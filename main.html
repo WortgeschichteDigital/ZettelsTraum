@@ -1,0 +1,23 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<script>
+		require("electron").ipcRenderer.on("zettelSortieren", function() {
+			document.getElementById("zettelSortieren").classList.remove("aus");
+		});
+	</script>
+	<style>
+		.aus {
+			display: none;
+		}
+	</style>
+</head>
+<body>
+	<h1>Hello World!</h1>
+	<p>Yeah! We are using node <script>document.write(process.versions.node); console.log(process)</script>,</p>
+	<p>Chrome <script>document.write(process.versions.chrome)</script>,</p>
+	<p>and Electron <script>document.write(process.versions.electron)</script>.</p>
+	<p id="zettelSortieren" class="aus">Hier werden Zettel sortiert!</p>
+</body>
+</html>
