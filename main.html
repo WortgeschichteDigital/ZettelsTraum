@@ -1,23 +1,49 @@
 <!doctype html>
-<html>
-<head>
-	<meta charset="utf-8">
-	<script>
-		require("electron").ipcRenderer.on("zettelSortieren", function() {
-			document.getElementById("zettelSortieren").classList.remove("aus");
-		});
-	</script>
-	<style>
-		.aus {
-			display: none;
-		}
-	</style>
-</head>
-<body>
-	<h1>Hello World!</h1>
-	<p>Yeah! We are using node <script>document.write(process.versions.node); console.log(process)</script>,</p>
-	<p>Chrome <script>document.write(process.versions.chrome)</script>,</p>
-	<p>and Electron <script>document.write(process.versions.electron)</script>.</p>
-	<p id="zettelSortieren" class="aus">Hier werden Zettel sortiert!</p>
-</body>
+<html lang="de">
+	<head>
+		<meta charset="utf-8">
+		<title> </title>
+		
+		<link rel="stylesheet" href="sty/app.css">
+		<link rel="stylesheet" href="sty/beleg.css">
+		<link rel="stylesheet" href="sty/dialog.css">
+		<link rel="stylesheet" href="sty/klassen.css">
+		<link rel="stylesheet" href="sty/kopf.css">
+		
+		<script src="scr/app.js"></script>
+		<script src="scr/beleg.js"></script>
+		<script src="scr/dialog.js"></script>
+		<script src="scr/helfer.js"></script>
+		<script src="scr/kartei.js"></script>
+		<script src="scr/overlay.js"></script>
+	</head>
+	<body>
+		<!-- KOPFDATEN -->
+		<header>
+			<div id="wort" class="keine_kartei">keine Kartei geöffnet</div>
+		</header>
+
+		<!-- STARTSEKTION -->
+		<section id="start">
+			<div id="start_erstellen">Kartei erstellen</div>
+			<div id="start_oeffnen">Kartei öffnen</div>
+		</section>
+
+		<!-- BELEG-FORMULAR -->
+		<section id="beleg" class="aus">
+			[Formular]
+		</section>
+		
+		<!-- DIALOG-FENSTER -->
+		<div id="dialog" class="overlay aus"><div>
+			<a href="#" class="overlay_schliessen"><img src="img/schliessen.svg" width="24" height="24" alt="x"></a>
+			<div id="dialog_text"></div>
+			<div id="dialog_prompt">
+				<p><input type="text" value="" id="dialog_prompt_text"></p>
+			</div>
+			<div id="dialog_ok">
+				<p class="button"><input type="button" value="Okay" id="dialog_ok_button"></p>
+			</div>
+		</div></div>
+	</body>
 </html>

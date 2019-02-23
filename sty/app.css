@@ -1,0 +1,108 @@
+@charset "UTF-8";
+
+:root {
+	--Text: #212121;
+	--TextHell: #9e9e9e;
+	--Hover: #f9f9f9;
+	--Linie: #e0e0e0;
+	--Farbe: #729fcf;
+	--FarbeGelb: #ffff4d;
+	--FarbeGruen: #53a600;
+	--FarbeOrange: #f90;
+	--FarbeRot: #c5000b;
+	--FarbeBlau: #00f;
+	--Blink: #79f200;
+}
+
+@font-face {
+	font-family: "DejaVu Sans";
+	src: url("fonts/DejaVuSans.woff2") format("woff2");
+}
+@font-face {
+	font-family: "DejaVu Sans";
+	src: url("fonts/DejaVuSans-Oblique.woff2") format("woff2");
+	font-style: italic;
+}
+@font-face {
+	font-family: "DejaVu Sans";
+	src: url("fonts/DejaVuSans-Bold.woff2") format("woff2");
+	font-weight: bold;
+}
+@font-face {
+	font-family: "DejaVu Sans";
+	src: url("fonts/DejaVuSans-BoldOblique.woff2") format("woff2");
+	font-style: italic;
+	font-weight: bold;
+}
+
+body {
+	color: var(--Text);
+	font-family: "DejaVu Sans", sans-serif;
+	font-size: 16px;
+	line-height: 24px;
+	margin: 0;
+	user-select: none;
+}
+
+input {
+	color: var(--Text);
+	font-family: "DejaVu Sans", sans-serif;
+	font-size: 16px;
+	line-height: 24px;
+	margin: 0;
+	outline: none;
+}
+input[type="text"] {
+	padding: 0 5px;
+	border: none;
+	border-bottom: 1px solid var(--Linie);
+}
+input[type="text"]:focus {
+	border-color: var(--Farbe);
+}
+input[type="button"] {
+	padding: 2px 10px 2px 31px;
+	border: 1px solid var(--Linie);
+	border-radius: 5px;
+}
+input[type="button"]:focus {
+	border-color: var(--Farbe);
+}
+input[type="button"][value="Okay"] {
+	background-image: url("../img/button_check.svg"), linear-gradient(to bottom, #fff, #eee);
+	background-repeat: no-repeat;
+	background-position: 4px center, left top;
+}
+
+p {
+	margin: 0 0 10px 0;
+}
+p.button {
+	text-align: right;
+	line-height: 30px;
+	margin: 0;
+}
+
+section {
+	padding: 0 10px;
+	margin-top: 70px; /* 60 px = Höhe des fixierten <header> + 10px = padding */
+}
+
+#start {
+	padding: 25px;
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	grid-gap: 25px;
+}
+#start div {
+	color: var(--Farbe);
+	text-align: center;
+	font-size: 25px;
+	line-height: 50px;
+	border: 1px solid var(--Linie);
+	border-radius: 10px;
+	cursor: pointer;
+}
+#start div:hover {
+	border-color: var(--Farbe);
+}

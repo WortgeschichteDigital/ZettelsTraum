@@ -1,0 +1,15 @@
+@charset "UTF-8";
+
+.aus {
+	display: none !important;
+}
+
+::placeholder {
+  color: var(--TextHell);
+	opacity: 1;
+}
+
+::selection {
+	background-color: var(--Farbe);
+	color: #fff;
+}

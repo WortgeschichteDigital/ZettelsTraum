@@ -1,16 +1,73 @@
+// Electron-Features einbinden
 const {app, BrowserWindow, Menu} = require("electron");
 
+// Funktionen zum Menü "Kartei"
+const Kartei = {
+	erstellen () {
+		
+	},
+	oeffnen () {
+		
+	},
+	speichern () {
+		
+	},
+	schliessen () {
+		
+	},
+};
+
+// Funktionen zum Menü "Werkzeuge"
+const Werkzeuge = {
+	belegHinzufuegen () {
+		
+	},
+	belegeAuflisten () {
+		
+	},
+	belegeSortieren () {
+		
+	},
+	bedeutungenSortieren () {
+		
+	},
+	metadaten () {
+		
+	},
+	notizen () {
+		
+	},
+	anhaenge () {
+		
+	},
+};
+
+// Funktionen zum Menü "Hilfe"
+const Hilfe = {
+	benutzerhandbuch () {
+	
+	},
+	dokumentation () {
+		
+	},
+	ueber () {
+		
+	},
+};
+
 // App-Menü erzeugen
-const menuVorlage = [
+const menuLayout = [
 	{
-		label: "Datei",
+		label: "Kartei",
 		submenu: [
-			{ click() { dateiErstellen() }, label: "Neue Datei", accelerator: "CommandOrControl+N" },
+			{ click() { Kartei.erstellen(); }, label: "Erstellen", accelerator: "CommandOrControl+N" },
 			{ type: "separator" },
-			{ click() { dateiOeffnen() }, label: "Öffnen", accelerator: "CommandOrControl+O" },
-			{ click() { dateiSpeichern() }, label: "Speichern", accelerator: "CommandOrControl+S" },
+			{ click() { Kartei.oeffnen(); }, label: "Öffnen", accelerator: "CommandOrControl+O" },
+			{ click() { Kartei.speichern(); }, label: "Speichern", accelerator: "CommandOrControl+S" },
 			{ type: "separator" },
-			{ role: "quit", label: "Beenden" },
+			{ click() { Kartei.schliessen(); }, label: "Schließen", accelerator: "CommandOrControl+W" },
+			{ type: "separator" },
+			{ role: "quit", label: "Programm beenden" },
 		],
 	},
 	{
@@ -30,7 +87,7 @@ const menuVorlage = [
 		submenu: [
 			{ role: "zoomIn", label: "Schrift vergrößern" },
 			{ role: "zoomOut", label: "Schrift verkleinern" },
-			{ role: "resetZoom", label: "Schrift zurücksetzen" },
+			{ role: "resetZoom", label: "Standardgröße" },
 			{ type: "separator" },
 			{ role: "toggleFullScreen", label: "Vollbild" },
 		],
@@ -38,14 +95,25 @@ const menuVorlage = [
 	{
 		label: "Werkzeuge",
 		submenu: [
-			{ click() { zettelAuflisten() }, label: "Zettel auflisten" },
-			{ click() { zettelSortieren() }, label: "Zettel sortieren" },
+			{ click() { Werkzeuge.belegHinzufuegen(); }, label: "Beleg hinzufügen" },
+			{ click() { Werkzeuge.belegeAuflisten(); }, label: "Belege auflisten" },
+			{ click() { Werkzeuge.belegeSortieren(); }, label: "Belege sortieren" },
+			{ type: "separator" },
+			{ click() { Werkzeuge.bedeutungenSortieren(); }, label: "Bedeutungen" },
+			{ type: "separator" },
+			{ click() { Werkzeuge.metadaten(); }, label: "Metadaten" },
+			{ click() { Werkzeuge.notizen(); }, label: "Notizen" },
+			{ click() { Werkzeuge.anhaenge(); }, label: "Anhänge" },
 		],
 	},
 	{
 		label: "Hilfe",
 		submenu: [
-			{ click() { benutzerhandbuch() }, label: "Benutzerhandbuch", accelerator: "F1" },
+			{ click() { Hilfe.benutzerhandbuch(); }, label: "Benutzerhandbuch", accelerator: "F1" },
+			{ type: "separator" },
+			{ click() { Hilfe.dokumentation(); }, label: "Dokumentation" },
+			{ type: "separator" },
+			{ click() { Hilfe.ueber(); }, label: `Über ${app.getName()}` },
 		],
 	},
 	{
@@ -56,37 +124,41 @@ const menuVorlage = [
 			{ type: "separator" },
 			{ role: "toggleDevTools", label: "Developer tools" },
 		],
-	}
+	},
 ];
-const menu = Menu.buildFromTemplate(menuVorlage);
+const menu = Menu.buildFromTemplate(menuLayout);
 Menu.setApplicationMenu(menu);
 
 // globales Fensterobjekt
 let win;
 
-// Browser-Fenster erstellen
-function createWindow () {
-	// Fenster öffnen
-	win = new BrowserWindow({
-		title: `${app.getName()} v${app.getVersion()}`,
-		width: 800,
-		height: 800,
-		show: false,
-	});
-	// main.html laden
-	win.loadFile("main.html");
-	// Fenster anzeigen, sobald alles geladen wurde
-	win.once("ready-to-show", () => {
-		win.show();
-	});
-	// globales Fensterobjekt beim Schließen dereferenzieren
-	win.on("closed", () => {
-		win = null;
-	});
-}
+// Browser-Fenster
+const Fenster = {
+	// Fenster erzeugen
+	erstellen () {
+		// Fenster öffnen
+		const Bildschirm = require("electron").screen.getPrimaryDisplay();
+		win = new BrowserWindow({
+			title: `${app.getName()} v${app.getVersion()}`,
+			width: 800,
+			height: Bildschirm.workArea.height,
+			show: false,
+		});
+		// main.html laden
+		win.loadFile("main.html");
+		// Fenster anzeigen, sobald alles geladen wurde
+		win.once("ready-to-show", () => {
+			win.show();
+		});
+		// globales Fensterobjekt beim Schließen dereferenzieren
+		win.on("closed", () => {
+			win = null;
+		});
+	},
+};
 
 // Initialisierung abgeschlossen => Browser-Fenster erstellen
-app.on("ready", createWindow);
+app.on("ready", Fenster.erstellen);
 
 // App beenden, wenn alle Fenster geschlossen worden sind
 app.on("window-all-closed", () => {
@@ -101,31 +173,6 @@ app.on("window-all-closed", () => {
 app.on("activate", () => {
 	// auf MacOS wird das Fenster einfach nur wiederhergestellt
 	if (win === null) {
-		createWindow();
+		Fenster.erstellen();
 	}
 });
-
-// Datei speichern
-function dateiOeffnen () {
-	console.log("Datei öffnen");
-}
-
-// Datei speichern
-function dateiSpeichern () {
-	console.log("Datei speichern");
-}
-
-// Benutzerhandbuch anzeigen
-function benutzerhandbuch () {
-	console.log("Benutzerhandbuch");
-}
-
-// Zettel auflisten
-function zettelAuflisten () {
-	win.webContents.send("zettelAuflisten");
-}
-
-// Zettel sortieren
-function zettelSortieren () {
-	win.webContents.send("zettelSortieren");
-}
