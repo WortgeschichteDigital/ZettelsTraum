@@ -5,7 +5,7 @@ let overlay = {
 	zIndex: 99,
 	// Fenster öffnen
 	oeffnen (fenster) {
-		this.zIndex++;
+		overlay.zIndex++;
 		fenster.style.zIndex = fenster.zIndex;
 		fenster.classList.remove("aus");
 	},
@@ -17,7 +17,7 @@ let overlay = {
 		});
 	},
 	// schließt ein Overlay-Fenster
-	//	link = Objektverweis auf den Link, über den das Schließen angestoßen wurde
+	//   link = Objektverweis auf den Link, über den das Schließen angestoßen wurde
 	schliessen (schliesser) {
 		// Overlay-Fenster ermitteln + schließen
 		let fenster = schliesser;
@@ -28,7 +28,7 @@ let overlay = {
 		// spezielle Funktionen für einzelne Overlay-Fenster
 		if (fenster.id === "dialog") {
 			if (schliesser.nodeName === "INPUT") { // Schließen durch Input-Button oder Input-Text
-				if (schliesser.value === "Nein") { // im Confirm-Dialog das Nein-Feld
+				if (schliesser.value.match(/Abbrechen|Nein/)) { // Alert-Dialog: Abbrechen, Confirm-Dialog: Nein
 					dialog.confirm = false;
 				} else {
 					dialog.confirm = true;

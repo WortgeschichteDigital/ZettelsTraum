@@ -1,16 +1,19 @@
+// globales Fensterobjekt
+let win;
+
 // Electron-Features einbinden
 const {app, BrowserWindow, Menu} = require("electron");
 
 // Funktionen zum Menü "Kartei"
 const Kartei = {
 	erstellen () {
-		
+		win.webContents.send("kartei-erstellen");
 	},
 	oeffnen () {
-		
+		win.webContents.send("kartei-oeffnen");
 	},
 	speichern () {
-		
+		win.webContents.send("kartei-speichern");
 	},
 	schliessen () {
 		
@@ -20,13 +23,10 @@ const Kartei = {
 // Funktionen zum Menü "Werkzeuge"
 const Werkzeuge = {
 	belegHinzufuegen () {
-		
+		win.webContents.send("beleg-hinzufuegen");
 	},
 	belegeAuflisten () {
-		
-	},
-	belegeSortieren () {
-		
+		win.webContents.send("belege-auflisten");
 	},
 	bedeutungenSortieren () {
 		
@@ -60,12 +60,12 @@ const menuLayout = [
 	{
 		label: "Kartei",
 		submenu: [
-			{ click() { Kartei.erstellen(); }, label: "Erstellen", accelerator: "CommandOrControl+N" },
+			{ click() { Kartei.erstellen(); }, label: "Erstellen", accelerator: "CommandOrControl+E" },
 			{ type: "separator" },
 			{ click() { Kartei.oeffnen(); }, label: "Öffnen", accelerator: "CommandOrControl+O" },
 			{ click() { Kartei.speichern(); }, label: "Speichern", accelerator: "CommandOrControl+S" },
 			{ type: "separator" },
-			{ click() { Kartei.schliessen(); }, label: "Schließen", accelerator: "CommandOrControl+W" },
+			{ click() { Kartei.schliessen(); }, label: "Schließen", accelerator: "CommandOrControl+W", enabled: false },
 			{ type: "separator" },
 			{ role: "quit", label: "Programm beenden" },
 		],
@@ -95,25 +95,24 @@ const menuLayout = [
 	{
 		label: "Werkzeuge",
 		submenu: [
-			{ click() { Werkzeuge.belegHinzufuegen(); }, label: "Beleg hinzufügen" },
-			{ click() { Werkzeuge.belegeAuflisten(); }, label: "Belege auflisten" },
-			{ click() { Werkzeuge.belegeSortieren(); }, label: "Belege sortieren" },
+			{ click() { Werkzeuge.belegHinzufuegen(); }, label: "Beleg hinzufügen", accelerator: "CommandOrControl+N" },
+			{ click() { Werkzeuge.belegeAuflisten(); }, label: "Belege auflisten", accelerator: "CommandOrControl+L" },
 			{ type: "separator" },
-			{ click() { Werkzeuge.bedeutungenSortieren(); }, label: "Bedeutungen" },
+			{ click() { Werkzeuge.bedeutungenSortieren(); }, label: "Bedeutungen", enabled: false },
 			{ type: "separator" },
-			{ click() { Werkzeuge.metadaten(); }, label: "Metadaten" },
-			{ click() { Werkzeuge.notizen(); }, label: "Notizen" },
-			{ click() { Werkzeuge.anhaenge(); }, label: "Anhänge" },
+			{ click() { Werkzeuge.metadaten(); }, label: "Metadaten", enabled: false },
+			{ click() { Werkzeuge.notizen(); }, label: "Notizen", enabled: false },
+			{ click() { Werkzeuge.anhaenge(); }, label: "Anhänge", enabled: false },
 		],
 	},
 	{
 		label: "Hilfe",
 		submenu: [
-			{ click() { Hilfe.benutzerhandbuch(); }, label: "Benutzerhandbuch", accelerator: "F1" },
+			{ click() { Hilfe.benutzerhandbuch(); }, label: "Benutzerhandbuch", accelerator: "F1", enabled: false },
 			{ type: "separator" },
-			{ click() { Hilfe.dokumentation(); }, label: "Dokumentation" },
+			{ click() { Hilfe.dokumentation(); }, label: "Dokumentation", enabled: false },
 			{ type: "separator" },
-			{ click() { Hilfe.ueber(); }, label: `Über ${app.getName()}` },
+			{ click() { Hilfe.ueber(); }, label: `Über ${app.getName()}`, enabled: false },
 		],
 	},
 	{
@@ -128,9 +127,6 @@ const menuLayout = [
 ];
 const menu = Menu.buildFromTemplate(menuLayout);
 Menu.setApplicationMenu(menu);
-
-// globales Fensterobjekt
-let win;
 
 // Browser-Fenster
 const Fenster = {

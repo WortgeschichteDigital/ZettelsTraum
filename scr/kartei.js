@@ -3,34 +3,36 @@
 let kartei = {
 	// aktuelles Wort
 	wort: "",
+	// Pfad der geladenen Datei (dient zum automatischen Speichern der Datei)
+	pfad: "",
 	// bestehende Kartei öffnen
 	oeffnen () {
-		
-	},
-	// Benutzer nach dem Wort fragen, für die eine Kartei angelegt werden soll
-	wortErfragen () {
-		dialog.oeffnen("prompt", function() {
-			let wort = document.getElementById("dialog_prompt_text").value;
-			wort = wort.replace(/^\s|\s$/g, "");
-			if (dialog.confirm && !wort) {
-				dialog.oeffnen("alert", null);
-				dialog.text("Sie müssen ein Wort eingeben, sonst kann keine Kartei erstellt werden!");
-			} else if (dialog.confirm && wort) {
-				kartei.wort = wort;
-				kartei.wortEintragen();
-				kartei.erstellen();
+		const {dialog} = require("electron").remote;
+		dialog.showOpenDialog((datei) => { // datei ist ein Array
+			if (datei === undefined) {
+				kartei.dialogWrapper("Sie haben keine Datei ausgewählt!");
+				return;
 			}
+			const fs = require("fs");
+			fs.readFile(datei[0], "utf-8", (err, content) => {
+				if (err) {
+					kartei.dialogWrapper(`Beim Öffnen ist ein Fehler aufgetreten!\n${err.message}`);
+					return;
+				}
+				// Daten einlesen
+				data = JSON.parse(content);
+				kartei.wort = data.w;
+				kartei.wortEintragen();
+				kartei.pfad = datei[0];
+				liste.aufbauen();
+				liste.wechseln();
+			});
 		});
-		dialog.text("Zu welchem Wort soll eine Kartei erstellt werden?");
-	},
-	// Wort der aktuellen Kartei eintragen
-	wortEintragen () {
-		let cont = document.getElementById("wort");
-		cont.classList.remove("keine_kartei");
-		cont.textContent = kartei.wort;
 	},
 	// neue Kartei erstellen
 	erstellen () {
+		// Kartei-Pfad löschen
+		kartei.pfad = "";
 		// globales Datenobjekt initialisieren
 		data = {
 			w: kartei.wort,
@@ -44,8 +46,116 @@ let kartei = {
 			h: {},
 			b: {},
 		};
-		data.dm = data.dc;
 		// neue Karte erstellen
-		beleg.erstellen();
+		beleg.erstellenCheck();
+	},
+	// geöffnete Kartei speichern
+	speichern () {
+		// keine Kartei geöffnet
+		if (!kartei.wort) {
+			kartei.dialogWrapper("Es ist keine Kartei geöffnet!");
+			return;
+		}
+		// Dialog-Komponente laden
+		const {app, dialog} = require("electron").remote;
+		// Speicher-Funktion
+		let speichern = function (pfad) {
+			let datum_modified = data.dm;
+			data.dm = new Date().toISOString();
+			const fs = require("fs");
+			fs.writeFile(pfad, JSON.stringify(data), (err) => {
+				if (err) {
+					kartei.dialogWrapper(`Beim Speichern ist ein Fehler aufgetreten!\n${err.message}`);
+					data.dm = datum_modified;
+					return;
+				}
+				kartei.pfad = pfad;
+				kartei.karteiGeaendert(false);
+			});
+		};
+		// Kartei-Datei besteht bereits
+		if (kartei.pfad) {
+			speichern(kartei.pfad);
+			return;
+		}
+		// Kartei-Datei muss angelegt werden
+		const optionen = {
+			defaultPath: `${app.getPath("documents")}/${kartei.wort}.wgd`,
+		};
+		dialog.showSaveDialog(null, optionen, (pfad) => {
+			if (pfad === undefined) {
+				kartei.dialogWrapper("Sie haben keinen Dateinamen eingeben!\nDie Datei wurde nicht gespeichert!");
+				return;
+			}
+			speichern(pfad);
+		});
+	},
+	// Dialogwrapper für die Öffnen- und Speichern-Funktionen
+	// (da gibt es einen Namenskonflikt)
+	dialogWrapper (text) {
+		dialog.oeffnen("alert", null);
+		dialog.text(text);
+	},
+	// Benutzer nach dem Wort fragen, für die eine Kartei angelegt werden soll
+	wortErfragen () {
+		dialog.oeffnen("prompt", function() {
+			let wort = dialog.promptText();
+			if (dialog.confirm && !wort) {
+				dialog.oeffnen("alert", null);
+				dialog.text("Sie müssen ein Wort eingeben, sonst kann keine Kartei erstellt werden!");
+			} else if (dialog.confirm && wort) {
+				kartei.karteiGeaendert(true);
+				kartei.wort = wort;
+				kartei.wortEintragen();
+				kartei.erstellen();
+			}
+		});
+		dialog.text("Zu welchem Wort soll eine Kartei erstellt werden?");
+	},
+	// Wort bei Bedarf ändern
+	wortAendern () {
+		// noch keine Kartei geöffnet
+		if (!kartei.wort) {
+			kartei.wortErfragen();
+			return;
+		}
+		// anbieten, das Wort zu ändern
+		dialog.oeffnen("prompt", function() {
+			let wort = dialog.promptText();
+			if (dialog.confirm && wort === kartei.wort) {
+				dialog.oeffnen("alert", null);
+				dialog.text("Das Wort wurde nicht geändert!");
+			} else if (dialog.confirm && wort) {
+				kartei.karteiGeaendert(true);
+				kartei.wort = wort;
+				data.w = wort;
+				kartei.wortEintragen();
+			} else if (dialog.confirm && !wort) {
+				dialog.oeffnen("alert", null);
+				dialog.text("Sie müssen ein Wort eingeben, sonst kann das bestehende nicht geändert werden!");
+			}
+		});
+		dialog.text("Soll das Wort geändert werden?");
+		let prompt_text = document.getElementById("dialog_prompt_text");
+		prompt_text.value = kartei.wort;
+		prompt_text.select();
+	},
+	// Wort der aktuellen Kartei eintragen
+	wortEintragen () {
+		let cont = document.getElementById("wort");
+		cont.classList.remove("keine_kartei");
+		cont.textContent = kartei.wort;
+	},
+	// Kartei wurde geändert und nocht nicht gespeichert
+	geaendert: false,
+	// Anzeigen, dass die Kartei geändert wurde
+	karteiGeaendert (geaendert) {
+		kartei.geaendert = geaendert;
+		let icon = document.getElementById("kartei_geaendert");
+		if (geaendert) {
+			icon.classList.remove("aus");
+		} else {
+			icon.classList.add("aus");
+		}
 	},
 };

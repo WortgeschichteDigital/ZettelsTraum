@@ -1,1 +1,81 @@
 @charset "UTF-8";
+
+#beleg table {
+	border-collapse: separate;
+	border-spacing: 0;
+	border: 2px solid var(--Linie);
+	border-radius: 25px;
+	margin: 25px auto;
+	padding: 25px;
+}
+#beleg caption {
+	caption-side: top;
+	color: var(--Farbe);
+	text-align: left;
+	font-weight: bold;
+	padding: 0 0 3px 32px;
+}
+#beleg caption #beleg_geaendert {
+	margin-left: 5px;
+	display: inline-block;
+}
+#beleg th {
+	color: var(--Farbe);
+	text-align: left;
+	font-weight: normal;
+	vertical-align: top;
+	padding: 15px 5px 0 5px;
+	position: relative;
+}
+#beleg tr:first-child td {
+	padding-bottom: 15px;
+}
+#beleg th span {
+	color: var(--Text);
+	position: absolute;
+	right: 10px;
+}
+#beleg td {
+	vertical-align: top;
+	padding: 0 5px;
+	position: relative;
+}
+#beleg td.check {
+	vertical-align: bottom;
+}
+
+#beleg input[type="text"] {
+	width: 300px;
+	border-top: 1px solid transparent;
+}
+#beleg input[type="text"].kurz {
+	width: 150px;
+}
+#beleg input[type="text"].lang {
+	width: 620px;
+}
+#beleg textarea {
+	width: 620px;
+	height: 120px;
+}
+#beleg textarea.kurz {
+	width: 300px;
+}
+#beleg textarea.flach {
+	height: 58px;
+}
+#beleg input[type="button"]:first-child {
+	margin-left: 0;
+}
+#beleg_loeschen {
+	position: absolute;
+	right: 0;
+}
+
+#beleg label {
+	color: var(--Farbe);
+}
+
+#beleg .rechts {
+	text-align: right;
+}
