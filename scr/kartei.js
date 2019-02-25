@@ -24,7 +24,7 @@ let kartei = {
 				kartei.wort = data.w;
 				kartei.wortEintragen();
 				kartei.pfad = datei[0];
-				liste.aufbauen();
+				liste.aufbauen(true);
 				liste.wechseln();
 			});
 		});

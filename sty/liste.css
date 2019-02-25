@@ -1,8 +1,9 @@
 @charset "UTF-8";
 
+/* KEYFRAMES (für die Animation Ein-/Ausblenden der Filterliste) */
 @keyframes liste_re {
 	0% {
-		transform: translateX(-210px);
+		transform: translateX(-310px);
 	}
 	100% {
 		transform: translateX(0);
@@ -13,55 +14,114 @@
 		transform: translateX(0);
 	}
 	100% {
-		transform: translateX(-210px);
+		transform: translateX(-310px);
 	}
 }
 
+/* LISTENSEKTION */
 #liste {
 	width: calc(100% - 20px);
+	margin-top: 60px; /* 10px weniger als in anderen <section>, wird hier als padding-top gesetzt */
 	display: grid;
-	grid-template-columns: 200px 1fr;
+	grid-template-columns: 300px 1fr;
 	grid-gap: 10px;
 	animation-name: liste_re;
 	animation-timing-function: ease;
-	animation-duration: 1s;
+	animation-duration: 0.5s;
 	animation-fill-mode: forwards;
-	transition: width 1s ease;
+	transition: width 0.5s ease;
 }
 #liste.filter_aus {
-	width: calc(100% + 210px - 20px);
+	width: calc(100% + 310px - 20px);
 	animation-name: liste_li;
-	transition: width 1s ease;
 }
-#liste.preload {
+#liste.preload { /* damit beim ersten Anzeigen der Liste keine Animation läuft */
 	animation-duration: 0s;
 }
 
+/* FILTERLISTE */
 #liste_filter {
-	width: 200px;
+	padding-top: 10px;
+	width: 300px;
+	position: sticky;
+	top: 60px;
+}
+#liste_filter p {
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+}
+#liste_filter label {
+	color: var(--Farbe);
 }
 
+/* BELEGLISTE: HEADER */
 #liste_belege {
 	position: relative;
 }
 #liste_belege header {
-	padding: 0 0 2px 0;
-	width: 100%;
+	background-color: #fff;
+	padding: 10px 0 2px 5px;
+	width: calc(100% - 5px);
 	height: 24px;
 	border-bottom: 1px solid var(--Linie);
-	position: absolute;
-	top: 0;
-	left: 0;
+	position: sticky;
+	top: 60px;
+	z-index: 1;
 }
-#liste_belege a {
-	height: 24px;
-	margin-left: 10px;
-	display: inline-block;
+#liste_belege header a {
+	margin-left: 5px;
 }
-#liste_belege a:nth-child(2) {
-	margin-left: 25px;
+#liste_belege #liste_link_sort_auf, #liste_belege #liste_link_belegschnitt {
+	margin-left: 20px;
 }
 
+/* BELEGLISTE: CONTENT */
 #liste_belege_cont {
-	margin-top: 35px;
+	white-space: nowrap;
+	margin: 27px 0 25px 0;
+}
+#liste_belege_cont div {
+	background-color: var(--Hintergrund);
+	height: 24px;
+	padding: 2px 10px;
+	border-bottom: 1px solid var(--Linie);
+}
+#liste_belege_cont a, #liste_belege_cont span {
+	overflow: hidden;
+	display: inline-block;
+}
+#liste_belege_cont .liste_beleg_bearbeiten {
+	margin-right: 15px;
+}
+#liste_belege_cont .liste_beleg_jahr {
+	font-style: italic;
+	margin-right: 15px;
+}
+#liste_belege_cont .liste_beleg_vorschau {
+	text-overflow: ellipsis;
+	width: 300px;
+	cursor: pointer;
+	transition: width 0.5s ease;
+}
+#liste_belege_cont .liste_beleg_vorschau.breit {
+	width: 610px;
+	transition: width 0.5s ease;
+}
+#liste_belege_cont .liste_beleg_schnitt {
+	background-color: transparent;
+	height: auto;
+	padding: 10px 10px 0 49px;
+	white-space: normal;
+	user-select: text;
+}
+#liste_belege_cont .liste_beleg_schnitt p {
+	max-width: 600px;
+}
+#liste_belege_cont .liste_beleg_zeitschnitt {
+	background-color: transparent;
+	color: var(--Farbe);
+	text-align: center;
+	font-style: italic;
+	padding: 17px 10px;
 }

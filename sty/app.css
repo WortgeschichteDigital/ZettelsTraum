@@ -3,15 +3,12 @@
 :root {
 	--Text: #212121;
 	--TextHell: #9e9e9e;
-	--Hover: #f9f9f9;
+	--Hintergrund: #f9f9f9;
+	--HintergrundHell: #fdfdfd;
 	--Linie: #e0e0e0;
 	--Farbe: #729fcf;
-	--FarbeGelb: #ffff4d;
-	--FarbeGruen: #53a600;
-	--FarbeOrange: #f90;
-	--FarbeRot: #c5000b;
-	--FarbeBlau: #00f;
-	--Blink: #79f200;
+	--BoxShadow: 3px 3px 6px 0 #d1d1d1;
+	--TextShadow: 3px 3px 6px #d1d1d1;
 }
 
 @font-face {
@@ -44,6 +41,56 @@ body {
 	user-select: none;
 }
 
+a {
+	color: var(--Farbe);
+	text-decoration: none;
+}
+a:focus, a:hover {
+	text-decoration: underline;
+}
+a.icon_link {
+	background-color: var(--Text);
+	text-decoration: none;
+	width: 24px;
+	height: 24px;
+	display: inline-block;
+}
+a.icon_link:focus {
+	background-color: var(--Farbe);
+}
+a.icon_auge {
+	-webkit-mask: url("../img/auge.svg") no-repeat center;
+	mask: url("../img/auge.svg") no-repeat center;
+}
+a.icon_auge_aus {
+	-webkit-mask: url("../img/auge_aus.svg") no-repeat center;
+	mask: url("../img/auge_aus.svg") no-repeat center;
+}
+a.icon_bearbeiten {
+	-webkit-mask: url("../img/bearbeiten.svg") no-repeat center;
+	mask: url("../img/bearbeiten.svg") no-repeat center;
+}
+a.icon_filter_an {
+	-webkit-mask: url("../img/filter_an.svg") no-repeat center;
+	mask: url("../img/filter_an.svg") no-repeat center;
+}
+a.icon_filter_aus {
+	-webkit-mask: url("../img/filter_aus.svg") no-repeat center;
+	mask: url("../img/filter_aus.svg") no-repeat center;
+}
+a.icon_pfeil_hoch {
+	-webkit-mask: url("../img/pfeil_hoch.svg") no-repeat center;
+	mask: url("../img/pfeil_hoch.svg") no-repeat center;
+}
+a.icon_pfeil_runter {
+	-webkit-mask: url("../img/pfeil_runter.svg") no-repeat center;
+	mask: url("../img/pfeil_runter.svg") no-repeat center;
+}
+a.icon_schliessen {
+	-webkit-mask: url("../img/schliessen.svg") no-repeat center;
+	mask: url("../img/schliessen.svg") no-repeat center;
+}
+
 input, textarea {
 	color: var(--Text);
 	font-family: "DejaVu Sans", sans-serif;
@@ -53,9 +100,9 @@ input, textarea {
 	outline: none;
 }
 input[type="text"] {
-	padding: 0 5px;
-	border: none;
-	border-bottom: 1px solid var(--Linie);
+	padding: 2px 5px;
+	border: 1px solid var(--Linie);
+	border-radius: 5px;
 }
 input[type="text"]:focus {
 	border-color: var(--Farbe);
@@ -110,10 +157,11 @@ input[type="checkbox"]:checked:before {
 	display: block;
 }
 textarea {
-	padding: 0 5px;
+	padding: 2px 5px;
 	border: 1px solid var(--Linie);
 	border-radius: 5px;
 	margin: 0;
+	display: block;
 }
 textarea:focus {
 	border-color: var(--Farbe);

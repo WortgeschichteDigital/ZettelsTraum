@@ -1,7 +1,7 @@
 "use strict";
 
-// Globales Datenobjekt, in dem die Werte zum aktuellen
-// Beleg gespeichert werden.
+// Globales Datenobjekt, in dem die Werte zur aktuellen
+// Kartei gespeichert werden.
 let data = {};
 
 // Initialisierung der App

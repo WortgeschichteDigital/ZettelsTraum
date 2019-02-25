@@ -12,7 +12,7 @@ let beleg = {
 			dialog.oeffnen("alert", null);
 			dialog.text("Sie müssen erst eine Kartei öffnen oder erstellen!");
 		} else if (beleg.geaendert) { // aktueller Beleg noch nicht gespeichert
-			dialog.oeffnen("confirm", function() {
+			dialog.oeffnen("confirm", () => {
 				if (dialog.confirm) {
 					beleg.erstellen();
 				}
@@ -43,7 +43,6 @@ let beleg = {
 			bs: "",
 			bd: "",
 			qu: "",
-			url: "",
 			ko: false,
 			bue: false,
 			no: "",
@@ -53,9 +52,31 @@ let beleg = {
 		// Karte anzeigen
 		beleg.formularAnzeigen();
 	},
+	// Klick-Event zum Öffnen eines Belegs
+	oeffnenKlick (a) {
+		a.addEventListener("click", function(evt) {
+			evt.preventDefault();
+			beleg.oeffnen(parseInt(this.dataset.id, 10));
+		});
+	},
 	// bestehende Karteikarte öffnen
-	oeffnen () {
-		// TODO
+	oeffnen (id) {
+		// ID zwischenspeichern
+		beleg.id_karte = id;
+		// Daten des Belegs kopieren
+		beleg.data = {};
+		for (let i in data.k[id]) {
+			if (!data.k[id].hasOwnProperty(i)) {
+				continue;
+			}
+			if (helfer.type_check("Array", data.k[id][i])) {
+				beleg.data[i] = [...data.k[id][i]];
+			} else {
+				beleg.data[i] = data.k[id][i];
+			}
+		}
+		// Formular anzeigen
+		beleg.formularAnzeigen();
 	},
 	// Formular anzeigen
 	formularAnzeigen () {
@@ -77,6 +98,8 @@ let beleg = {
 		beleg.belegGeaendert(false);
 		// Formular einblenden
 		helfer.sektionWechseln("beleg");
+		// Datumsfeld fokussieren
+		document.getElementById("beleg_da").focus();
 	},
 	// Änderungen in einem Formular-Feld automatisch übernehmen
 	// feld = das Formularfeld, das geändert wurde
@@ -107,7 +130,7 @@ let beleg = {
 					return;
 				}
 				// Test: Datum mit vierstelliger Jahreszahl
-				if (!da.value.match(/[0-9]{4}/)) {
+				if (!da.value.match(/[0-9]{4}|[0-9]{2}\. (Jahrhundert|Jh\.)/)) {
 					dialog.oeffnen("alert", function() {
 						da.select();
 					});
@@ -124,9 +147,8 @@ let beleg = {
 					return;
 				}
 				// Test: Quelle oder URL angegeben
-				let qu = document.getElementById("beleg_qu"),
-					url = document.getElementById("beleg_url");
-				if (!qu.value && !url.value) {
+				let qu = document.getElementById("beleg_qu");
+				if (!qu.value) {
 					dialog.oeffnen("alert", function() {
 						qu.select();
 					});
@@ -161,7 +183,7 @@ let beleg = {
 				// Änderungsmarkierung für Kartei setzen
 				kartei.karteiGeaendert(true);
 				// Belegliste einblenden
-				liste.aufbauen();
+				liste.aufbauen(true);
 				liste.wechseln();
 			} else if (aktion === "abbrechen") { // ABBRECHEN
 				let abbrechen = function () {

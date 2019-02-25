@@ -28,4 +28,10 @@ let helfer = {
 		let cl = Object.prototype.toString.call(obj).slice(8, -1);
     return obj !== undefined && obj !== null && cl === typ;
 	},
+	// Tokens mit spezieller Bedeutung für reguläre Ausdrücke escapen
+	escapeRegExp (s) {
+		return s.replace(/\/|\(|\)|\[|\]|\{|\}|\.|\?|\\|\+|\*|\^|\$|\|/g, function(m) {
+			return `\\${m}`;
+		});
+	},
 };

@@ -17,6 +17,7 @@
 		<script src="scr/helfer.js"></script>
 		<script src="scr/kartei.js"></script>
 		<script src="scr/liste.js"></script>
+		<script src="scr/liste_filter.js"></script>
 		<script src="scr/overlay.js"></script>
 	</head>
 	<body>
@@ -43,16 +44,8 @@
 					<th class="rechts">Bewertung</th>
 				</tr>
 				<tr>
-					<td><input type="text" value="" spellcheck="false" class="kurz" id="beleg_da"></td>
+					<td><input type="text" value="" spellcheck="false" id="beleg_da"></td>
 					<td class="rechts" id="beleg_be"><img src="img/stern.svg" width="24" height="24" alt="*"><img src="img/stern.svg" width="24" height="24" alt="*"><img src="img/stern.svg" width="24" height="24" alt="*"><img src="img/stern.svg" width="24" height="24" alt="*"><img src="img/stern.svg" width="24" height="24" alt="*"></td>
-				</tr>
-				<tr>
-					<th><label for="beleg_au">Autor</label></th>
-					<th><label for="beleg_ts">Textsorte</label></th>
-				</tr>
-				<tr>
-					<td><input type="text" value="" spellcheck="false" id="beleg_au"></td>
-					<td><input type="text" value="" spellcheck="false" id="beleg_ts"></td>
 				</tr>
 				<tr>
 					<th colspan="2"><label for="beleg_bs">Belegschnitt</label><span>[Text-Tools]</span></th>
@@ -61,18 +54,20 @@
 					<td colspan="2"><textarea spellcheck="false" id="beleg_bs"></textarea></td>
 				</tr>
 				<tr>
-					<th colspan="2"><label for="beleg_bd">Bedeutung</label></th>
+					<th><label for="beleg_au">Autor</label></th>
+					<th><label for="beleg_bd">Bedeutung</label></th>
 				</tr>
 				<tr>
-					<td colspan="2"><input type="text" value="" class="lang" spellcheck="false" id="beleg_bd"></td>
+					<td><input type="text" value="" spellcheck="false" id="beleg_au"></td>
+					<td><input type="text" value="" spellcheck="false" id="beleg_bd"></td>
 				</tr>
 				<tr>
 					<th><label for="beleg_qu">Quelle</label></th>
-					<th><label for="beleg_url">URL</label></th>
+					<th><label for="beleg_ts">Textsorte</label></th>
 				</tr>
 				<tr>
-					<td rowspan="2"><textarea spellcheck="false" class="kurz" id="beleg_qu"></textarea></td>
-					<td><input type="text" value="" spellcheck="false" id="beleg_url"></td>
+					<td rowspan="2"><textarea spellcheck="false" id="beleg_qu"></textarea></td>
+					<td><input type="text" value="" spellcheck="false" id="beleg_ts"></td>
 				</tr>
 				<tr>
 					<td class="check">
@@ -85,7 +80,7 @@
 					<th>Anhänge</th>
 				</tr>
 				<tr>
-					<td><textarea spellcheck="false" class="kurz flach" id="beleg_no"></textarea></td>
+					<td><textarea spellcheck="false" class="flach" id="beleg_no"></textarea></td>
 					<td>[Anhang hinzufügen]</td>
 				</tr>
 			</table>
@@ -93,16 +88,17 @@
 		
 		<!-- BELEG-LISTE -->
 		<section id="liste" class="aus">
-			<div id="liste_filter">[Filter]</div>
+			<!-- scheinbar unnötig verschachteln, damit position: sticky für #liste_filter funktioniert -->
+			<div><div id="liste_filter"></div></div>
 			<div id="liste_belege">
-				<header><a href="#" id="liste_link_filter" title="Filter ausblenden"><img src="img/filter_aus.svg" width="24" height="24" alt="[Filter]"></a><a href="#" id="liste_link_sort_auf" title="Chronologisch aufsteigend sortieren"><img src="img/pfeil_hoch.svg" width="24" height="24" alt="↑"></a><a href="#" id="liste_link_sort_ab" title="Chronologisch absteigend sortieren"><img src="img/pfeil_runter.svg" width="24" height="24" alt="↓"></a></header>
-				<div id="liste_belege_cont">[Belege]</div>
+				<header><a href="#" class="icon_link icon_filter_aus" id="liste_link_filter" title="Filter ausblenden"> </a><a href="#" class="icon_link icon_pfeil_hoch" id="liste_link_sort_auf" title="Chronologisch aufsteigend sortieren"> </a><a href="#" class="icon_link icon_pfeil_runter" id="liste_link_sort_ab" title="Chronologisch absteigend sortieren"> </a><a href="#" class="icon_link icon_auge_aus" id="liste_link_belegschnitt" title="Komplettanzeige der Belegschnitte ausblenden"> </a></header>
+				<div id="liste_belege_cont"></div>
 			</div>
 		</section>
 		
 		<!-- DIALOG-FENSTER -->
 		<div id="dialog" class="overlay aus"><div>
-			<a href="#" class="overlay_schliessen" title="Fenster schließen"><img src="img/schliessen.svg" width="24" height="24" alt="x"></a>
+			<a href="#" class="overlay_schliessen icon_link icon_schliessen" title="Fenster schließen"> </a>
 			<div id="dialog_text"></div>
 			<div id="dialog_prompt">
 				<p><input type="text" value="" id="dialog_prompt_text"></p>
