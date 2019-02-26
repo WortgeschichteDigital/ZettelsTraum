@@ -7,8 +7,14 @@ let kartei = {
 	pfad: "",
 	// bestehende Kartei öffnen
 	oeffnen () {
-		const {dialog} = require("electron").remote;
-		dialog.showOpenDialog((datei) => { // datei ist ein Array
+		const {app, dialog} = require("electron").remote;
+		const optionen = {
+			defaultPath: app.getPath("documents"),
+			filters: [
+				{ name: "Wortgeschichte digital-Datei", extensions: ["wgd"] },
+			],
+		};
+		dialog.showOpenDialog(null, optionen, (datei) => { // datei ist ein Array!
 			if (datei === undefined) {
 				kartei.dialogWrapper("Sie haben keine Datei ausgewählt!");
 				return;
@@ -16,10 +22,24 @@ let kartei = {
 			const fs = require("fs");
 			fs.readFile(datei[0], "utf-8", (err, content) => {
 				if (err) {
-					kartei.dialogWrapper(`Beim Öffnen ist ein Fehler aufgetreten!\n${err.message}`);
+					kartei.dialogWrapper(`Beim Öffnen der Datei ist ein Fehler aufgetreten!\n<strong>Fehlermeldung:</strong><br>${err.message}`);
 					return;
 				}
 				// Daten einlesen
+				let data_tmp = {};
+				// Folgt die Datei einer wohlgeformten JSON?
+				try {
+					data_tmp = JSON.parse(content);
+				} catch (err_json) {
+					kartei.dialogWrapper(`Beim Einlesen der Datei ist ein Fehler aufgetreten!\n<strong>Fehlermeldung:</strong><br>${err_json}`);
+					return;
+				}
+				// Wirklich ein wgd-Datei?
+				if (!data_tmp.t || data_tmp.t !== "wgd") {
+					kartei.dialogWrapper("Die Datei wurde nicht eingelesen!\nEs handelt sich nicht um eine Karteikasten-Datei von <i>Wortgeschichte digital</i>!");
+					return;
+				}
+				// Okay! Datei kann eingelesen werden
 				data = JSON.parse(content);
 				kartei.wort = data.w;
 				kartei.wortEintragen();
@@ -41,6 +61,7 @@ let kartei = {
 			e: [],
 			n: "",
 			a: [],
+			t: "wgd",
 			v: 1,
 			k: {},
 			h: {},
@@ -65,7 +86,7 @@ let kartei = {
 			const fs = require("fs");
 			fs.writeFile(pfad, JSON.stringify(data), (err) => {
 				if (err) {
-					kartei.dialogWrapper(`Beim Speichern ist ein Fehler aufgetreten!\n${err.message}`);
+					kartei.dialogWrapper(`Beim Speichern ist ein Fehler aufgetreten!\n<strong>Fehlermeldung:</strong><br>${err.message}`);
 					data.dm = datum_modified;
 					return;
 				}
@@ -81,10 +102,13 @@ let kartei = {
 		// Kartei-Datei muss angelegt werden
 		const optionen = {
 			defaultPath: `${app.getPath("documents")}/${kartei.wort}.wgd`,
+			filters: [
+				{ name: "Wortgeschichte digital-Datei", extensions: ["wgd"] },
+			],
 		};
 		dialog.showSaveDialog(null, optionen, (pfad) => {
 			if (pfad === undefined) {
-				kartei.dialogWrapper("Sie haben keinen Dateinamen eingeben!\nDie Datei wurde nicht gespeichert!");
+				kartei.dialogWrapper("Die Datei wurde nicht gespeichert!");
 				return;
 			}
 			speichern(pfad);

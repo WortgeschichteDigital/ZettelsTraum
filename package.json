@@ -1,12 +1,12 @@
 {
 	"name": "zettelstraum",
 	"productName": "Zettel's Traum",
-	"version": "0.0.1",
-	"description": "Wortkatei-App für „Wortgeschichte digital“ (Zentrum für digitale Lexikographie der deutschen Sprache)",
+	"version": "0.0.5",
+	"description": "Wortkartei-App des Projekts „Wortgeschichte digital“ (Zentrum für digitale Lexikographie der deutschen Sprache)",
 	"main": "main.js",
 	"scripts": {
 		"start": "electron ."
 	},
-	"author": "Nico Dorn",
+	"author": "Nico Dorn <ndorn@gwdg.de>",
 	"license": "MIT"
 }

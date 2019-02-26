@@ -21,6 +21,9 @@
 	margin: 70px auto 0 auto;
 	position: relative;
 }
+#dialog.frage > div {
+	background: #fff url("../img/dialog_confirm.svg") no-repeat 10px 10px;
+}
 
 #dialog > div > a {
 	position: absolute;

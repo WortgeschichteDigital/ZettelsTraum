@@ -23,7 +23,7 @@
 	width: calc(100% - 20px);
 	margin-top: 60px; /* 10px weniger als in anderen <section>, wird hier als padding-top gesetzt */
 	display: grid;
-	grid-template-columns: 300px 1fr;
+	grid-template-columns: 300px calc(100% - 300px - 10px); /* Minus Breite Filterleiste und Gap */
 	grid-gap: 10px;
 	animation-name: liste_re;
 	animation-timing-function: ease;
@@ -39,7 +39,7 @@
 	animation-duration: 0s;
 }
 
-/* FILTERLISTE */
+/* FILTERLEISTE */
 #liste_filter {
 	padding-top: 10px;
 	width: 300px;
@@ -61,7 +61,7 @@
 }
 #liste_belege header {
 	background-color: #fff;
-	padding: 10px 0 2px 5px;
+	padding: 10px 0 2px 8px;
 	width: calc(100% - 5px);
 	height: 24px;
 	border-bottom: 1px solid var(--Linie);
@@ -72,56 +72,72 @@
 #liste_belege header a {
 	margin-left: 5px;
 }
-#liste_belege #liste_link_sort_auf, #liste_belege #liste_link_belegschnitt {
-	margin-left: 20px;
+#liste_belege header .liste_link_text {
+	color: var(--Text);
+	margin-left: 10px;
+}
+#liste_belege header .liste_link_text:focus {
+	color: var(--Farbe);
+	text-decoration: none;
+}
+#liste_belege header .liste_link_text:hover {
+	text-decoration: none;
+}
+#liste_belege header .liste_link_text_strike, #liste_belege header .liste_link_text_strike:focus, #liste_belege header .liste_link_text_strike:hover {
+	text-decoration-line: line-through;
+	text-decoration-color: #f00;
+	text-decoration-style: solid;
+}
+#liste_belege header .start_block {
+	margin-left: 25px;
 }
 
 /* BELEGLISTE: CONTENT */
 #liste_belege_cont {
-	white-space: nowrap;
-	margin: 27px 0 25px 0;
+	margin: 0 0 25px 0;
 }
-#liste_belege_cont div {
+#liste_belege_cont .liste_kopf {
 	background-color: var(--Hintergrund);
+	line-height: 24px;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
 	height: 24px;
 	padding: 2px 10px;
 	border-bottom: 1px solid var(--Linie);
+	border-left: 3px solid var(--Farbe);
+	cursor: pointer;
 }
 #liste_belege_cont a, #liste_belege_cont span {
-	overflow: hidden;
 	display: inline-block;
 }
-#liste_belege_cont .liste_beleg_bearbeiten {
+#liste_belege_cont .liste_bearbeiten {
 	margin-right: 15px;
 }
-#liste_belege_cont .liste_beleg_jahr {
+#liste_belege_cont .liste_jahr {
 	font-style: italic;
-	margin-right: 15px;
+	width: 55px;
+	margin-right: 5px;
 }
-#liste_belege_cont .liste_beleg_vorschau {
-	text-overflow: ellipsis;
-	width: 300px;
-	cursor: pointer;
-	transition: width 0.5s ease;
-}
-#liste_belege_cont .liste_beleg_vorschau.breit {
-	width: 610px;
-	transition: width 0.5s ease;
-}
-#liste_belege_cont .liste_beleg_schnitt {
+#liste_belege_cont .liste_schnitt {
 	background-color: transparent;
 	height: auto;
 	padding: 10px 10px 0 49px;
-	white-space: normal;
+	border-bottom: 1px solid var(--Linie);
+	border-left: 3px solid var(--Farbe);
 	user-select: text;
 }
-#liste_belege_cont .liste_beleg_schnitt p {
+#liste_belege_cont .liste_schnitt p {
 	max-width: 600px;
 }
-#liste_belege_cont .liste_beleg_zeitschnitt {
+#liste_belege_cont .liste_zeitschnitt, #liste_belege_cont .liste_keine_belege {
 	background-color: transparent;
 	color: var(--Farbe);
 	text-align: center;
 	font-style: italic;
-	padding: 17px 10px;
+	padding: 10px;
+	border-bottom: 1px solid var(--Linie);
+}
+#liste_belege_cont .liste_keine_belege {
+	color: var(--TextHell);
 }

@@ -13,7 +13,7 @@ let liste_filter = {
 				continue;
 			}
 			// Bücherdienst
-			if (data.k[id].bue) {
+			if (data.k[id].bu) {
 				filter.buecherdienst++;
 			}
 		}
@@ -66,7 +66,7 @@ let liste_filter = {
 			let id = karten[i],
 				okay = false;
 			// Bücherdienst
-			if (filter_aktiv.buecherdienst && data.k[id].bue) {
+			if (filter_aktiv.buecherdienst && data.k[id].bu) {
 				okay = true;
 			}
 			// Karte okay?

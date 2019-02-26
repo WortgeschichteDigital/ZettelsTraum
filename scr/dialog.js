@@ -16,12 +16,14 @@ let dialog = {
 		// Funktion zwischenspeichern
 		dialog.funktion = funktion;
 		// Overlay öffnen
-		overlay.oeffnen(document.getElementById("dialog"));
+		let fenster = document.getElementById("dialog");
+		overlay.oeffnen(fenster);
 		// Layout vorbereiten + Fokus setzen
 		let div_prompt = document.getElementById("dialog_prompt"),
 			div_ok = document.getElementById("dialog_ok"),
 			div_confirm = document.getElementById("dialog_confirm");
 		if (typ === "prompt") { // Prompt-Fenster
+			fenster.classList.add("frage");
 			div_prompt.classList.remove("aus");
 			div_ok.classList.remove("aus");
 			div_confirm.classList.add("aus");
@@ -29,11 +31,13 @@ let dialog = {
 			textfeld.value = "";
 			textfeld.focus();
 		} else if (typ === "confirm") {
+			fenster.classList.add("confirm");
 			div_prompt.classList.add("aus");
 			div_ok.classList.add("aus");
 			div_confirm.classList.remove("aus");
 			div_confirm.querySelector("input").focus();
 		} else { // Meldungs-Fenster
+			fenster.classList.remove("frage");
 			div_prompt.classList.add("aus");
 			div_ok.classList.remove("aus");
 			div_confirm.classList.add("aus");
@@ -52,7 +56,7 @@ let dialog = {
 		let absaetze = text.split("\n");
 		for (let i = 0, len = absaetze.length; i < len; i++) {
 			let p = document.createElement("p");
-			p.textContent = absaetze[i];
+			p.innerHTML = absaetze[i];
 			cont.appendChild(p);
 		}
 	},

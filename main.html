@@ -21,7 +21,7 @@
 		<script src="scr/overlay.js"></script>
 	</head>
 	<body>
-		<!-- KOPFDATEN -->
+		<!-- KOPF -->
 		<header>
 			<span id="wort" class="keine_kartei">keine Kartei geöffnet</span><span class="aus" id="kartei_geaendert">*</span>
 		</header>
@@ -32,7 +32,7 @@
 			<div id="start_oeffnen">Kartei öffnen</div>
 		</section>
 		
-		<!-- BELEG-FORMULAR -->
+		<!-- BELEGFORMULAR -->
 		<section id="beleg" class="aus">
 			<table>
 				<caption><span id="beleg_titel"></span><span id="beleg_geaendert" class="aus">*</span></caption>
@@ -71,7 +71,7 @@
 				</tr>
 				<tr>
 					<td class="check">
-						<p><input type="checkbox" id="beleg_bue"><label for="beleg_bue">Bücherdienstauftrag</label></p>
+						<p><input type="checkbox" id="beleg_bu"><label for="beleg_bu">Bücherdienstauftrag</label></p>
 						<p><input type="checkbox" id="beleg_ko"><label for="beleg_ko">Kontext</label></p>
 					</td>
 				</tr>
@@ -86,12 +86,12 @@
 			</table>
 		</section>
 		
-		<!-- BELEG-LISTE -->
+		<!-- BELEGLISTE -->
 		<section id="liste" class="aus">
-			<!-- scheinbar unnötig verschachteln, damit position: sticky für #liste_filter funktioniert -->
+			<!-- scheinbar unnötig verschachteln; ist aber nötig damit position: sticky für #liste_filter funktioniert -->
 			<div><div id="liste_filter"></div></div>
 			<div id="liste_belege">
-				<header><a href="#" class="icon_link icon_filter_aus" id="liste_link_filter" title="Filter ausblenden"> </a><a href="#" class="icon_link icon_pfeil_hoch" id="liste_link_sort_auf" title="Chronologisch aufsteigend sortieren"> </a><a href="#" class="icon_link icon_pfeil_runter" id="liste_link_sort_ab" title="Chronologisch absteigend sortieren"> </a><a href="#" class="icon_link icon_auge_aus" id="liste_link_belegschnitt" title="Komplettanzeige der Belegschnitte ausblenden"> </a></header>
+				<header><a href="#" class="icon_link icon_filter_aus" id="liste_link_filter" title="Filter ausblenden"> </a><a href="#" class="start_block icon_link icon_pfeil_runter" id="liste_link_sortieren" title="Chronologisch absteigend sortieren"> </a><a href="#" class="start_block liste_link_text" id="liste_link_zeitschnitte_10" title="Zeitschnitte alle 10 Jahre">10</a><a href="#" class="liste_link_text" id="liste_link_zeitschnitte_50" title="Zeitschnitte alle 50 Jahre">50</a><a href="#" class="liste_link_text" id="liste_link_zeitschnitte_100" title="Zeitschnitte alle 100 Jahre">100</a><a href="#" class="liste_link_text liste_link_text_strike" id="liste_link_zeitschnitte" title="keine Zeitschnitte">100</a><a href="#" class="start_block icon_link icon_auge_aus" id="liste_link_belegschnitt" title="Komplettanzeige der Belegschnitte ausblenden"> </a></header>
 				<div id="liste_belege_cont"></div>
 			</div>
 		</section>
