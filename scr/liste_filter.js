@@ -37,9 +37,7 @@ let liste_filter = {
 	},
 	// Löst beim Ändern einer Filter-Checkbox den Neuaufbau der Liste aus
 	filterEvent (input) {
-		input.addEventListener("change", function() {
-			liste.aufbauen(false);
-		});
+		input.addEventListener("change", () => liste.aufbauen(false) );
 	},
 	// Karteikarten filtern
 	filter (karten) {

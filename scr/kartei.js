@@ -5,7 +5,30 @@ let kartei = {
 	wort: "",
 	// Pfad der geladenen Datei (dient zum automatischen Speichern der Datei)
 	pfad: "",
-	// bestehende Kartei öffnen
+	// Müssen vor dem Neuerstellen, Öffnen oder Schließen einer Kartei noch
+	// Änderungen gespeichert werden?
+	checkSpeichern (funktion) {
+		// zur Sicherheit den Fokus aus Textfeldern nehmen
+		// (falls Änderungen noch nicht übernommen wurden)
+		helfer.inputBlur();
+		// Änderungen nocht nicht gespeichert
+		if (beleg.geaendert || kartei.geaendert) {
+			let text = "Die Kartei";
+			if (beleg.geaendert) {
+				text = "Der Beleg";
+			}
+			dialog.oeffnen("confirm", function() {
+				if (!dialog.confirm) {
+					funktion();
+				}
+			});
+			dialog.text(`${text} wurde verändert, aber noch nicht gespeichert!\nMöchten Sie die Daten nicht lieber erst speichern?`);
+			return;
+		}
+		// alle Änderungen bereits gespeichert
+		funktion();
+	},
+	// bestehende Kartei öffnen (über den Öffnen-Dialog)
 	oeffnen () {
 		const {app, dialog} = require("electron").remote;
 		const optionen = {
@@ -14,39 +37,47 @@ let kartei = {
 				{ name: "Wortgeschichte digital-Datei", extensions: ["wgd"] },
 			],
 		};
-		dialog.showOpenDialog(null, optionen, (datei) => { // datei ist ein Array!
+		dialog.showOpenDialog(null, optionen, function(datei) { // datei ist ein Array!
 			if (datei === undefined) {
 				kartei.dialogWrapper("Sie haben keine Datei ausgewählt!");
 				return;
 			}
-			const fs = require("fs");
-			fs.readFile(datei[0], "utf-8", (err, content) => {
-				if (err) {
-					kartei.dialogWrapper(`Beim Öffnen der Datei ist ein Fehler aufgetreten!\n<strong>Fehlermeldung:</strong><br>${err.message}`);
-					return;
-				}
-				// Daten einlesen
-				let data_tmp = {};
-				// Folgt die Datei einer wohlgeformten JSON?
-				try {
-					data_tmp = JSON.parse(content);
-				} catch (err_json) {
-					kartei.dialogWrapper(`Beim Einlesen der Datei ist ein Fehler aufgetreten!\n<strong>Fehlermeldung:</strong><br>${err_json}`);
-					return;
-				}
-				// Wirklich ein wgd-Datei?
-				if (!data_tmp.t || data_tmp.t !== "wgd") {
-					kartei.dialogWrapper("Die Datei wurde nicht eingelesen!\nEs handelt sich nicht um eine Karteikasten-Datei von <i>Wortgeschichte digital</i>!");
-					return;
-				}
-				// Okay! Datei kann eingelesen werden
-				data = JSON.parse(content);
-				kartei.wort = data.w;
-				kartei.wortEintragen();
-				kartei.pfad = datei[0];
-				liste.aufbauen(true);
-				liste.wechseln();
-			});
+			kartei.oeffnenEinlesen(datei[0]);
+		});
+	},
+	// die übergebene Datei öffnen und einlesen
+	//   datei = Dateipfad (kommt vom Öffnen-Dialog oder via Drag-and-Drop)
+	oeffnenEinlesen (datei) {
+		const fs = require("fs");
+		fs.readFile(datei, "utf-8", function(err, content) {
+			if (err) {
+				kartei.dialogWrapper(`Beim Öffnen der Datei ist ein Fehler aufgetreten!\n<strong>Fehlermeldung:</strong><br>${err.message}`);
+				return;
+			}
+			// Daten einlesen
+			let data_tmp = {};
+			// Folgt die Datei einer wohlgeformten JSON?
+			try {
+				data_tmp = JSON.parse(content);
+			} catch (err_json) {
+				kartei.dialogWrapper(`Beim Einlesen der Datei ist ein Fehler aufgetreten!\n<strong>Fehlermeldung:</strong><br>${err_json}`);
+				return;
+			}
+			// Wirklich ein wgd-Datei?
+			if (!data_tmp.t || data_tmp.t !== "wgd") {
+				kartei.dialogWrapper("Die Datei wurde nicht eingelesen!\nEs handelt sich nicht um eine Karteikasten-Datei von <i>Wortgeschichte digital</i>!");
+				return;
+			}
+			// Daten werden eingelesen => Änderungsmarkierungen kommen weg
+			beleg.belegGeaendert(false);
+			kartei.karteiGeaendert(false);
+			// Okay! Datei kann eingelesen werden
+			data = JSON.parse(content);
+			kartei.wort = data.w;
+			kartei.wortEintragen();
+			kartei.pfad = datei;
+			liste.aufbauen(true);
+			liste.wechseln();
 		});
 	},
 	// neue Kartei erstellen
@@ -71,7 +102,7 @@ let kartei = {
 		beleg.erstellenCheck();
 	},
 	// geöffnete Kartei speichern
-	speichern () {
+	speichern (speichern_unter) {
 		// keine Kartei geöffnet
 		if (!kartei.wort) {
 			kartei.dialogWrapper("Es ist keine Kartei geöffnet!");
@@ -80,11 +111,11 @@ let kartei = {
 		// Dialog-Komponente laden
 		const {app, dialog} = require("electron").remote;
 		// Speicher-Funktion
-		let speichern = function (pfad) {
+		function speichern (pfad) {
 			let datum_modified = data.dm;
 			data.dm = new Date().toISOString();
 			const fs = require("fs");
-			fs.writeFile(pfad, JSON.stringify(data), (err) => {
+			fs.writeFile(pfad, JSON.stringify(data), function(err) {
 				if (err) {
 					kartei.dialogWrapper(`Beim Speichern ist ein Fehler aufgetreten!\n<strong>Fehlermeldung:</strong><br>${err.message}`);
 					data.dm = datum_modified;
@@ -93,9 +124,9 @@ let kartei = {
 				kartei.pfad = pfad;
 				kartei.karteiGeaendert(false);
 			});
-		};
+		}
 		// Kartei-Datei besteht bereits
-		if (kartei.pfad) {
+		if (kartei.pfad && !speichern_unter) {
 			speichern(kartei.pfad);
 			return;
 		}
@@ -106,7 +137,7 @@ let kartei = {
 				{ name: "Wortgeschichte digital-Datei", extensions: ["wgd"] },
 			],
 		};
-		dialog.showSaveDialog(null, optionen, (pfad) => {
+		dialog.showSaveDialog(null, optionen, function(pfad) {
 			if (pfad === undefined) {
 				kartei.dialogWrapper("Die Datei wurde nicht gespeichert!");
 				return;
@@ -120,21 +151,34 @@ let kartei = {
 		dialog.oeffnen("alert", null);
 		dialog.text(text);
 	},
+	// Kartei schließen
+	schliessen () {
+		beleg.belegGeaendert(false);
+		kartei.karteiGeaendert(false);
+		data = {};
+		kartei.wort = "";
+		kartei.pfad = "";
+		const wort = document.getElementById("wort");
+		wort.classList.add("keine_kartei");
+		wort.textContent = "keine Kartei geöffnet";
+		helfer.sektionWechseln("start");
+	},
 	// Benutzer nach dem Wort fragen, für die eine Kartei angelegt werden soll
 	wortErfragen () {
 		dialog.oeffnen("prompt", function() {
 			let wort = dialog.promptText();
 			if (dialog.confirm && !wort) {
 				dialog.oeffnen("alert", null);
-				dialog.text("Sie müssen ein Wort eingeben, sonst kann keine Kartei erstellt werden!");
+				dialog.text("Sie müssen ein Wort eingeben, sonst kann keine Kartei angelegt werden!");
 			} else if (dialog.confirm && wort) {
 				kartei.karteiGeaendert(true);
+				beleg.belegGeaendert(false);
 				kartei.wort = wort;
 				kartei.wortEintragen();
 				kartei.erstellen();
 			}
 		});
-		dialog.text("Zu welchem Wort soll eine Kartei erstellt werden?");
+		dialog.text("Zu welchem Wort soll eine Kartei angelegt werden?");
 	},
 	// Wort bei Bedarf ändern
 	wortAendern () {

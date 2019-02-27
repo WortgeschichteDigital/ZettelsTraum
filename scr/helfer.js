@@ -30,8 +30,33 @@ let helfer = {
 	},
 	// Tokens mit spezieller Bedeutung für reguläre Ausdrücke escapen
 	escapeRegExp (s) {
-		return s.replace(/\/|\(|\)|\[|\]|\{|\}|\.|\?|\\|\+|\*|\^|\$|\|/g, function(m) {
-			return `\\${m}`;
-		});
+		return s.replace(/\/|\(|\)|\[|\]|\{|\}|\.|\?|\\|\+|\*|\^|\$|\|/g, (m) => `\\${m}`);
+	},
+	// Tastatur-Events abfangen und verarbeiten
+	tastatur (evt) {
+		// Esc
+		if (evt.which === 27) {
+			// Overlay-Fenster schließen
+			let overlay_oben_id = overlay.oben();
+			if (overlay_oben_id) {
+				let link = document.querySelector(`#${overlay_oben_id} a`);
+				overlay.schliessen(link);
+				return;
+			}
+			// Belegfenster schließen
+			let formular = document.getElementById("beleg");
+			if (!formular.classList.contains("aus")) {
+				helfer.inputBlur();
+				beleg.aktionAbbrechen();
+			}
+		}
+	},
+	// Fokus aus Formularfeldern entfernen
+	inputBlur () {
+		let aktiv = document.activeElement;
+		if (aktiv.getAttribute("type") && aktiv.getAttribute("type") === "text" ||
+				aktiv.nodeName === "TEXTAREA") {
+			aktiv.blur();
+		}
 	},
 };

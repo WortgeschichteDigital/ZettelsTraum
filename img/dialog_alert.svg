@@ -7,26 +7,25 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   height="48"
    width="48"
-   version="1"
-   id="svg2"
-   inkscape:version="0.92.3 (2405546, 2018-03-11)"
-   sodipodi:docname="dialog_alert.svg">
+   height="48"
+   viewBox="0 0 48 48"
+   version="1.1"
+   id="svg7"
+   sodipodi:docname="dialog_alert.svg"
+   inkscape:version="0.92.3 (2405546, 2018-03-11)">
   <metadata
-     id="metadata22">
+     id="metadata11">
     <rdf:RDF>
       <cc:Work
          rdf:about="">
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
-  <defs
-     id="defs20" />
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -38,37 +37,31 @@
      inkscape:pageshadow="2"
      inkscape:window-width="1600"
      inkscape:window-height="849"
-     id="namedview18"
+     id="namedview9"
      showgrid="true"
      inkscape:zoom="13.583333"
-     inkscape:cx="12.220859"
+     inkscape:cx="24"
      inkscape:cy="24"
      inkscape:window-x="0"
      inkscape:window-y="24"
      inkscape:window-maximized="1"
-     inkscape:current-layer="svg2">
+     inkscape:current-layer="svg7">
     <inkscape:grid
        type="xygrid"
-       id="grid814" />
+       id="grid818" />
   </sodipodi:namedview>
-  <rect
-     transform="matrix(0,-1,-1,0,0,0)"
-     rx="20"
-     ry="20"
-     height="40"
-     width="40"
-     y="-44"
-     x="-44"
-     fill="#30a3db"
-     id="rect4"
-     style="fill:#729fcf;fill-opacity:1" />
-  <g
-     transform="matrix(2,0,0,-2,-1068,-673.01)"
-     id="g10">
-    <path
-       class="error"
-       d="m545-355h2v9.0039h-2zm0 11.004h2v1.9961h-2z"
-       id="path12"
-       fill="#fff" />
-  </g>
+  <defs
+     id="defs3">
+    <style
+       id="current-color-scheme"
+       type="text/css">
+   .ColorScheme-Text { color:#444444; } .ColorScheme-Highlight { color:#5294e2; }
+  </style>
+  </defs>
+  <path
+     style="color:#444444;fill:#729fcf;stroke-width:2.85713267;fill-opacity:1"
+     class="ColorScheme-Text"
+     d="M 24,4 C 12.954286,4 4,12.954507 4,23.999857 4,35.045778 12.954286,44 24,44 35.045714,44 44,35.045778 44,23.999857 44,12.954507 35.045714,4 24,4 Z m -2.857143,5.7031021 h 5.714286 V 26.845837 H 21.142857 Z M 24,29.702959 c 1.578,0 2.857143,1.279991 2.857143,2.857123 0,1.577131 -1.279143,2.857122 -2.857143,2.857122 -1.578,0 -2.857143,-1.279991 -2.857143,-2.857122 0,-1.577132 1.279143,-2.857123 2.857143,-2.857123 z"
+     id="path5"
+     inkscape:connector-curvature="0" />
 </svg>

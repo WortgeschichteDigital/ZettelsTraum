@@ -6,7 +6,7 @@ let overlay = {
 	// Fenster öffnen
 	oeffnen (fenster) {
 		overlay.zIndex++;
-		fenster.style.zIndex = fenster.zIndex;
+		fenster.style.zIndex = overlay.zIndex;
 		fenster.classList.remove("aus");
 	},
 	// Schließen-Event eines Links initialisieren
@@ -40,5 +40,24 @@ let overlay = {
 				dialog.funktion();
 			}
 		}
+	},
+	// oberstes Overlay-Fenster ermitteln
+	oben () {
+		let oben = {
+			zIndex: 0,
+			id: "",
+		};
+		let overlays = document.querySelectorAll(".overlay");
+		for (let i = 0, len = overlays.length; i < len; i++) {
+			if (overlays[i].classList.contains("aus")) {
+				continue;
+			}
+			let zIndex = parseInt(overlays[i].style.zIndex, 10);
+			if (zIndex > oben.zIndex) {
+				oben.zIndex = zIndex;
+				oben.id = overlays[i].id;
+			}
+		}
+		return oben.id;
 	},
 };

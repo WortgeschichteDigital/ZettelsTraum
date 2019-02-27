@@ -7,6 +7,7 @@
 	--HintergrundHell: #fdfdfd;
 	--Linie: #e0e0e0;
 	--Farbe: #729fcf;
+	--FarbeRot: #f00;
 	--BoxShadow: 3px 3px 6px 0 #d1d1d1;
 	--TextShadow: 3px 3px 6px #d1d1d1;
 }
@@ -37,6 +38,7 @@ body {
 	font-family: "DejaVu Sans", sans-serif;
 	font-size: 16px;
 	line-height: 24px;
+	overflow-x: hidden;
 	margin: 0;
 	user-select: none;
 }
@@ -78,6 +80,10 @@ a.icon_filter_aus {
 	-webkit-mask: url("../img/filter_aus.svg") no-repeat center;
 	mask: url("../img/filter_aus.svg") no-repeat center;
 }
+a.icon_hervorheben {
+	-webkit-mask: url("../img/hervorheben.svg") no-repeat center;
+	mask: url("../img/hervorheben.svg") no-repeat center;
+}
 a.icon_pfeil_hoch {
 	-webkit-mask: url("../img/pfeil_hoch.svg") no-repeat center;
 	mask: url("../img/pfeil_hoch.svg") no-repeat center;
@@ -89,6 +95,14 @@ a.icon_pfeil_runter {
 a.icon_schliessen {
 	-webkit-mask: url("../img/schliessen.svg") no-repeat center;
 	mask: url("../img/schliessen.svg") no-repeat center;
+}
+a.icon_tools_einfuegen {
+	-webkit-mask: url("../img/tool_einfuegen.svg") no-repeat center;
+	mask: url("../img/tool_einfuegen.svg") no-repeat center;
+}
+a.icon_tools_kopieren {
+	-webkit-mask: url("../img/tool_kopieren.svg") no-repeat center;
+	mask: url("../img/tool_kopieren.svg") no-repeat center;
 }
 
 input, textarea {

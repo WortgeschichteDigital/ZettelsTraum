@@ -19,31 +19,25 @@ let dialog = {
 		let fenster = document.getElementById("dialog");
 		overlay.oeffnen(fenster);
 		// Layout vorbereiten + Fokus setzen
-		let div_prompt = document.getElementById("dialog_prompt"),
-			div_ok = document.getElementById("dialog_ok"),
-			div_confirm = document.getElementById("dialog_confirm");
-		if (typ === "prompt") { // Prompt-Fenster
-			fenster.classList.add("frage");
-			div_prompt.classList.remove("aus");
-			div_ok.classList.remove("aus");
-			div_confirm.classList.add("aus");
-			let textfeld = div_prompt.querySelector("input");
+		if (typ === "prompt") { // Prompt
+			fenster.classList.add("prompt");
+			fenster.classList.remove("confirm");
+			fenster.classList.remove("alert");
+			let textfeld = fenster.querySelector("input");
 			textfeld.value = "";
 			textfeld.focus();
-		} else if (typ === "confirm") {
+		} else if (typ === "confirm") { // Confirm
+			fenster.classList.remove("prompt");
 			fenster.classList.add("confirm");
-			div_prompt.classList.add("aus");
-			div_ok.classList.add("aus");
-			div_confirm.classList.remove("aus");
-			div_confirm.querySelector("input").focus();
-		} else { // Meldungs-Fenster
-			fenster.classList.remove("frage");
-			div_prompt.classList.add("aus");
-			div_ok.classList.remove("aus");
-			div_confirm.classList.add("aus");
-			setTimeout(function() { // sonst wird onkeyup das Fenster sofort geschlossen (betrifft Prompt)
-				div_ok.querySelector("input").focus();
-			}, 25);
+			fenster.classList.remove("alert");
+			document.getElementById("dialog_confirm").querySelector("input").focus();
+		} else { // Alert
+			// Fenster-Typ
+			fenster.classList.remove("prompt");
+			fenster.classList.remove("confirm");
+			fenster.classList.add("alert");
+			// Timeout, sonst wird onkeyup das Fenster sofort geschlossen (betrifft Prompt)
+			setTimeout( () => document.getElementById("dialog_ok").querySelector("input").focus(), 25);
 		}
 	},
 	// Text im Dialog-Fenster eintragen

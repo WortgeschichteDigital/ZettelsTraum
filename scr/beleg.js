@@ -14,7 +14,7 @@ let beleg = {
 			dialog.oeffnen("alert", null);
 			dialog.text("Sie müssen erst eine Kartei öffnen oder erstellen!");
 		} else if (beleg.geaendert) { // aktueller Beleg noch nicht gespeichert
-			dialog.oeffnen("confirm", () => {
+			dialog.oeffnen("confirm", function() {
 				if (dialog.confirm) {
 					beleg.erstellen();
 				}
@@ -136,43 +136,33 @@ let beleg = {
 		// Test: Datum angegeben?
 		let da = document.getElementById("beleg_da");
 		if (!da.value) {
-			dialog.oeffnen("alert", function() {
-				da.select();
-			});
+			dialog.oeffnen("alert", () => da.select() );
 			dialog.text("Sie müssen ein Datum angeben!");
 			return;
 		}
 		// Test: Datum mit vierstelliger Jahreszahl oder Jahrhundertangabe?
 		if (!da.value.match(/[0-9]{4}|[0-9]{2}\. (Jahrhundert|Jh\.)/)) {
-			dialog.oeffnen("alert", function() {
-				da.select();
-			});
+			dialog.oeffnen("alert", () => da.select() );
 			dialog.text("Das Datum muss eine vierstellige Jahreszahl (z. B. 1813) oder eine Jahrhundertangabe (z. B. 17. Jh.) enthalten!");
 			return;
 		}
 		// Test: Belegschnitt angegeben?
 		let bs = document.getElementById("beleg_bs");
 		if (!bs.value) {
-			dialog.oeffnen("alert", function() {
-				bs.select();
-			});
+			dialog.oeffnen("alert", () => bs.select() );
 			dialog.text("Sie müssen einen Belegschnitt angeben!");
 			return;
 		}
 		// Test: Quelle angegeben?
 		let qu = document.getElementById("beleg_qu");
 		if (!qu.value) {
-			dialog.oeffnen("alert", function() {
-				qu.select();
-			});
+			dialog.oeffnen("alert", () => qu.select() );
 			dialog.text("Sie müssen eine Quelle oder eine URL angeben!");
 			return;
 		}
 		// Beleg wurde nicht geändert
 		if (!beleg.geaendert) {
-			dialog.oeffnen("alert", function() {
-				liste.wechseln();
-			});
+			dialog.oeffnen("alert", () => liste.wechseln() );
 			dialog.text("Es wurden keine Änderungen vorgenommen!");
 			return;
 		}
@@ -252,5 +242,65 @@ let beleg = {
 		} else {
 			icon.classList.add("aus");
 		}
+	},
+	// Verteilerfunktion für Klick-Events der Tools
+	toolsInit (a) {
+		a.addEventListener("click", function(evt) {
+			evt.preventDefault();
+			if (this.classList.contains("icon_tools_kopieren")) {
+				beleg.toolsKopieren(this);
+			} else if (this.classList.contains("icon_tools_einfuegen")) {
+				beleg.toolsEinfuegen(this);
+			}
+		});
+	},
+	// Tool Kopieren: Text aus dem zugehörigen Textfeld komplett kopieren
+	toolsKopieren (link) {
+		const {clipboard} = require("electron"),
+			id = link.parentNode.previousSibling.getAttribute("for"),
+			feld = document.getElementById(id);
+		if (id === "beleg_bs") {
+			clipboard.writeHTML(feld.value);
+		} else {
+			clipboard.writeText(feld.value);
+		}
+	},
+	// Tool Einfügen: Text möglichst unter Beibehaltung der Formatierung einfügen
+	toolsEinfuegen (link) {
+		// Element ermitteln
+		// Text einlesen
+		const {clipboard} = require("electron"),
+			formate = clipboard.availableFormats(),
+			id = link.parentNode.previousSibling.getAttribute("for"),
+			feld = document.getElementById(id);
+		// Text auslesen
+		let text = "";
+		if (id === "beleg_bs" && formate.indexOf("text/html") >= 0) {
+			text = beleg.toolsEinfuegenHtml(clipboard.readHTML());
+		} else {
+			text = clipboard.readText();
+		}
+		// Text einfügen
+		if (feld.value) {
+			dialog.oeffnen("confirm", function() {
+				if (dialog.confirm) {
+					feld.value = text;
+				} else if (feld.type === "text") { // Input-Text
+					feld.value += ` ${text}`;
+				} else { // Textareas
+					feld.value += `\n\n${text}`;
+				}
+				beleg.belegGeaendert(true);
+			});
+			dialog.text("Das Feld enthält schon Text! Soll es überschrieben werden?\n(Bei <i>Nein</i> wird der Text ergänzt.)");
+			return;
+		}
+		feld.value = text;
+		beleg.belegGeaendert(true);
+	},
+	// Bereitet HTML-Text zum Einfügen in das Belegschnitt-Formular auf
+	toolsEinfuegenHtml (html) {
+		// TODO
+		return html;
 	},
 };

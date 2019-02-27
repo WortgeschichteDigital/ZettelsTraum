@@ -40,7 +40,7 @@
 					<td colspan="2"><input type="button" value="Speichern" id="beleg_speichern"><input type="button" value="Abbrechen" id="beleg_abbrechen"><input type="button" value="Löschen" id="beleg_loeschen"></td>
 				</tr>
 				<tr>
-					<th><label for="beleg_da">Datum</label></th>
+					<th class="copy_paste_hover"><label for="beleg_da">Datum</label><span class="copy_paste"><a href="#" class="icon_link icon_tools_kopieren" title="Text kopieren"> </a><a href="#" class="icon_link icon_tools_einfuegen" title="Text einfügen"> </a></span></th>
 					<th class="rechts">Bewertung</th>
 				</tr>
 				<tr>
@@ -48,22 +48,22 @@
 					<td class="rechts" id="beleg_be"><img src="img/stern.svg" width="24" height="24" alt="*"><img src="img/stern.svg" width="24" height="24" alt="*"><img src="img/stern.svg" width="24" height="24" alt="*"><img src="img/stern.svg" width="24" height="24" alt="*"><img src="img/stern.svg" width="24" height="24" alt="*"></td>
 				</tr>
 				<tr>
-					<th colspan="2"><label for="beleg_bs">Belegschnitt</label><span>[Text-Tools]</span></th>
+					<th colspan="2" class="copy_paste_hover"><label for="beleg_bs">Belegschnitt</label><span class="copy_paste"><a href="#" class="icon_link icon_tools_kopieren" title="Text kopieren"> </a><a href="#" class="icon_link icon_tools_einfuegen" title="Text einfügen"> </a></span><span id="beleg_tools">[Text-Tools]</span></th>
 				</tr>
 				<tr>
 					<td colspan="2"><textarea spellcheck="false" id="beleg_bs"></textarea></td>
 				</tr>
 				<tr>
-					<th><label for="beleg_au">Autor</label></th>
-					<th><label for="beleg_bd">Bedeutung</label></th>
+					<th class="copy_paste_hover"><label for="beleg_au">Autor</label><span class="copy_paste"><a href="#" class="icon_link icon_tools_kopieren" title="Text kopieren"> </a><a href="#" class="icon_link icon_tools_einfuegen" title="Text einfügen"> </a></span></th>
+					<th class="copy_paste_hover"><label for="beleg_bd">Bedeutung</label><span class="copy_paste"><a href="#" class="icon_link icon_tools_kopieren" title="Text kopieren"> </a><a href="#" class="icon_link icon_tools_einfuegen" title="Text einfügen"> </a></span></th>
 				</tr>
 				<tr>
 					<td><input type="text" value="" spellcheck="false" id="beleg_au"></td>
 					<td><input type="text" value="" spellcheck="false" id="beleg_bd"></td>
 				</tr>
 				<tr>
-					<th><label for="beleg_qu">Quelle</label></th>
-					<th><label for="beleg_ts">Textsorte</label></th>
+					<th class="copy_paste_hover"><label for="beleg_qu">Quelle</label><span class="copy_paste"><a href="#" class="icon_link icon_tools_kopieren" title="Text kopieren"> </a><a href="#" class="icon_link icon_tools_einfuegen" title="Text einfügen"> </a></span></th>
+					<th class="copy_paste_hover"><label for="beleg_ts">Textsorte</label><span class="copy_paste"><a href="#" class="icon_link icon_tools_kopieren" title="Text kopieren"> </a><a href="#" class="icon_link icon_tools_einfuegen" title="Text einfügen"> </a></span></th>
 				</tr>
 				<tr>
 					<td rowspan="2"><textarea spellcheck="false" id="beleg_qu"></textarea></td>
@@ -76,7 +76,7 @@
 					</td>
 				</tr>
 				<tr>
-					<th><label for="beleg_no">Notizen</label></th>
+					<th class="copy_paste_hover"><label for="beleg_no">Notizen</label><span class="copy_paste"><a href="#" class="icon_link icon_tools_kopieren" title="Text kopieren"> </a><a href="#" class="icon_link icon_tools_einfuegen" title="Text einfügen"> </a></span></th>
 					<th>Anhänge</th>
 				</tr>
 				<tr>
@@ -91,7 +91,7 @@
 			<!-- scheinbar unnötig verschachteln; ist aber nötig damit position: sticky für #liste_filter funktioniert -->
 			<div><div id="liste_filter"></div></div>
 			<div id="liste_belege">
-				<header><a href="#" class="icon_link icon_filter_aus" id="liste_link_filter" title="Filter ausblenden"> </a><a href="#" class="start_block icon_link icon_pfeil_runter" id="liste_link_sortieren" title="Chronologisch absteigend sortieren"> </a><a href="#" class="start_block liste_link_text" id="liste_link_zeitschnitte_10" title="Zeitschnitte alle 10 Jahre">10</a><a href="#" class="liste_link_text" id="liste_link_zeitschnitte_50" title="Zeitschnitte alle 50 Jahre">50</a><a href="#" class="liste_link_text" id="liste_link_zeitschnitte_100" title="Zeitschnitte alle 100 Jahre">100</a><a href="#" class="liste_link_text liste_link_text_strike" id="liste_link_zeitschnitte" title="keine Zeitschnitte">100</a><a href="#" class="start_block icon_link icon_auge_aus" id="liste_link_belegschnitt" title="Komplettanzeige der Belegschnitte ausblenden"> </a></header>
+				<header><a href="#" class="icon_link icon_filter_aus" id="liste_link_filter" title="Filter ausblenden"> </a><a href="#" class="start_block icon_link icon_pfeil_runter" id="liste_link_sortieren" title="Chronologisch absteigend sortieren"> </a><a href="#" class="start_block liste_link_text liste_link_zeitschnitt" id="liste_link_zeitschnitte_10" title="Zeitschnitte alle 10 Jahre">10</a><a href="#" class="liste_link_text liste_link_zeitschnitt link_aktiv" id="liste_link_zeitschnitte_50" title="Zeitschnitte alle 50 Jahre">50</a><a href="#" class="liste_link_text liste_link_zeitschnitt" id="liste_link_zeitschnitte_100" title="Zeitschnitte alle 100 Jahre">100</a><a href="#" class="liste_link_text liste_link_text_strike liste_link_zeitschnitt" id="liste_link_zeitschnitte" title="keine Zeitschnitte">100</a><a href="#" class="start_block icon_link icon_auge_aus" id="liste_link_belegschnitt" title="Komplettanzeige der Belegschnitte ausblenden"> </a><a href="#" class="start_block liste_link_text link_aktiv" id="liste_link_hervorheben" title="Wort nicht hervorheben">Wort</a><span id="liste_belege_anzahl"></span></header>
 				<div id="liste_belege_cont"></div>
 			</div>
 		</section>

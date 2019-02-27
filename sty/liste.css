@@ -61,8 +61,10 @@
 }
 #liste_belege header {
 	background-color: #fff;
-	padding: 10px 0 2px 8px;
-	width: calc(100% - 5px);
+	white-space: nowrap;
+	overflow: hidden;
+	padding: 10px 5px 2px 8px;
+	width: calc(100% - 13px); /* 13px padding */
 	height: 24px;
 	border-bottom: 1px solid var(--Linie);
 	position: sticky;
@@ -83,13 +85,36 @@
 #liste_belege header .liste_link_text:hover {
 	text-decoration: none;
 }
-#liste_belege header .liste_link_text_strike, #liste_belege header .liste_link_text_strike:focus, #liste_belege header .liste_link_text_strike:hover {
-	text-decoration-line: line-through;
-	text-decoration-color: #f00;
-	text-decoration-style: solid;
+#liste_belege header .liste_link_text_strike {
+	position: relative;
+}
+#liste_belege header .liste_link_text_strike:before {
+  position: absolute;
+  content: "";
+  left: 0;
+  top: 40%;
+  right: 0;
+  border-top: 3px solid var(--FarbeRot);
+  transform:rotate(-20deg);
+}
+#liste_belege header #liste_link_hervorheben {
+	width: 45px;
+	display: inline-block;
+}
+#liste_belege header .link_aktiv {
+	font-weight: bold;
 }
 #liste_belege header .start_block {
 	margin-left: 25px;
+}
+#liste_belege header #liste_belege_anzahl {
+	background-color: #fff;
+	padding: 0 5px 0 25px;
+	position: absolute;
+	right: 0;
+}
+#liste_belege header .belege_gefiltert {
+	font-weight: bold;
 }
 
 /* BELEGLISTE: CONTENT */

@@ -21,7 +21,10 @@
 	margin: 70px auto 0 auto;
 	position: relative;
 }
-#dialog.frage > div {
+#dialog.prompt > div {
+	background: #fff url("../img/dialog_prompt.svg") no-repeat 10px 10px;
+}
+#dialog.confirm > div {
 	background: #fff url("../img/dialog_confirm.svg") no-repeat 10px 10px;
 }
 
@@ -38,4 +41,16 @@
 	text-align: right;
 	line-height: 30px;
 	margin: 0;
+}
+#dialog #dialog_prompt, #dialog #dialog_ok, #dialog #dialog_confirm {
+	display: none;
+}
+#dialog.prompt #dialog_prompt, #dialog.prompt #dialog_ok {
+	display: block;
+}
+#dialog.confirm #dialog_confirm {
+	display: block;
+}
+#dialog.alert #dialog_ok {
+	display: block;
 }

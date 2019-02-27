@@ -1,10 +1,11 @@
 @charset "UTF-8";
 
+/* TABELLE */
 #beleg table {
 	background-color: var(--HintergrundHell);
 	width: calc(100% - 104px);
 	min-width: 500px;
-	max-width: 900px;
+	max-width: 800px;
 	padding: 10px;
 	border-collapse: separate;
 	border-spacing: 0;
@@ -39,11 +40,6 @@
 #beleg tr:first-child td {
 	padding-bottom: 15px;
 }
-#beleg th span {
-	color: var(--Text);
-	position: absolute;
-	right: 10px;
-}
 #beleg td {
 	width: calc(50% - 10px);
 	vertical-align: top;
@@ -54,12 +50,16 @@
 	vertical-align: bottom;
 }
 
+/* FORM-ELEMENTE */
 #beleg input[type="text"] {
 	width: calc(100% - 12px);
 }
 #beleg textarea {
 	width: calc(100% - 12px);
 	height: 120px;
+}
+#beleg #beleg_bs {
+	height: 192px;
 }
 #beleg input[type="button"]:first-child {
 	margin-left: 0;
@@ -69,6 +69,20 @@
 	right: 0;
 }
 
+/* TEXT-TOOLS */
+#beleg_tools {
+	position: absolute;
+	right: 10px;
+}
+#beleg .copy_paste {
+	margin-left: 10px;
+	display: none;
+}
+#beleg .copy_paste_hover:hover .copy_paste {
+	display: inline-block;
+}
+
+/* SPEZIELLE FORMATE */
 #beleg .rechts {
 	text-align: right;
 }

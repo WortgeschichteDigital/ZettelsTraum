@@ -15,8 +15,11 @@ const Kartei = {
 	speichern () {
 		win.webContents.send("kartei-speichern");
 	},
+	speichernUnter () {
+		win.webContents.send("kartei-speichern-unter");
+	},
 	schliessen () {
-		
+		win.webContents.send("kartei-schliessen");
 	},
 };
 
@@ -29,29 +32,29 @@ const Werkzeuge = {
 		win.webContents.send("belege-auflisten");
 	},
 	bedeutungenSortieren () {
-		
+		// TODO
 	},
 	metadaten () {
-		
+		// TODO
 	},
 	notizen () {
-		
+		// TODO
 	},
 	anhaenge () {
-		
+		// TODO
 	},
 };
 
 // Funktionen zum Menü "Hilfe"
 const Hilfe = {
 	benutzerhandbuch () {
-	
+		// TODO
 	},
 	dokumentation () {
-		
+		// TODO
 	},
 	ueber () {
-		
+		// TODO
 	},
 };
 
@@ -64,8 +67,9 @@ const menuLayout = [
 			{ type: "separator" },
 			{ click() { Kartei.oeffnen(); }, label: "Öffnen", accelerator: "CommandOrControl+O" },
 			{ click() { Kartei.speichern(); }, label: "Speichern", accelerator: "CommandOrControl+S" },
+			{ click() { Kartei.speichernUnter(); }, label: "Speichern unter", accelerator: "CommandOrControl+Shift+S" },
 			{ type: "separator" },
-			{ click() { Kartei.schliessen(); }, label: "Schließen", accelerator: "CommandOrControl+W", enabled: false },
+			{ click() { Kartei.schliessen(); }, label: "Schließen", accelerator: "CommandOrControl+W" },
 			{ type: "separator" },
 			{ role: "quit", label: "Programm beenden" },
 		],
@@ -138,18 +142,16 @@ const Fenster = {
 			title: `${app.getName()} v${app.getVersion()}`,
 			width: 800,
 			height: Bildschirm.workArea.height,
+			minWidth: 500,
+			minHeight: 300,
 			show: false,
 		});
 		// main.html laden
 		win.loadFile("main.html");
 		// Fenster anzeigen, sobald alles geladen wurde
-		win.once("ready-to-show", () => {
-			win.show();
-		});
+		win.once("ready-to-show", () => win.show() );
 		// globales Fensterobjekt beim Schließen dereferenzieren
-		win.on("closed", () => {
-			win = null;
-		});
+		win.on("closed", () => win = null );
 	},
 };
 
@@ -157,7 +159,7 @@ const Fenster = {
 app.on("ready", Fenster.erstellen);
 
 // App beenden, wenn alle Fenster geschlossen worden sind
-app.on("window-all-closed", () => {
+app.on("window-all-closed", function() {
 	// auf MacOS bleibt das Programm üblicherweise aktiv,
 	// bis der Benutzer es explizit beendet
 	if (process.platform !== "darwin") {
@@ -166,7 +168,7 @@ app.on("window-all-closed", () => {
 });
 
 // App wiederherstellen, bzw. wieder öffnen
-app.on("activate", () => {
+app.on("activate", function() {
 	// auf MacOS wird das Fenster einfach nur wiederhergestellt
 	if (win === null) {
 		Fenster.erstellen();
