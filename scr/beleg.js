@@ -1,13 +1,11 @@
 "use strict";
 
-// Das Objekt enthält alle Variablen und Methoden, die mit dem Eingabeformular
-// für neue Karteikarten zusammenhängen.
 let beleg = {
 	// ID der aktuell angezeigten Karte
 	id_karte: -1,
 	// Kopie der Daten der aktuell angezeigten Karte
 	data: {},
-	// überprüfen, ob vor dem Erstellen eine neuen Belegs noch Änderungen
+	// überprüfen, ob vor dem Erstellen eines neuen Belegs noch Änderungen
 	// gespeichert werden müssen
 	erstellenCheck () {
 		if (!kartei.wort) { // noch keine Kartei geöffnet/erstellt
@@ -39,17 +37,17 @@ let beleg = {
 		beleg.id_karte = id_karte;
 		// Karten-Objekt anlegen
 		beleg.data = {
-			da: "",
-			ts: "",
-			au: "",
-			bs: "",
-			bd: "",
-			qu: "",
-			ko: false,
-			bu: false,
-			no: "",
-			an: [],
-			be: 0,
+			da: "", // Belegdatum
+			ts: "", // Textsorte
+			au: "", // Autor
+			bs: "", // Belegschnitt
+			bd: "", // Bedeutung
+			qu: "", // Quelle
+			ko: false, // Kontext
+			bu: false, // Bücherdienstauftrag
+			no: "", // Notizen
+			an: [], // Anhänge
+			be: 0, // Bewertung
 		};
 		// Karte anzeigen
 		beleg.formularAnzeigen();
@@ -186,11 +184,6 @@ let beleg = {
 	},
 	// Bearbeitung des Belegs abbrechen
 	aktionAbbrechen () {
-		// Funktion zum Abbrechen
-		function abbrechen () {
-			beleg.belegGeaendert(false);
-			liste.wechseln();
-		}
 		// Bearbeitung wirklich abbrechen?
 		if (beleg.geaendert) {
 			dialog.oeffnen("confirm", function() {
@@ -201,6 +194,11 @@ let beleg = {
 			dialog.text("Die Eingaben wurden nocht nicht gespeichert!\nFormular trotzdem schließen?");
 		} else {
 			abbrechen();
+		}
+		// Funktion zum Abbrechen
+		function abbrechen () {
+			beleg.belegGeaendert(false);
+			liste.wechseln();
 		}
 	},
 	// Beleg löschen

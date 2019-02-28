@@ -66,17 +66,28 @@ window.addEventListener("load", function() {
 	}
 	
 	// ANFRAGEN DES MAIN-PROZESSES ABFANGEN
-	require("electron").ipcRenderer.on("kartei-erstellen", function() {
+	const {ipcRenderer} = require("electron");
+	ipcRenderer.on("kartei-erstellen", function() {
 		kartei.checkSpeichern( () => kartei.wortErfragen() );
 	});
-	require("electron").ipcRenderer.on("kartei-oeffnen", function() {
-		kartei.checkSpeichern( () => kartei.oeffnen() );
+	ipcRenderer.on("kartei-oeffnen", function(evt, datei) {
+		if (datei) {
+			kartei.checkSpeichern(() => kartei.oeffnenEinlesen(datei) );
+		} else {
+			kartei.checkSpeichern(() => kartei.oeffnen() );
+		}
 	});
-	require("electron").ipcRenderer.on("kartei-speichern", () => kartei.speichern(false) );
-	require("electron").ipcRenderer.on("kartei-speichern-unter", () => kartei.speichern(true) );
-	require("electron").ipcRenderer.on("kartei-schliessen", function() {
+	ipcRenderer.on("kartei-speichern", () => kartei.speichern(false) );
+	ipcRenderer.on("kartei-speichern-unter", () => kartei.speichern(true) );
+	ipcRenderer.on("kartei-schliessen", function() {
 		kartei.checkSpeichern( () => kartei.schliessen() );
 	});
-	require("electron").ipcRenderer.on("beleg-hinzufuegen", () => beleg.erstellenCheck() );
-	require("electron").ipcRenderer.on("belege-auflisten", () => liste.anzeigen() );
+	ipcRenderer.on("beleg-hinzufuegen", () => beleg.erstellenCheck() );
+	ipcRenderer.on("belege-auflisten", () => liste.anzeigen() );
+	ipcRenderer.on("optionen-zuletzt", (evt, zuletzt) => optionen.data.zuletzt = zuletzt );
+	
+	// SYNCHRONE ANFRAGEN AN DEN MAIN-PROZESS STELLEN
+	let opt = ipcRenderer.sendSync("optionen-senden");
+	optionen.einlesen(optionen.data, opt);
+	optionen.anwenden();
 });

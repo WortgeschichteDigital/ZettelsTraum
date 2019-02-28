@@ -4,6 +4,8 @@
 		<meta charset="utf-8">
 		<title> </title>
 		
+		<meta http-equiv="Content-Security-Policy" content="default-src 'self'">
+		
 		<link rel="stylesheet" href="sty/app.css">
 		<link rel="stylesheet" href="sty/beleg.css">
 		<link rel="stylesheet" href="sty/klassen.css">
@@ -18,6 +20,7 @@
 		<script src="scr/kartei.js"></script>
 		<script src="scr/liste.js"></script>
 		<script src="scr/liste_filter.js"></script>
+		<script src="scr/optionen.js"></script>
 		<script src="scr/overlay.js"></script>
 	</head>
 	<body>
@@ -91,7 +94,7 @@
 			<!-- scheinbar unnötig verschachteln; ist aber nötig damit position: sticky für #liste_filter funktioniert -->
 			<div><div id="liste_filter"></div></div>
 			<div id="liste_belege">
-				<header><a href="#" class="icon_link icon_filter_aus" id="liste_link_filter" title="Filter ausblenden"> </a><a href="#" class="start_block icon_link icon_pfeil_runter" id="liste_link_sortieren" title="Chronologisch absteigend sortieren"> </a><a href="#" class="start_block liste_link_text liste_link_zeitschnitt" id="liste_link_zeitschnitte_10" title="Zeitschnitte alle 10 Jahre">10</a><a href="#" class="liste_link_text liste_link_zeitschnitt link_aktiv" id="liste_link_zeitschnitte_50" title="Zeitschnitte alle 50 Jahre">50</a><a href="#" class="liste_link_text liste_link_zeitschnitt" id="liste_link_zeitschnitte_100" title="Zeitschnitte alle 100 Jahre">100</a><a href="#" class="liste_link_text liste_link_text_strike liste_link_zeitschnitt" id="liste_link_zeitschnitte" title="keine Zeitschnitte">100</a><a href="#" class="start_block icon_link icon_auge_aus" id="liste_link_belegschnitt" title="Komplettanzeige der Belegschnitte ausblenden"> </a><a href="#" class="start_block liste_link_text link_aktiv" id="liste_link_hervorheben" title="Wort nicht hervorheben">Wort</a><span id="liste_belege_anzahl"></span></header>
+				<header><a href="#" class="icon_link icon_filter_aus" id="liste_link_filter" title="Filter ausblenden"> </a><a href="#" class="start_block icon_link icon_pfeil_runter" id="liste_link_sortieren" title="Chronologisch absteigend sortieren"> </a><a href="#" class="start_block liste_link_text liste_link_zeitschnitte" id="liste_link_zeitschnitte_10" title="Zeitschnitte alle 10 Jahre">10</a><a href="#" class="liste_link_text liste_link_zeitschnitte link_aktiv" id="liste_link_zeitschnitte_50" title="Zeitschnitte alle 50 Jahre">50</a><a href="#" class="liste_link_text liste_link_zeitschnitte" id="liste_link_zeitschnitte_100" title="Zeitschnitte alle 100 Jahre">100</a><a href="#" class="liste_link_text liste_link_text_strike liste_link_zeitschnitte" id="liste_link_zeitschnitte" title="keine Zeitschnitte">100</a><a href="#" class="start_block icon_link icon_auge_aus" id="liste_link_belegschnitte" title="Komplettanzeige der Belegschnitte ausblenden"> </a><a href="#" class="start_block liste_link_text link_aktiv" id="liste_link_hervorheben" title="Wort nicht hervorheben">Wort</a><span id="liste_belege_anzahl"></span></header>
 				<div id="liste_belege_cont"></div>
 			</div>
 		</section>

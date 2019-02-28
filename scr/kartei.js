@@ -31,13 +31,18 @@ let kartei = {
 	// bestehende Kartei öffnen (über den Öffnen-Dialog)
 	oeffnen () {
 		const {app, dialog} = require("electron").remote;
-		const optionen = {
+		const opt = {
 			defaultPath: app.getPath("documents"),
 			filters: [
 				{ name: "Wortgeschichte digital-Datei", extensions: ["wgd"] },
 			],
 		};
-		dialog.showOpenDialog(null, optionen, function(datei) { // datei ist ein Array!
+		// Wo wurde zuletzt eine Datei gespeichert oder geöffnet?
+		if (optionen.data.letzter_pfad) {
+			opt.defaultPath = optionen.data.letzter_pfad;
+		}
+		// Dialog anzeigen
+		dialog.showOpenDialog(null, opt, function(datei) { // datei ist ein Array!
 			if (datei === undefined) {
 				kartei.dialogWrapper("Sie haben keine Datei ausgewählt!");
 				return;
@@ -76,6 +81,8 @@ let kartei = {
 			kartei.wort = data.w;
 			kartei.wortEintragen();
 			kartei.pfad = datei;
+			optionen.optionLetzterPfad();
+			optionen.optionZuletzt();
 			liste.aufbauen(true);
 			liste.wechseln();
 		});
@@ -86,20 +93,22 @@ let kartei = {
 		kartei.pfad = "";
 		// globales Datenobjekt initialisieren
 		data = {
-			w: kartei.wort,
-			dc: new Date().toISOString(),
-			dm: "",
-			e: [],
-			n: "",
-			a: [],
-			t: "wgd",
-			v: 1,
-			k: {},
-			h: {},
-			b: {},
+			w: kartei.wort, // Wort
+			dc: new Date().toISOString(), // Datum Kartei-Erstellung
+			dm: "", // Datum Kartei-Änderung
+			e: [], // Bearbeiter
+			n: "", // Notizen
+			a: [], // Anhänge
+			t: "wgd", // Datei ist eine wgd-Datei (immer dieser Wert)
+			v: 1, // Version des Datei-Formats
+			k: {}, // Karteikarten
+			h: {}, // Kartenhaufen
+			b: {}, // Bedeutungen
 		};
+		// Belegliste leeren (es könnten noch Belege von einer vorherigen Karte vorhanden sein)
+		liste.aufbauenBasis(true);
 		// neue Karte erstellen
-		beleg.erstellenCheck();
+		beleg.erstellen();
 	},
 	// geöffnete Kartei speichern
 	speichern (speichern_unter) {
@@ -122,6 +131,8 @@ let kartei = {
 					return;
 				}
 				kartei.pfad = pfad;
+				optionen.optionLetzterPfad();
+				optionen.optionZuletzt();
 				kartei.karteiGeaendert(false);
 			});
 		}
@@ -131,13 +142,18 @@ let kartei = {
 			return;
 		}
 		// Kartei-Datei muss angelegt werden
-		const optionen = {
+		const opt = {
 			defaultPath: `${app.getPath("documents")}/${kartei.wort}.wgd`,
 			filters: [
 				{ name: "Wortgeschichte digital-Datei", extensions: ["wgd"] },
 			],
 		};
-		dialog.showSaveDialog(null, optionen, function(pfad) {
+		// Wo wurde zuletzt eine Datei gespeichert oder geöffnet?
+		if (optionen.data.letzter_pfad) {
+			opt.defaultPath = `${optionen.data.letzter_pfad}/${kartei.wort}.wgd`;
+		}
+		// Dialog anzeigen
+		dialog.showSaveDialog(null, opt, function(pfad) {
 			if (pfad === undefined) {
 				kartei.dialogWrapper("Die Datei wurde nicht gespeichert!");
 				return;
