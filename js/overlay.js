@@ -10,6 +10,7 @@ let overlay = {
 		fenster.classList.remove("aus");
 	},
 	// Schließen-Event eines Links initialisieren
+	//   link = Element, auf das geklickt wird
 	initSchliessen (link) {
 		link.addEventListener("click", function(evt) {
 			evt.preventDefault();
@@ -17,7 +18,7 @@ let overlay = {
 		});
 	},
 	// schließt ein Overlay-Fenster
-	//   link = Objektverweis auf den Link, über den das Schließen angestoßen wurde
+	//   schliesser = Objektverweis auf den Link, über den das Schließen angestoßen wurde
 	schliessen (schliesser) {
 		// Overlay-Fenster ermitteln + schließen
 		let fenster = schliesser;
@@ -29,12 +30,12 @@ let overlay = {
 		if (fenster.id === "dialog") {
 			if (schliesser.nodeName === "INPUT") { // Schließen durch Input-Button oder Input-Text
 				if (schliesser.value.match(/Abbrechen|Nein/)) { // Alert-Dialog: Abbrechen, Confirm-Dialog: Nein
-					dialog.confirm = false;
+					dialog.antwort = false;
 				} else {
-					dialog.confirm = true;
+					dialog.antwort = true;
 				}
 			} else { // Schließen durch Link
-				dialog.confirm = false;
+				dialog.antwort = null;
 			}
 			if (dialog.funktion) { // Soll eine Funktion ausgeführt werden?
 				dialog.funktion();

@@ -8,16 +8,15 @@ let beleg = {
 	// überprüfen, ob vor dem Erstellen eines neuen Belegs noch Änderungen
 	// gespeichert werden müssen
 	erstellenCheck () {
-		if (!kartei.wort) { // noch keine Kartei geöffnet/erstellt
-			dialog.oeffnen("alert", null);
-			dialog.text("Sie müssen erst eine Kartei öffnen oder erstellen!");
-		} else if (beleg.geaendert) { // aktueller Beleg noch nicht gespeichert
+		if (beleg.geaendert) { // aktueller Beleg noch nicht gespeichert
 			dialog.oeffnen("confirm", function() {
-				if (dialog.confirm) {
+				if (dialog.antwort) {
+					beleg.aktionSpeichern();
+				} else if (dialog.antwort === false) {
 					beleg.erstellen();
 				}
 			});
-			dialog.text("Der aktuelle Beleg wurde geändert, aber noch nicht gespeichert!\nMöchten Sie trotzdem einen neuen Beleg hinzufügen?\nAchtung, alle Änderungen am aktuellen Beleg gehen verloren!");
+			dialog.text("Der aktuelle Beleg wurde geändert, aber noch nicht gespeichert!\nMöchten Sie den Beleg nicht erst einmal speichern?");
 		} else {
 			beleg.erstellen();
 		}
@@ -57,7 +56,7 @@ let beleg = {
 		a.addEventListener("click", function(evt) {
 			evt.preventDefault();
 			evt.stopPropagation();
-			beleg.oeffnen(parseInt(this.dataset.id, 10));
+			beleg.oeffnen( parseInt(this.parentNode.dataset.id, 10) );
 		});
 	},
 	// bestehende Karteikarte öffnen
@@ -141,7 +140,7 @@ let beleg = {
 		// Test: Datum mit vierstelliger Jahreszahl oder Jahrhundertangabe?
 		if (!da.value.match(/[0-9]{4}|[0-9]{2}\. (Jahrhundert|Jh\.)/)) {
 			dialog.oeffnen("alert", () => da.select() );
-			dialog.text("Das Datum muss eine vierstellige Jahreszahl (z. B. 1813) oder eine Jahrhundertangabe (z. B. 17. Jh.) enthalten!");
+			dialog.text("Das Datum muss eine vierstellige Jahreszahl (z. B. „1813“) oder eine Jahrhundertangabe (z. B. „17. Jh.“) enthalten!\nZusätzlich können auch andere Angaben gemacht werden (z. B. „ca. 1815“, „1610, vielleicht 1611“)");
 			return;
 		}
 		// Test: Belegschnitt angegeben?
@@ -155,7 +154,7 @@ let beleg = {
 		let qu = document.getElementById("beleg_qu");
 		if (!qu.value) {
 			dialog.oeffnen("alert", () => qu.select() );
-			dialog.text("Sie müssen eine Quelle oder eine URL angeben!");
+			dialog.text("Sie müssen eine Quelle angeben!");
 			return;
 		}
 		// Beleg wurde nicht geändert
@@ -187,11 +186,13 @@ let beleg = {
 		// Bearbeitung wirklich abbrechen?
 		if (beleg.geaendert) {
 			dialog.oeffnen("confirm", function() {
-				if (dialog.confirm) {
+				if (dialog.antwort) {
+					beleg.aktionSpeichern();
+				} else if (dialog.antwort === false) {
 					abbrechen();
 				}
 			});
-			dialog.text("Die Eingaben wurden nocht nicht gespeichert!\nFormular trotzdem schließen?");
+			dialog.text("Der aktuelle Beleg wurde geändert, aber noch nicht gespeichert!\nMöchten Sie den Beleg nicht erst einmal speichern?");
 		} else {
 			abbrechen();
 		}
@@ -210,7 +211,7 @@ let beleg = {
 		}
 		// Beleg wirklich löschen?
 		dialog.oeffnen("confirm", function() {
-			if (dialog.confirm) {
+			if (dialog.antwort) {
 				// Datensatz löschen
 				delete data.k[beleg.id_karte];
 				// Änderungen darstellen
@@ -229,7 +230,7 @@ let beleg = {
 		liste.aufbauen(true);
 		liste.wechseln();
 	},
-	// Beleg wurde geändert und nocht nicht gespeichert
+	// Beleg wurde geändert und noch nicht gespeichert
 	geaendert: false,
 	// Anzeigen, dass der Beleg geändert wurde
 	belegGeaendert (geaendert) {
@@ -240,6 +241,16 @@ let beleg = {
 		} else {
 			icon.classList.add("aus");
 		}
+	},
+	// Beleg bei Enter speichern (wenn Fokus in Textfeld oder auf Checkbox)
+	belegSpeichern (input) {
+		input.addEventListener("keydown", function(evt) {
+			if (evt.which === 13) {
+				evt.preventDefault();
+				helfer.inputBlur();
+				beleg.aktionSpeichern();
+			}
+		});
 	},
 	// Verteilerfunktion für Klick-Events der Tools
 	toolsInit (a) {
@@ -281,16 +292,16 @@ let beleg = {
 		// Text einfügen
 		if (feld.value) {
 			dialog.oeffnen("confirm", function() {
-				if (dialog.confirm) {
+				if (dialog.antwort) {
 					feld.value = text;
-				} else if (feld.type === "text") { // Input-Text
+				} else if (dialog.antwort === false && feld.type === "text") { // Input-Text
 					feld.value += ` ${text}`;
-				} else { // Textareas
+				} else if (dialog.antwort === false) { // Textareas
 					feld.value += `\n\n${text}`;
 				}
 				beleg.belegGeaendert(true);
 			});
-			dialog.text("Das Feld enthält schon Text! Soll es überschrieben werden?\n(Bei <i>Nein</i> wird der Text ergänzt.)");
+			dialog.text("Das Feld enthält schon Text! Soll er überschrieben werden?\n(Bei <i>Nein</i> wird der Text ergänzt.)");
 			return;
 		}
 		feld.value = text;

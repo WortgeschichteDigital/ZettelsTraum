@@ -1,6 +1,6 @@
 @charset "UTF-8";
 
-/* TABELLE */
+/* TABELLE FÜR DAS FORMULAR */
 #beleg table {
 	background-color: var(--HintergrundHell);
 	width: calc(100% - 104px);
@@ -50,7 +50,7 @@
 	vertical-align: bottom;
 }
 
-/* FORM-ELEMENTE */
+/* FORMULAR-ELEMENTE */
 #beleg input[type="text"] {
 	width: calc(100% - 12px);
 }

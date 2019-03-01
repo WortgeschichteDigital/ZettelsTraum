@@ -22,17 +22,19 @@ let helfer = {
 	},
 	// überprüft den Typ des übergebenen Objekts zuverlässig
 	// mögliche Rückgabewerte: Arguments, Array, Boolean, Date, Error, Function, JSON, Math, Number, Object, RegExp, String
-	//   typ = zu überprüfender Typ
-	//   obj = zu überprüfendes Objekt
+	//   typ = String (zu überprüfender Typ)
+	//   obj = Object (zu überprüfendes Objekt)
 	type_check (typ, obj) {
 		let cl = Object.prototype.toString.call(obj).slice(8, -1);
     return obj !== undefined && obj !== null && cl === typ;
 	},
 	// Tokens mit spezieller Bedeutung für reguläre Ausdrücke escapen
+	//   s = übergebener String
 	escapeRegExp (s) {
 		return s.replace(/\/|\(|\)|\[|\]|\{|\}|\.|\?|\\|\+|\*|\^|\$|\|/g, (m) => `\\${m}`);
 	},
 	// Tastatur-Events abfangen und verarbeiten
+	//   evt = Event-Objekt
 	tastatur (evt) {
 		// Esc
 		if (evt.which === 27) {

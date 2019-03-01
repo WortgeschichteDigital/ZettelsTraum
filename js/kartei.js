@@ -13,16 +13,22 @@ let kartei = {
 		helfer.inputBlur();
 		// Änderungen nocht nicht gespeichert
 		if (beleg.geaendert || kartei.geaendert) {
-			let text = "Die Kartei";
-			if (beleg.geaendert) {
-				text = "Der Beleg";
-			}
 			dialog.oeffnen("confirm", function() {
-				if (!dialog.confirm) {
+				if (dialog.antwort === false) {
 					funktion();
+				} else if (dialog.antwort) {
+					if (beleg.geaendert) {
+						beleg.aktionSpeichern();
+					} else if (kartei.geaendert) {
+						kartei.speichern(false);
+					}
 				}
 			});
-			dialog.text(`${text} wurde verändert, aber noch nicht gespeichert!\nMöchten Sie die Daten nicht lieber erst speichern?`);
+			let typ = "Die Kartei";
+			if (beleg.geaendert) {
+				typ = "Der Beleg";
+			}
+			dialog.text(`${typ} wurde noch nicht gespeichert!\nMöchten Sie die Daten nicht erst einmal speichern?`);
 			return;
 		}
 		// alle Änderungen bereits gespeichert
@@ -32,9 +38,11 @@ let kartei = {
 	oeffnen () {
 		const {app, dialog} = require("electron").remote;
 		const opt = {
+			title: "Kartei öffnen",
 			defaultPath: app.getPath("documents"),
 			filters: [
 				{ name: "Wortgeschichte digital-Datei", extensions: ["wgd"] },
+				{ name: "Alle Dateien", extensions: ["*"] },
 			],
 		};
 		// Wo wurde zuletzt eine Datei gespeichert oder geöffnet?
@@ -85,6 +93,7 @@ let kartei = {
 			optionen.optionZuletzt();
 			liste.aufbauen(true);
 			liste.wechseln();
+			kartei.menusDeaktivieren(false);
 		});
 	},
 	// neue Kartei erstellen
@@ -105,52 +114,34 @@ let kartei = {
 			h: {}, // Kartenhaufen
 			b: {}, // Bedeutungen
 		};
-		// Belegliste leeren (es könnten noch Belege von einer vorherigen Karte vorhanden sein)
-		liste.aufbauenBasis(true);
+		// Belegliste leeren: Es könnten noch Belege von einer vorherigen Karte vorhanden sein;
+		// außerdem könnte es sein, dass die Bearbeiter*in keinen Beleg erstellt
+		liste.aufbauen(true);
 		// neue Karte erstellen
 		beleg.erstellen();
 	},
 	// geöffnete Kartei speichern
 	speichern (speichern_unter) {
-		// keine Kartei geöffnet
-		if (!kartei.wort) {
-			kartei.dialogWrapper("Es ist keine Kartei geöffnet!");
-			return;
-		}
 		// Dialog-Komponente laden
 		const {app, dialog} = require("electron").remote;
-		// Speicher-Funktion
-		function speichern (pfad) {
-			let datum_modified = data.dm;
-			data.dm = new Date().toISOString();
-			const fs = require("fs");
-			fs.writeFile(pfad, JSON.stringify(data), function(err) {
-				if (err) {
-					kartei.dialogWrapper(`Beim Speichern ist ein Fehler aufgetreten!\n<strong>Fehlermeldung:</strong><br>${err.message}`);
-					data.dm = datum_modified;
-					return;
-				}
-				kartei.pfad = pfad;
-				optionen.optionLetzterPfad();
-				optionen.optionZuletzt();
-				kartei.karteiGeaendert(false);
-			});
-		}
 		// Kartei-Datei besteht bereits
 		if (kartei.pfad && !speichern_unter) {
 			speichern(kartei.pfad);
 			return;
 		}
 		// Kartei-Datei muss angelegt werden
+		const path = require("path");
 		const opt = {
-			defaultPath: `${app.getPath("documents")}/${kartei.wort}.wgd`,
+			title: "Kartei speichern",
+			defaultPath: path.join(app.getPath("documents"), `${kartei.wort}.wgd`),
 			filters: [
 				{ name: "Wortgeschichte digital-Datei", extensions: ["wgd"] },
+				{ name: "Alle Dateien", extensions: ["*"] },
 			],
 		};
 		// Wo wurde zuletzt eine Datei gespeichert oder geöffnet?
 		if (optionen.data.letzter_pfad) {
-			opt.defaultPath = `${optionen.data.letzter_pfad}/${kartei.wort}.wgd`;
+			opt.defaultPath = path.join(optionen.data.letzter_pfad, `${kartei.wort}.wgd`);
 		}
 		// Dialog anzeigen
 		dialog.showSaveDialog(null, opt, function(pfad) {
@@ -160,6 +151,23 @@ let kartei = {
 			}
 			speichern(pfad);
 		});
+		// Speicher-Funktion
+		function speichern (pfad) {
+			let dm_alt = data.dm;
+			data.dm = new Date().toISOString();
+			const fs = require("fs");
+			fs.writeFile(pfad, JSON.stringify(data), function(err) {
+				if (err) {
+					kartei.dialogWrapper(`Beim Speichern der Datei ist ein Fehler aufgetreten!\n<strong>Fehlermeldung:</strong><br>${err.message}`);
+					data.dm = dm_alt; // altes Änderungsdatum wiederherstellen
+					return;
+				}
+				kartei.pfad = pfad;
+				optionen.optionLetzterPfad();
+				optionen.optionZuletzt();
+				kartei.karteiGeaendert(false);
+			});
+		}
 	},
 	// Dialogwrapper für die Öffnen- und Speichern-Funktionen
 	// (da gibt es einen Namenskonflikt)
@@ -178,23 +186,25 @@ let kartei = {
 		wort.classList.add("keine_kartei");
 		wort.textContent = "keine Kartei geöffnet";
 		helfer.sektionWechseln("start");
+		kartei.menusDeaktivieren(true);
 	},
 	// Benutzer nach dem Wort fragen, für die eine Kartei angelegt werden soll
 	wortErfragen () {
 		dialog.oeffnen("prompt", function() {
 			let wort = dialog.promptText();
-			if (dialog.confirm && !wort) {
+			if (dialog.antwort && !wort) {
 				dialog.oeffnen("alert", null);
 				dialog.text("Sie müssen ein Wort eingeben, sonst kann keine Kartei angelegt werden!");
-			} else if (dialog.confirm && wort) {
+			} else if (dialog.antwort && wort) {
 				kartei.karteiGeaendert(true);
 				beleg.belegGeaendert(false);
 				kartei.wort = wort;
 				kartei.wortEintragen();
 				kartei.erstellen();
+				kartei.menusDeaktivieren(false);
 			}
 		});
-		dialog.text("Zu welchem Wort soll eine Kartei angelegt werden?");
+		dialog.text("Zu welchem Wort soll die Kartei angelegt werden?");
 	},
 	// Wort bei Bedarf ändern
 	wortAendern () {
@@ -206,15 +216,15 @@ let kartei = {
 		// anbieten, das Wort zu ändern
 		dialog.oeffnen("prompt", function() {
 			let wort = dialog.promptText();
-			if (dialog.confirm && wort === kartei.wort) {
+			if (dialog.antwort && wort === kartei.wort) {
 				dialog.oeffnen("alert", null);
 				dialog.text("Das Wort wurde nicht geändert!");
-			} else if (dialog.confirm && wort) {
+			} else if (dialog.antwort && wort) {
 				kartei.karteiGeaendert(true);
 				kartei.wort = wort;
 				data.w = wort;
 				kartei.wortEintragen();
-			} else if (dialog.confirm && !wort) {
+			} else if (dialog.antwort && !wort) {
 				dialog.oeffnen("alert", null);
 				dialog.text("Sie müssen ein Wort eingeben, sonst kann das bestehende nicht geändert werden!");
 			}
@@ -241,5 +251,11 @@ let kartei = {
 		} else {
 			icon.classList.add("aus");
 		}
+	},
+	// ggf. die App-Menüs anpassen
+	//   disable = Boolean (wenn Kartei geschlossen wird => false)
+	menusDeaktivieren (disable) {
+		const {ipcRenderer} = require("electron");
+		ipcRenderer.send("menus-deaktivieren", disable);
 	},
 };

@@ -1,3 +1,5 @@
+"use strict";
+
 // globales Fensterobjekt
 let win;
 
@@ -5,58 +7,14 @@ let win;
 let appMenu, optionen, fenster;
 
 // Electron-Features einbinden
-const {app, BrowserWindow, dialog, ipcMain, Menu} = require("electron");
-
-// Funktionen zum Menü "Kartei"
-const Kartei = {
-	erstellen () {
-		win.webContents.send("kartei-erstellen");
-	},
-	oeffnen () {
-		win.webContents.send("kartei-oeffnen", "");
-	},
-	speichern () {
-		win.webContents.send("kartei-speichern");
-	},
-	speichernUnter () {
-		win.webContents.send("kartei-speichern-unter");
-	},
-	schliessen () {
-		win.webContents.send("kartei-schliessen");
-	},
-};
-
-// Funktionen zum Menü "Werkzeuge"
-const Werkzeuge = {
-	belegHinzufuegen () {
-		win.webContents.send("beleg-hinzufuegen");
-	},
-	belegeAuflisten () {
-		win.webContents.send("belege-auflisten");
-	},
-	belegeSortieren () {
-		// TODO
-	},
-	bedeutungenSortieren () {
-		// TODO
-	},
-	metadaten () {
-		// TODO
-	},
-	notizen () {
-		// TODO
-	},
-	anhaenge () {
-		// TODO
-	},
-};
+const {app, BrowserWindow, dialog, ipcMain, Menu} = require("electron"),
+	fs = require("fs"),
+	path = require("path");
 
 // Funktionen zum Menü "Hilfe"
-const Hilfe = {
-	benutzerhandbuch () {
-		// TODO
-	},
-	ueber () {
+const menuHilfe = {
+	// Dialog mit Infos zum Programm
+	ueberProgramm () {
 		dialog.showMessageBox({
 			type: "info",
 			buttons: ["Alles klar!"],
@@ -65,10 +23,8 @@ const Hilfe = {
 			message: `${app.getName()}\nVersion ${app.getVersion()}\n\n„${app.getName()}“ ist die Wortkartei-App von „Wortgeschichte digital“, dem Göttinger Teilprojekt des „Zentrums für digitale Lexikographie der deutschen Sprache“ (ZDL).\n\n© 2019 ZDL\n\nAutor:\tNico Dorn <ndorn@gwdg.de>\nLizenz:\tMIT\n\nFonts:\tDejaVu Sans\nLizenz:\tBitstream Vera Fonts, Arev Fonts, Public Domain\n\nIcons:\tPapirus\nLizenz:\tGNU General Public License 3.0`,
 		});
 	},
-	dokumentation () {
-		// TODO
-	},
-	electron () {
+	// Dialog mit Infos zum Framework
+	ueberElectron () {
 		dialog.showMessageBox({
 			type: "info",
 			buttons: ["Alles klar!"],
@@ -79,69 +35,197 @@ const Hilfe = {
 	},
 };
 
+// menuHilfe.ueberProgramm() aus dem Renderer-Prozess aufrufen
+ipcMain.on("ueber-zettelstraum", () => menuHilfe.ueberProgramm() );
+
 // App-Menü-Vorlage
 let menuLayout = [
 	{
+		label: "&Programm",
+		submenu: [
+			{
+				label: "Einstellungen",
+				icon: path.join(__dirname, "img", "menu", "programm-einstellungen.png"),
+				click: () => void 0, // TODO
+			},
+			{ type: "separator" },
+			{
+				label: "Programm beenden",
+				icon: path.join(__dirname, "img", "menu", "programm-beenden.png"),
+				role: "quit",
+			},
+		],
+	},
+	{
 		label: "&Kartei",
 		submenu: [
-			{ click: () => Kartei.erstellen(), label: "Erstellen", accelerator: "CommandOrControl+E", icon: "img/menu/kartei-erstellen.png" },
+			{
+				label: "Erstellen", accelerator: "CommandOrControl+E",
+				icon: path.join(__dirname, "img", "menu", "kartei-erstellen.png"),
+				click: () => win.webContents.send("kartei-erstellen"),
+			},
 			{ type: "separator" },
-			{ label: "Zuletzt verwendet", id: "zuletzt" },
+			{
+				label: "Zuletzt verwendet", // Menü wird über appMenu.zuletzt() gefüllt
+				id: "kartei-zuletzt",
+			},
 			{ type: "separator" },
-			{ click: () => Kartei.oeffnen(), label: "Öffnen", accelerator: "CommandOrControl+O", icon: "img/menu/kartei-oeffnen.png" },
-			{ click: () => Kartei.speichern(), label: "Speichern", accelerator: "CommandOrControl+S", icon: "img/menu/kartei-speichern.png" },
-			{ click: () => Kartei.speichernUnter(), label: "Speichern unter", accelerator: "CommandOrControl+Shift+S" },
+			{
+				label: "Öffnen",
+				icon: path.join(__dirname, "img", "menu", "kartei-oeffnen.png"),
+				click: () => win.webContents.send("kartei-oeffnen", ""),
+				accelerator: "CommandOrControl+O",
+			},
+			{
+				label: "Speichern",
+				icon: path.join(__dirname, "img", "menu", "kartei-speichern.png"),
+				click: () => win.webContents.send("kartei-speichern"),
+				accelerator: "CommandOrControl+S",
+				id: "kartei-speichern",
+			},
+			{
+				label: "Speichern unter",
+				click: () => win.webContents.send("kartei-speichern-unter"),
+				accelerator: "CommandOrControl+Shift+S",
+				id: "kartei-speichern-unter",
+			},
 			{ type: "separator" },
-			{ click: () => Kartei.schliessen(), label: "Schließen", accelerator: "CommandOrControl+W", icon: "img/menu/kartei-schliessen.png" },
+			{
+				label: "Schließen",
+				icon: path.join(__dirname, "img", "menu", "kartei-schliessen.png"),
+				click: () => win.webContents.send("kartei-schliessen"),
+				accelerator: "CommandOrControl+W",
+				id: "kartei-schliessen",
+			},
+		],
+	},
+	{
+		label: "&Werkzeuge",
+		id: "werkzeuge",
+		submenu: [
+			{
+				label: "Beleg hinzufügen",
+				icon: path.join(__dirname, "img", "menu", "werkzeuge-beleg-hinzufuegen.png"),
+				click: () => win.webContents.send("beleg-hinzufuegen"),
+				accelerator: "CommandOrControl+N",
+			},
+			{
+				label: "Belege auflisten",
+				icon: path.join(__dirname, "img", "menu", "werkzeuge-belege-auflisten.png"),
+				click: () => win.webContents.send("belege-auflisten"),
+				accelerator: "CommandOrControl+L",
+			},
+			{
+				label: "Belege sortieren",
+				icon: path.join(__dirname, "img", "menu", "werkzeuge-belege-sortieren.png"),
+				click: () => void 0, // TODO
+				accelerator: "CommandOrControl+H",
+			},
 			{ type: "separator" },
-			{ role: "quit", label: "Programm beenden", icon: "img/menu/kartei-beenden.png" },
+			{
+				label: "Bedeutungen",
+				click: () => void 0, // TODO
+			},
+			{ type: "separator" },
+			{
+				label: "Metadaten",
+				click: () => void 0, // TODO
+			},
+			{
+				label: "Notizen",
+				click: () => void 0, // TODO
+			},
+			{
+				label: "Anhänge",
+				click: () => void 0, // TODO
+			},
 		],
 	},
 	{
 		label: "&Bearbeiten",
 		submenu: [
-			{ role: "undo", label: "Rückgängig", icon: "img/menu/bearbeiten-rueckgaengig.png" },
-			{ role: "redo", label: "Wiederherstellen", icon: "img/menu/bearbeiten-wiederherstellen.png" },
+			{
+				label: "Rückgängig",
+				icon: path.join(__dirname, "img", "menu", "bearbeiten-rueckgaengig.png"),
+				role: "undo",
+			},
+			{
+				label: "Wiederherstellen",
+				icon: path.join(__dirname, "img", "menu", "bearbeiten-wiederherstellen.png"),
+				role: "redo",
+			},
 			{ type: "separator" },
-			{ role: "cut", label: "Ausschneiden", icon: "img/menu/bearbeiten-ausschneiden.png" },
-			{ role: "copy", label: "Kopieren", icon: "img/menu/bearbeiten-kopieren.png" },
-			{ role: "paste", label: "Einfügen", icon: "img/menu/bearbeiten-einfuegen.png" },
-			{ role: "selectAll", label: "Alles auswählen", icon: "img/menu/bearbeiten-auswaehlen.png" },
+			{
+				label: "Ausschneiden",
+				icon: path.join(__dirname, "img", "menu", "bearbeiten-ausschneiden.png"),
+				role: "cut",
+			},
+			{
+				label: "Kopieren",
+				icon: path.join(__dirname, "img", "menu", "bearbeiten-kopieren.png"),
+				role: "copy",
+			},
+			{
+				label: "Einfügen",
+				icon: path.join(__dirname, "img", "menu", "bearbeiten-einfuegen.png"),
+				role: "paste",
+			},
+			{
+				label: "Alles auswählen",
+				icon: path.join(__dirname, "img", "menu", "bearbeiten-auswaehlen.png"),
+				role: "selectAll",
+			},
 		],
 	},
 	{
 		label: "&Ansicht",
 		submenu: [
-			{ role: "zoomIn", label: "Schrift vergrößern", icon: "img/menu/ansicht-zoom-plus.png" },
-			{ role: "zoomOut", label: "Schrift verkleinern", icon: "img/menu/ansicht-zoom-minus.png" },
-			{ role: "resetZoom", label: "Standardgröße", icon: "img/menu/ansicht-zoom-standard.png" },
+			{
+				label: "Schrift vergrößern",
+				icon: path.join(__dirname, "img", "menu", "ansicht-zoom-plus.png"),
+				role: "zoomIn",
+			},
+			{
+				label: "Schrift verkleinern",
+				icon: path.join(__dirname, "img", "menu", "ansicht-zoom-minus.png"),
+				role: "zoomOut",
+			},
+			{
+				label: "Standardgröße",
+				icon: path.join(__dirname, "img", "menu", "ansicht-zoom-standard.png"),
+				role: "resetZoom",
+			},
 			{ type: "separator" },
-			{ role: "toggleFullScreen", label: "Vollbild", icon: "img/menu/ansicht-vollbild.png" },
-		],
-	},
-	{
-		label: "&Werkzeuge",
-		submenu: [
-			{ click: () => Werkzeuge.belegHinzufuegen(), label: "Beleg hinzufügen", accelerator: "CommandOrControl+N", icon: "img/menu/werkzeuge-beleg-hinzufuegen.png" },
-			{ click: () => Werkzeuge.belegeAuflisten(), label: "Belege auflisten", accelerator: "CommandOrControl+L", icon: "img/menu/werkzeuge-belege-auflisten.png" },
-			{ click: () => Werkzeuge.belegeSortieren(), label: "Belege sortieren", accelerator: "CommandOrControl+H", icon: "img/menu/werkzeuge-belege-sortieren.png", enabled: false },
-			{ type: "separator" },
-			{ click: () => Werkzeuge.bedeutungenSortieren(), label: "Bedeutungen", enabled: false },
-			{ type: "separator" },
-			{ click: () => Werkzeuge.metadaten(), label: "Metadaten", enabled: false },
-			{ click: () => Werkzeuge.notizen(), label: "Notizen", enabled: false },
-			{ click: () => Werkzeuge.anhaenge(), label: "Anhänge", enabled: false },
+			{
+				label: "Vollbild",
+				icon: path.join(__dirname, "img", "menu", "ansicht-vollbild.png"),
+				role: "toggleFullScreen",
+			},
 		],
 	},
 	{
 		label: "&Hilfe",
 		submenu: [
-			{ click: () => Hilfe.benutzerhandbuch(), label: "Benutzerhandbuch", accelerator: "F1", icon: "img/menu/hilfe.png", enabled: false },
+			{
+				label: "Benutzerhandbuch",
+				icon: path.join(__dirname, "img", "menu", "hilfe.png"),
+				click: () => void 0, // TODO
+				accelerator: "F1",
+			},
 			{ type: "separator" },
-			{ click: () => Hilfe.dokumentation(), label: "Technische Dokumentation", enabled: false },
+			{
+				label: "Technische Dokumentation",
+				click: () => void 0, // TODO
+			},
 			{ type: "separator" },
-			{ click: () => Hilfe.ueber(), label: `Über ${app.getName()}` },
-			{ click: () => Hilfe.electron(), label: "Über Electron" },
+			{
+				label: `Über ${app.getName()}`,
+				click: () => menuHilfe.ueberProgramm(),
+			},
+			{
+				label: "Über Electron",
+				click: () => menuHilfe.ueberElectron(),
+			},
 		],
 	},
 ];
@@ -151,10 +235,19 @@ if (!app.isPackaged) {
 	menuLayout.push({
 		label: "&Dev",
 		submenu: [
-			{ role: "reload", label: "Neu laden" },
-			{ role: "forceReload", label: "Neu laden erzwingen" },
+			{
+				label: "Neu laden",
+				role: "reload",
+			},
+			{
+				label: "Neu laden erzwingen",
+				role: "forceReload",
+			},
 			{ type: "separator" },
-			{ role: "toggleDevTools", label: "Developer tools" },
+			{
+				label: "Developer tools",
+				role: "toggleDevTools",
+			},
 		],
 	});
 }
@@ -166,8 +259,8 @@ appMenu = {
 		// neues Submenü erzeugen
 		let zuletztVerwendet = {
 			label: "Zuletzt verwendet",
-			icon: "img/menu/kartei-zuletzt.png",
-			id: "zuletzt",
+			icon: path.join(__dirname, "img", "menu", "kartei-zuletzt.png"),
+			id: "kartei-zuletzt",
 			submenu: [],
 		};
 		// Dateiliste ggf. ergänzen
@@ -176,7 +269,6 @@ appMenu = {
 				zuletzt = optionen.data.app.zuletzt;
 			for (let i = 0, len = zuletzt.length; i < len; i++) {
 				// existiert die Datei noch?
-				const fs = require("fs");
 				if (!fs.existsSync(zuletzt[i])) {
 					loeschen.push(zuletzt[i]);
 					continue;
@@ -203,16 +295,16 @@ appMenu = {
 			);
 		}
 		// Position der Karteiliste ermitteln
-		let menuKartei = menuLayout[0].submenu,
+		let menuKartei = menuLayout[1].submenu,
 			pos = -1;
 		for (let i = 0, len = menuKartei.length; i < len; i++) {
-			if (menuKartei[i].id === "zuletzt") {
+			if (menuKartei[i].id === "kartei-zuletzt") {
 				pos = i;
 				break;
 			}
 		}
 		// neue Liste einhängen
-		menuLayout[0].submenu[pos] = zuletztVerwendet;
+		menuLayout[1].submenu[pos] = zuletztVerwendet;
 		// Menü ggf. auffrischen
 		if (update) {
 			appMenu.erzeugen();
@@ -221,7 +313,8 @@ appMenu = {
 	// Menüpunkt im Untermenü "Zuletzt verwendet" erzeugen
 	zuletztItem (zuletztVerwendet, datei, i) {
 		let item = {
-			label: require("path").basename(datei),
+			label: path.basename(datei, ".wgd"),
+			sublabel: datei,
 			click: () => win.webContents.send("kartei-oeffnen", datei),
 		};
 		if (i <= 5) {
@@ -236,17 +329,55 @@ appMenu = {
 		optionen.schreiben();
 		appMenu.zuletzt(true);
 	},
-	// erzeugt das Menü
+	// Menü-Elemente deaktivieren, wenn keine Kartei offen ist
+	deaktivieren (disable, update) {
+		let elemente = ["kartei-speichern", "kartei-speichern-unter", "kartei-schliessen", "werkzeuge"];
+		for (let j = 0, len = menuLayout.length; j < len; j++) {
+			// sollen vielleicht alle Menüpunkte deaktiviert werden?
+			let alle = false;
+			if (elemente.indexOf(menuLayout[j].id) >= 0) {
+				alle = true;
+			}
+			// Submenu durchgehen
+			let submenu = menuLayout[j].submenu;
+			for (let k = 0, len = submenu.length; k < len; k++) {
+				if (alle) {
+					toggle(submenu[k]);
+				} else if (elemente.indexOf(submenu[k].id) >= 0) {
+					toggle(submenu[k]);
+				}
+			}
+		}
+		// Programm-Menü erzeugen?
+		if (update) {
+			appMenu.erzeugen();
+		}
+		// Switch-Funktion, die enabled auf true od. false stellt
+		function toggle (item) {
+			if (disable) {
+				item.enabled = false;
+			} else {
+				item.enabled = true;
+			}
+		}
+	},
+	// erzeugt das Programm-Menü
 	erzeugen () {
 		const menu = Menu.buildFromTemplate(menuLayout);
 		Menu.setApplicationMenu(menu);
 	},
 };
 
+// Menüs deaktivieren, die nur bei offenen Karteikarten funktionieren
+appMenu.deaktivieren(true, false);
+
+// Menüse aktivieren/deaktivieren, wenn der Renderer-Prozess es wünscht
+ipcMain.on("menus-deaktivieren", (evt, disable) => appMenu.deaktivieren(disable, true) );
+
 // Optionen einlesen und speichern
 optionen = {
 	// Pfad zur Optionen-Datei
-	pfad: `${app.getPath("userData")}/einstellungen.json`,
+	pfad: path.join(app.getPath("userData"), "einstellungen.json"),
 	// Objekt mit den gespeicherten Optionen
 	data: {
 		fenster: {
@@ -260,7 +391,6 @@ optionen = {
 	},
 	// liest die Optionen-Datei aus
 	lesen () {
-		const fs = require("fs");
 		if (fs.existsSync(optionen.pfad)) {
 			const content = fs.readFileSync(optionen.pfad, "utf-8");
 			try {
@@ -274,7 +404,6 @@ optionen = {
 	},
 	// überschreibt die Optionen-Datei
 	schreiben () {
-		const fs = require("fs");
 		fs.writeFile(optionen.pfad, JSON.stringify(optionen.data), function(err) {
 			if (err) {
 				dialog.showMessageBox({
@@ -302,7 +431,7 @@ ipcMain.on("optionen-speichern", function(evt, opt) {
 	if (optionen.data.app.zuletzt &&
 			optionen.data.app.zuletzt.join(",") !== opt.zuletzt.join(",")) {
 		optionen.data.app = opt;
-		appMenu.zuletzt(true); // das sollte nicht unnötig oft geschehen
+		appMenu.zuletzt(true); // Das sollte nicht unnötig oft aufgerufen werden!
 	} else {
 		optionen.data.app = opt;
 	}
@@ -316,12 +445,13 @@ fenster = {
 		// Fenster öffnen
 		win = new BrowserWindow({
 			title: app.getName(),
+			icon: path.join(__dirname, "img", "icon", "png", "icon_48px.png"),
 			x: optionen.data.fenster.x,
 			y: optionen.data.fenster.y,
 			width: optionen.data.fenster.width,
 			height: optionen.data.fenster.height,
-			minWidth: 500,
-			minHeight: 300,
+			minWidth: 600,
+			minHeight: 350,
 			show: false,
 			webPreferences: {
 				nodeIntegration: true,
@@ -330,7 +460,7 @@ fenster = {
 			},
 		});
 		// main.html laden
-		win.loadFile("main.html");
+		win.loadFile(path.join(__dirname, "main.html"));
 		// Fenster anzeigen, sobald alles geladen wurde
 		win.once("ready-to-show", function() {
 			win.show();

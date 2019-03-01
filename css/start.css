@@ -1,0 +1,36 @@
+@charset "UTF-8";
+
+/* START-SEKTION */
+#start {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+}
+
+#start div {
+	font-size: 24px;
+	line-height: 48px;
+	white-space: nowrap;
+	padding: 0 10px 0 55px;
+	border: 1px solid var(--Linie);
+	border-radius: 10px;
+	box-shadow: var(--ButtonShadow);
+	margin: 50px 10px 0 10px;
+}
+
+#start #start_erstellen, #start #start_oeffnen {
+	background-image: url("../img/erstellen_gross.svg"), linear-gradient(to bottom, #fff, #eee);
+	background-repeat: no-repeat;
+	background-position: 5px center, left top;
+}
+
+#start #start_oeffnen {
+	background-image: url("../img/oeffnen_gross.svg"), linear-gradient(to bottom, #fff, #eee);
+}
+
+/* Die "Buttons" sollten nicht zu breit werden */
+@media (min-width: 700px) {
+	#start div {
+		width: 253px;
+		margin: 50px auto 0 auto;
+	}
+}

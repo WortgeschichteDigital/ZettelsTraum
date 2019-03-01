@@ -4,9 +4,9 @@ let dialog = {
 	// Speicherort für Funktionen, die nach dem Schließen
 	// des Dialogs ausgeführt werden.
 	funktion: function() {},
-	// Speicherort für die Nutzerantwort, die aus einem
-	// Bestätigungsdialog resultiert.
-	antwort: false,
+	// Speicherort für die Nutzerantwort, die aus einem Bestätigungsdialog resultiert.
+	// Mögliche Werte: true (Okay od. Ja) || false (Abbrechen od. Nein) || null (Schließen durch Link)
+	antwort: null,
 	// Dialog-Fenster öffnen
 	//   typ = String
 	//     (gibt den Dialog-Typ an, Werte: "alert", "prompt", "confirm")

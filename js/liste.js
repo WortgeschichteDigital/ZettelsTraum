@@ -4,17 +4,16 @@ let liste = {
 	// Zeigt die Karteikartenliste an, überprüft aber vorher
 	// ob noch ein Beleg in Bearbeitung gespeichert werden muss
 	anzeigen () {
-		if (!kartei.wort) { // noch keine Kartei geöffnet/erstellt
-			dialog.oeffnen("alert", null);
-			dialog.text("Sie müssen erst eine Kartei öffnen oder erstellen!");
-		} else if (beleg.geaendert) { // aktueller Beleg noch nicht gespeichert
+		if (beleg.geaendert) { // aktueller Beleg noch nicht gespeichert
 			dialog.oeffnen("confirm", function() {
-				if (dialog.confirm) {
+				if (dialog.antwort) {
+					beleg.aktionSpeichern();
+				} else if (dialog.antwort === false) {
 					beleg.belegGeaendert(false);
 					liste.wechseln();
 				}
 			});
-			dialog.text("Der aktuelle Beleg wurde geändert, aber noch nicht gespeichert!\nMöchten Sie trotzdem zur Beleg-Liste wechseln?\nAchtung, alle Änderungen am aktuellen Beleg gehen verloren!");
+			dialog.text("Der aktuelle Beleg wurde noch nicht gespeichert!\nMöchten Sie ihn nicht erst einmal speichern?");
 		} else {
 			liste.wechseln();
 		}
@@ -30,6 +29,7 @@ let liste = {
 		let belege = liste.aufbauenBasis(filter_init);
 		// Hat die Kartei überhaupt Belege?
 		if (!belege.length) {
+			liste.aufbauenKeineBelege();
 			return;
 		}
 		// Belege sortieren
@@ -70,18 +70,23 @@ let liste = {
 				// Beleg-Kopf erstellen
 				let div = document.createElement("div");
 				div.classList.add("liste_kopf");
+				div.dataset.id = id;
 				// Beleg bearbeiten
 				let a = document.createElement("a");
 				a.href = "#";
 				a.classList.add("liste_bearbeiten", "icon_link", "icon_bearbeiten");
 				a.textContent = " ";
-				a.dataset.id = id;
 				beleg.oeffnenKlick(a);
 				div.appendChild(a);
 				// Jahr
 				let span = document.createElement("span");
 				span.classList.add("liste_jahr");
 				span.textContent = zeitschnitt_akt.datum;
+				if (zeitschnitt_akt.datum !== data.k[id].da) {
+					span.title = data.k[id].da;
+					span.classList.add("liste_jahr_hinweis");
+					liste.datumAnzeigen(span);
+				}
 				div.appendChild(span);
 				// Belegschnitt-Vorschau
 				div.appendChild( liste.belegschnittVorschau(data.k[id]) );
@@ -104,7 +109,6 @@ let liste = {
 		liste.zeitschnitteKeineBelege();
 	},
 	// basale Vorbereitungen für die Belegliste
-	// (muss ausgegliedert werden, weil die Liste mitunter einfach geleert werden soll)
 	//   filter_init = true/false (nicht immer müssen die Filter neu initialisiert werden)
 	aufbauenBasis (filter_init) {
 		// Filter initialisieren
@@ -122,6 +126,14 @@ let liste = {
 		liste.aufbauenAnzahl(belege_anzahl, belege.length);
 		// Belege zurückgeben
 		return belege;
+	},
+	// In der Kartei sind keine Belege (mehr) und das sollte auch gezeigt werden.
+	aufbauenKeineBelege () {
+		let cont = document.getElementById("liste_belege_cont");
+		let div = document.createElement("div");
+		div.classList.add("liste_kartei_leer");
+		div.textContent = "keine Belege";
+		cont.appendChild(div);
 	},
 	// Anzahl der Belege drucken
 	aufbauenAnzahl (gesamt, gefiltert) {
@@ -334,6 +346,16 @@ let liste = {
 		div.addEventListener("click", function() {
 			let schnitt = this.nextSibling;
 			schnitt.classList.toggle("aus");
+		});
+	},
+	// genaue Datumsangabe auf Klick anzeigen
+	datumAnzeigen (span) {
+		span.addEventListener("click", function(evt) {
+			evt.stopPropagation();
+			let datum = this.title,
+				beleg_id = this.parentNode.dataset.id;
+			dialog.oeffnen("alert", null);
+			dialog.text(`<strong>Beleg #${beleg_id}</strong>\n${datum}`);
 		});
 	},
 	// Funktionen im Header aufrufen

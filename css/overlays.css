@@ -1,5 +1,6 @@
 @charset "UTF-8";
 
+/* ALLE OVERLAY FENSTER */
 #dialog {
 	background-color: rgba(255, 255, 255, 0.7);
 	width: 100%;
@@ -9,17 +10,25 @@
 	left: 0;
 	z-index: 2;
 }
-
 #dialog > div {
-	background: #fff url("../img/dialog_alert.svg") no-repeat 10px 10px;
-	width: 400px;
-	min-height: 48px;
-	padding: 10px 35px 10px 70px;
+	background-color: #fff;
 	border: 1px solid var(--Linie);
 	border-radius: 10px;
 	box-shadow: var(--BoxShadow);
 	margin: 70px auto 0 auto;
 	position: relative;
+}
+#dialog > div > a {
+	position: absolute;
+	top: 0;
+	right: 0;
+}
+
+/* DIALOG */
+#dialog > div {
+	width: 400px;
+	min-height: 48px;
+	padding: 10px 35px 10px 70px;
 }
 #dialog.prompt > div {
 	background: #fff url("../img/dialog_prompt.svg") no-repeat 10px 10px;
@@ -27,16 +36,16 @@
 #dialog.confirm > div {
 	background: #fff url("../img/dialog_confirm.svg") no-repeat 10px 10px;
 }
-
-#dialog > div > a {
-	position: absolute;
-	top: 0;
-	right: 0;
+#dialog.alert > div {
+	background: #fff url("../img/dialog_alert.svg") no-repeat 10px 10px;
 }
 
+/* DIALOG: TEXTFELD PROMPT */
 #dialog input[type="text"] {
-	width: calc(100% - 10px); /* 10px = padding */
+	width: calc(100% - 10px - 2px); /* 10px = padding, 2px = border */
 }
+
+/* DIALOG: BUTTONS */
 #dialog p.button {
 	text-align: right;
 	line-height: 30px;
@@ -53,4 +62,10 @@
 }
 #dialog.alert #dialog_ok {
 	display: block;
+}
+#dialog.prompt #dialog_abbrechen_button {
+	display: inline-block;
+}
+#dialog.alert #dialog_abbrechen_button {
+	display: none;
 }

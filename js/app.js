@@ -22,6 +22,11 @@ window.addEventListener("load", function() {
 	// KLICK-EVENTS INITIALISIEREN
 	// Wort-Element
 	document.getElementById("wort").addEventListener("click", () => kartei.wortAendern() );
+	// Programm-Icon
+	document.getElementById("icon").addEventListener("click", function() {
+		const {ipcRenderer} = require("electron");
+		ipcRenderer.send("ueber-zettelstraum");
+	});
 	// Start-Sektion
 	document.getElementById("start_erstellen").addEventListener("click", () => kartei.wortErfragen() );
 	document.getElementById("start_oeffnen").addEventListener("click", () => kartei.oeffnen() );
@@ -32,6 +37,9 @@ window.addEventListener("load", function() {
 			beleg.klickButton(beleg_inputs[i]);
 		} else {
 			beleg.feldGeaendert(beleg_inputs[i]);
+			if (beleg_inputs[i].type.match(/^checkbox|^text/)) {
+				beleg.belegSpeichern(beleg_inputs[i]);
+			}
 		}
 	}
 	let beleg_links = document.querySelectorAll("#beleg .icon_link");
@@ -50,14 +58,14 @@ window.addEventListener("load", function() {
 		}
 	});
 	// Dialog-Buttons
+	let dialog_buttons = ["dialog_ok_button", "dialog_abbrechen_button", "dialog_ja_button", "dialog_nein_button"];
+	for (let i = 0, len = dialog_buttons.length; i < len; i++) {
+		dialog_schliessen(dialog_buttons[i]);
+	}
 	function dialog_schliessen (button) {
 		document.getElementById(button).addEventListener("click", function() {
 			overlay.schliessen(this);
 		});
-	}
-	let dialog_buttons = ["dialog_ok_button", "dialog_abbrechen_button", "dialog_ja_button", "dialog_nein_button"];
-	for (let i = 0, len = dialog_buttons.length; i < len; i++) {
-		dialog_schliessen(dialog_buttons[i]);
 	}
 	// Schließen-Links von Overlays
 	let overlay_links = document.querySelectorAll(".overlay_schliessen");
@@ -90,4 +98,31 @@ window.addEventListener("load", function() {
 	let opt = ipcRenderer.sendSync("optionen-senden");
 	optionen.einlesen(optionen.data, opt);
 	optionen.anwenden();
+});
+
+// Schließen unterbrechen, falls Daten noch nicht gespeichert wurden
+window.addEventListener("beforeunload", function(evt) {
+	if (beleg.geaendert || kartei.geaendert) {
+		dialog.oeffnen("confirm", function() {
+			if (dialog.antwort === false) {
+				beleg.geaendert = false;
+				kartei.geaendert = false;
+				const {remote} = require("electron");
+				let win = remote.getCurrentWindow();
+				win.close();
+			} else if (dialog.antwort) {
+				if (beleg.geaendert) {
+					beleg.aktionSpeichern();
+				} else if (kartei.geaendert) {
+					kartei.speichern(false);
+				}
+			}
+		});
+		let typ = "Der Beleg";
+		if (kartei.geaendert) {
+			typ = "Die Kartei";
+		}
+		dialog.text(`${typ} wurde noch nicht gespeichert!\nMöchten Sie die Daten vor dem Schließen des Programms nicht erst einmal speichern?`);
+		evt.returnValue = "false";
+	}
 });
