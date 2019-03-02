@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="de">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="Content-Security-Policy" content="default-src 'self'">
+		
+		<title> </title>
+		
+		<link rel="stylesheet" href="css/app.css">
+		<link rel="stylesheet" href="css/beleg.css">
+		<link rel="stylesheet" href="css/kopf.css">
+		<link rel="stylesheet" href="css/liste.css">
+		<link rel="stylesheet" href="css/overlays.css">
+		<link rel="stylesheet" href="css/start.css">
+		
+		<script src="js/app.js"></script>
+		<script src="js/beleg.js"></script>
+		<script src="js/dialog.js"></script>
+		<script src="js/filter.js"></script>
+		<script src="js/helfer.js"></script>
+		<script src="js/kartei.js"></script>
+		<script src="js/liste.js"></script>
+		<script src="js/optionen.js"></script>
+		<script src="js/overlay.js"></script>
+		<script src="js/start.js"></script>
+	</head>
+	<body>
+		<!-- KOPF -->
+		<header>
+			<span id="wort" class="keine-kartei">keine Kartei geöffnet</span
+				><span class="aus" id="kartei-geaendert">*</span
+				><span id="icon"><img src="img/icon.svg" width="48" height="48" alt="[Icon]"></span>
+		</header>
+		
+		<!-- STARTSEKTION -->
+		<section id="start">
+			<span id="start-erstellen">Kartei erstellen</span><span id="start-oeffnen">Kartei öffnen</span>
+			<div id="start-zuletzt">
+				<h2><img src="img/zuletzt.svg" width="24" height="24" alt="">Zuletzt verwendet</h2>
+				<ul id="start-liste"></ul>
+			</div>
+		</section>
+		
+		<!-- BELEGFORMULAR -->
+		<section id="beleg" class="aus">
+			<table>
+				<caption><span id="beleg-titel"></span><span id="beleg-geaendert" class="aus">*</span></caption>
+				<tr>
+					<td colspan="2"><input type="button" value="Speichern" id="beleg-speichern"
+						><input type="button" value="Abbrechen" id="beleg-abbrechen"
+						><input type="button" value="Löschen" id="beleg-loeschen"></td>
+				</tr>
+				<tr>
+					<th class="copy-paste-hover"><label for="beleg-da">Datum</label
+						><span class="copy-paste"
+						><a href="#" class="icon-link icon-tools-kopieren" title="Text kopieren"> </a
+						><a href="#" class="icon-link icon-tools-einfuegen" title="Text einfügen"> </a></span></th>
+					<th class="zelle-bewertung">Bewertung</th>
+				</tr>
+				<tr>
+					<td><input type="text" value="" spellcheck="false" id="beleg-da"></td>
+					<td class="zelle-bewertung" id="beleg-be"><img src="img/stern.svg" width="24" height="24" alt="*"
+						><img src="img/stern.svg" width="24" height="24" alt="*"
+						><img src="img/stern.svg" width="24" height="24" alt="*"
+						><img src="img/stern.svg" width="24" height="24" alt="*"
+						><img src="img/stern.svg" width="24" height="24" alt="*"></td>
+				</tr>
+				<tr>
+					<th colspan="2" class="copy-paste-hover"><label for="beleg-bs">Belegschnitt</label
+						><span class="copy-paste"
+						><a href="#" class="icon-link icon-tools-kopieren" title="Text kopieren"> </a
+						><a href="#" class="icon-link icon-tools-einfuegen" title="Text einfügen"> </a></span
+						><span id="beleg-tools">[Text-Tools]</span></th>
+				</tr>
+				<tr>
+					<td colspan="2"><textarea spellcheck="false" id="beleg-bs"></textarea></td>
+				</tr>
+				<tr>
+					<th class="copy-paste-hover"><label for="beleg-au">Autor</label
+						><span class="copy-paste"
+						><a href="#" class="icon-link icon-tools-kopieren" title="Text kopieren"> </a
+						><a href="#" class="icon-link icon-tools-einfuegen" title="Text einfügen"> </a></span></th>
+					<th class="copy-paste-hover"><label for="beleg-bd">Bedeutung</label
+						><span class="copy-paste"
+						><a href="#" class="icon-link icon-tools-kopieren" title="Text kopieren"> </a
+						><a href="#" class="icon-link icon-tools-einfuegen" title="Text einfügen"> </a></span></th>
+				</tr>
+				<tr>
+					<td><input type="text" value="" spellcheck="false" id="beleg-au"></td>
+					<td><input type="text" value="" spellcheck="false" id="beleg-bd"></td>
+				</tr>
+				<tr>
+					<th class="copy-paste-hover"><label for="beleg-qu">Quelle</label
+						><span class="copy-paste"
+						><a href="#" class="icon-link icon-tools-kopieren" title="Text kopieren"> </a
+						><a href="#" class="icon-link icon-tools-einfuegen" title="Text einfügen"> </a></span></th>
+					<th class="copy-paste-hover"><label for="beleg-ts"
+						>Textsorte</label><span class="copy-paste"
+						><a href="#" class="icon-link icon-tools-kopieren" title="Text kopieren"> </a
+						><a href="#" class="icon-link icon-tools-einfuegen" title="Text einfügen"> </a></span></th>
+				</tr>
+				<tr>
+					<td rowspan="2"><textarea spellcheck="false" id="beleg-qu"></textarea></td>
+					<td><input type="text" value="" spellcheck="false" id="beleg-ts"></td>
+				</tr>
+				<tr>
+					<td class="check">
+						<p><input type="checkbox" id="beleg-bu"
+							><label for="beleg-bu">Bücherdienstauftrag</label></p>
+						<p><input type="checkbox" id="beleg-ko"
+							><label for="beleg-ko">Kontext</label></p>
+					</td>
+				</tr>
+				<tr>
+					<th class="copy-paste-hover"><label for="beleg-no">Notizen</label
+						><span class="copy-paste"
+						><a href="#" class="icon-link icon-tools-kopieren" title="Text kopieren"> </a
+						><a href="#" class="icon-link icon-tools-einfuegen" title="Text einfügen"> </a></span></th>
+					<th>Anhänge</th>
+				</tr>
+				<tr>
+					<td><textarea spellcheck="false" class="flach" id="beleg-no"></textarea></td>
+					<td>[Anhang hinzufügen]</td>
+				</tr>
+			</table>
+		</section>
+		
+		<!-- BELEGLISTE -->
+		<section id="liste" class="aus">
+			<!-- scheinbar unnötig verschachtelt; ist aber nötig damit position: sticky für #liste-filter funktioniert -->
+			<div><div id="liste-filter"></div></div>
+			<div id="liste-belege">
+				<header><a href="#" class="icon-link icon-filter-aus" id="liste-link-filter" title="Filter ausblenden"> </a
+					><a href="#" class="start-block icon-link icon-pfeil-runter" id="liste-link-sortieren" title="Chronologisch absteigend sortieren"> </a
+					><a href="#" class="start-block liste-link-text liste-link-zeitschnitte" id="liste-link-zeitschnitte-10" title="Zeitschnitte alle 10 Jahre">10</a
+					><a href="#" class="liste-link-text liste-link-zeitschnitte link-aktiv" id="liste-link-zeitschnitte-50" title="Zeitschnitte alle 50 Jahre">50</a
+					><a href="#" class="liste-link-text liste-link-zeitschnitte" id="liste-link-zeitschnitte-100" title="Zeitschnitte alle 100 Jahre">100</a
+					><a href="#" class="liste-link-text liste-link-text-strike liste-link-zeitschnitte" id="liste-link-zeitschnitte" title="keine Zeitschnitte">100</a
+					><a href="#" class="start-block icon-link icon-auge-aus" id="liste-link-belegschnitte" title="Komplettanzeige der Belegschnitte ausblenden"> </a
+					><a href="#" class="start-block liste-link-text link-aktiv" id="liste-link-hervorheben" title="Wort nicht hervorheben">Wort</a
+					><span id="liste-belege-anzahl"></span></header>
+				<div id="liste-belege-cont"></div>
+			</div>
+		</section>
+		
+		<!-- OVERLAY: Einstellungen -->
+		<div id="einstellungen" class="overlay aus"><div>
+			<a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen"> </a>
+			<h2><img src="img/overlay_einstellungen.svg" width="24" height="24" alt="">Einstellungen</h2>
+			<div id="einstellungen-cont">
+				<p><input type="checkbox" id="einstellung-autoHideMenuBar"
+				><label for="einstellung-autoHideMenuBar">Menü-Leiste standardmäßig ausblenden und erst anzeigen, wenn die Alt-Taste gedrückt wird <span class="einstellung-neustart">(Neustart erforderlich)</span></label></p>
+			</div>
+		</div></div>
+		
+		<!-- OVERLAY: DIALOG-FENSTER -->
+		<div id="dialog" class="overlay aus"><div>
+			<a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen"> </a>
+			<div id="dialog-text"></div>
+			<div id="dialog-prompt">
+				<p><input type="text" value="" id="dialog-prompt-text"></p>
+			</div>
+			<div id="dialog-ok">
+				<p class="button"><input type="button" value="Okay" id="dialog-ok-button"
+					><input type="button" value="Abbrechen" id="dialog-abbrechen-button"></p>
+			</div>
+			<div id="dialog-confirm">
+				<p class="button"><input type="button" value="Ja" id="dialog-ja-button"
+					><input type="button" value="Nein" id="dialog-nein-button"></p>
+			</div>
+		</div></div>
+	</body>
+</html>

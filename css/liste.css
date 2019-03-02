@@ -1,7 +1,7 @@
-@charset "UTF-8";
+@charset "utf-8";
 
-/* KEYFRAMES (für die Animation Ein-/Ausblenden der Filterliste) */
-@keyframes liste_re {
+/* KEYFRAMES (für Animation "Ein- bzw. Ausblenden der Filterliste") */
+@keyframes liste-re {
 	0% {
 		transform: translateX(-310px);
 	}
@@ -9,7 +9,8 @@
 		transform: translateX(0);
 	}
 }
-@keyframes liste_li {
+
+@keyframes liste-li {
 	0% {
 		transform: translateX(0);
 	}
@@ -20,154 +21,184 @@
 
 /* LISTENSEKTION */
 #liste {
-	width: calc(100% - 20px);
-	margin-top: 60px; /* 10px weniger als in anderen <section>, wird hier als padding-top gesetzt */
 	display: grid;
 	grid-template-columns: 300px calc(100% - 300px - 10px); /* Minus Breite Filterleiste und Gap */
 	grid-gap: 10px;
-	animation-name: liste_re;
+	margin-top: 60px; /* 10px weniger als in anderen <section>, wird hier als padding-top gesetzt */
+	width: calc(100% - 20px);
+	animation-name: liste-re;
 	animation-timing-function: ease;
-	animation-duration: 0.5s;
+	animation-duration: .5s;
 	animation-fill-mode: forwards;
-	transition: width 0.5s ease;
+	transition: width .5s ease;
 }
-#liste.filter_aus {
+
+#liste.filter-aus {
 	width: calc(100% + 310px - 20px);
-	animation-name: liste_li;
+	animation-name: liste-li;
 }
+
 #liste.preload { /* damit beim ersten Anzeigen der Liste keine Animation läuft */
 	animation-duration: 0s;
 }
 
 /* FILTERLEISTE */
-#liste_filter {
-	padding-top: 10px;
-	width: 300px;
+#liste-filter {
 	position: sticky;
 	top: 60px;
+	padding-top: 10px;
+	width: 300px;
 }
-#liste_filter p {
+
+#liste-filter p {
+	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
-	overflow: hidden;
 }
-#liste_filter label {
+
+#liste-filter label {
 	color: var(--Farbe);
 }
 
 /* BELEGLISTE: HEADER */
-#liste_belege {
+#liste-belege {
 	position: relative;
 }
-#liste_belege header {
-	background-color: #fff;
-	white-space: nowrap;
-	overflow: hidden;
-	padding: 10px 5px 2px 8px;
-	width: calc(100% - 13px); /* 13px padding */
-	height: 24px;
-	border-bottom: 1px solid var(--Linie);
+
+#liste-belege header {
 	position: sticky;
 	top: 60px;
 	z-index: 1;
+	border-bottom: 1px solid var(--Linie);
+	padding: 10px 5px 2px 8px;
+	width: calc(100% - 13px); /* 13px padding */
+	height: 24px;
+	overflow: hidden;
+	background-color: #fff;
+	white-space: nowrap;
 }
-#liste_belege header a {
+
+#liste-belege header a {
 	margin-left: 5px;
 }
-#liste_belege header .liste_link_text {
-	color: var(--Text);
+
+#liste-belege .liste-link-text {
+	display: inline-block;
 	margin-left: 10px;
+	color: var(--Text);
 }
-#liste_belege header .liste_link_text:focus {
+
+#liste-belege .liste-link-text:focus {
 	color: var(--Farbe);
 	text-decoration: none;
 }
-#liste_belege header .liste_link_text:hover {
+
+#liste-belege .liste-link-text:hover {
 	text-decoration: none;
 }
-#liste_belege header .liste_link_text_strike {
-	padding: 0 3px 0 2px;
+
+#liste-belege .liste-link-text-strike {
 	position: relative;
+	padding: 0 3px 0 2px;
 }
-#liste_belege header .liste_link_text_strike:before {
-  position: absolute;
+
+#liste-belege .liste-link-text-strike:before {
   content: "";
+  position: absolute;
   left: 0;
   top: 40%;
   right: 0;
   border-top: 3px solid var(--FarbeRot);
 }
-#liste_belege header #liste_link_hervorheben {
-	width: 45px;
+
+#liste-link-hervorheben {
 	display: inline-block;
+	width: 45px;
 }
-#liste_belege header .link_aktiv {
+
+#liste-belege .link-aktiv {
 	font-weight: bold;
 }
-#liste_belege header .start_block {
+
+#liste-belege .start-block {
 	margin-left: 25px;
 }
-#liste_belege header #liste_belege_anzahl {
-	background-color: #fff;
-	padding: 0 5px 0 25px;
+
+#liste-belege-anzahl {
 	position: absolute;
 	right: 0;
+	padding: 0 5px 0 25px;
+	background-color: #fff;
 }
-#liste_belege header .belege_gefiltert {
+
+#liste-belege-anzahl.belege-gefiltert {
 	font-weight: bold;
 }
 
 /* BELEGLISTE: CONTENT */
-#liste_belege_cont {
+#liste-belege-cont {
 	margin: 0 0 25px 0;
 }
-#liste_belege_cont .liste_kopf {
-	background-color: var(--Hintergrund);
+
+#liste-belege-cont .liste-kopf {
+	border-bottom: 1px solid var(--Linie);
+	border-left: 3px solid var(--Farbe);
+	padding: 2px 10px;
+	height: 24px;
+	overflow: hidden;
 	line-height: 24px;
 	text-overflow: ellipsis;
 	white-space: nowrap;
-	overflow: hidden;
-	height: 24px;
-	padding: 2px 10px;
-	border-bottom: 1px solid var(--Linie);
-	border-left: 3px solid var(--Farbe);
+	background-color: var(--Hintergrund);
 	cursor: pointer;
 }
-#liste_belege_cont a, #liste_belege_cont span {
+
+#liste-belege-cont a,
+#liste-belege-cont span {
 	display: inline-block;
 }
-#liste_belege_cont .liste_bearbeiten {
+
+#liste-belege-cont .liste-bearbeiten {
 	margin-right: 15px;
 }
-#liste_belege_cont .liste_jahr {
+
+#liste-belege-cont .liste-jahr {
+	margin-right: 15px;
 	font-style: italic;
-	margin-right: 15px;
 }
-#liste_belege_cont .liste_jahr_hinweis:after {
+
+#liste-belege-cont .liste-jahr-hinweis:after {
 	content: "*";
-	color: var(--FarbeRot);
 	position: relative;
 	left: 3px;
+	color: var(--FarbeRot);
 }
-#liste_belege_cont .liste_schnitt {
-	background-color: transparent;
-	height: auto;
-	padding: 10px 10px 0 49px;
+
+#liste-belege-cont .liste-schnitt {
 	border-bottom: 1px solid var(--Linie);
 	border-left: 3px solid var(--Farbe);
+	padding: 10px 10px 0 49px;
+	height: auto;
+	background-color: transparent;
 	user-select: text;
 }
-#liste_belege_cont .liste_schnitt p {
+
+#liste-belege-cont .liste-schnitt p {
 	max-width: 600px;
 }
-#liste_belege_cont .liste_zeitschnitt, #liste_belege_cont .liste_keine_belege, #liste_belege_cont .liste_kartei_leer {
+
+#liste-belege-cont .liste-zeitschnitt,
+#liste-belege-cont .liste-keine-belege,
+#liste-belege-cont .liste-kartei-leer {
+	border-bottom: 1px solid var(--Linie);
+	padding: 10px;
 	background-color: transparent;
 	color: var(--Farbe);
-	text-align: center;
 	font-style: italic;
-	padding: 10px;
-	border-bottom: 1px solid var(--Linie);
+	text-align: center;
 }
-#liste_belege_cont .liste_keine_belege, #liste_belege_cont .liste_kartei_leer {
+
+#liste-belege-cont .liste-keine-belege,
+#liste-belege-cont .liste-kartei-leer {
 	color: var(--TextHell);
 }

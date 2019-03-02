@@ -1,4 +1,4 @@
-@charset "UTF-8";
+@charset "utf-8";
 
 /* VARIABLEN */
 :root {
@@ -7,7 +7,7 @@
 	--Hintergrund: #f9f9f9;
 	--HintergrundHell: #fdfdfd;
 	--Linie: #e0e0e0;
-	--Farbe: #729fcf;
+	--Farbe: #729fcf; /* Alternative: #c90230 */
 	--FarbeRot: #f00;
 	--BoxShadow: 3px 3px 6px 0 #d1d1d1;
 	--ButtonShadow: 2px 2px 2px 0 #d1d1d1;
@@ -17,34 +17,46 @@
 /* FONTS */
 @font-face {
 	font-family: "DejaVu Sans";
-	src: url("../fonts/DejaVuSans.woff2") format("woff2");
+	src: url(../fonts/DejaVuSans.woff2) format("woff2");
 }
+
 @font-face {
 	font-family: "DejaVu Sans";
-	src: url("../fonts/DejaVuSans-Oblique.woff2") format("woff2");
+	src: url(../fonts/DejaVuSans-Oblique.woff2) format("woff2");
 	font-style: italic;
 }
+
 @font-face {
 	font-family: "DejaVu Sans";
-	src: url("../fonts/DejaVuSans-Bold.woff2") format("woff2");
+	src: url(../fonts/DejaVuSans-Bold.woff2) format("woff2");
 	font-weight: bold;
 }
+
 @font-face {
 	font-family: "DejaVu Sans";
-	src: url("../fonts/DejaVuSans-BoldOblique.woff2") format("woff2");
+	src: url(../fonts/DejaVuSans-BoldOblique.woff2) format("woff2");
 	font-style: italic;
 	font-weight: bold;
 }
 
 /* ALLGEMEINE ELEMENTE */
 body {
-	color: var(--Text);
-	font-family: "DejaVu Sans", sans-serif;
-	font-size: 16px;
-	line-height: 24px;
-	overflow-x: hidden;
 	margin: 0;
+	overflow-x: hidden;
+	color: var(--Text);
+	font: 16px/24px "DejaVu Sans", sans-serif;
 	user-select: none;
+}
+
+h2 {
+	margin: 25px 0 10px 0;
+	color: var(--Farbe);
+	font-size: 16px;
+	line-height: 28px;
+}
+
+h2:first-child {
+	margin-top: 0;
 }
 
 p {
@@ -52,149 +64,182 @@ p {
 }
 
 section {
-	padding: 0 10px;
-	margin-top: 70px; /* 60 px = Höhe des fixierten <header> + 10px = padding */
 	position: relative;
+	margin-top: 70px; /* 60 px = Höhe des fixierten <header> + 10px = padding */
+	padding: 0 10px;
 }
 
 /* LINKS */
 a {
+	outline: none;
 	color: var(--Farbe);
 	text-decoration: none;
-	outline: none;
 }
-a:focus, a:hover {
+
+a:focus,
+a:hover {
 	text-decoration: underline;
 }
-a.icon_link {
-	background-color: var(--Text);
-	text-decoration: none;
+
+a.icon-link {
+	display: inline-block;
 	width: 24px;
 	height: 24px;
-	display: inline-block;
+	background-color: var(--Text);
+	text-decoration: none;
 }
-a.icon_link:focus {
+
+a.icon-link:focus {
 	background-color: var(--Farbe);
 }
-a.icon_auge {
-	-webkit-mask: url("../img/auge.svg") no-repeat center;
-	mask: url("../img/auge.svg") no-repeat center;
+
+a.icon-auge {
+	-webkit-mask-image: url(../img/auge.svg);
+	mask-image: url(../img/auge.svg);
 }
-a.icon_auge_aus {
-	-webkit-mask: url("../img/auge_aus.svg") no-repeat center;
-	mask: url("../img/auge_aus.svg") no-repeat center;
+
+a.icon-auge-aus {
+	-webkit-mask-image: url(../img/auge_aus.svg);
+	mask-image: url(../img/auge_aus.svg);
 }
-a.icon_bearbeiten {
-	-webkit-mask: url("../img/bearbeiten.svg") no-repeat center;
-	mask: url("../img/bearbeiten.svg") no-repeat center;
+
+a.icon-bearbeiten {
+	-webkit-mask-image: url(../img/bearbeiten.svg);
+	mask-image: url(../img/bearbeiten.svg);
 }
-a.icon_filter_an {
-	-webkit-mask: url("../img/filter_an.svg") no-repeat center;
-	mask: url("../img/filter_an.svg") no-repeat center;
+
+a.icon-filter-an {
+	-webkit-mask-image: url(../img/filter_an.svg);
+	mask-image: url(../img/filter_an.svg);
 }
-a.icon_filter_aus {
-	-webkit-mask: url("../img/filter_aus.svg") no-repeat center;
-	mask: url("../img/filter_aus.svg") no-repeat center;
+
+a.icon-filter-aus {
+	-webkit-mask-image: url(../img/filter_aus.svg);
+	mask-image: url(../img/filter_aus.svg);
 }
-a.icon_hervorheben {
-	-webkit-mask: url("../img/hervorheben.svg") no-repeat center;
-	mask: url("../img/hervorheben.svg") no-repeat center;
+
+a.icon-pfeil-hoch {
+	-webkit-mask-image: url(../img/pfeil_hoch.svg);
+	mask-image: url(../img/pfeil_hoch.svg);
 }
-a.icon_pfeil_hoch {
-	-webkit-mask: url("../img/pfeil_hoch.svg") no-repeat center;
-	mask: url("../img/pfeil_hoch.svg") no-repeat center;
+
+a.icon-pfeil-runter {
+	-webkit-mask-image: url(../img/pfeil_runter.svg);
+	mask-image: url(../img/pfeil_runter.svg);
 }
-a.icon_pfeil_runter {
-	-webkit-mask: url("../img/pfeil_runter.svg") no-repeat center;
-	mask: url("../img/pfeil_runter.svg") no-repeat center;
+
+a.icon-schliessen {
+	-webkit-mask-image: url(../img/schliessen.svg);
+	mask-image: url(../img/schliessen.svg);
 }
-a.icon_schliessen {
-	-webkit-mask: url("../img/schliessen.svg") no-repeat center;
-	mask: url("../img/schliessen.svg") no-repeat center;
+
+a.icon-tools-einfuegen {
+	-webkit-mask-image: url(../img/tool_einfuegen.svg);
+	mask-image: url(../img/tool_einfuegen.svg);
 }
-a.icon_tools_einfuegen {
-	-webkit-mask: url("../img/tool_einfuegen.svg") no-repeat center;
-	mask: url("../img/tool_einfuegen.svg") no-repeat center;
-}
-a.icon_tools_kopieren {
-	-webkit-mask: url("../img/tool_kopieren.svg") no-repeat center;
-	mask: url("../img/tool_kopieren.svg") no-repeat center;
+
+a.icon-tools-kopieren {
+	-webkit-mask-image: url(../img/tool_kopieren.svg);
+	mask-image: url(../img/tool_kopieren.svg);
 }
 
 /* FORMULAR-ELEMENT */
-input, textarea {
-	color: var(--Text);
-	font-family: "DejaVu Sans", sans-serif;
-	font-size: 16px;
-	line-height: 24px;
+input,
+textarea {
 	margin: 0;
 	outline: none;
+	color: var(--Text);
+	font: 16px/24px "DejaVu Sans", sans-serif;
 }
+
 input[type="text"] {
-	padding: 2px 5px;
 	border: 1px solid var(--Linie);
 	border-radius: 5px;
+	padding: 2px 5px;
 }
+
 input[type="text"]:focus {
 	border-color: var(--Farbe);
 }
+
 input[type="button"] {
-	padding: 0 10px 0 31px;
+	margin: 0 0 0 15px;
+	box-shadow: var(--ButtonShadow);
 	border: 1px solid var(--Linie);
 	border-radius: 5px;
-	box-shadow: var(--ButtonShadow);
-	margin: 0 0 0 10px;
+	padding: 0 10px 0 31px;
 }
+
 input[type="button"]:focus {
 	border-color: var(--Farbe);
 }
-input[type="button"][value="Okay"], input[type="button"][value="Abbrechen"], input[type="button"][value="Speichern"], input[type="button"][value="Löschen"], input[type="button"][value="Ja"], input[type="button"][value="Nein"] {
-	background-image: url("../img/button_check.svg"), linear-gradient(to bottom, #fff, #eee);
-	background-repeat: no-repeat;
-	background-position: 4px center, left top;
-}
-input[type="button"][value="Abbrechen"], input[type="button"][value="Nein"] {
-	background-image: url("../img/button_cancel.svg"), linear-gradient(to bottom, #fff, #eee);
-}
+
+input[type="button"][value="Abbrechen"],
+input[type="button"][value="Ja"],
+input[type="button"][value="Löschen"],
+input[type="button"][value="Okay"],
+input[type="button"][value="Nein"],
 input[type="button"][value="Speichern"] {
-	background-image: url("../img/button_save.svg"), linear-gradient(to bottom, #fff, #eee);
+	background-image: url(../img/button_check.svg),
+		linear-gradient(to bottom, #fff, #eee);
+	background-position: 4px center,
+		left top;
+	background-repeat: no-repeat;
 }
+
+input[type="button"][value="Abbrechen"],
+input[type="button"][value="Nein"] {
+	background-image: url(../img/button_cancel.svg),
+		linear-gradient(to bottom, #fff, #eee);
+}
+
 input[type="button"][value="Löschen"] {
-	background-image: url("../img/button_delete.svg"), linear-gradient(to bottom, #fff, #eee);
+	background-image: url(../img/button_delete.svg),
+		linear-gradient(to bottom, #fff, #eee);
 }
+
+input[type="button"][value="Speichern"] {
+	background-image: url(../img/button_save.svg),
+		linear-gradient(to bottom, #fff, #eee);
+}
+
 input[type="checkbox"] {
+	position: relative;
+	top: -1px;
+	box-sizing: content-box;
+	margin: 0 10px 0 0;
+	border: 1px solid var(--Linie);
+	border-radius: 3px;
+	padding: 0;
+	width: 15px;
+	height: 15px;
 	-webkit-appearance: none;
 	appearance: none;
 	background-color: #fff;
+	vertical-align: middle;
 	font-size: 19px;
 	line-height: 14px;
-	width: 15px;
-	height: 15px;
-	vertical-align: middle;
-	padding: 0;
-	border: 1px solid var(--Linie);
-	border-radius: 3px;
-	margin: 0 7px 0 0;
-	box-sizing: content-box;
-	position: relative;
-	top: -1px;
 }
+
 input[type="checkbox"]:focus {
 	outline: none;
 	border-color: var(--Farbe);
 }
+
 input[type="checkbox"]:checked:before {
 	content: "✔";
-	color: var(--Farbe);
 	display: block;
+	color: var(--Farbe);
 }
+
 textarea {
-	padding: 2px 5px;
+	display: block;
+	margin: 0;
 	border: 1px solid var(--Linie);
 	border-radius: 5px;
-	margin: 0;
-	display: block;
+	padding: 2px 5px;
 }
+
 textarea:focus {
 	border-color: var(--Farbe);
 }
@@ -205,8 +250,8 @@ textarea:focus {
 }
 
 ::placeholder {
-  color: var(--TextHell);
 	opacity: 1;
+  color: var(--TextHell);
 }
 
 ::selection {

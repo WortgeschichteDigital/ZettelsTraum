@@ -1,36 +1,92 @@
-@charset "UTF-8";
+@charset "utf-8";
 
 /* START-SEKTION */
 #start {
-	display: grid;
-	grid-template-columns: repeat(2, 1fr);
+	padding: 0 25px;
+	text-align: center;
 }
 
-#start div {
-	font-size: 24px;
-	line-height: 48px;
-	white-space: nowrap;
-	padding: 0 10px 0 55px;
+/* BUTTONS */
+#start > span {
+	display: inline-block;
+	margin: 65px 25px 0 0;
+	box-shadow: var(--ButtonShadow);
 	border: 1px solid var(--Linie);
 	border-radius: 10px;
-	box-shadow: var(--ButtonShadow);
-	margin: 50px 10px 0 10px;
+	padding: 0 10px 0 40px;
+	width: 170px;
+	font-size: 20px;
+	line-height: 32px;
+	text-align: left;
+	white-space: nowrap;
 }
 
-#start #start_erstellen, #start #start_oeffnen {
-	background-image: url("../img/erstellen_gross.svg"), linear-gradient(to bottom, #fff, #eee);
+#start > span + span {
+	margin-right: 0;
+}
+
+#start-erstellen,
+#start-oeffnen {
+	background-image: url(../img/erstellen_gross.svg),
+		linear-gradient(to bottom, #fff, #eee);
+	background-position: 5px center,
+		left top;
 	background-repeat: no-repeat;
-	background-position: 5px center, left top;
 }
 
-#start #start_oeffnen {
-	background-image: url("../img/oeffnen_gross.svg"), linear-gradient(to bottom, #fff, #eee);
+#start-oeffnen {
+	background-image: url(../img/oeffnen_gross.svg),
+		linear-gradient(to bottom, #fff, #eee);
 }
 
-/* Die "Buttons" sollten nicht zu breit werden */
-@media (min-width: 700px) {
-	#start div {
-		width: 253px;
-		margin: 50px auto 0 auto;
-	}
+/* LISTE ZULETZT VERWENDET */
+#start-zuletzt {
+	margin-top: 75px;
+	text-align: left;
+}
+
+#start-zuletzt h2 {
+	margin: 0;
+	border-top: 1px solid var(--Linie);
+	border-bottom: 1px solid var(--Linie);
+	padding: 2px 0 0 10px;
+	background-color: var(--Hintergrund);
+	line-height: 24px;
+}
+
+#start-zuletzt img {
+	margin-right: 5px;
+	vertical-align: top;
+	position: relative;
+	top: -1px;
+}
+
+#start-liste {
+	margin: 0;
+	padding-left: 0;
+	list-style-type: none;
+}
+
+#start-liste li {
+	border-bottom: 1px solid var(--Linie);
+	padding: 0 10px;
+	overflow: hidden;
+	line-height: 36px;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	cursor: pointer;
+}
+
+#start-liste li:hover {
+	background-color: var(--Hintergrund);
+}
+
+#start-liste span:first-child {
+	color: var(--Farbe);
+	font-size: 20px;
+}
+
+#start-liste span:last-child {
+	margin-left: 15px;
+	font-size: 12px;
 }

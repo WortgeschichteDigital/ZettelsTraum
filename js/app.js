@@ -6,7 +6,7 @@ let data = {};
 
 // Initialisierung der App
 window.addEventListener("load", function() {
-	// TASTATUREINGABEN
+	// TASTATUREINGABEN ABFANGEN
 	document.addEventListener("keydown", helfer.tastatur);
 	
 	// DATEIEN VIA DRAG & DROP ÖFFNEN
@@ -28,37 +28,42 @@ window.addEventListener("load", function() {
 		ipcRenderer.send("ueber-zettelstraum");
 	});
 	// Start-Sektion
-	document.getElementById("start_erstellen").addEventListener("click", () => kartei.wortErfragen() );
-	document.getElementById("start_oeffnen").addEventListener("click", () => kartei.oeffnen() );
+	document.getElementById("start-erstellen").addEventListener("click", () => kartei.wortErfragen() );
+	document.getElementById("start-oeffnen").addEventListener("click", () => kartei.oeffnen() );
 	// Belegformular
 	let beleg_inputs = document.querySelectorAll("#beleg input, #beleg textarea");
 	for (let i = 0, len = beleg_inputs.length; i < len; i++) {
 		if (beleg_inputs[i].type === "button") {
-			beleg.klickButton(beleg_inputs[i]);
+			beleg.aktionButton(beleg_inputs[i]);
 		} else {
-			beleg.feldGeaendert(beleg_inputs[i]);
-			if (beleg_inputs[i].type.match(/^checkbox|^text/)) {
+			beleg.formularGeaendert(beleg_inputs[i]);
+			if ( beleg_inputs[i].type.match(/^checkbox|^text/) ) {
 				beleg.belegSpeichern(beleg_inputs[i]);
 			}
 		}
 	}
-	let beleg_links = document.querySelectorAll("#beleg .icon_link");
+	let beleg_links = document.querySelectorAll("#beleg .icon-link");
 	for (let i = 0, len = beleg_links.length; i < len; i++) {
-		beleg.toolsInit(beleg_links[i]);
+		beleg.toolsKlick(beleg_links[i]);
 	}
 	// Funktionen im Belegliste-Header
 	let liste_links = document.querySelectorAll("#liste header a");
 	for (let i = 0, len = liste_links.length; i < len; i++) {
 		liste.header(liste_links[i]);
 	}
+	// Einstellungen-Fenster
+	let ee = document.querySelectorAll("#einstellungen input");
+	for (let i = 0, len = ee.length; i < len; i++) {
+		optionen.aendereEinstellung(ee[i]);
+	}
 	// Prompt-Textfeld
-	document.getElementById("dialog_prompt_text").addEventListener("keydown", function(evt) {
+	document.getElementById("dialog-prompt-text").addEventListener("keydown", function(evt) {
 		if (evt.which === 13) { // Enter im Textfeld führt die Aktion aus
 			overlay.schliessen(this);
 		}
 	});
 	// Dialog-Buttons
-	let dialog_buttons = ["dialog_ok_button", "dialog_abbrechen_button", "dialog_ja_button", "dialog_nein_button"];
+	let dialog_buttons = ["dialog-ok-button", "dialog-abbrechen-button", "dialog-ja-button", "dialog-nein-button"];
 	for (let i = 0, len = dialog_buttons.length; i < len; i++) {
 		dialog_schliessen(dialog_buttons[i]);
 	}
@@ -68,13 +73,14 @@ window.addEventListener("load", function() {
 		});
 	}
 	// Schließen-Links von Overlays
-	let overlay_links = document.querySelectorAll(".overlay_schliessen");
+	let overlay_links = document.querySelectorAll(".overlay-schliessen");
 	for (let i = 0, len = overlay_links.length; i < len; i++) {
 		overlay.initSchliessen(overlay_links[i]);
 	}
 	
 	// ANFRAGEN DES MAIN-PROZESSES ABFANGEN
 	const {ipcRenderer} = require("electron");
+	ipcRenderer.on("programm-einstellungen", () => optionen.oeffnen() );
 	ipcRenderer.on("kartei-erstellen", function() {
 		kartei.checkSpeichern( () => kartei.wortErfragen() );
 	});
@@ -90,14 +96,26 @@ window.addEventListener("load", function() {
 	ipcRenderer.on("kartei-schliessen", function() {
 		kartei.checkSpeichern( () => kartei.schliessen() );
 	});
-	ipcRenderer.on("beleg-hinzufuegen", () => beleg.erstellenCheck() );
+	ipcRenderer.on("belege-hinzufuegen", () => beleg.erstellenPre() );
 	ipcRenderer.on("belege-auflisten", () => liste.anzeigen() );
 	ipcRenderer.on("optionen-zuletzt", (evt, zuletzt) => optionen.data.zuletzt = zuletzt );
 	
 	// SYNCHRONE ANFRAGEN AN DEN MAIN-PROZESS STELLEN
+	// Optionen laden
 	let opt = ipcRenderer.sendSync("optionen-senden");
 	optionen.einlesen(optionen.data, opt);
 	optionen.anwenden();
+	// Bilder vorladen (damit es nicht flackert)
+	let bilder = ipcRenderer.sendSync("bilder-senden"),
+		bilder_preload = [];
+	for (let i = 0, len = bilder.length; i < len; i++) {
+		bilder_preload[i] = new Image();
+		bilder_preload[i].src = `img/${bilder[i]}`;
+	}
+	
+	// Start-Sektion initialisieren
+	// Obacht! Erst aufrunfen, nachdem die Optionen geladen wurden!
+	start.zuletzt();
 });
 
 // Schließen unterbrechen, falls Daten noch nicht gespeichert wurden

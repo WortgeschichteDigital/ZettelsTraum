@@ -1,51 +1,57 @@
-@charset "UTF-8";
+@charset "utf-8";
 
 /* TABELLE FÜR DAS FORMULAR */
 #beleg table {
-	background-color: var(--HintergrundHell);
-	width: calc(100% - 104px);
-	min-width: 500px;
-	max-width: 800px;
-	padding: 10px;
+	margin: 25px auto;
+	box-shadow: var(--BoxShadow);
 	border-collapse: separate;
 	border-spacing: 0;
 	border: 1px solid var(--Linie);
 	border-radius: 10px;
-	margin: 25px auto;
-	box-shadow: var(--BoxShadow);
+	padding: 10px;
+	width: calc(100% - 104px);
+	min-width: 500px;
+	max-width: 800px;
+	background-color: var(--HintergrundHell);
 }
+
 #beleg caption {
+	padding: 0 0 3px 17px;
 	caption-side: top;
 	color: var(--Farbe);
-	text-align: left;
 	font-weight: bold;
-	text-shadow: var(--TextShadow);
-	padding: 0 0 3px 17px;
-}
-#beleg caption #beleg_geaendert {
-	margin-left: 5px;
-	display: inline-block;
-}
-#beleg th {
-	color: var(--TextHell);
 	text-align: left;
-	font-size: 14px;
-	font-weight: normal;
-	font-style: italic;
-	vertical-align: top;
-	width: calc(50% - 10px);
-	padding: 10px 5px 0 5px;
-	position: relative;
+	text-shadow: var(--TextShadow);
 }
+
+#beleg-geaendert {
+	display: inline-block;
+	margin-left: 5px;
+}
+
+#beleg th {
+	position: relative;
+	padding: 10px 5px 0 5px;
+	width: calc(50% - 10px);
+	color: var(--TextHell);
+	vertical-align: top;
+	font-size: 14px;
+	font-style: italic;
+	font-weight: normal;
+	text-align: left;
+}
+
 #beleg tr:first-child td {
 	padding-bottom: 15px;
 }
+
 #beleg td {
+	position: relative;
+	padding: 0 5px;
 	width: calc(50% - 10px);
 	vertical-align: top;
-	padding: 0 5px;
-	position: relative;
 }
+
 #beleg td.check {
 	vertical-align: bottom;
 }
@@ -54,35 +60,41 @@
 #beleg input[type="text"] {
 	width: calc(100% - 12px);
 }
+
 #beleg textarea {
 	width: calc(100% - 12px);
 	height: 120px;
 }
-#beleg #beleg_bs {
+
+textarea#beleg-bs {
 	height: 192px;
 }
+
 #beleg input[type="button"]:first-child {
 	margin-left: 0;
 }
-#beleg_loeschen {
+
+#beleg-loeschen {
 	position: absolute;
 	right: 0;
 }
 
 /* TEXT-TOOLS */
-#beleg_tools {
+#beleg-tools {
 	position: absolute;
 	right: 10px;
 }
-#beleg .copy_paste {
-	margin-left: 10px;
+
+#beleg .copy-paste {
 	display: none;
+	margin-left: 10px;
 }
-#beleg .copy_paste_hover:hover .copy_paste {
+
+#beleg .copy-paste-hover:hover .copy-paste {
 	display: inline-block;
 }
 
 /* SPEZIELLE FORMATE */
-#beleg .rechts {
+#beleg .zelle-bewertung {
 	text-align: right;
 }

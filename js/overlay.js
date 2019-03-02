@@ -4,13 +4,16 @@ let overlay = {
 	// bisher höchster z-index
 	zIndex: 99,
 	// Fenster öffnen
+	//   fenster = Element
+	//     (Overlay-Fenster, das geöffnet werden soll)
 	oeffnen (fenster) {
 		overlay.zIndex++;
 		fenster.style.zIndex = overlay.zIndex;
 		fenster.classList.remove("aus");
 	},
 	// Schließen-Event eines Links initialisieren
-	//   link = Element, auf das geklickt wird
+	//   link = Element
+	//     (Link, auf den geklickt wurde)
 	initSchliessen (link) {
 		link.addEventListener("click", function(evt) {
 			evt.preventDefault();
@@ -18,18 +21,19 @@ let overlay = {
 		});
 	},
 	// schließt ein Overlay-Fenster
-	//   schliesser = Objektverweis auf den Link, über den das Schließen angestoßen wurde
+	//   schliesser = Element
+	//     (Link oder Button, über den das Schließen angestoßen wurde)
 	schliessen (schliesser) {
 		// Overlay-Fenster ermitteln + schließen
 		let fenster = schliesser;
-		while (!fenster.classList.contains("overlay")) {
+		while ( !fenster.classList.contains("overlay") ) {
 			fenster = fenster.parentNode;
 		}
 		fenster.classList.add("aus");
 		// spezielle Funktionen für einzelne Overlay-Fenster
 		if (fenster.id === "dialog") {
 			if (schliesser.nodeName === "INPUT") { // Schließen durch Input-Button oder Input-Text
-				if (schliesser.value.match(/Abbrechen|Nein/)) { // Alert-Dialog: Abbrechen, Confirm-Dialog: Nein
+				if ( schliesser.value.match(/Abbrechen|Nein/) ) { // Alert-Dialog: Abbrechen, Confirm-Dialog: Nein
 					dialog.antwort = false;
 				} else {
 					dialog.antwort = true;
@@ -42,6 +46,16 @@ let overlay = {
 			}
 		}
 	},
+	// alle offenen Overlays schließen
+	alleSchliessen () {
+		let oben_id = "";
+		do {
+			oben_id = overlay.oben();
+			if (oben_id) {
+				overlay.schliessen( document.getElementById(oben_id) );
+			}
+		} while (oben_id);
+	},
 	// oberstes Overlay-Fenster ermitteln
 	oben () {
 		let oben = {
@@ -50,7 +64,7 @@ let overlay = {
 		};
 		let overlays = document.querySelectorAll(".overlay");
 		for (let i = 0, len = overlays.length; i < len; i++) {
-			if (overlays[i].classList.contains("aus")) {
+			if ( overlays[i].classList.contains("aus") ) {
 				continue;
 			}
 			let zIndex = parseInt(overlays[i].style.zIndex, 10);

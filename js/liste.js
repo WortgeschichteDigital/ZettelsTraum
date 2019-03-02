@@ -24,6 +24,8 @@ let liste = {
 		helfer.sektionWechseln("liste");
 	},
 	// baut die Belegliste auf
+	//   filter_init = Boolean
+	//     (true = Filter müssen erneut initialisiert werden)
 	aufbauen (filter_init) {
 		// die Basis der Belegliste vorbereiten
 		let belege = liste.aufbauenBasis(filter_init);
@@ -36,9 +38,9 @@ let liste = {
 		liste.belegeSortierenCache = {};
 		belege.sort(liste.belegeSortieren);
 		// Zeitschnitte drucken
-		let cont = document.getElementById("liste_belege_cont"),
-			start = liste.zeitschnittErmitteln(data.k[belege[0]].da).jahrzehnt,
-			ende = liste.zeitschnittErmitteln(data.k[belege[belege.length - 1]].da).jahrzehnt,
+		let cont = document.getElementById("liste-belege-cont"),
+			start = liste.zeitschnittErmitteln(data.k[ belege[0] ].da).jahrzehnt,
+			ende = liste.zeitschnittErmitteln(data.k[ belege[belege.length - 1] ].da).jahrzehnt,
 			jahrzehnt = start,
 			beleg_akt = 0;
 		while (true) { // Obacht!
@@ -52,7 +54,7 @@ let liste = {
 				cont.appendChild( liste.zeitschnittErstellen(jahrzehnt) );
 				// diese Meldung wird ggf. nachträglich ausgeblendet
 				let div = document.createElement("div");
-				div.classList.add("liste_keine_belege");
+				div.classList.add("liste-keine-belege");
 				div.textContent = "keine Belege";
 				cont.appendChild(div);
 			}
@@ -69,22 +71,22 @@ let liste = {
 				beleg_akt++;
 				// Beleg-Kopf erstellen
 				let div = document.createElement("div");
-				div.classList.add("liste_kopf");
+				div.classList.add("liste-kopf");
 				div.dataset.id = id;
 				// Beleg bearbeiten
 				let a = document.createElement("a");
 				a.href = "#";
-				a.classList.add("liste_bearbeiten", "icon_link", "icon_bearbeiten");
+				a.classList.add("liste-bearbeiten", "icon-link", "icon-bearbeiten");
 				a.textContent = " ";
-				beleg.oeffnenKlick(a);
+				liste.formularOeffnen(a);
 				div.appendChild(a);
 				// Jahr
 				let span = document.createElement("span");
-				span.classList.add("liste_jahr");
+				span.classList.add("liste-jahr");
 				span.textContent = zeitschnitt_akt.datum;
 				if (zeitschnitt_akt.datum !== data.k[id].da) {
 					span.title = data.k[id].da;
-					span.classList.add("liste_jahr_hinweis");
+					span.classList.add("liste-jahr-hinweis");
 					liste.datumAnzeigen(span);
 				}
 				div.appendChild(span);
@@ -109,19 +111,20 @@ let liste = {
 		liste.zeitschnitteKeineBelege();
 	},
 	// basale Vorbereitungen für die Belegliste
-	//   filter_init = true/false (nicht immer müssen die Filter neu initialisiert werden)
+	//   filter_init = Boolean
+	//     (true = Filter müssen neu initialisiert werden)
 	aufbauenBasis (filter_init) {
 		// Filter initialisieren
 		if (filter_init) {
-			liste_filter.init();
+			filter.aufbauen();
 		}
 		// Content-Objekt vorbereiten
-		let cont = document.getElementById("liste_belege_cont");
+		let cont = document.getElementById("liste-belege-cont");
 		helfer.keineKinder(cont);
 		// Anzahl der Belege feststellen und Belege filtern
 		let belege = Object.keys(data.k),
 			belege_anzahl = belege.length;
-		belege = liste_filter.filter(belege);
+		belege = filter.kartenFiltern(belege);
 		// Belegzahl anzeigen
 		liste.aufbauenAnzahl(belege_anzahl, belege.length);
 		// Belege zurückgeben
@@ -129,15 +132,19 @@ let liste = {
 	},
 	// In der Kartei sind keine Belege (mehr) und das sollte auch gezeigt werden.
 	aufbauenKeineBelege () {
-		let cont = document.getElementById("liste_belege_cont");
+		let cont = document.getElementById("liste-belege-cont");
 		let div = document.createElement("div");
-		div.classList.add("liste_kartei_leer");
+		div.classList.add("liste-kartei-leer");
 		div.textContent = "keine Belege";
 		cont.appendChild(div);
 	},
 	// Anzahl der Belege drucken
+	//   gesamt = Number
+	//     (Anzahl aller Belege)
+	//   gefiltert = Number
+	//     (Anzahl der Belege, die die Filterung überstanden haben)
 	aufbauenAnzahl (gesamt, gefiltert) {
-		const cont = document.getElementById("liste_belege_anzahl");
+		const cont = document.getElementById("liste-belege-anzahl");
 		// keine Belege
 		if (!gesamt) {
 			cont.classList.add("aus");
@@ -152,17 +159,19 @@ let liste = {
 				text = "Belegen";
 			}
 			anzahl = `${gefiltert}/${gesamt} ${text}`;
-			cont.classList.add("belege_gefiltert");
+			cont.classList.add("belege-gefiltert");
 		} else {
 			if (gesamt !== 1) {
 				text = "Belege";
 			}
 			anzahl = `${gesamt} ${text}`;
-			cont.classList.remove("belege_gefiltert");
+			cont.classList.remove("belege-gefiltert");
 		}
 		cont.textContent = anzahl;
 	},
 	// Zeitschnitt ermitteln
+	//   datum = String
+	//     (das im Datum-Feld des Belegformulars eingetragene Datum)
 	zeitschnittErmitteln (datum) {
 		// Output-Objekt vorbereiten
 		let output = {
@@ -171,7 +180,7 @@ let liste = {
 			jahrzehnt: -1, // Jahrzehnt für die Zeitschnittanzeige
 		};
 		// Anzeigedatum und Jahr, mit dem gerechnet wird, ermitteln
-		if (datum.match(/[0-9]{4}/)) {
+		if ( datum.match(/[0-9]{4}/) ) {
 			output.datum = datum.match(/[0-9]{4}/)[0];
 			output.jahr = output.datum;
 		} else {
@@ -189,17 +198,19 @@ let liste = {
 		return output;
 	},
 	// erstellt ein <div>, der den Zeitschnitt anzeigt
+	//   jahrzehnt = Number
+	//     (das Jahrzehnt des Zeitschnitts, der erstellt werden soll)
 	zeitschnittErstellen (jahrzehnt) {
 		// Element erzeugen
 		let div = document.createElement("div");
-		div.classList.add("liste_zeitschnitt");
+		div.classList.add("liste-zeitschnitt");
 		div.textContent = jahrzehnt;
 		// dataset erstellen
 		jahrzehnt = jahrzehnt.toString(); // wird als integer übergeben, muss aber string sein
 		let dataset = "10|";
-		if (jahrzehnt.match(/50$/)) {
+		if ( jahrzehnt.match(/50$/) ) {
 			dataset += "50|";
-		} else if (jahrzehnt.match(/00$/)) {
+		} else if ( jahrzehnt.match(/00$/) ) {
 			dataset += "50|100|";
 		}
 		div.dataset.zeitschnitt = dataset;
@@ -209,9 +220,9 @@ let liste = {
 	// Anzeige, dass für einen Zeitabschnitt keine Belege vorhanden sind, ggf. ausblenden
 	zeitschnitteKeineBelege () {
 		// 1. Schritt: Meldungen, nur nach Zeitschnitten einblenden, die angezeigt werden.
-		let zeitschnitte = document.querySelectorAll("#liste_belege_cont .liste_zeitschnitt");
+		let zeitschnitte = document.querySelectorAll("#liste-belege-cont .liste-zeitschnitt");
 		for (let i = 0, len = zeitschnitte.length; i < len; i++) {
-			if (zeitschnitte[i].classList.contains("aus")) {
+			if ( zeitschnitte[i].classList.contains("aus") ) {
 				zeitschnitte[i].nextSibling.classList.add("aus");
 			} else {
 				zeitschnitte[i].nextSibling.classList.remove("aus");
@@ -221,20 +232,20 @@ let liste = {
 		for (let i = 0, len = zeitschnitte.length; i < len; i++) {
 			let keine_belege = zeitschnitte[i].nextSibling,
 				naechster_div = keine_belege.nextSibling;
-			while (naechster_div.classList.contains("aus")) {
+			while ( naechster_div.classList.contains("aus") ) {
 				naechster_div = naechster_div.nextSibling;
 			}
-			if (naechster_div.classList.contains("liste_kopf")) {
+			if ( naechster_div.classList.contains("liste-kopf") ) {
 				keine_belege.classList.add("aus");
 			}
 		}
 	},
 	// Anzeige der Zeitschnitte anpassen
 	zeitschnitteAnpassen () {
-		let zeitschnitte = document.querySelectorAll("#liste_belege_cont [data-zeitschnitt]");
+		let zeitschnitte = document.querySelectorAll("#liste-belege-cont [data-zeitschnitt]");
 		for (let i = 0, len = zeitschnitte.length; i < len; i++) {
-			let reg = new RegExp(helfer.escapeRegExp(`${optionen.data.belegliste.zeitschnitte}|`));
-			if (zeitschnitte[i].dataset.zeitschnitt.match(reg)) {
+			let reg = new RegExp( helfer.escapeRegExp(`${optionen.data.belegliste.zeitschnitte}|`) );
+			if ( zeitschnitte[i].dataset.zeitschnitt.match(reg) ) {
 				zeitschnitte[i].classList.remove("aus");
 			} else {
 				zeitschnitte[i].classList.add("aus");
@@ -246,6 +257,8 @@ let liste = {
 	// (unbedingt vor dem Sortieren leeren, sonst werden Änderungen nicht berücksichtigt!)
 	belegeSortierenCache: {},
 	// Belege chronologisch sortieren
+	//   a, b = String
+	//     (IDs der zu sortierenden Belege)
 	belegeSortieren (a, b) {
 		// Sortierdaten ermitteln
 		let datum = {
@@ -269,7 +282,7 @@ let liste = {
 				zeiger = "b";
 			}
 			let da = data.k[id].da;
-			if (da.match(/[0-9]{4}/)) {
+			if ( da.match(/[0-9]{4}/) ) {
 				datum[zeiger] = parseInt(da.match(/[0-9]{4}/)[0], 10);
 			} else {
 				datum[zeiger] = (parseInt(da.match(/([0-9]{2})\./)[1], 10) - 1) * 100;
@@ -288,10 +301,12 @@ let liste = {
 		return datum.b - datum.a;
 	},
 	// erstellt die Anzeige des Belegschnitts unterhalb des Belegkopfes
+	//   belegschnitt = String
+	//     (der Volltext des Belegschnitts)
 	belegschnittErstellen (belegschnitt) {
 		// <div> erzeugen
 		let div = document.createElement("div");
-		div.classList.add("liste_schnitt");
+		div.classList.add("liste-schnitt");
 		if (!optionen.data.belegliste.belegschnitte) {
 			div.classList.add("aus");
 		}
@@ -307,6 +322,8 @@ let liste = {
 		return div;
 	},
 	// generiert den Vorschautext des übergebenen Belegs inkl. Autorname (wenn vorhanden)
+	//   beleg_akt = Object
+	//     (Verweis auf den aktuellen Beleg)
 	belegschnittVorschau (beleg_akt) {
 		// Zeilenumbrüche löschen
 		let schnitt = beleg_akt.bs.replace(/\n/g, "");
@@ -332,6 +349,8 @@ let liste = {
 		return frag;
 	},
 	// hebt ggf. das Wort der Kartei im übergebenen Text hervor
+	//   schnitt = String
+	//     (Text, in dem der Beleg hervorgehoben werden soll)
 	belegschnittWortHervorheben (schnitt) {
 		// Wort soll nicht hervorgehoben werden
 		if (!optionen.data.belegliste.wort_hervorheben) {
@@ -342,32 +361,48 @@ let liste = {
 		return schnitt;
 	},
 	// einen einzelnen Belegschnitt durch Klick auf den Belegkopf umschalten
+	//   div = Element
+	//     (der Belegkopf, auf den geklickt werden kann)
 	belegschnittUmschalten (div) {
 		div.addEventListener("click", function() {
 			let schnitt = this.nextSibling;
 			schnitt.classList.toggle("aus");
 		});
 	},
+	// Klick-Event zum Öffnen des Karteikarten-Formulars
+	//   a = Element
+	//     (Icon-Link, über den das Formular geöffnet werden kann)
+	formularOeffnen (a) {
+		a.addEventListener("click", function(evt) {
+			evt.preventDefault();
+			evt.stopPropagation();
+			beleg.oeffnen( parseInt(this.parentNode.dataset.id, 10) );
+		});
+	},
 	// genaue Datumsangabe auf Klick anzeigen
+	//   span = Element
+	//     (<span>, in dem das Datum steht)
 	datumAnzeigen (span) {
 		span.addEventListener("click", function(evt) {
 			evt.stopPropagation();
 			let datum = this.title,
 				beleg_id = this.parentNode.dataset.id;
 			dialog.oeffnen("alert", null);
-			dialog.text(`<strong>Beleg #${beleg_id}</strong>\n${datum}`);
+			dialog.text(`<h2>Beleg #${beleg_id}</h2>\n${datum}`);
 		});
 	},
 	// Funktionen im Header aufrufen
+	//   link = Element
+	//     (Link im Header, auf den geklickt wird)
 	header (link) {
 		link.addEventListener("click", function(evt) {
 			evt.preventDefault();
-			let funktion = this.id.replace(/^liste_link_/, "");
+			let funktion = this.id.replace(/^liste-link-/, "");
 			if (funktion === "filter") {
 				liste.headerFilter();
 			} else if (funktion === "sortieren") {
 				liste.headerSortieren();
-			} else if (funktion.match(/^zeitschnitte/)) {
+			} else if ( funktion.match(/^zeitschnitte/) ) {
 				liste.headerZeitschnitte(funktion);
 			} else if (funktion === "belegschnitte") {
 				liste.headerBelegschnitte();
@@ -390,16 +425,16 @@ let liste = {
 		let sec_liste = document.getElementById("liste");
 		sec_liste.classList.remove("preload"); // damit bei der ersten Anzeige keine Animation läuft
 		// Link im Header
-		let link = document.getElementById("liste_link_filter");
+		let link = document.getElementById("liste-link-filter");
 		if (optionen.data.belegliste.filterleiste) {
-			sec_liste.classList.remove("filter_aus");
-			link.classList.add("icon_filter_aus");
-			link.classList.remove("icon_filter_an");
+			sec_liste.classList.remove("filter-aus");
+			link.classList.add("icon-filter-aus");
+			link.classList.remove("icon-filter-an");
 			link.title = "Filter ausblenden";
 		} else {
-			sec_liste.classList.add("filter_aus");
-			link.classList.remove("icon_filter_aus");
-			link.classList.add("icon_filter_an");
+			sec_liste.classList.add("filter-aus");
+			link.classList.remove("icon-filter-aus");
+			link.classList.add("icon-filter-an");
 			link.title = "Filter einblenden";
 		}
 	},
@@ -415,22 +450,23 @@ let liste = {
 	},
 	// chronologisches Sortieren der Belege (Anzeige im Header anpassen)
 	headerSortierenAnzeige () {
-		let link = document.getElementById("liste_link_sortieren");
+		let link = document.getElementById("liste-link-sortieren");
 		if (optionen.data.belegliste.sort_aufwaerts) {
-			link.classList.remove("icon_pfeil_hoch");
-			link.classList.add("icon_pfeil_runter");
+			link.classList.remove("icon-pfeil-hoch");
+			link.classList.add("icon-pfeil-runter");
 			link.title = "Chronologisch absteigend sortieren";
 		} else {
-			link.classList.add("icon_pfeil_hoch");
-			link.classList.remove("icon_pfeil_runter");
+			link.classList.add("icon-pfeil-hoch");
+			link.classList.remove("icon-pfeil-runter");
 			link.title = "Chronologisch aufsteigend sortieren";
 		}
 	},
 	// Anzahl der Zeitschnitte festlegen, die angezeigt werden sollen
-	//   funktion = der letzte Teil der ID des Elements (liste_link_ + funktion = ID)
+	//   funktion = String
+	//     (der letzte Teil der ID des Elements, also "liste-link-" + "funktion" = ID)
 	headerZeitschnitte (funktion) {
 		// Zeitschnitt ermitteln
-		if (funktion.match(/[0-9]+$/)) {
+		if ( funktion.match(/[0-9]+$/) ) {
 			optionen.data.belegliste.zeitschnitte = funktion.match(/[0-9]+$/)[0];
 		} else {
 			optionen.data.belegliste.zeitschnitte = "-";
@@ -445,15 +481,15 @@ let liste = {
 	headerZeitschnitteAnzeige () {
 		let aktiv = "";
 		if (optionen.data.belegliste.zeitschnitte !== "-") {
-			aktiv = `_${optionen.data.belegliste.zeitschnitte}`;
+			aktiv = `-${optionen.data.belegliste.zeitschnitte}`;
 		}
-		const id = `liste_link_zeitschnitte${aktiv}`, // der aktive Link
-			links = document.getElementsByClassName("liste_link_zeitschnitte"); // alle Links
+		const id = `liste-link-zeitschnitte${aktiv}`, // der aktive Link
+			links = document.getElementsByClassName("liste-link-zeitschnitte"); // alle Links
 		for (let i = 0, len = links.length; i < len; i++) {
 			if (links[i].id === id) {
-				links[i].classList.add("link_aktiv");
+				links[i].classList.add("link-aktiv");
 			} else {
-				links[i].classList.remove("link_aktiv");
+				links[i].classList.remove("link-aktiv");
 			}
 		}
 	},
@@ -465,7 +501,7 @@ let liste = {
 		// Link im Header anpassen
 		liste.headerBelegschnitteAnzeige();
 		// Anzeige der Belegschnitte anpassen
-		let belegschnitte = document.querySelectorAll("#liste_belege_cont .liste_schnitt");
+		let belegschnitte = document.querySelectorAll("#liste-belege-cont .liste-schnitt");
 		for (let i = 0, len = belegschnitte.length; i < len; i++) {
 			if (optionen.data.belegliste.belegschnitte) {
 				belegschnitte[i].classList.remove("aus");
@@ -476,14 +512,14 @@ let liste = {
 	},
 	// Anzeige des kompletten Belegschnitts umstellen (Anzeige im Header anpassen)
 	headerBelegschnitteAnzeige () {
-		let link = document.getElementById("liste_link_belegschnitte");
+		let link = document.getElementById("liste-link-belegschnitte");
 		if (optionen.data.belegliste.belegschnitte) {
-			link.classList.remove("icon_auge");
-			link.classList.add("icon_auge_aus");
+			link.classList.remove("icon-auge");
+			link.classList.add("icon-auge-aus");
 			link.title = "Komplettanzeige der Belegschnitte ausblenden";
 		} else {
-			link.classList.add("icon_auge");
-			link.classList.remove("icon_auge_aus");
+			link.classList.add("icon-auge");
+			link.classList.remove("icon-auge-aus");
 			link.title = "Komplettanzeige der Belegschnitte einblenden";
 		}
 	},
@@ -499,12 +535,12 @@ let liste = {
 	},
 	// Hervorhebung des Worts im Belegschnitt und der Vorschau aus-/einschalten (Anzeige im Header anpassen)
 	headerWortHervorhebenAnzeige () {
-		let link = document.getElementById("liste_link_hervorheben");
+		let link = document.getElementById("liste-link-hervorheben");
 		if (optionen.data.belegliste.wort_hervorheben) {
-			link.classList.add("link_aktiv");
+			link.classList.add("link-aktiv");
 			link.title = "Wort nicht hervorheben";
 		} else {
-			link.classList.remove("link_aktiv");
+			link.classList.remove("link-aktiv");
 			link.title = "Wort hervorheben";
 		}
 	},

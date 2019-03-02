@@ -11,42 +11,33 @@ const {app, BrowserWindow, dialog, ipcMain, Menu} = require("electron"),
 	fs = require("fs"),
 	path = require("path");
 
-// Funktionen zum Menü "Hilfe"
-const menuHilfe = {
-	// Dialog mit Infos zum Programm
-	ueberProgramm () {
-		dialog.showMessageBox({
-			type: "info",
-			buttons: ["Alles klar!"],
-			defaultId: 0,
-			title: `Über ${app.getName()}`,
-			message: `${app.getName()}\nVersion ${app.getVersion()}\n\n„${app.getName()}“ ist die Wortkartei-App von „Wortgeschichte digital“, dem Göttinger Teilprojekt des „Zentrums für digitale Lexikographie der deutschen Sprache“ (ZDL).\n\n© 2019 ZDL\n\nAutor:\tNico Dorn <ndorn@gwdg.de>\nLizenz:\tMIT\n\nFonts:\tDejaVu Sans\nLizenz:\tBitstream Vera Fonts, Arev Fonts, Public Domain\n\nIcons:\tPapirus\nLizenz:\tGNU General Public License 3.0`,
-		});
-	},
-	// Dialog mit Infos zum Framework
-	ueberElectron () {
-		dialog.showMessageBox({
-			type: "info",
-			buttons: ["Alles klar!"],
-			defaultId: 0,
-			title: "Über Electron",
-			message: `Framework-Software von „${app.getName()}“, Version ${app.getVersion()}:\n\nNode.js:\t\t${process.versions.node}\nChromium:\t\t${process.versions.chrome}\nElectron:\t\t${process.versions.electron}`,
-		});
-	},
-};
+// Bilderliste erstellen
+let bilder = [];
+fs.readdir(path.join(__dirname, "img"), function(err, img) {
+	for (let i = 0, len = img.length; i < len; i++) {
+		// Bild oder Ordner?
+		if ( fs.lstatSync( path.join(__dirname, "img", img[i]) ).isDirectory() ) {
+			continue;
+		}
+		// Bild!
+		bilder.push(img[i]);
+	}
+});
 
-// menuHilfe.ueberProgramm() aus dem Renderer-Prozess aufrufen
-ipcMain.on("ueber-zettelstraum", () => menuHilfe.ueberProgramm() );
+// Bilderliste auf Anfrage schicken
+ipcMain.on("bilder-senden", function(evt) {
+	evt.returnValue = bilder;
+});
 
 // App-Menü-Vorlage
-let menuLayout = [
+let layoutMenu = [
 	{
 		label: "&Programm",
 		submenu: [
 			{
 				label: "Einstellungen",
 				icon: path.join(__dirname, "img", "menu", "programm-einstellungen.png"),
-				click: () => void 0, // TODO
+				click: () => win.webContents.send("programm-einstellungen"),
 			},
 			{ type: "separator" },
 			{
@@ -91,6 +82,33 @@ let menuLayout = [
 			},
 			{ type: "separator" },
 			{
+				label: "Metadaten",
+				icon: path.join(__dirname, "img", "menu", "kartei-metadaten.png"),
+				click: () => void 0, // TODO
+				id: "kartei-metadaten",
+			},
+			{
+				label: "Notizen",
+				icon: path.join(__dirname, "img", "menu", "kartei-notizen.png"),
+				click: () => void 0, // TODO
+				id: "kartei-notizen",
+			},
+			{
+				label: "Anhänge",
+				icon: path.join(__dirname, "img", "menu", "kartei-anhaenge.png"),
+				click: () => void 0, // TODO
+				id: "kartei-anhaenge",
+			},
+			{ type: "separator" },
+			{
+				label: "Suche",
+				icon: path.join(__dirname, "img", "menu", "kartei-suche.png"),
+				click: () => void 0, // TODO
+				accelerator: "CommandOrControl+F",
+				id: "kartei-suche",
+			},
+			{ type: "separator" },
+			{
 				label: "Schließen",
 				icon: path.join(__dirname, "img", "menu", "kartei-schliessen.png"),
 				click: () => win.webContents.send("kartei-schliessen"),
@@ -100,49 +118,36 @@ let menuLayout = [
 		],
 	},
 	{
-		label: "&Werkzeuge",
-		id: "werkzeuge",
+		label: "&Belege",
+		id: "belege",
 		submenu: [
 			{
-				label: "Beleg hinzufügen",
-				icon: path.join(__dirname, "img", "menu", "werkzeuge-beleg-hinzufuegen.png"),
-				click: () => win.webContents.send("beleg-hinzufuegen"),
+				label: "Hinzufügen",
+				icon: path.join(__dirname, "img", "menu", "belege-hinzufuegen.png"),
+				click: () => win.webContents.send("belege-hinzufuegen"),
 				accelerator: "CommandOrControl+N",
 			},
 			{
-				label: "Belege auflisten",
-				icon: path.join(__dirname, "img", "menu", "werkzeuge-belege-auflisten.png"),
+				label: "Auflisten",
+				icon: path.join(__dirname, "img", "menu", "belege-auflisten.png"),
 				click: () => win.webContents.send("belege-auflisten"),
 				accelerator: "CommandOrControl+L",
 			},
 			{
-				label: "Belege sortieren",
-				icon: path.join(__dirname, "img", "menu", "werkzeuge-belege-sortieren.png"),
+				label: "Sortieren",
+				icon: path.join(__dirname, "img", "menu", "belege-sortieren.png"),
 				click: () => void 0, // TODO
 				accelerator: "CommandOrControl+H",
 			},
 			{ type: "separator" },
 			{
-				label: "Bedeutungen",
-				click: () => void 0, // TODO
-			},
-			{ type: "separator" },
-			{
-				label: "Metadaten",
-				click: () => void 0, // TODO
-			},
-			{
-				label: "Notizen",
-				click: () => void 0, // TODO
-			},
-			{
-				label: "Anhänge",
+				label: "Bedeutungen sortieren",
 				click: () => void 0, // TODO
 			},
 		],
 	},
 	{
-		label: "&Bearbeiten",
+		label: "B&earbeiten",
 		submenu: [
 			{
 				label: "Rückgängig",
@@ -220,11 +225,11 @@ let menuLayout = [
 			{ type: "separator" },
 			{
 				label: `Über ${app.getName()}`,
-				click: () => menuHilfe.ueberProgramm(),
+				click: () => appMenu.hilfeUeberProgramm(),
 			},
 			{
 				label: "Über Electron",
-				click: () => menuHilfe.ueberElectron(),
+				click: () => appMenu.hilfeUeberElectron(),
 			},
 		],
 	},
@@ -232,7 +237,7 @@ let menuLayout = [
 
 // ggf. Developer-Menü ergänzen
 if (!app.isPackaged) {
-	menuLayout.push({
+	layoutMenu.push({
 		label: "&Dev",
 		submenu: [
 			{
@@ -269,7 +274,7 @@ appMenu = {
 				zuletzt = optionen.data.app.zuletzt;
 			for (let i = 0, len = zuletzt.length; i < len; i++) {
 				// existiert die Datei noch?
-				if (!fs.existsSync(zuletzt[i])) {
+				if ( !fs.existsSync(zuletzt[i]) ) {
 					loeschen.push(zuletzt[i]);
 					continue;
 				}
@@ -295,7 +300,7 @@ appMenu = {
 			);
 		}
 		// Position der Karteiliste ermitteln
-		let menuKartei = menuLayout[1].submenu,
+		let menuKartei = layoutMenu[1].submenu,
 			pos = -1;
 		for (let i = 0, len = menuKartei.length; i < len; i++) {
 			if (menuKartei[i].id === "kartei-zuletzt") {
@@ -304,7 +309,7 @@ appMenu = {
 			}
 		}
 		// neue Liste einhängen
-		menuLayout[1].submenu[pos] = zuletztVerwendet;
+		layoutMenu[1].submenu[pos] = zuletztVerwendet;
 		// Menü ggf. auffrischen
 		if (update) {
 			appMenu.erzeugen();
@@ -331,15 +336,15 @@ appMenu = {
 	},
 	// Menü-Elemente deaktivieren, wenn keine Kartei offen ist
 	deaktivieren (disable, update) {
-		let elemente = ["kartei-speichern", "kartei-speichern-unter", "kartei-schliessen", "werkzeuge"];
-		for (let j = 0, len = menuLayout.length; j < len; j++) {
+		let elemente = ["kartei-speichern", "kartei-speichern-unter", "kartei-metadaten", "kartei-notizen", "kartei-anhaenge", "kartei-suche", "kartei-schliessen", "belege"];
+		for (let j = 0, len = layoutMenu.length; j < len; j++) {
 			// sollen vielleicht alle Menüpunkte deaktiviert werden?
 			let alle = false;
-			if (elemente.indexOf(menuLayout[j].id) >= 0) {
+			if (elemente.indexOf(layoutMenu[j].id) >= 0) {
 				alle = true;
 			}
 			// Submenu durchgehen
-			let submenu = menuLayout[j].submenu;
+			let submenu = layoutMenu[j].submenu;
 			for (let k = 0, len = submenu.length; k < len; k++) {
 				if (alle) {
 					toggle(submenu[k]);
@@ -363,8 +368,28 @@ appMenu = {
 	},
 	// erzeugt das Programm-Menü
 	erzeugen () {
-		const menu = Menu.buildFromTemplate(menuLayout);
+		const menu = Menu.buildFromTemplate(layoutMenu);
 		Menu.setApplicationMenu(menu);
+	},
+	// Dialog mit Infos zum Programm
+	hilfeUeberProgramm () {
+		dialog.showMessageBox({
+			type: "info",
+			buttons: ["Alles klar!"],
+			defaultId: 0,
+			title: `Über ${app.getName()}`,
+			message: `${app.getName()}\nVersion ${app.getVersion()}\n\n„${app.getName()}“ ist die Wortkartei-App von „Wortgeschichte digital“, dem Göttinger Teilprojekt des „Zentrums für digitale Lexikographie der deutschen Sprache“ (ZDL).\n\n© 2019 ZDL\n\nAutor:\tNico Dorn <ndorn@gwdg.de>\nLizenz:\tMIT\n\nFonts:\tDejaVu Sans\nLizenz:\tBitstream Vera Fonts, Arev Fonts, Public Domain\n\nIcons:\tPapirus Icon Theme\nLizenz:\tGNU General Public License 3.0`,
+		});
+	},
+	// Dialog mit Infos zum Framework
+	hilfeUeberElectron () {
+		dialog.showMessageBox({
+			type: "info",
+			buttons: ["Alles klar!"],
+			defaultId: 0,
+			title: "Über Electron",
+			message: `Framework-Software von „${app.getName()}“, Version ${app.getVersion()}:\n\nNode.js:\t\t${process.versions.node}\nChromium:\t\t${process.versions.chrome}\nElectron:\t\t${process.versions.electron}`,
+		});
 	},
 };
 
@@ -373,6 +398,9 @@ appMenu.deaktivieren(true, false);
 
 // Menüse aktivieren/deaktivieren, wenn der Renderer-Prozess es wünscht
 ipcMain.on("menus-deaktivieren", (evt, disable) => appMenu.deaktivieren(disable, true) );
+
+// Programm-Info aufrufen, wenn der Renderer-Prozess es wünscht
+ipcMain.on("ueber-zettelstraum", () => appMenu.hilfeUeberProgramm() );
 
 // Optionen einlesen und speichern
 optionen = {
@@ -391,7 +419,7 @@ optionen = {
 	},
 	// liest die Optionen-Datei aus
 	lesen () {
-		if (fs.existsSync(optionen.pfad)) {
+		if ( fs.existsSync(optionen.pfad) ) {
 			const content = fs.readFileSync(optionen.pfad, "utf-8");
 			try {
 				optionen.data = JSON.parse(content);
@@ -429,7 +457,7 @@ ipcMain.on("optionen-senden", function(evt) {
 // Optionen vom Renderer Process abfangen und speichern
 ipcMain.on("optionen-speichern", function(evt, opt) {
 	if (optionen.data.app.zuletzt &&
-			optionen.data.app.zuletzt.join(",") !== opt.zuletzt.join(",")) {
+			optionen.data.app.zuletzt.join(",") !== opt.zuletzt.join(",") ) {
 		optionen.data.app = opt;
 		appMenu.zuletzt(true); // Das sollte nicht unnötig oft aufgerufen werden!
 	} else {
@@ -452,15 +480,16 @@ fenster = {
 			height: optionen.data.fenster.height,
 			minWidth: 600,
 			minHeight: 350,
+			autoHideMenuBar: optionen.data.app.autoHideMenuBar ? true : false,
 			show: false,
 			webPreferences: {
 				nodeIntegration: true,
 				devTools: app.isPackaged ? false : true,
-				defaultEncoding: "UTF-8",
+				defaultEncoding: "utf-8",
 			},
 		});
-		// main.html laden
-		win.loadFile(path.join(__dirname, "main.html"));
+		// index.html laden
+		win.loadFile( path.join(__dirname, "index.html") );
 		// Fenster anzeigen, sobald alles geladen wurde
 		win.once("ready-to-show", function() {
 			win.show();

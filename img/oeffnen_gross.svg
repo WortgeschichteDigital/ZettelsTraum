@@ -7,9 +7,9 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="48"
-   height="48"
-   viewBox="0 0 48 48"
+   width="32"
+   height="32"
+   viewBox="0 0 32 32"
    version="1.1"
    id="svg7"
    sodipodi:docname="oeffnen_gross.svg"
@@ -39,9 +39,9 @@
      inkscape:window-height="849"
      id="namedview9"
      showgrid="true"
-     inkscape:zoom="13.583333"
-     inkscape:cx="24"
-     inkscape:cy="24"
+     inkscape:zoom="20.375"
+     inkscape:cx="16"
+     inkscape:cy="16"
      inkscape:window-x="0"
      inkscape:window-y="24"
      inkscape:window-maximized="1"
@@ -59,9 +59,9 @@
   </style>
   </defs>
   <path
-     style="color:#444444;fill:#212121;stroke-width:2;fill-opacity:1"
+     style="color:#444444;fill:#212121;fill-opacity:1;stroke-width:1.33333004"
      class="ColorScheme-Text"
-     d="m 23.99414,8.722656 -8.765624,12.613282 h 4.75 l 0.0196,11.941406 h 7.996094 l -0.0196,-11.941406 h 4.683594 z M 9.9941405,35.339844 v 3.9375 H 38.005859 l -0.0118,-3.9375 z"
+     d="m 15.996095,5.8151295 -5.843736,8.4088335 h 3.166658 l 0.01307,7.960918 h 5.330715 l -0.01307,-7.960918 H 21.77212 Z M 6.6627841,23.559877 v 2.624994 H 25.337215 l -0.0079,-2.624994 z"
      id="path5"
      inkscape:connector-curvature="0" />
 </svg>

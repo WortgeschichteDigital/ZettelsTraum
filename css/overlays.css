@@ -1,71 +1,127 @@
-@charset "UTF-8";
+@charset "utf-8";
 
 /* ALLE OVERLAY FENSTER */
-#dialog {
-	background-color: rgba(255, 255, 255, 0.7);
-	width: 100%;
-	height: 100%;
+#dialog,
+#einstellungen {
 	position: fixed;
 	top: 0;
 	left: 0;
 	z-index: 2;
+	padding: 0 25px;
+	width: calc(100% - 50px); /* 50px = padding */
+	height: 100%;
+	background-color: rgba(255, 255, 255, .7);
 }
-#dialog > div {
-	background-color: #fff;
+
+#dialog > div,
+#einstellungen > div {
+	position: relative;
+	margin: 70px auto 0 auto;
+	box-shadow: var(--BoxShadow);
 	border: 1px solid var(--Linie);
 	border-radius: 10px;
-	box-shadow: var(--BoxShadow);
-	margin: 70px auto 0 auto;
-	position: relative;
+	background-color: #fff;
 }
-#dialog > div > a {
+
+#dialog > div > a,
+#einstellungen > div > a {
 	position: absolute;
 	top: 0;
 	right: 0;
 }
 
-/* DIALOG */
-#dialog > div {
-	width: 400px;
-	min-height: 48px;
-	padding: 10px 35px 10px 70px;
-}
-#dialog.prompt > div {
-	background: #fff url("../img/dialog_prompt.svg") no-repeat 10px 10px;
-}
-#dialog.confirm > div {
-	background: #fff url("../img/dialog_confirm.svg") no-repeat 10px 10px;
-}
-#dialog.alert > div {
-	background: #fff url("../img/dialog_alert.svg") no-repeat 10px 10px;
+/* EINSTELLUNGEN */
+#einstellungen > div {
+	margin-top: 40px;
+	border-top-left-radius: 0;
+	border-top-right-radius: 0;
+	padding: 0;
+	max-width: 600px;
 }
 
-/* DIALOG: TEXTFELD PROMPT */
+#einstellungen h2 {
+	margin: 0;
+	border-bottom: 1px solid var(--Linie);
+	padding: 0 0 0 37px; /* links: 10px padding, 17px checkbox, 10px Rand zum Text */
+	background-color: var(--Hintergrund);
+	line-height: 24px;
+}
+
+#einstellungen img {
+	margin-right: 5px;
+	vertical-align: top;
+}
+
+#einstellungen-cont {
+	padding: 10px;
+}
+
+#einstellungen-cont p {
+	padding-left: 28px;
+	text-indent: -28px;
+}
+
+#einstellungen-cont p:last-child {
+	margin-bottom: 0;
+}
+
+.einstellung-neustart {
+	color: var(--FarbeRot);
+}
+
+/* DIALOG */
+#dialog > div {
+	padding: 10px 30px 10px 70px;
+	width: 400px;
+	min-height: 48px;
+}
+
+.prompt > div {
+	background: #fff url(../img/dialog_prompt.svg) no-repeat 10px 10px;
+}
+
+.confirm > div {
+	background: #fff url(../img/dialog_confirm.svg) no-repeat 10px 10px;
+}
+
+.alert > div {
+	background: #fff url(../img/dialog_alert.svg) no-repeat 10px 10px;
+}
+
 #dialog input[type="text"] {
 	width: calc(100% - 10px - 2px); /* 10px = padding, 2px = border */
 }
 
 /* DIALOG: BUTTONS */
 #dialog p.button {
-	text-align: right;
-	line-height: 30px;
 	margin: 0;
+	line-height: 30px;
+	text-align: right;
 }
-#dialog #dialog_prompt, #dialog #dialog_ok, #dialog #dialog_confirm {
+
+#dialog-confirm,
+#dialog-ok,
+#dialog-prompt {
 	display: none;
 }
-#dialog.prompt #dialog_prompt, #dialog.prompt #dialog_ok {
+
+.alert #dialog-ok {
 	display: block;
 }
-#dialog.confirm #dialog_confirm {
+
+.alert #dialog-abbrechen-button {
+	display: none;
+}
+
+.confirm #dialog-confirm {
 	display: block;
 }
-#dialog.alert #dialog_ok {
+
+.prompt #dialog-ok,
+.prompt #dialog-prompt {
 	display: block;
 }
-#dialog.prompt #dialog_abbrechen_button {
+
+.prompt #dialog-abbrechen-button {
 	display: inline-block;
-}
-#dialog.alert #dialog_abbrechen_button {
-	display: none;
 }

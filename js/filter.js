@@ -1,51 +1,55 @@
 "use strict";
 
-let liste_filter = {
+let filter = {
 	// Liste der Filter aufbauen
-	init () {
+	aufbauen () {
 		// überprüfen, welche Filter vorhanden sind;
 		// speichert zugleiche, wie viele Karten den Filter haben
-		let filter = {
+		let filter_typen = {
 			buecherdienst: 0,
 		};
 		for (let id in data.k) {
-			if (!data.k.hasOwnProperty(id)) {
+			if ( !data.k.hasOwnProperty(id) ) {
 				continue;
 			}
 			// Bücherdienst
 			if (data.k[id].bu) {
-				filter.buecherdienst++;
+				filter_typen.buecherdienst++;
 			}
 		}
 		// Filter drucken
-		let cont = document.getElementById("liste_filter");
+		let cont = document.getElementById("liste-filter");
 		helfer.keineKinder(cont);
 		// Bücherdienst
-		if (filter.buecherdienst) {
+		if (filter_typen.buecherdienst) {
 			let p = document.createElement("p"),
 				input = document.createElement("input"),
 				label = document.createElement("label");
 			input.type = "checkbox";
 			input.id = "filter_buecherdienst";
-			liste_filter.filterEvent(input);
+			filter.anwenden(input);
 			p.appendChild(input);
 			label.setAttribute("for", "filter_buecherdienst");
-			label.textContent = `Bücherdienst (${filter.buecherdienst})`;
+			label.textContent = `Bücherdienst (${filter_typen.buecherdienst})`;
 			p.appendChild(label);
 			cont.appendChild(p);
 		}
 	},
 	// Löst beim Ändern einer Filter-Checkbox den Neuaufbau der Liste aus
-	filterEvent (input) {
+	//   input = Element
+	//     (Checkbox in der Filterliste, die geändert wurde)
+	anwenden (input) {
 		input.addEventListener("change", () => liste.aufbauen(false) );
 	},
 	// Karteikarten filtern
-	filter (karten) {
+	//   karten = Array
+	//     (enthält die IDs der Karten, die gefiltert werden sollen)
+	kartenFiltern (karten) {
 		// aktive Filter ermitteln
 		let filter_aktiv = {
 			buecherdienst: false,
 		};
-		let filter = document.querySelectorAll("#liste_filter input"),
+		let filter = document.querySelectorAll("#liste-filter input"),
 			filtern = false;
 		for (let i = 0, len = filter.length; i < len; i++) {
 			if (filter[i].checked) {
