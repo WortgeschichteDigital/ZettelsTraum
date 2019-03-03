@@ -12,7 +12,7 @@
    viewBox="0 0 24 24"
    version="1.1"
    id="svg7"
-   sodipodi:docname="filter_aus.svg"
+   sodipodi:docname="dialog-confirm.svg"
    inkscape:version="0.92.3 (2405546, 2018-03-11)">
   <metadata
      id="metadata11">
@@ -39,7 +39,7 @@
      inkscape:window-height="849"
      id="namedview9"
      showgrid="true"
-     inkscape:zoom="9.8333333"
+     inkscape:zoom="27.166667"
      inkscape:cx="12"
      inkscape:cy="12"
      inkscape:window-x="0"
@@ -59,9 +59,8 @@
   </style>
   </defs>
   <path
-     style="fill:#212121;fill-opacity:1"
-     class="ColorScheme-Text"
-     d="M 0 2 L 4 6 L 4.0195312 10 L 4.9882812 14 L 6 10 L 6 6 L 10 2 L 0 2 z M 8 8 L 8 10 L 14 10 L 14 8 L 8 8 z"
-     transform="translate(4 4)"
-     id="path5" />
+     style="fill:#212121;fill-opacity:1;stroke:none;stroke-width:0.54997194;stroke-opacity:1"
+     d="m 12,5 a 7,7 0 0 0 -7,7 7,7 0 0 0 7,7 7,7 0 0 0 7,-7 7,7 0 0 0 -7,-7 z m 0,2.1 c 1.547,0 2.8,1.253 2.8,2.8 0,0.616 -0.251781,1.176 -0.650781,1.575 l -0.630274,0.643945 C 13.014945,12.629945 12.7,13.05 12.7,14.1 h -1.4 v -0.35 c 0,-0.77 0.314945,-1.470055 0.818945,-1.981055 l 0.868164,-0.881836 C 13.246109,10.635109 13.4,10.285 13.4,9.9 13.4,9.13 12.77,8.5 12,8.5 11.23,8.5 10.6,9.13 10.6,9.9 H 9.2 C 9.2,8.353 10.453,7.1 12,7.1 Z m -0.7,8.4 h 1.4 v 1.4 h -1.4 z"
+     id="path820"
+     inkscape:connector-curvature="0" />
 </svg>

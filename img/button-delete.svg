@@ -7,12 +7,12 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="32"
-   height="32"
-   viewBox="0 0 32 32"
+   width="24"
+   height="24"
+   viewBox="0 0 24 24"
    version="1.1"
    id="svg7"
-   sodipodi:docname="erstellen_gross.svg"
+   sodipodi:docname="button-delete.svg"
    inkscape:version="0.92.3 (2405546, 2018-03-11)">
   <metadata
      id="metadata11">
@@ -27,7 +27,7 @@
     </rdf:RDF>
   </metadata>
   <sodipodi:namedview
-     pagecolor="#ffffff"
+     pagecolor="#e9e9e9"
      bordercolor="#666666"
      borderopacity="1"
      objecttolerance="10"
@@ -39,9 +39,9 @@
      inkscape:window-height="849"
      id="namedview9"
      showgrid="true"
-     inkscape:zoom="20.375"
-     inkscape:cx="16"
-     inkscape:cy="16"
+     inkscape:zoom="27.166667"
+     inkscape:cx="12"
+     inkscape:cy="12"
      inkscape:window-x="0"
      inkscape:window-y="24"
      inkscape:window-maximized="1"
@@ -59,9 +59,9 @@
   </style>
   </defs>
   <path
-     style="color:#444444;fill:#212121;fill-opacity:1;stroke-width:1.33333004"
+     style="fill:#ffffff;fill-opacity:1"
      class="ColorScheme-Text"
-     d="M 9.125304,6.6743315 C 8.750505,6.732598 8.0002402,6.9861974 8.0002402,7.9191284 V 24.088421 c 0,1.243997 1.33333,1.24533 1.33333,1.24533 H 22.653537 c 1.331997,0 1.33333,-1.24533 1.33333,-1.24533 0.02533,-0.05733 0.0067,-9.268777 0,-12.437035 L 18.659014,6.6748648 H 9.3335702 c 0,0 -0.083333,-0.019387 -0.2082662,0 z m 5.541586,5.3281195 h 2.66666 v 2.66666 h 2.66666 v 2.66666 h -2.66666 v 2.666794 h -2.66666 v -2.666794 h -2.66666 v -2.66666 h 2.66666 z"
-     id="path5"
-     inkscape:connector-curvature="0" />
+     d="M 6 0.9921875 C 5 0.9921875 5 1.9921875 5 1.9921875 L 2 1.9921875 C 2 1.9921875 1 1.9956938 1 2.9960938 L 1 3.9960938 L 14 3.9921875 L 14 2.9960938 C 14 1.9960938 13 1.9921875 13 1.9921875 L 10 1.9921875 C 10 1.9921875 10 0.9921875 9 0.9921875 L 6 0.9921875 z M 2 4.9960938 L 2 13.996094 C 2.00005 14.519674 2.47642 14.996044 3 14.996094 L 12 14.996094 C 12.52358 14.996044 12.99995 14.519674 13 13.996094 L 13 4.9960938 L 2 4.9960938 z"
+     transform="translate(4 4)"
+     id="path5" />
 </svg>

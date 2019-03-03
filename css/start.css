@@ -10,55 +10,25 @@
 #start > span {
 	display: inline-block;
 	margin: 65px 25px 0 0;
-	box-shadow: var(--ButtonShadow);
-	border: 1px solid var(--Linie);
-	border-radius: 10px;
-	padding: 0 10px 0 40px;
-	width: 170px;
+	border-radius: 3px;
+	padding: 2px 0 2px 40px;
+	width: 165px;
+	background: var(--farbeB) url(../img/start-erstellen.svg) no-repeat 4px center;
+	color: #fff;
 	font-size: 20px;
 	line-height: 32px;
 	text-align: left;
-	white-space: nowrap;
 }
 
 #start > span + span {
 	margin-right: 0;
-}
-
-#start-erstellen,
-#start-oeffnen {
-	background-image: url(../img/erstellen_gross.svg),
-		linear-gradient(to bottom, #fff, #eee);
-	background-position: 5px center,
-		left top;
-	background-repeat: no-repeat;
-}
-
-#start-oeffnen {
-	background-image: url(../img/oeffnen_gross.svg),
-		linear-gradient(to bottom, #fff, #eee);
+	background-image: url(../img/start-oeffnen.svg);
 }
 
 /* LISTE ZULETZT VERWENDET */
 #start-zuletzt {
 	margin-top: 75px;
 	text-align: left;
-}
-
-#start-zuletzt h2 {
-	margin: 0;
-	border-top: 1px solid var(--Linie);
-	border-bottom: 1px solid var(--Linie);
-	padding: 2px 0 0 10px;
-	background-color: var(--Hintergrund);
-	line-height: 24px;
-}
-
-#start-zuletzt img {
-	margin-right: 5px;
-	vertical-align: top;
-	position: relative;
-	top: -1px;
 }
 
 #start-liste {
@@ -68,7 +38,7 @@
 }
 
 #start-liste li {
-	border-bottom: 1px solid var(--Linie);
+	border-bottom: 1px solid var(--linie);
 	padding: 0 10px;
 	overflow: hidden;
 	line-height: 36px;
@@ -78,11 +48,11 @@
 }
 
 #start-liste li:hover {
-	background-color: var(--Hintergrund);
+	background-color: var(--hover);
 }
 
 #start-liste span:first-child {
-	color: var(--Farbe);
+	color: var(--textFarbe);
 	font-size: 20px;
 }
 

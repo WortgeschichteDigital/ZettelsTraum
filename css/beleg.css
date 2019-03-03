@@ -3,25 +3,22 @@
 /* TABELLE FÜR DAS FORMULAR */
 #beleg table {
 	margin: 25px auto;
-	box-shadow: var(--BoxShadow);
 	border-collapse: separate;
 	border-spacing: 0;
-	border: 1px solid var(--Linie);
 	border-radius: 10px;
-	padding: 10px;
+	padding: 15px;
 	width: calc(100% - 104px);
 	min-width: 500px;
 	max-width: 800px;
-	background-color: var(--HintergrundHell);
+	background-color: var(--hintergrund);
 }
 
 #beleg caption {
-	padding: 0 0 3px 17px;
+	padding: 0 0 0 24px;
 	caption-side: top;
-	color: var(--Farbe);
+	color: var(--textFarbe);
 	font-weight: bold;
 	text-align: left;
-	text-shadow: var(--TextShadow);
 }
 
 #beleg-geaendert {
@@ -33,7 +30,7 @@
 	position: relative;
 	padding: 10px 5px 0 5px;
 	width: calc(50% - 10px);
-	color: var(--TextHell);
+	color: var(--farbe);
 	vertical-align: top;
 	font-size: 14px;
 	font-style: italic;
@@ -54,6 +51,10 @@
 
 #beleg td.check {
 	vertical-align: bottom;
+}
+
+#beleg label {
+	color: var(--farbe);
 }
 
 /* FORMULAR-ELEMENTE */

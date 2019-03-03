@@ -7,12 +7,12 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="48"
-   height="48"
-   viewBox="0 0 48 48"
+   width="24"
+   height="24"
+   viewBox="0 0 24 24"
    version="1.1"
    id="svg7"
-   sodipodi:docname="dialog_alert.svg"
+   sodipodi:docname="dialog-alert.svg"
    inkscape:version="0.92.3 (2405546, 2018-03-11)">
   <metadata
      id="metadata11">
@@ -39,9 +39,9 @@
      inkscape:window-height="849"
      id="namedview9"
      showgrid="true"
-     inkscape:zoom="13.583333"
-     inkscape:cx="21.90184"
-     inkscape:cy="24"
+     inkscape:zoom="27.166667"
+     inkscape:cx="12"
+     inkscape:cy="12"
      inkscape:window-x="0"
      inkscape:window-y="24"
      inkscape:window-maximized="1"
@@ -59,9 +59,9 @@
   </style>
   </defs>
   <path
-     style="color:#444444;fill:#729fcf;stroke-width:2.85714269;fill-opacity:1"
+     style="color:#444444;fill:#212121;fill-opacity:1;stroke-width:0.99999642"
      class="ColorScheme-Text"
-     d="M 24,4 C 12.954286,4 4,12.954571 4,24 4,35.045714 12.954286,44 24,44 35.045714,44 44,35.045714 44,24 44,12.954571 35.045714,4 24,4 Z m 0,7.857143 c 1.972457,0 3.571429,1.598971 3.571429,3.571428 C 27.571429,17.401029 25.972457,19 24,19 c -1.972457,0 -3.571429,-1.598971 -3.571429,-3.571429 0,-1.972457 1.598972,-3.571428 3.571429,-3.571428 z m -2.857143,9.285714 h 5.714286 v 14.285714 h -5.714286 z"
+     d="M 12,5 C 8.134,5 5,8.1340774 5,11.99995 5,15.866022 8.134,19 12,19 15.866,19 19,15.866022 19,11.99995 19,8.1340774 15.866,5 12,5 Z m -1,1.9960857 h 2 v 5.9999573 h -2 z m 1,6.9999503 c 0.5523,0 1,0.447997 1,0.999993 0,0.551996 -0.4477,0.999992 -1,0.999992 -0.5523,0 -1,-0.447996 -1,-0.999992 0,-0.551996 0.4477,-0.999993 1,-0.999993 z"
      id="path5"
      inkscape:connector-curvature="0" />
 </svg>

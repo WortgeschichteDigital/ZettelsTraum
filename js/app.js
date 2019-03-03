@@ -22,6 +22,8 @@ window.addEventListener("load", function() {
 	// KLICK-EVENTS INITIALISIEREN
 	// Wort-Element
 	document.getElementById("wort").addEventListener("click", () => kartei.wortAendern() );
+	// Notizen-Icon
+	document.getElementById("notizen-icon").addEventListener("click", () => notizen.oeffnen() );
 	// Programm-Icon
 	document.getElementById("icon").addEventListener("click", function() {
 		const {ipcRenderer} = require("electron");
@@ -55,6 +57,15 @@ window.addEventListener("load", function() {
 	let ee = document.querySelectorAll("#einstellungen input");
 	for (let i = 0, len = ee.length; i < len; i++) {
 		optionen.aendereEinstellung(ee[i]);
+	}
+	// Notizen-Fenster
+	let notizen_inputs = document.querySelectorAll("#notizen input, #notizen textarea");
+	for (let i = 0, len = notizen_inputs.length; i < len; i++) {
+		if (notizen_inputs[i].type === "button") {
+			notizen.aktionButton(notizen_inputs[i]);
+		} else { // <textarea>
+			notizen.change(notizen_inputs[i]);
+		}
 	}
 	// Prompt-Textfeld
 	document.getElementById("dialog-prompt-text").addEventListener("keydown", function(evt) {
@@ -96,6 +107,7 @@ window.addEventListener("load", function() {
 	ipcRenderer.on("kartei-schliessen", function() {
 		kartei.checkSpeichern( () => kartei.schliessen() );
 	});
+	ipcRenderer.on("kartei-notizen", () => notizen.oeffnen() );
 	ipcRenderer.on("belege-hinzufuegen", () => beleg.erstellenPre() );
 	ipcRenderer.on("belege-auflisten", () => liste.anzeigen() );
 	ipcRenderer.on("optionen-zuletzt", (evt, zuletzt) => optionen.data.zuletzt = zuletzt );

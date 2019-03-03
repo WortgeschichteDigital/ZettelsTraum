@@ -343,6 +343,9 @@ let liste = {
 		}
 		// Textschnitt in Anführungsstriche
 		let q = document.createElement("q");
+		if (optionen.data.belegliste.belegschnitte) {
+			q.classList.add("schnitt-offen");
+		}
 		q.innerHTML = schnitt;
 		frag.appendChild(q);
 		// Fragment zurückgeben
@@ -365,8 +368,16 @@ let liste = {
 	//     (der Belegkopf, auf den geklickt werden kann)
 	belegschnittUmschalten (div) {
 		div.addEventListener("click", function() {
+			// Belegschnitt umschalten
 			let schnitt = this.nextSibling;
 			schnitt.classList.toggle("aus");
+			// Anzeige der Vorschau verändern
+			let vorschau = this.querySelector("q");
+			if ( schnitt.classList.contains("aus") ) {
+				vorschau.classList.remove("schnitt-offen");
+			} else {
+				vorschau.classList.add("schnitt-offen");
+			}
 		});
 	},
 	// Klick-Event zum Öffnen des Karteikarten-Formulars
@@ -388,7 +399,7 @@ let liste = {
 			let datum = this.title,
 				beleg_id = this.parentNode.dataset.id;
 			dialog.oeffnen("alert", null);
-			dialog.text(`<h2>Beleg #${beleg_id}</h2>\n${datum}`);
+			dialog.text(`<h3>Beleg #${beleg_id}</h3>\n${datum}`);
 		});
 	},
 	// Funktionen im Header aufrufen
@@ -428,13 +439,11 @@ let liste = {
 		let link = document.getElementById("liste-link-filter");
 		if (optionen.data.belegliste.filterleiste) {
 			sec_liste.classList.remove("filter-aus");
-			link.classList.add("icon-filter-aus");
-			link.classList.remove("icon-filter-an");
+			link.classList.add("aktiv");
 			link.title = "Filter ausblenden";
 		} else {
 			sec_liste.classList.add("filter-aus");
-			link.classList.remove("icon-filter-aus");
-			link.classList.add("icon-filter-an");
+			link.classList.remove("aktiv");
 			link.title = "Filter einblenden";
 		}
 	},
@@ -452,12 +461,10 @@ let liste = {
 	headerSortierenAnzeige () {
 		let link = document.getElementById("liste-link-sortieren");
 		if (optionen.data.belegliste.sort_aufwaerts) {
-			link.classList.remove("icon-pfeil-hoch");
-			link.classList.add("icon-pfeil-runter");
+			link.classList.add("aktiv");
 			link.title = "Chronologisch absteigend sortieren";
 		} else {
-			link.classList.add("icon-pfeil-hoch");
-			link.classList.remove("icon-pfeil-runter");
+			link.classList.remove("aktiv");
 			link.title = "Chronologisch aufsteigend sortieren";
 		}
 	},
@@ -487,9 +494,9 @@ let liste = {
 			links = document.getElementsByClassName("liste-link-zeitschnitte"); // alle Links
 		for (let i = 0, len = links.length; i < len; i++) {
 			if (links[i].id === id) {
-				links[i].classList.add("link-aktiv");
+				links[i].classList.add("aktiv");
 			} else {
-				links[i].classList.remove("link-aktiv");
+				links[i].classList.remove("aktiv");
 			}
 		}
 	},
@@ -503,10 +510,13 @@ let liste = {
 		// Anzeige der Belegschnitte anpassen
 		let belegschnitte = document.querySelectorAll("#liste-belege-cont .liste-schnitt");
 		for (let i = 0, len = belegschnitte.length; i < len; i++) {
+			let q = belegschnitte[i].previousSibling.querySelector("q");
 			if (optionen.data.belegliste.belegschnitte) {
 				belegschnitte[i].classList.remove("aus");
+				q.classList.add("schnitt-offen");
 			} else {
 				belegschnitte[i].classList.add("aus");
+				q.classList.remove("schnitt-offen");
 			}
 		}
 	},
@@ -514,12 +524,10 @@ let liste = {
 	headerBelegschnitteAnzeige () {
 		let link = document.getElementById("liste-link-belegschnitte");
 		if (optionen.data.belegliste.belegschnitte) {
-			link.classList.remove("icon-auge");
-			link.classList.add("icon-auge-aus");
+			link.classList.add("aktiv");
 			link.title = "Komplettanzeige der Belegschnitte ausblenden";
 		} else {
-			link.classList.add("icon-auge");
-			link.classList.remove("icon-auge-aus");
+			link.classList.remove("aktiv");
 			link.title = "Komplettanzeige der Belegschnitte einblenden";
 		}
 	},
@@ -537,10 +545,10 @@ let liste = {
 	headerWortHervorhebenAnzeige () {
 		let link = document.getElementById("liste-link-hervorheben");
 		if (optionen.data.belegliste.wort_hervorheben) {
-			link.classList.add("link-aktiv");
+			link.classList.add("aktiv");
 			link.title = "Wort nicht hervorheben";
 		} else {
-			link.classList.remove("link-aktiv");
+			link.classList.remove("aktiv");
 			link.title = "Wort hervorheben";
 		}
 	},

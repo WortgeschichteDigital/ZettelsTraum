@@ -95,7 +95,7 @@ let kartei = {
 		const fs = require("fs");
 		fs.readFile(datei, "utf-8", function(err, content) {
 			if (err) {
-				kartei.dialogWrapper(`Beim Öffnen der Datei ist ein Fehler aufgetreten!\n<h2>Fehlermeldung</h2>\n${err.message}`);
+				kartei.dialogWrapper(`Beim Öffnen der Datei ist ein Fehler aufgetreten!\n<h3>Fehlermeldung</h3>\n${err.message}`);
 				return;
 			}
 			// Daten einlesen
@@ -104,7 +104,7 @@ let kartei = {
 			try {
 				data_tmp = JSON.parse(content);
 			} catch (err_json) {
-				kartei.dialogWrapper(`Beim Einlesen der Datei ist ein Fehler aufgetreten!\n<h2>Fehlermeldung</h2>\n${err_json}`);
+				kartei.dialogWrapper(`Beim Einlesen der Datei ist ein Fehler aufgetreten!\n<h3>Fehlermeldung</h3>\n${err_json}`);
 				return;
 			}
 			// Wirklich eine wgd-Datei?
@@ -124,6 +124,7 @@ let kartei = {
 			kartei.pfad = datei;
 			optionen.aendereLetzterPfad();
 			optionen.aendereZuletzt();
+			notizen.icon();
 			liste.aufbauen(true);
 			liste.wechseln();
 			kartei.menusDeaktivieren(false);
@@ -170,7 +171,7 @@ let kartei = {
 			const fs = require("fs");
 			fs.writeFile(pfad, JSON.stringify(data), function(err) {
 				if (err) {
-					kartei.dialogWrapper(`Beim Speichern der Datei ist ein Fehler aufgetreten!\n<h2>Fehlermeldung</h2>\n${err.message}`);
+					kartei.dialogWrapper(`Beim Speichern der Datei ist ein Fehler aufgetreten!\n<h3>Fehlermeldung</h3>\n${err.message}`);
 					data.dm = dm_alt; // altes Änderungsdatum wiederherstellen
 					return;
 				}
@@ -192,6 +193,7 @@ let kartei = {
 		const wort = document.getElementById("wort");
 		wort.classList.add("keine-kartei");
 		wort.textContent = "keine Kartei geöffnet";
+		notizen.icon();
 		start.zuletzt();
 		helfer.sektionWechseln("start");
 		kartei.menusDeaktivieren(true);
@@ -266,9 +268,9 @@ let kartei = {
 		kartei.geaendert = geaendert;
 		let icon = document.getElementById("kartei-geaendert");
 		if (geaendert) {
-			icon.classList.remove("aus");
+			icon.classList.add("geaendert");
 		} else {
-			icon.classList.add("aus");
+			icon.classList.remove("geaendert");
 		}
 	},
 	// die App-Menüs teilweise deaktivieren oder komplett aktivieren

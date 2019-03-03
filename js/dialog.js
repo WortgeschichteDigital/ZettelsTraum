@@ -51,10 +51,10 @@ let dialog = {
 		let absaetze = text.split("\n");
 		for (let i = 0, len = absaetze.length; i < len; i++) {
 			// Überschrift
-			if ( absaetze[i].match(/^<h2>/) ) {
-				let h2 = document.createElement("h2");
-				h2.innerHTML = absaetze[i].match(/<h2>(.+)<\/h2>/)[1];
-				cont.appendChild(h2);
+			if ( absaetze[i].match(/^<h3>/) ) {
+				let h3 = document.createElement("h3");
+				h3.innerHTML = absaetze[i].match(/<h3>(.+)<\/h3>/)[1];
+				cont.appendChild(h3);
 				continue;
 			}
 			// normaler Absatz

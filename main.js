@@ -90,7 +90,7 @@ let layoutMenu = [
 			{
 				label: "Notizen",
 				icon: path.join(__dirname, "img", "menu", "kartei-notizen.png"),
-				click: () => void 0, // TODO
+				click: () => win.webContents.send("kartei-notizen"),
 				id: "kartei-notizen",
 			},
 			{
@@ -473,7 +473,7 @@ fenster = {
 		// Fenster öffnen
 		win = new BrowserWindow({
 			title: app.getName(),
-			icon: path.join(__dirname, "img", "icon", "png", "icon_48px.png"),
+			icon: path.join(__dirname, "img", "icon", "png", "icon_32px.png"),
 			x: optionen.data.fenster.x,
 			y: optionen.data.fenster.y,
 			width: optionen.data.fenster.width,

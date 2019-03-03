@@ -56,10 +56,6 @@
 	white-space: nowrap;
 }
 
-#liste-filter label {
-	color: var(--Farbe);
-}
-
 /* BELEGLISTE: HEADER */
 #liste-belege {
 	position: relative;
@@ -69,59 +65,84 @@
 	position: sticky;
 	top: 60px;
 	z-index: 1;
-	border-bottom: 1px solid var(--Linie);
-	padding: 10px 5px 2px 8px;
-	width: calc(100% - 13px); /* 13px padding */
+	padding: 10px 0;
+	width: 100%;
 	height: 24px;
 	overflow: hidden;
 	background-color: #fff;
 	white-space: nowrap;
 }
 
-#liste-belege header a {
-	margin-left: 5px;
-}
-
-#liste-belege .liste-link-text {
+.liste-opt-block {
 	display: inline-block;
-	margin-left: 10px;
+	margin-left: 25px;
+	height: 24px;
+}
+.liste-opt-block:first-child {
+	margin-left: 0;
+}
+
+.liste-opt-block a {
+	display: inline-block;
+	border-right: 1px solid var(--linie);
+	padding: 0 5px;
+	width: 24px;
+	height: 24px;
+	overflow: hidden;
+	background-color: var(--hintergrund);
 	color: var(--Text);
-}
-
-#liste-belege .liste-link-text:focus {
-	color: var(--Farbe);
 	text-decoration: none;
 }
 
-#liste-belege .liste-link-text:hover {
-	text-decoration: none;
+.liste-opt-block a:first-child {
+	border-top-left-radius: 3px;
+	border-bottom-left-radius: 3px;
 }
 
-#liste-belege .liste-link-text-strike {
+.liste-opt-block a:last-child {
+	border-right: 0;
+	border-top-right-radius: 3px;
+	border-bottom-right-radius: 3px;
+}
+
+.liste-opt-block a:focus {
+	background-color: var(--hintergrund);
+	color: var(--farbe);
+}
+
+.liste-opt-block a.aktiv {
+	background-color: var(--aktiv);
+	color: #fff;
+}
+
+.liste-opt-block a.aktiv:focus {
+	background-color: var(--farbe);
+}
+
+.liste-opt-block svg path {
+	fill: currentcolor;
+}
+
+.liste-opt-block .liste-text {
+	width: auto;
+}
+
+.liste-opt-block .liste-link-zeitschnitte {
+	text-align: center;
+	width: 32px;
+}
+
+.liste-strike {
 	position: relative;
-	padding: 0 3px 0 2px;
 }
 
-#liste-belege .liste-link-text-strike:before {
+.liste-strike:before {
   content: "";
   position: absolute;
-  left: 0;
+  left: 3px;
   top: 40%;
-  right: 0;
-  border-top: 3px solid var(--FarbeRot);
-}
-
-#liste-link-hervorheben {
-	display: inline-block;
-	width: 45px;
-}
-
-#liste-belege .link-aktiv {
-	font-weight: bold;
-}
-
-#liste-belege .start-block {
-	margin-left: 25px;
+  right: 2px;
+  border-top: 3px solid var(--textWarnung);
 }
 
 #liste-belege-anzahl {
@@ -140,65 +161,77 @@
 	margin: 0 0 25px 0;
 }
 
-#liste-belege-cont .liste-kopf {
-	border-bottom: 1px solid var(--Linie);
-	border-left: 3px solid var(--Farbe);
+#liste-belege-cont a,
+#liste-belege-cont span {
+	display: inline-block;
+}
+
+.liste-kopf {
+	border-top: 1px solid var(--linie);
+	border-left: 3px solid var(--farbeB);
 	padding: 2px 10px;
 	height: 24px;
 	overflow: hidden;
 	line-height: 24px;
 	text-overflow: ellipsis;
 	white-space: nowrap;
-	background-color: var(--Hintergrund);
+	background-color: var(--hintergrund);
 	cursor: pointer;
 }
 
-#liste-belege-cont a,
-#liste-belege-cont span {
-	display: inline-block;
-}
-
-#liste-belege-cont .liste-bearbeiten {
+.liste-bearbeiten {
 	margin-right: 15px;
+	background-color: var(--textSehrHell);
 }
 
-#liste-belege-cont .liste-jahr {
+.liste-bearbeiten:hover {
+	background-color: var(--text);
+}
+
+.liste-jahr {
 	margin-right: 15px;
 	font-style: italic;
 }
 
-#liste-belege-cont .liste-jahr-hinweis:after {
+.liste-jahr-hinweis:after {
 	content: "*";
 	position: relative;
 	left: 3px;
-	color: var(--FarbeRot);
+	color: var(--textWarnung);
 }
 
-#liste-belege-cont .liste-schnitt {
-	border-bottom: 1px solid var(--Linie);
-	border-left: 3px solid var(--Farbe);
-	padding: 10px 10px 0 49px;
+.liste-kopf q.schnitt-offen {
+	color: var(--textSehrHell);
+}
+
+.liste-schnitt {
+	border-left: 3px solid var(--farbeB);
+	padding: 10px 10px 10px 49px;
 	height: auto;
 	background-color: transparent;
 	user-select: text;
 }
 
-#liste-belege-cont .liste-schnitt p {
+.liste-schnitt p {
 	max-width: 600px;
 }
 
-#liste-belege-cont .liste-zeitschnitt,
-#liste-belege-cont .liste-keine-belege,
-#liste-belege-cont .liste-kartei-leer {
-	border-bottom: 1px solid var(--Linie);
+.liste-schnitt p:last-child {
+	margin-bottom: 0;
+}
+
+.liste-zeitschnitt,
+.liste-keine-belege,
+.liste-kartei-leer {
+	border-top: 1px solid var(--linie);
 	padding: 10px;
 	background-color: transparent;
-	color: var(--Farbe);
+	color: var(--textFarbe);
 	font-style: italic;
 	text-align: center;
 }
 
-#liste-belege-cont .liste-keine-belege,
-#liste-belege-cont .liste-kartei-leer {
-	color: var(--TextHell);
+.liste-keine-belege,
+.liste-kartei-leer {
+	color: var(--textHell);
 }

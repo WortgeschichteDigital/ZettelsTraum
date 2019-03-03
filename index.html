@@ -20,6 +20,7 @@
 		<script src="js/helfer.js"></script>
 		<script src="js/kartei.js"></script>
 		<script src="js/liste.js"></script>
+		<script src="js/notizen.js"></script>
 		<script src="js/optionen.js"></script>
 		<script src="js/overlay.js"></script>
 		<script src="js/start.js"></script>
@@ -27,16 +28,17 @@
 	<body>
 		<!-- KOPF -->
 		<header>
-			<span id="wort" class="keine-kartei">keine Kartei geöffnet</span
-				><span class="aus" id="kartei-geaendert">*</span
-				><span id="icon"><img src="img/icon.svg" width="48" height="48" alt="[Icon]"></span>
+			<h1 id="wort" class="keine-kartei">keine Kartei geöffnet</h1
+				><span id="kartei-geaendert">*</span
+				><span class="aus" id="notizen-icon"><img src="img/notizen.svg" width="24" height="24" alt=""></span
+				><span id="icon"><img src="img/icon.svg" width="48" height="48" alt=""></span>
 		</header>
 		
 		<!-- STARTSEKTION -->
 		<section id="start">
 			<span id="start-erstellen">Kartei erstellen</span><span id="start-oeffnen">Kartei öffnen</span>
 			<div id="start-zuletzt">
-				<h2><img src="img/zuletzt.svg" width="24" height="24" alt="">Zuletzt verwendet</h2>
+				<h2><span class="icon-h icon-h-zuletzt"> </span>Zuletzt verwendet</h2>
 				<ul id="start-liste"></ul>
 			</div>
 		</section>
@@ -59,11 +61,11 @@
 				</tr>
 				<tr>
 					<td><input type="text" value="" spellcheck="false" id="beleg-da"></td>
-					<td class="zelle-bewertung" id="beleg-be"><img src="img/stern.svg" width="24" height="24" alt="*"
-						><img src="img/stern.svg" width="24" height="24" alt="*"
-						><img src="img/stern.svg" width="24" height="24" alt="*"
-						><img src="img/stern.svg" width="24" height="24" alt="*"
-						><img src="img/stern.svg" width="24" height="24" alt="*"></td>
+					<td class="zelle-bewertung" id="beleg-be"><img src="img/stern.svg" width="24" height="24" alt=""
+						><img src="img/stern.svg" width="24" height="24" alt=""
+						><img src="img/stern.svg" width="24" height="24" alt=""
+						><img src="img/stern.svg" width="24" height="24" alt=""
+						><img src="img/stern.svg" width="24" height="24" alt=""></td>
 				</tr>
 				<tr>
 					<th colspan="2" class="copy-paste-hover"><label for="beleg-bs">Belegschnitt</label
@@ -130,32 +132,52 @@
 			<!-- scheinbar unnötig verschachtelt; ist aber nötig damit position: sticky für #liste-filter funktioniert -->
 			<div><div id="liste-filter"></div></div>
 			<div id="liste-belege">
-				<header><a href="#" class="icon-link icon-filter-aus" id="liste-link-filter" title="Filter ausblenden"> </a
-					><a href="#" class="start-block icon-link icon-pfeil-runter" id="liste-link-sortieren" title="Chronologisch absteigend sortieren"> </a
-					><a href="#" class="start-block liste-link-text liste-link-zeitschnitte" id="liste-link-zeitschnitte-10" title="Zeitschnitte alle 10 Jahre">10</a
-					><a href="#" class="liste-link-text liste-link-zeitschnitte link-aktiv" id="liste-link-zeitschnitte-50" title="Zeitschnitte alle 50 Jahre">50</a
-					><a href="#" class="liste-link-text liste-link-zeitschnitte" id="liste-link-zeitschnitte-100" title="Zeitschnitte alle 100 Jahre">100</a
-					><a href="#" class="liste-link-text liste-link-text-strike liste-link-zeitschnitte" id="liste-link-zeitschnitte" title="keine Zeitschnitte">100</a
-					><a href="#" class="start-block icon-link icon-auge-aus" id="liste-link-belegschnitte" title="Komplettanzeige der Belegschnitte ausblenden"> </a
-					><a href="#" class="start-block liste-link-text link-aktiv" id="liste-link-hervorheben" title="Wort nicht hervorheben">Wort</a
-					><span id="liste-belege-anzahl"></span></header>
+				<header><span class="liste-opt-block"
+						><a href="#" id="liste-link-filter"
+							><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="m 6,6 4.8,4 0.02344,4 1.1625,4 L 13.2,14 V 10 L 18,6 Z" /></svg></a
+					></span><span class="liste-opt-block"
+						><a href="#" id="liste-link-sortieren"
+							><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M 7,14 V 6 L 3.5,9.5 2,8 8,2 14,8 12.5,9.5 9,6 V 14 Z" transform="translate(4 4)" /></svg></a
+						><a href="#" id="liste-link-belegschnitte"
+							><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M 8 3 C 6.4492 3.0151 4.8879094 3.3692056 3.5371094 4.1347656 C 2.9987094 4.4854656 2.3523344 4.9381912 1.8652344 5.3945312 C 1.0987444 6.1451213 0.4427 7.0222531 0 8.0019531 C 1.2149 10.682053 3.8859187 12.645447 6.8242188 12.935547 C 8.7516188 13.153707 10.768591 12.820847 12.462891 11.867188 C 13.001291 11.516487 13.647666 11.063762 14.134766 10.607422 C 14.901256 9.8568419 15.5573 8.9816531 16 8.0019531 C 14.785 5.3219531 12.114181 3.3563063 9.1757812 3.0664062 C 8.7859013 3.0209263 8.39251 2.99999 8 3 z M 8 5 C 9.607 4.96439 11.0303 6.4033531 11 8.0019531 C 11.0515 9.7687531 9.2909813 11.292891 7.5507812 10.962891 C 5.7931812 10.756511 4.5587188 8.7835812 5.1367188 7.1132812 C 5.5058788 5.8836812 6.7125 4.9847 8 5 z M 8 7 A 1 1.0002 0 0 0 7 8.0019531 A 1 1.0002 0 0 0 8 9.0019531 A 1 1.0002 0 0 0 9 8.0019531 A 1 1.0002 0 0 0 8 7 z" transform="translate(4 4)" /></svg></a
+						><a href="#" class="liste-text" id="liste-link-hervorheben">Wort</a
+					></span><span class="liste-opt-block"
+						><a href="#" class="liste-link-zeitschnitte" id="liste-link-zeitschnitte-10" title="Zeitschnitte alle 10 Jahre">10</a
+						><a href="#" class="liste-link-zeitschnitte" id="liste-link-zeitschnitte-50" title="Zeitschnitte alle 50 Jahre">50</a
+						><a href="#" class="liste-link-zeitschnitte" id="liste-link-zeitschnitte-100" title="Zeitschnitte alle 100 Jahre">100</a
+						><a href="#" class="liste-strike liste-link-zeitschnitte" id="liste-link-zeitschnitte" title="keine Zeitschnitte">100</a
+					></span><span id="liste-belege-anzahl"></span></header>
 				<div id="liste-belege-cont"></div>
 			</div>
 		</section>
 		
 		<!-- OVERLAY: Einstellungen -->
 		<div id="einstellungen" class="overlay aus"><div>
-			<a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen"> </a>
-			<h2><img src="img/overlay_einstellungen.svg" width="24" height="24" alt="">Einstellungen</h2>
+			<h2><span class="icon-h icon-h-einstellungen"> </span>Einstellungen<a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen"> </a></h2>
 			<div id="einstellungen-cont">
 				<p><input type="checkbox" id="einstellung-autoHideMenuBar"
 				><label for="einstellung-autoHideMenuBar">Menü-Leiste standardmäßig ausblenden und erst anzeigen, wenn die Alt-Taste gedrückt wird <span class="einstellung-neustart">(Neustart erforderlich)</span></label></p>
 			</div>
 		</div></div>
 		
+		<!-- OVERLAY: Notizen -->
+		<div id="notizen" class="overlay aus"><div>
+			<h2><span class="icon-h icon-h-notizen"> </span>Notizen<a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen"> </a></h2>
+			<div id="notizen-cont">
+				<textarea spellcheck="false" id="notizen-feld"></textarea>
+				<p class="button"><input type="button" value="Speichern" id="notizen-speichern"
+					><input type="button" value="Abbrechen" id="notizen-abbrechen"
+					><input type="button" value="Löschen" id="notizen-loeschen"></p>
+			</div>
+		</div></div>
+		
 		<!-- OVERLAY: DIALOG-FENSTER -->
 		<div id="dialog" class="overlay aus"><div>
-			<a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen"> </a>
+			<h2><span class="icon-h"> </span
+			><span id="dialog-h-prompt">Eingabe</span
+			><span id="dialog-h-confirm">Frage</span
+			><span id="dialog-h-alert">Meldung</span
+			><a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen"> </a></h2>
 			<div id="dialog-text"></div>
 			<div id="dialog-prompt">
 				<p><input type="text" value="" id="dialog-prompt-text"></p>

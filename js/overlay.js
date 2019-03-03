@@ -24,11 +24,17 @@ let overlay = {
 	//   schliesser = Element
 	//     (Link oder Button, über den das Schließen angestoßen wurde)
 	schliessen (schliesser) {
-		// Overlay-Fenster ermitteln + schließen
+		// Overlay-Fenster ermitteln
 		let fenster = schliesser;
 		while ( !fenster.classList.contains("overlay") ) {
 			fenster = fenster.parentNode;
 		}
+		// Sonderbehandlung für das Notizen-Fenster
+		if (fenster.id === "notizen") {
+			notizen.abbrechen();
+			return;
+		}
+		// Fenster schließen
 		fenster.classList.add("aus");
 		// spezielle Funktionen für einzelne Overlay-Fenster
 		if (fenster.id === "dialog") {

@@ -4,7 +4,15 @@ let helfer = {
 	// übergebene Sektion einblenden, alle andere Sektionen ausblenden
 	//   sektion = String
 	//     (ID der einzublendenden Sektion)
+	sektion_aktiv: "",
+	sektion_document_scroll: 0,
 	sektionWechseln (sektion) {
+		// Scroll-Status der Liste speichern oder wiederherstellen
+		if (helfer.sektion_aktiv === "liste") {
+			helfer.sektion_document_scroll = window.scrollY;
+		}
+		helfer.sektion_aktiv = sektion;
+		// Sektion umschalten
 		let sektionen = document.querySelectorAll("body > section");
 		for (let i = 0, len = sektionen.length; i < len; i++) {
 			if (sektionen[i].id === sektion) {
@@ -12,6 +20,12 @@ let helfer = {
 			} else {
 				sektionen[i].classList.add("aus");
 			}
+		}
+		// Scroll-Status wiederherstellen od. nach oben scrollen
+		if (sektion === "liste") {
+			window.scrollTo(0, helfer.sektion_document_scroll);
+		} else {
+			window.scrollTo(0, 0);
 		}
 	},
 	// eleminiert alle childNodes des übergebenen Objekts

@@ -9,13 +9,16 @@ body > header {
 	padding: 0 10px;
 	width: calc(100% - 20px);
 	height: 60px;
-	background-color: var(--Farbe);
+	background-color: var(--farbe);
 }
 
+body > header h1,
 body > header span {
 	display: inline-block;
+	margin: 0;
 	color: #fff;
 	font-size: 30px;
+	font-weight: normal;
 	line-height: 60px;
 }
 
@@ -30,7 +33,20 @@ body > header span {
 }
 
 #kartei-geaendert {
+	visibility: hidden;
 	margin-left: 10px;
+}
+
+#kartei-geaendert.geaendert {
+	visibility: visible;
+}
+
+#notizen-icon img {
+	position: relative;
+	bottom: 18px;
+	vertical-align: bottom;
+	margin-left: 50px;
+	cursor: pointer;
 }
 
 /* ICON */
