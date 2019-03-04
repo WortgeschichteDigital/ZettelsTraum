@@ -9,7 +9,7 @@
 	padding: 15px;
 	width: calc(100% - 104px);
 	min-width: 500px;
-	max-width: 800px;
+	max-width: 700px;
 	background-color: var(--hintergrund);
 }
 
@@ -17,7 +17,7 @@
 	padding: 0 0 0 24px;
 	caption-side: top;
 	color: var(--textFarbe);
-	font-weight: bold;
+	font-style: italic;
 	text-align: left;
 }
 
@@ -28,8 +28,8 @@
 
 #beleg th {
 	position: relative;
-	padding: 10px 5px 0 5px;
-	width: calc(50% - 10px);
+	padding: 10px 11px 0 11px;
+	width: calc(50% - 22px);
 	color: var(--farbe);
 	vertical-align: top;
 	font-size: 14px;
@@ -63,12 +63,13 @@
 }
 
 #beleg textarea {
-	width: calc(100% - 12px);
-	height: 120px;
+	min-height: 48px;
+	max-height: 144px;
 }
 
 textarea#beleg-bs {
-	height: 192px;
+	min-height: 96px;
+	max-height: 288px;
 }
 
 #beleg input[type="button"]:first-child {
@@ -81,21 +82,31 @@ textarea#beleg-bs {
 }
 
 /* TEXT-TOOLS */
-#beleg-tools {
+.text-tools {
 	position: absolute;
-	right: 10px;
+	right: 6px;
 }
 
-#beleg .copy-paste {
-	display: none;
-	margin-left: 10px;
-}
-
-#beleg .copy-paste-hover:hover .copy-paste {
+.text-tools a {
 	display: inline-block;
+	background-color: var(--textSehrHell);
+}
+
+.text-tools a:hover {
+	background-color: var(--text);
 }
 
 /* SPEZIELLE FORMATE */
 #beleg .zelle-bewertung {
 	text-align: right;
+}
+
+.icon-tools-einfuegen {
+	-webkit-mask-image: url(../img/tool-einfuegen.svg);
+	mask-image: url(../img/tool-einfuegen.svg);
+}
+
+.icon-tools-kopieren {
+	-webkit-mask-image: url(../img/tool-kopieren.svg);
+	mask-image: url(../img/tool-kopieren.svg);
 }

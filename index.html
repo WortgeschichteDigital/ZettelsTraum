@@ -20,9 +20,11 @@
 		<script src="js/helfer.js"></script>
 		<script src="js/kartei.js"></script>
 		<script src="js/liste.js"></script>
+		<script src="js/meta.js"></script>
 		<script src="js/notizen.js"></script>
 		<script src="js/optionen.js"></script>
 		<script src="js/overlay.js"></script>
+		<script src="js/sicherheitsfrage.js"></script>
 		<script src="js/start.js"></script>
 	</head>
 	<body>
@@ -30,7 +32,7 @@
 		<header>
 			<h1 id="wort" class="keine-kartei">keine Kartei geöffnet</h1
 				><span id="kartei-geaendert">*</span
-				><span class="aus" id="notizen-icon"><img src="img/notizen.svg" width="24" height="24" alt=""></span
+				><span class="aus" id="notizen-icon"><img src="img/kopf-notizen.svg" width="24" height="24" alt=""></span
 				><span id="icon"><img src="img/icon.svg" width="48" height="48" alt=""></span>
 		</header>
 		
@@ -53,10 +55,10 @@
 						><input type="button" value="Löschen" id="beleg-loeschen"></td>
 				</tr>
 				<tr>
-					<th class="copy-paste-hover"><label for="beleg-da">Datum</label
-						><span class="copy-paste"
-						><a href="#" class="icon-link icon-tools-kopieren" title="Text kopieren"> </a
-						><a href="#" class="icon-link icon-tools-einfuegen" title="Text einfügen"> </a></span></th>
+					<th><label for="beleg-da">Datum</label
+						><span class="text-tools"
+							><a href="#" class="icon-link icon-tools-kopieren" title="Text kopieren"> </a
+							><a href="#" class="icon-link icon-tools-einfuegen" title="Text einfügen"> </a></span></th>
 					<th class="zelle-bewertung">Bewertung</th>
 				</tr>
 				<tr>
@@ -68,38 +70,37 @@
 						><img src="img/stern.svg" width="24" height="24" alt=""></td>
 				</tr>
 				<tr>
-					<th colspan="2" class="copy-paste-hover"><label for="beleg-bs">Belegschnitt</label
-						><span class="copy-paste"
-						><a href="#" class="icon-link icon-tools-kopieren" title="Text kopieren"> </a
-						><a href="#" class="icon-link icon-tools-einfuegen" title="Text einfügen"> </a></span
-						><span id="beleg-tools">[Text-Tools]</span></th>
+					<th colspan="2"><label for="beleg-bs">Belegschnitt</label
+						><span class="text-tools"
+							><a href="#" class="icon-link icon-tools-kopieren" title="Text kopieren"> </a
+							><a href="#" class="icon-link icon-tools-einfuegen" title="Text einfügen"> </a></span></th>
 				</tr>
 				<tr>
 					<td colspan="2"><textarea spellcheck="false" id="beleg-bs"></textarea></td>
 				</tr>
 				<tr>
-					<th class="copy-paste-hover"><label for="beleg-au">Autor</label
-						><span class="copy-paste"
-						><a href="#" class="icon-link icon-tools-kopieren" title="Text kopieren"> </a
-						><a href="#" class="icon-link icon-tools-einfuegen" title="Text einfügen"> </a></span></th>
-					<th class="copy-paste-hover"><label for="beleg-bd">Bedeutung</label
-						><span class="copy-paste"
-						><a href="#" class="icon-link icon-tools-kopieren" title="Text kopieren"> </a
-						><a href="#" class="icon-link icon-tools-einfuegen" title="Text einfügen"> </a></span></th>
+					<th><label for="beleg-au">Autor</label
+						><span class="text-tools"
+							><a href="#" class="icon-link icon-tools-kopieren" title="Text kopieren"> </a
+							><a href="#" class="icon-link icon-tools-einfuegen" title="Text einfügen"> </a></span></th>
+					<th><label for="beleg-bd">Bedeutung</label
+						><span class="text-tools"
+							><a href="#" class="icon-link icon-tools-kopieren" title="Text kopieren"> </a
+							><a href="#" class="icon-link icon-tools-einfuegen" title="Text einfügen"> </a></span></th>
 				</tr>
 				<tr>
 					<td><input type="text" value="" spellcheck="false" id="beleg-au"></td>
 					<td><input type="text" value="" spellcheck="false" id="beleg-bd"></td>
 				</tr>
 				<tr>
-					<th class="copy-paste-hover"><label for="beleg-qu">Quelle</label
-						><span class="copy-paste"
-						><a href="#" class="icon-link icon-tools-kopieren" title="Text kopieren"> </a
-						><a href="#" class="icon-link icon-tools-einfuegen" title="Text einfügen"> </a></span></th>
-					<th class="copy-paste-hover"><label for="beleg-ts"
-						>Textsorte</label><span class="copy-paste"
-						><a href="#" class="icon-link icon-tools-kopieren" title="Text kopieren"> </a
-						><a href="#" class="icon-link icon-tools-einfuegen" title="Text einfügen"> </a></span></th>
+					<th><label for="beleg-qu">Quelle</label
+						><span class="text-tools"
+							><a href="#" class="icon-link icon-tools-kopieren" title="Text kopieren"> </a
+							><a href="#" class="icon-link icon-tools-einfuegen" title="Text einfügen"> </a></span></th>
+					<th><label for="beleg-ts">Textsorte</label
+						><span class="text-tools"
+							><a href="#" class="icon-link icon-tools-kopieren" title="Text kopieren"> </a
+							><a href="#" class="icon-link icon-tools-einfuegen" title="Text einfügen"> </a></span></th>
 				</tr>
 				<tr>
 					<td rowspan="2"><textarea spellcheck="false" id="beleg-qu"></textarea></td>
@@ -114,10 +115,10 @@
 					</td>
 				</tr>
 				<tr>
-					<th class="copy-paste-hover"><label for="beleg-no">Notizen</label
-						><span class="copy-paste"
-						><a href="#" class="icon-link icon-tools-kopieren" title="Text kopieren"> </a
-						><a href="#" class="icon-link icon-tools-einfuegen" title="Text einfügen"> </a></span></th>
+					<th><label for="beleg-no">Notizen</label
+						><span class="text-tools"
+							><a href="#" class="icon-link icon-tools-kopieren" title="Text kopieren"> </a
+							><a href="#" class="icon-link icon-tools-einfuegen" title="Text einfügen"> </a></span></th>
 					<th>Anhänge</th>
 				</tr>
 				<tr>
@@ -156,13 +157,40 @@
 			<h2><span class="icon-h icon-h-einstellungen"> </span>Einstellungen<a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen"> </a></h2>
 			<div id="einstellungen-cont">
 				<p><input type="checkbox" id="einstellung-autoHideMenuBar"
-				><label for="einstellung-autoHideMenuBar">Menü-Leiste standardmäßig ausblenden und erst anzeigen, wenn die Alt-Taste gedrückt wird <span class="einstellung-neustart">(Neustart erforderlich)</span></label></p>
+				><label for="einstellung-autoHideMenuBar">Menüleiste standardmäßig ausblenden und erst anzeigen, wenn die Alt-Taste gedrückt wird <span class="einstellung-neustart">(Neustart erforderlich)</span></label></p>
+			</div>
+		</div></div>
+		
+		<!-- OVERLAY: Metadaten -->
+		<div id="meta" class="overlay aus"><div>
+			<h2><span class="icon-h icon-h-meta"> </span
+				>Metadaten<a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen"> </a></h2>
+			<div id="meta-cont">
+				<div>
+					<h3>Erstellt</h3>
+					<p id="meta-dc"></p>
+					<h3>Geändert</h3>
+					<p id="meta-dm"></p>
+					<h3>Revision</h3>
+					<p id="meta-r"></p>
+					<h3>BearbeiterInnen</h3>
+					<p class="input"><input type="text" value="" spellcheck="false" id="meta-e"
+						><input type="button" value="Ergänzen" id="meta-e-ergaenzen"></p>
+					<div id="meta-e-liste"></div>
+				</div><div>
+					<h3>Überprüfte Lexika</h3>
+					<p class="input"><input type="text" value="" spellcheck="false" id="meta-l"
+						><input type="button" value="Ergänzen" id="meta-l-ergaenzen"></p>
+					<div id="meta-l-liste"></div>
+				</div>
 			</div>
 		</div></div>
 		
 		<!-- OVERLAY: Notizen -->
 		<div id="notizen" class="overlay aus"><div>
-			<h2><span class="icon-h icon-h-notizen"> </span>Notizen<a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen"> </a></h2>
+			<h2><span class="icon-h icon-h-notizen"> </span
+				>Notizen<span id="notizen-geaendert" class="aus">*</span
+				><a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen"> </a></h2>
 			<div id="notizen-cont">
 				<textarea spellcheck="false" id="notizen-feld"></textarea>
 				<p class="button"><input type="button" value="Speichern" id="notizen-speichern"
@@ -180,7 +208,7 @@
 			><a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen"> </a></h2>
 			<div id="dialog-text"></div>
 			<div id="dialog-prompt">
-				<p><input type="text" value="" id="dialog-prompt-text"></p>
+				<p><input type="text" value="" spellcheck="false" id="dialog-prompt-text"></p>
 			</div>
 			<div id="dialog-ok">
 				<p class="button"><input type="button" value="Okay" id="dialog-ok-button"

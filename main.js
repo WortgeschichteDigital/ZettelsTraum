@@ -84,20 +84,20 @@ let layoutMenu = [
 			{
 				label: "Metadaten",
 				icon: path.join(__dirname, "img", "menu", "kartei-metadaten.png"),
-				click: () => void 0, // TODO
+				click: () => win.webContents.send("kartei-metadaten"),
 				id: "kartei-metadaten",
-			},
-			{
-				label: "Notizen",
-				icon: path.join(__dirname, "img", "menu", "kartei-notizen.png"),
-				click: () => win.webContents.send("kartei-notizen"),
-				id: "kartei-notizen",
 			},
 			{
 				label: "Anhänge",
 				icon: path.join(__dirname, "img", "menu", "kartei-anhaenge.png"),
 				click: () => void 0, // TODO
 				id: "kartei-anhaenge",
+			},
+			{
+				label: "Notizen",
+				icon: path.join(__dirname, "img", "menu", "kartei-notizen.png"),
+				click: () => win.webContents.send("kartei-notizen"),
+				id: "kartei-notizen",
 			},
 			{ type: "separator" },
 			{

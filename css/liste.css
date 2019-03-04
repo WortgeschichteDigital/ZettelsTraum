@@ -73,6 +73,11 @@
 	white-space: nowrap;
 }
 
+.icon-bearbeiten {
+	-webkit-mask-image: url(../img/liste-bearbeiten.svg);
+	mask-image: url(../img/liste-bearbeiten.svg);
+}
+
 .liste-opt-block {
 	display: inline-block;
 	margin-left: 25px;
@@ -179,6 +184,14 @@
 	cursor: pointer;
 }
 
+.liste-kopf.schnitt-offen {
+	text-overflow: clip;
+}
+
+.liste-kopf.schnitt-offen q {
+	visibility: hidden;
+}
+
 .liste-bearbeiten {
 	margin-right: 15px;
 	background-color: var(--textSehrHell);
@@ -198,10 +211,6 @@
 	position: relative;
 	left: 3px;
 	color: var(--textWarnung);
-}
-
-.liste-kopf q.schnitt-offen {
-	color: var(--textSehrHell);
 }
 
 .liste-schnitt {

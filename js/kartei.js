@@ -14,24 +14,9 @@ let kartei = {
 		// zur Sicherheit den Fokus aus Textfeldern nehmen
 		// (falls Änderungen noch nicht übernommen wurden)
 		helfer.inputBlur();
-		// Änderungen nocht nicht gespeichert
-		if (beleg.geaendert || kartei.geaendert) {
-			dialog.oeffnen("confirm", function() {
-				if (dialog.antwort === false) {
-					funktion();
-				} else if (dialog.antwort) {
-					if (beleg.geaendert) {
-						beleg.aktionSpeichern();
-					} else if (kartei.geaendert) {
-						kartei.speichern(false);
-					}
-				}
-			});
-			let typ = "Die Kartei";
-			if (beleg.geaendert) {
-				typ = "Der Beleg";
-			}
-			dialog.text(`${typ} wurde noch nicht gespeichert!\nMöchten Sie die Daten nicht erst einmal speichern?`);
+		// Obacht! Änderungen nocht nicht gespeichert!
+		if (notizen.geaendert || beleg.geaendert || kartei.geaendert) {
+			sicherheitsfrage.warnen(funktion);
 			return;
 		}
 		// alle Änderungen bereits gespeichert
@@ -46,9 +31,11 @@ let kartei = {
 			w: kartei.wort, // Wort
 			dc: new Date().toISOString(), // Datum Kartei-Erstellung
 			dm: "", // Datum Kartei-Änderung
+			r: 0, // Revision
 			e: [], // Bearbeiter
-			n: "", // Notizen
+			l: [], // überprüfte Lexika usw.
 			a: [], // Anhänge
+			n: "", // Notizen
 			t: "wgd", // Datei ist eine wgd-Datei (immer dieser Wert)
 			v: 1, // Version des Datei-Formats
 			k: {}, // Karteikarten
@@ -81,7 +68,7 @@ let kartei = {
 		// Dialog anzeigen
 		dialog.showOpenDialog(null, opt, function(datei) { // datei ist ein Array!
 			if (datei === undefined) {
-				kartei.dialogWrapper("Sie haben keine Datei ausgewählt!");
+				kartei.dialogWrapper("Sie haben keine Datei ausgewählt.");
 				return;
 			}
 			kartei.oeffnenEinlesen(datei[0]);
@@ -95,7 +82,7 @@ let kartei = {
 		const fs = require("fs");
 		fs.readFile(datei, "utf-8", function(err, content) {
 			if (err) {
-				kartei.dialogWrapper(`Beim Öffnen der Datei ist ein Fehler aufgetreten!\n<h3>Fehlermeldung</h3>\n${err.message}`);
+				kartei.dialogWrapper(`Beim Öffnen der Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n${err.message}`);
 				return;
 			}
 			// Daten einlesen
@@ -104,15 +91,16 @@ let kartei = {
 			try {
 				data_tmp = JSON.parse(content);
 			} catch (err_json) {
-				kartei.dialogWrapper(`Beim Einlesen der Datei ist ein Fehler aufgetreten!\n<h3>Fehlermeldung</h3>\n${err_json}`);
+				kartei.dialogWrapper(`Beim Einlesen der Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n${err_json}`);
 				return;
 			}
 			// Wirklich eine wgd-Datei?
 			if (data_tmp.t !== "wgd") {
-				kartei.dialogWrapper("Die Datei wurde nicht eingelesen!\nEs handelt sich nicht um eine Karteikasten-Datei von <i>Wortgeschichte digital</i>!");
+				kartei.dialogWrapper("Die Datei wurde nicht eingelesen.\nEs handelt sich nicht um eine Karteikasten-Datei von <i>Wortgeschichte digital</i>.");
 				return;
 			}
 			// Daten werden eingelesen => Änderungsmarkierungen kommen weg
+			notizen.notizenGeaendert(false);
 			beleg.belegGeaendert(false);
 			kartei.karteiGeaendert(false);
 			// alle Overlays schließen
@@ -135,6 +123,11 @@ let kartei = {
 	//     (nicht automatisch in der aktuellen Datei speichern, sondern immer
 	//     den Speichern-Dialog anzeigen)
 	speichern (speichern_unter) {
+		// Wurden überhaupt Änderungen vorgenommen?
+		if (!speichern_unter && !kartei.geaendert) {
+			kartei.dialogWrapper("Es wurden keine Änderungen vorgenommen.\nDie Kartei wurde nicht gespeichert.");
+			return;
+		}
 		// Dialog-Komponente laden
 		const {app, dialog} = require("electron").remote;
 		// Kartei-Datei besteht bereits
@@ -159,20 +152,26 @@ let kartei = {
 		// Dialog anzeigen
 		dialog.showSaveDialog(null, opt, function(pfad) {
 			if (pfad === undefined) {
-				kartei.dialogWrapper("Die Datei wurde nicht gespeichert!");
+				kartei.dialogWrapper("Die Kartei wurde nicht gespeichert.");
 				return;
 			}
 			speichern(pfad);
 		});
 		// Speicher-Funktion
 		function speichern (pfad) {
-			let dm_alt = data.dm;
+			// einige Werte müssen vor dem Speichern angepasst werden
+			let dm_alt = data.dm,
+				r_alt = data.r;
 			data.dm = new Date().toISOString();
+			data.r++;
+			// Dateisystemzugriff
 			const fs = require("fs");
 			fs.writeFile(pfad, JSON.stringify(data), function(err) {
 				if (err) {
-					kartei.dialogWrapper(`Beim Speichern der Datei ist ein Fehler aufgetreten!\n<h3>Fehlermeldung</h3>\n${err.message}`);
-					data.dm = dm_alt; // altes Änderungsdatum wiederherstellen
+					kartei.dialogWrapper(`Beim Speichern der Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n${err.message}`);
+					// passiert ein Fehler, müssen manche Werte zurückgesetzt werden
+					data.dm = dm_alt;
+					data.r = r_alt;
 					return;
 				}
 				kartei.pfad = pfad;
@@ -184,6 +183,7 @@ let kartei = {
 	},
 	// Kartei schließen
 	schliessen () {
+		notizen.notizenGeaendert(false);
 		beleg.belegGeaendert(false);
 		kartei.karteiGeaendert(false);
 		overlay.alleSchliessen();
@@ -212,10 +212,11 @@ let kartei = {
 			let wort = dialog.getPromptText();
 			if (dialog.antwort && !wort) {
 				dialog.oeffnen("alert", null);
-				dialog.text("Sie müssen ein Wort eingeben, sonst kann keine Kartei angelegt werden!");
+				dialog.text("Sie müssen ein Wort eingeben, sonst kann keine Kartei angelegt werden.");
 			} else if (dialog.antwort && wort) {
-				kartei.karteiGeaendert(true);
+				notizen.notizenGeaendert(false);
 				beleg.belegGeaendert(false);
+				kartei.karteiGeaendert(true);
 				kartei.wort = wort;
 				kartei.wortEintragen();
 				kartei.erstellen();
@@ -236,7 +237,7 @@ let kartei = {
 			let wort = dialog.getPromptText();
 			if (dialog.antwort && wort === kartei.wort) {
 				dialog.oeffnen("alert", null);
-				dialog.text("Das Wort wurde nicht geändert!");
+				dialog.text("Das Wort wurde nicht geändert.");
 			} else if (dialog.antwort && wort) {
 				kartei.karteiGeaendert(true);
 				kartei.wort = wort;
@@ -244,7 +245,7 @@ let kartei = {
 				kartei.wortEintragen();
 			} else if (dialog.antwort && !wort) {
 				dialog.oeffnen("alert", null);
-				dialog.text("Sie müssen ein Wort eingeben, sonst kann das bestehende nicht geändert werden!");
+				dialog.text("Sie müssen ein Wort eingeben, sonst kann das bestehende nicht geändert werden.");
 			}
 		});
 		dialog.text("Soll das Wort geändert werden?");

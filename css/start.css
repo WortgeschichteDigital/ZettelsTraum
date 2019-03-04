@@ -31,6 +31,11 @@
 	text-align: left;
 }
 
+.icon-h-zuletzt {
+	-webkit-mask-image: url(../img/heading-zuletzt.svg);
+	mask-image: url(../img/heading-zuletzt.svg);
+}
+
 #start-liste {
 	margin: 0;
 	padding-left: 0;

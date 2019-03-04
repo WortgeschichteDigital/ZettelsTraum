@@ -1,7 +1,5 @@
 @charset "utf-8";
 
-/* GRUNDFARBE WOHL #2E9674 */
-
 /* VARIABLEN */
 :root {
 	/* Textfarben */
@@ -69,9 +67,11 @@ h2 span:first-child {
 }
 
 h3 {
-	margin: 25px 0 10px 0;
+	margin: 20px 0 10px 0;
 	color: var(--textFarbe);
 	font-size: 16px;
+	font-style: italic;
+	font-weight: normal;
 }
 
 h3:first-child {
@@ -85,16 +85,6 @@ h3:first-child {
 	background-color: #fff;
 	-webkit-mask-position: center;
 	mask-position: center;
-}
-
-.icon-h-einstellungen {
-	-webkit-mask-image: url(../img/heading-einstellungen.svg);
-	mask-image: url(../img/heading-einstellungen.svg);
-}
-
-.icon-h-zuletzt {
-	-webkit-mask-image: url(../img/heading-zuletzt.svg);
-	mask-image: url(../img/heading-zuletzt.svg);
 }
 
 p {
@@ -124,26 +114,6 @@ a {
 
 .icon-link:focus {
 	background-color: var(--farbe);
-}
-
-.icon-bearbeiten {
-	-webkit-mask-image: url(../img/bearbeiten.svg);
-	mask-image: url(../img/bearbeiten.svg);
-}
-
-.icon-schliessen {
-	-webkit-mask-image: url(../img/heading-schliessen.svg);
-	mask-image: url(../img/heading-schliessen.svg);
-}
-
-.icon-tools-einfuegen {
-	-webkit-mask-image: url(../img/tool-einfuegen.svg);
-	mask-image: url(../img/tool-einfuegen.svg);
-}
-
-.icon-tools-kopieren {
-	-webkit-mask-image: url(../img/tool-kopieren.svg);
-	mask-image: url(../img/tool-kopieren.svg);
 }
 
 /* FORMULAR-ELEMENT */
@@ -178,13 +148,20 @@ input[type="button"]:focus {
 	background-color: var(--farbe);
 }
 
-input[type="button"][value="Abbrechen"],
-input[type="button"][value="Nein"] {
+input[type="button"][value="Abbrechen"] {
 	background-image: url(../img/button-cancel.svg);
+}
+
+input[type="button"][value="Ergänzen"] {
+	background-image: url(../img/button-ergaenzen.svg);
 }
 
 input[type="button"][value="Löschen"] {
 	background-image: url(../img/button-delete.svg);
+}
+
+input[type="button"][value="Nein"] {
+	background-image: url(../img/button-no.svg);
 }
 
 input[type="button"][value="Speichern"] {
@@ -194,6 +171,7 @@ input[type="button"][value="Speichern"] {
 input[type="checkbox"] {
 	position: relative;
 	top: 2px;
+	z-index: 1;
 	box-sizing: content-box;
 	margin: 0 7px 0 0;
 	border: 1px solid var(--linie);
@@ -227,8 +205,10 @@ input[type="checkbox"]:checked:before {
 textarea {
 	display: block;
 	margin: 0;
+	resize: vertical;
 	border: 1px solid var(--linie);
 	padding: 2px 5px;
+	width: calc(100% - 12px);
 }
 
 textarea:focus {

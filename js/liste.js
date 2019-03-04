@@ -13,7 +13,7 @@ let liste = {
 					liste.wechseln();
 				}
 			});
-			dialog.text("Der aktuelle Beleg wurde noch nicht gespeichert!\nMöchten Sie ihn nicht erst einmal speichern?");
+			dialog.text("Der aktuelle Beleg wurde noch nicht gespeichert.\nMöchten Sie ihn nicht erst einmal speichern?");
 		} else {
 			liste.wechseln();
 		}
@@ -72,6 +72,9 @@ let liste = {
 				// Beleg-Kopf erstellen
 				let div = document.createElement("div");
 				div.classList.add("liste-kopf");
+				if (optionen.data.belegliste.belegschnitte) {
+					div.classList.add("schnitt-offen");
+				}
 				div.dataset.id = id;
 				// Beleg bearbeiten
 				let a = document.createElement("a");
@@ -343,9 +346,6 @@ let liste = {
 		}
 		// Textschnitt in Anführungsstriche
 		let q = document.createElement("q");
-		if (optionen.data.belegliste.belegschnitte) {
-			q.classList.add("schnitt-offen");
-		}
 		q.innerHTML = schnitt;
 		frag.appendChild(q);
 		// Fragment zurückgeben
@@ -371,12 +371,11 @@ let liste = {
 			// Belegschnitt umschalten
 			let schnitt = this.nextSibling;
 			schnitt.classList.toggle("aus");
-			// Anzeige der Vorschau verändern
-			let vorschau = this.querySelector("q");
+			// Anzeige der Vorschau anpassen
 			if ( schnitt.classList.contains("aus") ) {
-				vorschau.classList.remove("schnitt-offen");
+				this.classList.remove("schnitt-offen");
 			} else {
-				vorschau.classList.add("schnitt-offen");
+				this.classList.add("schnitt-offen");
 			}
 		});
 	},
@@ -510,13 +509,13 @@ let liste = {
 		// Anzeige der Belegschnitte anpassen
 		let belegschnitte = document.querySelectorAll("#liste-belege-cont .liste-schnitt");
 		for (let i = 0, len = belegschnitte.length; i < len; i++) {
-			let q = belegschnitte[i].previousSibling.querySelector("q");
+			let kopf = belegschnitte[i].previousSibling;
 			if (optionen.data.belegliste.belegschnitte) {
 				belegschnitte[i].classList.remove("aus");
-				q.classList.add("schnitt-offen");
+				kopf.classList.add("schnitt-offen");
 			} else {
 				belegschnitte[i].classList.add("aus");
-				q.classList.remove("schnitt-offen");
+				kopf.classList.remove("schnitt-offen");
 			}
 		}
 	},

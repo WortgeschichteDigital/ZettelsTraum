@@ -17,7 +17,7 @@ let beleg = {
 					beleg.erstellen();
 				}
 			});
-			dialog.text("Der aktuelle Beleg wurde geändert, aber noch nicht gespeichert!\nMöchten Sie den Beleg nicht erst einmal speichern?");
+			dialog.text("Der aktuelle Beleg wurde geändert, aber noch nicht gespeichert.\nMöchten Sie den Beleg nicht erst einmal speichern?");
 			return;
 		}
 		// Beleg schon gespeichert
@@ -94,6 +94,8 @@ let beleg = {
 		beleg.belegGeaendert(false);
 		// Formular einblenden
 		helfer.sektionWechseln("beleg");
+		// Textarea zurücksetzen
+		document.querySelectorAll("#beleg textarea").forEach( (textarea) => helfer.textareaGrow(textarea) );
 		// Datumsfeld fokussieren
 		document.getElementById("beleg-da").focus();
 	},
@@ -101,7 +103,11 @@ let beleg = {
 	//   feld = Element
 	//     (das Formularfeld, das geändert wurde)
 	formularGeaendert (feld) {
-		feld.addEventListener("change", function() {
+		let event_typ = "input";
+		if (this.type === "checkbox") {
+			event_typ = "change";
+		}
+		feld.addEventListener(event_typ, function() {
 			let feld = this.id.replace(/^beleg-/, "");
 			if (this.type === "checkbox") {
 				beleg.data[feld] = this.checked;
@@ -132,33 +138,33 @@ let beleg = {
 		let da = document.getElementById("beleg-da");
 		if (!da.value) {
 			dialog.oeffnen("alert", () => da.select() );
-			dialog.text("Sie müssen ein Datum angeben!");
+			dialog.text("Sie müssen ein Datum angeben.");
 			return;
 		}
 		// Test: Datum mit vierstelliger Jahreszahl oder Jahrhundertangabe?
 		if ( !da.value.match(/[0-9]{4}|[0-9]{2}\. (Jahrhundert|Jh\.)/) ) {
 			dialog.oeffnen("alert", () => da.select() );
-			dialog.text("Das Datum muss eine vierstellige Jahreszahl (z. B. „1813“) oder eine Jahrhundertangabe (z. B. „17. Jh.“) enthalten!\nZusätzlich können auch andere Angaben gemacht werden (z. B. „ca. 1815“, „1610, vielleicht 1611“)");
+			dialog.text("Das Datum muss eine vierstellige Jahreszahl (z. B. „1813“) oder eine Jahrhundertangabe (z. B. „17. Jh.“) enthalten.\nZusätzlich können auch andere Angaben gemacht werden (z. B. „ca. 1815“, „1610, vielleicht 1611“).");
 			return;
 		}
 		// Test: Belegschnitt angegeben?
 		let bs = document.getElementById("beleg-bs");
 		if (!bs.value) {
 			dialog.oeffnen("alert", () => bs.select() );
-			dialog.text("Sie müssen einen Belegschnitt angeben!");
+			dialog.text("Sie müssen einen Belegschnitt angeben.");
 			return;
 		}
 		// Test: Quelle angegeben?
 		let qu = document.getElementById("beleg-qu");
 		if (!qu.value) {
 			dialog.oeffnen("alert", () => qu.select() );
-			dialog.text("Sie müssen eine Quelle angeben!");
+			dialog.text("Sie müssen eine Quelle angeben.");
 			return;
 		}
 		// Beleg wurde nicht geändert
 		if (!beleg.geaendert) {
 			dialog.oeffnen("alert", () => liste.wechseln() );
-			dialog.text("Es wurden keine Änderungen vorgenommen!");
+			dialog.text("Es wurden keine Änderungen vorgenommen.");
 			return;
 		}
 		// ggf. Objekt anlegen
@@ -190,7 +196,7 @@ let beleg = {
 					abbrechen();
 				}
 			});
-			dialog.text("Der aktuelle Beleg wurde geändert, aber noch nicht gespeichert!\nMöchten Sie den Beleg nicht erst einmal speichern?");
+			dialog.text("Der aktuelle Beleg wurde geändert, aber noch nicht gespeichert.\nMöchten Sie den Beleg nicht erst einmal speichern?");
 			return;
 		}
 		// Änderungen sind schon gespeichert
@@ -309,7 +315,7 @@ let beleg = {
 				}
 				beleg.belegGeaendert(true);
 			});
-			dialog.text("Das Feld enthält schon Text! Soll er überschrieben werden?\n(Bei <i>Nein</i> wird der Text ergänzt.)");
+			dialog.text("Das Feld enthält schon Text. Soll er überschrieben werden?\n(Bei <i>Nein</i> wird der Text ergänzt.)");
 			return;
 		}
 		feld.value = text;

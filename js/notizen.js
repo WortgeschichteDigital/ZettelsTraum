@@ -5,17 +5,9 @@ let notizen = {
 	oeffnen () {
 		let fenster = document.getElementById("notizen"),
 			feld = document.getElementById("notizen-feld");
-		// Ist das Fenster schon offen?
-		let schon_offen = false;
-		if ( !fenster.classList.contains("aus") ) {
-			schon_offen = true;
-		}
 		// Fenster öffnen oder in den Vordergrund holen
-		overlay.oeffnen(fenster);
-		// Fokus ins Textfeld
-		feld.focus();
-		// ggf. Abbruch
-		if (schon_offen) {
+		if ( overlay.oeffnen(fenster) ) { // Fenster ist schon offen
+			feld.focus();
 			return;
 		}
 		// Notizen-Feld füllen bzw. leeren
@@ -24,54 +16,126 @@ let notizen = {
 		} else {
 			feld.value = "";
 		}
+		// Größe des Notizfeldes zurücksetzen
+		helfer.textareaGrow(feld);
+		// Feld fokussieren
+		feld.focus();
 	},
 	// speichert die Notizen
 	speichern () {
+		let feld = document.getElementById("notizen-feld");
 		// Es wurde gar nichts geändert!
 		if (!notizen.geaendert) {
-			dialog.oeffnen("alert", () => notizen.schliessen() );
-			dialog.text("Es wurden keine Änderungen vorgenommen!");
+			dialog.oeffnen("confirm", function() {
+				if (dialog.antwort) {
+					notizen.schliessen();
+				} else {
+					feld.focus();
+				}
+			});
+			dialog.text("Es wurden keine Änderungen vorgenommen.\nEingabefeld schließen?");
+			return;
+		}
+		let vorhanden = notizen.vorhanden();
+		// keine Notizen im Feld, aber Notizen in der Kartei
+		if (!vorhanden.feld && vorhanden.kartei) {
+			dialog.oeffnen("confirm", function() {
+				if (dialog.antwort) {
+					notizen.loeschen();
+				} else {
+					feld.focus();
+				}
+			});
+			dialog.text("Das Notizfeld ist leer.\nSollen die in der Kartei gespeicherten Notizen gelöscht werden?");
+			return;
+		}
+		// keine Notizen im Feld
+		if (!vorhanden.feld) {
+			dialog.oeffnen("alert", () => feld.focus() );
+			dialog.text("Das Notizfeld ist leer.\nEs können also gar keine Notizen gespeichert werden.");
 			return;
 		}
 		// Änderungen speichern
-		let notiz = document.getElementById("notizen-feld").value;
-		// TODO Wert aufbereiten (typische Fehler beheben in einer Helfer-Funktion)
-		data.n = notiz;
+		data.n = helfer.textTrim(vorhanden.feld_value, false);
+		kartei.karteiGeaendert(true);
 		notizen.schliessen();
 	},
 	// Edieren der Notizen abbrechen
 	abbrechen () {
-		if (notizen.geaendert) {
-			dialog.oeffnen("confirm", function() {
-				if (dialog.antwort) {
-					notizen.speichern();
-				} else if (dialog.antwort === false) {
-					notizen.schliessen();
-				}
-			});
-			dialog.text("Die Notizen wurden noch nicht gespeichert!\nMöchten Sie die Eingaben nicht erst einmal speichern?");
+		// keine Änderungen vorgenommen
+		if (!notizen.geaendert) {
+			notizen.schliessen();
 			return;
 		}
-		notizen.schliessen();
+		// keine Notizen im Feld trotz Änderungsmarkierung => direkt schließen
+		let vorhanden = notizen.vorhanden();
+		if (!vorhanden.feld) {
+			notizen.schliessen();
+			return;
+		}
+		// Es sind also Notizen im Notizfeld. Speichern?
+		dialog.oeffnen("confirm", function() {
+			if (dialog.antwort) {
+				notizen.speichern();
+			} else if (dialog.antwort === false) {
+				notizen.schliessen();
+			} else {
+				document.getElementById("notizen-feld").focus();
+			}
+		});
+		dialog.text("Die Notizen wurden noch nicht gespeichert.\nMöchten Sie die Eingaben nicht erst einmal speichern?");
 	},
 	// Notizen löschen
 	loeschen () {
-		// TODO sind überhaupt Notizen vorhanden (im Notizfeld und/oder in der DB)
+		// Sind überhaupt Notizen vorhanden?
+		let vorhanden = notizen.vorhanden();
+		if (!vorhanden.kartei && !vorhanden.feld) {
+			dialog.oeffnen("alert", () => notizen.schliessen() );
+			dialog.text("Es sind keine Notizen vorhanden.");
+			return;
+		}
+		// Sicherheitsfrage
 		dialog.oeffnen("confirm", function() {
 			if (dialog.antwort) {
 				data.n = "";
-				notizen.notizenGeaendert(true);
+				kartei.karteiGeaendert(true);
 				notizen.schliessen();
+			} else {
+				document.getElementById("notizen-feld").focus();
 			}
 		});
-		dialog.text("Sollen die Notizen wirklich gelöscht werden?");
+		let speicher = [];
+		if (vorhanden.kartei) {
+			speicher.push("in der Kartei");
+		}
+		if (vorhanden.feld) {
+			speicher.push("im Notizfeld");
+		}
+		dialog.text(`Sollen die Notizen ${speicher.join(" und ")} wirklich gelöscht werden?`);
 	},
-	// Funktionen, die das Notizen-Fenster schließen und beim Schließen
-	// aufgerufen werden sollten.
+	// Funktionen, die beim Schließen aufgerufen werden sollten
 	schliessen () {
 		notizen.notizenGeaendert(false);
 		notizen.icon();
 		document.getElementById("notizen").classList.add("aus");
+	},
+	// überprüft, ob überhaupt Notizen vorhanden sind
+	vorhanden () {
+		let vorhanden = {
+			kartei: false,
+			feld: false,
+			feld_value: "",
+		};
+		if (data.n) {
+			vorhanden.kartei = true;
+		}
+		let notiz = document.getElementById("notizen-feld").value;
+		notiz = helfer.textTrim(notiz, false);
+		if (notiz) {
+			vorhanden.feld = true;
+		}
+		vorhanden.feld_value = notiz;
+		return vorhanden;
 	},
 	// Aktionen beim Klick auf einen Button
 	//   button = Element
@@ -101,18 +165,21 @@ let notizen = {
 	//   textarea = Element
 	//     (<textarea>, in dem die Notizen stehen)
 	change (textarea) {
-		textarea.addEventListener("change", () => notizen.notizenGeaendert(true) );
+		textarea.addEventListener("input", () => notizen.notizenGeaendert(true) );
 	},
-	// speichert, ob das Notizen-Feld geändert wurde
+	// speichert, ob der Inhalt des Notizenfelds geändert wurde
 	geaendert: false,
 	// Notizen wurden geändert oder gespeichert
 	//   geaendert = Boolean
 	//     (true = Kartei wurde geändert, false = Änderung wurde gespeichert oder verworfen)
 	notizenGeaendert (geaendert) {
 		notizen.geaendert = geaendert;
-		// TODO Visualisierung
+		// Asterisk ein- oder ausblenden
+		let asterisk = document.getElementById("notizen-geaendert");
 		if (geaendert) {
-			kartei.karteiGeaendert(true);
+			asterisk.classList.remove("aus");
+		} else {
+			asterisk.classList.add("aus");
 		}
 	},
 };

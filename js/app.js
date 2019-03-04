@@ -19,7 +19,13 @@ window.addEventListener("load", function() {
 		kartei.checkSpeichern( () => kartei.oeffnenEinlesen(pfad) );
 	});
 	
-	// KLICK-EVENTS INITIALISIEREN
+	// EVENTS INITIALISIEREN
+	// alle <textarea>
+	document.querySelectorAll("textarea").forEach( function(textarea) {
+		textarea.addEventListener("input", function() {
+			helfer.textareaGrow(this);
+		});
+	});
 	// Wort-Element
 	document.getElementById("wort").addEventListener("click", () => kartei.wortAendern() );
 	// Notizen-Icon
@@ -39,7 +45,7 @@ window.addEventListener("load", function() {
 			beleg.aktionButton(beleg_inputs[i]);
 		} else {
 			beleg.formularGeaendert(beleg_inputs[i]);
-			if ( beleg_inputs[i].type.match(/^checkbox|^text/) ) {
+			if ( beleg_inputs[i].type.match(/^checkbox$|^text$/) ) {
 				beleg.belegSpeichern(beleg_inputs[i]);
 			}
 		}
@@ -57,6 +63,15 @@ window.addEventListener("load", function() {
 	let ee = document.querySelectorAll("#einstellungen input");
 	for (let i = 0, len = ee.length; i < len; i++) {
 		optionen.aendereEinstellung(ee[i]);
+	}
+	// Metadaten-Fenster
+	let meta_inputs = document.querySelectorAll("#meta input");
+	for (let i = 0, len = meta_inputs.length; i < len; i++) {
+		if (meta_inputs[i].type === "button") {
+			meta.aktionButton(meta_inputs[i]);
+		} else { // Text-input
+			meta.aktionText(meta_inputs[i]);
+		}
 	}
 	// Notizen-Fenster
 	let notizen_inputs = document.querySelectorAll("#notizen input, #notizen textarea");
@@ -107,6 +122,7 @@ window.addEventListener("load", function() {
 	ipcRenderer.on("kartei-schliessen", function() {
 		kartei.checkSpeichern( () => kartei.schliessen() );
 	});
+	ipcRenderer.on("kartei-metadaten", () => meta.oeffnen() );
 	ipcRenderer.on("kartei-notizen", () => notizen.oeffnen() );
 	ipcRenderer.on("belege-hinzufuegen", () => beleg.erstellenPre() );
 	ipcRenderer.on("belege-auflisten", () => liste.anzeigen() );
@@ -132,27 +148,15 @@ window.addEventListener("load", function() {
 
 // Schließen unterbrechen, falls Daten noch nicht gespeichert wurden
 window.addEventListener("beforeunload", function(evt) {
-	if (beleg.geaendert || kartei.geaendert) {
-		dialog.oeffnen("confirm", function() {
-			if (dialog.antwort === false) {
-				beleg.geaendert = false;
-				kartei.geaendert = false;
-				const {remote} = require("electron");
-				let win = remote.getCurrentWindow();
-				win.close();
-			} else if (dialog.antwort) {
-				if (beleg.geaendert) {
-					beleg.aktionSpeichern();
-				} else if (kartei.geaendert) {
-					kartei.speichern(false);
-				}
-			}
+	if (notizen.geaendert || beleg.geaendert || kartei.geaendert) {
+		sicherheitsfrage.warnen(function() {
+			beleg.geaendert = false;
+			kartei.geaendert = false;
+			notizen.geaendert = false;
+			const {remote} = require("electron");
+			let win = remote.getCurrentWindow();
+			win.close();
 		});
-		let typ = "Der Beleg";
-		if (kartei.geaendert) {
-			typ = "Die Kartei";
-		}
-		dialog.text(`${typ} wurde noch nicht gespeichert!\nMöchten Sie die Daten vor dem Schließen des Programms nicht erst einmal speichern?`);
 		evt.returnValue = "false";
 	}
 });

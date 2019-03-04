@@ -7,9 +7,14 @@ let overlay = {
 	//   fenster = Element
 	//     (Overlay-Fenster, das geöffnet werden soll)
 	oeffnen (fenster) {
+		let schon_offen = false;
+		if ( !fenster.classList.contains("aus") ) {
+			schon_offen = true;
+		}
 		overlay.zIndex++;
 		fenster.style.zIndex = overlay.zIndex;
 		fenster.classList.remove("aus");
+		return schon_offen;
 	},
 	// Schließen-Event eines Links initialisieren
 	//   link = Element
