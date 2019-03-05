@@ -22,9 +22,30 @@ let optionen = {
 		},
 		// zuletzt verwendete Dokumente
 		zuletzt: [],
-		// Einstellungen-Dialog: Nach dem Starten des Programms wird die Menü-Leiste
-		// ausgeblendet, bis die Alt-Taste gedrückt wird.
-		autoHideMenuBar: false,
+		// Einstellungen-Dialog
+		einstellungen: {
+			// für diesen Computer registrierte BearbeiterIn
+			bearbeiterin: "",
+			// Nach dem Starten des Programms wird die Menü-Leiste ausgeblendet,
+			// bis die Alt-Taste gedrückt wird.
+			autoHideMenuBar: false,
+			// Quick-Access-Bar anzeigen
+			quick: false,
+			// Icons in der Quick-Access-Bar, die ein- oder ausgeblendet gehören
+			"quick-programm-einstellungen": false,
+			"quick-programm-beenden": false,
+			"quick-kartei-erstellen": false,
+			"quick-kartei-oeffnen": false,
+			"quick-kartei-speichern": false,
+			"quick-kartei-metadaten": false,
+			"quick-kartei-anhaenge": false,
+			"quick-kartei-notizen": false,
+			"quick-kartei-suche": false,
+			"quick-kartei-schliessen": false,
+			"quick-belege-hinzufuegen": false,
+			"quick-belege-auflisten": false,
+			"quick-belege-sortieren": false,
+		},
 	},
 	// liest die vom Main-Prozess übergebenen Optionen ein
 	// (zur Sicherheit werden alle Optionen einzeln eingelesen;
@@ -50,6 +71,8 @@ let optionen = {
 	},
 	// nach dem Laden müssen manche Optionen direkt angewendet werden
 	anwenden () {
+		// Quick-Access-Bar ein- oder ausschalten
+		optionen.anwendenQuickAccess();
 		// Icons und Text im Header der Belegliste anpassen
 		liste.headerFilterAnzeige(); // hier auch die Anzeige der Filterleiste anpassen
 		liste.headerSortierenAnzeige();
@@ -60,10 +83,40 @@ let optionen = {
 		let ee = document.querySelectorAll("#einstellungen input");
 		for (let i = 0, len = ee.length; i < len; i++) {
 			let e = ee[i].id.replace(/^einstellung-/, "");
-			if (optionen.data[e]) {
-				ee[i].checked = true;
+			if (ee[i].type === "checkbox") {
+				ee[i].checked = optionen.data.einstellungen[e] ? true : false;
+			} else if (ee[i].type === "text") {
+				ee[i].value = optionen.data.einstellungen[e] ? optionen.data.einstellungen[e] : "";
+			}
+		}
+	},
+	// Quick-Access-Bar ein- bzw. ausblenden
+	anwendenQuickAccess () {
+		let quick = document.getElementById("quick");
+		// Icons ein- oder ausblenden
+		let icons = quick.querySelectorAll("a"),
+			icons_alle_aus = true;
+		for (let i = 0, len = icons.length; i < len; i++) {
+			if (optionen.data.einstellungen[ icons[i].id ]) {
+				icons[i].classList.remove("aus");
+				icons_alle_aus = false;
 			} else {
-				ee[i].checked = false;
+				icons[i].classList.add("aus");
+			}
+		}
+		// Bar ein- oder ausblenden
+		if (optionen.data.einstellungen.quick && !icons_alle_aus) {
+			quick.classList.remove("aus");
+		} else {
+			quick.classList.add("aus");
+		}
+		// affizierte Elemente anpassen
+		let affiziert = document.querySelectorAll("body > header, body > section");
+		for (let i = 0, len = affiziert.length; i < len; i++) {
+			if (optionen.data.einstellungen.quick && !icons_alle_aus) {
+				affiziert[i].classList.add("quick");
+			} else {
+				affiziert[i].classList.remove("quick");
 			}
 		}
 	},
@@ -101,13 +154,23 @@ let optionen = {
 		ele.addEventListener("change", function() {
 			// Option ermitteln und umstellen
 			let e = this.id.replace(/^einstellung-/, "");
-			optionen.data[e] = this.checked;
+			if (this.type === "checkbox") {
+				optionen.data.einstellungen[e] = this.checked;
+			} else if (this.type === "text") {
+				optionen.data.einstellungen[e] = this.value;
+			}
+			// ggf. Quick-Access-Bar umstellen
+			if ( e.match(/^quick/) ) {
+				optionen.anwendenQuickAccess();
+			}
 			// Optionen speichern
 			optionen.speichern();
 		});
 	},
 	// das Optionen-Fenster öffnen
 	oeffnen () {
-		overlay.oeffnen( document.getElementById("einstellungen") );
+		let fenster = document.getElementById("einstellungen");
+		overlay.oeffnen(fenster);
+		fenster.querySelector("#einstellungen input").focus();
 	},
 };

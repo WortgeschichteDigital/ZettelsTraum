@@ -26,6 +26,11 @@ window.addEventListener("load", function() {
 			helfer.textareaGrow(this);
 		});
 	});
+	// Quick-Access-Bar
+	let quick = document.querySelectorAll("#quick a");
+	for (let i = 0, len = quick.length; i < len; i++) {
+		helfer.quickAccess(quick[i]);
+	}
 	// Wort-Element
 	document.getElementById("wort").addEventListener("click", () => kartei.wortAendern() );
 	// Notizen-Icon
@@ -52,7 +57,11 @@ window.addEventListener("load", function() {
 	}
 	let beleg_links = document.querySelectorAll("#beleg .icon-link");
 	for (let i = 0, len = beleg_links.length; i < len; i++) {
-		beleg.toolsKlick(beleg_links[i]);
+		if ( beleg_links[i].classList.contains("icon-stern") ) { // Bewertung
+			beleg.bewertungEvents(beleg_links[i]);
+		} else { // Text-Tools
+			beleg.toolsKlick(beleg_links[i]);
+		}
 	}
 	// Funktionen im Belegliste-Header
 	let liste_links = document.querySelectorAll("#liste header a");
@@ -119,11 +128,11 @@ window.addEventListener("load", function() {
 	});
 	ipcRenderer.on("kartei-speichern", () => kartei.speichern(false) );
 	ipcRenderer.on("kartei-speichern-unter", () => kartei.speichern(true) );
+	ipcRenderer.on("kartei-metadaten", () => meta.oeffnen() );
+	ipcRenderer.on("kartei-notizen", () => notizen.oeffnen() );
 	ipcRenderer.on("kartei-schliessen", function() {
 		kartei.checkSpeichern( () => kartei.schliessen() );
 	});
-	ipcRenderer.on("kartei-metadaten", () => meta.oeffnen() );
-	ipcRenderer.on("kartei-notizen", () => notizen.oeffnen() );
 	ipcRenderer.on("belege-hinzufuegen", () => beleg.erstellenPre() );
 	ipcRenderer.on("belege-auflisten", () => liste.anzeigen() );
 	ipcRenderer.on("optionen-zuletzt", (evt, zuletzt) => optionen.data.zuletzt = zuletzt );

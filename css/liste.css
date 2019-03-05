@@ -33,6 +33,10 @@
 	transition: width .5s ease;
 }
 
+#liste.quick {
+	margin-top: 89px;
+}
+
 #liste.filter-aus {
 	width: calc(100% + 310px - 20px);
 	animation-name: liste-li;
@@ -48,6 +52,10 @@
 	top: 60px;
 	padding-top: 10px;
 	width: 300px;
+}
+
+.quick #liste-filter {
+	top: 89px;
 }
 
 #liste-filter p {
@@ -71,6 +79,10 @@
 	overflow: hidden;
 	background-color: #fff;
 	white-space: nowrap;
+}
+
+.quick #liste-belege header {
+	top: 89px;
 }
 
 .icon-bearbeiten {

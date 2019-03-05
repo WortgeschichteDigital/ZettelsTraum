@@ -10,7 +10,31 @@ let meta = {
 		}
 		// Felder füllen, die nicht geändert werden können
 		document.getElementById("meta-dc").textContent = helfer.datumFormat(data.dc);
-		document.getElementById("meta-dm").textContent = helfer.datumFormat(data.dm);
+		let dm = document.getElementById("meta-dm");
+		if (data.dm) {
+			dm.textContent = helfer.datumFormat(data.dm);
+			dm.classList.remove("kein-wert");
+		} else {
+			dm.textContent = "noch nicht gespeichert";
+			dm.classList.add("kein-wert");
+		}
+		let speicherort = document.getElementById("meta-speicherort"),
+			pfad = "noch nicht gespeichert";
+		if (kartei.pfad) {
+			pfad = `\u200E${kartei.pfad}\u200E`;
+			// Vor und hinter der Pfad-Angabe steht das nicht druckbare Steuer-Zeichen
+			// U+200E (left-to-right mark, HTML-Notation: &lrm;). Dadurch behebe ich
+			// sowohl im Absatz als auch im Title-Tag Darstellungsprobleme, die dazu
+			// führen, dass Slashes am Anfang oder Ende der Pfadangabe plötzlich
+			// an der (scheinbar) falschen Seite stehen. Das hängt mit der BiDi Class
+			// der Slashes zusammen. Anders ist der Wunsch, eine linke Textellipse zu
+			// haben, derzeit offenbar nicht zu realisieren.
+			speicherort.title = pfad;
+			speicherort.classList.remove("kein-wert");
+		} else {
+			speicherort.classList.add("kein-wert");
+		}
+		speicherort.innerHTML = pfad;
 		document.getElementById("meta-r").textContent = data.r;
 		// Textfelder leeren
 		document.querySelectorAll(`#meta input[type="text"]`).forEach( (input) => input.value = "" );
@@ -19,7 +43,7 @@ let meta = {
 		// Liste der Lexika
 		meta.lexikaAuflisten();
 		// Fokus in Lexika-Feld
-		document.getElementById("meta-l").focus();
+		document.querySelector("#meta-l-liste input").focus();
 	},
 	// vordefinierte Liste an BearbeiterInnen
 	bearbeiterInnen: [
@@ -33,23 +57,30 @@ let meta = {
 		if (!data.e.length) {
 			let p = document.createElement("p");
 			cont.appendChild(p);
-			p.classList.add("keine_bearb");
+			p.classList.add("kein-wert");
 			p.textContent = "keine BearbeiterIn registriert";
 			return;
 		}
 		// BearbeiterInnen auflisten
-		for (let i = 0, len = data.e.length; i < len; i++) {
+		let b = [...data.e];
+		b.reverse();
+		for (let i = 0, len = b.length; i < len; i++) {
 			let p = document.createElement("p");
 			cont.appendChild(p);
 			// Lösch-Link
 			let a = document.createElement("a");
 			a.href = "#";
 			a.classList.add("icon-link", "icon-entfernen");
-			a.dataset.bearb = data.e[i];
+			a.dataset.bearb = b[i];
 			meta.bearbEntfernen(a);
 			p.appendChild(a);
 			// BearbeiterIn
-			p.appendChild( document.createTextNode(data.e[i]) );
+			let bearb = b[i];
+			if (meta.bearbeiterInnen.indexOf(bearb) === -1) {
+				bearb += " +";
+				p.title = "(BearbeiterIn manuell ergänzt)";
+			}
+			p.appendChild( document.createTextNode(bearb) );
 		}
 	},
 	// BearbeiterIn ergänzen

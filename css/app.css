@@ -15,6 +15,7 @@
 	--farbe: #72a0cf;
 	--farbeB: #386ea6; /* Buttons */
 	--farbeH: #386ea6; /* Überschriften */
+	--farbeStern: #fd0;
 	--aktiv: #32af79;
 	--linie: #c3d9f1;
 }
@@ -91,10 +92,18 @@ p {
 	margin: 0 0 10px 0;
 }
 
+p.input-text {
+	line-height: 30px;
+}
+
 section {
 	position: relative;
 	margin-top: 70px; /* 60 px = Höhe des fixierten <header> + 10px = padding */
 	padding: 0 10px;
+}
+
+section.quick {
+	margin-top: 99px;
 }
 
 /* LINKS */
@@ -114,6 +123,11 @@ a {
 
 .icon-link:focus {
 	background-color: var(--farbe);
+}
+
+.icon-stern {
+	-webkit-mask-image: url(../img/stern.svg);
+	mask-image: url(../img/stern.svg);
 }
 
 /* FORMULAR-ELEMENT */
@@ -192,6 +206,10 @@ input[type="checkbox"]:focus {
 
 input[type="checkbox"]:checked {
 	border-color: var(--farbe);
+}
+
+input[type="checkbox"]:checked:focus {
+	outline-color: var(--aktiv);
 }
 
 input[type="checkbox"]:checked:before {

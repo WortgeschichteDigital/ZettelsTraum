@@ -41,7 +41,7 @@ let layoutMenu = [
 			},
 			{ type: "separator" },
 			{
-				label: "Programm beenden",
+				label: "Beenden",
 				icon: path.join(__dirname, "img", "menu", "programm-beenden.png"),
 				role: "quit",
 			},

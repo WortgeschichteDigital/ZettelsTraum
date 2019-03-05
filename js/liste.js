@@ -90,7 +90,7 @@ let liste = {
 				if (zeitschnitt_akt.datum !== data.k[id].da) {
 					span.title = data.k[id].da;
 					span.classList.add("liste-jahr-hinweis");
-					liste.datumAnzeigen(span);
+					liste.detailAnzeigen(span);
 				}
 				div.appendChild(span);
 				// Belegschnitt-Vorschau
@@ -341,8 +341,11 @@ let liste = {
 		// ggf. Autor angeben
 		let frag = document.createDocumentFragment();
 		if (beleg_akt.au) {
-			let autor = beleg_akt.au.split(",");
-			frag.appendChild( document.createTextNode(`${autor[0]}: `) );
+			let span = document.createElement("span");
+			span.title = beleg_akt.au;
+			span.textContent = `${beleg_akt.au.split(",")[0]}: `;
+			liste.detailAnzeigen(span);
+			frag.appendChild(span);
 		}
 		// Textschnitt in Anführungsstriche
 		let q = document.createElement("q");
@@ -392,13 +395,13 @@ let liste = {
 	// genaue Datumsangabe auf Klick anzeigen
 	//   span = Element
 	//     (<span>, in dem das Datum steht)
-	datumAnzeigen (span) {
+	detailAnzeigen (span) {
 		span.addEventListener("click", function(evt) {
 			evt.stopPropagation();
-			let datum = this.title,
+			let detail = this.title,
 				beleg_id = this.parentNode.dataset.id;
 			dialog.oeffnen("alert", null);
-			dialog.text(`<h3>Beleg #${beleg_id}</h3>\n${datum}`);
+			dialog.text(`<h3>Beleg #${beleg_id}</h3>\n${detail}`);
 		});
 	},
 	// Funktionen im Header aufrufen

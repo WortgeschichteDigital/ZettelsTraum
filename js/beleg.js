@@ -46,6 +46,7 @@ let beleg = {
 			qu: "", // Quelle
 			ko: false, // Kontext
 			bu: false, // Bücherdienstauftrag
+			un: false, // Bearbeitung unvollständig
 			no: "", // Notizen
 			an: [], // Anhänge
 			be: 0, // Bewertung
@@ -90,6 +91,8 @@ let beleg = {
 				felder[i].value = beleg.data[feld];
 			}
 		}
+		// Bewertung eintragen
+		beleg.bewertungAnzeigen();
 		// Änderungsmarkierung ausblenden
 		beleg.belegGeaendert(false);
 		// Formular einblenden
@@ -112,7 +115,7 @@ let beleg = {
 			if (this.type === "checkbox") {
 				beleg.data[feld] = this.checked;
 			} else {
-				beleg.data[feld] = this.value;
+				beleg.data[feld] = helfer.textTrim(this.value, true);
 			}
 			beleg.belegGeaendert(true);
 		});
@@ -135,28 +138,29 @@ let beleg = {
 	// Beleg speichern
 	aktionSpeichern () {
 		// Test: Datum angegeben?
-		let da = document.getElementById("beleg-da");
-		if (!da.value) {
+		let da = document.getElementById("beleg-da"),
+			dav = helfer.textTrim(da.value, true);
+		if (!dav) {
 			dialog.oeffnen("alert", () => da.select() );
 			dialog.text("Sie müssen ein Datum angeben.");
 			return;
 		}
 		// Test: Datum mit vierstelliger Jahreszahl oder Jahrhundertangabe?
-		if ( !da.value.match(/[0-9]{4}|[0-9]{2}\. (Jahrhundert|Jh\.)/) ) {
+		if ( !dav.match(/[0-9]{4}|[0-9]{2}\. (Jahrhundert|Jh\.)/) ) {
 			dialog.oeffnen("alert", () => da.select() );
 			dialog.text("Das Datum muss eine vierstellige Jahreszahl (z. B. „1813“) oder eine Jahrhundertangabe (z. B. „17. Jh.“) enthalten.\nZusätzlich können auch andere Angaben gemacht werden (z. B. „ca. 1815“, „1610, vielleicht 1611“).");
 			return;
 		}
 		// Test: Belegschnitt angegeben?
 		let bs = document.getElementById("beleg-bs");
-		if (!bs.value) {
+		if ( !helfer.textTrim(bs.value, true) ) {
 			dialog.oeffnen("alert", () => bs.select() );
 			dialog.text("Sie müssen einen Belegschnitt angeben.");
 			return;
 		}
 		// Test: Quelle angegeben?
 		let qu = document.getElementById("beleg-qu");
-		if (!qu.value) {
+		if ( !helfer.textTrim(qu.value, true) ) {
 			dialog.oeffnen("alert", () => qu.select() );
 			dialog.text("Sie müssen eine Quelle angeben.");
 			return;
@@ -308,10 +312,13 @@ let beleg = {
 			dialog.oeffnen("confirm", function() {
 				if (dialog.antwort) {
 					feld.value = text;
+					helfer.textareaGrow(feld);
 				} else if (dialog.antwort === false && feld.type === "text") { // Input-Text
 					feld.value += ` ${text}`;
+					helfer.textareaGrow(feld);
 				} else if (dialog.antwort === false) { // Textareas
 					feld.value += `\n\n${text}`;
+					helfer.textareaGrow(feld);
 				}
 				beleg.belegGeaendert(true);
 			});
@@ -319,6 +326,7 @@ let beleg = {
 			return;
 		}
 		feld.value = text;
+		helfer.textareaGrow(feld);
 		beleg.belegGeaendert(true);
 	},
 	// Bereitet HTML-Text zum Einfügen in das Belegschnitt-Formular auf
@@ -327,5 +335,64 @@ let beleg = {
 	toolsEinfuegenHtml (html) {
 		// TODO
 		return html;
+	},
+	// Bewertung des Belegs anzeigen
+	//   stern = Element
+	//     (Stern, auf den geklickt wurde, um eine Bewertung vorzunehmen)
+	bewertung (stern) {
+		let sterne = document.querySelectorAll("#beleg-bewertung a");
+		for (let i = 0, len = sterne.length; i < len; i++) {
+			if (sterne[i] === stern) {
+				let bewertung = i + 1;
+				if (beleg.data.be === bewertung) {
+					beleg.data.be = 0;
+				} else {
+					beleg.data.be = bewertung;
+				}
+				break;
+			}
+		}
+		beleg.belegGeaendert(true);
+		beleg.bewertungAnzeigen();
+	},
+	// regelt die Anzeige der Bewertung
+	bewertungAnzeigen () {
+		let sterne = document.querySelectorAll("#beleg-bewertung a");
+		for (let i = 0, len = sterne.length; i < len; i++) {
+			if (i + 1 > beleg.data.be) {
+				sterne[i].classList.remove("aktiv");
+			} else {
+				sterne[i].classList.add("aktiv");
+			}
+		}
+	},
+	// Verteilerfunktion, je nachdem welcher Event gerade stattfindet
+	//   a = Element
+	//     (Icon-Link mit dem Stern, der gerade aktiv ist)
+	bewertungEvents (a) {
+		// Mousover: Vorschau anzeigen
+		a.addEventListener("mouseover", function() {
+			let sterne = document.querySelectorAll("#beleg-bewertung a"),
+				aktivieren = true;
+			for (let i = 0, len = sterne.length; i < len; i++) {
+				if (aktivieren) {
+					sterne[i].classList.add("aktiv");
+					if (sterne[i] === this) {
+						aktivieren = false;
+					}
+				} else {
+					sterne[i].classList.remove("aktiv");
+				}
+			}
+		});
+		// Mouseout: die aktuelle Bewertung anzeigen
+		a.addEventListener("mouseout", function() {
+			beleg.bewertungAnzeigen();
+		});
+		// Click: den Zettel bewerten
+		a.addEventListener("click", function(evt) {
+			evt.preventDefault();
+			beleg.bewertung(this);
+		});
 	},
 };

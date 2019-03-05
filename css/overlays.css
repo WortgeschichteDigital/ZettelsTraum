@@ -58,6 +58,12 @@
 	padding: 10px;
 }
 
+#einstellungen-cont input[type="text"] {
+	margin-right: 10px;
+	width: 185px;
+	color: var(--farbe);
+}
+
 #einstellungen-cont input[type="checkbox"] {
 	margin-right: 9px; /* für alignment mit Überschrift */
 }
@@ -69,6 +75,26 @@
 
 #einstellungen-cont p:last-child {
 	margin-bottom: 0;
+}
+
+#einstellungen-quick-icons {
+	columns: 2;
+	padding-left: 29px;
+}
+
+#einstellungen-quick-icons h3 {
+	margin: 10px 0 5px 0;
+}
+
+#einstellungen-quick-icons h3:first-child {
+	margin-top: 0;
+}
+
+#einstellungen-quick-icons p {
+	margin-bottom: 5px;
+	padding-left: 0;
+	text-indent: 0;
+	white-space: nowrap;
 }
 
 .icon-h-einstellungen {
@@ -99,11 +125,14 @@
 }
 
 #meta-cont h3 {
-	margin-bottom: 5px;
+	margin: 10px 0 5px 0;
 }
 
-#meta-cont .input {
-	line-height: 30px;
+#meta-cont p {
+	margin-bottom: 5px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }
 
 #meta-cont input[type="button"] {
@@ -115,13 +144,20 @@
 	width: calc(100% - 121px - 12px); /* Button 121px, 12px padding und border */
 }
 
-#meta-e-liste p {
-	margin-bottom: 5px;
-}
-
-#meta-e-liste .keine_bearb {
+#meta-cont .kein-wert {
 	color: var(--textHell);
 	font-style: italic;
+}
+
+#meta-speicherort {
+	text-align: left; /* das Feld ist rtl, bei kurzem Inhalt wäre der Text sonst rechtsbündig */
+}
+
+#meta-e-liste {
+	margin-bottom: 5px;
+	height: 120px;
+	overflow-x: hidden;
+	overflow-y: auto;
 }
 
 #meta-e-liste .icon-link {
@@ -145,11 +181,11 @@
 	display: flex;
 	flex-direction: column;
 	flex-wrap: wrap;
-	max-height: 377px;
+	height: 377px;
 	overflow: hidden;
 }
+
 #meta-l-liste p {
-	margin-bottom: 5px;
 	padding: 0 10px 0 1px; /* 1px links, damit die linke Grenze des Outline onfocus angezeigt wird */
 }
 
@@ -157,6 +193,10 @@
 #notizen > div {
 	margin-top: 40px;
 	max-width: 650px;
+}
+
+#notizen-cont {
+	padding: 10px;
 }
 
 #notizen-cont textarea {
@@ -181,10 +221,6 @@
 #notizen-geaendert {
 	display: inline-block;
 	margin-left: 5px;
-}
-
-#notizen-cont {
-	padding: 10px;
 }
 
 .icon-h-notizen {
@@ -246,7 +282,6 @@
 
 #dialog-prompt {
 	padding-bottom: 0;
-	line-height: 30px;
 }
 
 .alert #dialog-ok {

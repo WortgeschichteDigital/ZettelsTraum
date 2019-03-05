@@ -42,6 +42,10 @@ let kartei = {
 			h: {}, // Kartenhaufen
 			b: {}, // Bedeutungen
 		};
+		// ggf. für diesen Rechner registrierte BearbeiterIn eintragen
+		if (optionen.data.einstellungen.bearbeiterin) {
+			data.e.push(optionen.data.einstellungen.bearbeiterin);
+		}
 		// Belegliste leeren: Es könnten noch Belege von einer vorherigen Karte vorhanden sein;
 		// außerdem könnte es sein, dass die Bearbeiter*in keinen Beleg erstellt
 		liste.aufbauen(true);

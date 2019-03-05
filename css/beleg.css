@@ -30,7 +30,7 @@
 	position: relative;
 	padding: 10px 11px 0 11px;
 	width: calc(50% - 22px);
-	color: var(--farbe);
+	color: var(--textFarbe);
 	vertical-align: top;
 	font-size: 14px;
 	font-style: italic;
@@ -38,8 +38,8 @@
 	text-align: left;
 }
 
-#beleg tr:first-child td {
-	padding-bottom: 15px;
+#beleg th[colspan="2"] {
+	width: auto;
 }
 
 #beleg td {
@@ -49,12 +49,28 @@
 	vertical-align: top;
 }
 
-#beleg td.check {
-	vertical-align: bottom;
+#beleg td[colspan="2"] {
+	width: auto;
 }
 
-#beleg label {
-	color: var(--farbe);
+#beleg td.check {
+	padding-top: 30px;
+}
+
+#beleg td.check div {
+	display: flex;
+	flex-wrap: wrap;
+}
+
+#beleg td.check p {
+	margin: 0;
+	padding: 0;
+	flex: 1 0 130px;
+	text-align: center;
+}
+
+#beleg td.check p:last-child {
+	padding-right: 0;
 }
 
 /* FORMULAR-ELEMENTE */
@@ -64,7 +80,7 @@
 
 #beleg textarea {
 	min-height: 48px;
-	max-height: 144px;
+	max-height: 192px;
 }
 
 textarea#beleg-bs {
@@ -78,7 +94,15 @@ textarea#beleg-bs {
 
 #beleg-loeschen {
 	position: absolute;
-	right: 0;
+	right: 5px;
+}
+
+#beleg label {
+	color: var(--textFarbe);
+}
+
+#beleg-bewertung a.aktiv {
+	background-color: var(--farbeStern);
 }
 
 /* TEXT-TOOLS */
@@ -94,11 +118,6 @@ textarea#beleg-bs {
 
 .text-tools a:hover {
 	background-color: var(--text);
-}
-
-/* SPEZIELLE FORMATE */
-#beleg .zelle-bewertung {
-	text-align: right;
 }
 
 .icon-tools-einfuegen {

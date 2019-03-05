@@ -1,5 +1,88 @@
 @charset "utf-8";
 
+/* QUICK ACCESS */
+#quick {
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 1;
+	border-bottom: 1px dotted var(--linie);
+	padding: 2px 10px;
+	width: calc(100% - 20px);
+	height: 24px;
+	background-color: var(--farbe);
+}
+
+#quick a {
+	margin-right: 5px;
+	background-color: #fff;
+}
+
+#quick-programm-einstellungen {
+	-webkit-mask-image: url(../img/quick-einstellungen.svg);
+	mask-image: url(../img/quick-einstellungen.svg);
+}
+
+#quick-programm-beenden {
+	-webkit-mask-image: url(../img/quick-beenden.svg);
+	mask-image: url(../img/quick-beenden.svg);
+}
+
+#quick-kartei-erstellen {
+	-webkit-mask-image: url(../img/quick-erstellen.svg);
+	mask-image: url(../img/quick-erstellen.svg);
+}
+
+#quick-kartei-oeffnen {
+	-webkit-mask-image: url(../img/quick-oeffnen.svg);
+	mask-image: url(../img/quick-oeffnen.svg);
+}
+
+#quick-kartei-speichern {
+	-webkit-mask-image: url(../img/quick-speichern.svg);
+	mask-image: url(../img/quick-speichern.svg);
+}
+
+#quick-kartei-metadaten {
+	-webkit-mask-image: url(../img/quick-metadaten.svg);
+	mask-image: url(../img/quick-metadaten.svg);
+}
+
+#quick-kartei-anhaenge {
+	-webkit-mask-image: url(../img/quick-anhaenge.svg);
+	mask-image: url(../img/quick-anhaenge.svg);
+}
+
+#quick-kartei-notizen {
+	-webkit-mask-image: url(../img/quick-notizen.svg);
+	mask-image: url(../img/quick-notizen.svg);
+}
+
+#quick-kartei-suche {
+	-webkit-mask-image: url(../img/quick-suche.svg);
+	mask-image: url(../img/quick-suche.svg);
+}
+
+#quick-kartei-schliessen {
+	-webkit-mask-image: url(../img/quick-schliessen.svg);
+	mask-image: url(../img/quick-schliessen.svg);
+}
+
+#quick-belege-hinzufuegen {
+	-webkit-mask-image: url(../img/quick-hinzufuegen.svg);
+	mask-image: url(../img/quick-hinzufuegen.svg);
+}
+
+#quick-belege-auflisten {
+	-webkit-mask-image: url(../img/quick-auflisten.svg);
+	mask-image: url(../img/quick-auflisten.svg);
+}
+
+#quick-belege-sortieren {
+	-webkit-mask-image: url(../img/quick-sortieren.svg);
+	mask-image: url(../img/quick-sortieren.svg);
+}
+
 /* KOPF ALLGEMEIN */
 body > header {
 	position: fixed;
@@ -10,6 +93,10 @@ body > header {
 	width: calc(100% - 20px);
 	height: 60px;
 	background-color: var(--farbe);
+}
+
+body > header.quick {
+	top: 29px;
 }
 
 body > header h1,

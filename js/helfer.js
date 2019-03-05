@@ -1,6 +1,56 @@
 "use strict";
 
 let helfer = {
+	// Klicks in der der Quick-Access-Bar verteilen
+	//   a = Element
+	//     (Link in der Quick-Access-Bar);
+	quickAccess (a) {
+		a.addEventListener("click", function(evt) {
+			evt.preventDefault();
+			let id = this.id.replace(/^quick-/, "");
+			if (id === "programm-einstellungen") {
+				optionen.oeffnen();
+				return;
+			} else if (id === "programm-beenden") {
+				const {remote} = require("electron");
+				let win = remote.getCurrentWindow();
+				win.close();
+				return;
+			} else if (id === "kartei-erstellen") {
+				kartei.wortErfragen();
+				return;
+			} else if (id === "kartei-oeffnen") {
+				kartei.oeffnen();
+				return;
+			}
+			// Ist eine Kartei geöffnet?
+			if (!kartei.wort) {
+				dialog.oeffnen("alert", null);
+				dialog.text(`Die Funktion <i>${this.title}</i> steht nur zur Verfügung, wenn eine Kartei offen ist.`);
+				return;
+			}
+			// diese Funktionen stehen nur bei einer geöffneten Kartei zur Verfügung
+			if (id === "kartei-speichern") {
+				kartei.speichern(false);
+			} else if (id === "kartei-metadaten") {
+				meta.oeffnen();
+			} else if (id === "kartei-anhaenge") {
+				// TODO
+			} else if (id === "kartei-notizen") {
+				notizen.oeffnen();
+			} else if (id === "kartei-suche") {
+				// TODO
+			} else if (id === "kartei-schliessen") {
+				kartei.schliessen();
+			} else if (id === "belege-hinzufuegen") {
+				beleg.erstellenPre();
+			} else if (id === "belege-auflisten") {
+				liste.anzeigen();
+			} else if (id === "belege-sortieren") {
+				// TODO
+			}
+		});
+	},
 	// übergebene Sektion einblenden, alle andere Sektionen ausblenden
 	//   sektion = String
 	//     (ID der einzublendenden Sektion)
@@ -99,11 +149,10 @@ let helfer = {
 		}
 		return text;
 	},
-	// Strings für alphanumerische Sortierung aufbereiten (Cache)
-	sortAlphaPrepCache: {},
 	// Strings für alphanumerische Sortierung aufbereiten
 	//   s = String
 	//     (String, der aufbereitet werden soll)
+	sortAlphaPrepCache: {},
 	sortAlphaPrep (s) {
 		if (helfer.sortAlphaPrepCache[s]) {
 			return helfer.sortAlphaPrepCache[s];
