@@ -98,8 +98,25 @@ let liste = {
 				// <div> für Belegkopf einhängen
 				liste.belegschnittUmschalten(div);
 				cont.appendChild(div);
+				// <div> für die Detail-Ansicht erzeugen
+				div = document.createElement("div");
+				div.classList.add("liste-details");
+				if (!optionen.data.belegliste.belegschnitte) {
+					div.classList.add("aus");
+				}
+				cont.appendChild(div);
 				// Belegschnitt
-				cont.appendChild( liste.belegschnittErstellen(data.k[id].bs) );
+				div.appendChild( liste.belegschnittErstellen(data.k[id].bs) );
+				// Bedeutung
+				liste.bedeutungErstellen(data.k[id].bd, div);
+				// Quellenangabe
+				div.appendChild( liste.quelleErstellen(data.k[id].qu) );
+				// Textsorte
+				liste.textsorteErstellen(data.k[id].ts, div);
+				// Notizen
+				liste.notizenErstellen(data.k[id].no, div);
+				// Meta-Infos
+				liste.metainfosErstellen(data.k[id], div);
 			}
 			// Jahrzehnt hoch- bzw. runterzählen
 			if (optionen.data.belegliste.sort_aufwaerts) {
@@ -307,18 +324,15 @@ let liste = {
 	//   belegschnitt = String
 	//     (der Volltext des Belegschnitts)
 	belegschnittErstellen (belegschnitt) {
-		// <div> erzeugen
+		// <div> für Belegschnitt
 		let div = document.createElement("div");
-		div.classList.add("liste-schnitt");
-		if (!optionen.data.belegliste.belegschnitte) {
-			div.classList.add("aus");
-		}
+		div.classList.add("liste-bs");
 		// Absätze erzeugen
-		let schnitt_prep = belegschnitt.replace(/\n(\s+)*\n/g, "\n"), // Leerzeilen löschen
-			schnitt_p = schnitt_prep.split("\n");
-		for (let i = 0, len = schnitt_p.length; i < len; i++) {
+		let prep = belegschnitt.replace(/\n(\s+)*\n/g, "\n"), // Leerzeilen löschen
+			p_prep = prep.split("\n");
+		for (let i = 0, len = p_prep.length; i < len; i++) {
 			let p = document.createElement("p");
-			p.innerHTML = liste.belegschnittWortHervorheben(schnitt_p[i]);
+			p.innerHTML = liste.belegschnittWortHervorheben(p_prep[i]);
 			div.appendChild(p);
 		}
 		// <div> zurückgeben
@@ -341,11 +355,17 @@ let liste = {
 		// ggf. Autor angeben
 		let frag = document.createDocumentFragment();
 		if (beleg_akt.au) {
-			let span = document.createElement("span");
-			span.title = beleg_akt.au;
-			span.textContent = `${beleg_akt.au.split(",")[0]}: `;
-			liste.detailAnzeigen(span);
-			frag.appendChild(span);
+			let autor = beleg_akt.au.split(/,(.+)/),
+				autor_span = document.createElement("span");
+			frag.appendChild(autor_span);
+			autor_span.textContent = autor[0];
+			if (autor.length > 1) {
+				let span = document.createElement("span");
+				span.classList.add("liste-autor-detail");
+				span.textContent = `,${autor[1]}`;
+				autor_span.appendChild(span);
+			}
+			autor_span.appendChild( document.createTextNode(": ") );
 		}
 		// Textschnitt in Anführungsstriche
 		let q = document.createElement("q");
@@ -382,6 +402,198 @@ let liste = {
 			}
 		});
 	},
+	// erstellt die Anzeige der Bedeutung unterhalb des Belegschnitts
+	//   belegschnitt = String
+	//     (der Volltext der Bedeutung)
+	//   cont = Element
+	//     (das ist der aktuelle Detailblock)
+	bedeutungErstellen (bedeutung, cont) {
+		// eine Bedeutung kann fehlen
+		if (!bedeutung) {
+			return;
+		}
+		// <div> für Bedeutung wird erstellt
+		let div = document.createElement("div"),
+			span = document.createElement("span"),
+			p = document.createElement("p");
+		div.classList.add("liste-bd", "liste-label");
+		span.classList.add("liste-label");
+		span.textContent = "Bedeutung";
+		div.appendChild(span);
+		p.textContent = bedeutung;
+		div.appendChild(p);
+		cont.appendChild(div);
+	},
+	// erstellt den Absatz mit der Quellenangabe
+	//   quelle = String
+	//     (Text des Formularfelds Quelle)
+	quelleErstellen (quelle) {
+		// <div> für Quelle
+		let div = document.createElement("div");
+		div.classList.add("liste-qu", "liste-label");
+		// Label erstellen
+		let span = document.createElement("span");
+		span.classList.add("liste-label");
+		span.textContent = "Quelle";
+		div.appendChild(span);
+		// Absätze erzeugen
+		let prep = quelle.replace(/\n(\s+)*\n/g, "\n"), // Leerzeilen löschen
+			p_prep = prep.split("\n");
+		for (let i = 0, len = p_prep.length; i < len; i++) {
+			// Text aufbereiten
+			let text = liste.linksErkennen(p_prep[i]);
+			// neuen Absatz erzeugen
+			let p = document.createElement("p");
+			p.innerHTML = text;
+			div.appendChild(p);
+		}
+		// Klick-Events an alles Links hängen
+		let links = div.querySelectorAll(".link");
+		for (let i = 0, len = links.length; i < len; i++) {
+			liste.linksOeffnen(links[i]);
+		}
+		// <div> zurückgeben
+		return div;
+	},
+	// erstellt die Anzeige der Textsorte unterhalb der Quellenangabe
+	//   textsorte = String
+	//     (der Volltext der Textsorte)
+	//   cont = Element
+	//     (das ist der aktuelle Detailblock)
+	textsorteErstellen (textsorte, cont) {
+		// eine Textsorte kann fehlen
+		if (!textsorte) {
+			return;
+		}
+		// <div> für Textsorte wird erstellt
+		let div = document.createElement("div"),
+			span = document.createElement("span"),
+			p = document.createElement("p");
+		div.classList.add("liste-ts", "liste-label");
+		span.classList.add("liste-label");
+		span.textContent = "Textsorte";
+		div.appendChild(span);
+		p.textContent = textsorte;
+		div.appendChild(p);
+		cont.appendChild(div);
+	},
+	// erstellt die Anzeige der Notizen unterhalb der Quelle
+	//   notizen = String
+	//     (der Volltext der Notizen)
+	//   cont = Element
+	//     (das ist der aktuelle Detailblock)
+	notizenErstellen (notizen, cont) {
+		// Notizen können fehlen
+		if (!notizen) {
+			return;
+		}
+		// <div> für Notizen erzeugen und einhängen
+		let div = document.createElement("div");
+		div.classList.add("liste-no", "liste-label");
+		cont.appendChild(div);
+		// Label erstellen
+		let span = document.createElement("span");
+		span.classList.add("liste-label");
+		span.textContent = "Notizen";
+		div.appendChild(span);
+		// Absätze erzeugen
+		let prep = notizen.replace(/\n(\s+)*\n/g, "\n"), // Leerzeilen löschen
+			p_prep = prep.split("\n");
+		for (let i = 0, len = p_prep.length; i < len; i++) {
+			// Text aufbereiten
+			let text = liste.linksErkennen(p_prep[i]);
+			// neuen Absatz erzeugen
+			let p = document.createElement("p");
+			p.innerHTML = text;
+			div.appendChild(p);
+		}
+	},
+	// Leiste mit Meta-Informationen zu der Karte erstellen
+	//   beleg = Object
+	//     (Datenobjekt mit allen Werte der Karte, die dargestellt werden soll)
+	//   cont = Element
+	//     (das ist der aktuelle Detailblock)
+	metainfosErstellen (beleg, cont) {
+		// Gibt es überhaupt Meta-Infos, die angezegit werden müssen
+		if (!beleg.un && !beleg.ko && !beleg.bu && !beleg.be) {
+			return;
+		}
+		// es gibt also Infos
+		let div = document.createElement("div");
+		div.classList.add("liste-meta");
+		cont.appendChild(div);
+		// Karte unvollständig?
+		if (beleg.un) {
+			let img = document.createElement("img");
+			img.src = "img/liste-unvollstaendig.svg";
+			img.width = "24";
+			img.height = "24";
+			img.title = "unvollständig";
+			div.appendChild(img);
+		}
+		// Kontext unklar?
+		if (beleg.ko) {
+			let img = document.createElement("img");
+			img.src = "img/liste-kontext.svg";
+			img.width = "24";
+			img.height = "24";
+			img.title = "Kontext?";
+			div.appendChild(img);
+		}
+		// Bücherdienstauftrag?
+		if (beleg.bu) {
+			let img = document.createElement("img");
+			img.src = "img/liste-buecherdienst.svg";
+			img.width = "24";
+			img.height = "24";
+			img.title = "Bücherdienst";
+			div.appendChild(img);
+		}
+		// Bewertung?
+		if (beleg.be) {
+			let cont_span = document.createElement("span");
+			cont_span.title = "Bewertung";
+			div.appendChild(cont_span);
+			for (let i = 0; i < beleg.be; i++) {
+				let span = document.createElement("span");
+				span.classList.add("liste-stern", "icon-stern");
+				span.textContent = " ";
+				cont_span.appendChild(span);
+			}
+		}
+	},
+	// Text-Links erkennen und in echte HTML-Links umwandeln
+	//   text = String
+	//     (Plain-Text, in dem die Links umgewandelt werden sollen)
+	linksErkennen (text) {
+		text = text.replace(/http(s)*:[^\s]+|www\.[^\s]+/g, function(m) {
+			let reg = /[.:,;!?)\]}]+$/g,
+				url = m.replace(reg, ""),
+				basis = m.match(/(https*:\/\/)*([^\/]+)/)[2].replace(reg, ""),
+				schluss = "";
+			if ( m.match(reg) ) {
+				schluss = m.replace(/.+?([.:,;!?)\]}]+)$/g, function(m, p) {
+					return p;
+				});
+			}
+			return `<a href="#" title="${url}" class="link">${basis}</a>${schluss}`;
+		});
+		return text;
+	},
+	// Links in einem externen Browser-Fenster öffnen
+	linksOeffnen (link) {
+		link.addEventListener("click", function(evt) {
+			evt.preventDefault();
+			// URL ermitteln und ggf. aufbereiten
+			let url = this.title;
+			if ( !url.match(/^http/) ) {
+				url = `https://${url}`;
+			}
+			// URL im Browser öffnen
+			const {shell} = require("electron");
+			shell.openExternal(url);
+		});
+	},
 	// Klick-Event zum Öffnen des Karteikarten-Formulars
 	//   a = Element
 	//     (Icon-Link, über den das Formular geöffnet werden kann)
@@ -392,9 +604,9 @@ let liste = {
 			beleg.oeffnen( parseInt(this.parentNode.dataset.id, 10) );
 		});
 	},
-	// genaue Datumsangabe auf Klick anzeigen
+	// Detail auf Klick anzeigen (wird derzeit nur für das Datum benutzt)
 	//   span = Element
-	//     (<span>, in dem das Datum steht)
+	//     (<span>, in dem das Detail steht)
 	detailAnzeigen (span) {
 		span.addEventListener("click", function(evt) {
 			evt.stopPropagation();
@@ -510,7 +722,7 @@ let liste = {
 		// Link im Header anpassen
 		liste.headerBelegschnitteAnzeige();
 		// Anzeige der Belegschnitte anpassen
-		let belegschnitte = document.querySelectorAll("#liste-belege-cont .liste-schnitt");
+		let belegschnitte = document.querySelectorAll("#liste-belege-cont .liste-details");
 		for (let i = 0, len = belegschnitte.length; i < len; i++) {
 			let kopf = belegschnitte[i].previousSibling;
 			if (optionen.data.belegliste.belegschnitte) {

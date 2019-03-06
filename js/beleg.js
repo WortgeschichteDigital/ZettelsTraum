@@ -254,10 +254,15 @@ let beleg = {
 	},
 	// Beleg auf Enter speichern (wenn Fokus in Textfeld oder auf Checkbox)
 	//   input = Element
-	//     (Element, auf dem das Event ausgeführt wird)
+	//     (Element, auf dem das Event ausgeführt wird:
+	//     <input type="text">, <input type="checkbox">, <textarea>)
 	belegSpeichern (input) {
 		input.addEventListener("keydown", function(evt) {
-			if (evt.which === 13) {
+			// auf Enter speichern
+			//   - Text-Input und Checkboxes: hier reicht Enter
+			//   - mit Strg + Enter geht der Befehl auch in Textareas
+			if (evt.which === 13 &&
+					(this.type.match(/^checkbox$|^text$/) || evt.ctrlKey)) {
 				evt.preventDefault();
 				helfer.inputBlur();
 				beleg.aktionSpeichern();

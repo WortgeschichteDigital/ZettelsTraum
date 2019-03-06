@@ -196,8 +196,16 @@
 	cursor: pointer;
 }
 
+#liste-belege-cont .liste-autor-detail {
+	display: none;
+}
+
 .liste-kopf.schnitt-offen {
 	text-overflow: clip;
+}
+
+#liste-belege-cont .liste-kopf.schnitt-offen .liste-autor-detail {
+	display: inline-block;
 }
 
 .liste-kopf.schnitt-offen q {
@@ -206,7 +214,7 @@
 
 .liste-bearbeiten {
 	margin-right: 15px;
-	background-color: var(--textSehrHell);
+	background-color: var(--textExtremHell);
 }
 
 .liste-bearbeiten:hover {
@@ -225,7 +233,7 @@
 	color: var(--textWarnung);
 }
 
-.liste-schnitt {
+.liste-details {
 	border-left: 3px solid var(--farbeB);
 	padding: 10px 10px 10px 49px;
 	height: auto;
@@ -233,12 +241,86 @@
 	user-select: text;
 }
 
-.liste-schnitt p {
+.liste-details > div {
+	margin-bottom: 10px;
+}
+
+.liste-details > div.liste-bs {
+	margin-bottom: 20px;
+}
+
+.liste-details > div:last-child {
+	margin-bottom: 0;
+}
+
+.liste-details p {
 	max-width: 600px;
 }
 
-.liste-schnitt p:last-child {
+.liste-details p:last-child {
 	margin-bottom: 0;
+}
+
+div.liste-label {
+	position: relative;
+	border-top: 1px dotted var(--linie);
+	padding: 10px 10px 0 10px;
+	max-width: 580px;
+}
+
+span.liste-label {
+	position: absolute;
+	top: -11px;
+	right: 10px;
+	padding: 0 5px;
+	background-color: #fff;
+	color: var(--textFarbe);
+	font-size: 12px;
+	line-height: 16px;
+	user-select: none;
+}
+
+.liste-bd p,
+.liste-qu p,
+.liste-ts p,
+.liste-no p {
+	margin-bottom: 5px;
+	font-size: 14px;
+	line-height: 20px;
+}
+
+.liste-meta {
+	border-radius: 3px;
+	padding: 2px 10px;
+	width: fit-content;
+	height: 24px;
+	background-color: var(--hintergrund);
+	user-select: none;
+}
+
+.liste-meta img {
+	margin-right: 5px;
+}
+
+.liste-meta img:last-child {
+	margin-right: 0;
+}
+
+.liste-meta > span {
+	display: inline-block;
+	margin-left: 20px;
+	overflow: hidden;
+}
+
+.liste-meta > span:first-child {
+	margin-left: 0;
+}
+
+.liste-stern {
+	display: inline-block;
+	width: 24px;
+	height: 24px;
+	background-color: var(--farbeStern);
 }
 
 .liste-zeitschnitt,
@@ -254,5 +336,5 @@
 
 .liste-keine-belege,
 .liste-kartei-leer {
-	color: var(--textHell);
+	color: var(--textSehrHell);
 }

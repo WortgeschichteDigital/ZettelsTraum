@@ -34,6 +34,7 @@
 			><a href="#" id="quick-kartei-erstellen" class="icon-link" title="Kartei: Erstellen"> </a
 			><a href="#" id="quick-kartei-oeffnen" class="icon-link" title="Kartei: Öffnen"> </a
 			><a href="#" id="quick-kartei-speichern" class="icon-link" title="Kartei: Speichern"> </a
+			><a href="#" id="quick-kartei-speichern-unter" class="icon-link" title="Kartei: Speichern unter"> </a
 			><a href="#" id="quick-kartei-metadaten" class="icon-link" title="Kartei: Metadaten"> </a
 			><a href="#" id="quick-kartei-anhaenge" class="icon-link" title="Kartei: Anhänge"> </a
 			><a href="#" id="quick-kartei-notizen" class="icon-link" title="Kartei: Notizen"> </a
@@ -68,8 +69,7 @@
 					<td colspan="2"><input type="button" value="Speichern" id="beleg-speichern" tabindex="0"
 						><input type="button" value="Abbrechen" id="beleg-abbrechen" tabindex="0"
 						><input type="button" value="Löschen" id="beleg-loeschen" tabindex="0"></td>
-				</tr>
-				<tr>
+				</tr><tr>
 					<td colspan="2" class="check"><div>
 						<p><input type="checkbox" id="beleg-un" tabindex="0"
 							><label for="beleg-un">unvollständig</label></p>
@@ -83,8 +83,7 @@
 							><a href="#" class="icon-link icon-stern"> </a
 							><a href="#" class="icon-link icon-stern"> </a></p>
 					</div></td>
-				</tr>
-				<tr>
+				</tr><tr>
 					<th><label for="beleg-da">Datum</label
 						><span class="text-tools"
 							><a href="#" class="icon-link icon-tools-kopieren" title="Text kopieren" tabindex="-1"> </a
@@ -93,21 +92,17 @@
 						><span class="text-tools"
 							><a href="#" class="icon-link icon-tools-kopieren" title="Text kopieren" tabindex="-1"> </a
 							><a href="#" class="icon-link icon-tools-einfuegen" title="Text einfügen" tabindex="-1"> </a></span></th>
-				</tr>
-				<tr>
+				</tr><tr>
 					<td><input type="text" value="" spellcheck="false" id="beleg-da" tabindex="0"></td>
 					<td><input type="text" value="" spellcheck="false" id="beleg-au" tabindex="0"></td>
-				</tr>
-				<tr>
+				</tr><tr>
 					<th colspan="2"><label for="beleg-bs">Belegschnitt</label
 						><span class="text-tools"
 							><a href="#" class="icon-link icon-tools-kopieren" title="Text kopieren" tabindex="-1"> </a
 							><a href="#" class="icon-link icon-tools-einfuegen" title="Text einfügen" tabindex="-1"> </a></span></th>
-				</tr>
-				<tr>
+				</tr><tr>
 					<td colspan="2"><textarea spellcheck="false" id="beleg-bs"></textarea></td>
-				</tr>
-				<tr>
+				</tr><tr>
 					<th><label for="beleg-bd">Bedeutung</label
 						><span class="text-tools"
 							><a href="#" class="icon-link icon-tools-kopieren" title="Text kopieren" tabindex="-1"> </a
@@ -116,29 +111,26 @@
 						><span class="text-tools"
 							><a href="#" class="icon-link icon-tools-kopieren" title="Text kopieren" tabindex="-1"> </a
 							><a href="#" class="icon-link icon-tools-einfuegen" title="Text einfügen" tabindex="-1"> </a></span></th>
-				</tr>
-				<tr>
+				</tr><tr>
 					<td><input type="text" value="" spellcheck="false" id="beleg-bd" tabindex="0"></td>
 					<td><input type="text" value="" spellcheck="false" id="beleg-ts" tabindex="0"></td>
-				</tr>
-				<tr>
-					<th><label for="beleg-qu">Quelle</label
+				</tr><tr>
+					<th colspan="2"><label for="beleg-qu">Quelle</label
 						><span class="text-tools"
 							><a href="#" class="icon-link icon-tools-kopieren" title="Text kopieren" tabindex="-1"> </a
 							><a href="#" class="icon-link icon-tools-einfuegen" title="Text einfügen" tabindex="-1"> </a></span></th>
-					<th><label for="beleg-no">Notizen</label
+				</tr><tr>
+					<td colspan="2"><textarea spellcheck="false" id="beleg-qu"></textarea></td>
+				</tr><tr>
+					<th colspan="2"><label for="beleg-no">Notizen</label
 						><span class="text-tools"
 							><a href="#" class="icon-link icon-tools-kopieren" title="Text kopieren" tabindex="-1"> </a
 							><a href="#" class="icon-link icon-tools-einfuegen" title="Text einfügen" tabindex="-1"> </a></span></th>
-				</tr>
-				<tr>
-					<td><textarea spellcheck="false" id="beleg-qu"></textarea></td>
-					<td><textarea spellcheck="false" id="beleg-no"></textarea></td>
-				</tr>
-				<tr>
+				</tr><tr>
+					<td colspan="2"><textarea spellcheck="false" id="beleg-no"></textarea></td>
+				</tr><tr>
 					<th colspan="2">Anhänge</th>
-				</tr>
-				<tr>
+				</tr><tr>
 					<td colspan="2">[Liste der Anhänge]</td>
 				</tr>
 			</table>
@@ -173,7 +165,7 @@
 			<h2><span class="icon-h icon-h-einstellungen"> </span>Einstellungen<a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen"> </a></h2>
 			<div id="einstellungen-cont">
 				<p class="input-text"><input type="text" value="" spellcheck="false" id="einstellung-bearbeiterin"
-					><label for="einstellung-bearbeiterin">BearbeiterIn</label>
+					><label for="einstellung-bearbeiterin">BearbeiterIn auf diesem Rechner</label>
 				<p><input type="checkbox" id="einstellung-autoHideMenuBar"
 					><label for="einstellung-autoHideMenuBar">Menüleiste des Programms erst einblenden, wenn die Alt-Taste gedrückt wird <span class="einstellung-neustart">(Neustart erforderlich)</span></label></p>
 				<p><input type="checkbox" id="einstellung-quick"
@@ -191,6 +183,8 @@
 						><label for="einstellung-quick-kartei-oeffnen">Öffnen</label></p>
 					<p><input type="checkbox" id="einstellung-quick-kartei-speichern"
 						><label for="einstellung-quick-kartei-speichern">Speichern</label></p>
+					<p><input type="checkbox" id="einstellung-quick-kartei-speichern-unter"
+						><label for="einstellung-quick-kartei-speichern-unter">Speichern unter</label></p>
 					<p><input type="checkbox" id="einstellung-quick-kartei-metadaten"
 						><label for="einstellung-quick-kartei-metadaten">Metadaten</label></p>
 					<p><input type="checkbox" id="einstellung-quick-kartei-anhaenge"
@@ -272,5 +266,8 @@
 					><input type="button" value="Nein" id="dialog-nein-button"></p>
 			</div>
 		</div></div>
+		
+		<!-- OVERLAY: PROGRAMMSTART -->
+		<div id="programmstart"> </div>
 	</body>
 </html>

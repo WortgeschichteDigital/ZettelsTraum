@@ -50,9 +50,7 @@ window.addEventListener("load", function() {
 			beleg.aktionButton(beleg_inputs[i]);
 		} else {
 			beleg.formularGeaendert(beleg_inputs[i]);
-			if ( beleg_inputs[i].type.match(/^checkbox$|^text$/) ) {
-				beleg.belegSpeichern(beleg_inputs[i]);
-			}
+			beleg.belegSpeichern(beleg_inputs[i]);
 		}
 	}
 	let beleg_links = document.querySelectorAll("#beleg .icon-link");
@@ -151,8 +149,10 @@ window.addEventListener("load", function() {
 	}
 	
 	// Start-Sektion initialisieren
-	// Obacht! Erst aufrunfen, nachdem die Optionen geladen wurden!
+	// Obacht! Erst aufrufen, nachdem die Optionen geladen wurden!
 	start.zuletzt();
+	// Programmstart-Overlay ausblenden
+	start.overlayAus();
 });
 
 // Schließen unterbrechen, falls Daten noch nicht gespeichert wurden

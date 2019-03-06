@@ -37,6 +37,7 @@ let optionen = {
 			"quick-kartei-erstellen": false,
 			"quick-kartei-oeffnen": false,
 			"quick-kartei-speichern": false,
+			"quick-kartei-speichern-unter": false,
 			"quick-kartei-metadaten": false,
 			"quick-kartei-anhaenge": false,
 			"quick-kartei-notizen": false,

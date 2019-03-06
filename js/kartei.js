@@ -163,6 +163,13 @@ let kartei = {
 		});
 		// Speicher-Funktion
 		function speichern (pfad) {
+			// ggf. BearbeiterIn hinzufügen
+			let bearb = optionen.data.einstellungen.bearbeiterin,
+				bearb_ergaenzt = false;
+			if (bearb && data.e.indexOf(bearb) === -1) {
+				data.e.push(bearb);
+				bearb_ergaenzt = true;
+			}
 			// einige Werte müssen vor dem Speichern angepasst werden
 			let dm_alt = data.dm,
 				r_alt = data.r;
@@ -174,6 +181,9 @@ let kartei = {
 				if (err) {
 					kartei.dialogWrapper(`Beim Speichern der Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n${err.message}`);
 					// passiert ein Fehler, müssen manche Werte zurückgesetzt werden
+					if (bearb_ergaenzt) {
+						data.e.splice(data.e.indexOf(bearb), 1);
+					}
 					data.dm = dm_alt;
 					data.r = r_alt;
 					return;

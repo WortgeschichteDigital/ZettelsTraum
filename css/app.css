@@ -4,8 +4,9 @@
 :root {
 	/* Textfarben */
 	--text: #212121;
-	--textHell: #bebebe;
-	--textSehrHell: #e5e5e5;
+	--textHell: #9e9e9e;
+	--textSehrHell: #bebebe;
+	--textExtremHell: #e5e5e5;
 	--textFarbe: #32af79;
 	--textWarnung: #d00;
 	/* Hintergrund-Farben */
@@ -241,7 +242,7 @@ textarea:focus {
 
 ::placeholder {
 	opacity: 1;
-  color: var(--textHell);
+  color: var(--textSehrHell);
 }
 
 ::selection {

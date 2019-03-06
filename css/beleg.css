@@ -113,7 +113,7 @@ textarea#beleg-bs {
 
 .text-tools a {
 	display: inline-block;
-	background-color: var(--textSehrHell);
+	background-color: var(--textExtremHell);
 }
 
 .text-tools a:hover {

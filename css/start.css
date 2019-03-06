@@ -65,3 +65,19 @@
 	margin-left: 15px;
 	font-size: 12px;
 }
+
+/* PROGRAMMSTART */
+#programmstart {
+	background-color: #fff;
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 1;
+	width: 100%;
+	height: 100%;
+	transition: opacity .5s ease-out;
+}
+
+#programmstart.gestartet {
+	opacity: 0;
+}

@@ -32,6 +32,8 @@ let helfer = {
 			// diese Funktionen stehen nur bei einer geöffneten Kartei zur Verfügung
 			if (id === "kartei-speichern") {
 				kartei.speichern(false);
+			} else if (id === "kartei-speichern-unter") {
+				kartei.speichern(true);
 			} else if (id === "kartei-metadaten") {
 				meta.oeffnen();
 			} else if (id === "kartei-anhaenge") {

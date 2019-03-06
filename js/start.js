@@ -42,4 +42,14 @@ let start = {
 			kartei.oeffnenEinlesen(this.dataset.datei);
 		});
 	},
+	// das Programmstart-Overlay ausblenden
+	// (dadurch bekomme wird die Unruhe verborgen, die das Einblenden
+	// der Quick-Access-Bar erzeugt)
+	overlayAus () {
+		setTimeout(function() {
+			let ps = document.getElementById("programmstart");
+			ps.classList.add("gestartet");
+			setTimeout( () => ps.classList.add("aus"), 500);
+		}, 250);
+	},
 };

@@ -145,7 +145,7 @@
 }
 
 #meta-cont .kein-wert {
-	color: var(--textHell);
+	color: var(--textSehrHell);
 	font-style: italic;
 }
 
@@ -165,7 +165,7 @@
 	top: -1px;
 	margin-right: 10px;
 	vertical-align: bottom;
-	background-color: var(--textSehrHell);
+	background-color: var(--textExtremHell);
 }
 
 #meta-e-liste .icon-link:hover {

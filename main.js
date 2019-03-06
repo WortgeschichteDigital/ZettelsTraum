@@ -76,6 +76,7 @@ let layoutMenu = [
 			},
 			{
 				label: "Speichern unter",
+				icon: path.join(__dirname, "img", "menu", "kartei-speichern-unter.png"),
 				click: () => win.webContents.send("kartei-speichern-unter"),
 				accelerator: "CommandOrControl+Shift+S",
 				id: "kartei-speichern-unter",
@@ -388,7 +389,7 @@ appMenu = {
 			buttons: ["Alles klar!"],
 			defaultId: 0,
 			title: "Über Electron",
-			message: `Framework-Software von „${app.getName()}“, Version ${app.getVersion()}:\n\nNode.js:\t\t${process.versions.node}\nChromium:\t\t${process.versions.chrome}\nElectron:\t\t${process.versions.electron}`,
+			message: `Framework-Software von „${app.getName()}“, Version ${app.getVersion()}:\n\nElectron:\t\t${process.versions.electron}\nNode:\t\t\t${process.versions.node}\nChromium:\t\t${process.versions.chrome}\nv8:\t\t\t\t${process.versions.v8}`,
 		});
 	},
 };

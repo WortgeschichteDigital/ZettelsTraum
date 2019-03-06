@@ -43,6 +43,11 @@
 	mask-image: url(../img/quick-speichern.svg);
 }
 
+#quick-kartei-speichern-unter {
+	-webkit-mask-image: url(../img/quick-speichern-unter.svg);
+	mask-image: url(../img/quick-speichern-unter.svg);
+}
+
 #quick-kartei-metadaten {
 	-webkit-mask-image: url(../img/quick-metadaten.svg);
 	mask-image: url(../img/quick-metadaten.svg);
