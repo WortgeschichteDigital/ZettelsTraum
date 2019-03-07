@@ -41,7 +41,7 @@ let beleg = {
 			da: "", // Belegdatum
 			ts: "", // Textsorte
 			au: "", // Autor
-			bs: "", // Belegschnitt
+			bs: "", // Beleg
 			bd: "", // Bedeutung
 			qu: "", // Quelle
 			ko: false, // Kontext
@@ -146,16 +146,16 @@ let beleg = {
 			return;
 		}
 		// Test: Datum mit vierstelliger Jahreszahl oder Jahrhundertangabe?
-		if ( !dav.match(/[0-9]{4}|[0-9]{2}\. (Jahrhundert|Jh\.)/) ) {
+		if ( !dav.match(/[0-9]{4}|[0-9]{2}\.\sJh\./) ) {
 			dialog.oeffnen("alert", () => da.select() );
 			dialog.text("Das Datum muss eine vierstellige Jahreszahl (z. B. „1813“) oder eine Jahrhundertangabe (z. B. „17. Jh.“) enthalten.\nZusätzlich können auch andere Angaben gemacht werden (z. B. „ca. 1815“, „1610, vielleicht 1611“).");
 			return;
 		}
-		// Test: Belegschnitt angegeben?
+		// Test: Beleg angegeben?
 		let bs = document.getElementById("beleg-bs");
 		if ( !helfer.textTrim(bs.value, true) ) {
 			dialog.oeffnen("alert", () => bs.select() );
-			dialog.text("Sie müssen einen Belegschnitt angeben.");
+			dialog.text("Sie müssen einen Beleg eingeben.");
 			return;
 		}
 		// Test: Quelle angegeben?
@@ -236,7 +236,7 @@ let beleg = {
 		// Änderungsmarkierung für Kartei setzen
 		kartei.karteiGeaendert(true);
 		// Belegliste aufbauen und einblenden
-		liste.aufbauen(true);
+		liste.status(true);
 		liste.wechseln();
 	},
 	// Beleg wurde geändert und noch nicht gespeichert
@@ -334,7 +334,7 @@ let beleg = {
 		helfer.textareaGrow(feld);
 		beleg.belegGeaendert(true);
 	},
-	// Bereitet HTML-Text zum Einfügen in das Belegschnitt-Formular auf
+	// Bereitet HTML-Text zum Einfügen in das Beleg-Formular auf
 	//   html = String
 	//     (Text mit HTML-Tags, der aufbereitet und dann eingefügt werden soll)
 	toolsEinfuegenHtml (html) {

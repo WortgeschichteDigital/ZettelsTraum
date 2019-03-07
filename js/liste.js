@@ -23,6 +23,37 @@ let liste = {
 		document.getElementById("liste").classList.add("preload");
 		helfer.sektionWechseln("liste");
 	},
+	// speichert den Status der aktuellen Belegliste, d.h. ob die Karten auf oder zugeklappt sind
+	//   filter_init = Boolean
+	//     (speichert, ob die Filterliste initialisiert werden sollen)
+	status (filter_init) {
+		// Klapp-Status ermitteln
+		let offen = {},
+			koepfe_vor = document.querySelectorAll(".liste-kopf");
+		for (let i = 0, len = koepfe_vor.length; i < len; i++) {
+			let id = koepfe_vor[i].dataset.id;
+			if ( koepfe_vor[i].classList.contains("schnitt-offen") ) {
+				offen[id] = true;
+			} else {
+				offen[id] = false;
+			}
+		}
+		// Liste aufbauen
+		liste.aufbauen(filter_init);
+		// Klapp-Status wiederherstellen
+		let koepfe_nach = document.querySelectorAll(".liste-kopf");
+		for (let i = 0, len = koepfe_nach.length; i < len; i++) {
+			let id = koepfe_nach[i].dataset.id;
+			if (offen[id]) {
+				koepfe_nach[i].classList.add("schnitt-offen");
+				koepfe_nach[i].nextSibling.classList.remove("aus");
+			} else {
+				koepfe_nach[i].classList.remove("schnitt-offen");
+				koepfe_nach[i].nextSibling.classList.add("aus");
+			}
+		}
+		
+	},
 	// baut die Belegliste auf
 	//   filter_init = Boolean
 	//     (true = Filter müssen erneut initialisiert werden)
@@ -72,7 +103,7 @@ let liste = {
 				// Beleg-Kopf erstellen
 				let div = document.createElement("div");
 				div.classList.add("liste-kopf");
-				if (optionen.data.belegliste.belegschnitte) {
+				if (optionen.data.belegliste.beleg) {
 					div.classList.add("schnitt-offen");
 				}
 				div.dataset.id = id;
@@ -93,20 +124,20 @@ let liste = {
 					liste.detailAnzeigen(span);
 				}
 				div.appendChild(span);
-				// Belegschnitt-Vorschau
-				div.appendChild( liste.belegschnittVorschau(data.k[id]) );
+				// Belegvorschau
+				div.appendChild( liste.belegVorschau(data.k[id]) );
 				// <div> für Belegkopf einhängen
-				liste.belegschnittUmschalten(div);
+				liste.belegUmschalten(div);
 				cont.appendChild(div);
 				// <div> für die Detail-Ansicht erzeugen
 				div = document.createElement("div");
 				div.classList.add("liste-details");
-				if (!optionen.data.belegliste.belegschnitte) {
+				if (!optionen.data.belegliste.beleg) {
 					div.classList.add("aus");
 				}
 				cont.appendChild(div);
-				// Belegschnitt
-				div.appendChild( liste.belegschnittErstellen(data.k[id].bs) );
+				// Beleg
+				div.appendChild( liste.belegErstellen(data.k[id].bs) );
 				// Bedeutung
 				liste.bedeutungErstellen(data.k[id].bd, div);
 				// Quellenangabe
@@ -127,6 +158,8 @@ let liste = {
 		}
 		// Anzeige der Zeitschnitte anpassen
 		liste.zeitschnitteAnpassen();
+		// Anzeige der Details anpassen
+		liste.detailsAnzeigen();
 		// Anzeige, dass kein Beleg vorhanden ist, ggf. ausblenden
 		liste.zeitschnitteKeineBelege();
 	},
@@ -200,12 +233,17 @@ let liste = {
 			jahrzehnt: -1, // Jahrzehnt für die Zeitschnittanzeige
 		};
 		// Anzeigedatum und Jahr, mit dem gerechnet wird, ermitteln
-		if ( datum.match(/[0-9]{4}/) ) {
-			output.datum = datum.match(/[0-9]{4}/)[0];
-			output.jahr = output.datum;
-		} else {
-			output.datum = `${datum.match(/([0-9]{2})\./)[1]}. Jh.`;
-			output.jahr = ((parseInt(datum.match(/([0-9]{2})\./)[1], 10) - 1) * 100).toString();
+		if ( datum.match(/[0-9]{4}/) && datum.match(/[0-9]{2}\.\sJh\./) ) { // mehrere Datentypen => 1. verwenden
+			let datum_split = datum.split(/\sJh\./);
+			if ( datum_split[0].match(/[0-9]{4}/) ) {
+				datum_vierstellig(datum_split[0]);
+			} else {
+				datum_jahrhundert(datum);
+			}
+		} else if ( datum.match(/[0-9]{4}/) ) { // 1. Jahresangabe verwenden
+			datum_vierstellig(datum);
+		} else { // 1. Jarhhundert verwenden
+			datum_jahrhundert(datum);
 		}
 		// Jahrzehnt ermitteln
 		output.jahrzehnt = Math.floor(parseInt(output.jahr, 10) / 10);
@@ -213,6 +251,15 @@ let liste = {
 			output.jahrzehnt *= 10;
 		} else if (!optionen.data.belegliste.sort_aufwaerts) {
 			output.jahrzehnt = (output.jahrzehnt + 1) * 10;
+		}
+		// Datum und Jahr im Output füllen
+		function datum_vierstellig (datum) {
+			output.datum = datum.match(/[0-9]{4}/)[0];
+			output.jahr = output.datum;
+		}
+		function datum_jahrhundert (datum) {
+			output.datum = `${datum.match(/([0-9]{2})\./)[1]}. Jh.`;
+			output.jahr = ((parseInt(datum.match(/([0-9]{2})\./)[1], 10) - 1) * 100).toString();
 		}
 		// Output auswerfen
 		return output;
@@ -301,12 +348,8 @@ let liste = {
 				id = b;
 				zeiger = "b";
 			}
-			let da = data.k[id].da;
-			if ( da.match(/[0-9]{4}/) ) {
-				datum[zeiger] = parseInt(da.match(/[0-9]{4}/)[0], 10);
-			} else {
-				datum[zeiger] = (parseInt(da.match(/([0-9]{2})\./)[1], 10) - 1) * 100;
-			}
+			let da = liste.zeitschnittErmitteln(data.k[id].da);
+			datum[zeiger] = parseInt(da.jahr, 10);
 			// Jahreszahl zwischenspeichern
 			liste.belegeSortierenCache[id] = datum[zeiger];
 		}
@@ -320,19 +363,19 @@ let liste = {
 		}
 		return datum.b - datum.a;
 	},
-	// erstellt die Anzeige des Belegschnitts unterhalb des Belegkopfes
-	//   belegschnitt = String
-	//     (der Volltext des Belegschnitts)
-	belegschnittErstellen (belegschnitt) {
-		// <div> für Belegschnitt
+	// erstellt die Anzeige des Belegs unterhalb des Belegkopfes
+	//   beleg = String
+	//     (der Volltext des Belegs)
+	belegErstellen (beleg) {
+		// <div> für Beleg
 		let div = document.createElement("div");
 		div.classList.add("liste-bs");
 		// Absätze erzeugen
-		let prep = belegschnitt.replace(/\n(\s+)*\n/g, "\n"), // Leerzeilen löschen
+		let prep = beleg.replace(/\n(\s+)*\n/g, "\n"), // Leerzeilen löschen
 			p_prep = prep.split("\n");
 		for (let i = 0, len = p_prep.length; i < len; i++) {
 			let p = document.createElement("p");
-			p.innerHTML = liste.belegschnittWortHervorheben(p_prep[i]);
+			p.innerHTML = liste.belegWortHervorheben(p_prep[i]);
 			div.appendChild(p);
 		}
 		// <div> zurückgeben
@@ -341,17 +384,17 @@ let liste = {
 	// generiert den Vorschautext des übergebenen Belegs inkl. Autorname (wenn vorhanden)
 	//   beleg_akt = Object
 	//     (Verweis auf den aktuellen Beleg)
-	belegschnittVorschau (beleg_akt) {
+	belegVorschau (beleg_akt) {
 		// Zeilenumbrüche löschen
 		let schnitt = beleg_akt.bs.replace(/\n/g, "");
-		// 1. Treffer im Text ermitteln, Belegschnitt am Anfang ggf. kürzen
+		// 1. Treffer im Text ermitteln, Beleg am Anfang ggf. kürzen
 		let reg = new RegExp(helfer.escapeRegExp(kartei.wort), "gi"),
 			idx = schnitt.replace(/<.+?>/g, "").split(reg)[0].length; // HTML-Formatierungen vorher löschen!
 		if (idx > 30) {
 			schnitt = `…${schnitt.substring(idx - 20)}`;
 		}
 		// Treffer hervorheben
-		schnitt = liste.belegschnittWortHervorheben(schnitt);
+		schnitt = liste.belegWortHervorheben(schnitt);
 		// ggf. Autor angeben
 		let frag = document.createDocumentFragment();
 		if (beleg_akt.au) {
@@ -377,7 +420,7 @@ let liste = {
 	// hebt ggf. das Wort der Kartei im übergebenen Text hervor
 	//   schnitt = String
 	//     (Text, in dem der Beleg hervorgehoben werden soll)
-	belegschnittWortHervorheben (schnitt) {
+	belegWortHervorheben (schnitt) {
 		// Wort soll nicht hervorgehoben werden
 		if (!optionen.data.belegliste.wort_hervorheben) {
 			return schnitt;
@@ -386,12 +429,12 @@ let liste = {
 		schnitt = schnitt.replace(reg, (m) => `<strong>${m}</strong>`);
 		return schnitt;
 	},
-	// einen einzelnen Belegschnitt durch Klick auf den Belegkopf umschalten
+	// einen einzelnen Beleg durch Klick auf den Belegkopf umschalten
 	//   div = Element
 	//     (der Belegkopf, auf den geklickt werden kann)
-	belegschnittUmschalten (div) {
+	belegUmschalten (div) {
 		div.addEventListener("click", function() {
-			// Belegschnitt umschalten
+			// Beleg umschalten
 			let schnitt = this.nextSibling;
 			schnitt.classList.toggle("aus");
 			// Anzeige der Vorschau anpassen
@@ -402,8 +445,8 @@ let liste = {
 			}
 		});
 	},
-	// erstellt die Anzeige der Bedeutung unterhalb des Belegschnitts
-	//   belegschnitt = String
+	// erstellt die Anzeige der Bedeutung unterhalb des Belegs
+	//   bedeutung = String
 	//     (der Volltext der Bedeutung)
 	//   cont = Element
 	//     (das ist der aktuelle Detailblock)
@@ -604,6 +647,21 @@ let liste = {
 			beleg.oeffnen( parseInt(this.parentNode.dataset.id, 10) );
 		});
 	},
+	// Passt die Anzeige der Details im geöffneten Beleg an
+	detailsAnzeigen () {
+		let funktionen = ["bd", "qu", "ts", "no", "meta"];
+		for (let i = 0, len = funktionen.length; i < len; i++) {
+			let opt = `detail_${funktionen[i]}`,
+				ele = document.querySelectorAll(`.liste-${funktionen[i]}`);
+			for (let j = 0, len = ele.length; j < len; j++) {
+				if (optionen.data.belegliste[opt]) {
+					ele[j].classList.remove("aus");
+				} else {
+					ele[j].classList.add("aus");
+				}
+			}
+		}
+	},
 	// Detail auf Klick anzeigen (wird derzeit nur für das Datum benutzt)
 	//   span = Element
 	//     (<span>, in dem das Detail steht)
@@ -629,10 +687,12 @@ let liste = {
 				liste.headerSortieren();
 			} else if ( funktion.match(/^zeitschnitte/) ) {
 				liste.headerZeitschnitte(funktion);
-			} else if (funktion === "belegschnitte") {
-				liste.headerBelegschnitte();
+			} else if (funktion === "beleg") {
+				liste.headerBeleg();
 			} else if (funktion === "hervorheben") {
 				liste.headerWortHervorheben();
+			} else if ( funktion.match(/^(bd|qu|ts|no|meta)$/) ) {
+				liste.headerDetails(funktion);
 			}
 		});
 	},
@@ -669,7 +729,7 @@ let liste = {
 		// Link anpassen
 		liste.headerSortierenAnzeige();
 		// Liste neu aufbauen
-		liste.aufbauen(false);
+		liste.status(false);
 	},
 	// chronologisches Sortieren der Belege (Anzeige im Header anpassen)
 	headerSortierenAnzeige () {
@@ -714,38 +774,38 @@ let liste = {
 			}
 		}
 	},
-	// Anzeige des kompletten Belegschnitts umstellen
-	headerBelegschnitte () {
+	// Anzeige des kompletten Belegs umstellen
+	headerBeleg () {
 		// Variable umstellen
-		optionen.data.belegliste.belegschnitte = !optionen.data.belegliste.belegschnitte;
+		optionen.data.belegliste.beleg = !optionen.data.belegliste.beleg;
 		optionen.speichern();
 		// Link im Header anpassen
-		liste.headerBelegschnitteAnzeige();
-		// Anzeige der Belegschnitte anpassen
-		let belegschnitte = document.querySelectorAll("#liste-belege-cont .liste-details");
-		for (let i = 0, len = belegschnitte.length; i < len; i++) {
-			let kopf = belegschnitte[i].previousSibling;
-			if (optionen.data.belegliste.belegschnitte) {
-				belegschnitte[i].classList.remove("aus");
+		liste.headerBelegAnzeige();
+		// Anzeige der Belege anpassen
+		let beleg = document.querySelectorAll("#liste-belege-cont .liste-details");
+		for (let i = 0, len = beleg.length; i < len; i++) {
+			let kopf = beleg[i].previousSibling;
+			if (optionen.data.belegliste.beleg) {
+				beleg[i].classList.remove("aus");
 				kopf.classList.add("schnitt-offen");
 			} else {
-				belegschnitte[i].classList.add("aus");
+				beleg[i].classList.add("aus");
 				kopf.classList.remove("schnitt-offen");
 			}
 		}
 	},
-	// Anzeige des kompletten Belegschnitts umstellen (Anzeige im Header anpassen)
-	headerBelegschnitteAnzeige () {
-		let link = document.getElementById("liste-link-belegschnitte");
-		if (optionen.data.belegliste.belegschnitte) {
+	// Anzeige des kompletten Belegs umstellen (Anzeige im Header anpassen)
+	headerBelegAnzeige () {
+		let link = document.getElementById("liste-link-beleg");
+		if (optionen.data.belegliste.beleg) {
 			link.classList.add("aktiv");
-			link.title = "Komplettanzeige der Belegschnitte ausblenden";
+			link.title = "Komplettanzeige des Belegs ausblenden";
 		} else {
 			link.classList.remove("aktiv");
-			link.title = "Komplettanzeige der Belegschnitte einblenden";
+			link.title = "Komplettanzeige des Belegs einblenden";
 		}
 	},
-	// Hervorhebung des Worts im Belegschnitt und der Vorschau aus-/einschalten
+	// Hervorhebung des Worts im Beleg und der Vorschau aus-/einschalten
 	headerWortHervorheben () {
 		// Hervorhebung umstellen
 		optionen.data.belegliste.wort_hervorheben = !optionen.data.belegliste.wort_hervorheben;
@@ -753,9 +813,9 @@ let liste = {
 		// Link anpassen
 		liste.headerWortHervorhebenAnzeige();
 		// Liste neu aufbauen
-		liste.aufbauen(false);
+		liste.status(false);
 	},
-	// Hervorhebung des Worts im Belegschnitt und der Vorschau aus-/einschalten (Anzeige im Header anpassen)
+	// Hervorhebung des Worts im Beleg und der Vorschau aus-/einschalten (Anzeige im Header anpassen)
 	headerWortHervorhebenAnzeige () {
 		let link = document.getElementById("liste-link-hervorheben");
 		if (optionen.data.belegliste.wort_hervorheben) {
@@ -764,6 +824,41 @@ let liste = {
 		} else {
 			link.classList.remove("aktiv");
 			link.title = "Wort hervorheben";
+		}
+	},
+	// Steuerung der Detailanzeige ändern
+	//   funktion = String
+	//     (verweist auf den Link, der geklickt wurde)
+	headerDetails (funktion) {
+		// Einstellung umstellen und speichern
+		let opt = `detail_${funktion}`;
+		optionen.data.belegliste[opt] = !optionen.data.belegliste[opt];
+		optionen.speichern();
+		// Anzeige der Icons auffrischen
+		liste.headerDetailsAnzeige(funktion, opt);
+		// Anzeige der Details in der Liste auffrischen
+		liste.detailsAnzeigen();
+	},
+	// Links zur Steuerung der Detailanzeige visuell anpassen
+	//   funktion = String
+	//     (verweist auf den Link, der geklickt wurde)
+	//   opt = String
+	//     (Name der Option, die betroffen ist)
+	headerDetailsAnzeige (funktion, opt) {
+		let title = {
+			bd: "Bedeutung",
+			qu: "Quelle",
+			ts: "Textsorte",
+			no: "Notizen",
+			meta: "Metainfos",
+		};
+		let link = document.getElementById(`liste-link-${funktion}`);
+		if (optionen.data.belegliste[opt]) {
+			link.classList.add("aktiv");
+			link.title = `${title[funktion]} ausblenden`;
+		} else {
+			link.classList.remove("aktiv");
+			link.title = `${title[funktion]} einblenden`;
 		}
 	},
 };

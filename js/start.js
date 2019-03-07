@@ -16,7 +16,7 @@ let start = {
 		// Dateiliste aufbauen
 		for (let i = 0, len = optionen.data.zuletzt.length; i < len; i++) {
 			let datei = optionen.data.zuletzt[i],
-				name = datei.match(/([^/\\]+)\.[a-z]+$/)[1],
+				name = datei.match(/([^\/\\]+)\.[a-z]+$/)[1],
 				li = document.createElement("li");
 			li.dataset.datei = datei;
 			// Name und Link

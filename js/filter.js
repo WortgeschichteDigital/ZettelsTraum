@@ -39,7 +39,7 @@ let filter = {
 	//   input = Element
 	//     (Checkbox in der Filterliste, die geändert wurde)
 	anwenden (input) {
-		input.addEventListener("change", () => liste.aufbauen(false) );
+		input.addEventListener("change", () => liste.status(false) );
 	},
 	// Karteikarten filtern
 	//   karten = Array

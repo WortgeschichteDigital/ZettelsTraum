@@ -15,7 +15,7 @@
    version="1.1"
    id="svg8"
    inkscape:version="0.92.3 (2405546, 2018-03-11)"
-   sodipodi:docname="liste-unvollstaendig.svg">
+   sodipodi:docname="liste-bedeutung2.svg">
   <defs
      id="defs2" />
   <sodipodi:namedview
@@ -32,8 +32,6 @@
      inkscape:current-layer="svg8"
      showgrid="true"
      units="px"
-     viewbox-height="24"
-     viewbox-width="24"
      inkscape:window-width="1600"
      inkscape:window-height="849"
      inkscape:window-x="0"
@@ -56,14 +54,7 @@
     </rdf:RDF>
   </metadata>
   <path
-     style="opacity:1;fill:#212121;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1.08012342;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:32.59999847;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal"
-     id="path812"
-     sodipodi:type="arc"
-     sodipodi:cx="12"
-     sodipodi:cy="12"
-     sodipodi:rx="7"
-     sodipodi:ry="7"
-     sodipodi:start="0"
-     sodipodi:end="4.7135545"
-     d="M 19,12 A 7,7 0 0 1 14.6769,18.467937 7,7 0 0 1 7.0473689,16.946862 7,7 0 0 1 5.5351874,9.3155638 7,7 0 0 1 12.008159,5.0000048 L 12,12 Z" />
+     style="opacity:1;fill:#212121;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1.52752519;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:32.59999847;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal"
+     d="M 7 5 C 5.892 5 5 5.892 5 7 L 5 17 C 5 18.108 5.892 19 7 19 L 17 19 C 18.108 19 19 18.108 19 17 L 19 7 C 19 5.892 18.108 5 17 5 L 7 5 z M 16 7 L 16 9 A 1 1 0 0 0 15 10 L 16 10 L 16 13 L 13 13 L 13 10 A 3 3 0 0 1 16 7 z M 8 11 L 11 11 L 11 14 A 3 3 0 0 1 8 17 L 8 15 A 1 1 0 0 0 9 14 L 8 14 L 8 11 z "
+     id="rect812" />
 </svg>

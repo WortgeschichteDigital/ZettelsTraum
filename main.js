@@ -297,7 +297,10 @@ appMenu = {
 		if (zuletztVerwendet.submenu.length) {
 			zuletztVerwendet.submenu.push(
 				{ type: "separator" },
-				{ click: () => appMenu.zuletztLoeschen(), label: "Liste löschen" }
+				{
+					click: () => appMenu.zuletztLoeschen(),
+					label: "Liste löschen",
+				}
 			);
 		}
 		// Position der Karteiliste ermitteln
@@ -379,7 +382,7 @@ appMenu = {
 			buttons: ["Alles klar!"],
 			defaultId: 0,
 			title: `Über ${app.getName()}`,
-			message: `${app.getName()}\nVersion ${app.getVersion()}\n\n„${app.getName()}“ ist die Wortkartei-App von „Wortgeschichte digital“, dem Göttinger Teilprojekt des „Zentrums für digitale Lexikographie der deutschen Sprache“ (ZDL).\n\n© 2019 ZDL\n\nAutor:\tNico Dorn <ndorn@gwdg.de>\nLizenz:\tMIT\n\nFonts:\tDejaVu Sans\nLizenz:\tBitstream Vera Fonts, Arev Fonts, Public Domain\n\nIcons:\tPapirus Icon Theme\nLizenz:\tGNU General Public License 3.0`,
+			message: `${app.getName()}\nVersion ${app.getVersion()}\n\n„${app.getName()}“ ist die Wortkartei-App von „Wortgeschichte digital“, dem Göttinger Teilprojekt des „Zentrums für digitale Lexikographie der deutschen Sprache“ (ZDL).\n\n© 2019 ZDL\n\nAutor:\tNico Dorn <ndorn@gwdg.de>\nLizenz:\tGNU General Public License 3.0\n\nFonts:\tDejaVu Sans\nLizenz:\tBitstream Vera Fonts, Arev Fonts, Public Domain\n\nIcons:\tPapirus Icon Theme\nLizenz:\tGNU General Public License 3.0`,
 		});
 	},
 	// Dialog mit Infos zum Framework

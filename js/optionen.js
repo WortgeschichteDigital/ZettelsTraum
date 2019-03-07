@@ -15,10 +15,20 @@ let optionen = {
 			// Dichte der Zeitschnitte oder Zeitschnitte ausblenden
 			// mögliche Werte: "10", "50", "100", "-" (keine Schnitte anzeigen)
 			zeitschnitte: "50",
-			// kompletten Belegschnitt anzeigen oder ausblenden
-			belegschnitte: true,
-			// Wort der Kartei in der Vorschau und im Belegschnitt automatisch hervorheben
+			// kompletten Beleg anzeigen oder ausblenden
+			beleg: true,
+			// Wort der Kartei in der Vorschau und im Beleg automatisch hervorheben
 			wort_hervorheben: true,
+			// Steuerung Details: Bedeutung einblenden
+			detail_bd: false,
+			// Steuerung Details: Quelle einblenden
+			detail_qu: true,
+			// Steuerung Details: Textsorte einblenden
+			detail_ts: false,
+			// Steuerung Details: Notizen einblenden
+			detail_no: false,
+			// Steuerung Details: Metainfos einblenden
+			detail_meta: true,
 		},
 		// zuletzt verwendete Dokumente
 		zuletzt: [],
@@ -78,8 +88,13 @@ let optionen = {
 		liste.headerFilterAnzeige(); // hier auch die Anzeige der Filterleiste anpassen
 		liste.headerSortierenAnzeige();
 		liste.headerZeitschnitteAnzeige();
-		liste.headerBelegschnitteAnzeige();
+		liste.headerBelegAnzeige();
 		liste.headerWortHervorhebenAnzeige();
+		// Auswahllinks für Detail-Anzeige anpassen
+		let details = ["bd", "qu", "ts", "no", "meta"];
+		for (let i = 0, len = details.length; i < len; i++) {
+			liste.headerDetailsAnzeige(details[i], `detail_${details[i]}`);
+		}
 		// Optionen im Optionen-Fenster eintragen
 		let ee = document.querySelectorAll("#einstellungen input");
 		for (let i = 0, len = ee.length; i < len; i++) {
