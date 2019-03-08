@@ -300,7 +300,7 @@ appMenu = {
 				{
 					click: () => appMenu.zuletztLoeschen(),
 					label: "Liste löschen",
-				}
+				},
 			);
 		}
 		// Position der Karteiliste ermitteln
@@ -382,7 +382,7 @@ appMenu = {
 			buttons: ["Alles klar!"],
 			defaultId: 0,
 			title: `Über ${app.getName()}`,
-			message: `${app.getName()}\nVersion ${app.getVersion()}\n\n„${app.getName()}“ ist die Wortkartei-App von „Wortgeschichte digital“, dem Göttinger Teilprojekt des „Zentrums für digitale Lexikographie der deutschen Sprache“ (ZDL).\n\n© 2019 ZDL\n\nAutor:\tNico Dorn <ndorn@gwdg.de>\nLizenz:\tGNU General Public License 3.0\n\nFonts:\tDejaVu Sans\nLizenz:\tBitstream Vera Fonts, Arev Fonts, Public Domain\n\nIcons:\tPapirus Icon Theme\nLizenz:\tGNU General Public License 3.0`,
+			message: `${app.getName()}\nVersion ${app.getVersion()}\n\n„${app.getName()}“ ist die Wortkartei-App von „Wortgeschichte digital“, dem Göttinger Teilprojekt des „Zentrums für digitale Lexikographie der deutschen Sprache“ (ZDL).\n\n© 2019 ZDL\n\nAutor:\tNico Dorn <ndorn@gwdg.de>\nLizenz:\tGNU General Public License v3.0\n\nFonts:\tDejaVu Sans\nLizenz:\tBitstream Vera Fonts, Arev Fonts, Public Domain\n\nIcons:\tPapirus Icon Theme\nLizenz:\tGNU General Public License v3.0`,
 		});
 	},
 	// Dialog mit Infos zum Framework
@@ -484,7 +484,7 @@ fenster = {
 			height: optionen.data.fenster.height,
 			minWidth: 600,
 			minHeight: 350,
-			autoHideMenuBar: optionen.data.app.autoHideMenuBar ? true : false,
+			autoHideMenuBar: optionen.data.app.einstellungen.autoHideMenuBar ? true : false,
 			show: false,
 			webPreferences: {
 				nodeIntegration: true,
@@ -505,8 +505,8 @@ fenster = {
 		// globales Fensterobjekt beim Schließen dereferenzieren
 		win.on("closed", () => win = null );
 		// Status des Fensters speichern
-		win.on("resize", fenster.status);
-		win.on("move", fenster.status);
+		// Man könnte den Status noch zusätzlich bei den Events
+		// "resize" und "move" speichern, finde ich aber übertrieben.
 		win.on("close", fenster.status);
 	},
 	// Fenster-Status in den Optionen speichern

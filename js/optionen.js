@@ -14,7 +14,7 @@ let optionen = {
 			sort_aufwaerts: true,
 			// Dichte der Zeitschnitte oder Zeitschnitte ausblenden
 			// mögliche Werte: "10", "50", "100", "-" (keine Schnitte anzeigen)
-			zeitschnitte: "50",
+			zeitschnitte: "-",
 			// kompletten Beleg anzeigen oder ausblenden
 			beleg: true,
 			// Wort der Kartei in der Vorschau und im Beleg automatisch hervorheben
@@ -22,13 +22,13 @@ let optionen = {
 			// Steuerung Details: Bedeutung einblenden
 			detail_bd: false,
 			// Steuerung Details: Quelle einblenden
-			detail_qu: true,
+			detail_qu: false,
 			// Steuerung Details: Textsorte einblenden
 			detail_ts: false,
 			// Steuerung Details: Notizen einblenden
 			detail_no: false,
 			// Steuerung Details: Metainfos einblenden
-			detail_meta: true,
+			detail_meta: false,
 		},
 		// zuletzt verwendete Dokumente
 		zuletzt: [],
@@ -56,6 +56,8 @@ let optionen = {
 			"quick-belege-hinzufuegen": false,
 			"quick-belege-auflisten": false,
 			"quick-belege-sortieren": false,
+			// neue Karteikarten als unvollständig markieren
+			unvollstaendig: true,
 		},
 	},
 	// liest die vom Main-Prozess übergebenen Optionen ein
@@ -122,9 +124,9 @@ let optionen = {
 		}
 		// Bar ein- oder ausblenden
 		if (optionen.data.einstellungen.quick && !icons_alle_aus) {
-			quick.classList.remove("aus");
+			quick.classList.add("an");
 		} else {
-			quick.classList.add("aus");
+			quick.classList.remove("an");
 		}
 		// affizierte Elemente anpassen
 		let affiziert = document.querySelectorAll("body > header, body > section");
@@ -136,8 +138,18 @@ let optionen = {
 			}
 		}
 	},
-	// Optionen zum speichern an den Main-Prozess schicken
+	// Timeout für die Speicherfunktion setzen, die nicht zu häufig ablaufen soll und
+	// nicht so häufig ablaufen muss.
+	speichern_timeout: null,
 	speichern () {
+		clearTimeout(optionen.speichern_timeout);
+		optionen.speichern_timeout = setTimeout(function() {
+			optionen.speichernAnstossen();
+		}, 60000);
+	},
+	// Optionen zum speichern endgültig an den Main-Prozess schicken
+	speichernAnstossen () {
+		optionen.speichern_timeout = null;
 		const {ipcRenderer} = require("electron");
 		ipcRenderer.send("optionen-speichern", optionen.data);
 	},
@@ -187,6 +199,79 @@ let optionen = {
 	oeffnen () {
 		let fenster = document.getElementById("einstellungen");
 		overlay.oeffnen(fenster);
-		fenster.querySelector("#einstellungen input").focus();
+		optionen.sektionWechselnInput();
+	},
+	// Sektion in den Einstellungen wechseln
+	//   link = Element
+	//     (Link, der für die Sektion steht, in die gewechsel werden soll)
+	sektionWechseln (link) {
+		// Links im Menü anpassen
+		let menu = document.querySelectorAll("#einstellungen ul a"),
+			sektion = "";
+		for (let i = 0, len = menu.length; i < len; i++) {
+			if (menu[i] === link) {
+				menu[i].classList.add("aktiv");
+				sektion = menu[i].id.replace(/^einstellungen-link-/, "");
+			} else {
+				menu[i].classList.remove("aktiv");
+			}
+		}
+		// Anzeige der Sektionen anpassen
+		let sektionen = document.querySelectorAll("#einstellungen section");
+		for (let i = 0, len = sektionen.length; i < len; i++) {
+			if (sektionen[i].id === `einstellungen-sec-${sektion}`) {
+				sektionen[i].classList.remove("aus");
+			} else {
+				sektionen[i].classList.add("aus");
+			}
+		}
+		// 1. Input fokussieren
+		optionen.sektionWechselnInput();
+	},
+	// Klick-Event zum Wechseln der Sektion in den Einstellungen
+	//   a = Element
+	//     (Link, auf den geklickt wurde)
+	sektionWechselnLink (a) {
+		a.addEventListener("click", function(evt) {
+			evt.preventDefault();
+			optionen.sektionWechseln(this);
+		});
+	},
+	// Fokussiert das erste Input-Element der aktuellen Sektion
+	sektionWechselnInput () {
+		document.querySelector("#einstellungen section:not(.aus) input").focus();
+	},
+	// durch die Menüelemente navigieren
+	naviMenue (evt) {
+		// Sind die Einstellungen überhaupt offen?
+		let oben = overlay.oben();
+		if (oben !== "einstellungen") {
+			console.log(oben);
+			return;
+		}
+		evt.preventDefault();
+		// aktives Element ermitteln
+		let links = document.querySelectorAll("#einstellungen li a"),
+			aktiv = document.querySelector("#einstellungen a.aktiv"),
+			pos = -1;
+		for (let i = 0, len = links.length; i < len; i++) {
+			if (links[i] === aktiv) {
+				pos = i;
+				break;
+			}
+		}
+		// zu aktivierendes Element ermitteln
+		if (evt.which === 38) {
+			pos--;
+		} else {
+			pos++;
+		}
+		if (pos < 0) {
+			pos = links.length - 1;
+		} else if (pos >= links.length) {
+			pos = 0;
+		}
+		// Sektion wechseln
+		optionen.sektionWechseln(links[pos]);
 	},
 };

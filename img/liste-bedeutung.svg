@@ -1,60 +1,7 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Created with Inkscape (http://www.inkscape.org/) -->
-
-<svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="24"
-   height="24"
-   viewBox="0 0 24 24"
-   version="1.1"
-   id="svg8"
-   inkscape:version="0.92.3 (2405546, 2018-03-11)"
-   sodipodi:docname="liste-bedeutung2.svg">
-  <defs
-     id="defs2" />
-  <sodipodi:namedview
-     id="base"
-     pagecolor="#ffffff"
-     bordercolor="#666666"
-     borderopacity="1.0"
-     inkscape:pageopacity="0.0"
-     inkscape:pageshadow="2"
-     inkscape:zoom="27.166667"
-     inkscape:cx="12"
-     inkscape:cy="12"
-     inkscape:document-units="px"
-     inkscape:current-layer="svg8"
-     showgrid="true"
-     units="px"
-     inkscape:window-width="1600"
-     inkscape:window-height="849"
-     inkscape:window-x="0"
-     inkscape:window-y="24"
-     inkscape:window-maximized="1">
-    <inkscape:grid
-       type="xygrid"
-       id="grid815" />
-  </sodipodi:namedview>
-  <metadata
-     id="metadata5">
-    <rdf:RDF>
-      <cc:Work
-         rdf:about="">
-        <dc:format>image/svg+xml</dc:format>
-        <dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
-      </cc:Work>
-    </rdf:RDF>
-  </metadata>
-  <path
-     style="opacity:1;fill:#212121;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1.52752519;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:32.59999847;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal"
-     d="M 7 5 C 5.892 5 5 5.892 5 7 L 5 17 C 5 18.108 5.892 19 7 19 L 17 19 C 18.108 19 19 18.108 19 17 L 19 7 C 19 5.892 18.108 5 17 5 L 7 5 z M 16 7 L 16 9 A 1 1 0 0 0 15 10 L 16 10 L 16 13 L 13 13 L 13 10 A 3 3 0 0 1 16 7 z M 8 11 L 11 11 L 11 14 A 3 3 0 0 1 8 17 L 8 15 A 1 1 0 0 0 9 14 L 8 14 L 8 11 z "
-     id="rect812" />
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24" height="24" version="1.1" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<metadata>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:dc="http://purl.org/dc/elements/1.1/"><rdf:Description dc:creator="Nico Dorn" dc:publisher="Zentrum für digitale Lexikographie der deutschen Sprache" dc:rights="GNU General Public License v3.0"></rdf:Description></rdf:RDF>
+</metadata>
+<path d="m19 5a4 4 0 0 0-4 4v4h4v-4h-2a2 2 0 0 1 2-2v-2zm-14 6v4h2a2 2 0 0 1-2 2v2a4 4 0 0 0 4-4v-4h-4z" fill="#212121" fill-rule="evenodd" style="paint-order:normal"/>
 </svg>

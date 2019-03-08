@@ -1,6 +1,6 @@
 @charset "utf-8";
 
-/* TABELLE FÜR DAS FORMULAR */
+/* Tabelle des Formulars ------------------------ */
 #beleg table {
 	margin: 25px auto;
 	border-collapse: separate;
@@ -73,7 +73,7 @@
 	padding-right: 0;
 }
 
-/* FORMULAR-ELEMENTE */
+/* Formular-Elemente ---------------------------- */
 #beleg input[type="text"] {
 	width: calc(100% - 12px);
 }
@@ -105,7 +105,7 @@ textarea#beleg-bs {
 	background-color: var(--farbeStern);
 }
 
-/* TEXT-TOOLS */
+/* Text-Tools ----------------------------------- */
 .text-tools {
 	position: absolute;
 	right: 6px;

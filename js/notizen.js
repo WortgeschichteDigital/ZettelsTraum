@@ -117,7 +117,7 @@ let notizen = {
 	schliessen () {
 		notizen.notizenGeaendert(false);
 		notizen.icon();
-		document.getElementById("notizen").classList.add("aus");
+		overlay.ausblenden( document.getElementById("notizen") );
 	},
 	// überprüft, ob überhaupt Notizen vorhanden sind
 	vorhanden () {

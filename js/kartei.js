@@ -61,8 +61,14 @@ let kartei = {
 			title: "Kartei öffnen",
 			defaultPath: app.getPath("documents"),
 			filters: [
-				{ name: "Wortgeschichte digital-Datei", extensions: ["wgd"] },
-				{ name: "Alle Dateien", extensions: ["*"] },
+				{
+					name: "Wortgeschichte digital-Datei",
+					extensions: ["wgd"],
+				},
+				{
+					name: "Alle Dateien",
+					extensions: ["*"],
+				},
 			],
 		};
 		// Wo wurde zuletzt eine Datei gespeichert oder geöffnet?
@@ -145,8 +151,14 @@ let kartei = {
 			title: "Kartei speichern",
 			defaultPath: path.join(app.getPath("documents"), `${kartei.wort}.wgd`),
 			filters: [
-				{ name: "Wortgeschichte digital-Datei", extensions: ["wgd"] },
-				{ name: "Alle Dateien", extensions: ["*"] },
+				{
+					name: "Wortgeschichte digital-Datei",
+					extensions: ["wgd"],
+				},
+				{
+					name: "Alle Dateien",
+					extensions: ["*"],
+				},
 			],
 		};
 		// Wo wurde zuletzt eine Datei gespeichert oder geöffnet?

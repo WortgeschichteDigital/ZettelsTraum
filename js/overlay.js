@@ -3,17 +3,34 @@
 let overlay = {
 	// bisher höchster z-index
 	zIndex: 99,
+	// Verweis auf einen laufenden Timeout
+	timeout: null,
 	// Fenster öffnen
 	//   fenster = Element
 	//     (Overlay-Fenster, das geöffnet werden soll)
 	oeffnen (fenster) {
+		// Ist das Fenster schon offen?
 		let schon_offen = false;
 		if ( !fenster.classList.contains("aus") ) {
 			schon_offen = true;
 		}
+		// Fenster in den Vordergrund holen
 		overlay.zIndex++;
 		fenster.style.zIndex = overlay.zIndex;
-		fenster.classList.remove("aus");
+		// Fenster einblenden
+		if (overlay.timeout) {
+			clearTimeout(overlay.timeout);
+		}
+		if (schon_offen) {
+			// das ist wichtig für direkt aufeinanderfolgende Dialog-Fenster
+			fenster.classList.add("einblenden");
+		} else {
+			fenster.classList.remove("aus");
+			// dieser Timeout behebt merkwürdigerweise Probleme beim Einblenden;
+			// sonst läuft die Transition nicht
+			overlay.timeout = setTimeout( () => fenster.classList.add("einblenden"), 0);
+		}
+		// Rückgabewert
 		return schon_offen;
 	},
 	// Schließen-Event eines Links initialisieren
@@ -40,7 +57,7 @@ let overlay = {
 			return;
 		}
 		// Fenster schließen
-		fenster.classList.add("aus");
+		overlay.ausblenden(fenster);
 		// spezielle Funktionen für einzelne Overlay-Fenster
 		if (fenster.id === "dialog") {
 			if (schliesser.nodeName === "INPUT") { // Schließen durch Input-Button oder Input-Text
@@ -66,6 +83,13 @@ let overlay = {
 				overlay.schliessen( document.getElementById(oben_id) );
 			}
 		} while (oben_id);
+	},
+	// blendet ein Overlay-Fenster aus
+	ausblenden (fenster) {
+		fenster.classList.remove("einblenden");
+		// die Zeit des Timeouts richtet sich nach der Transition-Länge, die in der
+		// overlay.css festgelegt ist
+		overlay.timeout = setTimeout( () => fenster.classList.add("aus"), 200);
 	},
 	// oberstes Overlay-Fenster ermitteln
 	oben () {

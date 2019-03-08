@@ -45,10 +45,6 @@ let meta = {
 		// Fokus in Lexika-Feld
 		document.querySelector("#meta-l-liste input").focus();
 	},
-	// vordefinierte Liste an BearbeiterInnen
-	bearbeiterInnen: [
-		// MitarbeiterInnenliste beim Umstieg auf Git entfernt
-	],
 	// BearbeiterInnen des Zettels auflisten
 	bearbAuflisten () {
 		let cont = document.getElementById("meta-e-liste");
@@ -76,7 +72,7 @@ let meta = {
 			p.appendChild(a);
 			// BearbeiterIn
 			let bearb = b[i];
-			if (meta.bearbeiterInnen.indexOf(bearb) === -1) {
+			if (privat.bearbeiterinnen.indexOf(bearb) === -1) {
 				bearb += " +";
 				p.title = "(BearbeiterIn manuell ergänzt)";
 			}

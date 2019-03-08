@@ -15,6 +15,9 @@ window.addEventListener("load", function() {
 	document.addEventListener("dragend", (evt) => evt.preventDefault() );
 	document.addEventListener("drop", function(evt) {
 		evt.preventDefault();
+		if (!evt.dataTransfer.files.length) { // wenn z.B. Text gedropt wird
+			return;
+		}
 		let pfad = evt.dataTransfer.files[0].path;
 		kartei.checkSpeichern( () => kartei.oeffnenEinlesen(pfad) );
 	});
@@ -67,6 +70,10 @@ window.addEventListener("load", function() {
 		liste.header(liste_links[i]);
 	}
 	// Einstellungen-Fenster
+	let ee_menu = document.querySelectorAll("#einstellungen ul a");
+	for (let i = 0, len = ee_menu.length; i < len; i++) {
+		optionen.sektionWechselnLink(ee_menu[i]);
+	}
 	let ee = document.querySelectorAll("#einstellungen input");
 	for (let i = 0, len = ee.length; i < len; i++) {
 		optionen.aendereEinstellung(ee[i]);
@@ -157,6 +164,11 @@ window.addEventListener("load", function() {
 
 // Schließen unterbrechen, falls Daten noch nicht gespeichert wurden
 window.addEventListener("beforeunload", function(evt) {
+	// ggf. Optionen speichern
+	if (optionen.speichern_timeout) {
+		optionen.speichernAnstossen();
+	}
+	// Schließen ggf. unterbrechen
 	if (notizen.geaendert || beleg.geaendert || kartei.geaendert) {
 		sicherheitsfrage.warnen(function() {
 			beleg.geaendert = false;

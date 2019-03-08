@@ -1,9 +1,9 @@
 @charset "utf-8";
 
-/* QUICK ACCESS */
+/* Quick-Access-Bar ----------------------------- */
 #quick {
 	position: fixed;
-	top: 0;
+	top: -29px;
 	left: 0;
 	z-index: 1;
 	border-bottom: 1px dotted var(--linie);
@@ -11,6 +11,11 @@
 	width: calc(100% - 20px);
 	height: 24px;
 	background-color: var(--farbe);
+	transition: top .5s ease;
+}
+
+#quick.an {
+	top: 0;
 }
 
 #quick a {
@@ -88,7 +93,7 @@
 	mask-image: url(../img/quick-sortieren.svg);
 }
 
-/* KOPF ALLGEMEIN */
+/* Kopf allgemein ------------------------------- */
 body > header {
 	position: fixed;
 	top: 0;
@@ -98,6 +103,7 @@ body > header {
 	width: calc(100% - 20px);
 	height: 60px;
 	background-color: var(--farbe);
+	transition: top .5s ease;
 }
 
 body > header.quick {
@@ -114,7 +120,7 @@ body > header span {
 	line-height: 60px;
 }
 
-/* WORT */
+/* Wort ----------------------------------------- */
 #wort {
 	cursor: pointer;
 }
@@ -141,7 +147,7 @@ body > header span {
 	cursor: pointer;
 }
 
-/* ICON */
+/* App-Icon ------------------------------------- */
 #icon {
 	position: absolute;
 	top: 6px;

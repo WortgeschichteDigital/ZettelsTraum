@@ -1,70 +1,7 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="24"
-   height="24"
-   viewBox="0 0 24 24"
-   version="1.1"
-   id="svg7"
-   sodipodi:docname="heading-zuletzt.svg"
-   inkscape:export-filename="/home/nico/Web/webapps/ZettelsTraum/app/img/menu/kartei-zuletzt.png"
-   inkscape:export-xdpi="96"
-   inkscape:export-ydpi="96"
-   inkscape:version="0.92.3 (2405546, 2018-03-11)">
-  <metadata
-     id="metadata11">
-    <rdf:RDF>
-      <cc:Work
-         rdf:about="">
-        <dc:format>image/svg+xml</dc:format>
-        <dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
-      </cc:Work>
-    </rdf:RDF>
-  </metadata>
-  <sodipodi:namedview
-     pagecolor="#ffffff"
-     bordercolor="#666666"
-     borderopacity="1"
-     objecttolerance="10"
-     gridtolerance="10"
-     guidetolerance="10"
-     inkscape:pageopacity="0"
-     inkscape:pageshadow="2"
-     inkscape:window-width="1600"
-     inkscape:window-height="849"
-     id="namedview9"
-     showgrid="true"
-     inkscape:zoom="27.166667"
-     inkscape:cx="12"
-     inkscape:cy="12"
-     inkscape:window-x="0"
-     inkscape:window-y="24"
-     inkscape:window-maximized="1"
-     inkscape:current-layer="svg7">
-    <inkscape:grid
-       type="xygrid"
-       id="grid818" />
-  </sodipodi:namedview>
-  <defs
-     id="defs3">
-    <style
-       id="current-color-scheme"
-       type="text/css">
-   .ColorScheme-Text { color:#444444; } .ColorScheme-Highlight { color:#5294e2; }
-  </style>
-  </defs>
-  <path
-     style="fill:#212121;fill-opacity:1"
-     class="ColorScheme-Text"
-     d="M 8 1 C 6.20855 1 4.4176312 1.6839313 3.0507812 3.0507812 C 0.31708125 5.7844812 0.31708125 10.215519 3.0507812 12.949219 C 5.7844812 15.682919 10.215519 15.682919 12.949219 12.949219 C 15.682919 10.215519 15.682919 5.7844812 12.949219 3.0507812 C 11.582369 1.6839313 9.79145 1 8 1 z M 7.9277344 3 A 5 5 0 0 1 11.535156 4.4648438 A 5 5 0 0 1 11.535156 11.535156 A 5 5 0 0 1 4.4648438 11.535156 A 5 5 0 0 1 4.4648438 4.4648438 A 5 5 0 0 1 7.9277344 3 z M 6.9960938 4 L 6.9960938 4.1328125 L 6.9960938 8.4140625 L 8.703125 10.121094 L 9.3183594 10.736328 L 9.4101562 10.828125 L 10.117188 10.121094 L 10.824219 9.4140625 L 10.730469 9.3203125 L 10.117188 8.7070312 L 8.9960938 7.5859375 L 8.9960938 4.1328125 L 8.9960938 4 L 6.9960938 4 z"
-     transform="translate(4 4)"
-     id="path5" />
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24" height="24" version="1.1" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<metadata>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:dc="http://purl.org/dc/elements/1.1/"><rdf:Description dc:publisher="Papirus Development Team" dc:rights="GNU General Public License v3.0"></rdf:Description></rdf:RDF>
+</metadata>
+<path transform="translate(4 4)" d="m8 1c-1.7914 0-3.5824 0.68393-4.9492 2.0508-2.7337 2.7337-2.7337 7.1647 0 9.8984 2.7337 2.7337 7.1647 2.7337 9.8984 0s2.7337-7.1647 0-9.8984c-1.3668-1.3668-3.1578-2.0508-4.9492-2.0508zm-0.072266 2a5 5 0 0 1 3.6074 1.4648 5 5 0 0 1 0 7.0703 5 5 0 0 1-7.0703 0 5 5 0 0 1 0-7.0703 5 5 0 0 1 3.4629-1.4648zm-0.93164 1v0.13281 4.2812l2.4141 2.4141 1.4141-1.4141-1.8281-1.8281v-3.4531-0.13281h-2z" fill="#212121"/>
 </svg>

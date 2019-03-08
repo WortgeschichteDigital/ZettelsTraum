@@ -46,7 +46,7 @@ let beleg = {
 			qu: "", // Quelle
 			ko: false, // Kontext
 			bu: false, // Bücherdienstauftrag
-			un: false, // Bearbeitung unvollständig
+			un: optionen.data.einstellungen.unvollstaendig, // Bearbeitung unvollständig
 			no: "", // Notizen
 			an: [], // Anhänge
 			be: 0, // Bewertung

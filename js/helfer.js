@@ -222,5 +222,9 @@ let helfer = {
 		if (evt.which === 37 || evt.which === 39) {
 			helfer.buttonNavi(evt);
 		}
+		// Cursor hoch (↑) und Cursor runter (↓)
+		if (evt.which === 38 || evt.which === 40) {
+			optionen.naviMenue(evt);
+		}
 	},
 };

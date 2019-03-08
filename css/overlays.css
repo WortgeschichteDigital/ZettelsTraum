@@ -1,6 +1,6 @@
 @charset "utf-8";
 
-/* ALLE OVERLAY FENSTER */
+/* Alle Overlay-Fenster ------------------------- */
 #dialog,
 #einstellungen,
 #meta,
@@ -48,14 +48,55 @@
 	mask-image: url(../img/heading-schliessen.svg);
 }
 
-/* EINSTELLUNGEN */
+.overlay {
+	opacity: 0;
+	transition: opacity .2s ease;
+}
+
+.overlay.einblenden {
+	opacity: 1;
+}
+
+/* Einstellungen -------------------------------- */
 #einstellungen > div {
 	margin-top: 40px;
-	max-width: 600px;
+	max-width: 700px;
 }
 
 #einstellungen-cont {
+	display: grid;
+	grid-template-columns: 150px 1fr;
+}
+
+#einstellungen-cont > div {
 	padding: 10px;
+}
+
+#einstellungen-cont > div:first-child {
+	padding: 10px 0 20px 0;
+	background-color: var(--hintergrund);
+	border-bottom-left-radius: 10px;
+}
+
+#einstellungen-cont ul {
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+}
+
+#einstellungen-cont li {
+	margin-bottom: 5px;
+}
+
+#einstellungen-cont li a {
+	display: block;
+	padding: 2px 5px;
+	background-color: var(--farbeB);
+	color: #fff;
+}
+
+#einstellungen-cont li a.aktiv {
+	background-color: var(--aktiv);
 }
 
 #einstellungen-cont input[type="text"] {
@@ -69,7 +110,7 @@
 }
 
 #einstellungen-cont p {
-	padding-left: 29px; /* für alignment mit Überschrift */
+	padding-left: 24px; /* für alignment mit Überschrift */
 	text-indent: -24px; /* so sind mehrzeilige Texte im Block (hängt von checkbox ab) */
 }
 
@@ -79,7 +120,7 @@
 
 #einstellungen-quick-icons {
 	columns: 2;
-	padding-left: 29px;
+	padding-left: 24px;
 }
 
 #einstellungen-quick-icons h3 {
@@ -106,7 +147,7 @@
 	color: var(--textWarnung);
 }
 
-/* METADATEN */
+/* Metadaten ------------------------------------ */
 #meta > div {
 	margin-top: 40px;
 	max-width: 900px;
@@ -189,7 +230,7 @@
 	padding: 0 10px 0 1px; /* 1px links, damit die linke Grenze des Outline onfocus angezeigt wird */
 }
 
-/* NOTIZEN */
+/* Notizen -------------------------------------- */
 #notizen > div {
 	margin-top: 40px;
 	max-width: 650px;
@@ -228,7 +269,7 @@
 	mask-image: url(../img/heading-notizen.svg);
 }
 
-/* DIALOG */
+/* Dialog --------------------------------------- */
 #dialog > div {
 	max-width: 450px;
 }

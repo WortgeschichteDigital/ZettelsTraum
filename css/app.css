@@ -1,6 +1,6 @@
 @charset "utf-8";
 
-/* VARIABLEN */
+/* Variablen ------------------------------------ */
 :root {
 	/* Textfarben */
 	--text: #212121;
@@ -21,7 +21,7 @@
 	--linie: #c3d9f1;
 }
 
-/* FONTS */
+/* Fonts ---------------------------------------- */
 @font-face {
 	font-family: "DejaVu Sans";
 	src: url(../fonts/DejaVuSans.woff2) format("woff2");
@@ -46,7 +46,7 @@
 	font-weight: bold;
 }
 
-/* ALLGEMEINE ELEMENTE */
+/* Basale Elemente ------------------------------ */
 body {
 	margin: 0;
 	overflow-x: hidden;
@@ -97,17 +97,18 @@ p.input-text {
 	line-height: 30px;
 }
 
-section {
+body > section {
 	position: relative;
 	margin-top: 70px; /* 60 px = Höhe des fixierten <header> + 10px = padding */
 	padding: 0 10px;
+	transition: margin-top .5s ease;
 }
 
-section.quick {
+body > section.quick {
 	margin-top: 99px;
 }
 
-/* LINKS */
+/* Links ---------------------------------------- */
 a {
 	outline: none;
 	color: var(--textFarbe);
@@ -131,7 +132,7 @@ a {
 	mask-image: url(../img/stern.svg);
 }
 
-/* FORMULAR-ELEMENT */
+/* Formular-Elemente ---------------------------- */
 input,
 textarea {
 	margin: 0;
@@ -235,7 +236,7 @@ textarea:focus {
 	border-color: var(--farbe);
 }
 
-/* GLOBALE KLASSEN */
+/* Globale Klassen ------------------------------ */
 .aus {
 	display: none !important;
 }
