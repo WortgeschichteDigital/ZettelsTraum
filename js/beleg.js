@@ -341,7 +341,7 @@ let beleg = {
 		// TODO
 		return html;
 	},
-	// Bewertung des Belegs anzeigen
+	// Bewertung des Belegs vor- od. zurücknehmen
 	//   stern = Element
 	//     (Stern, auf den geklickt wurde, um eine Bewertung vorzunehmen)
 	bewertung (stern) {
@@ -354,13 +354,14 @@ let beleg = {
 				} else {
 					beleg.data.be = bewertung;
 				}
+				sterne[i].blur();
 				break;
 			}
 		}
 		beleg.belegGeaendert(true);
 		beleg.bewertungAnzeigen();
 	},
-	// regelt die Anzeige der Bewertung
+	// regelt die Anzeige der Bewertung des Belegs
 	bewertungAnzeigen () {
 		let sterne = document.querySelectorAll("#beleg-bewertung a");
 		for (let i = 0, len = sterne.length; i < len; i++) {

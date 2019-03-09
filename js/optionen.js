@@ -140,12 +140,19 @@ let optionen = {
 	},
 	// Timeout für die Speicherfunktion setzen, die nicht zu häufig ablaufen soll und
 	// nicht so häufig ablaufen muss.
+	//   sofort = Boolean
+	//     (wird die Liste der zuletzt geänderten Dateien modifiziert, muss das sofort
+	//     gespeichert werden, weil es Konsequenzen für die UI hat)
 	speichern_timeout: null,
-	speichern () {
+	speichern (sofort) {
+		let timeout = 60000;
+		if (sofort) {
+			timeout = 0;
+		}
 		clearTimeout(optionen.speichern_timeout);
 		optionen.speichern_timeout = setTimeout(function() {
 			optionen.speichernAnstossen();
-		}, 60000);
+		}, timeout);
 	},
 	// Optionen zum speichern endgültig an den Main-Prozess schicken
 	speichernAnstossen () {
@@ -157,7 +164,7 @@ let optionen = {
 	aendereLetzterPfad () {
 		let pfad = kartei.pfad.match(/^.+\//)[0];
 		optionen.data.letzter_pfad = pfad;
-		optionen.speichern();
+		optionen.speichern(false);
 	},
 	// Liste der zuletzt verwendeten Karteien ergänzen
 	aendereZuletzt () {
@@ -173,7 +180,7 @@ let optionen = {
 			zuletzt.pop();
 		}
 		// Optionen speichern
-		optionen.speichern();
+		optionen.speichern(true);
 	},
 	// Einstellung aus dem Einstellungen-Dialog ändern
 	//   ele = Element
@@ -192,7 +199,7 @@ let optionen = {
 				optionen.anwendenQuickAccess();
 			}
 			// Optionen speichern
-			optionen.speichern();
+			optionen.speichern(false);
 		});
 	},
 	// das Optionen-Fenster öffnen
@@ -242,14 +249,10 @@ let optionen = {
 		document.querySelector("#einstellungen section:not(.aus) input").focus();
 	},
 	// durch die Menüelemente navigieren
-	naviMenue (evt) {
-		// Sind die Einstellungen überhaupt offen?
-		let oben = overlay.oben();
-		if (oben !== "einstellungen") {
-			console.log(oben);
-			return;
-		}
-		evt.preventDefault();
+	//   tastaturcode = Number
+	//     (der durch das Event übergebene Tastaturcode, kann hier nur
+	//     38 [aufwärts] od. 40 [abwärts] sein)
+	naviMenue (tastaturcode) {
 		// aktives Element ermitteln
 		let links = document.querySelectorAll("#einstellungen li a"),
 			aktiv = document.querySelector("#einstellungen a.aktiv"),
@@ -261,7 +264,7 @@ let optionen = {
 			}
 		}
 		// zu aktivierendes Element ermitteln
-		if (evt.which === 38) {
+		if (tastaturcode === 38) {
 			pos--;
 		} else {
 			pos++;

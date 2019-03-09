@@ -700,7 +700,7 @@ let liste = {
 	headerFilter () {
 		// Option ändern
 		optionen.data.belegliste.filterleiste = !optionen.data.belegliste.filterleiste;
-		optionen.speichern();
+		optionen.speichern(false);
 		// Anzeige anpassen
 		liste.headerFilterAnzeige();
 	},
@@ -725,7 +725,7 @@ let liste = {
 	headerSortieren () {
 		// Option ändern
 		optionen.data.belegliste.sort_aufwaerts = !optionen.data.belegliste.sort_aufwaerts;
-		optionen.speichern();
+		optionen.speichern(false);
 		// Link anpassen
 		liste.headerSortierenAnzeige();
 		// Liste neu aufbauen
@@ -752,7 +752,7 @@ let liste = {
 		} else {
 			optionen.data.belegliste.zeitschnitte = "-";
 		}
-		optionen.speichern();
+		optionen.speichern(false);
 		// Anzeige der Links im Listenheader anpassen
 		liste.headerZeitschnitteAnzeige();
 		// Anzeige der Zeitschnitte in der Liste anpassen
@@ -778,7 +778,7 @@ let liste = {
 	headerBeleg () {
 		// Variable umstellen
 		optionen.data.belegliste.beleg = !optionen.data.belegliste.beleg;
-		optionen.speichern();
+		optionen.speichern(false);
 		// Link im Header anpassen
 		liste.headerBelegAnzeige();
 		// Anzeige der Belege anpassen
@@ -809,7 +809,7 @@ let liste = {
 	headerWortHervorheben () {
 		// Hervorhebung umstellen
 		optionen.data.belegliste.wort_hervorheben = !optionen.data.belegliste.wort_hervorheben;
-		optionen.speichern();
+		optionen.speichern(false);
 		// Link anpassen
 		liste.headerWortHervorhebenAnzeige();
 		// Liste neu aufbauen
@@ -833,7 +833,7 @@ let liste = {
 		// Einstellung umstellen und speichern
 		let opt = `detail_${funktion}`;
 		optionen.data.belegliste[opt] = !optionen.data.belegliste[opt];
-		optionen.speichern();
+		optionen.speichern(false);
 		// Anzeige der Icons auffrischen
 		liste.headerDetailsAnzeige(funktion, opt);
 		// Anzeige der Details in der Liste auffrischen

@@ -87,8 +87,10 @@ let overlay = {
 	// blendet ein Overlay-Fenster aus
 	ausblenden (fenster) {
 		fenster.classList.remove("einblenden");
-		// die Zeit des Timeouts richtet sich nach der Transition-Länge, die in der
-		// overlay.css festgelegt ist
+		// Die Zeit des Timeouts richtet sich nach der Transition-Länge, die in der
+		// overlay.css festgelegt ist.
+		// Obacht! Wird die Zeit hier angepasst, muss dies auch an einigen Stellen geschehen,
+		// an denen overlay.alleSchliessen() aufgerufen wird.
 		overlay.timeout = setTimeout( () => fenster.classList.add("aus"), 200);
 	},
 	// oberstes Overlay-Fenster ermitteln

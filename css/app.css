@@ -99,7 +99,7 @@ p.input-text {
 
 body > section {
 	position: relative;
-	margin-top: 70px; /* 60 px = Höhe des fixierten <header> + 10px = padding */
+	margin-top: 70px; /* 60 px = Höhe des fixierten <header> + 10px = border */
 	padding: 0 10px;
 	transition: margin-top .5s ease;
 }

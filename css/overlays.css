@@ -69,7 +69,7 @@
 }
 
 #einstellungen-cont > div {
-	padding: 10px;
+	padding: 10px 10px 10px 15px;
 }
 
 #einstellungen-cont > div:first-child {
@@ -97,6 +97,11 @@
 
 #einstellungen-cont li a.aktiv {
 	background-color: var(--aktiv);
+}
+
+#einstellungen-cont li a:focus,
+#einstellungen-cont li a.aktiv:focus {
+	background-color: var(--farbe);
 }
 
 #einstellungen-cont input[type="text"] {
@@ -207,6 +212,10 @@
 	margin-right: 10px;
 	vertical-align: bottom;
 	background-color: var(--textExtremHell);
+}
+
+#meta-e-liste .icon-link:focus {
+	background-color: var(--farbe);
 }
 
 #meta-e-liste .icon-link:hover {

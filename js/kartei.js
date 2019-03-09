@@ -50,7 +50,10 @@ let kartei = {
 		// außerdem könnte es sein, dass die Bearbeiter*in keinen Beleg erstellt
 		liste.aufbauen(true);
 		// alle Overlays schließen
-		overlay.alleSchliessen();
+		// (Der Timeout ist nötig, weil sich das Dialog-Fenster wegen des Ausblende-Effekts
+		// um 200 ms verzögert schließt; ohne Timeout komme ich hier in eine Endlosschleife;
+		// vgl. overlay.ausblenden().)
+		setTimeout( () => overlay.alleSchliessen(), 200);
 		// neue Karte erstellen
 		beleg.erstellen();
 	},
@@ -212,7 +215,10 @@ let kartei = {
 		notizen.notizenGeaendert(false);
 		beleg.belegGeaendert(false);
 		kartei.karteiGeaendert(false);
-		overlay.alleSchliessen();
+		// Der Timeout ist nötig, weil sich Dialog-Fenster wegen des Ausblende-Effekts
+		// um 200 ms verzögert schließen; ohne Timeout könnte ich hier in eine Endlosschleife
+		// geraten; vgl. overlay.ausblenden().
+		setTimeout( () => overlay.alleSchliessen(), 200);
 		data = {};
 		kartei.wort = "";
 		kartei.pfad = "";

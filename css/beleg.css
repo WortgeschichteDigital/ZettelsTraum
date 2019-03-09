@@ -105,6 +105,10 @@ textarea#beleg-bs {
 	background-color: var(--farbeStern);
 }
 
+#beleg-bewertung a.aktiv:focus {
+	background-color: var(--farbe);
+}
+
 /* Text-Tools ----------------------------------- */
 .text-tools {
 	position: absolute;

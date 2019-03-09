@@ -484,7 +484,7 @@ fenster = {
 			height: optionen.data.fenster.height,
 			minWidth: 600,
 			minHeight: 350,
-			autoHideMenuBar: optionen.data.app.einstellungen.autoHideMenuBar ? true : false,
+			autoHideMenuBar: optionen.data.app.einstellungen && optionen.data.app.einstellungen.autoHideMenuBar ? true : false, // optionen.data.app.einstellungen könnte noch fehlen (wenn keine Optionen-Datei vorhanden)
 			show: false,
 			webPreferences: {
 				nodeIntegration: true,

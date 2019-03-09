@@ -88,31 +88,45 @@ let helfer = {
 			obj.removeChild(obj.lastChild);
 		}
 	},
-	// ermöglicht die Navigation mit dem Cursor durch nebeneinanderliegende Buttons
+	// ermöglicht die Navigation mit dem Cursor durch Buttons und Links
 	//   evt = Event-Objekt
 	//     (wird von helfer.tastatur() übergeben)
-	buttonNavi (evt) {
-		let aktiv = document.activeElement;
-		// aktives Element ist kein Button
-		if (aktiv.type !== "button") {
+	cursor (evt) {
+		// Cursor hoch od. runter
+		if (evt.which === 38 || evt.which === 40) {
+			if (overlay.oben() === "einstellungen") { // durch die Menüs in den Einstellungen navigieren
+				evt.preventDefault();
+				optionen.naviMenue(evt.which);
+			}
 			return;
 		}
-		// Buttons sammeln und Fokus-Position ermitteln
-		let buttons = aktiv.parentNode.querySelectorAll(`input[type="button"]`),
+		// Curosr links od. rechts
+		let aktiv = document.activeElement;
+		// Ist das aktive Element ein Anker oder ein Button?
+		if ( !(aktiv.nodeName === "A" || aktiv.nodeName === "INPUT" && aktiv.type === "button") ) {
+			return;
+		}
+		// Parent-Block ermitteln
+		let parent = aktiv.parentNode;
+		while ( !parent.nodeName.match(/^(BODY|DIV|HEADER|P|TD|TH)$/) ) { // BODY nur zur Sicherheit, falls ich in der Zukunft vergesse die Liste ggf. zu ergänzen
+			parent = parent.parentNode;
+		}
+		// Elemente sammeln und Fokus-Position ermitteln
+		let elemente = parent.querySelectorAll(`a, input[type="button"]`),
 			pos = -1;
-		for (let i = 0, len = buttons.length; i < len; i++) {
-			if (buttons[i] === aktiv) {
+		for (let i = 0, len = elemente.length; i < len; i++) {
+			if (elemente[i] === aktiv) {
 				pos = i;
 				break;
 			}
 		}
-		// nächsten Button ermitteln
+		// Position des zu fokussierenden Elements ermitteln
 		do {
 			if (evt.which === 37 && pos > 0) { // zurück
 				pos--;
 			} else if (evt.which === 37) { // letzte Position
-				pos = buttons.length - 1;
-			} else if (evt.which === 39 && pos < buttons.length - 1) { // vorwärts
+				pos = elemente.length - 1;
+			} else if (evt.which === 39 && pos < elemente.length - 1) { // vorwärts
 				pos++;
 			} else if (evt.which === 39) { // 1. Position
 				pos = 0;
@@ -120,9 +134,9 @@ let helfer = {
 			// Buttons können versteckt sein, das geschieht aber alles im CSS-Code;
 			// hat der Button ein display === "none" ist er versteckt und kann nicht
 			// fokussiert werden. Normal ist display === "inline-block".
-		} while (getComputedStyle(buttons[pos]).display === "none");
-		// Button ist okay und kann fokussiert werden
-		buttons[pos].focus();
+		} while (getComputedStyle(elemente[pos]).display === "none");
+		// Das Element kann fokussiert werden
+		elemente[pos].focus();
 	},
 	// Fokus aus Formularfeldern entfernen
 	inputBlur () {
@@ -218,13 +232,9 @@ let helfer = {
 				beleg.aktionAbbrechen();
 			}
 		}
-		// Cursor links (←) und Cursor rechts (→)
-		if (evt.which === 37 || evt.which === 39) {
-			helfer.buttonNavi(evt);
-		}
-		// Cursor hoch (↑) und Cursor runter (↓)
-		if (evt.which === 38 || evt.which === 40) {
-			optionen.naviMenue(evt);
+		// Cursor links (←), hoch (↑), rechts (→), runter (↓)
+		if (evt.which >= 37 && evt.which <= 40) {
+			helfer.cursor(evt);
 		}
 	},
 };
