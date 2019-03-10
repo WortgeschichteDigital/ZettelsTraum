@@ -184,7 +184,8 @@ input[type="button"][value="Speichern"] {
 	background-image: url(../img/button-save.svg);
 }
 
-input[type="checkbox"] {
+input[type="checkbox"],
+input[type="radio"] {
 	position: relative;
 	top: 2px;
 	z-index: 1;
@@ -201,25 +202,41 @@ input[type="checkbox"] {
 	line-height: 13px;
 }
 
-input[type="checkbox"]:focus {
+input[type="radio"] {
+	border-radius: 6.5px;
+}
+
+input[type="checkbox"]:focus,
+input[type="radio"]:focus {
 	outline: 1px solid var(--farbe);
 	border-color: var(--farbe);
 }
 
-input[type="checkbox"]:checked {
+input[type="checkbox"]:checked
+input[type="radio"]:checked {
 	border-color: var(--farbe);
 }
 
-input[type="checkbox"]:checked:focus {
+input[type="checkbox"]:checked:focus,
+input[type="radio"]:checked:focus {
 	outline-color: var(--aktiv);
 }
 
-input[type="checkbox"]:checked:before {
+input[type="checkbox"]:checked:before,
+input[type="radio"]:checked:before {
 	position: absolute;
 	content: "✔";
 	display: block;
 	background-color: var(--farbe);
 	color: #fff;
+}
+
+input[type="radio"]:checked:before {
+	content: "●";
+	border-radius: 6.5px;
+	width: 13px;
+	font-size: 9px;
+	text-align: center;
 }
 
 textarea {

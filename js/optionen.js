@@ -4,8 +4,6 @@ let optionen = {
 	// Speicherort aller Optionen
 	// (ausgenommen ist der Fenster-Status, der nur im Main-Prozess steht)
 	data: {
-		// letzter Pfad, der beim Speichern oder Öffnen einer Datei benutzt wurde
-		letzter_pfad: "",
 		// Einstellungen im Kopf der Belegliste
 		belegliste: {
 			// Filterleiste anzeigen
@@ -30,8 +28,6 @@ let optionen = {
 			// Steuerung Details: Metainfos einblenden
 			detail_meta: false,
 		},
-		// zuletzt verwendete Dokumente
-		zuletzt: [],
 		// Einstellungen-Dialog
 		einstellungen: {
 			// für diesen Computer registrierte BearbeiterIn
@@ -59,6 +55,12 @@ let optionen = {
 			// neue Karteikarten als unvollständig markieren
 			unvollstaendig: true,
 		},
+		// speichert den gewünschten Zeitintervall, der in der Filterliste gewählt wurde
+		filter_zeitraum: "100",
+		// letzter Pfad, der beim Speichern oder Öffnen einer Datei benutzt wurde
+		letzter_pfad: "",
+		// zuletzt verwendete Dokumente
+		zuletzt: [],
 	},
 	// liest die vom Main-Prozess übergebenen Optionen ein
 	// (zur Sicherheit werden alle Optionen einzeln eingelesen;
@@ -86,6 +88,15 @@ let optionen = {
 	anwenden () {
 		// Quick-Access-Bar ein- oder ausschalten
 		optionen.anwendenQuickAccess();
+		// Zeitfilter in der Filterleiste anpassen
+		let filter_zeitraum = document.getElementsByName("filter-zeitraum");
+		for (let i = 0, len = filter_zeitraum.length; i < len; i++) {
+			if (filter_zeitraum[i].id === `filter-zeitraum-${optionen.data.filter_zeitraum}`) {
+				filter_zeitraum[i].checked = true;
+			} else {
+				filter_zeitraum[i].checked = false;
+			}
+		}
 		// Icons und Text im Header der Belegliste anpassen
 		liste.headerFilterAnzeige(); // hier auch die Anzeige der Filterleiste anpassen
 		liste.headerSortierenAnzeige();

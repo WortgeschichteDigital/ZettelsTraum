@@ -35,7 +35,7 @@ let meta = {
 			speicherort.classList.add("kein-wert");
 		}
 		speicherort.innerHTML = pfad;
-		document.getElementById("meta-r").textContent = data.r;
+		document.getElementById("meta-re").textContent = data.re;
 		// Textfelder leeren
 		document.querySelectorAll(`#meta input[type="text"]`).forEach( (input) => input.value = "" );
 		// Liste der BearbeterInnen
@@ -43,14 +43,14 @@ let meta = {
 		// Liste der Lexika
 		meta.lexikaAuflisten();
 		// Fokus in Lexika-Feld
-		document.querySelector("#meta-l-liste input").focus();
+		document.querySelector("#meta-le-liste input").focus();
 	},
 	// BearbeiterInnen des Zettels auflisten
 	bearbAuflisten () {
-		let cont = document.getElementById("meta-e-liste");
+		let cont = document.getElementById("meta-be-liste");
 		helfer.keineKinder(cont);
 		// keine Bearbeiter eingetragen
-		if (!data.e.length) {
+		if (!data.be.length) {
 			let p = document.createElement("p");
 			cont.appendChild(p);
 			p.classList.add("kein-wert");
@@ -58,7 +58,7 @@ let meta = {
 			return;
 		}
 		// BearbeiterInnen auflisten
-		let b = [...data.e];
+		let b = [...data.be];
 		b.reverse();
 		for (let i = 0, len = b.length; i < len; i++) {
 			let p = document.createElement("p");
@@ -81,23 +81,23 @@ let meta = {
 	},
 	// BearbeiterIn ergänzen
 	bearbErgaenzen () {
-		let e = document.getElementById("meta-e"),
-			v = helfer.textTrim(e.value);
+		let be = document.getElementById("meta-be"),
+			va = helfer.textTrim(be.value);
 		// Uppala! Keine BearbeiterIn angegeben!
-		if (!v) {
-			dialog.oeffnen("alert", () => e.select() );
+		if (!va) {
+			dialog.oeffnen("alert", () => be.select() );
 			dialog.text("Sie haben keinen Namen angegeben.");
 			return;
 		}
 		// BearbeiterIn schon registriert
-		if (data.e.indexOf(v) >= 0) {
-			dialog.oeffnen("alert", () => e.select() );
+		if (data.be.indexOf(va) >= 0) {
+			dialog.oeffnen("alert", () => be.select() );
 			dialog.text("Die BearbeiterIn ist schon in der Liste.");
 			return;
 		}
 		// BearbeiterIn ergänzen und sortieren
-		e.value = "";
-		data.e.push(v);
+		be.value = "";
+		data.be.push(va);
 		// Liste neu aufbauen
 		meta.bearbAuflisten();
 		// Änderungsmarkierung setzen
@@ -113,13 +113,13 @@ let meta = {
 			dialog.oeffnen("confirm", function() {
 				if (dialog.antwort) {
 					// Löschen
-					data.e.splice(data.e.indexOf(bearb), 1);
+					data.be.splice(data.be.indexOf(bearb), 1);
 					// neu auflisten
 					meta.bearbAuflisten();
 					// Änderungsmarkierung setzen
 					kartei.karteiGeaendert(true);
 				} else {
-					document.getElementById("meta-e").focus();
+					document.getElementById("meta-be").focus();
 				}
 			});
 			dialog.text(`Soll <i>${bearb}</i> wirklich aus der Liste entfernt werden?`);
@@ -141,7 +141,7 @@ let meta = {
 	// Liste der Lexika erstellen
 	lexikaAuflisten () {
 		// Liste leeren
-		let cont = document.getElementById("meta-l-liste");
+		let cont = document.getElementById("meta-le-liste");
 		helfer.keineKinder(cont);
 		// Array erstellen
 		let l = [];
@@ -151,9 +151,9 @@ let meta = {
 			}
 			l.push(i);
 		}
-		for (let i = 0, len = data.l.length; i < len; i++) {
-			if (!meta.lexikaPreset[ data.l[i] ]) {
-				l.push(data.l[i]);
+		for (let i = 0, len = data.le.length; i < len; i++) {
+			if (!meta.lexikaPreset[ data.le[i] ]) {
+				l.push(data.le[i]);
 			}
 		}
 		// Liste aufbauen
@@ -166,7 +166,7 @@ let meta = {
 			input.type = "checkbox";
 			input.id = `lexikon-${i}`;
 			input.value = l[i];
-			if (data.l.indexOf(l[i]) >= 0) {
+			if (data.le.indexOf(l[i]) >= 0) {
 				input.checked = true;
 			}
 			p.appendChild(input);
@@ -190,33 +190,33 @@ let meta = {
 	lexikonUeberprueft (input) {
 		input.addEventListener("change", function() {
 			if (this.checked) {
-				data.l.push(this.value);
+				data.le.push(this.value);
 			} else {
-				data.l.splice(data.l.indexOf(this.value), 1);
+				data.le.splice(data.le.indexOf(this.value), 1);
 			}
 			kartei.karteiGeaendert(true);
 		});
 	},
 	// Lexikon ergänzen
 	lexikonErgaenzen () {
-		let l = document.getElementById("meta-l"),
-			v = helfer.textTrim(l.value);
+		let le = document.getElementById("meta-le"),
+			va = helfer.textTrim(le.value);
 		// Uppala! Kein Wert!
-		if (!v) {
-			dialog.oeffnen("alert", () => l.select() );
+		if (!va) {
+			dialog.oeffnen("alert", () => le.select() );
 			dialog.text("Sie haben keinen Titel eingegeben.");
 			return;
 		}
 		// Lexikon gibt es schon
-		if ( document.querySelector(`#meta-l-liste input[value="${v}"]`) ) {
-			dialog.oeffnen("alert", () => l.select() );
+		if ( document.querySelector(`#meta-le-liste input[value="${va}"]`) ) {
+			dialog.oeffnen("alert", () => le.select() );
 			dialog.text("Das Lexikon ist schon in der Liste.");
 			return;
 		}
 		// Lexikon ergänzen und sortieren
-		l.value = "";
-		data.l.push(v);
-		data.l.sort(function(a, b) {
+		le.value = "";
+		data.le.push(va);
+		data.le.sort(function(a, b) {
 			a = helfer.sortAlphaPrep(a);
 			b = helfer.sortAlphaPrep(b);
 			let x = [a, b];
@@ -234,9 +234,9 @@ let meta = {
 	// Klick auf Button verteilen
 	aktionButton (button) {
 		button.addEventListener("click", function() {
-			if ( this.id.match(/^meta-l/) ) {
+			if ( this.id.match(/^meta-le/) ) {
 				meta.lexikonErgaenzen();
-			} else if ( this.id.match(/^meta-e/) ) {
+			} else if ( this.id.match(/^meta-be/) ) {
 				meta.bearbErgaenzen();
 			}
 		});
@@ -247,9 +247,9 @@ let meta = {
 			// Enter
 			if (evt.which === 13) {
 				evt.preventDefault();
-				if (this.id === "meta-l") {
+				if (this.id === "meta-le") {
 					meta.lexikonErgaenzen();
-				} else if (this.id === "meta-e") {
+				} else if (this.id === "meta-be") {
 					meta.bearbErgaenzen();
 				}
 			}

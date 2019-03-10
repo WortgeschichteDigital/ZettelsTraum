@@ -27,7 +27,7 @@ let beleg = {
 	erstellen () {
 		// nächste ID ermitteln
 		let id_karte = 0,
-			ids = Object.keys(data.k);
+			ids = Object.keys(data.ka);
 		for (let i = 0, len = ids.length; i < len; i++) {
 			let id = parseInt(ids[i], 10);
 			if (id > id_karte) {
@@ -62,14 +62,14 @@ let beleg = {
 		beleg.id_karte = id;
 		// Daten des Belegs kopieren
 		beleg.data = {};
-		for (let i in data.k[id]) {
-			if ( !data.k[id].hasOwnProperty(i) ) {
+		for (let i in data.ka[id]) {
+			if ( !data.ka[id].hasOwnProperty(i) ) {
 				continue;
 			}
-			if ( helfer.checkType("Array", data.k[id][i]) ) {
-				beleg.data[i] = [ ...data.k[id][i] ];
+			if ( helfer.checkType("Array", data.ka[id][i]) ) {
+				beleg.data[i] = [ ...data.ka[id][i] ];
 			} else {
-				beleg.data[i] = data.k[id][i];
+				beleg.data[i] = data.ka[id][i];
 			}
 		}
 		// Formular anzeigen
@@ -172,8 +172,8 @@ let beleg = {
 			return;
 		}
 		// ggf. Objekt anlegen
-		if (!data.k[beleg.id_karte]) {
-			data.k[beleg.id_karte] = {};
+		if (!data.ka[beleg.id_karte]) {
+			data.ka[beleg.id_karte] = {};
 		}
 		// Objekt mit neuen Werten füllen
 		for (let i in beleg.data) {
@@ -181,9 +181,9 @@ let beleg = {
 				continue;
 			}
 			if ( helfer.checkType("Array", beleg.data[i]) ) {
-				data.k[beleg.id_karte][i] = [ ...beleg.data[i] ];
+				data.ka[beleg.id_karte][i] = [ ...beleg.data[i] ];
 			} else {
-				data.k[beleg.id_karte][i] = beleg.data[i];
+				data.ka[beleg.id_karte][i] = beleg.data[i];
 			}
 		}
 		// Änderungen darstellen
@@ -214,7 +214,7 @@ let beleg = {
 	// Beleg löschen
 	aktionLoeschen () {
 		// Beleg wurde noch gar nicht angelegt
-		if (!data.k[beleg.id_karte]) {
+		if (!data.ka[beleg.id_karte]) {
 			beleg.aktionAbbrechen();
 			return;
 		}
@@ -222,7 +222,7 @@ let beleg = {
 		dialog.oeffnen("confirm", function() {
 			if (dialog.antwort) {
 				// Datensatz löschen
-				delete data.k[beleg.id_karte];
+				delete data.ka[beleg.id_karte];
 				// Änderungen darstellen
 				beleg.listeGeaendert();
 			}

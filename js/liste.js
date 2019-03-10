@@ -65,13 +65,10 @@ let liste = {
 			liste.aufbauenKeineBelege();
 			return;
 		}
-		// Belege sortieren
-		liste.belegeSortierenCache = {};
-		belege.sort(liste.belegeSortieren);
 		// Zeitschnitte drucken
 		let cont = document.getElementById("liste-belege-cont"),
-			start = liste.zeitschnittErmitteln(data.k[ belege[0] ].da).jahrzehnt,
-			ende = liste.zeitschnittErmitteln(data.k[ belege[belege.length - 1] ].da).jahrzehnt,
+			start = liste.zeitschnittErmitteln(data.ka[ belege[0] ].da).jahrzehnt,
+			ende = liste.zeitschnittErmitteln(data.ka[ belege[belege.length - 1] ].da).jahrzehnt,
 			jahrzehnt = start,
 			beleg_akt = 0;
 		while (true) { // Obacht!
@@ -93,7 +90,7 @@ let liste = {
 			while (beleg_akt <= belege.length - 1) { // Obacht!
 				// id und Jahrzehnt des Belegs ermitteln
 				let id = belege[beleg_akt],
-					zeitschnitt_akt = liste.zeitschnittErmitteln(data.k[id].da);
+					zeitschnitt_akt = liste.zeitschnittErmitteln(data.ka[id].da);
 				// Abbruchbedingung Endlosschleife
 				if (zeitschnitt_akt.jahrzehnt !== jahrzehnt) {
 					break;
@@ -118,14 +115,14 @@ let liste = {
 				let span = document.createElement("span");
 				span.classList.add("liste-jahr");
 				span.textContent = zeitschnitt_akt.datum;
-				if (zeitschnitt_akt.datum !== data.k[id].da) {
-					span.title = data.k[id].da;
+				if (zeitschnitt_akt.datum !== data.ka[id].da) {
+					span.title = data.ka[id].da;
 					span.classList.add("liste-jahr-hinweis");
 					liste.detailAnzeigen(span);
 				}
 				div.appendChild(span);
 				// Belegvorschau
-				div.appendChild( liste.belegVorschau(data.k[id]) );
+				div.appendChild( liste.belegVorschau(data.ka[id]) );
 				// <div> für Belegkopf einhängen
 				liste.belegUmschalten(div);
 				cont.appendChild(div);
@@ -137,17 +134,17 @@ let liste = {
 				}
 				cont.appendChild(div);
 				// Beleg
-				div.appendChild( liste.belegErstellen(data.k[id].bs) );
+				div.appendChild( liste.belegErstellen(data.ka[id].bs) );
 				// Bedeutung
-				liste.bedeutungErstellen(data.k[id].bd, div);
+				liste.bedeutungErstellen(data.ka[id].bd, div);
 				// Quellenangabe
-				div.appendChild( liste.quelleErstellen(data.k[id].qu) );
+				div.appendChild( liste.quelleErstellen(data.ka[id].qu) );
 				// Textsorte
-				liste.textsorteErstellen(data.k[id].ts, div);
+				liste.textsorteErstellen(data.ka[id].ts, div);
 				// Notizen
-				liste.notizenErstellen(data.k[id].no, div);
+				liste.notizenErstellen(data.ka[id].no, div);
 				// Meta-Infos
-				liste.metainfosErstellen(data.k[id], div);
+				liste.metainfosErstellen(data.ka[id], div);
 			}
 			// Jahrzehnt hoch- bzw. runterzählen
 			if (optionen.data.belegliste.sort_aufwaerts) {
@@ -167,16 +164,20 @@ let liste = {
 	//   filter_init = Boolean
 	//     (true = Filter müssen neu initialisiert werden)
 	aufbauenBasis (filter_init) {
-		// Filter initialisieren
-		if (filter_init) {
-			filter.aufbauen();
-		}
 		// Content-Objekt vorbereiten
 		let cont = document.getElementById("liste-belege-cont");
 		helfer.keineKinder(cont);
-		// Anzahl der Belege feststellen und Belege filtern
-		let belege = Object.keys(data.k),
+		// Anzahl der Belege feststellen
+		let belege = Object.keys(data.ka),
 			belege_anzahl = belege.length;
+		// Belege sortieren
+		liste.belegeSortierenCache = {};
+		belege.sort(liste.belegeSortieren);
+		// Filter ggf. initialisieren
+		if (filter_init) {
+			filter.aufbauen([...belege]);
+		}
+		// Belege filtern
 		belege = filter.kartenFiltern(belege);
 		// Belegzahl anzeigen
 		liste.aufbauenAnzahl(belege_anzahl, belege.length);
@@ -348,7 +349,7 @@ let liste = {
 				id = b;
 				zeiger = "b";
 			}
-			let da = liste.zeitschnittErmitteln(data.k[id].da);
+			let da = liste.zeitschnittErmitteln(data.ka[id].da);
 			datum[zeiger] = parseInt(da.jahr, 10);
 			// Jahreszahl zwischenspeichern
 			liste.belegeSortierenCache[id] = datum[zeiger];

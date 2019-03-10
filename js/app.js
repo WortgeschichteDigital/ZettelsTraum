@@ -64,6 +64,12 @@ window.addEventListener("load", function() {
 			beleg.toolsKlick(beleg_links[i]);
 		}
 	}
+	// Belegliste-Filter
+	filter.anwenden( document.getElementById("filter-volltext") );
+	let filter_zeitraum = document.getElementsByName("filter-zeitraum");
+	for (let i = 0, len = filter_zeitraum.length; i < len; i++) {
+		filter.wechselnZeitraum(filter_zeitraum[i]);
+	}
 	// Funktionen im Belegliste-Header
 	let liste_links = document.querySelectorAll("#liste header a");
 	for (let i = 0, len = liste_links.length; i < len; i++) {

@@ -28,23 +28,23 @@ let kartei = {
 		kartei.pfad = "";
 		// globales Datenobjekt initialisieren
 		data = {
-			w: kartei.wort, // Wort
+			wo: kartei.wort, // Wort
 			dc: new Date().toISOString(), // Datum Kartei-Erstellung
 			dm: "", // Datum Kartei-Änderung
-			r: 0, // Revision
-			e: [], // Bearbeiter
-			l: [], // überprüfte Lexika usw.
-			a: [], // Anhänge
-			n: "", // Notizen
-			t: "wgd", // Datei ist eine wgd-Datei (immer dieser Wert)
-			v: 1, // Version des Datei-Formats
-			k: {}, // Karteikarten
-			h: {}, // Kartenhaufen
-			b: {}, // Bedeutungen
+			re: 0, // Revision
+			be: [], // Bearbeiter
+			le: [], // überprüfte Lexika usw.
+			an: [], // Anhänge
+			no: "", // Notizen
+			ty: "wgd", // Datei ist eine wgd-Datei (immer dieser Wert!)
+			ve: 1, // Version des Datei-Formats
+			ka: {}, // Karteikarten
+			ha: {}, // Kartenhaufen
+			bd: {}, // Bedeutungen
 		};
 		// ggf. für diesen Rechner registrierte BearbeiterIn eintragen
 		if (optionen.data.einstellungen.bearbeiterin) {
-			data.e.push(optionen.data.einstellungen.bearbeiterin);
+			data.be.push(optionen.data.einstellungen.bearbeiterin);
 		}
 		// Belegliste leeren: Es könnten noch Belege von einer vorherigen Karte vorhanden sein;
 		// außerdem könnte es sein, dass die Bearbeiter*in keinen Beleg erstellt
@@ -108,7 +108,7 @@ let kartei = {
 				return;
 			}
 			// Wirklich eine wgd-Datei?
-			if (data_tmp.t !== "wgd") {
+			if (data_tmp.ty !== "wgd") {
 				kartei.dialogWrapper("Die Datei wurde nicht eingelesen.\nEs handelt sich nicht um eine Karteikasten-Datei von <i>Wortgeschichte digital</i>.");
 				return;
 			}
@@ -120,7 +120,7 @@ let kartei = {
 			overlay.alleSchliessen();
 			// Okay! Datei kann eingelesen werden
 			data = JSON.parse(content);
-			kartei.wort = data.w;
+			kartei.wort = data.wo;
 			kartei.wortEintragen();
 			kartei.pfad = datei;
 			optionen.aendereLetzterPfad();
@@ -181,15 +181,15 @@ let kartei = {
 			// ggf. BearbeiterIn hinzufügen
 			let bearb = optionen.data.einstellungen.bearbeiterin,
 				bearb_ergaenzt = false;
-			if (bearb && data.e.indexOf(bearb) === -1) {
-				data.e.push(bearb);
+			if (bearb && data.be.indexOf(bearb) === -1) {
+				data.be.push(bearb);
 				bearb_ergaenzt = true;
 			}
 			// einige Werte müssen vor dem Speichern angepasst werden
 			let dm_alt = data.dm,
-				r_alt = data.r;
+				re_alt = data.re;
 			data.dm = new Date().toISOString();
-			data.r++;
+			data.re++;
 			// Dateisystemzugriff
 			const fs = require("fs");
 			fs.writeFile(pfad, JSON.stringify(data), function(err) {
@@ -197,10 +197,10 @@ let kartei = {
 					kartei.dialogWrapper(`Beim Speichern der Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n${err.message}`);
 					// passiert ein Fehler, müssen manche Werte zurückgesetzt werden
 					if (bearb_ergaenzt) {
-						data.e.splice(data.e.indexOf(bearb), 1);
+						data.be.splice(data.be.indexOf(bearb), 1);
 					}
 					data.dm = dm_alt;
-					data.r = r_alt;
+					data.re = re_alt;
 					return;
 				}
 				kartei.pfad = pfad;
@@ -273,7 +273,7 @@ let kartei = {
 			} else if (dialog.antwort && wort) {
 				kartei.karteiGeaendert(true);
 				kartei.wort = wort;
-				data.w = wort;
+				data.wo = wort;
 				kartei.wortEintragen();
 			} else if (dialog.antwort && !wort) {
 				dialog.oeffnen("alert", null);

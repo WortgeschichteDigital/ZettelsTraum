@@ -199,14 +199,14 @@
 	text-align: left; /* das Feld ist rtl, bei kurzem Inhalt wäre der Text sonst rechtsbündig */
 }
 
-#meta-e-liste {
+#meta-be-liste {
 	margin-bottom: 5px;
 	height: 120px;
 	overflow-x: hidden;
 	overflow-y: auto;
 }
 
-#meta-e-liste .icon-link {
+#meta-be-liste .icon-link {
 	position: relative;
 	top: -1px;
 	margin-right: 10px;
@@ -214,11 +214,11 @@
 	background-color: var(--textExtremHell);
 }
 
-#meta-e-liste .icon-link:focus {
+#meta-be-liste .icon-link:focus {
 	background-color: var(--farbe);
 }
 
-#meta-e-liste .icon-link:hover {
+#meta-be-liste .icon-link:hover {
 	background-color: var(--text);
 }
 
@@ -227,7 +227,7 @@
 	mask-image: url(../img/meta-entfernen.svg);
 }
 
-#meta-l-liste {
+#meta-le-liste {
 	display: flex;
 	flex-direction: column;
 	flex-wrap: wrap;
@@ -235,7 +235,7 @@
 	overflow: hidden;
 }
 
-#meta-l-liste p {
+#meta-le-liste p {
 	padding: 0 10px 0 1px; /* 1px links, damit die linke Grenze des Outline onfocus angezeigt wird */
 }
 

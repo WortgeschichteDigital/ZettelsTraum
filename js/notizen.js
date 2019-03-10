@@ -11,8 +11,8 @@ let notizen = {
 			return;
 		}
 		// Notizen-Feld füllen bzw. leeren
-		if (data.n) {
-			feld.value = data.n;
+		if (data.no) {
+			feld.value = data.no;
 		} else {
 			feld.value = "";
 		}
@@ -56,7 +56,7 @@ let notizen = {
 			return;
 		}
 		// Änderungen speichern
-		data.n = helfer.textTrim(vorhanden.feld_value, false);
+		data.no = helfer.textTrim(vorhanden.feld_value, false);
 		kartei.karteiGeaendert(true);
 		notizen.schliessen();
 	},
@@ -97,7 +97,7 @@ let notizen = {
 		// Sicherheitsfrage
 		dialog.oeffnen("confirm", function() {
 			if (dialog.antwort) {
-				data.n = "";
+				data.no = "";
 				kartei.karteiGeaendert(true);
 				notizen.schliessen();
 			} else {
@@ -126,7 +126,7 @@ let notizen = {
 			feld: false,
 			feld_value: "",
 		};
-		if (data.n) {
+		if (data.no) {
 			vorhanden.kartei = true;
 		}
 		let notiz = document.getElementById("notizen-feld").value;
@@ -155,7 +155,7 @@ let notizen = {
 	// ändert den Status des Icons, je nachdem ob eine Notiz vorhanden ist oder nicht
 	icon () {
 		let icon = document.getElementById("notizen-icon");
-		if (data.n) {
+		if (data.no) {
 			icon.classList.remove("aus");
 		} else {
 			icon.classList.add("aus");

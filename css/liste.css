@@ -54,12 +54,60 @@
 /* Filterleiste --------------------------------- */
 #liste-filter {
 	position: sticky;
-	top: 70px;
+	top: 95px; /* 70px + margin-top über dem ersten Element in #liste-filter */
 	transition: top .5s ease;
 }
 
 .quick #liste-filter {
-	top: 99px;
+	top: 124px; /* 99px + margin-top über dem ersten Element in #liste-filter */
+}
+
+.filter-kopf {
+	display: block;
+	margin: 25px 0 10px 0;
+	padding: 2px 5px;
+	background-color: var(--farbeB);
+	color: #fff;
+}
+
+.filter-kopf:focus {
+	background-color: var(--farbe);
+}
+
+.filter-cont {
+	margin: 0 10px 0 9px; /* vgl. .filter-cont p */
+}
+
+.filter-cont-max {
+	max-height: 340px;
+	overflow-y: auto;
+}
+
+.filter-cont p {
+	padding-left: 1px; /* sonst wird der outline links abgeschnitten; vgl. .filter-cont */
+}
+
+.filter-keine-belege {
+	color: var(--textSehrHell);
+	font-style: italic;
+	text-align: center;
+}
+
+
+#filter-volltext {
+	width: calc(100% - 12px);
+}
+
+#liste-filter input[type="radio"] {
+	margin-left: 20px;
+}
+
+#liste-filter input[type="radio"]:first-child {
+	margin-left: 0;
+}
+
+#liste-filter label {
+	color: var(--textFarbe);
 }
 
 /* Belegliste: Header --------------------------- */

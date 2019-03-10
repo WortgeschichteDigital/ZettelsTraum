@@ -132,7 +132,7 @@
 				</tr><tr>
 					<th colspan="2">Anhänge</th>
 				</tr><tr>
-					<td colspan="2">[Liste der Anhänge]</td>
+					<td colspan="2"> </td>
 				</tr>
 			</table>
 		</section>
@@ -140,7 +140,23 @@
 		<!-- BELEGLISTE -->
 		<section id="liste" class="aus">
 			<!-- scheinbar unnötig verschachtelt; ist aber nötig damit position: sticky für #liste-filter funktioniert -->
-			<div><div id="liste-filter"></div></div>
+			<div><div id="liste-filter">
+				<a href="#" class="filter-kopf" id="filter-kopf-volltext">Volltext</a>
+				<div class="filter-cont" id="filter-cont-volltext">
+					<p><input type="text" value="" id="filter-volltext"></p>
+				</div>
+				<a href="#" class="filter-kopf" id="filter-kopf-zeitraum">Zeitraum</a>
+				<div class="filter-cont" id="filter-cont-zeitraum">
+					<p><input type="radio" name="filter-zeitraum" id="filter-zeitraum-10"
+						><label for="filter-zeitraum-10">10er</label
+						><input type="radio" name="filter-zeitraum" id="filter-zeitraum-50"
+						><label for="filter-zeitraum-50">50er</label
+						><input type="radio" name="filter-zeitraum" id="filter-zeitraum-100"
+						><label for="filter-zeitraum-100">100er</label></p>
+					<div id="filter-zeitraum-dynamisch" class="filter-cont-max"></div>
+				</div>
+				<div id="liste-filter-dynamisch"></div>
+			</div></div>
 			<div id="liste-belege">
 				<header><span class="liste-opt-block"
 						><a href="#" id="liste-link-filter"
@@ -249,16 +265,16 @@
 					<h3>Speicherort</h3>
 					<p dir="rtl" id="meta-speicherort"></p>
 					<h3>Revision</h3>
-					<p id="meta-r"></p>
+					<p id="meta-re"></p>
 					<h3>BearbeiterInnen</h3>
-					<div id="meta-e-liste"></div>
-					<p class="input-text"><input type="text" value="" spellcheck="false" id="meta-e"
-						><input type="button" value="Ergänzen" id="meta-e-ergaenzen"></p>
+					<div id="meta-be-liste"></div>
+					<p class="input-text"><input type="text" value="" spellcheck="false" id="meta-be"
+						><input type="button" value="Ergänzen" id="meta-be-ergaenzen"></p>
 				</div><div>
 					<h3>Überprüfte Lexika</h3>
-					<div id="meta-l-liste"></div>
-					<p class="input-text"><input type="text" value="" spellcheck="false" id="meta-l"
-						><input type="button" value="Ergänzen" id="meta-l-ergaenzen"></p>
+					<div id="meta-le-liste"></div>
+					<p class="input-text"><input type="text" value="" spellcheck="false" id="meta-le"
+						><input type="button" value="Ergänzen" id="meta-le-ergaenzen"></p>
 				</div>
 			</div>
 		</div></div>
