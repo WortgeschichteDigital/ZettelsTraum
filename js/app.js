@@ -65,6 +65,9 @@ window.addEventListener("load", function() {
 		}
 	}
 	// Belegliste-Filter
+	document.querySelectorAll("#liste-filter header a").forEach(function(a) {
+		filter.ctrlButtons(a);
+	});
 	filter.anwenden( document.getElementById("filter-volltext") );
 	let filter_zeitraum = document.getElementsByName("filter-zeitraum");
 	for (let i = 0, len = filter_zeitraum.length; i < len; i++) {

@@ -54,12 +54,19 @@
 /* Filterleiste --------------------------------- */
 #liste-filter {
 	position: sticky;
-	top: 95px; /* 70px + margin-top über dem ersten Element in #liste-filter */
+	top: 70px; /* 70px + margin-top über dem ersten Element in #liste-filter */
 	transition: top .5s ease;
 }
 
 .quick #liste-filter {
-	top: 124px; /* 99px + margin-top über dem ersten Element in #liste-filter */
+	top: 99px; /* 99px + margin-top über dem ersten Element in #liste-filter */
+}
+
+#liste-filter header {
+	border-bottom: 1px solid var(--linie);
+	padding: 0 0 10px 10px;
+	height: 24px;
+	background-color: #fff;
 }
 
 .filter-kopf {
@@ -93,6 +100,11 @@
 	text-align: center;
 }
 
+.filter-treffer {
+	display: inline-block;
+	margin-left: 10px;
+	color: var(--textHell);
+}
 
 #filter-volltext {
 	width: calc(100% - 12px);
@@ -137,15 +149,19 @@
 	mask-image: url(../img/liste-bearbeiten.svg);
 }
 
+.filter-ctrl-block,
 .liste-opt-block {
 	display: inline-block;
 	margin-left: 25px;
 	height: 24px;
 }
+
+.filter-ctrl-block:first-child,
 .liste-opt-block:first-child {
 	margin-left: 0;
 }
 
+.filter-ctrl-block a,
 .liste-opt-block a {
 	display: inline-block;
 	border-right: 1px solid var(--linie);
@@ -158,17 +174,20 @@
 	text-decoration: none;
 }
 
+.filter-ctrl-block a:first-child,
 .liste-opt-block a:first-child {
 	border-top-left-radius: 3px;
 	border-bottom-left-radius: 3px;
 }
 
+.filter-ctrl-block a:last-child,
 .liste-opt-block a:last-child {
 	border-right: 0;
 	border-top-right-radius: 3px;
 	border-bottom-right-radius: 3px;
 }
 
+.filter-ctrl-block a:focus,
 .liste-opt-block a:focus {
 	background-color: var(--hintergrund);
 	color: var(--farbe);
@@ -183,6 +202,7 @@
 	background-color: var(--farbe);
 }
 
+.filter-ctrl-block svg path,
 .liste-opt-block svg path {
 	fill: currentcolor;
 }
@@ -313,7 +333,7 @@ div.liste-label {
 
 span.liste-label {
 	position: absolute;
-	top: -11px;
+	top: -9px;
 	right: 10px;
 	padding: 0 5px;
 	background-color: #fff;

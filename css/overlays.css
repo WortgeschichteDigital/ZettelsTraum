@@ -4,7 +4,8 @@
 #dialog,
 #einstellungen,
 #meta,
-#notizen {
+#notizen,
+#zeitraumgrafik {
 	position: fixed;
 	top: 0;
 	left: 0;
@@ -18,7 +19,8 @@
 #dialog > div,
 #einstellungen > div,
 #meta > div,
-#notizen > div {
+#notizen > div,
+#zeitraumgrafik > div {
 	margin: 80px auto 0 auto;
 	border-bottom-right-radius: 10px;
 	border-bottom-left-radius: 10px;
@@ -29,14 +31,16 @@
 #dialog h2,
 #einstellungen h2,
 #meta h2,
-#notizen h2 {
+#notizen h2,
+#zeitraumgrafik h2 {
 	position: relative;
 }
 
 #dialog h2 a,
 #einstellungen h2 a,
 #meta h2 a,
-#notizen h2 a {
+#notizen h2 a,
+#zeitraumgrafik h2 a {
 	position: absolute;
 	top: 2px;
 	right: 5px;
@@ -277,6 +281,26 @@
 	-webkit-mask-image: url(../img/heading-notizen.svg);
 	mask-image: url(../img/heading-notizen.svg);
 }
+
+/* Zeitraumgrafik ------------------------------- */
+#zeitraumgrafik > div {
+	margin-top: 40px;
+	max-width: 720px;
+}
+
+#zeitraumgrafik-cont {
+	padding: 10px;
+}
+
+#zeitraumgrafik-cont div {
+	overflow-x: auto;
+}
+
+.icon-h-zeitraumgrafik {
+	-webkit-mask-image: url(../img/heading-zeitraumgrafik.svg);
+	mask-image: url(../img/heading-zeitraumgrafik.svg);
+}
+
 
 /* Dialog --------------------------------------- */
 #dialog > div {

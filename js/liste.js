@@ -192,31 +192,31 @@ let liste = {
 		div.textContent = "keine Belege";
 		cont.appendChild(div);
 	},
-	// Anzahl der Belege drucken
+	// Anzahl der Karten drucken
 	//   gesamt = Number
-	//     (Anzahl aller Belege)
+	//     (Anzahl aller Karten)
 	//   gefiltert = Number
-	//     (Anzahl der Belege, die die Filterung überstanden haben)
+	//     (Anzahl der Karten, die die Filterung überstanden haben)
 	aufbauenAnzahl (gesamt, gefiltert) {
 		const cont = document.getElementById("liste-belege-anzahl");
-		// keine Belege
+		// keine Karten
 		if (!gesamt) {
 			cont.classList.add("aus");
 			return;
 		}
-		// Anzahl der Belege anzeigen
+		// Anzahl der Karten anzeigen
 		cont.classList.remove("aus");
 		let anzahl = "",
-			text = "Beleg";
+			text = "Karte";
 		if (gesamt !== gefiltert) {
 			if (gesamt !== 1) {
-				text = "Belegen";
+				text = "Karten";
 			}
 			anzahl = `${gefiltert}/${gesamt} ${text}`;
 			cont.classList.add("belege-gefiltert");
 		} else {
 			if (gesamt !== 1) {
-				text = "Belege";
+				text = "Karten";
 			}
 			anzahl = `${gesamt} ${text}`;
 			cont.classList.remove("belege-gefiltert");
