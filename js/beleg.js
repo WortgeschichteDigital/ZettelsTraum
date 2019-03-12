@@ -174,6 +174,7 @@ let beleg = {
 		// ggf. Objekt anlegen
 		if (!data.ka[beleg.id_karte]) {
 			data.ka[beleg.id_karte] = {};
+			liste.statusNeu = beleg.id_karte.toString();
 		}
 		// Objekt mit neuen Werten füllen
 		for (let i in beleg.data) {

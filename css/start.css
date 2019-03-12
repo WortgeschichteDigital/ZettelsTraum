@@ -49,7 +49,6 @@
 	line-height: 36px;
 	text-overflow: ellipsis;
 	white-space: nowrap;
-	cursor: pointer;
 }
 
 #start-liste li:hover {

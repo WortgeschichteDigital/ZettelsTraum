@@ -23,6 +23,10 @@ let liste = {
 		document.getElementById("liste").classList.add("preload");
 		helfer.sektionWechseln("liste");
 	},
+	// Zwischenspeicher für die ID eines neu erstellten Belegs
+	// (wichtig, damit der Beleg aufgeklappt wird, wenn die Liste neu aufgebaut wird;
+	// vgl. liste.status())
+	statusNeu: "",
 	// speichert den Status der aktuellen Belegliste, d.h. ob die Karten auf oder zugeklappt sind
 	//   filter_init = Boolean
 	//     (speichert, ob die Filterliste initialisiert werden sollen)
@@ -38,6 +42,10 @@ let liste = {
 				offen[id] = false;
 			}
 		}
+		// ggf. den gerade erst erstellten Beleg als offenen Beleg hinzufügen
+		if (liste.statusNeu) {
+			offen[liste.statusNeu] = true;
+		}
 		// Liste aufbauen
 		liste.aufbauen(filter_init);
 		// Klapp-Status wiederherstellen
@@ -52,7 +60,28 @@ let liste = {
 				koepfe_nach[i].nextSibling.classList.add("aus");
 			}
 		}
-		
+		// ggf. einen den neuen Beleg visuell hervorheben
+		if (liste.statusNeu) {
+			let belege = document.querySelectorAll(".liste-kopf"),
+				beleg_unsichtbar = true;
+			for (let i = 0, len = belege.length; i < len; i++) {
+				if (belege[i].dataset.id === liste.statusNeu) {
+					markNeu(belege[i]);
+					beleg_unsichtbar = false;
+					break;
+				}
+			}
+			liste.statusNeu = "";
+			// neuer Beleg könnte aufgrund der Filter versteckt sein
+			if (beleg_unsichtbar) {
+				dialog.oeffnen("alert", null);
+				dialog.text("Der Beleg wurde angelegt.\nWegen der Filtereinstellungen erscheint er jedoch nicht in der Belegliste.");
+			}
+		}
+		function markNeu (kopf) {
+			setTimeout( () => kopf.classList.add("neuer-beleg"), 0);
+			setTimeout( () => kopf.classList.remove("neuer-beleg"), 1500);
+		}
 	},
 	// baut die Belegliste auf
 	//   filter_init = Boolean
@@ -192,31 +221,31 @@ let liste = {
 		div.textContent = "keine Belege";
 		cont.appendChild(div);
 	},
-	// Anzahl der Karten drucken
+	// Anzahl der Belge drucken
 	//   gesamt = Number
-	//     (Anzahl aller Karten)
+	//     (Anzahl aller Belege)
 	//   gefiltert = Number
-	//     (Anzahl der Karten, die die Filterung überstanden haben)
+	//     (Anzahl der Belege, die die Filterung überstanden haben)
 	aufbauenAnzahl (gesamt, gefiltert) {
 		const cont = document.getElementById("liste-belege-anzahl");
-		// keine Karten
+		// keine Belege
 		if (!gesamt) {
 			cont.classList.add("aus");
 			return;
 		}
-		// Anzahl der Karten anzeigen
+		// Anzahl der Belege anzeigen
 		cont.classList.remove("aus");
 		let anzahl = "",
-			text = "Karte";
+			text = "Beleg";
 		if (gesamt !== gefiltert) {
 			if (gesamt !== 1) {
-				text = "Karten";
+				text = "Belegen";
 			}
 			anzahl = `${gefiltert}/${gesamt} ${text}`;
 			cont.classList.add("belege-gefiltert");
 		} else {
 			if (gesamt !== 1) {
-				text = "Karten";
+				text = "Belege";
 			}
 			anzahl = `${gesamt} ${text}`;
 			cont.classList.remove("belege-gefiltert");
@@ -386,13 +415,16 @@ let liste = {
 	//   beleg_akt = Object
 	//     (Verweis auf den aktuellen Beleg)
 	belegVorschau (beleg_akt) {
-		// Zeilenumbrüche löschen
-		let schnitt = beleg_akt.bs.replace(/\n/g, "");
+		// Beleg aufbereiten
+		let schnitt = beleg_akt.bs.replace(/\n+/g, " "); // Absätze könnten mit Leerzeile eingegeben sein
+		schnitt = schnitt.replace(/<.+?>/g, ""); // HTML-Formatierungen vorher löschen!
 		// 1. Treffer im Text ermitteln, Beleg am Anfang ggf. kürzen
-		let reg = new RegExp(helfer.escapeRegExp(kartei.wort), "gi"),
-			idx = schnitt.replace(/<.+?>/g, "").split(reg)[0].length; // HTML-Formatierungen vorher löschen!
-		if (idx > 30) {
-			schnitt = `…${schnitt.substring(idx - 20)}`;
+		let reg = new RegExp(helfer.escapeRegExp(kartei.wort), "gi");
+		if ( schnitt.match(reg) ) {
+			let idx = schnitt.split(reg)[0].length;
+			if (idx > 30) {
+				schnitt = `…${schnitt.substring(idx - 20)}`;
+			}
 		}
 		// Treffer hervorheben
 		schnitt = liste.belegWortHervorheben(schnitt);
@@ -426,7 +458,7 @@ let liste = {
 		if (!optionen.data.belegliste.wort_hervorheben) {
 			return schnitt;
 		}
-		let reg = new RegExp(helfer.escapeRegExp(kartei.wort), "gi");
+		let reg = new RegExp(`[a-zäöüß\-]*${helfer.escapeRegExp(kartei.wort)}[a-zäöüß\-]*`, "gi");
 		schnitt = schnitt.replace(reg, (m) => `<strong>${m}</strong>`);
 		return schnitt;
 	},
@@ -593,10 +625,10 @@ let liste = {
 			img.title = "Bücherdienst";
 			div.appendChild(img);
 		}
-		// Bewertung?
+		// Markierung?
 		if (beleg.be) {
 			let cont_span = document.createElement("span");
-			cont_span.title = "Bewertung";
+			cont_span.title = "Markierung";
 			div.appendChild(cont_span);
 			for (let i = 0; i < beleg.be; i++) {
 				let span = document.createElement("span");

@@ -118,6 +118,8 @@ let kartei = {
 			kartei.karteiGeaendert(false);
 			// alle Overlays schließen
 			overlay.alleSchliessen();
+			// alle Filter zurücksetzen (wichtig für Text- und Zeitraumfilter)
+			filter.ctrlReset(false);
 			// Okay! Datei kann eingelesen werden
 			data = JSON.parse(content);
 			kartei.wort = data.wo;
@@ -249,6 +251,7 @@ let kartei = {
 				notizen.notizenGeaendert(false);
 				beleg.belegGeaendert(false);
 				kartei.karteiGeaendert(true);
+				filter.ctrlReset(false);
 				kartei.wort = wort;
 				kartei.wortEintragen();
 				kartei.erstellen();

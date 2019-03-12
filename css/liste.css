@@ -63,21 +63,33 @@
 }
 
 #liste-filter header {
-	border-bottom: 1px solid var(--linie);
 	padding: 0 0 10px 10px;
 	height: 24px;
 	background-color: #fff;
 }
 
+#liste-filter-dynamisch {
+	display: block;
+}
+
 .filter-kopf {
 	display: block;
-	margin: 25px 0 10px 0;
-	padding: 2px 5px;
+	margin: 10px 0;
+	padding: 3px 5px 2px 5px; /* ein bisschen krum, damit der Kopf exakt dieselbe Höhe hat, wie ein Listenkopf */
 	background-color: var(--farbeB);
 	color: #fff;
 }
 
-.filter-kopf:focus {
+.filter-kopf:first-child {
+	margin-top: 0;
+}
+
+.filter-kopf.aktiv {
+	background-color: var(--aktiv);
+}
+
+.filter-kopf:focus,
+.filter-kopf.aktiv:focus {
 	background-color: var(--farbe);
 }
 
@@ -260,7 +272,12 @@
 	text-overflow: ellipsis;
 	white-space: nowrap;
 	background-color: var(--hintergrund);
-	cursor: pointer;
+	transition: background-color 1.5s ease;
+}
+
+.liste-kopf.neuer-beleg {
+	background-color: var(--highlight);
+	transition: background-color 1.5s ease;
 }
 
 #liste-belege-cont .liste-autor-detail {
@@ -314,6 +331,10 @@
 
 .liste-details > div:first-child {
 	margin-top: 0;
+}
+
+.liste-details a {
+	cursor: pointer;
 }
 
 .liste-details p {

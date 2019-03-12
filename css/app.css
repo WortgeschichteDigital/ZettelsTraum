@@ -12,6 +12,7 @@
 	/* Hintergrund-Farben */
 	--hintergrund: #f9f9f9;
 	--hover: #f9f9f9;
+	--highlight: #ff0;
 	/* Farb-Elemente */
 	--farbe: #72a0cf;
 	--farbeB: #386ea6; /* Buttons */
@@ -113,6 +114,7 @@ a {
 	outline: none;
 	color: var(--textFarbe);
 	text-decoration: none;
+	cursor: default;
 }
 
 .icon-link {

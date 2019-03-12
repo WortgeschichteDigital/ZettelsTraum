@@ -122,10 +122,6 @@ body > header span {
 }
 
 /* Wort ----------------------------------------- */
-#wort {
-	cursor: pointer;
-}
-
 #wort.keine-kartei {
 	font-size: 20px;
 	font-style: italic;
@@ -145,7 +141,6 @@ body > header span {
 	bottom: 18px;
 	vertical-align: bottom;
 	margin-left: 50px;
-	cursor: pointer;
 }
 
 /* App-Icon ------------------------------------- */
@@ -155,5 +150,4 @@ body > header span {
 	right: 10px;
 	width: 48px;
 	height: 48px;
-	cursor: pointer;
 }
