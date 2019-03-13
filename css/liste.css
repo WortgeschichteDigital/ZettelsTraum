@@ -55,11 +55,14 @@
 #liste-filter {
 	position: sticky;
 	top: 70px; /* 70px + margin-top über dem ersten Element in #liste-filter */
+	max-height: calc(100vh - 70px);
+	overflow: hidden;
 	transition: top .5s ease;
 }
 
 .quick #liste-filter {
 	top: 99px; /* 99px + margin-top über dem ersten Element in #liste-filter */
+	max-height: calc(100vh - 99px);
 }
 
 #liste-filter header {
@@ -98,12 +101,21 @@
 }
 
 .filter-cont-max {
+	margin-bottom: 10px;
 	max-height: 340px;
 	overflow-y: auto;
 }
 
+.filter-cont-max p:last-child {
+	margin-bottom: 0;
+}
+
 .filter-cont p {
 	padding-left: 1px; /* sonst wird der outline links abgeschnitten; vgl. .filter-cont */
+}
+
+.filter-cont p.markierung {
+	margin-bottom: 5px;
 }
 
 .filter-keine-belege {
@@ -123,7 +135,7 @@
 }
 
 #liste-filter input[type="radio"] {
-	margin-left: 20px;
+	margin-left: 15px;
 }
 
 #liste-filter input[type="radio"]:first-child {
@@ -132,6 +144,18 @@
 
 #liste-filter label {
 	color: var(--textFarbe);
+}
+
+#filter-bewertung {
+	margin-left: 22px;
+}
+
+#filter-bewertung a.aktiv {
+	background-color: var(--farbeStern);
+}
+
+#filter-bewertung a.aktiv:focus {
+	background-color: var(--farbe);
 }
 
 /* Belegliste: Header --------------------------- */

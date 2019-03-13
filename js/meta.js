@@ -1,7 +1,7 @@
 "use strict";
 
 let meta = {
-	// Fenster für Notizen einblenden
+	// Metadaten-Fenster einblenden
 	oeffnen () {
 		let fenster = document.getElementById("meta");
 		// Fenster öffnen oder in den Vordergrund holen

@@ -34,14 +34,16 @@ let helfer = {
 				kartei.speichern(false);
 			} else if (id === "kartei-speichern-unter") {
 				kartei.speichern(true);
-			} else if (id === "kartei-metadaten") {
-				meta.oeffnen();
-			} else if (id === "kartei-anhaenge") {
-				// TODO
+			} else if (id === "kartei-wortstamm") {
+				stamm.oeffnen();
 			} else if (id === "kartei-notizen") {
 				notizen.oeffnen();
-			} else if (id === "kartei-suche") {
+			} else if (id === "kartei-anhaenge") {
 				// TODO
+			} else if (id === "kartei-metadaten") {
+				meta.oeffnen();
+			} else if (id === "kartei-suche") {
+				filter.suche();
 			} else if (id === "kartei-schliessen") {
 				kartei.schliessen();
 			} else if (id === "belege-hinzufuegen") {

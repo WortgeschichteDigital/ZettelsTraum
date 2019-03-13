@@ -44,9 +44,10 @@ let optionen = {
 			"quick-kartei-oeffnen": false,
 			"quick-kartei-speichern": false,
 			"quick-kartei-speichern-unter": false,
-			"quick-kartei-metadaten": false,
-			"quick-kartei-anhaenge": false,
+			"quick-kartei-wortstamm": false,
 			"quick-kartei-notizen": false,
+			"quick-kartei-anhaenge": false,
+			"quick-kartei-metadaten": false,
 			"quick-kartei-suche": false,
 			"quick-kartei-schliessen": false,
 			"quick-belege-hinzufuegen": false,
@@ -55,8 +56,13 @@ let optionen = {
 			// neue Karteikarten als unvollständig markieren
 			unvollstaendig: true,
 		},
-		// speichert den gewünschten Zeitintervall, der in der Filterliste gewählt wurde
-		filter_zeitraum: "100",
+		// Einstellungen in der Filterleiste
+		filter: {
+			// speichert den gewünschten Zeitintervall, der in der Filterliste gewählt wurde
+			zeitraum: "100",
+			// inklusive Logik sollte der exklusiven vorgezogen werden (betrifft "Verschiedenes")
+			logik: "inklusiv",
+		},
 		// letzter Pfad, der beim Speichern oder Öffnen einer Datei benutzt wurde
 		letzter_pfad: "",
 		// zuletzt verwendete Dokumente
@@ -91,7 +97,7 @@ let optionen = {
 		// Zeitfilter in der Filterleiste anpassen
 		let filter_zeitraum = document.getElementsByName("filter-zeitraum");
 		for (let i = 0, len = filter_zeitraum.length; i < len; i++) {
-			if (filter_zeitraum[i].id === `filter-zeitraum-${optionen.data.filter_zeitraum}`) {
+			if (filter_zeitraum[i].id === `filter-zeitraum-${optionen.data.filter.zeitraum}`) {
 				filter_zeitraum[i].checked = true;
 			} else {
 				filter_zeitraum[i].checked = false;

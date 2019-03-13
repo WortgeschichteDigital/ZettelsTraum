@@ -1,12 +1,16 @@
 "use strict";
 
 let filter = {
+	// gibt an, ob die Filter gerade neu aufgebaut wurden
+	init: false,
 	// Zwischenspeicher für die dynamischen Filtertypen
 	typen: {},
 	// Liste der Filter aufbauen
 	//   belege = Array
 	//     (die IDs der Belege, bereits chronologisch sortiert)
 	aufbauen (belege) {
+		// Filter werden neu aufgebaut => das muss für später vorgemerkt werden
+		filter.init = true;
 		// Backup der Filtereinstellungen erstellen
 		let filter_backup = filter.backup();
 		// Zeitraum-Filter
@@ -28,10 +32,6 @@ let filter = {
 				name: "Verschiedenes",
 				filter_vorhanden: false,
 				filter: {
-					vollstaendig: {
-						name: "vollständig",
-						wert: 0,
-					},
 					unvollstaendig: {
 						name: "unvollständig",
 						wert: 0,
@@ -59,9 +59,6 @@ let filter = {
 			// Vollständigkeit
 			if (data.ka[id].un) {
 				filter.typen.verschiedenes.filter.unvollstaendig.wert++;
-				filter.typen.verschiedenes.filter_vorhanden = true;
-			} else {
-				filter.typen.verschiedenes.filter.vollstaendig.wert++;
 				filter.typen.verschiedenes.filter_vorhanden = true;
 			}
 			// Kontext
@@ -91,6 +88,9 @@ let filter = {
 				continue;
 			}
 			cont.appendChild( filter.aufbauenCont(filter.typen[block].name) );
+			if (block === "verschiedenes") {
+				cont.lastChild.appendChild( filter.aufbauenFilterlogik() );
+			}
 			for (let f in filter.typen[block].filter) {
 				if ( !filter.typen[block].filter.hasOwnProperty(f) ) {
 					continue;
@@ -103,6 +103,8 @@ let filter = {
 		}
 		// Backup der Filtereinstellungen wiederherstellen
 		filter.backupWiederher(filter_backup);
+		// ggf. Markierung der Sterne wiederherstellen
+		filter.markierenSterne();
 	},
 	// Zwischenspeicher für die Zeiträume der aktuellen Belegliste
 	zeitraumStart: "",
@@ -223,7 +225,7 @@ let filter = {
 	//     (Radio-Button, der für die gewünschten Zeitschnitte steht)
 	wechselnZeitraum (input) {
 		input.addEventListener("change", function() {
-			optionen.data.filter_zeitraum = this.id.match(/[0-9]+$/)[0];
+			optionen.data.filter.zeitraum = this.id.match(/[0-9]+$/)[0];
 			optionen.speichern(false);
 			filter.aufbauenZeitraum();
 			filter.aktiveFilterErmitteln();
@@ -241,15 +243,48 @@ let filter = {
 		a.href = "#";
 		a.id = `filter-kopf-${name.toLowerCase()}`;
 		a.textContent = name;
-		filter.anzeigeUmschaltenListener(a);
+		filter.anzeigeUmschalten(a);
 		frag.appendChild(a);
 		// Filter-Container
 		let div = document.createElement("div");
 		div.classList.add("filter-cont");
-		div.id = `filter-cont-${name.toLowerCase()}`;
 		frag.appendChild(div);
 		// Fragment zurückgeben
 		return frag;
+	},
+	// Zeile mit Filterlogik aufbauen
+	aufbauenFilterlogik () {
+		let p = document.createElement("p");
+		p.textContent = "Filterlogik: ";
+		let inputs = ["inklusiv", "exklusiv"];
+		for (let i = 0, len = inputs.length; i < len; i++) {
+			// Input
+			let input = document.createElement("input");
+			input.id = `filter-logik-${inputs[i]}`;
+			input.name = "filter-logik";
+			input.type = "radio";
+			if (inputs[i] === optionen.data.filter.logik) {
+				input.checked = true;
+			}
+			filter.wechselnFilterlogik(input);
+			p.appendChild(input);
+			// Label
+			let label = document.createElement("label");
+			label.setAttribute("for", `filter-logik-${inputs[i]}`);
+			label.textContent = inputs[i];
+			p.appendChild(label);
+		}
+		return p;
+	},
+	// die Logik im Verschiedenes-Filter wird geändert
+	//   input = Element
+	//     (Radio-Button, der für die gewünschten Zeitschnitte steht)
+	wechselnFilterlogik (input) {
+		input.addEventListener("change", function() {
+			optionen.data.filter.logik = this.id.match(/[a-z]+$/)[0];
+			optionen.speichern(false);
+			liste.status(false);
+		});
 	},
 	// Absatz mit einem Checkbox-Filter erzeugen
 	//   f = String
@@ -262,7 +297,8 @@ let filter = {
 			return false;
 		}
 		// Ja, der Filter muss gedruckt werden
-		let p = document.createElement("p"),
+		let frag = document.createDocumentFragment(),
+			p = document.createElement("p"),
 			input = document.createElement("input");
 		input.classList.add("filter");
 		input.id = `filter-${f}`;
@@ -280,8 +316,48 @@ let filter = {
 		span.textContent = `(${obj.wert})`;
 		span.title = `Anzahl der Belege, auf die der Filter „${obj.name}“ zutrifft`;
 		p.appendChild(span);
-		// Absatz zurückgeben
+		// Absatz einhängen
+		frag.appendChild(p);
+		// ggf. Absatz mit Sternen aufbauen
+		if (f === "markierung") {
+			frag.lastChild.classList.add("markierung");
+			frag.appendChild( filter.aufbauenSterne() );
+		}
+		// Fragment zurückgeben
+		return frag;
+	},
+	// Absatz mit Sternen aufbauen für eine detaillierte Markierungssuche
+	aufbauenSterne () {
+		let p = document.createElement("p");
+		p.dataset.bewertung = "0";
+		p.id = "filter-bewertung";
+		for (let i = 0; i < 5; i++) {
+			let a = document.createElement("a");
+			a.classList.add("icon-link", "icon-stern");
+			a.href = "#";
+			a.textContent = " ";
+			beleg.bewertungEvents(a);
+			p.appendChild(a);
+		}
 		return p;
+	},
+	// stellt die gespeicherte Markierung im Bewertungsfilter wieder her
+	markierenSterne () {
+		const filter_bewertung = document.getElementById("filter-bewertung");
+		// keine Markierung gespeichert
+		if (!filter_bewertung) {
+			return;
+		}
+		// Markierung wiederherstellen
+		const be = parseInt(filter_bewertung.dataset.bewertung, 10),
+			sterne = document.querySelectorAll("#filter-bewertung a");
+		for (let i = 0, len = sterne.length; i < len; i++) {
+			if (i < be) {
+				sterne[i].classList.add("aktiv");
+			} else {
+				sterne[i].classList.remove("aktiv");
+			}
+		}
 	},
 	// Erstellt ein Backup der aktuellen Filter-Einstellungen, um sie nach
 	// dem Neuaufbau der Liste wieder anzuwenden.
@@ -294,6 +370,10 @@ let filter = {
 				bak[i.id] = i.checked;
 			}
 		});
+		let filter_bewertung = document.getElementById("filter-bewertung");
+		if (filter_bewertung) {
+			bak["filter-bewertung"] = filter_bewertung.dataset.bewertung;
+		}
 		return bak;
 	},
 	// Stellt ein zuvor gemachtes Backup der Einstellungen in der Filterliste wieder her.
@@ -312,6 +392,10 @@ let filter = {
 				i.checked = bak[i.id];
 			}
 		});
+		let filter_bewertung = document.getElementById("filter-bewertung");
+		if (bak["filter-bewertung"] && filter_bewertung) {
+			filter_bewertung.dataset.bewertung = bak["filter-bewertung"];
+		}
 	},
 	// speichert den aktiven Timeout für das Anwenden der Filter
 	// (wichtig für den Volltextfilter, der nicht sofort, sondern
@@ -332,10 +416,29 @@ let filter = {
 			filter.anwendenTimeout = setTimeout( () => liste.status(false), timeout);
 		});
 	},
+	anwendenSterne (stern) {
+		let filter_bewertung = document.getElementById("filter-bewertung"),
+			be = parseInt(filter_bewertung.dataset.bewertung, 10),
+			sterne = filter_bewertung.querySelectorAll("a");
+		for (let i = 0, len = sterne.length; i < len; i++) {
+			if (sterne[i] === stern) {
+				let bewertung = i + 1;
+				if (be === bewertung) {
+					filter_bewertung.dataset.bewertung = "0";
+				} else {
+					document.getElementById("filter-markierung").checked = true;
+					filter_bewertung.dataset.bewertung = bewertung;
+				}
+				sterne[i].blur();
+				break;
+			}
+		}
+		liste.status(false);
+	},
 	// Zwischenspeicher für die zur Zeit aktiven Filter
 	aktiveFilter: {},
 	// ermittelt, welche Filter gerade aktiv sind
-	aktiveFilterErmitteln() {
+	aktiveFilterErmitteln () {
 		filter.aktiveFilter = {};
 		document.querySelectorAll(".filter").forEach(function(i) {
 			if (i.type === "text" && i.value ||
@@ -368,6 +471,8 @@ let filter = {
 		}
 		// die gerade aktiven Filterblöcke als solche markieren
 		filter.aktiveFilterMarkieren();
+		// inaktive Filterblöcke ggf. schließen
+		filter.inaktiveSchliessen();
 		// filter_zeitraum wird unter Umständen weiterverwendet
 		return filter_zeitraum;
 	},
@@ -382,6 +487,28 @@ let filter = {
 			}
 		});
 	},
+	// inaktive Filter nach dem Neuaufbau der Filterliste schließen
+	inaktiveSchliessen () {
+		// Wurden die Filter gerade erste neu aufgebaut?
+		if (!filter.init) {
+			return;
+		}
+		filter.init = false;
+		// inaktive Filter schließen
+		let koepfe = document.querySelectorAll(".filter-kopf"),
+			aktive_filter = 0;
+		koepfe.forEach(function(i) {
+			if ( !i.classList.contains("aktiv") ) {
+				i.nextSibling.classList.add("aus");
+				return;
+			}
+			aktive_filter++;
+		});
+		// sind alle Filter inaktiv => 1. Filter öffnen
+		if (!aktive_filter) {
+			koepfe[0].nextSibling.classList.remove("aus");
+		}
+	},
 	// Karteikarten filtern
 	//   karten = Array
 	//     (enthält die IDs der Karten, die gefiltert werden sollen)
@@ -392,6 +519,18 @@ let filter = {
 		// keine Filter aktiv
 		if (!Object.keys(filter.aktiveFilter).length) {
 			return karten;
+		}
+		// bei vorhandemen Verschiedenes-Filtern
+		let filter_logik = document.getElementById("filter-logik-inklusiv"),
+			filter_inklusiv = true;
+		if (filter_logik && !filter_logik.checked) {
+			filter_inklusiv = false;
+		}
+		// bei vorhandemen Bewertungsfilter
+		let filter_bewertung = document.getElementById("filter-bewertung"),
+			be = 0;
+		if (filter_bewertung) {
+			be = parseInt(filter_bewertung.dataset.bewertung, 10);
 		}
 		// Karten filtern
 		let karten_gefiltert = [],
@@ -411,23 +550,28 @@ let filter = {
 				}
 			}
 			// vollständig oder unvollständig
-			let voll = filter.aktiveFilter.vollstaendig,
-				unvoll = filter.aktiveFilter.unvollstaendig;
-			if (voll || unvoll) {
-				if (data.ka[id].un && !unvoll || !data.ka[id].un && !voll) {
-					continue;
-				}
+			if ( filter.aktiveFilter.unvollstaendig &&
+					(data.ka[id].un && !filter_inklusiv ||
+					!data.ka[id].un && filter_inklusiv) ) {
+				continue;
 			}
 			// Kontext
-			if (filter.aktiveFilter.kontext && !data.ka[id].ko) {
+			if ( filter.aktiveFilter.kontext &&
+					(data.ka[id].ko && !filter_inklusiv ||
+					!data.ka[id].ko && filter_inklusiv) ) {
 				continue;
 			}
 			// Bücherdienst
-			if (filter.aktiveFilter.buecherdienst && !data.ka[id].bu) {
+			if ( filter.aktiveFilter.buecherdienst &&
+					(data.ka[id].bu && !filter_inklusiv ||
+					!data.ka[id].bu && filter_inklusiv) ) {
 				continue;
 			}
 			// Markierung
-			if (filter.aktiveFilter.markierung && !data.ka[id].be) {
+			if ( filter.aktiveFilter.markierung &&
+					(data.ka[id].be && !filter_inklusiv ||
+					!data.ka[id].be && filter_inklusiv ||
+					data.ka[id].be && filter_inklusiv && be > data.ka[id].be) ) {
 				continue;
 			}
 			// Karte ist okay!
@@ -487,6 +631,11 @@ let filter = {
 				i.checked = false;
 			}
 		});
+		let filter_bewertung = document.getElementById("filter-bewertung");
+		if (filter_bewertung) {
+			filter_bewertung.dataset.bewertung = "0";
+			filter.markierenSterne();
+		}
 		// ggf. Liste neu aufbauen
 		if (liste_aufbauen) {
 			liste.status(false);
@@ -572,10 +721,39 @@ let filter = {
 		}
 	},
 	// klappt die Filterblöcke auf oder zu (Event-Listener)
-	anzeigeUmschaltenListener (a) {
+	anzeigeUmschalten (a) {
 		a.addEventListener("click", function(evt) {
 			evt.preventDefault();
 			a.nextSibling.classList.toggle("aus");
 		});
+	},
+	// die Suche wird aufgerufen
+	suche () {
+		// Sicherheitsfrage, falls Beleg und/oder Notizen noch nicht gespeichert sind
+		if (notizen.geaendert || beleg.geaendert) {
+			sicherheitsfrage.warnen(function() {
+				notizen.geaendert = false;
+				beleg.geaendert = false;
+				filter.suche();
+			}, {
+				notizen: true,
+				beleg: true,
+				kartei: false,
+			});
+			return;
+		}
+		// Beleg schließen
+		beleg.aktionAbbrechen();
+		// alle Overlays schließen (da gehört auch das Notizen-Fenster zu)
+		overlay.alleSchliessen();
+		// ggf. Filter öffnen
+		if (!optionen.data.belegliste.filterleiste) {
+			liste.headerFilter();
+		}
+		// Suche öffnen
+		let input = document.getElementById("filter-volltext");
+		input.parentNode.parentNode.classList.remove("aus");
+		// Suchfeld fokussieren
+		input.select();
 	},
 };

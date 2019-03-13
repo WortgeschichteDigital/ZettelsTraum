@@ -5,6 +5,7 @@
 #einstellungen,
 #meta,
 #notizen,
+#stamm,
 #zeitraumgrafik {
 	position: fixed;
 	top: 0;
@@ -20,6 +21,7 @@
 #einstellungen > div,
 #meta > div,
 #notizen > div,
+#stamm > div,
 #zeitraumgrafik > div {
 	margin: 80px auto 0 auto;
 	border-bottom-right-radius: 10px;
@@ -32,6 +34,7 @@
 #einstellungen h2,
 #meta h2,
 #notizen h2,
+#stamm h2,
 #zeitraumgrafik h2 {
 	position: relative;
 }
@@ -40,6 +43,7 @@
 #einstellungen h2 a,
 #meta h2 a,
 #notizen h2 a,
+#stamm h2 a,
 #zeitraumgrafik h2 a {
 	position: absolute;
 	top: 2px;
@@ -69,7 +73,7 @@
 
 #einstellungen-cont {
 	display: grid;
-	grid-template-columns: 150px 1fr;
+	grid-template-columns: 150px calc(100% - 150px);
 }
 
 #einstellungen-cont > div {
@@ -156,60 +160,45 @@
 	color: var(--textWarnung);
 }
 
-/* Metadaten ------------------------------------ */
-#meta > div {
+/* Wortstamm-Variationen ------------------------ */
+#stamm > div {
 	margin-top: 40px;
-	max-width: 900px;
+	max-width: 400px;
 }
 
-.icon-h-meta {
-	-webkit-mask-image: url(../img/heading-meta.svg);
-	mask-image: url(../img/heading-meta.svg);
+.icon-h-stamm {
+	-webkit-mask-image: url(../img/heading-wortstamm.svg);
+	mask-image: url(../img/heading-wortstamm.svg);
 }
 
-#meta-cont {
-	display: grid;
-	grid-template-columns: repeat(2, calc(50% - 15px));
-	column-gap: 30px;
-	padding: 10px 10px 5px 10px;
+#stamm-cont {
+	padding: 10px;
 }
 
-#meta-cont h3 {
-	margin: 10px 0 5px 0;
-}
-
-#meta-cont p {
+#stamm-cont p {
 	margin-bottom: 5px;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	white-space: nowrap;
 }
 
+#stamm-cont input[type="button"],
 #meta-cont input[type="button"] {
 	margin-left: 5px;
 	width: 116px;
 }
 
+#stamm-cont input[type="text"],
 #meta-cont input[type="text"] {
 	width: calc(100% - 121px - 12px); /* Button 121px, 12px padding und border */
 }
 
-#meta-cont .kein-wert {
-	color: var(--textSehrHell);
-	font-style: italic;
-}
-
-#meta-speicherort {
-	text-align: left; /* das Feld ist rtl, bei kurzem Inhalt wäre der Text sonst rechtsbündig */
-}
-
+#stamm-liste,
 #meta-be-liste {
 	margin-bottom: 5px;
-	height: 120px;
+	max-height: 290px;
 	overflow-x: hidden;
 	overflow-y: auto;
 }
 
+#stamm-liste .icon-link,
 #meta-be-liste .icon-link {
 	position: relative;
 	top: -1px;
@@ -218,10 +207,12 @@
 	background-color: var(--textExtremHell);
 }
 
+#stamm-liste .icon-link:focus,
 #meta-be-liste .icon-link:focus {
 	background-color: var(--farbe);
 }
 
+#stamm-liste .icon-link:hover,
 #meta-be-liste .icon-link:hover {
 	background-color: var(--text);
 }
@@ -229,18 +220,6 @@
 .icon-entfernen {
 	-webkit-mask-image: url(../img/meta-entfernen.svg);
 	mask-image: url(../img/meta-entfernen.svg);
-}
-
-#meta-le-liste {
-	display: flex;
-	flex-direction: column;
-	flex-wrap: wrap;
-	height: 377px;
-	overflow: hidden;
-}
-
-#meta-le-liste p {
-	padding: 0 10px 0 1px; /* 1px links, damit die linke Grenze des Outline onfocus angezeigt wird */
 }
 
 /* Notizen -------------------------------------- */
@@ -280,6 +259,61 @@
 .icon-h-notizen {
 	-webkit-mask-image: url(../img/heading-notizen.svg);
 	mask-image: url(../img/heading-notizen.svg);
+}
+
+/* Metadaten ------------------------------------ */
+#meta > div {
+	margin-top: 40px;
+	max-width: 900px;
+}
+
+.icon-h-meta {
+	-webkit-mask-image: url(../img/heading-meta.svg);
+	mask-image: url(../img/heading-meta.svg);
+}
+
+#meta-cont {
+	display: grid;
+	grid-template-columns: repeat(2, calc(50% - 15px));
+	column-gap: 30px;
+	padding: 10px 10px 5px 10px;
+}
+
+#meta-cont h3 {
+	margin: 10px 0 5px 0;
+}
+
+#meta-cont p {
+	margin-bottom: 5px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+#meta-cont .kein-wert {
+	color: var(--textSehrHell);
+	font-style: italic;
+}
+
+#meta-speicherort {
+	text-align: left; /* das Feld ist rtl, bei kurzem Inhalt wäre der Text sonst rechtsbündig */
+}
+
+#meta-be-liste {
+	height: 120px;
+	max-height: none;
+}
+
+#meta-le-liste {
+	display: flex;
+	flex-direction: column;
+	flex-wrap: wrap;
+	height: 377px;
+	overflow: hidden;
+}
+
+#meta-le-liste p {
+	padding: 0 10px 0 1px; /* 1px links, damit die linke Grenze des Outline onfocus angezeigt wird */
 }
 
 /* Zeitraumgrafik ------------------------------- */

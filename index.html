@@ -26,6 +26,7 @@
 		<script src="js/overlay.js"></script>
 		<script src="js/privat.js"></script>
 		<script src="js/sicherheitsfrage.js"></script>
+		<script src="js/stamm.js"></script>
 		<script src="js/start.js"></script>
 	</head>
 	<body>
@@ -36,9 +37,10 @@
 			><a href="#" id="quick-kartei-oeffnen" class="icon-link" title="Kartei: Öffnen"> </a
 			><a href="#" id="quick-kartei-speichern" class="icon-link" title="Kartei: Speichern"> </a
 			><a href="#" id="quick-kartei-speichern-unter" class="icon-link" title="Kartei: Speichern unter"> </a
-			><a href="#" id="quick-kartei-metadaten" class="icon-link" title="Kartei: Metadaten"> </a
-			><a href="#" id="quick-kartei-anhaenge" class="icon-link" title="Kartei: Anhänge"> </a
+			><a href="#" id="quick-kartei-wortstamm" class="icon-link" title="Kartei: Wortstamm-Variationen"> </a
 			><a href="#" id="quick-kartei-notizen" class="icon-link" title="Kartei: Notizen"> </a
+			><a href="#" id="quick-kartei-anhaenge" class="icon-link" title="Kartei: Anhänge"> </a
+			><a href="#" id="quick-kartei-metadaten" class="icon-link" title="Kartei: Metadaten"> </a
 			><a href="#" id="quick-kartei-suche" class="icon-link" title="Kartei: Suche"> </a
 			><a href="#" id="quick-kartei-schliessen" class="icon-link" title="Kartei: Schließen"> </a
 			><a href="#" id="quick-belege-hinzufuegen" class="icon-link" title="Belege: Hinzufügen"> </a
@@ -150,11 +152,11 @@
 				<!-- Der folgende <div> ist nur dazu da, dass die Tastaturnavigation zwischen den Filterköpfen nicht in den Header springt und da dann nicht mehr rauskommt. -->
 				<div
 					><a href="#" class="filter-kopf" id="filter-kopf-volltext">Volltext</a
-					><div class="filter-cont" id="filter-cont-volltext">
+					><div class="filter-cont">
 						<p><input type="text" value="" class="filter" id="filter-volltext"></p>
 					</div
 					><a href="#" class="filter-kopf" id="filter-kopf-zeitraum">Zeitraum</a
-					><div class="filter-cont" id="filter-cont-zeitraum">
+					><div class="filter-cont">
 						<p><input type="radio" name="filter-zeitraum" id="filter-zeitraum-10"
 							><label for="filter-zeitraum-10">10er</label
 							><input type="radio" name="filter-zeitraum" id="filter-zeitraum-50"
@@ -233,12 +235,14 @@
 								><label for="einstellung-quick-kartei-speichern">Speichern</label></p>
 							<p><input type="checkbox" id="einstellung-quick-kartei-speichern-unter"
 								><label for="einstellung-quick-kartei-speichern-unter">Speichern unter</label></p>
-							<p><input type="checkbox" id="einstellung-quick-kartei-metadaten"
-								><label for="einstellung-quick-kartei-metadaten">Metadaten</label></p>
-							<p><input type="checkbox" id="einstellung-quick-kartei-anhaenge"
-								><label for="einstellung-quick-kartei-anhaenge">Anhänge</label></p>
+							<p><input type="checkbox" id="einstellung-quick-kartei-wortstamm"
+								><label for="einstellung-quick-kartei-wortstamm">Wortstamm-Variationen</label></p>
 							<p><input type="checkbox" id="einstellung-quick-kartei-notizen"
 								><label for="einstellung-quick-kartei-notizen">Notizen</label></p>
+							<p><input type="checkbox" id="einstellung-quick-kartei-anhaenge"
+								><label for="einstellung-quick-kartei-anhaenge">Anhänge</label></p>
+							<p><input type="checkbox" id="einstellung-quick-kartei-metadaten"
+								><label for="einstellung-quick-kartei-metadaten">Metadaten</label></p>
 							<p><input type="checkbox" id="einstellung-quick-kartei-suche"
 								><label for="einstellung-quick-kartei-suche">Suche</label></p>
 							<p><input type="checkbox" id="einstellung-quick-kartei-schliessen"
@@ -257,6 +261,30 @@
 							><label for="einstellung-unvollstaendig">neue Karteikarten als unvollständig markieren</label></p>
 					</section>
 				</div>
+			</div>
+		</div></div>
+		
+		<!-- OVERLAY: Wortstamm-Variationen -->
+		<div id="stamm" class="overlay aus"><div>
+			<h2><span class="icon-h icon-h-stamm"> </span
+				>Wortstamm-Variationen<a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen"> </a></h2>
+			<div id="stamm-cont">
+				<div id="stamm-liste"></div>
+				<p class="input-text"><input type="text" value="" spellcheck="false" id="stamm-text"
+					><input type="button" value="Ergänzen" id="stamm-ergaenzen"></p>
+			</div>
+		</div></div>
+		
+		<!-- OVERLAY: Notizen -->
+		<div id="notizen" class="overlay aus"><div>
+			<h2><span class="icon-h icon-h-notizen"> </span
+				>Notizen<span id="notizen-geaendert" class="aus">*</span
+				><a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen"> </a></h2>
+			<div id="notizen-cont">
+				<textarea spellcheck="false" id="notizen-feld"></textarea>
+				<p class="button"><input type="button" value="Speichern" id="notizen-speichern"
+					><input type="button" value="Abbrechen" id="notizen-abbrechen"
+					><input type="button" value="Löschen" id="notizen-loeschen"></p>
 			</div>
 		</div></div>
 		
@@ -284,19 +312,6 @@
 					<p class="input-text"><input type="text" value="" spellcheck="false" id="meta-le"
 						><input type="button" value="Ergänzen" id="meta-le-ergaenzen"></p>
 				</div>
-			</div>
-		</div></div>
-		
-		<!-- OVERLAY: Notizen -->
-		<div id="notizen" class="overlay aus"><div>
-			<h2><span class="icon-h icon-h-notizen"> </span
-				>Notizen<span id="notizen-geaendert" class="aus">*</span
-				><a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen"> </a></h2>
-			<div id="notizen-cont">
-				<textarea spellcheck="false" id="notizen-feld"></textarea>
-				<p class="button"><input type="button" value="Speichern" id="notizen-speichern"
-					><input type="button" value="Abbrechen" id="notizen-abbrechen"
-					><input type="button" value="Löschen" id="notizen-loeschen"></p>
 			</div>
 		</div></div>
 		

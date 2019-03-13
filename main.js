@@ -83,10 +83,16 @@ let layoutMenu = [
 			},
 			{ type: "separator" },
 			{
-				label: "Metadaten",
-				icon: path.join(__dirname, "img", "menu", "kartei-metadaten.png"),
-				click: () => win.webContents.send("kartei-metadaten"),
-				id: "kartei-metadaten",
+				label: "Wortstamm-Variationen",
+				icon: path.join(__dirname, "img", "menu", "kartei-wortstamm.png"),
+				click: () => win.webContents.send("kartei-wortstamm"),
+				id: "kartei-wortstamm",
+			},
+			{
+				label: "Notizen",
+				icon: path.join(__dirname, "img", "menu", "kartei-notizen.png"),
+				click: () => win.webContents.send("kartei-notizen"),
+				id: "kartei-notizen",
 			},
 			{
 				label: "Anhänge",
@@ -95,16 +101,16 @@ let layoutMenu = [
 				id: "kartei-anhaenge",
 			},
 			{
-				label: "Notizen",
-				icon: path.join(__dirname, "img", "menu", "kartei-notizen.png"),
-				click: () => win.webContents.send("kartei-notizen"),
-				id: "kartei-notizen",
+				label: "Metadaten",
+				icon: path.join(__dirname, "img", "menu", "kartei-metadaten.png"),
+				click: () => win.webContents.send("kartei-metadaten"),
+				id: "kartei-metadaten",
 			},
 			{ type: "separator" },
 			{
 				label: "Suche",
 				icon: path.join(__dirname, "img", "menu", "kartei-suche.png"),
-				click: () => void 0, // TODO
+				click: () => win.webContents.send("kartei-suche"),
 				accelerator: "CommandOrControl+F",
 				id: "kartei-suche",
 			},
@@ -340,7 +346,7 @@ appMenu = {
 	},
 	// Menü-Elemente deaktivieren, wenn keine Kartei offen ist
 	deaktivieren (disable, update) {
-		let elemente = ["kartei-speichern", "kartei-speichern-unter", "kartei-metadaten", "kartei-notizen", "kartei-anhaenge", "kartei-suche", "kartei-schliessen", "belege"];
+		let elemente = ["kartei-speichern", "kartei-speichern-unter", "kartei-wortstamm", "kartei-notizen", "kartei-anhaenge", "kartei-metadaten", "kartei-suche", "kartei-schliessen", "belege"];
 		for (let j = 0, len = layoutMenu.length; j < len; j++) {
 			// sollen vielleicht alle Menüpunkte deaktiviert werden?
 			let alle = false;
@@ -415,7 +421,7 @@ optionen = {
 		fenster: {
 			x: undefined,
 			y: undefined,
-			width: 800,
+			width: 1100,
 			height: undefined,
 			maximiert: false,
 		},

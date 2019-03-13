@@ -53,9 +53,14 @@
 	mask-image: url(../img/quick-speichern-unter.svg);
 }
 
-#quick-kartei-metadaten {
-	-webkit-mask-image: url(../img/quick-metadaten.svg);
-	mask-image: url(../img/quick-metadaten.svg);
+#quick-kartei-wortstamm {
+	-webkit-mask-image: url(../img/quick-wortstamm.svg);
+	mask-image: url(../img/quick-wortstamm.svg);
+}
+
+#quick-kartei-notizen {
+	-webkit-mask-image: url(../img/quick-notizen.svg);
+	mask-image: url(../img/quick-notizen.svg);
 }
 
 #quick-kartei-anhaenge {
@@ -63,9 +68,9 @@
 	mask-image: url(../img/quick-anhaenge.svg);
 }
 
-#quick-kartei-notizen {
-	-webkit-mask-image: url(../img/quick-notizen.svg);
-	mask-image: url(../img/quick-notizen.svg);
+#quick-kartei-metadaten {
+	-webkit-mask-image: url(../img/quick-metadaten.svg);
+	mask-image: url(../img/quick-metadaten.svg);
 }
 
 #quick-kartei-suche {

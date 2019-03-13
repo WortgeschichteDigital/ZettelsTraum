@@ -66,7 +66,7 @@ window.addEventListener("load", function() {
 	}
 	// Belegliste-Filter
 	document.querySelectorAll("#liste-filter header a").forEach( (a) => filter.ctrlButtons(a) );
-	document.querySelectorAll(".filter-kopf").forEach( (a) => filter.anzeigeUmschaltenListener(a) );
+	document.querySelectorAll(".filter-kopf").forEach( (a) => filter.anzeigeUmschalten(a) );
 	filter.anwenden( document.getElementById("filter-volltext") );
 	let filter_zeitraum = document.getElementsByName("filter-zeitraum");
 	for (let i = 0, len = filter_zeitraum.length; i < len; i++) {
@@ -141,8 +141,10 @@ window.addEventListener("load", function() {
 	});
 	ipcRenderer.on("kartei-speichern", () => kartei.speichern(false) );
 	ipcRenderer.on("kartei-speichern-unter", () => kartei.speichern(true) );
-	ipcRenderer.on("kartei-metadaten", () => meta.oeffnen() );
+	ipcRenderer.on("kartei-wortstamm", () => stamm.oeffnen() );
 	ipcRenderer.on("kartei-notizen", () => notizen.oeffnen() );
+	ipcRenderer.on("kartei-metadaten", () => meta.oeffnen() );
+	ipcRenderer.on("kartei-suche", () => filter.suche() );
 	ipcRenderer.on("kartei-schliessen", function() {
 		kartei.checkSpeichern( () => kartei.schliessen() );
 	});
@@ -179,12 +181,16 @@ window.addEventListener("beforeunload", function(evt) {
 	// Schließen ggf. unterbrechen
 	if (notizen.geaendert || beleg.geaendert || kartei.geaendert) {
 		sicherheitsfrage.warnen(function() {
+			notizen.geaendert = false;
 			beleg.geaendert = false;
 			kartei.geaendert = false;
-			notizen.geaendert = false;
 			const {remote} = require("electron");
 			let win = remote.getCurrentWindow();
 			win.close();
+		}, {
+			notizen: true,
+			beleg: true,
+			kartei: true,
 		});
 		evt.returnValue = "false";
 	}

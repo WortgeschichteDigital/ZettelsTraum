@@ -374,12 +374,14 @@ let beleg = {
 		}
 	},
 	// Verteilerfunktion, je nachdem welcher Event gerade stattfindet
+	// (diese Funktion wird auch für die Sterne in der Filterliste benutzt)
 	//   a = Element
 	//     (Icon-Link mit dem Stern, der gerade aktiv ist)
 	bewertungEvents (a) {
 		// Mousover: Vorschau anzeigen
 		a.addEventListener("mouseover", function() {
-			let sterne = document.querySelectorAll("#beleg-bewertung a"),
+			let id = this.parentNode.id,
+				sterne = document.querySelectorAll(`#${id} a`),
 				aktivieren = true;
 			for (let i = 0, len = sterne.length; i < len; i++) {
 				if (aktivieren) {
@@ -394,12 +396,22 @@ let beleg = {
 		});
 		// Mouseout: die aktuelle Bewertung anzeigen
 		a.addEventListener("mouseout", function() {
-			beleg.bewertungAnzeigen();
+			let id = this.parentNode.id;
+			if ( id.match(/^beleg/) ) {
+				beleg.bewertungAnzeigen();
+			} else if ( id.match(/^filter/) ) {
+				filter.markierenSterne();
+			}
 		});
 		// Click: den Zettel bewerten
 		a.addEventListener("click", function(evt) {
 			evt.preventDefault();
-			beleg.bewertung(this);
+			let id = this.parentNode.id;
+			if ( id.match(/^beleg/) ) {
+				beleg.bewertung(this);
+			} else if ( id.match(/^filter/) ) {
+				filter.anwendenSterne(this);
+			}
 		});
 	},
 };

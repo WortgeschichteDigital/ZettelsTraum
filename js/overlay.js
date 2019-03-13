@@ -76,21 +76,21 @@ let overlay = {
 	},
 	// alle offenen Overlays schließen
 	alleSchliessen () {
-		let oben_id = "";
-		do {
-			oben_id = overlay.oben();
-			if (oben_id) {
-				overlay.schliessen( document.getElementById(oben_id) );
+		let offen = [];
+		document.querySelectorAll(".overlay").forEach(function(i) {
+			if ( !i.classList.contains("aus") ) {
+				offen.push(i.id);
 			}
-		} while (oben_id);
+		});
+		for (let i = 0, len = offen.length; i < len; i++) {
+			overlay.schliessen( document.getElementById(offen[i]) );
+		}
 	},
 	// blendet ein Overlay-Fenster aus
 	ausblenden (fenster) {
 		fenster.classList.remove("einblenden");
 		// Die Zeit des Timeouts richtet sich nach der Transition-Länge, die in der
 		// overlay.css festgelegt ist.
-		// Obacht! Wird die Zeit hier angepasst, muss dies auch an einigen Stellen geschehen,
-		// an denen overlay.alleSchliessen() aufgerufen wird.
 		overlay.timeout = setTimeout( () => fenster.classList.add("aus"), 200);
 	},
 	// oberstes Overlay-Fenster ermitteln
