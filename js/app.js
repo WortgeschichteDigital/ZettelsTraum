@@ -86,13 +86,13 @@ window.addEventListener("load", function() {
 	for (let i = 0, len = ee.length; i < len; i++) {
 		optionen.aendereEinstellung(ee[i]);
 	}
-	// Metadaten-Fenster
-	let meta_inputs = document.querySelectorAll("#meta input");
-	for (let i = 0, len = meta_inputs.length; i < len; i++) {
-		if (meta_inputs[i].type === "button") {
-			meta.aktionButton(meta_inputs[i]);
-		} else { // Text-input
-			meta.aktionText(meta_inputs[i]);
+	// Wortstamm-Variationen-Fenster
+	let stamm_inputs = document.querySelectorAll("#stamm input");
+	for (let i = 0, len = stamm_inputs.length; i < len; i++) {
+		if (stamm_inputs[i].type === "button") {
+			stamm.aktionButton(stamm_inputs[i]);
+		} else { // Text-Input
+			stamm.aktionText(stamm_inputs[i]);
 		}
 	}
 	// Notizen-Fenster
@@ -102,6 +102,15 @@ window.addEventListener("load", function() {
 			notizen.aktionButton(notizen_inputs[i]);
 		} else { // <textarea>
 			notizen.change(notizen_inputs[i]);
+		}
+	}
+	// Metadaten-Fenster
+	let meta_inputs = document.querySelectorAll("#meta input");
+	for (let i = 0, len = meta_inputs.length; i < len; i++) {
+		if (meta_inputs[i].type === "button") {
+			meta.aktionButton(meta_inputs[i]);
+		} else { // Text-Input
+			meta.aktionText(meta_inputs[i]);
 		}
 	}
 	// Prompt-Textfeld

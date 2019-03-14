@@ -33,6 +33,7 @@ let kartei = {
 		// globales Datenobjekt initialisieren
 		data = {
 			wo: kartei.wort, // Wort
+			wv: [kartei.wort], // Wortstammvariationen
 			dc: new Date().toISOString(), // Datum Kartei-Erstellung
 			dm: "", // Datum Kartei-Änderung
 			re: 0, // Revision
@@ -275,6 +276,7 @@ let kartei = {
 				kartei.karteiGeaendert(true);
 				kartei.wort = wort;
 				data.wo = wort;
+				data.wv[0] = wort;
 				kartei.wortEintragen();
 			} else if (dialog.antwort && !wort) {
 				dialog.oeffnen("alert", null);

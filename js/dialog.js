@@ -66,7 +66,7 @@ let dialog = {
 	// Text des Prompt-Inputs auslesen und zurückgeben
 	getPromptText () {
 		let text = document.getElementById("dialog-prompt-text").value;
-		text = text.replace(/^\s+|\s+$/g, "");
+		text = helfer.textTrim(text, true);
 		return text;
 	},
 };

@@ -163,7 +163,7 @@
 /* Wortstamm-Variationen ------------------------ */
 #stamm > div {
 	margin-top: 40px;
-	max-width: 400px;
+	max-width: 350px;
 }
 
 .icon-h-stamm {
@@ -192,7 +192,7 @@
 
 #stamm-liste,
 #meta-be-liste {
-	margin-bottom: 5px;
+	margin-bottom: 10px;
 	max-height: 290px;
 	overflow-x: hidden;
 	overflow-y: auto;
@@ -215,6 +215,12 @@
 #stamm-liste .icon-link:hover,
 #meta-be-liste .icon-link:hover {
 	background-color: var(--text);
+}
+
+#stamm-liste .platzhalter {
+	display: inline-block;
+	margin-right: 10px;
+	width: 24px;
 }
 
 .icon-entfernen {
@@ -300,6 +306,7 @@
 }
 
 #meta-be-liste {
+	margin-bottom: 5px;
 	height: 120px;
 	max-height: none;
 }

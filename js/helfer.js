@@ -17,10 +17,10 @@ let helfer = {
 				win.close();
 				return;
 			} else if (id === "kartei-erstellen") {
-				kartei.wortErfragen();
+				kartei.checkSpeichern( () => kartei.wortErfragen() );
 				return;
 			} else if (id === "kartei-oeffnen") {
-				kartei.oeffnen();
+				kartei.checkSpeichern(() => kartei.oeffnen() );
 				return;
 			}
 			// Ist eine Kartei geöffnet?
@@ -45,7 +45,7 @@ let helfer = {
 			} else if (id === "kartei-suche") {
 				filter.suche();
 			} else if (id === "kartei-schliessen") {
-				kartei.schliessen();
+				kartei.checkSpeichern( () => kartei.schliessen() );
 			} else if (id === "belege-hinzufuegen") {
 				beleg.erstellenPre();
 			} else if (id === "belege-auflisten") {
@@ -214,6 +214,14 @@ let helfer = {
 	//     (Text, der escaped werden soll)
 	escapeRegExp (string) {
 		return string.replace(/\/|\(|\)|\[|\]|\{|\}|\.|\?|\\|\+|\*|\^|\$|\|/g, (m) => `\\${m}`);
+	},
+	// regulären Ausdruck mit allen Wortstamm-Variationen erstellen
+	stammVariRegExp () {
+		let staemme = [...data.wv];
+		for (let i = 0, len = staemme.length; i < len; i++) {
+			staemme[i] = helfer.escapeRegExp(staemme[i]);
+		}
+		return staemme.join("|");
 	},
 	// Tastatur-Events abfangen und verarbeiten
 	//   evt = Event-Objekt

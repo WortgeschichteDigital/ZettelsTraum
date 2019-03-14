@@ -46,13 +46,15 @@ let liste = {
 		if (liste.statusNeu) {
 			offen[liste.statusNeu] = true;
 		}
+		// Scroll-Status speichern
+		liste.statusScrollBak();
 		// Liste aufbauen
 		liste.aufbauen(filter_init);
 		// Klapp-Status wiederherstellen
 		let koepfe_nach = document.querySelectorAll(".liste-kopf");
 		for (let i = 0, len = koepfe_nach.length; i < len; i++) {
 			let id = koepfe_nach[i].dataset.id;
-			if (offen[id]) {
+			if (offen[id] || offen[id] === undefined && optionen.data.belegliste.beleg) { // wurde ein Beleg zum Zeitpunkt der Sicherung nicht angezeigt, wird er aufgeklappt, wenn (theoretisch) alle Belege aufgeklappt sein sollten
 				koepfe_nach[i].classList.add("schnitt-offen");
 				koepfe_nach[i].nextSibling.classList.remove("aus");
 			} else {
@@ -60,6 +62,8 @@ let liste = {
 				koepfe_nach[i].nextSibling.classList.add("aus");
 			}
 		}
+		// Scroll-Status wiederherstellen
+		liste.statusScrollReset();
 		// ggf. einen den neuen Beleg visuell hervorheben
 		if (liste.statusNeu) {
 			let belege = document.querySelectorAll(".liste-kopf"),
@@ -73,14 +77,46 @@ let liste = {
 			}
 			liste.statusNeu = "";
 			// neuer Beleg könnte aufgrund der Filter versteckt sein
-			if (beleg_unsichtbar) {
+			if (beleg_unsichtbar && optionen.data.einstellungen["karte-gefiltert"]) {
 				dialog.oeffnen("alert", null);
-				dialog.text("Der Beleg wurde angelegt.\nWegen der Filtereinstellungen erscheint er jedoch nicht in der Belegliste.");
+				dialog.text("Der Beleg wurde angelegt.\nWegen der aktuellen Filterregeln erscheint er jedoch nicht in der Belegliste.");
+				document.getElementById("dialog-text").appendChild( optionen.shortcut("Meldung auch zukünftig anzeigen", "karte-gefiltert") );
 			}
 		}
 		function markNeu (kopf) {
 			setTimeout( () => kopf.classList.add("neuer-beleg"), 0);
 			setTimeout( () => kopf.classList.remove("neuer-beleg"), 1500);
+		}
+	},
+	// Zwischenspeicher für den ermittelten Scroll-Status
+	statusScroll: {},
+	// Scroll-Status ermitteln
+	statusScrollBak () {
+		let header = document.querySelector("#liste-belege header").offsetHeight,
+			win = window.scrollY,
+			koepfe = document.querySelectorAll(".liste-kopf");
+		liste.statusScroll = {
+			id: "",
+			scroll: 0,
+		};
+		for (let i = 0, len = koepfe.length; i < len; i++) {
+			let scroll = koepfe[i].offsetTop - header - win;
+			if (scroll >= 0) {
+				liste.statusScroll.id = koepfe[i].dataset.id;
+				liste.statusScroll.scroll = scroll;
+				break;
+			}
+		}
+	},
+	// Scroll-Status wiederherstellen
+	statusScrollReset () {
+		if (!liste.statusScroll.id) {
+			return;
+		}
+		let kopf = document.querySelector(`.liste-kopf[data-id="${liste.statusScroll.id}"]`);
+		if (kopf) {
+			let header = document.querySelector("#liste-belege header").offsetHeight;
+			window.scrollTo(0, kopf.offsetTop - liste.statusScroll.scroll - header);
 		}
 	},
 	// baut die Belegliste auf
@@ -183,9 +219,9 @@ let liste = {
 			}
 		}
 		// Anzeige der Zeitschnitte anpassen
-		liste.zeitschnitteAnpassen();
+		liste.zeitschnitteAnpassen(false);
 		// Anzeige der Details anpassen
-		liste.detailsAnzeigen();
+		liste.detailsAnzeigen(false);
 		// Anzeige, dass kein Beleg vorhanden ist, ggf. ausblenden
 		liste.zeitschnitteKeineBelege();
 	},
@@ -338,7 +374,12 @@ let liste = {
 		}
 	},
 	// Anzeige der Zeitschnitte anpassen
-	zeitschnitteAnpassen () {
+	//   scroll_bak = Boolean
+	//     (beim Neuaufbau der Liste darf die Position nicht gemerkt werden)
+	zeitschnitteAnpassen (scroll_bak) {
+		if (scroll_bak) {
+			liste.statusScrollBak();
+		}
 		let zeitschnitte = document.querySelectorAll("#liste-belege-cont [data-zeitschnitt]");
 		for (let i = 0, len = zeitschnitte.length; i < len; i++) {
 			let reg = new RegExp( helfer.escapeRegExp(`${optionen.data.belegliste.zeitschnitte}|`) );
@@ -349,6 +390,9 @@ let liste = {
 			}
 		}
 		liste.zeitschnitteKeineBelege();
+		if (scroll_bak) {
+			liste.statusScrollReset();
+		}
 	},
 	// Cache, um die Daten nicht andauernd neu extrahieren zu müssen
 	// (unbedingt vor dem Sortieren leeren, sonst werden Änderungen nicht berücksichtigt!)
@@ -402,11 +446,18 @@ let liste = {
 		div.classList.add("liste-bs");
 		// Absätze erzeugen
 		let prep = beleg.replace(/\n(\s+)*\n/g, "\n"), // Leerzeilen löschen
-			p_prep = prep.split("\n");
+			p_prep = prep.split("\n"),
+			stamm_reg = new RegExp(helfer.stammVariRegExp(), "i");
 		for (let i = 0, len = p_prep.length; i < len; i++) {
 			let p = document.createElement("p");
-			p.innerHTML = liste.belegWortHervorheben(p_prep[i]);
 			div.appendChild(p);
+			// Absatz ggf. kürzen
+			if ( optionen.data.belegliste.beleg_kuerzen && !stamm_reg.test(p_prep[i]) ) {
+				p.textContent = "[…]";
+				continue;
+			}
+			// Absatz normal einhängen
+			p.innerHTML = liste.belegWortHervorheben(p_prep[i]);
 		}
 		// <div> zurückgeben
 		return div;
@@ -419,7 +470,7 @@ let liste = {
 		let schnitt = beleg_akt.bs.replace(/\n+/g, " "); // Absätze könnten mit Leerzeile eingegeben sein
 		schnitt = schnitt.replace(/<.+?>/g, ""); // HTML-Formatierungen vorher löschen!
 		// 1. Treffer im Text ermitteln, Beleg am Anfang ggf. kürzen
-		let reg = new RegExp(helfer.escapeRegExp(kartei.wort), "gi");
+		let reg = new RegExp(helfer.stammVariRegExp(), "gi");
 		if ( schnitt.match(reg) ) {
 			let idx = schnitt.split(reg)[0].length;
 			if (idx > 30) {
@@ -458,7 +509,7 @@ let liste = {
 		if (!optionen.data.belegliste.wort_hervorheben) {
 			return schnitt;
 		}
-		let reg = new RegExp(`[a-zäöüß\-]*${helfer.escapeRegExp(kartei.wort)}[a-zäöüß\-]*`, "gi");
+		let reg = new RegExp(`[a-zäöüß\-]*(${helfer.stammVariRegExp()})[a-zäöüß\-]*`, "gi");
 		schnitt = schnitt.replace(reg, (m) => `<strong>${m}</strong>`);
 		return schnitt;
 	},
@@ -681,7 +732,12 @@ let liste = {
 		});
 	},
 	// Passt die Anzeige der Details im geöffneten Beleg an
-	detailsAnzeigen () {
+	//   scroll_back = Boolean
+	//     (beim Neuaufbau der Liste darf die Position nicht gemerkt werden)
+	detailsAnzeigen (scroll_bak) {
+		if (scroll_bak) {
+			liste.statusScrollBak();
+		}
 		let funktionen = ["bd", "qu", "ts", "no", "meta"];
 		for (let i = 0, len = funktionen.length; i < len; i++) {
 			let opt = `detail_${funktionen[i]}`,
@@ -693,6 +749,9 @@ let liste = {
 					ele[j].classList.add("aus");
 				}
 			}
+		}
+		if (scroll_bak) {
+			liste.statusScrollReset();
 		}
 	},
 	// Detail auf Klick anzeigen (wird derzeit nur für das Datum benutzt)
@@ -722,6 +781,8 @@ let liste = {
 				liste.headerZeitschnitte(funktion);
 			} else if (funktion === "beleg") {
 				liste.headerBeleg();
+			} else if (funktion === "kuerzen") {
+				liste.headerBelegKuerzen();
 			} else if (funktion === "hervorheben") {
 				liste.headerWortHervorheben();
 			} else if ( funktion.match(/^(bd|qu|ts|no|meta)$/) ) {
@@ -735,10 +796,14 @@ let liste = {
 		optionen.data.belegliste.filterleiste = !optionen.data.belegliste.filterleiste;
 		optionen.speichern(false);
 		// Anzeige anpassen
-		liste.headerFilterAnzeige();
+		liste.headerFilterAnzeige(true);
 	},
 	// Filter ein- bzw. ausblenden (Anzeige der Filterleiste und des Links im Header anpassen)
-	headerFilterAnzeige () {
+	headerFilterAnzeige (scroll_bak) {
+		// Scroll-Status speichern
+		if (scroll_bak) {
+			liste.statusScrollBak();
+		}
 		// Filterleiste
 		let sec_liste = document.getElementById("liste");
 		sec_liste.classList.remove("preload"); // damit bei der ersten Anzeige keine Animation läuft
@@ -752,6 +817,10 @@ let liste = {
 			sec_liste.classList.add("filter-aus");
 			link.classList.remove("aktiv");
 			link.title = "Filter einblenden";
+		}
+		// Scroll-Status wiederherstellen
+		if (scroll_bak) {
+			setTimeout( () => liste.statusScrollReset(), 500);
 		}
 	},
 	// chronologisches Sortieren der Belege
@@ -789,7 +858,7 @@ let liste = {
 		// Anzeige der Links im Listenheader anpassen
 		liste.headerZeitschnitteAnzeige();
 		// Anzeige der Zeitschnitte in der Liste anpassen
-		liste.zeitschnitteAnpassen();
+		liste.zeitschnitteAnpassen(true);
 	},
 	// Anzahl der Zeitschnitte festlegen, die angezeigt werden sollen (Anzeige im Header anpassen)
 	headerZeitschnitteAnzeige () {
@@ -838,6 +907,27 @@ let liste = {
 			link.title = "Komplettanzeige des Belegs einblenden";
 		}
 	},
+	// Kürzung des Belegs aus-/einschalten
+	headerBelegKuerzen () {
+		// Kürzung umstellen
+		optionen.data.belegliste.beleg_kuerzen = !optionen.data.belegliste.beleg_kuerzen;
+		optionen.speichern(false);
+		// Link anpassen
+		liste.headerBelegKuerzenAnzeige();
+		// Liste neu aufbauen
+		liste.status(false);
+	},
+	// Kürzung des Belegs aus-/einschalten (Anzeige im Header anpassen)
+	headerBelegKuerzenAnzeige () {
+		let link = document.getElementById("liste-link-kuerzen");
+		if (optionen.data.belegliste.beleg_kuerzen) {
+			link.classList.add("aktiv");
+			link.title = "Belegkontext anzeigen";
+		} else {
+			link.classList.remove("aktiv");
+			link.title = "Belegkontext kürzen";
+		}
+	},
 	// Hervorhebung des Worts im Beleg und der Vorschau aus-/einschalten
 	headerWortHervorheben () {
 		// Hervorhebung umstellen
@@ -870,7 +960,7 @@ let liste = {
 		// Anzeige der Icons auffrischen
 		liste.headerDetailsAnzeige(funktion, opt);
 		// Anzeige der Details in der Liste auffrischen
-		liste.detailsAnzeigen();
+		liste.detailsAnzeigen(true);
 	},
 	// Links zur Steuerung der Detailanzeige visuell anpassen
 	//   funktion = String

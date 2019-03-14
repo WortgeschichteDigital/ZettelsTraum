@@ -20,6 +20,7 @@
 }
 
 #liste {
+	position: relative; /* sonst bekomm ich keine offsetTop-Werte in der Belegliste */
 	display: grid;
 	grid-template-columns: 300px calc(100% - 300px - 15px); /* minus Breite Filterleiste und Gap */
 	grid-gap: 15px;

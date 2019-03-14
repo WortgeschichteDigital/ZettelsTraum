@@ -15,6 +15,8 @@ let optionen = {
 			zeitschnitte: "-",
 			// kompletten Beleg anzeigen oder ausblenden
 			beleg: true,
+			// Absätze im Beleg ohne Worttreffer gekürzt darstellen
+			beleg_kuerzen: false,
 			// Wort der Kartei in der Vorschau und im Beleg automatisch hervorheben
 			wort_hervorheben: true,
 			// Steuerung Details: Bedeutung einblenden
@@ -55,6 +57,8 @@ let optionen = {
 			"quick-belege-sortieren": false,
 			// neue Karteikarten als unvollständig markieren
 			unvollstaendig: true,
+			// warnen, wenn eine Karte erstellt wurde, sie aber wegen der Filterregeln nicht angezeigt wird
+			"karte-gefiltert": true,
 		},
 		// Einstellungen in der Filterleiste
 		filter: {
@@ -104,10 +108,11 @@ let optionen = {
 			}
 		}
 		// Icons und Text im Header der Belegliste anpassen
-		liste.headerFilterAnzeige(); // hier auch die Anzeige der Filterleiste anpassen
+		liste.headerFilterAnzeige(false); // hier auch die Anzeige der Filterleiste anpassen
 		liste.headerSortierenAnzeige();
 		liste.headerZeitschnitteAnzeige();
 		liste.headerBelegAnzeige();
+		liste.headerBelegKuerzenAnzeige();
 		liste.headerWortHervorhebenAnzeige();
 		// Auswahllinks für Detail-Anzeige anpassen
 		let details = ["bd", "qu", "ts", "no", "meta"];
@@ -293,5 +298,38 @@ let optionen = {
 		}
 		// Sektion wechseln
 		optionen.sektionWechseln(links[pos]);
+	},
+	// erzeugt eine Checkbox für Meldungsfenster, um eine Optione leicht zu ändern
+	//   label_text = String
+	//     (Text für das Label)
+	//   option = String
+	//     (die Einstellung, die eigentlich geändert werden soll)
+	shortcut (label_text, option) {
+		// Absatz erzeugen
+		let p = document.createElement("p");
+		// Input
+		let input = document.createElement("input");
+		p.appendChild(input);
+		input.checked = optionen.data.einstellungen[option];
+		input.id = "optionen-shortcut";
+		input.type = "checkbox";
+		input.addEventListener("change", function() {
+			let ein = document.getElementById(`einstellung-${option}`);
+			if (this.checked) {
+				optionen.data.einstellungen[option] = true;
+				ein.checked = true;
+			} else {
+				optionen.data.einstellungen[option] = false;
+				ein.checked = false;
+			}
+			optionen.speichern(false);
+		});
+		// Label
+		let label = document.createElement("label");
+		label.setAttribute("for", "optionen-shortcut");
+		label.textContent = label_text;
+		p.appendChild(label);
+		// Absatz zurückgeben
+		return p;
 	},
 };
