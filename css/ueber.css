@@ -1,0 +1,48 @@
+@charset "utf-8";
+
+/* Variablen ------------------------------------ */
+:root {
+	/* Textfarben */
+	--text: #212121;
+	--textHell: #9e9e9e;
+	--textSehrHell: #bebebe;
+	--textExtremHell: #e5e5e5;
+	--textFarbe: #32af79;
+	--textWarnung: #d00;
+	/* Hintergrund-Farben */
+	--hintergrund: #f9f9f9;
+	--hover: #f9f9f9;
+	--highlight: #ff0;
+	/* Farb-Elemente */
+	--farbe: #72a0cf;
+	--farbeB: #386ea6; /* Buttons */
+	--farbeH: #386ea6; /* Überschriften */
+	--farbeStern: #fd0;
+	--aktiv: #32af79;
+	--linie: #c3d9f1;
+}
+
+/* Fonts ---------------------------------------- */
+@font-face {
+	font-family: "DejaVu Sans";
+	src: url(../fonts/DejaVuSans.woff2) format("woff2");
+}
+
+@font-face {
+	font-family: "DejaVu Sans";
+	src: url(../fonts/DejaVuSans-Oblique.woff2) format("woff2");
+	font-style: italic;
+}
+
+@font-face {
+	font-family: "DejaVu Sans";
+	src: url(../fonts/DejaVuSans-Bold.woff2) format("woff2");
+	font-weight: bold;
+}
+
+@font-face {
+	font-family: "DejaVu Sans";
+	src: url(../fonts/DejaVuSans-BoldOblique.woff2) format("woff2");
+	font-style: italic;
+	font-weight: bold;
+}
