@@ -160,6 +160,10 @@ window.addEventListener("load", function() {
 	ipcRenderer.on("belege-hinzufuegen", () => beleg.erstellenPre() );
 	ipcRenderer.on("belege-auflisten", () => liste.anzeigen() );
 	ipcRenderer.on("optionen-zuletzt", (evt, zuletzt) => optionen.data.zuletzt = zuletzt );
+	ipcRenderer.on("dialog-anzeigen", function(evt, text) {
+		dialog.oeffnen("alert", null);
+		dialog.text(text);
+	});
 	
 	// SYNCHRONE ANFRAGEN AN DEN MAIN-PROZESS STELLEN
 	// Optionen laden

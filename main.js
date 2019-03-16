@@ -1,13 +1,13 @@
 "use strict";
 
-// globales Fensterobjekt
-let win;
+// globale Fensterobjekte
+let win, winUeberApp, winUeberElectron;
 
 // Funktionen-Container
 let appMenu, optionen, fenster;
 
 // Electron-Features einbinden
-const {app, BrowserWindow, dialog, ipcMain, Menu} = require("electron"),
+const {app, BrowserWindow, ipcMain, Menu} = require("electron"),
 	fs = require("fs"),
 	path = require("path");
 
@@ -232,11 +232,11 @@ let layoutMenu = [
 			{ type: "separator" },
 			{
 				label: `Über ${app.getName()}`,
-				click: () => appMenu.hilfeUeberProgramm(),
+				click: () => fenster.erstellenUeberApp(),
 			},
 			{
 				label: "Über Electron",
-				click: () => appMenu.hilfeUeberElectron(),
+				click: () => fenster.erstellenUeberElectron(),
 			},
 		],
 	},
@@ -381,26 +381,6 @@ appMenu = {
 		const menu = Menu.buildFromTemplate(layoutMenu);
 		Menu.setApplicationMenu(menu);
 	},
-	// Dialog mit Infos zum Programm
-	hilfeUeberProgramm () {
-		dialog.showMessageBox({
-			type: "info",
-			buttons: ["Alles klar!"],
-			defaultId: 0,
-			title: `Über ${app.getName()}`,
-			message: `${app.getName()}\nVersion ${app.getVersion()}\n\n„${app.getName()}“ ist die Wortkartei-App von „Wortgeschichte digital“, dem Göttinger Teilprojekt des „Zentrums für digitale Lexikographie der deutschen Sprache“ (ZDL).\n\n© 2019 ZDL\n\nAutor:\tNico Dorn <ndorn@gwdg.de>\nLizenz:\tGNU General Public License v3.0\n\nFonts:\tDejaVu Sans\nLizenz:\tBitstream Vera Fonts, Arev Fonts, Public Domain\n\nIcons:\tPapirus Icon Theme\nLizenz:\tGNU General Public License v3.0`,
-		});
-	},
-	// Dialog mit Infos zum Framework
-	hilfeUeberElectron () {
-		dialog.showMessageBox({
-			type: "info",
-			buttons: ["Alles klar!"],
-			defaultId: 0,
-			title: "Über Electron",
-			message: `Framework-Software von „${app.getName()}“, Version ${app.getVersion()}:\n\nElectron:\t\t${process.versions.electron}\nNode:\t\t\t${process.versions.node}\nChromium:\t\t${process.versions.chrome}\nv8:\t\t\t\t${process.versions.v8}`,
-		});
-	},
 };
 
 // Menüs deaktivieren, die nur bei offenen Karteikarten funktionieren
@@ -410,7 +390,7 @@ appMenu.deaktivieren(true, false);
 ipcMain.on("menus-deaktivieren", (evt, disable) => appMenu.deaktivieren(disable, true) );
 
 // Programm-Info aufrufen, wenn der Renderer-Prozess es wünscht
-ipcMain.on("ueber-zettelstraum", () => appMenu.hilfeUeberProgramm() );
+ipcMain.on("ueber-zettelstraum", () => fenster.erstellenUeberApp() );
 
 // Optionen einlesen und speichern
 optionen = {
@@ -444,13 +424,7 @@ optionen = {
 	schreiben () {
 		fs.writeFile(optionen.pfad, JSON.stringify(optionen.data), function(err) {
 			if (err) {
-				dialog.showMessageBox({
-					type: "error",
-					buttons: ["Alles klar!"],
-					defaultId: 0,
-					title: "Fehler im Main Process",
-					message: `Die Optionen-Datei konnte nicht gespeichert werden!\n\nFehlermeldung:\n${err.message}`,
-				});
+				win.webContents.send("dialog-anzeigen", `Die Optionen-Datei konnte nicht gespeichert werden.\n<h3>Fehlermeldung</h3>\n${err.message}`);
 			}
 		});
 	},
@@ -514,6 +488,66 @@ fenster = {
 		// Man könnte den Status noch zusätzlich bei den Events
 		// "resize" und "move" speichern, finde ich aber übertrieben.
 		win.on("close", fenster.status);
+	},
+	// Über-Fenster erstellen
+	erstellenUeberApp () {
+		// Fenster öffnen
+		winUeberApp = new BrowserWindow({
+			parent: win,
+			modal: true,
+			title: `Über ${app.getName()}`,
+			icon: path.join(__dirname, "img", "icon", "png", "icon_32px.png"),
+			width: 650,
+			height: 345,
+			center: true,
+			resizable: false,
+			minimizable: false,
+			maximizable: false,
+			show: false,
+			webPreferences: {
+				nodeIntegration: true,
+				devTools: app.isPackaged ? false : true,
+				defaultEncoding: "utf-8",
+			},
+		});
+		// Menü abschalten
+		winUeberApp.setMenuBarVisibility(false);
+		// index.html laden
+		winUeberApp.loadFile( path.join(__dirname, "win", "ueberApp.html") );
+		// Fenster anzeigen, sobald alles geladen wurde
+		winUeberApp.once("ready-to-show", () => winUeberApp.show() );
+		// globales Fensterobjekt beim Schließen dereferenzieren
+		winUeberApp.on("closed", () => winUeberApp = null );
+	},
+	// Über-Fenster erstellen
+	erstellenUeberElectron () {
+		// Fenster öffnen
+		winUeberElectron = new BrowserWindow({
+			parent: win,
+			modal: true,
+			title: "Über Electron",
+			icon: path.join(__dirname, "img", "icon", "png", "icon_32px.png"),
+			width: 650,
+			height: 353,
+			center: true,
+			resizable: false,
+			minimizable: false,
+			maximizable: false,
+			show: false,
+			webPreferences: {
+				nodeIntegration: true,
+				devTools: app.isPackaged ? false : true,
+				defaultEncoding: "utf-8",
+			},
+		});
+		// Menü abschalten
+		winUeberElectron.setMenuBarVisibility(false);
+		// index.html laden
+		winUeberElectron.loadFile( path.join(__dirname, "win", "ueberElectron.html") );
+		// Fenster anzeigen, sobald alles geladen wurde
+		winUeberElectron.once("ready-to-show", () => winUeberElectron.show() );
+		// globales Fensterobjekt beim Schließen dereferenzieren
+		winUeberElectron.on("closed", () => winUeberElectron = null );
 	},
 	// Fenster-Status in den Optionen speichern
 	status () {
