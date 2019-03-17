@@ -445,7 +445,7 @@ let liste = {
 		let div = document.createElement("div");
 		div.classList.add("liste-bs");
 		// Absätze erzeugen
-		let prep = beleg.replace(/\n(\s+)*\n/g, "\n"), // Leerzeilen löschen
+		let prep = beleg.replace(/\n\s*\n/g, "\n"), // Leerzeilen löschen
 			p_prep = prep.split("\n"),
 			stamm_reg = new RegExp(helfer.stammVariRegExp(), "i");
 		for (let i = 0, len = p_prep.length; i < len; i++) {
@@ -564,7 +564,7 @@ let liste = {
 		span.textContent = "Quelle";
 		div.appendChild(span);
 		// Absätze erzeugen
-		let prep = quelle.replace(/\n(\s+)*\n/g, "\n"), // Leerzeilen löschen
+		let prep = quelle.replace(/\n\s*\n/g, "\n"), // Leerzeilen löschen
 			p_prep = prep.split("\n");
 		for (let i = 0, len = p_prep.length; i < len; i++) {
 			// Text aufbereiten

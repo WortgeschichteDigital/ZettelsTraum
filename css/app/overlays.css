@@ -52,8 +52,8 @@
 }
 
 .icon-schliessen {
-	-webkit-mask-image: url(../img/heading-schliessen.svg);
-	mask-image: url(../img/heading-schliessen.svg);
+	-webkit-mask-image: url(../../img/heading-schliessen.svg);
+	mask-image: url(../../img/heading-schliessen.svg);
 }
 
 .overlay {
@@ -152,8 +152,8 @@
 }
 
 .icon-h-einstellungen {
-	-webkit-mask-image: url(../img/heading-einstellungen.svg);
-	mask-image: url(../img/heading-einstellungen.svg);
+	-webkit-mask-image: url(../../img/heading-einstellungen.svg);
+	mask-image: url(../../img/heading-einstellungen.svg);
 }
 
 .einstellung-neustart {
@@ -167,8 +167,8 @@
 }
 
 .icon-h-stamm {
-	-webkit-mask-image: url(../img/heading-wortstamm.svg);
-	mask-image: url(../img/heading-wortstamm.svg);
+	-webkit-mask-image: url(../../img/heading-wortstamm.svg);
+	mask-image: url(../../img/heading-wortstamm.svg);
 }
 
 #stamm-cont {
@@ -224,8 +224,8 @@
 }
 
 .icon-entfernen {
-	-webkit-mask-image: url(../img/meta-entfernen.svg);
-	mask-image: url(../img/meta-entfernen.svg);
+	-webkit-mask-image: url(../../img/meta-entfernen.svg);
+	mask-image: url(../../img/meta-entfernen.svg);
 }
 
 /* Notizen -------------------------------------- */
@@ -263,8 +263,8 @@
 }
 
 .icon-h-notizen {
-	-webkit-mask-image: url(../img/heading-notizen.svg);
-	mask-image: url(../img/heading-notizen.svg);
+	-webkit-mask-image: url(../../img/heading-notizen.svg);
+	mask-image: url(../../img/heading-notizen.svg);
 }
 
 /* Metadaten ------------------------------------ */
@@ -274,8 +274,8 @@
 }
 
 .icon-h-meta {
-	-webkit-mask-image: url(../img/heading-meta.svg);
-	mask-image: url(../img/heading-meta.svg);
+	-webkit-mask-image: url(../../img/heading-meta.svg);
+	mask-image: url(../../img/heading-meta.svg);
 }
 
 #meta-cont {
@@ -338,8 +338,8 @@
 }
 
 .icon-h-zeitraumgrafik {
-	-webkit-mask-image: url(../img/heading-zeitraumgrafik.svg);
-	mask-image: url(../img/heading-zeitraumgrafik.svg);
+	-webkit-mask-image: url(../../img/heading-zeitraumgrafik.svg);
+	mask-image: url(../../img/heading-zeitraumgrafik.svg);
 }
 
 
@@ -361,18 +361,18 @@
 }
 
 .prompt .icon-h {
-	-webkit-mask-image: url(../img/dialog-prompt.svg);
-	mask-image: url(../img/dialog-prompt.svg);
+	-webkit-mask-image: url(../../img/dialog-prompt.svg);
+	mask-image: url(../../img/dialog-prompt.svg);
 }
 
 .confirm .icon-h {
-	-webkit-mask-image: url(../img/dialog-confirm.svg);
-	mask-image: url(../img/dialog-confirm.svg);
+	-webkit-mask-image: url(../../img/dialog-confirm.svg);
+	mask-image: url(../../img/dialog-confirm.svg);
 }
 
 .alert .icon-h {
-	-webkit-mask-image: url(../img/dialog-alert.svg);
-	mask-image: url(../img/dialog-alert.svg);
+	-webkit-mask-image: url(../../img/dialog-alert.svg);
+	mask-image: url(../../img/dialog-alert.svg);
 }
 
 #dialog-text {

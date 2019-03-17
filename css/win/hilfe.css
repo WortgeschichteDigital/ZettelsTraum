@@ -1,0 +1,108 @@
+@charset "utf-8";
+
+/* Variablen ------------------------------------ */
+@import url(../variablen.css);
+
+/* Fonts ---------------------------------------- */
+@import url(../fonts.css);
+
+/* Struktur-Elemente ---------------------------- */
+body {
+	margin: 0;
+	color: var(--text);
+	font: 16px/24px "DejaVu Sans", sans-serif;
+	user-select: none;
+}
+
+body > header {
+	position: fixed;
+	top: 0;
+	left: 0;
+	border-bottom: 10px solid #fff;
+	padding: 0 10px;
+	width: calc(100% - 20px);
+	height: 60px;
+	background-color: var(--farbe);
+}
+
+body > header h1 {
+	display: inline-block;
+	margin: 0;
+	color: #fff;
+	font-size: 30px;
+	font-weight: normal;
+	line-height: 60px;
+}
+
+#icon {
+	position: absolute;
+	top: 6px;
+	right: 10px;
+}
+
+main {
+	display: grid;
+	grid-template-columns: 200px 1fr;
+	margin-top: 70px;
+}
+
+section {
+	padding: 0 15px;
+}
+
+/* Basis-Elemente ------------------------------- */
+a {
+	outline: none;
+	color: var(--textFarbe);
+	text-decoration: none;
+}
+
+p {
+	margin: 0 0 10px 0;
+}
+
+p.warnen {
+	font-weight: bold;
+}
+
+/* Navigation ----------------------------------- */
+
+nav {
+	position: sticky;
+	top: 70px;
+	padding: 22px 0 0 0;
+	height: calc(100vh - 70px - 22px); /* 70px Header, 22px Padding */
+	background-color: var(--hintergrund);
+}
+
+nav ul {
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+}
+
+nav li {
+	margin-bottom: 10px;
+}
+
+nav li a {
+	display: block;
+	padding: 2px 10px;
+	background-color: var(--farbeB);
+	color: #fff;
+	cursor: default;
+}
+
+nav li a.aktiv {
+	background-color: var(--aktiv);
+}
+
+nav li a:focus,
+nav li a.aktiv:focus {
+	background-color: var(--farbe);
+}
+
+/* Globale Klassen ------------------------------ */
+.aus {
+	display: none !important;
+}

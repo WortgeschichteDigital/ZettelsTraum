@@ -13,7 +13,7 @@
 	border-radius: 3px;
 	padding: 2px 0 2px 40px;
 	width: 165px;
-	background: var(--farbeB) url(../img/start-erstellen.svg) no-repeat 4px center;
+	background: var(--farbeB) url(../../img/start-erstellen.svg) no-repeat 4px center;
 	color: #fff;
 	font-size: 20px;
 	line-height: 32px;
@@ -22,7 +22,7 @@
 
 #start > span + span {
 	margin-right: 0;
-	background-image: url(../img/start-oeffnen.svg);
+	background-image: url(../../img/start-oeffnen.svg);
 }
 
 /* List der zuletzt verwendeten Karteien -------- */
@@ -32,8 +32,8 @@
 }
 
 .icon-h-zuletzt {
-	-webkit-mask-image: url(../img/heading-zuletzt.svg);
-	mask-image: url(../img/heading-zuletzt.svg);
+	-webkit-mask-image: url(../../img/heading-zuletzt.svg);
+	mask-image: url(../../img/heading-zuletzt.svg);
 }
 
 #start-liste {

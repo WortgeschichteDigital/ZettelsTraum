@@ -1,7 +1,7 @@
 "use strict";
 
 let helfer = {
-	// öffnet Links in einem externen Browser-Fenster
+	// öffnet externe Links in einem Browser-Fenster
 	//   a = Element
 	//     (Link, auf dem geklickt wurde)
 	links (a) {
@@ -20,6 +20,10 @@ let helfer = {
 			const {remote} = require("electron");
 			let win = remote.getCurrentWindow();
 			win.close();
+		}
+		// Cursor hoch (↑), runter (↓)
+		if ( typeof hilfe !== "undefined" && (evt.which === 38 || evt.which === 40) ) {
+			hilfe.naviMenue(evt.which);
 		}
 	},
 };

@@ -724,7 +724,10 @@ let filter = {
 	anzeigeUmschalten (a) {
 		a.addEventListener("click", function(evt) {
 			evt.preventDefault();
-			a.nextSibling.classList.toggle("aus");
+			this.nextSibling.classList.toggle("aus");
+			if ( this.classList.contains("aktiv") ) {
+				this.blur();
+			}
 		});
 	},
 	// die Suche wird aufgerufen

@@ -125,11 +125,11 @@ textarea#beleg-bs {
 }
 
 .icon-tools-einfuegen {
-	-webkit-mask-image: url(../img/tool-einfuegen.svg);
-	mask-image: url(../img/tool-einfuegen.svg);
+	-webkit-mask-image: url(../../img/tool-einfuegen.svg);
+	mask-image: url(../../img/tool-einfuegen.svg);
 }
 
 .icon-tools-kopieren {
-	-webkit-mask-image: url(../img/tool-kopieren.svg);
-	mask-image: url(../img/tool-kopieren.svg);
+	-webkit-mask-image: url(../../img/tool-kopieren.svg);
+	mask-image: url(../../img/tool-kopieren.svg);
 }

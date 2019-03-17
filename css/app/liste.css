@@ -182,8 +182,8 @@
 }
 
 .icon-bearbeiten {
-	-webkit-mask-image: url(../img/liste-bearbeiten.svg);
-	mask-image: url(../img/liste-bearbeiten.svg);
+	-webkit-mask-image: url(../../img/liste-bearbeiten.svg);
+	mask-image: url(../../img/liste-bearbeiten.svg);
 }
 
 .filter-ctrl-block,

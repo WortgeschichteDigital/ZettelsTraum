@@ -41,7 +41,7 @@ window.addEventListener("load", function() {
 	// Programm-Icon
 	document.getElementById("icon").addEventListener("click", function() {
 		const {ipcRenderer} = require("electron");
-		ipcRenderer.send("ueber-zettelstraum");
+		ipcRenderer.send("ueber-zettelstraum", "app");
 	});
 	// Start-Sektion
 	document.getElementById("start-erstellen").addEventListener("click", () => kartei.wortErfragen() );

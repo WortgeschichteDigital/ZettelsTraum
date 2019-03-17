@@ -1,7 +1,7 @@
 "use strict";
 
 // globale Fensterobjekte
-let win, winUeberApp, winUeberElectron;
+let win, winHandbuch, winDokumentation, winUeberApp, winUeberElectron;
 
 // Funktionen-Container
 let appMenu, optionen, fenster;
@@ -219,20 +219,20 @@ let layoutMenu = [
 		label: "&Hilfe",
 		submenu: [
 			{
-				label: "Benutzerhandbuch",
+				label: "Handbuch",
 				icon: path.join(__dirname, "img", "menu", "hilfe.png"),
-				click: () => void 0, // TODO
+				click: () => fenster.erstellenHandbuch(),
 				accelerator: "F1",
 			},
 			{ type: "separator" },
 			{
 				label: "Technische Dokumentation",
-				click: () => void 0, // TODO
+				click: () => fenster.erstellenDokumentation(),
 			},
 			{ type: "separator" },
 			{
 				label: `Über ${app.getName()}`,
-				click: () => fenster.erstellenUeberApp(),
+				click: () => fenster.erstellenUeberApp("app"),
 			},
 			{
 				label: "Über Electron",
@@ -390,7 +390,10 @@ appMenu.deaktivieren(true, false);
 ipcMain.on("menus-deaktivieren", (evt, disable) => appMenu.deaktivieren(disable, true) );
 
 // Programm-Info aufrufen, wenn der Renderer-Prozess es wünscht
-ipcMain.on("ueber-zettelstraum", () => fenster.erstellenUeberApp() );
+ipcMain.on("ueber-zettelstraum", (evt, opener) => fenster.erstellenUeberApp(opener) );
+
+// Handbuch aufrufen, wenn der Renderer-Prozess es wünscht
+ipcMain.on("hilfe-handbuch", () => fenster.erstellenHandbuch() );
 
 // Optionen einlesen und speichern
 optionen = {
@@ -452,7 +455,7 @@ ipcMain.on("optionen-speichern", function(evt, opt) {
 
 // Browser-Fenster
 fenster = {
-	// Fenster erzeugen
+	// Hauptfenster erzeugen
 	erstellen () {
 		// Fenster öffnen
 		win = new BrowserWindow({
@@ -472,7 +475,7 @@ fenster = {
 				defaultEncoding: "utf-8",
 			},
 		});
-		// index.html laden
+		// HTML laden
 		win.loadFile( path.join(__dirname, "index.html") );
 		// Fenster anzeigen, sobald alles geladen wurde
 		win.once("ready-to-show", function() {
@@ -489,11 +492,72 @@ fenster = {
 		// "resize" und "move" speichern, finde ich aber übertrieben.
 		win.on("close", fenster.status);
 	},
-	// Über-Fenster erstellen
-	erstellenUeberApp () {
+	// Handbuch-Fenster erstellen
+	erstellenHandbuch () {
+		// Fenster öffnen
+		const Bildschirm = require("electron").screen.getPrimaryDisplay();
+		winHandbuch = new BrowserWindow({
+			title: "Handbuch",
+			icon: path.join(__dirname, "img", "icon", "png", "icon_32px.png"),
+			width: 800,
+			height: Bildschirm.workArea.height,
+			minWidth: 600,
+			minHeight: 350,
+			show: false,
+			webPreferences: {
+				nodeIntegration: true,
+				devTools: app.isPackaged ? false : true,
+				defaultEncoding: "utf-8",
+			},
+		});
+		// Menü abschalten
+		winHandbuch.setMenuBarVisibility(false);
+		// HTML laden
+		winHandbuch.loadFile( path.join(__dirname, "win", "handbuch.html") );
+		// Fenster anzeigen, sobald alles geladen wurde
+		winHandbuch.once("ready-to-show", () => winHandbuch.show() );
+		// globales Fensterobjekt beim Schließen dereferenzieren
+		winHandbuch.on("closed", () => winHandbuch = null );
+	},
+	// Doku-Fenster erstellen
+	erstellenDokumentation () {
+		// Fenster öffnen
+		const Bildschirm = require("electron").screen.getPrimaryDisplay();
+		winDokumentation = new BrowserWindow({
+			title: "Technische Dokumentation",
+			icon: path.join(__dirname, "img", "icon", "png", "icon_32px.png"),
+			width: 800,
+			height: Bildschirm.workArea.height,
+			minWidth: 600,
+			minHeight: 350,
+			show: false,
+			webPreferences: {
+				nodeIntegration: true,
+				devTools: app.isPackaged ? false : true,
+				defaultEncoding: "utf-8",
+			},
+		});
+		// Menü abschalten
+		winDokumentation.setMenuBarVisibility(false);
+		// HTML laden
+		winDokumentation.loadFile( path.join(__dirname, "win", "dokumentation.html") );
+		// Fenster anzeigen, sobald alles geladen wurde
+		winDokumentation.once("ready-to-show", () => winDokumentation.show() );
+		// globales Fensterobjekt beim Schließen dereferenzieren
+		winDokumentation.on("closed", () => winDokumentation = null );
+	},
+	// Über-Fenster erstellen (App)
+	erstellenUeberApp (opener) {
+		// Parent-Fenster ermitteln
+		let parent = win;
+		if (opener === "handbuch") {
+			parent = winHandbuch;
+		} else if (opener === "dokumentation") {
+			parent = winDokumentation;
+		}
 		// Fenster öffnen
 		winUeberApp = new BrowserWindow({
-			parent: win,
+			parent: parent,
 			modal: true,
 			title: `Über ${app.getName()}`,
 			icon: path.join(__dirname, "img", "icon", "png", "icon_32px.png"),
@@ -512,14 +576,14 @@ fenster = {
 		});
 		// Menü abschalten
 		winUeberApp.setMenuBarVisibility(false);
-		// index.html laden
+		// HTML laden
 		winUeberApp.loadFile( path.join(__dirname, "win", "ueberApp.html") );
 		// Fenster anzeigen, sobald alles geladen wurde
 		winUeberApp.once("ready-to-show", () => winUeberApp.show() );
 		// globales Fensterobjekt beim Schließen dereferenzieren
 		winUeberApp.on("closed", () => winUeberApp = null );
 	},
-	// Über-Fenster erstellen
+	// Über-Fenster erstellen (Electron)
 	erstellenUeberElectron () {
 		// Fenster öffnen
 		winUeberElectron = new BrowserWindow({
@@ -542,14 +606,14 @@ fenster = {
 		});
 		// Menü abschalten
 		winUeberElectron.setMenuBarVisibility(false);
-		// index.html laden
+		// HTML laden
 		winUeberElectron.loadFile( path.join(__dirname, "win", "ueberElectron.html") );
 		// Fenster anzeigen, sobald alles geladen wurde
 		winUeberElectron.once("ready-to-show", () => winUeberElectron.show() );
 		// globales Fensterobjekt beim Schließen dereferenzieren
 		winUeberElectron.on("closed", () => winUeberElectron = null );
 	},
-	// Fenster-Status in den Optionen speichern
+	// Fenster-Status in den Optionen speichern (nur Hauptfenster)
 	status () {
 		optionen.data.fenster.maximiert = win.isMaximized();
 		const bounds = win.getBounds();
@@ -582,7 +646,7 @@ app.on("ready", function() {
 // App beenden, wenn alle Fenster geschlossen worden sind
 app.on("window-all-closed", function() {
 	// auf MacOS bleibt das Programm üblicherweise aktiv,
-	// bis der Benutzer es explizit beendet
+	// bis die BenutzerIn es explizit beendet
 	if (process.platform !== "darwin") {
 		app.quit();
 	}
