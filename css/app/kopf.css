@@ -68,6 +68,11 @@
 	mask-image: url(../../img/quick-anhaenge.svg);
 }
 
+#quick-kartei-lexika {
+	-webkit-mask-image: url(../../img/quick-lexika.svg);
+	mask-image: url(../../img/quick-lexika.svg);
+}
+
 #quick-kartei-metadaten {
 	-webkit-mask-image: url(../../img/quick-metadaten.svg);
 	mask-image: url(../../img/quick-metadaten.svg);
@@ -96,6 +101,11 @@
 #quick-belege-sortieren {
 	-webkit-mask-image: url(../../img/quick-sortieren.svg);
 	mask-image: url(../../img/quick-sortieren.svg);
+}
+
+.quick-spacer {
+	display: inline-block;
+	width: 20px;
 }
 
 /* Kopf allgemein ------------------------------- */

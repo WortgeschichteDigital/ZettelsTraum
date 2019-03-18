@@ -19,4 +19,6 @@
 	--farbeStern: #fd0;
 	--aktiv: #32af79;
 	--linie: #c3d9f1;
+	/* Schatten */
+	--boxShadow: 3px 3px 6px 0 #d1d1d1;
 }

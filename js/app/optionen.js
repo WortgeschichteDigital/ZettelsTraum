@@ -46,19 +46,20 @@ let optionen = {
 			"quick-kartei-oeffnen": false,
 			"quick-kartei-speichern": false,
 			"quick-kartei-speichern-unter": false,
+			"quick-kartei-schliessen": false,
 			"quick-kartei-wortstamm": false,
 			"quick-kartei-notizen": false,
 			"quick-kartei-anhaenge": false,
+			"quick-kartei-lexika": false,
 			"quick-kartei-metadaten": false,
 			"quick-kartei-suche": false,
-			"quick-kartei-schliessen": false,
 			"quick-belege-hinzufuegen": false,
 			"quick-belege-auflisten": false,
 			"quick-belege-sortieren": false,
 			// neue Karteikarten als unvollständig markieren
 			unvollstaendig: true,
-			// warnen, wenn eine Karte erstellt wurde, sie aber wegen der Filterregeln nicht angezeigt wird
-			"karte-gefiltert": true,
+			// nicht warnen, wenn eine Karte erstellt wurde, sie aber wegen der Filterregeln nicht angezeigt wird
+			"nicht-karte-gefiltert": false,
 		},
 		// Einstellungen in der Filterleiste
 		filter: {
@@ -143,6 +144,43 @@ let optionen = {
 			} else {
 				icons[i].classList.add("aus");
 			}
+		}
+		// Spacer ein- oder ausblenden
+		if (optionen.data.einstellungen.quick && !icons_alle_aus) {
+			let spacer = document.querySelectorAll(".quick-spacer");
+			spacer.forEach(function(i) {
+				i.classList.add("aus");
+			});
+			spacer.forEach(function(i) {
+				let prev = i.previousSibling,
+					next = i.nextSibling,
+					vor = false,
+					nach = false;
+				// vorherige Elemente
+				do {
+					if ( !prev.classList.contains("aus") ) {
+						if ( !prev.classList.contains("quick-spacer") ) {
+							vor = true;
+						}
+						break;
+					}
+					prev = prev.previousSibling;
+				} while (prev);
+				// folgende Elemente
+				do {
+					if ( !next.classList.contains("aus") ) {
+						nach = true;
+						break;
+					}
+					next = next.nextSibling;
+				} while (next);
+				// ein- od. ausschalten
+				if (vor && nach) {
+					i.classList.remove("aus");
+				} else {
+					i.classList.add("aus");
+				}
+			});
 		}
 		// Bar ein- oder ausblenden
 		if (optionen.data.einstellungen.quick && !icons_alle_aus) {

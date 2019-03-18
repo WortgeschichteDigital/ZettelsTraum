@@ -262,9 +262,13 @@ let beleg = {
 			// auf Enter speichern
 			//   - Text-Input und Checkboxes: hier reicht Enter
 			//   - mit Strg + Enter geht der Befehl auch in Textareas
-			if (evt.which === 13 &&
-					(this.type.match(/^checkbox$|^text$/) || evt.ctrlKey)) {
+			if ( evt.which === 13 &&
+					(this.type.match(/^checkbox$|^text$/) || evt.ctrlKey) ) {
 				evt.preventDefault();
+				if ( document.getElementById("popup") &&
+						(this.id === "beleg-bd" || this.id === "beleg-ts") ) {
+					return;
+				}
 				helfer.inputBlur();
 				beleg.aktionSpeichern();
 			}

@@ -1,0 +1,76 @@
+@charset "utf-8";
+
+/* Betroffene Elemente -------------------------- */
+.popup-cont {
+	position: relative;
+}
+
+input.popup-feld {
+	padding-right: 24px;
+}
+
+.popup-link-td { /* Popup-Link am Ende einer Tabellenzelle */
+	position: absolute;
+	top: 3px;
+	right: 6px; /* 5px padding, 1px border */
+	-webkit-mask-image: url(../../img/popup.svg);
+	mask-image: url(../../img/popup.svg);
+}
+
+.popup-link-button { /* Popup-Link, auf dem ein Input-Button folgt */
+	position: relative;
+	top: 3px;
+	left: -25px; /* 1px border */
+	-webkit-mask-image: url(../../img/popup.svg);
+	mask-image: url(../../img/popup.svg);
+}
+
+.popup-link-button ~ input {
+	position: relative;
+	left: -24px; /* der Link ist 24px breit */
+}
+
+/* Popup-Fensterchen ---------------------------- */
+#popup {
+	position: absolute;
+	z-index: 1; /* sonst überdeckt es nicht die relativ positionierten Tabellenzellen */
+	box-shadow: var(--boxShadow);
+	border: 1px solid var(--linie);
+	border-radius: 3px;
+	max-height: 200px; /* Höhe pro <div> = 25px, -1px für border-bottom */
+	overflow-y: auto;
+	background-color: #fff;
+	font-size: 14px;
+	line-height: 24px;
+}
+
+#popup div {
+	border-bottom: 1px solid var(--linie);
+	padding: 0 10px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	cursor: pointer;
+}
+
+#popup div:last-child {
+	border-bottom: none;
+}
+
+#popup div:hover {
+	background-color: var(--hover);
+}
+
+#popup div.aktiv {
+	background-color: var(--hover);
+}
+
+#popup div.keine-vorschlaege {
+	color: var(--textSehrHell);
+	font-style: italic;
+	cursor: default;
+}
+
+#popup div.keine-vorschlaege:hover {
+	background-color: transparent;
+}

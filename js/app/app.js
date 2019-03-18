@@ -24,10 +24,17 @@ window.addEventListener("load", function() {
 	
 	// EVENTS INITIALISIEREN
 	// alle <textarea>
-	document.querySelectorAll("textarea").forEach( function(textarea) {
+	document.querySelectorAll("textarea").forEach(function(textarea) {
 		textarea.addEventListener("input", function() {
 			helfer.textareaGrow(this);
 		});
+	});
+	// alle Popup-Listen
+	document.querySelectorAll(".popup-feld").forEach(function(i) {
+		popup.feld(i);
+	});
+	document.querySelectorAll(".popup-link-td, .popup-link-button").forEach(function(i) {
+		popup.link(i);
 	});
 	// Quick-Access-Bar
 	let quick = document.querySelectorAll("#quick a");
@@ -104,6 +111,15 @@ window.addEventListener("load", function() {
 			notizen.change(notizen_inputs[i]);
 		}
 	}
+	// Lexika-Fenster
+	let lexika_inputs = document.querySelectorAll("#lexika input");
+	for (let i = 0, len = lexika_inputs.length; i < len; i++) {
+		if (lexika_inputs[i].type === "button") {
+			lexika.aktionButton(lexika_inputs[i]);
+		} else { // Text-Input
+			lexika.aktionText(lexika_inputs[i]);
+		}
+	}
 	// Metadaten-Fenster
 	let meta_inputs = document.querySelectorAll("#meta input");
 	for (let i = 0, len = meta_inputs.length; i < len; i++) {
@@ -152,6 +168,7 @@ window.addEventListener("load", function() {
 	ipcRenderer.on("kartei-speichern-unter", () => kartei.speichern(true) );
 	ipcRenderer.on("kartei-wortstamm", () => stamm.oeffnen() );
 	ipcRenderer.on("kartei-notizen", () => notizen.oeffnen() );
+	ipcRenderer.on("kartei-lexika", () => lexika.oeffnen() );
 	ipcRenderer.on("kartei-metadaten", () => meta.oeffnen() );
 	ipcRenderer.on("kartei-suche", () => filter.suche() );
 	ipcRenderer.on("kartei-schliessen", function() {
@@ -197,9 +214,8 @@ window.addEventListener("beforeunload", function(evt) {
 			notizen.geaendert = false;
 			beleg.geaendert = false;
 			kartei.geaendert = false;
-			const {remote} = require("electron");
-			let win = remote.getCurrentWindow();
-			win.close();
+			const {app} = require("electron").remote;
+			app.quit();
 		}, {
 			notizen: true,
 			beleg: true,

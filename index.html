@@ -11,6 +11,7 @@
 		<link rel="stylesheet" href="css/app/kopf.css">
 		<link rel="stylesheet" href="css/app/liste.css">
 		<link rel="stylesheet" href="css/app/overlays.css">
+		<link rel="stylesheet" href="css/app/popup.css">
 		<link rel="stylesheet" href="css/app/start.css">
 		
 		<script src="js/app/app.js"></script>
@@ -19,11 +20,13 @@
 		<script src="js/app/filter.js"></script>
 		<script src="js/app/helfer.js"></script>
 		<script src="js/app/kartei.js"></script>
+		<script src="js/app/lexika.js"></script>
 		<script src="js/app/liste.js"></script>
 		<script src="js/app/meta.js"></script>
 		<script src="js/app/notizen.js"></script>
 		<script src="js/app/optionen.js"></script>
 		<script src="js/app/overlay.js"></script>
+		<script src="js/app/popup.js"></script>
 		<script src="js/app/privat.js"></script>
 		<script src="js/app/sicherheitsfrage.js"></script>
 		<script src="js/app/stamm.js"></script>
@@ -33,16 +36,20 @@
 		<!-- QUICK ACCESS -->
 		<div id="quick"><a href="#" id="quick-programm-einstellungen" class="icon-link" title="Programm: Einstellungen"> </a
 			><a href="#" id="quick-programm-beenden" class="icon-link" title="Programm: Beenden"> </a
+			><span class="quick-spacer"> </span
 			><a href="#" id="quick-kartei-erstellen" class="icon-link" title="Kartei: Erstellen"> </a
 			><a href="#" id="quick-kartei-oeffnen" class="icon-link" title="Kartei: Öffnen"> </a
 			><a href="#" id="quick-kartei-speichern" class="icon-link" title="Kartei: Speichern"> </a
 			><a href="#" id="quick-kartei-speichern-unter" class="icon-link" title="Kartei: Speichern unter"> </a
+			><a href="#" id="quick-kartei-schliessen" class="icon-link" title="Kartei: Schließen"> </a
+			><span class="quick-spacer"> </span
 			><a href="#" id="quick-kartei-wortstamm" class="icon-link" title="Kartei: Wortstamm-Variationen"> </a
 			><a href="#" id="quick-kartei-notizen" class="icon-link" title="Kartei: Notizen"> </a
 			><a href="#" id="quick-kartei-anhaenge" class="icon-link" title="Kartei: Anhänge"> </a
+			><a href="#" id="quick-kartei-lexika" class="icon-link" title="Kartei: Überprüfte Lexika"> </a
 			><a href="#" id="quick-kartei-metadaten" class="icon-link" title="Kartei: Metadaten"> </a
 			><a href="#" id="quick-kartei-suche" class="icon-link" title="Kartei: Suche"> </a
-			><a href="#" id="quick-kartei-schliessen" class="icon-link" title="Kartei: Schließen"> </a
+			><span class="quick-spacer"> </span
 			><a href="#" id="quick-belege-hinzufuegen" class="icon-link" title="Belege: Hinzufügen"> </a
 			><a href="#" id="quick-belege-auflisten" class="icon-link" title="Belege: Auflisten"> </a
 			><a href="#" id="quick-belege-sortieren" class="icon-link" title="Belege: Sortieren"> </a></div>
@@ -115,8 +122,8 @@
 							><a href="#" class="icon-link icon-tools-kopieren" title="Text kopieren" tabindex="-1"> </a
 							><a href="#" class="icon-link icon-tools-einfuegen" title="Text einfügen" tabindex="-1"> </a></span></th>
 				</tr><tr>
-					<td><input type="text" value="" spellcheck="false" id="beleg-bd" tabindex="0"></td>
-					<td><input type="text" value="" spellcheck="false" id="beleg-ts" tabindex="0"></td>
+					<td class="popup-cont"><input type="text" value="" spellcheck="false" class="popup-feld" id="beleg-bd" tabindex="0"><a href="#" class="icon-link popup-link-td" title="Bedeutungen auflisten" tabindex="-1"> </a></td>
+					<td class="popup-cont"><input type="text" value="" spellcheck="false" class="popup-feld" id="beleg-ts" tabindex="0"><a href="#" class="icon-link popup-link-td" title="Textsorten auflisten" tabindex="-1"> </a></td>
 				</tr><tr>
 					<th colspan="2"><label for="beleg-qu">Quelle</label
 						><span class="text-tools"
@@ -237,18 +244,20 @@
 								><label for="einstellung-quick-kartei-speichern">Speichern</label></p>
 							<p><input type="checkbox" id="einstellung-quick-kartei-speichern-unter"
 								><label for="einstellung-quick-kartei-speichern-unter">Speichern unter</label></p>
+							<p><input type="checkbox" id="einstellung-quick-kartei-schliessen"
+								><label for="einstellung-quick-kartei-schliessen">Schließen</label></p>
 							<p><input type="checkbox" id="einstellung-quick-kartei-wortstamm"
 								><label for="einstellung-quick-kartei-wortstamm">Wortstamm-Variationen</label></p>
 							<p><input type="checkbox" id="einstellung-quick-kartei-notizen"
 								><label for="einstellung-quick-kartei-notizen">Notizen</label></p>
 							<p><input type="checkbox" id="einstellung-quick-kartei-anhaenge"
 								><label for="einstellung-quick-kartei-anhaenge">Anhänge</label></p>
+							<p><input type="checkbox" id="einstellung-quick-kartei-lexika"
+								><label for="einstellung-quick-kartei-lexika">Überprüfte Lexika</label></p>
 							<p><input type="checkbox" id="einstellung-quick-kartei-metadaten"
 								><label for="einstellung-quick-kartei-metadaten">Metadaten</label></p>
 							<p><input type="checkbox" id="einstellung-quick-kartei-suche"
 								><label for="einstellung-quick-kartei-suche">Suche</label></p>
-							<p><input type="checkbox" id="einstellung-quick-kartei-schliessen"
-								><label for="einstellung-quick-kartei-schliessen">Schließen</label></p>
 							<h3>Belege</h3>
 							<p><input type="checkbox" id="einstellung-quick-belege-hinzufuegen"
 								><label for="einstellung-quick-belege-hinzufuegen">Hinzufügen</label></p>
@@ -261,8 +270,8 @@
 					<section id="einstellungen-sec-karteikarten" class="aus">
 						<p><input type="checkbox" id="einstellung-unvollstaendig"
 							><label for="einstellung-unvollstaendig">neue Karteikarten als unvollständig markieren</label></p>
-						<p><input type="checkbox" id="einstellung-karte-gefiltert"
-							><label for="einstellung-karte-gefiltert">warnen, wenn ein neuer Beleg wegen der Filterregeln nicht in der Belegliste erscheint</label></p>
+						<p><input type="checkbox" id="einstellung-nicht-karte-gefiltert"
+							><label for="einstellung-nicht-karte-gefiltert">nicht melden, wenn ein neuer Beleg wegen der Filterregeln nicht in der Belegliste erscheint</label></p>
 					</section>
 				</div>
 			</div>
@@ -292,6 +301,17 @@
 			</div>
 		</div></div>
 		
+		<!-- OVERLAY: Überprüfte Lexika -->
+		<div id="lexika" class="overlay aus"><div>
+			<h2><span class="icon-h icon-h-lexika"> </span
+				>Überprüfte Lexika<a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen"> </a></h2>
+			<div id="lexika-cont">
+				<div id="lexika-liste"></div>
+				<p class="input-text"><input type="text" value="" spellcheck="false" id="lexika-text"
+					><input type="button" value="Ergänzen" id="lexika-ergaenzen"></p>
+			</div>
+		</div></div>
+		
 		<!-- OVERLAY: Metadaten -->
 		<div id="meta" class="overlay aus"><div>
 			<h2><span class="icon-h icon-h-meta"> </span
@@ -306,15 +326,12 @@
 					<p dir="rtl" id="meta-speicherort"></p>
 					<h3>Revision</h3>
 					<p id="meta-re"></p>
+				</div><div>
 					<h3>BearbeiterInnen</h3>
 					<div id="meta-be-liste"></div>
-					<p class="input-text"><input type="text" value="" spellcheck="false" id="meta-be"
-						><input type="button" value="Ergänzen" id="meta-be-ergaenzen"></p>
-				</div><div>
-					<h3>Überprüfte Lexika</h3>
-					<div id="meta-le-liste"></div>
-					<p class="input-text"><input type="text" value="" spellcheck="false" id="meta-le"
-						><input type="button" value="Ergänzen" id="meta-le-ergaenzen"></p>
+					<p class="input-text popup-cont"
+						><input type="text" value="" spellcheck="false" class="popup-feld" id="meta-be"
+						><a href="#" class="icon-link popup-link-button" title="BearbeiterInnen auflisten"> </a><input type="button" value="Ergänzen" id="meta-be-ergaenzen"></p>
 				</div>
 			</div>
 		</div></div>

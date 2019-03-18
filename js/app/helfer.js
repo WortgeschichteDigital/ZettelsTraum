@@ -12,9 +12,8 @@ let helfer = {
 				optionen.oeffnen();
 				return;
 			} else if (id === "programm-beenden") {
-				const {remote} = require("electron");
-				let win = remote.getCurrentWindow();
-				win.close();
+				const {app} = require("electron").remote;
+				app.quit();
 				return;
 			} else if (id === "kartei-erstellen") {
 				kartei.checkSpeichern( () => kartei.wortErfragen() );
@@ -34,18 +33,20 @@ let helfer = {
 				kartei.speichern(false);
 			} else if (id === "kartei-speichern-unter") {
 				kartei.speichern(true);
+			} else if (id === "kartei-schliessen") {
+				kartei.checkSpeichern( () => kartei.schliessen() );
 			} else if (id === "kartei-wortstamm") {
 				stamm.oeffnen();
 			} else if (id === "kartei-notizen") {
 				notizen.oeffnen();
 			} else if (id === "kartei-anhaenge") {
 				// TODO
+			} else if (id === "kartei-lexika") {
+				lexika.oeffnen();
 			} else if (id === "kartei-metadaten") {
 				meta.oeffnen();
 			} else if (id === "kartei-suche") {
 				filter.suche();
-			} else if (id === "kartei-schliessen") {
-				kartei.checkSpeichern( () => kartei.schliessen() );
 			} else if (id === "belege-hinzufuegen") {
 				beleg.erstellenPre();
 			} else if (id === "belege-auflisten") {
@@ -161,7 +162,7 @@ let helfer = {
 	//   doppelleer = Boolean
 	//     (sollen doppelte Leerzeichen bereinigt werden; das ist nicht in jedem Feld sinnvoll)
 	textTrim (text, doppelleer) {
-		text = text.replace(/^(\s|\n)+|(\s|\n)+$/g, "");
+		text = text.trim();
 		if (doppelleer) {
 			text = text.replace(/ {2,}/g, " ");
 		}
@@ -228,6 +229,11 @@ let helfer = {
 	tastatur (evt) {
 		// Esc
 		if (evt.which === 27) {
+			// Popup schließen
+			if ( document.getElementById("popup") ) {
+				popup.schliessen();
+				return;
+			}
 			// Overlay-Fenster schließen
 			let overlay_oben_id = overlay.oben();
 			if (overlay_oben_id) {

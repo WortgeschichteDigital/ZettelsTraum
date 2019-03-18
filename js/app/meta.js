@@ -36,14 +36,12 @@ let meta = {
 		}
 		speicherort.innerHTML = pfad;
 		document.getElementById("meta-re").textContent = data.re;
-		// Textfelder leeren
-		document.querySelectorAll(`#meta input[type="text"]`).forEach( (input) => input.value = "" );
-		// Liste der BearbeterInnen
+		// Liste der BearbeterInnen erstellen
 		meta.bearbAuflisten();
-		// Liste der Lexika
-		meta.lexikaAuflisten();
-		// Fokus in Lexika-Feld
-		document.querySelector("#meta-le-liste input").focus();
+		// BearbeiterInnen-Feld leeren und fokussieren
+		let be = document.getElementById("meta-be");
+		be.value = "";
+		be.focus();
 	},
 	// BearbeiterInnen des Zettels auflisten
 	bearbAuflisten () {
@@ -86,7 +84,7 @@ let meta = {
 		// Uppala! Keine BearbeiterIn angegeben!
 		if (!va) {
 			dialog.oeffnen("alert", () => be.select() );
-			dialog.text("Sie haben keinen Namen angegeben.");
+			dialog.text("Sie haben keinen Namen eingegeben.");
 			return;
 		}
 		// BearbeiterIn schon registriert
@@ -125,133 +123,22 @@ let meta = {
 			dialog.text(`Soll <i>${bearb}</i> wirklich aus der Liste entfernt werden?`);
 		});
 	},
-	// vordefinierte Liste der Lexika, die überprüft werden sollten/könnten
-	lexikaPreset: {
-		"¹DWB": "Deutsches Wörterbuch",
-		"²DWB": "Deutsches Wörterbuch (Neubearbeitung)",
-		"AWB": "Althochdeutsches Wörterbuch",
-		"FWB": "Frühneuhochdeutsches Wörterbuch",
-		"Kluge": "Etymologisches Wörterbuch der deutschen Sprache",
-		"MWB": "Mittelhochdeutsches Wörterbuch",
-		"Paul": "Deutsches Wörterbuch",
-		"Pfeifer": "Etymologisches Wörterbuch des Deutschen",
-		"Schulz/Basler": "Deutsches Fremdwörterbuch",
-		"Trübner": "Trübners Deutsches Wörterbuch",
-	},
-	// Liste der Lexika erstellen
-	lexikaAuflisten () {
-		// Liste leeren
-		let cont = document.getElementById("meta-le-liste");
-		helfer.keineKinder(cont);
-		// Array erstellen
-		let l = [];
-		for (let i in meta.lexikaPreset) {
-			if ( !meta.lexikaPreset.hasOwnProperty(i) ) {
-				continue;
-			}
-			l.push(i);
-		}
-		for (let i = 0, len = data.le.length; i < len; i++) {
-			if (!meta.lexikaPreset[ data.le[i] ]) {
-				l.push(data.le[i]);
-			}
-		}
-		// Liste aufbauen
-		for (let i = 0, len = l.length; i < len; i++) {
-			let p = document.createElement("p");
-			cont.appendChild(p);
-			// Input
-			let input = document.createElement("input");
-			meta.lexikonUeberprueft(input);
-			input.type = "checkbox";
-			input.id = `lexikon-${i}`;
-			input.value = l[i];
-			if (data.le.indexOf(l[i]) >= 0) {
-				input.checked = true;
-			}
-			p.appendChild(input);
-			// Label
-			let label = document.createElement("label");
-			label.setAttribute("for", `lexikon-${i}`);
-			p.appendChild(label);
-			// title setzen oder Hinweis, dass das Lexikon manuell ergänzt wurde
-			if (meta.lexikaPreset[ l[i] ]) {
-				label.title = meta.lexikaPreset[ l[i] ];
-				label.textContent = l[i];
-			} else {
-				label.title = `${l[i]} (Lexikon manuell ergänzt)`;
-				label.textContent = `${l[i]} +`;
-			}
-		}
-	},
-	// Lexikon als überprüft kennzeichnen
-	//   input = Element
-	//     (Checkbox, die für ein Lexikon steht)
-	lexikonUeberprueft (input) {
-		input.addEventListener("change", function() {
-			if (this.checked) {
-				data.le.push(this.value);
-			} else {
-				data.le.splice(data.le.indexOf(this.value), 1);
-			}
-			kartei.karteiGeaendert(true);
-		});
-	},
-	// Lexikon ergänzen
-	lexikonErgaenzen () {
-		let le = document.getElementById("meta-le"),
-			va = helfer.textTrim(le.value);
-		// Uppala! Kein Wert!
-		if (!va) {
-			dialog.oeffnen("alert", () => le.select() );
-			dialog.text("Sie haben keinen Titel eingegeben.");
-			return;
-		}
-		// Lexikon gibt es schon
-		if ( document.querySelector(`#meta-le-liste input[value="${va}"]`) ) {
-			dialog.oeffnen("alert", () => le.select() );
-			dialog.text("Das Lexikon ist schon in der Liste.");
-			return;
-		}
-		// Lexikon ergänzen und sortieren
-		le.value = "";
-		data.le.push(va);
-		data.le.sort(function(a, b) {
-			a = helfer.sortAlphaPrep(a);
-			b = helfer.sortAlphaPrep(b);
-			let x = [a, b];
-			x.sort();
-			if (x[0] === a) {
-				return -1;
-			}
-			return 1;
-		});
-		// Liste neu aufbauen
-		meta.lexikaAuflisten();
-		// Änderungsmarkierung setzen
-		kartei.karteiGeaendert(true);
-	},
-	// Klick auf Button verteilen
+	// Klick auf Button
 	aktionButton (button) {
 		button.addEventListener("click", function() {
-			if ( this.id.match(/^meta-le/) ) {
-				meta.lexikonErgaenzen();
-			} else if ( this.id.match(/^meta-be/) ) {
-				meta.bearbErgaenzen();
-			}
+			meta.bearbErgaenzen();
 		});
 	},
-	// Tastatureingaben in den Textfeldern abfangen
+	// Tastatureingaben im Textfeld
 	aktionText (input) {
 		input.addEventListener("keydown", function(evt) {
 			// Enter
 			if (evt.which === 13) {
 				evt.preventDefault();
-				if (this.id === "meta-le") {
-					meta.lexikonErgaenzen();
-				} else if (this.id === "meta-be") {
-					meta.bearbErgaenzen();
+				if ( document.getElementById("popup") ) {
+					return;
 				}
+				meta.bearbErgaenzen();
 			}
 		});
 	},

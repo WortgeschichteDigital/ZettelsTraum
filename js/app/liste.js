@@ -77,10 +77,10 @@ let liste = {
 			}
 			liste.statusNeu = "";
 			// neuer Beleg könnte aufgrund der Filter versteckt sein
-			if (beleg_unsichtbar && optionen.data.einstellungen["karte-gefiltert"]) {
+			if (beleg_unsichtbar && !optionen.data.einstellungen["nicht-karte-gefiltert"]) {
 				dialog.oeffnen("alert", null);
 				dialog.text("Der Beleg wurde angelegt.\nWegen der aktuellen Filterregeln erscheint er jedoch nicht in der Belegliste.");
-				document.getElementById("dialog-text").appendChild( optionen.shortcut("Meldung auch zukünftig anzeigen", "karte-gefiltert") );
+				document.getElementById("dialog-text").appendChild( optionen.shortcut("Meldung nicht mehr anzeigen", "nicht-karte-gefiltert") );
 			}
 		}
 		function markNeu (kopf) {
@@ -624,7 +624,7 @@ let liste = {
 		span.textContent = "Notizen";
 		div.appendChild(span);
 		// Absätze erzeugen
-		let prep = notizen.replace(/\n(\s+)*\n/g, "\n"), // Leerzeilen löschen
+		let prep = notizen.replace(/\n\s*\n/g, "\n"), // Leerzeilen löschen
 			p_prep = prep.split("\n");
 		for (let i = 0, len = p_prep.length; i < len; i++) {
 			// Text aufbereiten

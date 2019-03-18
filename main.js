@@ -57,16 +57,16 @@ let layoutMenu = [
 			},
 			{ type: "separator" },
 			{
-				label: "Zuletzt verwendet", // Menü wird über appMenu.zuletzt() gefüllt
-				id: "kartei-zuletzt",
-			},
-			{ type: "separator" },
-			{
 				label: "Öffnen",
 				icon: path.join(__dirname, "img", "menu", "kartei-oeffnen.png"),
 				click: () => win.webContents.send("kartei-oeffnen", ""),
 				accelerator: "CommandOrControl+O",
 			},
+			{
+				label: "Zuletzt verwendet", // Menü wird über appMenu.zuletzt() gefüllt
+				id: "kartei-zuletzt",
+			},
+			{ type: "separator" },
 			{
 				label: "Speichern",
 				icon: path.join(__dirname, "img", "menu", "kartei-speichern.png"),
@@ -80,6 +80,14 @@ let layoutMenu = [
 				click: () => win.webContents.send("kartei-speichern-unter"),
 				accelerator: "CommandOrControl+Shift+S",
 				id: "kartei-speichern-unter",
+			},
+			{ type: "separator" },
+			{
+				label: "Schließen",
+				icon: path.join(__dirname, "img", "menu", "kartei-schliessen.png"),
+				click: () => win.webContents.send("kartei-schliessen"),
+				accelerator: "CommandOrControl+W",
+				id: "kartei-schliessen",
 			},
 			{ type: "separator" },
 			{
@@ -101,6 +109,12 @@ let layoutMenu = [
 				id: "kartei-anhaenge",
 			},
 			{
+				label: "Überprüfte Lexika",
+				icon: path.join(__dirname, "img", "menu", "kartei-lexika.png"),
+				click: () => win.webContents.send("kartei-lexika"),
+				id: "kartei-lexika",
+			},
+			{
 				label: "Metadaten",
 				icon: path.join(__dirname, "img", "menu", "kartei-metadaten.png"),
 				click: () => win.webContents.send("kartei-metadaten"),
@@ -113,14 +127,6 @@ let layoutMenu = [
 				click: () => win.webContents.send("kartei-suche"),
 				accelerator: "CommandOrControl+F",
 				id: "kartei-suche",
-			},
-			{ type: "separator" },
-			{
-				label: "Schließen",
-				icon: path.join(__dirname, "img", "menu", "kartei-schliessen.png"),
-				click: () => win.webContents.send("kartei-schliessen"),
-				accelerator: "CommandOrControl+W",
-				id: "kartei-schliessen",
 			},
 		],
 	},
@@ -346,7 +352,7 @@ appMenu = {
 	},
 	// Menü-Elemente deaktivieren, wenn keine Kartei offen ist
 	deaktivieren (disable, update) {
-		let elemente = ["kartei-speichern", "kartei-speichern-unter", "kartei-wortstamm", "kartei-notizen", "kartei-anhaenge", "kartei-metadaten", "kartei-suche", "kartei-schliessen", "belege"];
+		let elemente = ["kartei-speichern", "kartei-speichern-unter", "kartei-wortstamm", "kartei-notizen", "kartei-anhaenge", "kartei-lexika", "kartei-metadaten", "kartei-suche", "kartei-schliessen", "belege"];
 		for (let j = 0, len = layoutMenu.length; j < len; j++) {
 			// sollen vielleicht alle Menüpunkte deaktiviert werden?
 			let alle = false;

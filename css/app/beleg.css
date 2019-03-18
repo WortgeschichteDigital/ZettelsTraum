@@ -78,6 +78,10 @@
 	width: calc(100% - 12px);
 }
 
+#beleg input[type="text"].popup-feld {
+	width: calc(100% - 31px);
+}
+
 #beleg textarea {
 	min-height: 48px;
 	max-height: 192px;
