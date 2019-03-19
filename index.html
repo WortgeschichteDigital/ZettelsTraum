@@ -14,6 +14,7 @@
 		<link rel="stylesheet" href="css/app/popup.css">
 		<link rel="stylesheet" href="css/app/start.css">
 		
+		<script src="js/app/anhaenge.js"></script>
 		<script src="js/app/app.js"></script>
 		<script src="js/app/beleg.js"></script>
 		<script src="js/app/dialog.js"></script>
@@ -221,8 +222,8 @@
 				</div>
 				<div>
 					<section id="einstellungen-sec-allgemeines">
-						<p class="input-text"><input type="text" value="" spellcheck="false" id="einstellung-bearbeiterin"
-							><label for="einstellung-bearbeiterin">BearbeiterIn auf diesem Rechner</label>
+						<p class="input-text popup-cont"><input type="text" value="" spellcheck="false" class="popup-feld" id="einstellung-bearbeiterin"
+							><a href="#" class="icon-link popup-link-element" title="BearbeiterInnen auflisten"> </a><label for="einstellung-bearbeiterin">BearbeiterIn auf diesem Rechner</label>
 					</section>
 					<section id="einstellungen-sec-menue" class="aus">
 						<p><input type="checkbox" id="einstellung-autoHideMenuBar"
@@ -301,6 +302,13 @@
 			</div>
 		</div></div>
 		
+		<!-- OVERLAY: Anhänge -->
+		<div id="anhaenge" class="overlay aus"><div>
+			<h2><span class="icon-h icon-h-anhaenge"> </span
+				>Anhänge<a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen"> </a></h2>
+			<div id="anhaenge-cont"></div>
+		</div></div>
+		
 		<!-- OVERLAY: Überprüfte Lexika -->
 		<div id="lexika" class="overlay aus"><div>
 			<h2><span class="icon-h icon-h-lexika"> </span
@@ -331,7 +339,7 @@
 					<div id="meta-be-liste"></div>
 					<p class="input-text popup-cont"
 						><input type="text" value="" spellcheck="false" class="popup-feld" id="meta-be"
-						><a href="#" class="icon-link popup-link-button" title="BearbeiterInnen auflisten"> </a><input type="button" value="Ergänzen" id="meta-be-ergaenzen"></p>
+						><a href="#" class="icon-link popup-link-element" title="BearbeiterInnen auflisten"> </a><input type="button" value="Ergänzen" id="meta-be-ergaenzen"></p>
 				</div>
 			</div>
 		</div></div>

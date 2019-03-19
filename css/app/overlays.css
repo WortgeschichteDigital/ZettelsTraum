@@ -1,6 +1,7 @@
 @charset "utf-8";
 
 /* Alle Overlay-Fenster ------------------------- */
+#anhaenge,
 #dialog,
 #einstellungen,
 #lexika,
@@ -18,6 +19,7 @@
 	background-color: rgba(180, 180, 180, .7);
 }
 
+#anhaenge > div,
 #dialog > div,
 #einstellungen > div,
 #lexika > div,
@@ -32,6 +34,7 @@
 	background-color: #fff;
 }
 
+#anhaenge h2,
 #dialog h2,
 #einstellungen h2,
 #lexika h2,
@@ -42,6 +45,7 @@
 	position: relative;
 }
 
+#anhaenge h2 a,
 #dialog h2 a,
 #einstellungen h2 a,
 #lexika h2 a,
@@ -73,6 +77,11 @@
 #einstellungen > div {
 	margin-top: 40px;
 	max-width: 700px;
+}
+
+.icon-h-einstellungen {
+	-webkit-mask-image: url(../../img/heading-einstellungen.svg);
+	mask-image: url(../../img/heading-einstellungen.svg);
 }
 
 #einstellungen-cont {
@@ -117,13 +126,16 @@
 }
 
 #einstellungen-cont input[type="text"] {
-	margin-right: 10px;
 	width: 185px;
 	color: var(--farbe);
 }
 
 #einstellungen-cont input[type="checkbox"] {
 	margin-right: 9px; /* für alignment mit Überschrift */
+}
+
+#einstellungen-cont label[for="einstellung-bearbeiterin"] {
+	margin-left: 10px;
 }
 
 #einstellungen-cont p {
@@ -153,11 +165,6 @@
 	padding-left: 0;
 	text-indent: 0;
 	white-space: nowrap;
-}
-
-.icon-h-einstellungen {
-	-webkit-mask-image: url(../../img/heading-einstellungen.svg);
-	mask-image: url(../../img/heading-einstellungen.svg);
 }
 
 .einstellung-neustart {
@@ -243,6 +250,11 @@
 	max-width: 650px;
 }
 
+.icon-h-notizen {
+	-webkit-mask-image: url(../../img/heading-notizen.svg);
+	mask-image: url(../../img/heading-notizen.svg);
+}
+
 #notizen-cont {
 	padding: 10px;
 }
@@ -271,9 +283,19 @@
 	margin-left: 5px;
 }
 
-.icon-h-notizen {
-	-webkit-mask-image: url(../../img/heading-notizen.svg);
-	mask-image: url(../../img/heading-notizen.svg);
+/* Anhänge -------------------------------------- */
+#anhaenge > div {
+	margin-top: 40px;
+	max-width: 650px;
+}
+
+.icon-h-anhaenge {
+	-webkit-mask-image: url(../../img/heading-anhaenge.svg);
+	mask-image: url(../../img/heading-anhaenge.svg);
+}
+
+#anhaenge-cont {
+	padding: 10px;
 }
 
 /* Überprüfte Lexika ---------------------------- */
@@ -364,6 +386,11 @@
 	max-width: 720px;
 }
 
+.icon-h-zeitraumgrafik {
+	-webkit-mask-image: url(../../img/heading-zeitraumgrafik.svg);
+	mask-image: url(../../img/heading-zeitraumgrafik.svg);
+}
+
 #zeitraumgrafik-cont {
 	padding: 10px;
 }
@@ -371,12 +398,6 @@
 #zeitraumgrafik-cont div {
 	overflow-x: auto;
 }
-
-.icon-h-zeitraumgrafik {
-	-webkit-mask-image: url(../../img/heading-zeitraumgrafik.svg);
-	mask-image: url(../../img/heading-zeitraumgrafik.svg);
-}
-
 
 /* Dialog --------------------------------------- */
 #dialog > div {

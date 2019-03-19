@@ -171,6 +171,12 @@ let beleg = {
 			dialog.text("Es wurden keine Änderungen vorgenommen.");
 			return;
 		}
+		// ggf. Format von Bedeutung und Textsorte anpassen
+		let ds = ["bd", "ts"];
+		for (let i = 0, len = ds.length; i < len; i++) {
+			let ds_akt = ds[i];
+			beleg.data[ds_akt] = beleg.data[ds_akt].replace(/::/g, ": ");
+		}
 		// ggf. Objekt anlegen
 		if (!data.ka[beleg.id_karte]) {
 			data.ka[beleg.id_karte] = {};

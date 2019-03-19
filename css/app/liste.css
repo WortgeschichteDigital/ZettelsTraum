@@ -112,7 +112,28 @@
 }
 
 .filter-cont p {
-	padding-left: 1px; /* sonst wird der outline links abgeschnitten; vgl. .filter-cont */
+	padding-left: 25px; /* sonst wird der outline links abgeschnitten; vgl. .filter-cont */
+	text-indent: -24px;
+}
+
+.filter-cont p.filter-baum1 {
+	padding-left: 49px;
+}
+
+.filter-cont p.filter-baum2 {
+	padding-left: 73px;
+}
+
+.filter-cont p.filter-baum3 {
+	padding-left: 97px;
+}
+
+.filter-cont p.filter-baum4 {
+	padding-left: 121px;
+}
+
+.filter-cont p.filter-baum5 {
+	padding-left: 145px;
 }
 
 .filter-cont p.markierung {
@@ -129,6 +150,7 @@
 	display: inline-block;
 	margin-left: 10px;
 	color: var(--textHell);
+	text-indent: 0; /* wegen des text-indent in p */
 }
 
 #filter-volltext {

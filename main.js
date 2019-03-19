@@ -105,7 +105,7 @@ let layoutMenu = [
 			{
 				label: "Anhänge",
 				icon: path.join(__dirname, "img", "menu", "kartei-anhaenge.png"),
-				click: () => void 0, // TODO
+				click: () => win.webContents.send("kartei-anhaenge"),
 				id: "kartei-anhaenge",
 			},
 			{

@@ -28,6 +28,28 @@ let filter = {
 		filter.aufbauenZeitraum();
 		// dynamische Filter und Anzahl der passenden Karten ermitteln
 		filter.typen = {
+			bedeutungen: {
+				name: "Bedeutungen",
+				filter_vorhanden: Object.keys(data.ka).length ? true : false,
+				filter: {
+					"bedeutungen-undefined": {
+						name: "(nicht bestimmt)",
+						wert: 0,
+					},
+				},
+				filter_folge: ["bedeutungen-undefined"],
+			},
+			textsorten: {
+				name: "Textsorten",
+				filter_vorhanden: Object.keys(data.ka).length ? true : false,
+				filter: {
+					"textsorten-undefined": {
+						name: "(nicht bestimmt)",
+						wert: 0,
+					},
+				},
+				filter_folge: ["textsorten-undefined"],
+			},
 			verschiedenes: {
 				name: "Verschiedenes",
 				filter_vorhanden: false,
@@ -49,11 +71,57 @@ let filter = {
 						wert: 0,
 					},
 				},
+				filter_folge: [
+					"unvollstaendig",
+					"kontext",
+					"buecherdienst",
+					"markierung",
+				],
 			},
 		};
+		let baeume = [{
+				data: "bd",
+				typen: "bedeutungen",
+			},
+			{
+				data: "ts",
+				typen: "textsorten",
+			}];
 		for (let id in data.ka) {
 			if ( !data.ka.hasOwnProperty(id) ) {
 				continue;
+			}
+			// BEDEUTUNGEN UND TEXTSORTEN
+			for (let i = 0, len = baeume.length; i < len; i++) {
+				let d = baeume[i].data,
+					t = baeume[i].typen;
+				if (!data.ka[id][d]) {
+					filter.typen[t].filter[`${t}-undefined`].wert++;
+					continue;
+				}
+				let schon_gezaehlt = new Set(),
+					b = filter.baumExtrakt(data.ka[id][d], t);
+				for (let j = 0, len = b.length; j < len; j++) {
+					if (!filter.typen[t].filter[ b[j] ]) {
+						let name = b[j].replace(/^.+?-/, "").split(": ");
+						filter.typen[t].filter[ b[j] ] = {
+							name: name[name.length - 1],
+							wert: 0,
+						};
+						filter.typen[t].filter_folge.push(b[j]);
+					}
+					// Wenn mehrere Bedeutungen oder Textsorten in einem Beleg auftauchen
+					// könnte es passieren, dass Belege doppelt gezählt werden. Ein Beispiel wäre:
+					// "Mensch: alt: groß, Mensch: alt: klein". Hier würden "Mensch" und "Mensch: alt"
+					// zweimal gezählt, obwohl sie im selben Beleg auftauchen. Da kann man
+					// Abhilfe schaffen:
+					if ( schon_gezaehlt.has(b[j]) ) {
+						continue;
+					}
+					// Filter zählen
+					filter.typen[t].filter[ b[j] ].wert++;
+					schon_gezaehlt.add(b[j]);
+				}
 			}
 			// VERSCHIEDENES
 			// Vollständigkeit
@@ -77,6 +145,12 @@ let filter = {
 				filter.typen.verschiedenes.filter_vorhanden = true;
 			}
 		}
+		// Bedeutungen und Textsorten sortieren
+		let arr_typen = ["bedeutungen", "textsorten"];
+		for (let i = 0, len = arr_typen.length; i < len; i++) {
+			let arr = filter.typen[ arr_typen[i] ].filter_folge;
+			arr.sort(filter.baumSort);
+		}
 		// dynamische Filter drucken
 		const cont = document.getElementById("liste-filter-dynamisch");
 		helfer.keineKinder(cont);
@@ -91,11 +165,9 @@ let filter = {
 			if (block === "verschiedenes") {
 				cont.lastChild.appendChild( filter.aufbauenFilterlogik() );
 			}
-			for (let f in filter.typen[block].filter) {
-				if ( !filter.typen[block].filter.hasOwnProperty(f) ) {
-					continue;
-				}
-				let neuer_filter = filter.aufbauenFilter(f, filter.typen[block].filter[f]);
+			let f = filter.typen[block].filter_folge;
+			for (let i = 0, len = f.length; i < len; i++) {
+				let neuer_filter = filter.aufbauenFilter(f[i], filter.typen[block].filter[ f[i] ]);
 				if (neuer_filter) {
 					cont.lastChild.appendChild(neuer_filter);
 				}
@@ -232,6 +304,43 @@ let filter = {
 			liste.status(false);
 		});
 	},
+	// extrahiert die einzelnen Schichten, die in einer Bedeutungs- oder Textsortenangabe stecken
+	//   baum = String
+	//     (Bedeutungs- bzw. Textsortenbaum als einzeiliger String)
+	//   dt = String
+	//     (Datentyp, also entweder "bedeutungen" oder "textsorten")
+	baumExtrakt (baum, dt) {
+		let extrakt = [],
+			gruppen = baum.split(/, */);
+		for (let i = 0, len = gruppen.length; i < len; i++) {
+			let untergruppen = gruppen[i].split(": "),
+				konstrukt = [];
+			for (let j = 0, len = untergruppen.length; j < len; j++) {
+				konstrukt.push(untergruppen[j]);
+				extrakt.push(`${dt}-${konstrukt.join(": ")}`);
+			}
+		}
+		return extrakt;
+	},
+	// Array mit Bedeutungsschichten, die aus Bedeutungs- und Textsortenangaben
+	// extrahiert wurde, sortieren
+	baumSort (a, b) {
+		// undefined wird an den Anfang gesetzt
+		if ( a.match(/undefined$/) ) {
+			return -1;
+		} else if ( b.match(/undefined$/) ) {
+			return 1;
+		}
+		// alphabetische Sortierung
+		a = helfer.sortAlphaPrep(a);
+		b = helfer.sortAlphaPrep(b);
+		let arr = [a, b];
+		arr.sort();
+		if (arr[0] === a) {
+			return -1;
+		}
+		return 1;
+	},
 	// Kopf und Container einer Filtergruppe erzeugen
 	//   name = String
 	//     (Name des Filterkopfes)
@@ -247,7 +356,7 @@ let filter = {
 		frag.appendChild(a);
 		// Filter-Container
 		let div = document.createElement("div");
-		div.classList.add("filter-cont");
+		div.classList.add("filter-cont", "filter-cont-max");
 		frag.appendChild(div);
 		// Fragment zurückgeben
 		return frag;
@@ -296,10 +405,22 @@ let filter = {
 		if (!obj.wert) {
 			return false;
 		}
-		// Ja, der Filter muss gedruckt werden
+		// Sollte der Filter als Filterbaum dargestellt werden?
+		let baum = f.match(/: /g),
+			baum_tiefe = 0;
+		if (baum) {
+			baum_tiefe = baum.length;
+		}
+		// in der Filter-ID sind wahrscheinlich Leerzeichen
+		f = encodeURI(f);
+		// Filter drucken
 		let frag = document.createDocumentFragment(),
-			p = document.createElement("p"),
-			input = document.createElement("input");
+			p = document.createElement("p");
+		if (baum_tiefe) {
+			p.classList.add(`filter-baum${baum_tiefe}`);
+		}
+		// Input
+		let input = document.createElement("input");
 		input.classList.add("filter");
 		input.id = `filter-${f}`;
 		input.type = "checkbox";
@@ -443,7 +564,7 @@ let filter = {
 		document.querySelectorAll(".filter").forEach(function(i) {
 			if (i.type === "text" && i.value ||
 					i.type === "checkbox" && i.checked) {
-				let id = i.id.replace(/^filter-/, "");
+				let id = decodeURI( i.id.replace(/^filter-/, "") ); // Filter-ID könnte enkodiert sein
 				filter.aktiveFilter[id] = true;
 			}
 		});
@@ -462,8 +583,9 @@ let filter = {
 				if ( !filter.typen[typ].filter.hasOwnProperty(f) ) {
 					continue;
 				}
+				let f_encoded = encodeURI(f);
 				if (filter.typen[typ].filter[f].wert &&
-						document.getElementById(`filter-${f}`).checked) {
+						document.getElementById(`filter-${f_encoded}`).checked) {
 					filter.aktiveFilter[typ] = true;
 					break;
 				}
@@ -520,6 +642,25 @@ let filter = {
 		if (!Object.keys(filter.aktiveFilter).length) {
 			return karten;
 		}
+		// aktive Filter in Bedeutungen und Textsorten
+		let baumfilter = {
+			bd: [],
+			ts: [],
+		};
+		for (let i in filter.aktiveFilter) {
+			if ( !filter.aktiveFilter.hasOwnProperty(i) ) {
+				continue;
+			}
+			if ( !/^(bedeutungen|textsorten)-/.test(i) ) {
+				continue;
+			}
+			let f = i.match(/^(.+?)-(.+)/);
+			if (f[1] === "bedeutungen") {
+				baumfilter.bd.push(f[2]);
+			} else if (f[1] === "textsorten") {
+				baumfilter.ts.push(f[2]);
+			}
+		}
 		// bei vorhandemen Verschiedenes-Filtern
 		let filter_logik = document.getElementById("filter-logik-inklusiv"),
 			filter_inklusiv = true;
@@ -536,7 +677,7 @@ let filter = {
 		let karten_gefiltert = [],
 			vt = helfer.textTrim(document.getElementById("filter-volltext").value),
 			vt_reg = new RegExp(helfer.escapeRegExp( helfer.textTrim(vt) ), "i");
-		for (let i = 0, len = karten.length; i < len; i++) {
+		x: for (let i = 0, len = karten.length; i < len; i++) {
 			let id = karten[i];
 			// Volltext
 			if ( filter.aktiveFilter.volltext && !volltext(id) ) {
@@ -547,6 +688,29 @@ let filter = {
 				let jahr = parseInt(liste.zeitschnittErmitteln(data.ka[id].da).jahr, 10);
 				if (filter_zeitraum.indexOf(jahr) === -1) {
 					continue;
+				}
+			}
+			// Bedeutungen und Textsorten
+			for (let bf in baumfilter) {
+				if ( !baumfilter.hasOwnProperty(bf) ) {
+					continue;
+				}
+				let arr = baumfilter[bf];
+				if (arr.length) {
+					let okay = false;
+					if (!data.ka[id][bf] && arr.indexOf("undefined") >= 0) {
+						okay = true;
+					} else if (data.ka[id][bf]) {
+						for (let j = 0, len = arr.length; j < len; j++) {
+							if ( data.ka[id][bf].includes(arr[j]) ) {
+								okay = true;
+								break;
+							}
+						}
+					}
+					if (!okay) {
+						continue x;
+					}
 				}
 			}
 			// vollständig oder unvollständig
@@ -578,7 +742,7 @@ let filter = {
 			karten_gefiltert.push(id);
 		}
 		return karten_gefiltert;
-		// Funktionen
+		// Funktion Volltext
 		function volltext (id) {
 			let okay = false;
 			const ds = ["au", "bd", "bs", "da", "no", "qu", "ts"];

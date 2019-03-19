@@ -84,6 +84,7 @@ let popup = {
 				}, 10); // damit andere Enter-Events, die an dem Input hängen, nicht auch noch ausgelöst werden
 			} else if (evt.which === 38 || evt.which === 40) { // Cursor hoch (↑) od. runter (↓)
 				evt.preventDefault();
+				evt.stopPropagation(); // damit im Einstellungen-Menü der Menüpunkt nicht gewechselt wird
 				// Popup existiert noch nicht
 				if ( !document.getElementById("popup") ) {
 					popup.init(this.id);
@@ -118,7 +119,7 @@ let popup = {
 		popup.caller = feld_id;
 		// Daten sammeln
 		popup.data = [];
-		if (feld_id === "meta-be") {
+		if (feld_id === "einstellung-bearbeiterin" || feld_id === "meta-be") {
 			popup.data = [...privat.bearbeiterinnen];
 		} else if (feld_id === "beleg-bd") {
 			popup.dataFormular("bd");
@@ -126,23 +127,23 @@ let popup = {
 			popup.dataFormular("ts");
 		}
 		// Popup erzeugen und einhängen
-		let div = document.createElement("div");
-		div.id = "popup";
+		let span = document.createElement("span");
+		span.id = "popup";
 		let inp_text = document.getElementById(feld_id);
-		inp_text.parentNode.appendChild(div);
+		inp_text.parentNode.appendChild(span);
 		// Popup füllen
 		if (popup.data.length) {
 			popup.fill(false);
 		} else {
-			let opt = document.createElement("div");
+			let opt = document.createElement("span");
 			opt.classList.add("keine-vorschlaege");
 			opt.textContent = "keine Vorschläge vorhanden";
-			div.appendChild(opt);
+			span.appendChild(opt);
 		}
 		// Popup positionieren
-		div.style.left = `${inp_text.offsetLeft}px`;
-		div.style.top = `${inp_text.offsetHeight + 4}px`;
-		div.style.maxWidth = `${inp_text.parentNode.offsetWidth - 12}px`; // 12px padding und border
+		span.style.left = `${inp_text.offsetLeft}px`;
+		span.style.top = `${inp_text.offsetHeight + 4}px`;
+		span.style.maxWidth = `${inp_text.parentNode.offsetWidth - 12}px`; // 12px padding und border
 	},
 	// Popup-Liste füllen
 	//   filtern = Boolean
@@ -171,7 +172,7 @@ let popup = {
 		}
 		// Liste füllen
 		items.forEach(function(i) {
-			let opt = document.createElement("div");
+			let opt = document.createElement("span");
 			opt.textContent = i;
 			popup.auswahlKlick(opt);
 			pop.appendChild(opt);
@@ -181,8 +182,14 @@ let popup = {
 	//   tastaturcode = Number
 	//     (Tastaturcode 38 [hoch] od. 40 [runter])
 	navigation (tastaturcode) {
-		let pos = -1,
-			opts = document.getElementById("popup").querySelectorAll("div");
+		let pop = document.getElementById("popup"),
+			opts = pop.querySelectorAll("span");
+		// ggf. abbrechen, wenn keine Vorschläge vorhanden sind
+		if ( opts[0].classList.contains("keine-vorschlaege") ) {
+			return;
+		}
+		// neue Position ermitteln
+		let pos = -1;
 		for (let i = 0, len = opts.length; i < len; i++) {
 			if ( opts[i].classList.contains("aktiv") ) {
 				pos = i;
@@ -199,14 +206,22 @@ let popup = {
 		} else if (pos >= opts.length) {
 			pos = 0;
 		}
-		if ( opts[pos].classList.contains("keine-vorschlaege") ) {
-			return;
-		}
+		// neues Element aktivieren
 		opts[pos].classList.add("aktiv");
+		// ggf. die Liste an eine gute Position scrollen
+		let pop_hoehe = pop.offsetHeight,
+			span_hoehe = opts[0].offsetHeight,
+			scroll_top = pop.scrollTop,
+			pos_von_oben = opts[pos].offsetTop;
+		if (pos_von_oben >= pop_hoehe + scroll_top - span_hoehe * 2) {
+			pop.scrollTop = pos_von_oben - pop_hoehe + span_hoehe * 2;
+		} else if (pos_von_oben < scroll_top + span_hoehe) {
+			pop.scrollTop = pos_von_oben - span_hoehe;
+		}
 	},
 	// Klick in Popup-Liste abfangen
 	//   ein = Element
-	//     (<div>, auf den geklickt wurde)
+	//     (<span>, auf den geklickt wurde)
 	auswahlKlick (ein) {
 		ein.addEventListener("click", function() {
 			let feld = this.parentNode.parentNode.querySelector(".popup-feld");
@@ -219,9 +234,44 @@ let popup = {
 	//   text = String
 	//     (der Text, der eingetragen werden soll)
 	auswahl (feld, text) {
-		feld.value = text;
-		feld.focus();
-		popup.schliessen();
+		let caller = popup.caller; // muss zwischengespeichert werden, weil das Popup sich schließt, wenn sich das Dialog-Fenster öffnet
+		if (/^beleg-/.test(caller) && feld.value) {
+			dialog.oeffnen("confirm", function() {
+				if (dialog.antwort) {
+					// Steht der Text schon im Feld?
+					let feld_val = feld.value.split(/, */);
+					if (feld_val.indexOf(text) >= 0) {
+						dialog.oeffnen("alert", null);
+						dialog.text("Der Text muss nicht ergänzt werden, weil er bereits im Feld steht.");
+						return;
+					}
+					// Text wird ergänzt
+					eintragen(true);
+				} else if (dialog.antwort === false) {
+					eintragen(false);
+				}
+			});
+			dialog.text("Im Textfeld steht schon etwas.\nSoll es um den ausgewählten Text ergänzt werden?");
+			return;
+		}
+		eintragen(false);
+		// Eintragen
+		function eintragen (ergaenzen) {
+			if (ergaenzen) {
+				text = `${feld.value}, ${text}`;
+			}
+			// Auswahl übernehmen
+			feld.value = text;
+			feld.focus();
+			// Haben die Änderungen weitere Konsequenzen?
+			if ( /^beleg-/.test(caller) ) {
+				beleg.belegGeaendert(true);
+			} else if ( /^einstellung-/.test(caller) ) {
+				optionen.aendereEinstellung( document.getElementById(caller) );
+			}
+			// Popup schließen
+			popup.schliessen();
+		}
 	},
 	// Popup-Liste schließen
 	schliessen () {

@@ -40,7 +40,7 @@ let helfer = {
 			} else if (id === "kartei-notizen") {
 				notizen.oeffnen();
 			} else if (id === "kartei-anhaenge") {
-				// TODO
+				anhaenge.oeffnen();
 			} else if (id === "kartei-lexika") {
 				lexika.oeffnen();
 			} else if (id === "kartei-metadaten") {

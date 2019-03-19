@@ -242,25 +242,35 @@ let optionen = {
 		// Optionen speichern
 		optionen.speichern(true);
 	},
+	// auf Änderung der Einstellungen achten
+	//   ele = Element
+	//     (Element, dessen Wert geändert wurde)
+	aendereEinstellungListener (ele) {
+		let typ = "change";
+		if (ele.type === "text") {
+			typ = "input";
+		}
+		ele.addEventListener(typ, function() {
+			optionen.aendereEinstellung(this);
+		});
+	},
 	// Einstellung aus dem Einstellungen-Dialog ändern
 	//   ele = Element
 	//     (Element, dessen Wert geändert wurde)
 	aendereEinstellung (ele) {
-		ele.addEventListener("change", function() {
-			// Option ermitteln und umstellen
-			let e = this.id.replace(/^einstellung-/, "");
-			if (this.type === "checkbox") {
-				optionen.data.einstellungen[e] = this.checked;
-			} else if (this.type === "text") {
-				optionen.data.einstellungen[e] = this.value;
-			}
-			// ggf. Quick-Access-Bar umstellen
-			if ( e.match(/^quick/) ) {
-				optionen.anwendenQuickAccess();
-			}
-			// Optionen speichern
-			optionen.speichern(false);
-		});
+		// Option ermitteln und umstellen
+		let e = ele.id.replace(/^einstellung-/, "");
+		if (ele.type === "checkbox") {
+			optionen.data.einstellungen[e] = ele.checked;
+		} else if (ele.type === "text") {
+			optionen.data.einstellungen[e] = ele.value;
+		}
+		// ggf. Quick-Access-Bar umstellen
+		if ( e.match(/^quick/) ) {
+			optionen.anwendenQuickAccess();
+		}
+		// Optionen speichern
+		optionen.speichern(false);
 	},
 	// das Optionen-Fenster öffnen
 	oeffnen () {

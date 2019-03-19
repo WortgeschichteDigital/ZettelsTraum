@@ -17,7 +17,7 @@ input.popup-feld {
 	mask-image: url(../../img/popup.svg);
 }
 
-.popup-link-button { /* Popup-Link, auf dem ein Input-Button folgt */
+.popup-link-element { /* Popup-Link, auf dem ein Element folgt */
 	position: relative;
 	top: 3px;
 	left: -25px; /* 1px border */
@@ -25,7 +25,7 @@ input.popup-feld {
 	mask-image: url(../../img/popup.svg);
 }
 
-.popup-link-button ~ input {
+.popup-link-element ~ * {
 	position: relative;
 	left: -24px; /* der Link ist 24px breit */
 }
@@ -37,14 +37,16 @@ input.popup-feld {
 	box-shadow: var(--boxShadow);
 	border: 1px solid var(--linie);
 	border-radius: 3px;
-	max-height: 200px; /* Höhe pro <div> = 25px, -1px für border-bottom */
+	max-height: 200px; /* Höhe pro <span> = 25px, -1px für border-bottom */
 	overflow-y: auto;
 	background-color: #fff;
 	font-size: 14px;
 	line-height: 24px;
+	text-indent: 0; /* nötig wegen des Popups im Optionen-Fenster */
 }
 
-#popup div {
+#popup span {
+	display: block;
 	border-bottom: 1px solid var(--linie);
 	padding: 0 10px;
 	overflow: hidden;
@@ -53,24 +55,24 @@ input.popup-feld {
 	cursor: pointer;
 }
 
-#popup div:last-child {
+#popup span:last-child {
 	border-bottom: none;
 }
 
-#popup div:hover {
-	background-color: var(--hover);
+#popup span:hover {
+	background-color: var(--highlight);
 }
 
-#popup div.aktiv {
-	background-color: var(--hover);
+#popup span.aktiv {
+	background-color: var(--highlight);
 }
 
-#popup div.keine-vorschlaege {
+#popup span.keine-vorschlaege {
 	color: var(--textSehrHell);
 	font-style: italic;
 	cursor: default;
 }
 
-#popup div.keine-vorschlaege:hover {
+#popup span.keine-vorschlaege:hover {
 	background-color: transparent;
 }

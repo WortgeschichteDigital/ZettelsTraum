@@ -509,7 +509,7 @@ let liste = {
 		if (!optionen.data.belegliste.wort_hervorheben) {
 			return schnitt;
 		}
-		let reg = new RegExp(`[a-zäöüß\-]*(${helfer.stammVariRegExp()})[a-zäöüß\-]*`, "gi");
+		let reg = new RegExp(`[a-zäöüß=\-]*(${helfer.stammVariRegExp()})[a-zäöüß=\-]*`, "gi");
 		schnitt = schnitt.replace(reg, (m) => `<strong>${m}</strong>`);
 		return schnitt;
 	},
