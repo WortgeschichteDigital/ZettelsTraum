@@ -1,7 +1,7 @@
 "use strict";
 
 let stamm = {
-	// Wortstamm-Fenster einblenden
+	// Formvarianten-Fenster einblenden
 	oeffnen () {
 		let fenster = document.getElementById("stamm");
 		// Fenster öffnen oder in den Vordergrund holen

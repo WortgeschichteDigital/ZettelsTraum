@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24" height="24" version="1" xmlns="http://www.w3.org/2000/svg">
+<metadata>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:dc="http://purl.org/dc/elements/1.1/"><rdf:Description dc:publisher="Papirus Development Team" dc:rights="GNU General Public License v3.0"></rdf:Description></rdf:RDF>
+</metadata>
+<path d="m5 2.5c-0.554 0-1 0.446-1 1v18c0 0.554 0.446 1 1 1h14c0.554 0 1-0.446 1-1v-13l-5.5-0.5-0.5-5.5z" opacity=".2"/>
+<path d="m5 2c-0.554 0-1 0.446-1 1v18c0 0.554 0.446 1 1 1h14c0.554 0 1-0.446 1-1v-13l-5.5-0.5-0.5-5.5z" fill="#e4e4e4"/>
+<path d="m5 2c-0.554 0-1 0.446-1 1v0.5c0-0.554 0.446-1 1-1h9l5.5 5.5h0.5l-6-6z" fill="#fff" opacity=".2"/>
+<path d="m14 2.5v5c0 0.5523 0.44772 1 1 1h5z" opacity=".2"/>
+<path d="m14 2v5c0 0.5523 0.44772 1 1 1h5z" fill="#fafafa"/>
+<g transform="matrix(1.0029 0 0 .84265 -.5353 4.3882)">
+<rect transform="rotate(-51.933)" x="-8.0484" y="15.846" width="12" height="2" fill="#d00" fill-rule="evenodd" style="paint-order:normal"/>
+<rect transform="matrix(-.61659 -.78729 -.78729 .61659 0 0)" x="-22.846" y="-3.0484" width="12" height="2" fill="#d00" fill-rule="evenodd" style="paint-order:normal"/>
+</g>
+</svg>

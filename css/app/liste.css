@@ -422,7 +422,7 @@ span.liste-label {
 
 .liste-meta {
 	border-radius: 3px;
-	padding: 2px 10px;
+	padding: 5px 10px;
 	width: fit-content;
 	height: 24px;
 	background-color: var(--hintergrund);
@@ -431,6 +431,7 @@ span.liste-label {
 
 .liste-meta img {
 	margin-right: 5px;
+	vertical-align: top;
 }
 
 .liste-meta img:last-child {

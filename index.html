@@ -44,11 +44,12 @@
 			><a href="#" id="quick-kartei-speichern-unter" class="icon-link" title="Kartei: Speichern unter"> </a
 			><a href="#" id="quick-kartei-schliessen" class="icon-link" title="Kartei: Schließen"> </a
 			><span class="quick-spacer"> </span
-			><a href="#" id="quick-kartei-wortstamm" class="icon-link" title="Kartei: Wortstamm-Variationen"> </a
+			><a href="#" id="quick-kartei-formvarianten" class="icon-link" title="Kartei: Formvarianten"> </a
 			><a href="#" id="quick-kartei-notizen" class="icon-link" title="Kartei: Notizen"> </a
 			><a href="#" id="quick-kartei-anhaenge" class="icon-link" title="Kartei: Anhänge"> </a
 			><a href="#" id="quick-kartei-lexika" class="icon-link" title="Kartei: Überprüfte Lexika"> </a
 			><a href="#" id="quick-kartei-metadaten" class="icon-link" title="Kartei: Metadaten"> </a
+			><a href="#" id="quick-kartei-bedeutungen" class="icon-link" title="Kartei: Bedeutungen sortieren"> </a
 			><a href="#" id="quick-kartei-suche" class="icon-link" title="Kartei: Suche"> </a
 			><span class="quick-spacer"> </span
 			><a href="#" id="quick-belege-hinzufuegen" class="icon-link" title="Belege: Hinzufügen"> </a
@@ -59,7 +60,8 @@
 		<header>
 			<h1 id="wort" class="keine-kartei">keine Kartei geöffnet</h1
 				><span id="kartei-geaendert">*</span
-				><span class="aus" id="notizen-icon"><img src="img/kopf-notizen.svg" width="24" height="24" alt=""></span
+				><span class="aus" id="notizen-icon"><img src="img/kopf-notizen.svg" width="24" height="24" alt="" title="Notizen anzeigen"></span
+				><span id="kartei-anhaenge"></span
 				><span id="icon"><img src="img/icon.svg" width="48" height="48" alt=""></span>
 		</header>
 		
@@ -142,7 +144,7 @@
 				</tr><tr>
 					<th colspan="2">Anhänge</th>
 				</tr><tr>
-					<td colspan="2"> </td>
+					<td colspan="2"><div id="beleg-an" data-anhaenge="beleg"></div></td>
 				</tr>
 			</table>
 		</section>
@@ -247,8 +249,8 @@
 								><label for="einstellung-quick-kartei-speichern-unter">Speichern unter</label></p>
 							<p><input type="checkbox" id="einstellung-quick-kartei-schliessen"
 								><label for="einstellung-quick-kartei-schliessen">Schließen</label></p>
-							<p><input type="checkbox" id="einstellung-quick-kartei-wortstamm"
-								><label for="einstellung-quick-kartei-wortstamm">Wortstamm-Variationen</label></p>
+							<p><input type="checkbox" id="einstellung-quick-kartei-formvarianten"
+								><label for="einstellung-quick-kartei-formvarianten">Formvarianten</label></p>
 							<p><input type="checkbox" id="einstellung-quick-kartei-notizen"
 								><label for="einstellung-quick-kartei-notizen">Notizen</label></p>
 							<p><input type="checkbox" id="einstellung-quick-kartei-anhaenge"
@@ -257,6 +259,8 @@
 								><label for="einstellung-quick-kartei-lexika">Überprüfte Lexika</label></p>
 							<p><input type="checkbox" id="einstellung-quick-kartei-metadaten"
 								><label for="einstellung-quick-kartei-metadaten">Metadaten</label></p>
+							<p><input type="checkbox" id="einstellung-quick-kartei-bedeutungen"
+								><label for="einstellung-quick-kartei-bedeutungen">Bedeutungen sortieren</label></p>
 							<p><input type="checkbox" id="einstellung-quick-kartei-suche"
 								><label for="einstellung-quick-kartei-suche">Suche</label></p>
 							<h3>Belege</h3>
@@ -278,10 +282,10 @@
 			</div>
 		</div></div>
 		
-		<!-- OVERLAY: Wortstamm-Variationen -->
+		<!-- OVERLAY: Formvarianten -->
 		<div id="stamm" class="overlay aus"><div>
 			<h2><span class="icon-h icon-h-stamm"> </span
-				>Wortstamm-Variationen<a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen"> </a></h2>
+				>Formvarianten<a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen"> </a></h2>
 			<div id="stamm-cont">
 				<div id="stamm-liste"></div>
 				<p class="input-text"><input type="text" value="" spellcheck="false" id="stamm-text"
@@ -306,7 +310,7 @@
 		<div id="anhaenge" class="overlay aus"><div>
 			<h2><span class="icon-h icon-h-anhaenge"> </span
 				>Anhänge<a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen"> </a></h2>
-			<div id="anhaenge-cont"></div>
+			<div id="anhaenge-cont" data-anhaenge="kartei"></div>
 		</div></div>
 		
 		<!-- OVERLAY: Überprüfte Lexika -->

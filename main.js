@@ -91,10 +91,10 @@ let layoutMenu = [
 			},
 			{ type: "separator" },
 			{
-				label: "Wortstamm-Variationen",
-				icon: path.join(__dirname, "img", "menu", "kartei-wortstamm.png"),
-				click: () => win.webContents.send("kartei-wortstamm"),
-				id: "kartei-wortstamm",
+				label: "Formvarianten",
+				icon: path.join(__dirname, "img", "menu", "kartei-formvarianten.png"),
+				click: () => win.webContents.send("kartei-formvarianten"),
+				id: "kartei-formvarianten",
 			},
 			{
 				label: "Notizen",
@@ -119,6 +119,13 @@ let layoutMenu = [
 				icon: path.join(__dirname, "img", "menu", "kartei-metadaten.png"),
 				click: () => win.webContents.send("kartei-metadaten"),
 				id: "kartei-metadaten",
+			},
+			{ type: "separator" },
+			{
+				label: "Bedeutungen sortieren",
+				icon: path.join(__dirname, "img", "menu", "kartei-bedeutungen.png"),
+				click: () => win.webContents.send("dialog-anzeigen", "Sorry!\nDiese Funktion ist noch nicht programmiert."), // TODO
+				id: "kartei-bedeutungen",
 			},
 			{ type: "separator" },
 			{
@@ -149,13 +156,8 @@ let layoutMenu = [
 			{
 				label: "Sortieren",
 				icon: path.join(__dirname, "img", "menu", "belege-sortieren.png"),
-				click: () => void 0, // TODO
+				click: () => win.webContents.send("dialog-anzeigen", "Sorry!\nDiese Funktion ist noch nicht programmiert."), // TODO
 				accelerator: "CommandOrControl+H",
-			},
-			{ type: "separator" },
-			{
-				label: "Bedeutungen sortieren",
-				click: () => void 0, // TODO
 			},
 		],
 	},
@@ -352,7 +354,7 @@ appMenu = {
 	},
 	// Menü-Elemente deaktivieren, wenn keine Kartei offen ist
 	deaktivieren (disable, update) {
-		let elemente = ["kartei-speichern", "kartei-speichern-unter", "kartei-wortstamm", "kartei-notizen", "kartei-anhaenge", "kartei-lexika", "kartei-metadaten", "kartei-suche", "kartei-schliessen", "belege"];
+		let elemente = ["kartei-speichern", "kartei-speichern-unter", "kartei-formvarianten", "kartei-notizen", "kartei-anhaenge", "kartei-lexika", "kartei-metadaten", "kartei-bedeutungen", "kartei-suche", "kartei-schliessen", "belege"];
 		for (let j = 0, len = layoutMenu.length; j < len; j++) {
 			// sollen vielleicht alle Menüpunkte deaktiviert werden?
 			let alle = false;

@@ -93,7 +93,7 @@ window.addEventListener("load", function() {
 	for (let i = 0, len = ee.length; i < len; i++) {
 		optionen.aendereEinstellungListener(ee[i]);
 	}
-	// Wortstamm-Variationen-Fenster
+	// Formvarianten-Fenster
 	let stamm_inputs = document.querySelectorAll("#stamm input");
 	for (let i = 0, len = stamm_inputs.length; i < len; i++) {
 		if (stamm_inputs[i].type === "button") {
@@ -166,9 +166,9 @@ window.addEventListener("load", function() {
 	});
 	ipcRenderer.on("kartei-speichern", () => kartei.speichern(false) );
 	ipcRenderer.on("kartei-speichern-unter", () => kartei.speichern(true) );
-	ipcRenderer.on("kartei-wortstamm", () => stamm.oeffnen() );
+	ipcRenderer.on("kartei-formvarianten", () => stamm.oeffnen() );
 	ipcRenderer.on("kartei-notizen", () => notizen.oeffnen() );
-	ipcRenderer.on("kartei-anhaenge", () => anhaenge.oeffnen() );
+	ipcRenderer.on("kartei-anhaenge", () => anhaenge.fenster() );
 	ipcRenderer.on("kartei-lexika", () => lexika.oeffnen() );
 	ipcRenderer.on("kartei-metadaten", () => meta.oeffnen() );
 	ipcRenderer.on("kartei-suche", () => filter.suche() );

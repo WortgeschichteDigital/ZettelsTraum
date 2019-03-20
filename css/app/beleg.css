@@ -113,6 +113,19 @@ textarea#beleg-bs {
 	background-color: var(--farbe);
 }
 
+#beleg-an {
+	margin: 0 auto;
+	max-width: 500px;
+}
+
+#beleg-an p:last-child {
+	margin-bottom: 0;
+}
+
+#beleg-an .anhaenge-item:hover {
+	background-color: #fff;
+}
+
 /* Text-Tools ----------------------------------- */
 .text-tools {
 	position: absolute;

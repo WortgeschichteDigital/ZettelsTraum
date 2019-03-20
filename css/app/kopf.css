@@ -53,9 +53,9 @@
 	mask-image: url(../../img/quick-speichern-unter.svg);
 }
 
-#quick-kartei-wortstamm {
-	-webkit-mask-image: url(../../img/quick-wortstamm.svg);
-	mask-image: url(../../img/quick-wortstamm.svg);
+#quick-kartei-formvarianten {
+	-webkit-mask-image: url(../../img/quick-formvarianten.svg);
+	mask-image: url(../../img/quick-formvarianten.svg);
 }
 
 #quick-kartei-notizen {
@@ -76,6 +76,11 @@
 #quick-kartei-metadaten {
 	-webkit-mask-image: url(../../img/quick-metadaten.svg);
 	mask-image: url(../../img/quick-metadaten.svg);
+}
+
+#quick-kartei-bedeutungen {
+	-webkit-mask-image: url(../../img/quick-bedeutungen.svg);
+	mask-image: url(../../img/quick-bedeutungen.svg);
 }
 
 #quick-kartei-suche {
@@ -151,11 +156,20 @@ body > header span {
 	visibility: visible;
 }
 
-#notizen-icon img {
+#notizen-icon,
+#kartei-anhaenge {
+	margin-left: 50px;
+}
+
+#notizen-icon img,
+#kartei-anhaenge img {
 	position: relative;
 	bottom: 18px;
 	vertical-align: bottom;
-	margin-left: 50px;
+}
+
+#kartei-anhaenge img {
+	margin-right: 10px;
 }
 
 /* App-Icon ------------------------------------- */

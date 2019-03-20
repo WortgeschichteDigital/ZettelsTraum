@@ -35,24 +35,25 @@ let helfer = {
 				kartei.speichern(true);
 			} else if (id === "kartei-schliessen") {
 				kartei.checkSpeichern( () => kartei.schliessen() );
-			} else if (id === "kartei-wortstamm") {
+			} else if (id === "kartei-formvarianten") {
 				stamm.oeffnen();
 			} else if (id === "kartei-notizen") {
 				notizen.oeffnen();
 			} else if (id === "kartei-anhaenge") {
-				anhaenge.oeffnen();
+				anhaenge.fenster();
 			} else if (id === "kartei-lexika") {
 				lexika.oeffnen();
 			} else if (id === "kartei-metadaten") {
 				meta.oeffnen();
+			} else if (id === "kartei-bedeutungen") { // TODO
+				dialog.oeffnen("alert", null);
+				dialog.text("Sorry!\nDiese Funktion ist noch nicht programmiert.");
 			} else if (id === "kartei-suche") {
 				filter.suche();
 			} else if (id === "belege-hinzufuegen") {
 				beleg.erstellenPre();
 			} else if (id === "belege-auflisten") {
 				liste.anzeigen();
-			} else if (id === "belege-sortieren") {
-				// TODO
 			}
 		});
 	},
@@ -216,7 +217,7 @@ let helfer = {
 	escapeRegExp (string) {
 		return string.replace(/\/|\(|\)|\[|\]|\{|\}|\.|\?|\\|\+|\*|\^|\$|\|/g, (m) => `\\${m}`);
 	},
-	// regulären Ausdruck mit allen Wortstamm-Variationen erstellen
+	// regulären Ausdruck mit allen Formvarianten erstellen
 	stammVariRegExp () {
 		let staemme = [...data.wv];
 		for (let i = 0, len = staemme.length; i < len; i++) {

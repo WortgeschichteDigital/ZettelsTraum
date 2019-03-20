@@ -14,7 +14,7 @@ let kartei = {
 		// zur Sicherheit den Fokus aus Textfeldern nehmen
 		// (falls Änderungen noch nicht übernommen wurden)
 		helfer.inputBlur();
-		// Obacht! Änderungen nocht nicht gespeichert!
+		// Obacht! Änderungen noch nicht gespeichert!
 		if (notizen.geaendert || beleg.geaendert || kartei.geaendert) {
 			sicherheitsfrage.warnen(funktion, {
 				notizen: true,
@@ -33,7 +33,7 @@ let kartei = {
 		// globales Datenobjekt initialisieren
 		data = {
 			wo: kartei.wort, // Wort
-			wv: [kartei.wort], // Wortstammvariationen
+			wv: [kartei.wort], // Formvarianten
 			dc: new Date().toISOString(), // Datum Kartei-Erstellung
 			dm: "", // Datum Kartei-Änderung
 			re: 0, // Revision
@@ -74,6 +74,9 @@ let kartei = {
 					name: "Alle Dateien",
 					extensions: ["*"],
 				},
+			],
+			properties: [
+				"openFile",
 			],
 		};
 		// Wo wurde zuletzt eine Datei gespeichert oder geöffnet?
@@ -130,6 +133,8 @@ let kartei = {
 			optionen.aendereLetzterPfad();
 			optionen.aendereZuletzt();
 			notizen.icon();
+			anhaenge.scan(data.an);
+			anhaenge.makeIconList( data.an, document.getElementById("kartei-anhaenge") );
 			liste.aufbauen(true);
 			liste.wechseln();
 			kartei.menusDeaktivieren(false);

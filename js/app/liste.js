@@ -642,7 +642,7 @@ let liste = {
 	//     (das ist der aktuelle Detailblock)
 	metainfosErstellen (beleg, cont) {
 		// Gibt es überhaupt Meta-Infos, die angezegit werden müssen
-		if (!beleg.un && !beleg.ko && !beleg.bu && !beleg.be) {
+		if (!beleg.un && !beleg.ko && !beleg.bu && !beleg.be && !beleg.an.length) {
 			return;
 		}
 		// es gibt also Infos
@@ -687,6 +687,13 @@ let liste = {
 				span.textContent = " ";
 				cont_span.appendChild(span);
 			}
+		}
+		// Anhänge?
+		if (beleg.an.length) {
+			let cont_span = document.createElement("span");
+			anhaenge.scan(beleg.an);
+			anhaenge.makeIconList(beleg.an, cont_span);
+			div.appendChild(cont_span);
 		}
 	},
 	// Text-Links erkennen und in echte HTML-Links umwandeln
@@ -763,8 +770,21 @@ let liste = {
 			let detail = this.title,
 				beleg_id = this.parentNode.dataset.id;
 			dialog.oeffnen("alert", null);
-			dialog.text(`<h3>Beleg #${beleg_id}</h3>\n${detail}`);
+			dialog.text(`<h3>${liste.detailAnzeigenH3(beleg_id)}</h3>\n${detail}`);
 		});
+	},
+	// Text der Überschrift für die Detailanzeige erstellen
+	// (die Funktion brauch ich auch in anhaenge.js, darum ausgelagert)
+	//   beleg_id = String
+	//     (ID des Belegs)
+	detailAnzeigenH3 (beleg_id) {
+		let text_detail = [];
+		if (data.ka[beleg_id].au) {
+			let autor = data.ka[beleg_id].au.split(",")[0];
+			text_detail.push(autor);
+		}
+		text_detail.push( liste.zeitschnittErmitteln(data.ka[beleg_id].da).datum );
+		return `Beleg #${beleg_id} (${text_detail.join(" ")})`;
 	},
 	// Funktionen im Header aufrufen
 	//   link = Element

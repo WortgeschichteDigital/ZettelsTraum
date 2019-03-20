@@ -13,21 +13,29 @@ input.popup-feld {
 	position: absolute;
 	top: 3px;
 	right: 6px; /* 5px padding, 1px border */
-	-webkit-mask-image: url(../../img/popup.svg);
-	mask-image: url(../../img/popup.svg);
 }
 
 .popup-link-element { /* Popup-Link, auf dem ein Element folgt */
 	position: relative;
 	top: 3px;
 	left: -25px; /* 1px border */
-	-webkit-mask-image: url(../../img/popup.svg);
-	mask-image: url(../../img/popup.svg);
 }
 
 .popup-link-element ~ * {
 	position: relative;
 	left: -24px; /* der Link ist 24px breit */
+}
+
+.popup-link-td,
+.popup-link-element {
+	-webkit-mask-image: url(../../img/popup.svg);
+	mask-image: url(../../img/popup.svg);
+	background-color: var(--textExtremHell);
+}
+
+.popup-link-td:hover,
+.popup-link-element:hover {
+	background-color: var(--text);
 }
 
 /* Popup-Fensterchen ---------------------------- */

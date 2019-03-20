@@ -171,15 +171,15 @@
 	color: var(--textWarnung);
 }
 
-/* Wortstamm-Variationen ------------------------ */
+/* Formvarianten ------------------------ */
 #stamm > div {
 	margin-top: 40px;
 	max-width: 350px;
 }
 
 .icon-h-stamm {
-	-webkit-mask-image: url(../../img/heading-wortstamm.svg);
-	mask-image: url(../../img/heading-wortstamm.svg);
+	-webkit-mask-image: url(../../img/heading-formvarianten.svg);
+	mask-image: url(../../img/heading-formvarianten.svg);
 }
 
 #stamm-cont {
@@ -286,7 +286,7 @@
 /* Anhänge -------------------------------------- */
 #anhaenge > div {
 	margin-top: 40px;
-	max-width: 650px;
+	max-width: 500px;
 }
 
 .icon-h-anhaenge {
@@ -296,6 +296,58 @@
 
 #anhaenge-cont {
 	padding: 10px;
+	max-height: 385px;
+	overflow-y: auto;
+}
+
+#anhaenge-cont h3 {
+	margin-bottom: 5px;
+}
+
+#anhaenge-cont p:last-child {
+	margin-bottom: 0;
+} 
+
+.anhaenge-add {
+	text-align: center;
+}
+
+.anhaenge-item {
+	border-top: 1px solid var(--linie);
+	padding: 5px 10px;
+	height: 24px;
+}
+
+.anhaenge-item:last-child {
+	margin-bottom: 5px;
+	border-bottom: 1px solid var(--linie);
+}
+
+.anhaenge-item ~ h3 {
+	margin-top: 0;
+	border-top: 1px solid var(--linie);
+	padding-top: 20px;
+}
+
+.anhaenge-item:hover {
+	background-color: var(--hover);
+}
+
+.anhaenge-item img:first-child {
+	margin-right: 10px;
+}
+
+.anhaenge-item img:last-child {
+	margin-left: 10px;
+}
+
+.anhaenge-item span {
+	display: inline-block;
+	vertical-align: top;
+	width: calc(100% - 34px * 2); /* 24px Image, 10px Margin */
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }
 
 /* Überprüfte Lexika ---------------------------- */

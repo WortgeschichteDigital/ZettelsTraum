@@ -1,48 +1,366 @@
 "use strict";
 
 let anhaenge = {
-	// hier stehen Details zu den einzelnen Anhängen
-	//   exists = Boolean (Datei existiert)
-	//   ext = String (Dateiendung)
+	// hier stehen Details zu den einzelnen Anhängen (s. anhaenge.scan())
 	data: {},
+	// scannt die übergebenen Anhänge und trägt das Ergebnis
+	// in anhaenge.data ein
+	//   an = Array/String
+	//     (Anhang oder Liste von Anhängen, die gescannt werden sollen)
+	scan (an) {
+		if (Array.isArray(an) ) {
+			an.forEach( (i) => scannen(i) );
+		} else {
+			scannen(an);
+		}
+		function scannen (datei) {
+			// schon gescannt
+			if (anhaenge.data[datei]) {
+				return;
+			}
+			// scannen
+			const fs = require("fs"),
+				path = require("path");
+			let pfad = datei;
+			if ( !path.isAbsolute(datei) ) {
+				pfad = `${path.parse(kartei.pfad).dir}/${datei}`;
+			}
+			anhaenge.data[datei] = {
+				exists: fs.existsSync(pfad),
+				path: pfad,
+				ext: path.parse(pfad).ext,
+			};
+		}
+	},
+	// ermittelt das Array, in dem die aufzulistenden Anhänge zu finden sind
+	//   obj = String
+	//     (String mit Angaben zu dem Objekt; dieser muss in einen echten Verweis
+	//     umgewandelt werden)
+	getArr (obj) {
+		let obj_split = obj.split("|"),
+			arr = {};
+		if (obj_split[0] === "data") {
+			arr = data;
+		} else if (obj_split[0] === "beleg") {
+			arr = beleg;
+		}
+		for (let i = 1, len = obj_split.length; i < len; i++) {
+			arr = arr[ obj_split[i] ];
+		}
+		return arr;
+	},
+	// Liste mit Icon-Typen
+	iconTypen: {
+		".doc": "datei-doc.svg",
+		".docx": "datei-doc.svg",
+		".gif": "datei-img.svg",
+		".gz": "datei-archiv.svg",
+		".htm": "datei-html.svg",
+		".html": "datei-html.svg",
+		".jpeg": "datei-img.svg",
+		".jpg": "datei-img.svg",
+		".odp": "datei-praes.svg",
+		".odt": "datei-doc.svg",
+		".pdf": "datei-pdf.svg",
+		".png": "datei-img.svg",
+		".ppt": "datei-praes.svg",
+		".pptx": "datei-praes.svg",
+		".rar": "datei-archiv.svg",
+		".txt": "datei-txt.svg",
+		".wgd": "datei-wgd.svg",
+		".xml": "datei-xml.svg",
+		".zip": "datei-archiv.svg",
+	},
+	// passendes Icon zum anhang ermitteln
+	//   an = string
+	//     (Datei, wie sie sich in anhaenge.data findet)
+	getIcon (an) {
+		if (!anhaenge.data[an].exists) {
+			return "img/datei-x.svg";
+		}
+		if (anhaenge.iconTypen[anhaenge.data[an].ext]) {
+			return `img/${anhaenge.iconTypen[anhaenge.data[an].ext]}`;
+		}
+		return "img/datei.svg";
+	},
+	// Liste von Icons erstellen, die einzeln angeklickt werden können
+	//   arr = Array
+	//     (Array mit allen Dateien, für die Icons erstellt werden sollen)
+	//   ziel = Element
+	//     (Element, in das die Iconliste eingetragen werden soll)
+	makeIconList (arr, ziel) {
+		helfer.keineKinder(ziel);
+		arr.forEach(function(i) {
+			let img = document.createElement("img");
+			img.dataset.datei = i;
+			img.src = anhaenge.getIcon(i);
+			img.width = "24";
+			img.height = "24";
+			img.title = i;
+			anhaenge.oeffnen(img);
+			ziel.appendChild(img);
+		});
+	},
 	// Anhänge-Fenster einblenden
-	oeffnen () {
+	fenster () {
 		let fenster = document.getElementById("anhaenge");
 		// Fenster öffnen oder in den Vordergrund holen
 		if ( overlay.oeffnen(fenster) ) { // Fenster ist schon offen
 			return;
 		}
-		// Content-Objekt leeren
+		// Anhänge der Kartei auflisten
 		let cont = document.getElementById("anhaenge-cont");
-		helfer.keineKinder(cont);
-		// Liste der Anhänge erzeugen
-		anhaenge.auflisten(cont, true, data.an);
-		// TODO alle Karten durchgehen und an anhaenge.auflisten(data.ka[id].an, false) schicken
-		// TODO davor eine Überschrift: "Beleg #13"
-		// TODO die Überschrift kann man anklicken
+		anhaenge.auflisten(cont, true, "data|an");
+		// Anhänge der Belege auflisten
+		anhaenge.auflistenBelege(cont);
 	},
 	// Anhänge auflisten
 	//   cont = Element
 	//     (Container, in dem die Liste erzeugt werden soll)
 	//   add = Boolean
 	//     (Add-Button soll erzeugt werden, oder auch nicht)
-	//   arr = Array
-	//     (Liste der Anhänge; kann leer sein)
-	auflisten (cont, add, arr) {
+	//   obj = String
+	//     (verweist auf das Objekt, in dem die Anhänge gespeichert werden sollen;
+	//     Werte durch Haarstrich getrennt)
+	auflisten (cont, add, obj) {
+		// Content leeren
+		// (soll kein Button hinzugefügt werden, soll der Containert auch nicht geleert werden;
+		// das dürfte nur das Anhänge-Fenster betreffen; darum geht das so)
+		if (add) {
+			helfer.keineKinder(cont);
+		}
 		// ggf. Hinzufüge-Button einfügen
 		if (add) {
-			anhaenge.addButton(cont);
+			anhaenge.addButton(cont, obj);
 		}
 		// abbrechen, wenn keine Anhänge vorhanden sind
+		let arr = anhaenge.getArr(obj);
 		if (!arr.length) {
 			return;
 		}
+		anhaenge.scan(arr);
 		// Anhänge auflisten
+		arr.forEach(function(i) {
+			let div = document.createElement("div");
+			div.classList.add("anhaenge-item");
+			div.dataset.obj = obj;
+			div.dataset.datei = i;
+			anhaenge.oeffnen(div);
+			// Icon
+			let icon = document.createElement("img");
+			icon.src = anhaenge.getIcon(i);
+			icon.width = "24";
+			icon.height = "24";
+			div.appendChild(icon);
+			// Datei
+			let datei = `\u200E${i}\u200E`; // vgl. den Sermon in meta.oeffnen()
+			let span = document.createElement("span");
+			span.setAttribute("dir", "rtl");
+			span.textContent = datei;
+			span.title = datei;
+			div.appendChild(span);
+			// Löschen
+			let del = document.createElement("img");
+			del.src = "img/loeschen.svg";
+			del.width = "24";
+			del.height = "24";
+			anhaenge.loeschen(del);
+			div.appendChild(del);
+			// <div> einhängen
+			cont.appendChild(div);
+		});
+	},
+	// 
+	auflistenBelege (cont) {
+		for (let id in data.ka) {
+			if ( !data.ka.hasOwnProperty(id) ) {
+				continue;
+			}
+			// Anhänge vorhanden?
+			if (!data.ka[id].an.length) {
+				continue;
+			}
+			// Anhänge drucken
+			let h3 = document.createElement("h3");
+			h3.textContent = liste.detailAnzeigenH3(id);
+			h3.dataset.id = id;
+			anhaenge.belegOeffnen(h3);
+			cont.appendChild(h3);
+			anhaenge.auflisten(cont, false, `data|ka|${id}|an`);
+		}
+	},
+	// Öffnet einen Anhang
+	//   item = Element
+	//     (der <div> oder <img>, auf den/das geklickt wurde)
+	oeffnen (item) {
+		item.addEventListener("click", function() {
+			let datei = this.dataset.datei;
+			if (!anhaenge.data[datei].exists) {
+				dialog.oeffnen("alert", null);
+				dialog.text("Die Datei konnte nicht gefunden werden.");
+				return;
+			}
+			const {shell} = require("electron");
+			shell.openItem(anhaenge.data[datei].path);
+		});
+	},
+	// Öffnet beim Klick auf eine Überschrift im Anhänge-Fenster den entsprechenden Beleg
+	//   h3 = Element
+	//     (die Überschrift, auf die geklickt wurde)
+	belegOeffnen (h3) {
+		h3.addEventListener("click", function() {
+			let id = this.dataset.id;
+			if (beleg.geaendert) {
+				dialog.oeffnen("confirm", function() {
+					if (dialog.antwort) {
+						beleg.aktionSpeichern();
+					} else if (dialog.antwort === false) {
+						oeffnen();
+					}
+				});
+				dialog.text("Der aktuell geöffnete Beleg ist noch nicht gespeichert.\nMöchten Sie ihn nicht erst einmal speichern?");
+				return;
+			}
+			oeffnen();
+			function oeffnen () {
+				overlay.alleSchliessen();
+				beleg.oeffnen(id);
+			}
+		});
+	},
+	// Löscht einen Anhang aus der Liste
+	loeschen (item) {
+		item.addEventListener("click", function(evt) {
+			evt.stopPropagation();
+			let cont = this.parentNode.parentNode,
+				obj = this.parentNode.dataset.obj,
+				datei = this.parentNode.dataset.datei,
+				arr = anhaenge.getArr(obj);
+			dialog.oeffnen("confirm", function() {
+				if (dialog.antwort) {
+					arr.splice(arr.indexOf(datei), 1);
+					// Änderungsmarkierung
+					anhaenge.geaendert(cont);
+					// Liste der Anhänge neu aufbauen
+					anhaenge.auflisten(cont, true, obj);
+					// ggf. Liste der Anhänge in den Belegen neu aufbauen
+					if (cont.dataset.anhaenge === "kartei") {
+						anhaenge.auflistenBelege(cont);
+					}
+				}
+			});
+			dialog.text(`Soll die folgende Datei wirklich aus der Liste entfernt werden?\n${datei}`);
+		});
 	},
 	// Add-Button erzeugen, der über einer Anhängeliste steht
 	//   cont = Element
 	//     (Container, an den der Button gehängt werden soll)
-	addButton (cont) {
-		// TODO
-	}
+	//   obj = String
+	//     (verweist auf das Objekt, in dem die Anhänge gespeichert werden sollen;
+	//     Werte durch Haarstrich getrennt)
+	addButton (cont, obj) {
+		let p = document.createElement("p");
+		p.classList.add("anhaenge-add");
+		let input = document.createElement("input");
+		input.dataset.obj = obj;
+		input.setAttribute("tabindex", "0");
+		input.type = "button";
+		input.value = "Ergänzen";
+		anhaenge.add(input);
+		p.appendChild(input);
+		cont.appendChild(p);
+	},
+	// Anhang hinzufügen
+	//   input = Element
+	//     (Add-Button zum Hinzufügen eines Anhangs)
+	add (input) {
+		input.addEventListener("click", function() {
+			const obj = this.dataset.obj,
+				cont = this.parentNode.parentNode;
+			const {app, dialog} = require("electron").remote;
+			const opt = {
+				title: "Anhang hinzufügen",
+				defaultPath: app.getPath("documents"),
+				filters: [
+					{
+						name: "Alle Dateien",
+						extensions: ["*"],
+					},
+				],
+				properties: [
+					"multiSelections",
+					"openFile",
+				],
+			};
+			// Wo wurde zuletzt eine Datei gespeichert oder geöffnet?
+			if (optionen.data.letzter_pfad) {
+				opt.defaultPath = optionen.data.letzter_pfad;
+			}
+			// Dialog anzeigen
+			dialog.showOpenDialog(null, opt, function(dateien) { // dateien ist ein Array!
+				if (dateien === undefined) {
+					kartei.dialogWrapper("Sie haben keine Datei ausgewählt.");
+					return;
+				}
+				anhaenge.addFiles(dateien, cont, obj);
+			});
+		});
+	},
+	// Dateien ggf. hinzufügen
+	//   dateien = Array
+	//     (enthält eine Liste der Dateien, die hinzugefügt werden sollen)
+	//   obj = String
+	//     (Angaben über das Array, dem die Dateien hinzugefügt werden sollen
+	//     Werte durch Haarstriche getrennt)
+	addFiles (dateien, cont, obj) {
+		// Dateien hinzufügen
+		const path = require("path"),
+			reg_pfad = new RegExp( helfer.escapeRegExp(`${path.dirname(kartei.pfad)}/`) );
+		let schon = [],
+			arr = anhaenge.getArr(obj);
+		dateien.forEach(function(i) {
+			const datei = i.replace(reg_pfad, "");
+			if (arr.indexOf(datei) >= 0) {
+				schon.push(datei);
+				return;
+			}
+			anhaenge.scan(datei);
+			arr.push(datei);
+		});
+		// melden, wenn Dateien schon im Array sind
+		if (schon.length) {
+			dialog.oeffnen("alert", null);
+			let text = "folgende Datei war";
+			if (schon.length > 1) {
+				text = "folgenden Dateien waren";
+			}
+			dialog.text(`Die ${text} schon angehängt:\n${schon.join("<br>")}`);
+		}
+		// Abbruch, wenn keine neuen Dateien hinzugefügt wurden
+		if (schon.length === dateien.length) {
+			return;
+		}
+		// Änderungsmarkierung
+		anhaenge.geaendert(cont);
+		// Liste der Anhänge neu aufbauen
+		anhaenge.auflisten(cont, true, obj);
+		// ggf. Liste der Anhänge in den Belegen neu aufbauen
+		if (cont.dataset.anhaenge === "kartei") {
+			anhaenge.auflistenBelege(cont);
+		}
+	},
+	// Änderungsmarkierung setzen
+	//   cont = Element
+	//     (das Contentobjekt, in dem sich die Anhänge befinden; hier ist auch
+	//     die Markierung, ob die Kartei oder ein Beleg betroffen sind)
+	geaendert (cont) {
+		// Änderungsmarkierung
+		let typ = cont.dataset.anhaenge;
+		if (typ === "kartei") {
+			kartei.karteiGeaendert(true);
+			anhaenge.makeIconList( data.an, document.getElementById("kartei-anhaenge") );
+		} else if (typ === "beleg") {
+			beleg.belegGeaendert(true);
+		}
+	},
 };
