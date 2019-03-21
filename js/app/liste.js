@@ -447,12 +447,12 @@ let liste = {
 		// Absätze erzeugen
 		let prep = beleg.replace(/\n\s*\n/g, "\n"), // Leerzeilen löschen
 			p_prep = prep.split("\n"),
-			stamm_reg = new RegExp(helfer.stammVariRegExp(), "i");
+			form_reg = new RegExp(helfer.formVariRegExp(), "i");
 		for (let i = 0, len = p_prep.length; i < len; i++) {
 			let p = document.createElement("p");
 			div.appendChild(p);
 			// Absatz ggf. kürzen
-			if ( optionen.data.belegliste.beleg_kuerzen && !stamm_reg.test(p_prep[i]) ) {
+			if ( optionen.data.belegliste.beleg_kuerzen && !form_reg.test(p_prep[i]) ) {
 				p.textContent = "[…]";
 				continue;
 			}
@@ -470,7 +470,7 @@ let liste = {
 		let schnitt = beleg_akt.bs.replace(/\n+/g, " "); // Absätze könnten mit Leerzeile eingegeben sein
 		schnitt = schnitt.replace(/<.+?>/g, ""); // HTML-Formatierungen vorher löschen!
 		// 1. Treffer im Text ermitteln, Beleg am Anfang ggf. kürzen
-		let reg = new RegExp(helfer.stammVariRegExp(), "gi");
+		let reg = new RegExp(helfer.formVariRegExp(), "gi");
 		if ( schnitt.match(reg) ) {
 			let idx = schnitt.split(reg)[0].length;
 			if (idx > 30) {
@@ -509,7 +509,7 @@ let liste = {
 		if (!optionen.data.belegliste.wort_hervorheben) {
 			return schnitt;
 		}
-		let reg = new RegExp(`[a-zäöüß=\-]*(${helfer.stammVariRegExp()})[a-zäöüß=\-]*`, "gi");
+		let reg = new RegExp(`[a-zäöüß=\-]*(${helfer.formVariRegExp()})[a-zäöüß=\-]*`, "gi");
 		schnitt = schnitt.replace(reg, (m) => `<strong>${m}</strong>`);
 		return schnitt;
 	},

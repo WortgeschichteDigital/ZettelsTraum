@@ -129,6 +129,10 @@ input[type="button"][value="Abbrechen"] {
 	background-image: url(../../img/button-cancel.svg);
 }
 
+input[type="button"][value="DTA-Import"] {
+	background-image: url(../../img/button-import.svg);
+}
+
 input[type="button"][value="Ergänzen"] {
 	background-image: url(../../img/button-ergaenzen.svg);
 }

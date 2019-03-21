@@ -186,18 +186,27 @@
 	padding: 10px;
 }
 
-#stamm-cont p {
+#stamm-cont p.dta {
 	margin-bottom: 5px;
+	text-align: right;
 }
 
-#stamm-cont input[type="button"],
+#stamm-cont input[type="button"] {
+	margin-left: 5px;
+	width: 132px;
+	text-align: left;
+}
+
 #lexika-cont input[type="button"],
 #meta-cont input[type="button"] {
 	margin-left: 5px;
 	width: 116px;
 }
 
-#stamm-cont input[type="text"],
+#stamm-cont input[type="text"] {
+	width: calc(100% - 137px - 12px); /* Button 137px, 12px padding und border */
+}
+
 #lexika-cont input[type="text"] {
 	width: calc(100% - 121px - 12px); /* Button 121px, 12px padding und border */
 }
@@ -233,10 +242,22 @@
 	background-color: var(--text);
 }
 
+#stamm-liste p {
+	margin-bottom: 5px;
+	height: 24px;
+}
+
 #stamm-liste .platzhalter {
 	display: inline-block;
 	margin-right: 10px;
 	width: 24px;
+}
+
+#stamm-liste .dta {
+	display: inline-block;
+	margin-left: 7px;
+	color: var(--textDTA);
+	font-size: 12px;
 }
 
 .icon-entfernen {
@@ -294,8 +315,11 @@
 	mask-image: url(../../img/heading-anhaenge.svg);
 }
 
-#anhaenge-cont {
+#anhaenge-rahmen {
 	padding: 10px;
+}
+
+#anhaenge-cont {
 	max-height: 385px;
 	overflow-y: auto;
 }

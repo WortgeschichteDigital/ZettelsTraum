@@ -33,7 +33,7 @@ let kartei = {
 		// globales Datenobjekt initialisieren
 		data = {
 			wo: kartei.wort, // Wort
-			wv: [kartei.wort], // Formvarianten
+			fv: [], // Formvarianten
 			dc: new Date().toISOString(), // Datum Kartei-Erstellung
 			dm: "", // Datum Kartei-Änderung
 			re: 0, // Revision
@@ -47,6 +47,8 @@ let kartei = {
 			ha: {}, // Kartenhaufen
 			bd: {}, // Bedeutungen
 		};
+		// Formvarianten aus dem DTA importieren
+		stamm.dtaGet(false);
 		// ggf. für diesen Rechner registrierte BearbeiterIn eintragen
 		if (optionen.data.einstellungen.bearbeiterin) {
 			data.be.push(optionen.data.einstellungen.bearbeiterin);
@@ -232,6 +234,7 @@ let kartei = {
 		wort.classList.add("keine-kartei");
 		wort.textContent = "keine Kartei geöffnet";
 		notizen.icon();
+		anhaenge.makeIconList( null, document.getElementById("kartei-anhaenge") );
 		start.zuletzt();
 		helfer.sektionWechseln("start");
 		kartei.menusDeaktivieren(true);
@@ -281,7 +284,8 @@ let kartei = {
 				kartei.karteiGeaendert(true);
 				kartei.wort = wort;
 				data.wo = wort;
-				data.wv[0] = wort;
+				data.fv = [];
+				stamm.dtaGet(false);
 				kartei.wortEintragen();
 			} else if (dialog.antwort && !wort) {
 				dialog.oeffnen("alert", null);

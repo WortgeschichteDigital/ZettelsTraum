@@ -218,12 +218,12 @@ let helfer = {
 		return string.replace(/\/|\(|\)|\[|\]|\{|\}|\.|\?|\\|\+|\*|\^|\$|\|/g, (m) => `\\${m}`);
 	},
 	// regulären Ausdruck mit allen Formvarianten erstellen
-	stammVariRegExp () {
-		let staemme = [...data.wv];
-		for (let i = 0, len = staemme.length; i < len; i++) {
-			staemme[i] = helfer.escapeRegExp(staemme[i]);
-		}
-		return staemme.join("|");
+	formVariRegExp () {
+		let varianten = [];
+		data.fv.forEach(function(i) {
+			varianten.push( helfer.escapeRegExp(i.va) );
+		});
+		return varianten.join("|");
 	},
 	// Tastatur-Events abfangen und verarbeiten
 	//   evt = Event-Objekt

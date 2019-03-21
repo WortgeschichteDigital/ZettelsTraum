@@ -84,12 +84,16 @@ let anhaenge = {
 		return "img/datei.svg";
 	},
 	// Liste von Icons erstellen, die einzeln angeklickt werden können
-	//   arr = Array
-	//     (Array mit allen Dateien, für die Icons erstellt werden sollen)
+	//   arr = Array/null
+	//     (Array mit allen Dateien, für die Icons erstellt werden sollen;
+	//     steht der Wert auf null, soll nur die Liste gelöscht werden)
 	//   ziel = Element
 	//     (Element, in das die Iconliste eingetragen werden soll)
 	makeIconList (arr, ziel) {
 		helfer.keineKinder(ziel);
+		if (!arr) {
+			return;
+		}
 		arr.forEach(function(i) {
 			let img = document.createElement("img");
 			img.dataset.datei = i;

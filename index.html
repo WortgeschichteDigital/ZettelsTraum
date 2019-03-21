@@ -2,7 +2,7 @@
 <html lang="de">
 	<head>
 		<meta charset="utf-8">
-		<meta http-equiv="Content-Security-Policy" content="default-src 'self'">
+		<meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src https://www.deutschestextarchiv.de">
 		
 		<title> </title>
 		
@@ -290,6 +290,7 @@
 				<div id="stamm-liste"></div>
 				<p class="input-text"><input type="text" value="" spellcheck="false" id="stamm-text"
 					><input type="button" value="Ergänzen" id="stamm-ergaenzen"></p>
+				<p class="dta"><input type="button" value="DTA-Import" id="stamm-dta"></p>
 			</div>
 		</div></div>
 		
@@ -310,7 +311,9 @@
 		<div id="anhaenge" class="overlay aus"><div>
 			<h2><span class="icon-h icon-h-anhaenge"> </span
 				>Anhänge<a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen"> </a></h2>
-			<div id="anhaenge-cont" data-anhaenge="kartei"></div>
+			<div id="anhaenge-rahmen">
+				<div id="anhaenge-cont" data-anhaenge="kartei"></div>
+			</div>
 		</div></div>
 		
 		<!-- OVERLAY: Überprüfte Lexika -->
