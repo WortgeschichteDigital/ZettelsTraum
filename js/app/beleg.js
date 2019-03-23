@@ -44,9 +44,10 @@ let beleg = {
 			bs: "", // Beleg
 			bd: "", // Bedeutung
 			qu: "", // Quelle
+			un: optionen.data.einstellungen.unvollstaendig, // Bearbeitung unvollständig
 			ko: false, // Kontext
 			bu: false, // Bücherdienstauftrag
-			un: optionen.data.einstellungen.unvollstaendig, // Bearbeitung unvollständig
+			bc: false, // Buchung
 			no: "", // Notizen
 			an: [], // Anhänge
 			be: 0, // Bewertung
@@ -177,7 +178,7 @@ let beleg = {
 		let ds = ["bd", "ts"];
 		for (let i = 0, len = ds.length; i < len; i++) {
 			let ds_akt = ds[i];
-			beleg.data[ds_akt] = beleg.data[ds_akt].replace(/::/g, ": ");
+			beleg.data[ds_akt] = beleg.data[ds_akt].replace(/::/g, ": ").replace(/\n\s*\n/g, "\n");
 		}
 		// ggf. Objekt anlegen
 		if (!data.ka[beleg.id_karte]) {

@@ -5,7 +5,8 @@
 	position: relative;
 }
 
-input.popup-feld {
+input.popup-feld,
+textarea.popup-feld {
 	padding-right: 24px;
 }
 

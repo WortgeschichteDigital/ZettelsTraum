@@ -199,11 +199,11 @@ let liste = {
 				}
 				cont.appendChild(div);
 				// Beleg
-				div.appendChild( liste.belegErstellen(data.ka[id].bs) );
+				div.appendChild( liste.belegErstellen(id) );
 				// Bedeutung
 				liste.bedeutungErstellen(data.ka[id].bd, div);
 				// Quellenangabe
-				div.appendChild( liste.quelleErstellen(data.ka[id].qu) );
+				div.appendChild( liste.quelleErstellen(id) );
 				// Textsorte
 				liste.textsorteErstellen(data.ka[id].ts, div);
 				// Notizen
@@ -438,14 +438,20 @@ let liste = {
 		return datum.b - datum.a;
 	},
 	// erstellt die Anzeige des Belegs unterhalb des Belegkopfes
-	//   beleg = String
-	//     (der Volltext des Belegs)
-	belegErstellen (beleg) {
+	//   id = String
+	//     (ID des Belegs)
+	belegErstellen (id) {
 		// <div> für Beleg
 		let div = document.createElement("div");
 		div.classList.add("liste-bs");
+		// Kopierlink erzeugen
+		let a = document.createElement("a");
+		div.appendChild(a);
+		a.classList.add("icon-link", "icon-tools-kopieren");
+		a.dataset.ds = `${id}|bs`;
+		liste.kopieren(a);
 		// Absätze erzeugen
-		let prep = beleg.replace(/\n\s*\n/g, "\n"), // Leerzeilen löschen
+		let prep = data.ka[id].bs.replace(/\n\s*\n/g, "\n"), // Leerzeilen löschen
 			p_prep = prep.split("\n"),
 			form_reg = new RegExp(helfer.formVariRegExp(), "i");
 		for (let i = 0, len = p_prep.length; i < len; i++) {
@@ -547,24 +553,30 @@ let liste = {
 		span.classList.add("liste-label");
 		span.textContent = "Bedeutung";
 		div.appendChild(span);
-		p.textContent = bedeutung;
+		p.innerHTML = bedeutung.replace(/\n/g, "<br>");
 		div.appendChild(p);
 		cont.appendChild(div);
 	},
 	// erstellt den Absatz mit der Quellenangabe
-	//   quelle = String
-	//     (Text des Formularfelds Quelle)
-	quelleErstellen (quelle) {
+	//   id = String
+	//     (ID des Belegs)
+	quelleErstellen (id) {
 		// <div> für Quelle
 		let div = document.createElement("div");
 		div.classList.add("liste-qu", "liste-label");
+		// Kopierlink erzeugen
+		let a = document.createElement("a");
+		div.appendChild(a);
+		a.classList.add("icon-link", "icon-tools-kopieren");
+		a.dataset.ds = `${id}|qu`;
+		liste.kopieren(a);
 		// Label erstellen
 		let span = document.createElement("span");
 		span.classList.add("liste-label");
 		span.textContent = "Quelle";
 		div.appendChild(span);
 		// Absätze erzeugen
-		let prep = quelle.replace(/\n\s*\n/g, "\n"), // Leerzeilen löschen
+		let prep = data.ka[id].qu.replace(/\n\s*\n/g, "\n"), // Leerzeilen löschen
 			p_prep = prep.split("\n");
 		for (let i = 0, len = p_prep.length; i < len; i++) {
 			// Text aufbereiten
@@ -600,7 +612,7 @@ let liste = {
 		span.classList.add("liste-label");
 		span.textContent = "Textsorte";
 		div.appendChild(span);
-		p.textContent = textsorte;
+		p.innerHTML = textsorte.replace(/\n/g, "<br>");
 		div.appendChild(p);
 		cont.appendChild(div);
 	},
@@ -641,8 +653,8 @@ let liste = {
 	//   cont = Element
 	//     (das ist der aktuelle Detailblock)
 	metainfosErstellen (beleg, cont) {
-		// Gibt es überhaupt Meta-Infos, die angezegit werden müssen
-		if (!beleg.un && !beleg.ko && !beleg.bu && !beleg.be && !beleg.an.length) {
+		// Gibt es überhaupt Meta-Infos, die angezeigt werden müssen
+		if (!beleg.un && !beleg.ko && !beleg.bu && !beleg.bc && !beleg.be && !beleg.an.length) {
 			return;
 		}
 		// es gibt also Infos
@@ -674,6 +686,15 @@ let liste = {
 			img.width = "24";
 			img.height = "24";
 			img.title = "Bücherdienst";
+			div.appendChild(img);
+		}
+		// Buchung?
+		if (beleg.bc) {
+			let img = document.createElement("img");
+			img.src = "img/liste-buchung.svg";
+			img.width = "24";
+			img.height = "24";
+			img.title = "Buchung";
 			div.appendChild(img);
 		}
 		// Markierung?
@@ -1003,5 +1024,50 @@ let liste = {
 			link.classList.remove("aktiv");
 			link.title = `${title[funktion]} einblenden`;
 		}
+	},
+	// Datenfeld durch Klick auf ein Icon kopieren
+	kopieren (icon) {
+		icon.addEventListener("click", function(evt) {
+			evt.preventDefault();
+			let ds = this.dataset.ds.split("|"),
+				text = data.ka[ ds[0] ][ ds[1] ].replace(/\n\s*\n/g, "\n");
+			const {clipboard} = require("electron");
+			if (ds[1] !== "bs") {
+				clipboard.writeText(text.replace(/\n/g, "\n\n"));
+				return;
+			}
+			// Sonderbehandlung für den Belegtext
+			let html = "";
+			// Wurde Text ausgewählt?
+			let sel = window.getSelection();
+			if ( sel.toString() ) {
+				// Ist der ausgewählte Text unterhalb des Kopierknotens?
+				let div = this.parentNode,
+					parent = sel.anchorNode;
+				while (parent.nodeName !== "DIV" &&
+						parent.nodeName !== "BODY") { // body nur zur Sicherheit, damit man hier nicht unter Umständen in einen Fehler reinläuft
+					parent = parent.parentNode;
+				}
+				// Oh ja, der Text ist unterhalb des Kopierknotens!
+				// => Nur den ausgewählten Text kopieren.
+				if (div === parent) {
+					let range = sel.getRangeAt(0),
+						container = document.createElement("div");
+					container.appendChild(range.cloneContents());
+					text = container.innerHTML.replace(/<\/p><p>/g, "\n");
+					html = container.innerHTML;
+				}
+			}
+			// Wurde kein Text ausgewählt => Absätze erzeugen.
+			if (!html) {
+				text.split("\n").forEach(function(i) {
+					html += `<p>${i}</p>`;
+				});
+			}
+			clipboard.write({
+				text: text.replace(/<.+?>/g, "").replace(/\n/g, "\n\n"),
+				html: html,
+			});
+		});
 	},
 };

@@ -66,6 +66,10 @@ let filter = {
 						name: "Bücherdienst",
 						wert: 0,
 					},
+					buchung: {
+						name: "Buchung",
+						wert: 0,
+					},
 					markierung: {
 						name: "Markierung",
 						wert: 0,
@@ -75,6 +79,7 @@ let filter = {
 					"unvollstaendig",
 					"kontext",
 					"buecherdienst",
+					"buchung",
 					"markierung",
 				],
 			},
@@ -112,7 +117,7 @@ let filter = {
 					}
 					// Wenn mehrere Bedeutungen oder Textsorten in einem Beleg auftauchen
 					// könnte es passieren, dass Belege doppelt gezählt werden. Ein Beispiel wäre:
-					// "Mensch: alt: groß, Mensch: alt: klein". Hier würden "Mensch" und "Mensch: alt"
+					// "Mensch: alt: groß\nMensch: alt: klein". Hier würden "Mensch" und "Mensch: alt"
 					// zweimal gezählt, obwohl sie im selben Beleg auftauchen. Da kann man
 					// Abhilfe schaffen:
 					if ( schon_gezaehlt.has(b[j]) ) {
@@ -137,6 +142,11 @@ let filter = {
 			// Bücherdienst
 			if (data.ka[id].bu) {
 				filter.typen.verschiedenes.filter.buecherdienst.wert++;
+				filter.typen.verschiedenes.filter_vorhanden = true;
+			}
+			// Buchung
+			if (data.ka[id].bc) {
+				filter.typen.verschiedenes.filter.buchung.wert++;
 				filter.typen.verschiedenes.filter_vorhanden = true;
 			}
 			// Bewertung
@@ -311,7 +321,7 @@ let filter = {
 	//     (Datentyp, also entweder "bedeutungen" oder "textsorten")
 	baumExtrakt (baum, dt) {
 		let extrakt = [],
-			gruppen = baum.split(/, */);
+			gruppen = baum.split("\n");
 		for (let i = 0, len = gruppen.length; i < len; i++) {
 			let untergruppen = gruppen[i].split(": "),
 				konstrukt = [];
@@ -348,12 +358,19 @@ let filter = {
 		let frag = document.createDocumentFragment();
 		// Filter-Kopf
 		let a = document.createElement("a");
+		frag.appendChild(a);
 		a.classList.add("filter-kopf");
 		a.href = "#";
 		a.id = `filter-kopf-${name.toLowerCase()}`;
 		a.textContent = name;
 		filter.anzeigeUmschalten(a);
-		frag.appendChild(a);
+		// Bild für Block-Reset anhängen
+		let img = document.createElement("img");
+		a.appendChild(img);
+		img.src = "img/filter-reset-block.svg";
+		img.width = "24";
+		img.height = "24";
+		filter.ctrlResetBlock(img);
 		// Filter-Container
 		let div = document.createElement("div");
 		div.classList.add("filter-cont", "filter-cont-max");
@@ -631,6 +648,9 @@ let filter = {
 			koepfe[0].nextSibling.classList.remove("aus");
 		}
 	},
+	// Cache mit regulären Ausdrücken für Bedeutungen und Textsorten
+	// (wirkt sich wohl positiv auf die Performance aus)
+	regCache: {},
 	// Karteikarten filtern
 	//   karten = Array
 	//     (enthält die IDs der Karten, die gefiltert werden sollen)
@@ -702,7 +722,16 @@ let filter = {
 						okay = true;
 					} else if (data.ka[id][bf]) {
 						for (let j = 0, len = arr.length; j < len; j++) {
-							if ( data.ka[id][bf].includes(arr[j]) ) {
+							// Suchausdruck auslesen oder erzeugen
+							let reg;
+							if (filter.regCache[ arr[j] ]) {
+								reg = filter.regCache[ arr[j] ];
+							} else {
+								reg = new RegExp(`${helfer.escapeRegExp(arr[j])}(:|\n|$)`);
+								filter.regCache[ arr[j] ] = reg;
+							}
+							// suchen
+							if ( reg.test(data.ka[id][bf]) ) {
 								okay = true;
 								break;
 							}
@@ -729,6 +758,12 @@ let filter = {
 			if ( filter.aktiveFilter.buecherdienst &&
 					(data.ka[id].bu && !filter_inklusiv ||
 					!data.ka[id].bu && filter_inklusiv) ) {
+				continue;
+			}
+			// Buchung
+			if ( filter.aktiveFilter.buchung &&
+					(data.ka[id].bc && !filter_inklusiv ||
+					!data.ka[id].bc && filter_inklusiv) ) {
 				continue;
 			}
 			// Markierung
@@ -804,6 +839,26 @@ let filter = {
 		if (liste_aufbauen) {
 			liste.status(false);
 		}
+	},
+	// einen einzelnen Filterblock zurücksetzen
+	ctrlResetBlock (img) {
+		img.addEventListener("click", function(evt) {
+			evt.stopPropagation();
+			const block = this.parentNode.nextSibling;
+			block.querySelectorAll(".filter").forEach(function(i) {
+				if (i.type === "text") {
+					i.value = "";
+				} else if (i.type === "checkbox") {
+					i.checked = false;
+					// Sonderregel für die Sterne
+					if (i.id === "filter-markierung") {
+						document.getElementById("filter-bewertung").dataset.bewertung = "0";
+						filter.markierenSterne();
+					}
+				}
+			});
+			liste.status(false);
+		});
 	},
 	// Zeitraumgrafik generieren und anzeigen
 	ctrlGrafik () {

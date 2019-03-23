@@ -90,11 +90,13 @@
 							><label for="beleg-ko">Kontext?</label></p>
 						<p><input type="checkbox" id="beleg-bu" tabindex="0"
 							><label for="beleg-bu">Bücherdienst</label></p>
-						<p id="beleg-bewertung"><a href="#" class="icon-link icon-stern"> </a
-							><a href="#" class="icon-link icon-stern"> </a
-							><a href="#" class="icon-link icon-stern"> </a
-							><a href="#" class="icon-link icon-stern"> </a
-							><a href="#" class="icon-link icon-stern"> </a></p>
+						<p><input type="checkbox" id="beleg-bc" tabindex="0"
+							><label for="beleg-bc">Buchung</label></p>
+						<p id="beleg-bewertung"><a href="#" class="icon-link icon-stern" tabindex="0"> </a
+							><a href="#" class="icon-link icon-stern" tabindex="0"> </a
+							><a href="#" class="icon-link icon-stern" tabindex="0"> </a
+							><a href="#" class="icon-link icon-stern" tabindex="0"> </a
+							><a href="#" class="icon-link icon-stern" tabindex="0"> </a></p>
 					</div></td>
 				</tr><tr>
 					<th><label for="beleg-da">Datum</label
@@ -125,8 +127,8 @@
 							><a href="#" class="icon-link icon-tools-kopieren" title="Text kopieren" tabindex="-1"> </a
 							><a href="#" class="icon-link icon-tools-einfuegen" title="Text einfügen" tabindex="-1"> </a></span></th>
 				</tr><tr>
-					<td class="popup-cont"><input type="text" value="" spellcheck="false" class="popup-feld" id="beleg-bd" tabindex="0"><a href="#" class="icon-link popup-link-td" title="Bedeutungen auflisten" tabindex="-1"> </a></td>
-					<td class="popup-cont"><input type="text" value="" spellcheck="false" class="popup-feld" id="beleg-ts" tabindex="0"><a href="#" class="icon-link popup-link-td" title="Textsorten auflisten" tabindex="-1"> </a></td>
+					<td class="popup-cont"><textarea spellcheck="false" class="popup-feld" id="beleg-bd" tabindex="0"></textarea><a href="#" class="icon-link popup-link-td" title="Bedeutungen auflisten" tabindex="-1"> </a></td>
+					<td class="popup-cont"><textarea spellcheck="false" class="popup-feld" id="beleg-ts" tabindex="0"></textarea><a href="#" class="icon-link popup-link-td" title="Textsorten auflisten" tabindex="-1"> </a></td>
 				</tr><tr>
 					<th colspan="2"><label for="beleg-qu">Quelle</label
 						><span class="text-tools"
@@ -161,11 +163,15 @@
 				></span></header>
 				<!-- Der folgende <div> ist nur dazu da, dass die Tastaturnavigation zwischen den Filterköpfen nicht in den Header springt und da dann nicht mehr rauskommt. -->
 				<div
-					><a href="#" class="filter-kopf" id="filter-kopf-volltext">Volltext</a
+					><a href="#" class="filter-kopf" id="filter-kopf-volltext"
+						>Volltext<img src="img/filter-reset-block.svg" width="24" height="24" alt=""
+						></a
 					><div class="filter-cont">
 						<p><input type="text" value="" class="filter" id="filter-volltext"></p>
 					</div
-					><a href="#" class="filter-kopf" id="filter-kopf-zeitraum">Zeitraum</a
+					><a href="#" class="filter-kopf" id="filter-kopf-zeitraum"
+						>Zeitraum<img src="img/filter-reset-block.svg" width="24" height="24" alt=""
+						></a
 					><div class="filter-cont">
 						<p><input type="radio" name="filter-zeitraum" id="filter-zeitraum-10"
 							><label for="filter-zeitraum-10">10er</label
@@ -200,7 +206,7 @@
 						><a href="#" id="liste-link-no"
 							><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M 12.210938 1 C 11.998438 1 11.784141 1.0830469 11.619141 1.2480469 L 9.9902344 2.8886719 L 13.109375 6.0078125 L 14.75 4.3789062 C 15.08 4.0489063 15.08 3.5272656 14.75 3.1972656 L 12.800781 1.2480469 C 12.635781 1.0830469 12.423437 1 12.210938 1 z M 8.8691406 4.0078125 L 0.99023438 11.888672 L 0.99023438 15.007812 L 4.109375 15.007812 L 11.990234 7.1289062 L 8.8691406 4.0078125 z" transform="translate(4 4)" /></svg></a
 						><a href="#" id="liste-link-meta"
-							><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M 1 1 L 1 3 L 15 3 L 15 1 L 1 1 z M 1 5.0039062 L 1 7.0039062 L 15 7.0039062 L 15 5.0039062 L 1 5.0039062 z M 1 9.0039062 L 1 11.003906 L 15 11.003906 L 15 9.0039062 L 1 9.0039062 z M 1 13 L 1 15 L 15 15 L 15 13 L 1 13 z" transform="translate(4 4)" /></svg></a
+							><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="m4 4v16h16v-16h-16zm2 2h12v12h-12v-12zm9.8633 1.5117c-0.0724-0.0156-0.14927-0.016447-0.22656 0.0019531-0.16472 0.0406-0.31508 0.14623-0.42188 0.29492l-4.7266 6.1699-1.6934-1.9316c-0.2832-0.32309-0.79877-0.32306-1.082 0-0.28322 0.32307-0.28324 0.91126 0 1.2344l2.2578 2.5742 0.58789 0.64453 0.51758-0.69727 5.2676-6.8672c0.37363-0.46399 0.02635-1.3152-0.48047-1.4238z"/></svg></a
 					></span><span class="liste-opt-block"
 						><a href="#" class="liste-link-zeitschnitte" id="liste-link-zeitschnitte-10" title="Zeitschnitte alle 10 Jahre">10</a
 						><a href="#" class="liste-link-zeitschnitte" id="liste-link-zeitschnitte-50" title="Zeitschnitte alle 50 Jahre">50</a

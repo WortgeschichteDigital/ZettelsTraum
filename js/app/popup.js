@@ -11,7 +11,7 @@ let popup = {
 			if ( !data.ka.hasOwnProperty(id) ) {
 				continue;
 			}
-			let d = data.ka[id][ds].split(",");
+			let d = data.ka[id][ds].split("\n");
 			for (let i = 0, len = d.length; i < len; i++) {
 				let d_tmp = helfer.textTrim(d[i]);
 				if (!d_tmp) {
@@ -72,6 +72,8 @@ let popup = {
 				if ( !pop || pop.firstChild.classList.contains("keine-vorschlaege") ) {
 					return;
 				}
+				// erst jetzt darf die Enter-Taste blockiert werden
+				evt.preventDefault();
 				// noch kein Element ausgewählt => 1. Element auswählen
 				let aktiv = pop.querySelector(".aktiv");
 				if (!aktiv) {
@@ -83,10 +85,14 @@ let popup = {
 					popup.auswahl(feld, aktiv.textContent);
 				}, 10); // damit andere Enter-Events, die an dem Input hängen, nicht auch noch ausgelöst werden
 			} else if (evt.which === 38 || evt.which === 40) { // Cursor hoch (↑) od. runter (↓)
+				let fenster = document.getElementById("popup");
+				if (!fenster && !evt.ctrlKey && document.activeElement.nodeName === "TEXTAREA") { // sonst man in textareas nicht mehr navigieren
+					return;
+				}
 				evt.preventDefault();
 				evt.stopPropagation(); // damit im Einstellungen-Menü der Menüpunkt nicht gewechselt wird
 				// Popup existiert noch nicht
-				if ( !document.getElementById("popup") ) {
+				if (!fenster) {
 					popup.init(this.id);
 					return;
 				}
@@ -239,7 +245,7 @@ let popup = {
 			dialog.oeffnen("confirm", function() {
 				if (dialog.antwort) {
 					// Steht der Text schon im Feld?
-					let feld_val = feld.value.split(/, */);
+					let feld_val = feld.value.split("\n");
 					if (feld_val.indexOf(text) >= 0) {
 						dialog.oeffnen("alert", null);
 						dialog.text("Der Text muss nicht ergänzt werden, weil er bereits im Feld steht.");
@@ -258,13 +264,14 @@ let popup = {
 		// Eintragen
 		function eintragen (ergaenzen) {
 			if (ergaenzen) {
-				text = `${feld.value}, ${text}`;
+				text = `${feld.value}\n${text}`;
 			}
 			// Auswahl übernehmen
 			feld.value = text;
 			feld.focus();
 			// Haben die Änderungen weitere Konsequenzen?
 			if ( /^beleg-/.test(caller) ) {
+				helfer.textareaGrow(feld);
 				beleg.belegGeaendert(true);
 			} else if ( /^einstellung-/.test(caller) ) {
 				optionen.aendereEinstellung( document.getElementById(caller) );

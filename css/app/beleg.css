@@ -87,6 +87,10 @@
 	max-height: 192px;
 }
 
+#beleg textarea.popup-feld {
+	width: calc(100% - 31px);
+}
+
 textarea#beleg-bs {
 	min-height: 96px;
 	max-height: 288px;

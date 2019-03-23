@@ -77,6 +77,7 @@
 }
 
 .filter-kopf {
+	position: relative;
 	display: block;
 	margin: 10px 0;
 	padding: 3px 5px 2px 5px; /* ein bisschen krum, damit der Kopf exakt dieselbe Höhe hat, wie ein Listenkopf */
@@ -95,6 +96,12 @@
 .filter-kopf:focus,
 .filter-kopf.aktiv:focus {
 	background-color: var(--farbe);
+}
+
+.filter-kopf img {
+	position: absolute;
+	right: 5px;
+	top: 3px;
 }
 
 .filter-cont {
@@ -373,11 +380,29 @@
 }
 
 .liste-details > div {
+	position: relative; /* für die Positionierung der Kopier-Links */
 	margin-top: 10px;
 }
 
 .liste-details > div:first-child {
 	margin-top: 0;
+}
+
+.liste-details .icon-link {
+	position: absolute;
+	top: 10px; /* padding-top */
+	left: -39px;
+	background-color: var(--textExtremHell);
+	user-select: none;
+	cursor: default;
+}
+
+.liste-details .icon-link[data-ds$="|bs"] { /* Beleg hat keinen padding-top */
+	top: 0;
+}
+
+.liste-details .icon-link:hover {
+	background-color: var(--text);
 }
 
 .liste-details a {
