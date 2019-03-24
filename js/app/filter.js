@@ -365,12 +365,10 @@ let filter = {
 		a.textContent = name;
 		filter.anzeigeUmschalten(a);
 		// Bild für Block-Reset anhängen
-		let img = document.createElement("img");
-		a.appendChild(img);
-		img.src = "img/filter-reset-block.svg";
-		img.width = "24";
-		img.height = "24";
-		filter.ctrlResetBlock(img);
+		let span = document.createElement("span");
+		a.appendChild(span);
+		span.textContent = " ";
+		filter.ctrlResetBlock(span);
 		// Filter-Container
 		let div = document.createElement("div");
 		div.classList.add("filter-cont", "filter-cont-max");

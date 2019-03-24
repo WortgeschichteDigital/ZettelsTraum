@@ -135,7 +135,7 @@ let meta = {
 			// Enter
 			if (evt.which === 13) {
 				evt.preventDefault();
-				if ( document.getElementById("popup") ) {
+				if ( document.getElementById("dropdown") ) {
 					return;
 				}
 				meta.bearbErgaenzen();

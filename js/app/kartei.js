@@ -32,26 +32,32 @@ let kartei = {
 		kartei.pfad = "";
 		// globales Datenobjekt initialisieren
 		data = {
-			wo: kartei.wort, // Wort
-			fv: [], // Formvarianten
+			an: [], // Anhänge
+			bd: {}, // Bedeutungen
+			be: [], // BearbeiterIn
 			dc: new Date().toISOString(), // Datum Kartei-Erstellung
 			dm: "", // Datum Kartei-Änderung
-			re: 0, // Revision
-			be: [], // Bearbeiter
+			fv: [], // Formvarianten
+			ha: {}, // Kartenhaufen
+			ka: {}, // Karteikarten
 			le: [], // überprüfte Lexika usw.
-			an: [], // Anhänge
 			no: "", // Notizen
+			rd: [{ // Redaktion
+				da: new Date().toISOString().split("T")[0],
+				er: "Kartei erstellt",
+				pr: "",
+			}],
+			re: 0, // Revision
 			ty: "wgd", // Datei ist eine wgd-Datei (immer dieser Wert!)
 			ve: 1, // Version des Datei-Formats
-			ka: {}, // Karteikarten
-			ha: {}, // Kartenhaufen
-			bd: {}, // Bedeutungen
+			wo: kartei.wort, // Wort
 		};
 		// Formvarianten aus dem DTA importieren
 		stamm.dtaGet(false);
 		// ggf. für diesen Rechner registrierte BearbeiterIn eintragen
 		if (optionen.data.einstellungen.bearbeiterin) {
 			data.be.push(optionen.data.einstellungen.bearbeiterin);
+			data.rd[0].pr = optionen.data.einstellungen.bearbeiterin;
 		}
 		// Belegliste leeren: Es könnten noch Belege von einer vorherigen Karte vorhanden sein;
 		// außerdem könnte es sein, dass die Bearbeiter*in keinen Beleg erstellt

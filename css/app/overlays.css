@@ -7,6 +7,7 @@
 #lexika,
 #meta,
 #notizen,
+#redaktion,
 #stamm,
 #zeitraumgrafik {
 	position: fixed;
@@ -25,6 +26,7 @@
 #lexika > div,
 #meta > div,
 #notizen > div,
+#redaktion > div,
 #stamm > div,
 #zeitraumgrafik > div {
 	margin: 80px auto 0 auto;
@@ -40,6 +42,7 @@
 #lexika h2,
 #meta h2,
 #notizen h2,
+#redaktion h2,
 #stamm h2,
 #zeitraumgrafik h2 {
 	position: relative;
@@ -51,6 +54,7 @@
 #lexika h2 a,
 #meta h2 a,
 #notizen h2 a,
+#redaktion h2 a,
 #stamm h2 a,
 #zeitraumgrafik h2 a {
 	position: absolute;
@@ -454,6 +458,81 @@
 
 #meta-be-liste {
 	margin-bottom: 5px;
+}
+
+/* Redaktion ------------------------------------ */
+#redaktion > div {
+	margin-top: 40px;
+	max-width: 800px;
+}
+
+.icon-h-redaktion {
+	-webkit-mask-image: url(../../img/heading-redaktion.svg);
+	mask-image: url(../../img/heading-redaktion.svg);
+}
+
+.icon-redaktion-aufwaerts {
+	-webkit-mask-image: url(../../img/redaktion-aufwaerts.svg);
+	mask-image: url(../../img/redaktion-aufwaerts.svg);
+}
+
+.icon-redaktion-loeschen {
+	-webkit-mask-image: url(../../img/redaktion-loeschen.svg);
+	mask-image: url(../../img/redaktion-loeschen.svg);
+}
+
+#redaktion-cont .icon-link {
+	background-color: var(--textExtremHell);
+}
+
+#redaktion-cont .icon-link:focus {
+	background-color: var(--farbe);
+}
+
+#redaktion-cont .icon-link:hover {
+	background-color: var(--text);
+}
+
+#redaktion-cont {
+	padding: 10px;
+}
+
+#redaktion-cont table {
+	border-collapse: collapse;
+	border-spacing: 0;
+	margin: 0 auto;
+}
+
+#redaktion-cont td {
+	padding: 0 5px 5px 5px;
+	line-height: 30px;
+	white-space: nowrap;
+}
+
+#redaktion-cont td:first-child {
+	padding-left: 0;
+	min-width: 24px;
+	max-width: 24px;
+}
+
+#redaktion-cont td:nth-child(2) {
+	min-width: 170px;
+	max-width: 170px;
+}
+
+#redaktion-cont td:last-child {
+	padding-right: 0;
+	min-width: 24px;
+	max-width: 24px;
+}
+
+input[id^="redaktion-datum"] {
+	width: calc(100% - 12px);
+}
+
+input[id^="redaktion-ereignis"],
+input[id^="redaktion-person"] {
+	width: calc(100% - 31px);
 }
 
 /* Zeitraumgrafik ------------------------------- */

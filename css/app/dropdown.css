@@ -1,46 +1,46 @@
 @charset "utf-8";
 
 /* Betroffene Elemente -------------------------- */
-.popup-cont {
+.dropdown-cont {
 	position: relative;
 }
 
-input.popup-feld,
-textarea.popup-feld {
+input.dropdown-feld,
+textarea.dropdown-feld {
 	padding-right: 24px;
 }
 
-.popup-link-td { /* Popup-Link am Ende einer Tabellenzelle */
+.dropdown-link-td { /* Dropdown-Link am Ende einer Tabellenzelle */
 	position: absolute;
 	top: 3px;
 	right: 6px; /* 5px padding, 1px border */
 }
 
-.popup-link-element { /* Popup-Link, auf dem ein Element folgt */
+.dropdown-link-element { /* Dropdown-Link, auf dem ein Element folgt */
 	position: relative;
 	top: 3px;
 	left: -25px; /* 1px border */
 }
 
-.popup-link-element ~ * {
+.dropdown-link-element ~ * {
 	position: relative;
 	left: -24px; /* der Link ist 24px breit */
 }
 
-.popup-link-td,
-.popup-link-element {
-	-webkit-mask-image: url(../../img/popup.svg);
-	mask-image: url(../../img/popup.svg);
+.dropdown-link-td,
+.dropdown-link-element {
+	-webkit-mask-image: url(../../img/dropdown.svg);
+	mask-image: url(../../img/dropdown.svg);
 	background-color: var(--textExtremHell);
 }
 
-.popup-link-td:hover,
-.popup-link-element:hover {
+.dropdown-link-td:hover,
+.dropdown-link-element:hover {
 	background-color: var(--text);
 }
 
-/* Popup-Fensterchen ---------------------------- */
-#popup {
+/* Dropdown-Fensterchen ---------------------------- */
+#dropdown {
 	position: absolute;
 	z-index: 1; /* sonst überdeckt es nicht die relativ positionierten Tabellenzellen */
 	box-shadow: var(--boxShadow);
@@ -51,10 +51,10 @@ textarea.popup-feld {
 	background-color: #fff;
 	font-size: 14px;
 	line-height: 24px;
-	text-indent: 0; /* nötig wegen des Popups im Optionen-Fenster */
+	text-indent: 0; /* nötig wegen des Dropdowns im Optionen-Fenster */
 }
 
-#popup span {
+#dropdown span {
 	display: block;
 	border-bottom: 1px solid var(--linie);
 	padding: 0 10px;
@@ -64,24 +64,24 @@ textarea.popup-feld {
 	cursor: pointer;
 }
 
-#popup span:last-child {
+#dropdown span:last-child {
 	border-bottom: none;
 }
 
-#popup span:hover {
+#dropdown span:hover {
 	background-color: var(--highlight);
 }
 
-#popup span.aktiv {
+#dropdown span.aktiv {
 	background-color: var(--highlight);
 }
 
-#popup span.keine-vorschlaege {
+#dropdown span.keine-vorschlaege {
 	color: var(--textSehrHell);
 	font-style: italic;
 	cursor: default;
 }
 
-#popup span.keine-vorschlaege:hover {
+#dropdown span.keine-vorschlaege:hover {
 	background-color: transparent;
 }

@@ -52,6 +52,7 @@ let optionen = {
 			"quick-kartei-anhaenge": false,
 			"quick-kartei-lexika": false,
 			"quick-kartei-metadaten": false,
+			"quick-kartei-redaktion": false,
 			"quick-kartei-bedeutungen": false,
 			"quick-kartei-suche": false,
 			"quick-belege-hinzufuegen": false,

@@ -45,6 +45,8 @@ let helfer = {
 				lexika.oeffnen();
 			} else if (id === "kartei-metadaten") {
 				meta.oeffnen();
+			} else if (id === "kartei-redaktion") {
+				redaktion.oeffnen();
 			} else if (id === "kartei-bedeutungen") { // TODO
 				dialog.oeffnen("alert", null);
 				dialog.text("Sorry!\nDiese Funktion ist noch nicht programmiert.");
@@ -230,9 +232,9 @@ let helfer = {
 	tastatur (evt) {
 		// Esc
 		if (evt.which === 27) {
-			// Popup schließen
-			if ( document.getElementById("popup") ) {
-				popup.schliessen();
+			// Dropdown schließen
+			if ( document.getElementById("dropdown") ) {
+				dropdown.schliessen();
 				return;
 			}
 			// Overlay-Fenster schließen

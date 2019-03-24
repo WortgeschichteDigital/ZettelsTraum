@@ -274,7 +274,7 @@ let beleg = {
 			if ( evt.which === 13 &&
 					(this.type.match(/^checkbox$|^text$/) || evt.ctrlKey) ) {
 				evt.preventDefault();
-				if ( document.getElementById("popup") &&
+				if ( document.getElementById("dropdown") &&
 						(this.id === "beleg-bd" || this.id === "beleg-ts") ) {
 					return;
 				}

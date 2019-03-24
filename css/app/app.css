@@ -101,11 +101,13 @@ textarea {
 	font: 16px/24px "DejaVu Sans", sans-serif;
 }
 
+input[type="date"],
 input[type="text"] {
 	border: 1px solid var(--linie);
 	padding: 2px 5px;
 }
 
+input[type="date"]:focus,
 input[type="text"]:focus {
 	outline: 1px solid var(--farbe);
 	border-color: var(--farbe);

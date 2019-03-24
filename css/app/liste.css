@@ -98,10 +98,27 @@
 	background-color: var(--farbe);
 }
 
-.filter-kopf img {
+.filter-kopf span {
 	position: absolute;
 	right: 5px;
 	top: 3px;
+	width: 24px;
+	height: 24px;
+	background-color: var(--farbe);
+	-webkit-mask-image: url(../../img/filter-reset-block.svg);
+	mask-image: url(../../img/filter-reset-block.svg);
+}
+
+.filter-kopf:focus span {
+	background-color: var(--farbeB);
+}
+
+.filter-kopf.aktiv span {
+	background-color: var(--textHell);
+}
+
+.filter-kopf span:hover {
+	background-color: #fff;
 }
 
 .filter-cont {

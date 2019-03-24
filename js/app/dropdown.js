@@ -1,7 +1,7 @@
 "use strict";
 
-let popup = {
-	// speichert Daten der aktuellen Popup-Liste
+let dropdown = {
+	// speichert Daten der aktuellen Dropdown-Liste
 	data: [],
 	// sammelt die bereits registrierten Daten aus einem Formular-Datensatz
 	//   ds = String
@@ -17,12 +17,12 @@ let popup = {
 				if (!d_tmp) {
 					continue;
 				}
-				if (popup.data.indexOf(d_tmp) === -1) {
-					popup.data.push(d_tmp);
+				if (dropdown.data.indexOf(d_tmp) === -1) {
+					dropdown.data.push(d_tmp);
 				}
 			}
 		}
-		popup.data.sort(function(a, b) {
+		dropdown.data.sort(function(a, b) {
 			a = helfer.sortAlphaPrep(a);
 			b = helfer.sortAlphaPrep(b);
 			let arr = [a, b];
@@ -38,129 +38,133 @@ let popup = {
 	timeoutFill: null,
 	// Events im Textfeld
 	//   inp = Element
-	//     (Textinput-Feld, das ein Popup-Element haben könnte)
+	//     (Textinput-Feld, das ein Dropdown-Element haben könnte)
 	feld (inp) {
 		inp.addEventListener("blur", function() {
-			clearTimeout(popup.timeoutBlur);
-			popup.timeoutBlur = setTimeout(function() {
-				popup.schliessen();
-			}, 100); // deutlich Verzögerung, damit Klicks im Popup funktionieren
-			clearTimeout(popup.timeoutFill);
+			clearTimeout(dropdown.timeoutBlur);
+			dropdown.timeoutBlur = setTimeout(function() {
+				dropdown.schliessen();
+			}, 100); // deutlich Verzögerung, damit Klicks im Dropdown funktionieren
+			clearTimeout(dropdown.timeoutFill);
 		});
 		inp.addEventListener("focus", function() {
-			clearTimeout(popup.timeoutBlur); // sonst kann das Popup-Fensterchen nicht aufgeklappt werden
-			clearTimeout(popup.timeoutFill);
-			if (popup.caller && popup.caller !== this.id) {
-				popup.schliessen();
+			clearTimeout(dropdown.timeoutBlur); // sonst kann das Dropdown-Fensterchen nicht aufgeklappt werden
+			clearTimeout(dropdown.timeoutFill);
+			if (dropdown.caller && dropdown.caller !== this.id) {
+				dropdown.schliessen();
 			}
 		});
 		inp.addEventListener("input", function() {
-			clearTimeout(popup.timeoutBlur);
-			clearTimeout(popup.timeoutFill);
+			clearTimeout(dropdown.timeoutBlur);
+			clearTimeout(dropdown.timeoutFill);
 			let feld_id = this.id;
-			popup.timeoutFill = setTimeout(function() {
-				if ( !document.getElementById("popup") ) {
-					popup.init(feld_id);
+			dropdown.timeoutFill = setTimeout(function() {
+				if ( !document.getElementById("dropdown") ) {
+					dropdown.init(feld_id);
 				}
-				popup.fill(true);
+				dropdown.fill(true);
 			}, 250);
 		});
 		inp.addEventListener("keydown", function(evt) {
 			if (evt.which === 13) { // Enter
-				// Popup existiert noch nicht od. hält keine Vorschläge bereit
-				let pop = document.getElementById("popup");
-				if ( !pop || pop.firstChild.classList.contains("keine-vorschlaege") ) {
+				// Dropdown existiert noch nicht od. hält keine Vorschläge bereit
+				let drop = document.getElementById("dropdown");
+				if ( !drop || drop.firstChild.classList.contains("keine-vorschlaege") ) {
 					return;
 				}
 				// erst jetzt darf die Enter-Taste blockiert werden
 				evt.preventDefault();
 				// noch kein Element ausgewählt => 1. Element auswählen
-				let aktiv = pop.querySelector(".aktiv");
+				let aktiv = drop.querySelector(".aktiv");
 				if (!aktiv) {
-					aktiv = pop.firstChild;
+					aktiv = drop.firstChild;
 				}
 				// Text des aktivien Elements eintragen
-				let feld = pop.parentNode.querySelector(".popup-feld");
+				let feld = drop.parentNode.querySelector(".dropdown-feld");
 				setTimeout(function() {
-					popup.auswahl(feld, aktiv.textContent);
+					dropdown.auswahl(feld, aktiv.textContent);
 				}, 10); // damit andere Enter-Events, die an dem Input hängen, nicht auch noch ausgelöst werden
 			} else if (evt.which === 38 || evt.which === 40) { // Cursor hoch (↑) od. runter (↓)
-				let fenster = document.getElementById("popup");
+				let fenster = document.getElementById("dropdown");
 				if (!fenster && !evt.ctrlKey && document.activeElement.nodeName === "TEXTAREA") { // sonst man in textareas nicht mehr navigieren
 					return;
 				}
 				evt.preventDefault();
 				evt.stopPropagation(); // damit im Einstellungen-Menü der Menüpunkt nicht gewechselt wird
-				// Popup existiert noch nicht
+				// Dropdown existiert noch nicht
 				if (!fenster) {
-					popup.init(this.id);
+					dropdown.init(this.id);
 					return;
 				}
-				// im Popup-Feld navigieren
-				popup.navigation(evt.which);
+				// im Dropdown-Feld navigieren
+				dropdown.navigation(evt.which);
 			}
 		});
 	},
 	// Klick-Event auf dem Link
 	//   a = Element
-	//     (Link, der geklickt wurde, um die Popup-Liste aufzubauen)
+	//     (Link, der geklickt wurde, um die Dropdown-Liste aufzubauen)
 	link (a) {
 		a.addEventListener("click", function(evt) {
 			evt.preventDefault();
-			popup.init(this.previousSibling.id);
+			dropdown.init(this.previousSibling.id);
 			this.previousSibling.focus();
 		});
 	},
 	// ID des aufrufenden Inputfelds
 	caller: "",
-	// Popup-Liste initialisieren
+	// Dropdown-Liste initialisieren
 	//   feld_id = String
-	//     (ID des Textfeldes, zu dem das Popup gehört)
+	//     (ID des Textfeldes, zu dem das Dropdown gehört)
 	init (feld_id) {
-		// altes Popup-Liste ggf. schließen
-		if ( popup.caller && popup.caller !== feld_id) {
-			popup.schliessen();
+		// altes Dropdown-Liste ggf. schließen
+		if ( dropdown.caller && dropdown.caller !== feld_id) {
+			dropdown.schliessen();
 		}
 		// neuen Caller registrieren
-		popup.caller = feld_id;
+		dropdown.caller = feld_id;
 		// Daten sammeln
-		popup.data = [];
-		if (feld_id === "einstellung-bearbeiterin" || feld_id === "meta-be") {
-			popup.data = [...privat.bearbeiterinnen];
+		dropdown.data = [];
+		if (feld_id === "einstellung-bearbeiterin" ||
+				feld_id === "meta-be" ||
+				/^redaktion-person/.test(feld_id) ) {
+			dropdown.data = [...privat.bearbeiterinnen];
+		} else if ( /^redaktion-ereignis/.test(feld_id) ) {
+			dropdown.data = [...redaktion.ereignisse];
 		} else if (feld_id === "beleg-bd") {
-			popup.dataFormular("bd");
+			dropdown.dataFormular("bd");
 		} else if (feld_id === "beleg-ts") {
-			popup.dataFormular("ts");
+			dropdown.dataFormular("ts");
 		}
-		// Popup erzeugen und einhängen
+		// Dropdown erzeugen und einhängen
 		let span = document.createElement("span");
-		span.id = "popup";
+		span.id = "dropdown";
 		let inp_text = document.getElementById(feld_id);
 		inp_text.parentNode.appendChild(span);
-		// Popup füllen
-		if (popup.data.length) {
-			popup.fill(false);
+		// Dropdown füllen
+		if (dropdown.data.length) {
+			dropdown.fill(false);
 		} else {
 			let opt = document.createElement("span");
 			opt.classList.add("keine-vorschlaege");
 			opt.textContent = "keine Vorschläge vorhanden";
 			span.appendChild(opt);
 		}
-		// Popup positionieren
+		// Dropdown positionieren
 		span.style.left = `${inp_text.offsetLeft}px`;
 		span.style.top = `${inp_text.offsetHeight + 4}px`;
 		span.style.maxWidth = `${inp_text.parentNode.offsetWidth - 12}px`; // 12px padding und border
 	},
-	// Popup-Liste füllen
+	// Dropdown-Liste füllen
 	//   filtern = Boolean
 	//     (Vorschläge sollen gefiltert werden)
 	fill (filtern) {
 		// Liste leeren
-		let pop = document.getElementById("popup");
-		helfer.keineKinder(pop);
+		let drop = document.getElementById("dropdown");
+		helfer.keineKinder(drop);
 		// Elemente ggf. filtern
-		let items = [...popup.data],
-			va = helfer.textTrim( pop.parentNode.querySelector(".popup-feld").value );
+		let items = [...dropdown.data],
+			va = helfer.textTrim( drop.parentNode.querySelector(".dropdown-feld").value );
 		if (filtern && va) {
 			let reg = new RegExp(helfer.escapeRegExp(va), "i"),
 				gefiltert = [];
@@ -173,23 +177,23 @@ let popup = {
 		}
 		// Liste ist leer od. Textfeld ist leer (beim Aufrufen der Filterliste durch Tippen)
 		if (!items.length || !va && filtern) {
-			popup.schliessen();
+			dropdown.schliessen();
 			return;
 		}
 		// Liste füllen
 		items.forEach(function(i) {
 			let opt = document.createElement("span");
 			opt.textContent = i;
-			popup.auswahlKlick(opt);
-			pop.appendChild(opt);
+			dropdown.auswahlKlick(opt);
+			drop.appendChild(opt);
 		});
 	},
-	// Tastatur-Navigation in der Popup-Liste
+	// Tastatur-Navigation in der Dropdown-Liste
 	//   tastaturcode = Number
 	//     (Tastaturcode 38 [hoch] od. 40 [runter])
 	navigation (tastaturcode) {
-		let pop = document.getElementById("popup"),
-			opts = pop.querySelectorAll("span");
+		let drop = document.getElementById("dropdown"),
+			opts = drop.querySelectorAll("span");
 		// ggf. abbrechen, wenn keine Vorschläge vorhanden sind
 		if ( opts[0].classList.contains("keine-vorschlaege") ) {
 			return;
@@ -215,32 +219,32 @@ let popup = {
 		// neues Element aktivieren
 		opts[pos].classList.add("aktiv");
 		// ggf. die Liste an eine gute Position scrollen
-		let pop_hoehe = pop.offsetHeight,
+		let drop_hoehe = drop.offsetHeight,
 			span_hoehe = opts[0].offsetHeight,
-			scroll_top = pop.scrollTop,
+			scroll_top = drop.scrollTop,
 			pos_von_oben = opts[pos].offsetTop;
-		if (pos_von_oben >= pop_hoehe + scroll_top - span_hoehe * 2) {
-			pop.scrollTop = pos_von_oben - pop_hoehe + span_hoehe * 2;
+		if (pos_von_oben >= drop_hoehe + scroll_top - span_hoehe * 2) {
+			drop.scrollTop = pos_von_oben - drop_hoehe + span_hoehe * 2;
 		} else if (pos_von_oben < scroll_top + span_hoehe) {
-			pop.scrollTop = pos_von_oben - span_hoehe;
+			drop.scrollTop = pos_von_oben - span_hoehe;
 		}
 	},
-	// Klick in Popup-Liste abfangen
+	// Klick in Dropdown-Liste abfangen
 	//   ein = Element
 	//     (<span>, auf den geklickt wurde)
 	auswahlKlick (ein) {
 		ein.addEventListener("click", function() {
-			let feld = this.parentNode.parentNode.querySelector(".popup-feld");
-			popup.auswahl(feld, this.textContent);
+			let feld = this.parentNode.parentNode.querySelector(".dropdown-feld");
+			dropdown.auswahl(feld, this.textContent);
 		});
 	},
 	// ausgewählten Text in das Input-Feld eintragen
 	//   feld = Element
-	//     (das Input-Feld, zu dem das Popup gehört)
+	//     (das Input-Feld, zu dem das Dropdown gehört)
 	//   text = String
 	//     (der Text, der eingetragen werden soll)
 	auswahl (feld, text) {
-		let caller = popup.caller; // muss zwischengespeichert werden, weil das Popup sich schließt, wenn sich das Dialog-Fenster öffnet
+		let caller = dropdown.caller; // muss zwischengespeichert werden, weil das Dropdown sich schließt, wenn sich das Dialog-Fenster öffnet
 		if (/^beleg-/.test(caller) && feld.value) {
 			dialog.oeffnen("confirm", function() {
 				if (dialog.antwort) {
@@ -276,16 +280,16 @@ let popup = {
 			} else if ( /^einstellung-/.test(caller) ) {
 				optionen.aendereEinstellung( document.getElementById(caller) );
 			}
-			// Popup schließen
-			popup.schliessen();
+			// Dropdown schließen
+			dropdown.schliessen();
 		}
 	},
-	// Popup-Liste schließen
+	// Dropdown-Liste schließen
 	schliessen () {
-		let pop = document.getElementById("popup");
-		if (pop) {
-			pop.parentNode.removeChild(pop);
+		let drop = document.getElementById("dropdown");
+		if (drop) {
+			drop.parentNode.removeChild(drop);
 		}
-		popup.caller = "";
+		dropdown.caller = "";
 	},
 };

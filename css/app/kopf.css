@@ -78,6 +78,11 @@
 	mask-image: url(../../img/quick-metadaten.svg);
 }
 
+#quick-kartei-redaktion {
+	-webkit-mask-image: url(../../img/quick-redaktion.svg);
+	mask-image: url(../../img/quick-redaktion.svg);
+}
+
 #quick-kartei-bedeutungen {
 	-webkit-mask-image: url(../../img/quick-bedeutungen.svg);
 	mask-image: url(../../img/quick-bedeutungen.svg);

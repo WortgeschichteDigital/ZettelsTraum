@@ -29,12 +29,12 @@ window.addEventListener("load", function() {
 			helfer.textareaGrow(this);
 		});
 	});
-	// alle Popup-Listen
-	document.querySelectorAll(".popup-feld").forEach(function(i) {
-		popup.feld(i);
+	// alle Dropdown-Listen
+	document.querySelectorAll(".dropdown-feld").forEach(function(i) {
+		dropdown.feld(i);
 	});
-	document.querySelectorAll(".popup-link-td, .popup-link-element").forEach(function(i) {
-		popup.link(i);
+	document.querySelectorAll(".dropdown-link-td, .dropdown-link-element").forEach(function(i) {
+		dropdown.link(i);
 	});
 	// Quick-Access-Bar
 	let quick = document.querySelectorAll("#quick a");
@@ -174,6 +174,7 @@ window.addEventListener("load", function() {
 	ipcRenderer.on("kartei-anhaenge", () => anhaenge.fenster() );
 	ipcRenderer.on("kartei-lexika", () => lexika.oeffnen() );
 	ipcRenderer.on("kartei-metadaten", () => meta.oeffnen() );
+	ipcRenderer.on("kartei-redaktion", () => redaktion.oeffnen() );
 	ipcRenderer.on("kartei-suche", () => filter.suche() );
 	ipcRenderer.on("kartei-schliessen", function() {
 		kartei.checkSpeichern( () => kartei.schliessen() );

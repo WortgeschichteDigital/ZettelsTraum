@@ -78,7 +78,7 @@
 	width: calc(100% - 12px);
 }
 
-#beleg input[type="text"].popup-feld {
+#beleg input[type="text"].dropdown-feld {
 	width: calc(100% - 31px);
 }
 
@@ -87,7 +87,7 @@
 	max-height: 192px;
 }
 
-#beleg textarea.popup-feld {
+#beleg textarea.dropdown-feld {
 	width: calc(100% - 31px);
 }
 
