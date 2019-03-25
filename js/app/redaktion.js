@@ -4,11 +4,26 @@ let redaktion = {
 	// vordefinierte Redaktionsereignisse
 	ereignisse: [
 		"Artikel erstellt",
-		"1. Textkorrektur",
-		"2. Textkorrektur",
+		"Redaktion 1 (Leitung)",
+		"Revision",
+		"Redaktion 2 (Kollegium)",
+		"Redaktion 3 (Projektleitung)",
 		"XML-Auszeichnung",
 		"Artikel online",
 	],
+	// den Ereignisse zugeordnete Icons
+	// (das muss in einem getrennten Objekt sein, weil die Ereignisse
+	// für das Dropdown-Menü einfach zu kopieren sein müssen)
+	ereignisseIcons: {
+		"Kartei erstellt": "redaktion-kartei.svg",
+		"Artikel erstellt": "redaktion-artikel.svg",
+		"Redaktion 1 (Leitung)": "redaktion-korrektur.svg",
+		"Revision": "redaktion-revision.svg",
+		"Redaktion 2 (Kollegium)": "redaktion-korrektur.svg",
+		"Redaktion 3 (Projektleitung)": "redaktion-korrektur.svg",
+		"XML-Auszeichnung": "redaktion-xml.svg",
+		"Artikel online": "redaktion-online.svg",
+	},
 	// Schlüssel der Feldtypen ermitteln, die in jedem Eintrag vorhanden sind
 	feldtypen: {
 		datum: "da",
@@ -33,15 +48,24 @@ let redaktion = {
 		// Tabelle aufbauen und einhängen
 		let table = document.createElement("table");
 		cont.appendChild(table);
+		// Tabellenkopf
+		let tr = document.createElement("tr");
+		table.appendChild(tr);
+		kopfzelle(tr, " ");
+		kopfzelle(tr, "Datum");
+		kopfzelle(tr, "Ereignis");
+		kopfzelle(tr, "BearbeiterIn");
+		kopfzelle(tr, " ");
+		// Tabellenzellen
 		data.rd.forEach(function(i, n) {
 			let tr = document.createElement("tr");
 			table.appendChild(tr);
 			tr.dataset.slot = n;
 			// Verschiebe-Icon
 			if (n < 2) {
-				redaktion.zelleErzeugen(tr, " ");
+				redaktion.zelleErzeugen(tr, " ", false);
 			} else {
-				redaktion.zelleErzeugen(tr, null);
+				redaktion.zelleErzeugen(tr, null, false);
 				let a = document.createElement("a");
 				tr.lastChild.appendChild(a);
 				a.classList.add("icon-link", "icon-redaktion-aufwaerts");
@@ -50,23 +74,23 @@ let redaktion = {
 				redaktion.eintragVerschieben(a);
 			}
 			// Datum
-			redaktion.zelleErzeugen(tr, redaktion.formatDatum(i.da) );
+			redaktion.zelleErzeugen(tr, redaktion.formatDatum(i.da), false);
 			if (n > 0) {
 				redaktion.wertAendern(tr.lastChild, "datum");
 			}
 			// Ereignis
-			redaktion.zelleErzeugen(tr, i.er);
+			redaktion.zelleErzeugen(tr, i.er, true);
 			if (n > 0) {
 				redaktion.wertAendern(tr.lastChild, "ereignis");
 			}
 			// Person
-			redaktion.zelleErzeugen(tr, i.pr ? i.pr : "?");
+			redaktion.zelleErzeugen(tr, i.pr ? i.pr : "?", false);
 			redaktion.wertAendern(tr.lastChild, "person");
 			// Lösch-Icon
 			if (n === 0) {
-				redaktion.zelleErzeugen(tr, " ");
+				redaktion.zelleErzeugen(tr, " ", false);
 			} else {
-				redaktion.zelleErzeugen(tr, null);
+				redaktion.zelleErzeugen(tr, null, false);
 				let a = document.createElement("a");
 				tr.lastChild.appendChild(a);
 				a.classList.add("icon-link", "icon-redaktion-loeschen");
@@ -77,6 +101,12 @@ let redaktion = {
 		});
 		// Zeile für neuen Eintrag
 		redaktion.tabelleNeu(table);
+		// Kopfzellen erzeugen
+		function kopfzelle (tr, text) {
+			let th = document.createElement("th");
+			th.textContent = text;
+			tr.appendChild(th);
+		}
 	},
 	// Zeile für einen neuen Eintrag erzeugen
 	//   table = Element
@@ -86,21 +116,22 @@ let redaktion = {
 		tr.dataset.slot = "neu";
 		table.appendChild(tr);
 		// Leerzelle (Verschiebe-Icon)
-		redaktion.zelleErzeugen(tr, " ");
+		redaktion.zelleErzeugen(tr, " ", false);
 		// Datum
-		redaktion.zelleErzeugen(tr, null);
+		redaktion.zelleErzeugen(tr, null, false);
 		redaktion.inputDate(tr.lastChild, new Date().toISOString().split("T")[0], "neu");
 		redaktion.inputSubmit(tr.lastChild.firstChild.id);
 		// Ereignis
-		redaktion.zelleErzeugen(tr, null);
+		redaktion.zelleErzeugen(tr, null, false);
+		tr.lastChild.classList.add("kein-einzug");
 		redaktion.inputText(tr.lastChild, "", "ereignis", "neu");
 		redaktion.inputSubmit(tr.lastChild.firstChild.id);
 		// Person
-		redaktion.zelleErzeugen(tr, null);
+		redaktion.zelleErzeugen(tr, null, false);
 		redaktion.inputText(tr.lastChild, "", "person", "neu");
 		redaktion.inputSubmit(tr.lastChild.firstChild.id);
 		// Leerzelle (Lösch-Icon)
-		redaktion.zelleErzeugen(tr, " ");
+		redaktion.zelleErzeugen(tr, " ", false);
 	},
 	// ISO 8601-Datum umwandeln
 	//   datum = String
@@ -114,10 +145,21 @@ let redaktion = {
 	//     (Tabellenzeile [oder Fragment], an die die Zelle angehängt werden soll)
 	//   wert = String/null
 	//     (Text, der in die Zelle eingetragen werden soll)
-	zelleErzeugen (parent, wert) {
+	zelleErzeugen (parent, wert, icon) {
 		let td = document.createElement("td");
 		parent.appendChild(td);
-		if (wert) {
+		if (wert && icon) {
+			let img = document.createElement("img");
+			img.width = "24";
+			img.height = "24";
+			let src = "img/platzhalter.svg";
+			if (redaktion.ereignisseIcons[wert]) {
+				src = `img/${redaktion.ereignisseIcons[wert]}`;
+			}
+			img.src = src;
+			td.appendChild(img);
+			td.appendChild( document.createTextNode(wert) );
+		} else if (wert) {
 			td.textContent = wert;
 		}
 	},
@@ -165,6 +207,7 @@ let redaktion = {
 		a.href = "#";
 		a.textContent = " ";
 		a.title = droptypen[droptyp];
+		a.setAttribute("tabindex", "-1");
 		dropdown.link(a);
 	},
 	// Fokus auf ein Input-Feld setzen
@@ -241,11 +284,11 @@ let redaktion = {
 	zelleErsetzen (feldtyp, val, input) {
 		let frag = document.createDocumentFragment();
 		if (feldtyp === "datum") {
-			redaktion.zelleErzeugen(frag, redaktion.formatDatum(val) );
+			redaktion.zelleErzeugen(frag, redaktion.formatDatum(val), false);
 		} else if (feldtyp === "person") {
-			redaktion.zelleErzeugen(frag, val ? val : "?");
+			redaktion.zelleErzeugen(frag, val ? val : "?", false);
 		} else {
-			redaktion.zelleErzeugen(frag, val);
+			redaktion.zelleErzeugen(frag, val, true);
 		}
 		redaktion.wertAendern(frag.lastChild, feldtyp);
 		input.parentNode.parentNode.replaceChild(frag, input.parentNode);
@@ -259,7 +302,8 @@ let redaktion = {
 		td.dataset.feldtyp = feldtyp;
 		td.addEventListener("click", function() {
 			let frag = document.createDocumentFragment();
-			redaktion.zelleErzeugen(frag, null);
+			redaktion.zelleErzeugen(frag, null, false);
+			frag.lastChild.classList.add("kein-einzug");
 			const slot = parseInt(this.parentNode.dataset.slot, 10),
 				feldtyp = this.dataset.feldtyp,
 				val = data.rd[slot][ redaktion.feldtypen[feldtyp] ];

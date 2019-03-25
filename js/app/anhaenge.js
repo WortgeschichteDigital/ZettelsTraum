@@ -164,10 +164,10 @@ let anhaenge = {
 			span.title = datei;
 			div.appendChild(span);
 			// Löschen
-			let del = document.createElement("img");
-			del.src = "img/loeschen.svg";
-			del.width = "24";
-			del.height = "24";
+			let del = document.createElement("a");
+			del.classList.add("icon-link");
+			del.href = "#";
+			del.textContent = " ";
 			anhaenge.loeschen(del);
 			div.appendChild(del);
 			// <div> einhängen
@@ -236,6 +236,7 @@ let anhaenge = {
 	loeschen (item) {
 		item.addEventListener("click", function(evt) {
 			evt.stopPropagation();
+			evt.preventDefault();
 			let cont = this.parentNode.parentNode,
 				obj = this.parentNode.dataset.obj,
 				datei = this.parentNode.dataset.datei,

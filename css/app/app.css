@@ -113,6 +113,21 @@ input[type="text"]:focus {
 	border-color: var(--farbe);
 }
 
+input[type="date"] {
+	height: 24px;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator,
+input[type="date"]::-webkit-clear-button {
+	display: none;
+}
+
+input[type="date"]::-webkit-inner-spin-button,
+input[type="date"]::-webkit-outer-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+}
+
 input[type="button"] {
 	outline: none;
 	margin: 0 0 0 15px;
