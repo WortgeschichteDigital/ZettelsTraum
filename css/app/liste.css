@@ -346,7 +346,7 @@
 	transition: background-color 1.5s ease;
 }
 
-.liste-kopf.neuer-beleg {
+.liste-kopf.hinweis-beleg {
 	background-color: var(--highlight);
 	transition: background-color 1.5s ease;
 }

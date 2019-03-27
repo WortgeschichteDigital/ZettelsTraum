@@ -124,7 +124,7 @@ let anhaenge = {
 	//   add = Boolean
 	//     (Add-Button soll erzeugt werden, oder auch nicht)
 	//   obj = String
-	//     (verweist auf das Objekt, in dem die Anhänge gespeichert werden sollen;
+	//     (verweist auf das Objekt, in dem die Anhänge gespeichert werden;
 	//     Werte durch Haarstrich getrennt)
 	auflisten (cont, add, obj) {
 		// Content leeren
@@ -144,7 +144,7 @@ let anhaenge = {
 		}
 		anhaenge.scan(arr);
 		// Anhänge auflisten
-		arr.forEach(function(i) {
+		arr.forEach(function(i, n) {
 			let div = document.createElement("div");
 			div.classList.add("anhaenge-item");
 			div.dataset.obj = obj;
@@ -159,13 +159,28 @@ let anhaenge = {
 			// Datei
 			let datei = `\u200E${i}\u200E`; // vgl. den Sermon in meta.oeffnen()
 			let span = document.createElement("span");
+			span.classList.add("anhaenge-datei");
 			span.setAttribute("dir", "rtl");
 			span.textContent = datei;
 			span.title = datei;
 			div.appendChild(span);
+			// aufwärts
+			if (n > 0) {
+				let up = document.createElement("a");
+				up.classList.add("icon-link", "anhaenge-aufwaerts");
+				up.href = "#";
+				up.textContent = " ";
+				anhaenge.sortieren(up);
+				div.appendChild(up);
+			} else {
+				let span = document.createElement("span");
+				span.classList.add("anhaenge-platzhalter");
+				span.textContent = " ";
+				div.appendChild(span);
+			}
 			// Löschen
 			let del = document.createElement("a");
-			del.classList.add("icon-link");
+			del.classList.add("icon-link", "anhaenge-loeschen");
 			del.href = "#";
 			del.textContent = " ";
 			anhaenge.loeschen(del);
@@ -174,7 +189,7 @@ let anhaenge = {
 			cont.appendChild(div);
 		});
 	},
-	// 
+	// Anhänge der Belege im Kartei-Fenster auflisten
 	auflistenBelege (cont) {
 		for (let id in data.ka) {
 			if ( !data.ka.hasOwnProperty(id) ) {
@@ -232,7 +247,37 @@ let anhaenge = {
 			}
 		});
 	},
+	// Sortiert den Anhang um eine Position nach oben
+	//   item = Element
+	//     (der Icon-Link, auf den geklickt wurde)
+	sortieren (item) {
+		item.addEventListener("click", function(evt) {
+			evt.stopPropagation();
+			evt.preventDefault();
+			let cont = this.parentNode.parentNode,
+				obj = this.parentNode.dataset.obj,
+				datei = this.parentNode.dataset.datei,
+				arr = anhaenge.getArr(obj),
+				idx = arr.indexOf(datei);
+			// umsortieren
+			arr.splice(idx, 1);
+			arr.splice(idx - 1, 0, datei);
+			// Änderungsmarkierung
+			anhaenge.geaendert(cont);
+			// Liste der Anhänge neu aufbauen
+			if (cont.dataset.anhaenge === "kartei") { // sonst erscheinen die Anhänge des Belegs an der Stelle, an der die Anhänge der Kartei sein sollten
+				obj = "data|an";
+			}
+			anhaenge.auflisten(cont, true, obj);
+			// ggf. Liste der Anhänge in den Belegen neu aufbauen
+			if (cont.dataset.anhaenge === "kartei") {
+				anhaenge.auflistenBelege(cont);
+			}
+		});
+	},
 	// Löscht einen Anhang aus der Liste
+	//   item = Element
+	//     (der Icon-Link, auf den geklickt wurde)
 	loeschen (item) {
 		item.addEventListener("click", function(evt) {
 			evt.stopPropagation();
@@ -247,6 +292,9 @@ let anhaenge = {
 					// Änderungsmarkierung
 					anhaenge.geaendert(cont);
 					// Liste der Anhänge neu aufbauen
+					if (cont.dataset.anhaenge === "kartei") { // sonst erscheinen die Anhänge des Belegs an der Stelle, an der die Anhänge der Kartei sein sollten
+						obj = "data|an";
+					}
 					anhaenge.auflisten(cont, true, obj);
 					// ggf. Liste der Anhänge in den Belegen neu aufbauen
 					if (cont.dataset.anhaenge === "kartei") {

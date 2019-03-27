@@ -941,6 +941,18 @@ let filter = {
 	anzeigeUmschalten (a) {
 		a.addEventListener("click", function(evt) {
 			evt.preventDefault();
+			// wenn nur ein Filter offen sein sollte und der aktive Filter gerade zugeklappt ist
+			if (optionen.data.einstellungen["filter-zuklappen"]) {
+				document.querySelectorAll(".filter-kopf").forEach(function(i) {
+					if (i === this) {
+						i.nextSibling.classList.toggle("aus");
+					} else {
+						i.nextSibling.classList.add("aus");	
+					}
+				}, this);
+				return;
+			}
+			// wenn mehrere Filter offen sein dürfen
 			this.nextSibling.classList.toggle("aus");
 			if ( this.classList.contains("aktiv") ) {
 				this.blur();

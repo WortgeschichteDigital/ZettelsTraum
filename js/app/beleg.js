@@ -185,6 +185,9 @@ let beleg = {
 			data.ka[beleg.id_karte] = {};
 			liste.statusNeu = beleg.id_karte.toString();
 		}
+		// zwischenspeichern, dass dieser Beleg geändert wurde
+		// (für die Hervorhebung in der Liste)
+		liste.statusGeaendert = beleg.id_karte.toString();
 		// Objekt mit neuen Werten füllen
 		for (let i in beleg.data) {
 			if ( !beleg.data.hasOwnProperty(i) ) {

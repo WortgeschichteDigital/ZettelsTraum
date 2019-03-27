@@ -27,6 +27,9 @@ let liste = {
 	// (wichtig, damit der Beleg aufgeklappt wird, wenn die Liste neu aufgebaut wird;
 	// vgl. liste.status())
 	statusNeu: "",
+	// Zwischenspeicher für die ID eines geänderten Belegs
+	// (damit der Beleg markiert wird)
+	statusGeaendert: "",
 	// speichert den Status der aktuellen Belegliste, d.h. ob die Karten auf oder zugeklappt sind
 	//   filter_init = Boolean
 	//     (speichert, ob die Filterliste initialisiert werden sollen)
@@ -66,26 +69,33 @@ let liste = {
 		liste.statusScrollReset();
 		// ggf. einen den neuen Beleg visuell hervorheben
 		if (liste.statusNeu) {
-			let belege = document.querySelectorAll(".liste-kopf"),
-				beleg_unsichtbar = true;
-			for (let i = 0, len = belege.length; i < len; i++) {
-				if (belege[i].dataset.id === liste.statusNeu) {
-					markNeu(belege[i]);
-					beleg_unsichtbar = false;
-					break;
-				}
-			}
-			liste.statusNeu = "";
+			// neuen Beleg markieren
+			let beleg_unsichtbar = markBelegsuche(liste.statusNeu);
 			// neuer Beleg könnte aufgrund der Filter versteckt sein
 			if (beleg_unsichtbar && !optionen.data.einstellungen["nicht-karte-gefiltert"]) {
 				dialog.oeffnen("alert", null);
 				dialog.text("Der Beleg wurde angelegt.\nWegen der aktuellen Filterregeln erscheint er jedoch nicht in der Belegliste.");
 				document.getElementById("dialog-text").appendChild( optionen.shortcut("Meldung nicht mehr anzeigen", "nicht-karte-gefiltert") );
 			}
+		} else if (liste.statusGeaendert) {
+			markBelegsuche(liste.statusGeaendert);
 		}
-		function markNeu (kopf) {
-			setTimeout( () => kopf.classList.add("neuer-beleg"), 0);
-			setTimeout( () => kopf.classList.remove("neuer-beleg"), 1500);
+		liste.statusNeu = "";
+		liste.statusGeaendert = "";
+		// Beleg suchen, der neu ist oder geändert wurde
+		function markBelegsuche (status) {
+			let belege = document.querySelectorAll(".liste-kopf");
+			for (let i = 0, len = belege.length; i < len; i++) {
+				if (belege[i].dataset.id === status) {
+					markSetzen(belege[i]);
+					return false;
+				}
+			}
+			return true;
+		}
+		function markSetzen (kopf) {
+			setTimeout( () => kopf.classList.add("hinweis-beleg"), 0);
+			setTimeout( () => kopf.classList.remove("hinweis-beleg"), 1500);
 		}
 	},
 	// Zwischenspeicher für den ermittelten Scroll-Status

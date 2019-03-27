@@ -311,7 +311,7 @@
 /* Anhänge -------------------------------------- */
 #anhaenge > div {
 	margin-top: 40px;
-	max-width: 500px;
+	max-width: 550px;
 }
 
 .icon-h-anhaenge {
@@ -361,16 +361,23 @@
 	background-color: var(--hover);
 }
 
-.anhaenge-item img:first-child {
+.anhaenge-item img {
 	margin-right: 10px;
+}
+
+.anhaenge-datei {
+	display: inline-block;
+	vertical-align: top;
+	width: calc(100% - 34px * 3); /* 24px Image, 10px Margin */
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }
 
 .anhaenge-item a {
 	margin-left: 10px;
 	vertical-align: top;
 	background-color: var(--textExtremHell);
-	-webkit-mask-image: url(../../img/loeschen.svg);
-	mask-image: url(../../img/loeschen.svg);
 }
 
 .anhaenge-item a:focus {
@@ -381,13 +388,21 @@
 	background-color: var(--text);
 }
 
-.anhaenge-item span {
+.anhaenge-aufwaerts {
+	-webkit-mask-image: url(../../img/anhaenge-aufwaerts.svg);
+	mask-image: url(../../img/anhaenge-aufwaerts.svg);
+}
+
+.anhaenge-loeschen {
+	-webkit-mask-image: url(../../img/loeschen.svg);
+	mask-image: url(../../img/loeschen.svg);
+}
+
+.anhaenge-platzhalter {
 	display: inline-block;
-	vertical-align: top;
-	width: calc(100% - 34px * 2); /* 24px Image, 10px Margin */
-	overflow: hidden;
-	text-overflow: ellipsis;
-	white-space: nowrap;
+	margin-left: 10px;
+	width: 24px;
+	height: 24px;
 }
 
 /* Überprüfte Lexika ---------------------------- */
