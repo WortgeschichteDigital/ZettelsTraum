@@ -368,6 +368,7 @@ let filter = {
 		let span = document.createElement("span");
 		a.appendChild(span);
 		span.textContent = " ";
+		span.title = "Filter in diesem Block zurücksetzen";
 		filter.ctrlResetBlock(span);
 		// Filter-Container
 		let div = document.createElement("div");

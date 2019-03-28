@@ -101,7 +101,7 @@ let anhaenge = {
 			img.width = "24";
 			img.height = "24";
 			img.title = i;
-			anhaenge.oeffnen(img);
+			anhaenge.oeffnenListener(img);
 			ziel.appendChild(img);
 		});
 	},
@@ -149,7 +149,7 @@ let anhaenge = {
 			div.classList.add("anhaenge-item");
 			div.dataset.obj = obj;
 			div.dataset.datei = i;
-			anhaenge.oeffnen(div);
+			anhaenge.oeffnenListener(div);
 			// Icon
 			let icon = document.createElement("img");
 			icon.src = anhaenge.getIcon(i);
@@ -211,17 +211,22 @@ let anhaenge = {
 	// Öffnet einen Anhang
 	//   item = Element
 	//     (der <div> oder <img>, auf den/das geklickt wurde)
-	oeffnen (item) {
+	oeffnenListener (item) {
 		item.addEventListener("click", function() {
-			let datei = this.dataset.datei;
-			if (!anhaenge.data[datei].exists) {
-				dialog.oeffnen("alert", null);
-				dialog.text("Die Datei konnte nicht gefunden werden.");
-				return;
-			}
-			const {shell} = require("electron");
-			shell.openItem(anhaenge.data[datei].path);
+			anhaenge.oeffnen(this.dataset.datei);
 		});
+	},
+	// Öffnet die übergebene Datei
+	//   datei = "String"
+	//     (Datei, die geöffnet werden soll)
+	oeffnen (datei) {
+		if (!anhaenge.data[datei].exists) {
+			dialog.oeffnen("alert", null);
+			dialog.text("Die Datei konnte nicht gefunden werden.");
+			return;
+		}
+		const {shell} = require("electron");
+		shell.openItem(anhaenge.data[datei].path);
 	},
 	// Öffnet beim Klick auf eine Überschrift im Anhänge-Fenster den entsprechenden Beleg
 	//   h3 = Element

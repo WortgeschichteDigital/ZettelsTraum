@@ -28,6 +28,7 @@
 		<script src="js/app/optionen.js"></script>
 		<script src="js/app/overlay.js"></script>
 		<script src="js/app/dropdown.js"></script>
+		<script src="js/app/popup.js"></script>
 		<script src="js/app/privat.js"></script>
 		<script src="js/app/redaktion.js"></script>
 		<script src="js/app/sicherheitsfrage.js"></script>
@@ -165,11 +166,11 @@
 				></span></header>
 				<!-- Der folgende <div> ist nur dazu da, dass die Tastaturnavigation zwischen den Filterköpfen nicht in den Header springt und da dann nicht mehr rauskommt. -->
 				<div
-					><a href="#" class="filter-kopf" id="filter-kopf-volltext">Volltext<span> </span></a
+					><a href="#" class="filter-kopf" id="filter-kopf-volltext">Volltext<span title="Filter in diesem Block zurücksetzen"> </span></a
 					><div class="filter-cont">
 						<p><input type="text" value="" class="filter" id="filter-volltext"></p>
 					</div
-					><a href="#" class="filter-kopf" id="filter-kopf-zeitraum">Zeitraum<span> </span></a
+					><a href="#" class="filter-kopf" id="filter-kopf-zeitraum">Zeitraum<span title="Filter in diesem Block zurücksetzen"> </span></a
 					><div class="filter-cont">
 						<p><input type="radio" name="filter-zeitraum" id="filter-zeitraum-10"
 							><label for="filter-zeitraum-10">10er</label
@@ -400,7 +401,7 @@
 			</div>
 		</div></div>
 		
-		<!-- OVERLAY: PROGRAMMSTART -->
+		<!-- PROGRAMMSTART -->
 		<div id="programmstart"> </div>
 	</body>
 </html>

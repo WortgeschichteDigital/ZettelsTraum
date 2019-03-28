@@ -9,6 +9,12 @@ window.addEventListener("load", function() {
 	// TASTATUREINGABEN ABFANGEN
 	document.addEventListener("keydown", helfer.tastatur);
 	
+	// RECHTSKLICK ABFANGEN
+	window.addEventListener("contextmenu", function(evt) {
+		evt.preventDefault();
+		popup.oeffnen(evt);
+	});
+	
 	// DATEIEN VIA DRAG & DROP ÖFFNEN
 	document.addEventListener("dragover", (evt) => evt.preventDefault() );
 	document.addEventListener("dragleave", (evt) => evt.preventDefault() );
