@@ -14,16 +14,30 @@
 }
 
 #beleg caption {
-	padding: 0 0 0 24px;
+	position: relative;
+	margin: 0 0 10px 0;
+	padding: 0 20px;
 	caption-side: top;
-	color: var(--textFarbe);
 	font-style: italic;
 	text-align: left;
+}
+
+#beleg-titel {
+	color: var(--textFarbe);
 }
 
 #beleg-geaendert {
 	display: inline-block;
 	margin-left: 5px;
+	color: var(--textFarbe);
+}
+
+/* mehr Styles zu .beleg-opt-block → liste.css */
+
+.beleg-opt-block {
+	position: absolute;
+	right: 20px;
+	top: 0;
 }
 
 #beleg th {
@@ -80,6 +94,15 @@
 
 #beleg input[type="text"].dropdown-feld {
 	width: calc(100% - 31px);
+}
+
+#beleg input[type="text"]#beleg-dta {
+	width: calc(100% - 12px - 145px); /* 145px Button */
+}
+
+#beleg-dta-button {
+	margin-left: 10px;
+	width: 135px;
 }
 
 #beleg textarea {

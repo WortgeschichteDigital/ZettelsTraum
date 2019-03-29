@@ -165,7 +165,8 @@ let helfer = {
 	//   doppelleer = Boolean
 	//     (sollen doppelte Leerzeichen bereinigt werden; das ist nicht in jedem Feld sinnvoll)
 	textTrim (text, doppelleer) {
-		text = text.trim();
+		text = text.replace(/^(\s*\n)+|(\s*\n)+$/g, "");
+		text = text.trim(); // berücksichtigt Zeilenumbrüche nicht
 		if (doppelleer) {
 			text = text.replace(/ {2,}/g, " ");
 		}
@@ -204,13 +205,13 @@ let helfer = {
 		return `${wochentage[d.getDay()]}, ${d.getDate()}. ${monate[d.getMonth()]} ${d.getFullYear()}, ${d.getHours()}:${d.getMinutes() < 10 ? `0${d.getMinutes()}` : d.getMinutes()} Uhr`;
 	},
 	// überprüft den Typ des übergebenen Objekts zuverlässig
-	// mögliche Rückgabewerte: Arguments, Array, Boolean, Date, Error, Function, JSON, Math, Number, Object, RegExp, String
+	// mögliche Rückgabewerte: Arguments, Array, Boolean, Date, Element, Error, Function, JSON, Math, NodeList, Number, Object, RegExp, String
 	//   typ = String
 	//     (Typ, auf den das übergebene Objekt überprüft werden soll)
 	//   obj = Object
 	//     (das Objekt, das auf den übergebenen Typ überprüft wird)
 	checkType (typ, obj) {
-		let cl = Object.prototype.toString.call(obj).slice(8, -1);
+		const cl = Object.prototype.toString.call(obj).slice(8, -1);
     return obj !== undefined && obj !== null && cl === typ;
 	},
 	// Tokens mit spezieller Bedeutung für reguläre Ausdrücke escapen

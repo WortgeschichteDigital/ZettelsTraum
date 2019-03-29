@@ -165,7 +165,7 @@ let stamm = {
 		ajax.timeout = 5000;
 		ajax.addEventListener("load", function () {
 			if (ajax.status >= 200 && ajax.status < 300) {
-				// JSON parse
+				// JSON parsen
 				let json = {};
 				try {
 					json = JSON.parse(ajax.response);

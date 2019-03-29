@@ -16,7 +16,7 @@ let optionen = {
 			// kompletten Beleg anzeigen oder ausblenden
 			beleg: true,
 			// Absätze im Beleg ohne Worttreffer gekürzt darstellen
-			beleg_kuerzen: false,
+			beleg_kuerzen: true,
 			// Wort der Kartei in der Vorschau und im Beleg automatisch hervorheben
 			wort_hervorheben: true,
 			// Steuerung Details: Bedeutung einblenden

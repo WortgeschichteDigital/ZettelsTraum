@@ -232,6 +232,7 @@
 	mask-image: url(../../img/liste-bearbeiten.svg);
 }
 
+.beleg-opt-block,
 .filter-ctrl-block,
 .liste-opt-block {
 	display: inline-block;
@@ -239,11 +240,13 @@
 	height: 24px;
 }
 
+.beleg-opt-block, /* margin-left im Beleg generell unnötig */
 .filter-ctrl-block:first-child,
 .liste-opt-block:first-child {
 	margin-left: 0;
 }
 
+.beleg-opt-block a,
 .filter-ctrl-block a,
 .liste-opt-block a {
 	display: inline-block;
@@ -257,12 +260,14 @@
 	text-decoration: none;
 }
 
+.beleg-opt-block a:first-child,
 .filter-ctrl-block a:first-child,
 .liste-opt-block a:first-child {
 	border-top-left-radius: 3px;
 	border-bottom-left-radius: 3px;
 }
 
+.beleg-opt-block a:last-child,
 .filter-ctrl-block a:last-child,
 .liste-opt-block a:last-child {
 	border-right: 0;
@@ -270,21 +275,25 @@
 	border-bottom-right-radius: 3px;
 }
 
+.beleg-opt-block a:focus,
 .filter-ctrl-block a:focus,
 .liste-opt-block a:focus {
 	background-color: var(--hintergrund);
 	color: var(--farbe);
 }
 
+.beleg-opt-block a.aktiv,
 .liste-opt-block a.aktiv {
 	background-color: var(--aktiv);
 	color: #fff;
 }
 
+.beleg-opt-block a.aktiv:focus,
 .liste-opt-block a.aktiv:focus {
 	background-color: var(--farbe);
 }
 
+.beleg-opt-block svg path,
 .filter-ctrl-block svg path,
 .liste-opt-block svg path {
 	fill: currentcolor;

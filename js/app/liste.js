@@ -76,6 +76,12 @@ let liste = {
 				dialog.oeffnen("alert", null);
 				dialog.text("Der Beleg wurde angelegt.\nWegen der aktuellen Filterregeln erscheint er jedoch nicht in der Belegliste.");
 				document.getElementById("dialog-text").appendChild( optionen.shortcut("Meldung nicht mehr anzeigen", "nicht-karte-gefiltert") );
+			} else if (!beleg_unsichtbar) { // zum Beleg scrollen
+				let id = liste.statusNeu; // wird unten geleert, darum hier zwischenspeichern
+				setTimeout(function() {
+					let scroll = document.querySelector(`.liste-kopf[data-id="${id}"]`).offsetTop - 34; // 34 = Höhe des Listen-Headers
+					window.scrollTo(0, scroll);
+				}, 5); // ohne den Timeout ist offsetTop immer 0
 			}
 		} else if (liste.statusGeaendert) {
 			markBelegsuche(liste.statusGeaendert);
@@ -84,12 +90,10 @@ let liste = {
 		liste.statusGeaendert = "";
 		// Beleg suchen, der neu ist oder geändert wurde
 		function markBelegsuche (status) {
-			let belege = document.querySelectorAll(".liste-kopf");
-			for (let i = 0, len = belege.length; i < len; i++) {
-				if (belege[i].dataset.id === status) {
-					markSetzen(belege[i]);
-					return false;
-				}
+			let beleg = document.querySelector(`.liste-kopf[data-id="${status}"]`);
+			if (beleg) {
+				markSetzen(beleg);
+				return false;
 			}
 			return true;
 		}
@@ -463,15 +467,22 @@ let liste = {
 		// Absätze erzeugen
 		let prep = data.ka[id].bs.replace(/\n\s*\n/g, "\n"), // Leerzeilen löschen
 			p_prep = prep.split("\n"),
-			form_reg = new RegExp(helfer.formVariRegExp(), "i");
+			form_reg = new RegExp(helfer.formVariRegExp(), "i"),
+			zuletzt_gekuerzt = false; // true, wenn der vorherige Absatz gekürzt wurde
 		for (let i = 0, len = p_prep.length; i < len; i++) {
 			let p = document.createElement("p");
 			div.appendChild(p);
 			// Absatz ggf. kürzen
 			if ( optionen.data.belegliste.beleg_kuerzen && !form_reg.test(p_prep[i]) ) {
-				p.textContent = "[…]";
+				if (zuletzt_gekuerzt) {
+					div.removeChild(div.lastChild);
+				} else {
+					p.textContent = "[…]";
+					zuletzt_gekuerzt = true;
+				}
 				continue;
 			}
+			zuletzt_gekuerzt = false;
 			// Absatz normal einhängen
 			p.innerHTML = liste.belegWortHervorheben(p_prep[i]);
 		}
@@ -525,7 +536,7 @@ let liste = {
 		if (!optionen.data.belegliste.wort_hervorheben) {
 			return schnitt;
 		}
-		let reg = new RegExp(`[a-zäöüß=\-]*(${helfer.formVariRegExp()})[a-zäöüß=\-]*`, "gi");
+		let reg = new RegExp(`[a-zäöüßſ=\-]*(${helfer.formVariRegExp()})[a-zäöüßſ=\-]*`, "gi");
 		schnitt = schnitt.replace(reg, (m) => `<strong>${m}</strong>`);
 		return schnitt;
 	},
