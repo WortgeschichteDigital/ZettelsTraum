@@ -537,7 +537,7 @@ let liste = {
 			return schnitt;
 		}
 		let reg = new RegExp(`[a-zäöüßſ=\-]*(${helfer.formVariRegExp()})[a-zäöüßſ=\-]*`, "gi");
-		schnitt = schnitt.replace(reg, (m) => `<strong>${m}</strong>`);
+		schnitt = schnitt.replace(reg, (m) => `<span class="liste-wort">${m}</span>`);
 		return schnitt;
 	},
 	// einen einzelnen Beleg durch Klick auf den Belegkopf umschalten
@@ -1087,7 +1087,7 @@ let liste = {
 			}
 			clipboard.write({
 				text: text.replace(/<.+?>/g, "").replace(/\n/g, "\n\n"),
-				html: html,
+				html: helfer.clipboardHtml(html),
 			});
 		});
 	},

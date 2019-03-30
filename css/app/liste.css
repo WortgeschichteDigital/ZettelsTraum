@@ -443,6 +443,16 @@
 	margin-bottom: 0;
 }
 
+.liste-wort {
+	font-weight: bold;
+}
+
+.liste-details .liste-wort {
+	border-radius: 3px;
+	padding: 0 3px;
+	background-color: var(--farbeGelb);
+}
+
 div.liste-label {
 	position: relative;
 	border-top: 1px dotted var(--linie);

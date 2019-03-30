@@ -2,7 +2,7 @@
 <html lang="de">
 	<head>
 		<meta charset="utf-8">
-		<meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src http://www.deutschestextarchiv.de https://www.deutschestextarchiv.de; style-src 'self' 'unsafe-inline'">
+		<meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src http://www.deutschestextarchiv.de https://www.deutschestextarchiv.de">
 		
 		<title> </title>
 		
@@ -112,7 +112,9 @@
 				</tr><tr>
 					<th colspan="2">DTA-Import</th>
 				</tr><tr>
-					<td colspan="2"><input type="text" value="" spellcheck="false" id="beleg-dta" tabindex="0"><input type="button" value="Importieren" id="beleg-dta-button" tabindex="0"></td>
+					<td colspan="2"><input type="text" value="" spellcheck="false" id="beleg-dta" tabindex="0"
+						><input type="number" value="2" min="0" max="9999" spellcheck="false" id="beleg-dta-bis" tabindex="0"
+						><input type="button" value="Importieren" id="beleg-dta-button" tabindex="0"></td>
 				</tr><tr>
 					<th><label for="beleg-da">Datum</label
 						><span class="text-tools"

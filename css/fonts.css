@@ -23,3 +23,27 @@
 	font-style: italic;
 	font-weight: bold;
 }
+
+@font-face {
+	font-family: "DejaVu Serif";
+	src: url(../fonts/DejaVuSerif.woff2) format("woff2");
+}
+
+@font-face {
+	font-family: "DejaVu Serif";
+	src: url(../fonts/DejaVuSerif-Italic.woff2) format("woff2");
+	font-style: italic;
+}
+
+@font-face {
+	font-family: "DejaVu Serif";
+	src: url(../fonts/DejaVuSerif-Bold.woff2) format("woff2");
+	font-weight: bold;
+}
+
+@font-face {
+	font-family: "DejaVu Serif";
+	src: url(../fonts/DejaVuSerif-BoldItalic.woff2) format("woff2");
+	font-style: italic;
+	font-weight: bold;
+}

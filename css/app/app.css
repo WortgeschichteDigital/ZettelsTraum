@@ -102,12 +102,14 @@ textarea {
 }
 
 input[type="date"],
+input[type="number"],
 input[type="text"] {
 	border: 1px solid var(--linie);
 	padding: 2px 5px;
 }
 
 input[type="date"]:focus,
+input[type="number"]:focus,
 input[type="text"]:focus {
 	outline: 1px solid var(--farbe);
 	border-color: var(--farbe);
@@ -123,7 +125,8 @@ input[type="date"]::-webkit-clear-button {
 }
 
 input[type="date"]::-webkit-inner-spin-button,
-input[type="date"]::-webkit-outer-spin-button {
+input[type="date"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
 	-webkit-appearance: none;
 	margin: 0;
 }
@@ -234,6 +237,48 @@ textarea {
 textarea:focus {
 	outline: 1px solid var(--farbe);
 	border-color: var(--farbe);
+}
+
+/* DTA-Auszeichnungen in XML-Dokumenten --------- */
+.dta-antiqua {
+	font-family: "DejaVu Serif", serif;
+	font-size: 110%;
+}
+
+.dta-blau {
+	color: blue;
+}
+
+.dta-doppelt {
+	text-decoration: underline double;
+}
+
+.dta-durchgestrichen {
+	text-decoration: line-through;
+}
+
+.dta-gesperrt {
+	letter-spacing: 0.125em;
+}
+
+.dta-groesser {
+	font-size: larger;
+}
+
+.dta-initiale {
+	font-size: 150%;
+}
+
+.dta-kapitaelchen {
+	font-variant: small-caps;
+}
+
+.dta-kleiner {
+	font-size: smaller;
+}
+
+.dta-rot {
+	color: red;
 }
 
 /* Globale Klassen ------------------------------ */

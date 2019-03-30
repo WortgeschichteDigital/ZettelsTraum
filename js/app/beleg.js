@@ -89,6 +89,9 @@ let beleg = {
 			} else if (feld === "dta") {
 				felder[i].value = "";
 				continue;
+			} else if (feld === "dta-bis") {
+				felder[i].value = "0";
+				continue;
 			} else if (felder[i].type === "checkbox") {
 				felder[i].checked = beleg.data[feld];
 			} else { // Text-Input und Textarea
@@ -122,7 +125,14 @@ let beleg = {
 		}
 		feld.addEventListener(event_typ, function() {
 			let feld = this.id.replace(/^beleg-/, "");
-			if (feld === "dta") { // #beleg-dta gehört nicht zur Kartei, dient nur zum DTA-Import
+			if ( /^dta(-bis)*$/.test(feld) ) { // #beleg-dta + #beleg-dta-bis gehören nicht zur Kartei, dienen nur zum DTA-Import
+				if (feld === "dta" &&
+						/^https*:\/\/www\.deutschestextarchiv\.de\//.test(this.value) ) { // Bis-Seite ermitteln und eintragen
+					const fak = beleg.DTAImportGetFak(this.value, "");
+					if (fak) {
+						this.nextSibling.value = parseInt(fak, 10) + 1;
+					}
+				}
 				return;
 			}
 			if (this.type === "checkbox") {
@@ -182,7 +192,7 @@ let beleg = {
 		}
 		// Beleg wurde nicht geändert
 		if (!beleg.geaendert) {
-			dialog.oeffnen("alert", () => liste.wechseln() );
+			dialog.oeffnen("alert", () => da.focus() );
 			dialog.text("Es wurden keine Änderungen vorgenommen.");
 			return;
 		}
@@ -262,54 +272,33 @@ let beleg = {
 			url = helfer.textTrim(dta.value, true);
 		// URL fehlt
 		if (!url) {
-			dialog.oeffnen("alert", function() {
-				dta.select();
-			});
+			dialog.oeffnen("alert", () => dta.select() );
 			dialog.text("Sie haben keine URL eingegeben.");
 			return;
 		}
 		// Ist das überhaupt eine URL?
 		if ( !/^https*:\/\//.test(url) ) {
-			dialog.oeffnen("alert", function() {
-				dta.select();
-			});
+			dialog.oeffnen("alert", () => dta.select() );
 			dialog.text("Die scheint keine URL zu sein.");
 			return;
 		}
 		// URL nicht vom DTA
 		if ( !/^https*:\/\/www\.deutschestextarchiv\.de\//.test(url) ) {
-			dialog.oeffnen("alert", function() {
-				dta.select();
-			});
+			dialog.oeffnen("alert", () => dta.select() );
 			dialog.text("Die URL stammt nicht vom DTA.");
 			return;
 		}
 		// Titel-ID ermitteln
-		let titel_id = "";
-		if ( /\/view\//.test(url) ) {
-			titel_id = url.match(/\/view\/([^/?]+)/)[1];
-		} else {
-			titel_id = url.match(/deutschestextarchiv\.de\/([^/?]+)/)[1];
-		}
+		let titel_id = beleg.DTAImportGetTitelId(url);
 		if (!titel_id) {
-			dialog.oeffnen("alert", function() {
-				dta.focus();
-			});
+			dialog.oeffnen("alert", () => dta.focus() );
 			dialog.text("Beim ermitteln der Titel-ID ist etwas schiefgelaufen.\nIst die URL korrekt?");
 			return;
 		}
-		// Seite ermitteln
-		let seite = "";
-		if ( /p=[0-9]+/.test(url) ) {
-			seite = url.match(/p=([0-9]+)/)[1];
-		} else {
-			const reg = new RegExp(`${titel_id}\\/([0-9]+)`);
-			seite = url.match(reg)[1];
-		}
-		if (!seite) {
-			dialog.oeffnen("alert", function() {
-				dta.focus();
-			});
+		// Faksimileseite ermitteln
+		let fak = beleg.DTAImportGetFak(url, titel_id);
+		if (!fak) {
+			dialog.oeffnen("alert", () => dta.focus() );
 			dialog.text("Beim ermitteln der Seite ist etwas schiefgelaufen.\nIst die URL korrekt?");
 			return;
 		}
@@ -319,7 +308,7 @@ let beleg = {
 				if (dialog.antwort) {
 					startImport();
 				} else {
-					document.getElementById("beleg-dta").focus();
+					dta.focus();
 				}
 			});
 			dialog.text("Die Karteikarte ist teilweise schon gefüllt.\nDie Felder <i>Datum, Autor, Beleg, Textsorte</i> und <i>Quelle</i> werden beim Importieren der Textdaten aus dem DTA überschrieben.\nMöchten Sie den DTA-Import wirklich starten?");
@@ -338,26 +327,66 @@ let beleg = {
 				auflage: "",
 				ort: "",
 				verlag: "",
-				datum: "",
+				datum: {
+					druck: "",
+					entstehung: "",
+				},
 				seite: "",
+				"seite-bis-diff": 0,
 				serie: "",
 				serie_seite: "",
 				beleg: "",
 				textsorte: [],
 				textsorte_sub: [],
-				url: `http://www.deutschestextarchiv.de/${titel_id}/${seite}`,
+				url: `http://www.deutschestextarchiv.de/${titel_id}/${fak}`,
 			};
 			const url_xml = `http://www.deutschestextarchiv.de/book/download_xml/${titel_id}`;
 			dta.blur();
-			beleg.DTAImportRequest(url_xml, seite);
+			beleg.DTAImportRequest(url_xml, fak);
 		}
+	},
+	// Titel-ID ermitteln
+	//   url = String
+	//     (DTA-URL)
+	DTAImportGetTitelId (url) {
+		let m, titel_id = "";
+		if ( /\/view\//.test(url) ) {
+			m = url.match(/\/view\/([^/?]+)/);
+		} else {
+			m = url.match(/deutschestextarchiv\.de\/([^/?]+)/);
+		}
+		if (m) {
+			titel_id = m[1];
+		}
+		return titel_id;
+	},
+	// Faksimile-Nummer ermitteln
+	//   url = String
+	//     (DTA-URL)
+	//   titel_id = String
+	//     (titel_id, falls sie schon ermittelt wurde, sonst leerer String)
+	DTAImportGetFak (url, titel_id) {
+		let fak = "";
+		if (!titel_id) {
+			titel_id = beleg.DTAImportGetTitelId(url);
+			if (!titel_id) {
+				return fak;
+			}
+		}
+		if ( /p=[0-9]+/.test(url) ) {
+			fak = url.match(/p=([0-9]+)/)[1];
+		} else {
+			const reg = new RegExp(`${titel_id}\\/([0-9]+)`);
+			fak = url.match(reg)[1];
+		}
+		return fak;
 	},
 	// XMLHttpRequest stellen
 	//   url = String
 	//     (URL des Dokument, das aus dem DTA geladen werden soll)
-	//   seite = String
+	//   fak = String
 	//     (Faksimile-Seite des Titels)
-	DTAImportRequest (url, seite) {
+	DTAImportRequest (url, fak) {
 		let ajax = new XMLHttpRequest();
 		ajax.open("GET", url, true);
 		ajax.timeout = 10000;
@@ -368,22 +397,22 @@ let beleg = {
 							/<title>DTA Qualitätssicherung<\/title>/.test(ajax.responseText) ) {
 						beleg.DTAImportFehler("DTAQ: Titel noch nicht freigeschaltet");
 					} else {
-						beleg.DTAImportFehler("keine XML-Daten");
+						beleg.DTAImportFehler("XMLHttpRequest: keine XML-Daten");
 					}
 					return;
 				}
 				beleg.DTAImportMeta(ajax.responseXML);
-				beleg.DTAImportText(ajax.responseXML, seite);
+				beleg.DTAImportText(ajax.responseXML, fak);
 				beleg.DTAImportFill();
 			} else {
-				beleg.DTAImportFehler("falscher Status-Code");
+				beleg.DTAImportFehler("XMLHttpRequest: falscher Status-Code");
 			}
 		});
 		ajax.addEventListener("timeout", function () {
 			beleg.DTAImportFehler("XMLHttpRequest: Timeout");
 		});
 		ajax.addEventListener("error", function () {
-			beleg.DTAImportFehler("XMLHttpRequest: allgemeiner Fehler");
+			beleg.DTAImportFehler("XMLHttpRequest: unbestimmter Fehler");
 		});
 		ajax.send(null);
 	},
@@ -433,26 +462,26 @@ let beleg = {
 				if (!v.firstChild) {
 					return "";
 				}
-				return helfer.textTrim(v.firstChild.nodeValue, true);
+				return trimmer(v.firstChild.nodeValue);
 			}
 			let out = [];
 			v.forEach(function(i) {
 				if (!i.firstChild) {
 					return;
 				}
-				out.push( helfer.textTrim(i.firstChild.nodeValue, true) );
+				out.push( trimmer(i.firstChild.nodeValue) );
 			});
 			return out;
 		}
 		// Datum
 		let datum = bibl.querySelectorAll("publicationStmt date");
 		if (datum) {
-			if (datum.length === 1) {
-				beleg.DTAImportData.datum = datum[0].firstChild.nodeValue;
-			} else {
-				let crea = bibl.querySelector(`publicationStmt date[type="creation"]`);
-				if (crea) {
-					beleg.DTAImportData.datum = crea.firstChild.nodeValue;
+			for (let i = 0, len = datum.length; i < len; i++) {
+				const typ = datum[i].getAttribute("type");
+				if (typ === "creation") {
+					beleg.DTAImportData.datum.entstehung = trimmer(datum[i].firstChild.nodeValue);
+				} else {
+					beleg.DTAImportData.datum.druck = trimmer(datum[i].firstChild.nodeValue);
 				}
 			}
 		}
@@ -467,14 +496,14 @@ let beleg = {
 					}
 					beleg.DTAImportData.serie += " ";
 				}
-				beleg.DTAImportData.serie += helfer.textTrim(i.firstChild.nodeValue, true);
+				beleg.DTAImportData.serie += trimmer(i.firstChild.nodeValue);
 			});
 			if (serie_bd) {
 				let unit = serie_bd.getAttribute("unit");
 				if (unit === "volume") {
-					beleg.DTAImportData.serie += `, ${helfer.textTrim(serie_bd.firstChild.nodeValue, true)}`;
+					beleg.DTAImportData.serie += `, ${trimmer(serie_bd.firstChild.nodeValue)}`;
 				} else if (unit === "pages") {
-					beleg.DTAImportData.serie_seite = helfer.textTrim(serie_bd.firstChild.nodeValue, true);
+					beleg.DTAImportData.serie_seite = trimmer(serie_bd.firstChild.nodeValue);
 				}
 			}
 			if (beleg.DTAImportData.textsorte[0] === "Zeitung") {
@@ -500,15 +529,15 @@ let beleg = {
 					name = "";
 				if (person_name) {
 					if (wert === "autor") {
-						name = helfer.textTrim(person_name.firstChild.nodeValue, true);
+						name = trimmer(person_name.firstChild.nodeValue);
 						if (person_vorname) {
-							name += `, ${helfer.textTrim(person_vorname.firstChild.nodeValue, true)}`;
+							name += `, ${trimmer(person_vorname.firstChild.nodeValue)}`;
 						}
 					} else {
 						if (person_vorname) {
-							name = `${helfer.textTrim(person_vorname.firstChild.nodeValue, true)} ${helfer.textTrim(person_name.firstChild.nodeValue, true)}`;
+							name = `${trimmer(person_vorname.firstChild.nodeValue)} ${trimmer(person_name.firstChild.nodeValue)}`;
 						} else {
-							name = helfer.textTrim(person_name.firstChild.nodeValue, true);
+							name = trimmer(person_name.firstChild.nodeValue);
 						}
 					}
 				}
@@ -517,20 +546,45 @@ let beleg = {
 				}
 			}
 		}
+		// spezielle Trim-Funktion
+		function trimmer (v) {
+			helfer.textTrim(v, true);
+			v = v.replace(/\n/g, " "); // kommt mitunter mitten im Untertitel vor
+			return v;
+		}
 	},
 	// Seite und Text des Titels importieren
 	//   xml = Document
 	//     (das komplette Buch, aus dem eine Seite importiert werden soll)
-	DTAImportText (xml, seite) {
+	//   fak = String
+	//     (Faksimile-Seite des Titels)
+	DTAImportText (xml, fak) {
+		// Grenze des Textimports ermitteln
+		// (importiert wird bis zum Seitenumbruch "fak_bis", aber nie darüber hinaus)
+		let int_fak = parseInt(fak, 10),
+			int_fak_bis = parseInt(document.getElementById("beleg-dta-bis").value, 10),
+			fak_bis = "";
+		if (int_fak_bis && int_fak_bis > int_fak) {
+			fak_bis = int_fak_bis.toString();
+			beleg.DTAImportData["seite-bis-diff"] = int_fak_bis - int_fak - 1;
+		} else {
+			fak_bis = (int_fak + 1).toString();
+		}
 		// Start- und Endelement ermitteln
-		const ele_start = xml.querySelector(`pb[facs="#f${seite.padStart(4, "0")}"]`),
-			ele_ende = xml.querySelector(`pb[facs="#f${(parseInt(seite, 10) + 1).toString().padStart(4, "0")}"]`);
+		const ele_start = xml.querySelector(`pb[facs="#f${fak.padStart(4, "0")}"]`),
+			ele_ende = xml.querySelector(`pb[facs="#f${fak_bis.padStart(4, "0")}"]`);
 		// Seite auslesen
 		beleg.DTAImportData.seite = ele_start.getAttribute("n");
 		// Elemente ermitteln, die analysiert werden müssen
-		let parent = ele_ende.parentNode;
-		while ( !parent.contains(ele_start) ) {
-			parent = parent.parentNode;
+		let parent;
+		if (ele_ende) {
+			parent = ele_ende.parentNode;
+			while ( !parent.contains(ele_start) ) {
+				parent = parent.parentNode;
+			}
+		} else { // Startseite = letzte Seite (oder als letzte Seite wurde eine nicht existierende Seite angegeben)
+			parent = ele_start.parentNode.parentNode;
+			beleg.DTAImportData["seite-bis-diff"] = 0;
 		}
 		let analyse = [],
 			alleKinder = parent.childNodes;
@@ -547,61 +601,69 @@ let beleg = {
 		}
 		// Elemente analysieren
 		const rend = { // Textauszeichnungen
+			"#aq": {
+				ele: "span",
+				class: "dta-antiqua",
+			},
 			"#b": {
 				ele: "b",
-				style: "",
+				class: "",
 			},
 			"#blue": {
 				ele: "span",
-				style: "color:blue",
+				class: "dta-blau",
+			},
+			"#fr": {
+				ele: "span",
+				class: "dta-groesser", // so zumindest Drastellung im DTA, style-Angaben im XML-Header anders
 			},
 			"#g": {
 				ele: "span",
-				style: "letter-spacing:0.125em",
+				class: "dta-gesperrt",
 			},
 			"#i": {
 				ele: "i",
-				style: "",
+				class: "",
 			},
 			"#in": {
 				ele: "span",
-				style: "font-size:150%",
+				class: "dta-initiale",
 			},
 			"#k": {
 				ele: "span",
-				style: "font-variant:small-caps",
+				class: "dta-kapitaelchen",
 			},
 			"#larger": {
 				ele: "span",
-				style: "font-size:larger",
+				class: "dta-groesser",
 			},
 			"#red": {
 				ele: "span",
-				style: "color:red",
+				class: "dta-rot",
 			},
 			"#s": {
 				ele: "span",
-				style: "text-decoration:line-through",
+				class: "dta-durchgestrichen",
 			},
 			"#smaller": {
 				ele: "smaller",
-				style: "font-size:smaller",
+				class: "dta-kleiner",
 			},
 			"#sub": {
 				ele: "sub",
-				style: "",
+				class: "",
 			},
 			"#sup": {
 				ele: "sup",
-				style: "",
+				class: "",
 			},
 			"#u": {
 				ele: "u",
-				style: "",
+				class: "",
 			},
 			"#uu": {
-				ele: "u",
-				style: "",
+				ele: "span",
+				class: "dta-doppelt",
 			},
 		};
 		let text = "",
@@ -617,8 +679,8 @@ let beleg = {
 			let reg = new RegExp(`\\[(${typ})\\](.+?)\\[\\/${typ}\\]`, "g");
 			text = text.replace(reg, function(m, p1, p2) {
 				let start = `<${rend[p1].ele}`;
-				if (rend[p1].style) {
-					start += ` style="${rend[p1].style}"`;
+				if (rend[p1].class) {
+					start += ` class="${rend[p1].class}"`;
 				}
 				start += ">";
 				return `${start}${p2}</${rend[p1].ele}>`;
@@ -628,13 +690,14 @@ let beleg = {
 		function ana (ele) {
 			if (ele.nodeType === 3) { // Text
 				if (start && !ende) {
-					let text_tmp = ele.nodeValue.replace(/\n/, "");
-					if (/(-|¬)$/.test(text_tmp) && ele.nextSibling && ele.nextSibling.nodeName === "lb") {
+					let text_tmp = ele.nodeValue.replace(/\n/g, "");
+					if (/(-|¬)$/.test(text_tmp) &&
+							ele.nextSibling &&
+							ele.nextSibling.nodeName === "lb") {
 						text += text_tmp.replace(/(-|¬)$/, ""); // Trennungsstrich weg
 					} else {
 						text += text_tmp;
 						if (ele.nextSibling &&
-								ele.nextSibling.nodeType === 1 &&
 								ele.nextSibling.nodeName === "lb") {
 							text += " ";
 						}
@@ -646,16 +709,14 @@ let beleg = {
 				} else if (ele === ele_ende) {
 					ende = true;
 				} else {
-					if (ele.nodeName === "lb") { // Zeilenumbruch
-						if (ele.previousSibling && ele.previousSibling.nodeType === 1) {
-							text += " ";
-						}
-						return;
-					} else if ( /^(closer|div|p)$/.test(ele.nodeName) ) { // Absätze
+					if ( /^(closer|div|item|p)$/.test(ele.nodeName) ) { // Absätze
+						text = helfer.textTrim(text, false);
 						text += "\n\n";
-					} else if ( ele.nodeName === "fw" && /^(header|sig)$/.test(ele.getAttribute("type")) ) { // Kolumnentitel, Bogensignaturen
-						return;
-					} else if (ele.nodeName === "sic") { // falsch im Original, Korrektur steht in <corr>
+					} else if ( /^(lg)$/.test(ele.nodeName) ) { // einfache Absätze
+						text = helfer.textTrim(text, false);
+						text += "\n";
+					} else if ( ele.nodeName === "fw" &&
+							/^(catch|header|sig)$/.test( ele.getAttribute("type") ) ) { // Kustode, Kolumnentitel, Bogensignaturen
 						return;
 					} else if (ele.nodeName === "hi") { // Text-Auszeichnungen
 						const typ = ele.getAttribute("rendition");
@@ -663,9 +724,25 @@ let beleg = {
 							ele.insertBefore(document.createTextNode(`[${typ}]`), ele.firstChild);
 							ele.appendChild( document.createTextNode(`[/${typ}]`) );
 						}
-					} else if (ele.nodeName === "note" && ele.getAttribute("type") !== "editorial") { // Anmerkungen
+					} else if (ele.nodeName === "l") { // Verszeile
+						text += "\n";
+					} else if (ele.nodeName === "lb") { // Zeilenumbruch
+						if (ele.previousSibling &&
+								ele.previousSibling.nodeType === 1) {
+							text += " ";
+						}
+						return;
+					} else if (ele.nodeName === "note" &&
+							ele.getAttribute("type") !== "editorial") { // Anmerkungen; "editorial" sollte inline dargestellt werden
 						ele.insertBefore(document.createTextNode("[Anmerkung: "), ele.firstChild);
 						ele.appendChild( document.createTextNode("] ") );
+					} else if (ele.nodeName === "sic") { // <sic> Fehler im Original, Korrektur steht in <corr>; die wird übernommen
+						return;
+					} else if (ele.nodeName === "speaker") { // Sprecher im Drama
+						ele.insertBefore(document.createTextNode(`[#b]`), ele.firstChild);
+						ele.appendChild( document.createTextNode(`[/#b]`) );
+						text = helfer.textTrim(text, false);
+						text += "\n\n";
 					}
 					let kinder = ele.childNodes;
 					for (let i = 0, len = kinder.length; i < len; i++) {
@@ -682,7 +759,13 @@ let beleg = {
 	DTAImportFill () {
 		// Werte eintragen
 		const dta = beleg.DTAImportData;
-		beleg.data.da = dta.datum;
+		let datum_feld = dta.datum.entstehung;
+		if (!datum_feld && dta.datum.druck) {
+			datum_feld = dta.datum.druck;
+		} else if (dta.datum.druck) {
+			datum_feld += ` (Publikation von ${dta.datum.druck})`;
+		}
+		beleg.data.da = datum_feld;
 		let autor = dta.autor.join("/");
 		if (!autor) {
 			autor = "N. N.";
@@ -763,15 +846,25 @@ let beleg = {
 			}
 		}
 		// Datum
-		quelle += ` ${dta.datum}`;
+		let datum = dta.datum.druck;
+		if (!datum) {
+			datum = dta.datum.entstehung;
+		}
+		quelle += ` ${datum}`;
 		// Seite
 		if (dta.serie_seite) {
 			quelle += `, S. ${dta.serie_seite}`;
 			if (dta.seite) {
 				quelle += `, hier ${dta.seite}`;
+				if (dta["seite-bis-diff"]) {
+					quelle += `–${parseInt(dta.seite, 10) + dta["seite-bis-diff"]}`;
+				}
 			}
 		} else if (dta.seite) {
 			quelle += `, S. ${dta.seite}`;
+			if (dta["seite-bis-diff"]) {
+				quelle += `–${parseInt(dta.seite, 10) + dta["seite-bis-diff"]}`;
+			}
 		}
 		// Serie
 		if (dta.serie) {
@@ -784,7 +877,7 @@ let beleg = {
 		beleg.data.qu = quelle;
 		// Formular füllen
 		beleg.formular(false);
-		beleg.belegGeaendert(true);
+// 		beleg.belegGeaendert(true); // TODO einschalten
 		// ggf. Punkt einfügen
 		function quellePunkt () {
 			if ( !/\.$/.test(quelle) ) {
@@ -825,9 +918,9 @@ let beleg = {
 			//   - Text-Input und Checkboxes: hier reicht Enter
 			//   - mit Strg + Enter geht der Befehl auch in Textareas
 			if ( evt.which === 13 &&
-					(this.type.match(/^checkbox$|^text$/) || evt.ctrlKey) ) {
+					(this.type.match(/^(checkbox|number|text)$/) || evt.ctrlKey) ) {
 				evt.preventDefault();
-				if (this.id === "beleg-dta") {
+				if ( /^beleg-dta(-bis)*$/.test(this.id) ) {
 					beleg.DTAImport();
 					return;
 				}
@@ -861,7 +954,15 @@ let beleg = {
 			id = link.parentNode.previousSibling.getAttribute("for"),
 			feld = document.getElementById(id);
 		if (id === "beleg-bs") {
-			clipboard.writeHTML(feld.value);
+			const p = feld.value.replace(/\n\s*\n/g, "\n").split("\n");
+			let html = "";
+			p.forEach(function(i) {
+				html += `<p>${i}</p>`;
+			});
+			clipboard.write({
+				text: feld.value,
+				html: helfer.clipboardHtml(html),
+			});
 		} else {
 			clipboard.writeText(feld.value);
 		}

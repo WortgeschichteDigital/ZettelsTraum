@@ -152,7 +152,7 @@ let popup = {
 				const {clipboard} = require("electron");
 				clipboard.write({
 					text: popup.textauswahl.text,
-					html: popup.textauswahl.html,
+					html: helfer.clipboardHtml(popup.textauswahl.html),
 				});
 			},
 		}) );
