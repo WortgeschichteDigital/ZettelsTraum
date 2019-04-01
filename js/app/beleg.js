@@ -52,6 +52,10 @@ let beleg = {
 			no: "", // Notizen
 			an: [], // Anhänge
 		};
+		// ggf. die Leseansicht verlassen
+		if ( document.getElementById("beleg-link-leseansicht").classList.contains("aktiv") ) {
+			beleg.leseToggle(false);
+		}
 		// Karte anzeigen
 		beleg.formular(true);
 	},
@@ -73,7 +77,18 @@ let beleg = {
 				beleg.data[i] = data.ka[id][i];
 			}
 		}
-		// Formular anzeigen
+		// in Lese- oder in Formularansicht öffnen?
+		const leseansicht = document.getElementById("beleg-link-leseansicht");
+		if (optionen.data.einstellungen.leseansicht) {
+			if ( !leseansicht.classList.contains("aktiv") ) {
+				beleg.leseToggle(false);
+			} else {
+				beleg.leseFill();
+			}
+		} else if ( leseansicht.classList.contains("aktiv") ) {
+			beleg.leseToggle(false);
+		}
+		// Formular füllen und anzeigen
 		beleg.formular(false);
 	},
 	// Formular füllen und anzeigen
@@ -109,9 +124,10 @@ let beleg = {
 		// Textarea zurücksetzen
 		document.querySelectorAll("#beleg textarea").forEach( (textarea) => helfer.textareaGrow(textarea) );
 		// Fokus setzen
-		if (neu) {
+		const leseansicht_aktiv = document.getElementById("beleg-link-leseansicht").classList.contains("aktiv");
+		if (neu && !leseansicht_aktiv) {
 			document.getElementById("beleg-dta").focus();
-		} else {
+		} else if (!leseansicht_aktiv) {
 			document.getElementById("beleg-da").focus();
 		}
 	},
@@ -332,7 +348,7 @@ let beleg = {
 					entstehung: "",
 				},
 				seite: "",
-				"seite-bis-diff": 0,
+				seite_zuletzt: "",
 				serie: "",
 				serie_seite: "",
 				beleg: "",
@@ -566,7 +582,6 @@ let beleg = {
 			fak_bis = "";
 		if (int_fak_bis && int_fak_bis > int_fak) {
 			fak_bis = int_fak_bis.toString();
-			beleg.DTAImportData["seite-bis-diff"] = int_fak_bis - int_fak - 1;
 		} else {
 			fak_bis = (int_fak + 1).toString();
 		}
@@ -574,7 +589,7 @@ let beleg = {
 		const ele_start = xml.querySelector(`pb[facs="#f${fak.padStart(4, "0")}"]`),
 			ele_ende = xml.querySelector(`pb[facs="#f${fak_bis.padStart(4, "0")}"]`);
 		// Seite auslesen
-		beleg.DTAImportData.seite = ele_start.getAttribute("n");
+		beleg.DTAImportData.seite = beleg.DTAImportData.seite_zuletzt = ele_start.getAttribute("n");
 		// Elemente ermitteln, die analysiert werden müssen
 		let parent;
 		if (ele_ende) {
@@ -582,9 +597,11 @@ let beleg = {
 			while ( !parent.contains(ele_start) ) {
 				parent = parent.parentNode;
 			}
-		} else { // Startseite = letzte Seite (oder als letzte Seite wurde eine nicht existierende Seite angegeben)
+		} else {
+			// Wenn "ele_ende" nicht existiert, dürfte die Startseite die letzte Seite sein.
+			// Denkbar ist auch, dass eine viel zu hohe Seitenzahl angegeben wurde.
+			// Dann holt sich das Skript alle Seiten, die es kriegen kann, aber der Startseite.
 			parent = ele_start.parentNode.parentNode;
-			beleg.DTAImportData["seite-bis-diff"] = 0;
 		}
 		let analyse = [],
 			alleKinder = parent.childNodes;
@@ -709,7 +726,10 @@ let beleg = {
 				} else if (ele === ele_ende) {
 					ende = true;
 				} else {
-					if ( /^(closer|div|item|p)$/.test(ele.nodeName) ) { // Absätze
+					if (ele.nodeName === "pb") { // Seitenumbruch
+						beleg.DTAImportData.seite_zuletzt = ele.getAttribute("n");
+						return;
+					} else if ( /^(closer|div|item|p)$/.test(ele.nodeName) ) { // Absätze
 						text = helfer.textTrim(text, false);
 						text += "\n\n";
 					} else if ( /^(lg)$/.test(ele.nodeName) ) { // einfache Absätze
@@ -856,14 +876,14 @@ let beleg = {
 			quelle += `, S. ${dta.serie_seite}`;
 			if (dta.seite) {
 				quelle += `, hier ${dta.seite}`;
-				if (dta["seite-bis-diff"]) {
-					quelle += `–${parseInt(dta.seite, 10) + dta["seite-bis-diff"]}`;
+				if (dta.seite_zuletzt !== dta.seite) {
+					quelle += `–${dta.seite_zuletzt}`;
 				}
 			}
 		} else if (dta.seite) {
 			quelle += `, S. ${dta.seite}`;
-			if (dta["seite-bis-diff"]) {
-				quelle += `–${parseInt(dta.seite, 10) + dta["seite-bis-diff"]}`;
+			if (dta.seite_zuletzt !== dta.seite) {
+				quelle += `–${dta.seite_zuletzt}`;
 			}
 		}
 		// Serie
@@ -877,7 +897,7 @@ let beleg = {
 		beleg.data.qu = quelle;
 		// Formular füllen
 		beleg.formular(false);
-// 		beleg.belegGeaendert(true); // TODO einschalten
+		beleg.belegGeaendert(true);
 		// ggf. Punkt einfügen
 		function quellePunkt () {
 			if ( !/\.$/.test(quelle) ) {
@@ -950,21 +970,34 @@ let beleg = {
 	//   link = Element
 	//     (Link, auf den geklickt wurde)
 	toolsKopieren (link) {
-		const {clipboard} = require("electron"),
-			id = link.parentNode.previousSibling.getAttribute("for"),
-			feld = document.getElementById(id);
-		if (id === "beleg-bs") {
-			const p = feld.value.replace(/\n\s*\n/g, "\n").split("\n");
+		// Datensatz ermitteln. Ist der Wert gefüllt?
+		const ds = link.parentNode.previousSibling.getAttribute("for").replace(/^beleg-/, "");
+		if (!beleg.data[ds]) {
+			return;
+		}
+		const {clipboard} = require("electron");
+		// Ist Text ausgewählt?
+		if (window.getSelection().toString() &&
+				popup.getTargetSelection([document.querySelector(`#beleg-lese-${ds} p`)]) ) {
+			clipboard.write({
+				text: popup.textauswahl.text,
+				html: helfer.clipboardHtml(popup.textauswahl.html),
+			});
+			return;
+		}
+		// Kein Text ausgewählt => das gesamte Feld wird kopiert
+		if (ds === "bs") { // Beleg
+			const p = beleg.data[ds].replace(/\n\s*\n/g, "\n").split("\n");
 			let html = "";
 			p.forEach(function(i) {
 				html += `<p>${i}</p>`;
 			});
 			clipboard.write({
-				text: feld.value,
+				text: beleg.data[ds],
 				html: helfer.clipboardHtml(html),
 			});
-		} else {
-			clipboard.writeText(feld.value);
+		} else { // alle anderen Felder
+			clipboard.writeText(beleg.data[ds]);
 		}
 	},
 	// Tool Einfügen: Text möglichst unter Beibehaltung der Formatierung einfügen
@@ -1083,6 +1116,79 @@ let beleg = {
 			} else if ( id.match(/^filter/) ) {
 				filter.anwendenSterne(this);
 			}
+		});
+	},
+	// Lesansicht umschalten
+	//   manuell = Boolean
+	//     (Leseansicht wurde manuell gewechselt)
+	leseToggle (manuell) {
+		// Ansicht umstellen
+		const button = document.getElementById("beleg-link-leseansicht");
+		let an = true;
+		if ( button.classList.contains("aktiv") ) {
+			an = false;
+		}
+		button.classList.toggle("aktiv");
+		document.querySelectorAll(".beleg-form").forEach(function(i) {
+			if (an) {
+				i.classList.add("aus");
+			} else {
+				i.classList.remove("aus");
+			}
+		});
+		document.querySelectorAll(".beleg-lese").forEach(function(i) {
+			if (an) {
+				i.classList.remove("aus");
+			} else {
+				i.classList.add("aus");
+			}
+		});
+		// Einfüge-Icons ein- oder ausblenden
+		document.querySelectorAll("#beleg .icon-tools-einfuegen").forEach(function(i) {
+			if (an) {
+				i.classList.add("aus");
+			} else {
+				i.classList.remove("aus");
+			}
+		});
+		// Textwerte eintragen
+		if (an) {
+			beleg.leseFill();
+		} else if (manuell) {
+			document.getElementById("beleg-da").focus();
+		}
+	},
+	// aktuelle Werte des Belegs in die Leseansicht eintragen
+	leseFill () {
+		for (let wert in beleg.data) {
+			if ( !beleg.data.hasOwnProperty(wert) ) {
+				continue;
+			}
+			// String?
+			const v = beleg.data[wert];
+			if ( !helfer.checkType("String", v) ) {
+				continue;
+			}
+			// Container leeren
+			const cont = document.getElementById(`beleg-lese-${wert}`);
+			helfer.keineKinder(cont);
+			// Absätze einhängen
+			const p = v.replace(/\n\s*\n/g, "\n").split("\n");
+			for (let i = 0, len = p.length; i < len; i++) {
+				let text = p[i];
+				if (!text) {
+					text = " ";
+				} else {
+					text = liste.linksErkennen(text);
+				}
+				let nP = document.createElement("p");
+				nP.innerHTML = text;
+				cont.appendChild(nP);
+			}
+		}
+		// Klick-Events an alles Links hängen
+		document.querySelectorAll("#beleg .link").forEach(function(i) {
+			liste.linksOeffnenListener(i);
 		});
 	},
 };

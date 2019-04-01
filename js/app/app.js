@@ -77,6 +77,14 @@ window.addEventListener("load", function() {
 			beleg.toolsKlick(beleg_links[i]);
 		}
 	}
+	document.getElementById("beleg-link-leseansicht").addEventListener("click", function(evt) {
+		evt.preventDefault();
+		beleg.leseToggle(true);
+	});
+	document.getElementById("beleg-link-drucken").addEventListener("click", function(evt) {
+		evt.preventDefault();
+		drucken.init();
+	});
 	// Belegliste-Filter
 	document.querySelectorAll("#liste-filter header a").forEach( (a) => filter.ctrlButtons(a) );
 	document.querySelectorAll(".filter-kopf").forEach(function(a) {

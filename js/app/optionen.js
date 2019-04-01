@@ -64,6 +64,8 @@ let optionen = {
 			"nicht-karte-gefiltert": false,
 			// neue Karteikarten als unvollständig markieren
 			unvollstaendig: true,
+			// bestehende Karteikarten in der Leseansicht öffnen
+			leseansicht: true,
 		},
 		// Einstellungen in der Filterleiste
 		filter: {

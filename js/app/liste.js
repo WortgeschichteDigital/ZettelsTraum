@@ -610,7 +610,7 @@ let liste = {
 		// Klick-Events an alles Links hängen
 		let links = div.querySelectorAll(".link");
 		for (let i = 0, len = links.length; i < len; i++) {
-			liste.linksOeffnen(links[i]);
+			liste.linksOeffnenListener(links[i]);
 		}
 		// <div> zurückgeben
 		return div;
@@ -757,18 +757,26 @@ let liste = {
 		return text;
 	},
 	// Links in einem externen Browser-Fenster öffnen
-	linksOeffnen (link) {
+	//   link = Element
+	//     (der Link, auf den geklickt wurde)
+	linksOeffnenListener (link) {
 		link.addEventListener("click", function(evt) {
 			evt.preventDefault();
-			// URL ermitteln und ggf. aufbereiten
 			let url = this.title;
-			if ( !url.match(/^http/) ) {
-				url = `https://${url}`;
-			}
-			// URL im Browser öffnen
-			const {shell} = require("electron");
-			shell.openExternal(url);
+			liste.linksOeffnen(url);
 		});
+	},
+	// Link im Standardbrowser öffnen
+	//   url = String
+	//     (die URL, die aufgerufen werden soll)
+	linksOeffnen (url) {
+		// URL ggf. aufbereiten
+		if ( !url.match(/^http/) ) {
+			url = `https://${url}`;
+		}
+		// URL im Browser öffnen
+		const {shell} = require("electron");
+		shell.openExternal(url);
 	},
 	// Klick-Event zum Öffnen des Karteikarten-Formulars
 	//   a = Element

@@ -182,3 +182,19 @@ textarea#beleg-bs {
 	-webkit-mask-image: url(../../img/tool-kopieren.svg);
 	mask-image: url(../../img/tool-kopieren.svg);
 }
+
+/* Leseansicht ---------------------------------- */
+.beleg-lese a {
+	cursor: pointer;
+}
+
+.beleg-lese p {
+	padding: 0 6px;
+	user-select: text;
+}
+
+#beleg .beleg-lese td {
+	border-bottom: 1px solid var(--linie);
+	padding-top: 10px;
+}
+

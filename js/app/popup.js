@@ -10,6 +10,8 @@ let popup = {
 	belegID: "",
 	// speichert den Anhang, der geöffnet werden soll
 	anhangDatei: "",
+	// speichert das Element, auf das sich das Event bezieht
+	element: null,
 	// Popup öffnen
 	//   evt = Event-Object
 	//     (das Ereignis-Objekt, das beim Rechtsklick erzeugt wird)
@@ -33,6 +35,8 @@ let popup = {
 			popup.menuAnhaenge(menu);
 		} else if (target === "filter") {
 			popup.menuFilter(menu);
+		} else if (target === "link") {
+			popup.menuLink(menu);
 		} else if (target === "beleg") {
 			popup.menuBeleg(menu);
 		} else if (target === "anhang") {
@@ -50,44 +54,14 @@ let popup = {
 		});
 	},
 	// ermittelt das für den Rechtsklick "passendste" Klickziel
+	//   pfad = Array
+	//     (speichert den Event-Pfad, also die Elementeliste,
+	//     über die das Klick-Event aufgerufen wurde)
 	getTarget (pfad) {
 		// Textauswahl
-		const sel = window.getSelection();
-		if ( sel.toString() ) {
-			// ermitteln, ob der ausgewählte Text im Listen-Detail-Bereich steht
-			let detail = false,
-				ele = sel.anchorNode;
-			while (ele.nodeName !== "BODY") {
-				ele = ele.parentNode;
-				if ( ele.classList.contains("liste-details") ) {
-					detail = true;
-					break;
-				}
-			}
-			// ermitteln, ob sich der Rechtsklick im unmittelbaren Umfeld
-			// des ausgewählten Textes ereignete
-			let umfeld = false;
-			if (detail) {
-				let ele = sel.anchorNode;
-				while (ele.nodeName !== "DIV") {
-					ele = ele.parentNode;
-				}
-				if ( ele.contains(pfad[0]) ) {
-					umfeld = true;
-				}
-			}
-			// Kopie des ausgewählten Texts zwischenspeichern
-			if (detail && umfeld) {
-				let range = sel.getRangeAt(0),
-					container = document.createElement("div");
-				container.appendChild(range.cloneContents());
-				let text = container.innerHTML.replace(/<\/p><p>/g, "\n");
-				text = text.replace(/<.+?>/g, "");
-				text = text.replace(/\n/g, "\n\n");
-				popup.textauswahl.text = text;
-				popup.textauswahl.html = container.innerHTML;
-				return "kopieren";
-			}
+		if (window.getSelection().toString() &&
+				popup.getTargetSelection(pfad) ) {
+			return "kopieren";
 		}
 		// alle Elemente im Pfad durchgehen
 		for (let i = 0, len = pfad.length; i < len; i++) {
@@ -118,7 +92,10 @@ let popup = {
 			}
 			// Klassen
 			if ( pfad[i].classList) {
-				if ( pfad[i].classList.contains("liste-kopf") ) {
+				if ( pfad[i].classList.contains("link") ) {
+					popup.element = pfad[i];
+					return "link";
+				} else if ( pfad[i].classList.contains("liste-kopf") ) {
 					popup.belegID = pfad[i].dataset.id;
 					return "beleg";
 				} else if ( pfad[i].classList.contains("liste-meta") ) {
@@ -138,6 +115,60 @@ let popup = {
 		}
 		// keine Kartei offen
 		return "kartei";
+	},
+	// Text der Auswahl ermitteln und entscheiden, ob sie berücksichtigt wird
+	// (diese Funktion wird nicht nur für Rechtsklicks verwendet, sondern
+	// auch für Kopier-Icons!)
+	//   pfad = Array
+	//     (speichert den Event-Pfad, also die Elementeliste, über die das
+	//     Klick-Event aufgerufen wurde; wird die Funktion über ein Kopier-Icon
+	//     aufgerufen, steht nur ein Element in dem Array)
+	getTargetSelection (pfad) {
+		// ermitteln, ob der ausgewählte Text in einem Bereicht steht,
+		// der berücksichtigt werden soll ("liste-details" oder "beleg-lese")
+		const sel = window.getSelection();
+		let bereich = false,
+			ele = sel.anchorNode,
+			container_umfeld = "";
+		while (ele.nodeName !== "BODY") {
+			ele = ele.parentNode;
+			if ( ele.classList.contains("liste-details") ) {
+				container_umfeld = "DIV";
+				bereich = true;
+				break;
+			} else if ( ele.classList.contains("beleg-lese") ) {
+				container_umfeld = "TD";
+				bereich = true;
+				break;
+			}
+		}
+		// ermitteln, ob sich der Rechtsklick im unmittelbaren Umfeld
+		// des ausgewählten Textes ereignete
+		let umfeld = false;
+		if (bereich) {
+			let ele = sel.anchorNode;
+			while (ele.nodeName !== container_umfeld) {
+				ele = ele.parentNode;
+			}
+			if ( ele.contains(pfad[0]) ) {
+				umfeld = true;
+			}
+		}
+		// Kopie des ausgewählten Texts ermitteln und zwischenspeichern;
+		// Kopieranweisung geben
+		if (bereich && umfeld) {
+			let range = sel.getRangeAt(0),
+				container = document.createElement("div");
+			container.appendChild(range.cloneContents());
+			let text = container.innerHTML.replace(/<\/p><p>/g, "\n");
+			text = text.replace(/<.+?>/g, "");
+			text = text.replace(/\n/g, "\n\n");
+			popup.textauswahl.text = text;
+			popup.textauswahl.html = container.innerHTML;
+			return true;
+		}
+		// keine Kopieranweisung geben
+		return false;
 	},
 	// Kopieren-Menü füllen
 	//   menu = Object
@@ -258,6 +289,21 @@ let popup = {
 			label: "Filter zurücksetzen",
 			icon: path.join(__dirname, "img", "menu", "popup-filter.png"),
 			click: () => filter.ctrlReset(true),
+		}) );
+	},
+	// Link-Menü füllen
+	//   menu = Object
+	//     (Menü-Objekt, an das die Menü-Items gehängt werden müssen)
+	menuLink (menu) {
+		const {MenuItem} = require("electron").remote,
+			path = require("path");
+		menu.append( new MenuItem({
+			label: "Link kopieren",
+			icon: path.join(__dirname, "img", "menu", "popup-link.png"),
+			click: function() {
+				const {clipboard} = require("electron");
+				clipboard.writeText(popup.element.title);
+			},
 		}) );
 	},
 	// Beleg-Menü füllen

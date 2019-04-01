@@ -18,6 +18,7 @@
 		<script src="js/app/app.js"></script>
 		<script src="js/app/beleg.js"></script>
 		<script src="js/app/dialog.js"></script>
+		<script src="js/app/drucken.js"></script>
 		<script src="js/app/filter.js"></script>
 		<script src="js/app/helfer.js"></script>
 		<script src="js/app/kartei.js"></script>
@@ -93,7 +94,7 @@
 					<td colspan="2"><input type="button" value="Speichern" id="beleg-speichern" tabindex="0"
 						><input type="button" value="Abbrechen" id="beleg-abbrechen" tabindex="0"
 						><input type="button" value="Löschen" id="beleg-loeschen" tabindex="0"></td>
-				</tr><tr>
+				</tr><tr class="beleg-form">
 					<td colspan="2" class="check"><div>
 						<p><input type="checkbox" id="beleg-un" tabindex="0"
 							><label for="beleg-un">unvollständig</label></p>
@@ -109,9 +110,9 @@
 							><a href="#" class="icon-link icon-stern" tabindex="0"> </a
 							><a href="#" class="icon-link icon-stern" tabindex="0"> </a></p>
 					</div></td>
-				</tr><tr>
+				</tr><tr class="beleg-form">
 					<th colspan="2">DTA-Import</th>
-				</tr><tr>
+				</tr><tr class="beleg-form">
 					<td colspan="2"><input type="text" value="" spellcheck="false" id="beleg-dta" tabindex="0"
 						><input type="number" value="2" min="0" max="9999" spellcheck="false" id="beleg-dta-bis" tabindex="0"
 						><input type="button" value="Importieren" id="beleg-dta-button" tabindex="0"></td>
@@ -124,16 +125,21 @@
 						><span class="text-tools"
 							><a href="#" class="icon-link icon-tools-kopieren" title="Text kopieren" tabindex="-1"> </a
 							><a href="#" class="icon-link icon-tools-einfuegen" title="Text einfügen" tabindex="-1"> </a></span></th>
-				</tr><tr>
+				</tr><tr class="beleg-form">
 					<td><input type="text" value="" spellcheck="false" id="beleg-da" tabindex="0"></td>
 					<td><input type="text" value="" spellcheck="false" id="beleg-au" tabindex="0"></td>
+				</tr><tr class="beleg-lese aus">
+					<td id="beleg-lese-da"></td>
+					<td id="beleg-lese-au"></td>
 				</tr><tr>
 					<th colspan="2"><label for="beleg-bs">Beleg</label
 						><span class="text-tools"
 							><a href="#" class="icon-link icon-tools-kopieren" title="Text kopieren" tabindex="-1"> </a
 							><a href="#" class="icon-link icon-tools-einfuegen" title="Text einfügen" tabindex="-1"> </a></span></th>
-				</tr><tr>
+				</tr><tr class="beleg-form">
 					<td colspan="2"><textarea spellcheck="false" id="beleg-bs"></textarea></td>
+				</tr><tr class="beleg-lese aus">
+					<td colspan="2" id="beleg-lese-bs"></td>
 				</tr><tr>
 					<th><label for="beleg-bd">Bedeutung</label
 						><span class="text-tools"
@@ -143,23 +149,30 @@
 						><span class="text-tools"
 							><a href="#" class="icon-link icon-tools-kopieren" title="Text kopieren" tabindex="-1"> </a
 							><a href="#" class="icon-link icon-tools-einfuegen" title="Text einfügen" tabindex="-1"> </a></span></th>
-				</tr><tr>
+				</tr><tr class="beleg-form">
 					<td class="dropdown-cont"><textarea spellcheck="false" class="dropdown-feld" id="beleg-bd" tabindex="0"></textarea><a href="#" class="icon-link dropdown-link-td" title="Bedeutungen auflisten" tabindex="-1"> </a></td>
 					<td class="dropdown-cont"><textarea spellcheck="false" class="dropdown-feld" id="beleg-ts" tabindex="0"></textarea><a href="#" class="icon-link dropdown-link-td" title="Textsorten auflisten" tabindex="-1"> </a></td>
+				</tr><tr class="beleg-lese aus">
+					<td id="beleg-lese-bd"></td>
+					<td id="beleg-lese-ts"></td>
 				</tr><tr>
 					<th colspan="2"><label for="beleg-qu">Quelle</label
 						><span class="text-tools"
 							><a href="#" class="icon-link icon-tools-kopieren" title="Text kopieren" tabindex="-1"> </a
 							><a href="#" class="icon-link icon-tools-einfuegen" title="Text einfügen" tabindex="-1"> </a></span></th>
-				</tr><tr>
+				</tr><tr class="beleg-form">
 					<td colspan="2"><textarea spellcheck="false" id="beleg-qu"></textarea></td>
+				</tr><tr class="beleg-lese aus">
+					<td colspan="2" id="beleg-lese-qu"></td>
 				</tr><tr>
 					<th colspan="2"><label for="beleg-no">Notizen</label
 						><span class="text-tools"
 							><a href="#" class="icon-link icon-tools-kopieren" title="Text kopieren" tabindex="-1"> </a
 							><a href="#" class="icon-link icon-tools-einfuegen" title="Text einfügen" tabindex="-1"> </a></span></th>
-				</tr><tr>
+				</tr><tr class="beleg-form">
 					<td colspan="2"><textarea spellcheck="false" id="beleg-no"></textarea></td>
+				</tr><tr class="beleg-lese aus">
+					<td colspan="2" id="beleg-lese-no"></td>
 				</tr><tr>
 					<th colspan="2">Anhänge</th>
 				</tr><tr>
@@ -303,6 +316,8 @@
 					<section id="einstellungen-sec-karteikarten" class="aus">
 						<p><input type="checkbox" id="einstellung-unvollstaendig"
 							><label for="einstellung-unvollstaendig">neue Karteikarten als unvollständig markieren</label></p>
+						<p><input type="checkbox" id="einstellung-leseansicht"
+							><label for="einstellung-leseansicht">bestehende Karteikarten in der Leseansicht öffnen</label></p>
 					</section>
 				</div>
 			</div>
