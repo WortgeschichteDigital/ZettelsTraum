@@ -443,14 +443,16 @@
 	margin-bottom: 0;
 }
 
-.liste-wort {
+.liste-kopf mark {
+	background-color: transparent;
 	font-weight: bold;
 }
 
-.liste-details .liste-wort {
+.liste-details mark.wort {
 	border-radius: 3px;
 	padding: 0 3px;
 	background-color: var(--farbeGelb);
+	font-weight: bold;
 }
 
 div.liste-label {

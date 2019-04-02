@@ -84,14 +84,14 @@
 				<caption><span id="beleg-titel"
 					></span><span id="beleg-geaendert" class="aus"
 					>*</span><span class="beleg-opt-block"
-						><a href="#" id="beleg-link-leseansicht"
+						><a href="#" id="beleg-link-leseansicht" title="zur Leseansicht wechseln"
 							><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M 8 3 C 6.4492 3.0151 4.8879094 3.3692056 3.5371094 4.1347656 C 2.9987094 4.4854656 2.3523344 4.9381912 1.8652344 5.3945312 C 1.0987444 6.1451213 0.4427 7.0222531 0 8.0019531 C 1.2149 10.682053 3.8859187 12.645447 6.8242188 12.935547 C 8.7516188 13.153707 10.768591 12.820847 12.462891 11.867188 C 13.001291 11.516487 13.647666 11.063762 14.134766 10.607422 C 14.901256 9.8568419 15.5573 8.9816531 16 8.0019531 C 14.785 5.3219531 12.114181 3.3563063 9.1757812 3.0664062 C 8.7859013 3.0209263 8.39251 2.99999 8 3 z M 8 5 C 9.607 4.96439 11.0303 6.4033531 11 8.0019531 C 11.0515 9.7687531 9.2909813 11.292891 7.5507812 10.962891 C 5.7931812 10.756511 4.5587188 8.7835812 5.1367188 7.1132812 C 5.5058788 5.8836812 6.7125 4.9847 8 5 z M 8 7 A 1 1.0002 0 0 0 7 8.0019531 A 1 1.0002 0 0 0 8 9.0019531 A 1 1.0002 0 0 0 9 8.0019531 A 1 1.0002 0 0 0 8 7 z" transform="translate(4 4)"/></svg></a
-						><a href="#" id="beleg-link-drucken"
+						><a href="#" id="beleg-link-drucken" title="Karte drucken"
 							><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m4 1v2h8v-2h-8zm-2 3c-0.5 0-1 0.5-1 1v4c0 0.5 0.5 1 1 1h1v-2h10v2h1c0.5 0 1-0.5 1-1v-4c0-0.5-0.5-1-1-1h-12zm2 5v5h8v-5h-8z" fill="#212121"/></svg></a
 						></span
 				></caption>
 				<tr>
-					<td colspan="2"><input type="button" value="Speichern" id="beleg-speichern" tabindex="0"
+					<td colspan="2" class="buttons"><input type="button" value="Speichern" id="beleg-speichern" tabindex="0"
 						><input type="button" value="Abbrechen" id="beleg-abbrechen" tabindex="0"
 						><input type="button" value="Löschen" id="beleg-loeschen" tabindex="0"></td>
 				</tr><tr class="beleg-form">
@@ -110,6 +110,8 @@
 							><a href="#" class="icon-link icon-stern" tabindex="0"> </a
 							><a href="#" class="icon-link icon-stern" tabindex="0"> </a></p>
 					</div></td>
+				</tr><tr class="beleg-lese aus">
+					<td colspan="2" id="beleg-lese-meta"></td>
 				</tr><tr class="beleg-form">
 					<th colspan="2">DTA-Import</th>
 				</tr><tr class="beleg-form">

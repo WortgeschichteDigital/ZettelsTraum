@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg width="24" height="24" version="1.1" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
 <metadata>
-<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:dc="http://purl.org/dc/elements/1.1/"><rdf:Description dc:creator="Nico Dorn" dc:publisher="Zentrum für digitale Lexikographie der deutschen Sprache" dc:rights="GNU General Public License v3.0"></rdf:Description></rdf:RDF>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:dc="http://purl.org/dc/elements/1.1/"><rdf:Description dc:creator="Nico Dorn" dc:publisher="Akademie der Wissenschaften zu Göttingen, 'Wortgeschichte digital' ('Zentrum für digitale Lexikographie der deutschen Sprache')" dc:rights="GNU General Public License v3.0"></rdf:Description></rdf:RDF>
 </metadata>
 <path d="m6.5 4a3.5 3.5 0 0 0-3.5 3.5 3.5 3.5 0 0 0 3.5 3.5 3.5 3.5 0 0 0 3.5-3.5 3.5 3.5 0 0 0-3.5-3.5zm7.5 0v7h7v-7h-7zm-2.5 9-3.5 7h3.5 3.5l-3.5-7z" fill="#212121" fill-rule="evenodd" style="paint-order:normal"/>
 </svg>

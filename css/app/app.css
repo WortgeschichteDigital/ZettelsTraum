@@ -49,6 +49,10 @@ h3:first-child {
 	mask-position: center;
 }
 
+mark {
+	color: var(--text);
+}
+
 p {
 	margin: 0 0 10px 0;
 }
@@ -253,10 +257,6 @@ textarea:focus {
 	text-decoration: underline double;
 }
 
-.dta-durchgestrichen {
-	text-decoration: line-through;
-}
-
 .dta-gesperrt {
 	letter-spacing: 0.125em;
 }
@@ -271,10 +271,6 @@ textarea:focus {
 
 .dta-kapitaelchen {
 	font-variant: small-caps;
-}
-
-.dta-kleiner {
-	font-size: smaller;
 }
 
 .dta-rot {

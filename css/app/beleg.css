@@ -67,8 +67,8 @@
 	width: auto;
 }
 
-#beleg td.check {
-	padding-top: 30px;
+#beleg td.buttons {
+	padding-bottom: 30px;
 }
 
 #beleg td.check div {
@@ -198,3 +198,10 @@ textarea#beleg-bs {
 	padding-top: 10px;
 }
 
+#beleg .beleg-lese td#beleg-lese-meta {
+	padding-top: 0;
+}
+
+#beleg-lese-meta div {
+	padding-left: 6px;
+}

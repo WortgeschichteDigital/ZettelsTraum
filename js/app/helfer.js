@@ -178,12 +178,10 @@ let helfer = {
 			"dta-antiqua": "font-family: sans-serif",
 			"dta-blau": "color: blue",
 			"dta-doppelt": "text-decoration: underline double",
-			"dta-durchgestrichen": "text-decoration: line-through",
 			"dta-gesperrt": "letter-spacing: 4px",
 			"dta-groesser": "font-size: 20px",
 			"dta-initiale": "font-size: 24px",
 			"dta-kapitaelchen": "font-variant: small-caps",
-			"dta-kleiner": "font-size: 11px",
 			"dta-rot": "color: red",
 		};
 		for (let style in styles) {

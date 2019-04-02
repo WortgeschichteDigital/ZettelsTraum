@@ -659,12 +659,12 @@ let beleg = {
 				class: "dta-rot",
 			},
 			"#s": {
-				ele: "span",
-				class: "dta-durchgestrichen",
+				ele: "s",
+				class: "",
 			},
 			"#smaller": {
-				ele: "smaller",
-				class: "dta-kleiner",
+				ele: "small",
+				class: "",
 			},
 			"#sub": {
 				ele: "sub",
@@ -693,7 +693,7 @@ let beleg = {
 			if ( !rend.hasOwnProperty(typ) ) {
 				continue;
 			}
-			let reg = new RegExp(`\\[(${typ})\\](.+?)\\[\\/${typ}\\]`, "g");
+			const reg = new RegExp(`\\[(${typ})\\](.+?)\\[\\/${typ}\\]`, "g");
 			text = text.replace(reg, function(m, p1, p2) {
 				let start = `<${rend[p1].ele}`;
 				if (rend[p1].class) {
@@ -971,14 +971,29 @@ let beleg = {
 	//     (Link, auf den geklickt wurde)
 	toolsKopieren (link) {
 		// Datensatz ermitteln. Ist der Wert gefüllt?
-		const ds = link.parentNode.previousSibling.getAttribute("for").replace(/^beleg-/, "");
-		if (!beleg.data[ds]) {
+		const ds = link.parentNode.previousSibling.getAttribute("for").replace(/^beleg-/, ""),
+			text = beleg.data[ds];
+		if (!text) {
 			return;
 		}
+		beleg.toolsKopierenExec(ds, text, document.querySelector(`#beleg-lese-${ds} p`) );
+	},
+	// führt die Kopieroperation aus (eigene Funktion,
+	// weil sie auch für die Kopierfunktion im Beleg benutzt wird)
+	//   ds = String
+	//     (Bezeichner des Datensatzes)
+	//   text = String
+	//     (der komplette Feldtext, wie er in der DB steht)
+	//   ele = Element
+	//     (ein Element auf der 1. Ebene im Kopierbereich)
+	toolsKopierenExec (ds, text, ele) {
+		// Zeilenumbrüche im Text aufbereiten
+		text = text.replace(/\n\s*\n/g, "\n");
+		// clipboard initialisieren
 		const {clipboard} = require("electron");
-		// Ist Text ausgewählt?
+		// Ist Text ausgewählt und ist er im Bereich des Kopier-Icons?
 		if (window.getSelection().toString() &&
-				popup.getTargetSelection([document.querySelector(`#beleg-lese-${ds} p`)]) ) {
+				popup.getTargetSelection([ele]) ) {
 			clipboard.write({
 				text: popup.textauswahl.text,
 				html: helfer.clipboardHtml(popup.textauswahl.html),
@@ -987,17 +1002,17 @@ let beleg = {
 		}
 		// Kein Text ausgewählt => das gesamte Feld wird kopiert
 		if (ds === "bs") { // Beleg
-			const p = beleg.data[ds].replace(/\n\s*\n/g, "\n").split("\n");
+			const p = text.split("\n");
 			let html = "";
 			p.forEach(function(i) {
 				html += `<p>${i}</p>`;
 			});
 			clipboard.write({
-				text: beleg.data[ds],
+				text: text,
 				html: helfer.clipboardHtml(html),
 			});
 		} else { // alle anderen Felder
-			clipboard.writeText(beleg.data[ds]);
+			clipboard.writeText(text);
 		}
 	},
 	// Tool Einfügen: Text möglichst unter Beibehaltung der Formatierung einfügen
@@ -1043,8 +1058,121 @@ let beleg = {
 	//   html = String
 	//     (Text mit HTML-Tags, der aufbereitet und dann eingefügt werden soll)
 	toolsEinfuegenHtml (html) {
-		// TODO
-		return html;
+		// Inline-Styles löschen (widerspricht sonst der Content-Security-Policy)
+		html = html.replace(/<([a-zA-Z0-9]+) .+?>/g, function(m, p1) {
+			return `<${p1}>`;
+		});
+		// HTML in temporären Container schieben
+		let container = document.createElement("div");
+		container.innerHTML = html;
+		// Inline-Tags, die erhalten bleiben bzw. ersetzt werden sollen
+		const inline_keep = [
+			"B",
+			"CITE",
+			"DEL",
+			"DFN",
+			"EM",
+			"I",
+			"MARK",
+			"S",
+			"SMALL",
+			"STRONG",
+			"SUB",
+			"SUP",
+			"U",
+			"VAR",
+		];
+		const speziell = {
+			"BIG": { // obsolete!
+				ele: "span",
+				class: "dta-groesser",
+			},
+			"DD": {
+				ele: "b",
+				class: "",
+			},
+			"H1": {
+				ele: "span",
+				class: "dta-groesser",
+			},
+			"H2": {
+				ele: "span",
+				class: "dta-groesser",
+			},
+			"H3": {
+				ele: "span",
+				class: "dta-groesser",
+			},
+			"H4": {
+				ele: "span",
+				class: "dta-groesser",
+			},
+			"H5": {
+				ele: "span",
+				class: "dta-groesser",
+			},
+			"H6": {
+				ele: "span",
+				class: "dta-groesser",
+			},
+		};
+		// Text extrahieren
+		let text = "";
+		container.childNodes.forEach(function(i) {
+			ana(i);
+		});
+		// erhaltene Inline-Auszeichnungen korrigieren
+		for (let tag in speziell) {
+			if ( !speziell.hasOwnProperty(tag) ) {
+				continue;
+			}
+			const reg = new RegExp(`\\[#(${tag})\\](.+?)\\[\\/${tag}\\]`, "g");
+			text = text.replace(reg, function(m, p1, p2) {
+				let start = `<${speziell[p1].ele}`;
+				if (speziell[p1].class) {
+					start += ` class="${speziell[p1].class}"`;
+				} 
+				return `${start}>${p2}</${speziell[p1].ele}>`;
+			});
+		}
+		for (let i = 0, len = inline_keep.length; i < len; i++) {
+			const tag = inline_keep[i],
+				reg = new RegExp(`\\[#${tag}\\](.+?)\\[\\/${tag}\\]`, "g");
+			text = text.replace(reg, function(m, p1) {
+				return `<${tag.toLowerCase()}>${p1}</${tag.toLowerCase()}>`;
+			});
+		}
+		// viele Absätze am Stück bereinigen
+		text = text.replace(/\n{3,}/g, "\n\n");
+		// gereinigtes HTML zurückgeben
+		return helfer.textTrim(text, true);
+		// rekursive Analyse der Tags
+		function ana (ele) {
+			if (ele.nodeType === 3) { // Text
+				text += ele.nodeValue.replace(/\n/g, "");
+			} else if (ele.nodeType === 1) { // Element
+				// Inline-Elemente ggf. gesondert behandeln
+				if (inline_keep.indexOf(ele.nodeName) >= 0 || speziell[ele.nodeName]) {
+					ele.insertBefore(document.createTextNode(`[#${ele.nodeName}]`), ele.firstChild);
+					ele.appendChild( document.createTextNode(`[/${ele.nodeName}]`) );
+				} else if (ele.nodeName === "Q") {
+					ele.insertBefore(document.createTextNode('"'), ele.firstChild);
+					ele.appendChild( document.createTextNode('"') );
+				} else if (ele.nodeName === "LI") {
+					ele.insertBefore(document.createTextNode("– "), ele.firstChild);
+				}
+				// Block-Level-Elemente (und andere), die eine Sonderbehandlung benötigen
+				if ( /^(DD|DT|FIGCAPTION|HR|LI|TR)$/.test(ele.nodeName) ) { // Zeilenumbruch
+					text += "\n";
+				} else if ( /^(ADDRESS|ARTICLE|ASIDE|BLOCKQUOTE|DETAILS|DIALOG|DIV|DL|FIELDSET|FIGURE|FOOTER|FORM|H([1-6]{1})|HEADER|MAIN|NAV|OL|P|PRE|SECTION|TABLE|UL)$/.test(ele.nodeName) ) { // Absätze
+					text = helfer.textTrim(text, false);
+					text += "\n\n";
+				}
+				ele.childNodes.forEach(function(i) {
+					ana(i);
+				});
+			}
+		}
 	},
 	// Bewertung des Belegs vor- od. zurücknehmen
 	//   stern = Element
@@ -1127,6 +1255,9 @@ let beleg = {
 		let an = true;
 		if ( button.classList.contains("aktiv") ) {
 			an = false;
+			button.title = "zur Leseansicht wechseln";
+		} else {
+			button.title = "zur Formularansicht wechseln";
 		}
 		button.classList.toggle("aktiv");
 		document.querySelectorAll(".beleg-form").forEach(function(i) {
@@ -1155,11 +1286,22 @@ let beleg = {
 		if (an) {
 			beleg.leseFill();
 		} else if (manuell) {
+			document.querySelectorAll("#beleg textarea").forEach( (textarea) => helfer.textareaGrow(textarea) );
 			document.getElementById("beleg-da").focus();
 		}
 	},
 	// aktuelle Werte des Belegs in die Leseansicht eintragen
 	leseFill () {
+		// Meta-Infos
+		const cont = document.getElementById("beleg-lese-meta");
+		helfer.keineKinder(cont);
+		liste.metainfosErstellen(beleg.data, cont, "");
+		if ( !cont.hasChildNodes() ) {
+			cont.parentNode.classList.add("aus");
+		} else {
+			cont.parentNode.classList.remove("aus");
+		}
+		// Datensätze, die String sind
 		for (let wert in beleg.data) {
 			if ( !beleg.data.hasOwnProperty(wert) ) {
 				continue;
@@ -1188,7 +1330,7 @@ let beleg = {
 		}
 		// Klick-Events an alles Links hängen
 		document.querySelectorAll("#beleg .link").forEach(function(i) {
-			liste.linksOeffnenListener(i);
+			liste.linksOeffnen(i);
 		});
 	},
 };

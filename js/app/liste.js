@@ -223,7 +223,7 @@ let liste = {
 				// Notizen
 				liste.notizenErstellen(data.ka[id].no, div);
 				// Meta-Infos
-				liste.metainfosErstellen(data.ka[id], div);
+				liste.metainfosErstellen(data.ka[id], div, "liste-meta");
 			}
 			// Jahrzehnt hoch- bzw. runterzählen
 			if (optionen.data.belegliste.sort_aufwaerts) {
@@ -537,7 +537,7 @@ let liste = {
 			return schnitt;
 		}
 		let reg = new RegExp(`[a-zäöüßſ=\-]*(${helfer.formVariRegExp()})[a-zäöüßſ=\-]*`, "gi");
-		schnitt = schnitt.replace(reg, (m) => `<span class="liste-wort">${m}</span>`);
+		schnitt = schnitt.replace(reg, (m) => `<mark class="wort">${m}</mark>`);
 		return schnitt;
 	},
 	// einen einzelnen Beleg durch Klick auf den Belegkopf umschalten
@@ -610,7 +610,7 @@ let liste = {
 		// Klick-Events an alles Links hängen
 		let links = div.querySelectorAll(".link");
 		for (let i = 0, len = links.length; i < len; i++) {
-			liste.linksOeffnenListener(links[i]);
+			liste.linksOeffnen(links[i]);
 		}
 		// <div> zurückgeben
 		return div;
@@ -672,15 +672,20 @@ let liste = {
 	//   beleg = Object
 	//     (Datenobjekt mit allen Werte der Karte, die dargestellt werden soll)
 	//   cont = Element
-	//     (das ist der aktuelle Detailblock)
-	metainfosErstellen (beleg, cont) {
+	//     (an dieses Element soll der Container gehängt werden)
+	//   klasse = String
+	//     (class des Elements, an das die Icons gehängt werden;
+	//     entweder "liste-meta" oder "")
+	metainfosErstellen (beleg, cont, klasse) {
 		// Gibt es überhaupt Meta-Infos, die angezeigt werden müssen
 		if (!beleg.un && !beleg.ko && !beleg.bu && !beleg.bc && !beleg.be && !beleg.an.length) {
 			return;
 		}
 		// es gibt also Infos
 		let div = document.createElement("div");
-		div.classList.add("liste-meta");
+		if (klasse) {
+			div.classList.add(klasse);
+		}
 		cont.appendChild(div);
 		// Karte unvollständig?
 		if (beleg.un) {
@@ -731,7 +736,7 @@ let liste = {
 			}
 		}
 		// Anhänge?
-		if (beleg.an.length) {
+		if (beleg.an.length && klasse) {
 			let cont_span = document.createElement("span");
 			anhaenge.scan(beleg.an);
 			anhaenge.makeIconList(beleg.an, cont_span);
@@ -759,24 +764,18 @@ let liste = {
 	// Links in einem externen Browser-Fenster öffnen
 	//   link = Element
 	//     (der Link, auf den geklickt wurde)
-	linksOeffnenListener (link) {
+	linksOeffnen (link) {
 		link.addEventListener("click", function(evt) {
 			evt.preventDefault();
 			let url = this.title;
-			liste.linksOeffnen(url);
+			// URL ggf. aufbereiten
+			if ( !url.match(/^http/) ) {
+				url = `https://${url}`;
+			}
+			// URL im Browser öffnen
+			const {shell} = require("electron");
+			shell.openExternal(url);
 		});
-	},
-	// Link im Standardbrowser öffnen
-	//   url = String
-	//     (die URL, die aufgerufen werden soll)
-	linksOeffnen (url) {
-		// URL ggf. aufbereiten
-		if ( !url.match(/^http/) ) {
-			url = `https://${url}`;
-		}
-		// URL im Browser öffnen
-		const {shell} = require("electron");
-		shell.openExternal(url);
 	},
 	// Klick-Event zum Öffnen des Karteikarten-Formulars
 	//   a = Element
@@ -1059,44 +1058,8 @@ let liste = {
 		icon.addEventListener("click", function(evt) {
 			evt.preventDefault();
 			let ds = this.dataset.ds.split("|"),
-				text = data.ka[ ds[0] ][ ds[1] ].replace(/\n\s*\n/g, "\n");
-			const {clipboard} = require("electron");
-			if (ds[1] !== "bs") {
-				clipboard.writeText(text.replace(/\n/g, "\n\n"));
-				return;
-			}
-			// Sonderbehandlung für den Belegtext
-			let html = "";
-			// Wurde Text ausgewählt?
-			let sel = window.getSelection();
-			if ( sel.toString() ) {
-				// Ist der ausgewählte Text unterhalb des Kopierknotens?
-				let div = this.parentNode,
-					parent = sel.anchorNode;
-				while (parent.nodeName !== "DIV" &&
-						parent.nodeName !== "BODY") { // body nur zur Sicherheit, damit man hier nicht unter Umständen in einen Fehler reinläuft
-					parent = parent.parentNode;
-				}
-				// Oh ja, der Text ist unterhalb des Kopierknotens!
-				// => Nur den ausgewählten Text kopieren.
-				if (div === parent) {
-					let range = sel.getRangeAt(0),
-						container = document.createElement("div");
-					container.appendChild(range.cloneContents());
-					text = container.innerHTML.replace(/<\/p><p>/g, "\n");
-					html = container.innerHTML;
-				}
-			}
-			// Wurde kein Text ausgewählt => Absätze erzeugen.
-			if (!html) {
-				text.split("\n").forEach(function(i) {
-					html += `<p>${i}</p>`;
-				});
-			}
-			clipboard.write({
-				text: text.replace(/<.+?>/g, "").replace(/\n/g, "\n\n"),
-				html: helfer.clipboardHtml(html),
-			});
+				text = data.ka[ ds[0] ][ ds[1] ];
+			beleg.toolsKopierenExec(ds[1], text, this);
 		});
 	},
 };
