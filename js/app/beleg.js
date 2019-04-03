@@ -1024,6 +1024,7 @@ let beleg = {
 		const {clipboard} = require("electron"),
 			formate = clipboard.availableFormats(),
 			id = link.parentNode.previousSibling.getAttribute("for"),
+			ds = id.replace(/^beleg-/, ""),
 			feld = document.getElementById(id);
 		// Text auslesen
 		let text = "";
@@ -1037,20 +1038,20 @@ let beleg = {
 			dialog.oeffnen("confirm", function() {
 				if (dialog.antwort) {
 					feld.value = text;
-					helfer.textareaGrow(feld);
 				} else if (dialog.antwort === false && feld.type === "text") { // Input-Text
 					feld.value += ` ${text}`;
-					helfer.textareaGrow(feld);
 				} else if (dialog.antwort === false) { // Textareas
 					feld.value += `\n\n${text}`;
-					helfer.textareaGrow(feld);
 				}
+				beleg.data[ds] = feld.value;
+				helfer.textareaGrow(feld);
 				beleg.belegGeaendert(true);
 			});
 			dialog.text("Das Feld enthält schon Text. Soll er überschrieben werden?\n(Bei <i>Nein</i> wird der Text ergänzt.)");
 			return;
 		}
 		feld.value = text;
+		beleg.data[ds] = text;
 		helfer.textareaGrow(feld);
 		beleg.belegGeaendert(true);
 	},

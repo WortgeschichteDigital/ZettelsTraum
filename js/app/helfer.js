@@ -249,9 +249,28 @@ let helfer = {
 	formVariRegExp () {
 		let varianten = [];
 		data.fv.forEach(function(i) {
-			varianten.push( helfer.escapeRegExp(i.va) );
+			varianten.push( helfer.formVariSonderzeichen( helfer.escapeRegExp(i.va) ) );
 		});
 		return varianten.join("|");
+	},
+	// spezielle Buchstaben für einen regulären Suchausdruck um Sonderzeichen ergänzen
+	//   wort = String
+	//     (die Zeichenkette, mit der gesucht werden soll
+	formVariSonderzeichen (wort) {
+		return wort.replace(/ä|ö|ü|s/g, function(m) {
+			switch (m) {
+				case "e":
+					return "(e|ẽ)";
+				case "s":
+					return "(s|ſ)";
+				case "ä":
+					return "(ä|aͤ)";
+				case "ö":
+					return "(ö|oͤ)";
+				case "ü":
+					return "(ü|uͤ)";
+			}
+		});
 	},
 	// Tastatur-Events abfangen und verarbeiten
 	//   evt = Event-Objekt

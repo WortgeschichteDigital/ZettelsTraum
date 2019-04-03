@@ -1,12 +1,8 @@
 {
 	"name": "zettelstraum",
 	"productName": "Zettel's Traum",
-	"version": "0.0.36",
-	"description": "Wortkartei-App von \"Wortgeschichte digital\", dem an der \"Akademie der Wissenschaften zu Göttingen\" angesiedelten Teilprojekt des (\"Zentrums für digitale Lexikographie der deutschen Sprache\")",
-	"main": "main.js",
-	"scripts": {
-		"start": "electron ."
-	},
+	"version": "0.0.37",
+	"description": "Wortkartei-App von 'Wortgeschichte digital', dem an der 'Akademie der Wissenschaften zu Göttingen' angesiedelten Teilprojekt des ('Zentrums für digitale Lexikographie der deutschen Sprache')",
 	"keywords": [
 		"Kartei",
 		"Karteikarten",
@@ -16,5 +12,16 @@
 		"ZDL"
 	],
 	"author": "Nico Dorn <ndorn@gwdg.de>",
-	"license": "GNU General Public License v3.0"
+	"license": "GPL-3.0",
+	"homepage": "https://adw-goe.de/forschung/weitere-forschungsprojekte/wortgeschichte-digital-teilprojekt-im-zdl/",
+	"main": "main.js",
+	"scripts": {
+		"start": "electron .",
+		"package-win": "electron-packager . zettelstraum --overwrite --asar --platform=win32 --arch=x64 --icon=img/icon/win/icon.ico --prune=true --out=../dist --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"Zettel's Traum\""
+	},
+	"devDependencies": {
+		"electron": "^4.1.3",
+		"electron-packager": "^13.1.1",
+		"electron-winstaller": "^3.0.4"
+	}
 }

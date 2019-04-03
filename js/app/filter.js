@@ -380,6 +380,7 @@ let filter = {
 	// Zeile mit Filterlogik aufbauen
 	aufbauenFilterlogik () {
 		let p = document.createElement("p");
+		p.classList.add("no-indent");
 		p.textContent = "Filterlogik: ";
 		let inputs = ["inklusiv", "exklusiv"];
 		for (let i = 0, len = inputs.length; i < len; i++) {
@@ -534,6 +535,29 @@ let filter = {
 			filter_bewertung.dataset.bewertung = bak["filter-bewertung"];
 		}
 	},
+	// beim Ändern eines Filters die Optionen anpassen
+	//   checkbox = Element
+	//     (Input-Element, das geändert wurde [wohl immer eine Checkbox])
+	filterOptionen (checkbox) {
+		checkbox.addEventListener("change", function() {
+			const opt = this.id.replace(/^filter-/, "");
+			optionen.data.filter[opt] = this.checked;
+			optionen.speichern(false);
+		});
+	},
+	// erweiterte Filter umschalten
+	toggleErweiterte () {
+		document.getElementById("filter-erweiterte").addEventListener("click", function(evt) {
+			evt.preventDefault();
+			this.classList.toggle("aktiv");
+			const cont = document.getElementById("filter-erweiterte-cont");
+			if ( this.classList.contains("aktiv") ) {
+				cont.classList.remove("aus");
+			} else {
+				cont.classList.add("aus");
+			}
+		});
+	},
 	// speichert den aktiven Timeout für das Anwenden der Filter
 	// (wichtig für den Volltextfilter, der nicht sofort, sondern
 	// nur mit Verzögerung angewandt werden soll)
@@ -552,6 +576,14 @@ let filter = {
 			clearTimeout(filter.anwendenTimeout);
 			filter.anwendenTimeout = setTimeout( () => liste.status(false), timeout);
 		});
+		// Text-Felder sollten auch auf Enter hören
+		if (input.type === "text") {
+			input.addEventListener("keydown", function(evt) {
+				if (evt.which === 13) { // Enter
+					liste.status(false);
+				}
+			});
+		}
 	},
 	anwendenSterne (stern) {
 		let filter_bewertung = document.getElementById("filter-bewertung"),
@@ -693,13 +725,11 @@ let filter = {
 			be = parseInt(filter_bewertung.dataset.bewertung, 10);
 		}
 		// Karten filtern
-		let karten_gefiltert = [],
-			vt = helfer.textTrim(document.getElementById("filter-volltext").value),
-			vt_reg = new RegExp(helfer.escapeRegExp( helfer.textTrim(vt) ), "i");
+		let karten_gefiltert = [];
 		x: for (let i = 0, len = karten.length; i < len; i++) {
 			let id = karten[i];
 			// Volltext
-			if ( filter.aktiveFilter.volltext && !volltext(id) ) {
+			if ( filter.aktiveFilter.volltext && !filter.kartenFilternVolltext(id) ) {
 				continue;
 			}
 			// Zeitraum
@@ -776,18 +806,33 @@ let filter = {
 			karten_gefiltert.push(id);
 		}
 		return karten_gefiltert;
-		// Funktion Volltext
-		function volltext (id) {
-			let okay = false;
-			const ds = ["au", "bd", "bs", "da", "no", "qu", "ts"];
-			for (let i = 0, len = ds.length; i < len; i++) {
-				if ( data.ka[id][ ds[i] ].match(vt_reg) ) {
-					okay = true;
-					break;
-				}
-			}
-			return okay;
+	},
+	// Volltextfilter
+	kartenFilternVolltext (id) {
+		// Filter-Text ermitteln
+		const vt = helfer.textTrim(document.getElementById("filter-volltext").value, true);
+		// kein Filtertext
+		if (!vt) {
+			return true;
 		}
+		// erweiterte Filter ermitteln
+		const erweiterte = document.getElementById("filter-erweiterte").classList.contains("aktiv");
+		let insensitive = "i";
+		if ( erweiterte && document.getElementById("filter-text-genau").checked ) {
+			insensitive = "";
+		}
+		const ds = ["au", "bd", "bs", "da", "no", "qu", "ts"];
+		// filtern
+		const vt_reg = new RegExp(helfer.formVariSonderzeichen ( helfer.escapeRegExp(vt) ), insensitive);
+		let okay = false;
+		for (let i = 0, len = ds.length; i < len; i++) {
+			const text_rein = data.ka[id][ ds[i] ].replace(/<.+?>/g, "");
+			if ( text_rein.match(vt_reg) ) {
+				okay = true;
+				break;
+			}
+		}
+		return okay;
 	},
 	// ermitteln, welche Jahre durch den Filter gelassen werden
 	kartenFilternZeitraum () {

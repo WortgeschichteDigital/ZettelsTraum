@@ -536,7 +536,7 @@ let liste = {
 		if (!optionen.data.belegliste.wort_hervorheben) {
 			return schnitt;
 		}
-		let reg = new RegExp(`[a-zäöüßſ=\-]*(${helfer.formVariRegExp()})[a-zäöüßſ=\-]*`, "gi");
+		const reg = new RegExp(`[^\\s/\\\\([{<]*(${helfer.formVariRegExp()})[^\\s"/\\\\)\\\]!?.:,;>]*`, "gi");
 		schnitt = schnitt.replace(reg, (m) => `<mark class="wort">${m}</mark>`);
 		return schnitt;
 	},

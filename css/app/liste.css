@@ -136,32 +136,48 @@
 }
 
 .filter-cont p {
-	padding-left: 25px; /* sonst wird der outline links abgeschnitten; vgl. .filter-cont */
+	margin-bottom: 0;
+	padding: 0 0 5px 25px; /* sonst wird der outline links abgeschnitten; vgl. .filter-cont */
 	text-indent: -24px;
 }
 
+.filter-cont p.no-indent {
+	margin-bottom: 10px;
+	padding: 0;
+	text-indent: 0;
+}
+
+.filter-cont p.small {
+	margin-bottom: 5px;
+}
+
+.filter-cont p[class^="filter-baum"] {
+	border-left: 1px dotted var(--linie);
+}
+
 .filter-cont p.filter-baum1 {
-	padding-left: 49px;
+	padding-left: 41px;
+	margin-left: 8px;
 }
 
 .filter-cont p.filter-baum2 {
-	padding-left: 73px;
+	padding-left: 40px;
+	margin-left: 33px
 }
 
 .filter-cont p.filter-baum3 {
-	padding-left: 97px;
+	padding-left: 39px;
+	margin-left: 58px;
 }
 
 .filter-cont p.filter-baum4 {
-	padding-left: 121px;
+	padding-left: 38px;
+	margin-left: 83px
 }
 
 .filter-cont p.filter-baum5 {
-	padding-left: 145px;
-}
-
-.filter-cont p.markierung {
-	margin-bottom: 5px;
+	padding-left: 37px;
+	margin-left: 108px;
 }
 
 .filter-keine-belege {
@@ -179,6 +195,23 @@
 
 #filter-volltext {
 	width: calc(100% - 12px);
+}
+
+#filter-erweiterte {
+	padding-left: 24px;
+	background: url(../../img/erweiterte-auf.svg) no-repeat left -2px;
+}
+
+#filter-erweiterte.aktiv {
+	background-image: url(../../img/erweiterte-zu.svg);
+}
+
+#filter-erweiterte-cont {
+	padding-left: 24px;
+}
+
+#filter-erweiterte-cont p {
+	margin-bottom: 5px;
 }
 
 #liste-filter input[type="radio"] {

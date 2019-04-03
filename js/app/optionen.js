@@ -69,6 +69,8 @@ let optionen = {
 		},
 		// Einstellungen in der Filterleiste
 		filter: {
+			// erweiterte Suche: Groß- und Kleinschreibung im Text beachten
+			"text-genau": false,
 			// speichert den gewünschten Zeitintervall, der in der Filterliste gewählt wurde
 			zeitraum: "100",
 			// inklusive Logik sollte der exklusiven vorgezogen werden (betrifft "Verschiedenes")
@@ -114,6 +116,11 @@ let optionen = {
 				filter_zeitraum[i].checked = false;
 			}
 		}
+		// andere Filter-Optionen in der Filterleiste anpassen
+		document.querySelectorAll(".filter-optionen").forEach(function(i) {
+			const opt = i.id.replace(/^filter-/, "");
+			i.checked = optionen.data.filter[opt];
+		});
 		// Icons und Text im Header der Belegliste anpassen
 		liste.headerFilterAnzeige(false); // hier auch die Anzeige der Filterleiste anpassen
 		liste.headerSortierenAnzeige();
@@ -228,7 +235,9 @@ let optionen = {
 	},
 	// letzten Pfad speichern
 	aendereLetzterPfad () {
-		let pfad = kartei.pfad.match(/^.+\//)[0];
+		const path = require("path"),
+			reg = new RegExp(`^.+\\${path.sep}`),
+			pfad = kartei.pfad.match(reg)[0];
 		optionen.data.letzter_pfad = pfad;
 		optionen.speichern(false);
 	},

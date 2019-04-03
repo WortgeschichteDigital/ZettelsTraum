@@ -91,6 +91,8 @@ window.addEventListener("load", function() {
 		filter.anzeigeUmschalten(a);
 		filter.ctrlResetBlock(a.lastChild);
 	});
+	filter.toggleErweiterte();
+	document.querySelectorAll(".filter-optionen").forEach( (input) => filter.filterOptionen(input) );
 	filter.anwenden( document.getElementById("filter-volltext") );
 	let filter_zeitraum = document.getElementsByName("filter-zeitraum");
 	for (let i = 0, len = filter_zeitraum.length; i < len; i++) {

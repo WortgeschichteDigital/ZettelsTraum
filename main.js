@@ -44,6 +44,7 @@ let layoutMenu = [
 				label: "Beenden",
 				icon: path.join(__dirname, "img", "menu", "programm-beenden.png"),
 				role: "quit",
+				accelerator: "CommandOrControl+Q",
 			},
 		],
 	},
@@ -51,9 +52,10 @@ let layoutMenu = [
 		label: "&Kartei",
 		submenu: [
 			{
-				label: "Erstellen", accelerator: "CommandOrControl+E",
+				label: "Erstellen",
 				icon: path.join(__dirname, "img", "menu", "kartei-erstellen.png"),
 				click: () => win.webContents.send("kartei-erstellen"),
+				accelerator: "CommandOrControl+E",
 			},
 			{ type: "separator" },
 			{
@@ -257,7 +259,7 @@ let layoutMenu = [
 ];
 
 // ggf. Developer-Menü ergänzen
-if (!app.isPackaged) {
+if (true || !app.isPackaged) { // TODO Dev-Tools
 	layoutMenu.push({
 		label: "&Dev",
 		submenu: [
@@ -485,7 +487,7 @@ fenster = {
 			show: false,
 			webPreferences: {
 				nodeIntegration: true,
-				devTools: app.isPackaged ? false : true,
+// 				devTools: app.isPackaged ? false : true, // TODO Dev-Tools
 				defaultEncoding: "utf-8",
 			},
 		});
@@ -520,7 +522,7 @@ fenster = {
 			show: false,
 			webPreferences: {
 				nodeIntegration: true,
-				devTools: app.isPackaged ? false : true,
+// 				devTools: app.isPackaged ? false : true, // TODO Dev-Tools
 				defaultEncoding: "utf-8",
 			},
 		});
@@ -547,7 +549,7 @@ fenster = {
 			show: false,
 			webPreferences: {
 				nodeIntegration: true,
-				devTools: app.isPackaged ? false : true,
+// 				devTools: app.isPackaged ? false : true, // TODO Dev-Tools
 				defaultEncoding: "utf-8",
 			},
 		});
@@ -584,7 +586,7 @@ fenster = {
 			show: false,
 			webPreferences: {
 				nodeIntegration: true,
-				devTools: app.isPackaged ? false : true,
+// 				devTools: app.isPackaged ? false : true, // TODO Dev-Tools
 				defaultEncoding: "utf-8",
 			},
 		});
@@ -614,7 +616,7 @@ fenster = {
 			show: false,
 			webPreferences: {
 				nodeIntegration: true,
-				devTools: app.isPackaged ? false : true,
+// 				devTools: app.isPackaged ? false : true, // TODO Dev-Tools
 				defaultEncoding: "utf-8",
 			},
 		});
