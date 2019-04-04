@@ -39,7 +39,7 @@ let liste = {
 			koepfe_vor = document.querySelectorAll(".liste-kopf");
 		for (let i = 0, len = koepfe_vor.length; i < len; i++) {
 			let id = koepfe_vor[i].dataset.id;
-			if ( koepfe_vor[i].classList.contains("schnitt-offen") ) {
+			if (koepfe_vor[i].classList.contains("schnitt-offen")) {
 				offen[id] = true;
 			} else {
 				offen[id] = false;
@@ -75,7 +75,7 @@ let liste = {
 			if (beleg_unsichtbar && !optionen.data.einstellungen["nicht-karte-gefiltert"]) {
 				dialog.oeffnen("alert", null);
 				dialog.text("Der Beleg wurde angelegt.\nWegen der aktuellen Filterregeln erscheint er jedoch nicht in der Belegliste.");
-				document.getElementById("dialog-text").appendChild( optionen.shortcut("Meldung nicht mehr anzeigen", "nicht-karte-gefiltert") );
+				document.getElementById("dialog-text").appendChild(optionen.shortcut("Meldung nicht mehr anzeigen", "nicht-karte-gefiltert"));
 			} else if (!beleg_unsichtbar) { // zum Beleg scrollen
 				let id = liste.statusNeu; // wird unten geleert, darum hier zwischenspeichern
 				setTimeout(function() {
@@ -98,8 +98,8 @@ let liste = {
 			return true;
 		}
 		function markSetzen (kopf) {
-			setTimeout( () => kopf.classList.add("hinweis-beleg"), 0);
-			setTimeout( () => kopf.classList.remove("hinweis-beleg"), 1500);
+			setTimeout(() => kopf.classList.add("hinweis-beleg"), 0);
+			setTimeout(() => kopf.classList.remove("hinweis-beleg"), 1500);
 		}
 	},
 	// Zwischenspeicher für den ermittelten Scroll-Status
@@ -146,8 +146,8 @@ let liste = {
 		}
 		// Zeitschnitte drucken
 		let cont = document.getElementById("liste-belege-cont"),
-			start = liste.zeitschnittErmitteln(data.ka[ belege[0] ].da).jahrzehnt,
-			ende = liste.zeitschnittErmitteln(data.ka[ belege[belege.length - 1] ].da).jahrzehnt,
+			start = liste.zeitschnittErmitteln(data.ka[belege[0]].da).jahrzehnt,
+			ende = liste.zeitschnittErmitteln(data.ka[belege[belege.length - 1]].da).jahrzehnt,
 			jahrzehnt = start,
 			beleg_akt = 0;
 		while (true) { // Obacht!
@@ -158,7 +158,7 @@ let liste = {
 			}
 			// Zeitschnitt drucken?
 			if (jahrzehnt !== start) {
-				cont.appendChild( liste.zeitschnittErstellen(jahrzehnt) );
+				cont.appendChild(liste.zeitschnittErstellen(jahrzehnt));
 				// diese Meldung wird ggf. nachträglich ausgeblendet
 				let div = document.createElement("div");
 				div.classList.add("liste-keine-belege");
@@ -201,7 +201,7 @@ let liste = {
 				}
 				div.appendChild(span);
 				// Belegvorschau
-				div.appendChild( liste.belegVorschau(data.ka[id]) );
+				div.appendChild(liste.belegVorschau(data.ka[id]));
 				// <div> für Belegkopf einhängen
 				liste.belegUmschalten(div);
 				cont.appendChild(div);
@@ -213,11 +213,11 @@ let liste = {
 				}
 				cont.appendChild(div);
 				// Beleg
-				div.appendChild( liste.belegErstellen(id) );
+				div.appendChild(liste.belegErstellen(id));
 				// Bedeutung
 				liste.bedeutungErstellen(data.ka[id].bd, div);
 				// Quellenangabe
-				div.appendChild( liste.quelleErstellen(id) );
+				div.appendChild(liste.quelleErstellen(id));
 				// Textsorte
 				liste.textsorteErstellen(data.ka[id].ts, div);
 				// Notizen
@@ -313,14 +313,14 @@ let liste = {
 			jahrzehnt: -1, // Jahrzehnt für die Zeitschnittanzeige
 		};
 		// Anzeigedatum und Jahr, mit dem gerechnet wird, ermitteln
-		if ( datum.match(/[0-9]{4}/) && datum.match(/[0-9]{2}\.\sJh\./) ) { // mehrere Datentypen => 1. verwenden
+		if (datum.match(/[0-9]{4}/) && datum.match(/[0-9]{2}\.\sJh\./)) { // mehrere Datentypen => 1. verwenden
 			let datum_split = datum.split(/\sJh\./);
-			if ( datum_split[0].match(/[0-9]{4}/) ) {
+			if (datum_split[0].match(/[0-9]{4}/)) {
 				datum_vierstellig(datum_split[0]);
 			} else {
 				datum_jahrhundert(datum);
 			}
-		} else if ( datum.match(/[0-9]{4}/) ) { // 1. Jahresangabe verwenden
+		} else if (datum.match(/[0-9]{4}/)) { // 1. Jahresangabe verwenden
 			datum_vierstellig(datum);
 		} else { // 1. Jarhhundert verwenden
 			datum_jahrhundert(datum);
@@ -355,9 +355,9 @@ let liste = {
 		// dataset erstellen
 		jahrzehnt = jahrzehnt.toString(); // wird als integer übergeben, muss aber string sein
 		let dataset = "10|";
-		if ( jahrzehnt.match(/50$/) ) {
+		if (jahrzehnt.match(/50$/)) {
 			dataset += "50|";
-		} else if ( jahrzehnt.match(/00$/) ) {
+		} else if (jahrzehnt.match(/00$/)) {
 			dataset += "50|100|";
 		}
 		div.dataset.zeitschnitt = dataset;
@@ -369,7 +369,7 @@ let liste = {
 		// 1. Schritt: Meldungen, nur nach Zeitschnitten einblenden, die angezeigt werden.
 		let zeitschnitte = document.querySelectorAll("#liste-belege-cont .liste-zeitschnitt");
 		for (let i = 0, len = zeitschnitte.length; i < len; i++) {
-			if ( zeitschnitte[i].classList.contains("aus") ) {
+			if (zeitschnitte[i].classList.contains("aus")) {
 				zeitschnitte[i].nextSibling.classList.add("aus");
 			} else {
 				zeitschnitte[i].nextSibling.classList.remove("aus");
@@ -379,10 +379,10 @@ let liste = {
 		for (let i = 0, len = zeitschnitte.length; i < len; i++) {
 			let keine_belege = zeitschnitte[i].nextSibling,
 				naechster_div = keine_belege.nextSibling;
-			while ( naechster_div.classList.contains("aus") ) {
+			while (naechster_div.classList.contains("aus")) {
 				naechster_div = naechster_div.nextSibling;
 			}
-			if ( naechster_div.classList.contains("liste-kopf") ) {
+			if (naechster_div.classList.contains("liste-kopf")) {
 				keine_belege.classList.add("aus");
 			}
 		}
@@ -396,8 +396,8 @@ let liste = {
 		}
 		let zeitschnitte = document.querySelectorAll("#liste-belege-cont [data-zeitschnitt]");
 		for (let i = 0, len = zeitschnitte.length; i < len; i++) {
-			let reg = new RegExp( helfer.escapeRegExp(`${optionen.data.belegliste.zeitschnitte}|`) );
-			if ( zeitschnitte[i].dataset.zeitschnitt.match(reg) ) {
+			let reg = new RegExp(helfer.escapeRegExp(`${optionen.data.belegliste.zeitschnitte}|`));
+			if (zeitschnitte[i].dataset.zeitschnitt.match(reg)) {
 				zeitschnitte[i].classList.remove("aus");
 			} else {
 				zeitschnitte[i].classList.add("aus");
@@ -473,7 +473,7 @@ let liste = {
 			let p = document.createElement("p");
 			div.appendChild(p);
 			// Absatz ggf. kürzen
-			if ( optionen.data.belegliste.beleg_kuerzen && !form_reg.test(p_prep[i]) ) {
+			if (optionen.data.belegliste.beleg_kuerzen && !form_reg.test(p_prep[i])) {
 				if (zuletzt_gekuerzt) {
 					div.removeChild(div.lastChild);
 				} else {
@@ -484,7 +484,7 @@ let liste = {
 			}
 			zuletzt_gekuerzt = false;
 			// Absatz normal einhängen
-			p.innerHTML = liste.belegWortHervorheben(p_prep[i]);
+			p.innerHTML = liste.belegWortHervorheben(p_prep[i], false);
 		}
 		// <div> zurückgeben
 		return div;
@@ -498,14 +498,14 @@ let liste = {
 		schnitt = schnitt.replace(/<.+?>/g, ""); // HTML-Formatierungen vorher löschen!
 		// 1. Treffer im Text ermitteln, Beleg am Anfang ggf. kürzen
 		let reg = new RegExp(helfer.formVariRegExp(), "gi");
-		if ( schnitt.match(reg) ) {
+		if (schnitt.match(reg)) {
 			let idx = schnitt.split(reg)[0].length;
 			if (idx > 30) {
 				schnitt = `…${schnitt.substring(idx - 20)}`;
 			}
 		}
 		// Treffer hervorheben
-		schnitt = liste.belegWortHervorheben(schnitt);
+		schnitt = liste.belegWortHervorheben(schnitt, false);
 		// ggf. Autor angeben
 		let frag = document.createDocumentFragment();
 		if (beleg_akt.au) {
@@ -519,7 +519,7 @@ let liste = {
 				span.textContent = `,${autor[1]}`;
 				autor_span.appendChild(span);
 			}
-			autor_span.appendChild( document.createTextNode(": ") );
+			autor_span.appendChild(document.createTextNode(": "));
 		}
 		// Textschnitt in Anführungsstriche
 		let q = document.createElement("q");
@@ -531,12 +531,14 @@ let liste = {
 	// hebt ggf. das Wort der Kartei im übergebenen Text hervor
 	//   schnitt = String
 	//     (Text, in dem der Beleg hervorgehoben werden soll)
-	belegWortHervorheben (schnitt) {
+	//   immer = Boolean
+	//     (das Wort soll immer hervorgehoben werden, egal was in der Option steht)
+	belegWortHervorheben (schnitt, immer) {
 		// Wort soll nicht hervorgehoben werden
-		if (!optionen.data.belegliste.wort_hervorheben) {
+		if (!optionen.data.belegliste.wort_hervorheben && !immer) {
 			return schnitt;
 		}
-		const reg = new RegExp(`[^\\s/\\\\([{<]*(${helfer.formVariRegExp()})[^\\s"/\\\\)\\\]!?.:,;>]*`, "gi");
+		const reg = new RegExp(`[^${helfer.ganzesWortRegExp.links}]*(${helfer.formVariRegExp()})[^${helfer.ganzesWortRegExp.rechts}]*`, "gi");
 		schnitt = schnitt.replace(reg, (m) => `<mark class="wort">${m}</mark>`);
 		return schnitt;
 	},
@@ -549,7 +551,7 @@ let liste = {
 			let schnitt = this.nextSibling;
 			schnitt.classList.toggle("aus");
 			// Anzeige der Vorschau anpassen
-			if ( schnitt.classList.contains("aus") ) {
+			if (schnitt.classList.contains("aus")) {
 				this.classList.remove("schnitt-offen");
 			} else {
 				this.classList.add("schnitt-offen");
@@ -752,7 +754,7 @@ let liste = {
 				url = m.replace(reg, ""),
 				basis = m.match(/(https*:\/\/)*([^\/]+)/)[2].replace(reg, ""),
 				schluss = "";
-			if ( m.match(reg) ) {
+			if (m.match(reg)) {
 				schluss = m.replace(/.+?([.:,;!?)\]}]+)$/g, function(m, p) {
 					return p;
 				});
@@ -769,7 +771,7 @@ let liste = {
 			evt.preventDefault();
 			let url = this.title;
 			// URL ggf. aufbereiten
-			if ( !url.match(/^http/) ) {
+			if (!url.match(/^http/)) {
 				url = `https://${url}`;
 			}
 			// URL im Browser öffnen
@@ -784,7 +786,7 @@ let liste = {
 		a.addEventListener("click", function(evt) {
 			evt.preventDefault();
 			evt.stopPropagation();
-			beleg.oeffnen( parseInt(this.parentNode.dataset.id, 10) );
+			beleg.oeffnen(parseInt(this.parentNode.dataset.id, 10));
 		});
 	},
 	// Passt die Anzeige der Details im geöffneten Beleg an
@@ -832,7 +834,7 @@ let liste = {
 			let autor = data.ka[beleg_id].au.split(",")[0];
 			text_detail.push(autor);
 		}
-		text_detail.push( liste.zeitschnittErmitteln(data.ka[beleg_id].da).datum );
+		text_detail.push(liste.zeitschnittErmitteln(data.ka[beleg_id].da).datum);
 		return `Beleg #${beleg_id} (${text_detail.join(" ")})`;
 	},
 	// Funktionen im Header aufrufen
@@ -846,7 +848,7 @@ let liste = {
 				liste.headerFilter();
 			} else if (funktion === "sortieren") {
 				liste.headerSortieren();
-			} else if ( funktion.match(/^zeitschnitte/) ) {
+			} else if (funktion.match(/^zeitschnitte/)) {
 				liste.headerZeitschnitte(funktion);
 			} else if (funktion === "beleg") {
 				liste.headerBeleg();
@@ -854,7 +856,7 @@ let liste = {
 				liste.headerBelegKuerzen();
 			} else if (funktion === "hervorheben") {
 				liste.headerWortHervorheben();
-			} else if ( funktion.match(/^(bd|qu|ts|no|meta)$/) ) {
+			} else if (funktion.match(/^(bd|qu|ts|no|meta)$/)) {
 				liste.headerDetails(funktion);
 			}
 		});
@@ -889,7 +891,7 @@ let liste = {
 		}
 		// Scroll-Status wiederherstellen
 		if (scroll_bak) {
-			setTimeout( () => liste.statusScrollReset(), 500);
+			setTimeout(() => liste.statusScrollReset(), 500);
 		}
 	},
 	// chronologisches Sortieren der Belege
@@ -918,7 +920,7 @@ let liste = {
 	//     (der letzte Teil der ID des Elements, also "liste-link-" + "funktion" = ID)
 	headerZeitschnitte (funktion) {
 		// Zeitschnitt ermitteln
-		if ( funktion.match(/[0-9]+$/) ) {
+		if (funktion.match(/[0-9]+$/)) {
 			optionen.data.belegliste.zeitschnitte = funktion.match(/[0-9]+$/)[0];
 		} else {
 			optionen.data.belegliste.zeitschnitte = "-";
@@ -1058,7 +1060,7 @@ let liste = {
 		icon.addEventListener("click", function(evt) {
 			evt.preventDefault();
 			let ds = this.dataset.ds.split("|"),
-				text = data.ka[ ds[0] ][ ds[1] ];
+				text = data.ka[ds[0]][ds[1]];
 			beleg.toolsKopierenExec(ds[1], text, this);
 		});
 	},

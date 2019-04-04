@@ -18,7 +18,7 @@ let lexika = {
 	oeffnen () {
 		let fenster = document.getElementById("lexika");
 		// Fenster öffnen oder in den Vordergrund holen
-		if ( overlay.oeffnen(fenster) ) { // Fenster ist schon offen
+		if (overlay.oeffnen(fenster)) { // Fenster ist schon offen
 			return;
 		}
 		// Textfeld leeren
@@ -36,13 +36,13 @@ let lexika = {
 		// Array erstellen
 		let l = [];
 		for (let i in lexika.preset) {
-			if ( !lexika.preset.hasOwnProperty(i) ) {
+			if (!lexika.preset.hasOwnProperty(i)) {
 				continue;
 			}
 			l.push(i);
 		}
 		for (let i = 0, len = data.le.length; i < len; i++) {
-			if (!lexika.preset[ data.le[i] ]) {
+			if (!lexika.preset[data.le[i]]) {
 				l.push(data.le[i]);
 			}
 		}
@@ -65,8 +65,8 @@ let lexika = {
 			label.setAttribute("for", `lexikon-${i}`);
 			p.appendChild(label);
 			// title setzen oder Hinweis, dass das Lexikon manuell ergänzt wurde
-			if (lexika.preset[ l[i] ]) {
-				label.title = lexika.preset[ l[i] ];
+			if (lexika.preset[l[i]]) {
+				label.title = lexika.preset[l[i]];
 				label.textContent = l[i];
 			} else {
 				label.title = `${l[i]} (Lexikon manuell ergänzt)`;
@@ -93,13 +93,13 @@ let lexika = {
 			va = helfer.textTrim(le.value);
 		// Uppala! Kein Wert!
 		if (!va) {
-			dialog.oeffnen("alert", () => le.select() );
+			dialog.oeffnen("alert", () => le.select());
 			dialog.text("Sie haben keinen Titel eingegeben.");
 			return;
 		}
 		// Lexikon gibt es schon
-		if ( document.querySelector(`#lexika-liste input[value="${va}"]`) ) {
-			dialog.oeffnen("alert", () => le.select() );
+		if (document.querySelector(`#lexika-liste input[value="${va}"]`)) {
+			dialog.oeffnen("alert", () => le.select());
 			dialog.text("Das Lexikon ist schon in der Liste.");
 			return;
 		}

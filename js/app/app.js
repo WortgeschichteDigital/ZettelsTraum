@@ -16,16 +16,16 @@ window.addEventListener("load", function() {
 	});
 	
 	// DATEIEN VIA DRAG & DROP ÖFFNEN
-	document.addEventListener("dragover", (evt) => evt.preventDefault() );
-	document.addEventListener("dragleave", (evt) => evt.preventDefault() );
-	document.addEventListener("dragend", (evt) => evt.preventDefault() );
+	document.addEventListener("dragover", (evt) => evt.preventDefault());
+	document.addEventListener("dragleave", (evt) => evt.preventDefault());
+	document.addEventListener("dragend", (evt) => evt.preventDefault());
 	document.addEventListener("drop", function(evt) {
 		evt.preventDefault();
 		if (!evt.dataTransfer.files.length) { // wenn z.B. Text gedropt wird
 			return;
 		}
 		let pfad = evt.dataTransfer.files[0].path;
-		kartei.checkSpeichern( () => kartei.oeffnenEinlesen(pfad) );
+		kartei.checkSpeichern(() => kartei.oeffnenEinlesen(pfad));
 	});
 	
 	// EVENTS INITIALISIEREN
@@ -48,17 +48,17 @@ window.addEventListener("load", function() {
 		helfer.quickAccess(quick[i]);
 	}
 	// Wort-Element
-	document.getElementById("wort").addEventListener("click", () => kartei.wortAendern() );
+	document.getElementById("wort").addEventListener("click", () => kartei.wortAendern());
 	// Notizen-Icon
-	document.getElementById("notizen-icon").addEventListener("click", () => notizen.oeffnen() );
+	document.getElementById("notizen-icon").addEventListener("click", () => notizen.oeffnen());
 	// Programm-Icon
 	document.getElementById("icon").addEventListener("click", function() {
 		const {ipcRenderer} = require("electron");
 		ipcRenderer.send("ueber-zettelstraum", "app");
 	});
 	// Start-Sektion
-	document.getElementById("start-erstellen").addEventListener("click", () => kartei.wortErfragen() );
-	document.getElementById("start-oeffnen").addEventListener("click", () => kartei.oeffnen() );
+	document.getElementById("start-erstellen").addEventListener("click", () => kartei.wortErfragen());
+	document.getElementById("start-oeffnen").addEventListener("click", () => kartei.oeffnen());
 	// Belegformular
 	let beleg_inputs = document.querySelectorAll("#beleg input, #beleg textarea");
 	for (let i = 0, len = beleg_inputs.length; i < len; i++) {
@@ -71,7 +71,7 @@ window.addEventListener("load", function() {
 	}
 	let beleg_links = document.querySelectorAll("#beleg .icon-link");
 	for (let i = 0, len = beleg_links.length; i < len; i++) {
-		if ( beleg_links[i].classList.contains("icon-stern") ) { // Bewertung
+		if (beleg_links[i].classList.contains("icon-stern")) { // Bewertung
 			beleg.bewertungEvents(beleg_links[i]);
 		} else { // Text-Tools
 			beleg.toolsKlick(beleg_links[i]);
@@ -86,14 +86,15 @@ window.addEventListener("load", function() {
 		drucken.init();
 	});
 	// Belegliste-Filter
-	document.querySelectorAll("#liste-filter header a").forEach( (a) => filter.ctrlButtons(a) );
+	document.querySelectorAll("#liste-filter header a").forEach((a) => filter.ctrlButtons(a));
 	document.querySelectorAll(".filter-kopf").forEach(function(a) {
 		filter.anzeigeUmschalten(a);
 		filter.ctrlResetBlock(a.lastChild);
 	});
 	filter.toggleErweiterte();
-	document.querySelectorAll(".filter-optionen").forEach( (input) => filter.filterOptionen(input) );
-	filter.anwenden( document.getElementById("filter-volltext") );
+	document.querySelectorAll(".filter-optionen").forEach((input) => filter.filterOptionenListener(input));
+	document.querySelectorAll(`a[id^="filter-datenfelder-"`).forEach((input) => filter.ctrlVolltextDs(input));
+	filter.anwenden(document.getElementById("filter-volltext"));
 	let filter_zeitraum = document.getElementsByName("filter-zeitraum");
 	for (let i = 0, len = filter_zeitraum.length; i < len; i++) {
 		filter.wechselnZeitraum(filter_zeitraum[i]);
@@ -172,31 +173,31 @@ window.addEventListener("load", function() {
 	
 	// ANFRAGEN DES MAIN-PROZESSES ABFANGEN
 	const {ipcRenderer} = require("electron");
-	ipcRenderer.on("programm-einstellungen", () => optionen.oeffnen() );
+	ipcRenderer.on("programm-einstellungen", () => optionen.oeffnen());
 	ipcRenderer.on("kartei-erstellen", function() {
-		kartei.checkSpeichern( () => kartei.wortErfragen() );
+		kartei.checkSpeichern(() => kartei.wortErfragen());
 	});
 	ipcRenderer.on("kartei-oeffnen", function(evt, datei) {
 		if (datei) {
-			kartei.checkSpeichern(() => kartei.oeffnenEinlesen(datei) );
+			kartei.checkSpeichern(() => kartei.oeffnenEinlesen(datei));
 		} else {
-			kartei.checkSpeichern(() => kartei.oeffnen() );
+			kartei.checkSpeichern(() => kartei.oeffnen());
 		}
 	});
-	ipcRenderer.on("kartei-speichern", () => kartei.speichern(false) );
-	ipcRenderer.on("kartei-speichern-unter", () => kartei.speichern(true) );
-	ipcRenderer.on("kartei-formvarianten", () => stamm.oeffnen() );
-	ipcRenderer.on("kartei-notizen", () => notizen.oeffnen() );
-	ipcRenderer.on("kartei-anhaenge", () => anhaenge.fenster() );
-	ipcRenderer.on("kartei-lexika", () => lexika.oeffnen() );
-	ipcRenderer.on("kartei-metadaten", () => meta.oeffnen() );
-	ipcRenderer.on("kartei-redaktion", () => redaktion.oeffnen() );
-	ipcRenderer.on("kartei-suche", () => filter.suche() );
+	ipcRenderer.on("kartei-speichern", () => kartei.speichern(false));
+	ipcRenderer.on("kartei-speichern-unter", () => kartei.speichern(true));
+	ipcRenderer.on("kartei-formvarianten", () => stamm.oeffnen());
+	ipcRenderer.on("kartei-notizen", () => notizen.oeffnen());
+	ipcRenderer.on("kartei-anhaenge", () => anhaenge.fenster());
+	ipcRenderer.on("kartei-lexika", () => lexika.oeffnen());
+	ipcRenderer.on("kartei-metadaten", () => meta.oeffnen());
+	ipcRenderer.on("kartei-redaktion", () => redaktion.oeffnen());
+	ipcRenderer.on("kartei-suche", () => filter.suche());
 	ipcRenderer.on("kartei-schliessen", function() {
-		kartei.checkSpeichern( () => kartei.schliessen() );
+		kartei.checkSpeichern(() => kartei.schliessen());
 	});
-	ipcRenderer.on("belege-hinzufuegen", () => beleg.erstellenPre() );
-	ipcRenderer.on("belege-auflisten", () => liste.anzeigen() );
+	ipcRenderer.on("belege-hinzufuegen", () => beleg.erstellenPre());
+	ipcRenderer.on("belege-auflisten", () => liste.anzeigen());
 	ipcRenderer.on("optionen-zuletzt", (evt, zuletzt) => optionen.data.zuletzt = zuletzt );
 	ipcRenderer.on("dialog-anzeigen", function(evt, text) {
 		dialog.oeffnen("alert", null);

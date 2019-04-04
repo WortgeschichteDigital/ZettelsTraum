@@ -38,22 +38,24 @@ let beleg = {
 		beleg.id_karte = id_karte;
 		// neues Karten-Objekt anlegen
 		beleg.data = {
-			un: optionen.data.einstellungen.unvollstaendig, // Bearbeitung unvollständig
-			ko: false, // Kontext
-			bu: false, // Bücherdienstauftrag
-			bc: false, // Buchung
-			be: 0, // Bewertung
-			da: "", // Belegdatum
-			au: "", // Autor
-			bs: "", // Beleg
-			bd: "", // Bedeutung
-			ts: "", // Textsorte
-			qu: "", // Quelle
-			no: "", // Notizen
 			an: [], // Anhänge
+			au: "", // Autor
+			bc: false, // Buchung
+			bd: "", // Bedeutung
+			be: 0, // Bewertung
+			bs: "", // Beleg
+			bu: false, // Bücherdienstauftrag
+			da: "", // Belegdatum
+			dc: new Date().toISOString(), // Datum Karteikarten-Erstellung
+			dm: "", // Datum Karteikarten-Änderung
+			ko: false, // Kontext
+			no: "", // Notizen
+			qu: "", // Quelle
+			ts: "", // Textsorte
+			un: optionen.data.einstellungen.unvollstaendig, // Bearbeitung unvollständig
 		};
 		// ggf. die Leseansicht verlassen
-		if ( document.getElementById("beleg-link-leseansicht").classList.contains("aktiv") ) {
+		if (document.getElementById("beleg-link-leseansicht").classList.contains("aktiv")) {
 			beleg.leseToggle(false);
 		}
 		// Karte anzeigen
@@ -68,11 +70,11 @@ let beleg = {
 		// Daten des Belegs kopieren
 		beleg.data = {};
 		for (let i in data.ka[id]) {
-			if ( !data.ka[id].hasOwnProperty(i) ) {
+			if (!data.ka[id].hasOwnProperty(i)) {
 				continue;
 			}
-			if ( helfer.checkType("Array", data.ka[id][i]) ) {
-				beleg.data[i] = [ ...data.ka[id][i] ];
+			if (helfer.checkType("Array", data.ka[id][i])) {
+				beleg.data[i] = [...data.ka[id][i]];
 			} else {
 				beleg.data[i] = data.ka[id][i];
 			}
@@ -80,12 +82,12 @@ let beleg = {
 		// in Lese- oder in Formularansicht öffnen?
 		const leseansicht = document.getElementById("beleg-link-leseansicht");
 		if (optionen.data.einstellungen.leseansicht) {
-			if ( !leseansicht.classList.contains("aktiv") ) {
+			if (!leseansicht.classList.contains("aktiv")) {
 				beleg.leseToggle(false);
 			} else {
 				beleg.leseFill();
 			}
-		} else if ( leseansicht.classList.contains("aktiv") ) {
+		} else if (leseansicht.classList.contains("aktiv")) {
 			beleg.leseToggle(false);
 		}
 		// Formular füllen und anzeigen
@@ -122,7 +124,7 @@ let beleg = {
 		// Formular einblenden
 		helfer.sektionWechseln("beleg");
 		// Textarea zurücksetzen
-		document.querySelectorAll("#beleg textarea").forEach( (textarea) => helfer.textareaGrow(textarea) );
+		document.querySelectorAll("#beleg textarea").forEach((textarea) => helfer.textareaGrow(textarea));
 		// Fokus setzen
 		const leseansicht_aktiv = document.getElementById("beleg-link-leseansicht").classList.contains("aktiv");
 		if (neu && !leseansicht_aktiv) {
@@ -141,9 +143,9 @@ let beleg = {
 		}
 		feld.addEventListener(event_typ, function() {
 			let feld = this.id.replace(/^beleg-/, "");
-			if ( /^dta(-bis)*$/.test(feld) ) { // #beleg-dta + #beleg-dta-bis gehören nicht zur Kartei, dienen nur zum DTA-Import
+			if (/^dta(-bis)*$/.test(feld)) { // #beleg-dta + #beleg-dta-bis gehören nicht zur Kartei, dienen nur zum DTA-Import
 				if (feld === "dta" &&
-						/^https*:\/\/www\.deutschestextarchiv\.de\//.test(this.value) ) { // Bis-Seite ermitteln und eintragen
+						/^https*:\/\/www\.deutschestextarchiv\.de\//.test(this.value)) { // Bis-Seite ermitteln und eintragen
 					const fak = beleg.DTAImportGetFak(this.value, "");
 					if (fak) {
 						this.nextSibling.value = parseInt(fak, 10) + 1;
@@ -182,33 +184,33 @@ let beleg = {
 		let da = document.getElementById("beleg-da"),
 			dav = helfer.textTrim(da.value, true);
 		if (!dav) {
-			dialog.oeffnen("alert", () => da.select() );
+			dialog.oeffnen("alert", () => da.select());
 			dialog.text("Sie müssen ein Datum angeben.");
 			return;
 		}
 		// Test: Datum mit vierstelliger Jahreszahl oder Jahrhundertangabe?
-		if ( !dav.match(/[0-9]{4}|[0-9]{2}\.\sJh\./) ) {
-			dialog.oeffnen("alert", () => da.select() );
+		if (!dav.match(/[0-9]{4}|[0-9]{2}\.\sJh\./)) {
+			dialog.oeffnen("alert", () => da.select());
 			dialog.text("Das Datum muss eine vierstellige Jahreszahl (z. B. „1813“) oder eine Jahrhundertangabe (z. B. „17. Jh.“) enthalten.\nZusätzlich können auch andere Angaben gemacht werden (z. B. „ca. 1815“, „1610, vielleicht 1611“).");
 			return;
 		}
 		// Test: Beleg angegeben?
 		let bs = document.getElementById("beleg-bs");
-		if ( !helfer.textTrim(bs.value, true) ) {
-			dialog.oeffnen("alert", () => bs.select() );
+		if (!helfer.textTrim(bs.value, true)) {
+			dialog.oeffnen("alert", () => bs.select());
 			dialog.text("Sie müssen einen Beleg eingeben.");
 			return;
 		}
 		// Test: Quelle angegeben?
 		let qu = document.getElementById("beleg-qu");
-		if ( !helfer.textTrim(qu.value, true) ) {
-			dialog.oeffnen("alert", () => qu.select() );
+		if (!helfer.textTrim(qu.value, true)) {
+			dialog.oeffnen("alert", () => qu.select());
 			dialog.text("Sie müssen eine Quelle angeben.");
 			return;
 		}
 		// Beleg wurde nicht geändert
 		if (!beleg.geaendert) {
-			dialog.oeffnen("alert", () => da.focus() );
+			dialog.oeffnen("alert", () => da.focus());
 			dialog.text("Es wurden keine Änderungen vorgenommen.");
 			return;
 		}
@@ -228,15 +230,17 @@ let beleg = {
 		liste.statusGeaendert = beleg.id_karte.toString();
 		// Objekt mit neuen Werten füllen
 		for (let i in beleg.data) {
-			if ( !beleg.data.hasOwnProperty(i) ) {
+			if (!beleg.data.hasOwnProperty(i)) {
 				continue;
 			}
-			if ( helfer.checkType("Array", beleg.data[i]) ) {
-				data.ka[beleg.id_karte][i] = [ ...beleg.data[i] ];
+			if (helfer.checkType("Array", beleg.data[i])) {
+				data.ka[beleg.id_karte][i] = [...beleg.data[i]];
 			} else {
 				data.ka[beleg.id_karte][i] = beleg.data[i];
 			}
 		}
+		// Änderungsdatum speichern
+		data.ka[beleg.id_karte].dm = new Date().toISOString();
 		// Änderungen darstellen
 		beleg.listeGeaendert();
 	},
@@ -288,33 +292,33 @@ let beleg = {
 			url = helfer.textTrim(dta.value, true);
 		// URL fehlt
 		if (!url) {
-			dialog.oeffnen("alert", () => dta.select() );
+			dialog.oeffnen("alert", () => dta.select());
 			dialog.text("Sie haben keine URL eingegeben.");
 			return;
 		}
 		// Ist das überhaupt eine URL?
-		if ( !/^https*:\/\//.test(url) ) {
-			dialog.oeffnen("alert", () => dta.select() );
+		if (!/^https*:\/\//.test(url)) {
+			dialog.oeffnen("alert", () => dta.select());
 			dialog.text("Die scheint keine URL zu sein.");
 			return;
 		}
 		// URL nicht vom DTA
-		if ( !/^https*:\/\/www\.deutschestextarchiv\.de\//.test(url) ) {
-			dialog.oeffnen("alert", () => dta.select() );
+		if (!/^https*:\/\/www\.deutschestextarchiv\.de\//.test(url)) {
+			dialog.oeffnen("alert", () => dta.select());
 			dialog.text("Die URL stammt nicht vom DTA.");
 			return;
 		}
 		// Titel-ID ermitteln
 		let titel_id = beleg.DTAImportGetTitelId(url);
 		if (!titel_id) {
-			dialog.oeffnen("alert", () => dta.focus() );
+			dialog.oeffnen("alert", () => dta.focus());
 			dialog.text("Beim ermitteln der Titel-ID ist etwas schiefgelaufen.\nIst die URL korrekt?");
 			return;
 		}
 		// Faksimileseite ermitteln
 		let fak = beleg.DTAImportGetFak(url, titel_id);
 		if (!fak) {
-			dialog.oeffnen("alert", () => dta.focus() );
+			dialog.oeffnen("alert", () => dta.focus());
 			dialog.text("Beim ermitteln der Seite ist etwas schiefgelaufen.\nIst die URL korrekt?");
 			return;
 		}
@@ -366,7 +370,7 @@ let beleg = {
 	//     (DTA-URL)
 	DTAImportGetTitelId (url) {
 		let m, titel_id = "";
-		if ( /\/view\//.test(url) ) {
+		if (/\/view\//.test(url)) {
 			m = url.match(/\/view\/([^/?]+)/);
 		} else {
 			m = url.match(/deutschestextarchiv\.de\/([^/?]+)/);
@@ -389,7 +393,7 @@ let beleg = {
 				return fak;
 			}
 		}
-		if ( /p=[0-9]+/.test(url) ) {
+		if (/p=[0-9]+/.test(url)) {
 			fak = url.match(/p=([0-9]+)/)[1];
 		} else {
 			const reg = new RegExp(`${titel_id}\\/([0-9]+)`);
@@ -410,7 +414,7 @@ let beleg = {
 			if (ajax.status >= 200 && ajax.status < 300) {
 				if (!ajax.responseXML) {
 					if (ajax.responseText &&
-							/<title>DTA Qualitätssicherung<\/title>/.test(ajax.responseText) ) {
+							/<title>DTA Qualitätssicherung<\/title>/.test(ajax.responseText)) {
 						beleg.DTAImportFehler("DTAQ: Titel noch nicht freigeschaltet");
 					} else {
 						beleg.DTAImportFehler("XMLHttpRequest: keine XML-Daten");
@@ -461,7 +465,7 @@ let beleg = {
 			textsorte_sub: sorte.querySelectorAll(`classCode[scheme$="dwds1sub"], classCode[scheme$="dwds2sub"], classCode[scheme$="dwds3sub"]`),
 		};
 		for (let wert in werte) {
-			if ( !werte.hasOwnProperty(wert) ) {
+			if (!werte.hasOwnProperty(wert)) {
 				continue;
 			}
 			if (!werte[wert]) {
@@ -474,7 +478,7 @@ let beleg = {
 			beleg.DTAImportData[wert] = text;
 		}
 		function getValue (v) {
-			if ( helfer.checkType("Element", v) ) {
+			if (helfer.checkType("Element", v)) {
 				if (!v.firstChild) {
 					return "";
 				}
@@ -485,7 +489,7 @@ let beleg = {
 				if (!i.firstChild) {
 					return;
 				}
-				out.push( trimmer(i.firstChild.nodeValue) );
+				out.push(trimmer(i.firstChild.nodeValue));
 			});
 			return out;
 		}
@@ -507,7 +511,7 @@ let beleg = {
 		if (serie_titel) {
 			serie_titel.forEach(function(i, n) {
 				if (n > 0) {
-					if ( !/\.$/.test(beleg.DTAImportData.serie) ) {
+					if (!/\.$/.test(beleg.DTAImportData.serie)) {
 						beleg.DTAImportData.serie += ".";
 					}
 					beleg.DTAImportData.serie += " ";
@@ -533,7 +537,7 @@ let beleg = {
 			hrsg: bibl.querySelectorAll("titleStmt editor"),
 		};
 		for (let wert in personen) {
-			if ( !personen.hasOwnProperty(wert) ) {
+			if (!personen.hasOwnProperty(wert)) {
 				continue;
 			}
 			if (!personen[wert]) {
@@ -594,7 +598,7 @@ let beleg = {
 		let parent;
 		if (ele_ende) {
 			parent = ele_ende.parentNode;
-			while ( !parent.contains(ele_start) ) {
+			while (!parent.contains(ele_start)) {
 				parent = parent.parentNode;
 			}
 		} else {
@@ -606,11 +610,11 @@ let beleg = {
 		let analyse = [],
 			alleKinder = parent.childNodes;
 		for (let i = 0, len = alleKinder.length; i < len; i++) {
-			if ( !analyse.length && alleKinder[i] !== ele_start && !alleKinder[i].contains(ele_start) ) {
+			if (!analyse.length && alleKinder[i] !== ele_start && !alleKinder[i].contains(ele_start)) {
 				continue;
 			} else if (alleKinder[i] === ele_ende) {
 				break;
-			} else if ( alleKinder[i].contains(ele_ende) ) {
+			} else if (alleKinder[i].contains(ele_ende)) {
 				analyse.push(alleKinder[i]);
 				break;
 			}
@@ -690,7 +694,7 @@ let beleg = {
 			ana(analyse[i]);
 		}
 		for (let typ in rend) {
-			if ( !rend.hasOwnProperty(typ) ) {
+			if (!rend.hasOwnProperty(typ)) {
 				continue;
 			}
 			const reg = new RegExp(`\\[(${typ})\\](.+?)\\[\\/${typ}\\]`, "g");
@@ -729,20 +733,20 @@ let beleg = {
 					if (ele.nodeName === "pb") { // Seitenumbruch
 						beleg.DTAImportData.seite_zuletzt = ele.getAttribute("n");
 						return;
-					} else if ( /^(closer|div|item|p)$/.test(ele.nodeName) ) { // Absätze
+					} else if (/^(closer|div|item|p)$/.test(ele.nodeName)) { // Absätze
 						text = helfer.textTrim(text, false);
 						text += "\n\n";
-					} else if ( /^(lg)$/.test(ele.nodeName) ) { // einfache Absätze
+					} else if (/^(lg)$/.test(ele.nodeName)) { // einfache Absätze
 						text = helfer.textTrim(text, false);
 						text += "\n";
-					} else if ( ele.nodeName === "fw" &&
-							/^(catch|header|sig)$/.test( ele.getAttribute("type") ) ) { // Kustode, Kolumnentitel, Bogensignaturen
+					} else if (ele.nodeName === "fw" &&
+							/^(catch|header|sig)$/.test(ele.getAttribute("type"))) { // Kustode, Kolumnentitel, Bogensignaturen
 						return;
 					} else if (ele.nodeName === "hi") { // Text-Auszeichnungen
 						const typ = ele.getAttribute("rendition");
 						if (rend[typ]) {
 							ele.insertBefore(document.createTextNode(`[${typ}]`), ele.firstChild);
-							ele.appendChild( document.createTextNode(`[/${typ}]`) );
+							ele.appendChild(document.createTextNode(`[/${typ}]`));
 						}
 					} else if (ele.nodeName === "l") { // Verszeile
 						text += "\n";
@@ -755,12 +759,12 @@ let beleg = {
 					} else if (ele.nodeName === "note" &&
 							ele.getAttribute("type") !== "editorial") { // Anmerkungen; "editorial" sollte inline dargestellt werden
 						ele.insertBefore(document.createTextNode("[Anmerkung: "), ele.firstChild);
-						ele.appendChild( document.createTextNode("] ") );
+						ele.appendChild(document.createTextNode("] "));
 					} else if (ele.nodeName === "sic") { // <sic> Fehler im Original, Korrektur steht in <corr>; die wird übernommen
 						return;
 					} else if (ele.nodeName === "speaker") { // Sprecher im Drama
 						ele.insertBefore(document.createTextNode(`[#b]`), ele.firstChild);
-						ele.appendChild( document.createTextNode(`[/#b]`) );
+						ele.appendChild(document.createTextNode(`[/#b]`));
 						text = helfer.textTrim(text, false);
 						text += "\n\n";
 					}
@@ -797,7 +801,7 @@ let beleg = {
 			for (let i = 0, len = dta.textsorte.length; i < len; i++) {
 				let ts = dta.textsorte[i],
 					ts_sub = dta.textsorte_sub[i];
-				if (ts_sub && /; /.test(ts_sub) ) {
+				if (ts_sub && /; /.test(ts_sub)) {
 					ts_sub = ts_sub.replace(/, /g, ": ");
 					let ts_sub_sp = ts_sub.split("; ");
 					for (let j = 0, len = ts_sub_sp.length; j < len; j++) {
@@ -818,9 +822,9 @@ let beleg = {
 		// Untertitel
 		if (dta.untertitel.length) {
 			dta.untertitel.forEach(function(i) {
-				if ( /^[a-zäöü]/.test(i) ) {
+				if (/^[a-zäöü]/.test(i)) {
 					quelle += ",";
-				} else if ( !/\.$/.test(quelle) ) {
+				} else if (!/\.$/.test(quelle)) {
 					quelle += ".";
 				}
 				quelle += ` ${i}`;
@@ -833,8 +837,8 @@ let beleg = {
 			dta.serie = "";
 		}
 		// Band
-		let reg_band = new RegExp( helfer.escapeRegExp(dta.band) );
-		if ( dta.band && !reg_band.test(quelle) ) {
+		let reg_band = new RegExp(helfer.escapeRegExp(dta.band));
+		if (dta.band && !reg_band.test(quelle)) {
 			quellePunkt();
 			quelle += ` ${dta.band}`;
 		}
@@ -900,7 +904,7 @@ let beleg = {
 		beleg.belegGeaendert(true);
 		// ggf. Punkt einfügen
 		function quellePunkt () {
-			if ( !/\.$/.test(quelle) ) {
+			if (!/\.$/.test(quelle)) {
 				quelle += ".";
 			}
 		}
@@ -937,15 +941,15 @@ let beleg = {
 			// auf Enter speichern
 			//   - Text-Input und Checkboxes: hier reicht Enter
 			//   - mit Strg + Enter geht der Befehl auch in Textareas
-			if ( evt.which === 13 &&
-					(this.type.match(/^(checkbox|number|text)$/) || evt.ctrlKey) ) {
+			if (evt.which === 13 &&
+					(this.type.match(/^(checkbox|number|text)$/) || evt.ctrlKey)) {
 				evt.preventDefault();
-				if ( /^beleg-dta(-bis)*$/.test(this.id) ) {
+				if (/^beleg-dta(-bis)*$/.test(this.id)) {
 					beleg.DTAImport();
 					return;
 				}
 				if (document.getElementById("dropdown") &&
-						(this.id === "beleg-bd" || this.id === "beleg-ts") ) {
+						(this.id === "beleg-bd" || this.id === "beleg-ts")) {
 					return;
 				}
 				helfer.inputBlur();
@@ -959,9 +963,9 @@ let beleg = {
 	toolsKlick (a) {
 		a.addEventListener("click", function(evt) {
 			evt.preventDefault();
-			if ( this.classList.contains("icon-tools-kopieren") ) {
+			if (this.classList.contains("icon-tools-kopieren")) {
 				beleg.toolsKopieren(this);
-			} else if ( this.classList.contains("icon-tools-einfuegen") ) {
+			} else if (this.classList.contains("icon-tools-einfuegen")) {
 				beleg.toolsEinfuegen(this);
 			}
 		});
@@ -976,7 +980,7 @@ let beleg = {
 		if (!text) {
 			return;
 		}
-		beleg.toolsKopierenExec(ds, text, document.querySelector(`#beleg-lese-${ds} p`) );
+		beleg.toolsKopierenExec(ds, text, document.querySelector(`#beleg-lese-${ds} p`));
 	},
 	// führt die Kopieroperation aus (eigene Funktion,
 	// weil sie auch für die Kopierfunktion im Beleg benutzt wird)
@@ -993,7 +997,7 @@ let beleg = {
 		const {clipboard} = require("electron");
 		// Ist Text ausgewählt und ist er im Bereich des Kopier-Icons?
 		if (window.getSelection().toString() &&
-				popup.getTargetSelection([ele]) ) {
+				popup.getTargetSelection([ele])) {
 			clipboard.write({
 				text: popup.textauswahl.text,
 				html: helfer.clipboardHtml(popup.textauswahl.html),
@@ -1029,7 +1033,7 @@ let beleg = {
 		// Text auslesen
 		let text = "";
 		if (id === "beleg-bs" && formate.indexOf("text/html") >= 0) {
-			text = beleg.toolsEinfuegenHtml( clipboard.readHTML() );
+			text = beleg.toolsEinfuegenHtml(clipboard.readHTML());
 		} else {
 			text = clipboard.readText();
 		}
@@ -1124,7 +1128,7 @@ let beleg = {
 		});
 		// erhaltene Inline-Auszeichnungen korrigieren
 		for (let tag in speziell) {
-			if ( !speziell.hasOwnProperty(tag) ) {
+			if (!speziell.hasOwnProperty(tag)) {
 				continue;
 			}
 			const reg = new RegExp(`\\[#(${tag})\\](.+?)\\[\\/${tag}\\]`, "g");
@@ -1155,17 +1159,17 @@ let beleg = {
 				// Inline-Elemente ggf. gesondert behandeln
 				if (inline_keep.indexOf(ele.nodeName) >= 0 || speziell[ele.nodeName]) {
 					ele.insertBefore(document.createTextNode(`[#${ele.nodeName}]`), ele.firstChild);
-					ele.appendChild( document.createTextNode(`[/${ele.nodeName}]`) );
+					ele.appendChild(document.createTextNode(`[/${ele.nodeName}]`));
 				} else if (ele.nodeName === "Q") {
 					ele.insertBefore(document.createTextNode('"'), ele.firstChild);
-					ele.appendChild( document.createTextNode('"') );
+					ele.appendChild(document.createTextNode('"'));
 				} else if (ele.nodeName === "LI") {
 					ele.insertBefore(document.createTextNode("– "), ele.firstChild);
 				}
 				// Block-Level-Elemente (und andere), die eine Sonderbehandlung benötigen
-				if ( /^(DD|DT|FIGCAPTION|HR|LI|TR)$/.test(ele.nodeName) ) { // Zeilenumbruch
+				if (/^(DD|DT|FIGCAPTION|HR|LI|TR)$/.test(ele.nodeName)) { // Zeilenumbruch
 					text += "\n";
-				} else if ( /^(ADDRESS|ARTICLE|ASIDE|BLOCKQUOTE|DETAILS|DIALOG|DIV|DL|FIELDSET|FIGURE|FOOTER|FORM|H([1-6]{1})|HEADER|MAIN|NAV|OL|P|PRE|SECTION|TABLE|UL)$/.test(ele.nodeName) ) { // Absätze
+				} else if (/^(ADDRESS|ARTICLE|ASIDE|BLOCKQUOTE|DETAILS|DIALOG|DIV|DL|FIELDSET|FIGURE|FOOTER|FORM|H([1-6]{1})|HEADER|MAIN|NAV|OL|P|PRE|SECTION|TABLE|UL)$/.test(ele.nodeName)) { // Absätze
 					text = helfer.textTrim(text, false);
 					text += "\n\n";
 				}
@@ -1230,9 +1234,9 @@ let beleg = {
 		// Mouseout: die aktuelle Bewertung anzeigen
 		a.addEventListener("mouseout", function() {
 			let id = this.parentNode.id;
-			if ( id.match(/^beleg/) ) {
+			if (id.match(/^beleg/)) {
 				beleg.bewertungAnzeigen();
-			} else if ( id.match(/^filter/) ) {
+			} else if (id.match(/^filter/)) {
 				filter.markierenSterne();
 			}
 		});
@@ -1240,9 +1244,9 @@ let beleg = {
 		a.addEventListener("click", function(evt) {
 			evt.preventDefault();
 			let id = this.parentNode.id;
-			if ( id.match(/^beleg/) ) {
+			if (id.match(/^beleg/)) {
 				beleg.bewertung(this);
-			} else if ( id.match(/^filter/) ) {
+			} else if (id.match(/^filter/)) {
 				filter.anwendenSterne(this);
 			}
 		});
@@ -1254,7 +1258,7 @@ let beleg = {
 		// Ansicht umstellen
 		const button = document.getElementById("beleg-link-leseansicht");
 		let an = true;
-		if ( button.classList.contains("aktiv") ) {
+		if (button.classList.contains("aktiv")) {
 			an = false;
 			button.title = "zur Leseansicht wechseln";
 		} else {
@@ -1287,7 +1291,7 @@ let beleg = {
 		if (an) {
 			beleg.leseFill();
 		} else if (manuell) {
-			document.querySelectorAll("#beleg textarea").forEach( (textarea) => helfer.textareaGrow(textarea) );
+			document.querySelectorAll("#beleg textarea").forEach((textarea) => helfer.textareaGrow(textarea));
 			document.getElementById("beleg-da").focus();
 		}
 	},
@@ -1297,23 +1301,26 @@ let beleg = {
 		const cont = document.getElementById("beleg-lese-meta");
 		helfer.keineKinder(cont);
 		liste.metainfosErstellen(beleg.data, cont, "");
-		if ( !cont.hasChildNodes() ) {
+		if (!cont.hasChildNodes()) {
 			cont.parentNode.classList.add("aus");
 		} else {
 			cont.parentNode.classList.remove("aus");
 		}
 		// Datensätze, die String sind
 		for (let wert in beleg.data) {
-			if ( !beleg.data.hasOwnProperty(wert) ) {
+			if (!beleg.data.hasOwnProperty(wert)) {
 				continue;
 			}
 			// String?
 			const v = beleg.data[wert];
-			if ( !helfer.checkType("String", v) ) {
+			if (!helfer.checkType("String", v)) {
 				continue;
 			}
 			// Container leeren
 			const cont = document.getElementById(`beleg-lese-${wert}`);
+			if (!cont) { // die Datumsdatensätze dc und dm werden nicht angezeigt
+				continue;
+			}
 			helfer.keineKinder(cont);
 			// Absätze einhängen
 			const p = v.replace(/\n\s*\n/g, "\n").split("\n");
@@ -1323,6 +1330,9 @@ let beleg = {
 					text = " ";
 				} else {
 					text = liste.linksErkennen(text);
+				}
+				if (wert === "bs") {
+					text = liste.belegWortHervorheben(text, true);
 				}
 				let nP = document.createElement("p");
 				nP.innerHTML = text;

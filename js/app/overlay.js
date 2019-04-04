@@ -11,7 +11,7 @@ let overlay = {
 	oeffnen (fenster) {
 		// Ist das Fenster schon offen?
 		let schon_offen = false;
-		if ( !fenster.classList.contains("aus") ) {
+		if (!fenster.classList.contains("aus")) {
 			schon_offen = true;
 		}
 		// Fenster in den Vordergrund holen
@@ -28,7 +28,7 @@ let overlay = {
 			fenster.classList.remove("aus");
 			// dieser Timeout behebt merkwürdigerweise Probleme beim Einblenden;
 			// sonst läuft die Transition nicht
-			overlay.timeout = setTimeout( () => fenster.classList.add("einblenden"), 0);
+			overlay.timeout = setTimeout(() => fenster.classList.add("einblenden"), 0);
 		}
 		// Rückgabewert
 		return schon_offen;
@@ -48,7 +48,7 @@ let overlay = {
 	schliessen (schliesser) {
 		// Overlay-Fenster ermitteln
 		let fenster = schliesser;
-		while ( !fenster.classList.contains("overlay") ) {
+		while (!fenster.classList.contains("overlay")) {
 			fenster = fenster.parentNode;
 		}
 		// Sonderbehandlung für das Notizen-Fenster
@@ -61,7 +61,7 @@ let overlay = {
 		// spezielle Funktionen für einzelne Overlay-Fenster
 		if (fenster.id === "dialog") {
 			if (schliesser.nodeName === "INPUT") { // Schließen durch Input-Button oder Input-Text
-				if ( schliesser.value.match(/Abbrechen|Nein/) ) { // Alert-Dialog: Abbrechen, Confirm-Dialog: Nein
+				if (schliesser.value.match(/Abbrechen|Nein/)) { // Alert-Dialog: Abbrechen, Confirm-Dialog: Nein
 					dialog.antwort = false;
 				} else {
 					dialog.antwort = true;
@@ -78,12 +78,12 @@ let overlay = {
 	alleSchliessen () {
 		let offen = [];
 		document.querySelectorAll(".overlay").forEach(function(i) {
-			if ( !i.classList.contains("aus") ) {
+			if (!i.classList.contains("aus")) {
 				offen.push(i.id);
 			}
 		});
 		for (let i = 0, len = offen.length; i < len; i++) {
-			overlay.schliessen( document.getElementById(offen[i]) );
+			overlay.schliessen(document.getElementById(offen[i]));
 		}
 	},
 	// blendet ein Overlay-Fenster aus
@@ -91,7 +91,7 @@ let overlay = {
 		fenster.classList.remove("einblenden");
 		// Die Zeit des Timeouts richtet sich nach der Transition-Länge, die in der
 		// overlay.css festgelegt ist.
-		overlay.timeout = setTimeout( () => fenster.classList.add("aus"), 200);
+		overlay.timeout = setTimeout(() => fenster.classList.add("aus"), 200);
 	},
 	// oberstes Overlay-Fenster ermitteln
 	oben () {
@@ -101,7 +101,7 @@ let overlay = {
 		};
 		let overlays = document.querySelectorAll(".overlay");
 		for (let i = 0, len = overlays.length; i < len; i++) {
-			if ( overlays[i].classList.contains("aus") ) {
+			if (overlays[i].classList.contains("aus")) {
 				continue;
 			}
 			let zIndex = parseInt(overlays[i].style.zIndex, 10);

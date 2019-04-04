@@ -71,6 +71,16 @@ let optionen = {
 		filter: {
 			// erweiterte Suche: Groß- und Kleinschreibung im Text beachten
 			"text-genau": false,
+			// erweiterte Suche: nur ganze Wörter suchen
+			"ganzes-wort": false,
+			// erweiterte Suche: Datenfelder
+			"feld-au": true,
+			"feld-bd": true,
+			"feld-bs": true,
+			"feld-da": true,
+			"feld-no": true,
+			"feld-qu": true,
+			"feld-ts": true,
 			// speichert den gewünschten Zeitintervall, der in der Filterliste gewählt wurde
 			zeitraum: "100",
 			// inklusive Logik sollte der exklusiven vorgezogen werden (betrifft "Verschiedenes")
@@ -90,13 +100,13 @@ let optionen = {
 	//     (Objekt-Referenz der durch den Main-Prozess übergebenen Daten)
 	einlesen (obj, opt) {
 		for (let o in obj) {
-			if ( !obj.hasOwnProperty(o) ) {
+			if (!obj.hasOwnProperty(o)) {
 				continue;
 			}
-			if ( !opt.hasOwnProperty(o) ) {
+			if (!opt.hasOwnProperty(o)) {
 				continue;
 			}
-			if ( helfer.checkType("Object", obj[o]) ) {
+			if (helfer.checkType("Object", obj[o])) {
 				optionen.einlesen(obj[o], opt[o]);
 			} else {
 				obj[o] = opt[o];
@@ -151,7 +161,7 @@ let optionen = {
 		let icons = quick.querySelectorAll("a"),
 			icons_alle_aus = true;
 		for (let i = 0, len = icons.length; i < len; i++) {
-			if (optionen.data.einstellungen[ icons[i].id ]) {
+			if (optionen.data.einstellungen[icons[i].id]) {
 				icons[i].classList.remove("aus");
 				icons_alle_aus = false;
 			} else {
@@ -171,8 +181,8 @@ let optionen = {
 					nach = false;
 				// vorherige Elemente
 				do {
-					if ( !prev.classList.contains("aus") ) {
-						if ( !prev.classList.contains("quick-spacer") ) {
+					if (!prev.classList.contains("aus")) {
+						if (!prev.classList.contains("quick-spacer")) {
 							vor = true;
 						}
 						break;
@@ -181,7 +191,7 @@ let optionen = {
 				} while (prev);
 				// folgende Elemente
 				do {
-					if ( !next.classList.contains("aus") ) {
+					if (!next.classList.contains("aus")) {
 						nach = true;
 						break;
 					}
@@ -281,7 +291,7 @@ let optionen = {
 			optionen.data.einstellungen[e] = ele.value;
 		}
 		// ggf. Quick-Access-Bar umstellen
-		if ( e.match(/^quick/) ) {
+		if (e.match(/^quick/)) {
 			optionen.anwendenQuickAccess();
 		}
 		// Optionen speichern

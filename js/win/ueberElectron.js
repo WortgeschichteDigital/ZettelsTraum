@@ -11,7 +11,7 @@ window.addEventListener("load", function() {
 	document.getElementById("version-v8").textContent = process.versions.v8;
 	// Klick-Events an Links hängen
 	document.querySelectorAll("a").forEach(function(i) {
-		if ( i.classList.contains("intern") ) {
+		if (i.classList.contains("intern")) {
 			return;
 		}
 		helfer.links(i);

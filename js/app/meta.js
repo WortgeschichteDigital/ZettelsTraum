@@ -5,7 +5,7 @@ let meta = {
 	oeffnen () {
 		let fenster = document.getElementById("meta");
 		// Fenster öffnen oder in den Vordergrund holen
-		if ( overlay.oeffnen(fenster) ) { // Fenster ist schon offen
+		if (overlay.oeffnen(fenster)) { // Fenster ist schon offen
 			return;
 		}
 		// Felder füllen, die nicht geändert werden können
@@ -74,7 +74,7 @@ let meta = {
 				bearb += " +";
 				p.title = "(BearbeiterIn manuell ergänzt)";
 			}
-			p.appendChild( document.createTextNode(bearb) );
+			p.appendChild(document.createTextNode(bearb));
 		}
 	},
 	// BearbeiterIn ergänzen
@@ -83,13 +83,13 @@ let meta = {
 			va = helfer.textTrim(be.value);
 		// Uppala! Keine BearbeiterIn angegeben!
 		if (!va) {
-			dialog.oeffnen("alert", () => be.select() );
+			dialog.oeffnen("alert", () => be.select());
 			dialog.text("Sie haben keinen Namen eingegeben.");
 			return;
 		}
 		// BearbeiterIn schon registriert
 		if (data.be.indexOf(va) >= 0) {
-			dialog.oeffnen("alert", () => be.select() );
+			dialog.oeffnen("alert", () => be.select());
 			dialog.text("Die BearbeiterIn ist schon in der Liste.");
 			return;
 		}
@@ -135,7 +135,7 @@ let meta = {
 			// Enter
 			if (evt.which === 13) {
 				evt.preventDefault();
-				if ( document.getElementById("dropdown") ) {
+			if (document.getElementById("dropdown")) {
 					return;
 				}
 				meta.bearbErgaenzen();

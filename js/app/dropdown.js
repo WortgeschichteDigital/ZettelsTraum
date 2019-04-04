@@ -8,7 +8,7 @@ let dropdown = {
 	//     (der Datensatz, aus dem die Daten zusammengetragen werden sollen)
 	dataFormular (ds) {
 		for (let id in data.ka) {
-			if ( !data.ka.hasOwnProperty(id) ) {
+			if (!data.ka.hasOwnProperty(id)) {
 				continue;
 			}
 			let d = data.ka[id][ds].split("\n");
@@ -59,7 +59,7 @@ let dropdown = {
 			clearTimeout(dropdown.timeoutFill);
 			let feld_id = this.id;
 			dropdown.timeoutFill = setTimeout(function() {
-				if ( !document.getElementById("dropdown") ) {
+				if (!document.getElementById("dropdown")) {
 					dropdown.init(feld_id);
 				}
 				dropdown.fill(true);
@@ -69,7 +69,7 @@ let dropdown = {
 			if (evt.which === 13) { // Enter
 				// Dropdown existiert noch nicht od. hält keine Vorschläge bereit
 				let drop = document.getElementById("dropdown");
-				if ( !drop || drop.firstChild.classList.contains("keine-vorschlaege") ) {
+				if (!drop || drop.firstChild.classList.contains("keine-vorschlaege")) {
 					return;
 				}
 				// erst jetzt darf die Enter-Taste blockiert werden
@@ -118,7 +118,7 @@ let dropdown = {
 	//     (ID des Textfeldes, zu dem das Dropdown gehört)
 	init (feld_id) {
 		// altes Dropdown-Liste ggf. schließen
-		if ( dropdown.caller && dropdown.caller !== feld_id) {
+		if (dropdown.caller && dropdown.caller !== feld_id) {
 			dropdown.schliessen();
 		}
 		// neuen Caller registrieren
@@ -127,9 +127,9 @@ let dropdown = {
 		dropdown.data = [];
 		if (feld_id === "einstellung-bearbeiterin" ||
 				feld_id === "meta-be" ||
-				/^redaktion-person/.test(feld_id) ) {
+				/^redaktion-person/.test(feld_id)) {
 			dropdown.data = [...privat.bearbeiterinnen];
-		} else if ( /^redaktion-ereignis/.test(feld_id) ) {
+		} else if (/^redaktion-ereignis/.test(feld_id)) {
 			dropdown.data = [...redaktion.ereignisse];
 		} else if (feld_id === "beleg-bd") {
 			dropdown.dataFormular("bd");
@@ -164,12 +164,12 @@ let dropdown = {
 		helfer.keineKinder(drop);
 		// Elemente ggf. filtern
 		let items = [...dropdown.data],
-			va = helfer.textTrim( drop.parentNode.querySelector(".dropdown-feld").value );
+			va = helfer.textTrim(drop.parentNode.querySelector(".dropdown-feld").value);
 		if (filtern && va) {
 			let reg = new RegExp(helfer.escapeRegExp(va), "i"),
 				gefiltert = [];
 			items.forEach(function(i) {
-				if ( reg.test(i) ) {
+				if (reg.test(i)) {
 					gefiltert.push(i);
 				}
 			});
@@ -195,13 +195,13 @@ let dropdown = {
 		let drop = document.getElementById("dropdown"),
 			opts = drop.querySelectorAll("span");
 		// ggf. abbrechen, wenn keine Vorschläge vorhanden sind
-		if ( opts[0].classList.contains("keine-vorschlaege") ) {
+		if (opts[0].classList.contains("keine-vorschlaege")) {
 			return;
 		}
 		// neue Position ermitteln
 		let pos = -1;
 		for (let i = 0, len = opts.length; i < len; i++) {
-			if ( opts[i].classList.contains("aktiv") ) {
+			if (opts[i].classList.contains("aktiv")) {
 				pos = i;
 			}
 			opts[i].classList.remove("aktiv");
@@ -274,11 +274,11 @@ let dropdown = {
 			feld.value = text;
 			feld.focus();
 			// Haben die Änderungen weitere Konsequenzen?
-			if ( /^beleg-/.test(caller) ) {
+			if (/^beleg-/.test(caller)) {
 				helfer.textareaGrow(feld);
 				beleg.belegGeaendert(true);
-			} else if ( /^einstellung-/.test(caller) ) {
-				optionen.aendereEinstellung( document.getElementById(caller) );
+			} else if (/^einstellung-/.test(caller)) {
+				optionen.aendereEinstellung(document.getElementById(caller));
 			}
 			// Dropdown schließen
 			dropdown.schliessen();

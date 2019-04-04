@@ -11,12 +11,60 @@ const {app, BrowserWindow, ipcMain, Menu} = require("electron"),
 	fs = require("fs"),
 	path = require("path");
 
+// Squirrel-Events abfangen
+// (das ist im Wesentelichen eine Kopie von
+// https://github.com/electron/windows-installer)
+if (handleSquirrelEvent()) {
+	return;
+}
+
+function handleSquirrelEvent() {
+	if (process.argv.length === 1) {
+		return false;
+	}
+	const ChildProcess = require("child_process"),
+		appFolder = path.resolve(process.execPath, ".."),
+		rootAtomFolder = path.resolve(appFolder, ".."),
+		updateDotExe = path.resolve(path.join(rootAtomFolder, "Update.exe")),
+		exeName = path.basename(process.execPath);
+	const spawn = function(command, args) {
+		let spawnedProcess;
+		try {
+			spawnedProcess = ChildProcess.spawn(command, args, {detached: true});
+		} catch (err) {}
+		return spawnedProcess;
+	};
+	const spawnUpdate = function(args) {
+		return spawn(updateDotExe, args);
+	};
+	const squirrelEvent = process.argv[1];
+	switch (squirrelEvent) {
+		case "--squirrel-install":
+		case "--squirrel-updated":
+			// Install desktop and start menu shortcuts
+			spawnUpdate(['--createShortcut', exeName]);
+			setTimeout(app.quit, 1000);
+			return true;
+		case "--squirrel-uninstall":
+			// Remove desktop and start menu shortcuts
+			spawnUpdate(["--removeShortcut", exeName]);
+			setTimeout(app.quit, 1000);
+			return true;
+		case "--squirrel-obsolete":
+			// This is called on the outgoing version of your app before
+			// we update to the new version - it's the opposite of
+			// --squirrel-updated
+			app.quit();
+			return true;
+	}
+}
+
 // Bilderliste erstellen
 let bilder = [];
 fs.readdir(path.join(__dirname, "img"), function(err, img) {
 	for (let i = 0, len = img.length; i < len; i++) {
 		// Bild oder Ordner?
-		if ( fs.lstatSync( path.join(__dirname, "img", img[i]) ).isDirectory() ) {
+		if (fs.lstatSync(path.join(__dirname, "img", img[i])).isDirectory()) {
 			continue;
 		}
 		// Bild!
@@ -259,7 +307,9 @@ let layoutMenu = [
 ];
 
 // ggf. Developer-Menü ergänzen
-if (true || !app.isPackaged) { // TODO Dev-Tools
+let devtools = false;
+if (true || !app.isPackaged) { // TODO Dev-Tools in der paketierten Variante ausblenden
+	devtools = true;
 	layoutMenu.push({
 		label: "&Dev",
 		submenu: [
@@ -297,7 +347,7 @@ appMenu = {
 				zuletzt = optionen.data.app.zuletzt;
 			for (let i = 0, len = zuletzt.length; i < len; i++) {
 				// existiert die Datei noch?
-				if ( !fs.existsSync(zuletzt[i]) ) {
+				if (!fs.existsSync(zuletzt[i])) {
 					loeschen.push(zuletzt[i]);
 					continue;
 				}
@@ -403,13 +453,13 @@ appMenu = {
 appMenu.deaktivieren(true, false);
 
 // Menüse aktivieren/deaktivieren, wenn der Renderer-Prozess es wünscht
-ipcMain.on("menus-deaktivieren", (evt, disable) => appMenu.deaktivieren(disable, true) );
+ipcMain.on("menus-deaktivieren", (evt, disable) => appMenu.deaktivieren(disable, true));
 
 // Programm-Info aufrufen, wenn der Renderer-Prozess es wünscht
-ipcMain.on("ueber-zettelstraum", (evt, opener) => fenster.erstellenUeberApp(opener) );
+ipcMain.on("ueber-zettelstraum", (evt, opener) => fenster.erstellenUeberApp(opener));
 
 // Handbuch aufrufen, wenn der Renderer-Prozess es wünscht
-ipcMain.on("hilfe-handbuch", () => fenster.erstellenHandbuch() );
+ipcMain.on("hilfe-handbuch", () => fenster.erstellenHandbuch());
 
 // Optionen einlesen und speichern
 optionen = {
@@ -428,7 +478,7 @@ optionen = {
 	},
 	// liest die Optionen-Datei aus
 	lesen () {
-		if ( fs.existsSync(optionen.pfad) ) {
+		if (fs.existsSync(optionen.pfad)) {
 			const content = fs.readFileSync(optionen.pfad, "utf-8");
 			try {
 				optionen.data = JSON.parse(content);
@@ -460,7 +510,7 @@ ipcMain.on("optionen-senden", function(evt) {
 // Optionen vom Renderer Process abfangen und speichern
 ipcMain.on("optionen-speichern", function(evt, opt) {
 	if (optionen.data.app.zuletzt &&
-			optionen.data.app.zuletzt.join(",") !== opt.zuletzt.join(",") ) {
+			optionen.data.app.zuletzt.join(",") !== opt.zuletzt.join(",")) {
 		optionen.data.app = opt;
 		appMenu.zuletzt(true); // Das sollte nicht unnötig oft aufgerufen werden!
 	} else {
@@ -487,12 +537,12 @@ fenster = {
 			show: false,
 			webPreferences: {
 				nodeIntegration: true,
-// 				devTools: app.isPackaged ? false : true, // TODO Dev-Tools
+				devTools: devtools,
 				defaultEncoding: "utf-8",
 			},
 		});
 		// HTML laden
-		win.loadFile( path.join(__dirname, "index.html") );
+		win.loadFile(path.join(__dirname, "index.html"));
 		// Fenster anzeigen, sobald alles geladen wurde
 		win.once("ready-to-show", function() {
 			win.show();
@@ -502,7 +552,7 @@ fenster = {
 			}
 		});
 		// globales Fensterobjekt beim Schließen dereferenzieren
-		win.on("closed", () => win = null );
+		win.on("closed", () => win = null);
 		// Status des Fensters speichern
 		// Man könnte den Status noch zusätzlich bei den Events
 		// "resize" und "move" speichern, finde ich aber übertrieben.
@@ -522,18 +572,18 @@ fenster = {
 			show: false,
 			webPreferences: {
 				nodeIntegration: true,
-// 				devTools: app.isPackaged ? false : true, // TODO Dev-Tools
+				devTools: devtools,
 				defaultEncoding: "utf-8",
 			},
 		});
 		// Menü abschalten
 		winHandbuch.setMenuBarVisibility(false);
 		// HTML laden
-		winHandbuch.loadFile( path.join(__dirname, "win", "handbuch.html") );
+		winHandbuch.loadFile(path.join(__dirname, "win", "handbuch.html"));
 		// Fenster anzeigen, sobald alles geladen wurde
-		winHandbuch.once("ready-to-show", () => winHandbuch.show() );
+		winHandbuch.once("ready-to-show", () => winHandbuch.show());
 		// globales Fensterobjekt beim Schließen dereferenzieren
-		winHandbuch.on("closed", () => winHandbuch = null );
+		winHandbuch.on("closed", () => winHandbuch = null);
 	},
 	// Doku-Fenster erstellen
 	erstellenDokumentation () {
@@ -549,18 +599,18 @@ fenster = {
 			show: false,
 			webPreferences: {
 				nodeIntegration: true,
-// 				devTools: app.isPackaged ? false : true, // TODO Dev-Tools
+				devTools: devtools,
 				defaultEncoding: "utf-8",
 			},
 		});
 		// Menü abschalten
 		winDokumentation.setMenuBarVisibility(false);
 		// HTML laden
-		winDokumentation.loadFile( path.join(__dirname, "win", "dokumentation.html") );
+		winDokumentation.loadFile(path.join(__dirname, "win", "dokumentation.html"));
 		// Fenster anzeigen, sobald alles geladen wurde
-		winDokumentation.once("ready-to-show", () => winDokumentation.show() );
+		winDokumentation.once("ready-to-show", () => winDokumentation.show());
 		// globales Fensterobjekt beim Schließen dereferenzieren
-		winDokumentation.on("closed", () => winDokumentation = null );
+		winDokumentation.on("closed", () => winDokumentation = null);
 	},
 	// Über-Fenster erstellen (App)
 	erstellenUeberApp (opener) {
@@ -586,18 +636,18 @@ fenster = {
 			show: false,
 			webPreferences: {
 				nodeIntegration: true,
-// 				devTools: app.isPackaged ? false : true, // TODO Dev-Tools
+				devTools: devtools,
 				defaultEncoding: "utf-8",
 			},
 		});
 		// Menü abschalten
 		winUeberApp.setMenuBarVisibility(false);
 		// HTML laden
-		winUeberApp.loadFile( path.join(__dirname, "win", "ueberApp.html") );
+		winUeberApp.loadFile(path.join(__dirname, "win", "ueberApp.html"));
 		// Fenster anzeigen, sobald alles geladen wurde
-		winUeberApp.once("ready-to-show", () => winUeberApp.show() );
+		winUeberApp.once("ready-to-show", () => winUeberApp.show());
 		// globales Fensterobjekt beim Schließen dereferenzieren
-		winUeberApp.on("closed", () => winUeberApp = null );
+		winUeberApp.on("closed", () => winUeberApp = null);
 	},
 	// Über-Fenster erstellen (Electron)
 	erstellenUeberElectron () {
@@ -616,18 +666,18 @@ fenster = {
 			show: false,
 			webPreferences: {
 				nodeIntegration: true,
-// 				devTools: app.isPackaged ? false : true, // TODO Dev-Tools
+				devTools: devtools,
 				defaultEncoding: "utf-8",
 			},
 		});
 		// Menü abschalten
 		winUeberElectron.setMenuBarVisibility(false);
 		// HTML laden
-		winUeberElectron.loadFile( path.join(__dirname, "win", "ueberElectron.html") );
+		winUeberElectron.loadFile(path.join(__dirname, "win", "ueberElectron.html"));
 		// Fenster anzeigen, sobald alles geladen wurde
-		winUeberElectron.once("ready-to-show", () => winUeberElectron.show() );
+		winUeberElectron.once("ready-to-show", () => winUeberElectron.show());
 		// globales Fensterobjekt beim Schließen dereferenzieren
-		winUeberElectron.on("closed", () => winUeberElectron = null );
+		winUeberElectron.on("closed", () => winUeberElectron = null);
 	},
 	// Fenster-Status in den Optionen speichern (nur Hauptfenster)
 	status () {

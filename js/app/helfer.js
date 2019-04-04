@@ -16,10 +16,10 @@ let helfer = {
 				app.quit();
 				return;
 			} else if (id === "kartei-erstellen") {
-				kartei.checkSpeichern( () => kartei.wortErfragen() );
+				kartei.checkSpeichern(() => kartei.wortErfragen());
 				return;
 			} else if (id === "kartei-oeffnen") {
-				kartei.checkSpeichern(() => kartei.oeffnen() );
+				kartei.checkSpeichern(() => kartei.oeffnen());
 				return;
 			}
 			// Ist eine Kartei geöffnet?
@@ -34,7 +34,7 @@ let helfer = {
 			} else if (id === "kartei-speichern-unter") {
 				kartei.speichern(true);
 			} else if (id === "kartei-schliessen") {
-				kartei.checkSpeichern( () => kartei.schliessen() );
+				kartei.checkSpeichern(() => kartei.schliessen());
 			} else if (id === "kartei-formvarianten") {
 				stamm.oeffnen();
 			} else if (id === "kartei-notizen") {
@@ -90,7 +90,7 @@ let helfer = {
 	//   obj = Element
 	//     (dieses Element soll von all seinen Kindern befreit werden)
 	keineKinder (obj) {
-		while ( obj.hasChildNodes() ) {
+		while (obj.hasChildNodes()) {
 			obj.removeChild(obj.lastChild);
 		}
 	},
@@ -109,12 +109,12 @@ let helfer = {
 		// Curosr links od. rechts
 		let aktiv = document.activeElement;
 		// Ist das aktive Element ein Anker oder ein Button?
-		if ( !(aktiv.nodeName === "A" || aktiv.nodeName === "INPUT" && aktiv.type === "button") ) {
+		if (!(aktiv.nodeName === "A" || aktiv.nodeName === "INPUT" && aktiv.type === "button")) {
 			return;
 		}
 		// Parent-Block ermitteln
 		let parent = aktiv.parentNode;
-		while ( !parent.nodeName.match(/^(BODY|DIV|HEADER|P|TD|TH)$/) ) { // BODY nur zur Sicherheit, falls ich in der Zukunft vergesse die Liste ggf. zu ergänzen
+		while (!parent.nodeName.match(/^(BODY|DIV|HEADER|P|TD|TH)$/)) { // BODY nur zur Sicherheit, falls ich in der Zukunft vergesse die Liste ggf. zu ergänzen
 			parent = parent.parentNode;
 		}
 		// Elemente sammeln und Fokus-Position ermitteln
@@ -185,7 +185,7 @@ let helfer = {
 			"dta-rot": "color: red",
 		};
 		for (let style in styles) {
-			if ( !styles.hasOwnProperty(style) ) {
+			if (!styles.hasOwnProperty(style)) {
 				continue;
 			}
 			html = html.replace(/class="(.+?)"/g, function(m, p1) {
@@ -239,6 +239,11 @@ let helfer = {
 		const cl = Object.prototype.toString.call(obj).slice(8, -1);
     return obj !== undefined && obj !== null && cl === typ;
 	},
+	// Variablen um Wortgrenzen zu bestimmen
+	ganzesWortRegExp: {
+		links: `\\s/\\\\([{<>`,
+		rechts: `\\s"/\\\\)\\\]!?.:,;<>`,
+	},
 	// Tokens mit spezieller Bedeutung für reguläre Ausdrücke escapen
 	//   string = String
 	//     (Text, der escaped werden soll)
@@ -249,7 +254,7 @@ let helfer = {
 	formVariRegExp () {
 		let varianten = [];
 		data.fv.forEach(function(i) {
-			varianten.push( helfer.formVariSonderzeichen( helfer.escapeRegExp(i.va) ) );
+			varianten.push(helfer.formVariSonderzeichen(helfer.escapeRegExp(i.va)));
 		});
 		return varianten.join("|");
 	},
@@ -278,7 +283,7 @@ let helfer = {
 		// Esc
 		if (evt.which === 27) {
 			// Dropdown schließen
-			if ( document.getElementById("dropdown") ) {
+			if (document.getElementById("dropdown")) {
 				dropdown.schliessen();
 				return;
 			}
@@ -291,7 +296,7 @@ let helfer = {
 			}
 			// Belegfenster schließen
 			let formular = document.getElementById("beleg");
-			if ( !formular.classList.contains("aus") ) {
+			if (!formular.classList.contains("aus")) {
 				helfer.inputBlur();
 				beleg.aktionAbbrechen();
 			}

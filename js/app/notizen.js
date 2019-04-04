@@ -6,7 +6,7 @@ let notizen = {
 		let fenster = document.getElementById("notizen"),
 			feld = document.getElementById("notizen-feld");
 		// Fenster öffnen oder in den Vordergrund holen
-		if ( overlay.oeffnen(fenster) ) { // Fenster ist schon offen
+		if (overlay.oeffnen(fenster)) { // Fenster ist schon offen
 			feld.focus();
 			return;
 		}
@@ -51,7 +51,7 @@ let notizen = {
 		}
 		// keine Notizen im Feld
 		if (!vorhanden.feld) {
-			dialog.oeffnen("alert", () => feld.focus() );
+			dialog.oeffnen("alert", () => feld.focus());
 			dialog.text("Das Notizfeld ist leer.\nEs können also gar keine Notizen gespeichert werden.");
 			return;
 		}
@@ -90,7 +90,7 @@ let notizen = {
 		// Sind überhaupt Notizen vorhanden?
 		let vorhanden = notizen.vorhanden();
 		if (!vorhanden.kartei && !vorhanden.feld) {
-			dialog.oeffnen("alert", () => notizen.schliessen() );
+			dialog.oeffnen("alert", () => notizen.schliessen());
 			dialog.text("Es sind keine Notizen vorhanden.");
 			return;
 		}
@@ -117,7 +117,7 @@ let notizen = {
 	schliessen () {
 		notizen.notizenGeaendert(false);
 		notizen.icon();
-		overlay.ausblenden( document.getElementById("notizen") );
+		overlay.ausblenden(document.getElementById("notizen"));
 	},
 	// überprüft, ob überhaupt Notizen vorhanden sind
 	vorhanden () {
@@ -165,7 +165,7 @@ let notizen = {
 	//   textarea = Element
 	//     (<textarea>, in dem die Notizen stehen)
 	change (textarea) {
-		textarea.addEventListener("input", () => notizen.notizenGeaendert(true) );
+		textarea.addEventListener("input", () => notizen.notizenGeaendert(true));
 	},
 	// speichert, ob der Inhalt des Notizenfelds geändert wurde
 	geaendert: false,

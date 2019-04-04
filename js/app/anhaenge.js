@@ -8,8 +8,8 @@ let anhaenge = {
 	//   an = Array/String
 	//     (Anhang oder Liste von Anhängen, die gescannt werden sollen)
 	scan (an) {
-		if (Array.isArray(an) ) {
-			an.forEach( (i) => scannen(i) );
+		if (Array.isArray(an)) {
+			an.forEach((i) => scannen(i));
 		} else {
 			scannen(an);
 		}
@@ -22,7 +22,7 @@ let anhaenge = {
 			const fs = require("fs"),
 				path = require("path");
 			let pfad = datei;
-			if ( !path.isAbsolute(datei) ) {
+			if (!path.isAbsolute(datei)) {
 				pfad = `${path.parse(kartei.pfad).dir}/${datei}`;
 			}
 			anhaenge.data[datei] = {
@@ -45,7 +45,7 @@ let anhaenge = {
 			arr = beleg;
 		}
 		for (let i = 1, len = obj_split.length; i < len; i++) {
-			arr = arr[ obj_split[i] ];
+			arr = arr[obj_split[i]];
 		}
 		return arr;
 	},
@@ -109,7 +109,7 @@ let anhaenge = {
 	fenster () {
 		let fenster = document.getElementById("anhaenge");
 		// Fenster öffnen oder in den Vordergrund holen
-		if ( overlay.oeffnen(fenster) ) { // Fenster ist schon offen
+		if (overlay.oeffnen(fenster)) { // Fenster ist schon offen
 			return;
 		}
 		// Anhänge der Kartei auflisten
@@ -192,7 +192,7 @@ let anhaenge = {
 	// Anhänge der Belege im Kartei-Fenster auflisten
 	auflistenBelege (cont) {
 		for (let id in data.ka) {
-			if ( !data.ka.hasOwnProperty(id) ) {
+			if (!data.ka.hasOwnProperty(id)) {
 				continue;
 			}
 			// Anhänge vorhanden?
@@ -269,6 +269,11 @@ let anhaenge = {
 			arr.splice(idx - 1, 0, datei);
 			// Änderungsmarkierung
 			anhaenge.geaendert(cont);
+			// ggf. Änderungsdatum der Karteikarte auffrischen
+			if (/^data\|ka/.test(obj)) {
+				const id = obj.split("|")[2];
+				data.ka[id].dm = new Date().toISOString();
+			}
 			// Liste der Anhänge neu aufbauen
 			if (cont.dataset.anhaenge === "kartei") { // sonst erscheinen die Anhänge des Belegs an der Stelle, an der die Anhänge der Kartei sein sollten
 				obj = "data|an";
@@ -296,6 +301,11 @@ let anhaenge = {
 					arr.splice(arr.indexOf(datei), 1);
 					// Änderungsmarkierung
 					anhaenge.geaendert(cont);
+					// ggf. Änderungsdatum der Karteikarte auffrischen
+					if (/^data\|ka/.test(obj)) {
+						const id = obj.split("|")[2];
+						data.ka[id].dm = new Date().toISOString();
+					}
 					// Liste der Anhänge neu aufbauen
 					if (cont.dataset.anhaenge === "kartei") { // sonst erscheinen die Anhänge des Belegs an der Stelle, an der die Anhänge der Kartei sein sollten
 						obj = "data|an";
@@ -307,7 +317,7 @@ let anhaenge = {
 					}
 				}
 			});
-			dialog.text(`Soll die folgende Datei wirklich aus der Liste entfernt werden?\n${datei}`);
+			dialog.text(`Soll die folgende Datei wirklich aus der Liste entfernt werden?\n<p class="force-wrap">${datei}</p>`);
 		});
 	},
 	// Add-Button erzeugen, der über einer Anhängeliste steht
@@ -367,13 +377,15 @@ let anhaenge = {
 	// Dateien ggf. hinzufügen
 	//   dateien = Array
 	//     (enthält eine Liste der Dateien, die hinzugefügt werden sollen)
+	//   cont = Element
+	//     (Container der den Add-Button und die Liste der Anhänge enthält)
 	//   obj = String
 	//     (Angaben über das Array, dem die Dateien hinzugefügt werden sollen
 	//     Werte durch Haarstriche getrennt)
 	addFiles (dateien, cont, obj) {
 		// Dateien hinzufügen
 		const path = require("path"),
-			reg_pfad = new RegExp( helfer.escapeRegExp(`${path.dirname(kartei.pfad)}/`) );
+			reg_pfad = new RegExp(helfer.escapeRegExp(`${path.dirname(kartei.pfad)}${path.sep}`));
 		let schon = [],
 			arr = anhaenge.getArr(obj);
 		dateien.forEach(function(i) {
@@ -416,7 +428,7 @@ let anhaenge = {
 		let typ = cont.dataset.anhaenge;
 		if (typ === "kartei") {
 			kartei.karteiGeaendert(true);
-			anhaenge.makeIconList( data.an, document.getElementById("kartei-anhaenge") );
+			anhaenge.makeIconList(data.an, document.getElementById("kartei-anhaenge"));
 		} else if (typ === "beleg") {
 			beleg.belegGeaendert(true);
 		}

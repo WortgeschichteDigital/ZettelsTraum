@@ -60,7 +60,7 @@ let popup = {
 	getTarget (pfad) {
 		// Textauswahl
 		if (window.getSelection().toString() &&
-				popup.getTargetSelection(pfad) ) {
+				popup.getTargetSelection(pfad)) {
 			return "kopieren";
 		}
 		// alle Elemente im Pfad durchgehen
@@ -86,25 +86,25 @@ let popup = {
 				return "notizen";
 			} else if (id === "kartei-anhaenge") {
 				return "anhaenge";
-			} else if ( id === "liste-belege-anzahl" &&
-					pfad[i].classList.contains("belege-gefiltert") ) {
+			} else if (id === "liste-belege-anzahl" &&
+					pfad[i].classList.contains("belege-gefiltert")) {
 				return "filter";
 			}
 			// Klassen
-			if ( pfad[i].classList) {
-				if ( pfad[i].classList.contains("link") ) {
+			if (pfad[i].classList) {
+				if (pfad[i].classList.contains("link")) {
 					popup.element = pfad[i];
 					return "link";
-				} else if ( pfad[i].classList.contains("liste-kopf") ) {
+				} else if (pfad[i].classList.contains("liste-kopf")) {
 					popup.belegID = pfad[i].dataset.id;
 					return "beleg";
-				} else if ( pfad[i].classList.contains("liste-meta") ) {
+				} else if (pfad[i].classList.contains("liste-meta")) {
 					popup.belegID = pfad[i].parentNode.previousSibling.dataset.id;
 					return "beleg";
-				} else if ( pfad[i].classList.contains("anhaenge-item") ) {
+				} else if (pfad[i].classList.contains("anhaenge-item")) {
 					popup.anhangDatei = pfad[i].dataset.datei;
 					return "anhang";
-				} else if ( pfad[i].classList.contains("overlay") ) {
+				} else if (pfad[i].classList.contains("overlay")) {
 					return "schliessen";
 				}
 			}
@@ -132,11 +132,11 @@ let popup = {
 			container_umfeld = "";
 		while (ele.nodeName !== "BODY") {
 			ele = ele.parentNode;
-			if ( ele.classList.contains("liste-details") ) {
+			if (ele.classList.contains("liste-details")) {
 				container_umfeld = "DIV";
 				bereich = true;
 				break;
-			} else if ( ele.classList.contains("beleg-lese") ) {
+			} else if (ele.classList.contains("beleg-lese")) {
 				container_umfeld = "TD";
 				bereich = true;
 				break;
@@ -150,7 +150,7 @@ let popup = {
 			while (ele.nodeName !== container_umfeld) {
 				ele = ele.parentNode;
 			}
-			if ( ele.contains(pfad[0]) ) {
+			if (ele.contains(pfad[0])) {
 				umfeld = true;
 			}
 		}
@@ -176,7 +176,7 @@ let popup = {
 	menuKopieren (menu) {
 		const {MenuItem} = require("electron").remote,
 			path = require("path");
-		menu.append( new MenuItem({
+		menu.append(new MenuItem({
 			label: "Textauswahl kopieren",
 			icon: path.join(__dirname, "img", "menu", "bearbeiten-kopieren.png"),
 			click: function() {
@@ -186,7 +186,7 @@ let popup = {
 					html: helfer.clipboardHtml(popup.textauswahl.html),
 				});
 			},
-		}) );
+		}));
 	},
 	// Bearbeiten-Menü füllen
 	//   menu = Object
@@ -194,39 +194,39 @@ let popup = {
 	menuBearbeiten (menu) {
 		const {MenuItem} = require("electron").remote,
 			path = require("path");
-		menu.append( new MenuItem({
+		menu.append(new MenuItem({
 			label: "Rückgängig",
 			icon: path.join(__dirname, "img", "menu", "bearbeiten-rueckgaengig.png"),
 			role: "undo",
-		}) );
-		menu.append( new MenuItem({
+		}));
+		menu.append(new MenuItem({
 			label: "Wiederherstellen",
 			icon: path.join(__dirname, "img", "menu", "bearbeiten-wiederherstellen.png"),
 			role: "redo",
-		}) );
-		menu.append( new MenuItem({
+		}));
+		menu.append(new MenuItem({
 			type: "separator"
-		}) );
-		menu.append( new MenuItem({
+		}));
+		menu.append(new MenuItem({
 			label: "Ausschneiden",
 			icon: path.join(__dirname, "img", "menu", "bearbeiten-ausschneiden.png"),
 			role: "cut",
-		}) );
-		menu.append( new MenuItem({
+		}));
+		menu.append(new MenuItem({
 			label: "Kopieren",
 			icon: path.join(__dirname, "img", "menu", "bearbeiten-kopieren.png"),
 			role: "copy",
-		}) );
-		menu.append( new MenuItem({
+		}));
+		menu.append(new MenuItem({
 			label: "Einfügen",
 			icon: path.join(__dirname, "img", "menu", "bearbeiten-einfuegen.png"),
 			role: "paste",
-		}) );
-		menu.append( new MenuItem({
+		}));
+		menu.append(new MenuItem({
 			label: "Alles auswählen",
 			icon: path.join(__dirname, "img", "menu", "bearbeiten-auswaehlen.png"),
 			role: "selectAll",
-		}) );
+		}));
 	},
 	// Quick-Access-Bar-Menü füllen
 	//   menu = Object
@@ -234,14 +234,14 @@ let popup = {
 	menuQuick (menu) {
 		const {MenuItem} = require("electron").remote,
 			path = require("path");
-		menu.append( new MenuItem({
+		menu.append(new MenuItem({
 			label: "Quick-Access-Bar konfigurieren",
 			icon: path.join(__dirname, "img", "menu", "programm-einstellungen.png"),
 			click: function() {
 				optionen.oeffnen();
-				optionen.sektionWechseln( document.getElementById("einstellungen-link-menue") );
+				optionen.sektionWechseln(document.getElementById("einstellungen-link-menue"));
 			},
-		}) );
+		}));
 	},
 	// Wort-Menü füllen
 	//   menu = Object
@@ -249,11 +249,11 @@ let popup = {
 	menuWort (menu) {
 		const {MenuItem} = require("electron").remote,
 			path = require("path");
-		menu.append( new MenuItem({
+		menu.append(new MenuItem({
 			label: "Wort ändern",
 			icon: path.join(__dirname, "img", "menu", "popup-wort.png"),
 			click: () => kartei.wortAendern(),
-		}) );
+		}));
 	},
 	// Notizen-Menü füllen
 	//   menu = Object
@@ -261,11 +261,11 @@ let popup = {
 	menuNotizen (menu) {
 		const {MenuItem} = require("electron").remote,
 			path = require("path");
-		menu.append( new MenuItem({
+		menu.append(new MenuItem({
 			label: "Notizen-Fenster",
 			icon: path.join(__dirname, "img", "menu", "kartei-notizen.png"),
 			click: () => notizen.oeffnen(),
-		}) );
+		}));
 	},
 	// Anhänge-Menü füllen
 	//   menu = Object
@@ -273,11 +273,11 @@ let popup = {
 	menuAnhaenge (menu) {
 		const {MenuItem} = require("electron").remote,
 			path = require("path");
-		menu.append( new MenuItem({
+		menu.append(new MenuItem({
 			label: "Anhänge-Fenster",
 			icon: path.join(__dirname, "img", "menu", "kartei-anhaenge.png"),
 			click: () => anhaenge.fenster(),
-		}) );
+		}));
 	},
 	// Filter-Menü füllen
 	//   menu = Object
@@ -285,11 +285,11 @@ let popup = {
 	menuFilter (menu) {
 		const {MenuItem} = require("electron").remote,
 			path = require("path");
-		menu.append( new MenuItem({
+		menu.append(new MenuItem({
 			label: "Filter zurücksetzen",
 			icon: path.join(__dirname, "img", "menu", "popup-filter.png"),
 			click: () => filter.ctrlReset(true),
-		}) );
+		}));
 	},
 	// Link-Menü füllen
 	//   menu = Object
@@ -297,14 +297,14 @@ let popup = {
 	menuLink (menu) {
 		const {MenuItem} = require("electron").remote,
 			path = require("path");
-		menu.append( new MenuItem({
+		menu.append(new MenuItem({
 			label: "Link kopieren",
 			icon: path.join(__dirname, "img", "menu", "popup-link.png"),
 			click: function() {
 				const {clipboard} = require("electron");
 				clipboard.writeText(popup.element.title);
 			},
-		}) );
+		}));
 	},
 	// Beleg-Menü füllen
 	//   menu = Object
@@ -312,14 +312,14 @@ let popup = {
 	menuBeleg (menu) {
 		const {MenuItem} = require("electron").remote,
 			path = require("path");
-		menu.append( new MenuItem({
+		menu.append(new MenuItem({
 			label: "Beleg bearbeiten",
 			icon: path.join(__dirname, "img", "menu", "popup-beleg.png"),
 			click: function() {
 				overlay.alleSchliessen(); // der Beleg kann auch aus einem Overlay-Fenster geöffnet werden
-				beleg.oeffnen( parseInt(popup.belegID, 10) );
+				beleg.oeffnen(parseInt(popup.belegID, 10));
 			},
-		}) );
+		}));
 	},
 	// Anhang-Menü füllen
 	//   menu = Object
@@ -327,11 +327,11 @@ let popup = {
 	menuAnhang (menu) {
 		const {MenuItem} = require("electron").remote,
 			path = require("path");
-		menu.append( new MenuItem({
+		menu.append(new MenuItem({
 			label: "Anhang öffnen",
 			icon: path.join(__dirname, "img", "menu", "popup-oeffnen.png"),
-			click: () => anhaenge.oeffnen( popup.anhangDatei ),
-		}) );
+			click: () => anhaenge.oeffnen(popup.anhangDatei),
+		}));
 	},
 	// Schließen-Menü füllen
 	//   menu = Object
@@ -339,14 +339,14 @@ let popup = {
 	menuSchliessen (menu) {
 		const {MenuItem} = require("electron").remote,
 			path = require("path");
-		menu.append( new MenuItem({
+		menu.append(new MenuItem({
 			label: "Fenster schließen",
 			icon: path.join(__dirname, "img", "menu", "popup-schliessen.png"),
 			click: function() {
 				const id_oben = overlay.oben();
-				overlay.schliessen( document.getElementById(id_oben) );
+				overlay.schliessen(document.getElementById(id_oben));
 			},
-		}) );
+		}));
 	},
 	// Belege-Menü füllen
 	//   menu = Object
@@ -354,19 +354,19 @@ let popup = {
 	menuBelege (menu) {
 		const {MenuItem} = require("electron").remote,
 			path = require("path");
-		menu.append( new MenuItem({
+		menu.append(new MenuItem({
 			label: "Beleg hinzufügen",
 			icon: path.join(__dirname, "img", "menu", "belege-hinzufuegen.png"),
 			click: () => beleg.erstellenPre(),
 			accelerator: "CommandOrControl+N",
-		}) );
-		menu.append( new MenuItem({
+		}));
+		menu.append(new MenuItem({
 			label: "Belege auflisten",
 			icon: path.join(__dirname, "img", "menu", "belege-auflisten.png"),
 			click: () => liste.anzeigen(),
 			accelerator: "CommandOrControl+L",
-		}) );
-		menu.append( new MenuItem({
+		}));
+		menu.append(new MenuItem({
 			label: "Belege sortieren",
 			icon: path.join(__dirname, "img", "menu", "belege-sortieren.png"),
 			click: function() { // TODO
@@ -374,7 +374,7 @@ let popup = {
 				dialog.text("Sorry!\nDiese Funktion ist noch nicht programmiert.");
 			},
 			accelerator: "CommandOrControl+H",
-		}) );
+		}));
 	},
 	// Kartei-Menü füllen
 	//   menu = Object
@@ -382,13 +382,13 @@ let popup = {
 	menuKartei (menu) {
 		const {MenuItem} = require("electron").remote,
 			path = require("path");
-		menu.append( new MenuItem({
+		menu.append(new MenuItem({
 			label: "Kartei erstellen",
 			icon: path.join(__dirname, "img", "menu", "kartei-erstellen.png"),
 			click: function() {
-				kartei.checkSpeichern( () => kartei.wortErfragen() );
+				kartei.checkSpeichern(() => kartei.wortErfragen());
 			},
 			accelerator: "CommandOrControl+E",
-		}) );
+		}));
 	},
 };

@@ -11,7 +11,7 @@ let stamm = {
 		}
 		// Fenster öffnen oder in den Vordergrund holen
 		let fenster = document.getElementById("stamm");
-		if ( overlay.oeffnen(fenster) ) { // Fenster ist schon offen
+		if (overlay.oeffnen(fenster)) { // Fenster ist schon offen
 			return;
 		}
 		// Liste erzeugen
@@ -43,7 +43,7 @@ let stamm = {
 				p.appendChild(a);
 			}
 			// Text
-			p.appendChild( document.createTextNode(data.fv[i].va) );
+			p.appendChild(document.createTextNode(data.fv[i].va));
 			// Variante aus dem DTA?
 			if (data.fv[i].qu === "dta") {
 				let span = document.createElement("span");
@@ -60,7 +60,7 @@ let stamm = {
 			va = helfer.textTrim(text.value);
 		// Uppala! Keine Variante angegeben!
 		if (!va) {
-			dialog.oeffnen("alert", () => text.select() );
+			dialog.oeffnen("alert", () => text.select());
 			dialog.text("Sie haben keine Variante eingegeben.");
 			return;
 		}
@@ -84,7 +84,7 @@ let stamm = {
 		kartei.karteiGeaendert(true);
 		// Abbruchmeldung
 		function abbruch () {
-			dialog.oeffnen("alert", () => text.select() );
+			dialog.oeffnen("alert", () => text.select());
 			dialog.text("Die Variante ist schon in der Liste.");
 		}
 	},
@@ -229,7 +229,7 @@ let stamm = {
 		eqlemma.forEach(function(i) {
 			if (helfer.checkType("Object", i) && i.hi) {
 				varianten.push(i.hi);
-			} else if ( helfer.checkType("String", i) ) {
+			} else if (helfer.checkType("String", i)) {
 				varianten.push(i);
 			}
 		});
@@ -256,7 +256,7 @@ let stamm = {
 				if (j === i) {
 					continue;
 				}
-				if ( varianten[j].includes(variante) ) {
+				if (varianten[j].includes(variante)) {
 					ex.push(j);
 				}
 			}

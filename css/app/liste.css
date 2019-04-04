@@ -135,9 +135,13 @@
 	margin-bottom: 0;
 }
 
+.filter-cont a:focus {
+	text-decoration: underline;
+}
+
 .filter-cont p {
 	margin-bottom: 0;
-	padding: 0 0 5px 25px; /* sonst wird der outline links abgeschnitten; vgl. .filter-cont */
+	padding: 0 0 5px 25px; /* 25px, sonst wird der outline links abgeschnitten; vgl. .filter-cont */
 	text-indent: -24px;
 }
 
@@ -151,39 +155,22 @@
 	margin-bottom: 5px;
 }
 
-.filter-cont p[class^="filter-baum"] {
+.filter-baum {
+	margin: 0 0 0 8px;
 	border-left: 1px dotted var(--linie);
+	padding-left: 14px;
 }
 
-.filter-cont p.filter-baum1 {
-	padding-left: 41px;
-	margin-left: 8px;
+.filter-baum p:last-child {
+	padding-bottom: 0;
 }
 
-.filter-cont p.filter-baum2 {
-	padding-left: 40px;
-	margin-left: 33px
+.filter-baum + .filter-baum {
+	padding-top: 5px;
 }
 
-.filter-cont p.filter-baum3 {
-	padding-left: 39px;
-	margin-left: 58px;
-}
-
-.filter-cont p.filter-baum4 {
-	padding-left: 38px;
-	margin-left: 83px
-}
-
-.filter-cont p.filter-baum5 {
-	padding-left: 37px;
-	margin-left: 108px;
-}
-
-.filter-keine-belege {
-	color: var(--textSehrHell);
-	font-style: italic;
-	text-align: center;
+.filter-baum + p {
+	padding-top: 5px;
 }
 
 .filter-treffer {
@@ -210,8 +197,28 @@
 	padding-left: 24px;
 }
 
+#filter-erweiterte-cont h3 {
+	position: relative;
+	margin: 10px 0 5px 0;
+	color: var(--farbe);
+}
+
 #filter-erweiterte-cont p {
 	margin-bottom: 5px;
+}
+
+#filter-erweiterte-cont span {
+	display: inline-block;
+	margin-right: 10px;
+	width: 115px;
+}
+
+#filter-erweiterte-cont span#filter-datenfelder {
+	position: absolute;
+	right: 0;
+	margin: 0;
+	width: auto;
+	font-style: normal;
 }
 
 #liste-filter input[type="radio"] {
@@ -393,6 +400,12 @@
 	transition: background-color 1.5s ease;
 }
 
+.liste-kopf mark {
+	padding: 0;
+	background-color: transparent;
+	font-weight: bold;
+}
+
 #liste-belege-cont .liste-autor-detail {
 	display: none;
 }
@@ -474,18 +487,6 @@
 
 .liste-details p:last-child {
 	margin-bottom: 0;
-}
-
-.liste-kopf mark {
-	background-color: transparent;
-	font-weight: bold;
-}
-
-.liste-details mark.wort {
-	border-radius: 3px;
-	padding: 0 3px;
-	background-color: var(--farbeGelb);
-	font-weight: bold;
 }
 
 div.liste-label {

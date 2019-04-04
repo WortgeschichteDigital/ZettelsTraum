@@ -34,7 +34,7 @@ let redaktion = {
 	oeffnen () {
 		let fenster = document.getElementById("redaktion");
 		// Fenster öffnen oder in den Vordergrund holen
-		if ( overlay.oeffnen(fenster) ) { // Fenster ist schon offen
+		if (overlay.oeffnen(fenster)) { // Fenster ist schon offen
 			return;
 		}
 		// Tabelle aufbauen
@@ -158,7 +158,7 @@ let redaktion = {
 			}
 			img.src = src;
 			td.appendChild(img);
-			td.appendChild( document.createTextNode(wert) );
+			td.appendChild(document.createTextNode(wert));
 		} else if (wert) {
 			td.textContent = wert;
 		}
@@ -227,7 +227,7 @@ let redaktion = {
 				return;
 			}
 			// Abbruch, wenn Enter gedrückt wurde, aber das Dropdown-Menü offen ist
-			if ( document.getElementById("dropdown") ) {
+			if (document.getElementById("dropdown")) {
 				return;
 			}
 			// Soll ein neuer Eintrag erstellt werden?
@@ -249,8 +249,8 @@ let redaktion = {
 			}
 			slot = parseInt(slot, 10);
 			// Wurde der Wert wirklich geändert?
-			if (data.rd[slot][ redaktion.feldtypen[feldtyp] ] !== val) {
-				data.rd[slot][ redaktion.feldtypen[feldtyp] ] = val;
+			if (data.rd[slot][redaktion.feldtypen[feldtyp]] !== val) {
+				data.rd[slot][redaktion.feldtypen[feldtyp]] = val;
 				kartei.karteiGeaendert(true);
 			}
 			// Tabellenzelle überschreiben
@@ -271,7 +271,7 @@ let redaktion = {
 			// Feld zurücksetzen
 			const slot = parseInt(this.parentNode.parentNode.dataset.slot, 10),
 				feldtyp = this.id.match(/^.+?-(.+?)-/)[1];
-			redaktion.zelleErsetzen(feldtyp, data.rd[slot][ redaktion.feldtypen[feldtyp] ], this);
+			redaktion.zelleErsetzen(feldtyp, data.rd[slot][redaktion.feldtypen[feldtyp]], this);
 		});
 	},
 	// Tabellenzelle mit einem Input-Element durch eine Textzelle ersetzen
@@ -306,7 +306,7 @@ let redaktion = {
 			frag.lastChild.classList.add("kein-einzug");
 			const slot = parseInt(this.parentNode.dataset.slot, 10),
 				feldtyp = this.dataset.feldtyp,
-				val = data.rd[slot][ redaktion.feldtypen[feldtyp] ];
+				val = data.rd[slot][redaktion.feldtypen[feldtyp]];
 			if (feldtyp === "datum") {
 				redaktion.inputDate(frag.lastChild, val, slot);
 			} else if (feldtyp === "ereignis" || feldtyp === "person") {
@@ -340,7 +340,7 @@ let redaktion = {
 				return;
 			}
 			// Der Wert des Inputfelds ist okay.
-			obj[ redaktion.feldtypen[feldtyp] ] = val;
+			obj[redaktion.feldtypen[feldtyp]] = val;
 		}
 		data.rd.push(obj);
 		kartei.karteiGeaendert(true);
@@ -387,7 +387,7 @@ let redaktion = {
 	//   feld = Element
 	//     (Feld, das später fokussiert werden soll)
 	alert (text, feld) {
-		dialog.oeffnen("alert", () => feld.focus() );
+		dialog.oeffnen("alert", () => feld.focus());
 		dialog.text(text);
 	},
 };

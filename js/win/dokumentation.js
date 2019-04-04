@@ -14,7 +14,7 @@ window.addEventListener("load", function() {
 		ipcRenderer.send("ueber-zettelstraum", "dokumentation");
 	});
 	// Navigation
-	document.querySelectorAll("nav a").forEach( (i) => hilfe.navi(i) );
+	document.querySelectorAll("nav a").forEach((i) => hilfe.navi(i));
 	// Links
-	document.querySelectorAll(".link-handbuch").forEach( (i) => hilfe.oeffneHandbuch(i) );
+	document.querySelectorAll(".link-handbuch").forEach((i) => hilfe.oeffneHandbuch(i));
 });

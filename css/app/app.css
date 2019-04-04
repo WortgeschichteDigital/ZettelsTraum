@@ -50,11 +50,32 @@ h3:first-child {
 }
 
 mark {
+	border-radius: 3px;
+	padding: 0 3px;
+	background-color: var(--highlight);
 	color: var(--text);
+}
+
+mark.suche {
+	background-color: var(--farbeOrange);
+	color: #fff;
+}
+
+mark.user {
+	background-color: var(--farbeGelb);
+}
+
+mark.wort {
+	background-color: var(--farbeGelb);
+	font-weight: bold;
 }
 
 p {
 	margin: 0 0 10px 0;
+}
+
+p.force-wrap {
+	overflow-wrap: break-word;
 }
 
 p.input-text {

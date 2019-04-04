@@ -20,8 +20,8 @@ let filter = {
 		if (!belege.length) {
 			filter.zeitraumStart = "";
 		} else {
-			filter.zeitraumStart = liste.zeitschnittErmitteln(data.ka[ belege[0] ].da).jahr;
-			filter.zeitraumEnde = liste.zeitschnittErmitteln(data.ka[ belege[belege.length - 1] ].da).jahr;
+			filter.zeitraumStart = liste.zeitschnittErmitteln(data.ka[belege[0]].da).jahr;
+			filter.zeitraumEnde = liste.zeitschnittErmitteln(data.ka[belege[belege.length - 1]].da).jahr;
 			// Zwischenspeicher für die Jahre der Belge füllen
 			filter.jahrBelegeFuellen();
 		}
@@ -93,7 +93,7 @@ let filter = {
 				typen: "textsorten",
 			}];
 		for (let id in data.ka) {
-			if ( !data.ka.hasOwnProperty(id) ) {
+			if (!data.ka.hasOwnProperty(id)) {
 				continue;
 			}
 			// BEDEUTUNGEN UND TEXTSORTEN
@@ -107,9 +107,9 @@ let filter = {
 				let schon_gezaehlt = new Set(),
 					b = filter.baumExtrakt(data.ka[id][d], t);
 				for (let j = 0, len = b.length; j < len; j++) {
-					if (!filter.typen[t].filter[ b[j] ]) {
+					if (!filter.typen[t].filter[b[j]]) {
 						let name = b[j].replace(/^.+?-/, "").split(": ");
-						filter.typen[t].filter[ b[j] ] = {
+						filter.typen[t].filter[b[j]] = {
 							name: name[name.length - 1],
 							wert: 0,
 						};
@@ -120,11 +120,11 @@ let filter = {
 					// "Mensch: alt: groß\nMensch: alt: klein". Hier würden "Mensch" und "Mensch: alt"
 					// zweimal gezählt, obwohl sie im selben Beleg auftauchen. Da kann man
 					// Abhilfe schaffen:
-					if ( schon_gezaehlt.has(b[j]) ) {
+					if (schon_gezaehlt.has(b[j])) {
 						continue;
 					}
 					// Filter zählen
-					filter.typen[t].filter[ b[j] ].wert++;
+					filter.typen[t].filter[b[j]].wert++;
 					schon_gezaehlt.add(b[j]);
 				}
 			}
@@ -158,29 +158,72 @@ let filter = {
 		// Bedeutungen und Textsorten sortieren
 		let arr_typen = ["bedeutungen", "textsorten"];
 		for (let i = 0, len = arr_typen.length; i < len; i++) {
-			let arr = filter.typen[ arr_typen[i] ].filter_folge;
+			let arr = filter.typen[arr_typen[i]].filter_folge;
 			arr.sort(filter.baumSort);
 		}
 		// dynamische Filter drucken
 		const cont = document.getElementById("liste-filter-dynamisch");
 		helfer.keineKinder(cont);
 		for (let block in filter.typen) {
-			if ( !filter.typen.hasOwnProperty(block) ) {
+			if (!filter.typen.hasOwnProperty(block)) {
 				continue;
 			}
 			if (!filter.typen[block].filter_vorhanden) {
 				continue;
 			}
-			cont.appendChild( filter.aufbauenCont(filter.typen[block].name) );
+			cont.appendChild(filter.aufbauenCont(filter.typen[block].name));
 			if (block === "verschiedenes") {
-				cont.lastChild.appendChild( filter.aufbauenFilterlogik() );
+				cont.lastChild.appendChild(filter.aufbauenFilterlogik());
 			}
-			let f = filter.typen[block].filter_folge;
+			let f = filter.typen[block].filter_folge,
+				baum_zuletzt = 0,
+				baum_basis = null,
+				baum_basis_last = null;
 			for (let i = 0, len = f.length; i < len; i++) {
-				let neuer_filter = filter.aufbauenFilter(f[i], filter.typen[block].filter[ f[i] ]);
-				if (neuer_filter) {
-					cont.lastChild.appendChild(neuer_filter);
+				let neuer_filter = filter.aufbauenFilter(f[i], filter.typen[block].filter[f[i]]);
+				// keine neuer Filter
+				if (!neuer_filter[0]) {
+					continue;
 				}
+				// in Filterbaum einhängen
+				//   [0] = Document-Fragment
+				//   [1] = Verschachtelungstiefe; 0 = ohne Verschachtelung, 1 = 1. Ebene usw.
+				if (neuer_filter[1] > 0) {
+					if (!baum_basis) { // der letzt Filter war in keiner Baumstruktur
+						baum_basis = document.createDocumentFragment();
+						let div = document.createElement("div");
+						div.classList.add("filter-baum");
+						baum_basis.appendChild(div);
+						baum_basis_last = div;
+						baum_zuletzt = neuer_filter[1];
+					}
+					let div;
+					if (neuer_filter[1] !== baum_zuletzt) { // Filter ist in einer anderen Ebene als zuvor
+						div = document.createElement("div");
+						div.classList.add("filter-baum");
+						div.appendChild(neuer_filter[0]);
+					}
+					if (neuer_filter[1] > baum_zuletzt) { // Filter ist eine Ebene höher
+						baum_basis_last.appendChild(div);
+						baum_basis_last = div;
+					} else if (neuer_filter[1] < baum_zuletzt) { // Filter ist eine Ebene tiefer
+						baum_basis.appendChild(div);
+						baum_basis_last = div;
+					} else { // Filter ist in derselben Ebene
+						baum_basis_last.appendChild(neuer_filter[0]);
+					}
+				} else if (neuer_filter[1] === 0) { // der Filter ist unterhalb einer Baumstruktur
+					if (baum_basis) { // bestehende Baumstruktur einhängen
+						cont.lastChild.appendChild(baum_basis);
+						baum_basis = null;
+						baum_basis_last = null;
+					}
+					cont.lastChild.appendChild(neuer_filter[0]);
+				}
+				baum_zuletzt = neuer_filter[1];
+			}
+			if (baum_basis) { // bestehende Baumstruktur einhängen
+				cont.lastChild.appendChild(baum_basis);
 			}
 		}
 		// Backup der Filtereinstellungen wiederherstellen
@@ -274,7 +317,7 @@ let filter = {
 	jahrBelegeFuellen () {
 		filter.jahrBelege = {};
 		for (let id in data.ka) {
-			if ( !data.ka.hasOwnProperty(id) ) {
+			if (!data.ka.hasOwnProperty(id)) {
 				continue;
 			}
 			filter.jahrBelege[id] = parseInt(liste.zeitschnittErmitteln(data.ka[id].da).jahr, 10);
@@ -292,7 +335,7 @@ let filter = {
 		let ende = y + step - 1,
 			treffer = 0;
 		for (let id in filter.jahrBelege) {
-			if ( !filter.jahrBelege.hasOwnProperty(id) ) {
+			if (!filter.jahrBelege.hasOwnProperty(id)) {
 				continue;
 			}
 			if (filter.jahrBelege[id] >= y && filter.jahrBelege[id] <= ende) {
@@ -336,9 +379,9 @@ let filter = {
 	// extrahiert wurde, sortieren
 	baumSort (a, b) {
 		// undefined wird an den Anfang gesetzt
-		if ( a.match(/undefined$/) ) {
+		if (a.match(/undefined$/)) {
 			return -1;
-		} else if ( b.match(/undefined$/) ) {
+		} else if (b.match(/undefined$/)) {
 			return 1;
 		}
 		// alphabetische Sortierung
@@ -433,9 +476,7 @@ let filter = {
 		// Filter drucken
 		let frag = document.createDocumentFragment(),
 			p = document.createElement("p");
-		if (baum_tiefe) {
-			p.classList.add(`filter-baum${baum_tiefe}`);
-		}
+		frag.appendChild(p);
 		// Input
 		let input = document.createElement("input");
 		input.classList.add("filter");
@@ -454,15 +495,13 @@ let filter = {
 		span.textContent = `(${obj.wert})`;
 		span.title = `Anzahl der Belege, auf die der Filter „${obj.name}“ zutrifft`;
 		p.appendChild(span);
-		// Absatz einhängen
-		frag.appendChild(p);
 		// ggf. Absatz mit Sternen aufbauen
 		if (f === "markierung") {
 			frag.lastChild.classList.add("markierung");
-			frag.appendChild( filter.aufbauenSterne() );
+			frag.appendChild(filter.aufbauenSterne());
 		}
 		// Fragment zurückgeben
-		return frag;
+		return [frag, baum_tiefe];
 	},
 	// Absatz mit Sternen aufbauen für eine detaillierte Markierungssuche
 	aufbauenSterne () {
@@ -535,15 +574,26 @@ let filter = {
 			filter_bewertung.dataset.bewertung = bak["filter-bewertung"];
 		}
 	},
-	// beim Ändern eines Filters die Optionen anpassen
+	// beim Ändern eines Filters die Optionen anpassen (Listener)
 	//   checkbox = Element
 	//     (Input-Element, das geändert wurde [wohl immer eine Checkbox])
-	filterOptionen (checkbox) {
+	filterOptionenListener (checkbox) {
 		checkbox.addEventListener("change", function() {
-			const opt = this.id.replace(/^filter-/, "");
-			optionen.data.filter[opt] = this.checked;
-			optionen.speichern(false);
+			filter.filterOptionen(this, true);
 		});
+	},
+	// beim Ändern eines Filters die Optionen anpassen (Listener)
+	//   checkbox = Element
+	//     (Input-Element, das geändert wurde [wohl immer eine Checkbox])
+	//   refresh = Boolean
+	//     (auffrischen der Belegliste anstoßen)
+	filterOptionen (checkbox, refresh) {
+		const opt = checkbox.id.replace(/^filter-/, "");
+		optionen.data.filter[opt] = checkbox.checked;
+		optionen.speichern(false);
+		if (refresh) {
+			liste.status(false);
+		}
 	},
 	// erweiterte Filter umschalten
 	toggleErweiterte () {
@@ -551,11 +601,12 @@ let filter = {
 			evt.preventDefault();
 			this.classList.toggle("aktiv");
 			const cont = document.getElementById("filter-erweiterte-cont");
-			if ( this.classList.contains("aktiv") ) {
+			if (this.classList.contains("aktiv")) {
 				cont.classList.remove("aus");
 			} else {
 				cont.classList.add("aus");
 			}
+			liste.status(false);
 		});
 	},
 	// speichert den aktiven Timeout für das Anwenden der Filter
@@ -574,7 +625,7 @@ let filter = {
 		}
 		input.addEventListener(listener, function() {
 			clearTimeout(filter.anwendenTimeout);
-			filter.anwendenTimeout = setTimeout( () => liste.status(false), timeout);
+			filter.anwendenTimeout = setTimeout(() => liste.status(false), timeout);
 		});
 		// Text-Felder sollten auch auf Enter hören
 		if (input.type === "text") {
@@ -612,7 +663,7 @@ let filter = {
 		document.querySelectorAll(".filter").forEach(function(i) {
 			if (i.type === "text" && i.value ||
 					i.type === "checkbox" && i.checked) {
-				let id = decodeURI( i.id.replace(/^filter-/, "") ); // Filter-ID könnte enkodiert sein
+				let id = decodeURI(i.id.replace(/^filter-/, "")); // Filter-ID könnte enkodiert sein
 				filter.aktiveFilter[id] = true;
 			}
 		});
@@ -624,11 +675,11 @@ let filter = {
 		}
 		// dynamische Filter
 		for (let typ in filter.typen) {
-			if ( !filter.typen.hasOwnProperty(typ) ) {
+			if (!filter.typen.hasOwnProperty(typ)) {
 				continue;
 			}
 			for (let f in filter.typen[typ].filter) {
-				if ( !filter.typen[typ].filter.hasOwnProperty(f) ) {
+				if (!filter.typen[typ].filter.hasOwnProperty(f)) {
 					continue;
 				}
 				let f_encoded = encodeURI(f);
@@ -668,7 +719,7 @@ let filter = {
 		let koepfe = document.querySelectorAll(".filter-kopf"),
 			aktive_filter = 0;
 		koepfe.forEach(function(i) {
-			if ( !i.classList.contains("aktiv") ) {
+			if (!i.classList.contains("aktiv")) {
 				i.nextSibling.classList.add("aus");
 				return;
 			}
@@ -699,10 +750,10 @@ let filter = {
 			ts: [],
 		};
 		for (let i in filter.aktiveFilter) {
-			if ( !filter.aktiveFilter.hasOwnProperty(i) ) {
+			if (!filter.aktiveFilter.hasOwnProperty(i)) {
 				continue;
 			}
-			if ( !/^(bedeutungen|textsorten)-/.test(i) ) {
+			if (!/^(bedeutungen|textsorten)-/.test(i)) {
 				continue;
 			}
 			let f = i.match(/^(.+?)-(.+)/);
@@ -729,7 +780,7 @@ let filter = {
 		x: for (let i = 0, len = karten.length; i < len; i++) {
 			let id = karten[i];
 			// Volltext
-			if ( filter.aktiveFilter.volltext && !filter.kartenFilternVolltext(id) ) {
+			if (filter.aktiveFilter.volltext && !filter.kartenFilternVolltext(id)) {
 				continue;
 			}
 			// Zeitraum
@@ -741,7 +792,7 @@ let filter = {
 			}
 			// Bedeutungen und Textsorten
 			for (let bf in baumfilter) {
-				if ( !baumfilter.hasOwnProperty(bf) ) {
+				if (!baumfilter.hasOwnProperty(bf)) {
 					continue;
 				}
 				let arr = baumfilter[bf];
@@ -753,14 +804,14 @@ let filter = {
 						for (let j = 0, len = arr.length; j < len; j++) {
 							// Suchausdruck auslesen oder erzeugen
 							let reg;
-							if (filter.regCache[ arr[j] ]) {
-								reg = filter.regCache[ arr[j] ];
+							if (filter.regCache[arr[j]]) {
+								reg = filter.regCache[arr[j]];
 							} else {
 								reg = new RegExp(`${helfer.escapeRegExp(arr[j])}(:|\n|$)`);
-								filter.regCache[ arr[j] ] = reg;
+								filter.regCache[arr[j]] = reg;
 							}
 							// suchen
-							if ( reg.test(data.ka[id][bf]) ) {
+							if (reg.test(data.ka[id][bf])) {
 								okay = true;
 								break;
 							}
@@ -772,34 +823,34 @@ let filter = {
 				}
 			}
 			// vollständig oder unvollständig
-			if ( filter.aktiveFilter.unvollstaendig &&
+			if (filter.aktiveFilter.unvollstaendig &&
 					(data.ka[id].un && !filter_inklusiv ||
-					!data.ka[id].un && filter_inklusiv) ) {
+					!data.ka[id].un && filter_inklusiv)) {
 				continue;
 			}
 			// Kontext
-			if ( filter.aktiveFilter.kontext &&
+			if (filter.aktiveFilter.kontext &&
 					(data.ka[id].ko && !filter_inklusiv ||
-					!data.ka[id].ko && filter_inklusiv) ) {
+					!data.ka[id].ko && filter_inklusiv)) {
 				continue;
 			}
 			// Bücherdienst
-			if ( filter.aktiveFilter.buecherdienst &&
+			if (filter.aktiveFilter.buecherdienst &&
 					(data.ka[id].bu && !filter_inklusiv ||
-					!data.ka[id].bu && filter_inklusiv) ) {
+					!data.ka[id].bu && filter_inklusiv)) {
 				continue;
 			}
 			// Buchung
-			if ( filter.aktiveFilter.buchung &&
+			if (filter.aktiveFilter.buchung &&
 					(data.ka[id].bc && !filter_inklusiv ||
-					!data.ka[id].bc && filter_inklusiv) ) {
+					!data.ka[id].bc && filter_inklusiv)) {
 				continue;
 			}
 			// Markierung
-			if ( filter.aktiveFilter.markierung &&
+			if (filter.aktiveFilter.markierung &&
 					(data.ka[id].be && !filter_inklusiv ||
 					!data.ka[id].be && filter_inklusiv ||
-					data.ka[id].be && filter_inklusiv && be > data.ka[id].be) ) {
+					data.ka[id].be && filter_inklusiv && be > data.ka[id].be)) {
 				continue;
 			}
 			// Karte ist okay!
@@ -815,19 +866,33 @@ let filter = {
 		if (!vt) {
 			return true;
 		}
-		// erweiterte Filter ermitteln
+		// erweiterte Filter aktiv?
 		const erweiterte = document.getElementById("filter-erweiterte").classList.contains("aktiv");
-		let insensitive = "i";
-		if ( erweiterte && document.getElementById("filter-text-genau").checked ) {
-			insensitive = "";
+		// case sensitive?
+		let insensitiv = "i";
+		if (erweiterte && document.getElementById("filter-text-genau").checked) {
+			insensitiv = "";
 		}
-		const ds = ["au", "bd", "bs", "da", "no", "qu", "ts"];
-		// filtern
-		const vt_reg = new RegExp(helfer.formVariSonderzeichen ( helfer.escapeRegExp(vt) ), insensitive);
+		// zu durchsuchende Datenfelder
+		let ds = [];
+		document.querySelectorAll(`input[id^="filter-feld-"]`).forEach(function(i) {
+			if (erweiterte && i.checked ||
+					!erweiterte) {
+				const id = i.id.replace(/^filter-feld-/, "");
+				ds.push(id);
+			}
+		});
+		// Suchausdruck
+		let reg = helfer.formVariSonderzeichen(helfer.escapeRegExp(vt));
+		if (erweiterte && document.getElementById("filter-ganzes-wort").checked) {
+			reg = `(^|[${helfer.ganzesWortRegExp.links}]+)${reg}($|[${helfer.ganzesWortRegExp.rechts}]+)`;
+		}
+		const vt_reg = new RegExp(reg, insensitiv);
+		// Suche
 		let okay = false;
 		for (let i = 0, len = ds.length; i < len; i++) {
-			const text_rein = data.ka[id][ ds[i] ].replace(/<.+?>/g, "");
-			if ( text_rein.match(vt_reg) ) {
+			const text_rein = data.ka[id][ds[i]].replace(/<.+?>/g, "");
+			if (text_rein.match(vt_reg)) {
 				okay = true;
 				break;
 			}
@@ -919,7 +984,7 @@ let filter = {
 		}
 		// Fenster öffnen od. in den Vordergrund holen
 		const fenster = document.getElementById("zeitraumgrafik");
-		if ( overlay.oeffnen(fenster) ) {
+		if (overlay.oeffnen(fenster)) {
 			return;
 		}
 		// Canvas vorbereiten
@@ -957,7 +1022,7 @@ let filter = {
 			last_font_x = 0;
 		for (let i = 0, len = jahre.length; i < len; i++) {
 			x += step_x;
-			let y = can.height - 30 - Math.round(step_y * filter.zeitraumTrefferCache[ jahre[i] ]) + 0.5; // 30px Platz unten (s.o.)
+			let y = can.height - 30 - Math.round(step_y * filter.zeitraumTrefferCache[jahre[i]]) + 0.5; // 30px Platz unten (s.o.)
 			if (i === 0) {
 				ctx.beginPath();
 				ctx.moveTo(x, y);
@@ -983,6 +1048,27 @@ let filter = {
 			ctx.fillText(i, 32, y);
 		}
 	},
+	// Datensätze im Volltextfilter en bloc umschalten
+	//   a = Element
+	//     (Link, über den das Umschalten gesteuert wird)
+	ctrlVolltextDs (a) {
+		a.addEventListener("click", function(evt) {
+			evt.preventDefault();
+			let alle = true;
+			if (this.id.match(/keine$/)) {
+				alle = false;
+			}
+			document.querySelectorAll(`input[id^="filter-feld-"]`).forEach(function(i) {
+				if (alle) {
+					i.checked = true;
+				} else {
+					i.checked = false;
+				}
+				filter.filterOptionen(i, false);
+			});
+			liste.status(false);
+		});
+	},
 	// klappt die Filterblöcke auf oder zu (Event-Listener)
 	anzeigeUmschalten (a) {
 		a.addEventListener("click", function(evt) {
@@ -1000,7 +1086,7 @@ let filter = {
 			}
 			// wenn mehrere Filter offen sein dürfen
 			this.nextSibling.classList.toggle("aus");
-			if ( this.classList.contains("aktiv") ) {
+			if (this.classList.contains("aktiv")) {
 				this.blur();
 			}
 		});

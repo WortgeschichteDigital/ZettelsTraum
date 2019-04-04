@@ -142,7 +142,7 @@ let kartei = {
 			optionen.aendereZuletzt();
 			notizen.icon();
 			anhaenge.scan(data.an);
-			anhaenge.makeIconList( data.an, document.getElementById("kartei-anhaenge") );
+			anhaenge.makeIconList(data.an, document.getElementById("kartei-anhaenge"));
 			liste.aufbauen(true);
 			liste.wechseln();
 			kartei.menusDeaktivieren(false);
@@ -240,7 +240,7 @@ let kartei = {
 		wort.classList.add("keine-kartei");
 		wort.textContent = "keine Kartei geöffnet";
 		notizen.icon();
-		anhaenge.makeIconList( null, document.getElementById("kartei-anhaenge") );
+		anhaenge.makeIconList(null, document.getElementById("kartei-anhaenge"));
 		start.zuletzt();
 		helfer.sektionWechseln("start");
 		kartei.menusDeaktivieren(true);
@@ -268,6 +268,8 @@ let kartei = {
 				kartei.wort = wort;
 				kartei.wortEintragen();
 				kartei.erstellen();
+				notizen.icon();
+				anhaenge.makeIconList(null, document.getElementById("kartei-anhaenge"));
 				kartei.menusDeaktivieren(false);
 			}
 		});

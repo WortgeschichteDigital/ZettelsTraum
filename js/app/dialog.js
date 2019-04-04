@@ -37,7 +37,7 @@ let dialog = {
 			fenster.classList.remove("confirm");
 			fenster.classList.add("alert");
 			// Timeout, sonst wird onkeyup das Fenster sofort geschlossen (betrifft Prompt)
-			setTimeout( () => document.getElementById("dialog-ok").querySelector("input").focus(), 25);
+			setTimeout(() => document.getElementById("dialog-ok").querySelector("input").focus(), 25);
 		}
 	},
 	// Text in Dialog-Fenster eintragen
@@ -50,11 +50,17 @@ let dialog = {
 		// neue Absätze hinzufügen
 		let absaetze = text.split("\n");
 		for (let i = 0, len = absaetze.length; i < len; i++) {
-			// Überschrift
-			if ( absaetze[i].match(/^<h3>/) ) {
+			if (absaetze[i].match(/^<h3>/)) { // Überschrift
 				let h3 = document.createElement("h3");
 				h3.innerHTML = absaetze[i].match(/<h3>(.+)<\/h3>/)[1];
 				cont.appendChild(h3);
+				continue;
+			} else if (absaetze[i].match(/^<p class/)) { // vordefinierter Absatz
+				const ab = absaetze[i].match(/<p class="(.+?)">(.+?)<\/p>/);
+				let p = document.createElement("p");
+				p.classList.add(ab[1]);
+				p.innerHTML = ab[2];
+				cont.appendChild(p);
 				continue;
 			}
 			// normaler Absatz

@@ -22,7 +22,7 @@ let helfer = {
 			win.close();
 		}
 		// Cursor hoch (↑), runter (↓)
-		if ( typeof hilfe !== "undefined" && (evt.which === 38 || evt.which === 40) ) {
+		if (typeof hilfe !== "undefined" && (evt.which === 38 || evt.which === 40)) {
 			hilfe.naviMenue(evt.which);
 		}
 	},
