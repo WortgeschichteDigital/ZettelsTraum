@@ -262,18 +262,18 @@ let helfer = {
 	//   wort = String
 	//     (die Zeichenkette, mit der gesucht werden soll
 	formVariSonderzeichen (wort) {
-		return wort.replace(/ä|ö|ü|s/g, function(m) {
+		return wort.replace(/e|s|ä|ö|ü/g, function(m) {
 			switch (m) {
 				case "e":
-					return "(e|ẽ)";
+					return "(ẽ|e)";
 				case "s":
-					return "(s|ſ)";
+					return "(ſ|s)";
 				case "ä":
-					return "(ä|aͤ)";
+					return "(aͤ|ä)";
 				case "ö":
-					return "(ö|oͤ)";
+					return "(oͤ|ö)";
 				case "ü":
-					return "(ü|uͤ)";
+					return "(uͤ|ü)";
 			}
 		});
 	},

@@ -81,10 +81,7 @@ window.addEventListener("load", function() {
 		evt.preventDefault();
 		beleg.leseToggle(true);
 	});
-	document.getElementById("beleg-link-drucken").addEventListener("click", function(evt) {
-		evt.preventDefault();
-		drucken.init();
-	});
+	document.querySelectorAll("#beleg-link-drucken, #liste-link-drucken").forEach((a) => drucken.listener(a));
 	// Belegliste-Filter
 	document.querySelectorAll("#liste-filter header a").forEach((a) => filter.ctrlButtons(a));
 	document.querySelectorAll(".filter-kopf").forEach(function(a) {

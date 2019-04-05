@@ -252,12 +252,12 @@ let liste = {
 		// Belege sortieren
 		liste.belegeSortierenCache = {};
 		belege.sort(liste.belegeSortieren);
-		// Filter ggf. initialisieren
+		// Belege filtern
+		belege = filter.kartenFiltern(belege);
+		// Filter ggf. mit den gefilterten Belegen initialisieren
 		if (filter_init) {
 			filter.aufbauen([...belege]);
 		}
-		// Belege filtern
-		belege = filter.kartenFiltern(belege);
 		// Belegzahl anzeigen
 		liste.aufbauenAnzahl(belege_anzahl, belege.length);
 		// Belege zurückgeben
@@ -484,7 +484,7 @@ let liste = {
 			}
 			zuletzt_gekuerzt = false;
 			// Absatz normal einhängen
-			p.innerHTML = liste.belegWortHervorheben(p_prep[i], false);
+			p.innerHTML = liste.suchtreffer(liste.belegWortHervorheben(p_prep[i], false), "bs");
 		}
 		// <div> zurückgeben
 		return div;
@@ -542,6 +542,32 @@ let liste = {
 		schnitt = schnitt.replace(reg, (m) => `<mark class="wort">${m}</mark>`);
 		return schnitt;
 	},
+	// Suchtreffer hervorheben
+	//   text = String
+	//     (der Text, in dem die Ersetzung vorgenommen werden soll)
+	//   ds = String
+	//     (der Datensatz, aus dem der Text stammt, also "bs", "da", "au" usw.)
+	suchtreffer (text, ds) {
+		// keine Suche oder keine Suche im aktuellen Datensatz
+		if (!filter.volltextSuche.suche ||
+				filter.volltextSuche.ds.indexOf(ds) === -1) {
+			return text;
+		}
+		// Suchtreffer hervorheben
+		const treffer = filter.volltextSuche.reg.exec(text);
+		text = text.replace(filter.volltextSuche.reg, function(m) {
+			if (treffer.groups) {
+				return `${treffer.groups.vor}<mark class="suche">${treffer.groups.wort}</mark>${treffer.groups.nach}`;
+			}
+			return `<mark class="suche">${m}</mark>`;
+		});
+		// Treffer innerhalb von Tags löschen
+		text = text.replace(/(<[^>]*?)<mark class="suche">(.+?)<\/mark>/g, function(m, p1, p2) {
+			return `${p1}${p2}`;
+		});
+		// Text zurückgeben
+		return text;
+	},
 	// einen einzelnen Beleg durch Klick auf den Belegkopf umschalten
 	//   div = Element
 	//     (der Belegkopf, auf den geklickt werden kann)
@@ -576,7 +602,7 @@ let liste = {
 		span.classList.add("liste-label");
 		span.textContent = "Bedeutung";
 		div.appendChild(span);
-		p.innerHTML = bedeutung.replace(/\n/g, "<br>");
+		p.innerHTML = liste.suchtreffer(bedeutung.replace(/\n/g, "<br>"), "bd");
 		div.appendChild(p);
 		cont.appendChild(div);
 	},
@@ -606,7 +632,7 @@ let liste = {
 			let text = liste.linksErkennen(p_prep[i]);
 			// neuen Absatz erzeugen
 			let p = document.createElement("p");
-			p.innerHTML = text;
+			p.innerHTML = liste.suchtreffer(text, "qu");
 			div.appendChild(p);
 		}
 		// Klick-Events an alles Links hängen
@@ -635,7 +661,7 @@ let liste = {
 		span.classList.add("liste-label");
 		span.textContent = "Textsorte";
 		div.appendChild(span);
-		p.innerHTML = textsorte.replace(/\n/g, "<br>");
+		p.innerHTML = liste.suchtreffer(textsorte.replace(/\n/g, "<br>"), "ts");
 		div.appendChild(p);
 		cont.appendChild(div);
 	},
@@ -666,7 +692,7 @@ let liste = {
 			let text = liste.linksErkennen(p_prep[i]);
 			// neuen Absatz erzeugen
 			let p = document.createElement("p");
-			p.innerHTML = text;
+			p.innerHTML = liste.suchtreffer(text, "no");
 			div.appendChild(p);
 		}
 	},

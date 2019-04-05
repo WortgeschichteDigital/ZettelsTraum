@@ -58,8 +58,10 @@ let optionen = {
 			"quick-belege-hinzufuegen": false,
 			"quick-belege-auflisten": false,
 			"quick-belege-sortieren": false,
-			// alle anderen Filter zuklappen, wenn ein Filter geöffnet wird
-			"filter-zuklappen": true,
+			// alle anderen Filterblöcke zuklappen, wenn ein Filterblock geöffnet wird
+			"filter-zuklappen": false,
+			// inaktive Filterblöcke nach dem Neuaufbau der Filterleiste automatisch zuklappen
+			"filter-inaktive": false,
 			// nicht warnen, wenn eine Karte erstellt wurde, sie aber wegen der Filterregeln nicht angezeigt wird
 			"nicht-karte-gefiltert": false,
 			// neue Karteikarten als unvollständig markieren

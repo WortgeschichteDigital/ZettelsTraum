@@ -308,7 +308,7 @@ let layoutMenu = [
 
 // ggf. Developer-Menü ergänzen
 let devtools = false;
-if (true || !app.isPackaged) { // TODO Dev-Tools in der paketierten Variante ausblenden
+if (!app.isPackaged) {
 	devtools = true;
 	layoutMenu.push({
 		label: "&Dev",

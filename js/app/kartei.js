@@ -146,6 +146,11 @@ let kartei = {
 			liste.aufbauen(true);
 			liste.wechseln();
 			kartei.menusDeaktivieren(false);
+			// inaktive Filter schließen
+			// (wurde zwar schon über filter.ctrlReset() ausgeführt,
+			// muss hier aber noch einmal gemacht werden, um die dynamisch
+			// aufgebauten Filter auch zu schließen)
+			filter.inaktiveSchliessen(true);
 		});
 	},
 	// geöffnete Kartei speichern

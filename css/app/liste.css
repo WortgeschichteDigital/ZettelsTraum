@@ -199,8 +199,9 @@
 
 #filter-erweiterte-cont h3 {
 	position: relative;
-	margin: 10px 0 5px 0;
-	color: var(--farbe);
+	margin: 15px 0 5px 0;
+	color: var(--text);
+	font-style: normal;
 }
 
 #filter-erweiterte-cont p {

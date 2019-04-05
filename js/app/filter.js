@@ -1,16 +1,27 @@
 "use strict";
 
 let filter = {
-	// gibt an, ob die Filter gerade neu aufgebaut wurden
-	init: false,
+	// speichert die ID des Filterblocks, in dem die BenutzerIn
+	// vor dem Neuaufbau der Belegliste aktiv gewesen ist
+	zuletztAktiv: "",
+	// die ID des zuletzt aktiven Filterblocks ermitteln
+	//   ele = Element
+	//     (das Element, das geändert wurde
+	setZuletztAktiv (ele) {
+		while (!ele.classList.contains("filter-cont")) {
+			ele = ele.parentNode;
+		}
+		ele = ele.previousSibling;
+		filter.zuletztAktiv = ele.id;
+	},
 	// Zwischenspeicher für die dynamischen Filtertypen
 	typen: {},
 	// Liste der Filter aufbauen
 	//   belege = Array
 	//     (die IDs der Belege, bereits chronologisch sortiert)
 	aufbauen (belege) {
-		// Filter werden neu aufgebaut => das muss für später vorgemerkt werden
-		filter.init = true;
+		// Backup des Klappstatus erstellen
+		filter.backupKlappMake();
 		// Backup der Filtereinstellungen erstellen
 		let filter_backup = filter.backup();
 		// Zeitraum-Filter
@@ -23,14 +34,14 @@ let filter = {
 			filter.zeitraumStart = liste.zeitschnittErmitteln(data.ka[belege[0]].da).jahr;
 			filter.zeitraumEnde = liste.zeitschnittErmitteln(data.ka[belege[belege.length - 1]].da).jahr;
 			// Zwischenspeicher für die Jahre der Belge füllen
-			filter.jahrBelegeFuellen();
+			filter.jahrBelegeFuellen(belege);
 		}
 		filter.aufbauenZeitraum();
 		// dynamische Filter und Anzahl der passenden Karten ermitteln
 		filter.typen = {
 			bedeutungen: {
 				name: "Bedeutungen",
-				filter_vorhanden: Object.keys(data.ka).length ? true : false,
+				filter_vorhanden: belege.length ? true : false,
 				filter: {
 					"bedeutungen-undefined": {
 						name: "(nicht bestimmt)",
@@ -41,7 +52,7 @@ let filter = {
 			},
 			textsorten: {
 				name: "Textsorten",
-				filter_vorhanden: Object.keys(data.ka).length ? true : false,
+				filter_vorhanden: belege.length ? true : false,
 				filter: {
 					"textsorten-undefined": {
 						name: "(nicht bestimmt)",
@@ -52,7 +63,7 @@ let filter = {
 			},
 			verschiedenes: {
 				name: "Verschiedenes",
-				filter_vorhanden: false,
+				filter_vorhanden: filter.exklusivAktiv.length ? true : false,
 				filter: {
 					unvollstaendig: {
 						name: "unvollständig",
@@ -92,10 +103,8 @@ let filter = {
 				data: "ts",
 				typen: "textsorten",
 			}];
-		for (let id in data.ka) {
-			if (!data.ka.hasOwnProperty(id)) {
-				continue;
-			}
+		for (let x = 0, len = belege.length; x < len; x++) {
+			let id = belege[x];
 			// BEDEUTUNGEN UND TEXTSORTEN
 			for (let i = 0, len = baeume.length; i < len; i++) {
 				let d = baeume[i].data,
@@ -230,6 +239,8 @@ let filter = {
 		filter.backupWiederher(filter_backup);
 		// ggf. Markierung der Sterne wiederherstellen
 		filter.markierenSterne();
+		// erneut aktive Filter ermitteln
+		filter.aktiveFilterErmitteln(true);
 	},
 	// Zwischenspeicher für die Zeiträume der aktuellen Belegliste
 	zeitraumStart: "",
@@ -314,12 +325,12 @@ let filter = {
 	// (vgl. filter.aufbauen())
 	jahrBelege: {},
 	// füllt den Zwischenspeicher filter.jahrBelege
-	jahrBelegeFuellen () {
+	//   belege = Array
+	//     (IDs der aktuellen Belege)
+	jahrBelegeFuellen (belege) {
 		filter.jahrBelege = {};
-		for (let id in data.ka) {
-			if (!data.ka.hasOwnProperty(id)) {
-				continue;
-			}
+		for (let i = 0, len = belege.length; i < len; i++) {
+			const id = belege[i];
 			filter.jahrBelege[id] = parseInt(liste.zeitschnittErmitteln(data.ka[id].da).jahr, 10);
 		}
 	},
@@ -350,11 +361,12 @@ let filter = {
 	//     (Radio-Button, der für die gewünschten Zeitschnitte steht)
 	wechselnZeitraum (input) {
 		input.addEventListener("change", function() {
+			filter.setZuletztAktiv(this);
 			optionen.data.filter.zeitraum = this.id.match(/[0-9]+$/)[0];
 			optionen.speichern(false);
 			filter.aufbauenZeitraum();
-			filter.aktiveFilterErmitteln();
-			liste.status(false);
+			filter.aktiveFilterErmitteln(false);
+			liste.status(true);
 		});
 	},
 	// extrahiert die einzelnen Schichten, die in einer Bedeutungs- oder Textsortenangabe stecken
@@ -450,9 +462,10 @@ let filter = {
 	//     (Radio-Button, der für die gewünschten Zeitschnitte steht)
 	wechselnFilterlogik (input) {
 		input.addEventListener("change", function() {
+			filter.setZuletztAktiv(this);
 			optionen.data.filter.logik = this.id.match(/[a-z]+$/)[0];
 			optionen.speichern(false);
-			liste.status(false);
+			liste.status(true);
 		});
 	},
 	// Absatz mit einem Checkbox-Filter erzeugen
@@ -462,7 +475,7 @@ let filter = {
 	//     (Daten zum Filter)
 	aufbauenFilter (f, obj) {
 		// Muss der Filter wirklich gedruckt werden?
-		if (!obj.wert) {
+		if (!obj.wert && filter.exklusivAktiv.indexOf(f) === -1) {
 			return false;
 		}
 		// Sollte der Filter als Filterbaum dargestellt werden?
@@ -574,6 +587,31 @@ let filter = {
 			filter_bewertung.dataset.bewertung = bak["filter-bewertung"];
 		}
 	},
+	// speichert den Klappstatus der Filterblöcke
+	backupKlapp: {},
+	// Backup des Klappstatus der Filterblöcke erstellen
+	backupKlappMake () {
+		filter.backupKlapp = {};
+		document.querySelectorAll(".filter-kopf").forEach(function(i) {
+			const id = i.id,
+				div = i.nextSibling;
+			let aus = false;
+			if (div.classList.contains("aus")) {
+				aus = true;
+			}
+			filter.backupKlapp[id] = aus;
+		});
+	},
+	// Backup des Klappstatust der Filterblöcke wiederherstellen
+	backupKlappReset () {
+		document.querySelectorAll(".filter-kopf").forEach(function(i) {
+			const id = i.id;
+			if (filter.backupKlapp[id] === undefined ||
+					filter.backupKlapp[id]) {
+				i.nextSibling.classList.add("aus");
+			}
+		});
+	},
 	// beim Ändern eines Filters die Optionen anpassen (Listener)
 	//   checkbox = Element
 	//     (Input-Element, das geändert wurde [wohl immer eine Checkbox])
@@ -592,13 +630,15 @@ let filter = {
 		optionen.data.filter[opt] = checkbox.checked;
 		optionen.speichern(false);
 		if (refresh) {
-			liste.status(false);
+			filter.setZuletztAktiv(checkbox);
+			liste.status(true);
 		}
 	},
 	// erweiterte Filter umschalten
 	toggleErweiterte () {
 		document.getElementById("filter-erweiterte").addEventListener("click", function(evt) {
 			evt.preventDefault();
+			filter.setZuletztAktiv(this);
 			this.classList.toggle("aktiv");
 			const cont = document.getElementById("filter-erweiterte-cont");
 			if (this.classList.contains("aktiv")) {
@@ -606,7 +646,7 @@ let filter = {
 			} else {
 				cont.classList.add("aus");
 			}
-			liste.status(false);
+			liste.status(true);
 		});
 	},
 	// speichert den aktiven Timeout für das Anwenden der Filter
@@ -624,19 +664,16 @@ let filter = {
 			timeout = 250;
 		}
 		input.addEventListener(listener, function() {
+			filter.setZuletztAktiv(this);
+			if (this.id === "filter-volltext") {
+				filter.volltextSuchePrep();
+			}
 			clearTimeout(filter.anwendenTimeout);
-			filter.anwendenTimeout = setTimeout(() => liste.status(false), timeout);
+			filter.anwendenTimeout = setTimeout(() => liste.status(true), timeout);
 		});
-		// Text-Felder sollten auch auf Enter hören
-		if (input.type === "text") {
-			input.addEventListener("keydown", function(evt) {
-				if (evt.which === 13) { // Enter
-					liste.status(false);
-				}
-			});
-		}
 	},
 	anwendenSterne (stern) {
+		filter.setZuletztAktiv(stern);
 		let filter_bewertung = document.getElementById("filter-bewertung"),
 			be = parseInt(filter_bewertung.dataset.bewertung, 10),
 			sterne = filter_bewertung.querySelectorAll("a");
@@ -653,12 +690,14 @@ let filter = {
 				break;
 			}
 		}
-		liste.status(false);
+		liste.status(true);
 	},
 	// Zwischenspeicher für die zur Zeit aktiven Filter
 	aktiveFilter: {},
 	// ermittelt, welche Filter gerade aktiv sind
-	aktiveFilterErmitteln () {
+	//   inaktive = Boolean
+	//     (Funktion zum Schließen der inaktiven Filter aufrufen)
+	aktiveFilterErmitteln (inaktive) {
 		filter.aktiveFilter = {};
 		document.querySelectorAll(".filter").forEach(function(i) {
 			if (i.type === "text" && i.value ||
@@ -692,8 +731,10 @@ let filter = {
 		}
 		// die gerade aktiven Filterblöcke als solche markieren
 		filter.aktiveFilterMarkieren();
-		// inaktive Filterblöcke ggf. schließen
-		filter.inaktiveSchliessen();
+		// ggf. inaktive Filterblöcke ggf. schließen
+		if (inaktive) {
+			filter.inaktiveSchliessen(false);
+		}
 		// filter_zeitraum wird unter Umständen weiterverwendet
 		return filter_zeitraum;
 	},
@@ -708,22 +749,25 @@ let filter = {
 			}
 		});
 	},
-	// inaktive Filter nach dem Neuaufbau der Filterliste schließen
-	inaktiveSchliessen () {
-		// Wurden die Filter gerade erste neu aufgebaut?
-		if (!filter.init) {
+	// inaktive Filter nach dem Neuaufbau der Filterliste schließen;
+	// der Filter, in dem man zuletzt aktiv war, bleibt allerdings immer offen
+	//   immer = Boolean
+	//     (inaktive Filter werden immer geschlossen, egal wie die Einstellungen sind)
+	inaktiveSchliessen (immer) {
+		// Sollen die inaktiven Filterblöcke wirklich automatisch geschlossen werden?
+		if (!immer && !optionen.data.einstellungen["filter-inaktive"]) {
+			filter.backupKlappReset();
 			return;
 		}
-		filter.init = false;
 		// inaktive Filter schließen
 		let koepfe = document.querySelectorAll(".filter-kopf"),
-			aktive_filter = 0;
+			aktive_filter = false;
 		koepfe.forEach(function(i) {
-			if (!i.classList.contains("aktiv")) {
+			if (!i.classList.contains("aktiv") && i.id !== filter.zuletztAktiv) {
 				i.nextSibling.classList.add("aus");
 				return;
 			}
-			aktive_filter++;
+			aktive_filter = true;
 		});
 		// sind alle Filter inaktiv => 1. Filter öffnen
 		if (!aktive_filter) {
@@ -732,14 +776,66 @@ let filter = {
 	},
 	// Cache mit regulären Ausdrücken für Bedeutungen und Textsorten
 	// (wirkt sich wohl positiv auf die Performance aus)
-	regCache: {},
+	regCacheBdTs: {},
+	// Zwischenspeicher für die Daten der Volltextsuche
+	volltextSuche: {
+		suche: false,
+		ds: [],
+		reg: new RegExp(),
+	},
+	// Variablen für die Volltextsuche vorbereiten
+	volltextSuchePrep () {
+		// Filter-Text ermitteln
+		const vt = helfer.textTrim(document.getElementById("filter-volltext").value, true);
+		// kein Filtertext
+		if (!vt) {
+			filter.volltextSuche.suche = false;
+			return;
+		}
+		filter.volltextSuche.suche = true;
+		// erweiterte Filter aktiv?
+		const erweiterte = document.getElementById("filter-erweiterte").classList.contains("aktiv");
+		// zu durchsuchende Datensätze
+		filter.volltextSuche.ds = [];
+		document.querySelectorAll(`input[id^="filter-feld-"]`).forEach(function(i) {
+			if (erweiterte && i.checked ||
+					!erweiterte) {
+				const id = i.id.replace(/^filter-feld-/, "");
+				filter.volltextSuche.ds.push(id);
+			}
+		});
+		// regulärer Suchausdruck
+		let reg = helfer.formVariSonderzeichen(helfer.escapeRegExp(vt));
+		if (erweiterte && document.getElementById("filter-ganzes-wort").checked) {
+			reg = `(?<vor>^|[${helfer.ganzesWortRegExp.links}]+)(?<wort>${reg})(?<nach>$|[${helfer.ganzesWortRegExp.rechts}]+)`;
+		}
+		let insensitiv = "gi";
+		if (erweiterte && document.getElementById("filter-text-genau").checked) {
+			insensitiv = "g";
+		}
+		filter.volltextSuche.reg = new RegExp(reg, insensitiv);
+	},
+	// Array mit den aktiven Verschiedenes-Filtern bei exklusiver Filterlogik
+	exklusivAktiv: [],
+	// aktive Verschiedenes-Filter bei exklusiver Filterlogik finden
+	getExklusivAktiv () {
+		filter.exklusivAktiv = [];
+		const inputs = document.querySelectorAll("#filter-kopf-verschiedenes + div .filter");
+		inputs.forEach(function(i) {
+			if (!i.checked) {
+				return;
+			}
+			const id = i.id.replace(/^filter-/, "");
+			filter.exklusivAktiv.push(id);
+		});
+	},
 	// Karteikarten filtern
 	//   karten = Array
 	//     (enthält die IDs der Karten, die gefiltert werden sollen)
 	kartenFiltern (karten) {
 		// zwei Fliegen mit einer Klappe: ermitteln, ob Filter aktiv sind; 
 		// Array mit Jahren besorgen, die durch die Filter passen
-		let filter_zeitraum = filter.aktiveFilterErmitteln();
+		let filter_zeitraum = filter.aktiveFilterErmitteln(false);
 		// keine Filter aktiv
 		if (!Object.keys(filter.aktiveFilter).length) {
 			return karten;
@@ -768,6 +864,9 @@ let filter = {
 			filter_inklusiv = true;
 		if (filter_logik && !filter_logik.checked) {
 			filter_inklusiv = false;
+			filter.getExklusivAktiv();
+		} else {
+			filter.exklusivAktiv = [];
 		}
 		// bei vorhandemen Bewertungsfilter
 		let filter_bewertung = document.getElementById("filter-bewertung"),
@@ -775,6 +874,11 @@ let filter = {
 		if (filter_bewertung) {
 			be = parseInt(filter_bewertung.dataset.bewertung, 10);
 		}
+		// Volltextsuche vorbereiten
+		// (wird zwar auch "oninput" aufgerufen, es könnte aber sein, dass die Suche
+		// durch eine Änderung der Checkboxes oder Öffnen/Schließen des Erweiterungs-
+		// filters aufgerufen wird)
+		filter.volltextSuchePrep();
 		// Karten filtern
 		let karten_gefiltert = [];
 		x: for (let i = 0, len = karten.length; i < len; i++) {
@@ -804,11 +908,11 @@ let filter = {
 						for (let j = 0, len = arr.length; j < len; j++) {
 							// Suchausdruck auslesen oder erzeugen
 							let reg;
-							if (filter.regCache[arr[j]]) {
-								reg = filter.regCache[arr[j]];
+							if (filter.regCacheBdTs[arr[j]]) {
+								reg = filter.regCacheBdTs[arr[j]];
 							} else {
 								reg = new RegExp(`${helfer.escapeRegExp(arr[j])}(:|\n|$)`);
-								filter.regCache[arr[j]] = reg;
+								filter.regCacheBdTs[arr[j]] = reg;
 							}
 							// suchen
 							if (reg.test(data.ka[id][bf])) {
@@ -859,45 +963,22 @@ let filter = {
 		return karten_gefiltert;
 	},
 	// Volltextfilter
+	//   id = String
+	//     (die ID der Karteikarte)
 	kartenFilternVolltext (id) {
-		// Filter-Text ermitteln
-		const vt = helfer.textTrim(document.getElementById("filter-volltext").value, true);
-		// kein Filtertext
-		if (!vt) {
+		// keine Volltextsuche
+		if (!filter.volltextSuche.suche) {
 			return true;
 		}
-		// erweiterte Filter aktiv?
-		const erweiterte = document.getElementById("filter-erweiterte").classList.contains("aktiv");
-		// case sensitive?
-		let insensitiv = "i";
-		if (erweiterte && document.getElementById("filter-text-genau").checked) {
-			insensitiv = "";
-		}
-		// zu durchsuchende Datenfelder
-		let ds = [];
-		document.querySelectorAll(`input[id^="filter-feld-"]`).forEach(function(i) {
-			if (erweiterte && i.checked ||
-					!erweiterte) {
-				const id = i.id.replace(/^filter-feld-/, "");
-				ds.push(id);
-			}
-		});
-		// Suchausdruck
-		let reg = helfer.formVariSonderzeichen(helfer.escapeRegExp(vt));
-		if (erweiterte && document.getElementById("filter-ganzes-wort").checked) {
-			reg = `(^|[${helfer.ganzesWortRegExp.links}]+)${reg}($|[${helfer.ganzesWortRegExp.rechts}]+)`;
-		}
-		const vt_reg = new RegExp(reg, insensitiv);
-		// Suche
-		let okay = false;
-		for (let i = 0, len = ds.length; i < len; i++) {
-			const text_rein = data.ka[id][ds[i]].replace(/<.+?>/g, "");
-			if (text_rein.match(vt_reg)) {
-				okay = true;
-				break;
+		// Volltextsuche
+		for (let i = 0, len = filter.volltextSuche.ds.length; i < len; i++) {
+			const ds = filter.volltextSuche.ds[i],
+				text_rein = data.ka[id][ds].replace(/<.+?>/g, "");
+			if (text_rein.match(filter.volltextSuche.reg)) {
+				return true;
 			}
 		}
-		return okay;
+		return false;
 	},
 	// ermitteln, welche Jahre durch den Filter gelassen werden
 	kartenFilternZeitraum () {
@@ -939,6 +1020,7 @@ let filter = {
 				i.checked = false;
 			}
 		});
+		filter.volltextSuche.suche = false;
 		let filter_bewertung = document.getElementById("filter-bewertung");
 		if (filter_bewertung) {
 			filter_bewertung.dataset.bewertung = "0";
@@ -946,17 +1028,24 @@ let filter = {
 		}
 		// ggf. Liste neu aufbauen
 		if (liste_aufbauen) {
-			liste.status(false);
+			filter.zuletztAktiv = "";
+			liste.status(true);
 		}
+		// inaktive Filter schließen
+		filter.inaktiveSchliessen(true);
 	},
 	// einen einzelnen Filterblock zurücksetzen
 	ctrlResetBlock (img) {
 		img.addEventListener("click", function(evt) {
 			evt.stopPropagation();
+			filter.zuletztAktiv = this.parentNode.id;
 			const block = this.parentNode.nextSibling;
 			block.querySelectorAll(".filter").forEach(function(i) {
 				if (i.type === "text") {
 					i.value = "";
+					if (i.id === "filter-volltext") {
+						filter.volltextSuche.suche = false;
+					}
 				} else if (i.type === "checkbox") {
 					i.checked = false;
 					// Sonderregel für die Sterne
@@ -966,7 +1055,7 @@ let filter = {
 					}
 				}
 			});
-			liste.status(false);
+			liste.status(true);
 		});
 	},
 	// Zeitraumgrafik generieren und anzeigen
@@ -1054,6 +1143,7 @@ let filter = {
 	ctrlVolltextDs (a) {
 		a.addEventListener("click", function(evt) {
 			evt.preventDefault();
+			filter.setZuletztAktiv(this);
 			let alle = true;
 			if (this.id.match(/keine$/)) {
 				alle = false;
@@ -1066,7 +1156,7 @@ let filter = {
 				}
 				filter.filterOptionen(i, false);
 			});
-			liste.status(false);
+			liste.status(true);
 		});
 	},
 	// klappt die Filterblöcke auf oder zu (Event-Listener)
