@@ -1,6 +1,17 @@
 "use strict";
 
 let filter = {
+	// zeigt an, dass keine Filter vorhanden sind
+	//   keine = Boolean
+	//     (es sind keine Filter vorhanden)
+	keineFilter (keine) {
+		const filterliste = document.getElementById("liste-filter");
+		if (keine) {
+			filterliste.classList.add("keine-filter");
+		} else {
+			filterliste.classList.remove("keine-filter");
+		}
+	},
 	// speichert die ID des Filterblocks, in dem die BenutzerIn
 	// vor dem Neuaufbau der Belegliste aktiv gewesen ist
 	zuletztAktiv: "",
@@ -258,10 +269,6 @@ let filter = {
 		filter.zeitraumTrefferCache = {};
 		// Belege vorhanden?
 		if (!filter.zeitraumStart) {
-			let p = document.createElement("p");
-			p.classList.add("filter-keine-belege");
-			p.textContent = "keine Belege";
-			cont.appendChild(p);
 			return;
 		}
 		// Grenzen berechnen
@@ -1007,6 +1014,8 @@ let filter = {
 				filter.ctrlReset(true);
 			} else if (aktion === "zeitraumgrafik") {
 				filter.ctrlGrafik();
+			} else if (aktion === "reduzieren") {
+				filter.ctrlReduzierenToggle();
 			}
 		});
 	},
@@ -1062,11 +1071,7 @@ let filter = {
 	ctrlGrafik () {
 		// Macht es überhaupt Sinn, die Karte anzuzeigen?
 		const jahre = Object.keys(filter.zeitraumTrefferCache);
-		if (!jahre.length) {
-			dialog.oeffnen("alert", null);
-			dialog.text("Es sind keine Belege vorhanden.\nDie Verteilungsgrafik wird nicht anzeigt.");
-			return;
-		} else if (jahre.length === 1) {
+		if (jahre.length === 1) {
 			dialog.oeffnen("alert", null);
 			dialog.text("Alle Belege befinden sich im selben Zeitraum.\nDie Verteilungsgrafik wird nicht anzeigt.");
 			return;
@@ -1135,6 +1140,23 @@ let filter = {
 			}
 			last_font_y = y;
 			ctx.fillText(i, 32, y);
+		}
+	},
+	// Reduktionsmodus der Filter umschalten
+	ctrlReduzierenToggle () {
+		optionen.data.filter.reduzieren = !optionen.data.filter.reduzieren;
+		optionen.speichern(false);
+		filter.ctrlReduzierenAnzeige();
+	},
+	// Reduktionsmodus der Filter visualisieren
+	ctrlReduzierenAnzeige () {
+		const link = document.getElementById("filter-ctrl-reduzieren");
+		if (optionen.data.filter.reduzieren) {
+			link.classList.add("aktiv");
+			link.title = "Reduktionsmodus ausschalten";
+		} else {
+			link.classList.remove("aktiv");
+			link.title = "Reduktionsmodus einschalten";
 		}
 	},
 	// Datensätze im Volltextfilter en bloc umschalten

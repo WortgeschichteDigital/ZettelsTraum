@@ -967,6 +967,8 @@ let beleg = {
 				beleg.toolsKopieren(this);
 			} else if (this.classList.contains("icon-tools-einfuegen")) {
 				beleg.toolsEinfuegen(this);
+			} else {
+				beleg.toolsText(this);
 			}
 		});
 	},
@@ -975,7 +977,7 @@ let beleg = {
 	//     (Link, auf den geklickt wurde)
 	toolsKopieren (link) {
 		// Datensatz ermitteln. Ist der Wert gefüllt?
-		const ds = link.parentNode.previousSibling.getAttribute("for").replace(/^beleg-/, ""),
+		const ds = link.parentNode.parentNode.firstChild.getAttribute("for").replace(/^beleg-/, ""),
 			text = beleg.data[ds];
 		if (!text) {
 			return;
@@ -1179,6 +1181,80 @@ let beleg = {
 			}
 		}
 	},
+	// Texttools Beleg
+	//   link = Element
+	//     (Link, auf den geklickt wurde)
+	toolsText (link) {
+		// Fokus in <textarea>
+		const ta = document.getElementById("beleg-bs");
+		ta.focus();
+		// Tags ermitteln
+		const tags = {
+			antiqua: {
+				start: `<span class="dta-antiqua">`,
+				ende: "</span>",
+			},
+			bold: {
+				start: "<b>",
+				ende: "</b>",
+			},
+			caps: {
+				start: `<span class="dta-kapitaelchen">`,
+				ende: "</span>",
+			},
+			italic: {
+				start: "<i>",
+				ende: "</i>",
+			},
+			mark: {
+				start: `<mark class="user">`,
+				ende: "</mark>",
+			},
+			size: {
+				start: `<span class="dta-groesser">`,
+				ende: "</span>",
+			},
+			spacing: {
+				start: `<span class="dta-gesperrt">`,
+				ende: "</span>",
+			},
+			strike: {
+				start: "<s>",
+				ende: "</s>",
+			},
+			underline: {
+				start: "<u>",
+				ende: "</u>",
+			},
+		};
+		const aktion = link.getAttribute("class").replace(/.+-/, "");
+		// Auswahl ermitteln
+		let start = ta.selectionStart,
+			ende = ta.selectionEnd,
+			str_start = ta.value.substring(0, start),
+			str_sel = window.getSelection().toString(),
+			str_ende = ta.value.substring(ende);
+		// Aktion durchführen
+		const reg_start = new RegExp(`${helfer.escapeRegExp(tags[aktion].start)}$`),
+			reg_ende = new RegExp(`^${helfer.escapeRegExp(tags[aktion].ende)}`);
+		if (reg_start.test(str_start) && reg_ende.test(str_ende)) { // Tag entfernen
+			str_start = str_start.replace(reg_start, "");
+			str_ende = str_ende.replace(reg_ende, "");
+			start -= tags[aktion].start.length;
+			ende -= tags[aktion].start.length;
+		} else { // Tag hinzufüren
+			str_sel = `${tags[aktion].start}${str_sel}${tags[aktion].ende}`;
+			start += tags[aktion].start.length;
+			ende += tags[aktion].start.length;
+		}
+		ta.value = `${str_start}${str_sel}${str_ende}`;
+		// Auswahl wiederherstellen
+		ta.setSelectionRange(start, ende, "forward");
+		// neuen Text in data
+		beleg.data.bs = ta.value;
+		// Änderungsmarkierung setzen
+		beleg.belegGeaendert(true);
+	},
 	// Bewertung des Belegs vor- od. zurücknehmen
 	//   stern = Element
 	//     (Stern, auf den geklickt wurde, um eine Bewertung vorzunehmen)
@@ -1287,6 +1363,13 @@ let beleg = {
 				i.classList.remove("aus");
 			}
 		});
+		// Text-Tools für Beleg ein- oder ausblenden
+		const tools_beleg = document.querySelector(".text-tools-beleg");
+		if (an) {
+			tools_beleg.classList.add("aus");
+		} else {
+			tools_beleg.classList.remove("aus");
+		}
 		// Textwerte eintragen
 		if (an) {
 			beleg.leseFill();

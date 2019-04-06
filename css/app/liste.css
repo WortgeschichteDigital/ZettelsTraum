@@ -246,6 +246,24 @@
 	background-color: var(--farbe);
 }
 
+#liste-filter-keine {
+	display: none;
+	margin-top: 11px;
+	color: var(--textSehrHell);
+	font-style: italic;
+	text-align: center;
+}
+
+.keine-filter #liste-filter-keine {
+	display: block;
+}
+
+.keine-filter header span,
+.keine-filter .filter-kopf,
+.keine-filter .filter-cont {
+	display: none;
+}
+
 /* Belegliste: Header --------------------------- */
 #liste-belege {
 	position: relative;
@@ -324,12 +342,14 @@
 }
 
 .beleg-opt-block a.aktiv,
+.filter-ctrl-block a.aktiv,
 .liste-opt-block a.aktiv {
 	background-color: var(--aktiv);
 	color: #fff;
 }
 
 .beleg-opt-block a.aktiv:focus,
+.filter-ctrl-block a.aktiv:focus,
 .liste-opt-block a.aktiv:focus {
 	background-color: var(--farbe);
 }

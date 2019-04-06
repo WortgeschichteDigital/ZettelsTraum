@@ -23,28 +23,45 @@ let popup = {
 		// Menü füllen
 		if (target === "kopieren") {
 			popup.menuKopieren(menu);
+			popup.menuBelege(menu, true);
 		} else if (target === "textfeld") {
 			popup.menuBearbeiten(menu);
 		} else if (target === "quick") {
 			popup.menuQuick(menu);
+			popup.menuBelege(menu, true);
 		} else if (target === "wort") {
 			popup.menuWort(menu);
+			popup.menuBelege(menu, true);
 		} else if (target === "notizen") {
 			popup.menuNotizen(menu);
+			popup.menuBelege(menu, true);
 		} else if (target === "anhaenge") {
 			popup.menuAnhaenge(menu);
-		} else if (target === "filter") {
-			popup.menuFilter(menu);
+			popup.menuBelege(menu, true);
+		} else if (target === "filter-conf") {
+			popup.menuFilterConf(menu);
+			popup.menuBelege(menu, true);
+		} else if (target === "filter-reset") {
+			popup.menuFilterReset(menu);
+			popup.menuBelege(menu, true);
 		} else if (target === "link") {
 			popup.menuLink(menu);
+			popup.menuBelege(menu, true);
 		} else if (target === "beleg") {
 			popup.menuBeleg(menu);
+			popup.menuBelege(menu, true);
 		} else if (target === "anhang") {
 			popup.menuAnhang(menu);
+			if (!overlay.oben()) { // nicht im Anhänge-Fenster
+				popup.menuBelege(menu, true);
+			}
 		} else if (target === "schliessen") {
 			popup.menuSchliessen(menu);
+		} else if (target === "beleg-conf") {
+			popup.menuBelegConf(menu);
+			popup.menuBelege(menu, true);
 		} else if (target === "belege") {
-			popup.menuBelege(menu);
+			popup.menuBelege(menu, false);
 		} else if (target === "kartei") {
 			popup.menuKartei(menu);
 		}
@@ -86,9 +103,11 @@ let popup = {
 				return "notizen";
 			} else if (id === "kartei-anhaenge") {
 				return "anhaenge";
+			} else if (id === "liste-filter") {
+				return "filter-conf";
 			} else if (id === "liste-belege-anzahl" &&
 					pfad[i].classList.contains("belege-gefiltert")) {
-				return "filter";
+				return "filter-reset";
 			}
 			// Klassen
 			if (pfad[i].classList) {
@@ -107,6 +126,11 @@ let popup = {
 				} else if (pfad[i].classList.contains("overlay")) {
 					return "schliessen";
 				}
+			}
+			// IDs untergeordnet
+			// (müssen nach "Klassen" überprüft werden)
+			if (id === "beleg") {
+				return "beleg-conf";
 			}
 		}
 		// kein passendes Element gefunden => Ist eine Kartei offen?
@@ -279,10 +303,25 @@ let popup = {
 			click: () => anhaenge.fenster(),
 		}));
 	},
-	// Filter-Menü füllen
+	// Filter-Conf-Menü füllen
 	//   menu = Object
 	//     (Menü-Objekt, an das die Menü-Items gehängt werden müssen)
-	menuFilter (menu) {
+	menuFilterConf (menu) {
+		const {MenuItem} = require("electron").remote,
+			path = require("path");
+		menu.append(new MenuItem({
+			label: "Filter-Einstellungen",
+			icon: path.join(__dirname, "img", "menu", "programm-einstellungen.png"),
+			click: function() {
+				optionen.oeffnen();
+				optionen.sektionWechseln(document.getElementById("einstellungen-link-filter"));
+			},
+		}));
+	},
+	// Filter-Reset-Menü füllen
+	//   menu = Object
+	//     (Menü-Objekt, an das die Menü-Items gehängt werden müssen)
+	menuFilterReset (menu) {
 		const {MenuItem} = require("electron").remote,
 			path = require("path");
 		menu.append(new MenuItem({
@@ -348,12 +387,34 @@ let popup = {
 			},
 		}));
 	},
+	// Beleg-Conf-Menü füllen
+	//   menu = Object
+	//     (Menü-Objekt, an das die Menü-Items gehängt werden müssen)
+	menuBelegConf (menu) {
+		const {MenuItem} = require("electron").remote,
+			path = require("path");
+		menu.append(new MenuItem({
+			label: "Karteikarten-Einstellungen",
+			icon: path.join(__dirname, "img", "menu", "programm-einstellungen.png"),
+			click: function() {
+				optionen.oeffnen();
+				optionen.sektionWechseln(document.getElementById("einstellungen-link-karteikarten"));
+			},
+		}));
+	},
 	// Belege-Menü füllen
 	//   menu = Object
 	//     (Menü-Objekt, an das die Menü-Items gehängt werden müssen)
-	menuBelege (menu) {
+	//   separator = Boolean
+	//     (Separator einfügen)
+	menuBelege (menu, separator) {
 		const {MenuItem} = require("electron").remote,
 			path = require("path");
+		if (separator) {
+			menu.append(new MenuItem({
+				type: "separator",
+			}));
+		}
 		menu.append(new MenuItem({
 			label: "Beleg hinzufügen",
 			icon: path.join(__dirname, "img", "menu", "belege-hinzufuegen.png"),

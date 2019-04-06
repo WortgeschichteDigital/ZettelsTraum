@@ -164,12 +164,19 @@ textarea#beleg-bs {
 	right: 6px;
 }
 
-.text-tools a {
+.text-tools-beleg {
+	position: absolute;
+	right: 78px;
+}
+
+.text-tools a,
+.text-tools-beleg a {
 	display: inline-block;
 	background-color: var(--textExtremHell);
 }
 
-.text-tools a:hover {
+.text-tools a:hover,
+.text-tools-beleg a:hover {
 	background-color: var(--text);
 }
 
@@ -181,6 +188,51 @@ textarea#beleg-bs {
 .icon-tools-kopieren {
 	-webkit-mask-image: url(../../img/tool-kopieren.svg);
 	mask-image: url(../../img/tool-kopieren.svg);
+}
+
+.icon-tools-antiqua {
+	-webkit-mask-image: url(../../img/tool-antiqua.svg);
+	mask-image: url(../../img/tool-antiqua.svg);
+}
+
+.icon-tools-bold {
+	-webkit-mask-image: url(../../img/tool-bold.svg);
+	mask-image: url(../../img/tool-bold.svg);
+}
+
+.icon-tools-caps {
+	-webkit-mask-image: url(../../img/tool-caps.svg);
+	mask-image: url(../../img/tool-caps.svg);
+}
+
+.icon-tools-italic {
+	-webkit-mask-image: url(../../img/tool-italic.svg);
+	mask-image: url(../../img/tool-italic.svg);
+}
+
+.icon-tools-mark {
+	-webkit-mask-image: url(../../img/tool-mark.svg);
+	mask-image: url(../../img/tool-mark.svg);
+}
+
+.icon-tools-size {
+	-webkit-mask-image: url(../../img/tool-size.svg);
+	mask-image: url(../../img/tool-size.svg);
+}
+
+.icon-tools-spacing {
+	-webkit-mask-image: url(../../img/tool-spacing.svg);
+	mask-image: url(../../img/tool-spacing.svg);
+}
+
+.icon-tools-strike {
+	-webkit-mask-image: url(../../img/tool-strike.svg);
+	mask-image: url(../../img/tool-strike.svg);
+}
+
+.icon-tools-underline {
+	-webkit-mask-image: url(../../img/tool-underline.svg);
+	mask-image: url(../../img/tool-underline.svg);
 }
 
 /* Leseansicht ---------------------------------- */

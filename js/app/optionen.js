@@ -71,6 +71,8 @@ let optionen = {
 		},
 		// Einstellungen in der Filterleiste
 		filter: {
+			// Anzahl der Filter während der Filterung sukzessive reduzieren
+			reduzieren: false,
 			// erweiterte Suche: Groß- und Kleinschreibung im Text beachten
 			"text-genau": false,
 			// erweiterte Suche: nur ganze Wörter suchen
@@ -133,6 +135,8 @@ let optionen = {
 			const opt = i.id.replace(/^filter-/, "");
 			i.checked = optionen.data.filter[opt];
 		});
+		// Icons im Header der Filterleiste anpassen
+		filter.ctrlReduzierenAnzeige();
 		// Icons und Text im Header der Belegliste anpassen
 		liste.headerFilterAnzeige(false); // hier auch die Anzeige der Filterleiste anpassen
 		liste.headerSortierenAnzeige();

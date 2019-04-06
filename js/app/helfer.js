@@ -172,8 +172,12 @@ let helfer = {
 		}
 		return text;
 	},
-	// ergänzt Style-Information für eine Kopie im HTML-Format
+	// ergänzt Style-Information für eine Kopie im HTML-Format;
+	// löscht die nicht zum Original gehörenden Markierungen der BenutzerIn
 	clipboardHtml (html) {
+		html = html.replace(/<mark class="user">(.+?)<\/mark>/g, function(m, p1) {
+			return p1;
+		});
 		const styles = {
 			"dta-antiqua": "font-family: sans-serif",
 			"dta-blau": "color: blue",

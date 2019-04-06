@@ -142,8 +142,10 @@ let liste = {
 		// Hat die Kartei überhaupt Belege?
 		if (!belege.length) {
 			liste.aufbauenKeineBelege();
+			filter.keineFilter(true);
 			return;
 		}
+		filter.keineFilter(false);
 		// Zeitschnitte drucken
 		let cont = document.getElementById("liste-belege-cont"),
 			start = liste.zeitschnittErmitteln(data.ka[belege[0]].da).jahrzehnt,
@@ -253,10 +255,15 @@ let liste = {
 		liste.belegeSortierenCache = {};
 		belege.sort(liste.belegeSortieren);
 		// Belege filtern
+		const belege_ungefiltert = [...belege];
 		belege = filter.kartenFiltern(belege);
 		// Filter ggf. mit den gefilterten Belegen initialisieren
 		if (filter_init) {
-			filter.aufbauen([...belege]);
+			if (optionen.data.filter.reduzieren) {
+				filter.aufbauen([...belege]);
+			} else {
+				filter.aufbauen([...belege_ungefiltert]);
+			}
 		}
 		// Belegzahl anzeigen
 		liste.aufbauenAnzahl(belege_anzahl, belege.length);
@@ -265,7 +272,7 @@ let liste = {
 	},
 	// In der Kartei sind keine Belege (mehr) und das sollte auch gezeigt werden.
 	aufbauenKeineBelege () {
-		let cont = document.getElementById("liste-belege-cont");
+		const cont = document.getElementById("liste-belege-cont");
 		let div = document.createElement("div");
 		div.classList.add("liste-kartei-leer");
 		div.textContent = "keine Belege";
