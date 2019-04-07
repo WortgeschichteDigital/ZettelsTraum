@@ -678,6 +678,15 @@ let filter = {
 			clearTimeout(filter.anwendenTimeout);
 			filter.anwendenTimeout = setTimeout(() => liste.status(true), timeout);
 		});
+		// das Volltextsuch-Feld sollte auch auf Enter hören
+		if (input.type === "text") {
+			input.addEventListener("keydown", function(evt) {
+				if (evt.which === 13) {
+					filter.volltextSuchePrep();
+					liste.status(true);
+				}
+			});
+		}
 	},
 	anwendenSterne (stern) {
 		filter.setZuletztAktiv(stern);
@@ -788,7 +797,7 @@ let filter = {
 	volltextSuche: {
 		suche: false,
 		ds: [],
-		reg: new RegExp(),
+		reg: [],
 	},
 	// Variablen für die Volltextsuche vorbereiten
 	volltextSuchePrep () {
@@ -811,16 +820,27 @@ let filter = {
 				filter.volltextSuche.ds.push(id);
 			}
 		});
-		// regulärer Suchausdruck
-		let reg = helfer.formVariSonderzeichen(helfer.escapeRegExp(vt));
-		if (erweiterte && document.getElementById("filter-ganzes-wort").checked) {
-			reg = `(?<vor>^|[${helfer.ganzesWortRegExp.links}]+)(?<wort>${reg})(?<nach>$|[${helfer.ganzesWortRegExp.rechts}]+)`;
-		}
+		// reguläre Suchausdrücke
+		filter.volltextSuche.reg = [];
 		let insensitiv = "gi";
 		if (erweiterte && document.getElementById("filter-text-genau").checked) {
 			insensitiv = "g";
 		}
-		filter.volltextSuche.reg = new RegExp(reg, insensitiv);
+		let chunks = vt.split(/\s/);
+		if (erweiterte && document.getElementById("filter-phrase").checked) {
+			chunks = [vt];
+		}
+		const ganzes_wort = document.getElementById("filter-ganzes-wort").checked;
+		chunks.forEach(function(i) {
+			if (!i) { // i dürfte eigentlich nicht leer sein, aber sicher ist sicher
+				return;
+			}
+			let reg = helfer.formVariSonderzeichen(helfer.escapeRegExp(i));
+			if (erweiterte && ganzes_wort) {
+				reg = `(?<vor>^|[${helfer.ganzesWortRegExp.links}]+)(?<wort>${reg})(?<nach>$|[${helfer.ganzesWortRegExp.rechts}]+)`;
+			}
+			filter.volltextSuche.reg.push(new RegExp(reg, insensitiv));
+		});
 	},
 	// Array mit den aktiven Verschiedenes-Filtern bei exklusiver Filterlogik
 	exklusivAktiv: [],
@@ -978,10 +998,17 @@ let filter = {
 			return true;
 		}
 		// Volltextsuche
+		let treffer = Array(filter.volltextSuche.reg.length).fill(false);
 		for (let i = 0, len = filter.volltextSuche.ds.length; i < len; i++) {
 			const ds = filter.volltextSuche.ds[i],
-				text_rein = data.ka[id][ds].replace(/<.+?>/g, "");
-			if (text_rein.match(filter.volltextSuche.reg)) {
+				text_rein = data.ka[id][ds].replace(/<.+?>|\[¬\]/g, "");
+			for (let j = 0, len = treffer.length; j < len; j++) {
+				const reg = filter.volltextSuche.reg[j];
+				if (text_rein.match(reg)) {
+					treffer[j] = true;
+				}
+			}
+			if (treffer.indexOf(false) === -1) {
 				return true;
 			}
 		}

@@ -50,6 +50,10 @@ let popup = {
 		} else if (target === "beleg") {
 			popup.menuBeleg(menu);
 			popup.menuBelege(menu, true);
+		} else if (target === "beleg-moddel") {
+			popup.menuBeleg(menu);
+			popup.menuBelegDel(menu);
+			popup.menuBelege(menu, true);
 		} else if (target === "anhang") {
 			popup.menuAnhang(menu);
 			if (!overlay.oben()) { // nicht im Anhänge-Fenster
@@ -116,7 +120,7 @@ let popup = {
 					return "link";
 				} else if (pfad[i].classList.contains("liste-kopf")) {
 					popup.belegID = pfad[i].dataset.id;
-					return "beleg";
+					return "beleg-moddel";
 				} else if (pfad[i].classList.contains("liste-meta")) {
 					popup.belegID = pfad[i].parentNode.previousSibling.dataset.id;
 					return "beleg";
@@ -358,6 +362,18 @@ let popup = {
 				overlay.alleSchliessen(); // der Beleg kann auch aus einem Overlay-Fenster geöffnet werden
 				beleg.oeffnen(parseInt(popup.belegID, 10));
 			},
+		}));
+	},
+	// BelegDel-Menü füllen
+	//   menu = Object
+	//     (Menü-Objekt, an das die Menü-Items gehängt werden müssen)
+	menuBelegDel (menu) {
+		const {MenuItem} = require("electron").remote,
+			path = require("path");
+		menu.append(new MenuItem({
+			label: "Beleg löschen",
+			icon: path.join(__dirname, "img", "menu", "popup-loeschen.png"),
+			click: () => beleg.aktionLoeschenFrage(parseInt(popup.belegID, 10)),
 		}));
 	},
 	// Anhang-Menü füllen

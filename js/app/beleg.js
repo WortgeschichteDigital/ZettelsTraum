@@ -274,15 +274,20 @@ let beleg = {
 			return;
 		}
 		// Beleg wirklich löschen?
+		beleg.aktionLoeschenFrage(beleg.id_karte);
+	},
+	// Fragen, ob der Beleg wirklich gelöscht werden soll
+	// (wird auch in anderen Kontexten gebraucht, darum auslagern)
+	//   id = Number
+	//     (ID des Belegs)
+	aktionLoeschenFrage (id) {
 		dialog.oeffnen("confirm", function() {
 			if (dialog.antwort) {
-				// Datensatz löschen
-				delete data.ka[beleg.id_karte];
-				// Änderungen darstellen
+				delete data.ka[id];
 				beleg.listeGeaendert();
 			}
 		});
-		dialog.text("Soll der Beleg wirklich gelöscht werden?");
+		dialog.text(`Soll <i>${liste.detailAnzeigenH3(id)}</i> wirklich gelöscht werden?`);
 	},
 	// Daten, die importiert wurden
 	DTAImportData: {},
@@ -568,7 +573,7 @@ let beleg = {
 		}
 		// spezielle Trim-Funktion
 		function trimmer (v) {
-			helfer.textTrim(v, true);
+			v = helfer.textTrim(v, true);
 			v = v.replace(/\n/g, " "); // kommt mitunter mitten im Untertitel vor
 			return v;
 		}
@@ -715,7 +720,7 @@ let beleg = {
 					if (/(-|¬)$/.test(text_tmp) &&
 							ele.nextSibling &&
 							ele.nextSibling.nodeName === "lb") {
-						text += text_tmp.replace(/(-|¬)$/, ""); // Trennungsstrich weg
+						text += text_tmp.replace(/(-|¬)$/, "[¬]"); // Trennungsstrich ersetzen
 					} else {
 						text += text_tmp;
 						if (ele.nextSibling &&
@@ -967,7 +972,7 @@ let beleg = {
 				beleg.toolsKopieren(this);
 			} else if (this.classList.contains("icon-tools-einfuegen")) {
 				beleg.toolsEinfuegen(this);
-			} else {
+			} else if (this.parentNode.classList.contains("text-tools-beleg")) {
 				beleg.toolsText(this);
 			}
 		});
@@ -1228,12 +1233,26 @@ let beleg = {
 			},
 		};
 		const aktion = link.getAttribute("class").replace(/.+-/, "");
+		// illegales Nesting über die Absatzgrenze hinaus?
+		let str_sel = window.getSelection().toString();
+		if (/\n/.test(str_sel)) {
+			const umbruch = str_sel.match(/\n/).index;
+			ta.setSelectionRange(ta.selectionStart, ta.selectionStart + umbruch, "forward");
+			str_sel = window.getSelection().toString();
+		}
 		// Auswahl ermitteln
 		let start = ta.selectionStart,
 			ende = ta.selectionEnd,
 			str_start = ta.value.substring(0, start),
-			str_sel = window.getSelection().toString(),
 			str_ende = ta.value.substring(ende);
+		// illegales Nesting von Inline-Tags?
+		if (beleg.toolsTextNesting(str_sel)) {
+			dialog.oeffnen("alert", function() {
+				ta.focus();
+			});
+			dialog.text("Die Formatierung kann an dieser Position nicht vorgenommen werden.\nGrund: illegale Verschachtelung.");
+			return;
+		}
 		// Aktion durchführen
 		const reg_start = new RegExp(`${helfer.escapeRegExp(tags[aktion].start)}$`),
 			reg_ende = new RegExp(`^${helfer.escapeRegExp(tags[aktion].ende)}`);
@@ -1254,6 +1273,46 @@ let beleg = {
 		beleg.data.bs = ta.value;
 		// Änderungsmarkierung setzen
 		beleg.belegGeaendert(true);
+	},
+	// illegales Nesting ermitteln
+	//   str = String
+	//     (String mit [oder ohne] HTML-Tags)
+	toolsTextNesting (str) {
+		// Sind überhaupt Tags im String?
+		const treffer = {
+			auf: str.match(/<[a-z1-6]+/g),
+			zu: str.match(/<\/[a-z1-6]+>/g),
+		};
+		if (!treffer.auf && !treffer.zu) {
+			return false;
+		}
+		// Anzahl der Treffer pro Tag ermitteln
+		let tags = {
+			auf: {},
+			zu: {}
+		};
+		for (let i in treffer) {
+			if (!treffer.hasOwnProperty(i)) {
+				continue;
+			}
+			for (let j = 0, len = treffer[i].length; j < len; j++) {
+				const tag = treffer[i][j].replace(/<|>|\//g, "");
+				if (!tags[i][tag]) {
+					tags[i][tag] = 0;
+				}
+				tags[i][tag]++;
+			}
+		}
+		// Analysieren, ob es Diskrepanzen zwischen den Tags gibt
+		for (let i in tags.auf) {
+			if (!tags.auf.hasOwnProperty(i)) {
+				continue;
+			}
+			if (!tags.zu[i] || tags.auf[i] !== tags.zu[i]) {
+				return true; // illegales Nesting
+			}
+		}
+		return false; // kein illegales Nesting
 	},
 	// Bewertung des Belegs vor- od. zurücknehmen
 	//   stern = Element

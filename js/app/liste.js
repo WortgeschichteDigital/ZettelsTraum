@@ -142,10 +142,8 @@ let liste = {
 		// Hat die Kartei überhaupt Belege?
 		if (!belege.length) {
 			liste.aufbauenKeineBelege();
-			filter.keineFilter(true);
 			return;
 		}
-		filter.keineFilter(false);
 		// Zeitschnitte drucken
 		let cont = document.getElementById("liste-belege-cont"),
 			start = liste.zeitschnittErmitteln(data.ka[belege[0]].da).jahrzehnt,
@@ -251,6 +249,12 @@ let liste = {
 		// Anzahl der Belege feststellen
 		let belege = Object.keys(data.ka),
 			belege_anzahl = belege.length;
+		// Filter ausblenden?
+		if (!belege_anzahl) {
+			filter.keineFilter(true);
+		} else {
+			filter.keineFilter(false);
+		}
 		// Belege sortieren
 		liste.belegeSortierenCache = {};
 		belege.sort(liste.belegeSortieren);
@@ -561,12 +565,14 @@ let liste = {
 			return text;
 		}
 		// Suchtreffer hervorheben
-		const treffer = filter.volltextSuche.reg.exec(text);
-		text = text.replace(filter.volltextSuche.reg, function(m) {
-			if (treffer.groups) {
-				return `${treffer.groups.vor}<mark class="suche">${treffer.groups.wort}</mark>${treffer.groups.nach}`;
-			}
-			return `<mark class="suche">${m}</mark>`;
+		filter.volltextSuche.reg.forEach(function(i) {
+			const treffer = i.exec(text);
+			text = text.replace(i, function(m) {
+				if (treffer.groups) {
+					return `${treffer.groups.vor}<mark class="suche">${treffer.groups.wort}</mark>${treffer.groups.nach}`;
+				}
+				return `<mark class="suche">${m}</mark>`;
+			});
 		});
 		// Treffer innerhalb von Tags löschen
 		text = text.replace(/(<[^>]*?)<mark class="suche">(.+?)<\/mark>/g, function(m, p1, p2) {

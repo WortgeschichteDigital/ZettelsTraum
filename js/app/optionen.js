@@ -73,6 +73,8 @@ let optionen = {
 		filter: {
 			// Anzahl der Filter während der Filterung sukzessive reduzieren
 			reduzieren: false,
+			// erweiterte Suche: Suchausdruck als Phrase behandeln
+			phrase: false,
 			// erweiterte Suche: Groß- und Kleinschreibung im Text beachten
 			"text-genau": false,
 			// erweiterte Suche: nur ganze Wörter suchen

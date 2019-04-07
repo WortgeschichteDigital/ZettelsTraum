@@ -245,7 +245,7 @@ let helfer = {
 	},
 	// Variablen um Wortgrenzen zu bestimmen
 	ganzesWortRegExp: {
-		links: `\\s/\\\\([{<>`,
+		links: `\\s/\\\\([\\\]{<>`,
 		rechts: `\\s"/\\\\)\\\]!?.:,;<>`,
 	},
 	// Tokens mit spezieller Bedeutung für reguläre Ausdrücke escapen
