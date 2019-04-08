@@ -49,6 +49,10 @@ section a {
 	color: #fff;
 }
 
+abbr {
+	text-decoration: none;
+}
+
 h1 {
 	margin: 10px 0;
 	color: var(--textFarbe);
@@ -73,6 +77,15 @@ h2 a {
 
 section h2 {
 	margin: 0 0 20px 0;
+}
+
+kbd {
+	display: inline-block;
+	border: 1px solid var(--linie);
+	border-radius: 2px;
+	padding: 0 2px;
+	background-color: var(--hintergrund);
+	font-family: "DejaVu Sans Mono", monospace;
 }
 
 p {

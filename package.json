@@ -1,7 +1,7 @@
 {
 	"name": "zettelstraum",
 	"productName": "Zettel's Traum",
-	"version": "0.1.0",
+	"version": "0.3.0",
 	"description": "Wortkartei-App von 'Wortgeschichte digital', dem an der 'Akademie der Wissenschaften zu Göttingen' angesiedelten Teilprojekt des 'Zentrums für digitale Lexikographie der deutschen Sprache'",
 	"keywords": [
 		"Kartei",
@@ -11,13 +11,22 @@
 		"Wortgeschichte",
 		"ZDL"
 	],
-	"author": "Nico Dorn <ndorn@gwdg.de>",
-	"license": "GPL-3.0",
+	"author": {
+		"name": "Nico Dorn",
+		"email": "ndorn@gwdg.de"
+	},
+	"license": {
+		"type": "GPL-3.0",
+		"url": "https://www.gnu.org/licenses/gpl-3.0.en.html"
+	},
 	"homepage": "https://adw-goe.de/forschung/weitere-forschungsprojekte/wortgeschichte-digital-teilprojekt-im-zdl/",
+	"bugs": {
+		"email": "ndorn@gwdg.de"
+	},
 	"main": "main.js",
 	"scripts": {
 		"start": "electron .",
-		"package-win": "electron-packager . zettelstraum --overwrite --asar --platform=win32 --arch=x64 --icon=img/icon/win/icon.ico --prune=true --out=../dist --win32metadata.CompanyName=\"Akademie der Wissenschaften zu Göttingen\" --win32metadata.ProductName=\"Zettel's Traum\""
+		"package-win": "electron-packager . zettelstraum --overwrite --asar --platform=win32 --arch=x64 --icon=img/icon/win/icon.ico --prune=true --out=../dist --appCopyright=\"Akademie der Wissenschaften zu Göttingen\" --name=\"Zettel's Traum\" --win32metadata.CompanyName=\"Akademie der Wissenschaften zu Göttingen\" --win32metadata.FileDescription=\"Zettel's Traum\" --win32metadata.ProductName=\"Zettel's Traum\" --win32metadata.InternalName=\"Zettel's Traum\""
 	},
 	"devDependencies": {
 		"electron": "^4.1.4",

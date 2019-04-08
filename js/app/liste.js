@@ -494,6 +494,8 @@ let liste = {
 				continue;
 			}
 			zuletzt_gekuerzt = false;
+			// ggf. Trennungszeichen entfernen
+			p_prep[i] = liste.belegTrennungWeg(p_prep[i], false);
 			// Absatz normal einhängen
 			p.innerHTML = liste.suchtreffer(liste.belegWortHervorheben(p_prep[i], false), "bs");
 		}
@@ -515,6 +517,8 @@ let liste = {
 				schnitt = `…${schnitt.substring(idx - 20)}`;
 			}
 		}
+		// Trennungszeichen entfernen
+		schnitt = liste.belegTrennungWeg(schnitt, true);
 		// Treffer hervorheben
 		schnitt = liste.belegWortHervorheben(schnitt, false);
 		// ggf. Autor angeben
@@ -538,6 +542,17 @@ let liste = {
 		frag.appendChild(q);
 		// Fragment zurückgeben
 		return frag;
+	},
+	// Trennungszeichen entfernen
+	//   text = String
+	//     (Belegtext)
+	//   immer_weg = Boolean
+	//     (Trennungsstriche sollen in jedem Fall entfernt werden)
+	belegTrennungWeg (text, immer_weg) {
+		if (optionen.data.belegliste.trennung && !immer_weg) {
+			return text;
+		}
+		return text.replace(/\[¬\]/g, "");
 	},
 	// hebt ggf. das Wort der Kartei im übergebenen Text hervor
 	//   schnitt = String
@@ -1123,7 +1138,7 @@ let liste = {
 			evt.preventDefault();
 			let ds = this.dataset.ds.split("|"),
 				text = data.ka[ds[0]][ds[1]];
-			beleg.toolsKopierenExec(ds[1], text, this);
+			beleg.toolsKopierenExec(ds[1], data.ka[ds[0]], text, this);
 		});
 	},
 };

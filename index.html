@@ -13,6 +13,7 @@
 		<link rel="stylesheet" href="css/app/overlays.css">
 		<link rel="stylesheet" href="css/app/dropdown.css">
 		<link rel="stylesheet" href="css/app/start.css">
+		<link rel="stylesheet" href="css/app/drucken.css" media="print">
 		
 		<script src="js/app/anhaenge.js"></script>
 		<script src="js/app/app.js"></script>
@@ -492,6 +493,21 @@
 			<div id="dialog-confirm">
 				<p class="button"><input type="button" value="Ja" id="dialog-ja-button"
 					><input type="button" value="Nein" id="dialog-nein-button"></p>
+			</div>
+		</div></div>
+		
+		<!-- OVERLAY: Drucken -->
+		<div id="drucken" class="overlay aus"><div>
+			<h2><span class="icon-h icon-h-drucken"> </span
+				>Drucken<a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen"
+				> </a></h2>
+			<div id="drucken-head"
+				><span><img src="img/drucken-gross.svg" width="48" height="48" alt=""><br>Drucken</span
+				><span><img src="img/kopieren-gross.svg" width="48" height="48" alt=""><br>Kopieren</span
+				><span id="drucken-serife">normal<br><i>italic</i><br><b>bold</b><br><b><i>bold-italic</i></b></span
+			></div>
+			<div id="drucken-cont-rahmen">
+				<div id="drucken-cont"></div>
 			</div>
 		</div></div>
 		

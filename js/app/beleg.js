@@ -178,6 +178,8 @@ let beleg = {
 			}
 		});
 	},
+	// Vormerken, dass die Liste neu aufgebaut werden muss
+	listeGeaendert: false,
 	// Beleg speichern
 	aktionSpeichern () {
 		// Test: Datum angegeben?
@@ -210,8 +212,6 @@ let beleg = {
 		}
 		// Beleg wurde nicht geändert
 		if (!beleg.geaendert) {
-			dialog.oeffnen("alert", () => da.focus());
-			dialog.text("Es wurden keine Änderungen vorgenommen.");
 			return;
 		}
 		// ggf. Format von Bedeutung und Textsorte anpassen
@@ -241,8 +241,10 @@ let beleg = {
 		}
 		// Änderungsdatum speichern
 		data.ka[beleg.id_karte].dm = new Date().toISOString();
-		// Änderungen darstellen
-		beleg.listeGeaendert();
+		// Änderungsmarkierung weg
+		beleg.belegGeaendert(false);
+		beleg.listeGeaendert = true;
+		kartei.karteiGeaendert(true);
 	},
 	// Bearbeiten des Belegs abbrechen
 	aktionAbbrechen () {
@@ -263,13 +265,18 @@ let beleg = {
 		// Funktion zum Abbrechen
 		function abbrechen () {
 			beleg.belegGeaendert(false);
+			if (beleg.listeGeaendert) {
+				liste.status(true);
+			}
 			liste.wechseln();
+			beleg.listeGeaendert = false;
 		}
 	},
 	// Beleg löschen
 	aktionLoeschen () {
 		// Beleg wurde noch gar nicht angelegt
 		if (!data.ka[beleg.id_karte]) {
+			beleg.belegGeaendert(false);
 			beleg.aktionAbbrechen();
 			return;
 		}
@@ -284,7 +291,13 @@ let beleg = {
 		dialog.oeffnen("confirm", function() {
 			if (dialog.antwort) {
 				delete data.ka[id];
-				beleg.listeGeaendert();
+				beleg.belegGeaendert(false);
+				kartei.karteiGeaendert(true);
+				liste.statusNeu = "";
+				liste.statusGeaendert = "";
+				liste.status(true);
+				liste.wechseln();
+				beleg.listeGeaendert = false;
 			}
 		});
 		dialog.text(`Soll <i>${liste.detailAnzeigenH3(id)}</i> wirklich gelöscht werden?`);
@@ -914,16 +927,6 @@ let beleg = {
 			}
 		}
 	},
-	// die Aktionen im Formular führten zu einer Änderung der Belegliste (betrifft Speichern und Löschen)
-	listeGeaendert () {
-		// Änderungsmarkierung des Belegs entfernen
-		beleg.belegGeaendert(false);
-		// Änderungsmarkierung für Kartei setzen
-		kartei.karteiGeaendert(true);
-		// Belegliste aufbauen und einblenden
-		liste.status(true);
-		liste.wechseln();
-	},
 	// Beleg wurde geändert und noch nicht gespeichert
 	geaendert: false,
 	// Anzeigen, dass der Beleg geändert wurde
@@ -987,44 +990,69 @@ let beleg = {
 		if (!text) {
 			return;
 		}
-		beleg.toolsKopierenExec(ds, text, document.querySelector(`#beleg-lese-${ds} p`));
+		beleg.toolsKopierenExec(ds, beleg.data, text, document.querySelector(`#beleg-lese-${ds} p`));
 	},
 	// führt die Kopieroperation aus (eigene Funktion,
 	// weil sie auch für die Kopierfunktion im Beleg benutzt wird)
 	//   ds = String
 	//     (Bezeichner des Datensatzes)
+	//   obj = Object
+	//     (verweist auf das Datenobjekt, in dem der zu kopierende Text steht;
+	//     wichtig, um die Literaturangabe beim Kopieren von Belegtext zu finden
 	//   text = String
 	//     (der komplette Feldtext, wie er in der DB steht)
 	//   ele = Element
 	//     (ein Element auf der 1. Ebene im Kopierbereich)
-	toolsKopierenExec (ds, text, ele) {
-		// Zeilenumbrüche im Text aufbereiten
-		text = text.replace(/\n\s*\n/g, "\n");
+	toolsKopierenExec (ds, obj, text, ele) {
 		// clipboard initialisieren
 		const {clipboard} = require("electron");
 		// Ist Text ausgewählt und ist er im Bereich des Kopier-Icons?
 		if (window.getSelection().toString() &&
 				popup.getTargetSelection([ele])) {
+			let html = helfer.clipboardHtml(popup.textauswahl.html);
 			clipboard.write({
 				text: popup.textauswahl.text,
-				html: helfer.clipboardHtml(popup.textauswahl.html),
+				html: html,
 			});
 			return;
 		}
 		// Kein Text ausgewählt => das gesamte Feld wird kopiert
 		if (ds === "bs") { // Beleg
-			const p = text.split("\n");
+			const p = text.replace(/\n\s*\n/g, "\n").split("\n");
 			let html = "";
 			p.forEach(function(i) {
 				html += `<p>${i}</p>`;
 			});
+			html = helfer.clipboardHtml(html);
+			html = beleg.toolsKopierenAddQuelle(html, true, obj);
+			text = beleg.toolsKopierenAddQuelle(text, false, obj);
 			clipboard.write({
 				text: text,
-				html: helfer.clipboardHtml(html),
+				html: html,
 			});
 		} else { // alle anderen Felder
 			clipboard.writeText(text);
 		}
+	},
+	// Quellenangabe zum Belegtext hinzufügen
+	//   text = String
+	//     (Text, der um die Quelle ergänzt werden soll)
+	//   html = Boolean
+	//     (Text soll um eine html-formatierte Quellenangabe ergänzt werden)
+	//   obj = Object
+	//     (das Datenobjekt, in dem die Quelle steht)
+	toolsKopierenAddQuelle (text, html, obj) {
+		if (html) {
+			text += "<hr>";
+			const quelle = obj.qu.split("\n");
+			quelle.forEach(function(i) {
+				text += `<p>${i}</p>`;
+			});
+		} else {
+			text += "\n\n---\n\n";
+			text += obj.qu;
+		}
+		return text;
 	},
 	// Tool Einfügen: Text möglichst unter Beibehaltung der Formatierung einfügen
 	//   link = Element
@@ -1034,7 +1062,7 @@ let beleg = {
 		// Text einlesen
 		const {clipboard} = require("electron"),
 			formate = clipboard.availableFormats(),
-			id = link.parentNode.previousSibling.getAttribute("for"),
+			id = link.parentNode.parentNode.firstChild.getAttribute("for"),
 			ds = id.replace(/^beleg-/, ""),
 			feld = document.getElementById(id);
 		// Text auslesen
@@ -1174,7 +1202,7 @@ let beleg = {
 					ele.insertBefore(document.createTextNode("– "), ele.firstChild);
 				}
 				// Block-Level-Elemente (und andere), die eine Sonderbehandlung benötigen
-				if (/^(DD|DT|FIGCAPTION|HR|LI|TR)$/.test(ele.nodeName)) { // Zeilenumbruch
+				if (/^(BR|DD|DT|FIGCAPTION|HR|LI|TR)$/.test(ele.nodeName)) { // Zeilenumbruch
 					text += "\n";
 				} else if (/^(ADDRESS|ARTICLE|ASIDE|BLOCKQUOTE|DETAILS|DIALOG|DIV|DL|FIELDSET|FIGURE|FOOTER|FORM|H([1-6]{1})|HEADER|MAIN|NAV|OL|P|PRE|SECTION|TABLE|UL)$/.test(ele.nodeName)) { // Absätze
 					text = helfer.textTrim(text, false);
@@ -1289,7 +1317,7 @@ let beleg = {
 		// Analysieren, ob zuerst ein schließender Tag erscheint
 		const first_start = str.match(/<[a-z1-6]+/),
 			first_end = str.match(/<\/[a-z1-6]+/);
-		if (first_end.index < first_start.index) {
+		if (first_start && first_end && first_end.index < first_start.index) {
 			return true; // offenbar illegales Nesting
 		}
 		// Anzahl der Treffer pro Tag ermitteln
@@ -1299,6 +1327,9 @@ let beleg = {
 		};
 		for (let i in treffer) {
 			if (!treffer.hasOwnProperty(i)) {
+				continue;
+			}
+			if (!treffer[i]) {
 				continue;
 			}
 			for (let j = 0, len = treffer[i].length; j < len; j++) {
@@ -1311,12 +1342,17 @@ let beleg = {
 		}
 		// Analysieren, ob es Diskrepanzen zwischen den
 		// öffnenden und schließenden Tags gibt
-		for (let i in tags.auf) {
-			if (!tags.auf.hasOwnProperty(i)) {
-				continue;
-			}
-			if (!tags.zu[i] || tags.auf[i] !== tags.zu[i]) {
-				return true; // offenbar illegales Nesting
+		const arr = ["auf", "zu"];
+		for (let i = 0; i < 2; i++) {
+			const a = arr[i],
+				b = arr[i === 1 ? 0 : 1];
+			for (let tag in tags[a]) {
+				if (!tags[a].hasOwnProperty(tag)) {
+					continue;
+				}
+				if (!tags[b][tag] || tags[a][tag] !== tags[b][tag]) {
+					return true; // offenbar illegales Nesting
+				}
 			}
 		}
 		return false; // offenbar kein illegales Nesting
@@ -1394,9 +1430,9 @@ let beleg = {
 		});
 	},
 	// Lesansicht umschalten
-	//   manuell = Boolean
-	//     (Leseansicht wurde manuell gewechselt)
-	leseToggle (manuell) {
+	//   user = Boolean
+	//     (Leseansicht wurde durch User aktiv gewechselt)
+	leseToggle (user) {
 		// Ansicht umstellen
 		const button = document.getElementById("beleg-link-leseansicht");
 		let an = true;
@@ -1439,7 +1475,7 @@ let beleg = {
 		// Textwerte eintragen
 		if (an) {
 			beleg.leseFill();
-		} else if (manuell) {
+		} else if (user) {
 			document.querySelectorAll("#beleg textarea").forEach((textarea) => helfer.textareaGrow(textarea));
 			document.getElementById("beleg-da").focus();
 		}

@@ -44,7 +44,7 @@ let dropdown = {
 			clearTimeout(dropdown.timeoutBlur);
 			dropdown.timeoutBlur = setTimeout(function() {
 				dropdown.schliessen();
-			}, 100); // deutlich Verzögerung, damit Klicks im Dropdown funktionieren
+			}, 250); // deutlich Verzögerung, damit Klicks im Dropdown funktionieren
 			clearTimeout(dropdown.timeoutFill);
 		});
 		inp.addEventListener("focus", function() {
@@ -155,21 +155,42 @@ let dropdown = {
 		span.style.top = `${inp_text.offsetHeight + 4}px`;
 		span.style.maxWidth = `${inp_text.parentNode.offsetWidth - 12}px`; // 12px padding und border
 	},
+	// Wenn >= 0 heißt das, dass die Dropdownliste gefiltert wurde. Sie ist also
+	// aufgrund einer Tastatureingabe erstellt worden
+	cursor: -1,
 	// Dropdown-Liste füllen
 	//   filtern = Boolean
 	//     (Vorschläge sollen gefiltert werden)
 	fill (filtern) {
+		let drop = document.getElementById("dropdown"),
+			feld = drop.parentNode.querySelector(".dropdown-feld");
+		// wird die Liste gefiltert?
+		if (filtern) {
+			dropdown.cursor = feld.selectionStart;
+		} else {
+			dropdown.cursor = -1;
+		}
 		// Liste leeren
-		let drop = document.getElementById("dropdown");
 		helfer.keineKinder(drop);
 		// Elemente ggf. filtern
 		let items = [...dropdown.data],
-			va = helfer.textTrim(drop.parentNode.querySelector(".dropdown-feld").value);
+			va = helfer.textTrim(feld.value, true);
 		if (filtern && va) {
-			let reg = new RegExp(helfer.escapeRegExp(va), "i"),
+			let reg_chunks = "",
+				va_split = va.split("\n");
+			va_split.forEach(function(i) {
+				if (!i) {
+					return;
+				}
+				if (reg_chunks) {
+					reg_chunks += "|";
+				}
+				reg_chunks += helfer.escapeRegExp(i);
+			});
+			let reg = new RegExp(reg_chunks, "i"),
 				gefiltert = [];
 			items.forEach(function(i) {
-				if (reg.test(i)) {
+				if (reg.test(i) && va_split.indexOf(i) === -1) {
 					gefiltert.push(i);
 				}
 			});
@@ -184,6 +205,9 @@ let dropdown = {
 		items.forEach(function(i) {
 			let opt = document.createElement("span");
 			opt.textContent = i;
+			if (i.length > 65) {
+				opt.title = i;
+			}
 			dropdown.auswahlKlick(opt);
 			drop.appendChild(opt);
 		});
@@ -246,29 +270,52 @@ let dropdown = {
 	auswahl (feld, text) {
 		let caller = dropdown.caller; // muss zwischengespeichert werden, weil das Dropdown sich schließt, wenn sich das Dialog-Fenster öffnet
 		if (/^beleg-/.test(caller) && feld.value) {
+			// Steht der Wert schon im Feld?
+			let feld_val = feld.value.split("\n");
+			if (feld_val.indexOf(text) >= 0) {
+				dialog.oeffnen("alert", function() {
+					feld.focus();
+				});
+				dialog.text("Der ausgewählte Wert muss nicht ergänzt werden, weil er bereits im Feld steht.");
+				return;
+			}
+			// Wurde das Feld durch Texteingabe gefiltert?
+			if (dropdown.cursor >= 0) {
+				eintragen(true);
+				return;
+			}
+			// Ergänzen oder überschreiben?
 			dialog.oeffnen("confirm", function() {
 				if (dialog.antwort) {
-					// Steht der Text schon im Feld?
-					let feld_val = feld.value.split("\n");
-					if (feld_val.indexOf(text) >= 0) {
-						dialog.oeffnen("alert", null);
-						dialog.text("Der Text muss nicht ergänzt werden, weil er bereits im Feld steht.");
-						return;
-					}
-					// Text wird ergänzt
-					eintragen(true);
-				} else if (dialog.antwort === false) {
 					eintragen(false);
+				} else if (dialog.antwort === false) {
+					eintragen(true);
 				}
 			});
-			dialog.text("Im Textfeld steht schon etwas.\nSoll es um den ausgewählten Text ergänzt werden?");
+			dialog.text("Im Textfeld steht schon etwas.\nSoll der Wert überschrieben werden?\n(Bei „Nein“ wird das Textfeld um den Wert ergänzt.)");
 			return;
 		}
 		eintragen(false);
 		// Eintragen
 		function eintragen (ergaenzen) {
 			if (ergaenzen) {
-				text = `${feld.value}\n${text}`;
+				if (dropdown.cursor >= 0) {
+					let arr = [];
+					let feld_start = feld.value.substring(0, dropdown.cursor);
+					feld_start = feld_start.replace(/[^\n]+$/, "").replace(/\n$/, "");
+					if (feld_start) {
+						arr.push(feld_start);
+					}
+					arr.push(text);
+					let feld_ende = feld.value.substring(dropdown.cursor);
+					feld_ende = feld_ende.replace(/^[^\n]+/, "").replace(/^\n/, "");
+					if (feld_ende) {
+						arr.push(feld_ende);
+					}
+					text = arr.join("\n");
+				} else {
+					text = `${helfer.textTrim(feld.value, true)}\n${text}`;
+				}
 			}
 			// Auswahl übernehmen
 			feld.value = text;
@@ -276,6 +323,8 @@ let dropdown = {
 			// Haben die Änderungen weitere Konsequenzen?
 			if (/^beleg-/.test(caller)) {
 				helfer.textareaGrow(feld);
+				const id = caller.replace(/^beleg-/, "");
+				beleg.data[id] = helfer.textTrim(feld.value, true);
 				beleg.belegGeaendert(true);
 			} else if (/^einstellung-/.test(caller)) {
 				optionen.aendereEinstellung(document.getElementById(caller));

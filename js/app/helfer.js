@@ -266,10 +266,16 @@ let helfer = {
 	//   wort = String
 	//     (die Zeichenkette, mit der gesucht werden soll
 	formVariSonderzeichen (wort) {
-		return wort.replace(/e|s|ä|ö|ü/g, function(m) {
+		return wort.replace(/en|e|nn|n|s|ä|ö|ü/g, function(m) {
 			switch (m) {
+				case "en":
+					return "(ẽ|en)";
 				case "e":
 					return "(ẽ|e)";
+				case "nn":
+					return "(ñ|nn)";
+				case "n":
+					return "(ñ|n)";
 				case "s":
 					return "(ſ|s)";
 				case "ä":
@@ -280,6 +286,19 @@ let helfer = {
 					return "(uͤ|ü)";
 			}
 		});
+	},
+	// Verteilerfunktion für den Tastaturbefehl Strg + S
+	speichern () {
+		const oben = overlay.oben();
+		if (oben === "notizen" && notizen.geaendert) {
+			notizen.speichern();
+		}
+		if (!oben && beleg.geaendert) {
+			beleg.aktionSpeichern();
+		}
+		if (!notizen.geaendert && !beleg.geaendert && kartei.geaendert) {
+			kartei.speichern(false);
+		}
 	},
 	// Tastatur-Events abfangen und verarbeiten
 	//   evt = Event-Objekt
@@ -308,6 +327,11 @@ let helfer = {
 		// Cursor links (←), hoch (↑), rechts (→), runter (↓)
 		if (evt.which >= 37 && evt.which <= 40) {
 			helfer.cursor(evt);
+		}
+		// Strg + U (wenn im Beleg)
+		if (evt.ctrlKey && evt.which === 85 && !overlay.oben() &&
+				!document.getElementById("beleg").classList.contains("aus")) {
+			beleg.leseToggle(true);
 		}
 	},
 };

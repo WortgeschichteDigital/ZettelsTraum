@@ -73,7 +73,7 @@ window.addEventListener("load", function() {
 	for (let i = 0, len = beleg_links.length; i < len; i++) {
 		if (beleg_links[i].classList.contains("icon-stern")) { // Bewertung
 			beleg.bewertungEvents(beleg_links[i]);
-		} else { // Text-Tools
+		} else if (/icon-tools-/.test(beleg_links[i].getAttribute("class"))) { // Text-Tools
 			beleg.toolsKlick(beleg_links[i]);
 		}
 	}
@@ -162,6 +162,8 @@ window.addEventListener("load", function() {
 			overlay.schliessen(this);
 		});
 	}
+	// Druck-Fenster
+	document.querySelectorAll("#drucken-head span").forEach((span) => drucken.buttons(span));
 	// Schließen-Links von Overlays
 	let overlay_links = document.querySelectorAll(".overlay-schliessen");
 	for (let i = 0, len = overlay_links.length; i < len; i++) {
@@ -181,7 +183,7 @@ window.addEventListener("load", function() {
 			kartei.checkSpeichern(() => kartei.oeffnen());
 		}
 	});
-	ipcRenderer.on("kartei-speichern", () => kartei.speichern(false));
+	ipcRenderer.on("kartei-speichern", () => helfer.speichern());
 	ipcRenderer.on("kartei-speichern-unter", () => kartei.speichern(true));
 	ipcRenderer.on("kartei-formvarianten", () => stamm.oeffnen());
 	ipcRenderer.on("kartei-notizen", () => notizen.oeffnen());

@@ -157,16 +157,32 @@ let popup = {
 		const sel = window.getSelection();
 		let bereich = false,
 			ele = sel.anchorNode,
-			container_umfeld = "";
+			container_umfeld = "",
+			bs = false, // true, wenn die Textauswahl innerhalb des Belegs ist
+			obj = {};
 		while (ele.nodeName !== "BODY") {
 			ele = ele.parentNode;
 			if (ele.classList.contains("liste-details")) {
 				container_umfeld = "DIV";
 				bereich = true;
+				// feststellen, ob der markierte Text Teil des Belegtexts ist
+				let div = sel.anchorNode;
+				while (div.nodeName !== "DIV") {
+					div = div.parentNode;
+				}
+				if (div.classList.contains("liste-bs")) {
+					bs = true;
+				}
+				const id = div.parentNode.previousSibling.dataset.id;
+				obj = data.ka[id];
 				break;
 			} else if (ele.classList.contains("beleg-lese")) {
 				container_umfeld = "TD";
 				bereich = true;
+				if (ele.querySelector("td").id === "beleg-lese-bs") {
+					bs = true;
+					obj = beleg.data;
+				}
 				break;
 			}
 		}
@@ -191,8 +207,13 @@ let popup = {
 			let text = container.innerHTML.replace(/<\/p><p>/g, "\n");
 			text = text.replace(/<.+?>/g, "");
 			text = text.replace(/\n/g, "\n\n");
+			let html = helfer.clipboardHtml(container.innerHTML);
+			if (bs) {
+				text = beleg.toolsKopierenAddQuelle(text, false, obj);
+				html = beleg.toolsKopierenAddQuelle(html, true, obj);
+			}
 			popup.textauswahl.text = text;
-			popup.textauswahl.html = container.innerHTML;
+			popup.textauswahl.html = html;
 			return true;
 		}
 		// keine Kopieranweisung geben
@@ -211,7 +232,7 @@ let popup = {
 				const {clipboard} = require("electron");
 				clipboard.write({
 					text: popup.textauswahl.text,
-					html: helfer.clipboardHtml(popup.textauswahl.html),
+					html: popup.textauswahl.html,
 				});
 			},
 		}));
