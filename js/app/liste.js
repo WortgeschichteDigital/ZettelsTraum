@@ -895,6 +895,8 @@ let liste = {
 				liste.headerBelegKuerzen();
 			} else if (funktion === "hervorheben") {
 				liste.headerWortHervorheben();
+			} else if (funktion === "trennung") {
+				liste.headerTrennung();
 			} else if (funktion.match(/^(bd|qu|ts|no|meta)$/)) {
 				liste.headerDetails(funktion);
 			}
@@ -1036,6 +1038,27 @@ let liste = {
 		} else {
 			link.classList.remove("aktiv");
 			link.title = "Belegkontext kürzen";
+		}
+	},
+	// Silbentrennung im Beleg aus-/einschalten
+	headerTrennung () {
+		// Hervorhebung umstellen
+		optionen.data.belegliste.trennung = !optionen.data.belegliste.trennung;
+		optionen.speichern(false);
+		// Link anpassen
+		liste.headerTrennungAnzeige();
+		// Liste neu aufbauen
+		liste.status(false);
+	},
+	// Silbentrennung im Beleg aus-/einschalten (Anzeige im Header anpassen)
+	headerTrennungAnzeige () {
+		let link = document.getElementById("liste-link-trennung");
+		if (optionen.data.belegliste.trennung) {
+			link.classList.add("aktiv");
+			link.title = "Silbentrennung nicht anzeigen";
+		} else {
+			link.classList.remove("aktiv");
+			link.title = "Silbentrennung anzeigen";
 		}
 	},
 	// Hervorhebung des Worts im Beleg und der Vorschau aus-/einschalten

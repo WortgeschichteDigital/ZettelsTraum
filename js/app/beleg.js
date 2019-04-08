@@ -1286,6 +1286,12 @@ let beleg = {
 		if (!treffer.auf && !treffer.zu) {
 			return false;
 		}
+		// Analysieren, ob zuerst ein schließender Tag erscheint
+		const first_start = str.match(/<[a-z1-6]+/),
+			first_end = str.match(/<\/[a-z1-6]+/);
+		if (first_end.index < first_start.index) {
+			return true; // offenbar illegales Nesting
+		}
 		// Anzahl der Treffer pro Tag ermitteln
 		let tags = {
 			auf: {},
@@ -1303,16 +1309,17 @@ let beleg = {
 				tags[i][tag]++;
 			}
 		}
-		// Analysieren, ob es Diskrepanzen zwischen den Tags gibt
+		// Analysieren, ob es Diskrepanzen zwischen den
+		// öffnenden und schließenden Tags gibt
 		for (let i in tags.auf) {
 			if (!tags.auf.hasOwnProperty(i)) {
 				continue;
 			}
 			if (!tags.zu[i] || tags.auf[i] !== tags.zu[i]) {
-				return true; // illegales Nesting
+				return true; // offenbar illegales Nesting
 			}
 		}
-		return false; // kein illegales Nesting
+		return false; // offenbar kein illegales Nesting
 	},
 	// Bewertung des Belegs vor- od. zurücknehmen
 	//   stern = Element

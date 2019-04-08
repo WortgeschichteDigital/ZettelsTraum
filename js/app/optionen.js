@@ -7,18 +7,20 @@ let optionen = {
 		// Einstellungen im Kopf der Belegliste
 		belegliste: {
 			// Filterleiste anzeigen
-			filterleiste: true,
+			filterleiste: false,
 			// chronologischen Richtung, in der die Belege sortiert werden sollen
-			sort_aufwaerts: true,
+			sort_aufwaerts: false,
 			// Dichte der Zeitschnitte oder Zeitschnitte ausblenden
 			// mögliche Werte: "10", "50", "100", "-" (keine Schnitte anzeigen)
 			zeitschnitte: "-",
 			// kompletten Beleg anzeigen oder ausblenden
-			beleg: true,
+			beleg: false,
 			// Absätze im Beleg ohne Worttreffer gekürzt darstellen
-			beleg_kuerzen: true,
+			beleg_kuerzen: false,
+			// Trennstriche im Belegtext anzeigen
+			trennung: false,
 			// Wort der Kartei in der Vorschau und im Beleg automatisch hervorheben
-			wort_hervorheben: true,
+			wort_hervorheben: false,
 			// Steuerung Details: Bedeutung einblenden
 			detail_bd: false,
 			// Steuerung Details: Quelle einblenden
@@ -145,6 +147,7 @@ let optionen = {
 		liste.headerZeitschnitteAnzeige();
 		liste.headerBelegAnzeige();
 		liste.headerBelegKuerzenAnzeige();
+		liste.headerTrennungAnzeige();
 		liste.headerWortHervorhebenAnzeige();
 		// Auswahllinks für Detail-Anzeige anpassen
 		let details = ["bd", "qu", "ts", "no", "meta"];
