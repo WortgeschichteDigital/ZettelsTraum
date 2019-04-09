@@ -178,8 +178,6 @@ let beleg = {
 			}
 		});
 	},
-	// Vormerken, dass die Liste neu aufgebaut werden muss
-	listeGeaendert: false,
 	// Beleg speichern
 	aktionSpeichern () {
 		// Test: Datum angegeben?
@@ -212,6 +210,8 @@ let beleg = {
 		}
 		// Beleg wurde nicht geändert
 		if (!beleg.geaendert) {
+			dialog.oeffnen("alert", () => da.focus());
+			dialog.text("Es wurden keine Änderungen vorgenommen.");
 			return;
 		}
 		// ggf. Format von Bedeutung und Textsorte anpassen
@@ -241,10 +241,8 @@ let beleg = {
 		}
 		// Änderungsdatum speichern
 		data.ka[beleg.id_karte].dm = new Date().toISOString();
-		// Änderungsmarkierung weg
-		beleg.belegGeaendert(false);
-		beleg.listeGeaendert = true;
-		kartei.karteiGeaendert(true);
+		// Änderungen darstellen
+		beleg.listeGeaendert();
 	},
 	// Bearbeiten des Belegs abbrechen
 	aktionAbbrechen () {
@@ -265,18 +263,13 @@ let beleg = {
 		// Funktion zum Abbrechen
 		function abbrechen () {
 			beleg.belegGeaendert(false);
-			if (beleg.listeGeaendert) {
-				liste.status(true);
-			}
 			liste.wechseln();
-			beleg.listeGeaendert = false;
 		}
 	},
 	// Beleg löschen
 	aktionLoeschen () {
 		// Beleg wurde noch gar nicht angelegt
 		if (!data.ka[beleg.id_karte]) {
-			beleg.belegGeaendert(false);
 			beleg.aktionAbbrechen();
 			return;
 		}
@@ -291,13 +284,7 @@ let beleg = {
 		dialog.oeffnen("confirm", function() {
 			if (dialog.antwort) {
 				delete data.ka[id];
-				beleg.belegGeaendert(false);
-				kartei.karteiGeaendert(true);
-				liste.statusNeu = "";
-				liste.statusGeaendert = "";
-				liste.status(true);
-				liste.wechseln();
-				beleg.listeGeaendert = false;
+				beleg.listeGeaendert();
 			}
 		});
 		dialog.text(`Soll <i>${liste.detailAnzeigenH3(id)}</i> wirklich gelöscht werden?`);
@@ -927,6 +914,16 @@ let beleg = {
 			}
 		}
 	},
+	// die Aktionen im Formular führten zu einer Änderung der Belegliste (betrifft Speichern und Löschen)
+	listeGeaendert () {
+		// Änderungsmarkierung des Belegs entfernen
+		beleg.belegGeaendert(false);
+		// Änderungsmarkierung für Kartei setzen
+		kartei.karteiGeaendert(true);
+		// Belegliste aufbauen und einblenden
+		liste.status(true);
+		liste.wechseln();
+	},
 	// Beleg wurde geändert und noch nicht gespeichert
 	geaendert: false,
 	// Anzeigen, dass der Beleg geändert wurde
@@ -1430,9 +1427,9 @@ let beleg = {
 		});
 	},
 	// Lesansicht umschalten
-	//   user = Boolean
-	//     (Leseansicht wurde durch User aktiv gewechselt)
-	leseToggle (user) {
+	//   manuell = Boolean
+	//     (Leseansicht wurde manuell gewechselt)
+	leseToggle (manuell) {
 		// Ansicht umstellen
 		const button = document.getElementById("beleg-link-leseansicht");
 		let an = true;
@@ -1475,7 +1472,7 @@ let beleg = {
 		// Textwerte eintragen
 		if (an) {
 			beleg.leseFill();
-		} else if (user) {
+		} else if (manuell) {
 			document.querySelectorAll("#beleg textarea").forEach((textarea) => helfer.textareaGrow(textarea));
 			document.getElementById("beleg-da").focus();
 		}

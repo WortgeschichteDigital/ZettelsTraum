@@ -26,6 +26,14 @@ let notizen = {
 		let feld = document.getElementById("notizen-feld");
 		// Es wurde gar nichts geändert!
 		if (!notizen.geaendert) {
+			dialog.oeffnen("confirm", function() {
+				if (dialog.antwort) {
+					notizen.schliessen();
+				} else {
+					feld.focus();
+				}
+			});
+			dialog.text("Es wurden keine Änderungen vorgenommen.\nEingabefeld schließen?");
 			return;
 		}
 		let vorhanden = notizen.vorhanden();
@@ -33,7 +41,7 @@ let notizen = {
 		if (!vorhanden.feld && vorhanden.kartei) {
 			dialog.oeffnen("confirm", function() {
 				if (dialog.antwort) {
-					notizen.loeschen(true);
+					notizen.loeschen();
 				} else {
 					feld.focus();
 				}
@@ -43,13 +51,14 @@ let notizen = {
 		}
 		// keine Notizen im Feld
 		if (!vorhanden.feld) {
-			feld.focus();
+			dialog.oeffnen("alert", () => feld.focus());
+			dialog.text("Das Notizfeld ist leer.\nEs können also gar keine Notizen gespeichert werden.");
 			return;
 		}
 		// Änderungen speichern
 		data.no = helfer.textTrim(vorhanden.feld_value, false);
-		notizen.notizenGeaendert(false);
 		kartei.karteiGeaendert(true);
+		notizen.schliessen();
 	},
 	// Edieren der Notizen abbrechen
 	abbrechen () {
@@ -68,7 +77,6 @@ let notizen = {
 		dialog.oeffnen("confirm", function() {
 			if (dialog.antwort) {
 				notizen.speichern();
-				notizen.schliessen();
 			} else if (dialog.antwort === false) {
 				notizen.schliessen();
 			} else {
@@ -78,23 +86,20 @@ let notizen = {
 		dialog.text("Die Notizen wurden noch nicht gespeichert.\nMöchten Sie die Eingaben nicht erst einmal speichern?");
 	},
 	// Notizen löschen
-	//   confirmed = Boolean
-	//     (Die Löschabsicht wurde schon bestätigt.)
-	loeschen (confirmed) {
-		if (confirmed) {
-			loesche();
-			return;
-		}
+	loeschen () {
 		// Sind überhaupt Notizen vorhanden?
 		let vorhanden = notizen.vorhanden();
 		if (!vorhanden.kartei && !vorhanden.feld) {
-			notizen.schliessen();
+			dialog.oeffnen("alert", () => notizen.schliessen());
+			dialog.text("Es sind keine Notizen vorhanden.");
 			return;
 		}
 		// Sicherheitsfrage
 		dialog.oeffnen("confirm", function() {
 			if (dialog.antwort) {
-				loesche();
+				data.no = "";
+				kartei.karteiGeaendert(true);
+				notizen.schliessen();
 			} else {
 				document.getElementById("notizen-feld").focus();
 			}
@@ -107,12 +112,6 @@ let notizen = {
 			speicher.push("im Notizfeld");
 		}
 		dialog.text(`Sollen die Notizen ${speicher.join(" und ")} wirklich gelöscht werden?`);
-		// Löschfunktion
-		function loesche () {
-			data.no = "";
-			kartei.karteiGeaendert(true);
-			notizen.schliessen();
-		}
 	},
 	// Funktionen, die beim Schließen aufgerufen werden sollten
 	schliessen () {
@@ -149,7 +148,7 @@ let notizen = {
 			} else if (aktion === "abbrechen") {
 				notizen.abbrechen();
 			} else if (aktion === "loeschen") {
-				notizen.loeschen(false);
+				notizen.loeschen();
 			}
 		});
 	},

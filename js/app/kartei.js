@@ -160,6 +160,7 @@ let kartei = {
 	speichern (speichern_unter) {
 		// Wurden überhaupt Änderungen vorgenommen?
 		if (!speichern_unter && !kartei.geaendert) {
+			kartei.dialogWrapper("Es wurden keine Änderungen vorgenommen.\nDie Kartei wurde nicht gespeichert.");
 			return;
 		}
 		// Dialog-Komponente laden

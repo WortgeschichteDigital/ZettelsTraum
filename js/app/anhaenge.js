@@ -107,7 +107,7 @@ let anhaenge = {
 	},
 	// Anhänge-Fenster einblenden
 	fenster () {
-		const fenster = document.getElementById("anhaenge");
+		let fenster = document.getElementById("anhaenge");
 		// Fenster öffnen oder in den Vordergrund holen
 		if (overlay.oeffnen(fenster)) { // Fenster ist schon offen
 			return;

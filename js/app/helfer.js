@@ -287,19 +287,6 @@ let helfer = {
 			}
 		});
 	},
-	// Verteilerfunktion für den Tastaturbefehl Strg + S
-	speichern () {
-		const oben = overlay.oben();
-		if (oben === "notizen" && notizen.geaendert) {
-			notizen.speichern();
-		}
-		if (!oben && beleg.geaendert) {
-			beleg.aktionSpeichern();
-		}
-		if (!notizen.geaendert && !beleg.geaendert && kartei.geaendert) {
-			kartei.speichern(false);
-		}
-	},
 	// Tastatur-Events abfangen und verarbeiten
 	//   evt = Event-Objekt
 	tastatur (evt) {
@@ -327,11 +314,6 @@ let helfer = {
 		// Cursor links (←), hoch (↑), rechts (→), runter (↓)
 		if (evt.which >= 37 && evt.which <= 40) {
 			helfer.cursor(evt);
-		}
-		// Strg + U (wenn im Beleg)
-		if (evt.ctrlKey && evt.which === 85 && !overlay.oben() &&
-				!document.getElementById("beleg").classList.contains("aus")) {
-			beleg.leseToggle(true);
 		}
 	},
 };
