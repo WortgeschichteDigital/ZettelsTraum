@@ -178,6 +178,8 @@ let beleg = {
 			}
 		});
 	},
+	// Vormerken, dass die Liste neu aufgebaut werden muss
+	listeGeaendert: false,
 	// Beleg speichern
 	aktionSpeichern () {
 		// Test: Datum angegeben?
@@ -210,8 +212,6 @@ let beleg = {
 		}
 		// Beleg wurde nicht geändert
 		if (!beleg.geaendert) {
-			dialog.oeffnen("alert", () => da.focus());
-			dialog.text("Es wurden keine Änderungen vorgenommen.");
 			return;
 		}
 		// ggf. Format von Bedeutung und Textsorte anpassen
@@ -241,8 +241,10 @@ let beleg = {
 		}
 		// Änderungsdatum speichern
 		data.ka[beleg.id_karte].dm = new Date().toISOString();
-		// Änderungen darstellen
-		beleg.listeGeaendert();
+		// Änderungsmarkierung weg
+		beleg.belegGeaendert(false);
+		beleg.listeGeaendert = true;
+		kartei.karteiGeaendert(true);
 	},
 	// Bearbeiten des Belegs abbrechen
 	aktionAbbrechen () {
@@ -263,13 +265,18 @@ let beleg = {
 		// Funktion zum Abbrechen
 		function abbrechen () {
 			beleg.belegGeaendert(false);
+			if (beleg.listeGeaendert) {
+				liste.status(true);
+			}
 			liste.wechseln();
+			beleg.listeGeaendert = false;
 		}
 	},
 	// Beleg löschen
 	aktionLoeschen () {
 		// Beleg wurde noch gar nicht angelegt
 		if (!data.ka[beleg.id_karte]) {
+			beleg.belegGeaendert(false);
 			beleg.aktionAbbrechen();
 			return;
 		}
@@ -284,7 +291,13 @@ let beleg = {
 		dialog.oeffnen("confirm", function() {
 			if (dialog.antwort) {
 				delete data.ka[id];
-				beleg.listeGeaendert();
+				beleg.belegGeaendert(false);
+				kartei.karteiGeaendert(true);
+				liste.statusNeu = "";
+				liste.statusGeaendert = "";
+				liste.status(true);
+				liste.wechseln();
+				beleg.listeGeaendert = false;
 			}
 		});
 		dialog.text(`Soll <i>${liste.detailAnzeigenH3(id)}</i> wirklich gelöscht werden?`);
@@ -304,7 +317,7 @@ let beleg = {
 		// Ist das überhaupt eine URL?
 		if (!/^https*:\/\//.test(url)) {
 			dialog.oeffnen("alert", () => dta.select());
-			dialog.text("Die scheint keine URL zu sein.");
+			dialog.text("Das scheint keine URL zu sein.");
 			return;
 		}
 		// URL nicht vom DTA
@@ -400,7 +413,7 @@ let beleg = {
 		}
 		if (/p=[0-9]+/.test(url)) {
 			fak = url.match(/p=([0-9]+)/)[1];
-		} else {
+		} else if (new RegExp(`${titel_id}\\/[0-9]+`).test(url)) {
 			const reg = new RegExp(`${titel_id}\\/([0-9]+)`);
 			fak = url.match(reg)[1];
 		}
@@ -609,8 +622,11 @@ let beleg = {
 		} else {
 			// Wenn "ele_ende" nicht existiert, dürfte die Startseite die letzte Seite sein.
 			// Denkbar ist auch, dass eine viel zu hohe Seitenzahl angegeben wurde.
-			// Dann holt sich das Skript alle Seiten, die es kriegen kann, aber der Startseite.
-			parent = ele_start.parentNode.parentNode;
+			// Dann holt sich das Skript alle Seiten, die es kriegen kann, ab der Startseite.
+			parent = ele_start.parentNode;
+			while (parent.nodeName !== "body") {
+				parent = parent.parentNode;
+			}
 		}
 		let analyse = [],
 			alleKinder = parent.childNodes;
@@ -736,7 +752,11 @@ let beleg = {
 					ende = true;
 				} else {
 					if (ele.nodeName === "pb") { // Seitenumbruch
-						beleg.DTAImportData.seite_zuletzt = ele.getAttribute("n");
+						const n = ele.getAttribute("n");
+						if (start) {
+							text += `[:${n}:]`;
+						}
+						beleg.DTAImportData.seite_zuletzt = n;
 						return;
 					} else if (/^(closer|div|item|p)$/.test(ele.nodeName)) { // Absätze
 						text = helfer.textTrim(text, false);
@@ -913,16 +933,6 @@ let beleg = {
 				quelle += ".";
 			}
 		}
-	},
-	// die Aktionen im Formular führten zu einer Änderung der Belegliste (betrifft Speichern und Löschen)
-	listeGeaendert () {
-		// Änderungsmarkierung des Belegs entfernen
-		beleg.belegGeaendert(false);
-		// Änderungsmarkierung für Kartei setzen
-		kartei.karteiGeaendert(true);
-		// Belegliste aufbauen und einblenden
-		liste.status(true);
-		liste.wechseln();
 	},
 	// Beleg wurde geändert und noch nicht gespeichert
 	geaendert: false,
@@ -1427,9 +1437,9 @@ let beleg = {
 		});
 	},
 	// Lesansicht umschalten
-	//   manuell = Boolean
-	//     (Leseansicht wurde manuell gewechselt)
-	leseToggle (manuell) {
+	//   user = Boolean
+	//     (Leseansicht wurde durch User aktiv gewechselt)
+	leseToggle (user) {
 		// Ansicht umstellen
 		const button = document.getElementById("beleg-link-leseansicht");
 		let an = true;
@@ -1472,7 +1482,7 @@ let beleg = {
 		// Textwerte eintragen
 		if (an) {
 			beleg.leseFill();
-		} else if (manuell) {
+		} else if (user) {
 			document.querySelectorAll("#beleg textarea").forEach((textarea) => helfer.textareaGrow(textarea));
 			document.getElementById("beleg-da").focus();
 		}
@@ -1511,6 +1521,9 @@ let beleg = {
 				if (!text) {
 					text = " ";
 				} else {
+					if (!optionen.data.beleg.trennung) {
+						text = text.replace(/\[¬\]|\s*\[:.+?:\]\s*/g, "");
+					}
 					text = liste.linksErkennen(text);
 				}
 				if (wert === "bs") {
@@ -1525,5 +1538,41 @@ let beleg = {
 		document.querySelectorAll("#beleg .link").forEach(function(i) {
 			liste.linksOeffnen(i);
 		});
+	},
+	// Verteilerfunktion für die Links im <caption>-Block
+	//   a = Element
+	//     (Link, auf den geklickt wurde)
+	ctrlLinks (a) {
+		a.addEventListener("click", function(evt) {
+			evt.preventDefault();
+			if (/leseansicht$/.test(this.id)) {
+				beleg.leseToggle(true);
+			} else if (/trennung$/.test(this.id)) {
+				beleg.ctrlTrennung();
+			}
+		});
+	},
+	// Trennstriche in der Leseansicht ein- bzw. ausblenden
+	ctrlTrennung () {
+		// Hervorhebung umstellen
+		optionen.data.beleg.trennung = !optionen.data.beleg.trennung;
+		optionen.speichern(false);
+		// Link anpassen
+		beleg.ctrlTrennungAnzeige();
+		// Belegtext in der Leseansicht ggf. neu aufbauen
+		if (document.getElementById("beleg-link-leseansicht").classList.contains("aktiv")) {
+			beleg.leseFill();
+		}
+	},
+	// Trennstriche in der Leseansicht ein- bzw. ausblenden (Anzeige)
+	ctrlTrennungAnzeige () {
+		let link = document.getElementById("beleg-link-trennung");
+		if (optionen.data.beleg.trennung) {
+			link.classList.add("aktiv");
+			link.title = "Silbentrennung nicht anzeigen";
+		} else {
+			link.classList.remove("aktiv");
+			link.title = "Silbentrennung anzeigen";
+		}
 	},
 };

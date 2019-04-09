@@ -1001,7 +1001,7 @@ let filter = {
 		let treffer = Array(filter.volltextSuche.reg.length).fill(false);
 		for (let i = 0, len = filter.volltextSuche.ds.length; i < len; i++) {
 			const ds = filter.volltextSuche.ds[i],
-				text_rein = data.ka[id][ds].replace(/<.+?>|\[¬\]/g, "");
+				text_rein = data.ka[id][ds].replace(/<.+?>|\[¬\]|\s*\[:.+?:\]\s*/g, "");
 			for (let j = 0, len = treffer.length; j < len; j++) {
 				const reg = filter.volltextSuche.reg[j];
 				if (text_rein.match(reg)) {

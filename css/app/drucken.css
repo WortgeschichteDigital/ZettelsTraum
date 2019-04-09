@@ -1,0 +1,54 @@
+@charset "utf-8";
+
+
+/* Basis-Elemente ------------------------------- */
+body {
+	margin: 0;
+	overflow-x: inherit;
+}
+
+#quick,
+body > header,
+#beleg,
+#liste,
+#drucken h2,
+#drucken-head {
+	display: none;
+}
+
+/* Druck-Fenster -------------------------------- */
+#drucken {
+	position: static;
+	display: block;
+	padding: 0;
+	width: auto;
+	height: auto;
+}
+
+#drucken > div {
+	margin: 0;
+	border-radius: 0;
+	max-width: none;
+}
+
+#drucken-cont-rahmen {
+	padding: 0;
+}
+
+#drucken-cont {
+	max-height: none;
+	overflow-y: inherit;
+	color: #000;
+	font-family: "DejaVu Serif", serif;
+	font-size: 12pt;
+	line-height: 20pt;
+}
+
+#drucken-cont h3 {
+	page-break-before: always;
+}
+
+#drucken-cont th {
+	page-break-after: avoid;
+}
+

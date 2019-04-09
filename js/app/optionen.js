@@ -32,6 +32,10 @@ let optionen = {
 			// Steuerung Details: Metainfos einblenden
 			detail_meta: false,
 		},
+		// Einstellungen im Belegzettel
+		beleg: {
+			trennung: true,
+		},
 		// Einstellungen-Dialog
 		einstellungen: {
 			// für diesen Computer registrierte BearbeiterIn
@@ -154,6 +158,8 @@ let optionen = {
 		for (let i = 0, len = details.length; i < len; i++) {
 			liste.headerDetailsAnzeige(details[i], `detail_${details[i]}`);
 		}
+		// Icons im <caption> des Belegzettels
+		beleg.ctrlTrennungAnzeige();
 		// Optionen im Optionen-Fenster eintragen
 		let ee = document.querySelectorAll("#einstellungen input");
 		for (let i = 0, len = ee.length; i < len; i++) {
