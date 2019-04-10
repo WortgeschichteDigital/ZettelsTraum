@@ -9,7 +9,7 @@
 	padding: 15px;
 	width: calc(100% - 104px);
 	min-width: 500px;
-	max-width: 700px;
+	max-width: 1000px;
 	background-color: var(--hintergrund);
 }
 
@@ -42,8 +42,8 @@
 
 #beleg th {
 	position: relative;
-	padding: 10px 11px 0 11px;
-	width: calc(50% - 22px);
+	padding: 10px 35px 0 11px;
+	width: calc(50% - 46px);
 	color: var(--textFarbe);
 	vertical-align: top;
 	font-size: 14px;
@@ -111,8 +111,10 @@
 }
 
 #beleg textarea {
-	min-height: 48px;
+	margin: 0 auto;
+	max-width: 800px;
 	max-height: 192px;
+	min-height: 48px;
 }
 
 #beleg textarea.dropdown-feld {
@@ -241,7 +243,9 @@ textarea#beleg-bs {
 }
 
 .beleg-lese p {
+	margin: 0 auto 10px auto;
 	padding: 0 6px;
+	max-width: 700px;
 	user-select: text;
 }
 

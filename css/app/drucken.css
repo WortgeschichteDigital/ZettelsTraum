@@ -44,11 +44,3 @@ body > header,
 	line-height: 20pt;
 }
 
-#drucken-cont h3 {
-	page-break-before: always;
-}
-
-#drucken-cont th {
-	page-break-after: avoid;
-}
-

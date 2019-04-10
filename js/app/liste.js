@@ -879,31 +879,17 @@ let liste = {
 		});
 	},
 	// Text der Überschrift für die Detailanzeige erstellen
-	// (die Funktion brauch ich auch in anhaenge.js und drucken.js, darum ausgelagert)
-	//   beleg_id = String || Object
-	//     (ID des Belegs; soll der aktuelle Belegzettel gedruckt werden ist es ein Object)
+	// (die Funktion brauch ich auch in anhaenge.js, darum ausgelagert)
+	//   beleg_id = String
+	//     (ID des Belegs)
 	detailAnzeigenH3 (beleg_id) {
-		let obj = {},
-			nr = beleg_id;
-		if (helfer.checkType("String", beleg_id)) {
-			obj = data.ka[beleg_id];
-		} else { // falls der aktuelle Belegzettel als Objekt übergeben wird
-			obj = beleg_id;
-			nr = beleg.id_karte;
-		}
-		let text = `Beleg #${nr}`,
-			text_detail = [];
-		if (obj.au) {
-			let autor = obj.au.split(",")[0];
+		let text_detail = [];
+		if (data.ka[beleg_id].au) {
+			let autor = data.ka[beleg_id].au.split(",")[0];
 			text_detail.push(autor);
 		}
-		if (obj.da && /[0-9]{4}|[0-9]{2}\.\sJh\./.test(obj.da)) { // in neuen Karten kann das Datumsfeld noch fehlen oder inkorrekt sein
-			text_detail.push(liste.zeitschnittErmitteln(obj.da).datum);
-		}
-		if (text_detail.length) {
-			text += ` (${text_detail.join(" ")})`;
-		}
-		return text;
+		text_detail.push(liste.zeitschnittErmitteln(data.ka[beleg_id].da).datum);
+		return `Beleg #${beleg_id} (${text_detail.join(" ")})`;
 	},
 	// Funktionen im Header aufrufen
 	//   link = Element

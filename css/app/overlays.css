@@ -3,6 +3,7 @@
 /* Alle Overlay-Fenster ------------------------- */
 #anhaenge,
 #dialog,
+#drucken,
 #einstellungen,
 #lexika,
 #meta,
@@ -22,6 +23,7 @@
 
 #anhaenge > div,
 #dialog > div,
+#drucken > div,
 #einstellungen > div,
 #lexika > div,
 #meta > div,
@@ -38,6 +40,7 @@
 
 #anhaenge h2,
 #dialog h2,
+#drucken h2,
 #einstellungen h2,
 #lexika h2,
 #meta h2,
@@ -50,6 +53,7 @@
 
 #anhaenge h2 a,
 #dialog h2 a,
+#drucken h2 a,
 #einstellungen h2 a,
 #lexika h2 a,
 #meta h2 a,
@@ -683,4 +687,63 @@ input[id^="redaktion-person"] {
 
 .prompt #dialog-abbrechen-button {
 	display: inline-block;
+}
+
+/* Drucken -------------------------------------- */
+#drucken > div {
+	margin-top: 40px;
+	max-width: 720px;
+}
+
+.icon-h-drucken {
+	-webkit-mask-image: url(../../img/heading-drucken.svg);
+	mask-image: url(../../img/heading-drucken.svg);
+}
+
+#drucken-head {
+	position: relative;
+	margin: 10px 0;
+	text-align: center;
+}
+
+#drucken-head span {
+	display: inline-block;
+	border: 1px solid var(--linie);
+	border-radius: 10px;
+	padding: 5px;
+	width: 78px;
+}
+
+#drucken-head span:first-child {
+	margin-right: 40px;
+}
+
+#drucken-head span:hover {
+	background-color: var(--hover);
+}
+
+/* verrücktes Zeug: DejaVu Serif muss zunächst in allen Varianten
+   im Dokument benutzt werden, andernfalls wird die Schrift für den
+   Druck nicht verwendet. */
+#drucken-head #drucken-serife {
+	position: absolute;
+	right: 0;
+	bottom: 0;
+	border: none;
+	border-radius: 0;
+	padding: 0;
+	width: auto;
+	font-family: "DejaVu Serif", serif;
+	font-size: 8px;
+	line-height: 12px;
+	visibility: hidden;
+}
+
+#drucken-cont-rahmen {
+	padding: 10px;
+}
+
+#drucken-cont {
+	max-height: 400px;
+	overflow-y: auto;
 }

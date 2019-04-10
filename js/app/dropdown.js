@@ -117,9 +117,8 @@ let dropdown = {
 	//   feld_id = String
 	//     (ID des Textfeldes, zu dem das Dropdown gehört)
 	init (feld_id) {
-		// alte Dropdown-Liste ggf. schließen und entfernen
-		if (dropdown.caller && dropdown.caller !== feld_id ||
-				document.getElementById("dropdown")) {
+		// altes Dropdown-Liste ggf. schließen
+		if (dropdown.caller && dropdown.caller !== feld_id) {
 			dropdown.schliessen();
 		}
 		// neuen Caller registrieren
@@ -153,13 +152,8 @@ let dropdown = {
 		}
 		// Dropdown positionieren
 		span.style.left = `${inp_text.offsetLeft}px`;
+		span.style.top = `${inp_text.offsetHeight + 4}px`;
 		span.style.maxWidth = `${inp_text.parentNode.offsetWidth - 12}px`; // 12px padding und border
-		const rect = inp_text.getBoundingClientRect();
-		if (rect.top + rect.height + span.offsetHeight > window.innerHeight) {
-			span.style.top = `-${span.offsetHeight + 4}px`;
-		} else {
-			span.style.top = `${inp_text.offsetHeight + 4}px`;
-		}
 	},
 	// Wenn >= 0 heißt das, dass die Dropdownliste gefiltert wurde. Sie ist also
 	// aufgrund einer Tastatureingabe erstellt worden
