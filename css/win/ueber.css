@@ -10,7 +10,7 @@
 body {
 	margin: 0;
 	color: var(--text);
-	font: 16px/24px "DejaVu Sans", sans-serif;
+	font: 16px/24px "Noto Sans", sans-serif;
 	user-select: none;
 }
 
@@ -85,7 +85,7 @@ kbd {
 	border-radius: 2px;
 	padding: 0 2px;
 	background-color: var(--hintergrund);
-	font-family: "DejaVu Sans Mono", monospace;
+	font-family: "Noto Sans Mono", monospace;
 }
 
 p {
@@ -94,6 +94,10 @@ p {
 
 p:last-child {
 	margin-bottom: 0;
+}
+
+p.beschreibung-app {
+	margin-bottom: 24px;
 }
 
 header p {

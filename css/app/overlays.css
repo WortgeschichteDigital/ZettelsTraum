@@ -722,7 +722,7 @@ input[id^="redaktion-person"] {
 	background-color: var(--hover);
 }
 
-/* verrücktes Zeug: DejaVu Serif muss zunächst in allen Varianten
+/* verrücktes Zeug: Noto Serif muss zunächst in allen Varianten
    im Dokument benutzt werden, andernfalls wird die Schrift für den
    Druck nicht verwendet. */
 #drucken-head #drucken-serife {
@@ -733,7 +733,7 @@ input[id^="redaktion-person"] {
 	border-radius: 0;
 	padding: 0;
 	width: auto;
-	font-family: "DejaVu Serif", serif;
+	font-family: "Noto Serif", serif;
 	font-size: 8px;
 	line-height: 12px;
 	visibility: hidden;

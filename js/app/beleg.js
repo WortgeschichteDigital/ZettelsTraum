@@ -191,7 +191,7 @@ let beleg = {
 			return;
 		}
 		// Test: Datum mit vierstelliger Jahreszahl oder Jahrhundertangabe?
-		if (!dav.match(/[0-9]{4}|[0-9]{2}\.\sJh\./)) {
+		if (!/[0-9]{4}|[0-9]{2}\.\sJh\./.test(dav)) {
 			dialog.oeffnen("alert", () => da.select());
 			dialog.text("Das Datum muss eine vierstellige Jahreszahl (z. B. „1813“) oder eine Jahrhundertangabe (z. B. „17. Jh.“) enthalten.\nZusätzlich können auch andere Angaben gemacht werden (z. B. „ca. 1815“, „1610, vielleicht 1611“).");
 			return;
@@ -957,7 +957,7 @@ let beleg = {
 			//   - Text-Input und Checkboxes: hier reicht Enter
 			//   - mit Strg + Enter geht der Befehl auch in Textareas
 			if (evt.which === 13 &&
-					(this.type.match(/^(checkbox|number|text)$/) || evt.ctrlKey)) {
+					(/^(checkbox|number|text)$/.test(this.type) || evt.ctrlKey)) {
 				evt.preventDefault();
 				if (/^beleg-dta(-bis)*$/.test(this.id)) {
 					beleg.DTAImport();
@@ -1419,9 +1419,9 @@ let beleg = {
 		// Mouseout: die aktuelle Bewertung anzeigen
 		a.addEventListener("mouseout", function() {
 			let id = this.parentNode.id;
-			if (id.match(/^beleg/)) {
+			if (/^beleg/.test(id)) {
 				beleg.bewertungAnzeigen();
-			} else if (id.match(/^filter/)) {
+			} else if (/^filter/.test(id)) {
 				filter.markierenSterne();
 			}
 		});
@@ -1429,9 +1429,9 @@ let beleg = {
 		a.addEventListener("click", function(evt) {
 			evt.preventDefault();
 			let id = this.parentNode.id;
-			if (id.match(/^beleg/)) {
+			if (/^beleg/.test(id)) {
 				beleg.bewertung(this);
-			} else if (id.match(/^filter/)) {
+			} else if (/^filter/.test(id)) {
 				filter.anwendenSterne(this);
 			}
 		});

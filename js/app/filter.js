@@ -398,9 +398,9 @@ let filter = {
 	// extrahiert wurde, sortieren
 	baumSort (a, b) {
 		// undefined wird an den Anfang gesetzt
-		if (a.match(/undefined$/)) {
+		if (/undefined$/.test(a)) {
 			return -1;
-		} else if (b.match(/undefined$/)) {
+		} else if (/undefined$/.test(b)) {
 			return 1;
 		}
 		// alphabetische Sortierung
@@ -1137,7 +1137,7 @@ let filter = {
 		// Diagramm zeichnen
 		ctx.lineWidth = 3;
 		ctx.strokeStyle = "#72a0cf";
-		ctx.font = "14px DejaVu Sans";
+		ctx.font = "14px Noto Sans";
 		ctx.textAlign = "left";
 		let x = 40 - step_x,
 			last_font_x = 0;
@@ -1153,7 +1153,7 @@ let filter = {
 			if (x - last_font_x < 50 && i !== 0) { // Jahreszahlen brauchen ein wenig Platz => nicht zu viele anzeigen
 				continue;
 			}
-			ctx.fillText(jahre[i], x - 17, 390); // Jahreszahlen in 14px DejaVu Sans sind 34px breit
+			ctx.fillText(jahre[i], x - 16, 390); // Jahreszahlen in 14px Noto Sans sind 32px breit
 			last_font_x = x;
 		}
 		ctx.stroke();
@@ -1194,7 +1194,7 @@ let filter = {
 			evt.preventDefault();
 			filter.setZuletztAktiv(this);
 			let alle = true;
-			if (this.id.match(/keine$/)) {
+			if (/keine$/.test(this.id)) {
 				alle = false;
 			}
 			document.querySelectorAll(`input[id^="filter-feld-"]`).forEach(function(i) {

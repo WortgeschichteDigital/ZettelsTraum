@@ -32,8 +32,9 @@ let optionen = {
 			// Steuerung Details: Metainfos einblenden
 			detail_meta: false,
 		},
-		// Einstellungen im Belegzettel
+		// Einstellungen in der Karteikarte
 		beleg: {
+			// Trennstriche und Seitenumbrüche in der Leseansicht anzeigen
 			trennung: true,
 		},
 		// Einstellungen-Dialog
@@ -72,6 +73,8 @@ let optionen = {
 			"nicht-karte-gefiltert": false,
 			// neue Karteikarten als unvollständig markieren
 			unvollstaendig: true,
+			// Textfeld immer ergänzen, wenn aus einem Dropdown-Menü ein Wert ausgewählt wurde (betrifft Bedeutung und Textsorte)
+			"immer-ergaenzen": false,
 			// bestehende Karteikarten in der Leseansicht öffnen
 			leseansicht: true,
 		},
@@ -158,7 +161,7 @@ let optionen = {
 		for (let i = 0, len = details.length; i < len; i++) {
 			liste.headerDetailsAnzeige(details[i], `detail_${details[i]}`);
 		}
-		// Icons im <caption> des Belegzettels
+		// Icons im <caption> der Karteikarte
 		beleg.ctrlTrennungAnzeige();
 		// Optionen im Optionen-Fenster eintragen
 		let ee = document.querySelectorAll("#einstellungen input");
@@ -308,7 +311,7 @@ let optionen = {
 			optionen.data.einstellungen[e] = ele.value;
 		}
 		// ggf. Quick-Access-Bar umstellen
-		if (e.match(/^quick/)) {
+		if (/^quick/.test(e)) {
 			optionen.anwendenQuickAccess();
 		}
 		// Optionen speichern

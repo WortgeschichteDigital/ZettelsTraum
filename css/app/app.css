@@ -11,7 +11,7 @@ body {
 	margin: 0;
 	overflow-x: hidden;
 	color: var(--text);
-	font: 16px/24px "DejaVu Sans", sans-serif;
+	font: 16px/24px "Noto Sans", sans-serif;
 	user-select: none;
 }
 
@@ -123,7 +123,7 @@ input,
 textarea {
 	margin: 0;
 	color: var(--text);
-	font: 16px/24px "DejaVu Sans", sans-serif;
+	font: 16px/24px "Noto Sans", sans-serif;
 }
 
 input[type="date"],
@@ -236,17 +236,21 @@ input[type="radio"]:checked:focus {
 input[type="checkbox"]:checked:before,
 input[type="radio"]:checked:before {
 	position: absolute;
-	content: "✔";
 	display: block;
+	content: "✓";
+	width: 13px;
 	background-color: var(--farbe);
 	color: #fff;
+	font-size: 12px;
+	font-weight: bold;
+	text-align: center;
 }
 
 input[type="radio"]:checked:before {
-	content: "●";
+	content: "⬤";
 	border-radius: 6.5px;
 	width: 13px;
-	font-size: 9px;
+	font-size: 7px;
 	text-align: center;
 }
 
@@ -266,7 +270,7 @@ textarea:focus {
 
 /* DTA-Auszeichnungen in XML-Dokumenten --------- */
 .dta-antiqua {
-	font-family: "DejaVu Serif", serif;
+	font-family: "Noto Serif", serif;
 	font-size: 110%;
 }
 

@@ -61,7 +61,7 @@ let overlay = {
 		// spezielle Funktionen für einzelne Overlay-Fenster
 		if (fenster.id === "dialog") {
 			if (schliesser.nodeName === "INPUT") { // Schließen durch Input-Button oder Input-Text
-				if (schliesser.value.match(/Abbrechen|Nein/)) { // Alert-Dialog: Abbrechen, Confirm-Dialog: Nein
+				if (/Abbrechen|Nein/.test(schliesser.value)) { // Alert-Dialog: Abbrechen, Confirm-Dialog: Nein
 					dialog.antwort = false;
 				} else {
 					dialog.antwort = true;

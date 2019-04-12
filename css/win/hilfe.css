@@ -10,7 +10,7 @@
 body {
 	margin: 0;
 	color: var(--text);
-	font: 16px/24px "DejaVu Sans", sans-serif;
+	font: 16px/24px "Noto Sans", sans-serif;
 	user-select: none;
 }
 

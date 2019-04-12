@@ -50,12 +50,12 @@ let dialog = {
 		// neue Absätze hinzufügen
 		let absaetze = text.split("\n");
 		for (let i = 0, len = absaetze.length; i < len; i++) {
-			if (absaetze[i].match(/^<h3>/)) { // Überschrift
+			if (/^<h3>/.test(absaetze[i])) { // Überschrift
 				let h3 = document.createElement("h3");
 				h3.innerHTML = absaetze[i].match(/<h3>(.+)<\/h3>/)[1];
 				cont.appendChild(h3);
 				continue;
-			} else if (absaetze[i].match(/^<p class/)) { // vordefinierter Absatz
+			} else if (/^<p class/.test(absaetze[i])) { // vordefinierter Absatz
 				const ab = absaetze[i].match(/<p class="(.+?)">(.+?)<\/p>/);
 				let p = document.createElement("p");
 				p.classList.add(ab[1]);

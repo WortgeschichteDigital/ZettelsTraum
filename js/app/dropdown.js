@@ -286,7 +286,9 @@ let dropdown = {
 				return;
 			}
 			// Wurde das Feld durch Texteingabe gefiltert?
-			if (dropdown.cursor >= 0) {
+			// Soll der Wert immer automatisch ergänzt werden?
+			if (dropdown.cursor >= 0 ||
+					optionen.data.einstellungen["immer-ergaenzen"]) {
 				eintragen(true);
 				return;
 			}
@@ -298,7 +300,8 @@ let dropdown = {
 					eintragen(true);
 				}
 			});
-			dialog.text("Im Textfeld steht schon etwas.\nSoll der Wert überschrieben werden?\n(Bei „Nein“ wird das Textfeld um den Wert ergänzt.)");
+			dialog.text("Im Textfeld steht schon etwas. Soll der Wert überschrieben werden?\n(Bei „Nein“ wird das Textfeld um den Wert ergänzt.)");
+			document.getElementById("dialog-text").appendChild(optionen.shortcut("Textfeld künftig ohne Nachfrage ergänzen", "immer-ergaenzen"));
 			return;
 		}
 		eintragen(false);

@@ -114,7 +114,7 @@ let helfer = {
 		}
 		// Parent-Block ermitteln
 		let parent = aktiv.parentNode;
-		while (!parent.nodeName.match(/^(BODY|DIV|HEADER|P|TD|TH)$/)) { // BODY nur zur Sicherheit, falls ich in der Zukunft vergesse die Liste ggf. zu ergänzen
+		while (!/^(BODY|DIV|HEADER|P|TD|TH)$/.test(parent.nodeName)) { // BODY nur zur Sicherheit, falls ich in der Zukunft vergesse die Liste ggf. zu ergänzen
 			parent = parent.parentNode;
 		}
 		// Elemente sammeln und Fokus-Position ermitteln
@@ -338,7 +338,7 @@ let helfer = {
 			beleg.ctrlTrennung();
 		}
 	},
-	// überprüft, ob der Belegzettel offen ist und nicht durch irgendein
+	// überprüft, ob die Karteikarte offen ist und nicht durch irgendein
 	// anderes Fenster verdeckt wird
 	belegOffen () {
 		if (!overlay.oben() && !document.getElementById("beleg").classList.contains("aus")) {

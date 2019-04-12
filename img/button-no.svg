@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg width="24" height="24" version="1.1" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
 <metadata>
-<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:dc="http://purl.org/dc/elements/1.1/"><rdf:Description dc:publisher="Papirus Development Team" dc:rights="GNU General Public License v3.0"></rdf:Description></rdf:RDF>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:dc="http://purl.org/dc/elements/1.1/"><rdf:Description dc:publisher="Papirus Development Team" dc:rights="GPL-3.0-only"></rdf:Description></rdf:RDF>
 </metadata>
 <path transform="translate(4 4)" d="m5.2168 1-0.3125 0.28125-3.625 3.625-0.28125 0.3125v5.5625l0.28125 0.3125 3.625 3.625 0.3125 0.28125h5.5625l0.3125-0.28125 3.625-3.625 0.28125-0.3125v-5.5625l-0.28125-0.3125-3.625-3.625-0.3125-0.28125h-5.5625zm0.78125 2h4l3 3v4l-3 3h-4l-3-3v-4l3-3zm0.4375 1-2.4375 2.4375v3.125l2.4375 2.4375h3.125l2.4375-2.4375v-3.125l-2.4375-2.4375h-3.125z" fill="#fff"/>
 </svg>

@@ -324,14 +324,14 @@ let liste = {
 			jahrzehnt: -1, // Jahrzehnt für die Zeitschnittanzeige
 		};
 		// Anzeigedatum und Jahr, mit dem gerechnet wird, ermitteln
-		if (datum.match(/[0-9]{4}/) && datum.match(/[0-9]{2}\.\sJh\./)) { // mehrere Datentypen => 1. verwenden
+		if (/[0-9]{4}/.test(datum) && /[0-9]{2}\.\sJh\./.test(datum)) { // mehrere Datentypen => 1. verwenden
 			let datum_split = datum.split(/\sJh\./);
-			if (datum_split[0].match(/[0-9]{4}/)) {
+			if (/[0-9]{4}/.test(datum_split[0])) {
 				datum_vierstellig(datum_split[0]);
 			} else {
 				datum_jahrhundert(datum);
 			}
-		} else if (datum.match(/[0-9]{4}/)) { // 1. Jahresangabe verwenden
+		} else if (/[0-9]{4}/.test(datum)) { // 1. Jahresangabe verwenden
 			datum_vierstellig(datum);
 		} else { // 1. Jarhhundert verwenden
 			datum_jahrhundert(datum);
@@ -366,9 +366,9 @@ let liste = {
 		// dataset erstellen
 		jahrzehnt = jahrzehnt.toString(); // wird als integer übergeben, muss aber string sein
 		let dataset = "10|";
-		if (jahrzehnt.match(/50$/)) {
+		if (/50$/.test(jahrzehnt)) {
 			dataset += "50|";
-		} else if (jahrzehnt.match(/00$/)) {
+		} else if (/00$/.test(jahrzehnt)) {
 			dataset += "50|100|";
 		}
 		div.dataset.zeitschnitt = dataset;
@@ -408,7 +408,7 @@ let liste = {
 		let zeitschnitte = document.querySelectorAll("#liste-belege-cont [data-zeitschnitt]");
 		for (let i = 0, len = zeitschnitte.length; i < len; i++) {
 			let reg = new RegExp(helfer.escapeRegExp(`${optionen.data.belegliste.zeitschnitte}|`));
-			if (zeitschnitte[i].dataset.zeitschnitt.match(reg)) {
+			if (reg.test(zeitschnitte[i].dataset.zeitschnitt)) {
 				zeitschnitte[i].classList.remove("aus");
 			} else {
 				zeitschnitte[i].classList.add("aus");
@@ -511,7 +511,7 @@ let liste = {
 		schnitt = schnitt.replace(/<.+?>/g, ""); // HTML-Formatierungen vorher löschen!
 		// 1. Treffer im Text ermitteln, Beleg am Anfang ggf. kürzen
 		let reg = new RegExp(helfer.formVariRegExp(), "gi");
-		if (schnitt.match(reg)) {
+		if (reg.test(schnitt)) {
 			let idx = schnitt.split(reg)[0].length;
 			if (idx > 30) {
 				schnitt = `…${schnitt.substring(idx - 20)}`;
@@ -825,7 +825,7 @@ let liste = {
 			evt.preventDefault();
 			let url = this.title;
 			// URL ggf. aufbereiten
-			if (!url.match(/^http/)) {
+			if (!/^http/.test(url)) {
 				url = `https://${url}`;
 			}
 			// URL im Browser öffnen
@@ -881,13 +881,13 @@ let liste = {
 	// Text der Überschrift für die Detailanzeige erstellen
 	// (die Funktion brauch ich auch in anhaenge.js und drucken.js, darum ausgelagert)
 	//   beleg_id = String || Object
-	//     (ID des Belegs; soll der aktuelle Belegzettel gedruckt werden ist es ein Object)
+	//     (ID des Belegs; soll die aktuelle Karteikarte gedruckt werden ist es ein Object)
 	detailAnzeigenH3 (beleg_id) {
 		let obj = {},
 			nr = beleg_id;
 		if (helfer.checkType("String", beleg_id)) {
 			obj = data.ka[beleg_id];
-		} else { // falls der aktuelle Belegzettel als Objekt übergeben wird
+		} else { // falls die aktuelle Karteikarte als Objekt übergeben wird
 			obj = beleg_id;
 			nr = beleg.id_karte;
 		}
@@ -916,7 +916,7 @@ let liste = {
 				liste.headerFilter();
 			} else if (funktion === "sortieren") {
 				liste.headerSortieren();
-			} else if (funktion.match(/^zeitschnitte/)) {
+			} else if (/^zeitschnitte/.test(funktion)) {
 				liste.headerZeitschnitte(funktion);
 			} else if (funktion === "beleg") {
 				liste.headerBeleg();
@@ -926,7 +926,7 @@ let liste = {
 				liste.headerWortHervorheben();
 			} else if (funktion === "trennung") {
 				liste.headerTrennung();
-			} else if (funktion.match(/^(bd|qu|ts|no|meta)$/)) {
+			} else if (/^(bd|qu|ts|no|meta)$/.test(funktion)) {
 				liste.headerDetails(funktion);
 			}
 		});
@@ -990,7 +990,7 @@ let liste = {
 	//     (der letzte Teil der ID des Elements, also "liste-link-" + "funktion" = ID)
 	headerZeitschnitte (funktion) {
 		// Zeitschnitt ermitteln
-		if (funktion.match(/[0-9]+$/)) {
+		if (/[0-9]+$/.test(funktion)) {
 			optionen.data.belegliste.zeitschnitte = funktion.match(/[0-9]+$/)[0];
 		} else {
 			optionen.data.belegliste.zeitschnitte = "-";

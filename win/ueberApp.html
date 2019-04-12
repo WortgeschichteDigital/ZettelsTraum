@@ -19,7 +19,7 @@
 			></aside>
 			<h1></h1>
 			<h2>Version <span id="version"></span><a href="#changelog" class="intern">Changelog</a></h2>
-			<p><i id="name"></i> ist die Wortkartei-App von <a href="#" title="https://adw-goe.de/forschung/weitere-forschungsprojekte/wortgeschichte-digital-teilprojekt-im-zdl/"><i>Wortgeschichte digital</i></a>, dem an der <i>Akademie der Wissenschaften zu Göttingen</i> (<a href="#" title="https://adw-goe.de/">AdWG</a>) angesiedelten Teilprojekt des <i>Zentrums für digitale Lexikographie der deutschen Sprache</i> (<a href="#" title="https://www.zentrum-lexikographie.de/">ZDL</a>).</p>
+			<p class="beschreibung-app"><i id="name"></i> ist die Wortkartei-App von <a href="#" title="https://adw-goe.de/forschung/weitere-forschungsprojekte/wortgeschichte-digital-teilprojekt-im-zdl/"><i>Wortgeschichte digital</i></a>, dem an der <i>Akademie der Wissenschaften zu Göttingen</i> (<a href="#" title="https://adw-goe.de/">AdWG</a>) angesiedelten Teilprojekt des <i>Zentrums für digitale Lexikographie der deutschen Sprache</i> (<a href="#" title="https://www.zentrum-lexikographie.de/">ZDL</a>).</p>
 		</header>
 		
 		<!-- LIZENZEN -->
@@ -38,11 +38,11 @@
 				</tr>
 				<tr class="lizenz">
 					<th>Fonts</th>
-					<td>DejaVu Sans, DejaVu Sans Mono und DejaVu Serif (<a href="#" title="https://dejavu-fonts.github.io/">Projektseite</a>)</td>
+					<td>Noto Sans, Noto Sans Mono und Noto Serif (<a href="#" title="https://www.google.com/get/noto/">Projektseite</a>)</td>
 				</tr>
 				<tr>
-					<th>Lizenzen</th>
-					<td>Bitstream Vera Fonts, Arev Fonts, Public Domain (<a href="#" title="https://dejavu-fonts.github.io/License.html">Lizenzbedingungen</a>)</td>
+					<th>Lizenz</th>
+					<td>SIL Open Font License (<a href="#" title="http://scripts.sil.org/OFL">Lizenzbedingungen</a>)</td>
 				</tr>
 				<tr class="lizenz">
 					<th>Icons</th>
@@ -53,7 +53,7 @@
 					<td>GNU General Public License v3.0 (<a href="#" title="https://www.gnu.org/licenses/gpl-3.0.en.html">Lizenzbedingungen</a>)</td>
 				</tr>
 				<tr class="lizenz">
-					<td colspan="2">Die Papirus-Icons wurden alle leicht verändert. Daneben gibt es eigens für das Programm erstellte Icons, die ebenfalls unter der GNU General Public License v3.0 stehen. Welche der Grafiken aus dem Papirus Theme stammen und welche neu erstellt wurden, lässt sich im Einzelnen den Metadaten der SVG-Dateien entnehmen.</td>
+					<td colspan="2">Die Papirus-Icons wurden alle leicht verändert. Daneben gibt es eigens für das Programm erstellte Icons, die ebenfalls unter der GNU General Public License v3.0 stehen. Welche der Grafiken aus dem Papirus Theme stammen und welche neu erstellt wurden, lässt sich im Einzelnen den Metadaten der SVG-Dateien entnehmen. Einige neu erstellte Grafiken basieren mitunter auf Teilen von Papirus-Icons.</td>
 				</tr>
 			</table>
 		</section>
@@ -69,27 +69,30 @@
 				</ul>
 				<h3>Verbesserungen</h3>
 				<ul>
+					<li>Anstelle von <i>DejaVu</i> wird als Schriftart fortan <i>Noto</i> benutzt. (Einige im <abbr title="Deutschen Textarchiv">DTA</abbr> häufig verwendete Glyphen sind in <i>DejaVu</i> nicht vorhanden.)</li>
+					<li>Karteikarte: Die Textfelder <i>Bedeutung</i> und <i>Textsorte</i> können auf Wunsch ohne Nachfrage ergänzt werden. Eine Option dafür findet sich in <i>Programm &gt; Einstellungen &gt; Karteikarte</i>. Daneben lässt sich die Einstellung auch über das Meldungsfenster aktivieren.</li>
 					<li>Dropdown-Menü: Immer dann, wenn der Inhalt eines Dropdown-Menüs unterhalb des Textfeldes nicht komplett angezeigt werden kann, wird das Menü automatisch über dem Textfeld geöffnet.</li>
 				</ul>
 				<h3>Behobene Fehler</h3>
 				<ul>
 					<li>Dropdown-Menü: Wurde mehrmals hintereinander auf denselben Schalter gedrückt, um ein Dropdown-Menü zu öffnen, funktionierte das Öffnen der Dropdownliste via Tastaturkürzel mitunter nicht mehr.</li>
+					<li>Das Formular zur Eingabe neuer Belege <abbr title="beziehungsweise">bzw.</abbr> dessen Leseansicht wird nun durchgehend als <i>Karteikarte</i> und nicht mehr als <i>Belegzettel</i> bezeichnet.</li>
 				</ul>
 			</div>
 			<div>
 				<div class="version"><span>Version 0.3.0</span><time datetime="2019-04-10">10. April 2019</time></div>
 				<h3>Neue Funktionen</h3>
 				<ul>
-					<li>Belegzettel: Mit dem Tastaturkürzel <kbd>Strg</kbd> + <kbd>U</kbd> kann jetzt zwischen Formular- und Leseansicht gewechselt werden.</li>
-					<li>Belegzettel: In der Leseansicht gibt es nun eine Funktion zum Aus- <abbr title="beziehungsweise">bzw.</abbr> Einblenden der Silbentrennung und Seitenumbrüche. Diese Einstellung wird gespeichert und beim Neustart des Programms wiederhergestellt. Sie ist auch über das Tastaturkürzel <kbd>Strg</kbd> + <kbd>T</kbd> zu erreichen.</li>
+					<li>Karteikarte: Mit dem Tastaturkürzel <kbd>Strg</kbd> + <kbd>U</kbd> kann jetzt zwischen Formular- und Leseansicht gewechselt werden.</li>
+					<li>Karteikarte: In der Leseansicht gibt es nun eine Funktion zum Aus- <abbr title="beziehungsweise">bzw.</abbr> Einblenden der Silbentrennung und Seitenumbrüche. Diese Einstellung wird gespeichert und beim Neustart des Programms wiederhergestellt. Sie ist auch über das Tastaturkürzel <kbd>Strg</kbd> + <kbd>T</kbd> zu erreichen.</li>
 				</ul>
 				<h3>Verbesserungen</h3>
 				<ul>
-					<li>Das Tastaturkürzel <kbd>Strg</kbd> + <kbd>S</kbd> und die Funktion <i>Kartei &gt; Speichern</i> rufen den Speicherbefehl nun auch für das Notizen-Fenster und den Belegzettel auf. Verläuft das Speichern der Notizen <abbr title="beziehungsweise">bzw.</abbr> des Belegs fehlerfrei, wird direkt im Anschluss die Kartei gespeichert.</li>
+					<li>Das Tastaturkürzel <kbd>Strg</kbd> + <kbd>S</kbd> und die Funktion <i>Kartei &gt; Speichern</i> rufen den Speicherbefehl nun auch für das Notizen-Fenster und die Karteikarte auf. Verläuft das Speichern der Notizen <abbr title="beziehungsweise">bzw.</abbr> des Belegs fehlerfrei, wird direkt im Anschluss die Kartei gespeichert.</li>
 					<li>Meldungen, dass keine Änderungen vorgenommen wurden und ein Speichern unnötig sei, wurden entfernt.</li>
 					<li>Belegliste: Die Maximalbreite der Absätze wurde leicht erhöht.</li>
 					<li>DTA-Import: Beim Import mehrerer Seiten wird der Seiten- oder Spaltenumbruch im Texte nun markiert. Angegeben wird immer die Nummer der folgenden Seite/Spalte, und zwar nach diesem Schema: "[:SEITE:]". Diese Markierung der Seitenangabe wird mit den Schaltern, die bisher nur zum Ein- <abbr title="beziehungsweise">bzw.</abbr> Ausblenden der Silbentrennung dienten, ein- <abbr title="beziehungsweise">bzw.</abbr> ausgeblendet.</li>
-					<li>Belegzettel: Die Maximalbreite des Belegzettels wurde stark erhöht.</li>
+					<li>Karteikarte: Die Maximalbreite der Karteikarte wurde stark erhöht.</li>
 					<li>Dropdown-Menü: Einträge, die mehr als 65 Zeichen lang sind, haben jetzt immer einen Tooltip.</li>
 					<li>Dropdown-Menü: In mehrzeiligen Feldern werden auch dann sinnvolle Vorschläge geliefert, wenn bereits ein Wert im Textfeld steht.</li>
 					<li>Dropdown-Menü: Erscheint das Dropdown-Menü während der Texteingabe, werden bereits im Feld vorhandene Werte nicht mehr zum Hinzufügen angeboten.</li>
@@ -99,11 +102,11 @@
 				<h3>Behobene Fehler</h3>
 				<ul>
 					<li>DTA-Import: Der Import der letzten Seite eines Werks war mitunter nur unvollständig.</li>
-					<li>Belegzettel: Wenn die Felder mit den Feldüberschriften sehr schmal wurden, konnten sich Text und Kopier-Icon unter Umständen überlappen.</li>
+					<li>Karteikarte: Wenn die Felder mit den Feldüberschriften sehr schmal wurden, konnten sich Text und Kopier-Icon unter Umständen überlappen.</li>
 					<li>Notizen-Fenster: Unter Umständen wurde man zweimal gefragt, ob die Notizen gelöscht werden sollen.</li>
 					<li>Dropdown-Menü: Unter Windows konnten Menü-Einträge nicht mit der Maus ausgewählt werden.</li>
 					<li>Dropdown-Menü: Die Dialoge waren dysfunktional, falls in einem der Datenfelder des Belegs bereits Text stand.</li>
-					<li>Dropdown-Menü: Wurden im Belegzettel die Felder <i>Bedeutung</i> oder <i>Textsorte</i> über das Dropdown-Menü gefüllt, wurden die Werte beim Speichern nicht übernommen.</li>
+					<li>Dropdown-Menü: Wurden in der Karteikarte die Felder <i>Bedeutung</i> oder <i>Textsorte</i> über das Dropdown-Menü gefüllt, wurden die Werte beim Speichern nicht übernommen.</li>
 				</ul>
 			</div>
 			<div>
@@ -111,14 +114,14 @@
 				<h3>Verbesserungen</h3>
 				<ul>
 					<li>Suchfunktion: Das Finden von Wörtern mit Sonderzeichen (ẽ und ñ) wurde verbessert.</li>
-					<li>Belegtext: Beim Kopieren wird die Quellenangabe automatisch mitkopiert. Dies betrifft alle Kopierfunktionen: das Kopieren via Icon und das Kopieren einer Textauswahl via Kontextmenü; beides sowohl in der Belegliste als auch im Belegzettel.</li>
-					<li>Belegzettel: Die Texttools erkennen illegales Nesting jetzt in mehr Fällen als zuvor.</li>
+					<li>Belegtext: Beim Kopieren wird die Quellenangabe automatisch mitkopiert. Dies betrifft alle Kopierfunktionen: das Kopieren via Icon und das Kopieren einer Textauswahl via Kontextmenü; beides sowohl in der Belegliste als auch in der Karteikarte.</li>
+					<li>Karteikarte: Die Texttools erkennen illegales Nesting jetzt in mehr Fällen als zuvor.</li>
 				</ul>
 				<h3>Behobene Fehler</h3>
 				<ul>
-					<li>Belegzettel: Das Einfügen von Text im Belegfeld durch Klick auf das Einfüge-Icon funktionierte nicht.</li>
-					<li>Belegzettel: Beim Einfügen von Text im Belegfeld durch Klick auf das Einfüge-Icon wurden einfache Zeilenumbrüche im HTML-Quelltext ignoriert.</li>
-					<li>Belegzettel: Ein Hinweis auf illegales Nesting erschien nicht in jedem Fall.</li>
+					<li>Karteikarte: Das Einfügen von Text im Belegfeld durch Klick auf das Einfüge-Icon funktionierte nicht.</li>
+					<li>Karteikarte: Beim Einfügen von Text im Belegfeld durch Klick auf das Einfüge-Icon wurden einfache Zeilenumbrüche im HTML-Quelltext ignoriert.</li>
+					<li>Karteikarte: Ein Hinweis auf illegales Nesting erschien nicht in jedem Fall.</li>
 				</ul>
 			</div>
 			<div>

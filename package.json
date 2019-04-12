@@ -1,7 +1,7 @@
 {
 	"name": "zettelstraum",
 	"productName": "Zettel's Traum",
-	"version": "0.4.0-beta.1",
+	"version": "0.4.0-beta.2",
 	"description": "Wortkartei-App von 'Wortgeschichte digital', dem an der 'Akademie der Wissenschaften zu Göttingen' angesiedelten Teilprojekt des 'Zentrums für digitale Lexikographie der deutschen Sprache'",
 	"keywords": [
 		"Kartei",
@@ -16,7 +16,7 @@
 		"email": "ndorn@gwdg.de"
 	},
 	"license": {
-		"type": "GPL-3.0",
+		"type": "GPL-3.0-only",
 		"url": "https://www.gnu.org/licenses/gpl-3.0.en.html"
 	},
 	"homepage": "https://adw-goe.de/forschung/weitere-forschungsprojekte/wortgeschichte-digital-teilprojekt-im-zdl/",
