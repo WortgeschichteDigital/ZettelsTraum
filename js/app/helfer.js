@@ -328,6 +328,11 @@ let helfer = {
 		if (evt.which >= 37 && evt.which <= 40) {
 			helfer.cursor(evt);
 		}
+		// Strg + P (wenn kein Overlay)
+		if (evt.ctrlKey && evt.which === 80) {
+			drucken.tastatur();
+			return;
+		}
 		// Strg + U (wenn im Beleg)
 		if (evt.ctrlKey && evt.which === 85 && helfer.belegOffen()) {
 			beleg.leseToggle(true);

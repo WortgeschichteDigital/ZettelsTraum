@@ -229,33 +229,30 @@
 							<h3>Datenfelder<span id="filter-datenfelder"
 								><a href="#" id="filter-datenfelder-alle">alle</a> | <a href="#" id="filter-datenfelder-keine">keine</a></span
 							></h3>
-							<p class="no-indent"
-								><span
-									><input type="checkbox" id="filter-feld-bs" class="filter-optionen"
+							<div class="filter-erweiterte-flex">
+								<p><input type="checkbox" id="filter-feld-bs" class="filter-optionen"
 									><label for="filter-feld-bs">Beleg</label
-								></span
-								><input type="checkbox" id="filter-feld-qu" class="filter-optionen"
-								><label for="filter-feld-qu">Quelle</label
-							></p>
-							<p class="no-indent"
-								><span
-									><input type="checkbox" id="filter-feld-bd" class="filter-optionen"
+									></p>
+								<p><input type="checkbox" id="filter-feld-qu" class="filter-optionen"
+									><label for="filter-feld-qu">Quelle</label
+									></p>
+								<p><input type="checkbox" id="filter-feld-bd" class="filter-optionen"
 									><label for="filter-feld-bd">Bedeutung</label
-								></span
-								><input type="checkbox" id="filter-feld-ts" class="filter-optionen"
-								><label for="filter-feld-ts">Textsorte</label
-							></p>
-							<p class="no-indent"
-								><span
-									><input type="checkbox" id="filter-feld-au" class="filter-optionen"
+									></p>
+								<p><input type="checkbox" id="filter-feld-ts" class="filter-optionen"
+									><label for="filter-feld-ts">Textsorte</label
+									></p>
+								<p><input type="checkbox" id="filter-feld-au" class="filter-optionen"
 									><label for="filter-feld-au">Autor</label
-								></span
-								><input type="checkbox" id="filter-feld-da" class="filter-optionen"
-								><label for="filter-feld-da">Datum</label
-							></p>
-							<p class="no-indent"><input type="checkbox" id="filter-feld-no" class="filter-optionen"
-								><label for="filter-feld-no">Notizen</label
-								></p>
+									></p>
+								<p><input type="checkbox" id="filter-feld-da" class="filter-optionen"
+									><label for="filter-feld-da">Datum</label
+									></p>
+								<p><input type="checkbox" id="filter-feld-no" class="filter-optionen"
+									><label for="filter-feld-no">Notizen</label
+									></p>
+								<p> </p> <!-- Damit die Flexboxes immer ein hübsches Grid ergeben. -->
+							</div>
 						</div>
 					</div
 					><a href="#" class="filter-kopf" id="filter-kopf-zeitraum">Zeitraum<span title="Filter in diesem Block zurücksetzen"> </span></a
@@ -479,7 +476,7 @@
 			</div>
 		</div></div>
 		
-		<!-- OVERLAY: DIALOG-FENSTER -->
+		<!-- OVERLAY: Dialog-Fenster -->
 		<div id="dialog" class="overlay aus"><div>
 			<h2><span class="icon-h"> </span
 			><span id="dialog-h-prompt">Eingabe</span
@@ -508,7 +505,6 @@
 			<div id="drucken-head"
 				><span><img src="img/drucken-gross.svg" width="48" height="48" alt=""><br>Drucken</span
 				><span><img src="img/kopieren-gross.svg" width="48" height="48" alt=""><br>Kopieren</span
-				><span id="drucken-serife">normal<br><i>italic</i><br><b>bold</b><br><b><i>bold-italic</i></b></span
 			></div>
 			<div id="drucken-cont-rahmen">
 				<div id="drucken-cont"></div>

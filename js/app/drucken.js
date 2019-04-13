@@ -1,20 +1,28 @@
 "use strict";
 
 let drucken = {
-	// TODO (temporäre Funktion)
-	ausgeschaltet () {
-		dialog.oeffnen("alert", null);
-		dialog.text("Sorry!\nDiese Funktion ist noch nicht programmiert.");
-	},
 	// Listener für die Druck-Icons
 	//   a = Element
 	//     (Icon-Link, auf den geklickt wurde)
 	listener (a) {
 		a.addEventListener("click", function(evt) {
 			evt.preventDefault();
-// 			drucken.ausgeschaltet(); // TODO
 			drucken.init(this.id);
 		});
+	},
+	// Drucken über Tastaturkürzel initialisieren, starten oder ggf. unterbinden
+	tastatur () {
+		const oben = overlay.oben();
+		if (oben && oben !== "drucken" || !kartei.wort) {
+			return;
+		}
+		if (oben === "drucken") {
+			print();
+		} else if (!document.getElementById("beleg").classList.contains("aus")) {
+			drucken.init("beleg-");
+		} else {
+			drucken.init("liste-");
+		}
 	},
 	// Listener für die Buttons im Druckfenster
 	//   span = Element
@@ -40,6 +48,12 @@ let drucken = {
 		// Verteiler
 		if (/^(liste|beleg)-/.test(id)) {
 			drucken.getIds(id);
+			if (!drucken.kartenIds.length) { // keine Karteikarten, die gedruckt werden können
+				setTimeout(() => overlay.schliessen(fenster), 0); // ohne Timeout wird es nicht ausgeblendet
+				dialog.oeffnen("alert", null);
+				dialog.text("In der Belegliste sind keine Karteikarten, die gedruckt werden könnten.");
+				return;
+			}
 			drucken.fillKarten();
 		} else if (false) {
 			drucken.initBedeutungen();
@@ -107,6 +121,7 @@ let drucken = {
 		// Content leeren
 		const cont = document.getElementById("drucken-cont");
 		helfer.keineKinder(cont);
+		cont.scrollTop = 0;
 		// Karten einhängen
 		drucken.kartenIds.forEach(function(i) {
 			let obj = i;

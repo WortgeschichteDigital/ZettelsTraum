@@ -77,9 +77,9 @@
 }
 
 #beleg td.check p {
+	flex: 1 0 130px;
 	margin: 0;
 	padding: 0;
-	flex: 1 0 130px;
 	text-align: center;
 }
 
@@ -259,5 +259,17 @@ textarea#beleg-bs {
 }
 
 #beleg-lese-meta div {
+	margin-bottom: 10px;
 	padding-left: 6px;
+	height: 24px;
+}
+
+#beleg-lese-meta div > span {
+	display: inline-block;
+	margin-left: 20px;
+	height: 24px;
+}
+
+#beleg-lese-meta div span span {
+	overflow: hidden;
 }

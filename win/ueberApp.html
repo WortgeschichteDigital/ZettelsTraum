@@ -58,24 +58,29 @@
 			</table>
 		</section>
 			
-			<!-- CHANGELOG -->
+		<!-- CHANGELOG -->
 		<section class="changelog">
 			<h2 id="changelog">Changelog</h2>
 			<div>
-				<div class="version"><span>Version 0.4.0-next</span><time datetime="2019-04-10"><s>10. April 2019</s></time></div>
+				<div class="version"><span>Version 0.4.0-beta</span><time datetime="2019-04-10"><s>10. April 2019</s></time></div>
 				<h3>Neue Funktionen</h3>
 				<ul>
-					<li>…</li>
+					<li><p>Druckfunktion: Karteikarten können nun ausgedruckt werden. Die Funktion steht sowohl für einzelne Karteikarten als auch für die komplette Belegliste zur Verfügung. Beim Druck einer Belegliste werden nur die Belege gedruckt, die aktuell in der Liste erscheinen.</p>
+					<p>Aufgerufen werden kann die Druckfunktion über das Druck-Icon im Kopf der Belegliste <abbr title="beziehungsweise">bzw.</abbr> Karteikarte. Alternativ lässt sie sich auch über das Tastaturkürzel <kbd>Strg</kbd> + <kbd>P</kbd> starten (wenn Belegliste oder Karteikarte nicht durch ein anderes Fenster verdeckt werden).</p>
+					<p>Wird die Druckfunktion aufgerufen, erscheint zunächst ein Vorschaufenster. In diesem kann der Druck gestartet oder der komplette Inhalt des Vorschaufensters in die Zwischenablage kopiert werden.</p></li>
 				</ul>
 				<h3>Verbesserungen</h3>
 				<ul>
+					<li>Die Breite der Filterleiste passt sich dynamisch an die Breite des Programmfensters an. Sie nimmt nun 40 % des verfügbaren Platzes ein, jedoch mindestens 300 Pixel und höchsten 600 Pixel, was dem Doppelten der bisherigen fixen Breite entspricht.</li>
 					<li>Anstelle von <i>DejaVu</i> wird als Schriftart fortan <i>Noto</i> benutzt. (Einige im <abbr title="Deutschen Textarchiv">DTA</abbr> häufig verwendete Glyphen sind in <i>DejaVu</i> nicht vorhanden.)</li>
-					<li>Karteikarte: Die Textfelder <i>Bedeutung</i> und <i>Textsorte</i> können auf Wunsch ohne Nachfrage ergänzt werden. Eine Option dafür findet sich in <i>Programm &gt; Einstellungen &gt; Karteikarte</i>. Daneben lässt sich die Einstellung auch über das Meldungsfenster aktivieren.</li>
+					<li>Karteikarte: Die Textfelder <i>Bedeutung</i> und <i>Textsorte</i> können auf Wunsch ohne Nachfrage aus einem Dropdown-Menü heraus ergänzt werden. Eine Option dafür findet sich in <i>Programm &gt; Einstellungen &gt; Karteikarte</i>. Die Option lässt sich auch über das Meldungsfenster aktivieren, das erscheint, wenn ein Textfeld bereits gefüllt ist.</li>
 					<li>Dropdown-Menü: Immer dann, wenn der Inhalt eines Dropdown-Menüs unterhalb des Textfeldes nicht komplett angezeigt werden kann, wird das Menü automatisch über dem Textfeld geöffnet.</li>
 				</ul>
 				<h3>Behobene Fehler</h3>
 				<ul>
-					<li>Dropdown-Menü: Wurde mehrmals hintereinander auf denselben Schalter gedrückt, um ein Dropdown-Menü zu öffnen, funktionierte das Öffnen der Dropdownliste via Tastaturkürzel mitunter nicht mehr.</li>
+					<li>Viele Funktionen des Hauptfensters waren auch aus den Nebenfenstern (Handbuch, Dokumentation <abbr title="und so weiter">usw.</abbr>) heraus aufzurufen, wenn das zugehörige Tastaturkürzel gedrückt wurde. Dies könnte unerwünschte Effekte haben und wird fortan unterbunden.</li>
+					<li>Karteikarte: In der Leseansicht wurde die Markierung mit Sternen fehlerhaft dargestellt.</li>
+					<li>Dropdown-Menü: Wurde mehrmals hintereinander auf denselben Schalter gedrückt, um ein Dropdown-Menü zu öffnen, funktionierte das Öffnen des Dropdowns via Tastaturkürzel mitunter nicht mehr.</li>
 					<li>Das Formular zur Eingabe neuer Belege <abbr title="beziehungsweise">bzw.</abbr> dessen Leseansicht wird nun durchgehend als <i>Karteikarte</i> und nicht mehr als <i>Belegzettel</i> bezeichnet.</li>
 				</ul>
 			</div>

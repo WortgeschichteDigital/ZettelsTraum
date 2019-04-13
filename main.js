@@ -445,7 +445,7 @@ appMenu = {
 	// erzeugt das Programm-Menü
 	erzeugen () {
 		const menu = Menu.buildFromTemplate(layoutMenu);
-		Menu.setApplicationMenu(menu);
+		win.setMenu(menu);
 	},
 };
 
@@ -541,6 +541,8 @@ fenster = {
 				defaultEncoding: "utf-8",
 			},
 		});
+		// Menü erzeugen
+		appMenu.erzeugen();
 		// HTML laden
 		win.loadFile(path.join(__dirname, "index.html"));
 		// Fenster anzeigen, sobald alles geladen wurde
@@ -577,7 +579,7 @@ fenster = {
 			},
 		});
 		// Menü abschalten
-		winHandbuch.setMenuBarVisibility(false);
+		winHandbuch.setMenuBarVisibility(false); // unpacketiert erscheint sonst ein Standardmenü
 		// HTML laden
 		winHandbuch.loadFile(path.join(__dirname, "win", "handbuch.html"));
 		// Fenster anzeigen, sobald alles geladen wurde
@@ -604,7 +606,7 @@ fenster = {
 			},
 		});
 		// Menü abschalten
-		winDokumentation.setMenuBarVisibility(false);
+		winDokumentation.setMenuBarVisibility(false); // unpacketiert erscheint sonst ein Standardmenü
 		// HTML laden
 		winDokumentation.loadFile(path.join(__dirname, "win", "dokumentation.html"));
 		// Fenster anzeigen, sobald alles geladen wurde
@@ -628,7 +630,8 @@ fenster = {
 			title: `Über ${app.getName()}`,
 			icon: path.join(__dirname, "img", "icon", "png", "icon_32px.png"),
 			width: 650,
-			height: 345,
+			height: 321,
+			useContentSize: true,
 			center: true,
 			resizable: false,
 			minimizable: false,
@@ -641,7 +644,7 @@ fenster = {
 			},
 		});
 		// Menü abschalten
-		winUeberApp.setMenuBarVisibility(false);
+		winUeberApp.setMenuBarVisibility(false); // unpacketiert erscheint sonst ein Standardmenü
 		// HTML laden
 		winUeberApp.loadFile(path.join(__dirname, "win", "ueberApp.html"));
 		// Fenster anzeigen, sobald alles geladen wurde
@@ -658,7 +661,8 @@ fenster = {
 			title: "Über Electron",
 			icon: path.join(__dirname, "img", "icon", "png", "icon_32px.png"),
 			width: 650,
-			height: 353,
+			height: 329,
+			useContentSize: true,
 			center: true,
 			resizable: false,
 			minimizable: false,
@@ -671,7 +675,7 @@ fenster = {
 			},
 		});
 		// Menü abschalten
-		winUeberElectron.setMenuBarVisibility(false);
+		winUeberElectron.setMenuBarVisibility(false); // unpacketiert erscheint sonst ein Standardmenü
 		// HTML laden
 		winUeberElectron.loadFile(path.join(__dirname, "win", "ueberElectron.html"));
 		// Fenster anzeigen, sobald alles geladen wurde
@@ -697,8 +701,6 @@ fenster = {
 app.on("ready", function() {
 	// Menu der zuletzt verwendeter Karteien erzeugen
 	appMenu.zuletzt(false);
-	// Menü erzeugen
-	appMenu.erzeugen();
 	// Informationen zum Bildschirm auslesen und ggf. speichern
 	const Bildschirm = require("electron").screen.getPrimaryDisplay();
 	// Fenster standardmäßig maximalisiert öffnen

@@ -722,23 +722,6 @@ input[id^="redaktion-person"] {
 	background-color: var(--hover);
 }
 
-/* verrücktes Zeug: Noto Serif muss zunächst in allen Varianten
-   im Dokument benutzt werden, andernfalls wird die Schrift für den
-   Druck nicht verwendet. */
-#drucken-head #drucken-serife {
-	position: absolute;
-	right: 0;
-	bottom: 0;
-	border: none;
-	border-radius: 0;
-	padding: 0;
-	width: auto;
-	font-family: "Noto Serif", serif;
-	font-size: 8px;
-	line-height: 12px;
-	visibility: hidden;
-}
-
 #drucken-cont-rahmen {
 	padding: 10px;
 }
@@ -746,4 +729,57 @@ input[id^="redaktion-person"] {
 #drucken-cont {
 	max-height: 400px;
 	overflow-y: auto;
+	color: #000;
+	font-family: "Noto Serif", serif;
+	user-select: text;
+}
+
+#drucken-cont h3 {
+	border-top: 7px double #000;
+	padding-top: 30px;
+	color: #000;
+	font-size: 20px;
+	font-style: normal;
+	font-weight: bold;
+}
+
+#drucken-cont h3:first-child {
+	border-top: none;
+	padding-top: 0;
+}
+
+#drucken-cont table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+#drucken-cont th {
+	border-bottom: 1px solid #000;
+	padding: 10px 0 0 10px;
+	width: calc(50% - 10px);
+	font-style: italic;
+	font-weight: normal;
+	text-align: left;
+}
+
+#drucken-cont td {
+	padding: 10px 0 0 10px;
+	width: calc(50% - 10px);
+	vertical-align: top;
+}
+
+#drucken-cont th:first-child,
+#drucken-cont td:first-child {
+	padding-left: 0;
+	width: 50%;
+}
+
+#drucken-cont th[colspan="2"],
+#drucken-cont td[colspan="2"] {
+	width: 100%;
+}
+
+#drucken-cont .dta-antiqua {
+	font-family: "Noto Sans", sans-serif;
+	font-size: 100%;
 }

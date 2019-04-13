@@ -3,7 +3,7 @@
 /* Listensektion -------------------------------- */
 @keyframes liste-re {
 	0% {
-		transform: translateX(-305px);
+		transform: translateX(var(--filterKeyframe));
 	}
 	100% {
 		transform: translateX(0);
@@ -15,14 +15,14 @@
 		transform: translateX(0);
 	}
 	100% {
-		transform: translateX(-305px);
+		transform: translateX(var(--filterKeyframe));
 	}
 }
 
 #liste {
 	position: relative; /* sonst bekomm ich keine offsetTop-Werte in der Belegliste */
 	display: grid;
-	grid-template-columns: 300px calc(100% - 300px - 15px); /* minus Breite Filterleiste und Gap */
+	grid-template-columns: var(--filter) calc(100% - var(--filter) - 15px); /* minus Breite Filterleiste und Gap */
 	grid-gap: 15px;
 	padding-left: 0;
 	width: calc(100% - 10px); /* minus padding-right; diese Width ist für die Animation wichtig */
@@ -40,7 +40,7 @@
 }
 
 #liste.filter-aus {
-	width: calc(100% + 300px - 5px); /* plus Breite Filterleiste und minus verstecktem Gap */
+	width: calc(100% + var(--filter) - 5px); /* plus Breite Filterleiste und minus verstecktem Gap */
 	animation-name: liste-li;
 }
 
@@ -50,6 +50,25 @@
 
 #liste > div:first-child {
 	background-color: var(--hintergrund);
+}
+
+:root {
+	--filter: 300px;
+	--filterKeyframe: -305px;
+}
+
+@media (min-width: 750px) {
+	:root {
+		--filter: 40vw;
+		--filterKeyframe: calc(-40vw - 5px);
+	}
+}
+
+@media (min-width: 1500px) {
+	:root {
+		--filter: 600px;
+		--filterKeyframe: -605px;
+	}
 }
 
 /* Filterleiste --------------------------------- */
@@ -127,7 +146,7 @@
 
 .filter-cont-max {
 	margin-bottom: 10px;
-	max-height: 340px;
+	max-height: 348px;
 	overflow-y: auto;
 }
 
@@ -198,7 +217,6 @@
 }
 
 #filter-erweiterte-cont h3 {
-	position: relative;
 	margin: 15px 0 5px 0;
 	color: var(--text);
 	font-style: normal;
@@ -208,18 +226,20 @@
 	margin-bottom: 5px;
 }
 
-#filter-erweiterte-cont span {
-	display: inline-block;
-	margin-right: 10px;
-	width: 115px;
+.filter-erweiterte-flex {
+	display: flex;
+	flex-wrap: wrap;
 }
 
-#filter-erweiterte-cont span#filter-datenfelder {
-	position: absolute;
-	right: 0;
-	margin: 0;
-	width: auto;
-	font-style: normal;
+.filter-erweiterte-flex p {
+	flex: 1 0 125px;
+	padding: 0;
+	max-width: 125px;
+	text-indent: 0;
+}
+
+#filter-datenfelder {
+	margin-left: 36px;
 }
 
 #liste-filter input[type="radio"] {

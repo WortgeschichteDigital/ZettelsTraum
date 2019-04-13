@@ -4,6 +4,8 @@
 /* Basis-Elemente ------------------------------- */
 body {
 	margin: 0;
+	width: 210mm; /* A4 */
+	height: 297mm;
 	overflow-x: inherit;
 }
 
@@ -14,6 +16,11 @@ body > header,
 #drucken h2,
 #drucken-head {
 	display: none;
+}
+
+/* Druckseite ----------------------------------- */
+@page {
+	margin: 20mm;
 }
 
 /* Druck-Fenster -------------------------------- */
@@ -38,17 +45,18 @@ body > header,
 #drucken-cont {
 	max-height: none;
 	overflow-y: inherit;
-	color: #000;
-	font-family: "Noto Serif", serif;
-	font-size: 12pt;
-	line-height: 20pt;
+	font-size: 14pt;
+	line-height: 24pt;
 }
 
 #drucken-cont h3 {
 	page-break-before: always;
+	margin-top: 0;
+	border-top: none;
+	padding-top: 0;
+	font-size: 18pt;
 }
 
 #drucken-cont th {
 	page-break-after: avoid;
 }
-
