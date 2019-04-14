@@ -190,19 +190,20 @@ window.addEventListener("load", function() {
 	});
 	ipcRenderer.on("kartei-speichern", () => helfer.speichern());
 	ipcRenderer.on("kartei-speichern-unter", () => kartei.speichern(true));
+	ipcRenderer.on("kartei-schliessen", function() {
+		kartei.checkSpeichern(() => kartei.schliessen());
+	});
 	ipcRenderer.on("kartei-formvarianten", () => stamm.oeffnen());
 	ipcRenderer.on("kartei-notizen", () => notizen.oeffnen());
 	ipcRenderer.on("kartei-anhaenge", () => anhaenge.fenster());
 	ipcRenderer.on("kartei-lexika", () => lexika.oeffnen());
 	ipcRenderer.on("kartei-metadaten", () => meta.oeffnen());
 	ipcRenderer.on("kartei-redaktion", () => redaktion.oeffnen());
+	ipcRenderer.on("kartei-bedeutungen-fenster-daten", () => bedeutungenwin.daten());
 	ipcRenderer.on("kartei-suche", () => filter.suche());
-	ipcRenderer.on("kartei-schliessen", function() {
-		kartei.checkSpeichern(() => kartei.schliessen());
-	});
 	ipcRenderer.on("belege-hinzufuegen", () => beleg.erstellenPre());
 	ipcRenderer.on("belege-auflisten", () => liste.anzeigen());
-	ipcRenderer.on("optionen-zuletzt", (evt, zuletzt) => optionen.data.zuletzt = zuletzt );
+	ipcRenderer.on("optionen-zuletzt", (evt, zuletzt) => optionen.data.zuletzt = zuletzt);
 	ipcRenderer.on("dialog-anzeigen", function(evt, text) {
 		dialog.oeffnen("alert", null);
 		dialog.text(text);

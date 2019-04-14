@@ -88,6 +88,11 @@
 	mask-image: url(../../img/quick-bedeutungen.svg);
 }
 
+#quick-kartei-bedeutungen-fenster {
+	-webkit-mask-image: url(../../img/quick-bedeutungen-fenster.svg);
+	mask-image: url(../../img/quick-bedeutungen-fenster.svg);
+}
+
 #quick-kartei-suche {
 	-webkit-mask-image: url(../../img/quick-suche.svg);
 	mask-image: url(../../img/quick-suche.svg);

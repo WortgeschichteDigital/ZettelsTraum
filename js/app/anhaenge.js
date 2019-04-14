@@ -283,6 +283,11 @@ let anhaenge = {
 			if (cont.dataset.anhaenge === "kartei") {
 				anhaenge.auflistenBelege(cont);
 			}
+			// ggf. Pfeil-Icon fokussieren
+			const pfeil = cont.querySelector(`[data-datei="${datei}"] .anhaenge-aufwaerts`);
+			if (pfeil) {
+				pfeil.focus();
+			}
 		});
 	},
 	// Löscht einen Anhang aus der Liste

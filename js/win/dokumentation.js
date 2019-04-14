@@ -5,7 +5,7 @@ window.addEventListener("load", function() {
 	hilfe.sektionWechseln("start");
 	
 	// TASTATUREINGABEN ABFANGEN
-	document.addEventListener("keydown", helfer.tastatur);
+	document.addEventListener("keydown", helferWin.tastatur);
 	
 	// EVENTS INITIALISIEREN
 	// Programm-Icon

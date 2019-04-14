@@ -195,13 +195,10 @@ let filter = {
 			if (block === "verschiedenes") {
 				cont.lastChild.appendChild(filter.aufbauenFilterlogik());
 			}
-			let f = filter.typen[block].filter_folge,
-				baum_zuletzt = 0,
-				baum_basis = null,
-				baum_basis_last = null;
+			const f = filter.typen[block].filter_folge;
 			for (let i = 0, len = f.length; i < len; i++) {
-				let neuer_filter = filter.aufbauenFilter(f[i], filter.typen[block].filter[f[i]]);
-				// keine neuer Filter
+				const neuer_filter = filter.aufbauenFilter(f[i], filter.typen[block].filter[f[i]]);
+				// kein neuer Filter
 				if (!neuer_filter[0]) {
 					continue;
 				}
@@ -209,41 +206,11 @@ let filter = {
 				//   [0] = Document-Fragment
 				//   [1] = Verschachtelungstiefe; 0 = ohne Verschachtelung, 1 = 1. Ebene usw.
 				if (neuer_filter[1] > 0) {
-					if (!baum_basis) { // der letzt Filter war in keiner Baumstruktur
-						baum_basis = document.createDocumentFragment();
-						let div = document.createElement("div");
-						div.classList.add("filter-baum");
-						baum_basis.appendChild(div);
-						baum_basis_last = div;
-						baum_zuletzt = neuer_filter[1];
-					}
-					let div;
-					if (neuer_filter[1] !== baum_zuletzt) { // Filter ist in einer anderen Ebene als zuvor
-						div = document.createElement("div");
-						div.classList.add("filter-baum");
-						div.appendChild(neuer_filter[0]);
-					}
-					if (neuer_filter[1] > baum_zuletzt) { // Filter ist eine Ebene höher
-						baum_basis_last.appendChild(div);
-						baum_basis_last = div;
-					} else if (neuer_filter[1] < baum_zuletzt) { // Filter ist eine Ebene tiefer
-						baum_basis.appendChild(div);
-						baum_basis_last = div;
-					} else { // Filter ist in derselben Ebene
-						baum_basis_last.appendChild(neuer_filter[0]);
-					}
-				} else if (neuer_filter[1] === 0) { // der Filter ist unterhalb einer Baumstruktur
-					if (baum_basis) { // bestehende Baumstruktur einhängen
-						cont.lastChild.appendChild(baum_basis);
-						baum_basis = null;
-						baum_basis_last = null;
-					}
+					const schachtel = schachtelFinden(neuer_filter[0].firstChild.dataset.f);
+					schachtel.appendChild(neuer_filter[0]);
+				} else if (neuer_filter[1] === 0) { // die Bedeutung ist unterhalb einer Baumstruktur
 					cont.lastChild.appendChild(neuer_filter[0]);
 				}
-				baum_zuletzt = neuer_filter[1];
-			}
-			if (baum_basis) { // bestehende Baumstruktur einhängen
-				cont.lastChild.appendChild(baum_basis);
 			}
 		}
 		// Backup der Filtereinstellungen wiederherstellen
@@ -252,6 +219,22 @@ let filter = {
 		filter.markierenSterne();
 		// erneut aktive Filter ermitteln
 		filter.aktiveFilterErmitteln(true);
+		// sucht das <div>, in den ein Filter verschachtelt werden muss
+		function schachtelFinden(f) {
+			// Filter kürzen
+			let bd_arr = f.split(": ");
+			if (bd_arr.length > 1) {
+				bd_arr.pop();
+			}
+			f = bd_arr.join(": ");
+			// Schachtel suchen
+			const schachtel = cont.lastChild.querySelector(`[data-f^="${f}"]`);
+			if (schachtel) {
+				return schachtel;
+			}
+			// nichts gefunden => weiter kürzen
+			schachtelFinden(f);
+		}
 	},
 	// Zwischenspeicher für die Zeiträume der aktuellen Belegliste
 	zeitraumStart: "",
@@ -380,8 +363,11 @@ let filter = {
 	//   baum = String
 	//     (Bedeutungs- bzw. Textsortenbaum als einzeiliger String)
 	//   dt = String
-	//     (Datentyp, also entweder "bedeutungen" oder "textsorten")
+	//     (Datentyp, also entweder "bedeutungen", "textsorten" oder "")
 	baumExtrakt (baum, dt) {
+		if (/^(bedeutungen|textsorten)/.test(dt)) {
+			dt += "-";
+		}
 		let extrakt = [],
 			gruppen = baum.split("\n");
 		for (let i = 0, len = gruppen.length; i < len; i++) {
@@ -389,7 +375,7 @@ let filter = {
 				konstrukt = [];
 			for (let j = 0, len = untergruppen.length; j < len; j++) {
 				konstrukt.push(untergruppen[j]);
-				extrakt.push(`${dt}-${konstrukt.join(": ")}`);
+				extrakt.push(`${dt}${konstrukt.join(": ")}`);
 			}
 		}
 		return extrakt;
@@ -492,21 +478,25 @@ let filter = {
 			baum_tiefe = baum.length;
 		}
 		// in der Filter-ID sind wahrscheinlich Leerzeichen
-		f = encodeURI(f);
+		const f_enc = encodeURI(f);
 		// Filter drucken
 		let frag = document.createDocumentFragment(),
+			div = document.createElement("div"),
 			p = document.createElement("p");
-		frag.appendChild(p);
+		div.appendChild(p);
+		div.classList.add("filter-baum");
+		div.dataset.f = f;
+		frag.appendChild(div);
 		// Input
 		let input = document.createElement("input");
 		input.classList.add("filter");
-		input.id = `filter-${f}`;
+		input.id = `filter-${f_enc}`;
 		input.type = "checkbox";
 		filter.anwenden(input);
 		p.appendChild(input);
 		// Label
 		let label = document.createElement("label");
-		label.setAttribute("for", `filter-${f}`);
+		label.setAttribute("for", `filter-${f_enc}`);
 		label.textContent = obj.name;
 		p.appendChild(label);
 		// Anzahl der Belege

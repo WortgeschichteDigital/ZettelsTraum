@@ -12,14 +12,15 @@ textarea.dropdown-feld {
 
 .dropdown-link-td { /* Dropdown-Link am Ende einer Tabellenzelle */
 	position: absolute;
-	top: 3px;
-	right: 6px; /* 5px padding, 1px border */
+	top: 2px;
+	right: 7px; /* 5px padding, 1px border, 1px outline */
 }
 
 .dropdown-link-element { /* Dropdown-Link, auf dem ein Element folgt */
 	position: relative;
-	top: 3px;
-	left: -25px; /* 1px border */
+	top: 6px;
+	left: -26px; /* 1px border, 1px outline */
+	display: inline-block;
 }
 
 .dropdown-link-element ~ * {
@@ -27,16 +28,32 @@ textarea.dropdown-feld {
 	left: -24px; /* der Link ist 24px breit */
 }
 
+.dropdown-link-haengend svg { /* Sonderregel für Dropdown-Links in hängenden Absätzen */
+	position: relative;
+	left: 24px;
+}
+
 .dropdown-link-td,
 .dropdown-link-element {
-	-webkit-mask-image: url(../../img/dropdown.svg);
-	mask-image: url(../../img/dropdown.svg);
-	background-color: var(--textExtremHell);
+	width: 24px;
+	height: 24px;
+	background-color: #fff;
+	color: var(--textExtremHell);
+}
+
+.dropdown-link-td:focus,
+.dropdown-link-element:focus {
+	color: var(--farbe);
 }
 
 .dropdown-link-td:hover,
 .dropdown-link-element:hover {
-	background-color: var(--text);
+	color: var(--text);
+}
+
+.dropdown-link-td svg path,
+.dropdown-link-element svg path {
+	fill: currentcolor;
 }
 
 /* Dropdown-Fensterchen ---------------------------- */

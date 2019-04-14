@@ -174,22 +174,31 @@
 	margin-bottom: 5px;
 }
 
-.filter-baum {
-	margin: 0 0 0 8px;
-	border-left: 1px dotted var(--linie);
-	padding-left: 14px;
+.filter-baum p {
+	padding-bottom: 0;
 }
 
-.filter-baum p:last-child {
+.filter-baum > .filter-baum {
+	margin: 0 0 0 8px;
+	border-left: 1px dotted var(--linie);
+	padding: 5px 0 5px 14px;
+	text-indent: 0;
+}
+
+.filter-baum > .filter-baum:last-child {
 	padding-bottom: 0;
 }
 
 .filter-baum + .filter-baum {
-	padding-top: 5px;
+	padding-top: 0;
 }
 
-.filter-baum + p {
-	padding-top: 5px;
+.filter-cont > .filter-baum {
+	padding: 5px 0 0 0;
+}
+
+.filter-cont > .filter-baum:first-child {
+	padding-top: 0;
 }
 
 .filter-treffer {

@@ -1,0 +1,92 @@
+@charset "utf-8";
+
+/* Variablen ------------------------------------ */
+@import url(../variablen.css);
+
+/* Fonts ---------------------------------------- */
+@import url(../fonts.css);
+
+/* Struktur-Elemente ---------------------------- */
+body {
+	margin: 0;
+	color: var(--text);
+	font: 16px/24px "Noto Sans", sans-serif;
+	user-select: none;
+}
+
+body > header {
+	position: fixed;
+	top: 0;
+	left: 0;
+	border-bottom: 10px solid #fff;
+	padding: 0 10px;
+	width: calc(100% - 20px);
+	height: 60px;
+	background-color: var(--farbe);
+}
+
+body > header h1 {
+	display: inline-block;
+	margin: 0;
+	color: #fff;
+	font-size: 30px;
+	font-weight: normal;
+	line-height: 60px;
+}
+
+#icon {
+	position: absolute;
+	top: 6px;
+	right: 10px;
+}
+
+main {
+	margin-top: 70px;
+	padding: 0 10px 10px 10px;
+}
+
+/* Basis-Elemente ------------------------------- */
+h2 {
+	margin: 80px 0 15px 0;
+	color: var(--textFarbe);
+	font-size: 24px;
+	font-style: italic;
+	font-weight: normal;
+	line-height: 38px;
+}
+
+/* Bedeutungsbaum ------------------------------- */
+.baum p {
+	margin: 0;
+	padding-left: 36px;
+	text-indent: -36px;
+}
+
+.baum > .baum {
+	margin: 0 0 0 18px;
+	border-left: 1px dotted var(--linie);
+	padding: 5px 0 5px 18px;
+}
+
+.baum > .baum:last-child {
+	padding-bottom: 0;
+}
+
+.baum + .baum {
+	padding-top: 0;
+}
+
+#bedeutungen > div {
+	padding: 5px 0 0 0;
+}
+
+#bedeutungen > div:first-child {
+	padding-top: 0;
+}
+
+b {
+	display: inline-block;
+	width: 36px;
+	text-align: center;
+	text-indent: 0;
+}

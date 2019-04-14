@@ -8,7 +8,7 @@
 		
 		<link rel="stylesheet" href="../css/win/ueber.css">
 		
-		<script src="../js/win/helfer.js"></script>
+		<script src="../js/win/helferWin.js"></script>
 		<script src="../js/win/ueberApp.js"></script>
 	</head>
 	<body>
@@ -65,9 +65,17 @@
 				<div class="version"><span>Version 0.4.0-beta</span><time datetime="2019-04-10"><s>10. April 2019</s></time></div>
 				<h3>Neue Funktionen</h3>
 				<ul>
-					<li><p>Druckfunktion: Karteikarten können nun ausgedruckt werden. Die Funktion steht sowohl für einzelne Karteikarten als auch für die komplette Belegliste zur Verfügung. Beim Druck einer Belegliste werden nur die Belege gedruckt, die aktuell in der Liste erscheinen.</p>
-					<p>Aufgerufen werden kann die Druckfunktion über das Druck-Icon im Kopf der Belegliste <abbr title="beziehungsweise">bzw.</abbr> Karteikarte. Alternativ lässt sie sich auch über das Tastaturkürzel <kbd>Strg</kbd> + <kbd>P</kbd> starten (wenn Belegliste oder Karteikarte nicht durch ein anderes Fenster verdeckt werden).</p>
-					<p>Wird die Druckfunktion aufgerufen, erscheint zunächst ein Vorschaufenster. In diesem kann der Druck gestartet oder der komplette Inhalt des Vorschaufensters in die Zwischenablage kopiert werden.</p></li>
+					<li
+						><p>Es gibt nun ein separates Fenster, in dem die bisher gesammelten Bedeutungen zum jeweiligen Wort in einer Baumstruktur angezeigt werden. Geöffnet werden kann das Fenster über das Menü (<i>Kartei &gt; Bedeutungen</i>), das Tastaturkürzel <kbd>Strg</kbd> + <kbd>⇧</kbd> + <kbd>B</kbd> oder das Icon <img src="../img/quick-bedeutungen-fenster.svg" width="24" height="24" alt=""> in der Quick-Access-Bar.</p
+						><p>Die Zählung der Bedeutungsebenen beginnt vorerst mit römischen Ziffern (I., II. <abbr title="und so weiter">usw.</abbr>). Dies wird sich anpassen lassen, sobald die zentrale Bedeutungsfunktion programmiert ist.</p
+						><p>Durch Klick auf eine der Bedeutungen kann diese in eine gerade geöffnete Karteikarte im Hauptfenster eingetragen werden. Steht dort im Textfeld <i>Bedeutung</i> schon ein Wert wird dieser keinesfalls automatisch, sondern allenfalls auf Nachfrage überschrieben.</p
+						><p>Der Bedeutungsbaum kann über das Druck-Icon in der Überschrift ausgedruckt werden. Dabei wird die Druckfunktion des Hauptfensters verwendet (<abbr title="siehe unten">s. u.</abbr>).</p
+					></li>
+					<li
+						><p>Druckfunktion: Karteikarten können nun ausgedruckt werden. Die Funktion steht sowohl für einzelne Karteikarten als auch für die komplette Belegliste zur Verfügung. Beim Druck einer Belegliste werden jene Belege gedruckt, die aktuell in der Liste erscheinen.</p
+						><p>Aufgerufen werden kann die Druckfunktion über das Druck-Icon im Kopf der Belegliste <abbr title="beziehungsweise">bzw.</abbr> Karteikarte. Alternativ lässt sie sich auch über das Tastaturkürzel <kbd>Strg</kbd> + <kbd>P</kbd> starten (wenn Belegliste oder Karteikarte nicht durch ein anderes Fenster verdeckt werden).</p
+						><p>Wird die Druckfunktion aufgerufen, erscheint zunächst ein Vorschaufenster. In diesem kann der Druck gestartet oder der komplette Inhalt des Vorschaufensters in die Zwischenablage kopiert werden.</p
+					></li>
 				</ul>
 				<h3>Verbesserungen</h3>
 				<ul>
@@ -75,12 +83,16 @@
 					<li>Anstelle von <i>DejaVu</i> wird als Schriftart fortan <i>Noto</i> benutzt. (Einige im <abbr title="Deutschen Textarchiv">DTA</abbr> häufig verwendete Glyphen sind in <i>DejaVu</i> nicht vorhanden.)</li>
 					<li>Karteikarte: Die Textfelder <i>Bedeutung</i> und <i>Textsorte</i> können auf Wunsch ohne Nachfrage aus einem Dropdown-Menü heraus ergänzt werden. Eine Option dafür findet sich in <i>Programm &gt; Einstellungen &gt; Karteikarte</i>. Die Option lässt sich auch über das Meldungsfenster aktivieren, das erscheint, wenn ein Textfeld bereits gefüllt ist.</li>
 					<li>Dropdown-Menü: Immer dann, wenn der Inhalt eines Dropdown-Menüs unterhalb des Textfeldes nicht komplett angezeigt werden kann, wird das Menü automatisch über dem Textfeld geöffnet.</li>
+					<li>Anhänge und Redaktion: Nach dem Verschieben eines Eintrags wird das Pfeil-Icon des betreffenden Eintrags fokussiert. So kann ein Eintrag mithilfe von <kbd>↵</kbd> schneller und leichter über mehrere Positionen nach oben verschoben werden.</li>
+					<li><i>Kartei &gt; Zuletzt verwendet:</i> Bisher gab es nur für die ersten sechs Einträge Tastaturkürzel. Ab sofort gibt es Kürzel bis Eintrag Nummer neun.</li>
 				</ul>
 				<h3>Behobene Fehler</h3>
 				<ul>
 					<li>Viele Funktionen des Hauptfensters waren auch aus den Nebenfenstern (Handbuch, Dokumentation <abbr title="und so weiter">usw.</abbr>) heraus aufzurufen, wenn das zugehörige Tastaturkürzel gedrückt wurde. Dies könnte unerwünschte Effekte haben und wird fortan unterbunden.</li>
+					<li>Filterleiste: Die Darstellung kompliziert verschachtelter Bedeutungsbäume war mitunter grob falsch.</li>
 					<li>Karteikarte: In der Leseansicht wurde die Markierung mit Sternen fehlerhaft dargestellt.</li>
 					<li>Dropdown-Menü: Wurde mehrmals hintereinander auf denselben Schalter gedrückt, um ein Dropdown-Menü zu öffnen, funktionierte das Öffnen des Dropdowns via Tastaturkürzel mitunter nicht mehr.</li>
+					<li>Dropdown-Menü: In mehrzeiligen Feldern war der Pfeil zum Aufklappen des Menüs nicht mehr richtig zu sehen, wenn das Feld so groß geworden war, dass es eine Scrollleiste bekam.</li>
 					<li>Das Formular zur Eingabe neuer Belege <abbr title="beziehungsweise">bzw.</abbr> dessen Leseansicht wird nun durchgehend als <i>Karteikarte</i> und nicht mehr als <i>Belegzettel</i> bezeichnet.</li>
 				</ul>
 			</div>

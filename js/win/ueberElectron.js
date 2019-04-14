@@ -14,8 +14,8 @@ window.addEventListener("load", function() {
 		if (i.classList.contains("intern")) {
 			return;
 		}
-		helfer.links(i);
+		helferWin.links(i);
 	});
 	// Tastatur-Events abfangen
-	document.addEventListener("keydown", helfer.tastatur);
+	document.addEventListener("keydown", helferWin.tastatur);
 });

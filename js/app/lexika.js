@@ -106,16 +106,7 @@ let lexika = {
 		// Lexikon ergänzen und sortieren
 		le.value = "";
 		data.le.push(va);
-		data.le.sort(function(a, b) {
-			a = helfer.sortAlphaPrep(a);
-			b = helfer.sortAlphaPrep(b);
-			let x = [a, b];
-			x.sort();
-			if (x[0] === a) {
-				return -1;
-			}
-			return 1;
-		});
+		data.le.sort(helfer.sortAlpha);
 		// Liste neu aufbauen
 		lexika.auflisten();
 		// Änderungsmarkierung setzen

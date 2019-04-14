@@ -245,6 +245,8 @@ let beleg = {
 		beleg.belegGeaendert(false);
 		beleg.listeGeaendert = true;
 		kartei.karteiGeaendert(true);
+		// Bedeutungen-Fenster mit neuen Daten versorgen
+		bedeutungenwin.daten();
 	},
 	// Bearbeiten des Belegs abbrechen
 	aktionAbbrechen () {
@@ -298,6 +300,7 @@ let beleg = {
 				liste.status(true);
 				liste.wechseln();
 				beleg.listeGeaendert = false;
+				bedeutungenwin.daten();
 			}
 		});
 		dialog.text(`Soll <i>${liste.detailAnzeigenH3(id)}</i> wirklich gelöscht werden?`);

@@ -50,6 +50,8 @@ let helfer = {
 			} else if (id === "kartei-bedeutungen") { // TODO
 				dialog.oeffnen("alert", null);
 				dialog.text("Sorry!\nDiese Funktion ist noch nicht programmiert.");
+			} else if (id === "kartei-bedeutungen-fenster") {
+				bedeutungenwin.oeffnen(true);
 			} else if (id === "kartei-suche") {
 				filter.suche();
 			} else if (id === "belege-hinzufuegen") {
@@ -223,6 +225,20 @@ let helfer = {
 		});
 		helfer.sortAlphaPrepCache[s] = prep;
 		return prep;
+	},
+	// alphanumerisch sortieren
+	// (geht nur bei eindimensionalen Arrays!)
+	//   a = String
+	//   b = String
+	sortAlpha (a, b) {
+		a = helfer.sortAlphaPrep(a);
+		b = helfer.sortAlphaPrep(b);
+		let x = [a, b];
+		x.sort();
+		if (x[0] === a) {
+			return -1;
+		}
+		return 1;
 	},
 	// ein übergebenes Datum formatiert ausgeben
 	//   datum = String

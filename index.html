@@ -17,6 +17,7 @@
 		
 		<script src="js/app/anhaenge.js"></script>
 		<script src="js/app/app.js"></script>
+		<script src="js/app/bedeutungenwin.js"></script>
 		<script src="js/app/beleg.js"></script>
 		<script src="js/app/dialog.js"></script>
 		<script src="js/app/drucken.js"></script>
@@ -54,7 +55,8 @@
 			><a href="#" id="quick-kartei-lexika" class="icon-link" title="Kartei: Überprüfte Lexika"> </a
 			><a href="#" id="quick-kartei-metadaten" class="icon-link" title="Kartei: Metadaten"> </a
 			><a href="#" id="quick-kartei-redaktion" class="icon-link" title="Kartei: Redaktion"> </a
-			><a href="#" id="quick-kartei-bedeutungen" class="icon-link" title="Kartei: Bedeutungen sortieren"> </a
+			><a href="#" id="quick-kartei-bedeutungen" class="icon-link" title="Kartei: Bedeutungen"> </a
+			><a href="#" id="quick-kartei-bedeutungen-fenster" class="icon-link" title="Kartei: Bedeutungen-Fenster"> </a
 			><a href="#" id="quick-kartei-suche" class="icon-link" title="Kartei: Suche"> </a
 			><span class="quick-spacer"> </span
 			><a href="#" id="quick-belege-hinzufuegen" class="icon-link" title="Belege: Hinzufügen"> </a
@@ -166,8 +168,12 @@
 							><a href="#" class="icon-link icon-tools-kopieren" title="Text kopieren" tabindex="-1"> </a
 							><a href="#" class="icon-link icon-tools-einfuegen" title="Text einfügen" tabindex="-1"> </a></span></th>
 				</tr><tr class="beleg-form">
-					<td class="dropdown-cont"><textarea spellcheck="false" class="dropdown-feld" id="beleg-bd" tabindex="0"></textarea><a href="#" class="icon-link dropdown-link-td" title="Bedeutungen auflisten" tabindex="-1"> </a></td>
-					<td class="dropdown-cont"><textarea spellcheck="false" class="dropdown-feld" id="beleg-ts" tabindex="0"></textarea><a href="#" class="icon-link dropdown-link-td" title="Textsorten auflisten" tabindex="-1"> </a></td>
+					<td class="dropdown-cont"><textarea spellcheck="false" class="dropdown-feld" id="beleg-bd" tabindex="0"></textarea
+						><a href="#" class="dropdown-link-td" title="Bedeutungen auflisten" tabindex="-1"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m7 2v8l-3.5-3.5-1.5 1.5 6 6 6-6-1.5-1.5-3.5 3.5v-8z" fill="#212121"/></svg></a
+					></td>
+					<td class="dropdown-cont"><textarea spellcheck="false" class="dropdown-feld" id="beleg-ts" tabindex="0"></textarea
+						><a href="#" class="dropdown-link-td" title="Textsorten auflisten" tabindex="-1"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m7 2v8l-3.5-3.5-1.5 1.5 6 6 6-6-1.5-1.5-3.5 3.5v-8z" fill="#212121"/></svg></a
+					></td>
 				</tr><tr class="beleg-lese aus">
 					<td id="beleg-lese-bd"></td>
 					<td id="beleg-lese-ts"></td>
@@ -321,7 +327,8 @@
 				<div>
 					<section id="einstellungen-sec-allgemeines">
 						<p class="input-text dropdown-cont"><input type="text" value="" spellcheck="false" class="dropdown-feld" id="einstellung-bearbeiterin"
-							><a href="#" class="icon-link dropdown-link-element" title="BearbeiterInnen auflisten"> </a><label for="einstellung-bearbeiterin">BearbeiterIn auf diesem Rechner</label>
+							><a href="#" class="dropdown-link-element dropdown-link-haengend" title="BearbeiterInnen auflisten"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m7 2v8l-3.5-3.5-1.5 1.5 6 6 6-6-1.5-1.5-3.5 3.5v-8z" fill="#212121"/></svg></a
+							><label for="einstellung-bearbeiterin">BearbeiterIn auf diesem Rechner</label>
 					</section>
 					<section id="einstellungen-sec-menue" class="aus">
 						<p><input type="checkbox" id="einstellung-autoHideMenuBar"
@@ -358,7 +365,9 @@
 							<p><input type="checkbox" id="einstellung-quick-kartei-redaktion"
 								><label for="einstellung-quick-kartei-redaktion">Redaktion</label></p>
 							<p><input type="checkbox" id="einstellung-quick-kartei-bedeutungen"
-								><label for="einstellung-quick-kartei-bedeutungen">Bedeutungen sortieren</label></p>
+								><label for="einstellung-quick-kartei-bedeutungen">Bedeutungen</label></p>
+							<p><input type="checkbox" id="einstellung-quick-kartei-bedeutungen-fenster"
+								><label for="einstellung-quick-kartei-bedeutungen-fenster">Bedeutungen-Fenster</label></p>
 							<p><input type="checkbox" id="einstellung-quick-kartei-suche"
 								><label for="einstellung-quick-kartei-suche">Suche</label></p>
 							<h3>Belege</h3>
@@ -454,7 +463,8 @@
 					<div id="meta-be-liste"></div>
 					<p class="input-text dropdown-cont"
 						><input type="text" value="" spellcheck="false" class="dropdown-feld" id="meta-be"
-						><a href="#" class="icon-link dropdown-link-element" title="BearbeiterInnen auflisten"> </a><input type="button" value="Ergänzen" id="meta-be-ergaenzen"></p>
+						><a href="#" class="dropdown-link-element" title="BearbeiterInnen auflisten"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m7 2v8l-3.5-3.5-1.5 1.5 6 6 6-6-1.5-1.5-3.5 3.5v-8z" fill="#212121"/></svg></a
+						><input type="button" value="Ergänzen" id="meta-be-ergaenzen"></p>
 				</div>
 			</div>
 		</div></div>

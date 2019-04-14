@@ -61,6 +61,7 @@ let optionen = {
 			"quick-kartei-metadaten": false,
 			"quick-kartei-redaktion": false,
 			"quick-kartei-bedeutungen": false,
+			"quick-kartei-bedeutungen-fenster": false,
 			"quick-kartei-suche": false,
 			"quick-belege-hinzufuegen": false,
 			"quick-belege-auflisten": false,

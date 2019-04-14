@@ -1,6 +1,6 @@
 "use strict";
 
-let helfer = {
+let helferWin = {
 	// öffnet externe Links in einem Browser-Fenster
 	//   a = Element
 	//     (Link, auf dem geklickt wurde)

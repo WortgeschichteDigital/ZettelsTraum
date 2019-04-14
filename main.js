@@ -1,7 +1,7 @@
 "use strict";
 
 // globale Fensterobjekte
-let win, winHandbuch, winDokumentation, winUeberApp, winUeberElectron;
+let win, winBedeutungen, winHandbuch, winDokumentation, winUeberApp, winUeberElectron;
 
 // Funktionen-Container
 let appMenu, optionen, fenster;
@@ -178,10 +178,18 @@ let layoutMenu = [
 			},
 			{ type: "separator" },
 			{
-				label: "Bedeutungen sortieren",
+				label: "Bedeutungen",
 				icon: path.join(__dirname, "img", "menu", "kartei-bedeutungen.png"),
 				click: () => win.webContents.send("dialog-anzeigen", "Sorry!\nDiese Funktion ist noch nicht programmiert."), // TODO
+				accelerator: "CommandOrControl+B",
 				id: "kartei-bedeutungen",
+			},
+			{
+				label: "Bedeutungen-Fenster",
+				icon: path.join(__dirname, "img", "menu", "kartei-bedeutungen-fenster.png"),
+				click: () => fenster.erstellenBedeutungen(),
+				accelerator: "CommandOrControl+Shift+B",
+				id: "kartei-bedeutungen-fenster",
 			},
 			{ type: "separator" },
 			{
@@ -398,7 +406,7 @@ appMenu = {
 			sublabel: datei,
 			click: () => win.webContents.send("kartei-oeffnen", datei),
 		};
-		if (i <= 5) {
+		if (i <= 8) {
 			item.accelerator = `CommandOrControl+${i + 1}`;
 		}
 		zuletztVerwendet.submenu.push(item);
@@ -412,7 +420,7 @@ appMenu = {
 	},
 	// Menü-Elemente deaktivieren, wenn keine Kartei offen ist
 	deaktivieren (disable, update) {
-		let elemente = ["kartei-speichern", "kartei-speichern-unter", "kartei-formvarianten", "kartei-notizen", "kartei-anhaenge", "kartei-lexika", "kartei-metadaten", "kartei-redaktion", "kartei-bedeutungen", "kartei-suche", "kartei-schliessen", "belege"];
+		let elemente = ["kartei-speichern", "kartei-speichern-unter", "kartei-formvarianten", "kartei-notizen", "kartei-anhaenge", "kartei-lexika", "kartei-metadaten", "kartei-redaktion", "kartei-bedeutungen", "kartei-bedeutungen-fenster", "kartei-suche", "kartei-schliessen", "belege"];
 		for (let j = 0, len = layoutMenu.length; j < len; j++) {
 			// sollen vielleicht alle Menüpunkte deaktiviert werden?
 			let alle = false;
@@ -458,6 +466,27 @@ ipcMain.on("menus-deaktivieren", (evt, disable) => appMenu.deaktivieren(disable,
 // Programm-Info aufrufen, wenn der Renderer-Prozess es wünscht
 ipcMain.on("ueber-zettelstraum", (evt, opener) => fenster.erstellenUeberApp(opener));
 
+// Bedeutungen-Fenster öffnen/schließen, wenn der Renderer-Prozess es wünscht
+ipcMain.on("kartei-bedeutungen-fenster", function(evt, oeffnen) {
+	if (oeffnen) {
+		fenster.erstellenBedeutungen();
+	} else if (winBedeutungen) {
+		winBedeutungen.close();
+	}
+});
+
+// Daten an Bedeutungen-Fenster übergeben
+ipcMain.on("kartei-bedeutungen-fenster-daten", function(evt, daten) {
+	if (!winBedeutungen) {
+		return;
+	}
+	winBedeutungen.webContents.send("daten", daten);
+});
+
+// Bedeutungen vom Renderer-Prozess holen
+// TODO Das brauche ich nur für die Testphase, später übernimmt das alles der Renderer-Prozess
+ipcMain.on("bedeutungen-fenster-daten", () => win.webContents.send("kartei-bedeutungen-fenster-daten"));
+
 // Handbuch aufrufen, wenn der Renderer-Prozess es wünscht
 ipcMain.on("hilfe-handbuch", () => fenster.erstellenHandbuch());
 
@@ -474,6 +503,13 @@ optionen = {
 			height: undefined,
 			maximiert: false,
 		},
+		"fenster-bedeutungen": {
+			x: undefined,
+			y: undefined,
+			width: 650,
+			height: 600,
+			maximiert: false,
+		},
 		app: {},
 	},
 	// liest die Optionen-Datei aus
@@ -481,7 +517,13 @@ optionen = {
 		if (fs.existsSync(optionen.pfad)) {
 			const content = fs.readFileSync(optionen.pfad, "utf-8");
 			try {
-				optionen.data = JSON.parse(content);
+				const data = JSON.parse(content);
+				for (let satz in data) {
+					if (!data.hasOwnProperty(satz)) {
+						continue;
+					}
+					optionen.data[satz] = data[satz];
+				}
 			} catch (json_err) {
 				// kann die Optionen-Datei nicht eingelesen werden, ist sie wohl korrupt;
 				// dann lösche ich sie halt einfach
@@ -553,12 +595,55 @@ fenster = {
 				win.maximize();
 			}
 		});
-		// globales Fensterobjekt beim Schließen dereferenzieren
-		win.on("closed", () => win = null);
 		// Status des Fensters speichern
 		// Man könnte den Status noch zusätzlich bei den Events
 		// "resize" und "move" speichern, finde ich aber übertrieben.
-		win.on("close", fenster.status);
+		win.on("close", () => fenster.status("win"));
+		// globales Fensterobjekt beim Schließen dereferenzieren
+		win.on("closed", () => win = null);
+	},
+	// Bedeutungen-Fenster erstellen
+	erstellenBedeutungen () {
+		// Bedeutungen-Fenster ist bereits offen => Fenster fokussieren
+		if (winBedeutungen) {
+			winBedeutungen.focus();
+			return;
+		}
+		// Fenster öffnen
+		winBedeutungen = new BrowserWindow({
+			title: "Bedeutungen",
+			icon: path.join(__dirname, "img", "icon", "png", "icon_32px.png"),
+			x: optionen.data["fenster-bedeutungen"].x,
+			y: optionen.data["fenster-bedeutungen"].y,
+			width: optionen.data["fenster-bedeutungen"].width,
+			height: optionen.data["fenster-bedeutungen"].height,
+			minWidth: 600,
+			minHeight: 350,
+			show: false,
+			webPreferences: {
+				nodeIntegration: true,
+				devTools: devtools,
+				defaultEncoding: "utf-8",
+			},
+		});
+		// Menü abschalten
+		winBedeutungen.setMenuBarVisibility(false); // unpacketiert erscheint sonst ein Standardmenü
+		// HTML laden
+		winBedeutungen.loadFile(path.join(__dirname, "win", "bedeutungen.html"));
+		// Fenster anzeigen, sobald alles geladen wurde
+		winBedeutungen.once("ready-to-show", function() {
+			winBedeutungen.show();
+			// ggf. maximieren
+			if (optionen.data["fenster-bedeutungen"].maximiert) {
+				winBedeutungen.maximize();
+			}
+			// Daten aus dem Renderer-Prozess holen
+			win.webContents.send("kartei-bedeutungen-fenster-daten");
+		});
+		// Status des Fensters speichern
+		winBedeutungen.on("close", () => fenster.status("winBedeutungen"));
+		// globales Fensterobjekt beim Schließen dereferenzieren
+		winBedeutungen.on("closed", () => winBedeutungen = null);
 	},
 	// Handbuch-Fenster erstellen
 	erstellenHandbuch () {
@@ -618,7 +703,9 @@ fenster = {
 	erstellenUeberApp (opener) {
 		// Parent-Fenster ermitteln
 		let parent = win;
-		if (opener === "handbuch") {
+		if (opener === "bedeutungen") {
+			parent = winBedeutungen;
+		} else if (opener === "handbuch") {
 			parent = winHandbuch;
 		} else if (opener === "dokumentation") {
 			parent = winDokumentation;
@@ -683,15 +770,28 @@ fenster = {
 		// globales Fensterobjekt beim Schließen dereferenzieren
 		winUeberElectron.on("closed", () => winUeberElectron = null);
 	},
-	// Fenster-Status in den Optionen speichern (nur Hauptfenster)
-	status () {
-		optionen.data.fenster.maximiert = win.isMaximized();
-		const bounds = win.getBounds();
-		if (!optionen.data.fenster.maximiert && bounds) {
-			optionen.data.fenster.x = bounds.x;
-			optionen.data.fenster.y = bounds.y;
-			optionen.data.fenster.width = bounds.width;
-			optionen.data.fenster.height = bounds.height;
+	// Fenster-Status in den Optionen speichern (Haupt- und Bedeutungen-Fenster)
+	//   typ = String
+	//     ("win" für das Hauptfenster, "winBedeutungen" für das Bedeutungen-Fenster)
+	status (typ) {
+		if (typ === "win") {
+			optionen.data.fenster.maximiert = win.isMaximized();
+			const bounds = win.getBounds();
+			if (!optionen.data.fenster.maximiert && bounds) {
+				optionen.data.fenster.x = bounds.x;
+				optionen.data.fenster.y = bounds.y;
+				optionen.data.fenster.width = bounds.width;
+				optionen.data.fenster.height = bounds.height;
+			}
+		} else if (typ === "winBedeutungen") {
+			optionen.data["fenster-bedeutungen"].maximiert = winBedeutungen.isMaximized();
+			const bounds = winBedeutungen.getBounds();
+			if (!optionen.data["fenster-bedeutungen"].maximiert && bounds) {
+				optionen.data["fenster-bedeutungen"].x = bounds.x;
+				optionen.data["fenster-bedeutungen"].y = bounds.y;
+				optionen.data["fenster-bedeutungen"].width = bounds.width;
+				optionen.data["fenster-bedeutungen"].height = bounds.height;
+			}
 		}
 		optionen.schreiben();
 	},

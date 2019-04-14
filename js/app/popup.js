@@ -23,7 +23,11 @@ let popup = {
 		// Menü füllen
 		if (target === "kopieren") {
 			popup.menuKopieren(menu);
-			popup.menuBelege(menu, true);
+			if (overlay.oben() === "drucken") {
+				popup.menuSchliessen(menu, true);
+			} else {
+				popup.menuBelege(menu, true);
+			}
 		} else if (target === "textfeld") {
 			popup.menuBearbeiten(menu);
 		} else if (target === "quick") {
@@ -60,7 +64,7 @@ let popup = {
 				popup.menuBelege(menu, true);
 			}
 		} else if (target === "schliessen") {
-			popup.menuSchliessen(menu);
+			popup.menuSchliessen(menu, false);
 		} else if (target === "beleg-conf") {
 			popup.menuBelegConf(menu);
 			popup.menuBelege(menu, true);
@@ -179,11 +183,15 @@ let popup = {
 			} else if (ele.classList.contains("beleg-lese")) {
 				container_umfeld = "TD";
 				bereich = true;
+				// feststellen, ob der markierte Text Teil des Belegtexts ist
 				if (ele.querySelector("td").id === "beleg-lese-bs") {
 					bs = true;
 					obj = beleg.data;
 				}
 				break;
+			} else if (ele.id === "drucken-cont-rahmen") {
+				container_umfeld = "DIV";
+				bereich = true;
 			}
 		}
 		// ermitteln, ob sich der Rechtsklick im unmittelbaren Umfeld
@@ -412,9 +420,16 @@ let popup = {
 	// Schließen-Menü füllen
 	//   menu = Object
 	//     (Menü-Objekt, an das die Menü-Items gehängt werden müssen)
-	menuSchliessen (menu) {
+	//   separator = Boolean
+	//     (Separator einfügen)
+	menuSchliessen (menu, separator) {
 		const {MenuItem} = require("electron").remote,
 			path = require("path");
+		if (separator) {
+			menu.append(new MenuItem({
+				type: "separator",
+			}));
+		}
 		menu.append(new MenuItem({
 			label: "Fenster schließen",
 			icon: path.join(__dirname, "img", "menu", "popup-schliessen.png"),

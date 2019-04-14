@@ -17,7 +17,7 @@ let drucken = {
 			return;
 		}
 		if (oben === "drucken") {
-			print();
+			drucken.start();
 		} else if (!document.getElementById("beleg").classList.contains("aus")) {
 			drucken.init("beleg-");
 		} else {
@@ -30,9 +30,9 @@ let drucken = {
 	buttons (span) {
 		span.addEventListener("click", function() {
 			if (/drucken/.test(this.firstChild.src)) {
-				print();
+				drucken.start();
 			} else if (/kopieren/.test(this.firstChild.src)) {
-				// TODO Text kopieren (HTML und Plaintext)
+				drucken.kopieren();
 			}
 		});
 	},
@@ -183,5 +183,41 @@ let drucken = {
 	// Druckfenster mit dem Bedeutungsbaum füllen
 	initBedeutungen () {
 		// TODO
+	},
+	// Druck starten
+	start () {
+		// Liste auf "preload" setzen, sonst springt sie im Hintergrund wild rum
+		// ("preload" schaltet die Animationslänge auf 0 Sekunden)
+		document.getElementById("liste").classList.add("preload");
+		// Druckfunktion triggern
+		print();
+	},
+	// Text aus der Vorschau kopieren
+	kopieren () {
+		// clipboard initialisieren
+		const {clipboard} = require("electron"),
+			cont = document.getElementById("drucken-cont");
+		// Ist Text ausgewählt und ist er im Bereich der Vorschau?
+		if (window.getSelection().toString() &&
+				popup.getTargetSelection([cont])) {
+			let html = helfer.clipboardHtml(popup.textauswahl.html);
+			clipboard.write({
+				text: popup.textauswahl.text,
+				html: html,
+			});
+			return;
+		}
+		// Kein Text ausgewählt => die gesamte Vorschau wird kopiert
+		let html = cont.innerHTML;
+		html = helfer.clipboardHtml(html);
+		// Text aufbereiten (Karten nur basal aufbereiten)
+		let text = cont.innerHTML.replace(/<\/h3>|<\/p>|<\/tr>/g, "\n\n");
+		text = text.replace(/<.+?>/g, "");
+		text = text.replace(/&nbsp;/g, " ");
+		// HTML und Text kopieren
+		clipboard.write({
+			text: text,
+			html: html,
+		});
 	},
 };

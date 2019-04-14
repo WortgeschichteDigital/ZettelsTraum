@@ -64,6 +64,8 @@ let kartei = {
 		liste.aufbauen(true);
 		// alle Overlays schließen
 		overlay.alleSchliessen();
+		// Bedeutungen-Fenster schließen
+		bedeutungenwin.oeffnen(false);
 		// neue Karte erstellen
 		beleg.erstellen();
 	},
@@ -131,6 +133,8 @@ let kartei = {
 			kartei.karteiGeaendert(false);
 			// alle Overlays schließen
 			overlay.alleSchliessen();
+			// Bedeutungen-Fenster schließen
+			bedeutungenwin.oeffnen(false);
 			// alle Filter zurücksetzen (wichtig für Text- und Zeitraumfilter)
 			filter.ctrlReset(false);
 			// Okay! Datei kann eingelesen werden
@@ -237,6 +241,7 @@ let kartei = {
 		beleg.belegGeaendert(false);
 		kartei.karteiGeaendert(false);
 		overlay.alleSchliessen();
+		bedeutungenwin.oeffnen(false);
 		data = {};
 		kartei.wort = "";
 		kartei.pfad = "";
@@ -299,6 +304,7 @@ let kartei = {
 				data.fv = [];
 				stamm.dtaGet(false);
 				kartei.wortEintragen();
+				bedeutungenwin.daten();
 			} else if (dialog.antwort && !wort) {
 				dialog.oeffnen("alert", null);
 				dialog.text("Sie müssen ein Wort eingeben, sonst kann das bestehende nicht geändert werden.");

@@ -22,16 +22,7 @@ let dropdown = {
 				}
 			}
 		}
-		dropdown.data.sort(function(a, b) {
-			a = helfer.sortAlphaPrep(a);
-			b = helfer.sortAlphaPrep(b);
-			let arr = [a, b];
-			arr.sort();
-			if (arr[0] === a) {
-				return -1;
-			}
-			return 1;
-		});
+		dropdown.data.sort(helfer.sortAlpha);
 	},
 	// Timeouts für Events im Textfeld
 	timeoutBlur: null,
@@ -152,13 +143,19 @@ let dropdown = {
 			span.appendChild(opt);
 		}
 		// Dropdown positionieren
-		span.style.left = `${inp_text.offsetLeft}px`;
-		span.style.maxWidth = `${inp_text.parentNode.offsetWidth - 12}px`; // 12px padding und border
-		const rect = inp_text.getBoundingClientRect();
-		if (rect.top + rect.height + span.offsetHeight > window.innerHeight) {
-			span.style.top = `-${span.offsetHeight + 4}px`;
+		dropdown.position();
+	},
+	// Dropdown korrekt positionieren
+	position () {
+		const drop = document.getElementById("dropdown"),
+			feld = drop.parentNode.querySelector(".dropdown-feld");
+		drop.style.left = `${feld.offsetLeft}px`;
+		drop.style.maxWidth = `${feld.parentNode.offsetWidth - 12}px`; // 12px padding und border
+		const rect = feld.getBoundingClientRect();
+		if (rect.top + rect.height + drop.offsetHeight + 5 > window.innerHeight) { // 5px hinzuzählen, damit unten immer ein bisschen Absatz bleibt
+			drop.style.top = `-${drop.offsetHeight + 4}px`;
 		} else {
-			span.style.top = `${inp_text.offsetHeight + 4}px`;
+			drop.style.top = `${feld.offsetHeight + 4}px`;
 		}
 	},
 	// Wenn >= 0 heißt das, dass die Dropdownliste gefiltert wurde. Sie ist also
@@ -217,6 +214,8 @@ let dropdown = {
 			dropdown.auswahlKlick(opt);
 			drop.appendChild(opt);
 		});
+		// Dropdown positionieren
+		dropdown.position();
 	},
 	// Tastatur-Navigation in der Dropdown-Liste
 	//   tastaturcode = Number

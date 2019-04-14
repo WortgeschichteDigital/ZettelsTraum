@@ -172,6 +172,10 @@ li {
 	margin-bottom: 5px;
 }
 
+li img {
+	vertical-align: bottom;
+}
+
 li p {
 	margin-bottom: 5px;
 }
