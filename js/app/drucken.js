@@ -36,7 +36,7 @@ let drucken = {
 			}
 		});
 	},
-	// Druckanzeige initialisieren
+	// Druckanzeige initialisieren (nur für Karteikarte und Belegliste)
 	//   id = String
 	//     (ID des Links, über den gedruckt wurde)
 	init (id) {
@@ -46,18 +46,14 @@ let drucken = {
 			return;
 		}
 		// Verteiler
-		if (/^(liste|beleg)-/.test(id)) {
-			drucken.getIds(id);
-			if (!drucken.kartenIds.length) { // keine Karteikarten, die gedruckt werden können
-				setTimeout(() => overlay.schliessen(fenster), 0); // ohne Timeout wird es nicht ausgeblendet
-				dialog.oeffnen("alert", null);
-				dialog.text("In der Belegliste sind keine Karteikarten, die gedruckt werden könnten.");
-				return;
-			}
-			drucken.fillKarten();
-		} else if (false) {
-			drucken.initBedeutungen();
+		drucken.getIds(id);
+		if (!drucken.kartenIds.length) { // keine Karteikarten, die gedruckt werden können
+			setTimeout(() => overlay.schliessen(fenster), 0); // ohne Timeout wird es nicht ausgeblendet
+			dialog.oeffnen("alert", null);
+			dialog.text("In der Belegliste sind keine Karteikarten, die gedruckt werden könnten.");
+			return;
 		}
+		drucken.fillKarten();
 	},
 	// Datenfelder der Karten, die gedruckt werden sollen
 	kartenFelder: [
@@ -181,8 +177,31 @@ let drucken = {
 		});
 	},
 	// Druckfenster mit dem Bedeutungsbaum füllen
-	initBedeutungen () {
-		// TODO
+	//   daten = String
+	//     (die HTML-Daten der Bedeutungen, die eingetragen werden sollen
+	initBedeutungen (daten) {
+		// Sind überhaupt Bedeutungen vorhanden
+		if (/class="bd-win-keine"/.test(daten)) {
+			dialog.oeffnen("alert", null);
+			dialog.text("Es gibt keine Bedeutungen, die gedruckt werden könnten.");
+			return;
+		}
+		// Fenster öffnen od. in den Vordergrund holen
+		const fenster = document.getElementById("drucken");
+		overlay.oeffnen(fenster);
+		// Content leeren
+		const cont = document.getElementById("drucken-cont");
+		helfer.keineKinder(cont);
+		cont.scrollTop = 0;
+		// Daten eintragen
+		cont.innerHTML = daten;
+		// Überschrift ergänzen
+		let h3 = document.createElement("h3");
+		h3.textContent = "Bedeutungen ";
+		let i = document.createElement("i");
+		i.textContent = kartei.wort;
+		h3.appendChild(i);
+		cont.firstChild.insertBefore(h3, cont.firstChild.firstChild);
 	},
 	// Druck starten
 	start () {
@@ -195,29 +214,78 @@ let drucken = {
 	// Text aus der Vorschau kopieren
 	kopieren () {
 		// clipboard initialisieren
-		const {clipboard} = require("electron"),
-			cont = document.getElementById("drucken-cont");
+		const {clipboard} = require("electron");
+		// Bedeutungsbaum?
+		let cont = document.getElementById("drucken-cont"),
+			baum = false;
+		if (cont.firstChild.id === "bd-win-cont") {
+			baum = true;
+		}
 		// Ist Text ausgewählt und ist er im Bereich der Vorschau?
 		if (window.getSelection().toString() &&
 				popup.getTargetSelection([cont])) {
 			let html = helfer.clipboardHtml(popup.textauswahl.html);
+			if (baum) {
+				html = baumHtml(html);
+			}
+			let text = popup.textauswahl.text;
+			if (baum) {
+				text = baumText(popup.textauswahl.html);
+				text = cleanText(text);
+			}
 			clipboard.write({
-				text: popup.textauswahl.text,
+				text: text,
 				html: html,
 			});
 			return;
 		}
+		// in der Baumansicht den umschließenden <div> ignorieren
+		if (baum) {
+			cont = cont.firstChild;
+		}
 		// Kein Text ausgewählt => die gesamte Vorschau wird kopiert
 		let html = cont.innerHTML;
+		if (baum) {
+			html = baumHtml(html);
+		}
 		html = helfer.clipboardHtml(html);
-		// Text aufbereiten (Karten nur basal aufbereiten)
-		let text = cont.innerHTML.replace(/<\/h3>|<\/p>|<\/tr>/g, "\n\n");
-		text = text.replace(/<.+?>/g, "");
-		text = text.replace(/&nbsp;/g, " ");
+		// Text aufbereiten (Karten nur basal aufbereiten, Bedeutungsbaum schöner)
+		let text = cont.innerHTML;
+		if (baum) {
+			text = baumText(text);
+		} else {
+			text = text.replace(/<\/h3>|<\/p>|<\/tr>/g, "\n\n");
+		}
+		text = cleanText(text);
 		// HTML und Text kopieren
 		clipboard.write({
 			text: text,
 			html: html,
 		});
+		// Funktionen zum Aufbereiten des Bedeutungsbaums
+		function baumHtml (html) {
+			html = html.replace(/<\/b>/g, "</b> ");
+			html = html.replace(/<div.+?data-bd="(.+?)".*?><p>/g, function(m, p1) {
+				let ebenen = p1.split(": ").length - 1;
+				return `<div><p style="margin-left: ${0.5 * ebenen}cm">`;
+			});
+			return html;
+		}
+		function baumText (text) {
+			text = text.replace(/<\/h3>/, "\n\n");
+			text = text.replace(/<\/b>/g, " ");
+			text = text.replace(/<\/p>/g, "\n");
+			text = text.replace(/<div.+?data-bd="(.+?)".*?>/g, function(m, p1) {
+				let ebenen = p1.split(": ").length,
+					tabs = "".padEnd(ebenen - 1, "\t");
+				return tabs;
+			});
+			return text;
+		}
+		function cleanText (text) {
+			text = text.replace(/<.+?>/g, "");
+			text = text.replace(/&nbsp;/g, " ");
+			return text;
+		}
 	},
 };

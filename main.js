@@ -483,9 +483,17 @@ ipcMain.on("kartei-bedeutungen-fenster-daten", function(evt, daten) {
 	winBedeutungen.webContents.send("daten", daten);
 });
 
-// Bedeutungen vom Renderer-Prozess holen
-// TODO Das brauche ich nur für die Testphase, später übernimmt das alles der Renderer-Prozess
-ipcMain.on("bedeutungen-fenster-daten", () => win.webContents.send("kartei-bedeutungen-fenster-daten"));
+// Druckauftrag aus dem Bedeutungen-Fenster an den Renderer-Prozess schicken
+ipcMain.on("bedeutungen-fenster-drucken", function(evt, daten) {
+	win.webContents.send("bedeutungen-fenster-drucken", daten);
+	win.focus();
+});
+
+// angeklickte Bedeutung aus dem Bedeutungen-Fenster an den Renderer-Prozess schicken
+ipcMain.on("bedeutungen-fenster-eintragen", function(evt, bd) {
+	win.webContents.send("bedeutungen-fenster-eintragen", bd);
+	win.focus();
+});
 
 // Handbuch aufrufen, wenn der Renderer-Prozess es wünscht
 ipcMain.on("hilfe-handbuch", () => fenster.erstellenHandbuch());
@@ -617,7 +625,7 @@ fenster = {
 			y: optionen.data["fenster-bedeutungen"].y,
 			width: optionen.data["fenster-bedeutungen"].width,
 			height: optionen.data["fenster-bedeutungen"].height,
-			minWidth: 600,
+			minWidth: 350,
 			minHeight: 350,
 			show: false,
 			webPreferences: {

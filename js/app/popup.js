@@ -161,13 +161,16 @@ let popup = {
 		const sel = window.getSelection();
 		let bereich = false,
 			ele = sel.anchorNode,
-			container_umfeld = "",
 			bs = false, // true, wenn die Textauswahl innerhalb des Belegs ist
 			obj = {};
+		let container = {
+			umfeld: "",
+			id: "",
+		};
 		while (ele.nodeName !== "BODY") {
 			ele = ele.parentNode;
 			if (ele.classList.contains("liste-details")) {
-				container_umfeld = "DIV";
+				container.umfeld = "DIV";
 				bereich = true;
 				// feststellen, ob der markierte Text Teil des Belegtexts ist
 				let div = sel.anchorNode;
@@ -181,7 +184,7 @@ let popup = {
 				obj = data.ka[id];
 				break;
 			} else if (ele.classList.contains("beleg-lese")) {
-				container_umfeld = "TD";
+				container.umfeld = "TD";
 				bereich = true;
 				// feststellen, ob der markierte Text Teil des Belegtexts ist
 				if (ele.querySelector("td").id === "beleg-lese-bs") {
@@ -190,7 +193,8 @@ let popup = {
 				}
 				break;
 			} else if (ele.id === "drucken-cont-rahmen") {
-				container_umfeld = "DIV";
+				container.umfeld = "DIV";
+				container.id = "drucken-cont-rahmen";
 				bereich = true;
 			}
 		}
@@ -199,7 +203,7 @@ let popup = {
 		let umfeld = false;
 		if (bereich) {
 			let ele = sel.anchorNode;
-			while (ele.nodeName !== container_umfeld) {
+			while (!(ele.nodeName === container.umfeld && (!container.id || ele.id === container.id))) {
 				ele = ele.parentNode;
 			}
 			if (ele.contains(pfad[0])) {

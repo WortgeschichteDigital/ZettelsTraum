@@ -6,12 +6,18 @@ let bedeutungencont = {
 		// Wort eintragen
 		document.querySelector("h1").textContent = daten.wort;
 		// Content leeren
-		const cont = document.getElementById("bedeutungen");
+		const cont = document.getElementById("bd-win-cont");
 		helfer.keineKinder(cont);
-		// zaehlungenzählung zurücksetzen
-		bedeutungencont.zaehlungen = [];
-		// Bedeutungen aufbauen
+		// Sind überhaupt Bedeutungen vorhanden?
 		const bd = daten.bedeutungen.bd_folge;
+		if (!bd.length) {
+			let p = document.createElement("p");
+			p.classList.add("bd-win-keine");
+			p.textContent = "keine Bedeutungen";
+			cont.appendChild(p);
+			return;
+		}
+		// Bedeutungen aufbauen
 		for (let i = 0, len = bd.length; i < len; i++) {
 			const neue_bd = bedeutungencont.aufbauenLi(bd[i], daten.bedeutungen.bd[bd[i]]);
 			// in Bedeutungsbaum einhängen
@@ -24,6 +30,8 @@ let bedeutungencont = {
 				cont.appendChild(neue_bd[0]);
 			}
 		}
+		// Zählung eintragen
+		bedeutungencont.zaehlung();
 		// sucht das <div>, in den eine Bedeutung verschachtelt werden muss
 		function schachtelFinden(bd) {
 			// Bedeutung kürzen
@@ -61,48 +69,66 @@ let bedeutungencont = {
 		// Listen-Item erzeugen
 		let div = document.createElement("div"),
 			p = document.createElement("p");
+		bedeutungencont.eintragen(p);
 		div.appendChild(p);
-		div.classList.add("baum");
+		div.classList.add("bd-win-baum");
 		div.dataset.bd = bd;
-		// Zählung anhängen
-		bedeutungencont.zaehlung(p, baum_tiefe);
+		// Element für Zählung vorbereiten
+		let b = document.createElement("b");
+		b.textContent = " ";
+		p.appendChild(b);
 		// Bedeutungstext anhängen
 		p.appendChild(document.createTextNode(obj.name));
 		// Fragment zurückgeben
 		return [div, baum_tiefe];
 	},
-	// speichert die letzte Zählung der jeweiligen Verschachtelungstiefe
-	zaehlungen: [],
-	zaehlungenTiefe: [
-		["I.", "II.", "III.", "IV.", "V.", "VI.", "VII.", "VIII.", "IX.", "X.", "XI.", "XII.", "XIII.", "XIV.", "XV."],
-		["1)", "2)", "3)", "4)", "5)", "6)", "7)", "8)", "9)", "10)", "11)", "12)", "13)", "14)", "15)"],
-		["a)", "b)", "c)", "d)", "e)", "f)", "g)", "h)", "i)", "j)", "k)", "l)", "m)", "n)", "o)"],
-		["α)", "β)", "γ)", "δ)", "ε)", "ζ)", "η)", "θ)", "ι)", "κ)", "λ)", "μ)", "ν)", "ξ)", "ο)"],
+	// Zählzeichen
+	zaehlzeichen: [
+		["I.", "II.", "III.", "IV.", "V.", "VI.", "VII.", "VIII.", "IX.", "X.", "XI.", "XII.", "XIII.", "XIV.", "XV.", "XVI.", "XVII.", "XVIII.", "IX.", "XX."],
+		["1)", "2)", "3)", "4)", "5)", "6)", "7)", "8)", "9)", "10)", "11)", "12)", "13)", "14)", "15)", "16)", "17)", "18)", "19)", "20)"],
+		["a)", "b)", "c)", "d)", "e)", "f)", "g)", "h)", "i)", "j)", "k)", "l)", "m)", "n)", "o)", "p)", "q)", "r)", "s)", "t)"],
+		["α)", "β)", "γ)", "δ)", "ε)", "ζ)", "η)", "θ)", "ι)", "κ)", "λ)", "μ)", "ν)", "ξ)", "ο)", "π)", "ρ)", "σ)", "τ)", "υ)"],
 		Array(15).fill("•"),
 		Array(15).fill("◦"),
-		Array(15).fill("‣"),
-		Array(15).fill("⁃"),
 	],
-	// Zählung anhängen
-	//   div = Element
-	//     (der Container, an den die Zählung angehängt werden soll)
-	//   baum_tiefe = Number
-	//     (die Verschachtelungstiefe)
-	zaehlung (div, baum_tiefe) {
-		// hochzählen
-		if (!bedeutungencont.zaehlungen[baum_tiefe]) {
-			bedeutungencont.zaehlungen[baum_tiefe] = 0;
-		}
-		bedeutungencont.zaehlungen[baum_tiefe]++;
-		// alle höheren zaehlungen löschen
-		bedeutungencont.zaehlungen.fill(0, baum_tiefe + 1);
-		// zaehlungenanzeige erzeugen
-		let b = document.createElement("b");
-		let zeichen = "*";
-		if (bedeutungencont.zaehlungenTiefe[baum_tiefe]) {
-			zeichen = bedeutungencont.zaehlungenTiefe[baum_tiefe][bedeutungencont.zaehlungen[baum_tiefe] - 1];
-		}
-		b.textContent = zeichen;
-		div.appendChild(b);
+	zaehlung () {
+		let zaehlungen = [];
+		document.querySelectorAll("b").forEach(function(b) {
+			// Verschachtelungstiefe ermitteln
+			let ebene = -1,
+				knoten = b.parentNode.parentNode;
+			do {
+				ebene++;
+				knoten = knoten.parentNode;
+			} while (knoten.classList.contains("bd-win-baum"));
+			// hochzählen
+			if (!zaehlungen[ebene]) {
+				zaehlungen[ebene] = 0;
+			}
+			zaehlungen[ebene]++;
+			// alle höheren Zählungen löschen
+			zaehlungen.fill(0, ebene + 1);
+			// Zählzeichen ermitteln erzeugen
+			let zeichen = "–";
+			if (bedeutungencont.zaehlzeichen[ebene]) {
+				zeichen = bedeutungencont.zaehlzeichen[ebene][zaehlungen[ebene] - 1];
+			}
+			b.textContent = zeichen;
+		});
+	},
+	// Bedeutungsbaum drucken
+	drucken () {
+		const {ipcRenderer} = require("electron");
+		ipcRenderer.send("bedeutungen-fenster-drucken", document.getElementById("bd-win-cont").outerHTML);
+	},
+	// Bedeutung im Formular des Hauptfensters eintragen
+	//   p = Element
+	//     (der Absatz, auf den geklickt wurde)
+	eintragen (p) {
+		p.addEventListener("click", function() {
+			const bd = this.parentNode.dataset.bd,
+				{ipcRenderer} = require("electron");
+			ipcRenderer.send("bedeutungen-fenster-eintragen", bd);
+		});
 	},
 };

@@ -208,6 +208,8 @@ window.addEventListener("load", function() {
 		dialog.oeffnen("alert", null);
 		dialog.text(text);
 	});
+	ipcRenderer.on("bedeutungen-fenster-drucken", (evt, daten) => drucken.initBedeutungen(daten));
+	ipcRenderer.on("bedeutungen-fenster-eintragen", (evt, bd) => beleg.bedeutungEintragen(bd));
 	
 	// SYNCHRONE ANFRAGEN AN DEN MAIN-PROZESS STELLEN
 	// Optionen laden

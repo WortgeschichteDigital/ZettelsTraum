@@ -21,9 +21,13 @@ let helferWin = {
 			let win = remote.getCurrentWindow();
 			win.close();
 		}
-		// Cursor hoch (↑), runter (↓)
+		// Cursor hoch (↑), runter (↓) (nur in Hilfefenstern)
 		if (typeof hilfe !== "undefined" && (evt.which === 38 || evt.which === 40)) {
 			hilfe.naviMenue(evt.which);
+		}
+		// Strg + P (nur im Bedeutungen-Fenster)
+		if (typeof bedeutungencont !== "undefined" && evt.ctrlKey && evt.which === 80) {
+			bedeutungencont.drucken();
 		}
 	},
 };

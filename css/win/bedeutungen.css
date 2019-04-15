@@ -6,6 +6,9 @@
 /* Fonts ---------------------------------------- */
 @import url(../fonts.css);
 
+/* Bedeutungenbaum ------------------------------ */
+@import url(../bedeutungenbaum.css);
+
 /* Struktur-Elemente ---------------------------- */
 body {
 	margin: 0;
@@ -18,6 +21,7 @@ body > header {
 	position: fixed;
 	top: 0;
 	left: 0;
+	z-index: 1;
 	border-bottom: 10px solid #fff;
 	padding: 0 10px;
 	width: calc(100% - 20px);
@@ -34,19 +38,24 @@ body > header h1 {
 	line-height: 60px;
 }
 
+/* Abweichend von Styles in anderen Fenstern. Das Bedeutungen-Fenster
+   darf sehr schmal werden; da muss es einen Fallback geben. */
 #icon {
 	position: absolute;
 	top: 6px;
-	right: 10px;
+	right: 0;
+	padding: 0 10px;
+	background-color: var(--farbe);
 }
 
 main {
 	margin-top: 70px;
-	padding: 0 10px 10px 10px;
+	padding: 0 10px 20px 10px;
 }
 
 /* Basis-Elemente ------------------------------- */
 h2 {
+	position: relative;
 	margin: 80px 0 15px 0;
 	color: var(--textFarbe);
 	font-size: 24px;
@@ -55,38 +64,33 @@ h2 {
 	line-height: 38px;
 }
 
-/* Bedeutungsbaum ------------------------------- */
-.baum p {
-	margin: 0;
-	padding-left: 36px;
-	text-indent: -36px;
-}
-
-.baum > .baum {
-	margin: 0 0 0 18px;
-	border-left: 1px dotted var(--linie);
-	padding: 5px 0 5px 18px;
-}
-
-.baum > .baum:last-child {
-	padding-bottom: 0;
-}
-
-.baum + .baum {
-	padding-top: 0;
-}
-
-#bedeutungen > div {
-	padding: 5px 0 0 0;
-}
-
-#bedeutungen > div:first-child {
-	padding-top: 0;
-}
-
-b {
+h2 a {
+	position: absolute;
+	right: 0;
+	bottom: 4px;
 	display: inline-block;
-	width: 36px;
+	border-radius: 3px;
+	width: 24px;
+	height: 24px;
+	padding: 0 5px;
+	background-color: var(--hintergrund);
+	color: var(--text);
+	text-decoration: none;
+	cursor: default;
+}
+
+h2 svg {
+	vertical-align: top;
+}
+
+/* Bedeutungenbaum ------------------------------- */
+p.bd-win-keine {
+	margin: 0;
+	color: var(--textSehrHell);
+	font-style: italic;
 	text-align: center;
-	text-indent: 0;
+}
+
+.bd-win-baum p:hover {
+	color: var(--farbe);
 }

@@ -970,7 +970,6 @@ let beleg = {
 						(this.id === "beleg-bd" || this.id === "beleg-ts")) {
 					return;
 				}
-				helfer.inputBlur();
 				beleg.aktionSpeichern();
 			}
 		});
@@ -1577,5 +1576,27 @@ let beleg = {
 			link.classList.remove("aktiv");
 			link.title = "Silbentrennung anzeigen";
 		}
+	},
+	// trägt eine Bedeutung ein, die aus dem Bedeutungen-Fenster
+	// an das Hauptfenster geschickt wurde
+	//   bd = String
+	//     (die Bedeutung)
+	bedeutungEintragen (bd) {
+		// Karteikarte ist nicht offen
+		if (document.getElementById("beleg").classList.contains("aus")) {
+			dialog.oeffnen("alert", null);
+			dialog.text("Es ist keine Karteikarte geöffnet, in die die Bedeutung eingetragen werden könnte.");
+			return;
+		}
+		// Karteikarte ist in der Leseansicht
+		if (document.getElementById("beleg-link-leseansicht").classList.contains("aktiv")) {
+			dialog.oeffnen("alert", null);
+			dialog.text("Die Karteikarte befindet sich in der Leseansicht.\nDie Bedeutung kann aber nur eingetragen werden, wenn sie sich in der Formularansicht befindet.");
+			return;
+		}
+		// Bedeutung an die Dropdown-Funktion übergeben, die entscheiden soll, wie verfahren wird
+		dropdown.caller = "beleg-bd";
+		dropdown.cursor = -1;
+		dropdown.auswahl(document.getElementById("beleg-bd"), bd);
 	},
 };

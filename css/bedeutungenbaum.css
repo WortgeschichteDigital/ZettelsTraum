@@ -1,0 +1,37 @@
+@charset "utf-8";
+
+.bd-win-baum p {
+	margin: 0;
+	padding-left: 37px;
+	width: fit-content;
+	text-indent: -37px;
+}
+
+.bd-win-baum > .bd-win-baum {
+	margin: 0 0 0 18px;
+	border-left: 1px dotted var(--linie);
+	padding: 5px 0 5px 18px;
+}
+
+.bd-win-baum > .bd-win-baum:last-child {
+	padding-bottom: 0;
+}
+
+.bd-win-baum + .bd-win-baum {
+	padding-top: 0;
+}
+
+#bd-win-cont > div {
+	padding: 5px 0 0 0;
+}
+
+#bd-win-cont > div:first-child {
+	padding-top: 0;
+}
+
+.bd-win-baum b {
+	display: inline-block;
+	width: 37px;
+	text-align: center;
+	text-indent: 0;
+}

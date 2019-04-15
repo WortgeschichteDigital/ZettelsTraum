@@ -622,17 +622,22 @@ let liste = {
 		if (!bedeutung) {
 			return;
 		}
-		// <div> für Bedeutung wird erstellt
-		let div = document.createElement("div"),
-			span = document.createElement("span"),
-			p = document.createElement("p");
+		// <div> für Bedeutung
+		let div = document.createElement("div");
+		cont.appendChild(div);
 		div.classList.add("liste-bd", "liste-label");
+		// Label erstellen
+		let span = document.createElement("span");
+		div.appendChild(span);
 		span.classList.add("liste-label");
 		span.textContent = "Bedeutung";
-		div.appendChild(span);
-		p.innerHTML = liste.suchtreffer(bedeutung.replace(/\n/g, "<br>"), "bd");
-		div.appendChild(p);
-		cont.appendChild(div);
+		// Absätze erzeugen
+		let p_prep = bedeutung.split("\n");
+		for (let i = 0, len = p_prep.length; i < len; i++) {
+			let p = document.createElement("p");
+			p.innerHTML = liste.suchtreffer(p_prep[i], "bd");
+			div.appendChild(p);
+		}
 	},
 	// erstellt den Absatz mit der Quellenangabe
 	//   id = String
@@ -681,17 +686,22 @@ let liste = {
 		if (!textsorte) {
 			return;
 		}
-		// <div> für Textsorte wird erstellt
-		let div = document.createElement("div"),
-			span = document.createElement("span"),
-			p = document.createElement("p");
+		// <div> für Textsorte
+		let div = document.createElement("div");
+		cont.appendChild(div);
 		div.classList.add("liste-ts", "liste-label");
+		// Label erstellen
+		let span = document.createElement("span");
+		div.appendChild(span);
 		span.classList.add("liste-label");
 		span.textContent = "Textsorte";
-		div.appendChild(span);
-		p.innerHTML = liste.suchtreffer(textsorte.replace(/\n/g, "<br>"), "ts");
-		div.appendChild(p);
-		cont.appendChild(div);
+		// Absätze erzeugen
+		let p_prep = textsorte.split("\n");
+		for (let i = 0, len = p_prep.length; i < len; i++) {
+			let p = document.createElement("p");
+			p.innerHTML = liste.suchtreffer(p_prep[i], "ts");
+			div.appendChild(p);
+		}
 	},
 	// erstellt die Anzeige der Notizen unterhalb der Quelle
 	//   notizen = String

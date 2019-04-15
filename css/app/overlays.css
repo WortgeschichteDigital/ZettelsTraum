@@ -1,5 +1,8 @@
 @charset "utf-8";
 
+/* Bedeutungenbaum ------------------------------ */
+@import url(../bedeutungenbaum.css);
+
 /* Alle Overlay-Fenster ------------------------- */
 #anhaenge,
 #dialog,
@@ -782,4 +785,8 @@ input[id^="redaktion-person"] {
 #drucken-cont .dta-antiqua {
 	font-family: "Noto Sans", sans-serif;
 	font-size: 100%;
+}
+
+#drucken-cont .bd-win-baum {
+	border-color: transparent;
 }

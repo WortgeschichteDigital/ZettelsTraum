@@ -347,12 +347,10 @@ let helfer = {
 		// Strg + P (wenn kein Overlay)
 		if (evt.ctrlKey && evt.which === 80) {
 			drucken.tastatur();
-			return;
 		}
 		// Strg + U (wenn im Beleg)
 		if (evt.ctrlKey && evt.which === 85 && helfer.belegOffen()) {
 			beleg.leseToggle(true);
-			return;
 		}
 		// Strg + T (wenn im Beleg)
 		if (evt.ctrlKey && evt.which === 84 && helfer.belegOffen()) {

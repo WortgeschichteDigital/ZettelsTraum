@@ -268,6 +268,7 @@ let dropdown = {
 		});
 	},
 	// ausgewählten Text in das Input-Feld eintragen
+	// Obacht! Die Funktion wird auch von beleg.bedeutungEintragen() genutzt.
 	//   feld = Element
 	//     (das Input-Feld, zu dem das Dropdown gehört)
 	//   text = String

@@ -10,10 +10,6 @@ let bedeutungenwin = {
 			ipcRenderer.send("kartei-bedeutungen-fenster", false);
 		}
 	},
-	// enthält die Bedeutungen, wie sie zuletzt an das Bedeutungen-Fenster
-	// geschickt wurden; so können sie mit den neuen verglichen werden, was
-	// das Senden mitunter unnötig macht.
-	datenBak: "",
 	// Daten zusammentragen und an das Bedeutungen-Fenster schicken
 	daten () {
 		// Daten zusammentragen
@@ -21,12 +17,6 @@ let bedeutungenwin = {
 			wort: kartei.wort,
 			bedeutungen: bedeutungenwin.get(),
 		};
-		// Müssen die Daten wirklich gesendet werden?
-		// TODO Kontrollstruktur einstellen, sobald die Tests vorbei sind
-		if (false && JSON.stringify(daten) === bedeutungenwin.datenBak) {
-			return;
-		}
-		bedeutungenwin.datenBak = JSON.stringify(daten);
 		// Daten senden
 		const {ipcRenderer} = require("electron");
 		ipcRenderer.send("kartei-bedeutungen-fenster-daten", daten);
