@@ -9,7 +9,7 @@
 	padding: 15px;
 	width: calc(100% - 104px);
 	min-width: 500px;
-	max-width: 1000px;
+	max-width: 850px;
 	background-color: var(--hintergrund);
 }
 
@@ -112,7 +112,6 @@
 
 #beleg textarea {
 	margin: 0 auto;
-	max-width: 800px;
 	max-height: 192px;
 	min-height: 48px;
 }

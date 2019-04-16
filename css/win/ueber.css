@@ -154,6 +154,10 @@ section.changelog h2 + div {
 	color: var(--textHell);
 }
 
+.obacht {
+	color: var(--textWarnung);
+}
+
 h3 {
 	margin: 10px 0 5px 0;
 	color: var(--textFarbe);

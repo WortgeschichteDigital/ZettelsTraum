@@ -61,6 +61,17 @@ let filter = {
 				},
 				filter_folge: ["bedeutungen-undefined"],
 			},
+			korpora: {
+				name: "Korpora",
+				filter_vorhanden: belege.length ? true : false,
+				filter: {
+					"korpora-undefined": {
+						name: "(nicht bestimmt)",
+						wert: 0,
+					},
+				},
+				filter_folge: ["korpora-undefined"],
+			},
 			textsorten: {
 				name: "Textsorten",
 				filter_vorhanden: belege.length ? true : false,
@@ -106,17 +117,23 @@ let filter = {
 				],
 			},
 		};
-		let baeume = [{
+		let baeume = [
+			{
 				data: "bd",
 				typen: "bedeutungen",
 			},
 			{
+				data: "kr",
+				typen: "korpora",
+			},
+			{
 				data: "ts",
 				typen: "textsorten",
-			}];
+			},
+		];
 		for (let x = 0, len = belege.length; x < len; x++) {
 			let id = belege[x];
-			// BEDEUTUNGEN UND TEXTSORTEN
+			// BEDEUTUNGEN, KORPORA UND TEXTSORTEN
 			for (let i = 0, len = baeume.length; i < len; i++) {
 				let d = baeume[i].data,
 					t = baeume[i].typen;
@@ -175,8 +192,8 @@ let filter = {
 				filter.typen.verschiedenes.filter_vorhanden = true;
 			}
 		}
-		// Bedeutungen und Textsorten sortieren
-		let arr_typen = ["bedeutungen", "textsorten"];
+		// Bedeutungen, Korpora und Textsorten sortieren
+		let arr_typen = ["bedeutungen", "korpora", "textsorten"];
 		for (let i = 0, len = arr_typen.length; i < len; i++) {
 			let arr = filter.typen[arr_typen[i]].filter_folge;
 			arr.sort(filter.baumSort);
@@ -360,12 +377,13 @@ let filter = {
 		});
 	},
 	// extrahiert die einzelnen Schichten, die in einer Bedeutungs- oder Textsortenangabe stecken
+	// (wird auch für die Korpora benutzt, weil es so leichter ist)
 	//   baum = String
-	//     (Bedeutungs- bzw. Textsortenbaum als einzeiliger String)
+	//     (Bedeutungs- bzw. Textsortenbaum oder Korpus als einzeiliger String)
 	//   dt = String
-	//     (Datentyp, also entweder "bedeutungen", "textsorten" oder "")
+	//     (Datentyp, also entweder "bedeutungen", "korpora", "textsorten" oder "")
 	baumExtrakt (baum, dt) {
-		if (/^(bedeutungen|textsorten)/.test(dt)) {
+		if (/^(bedeutungen|korpora|textsorten)/.test(dt)) {
 			dt += "-";
 		}
 		let extrakt = [],
@@ -380,8 +398,8 @@ let filter = {
 		}
 		return extrakt;
 	},
-	// Array mit Bedeutungsschichten, die aus Bedeutungs- und Textsortenangaben
-	// extrahiert wurde, sortieren
+	// Array mit Bedeutungsschichten sortieren, die aus Bedeutungs-, Korpus- und
+	// Textsortenangaben extrahiert wurden
 	baumSort (a, b) {
 		// undefined wird an den Anfang gesetzt
 		if (/undefined$/.test(a)) {
@@ -727,9 +745,8 @@ let filter = {
 				if (!filter.typen[typ].filter.hasOwnProperty(f)) {
 					continue;
 				}
-				let f_encoded = encodeURI(f);
-				if (filter.typen[typ].filter[f].wert &&
-						document.getElementById(`filter-${f_encoded}`).checked) {
+				const f_check = document.getElementById(`filter-${encodeURI(f)}`);
+				if (f_check && f_check.checked) {
 					filter.aktiveFilter[typ] = true;
 					break;
 				}
@@ -780,9 +797,9 @@ let filter = {
 			koepfe[0].nextSibling.classList.remove("aus");
 		}
 	},
-	// Cache mit regulären Ausdrücken für Bedeutungen und Textsorten
+	// Cache mit regulären Ausdrücken für Bedeutungen, Korpora und Textsorten
 	// (wirkt sich wohl positiv auf die Performance aus)
-	regCacheBdTs: {},
+	regCacheBaum: {},
 	// Zwischenspeicher für die Daten der Volltextsuche
 	volltextSuche: {
 		suche: false,
@@ -857,21 +874,24 @@ let filter = {
 		if (!Object.keys(filter.aktiveFilter).length) {
 			return karten;
 		}
-		// aktive Filter in Bedeutungen und Textsorten
+		// aktive Filter in Bedeutungen, Korpora und Textsorten
 		let baumfilter = {
 			bd: [],
+			kr: [],
 			ts: [],
 		};
 		for (let i in filter.aktiveFilter) {
 			if (!filter.aktiveFilter.hasOwnProperty(i)) {
 				continue;
 			}
-			if (!/^(bedeutungen|textsorten)-/.test(i)) {
+			if (!/^(bedeutungen|korpora|textsorten)-/.test(i)) {
 				continue;
 			}
 			let f = i.match(/^(.+?)-(.+)/);
 			if (f[1] === "bedeutungen") {
 				baumfilter.bd.push(f[2]);
+			} else if (f[1] === "korpora") {
+				baumfilter.kr.push(f[2]);
 			} else if (f[1] === "textsorten") {
 				baumfilter.ts.push(f[2]);
 			}
@@ -911,7 +931,7 @@ let filter = {
 					continue;
 				}
 			}
-			// Bedeutungen und Textsorten
+			// Bedeutungen, Korpora und Textsorten
 			for (let bf in baumfilter) {
 				if (!baumfilter.hasOwnProperty(bf)) {
 					continue;
@@ -925,11 +945,11 @@ let filter = {
 						for (let j = 0, len = arr.length; j < len; j++) {
 							// Suchausdruck auslesen oder erzeugen
 							let reg;
-							if (filter.regCacheBdTs[arr[j]]) {
-								reg = filter.regCacheBdTs[arr[j]];
+							if (filter.regCacheBaum[arr[j]]) {
+								reg = filter.regCacheBaum[arr[j]];
 							} else {
 								reg = new RegExp(`${helfer.escapeRegExp(arr[j])}(:|\n|$)`);
-								filter.regCacheBdTs[arr[j]] = reg;
+								filter.regCacheBaum[arr[j]] = reg;
 							}
 							// suchen
 							if (reg.test(data.ka[id][bf])) {

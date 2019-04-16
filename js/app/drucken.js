@@ -75,17 +75,22 @@ let drucken = {
 		{
 			val: "bd",
 			name: "Bedeutung",
+			width: 2,
+		},
+		{
+			val: "qu",
+			name: "Quelle",
+			width: 2,
+		},
+		{
+			val: "kr",
+			name: "Korpus",
 			width: 1,
 		},
 		{
 			val: "ts",
 			name: "Textsorte",
 			width: 1,
-		},
-		{
-			val: "qu",
-			name: "Quelle",
-			width: 2,
 		},
 		{
 			val: "no",

@@ -5,6 +5,26 @@ let beleg = {
 	id_karte: -1,
 	// Kopie der Daten der aktuell angezeigten Karte
 	data: {},
+	// Liste häufig verwendeter Korpora für das Dropdown-Menü
+	korpora: [
+		"DTA",
+		"DWDS-Kernkorpus",
+		"DWDS-Kernkorpus 21",
+		"DWDS-Zeitungskorpus",
+		"Berliner Zeitung",
+		"Berliner Wendecorpus",
+		"Blogs",
+		"DDR",
+		"Dortmunder Chat-Korpus",
+		"Filmuntertitel",
+		"Gesprochene Sprache",
+		"neues deutschland",
+		"Polytechnisches Journal",
+		"Tagesspiegel",
+		"Text+Berg",
+		"Webkorpus 2016c",
+		"Die ZEIT",
+	],
 	// Überprüfen, ob vor dem Erstellen eines neuen Belegs noch Änderungen
 	// gespeichert werden müssen.
 	erstellenPre () {
@@ -49,6 +69,7 @@ let beleg = {
 			dc: new Date().toISOString(), // Datum Karteikarten-Erstellung
 			dm: "", // Datum Karteikarten-Änderung
 			ko: false, // Kontext
+			kr: "", // Korpus
 			no: "", // Notizen
 			qu: "", // Quelle
 			ts: "", // Textsorte
@@ -344,7 +365,7 @@ let beleg = {
 			return;
 		}
 		// Ist die Kartei schon ausgefüllt?
-		if (beleg.data.da || beleg.data.au || beleg.data.bs || beleg.data.ts || beleg.data.qu) {
+		if (beleg.data.da || beleg.data.au || beleg.data.bs || beleg.data.kr || beleg.data.ts || beleg.data.qu) {
 			dialog.oeffnen("confirm", function() {
 				if (dialog.antwort) {
 					startImport();
@@ -352,7 +373,7 @@ let beleg = {
 					dta.focus();
 				}
 			});
-			dialog.text("Die Karteikarte ist teilweise schon gefüllt.\nDie Felder <i>Datum, Autor, Beleg, Textsorte</i> und <i>Quelle</i> werden beim Importieren der Textdaten aus dem DTA überschrieben.\nMöchten Sie den DTA-Import wirklich starten?");
+			dialog.text("Die Karteikarte ist teilweise schon gefüllt.\nDie Felder <i>Datum, Autor, Beleg, Korpus, Textsorte</i> und <i>Quelle</i> werden beim Importieren der Textdaten aus dem DTA überschrieben.\nMöchten Sie den DTA-Import wirklich starten?");
 			return;
 		}
 		// Dann mal los...
@@ -844,6 +865,7 @@ let beleg = {
 			}
 			beleg.data.ts = textsorte.join("\n");
 		}
+		beleg.data.kr = "DTA";
 		// QUELLENANGABE ZUSAMMENSETZEN
 		// Autor und Titel
 		let quelle = `${autor}: ${dta.titel}`;
@@ -967,7 +989,7 @@ let beleg = {
 					return;
 				}
 				if (document.getElementById("dropdown") &&
-						(this.id === "beleg-bd" || this.id === "beleg-ts")) {
+						/^beleg-(bd|kr|ts)/.test(this.id)) {
 					return;
 				}
 				beleg.aktionSpeichern();

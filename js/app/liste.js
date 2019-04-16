@@ -218,6 +218,8 @@ let liste = {
 				liste.bedeutungErstellen(data.ka[id].bd, div);
 				// Quellenangabe
 				div.appendChild(liste.quelleErstellen(id));
+				// Korpus
+				liste.korpusErstellen(data.ka[id].kr, div);
 				// Textsorte
 				liste.textsorteErstellen(data.ka[id].ts, div);
 				// Notizen
@@ -462,7 +464,7 @@ let liste = {
 		}
 		return datum.b - datum.a;
 	},
-	// erstellt die Anzeige des Belegs unterhalb des Belegkopfes
+	// erstellt die Anzeige des Belegs
 	//   id = String
 	//     (ID des Belegs)
 	belegErstellen (id) {
@@ -612,7 +614,7 @@ let liste = {
 			}
 		});
 	},
-	// erstellt die Anzeige der Bedeutung unterhalb des Belegs
+	// erstellt die Anzeige der Bedeutung
 	//   bedeutung = String
 	//     (der Volltext der Bedeutung)
 	//   cont = Element
@@ -676,7 +678,31 @@ let liste = {
 		// <div> zurückgeben
 		return div;
 	},
-	// erstellt die Anzeige der Textsorte unterhalb der Quellenangabe
+	// erstellt die Anzeige des Korpus
+	//   korpus = String
+	//     (das Korpus)
+	//   cont = Element
+	//     (das ist der aktuelle Detailblock)
+	korpusErstellen (korpus, cont) {
+		// die Korpus-Angabe kann fehlen
+		if (!korpus) {
+			return;
+		}
+		// <div> für Korpus
+		let div = document.createElement("div");
+		cont.appendChild(div);
+		div.classList.add("liste-kr", "liste-label");
+		// Label erstellen
+		let span = document.createElement("span");
+		div.appendChild(span);
+		span.classList.add("liste-label");
+		span.textContent = "Korpus";
+		// Absatz erzeugen
+		let p = document.createElement("p");
+		p.innerHTML = liste.suchtreffer(korpus, "kr");
+		div.appendChild(p);
+	},
+	// erstellt die Anzeige der Textsorte
 	//   textsorte = String
 	//     (der Volltext der Textsorte)
 	//   cont = Element
@@ -703,7 +729,7 @@ let liste = {
 			div.appendChild(p);
 		}
 	},
-	// erstellt die Anzeige der Notizen unterhalb der Quelle
+	// erstellt die Anzeige der Notizen
 	//   notizen = String
 	//     (der Volltext der Notizen)
 	//   cont = Element
@@ -860,7 +886,7 @@ let liste = {
 		if (scroll_bak) {
 			liste.statusScrollBak();
 		}
-		let funktionen = ["bd", "qu", "ts", "no", "meta"];
+		let funktionen = ["bd", "qu", "kr", "ts", "no", "meta"];
 		for (let i = 0, len = funktionen.length; i < len; i++) {
 			let opt = `detail_${funktionen[i]}`,
 				ele = document.querySelectorAll(`.liste-${funktionen[i]}`);
@@ -1128,6 +1154,9 @@ let liste = {
 		// Einstellung umstellen und speichern
 		let opt = `detail_${funktion}`;
 		optionen.data.belegliste[opt] = !optionen.data.belegliste[opt];
+		if (funktion === "qu") {
+			optionen.data.belegliste.detail_kr = optionen.data.belegliste.detail_qu;
+		}
 		optionen.speichern(false);
 		// Anzeige der Icons auffrischen
 		liste.headerDetailsAnzeige(funktion, opt);

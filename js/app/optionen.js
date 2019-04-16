@@ -25,6 +25,8 @@ let optionen = {
 			detail_bd: false,
 			// Steuerung Details: Quelle einblenden
 			detail_qu: false,
+			// Steuerung Details: Korpus einblenden (ist mit Quelle gekoppelt)
+			detail_kr: false,
 			// Steuerung Details: Textsorte einblenden
 			detail_ts: false,
 			// Steuerung Details: Notizen einblenden
@@ -94,6 +96,7 @@ let optionen = {
 			"feld-bd": true,
 			"feld-bs": true,
 			"feld-da": true,
+			"feld-kr": true,
 			"feld-no": true,
 			"feld-qu": true,
 			"feld-ts": true,

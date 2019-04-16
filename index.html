@@ -24,6 +24,7 @@
 		<script src="js/app/filter.js"></script>
 		<script src="js/app/helfer.js"></script>
 		<script src="js/app/kartei.js"></script>
+		<script src="js/app/konversion.js"></script>
 		<script src="js/app/lexika.js"></script>
 		<script src="js/app/liste.js"></script>
 		<script src="js/app/meta.js"></script>
@@ -159,24 +160,16 @@
 				</tr><tr class="beleg-lese aus">
 					<td colspan="2" id="beleg-lese-bs"></td>
 				</tr><tr>
-					<th><label for="beleg-bd">Bedeutung</label
-						><span class="text-tools"
-							><a href="#" class="icon-link icon-tools-kopieren" title="Text kopieren" tabindex="-1"> </a
-							><a href="#" class="icon-link icon-tools-einfuegen" title="Text einfügen" tabindex="-1"> </a></span></th>
-					<th><label for="beleg-ts">Textsorte</label
+					<th colspan="2"><label for="beleg-bd">Bedeutung</label
 						><span class="text-tools"
 							><a href="#" class="icon-link icon-tools-kopieren" title="Text kopieren" tabindex="-1"> </a
 							><a href="#" class="icon-link icon-tools-einfuegen" title="Text einfügen" tabindex="-1"> </a></span></th>
 				</tr><tr class="beleg-form">
-					<td class="dropdown-cont"><textarea spellcheck="false" class="dropdown-feld" id="beleg-bd" tabindex="0"></textarea
+					<td colspan="2" class="dropdown-cont"><textarea spellcheck="false" class="dropdown-feld" id="beleg-bd" tabindex="0"></textarea
 						><a href="#" class="dropdown-link-td" title="Bedeutungen auflisten" tabindex="-1"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m7 2v8l-3.5-3.5-1.5 1.5 6 6 6-6-1.5-1.5-3.5 3.5v-8z" fill="#212121"/></svg></a
 					></td>
-					<td class="dropdown-cont"><textarea spellcheck="false" class="dropdown-feld" id="beleg-ts" tabindex="0"></textarea
-						><a href="#" class="dropdown-link-td" title="Textsorten auflisten" tabindex="-1"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m7 2v8l-3.5-3.5-1.5 1.5 6 6 6-6-1.5-1.5-3.5 3.5v-8z" fill="#212121"/></svg></a
-					></td>
 				</tr><tr class="beleg-lese aus">
-					<td id="beleg-lese-bd"></td>
-					<td id="beleg-lese-ts"></td>
+					<td colspan="2" id="beleg-lese-bd"></td>
 				</tr><tr>
 					<th colspan="2"><label for="beleg-qu">Quelle</label
 						><span class="text-tools"
@@ -186,6 +179,25 @@
 					<td colspan="2"><textarea spellcheck="false" id="beleg-qu"></textarea></td>
 				</tr><tr class="beleg-lese aus">
 					<td colspan="2" id="beleg-lese-qu"></td>
+				</tr><tr>
+					<th><label for="beleg-kr">Korpus</label
+						><span class="text-tools"
+							><a href="#" class="icon-link icon-tools-kopieren" title="Text kopieren" tabindex="-1"> </a
+							><a href="#" class="icon-link icon-tools-einfuegen" title="Text einfügen" tabindex="-1"> </a></span></th>
+					<th><label for="beleg-ts">Textsorte</label
+						><span class="text-tools"
+							><a href="#" class="icon-link icon-tools-kopieren" title="Text kopieren" tabindex="-1"> </a
+							><a href="#" class="icon-link icon-tools-einfuegen" title="Text einfügen" tabindex="-1"> </a></span></th>
+				</tr><tr class="beleg-form">
+					<td class="dropdown-cont"><input type="text" value="" spellcheck="false" class="dropdown-feld" id="beleg-kr" tabindex="0"
+						><a href="#" class="dropdown-link-td" title="Korpora auflisten" tabindex="-1"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m7 2v8l-3.5-3.5-1.5 1.5 6 6 6-6-1.5-1.5-3.5 3.5v-8z" fill="#212121"/></svg></a
+					></td>
+					<td class="dropdown-cont"><textarea spellcheck="false" class="dropdown-feld" id="beleg-ts" tabindex="0"></textarea
+						><a href="#" class="dropdown-link-td" title="Textsorten auflisten" tabindex="-1"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m7 2v8l-3.5-3.5-1.5 1.5 6 6 6-6-1.5-1.5-3.5 3.5v-8z" fill="#212121"/></svg></a
+					></td>
+				</tr><tr class="beleg-lese aus">
+					<td id="beleg-lese-kr"></td>
+					<td id="beleg-lese-ts"></td>
 				</tr><tr>
 					<th colspan="2"><label for="beleg-no">Notizen</label
 						><span class="text-tools"
@@ -239,14 +251,20 @@
 								<p><input type="checkbox" id="filter-feld-bs" class="filter-optionen"
 									><label for="filter-feld-bs">Beleg</label
 									></p>
-								<p><input type="checkbox" id="filter-feld-qu" class="filter-optionen"
-									><label for="filter-feld-qu">Quelle</label
-									></p>
 								<p><input type="checkbox" id="filter-feld-bd" class="filter-optionen"
 									><label for="filter-feld-bd">Bedeutung</label
 									></p>
+								<p><input type="checkbox" id="filter-feld-qu" class="filter-optionen"
+									><label for="filter-feld-qu">Quelle</label
+									></p>
+								<p><input type="checkbox" id="filter-feld-kr" class="filter-optionen"
+									><label for="filter-feld-kr">Korpus</label
+									></p>
 								<p><input type="checkbox" id="filter-feld-ts" class="filter-optionen"
 									><label for="filter-feld-ts">Textsorte</label
+									></p>
+								<p><input type="checkbox" id="filter-feld-no" class="filter-optionen"
+									><label for="filter-feld-no">Notizen</label
 									></p>
 								<p><input type="checkbox" id="filter-feld-au" class="filter-optionen"
 									><label for="filter-feld-au">Autor</label
@@ -254,10 +272,6 @@
 								<p><input type="checkbox" id="filter-feld-da" class="filter-optionen"
 									><label for="filter-feld-da">Datum</label
 									></p>
-								<p><input type="checkbox" id="filter-feld-no" class="filter-optionen"
-									><label for="filter-feld-no">Notizen</label
-									></p>
-								<p> </p> <!-- Damit die Flexboxes immer ein hübsches Grid ergeben. -->
 							</div>
 						</div>
 					</div
@@ -391,7 +405,7 @@
 						<p><input type="checkbox" id="einstellung-unvollstaendig"
 							><label for="einstellung-unvollstaendig">neue Karteikarte als unvollständig markieren</label></p>
 						<p><input type="checkbox" id="einstellung-immer-ergaenzen"
-							><label for="einstellung-immer-ergaenzen">mehrzeilige Textfelder ohne Nachfrage ergänzen, wenn aus einem Dropdown-Menü ein Wert oder aus dem Bedeutungen-Fenster eine Bedeutung ausgewählt wurde</label></p>
+							><label for="einstellung-immer-ergaenzen">mehrzeilige Textfelder ohne Nachfrage ergänzen, wenn aus einem Dropdown-Menü ein Wert ausgewählt oder im Bedeutungen-Fenster eine Bedeutung angeklickt wurde</label></p>
 						<p><input type="checkbox" id="einstellung-leseansicht"
 							><label for="einstellung-leseansicht">bestehende Karteikarte in der Leseansicht öffnen</label></p>
 					</section>

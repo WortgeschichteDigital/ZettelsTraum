@@ -139,6 +139,9 @@ let kartei = {
 			filter.ctrlReset(false);
 			// Okay! Datei kann eingelesen werden
 			data = JSON.parse(content);
+			// Konversion des Dateiformats anstoßen
+			konversion.start();
+			// Einleseoperationen
 			kartei.wort = data.wo;
 			kartei.wortEintragen();
 			kartei.pfad = datei;
