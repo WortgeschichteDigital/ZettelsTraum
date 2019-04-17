@@ -22,7 +22,7 @@ let helferWin = {
 			win.close();
 		}
 		// Cursor hoch (↑), runter (↓) (nur in Hilfefenstern)
-		if (typeof hilfe !== "undefined" && (evt.which === 38 || evt.which === 40)) {
+		if (typeof hilfe !== "undefined" && evt.ctrlKey && (evt.which === 38 || evt.which === 40)) {
 			hilfe.naviMenue(evt.which);
 		}
 		// Strg + P (nur im Bedeutungen-Fenster)

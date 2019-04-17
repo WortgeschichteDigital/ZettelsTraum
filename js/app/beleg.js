@@ -1546,7 +1546,7 @@ let beleg = {
 					text = " ";
 				} else {
 					if (!optionen.data.beleg.trennung) {
-						text = text.replace(/\[¬\]|\s*\[:.+?:\]\s*/g, "");
+						text = text.replace(/\[¬\]|\[:.+?:\]\s*/g, "");
 					}
 					text = liste.linksErkennen(text);
 				}

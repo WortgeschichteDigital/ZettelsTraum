@@ -47,7 +47,7 @@ main {
 }
 
 section {
-	padding: 0 15px;
+	padding: 0 15px 10px 15px;
 }
 
 /* Basis-Elemente ------------------------------- */
@@ -57,16 +57,66 @@ a {
 	text-decoration: none;
 }
 
+abbr {
+	text-decoration: none;
+}
+
+code {
+	display: inline-block;
+	border-radius: 2px;
+	padding: 0 3px;
+	background-color: var(--text);
+	color: #fff;
+	font-family: "Noto Sans Mono", monospace;
+	user-select: text;
+}
+
+code.quelltext {
+	background-color: var(--hintergrund);
+	color: var(--text);
+}
+
+h2 {
+	margin: 30px 0 15px 0;
+	color: var(--textFarbe);
+	font-size: 24px;
+	font-style: italic;
+	font-weight: normal;
+	line-height: 38px;
+}
+
+h2:first-child {
+	margin-top: 0;
+}
+
+kbd {
+	display: inline-block;
+	border: 1px solid var(--linie);
+	border-radius: 2px;
+	padding: 0 2px;
+	background-color: var(--hintergrund);
+	font-family: "Noto Sans Mono", monospace;
+}
+
 p {
 	margin: 0 0 10px 0;
 }
 
-p.warnen {
-	font-weight: bold;
+pre {
+	border-radius: 2px;
+	padding: 0 3px;
+	background-color: var(--text);
+	color: #fff;
+	font-family: "Noto Sans Mono", monospace;
+	user-select: text;
+}
+
+pre.quelltext {
+	background-color: var(--hintergrund);
+	color: var(--text);
 }
 
 /* Navigation ----------------------------------- */
-
 nav {
 	position: sticky;
 	top: 70px;
@@ -105,4 +155,13 @@ nav li a.aktiv:focus {
 /* Globale Klassen ------------------------------ */
 .aus {
 	display: none !important;
+}
+
+.datei {
+	color: var(--farbe);
+	font-family: "Noto Sans Mono", monospace;
+}
+
+.obacht {
+	color: var(--textWarnung);
 }

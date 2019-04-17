@@ -150,12 +150,8 @@ let liste = {
 			ende = liste.zeitschnittErmitteln(data.ka[belege[belege.length - 1]].da).jahrzehnt,
 			jahrzehnt = start,
 			beleg_akt = 0;
-		while (true) { // Obacht!
-			// Abbruchbedingungen
-			if (optionen.data.belegliste.sort_aufwaerts && jahrzehnt > ende ||
-					!optionen.data.belegliste.sort_aufwaerts && jahrzehnt < ende) {
-				break;
-			}
+		while (!(optionen.data.belegliste.sort_aufwaerts && jahrzehnt > ende ||
+					!optionen.data.belegliste.sort_aufwaerts && jahrzehnt < ende)) {
 			// Zeitschnitt drucken?
 			if (jahrzehnt !== start) {
 				cont.appendChild(liste.zeitschnittErstellen(jahrzehnt));
@@ -554,7 +550,7 @@ let liste = {
 		if (optionen.data.belegliste.trennung && !immer_weg) {
 			return text;
 		}
-		return text.replace(/\[¬\]|\s*\[:.+?:\]\s*/g, "");
+		return text.replace(/\[¬\]|\[:.+?:\]\s*/g, "");
 	},
 	// hebt ggf. das Wort der Kartei im übergebenen Text hervor
 	//   schnitt = String

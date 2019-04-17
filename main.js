@@ -635,7 +635,7 @@ fenster = {
 			},
 		});
 		// Menü abschalten
-		winBedeutungen.setMenuBarVisibility(false); // unpacketiert erscheint sonst ein Standardmenü
+		winBedeutungen.setMenuBarVisibility(false); // unpaketiert erscheint sonst ein Standardmenü
 		// HTML laden
 		winBedeutungen.loadFile(path.join(__dirname, "win", "bedeutungen.html"));
 		// Fenster anzeigen, sobald alles geladen wurde
@@ -672,7 +672,7 @@ fenster = {
 			},
 		});
 		// Menü abschalten
-		winHandbuch.setMenuBarVisibility(false); // unpacketiert erscheint sonst ein Standardmenü
+		winHandbuch.setMenuBarVisibility(false); // unpaketiert erscheint sonst ein Standardmenü
 		// HTML laden
 		winHandbuch.loadFile(path.join(__dirname, "win", "handbuch.html"));
 		// Fenster anzeigen, sobald alles geladen wurde
@@ -699,7 +699,7 @@ fenster = {
 			},
 		});
 		// Menü abschalten
-		winDokumentation.setMenuBarVisibility(false); // unpacketiert erscheint sonst ein Standardmenü
+		winDokumentation.setMenuBarVisibility(false); // unpaketiert erscheint sonst ein Standardmenü
 		// HTML laden
 		winDokumentation.loadFile(path.join(__dirname, "win", "dokumentation.html"));
 		// Fenster anzeigen, sobald alles geladen wurde
@@ -739,7 +739,7 @@ fenster = {
 			},
 		});
 		// Menü abschalten
-		winUeberApp.setMenuBarVisibility(false); // unpacketiert erscheint sonst ein Standardmenü
+		winUeberApp.setMenuBarVisibility(false); // unpaketiert erscheint sonst ein Standardmenü
 		// HTML laden
 		winUeberApp.loadFile(path.join(__dirname, "win", "ueberApp.html"));
 		// Fenster anzeigen, sobald alles geladen wurde
@@ -770,7 +770,7 @@ fenster = {
 			},
 		});
 		// Menü abschalten
-		winUeberElectron.setMenuBarVisibility(false); // unpacketiert erscheint sonst ein Standardmenü
+		winUeberElectron.setMenuBarVisibility(false); // unpaketiert erscheint sonst ein Standardmenü
 		// HTML laden
 		winUeberElectron.loadFile(path.join(__dirname, "win", "ueberElectron.html"));
 		// Fenster anzeigen, sobald alles geladen wurde
