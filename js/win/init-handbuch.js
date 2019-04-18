@@ -4,6 +4,12 @@ window.addEventListener("load", function() {
 	// KARTEIEN-SEKTION ANZEIGEN
 	hilfe.sektionWechseln("karteien");
 	
+	// PROGRAMM-NAME EINTRAGEN
+	const {app} = require("electron").remote;
+	document.querySelectorAll(".app-name").forEach(function(i) {
+		i.textContent = app.getName().replace("'", "’");
+	});
+	
 	// TASTATUREINGABEN ABFANGEN
 	document.addEventListener("keydown", helferWin.tastatur);
 	
@@ -13,6 +19,17 @@ window.addEventListener("load", function() {
 		const {ipcRenderer} = require("electron");
 		ipcRenderer.send("ueber-zettelstraum", "handbuch");
 	});
-	// Navigation
-	document.querySelectorAll("nav a").forEach((i) => hilfe.navi(i));
+	// Navigation durch die Sektionen
+	document.querySelectorAll(`a[class^="link-sektion-"`).forEach((i) => hilfe.sektion(i));
+	// Klick-Events an andere Links hängen
+	document.querySelectorAll("a").forEach(function(i) {
+		if (i.classList.contains("sprung")) {
+			hilfe.naviSprung(i);
+			return;
+		}
+		if (i.classList.contains("intern")) {
+			return;
+		}
+		helferWin.links(i);
+	});
 });

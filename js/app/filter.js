@@ -1172,7 +1172,7 @@ let filter = {
 		let last_font_y = 370;
 		for (let i = 1; i <= treffer_max; i++) {
 			let y = 370 + 5 - i * step_y; // der Text ist 11px hoch, darum hier + 5
-			if (last_font_y - y < 20) { // die Anzahl der Treffer braucht ein wenig Platz => nicht zu eng staffeln
+			if (last_font_y - y < 30) { // die Anzahl der Treffer braucht ein wenig Platz => nicht zu eng staffeln
 				continue;
 			}
 			last_font_y = y;

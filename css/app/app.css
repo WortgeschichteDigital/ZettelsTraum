@@ -6,6 +6,9 @@
 /* Fonts ---------------------------------------- */
 @import url(../fonts.css);
 
+/* Globale Klassen ------------------------------ */
+@import url(../global.css);
+
 /* Basis-Elemente ------------------------------- */
 body {
 	margin: 0;
@@ -170,7 +173,8 @@ input[type="button"]:focus {
 	background-color: var(--farbe);
 }
 
-input[type="button"][value="Abbrechen"] {
+input[type="button"][value="Abbrechen"],
+input[type="button"][value="Schließen"] {
 	background-image: url(../../img/button-cancel.svg);
 }
 
@@ -233,8 +237,8 @@ input[type="radio"]:checked:focus {
 	outline-color: var(--aktiv);
 }
 
-input[type="checkbox"]:checked:before,
-input[type="radio"]:checked:before {
+input[type="checkbox"]:checked::before,
+input[type="radio"]:checked::before {
 	position: absolute;
 	display: block;
 	content: "✓";
@@ -246,7 +250,7 @@ input[type="radio"]:checked:before {
 	text-align: center;
 }
 
-input[type="radio"]:checked:before {
+input[type="radio"]:checked::before {
 	content: "⬤";
 	border-radius: 6.5px;
 	width: 13px;
@@ -300,14 +304,4 @@ textarea:focus {
 
 .dta-rot {
 	color: red;
-}
-
-/* Globale Klassen ------------------------------ */
-.aus {
-	display: none !important;
-}
-
-::selection {
-	background-color: var(--farbe);
-	color: #fff;
 }

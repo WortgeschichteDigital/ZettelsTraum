@@ -403,7 +403,7 @@ p.no-indent + .filter-baum, /* betrifft Verschiedenes > Filterlogik */
 	position: relative;
 }
 
-.liste-strike:before {
+.liste-strike::before {
   content: "";
   position: absolute;
   left: 3px;

@@ -51,7 +51,8 @@ let notizen = {
 		notizen.notizenGeaendert(false);
 		kartei.karteiGeaendert(true);
 	},
-	// Edieren der Notizen abbrechen
+	// Notizen schließen
+	// (der Button hieß früher "Abbrechen", darum heißt die Funktion noch so)
 	abbrechen () {
 		// keine Änderungen vorgenommen
 		if (!notizen.geaendert) {

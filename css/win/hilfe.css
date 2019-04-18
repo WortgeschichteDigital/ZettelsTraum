@@ -6,6 +6,9 @@
 /* Fonts ---------------------------------------- */
 @import url(../fonts.css);
 
+/* Globale Klassen ------------------------------ */
+@import url(../global.css);
+
 /* Struktur-Elemente ---------------------------- */
 body {
 	margin: 0;
@@ -42,7 +45,7 @@ body > header h1 {
 
 main {
 	display: grid;
-	grid-template-columns: 200px 1fr;
+	grid-template-columns: 300px 1fr;
 	margin-top: 70px;
 }
 
@@ -55,6 +58,10 @@ a {
 	outline: none;
 	color: var(--textFarbe);
 	text-decoration: none;
+}
+
+a.intern {
+	cursor: default;
 }
 
 abbr {
@@ -135,19 +142,26 @@ nav li {
 	margin-bottom: 10px;
 }
 
-nav li a {
+nav ul.h {
+	margin: 5px 10px 0 10px;
+}
+
+nav ul.h li {
+	margin-bottom: 5px;
+}
+
+nav li a.kopf {
 	display: block;
 	padding: 2px 10px;
 	background-color: var(--farbeB);
 	color: #fff;
-	cursor: default;
 }
 
 nav li a.aktiv {
 	background-color: var(--aktiv);
 }
 
-nav li a:focus,
+nav li a.kopf:focus,
 nav li a.aktiv:focus {
 	background-color: var(--farbe);
 }

@@ -1,0 +1,18 @@
+@charset "utf-8";
+
+/* Element ausschalten -------------------------- */
+.aus {
+	display: none !important;
+}
+
+/* Ziehen von Elementen unterbinden ------------- */
+*, *::after, *::before {
+	-webkit-app-region: no-drag;
+	-webkit-user-drag: none;
+}
+
+/* Farbe Textauswahl ---------------------------- */
+::selection {
+	background-color: var(--farbe);
+	color: #fff;
+}

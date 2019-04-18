@@ -61,16 +61,30 @@
 		<!-- CHANGELOG -->
 		<section class="changelog">
 			<h2 id="changelog">Changelog</h2>
+			
 			<div>
-				<div class="version"><span>Version 0.5.0-beta</span><time datetime="2019-04-17"><s>17. April 2019</s></time></div>
+				<div class="version"><span>Version 0.5.0-beta</span><time datetime="2100-01-01">1. Januar 2100</time></div>
 				<h3>Neue Funktionen</h3>
 				<ul>
-					<li>Die <i>technische Dokumentation</i> (zu erreichen über das <i>Hilfe</i>-Menü) ist fertig.</li>
+					<li>Die <i>technische Dokumentation</i> ist fertig. Wer sie lesen möchte, findet sie unter <i>Hilfe &gt; Technische Dokumentation</i>.</li>
+				</ul>
+				<h3>Verbesserungen</h3>
+				<ul>
+					<li>Enthält eine Kartei viele lange Belege, war der Aufbau der Belegliste schon bei ein paar Dutzend Karteikarten mitunter recht träge. In solchen Fällen agiert die App nun deutlich performanter, ohne Abstriche bei der Funktionalität zu machen.</li>
+					<li>Notizen und Karteikarte: Seit Version 0.3.0 schließen sich Karteikarte und Notizenfenster nach dem Speichern nicht mehr automatisch. Die Buttons, die früher <i>Abbrechen</i> hießen, wurden deswegen in <i>Schließen</i> umbenannt. Ihre Funktionalität hat sich dabei nicht geändert.</li>
 				</ul>
 				<h3>Behobene Fehler</h3>
 				<ul>
 					<li>Anzeige des Belegtexts: Beim Ausblenden der Seitenumbruchsmarkierung (also <abbr title="zum Beispiel">z. B.</abbr> <q>[:35:]</q>) wurde auch das Leerzeichen vor der Markierung entfernt, was mitunter zur Komposition nicht zusammengehöriger Wörter führte.</li>
+					<li>Kopieren des Belegtexts: Wurde der Belegtext über das Icon <img src="../img/tool-kopieren.svg" width="24" height="24" alt=""> in der Belegliste oder Karteikarte komplett kopiert, fanden sich im Plaintext noch HTML-Tags. Diese werden nun entfernt. (Die Änderung hat keine Auswirkungen, wenn der Text mit allen Formatierungen in ein Office-Programm eingefügt werden soll.)</li>
+					<li>Belegliste: Die Belegvorschau in den Listenköpfen zeigte mitunter den Beleganfang an, obwohl das Wort der Kartei erst weiter hinten zu finden war.</li>
+					<li>Belegliste: Beim Kürzen des Belegkontexts (Funktion <img src="../img/liste-kuerzen.svg" width="24" height="24" alt="">) wurden mitunter auch Absätze gestrichen, in denen das Wort durchaus zu finden ist.</li>
+					<li>Filterleiste: In der zeitlichen Verteilungsgrafik (Funktion <img src="../img/filter-zeitraumgrafik.svg" width="24" height="24" alt="">) folgten die Ziffern in der Beschriftung der y-Achse mitunter ein wenig zu eng aufeinander.</li>
+					<li>Dropdown-Menü: Die Logik des Dialogs, der aufpoppt, wenn in einem der Datenfelder des Belegs bereits Text steht, wurde wieder in seinen ursprünglichen Zustand versetzt: <q>Ja</q> bedeutet Ergänzen, <q>Nein</q> Überschreiben (Rücknahme der Änderung von Version 0.3.0, die sich dann doch als ungut herausstellte).</li>
 				</ul>
+			</div>
+			
+			<div>
 				<div class="version"><span>Version 0.4.0</span><time datetime="2019-04-17">17. April 2019</time></div>
 				<h3>Neue Funktionen</h3>
 				<p><span class="obacht">Das Dateiformat hat sich geändert!</span> Ältere <abbr title="Wortgeschichte digital">WGD</abbr>-Dateien werden automatisch konvertiert; dabei wird eine Änderungsmarkierung gesetzt.</p>
@@ -117,6 +131,7 @@
 					<li>Das Formular zur Eingabe neuer Belege <abbr title="beziehungsweise">bzw.</abbr> dessen Leseansicht wird nun durchgehend als <i>Karteikarte</i> und nicht mehr als <i>Belegzettel</i> bezeichnet.</li>
 				</ul>
 			</div>
+			
 			<div>
 				<div class="version"><span>Version 0.3.0</span><time datetime="2019-04-10">10. April 2019</time></div>
 				<h3>Neue Funktionen</h3>
@@ -147,6 +162,7 @@
 					<li>Dropdown-Menü: Wurden in der Karteikarte die Felder <i>Bedeutung</i> oder <i>Textsorte</i> über das Dropdown-Menü gefüllt, wurden die Werte beim Speichern nicht übernommen.</li>
 				</ul>
 			</div>
+			
 			<div>
 				<div class="version"><span>Version 0.2.0</span><time datetime="2019-04-09">9. April 2019</time></div>
 				<h3>Verbesserungen</h3>
@@ -162,6 +178,7 @@
 					<li>Karteikarte: Ein Hinweis auf illegales Nesting erschien nicht in jedem Fall.</li>
 				</ul>
 			</div>
+			
 			<div>
 				<div class="version"><span>Version 0.1.0</span><time datetime="2019-04-08">8. April 2019</time></div>
 				<p>Erste freigegebene Version.</p>

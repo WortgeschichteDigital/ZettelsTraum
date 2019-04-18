@@ -297,12 +297,12 @@ let dropdown = {
 			// Ergänzen oder überschreiben?
 			dialog.oeffnen("confirm", function() {
 				if (dialog.antwort) {
-					eintragen(false);
-				} else if (dialog.antwort === false) {
 					eintragen(true);
+				} else if (dialog.antwort === false) {
+					eintragen(false);
 				}
 			});
-			dialog.text("Im Textfeld steht schon etwas. Soll der Wert überschrieben werden?\n(Bei „Nein“ wird das Textfeld um den Wert ergänzt.)");
+			dialog.text("Im Textfeld steht schon etwas. Soll es ergänzt werden?\n(Bei „Nein“ wird das Textfeld überschrieben.)");
 			document.getElementById("dialog-text").appendChild(optionen.shortcut("Textfeld künftig ohne Nachfrage ergänzen", "immer-ergaenzen"));
 			return;
 		}

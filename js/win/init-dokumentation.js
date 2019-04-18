@@ -19,12 +19,22 @@ window.addEventListener("load", function() {
 		const {ipcRenderer} = require("electron");
 		ipcRenderer.send("ueber-zettelstraum", "dokumentation");
 	});
-	// Navigation
-	document.querySelectorAll("nav a").forEach((i) => hilfe.navi(i));
-	// Links
+	// Über Electron
+	document.querySelector(".ueber-electron").addEventListener("click", function(evt) {
+		evt.preventDefault();
+		const {ipcRenderer} = require("electron");
+		ipcRenderer.send("ueber-electron", "dokumentation");
+	});
+	// Navigation durch die Sektionen
+	document.querySelectorAll(`a[class^="link-sektion-"`).forEach((i) => hilfe.sektion(i));
+	// spezielle Links
 	document.querySelectorAll(".link-handbuch").forEach((i) => hilfe.oeffneHandbuch(i));
 	// Klick-Events an andere Links hängen
 	document.querySelectorAll("a").forEach(function(i) {
+		if (i.classList.contains("sprung")) {
+			hilfe.naviSprung(i);
+			return;
+		}
 		if (i.classList.contains("intern")) {
 			return;
 		}

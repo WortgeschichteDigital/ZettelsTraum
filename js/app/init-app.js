@@ -1,11 +1,11 @@
 "use strict";
 
-// Globales Datenobjekt, in dem die Werte zur aktuellen
-// Kartei gespeichert werden.
-let data = {};
-
 // Initialisierung der App
 window.addEventListener("load", function() {
+	// Globales Datenobjekt, in dem die Werte zur aktuellen
+	// Kartei gespeichert werden.
+	window.data = {};
+	
 	// TASTATUREINGABEN ABFANGEN
 	document.addEventListener("keydown", helfer.tastatur);
 	

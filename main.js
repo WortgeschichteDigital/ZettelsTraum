@@ -466,6 +466,9 @@ ipcMain.on("menus-deaktivieren", (evt, disable) => appMenu.deaktivieren(disable,
 // Programm-Info aufrufen, wenn der Renderer-Prozess es wünscht
 ipcMain.on("ueber-zettelstraum", (evt, opener) => fenster.erstellenUeberApp(opener));
 
+// Electron-Info aufrufen, wenn der Renderer-Prozess es wünscht
+ipcMain.on("ueber-electron", (evt, opener) => fenster.erstellenUeberElectron(opener));
+
 // Bedeutungen-Fenster öffnen/schließen, wenn der Renderer-Prozess es wünscht
 ipcMain.on("kartei-bedeutungen-fenster", function(evt, oeffnen) {
 	if (oeffnen) {
@@ -660,9 +663,9 @@ fenster = {
 		winHandbuch = new BrowserWindow({
 			title: "Handbuch",
 			icon: path.join(__dirname, "img", "icon", "png", "icon_32px.png"),
-			width: 800,
+			width: 900,
 			height: Bildschirm.workArea.height,
-			minWidth: 600,
+			minWidth: 700,
 			minHeight: 350,
 			show: false,
 			webPreferences: {
@@ -687,9 +690,9 @@ fenster = {
 		winDokumentation = new BrowserWindow({
 			title: "Technische Dokumentation",
 			icon: path.join(__dirname, "img", "icon", "png", "icon_32px.png"),
-			width: 800,
+			width: 900,
 			height: Bildschirm.workArea.height,
-			minWidth: 600,
+			minWidth: 700,
 			minHeight: 350,
 			show: false,
 			webPreferences: {
@@ -709,18 +712,9 @@ fenster = {
 	},
 	// Über-Fenster erstellen (App)
 	erstellenUeberApp (opener) {
-		// Parent-Fenster ermitteln
-		let parent = win;
-		if (opener === "bedeutungen") {
-			parent = winBedeutungen;
-		} else if (opener === "handbuch") {
-			parent = winHandbuch;
-		} else if (opener === "dokumentation") {
-			parent = winDokumentation;
-		}
 		// Fenster öffnen
 		winUeberApp = new BrowserWindow({
-			parent: parent,
+			parent: fenster.findParent(opener),
 			modal: true,
 			title: `Über ${app.getName()}`,
 			icon: path.join(__dirname, "img", "icon", "png", "icon_32px.png"),
@@ -748,10 +742,10 @@ fenster = {
 		winUeberApp.on("closed", () => winUeberApp = null);
 	},
 	// Über-Fenster erstellen (Electron)
-	erstellenUeberElectron () {
+	erstellenUeberElectron (opener) {
 		// Fenster öffnen
 		winUeberElectron = new BrowserWindow({
-			parent: win,
+			parent: fenster.findParent(opener),
 			modal: true,
 			title: "Über Electron",
 			icon: path.join(__dirname, "img", "icon", "png", "icon_32px.png"),
@@ -777,6 +771,18 @@ fenster = {
 		winUeberElectron.once("ready-to-show", () => winUeberElectron.show());
 		// globales Fensterobjekt beim Schließen dereferenzieren
 		winUeberElectron.on("closed", () => winUeberElectron = null);
+	},
+	// Parent-Fenster ermitteln
+	findParent (opener) {
+		if (opener === "bedeutungen") {
+			return winBedeutungen;
+		} else if (opener === "handbuch") {
+			return winHandbuch;
+		} else if (opener === "dokumentation") {
+			return winDokumentation;
+		} else {
+			return win;
+		}
 	},
 	// Fenster-Status in den Optionen speichern (Haupt- und Bedeutungen-Fenster)
 	//   typ = String

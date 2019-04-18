@@ -6,6 +6,9 @@
 /* Fonts ---------------------------------------- */
 @import url(../fonts.css);
 
+/* Globale Klassen ------------------------------ */
+@import url(../global.css);
+
 /* Struktur-Elemente ---------------------------- */
 body {
 	margin: 0;
@@ -43,6 +46,10 @@ a {
 	color: var(--textFarbe);
 	text-decoration: underline;
 	outline: none;
+}
+
+a.intern {
+	cursor: default;
 }
 
 section a {

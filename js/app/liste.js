@@ -34,6 +34,7 @@ let liste = {
 	//   filter_init = Boolean
 	//     (speichert, ob die Filterliste initialisiert werden sollen)
 	status (filter_init) {
+		let test_start = new Date();
 		// Klapp-Status ermitteln
 		let offen = {},
 			koepfe_vor = document.querySelectorAll(".liste-kopf");
@@ -101,6 +102,7 @@ let liste = {
 			setTimeout(() => kopf.classList.add("hinweis-beleg"), 0);
 			setTimeout(() => kopf.classList.remove("hinweis-beleg"), 1500);
 		}
+		console.log(new Date() - test_start);
 	},
 	// Zwischenspeicher für den ermittelten Scroll-Status
 	statusScroll: {},
@@ -482,7 +484,8 @@ let liste = {
 			let p = document.createElement("p");
 			div.appendChild(p);
 			// Absatz ggf. kürzen
-			if (optionen.data.belegliste.beleg_kuerzen && !form_reg.test(p_prep[i])) {
+			if (optionen.data.belegliste.beleg_kuerzen &&
+					!form_reg.test(bereinigen(p_prep[i]))) {
 				if (zuletzt_gekuerzt) {
 					div.removeChild(div.lastChild);
 				} else {
@@ -499,6 +502,12 @@ let liste = {
 		}
 		// <div> zurückgeben
 		return div;
+		// Absatztext bereinigen, bevor eine Kürzung vollzogen wird
+		function bereinigen (text) {
+			text = text.replace(/<.+?>/g, "");
+			text = liste.belegTrennungWeg(text, true);
+			return text;
+		}
 	},
 	// generiert den Vorschautext des übergebenen Belegs inkl. Autorname (wenn vorhanden)
 	//   beleg_akt = Object
@@ -507,16 +516,17 @@ let liste = {
 		// Beleg aufbereiten
 		let schnitt = beleg_akt.bs.replace(/\n+/g, " "); // Absätze könnten mit Leerzeile eingegeben sein
 		schnitt = schnitt.replace(/<.+?>/g, ""); // HTML-Formatierungen vorher löschen!
+		schnitt = liste.belegTrennungWeg(schnitt, true); // Trennzeichen und Seitenumbrüche weg
 		// 1. Treffer im Text ermitteln, Beleg am Anfang ggf. kürzen
 		let reg = new RegExp(helfer.formVariRegExp(), "gi");
-		if (reg.test(schnitt)) {
-			let idx = schnitt.split(reg)[0].length;
-			if (idx > 30) {
-				schnitt = `…${schnitt.substring(idx - 20)}`;
-			}
+		if (reg.test(schnitt) &&
+				reg.lastIndex - kartei.wort.length > 35) {
+			schnitt = `…${schnitt.substring(reg.lastIndex - kartei.wort.length - 25)}`;
 		}
-		// Trennungszeichen entfernen
-		schnitt = liste.belegTrennungWeg(schnitt, true);
+		// Performance-Schub: Vorschautext kürzen
+		if (schnitt.length > 280) {
+			schnitt = `${schnitt.substring(0, 250)}…`;
+		}
 		// Treffer hervorheben
 		schnitt = liste.belegWortHervorheben(schnitt, false);
 		// ggf. Autor angeben

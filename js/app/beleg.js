@@ -269,7 +269,8 @@ let beleg = {
 		// Bedeutungen-Fenster mit neuen Daten versorgen
 		bedeutungenwin.daten();
 	},
-	// Bearbeiten des Belegs abbrechen
+	// Bearbeiten des Belegs beenden, Beleg also schließen
+	// (Der Button hieß früher "Abbrechen", darum heißt die Funktion noch so)
 	aktionAbbrechen () {
 		// Änderungen noch speichern?
 		if (beleg.geaendert) {
@@ -1056,6 +1057,7 @@ let beleg = {
 			});
 			html = helfer.clipboardHtml(html);
 			html = beleg.toolsKopierenAddQuelle(html, true, obj);
+			text = text.replace(/<.+?>/g, "");
 			text = beleg.toolsKopierenAddQuelle(text, false, obj);
 			clipboard.write({
 				text: text,

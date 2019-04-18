@@ -23,17 +23,17 @@
 		<main>
 			<nav>
 				<ul>
-					<li><a href="#" class="intern" id="link-technik">Technik</a></li>
-					<li><a href="#" class="intern" id="link-wgd">WGD-Dateiformat</a></li>
-					<li><a href="#" class="intern" id="link-ordner">Ordnerstruktur</a></li>
-					<li><a href="#" class="intern" id="link-js">JavaScript-Dateien</a></li>
+					<li><a href="#" class="link-sektion-technik kopf intern">Technik</a></li>
+					<li><a href="#" class="link-sektion-ordner kopf intern">Ordner und Dateien</a></li>
+					<li><a href="#" class="link-sektion-js kopf intern">JavaScript</a></li>
+					<li><a href="#" class="link-sektion-wgd kopf intern">WGD-Dateiformat</a></li>
 				</ul>
 			</nav>
 			<div>
 				<!-- START -->
 				<section id="sektion-start"
 					><p class="obacht">Die technische Dokumentation ist nur für diejenigen gedacht, die das Programm bauen oder den Quellcode verändern wollen!</p
-					><p>Allen anderen BenutzerInnen hilft das <a href="#" class="intern link-handbuch">Handbuch</a> vielleicht eher weiter.</p
+					><p>Allen anderen BenutzerInnen hilft das <a href="#" class="link-handbuch intern">Handbuch</a> vielleicht eher weiter.</p
 				></section>
 				
 				<!-- TECHNIK -->
@@ -41,8 +41,8 @@
 					><h2 id="technik-electron-framework">Das <i>Electron</i>-Framework</h2
 					><p><i class="app-name"></i> läuft auf dem <a href="#" title="https://electronjs.org/"><i>Electron</i></a>-Framework. <i>Electron</i> ist eine Kombination aus <a href="#" title="https://www.chromium.org/Home"><i>Chromium</i></a>, dem Open-Source-Browser, auf dem <i>Google Chrome</i> basiert, und <a href="#" title="https://nodejs.org/"><i>Node.js</i></a>, einer JavaScript-Laufzeitumgebung mit der Implementierung <i>V8</i>. Das Framework kann komplett via JavaScript gesteuert werden, weswegen zum Programmieren der App Kenntnisse in den Sprachen <abbr title="Hyptertext Markup Language" lang="en">HTML</abbr>, <abbr title="Cascading Style Sheets" lang="en">CSS</abbr> und JavaScript vollkommen ausreichen.</p
 					><p><i>Electron</i> übernimmt die schwierigen Aufgaben, die sich beim Programmieren einer Desktop-App stellen. Es kümmert sich um die Integration in das Betriebssystem, ermöglicht also lesende und schreibende Dateizugriffe sowie das Öffnen externer Programme, erzeugt die Dateidialoge zum Öffnen und Speichern der Karteien und verwaltet über den betriebssystemeigenen Fenster-Manager die einzelnen Programm-Fenster, in denen eine leicht eingedampfte Variante des <i>Chromium</i>-Browsers für die Anzeige zuständig ist. Jedes Programm-Fenster läuft in einem eigenen Renderer-Prozess, weswegen die einzelnen Fenster nicht direkt miteiander kommunizieren können. Das Öffnen der Programm-Fenster und die Darstellung der Fenster-Menüs werden im Wesentlichten über den Main-Prozess gesteuert, über den die App initialisiert wird. Dieser wiederum kann mit allen Fenstern kommunizieren.</p
-					><p>Der Main-Prozess wird über die Scripts in der Datei <span class="datei">./main.js</span> im Wurzelverzeichnis der App gesteuert (das Wurzelverzeichnis der App wird im Folgenden immer durch <span class="datei">./</span> bezeichnet). Vermittelt über diesen Prozess können die Fenster miteinander in Kommunikation treten. Über das Objekt <code>ipcMain</code> hört der Main-Prozess auf Meldungen der Renderer-Prozesse, die diese via <code>ipcRenderer</code> abgeschickt haben (<abbr title="vergleiche">vgl.</abbr> den Code in <span class="datei">./main.js</span> und <span class="datei">./js/app/init-app.js</span>).</p
-					><p>Daneben erleichtert <i>Electron</i> das Paketieren der App für die Betriebssysteme <i>Linux</i>, <i>Windows</i> und <i>macOS</i> enorm. Aus der <a href="#technik-paketieren" class="intern">paketierten App</a> lassen sich im Anschluss die verschiedensten Installer für die einzelnen Betriebssysteme bauen.</p
+					><p>Der Main-Prozess wird über die Scripts in der Datei <span class="datei">./main.js</span> im Wurzelverzeichnis der App gesteuert (das Wurzelverzeichnis der App wird im Folgenden immer durch <span class="datei">./</span> bezeichnet). Vermittelt über diesen Prozess können die Fenster miteinander in Kommunikation treten. Über das Objekt <code class="quelltext">ipcMain</code> hört der Main-Prozess auf Meldungen der Renderer-Prozesse, die diese via <code class="quelltext">ipcRenderer</code> abgeschickt haben (<abbr title="vergleiche">vgl.</abbr> den Code in <span class="datei">./main.js</span> und <span class="datei">./js/app/init-app.js</span>).</p
+					><p>Daneben erleichtert <i>Electron</i> das Paketieren der App für die Betriebssysteme <i>Linux</i>, <i>Windows</i> und <i>macOS</i> enorm. Aus der <a href="#technik-paketieren" class="intern sprung">paketierten App</a> lassen sich im Anschluss die verschiedensten <a href="#technik-installer" class="intern sprung">Installer</a> für die einzelnen Betriebssysteme bauen.</p
 					
 					><h2 id="technik-installation-electron">Installation von <i>Electron</i></h2
 					><p>Im Folgenden wird die Einrichtung von <i>Electron</i> auf einer <i>Linux</i>-Distribution beschrieben, die auf <a href="#" title="https://www.ubuntu.com/"><i>Ubuntu</i></a> basiert. Die Anweisungen dürften aber für alle Betriebssystem ähnlich sein, denn auch unter Windows wird <i>Node.js</i> <abbr title="beispielsweise">bspw.</abbr> über die Eingabeaufforderung gesteuert.</p
@@ -69,7 +69,7 @@ npm install --save-dev electron</pre
 					
 					><pre>npm install --save-dev electron</pre
 					
-					><p>Welche <i>Electron</i>-Version im App-Ordner installiert ist, kann man dem Fenster <i>Über Electron</i> (aufzurufen über das Menü <i>Hilfe</i> von <i class="app-name"></i>) oder der <span class="datei">./package.json</span> entnehmen:</p
+					><p>Welche <i>Electron</i>-Version im App-Ordner installiert ist, kann man dem Fenster <a href="#" class="ueber-electron intern"><i>Über Electron</i></a> (auch aufzurufen über das Menü <i>Hilfe</i> im Hauptfenster von <i class="app-name"></i>) oder der <span class="datei">./package.json</span> entnehmen:</p
 					
 					><pre class="quelltext">"devDependencies": {
 	"electron": "^4.1.4",
@@ -80,11 +80,11 @@ npm install --save-dev electron</pre
 					
 					><pre>npm show electron version</pre
 					
-					><p>Die stabile Version von <i>Electron</i> liefert nie die jüngste Version von <i>Chromium</i>. Technisch ist der Browser somit zwar immer leicht veraltet, um die notwendigen Sicherheitsupdates kümmert sich das <i>Electron</i>-Team aber fortwährend.</p
+					><p>Die stabile Version von <i>Electron</i> liefert nie die jüngste Ausgabe von <i>Chromium</i>. Technisch ist der Browser somit zwar immer leicht veraltet, um die notwendigen Sicherheitsupdates kümmert sich das <i>Electron</i>-Team aber fortwährend.</p
 					
 					><h2 id="technik-starten">Starten der App</h2
 					
-					><p>Wie die App gestartet werden soll, wird in der Datei <span class="datei">./package.json</span> festgelegt. Die <span class="datei">./package.json</span> enthält neben Meta-Informationen zu Programm, Autor und Lizenz auch Scripts zum Starten und Paketieren von <i class="app-name"></i>. Die folgende Zeile legt fest, über welche Script-Datei der Main-Prozess initialisiert wird:</p
+					><p>Wie die App gestartet werden soll, wird in der Datei <span class="datei">./package.json</span> festgelegt. Die <span class="datei">./package.json</span> enthält neben Meta-Informationen zu Programm, Autor und Lizenz nämlich auch Scripts zum Starten und Paketieren von <i class="app-name"></i>. Die folgende Zeile legt fest, über welche Script-Datei der Main-Prozess initialisiert wird:</p
 					
 					><pre class="quelltext">"main": "main.js",</pre
 					
@@ -103,32 +103,42 @@ npm install --save-dev electron</pre
 					
 					><h2 id="technik-paketieren">Paketieren der App</h2
 					
-					><p>Das Paketieren von <i class="app-name"></i> ist denkbar einfach.</p
+					><p><mark>TODO</mark> Das Paketieren von <i class="app-name"></i> ist denkbar einfach.</p
 					
 					><h2 id="technik-installer">Installer bauen</h2
 					
-					><p>installer-win.js</p
+					><p><mark>TODO</mark> installer-win.js</p
 					
 					><h2 id="technik-ordner">Programm- und Konfigurationsordner</h2
+					><p><mark>TODO</mark></p
+				></section>
+				
+				<!-- ORDNER UND DATEIEN -->
+				<section id="sektion-ordner"
+					><p><mark>TODO</mark></p
+				></section>
+				
+				<!-- JAVASCRIPT -->
+				<section id="sektion-js"
+					><h2 id="js-code">Der Code</h2
+					><p>Der JavaScript-Code ist <i lang="en">vanilla</i>. Sprich: Es wurden keine externen Bibliotheken wie <i>jQuery</i> oder dergleichen verwendet. Programmiert wurde im <a href="#" title="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode"><i lang="en">strict mode</i></a>, einer restringierten Variante von JavaScript, die <abbr title="zum Beispiel">z. B.</abbr> Zuweisungsoperationen zu nicht deklarierten Variablen unmöglicht macht und vieles mehr unterbindet, was potenziell gefährlich oder einfach schlechter Stil ist.</p
 					
-					><h2 id="technik-integration">Integration von <i>Electron</i> und <i>Node.js</i></h2
+					><p>Der Code wurde extensiv kommentiert. Im Ergebnis sollte immer nachvollziehbar sein, welche Aufgabe das Script an der jeweiligen Stelle erfüllt. So wird <abbr title="zum Beispiel">z. B.</abbr> bei jeder Funktion angegeben, wozu sie dient und welchen Variablentyp die Argumente haben.</p
 					
-					><h2 id="technik-javascript">JavaScript-Code</h2
-					><p>Der JavaScript-Code ist <i lang="en">vanilla</i>. Sprich: Es wurden keine externen Bibliotheken wie <i>jQuery</i> oder dergleichen verwendet. Programmiert wurde im <a href="#" title="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode"><i lang="en">strict mode</i></a>, einer restringierten Variante von JavaScript, die <abbr title="zum Beispiel">z. B.</abbr> Zuweisungsoperationen zu nicht deklarierten Variablen unmöglicht macht und vieles mehr unterbindet, was potenziell gefährlich oder einfach schlechter Stil ist (übersichtlich <a href="#" title="https://www.w3schools.com/js/js_strict.asp">zusammengefasst auf w3schools.com</a>).</p
+					><p>Alle Funktionen stecken in Objekten, um den Namensraum des Fensters nicht zu vermüllen. Dabei steht in jeder JavaScript-Datei ein Objekt, das exakt denselben Namen wie die Datei trägt. Sucht man also die Methode <code class="quelltext">popup.oeffnen()</code> oder die Eigenschaft <code class="quelltext">popup.belegID</code> muss man nur nach der Datei <span class="datei">popup.js</span> Ausschau halten. Eine Ausnahme bilden hier allein die Scripts im Wurzelverzeichnis und Dateien mit dem Namensmuster <span class="datei">init-*.js</span>. In letzteren werden Eventobjekte des Fensters initialisiert, zu dem die jeweilige Datei gehört. (Das betreffende Fenster lässt sich leicht am Dateinamen erkennen.) Einen Überblick über den Inhalt der Dateien gibt der Abschnitt <a href="#js-dateien" class="intern sprung"><i>Die Dateien</i></a>.</p
 					
-					><p>Der Code wurde extensiv kommentiert – mitunter vielleicht sogar ein bisschen zu viel. So wird <abbr title="zum Beispiel">z. B.</abbr> bei jeder Funktion angegeben, wozu sie dient und welchen Variablentyp die Argumente haben.</p
+					><h2 id="js-integration">Integration von <i>Electron</i> und <i>Node.js</i></h2
+					><p>Eine Besonderheit des JavaScript-Codes ist, dass auf Objekte, Methoden und Eigenschaften von <i>Electron</i> und <i>Node.js</i> auch in den Renderer-Prozessen zurückgegriffen wird. Hierzu wird die in JavaScript sonst nicht vorhandene Methode <code class="quelltext">require()</code> benutzt.</p
+					><p>Über <code class="quelltext">const {app} = require("electron").remote</code> <abbr title="zum Beispiel">z. B.</abbr> wird der Zugriff auf das App-Objekt im Main-Prozess ermöglicht. Und via <code class="quelltext">const path = require("path")</code> kann man das Node-Modul <a href="#" title="https://nodejs.org/api/path.html"><i>Path</i></a> laden, um sich neben vielem anderen <abbr title="zum Beispiel">z. B.</abbr> Informationen über den <i lang="en">path segment separator</i> im aktuellen Betriebssystem geben zu lassen (nämlich via <code class="quelltext">path.sep</code>).</p
 					
-					><p>Alle Funktionen stecken in Objekten, um den Namensraum des Fensters nicht allzu sehr zu vermüllen. Dabei steht in jeder JavaScript-Datei ein Objekt, das exakt denselben Namen wie die Datei trägt. Sucht man also die Methode <code class="quelltext">popup.oeffnen()</code> oder die Eigenschaft <code class="quelltext">popup.belegID</code> muss man nur nach der Datei <span class="datei">popup.js</span> Ausschau halten. Eine Ausnahme bilden hier allein die Scripts im Wurzelverzeichnis und Dateien mit dem Namensmuster <span class="datei">init-*.js</span>. In letzteren werden Eventobjekte des Fensters initialisiert, zu dem die Dateien gehören. (Das lässt sich leicht am Namen erkennen.) Einen Überblick über die Dateien kann man sich im <abbr title="Kapitel">Kap.</abbr> <mark>JavaScript-Dateien</mark> verschaffen.</p
+					><h2 id="js-dateien">Die Dateien</i></h2
+					><p><mark>TODO</mark></p
 				></section>
 				
 				<!-- WGD-DATEIFORMAT -->
-				<section id="sektion-wgd">WGD-Dateiformat</section>
-				
-				<!-- ORDNERSTRUKTUR -->
-				<section id="sektion-ordner">Ordnerstruktur + Dateien in den Ordnern</section>
-				
-				<!-- JS-DATEIEN -->
-				<section id="sektion-js">Liste der JS-Dateien + Kurzbeschreibung</section>
+				<section id="sektion-wgd"
+					><p><mark>TODO</mark></p
+				></section>
 			</div>
 		</main>
 	</body>

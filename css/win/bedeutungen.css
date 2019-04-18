@@ -6,6 +6,9 @@
 /* Fonts ---------------------------------------- */
 @import url(../fonts.css);
 
+/* Globale Klassen ------------------------------ */
+@import url(../global.css);
+
 /* Bedeutungenbaum ------------------------------ */
 @import url(../bedeutungenbaum.css);
 
