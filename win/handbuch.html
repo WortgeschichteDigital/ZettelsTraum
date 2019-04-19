@@ -8,6 +8,8 @@
 		
 		<link rel="stylesheet" href="../css/win/hilfe.css">
 		
+		<script src="../js/app/helfer.js"></script>
+		
 		<script src="../js/win/init-handbuch.js"></script>
 		<script src="../js/win/helferWin.js"></script>
 		<script src="../js/win/hilfe.js"></script>
@@ -22,13 +24,24 @@
 		<!-- GRID -->
 		<main>
 			<nav>
+				<p><input type="text" value="" placeholder="Suche" spellcheck="false" id="suchfeld"
+					><a href="#" id="suchfeld-lupe"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m6.5 1a5.5 5.5 0 0 0-5.5 5.5 5.5 5.5 0 0 0 5.5 5.5 5.5 5.5 0 0 0 3.1172-0.969l3.6618 3.662a1 1 0 0 0 0.721 0.307 1 1 0 0 0 1-1 1 1 0 0 0-0.303-0.717l-3.67-3.6697a5.5 5.5 0 0 0 0.973-3.1133 5.5 5.5 0 0 0-5.5-5.5zm0 2a3.5 3.5 0 0 1 3.5 3.5 3.5 3.5 0 0 1-3.5 3.5 3.5 3.5 0 0 1-3.5-3.5 3.5 3.5 0 0 1 3.5-3.5z" fill="#212121"/></svg></a></p>
 				<ul>
 					<li><a href="#" class="link-sektion-karteien kopf intern">Karteien</a></li>
 				</ul>
 			</nav>
 			<div>
+				<!-- SUCHE -->
+				<section id="sektion-suche">
+					<h2>Suchergebnisse</h2>
+					
+					<div id="suchergebnisse"></div>
+				</section>
+				
 				<!-- KARTEIEN -->
-				<section id="sektion-karteien">Karteien</section>
+				<section id="sektion-karteien" class="suche">
+					<p><mark>TODO</mark>
+				</section>
 			</div>
 		</main>
 	</body>

@@ -5,9 +5,10 @@ let helferWin = {
 	//   a = Element
 	//     (Link, auf dem geklickt wurde)
 	links (a) {
+		a.title = a.getAttribute("href");
 		a.addEventListener("click", function(evt) {
 			evt.preventDefault();
-			let url = this.title;
+			const url = this.getAttribute("href");
 			const {shell} = require("electron");
 			shell.openExternal(url);
 		});
@@ -24,6 +25,10 @@ let helferWin = {
 		// Cursor hoch (↑), runter (↓) (nur in Hilfefenstern)
 		if (typeof hilfe !== "undefined" && evt.ctrlKey && (evt.which === 38 || evt.which === 40)) {
 			hilfe.naviMenue(evt.which);
+		}
+		// Cursor hoch (↑), runter (↓) (nur in Hilfefenstern)
+		if (typeof hilfe !== "undefined" && evt.ctrlKey && evt.which === 70) {
+			document.getElementById("suchfeld").select();
 		}
 		// Strg + P (nur im Bedeutungen-Fenster)
 		if (typeof bedeutungencont !== "undefined" && evt.ctrlKey && evt.which === 80) {

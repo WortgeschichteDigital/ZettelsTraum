@@ -9,8 +9,8 @@ window.addEventListener("load", function() {
 	});
 	// Programm-Version eintragen
 	document.getElementById("version").textContent = app.getVersion();
-	// Klick-Events an Links hängen
-	document.querySelectorAll("a.extern").forEach((a) => helferWin.links(a));
+	// externe Links
+	document.querySelectorAll(`a[href^="http"], a[href^="mailto"]`).forEach((a) => helferWin.links(a));
 	// Tastatur-Events abfangen
 	document.addEventListener("keydown", helferWin.tastatur);
 });

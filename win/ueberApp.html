@@ -18,8 +18,8 @@
 				><img src="../img/icon_app.svg" width="150" height="150" alt=""
 			></aside>
 			<h1></h1>
-			<h2>Version <span id="version"></span><a href="#changelog" class="intern">Changelog</a></h2>
-			<p class="beschreibung-app"><i id="name"></i> ist die Wortkartei-App von <a href="#" title="https://adw-goe.de/forschung/weitere-forschungsprojekte/wortgeschichte-digital-teilprojekt-im-zdl/"><i>Wortgeschichte digital</i></a>, dem an der <i>Akademie der Wissenschaften zu Göttingen</i> (<a href="#" title="https://adw-goe.de/">AdWG</a>) angesiedelten Teilprojekt des <i>Zentrums für digitale Lexikographie der deutschen Sprache</i> (<a href="#" title="https://www.zentrum-lexikographie.de/">ZDL</a>).</p>
+			<h2>Version <span id="version"></span><a href="#changelog">(Changelog)</a></h2>
+			<p class="beschreibung-app"><i id="name"></i> ist die Wortkartei-App von <a href="https://adw-goe.de/forschung/weitere-forschungsprojekte/wortgeschichte-digital-teilprojekt-im-zdl/"><i>Wortgeschichte digital</i></a>, dem an der <i>Akademie der Wissenschaften zu Göttingen</i> (<a href="https://adw-goe.de/">AdWG</a>) angesiedelten Teilprojekt des <i>Zentrums für digitale Lexikographie der deutschen Sprache</i> (<a href="https://www.zentrum-lexikographie.de/">ZDL</a>).</p>
 		</header>
 		
 		<!-- LIZENZEN -->
@@ -30,27 +30,27 @@
 				</tr>
 				<tr class="lizenz">
 					<th>Autor</th>
-					<td>Nico Dorn &lt;<a href="#" title="mailto:ndorn@gwdg.de">ndorn@gwdg.de</a>&gt;</td>
+					<td>Nico Dorn &lt;<a href="mailto:ndorn@gwdg.de">ndorn@gwdg.de</a>&gt;</td>
 				</tr>
 				<tr>
 					<th>Lizenz</th>
-					<td>GNU General Public License v3.0 (<a href="#" title="https://www.gnu.org/licenses/gpl-3.0.en.html">Lizenzbedingungen</a>)</td>
+					<td>GNU General Public License v3.0 (<a href="https://www.gnu.org/licenses/gpl-3.0.en.html">Lizenzbedingungen</a>)</td>
 				</tr>
 				<tr class="lizenz">
 					<th>Fonts</th>
-					<td>Noto Sans, Noto Sans Mono und Noto Serif (<a href="#" title="https://www.google.com/get/noto/">Projektseite</a>)</td>
+					<td>Noto Sans, Noto Sans Mono und Noto Serif (<a href="https://www.google.com/get/noto/">Projektseite</a>)</td>
 				</tr>
 				<tr>
 					<th>Lizenz</th>
-					<td>SIL Open Font License (<a href="#" title="http://scripts.sil.org/OFL">Lizenzbedingungen</a>)</td>
+					<td>SIL Open Font License (<a href="https://scripts.sil.org/cms/scripts/page.php?id=OFL">Lizenzbedingungen</a>)</td>
 				</tr>
 				<tr class="lizenz">
 					<th>Icons</th>
-					<td>Papirus Icon Theme (<a href="#" title="https://github.com/PapirusDevelopmentTeam/papirus-icon-theme">Projektseite</a>)</td>
+					<td>Papirus Icon Theme (<a href="https://github.com/PapirusDevelopmentTeam/papirus-icon-theme">Projektseite</a>)</td>
 				</tr>
 				<tr>
 					<th>Lizenz</th>
-					<td>GNU General Public License v3.0 (<a href="#" title="https://www.gnu.org/licenses/gpl-3.0.en.html">Lizenzbedingungen</a>)</td>
+					<td>GNU General Public License v3.0 (<a href="https://www.gnu.org/licenses/gpl-3.0.en.html">Lizenzbedingungen</a>)</td>
 				</tr>
 				<tr class="lizenz">
 					<td colspan="2">Die Papirus-Icons wurden alle leicht verändert. Daneben gibt es eigens für das Programm erstellte Icons, die ebenfalls unter der GNU General Public License v3.0 stehen. Welche der Grafiken aus dem Papirus Theme stammen und welche neu erstellt wurden, lässt sich im Einzelnen den Metadaten der SVG-Dateien entnehmen. Einige neu erstellte Grafiken basieren mitunter auf Teilen von Papirus-Icons.</td>
@@ -70,6 +70,7 @@
 				</ul>
 				<h3>Verbesserungen</h3>
 				<ul>
+					<li>Links zu Webseiten können nun via Drag-and-Drop in einen Browser gezogen und auch auf diese Weise geöffnet werden. Die Änderung betrifft alle externen Links in allen Programm-Fenstern.</li>
 					<li>Enthält eine Kartei viele lange Belege, war der Aufbau der Belegliste schon bei ein paar Dutzend Karteikarten mitunter recht träge. In solchen Fällen agiert die App nun deutlich performanter, ohne Abstriche bei der Funktionalität zu machen.</li>
 					<li>Notizen und Karteikarte: Seit Version 0.3.0 schließen sich Karteikarte und Notizenfenster nach dem Speichern nicht mehr automatisch. Die Buttons, die früher <i>Abbrechen</i> hießen, wurden deswegen in <i>Schließen</i> umbenannt. Ihre Funktionalität hat sich dabei nicht geändert.</li>
 				</ul>
@@ -89,24 +90,24 @@
 				<h3>Neue Funktionen</h3>
 				<p><span class="obacht">Das Dateiformat hat sich geändert!</span> Ältere <abbr title="Wortgeschichte digital">WGD</abbr>-Dateien werden automatisch konvertiert; dabei wird eine Änderungsmarkierung gesetzt.</p>
 				<ul>
-					<li
-						><p>Bedeutungen-Fenster: Es gibt nun ein separates Fenster, in dem die bisher gesammelten Bedeutungen zum jeweiligen Wort in einer Baumstruktur angezeigt werden. Geöffnet werden kann das Fenster über das Menü (<i>Kartei &gt; Bedeutungen-Fenster</i>), das Tastaturkürzel <kbd>Strg</kbd> + <kbd>⇧</kbd> + <kbd>B</kbd> oder das Icon <img src="../img/quick-bedeutungen-fenster.svg" width="24" height="24" alt=""> in der Quick-Access-Bar.</p
-						><p>Die Zählung der Bedeutungsebenen beginnt vorerst mit römischen Ziffern (I., II. <abbr title="und so weiter">usw.</abbr>). Dies wird sich anpassen lassen, sobald die zentrale Bedeutungsfunktion programmiert ist.</p
-						><p>Durch Klick auf eine der Bedeutungen kann diese in eine gerade geöffnete Karteikarte im Hauptfenster eingetragen werden. Steht dort im Textfeld <i>Bedeutung</i> schon ein Wert wird dieser keinesfalls automatisch, sondern allenfalls auf Nachfrage überschrieben. Das Programm zeigt hier dasselbe Verhalten wie beim Ergänzen des Feldes über das Dropdown-Menü.</p
-						><p>Der Bedeutungsbaum kann über das Drucker-Icon neben der Überschrift oder über das Tastaturkürzel <kbd>Strg</kbd> + <kbd>P</kbd> ausgedruckt werden. Dafür wird die Druckfunktion des Hauptfensters verwendet (<abbr title="siehe unten">s. u.</abbr>), die auch ein Kopieren des Bedeutungsbaums ermöglicht.</p
-						><p>Ist das Bedeutungen-Fenster einmal offen, wird dessen Inhalt beim Ergänzen, Ändern oder Löschen von Belegen im Hauptfenster automatisch aufgefrischt.</p
-					></li>
-					<li
-						><p>Druckfunktion: Karteikarten können nun ausgedruckt werden. Die Funktion steht sowohl für einzelne Karteikarten als auch für die komplette Belegliste zur Verfügung. Beim Druck einer Belegliste werden jene Belege gedruckt, die aktuell in der Liste erscheinen.</p
-						><p>Aufgerufen werden kann die Druckfunktion über das Drucker-Icon im Kopf der Belegliste <abbr title="beziehungsweise">bzw.</abbr> Karteikarte. Alternativ lässt sie sich auch über das Tastaturkürzel <kbd>Strg</kbd> + <kbd>P</kbd> starten (wenn Belegliste oder Karteikarte nicht durch ein anderes Fenster verdeckt werden).</p
-						><p>Wird die Druckfunktion aufgerufen, erscheint zunächst ein Vorschaufenster. In diesem kann der Druck gestartet oder der Inhalt des Vorschaufensters in die Zwischenablage kopiert werden.</p
-					></li>
-					<li
-						><p>Datenfeld Korpus: Die Karteikarte hat ein zusätzliches Textfeld erhalten, in dem das Korpus, aus dem der Beleg stammt, eingetragen werden kann. Zu dem Feld gibt es eine Dropdown-Liste mit allen im <abbr title="Digitalen Wörterbuch der deutschen Sprache">DWDS</abbr> verfügbaren Korpora. Es kann natürlich auch frei gefüllt werden. Wird ein Titel aus dem <abbr title="Deutschen Textarchiv">DTA</abbr> importiert, wird das Feld automatisch gefüllt.</p
-						><p>Die Einführung des neuen Feldes machte einen Umbau des Karteikarten-Formulars nötig. Da das Textfeld <i>Bedeutung</i> nun allein in einer Zeile steht und bei Vergrößerung des Fensters sehr breit werden kann, konnte die maximale Gesamtbreite des Formulars wieder stärker beschränkt werden. Außerdem erhalten die Einträge im Dropdown-Menü nun erst ab 80 Zeichen Länge einen Tooltip (vorher schon ab 65).</p
-						><p>In der Belegliste ist die Anzeige des neuen Datenfelds an das <i>Quellen</i>-Feld gekoppelt. Wird die <i>Quelle</i> über das Icon <img src="../img/liste-quelle.svg" width="24" height="24" alt=""> ein- oder ausgeblendet, wird dadurch zugleich das <i>Korpus</i>-Feld ein- oder ausgeblendet – wenn es denn gefüllt wurde.</p
-						><p>Für die erweiterte Suche gilt diese Kopplung an das <i>Quellen</i>-Feld nicht. Die Felder <i>Quelle</i> und <i>Korpus</i> können separat aus der Suche ausgeschlossen <abbr title="beziehungsweise">bzw.</abbr> in die Suche einbezogen werden.</p
-					></li>
+					<li>
+						<p>Bedeutungen-Fenster: Es gibt nun ein separates Fenster, in dem die bisher gesammelten Bedeutungen zum jeweiligen Wort in einer Baumstruktur angezeigt werden. Geöffnet werden kann das Fenster über das Menü (<i>Kartei &gt; Bedeutungen-Fenster</i>), das Tastaturkürzel <kbd>Strg</kbd> + <kbd>⇧</kbd> + <kbd>B</kbd> oder das Icon <img src="../img/quick-bedeutungen-fenster.svg" width="24" height="24" alt=""> in der Quick-Access-Bar.</p>
+						<p>Die Zählung der Bedeutungsebenen beginnt vorerst mit römischen Ziffern (I., II. <abbr title="und so weiter">usw.</abbr>). Dies wird sich anpassen lassen, sobald die zentrale Bedeutungsfunktion programmiert ist.</p>
+						<p>Durch Klick auf eine der Bedeutungen kann diese in eine gerade geöffnete Karteikarte im Hauptfenster eingetragen werden. Steht dort im Textfeld <i>Bedeutung</i> schon ein Wert wird dieser keinesfalls automatisch, sondern allenfalls auf Nachfrage überschrieben. Das Programm zeigt hier dasselbe Verhalten wie beim Ergänzen des Feldes über das Dropdown-Menü.</p>
+						<p>Der Bedeutungsbaum kann über das Drucker-Icon neben der Überschrift oder über das Tastaturkürzel <kbd>Strg</kbd> + <kbd>P</kbd> ausgedruckt werden. Dafür wird die Druckfunktion des Hauptfensters verwendet (<abbr title="siehe unten">s. u.</abbr>), die auch ein Kopieren des Bedeutungsbaums ermöglicht.</p>
+						<p>Ist das Bedeutungen-Fenster einmal offen, wird dessen Inhalt beim Ergänzen, Ändern oder Löschen von Belegen im Hauptfenster automatisch aufgefrischt.</p>
+					</li>
+					<li>
+						<p>Druckfunktion: Karteikarten können nun ausgedruckt werden. Die Funktion steht sowohl für einzelne Karteikarten als auch für die komplette Belegliste zur Verfügung. Beim Druck einer Belegliste werden jene Belege gedruckt, die aktuell in der Liste erscheinen.</p>
+						<p>Aufgerufen werden kann die Druckfunktion über das Drucker-Icon im Kopf der Belegliste <abbr title="beziehungsweise">bzw.</abbr> Karteikarte. Alternativ lässt sie sich auch über das Tastaturkürzel <kbd>Strg</kbd> + <kbd>P</kbd> starten (wenn Belegliste oder Karteikarte nicht durch ein anderes Fenster verdeckt werden).</p>
+						<p>Wird die Druckfunktion aufgerufen, erscheint zunächst ein Vorschaufenster. In diesem kann der Druck gestartet oder der Inhalt des Vorschaufensters in die Zwischenablage kopiert werden.</p>
+					</li>
+					<li>
+						<p>Datenfeld Korpus: Die Karteikarte hat ein zusätzliches Textfeld erhalten, in dem das Korpus, aus dem der Beleg stammt, eingetragen werden kann. Zu dem Feld gibt es eine Dropdown-Liste mit allen im <abbr title="Digitalen Wörterbuch der deutschen Sprache">DWDS</abbr> verfügbaren Korpora. Es kann natürlich auch frei gefüllt werden. Wird ein Titel aus dem <abbr title="Deutschen Textarchiv">DTA</abbr> importiert, wird das Feld automatisch gefüllt.</p>
+						<p>Die Einführung des neuen Feldes machte einen Umbau des Karteikarten-Formulars nötig. Da das Textfeld <i>Bedeutung</i> nun allein in einer Zeile steht und bei Vergrößerung des Fensters sehr breit werden kann, konnte die maximale Gesamtbreite des Formulars wieder stärker beschränkt werden. Außerdem erhalten die Einträge im Dropdown-Menü nun erst ab 80 Zeichen Länge einen Tooltip (vorher schon ab 65).</p>
+						<p>In der Belegliste ist die Anzeige des neuen Datenfelds an das <i>Quellen</i>-Feld gekoppelt. Wird die <i>Quelle</i> über das Icon <img src="../img/liste-quelle.svg" width="24" height="24" alt=""> ein- oder ausgeblendet, wird dadurch zugleich das <i>Korpus</i>-Feld ein- oder ausgeblendet – wenn es denn gefüllt wurde.</p>
+						<p>Für die erweiterte Suche gilt diese Kopplung an das <i>Quellen</i>-Feld nicht. Die Felder <i>Quelle</i> und <i>Korpus</i> können separat aus der Suche ausgeschlossen <abbr title="beziehungsweise">bzw.</abbr> in die Suche einbezogen werden.</p>
+					</li>
 					<li>Filter Korpora: Das neue Datenfeld <i>Korpus</i> ermöglichte ferner die Integration eines neuen Filters, mit dem sich die Belegliste nach den in den Karteikarten angegebenen Korpora filtern lässt. Der <i>Korpora</i>-Filter verhält sich genauso wie der <i>Bedeutungen-</i> und <i>Textsorten</i>-Filter: Belege, in denen kein Korpus angegeben wurde, lassen sich über den Filter <i>(nicht bestimmt)</i> finden.</li>
 				</ul>
 				<h3>Verbesserungen</h3>

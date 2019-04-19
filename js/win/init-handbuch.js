@@ -14,22 +14,25 @@ window.addEventListener("load", function() {
 	document.addEventListener("keydown", helferWin.tastatur);
 	
 	// EVENTS INITIALISIEREN
-	// Programm-Icon
+	// Suche
+	hilfe.sucheListener(document.getElementById("suchfeld"));
+	document.getElementById("suchfeld-lupe").addEventListener("click", function(evt) {
+		evt.preventDefault();
+		hilfe.sucheWechseln();
+	});
+	// Über App
 	document.getElementById("icon").addEventListener("click", function() {
 		const {ipcRenderer} = require("electron");
-		ipcRenderer.send("ueber-zettelstraum", "handbuch");
+		ipcRenderer.send("ueber-app", "handbuch");
 	});
-	// Navigation durch die Sektionen
+	// Navigation
 	document.querySelectorAll(`a[class^="link-sektion-"`).forEach((i) => hilfe.sektion(i));
-	// Klick-Events an andere Links hängen
-	document.querySelectorAll("a").forEach(function(i) {
-		if (i.classList.contains("sprung")) {
-			hilfe.naviSprung(i);
-			return;
+	// interne Sprung-Links
+	document.querySelectorAll(`a[href^="#"]`).forEach(function(a) {
+		if (/^#[a-z]/.test(a.getAttribute("href"))) {
+			hilfe.naviSprung(a);
 		}
-		if (i.classList.contains("intern")) {
-			return;
-		}
-		helferWin.links(i);
 	});
+	// externe Links TODO (gibt es sowas im Handbuch?)
+	document.querySelectorAll(`a[href^="http"]`).forEach((a) => helferWin.links(a));
 });

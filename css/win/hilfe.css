@@ -12,6 +12,7 @@
 /* Struktur-Elemente ---------------------------- */
 body {
 	margin: 0;
+	overflow-x: hidden;
 	color: var(--text);
 	font: 16px/24px "Noto Sans", sans-serif;
 	user-select: none;
@@ -45,7 +46,7 @@ body > header h1 {
 
 main {
 	display: grid;
-	grid-template-columns: 300px 1fr;
+	grid-template-columns: 250px 1fr;
 	margin-top: 70px;
 }
 
@@ -60,17 +61,13 @@ a {
 	text-decoration: none;
 }
 
-a.intern {
-	cursor: default;
-}
-
 abbr {
 	text-decoration: none;
 }
 
 code {
 	display: inline-block;
-	border-radius: 2px;
+	border-radius: 3px;
 	padding: 0 3px;
 	background-color: var(--text);
 	color: #fff;
@@ -93,14 +90,14 @@ h2 {
 }
 
 h2:first-child {
-	margin-top: 0;
+	margin-top: 16px;
 }
 
 kbd {
 	display: inline-block;
 	border: 1px solid var(--linie);
-	border-radius: 2px;
-	padding: 0 2px;
+	border-radius: 3px;
+	padding: 0 3px;
 	background-color: var(--hintergrund);
 	font-family: "Noto Sans Mono", monospace;
 }
@@ -109,9 +106,13 @@ p {
 	margin: 0 0 10px 0;
 }
 
+section > p:first-child {
+	margin-top: 23px;
+}
+
 pre {
-	border-radius: 2px;
-	padding: 0 3px;
+	border-radius: 3px;
+	padding: 3px;
 	background-color: var(--text);
 	color: #fff;
 	font-family: "Noto Sans Mono", monospace;
@@ -123,13 +124,70 @@ pre.quelltext {
 	color: var(--text);
 }
 
+section ul {
+	margin: 0;
+	padding: 0 0 0 30px;
+	list-style-type: disc;
+}
+
+section li {
+	margin-bottom: 10px;
+}
+
 /* Navigation ----------------------------------- */
 nav {
 	position: sticky;
 	top: 70px;
-	padding: 22px 0 0 0;
-	height: calc(100vh - 70px - 22px); /* 70px Header, 22px Padding */
+	padding: 20px 0 0 0;
+	height: calc(100vh - 70px - 20px); /* 70px Header, 20px Padding */
 	background-color: var(--hintergrund);
+}
+
+nav p {
+	position: relative;
+	padding: 0 4px;
+}
+
+input {
+	margin: 0;
+	border: 1px solid var(--linie);
+	padding: 2px 5px;
+	width: calc(100% - 12px); /* 12px padding und border */
+	color: var(--text);
+	font: 16px/24px "Noto Sans", sans-serif;
+}
+
+input:focus {
+	outline: 1px solid var(--farbe);
+	border-color: var(--farbe);
+}
+
+#suchfeld-lupe {
+	position: absolute;
+	right: 6px;
+	top: 3px;
+	display: none;
+	width: 24px;
+	height: 24px;
+	background-color: #fff;
+	color: var(--textExtremHell);
+}
+
+#suchfeld-lupe:hover {
+	color: var(--text);
+}
+
+#suchfeld-lupe svg path {
+	fill: currentcolor;
+}
+
+nav p.lupe input {
+	padding-right: 25px;
+	width: calc(100% - 32px); /* 32px padding und border */
+}
+
+nav p.lupe #suchfeld-lupe {
+	display: block;
 }
 
 nav ul {
@@ -148,6 +206,8 @@ nav ul.h {
 
 nav ul.h li {
 	margin-bottom: 5px;
+	padding-left: 15px;
+	text-indent: -15px;
 }
 
 nav li a.kopf {
@@ -166,15 +226,125 @@ nav li a.aktiv:focus {
 	background-color: var(--farbe);
 }
 
-/* Globale Klassen ------------------------------ */
-.aus {
-	display: none !important;
+/* Tabellen ------------------------------------- */
+table {
+	margin: 0;
+	border-collapse: collapse;
+	border-spacing: 0;
 }
 
-.datei {
+th,
+td {
+	padding: 5px 10px;
+	vertical-align: top;
+	text-align: left;
+}
+
+th:first-child,
+td:first-child {
+	padding-left: 0;
+}
+
+th:last-child,
+td:last-child {
+	padding-right: 0;
+}
+
+td:nth-child(3),
+td:last-child {
+	font-size: 14px;
+	line-height: 20px;
+}
+
+td:nth-child(3) {
+	white-space: nowrap;
+}
+
+th {
+	font-style: italic;
+	font-weight: normal;
+}
+
+td[colspan] {
+	font-style: italic;
+}
+
+tr.wgd-ebene1 td[colspan] p,
+tr.wgd-ebene1 p,
+tr.wgd-ebene2 td[colspan] p,
+tr.wgd-ebene2 p {
+	margin: 0 0 0 15px;
+	border-left: 3px solid var(--farbeB);
+	padding-left: 15px;
+}
+
+tr.wgd-ebene1 td[colspan] p,
+tr.wgd-ebene2 td[colspan] p {
+	border-color: transparent;
+}
+
+tr.wgd-ebene2 td[colspan] p,
+tr.wgd-ebene2 p {
+	margin-left: 43px;
+}
+
+/* Suche ---------------------------------------- */
+mark.suche {
+	border-radius: 3px;
+	padding: 0 3px;
+	background-color: var(--farbeOrange);
+	color: #fff;
+}
+
+#suchergebnisse b {
+	padding-right: 15px;
+}
+
+#suchergebnisse p {
+	margin-bottom: 15px;
+}
+
+#suchergebnisse p:hover {
 	color: var(--farbe);
+}
+
+#suchergebnisse p.keine-treffer {
+	color: var(--textSehrHell);
+	text-align: center;
+	font-style: italic;
+}
+
+#suchergebnisse p.mehr-treffer {
+	color: var(--farbe);
+	font-style: italic;
+	text-align: center;
+}
+
+/* Globale Klassen ------------------------------ */
+.datei {
 	font-family: "Noto Sans Mono", monospace;
 }
+
+.datentyp {
+	color: var(--farbe);
+}
+
+.treffer-vor {
+	outline-color: transparent;
+	outline-offset: 2px;
+	outline-style: solid;
+	outline-width: 2px;
+}
+
+.treffer {
+	outline-color: var(--farbe);
+	transition: outline-color 1s ease;
+}
+
+.treffer-nach {
+	transition: outline-color 1s ease;
+}
+
 
 .obacht {
 	color: var(--textWarnung);

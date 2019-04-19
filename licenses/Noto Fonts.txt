@@ -1,5 +1,5 @@
 This license below is also available with a FAQ at:
-http://scripts.sil.org/OFL
+https://scripts.sil.org/cms/scripts/page.php?id=OFL
 
 -----------------------------------------------------------
 SIL OPEN FONT LICENSE Version 1.1 - 26 February 2007

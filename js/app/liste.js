@@ -855,7 +855,7 @@ let liste = {
 					return p;
 				});
 			}
-			return `<a href="#" title="${url}" class="link">${basis}</a>${schluss}`;
+			return `<a href="${url}" title="${url}" class="link">${basis}</a>${schluss}`;
 		});
 		return text;
 	},

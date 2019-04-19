@@ -9,13 +9,8 @@ window.addEventListener("load", function() {
 	document.getElementById("version-nodejs").textContent = process.versions.node;
 	document.getElementById("version-chromium").textContent = process.versions.chrome;
 	document.getElementById("version-v8").textContent = process.versions.v8;
-	// Klick-Events an Links hängen
-	document.querySelectorAll("a").forEach(function(i) {
-		if (i.classList.contains("intern")) {
-			return;
-		}
-		helferWin.links(i);
-	});
+	// externe Links
+	document.querySelectorAll(`a[href^="http"]`).forEach((a) => helferWin.links(a));
 	// Tastatur-Events abfangen
 	document.addEventListener("keydown", helferWin.tastatur);
 });

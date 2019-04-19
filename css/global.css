@@ -5,14 +5,30 @@
 	display: none !important;
 }
 
-/* Ziehen von Elementen unterbinden ------------- */
+/* Ziehen von Elementen ------------------------- */
 *, *::after, *::before {
 	-webkit-app-region: no-drag;
 	-webkit-user-drag: none;
+}
+
+a[href^="http"],
+a[href^="mailto"] {
+	-webkit-app-region: drag;
+	-webkit-user-drag: auto;
+}
+
+a[href^="#"] {
+	user-select: none;
+	cursor: default;
 }
 
 /* Farbe Textauswahl ---------------------------- */
 ::selection {
 	background-color: var(--farbe);
 	color: #fff;
+}
+
+/* Placeholder in Inputs ------------------------ */
+::placeholder {
+  color: var(--textSehrHell);
 }

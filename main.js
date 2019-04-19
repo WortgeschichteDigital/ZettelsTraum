@@ -464,7 +464,7 @@ appMenu.deaktivieren(true, false);
 ipcMain.on("menus-deaktivieren", (evt, disable) => appMenu.deaktivieren(disable, true));
 
 // Programm-Info aufrufen, wenn der Renderer-Prozess es wünscht
-ipcMain.on("ueber-zettelstraum", (evt, opener) => fenster.erstellenUeberApp(opener));
+ipcMain.on("ueber-app", (evt, opener) => fenster.erstellenUeberApp(opener));
 
 // Electron-Info aufrufen, wenn der Renderer-Prozess es wünscht
 ipcMain.on("ueber-electron", (evt, opener) => fenster.erstellenUeberElectron(opener));

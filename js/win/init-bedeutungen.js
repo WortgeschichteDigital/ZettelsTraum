@@ -6,8 +6,8 @@ window.addEventListener("load", function() {
 	
 	// EVENTS INITIALISIEREN
 	const {ipcRenderer} = require("electron");
-	// Programm-Icon
-	document.getElementById("icon").addEventListener("click", () => ipcRenderer.send("ueber-zettelstraum", "bedeutungen"));
+	// Über App
+	document.getElementById("icon").addEventListener("click", () => ipcRenderer.send("ueber-app", "bedeutungen"));
 	// Druck-Icon
 	document.getElementById("bd-win-drucken").addEventListener("click", function(evt) {
 		evt.preventDefault();

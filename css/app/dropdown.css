@@ -78,7 +78,6 @@ textarea.dropdown-feld {
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
-	cursor: pointer;
 }
 
 #dropdown span:last-child {
@@ -96,7 +95,6 @@ textarea.dropdown-feld {
 #dropdown span.keine-vorschlaege {
 	color: var(--textSehrHell);
 	font-style: italic;
-	cursor: default;
 }
 
 #dropdown span.keine-vorschlaege:hover {

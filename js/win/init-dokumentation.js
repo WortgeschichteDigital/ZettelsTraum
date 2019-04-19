@@ -14,30 +14,30 @@ window.addEventListener("load", function() {
 	document.addEventListener("keydown", helferWin.tastatur);
 	
 	// EVENTS INITIALISIEREN
-	// Programm-Icon
-	document.getElementById("icon").addEventListener("click", function() {
-		const {ipcRenderer} = require("electron");
-		ipcRenderer.send("ueber-zettelstraum", "dokumentation");
+	// Suche
+	hilfe.sucheListener(document.getElementById("suchfeld"));
+	document.getElementById("suchfeld-lupe").addEventListener("click", function(evt) {
+		evt.preventDefault();
+		hilfe.sucheWechseln();
 	});
+	// Über App
+	const {ipcRenderer} = require("electron");
+	document.getElementById("icon").addEventListener("click", () => ipcRenderer.send("ueber-app", "dokumentation"));
 	// Über Electron
 	document.querySelector(".ueber-electron").addEventListener("click", function(evt) {
 		evt.preventDefault();
-		const {ipcRenderer} = require("electron");
 		ipcRenderer.send("ueber-electron", "dokumentation");
 	});
-	// Navigation durch die Sektionen
-	document.querySelectorAll(`a[class^="link-sektion-"`).forEach((i) => hilfe.sektion(i));
-	// spezielle Links
-	document.querySelectorAll(".link-handbuch").forEach((i) => hilfe.oeffneHandbuch(i));
-	// Klick-Events an andere Links hängen
-	document.querySelectorAll("a").forEach(function(i) {
-		if (i.classList.contains("sprung")) {
-			hilfe.naviSprung(i);
-			return;
+	// Handbuch
+	document.querySelectorAll(".link-handbuch").forEach((a) => hilfe.oeffneHandbuch(a));
+	// Navigation
+	document.querySelectorAll(`a[class^="link-sektion-"`).forEach((a) => hilfe.sektion(a));
+	// interne Sprung-Links
+	document.querySelectorAll(`a[href^="#"]`).forEach(function(a) {
+		if (/^#[a-z]/.test(a.getAttribute("href"))) {
+			hilfe.naviSprung(a);
 		}
-		if (i.classList.contains("intern")) {
-			return;
-		}
-		helferWin.links(i);
 	});
+	// externe Links
+	document.querySelectorAll(`a[href^="http"]`).forEach((a) => helferWin.links(a));
 });

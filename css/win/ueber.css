@@ -44,16 +44,13 @@ section.changelog {
 /* Basis-Elemente ------------------------------- */
 a {
 	color: var(--textFarbe);
-	text-decoration: underline;
+	text-decoration: none;
 	outline: none;
-}
-
-a.intern {
-	cursor: default;
 }
 
 section a {
 	color: #fff;
+	text-decoration: underline;
 }
 
 abbr {
@@ -79,7 +76,6 @@ h2 {
 h2 a {
 	margin-left: 20px;
 	font-size: 14px;
-	text-decoration: underline;
 }
 
 section h2 {
@@ -89,8 +85,8 @@ section h2 {
 kbd {
 	display: inline-block;
 	border: 1px solid var(--linie);
-	border-radius: 2px;
-	padding: 0 2px;
+	border-radius: 3px;
+	padding: 0 3px;
 	background-color: var(--hintergrund);
 	font-family: "Noto Sans Mono", monospace;
 }
