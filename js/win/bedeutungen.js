@@ -1,6 +1,6 @@
 "use strict";
 
-let bedeutungencont = {
+let bedeutungen = {
 	// Anzeige mit den gelieferten Daten aufbereiten
 	aufbauen (daten) {
 		// Wort eintragen
@@ -19,7 +19,7 @@ let bedeutungencont = {
 		}
 		// Bedeutungen aufbauen
 		for (let i = 0, len = bd.length; i < len; i++) {
-			const neue_bd = bedeutungencont.aufbauenLi(bd[i], daten.bedeutungen.bd[bd[i]]);
+			const neue_bd = bedeutungen.aufbauenLi(bd[i], daten.bedeutungen.bd[bd[i]]);
 			// in Bedeutungsbaum einhängen
 			//   [0] = <div>
 			//   [1] = Verschachtelungstiefe; 0 = ohne Verschachtelung, 1 = 1. Ebene usw.
@@ -31,7 +31,7 @@ let bedeutungencont = {
 			}
 		}
 		// Zählung eintragen
-		bedeutungencont.zaehlung();
+		bedeutungen.zaehlung();
 		// sucht das <div>, in den eine Bedeutung verschachtelt werden muss
 		function schachtelFinden(bd) {
 			// Bedeutung kürzen
@@ -69,7 +69,7 @@ let bedeutungencont = {
 		// Listen-Item erzeugen
 		let div = document.createElement("div"),
 			p = document.createElement("p");
-		bedeutungencont.eintragen(p);
+		bedeutungen.eintragen(p);
 		div.appendChild(p);
 		div.classList.add("bd-win-baum");
 		div.dataset.bd = bd;
@@ -110,8 +110,8 @@ let bedeutungencont = {
 			zaehlungen.fill(0, ebene + 1);
 			// Zählzeichen ermitteln erzeugen
 			let zeichen = "–";
-			if (bedeutungencont.zaehlzeichen[ebene]) {
-				zeichen = bedeutungencont.zaehlzeichen[ebene][zaehlungen[ebene] - 1];
+			if (bedeutungen.zaehlzeichen[ebene]) {
+				zeichen = bedeutungen.zaehlzeichen[ebene][zaehlungen[ebene] - 1];
 			}
 			b.textContent = zeichen;
 		});

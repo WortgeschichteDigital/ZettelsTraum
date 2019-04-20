@@ -13,6 +13,12 @@ window.addEventListener("load", function() {
 	// TASTATUREINGABEN ABFANGEN
 	document.addEventListener("keydown", helferWin.tastatur);
 	
+	// RECHTSKLICK ABFANGEN
+	window.addEventListener("contextmenu", function(evt) {
+		evt.preventDefault();
+		popup.oeffnen(evt);
+	});
+	
 	// EVENTS INITIALISIEREN
 	// Suche
 	hilfe.sucheListener(document.getElementById("suchfeld"));

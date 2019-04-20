@@ -267,7 +267,7 @@ let beleg = {
 		beleg.listeGeaendert = true;
 		kartei.karteiGeaendert(true);
 		// Bedeutungen-Fenster mit neuen Daten versorgen
-		bedeutungenwin.daten();
+		bedeutungenWin.daten();
 	},
 	// Bearbeiten des Belegs beenden, Beleg also schließen
 	// (Der Button hieß früher "Abbrechen", darum heißt die Funktion noch so)
@@ -322,7 +322,7 @@ let beleg = {
 				liste.status(true);
 				liste.wechseln();
 				beleg.listeGeaendert = false;
-				bedeutungenwin.daten();
+				bedeutungenWin.daten();
 			}
 		});
 		dialog.text(`Soll <i>${liste.detailAnzeigenH3(id)}</i> wirklich gelöscht werden?`);

@@ -124,6 +124,22 @@ pre.quelltext {
 	color: var(--text);
 }
 
+q::before {
+	content: "„";
+}
+
+q::after {
+	content: "“";
+}
+
+q.einfach::before {
+	content: "‚";
+}
+
+q.einfach::after {
+	content: "‘";
+}
+
 section ul {
 	margin: 0;
 	padding: 0 0 0 30px;

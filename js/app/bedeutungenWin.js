@@ -1,6 +1,6 @@
 "use strict";
 
-let bedeutungenwin = {
+let bedeutungenWin = {
 	// Fenster öffnen oder schließen
 	oeffnen (oeffnen) {
 		const {ipcRenderer} = require("electron");
@@ -15,7 +15,7 @@ let bedeutungenwin = {
 		// Daten zusammentragen
 		let daten = {
 			wort: kartei.wort,
-			bedeutungen: bedeutungenwin.get(),
+			bedeutungen: bedeutungenWin.get(),
 		};
 		// Daten senden
 		const {ipcRenderer} = require("electron");

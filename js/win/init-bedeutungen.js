@@ -11,9 +11,9 @@ window.addEventListener("load", function() {
 	// Druck-Icon
 	document.getElementById("bd-win-drucken").addEventListener("click", function(evt) {
 		evt.preventDefault();
-		bedeutungencont.drucken();
+		bedeutungen.drucken();
 	});
 	
 	// ANFRAGEN DES MAIN-PROZESSES ABFANGEN
-	ipcRenderer.on("daten", (evt, daten) => bedeutungencont.aufbauen(daten));
+	ipcRenderer.on("daten", (evt, daten) => bedeutungen.aufbauen(daten));
 });

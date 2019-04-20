@@ -1,7 +1,7 @@
 "use strict";
 
 let popup = {
-	// speichert die ermittelte Textauswahl in der Listen-Detailansicht
+	// speichert die ermittelte Textauswahl
 	textauswahl: {
 		text: "",
 		html: "",

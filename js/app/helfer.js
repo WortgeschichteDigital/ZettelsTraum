@@ -51,7 +51,7 @@ let helfer = {
 				dialog.oeffnen("alert", null);
 				dialog.text("Sorry!\nDiese Funktion ist noch nicht programmiert.");
 			} else if (id === "kartei-bedeutungen-fenster") {
-				bedeutungenwin.oeffnen(true);
+				bedeutungenWin.oeffnen(true);
 			} else if (id === "kartei-suche") {
 				filter.suche();
 			} else if (id === "belege-hinzufuegen") {

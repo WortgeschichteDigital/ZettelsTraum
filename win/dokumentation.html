@@ -13,6 +13,7 @@
 		<script src="../js/win/init-dokumentation.js"></script>
 		<script src="../js/win/helferWin.js"></script>
 		<script src="../js/win/hilfe.js"></script>
+		<script src="../js/win/popup.js"></script>
 	</head>
 	<body>
 		<!-- KOPF -->
@@ -85,7 +86,7 @@ npm install --save-dev electron</pre>
 					
 					<p>Während der Installation werden der Ordner <span class="datei">./node_modules/</span> und die Datei <span class="datei">./package-lock.json</span> erstellt. Der Ordner <span class="datei">./node_modules/</span> kann mehrere Hundert Megabyte groß sein!</p>
 					
-					<p>Da im Herzen von <i>Electron</i> ein Browser schlägt und Browser fortwährend mit Sicherheitsupdates versorgt werden wollen, gibt es sehr häufig (alle ein bis zwei Wochen) <a href="https://electronjs.org/releases/stable"><i>Electron</i>-Updates</a>. Das Update funktioniert genauso wie die Erstinstallation:</p>
+					<p>Da im Herzen von <i>Electron</i> ein Browser schlägt und Browser fortwährend mit Sicherheitsupdates versorgt werden wollen, gibt es sehr häufig (<abbr title="in der Regel">i. d. R.</abbr> alle ein bis zwei Wochen) <a href="https://electronjs.org/releases/stable"><i>Electron</i>-Updates</a>. Das Update funktioniert genauso wie die Erstinstallation:</p>
 					
 					<pre>npm install --save-dev electron</pre>
 					
@@ -111,7 +112,7 @@ npm install --save-dev electron</pre>
 					
 					<pre class="quelltext">"main": "main.js",</pre>
 					
-					<p>Unter <code class="quelltext">"scripts"</code> steht <abbr title="unter anderem">u. a.</abbr> die Information, wie das Programm gestartet werden soll:</p>
+					<p>Und unter <code class="quelltext">"scripts"</code> steht <abbr title="unter anderem">u. a.</abbr> die Information, wie das Programm gestartet werden soll:</p>
 					
 					<pre class="quelltext">"scripts": {
 	"start": "electron .",
@@ -122,14 +123,14 @@ npm install --save-dev electron</pre>
 					
 					<pre>npm start</pre>
 					
-					<p>Nun sollte <i class="app-name"></i> im Entwickler-Modus gestartet werden. <abbr title="Das heißt">D. h.</abbr> konkret, dass sich über das Tastaturkürzel <kbd>Strg</kbd> + <kbd>⇧</kbd> + <kbd>I</kbd> die <i lang="en">Developer Tools</i> von <i>Chromium</i> öffnen lassen, die in der paketierten Version nicht mehr aufgerufen werden können. Außerdem erscheint im Hauptfenster das Menü <i>Dev</i>, das nach der Paketierung verschwunden ist.</p>
+					<p>Nun sollte <i class="app-name"></i> im Entwickler-Modus gestartet werden. <abbr title="Das heißt">D. h.</abbr> konkret, dass sich über das Tastaturkürzel <kbd>Strg</kbd> + <kbd>⇧</kbd> + <kbd>I</kbd> die <i lang="en">Developer Tools</i> von <i>Chromium</i> öffnen lassen, die in der paketierten Version nicht mehr aufgerufen werden können. Außerdem erscheint im Hauptfenster das App-Menü <i>Dev</i>, das nach der Paketierung verschwunden ist.</p>
 					
 					<!-- Paketieren -->
 					<h2 id="framework-paketieren">Paketieren der App</h2>
 					
 					<p>Das Paketieren von <i class="app-name"></i> ist denkbar einfach. Zunächst muss der <a href="https://github.com/electron-userland/electron-packager/">Packager von <i>Electron</i></a> installiert werden:</p>
 					
-					<pre>./
+					<pre>cd ./
 npm install --save-dev electron-packager</pre>
 
 					<p>Der Packager wird – natürlich – über die Kommandozeile bedient:</p>
@@ -148,7 +149,7 @@ npm install --save-dev electron-packager</pre>
 					
 					<p>Die vordefinierten Scripts erstellen Pakete für eine 64-Bit-Architektur. Dies kann natürlich nach Belieben angepasst werden. Wie, darüber gibt die <a href="https://github.com/electron-userland/electron-packager/blob/master/docs/api.md"><abbr title="Application Programming Interface" lang="en">API</abbr></a> des Packagers Auskunft.</p>
 					
-					<p>Im Ordner <span class="datei">../dist</span> befinden sich nun die Ordner <span class="datei">zettelstraum-linux-x64</span> <abbr title="beziehungsweise">bzw.</abbr> <span class="datei">zettelstraum-win32-x64</span>. In den Ordnern befinden sich wiederum die ausführbaren Dateien <span class="datei">zettelstraum</span> <abbr title="beziehungsweise">bzw.</abbr> <span class="datei">zettelstraum.exe</span>. Über diese kann das paketierte Programm ohne vorherige Installation gestartet werden.</p>
+					<p>Im Ordner <span class="datei">../dist</span> befinden sich nun die Unterordner <span class="datei">zettelstraum-linux-x64</span> <abbr title="beziehungsweise">bzw.</abbr> <span class="datei">zettelstraum-win32-x64</span>. Die Unterordner enthalten die ausführbare Datei <span class="datei">zettelstraum</span> <abbr title="beziehungsweise">bzw.</abbr> <span class="datei">zettelstraum.exe</span>. Über diese kann das paketierte Programm ohne vorherige Installation gestartet werden.</p>
 					
 					<p>Auch wenn die ausführbare Programm-Datei um die 100 Megabyte groß ist – ohne die anderen Dateien, die sich im Paket-Ordner befinden, kann die App nicht gestartet werden. Soll sie auf ein anderes Betriebssystem kopiert werden, muss also immer der gesamte Ordner mit allen Dateien mitgenommen werden.</p>
 					
@@ -161,10 +162,10 @@ npm install --save-dev electron-packager</pre>
 					
 					<p>Zunächst einmal muss das Helfer-Programm via <code>npm</code> installiert werden:</p>
 					
-					<pre>./
+					<pre>cd ./
 npm install --save-dev electron-winstaller</pre>
 
-					<p>Damit das Programm funktioniert, müssen <a href="https://wiki.ubuntuusers.de/Wine/">Wine</a> und ein ganzer Haufen <a href="https://github.com/mono/mono">Mono</a>-Bibliotheken installiert werden:</p>
+					<p>Damit das Programm funktioniert, müssen <a href="https://wiki.ubuntuusers.de/Wine/">Wine</a> und ein ganzer Haufen <a href="https://github.com/mono/mono">Mono</a>-Bibliotheken installiert sein:</p>
 					
 					<pre>sudo apt-get install wine mono-runtime mono-devel</pre>
 					
@@ -185,13 +186,13 @@ npm install --save-dev electron-winstaller</pre>
 					
 					<p>Ob die App nun paketiert und installiert ist oder einfach via <code>npm start</code> aufgerufen wurde, das <i>Electron</i>-Framework erstellt automatisch einen Konfigurationsordner im Standard-Konfigurationsverzeichnis des Betriebssystems. Das ist unter <i>Linux</i>:</p>
 					
-					<p class="datei">$HOME/.config/<span class="app-name"></span>/</p>
+					<p class="datei">~/.config/<span class="app-name"></span>/</p>
 					
 					<p>Und unter <i>Windows 10</i>:</p>
 					
 					<p class="datei">C:\Users\[BENUTZERNAME]\AppData\Roaming\<span class="app-name"></span>\</p>
 					
-					<p>Die Dateien in dem Ordner werden alle von <i>Electron</i> verwaltet – bis auf die Datei <span class="datei">einstellungen.json</span>. Diese wird von der <span class="datei">./main.js</span> erstellt. In ihr werden die Einstellungen des Hauptfensters der App und die Größe und Position von einigen (aber nicht allen) Programm-Fenstern gespeichert. Welche Werte die App anlegt, lässt sich dem Objekt <code class="quelltext">optionen.data</code> in der Datei <span class="datei">./js/app/optionen.js</span> entnehmen. Die durch die Datei <span class="datei">./main.js</span> angelegten Werte finden sich <abbr title="ebenda">ebd.</abbr> im gleichnamigen Objekt <code class="quelltext">optionen.data</code>.</p>
+					<p>Die Dateien in dem Ordner werden alle von <i>Electron</i> verwaltet – bis auf die Datei <span class="datei">einstellungen.json</span>. Diese wird von der <span class="datei">./main.js</span> erstellt. In ihr werden die Einstellungen des Hauptfensters der App und die Größe und Position von einigen (aber nicht allen) Programmfenstern gespeichert. Welche Werte die App anlegt, lässt sich dem Objekt <code class="quelltext">optionen.data</code> in der Datei <span class="datei">./js/app/optionen.js</span> entnehmen. Die durch die Datei <span class="datei">./main.js</span> angelegten Werte finden sich <abbr title="ebenda">ebd.</abbr> im gleichnamigen Objekt <code class="quelltext">optionen.data</code>. In <code class="quelltext">optionen.data.app</code> der <span class="datei">./main.js</span> landen letztlich alle Werte aus dem Objekt <code class="quelltext">optionen.data</code> der <span class="datei">./js/app/optionen.js</span>.</p>
 					
 					<!-- Quelltext -->
 					<h2 id="framework-quelltext">Quelltext in der paketierten App</h2>
@@ -200,7 +201,7 @@ npm install --save-dev electron-winstaller</pre>
 					
 					<p class="datei">C:\Users\[BENUTZERNAME]\AppData\Local\zettelstraum\app-[VERSIONSNUMMER]\resources\app.asar</p>
 					
-					<p><a href="https://github.com/electron/asar">Asar</a> ist das Archiv-Programm von <i>Electron</i>, das ähnlich wie <code>tar</code> funktioniert: Der Inhalt ist nicht komprimiert, es können aber beliebig viele Ordner und Dateien in einem einzigen Archiv zusammengefasst werden.</p>
+					<p><a href="https://github.com/electron/asar">Asar</a> ist das Archiv-Programm von <i>Electron</i>, das ähnlich wie <code>tar</code> funktioniert: Der Inhalt ist nicht komprimiert, es werden schlicht Ordner und Dateien in einem Archiv zusammengefasst.</p>
 					
 					<p>Entpacken lässt sich das Archiv via:</p>
 					
@@ -221,8 +222,8 @@ npm install --save-dev electron-winstaller</pre>
 					<ul>
 						<li><span class="datei">./index.html</span>: <abbr title="Hyptertext Markupt Language" lang="en">HTML</abbr>-Datei, die beim Öffnen des Hauptfensters geladen wird</li>
 						<li><span class="datei">./installer-win.js</span>: Node-Script, das auf Basis der <a href="#framework-paketieren">paketierten App</a> einen <a href="#framework-installer">Squirrel-Installer erstellt</a></li>
-						<li><span class="datei">./main.js</span>: Node-Script, das die App initialisiert, die Programm-Fenster lädt und verwaltet</li>
-						<li><span class="datei">./package.json</span>: <abbr title="JavaScript Object Notation" lang="en">JSON</abbr>-Datei mit Meta-Informationen zu Programm, Autor und Lizenz sowie Angaben darüber, wie die App gestartet wird; <abbr title="siehe">s.</abbr> <a href="#framework-starten">Framework &gt; Starten der App</a></li>
+						<li><span class="datei">./main.js</span>: Node-Script, das die App initialisiert, die Programmfenster öffnet, lädt, verwaltet und für vieles andere zuständig ist, was direkt mit dem Betriebssystem zu tun hat</li>
+						<li><span class="datei">./package.json</span>: <abbr title="JavaScript Object Notation" lang="en">JSON</abbr>-Datei mit Meta-Informationen zu Programm, Autor und Lizenz sowie Angaben darüber, wie die App gestartet wird; <abbr title="vergleiche">vgl.</abbr> den Abschnitt <a href="#framework-starten">Starten der App</a></li>
 					</ul>
 					
 					<!-- CSS -->
@@ -246,7 +247,7 @@ npm install --save-dev electron-winstaller</pre>
 					
 					<ul>
 						<li><span class="datei">./img/*.svg</span>: Vektorgrafiken, die sowohl für das Hauptfenster der App als auch für deren Nebenfenster genutzt werden; nicht alle Grafiken werden aus diesem Ordner geladen, mitunter sind sie als <abbr title="Extensible Markup Language">XML</abbr> direkt in den Quelltext der <abbr title="Hyptertext Markup Language">HTML</abbr>-Dateien eingefügt worden</li>
-						<li><span class="datei">./img/file-type/*.png</span>: Bilddateien, die in den Betriebssystemen für die Assoziation mit <a href="#" class="link-sektion-wgd"><abbr title="Wortgeschichte digital">WGD</abbr>-Dateien</a> genutzt werden können; es gibt auch eine <abbr title="Scalable Vector Graphics">SVG</abbr>-Version dieser Bilder: <span class="datei">./img/datei-wgd.svg</span></li>
+						<li><span class="datei">./img/file-type/*.png</span>: Bilddateien, die im Betriebssystem für die Assoziation mit <a href="#" class="link-sektion-wgd"><abbr title="Wortgeschichte digital">WGD</abbr>-Dateien</a> genutzt werden können; es gibt auch eine <abbr title="Scalable Vector Graphics">SVG</abbr>-Version dieser Bilder: <span class="datei">./img/datei-wgd.svg</span></li>
 						<li><span class="datei">./img/icon/</span>: Bilddateien mit dem Programm-Icon in verschiedenen Größen für unterschiedliche Betriebssysteme; für <i>Windows</i> gibt es eine <span class="datei">icon.ico</span>, für <i>macOS</i> eine <span class="datei">icon.icns</span> und für <i>Linux</i> einen Ordner mit <span class="datei">*.png</span>-Dateien</li>
 						<li><span class="datei">./img/menu/*.png</span>: Bilddateien, die nur von den Menüs verwendet werden, die das Framework verwaltet; dazu zählen das App-Menü am oberen Rand des Hauptfensters und die Kontextmenüs, die auf Rechtsklick erscheinen</li>
 					</ul>
@@ -256,7 +257,27 @@ npm install --save-dev electron-winstaller</pre>
 					
 					<p>Der Ordner enthält alle JavaScript-Dateien, die von den Renderer-Prozessen geladen werden. Im Unterordner <span class="datei">./js/app/</span> liegen Dateien, die (fast) ausschließlich vom Hauptfenster benutzt und in <span class="datei">./js/win/</span> Dateien, die ausschließlich von den Nebenfenstern geladen werden.</p>
 					
-					<p>Jede Datei enthält ein Objekt, das denselben Namen wie die Datei trägt (<a href="#" class="link-sektion-js">es gibt Ausnahmen</a>). Der Name weist darauf hin, welche Funktionalität die Scripts in der Datei steuern.</p>
+					<p>Die einzige Datei des Ordners <span class="datei">./js/app/</span>, die auch in Nebenfenstern benutzt wird, ist die <span class="datei">helfer.js</span>. Sie enthält meist kleinere Methoden, die in vielen verschiedenen Kontexten immer wieder genutzt werden. Analog dazu gibt es die Datei <span class="datei">./js/win/helferWin.js</span>, die allerdings nur von Nebenfenstern geladen wird.</p>
+					
+					<p>Jede JavaScript-Datei enthält ein Objekt, das denselben Namen wie die Datei trägt. Es gibt allerdings Ausnahmen: Dies sind zum einen die JavaScript-Dateien im <a href="#ordner-root">Wurzelverzeichnis der App</a> und zum anderen Dateien mit dem Namensmuster <span class="datei">init-*.js</span>. In letzteren werden Events des Fensters initialisiert, zu dem die Datei gehört. Der Name der <abbr title="Hyptertext Markup Language">HTML</abbr>-Dateien im <a href="#ordner-win">Ordner <span class="datei">./win/</span></a> steht jeweils anstelle des Asterisks.</p>
+					
+					<p>Die Namen der JavaScript-Dateien zeigen an, welche Funktionalität die Scripts in ihnen bereitstellen. Manchmal ist dies nicht auf Anhieb klar, mitunter auch aus, sagen wir mal, <q class="einfach">historischen</q> Gründen verunklarend, <abbr title="das heißt">d. h.</abbr>: In einem frühen Programmierstadium wurde eine falsche Entscheidung getroffen, die später nicht revidiert wurde. Auch darum sollen einige der Dateien kurz beschrieben werden:</p>
+					
+					<ul>
+						<li><span class="datei">./js/app/beleg.js</span>: die Karteikarte betreffende Funktionen, und zwar sowohl die der Formular- als auch die der Leseansicht</li>
+						<li><span class="datei">./js/app/dialog.js</span>: Overlay-Fenster mit Meldungen für und Fragen an die BenutzerIn erzeugen</li>
+						<li><span class="datei">./js/app/dropdown.js</span>: erzeugt das über einen Pfeil oder via Tastaturkürzel zu öffnende Dropdown-Menü, das aus einigen Textfeldern aufgerufen werden kann (<abbr title="zum Beispiel">z. B.</abbr> im Formular der Karteikarte)</li>
+						<li><span class="datei">./js/app/kartei.js</span>: regelt das Öffnen und Speichern der Wort-Kartei</li>
+						<li><span class="datei">./js/app/konversion.js</span>: konvertiert <abbr title="Wortgeschichte digital">WGD</abbr>-Dateien, sodass sie dem aktuellen <a href="#" class="link-sektion-wgd"><abbr title="Wortgeschichte digital">WGD</abbr>-Format</a> entsprechen</li>
+						<li><span class="datei">./js/app/liste.js</span>: regelt den Aufbau und die Funktionen der Belegliste; die Filterleiste links neben den Belegen wird allerdings via <span class="datei">./js/app/filter.js</span> gesteuert</li>
+						<li><span class="datei">./js/app/optionen.js</span>: Funktionen, die sich um die Programm-Einstellungen und die Speicheraufträge an den Main-Prozess kümmern</li>
+						<li><span class="datei">./js/app/overlay.js</span>: ein größeres Helferobjekt, das die Anzeige aller Overlay-Fenster steuert (das sind Fenster, die die Hauptanzeige überlagern und den Hintergrund leicht ausgrauen)</li>
+						<li><span class="datei">./js/app/popup.js</span>: baut das Kontextmenü zusammen, das bei Rechtsklick im Hauptfenster erscheint; die Funktion <code class="quelltext">popup.getTargetSelection()</code> wird auch von vielen anderen Methoden genutzt</li>
+						<li><span class="datei">./js/app/privat.js</span>: enthält nur eine Liste der Mitarbeiter des Projekts; die Datei ist zwar unverzichtbar, bei Publikation des Quelltextes sollte das Array <code class="quelltext">privat.bearbeiterinnen</code> allerdings geleert werden (Datenschutz!), was für die Scripts kein Problem darstellt</li>
+						<li><span class="datei">./js/app/stamm.js</span>: Anzeigen, Aufbauen und Füllen des Fensters mit den Formvarianten</li>
+						<li><span class="datei">./js/app/start.js</span>: regelt die Anzeige der Startseite, die beim Öffnen des Programms und nach dem Schließen einer Kartei angezeigt wird</li>
+						<li><span class="datei">./js/win/hilfe.js</span>: Funktionen für das <i>Handbuch</i> und die <i>technische Dokumentation</i> (also dieses Fenster)</li>
+					</ul>
 					
 					<!-- Licenses -->
 					<h2 class="datei" id="ordner-licenses">./licenses/</h2>
@@ -266,20 +287,20 @@ npm install --save-dev electron-winstaller</pre>
 					<!-- Fenster -->
 					<h2 class="datei" id="ordner-win">./win/</h2>
 					
-					<p>Der Ordner enthält die <abbr title="Hypertext Markup Language">HTML</abbr>-Dateien, die von den Nebenfenstern geladen werden.</p>
+					<p>Der Ordner enthält die <abbr title="Hypertext Markup Language">HTML</abbr>-Dateien, die in den Nebenfenstern geladen werden.</p>
 				</section>
 				
 				<!-- JAVASCRIPT -->
 				<section id="sektion-js" class="suche">
 					<h2 id="js-code">Der Code</h2>
 					
-					<p>Der JavaScript-Code ist <i lang="en">vanilla</i>. Sprich: Es wurden keine Bibliotheken wie <i>jQuery</i> oder dergleichen verwendet. Programmiert wurde im <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode"><i lang="en">strict mode</i></a>, einer restringierten Variante von JavaScript, die <abbr title="zum Beispiel">z. B.</abbr> Zuweisungsoperationen zu nicht deklarierten Variablen unmöglicht macht und vieles mehr unterbindet, was potenziell gefährlich oder einfach schlechter Stil ist.</p>
+					<p>Der JavaScript-Code ist <i lang="en">vanilla</i>. Sprich: Es wurden keine Bibliotheken wie <i>jQuery</i> oder dergleichen verwendet. Programmiert wurde im <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode"><i lang="en">strict mode</i></a>, einer restringierten Variante von JavaScript, die <abbr title="zum Beispiel">z. B.</abbr> Zuweisungsoperationen zu nicht deklarierten Variablen unmöglicht macht und vieles mehr unterbindet, was potenziell gefährlich oder einfach schlechter Stil ist. Außerdem verspricht strikter Code Zukunftssicherheit, weil wahrscheinlich kommende Ergänzungen in der ECMAScript-Spezifikation bereits bedacht sind.</p>
 					
-					<p>Der Code wurde extensiv kommentiert. Im Ergebnis sollte immer nachvollziehbar sein, welche Aufgabe das Script an der jeweiligen Stelle erfüllt. So wird <abbr title="zum Beispiel">z. B.</abbr> bei jeder Funktion angegeben, wozu sie dient und welchen Variablentyp die Argumente haben.</p>
+					<p>Der JavaScript-Code wurde extensiv kommentiert. Im Ergebnis sollte immer nachvollziehbar sein, welche Aufgabe das Script an der jeweiligen Stelle erfüllt. So wird <abbr title="zum Beispiel">z. B.</abbr> bei jeder Funktion angegeben, wozu sie dient und welchen Variablentyp die Argumente haben.</p>
 					
 					<p>Alle Funktionen stecken in Objekten, um den Namensraum des Fensters nicht zu vermüllen. Dabei steht in jeder JavaScript-Datei ein Objekt, das exakt denselben Namen wie die Datei trägt. Sucht man also die Methode <code class="quelltext">popup.oeffnen()</code> oder die Eigenschaft <code class="quelltext">popup.belegID</code> muss man nur nach der Datei <span class="datei">popup.js</span> Ausschau halten. Eine Ausnahme von diesem Schema bilden allein die Scripts im Wurzelverzeichnis und Dateien mit dem Namensmuster <span class="datei">init-*.js</span>. In letzteren werden Eventobjekte des Fensters initialisiert, zu dem die jeweilige Datei gehört. Das betreffende Fenster lässt sich leicht aus dem Dateinamen ableiten.</p>
 					
-					<p><abbr title="Vergleiche">Vgl.</abbr> zu den JavaScript-Dateien auch die Anmerkungen im Kapitel <a href="#ordner-js">Ordner und Dateien</a>
+					<p><abbr title="Vergleiche">Vgl.</abbr> zu den JavaScript-Dateien die ausführlicheren Anmerkungen im Kapitel <a href="#ordner-js">Ordner und Dateien</a>.</p>
 					
 					<h2 id="js-integration">Integration von <i>Electron</i> und <i>Node.js</i></h2>
 					
@@ -454,7 +475,7 @@ npm install --save-dev electron-winstaller</pre>
 							<td><p><code class="quelltext">no</code></p></td>
 							<td class="datentyp">String</td>
 							<td><code class="quelltext">\n</code> möglich</td>
-							<td>Notizen</td>
+							<td>Notizen zur Karteikarte</td>
 						</tr>
 						<tr class="wgd-ebene2">
 							<td><p><code class="quelltext">ts</code></p></td>
@@ -466,7 +487,7 @@ npm install --save-dev electron-winstaller</pre>
 							<td><p><code class="quelltext">un</code></p></td>
 							<td class="datentyp">Boolean</td>
 							<td> </td>
-							<td>Beleg unvollständig (muss weiter bearbeitet werden)</td>
+							<td>Beleg unvollständig (er muss weiter bearbeitet werden)</td>
 						</tr>
 						<tr class="wgd-ebene2">
 							<td><p><code class="quelltext">qu</code></p></td>
@@ -484,7 +505,7 @@ npm install --save-dev electron-winstaller</pre>
 							<td><p><code class="quelltext">no</code></p></td>
 							<td class="datentyp">String</td>
 							<td><code class="quelltext">\n</code> möglich</td>
-							<td>Notizen</td>
+							<td>Notizen zur Kartei</td>
 						</tr>
 						<tr>
 							<td><p><code class="quelltext">rd</code></p></td>

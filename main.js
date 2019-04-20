@@ -262,32 +262,6 @@ let layoutMenu = [
 		],
 	},
 	{
-		label: "&Ansicht",
-		submenu: [
-			{
-				label: "Schrift vergrößern",
-				icon: path.join(__dirname, "img", "menu", "ansicht-zoom-plus.png"),
-				role: "zoomIn",
-			},
-			{
-				label: "Schrift verkleinern",
-				icon: path.join(__dirname, "img", "menu", "ansicht-zoom-minus.png"),
-				role: "zoomOut",
-			},
-			{
-				label: "Standardgröße",
-				icon: path.join(__dirname, "img", "menu", "ansicht-zoom-standard.png"),
-				role: "resetZoom",
-			},
-			{ type: "separator" },
-			{
-				label: "Vollbild",
-				icon: path.join(__dirname, "img", "menu", "ansicht-vollbild.png"),
-				role: "toggleFullScreen",
-			},
-		],
-	},
-	{
 		label: "&Hilfe",
 		submenu: [
 			{
@@ -314,28 +288,63 @@ let layoutMenu = [
 	},
 ];
 
+let layoutMenuAnsicht = [
+	{
+		label: "&Ansicht",
+		submenu: [
+			{
+				label: "Schrift vergrößern",
+				icon: path.join(__dirname, "img", "menu", "ansicht-zoom-plus.png"),
+				role: "zoomIn",
+			},
+			{
+				label: "Schrift verkleinern",
+				icon: path.join(__dirname, "img", "menu", "ansicht-zoom-minus.png"),
+				role: "zoomOut",
+			},
+			{
+				label: "Standardgröße",
+				icon: path.join(__dirname, "img", "menu", "ansicht-zoom-standard.png"),
+				role: "resetZoom",
+			},
+			{ type: "separator" },
+			{
+				label: "Vollbild",
+				icon: path.join(__dirname, "img", "menu", "ansicht-vollbild.png"),
+				role: "toggleFullScreen",
+			},
+		],
+	},
+];
+
+// Ansicht im Hauptmenü ergänzen
+layoutMenu.splice(layoutMenu.length - 1, 0, layoutMenuAnsicht[0]);
+
 // ggf. Developer-Menü ergänzen
 let devtools = false;
 if (!app.isPackaged) {
 	devtools = true;
-	layoutMenu.push({
-		label: "&Dev",
-		submenu: [
-			{
-				label: "Neu laden",
-				role: "reload",
-			},
-			{
-				label: "Neu laden erzwingen",
-				role: "forceReload",
-			},
-			{ type: "separator" },
-			{
-				label: "Developer tools",
-				role: "toggleDevTools",
-			},
-		],
-	});
+	const menus = [layoutMenu, layoutMenuAnsicht];
+	for (let i = 0, len = menus.length; i < len; i++) {
+		menus[i].push({
+			label: "&Dev",
+			submenu: [
+				{
+					label: "Neu laden",
+					role: "reload",
+				},
+				{
+					label: "Neu laden erzwingen",
+					role: "forceReload",
+				},
+				{ type: "separator" },
+				{
+					label: "Developer tools",
+					role: "toggleDevTools",
+				},
+			],
+		});
+	}
 }
 
 // Funktionen zum Menü
@@ -450,10 +459,16 @@ appMenu = {
 			}
 		}
 	},
-	// erzeugt das Programm-Menü
+	// erzeugt das normale Programm-Menü
 	erzeugen () {
 		const menu = Menu.buildFromTemplate(layoutMenu);
 		win.setMenu(menu);
+	},
+	// erzeugt ein Menü, das nur den Punkt Ansicht hat
+	erzeugenAnsicht (fenster) {
+		const menu = Menu.buildFromTemplate(layoutMenuAnsicht);
+		fenster.setMenu(menu);
+		fenster.setMenuBarVisibility(false);
 	},
 };
 
@@ -637,8 +652,13 @@ fenster = {
 				defaultEncoding: "utf-8",
 			},
 		});
-		// Menü abschalten
-		winBedeutungen.setMenuBarVisibility(false); // unpaketiert erscheint sonst ein Standardmenü
+		// Menü erzeugen
+		appMenu.erzeugenAnsicht(winBedeutungen);
+		winBedeutungen.on("leave-full-screen", function() {
+			// nach Verlassen des Vollbilds muss die Menüleiste wieder ausgeblendet werden
+			// (ohne Timeout geht es nicht)
+			setTimeout(() => winBedeutungen.setMenuBarVisibility(false), 1);
+		});
 		// HTML laden
 		winBedeutungen.loadFile(path.join(__dirname, "win", "bedeutungen.html"));
 		// Fenster anzeigen, sobald alles geladen wurde
@@ -674,8 +694,13 @@ fenster = {
 				defaultEncoding: "utf-8",
 			},
 		});
-		// Menü abschalten
-		winHandbuch.setMenuBarVisibility(false); // unpaketiert erscheint sonst ein Standardmenü
+		// Menü erzeugen
+		appMenu.erzeugenAnsicht(winHandbuch);
+		winHandbuch.on("leave-full-screen", function() {
+			// nach Verlassen des Vollbilds muss die Menüleiste wieder ausgeblendet werden
+			// (ohne Timeout geht es nicht)
+			setTimeout(() => winHandbuch.setMenuBarVisibility(false), 1);
+		});
 		// HTML laden
 		winHandbuch.loadFile(path.join(__dirname, "win", "handbuch.html"));
 		// Fenster anzeigen, sobald alles geladen wurde
@@ -701,8 +726,13 @@ fenster = {
 				defaultEncoding: "utf-8",
 			},
 		});
-		// Menü abschalten
-		winDokumentation.setMenuBarVisibility(false); // unpaketiert erscheint sonst ein Standardmenü
+		// Menü erzeugen
+		appMenu.erzeugenAnsicht(winDokumentation);
+		winDokumentation.on("leave-full-screen", function() {
+			// nach Verlassen des Vollbilds muss die Menüleiste wieder ausgeblendet werden
+			// (ohne Timeout geht es nicht)
+			setTimeout(() => winDokumentation.setMenuBarVisibility(false), 1);
+		});
 		// HTML laden
 		winDokumentation.loadFile(path.join(__dirname, "win", "dokumentation.html"));
 		// Fenster anzeigen, sobald alles geladen wurde
