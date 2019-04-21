@@ -67,16 +67,23 @@
 				<h3>Neue Funktionen</h3>
 				<ul>
 					<li>Die <i>technische Dokumentation</i> ist fertig. Wer sie lesen möchte, findet sie unter <i>Hilfe &gt; Technische Dokumentation</i>.</li>
+					<li>Für die Installation unter <i>Windows</i> wird ab sofort ein <abbr title="Nullsoft Scriptable Install System" lang="en">NSIS</abbr>-Installer verwendet. Dieser Installer kann automatisch den <abbr title="Wortgeschichte digital">WGD</abbr>-Dateityp im Betriebssystem registrieren, sodass <abbr title="Wortgeschichte digital">WGD</abbr>-Dateien fortan einfach durch Klick im <i>Windows-Explorer</i> geöffnet werden können. Das Erstellen von DEB-Paketen und das Registrieren der <abbr title="Wortgeschichte digital">WGD</abbr>-Dateien unter <i>Linux</i> wurde ebenfalls eingerichtet.</li>
 				</ul>
 				<h3>Verbesserungen</h3>
 				<ul>
-					<li>Links zu Webseiten können nun via Drag-and-Drop in einen Browser gezogen und auch auf diese Weise geöffnet werden. Die Änderung betrifft alle externen Links in allen Programm-Fenstern.</li>
+					<li>Links zu Webseiten können nun via Drag-and-Drop in einen Browser gezogen und so geöffnet werden. Die Änderung betrifft alle externen Links in allen Programmfenstern.</li>
 					<li>Enthält eine Kartei viele lange Belege, war der Aufbau der Belegliste schon bei ein paar Dutzend Karteikarten mitunter recht träge. In solchen Fällen agiert die App nun deutlich performanter, ohne Abstriche bei der Funktionalität zu machen.</li>
 					<li>Die Ansicht des <i>Bedeutungen-Fensters</i>, des <i>Handbuchs</i> und der <i>technischen Dokumentation</i> lässt sich nun via Tastaturkürzel anpassen. Implementiert wurden alle Funktionen des Hauptfenster, die im Menü <i>Ansicht</i> zu finden sind. Das sind im Einzelnen:<br><kbd>Strg</kbd> + <kbd>⇧</kbd> + <kbd>+</kbd> (<i>Schrift vergrößern</i>), <kbd>Strg</kbd> + <kbd>-</kbd> (<i>Schrift verkleinern</i>), <kbd>Strg</kbd> + <kbd>0</kbd> (<i>Standardgröße</i>) und <kbd>F11</kbd> (<i>Vollbild</i>).</li>
-					<li>Notizen und Karteikarte: Seit Version 0.3.0 schließen sich Karteikarte und Notizenfenster nach dem Speichern nicht mehr automatisch. Die Buttons, die früher <i>Abbrechen</i> hießen, wurden deswegen in <i>Schließen</i> umbenannt. Ihre Funktionalität hat sich dabei nicht geändert.</li>
+					<li>Belegliste und Karteikarte: Beim Import von Belgen aus dem <abbr title="Deutschen Textarchiv">DTA</abbr> werden Trennstriche am Zeilenende mit <q>[¬]</q> markiert. Werden diese Trennstrichmarkierungen über die Funktion <img src="../img/liste-trennung.svg" width="24" height="24" alt=""> ausgeschaltet erscheint fortan ein Bindestrich, wenn das nächste Wort mit einem Großbuchstaben beginnt. Aus <q>Eisenbahn[¬]Differentialtarife</q> wird nun also <q>Eisenbahn-Differentialtarife</q> und nicht mehr <q>EisenbahnDifferentialtarife</q>.</li>
+					<li>
+						<p>Notizen und Karteikarte: Seit Version 0.3.0 schließen sich Karteikarte und Notizenfenster nach dem Speichern nicht mehr automatisch. Von nun an gibt es Einstellungen, mit denen dieses Verhalten wiederhergestellt werden kann, und zwar unter <i>Programm &gt; Einstellungen &gt; Allgemeines</i> <abbr title="beziehungsweise">bzw.</abbr> <i>Programm &gt; Einstellungen &gt; Karteikarte</i>.</p>
+						<p><span class="obacht">Achtung!</span> Die Optionen sind standardmäßig aktiviert. Mit dieser Version wird also zunächst das ältere Verhalten der App wiederhergestellt.</p>
+					</li>
+					<li>Notizen und Karteikarte: Die Buttons, die früher <i>Abbrechen</i> hießen, wurden in <i>Schließen</i> umbenannt, weil sich <i>Notizen-Fenster</i> oder <i>Karteikarte</i> nach dem Speichern nicht mehr notwendigerweise direkt schließen müssen. Die Funktionalität der Buttons hat sich dabei nicht geändert.</li>
 				</ul>
 				<h3>Behobene Fehler</h3>
 				<ul>
+					<li>Wurde das Hauptfenster der App über die Schließenfunktion der Fensterleiste geschlossen, blieben <abbr title="eventuell">evtl.</abbr> offene Nebenfenster (<i>Bedeutungen-Fenster</i>, <i>Handbuch</i>, <i>technische Dokumentation</i>) weiter geöffnet. Diese Fenster gehen nun mit dem Schließen des Hauptfenster automatisch zu.</li>
 					<li>Anzeige des Belegtexts: Beim Ausblenden der Seitenumbruchsmarkierung (also <abbr title="zum Beispiel">z. B.</abbr> <q>[:35:]</q>) wurde auch das Leerzeichen vor der Markierung entfernt, was mitunter zur Komposition nicht zusammengehöriger Wörter führte.</li>
 					<li>Kopieren des Belegtexts: Wurde der Belegtext über das Icon <img src="../img/tool-kopieren.svg" width="24" height="24" alt=""> in der Belegliste oder Karteikarte komplett kopiert, fanden sich im Plaintext noch HTML-Tags. Diese werden nun entfernt. (Die Änderung hat keine Auswirkungen, wenn der Text mit allen Formatierungen in ein Office-Programm eingefügt werden soll.)</li>
 					<li>Belegliste: Die Belegvorschau in den Listenköpfen zeigte mitunter den Beleganfang an, obwohl das Wort der Kartei erst weiter hinten zu finden war.</li>
@@ -88,8 +95,8 @@
 			
 			<div>
 				<div class="version"><span>Version 0.4.0</span><time datetime="2019-04-17">17. April 2019</time></div>
-				<h3>Neue Funktionen</h3>
 				<p><span class="obacht">Das Dateiformat hat sich geändert!</span> Ältere <abbr title="Wortgeschichte digital">WGD</abbr>-Dateien werden automatisch konvertiert; dabei wird eine Änderungsmarkierung gesetzt.</p>
+				<h3>Neue Funktionen</h3>
 				<ul>
 					<li>
 						<p>Bedeutungen-Fenster: Es gibt nun ein separates Fenster, in dem die bisher gesammelten Bedeutungen zum jeweiligen Wort in einer Baumstruktur angezeigt werden. Geöffnet werden kann das Fenster über das Menü (<i>Kartei &gt; Bedeutungen-Fenster</i>), das Tastaturkürzel <kbd>Strg</kbd> + <kbd>⇧</kbd> + <kbd>B</kbd> oder das Icon <img src="../img/quick-bedeutungen-fenster.svg" width="24" height="24" alt=""> in der Quick-Access-Bar.</p>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg width="24" height="24" version="1.1" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
 <metadata>
-<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:dc="http://purl.org/dc/elements/1.1/"><rdf:Description dc:creator="Nico Dorn" dc:publisher="Akademie der Wissenschaften zu Göttingen, 'Wortgeschichte digital' ('Zentrum für digitale Lexikographie der deutschen Sprache')" dc:rights="GPL-3.0-only"></rdf:Description></rdf:RDF>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:dc="http://purl.org/dc/elements/1.1/"><rdf:Description dc:creator="Nico Dorn" dc:publisher="Akademie der Wissenschaften zu Göttingen, „Wortgeschichte digital“ („Zentrum für digitale Lexikographie der deutschen Sprache“)" dc:rights="GPL-3.0-only"></rdf:Description></rdf:RDF>
 </metadata>
 <path d="m6.8398 5.0098c-0.28103 0.04373-0.84375 0.23197-0.84375 0.93164v12.129c0 0.933 1 0.93164 1 0.93164h9.9922c0.99921 0 1-0.93164 1-0.93164 0.0188-0.043009 5e-3 -6.9539 0-9.3301l-3.9961-3.7305h-6.9961s-0.06253-0.01455-0.15625 0zm1.1602 4.9902h8v1h-8v-1zm0 2h8v1h-8v-1zm0 2h4v1h-4v-1z" fill="#212121"/>
 </svg>

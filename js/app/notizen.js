@@ -26,6 +26,7 @@ let notizen = {
 		let feld = document.getElementById("notizen-feld");
 		// Es wurde gar nichts geändert!
 		if (!notizen.geaendert) {
+			direktSchliessen();
 			return;
 		}
 		let vorhanden = notizen.vorhanden();
@@ -50,6 +51,13 @@ let notizen = {
 		data.no = helfer.textTrim(vorhanden.feld_value, false);
 		notizen.notizenGeaendert(false);
 		kartei.karteiGeaendert(true);
+		direktSchliessen();
+		// Notizen-Fenster ggf. schließen
+		function direktSchliessen () {
+			if (optionen.data.einstellungen["notizen-schliessen"]) {
+				notizen.abbrechen();
+			}
+		}
 	},
 	// Notizen schließen
 	// (der Button hieß früher "Abbrechen", darum heißt die Funktion noch so)

@@ -594,7 +594,7 @@ fenster = {
 		// Fenster öffnen
 		win = new BrowserWindow({
 			title: app.getName(),
-			icon: path.join(__dirname, "img", "icon", "png", "icon_32px.png"),
+			icon: path.join(__dirname, "img", "icon", "linux", "icon_32px.png"),
 			x: optionen.data.fenster.x,
 			y: optionen.data.fenster.y,
 			width: optionen.data.fenster.width,
@@ -626,7 +626,19 @@ fenster = {
 		// "resize" und "move" speichern, finde ich aber übertrieben.
 		win.on("close", () => fenster.status("win"));
 		// globales Fensterobjekt beim Schließen dereferenzieren
-		win.on("closed", () => win = null);
+		win.on("closed", function() {
+			win = null;
+			// ggf. noch offene Nebenfenster schließen
+			if (winBedeutungen) {
+				winBedeutungen.close();
+			}
+			if (winHandbuch) {
+				winHandbuch.close();
+			}
+			if (winDokumentation) {
+				winDokumentation.close();
+			}
+		});
 	},
 	// Bedeutungen-Fenster erstellen
 	erstellenBedeutungen () {
@@ -638,7 +650,7 @@ fenster = {
 		// Fenster öffnen
 		winBedeutungen = new BrowserWindow({
 			title: "Bedeutungen",
-			icon: path.join(__dirname, "img", "icon", "png", "icon_32px.png"),
+			icon: path.join(__dirname, "img", "icon", "linux", "icon_32px.png"),
 			x: optionen.data["fenster-bedeutungen"].x,
 			y: optionen.data["fenster-bedeutungen"].y,
 			width: optionen.data["fenster-bedeutungen"].width,
@@ -682,7 +694,7 @@ fenster = {
 		const Bildschirm = require("electron").screen.getPrimaryDisplay();
 		winHandbuch = new BrowserWindow({
 			title: "Handbuch",
-			icon: path.join(__dirname, "img", "icon", "png", "icon_32px.png"),
+			icon: path.join(__dirname, "img", "icon", "linux", "icon_32px.png"),
 			width: 900,
 			height: Bildschirm.workArea.height,
 			minWidth: 700,
@@ -714,7 +726,7 @@ fenster = {
 		const Bildschirm = require("electron").screen.getPrimaryDisplay();
 		winDokumentation = new BrowserWindow({
 			title: "Technische Dokumentation",
-			icon: path.join(__dirname, "img", "icon", "png", "icon_32px.png"),
+			icon: path.join(__dirname, "img", "icon", "linux", "icon_32px.png"),
 			width: 900,
 			height: Bildschirm.workArea.height,
 			minWidth: 700,
@@ -747,7 +759,7 @@ fenster = {
 			parent: fenster.findParent(opener),
 			modal: true,
 			title: `Über ${app.getName()}`,
-			icon: path.join(__dirname, "img", "icon", "png", "icon_32px.png"),
+			icon: path.join(__dirname, "img", "icon", "linux", "icon_32px.png"),
 			width: 650,
 			height: 321,
 			useContentSize: true,
@@ -778,7 +790,7 @@ fenster = {
 			parent: fenster.findParent(opener),
 			modal: true,
 			title: "Über Electron",
-			icon: path.join(__dirname, "img", "icon", "png", "icon_32px.png"),
+			icon: path.join(__dirname, "img", "icon", "linux", "icon_32px.png"),
 			width: 650,
 			height: 329,
 			useContentSize: true,

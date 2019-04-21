@@ -34,7 +34,6 @@ let liste = {
 	//   filter_init = Boolean
 	//     (speichert, ob die Filterliste initialisiert werden sollen)
 	status (filter_init) {
-		let test_start = new Date();
 		// Klapp-Status ermitteln
 		let offen = {},
 			koepfe_vor = document.querySelectorAll(".liste-kopf");
@@ -102,7 +101,6 @@ let liste = {
 			setTimeout(() => kopf.classList.add("hinweis-beleg"), 0);
 			setTimeout(() => kopf.classList.remove("hinweis-beleg"), 1500);
 		}
-		console.log(new Date() - test_start);
 	},
 	// Zwischenspeicher für den ermittelten Scroll-Status
 	statusScroll: {},
@@ -552,6 +550,7 @@ let liste = {
 		return frag;
 	},
 	// Trennungszeichen entfernen
+	// (Funktion wird auch für andere Kontexte benutzt, z. B. in filter.js und beleg.js)
 	//   text = String
 	//     (Belegtext)
 	//   immer_weg = Boolean
@@ -560,6 +559,9 @@ let liste = {
 		if (optionen.data.belegliste.trennung && !immer_weg) {
 			return text;
 		}
+		text = text.replace(/\[¬\]([A-Z]+)/, function(m, p1) {
+			return `-${p1}`;
+		});
 		return text.replace(/\[¬\]|\[:.+?:\]\s*/g, "");
 	},
 	// hebt ggf. das Wort der Kartei im übergebenen Text hervor

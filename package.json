@@ -1,8 +1,8 @@
 {
 	"name": "zettelstraum",
-	"productName": "Zettel's Traum",
-	"version": "0.5.0-beta.4",
-	"description": "Wortkartei-App von 'Wortgeschichte digital', dem an der 'Akademie der Wissenschaften zu Göttingen' angesiedelten Teilprojekt des 'Zentrums für digitale Lexikographie der deutschen Sprache'",
+	"productName": "Zettel’s Traum",
+	"version": "0.5.0-beta.5",
+	"description": "Wortkartei-App von „Wortgeschichte digital“, dem an der „Akademie der Wissenschaften zu Göttingen“ angesiedelten Teilprojekt des „Zentrums für digitale Lexikographie der deutschen Sprache“",
 	"keywords": [
 		"Kartei",
 		"Karteikarten",
@@ -26,12 +26,12 @@
 	"main": "main.js",
 	"scripts": {
 		"start": "electron .",
-		"package-linux": "electron-packager . zettelstraum --overwrite --asar --platform=linux --arch=x64 --prune=true --out=../dist --appCopyright=\"Akademie der Wissenschaften zu Göttingen\" --name=\"Zettel's Traum\"",
-		"package-win": "electron-packager . zettelstraum --overwrite --asar --platform=win32 --arch=x64 --icon=img/icon/win/icon.ico --prune=true --out=../dist --appCopyright=\"Akademie der Wissenschaften zu Göttingen\" --name=\"Zettel's Traum\" --win32metadata.CompanyName=\"Akademie der Wissenschaften zu Göttingen\" --win32metadata.FileDescription=\"Zettel's Traum\" --win32metadata.ProductName=\"Zettel's Traum\" --win32metadata.InternalName=\"Zettel's Traum\""
+		"package-linux": "electron-packager . zettelstraum --overwrite --asar --platform=linux --arch=x64 --prune=true --out=../dist --appCopyright=\"Akademie der Wissenschaften zu Göttingen\" --name=\"Zettel’s Traum\"",
+		"package-win": "electron-packager . zettelstraum --overwrite --asar --platform=win32 --arch=x64 --icon=img/icon/win/icon.ico --prune=true --out=../dist --appCopyright=\"Akademie der Wissenschaften zu Göttingen\" --name=\"Zettel’s Traum\" --win32metadata.CompanyName=\"Akademie der Wissenschaften zu Göttingen\" --win32metadata.FileDescription=\"Zettel’s Traum\" --win32metadata.ProductName=\"Zettel’s Traum\" --win32metadata.InternalName=\"Zettel’s Traum\""
 	},
 	"devDependencies": {
 		"electron": "^4.1.4",
-		"electron-packager": "^13.1.1",
-		"electron-winstaller": "^3.0.4"
+		"electron-builder": "^20.39.0",
+		"electron-packager": "^13.1.1"
 	}
 }

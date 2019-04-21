@@ -59,7 +59,7 @@ textarea.dropdown-feld {
 /* Dropdown-Fensterchen ---------------------------- */
 #dropdown {
 	position: absolute;
-	z-index: 1; /* sonst überdeckt es nicht die relativ positionierten Tabellenzellen */
+	z-index: 2; /* sonst überdeckt es nicht die relativ positionierten Tabellenzellen und Checkboxes */
 	box-shadow: var(--boxShadow);
 	border: 1px solid var(--linie);
 	border-radius: 3px;

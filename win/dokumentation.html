@@ -58,9 +58,11 @@
 					
 					<p><i>Electron</i> übernimmt die schwierigen Aufgaben, die sich beim Programmieren einer Desktop-App stellen. Es kümmert sich um die Integration in das Betriebssystem, ermöglicht also lesende und schreibende Dateizugriffe sowie das Öffnen externer Programme, erzeugt die Dateidialoge zum Öffnen und Speichern der Karteien und verwaltet über den betriebssystemeigenen Fenster-Manager die einzelnen Programm-Fenster, in denen eine leicht eingedampfte Variante des <i>Chromium</i>-Browsers für die Anzeige zuständig ist. Jedes Programm-Fenster läuft in einem eigenen Renderer-Prozess, weswegen die einzelnen Fenster nicht direkt miteiander kommunizieren können. Das Öffnen der Programm-Fenster und die Darstellung der Fenster-Menüs werden im Wesentlichten über den Main-Prozess gesteuert, über den die App initialisiert wird. Dieser wiederum kann mit allen Fenstern kommunizieren.</p>
 					
-					<p>Der Main-Prozess wird über die Scripts in der Datei <span class="datei">./main.js</span> im Wurzelverzeichnis der App gesteuert (das Wurzelverzeichnis der App wird im Folgenden immer durch <span class="datei">./</span> bezeichnet). Vermittelt über diesen Prozess können die Fenster miteinander in Kommunikation treten. Über das Objekt <code class="quelltext">ipcMain</code> hört der Main-Prozess auf Meldungen der Renderer-Prozesse, die diese via <code class="quelltext">ipcRenderer</code> abgeschickt haben (<abbr title="vergleiche">vgl.</abbr> den Code in <span class="datei">./main.js</span> und <span class="datei">./js/app/init-app.js</span>).</p>
+					<p>Der Main-Prozess wird über die Scripts in der Datei <span class="datei">./main.js</span> im Wurzelverzeichnis des Quellcodes gesteuert (das Wurzelverzeichnis des App-Codes wird im Folgenden immer durch <span class="datei">./</span> bezeichnet). Vermittelt über diesen Prozess können die Fenster miteinander in Kommunikation treten. Über das Objekt <code class="quelltext">ipcMain</code> hört der Main-Prozess auf Meldungen der Renderer-Prozesse, die diese via <code class="quelltext">ipcRenderer</code> abgeschickt haben (<abbr title="vergleiche">vgl.</abbr> den Code in <span class="datei">./main.js</span> und <span class="datei">./js/app/init-app.js</span>).</p>
 					
-					<p>Daneben erleichtert <i>Electron</i> das <a href="#framework-paketieren">Paketieren der App</a> für die Betriebssysteme <i>Linux</i>, <i>Windows</i> und <i>macOS</i> enorm. Aus der paketierten App lassen sich im Anschluss die verschiedensten <a href="#framework-installer">Installer</a> für die einzelnen Betriebssysteme bauen.</p>
+					<p>Daneben erleichtert <i>Electron</i> das <a href="#framework-paketieren">Paketieren der App</a> für die Betriebssysteme <i>Linux</i>, <i>Windows</i> und <i>macOS</i> enorm. Außerdem können <a href="#framework-installer">Installer</a> für die einzelnen Betriebssysteme gebaut werden.</p>
+					
+					<p>Die <abbr title="Application Programming Interface" lang="en">API</abbr> von <i>Electron</i> ist sehr gut <a href="https://electronjs.org/docs">dokumentiert</a>; das Framework-Motto <q lang="en">It’s easier than you think</q>, somit gar nicht falsch. Für einen raschen Einstieg empfiehlt sich das zweiteilige, sehr übersichtliche <a href="https://electronjs.org/docs/tutorial/quick-start">Quick-Start-Tutorial</a>.</p>
 					
 					<!-- Installation -->
 					<h2 id="framework-installation">Installation von <i>Electron</i></h2>
@@ -101,9 +103,15 @@ npm install --save-dev electron</pre>
 					
 					<pre>npm show electron version</pre>
 					
-					<p>Die stabile Version von <i>Electron</i> liefert nie die jüngste Ausgabe von <i>Chromium</i>. Technisch ist der Browser somit zwar immer leicht veraltet, um die notwendigen Sicherheitsupdates kümmert sich das <i>Electron</i>-Team aber fortwährend.</p>
+					<p>Die stabile Version von <i>Electron</i> liefert nie die jüngste Ausgabe von <i>Chromium</i>. Technisch ist der im Framework arbeitende Browser somit zwar immer leicht veraltet, um die notwendigen Sicherheitsupdates kümmert sich das <i>Electron</i>-Team aber fortwährend.</p>
 					
-					<p>Die <abbr title="Application Programming Interface" lang="en">API</abbr> von <i>Electron</i> ist sehr gut <a href="https://electronjs.org/docs">dokumentiert</a>; das Framework-Motto <q lang="en">It’s easier than you think</q>, somit gar nicht falsch. Für einen raschen Einstieg empfiehlt sich das zweiteilige, sehr übersichtliche <a href="https://electronjs.org/docs/tutorial/quick-start">Quick-Start-Tutorial</a>.</p>
+					<p>Neben der jüngsten stabilen Version von <i>Electron</i> werden auch ältere Ausgaben für einen längeren Zeitraum mit Updates versorgt. Möchte man nicht gleich mit dem ersten Release eines neuen Zweiges auf diesen wechseln, muss man den Releasezweig angeben, von dem man Updates beziehen will. Möchte man es also <abbr title="beispielsweise">bspw.</abbr> vermeiden, die gerade aktuelle Version 5.0 zu benutzen, sondern lieber im Release-Zweig 4.1 bleiben, muss man den Update-Befehl etwas anpassen:</p>
+					
+					<pre>npm install --save-dev electron@4-1-x</pre>
+					
+					<p>Darüber, welche Zweige alle zur Verfügung stehen, gibt diese Eingabe Auskunft:</p>
+					
+					<pre>npm view electron</pre>
 					
 					<!-- Starten -->
 					<h2 id="framework-starten">Starten der App</h2>
@@ -156,73 +164,119 @@ npm install --save-dev electron-packager</pre>
 					<!-- Installer -->
 					<h2 id="framework-installer">Installer bauen</h2>
 					
-					<p>Das Bauen von Installern für die verschiedenen Betriebssysteme und Architekturen gestaltet sich bedeutend schwieriger als das Paketieren. Grundsätzlich muss die App erst einmal <a href="#framework-paketieren">paketiert</a> werden. Dann kann man eines der vielen <a href="https://github.com/electron-userland/electron-packager/#distributable-creators">zur Verfügung stehenden Programme</a> zum Generieren eines Installers verwenden, die auf der Projektseite des Packagers aufgelistet sind.</p>
+					<p>Ein bisschen schwieriger ist das Bauen von Installern für die verschiedenen Betriebssysteme und Architekturen. Im Folgenden wird beschrieben, wie man mithilfe von <a href="https://github.com/electron-userland/electron-builder">electron-builder</a> Installer für <i>Windows</i> und <i>Debian</i>/<i>Ubuntu</i> erzeugt.</p>
 					
-					<p>Im Folgenden wird beschrieben, wie ein Squirrel-Installer mithilfe von <a href="https://github.com/electron/windows-installer">electron-winstaller</a> erstellt werden kann. Getestet wurde das Ganze nur auf einem <i>Ubuntu</i>-Derivat.</p>
-					
-					<p>Zunächst einmal muss das Helfer-Programm via <code>npm</code> installiert werden:</p>
+					<p>Zunächst einmal muss der Builder via <code>npm</code> installiert werden:</p>
 					
 					<pre>cd ./
-npm install --save-dev electron-winstaller</pre>
+npm install --save-dev electron-builder</pre>
+					
+					<p>Die richtige Konfiguration des Builders zu finden, ist nicht so leicht. Für das Erstellen eines <abbr title="Nullsoft Scriptable Install System" lang="en">NSIS</abbr>-Installers und einer DEB-Datei finden sich im Wurzelverzeichnis der App bereits fertige Node-Scripts, die einem diese Arbeit abnehmen: <span class="datei">installer-win-nsis.js</span> <abbr title="beziehungsweise">bzw.</abbr> <span class="datei">installer-linux-deb.js</span>.</p>
+					
+					<p>Ausgeführt werden die Scripts mit <code>node</code>. Für den <i>Windows</i>-Installer heißt das:</p>
+					
+					<pre>node installer-win-nsis.js</pre>
+					
+					<p>und für den <i>Linux</i>-Installer:</p>
+					
+					<pre>node installer-linux-deb.js</pre>
 
-					<p>Damit das Programm funktioniert, müssen <a href="https://wiki.ubuntuusers.de/Wine/">Wine</a> und ein ganzer Haufen <a href="https://github.com/mono/mono">Mono</a>-Bibliotheken installiert sein:</p>
+					<p>Nach ungefähr einer Minute (die genaue Zeit hängt natürlich vom Rechner ab), sollte die Meldung <code>Windows-Installer erstellt!</code> <abbr title="beziehungsweise">bzw.</abbr> <code>Linux-Installer erstellt!</code> erscheinen. Kommt diese Meldung, kann es eigentlich nicht zu größeren Fehlern gekommen sein. Im Verzeichnis <span class="datei">../dist</span> (eine Ebene oberhalb des Wurzelverzeichnisses der App) befinden sich nun ein Ordner und mehrere Dateien. Interessant ist natürlich nur die Installer-Datei. Also entweder</p>
 					
-					<pre>sudo apt-get install wine mono-runtime mono-devel</pre>
+					<ul>
+						<li class="datei">../dist/zettelstraum_[VERSION]_[ARCHITEKTUR].deb</li>
+					</ul>
 					
-					<p>Wenn nach dem <a href="#framework-paketieren">Paketieren der App</a> der Ordner <span class="datei">../dist/zettelstraum-win32-x64/</span> erstellt wurde, kann das mitgelieferte Installerscript ausgeführt werden, das sich im Wurzelverzeichnis der App befindet:</p>
+					<p>oder</p>
 					
-					<pre>node installer-win.js</pre>
-
-					<p>Kommen Fehlermeldungen… viel Spaß beim Beheben! Normalerweise sollte nach kurzer Zeit allerdings nur die Meldung <code>Installer erstellt!</code> erscheinen. Danach befindet sich in <span class="datei">../dist</span> der Ordner <span class="datei">installer-win</span> und darin die Datei <span class="datei">ZettelsTraum-*.exe</span> (anstelle des Asterisks steht die Versionsnummer). Die ausführbare Datei kann kopiert und auf Windows-Rechnern installiert werden. (Getestet wurde die Installation nur auf <i>Windows 10</i>.)</p>
+					<ul>
+						<li class="datei">../dist/zettelstraum-[VERSION].exe</li>
+					</ul>
+					
+					<p>Die ausführbare EXE-Datei kann nun auf einen Windows-Rechnern kopiert und installiert werden. (Getestet wurde die Installation nur auf <i>Windows 10</i>.)</p>
+					
+					<p>Für die Installation der DEB-Datei gibt es einige Abhängigkeiten, die zuvor <abbr title="gegebenenfalls">ggf.</abbr> aufgelöst werden müssen:</p>
+					
+					<pre>sudo apt-get install gconf2 gconf-service libnotify4 libappindicator1 libxtst6 libnss3 libxss</pre>
+					
+					<p>Danach kann das Paket installiert werden:</p>
+					
+					<pre>sudo dpkg -i zettelstraum*.deb</pre>
+					
+					<p>Mit der automatischen Registrierung des <abbr title="Wortgeschichte digital">WGD</abbr>-Dateityps gibt es allerdings Probleme – und eine mitgelieferte Lösung. Im Programmordner findet sich ein Script, das nach der ersten Installation (nur nach der ersten!) einmal ausgeführt werden muss:</p>
+					
+					<pre>cd /opt/zettelstraum/resources/filetype/linux/
+sh register.sh</pre>
+					
+					<p>Mit <code>sh deregister.sh</code> lässt sich die Registrierung rückgängig machen. Root-Rechte werden für diesen letzten Schritt nicht benötigt.</p>
 					
 					<!-- Ordner -->
 					<h2 id="framework-ordner">Programm- und Konfigurationsordner</h2>
 					
-					<p>Für die Installation eines mit <a href="https://github.com/Squirrel/Squirrel.Windows">Squirrel.Windows</a> erstellten Installers werden keine Administratorrechte benötigt. Das Programm installiert sich nach Doppelklick im lokalen Benutzerordner: <span class="datei">C:\Users\[BENUTZERNAME]\AppData\Local\zettelstraum\</span>.</p>
-					
-					<p>Soll eine neuere Version installiert werden, muss man <i class="app-name"></i> nur beenden (<abbr title="zum Beispiel">z. B.</abbr> via <kbd>Strg</kbd> + <kbd>Q</kbd>), auf der Installer-Datei doppelklicken und das war’s.</p>
+					<p>Der <strong><abbr title="Nullsoft Scriptable Install System" lang="en">NSIS</abbr>-Installer</strong> legt das Programm nach Doppelklick in einem lokalen Benutzerordner ab: <span class="datei"><mark>C:\Users\[BENUTZERNAME]\AppData\Local\zettelstraum\</mark></span>. Soll eine neuere Version installiert werden, muss man <i class="app-name"></i> nur beenden (<abbr title="zum Beispiel">z. B.</abbr> via <kbd>Strg</kbd> + <kbd>Q</kbd>), auf der Installer-Datei doppelklicken und das war’s.</p>
 					
 					<p>Deinstalliert werden kann das Programm wie jede andere App über die Systemsteuerung von <i>Windows</i>.</p>
 					
+					<p>Der <strong>DEB-Installer</strong> erstellt einen Programmordner unter <span class="datei">/opt/zettelstraum/</span> und legt eine Desktop-Datei im Ordner <span class="datei">/usr/share/applications/</span> ab: <span class="datei">zettelstraum.desktop</span>. Das Programm sollte sich nach der Installation also ganz normal über das Programm-Menü des Betriebssystems starten lassen.</p>
+					
+					<p>Deinstalliert werden kann es einfach mit dem Paketmanager:</p>
+					
+					<pre>sudo apt-get purge zettelstraum</pre>
+					
+					<p>Aber Achtung! Soll <i class="app-name"></i> künftig nicht mehr benutzt werden, sollte man auch die Registrierung des <abbr title="Wortgeschichte digital">WGD</abbr>-Dateityps wieder rückgäging machen (vgl. dazu den Abschnitt <a href="#framework-installer">Installer bauen</a>). Und dies sollte man tun, bevor die App deinstalliert wird, weil das dafür nötige Script sonst nicht mehr zur Verfügung steht.</p>
+					
 					<p>Ob die App nun paketiert und installiert ist oder einfach via <code>npm start</code> aufgerufen wurde, das <i>Electron</i>-Framework erstellt automatisch einen Konfigurationsordner im Standard-Konfigurationsverzeichnis des Betriebssystems. Das ist unter <i>Linux</i>:</p>
 					
-					<p class="datei">~/.config/<span class="app-name"></span>/</p>
+					<ul>
+						<li class="datei">~/.config/<span class="app-name"></span>/</li>
+					</ul>
 					
 					<p>Und unter <i>Windows 10</i>:</p>
 					
-					<p class="datei">C:\Users\[BENUTZERNAME]\AppData\Roaming\<span class="app-name"></span>\</p>
+					<ul>
+						<li class="datei"><mark>C:\Users\[BENUTZERNAME]\AppData\Roaming\<span class="app-name"></span>\</mark></li>
+					</ul>
 					
-					<p>Die Dateien in dem Ordner werden alle von <i>Electron</i> verwaltet – bis auf die Datei <span class="datei">einstellungen.json</span>. Diese wird von der <span class="datei">./main.js</span> erstellt. In ihr werden die Einstellungen des Hauptfensters der App und die Größe und Position von einigen (aber nicht allen) Programmfenstern gespeichert. Welche Werte die App anlegt, lässt sich dem Objekt <code class="quelltext">optionen.data</code> in der Datei <span class="datei">./js/app/optionen.js</span> entnehmen. Die durch die Datei <span class="datei">./main.js</span> angelegten Werte finden sich <abbr title="ebenda">ebd.</abbr> im gleichnamigen Objekt <code class="quelltext">optionen.data</code>. In <code class="quelltext">optionen.data.app</code> der <span class="datei">./main.js</span> landen letztlich alle Werte aus dem Objekt <code class="quelltext">optionen.data</code> der <span class="datei">./js/app/optionen.js</span>.</p>
+					<p>Die Dateien in dem Ordner werden alle von <i>Electron</i> verwaltet – bis auf die Datei <span class="datei">einstellungen.json</span>. Diese wird von der <span class="datei">./main.js</span> erstellt. In ihr werden die Einstellungen des Hauptfensters der App und die Größe und Position von einigen (aber nicht allen) Programmfenstern gespeichert. Welche Werte die App anlegt, lässt sich dem Objekt <code class="quelltext">optionen.data</code> in der Datei <span class="datei">./js/app/optionen.js</span> entnehmen. Die durch die Datei <span class="datei">./main.js</span> angelegten Werte finden sich <abbr title="ebenda">ebd.</abbr> im gleichnamigen Objekt <code class="quelltext">optionen.data</code>.</p>
 					
 					<!-- Quelltext -->
-					<h2 id="framework-quelltext">Quelltext in der paketierten App</h2>
+					<h2 id="framework-quelltext">Quelltext in der paketierten und installierten App</h2>
 					
-					<p>Durch die Option <code>--asar</code> wird der Quelltext beim <a href="#framework-paketieren">Paketieren</a> in einer Archivdatei abgelegt: <span class="datei">app.asar</span>. In den Paket-Ordnern <span class="datei">zettelstraum-linux-x64</span> <abbr title="beziehungsweise">bzw.</abbr> <span class="datei">zettelstraum-win32-x64</span> befindet sich die Datei im Unterordner <span class="datei">resources</span>. Nach der Installation eines <a href="#framework-installer">mit Squirrel.Windows erstellten Installers</a> wird die Datei im Programmordner abgelegt:</p>
+					<p>Durch die Option <code>--asar</code> wird der Quelltext beim <a href="#framework-paketieren">Paketieren</a> in einer Archivdatei abgelegt: <span class="datei">app.asar</span>. In den Paket-Ordnern <span class="datei">zettelstraum-linux-x64</span> <abbr title="beziehungsweise">bzw.</abbr> <span class="datei">zettelstraum-win32-x64</span> befindet sich die Datei im Unterordner <span class="datei">resources</span>.</p>
 					
-					<p class="datei">C:\Users\[BENUTZERNAME]\AppData\Local\zettelstraum\app-[VERSIONSNUMMER]\resources\app.asar</p>
+					<p>Der Quelltext der App ist auch in den Installern: Er wird im jeweiligen Programmordner ebenfalls im Unterordner <span class="datei">resources</span> abgelegt. Also entweder in</p>
+					
+					<ul>
+						<li class="datei"><mark>C:\Users\[BENUTZERNAME]\AppData\Local\zettelstraum\app-[VERSIONSNUMMER]\resources\</mark></li>
+					</ul>
+					
+					<p>oder in</p>
+					
+					<ul>
+						<li class="datei">/opt/zettelstraum/resources/</li>
+					</ul>
 					
 					<p><a href="https://github.com/electron/asar">Asar</a> ist das Archiv-Programm von <i>Electron</i>, das ähnlich wie <code>tar</code> funktioniert: Der Inhalt ist nicht komprimiert, es werden schlicht Ordner und Dateien in einem Archiv zusammengefasst.</p>
 					
-					<p>Entpacken lässt sich das Archiv via:</p>
+					<p>Entpacken lässt es sich via:</p>
 					
 					<pre>npx asar extract app.asar [ZIELORDNER]</pre>
 					
-					<p>Das Archiv enthält den vollständigen Quelltext von <i class="app-name"></i>. Allein der Ordner <span class="datei">node_modules</span>, in dem sich noch einige leere Unterordner befinden können, und die Datei <span class="datei">package-lock.json</span> gehören nicht zum Programm. Sie wurden automatisch bei der <a href="#framework-installation">Installation von <i>Electron</i></a> erstellt.</p>
+					<p>Das Archiv enthält den vollständigen Quelltext von <i class="app-name"></i>. Unter <i>Linux</i> fehlt allerdings der Unterordner <span class="datei">./filetype/</span>, in dem sich die Scripts zum Registrieren des <abbr title="Wortgeschichte digital">WGD</abbr>-Dateityps und die passenden Icons befinden. Dieses Verzeichnis liegt bereits entpackt im selben Ordner wie die <span class="datei">app.asar</span>.</p>
 				</section>
 				
 				<!-- ORDNER UND DATEIEN -->
 				<section id="sektion-ordner" class="suche">
 					<p>Im Folgenden wird summarisch beschrieben, welche Ordner und Dateien sich im Quellcode befinden, um die Orientierung für den Einsteig ein wenig zu erleichtern.</p>
 					
-					<p>Der Ordner <span class="datei">./node_modules/</span> und die Datei <span class="datei">./package-lock.json</span> werden beim <a href="#framework-installation">Installieren von <i>Electron</i></a> angelegt. Sie gehören nicht im eigentlichen Sinne zum Quelltext des Programms.</p>
-					
 					<!-- Root -->
 					<h2 class="datei" id="ordner-root">./</h2>
 					
 					<ul>
 						<li><span class="datei">./index.html</span>: <abbr title="Hyptertext Markupt Language" lang="en">HTML</abbr>-Datei, die beim Öffnen des Hauptfensters geladen wird</li>
-						<li><span class="datei">./installer-win.js</span>: Node-Script, das auf Basis der <a href="#framework-paketieren">paketierten App</a> einen <a href="#framework-installer">Squirrel-Installer erstellt</a></li>
-						<li><span class="datei">./main.js</span>: Node-Script, das die App initialisiert, die Programmfenster öffnet, lädt, verwaltet und für vieles andere zuständig ist, was direkt mit dem Betriebssystem zu tun hat</li>
+						<li><span class="datei">./installer-linux-deb.js</span>: Node-Script, das eine DEB-Datei erzeugt, mit der <i class="app-name"></i> auf <i>Debian</i>, <i>Ubuntu</i> <abbr title="und so weiter">usw.</abbr> installiert werden kann</li>
+						<li><span class="datei">./installer-win-nsis.js</span>: Node-Script, das einen <abbr title="Nullsoft Scriptable Install System" lang="en">NSIS</abbr>-Installer erzeugt, mit dem <i class="app-name"></i> auf <i>Windows</i> installiert werden kann</li>
+						<li><span class="datei">./main.js</span>: Node-Script, das die App initialisiert, die Programmfenster öffnet, lädt, verwaltet und für vieles andere zuständig ist, was das Betriebssystem, auf dem <i class="app-name"></i> läuft, direkt betrifft</li>
 						<li><span class="datei">./package.json</span>: <abbr title="JavaScript Object Notation" lang="en">JSON</abbr>-Datei mit Meta-Informationen zu Programm, Autor und Lizenz sowie Angaben darüber, wie die App gestartet wird; <abbr title="vergleiche">vgl.</abbr> den Abschnitt <a href="#framework-starten">Starten der App</a></li>
 					</ul>
 					
@@ -237,6 +291,11 @@ npm install --save-dev electron-winstaller</pre>
 						<li><span class="datei">./css/win/*.css</span>: diese Stylesheets werden nur in den vom Hauptfenster abhängigen Nebenfenstern (also <abbr title="unter anderem">u. a.</abbr> dem Handbuch und diesem Fenster) benötigt</li>
 					</ul>
 					
+					<!-- File type -->
+					<h2 class="datei" id="ordner-filetype">./filetype/</h2>
+					
+					<p>Der Ordner enthält Icons für den <abbr title="Wortgeschichte digital">WGD</abbr>-Dateityp und Shell-Scripts, mit denen auf <i>Linux</i>-Systemen der Dateityp registriert oder entfernt werden kann. Es gibt auch eine <abbr title="Scalable Vector Graphics">SVG</abbr>-Version des Icons: <span class="datei">./img/datei-wgd.svg</span>.</p>
+					
 					<!-- Fonts -->
 					<h2 class="datei" id="ordner-fonts">./fonts/</h2>
 					
@@ -247,7 +306,6 @@ npm install --save-dev electron-winstaller</pre>
 					
 					<ul>
 						<li><span class="datei">./img/*.svg</span>: Vektorgrafiken, die sowohl für das Hauptfenster der App als auch für deren Nebenfenster genutzt werden; nicht alle Grafiken werden aus diesem Ordner geladen, mitunter sind sie als <abbr title="Extensible Markup Language">XML</abbr> direkt in den Quelltext der <abbr title="Hyptertext Markup Language">HTML</abbr>-Dateien eingefügt worden</li>
-						<li><span class="datei">./img/file-type/*.png</span>: Bilddateien, die im Betriebssystem für die Assoziation mit <a href="#" class="link-sektion-wgd"><abbr title="Wortgeschichte digital">WGD</abbr>-Dateien</a> genutzt werden können; es gibt auch eine <abbr title="Scalable Vector Graphics">SVG</abbr>-Version dieser Bilder: <span class="datei">./img/datei-wgd.svg</span></li>
 						<li><span class="datei">./img/icon/</span>: Bilddateien mit dem Programm-Icon in verschiedenen Größen für unterschiedliche Betriebssysteme; für <i>Windows</i> gibt es eine <span class="datei">icon.ico</span>, für <i>macOS</i> eine <span class="datei">icon.icns</span> und für <i>Linux</i> einen Ordner mit <span class="datei">*.png</span>-Dateien</li>
 						<li><span class="datei">./img/menu/*.png</span>: Bilddateien, die nur von den Menüs verwendet werden, die das Framework verwaltet; dazu zählen das App-Menü am oberen Rand des Hauptfensters und die Kontextmenüs, die auf Rechtsklick erscheinen</li>
 					</ul>

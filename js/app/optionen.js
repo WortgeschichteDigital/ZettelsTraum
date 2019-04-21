@@ -43,6 +43,8 @@ let optionen = {
 		einstellungen: {
 			// für diesen Computer registrierte BearbeiterIn
 			bearbeiterin: "",
+			// Notizen-Fenster nach dem Speichern direkt schließen
+			"notizen-schliessen": true,
 			// Nach dem Starten des Programms wird die Menü-Leiste ausgeblendet,
 			// bis die Alt-Taste gedrückt wird.
 			autoHideMenuBar: false,
@@ -80,6 +82,8 @@ let optionen = {
 			"immer-ergaenzen": false,
 			// bestehende Karteikarten in der Leseansicht öffnen
 			leseansicht: true,
+			// Karteikarte nach dem Speichern direkt schließen
+			"karteikarte-schliessen": true,
 		},
 		// Einstellungen in der Filterleiste
 		filter: {

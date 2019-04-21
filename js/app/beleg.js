@@ -233,6 +233,7 @@ let beleg = {
 		}
 		// Beleg wurde nicht geändert
 		if (!beleg.geaendert) {
+			direktSchliessen();
 			return;
 		}
 		// ggf. Format von Bedeutung und Textsorte anpassen
@@ -268,6 +269,14 @@ let beleg = {
 		kartei.karteiGeaendert(true);
 		// Bedeutungen-Fenster mit neuen Daten versorgen
 		bedeutungenWin.daten();
+		// Schließen?
+		direktSchliessen();
+		// Karteikarte ggf. schließen
+		function direktSchliessen () {
+			if (optionen.data.einstellungen["karteikarte-schliessen"]) {
+				beleg.aktionAbbrechen();
+			}
+		}
 	},
 	// Bearbeiten des Belegs beenden, Beleg also schließen
 	// (Der Button hieß früher "Abbrechen", darum heißt die Funktion noch so)
@@ -1548,7 +1557,7 @@ let beleg = {
 					text = " ";
 				} else {
 					if (!optionen.data.beleg.trennung) {
-						text = text.replace(/\[¬\]|\[:.+?:\]\s*/g, "");
+						text = liste.belegTrennungWeg(text, true);
 					}
 					text = liste.linksErkennen(text);
 				}
