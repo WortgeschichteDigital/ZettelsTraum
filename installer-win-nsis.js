@@ -9,24 +9,24 @@ if (jahr_aktuell > 2019) {
 
 // Installer erstellen
 const builder = require("electron-builder"),
+	Arch = builder.Arch,
 	Platform = builder.Platform;
 builder.build({
-	targets: Platform.WINDOWS.createTarget(),
+	targets: Platform.WINDOWS.createTarget(null, Arch.x64),
 	config: {
 		"appId": "zdl.wgd.zettelstraum",
-		"productName": "ZettelsTraum",
+		"productName": "Zettel’s Traum",
 		"copyright": `© ${jahr}, Akademie der Wissenschaften zu Göttingen`,
 		"directories": {
-			"output": "../dist/"
+			"output": "../build/"
 		},
 		"win": {
 			"target": "nsis",
 			"icon": "img/icon/win/icon.ico"
 		},
 		"nsis": {
-			"artifactName": "zettelstraum-${version}.${ext}",
-			"license": "licenses/Zettel's Traum.txt",
-			"deleteAppDataOnUninstall": true,
+			"artifactName": "zettelstraum_${version}_x64.${ext}",
+			"license": "licenses/Zettel's Traum (GPL-3.0-only).txt",
 			"shortcutName": "Zettel’s Traum"
 		},
 		"fileAssociations": [
@@ -34,7 +34,7 @@ builder.build({
 				"ext": "wgd",
 				"name": "wgd",
 				"description": "Wortgeschichte digital-Datei",
-				"icon": "img/filetype/win/wgd.ico"
+				"icon": "filetype/win/wgd.ico"
 			}
 		]
 	}

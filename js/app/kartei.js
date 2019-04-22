@@ -108,9 +108,15 @@ let kartei = {
 	//     dem Öffnen-Dialog oder via Drag-and-Drop)
 	oeffnenEinlesen (datei) {
 		const fs = require("fs");
+		// Ist die Datei gesperrt?
+		if (kartei.lock(datei, "check")) {
+			kartei.dialogWrapper("Beim Öffnen der Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\nDatei ist gesperrt");
+			return;
+		}
+		// Datei einlesen
 		fs.readFile(datei, "utf-8", function(err, content) {
 			if (err) {
-				kartei.dialogWrapper(`Beim Öffnen der Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n${err.message}`);
+				kartei.dialogWrapper(`Beim Öffnen der Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.message}</p>`);
 				return;
 			}
 			// Daten einlesen
@@ -127,6 +133,11 @@ let kartei = {
 				kartei.dialogWrapper("Die Datei wurde nicht eingelesen.\nEs handelt sich nicht um eine Karteikasten-Datei von <i>Wortgeschichte digital</i>.");
 				return;
 			}
+			// Datei sperren
+			if (kartei.pfad && datei !== kartei.pfad) {
+				kartei.lock(kartei.pfad, "unlock");
+			}
+			kartei.lock(datei, "lock");
 			// Daten werden eingelesen => Änderungsmarkierungen kommen weg
 			notizen.notizenGeaendert(false);
 			beleg.belegGeaendert(false);
@@ -222,7 +233,7 @@ let kartei = {
 			const fs = require("fs");
 			fs.writeFile(pfad, JSON.stringify(data), function(err) {
 				if (err) {
-					kartei.dialogWrapper(`Beim Speichern der Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n${err.message}`);
+					kartei.dialogWrapper(`Beim Speichern der Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.message}</p>`);
 					// passiert ein Fehler, müssen manche Werte zurückgesetzt werden
 					if (bearb_ergaenzt) {
 						data.be.splice(data.be.indexOf(bearb), 1);
@@ -230,6 +241,12 @@ let kartei = {
 					data.dm = dm_alt;
 					data.re = re_alt;
 					return;
+				}
+				if (!kartei.pfad) {
+					kartei.lock(pfad, "lock");
+				} else if (pfad !== kartei.pfad) {
+					kartei.lock(kartei.pfad, "unlock");
+					kartei.lock(pfad, "lock");
 				}
 				kartei.pfad = pfad;
 				optionen.aendereLetzterPfad();
@@ -240,6 +257,7 @@ let kartei = {
 	},
 	// Kartei schließen
 	schliessen () {
+		kartei.lock(kartei.pfad, "unlock");
 		notizen.notizenGeaendert(false);
 		beleg.belegGeaendert(false);
 		kartei.karteiGeaendert(false);
@@ -273,6 +291,7 @@ let kartei = {
 				dialog.oeffnen("alert", null);
 				dialog.text("Sie müssen ein Wort eingeben, sonst kann keine Kartei angelegt werden.");
 			} else if (dialog.antwort && wort) {
+				kartei.lock(kartei.pfad, "unlock");
 				notizen.notizenGeaendert(false);
 				beleg.belegGeaendert(false);
 				kartei.karteiGeaendert(true);
@@ -345,5 +364,48 @@ let kartei = {
 	menusDeaktivieren (disable) {
 		const {ipcRenderer} = require("electron");
 		ipcRenderer.send("menus-deaktivieren", disable);
+	},
+	// Lock-Datei-Funktionen
+	//   datei = String
+	//     (Dateipfad)
+	//   aktion = String
+	//     (lock, unlock, check)
+	lock (datei, aktion) {
+		if (!datei) { // für just erstellte, aber noch nicht gespeicherte Dateien
+			return;
+		}
+		const fs = require("fs"),
+			pfad = datei.match(/^(.+[/\\]{1})(.+)$/),
+			lockfile = `${pfad[1]}.~lock.${pfad[2]}#`;
+		if (aktion === "lock") {
+			const datum = new Date().toISOString();
+			fs.writeFile(lockfile, datum, function(err) {
+				if (err) {
+					dialog.oeffnen("alert", null);
+					dialog.text(`Beim Erstellen der Sperrdatei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.message}</p>`);
+				}
+			});
+			// Datei unter Windows verstecken
+			if (process.platform === "win32") {
+				const child_process = require("child_process");
+				child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);
+			}
+		} else if (aktion === "unlock") {
+			fs.unlink(lockfile, function(err) {
+				if (err) {
+					dialog.oeffnen("alert", null);
+					dialog.text(`Beim Löschen der Sperrdatei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.message}</p>`);
+				}
+			});
+		} else if (aktion === "check") {
+			if (fs.existsSync(lockfile)) {
+				const lockdate = new Date(fs.readFileSync(lockfile, "utf-8"));
+				if (new Date() - lockdate > 43200000) { // vor mehr als 12 Stunden gesperrt => nicht gesperrt
+					return false;
+				}
+				return true;
+			}
+			return false;
+		}
 	},
 };

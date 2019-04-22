@@ -63,11 +63,16 @@
 			<h2 id="changelog">Changelog</h2>
 			
 			<div>
-				<div class="version"><span>Version 0.5.0-beta</span><time datetime="2100-01-01">1. Januar 2100</time></div>
+				<div class="version" data-maintainer="Nico Dorn"><span>Version 0.5.0-beta</span><time datetime="2100-01-01">1. Januar 2100</time></div>
 				<h3>Neue Funktionen</h3>
 				<ul>
 					<li>Die <i>technische Dokumentation</i> ist fertig. Wer sie lesen möchte, findet sie unter <i>Hilfe &gt; Technische Dokumentation</i>.</li>
-					<li>Für die Installation unter <i>Windows</i> wird ab sofort ein <abbr title="Nullsoft Scriptable Install System" lang="en">NSIS</abbr>-Installer verwendet. Dieser Installer kann automatisch den <abbr title="Wortgeschichte digital">WGD</abbr>-Dateityp im Betriebssystem registrieren, sodass <abbr title="Wortgeschichte digital">WGD</abbr>-Dateien fortan einfach durch Klick im <i>Windows-Explorer</i> geöffnet werden können. Das Erstellen von DEB-Paketen und das Registrieren der <abbr title="Wortgeschichte digital">WGD</abbr>-Dateien unter <i>Linux</i> wurde ebenfalls eingerichtet.</li>
+					<li>Für die Installation unter <i>Windows</i> wird ab sofort ein <abbr title="Nullsoft Scriptable Install System" lang="en">NSIS</abbr>-Installer verwendet. Dieser Installer kann automatisch den <abbr title="Wortgeschichte digital">wgd</abbr>-Dateityp im Betriebssystem registrieren, sodass <abbr title="Wortgeschichte digital">wgd</abbr>-Dateien fortan einfach durch Klick im <i>Windows-Explorer</i> geöffnet werden können. Das Erstellen von deb-Paketen und das Registrieren der <abbr title="Wortgeschichte digital">wgd</abbr>-Dateien unter <i>Linux</i> wurde ebenfalls eingerichtet.</li>
+					<li>
+						<p>Es gibt nun einen Sperrmechanismus, der das kollaborative Arbeiten an Wortkarteien ermöglicht.</p>
+						<p>Beim Öffnen einer Kartei wird diese automatisch für andere BenutzerInnen gesperrt. Dazu wird im selben Ordner, in dem die geöffnete Kartei liegt, eine Datei nach dem folgenden Namensmuster erstellt: <q>.~lock.[KARTEINAME]#</q>. Aus der Kartei <q>Freiheit.wgd</q> resultiert somit die Sperrdatei <q>.~lock.Freiheit.wgd#</q>.</p>
+						<p>Sollte es beim Entsperren aus irgendeinem Grund zu einem Fehler kommen (Programmabsturz, Programmierfehler <abbr title="und so weiter">usw.</abbr>), kann die Sperrdatei problemlos manuell gelöscht werden. Danach lässt sich die betreffende Kartei wieder öffnen.</p>
+					</li>
 				</ul>
 				<h3>Verbesserungen</h3>
 				<ul>
@@ -88,14 +93,14 @@
 					<li>Kopieren des Belegtexts: Wurde der Belegtext über das Icon <img src="../img/tool-kopieren.svg" width="24" height="24" alt=""> in der Belegliste oder Karteikarte komplett kopiert, fanden sich im Plaintext noch HTML-Tags. Diese werden nun entfernt. (Die Änderung hat keine Auswirkungen, wenn der Text mit allen Formatierungen in ein Office-Programm eingefügt werden soll.)</li>
 					<li>Belegliste: Die Belegvorschau in den Listenköpfen zeigte mitunter den Beleganfang an, obwohl das Wort der Kartei erst weiter hinten zu finden war.</li>
 					<li>Belegliste: Beim Kürzen des Belegkontexts (Funktion <img src="../img/liste-kuerzen.svg" width="24" height="24" alt="">) wurden mitunter auch Absätze gestrichen, in denen das Wort durchaus zu finden ist.</li>
-					<li>Filterleiste: In der zeitlichen Verteilungsgrafik (Funktion <img src="../img/filter-zeitraumgrafik.svg" width="24" height="24" alt="">) folgten die Ziffern in der Beschriftung der y-Achse mitunter ein wenig zu eng aufeinander.</li>
+					<li>Filterleiste: In der zeitlichen Verteilungsgrafik (Funktion <img src="../img/filter-zeitraumgrafik.svg" width="24" height="24" alt="">) folgten die Ziffern in der Beschriftung der y-Achse mitunter ein wenig zu dicht aufeinander.</li>
 					<li>Dropdown-Menü: Die Logik des Dialogs, der aufpoppt, wenn in einem der Datenfelder des Belegs bereits Text steht, wurde wieder in seinen ursprünglichen Zustand versetzt: <q>Ja</q> bedeutet ergänzen, <q>Nein</q> überschreiben (Rücknahme der Änderung von Version 0.3.0, die sich dann doch als ungut herausstellte).</li>
 				</ul>
 			</div>
 			
 			<div>
-				<div class="version"><span>Version 0.4.0</span><time datetime="2019-04-17">17. April 2019</time></div>
-				<p><span class="obacht">Das Dateiformat hat sich geändert!</span> Ältere <abbr title="Wortgeschichte digital">WGD</abbr>-Dateien werden automatisch konvertiert; dabei wird eine Änderungsmarkierung gesetzt.</p>
+				<div class="version" data-maintainer="Nico Dorn"><span>Version 0.4.0</span><time datetime="2019-04-17">17. April 2019</time></div>
+				<p><span class="obacht">Das Dateiformat hat sich geändert!</span> Ältere <abbr title="Wortgeschichte digital">wgd</abbr>-Dateien werden automatisch konvertiert; dabei wird eine Änderungsmarkierung gesetzt.</p>
 				<h3>Neue Funktionen</h3>
 				<ul>
 					<li>
@@ -142,7 +147,7 @@
 			</div>
 			
 			<div>
-				<div class="version"><span>Version 0.3.0</span><time datetime="2019-04-10">10. April 2019</time></div>
+				<div class="version" data-maintainer="Nico Dorn"><span>Version 0.3.0</span><time datetime="2019-04-10">10. April 2019</time></div>
 				<h3>Neue Funktionen</h3>
 				<ul>
 					<li>Karteikarte: Mit dem Tastaturkürzel <kbd>Strg</kbd> + <kbd>U</kbd> kann jetzt zwischen Formular- und Leseansicht gewechselt werden.</li>
@@ -173,7 +178,7 @@
 			</div>
 			
 			<div>
-				<div class="version"><span>Version 0.2.0</span><time datetime="2019-04-09">9. April 2019</time></div>
+				<div class="version" data-maintainer="Nico Dorn"><span>Version 0.2.0</span><time datetime="2019-04-09">9. April 2019</time></div>
 				<h3>Verbesserungen</h3>
 				<ul>
 					<li>Suchfunktion: Das Finden von Wörtern mit Sonderzeichen (ẽ und ñ) wurde verbessert.</li>
@@ -189,7 +194,7 @@
 			</div>
 			
 			<div>
-				<div class="version"><span>Version 0.1.0</span><time datetime="2019-04-08">8. April 2019</time></div>
+				<div class="version" data-maintainer="Nico Dorn"><span>Version 0.1.0</span><time datetime="2019-04-08">8. April 2019</time></div>
 				<p>Erste freigegebene Version.</p>
 			</div>
 		</section>

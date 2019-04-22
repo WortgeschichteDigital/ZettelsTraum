@@ -1,5 +1,20 @@
 #!/bin/sh
 
+dir=$PWD
+if ! test -e "$dir/zdl-wgd.xml"; then
+	dir=/opt/zettelstraum/resources/filetype/linux
+	if ! test -e "$dir/zdl-wgd.xml"; then
+		echo ""
+		echo "zdl-wgd.xml nicht gefunden!"
+		echo ""
+		echo "Am besten rufen Sie das Script so auf:"
+		echo "  cd /opt/zettelstraum/resources/filetype/linux"
+		echo "  sh register.sh"
+		echo ""
+		exit 1
+	fi
+fi
+
 if ! command -v xdg-mime >/dev/null 2>&1; then
 	echo ""
 	echo "xdg-mime nicht gefunden!"
@@ -10,20 +25,26 @@ if ! command -v xdg-mime >/dev/null 2>&1; then
 	exit 1
 fi
 
-if ! test -e zdl-wgd.xml; then
+cd "$dir"
+
+echo ""
+echo "* MIME-Typ deinstallieren"
+xdg-mime uninstall zdl-wgd.xml
+if [ "$?" != "0" ]; then
 	echo ""
-	echo "zdl-wgd.xml nicht gefunden!"
-	echo ""
-	echo "Sie müssen das Script so aufrufen:"
-	echo "  cd /opt/zettelstraum/resources/filetype/linux/"
-	echo "  sh register.sh"
+	echo "Deinstallation fehlgeschlagen!"
 	echo ""
 	exit 1
 fi
 
 echo ""
-echo "* MIME-Typ deinstallieren"
-xdg-mime uninstall zdl-wgd.xml
+echo "* Icons deinstallieren"
+xdg-icon-resource uninstall --context mimetypes --size 16 application-x-wgd
+xdg-icon-resource uninstall --context mimetypes --size 22 application-x-wgd
+xdg-icon-resource uninstall --context mimetypes --size 32 application-x-wgd
+xdg-icon-resource uninstall --context mimetypes --size 48 application-x-wgd
+xdg-icon-resource uninstall --context mimetypes --size 64 application-x-wgd
+xdg-icon-resource uninstall --context mimetypes --size 128 application-x-wgd
 if [ "$?" != "0" ]; then
 	echo ""
 	echo "Deinstallation fehlgeschlagen!"

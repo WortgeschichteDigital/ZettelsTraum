@@ -11,53 +11,26 @@ const {app, BrowserWindow, ipcMain, Menu} = require("electron"),
 	fs = require("fs"),
 	path = require("path");
 
-// Squirrel-Events abfangen
-// (das ist im Wesentelichen eine Kopie von
-// https://github.com/electron/windows-installer)
-if (handleSquirrelEvent()) {
+// Single-Instance-Test
+let primary = app.requestSingleInstanceLock();
+
+if (!primary) {
+	app.quit();
 	return;
 }
 
-function handleSquirrelEvent() {
-	if (process.argv.length === 1) {
-		return false;
+app.on("second-instance", function(evt, argv) {
+	if (!win) {
+		return;
 	}
-	const ChildProcess = require("child_process"),
-		appFolder = path.resolve(process.execPath, ".."),
-		rootAtomFolder = path.resolve(appFolder, ".."),
-		updateDotExe = path.resolve(path.join(rootAtomFolder, "Update.exe")),
-		exeName = path.basename(process.execPath);
-	const spawn = function(command, args) {
-		let spawnedProcess;
-		try {
-			spawnedProcess = ChildProcess.spawn(command, args, {detached: true});
-		} catch (err) {}
-		return spawnedProcess;
-	};
-	const spawnUpdate = function(args) {
-		return spawn(updateDotExe, args);
-	};
-	const squirrelEvent = process.argv[1];
-	switch (squirrelEvent) {
-		case "--squirrel-install":
-		case "--squirrel-updated":
-			// Install desktop and start menu shortcuts
-			spawnUpdate(['--createShortcut', exeName]);
-			setTimeout(app.quit, 1000);
-			return true;
-		case "--squirrel-uninstall":
-			// Remove desktop and start menu shortcuts
-			spawnUpdate(["--removeShortcut", exeName]);
-			setTimeout(app.quit, 1000);
-			return true;
-		case "--squirrel-obsolete":
-			// This is called on the outgoing version of your app before
-			// we update to the new version - it's the opposite of
-			// --squirrel-updated
-			app.quit();
-			return true;
+	if (/\.wgd$/.test(argv[1])) {
+		win.webContents.send("kartei-oeffnen", argv[1]);
 	}
-}
+	if (win.isMinimized()) {
+		win.restore();
+	}
+	win.focus();
+});
 
 // Bilderliste erstellen
 let bilder = [];
@@ -615,6 +588,12 @@ fenster = {
 		win.loadFile(path.join(__dirname, "index.html"));
 		// Fenster anzeigen, sobald alles geladen wurde
 		win.once("ready-to-show", function() {
+			// ggf. übergebene Kartei öffnen
+			if (/\.wgd$/.test(process.argv[1])) {
+				// ein bisschen Timeout, sonst klappt das nicht
+				setTimeout(() => win.webContents.send("kartei-oeffnen", process.argv[1]), 100);
+			}
+			// Fenster anzeigen
 			win.show();
 			// ggf. maximieren
 			if (optionen.data.fenster.maximiert) {

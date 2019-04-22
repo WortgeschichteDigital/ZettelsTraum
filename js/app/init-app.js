@@ -182,6 +182,7 @@ window.addEventListener("load", function() {
 		kartei.checkSpeichern(() => kartei.wortErfragen());
 	});
 	ipcRenderer.on("kartei-oeffnen", function(evt, datei) {
+		console.log(datei);
 		if (datei) {
 			kartei.checkSpeichern(() => kartei.oeffnenEinlesen(datei));
 		} else {
@@ -237,7 +238,7 @@ window.addEventListener("beforeunload", function(evt) {
 	if (optionen.speichern_timeout) {
 		optionen.speichernAnstossen();
 	}
-	// Schließen ggf. unterbrechen
+	// Schließen ggf. unterbrechen + Kartei ggf. entsperren
 	if (notizen.geaendert || beleg.geaendert || kartei.geaendert) {
 		sicherheitsfrage.warnen(function() {
 			notizen.geaendert = false;
@@ -251,5 +252,7 @@ window.addEventListener("beforeunload", function(evt) {
 			kartei: true,
 		});
 		evt.returnValue = "false";
+	} else {
+		kartei.lock(kartei.pfad, "unlock");
 	}
 });
