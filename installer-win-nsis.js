@@ -26,7 +26,7 @@ builder.build({
 		},
 		"nsis": {
 			"artifactName": "zettelstraum_${version}_x64.${ext}",
-			"license": "licenses/Zettel's Traum (GPL-3.0-only).txt",
+			"license": "LICENSE.ZettelsTraum.txt",
 			"shortcutName": "Zettel’s Traum"
 		},
 		"fileAssociations": [

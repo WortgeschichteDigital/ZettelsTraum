@@ -63,14 +63,15 @@
 			<h2 id="changelog">Changelog</h2>
 			
 			<div>
-				<div class="version" data-maintainer="Nico Dorn"><span>Version 0.5.0-beta</span><time datetime="2100-01-01">1. Januar 2100</time></div>
+				<div class="version" data-maintainer="Nico Dorn"><span>Version 0.5.0</span><time datetime="2019-04-23T13:02:11">23. April 2019</time></div>
+				<p><span class="obacht">Achtung!</span> Mit der Installation dieser Version gehen alle bisherigen Einstellungen verloren. (Sie können allerdings manuell wiederhergestellt werden.)</p>
 				<h3>Neue Funktionen</h3>
 				<ul>
 					<li>Die <i>technische Dokumentation</i> ist fertig. Wer sie lesen möchte, findet sie unter <i>Hilfe &gt; Technische Dokumentation</i>.</li>
-					<li>Für die Installation unter <i>Windows</i> wird ab sofort ein <abbr title="Nullsoft Scriptable Install System" lang="en">NSIS</abbr>-Installer verwendet. Dieser Installer kann automatisch den <abbr title="Wortgeschichte digital">wgd</abbr>-Dateityp im Betriebssystem registrieren, sodass <abbr title="Wortgeschichte digital">wgd</abbr>-Dateien fortan einfach durch Klick im <i>Windows-Explorer</i> geöffnet werden können. Das Erstellen von deb-Paketen und das Registrieren der <abbr title="Wortgeschichte digital">wgd</abbr>-Dateien unter <i>Linux</i> wurde ebenfalls eingerichtet.</li>
+					<li>Für die Installation unter <i>Windows</i> wird ab sofort ein <abbr title="Nullsoft Scriptable Install System" lang="en">NSIS</abbr>-Installer verwendet. Dieser Installer kann automatisch den <abbr title="Wortgeschichte digital">WGD</abbr>-Dateityp im Betriebssystem registrieren, sodass <abbr title="Wortgeschichte digital">WGD</abbr>-Dateien fortan einfach durch Klick im <i>Windows-Explorer</i> geöffnet werden können. Das Erstellen von DEB-Paketen und das Registrieren der <abbr title="Wortgeschichte digital">WGD</abbr>-Dateien unter <i>Linux</i> wurde ebenfalls eingerichtet.</li>
 					<li>
 						<p>Es gibt nun einen Sperrmechanismus, der das kollaborative Arbeiten an Wortkarteien ermöglicht.</p>
-						<p>Beim Öffnen einer Kartei wird diese automatisch für andere BenutzerInnen gesperrt. Dazu wird im selben Ordner, in dem die geöffnete Kartei liegt, eine Datei nach dem folgenden Namensmuster erstellt: <q>.~lock.[KARTEINAME]#</q>. Aus der Kartei <q>Freiheit.wgd</q> resultiert somit die Sperrdatei <q>.~lock.Freiheit.wgd#</q>.</p>
+						<p>Beim Öffnen einer Kartei wird diese automatisch für andere BenutzerInnen gesperrt; es erscheint nur eine Fehlermeldung. Dazu wird im selben Ordner, in dem die geöffnete Kartei liegt, eine Datei nach dem folgenden Namensmuster erstellt: <q>.~lock.[KARTEINAME]#</q>. Aus der Kartei <q>Freiheit.wgd</q> resultiert somit die Sperrdatei <q>.~lock.Freiheit.wgd#</q>. Diese Datei ist standardmäßig versteckt.</p>
 						<p>Sollte es beim Entsperren aus irgendeinem Grund zu einem Fehler kommen (Programmabsturz, Programmierfehler <abbr title="und so weiter">usw.</abbr>), kann die Sperrdatei problemlos manuell gelöscht werden. Danach lässt sich die betreffende Kartei wieder öffnen.</p>
 					</li>
 				</ul>
@@ -84,6 +85,9 @@
 						<p>Notizen und Karteikarte: Seit Version 0.3.0 schließen sich Karteikarte und Notizenfenster nach dem Speichern nicht mehr automatisch. Von nun an gibt es Einstellungen, mit denen dieses Verhalten wiederhergestellt werden kann, und zwar unter <i>Programm &gt; Einstellungen &gt; Allgemeines</i> <abbr title="beziehungsweise">bzw.</abbr> <i>Programm &gt; Einstellungen &gt; Karteikarte</i>.</p>
 						<p><span class="obacht">Achtung!</span> Die Optionen sind standardmäßig aktiviert. Mit dieser Version wird also zunächst das ältere Verhalten der App wiederhergestellt.</p>
 					</li>
+					<li>Korpora: Die Liste wurde um den Punkt <i>Referenz- und Zeitungskorpora</i> ergänzt.</li>
+					<li>Kopieren des Belegtextes: Ist das Wort der Kartei hervorgehoben, wird diese Hervorhebung nun mitkopiert. Nach dem Einfügen in einem Textverarbeitungsprogramm erscheint das Wort fett und grau hinterlegt.</li>
+					<li>Drucken: Das Wort der Kartei wird für den Ausdruck nun fett hervorgehoben und grau hinterlegt. Allerdings kann die graue Hinterlegung nicht direkt gedruckt werden. Ist sie unverzichtbar, muss man den Text kopieren (Kopierfunktion im Kopf der Druckfensters), in ein Textverarbeitungsprogramm einfügen und von dort aus drucken.</li>
 					<li>Notizen und Karteikarte: Die Buttons, die früher <i>Abbrechen</i> hießen, wurden in <i>Schließen</i> umbenannt, weil sich <i>Notizen-Fenster</i> oder <i>Karteikarte</i> nach dem Speichern nicht mehr notwendigerweise direkt schließen müssen. Die Funktionalität der Buttons hat sich dabei nicht geändert.</li>
 				</ul>
 				<h3>Behobene Fehler</h3>
@@ -91,16 +95,18 @@
 					<li>Wurde das Hauptfenster der App über die Schließenfunktion der Fensterleiste geschlossen, blieben <abbr title="eventuell">evtl.</abbr> offene Nebenfenster (<i>Bedeutungen-Fenster</i>, <i>Handbuch</i>, <i>technische Dokumentation</i>) weiter geöffnet. Diese Fenster gehen nun mit dem Schließen des Hauptfenster automatisch zu.</li>
 					<li>Anzeige des Belegtexts: Beim Ausblenden der Seitenumbruchsmarkierung (also <abbr title="zum Beispiel">z. B.</abbr> <q>[:35:]</q>) wurde auch das Leerzeichen vor der Markierung entfernt, was mitunter zur Komposition nicht zusammengehöriger Wörter führte.</li>
 					<li>Kopieren des Belegtexts: Wurde der Belegtext über das Icon <img src="../img/tool-kopieren.svg" width="24" height="24" alt=""> in der Belegliste oder Karteikarte komplett kopiert, fanden sich im Plaintext noch HTML-Tags. Diese werden nun entfernt. (Die Änderung hat keine Auswirkungen, wenn der Text mit allen Formatierungen in ein Office-Programm eingefügt werden soll.)</li>
+					<li>Kopieren des Belegtextes: War das Wort der Kartei hervorgehoben (gefettet und gelb hinterlegt), veschwand es beim Einfügen in <i>LibreOffice</i> ganz.</li>
 					<li>Belegliste: Die Belegvorschau in den Listenköpfen zeigte mitunter den Beleganfang an, obwohl das Wort der Kartei erst weiter hinten zu finden war.</li>
 					<li>Belegliste: Beim Kürzen des Belegkontexts (Funktion <img src="../img/liste-kuerzen.svg" width="24" height="24" alt="">) wurden mitunter auch Absätze gestrichen, in denen das Wort durchaus zu finden ist.</li>
 					<li>Filterleiste: In der zeitlichen Verteilungsgrafik (Funktion <img src="../img/filter-zeitraumgrafik.svg" width="24" height="24" alt="">) folgten die Ziffern in der Beschriftung der y-Achse mitunter ein wenig zu dicht aufeinander.</li>
+					<li>Dropdown-Menü: Manuell ergänzte Korpora wurden nicht in die Korporaliste integriert. Nun werden die ergänzten Korpora vor die vordefinierten eingerückt.</li>
 					<li>Dropdown-Menü: Die Logik des Dialogs, der aufpoppt, wenn in einem der Datenfelder des Belegs bereits Text steht, wurde wieder in seinen ursprünglichen Zustand versetzt: <q>Ja</q> bedeutet ergänzen, <q>Nein</q> überschreiben (Rücknahme der Änderung von Version 0.3.0, die sich dann doch als ungut herausstellte).</li>
 				</ul>
 			</div>
 			
 			<div>
 				<div class="version" data-maintainer="Nico Dorn"><span>Version 0.4.0</span><time datetime="2019-04-17">17. April 2019</time></div>
-				<p><span class="obacht">Das Dateiformat hat sich geändert!</span> Ältere <abbr title="Wortgeschichte digital">wgd</abbr>-Dateien werden automatisch konvertiert; dabei wird eine Änderungsmarkierung gesetzt.</p>
+				<p><span class="obacht">Das Dateiformat hat sich geändert!</span> Ältere <abbr title="Wortgeschichte digital">WGD</abbr>-Dateien werden automatisch konvertiert; dabei wird eine Änderungsmarkierung gesetzt.</p>
 				<h3>Neue Funktionen</h3>
 				<ul>
 					<li>

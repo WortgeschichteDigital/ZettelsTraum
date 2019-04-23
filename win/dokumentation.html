@@ -31,7 +31,7 @@
 					<li><a href="#" class="link-sektion-framework kopf">Framework</a></li>
 					<li><a href="#" class="link-sektion-ordner kopf">Ordner und Dateien</a></li>
 					<li><a href="#" class="link-sektion-js kopf">JavaScript</a></li>
-					<li><a href="#" class="link-sektion-wgd kopf">wgd-Dateiformat</a></li>
+					<li><a href="#" class="link-sektion-wgd kopf">WGD-Dateiformat</a></li>
 				</ul>
 			</nav>
 			<div>
@@ -56,7 +56,7 @@
 					
 					<p><i class="app-name"></i> läuft auf dem <a href="https://electronjs.org/"><i>Electron</i></a>-Framework. <i>Electron</i> ist eine Kombination aus <a href="https://www.chromium.org/Home"><i>Chromium</i></a>, dem Open-Source-Browser, auf dem <i>Google Chrome</i> basiert, und <a href="https://nodejs.org/"><i>Node.js</i></a>, einer JavaScript-Laufzeitumgebung mit der Implementierung <i>V8</i>. Das Framework kann komplett via JavaScript gesteuert werden, weswegen zum Programmieren der App Kenntnisse in den Sprachen <abbr title="Hyptertext Markup Language" lang="en">HTML</abbr>, <abbr title="Cascading Style Sheets" lang="en">CSS</abbr> und JavaScript vollkommen ausreichen.</p>
 					
-					<p><i>Electron</i> übernimmt die schwierigen Aufgaben, die sich beim Programmieren einer Desktop-App stellen. Es kümmert sich um die Integration in das Betriebssystem, ermöglicht also lesende und schreibende Dateizugriffe sowie das Öffnen externer Programme, erzeugt die Dateidialoge zum Öffnen und Speichern der Karteien und verwaltet über den betriebssystemeigenen Fenster-Manager die einzelnen Programm-Fenster, in denen eine leicht eingedampfte Variante des <i>Chromium</i>-Browsers für die Anzeige zuständig ist. Jedes Programm-Fenster läuft in einem eigenen Renderer-Prozess, weswegen die einzelnen Fenster nicht direkt miteiander kommunizieren können. Das Öffnen der Programm-Fenster und die Darstellung der Fenster-Menüs werden im Wesentlichten über den Main-Prozess gesteuert, über den die App initialisiert wird. Dieser wiederum kann mit allen Fenstern kommunizieren.</p>
+					<p><i>Electron</i> übernimmt die schwierigen Aufgaben, die sich beim Programmieren einer Desktop-App stellen. Es kümmert sich um die Integration in das Betriebssystem, ermöglicht also lesende und schreibende Dateizugriffe sowie das Öffnen externer Programme, erzeugt die Dateidialoge zum Öffnen und Speichern der Karteien und verwaltet über den betriebssystemeigenen Fenster-Manager die einzelnen Programmfenster, in denen eine leicht eingedampfte Variante des <i>Chromium</i>-Browsers für die Anzeige zuständig ist. Jedes Programmfenster läuft in einem eigenen Renderer-Prozess, weswegen die einzelnen Fenster nicht direkt miteiander kommunizieren können. Das Öffnen der Programmfenster und die Darstellung der Fenster-Menüs werden im Wesentlichten über den Main-Prozess gesteuert, über den die App initialisiert wird. Dieser wiederum kann mit allen Fenstern kommunizieren.</p>
 					
 					<p>Der Main-Prozess wird über die Scripts in der Datei <span class="datei">./main.js</span> im Wurzelverzeichnis des Quellcodes gesteuert (das Wurzelverzeichnis des App-Codes wird im Folgenden immer durch <span class="datei">./</span> bezeichnet). Vermittelt über diesen Prozess können die Fenster miteinander in Kommunikation treten. Über das Objekt <code class="quelltext">ipcMain</code> hört der Main-Prozess auf Meldungen der Renderer-Prozesse, die diese via <code class="quelltext">ipcRenderer</code> abgeschickt haben (<abbr title="vergleiche">vgl.</abbr> den Code in <span class="datei">./main.js</span> und <span class="datei">./js/app/init-app.js</span>).</p>
 					
@@ -105,7 +105,7 @@ npm install --save-dev electron</pre>
 					
 					<p>Die stabile Version von <i>Electron</i> liefert nie die jüngste Ausgabe von <i>Chromium</i>. Technisch ist der im Framework arbeitende Browser somit zwar immer leicht veraltet, um die notwendigen Sicherheitsupdates kümmert sich das <i>Electron</i>-Team aber fortwährend.</p>
 					
-					<p>Neben der jüngsten stabilen Version von <i>Electron</i> werden auch ältere Ausgaben für einen längeren Zeitraum mit Updates versorgt. Möchte man nicht gleich mit dem ersten Release eines neuen Zweiges auf diesen wechseln, muss man den Releasezweig angeben, von dem man Updates beziehen will. Möchte man es also <abbr title="beispielsweise">bspw.</abbr> vermeiden, die gerade aktuelle Version 5.0 zu benutzen, sondern lieber im Release-Zweig 4.1 bleiben, muss man den Update-Befehl etwas anpassen:</p>
+					<p>Neben der jüngsten stabilen Version von <i>Electron</i> werden auch ältere Ausgaben für einen längeren Zeitraum mit Updates versorgt. Möchte man nicht gleich mit dem ersten Release eines neuen Zweiges auf diesen wechseln, muss man den Releasezweig angeben, von dem man Updates beziehen will. Um es <abbr title="beispielsweise">bspw.</abbr> zu vermeiden, die gerade aktuelle Version 5.0 zu benutzen, muss man den Update-Befehl etwas anpassen, um weiterhin Updates des Release-Zweigs 4.1 zu bekommen:</p>
 					
 					<pre>npm install --save-dev electron@4-1-x</pre>
 					
@@ -159,7 +159,7 @@ npm install --save-dev electron-packager</pre>
 					
 					<p>Im Ordner <span class="datei">../build</span> befinden sich nun die Unterordner <span class="datei">zettelstraum-linux-x64</span> <abbr title="beziehungsweise">bzw.</abbr> <span class="datei">zettelstraum-win32-x64</span>. Die Unterordner enthalten die ausführbare Datei <span class="datei">zettelstraum</span> <abbr title="beziehungsweise">bzw.</abbr> <span class="datei">zettelstraum.exe</span>. Über diese kann das paketierte Programm ohne vorherige Installation gestartet werden.</p>
 					
-					<p>Auch wenn die ausführbare Programm-Datei um die 100 Megabyte groß ist – ohne die anderen Dateien, die sich im Paket-Ordner befinden, kann die App nicht gestartet werden. Soll sie auf ein anderes Betriebssystem kopiert werden, muss also immer der gesamte Ordner mit allen Dateien mitgenommen werden.</p>
+					<p>Auch wenn die ausführbare Programm-Datei um die 100 Megabyte groß ist – ohne die anderen Dateien und Verzeichnisse, die sich im Paket-Ordner befinden, kann die App nicht gestartet werden. Soll sie auf ein anderes Betriebssystem kopiert werden, muss also immer der gesamte Ordner mit allen Dateien mitgenommen werden.</p>
 					
 					<!-- Installer -->
 					<h2 id="framework-installer">Installer bauen</h2>
@@ -171,9 +171,9 @@ npm install --save-dev electron-packager</pre>
 					<pre>cd ./
 npm install --save-dev electron-builder</pre>
 					
-					<p>Die richtige Konfiguration des Builders zu finden, ist nicht so leicht, denn er kennt eine Vielzahl an <a href="https://www.electron.build/configuration/configuration">Konfigurationsmöglichkeiten</a>. Für das Erstellen eines <abbr title="Nullsoft Scriptable Install System" lang="en">NSIS</abbr>-Installers und einer deb-Datei finden sich im Wurzelverzeichnis der App bereits fertige Node-Scripts, die sich der <a href="https://www.electron.build/api/electron-builder" lang="en">Programmatic API</a> bedienen und einem diese Arbeit abnehmen: <span class="datei">installer-win-nsis.js</span> <abbr title="beziehungsweise">bzw.</abbr> <span class="datei">installer-linux-deb.js</span>. Die Scripts erstellen Installer für eine 64-Bit-Architektur.</p>
+					<p>Die richtige Konfiguration des Builders zu finden, ist nicht so leicht, denn er kennt eine Vielzahl an <a href="https://www.electron.build/configuration/configuration">Konfigurationsmöglichkeiten</a>. Für das Erstellen eines <abbr title="Nullsoft Scriptable Install System" lang="en">NSIS</abbr>-Installers und eines DEB-Pakets finden sich im Wurzelverzeichnis der App bereits fertige Node-Scripts, die sich der <a href="https://www.electron.build/api/electron-builder" lang="en">Programmatic API</a> des Builders bedienen und einem die Konfigurationsarbeit abnehmen: <span class="datei">installer-win-nsis.js</span> <abbr title="beziehungsweise">bzw.</abbr> <span class="datei">installer-linux-deb.js</span>. Die Scripts erstellen Installer für eine 64-Bit-Architektur.</p>
 					
-					<p>Ausgeführt werden die Scripts mit <code>node</code>. Für den <i>Windows</i>-Installer heißt das:</p>
+					<p>Ausgeführt werden sie mit <code>node</code>. Für den <i>Windows</i>-Installer heißt das:</p>
 					
 					<pre>node installer-win-nsis.js</pre>
 					
@@ -195,7 +195,7 @@ npm install --save-dev electron-builder</pre>
 					
 					<p>Die ausführbare exe-Datei kann nun auf einen Windows-Rechnern kopiert und installiert werden. (Getestet wurde die Installation nur auf <i>Windows 10</i>.)</p>
 					
-					<p>Für die Installation der deb-Datei gibt es einige Abhängigkeiten, die zuvor <abbr title="gegebenenfalls">ggf.</abbr> aufgelöst werden müssen:</p>
+					<p>Für die Installation der DEB-Datei gibt es einige Abhängigkeiten, die zuvor <abbr title="gegebenenfalls">ggf.</abbr> aufgelöst werden müssen:</p>
 					
 					<pre>sudo apt-get install gconf2 gconf-service libnotify4 libappindicator1 libxtst6 libnss3 libxss</pre>
 					
@@ -203,7 +203,7 @@ npm install --save-dev electron-builder</pre>
 					
 					<pre>sudo dpkg -i zettelstraum*.deb</pre>
 					
-					<p>Der <abbr title="Wortgeschichte digital">wgd</abbr>-Dateityp sollte während der Installation automatisch registriert werden. Für denn Fall, dass Probleme auftreten, finden sich im Programmordner Scripts, mit denen die Registrierung des Dateityps manuell vor- oder zurückgenommen werden kann. Die Scripts liegen in <span class="datei">/opt/zettelstraum/resources/filetype/linux/</span> und können mit <code>sh</code> ausgeführt werden.</p>
+					<p>Der <abbr title="Wortgeschichte digital">WGD</abbr>-Dateityp sollte während der Installation automatisch registriert werden. Für den Fall, dass Probleme auftreten, finden sich im Programmordner Scripts, mit denen die Registrierung des Dateityps manuell vor- oder zurückgenommen werden kann. Die Scripts liegen in <span class="datei">/opt/zettelstraum/resources/filetype/linux/</span> und können mit <code>sh</code> ausgeführt werden.</p>
 					
 					<pre>sh [de]register.sh</pre>
 					
@@ -212,17 +212,17 @@ npm install --save-dev electron-builder</pre>
 					<!-- Ordner -->
 					<h2 id="framework-ordner">Programm- und Konfigurationsordner</h2>
 					
-					<p>Der <strong><abbr title="Nullsoft Scriptable Install System" lang="en">NSIS</abbr>-Installer</strong> legt das Programm nach Doppelklick in einem lokalen Benutzerordner ab: <span class="datei"><mark>C:\Users\[BENUTZERNAME]\AppData\Local\zettelstraum\</mark></span>. Soll eine neuere Version installiert werden, muss man <i class="app-name"></i> nur beenden (<abbr title="zum Beispiel">z. B.</abbr> via <kbd>Strg</kbd> + <kbd>Q</kbd>), auf der Installer-Datei doppelklicken und das war’s.</p>
+					<p>Der <strong><abbr title="Nullsoft Scriptable Install System" lang="en">NSIS</abbr>-Installer</strong> legt das Programm nach Doppelklick in einem lokalen Benutzerordner ab: <span class="datei">C:\Users\[BENUTZERNAME]\AppData\Local\Programs\zettelstraum\</span>. Soll eine neuere Version installiert werden, muss man <i class="app-name"></i> nur beenden (<abbr title="zum Beispiel">z. B.</abbr> via <kbd>Strg</kbd> + <kbd>Q</kbd>), auf der Installer-Datei doppelklicken und das war’s.</p>
 					
 					<p>Deinstalliert werden kann das Programm wie jede andere App über die Systemsteuerung von <i>Windows</i>.</p>
 					
-					<p>Der <strong>deb-Installer</strong> erstellt einen Programmordner unter <span class="datei">/opt/zettelstraum/</span> und legt eine Desktop-Datei im Ordner <span class="datei">/usr/share/applications/</span> ab: <span class="datei">zettelstraum.desktop</span>. Das Programm sollte sich nach der Installation also ganz normal über das Programm-Menü des Betriebssystems starten lassen.</p>
+					<p>Der <strong>DEB-Installer</strong> erstellt einen Programmordner unter <span class="datei">/opt/zettelstraum/</span> und legt eine Desktop-Datei im Ordner <span class="datei">/usr/share/applications/</span> ab: <span class="datei">zettelstraum.desktop</span>. Das Programm sollte sich nach der Installation also ganz normal über das Programm-Menü des Betriebssystems starten lassen. Da eine Verknüpfung in <span class="datei">/usr/local/bin/</span> angelegt wird, lässt sich die App auch in der Konsole via <code>zettelstraum</code> starten.</p>
 					
 					<p>Deinstalliert werden kann es einfach mit dem Paketmanager:</p>
 					
 					<pre>sudo apt-get purge zettelstraum</pre>
 					
-					<p>Aber Achtung! Soll <i class="app-name"></i> künftig nicht mehr benutzt werden, sollte man auch die Registrierung des <abbr title="Wortgeschichte digital">wgd</abbr>-Dateityps wieder rückgäging machen (vgl. dazu den Abschnitt <a href="#framework-installer">Installer bauen</a>). Und dies sollte man tun, bevor die App deinstalliert wird, weil das dafür nötige Script sonst nicht mehr zur Verfügung steht.</p>
+					<p>Die Registrierung des <abbr title="Wortgeschichte digital">WGD</abbr>-Dateityps sollte dabei automatisch rückgängig gemacht werden (<abbr title="vergleiche">vgl.</abbr> dazu den Abschnitt <a href="#framework-installer">Installer bauen</a>).</p>
 					
 					<p>Ob die App nun paketiert und installiert ist oder einfach via <code>npm start</code> aufgerufen wurde, das <i>Electron</i>-Framework erstellt automatisch einen Konfigurationsordner im Standard-Konfigurationsverzeichnis des Betriebssystems. Das ist unter <i>Linux</i>:</p>
 					
@@ -233,7 +233,7 @@ npm install --save-dev electron-builder</pre>
 					<p>Und unter <i>Windows 10</i>:</p>
 					
 					<ul>
-						<li class="datei"><mark>C:\Users\[BENUTZERNAME]\AppData\Roaming\<span class="app-name"></span>\</mark></li>
+						<li class="datei">C:\Users\[BENUTZERNAME]\AppData\Roaming\<span class="app-name"></span>\</li>
 					</ul>
 					
 					<p>Die Dateien in dem Ordner werden alle von <i>Electron</i> verwaltet – bis auf die Datei <span class="datei">einstellungen.json</span>. Diese wird von der <span class="datei">./main.js</span> erstellt. In ihr werden die Einstellungen des Hauptfensters der App und die Größe und Position von einigen (aber nicht allen) Programmfenstern gespeichert. Welche Werte die App anlegt, lässt sich dem Objekt <code class="quelltext">optionen.data</code> in der Datei <span class="datei">./js/app/optionen.js</span> entnehmen. Die durch die Datei <span class="datei">./main.js</span> angelegten Werte finden sich <abbr title="ebenda">ebd.</abbr> im gleichnamigen Objekt <code class="quelltext">optionen.data</code>.</p>
@@ -246,7 +246,7 @@ npm install --save-dev electron-builder</pre>
 					<p>Der Quelltext der App ist auch in den Installern: Er wird im jeweiligen Programmordner ebenfalls im Unterordner <span class="datei">resources</span> abgelegt. Also entweder in</p>
 					
 					<ul>
-						<li class="datei"><mark>C:\Users\[BENUTZERNAME]\AppData\Local\zettelstraum\app-[VERSIONSNUMMER]\resources\</mark></li>
+						<li class="datei">C:\Users\[BENUTZERNAME]\AppData\Local\Programs\zettelstraum\resources\</li>
 					</ul>
 					
 					<p>oder in</p>
@@ -261,7 +261,7 @@ npm install --save-dev electron-builder</pre>
 					
 					<pre>npx asar extract app.asar [ZIELORDNER]</pre>
 					
-					<p>Das Archiv enthält den vollständigen Quelltext von <i class="app-name"></i>. Unter <i>Linux</i> fehlt allerdings der Unterordner <span class="datei">./filetype/</span>, in dem sich Scripts zum Registrieren des <abbr title="Wortgeschichte digital">wgd</abbr>-Dateityps und die passenden Icons befinden. Dieses Verzeichnis liegt bereits entpackt im selben Ordner wie die <span class="datei">app.asar</span>.</p>
+					<p>Das Archiv enthält den vollständigen Quelltext von <i class="app-name"></i>. Unter <i>Linux</i> fehlt allerdings der Unterordner <span class="datei">./filetype/</span>, in dem sich Scripts zum Registrieren des <abbr title="Wortgeschichte digital">WGD</abbr>-Dateityps und die passenden Icons befinden. Dieses Verzeichnis liegt bereits entpackt im selben Ordner wie die <span class="datei">app.asar</span>.</p>
 				</section>
 				
 				<!-- ORDNER UND DATEIEN -->
@@ -273,8 +273,9 @@ npm install --save-dev electron-builder</pre>
 					
 					<ul>
 						<li><span class="datei">./index.html</span>: <abbr title="Hyptertext Markupt Language" lang="en">HTML</abbr>-Datei, die beim Öffnen des Hauptfensters geladen wird</li>
-						<li><span class="datei">./installer-linux-deb.js</span>: Node-Script, das eine deb-Datei erzeugt, mit der <i class="app-name"></i> auf <i>Debian</i>, <i>Ubuntu</i> <abbr title="und so weiter">usw.</abbr> installiert werden kann</li>
+						<li><span class="datei">./installer-linux-deb.js</span>: Node-Script, das eine DEB-Datei erzeugt, mit der <i class="app-name"></i> auf <i>Debian</i>/<i>Ubuntu</i> <abbr title="und so weiter">usw.</abbr> installiert werden kann</li>
 						<li><span class="datei">./installer-win-nsis.js</span>: Node-Script, das einen <abbr title="Nullsoft Scriptable Install System" lang="en">NSIS</abbr>-Installer erzeugt, mit dem <i class="app-name"></i> auf <i>Windows</i> installiert werden kann</li>
+						<li><span class="datei">./LICENSE.*.txt</span>: Lizenzbestimmungen von <i class="app-name"></i> den Icons und Fonts</li>
 						<li><span class="datei">./main.js</span>: Node-Script, das die App initialisiert, die Programmfenster öffnet, lädt, verwaltet und für vieles andere zuständig ist, was das Betriebssystem, auf dem <i class="app-name"></i> läuft, direkt betrifft</li>
 						<li><span class="datei">./package.json</span>: <abbr title="JavaScript Object Notation" lang="en">JSON</abbr>-Datei mit Meta-Informationen zu Programm, Autor und Lizenz sowie Angaben darüber, wie die App gestartet wird; <abbr title="vergleiche">vgl.</abbr> den Abschnitt <a href="#framework-starten">Starten der App</a></li>
 					</ul>
@@ -287,13 +288,13 @@ npm install --save-dev electron-builder</pre>
 					<ul>
 						<li><span class="datei">./css/*.css</span>: Stylesheets, die in mehr als einem Fenster benötigt werden und durch <code class="quelltext">@include</code> in andere Stylesheets eingebunden werden</li>
 						<li><span class="datei">./css/app/*.css</span>: Stylesheets, die im Hauptfenster des Programms geladen werden; in der <span class="datei">app.css</span> finden sich viele basale Definitionen, die anderen Dateien regeln das Layout einzelner Teile oder Funktionen der App</li>
-						<li><span class="datei">./css/win/*.css</span>: diese Stylesheets werden nur in den vom Hauptfenster abhängigen Nebenfenstern (also <abbr title="unter anderem">u. a.</abbr> dem Handbuch und diesem Fenster) benötigt</li>
+						<li><span class="datei">./css/win/*.css</span>: diese Stylesheets werden nur in den vom Hauptfenster abhängigen Nebenfenstern (also <abbr title="unter anderem">u. a.</abbr> dem <a href="#" class="link-handbuch">Handbuch</a> und diesem Fenster) benötigt</li>
 					</ul>
 					
 					<!-- File type -->
 					<h2 class="datei" id="ordner-filetype">./filetype/</h2>
 					
-					<p>Der Ordner enthält Icons für den <abbr title="Wortgeschichte digital">wgd</abbr>-Dateityp und Shell-Scripts, mit denen auf <i>Linux</i>-Systemen der Dateityp registriert oder entfernt werden kann. Es gibt auch eine <abbr title="Scalable Vector Graphics">SVG</abbr>-Version des Dateityp-Icons: <span class="datei">./img/datei-wgd.svg</span>.</p>
+					<p>Der Ordner enthält Icons für den <abbr title="Wortgeschichte digital">WGD</abbr>-Dateityp und Shell-Scripts, mit denen auf <i>Linux</i>-Systemen der Dateityp registriert oder entfernt werden kann. Es gibt auch eine <abbr title="Scalable Vector Graphics">SVG</abbr>-Version des Dateityp-Icons: <span class="datei">./img/datei-wgd.svg</span>.</p>
 					
 					<!-- Fonts -->
 					<h2 class="datei" id="ordner-fonts">./fonts/</h2>
@@ -305,7 +306,7 @@ npm install --save-dev electron-builder</pre>
 					
 					<ul>
 						<li><span class="datei">./img/*.svg</span>: Vektorgrafiken, die sowohl für das Hauptfenster der App als auch für deren Nebenfenster genutzt werden; nicht alle Grafiken werden aus diesem Ordner geladen, mitunter sind sie als <abbr title="Extensible Markup Language">XML</abbr> direkt in den Quelltext der <abbr title="Hyptertext Markup Language">HTML</abbr>-Dateien eingefügt worden</li>
-						<li><span class="datei">./img/icon/</span>: Bilddateien mit dem Programm-Icon in verschiedenen Größen für unterschiedliche Betriebssysteme; für <i>Windows</i> gibt es eine <span class="datei">icon.ico</span>, für <i>macOS</i> eine <span class="datei">icon.icns</span> und für <i>Linux</i> einen Ordner mit <span class="datei">*.png</span>-Dateien</li>
+						<li><span class="datei">./img/icon/</span>: Bilddateien mit dem Programm-Icon in verschiedenen Größen für unterschiedliche Betriebssysteme; für <i>Windows</i> gibt es eine <span class="datei">icon.ico</span>, für <i>macOS</i> eine <span class="datei">icon.icns</span> und für <i>Linux</i> einen Ordner mit <abbr title="Portable Network Graphics" lang="en">PNG</abbr>-Dateien</li>
 						<li><span class="datei">./img/menu/*.png</span>: Bilddateien, die nur von den Menüs verwendet werden, die das Framework verwaltet; dazu zählen das App-Menü am oberen Rand des Hauptfensters und die Kontextmenüs, die auf Rechtsklick erscheinen</li>
 					</ul>
 					
@@ -323,28 +324,23 @@ npm install --save-dev electron-builder</pre>
 					
 					<p>Jede JavaScript-Datei enthält ein Objekt, das denselben Namen wie die Datei trägt. Es gibt allerdings Ausnahmen: Dies sind zum einen die JavaScript-Dateien im <a href="#ordner-root">Wurzelverzeichnis der App</a> und zum anderen Dateien mit dem Namensmuster <span class="datei">init-*.js</span>. In letzteren werden Events des Fensters initialisiert, zu dem die Datei gehört. Der Name der <abbr title="Hyptertext Markup Language">HTML</abbr>-Dateien im <a href="#ordner-win">Ordner <span class="datei">./win/</span></a> steht jeweils anstelle des Asterisks.</p>
 					
-					<p>Die Namen der JavaScript-Dateien zeigen an, welche Funktionalität die Scripts in ihnen bereitstellen. Manchmal ist dies nicht auf Anhieb klar, mitunter auch aus, sagen wir mal, <q class="einfach">historischen</q> Gründen verunklarend, <abbr title="das heißt">d. h.</abbr>: In einem frühen Programmierstadium wurde eine falsche Entscheidung getroffen, die später nicht revidiert wurde. Auch darum sollen einige der Dateien kurz beschrieben werden:</p>
+					<p>Die Namen der JavaScript-Dateien zeigen an, welche Funktionalität die Scripts in ihnen bereitstellen. Manchmal ist dies nicht auf Anhieb klar, mitunter auch aus, sagen wir mal, <q class="einfach">historischen</q> Gründen: In einem frühen Programmierstadium wurde eine falsche Entscheidung getroffen, die später nicht revidiert wurde. Auch darum sollen einige der Dateien kurz beschrieben werden:</p>
 					
 					<ul>
 						<li><span class="datei">./js/app/beleg.js</span>: die Karteikarte betreffende Funktionen, und zwar sowohl die der Formular- als auch die der Leseansicht</li>
 						<li><span class="datei">./js/app/dialog.js</span>: Overlay-Fenster mit Meldungen für und Fragen an die BenutzerIn erzeugen</li>
 						<li><span class="datei">./js/app/dropdown.js</span>: erzeugt das über einen Pfeil oder via Tastaturkürzel zu öffnende Dropdown-Menü, das aus einigen Textfeldern aufgerufen werden kann (<abbr title="zum Beispiel">z. B.</abbr> im Formular der Karteikarte)</li>
 						<li><span class="datei">./js/app/kartei.js</span>: regelt das Öffnen und Speichern der Wort-Kartei</li>
-						<li><span class="datei">./js/app/konversion.js</span>: konvertiert <abbr title="Wortgeschichte digital">wgd</abbr>-Dateien, sodass sie dem aktuellen <a href="#" class="link-sektion-wgd"><abbr title="Wortgeschichte digital">wgd</abbr>-Format</a> entsprechen</li>
+						<li><span class="datei">./js/app/konversion.js</span>: konvertiert <abbr title="Wortgeschichte digital">WGD</abbr>-Dateien, sodass sie dem aktuellen <a href="#" class="link-sektion-wgd"><abbr title="Wortgeschichte digital">WGD</abbr>-Format</a> entsprechen</li>
 						<li><span class="datei">./js/app/liste.js</span>: regelt den Aufbau und die Funktionen der Belegliste; die Filterleiste links neben den Belegen wird allerdings via <span class="datei">./js/app/filter.js</span> gesteuert</li>
 						<li><span class="datei">./js/app/optionen.js</span>: Funktionen, die sich um die Programm-Einstellungen und die Speicheraufträge an den Main-Prozess kümmern</li>
 						<li><span class="datei">./js/app/overlay.js</span>: ein größeres Helferobjekt, das die Anzeige aller Overlay-Fenster steuert (das sind Fenster, die die Hauptanzeige überlagern und den Hintergrund leicht ausgrauen)</li>
 						<li><span class="datei">./js/app/popup.js</span>: baut das Kontextmenü zusammen, das bei Rechtsklick im Hauptfenster erscheint; die Funktion <code class="quelltext">popup.getTargetSelection()</code> wird auch von vielen anderen Methoden genutzt</li>
-						<li><span class="datei">./js/app/privat.js</span>: enthält nur eine Liste der Mitarbeiter des Projekts; die Datei ist zwar unverzichtbar, bei Publikation des Quelltextes sollte das Array <code class="quelltext">privat.bearbeiterinnen</code> allerdings geleert werden (Datenschutz!), was für die Scripts kein Problem darstellt</li>
+						<li><span class="datei">./js/app/privat.js</span>: enthält nur eine Liste der Mitarbeiter des Projekts; die Datei ist zwar unverzichtbar, bei Publikation des Quelltextes sollte das Array <code class="quelltext">privat.bearbeiterinnen</code> allerdings geleert werden (Datenschutz!); das leere Array stellt für die Scripts, die darauf zugreifen, kein Problem dar</li>
 						<li><span class="datei">./js/app/stamm.js</span>: Anzeigen, Aufbauen und Füllen des Fensters mit den Formvarianten</li>
 						<li><span class="datei">./js/app/start.js</span>: regelt die Anzeige der Startseite, die beim Öffnen des Programms und nach dem Schließen einer Kartei angezeigt wird</li>
 						<li><span class="datei">./js/win/hilfe.js</span>: Funktionen für das <i>Handbuch</i> und die <i>technische Dokumentation</i> (also dieses Fenster)</li>
 					</ul>
-					
-					<!-- Licenses -->
-					<h2 class="datei" id="ordner-licenses">./licenses/</h2>
-					
-					<p>Der Ordner enthält Plaintext-Dateien mit den Lizenzbedingungen zu den einzelnen Programmteilen.</p>
 					
 					<!-- Fenster -->
 					<h2 class="datei" id="ordner-win">./win/</h2>
@@ -354,7 +350,7 @@ npm install --save-dev electron-builder</pre>
 				
 				<!-- JAVASCRIPT -->
 				<section id="sektion-js" class="suche">
-					<h2 id="js-code">Der Code</h2>
+					<h2 id="js-code">JavaScript-Code</h2>
 					
 					<p>Der JavaScript-Code ist <i lang="en">vanilla</i>. Sprich: Es wurden keine Bibliotheken wie <i>jQuery</i> oder dergleichen verwendet. Programmiert wurde im <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode"><i lang="en">strict mode</i></a>, einer restringierten Variante von JavaScript, die <abbr title="zum Beispiel">z. B.</abbr> Zuweisungsoperationen zu nicht deklarierten Variablen unmöglicht macht und vieles mehr unterbindet, was potenziell gefährlich oder einfach schlechter Stil ist. Außerdem verspricht strikter Code Zukunftssicherheit, weil mögliche Ergänzungen in der ECMAScript-Spezifikation bereits bedacht sind.</p>
 					
@@ -373,9 +369,9 @@ npm install --save-dev electron-builder</pre>
 				
 				<!-- WGD-DATEIFORMAT -->
 				<section id="sektion-wgd" class="suche">
-					<p>Die <abbr title="Wortgeschichte digital">wgd</abbr>-Dateien sind im <abbr title="JavaScript Object Notation">JSON</abbr>-Format.</p>
+					<p>Der Inhalt der <abbr title="Wortgeschichte digital">WGD</abbr>-Dateien ist im <abbr title="JavaScript Object Notation">JSON</abbr>-Format.</p>
 					
-					<p>Nach dem Laden einer <abbr title="Wortgeschichte digital">wgd</abbr>-Datei in <i class="app-name"></i> befinden sich die Daten im globalen Objekt <code class="quelltext">data</code>. Ihre Werte lassen sich dann in allen Funktionen des Hauptfensters durch einfache Statements wie <code class="quelltext">data.dc</code> lesen oder schreiben.</p>
+					<p>Nach dem Laden einer <abbr title="Wortgeschichte digital">WGD</abbr>-Datei in <i class="app-name"></i> befinden sich die Daten im globalen Objekt <code class="quelltext">data</code>. Ihre Werte lassen sich dann in allen Funktionen des Hauptfensters durch einfache Statements wie <code class="quelltext">data.dc</code> lesen oder schreiben.</p>
 					
 					<p>Alle Dateien sind gleich aufgebaut (<span class="obacht">Datenformat Version 2</span>):</p>
 					
@@ -488,7 +484,7 @@ npm install --save-dev electron-builder</pre>
 						<tr class="wgd-ebene2">
 							<td><p><code class="quelltext">be</code></p></td>
 							<td class="datentyp">Number</td>
-							<td>0–5</td>
+							<td><code class="quelltext">0–5</code></td>
 							<td>Markierung mit Sternen; <code class="quelltext">0</code> = unmarkiert, <code class="quelltext">5</code> = 5 Sterne</td>
 						</tr>
 						<tr class="wgd-ebene2">
@@ -612,7 +608,7 @@ npm install --save-dev electron-builder</pre>
 							<td><p><code class="quelltext">ve</code></p></td>
 							<td class="datentyp">Number</td>
 							<td><code class="quelltext">/[0-9]+/</code></td>
-							<td>Versionsnummer des <abbr title="Wortgeschichte digital">wgd</abbr>-Dateiformats</td>
+							<td>Versionsnummer des <abbr title="Wortgeschichte digital">WGD</abbr>-Dateiformats</td>
 						</tr>
 						<tr>
 							<td><p><code class="quelltext">wo</code></p></td>

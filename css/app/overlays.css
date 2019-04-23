@@ -751,6 +751,12 @@ input[id^="redaktion-person"] {
 	padding-top: 0;
 }
 
+#drucken-cont mark.wort {
+	padding: 0;
+	background-color: var(--hintergrundDunkel);
+	font-weight: bold;
+}
+
 #drucken-cont table {
 	border-collapse: collapse;
 	border-spacing: 0;

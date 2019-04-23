@@ -24,6 +24,22 @@ let dropdown = {
 		}
 		dropdown.data.sort(helfer.sortAlpha);
 	},
+	// ergänzt die vordefinierte Liste der Korpora um manuell ergänzte
+	dataKorpora () {
+		let korpora = [...beleg.korpora],
+			korpora_ergaenzt = [];
+		for (let id in data.ka) {
+			if (!data.ka.hasOwnProperty(id)) {
+				continue;
+			}
+			const kr = data.ka[id].kr;
+			if (kr && korpora.indexOf(kr) === -1 && korpora_ergaenzt.indexOf(kr) === -1) {
+				korpora_ergaenzt.push(kr);
+			}
+		}
+		korpora_ergaenzt.sort(helfer.sortAlpha);
+		dropdown.data = korpora_ergaenzt.concat(korpora);
+	},
 	// Timeouts für Events im Textfeld
 	timeoutBlur: null,
 	timeoutFill: null,
@@ -126,7 +142,7 @@ let dropdown = {
 		} else if (feld_id === "beleg-bd") {
 			dropdown.dataFormular("bd");
 		} else if (feld_id === "beleg-kr") {
-			dropdown.data = [...beleg.korpora];
+			dropdown.dataKorpora();
 		} else if (feld_id === "beleg-ts") {
 			dropdown.dataFormular("ts");
 		}

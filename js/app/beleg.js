@@ -20,6 +20,7 @@ let beleg = {
 		"Gesprochene Sprache",
 		"neues deutschland",
 		"Polytechnisches Journal",
+		"Referenz- und Zeitungskorpora",
 		"Tagesspiegel",
 		"Text+Berg",
 		"Webkorpus 2016c",

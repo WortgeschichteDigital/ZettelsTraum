@@ -168,8 +168,12 @@ let drucken = {
 				if (helfer.checkType("String", wert)) {
 					const wert_p = wert.replace(/\n\s*\n/g, "\n").split("\n");
 					for (let y = 0, len = wert_p.length; y < len; y++) {
-						let p = document.createElement("p");
-						p.innerHTML = wert_p[y];
+						let p = document.createElement("p"),
+							text = wert_p[y];
+						if (f[x].val === "bs") { // Wort im Belegschnitt hervorheben
+							text = liste.belegWortHervorheben(text, true);
+						}
+						p.innerHTML = text;
 						td.appendChild(p);
 					}
 				}

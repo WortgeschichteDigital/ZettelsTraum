@@ -176,9 +176,14 @@ let helfer = {
 	},
 	// ergänzt Style-Information für eine Kopie im HTML-Format;
 	// löscht die nicht zum Original gehörenden Markierungen der BenutzerIn
+	//   html = String
+	//     (der Quelltext, in dem die Ersetzungen vorgenommen werden sollen)
 	clipboardHtml (html) {
-		html = html.replace(/<mark class="user">(.+?)<\/mark>/g, function(m, p1) {
-			return p1;
+		html = html.replace(/<mark class="(suche|user)">(.+?)<\/mark>/g, function(m, p1, p2) {
+			return p2;
+		});
+		html = html.replace(/<mark class="wort">(.+?)<\/mark>/g, function(m, p1) {
+			return `<span style="background-color: #e5e5e5; font-weight: bold">${p1}</span>`;
 		});
 		const styles = {
 			"dta-antiqua": "font-family: sans-serif",

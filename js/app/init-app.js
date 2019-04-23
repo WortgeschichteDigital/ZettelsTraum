@@ -182,7 +182,6 @@ window.addEventListener("load", function() {
 		kartei.checkSpeichern(() => kartei.wortErfragen());
 	});
 	ipcRenderer.on("kartei-oeffnen", function(evt, datei) {
-		console.log(datei);
 		if (datei) {
 			kartei.checkSpeichern(() => kartei.oeffnenEinlesen(datei));
 		} else {
