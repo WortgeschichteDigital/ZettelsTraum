@@ -10,6 +10,9 @@ window.addEventListener("load", function() {
 		i.textContent = app.getName().replace("'", "’");
 	});
 	
+	// UMBRUCH IN LANGEN DATEIPFADE
+	hilfe.dateiBreak();
+	
 	// TASTATUREINGABEN ABFANGEN
 	document.addEventListener("keydown", helferWin.tastatur);
 	

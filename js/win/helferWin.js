@@ -13,6 +13,31 @@ let helferWin = {
 			shell.openExternal(url);
 		});
 	},
+	// Handbuch über Link öffnen
+	//   a = Element
+	//     (Link, der zum Handbuch führen soll)
+	oeffneHandbuch (a) {
+		a.addEventListener("click", function(evt) {
+			evt.preventDefault();
+			const {ipcRenderer} = require("electron");
+			ipcRenderer.send("hilfe-handbuch");
+		});
+	},
+	// Changelog über Link öffnen
+	//   a = Element
+	//     (Link, der zum Changelog führen soll)
+	oeffneChangelog (a) {
+		a.addEventListener("click", function(evt) {
+			evt.preventDefault();
+			const {ipcRenderer} = require("electron");
+			ipcRenderer.send("hilfe-changelog");
+			if (this.dataset.caller === "ueber-app") {
+				const {remote} = require("electron");
+				let win = remote.getCurrentWindow();
+				win.close();
+			}
+		});
+	},
 	// Tastatur-Events abfangen und verarbeiten
 	//   evt = Event-Objekt
 	tastatur (evt) {
@@ -22,7 +47,7 @@ let helferWin = {
 			let win = remote.getCurrentWindow();
 			win.close();
 		}
-		// Cursor hoch (↑), runter (↓) (nur in Hilfefenstern)
+		// Ctrl + Cursor hoch (↑), runter (↓) (nur in Hilfefenstern)
 		if (typeof hilfe !== "undefined" && evt.ctrlKey && (evt.which === 38 || evt.which === 40)) {
 			hilfe.naviMenue(evt.which);
 		}
@@ -31,8 +56,8 @@ let helferWin = {
 			document.getElementById("suchfeld").select();
 		}
 		// Strg + P (nur im Bedeutungen-Fenster)
-		if (typeof bedeutungencont !== "undefined" && evt.ctrlKey && evt.which === 80) {
-			bedeutungencont.drucken();
+		if (typeof bedeutungen !== "undefined" && evt.ctrlKey && evt.which === 80) {
+			bedeutungen.drucken();
 		}
 	},
 };

@@ -354,6 +354,8 @@ npm install --save-dev electron-builder</pre>
 					
 					<p>Der JavaScript-Code ist <i lang="en">vanilla</i>. Sprich: Es wurden keine Bibliotheken wie <i>jQuery</i> oder dergleichen verwendet. Programmiert wurde im <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode"><i lang="en">strict mode</i></a>, einer restringierten Variante von JavaScript, die <abbr title="zum Beispiel">z. B.</abbr> Zuweisungsoperationen zu nicht deklarierten Variablen unmöglicht macht und vieles mehr unterbindet, was potenziell gefährlich oder einfach schlechter Stil ist. Außerdem verspricht strikter Code Zukunftssicherheit, weil mögliche Ergänzungen in der ECMAScript-Spezifikation bereits bedacht sind.</p>
 					
+					<p>Beim Coden wurde der Grundregel gefolgt, Struktur, Layout und Funktion strikt voneinander zu trennen. In den <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>-Dateien finden sich darum weder <abbr title="Cascading Style Sheets" lang="en">CSS</abbr>-Style-Attribute noch Event-Handler von JavaScript. Die an Elemente gebundenen Events werden alle in den Dateien initialisiert, die <span class="datei">init-*.js</span> heißen.</p>
+					
 					<p>Der JavaScript-Code wurde extensiv kommentiert. Im Ergebnis sollte immer nachvollziehbar sein, welche Aufgabe das Script an der jeweiligen Stelle erfüllt. So wird <abbr title="zum Beispiel">z. B.</abbr> bei jeder Funktion angegeben, wozu sie dient und welchen Variablentyp die Argumente haben.</p>
 					
 					<p>Alle Funktionen stecken in Objekten, um den Namensraum des Fensters nicht zu vermüllen. Dabei steht in jeder JavaScript-Datei ein Objekt, das exakt denselben Namen wie die Datei trägt. Sucht man also die Methode <code class="quelltext">popup.oeffnen()</code> oder die Eigenschaft <code class="quelltext">popup.belegID</code> muss man nur nach der Datei <span class="datei">popup.js</span> Ausschau halten. Eine Ausnahme von diesem Schema bilden allein die Scripts im Wurzelverzeichnis und Dateien mit dem Namensmuster <span class="datei">init-*.js</span>. In letzteren werden Eventobjekte des Fensters initialisiert, zu dem die jeweilige Datei gehört. Das betreffende Fenster lässt sich leicht aus dem Dateinamen ableiten.</p>
@@ -364,7 +366,11 @@ npm install --save-dev electron-builder</pre>
 					
 					<p>Eine Besonderheit des JavaScript-Codes ist, dass auf Objekte, Methoden und Eigenschaften von <i>Electron</i> und <i>Node.js</i> auch in den Renderer-Prozessen zurückgegriffen wird. Hierzu wird die in JavaScript sonst nicht vorhandene Methode <code class="quelltext">require()</code> benutzt.</p>
 					
-					<p>Über <code class="quelltext">const {app} = require("electron").remote</code> <abbr title="zum Beispiel">z. B.</abbr> wird der Zugriff auf das App-Objekt im Main-Prozess ermöglicht. Und via <code class="quelltext">const path = require("path")</code> kann man das Node-Modul <a href="https://nodejs.org/api/path.html"><i>Path</i></a> laden, um sich neben vielem anderen <abbr title="zum Beispiel">z. B.</abbr> Informationen über den <i lang="en">path segment separator</i> im aktuellen Betriebssystem geben zu lassen (nämlich via <code class="quelltext">path.sep</code>).</p>
+					<p>Über <code class="quelltext">const {app} = require("electron").remote</code> <abbr title="zum Beispiel">z. B.</abbr> wird der Zugriff auf das App-Objekt im Main-Prozess ermöglicht. Und via <code class="quelltext">const path = require("path")</code> kann man das Node-Modul <a href="https://nodejs.org/api/path.html"><i>Path</i></a> laden, um sich neben vielem anderen <abbr title="zum Beispiel">z. B.</abbr> Informationen über den <i lang="en">path segment separator</i> im aktuellen Betriebssystem geben zu lassen (nämlich via <code class="quelltext">path.sep</code>). An einer Stelle wird auf diese Weise sogar ein Befehl in der Eingabeaufforderung von <i>Windows</i> ausgeführt:</p>
+					
+					<pre class="quelltext">const child_process = require("child_process");
+child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);
+</pre>
 				</section>
 				
 				<!-- WGD-DATEIFORMAT -->

@@ -341,6 +341,9 @@ mark.suche {
 .datei {
 	font-family: "Noto Sans Mono", monospace;
 }
+.datei.long {
+	word-break: break-all;
+}
 
 .datentyp {
 	color: var(--farbe);

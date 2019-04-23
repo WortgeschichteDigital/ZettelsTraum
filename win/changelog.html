@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="de">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="Content-Security-Policy" content="default-src 'self'">
+		
+		<title> </title>
+		
+		<link rel="stylesheet" href="../css/win/changelog.css">
+		
+		<script src="../js/win/init-changelog.js"></script>
+		<script src="../js/win/helferWin.js"></script>
+	</head>
+	<body>
+		<!-- KOPF -->
+		<header>
+			<h1>Changelog</h1
+				><img src="../img/icon.svg" width="48" height="48" alt="" id="icon">
+		</header>
+		
+		<!-- CHANGELOG -->
+		<main>
+			<!-- 0.6.0 -->
+			<div>
+				<h2><span data-maintainer="Nico Dorn">Version 0.6.0-beta.1</span><time datetime="2019-04-23T19:56:05">23. April 2019</time></h2>
+				
+				<h3>Neue Funktionen</h3>
+				
+				<ul>
+					<li>
+						<p>Wie Sie sehen: Der <i>Changelog</i> hat nun ein eigenes Fenster, das mehr Anzeigeraum bietet und das Hauptfenster nicht blockiert. So können parallel zum Lesen der Änderungen neue Funktionen ausprobiert werden.</p>
+						<p>Der <i>Changelog</i> ist wie gehabt aus dem Fenster <i>Über <span class="app-name"></span></i> heraus zu erreichen, aber auch direkt via <i>Hilfe &gt; Changelog</i>.</p>
+					</li>
+				</ul>
+				
+				<h3>Verbesserungen</h3>
+				
+				<ul>
+					<li>Die <i>technische Dokumentation</i> wurde an einigen Stellen ein wenig ergänzt.</li>
+				</ul>
+				
+				<h3>Behobene Fehler</h3>
+				
+				<ul>
+					<li>Bedeutungen-Fenster: Das Tastaturkürzel <kbd>Strg</kbd> + <kbd>P</kbd> funktionierte nicht mehr.</li>
+					<li>Hilfe-Fenster: Lange Pfadangaben werden nun besser umgebrochen, sodass das Fenster schmaler werden kann, ohne dass Text im Off verschwindet. Dies betrifft die <i>technische Dokumentation</i> und das <i>Handbuch</i> (sobald es geschrieben wurde).</li>
+					<li>Hilfe-Fenster: Das <i>Handuch</i> und die <i>technische Dokumentation</i> konnten über das App-Menü beliebig oft geöffnet werden. Ist das Fenster schon offen, wird es ab jetzt nicht noch einmal geöffnet, sondern erhält einfach den Fokus.</li>
+				</ul>
+			</div>
+			
+			<!-- 0.5.0 -->
+			<div>
+				<h2><span data-maintainer="Nico Dorn">Version 0.5.0</span><time datetime="2019-04-23T13:02:11">23. April 2019</time></h2>
+				
+				<p><span class="obacht">Achtung!</span> Mit der Installation dieser Version gehen alle bisherigen Einstellungen verloren. (Sie können allerdings manuell wiederhergestellt werden.)</p>
+				
+				<h3>Neue Funktionen</h3>
+				
+				<ul>
+					<li>Die <i>technische Dokumentation</i> ist fertig. Wer sie lesen möchte, findet sie unter <i>Hilfe &gt; Technische Dokumentation</i>.</li>
+					<li>
+						<p>Für die Installation unter <i>Windows</i> wird ab sofort ein <abbr title="Nullsoft Scriptable Install System" lang="en">NSIS</abbr>-Installer verwendet. Dieser Installer kann automatisch den <abbr title="Wortgeschichte digital">WGD</abbr>-Dateityp im Betriebssystem registrieren, sodass <abbr title="Wortgeschichte digital">WGD</abbr>-Dateien fortan einfach durch Klick im <i>Windows-Explorer</i> geöffnet werden können.</p>
+						<p>Das Erstellen von DEB-Paketen und das Registrieren der <abbr title="Wortgeschichte digital">WGD</abbr>-Dateien unter <i>Linux</i> wurde ebenfalls eingerichtet.</p>
+					</li>
+					<li>
+						<p>Es gibt nun einen Sperrmechanismus, der das kollaborative Arbeiten an Wortkarteien ermöglicht.</p>
+						<p>Beim Öffnen einer Kartei wird diese automatisch für andere BenutzerInnen gesperrt; es erscheint nur eine Fehlermeldung. Dazu wird im selben Ordner, in dem die geöffnete Kartei liegt, eine Datei nach dem folgenden Namensmuster erstellt: <q>.~lock.[KARTEINAME]#</q>. Aus der Kartei <q>Freiheit.wgd</q> resultiert somit die Sperrdatei <q>.~lock.Freiheit.wgd#</q>. Diese Datei ist standardmäßig versteckt.</p>
+						<p>Sollte es beim Entsperren aus irgendeinem Grund zu einem Fehler kommen (Programmabsturz, Programmierfehler <abbr title="und so weiter">usw.</abbr>), kann die Sperrdatei problemlos manuell gelöscht werden. Danach lässt sich die betreffende Kartei wieder öffnen.</p>
+					</li>
+				</ul>
+				
+				<h3>Verbesserungen</h3>
+				
+				<ul>
+					<li>Links zu Webseiten können nun via Drag-and-Drop in einen Browser gezogen und so geöffnet werden. Die Änderung betrifft alle externen Links in allen Programmfenstern.</li>
+					<li>Enthält eine Kartei viele lange Belege, war der Aufbau der Belegliste schon bei ein paar Dutzend Karteikarten mitunter recht träge. In solchen Fällen agiert die App nun deutlich performanter, ohne Abstriche bei der Funktionalität zu machen.</li>
+					<li>Die Ansicht des <i>Bedeutungen-Fensters</i>, des <i>Handbuchs</i> und der <i>technischen Dokumentation</i> lässt sich nun via Tastaturkürzel anpassen. Implementiert wurden alle Funktionen des Hauptfenster, die im Menü <i>Ansicht</i> zu finden sind. Das sind im Einzelnen:<br><kbd>Strg</kbd> + <kbd>⇧</kbd> + <kbd>+</kbd> (<i>Schrift vergrößern</i>), <kbd>Strg</kbd> + <kbd>-</kbd> (<i>Schrift verkleinern</i>), <kbd>Strg</kbd> + <kbd>0</kbd> (<i>Standardgröße</i>) und <kbd>F11</kbd> (<i>Vollbild</i>).</li>
+					<li>Belegliste und Karteikarte: Beim Import von Belgen aus dem <abbr title="Deutschen Textarchiv">DTA</abbr> werden Trennstriche am Zeilenende mit <q>[¬]</q> markiert. Werden diese Trennstrichmarkierungen über die Funktion <img src="../img/liste-trennung.svg" width="24" height="24" alt=""> ausgeschaltet erscheint fortan ein Bindestrich, wenn das nächste Wort mit einem Großbuchstaben beginnt. Aus <q>Eisenbahn[¬]Differentialtarife</q> wird nun also <q>Eisenbahn-Differentialtarife</q> und nicht mehr <q>EisenbahnDifferentialtarife</q>.</li>
+					<li>
+						<p>Notizen und Karteikarte: Seit Version 0.3.0 schließen sich Karteikarte und Notizenfenster nach dem Speichern nicht mehr automatisch. Von nun an gibt es Einstellungen, mit denen dieses Verhalten wiederhergestellt werden kann, und zwar unter <i>Programm &gt; Einstellungen &gt; Allgemeines</i> <abbr title="beziehungsweise">bzw.</abbr> <i>Programm &gt; Einstellungen &gt; Karteikarte</i>.</p>
+						<p><span class="obacht">Achtung!</span> Die Optionen sind standardmäßig aktiviert. Mit dieser Version wird also zunächst das ältere Verhalten der App wiederhergestellt.</p>
+					</li>
+					<li>Korpora: Die Liste wurde um den Punkt <i>Referenz- und Zeitungskorpora</i> ergänzt.</li>
+					<li>Kopieren des Belegtextes: Ist das Wort der Kartei hervorgehoben, wird diese Hervorhebung nun mitkopiert. Nach dem Einfügen in einem Textverarbeitungsprogramm erscheint das Wort fett und grau hinterlegt.</li>
+					<li>Drucken: Das Wort der Kartei wird für den Ausdruck nun fett hervorgehoben und grau hinterlegt. Allerdings kann die graue Hinterlegung nicht direkt gedruckt werden. Ist sie unverzichtbar, muss man den Text kopieren (Kopierfunktion im Kopf der Druckfensters), in ein Textverarbeitungsprogramm einfügen und von dort aus drucken.</li>
+					<li>Notizen und Karteikarte: Die Buttons, die früher <i>Abbrechen</i> hießen, wurden in <i>Schließen</i> umbenannt, weil sich <i>Notizen-Fenster</i> oder <i>Karteikarte</i> nach dem Speichern nicht mehr notwendigerweise direkt schließen müssen. Die Funktionalität der Buttons hat sich dabei nicht geändert.</li>
+				</ul>
+				
+				<h3>Behobene Fehler</h3>
+				
+				<ul>
+					<li>Wurde das Hauptfenster der App über die Schließenfunktion der Fensterleiste geschlossen, blieben <abbr title="eventuell">evtl.</abbr> offene Nebenfenster (<i>Bedeutungen-Fenster</i>, <i>Handbuch</i>, <i>technische Dokumentation</i>) weiter geöffnet. Diese Fenster gehen nun mit dem Schließen des Hauptfenster automatisch zu.</li>
+					<li>Anzeige des Belegtexts: Beim Ausblenden der Seitenumbruchsmarkierung (also <abbr title="zum Beispiel">z. B.</abbr> <q>[:35:]</q>) wurde auch das Leerzeichen vor der Markierung entfernt, was mitunter zur Komposition nicht zusammengehöriger Wörter führte.</li>
+					<li>Kopieren des Belegtexts: Wurde der Belegtext über das Icon <img src="../img/tool-kopieren.svg" width="24" height="24" alt=""> in der Belegliste oder Karteikarte komplett kopiert, fanden sich im Plaintext noch HTML-Tags. Diese werden nun entfernt. (Die Änderung hat keine Auswirkungen, wenn der Text mit allen Formatierungen in ein Office-Programm eingefügt werden soll.)</li>
+					<li>Kopieren des Belegtextes: War das Wort der Kartei hervorgehoben (gefettet und gelb hinterlegt), veschwand es beim Einfügen in <i>LibreOffice</i> ganz.</li>
+					<li>Belegliste: Die Belegvorschau in den Listenköpfen zeigte mitunter den Beleganfang an, obwohl das Wort der Kartei erst weiter hinten zu finden war.</li>
+					<li>Belegliste: Beim Kürzen des Belegkontexts (Funktion <img src="../img/liste-kuerzen.svg" width="24" height="24" alt="">) wurden mitunter auch Absätze gestrichen, in denen das Wort durchaus zu finden ist.</li>
+					<li>Filterleiste: In der zeitlichen Verteilungsgrafik (Funktion <img src="../img/filter-zeitraumgrafik.svg" width="24" height="24" alt="">) folgten die Ziffern in der Beschriftung der y-Achse mitunter ein wenig zu dicht aufeinander.</li>
+					<li>Dropdown-Menü: Manuell ergänzte Korpora wurden nicht in die Korporaliste integriert. Nun werden die ergänzten Korpora vor die vordefinierten eingerückt.</li>
+					<li>Dropdown-Menü: Die Logik des Dialogs, der aufpoppt, wenn in einem der Datenfelder des Belegs bereits Text steht, wurde wieder in seinen ursprünglichen Zustand versetzt: <q>Ja</q> bedeutet ergänzen, <q>Nein</q> überschreiben (Rücknahme der Änderung von Version 0.3.0, die sich dann doch als ungut herausstellte).</li>
+				</ul>
+			</div>
+			
+			<!-- 0.4.0 -->
+			<div>
+				<h2><span data-maintainer="Nico Dorn">Version 0.4.0</span><time datetime="2019-04-17">17. April 2019</time></h2>
+				
+				<p><span class="obacht">Das Dateiformat hat sich geändert!</span> Ältere <abbr title="Wortgeschichte digital">WGD</abbr>-Dateien werden automatisch konvertiert; dabei wird eine Änderungsmarkierung gesetzt.</p>
+				
+				<h3>Neue Funktionen</h3>
+				
+				<ul>
+					<li>
+						<p>Bedeutungen-Fenster: Es gibt nun ein separates Fenster, in dem die bisher gesammelten Bedeutungen zum jeweiligen Wort in einer Baumstruktur angezeigt werden. Geöffnet werden kann das Fenster über das Menü (<i>Kartei &gt; Bedeutungen-Fenster</i>), das Tastaturkürzel <kbd>Strg</kbd> + <kbd>⇧</kbd> + <kbd>B</kbd> oder das Icon <img src="../img/quick-bedeutungen-fenster.svg" width="24" height="24" alt=""> in der Quick-Access-Bar.</p>
+						<p>Die Zählung der Bedeutungsebenen beginnt vorerst mit römischen Ziffern (I., II. <abbr title="und so weiter">usw.</abbr>). Dies wird sich anpassen lassen, sobald die zentrale Bedeutungsfunktion programmiert ist.</p>
+						<p>Durch Klick auf eine der Bedeutungen kann diese in eine gerade geöffnete Karteikarte im Hauptfenster eingetragen werden. Steht dort im Textfeld <i>Bedeutung</i> schon ein Wert wird dieser keinesfalls automatisch, sondern allenfalls auf Nachfrage überschrieben. Das Programm zeigt hier dasselbe Verhalten wie beim Ergänzen des Feldes über das Dropdown-Menü.</p>
+						<p>Der Bedeutungsbaum kann über das Drucker-Icon neben der Überschrift oder über das Tastaturkürzel <kbd>Strg</kbd> + <kbd>P</kbd> ausgedruckt werden. Dafür wird die Druckfunktion des Hauptfensters verwendet (<abbr title="siehe unten">s. u.</abbr>), die auch ein Kopieren des Bedeutungsbaums ermöglicht.</p>
+						<p>Ist das Bedeutungen-Fenster einmal offen, wird dessen Inhalt beim Ergänzen, Ändern oder Löschen von Belegen im Hauptfenster automatisch aufgefrischt.</p>
+					</li>
+					<li>
+						<p>Druckfunktion: Karteikarten können nun ausgedruckt werden. Die Funktion steht sowohl für einzelne Karteikarten als auch für die komplette Belegliste zur Verfügung. Beim Druck einer Belegliste werden jene Belege gedruckt, die aktuell in der Liste erscheinen.</p>
+						<p>Aufgerufen werden kann die Druckfunktion über das Drucker-Icon im Kopf der Belegliste <abbr title="beziehungsweise">bzw.</abbr> Karteikarte. Alternativ lässt sie sich auch über das Tastaturkürzel <kbd>Strg</kbd> + <kbd>P</kbd> starten (wenn Belegliste oder Karteikarte nicht durch ein anderes Fenster verdeckt werden).</p>
+						<p>Wird die Druckfunktion aufgerufen, erscheint zunächst ein Vorschaufenster. In diesem kann der Druck gestartet oder der Inhalt des Vorschaufensters in die Zwischenablage kopiert werden.</p>
+					</li>
+					<li>
+						<p>Datenfeld Korpus: Die Karteikarte hat ein zusätzliches Textfeld erhalten, in dem das Korpus, aus dem der Beleg stammt, eingetragen werden kann. Zu dem Feld gibt es eine Dropdown-Liste mit allen im <abbr title="Digitalen Wörterbuch der deutschen Sprache">DWDS</abbr> verfügbaren Korpora. Es kann natürlich auch frei gefüllt werden. Wird ein Titel aus dem <abbr title="Deutschen Textarchiv">DTA</abbr> importiert, wird das Feld automatisch gefüllt.</p>
+						<p>Die Einführung des neuen Feldes machte einen Umbau des Karteikarten-Formulars nötig. Da das Textfeld <i>Bedeutung</i> nun allein in einer Zeile steht und bei Vergrößerung des Fensters sehr breit werden kann, konnte die maximale Gesamtbreite des Formulars wieder stärker beschränkt werden. Außerdem erhalten die Einträge im Dropdown-Menü nun erst ab 80 Zeichen Länge einen Tooltip (vorher schon ab 65).</p>
+						<p>In der Belegliste ist die Anzeige des neuen Datenfelds an das <i>Quellen</i>-Feld gekoppelt. Wird die <i>Quelle</i> über das Icon <img src="../img/liste-quelle.svg" width="24" height="24" alt=""> ein- oder ausgeblendet, wird dadurch zugleich das <i>Korpus</i>-Feld ein- oder ausgeblendet – wenn es denn gefüllt wurde.</p>
+						<p>Für die erweiterte Suche gilt diese Kopplung an das <i>Quellen</i>-Feld nicht. Die Felder <i>Quelle</i> und <i>Korpus</i> können separat aus der Suche ausgeschlossen <abbr title="beziehungsweise">bzw.</abbr> in die Suche einbezogen werden.</p>
+					</li>
+					<li>Filter Korpora: Das neue Datenfeld <i>Korpus</i> ermöglichte ferner die Integration eines neuen Filters, mit dem sich die Belegliste nach den in den Karteikarten angegebenen Korpora filtern lässt. Der <i>Korpora</i>-Filter verhält sich genauso wie der <i>Bedeutungen-</i> und <i>Textsorten</i>-Filter: Belege, in denen kein Korpus angegeben wurde, lassen sich über den Filter <i>(nicht bestimmt)</i> finden.</li>
+				</ul>
+				
+				<h3>Verbesserungen</h3>
+				
+				<ul>
+					<li>Die Breite der Filterleiste passt sich dynamisch an die Breite des Programmfensters an. Sie nimmt nun 40 % des verfügbaren Platzes ein, jedoch mindestens 300 Pixel und höchsten 600 Pixel, was dem Doppelten der bisherigen fixen Breite entspricht.</li>
+					<li>Anstelle von <i>DejaVu</i> wird als Schriftart fortan <i>Noto</i> benutzt. (Einige im <abbr title="Deutschen Textarchiv">DTA</abbr> häufig verwendete Glyphen sind in <i>DejaVu</i> nicht vorhanden.)</li>
+					<li>Belegliste: Die Lesbarkeit der Felder <i>Bedeutung</i> und <i>Textsorte</i> wurde verbessert. Wurden mehrere Bedeutungen <abbr title="beziehungsweise">bzw.</abbr> Textsorten eingetragen, werden sie in der Anzeige durch einen größeren Durchschuss voneinander getrennt.</li>
+					<li>Karteikarte: Die Textfelder <i>Bedeutung</i> und <i>Textsorte</i> können nun auch ohne Nachfrage aus dem zugehörigen Dropdown-Menü heraus ergänzt werden. Eine Option dafür findet sich in <i>Programm &gt; Einstellungen &gt; Karteikarte</i>. Die Option lässt sich auch über das Dialogfenster aktivieren, das erscheint, wenn ein Textfeld bereits gefüllt ist.</li>
+					<li>Dropdown-Menü: Immer dann, wenn der Inhalt eines Dropdown-Menüs unterhalb des Textfeldes nicht komplett angezeigt werden kann, wird das Menü automatisch über dem Textfeld geöffnet.</li>
+					<li>Anhänge und Redaktion: Nach dem Verschieben eines Eintrags wird das Pfeil-Icon des betreffenden Eintrags fokussiert. So kann ein Eintrag mithilfe von <kbd>↵</kbd> schneller und leichter über mehrere Positionen nach oben verschoben werden.</li>
+					<li><i>Kartei &gt; Zuletzt verwendet:</i> Bisher gab es nur für die ersten sechs Einträge Tastaturkürzel. Ab sofort gibt es Kürzel bis Eintrag Nummer neun.</li>
+				</ul>
+				
+				<h3>Behobene Fehler</h3>
+				
+				<ul>
+					<li>Viele Funktionen des Hauptfensters waren auch aus den Nebenfenstern (Handbuch, Dokumentation <abbr title="und so weiter">usw.</abbr>) heraus aufzurufen, wenn das zugehörige Tastaturkürzel gedrückt wurde. Dies könnte unerwünschte Effekte haben und wird fortan unterbunden.</li>
+					<li>Filterleiste: Die Darstellung kompliziert verschachtelter Bedeutungsbäume war mitunter grob falsch.</li>
+					<li>Filterleiste: Bei aktiviertem Reduktionsmodus wurde der Filterblock <i>Verschiedenes</i> nie als aktiv – also grün – markiert, wenn die Filterlogik auf <i>exklusiv</i> stand.</li>
+					<li>Karteikarte: In der Leseansicht wurde die Markierung mit Sternen fehlerhaft dargestellt.</li>
+					<li>Karteikarte: Wurde das Speichern der Karte durch das Drücken von <kbd>↵</kbd> oder <kbd>Strg</kbd> + <kbd>↵</kbd> angestoßen, während man sich in einem der Textfelder befand, verließ der Fokus das Textfeld.</li>
+					<li>Dropdown-Menü: Wurde mehrmals hintereinander auf denselben Schalter gedrückt, um ein Dropdown-Menü zu öffnen, funktionierte das Öffnen des Dropdowns via Tastaturkürzel mitunter nicht mehr.</li>
+					<li>Dropdown-Menü: In mehrzeiligen Feldern war der Pfeil zum Aufklappen des Menüs nicht mehr richtig zu sehen, wenn das Feld so groß geworden war, dass es eine Scrollleiste bekam.</li>
+					<li>Das Formular zur Eingabe neuer Belege <abbr title="beziehungsweise">bzw.</abbr> dessen Leseansicht wird nun durchgehend als <i>Karteikarte</i> und nicht mehr als <i>Belegzettel</i> bezeichnet.</li>
+				</ul>
+			</div>
+			
+			<!-- 0.3.0 -->
+			<div>
+				<h2><span data-maintainer="Nico Dorn">Version 0.3.0</span><time datetime="2019-04-10">10. April 2019</time></h2>
+				
+				<h3>Neue Funktionen</h3>
+				
+				<ul>
+					<li>Karteikarte: Mit dem Tastaturkürzel <kbd>Strg</kbd> + <kbd>U</kbd> kann jetzt zwischen Formular- und Leseansicht gewechselt werden.</li>
+					<li>Karteikarte: In der Leseansicht gibt es nun eine Funktion zum Aus- <abbr title="beziehungsweise">bzw.</abbr> Einblenden der Silbentrennung und Seitenumbrüche. Diese Einstellung wird gespeichert und beim Neustart des Programms wiederhergestellt. Sie ist auch über das Tastaturkürzel <kbd>Strg</kbd> + <kbd>T</kbd> zu erreichen.</li>
+				</ul>
+				
+				<h3>Verbesserungen</h3>
+				
+				<ul>
+					<li>Das Tastaturkürzel <kbd>Strg</kbd> + <kbd>S</kbd> und die Funktion <i>Kartei &gt; Speichern</i> rufen den Speicherbefehl nun auch für das Notizen-Fenster und die Karteikarte auf. Verläuft das Speichern der Notizen <abbr title="beziehungsweise">bzw.</abbr> des Belegs fehlerfrei, wird direkt im Anschluss die Kartei gespeichert.</li>
+					<li>Meldungen, dass keine Änderungen vorgenommen wurden und ein Speichern unnötig sei, wurden entfernt.</li>
+					<li>Belegliste: Die Maximalbreite der Absätze wurde leicht erhöht.</li>
+					<li>DTA-Import: Beim Import mehrerer Seiten wird der Seiten- oder Spaltenumbruch im Texte nun markiert. Angegeben wird immer die Nummer der folgenden Seite/Spalte, und zwar nach diesem Schema: "[:SEITE:]". Diese Markierung der Seitenangabe wird mit den Schaltern, die bisher nur zum Ein- <abbr title="beziehungsweise">bzw.</abbr> Ausblenden der Silbentrennung dienten, ein- <abbr title="beziehungsweise">bzw.</abbr> ausgeblendet.</li>
+					<li>Karteikarte: Die Maximalbreite der Karteikarte wurde stark erhöht.</li>
+					<li>Dropdown-Menü: Einträge, die mehr als 65 Zeichen lang sind, haben jetzt immer einen Tooltip.</li>
+					<li>Dropdown-Menü: In mehrzeiligen Feldern werden auch dann sinnvolle Vorschläge geliefert, wenn bereits ein Wert im Textfeld steht.</li>
+					<li>Dropdown-Menü: Erscheint das Dropdown-Menü während der Texteingabe, werden bereits im Feld vorhandene Werte nicht mehr zum Hinzufügen angeboten.</li>
+					<li>Dropdown-Menü: Wird infolge einer Texteingabe ein Wert aus einer gefilterten Vorschlagsliste ausgewählt, wird automatisch die Zeile überschrieben, in der begonnen wurde zu tippen.</li>
+					<li>Dropdown-Menü: Versehntliches Einfügen von Leerzeilen zwischen den Werten wird in mehrzeiligen Feldern von nun an vermieden.</li>
+				</ul>
+				
+				<h3>Behobene Fehler</h3>
+				
+				<ul>
+					<li>DTA-Import: Der Import der letzten Seite eines Werks war mitunter nur unvollständig.</li>
+					<li>Karteikarte: Wenn die Felder mit den Feldüberschriften sehr schmal wurden, konnten sich Text und Kopier-Icon unter Umständen überlappen.</li>
+					<li>Notizen-Fenster: Unter Umständen wurde man zweimal gefragt, ob die Notizen gelöscht werden sollen.</li>
+					<li>Dropdown-Menü: Unter Windows konnten Menü-Einträge nicht mit der Maus ausgewählt werden.</li>
+					<li>Dropdown-Menü: Die Dialoge waren dysfunktional, falls in einem der Datenfelder des Belegs bereits Text stand.</li>
+					<li>Dropdown-Menü: Wurden in der Karteikarte die Felder <i>Bedeutung</i> oder <i>Textsorte</i> über das Dropdown-Menü gefüllt, wurden die Werte beim Speichern nicht übernommen.</li>
+				</ul>
+			</div>
+			
+			<!-- 0.2.0 -->
+			<div>
+				<h2><span data-maintainer="Nico Dorn">Version 0.2.0</span><time datetime="2019-04-09">9. April 2019</time></h2>
+				
+				<h3>Verbesserungen</h3>
+				
+				<ul>
+					<li>Suchfunktion: Das Finden von Wörtern mit Sonderzeichen (ẽ und ñ) wurde verbessert.</li>
+					<li>Belegtext: Beim Kopieren wird die Quellenangabe automatisch mitkopiert. Dies betrifft alle Kopierfunktionen: das Kopieren via Icon und das Kopieren einer Textauswahl via Kontextmenü; beides sowohl in der Belegliste als auch in der Karteikarte.</li>
+					<li>Karteikarte: Die Texttools erkennen illegales Nesting jetzt in mehr Fällen als zuvor.</li>
+				</ul>
+				
+				<h3>Behobene Fehler</h3>
+				
+				<ul>
+					<li>Karteikarte: Das Einfügen von Text im Belegfeld durch Klick auf das Einfüge-Icon funktionierte nicht.</li>
+					<li>Karteikarte: Beim Einfügen von Text im Belegfeld durch Klick auf das Einfüge-Icon wurden einfache Zeilenumbrüche im HTML-Quelltext ignoriert.</li>
+					<li>Karteikarte: Ein Hinweis auf illegales Nesting erschien nicht in jedem Fall.</li>
+				</ul>
+			</div>
+			
+			<!-- 0.1.0 -->
+			<div>
+				<h2><span data-maintainer="Nico Dorn">Version 0.1.0</span><time datetime="2019-04-08">8. April 2019</time></h2>
+				
+				<p>Erste freigegebene Version.</p>
+			</div>
+		</main>
+	</body>
+</html>

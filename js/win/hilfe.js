@@ -56,6 +56,14 @@ let hilfe = {
 			window.scrollTo(0, h2.offsetTop - 70 - 16); // -16, um oben immer ein bisschen padding zu haben; vgl. hilfe.sucheSprung()
 		});
 	},
+	// lange Dateipfade umbrechen
+	dateiBreak () {
+		document.querySelectorAll(".datei").forEach(function(i) {
+			if (i.innerText.length > 30) {
+				i.classList.add("long");
+			}
+		});
+	},
 	// Klick-Event zum Wechseln der Sektion
 	//   a = Element
 	//     (Link zur gewünschten Sektion)
@@ -119,16 +127,6 @@ let hilfe = {
 			li.appendChild(a);
 			ul.appendChild(li);
 			hilfe.naviSprung(a);
-		});
-	},
-	// Handbuch über Link öffnen
-	//   a = Element
-	//     (Link, der zum Handbuch führen soll)
-	oeffneHandbuch (a) {
-		a.addEventListener("click", function(evt) {
-			evt.preventDefault();
-			const {ipcRenderer} = require("electron");
-			ipcRenderer.send("hilfe-handbuch");
 		});
 	},
 	// Variable, in der der Timeout der Suche gespeichert wird

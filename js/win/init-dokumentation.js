@@ -10,6 +10,9 @@ window.addEventListener("load", function() {
 		i.textContent = app.getName().replace("'", "’");
 	});
 	
+	// UMBRUCH IN LANGEN DATEIPFADE
+	hilfe.dateiBreak();
+	
 	// TASTATUREINGABEN ABFANGEN
 	document.addEventListener("keydown", helferWin.tastatur);
 	
@@ -35,7 +38,7 @@ window.addEventListener("load", function() {
 		ipcRenderer.send("ueber-electron", "dokumentation");
 	});
 	// Handbuch
-	document.querySelectorAll(".link-handbuch").forEach((a) => hilfe.oeffneHandbuch(a));
+	document.querySelectorAll(".link-handbuch").forEach((a) => helferWin.oeffneHandbuch(a));
 	// Navigation
 	document.querySelectorAll(`a[class^="link-sektion-"`).forEach((a) => hilfe.sektion(a));
 	// interne Sprung-Links

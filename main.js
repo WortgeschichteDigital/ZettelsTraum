@@ -1,7 +1,7 @@
 "use strict";
 
 // globale Fensterobjekte
-let win, winBedeutungen, winHandbuch, winDokumentation, winUeberApp, winUeberElectron;
+let win, winBedeutungen, winHandbuch, winDokumentation, winChangelog, winUeberApp, winUeberElectron;
 
 // Funktionen-Container
 let appMenu, optionen, fenster;
@@ -250,6 +250,11 @@ let layoutMenu = [
 			},
 			{ type: "separator" },
 			{
+				label: "Changelog",
+				click: () => fenster.erstellenChangelog(),
+			},
+			{ type: "separator" },
+			{
 				label: `Über ${app.getName()}`,
 				click: () => fenster.erstellenUeberApp("app"),
 			},
@@ -477,17 +482,26 @@ ipcMain.on("kartei-bedeutungen-fenster-daten", function(evt, daten) {
 // Druckauftrag aus dem Bedeutungen-Fenster an den Renderer-Prozess schicken
 ipcMain.on("bedeutungen-fenster-drucken", function(evt, daten) {
 	win.webContents.send("bedeutungen-fenster-drucken", daten);
+	if (win.isMinimized()) {
+		win.restore();
+	}
 	win.focus();
 });
 
 // angeklickte Bedeutung aus dem Bedeutungen-Fenster an den Renderer-Prozess schicken
 ipcMain.on("bedeutungen-fenster-eintragen", function(evt, bd) {
 	win.webContents.send("bedeutungen-fenster-eintragen", bd);
+	if (win.isMinimized()) {
+		win.restore();
+	}
 	win.focus();
 });
 
 // Handbuch aufrufen, wenn der Renderer-Prozess es wünscht
 ipcMain.on("hilfe-handbuch", () => fenster.erstellenHandbuch());
+
+// Changelog aufrufen, wenn der Renderer-Prozess es wünscht
+ipcMain.on("hilfe-changelog", () => fenster.erstellenChangelog());
 
 // Optionen einlesen und speichern
 optionen = {
@@ -617,12 +631,18 @@ fenster = {
 			if (winDokumentation) {
 				winDokumentation.close();
 			}
+			if (winChangelog) {
+				winChangelog.close();
+			}
 		});
 	},
 	// Bedeutungen-Fenster erstellen
 	erstellenBedeutungen () {
 		// Bedeutungen-Fenster ist bereits offen => Fenster fokussieren
 		if (winBedeutungen) {
+			if (winBedeutungen.isMinimized()) {
+				winBedeutungen.restore();
+			}
 			winBedeutungen.focus();
 			return;
 		}
@@ -669,6 +689,14 @@ fenster = {
 	},
 	// Handbuch-Fenster erstellen
 	erstellenHandbuch () {
+		// Handbuch-Fenster ist bereits offen => Fenster fokussieren
+		if (winHandbuch) {
+			if (winHandbuch.isMinimized()) {
+				winHandbuch.restore();
+			}
+			winHandbuch.focus();
+			return;
+		}
 		// Fenster öffnen
 		const Bildschirm = require("electron").screen.getPrimaryDisplay();
 		winHandbuch = new BrowserWindow({
@@ -701,6 +729,14 @@ fenster = {
 	},
 	// Doku-Fenster erstellen
 	erstellenDokumentation () {
+		// Doku-Fenster ist bereits offen => Fenster fokussieren
+		if (winDokumentation) {
+			if (winDokumentation.isMinimized()) {
+				winDokumentation.restore();
+			}
+			winDokumentation.focus();
+			return;
+		}
 		// Fenster öffnen
 		const Bildschirm = require("electron").screen.getPrimaryDisplay();
 		winDokumentation = new BrowserWindow({
@@ -730,6 +766,45 @@ fenster = {
 		winDokumentation.once("ready-to-show", () => winDokumentation.show());
 		// globales Fensterobjekt beim Schließen dereferenzieren
 		winDokumentation.on("closed", () => winDokumentation = null);
+	},
+	// Changelog-Fenster erstellen
+	erstellenChangelog () {
+		// Changelog-Fenster ist bereits offen => Fenster fokussieren
+		if (winChangelog) {
+			if (winChangelog.isMinimized()) {
+				winChangelog.restore();
+			}
+			winChangelog.focus();
+			return;
+		}
+		// Fenster öffnen
+		winChangelog = new BrowserWindow({
+			title: "Changelog",
+			icon: path.join(__dirname, "img", "icon", "linux", "icon_32px.png"),
+			width: 600,
+			height: 600,
+			minWidth: 350,
+			minHeight: 350,
+			show: false,
+			webPreferences: {
+				nodeIntegration: true,
+				devTools: devtools,
+				defaultEncoding: "utf-8",
+			},
+		});
+		// Menü erzeugen
+		appMenu.erzeugenAnsicht(winChangelog);
+		winChangelog.on("leave-full-screen", function() {
+			// nach Verlassen des Vollbilds muss die Menüleiste wieder ausgeblendet werden
+			// (ohne Timeout geht es nicht)
+			setTimeout(() => winChangelog.setMenuBarVisibility(false), 1);
+		});
+		// HTML laden
+		winChangelog.loadFile(path.join(__dirname, "win", "changelog.html"));
+		// Fenster anzeigen, sobald alles geladen wurde
+		winChangelog.once("ready-to-show", () => winChangelog.show());
+		// globales Fensterobjekt beim Schließen dereferenzieren
+		winChangelog.on("closed", () => winChangelog = null);
 	},
 	// Über-Fenster erstellen (App)
 	erstellenUeberApp (opener) {
@@ -801,6 +876,8 @@ fenster = {
 			return winHandbuch;
 		} else if (opener === "dokumentation") {
 			return winDokumentation;
+		} else if (opener === "changelog") {
+			return winChangelog;
 		} else {
 			return win;
 		}

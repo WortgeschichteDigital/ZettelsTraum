@@ -30,15 +30,10 @@ aside {
 	padding: 0 20px 20px 0;
 }
 
-section {
+main {
 	padding: 20px;
 	background-color: var(--farbeB);
 	color: #fff;
-}
-
-section.changelog {
-	background-color: #fff;
-	color: var(--text);
 }
 
 /* Basis-Elemente ------------------------------- */
@@ -48,13 +43,9 @@ a {
 	outline: none;
 }
 
-section a {
+main a {
 	color: #fff;
 	text-decoration: underline;
-}
-
-abbr {
-	text-decoration: none;
 }
 
 h1 {
@@ -76,19 +67,6 @@ h2 {
 h2 a {
 	margin-left: 20px;
 	font-size: 14px;
-}
-
-section h2 {
-	margin: 0 0 20px 0;
-}
-
-kbd {
-	display: inline-block;
-	border: 1px solid var(--linie);
-	border-radius: 3px;
-	padding: 0 3px;
-	background-color: var(--hintergrund);
-	font-family: "Noto Sans Mono", monospace;
 }
 
 p {
@@ -128,61 +106,4 @@ th {
 tr.lizenz th,
 tr.lizenz td {
 	padding-top: 20px;
-}
-
-/* Changelog ------------------------------------ */
-section.changelog > div {
-	padding: 20px 25px 0 25px;
-}
-
-section.changelog h2 + div {
-	padding-top: 0;
-}
-
-.version {
-	margin: 0 0 10px -25px;
-	font-size: 18px;
-}
-
-.version span {
-	display: inline-block;
-	margin-right: 10px;
-	border: 1px solid var(--linie);
-	border-radius: 3px;
-	padding: 2px 5px;
-}
-
-.version time {
-	font-size: 14px;
-	color: var(--textHell);
-}
-
-.obacht {
-	color: var(--textWarnung);
-}
-
-h3 {
-	margin: 10px 0 5px 0;
-	color: var(--textFarbe);
-	font-size: 16px;
-	font-style: italic;
-	font-weight: normal;
-}
-
-ul {
-	margin: 0 0 10px 0;
-	padding-left: 20px;
-	list-style-type: disc;
-}
-
-li {
-	margin-bottom: 5px;
-}
-
-li img {
-	vertical-align: bottom;
-}
-
-li p {
-	margin-bottom: 5px;
 }
