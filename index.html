@@ -7,6 +7,7 @@
 		<title> </title>
 		
 		<link rel="stylesheet" href="css/app/app.css">
+		<link rel="stylesheet" href="css/app/bedeutungen.css">
 		<link rel="stylesheet" href="css/app/beleg.css">
 		<link rel="stylesheet" href="css/app/kopf.css">
 		<link rel="stylesheet" href="css/app/liste.css">
@@ -17,6 +18,7 @@
 		
 		<script src="js/app/init-app.js"></script>
 		<script src="js/app/anhaenge.js"></script>
+		<script src="js/app/bedeutungen.js"></script>
 		<script src="js/app/bedeutungenWin.js"></script>
 		<script src="js/app/beleg.js"></script>
 		<script src="js/app/dialog.js"></script>
@@ -56,6 +58,7 @@
 			><a href="#" id="quick-kartei-lexika" class="icon-link" title="Kartei: Überprüfte Lexika"> </a
 			><a href="#" id="quick-kartei-metadaten" class="icon-link" title="Kartei: Metadaten"> </a
 			><a href="#" id="quick-kartei-redaktion" class="icon-link" title="Kartei: Redaktion"> </a
+			><span class="quick-spacer"> </span
 			><a href="#" id="quick-kartei-bedeutungen" class="icon-link" title="Kartei: Bedeutungen"> </a
 			><a href="#" id="quick-kartei-bedeutungen-fenster" class="icon-link" title="Kartei: Bedeutungen-Fenster"> </a
 			><a href="#" id="quick-kartei-suche" class="icon-link" title="Kartei: Suche"> </a
@@ -215,6 +218,17 @@
 			</table>
 		</section>
 		
+		<!-- BEDEUTUNGEN -->
+		<section id="bedeutungen" class="aus">
+			<header
+				><input type="button" value="Speichern" id="bedeutungen-speichern" tabindex="0"
+				><input type="button" value="Schließen" id="bedeutungen-schliessen" tabindex="0"
+				><span class="aus">*</span
+			></header>
+			<h2>Bedeutungen</h2>
+			<div id="bedeutungen-cont"></div>
+		</section>
+		
 		<!-- BELEGLISTE -->
 		<section id="liste" class="aus">
 			<!-- scheinbar unnötig verschachtelt; ist aber nötig damit position: sticky für #liste-filter funktioniert -->
@@ -343,6 +357,8 @@
 						<p class="input-text dropdown-cont"><input type="text" value="" spellcheck="false" class="dropdown-feld" id="einstellung-bearbeiterin"
 							><a href="#" class="dropdown-link-element dropdown-link-haengend" title="BearbeiterInnen auflisten"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m7 2v8l-3.5-3.5-1.5 1.5 6 6 6-6-1.5-1.5-3.5 3.5v-8z" fill="#212121"/></svg></a
 							><label for="einstellung-bearbeiterin">BearbeiterIn auf diesem Rechner</label></p>
+						<p><input type="checkbox" id="einstellung-bedeutungen-schliessen"
+							><label for="einstellung-bedeutungen-schliessen">Bedeutungen-Formular nach dem Speichern schließen</label></p>
 						<p><input type="checkbox" id="einstellung-notizen-schliessen"
 							><label for="einstellung-notizen-schliessen">Notizen-Fenster nach dem Speichern schließen</label></p>
 					</section>
@@ -368,6 +384,7 @@
 								><label for="einstellung-quick-kartei-speichern-unter">Speichern unter</label></p>
 							<p><input type="checkbox" id="einstellung-quick-kartei-schliessen"
 								><label for="einstellung-quick-kartei-schliessen">Schließen</label></p>
+							<p class="einstellungen-spacer"> </p>
 							<p><input type="checkbox" id="einstellung-quick-kartei-formvarianten"
 								><label for="einstellung-quick-kartei-formvarianten">Formvarianten</label></p>
 							<p><input type="checkbox" id="einstellung-quick-kartei-notizen"
@@ -380,6 +397,7 @@
 								><label for="einstellung-quick-kartei-metadaten">Metadaten</label></p>
 							<p><input type="checkbox" id="einstellung-quick-kartei-redaktion"
 								><label for="einstellung-quick-kartei-redaktion">Redaktion</label></p>
+							<p class="einstellungen-spacer"> </p>
 							<p><input type="checkbox" id="einstellung-quick-kartei-bedeutungen"
 								><label for="einstellung-quick-kartei-bedeutungen">Bedeutungen</label></p>
 							<p><input type="checkbox" id="einstellung-quick-kartei-bedeutungen-fenster"

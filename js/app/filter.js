@@ -1243,19 +1243,23 @@ let filter = {
 	},
 	// die Suche wird aufgerufen
 	suche () {
-		// Sicherheitsfrage, falls Beleg und/oder Notizen noch nicht gespeichert sind
-		if (notizen.geaendert || beleg.geaendert) {
+		// Sicherheitsfrage, falls Notizen, Beleg, Bedeutungen noch nicht gespeichert sind
+		if (notizen.geaendert || bedeutungen.geaendert || beleg.geaendert) {
 			sicherheitsfrage.warnen(function() {
 				notizen.geaendert = false;
+				bedeutungen.geaendert = false;
 				beleg.geaendert = false;
 				filter.suche();
 			}, {
 				notizen: true,
+				bedeutungen: true,
 				beleg: true,
 				kartei: false,
 			});
 			return;
 		}
+		// Bedeutungen schließen
+		bedeutungen.schliessen();
 		// Beleg schließen
 		beleg.aktionAbbrechen();
 		// alle Overlays schließen (da gehört auch das Notizen-Fenster zu)

@@ -83,6 +83,9 @@ window.addEventListener("load", function() {
 		}
 		beleg.ctrlLinks(a);
 	});
+	// Bedeutungen
+	document.getElementById("bedeutungen-speichern").addEventListener("click", () => bedeutungen.speichern());
+	document.getElementById("bedeutungen-schliessen").addEventListener("click", () => bedeutungen.schliessen());
 	// Belegliste-Filter
 	document.querySelectorAll("#liste-filter header a").forEach((a) => filter.ctrlButtons(a));
 	document.querySelectorAll(".filter-kopf").forEach(function(a) {
@@ -199,11 +202,12 @@ window.addEventListener("load", function() {
 	ipcRenderer.on("kartei-lexika", () => lexika.oeffnen());
 	ipcRenderer.on("kartei-metadaten", () => meta.oeffnen());
 	ipcRenderer.on("kartei-redaktion", () => redaktion.oeffnen());
+	ipcRenderer.on("kartei-bedeutungen", () => bedeutungen.oeffnen());
 	ipcRenderer.on("kartei-bedeutungen-fenster-daten", () => bedeutungenWin.daten());
 	ipcRenderer.on("kartei-suche", () => filter.suche());
 	ipcRenderer.on("belege-hinzufuegen", () => beleg.erstellenPre());
 	ipcRenderer.on("belege-auflisten", () => liste.anzeigen());
-	ipcRenderer.on("optionen-zuletzt", (evt, zuletzt) => optionen.data.zuletzt = zuletzt);
+	ipcRenderer.on("optionen-zuletzt", (evt, zuletzt) => optionen.updateZuletzt(zuletzt));
 	ipcRenderer.on("dialog-anzeigen", function(evt, text) {
 		dialog.oeffnen("alert", null);
 		dialog.text(text);
@@ -238,15 +242,17 @@ window.addEventListener("beforeunload", function(evt) {
 		optionen.speichernAnstossen();
 	}
 	// Schließen ggf. unterbrechen + Kartei ggf. entsperren
-	if (notizen.geaendert || beleg.geaendert || kartei.geaendert) {
+	if (notizen.geaendert || bedeutungen.geaendert || beleg.geaendert || kartei.geaendert) {
 		sicherheitsfrage.warnen(function() {
 			notizen.geaendert = false;
+			bedeutungen.geaendert = false;
 			beleg.geaendert = false;
 			kartei.geaendert = false;
 			const {app} = require("electron").remote;
 			app.quit();
 		}, {
 			notizen: true,
+			bedeutungen: true,
 			beleg: true,
 			kartei: true,
 		});

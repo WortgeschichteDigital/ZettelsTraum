@@ -34,17 +34,24 @@
 				</ul>
 				
 				<h3>Verbesserungen</h3>
-				
 				<ul>
-					<li>Die <i>technische Dokumentation</i> wurde an einigen Stellen ein wenig ergänzt.</li>
+					<li>
+						<p>Sperrdatei: Der Mechanismus der mit Version 0.5.0 eingeführten Sperrdatei, die ein kollaboratives Arbeiten in einem gemeinsamen Netzwerkordner ermöglicht, ohne dass man sich gegenseitig die Arbeit überschreibt, wurde stark verbessert: Wird von einer BenutzerIn eine Kartei geöffnet, die durch sie zuvor am selben Computer gesperrt wurde, behandelt das Programm die gesperrte Kartei wie eine nicht gesperrte – und öffnet sie ohne Probleme.</p>
+						<p>Dieses Verhalten ist <abbr title="zum Beispiel">z. B.</abbr> für den Fall eines Computerabsturzes wichtig, wenn dieselbe Person danach am selben Rechner dort weiterarbeiten möchte, wo sie zuvor aufgehört hat. Die vor dem Absturz geöffnete Kartei ist in dieser Situation nämlich immer noch gesperrt, da die App nicht ordungsgemäß beendet wurde, sondern zusammen mit dem Computer abgestürzt ist.</p>
+					</li>
+					<li>Die Gliederung der Icons in der Quick-Access-Bar wurde leicht angepasst, um die Übersichtlichkeit zu erhöhen. Auch in den betreffenden Einstellungen (<i>Programm &gt; Einstellungen &gt; Menü</i>) sind die Funktionsgruppen nun klarer ersichtlich.</li>
+					<li>Wird versucht dieselbe Kartei, die aktuell bearbeitet wird, noch einmal zu öffnen, wird dieses erneute Öffnen unterbunden. Stattdessen erscheint eine Meldung, dass die Datei bereits geöffnet ist.</li>
+					<li>Die <i>technische Dokumentation</i> wurde an einigen Stellen ergänzt.</li>
 				</ul>
 				
 				<h3>Behobene Fehler</h3>
 				
 				<ul>
+					<li>Startseite: Beim Leeren der Liste zuletzt verwendeter Karteien (Funktion <i>Kartei &gt; Zuletzt verwendet &gt; Liste löschen</i>) wurde die Ansicht der Startseite der App, auf der diese Liste auch zu sehen ist, nicht aufgefrischt. Ist die Startseite sichtbar, hat die Löschaktion auch dort eine unmittelbare Konsequenz: Die Liste zuletzt verwendeter Karteien verschwindet.</li>
 					<li>Bedeutungen-Fenster: Das Tastaturkürzel <kbd>Strg</kbd> + <kbd>P</kbd> funktionierte nicht mehr.</li>
 					<li>Hilfe-Fenster: Lange Pfadangaben werden nun besser umgebrochen, sodass das Fenster schmaler werden kann, ohne dass Text im Off verschwindet. Dies betrifft die <i>technische Dokumentation</i> und das <i>Handbuch</i> (sobald es geschrieben wurde).</li>
 					<li>Hilfe-Fenster: Das <i>Handuch</i> und die <i>technische Dokumentation</i> konnten über das App-Menü beliebig oft geöffnet werden. Ist das Fenster schon offen, wird es ab jetzt nicht noch einmal geöffnet, sondern erhält einfach den Fokus.</li>
+					<li>Über-Fenster: Behebung visueller Glitches.</li>
 				</ul>
 			</div>
 			

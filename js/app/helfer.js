@@ -47,9 +47,8 @@ let helfer = {
 				meta.oeffnen();
 			} else if (id === "kartei-redaktion") {
 				redaktion.oeffnen();
-			} else if (id === "kartei-bedeutungen") { // TODO
-				dialog.oeffnen("alert", null);
-				dialog.text("Sorry!\nDiese Funktion ist noch nicht programmiert.");
+			} else if (id === "kartei-bedeutungen") {
+				bedeutungen.oeffnen();
 			} else if (id === "kartei-bedeutungen-fenster") {
 				bedeutungenWin.oeffnen(true);
 			} else if (id === "kartei-suche") {
@@ -58,6 +57,9 @@ let helfer = {
 				beleg.erstellenPre();
 			} else if (id === "belege-auflisten") {
 				liste.anzeigen();
+			} else if (id === "belege-sortieren") { // TODO
+				dialog.oeffnen("alert", null);
+				dialog.text("Sorry!\nDiese Funktion ist noch nicht programmiert.");
 			}
 		});
 	},
@@ -314,10 +316,13 @@ let helfer = {
 		if (oben === "notizen" && notizen.geaendert) {
 			notizen.speichern();
 		}
+		if (!oben && bedeutungen.geaendert) {
+			bedeutungen.speichern();
+		}
 		if (!oben && beleg.geaendert) {
 			beleg.aktionSpeichern();
 		}
-		if (!notizen.geaendert && !beleg.geaendert && kartei.geaendert) {
+		if (!notizen.geaendert && !bedeutungen.geaendert && !beleg.geaendert && kartei.geaendert) {
 			kartei.speichern(false);
 		}
 	},
@@ -338,9 +343,13 @@ let helfer = {
 				overlay.schliessen(link);
 				return;
 			}
-			// Belegfenster schließen
-			let formular = document.getElementById("beleg");
-			if (!formular.classList.contains("aus")) {
+			// Bedeutungenformular schließen
+			if (!document.getElementById("bedeutungen").classList.contains("aus")) {
+				bedeutungen.schliessen();
+				return;
+			}
+			// Belegformular schließen
+			if (!document.getElementById("beleg").classList.contains("aus")) {
 				helfer.inputBlur();
 				beleg.aktionAbbrechen();
 			}

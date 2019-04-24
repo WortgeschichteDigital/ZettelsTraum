@@ -29,8 +29,18 @@ let beleg = {
 	// Überprüfen, ob vor dem Erstellen eines neuen Belegs noch Änderungen
 	// gespeichert werden müssen.
 	erstellenPre () {
-		// aktueller Beleg noch nicht gespeichert
-		if (beleg.geaendert) {
+		// Änderungen in Bedeutungen/im Beleg noch nicht gespeichert
+		if (bedeutungen.geaendert) {
+			dialog.oeffnen("confirm", function() {
+				if (dialog.antwort) {
+					bedeutungen.speichern();
+				} else if (dialog.antwort === false) {
+					beleg.erstellen();
+				}
+			});
+			dialog.text("Die Bedeutungen wurden verändert, aber noch nicht gespeichert.\nMöchten Sie die Änderungen nicht erst einmal speichern?");
+			return;
+		} else if (beleg.geaendert) {
 			dialog.oeffnen("confirm", function() {
 				if (dialog.antwort) {
 					beleg.aktionSpeichern();

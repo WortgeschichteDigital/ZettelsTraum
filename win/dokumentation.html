@@ -32,6 +32,7 @@
 					<li><a href="#" class="link-sektion-ordner kopf">Ordner und Dateien</a></li>
 					<li><a href="#" class="link-sektion-js kopf">JavaScript</a></li>
 					<li><a href="#" class="link-sektion-wgd kopf">WGD-Dateiformat</a></li>
+					<li><a href="#" class="link-sektion-verschiedenes kopf">Verschiedenes</a></li>
 				</ul>
 			</nav>
 			<div>
@@ -623,6 +624,26 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);
 							<td>Wort, zu dem die Kartei erstellt wurde</td>
 						</tr>
 					</table>
+				</section>
+				
+				<!-- VERSCHIEDENES -->
+				<section id="sektion-verschiedenes" class="suche">
+					<!-- Sperrdatei -->
+					<h2 id="verschiedenes-sperrdatei">Lockfile</h2>
+					
+					<p>Wird mit <i class="app-name"></i> eine <abbr title="Wortgeschichte digital">WGD</abbr>-Datei geöffnet, wird im Quellordner der Datei automatisch eine Sperrdatei angelegt. Mithilfe dieser Lock-Datei wird das Öffnen der Kartei für andere BenutzerInnen temporär unterbunden, sodass ein kollaboratives Arbeiten in einem Netzwerkordner möglich ist, ohne dass sich die BenutzerInnen gegenseitig die Arbeit überschreiben. Beim Schließen der Kartei oder der App wird die Sperrdatei automatisch entfernt.</p>
+					
+					<p>Das Schreiben, Überprüfen und Löschen dieser Lock-Datei wird in <code class="quelltext">kartei.lock()</code> geregelt. Ist eine solche Sperrdatei vorhanden, wird das Öffnen der zugehörigen Kartei grundsätzlich unterbunden. Es gibt zwei Ausnahmen:</p>
+					
+					<ul>
+						<li>dieselbe BenutzerIn versucht die Kartei vom selben Computer aus zu öffnen,</li>
+						<li>die Lock-Datei wurde vor mehr als zwölf Stunden angelegt.</li>
+					</ul>
+					
+					<p>Der Name der Sperrdatei folgt demselben Format, das <abbr title="zum Beispiel">z. B.</abbr> auch <i>LibreOffice</i> verwendet: <span class="datei">.~lock.[DATEINAME]#</span>.</p>
+					<p>Im Inneren der Lock-Datei steht im Plaintext der auf die Millisekunde genaue Zeitpunkt der Anlage der Datei, der Name des sperrenden Rechners und der seiner BenutzerIn. Die einzelnen Werte werden durch <code class="quelltext">;;</code> voneinander getrennt. Das Ganze sieht dann in etwa so aus:</p>
+					
+					<pre class="quelltext">2019-04-24T17:36:47.681Z;;nico-sein-rechner;;Nico</pre>
 				</section>
 			</div>
 		</main>

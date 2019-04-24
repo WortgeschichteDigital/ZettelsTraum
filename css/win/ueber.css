@@ -21,8 +21,10 @@ body.electron {
 	overflow: hidden;
 }
 
-header {
-	padding: 10px 10px 20px 10px;
+main {
+	padding: 10px;
+	height: 250px;
+	overflow: hidden;
 }
 
 aside {
@@ -30,7 +32,7 @@ aside {
 	padding: 0 20px 20px 0;
 }
 
-main {
+footer {
 	padding: 20px;
 	background-color: var(--farbeB);
 	color: #fff;
@@ -43,7 +45,7 @@ a {
 	outline: none;
 }
 
-main a {
+footer a {
 	color: #fff;
 	text-decoration: underline;
 }
@@ -81,7 +83,7 @@ p.beschreibung-app {
 	margin-bottom: 24px;
 }
 
-header p {
+main p {
 	margin-left: 170px;
 }
 

@@ -16,7 +16,7 @@ let sicherheitsfrage = {
 	// Funktion, die nach dem Ablehnen des Speicherns aufgerufen werden soll
 	funktion: function() {},
 	// Werte, die betroffen sind
-	// (wird die Suche geöffnet sind bspw. nur Notizen und Beleg betroffen,
+	// (wird die Suche geöffnet sind bspw. nur Notizen, Bedeutungen und Beleg betroffen,
 	// die Kartei aber nicht)
 	werte: {},
 	// warnen, dass es noch ungespeicherte Daten gibt
@@ -42,6 +42,10 @@ let sicherheitsfrage = {
 			typen.push("die Notizen");
 			mehrzahl += 2;
 		}
+		if (werte.bedeutungen && bedeutungen.geaendert) {
+			typen.push("die Bedeutungen");
+			mehrzahl += 2;
+		}
 		if (werte.beleg && beleg.geaendert) {
 			typen.push("der Beleg");
 			mehrzahl++;
@@ -62,6 +66,8 @@ let sicherheitsfrage = {
 	speichern () {
 		if (sicherheitsfrage.werte.notizen && notizen.geaendert) {
 			notizen.speichern();
+		} else if (sicherheitsfrage.werte.bedeutungen && bedeutungen.geaendert) {
+			bedeutungen.speichern();
 		} else if (sicherheitsfrage.werte.beleg && beleg.geaendert) {
 			beleg.aktionSpeichern();
 		} else if (sicherheitsfrage.werte.kartei && kartei.geaendert) {

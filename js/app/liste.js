@@ -2,9 +2,19 @@
 
 let liste = {
 	// Zeigt die Karteikartenliste an, überprüft aber vorher
-	// ob noch ein Beleg in Bearbeitung gespeichert werden muss
+	// ob noch etwas in Bearbeitung gespeichert werden muss
 	anzeigen () {
-		if (beleg.geaendert) { // aktueller Beleg noch nicht gespeichert
+		if (bedeutungen.geaendert) { // Bedeutungen noch nicht gespeichert
+			dialog.oeffnen("confirm", function() {
+				if (dialog.antwort) {
+					bedeutungen.speichern();
+				} else if (dialog.antwort === false) {
+					bedeutungen.bedeutungenGeaendert(false);
+					liste.wechseln();
+				}
+			});
+			dialog.text("Die Bedeutungen wurden verändert, aber noch nicht gespeichert.\nMöchten Sie die Änderungen nicht erst einmal speichern?");
+		} else if (beleg.geaendert) { // aktueller Beleg noch nicht gespeichert
 			dialog.oeffnen("confirm", function() {
 				if (dialog.antwort) {
 					beleg.aktionSpeichern();

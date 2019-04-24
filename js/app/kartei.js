@@ -15,9 +15,10 @@ let kartei = {
 		// (falls Änderungen noch nicht übernommen wurden)
 		helfer.inputBlur();
 		// Obacht! Änderungen noch nicht gespeichert!
-		if (notizen.geaendert || beleg.geaendert || kartei.geaendert) {
+		if (notizen.geaendert || bedeutungen.geaendert || beleg.geaendert || kartei.geaendert) {
 			sicherheitsfrage.warnen(funktion, {
 				notizen: true,
+				bedeutungen: true,
 				beleg: true,
 				kartei: true,
 			});
@@ -107,13 +108,30 @@ let kartei = {
 	//     (Dateipfad; kommt von der Startseite, dem Main-Prozess,
 	//     dem Öffnen-Dialog oder via Drag-and-Drop)
 	oeffnenEinlesen (datei) {
-		const fs = require("fs");
+		// Ist die Kartei schon offen?
+		if (datei === kartei.pfad) {
+			kartei.dialogWrapper("Die Datei, die Sie zu öffnen versuchen, ist schon geöffnet.");
+			return;
+		}
 		// Ist die Datei gesperrt?
-		if (kartei.lock(datei, "check")) {
-			kartei.dialogWrapper("Beim Öffnen der Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\nDatei ist gesperrt");
+		const lockcheck = kartei.lock(datei, "check");
+		if (lockcheck) {
+			let durch = "";
+			if (Array.isArray(lockcheck)) {
+				switch (lockcheck[0]) {
+					case "computer":
+						durch = ` durch Computer <i>${lockcheck[1]}</i>`;
+						break;
+					case "user":
+						durch = ` durch BenutzerIn <i>${lockcheck[1]}</i>`;
+						break;
+				}
+			}
+			kartei.dialogWrapper(`Beim Öffnen der Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\nDatei ist gesperrt${durch}`);
 			return;
 		}
 		// Datei einlesen
+		const fs = require("fs");
 		fs.readFile(datei, "utf-8", function(err, content) {
 			if (err) {
 				kartei.dialogWrapper(`Beim Öffnen der Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.message}</p>`);
@@ -378,8 +396,12 @@ let kartei = {
 			pfad = datei.match(/^(.+[/\\]{1})(.+)$/),
 			lockfile = `${pfad[1]}.~lock.${pfad[2]}#`;
 		if (aktion === "lock") {
-			const datum = new Date().toISOString();
-			fs.writeFile(lockfile, datum, function(err) {
+			const os = require("os"),
+				host = os.hostname(),
+				user = os.userInfo().username,
+				datum = new Date().toISOString(),
+				lockcontent = `${datum};;${host};;${user}`;
+			fs.writeFile(lockfile, lockcontent, function(err) {
 				if (err) {
 					dialog.oeffnen("alert", null);
 					dialog.text(`Beim Erstellen der Sperrdatei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.message}</p>`);
@@ -399,13 +421,27 @@ let kartei = {
 			});
 		} else if (aktion === "check") {
 			if (fs.existsSync(lockfile)) {
-				const lockdate = new Date(fs.readFileSync(lockfile, "utf-8"));
-				if (new Date() - lockdate > 43200000) { // vor mehr als 12 Stunden gesperrt => nicht gesperrt
-					return false;
+				const lockcontent = fs.readFileSync(lockfile, "utf-8");
+				if (!lockcontent) {
+					return true; // gesperrt (zur Sicherheit, weil unklarer Status)
 				}
-				return true;
+				const datum_host_user = lockcontent.split(";;"),
+					os = require("os"),
+					host = os.hostname(),
+					user = os.userInfo().username;
+				// nicht sperren, wenn:
+				//   derselbe Computer + dieselbe BenutzerIn
+				//   vor mehr als 12 Stunden gesperrt
+				if (host === datum_host_user[1] && user === datum_host_user[2] ||
+						new Date() - new Date(datum_host_user[0]) > 43200000) {
+					return false; // nicht gesperrt
+				}
+				if (datum_host_user[2]) {
+					return ["user", datum_host_user[2]]; // gesperrt
+				}
+				return ["computer", datum_host_user[1]]; // gesperrt
 			}
-			return false;
+			return false; // nicht gesperrt
 		}
 	},
 };

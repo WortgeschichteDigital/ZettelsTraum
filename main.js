@@ -153,7 +153,7 @@ let layoutMenu = [
 			{
 				label: "Bedeutungen",
 				icon: path.join(__dirname, "img", "menu", "kartei-bedeutungen.png"),
-				click: () => win.webContents.send("dialog-anzeigen", "Sorry!\nDiese Funktion ist noch nicht programmiert."), // TODO
+				click: () => win.webContents.send("kartei-bedeutungen"),
 				accelerator: "CommandOrControl+B",
 				id: "kartei-bedeutungen",
 			},
@@ -815,7 +815,7 @@ fenster = {
 			title: `Über ${app.getName()}`,
 			icon: path.join(__dirname, "img", "icon", "linux", "icon_32px.png"),
 			width: 650,
-			height: 321,
+			height: 334,
 			useContentSize: true,
 			center: true,
 			resizable: false,
@@ -846,7 +846,7 @@ fenster = {
 			title: "Über Electron",
 			icon: path.join(__dirname, "img", "icon", "linux", "icon_32px.png"),
 			width: 650,
-			height: 329,
+			height: 334,
 			useContentSize: true,
 			center: true,
 			resizable: false,

@@ -4,7 +4,7 @@ window.addEventListener("load", function() {
 	// app initialisieren
 	const {app} = require("electron").remote;
 	// Programm-Name eintragen
-	document.querySelectorAll("header h1, #name").forEach(function(i) {
+	document.querySelectorAll("main h1, #name").forEach(function(i) {
 		i.textContent = app.getName().replace("'", "’");
 	});
 	// Programm-Version eintragen

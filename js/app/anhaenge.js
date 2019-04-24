@@ -234,7 +234,17 @@ let anhaenge = {
 	belegOeffnen (h3) {
 		h3.addEventListener("click", function() {
 			let id = this.dataset.id;
-			if (beleg.geaendert) {
+			if (bedeutungen.geaendert) {
+				dialog.oeffnen("confirm", function() {
+					if (dialog.antwort) {
+						bedeutungen.speichern();
+					} else if (dialog.antwort === false) {
+						oeffnen();
+					}
+				});
+				dialog.text("Die Bedeutungen wurden verändert, aber noch nicht gespeichert.\nMöchten Sie die Änderungen nicht erst einmal speichern?");
+				return;
+			} else if (beleg.geaendert) {
 				dialog.oeffnen("confirm", function() {
 					if (dialog.antwort) {
 						beleg.aktionSpeichern();

@@ -182,6 +182,10 @@
 	color: var(--textWarnung);
 }
 
+.einstellungen-spacer {
+	height: 5px;
+}
+
 /* Formvarianten ------------------------ */
 #stamm > div {
 	margin-top: 40px;

@@ -43,6 +43,8 @@ let optionen = {
 		einstellungen: {
 			// für diesen Computer registrierte BearbeiterIn
 			bearbeiterin: "",
+			// Bedeutungen-Formular nach dem Speichern direkt schließen
+			"bedeutungen-schliessen": true,
 			// Notizen-Fenster nach dem Speichern direkt schließen
 			"notizen-schliessen": true,
 			// Nach dem Starten des Programms wird die Menü-Leiste ausgeblendet,
@@ -294,6 +296,13 @@ let optionen = {
 		}
 		// Optionen speichern
 		optionen.speichern(true);
+	},
+	// Liste der zuletzt verwendeten Karteien updaten (angestoßen durch Main-Prozess)
+	updateZuletzt(zuletzt) {
+		optionen.data.zuletzt = zuletzt;
+		if (!document.getElementById("start").classList.contains("aus")) {
+			start.zuletzt();
+		}
 	},
 	// auf Änderung der Einstellungen achten
 	//   ele = Element
