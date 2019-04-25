@@ -18,6 +18,7 @@ let start = {
 			let datei = optionen.data.zuletzt[i],
 				name = datei.match(/([^\/\\]+)\.[a-z]+$/)[1],
 				li = document.createElement("li");
+			li.classList.add("start-datei"); // dient zur Identifizierung für Rechtsklicks
 			li.dataset.datei = datei;
 			// Name und Link
 			let span = document.createElement("span");
@@ -32,6 +33,15 @@ let start = {
 			start.karteiOeffnen(li);
 			liste.appendChild(li);
 		}
+	},
+	// entferne eine Datei aus der Liste zuletzt verwendeter Dateien
+	//   datei = String
+	//     (Datei, die aus optionen.data.zuletzt entfernt werden soll)
+	dateiEntfernen (datei) {
+		const idx = optionen.data.zuletzt.indexOf(datei);
+		optionen.data.zuletzt.splice(idx, 1);
+		optionen.speichern(true);
+		start.zuletzt();
 	},
 	// Kartei aus der Liste "Zuletzt verwendet" öffnen
 	//   a = Element

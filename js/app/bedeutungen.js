@@ -1,6 +1,8 @@
 "use strict";
 
 let bedeutungen = {
+	// Kopie der Bedeutungen, ausgelesen aus data.bd
+	data: {},
 	// Bedeutungen öffnen
 	oeffnen () {
 		// Bedeutungen sind schon offen

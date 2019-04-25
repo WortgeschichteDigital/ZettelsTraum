@@ -10,6 +10,8 @@ let popup = {
 	belegID: "",
 	// speichert den Anhang, der geöffnet werden soll
 	anhangDatei: "",
+	// speichert die Datei aus der Liste zu verwendeter Dateien, der gelöscht werden soll
+	startDatei: "",
 	// speichert das Element, auf das sich das Event bezieht
 	element: null,
 	// Popup öffnen
@@ -48,6 +50,8 @@ let popup = {
 		} else if (target === "filter-reset") {
 			popup.menuFilterReset(menu);
 			popup.menuBelege(menu, true);
+		} else if (target === "start-datei") {
+			popup.menuStartDatei(menu);
 		} else if (target === "link") {
 			popup.menuLink(menu);
 			popup.menuBelege(menu, true);
@@ -119,7 +123,10 @@ let popup = {
 			}
 			// Klassen
 			if (pfad[i].classList) {
-				if (pfad[i].classList.contains("link")) {
+				if (pfad[i].classList.contains("start-datei")) {
+					popup.startDatei = pfad[i].dataset.datei;
+					return "start-datei";
+				} else if (pfad[i].classList.contains("link")) {
 					popup.element = pfad[i];
 					return "link";
 				} else if (pfad[i].classList.contains("liste-kopf")) {
@@ -365,6 +372,18 @@ let popup = {
 			label: "Filter zurücksetzen",
 			icon: path.join(__dirname, "img", "menu", "popup-filter.png"),
 			click: () => filter.ctrlReset(true),
+		}));
+	},
+	// Start-Datei-Menü füllen
+	//   menu = Object
+	//     (Menü-Objekt, an das die Menü-Items gehängt werden müssen)
+	menuStartDatei (menu) {
+		const {MenuItem} = require("electron").remote,
+			path = require("path");
+		menu.append(new MenuItem({
+			label: "Aus Liste entfernen",
+			icon: path.join(__dirname, "img", "menu", "popup-loeschen.png"),
+			click: () => start.dateiEntfernen(popup.startDatei),
 		}));
 	},
 	// Link-Menü füllen
