@@ -50,6 +50,12 @@ main {
 }
 
 /* Elemente ------------------------------------- */
+a {
+	outline: none;
+	color: var(--textFarbe);
+	text-decoration: none;
+}
+
 abbr {
 	text-decoration: none;
 }

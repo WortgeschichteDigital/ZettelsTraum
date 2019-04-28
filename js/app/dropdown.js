@@ -145,6 +145,8 @@ let dropdown = {
 			dropdown.dataKorpora();
 		} else if (feld_id === "beleg-ts") {
 			dropdown.dataFormular("ts");
+		} else if (feld_id === "bedeutungen-hierarchie") {
+			dropdown.data = [...bedeutungen.hierarchieEbenen];
 		}
 		// Dropdown erzeugen und einhängen
 		let span = document.createElement("span");
@@ -358,6 +360,8 @@ let dropdown = {
 				beleg.belegGeaendert(true);
 			} else if (/^einstellung-/.test(caller)) {
 				optionen.aendereEinstellung(document.getElementById(caller));
+			} else if (caller === "bedeutungen-hierarchie") {
+				bedeutungen.hierarchie();
 			}
 			// Dropdown schließen
 			dropdown.schliessen();

@@ -102,9 +102,15 @@ let helfer = {
 	//   evt = Event-Objekt
 	//     (wird von helfer.tastatur() übergeben)
 	cursor (evt) {
+		const oben = overlay.oben();
+		// Bedeutungen sind aktiv, kein Overlay
+		if (!oben && !document.getElementById("bedeutungen").classList.contains("aus")) {
+			bedeutungen.move(evt);
+			return;
+		}
 		// Cursor hoch od. runter
 		if (evt.which === 38 || evt.which === 40) {
-			if (overlay.oben() === "einstellungen") { // durch die Menüs in den Einstellungen navigieren
+			if (oben === "einstellungen") { // durch die Menüs in den Einstellungen navigieren
 				evt.preventDefault();
 				optionen.naviMenue(evt.which);
 			}
@@ -345,7 +351,11 @@ let helfer = {
 			}
 			// Bedeutungenformular schließen
 			if (!document.getElementById("bedeutungen").classList.contains("aus")) {
-				bedeutungen.schliessen();
+				if (bedeutungen.moveAktiv) {
+					bedeutungen.moveAus();
+				} else {
+					bedeutungen.schliessen();
+				}
 				return;
 			}
 			// Belegformular schließen

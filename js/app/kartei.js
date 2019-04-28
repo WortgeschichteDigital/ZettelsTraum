@@ -171,6 +171,7 @@ let kartei = {
 			// Konversion des Dateiformats anstoßen
 			konversion.start();
 			// Einleseoperationen
+			bedeutungen.konstituieren(); // für ältere Karteien, in denen data.bd noch nicht gefüllt ist
 			kartei.wort = data.wo;
 			kartei.wortEintragen();
 			kartei.pfad = datei;

@@ -88,8 +88,8 @@ let bedeutungen = {
 		["1)", "2)", "3)", "4)", "5)", "6)", "7)", "8)", "9)", "10)", "11)", "12)", "13)", "14)", "15)", "16)", "17)", "18)", "19)", "20)"],
 		["a)", "b)", "c)", "d)", "e)", "f)", "g)", "h)", "i)", "j)", "k)", "l)", "m)", "n)", "o)", "p)", "q)", "r)", "s)", "t)"],
 		["α)", "β)", "γ)", "δ)", "ε)", "ζ)", "η)", "θ)", "ι)", "κ)", "λ)", "μ)", "ν)", "ξ)", "ο)", "π)", "ρ)", "σ)", "τ)", "υ)"],
-		Array(15).fill("•"),
-		Array(15).fill("◦"),
+		Array(20).fill("•"),
+		Array(20).fill("◦"),
 	],
 	zaehlung () {
 		let zaehlungen = [];
@@ -108,7 +108,7 @@ let bedeutungen = {
 			zaehlungen[ebene]++;
 			// alle höheren Zählungen löschen
 			zaehlungen.fill(0, ebene + 1);
-			// Zählzeichen ermitteln erzeugen
+			// Zählzeichen ermitteln
 			let zeichen = "–";
 			if (bedeutungen.zaehlzeichen[ebene]) {
 				zeichen = bedeutungen.zaehlzeichen[ebene][zaehlungen[ebene] - 1];

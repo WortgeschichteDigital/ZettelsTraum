@@ -32,3 +32,75 @@
 	font-weight: normal;
 	line-height: 38px;
 }
+
+#bedeutungen h2 + p {
+	margin-bottom: 15px;
+}
+
+#bedeutungen-hierarchie {
+	background-color: transparent;
+	width: 75px;
+}
+
+#bedeutungen-cont {
+	padding-bottom: 20px;
+}
+
+#bedeutungen-cont table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+#bedeutungen-cont td {
+	padding: 0 5px;
+	vertical-align: top;
+}
+
+#bedeutungen-cont td:first-child {
+	padding-left: 0;
+}
+
+#bedeutungen-cont td:last-child {
+	padding-right: 0;
+}
+
+#bedeutungen-cont td.zaehlung b {
+	display: inline-block;
+	width: 35px;
+	text-align: center;
+	text-indent: 0;
+}
+
+#bedeutungen-cont td.zaehlung div {
+	margin-left: 35px;
+}
+
+#bedeutungen-cont td.zaehlung > div {
+	margin-left: 0;
+}
+
+#bedeutungen-cont td.zaehlung p {
+	margin: 0;
+	padding-left: 35px;
+	text-indent: -35px;
+}
+
+#bedeutungen-cont tr.bedeutungen-aktiv td {
+	background-color: var(--farbe);
+	color: #fff;
+}
+
+.icon-move {
+	-webkit-mask-image: url(../../img/bedeutungen-move.svg);
+	mask-image: url(../../img/bedeutungen-move.svg);
+	background-color: #fff;
+}
+
+.icon-move:hover {
+	background-color: var(--text);
+}
+
+#bedeutungen-cont tr.bedeutungen-aktiv .icon-move,
+#bedeutungen-cont tr.bedeutungen-aktiv .icon-move:hover {
+	background-color: #fff;
+}
