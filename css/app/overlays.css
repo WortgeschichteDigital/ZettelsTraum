@@ -141,11 +141,17 @@
 	color: var(--farbe);
 }
 
+#einstellungen-cont input[type="number"] {
+	width: 50px;
+	color: var(--farbe);
+}
+
 #einstellungen-cont input[type="checkbox"] {
 	margin-right: 9px; /* für alignment mit Überschrift */
 }
 
-#einstellungen-cont label[for="einstellung-bearbeiterin"] {
+#einstellungen-cont label[for="einstellung-bearbeiterin"],
+#einstellungen-cont label[for="einstellung-timeout"] {
 	margin-left: 10px;
 }
 
@@ -173,8 +179,10 @@
 
 #einstellungen-quick-icons p {
 	margin-bottom: 5px;
-	padding-left: 0;
+	padding-left: 1px; /* damit beim Fokussieren der Checkbox der linke Rand nicht abgeschnitten erscheint */
+	overflow: hidden;
 	text-indent: 0;
+	text-overflow: ellipsis;
 	white-space: nowrap;
 }
 

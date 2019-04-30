@@ -1,7 +1,7 @@
 "use strict";
 
 let bedeutungen = {
-	// Kopie der Bedeutungen, ausgelesen aus data.bd
+	// Kopie des Bedeutungsgerüsts, ausgelesen aus data.bd
 	data: {},
 	// baut einen initialen, alphabetisch sortierten Bedeutungenbaum auf
 	// (falls in der Kartei noch keiner vorhanden ist; irgendwann ist diese Funktion wohl tot)
@@ -68,10 +68,6 @@ let bedeutungen = {
 	},
 	// Bedeutungen öffnen
 	oeffnen () {
-		// für BenutzerInnen sperren, bis es fertig ist
-		dialog.oeffnen("alert", null);
-		dialog.text("Sorry!\nDiese Funktion ist noch nicht programmiert.");
-		return;
 		// Bedeutungen sind schon offen
 		if (!document.getElementById("bedeutungen").classList.contains("aus")) {
 			return;
@@ -327,7 +323,7 @@ let bedeutungen = {
 					liste.wechseln();
 				}
 			});
-			dialog.text("Die Bedeutungen wurden verändert, aber noch nicht gespeichert.\nMöchten Sie die Änderungen nicht erst einmal speichern?");
+			dialog.text("Das Bedeutungsgerüst wurde verändert, aber noch nicht gespeichert.\nMöchten Sie die Änderungen nicht erst einmal speichern?");
 			return;
 		}
 		// zur Liste wechseln

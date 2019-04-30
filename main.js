@@ -151,14 +151,14 @@ let layoutMenu = [
 			},
 			{ type: "separator" },
 			{
-				label: "Bedeutungen",
+				label: "Bedeutungsgerüst",
 				icon: path.join(__dirname, "img", "menu", "kartei-bedeutungen.png"),
 				click: () => win.webContents.send("kartei-bedeutungen"),
 				accelerator: "CommandOrControl+B",
 				id: "kartei-bedeutungen",
 			},
 			{
-				label: "Bedeutungen-Fenster",
+				label: "Bedeutungsgerüst-Fenster",
 				icon: path.join(__dirname, "img", "menu", "kartei-bedeutungen-fenster.png"),
 				click: () => fenster.erstellenBedeutungen(),
 				accelerator: "CommandOrControl+Shift+B",
@@ -462,7 +462,7 @@ ipcMain.on("ueber-app", (evt, opener) => fenster.erstellenUeberApp(opener));
 // Electron-Info aufrufen, wenn der Renderer-Prozess es wünscht
 ipcMain.on("ueber-electron", (evt, opener) => fenster.erstellenUeberElectron(opener));
 
-// Bedeutungen-Fenster öffnen/schließen, wenn der Renderer-Prozess es wünscht
+// Bedeutungsgerüst-Fenster öffnen/schließen, wenn der Renderer-Prozess es wünscht
 ipcMain.on("kartei-bedeutungen-fenster", function(evt, oeffnen) {
 	if (oeffnen) {
 		fenster.erstellenBedeutungen();
@@ -471,7 +471,7 @@ ipcMain.on("kartei-bedeutungen-fenster", function(evt, oeffnen) {
 	}
 });
 
-// Daten an Bedeutungen-Fenster übergeben
+// Daten an Bedeutungsgerüst-Fenster übergeben
 ipcMain.on("kartei-bedeutungen-fenster-daten", function(evt, daten) {
 	if (!winBedeutungen) {
 		return;
@@ -479,7 +479,7 @@ ipcMain.on("kartei-bedeutungen-fenster-daten", function(evt, daten) {
 	winBedeutungen.webContents.send("daten", daten);
 });
 
-// Druckauftrag aus dem Bedeutungen-Fenster an den Renderer-Prozess schicken
+// Druckauftrag aus dem Bedeutungsgerüst-Fenster an den Renderer-Prozess schicken
 ipcMain.on("bedeutungen-fenster-drucken", function(evt, daten) {
 	win.webContents.send("bedeutungen-fenster-drucken", daten);
 	if (win.isMinimized()) {
@@ -488,7 +488,7 @@ ipcMain.on("bedeutungen-fenster-drucken", function(evt, daten) {
 	win.focus();
 });
 
-// angeklickte Bedeutung aus dem Bedeutungen-Fenster an den Renderer-Prozess schicken
+// angeklickte Bedeutung aus dem Bedeutungsgerüst-Fenster an den Renderer-Prozess schicken
 ipcMain.on("bedeutungen-fenster-eintragen", function(evt, bd) {
 	win.webContents.send("bedeutungen-fenster-eintragen", bd);
 	if (win.isMinimized()) {
@@ -636,9 +636,9 @@ fenster = {
 			}
 		});
 	},
-	// Bedeutungen-Fenster erstellen
+	// Bedeutungsgerüst-Fenster erstellen
 	erstellenBedeutungen () {
-		// Bedeutungen-Fenster ist bereits offen => Fenster fokussieren
+		// Bedeutungsgerüst-Fenster ist bereits offen => Fenster fokussieren
 		if (winBedeutungen) {
 			if (winBedeutungen.isMinimized()) {
 				winBedeutungen.restore();
@@ -648,7 +648,7 @@ fenster = {
 		}
 		// Fenster öffnen
 		winBedeutungen = new BrowserWindow({
-			title: "Bedeutungen",
+			title: "Bedeutungsgerüst",
 			icon: path.join(__dirname, "img", "icon", "linux", "icon_32px.png"),
 			x: optionen.data["fenster-bedeutungen"].x,
 			y: optionen.data["fenster-bedeutungen"].y,
@@ -882,9 +882,9 @@ fenster = {
 			return win;
 		}
 	},
-	// Fenster-Status in den Optionen speichern (Haupt- und Bedeutungen-Fenster)
+	// Fenster-Status in den Optionen speichern (Haupt- und Bedeutungsgerüst-Fenster)
 	//   typ = String
-	//     ("win" für das Hauptfenster, "winBedeutungen" für das Bedeutungen-Fenster)
+	//     ("win" für das Hauptfenster, "winBedeutungen" für das Bedeutungsgerüst-Fenster)
 	status (typ) {
 		if (typ === "win") {
 			optionen.data.fenster.maximiert = win.isMaximized();

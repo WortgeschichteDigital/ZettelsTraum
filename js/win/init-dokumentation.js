@@ -5,10 +5,12 @@ window.addEventListener("load", function() {
 	hilfe.sektionWechseln("start");
 	
 	// PROGRAMM-NAME EINTRAGEN
-	const {app} = require("electron").remote;
-	document.querySelectorAll(".app-name").forEach(function(i) {
-		i.textContent = app.getName().replace("'", "’");
-	});
+	try { // damit die Dokumentation auch im Browser geladen werden kann und die Navigation funktioniert
+		const {app} = require("electron").remote;
+		document.querySelectorAll(".app-name").forEach(function(i) {
+			i.textContent = app.getName().replace("'", "’");
+		});
+	} catch (err) {}
 	
 	// UMBRUCH IN LANGEN DATEIPFADE
 	hilfe.dateiBreak();
@@ -30,13 +32,15 @@ window.addEventListener("load", function() {
 		hilfe.sucheWechseln();
 	});
 	// Über App
-	const {ipcRenderer} = require("electron");
-	document.getElementById("icon").addEventListener("click", () => ipcRenderer.send("ueber-app", "dokumentation"));
-	// Über Electron
-	document.querySelector(".ueber-electron").addEventListener("click", function(evt) {
-		evt.preventDefault();
-		ipcRenderer.send("ueber-electron", "dokumentation");
-	});
+	try { // s.o.
+		const {ipcRenderer} = require("electron");
+		document.getElementById("icon").addEventListener("click", () => ipcRenderer.send("ueber-app", "dokumentation"));
+		// Über Electron
+		document.querySelector(".ueber-electron").addEventListener("click", function(evt) {
+			evt.preventDefault();
+			ipcRenderer.send("ueber-electron", "dokumentation");
+		});
+	} catch (err) {}
 	// Handbuch
 	document.querySelectorAll(".link-handbuch").forEach((a) => helferWin.oeffneHandbuch(a));
 	// Navigation

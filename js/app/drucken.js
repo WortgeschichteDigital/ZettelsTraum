@@ -192,7 +192,7 @@ let drucken = {
 		// Sind überhaupt Bedeutungen vorhanden
 		if (/class="bd-win-keine"/.test(daten)) {
 			dialog.oeffnen("alert", null);
-			dialog.text("Es gibt keine Bedeutungen, die gedruckt werden könnten.");
+			dialog.text("Es gibt kein Bedeutungsgerüst, das gedruckt werden könnte.");
 			return;
 		}
 		// Fenster öffnen od. in den Vordergrund holen
@@ -206,7 +206,7 @@ let drucken = {
 		cont.innerHTML = daten;
 		// Überschrift ergänzen
 		let h3 = document.createElement("h3");
-		h3.textContent = "Bedeutungen ";
+		h3.textContent = "Bedeutungsgerüst ";
 		let i = document.createElement("i");
 		i.textContent = kartei.wort;
 		h3.appendChild(i);

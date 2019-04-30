@@ -43,7 +43,9 @@ let optionen = {
 		einstellungen: {
 			// für diesen Computer registrierte BearbeiterIn
 			bearbeiterin: "",
-			// Bedeutungen-Formular nach dem Speichern direkt schließen
+			// Timeout für Anfrage an das DTA in Sekunden; einfacher als String, wird bei Bedarf in Number konvertiert
+			timeout: "10",
+			// Bedeutungsgerüst-Formular nach dem Speichern direkt schließen
 			"bedeutungen-schliessen": true,
 			// Notizen-Fenster nach dem Speichern direkt schließen
 			"notizen-schliessen": true,
@@ -179,7 +181,7 @@ let optionen = {
 			let e = ee[i].id.replace(/^einstellung-/, "");
 			if (ee[i].type === "checkbox") {
 				ee[i].checked = optionen.data.einstellungen[e] ? true : false;
-			} else if (ee[i].type === "text") {
+			} else if (ee[i].type === "text" || ee[i].type === "number") {
 				ee[i].value = optionen.data.einstellungen[e] ? optionen.data.einstellungen[e] : "";
 			}
 		}
@@ -308,7 +310,7 @@ let optionen = {
 	//   ele = Element
 	//     (Element, dessen Wert geändert wurde)
 	aendereEinstellungListener (ele) {
-		let typ = "change";
+		let typ = "change"; // Checkbox und Number
 		if (ele.type === "text") {
 			typ = "input";
 		}
@@ -324,7 +326,7 @@ let optionen = {
 		let e = ele.id.replace(/^einstellung-/, "");
 		if (ele.type === "checkbox") {
 			optionen.data.einstellungen[e] = ele.checked;
-		} else if (ele.type === "text") {
+		} else if (ele.type === "text" || ele.type === "number") {
 			optionen.data.einstellungen[e] = ele.value;
 		}
 		// ggf. Quick-Access-Bar umstellen

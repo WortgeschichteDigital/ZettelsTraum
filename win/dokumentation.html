@@ -399,7 +399,7 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);
 							<td><code class="quelltext">bd</code></td>
 							<td class="datentyp">Object</td>
 							<td> </td>
-							<td>reserviert für die Bedeutungen-Funktion</td>
+							<td>reserviert für die Bedeutungsgerüst-Funktion</td>
 						</tr>
 						<tr>
 							<td><code class="quelltext">be</code></td>
@@ -628,6 +628,28 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);
 				
 				<!-- VERSCHIEDENES -->
 				<section id="sektion-verschiedenes" class="suche">
+					<!-- DTA-Import -->
+					<h2 id="verschiedenes-dta"><abbr title="Deutsches Textarchiv">DTA</abbr>-Import</h2>
+					
+					<p>Importiert wird grundsätzlich der gesamte Text der Seite, die sich hinter der eingegebenen URL im Karteikarten-Formular verbirgt – mit einigen wenigen Ausnahmen. Ignoriert werden die Textinhalte in:</p>
+					
+					<ul>
+						<li>Kustoden (<code class="quelltext">&lt;catch&gt;</code>),</li>
+						<li>Kolumnentiteln (<code class="quelltext">&lt;header&gt;</code>),</li>
+						<li>Bogensignaturen (<code class="quelltext">&lt;sig&gt;</code>),</li>
+						<li>Schreib- oder Setzfehlern (<code class="quelltext">&lt;sic&gt;</code>), wobei der korrigierte Text in <code class="quelltext">&lt;corr&gt;</code> importiert wird.</li>
+					</ul>
+					
+					<p>Beim Import wird versucht, Inline-Formatierungen wie Kursivierungen, Fettungen oder Sperrungen zu erhalten. Auf einen Absatz bezogene Formatierungen (Zentrierung oder <abbr title="dergleichen">dgl.</abbr>) werden immer ignoriert.</p>
+					
+					<p>Die Trennstriche am Ende einer Textzeile (das sind <q>-</q> oder <q>¬</q>) werden zu <q>[¬]</q> normalisiert, sodass sie für die Leseansicht der Belege automatisch ausgeblendet werden können.</p>
+					
+					<p>Werden mehrere Seiten importiert, wird jeder Seitenumbruch nach diesem Muster markiert: <q>[:35:]</q>. Dabei steht hier die <q>35</q> für die Seitenangabe, die aus dem n-Attribute des <code class="quelltext">&lt;pb&gt;</code> ausgelesen wurde.</p>
+					
+					<p>Wird der den Import begrenzende <code class="quelltext">&lt;pb&gt;</code> nicht gefunden (weil man sich auf der letzten Seite des Texts befindet oder die BenutzerIn bei der Eingabe einen Fehler gemacht hat), wird versucht den Text des Buchs ab dem Start-<code class="quelltext">&lt;pb&gt;</code> komplett zu importieren.</p>
+					
+					<p>Die Funktionen, die den Import durchführen, stehen alle in <span class="datei">./js/app/beleg.js</span>. Ihr Name beginnt immer mit <code class="quelltext">DTAImport</code>.</p>
+					
 					<!-- Sperrdatei -->
 					<h2 id="verschiedenes-sperrdatei">Lockfile</h2>
 					

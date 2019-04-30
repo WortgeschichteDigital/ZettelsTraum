@@ -10,7 +10,7 @@ let bedeutungenWin = {
 			ipcRenderer.send("kartei-bedeutungen-fenster", false);
 		}
 	},
-	// Daten zusammentragen und an das Bedeutungen-Fenster schicken
+	// Daten zusammentragen und an das Bedeutungsgerüst-Fenster schicken
 	daten () {
 		// Daten zusammentragen
 		let daten = {

@@ -162,7 +162,7 @@ let stamm = {
 	dtaGet (aktiv) {
 		let ajax = new XMLHttpRequest();
 		ajax.open("GET", `https://www.deutschestextarchiv.de/demo/cab/query?a=expand.eqlemma&fmt=json&clean=1&q=${encodeURIComponent(kartei.wort)}`, true);
-		ajax.timeout = 10000;
+		ajax.timeout = parseInt(optionen.data.einstellungen.timeout, 10) * 1000;
 		ajax.addEventListener("load", function () {
 			if (ajax.status >= 200 && ajax.status < 300) {
 				// JSON parsen

@@ -35,6 +35,12 @@ window.addEventListener("load", function() {
 			helfer.textareaGrow(this);
 		});
 	});
+	// alle <input type="number">
+	document.querySelectorAll(`input[type="number"]`).forEach(function(i) {
+		i.addEventListener("change", function() {
+			helfer.inputNumber(this);
+		});
+	});
 	// alle Dropdown-Listen
 	document.querySelectorAll(".dropdown-feld").forEach(function(i) {
 		dropdown.feld(i);

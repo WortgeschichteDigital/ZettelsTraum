@@ -134,6 +134,7 @@ body > header {
 	width: calc(100% - 20px);
 	height: 60px;
 	background-color: var(--farbe);
+	white-space: nowrap;
 	transition: top .5s ease;
 }
 
@@ -186,7 +187,9 @@ body > header span {
 #icon {
 	position: absolute;
 	top: 6px;
-	right: 10px;
 	width: 48px;
 	height: 48px;
+	right: 0;
+	padding: 0 10px;
+	background-color: var(--farbe);
 }

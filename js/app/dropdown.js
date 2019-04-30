@@ -97,7 +97,6 @@ let dropdown = {
 					return;
 				}
 				evt.preventDefault();
-				evt.stopPropagation(); // damit im Einstellungen-Menü der Menüpunkt nicht gewechselt wird
 				// Dropdown existiert noch nicht
 				if (!fenster) {
 					dropdown.init(this.id);

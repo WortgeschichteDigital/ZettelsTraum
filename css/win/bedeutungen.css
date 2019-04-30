@@ -30,6 +30,7 @@ body > header {
 	width: calc(100% - 20px);
 	height: 60px;
 	background-color: var(--farbe);
+	white-space: nowrap;
 }
 
 body > header h1 {
@@ -41,8 +42,6 @@ body > header h1 {
 	line-height: 60px;
 }
 
-/* Abweichend von Styles in anderen Fenstern. Das Bedeutungen-Fenster
-   darf sehr schmal werden; da muss es einen Fallback geben. */
 #icon {
 	position: absolute;
 	top: 6px;

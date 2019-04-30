@@ -59,8 +59,8 @@
 			><a href="#" id="quick-kartei-metadaten" class="icon-link" title="Kartei: Metadaten"> </a
 			><a href="#" id="quick-kartei-redaktion" class="icon-link" title="Kartei: Redaktion"> </a
 			><span class="quick-spacer"> </span
-			><a href="#" id="quick-kartei-bedeutungen" class="icon-link" title="Kartei: Bedeutungen"> </a
-			><a href="#" id="quick-kartei-bedeutungen-fenster" class="icon-link" title="Kartei: Bedeutungen-Fenster"> </a
+			><a href="#" id="quick-kartei-bedeutungen" class="icon-link" title="Kartei: Bedeutungsgerüst"> </a
+			><a href="#" id="quick-kartei-bedeutungen-fenster" class="icon-link" title="Kartei: Bedeutungsgerüst-Fenster"> </a
 			><a href="#" id="quick-kartei-suche" class="icon-link" title="Kartei: Suche"> </a
 			><span class="quick-spacer"> </span
 			><a href="#" id="quick-belege-hinzufuegen" class="icon-link" title="Belege: Hinzufügen"> </a
@@ -225,9 +225,9 @@
 				><input type="button" value="Schließen" id="bedeutungen-schliessen" tabindex="0"
 				><span class="aus">*</span
 			></header>
-			<h2>Bedeutungen</h2>
+			<h2>Bedeutungsgerüst</h2>
 			<p class="input-text dropdown-cont"><input type="text" value="" spellcheck="false" class="dropdown-feld" id="bedeutungen-hierarchie" disabled
-				><a href="#" class="dropdown-link-element" title="oberste Hierarchie auswählen"
+				><a href="#" class="dropdown-link-element" title="Zählung oberste Hierarchie"
 					><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m7 2v8l-3.5-3.5-1.5 1.5 6 6 6-6-1.5-1.5-3.5 3.5v-8z" fill="#212121"/></svg></a
 			></p>
 			<div id="bedeutungen-cont"></div>
@@ -361,8 +361,10 @@
 						<p class="input-text dropdown-cont"><input type="text" value="" spellcheck="false" class="dropdown-feld" id="einstellung-bearbeiterin"
 							><a href="#" class="dropdown-link-element dropdown-link-haengend" title="BearbeiterInnen auflisten"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m7 2v8l-3.5-3.5-1.5 1.5 6 6 6-6-1.5-1.5-3.5 3.5v-8z" fill="#212121"/></svg></a
 							><label for="einstellung-bearbeiterin">BearbeiterIn auf diesem Rechner</label></p>
+						<p class="input-text"><input type="number" value="10" min="5" max="180" spellcheck="false" id="einstellung-timeout"
+							><label for="einstellung-timeout">Sekunden Timeout bei Anfragen an das <abbr title="Deutsche Textarchiv">DTA</abbr></label></p>
 						<p><input type="checkbox" id="einstellung-bedeutungen-schliessen"
-							><label for="einstellung-bedeutungen-schliessen">Bedeutungen-Formular nach dem Speichern schließen</label></p>
+							><label for="einstellung-bedeutungen-schliessen">Bedeutungsgerüst-Formular nach dem Speichern schließen</label></p>
 						<p><input type="checkbox" id="einstellung-notizen-schliessen"
 							><label for="einstellung-notizen-schliessen">Notizen-Fenster nach dem Speichern schließen</label></p>
 					</section>
@@ -403,9 +405,9 @@
 								><label for="einstellung-quick-kartei-redaktion">Redaktion</label></p>
 							<p class="einstellungen-spacer"> </p>
 							<p><input type="checkbox" id="einstellung-quick-kartei-bedeutungen"
-								><label for="einstellung-quick-kartei-bedeutungen">Bedeutungen</label></p>
+								><label for="einstellung-quick-kartei-bedeutungen">Bedeutungsgerüst</label></p>
 							<p><input type="checkbox" id="einstellung-quick-kartei-bedeutungen-fenster"
-								><label for="einstellung-quick-kartei-bedeutungen-fenster">Bedeutungen-Fenster</label></p>
+								><label for="einstellung-quick-kartei-bedeutungen-fenster">Bedeutungsgerüst-Fenster</label></p>
 							<p><input type="checkbox" id="einstellung-quick-kartei-suche"
 								><label for="einstellung-quick-kartei-suche">Suche</label></p>
 							<h3>Belege</h3>
@@ -429,7 +431,7 @@
 						<p><input type="checkbox" id="einstellung-unvollstaendig"
 							><label for="einstellung-unvollstaendig">neue Karteikarte als unvollständig markieren</label></p>
 						<p><input type="checkbox" id="einstellung-immer-ergaenzen"
-							><label for="einstellung-immer-ergaenzen">mehrzeilige Textfelder ohne Nachfrage ergänzen, wenn aus einem Dropdown-Menü ein Wert ausgewählt oder im Bedeutungen-Fenster eine Bedeutung angeklickt wurde</label></p>
+							><label for="einstellung-immer-ergaenzen">mehrzeilige Textfelder ohne Nachfrage ergänzen, wenn aus einem Dropdown-Menü ein Wert ausgewählt oder im Bedeutungsgerüst-Fenster eine Bedeutung angeklickt wurde</label></p>
 						<p><input type="checkbox" id="einstellung-leseansicht"
 							><label for="einstellung-leseansicht">bestehende Karteikarte in der Leseansicht öffnen</label></p>
 						<p><input type="checkbox" id="einstellung-karteikarte-schliessen"

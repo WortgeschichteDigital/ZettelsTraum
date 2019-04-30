@@ -38,7 +38,7 @@ let beleg = {
 					beleg.erstellen();
 				}
 			});
-			dialog.text("Die Bedeutungen wurden verändert, aber noch nicht gespeichert.\nMöchten Sie die Änderungen nicht erst einmal speichern?");
+			dialog.text("Das Bedeutungsgerüst wurde verändert, aber noch nicht gespeichert.\nMöchten Sie die Änderungen nicht erst einmal speichern?");
 			return;
 		} else if (beleg.geaendert) {
 			dialog.oeffnen("confirm", function() {
@@ -278,7 +278,7 @@ let beleg = {
 		beleg.belegGeaendert(false);
 		beleg.listeGeaendert = true;
 		kartei.karteiGeaendert(true);
-		// Bedeutungen-Fenster mit neuen Daten versorgen
+		// Bedeutungsgerüst-Fenster mit neuen Daten versorgen
 		bedeutungenWin.daten();
 		// Schließen?
 		direktSchliessen();
@@ -472,7 +472,7 @@ let beleg = {
 	DTAImportRequest (url, fak) {
 		let ajax = new XMLHttpRequest();
 		ajax.open("GET", url, true);
-		ajax.timeout = 10000;
+		ajax.timeout = parseInt(optionen.data.einstellungen.timeout, 10) * 1000;
 		ajax.addEventListener("load", function () {
 			if (ajax.status >= 200 && ajax.status < 300) {
 				if (!ajax.responseXML) {
@@ -524,8 +524,8 @@ let beleg = {
 			auflage: bibl.querySelector("editionStmt edition"),
 			ort: bibl.querySelector("publicationStmt pubPlace"),
 			verlag: bibl.querySelector("publicationStmt publisher name"),
-			textsorte: sorte.querySelectorAll(`classCode[scheme$="dwds1main"], classCode[scheme$="dwds2main"], classCode[scheme$="dwds3main"]`),
-			textsorte_sub: sorte.querySelectorAll(`classCode[scheme$="dwds1sub"], classCode[scheme$="dwds2sub"], classCode[scheme$="dwds3sub"]`),
+			textsorte: sorte.querySelectorAll(`classCode[scheme$="dwds1main"]`), // querySelectorAll eigentlich nicht nötig; das ist ein Relikt aus der Zeit als auch "dwds2main" importiert wurde; besser so lassen, eine Änderung produziert nur Fehler
+			textsorte_sub: sorte.querySelectorAll(`classCode[scheme$="dwds1sub"]`),
 		};
 		for (let wert in werte) {
 			if (!werte.hasOwnProperty(wert)) {

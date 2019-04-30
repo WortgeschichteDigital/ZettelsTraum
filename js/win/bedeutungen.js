@@ -13,7 +13,7 @@ let bedeutungen = {
 		if (!bd.length) {
 			let p = document.createElement("p");
 			p.classList.add("bd-win-keine");
-			p.textContent = "keine Bedeutungen";
+			p.textContent = "kein Bedeutungsgerüst";
 			cont.appendChild(p);
 			return;
 		}

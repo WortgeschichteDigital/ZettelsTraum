@@ -110,7 +110,7 @@ let helfer = {
 		}
 		// Cursor hoch od. runter
 		if (evt.which === 38 || evt.which === 40) {
-			if (oben === "einstellungen") { // durch die Menüs in den Einstellungen navigieren
+			if (evt.ctrlKey && oben === "einstellungen") { // durch die Menüs in den Einstellungen navigieren
 				evt.preventDefault();
 				optionen.naviMenue(evt.which);
 			}
@@ -159,6 +159,15 @@ let helfer = {
 		let aktiv = document.activeElement;
 		if (aktiv.type === "text" || aktiv.nodeName === "TEXTAREA") {
 			aktiv.blur();
+		}
+	},
+	// überprüft, ob in einem Number-Input eine zulässige Ziffer steht
+	//   i = Element
+	//     (das Number-Feld, das überprüft werden soll)
+	inputNumber (i) {
+		const v = parseInt(i.value, 10);
+		if (isNaN(v) || v < i.min || v > i.max) {
+			i.value = i.defaultValue;
 		}
 	},
 	// mehrzeilige Textfelder automatisch an die Größe des Inhalts anpassen
@@ -349,7 +358,7 @@ let helfer = {
 				overlay.schliessen(link);
 				return;
 			}
-			// Bedeutungenformular schließen
+			// Bedeutungsgerüst-Formular schließen
 			if (!document.getElementById("bedeutungen").classList.contains("aus")) {
 				if (bedeutungen.moveAktiv) {
 					bedeutungen.moveAus();

@@ -242,7 +242,7 @@ let anhaenge = {
 						oeffnen();
 					}
 				});
-				dialog.text("Die Bedeutungen wurden verändert, aber noch nicht gespeichert.\nMöchten Sie die Änderungen nicht erst einmal speichern?");
+				dialog.text("Das Bedeutungsgerüst wurde verändert, aber noch nicht gespeichert.\nMöchten Sie die Änderungen nicht erst einmal speichern?");
 				return;
 			} else if (beleg.geaendert) {
 				dialog.oeffnen("confirm", function() {

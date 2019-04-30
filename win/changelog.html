@@ -22,7 +22,31 @@
 		<main>
 			<!-- 0.7.0 -->
 			<div>
-				<h2><span data-maintainer="Nico Dorn">Version 0.7.0-beta</span><time datetime="2019-04-28T08:54:46">28. April 2019</time></h2>
+				<h2><span data-maintainer="Nico Dorn">Version 0.7.0-beta.1</span><time datetime="2019-04-30T11:26:47">30. April 2019</time></h2>
+				
+				<h3>Neue Funktionen</h3>
+				
+				<ul>
+					<li>
+						<p>Einstellungen: Der Timeout für Anfragen an das <abbr title="Deutsche Textarchiv">DTA</abbr> kann nun geändert werden. Die Option findet sich unter <i>Einstellungen &gt; Allgemeines</i>. Zulässige Werte liegen zwischen 5 Sekunden und 3 Minuten (also 180 Sekunden).</p>
+						<p>Wenn nur eine schwache Internetverbindung zur Verfügung steht, kann es sinnvoll sein, den Timeout stark zu erhöhen. Das Programm wartet dann entsprechend länger auf eine Antwort des Servers.</p>
+					</li>
+				</ul>
+				
+				<h3>Verbesserungen</h3>
+				
+				<ul>
+					<li><abbr title="Deutsches Textarchiv">DTA</abbr>-Import: Fortan wird nur noch die Textsortenangabe <q>dwds1</q> importiert. (Die unter <q>dwds2</q> gelisteten Textsorten stammen aus einer Frühzeit des Projekts und sind nicht so zuverlässig.)</li>
+					<li>Einstellungen: Die Tastatur-Navigation durch die Menüpunkte wurde auf <kbd>Strg</kbd> + <kbd>↑</kbd> / <kbd>↓</kbd> umgestellt, auch damit sie identisch zu der Navigation im <i>Handbuch</i> und der <i>technischen Dokumentation</i> funktioniert.</li>
+					<li>Die <i>technische Dokumentation</i> wurde ergänzt.</li>
+				</ul>
+				
+				<h3>Behobene Fehler</h3>
+				
+				<ul>
+					<li>Wurden an eine Kartei sehr viele Dateien angehängt, erschienen die Icons im Kopf des Programmfensters mitten auf der Seite. Bezogen auf die Überschrift zeigte sich der Fehler auch im Bedeutungsgerüst-Fenster, wenn es sehr schmal war und die Kartei nicht ein einzelnes Wort, sondern eine Wortverbindung betraf.</li>
+					<li>Behebung visueller Glitches unter <i>Einstellungen &gt; Menü</i>.</li>
+				</ul>
 			</div>
 			
 			<!-- 0.6.0 -->
@@ -39,6 +63,7 @@
 				</ul>
 				
 				<h3>Verbesserungen</h3>
+				
 				<ul>
 					<li>
 						<p>Sperrdatei: Der Mechanismus der mit Version 0.5.0 eingeführten Sperrdatei, die ein kollaboratives Arbeiten in einem gemeinsamen Netzwerkordner ermöglicht, ohne dass man sich gegenseitig die Arbeit überschreibt, wurde stark verbessert: Wird von einer BenutzerIn eine Kartei geöffnet, die durch sie zuvor am selben Computer gesperrt wurde, behandelt das Programm die gesperrte Kartei wie eine nicht gesperrte – und öffnet sie ohne Probleme.</p>
@@ -55,7 +80,7 @@
 				
 				<ul>
 					<li>Startseite: Beim Leeren der Liste zuletzt verwendeter Karteien (Funktion <i>Kartei &gt; Zuletzt verwendet &gt; Liste löschen</i>) wurde die Ansicht der Startseite der App, auf der diese Liste auch zu sehen ist, nicht aufgefrischt. Ist die Startseite sichtbar, hat die Löschaktion auch dort eine unmittelbare Konsequenz: Die Liste zuletzt verwendeter Karteien verschwindet.</li>
-					<li>Bedeutungen-Fenster: Das Tastaturkürzel <kbd>Strg</kbd> + <kbd>P</kbd> funktionierte nicht mehr.</li>
+					<li>Bedeutungsgerüst-Fenster: Das Tastaturkürzel <kbd>Strg</kbd> + <kbd>P</kbd> funktionierte nicht mehr.</li>
 					<li>Hilfe-Fenster: Lange Pfadangaben werden nun besser umgebrochen, sodass das Fenster schmaler werden kann, ohne dass Text im Off verschwindet. Dies betrifft die <i>technische Dokumentation</i> und das <i>Handbuch</i> (sobald es geschrieben wurde).</li>
 					<li>Hilfe-Fenster: Das <i>Handuch</i> und die <i>technische Dokumentation</i> konnten über das App-Menü beliebig oft geöffnet werden. Ist das Fenster schon offen, wird es ab jetzt nicht noch einmal geöffnet, sondern erhält einfach den Fokus.</li>
 					<li>Über-Fenster: Behebung visueller Glitches.</li>
@@ -88,7 +113,7 @@
 				<ul>
 					<li>Links zu Webseiten können nun via Drag-and-Drop in einen Browser gezogen und so geöffnet werden. Die Änderung betrifft alle externen Links in allen Programmfenstern.</li>
 					<li>Enthält eine Kartei viele lange Belege, war der Aufbau der Belegliste schon bei ein paar Dutzend Karteikarten mitunter recht träge. In solchen Fällen agiert die App nun deutlich performanter, ohne Abstriche bei der Funktionalität zu machen.</li>
-					<li>Die Ansicht des <i>Bedeutungen-Fensters</i>, des <i>Handbuchs</i> und der <i>technischen Dokumentation</i> lässt sich nun via Tastaturkürzel anpassen. Implementiert wurden alle Funktionen des Hauptfenster, die im Menü <i>Ansicht</i> zu finden sind. Das sind im Einzelnen:<br><kbd>Strg</kbd> + <kbd>⇧</kbd> + <kbd>+</kbd> (<i>Schrift vergrößern</i>), <kbd>Strg</kbd> + <kbd>-</kbd> (<i>Schrift verkleinern</i>), <kbd>Strg</kbd> + <kbd>0</kbd> (<i>Standardgröße</i>) und <kbd>F11</kbd> (<i>Vollbild</i>).</li>
+					<li>Die Ansicht des <i>Bedeutungsgerüst-Fensters</i>, des <i>Handbuchs</i> und der <i>technischen Dokumentation</i> lässt sich nun via Tastaturkürzel anpassen. Implementiert wurden alle Funktionen des Hauptfenster, die im Menü <i>Ansicht</i> zu finden sind. Das sind im Einzelnen:<br><kbd>Strg</kbd> + <kbd>⇧</kbd> + <kbd>+</kbd> (<i>Schrift vergrößern</i>), <kbd>Strg</kbd> + <kbd>-</kbd> (<i>Schrift verkleinern</i>), <kbd>Strg</kbd> + <kbd>0</kbd> (<i>Standardgröße</i>) und <kbd>F11</kbd> (<i>Vollbild</i>).</li>
 					<li>Belegliste und Karteikarte: Beim Import von Belgen aus dem <abbr title="Deutschen Textarchiv">DTA</abbr> werden Trennstriche am Zeilenende mit <q>[¬]</q> markiert. Werden diese Trennstrichmarkierungen über die Funktion <img src="../img/liste-trennung.svg" width="24" height="24" alt=""> ausgeschaltet erscheint fortan ein Bindestrich, wenn das nächste Wort mit einem Großbuchstaben beginnt. Aus <q>Eisenbahn[¬]Differentialtarife</q> wird nun also <q>Eisenbahn-Differentialtarife</q> und nicht mehr <q>EisenbahnDifferentialtarife</q>.</li>
 					<li>
 						<p>Notizen und Karteikarte: Seit Version 0.3.0 schließen sich Karteikarte und Notizenfenster nach dem Speichern nicht mehr automatisch. Von nun an gibt es Einstellungen, mit denen dieses Verhalten wiederhergestellt werden kann, und zwar unter <i>Programm &gt; Einstellungen &gt; Allgemeines</i> <abbr title="beziehungsweise">bzw.</abbr> <i>Programm &gt; Einstellungen &gt; Karteikarte</i>.</p>
@@ -103,7 +128,7 @@
 				<h3>Behobene Fehler</h3>
 				
 				<ul>
-					<li>Wurde das Hauptfenster der App über die Schließenfunktion der Fensterleiste geschlossen, blieben <abbr title="eventuell">evtl.</abbr> offene Nebenfenster (<i>Bedeutungen-Fenster</i>, <i>Handbuch</i>, <i>technische Dokumentation</i>) weiter geöffnet. Diese Fenster gehen nun mit dem Schließen des Hauptfenster automatisch zu.</li>
+					<li>Wurde das Hauptfenster der App über die Schließenfunktion der Fensterleiste geschlossen, blieben <abbr title="eventuell">evtl.</abbr> offene Nebenfenster (<i>Bedeutungsgerüst-Fenster</i>, <i>Handbuch</i>, <i>technische Dokumentation</i>) weiter geöffnet. Diese Fenster gehen nun mit dem Schließen des Hauptfenster automatisch zu.</li>
 					<li>Anzeige des Belegtexts: Beim Ausblenden der Seitenumbruchsmarkierung (also <abbr title="zum Beispiel">z. B.</abbr> <q>[:35:]</q>) wurde auch das Leerzeichen vor der Markierung entfernt, was mitunter zur Komposition nicht zusammengehöriger Wörter führte.</li>
 					<li>Kopieren des Belegtexts: Wurde der Belegtext über das Icon <img src="../img/tool-kopieren.svg" width="24" height="24" alt=""> in der Belegliste oder Karteikarte komplett kopiert, fanden sich im Plaintext noch HTML-Tags. Diese werden nun entfernt. (Die Änderung hat keine Auswirkungen, wenn der Text mit allen Formatierungen in ein Office-Programm eingefügt werden soll.)</li>
 					<li>Kopieren des Belegtextes: War das Wort der Kartei hervorgehoben (gefettet und gelb hinterlegt), veschwand es beim Einfügen in <i>LibreOffice</i> ganz.</li>
@@ -125,11 +150,11 @@
 				
 				<ul>
 					<li>
-						<p>Bedeutungen-Fenster: Es gibt nun ein separates Fenster, in dem die bisher gesammelten Bedeutungen zum jeweiligen Wort in einer Baumstruktur angezeigt werden. Geöffnet werden kann das Fenster über das Menü (<i>Kartei &gt; Bedeutungen-Fenster</i>), das Tastaturkürzel <kbd>Strg</kbd> + <kbd>⇧</kbd> + <kbd>B</kbd> oder das Icon <img src="../img/quick-bedeutungen-fenster.svg" width="24" height="24" alt=""> in der Quick-Access-Bar.</p>
-						<p>Die Zählung der Bedeutungsebenen beginnt vorerst mit römischen Ziffern (I., II. <abbr title="und so weiter">usw.</abbr>). Dies wird sich anpassen lassen, sobald die zentrale Bedeutungsfunktion programmiert ist.</p>
+						<p>Bedeutungsgerüst-Fenster: Es gibt nun ein separates Fenster, in dem die bisher gesammelten Bedeutungen zum jeweiligen Wort in einer Baumstruktur angezeigt werden. Geöffnet werden kann das Fenster über das Menü (<i>Kartei &gt; Bedeutungsgerüst-Fenster</i>), das Tastaturkürzel <kbd>Strg</kbd> + <kbd>⇧</kbd> + <kbd>B</kbd> oder das Icon <img src="../img/quick-bedeutungen-fenster.svg" width="24" height="24" alt=""> in der Quick-Access-Bar.</p>
+						<p>Die Zählung der Bedeutungsebenen beginnt vorerst mit römischen Ziffern (I., II. <abbr title="und so weiter">usw.</abbr>). Dies wird sich anpassen lassen, sobald die zentrale Bedeutungsgerüstfunktion programmiert ist.</p>
 						<p>Durch Klick auf eine der Bedeutungen kann diese in eine gerade geöffnete Karteikarte im Hauptfenster eingetragen werden. Steht dort im Textfeld <i>Bedeutung</i> schon ein Wert wird dieser keinesfalls automatisch, sondern allenfalls auf Nachfrage überschrieben. Das Programm zeigt hier dasselbe Verhalten wie beim Ergänzen des Feldes über das Dropdown-Menü.</p>
-						<p>Der Bedeutungsbaum kann über das Drucker-Icon neben der Überschrift oder über das Tastaturkürzel <kbd>Strg</kbd> + <kbd>P</kbd> ausgedruckt werden. Dafür wird die Druckfunktion des Hauptfensters verwendet (<abbr title="siehe unten">s. u.</abbr>), die auch ein Kopieren des Bedeutungsbaums ermöglicht.</p>
-						<p>Ist das Bedeutungen-Fenster einmal offen, wird dessen Inhalt beim Ergänzen, Ändern oder Löschen von Belegen im Hauptfenster automatisch aufgefrischt.</p>
+						<p>Das Bedeutungsgerüst kann über das Drucker-Icon neben der Überschrift oder über das Tastaturkürzel <kbd>Strg</kbd> + <kbd>P</kbd> ausgedruckt werden. Dafür wird die Druckfunktion des Hauptfensters verwendet (<abbr title="siehe unten">s. u.</abbr>), die auch ein Kopieren des Bedeutungsgerüsts ermöglicht.</p>
+						<p>Ist das Bedeutungsgerüst-Fenster einmal offen, wird dessen Inhalt beim Ergänzen, Ändern oder Löschen von Belegen im Hauptfenster automatisch aufgefrischt.</p>
 					</li>
 					<li>
 						<p>Druckfunktion: Karteikarten können nun ausgedruckt werden. Die Funktion steht sowohl für einzelne Karteikarten als auch für die komplette Belegliste zur Verfügung. Beim Druck einer Belegliste werden jene Belege gedruckt, die aktuell in der Liste erscheinen.</p>
@@ -161,7 +186,7 @@
 				
 				<ul>
 					<li>Viele Funktionen des Hauptfensters waren auch aus den Nebenfenstern (Handbuch, Dokumentation <abbr title="und so weiter">usw.</abbr>) heraus aufzurufen, wenn das zugehörige Tastaturkürzel gedrückt wurde. Dies könnte unerwünschte Effekte haben und wird fortan unterbunden.</li>
-					<li>Filterleiste: Die Darstellung kompliziert verschachtelter Bedeutungsbäume war mitunter grob falsch.</li>
+					<li>Filterleiste: Die Darstellung kompliziert verschachtelter Bedeutungsgerüste war mitunter grob falsch.</li>
 					<li>Filterleiste: Bei aktiviertem Reduktionsmodus wurde der Filterblock <i>Verschiedenes</i> nie als aktiv – also grün – markiert, wenn die Filterlogik auf <i>exklusiv</i> stand.</li>
 					<li>Karteikarte: In der Leseansicht wurde die Markierung mit Sternen fehlerhaft dargestellt.</li>
 					<li>Karteikarte: Wurde das Speichern der Karte durch das Drücken von <kbd>↵</kbd> oder <kbd>Strg</kbd> + <kbd>↵</kbd> angestoßen, während man sich in einem der Textfelder befand, verließ der Fokus das Textfeld.</li>

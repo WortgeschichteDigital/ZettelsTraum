@@ -65,7 +65,7 @@ let kartei = {
 		liste.aufbauen(true);
 		// alle Overlays schließen
 		overlay.alleSchliessen();
-		// Bedeutungen-Fenster schließen
+		// Bedeutungsgerüst-Fenster schließen
 		bedeutungenWin.oeffnen(false);
 		// neue Karte erstellen
 		beleg.erstellen();
@@ -162,7 +162,7 @@ let kartei = {
 			kartei.karteiGeaendert(false);
 			// alle Overlays schließen
 			overlay.alleSchliessen();
-			// Bedeutungen-Fenster schließen
+			// Bedeutungsgerüst-Fenster schließen
 			bedeutungenWin.oeffnen(false);
 			// alle Filter zurücksetzen (wichtig für Text- und Zeitraumfilter)
 			filter.ctrlReset(false);
