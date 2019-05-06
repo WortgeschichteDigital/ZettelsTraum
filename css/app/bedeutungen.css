@@ -85,7 +85,8 @@
 	text-indent: -35px;
 }
 
-#bedeutungen-cont tr.bedeutungen-aktiv td {
+#bedeutungen-cont tr.bedeutungen-aktiv td,
+#bedeutungen-cont tr.bedeutungen-affiziert td {
 	background-color: var(--farbe);
 	color: #fff;
 }
@@ -93,7 +94,7 @@
 .icon-move {
 	-webkit-mask-image: url(../../img/bedeutungen-move.svg);
 	mask-image: url(../../img/bedeutungen-move.svg);
-	background-color: #fff;
+	background-color: transparent;
 }
 
 .icon-move:hover {

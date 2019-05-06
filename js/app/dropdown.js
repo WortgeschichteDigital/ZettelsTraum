@@ -135,7 +135,7 @@ let dropdown = {
 		if (feld_id === "einstellung-bearbeiterin" ||
 				feld_id === "meta-be" ||
 				/^redaktion-person/.test(feld_id)) {
-			dropdown.data = [...privat.bearbeiterinnen];
+			dropdown.data = [...optionen.data.personen];
 		} else if (/^redaktion-ereignis/.test(feld_id)) {
 			dropdown.data = [...redaktion.ereignisse];
 		} else if (feld_id === "beleg-bd") {

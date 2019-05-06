@@ -98,11 +98,11 @@
 
 #beleg input[type="number"] {
 	margin-left: 10px;
-	width: 42px;
+	width: 57px;
 }
 
 #beleg input[type="text"]#beleg-dta {
-	width: calc(100% - 12px - 64px - 145px); /* 64px Number-Feld, 145px Button */
+	width: calc(100% - 12px - 79px - 145px); /* 64px Number-Feld, 145px Button */
 }
 
 #beleg-dta-button {

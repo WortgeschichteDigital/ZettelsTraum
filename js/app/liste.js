@@ -550,7 +550,10 @@ let liste = {
 				span.textContent = `,${autor[1]}`;
 				autor_span.appendChild(span);
 			}
+			liste.belegVorschauTs(autor_span, beleg_akt, " ", "");
 			autor_span.appendChild(document.createTextNode(": "));
+		} else {
+			liste.belegVorschauTs(frag, beleg_akt, "", " ");
 		}
 		// Textschnitt in Anführungsstriche
 		let q = document.createElement("q");
@@ -558,6 +561,26 @@ let liste = {
 		frag.appendChild(q);
 		// Fragment zurückgeben
 		return frag;
+	},
+	// Textsorte hinter Jahr bzw. Autorname in Vorschaukopf des Belegs einhängen
+	//   ele = Element
+	//     (hier wird die Textsorte angehängt)
+	//   beleg_akt = Object
+	//     (Verweis auf den aktuellen Beleg)
+	//   vor = String
+	//     (Text vor der Textsorte)
+	//   nach = String
+	//     (Text nach der Textsorte)
+	belegVorschauTs (ele, beleg_akt, vor, nach) {
+		if (!beleg_akt.ts || !optionen.data.einstellungen.textsorte) {
+			return;
+		}
+		ele.appendChild(document.createTextNode(`${vor}(`));
+		let span = document.createElement("span");
+		span.classList.add("liste-textsorte");
+		span.textContent = beleg_akt.ts.split(":")[0];
+		ele.appendChild(span);
+		ele.appendChild(document.createTextNode(`)${nach}`));
 	},
 	// Trennungszeichen entfernen
 	// (Funktion wird auch für andere Kontexte benutzt, z. B. in filter.js und beleg.js)

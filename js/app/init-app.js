@@ -55,6 +55,8 @@ window.addEventListener("load", function() {
 	}
 	// Wort-Element
 	document.getElementById("wort").addEventListener("click", () => kartei.wortAendern());
+	// Erinnerungen-Icon
+	document.getElementById("erinnerungen").addEventListener("click", () => erinnerungen.show());
 	// Notizen-Icon
 	document.getElementById("notizen-icon").addEventListener("click", () => notizen.oeffnen());
 	// Programm-Icon
@@ -120,6 +122,7 @@ window.addEventListener("load", function() {
 	for (let i = 0, len = ee.length; i < len; i++) {
 		optionen.aendereEinstellungListener(ee[i]);
 	}
+	document.getElementById("einstellung-personenliste").addEventListener("click", () => optionen.aenderePersonenliste());
 	// Formvarianten-Fenster
 	let stamm_inputs = document.querySelectorAll("#stamm input");
 	for (let i = 0, len = stamm_inputs.length; i < len; i++) {

@@ -157,8 +157,7 @@ input[type="date"]::-webkit-clear-button {
 }
 
 input[type="date"]::-webkit-inner-spin-button,
-input[type="date"]::-webkit-outer-spin-button,
-input[type="number"]::-webkit-inner-spin-button {
+input[type="date"]::-webkit-outer-spin-button {
 	-webkit-appearance: none;
 	margin: 0;
 }
@@ -183,7 +182,8 @@ input[type="button"][value="Schließen"] {
 }
 
 input[type="button"][value="DTA-Import"],
-input[type="button"][value="Importieren"] {
+input[type="button"][value="Importieren"],
+input[type="button"][value^="Personenliste"]{
 	background-image: url(../../img/button-import.svg);
 }
 

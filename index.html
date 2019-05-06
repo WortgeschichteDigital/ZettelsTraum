@@ -23,6 +23,7 @@
 		<script src="js/app/beleg.js"></script>
 		<script src="js/app/dialog.js"></script>
 		<script src="js/app/drucken.js"></script>
+		<script src="js/app/erinnerungen.js"></script>
 		<script src="js/app/filter.js"></script>
 		<script src="js/app/helfer.js"></script>
 		<script src="js/app/kartei.js"></script>
@@ -35,7 +36,6 @@
 		<script src="js/app/overlay.js"></script>
 		<script src="js/app/dropdown.js"></script>
 		<script src="js/app/popup.js"></script>
-		<script src="js/app/privat.js"></script>
 		<script src="js/app/redaktion.js"></script>
 		<script src="js/app/sicherheitsfrage.js"></script>
 		<script src="js/app/stamm.js"></script>
@@ -71,6 +71,7 @@
 		<header>
 			<h1 id="wort" class="keine-kartei">keine Kartei geöffnet</h1
 				><span id="kartei-geaendert">*</span
+				><span class="aus" id="erinnerungen"><img src="img/kopf-erinnerungen.svg" width="24" height="24" alt="" title="Erinnerungen anzeigen"></span
 				><span class="aus" id="notizen-icon"><img src="img/kopf-notizen.svg" width="24" height="24" alt="" title="Notizen anzeigen"></span
 				><span id="kartei-anhaenge"></span
 				><span id="icon"><img src="img/icon.svg" width="48" height="48" alt=""></span>
@@ -353,6 +354,7 @@
 						<li><a href="#" id="einstellungen-link-allgemeines" class="aktiv">Allgemeines</a></li>
 						<li><a href="#" id="einstellungen-link-menue">Menü</a></li>
 						<li><a href="#" id="einstellungen-link-filter">Filter</a></li>
+						<li><a href="#" id="einstellungen-link-belegliste">Belegliste</a></li>
 						<li><a href="#" id="einstellungen-link-karteikarten">Karteikarte</a></li>
 					</ul>
 				</div>
@@ -367,6 +369,7 @@
 							><label for="einstellung-bedeutungen-schliessen">Bedeutungsgerüst-Formular nach dem Speichern schließen</label></p>
 						<p><input type="checkbox" id="einstellung-notizen-schliessen"
 							><label for="einstellung-notizen-schliessen">Notizen-Fenster nach dem Speichern schließen</label></p>
+						<p class="button"><input type="button" value="Personenliste laden" id="einstellung-personenliste"></p>
 					</section>
 					<section id="einstellungen-sec-menue" class="aus">
 						<p><input type="checkbox" id="einstellung-autoHideMenuBar"
@@ -426,6 +429,10 @@
 							><label for="einstellung-filter-inaktive">inaktive Filterblöcke automatisch zuklappen</label></p>
 						<p><input type="checkbox" id="einstellung-nicht-karte-gefiltert"
 							><label for="einstellung-nicht-karte-gefiltert">nicht melden, wenn ein neuer Beleg wegen der Filterregeln nicht in der Belegliste erscheint</label></p>
+					</section>
+					<section id="einstellungen-sec-belegliste" class="aus">
+						<p><input type="checkbox" id="einstellung-textsorte"
+							><label for="einstellung-textsorte">Textsorte in den Belegkopf eintragen</label></p>
 					</section>
 					<section id="einstellungen-sec-karteikarten" class="aus">
 						<p><input type="checkbox" id="einstellung-unvollstaendig"

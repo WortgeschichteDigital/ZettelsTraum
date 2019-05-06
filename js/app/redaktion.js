@@ -262,6 +262,8 @@ let redaktion = {
 			if (data.rd[slot][redaktion.feldtypen[feldtyp]] !== val) {
 				data.rd[slot][redaktion.feldtypen[feldtyp]] = val;
 				kartei.karteiGeaendert(true);
+				// Erinnerungen-Icon auffrischen
+				erinnerungen.check();
 			}
 			// Tabellenzelle überschreiben
 			redaktion.zelleErsetzen(feldtyp, val, this);
@@ -355,6 +357,8 @@ let redaktion = {
 		data.rd.push(obj);
 		kartei.karteiGeaendert(true);
 		redaktion.tabelle();
+		// Erinnerungen-Icon auffrischen
+		erinnerungen.check();
 	},
 	// Eintrag um eine Position nach oben schieben
 	//   a = Element

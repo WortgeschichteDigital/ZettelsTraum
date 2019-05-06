@@ -22,30 +22,42 @@
 		<main>
 			<!-- 0.7.0 -->
 			<div>
-				<h2><span data-maintainer="Nico Dorn">Version 0.7.0-beta.1</span><time datetime="2019-04-30T11:26:47">30. April 2019</time></h2>
+				<h2><span data-maintainer="Nico Dorn">Version 0.7.0</span><time datetime="2019-05-06T14:26:09">6. Mai 2019</time></h2>
 				
 				<h3>Neue Funktionen</h3>
 				
 				<ul>
 					<li>
-						<p>Einstellungen: Der Timeout für Anfragen an das <abbr title="Deutsche Textarchiv">DTA</abbr> kann nun geändert werden. Die Option findet sich unter <i>Einstellungen &gt; Allgemeines</i>. Zulässige Werte liegen zwischen 5 Sekunden und 3 Minuten (also 180 Sekunden).</p>
+						<p>Einstellungen: Der Timeout für Anfragen an das <abbr title="Deutsche Textarchiv">DTA</abbr> kann nun geändert werden. Die Option findet sich unter <i>Einstellungen &gt; Allgemeines</i>. Zulässige Werte liegen zwischen 5 Sekunden und 3 Minuten (also 180 Sekunden).</p>
 						<p>Wenn nur eine schwache Internetverbindung zur Verfügung steht, kann es sinnvoll sein, den Timeout stark zu erhöhen. Das Programm wartet dann entsprechend länger auf eine Antwort des Servers.</p>
 					</li>
+					<li>
+						<p>Die hardkodierte Liste der BearbeiterInnnen wurde gelöscht und durch eine Importfunktion ersetzt. Jetzt kann der Quelltext verbreitet werden, ohne dass dadurch zugleich eine Liste der MitarbeiterInnen des Projekts kursiert (Datenschutz!). Außerdem kann fortan jede BenutzerIn der App die Liste auch ohne Programmierkenntnisse anpassen.</p>
+						<p>Dazu muss einfach eine Plain-Text-Datei erstellt werden, die eine Liste an Personen enthält. Geeignet hierfür ist <abbr title="zum Beispiel">z. B.</abbr> das kleine <i>Windows</i>-Programm <i>Editor</i>. Der Zeilenumbruch dient dabei als Trennzeichen. Jede Zeile enthält also einen Personennamen:</p>
+						<pre class="quelltext">Müller, Thomas
+Mustermann, Erika
+...</pre>
+						<p>Die Import-Funktion verbirgt sich hinter dem Button <i>Personenliste laden </i> unter <i>Programm &gt; Einstellungen &gt; Allgemeines</i>.</p>
+					</li>
+					<li>Es gibt nun eine Funktion, die darauf aufmerksam macht, dass vergessen wurde, sich oder andere MitarbeiterInnen namentlich zu registrieren. Fehlen Angaben zu den BearbeiterInnen in den <i>Einstellungen</i>, den <i>Metadaten</i> oder im <i>Redaktionsfenster</i>, erscheint im Programmkopf neben dem Wort das Icon <img src="../img/dialog-alert.svg" width="24" height="24" alt="">. Klickt man auf das Icon, wird angezeigt, wo <abbr title="eventuell">evtl.</abbr> noch der Name einer BearbeiterIn eingegeben werden sollte.</li>
+					<li>Belegliste: Auf Wunsch kann zusätzlich zu Datum und Autor auch die Textsorte im Kopf der Belegliste eingeblendet werden. Die Option ist standardmäßig deaktiviert. Aktivieren lässt sie sich in den Optionen unter <i>Programm &gt; Einstellungen &gt; Belegliste</i>.</li>
 				</ul>
 				
 				<h3>Verbesserungen</h3>
 				
 				<ul>
-					<li><abbr title="Deutsches Textarchiv">DTA</abbr>-Import: Fortan wird nur noch die Textsortenangabe <q>dwds1</q> importiert. (Die unter <q>dwds2</q> gelisteten Textsorten stammen aus einer Frühzeit des Projekts und sind nicht so zuverlässig.)</li>
+					<li><abbr title="Deutsches Textarchiv">DTA</abbr>-Import: Fortan wird nur noch die Textsortenangabe <q>dwds1</q> importiert. (Die im <abbr title="Text Encoding Initiative" lang="en">TEI</abbr>-Header der <abbr title="Deutsches Textarchiv">DTA</abbr>-Texte unter <q>dwds2</q> gelisteten Textsorten stammen aus einer Frühzeit des Projekts und sind nicht so zuverlässig.)</li>
 					<li>Einstellungen: Die Tastatur-Navigation durch die Menüpunkte wurde auf <kbd>Strg</kbd> + <kbd>↑</kbd> / <kbd>↓</kbd> umgestellt, auch damit sie identisch zu der Navigation im <i>Handbuch</i> und der <i>technischen Dokumentation</i> funktioniert.</li>
-					<li>Die <i>technische Dokumentation</i> wurde ergänzt.</li>
+					<li>Eingabefelder für Ziffern haben nun (wieder) Spin-Buttons (kleine Pfeile, mit denen die Ziffer im Feld hoch- oder runtergezählt werden kann).</li>
+					<li>Die <i>technische Dokumentation</i> wurde ergänzt <abbr title="beziehungsweise">bzw.</abbr> angepasst.</li>
+					<li><a href="#" class="ueber-electron"><i>Electron</i></a>-Update auf Version 4.2.0.</li>
 				</ul>
 				
 				<h3>Behobene Fehler</h3>
 				
 				<ul>
 					<li>Wurden an eine Kartei sehr viele Dateien angehängt, erschienen die Icons, die eigentlich im Kopf des Programmfensters stehen sollten, mitten auf der Seite. Bezogen auf die Überschrift zeigte sich der Fehler auch im Bedeutungsgerüst-Fenster, wenn es sehr schmal war und die Kartei nicht ein einzelnes Wort, sondern eine Wortverbindung betraf.</li>
-					<li>Behebung visueller Glitches unter <i>Einstellungen &gt; Menü</i>.</li>
+					<li>Behebung visueller Glitches unter <i>Einstellungen &gt; Menü</i>.</li>
 				</ul>
 			</div>
 			
@@ -58,7 +70,7 @@
 				<ul>
 					<li>
 						<p>Wie Sie sehen: Der <i>Changelog</i> hat nun ein eigenes Fenster, das mehr Anzeigeraum bietet und das Hauptfenster nicht blockiert. So können parallel zum Lesen der Änderungen neue Funktionen ausprobiert werden.</p>
-						<p>Der <i>Changelog</i> ist wie gehabt aus dem Fenster <i>Über <span class="app-name"></span></i> heraus zu erreichen, aber auch direkt via <i>Hilfe &gt; Changelog</i>.</p>
+						<p>Der <i>Changelog</i> ist wie gehabt aus dem Fenster <i>Über <span class="app-name"></span></i> heraus zu erreichen, aber auch direkt via <i>Hilfe &gt; Changelog</i>.</p>
 					</li>
 				</ul>
 				
@@ -69,7 +81,7 @@
 						<p>Sperrdatei: Der Mechanismus der mit Version 0.5.0 eingeführten Sperrdatei, die ein kollaboratives Arbeiten in einem gemeinsamen Netzwerkordner ermöglicht, ohne dass man sich gegenseitig die Arbeit überschreibt, wurde stark verbessert: Wird von einer BenutzerIn eine Kartei geöffnet, die durch sie zuvor am selben Computer gesperrt wurde, behandelt das Programm die gesperrte Kartei wie eine nicht gesperrte – und öffnet sie ohne Probleme.</p>
 						<p>Dieses Verhalten ist <abbr title="zum Beispiel">z. B.</abbr> für den Fall eines Computerabsturzes wichtig, wenn dieselbe Person danach am selben Rechner dort weiterarbeiten möchte, wo sie zuvor aufgehört hat. Die vor dem Absturz geöffnete Kartei ist in dieser Situation nämlich immer noch gesperrt, da die App nicht ordungsgemäß beendet wurde, sondern zusammen mit dem Computer abgestürzt ist.</p>
 					</li>
-					<li>Die Gliederung der Icons in der Quick-Access-Bar wurde leicht angepasst, um die Übersichtlichkeit zu erhöhen. Auch in den betreffenden Einstellungen (<i>Programm &gt; Einstellungen &gt; Menü</i>) sind die Funktionsgruppen nun klarer ersichtlich.</li>
+					<li>Die Gliederung der Icons in der Quick-Access-Bar wurde leicht angepasst, um die Übersichtlichkeit zu erhöhen. Auch in den betreffenden Einstellungen (<i>Programm &gt; Einstellungen &gt; Menü</i>) sind die Funktionsgruppen nun klarer ersichtlich.</li>
 					<li>Wird versucht dieselbe Kartei, die aktuell bearbeitet wird, noch einmal zu öffnen, wird dieses erneute Öffnen unterbunden. Stattdessen erscheint eine Meldung, dass die Datei bereits geöffnet ist.</li>
 					<li>Startseite: Via Rechtsklick können nun einzelne Karteien aus der Liste zuletzt verwendeter Dateien entfernt werden. (Die Karteien werden natürlich nur aus der Liste entfernt und nicht von der Festplatte gelöscht.)</li>
 					<li>Die <i>technische Dokumentation</i> wurde an einigen Stellen ergänzt.</li>
@@ -79,7 +91,7 @@
 				<h3>Behobene Fehler</h3>
 				
 				<ul>
-					<li>Startseite: Beim Leeren der Liste zuletzt verwendeter Karteien (Funktion <i>Kartei &gt; Zuletzt verwendet &gt; Liste löschen</i>) wurde die Ansicht der Startseite der App, auf der diese Liste auch zu sehen ist, nicht aufgefrischt. Ist die Startseite sichtbar, hat die Löschaktion auch dort eine unmittelbare Konsequenz: Die Liste zuletzt verwendeter Karteien verschwindet.</li>
+					<li>Startseite: Beim Leeren der Liste zuletzt verwendeter Karteien (Funktion <i>Kartei &gt; Zuletzt verwendet &gt; Liste löschen</i>) wurde die Ansicht der Startseite der App, auf der diese Liste auch zu sehen ist, nicht aufgefrischt. Ist die Startseite sichtbar, hat die Löschaktion auch dort eine unmittelbare Konsequenz: Die Liste zuletzt verwendeter Karteien verschwindet.</li>
 					<li>Bedeutungsgerüst-Fenster: Das Tastaturkürzel <kbd>Strg</kbd> + <kbd>P</kbd> funktionierte nicht mehr.</li>
 					<li>Hilfe-Fenster: Lange Pfadangaben werden nun besser umgebrochen, sodass das Fenster schmaler werden kann, ohne dass Text im Off verschwindet. Dies betrifft die <i>technische Dokumentation</i> und das <i>Handbuch</i> (sobald es geschrieben wurde).</li>
 					<li>Hilfe-Fenster: Das <i>Handuch</i> und die <i>technische Dokumentation</i> konnten über das App-Menü beliebig oft geöffnet werden. Ist das Fenster schon offen, wird es ab jetzt nicht noch einmal geöffnet, sondern erhält einfach den Fokus.</li>
@@ -96,7 +108,7 @@
 				<h3>Neue Funktionen</h3>
 				
 				<ul>
-					<li>Die <i>technische Dokumentation</i> ist fertig. Wer sie lesen möchte, findet sie unter <i>Hilfe &gt; Technische Dokumentation</i>.</li>
+					<li>Die <i>technische Dokumentation</i> ist fertig. Wer sie lesen möchte, findet sie unter <i>Hilfe &gt; Technische Dokumentation</i>.</li>
 					<li>
 						<p>Für die Installation unter <i>Windows</i> wird ab sofort ein <abbr title="Nullsoft Scriptable Install System" lang="en">NSIS</abbr>-Installer verwendet. Dieser Installer kann automatisch den <abbr title="Wortgeschichte digital">WGD</abbr>-Dateityp im Betriebssystem registrieren, sodass <abbr title="Wortgeschichte digital">WGD</abbr>-Dateien fortan einfach durch Klick im <i>Windows-Explorer</i> geöffnet werden können.</p>
 						<p>Das Erstellen von DEB-Paketen und das Registrieren der <abbr title="Wortgeschichte digital">WGD</abbr>-Dateien unter <i>Linux</i> wurde ebenfalls eingerichtet.</p>
@@ -116,7 +128,7 @@
 					<li>Die Ansicht des <i>Bedeutungsgerüst-Fensters</i>, des <i>Handbuchs</i> und der <i>technischen Dokumentation</i> lässt sich nun via Tastaturkürzel anpassen. Implementiert wurden alle Funktionen des Hauptfenster, die im Menü <i>Ansicht</i> zu finden sind. Das sind im Einzelnen:<br><kbd>Strg</kbd> + <kbd>⇧</kbd> + <kbd>+</kbd> (<i>Schrift vergrößern</i>), <kbd>Strg</kbd> + <kbd>-</kbd> (<i>Schrift verkleinern</i>), <kbd>Strg</kbd> + <kbd>0</kbd> (<i>Standardgröße</i>) und <kbd>F11</kbd> (<i>Vollbild</i>).</li>
 					<li>Belegliste und Karteikarte: Beim Import von Belgen aus dem <abbr title="Deutschen Textarchiv">DTA</abbr> werden Trennstriche am Zeilenende mit <q>[¬]</q> markiert. Werden diese Trennstrichmarkierungen über die Funktion <img src="../img/liste-trennung.svg" width="24" height="24" alt=""> ausgeschaltet erscheint fortan ein Bindestrich, wenn das nächste Wort mit einem Großbuchstaben beginnt. Aus <q>Eisenbahn[¬]Differentialtarife</q> wird nun also <q>Eisenbahn-Differentialtarife</q> und nicht mehr <q>EisenbahnDifferentialtarife</q>.</li>
 					<li>
-						<p>Notizen und Karteikarte: Seit Version 0.3.0 schließen sich Karteikarte und Notizenfenster nach dem Speichern nicht mehr automatisch. Von nun an gibt es Einstellungen, mit denen dieses Verhalten wiederhergestellt werden kann, und zwar unter <i>Programm &gt; Einstellungen &gt; Allgemeines</i> <abbr title="beziehungsweise">bzw.</abbr> <i>Programm &gt; Einstellungen &gt; Karteikarte</i>.</p>
+						<p>Notizen und Karteikarte: Seit Version 0.3.0 schließen sich Karteikarte und Notizenfenster nach dem Speichern nicht mehr automatisch. Von nun an gibt es Einstellungen, mit denen dieses Verhalten wiederhergestellt werden kann, und zwar unter <i>Programm &gt; Einstellungen &gt; Allgemeines</i> <abbr title="beziehungsweise">bzw.</abbr> <i>Programm &gt; Einstellungen &gt; Karteikarte</i>.</p>
 						<p><span class="obacht">Achtung!</span> Die Optionen sind standardmäßig aktiviert. Mit dieser Version wird also zunächst das ältere Verhalten der App wiederhergestellt.</p>
 					</li>
 					<li>Korpora: Die Liste wurde um den Punkt <i>Referenz- und Zeitungskorpora</i> ergänzt.</li>
@@ -150,7 +162,7 @@
 				
 				<ul>
 					<li>
-						<p>Bedeutungsgerüst-Fenster: Es gibt nun ein separates Fenster, in dem die bisher gesammelten Bedeutungen zum jeweiligen Wort in einer Baumstruktur angezeigt werden. Geöffnet werden kann das Fenster über das Menü (<i>Kartei &gt; Bedeutungsgerüst-Fenster</i>), das Tastaturkürzel <kbd>Strg</kbd> + <kbd>⇧</kbd> + <kbd>B</kbd> oder das Icon <img src="../img/quick-bedeutungen-fenster.svg" width="24" height="24" alt=""> in der Quick-Access-Bar.</p>
+						<p>Bedeutungsgerüst-Fenster: Es gibt nun ein separates Fenster, in dem die bisher gesammelten Bedeutungen zum jeweiligen Wort in einer Baumstruktur angezeigt werden. Geöffnet werden kann das Fenster über das Menü (<i>Kartei &gt; Bedeutungsgerüst-Fenster</i>), das Tastaturkürzel <kbd>Strg</kbd> + <kbd>⇧</kbd> + <kbd>B</kbd> oder das Icon <img src="../img/quick-bedeutungen-fenster.svg" width="24" height="24" alt=""> in der Quick-Access-Bar.</p>
 						<p>Die Zählung der Bedeutungsebenen beginnt vorerst mit römischen Ziffern (I., II. <abbr title="und so weiter">usw.</abbr>). Dies wird sich anpassen lassen, sobald die zentrale Bedeutungsgerüstfunktion programmiert ist.</p>
 						<p>Durch Klick auf eine der Bedeutungen kann diese in eine gerade geöffnete Karteikarte im Hauptfenster eingetragen werden. Steht dort im Textfeld <i>Bedeutung</i> schon ein Wert wird dieser keinesfalls automatisch, sondern allenfalls auf Nachfrage überschrieben. Das Programm zeigt hier dasselbe Verhalten wie beim Ergänzen des Feldes über das Dropdown-Menü.</p>
 						<p>Das Bedeutungsgerüst kann über das Drucker-Icon neben der Überschrift oder über das Tastaturkürzel <kbd>Strg</kbd> + <kbd>P</kbd> ausgedruckt werden. Dafür wird die Druckfunktion des Hauptfensters verwendet (<abbr title="siehe unten">s. u.</abbr>), die auch ein Kopieren des Bedeutungsgerüsts ermöglicht.</p>
@@ -176,10 +188,10 @@
 					<li>Die Breite der Filterleiste passt sich dynamisch an die Breite des Programmfensters an. Sie nimmt nun 40 % des verfügbaren Platzes ein, jedoch mindestens 300 Pixel und höchsten 600 Pixel, was dem Doppelten der bisherigen fixen Breite entspricht.</li>
 					<li>Anstelle von <i>DejaVu</i> wird als Schriftart fortan <i>Noto</i> benutzt. (Einige im <abbr title="Deutschen Textarchiv">DTA</abbr> häufig verwendete Glyphen sind in <i>DejaVu</i> nicht vorhanden.)</li>
 					<li>Belegliste: Die Lesbarkeit der Felder <i>Bedeutung</i> und <i>Textsorte</i> wurde verbessert. Wurden mehrere Bedeutungen <abbr title="beziehungsweise">bzw.</abbr> Textsorten eingetragen, werden sie in der Anzeige durch einen größeren Durchschuss voneinander getrennt.</li>
-					<li>Karteikarte: Die Textfelder <i>Bedeutung</i> und <i>Textsorte</i> können nun auch ohne Nachfrage aus dem zugehörigen Dropdown-Menü heraus ergänzt werden. Eine Option dafür findet sich in <i>Programm &gt; Einstellungen &gt; Karteikarte</i>. Die Option lässt sich auch über das Dialogfenster aktivieren, das erscheint, wenn ein Textfeld bereits gefüllt ist.</li>
+					<li>Karteikarte: Die Textfelder <i>Bedeutung</i> und <i>Textsorte</i> können nun auch ohne Nachfrage aus dem zugehörigen Dropdown-Menü heraus ergänzt werden. Eine Option dafür findet sich in <i>Programm &gt; Einstellungen &gt; Karteikarte</i>. Die Option lässt sich auch über das Dialogfenster aktivieren, das erscheint, wenn ein Textfeld bereits gefüllt ist.</li>
 					<li>Dropdown-Menü: Immer dann, wenn der Inhalt eines Dropdown-Menüs unterhalb des Textfeldes nicht komplett angezeigt werden kann, wird das Menü automatisch über dem Textfeld geöffnet.</li>
 					<li>Anhänge und Redaktion: Nach dem Verschieben eines Eintrags wird das Pfeil-Icon des betreffenden Eintrags fokussiert. So kann ein Eintrag mithilfe von <kbd>↵</kbd> schneller und leichter über mehrere Positionen nach oben verschoben werden.</li>
-					<li><i>Kartei &gt; Zuletzt verwendet:</i> Bisher gab es nur für die ersten sechs Einträge Tastaturkürzel. Ab sofort gibt es Kürzel bis Eintrag Nummer neun.</li>
+					<li><i>Kartei &gt; Zuletzt verwendet:</i> Bisher gab es nur für die ersten sechs Einträge Tastaturkürzel. Ab sofort gibt es Kürzel bis Eintrag Nummer neun.</li>
 				</ul>
 				
 				<h3>Behobene Fehler</h3>
@@ -210,7 +222,7 @@
 				<h3>Verbesserungen</h3>
 				
 				<ul>
-					<li>Das Tastaturkürzel <kbd>Strg</kbd> + <kbd>S</kbd> und die Funktion <i>Kartei &gt; Speichern</i> rufen den Speicherbefehl nun auch für das Notizen-Fenster und die Karteikarte auf. Verläuft das Speichern der Notizen <abbr title="beziehungsweise">bzw.</abbr> des Belegs fehlerfrei, wird direkt im Anschluss die Kartei gespeichert.</li>
+					<li>Das Tastaturkürzel <kbd>Strg</kbd> + <kbd>S</kbd> und die Funktion <i>Kartei &gt; Speichern</i> rufen den Speicherbefehl nun auch für das Notizen-Fenster und die Karteikarte auf. Verläuft das Speichern der Notizen <abbr title="beziehungsweise">bzw.</abbr> des Belegs fehlerfrei, wird direkt im Anschluss die Kartei gespeichert.</li>
 					<li>Meldungen, dass keine Änderungen vorgenommen wurden und ein Speichern unnötig sei, wurden entfernt.</li>
 					<li>Belegliste: Die Maximalbreite der Absätze wurde leicht erhöht.</li>
 					<li>DTA-Import: Beim Import mehrerer Seiten wird der Seiten- oder Spaltenumbruch im Texte nun markiert. Angegeben wird immer die Nummer der folgenden Seite/Spalte, und zwar nach diesem Schema: "[:SEITE:]". Diese Markierung der Seitenangabe wird mit den Schaltern, die bisher nur zum Ein- <abbr title="beziehungsweise">bzw.</abbr> Ausblenden der Silbentrennung dienten, ein- <abbr title="beziehungsweise">bzw.</abbr> ausgeblendet.</li>

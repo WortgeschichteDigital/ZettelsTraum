@@ -70,7 +70,7 @@ let meta = {
 			p.appendChild(a);
 			// BearbeiterIn
 			let bearb = b[i];
-			if (privat.bearbeiterinnen.indexOf(bearb) === -1) {
+			if (optionen.data.personen.indexOf(bearb) === -1) {
 				bearb += " +";
 				p.title = "(BearbeiterIn manuell ergänzt)";
 			}
@@ -100,6 +100,8 @@ let meta = {
 		meta.bearbAuflisten();
 		// Änderungsmarkierung setzen
 		kartei.karteiGeaendert(true);
+		// Erinnerungen-Icon auffrischen
+		erinnerungen.check();
 	},
 	// BearbeiterIn aus der Liste entfernen
 	//   a = Element
@@ -116,6 +118,8 @@ let meta = {
 					meta.bearbAuflisten();
 					// Änderungsmarkierung setzen
 					kartei.karteiGeaendert(true);
+					// Erinnerungen-Icon auffrischen
+					erinnerungen.check();
 				} else {
 					document.getElementById("meta-be").focus();
 				}

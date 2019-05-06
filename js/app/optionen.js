@@ -80,6 +80,8 @@ let optionen = {
 			"filter-inaktive": false,
 			// nicht warnen, wenn eine Karte erstellt wurde, sie aber wegen der Filterregeln nicht angezeigt wird
 			"nicht-karte-gefiltert": false,
+			// Textsorte in den Kopf der Belegliste eintragen
+			textsorte: false,
 			// neue Karteikarten als unvollständig markieren
 			unvollstaendig: true,
 			// Textfeld immer ergänzen, wenn aus einem Dropdown-Menü ein Wert ausgewählt wurde (betrifft Bedeutung und Textsorte)
@@ -117,6 +119,8 @@ let optionen = {
 		letzter_pfad: "",
 		// zuletzt verwendete Dokumente
 		zuletzt: [],
+		// Liste mit Personen, die in dem Projekt arbeiten (wird über die Einstellungen geladen)
+		personen: [],
 	},
 	// liest die vom Main-Prozess übergebenen Optionen ein
 	// (zur Sicherheit werden alle Optionen einzeln eingelesen;
@@ -306,10 +310,74 @@ let optionen = {
 			start.zuletzt();
 		}
 	},
+	// Personenliste einlesen
+	aenderePersonenliste () {
+		const {app, dialog} = require("electron").remote;
+		const opt = {
+			title: "Personenliste laden",
+			defaultPath: app.getPath("documents"),
+			filters: [
+				{
+					name: "Text-Datei",
+					extensions: ["txt"],
+				},
+				{
+					name: "Alle Dateien",
+					extensions: ["*"],
+				},
+			],
+			properties: [
+				"openFile",
+			],
+		};
+		// Dialog anzeigen
+		dialog.showOpenDialog(null, opt, function(datei) { // datei ist ein Array!
+			if (datei === undefined) {
+				kartei.dialogWrapper("Sie haben keine Datei ausgewählt.");
+				return;
+			}
+			const fs = require("fs");
+			fs.readFile(datei[0], "utf-8", function(err, content) {
+				// Fehlermeldung
+				if (err) {
+					kartei.dialogWrapper(`Beim Öffnen der Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.message}</p>`);
+					return;
+				}
+				// Inhalt einlesen und speichern
+				optionen.data.personen = [];
+				const personen = content.split(/(\r|\n)/); // alle End-of-line-Styles berücksichtigen
+				for (let i = 0, len = personen.length; i < len; i++) {
+					const person = personen[i].trim();
+					if (person) {
+						optionen.data.personen.push(person);
+					}
+				}
+				optionen.speichern(false);
+				// Rückmeldung
+				let fb = {
+					personen: optionen.data.personen.length,
+					text: "Personen",
+				};
+				// Liste wurde geleert
+				if (fb.personen === 0) {
+					kartei.dialogWrapper("Die Personenliste wurde geleert.");
+					return;
+				}
+				// Liste enthält Personen
+				if (fb.personen === 1) {
+					fb.text = "Person";
+				}
+				kartei.dialogWrapper(`In der Personenliste stehen jetzt ${fb.personen} ${fb.text}.`);
+			});
+		});
+	},
 	// auf Änderung der Einstellungen achten
 	//   ele = Element
 	//     (Element, dessen Wert geändert wurde)
 	aendereEinstellungListener (ele) {
+		if (ele.type === "button") { // Lade-Button für die Personenliste
+			return;
+		}
 		let typ = "change"; // Checkbox und Number
 		if (ele.type === "text") {
 			typ = "input";
@@ -335,6 +403,8 @@ let optionen = {
 		}
 		// Optionen speichern
 		optionen.speichern(false);
+		// Erinnerungen-Icon auffrischen
+		erinnerungen.check();
 	},
 	// das Optionen-Fenster öffnen
 	oeffnen () {

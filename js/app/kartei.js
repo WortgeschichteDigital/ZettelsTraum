@@ -183,6 +183,7 @@ let kartei = {
 			liste.aufbauen(true);
 			liste.wechseln();
 			kartei.menusDeaktivieren(false);
+			erinnerungen.check();
 			// inaktive Filter schließen
 			// (wurde zwar schon über filter.ctrlReset() ausgeführt,
 			// muss hier aber noch einmal gemacht werden, um die dynamisch
@@ -293,6 +294,7 @@ let kartei = {
 		start.zuletzt();
 		helfer.sektionWechseln("start");
 		kartei.menusDeaktivieren(true);
+		erinnerungen.icon(false);
 	},
 	// Dialogwrapper für die Öffnen- und Speichern-Funktionen
 	// (da gibt es einen Namenskonflikt mit Electrons {dialog})
@@ -321,6 +323,7 @@ let kartei = {
 				notizen.icon();
 				anhaenge.makeIconList(null, document.getElementById("kartei-anhaenge"));
 				kartei.menusDeaktivieren(false);
+				erinnerungen.check();
 			}
 		});
 		dialog.text("Zu welchem Wort soll die Kartei angelegt werden?");

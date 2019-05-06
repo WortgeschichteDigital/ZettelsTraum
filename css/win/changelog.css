@@ -101,6 +101,21 @@ p {
 	margin: 0 0 10px 0;
 }
 
+pre {
+	border-radius: 3px;
+	padding: 3px;
+	background-color: var(--text);
+	color: #fff;
+	font-family: "Noto Sans Mono", monospace;
+	white-space: pre-wrap;
+	user-select: text;
+}
+
+pre.quelltext {
+	background-color: var(--hintergrund);
+	color: var(--text);
+}
+
 ul {
 	margin: 0 0 10px 0;
 	padding-left: 20px;

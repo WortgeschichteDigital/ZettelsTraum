@@ -68,6 +68,10 @@ let bedeutungen = {
 	},
 	// Bedeutungen öffnen
 	oeffnen () {
+		// TODO temporär sperren
+		dialog.oeffnen("alert", null);
+		dialog.text("Sorry!\nDiese Funktion ist noch nicht programmiert.");
+		return;
 		// Bedeutungen sind schon offen
 		if (!document.getElementById("bedeutungen").classList.contains("aus")) {
 			return;
@@ -185,7 +189,7 @@ let bedeutungen = {
 	// Listener für die Windrose
 	//   a = Element
 	//     (der Link mit der Windrose)
-	moveListener(a) {
+	moveListener (a) {
 		a.addEventListener("click", function(evt) {
 			evt.preventDefault();
 			const tr = this.parentNode.parentNode,
@@ -193,8 +197,7 @@ let bedeutungen = {
 			if (tr === tr_aktiv) {
 				return;
 			}
-			tr.classList.add("bedeutungen-aktiv");
-			bedeutungen.moveAktiv = true;
+			bedeutungen.moveAn(parseInt(tr.dataset.idx, 10));
 		});
 	},
 	// eine der Bedeutungen ist aktiviert und kann bewegt werden
@@ -279,17 +282,29 @@ let bedeutungen = {
 			bedeutungen.moveAn(idx + move);
 		}
 		// ggf. scrollen
-		const cont = document.getElementById("bedeutungen-cont").offsetTop,
+		const quick = document.getElementById("quick"),
+			cont = document.getElementById("bedeutungen-cont").offsetTop,
 			tr = document.querySelector(".bedeutungen-aktiv").offsetTop;
-		if (cont + tr - 5 <= window.scrollY) {
-			window.scrollTo(0, cont + tr - 5);
-		}
+// 		if (cont + quick + tr - 5 <= window.scrollY) {
+			window.scrollTo(0, cont + tr - quick);
+// 		}
 	},
 	// Bedeutung nach dem Verschieben wieder aktivieren
+	//   idx = Number
+	//     (Index der aktiven Zeile)
 	moveAn (idx) {
-		let tr = document.querySelectorAll("#bedeutungen-cont tr")[idx];
-		tr.classList.add("bedeutungen-aktiv");
 		bedeutungen.moveAktiv = true;
+		// Top-Element markieren
+		const tr = document.querySelectorAll("#bedeutungen-cont tr")[idx];
+		tr.classList.add("bedeutungen-aktiv");
+		// affizierte markieren
+		const len_aktiv = bedeutungen.data.bd[idx].bd.length;
+		for (let i = idx + 1, len = bedeutungen.data.bd.length; i < len; i++) {
+			if (bedeutungen.data.bd[i].bd.length <= len_aktiv) {
+				break;
+			}
+			document.querySelector(`tr[data-idx="${i}"]`).classList.add("bedeutungen-affiziert");
+		}
 	},
 	// Bewegung wieder ausschalten
 	moveAus () {
@@ -297,9 +312,15 @@ let bedeutungen = {
 		if (!tr) {
 			return null;
 		}
+		// aktivierte Zeile deaktivieren
 		tr.firstChild.firstChild.blur();
 		tr.classList.remove("bedeutungen-aktiv");
 		bedeutungen.moveAktiv = false;
+		// affizierte Zeilen deaktivieren
+		document.querySelectorAll(".bedeutungen-affiziert").forEach(function(i) {
+			i.classList.remove("bedeutungen-affiziert");
+		});
+		// vormals aktive Zeile zurückgeben
 		return tr;
 	},
 	// Änderungen speichern

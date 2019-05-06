@@ -167,11 +167,13 @@ body > header span {
 	visibility: visible;
 }
 
+#erinnerungen,
 #notizen-icon,
 #kartei-anhaenge {
-	margin-left: 50px;
+	margin-left: 35px;
 }
 
+#erinnerungen img,
 #notizen-icon img,
 #kartei-anhaenge img {
 	position: relative;
