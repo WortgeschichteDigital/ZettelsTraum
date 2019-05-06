@@ -69,9 +69,9 @@ let bedeutungen = {
 	// Bedeutungen öffnen
 	oeffnen () {
 		// TODO temporär sperren
-		dialog.oeffnen("alert", null);
-		dialog.text("Sorry!\nDiese Funktion ist noch nicht programmiert.");
-		return;
+// 		dialog.oeffnen("alert", null);
+// 		dialog.text("Sorry!\nDiese Funktion ist noch nicht programmiert.");
+// 		return;
 		// Bedeutungen sind schon offen
 		if (!document.getElementById("bedeutungen").classList.contains("aus")) {
 			return;
@@ -213,29 +213,24 @@ let bedeutungen = {
 		const idx = parseInt(document.querySelector(".bedeutungen-aktiv").dataset.idx, 10),
 			ebene = bedeutungen.data.bd[idx].bd.length;
 		let move = 0,
+			pad_links = [],
 			bewegen = [];
 		if (evt.which === 37) { // nach links
 			if (bedeutungen.data.bd[idx].bd.length > 1) {
-				bewegen.push(idx);
-				// TODO Test, ob ID schon vergeben; wenn ja => Frage, ob verschmelzen
+				bewegen = bedeutungen.moveGetEle();
 				// Anzahl der Moves ermitteln
-				let kinder = true;
 				for (let i = idx + 1, len = bedeutungen.data.bd.length; i < len; i++) {
 					const ebene_tmp = bedeutungen.data.bd[i].bd.length;
-					if (ebene_tmp === ebene - 1) {
+					if (ebene_tmp <= ebene - 1) {
 						break;
-					}
-					if (kinder && ebene_tmp > ebene) {
-						bewegen.push(i);
-					} else {
-						kinder = false;
 					}
 					move++;
 				}
 			}
 		} else if (evt.which === 38) { // nach oben
 			if (idx > 0 && bedeutungen.data.bd[idx - 1].bd.length >= bedeutungen.data.bd[idx].bd.length) {
-				bewegen.push(idx);
+				bewegen = bedeutungen.moveGetEle();
+				// Anzahl der Moves ermitteln
 				move = -1;
 				for (let i = idx - 1; i >= 0; i--) {
 					if (bedeutungen.data.bd[i].bd.length <= ebene) {
@@ -243,15 +238,24 @@ let bedeutungen = {
 					}
 					move--;
 				}
-				for (let i = idx + 1, len = bedeutungen.data.bd.length; i < len; i++) {
-					if (bedeutungen.data.bd[i].bd.length <= ebene) {
-						break;
+			}
+		} else if (evt.which === 39) { // nach rechts
+			for (let i = idx - 1; i > 0; i--) {
+				const ebene_tmp = bedeutungen.data.bd[i].bd.length;
+				if (ebene_tmp <= ebene) {
+					if (ebene_tmp === ebene) {
+						pad_links = [...bedeutungen.data.bd[i].bd];
 					}
-					bewegen.push(i);
+					break;
 				}
 			}
+			if (pad_links.length) {
+				bewegen = bedeutungen.moveGetEle();
+			}
+		} else if (evt.which === 40) { // nach unten
+			// TODO
 		}
-		// keine Kinder, die bewegt werden müssen
+		// es muss/kann nichts bewegt werden
 		if (!bewegen.length) {
 			return;
 		}
@@ -259,11 +263,21 @@ let bedeutungen = {
 		for (let i = 0, len = bewegen.length; i < len; i++) {
 			let idx = bewegen[i];
 			// alte ID löschen, neue ermitteln
-			if (evt.which === 37) {
+			if (evt.which === 37) { // nach links
 				idx -= i;
 				const id = bedeutungen.data.bd[idx].bd.join(": ");
 				delete bedeutungen.data.id[id];
-				bedeutungen.data.bd[idx].bd.shift(bedeutungen.data.bd[idx].bd);
+				bedeutungen.data.bd[idx].bd.shift();
+				bedeutungen.data.id[bedeutungen.data.bd[idx].bd.join(": ")] = true;
+			} else if (evt.which === 39) { // nach rechts
+				const id = bedeutungen.data.bd[idx].bd.join(": ");
+				delete bedeutungen.data.id[id];
+				for (let j = 0, len = pad_links.length - 1; j < len; j++) {
+					bedeutungen.data.bd[idx].bd.shift();
+				}
+				for (let j = pad_links.length - 1; j >= 0; j--) {
+					bedeutungen.data.bd[idx].bd.unshift(pad_links[j]);
+				}
 				bedeutungen.data.id[bedeutungen.data.bd[idx].bd.join(": ")] = true;
 			}
 			// Element kopieren
@@ -276,18 +290,37 @@ let bedeutungen = {
 		}
 		// Tabelle neu aufbauen, Element fokussieren
 		bedeutungen.aufbauen();
-		if (evt.which === 37) {
+		if (evt.which === 37) { // nach links
 			bedeutungen.moveAn(idx + move - bewegen.length + 1);
-		} else if (evt.which === 38) {
+		} else if (evt.which === 38) { // nach oben
 			bedeutungen.moveAn(idx + move);
+		} else if (evt.which === 39) { // nach rechts
+			bedeutungen.moveAn(idx);
 		}
 		// ggf. scrollen
+		bedeutungen.moveScroll();
+	},
+	// Elemente sammeln, die bewegt werden sollen
+	moveGetEle () {
+		let bewegen = [];
+		document.querySelectorAll(".bedeutungen-aktiv, .bedeutungen-affiziert").forEach(function(i) {
+			const idx = parseInt(i.dataset.idx, 10);
+			bewegen.push(idx);
+		});
+		return bewegen;
+	},
+	// nach der Bewegung das Gerüst ggf. an die richtige Stelle scrollen
+	moveScroll () {
 		const quick = document.getElementById("quick"),
 			cont = document.getElementById("bedeutungen-cont").offsetTop,
 			tr = document.querySelector(".bedeutungen-aktiv").offsetTop;
-// 		if (cont + quick + tr - 5 <= window.scrollY) {
-			window.scrollTo(0, cont + tr - quick);
-// 		}
+		let quick_height = quick.offsetHeight;
+		if (quick.classList.contains("an")) {
+			quick_height = 0;
+		}
+		if (cont + tr - quick_height - 5 <= window.scrollY) {
+			window.scrollTo(0, cont + tr - quick_height - 5);
+		}
 	},
 	// Bedeutung nach dem Verschieben wieder aktivieren
 	//   idx = Number
