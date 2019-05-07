@@ -1,8 +1,10 @@
 @charset "utf-8";
 
+/* Kopf ----------------------------------------- */
 #bedeutungen header {
 	position: sticky;
 	top: 70px;
+	z-index: 1;
 	padding: 0 0 10px 0;
 	height: 24px;
 	overflow: hidden;
@@ -14,12 +16,8 @@
 	margin-left: 0;
 }
 
-#bedeutungen header span {
-	position: absolute;
-	right: 0;
-	width: 48px;
-	color: var(--textFarbe);
-	text-align: center;
+#bedeutungen.quick header {
+	top: 99px;
 }
 
 #bedeutungen h2 {
@@ -33,6 +31,10 @@
 	line-height: 38px;
 }
 
+#bedeutungen h2 span {
+	margin-left: 10px;
+}
+
 #bedeutungen h2 + p {
 	margin-bottom: 15px;
 }
@@ -40,8 +42,23 @@
 #bedeutungen-hierarchie {
 	background-color: transparent;
 	width: 75px;
+	color: var(--textSehrHell);
+	cursor: default;
 }
 
+#bedeutungen-hierarchie:focus,
+#bedeutungen-hierarchie:hover {
+	outline: none;
+	border-color: var(--linie);
+	color: var(--text);
+}
+
+#bedeutungen-hierarchie:hover ~ a,
+#bedeutungen-hierarchie:focus ~ a {
+	color: var(--text);
+}
+
+/* Tabelle -------------------------------------- */
 #bedeutungen-cont {
 	padding-bottom: 20px;
 }
@@ -54,54 +71,202 @@
 #bedeutungen-cont td {
 	padding: 0 5px;
 	vertical-align: top;
+	line-height: 30px;
 }
 
-#bedeutungen-cont td:first-child {
-	padding-left: 0;
+#bedeutungen-cont td:nth-child(3) {
+	max-width: 700px;
 }
 
+#bedeutungen-cont td:nth-child(4),
 #bedeutungen-cont td:last-child {
-	padding-right: 0;
+	border-left: 1px dotted var(--linie);
+	white-space: nowrap;
 }
 
-#bedeutungen-cont td.zaehlung b {
+#bedeutungen-cont div[contenteditable] {
+	position: relative;
+	top: 2px;
+	border: 1px solid var(--linie);
+	padding: 2px 5px;
+	min-width: 50px;
+	line-height: 20px;
+	color: var(--text);
+}
+
+#bedeutungen-cont div[contenteditable]:focus {
+	outline: 1px solid var(--farbe);
+	border-color: var(--farbe);
+}
+
+#bedeutungen-cont .bedeutungen-edit {
+	background-color: var(--hintergrund);
+}
+
+#bedeutungen-cont .zaehlung b,
+.bedeutungen-dialog b {
 	display: inline-block;
 	width: 35px;
 	text-align: center;
 	text-indent: 0;
 }
 
-#bedeutungen-cont td.zaehlung div {
+#bedeutungen-cont .zaehlung div {
 	margin-left: 35px;
 }
 
-#bedeutungen-cont td.zaehlung > div {
+#bedeutungen-cont .zaehlung > div {
 	margin-left: 0;
 }
 
-#bedeutungen-cont td.zaehlung p {
+#bedeutungen-cont .zaehlung p {
 	margin: 0;
 	padding-left: 35px;
 	text-indent: -35px;
 }
 
-#bedeutungen-cont tr.bedeutungen-aktiv td,
-#bedeutungen-cont tr.bedeutungen-affiziert td {
+#bedeutungen-cont .bedeutungen-aktiv td,
+#bedeutungen-cont .bedeutungen-affiziert td {
 	background-color: var(--farbe);
 	color: #fff;
 }
 
-.icon-move {
-	-webkit-mask-image: url(../../img/bedeutungen-move.svg);
-	mask-image: url(../../img/bedeutungen-move.svg);
+#bedeutungen-cont .bedeutungen-unmovable .bedeutungen-aktiv td,
+#bedeutungen-cont .bedeutungen-unmovable .bedeutungen-affiziert td {
+	background-color: var(--textWarnung);
+}
+
+a[class*="icon-move"] {
 	background-color: transparent;
 }
 
-.icon-move:hover {
+.icon-move_ {
+	-webkit-mask-image: url(../../img/move_.svg);
+	mask-image: url(../../img/move_.svg);
+}
+
+.icon-move_37-38-39-40 {
+	-webkit-mask-image: url(../../img/move_37-38-39-40.svg);
+	mask-image: url(../../img/move_37-38-39-40.svg);
+}
+
+.icon-move_37-38-39 {
+	-webkit-mask-image: url(../../img/move_37-38-39.svg);
+	mask-image: url(../../img/move_37-38-39.svg);
+}
+
+.icon-move_37-38-40 {
+	-webkit-mask-image: url(../../img/move_37-38-40.svg);
+	mask-image: url(../../img/move_37-38-40.svg);
+}
+
+.icon-move_37-38 {
+	-webkit-mask-image: url(../../img/move_37-38.svg);
+	mask-image: url(../../img/move_37-38.svg);
+}
+
+.icon-move_37-39-40 {
+	-webkit-mask-image: url(../../img/move_37-39-40.svg);
+	mask-image: url(../../img/move_37-39-40.svg);
+}
+
+.icon-move_37-39 {
+	-webkit-mask-image: url(../../img/move_37-39.svg);
+	mask-image: url(../../img/move_37-39.svg);
+}
+
+.icon-move_37-40 {
+	-webkit-mask-image: url(../../img/move_37-40.svg);
+	mask-image: url(../../img/move_37-40.svg);
+}
+
+.icon-move_37 {
+	-webkit-mask-image: url(../../img/move_37.svg);
+	mask-image: url(../../img/move_37.svg);
+}
+
+.icon-move_38-39-40 {
+	-webkit-mask-image: url(../../img/move_38-39-40.svg);
+	mask-image: url(../../img/move_38-39-40.svg);
+}
+
+.icon-move_38-39 {
+	-webkit-mask-image: url(../../img/move_38-39.svg);
+	mask-image: url(../../img/move_38-39.svg);
+}
+
+.icon-move_38-40 {
+	-webkit-mask-image: url(../../img/move_38-40.svg);
+	mask-image: url(../../img/move_38-40.svg);
+}
+
+.icon-move_38 {
+	-webkit-mask-image: url(../../img/move_38.svg);
+	mask-image: url(../../img/move_38.svg);
+}
+
+.icon-move_39-40 {
+	-webkit-mask-image: url(../../img/move_39-40.svg);
+	mask-image: url(../../img/move_39-40.svg);
+}
+
+.icon-move_39 {
+	-webkit-mask-image: url(../../img/move_39.svg);
+	mask-image: url(../../img/move_39.svg);
+}
+
+.icon-move_40 {
+	-webkit-mask-image: url(../../img/move_40.svg);
+	mask-image: url(../../img/move_40.svg);
+}
+
+#bedeutungen-cont .icon-loeschen {
+	-webkit-mask-image: url(../../img/loeschen.svg);
+	mask-image: url(../../img/loeschen.svg);
+	background-color: transparent;
+	visibility: hidden;
+}
+
+#bedeutungen-cont .bedeutungen-aktiv .icon-loeschen {
+	visibility: visible;
+}
+
+#bedeutungen-cont .icon-link {
+	position: relative;
+	top: 3px;
+}
+
+#bedeutungen-cont .icon-link:hover {
 	background-color: var(--text);
 }
 
-#bedeutungen-cont tr.bedeutungen-aktiv .icon-move,
-#bedeutungen-cont tr.bedeutungen-aktiv .icon-move:hover {
+#bedeutungen-cont .bedeutungen-aktiv .icon-link,
+#bedeutungen-cont .bedeutungen-aktiv .icon-link:hover,
+#bedeutungen-cont .bedeutungen-affiziert .icon-link:hover {
 	background-color: #fff;
+}
+
+#bedeutungen-cont .leer,
+#bedeutungen-cont .bedeutungen-aktiv .leer,
+#bedeutungen-cont .bedeutungen-affiziert .leer {
+	color: transparent;
+	font-style: italic;
+}
+
+#bedeutungen-cont .leer:hover {
+	color: var(--text);
+}
+
+#bedeutungen-cont .bedeutungen-aktiv .leer:hover,
+#bedeutungen-cont .bedeutungen-affiziert .leer:hover {
+	color: #fff;
+}
+
+
+/* Besonderheiten ------------------------------- */
+.bedeutungen-dialog {
+	margin-left: 25px;
+	padding-left: 35px;
+	font-style: italic;
+	text-indent: -35px;
 }

@@ -98,6 +98,16 @@ let helfer = {
 			obj.removeChild(obj.lastChild);
 		}
 	},
+	// wählt den Text innerhalb des übergebenen Objekts aus
+	//   obj = Element
+	//     (das Element, in dem der Text komplett markiert werden soll)
+	auswahl (obj) {
+		let range = document.createRange();
+		range.selectNodeContents(obj);
+		let sel = window.getSelection();
+		sel.removeAllRanges();
+		sel.addRange(range);
+	},
 	// ermöglicht die Navigation mit dem Cursor durch Buttons und Links
 	//   evt = Event-Objekt
 	//     (wird von helfer.tastatur() übergeben)
@@ -185,7 +195,7 @@ let helfer = {
 	//     (sollen doppelte Leerzeichen bereinigt werden; das ist nicht in jedem Feld sinnvoll)
 	textTrim (text, doppelleer) {
 		text = text.replace(/^(\s*\n)+|(\s*\n)+$/g, "");
-		text = text.trim(); // berücksichtigt Zeilenumbrüche nicht
+		text = text.trim(); // berücksichtigt Zeilenumbrüche nicht immer
 		if (doppelleer) {
 			text = text.replace(/ {2,}/g, " ");
 		}

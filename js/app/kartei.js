@@ -159,6 +159,7 @@ let kartei = {
 			// Daten werden eingelesen => Änderungsmarkierungen kommen weg
 			notizen.notizenGeaendert(false);
 			beleg.belegGeaendert(false);
+			bedeutungen.bedeutungenGeaendert(false);
 			kartei.karteiGeaendert(false);
 			// alle Overlays schließen
 			overlay.alleSchliessen();
@@ -280,6 +281,7 @@ let kartei = {
 		kartei.lock(kartei.pfad, "unlock");
 		notizen.notizenGeaendert(false);
 		beleg.belegGeaendert(false);
+		bedeutungen.bedeutungenGeaendert(false);
 		kartei.karteiGeaendert(false);
 		overlay.alleSchliessen();
 		bedeutungenWin.oeffnen(false);
@@ -315,6 +317,7 @@ let kartei = {
 				kartei.lock(kartei.pfad, "unlock");
 				notizen.notizenGeaendert(false);
 				beleg.belegGeaendert(false);
+				bedeutungen.bedeutungenGeaendert(false);
 				kartei.karteiGeaendert(true);
 				filter.ctrlReset(false);
 				kartei.wort = wort;

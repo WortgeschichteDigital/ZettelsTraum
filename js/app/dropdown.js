@@ -106,6 +106,11 @@ let dropdown = {
 				dropdown.navigation(evt.which);
 			}
 		});
+		if (inp.getAttribute("readonly") !== null) {
+			inp.addEventListener("click", function() {
+				dropdown.init(this.id);
+			});
+		}
 	},
 	// Klick-Event auf dem Link
 	//   a = Element

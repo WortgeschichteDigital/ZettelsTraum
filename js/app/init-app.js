@@ -42,12 +42,8 @@ window.addEventListener("load", function() {
 		});
 	});
 	// alle Dropdown-Listen
-	document.querySelectorAll(".dropdown-feld").forEach(function(i) {
-		dropdown.feld(i);
-	});
-	document.querySelectorAll(".dropdown-link-td, .dropdown-link-element").forEach(function(i) {
-		dropdown.link(i);
-	});
+	document.querySelectorAll(".dropdown-feld").forEach((i) => dropdown.feld(i));
+	document.querySelectorAll(".dropdown-link-td, .dropdown-link-element").forEach((i) =>	dropdown.link(i));
 	// Quick-Access-Bar
 	let quick = document.querySelectorAll("#quick a");
 	for (let i = 0, len = quick.length; i < len; i++) {
