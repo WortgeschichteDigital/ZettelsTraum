@@ -97,7 +97,7 @@
 
 #einstellungen-cont {
 	display: grid;
-	grid-template-columns: 150px calc(100% - 150px);
+	grid-template-columns: 155px calc(100% - 155px);
 }
 
 #einstellungen-cont > div {
@@ -108,6 +108,25 @@
 	padding: 10px 0 20px 0;
 	background-color: var(--hintergrund);
 	border-bottom-left-radius: 10px;
+}
+
+#einstellungen-cont table {
+	margin: 0 0 10px 0;
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+#einstellungen-cont td {
+	padding: 0 5px;
+	vertical-align: top;
+}
+
+#einstellungen-cont td:first-child {
+	padding-left: 0;
+}
+
+#einstellungen-cont td:last-child {
+	padding-right: 0;
 }
 
 #einstellungen-cont ul {
@@ -165,14 +184,18 @@
 }
 
 #einstellungen-cont p.button {
-	margin-top: 20px;
+	margin-bottom: 25px;
 	padding-left: 0;
-	text-align: center;
 	text-indent: 0;
 }
 
 #einstellungen-cont p.button input {
 	margin-left: 0;
+	width: 216px;
+}
+
+#einstellungen-cont p.einzug {
+	margin-left: 24px;
 }
 
 #einstellungen-quick-icons {
@@ -203,6 +226,31 @@
 
 .einstellungen-spacer {
 	height: 5px;
+}
+
+#einstellungen-cont .sachgebiete tr:first-child td {
+	padding-bottom: 10px;
+}
+
+#einstellungen-cont .sachgebiete input {
+	width: 105px;
+}
+
+#sachgebiete-datei {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+#sachgebiete.leer,
+#sachgebiete-datei.leer {
+	direction: ltr;
+	color: var(--textSehrHell);
+	font-style: italic;
+}
+
+#sachgebiete-abgleich {
+	margin-bottom: 5px;
 }
 
 /* Formvarianten ------------------------ */

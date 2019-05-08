@@ -354,6 +354,7 @@
 						<li><a href="#" id="einstellungen-link-allgemeines" class="aktiv">Allgemeines</a></li>
 						<li><a href="#" id="einstellungen-link-menue">Menü</a></li>
 						<li><a href="#" id="einstellungen-link-filter">Filter</a></li>
+						<li><a href="#" id="einstellungen-link-bedeutungen">Bedeutungsgerüst</a></li>
 						<li><a href="#" id="einstellungen-link-belegliste">Belegliste</a></li>
 						<li><a href="#" id="einstellungen-link-karteikarten">Karteikarte</a></li>
 					</ul>
@@ -363,13 +364,15 @@
 						<p class="input-text dropdown-cont"><input type="text" value="" spellcheck="false" class="dropdown-feld" id="einstellung-bearbeiterin"
 							><a href="#" class="dropdown-link-element dropdown-link-haengend" title="BearbeiterInnen auflisten"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m7 2v8l-3.5-3.5-1.5 1.5 6 6 6-6-1.5-1.5-3.5 3.5v-8z" fill="#212121"/></svg></a
 							><label for="einstellung-bearbeiterin">BearbeiterIn auf diesem Rechner</label></p>
+						<p class="button"><input type="button" value="Personenliste laden" id="einstellung-personenliste"></p>
 						<p class="input-text"><input type="number" value="10" min="5" max="180" spellcheck="false" id="einstellung-timeout"
 							><label for="einstellung-timeout">Sekunden Timeout bei Anfragen an das <abbr title="Deutsche Textarchiv">DTA</abbr></label></p>
-						<p><input type="checkbox" id="einstellung-bedeutungen-schliessen"
-							><label for="einstellung-bedeutungen-schliessen">Bedeutungsgerüst-Formular nach dem Speichern schließen</label></p>
 						<p><input type="checkbox" id="einstellung-notizen-schliessen"
 							><label for="einstellung-notizen-schliessen">Notizen-Fenster nach dem Speichern schließen</label></p>
-						<p class="button"><input type="button" value="Personenliste laden" id="einstellung-personenliste"></p>
+						<p><input type="checkbox" id="einstellung-textkopie-wort"
+							><label for="einstellung-textkopie-wort">Hervorhebung des Kartei-Worts beim Kopieren von Text erhalten</label></p>
+						<p class="einzug"><input type="checkbox" id="einstellung-textkopie-wort-hinterlegt"
+							><label for="einstellung-textkopie-wort-hinterlegt">Kartei-Wort mit grauem Hintergrund kopieren</label></p>
 					</section>
 					<section id="einstellungen-sec-menue" class="aus">
 						<p><input type="checkbox" id="einstellung-autoHideMenuBar"
@@ -429,6 +432,21 @@
 							><label for="einstellung-filter-inaktive">inaktive Filterblöcke automatisch zuklappen</label></p>
 						<p><input type="checkbox" id="einstellung-nicht-karte-gefiltert"
 							><label for="einstellung-nicht-karte-gefiltert">nicht melden, wenn ein neuer Beleg wegen der Filterregeln nicht in der Belegliste erscheint</label></p>
+					</section>
+					<section id="einstellungen-sec-bedeutungen" class="aus">
+						<p><input type="checkbox" id="einstellung-bedeutungen-schliessen"
+							><label for="einstellung-bedeutungen-schliessen">Bedeutungsgerüst nach dem Speichern schließen</label></p>
+						<h3>Sachgebiete</h3>
+						<table class="sachgebiete"><tr>
+								<td id="sachgebiete"></td>
+								<td><input type="button" value="Löschen" id="sachgebiete-loeschen"></td>
+							</tr><tr>
+								<td dir="rtl" id="sachgebiete-datei"></td>
+								<td><input type="button" value="Laden" id="sachgebiete-laden"></td>
+						</tr></table>
+						<p id="sachgebiete-abgleich"><input type="checkbox" id="einstellung-sachgebiete-abgleich"
+							><label for="einstellung-sachgebiete-abgleich">Sachgebiete automatisch auffrischen</label></p>
+						<p class="einzug"><i>Zuletzt überprüft:</i> <span id="sachgebiete-zuletzt"></span></p>
 					</section>
 					<section id="einstellungen-sec-belegliste" class="aus">
 						<p><input type="checkbox" id="einstellung-textsorte"

@@ -17,6 +17,11 @@ let erinnerungen = {
 	},
 	// überprüfen, ob auf etwas hingewiesen werden muss
 	check () {
+		// nicht testen, wenn keine Kartei offen ist
+		if (!kartei.wort) {
+			return;
+		}
+		// Tests durchführen
 		let alles_okay = true;
 		// BearbeiterIn registriert?
 		if (optionen.data.einstellungen.bearbeiterin) {

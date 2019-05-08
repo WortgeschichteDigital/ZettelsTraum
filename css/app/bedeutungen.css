@@ -131,6 +131,11 @@
 	color: #fff;
 }
 
+#bedeutungen-cont .bedeutungen-moved .bedeutungen-aktiv td,
+#bedeutungen-cont .bedeutungen-moved .bedeutungen-affiziert td {
+	background-color: var(--textFarbe);
+}
+
 #bedeutungen-cont .bedeutungen-unmovable .bedeutungen-aktiv td,
 #bedeutungen-cont .bedeutungen-unmovable .bedeutungen-affiziert td {
 	background-color: var(--textWarnung);

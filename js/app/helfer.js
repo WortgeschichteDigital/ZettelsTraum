@@ -115,18 +115,22 @@ let helfer = {
 		const oben = overlay.oben();
 		// Bedeutungen sind aktiv, kein Overlay
 		if (!oben && !document.getElementById("bedeutungen").classList.contains("aus")) {
-			bedeutungen.move(evt);
+			if (evt.ctrlKey && (evt.which === 38 || evt.which === 40)) { // Ctrl + hoch (↑) oder runter (↓)
+				bedeutungen.navi(evt);
+			} else if (!evt.ctrlKey) {
+				bedeutungen.move(evt);
+			}
 			return;
 		}
 		// Cursor hoch od. runter
-		if (evt.which === 38 || evt.which === 40) {
+		if (evt.which === 38 || evt.which === 40) { // hoch (↑) + runter (↓)
 			if (evt.ctrlKey && oben === "einstellungen") { // durch die Menüs in den Einstellungen navigieren
 				evt.preventDefault();
 				optionen.naviMenue(evt.which);
 			}
 			return;
 		}
-		// Curosr links od. rechts
+		// Cursor links od. rechts
 		let aktiv = document.activeElement;
 		// Ist das aktive Element ein Anker oder ein Button?
 		if (!(aktiv.nodeName === "A" || aktiv.nodeName === "INPUT" && aktiv.type === "button")) {
@@ -206,12 +210,25 @@ let helfer = {
 	//   html = String
 	//     (der Quelltext, in dem die Ersetzungen vorgenommen werden sollen)
 	clipboardHtml (html) {
+		// temporäre Hervorhebungen löschen
 		html = html.replace(/<mark class="(suche|user)">(.+?)<\/mark>/g, function(m, p1, p2) {
 			return p2;
 		});
-		html = html.replace(/<mark class="wort">(.+?)<\/mark>/g, function(m, p1) {
-			return `<span style="background-color: #e5e5e5; font-weight: bold">${p1}</span>`;
-		});
+		// Worthervorhebung
+		if (optionen.data.einstellungen["textkopie-wort"]) {
+			let style = "font-weight: bold";
+			if (optionen.data.einstellungen["textkopie-wort-hinterlegt"]) {
+				style += "; background-color: #e5e5e5";
+			}
+			html = html.replace(/<mark class="wort">(.+?)<\/mark>/g, function(m, p1) {
+				return `<span style="${style}">${p1}</span>`;
+			});
+		} else {
+			html = html.replace(/<mark class="wort">(.+?)<\/mark>/g, function(m, p1) {
+				return p1;
+			});
+		}
+		// normale Styles
 		const styles = {
 			"dta-antiqua": "font-family: sans-serif",
 			"dta-blau": "color: blue",

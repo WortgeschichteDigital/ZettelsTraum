@@ -1227,6 +1227,8 @@ let liste = {
 		}
 	},
 	// Datenfeld durch Klick auf ein Icon kopieren
+	//   icon = Element
+	//     (Kopier-Icon, auf das geklickt wurde)
 	kopieren (icon) {
 		icon.addEventListener("click", function(evt) {
 			evt.preventDefault();

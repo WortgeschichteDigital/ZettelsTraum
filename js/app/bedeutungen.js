@@ -1,6 +1,9 @@
 "use strict";
 
 let bedeutungen = {
+	// speichert den Timeout für das Ausschalten der Hintergrundfarbe
+	// bei den Ereignissen unmovable und moved
+	timeout: null,
 	// Kopie des Bedeutungsgerüsts, ausgelesen aus data.bd
 	data: {},
 	// baut einen initialen, alphabetisch sortierten Bedeutungenbaum auf
@@ -216,6 +219,23 @@ let bedeutungen = {
 		}
 		return zeichen;
 	},
+	// die vorherige oder nächste Bedeutung aufrufen
+	// (wird nur aufgerufen, wenn Ctrl + ↑ | ↓)
+	//   evt = Event-Objekt
+	//     (Tastaturevent, über das die Funktion aufgerufen wurde)
+	navi (evt) {
+		if (!bedeutungen.moveAktiv) {
+			return;
+		}
+		const tr_aktiv = document.querySelector(".bedeutungen-aktiv");
+		if (evt.which === 38 && tr_aktiv.previousSibling) { // hoch
+			bedeutungen.moveAus();
+			bedeutungen.moveAn(parseInt(tr_aktiv.previousSibling.dataset.idx, 10), false);
+		} else if (evt.which === 40 && tr_aktiv.nextSibling) {
+			bedeutungen.moveAus();
+			bedeutungen.moveAn(parseInt(tr_aktiv.nextSibling.dataset.idx, 10), false);
+		}
+	},
 	// Listener für die Windrose
 	//   a = Element
 	//     (der Link mit der Windrose)
@@ -227,7 +247,7 @@ let bedeutungen = {
 			if (tr === tr_aktiv) {
 				return;
 			}
-			bedeutungen.moveAn(parseInt(tr.dataset.idx, 10));
+			bedeutungen.moveAn(parseInt(tr.dataset.idx, 10), false);
 		});
 	},
 	// eine der Bedeutungen ist aktiviert und kann nun mit allen Subbedeutungen bewegt werden
@@ -235,7 +255,9 @@ let bedeutungen = {
 	// Bedeutung nach dem Verschieben wieder aktivieren
 	//   idx = Number
 	//     (Index der aktiven Zeile)
-	moveAn (idx) {
+	//   moved = Boolean
+	//     (die zu aktivierende Bedeutung wurde gerade bewegt)
+	moveAn (idx, moved) {
 		bedeutungen.moveAktiv = true;
 		bedeutungen.aliasFeldWeg();
 		// Top-Element markieren
@@ -266,6 +288,15 @@ let bedeutungen = {
 		setTimeout(function() {
 			icon.focus();
 		}, 0); // ohne Timeout kein Fokus
+		// erfolgreiche Bewegung markieren
+		if (moved) {
+			const tab = document.querySelector("#bedeutungen-cont table");
+			tab.classList.add("bedeutungen-moved");
+			clearTimeout(bedeutungen.timeout);
+			bedeutungen.timeout = setTimeout(function() {
+				tab.classList.remove("bedeutungen-moved");
+			}, 500);
+		}
 	},
 	// Bewegung wieder ausschalten
 	moveAus () {
@@ -391,7 +422,8 @@ let bedeutungen = {
 		if (!d.movable) {
 			const tab = document.querySelector("#bedeutungen-cont table");
 			tab.classList.add("bedeutungen-unmovable");
-			setTimeout(function() {
+			clearTimeout(bedeutungen.timeout);
+			bedeutungen.timeout = setTimeout(function() {
 				tab.classList.remove("bedeutungen-unmovable");
 			}, 500);
 			return;
@@ -434,11 +466,11 @@ let bedeutungen = {
 		bedeutungen.aufbauen();
 		// Items refokussieren
 		if (evt.which === 37 || evt.which === 40) { // nach links + nach unten
-			bedeutungen.moveAn(aktiv + d.steps - items.length + 1);
+			bedeutungen.moveAn(aktiv + d.steps - items.length + 1, true);
 		} else if (evt.which === 38) { // nach oben
-			bedeutungen.moveAn(aktiv + d.steps);
+			bedeutungen.moveAn(aktiv + d.steps, true);
 		} else if (evt.which === 39) { // nach rechts
-			bedeutungen.moveAn(aktiv);
+			bedeutungen.moveAn(aktiv, true);
 		}
 		// ggf. scrollen
 		bedeutungen.moveScroll();
@@ -456,30 +488,22 @@ let bedeutungen = {
 	},
 	// nach der Bewegung das Gerüst ggf. an die richtige Stelle scrollen
 	moveScroll () {
-		const quick = document.getElementById("quick"),
-			quick_an = quick.classList.contains("an"),
-			quick_height = quick.offsetHeight,
+		const quick_height = document.getElementById("quick").offsetHeight,
 			header_height = document.querySelector("body > header").offsetHeight,
 			cont_top = document.getElementById("bedeutungen-cont").offsetTop,
 			tr = document.querySelector(".bedeutungen-aktiv"),
 			tr_top = tr.offsetTop,
 			tr_height = tr.offsetHeight;
 		// ggf. hochscrollen
-		let pos = cont_top + tr_top - 5;
-		if (!quick_an) {
-			pos -= quick_height;
-		}
+		let pos = cont_top + tr_top - quick_height - 5;
 		if (pos <= window.scrollY) {
 			window.scrollTo(0, pos);
 			return;
 		}
 		// ggf. runterscrollen
-		pos = header_height + cont_top + tr_top + tr_height;
-		if (quick_an) {
-			pos += quick_height;
-		}
+		pos = header_height + cont_top + tr_top + tr_height - quick_height;
 		if (pos - window.scrollY >= window.innerHeight) {
-			window.scrollTo(0, pos - tr_height - 5 - quick_height - header_height);
+			window.scrollTo(0, pos - tr_height - 5 - header_height);
 		}
 	},
 	// Listener für das Löschn-Icon

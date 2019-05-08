@@ -45,10 +45,12 @@ let optionen = {
 			bearbeiterin: "",
 			// Timeout für Anfrage an das DTA in Sekunden; einfacher als String, wird bei Bedarf in Number konvertiert
 			timeout: "10",
-			// Bedeutungsgerüst-Formular nach dem Speichern direkt schließen
-			"bedeutungen-schliessen": true,
 			// Notizen-Fenster nach dem Speichern direkt schließen
 			"notizen-schliessen": true,
+			// Hervorhebung des Wort beim Kopieren von Text mitkopieren
+			"textkopie-wort": false,
+			// beim Kopieren ist das Wort grau hinterlegt
+			"textkopie-wort-hinterlegt": false,
 			// Nach dem Starten des Programms wird die Menü-Leiste ausgeblendet,
 			// bis die Alt-Taste gedrückt wird.
 			autoHideMenuBar: false,
@@ -80,10 +82,20 @@ let optionen = {
 			"filter-inaktive": false,
 			// nicht warnen, wenn eine Karte erstellt wurde, sie aber wegen der Filterregeln nicht angezeigt wird
 			"nicht-karte-gefiltert": false,
+			// Bedeutungsgerüst nach dem Speichern direkt schließen
+			"bedeutungen-schliessen": true,
+			// Bedeutungsgerüst: Sachgebiete
+			sachgebiete: [],
+			// Bedeutungsgerüst: Sachgebiete (Datei mit Liste an Sachgebieten)
+			"sachgebiete-datei": "",
+			// Bedeutungsgerüst: Sachgebiete (beim Start automatisch mit der Datei abgleichen)
+			"sachgebiete-abgleich": true,
+			// Bedeutungsgerüst: Sachgebiete (Datum des letzten Abgleichs)
+			"sachgebiete-zuletzt": "",
 			// Textsorte in den Kopf der Belegliste eintragen
 			textsorte: false,
 			// neue Karteikarten als unvollständig markieren
-			unvollstaendig: true,
+			unvollstaendig: false,
 			// Textfeld immer ergänzen, wenn aus einem Dropdown-Menü ein Wert ausgewählt wurde (betrifft Bedeutung und Textsorte)
 			"immer-ergaenzen": false,
 			// bestehende Karteikarten in der Leseansicht öffnen
@@ -148,6 +160,8 @@ let optionen = {
 	anwenden () {
 		// Quick-Access-Bar ein- oder ausschalten
 		optionen.anwendenQuickAccess();
+		// Anzeige der Sachgebiete auffrischen
+		optionen.anwendenSachgebiete();
 		// Zeitfilter in der Filterleiste anpassen
 		let filter_zeitraum = document.getElementsByName("filter-zeitraum");
 		for (let i = 0, len = filter_zeitraum.length; i < len; i++) {
@@ -255,6 +269,35 @@ let optionen = {
 			} else {
 				affiziert[i].classList.remove("quick");
 			}
+		}
+	},
+	// Informationen zu den Sachgebieten auffrischen
+	anwendenSachgebiete () {
+		// Sachgebiete eintragen
+		const sg = document.getElementById("sachgebiete");
+		if (optionen.data.einstellungen.sachgebiete.length) {
+			sg.classList.remove("leer");
+			sg.textContent = `${optionen.data.einstellungen.sachgebiete.length} Sachgebiete`;
+		} else {
+			sg.classList.add("leer");
+			sg.textContent = "keine Sachgebiete";
+		}
+		// Datei eintragen
+		const datei = document.getElementById("sachgebiete-datei");
+		if (optionen.data.einstellungen["sachgebiete-datei"]) {
+			datei.classList.remove("leer");
+			datei.textContent = optionen.data.einstellungen["sachgebiete-datei"];
+		} else {
+			datei.classList.add("leer");
+			datei.textContent = "keine Sachgebiete-Datei";
+		}
+		// Datum der letzten Überprüfung eintragen
+		const zuletzt = document.getElementById("sachgebiete-zuletzt");
+		if (optionen.data.einstellungen["sachgebiete-zuletzt"]) {
+			zuletzt.parentNode.classList.remove("aus");
+			zuletzt.textContent = helfer.datumFormat(optionen.data.einstellungen["sachgebiete-zuletzt"]);
+		} else {
+			zuletzt.parentNode.classList.add("aus");
 		}
 	},
 	// Timeout für die Speicherfunktion setzen, die nicht zu häufig ablaufen soll und

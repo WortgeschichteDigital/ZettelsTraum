@@ -1073,7 +1073,11 @@ let beleg = {
 			const p = text.replace(/\n\s*\n/g, "\n").split("\n");
 			let html = "";
 			p.forEach(function(i) {
-				html += `<p>${i}</p>`;
+				let text = i;
+				if (optionen.data.einstellungen["textkopie-wort"]) {
+					text = liste.belegWortHervorheben(text, true);
+				}
+				html += `<p>${text}</p>`;
 			});
 			html = helfer.clipboardHtml(html);
 			html = beleg.toolsKopierenAddQuelle(html, true, obj);
