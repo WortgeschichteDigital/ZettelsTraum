@@ -22,15 +22,29 @@
 		<main>
 			<!-- 0.8.0 -->
 			<div>
-				<h2><span data-maintainer="Nico Dorn">Version 0.8.0-beta.2</span><time datetime="2019-05-07T22:40:56">7. Mai 2019</time></h2>
+				<h2><span data-maintainer="Nico Dorn">Version 0.8.0-beta.4</span><time datetime="2019-05-10T10:03:02">10. Mai 2019</time></h2>
+				
+				<h3>Neue Funktionen</h3>
+				
+				<ul>
+					<li>
+						<p>Sachgebiete: In den <i>Programm-Einstellungen</i> unter <i>Bedeutungsgerüst</i> kann nun eine Datei mit einer Liste an Sachgebieten geladen werden. Die Datei mit den Sachgebieten muss denselben Regeln folgen wie die mit Version 0.7.0 eingeführte Personen-Datei: Es muss sich um eine Plain-Text-Datei handeln, für deren Erstellung <abbr title="zum Beispiel">z. B.</abbr> das kleine <i>Windows</i>-Programm <i>Editor</i> geeignet ist. Der Zeilenumbruch dient dabei als Trennzeichen. Jede Zeile enthält also ein Sachgebiet:</p>
+						<pre class="quelltext">Botanik
+Geographie
+Sport
+...</pre>
+						<p>Wurde einmal über den Button <i>Laden</i> eine Sachgebiete-Datei ausgewählt, bleibt diese mit dem Programm verknüpft, bis der Button <i>Löschen</i> betätigt wird. <abbr title="Das heißt">D. h.</abbr> konkret, dass <i class="app-name"></i> bei jedem Start einmal überprüft, ob sich der Inhalt der Datei geändert hat. Ist dem der Fall, wird die Liste der Sachgebiete aus der Sachgebiete-Datei neu geladen. Dieser automatische Abgleich lässt sich über eine Checkbox abstellen.</p>
+						<p>Schlägt der Abgleich der importierten Sachgebiete mit denen der Sachgebiete-Datei fehl – weil <abbr title="zum Beispiel">z. B.</abbr> die Datei entfernt oder umbenannt wurde –, erscheint hinter dem Dateinamen ein kleines Icon: <img src="../img/fehler.svg" width="24" height="24" alt="">. Die einmal importierten Sachgebiete bleiben allerdings erhalten.</p>
+					</li>
+				</ul>
 				
 				<h3>Verbesserungen</h3>
 				
 				<ul>
 					<li>
-						<p>Textkopie: Die mit Version 0.5.0 eingeführte Funktion, die Hervorhebung des Kartei-Worts mitzukopieren, wurde leicht modifiziert. Denn ob und wie die Hervorhebung des Kartei-Worts beim Kopieren mithilfe des Kopier-Icons <img src="../img/tool-kopieren.svg" width="24" height="24" alt=""> oder des Kontextmenüs (<i>Rechtsklick &gt; Textauswahl kopieren</i>) erhalten bleiben soll, kann von nun an genauer gesteuert werden:</p>
-						<p>In <i>Programm &gt; Einstellungen &gt; Allgemeines</i> finden sich dazu zwei Optionen, mit denen zum einen festgelegt werden kann, ob die Markierung des Kartei-Worts beim Kopieren überhaupt erhalten bleiben soll. Zum anderen lässt sich einstellen, ob das Wort zusätzlich zu einer immer vorhandenen Auszeichnung als halbfett auch noch grau hinterlegt wird. Die hier vorgenommenen Einstellungen werden bei allen Kopierfunktionen berücksichtigt: in der <i>Belegliste</i>, in der <i>Karteikarte</i> (Lese- und Formularansicht) und im <i>Druckfenster</i>. Sie sind standardmäßig ausgeschaltet, müssen also erst aktiviert werden.</p>
-						<p><span class="obacht">Aber Achtung!</span> Wird nicht der gesamte Beleg, sondern nur ein Textausschnitt aus der <i>Belegliste</i> kopiert, muss die Wortmarkierung zuvor über das Icon <img src="../img/liste-hervorheben.svg" width="24" height="24" alt=""> eingeschaltet sein. Ist dies nicht der Fall, wird selbst dann, wenn die entsprechenden Optionen im Einstellungsfenster aktiviert wurden, die Markierung nicht nachträglich ergänzt. Auf diese Weise hat man die Möglichkeit, die aktivierten Einstellungen temporär zu umgehen – wenn nicht der gesamte Beleg, sondern nur ein Belegschnitt kopiert wird.</p>
+						<p>Textkopie: Die mit Version 0.5.0 eingeführte Funktion, die Hervorhebung des Kartei-Worts mitzukopieren, wurde leicht modifiziert. Ob und wie die Hervorhebung des Kartei-Worts beim Kopieren mithilfe des Kopier-Icons <img src="../img/tool-kopieren.svg" width="24" height="24" alt=""> oder des Kontextmenüs (<i>Rechtsklick &gt; Textauswahl kopieren</i>) erhalten bleiben soll, kann von nun an genauer gesteuert werden:</p>
+						<p>In <i>Programm &gt; Einstellungen &gt; Allgemeines</i> finden sich dazu zwei Optionen, mit denen zum einen festgelegt werden kann, ob die Markierung des Kartei-Worts beim Kopieren überhaupt erhalten bleiben soll. Zum anderen lässt sich einstellen, ob das Wort zusätzlich zu einer immer vorhandenen Auszeichnung als halbfett auch noch grau hinterlegt wird. Die hier vorgenommenen Einstellungen werden bei allen Kopierfunktionen berücksichtigt: in der <i>Belegliste</i>, in der <i>Karteikarte</i> (Lese- und Formularansicht) und im <i>Druckfenster</i>. Sie sind standardmäßig ausgeschaltet.</p>
+						<p>Ist die Hervorhebung des Worts in der <i>Belegliste</i> ausgeschaltet (Funktion <img src="../img/liste-hervorheben.svg" width="24" height="24" alt="">), wird die Markierung in den Text, der beim Kopieren in die Zwischenablage geschoben wird, automatisch eingefügt.</p>
 						<p>
 					</li>
 				</ul>
@@ -39,7 +53,9 @@
 				
 				<ul>
 					<li>Erinnerungen: Die Funktion, die darauf aufmerksam macht, dass an verschiedenen Stellen vergessen wurde, die BearbeiterIn einzutragen, wurde unter Umständen auch dann aufgerufen, wenn gar keine Kartei geöffnet war. Das führte zu einem Programmfehler.</li>
-					<li>Textkopie: Beim Kopieren eines ganzen Belegs mithilfe des Kopier-Icons <img src="../img/tool-kopieren.svg" width="24" height="24" alt=""> wurde die Hervorhebung des Worts in keinem Fall mitkopiert (<abbr title="vergleiche">vgl.</abbr> hierzu <i>Verbesserungen</i>).</li>
+					<li>Textkopie: Beim Kopieren eines ganzen Belegs mithilfe des Kopier-Icons <img src="../img/tool-kopieren.svg" width="24" height="24" alt=""> wurde die Hervorhebung des Worts nicht mitkopiert (<abbr title="vergleiche">vgl.</abbr> hierzu <i>Verbesserungen</i>).</li>
+					<li>Beim Löschen der Belege aus der <i>Belegliste</i> via Rechtsklick wurde in der Sicherheitsfrage nicht der komplette Kurztitel des zu löschenden Belegs angezeigt.</li>
+					<li><abbr title="Deutsches Textarchiv">DTA</abbr>-Import: Beim Auslesen der Textsorte gab es in Texten, die mehrere kommagetrennte Unterklassen haben, einen kleineren Importfehler.</li>
 				</ul>
 			</div>
 			

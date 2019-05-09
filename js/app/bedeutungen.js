@@ -143,7 +143,11 @@ let bedeutungen = {
 				b = document.createElement("b");
 			b.textContent = bedeutungen.zaehlung(bd);
 			p.appendChild(b);
-			p.appendChild(document.createTextNode(bd[bd.length- 1]));
+			let span = document.createElement("span");
+			span.dataset.feld = "bd";
+			span.textContent = bd[bd.length- 1];
+			bedeutungen.editListener(span);
+			p.appendChild(span);
 			let div = document.createElement("div");
 			div.appendChild(p);
 			for (let j = 1, len = bd.length; j < len; j++) {
@@ -154,11 +158,18 @@ let bedeutungen = {
 			td.appendChild(div);
 			// Sachgebiet
 			td = document.createElement("td");
+			td.dataset.feld = "sg";
 			tr.appendChild(td);
-			td.classList.add("leer");
-			td.textContent = "Sachgebiet";
+			let sg = i.sg;
+			if (!sg) {
+				sg = "Sachgebiet";
+				td.classList.add("leer");
+			}
+			td.textContent = sg;
+			bedeutungen.editListener(td);
 			// Alias
 			td = document.createElement("td");
+			td.dataset.feld = "al";
 			tr.appendChild(td);
 			let al = i.al;
 			if (!al) {
@@ -166,7 +177,7 @@ let bedeutungen = {
 				td.classList.add("leer");
 			}
 			td.textContent = al;
-			bedeutungen.aliasListener(td);
+			bedeutungen.editListener(td);
 		});
 	},
 	// Werte für das Formular, mit dem die oberste Hierarchie der Zählzeichen festgelegt wird
@@ -259,7 +270,7 @@ let bedeutungen = {
 	//     (die zu aktivierende Bedeutung wurde gerade bewegt)
 	moveAn (idx, moved) {
 		bedeutungen.moveAktiv = true;
-		bedeutungen.aliasFeldWeg();
+		bedeutungen.editFeldWeg();
 		// Top-Element markieren
 		const tr = document.querySelectorAll("#bedeutungen-cont tr")[idx];
 		tr.classList.add("bedeutungen-aktiv");
@@ -512,11 +523,25 @@ let bedeutungen = {
 	loeschenListener (a) {
 		a.addEventListener("click", function(evt) {
 			evt.preventDefault();
-			const tr = this.parentNode.parentNode,
-				idx = parseInt(tr.dataset.idx, 10),
-				zaehlung = tr.querySelector("b").firstChild.nodeValue;
-			bedeutungen.loeschen(idx, zaehlung);
+			bedeutungen.loeschenPrep();
 		});
+	},
+	// Tastatur-Handler für Entf
+	loeschenTastatur () {
+		// ggf. abbrechen
+		if (!bedeutungen.moveAktiv ||
+				document.getElementById("bedeutungen").classList.contains("aus") ||
+				overlay.oben()) {
+			return;
+		}
+		bedeutungen.loeschenPrep();
+	},
+	// benötigte Werte ermitteln, bevor das Löschen angestoßen wird
+	loeschenPrep () {
+		const tr = document.querySelector(".bedeutungen-aktiv"),
+			idx = parseInt(tr.dataset.idx, 10),
+			zaehlung = tr.querySelector("b").firstChild.nodeValue;
+		bedeutungen.loeschen(idx, zaehlung);
 	},
 	// Löschen auf Nachfrage durchführen
 	//   idx = Number
@@ -542,92 +567,145 @@ let bedeutungen = {
 		});
 		dialog.text(`Soll die markierte Bedeutung\n<p class="bedeutungen-dialog"><b>${zaehlung}</b>${bd}</p>\n${items.length > 1 ? "mit all ihren Unterbedeutungen " : ""}wirklich gelöscht werden?`);
 	},
-	// aktiviert die Eingabe eines Alias
-	//   td = Element
-	//     (Tabellenzelle für das Alias)
-	aliasListener (td) {
-		td.addEventListener("click", function() {
+	// erstellt ein Edit-Feld
+	//   ele = Element
+	//     (Element, in dem das Edit-Feld erstellt werden soll)
+	editListener (ele) {
+		ele.addEventListener("click", function() {
 			// Ist das Edit-Feld in dieser Zelle?
 			if (this.firstChild.id) {
 				return;
 			}
 			// ggf. altes Edit-Feld löschen
-			bedeutungen.aliasFeldWeg();
-			// Zeile und Zelle vorbereiten
+			bedeutungen.editFeldWeg();
+			// Zeile und Container vorbereiten
 			bedeutungen.moveAus();
-			td.parentNode.classList.add("bedeutungen-edit");
-			td.classList.remove("leer");
+			bedeutungen.editZeile(ele, true);
+			ele.classList.remove("leer");
 			// Edit-Feld erzeugen und einhängen
-			const idx = parseInt(this.parentNode.dataset.idx, 10);
-			let edit = document.createElement("div");
+			const idx = bedeutungen.editGetIdx(this),
+				feld = this.dataset.feld,
+				z = bedeutungen.data.bd[idx][feld];
+			let edit = document.createElement("span");
 			edit.setAttribute("contenteditable", "true");
-			edit.id = "bedeutungen-alias";
-			edit.textContent = bedeutungen.data.bd[idx].al;
-			td.replaceChild(edit, td.firstChild);
-			helfer.auswahl(edit);
+			edit.id = "bedeutungen-edit";
+			if (Array.isArray(z)) {
+				edit.textContent = z[z.length - 1];
+			} else {
+				edit.textContent = z;
+			}
+			ele.replaceChild(edit, ele.firstChild);
+			edit.focus();
 			// Event-Listener
 			edit.addEventListener("keydown", function(evt) {
 				if (evt.which === 27) { // Esc
 					evt.stopPropagation();
-					bedeutungen.aliasEintragen(this.parentNode);
+					bedeutungen.editEintragen(this.parentNode);
 					return;
 				} else if (evt.which !== 13) { // kein Enter
 					return;
 				}
 				evt.preventDefault();
-				// Wert aus dem Input ermitteln
-				const idx = parseInt(this.parentNode.parentNode.dataset.idx, 10),
-					al = helfer.textTrim(this.textContent, true);
-				// wurde das Alias schon vergeben?
-				for (let i = 0, len = bedeutungen.data.bd.length; i < len; i++) {
-					if (!al) {
-						break;
-					}
-					if (i === idx) {
-						continue;
-					}
-					if (bedeutungen.data.bd[i].al === al) {
-						schon_vergeben(this);
-						return;
+				// Wert aus dem Edit-Feld ermitteln
+				const idx = bedeutungen.editGetIdx(this),
+					feld = this.parentNode.dataset.feld,
+					wert = helfer.textTrim(this.textContent, true);
+				// Wenn Alias: Wurde das Alias schon vergeben?
+				if (feld === "bd" && !wert) {
+					dialog.oeffnen("alert", function() {
+						edit.focus();
+					});
+					dialog.text("Sie haben keine Bedeutung eingetragen.");
+					return;
+				} else if (feld === "al") {
+					for (let i = 0, len = bedeutungen.data.bd.length; i < len; i++) {
+						if (!wert) {
+							break;
+						}
+						if (i === idx) {
+							continue;
+						}
+						if (bedeutungen.data.bd[i].al === wert) {
+							alias_schon_vergeben(this);
+							return;
+						}
 					}
 				}
-				// Alias übernehmen
-				bedeutungen.data.bd[idx].al = al;
+				// Wert übernehmen
+				let z = bedeutungen.data.bd[idx];
+				if (Array.isArray(z[feld])) {
+					z[feld][z[feld].length - 1] = wert;
+				} else {
+					z[feld] = wert;
+				}
 				// Alias eintragen
-				bedeutungen.aliasEintragen(this.parentNode);
+				bedeutungen.editEintragen(this.parentNode);
 				// Änderungsmarkierung setzen
 				bedeutungen.bedeutungenGeaendert(true);
 				// Alias schon vergeben
-				function schon_vergeben (edit) {
+				function alias_schon_vergeben (edit) {
 					dialog.oeffnen("alert", function() {
 						helfer.auswahl(edit);
 					});
-					dialog.text(`Das Alias <i>${al}</i> wurde schon vergeben.`);
+					dialog.text(`Das Alias <i>${wert}</i> wurde schon vergeben.`);
 				}
 			});
 		});
 	},
-	// ggf. altes Eingabefeld für ein Alias ggf. entfernen
-	aliasFeldWeg () {
-		const alias = document.getElementById("bedeutungen-alias");
-		if (alias) {
-			bedeutungen.aliasEintragen(alias.parentNode);
+	// altes Eingabefeld ggf. entfernen
+	editFeldWeg () {
+		const edit = document.getElementById("bedeutungen-edit");
+		if (edit) {
+			bedeutungen.editEintragen(edit.parentNode);
 		}
 	},
-	// gespeicherten Alias in die übergebene Zelle eintragen
-	//   td = Element
-	//     (Tabellenzelle für das Alias)
-	aliasEintragen (td) {
-		const idx = parseInt(td.parentNode.dataset.idx, 10);
-		let al = bedeutungen.data.bd[idx].al;
-		if (!al) { // kein Alias gespeichert
-			al = "Alias";
-			td.classList.add("leer");
+	// gespeicherten Wert des edierten Feldes in die übergebene Zelle eintragen
+	//   ele = Element
+	//     (Element, in dem das Edit-Feld steht)
+	editEintragen (ele) {
+		const felder = {
+			sg: "Sachgebiet",
+			al: "Alias",
+		};
+		const idx = bedeutungen.editGetIdx(ele),
+			feld = ele.dataset.feld,
+			z = bedeutungen.data.bd[idx][feld];
+		let wert = "";
+		if (Array.isArray(z)) {
+			wert = z[z.length - 1];
 		} else {
-			td.classList.remove("leer");
+			wert = z;
+			if (!wert) { // kein Wert gespeichert
+				wert = felder[feld];
+				ele.classList.add("leer");
+			} else {
+				ele.classList.remove("leer");
+			}
 		}
-		td.replaceChild(document.createTextNode(al), td.firstChild);
-		td.parentNode.classList.remove("bedeutungen-edit");
+		helfer.keineKinder(ele);
+		ele.appendChild(document.createTextNode(wert));
+		bedeutungen.editZeile(ele, false);
+	},
+	// Index des betreffenden Elemenets suchen
+	//   ele = Element
+	//     (das Edit-Feld, zu dem der Index gesucht werden soll)
+	editGetIdx (ele) {
+		while (!ele.dataset || !ele.dataset.idx) {
+			ele = ele.parentNode;
+		}
+		return parseInt(ele.dataset.idx, 10);
+	},
+	// Zeile markieren/demarkieren, in der ein Edit-Feld geöffnet/geschlossen wurde
+	editZeile (ele, edit) {
+		let tr = ele.parentNode;
+		while (tr.nodeName !== "TR") {
+			tr = tr.parentNode;
+		}
+		if (edit) {
+			tr.classList.add("bedeutungen-edit");
+		} else {
+			tr.classList.remove("bedeutungen-edit");
+		}
 	},
 	// Änderungen speichern
 	speichern () {

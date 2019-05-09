@@ -161,7 +161,7 @@ let optionen = {
 		// Quick-Access-Bar ein- oder ausschalten
 		optionen.anwendenQuickAccess();
 		// Anzeige der Sachgebiete auffrischen
-		optionen.anwendenSachgebiete();
+		optionen.anwendenSachgebiete(true);
 		// Zeitfilter in der Filterleiste anpassen
 		let filter_zeitraum = document.getElementsByName("filter-zeitraum");
 		for (let i = 0, len = filter_zeitraum.length; i < len; i++) {
@@ -272,24 +272,36 @@ let optionen = {
 		}
 	},
 	// Informationen zu den Sachgebieten auffrischen
-	anwendenSachgebiete () {
+	//   init = Boolean
+	//     (Aufruf der Funktion beim Einlesen der Einstellungen)
+	anwendenSachgebiete (init) {
 		// Sachgebiete eintragen
 		const sg = document.getElementById("sachgebiete");
 		if (optionen.data.einstellungen.sachgebiete.length) {
 			sg.classList.remove("leer");
-			sg.textContent = `${optionen.data.einstellungen.sachgebiete.length} Sachgebiete`;
+			let a = document.createElement("a");
+			a.href = "#";
+			a.textContent = `${optionen.data.einstellungen.sachgebiete.length} Sachgebiete`;
+			optionen.sachgebieteAnzeigen(a);
+			sg.replaceChild(a, sg.firstChild);
 		} else {
 			sg.classList.add("leer");
 			sg.textContent = "keine Sachgebiete";
 		}
 		// Datei eintragen
-		const datei = document.getElementById("sachgebiete-datei");
+		const tab = document.querySelector(".sachgebiete"),
+			datei = document.getElementById("sachgebiete-datei");
 		if (optionen.data.einstellungen["sachgebiete-datei"]) {
+			tab.classList.add("gefuellt");
 			datei.classList.remove("leer");
-			datei.textContent = optionen.data.einstellungen["sachgebiete-datei"];
+			const pfad = `\u200E${optionen.data.einstellungen["sachgebiete-datei"]}\u200E`; // vgl. meta.oeffnen()
+			datei.textContent = pfad;
+			datei.title = pfad;
 		} else {
+			tab.classList.remove("gefuellt");
 			datei.classList.add("leer");
 			datei.textContent = "keine Sachgebiete-Datei";
+			datei.removeAttribute("title");
 		}
 		// Datum der letzten Überprüfung eintragen
 		const zuletzt = document.getElementById("sachgebiete-zuletzt");
@@ -299,6 +311,148 @@ let optionen = {
 		} else {
 			zuletzt.parentNode.classList.add("aus");
 		}
+		// ggf. einen Check der Sachgebiete-Datei anstoßen
+		if (init) {
+			optionen.sachgebieteCheck();
+		} else {
+			optionen.sachgebieteChecked = true;
+		}
+	},
+	// Sachgebiete-Datei wurde in dieser Session schon einmal überprüft
+	sachgebieteChecked: false,
+	// Sachgebiete-Datei überprüfen
+	sachgebieteCheck () {
+		if (optionen.sachgebieteChecked ||
+				!optionen.data.einstellungen["sachgebiete-abgleich"] ||
+				!optionen.data.einstellungen["sachgebiete-datei"]) {
+			return;
+		}
+		const fs = require("fs");
+		fs.readFile(optionen.data.einstellungen["sachgebiete-datei"], "utf-8", function(err, content) {
+			// Fehlermeldung (wahrscheinlich existiert die Datei nicht mehr)
+			if (err) {
+				let img = document.createElement("img");
+				img.src = "img/fehler.svg";
+				img.width = "24";
+				img.height = "24";
+				img.addEventListener("click", function() {
+					dialog.oeffnen("alert", null);
+					dialog.text("Beim automatischen Abgleich der Sachgebiete-Datei ist ein Fehler aufgetreten.\nExistiert die angegebene Datei noch?");
+				});
+				const datei = document.getElementById("sachgebiete-datei");
+				datei.insertBefore(img, datei.firstChild);
+				return;
+			}
+			// Sachgebiete auslesen und ggf. abbrechen
+			const sachgebiete = optionen.sachgebieteLadenArr(content.split(/(\r|\n)/));
+			if (sachgebiete.join() !== optionen.data.einstellungen.sachgebiete.join()) {
+				optionen.data.einstellungen.sachgebiete = [...sachgebiete];
+			}
+			// Datum Abgleich speichern
+			optionen.data.einstellungen["sachgebiete-zuletzt"] = new Date().toISOString();
+			// Optionen speichern
+			optionen.speichern(false);
+			// Überprüfung durchgeführt
+			optionen.sachgebieteChecked = true;
+			// Anzeige auffrischen
+			optionen.anwendenSachgebiete(false);
+		});
+	},
+	// Datei mit Sachgebieten laden
+	sachgebieteLaden () {
+		const {app, dialog} = require("electron").remote;
+		const opt = {
+			title: "Sachgebiete laden",
+			defaultPath: app.getPath("documents"),
+			filters: [
+				{
+					name: "Text-Datei",
+					extensions: ["txt"],
+				},
+				{
+					name: "Alle Dateien",
+					extensions: ["*"],
+				},
+			],
+			properties: [
+				"openFile",
+			],
+		};
+		// Dialog anzeigen
+		dialog.showOpenDialog(null, opt, function(datei) { // datei ist ein Array!
+			if (datei === undefined) {
+				kartei.dialogWrapper("Sie haben keine Datei ausgewählt.");
+				return;
+			}
+			const fs = require("fs");
+			fs.readFile(datei[0], "utf-8", function(err, content) {
+				// Fehlermeldung
+				if (err) {
+					kartei.dialogWrapper(`Beim Öffnen der Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.message}</p>`);
+					return;
+				}
+				// Pfad zur Datei speichern
+				optionen.data.einstellungen["sachgebiete-datei"] = datei[0];
+				// Sachgebiete aus- und einlesen
+				const sachgebiete = optionen.sachgebieteLadenArr(content.split(/(\r|\n)/));
+				optionen.data.einstellungen.sachgebiete = [...sachgebiete];
+				// Datum Abgleich speichern
+				optionen.data.einstellungen["sachgebiete-zuletzt"] = new Date().toISOString();
+				// Optionen speichern
+				optionen.speichern(false);
+				// Anzeige auffrischen
+				optionen.anwendenSachgebiete(false);
+			});
+		});
+	},
+	// Array mit Sachgebieten übernehmen
+	//   sachgebiete = Array
+	//     (eindimensionales Array mit Strings, in jedem Slot sollte ein Sachgebiet stehen)
+	sachgebieteLadenArr (sachgebiete) {
+		let arr = [];
+		for (let i = 0, len = sachgebiete.length; i < len; i++) {
+			const sachgebiet = sachgebiete[i].trim();
+			if (sachgebiet) {
+				arr.push(sachgebiet);
+			}
+		}
+		return arr;
+	},
+	// Liste der Sachgebiete leeren und Verknüpfung mit Datei entfernen
+	sachgebieteLoeschen () {
+		// keine Sachgebiete
+		if (!optionen.data.einstellungen.sachgebiete.length &&
+				!optionen.data.einstellungen["sachgebiete-datei"]) {
+			dialog.oeffnen("alert", null);
+			dialog.text("Es wurden noch Sachgebiete geladen!");
+			return;
+		}
+		// Sicherheitsfrage
+		dialog.oeffnen("confirm", function() {
+			if (dialog.antwort) {
+				optionen.data.einstellungen.sachgebiete = [];
+				optionen.data.einstellungen["sachgebiete-datei"] = "";
+				optionen.data.einstellungen["sachgebiete-zuletzt"] = "";
+				optionen.speichern(false);
+				optionen.anwendenSachgebiete(false);
+			}
+		});
+		// Text zusammenstellen
+		let text = "Sollen die importierten Sachgebiete wirklich gelöscht werden?\n(Die Verknüpfung mit der aktuellen Sachgebiete-Datei wird in diesem Zuge ebenfalls entfernt.)";
+		if (!optionen.data.einstellungen.sachgebiete.length) {
+			text = "Soll die Verknüpfung mit der aktuellen Sachgebiete-Datei wirklich entfernt werden?";
+		}
+		dialog.text(text);
+	},
+	// Liste der geladenen Sachgebiete anzeigen
+	//   a = Element
+	//     (Anker, auf den geklickt wurde)
+	sachgebieteAnzeigen (a) {
+		a.addEventListener("click", function(evt) {
+			evt.preventDefault();
+			dialog.oeffnen("alert", null);
+			dialog.text(`<h3>Sachgebiete</h3>\n${optionen.data.einstellungen.sachgebiete.join("<br>")}`);
+		});
 	},
 	// Timeout für die Speicherfunktion setzen, die nicht zu häufig ablaufen soll und
 	// nicht so häufig ablaufen muss.

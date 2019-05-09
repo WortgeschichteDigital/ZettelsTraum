@@ -956,7 +956,7 @@ let liste = {
 		});
 	},
 	// Text der Überschrift für die Detailanzeige erstellen
-	// (die Funktion brauch ich auch in anhaenge.js und drucken.js, darum ausgelagert)
+	// (die Funktion brauch ich auch in anhaenge.js, drucken.js und popup.js, darum ausgelagert)
 	//   beleg_id = String || Object
 	//     (ID des Belegs; soll die aktuelle Karteikarte gedruckt werden ist es ein Object)
 	detailAnzeigenH3 (beleg_id) {

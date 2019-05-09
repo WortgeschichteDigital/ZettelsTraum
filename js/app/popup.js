@@ -223,10 +223,17 @@ let popup = {
 			let range = sel.getRangeAt(0),
 				container = document.createElement("div");
 			container.appendChild(range.cloneContents());
+			// Text aufbereiten
 			let text = container.innerHTML.replace(/<\/p><p>/g, "\n");
 			text = text.replace(/<.+?>/g, "");
 			text = text.replace(/\n/g, "\n\n");
-			let html = helfer.clipboardHtml(container.innerHTML);
+			// HTML aufbereiten
+			let html = container.innerHTML;
+			if (optionen.data.einstellungen["textkopie-wort"] &&
+					!/class="wort"/.test(html)) {
+				html = liste.belegWortHervorheben(html, true);
+			}
+			html = helfer.clipboardHtml(html);
 			if (bs) {
 				text = beleg.toolsKopierenAddQuelle(text, false, obj);
 				html = beleg.toolsKopierenAddQuelle(html, true, obj);
@@ -425,7 +432,7 @@ let popup = {
 		menu.append(new MenuItem({
 			label: "Beleg löschen",
 			icon: path.join(__dirname, "img", "menu", "popup-loeschen.png"),
-			click: () => beleg.aktionLoeschenFrage(parseInt(popup.belegID, 10)),
+			click: () => beleg.aktionLoeschenFrage(popup.belegID),
 		}));
 	},
 	// Anhang-Menü füllen

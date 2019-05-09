@@ -108,7 +108,6 @@ pre {
 	color: #fff;
 	font-family: "Noto Sans Mono", monospace;
 	white-space: pre-wrap;
-	user-select: text;
 }
 
 pre.quelltext {

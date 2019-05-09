@@ -871,14 +871,12 @@ let beleg = {
 			for (let i = 0, len = dta.textsorte.length; i < len; i++) {
 				let ts = dta.textsorte[i],
 					ts_sub = dta.textsorte_sub[i];
-				if (ts_sub && /; /.test(ts_sub)) {
-					ts_sub = ts_sub.replace(/, /g, ": ");
-					let ts_sub_sp = ts_sub.split("; ");
+				if (ts_sub && /[,;] /.test(ts_sub)) {
+					const ts_sub_sp = ts_sub.split(/[,;] /);
 					for (let j = 0, len = ts_sub_sp.length; j < len; j++) {
 						textsorte.push(`${ts}: ${ts_sub_sp[j]}`);
 					}
 				} else if (ts_sub) {
-					ts_sub = ts_sub.replace(/, /g, ": ");
 					textsorte.push(`${ts}: ${ts_sub}`);
 				} else {
 					textsorte.push(ts);

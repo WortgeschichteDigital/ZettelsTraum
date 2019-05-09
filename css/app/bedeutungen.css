@@ -78,23 +78,32 @@
 	max-width: 700px;
 }
 
-#bedeutungen-cont td:nth-child(4),
-#bedeutungen-cont td:last-child {
-	border-left: 1px dotted var(--linie);
+#bedeutungen-cont td:nth-child(4) {
+	background-color: var(--hintergrund);
 	white-space: nowrap;
 }
 
-#bedeutungen-cont div[contenteditable] {
-	position: relative;
-	top: 2px;
-	border: 1px solid var(--linie);
-	padding: 2px 5px;
-	min-width: 50px;
-	line-height: 20px;
-	color: var(--text);
+#bedeutungen-cont td:nth-child(4):not(.leer) {
+	font-variant: small-caps;
 }
 
-#bedeutungen-cont div[contenteditable]:focus {
+#bedeutungen-cont td:last-child {
+	border-left: 1px solid var(--linie);
+	background-color: var(--hintergrund);
+	white-space: nowrap;
+}
+
+#bedeutungen-cont span[contenteditable] {
+	display: inline-block;
+	border: 1px solid var(--linie);
+	padding: 0 5px;
+	min-width: 50px;
+	line-height: 24px;
+	color: var(--text);
+	text-indent: 0;
+}
+
+#bedeutungen-cont span[contenteditable]:focus {
 	outline: 1px solid var(--farbe);
 	border-color: var(--farbe);
 }
@@ -107,6 +116,7 @@
 .bedeutungen-dialog b {
 	display: inline-block;
 	width: 35px;
+	vertical-align: top;
 	text-align: center;
 	text-indent: 0;
 }

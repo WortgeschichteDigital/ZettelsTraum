@@ -228,11 +228,25 @@
 	height: 5px;
 }
 
+#einstellungen-cont .sachgebiete.gefuellt {
+	width: 100%;
+	table-layout: fixed;
+}
+
 #einstellungen-cont .sachgebiete tr:first-child td {
 	padding-bottom: 10px;
 }
 
+#einstellungen-cont .sachgebiete td:last-child {
+	width: 105px;
+}
+
+#einstellungen-cont .sachgebiete img {
+	vertical-align: top;
+}
+
 #einstellungen-cont .sachgebiete input {
+	margin: 0;
 	width: 105px;
 }
 
@@ -718,8 +732,18 @@ input[id^="redaktion-person"] {
 	mask-image: url(../../img/dialog-alert.svg);
 }
 
+#dialog-rahmen {
+	padding: 10px;
+}
+
 #dialog-text {
-	padding: 10px 10px 0 10px;
+	max-height: 400px;
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+
+#dialog-text *:last-child {
+	margin-bottom: 0;
 }
 
 #dialog input[type="text"] {

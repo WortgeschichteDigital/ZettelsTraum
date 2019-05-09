@@ -404,6 +404,10 @@ let helfer = {
 		if (evt.which >= 37 && evt.which <= 40) {
 			helfer.cursor(evt);
 		}
+		// Entf
+		if (evt.which === 46) {
+			bedeutungen.loeschenTastatur();
+		}
 		// Strg + P (wenn kein Overlay)
 		if (evt.ctrlKey && evt.which === 80) {
 			drucken.tastatur();
