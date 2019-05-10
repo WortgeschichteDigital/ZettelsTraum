@@ -123,20 +123,12 @@
 	top: 3px;
 	width: 24px;
 	height: 24px;
-	background-color: var(--farbe);
+	background-color: transparent;
 	-webkit-mask-image: url(../../img/filter-reset-block.svg);
 	mask-image: url(../../img/filter-reset-block.svg);
 }
 
-.filter-kopf:focus span {
-	background-color: var(--farbeB);
-}
-
-.filter-kopf.aktiv span {
-	background-color: var(--textHell);
-}
-
-.filter-kopf span:hover {
+.filter-kopf:hover span {
 	background-color: #fff;
 }
 
@@ -420,7 +412,7 @@ p.no-indent + .filter-baum, /* betrifft Verschiedenes > Filterlogik */
 }
 
 #liste-belege-anzahl.belege-gefiltert {
-	font-weight: bold;
+	color: var(--textWarnung);
 }
 
 /* Belegliste: Content -------------------------- */

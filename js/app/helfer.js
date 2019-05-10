@@ -25,7 +25,7 @@ let helfer = {
 			// Ist eine Kartei geöffnet?
 			if (!kartei.wort) {
 				dialog.oeffnen("alert", null);
-				dialog.text(`Die Funktion <i>${this.title}</i> steht nur zur Verfügung, wenn eine Kartei offen ist.`);
+				dialog.text(`Die Funktion <i>${this.title.replace(/ \(.+\)/, "")}</i> steht nur zur Verfügung, wenn eine Kartei offen ist.`);
 				return;
 			}
 			// diese Funktionen stehen nur bei einer geöffneten Kartei zur Verfügung

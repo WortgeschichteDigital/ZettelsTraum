@@ -103,13 +103,15 @@ let bedeutungen = {
 	},
 	// den Bedeutungenbaum aufbauen
 	aufbauen () {
-		const cont = document.getElementById("bedeutungen-cont");
-		helfer.keineKinder(cont);
 		bedeutungen.zaehlungen = [];
 		bedeutungen.moveAktiv = false;
-		// Tabelle aufbauen
-		let table = document.createElement("table");
-		cont.appendChild(table);
+		// Content vorbereiten
+		const cont = document.getElementById("bedeutungen-cont"),
+			table = cont.querySelector("table");
+		while (table.childNodes.length > 1) { // Caption mit Überschrift erhalten
+			table.removeChild(table.lastChild);
+		}
+		// Tabelle füllen
 		bedeutungen.data.bd.forEach(function(i, n) {
 			const bd = i.bd;
 			let tr = document.createElement("tr");
@@ -132,7 +134,7 @@ let bedeutungen = {
 			td.appendChild(a);
 			a.classList.add("icon-link", "icon-loeschen");
 			a.href = "#";
-			a.title = "Bedeutung löschen";
+			a.title = "Bedeutung löschen (Entf)";
 			a.textContent = " ";
 			bedeutungen.loeschenListener(a);
 			// Bedeutung
@@ -304,6 +306,7 @@ let bedeutungen = {
 			const tab = document.querySelector("#bedeutungen-cont table");
 			tab.classList.add("bedeutungen-moved");
 			clearTimeout(bedeutungen.timeout);
+			tab.classList.remove("bedeutungen-unmovable");
 			bedeutungen.timeout = setTimeout(function() {
 				tab.classList.remove("bedeutungen-moved");
 			}, 500);
@@ -434,6 +437,7 @@ let bedeutungen = {
 			const tab = document.querySelector("#bedeutungen-cont table");
 			tab.classList.add("bedeutungen-unmovable");
 			clearTimeout(bedeutungen.timeout);
+			tab.classList.remove("bedeutungen-moved");
 			bedeutungen.timeout = setTimeout(function() {
 				tab.classList.remove("bedeutungen-unmovable");
 			}, 500);
@@ -506,7 +510,7 @@ let bedeutungen = {
 			tr_top = tr.offsetTop,
 			tr_height = tr.offsetHeight;
 		// ggf. hochscrollen
-		let pos = cont_top + tr_top - quick_height - 5;
+		let pos = cont_top + tr_top - quick_height - 10;
 		if (pos <= window.scrollY) {
 			window.scrollTo(0, pos);
 			return;
@@ -514,7 +518,7 @@ let bedeutungen = {
 		// ggf. runterscrollen
 		pos = header_height + cont_top + tr_top + tr_height - quick_height;
 		if (pos - window.scrollY >= window.innerHeight) {
-			window.scrollTo(0, pos - tr_height - 5 - header_height);
+			window.scrollTo(0, pos - tr_height - 10 - header_height);
 		}
 	},
 	// Listener für das Löschn-Icon
@@ -523,7 +527,26 @@ let bedeutungen = {
 	loeschenListener (a) {
 		a.addEventListener("click", function(evt) {
 			evt.preventDefault();
-			bedeutungen.loeschenPrep();
+			const tr = this.parentNode.parentNode,
+				idx = parseInt(tr.dataset.idx, 10);
+			if (!bedeutungen.moveAktiv) {
+				aktivieren();
+			} else {
+				const tr_aktiv = document.querySelector(".bedeutungen-aktiv"),
+					idx_aktiv = parseInt(tr_aktiv.dataset.idx, 10);
+				if (idx_aktiv !== idx) {
+					bedeutungen.moveAus();
+					aktivieren();
+				} else {
+					bedeutungen.loeschenPrep();
+				}
+			}
+			function aktivieren () {
+				bedeutungen.moveAn(idx, false);
+				setTimeout(function() {
+					bedeutungen.loeschenPrep();
+				}, 500);
+			}
 		});
 	},
 	// Tastatur-Handler für Entf
@@ -560,7 +583,7 @@ let bedeutungen = {
 					bedeutungen.data.bd.splice(idx, 1);
 				}
 				bedeutungen.aufbauen();
-				bedeutungen.bedeutungenGeaendert(false);
+				bedeutungen.bedeutungenGeaendert(true);
 			} else {
 				document.querySelector(".bedeutungen-aktiv").firstChild.firstChild.focus();
 			}
@@ -690,7 +713,7 @@ let bedeutungen = {
 	//   ele = Element
 	//     (das Edit-Feld, zu dem der Index gesucht werden soll)
 	editGetIdx (ele) {
-		while (!ele.dataset || !ele.dataset.idx) {
+		while (!ele.dataset.idx) {
 			ele = ele.parentNode;
 		}
 		return parseInt(ele.dataset.idx, 10);
@@ -740,7 +763,7 @@ let bedeutungen = {
 	//   geaendert = Boolean
 	bedeutungenGeaendert (geaendert) {
 		bedeutungen.geaendert = geaendert;
-		let asterisk = document.querySelector("#bedeutungen h2 span");
+		let asterisk = document.querySelector("#bedeutungen-cont h2 span");
 		if (geaendert) {
 			asterisk.classList.remove("aus");
 		} else {

@@ -31,7 +31,7 @@ let filter = {
 	//   belege = Array
 	//     (die IDs der Belege, bereits chronologisch sortiert)
 	aufbauen (belege) {
-		// Backup des Klappstatus erstellen
+		// Backup des Klappstatus und der Scrollposition erstellen
 		filter.backupKlappMake();
 		// Backup der Filtereinstellungen erstellen
 		let filter_backup = filter.backup();
@@ -439,6 +439,7 @@ let filter = {
 		// Filter-Container
 		let div = document.createElement("div");
 		div.classList.add("filter-cont", "filter-cont-max");
+		filter.backupKlappScroll(div);
 		frag.appendChild(div);
 		// Fragment zurückgeben
 		return frag;
@@ -602,29 +603,75 @@ let filter = {
 			filter_bewertung.dataset.bewertung = bak["filter-bewertung"];
 		}
 	},
-	// speichert den Klappstatus der Filterblöcke
+	// speichert den Klappstatus und die Scrollposition der Filterblöcke
 	backupKlapp: {},
-	// Backup des Klappstatus der Filterblöcke erstellen
+	// Backup des Klappstatus und der Scrollposition der Filterblöcke erstellen
 	backupKlappMake () {
 		filter.backupKlapp = {};
 		document.querySelectorAll(".filter-kopf").forEach(function(i) {
-			const id = i.id,
+			let id = i.id,
 				div = i.nextSibling;
-			let aus = false;
-			if (div.classList.contains("aus")) {
-				aus = true;
+			let pos = [-1, false];
+			if (!div.classList.contains("aus")) {
+				if (optionen.data.filter.reduzieren || !div.dataset.scroll) {
+					pos = [0, false];
+				} else {
+					const ds = parseInt(div.dataset.scroll, 10); // vgl. filter.backupKlappScroll()
+					// ggf. einen anderen <div> wählen (nötig für Zeitraum-Filter)
+					let div_max = div.querySelector(".filter-cont-max");
+					if (div_max) {
+						div = div_max;
+					}
+					const st = div.scrollTop;
+					if (ds !== st) {
+						pos = [ds, true];
+					} else {
+						pos = [st, false];
+					}
+				}
 			}
-			filter.backupKlapp[id] = aus;
+			filter.backupKlapp[id] = pos;
 		});
 	},
-	// Backup des Klappstatust der Filterblöcke wiederherstellen
+	// Backup des Klappstatust und der Scrollposition der Filterblöcke wiederherstellen
 	backupKlappReset () {
 		document.querySelectorAll(".filter-kopf").forEach(function(i) {
-			const id = i.id;
+			let id = i.id,
+				div = i.nextSibling;
 			if (filter.backupKlapp[id] === undefined ||
-					filter.backupKlapp[id]) {
-				i.nextSibling.classList.add("aus");
+					filter.backupKlapp[id][0] === -1) {
+				div.classList.add("aus");
+			} else if (filter.backupKlapp[id][0] > 0) {
+				// ggf. einen anderen <div> wählen (nötig für Zeitraum-Filter)
+				let div_max = div.querySelector(".filter-cont-max");
+				if (div_max) {
+					div = div_max;
+				}
+				if (filter.backupKlapp[id][1]) {
+					// das Auslesen von scrollTop hat beim Backup nicht funktioniert =>
+					// ein Timeout ist nötig, damit die Scrollposition wiederhergestellt werden kann
+					// (dies tritt auf, wenn die Karteikarte gespeichert wurde)
+					setTimeout(function() {
+						div.scrollTop = filter.backupKlapp[id][0];
+					}, 0);
+				} else {
+					div.scrollTop = filter.backupKlapp[id][0];
+				}
 			}
+		});
+	},
+	// Scroll-Status als Fallback speichern
+	// (nötig, weil scrollTop nur ermittelt werden kann, wenn der Block sichtbar ist;
+	// speichere ich die Karteikarte, ist der Block nicht sichtbar und die Scrollposition immer 0)
+	//   div = Element
+	//     (Block, in dem die Filter stecken)
+	backupKlappScroll (div) {
+		div.addEventListener("scroll", function() {
+			let ziel = this;
+			if (this.id === "filter-zeitraum-dynamisch") {
+				ziel = this.parentNode;
+			}
+			ziel.dataset.scroll = this.scrollTop;
 		});
 	},
 	// beim Ändern eines Filters die Optionen anpassen (Listener)

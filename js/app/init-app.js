@@ -104,6 +104,7 @@ window.addEventListener("load", function() {
 	for (let i = 0, len = filter_zeitraum.length; i < len; i++) {
 		filter.wechselnZeitraum(filter_zeitraum[i]);
 	}
+	filter.backupKlappScroll(document.getElementById("filter-zeitraum-dynamisch"));
 	// Funktionen im Belegliste-Header
 	let liste_links = document.querySelectorAll("#liste header a");
 	for (let i = 0, len = liste_links.length; i < len; i++) {

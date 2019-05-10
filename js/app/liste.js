@@ -267,15 +267,24 @@ let liste = {
 		liste.belegeSortierenCache = {};
 		belege.sort(liste.belegeSortieren);
 		// Belege filtern
-		const belege_ungefiltert = [...belege];
-		belege = filter.kartenFiltern(belege);
-		// Filter ggf. mit den gefilterten Belegen initialisieren
 		if (filter_init) {
 			if (optionen.data.filter.reduzieren) {
+				// Hier muss das Aufbauen der Filter unbedingt zweimal gemacht werden!
+				// (Wenn sich die Filter durch die Bearbeitung der Karteikarte ändern, kann es sonst
+				// passieren, dass kein Filter aktiv ist, aber trotzdem alle Belege herausgefiltert
+				// wurden. Kein aktiver Filter, trotzdem keine Belege. Das wäre nicht gut!)
+				filter.aufbauen([...belege]);
+				belege = filter.kartenFiltern(belege);
 				filter.aufbauen([...belege]);
 			} else {
-				filter.aufbauen([...belege_ungefiltert]);
+				// Wichtig: Erst Filter aufbauen, dann Belege filtern!
+				// (Wenn sich die Filter durch die Bearbeitung der Karteikarte ändern, kann es sonst
+				// passieren, dass noch Filter aktiv sind, die längst nicht mehr existieren.)
+				filter.aufbauen([...belege]);
+				belege = filter.kartenFiltern(belege);
 			}
+		} else {
+			belege = filter.kartenFiltern(belege);
 		}
 		// Belegzahl anzeigen
 		liste.aufbauenAnzahl(belege_anzahl, belege.length);

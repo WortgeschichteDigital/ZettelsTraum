@@ -4,12 +4,9 @@
 #bedeutungen header {
 	position: sticky;
 	top: 70px;
-	z-index: 1;
 	padding: 0 0 10px 0;
-	height: 24px;
-	overflow: hidden;
+	height: 30px;
 	background-color: #fff;
-	text-align: center;
 }
 
 #bedeutungen header input:first-child {
@@ -20,23 +17,17 @@
 	top: 99px;
 }
 
-#bedeutungen h2 {
-	margin: 0 0 15px 0;
-	padding: 0;
-	background-color: transparent;
-	color: var(--textFarbe);
-	font-size: 24px;
-	font-style: italic;
-	font-weight: normal;
-	line-height: 38px;
+#bedeutungen header > div {
+	position: relative;
+	margin: 0 auto;
+	max-width: 800px;
 }
 
-#bedeutungen h2 span {
-	margin-left: 10px;
-}
-
-#bedeutungen h2 + p {
-	margin-bottom: 15px;
+#bedeutungen header > div > div {
+	position: absolute;
+	top: -3px;
+	right: -24px;
+	height: 30px;
 }
 
 #bedeutungen-hierarchie {
@@ -63,7 +54,24 @@
 	padding-bottom: 20px;
 }
 
+#bedeutungen-cont h2 {
+	margin: 15px 0 15px 74px; /* 74px = 2 Zellen links + 5px Padding der Gerüstzelle + Border*/
+	padding: 0;
+	background-color: transparent;
+	color: var(--textFarbe);
+	font-size: 24px;
+	font-style: italic;
+	font-weight: normal;
+	line-height: 38px;
+	text-align: left;
+}
+
+#bedeutungen-cont h2 span {
+	margin-left: 10px;
+}
+
 #bedeutungen-cont table {
+	margin: 0 auto;
 	border-collapse: collapse;
 	border-spacing: 0;
 }
@@ -74,7 +82,18 @@
 	line-height: 30px;
 }
 
+#bedeutungen-cont td:first-child,
+#bedeutungen-cont td:nth-child(2) {
+	width: 24px;
+	background-color: var(--hintergrund);
+}
+
+#bedeutungen-cont td:nth-child(2) {
+	border-left: 1px solid var(--linie);
+}
+
 #bedeutungen-cont td:nth-child(3) {
+	min-width: 250px;
 	max-width: 700px;
 }
 
@@ -89,6 +108,7 @@
 
 #bedeutungen-cont td:last-child {
 	border-left: 1px solid var(--linie);
+	min-width: 62px;
 	background-color: var(--hintergrund);
 	white-space: nowrap;
 }
@@ -239,11 +259,10 @@ a[class*="icon-move"] {
 	-webkit-mask-image: url(../../img/loeschen.svg);
 	mask-image: url(../../img/loeschen.svg);
 	background-color: transparent;
-	visibility: hidden;
 }
 
 #bedeutungen-cont .bedeutungen-aktiv .icon-loeschen {
-	visibility: visible;
+	background-color: #fff;
 }
 
 #bedeutungen-cont .icon-link {

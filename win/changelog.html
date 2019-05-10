@@ -22,7 +22,7 @@
 		<main>
 			<!-- 0.8.0 -->
 			<div>
-				<h2><span data-maintainer="Nico Dorn">Version 0.8.0-beta.4</span><time datetime="2019-05-10T10:03:02">10. Mai 2019</time></h2>
+				<h2><span data-maintainer="Nico Dorn">Version 0.8.0-beta.5</span><time datetime="2019-05-10T10:42:52">10. Mai 2019</time></h2>
 				
 				<h3>Neue Funktionen</h3>
 				
@@ -35,6 +35,7 @@ Sport
 ...</pre>
 						<p>Wurde einmal über den Button <i>Laden</i> eine Sachgebiete-Datei ausgewählt, bleibt diese mit dem Programm verknüpft, bis der Button <i>Löschen</i> betätigt wird. <abbr title="Das heißt">D. h.</abbr> konkret, dass <i class="app-name"></i> bei jedem Start einmal überprüft, ob sich der Inhalt der Datei geändert hat. Ist dem der Fall, wird die Liste der Sachgebiete aus der Sachgebiete-Datei neu geladen. Dieser automatische Abgleich lässt sich über eine Checkbox abstellen.</p>
 						<p>Schlägt der Abgleich der importierten Sachgebiete mit denen der Sachgebiete-Datei fehl – weil <abbr title="zum Beispiel">z. B.</abbr> die Datei entfernt oder umbenannt wurde –, erscheint hinter dem Dateinamen ein kleines Icon: <img src="../img/fehler.svg" width="24" height="24" alt="">. Die einmal importierten Sachgebiete bleiben allerdings erhalten.</p>
+						<p>Die Sachgebietsliste wird für die kommende Funktion <i>Bedeutungsgerüst</i> benutzt.</p>
 					</li>
 				</ul>
 				
@@ -44,17 +45,26 @@ Sport
 					<li>
 						<p>Textkopie: Die mit Version 0.5.0 eingeführte Funktion, die Hervorhebung des Kartei-Worts mitzukopieren, wurde leicht modifiziert. Ob und wie die Hervorhebung des Kartei-Worts beim Kopieren mithilfe des Kopier-Icons <img src="../img/tool-kopieren.svg" width="24" height="24" alt=""> oder des Kontextmenüs (<i>Rechtsklick &gt; Textauswahl kopieren</i>) erhalten bleiben soll, kann von nun an genauer gesteuert werden:</p>
 						<p>In <i>Programm &gt; Einstellungen &gt; Allgemeines</i> finden sich dazu zwei Optionen, mit denen zum einen festgelegt werden kann, ob die Markierung des Kartei-Worts beim Kopieren überhaupt erhalten bleiben soll. Zum anderen lässt sich einstellen, ob das Wort zusätzlich zu einer immer vorhandenen Auszeichnung als halbfett auch noch grau hinterlegt wird. Die hier vorgenommenen Einstellungen werden bei allen Kopierfunktionen berücksichtigt: in der <i>Belegliste</i>, in der <i>Karteikarte</i> (Lese- und Formularansicht) und im <i>Druckfenster</i>. Sie sind standardmäßig ausgeschaltet.</p>
-						<p>Ist die Hervorhebung des Worts in der <i>Belegliste</i> ausgeschaltet (Funktion <img src="../img/liste-hervorheben.svg" width="24" height="24" alt="">), wird die Markierung in den Text, der beim Kopieren in die Zwischenablage geschoben wird, automatisch eingefügt.</p>
+						<p>Ist die Hervorhebung des Worts in der <i>Belegliste</i> ausgeschaltet (Funktion <img src="../img/liste-hervorheben.svg" width="24" height="24" alt="">), wird die Markierung in dem Text, der beim Kopieren in die Zwischenablage geschoben wird, automatisch vorgenommen.</p>
 						<p>
 					</li>
+					<li>
+						<p>Filterleiste: In langen Filterblöcken mit Scrollleiste wird nach dem Neuaufbau der Filter jetzt auch die Scrollposition der Filterblöcke wiederhergestellt. So wird ein dysfunktionales Springen nach der Auswahl eines Filters verhindert: Man konnte unter Umständen nicht mehr sehen, was man eigentlich angeklickt hatte.</p>
+						<p>Ist der Reduktionsmodus aktiv (Funktion <img src="../img/filter-reduzieren.svg" width="24" height="24" alt="">) werden die Filterblöcke allerdings immer ganz nach oben gescrollt, weil sich die Anzahl der angezeigten Filter in diesem Modus <abbr title="in der Regel">i. d. R.</abbr> massiv reduziert, was eine deutlich kompliziertere Lösung des Problems erfordern würde.</p>
+					</li>
+					<li>Filterleiste: Um die Filterleiste visuell zu entlasten, erscheinen die Reset-Icons, mit deren Hilfe man einen einzelnen Filterblock zurücksetzen kann, erst, wenn man mit der Maus über den Kopf rüberfährt. Ihre Funktionalität hat sich nicht geändert.</li>
+					<li>Belegliste: Die Belegliste-Einstellungen sind nun auch über das Kontextmenü zu erreichen (Rechtsklick in einem beliebigen Belegkopf).</li>
+					<li>Im Tooltip aller Icons, deren Funktion nicht nur durch Klick, sondern auch durch ein Tastaturkürzel aufgerufen werden kann, wurde das entsprechende Tastaturkürzel notiert. Das Icon <img src="../img/drucken.svg" width="24" height="24" alt=""> hat in der Karteikarte nun <abbr title="zum Beispiel">z. B.</abbr> den Tooltip <q>Karte drucken (Strg + P)</q>.</li>
 				</ul>
 				
 				<h3>Behobene Fehler</h3>
 				
 				<ul>
+					<li><span class="obacht">Schwerer Fehler:</span> Neue Karteien wurden fälschlicherweise immer noch mit der Dateiformat-Version <strong>1</strong> getaggt. Richtig wäre hier aber die <strong>2</strong> gewesen, und zwar seit Version 0.4.0 von <i class="app-name"></i>. Der Fehler führte dazu, dass beim zweiten Öffnen einer neu erstellten Kartei in allen existierenden Belegen das Korpus-Feld gelöscht wurde. <span lang="la">Mea culpa, mea culpa, mea maxima culpa!</span></li>
 					<li>Erinnerungen: Die Funktion, die darauf aufmerksam macht, dass an verschiedenen Stellen vergessen wurde, die BearbeiterIn einzutragen, wurde unter Umständen auch dann aufgerufen, wenn gar keine Kartei geöffnet war. Das führte zu einem Programmfehler.</li>
 					<li>Textkopie: Beim Kopieren eines ganzen Belegs mithilfe des Kopier-Icons <img src="../img/tool-kopieren.svg" width="24" height="24" alt=""> wurde die Hervorhebung des Worts nicht mitkopiert (<abbr title="vergleiche">vgl.</abbr> hierzu <i>Verbesserungen</i>).</li>
-					<li>Beim Löschen der Belege aus der <i>Belegliste</i> via Rechtsklick wurde in der Sicherheitsfrage nicht der komplette Kurztitel des zu löschenden Belegs angezeigt.</li>
+					<li>Filterleiste: Wurden in der <i>Belegliste</i> die zuvor gefilterten Belege so geändert, dass kein Beleg mehr auf den gewählten Filter zutraf, der Filter demnach gar nicht mehr existierte, war dieser Filter dennoch aktiv und filterte alle Belege heraus. Im Ergebnis erschien kein Beleg in der Liste, obwohl kein Filter aktiv zu sein schien.</li>
+					<li>Belegliste: Beim Löschen der Belege aus der <i>Belegliste</i> via Rechtsklick wurde in der Sicherheitsfrage nicht der komplette Kurztitel des zu löschenden Belegs angezeigt.</li>
 					<li><abbr title="Deutsches Textarchiv">DTA</abbr>-Import: Beim Auslesen der Textsorte gab es in Texten, die mehrere kommagetrennte Unterklassen haben, einen kleineren Importfehler.</li>
 				</ul>
 			</div>

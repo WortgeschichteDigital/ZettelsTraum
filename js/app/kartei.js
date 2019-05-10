@@ -49,8 +49,8 @@ let kartei = {
 				pr: "",
 			}],
 			re: 0, // Revision
-			ty: "wgd", // Datei ist eine wgd-Datei (immer dieser Wert!)
-			ve: 1, // Version des Datei-Formats
+			ty: "wgd", // Datei ist eine WGD-Datei (immer dieser Wert!)
+			ve: konversion.version, // Version des Dateiformats
 			wo: kartei.wort, // Wort
 		};
 		// Formvarianten aus dem DTA importieren

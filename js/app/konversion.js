@@ -1,6 +1,10 @@
 "use strict";
 
 let konversion = {
+	// aktuelle Version des Dateiformats
+	// *** WICHTIG! *** WICHTIG! *** WICHTIG! ***
+	// Bei Änderungen anpassen!
+	version: 2,
 	// Verteilerfunktion
 	start () {
 		konversion.von1nach2();

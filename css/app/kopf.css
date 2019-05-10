@@ -11,6 +11,7 @@
 	width: calc(100% - 20px);
 	height: 24px;
 	background-color: var(--farbe);
+	white-space: nowrap;
 	transition: top .5s ease;
 }
 

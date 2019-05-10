@@ -61,6 +61,7 @@ let popup = {
 		} else if (target === "beleg-moddel") {
 			popup.menuBeleg(menu);
 			popup.menuBelegDel(menu);
+			popup.menuBeleglisteConf(menu);
 			popup.menuBelege(menu, true);
 		} else if (target === "anhang") {
 			popup.menuAnhang(menu);
@@ -71,6 +72,9 @@ let popup = {
 			popup.menuSchliessen(menu, false);
 		} else if (target === "beleg-conf") {
 			popup.menuBelegConf(menu);
+			popup.menuBelege(menu, true);
+		} else if (target === "bedeutungen-conf") {
+			popup.menuBedeutungenConf(menu);
 			popup.menuBelege(menu, true);
 		} else if (target === "belege") {
 			popup.menuBelege(menu, false);
@@ -94,9 +98,16 @@ let popup = {
 		}
 		// alle Elemente im Pfad durchgehen
 		for (let i = 0, len = pfad.length; i < len; i++) {
-			// Textfelder
-			if (pfad[i].nodeName === "INPUT" && /^(date|text)$/.test(pfad[i].type) ||
-					pfad[i].nodeName === "TEXTAREA") {
+			// Textfelder:
+			//   - <input type="date|text"> + nicht readonly
+			//   - <textarea>
+			//   - Edit-Feld
+			if (pfad[i].nodeName === "INPUT" &&
+					/^(date|text)$/.test(pfad[i].type) &&
+					pfad[i].getAttribute("readonly") === null ||
+					pfad[i].nodeName === "TEXTAREA" ||
+					pfad[i].nodeType === 1 &&
+					pfad[i].getAttribute("contenteditable")) {
 				return "textfeld";
 			}
 			// Überschriften
@@ -146,6 +157,8 @@ let popup = {
 			// (müssen nach "Klassen" überprüft werden)
 			if (id === "beleg") {
 				return "beleg-conf";
+			} else if (id === "bedeutungen") {
+				return "bedeutungen-conf";
 			}
 		}
 		// kein passendes Element gefunden => Ist eine Kartei offen?
@@ -435,6 +448,24 @@ let popup = {
 			click: () => beleg.aktionLoeschenFrage(popup.belegID),
 		}));
 	},
+	// Belegliste-Conf-Menü füllen
+	//   menu = Object
+	//     (Menü-Objekt, an das die Menü-Items gehängt werden müssen)
+	menuBeleglisteConf (menu) {
+		const {MenuItem} = require("electron").remote,
+			path = require("path");
+		menu.append(new MenuItem({
+			type: "separator",
+		}));
+		menu.append(new MenuItem({
+			label: "Belegliste-Einstellungen",
+			icon: path.join(__dirname, "img", "menu", "programm-einstellungen.png"),
+			click: function() {
+				optionen.oeffnen();
+				optionen.sektionWechseln(document.getElementById("einstellungen-link-belegliste"));
+			},
+		}));
+	},
 	// Anhang-Menü füllen
 	//   menu = Object
 	//     (Menü-Objekt, an das die Menü-Items gehängt werden müssen)
@@ -467,6 +498,7 @@ let popup = {
 				const id_oben = overlay.oben();
 				overlay.schliessen(document.getElementById(id_oben));
 			},
+			accelerator: "Esc",
 		}));
 	},
 	// Beleg-Conf-Menü füllen
@@ -480,7 +512,22 @@ let popup = {
 			icon: path.join(__dirname, "img", "menu", "programm-einstellungen.png"),
 			click: function() {
 				optionen.oeffnen();
-				optionen.sektionWechseln(document.getElementById("einstellungen-link-karteikarten"));
+				optionen.sektionWechseln(document.getElementById("einstellungen-link-karteikarte"));
+			},
+		}));
+	},
+	// Bedeutungen-Conf-Menü füllen
+	//   menu = Object
+	//     (Menü-Objekt, an das die Menü-Items gehängt werden müssen)
+	menuBedeutungenConf (menu) {
+		const {MenuItem} = require("electron").remote,
+			path = require("path");
+		menu.append(new MenuItem({
+			label: "Bedeutungsgerüst-Einstellungen",
+			icon: path.join(__dirname, "img", "menu", "programm-einstellungen.png"),
+			click: function() {
+				optionen.oeffnen();
+				optionen.sektionWechseln(document.getElementById("einstellungen-link-bedeutungen"));
 			},
 		}));
 	},

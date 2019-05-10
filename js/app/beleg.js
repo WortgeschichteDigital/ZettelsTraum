@@ -1493,9 +1493,9 @@ let beleg = {
 		let an = true;
 		if (button.classList.contains("aktiv")) {
 			an = false;
-			button.title = "zur Leseansicht wechseln";
+			button.title = "zur Leseansicht wechseln (Strg + U)";
 		} else {
-			button.title = "zur Formularansicht wechseln";
+			button.title = "zur Formularansicht wechseln (Strg + U)";
 		}
 		button.classList.toggle("aktiv");
 		document.querySelectorAll(".beleg-form").forEach(function(i) {
@@ -1617,10 +1617,10 @@ let beleg = {
 		let link = document.getElementById("beleg-link-trennung");
 		if (optionen.data.beleg.trennung) {
 			link.classList.add("aktiv");
-			link.title = "Silbentrennung nicht anzeigen";
+			link.title = "Silbentrennung nicht anzeigen (Strg + T)";
 		} else {
 			link.classList.remove("aktiv");
-			link.title = "Silbentrennung anzeigen";
+			link.title = "Silbentrennung anzeigen (Strg + T)";
 		}
 	},
 	// trägt eine Bedeutung ein, die aus dem Bedeutungen-Fenster

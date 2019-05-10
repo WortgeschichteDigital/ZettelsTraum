@@ -4,6 +4,35 @@ let optionen = {
 	// Speicherort aller Optionen
 	// (ausgenommen ist der Fenster-Status, der nur im Main-Prozess steht)
 	data: {
+		// Karteikarte
+		beleg: {
+			// Trennstriche und Seitenumbrüche in der Leseansicht anzeigen
+			trennung: true,
+		},
+		// Filterleiste
+		filter: {
+			// Anzahl der Filter während der Filterung sukzessive reduzieren
+			reduzieren: false,
+			// erweiterte Suche: Suchausdruck als Phrase behandeln
+			phrase: false,
+			// erweiterte Suche: Groß- und Kleinschreibung im Text beachten
+			"text-genau": false,
+			// erweiterte Suche: nur ganze Wörter suchen
+			"ganzes-wort": false,
+			// erweiterte Suche: Datenfelder
+			"feld-au": true,
+			"feld-bd": true,
+			"feld-bs": true,
+			"feld-da": true,
+			"feld-kr": true,
+			"feld-no": true,
+			"feld-qu": true,
+			"feld-ts": true,
+			// speichert den gewünschten Zeitintervall, der in der Filterliste gewählt wurde
+			zeitraum: "100",
+			// inklusive Logik sollte der exklusiven vorgezogen werden (betrifft "Verschiedenes")
+			logik: "inklusiv",
+		},
 		// Einstellungen im Kopf der Belegliste
 		belegliste: {
 			// Filterleiste anzeigen
@@ -34,16 +63,13 @@ let optionen = {
 			// Steuerung Details: Metainfos einblenden
 			detail_meta: false,
 		},
-		// Einstellungen in der Karteikarte
-		beleg: {
-			// Trennstriche und Seitenumbrüche in der Leseansicht anzeigen
-			trennung: true,
-		},
 		// Einstellungen-Dialog
 		einstellungen: {
+			// ALLGEMEINES
 			// für diesen Computer registrierte BearbeiterIn
 			bearbeiterin: "",
-			// Timeout für Anfrage an das DTA in Sekunden; einfacher als String, wird bei Bedarf in Number konvertiert
+			// Timeout für Anfrage an das DTA in Sekunden
+			// (einfacher als String, wird bei Bedarf in Number konvertiert)
 			timeout: "10",
 			// Notizen-Fenster nach dem Speichern direkt schließen
 			"notizen-schliessen": true,
@@ -51,8 +77,8 @@ let optionen = {
 			"textkopie-wort": false,
 			// beim Kopieren ist das Wort grau hinterlegt
 			"textkopie-wort-hinterlegt": false,
-			// Nach dem Starten des Programms wird die Menü-Leiste ausgeblendet,
-			// bis die Alt-Taste gedrückt wird.
+			// MENÜ
+			// Menü-Leiste ausblenden (einblenden, wenn Alt gedruckt)
 			autoHideMenuBar: false,
 			// Quick-Access-Bar anzeigen
 			quick: false,
@@ -76,63 +102,45 @@ let optionen = {
 			"quick-belege-hinzufuegen": false,
 			"quick-belege-auflisten": false,
 			"quick-belege-sortieren": false,
+			// BEDEUTUNGSGERÜST
+			// Bedeutungsgerüst nach dem Speichern direkt schließen
+			"bedeutungen-schliessen": true,
+			// Sachgebiete
+			sachgebiete: [],
+			// Sachgebiete (Datei mit Liste an Sachgebieten)
+			"sachgebiete-datei": "",
+			// Sachgebiete (beim Start automatisch mit der Datei abgleichen)
+			"sachgebiete-abgleich": true,
+			// Sachgebiete (Datum des letzten Abgleichs)
+			"sachgebiete-zuletzt": "",
+			// KARTEIKARTE
+			// neue Karteikarten als unvollständig markieren
+			unvollstaendig: false,
+			// Textfeld immer ergänzen, wenn aus einem Dropdown-Menü ein Wert
+			// ausgewählt wurde (betrifft Bedeutung und Textsorte)
+			"immer-ergaenzen": false,
+			// bestehende Karteikarten in der Leseansicht öffnen
+			leseansicht: true,
+			// Karteikarte nach dem Speichern direkt schließen
+			"karteikarte-schliessen": true,
+			// FILTERLEISTE
 			// alle anderen Filterblöcke zuklappen, wenn ein Filterblock geöffnet wird
 			"filter-zuklappen": false,
 			// inaktive Filterblöcke nach dem Neuaufbau der Filterleiste automatisch zuklappen
 			"filter-inaktive": false,
 			// nicht warnen, wenn eine Karte erstellt wurde, sie aber wegen der Filterregeln nicht angezeigt wird
 			"nicht-karte-gefiltert": false,
-			// Bedeutungsgerüst nach dem Speichern direkt schließen
-			"bedeutungen-schliessen": true,
-			// Bedeutungsgerüst: Sachgebiete
-			sachgebiete: [],
-			// Bedeutungsgerüst: Sachgebiete (Datei mit Liste an Sachgebieten)
-			"sachgebiete-datei": "",
-			// Bedeutungsgerüst: Sachgebiete (beim Start automatisch mit der Datei abgleichen)
-			"sachgebiete-abgleich": true,
-			// Bedeutungsgerüst: Sachgebiete (Datum des letzten Abgleichs)
-			"sachgebiete-zuletzt": "",
+			// BELEGLISTE
 			// Textsorte in den Kopf der Belegliste eintragen
 			textsorte: false,
-			// neue Karteikarten als unvollständig markieren
-			unvollstaendig: false,
-			// Textfeld immer ergänzen, wenn aus einem Dropdown-Menü ein Wert ausgewählt wurde (betrifft Bedeutung und Textsorte)
-			"immer-ergaenzen": false,
-			// bestehende Karteikarten in der Leseansicht öffnen
-			leseansicht: true,
-			// Karteikarte nach dem Speichern direkt schließen
-			"karteikarte-schliessen": true,
 		},
-		// Einstellungen in der Filterleiste
-		filter: {
-			// Anzahl der Filter während der Filterung sukzessive reduzieren
-			reduzieren: false,
-			// erweiterte Suche: Suchausdruck als Phrase behandeln
-			phrase: false,
-			// erweiterte Suche: Groß- und Kleinschreibung im Text beachten
-			"text-genau": false,
-			// erweiterte Suche: nur ganze Wörter suchen
-			"ganzes-wort": false,
-			// erweiterte Suche: Datenfelder
-			"feld-au": true,
-			"feld-bd": true,
-			"feld-bs": true,
-			"feld-da": true,
-			"feld-kr": true,
-			"feld-no": true,
-			"feld-qu": true,
-			"feld-ts": true,
-			// speichert den gewünschten Zeitintervall, der in der Filterliste gewählt wurde
-			zeitraum: "100",
-			// inklusive Logik sollte der exklusiven vorgezogen werden (betrifft "Verschiedenes")
-			logik: "inklusiv",
-		},
+		// Liste mit Personen, die in dem Projekt arbeiten
+		// (wird über die Einstellungen geladen)
+		personen: [],
 		// letzter Pfad, der beim Speichern oder Öffnen einer Datei benutzt wurde
 		letzter_pfad: "",
 		// zuletzt verwendete Dokumente
 		zuletzt: [],
-		// Liste mit Personen, die in dem Projekt arbeiten (wird über die Einstellungen geladen)
-		personen: [],
 	},
 	// liest die vom Main-Prozess übergebenen Optionen ein
 	// (zur Sicherheit werden alle Optionen einzeln eingelesen;
