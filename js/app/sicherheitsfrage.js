@@ -23,6 +23,8 @@ let sicherheitsfrage = {
 	//   funktion = Function
 	//     (die Funktion, die die BenutzerIn eigentlich ausführen wollte,
 	//     also z.B. das Programm schließen, eine neue Kartei öffnen usw.)
+	//   werte = Object
+	//     (enthält die Datentypen, die überprüft werden sollen)
 	warnen (funktion, werte) {
 		sicherheitsfrage.funktion = funktion;
 		sicherheitsfrage.werte = werte;

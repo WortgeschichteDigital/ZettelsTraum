@@ -5,7 +5,7 @@ window.addEventListener("load", function() {
 	document.addEventListener("keydown", helferWin.tastatur);
 	
 	// EVENTS INITIALISIEREN
-	const {ipcRenderer} = require("electron");
+	let {ipcRenderer} = require("electron");
 	// Über App
 	document.getElementById("icon").addEventListener("click", () => ipcRenderer.send("ueber-app", "bedeutungen"));
 	// Druck-Icon

@@ -6,10 +6,10 @@ let bedeutungen = {
 		// Wort eintragen
 		document.querySelector("h1").textContent = daten.wort;
 		// Content leeren
-		const cont = document.getElementById("bd-win-cont");
+		let cont = document.getElementById("bd-win-cont");
 		helfer.keineKinder(cont);
 		// Sind überhaupt Bedeutungen vorhanden?
-		const bd = daten.bedeutungen.bd_folge;
+		let bd = daten.bedeutungen.bd_folge;
 		if (!bd.length) {
 			let p = document.createElement("p");
 			p.classList.add("bd-win-keine");
@@ -19,12 +19,12 @@ let bedeutungen = {
 		}
 		// Bedeutungen aufbauen
 		for (let i = 0, len = bd.length; i < len; i++) {
-			const neue_bd = bedeutungen.aufbauenLi(bd[i], daten.bedeutungen.bd[bd[i]]);
+			let neue_bd = bedeutungen.aufbauenLi(bd[i], daten.bedeutungen.bd[bd[i]]);
 			// in Bedeutungsbaum einhängen
 			//   [0] = <div>
 			//   [1] = Verschachtelungstiefe; 0 = ohne Verschachtelung, 1 = 1. Ebene usw.
 			if (neue_bd[1] > 0) {
-				const schachtel = schachtelFinden(neue_bd[0].dataset.bd);
+				let schachtel = schachtelFinden(neue_bd[0].dataset.bd);
 				schachtel.appendChild(neue_bd[0]);
 			} else if (neue_bd[1] === 0) { // die Bedeutung ist unterhalb einer Baumstruktur
 				cont.appendChild(neue_bd[0]);
@@ -41,7 +41,7 @@ let bedeutungen = {
 			}
 			bd = bd_arr.join(": ");
 			// Schachtel suchen
-			const schachtel = cont.querySelector(`[data-bd^="${bd}"]`);
+			let schachtel = cont.querySelector(`[data-bd^="${bd}"]`);
 			if (schachtel) {
 				return schachtel;
 			}
@@ -118,7 +118,7 @@ let bedeutungen = {
 	},
 	// Bedeutungsbaum drucken
 	drucken () {
-		const {ipcRenderer} = require("electron");
+		let {ipcRenderer} = require("electron");
 		ipcRenderer.send("bedeutungen-fenster-drucken", document.getElementById("bd-win-cont").outerHTML);
 	},
 	// Bedeutung im Formular des Hauptfensters eintragen
@@ -126,8 +126,8 @@ let bedeutungen = {
 	//     (der Absatz, auf den geklickt wurde)
 	eintragen (p) {
 		p.addEventListener("click", function() {
-			const bd = this.parentNode.dataset.bd,
-				{ipcRenderer} = require("electron");
+			const bd = this.parentNode.dataset.bd;
+			let {ipcRenderer} = require("electron");
 			ipcRenderer.send("bedeutungen-fenster-eintragen", bd);
 		});
 	},

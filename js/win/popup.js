@@ -14,7 +14,7 @@ let popup = {
 			return;
 		}
 		// Menü initialisieren
-		const {remote} = require("electron"),
+		let {remote} = require("electron"),
 			{Menu} = remote,
 			menu = new Menu();
 		// Menü füllen
@@ -70,8 +70,8 @@ let popup = {
 	//     (speichert den Event-Pfad, also die Elementeliste, über die das
 	//     Klick-Event aufgerufen wurde)
 	getTargetSelection (pfad) {
-		const sel = window.getSelection();
-		let ele = sel.anchorNode;
+		let sel = window.getSelection(),
+			ele = sel.anchorNode;
 		while (ele.nodeType !== 1) {
 			ele = ele.parentNode;
 		}
@@ -88,13 +88,13 @@ let popup = {
 	//   menu = Object
 	//     (Menü-Objekt, an das die Menü-Items gehängt werden müssen)
 	menuKopieren (menu) {
-		const {MenuItem} = require("electron").remote,
+		let {MenuItem} = require("electron").remote,
 			path = require("path");
 		menu.append(new MenuItem({
 			label: "Textauswahl kopieren",
 			icon: path.join(__dirname, "../", "img", "menu", "bearbeiten-kopieren.png"),
 			click: function() {
-				const {clipboard} = require("electron");
+				let {clipboard} = require("electron");
 				clipboard.writeText(popup.textauswahl);
 			},
 		}));
@@ -103,13 +103,13 @@ let popup = {
 	//   menu = Object
 	//     (Menü-Objekt, an das die Menü-Items gehängt werden müssen)
 	menuKopierenCode (menu) {
-		const {MenuItem} = require("electron").remote,
+		let {MenuItem} = require("electron").remote,
 			path = require("path");
 		menu.append(new MenuItem({
 			label: "Code kopieren",
 			icon: path.join(__dirname, "../", "img", "menu", "bearbeiten-kopieren.png"),
 			click: function() {
-				const {clipboard} = require("electron");
+				let {clipboard} = require("electron");
 				clipboard.writeText(popup.element.innerText);
 			},
 		}));
@@ -118,7 +118,7 @@ let popup = {
 	//   menu = Object
 	//     (Menü-Objekt, an das die Menü-Items gehängt werden müssen)
 	menuBearbeiten (menu) {
-		const {MenuItem} = require("electron").remote,
+		let {MenuItem} = require("electron").remote,
 			path = require("path");
 		menu.append(new MenuItem({
 			label: "Rückgängig",
@@ -158,13 +158,13 @@ let popup = {
 	//   menu = Object
 	//     (Menü-Objekt, an das die Menü-Items gehängt werden müssen)
 	menuLink (menu) {
-		const {MenuItem} = require("electron").remote,
+		let {MenuItem} = require("electron").remote,
 			path = require("path");
 		menu.append(new MenuItem({
 			label: "Link kopieren",
 			icon: path.join(__dirname, "../", "img", "menu", "popup-link.png"),
 			click: function() {
-				const {clipboard} = require("electron");
+				let {clipboard} = require("electron");
 				clipboard.writeText(popup.element.getAttribute("href"));
 			},
 		}));

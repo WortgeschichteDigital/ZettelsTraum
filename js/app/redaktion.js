@@ -198,7 +198,6 @@ let redaktion = {
 		input.id = `redaktion-${droptyp}-${id}`;
 		input.type = "text";
 		input.value = val;
-		input.setAttribute("spellcheck", "false");
 		dropdown.feld(input);
 		// Dropdown-Link erzeugen
 		let a = document.createElement("a");

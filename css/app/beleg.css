@@ -1,8 +1,43 @@
 @charset "utf-8";
 
+/* Kopf ----------------------------------------- */
+#beleg header {
+	position: sticky;
+	top: 70px;
+	z-index: 2;
+	padding: 0 0 10px 0;
+	background-color: #fff;
+}
+
+#beleg header input:first-child {
+	margin-left: 0;
+}
+
+#beleg.quick header {
+	top: 99px;
+}
+
+#beleg header > div {
+	position: relative;
+	margin: 0 auto;
+	max-width: 800px;
+}
+
+#beleg-loeschen {
+	margin-left: 45px;
+}
+
+/* Styles zu .beleg-opt-block → liste.css */
+#beleg-opt {
+	position: absolute;
+	right: 0;
+	top: 0;
+	height: 24px;
+}
+
 /* Tabelle des Formulars ------------------------ */
 #beleg table {
-	margin: 25px auto;
+	margin: 0 auto 20px auto;
 	border-collapse: separate;
 	border-spacing: 0;
 	border-radius: 10px;
@@ -13,31 +48,20 @@
 	background-color: var(--hintergrund);
 }
 
-#beleg caption {
-	position: relative;
-	margin: 0 0 10px 0;
-	padding: 0 20px;
-	caption-side: top;
+#beleg h2 {
+	margin: 21px 0 10px 15px; /* 21px von oben, damit identische Position mit Überschrift Bedeutungsgerüst */
+	padding: 0;
+	background-color: transparent;
+	color: var(--textFarbe);
+	font-size: 24px;
 	font-style: italic;
+	font-weight: normal;
+	line-height: 38px;
 	text-align: left;
 }
 
-#beleg-titel {
-	color: var(--textFarbe);
-}
-
 #beleg-geaendert {
-	display: inline-block;
-	margin-left: 5px;
-	color: var(--textFarbe);
-}
-
-/* mehr Styles zu .beleg-opt-block → liste.css */
-
-.beleg-opt-block {
-	position: absolute;
-	right: 20px;
-	top: 0;
+	margin-left: 10px;
 }
 
 #beleg th {
@@ -67,10 +91,6 @@
 	width: auto;
 }
 
-#beleg td.buttons {
-	padding-bottom: 30px;
-}
-
 #beleg td.check div {
 	display: flex;
 	flex-wrap: wrap;
@@ -80,6 +100,7 @@
 	flex: 1 0 130px;
 	margin: 0;
 	padding: 0;
+	line-height: 30px;
 	text-align: center;
 }
 
@@ -123,15 +144,6 @@
 textarea#beleg-bs {
 	min-height: 96px;
 	max-height: 288px;
-}
-
-#beleg input[type="button"]:first-child {
-	margin-left: 0;
-}
-
-#beleg-loeschen {
-	position: absolute;
-	right: 5px;
 }
 
 #beleg label {

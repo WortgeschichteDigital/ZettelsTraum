@@ -321,7 +321,7 @@ p.no-indent + .filter-baum, /* betrifft Verschiedenes > Filterlogik */
 	height: 24px;
 }
 
-.beleg-opt-block, /* margin-left im Beleg generell unnötig */
+.beleg-opt-block:first-child,
 .filter-ctrl-block:first-child,
 .liste-opt-block:first-child {
 	margin-left: 0;
@@ -435,7 +435,6 @@ p.no-indent + .filter-baum, /* betrifft Verschiedenes > Filterlogik */
 	text-overflow: ellipsis;
 	white-space: nowrap;
 	background-color: var(--hintergrund);
-	transition: background-color 1.5s ease;
 }
 
 .liste-kopf .liste-textsorte {
@@ -443,8 +442,12 @@ p.no-indent + .filter-baum, /* betrifft Verschiedenes > Filterlogik */
 }
 
 .liste-kopf.hinweis-beleg {
-	background-color: var(--highlight);
-	transition: background-color 1.5s ease;
+	background-color: var(--farbeGruen);
+	color: #fff;
+}
+
+.liste-kopf.hinweis-beleg mark {
+	color: #fff;
 }
 
 .liste-kopf mark {

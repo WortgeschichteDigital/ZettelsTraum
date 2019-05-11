@@ -86,6 +86,8 @@ let beleg = {
 			ts: "", // Textsorte
 			un: optionen.data.einstellungen.unvollstaendig, // Bearbeitung unvollständig
 		};
+		// Wert des Suchfelds der Leseansicht zurücksetzen
+		beleg.leseSucheText = "";
 		// ggf. die Leseansicht verlassen
 		if (document.getElementById("beleg-link-leseansicht").classList.contains("aktiv")) {
 			beleg.leseToggle(false);
@@ -111,13 +113,15 @@ let beleg = {
 				beleg.data[i] = data.ka[id][i];
 			}
 		}
+		// Wert des Suchfelds der Leseansicht zurücksetzen
+		beleg.leseSucheText = "";
 		// in Lese- oder in Formularansicht öffnen?
 		const leseansicht = document.getElementById("beleg-link-leseansicht");
 		if (optionen.data.einstellungen.leseansicht) {
 			if (!leseansicht.classList.contains("aktiv")) {
 				beleg.leseToggle(false);
 			} else {
-				beleg.leseFill();
+				beleg.leseFill(false);
 			}
 		} else if (leseansicht.classList.contains("aktiv")) {
 			beleg.leseToggle(false);
@@ -128,12 +132,15 @@ let beleg = {
 	// Formular füllen und anzeigen
 	formular (neu) {
 		// Beleg-Titel eintragen
-		document.getElementById("beleg-titel").textContent = `Beleg #${beleg.id_karte}`;
+		const beleg_titel = document.getElementById("beleg-titel"),
+			titel_text = document.createTextNode(`Beleg #${beleg.id_karte}`);
+		beleg_titel.replaceChild(titel_text, beleg_titel.firstChild);
 		// Feld-Werte eintragen
 		let felder = document.querySelectorAll("#beleg input, #beleg textarea");
 		for (let i = 0, len = felder.length; i < len; i++) {
 			let feld = felder[i].id.replace(/^beleg-/, "");
-			if (felder[i].type === "button") {
+			if (felder[i].type === "button" ||
+					felder[i].id === "beleg-suchfeld") {
 				continue;
 			} else if (feld === "dta") {
 				felder[i].value = "";
@@ -977,6 +984,22 @@ let beleg = {
 				quelle += ".";
 			}
 		}
+		// Wort gefunden?
+		beleg.DTAImportCheck();
+	},
+	// überprüft, ob das Wort im importierten Text gefunden wurde
+	DTAImportCheck () {
+		if (!beleg.data.bs || !optionen.data.einstellungen["wort-check"]) {
+			return;
+		}
+		const form_reg = new RegExp(helfer.formVariRegExp(), "i"),
+			text = beleg.data.bs;
+		if (!form_reg.test(liste.textBereinigen(text))) {
+			dialog.oeffnen("alert", function() {
+				document.getElementById("beleg-dta").focus();
+			});
+			dialog.text("Das Kartei-Wort wurde im gerade importierten Belegtext nicht gefunden.");
+		}
 	},
 	// Beleg wurde geändert und noch nicht gespeichert
 	geaendert: false,
@@ -984,11 +1007,11 @@ let beleg = {
 	//   geaendert = Boolean
 	belegGeaendert (geaendert) {
 		beleg.geaendert = geaendert;
-		let icon = document.getElementById("beleg-geaendert");
+		let asterisk = document.getElementById("beleg-geaendert");
 		if (geaendert) {
-			icon.classList.remove("aus");
+			asterisk.classList.remove("aus");
 		} else {
-			icon.classList.add("aus");
+			asterisk.classList.add("aus");
 		}
 	},
 	// Beleg auf Enter speichern (wenn Fokus in Textfeld oder auf Checkbox)
@@ -1512,6 +1535,14 @@ let beleg = {
 				i.classList.add("aus");
 			}
 		});
+		// Header-Icons ein- oder ausblenden
+		document.querySelectorAll("#beleg .icon-leseansicht").forEach(function(i) {
+			if (an) {
+				i.classList.remove("aus");
+			} else {
+				i.classList.add("aus");
+			}
+		});
 		// Einfüge-Icons ein- oder ausblenden
 		document.querySelectorAll("#beleg .icon-tools-einfuegen").forEach(function(i) {
 			if (an) {
@@ -1529,14 +1560,18 @@ let beleg = {
 		}
 		// Textwerte eintragen
 		if (an) {
-			beleg.leseFill();
+			beleg.leseFill(false);
 		} else if (user) {
 			document.querySelectorAll("#beleg textarea").forEach((textarea) => helfer.textareaGrow(textarea));
 			document.getElementById("beleg-da").focus();
 		}
 	},
 	// aktuelle Werte des Belegs in die Leseansicht eintragen
-	leseFill () {
+	//   suche = Boolean
+	//     (erneute Füllung des Formulars wurde durch eine Suche angestoßen)
+	leseFill (suche) {
+		// Sprungmarke zurücksetzen
+		beleg.ctrlSpringenPos = -1;
 		// Meta-Infos
 		const cont = document.getElementById("beleg-lese-meta");
 		helfer.keineKinder(cont);
@@ -1563,29 +1598,98 @@ let beleg = {
 			}
 			helfer.keineKinder(cont);
 			// Absätze einhängen
-			const p = v.replace(/\n\s*\n/g, "\n").split("\n");
+			const p = v.replace(/\n\s*\n/g, "\n").split("\n"),
+				form_reg = new RegExp(helfer.formVariRegExp(), "i");
+			let zuletzt_gekuerzt = false; // true, wenn der vorherige Absatz gekürzt wurde
 			for (let i = 0, len = p.length; i < len; i++) {
+				let nP = document.createElement("p");
+				cont.appendChild(nP);
 				let text = p[i];
 				if (!text) {
 					text = " ";
 				} else {
+					// Absatz ggf. kürzen
+					if (wert === "bs" &&
+							optionen.data.beleg.kuerzen &&
+							!form_reg.test(liste.textBereinigen(text))) {
+						if (zuletzt_gekuerzt) {
+							cont.removeChild(cont.lastChild);
+						} else {
+							nP.textContent = "[…]";
+							zuletzt_gekuerzt = true;
+						}
+						continue;
+					}
+					zuletzt_gekuerzt = false;
+					// Absatz einbinden
 					if (!optionen.data.beleg.trennung) {
 						text = liste.belegTrennungWeg(text, true);
 					}
 					text = liste.linksErkennen(text);
+					if (wert === "bs") {
+						text = liste.belegWortHervorheben(text, true);
+						text = beleg.leseSucheMark(text);
+					}
 				}
-				if (wert === "bs") {
-					text = liste.belegWortHervorheben(text, true);
-				}
-				let nP = document.createElement("p");
 				nP.innerHTML = text;
-				cont.appendChild(nP);
+			}
+			// ggf. Suchfeld erzeugen
+			if (wert === "bs" && v && optionen.data.einstellungen["karte-suchfeld"]) {
+				let p = document.createElement("p");
+				p.classList.add("input-text");
+				let input = document.createElement("input");
+				p.appendChild(input);
+				cont.appendChild(p);
+				input.id = "beleg-suchfeld";
+				input.type = "text";
+				input.value = beleg.leseSucheText;
+				input.setAttribute("placeholder", "Suche");
+				input.setAttribute("tabindex", "0");
+				beleg.leseSuche(input);
+				if (suche) {
+					input.focus();
+				}
 			}
 		}
 		// Klick-Events an alles Links hängen
 		document.querySelectorAll("#beleg .link").forEach(function(i) {
 			liste.linksOeffnen(i);
 		});
+	},
+	// enthält den Wert des Suchfelds über dem Beleg in der Leseansicht
+	leseSucheText: "",
+	// speichert den Timeout für das Tippen im Suchfeld
+	leseSucheTimeout: null,
+	// Suche im Belegtext anstoßen
+	//   input = Element
+	//     (das Suchfeld)
+	leseSuche (input) {
+		input.addEventListener("input", function() {
+			clearTimeout(beleg.leseSucheTimeout);
+			const text = this.value;
+			beleg.leseSucheTimeout = setTimeout(function() {
+				beleg.leseSucheText = text;
+				beleg.leseFill(true);
+			}, 250);
+		});
+	},
+	// Suchtreffer im Belegtext markieren
+	//   text = String
+	//     (ein Absatz aus dem Belegtext)
+	leseSucheMark (text) {
+		const s = helfer.textTrim(beleg.leseSucheText, true);
+		if (!s || !optionen.data.einstellungen["karte-suchfeld"]) {
+			return text;
+		}
+		// Treffer hervorheben
+		const reg = new RegExp(helfer.formVariSonderzeichen(helfer.escapeRegExp(s)), "gi");
+		text = text.replace(reg, function(m) {
+			return `<mark class="suche">${m}</mark>`;
+		});
+		// Treffer innerhalb von Tags löschen
+		text = liste.suchtrefferBereinigen(text);
+		// Text zurückgeben
+		return text;
 	},
 	// Verteilerfunktion für die Links im <caption>-Block
 	//   a = Element
@@ -1595,10 +1699,37 @@ let beleg = {
 			evt.preventDefault();
 			if (/leseansicht$/.test(this.id)) {
 				beleg.leseToggle(true);
+			} else if (/kuerzen$/.test(this.id)) {
+				beleg.ctrlKuerzen();
 			} else if (/trennung$/.test(this.id)) {
 				beleg.ctrlTrennung();
+			} else if (/springen$/.test(this.id)) {
+				beleg.ctrlSpringen();
 			}
 		});
+	},
+	// Kürzung des Belegkontexts in der Leseansicht ein- bzw. ausblenden
+	ctrlKuerzen () {
+		// Hervorhebung umstellen
+		optionen.data.beleg.kuerzen = !optionen.data.beleg.kuerzen;
+		optionen.speichern(false);
+		// Link anpassen
+		beleg.ctrlKuerzenAnzeige();
+		// Belegtext in der Leseansicht ggf. neu aufbauen
+		if (document.getElementById("beleg-link-leseansicht").classList.contains("aktiv")) {
+			beleg.leseFill(false);
+		}
+	},
+	// Kürzung des Belegkontexts in der Leseansicht ein- bzw. ausblenden (Anzeige)
+	ctrlKuerzenAnzeige () {
+		let link = document.getElementById("beleg-link-kuerzen");
+		if (optionen.data.beleg.kuerzen) {
+			link.classList.add("aktiv");
+			link.title = "Belegkontext anzeigen (Strg + K)";
+		} else {
+			link.classList.remove("aktiv");
+			link.title = "Belegkontext kürzen (Strg + K)";
+		}
 	},
 	// Trennstriche in der Leseansicht ein- bzw. ausblenden
 	ctrlTrennung () {
@@ -1609,7 +1740,7 @@ let beleg = {
 		beleg.ctrlTrennungAnzeige();
 		// Belegtext in der Leseansicht ggf. neu aufbauen
 		if (document.getElementById("beleg-link-leseansicht").classList.contains("aktiv")) {
-			beleg.leseFill();
+			beleg.leseFill(false);
 		}
 	},
 	// Trennstriche in der Leseansicht ein- bzw. ausblenden (Anzeige)
@@ -1622,6 +1753,39 @@ let beleg = {
 			link.classList.remove("aktiv");
 			link.title = "Silbentrennung anzeigen (Strg + T)";
 		}
+	},
+	// das letzte Element, zu dem in der Karteikarte gesprungen wurde
+	ctrlSpringenPos: -1,
+	// durch die Hervorhebungen in der Leseansicht der Karteikarte springen
+	ctrlSpringen () {
+		const marks = document.querySelectorAll("#beleg-lese-bs mark.suche, #beleg-lese-bs mark.user, #beleg-lese-bs mark.wort");
+		if (!marks.length) {
+			dialog.oeffnen("alert", null);
+			dialog.text("Keine Markierung gefunden.");
+			return;
+		}
+		// Element ermitteln
+		beleg.ctrlSpringenPos++;
+		if (beleg.ctrlSpringenPos >= marks.length) {
+			beleg.ctrlSpringenPos = 0;
+		}
+		// Zur Position springen
+		const rect = marks[beleg.ctrlSpringenPos].getBoundingClientRect(),
+			header_height = document.querySelector("body > header").offsetHeight,
+			beleg_header_height = document.querySelector("#beleg header").offsetHeight,
+			quick = document.getElementById("quick");
+		let quick_height = quick.offsetHeight;
+		if (!quick.classList.contains("an")) {
+			quick_height = 0;
+		}
+		const platz = window.innerHeight - header_height - beleg_header_height - quick_height;
+		window.scrollTo(0, window.scrollY + rect.bottom - window.innerHeight + Math.round(platz / 2));
+		// Element markieren
+		const i = beleg.ctrlSpringenPos; // für schnelles Springen zwischenspeichern
+		marks[i].classList.add("mark");
+		setTimeout(function() {
+			marks[i].classList.remove("mark");
+		}, 1000);
 	},
 	// trägt eine Bedeutung ein, die aus dem Bedeutungen-Fenster
 	// an das Hauptfenster geschickt wurde

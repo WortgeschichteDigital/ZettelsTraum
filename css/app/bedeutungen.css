@@ -55,7 +55,7 @@
 }
 
 #bedeutungen-cont h2 {
-	margin: 15px 0 15px 74px; /* 74px = 2 Zellen links + 5px Padding der Gerüstzelle + Border*/
+	margin: 15px 0 10px 74px; /* 74px = 2 Zellen links + 5px Padding der Gerüstzelle + Border*/
 	padding: 0;
 	background-color: transparent;
 	color: var(--textFarbe);
@@ -163,7 +163,7 @@
 
 #bedeutungen-cont .bedeutungen-moved .bedeutungen-aktiv td,
 #bedeutungen-cont .bedeutungen-moved .bedeutungen-affiziert td {
-	background-color: var(--textFarbe);
+	background-color: var(--farbeGruen);
 }
 
 #bedeutungen-cont .bedeutungen-unmovable .bedeutungen-aktiv td,

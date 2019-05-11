@@ -77,6 +77,11 @@ mark.wort {
 	font-weight: bold;
 }
 
+mark.mark {
+	background-color: var(--farbeGruen);
+	color: #fff;
+}
+
 p {
 	margin: 0 0 10px 0;
 }

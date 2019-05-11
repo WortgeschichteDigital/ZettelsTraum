@@ -8,11 +8,11 @@ if (jahr_aktuell > 2019) {
 }
 
 // Schlagwörter ermitteln
-const fs = require("fs"),
-	keywords = JSON.parse(fs.readFileSync("package.json")).keywords.join(";");
+let fs = require("fs");
+const keywords = JSON.parse(fs.readFileSync("package.json")).keywords.join(";");
 
 // Installer erstellen
-const builder = require("electron-builder"),
+let builder = require("electron-builder"),
 	Arch = builder.Arch,
 	Platform = builder.Platform;
 builder.build({

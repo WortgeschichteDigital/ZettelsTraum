@@ -86,25 +86,54 @@
 			</div>
 		</section>
 		
-		<!-- BELEGFORMULAR -->
+		<!-- BEDEUTUNGEN -->
+		<section id="bedeutungen" class="aus">
+			<header>
+				<div
+					><input type="button" value="Speichern" id="bedeutungen-speichern" tabindex="0"
+					><input type="button" value="Schließen" id="bedeutungen-schliessen" tabindex="0"
+					><div class="dropdown-cont"
+						><input type="text" value="" class="dropdown-feld" id="bedeutungen-hierarchie" readonly title="Zählung oberste Hierarchie"
+						><a href="#" class="dropdown-link-element" title="Zählung oberste Hierarchie"
+							><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m7 2v8l-3.5-3.5-1.5 1.5 6 6 6-6-1.5-1.5-3.5 3.5v-8z" fill="#212121"/></svg></a
+					></div
+				></div
+			></header>
+			<div id="bedeutungen-cont">
+				<table><caption
+					><h2>Bedeutungsgerüst<span class="aus">*</span></h2
+				></caption></table>
+			</div>
+		</section>
+		
+		<!-- KARTEIKARTE -->
 		<section id="beleg" class="aus">
-			<table>
-				<caption><span id="beleg-titel"
-					></span><span id="beleg-geaendert" class="aus"
-					>*</span><span class="beleg-opt-block"
-						><a href="#" id="beleg-link-leseansicht" title="zur Leseansicht wechseln (Strg + U)"
-							><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M 8 3 C 6.4492 3.0151 4.8879094 3.3692056 3.5371094 4.1347656 C 2.9987094 4.4854656 2.3523344 4.9381912 1.8652344 5.3945312 C 1.0987444 6.1451213 0.4427 7.0222531 0 8.0019531 C 1.2149 10.682053 3.8859187 12.645447 6.8242188 12.935547 C 8.7516188 13.153707 10.768591 12.820847 12.462891 11.867188 C 13.001291 11.516487 13.647666 11.063762 14.134766 10.607422 C 14.901256 9.8568419 15.5573 8.9816531 16 8.0019531 C 14.785 5.3219531 12.114181 3.3563063 9.1757812 3.0664062 C 8.7859013 3.0209263 8.39251 2.99999 8 3 z M 8 5 C 9.607 4.96439 11.0303 6.4033531 11 8.0019531 C 11.0515 9.7687531 9.2909813 11.292891 7.5507812 10.962891 C 5.7931812 10.756511 4.5587188 8.7835812 5.1367188 7.1132812 C 5.5058788 5.8836812 6.7125 4.9847 8 5 z M 8 7 A 1 1.0002 0 0 0 7 8.0019531 A 1 1.0002 0 0 0 8 9.0019531 A 1 1.0002 0 0 0 9 8.0019531 A 1 1.0002 0 0 0 8 7 z" transform="translate(4 4)"/></svg></a
-						><a href="#" id="beleg-link-trennung"
-							><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g fill="#212121"><path d="m4 4v16h6v-2h-4v-12h4v-2h-4z"/><path d="m20 4v16h-6v-2h4v-12h-4v-2h4z"/><path d="m8 10v2h6v2h2v-2-2h-8z"/></g></svg></a
-						><a href="#" class="druck-icon" id="beleg-link-drucken" title="Karte drucken (Strg + P)"
-							><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m4 1v2h8v-2h-8zm-2 3c-0.5 0-1 0.5-1 1v4c0 0.5 0.5 1 1 1h1v-2h10v2h1c0.5 0 1-0.5 1-1v-4c0-0.5-0.5-1-1-1h-12zm2 5v5h8v-5h-8z" fill="#212121"/></svg></a
+			<header>
+				<div
+					><input type="button" value="Speichern" id="beleg-speichern" tabindex="0"
+					><input type="button" value="Schließen" id="beleg-abbrechen" tabindex="0"
+					><input type="button" value="Löschen" id="beleg-loeschen" tabindex="0"
+					><div id="beleg-opt"
+						><span class="beleg-opt-block"
+							><a href="#" id="beleg-link-leseansicht" title="zur Leseansicht wechseln (Strg + U)"
+								><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M 8 3 C 6.4492 3.0151 4.8879094 3.3692056 3.5371094 4.1347656 C 2.9987094 4.4854656 2.3523344 4.9381912 1.8652344 5.3945312 C 1.0987444 6.1451213 0.4427 7.0222531 0 8.0019531 C 1.2149 10.682053 3.8859187 12.645447 6.8242188 12.935547 C 8.7516188 13.153707 10.768591 12.820847 12.462891 11.867188 C 13.001291 11.516487 13.647666 11.063762 14.134766 10.607422 C 14.901256 9.8568419 15.5573 8.9816531 16 8.0019531 C 14.785 5.3219531 12.114181 3.3563063 9.1757812 3.0664062 C 8.7859013 3.0209263 8.39251 2.99999 8 3 z M 8 5 C 9.607 4.96439 11.0303 6.4033531 11 8.0019531 C 11.0515 9.7687531 9.2909813 11.292891 7.5507812 10.962891 C 5.7931812 10.756511 4.5587188 8.7835812 5.1367188 7.1132812 C 5.5058788 5.8836812 6.7125 4.9847 8 5 z M 8 7 A 1 1.0002 0 0 0 7 8.0019531 A 1 1.0002 0 0 0 8 9.0019531 A 1 1.0002 0 0 0 9 8.0019531 A 1 1.0002 0 0 0 8 7 z" transform="translate(4 4)"/></svg></a
+							><a href="#" class="icon-leseansicht aus" id="beleg-link-kuerzen"
+								><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="m7 4 5 5 5-5h-10zm-3 6v4h16v-4h-16zm8 5-5 5h10l-5-5z"/></svg></a
+							><a href="#" class="icon-leseansicht aus" id="beleg-link-trennung"
+								><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g fill="#212121"><path d="m4 4v16h6v-2h-4v-12h4v-2h-4z"/><path d="m20 4v16h-6v-2h4v-12h-4v-2h4z"/><path d="m8 10v2h6v2h2v-2-2h-8z"/></g></svg></a
+							><a href="#" class="icon-leseansicht aus" id="beleg-link-springen"
+								><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m7 1c-2.7527 0-5 2.2473-5 5v5h2v-5c0-1.6793 1.3207-3 3-3s3 1.3207 3 3v3h-2l3 5 3-5h-2v-3c0-2.7527-2.2473-5-5-5z" fill="#212121"/></svg></a
+							><a href="#" class="druck-icon" id="beleg-link-drucken" title="Karte drucken (Strg + P)"
+								><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m4 1v2h8v-2h-8zm-2 3c-0.5 0-1 0.5-1 1v4c0 0.5 0.5 1 1 1h1v-2h10v2h1c0.5 0 1-0.5 1-1v-4c0-0.5-0.5-1-1-1h-12zm2 5v5h8v-5h-8z" fill="#212121"/></svg></a
 						></span
+					></div
+				></div
+			></header>
+			<table>
+				<caption
+					><h2 id="beleg-titel"> <span id="beleg-geaendert" class="aus">*</span></h2
 				></caption>
-				<tr>
-					<td colspan="2" class="buttons"><input type="button" value="Speichern" id="beleg-speichern" tabindex="0"
-						><input type="button" value="Schließen" id="beleg-abbrechen" tabindex="0"
-						><input type="button" value="Löschen" id="beleg-loeschen" tabindex="0"></td>
-				</tr><tr class="beleg-form">
+				<tr class="beleg-form">
 					<td colspan="2" class="check"><div>
 						<p><input type="checkbox" id="beleg-un" tabindex="0"
 							><label for="beleg-un">unvollständig</label></p>
@@ -125,8 +154,8 @@
 				</tr><tr class="beleg-form">
 					<th colspan="2">DTA-Import</th>
 				</tr><tr class="beleg-form">
-					<td colspan="2"><input type="text" value="" spellcheck="false" id="beleg-dta" tabindex="0"
-						><input type="number" value="2" min="0" max="9999" spellcheck="false" id="beleg-dta-bis" tabindex="0"
+					<td colspan="2"><input type="text" value="" id="beleg-dta" tabindex="0"
+						><input type="number" value="2" min="0" max="9999" id="beleg-dta-bis" tabindex="0"
 						><input type="button" value="Importieren" id="beleg-dta-button" tabindex="0"></td>
 				</tr><tr>
 					<th><label for="beleg-da">Datum</label
@@ -138,8 +167,8 @@
 							><a href="#" class="icon-link icon-tools-kopieren" title="Text kopieren" tabindex="-1"> </a
 							><a href="#" class="icon-link icon-tools-einfuegen" title="Text einfügen" tabindex="-1"> </a></span></th>
 				</tr><tr class="beleg-form">
-					<td><input type="text" value="" spellcheck="false" id="beleg-da" tabindex="0"></td>
-					<td><input type="text" value="" spellcheck="false" id="beleg-au" tabindex="0"></td>
+					<td><input type="text" value="" id="beleg-da" tabindex="0"></td>
+					<td><input type="text" value="" id="beleg-au" tabindex="0"></td>
 				</tr><tr class="beleg-lese aus">
 					<td id="beleg-lese-da"></td>
 					<td id="beleg-lese-au"></td>
@@ -160,7 +189,7 @@
 							><a href="#" class="icon-link icon-tools-kopieren" title="Text kopieren" tabindex="-1"> </a
 							><a href="#" class="icon-link icon-tools-einfuegen" title="Text einfügen" tabindex="-1"> </a></span></th>
 				</tr><tr class="beleg-form">
-					<td colspan="2"><textarea spellcheck="false" id="beleg-bs"></textarea></td>
+					<td colspan="2"><textarea id="beleg-bs"></textarea></td>
 				</tr><tr class="beleg-lese aus">
 					<td colspan="2" id="beleg-lese-bs"></td>
 				</tr><tr>
@@ -169,7 +198,7 @@
 							><a href="#" class="icon-link icon-tools-kopieren" title="Text kopieren" tabindex="-1"> </a
 							><a href="#" class="icon-link icon-tools-einfuegen" title="Text einfügen" tabindex="-1"> </a></span></th>
 				</tr><tr class="beleg-form">
-					<td colspan="2" class="dropdown-cont"><textarea spellcheck="false" class="dropdown-feld" id="beleg-bd" tabindex="0"></textarea
+					<td colspan="2" class="dropdown-cont"><textarea class="dropdown-feld" id="beleg-bd" tabindex="0"></textarea
 						><a href="#" class="dropdown-link-td" title="Bedeutungen auflisten" tabindex="-1"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m7 2v8l-3.5-3.5-1.5 1.5 6 6 6-6-1.5-1.5-3.5 3.5v-8z" fill="#212121"/></svg></a
 					></td>
 				</tr><tr class="beleg-lese aus">
@@ -180,7 +209,7 @@
 							><a href="#" class="icon-link icon-tools-kopieren" title="Text kopieren" tabindex="-1"> </a
 							><a href="#" class="icon-link icon-tools-einfuegen" title="Text einfügen" tabindex="-1"> </a></span></th>
 				</tr><tr class="beleg-form">
-					<td colspan="2"><textarea spellcheck="false" id="beleg-qu"></textarea></td>
+					<td colspan="2"><textarea id="beleg-qu"></textarea></td>
 				</tr><tr class="beleg-lese aus">
 					<td colspan="2" id="beleg-lese-qu"></td>
 				</tr><tr>
@@ -193,10 +222,10 @@
 							><a href="#" class="icon-link icon-tools-kopieren" title="Text kopieren" tabindex="-1"> </a
 							><a href="#" class="icon-link icon-tools-einfuegen" title="Text einfügen" tabindex="-1"> </a></span></th>
 				</tr><tr class="beleg-form">
-					<td class="dropdown-cont"><input type="text" value="" spellcheck="false" class="dropdown-feld" id="beleg-kr" tabindex="0"
+					<td class="dropdown-cont"><input type="text" value="" class="dropdown-feld" id="beleg-kr" tabindex="0"
 						><a href="#" class="dropdown-link-td" title="Korpora auflisten" tabindex="-1"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m7 2v8l-3.5-3.5-1.5 1.5 6 6 6-6-1.5-1.5-3.5 3.5v-8z" fill="#212121"/></svg></a
 					></td>
-					<td class="dropdown-cont"><textarea spellcheck="false" class="dropdown-feld" id="beleg-ts" tabindex="0"></textarea
+					<td class="dropdown-cont"><textarea class="dropdown-feld" id="beleg-ts" tabindex="0"></textarea
 						><a href="#" class="dropdown-link-td" title="Textsorten auflisten" tabindex="-1"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m7 2v8l-3.5-3.5-1.5 1.5 6 6 6-6-1.5-1.5-3.5 3.5v-8z" fill="#212121"/></svg></a
 					></td>
 				</tr><tr class="beleg-lese aus">
@@ -208,7 +237,7 @@
 							><a href="#" class="icon-link icon-tools-kopieren" title="Text kopieren" tabindex="-1"> </a
 							><a href="#" class="icon-link icon-tools-einfuegen" title="Text einfügen" tabindex="-1"> </a></span></th>
 				</tr><tr class="beleg-form">
-					<td colspan="2"><textarea spellcheck="false" id="beleg-no"></textarea></td>
+					<td colspan="2"><textarea id="beleg-no"></textarea></td>
 				</tr><tr class="beleg-lese aus">
 					<td colspan="2" id="beleg-lese-no"></td>
 				</tr><tr>
@@ -217,27 +246,6 @@
 					<td colspan="2"><div id="beleg-an" data-anhaenge="beleg"></div></td>
 				</tr>
 			</table>
-		</section>
-		
-		<!-- BEDEUTUNGEN -->
-		<section id="bedeutungen" class="aus">
-			<header>
-				<div
-					><input type="button" value="Speichern" id="bedeutungen-speichern" tabindex="0"
-					><input type="button" value="Schließen" id="bedeutungen-schliessen" tabindex="0"
-					><div class="dropdown-cont"
-						><input type="text" value="" spellcheck="false" class="dropdown-feld" id="bedeutungen-hierarchie" readonly title="Zählung oberste Hierarchie"
-						><a href="#" class="dropdown-link-element" title="Zählung oberste Hierarchie"
-							><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m7 2v8l-3.5-3.5-1.5 1.5 6 6 6-6-1.5-1.5-3.5 3.5v-8z" fill="#212121"/></svg></a
-					></div
-				></div
-			></header>
-			
-			<div id="bedeutungen-cont">
-				<table><caption
-					><h2>Bedeutungsgerüst<span class="aus">*</span></h2
-				></caption></table>
-			</div>
 		</section>
 		
 		<!-- BELEGLISTE -->
@@ -367,11 +375,11 @@
 				</div>
 				<div>
 					<section id="einstellungen-sec-allgemeines">
-						<p class="input-text dropdown-cont"><input type="text" value="" spellcheck="false" class="dropdown-feld" id="einstellung-bearbeiterin"
+						<p class="input-text dropdown-cont"><input type="text" value="" class="dropdown-feld" id="einstellung-bearbeiterin"
 							><a href="#" class="dropdown-link-element dropdown-link-haengend" title="BearbeiterInnen auflisten"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m7 2v8l-3.5-3.5-1.5 1.5 6 6 6-6-1.5-1.5-3.5 3.5v-8z" fill="#212121"/></svg></a
 							><label for="einstellung-bearbeiterin">BearbeiterIn auf diesem Rechner</label></p>
 						<p class="button"><input type="button" value="Personenliste laden" id="einstellung-personenliste"></p>
-						<p class="input-text"><input type="number" value="10" min="5" max="180" spellcheck="false" id="einstellung-timeout"
+						<p class="input-text"><input type="number" value="10" min="5" max="180" id="einstellung-timeout"
 							><label for="einstellung-timeout">Sekunden Timeout bei Anfragen an das <abbr title="Deutsche Textarchiv">DTA</abbr></label></p>
 						<p><input type="checkbox" id="einstellung-notizen-schliessen"
 							><label for="einstellung-notizen-schliessen">Notizen-Fenster nach dem Speichern schließen</label></p>
@@ -447,14 +455,20 @@
 						<p class="einzug"><i>Zuletzt überprüft:</i> <span id="sachgebiete-zuletzt"></span></p>
 					</section>
 					<section id="einstellungen-sec-karteikarte" class="aus">
-						<p><input type="checkbox" id="einstellung-unvollstaendig"
-							><label for="einstellung-unvollstaendig">neue Karteikarte als unvollständig markieren</label></p>
-						<p><input type="checkbox" id="einstellung-immer-ergaenzen"
-							><label for="einstellung-immer-ergaenzen">mehrzeilige Textfelder ohne Nachfrage ergänzen, wenn aus einem Dropdown-Menü ein Wert ausgewählt oder im Bedeutungsgerüst-Fenster eine Bedeutung angeklickt wurde</label></p>
-						<p><input type="checkbox" id="einstellung-leseansicht"
-							><label for="einstellung-leseansicht">bestehende Karteikarte in der Leseansicht öffnen</label></p>
 						<p><input type="checkbox" id="einstellung-karteikarte-schliessen"
 							><label for="einstellung-karteikarte-schliessen">Karteikarte nach dem Speichern schließen</label></p>
+						<h3>Formularansicht</h3>
+						<p><input type="checkbox" id="einstellung-unvollstaendig"
+							><label for="einstellung-unvollstaendig">neue Karteikarte als unvollständig markieren</label></p>
+						<p><input type="checkbox" id="einstellung-wort-check"
+							><label for="einstellung-wort-check">nach dem <abbr title="Deutsches Textarchiv">DTA</abbr>-Import überprüfen, ob der Belegtext das Kartei-Wort enthält</label></p>
+						<p><input type="checkbox" id="einstellung-immer-ergaenzen"
+							><label for="einstellung-immer-ergaenzen">mehrzeilige Textfelder ohne Nachfrage ergänzen, wenn aus einem Dropdown-Menü ein Wert ausgewählt oder im Bedeutungsgerüst-Fenster eine Bedeutung angeklickt wurde</label></p>
+						<h3>Leseansicht</h3>
+						<p><input type="checkbox" id="einstellung-leseansicht"
+							><label for="einstellung-leseansicht">bestehende Karteikarte in der Leseansicht öffnen</label></p>
+						<p><input type="checkbox" id="einstellung-karte-suchfeld"
+							><label for="einstellung-karte-suchfeld">Suchfeld unter dem Belegtext anzeigen</label></p>
 					</section>
 					<section id="einstellungen-sec-filter" class="aus">
 						<p><input type="checkbox" id="einstellung-filter-zuklappen"
@@ -478,7 +492,7 @@
 				>Formvarianten<a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"> </a></h2>
 			<div id="stamm-cont">
 				<div id="stamm-liste"></div>
-				<p class="input-text"><input type="text" value="" spellcheck="false" id="stamm-text"
+				<p class="input-text"><input type="text" value="" id="stamm-text"
 					><input type="button" value="Ergänzen" id="stamm-ergaenzen"></p>
 				<p class="dta"><input type="button" value="DTA-Import" id="stamm-dta"></p>
 			</div>
@@ -490,7 +504,7 @@
 				>Notizen<span id="notizen-geaendert" class="aus">*</span
 				><a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"> </a></h2>
 			<div id="notizen-cont">
-				<textarea spellcheck="false" id="notizen-feld"></textarea>
+				<textarea id="notizen-feld"></textarea>
 				<p class="button"><input type="button" value="Speichern" id="notizen-speichern"
 					><input type="button" value="Schließen" id="notizen-abbrechen"
 					><input type="button" value="Löschen" id="notizen-loeschen"></p>
@@ -512,7 +526,7 @@
 				>Überprüfte Lexika<a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"> </a></h2>
 			<div id="lexika-cont">
 				<div id="lexika-liste"></div>
-				<p class="input-text"><input type="text" value="" spellcheck="false" id="lexika-text"
+				<p class="input-text"><input type="text" value="" id="lexika-text"
 					><input type="button" value="Ergänzen" id="lexika-ergaenzen"></p>
 			</div>
 		</div></div>
@@ -535,7 +549,7 @@
 					<h3>BearbeiterInnen</h3>
 					<div id="meta-be-liste"></div>
 					<p class="input-text dropdown-cont"
-						><input type="text" value="" spellcheck="false" class="dropdown-feld" id="meta-be"
+						><input type="text" value="" class="dropdown-feld" id="meta-be"
 						><a href="#" class="dropdown-link-element" title="BearbeiterInnen auflisten"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m7 2v8l-3.5-3.5-1.5 1.5 6 6 6-6-1.5-1.5-3.5 3.5v-8z" fill="#212121"/></svg></a
 						><input type="button" value="Ergänzen" id="meta-be-ergaenzen"></p>
 				</div>
@@ -570,7 +584,7 @@
 				<div id="dialog-text"></div>
 			</div>
 			<div id="dialog-prompt">
-				<p class="input-text"><input type="text" value="" spellcheck="false" id="dialog-prompt-text"></p>
+				<p class="input-text"><input type="text" value="" id="dialog-prompt-text"></p>
 			</div>
 			<div id="dialog-ok">
 				<p class="button"><input type="button" value="Okay" id="dialog-ok-button"

@@ -9,7 +9,7 @@ let helferWin = {
 		a.addEventListener("click", function(evt) {
 			evt.preventDefault();
 			const url = this.getAttribute("href");
-			const {shell} = require("electron");
+			let {shell} = require("electron");
 			shell.openExternal(url);
 		});
 	},
@@ -19,7 +19,7 @@ let helferWin = {
 	oeffneHandbuch (a) {
 		a.addEventListener("click", function(evt) {
 			evt.preventDefault();
-			const {ipcRenderer} = require("electron");
+			let {ipcRenderer} = require("electron");
 			ipcRenderer.send("hilfe-handbuch");
 		});
 	},
@@ -29,11 +29,11 @@ let helferWin = {
 	oeffneChangelog (a) {
 		a.addEventListener("click", function(evt) {
 			evt.preventDefault();
-			const {ipcRenderer} = require("electron");
+			let {ipcRenderer} = require("electron");
 			ipcRenderer.send("hilfe-changelog");
 			if (this.dataset.caller === "ueber-app") {
-				const {remote} = require("electron");
-				let win = remote.getCurrentWindow();
+				let {remote} = require("electron"),
+					win = remote.getCurrentWindow();
 				win.close();
 			}
 		});
@@ -43,8 +43,8 @@ let helferWin = {
 	tastatur (evt) {
 		// Esc
 		if (evt.which === 27) {
-			const {remote} = require("electron");
-			let win = remote.getCurrentWindow();
+			let {remote} = require("electron"),
+				win = remote.getCurrentWindow();
 			win.close();
 		}
 		// Ctrl + Cursor hoch (↑), runter (↓) (nur in Hilfefenstern)

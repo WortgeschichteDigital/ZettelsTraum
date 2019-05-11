@@ -35,8 +35,8 @@ let hilfe = {
 		a.addEventListener("click", function(evt) {
 			evt.preventDefault();
 			// aktive Sektion ermitteln
-			const sek = document.querySelectorAll("section");
-			let sek_aktiv = "";
+			let sek = document.querySelectorAll("section"),
+				sek_aktiv = "";
 			for (let i = 0, len = sek.length; i < len; i++) {
 				if (!sek[i].classList.contains("aus")) {
 					sek_aktiv = sek[i].id.replace(/^sektion-/, "");
@@ -44,8 +44,8 @@ let hilfe = {
 				}
 			}
 			// Sprungziel ermitteln und ggf. die Sektion wechseln
-			const id = this.getAttribute("href").replace(/^#/, ""),
-				h2 = document.getElementById(id);
+			const id = this.getAttribute("href").replace(/^#/, "");
+			let h2 = document.getElementById(id);
 			if (!new RegExp(`^${sek_aktiv}`).test(id)) {
 				const sek_ziel = id.replace(/^(.+?)-.+/, function(m, p1) {
 					return p1;
@@ -103,13 +103,13 @@ let hilfe = {
 	// Überschriftenliste der aktiven Sektion aufbauen
 	sektionenH(sektion) {
 		// alte Liste entfernen
-		const nav = document.querySelector("nav");
+		let nav = document.querySelector("nav");
 		let ul_h = nav.querySelector("ul.h");
 		if (ul_h) {
 			ul_h.parentNode.removeChild(ul_h);
 		}
 		// aktive Sektion ermitteln
-		const aktiv = nav.querySelector("a.aktiv");
+		let aktiv = nav.querySelector("a.aktiv");
 		if (!aktiv) {
 			return;
 		}
@@ -163,8 +163,8 @@ let hilfe = {
 	//     (die Suche wurde via Enter angestoßen)
 	suche () {
 		// Suchtext ermitteln
-		const feld = document.getElementById("suchfeld"),
-			val = helfer.textTrim(feld.value, true);
+		let feld = document.getElementById("suchfeld");
+		const val = helfer.textTrim(feld.value, true);
 		// erst ab 3 Buchstaben suchen
 		if (!val || val.length < 3) {
 			hilfe.suchergebnis.val = ""; // damit nach dem Löschen des Suchfelds dasselbe Wort wieder gesucht werden kann
@@ -187,16 +187,16 @@ let hilfe = {
 		};
 		let e = hilfe.suchergebnis;
 		// reguläre Ausdrücke
-		const val_sp = val.split(/\s/);
+		let val_sp = val.split(/\s/);
 		for (let i = 0, len = val_sp.length; i < len; i++) {
 			let reg = new RegExp(helfer.escapeRegExp(val_sp[i]), "gi");
 			e.reg.push(reg);
 		}
 		// Suche durchführen
-		const sek_suche = document.querySelectorAll(".suche");
+		let sek_suche = document.querySelectorAll(".suche");
 		for (let i = 0, len = sek_suche.length; i < len; i++) {
-			const sektion = sek_suche[i].id.replace(/^sektion-/, ""),
-				knoten = sek_suche[i].childNodes;
+			const sektion = sek_suche[i].id.replace(/^sektion-/, "");
+			let knoten = sek_suche[i].childNodes;
 			for (let j = 0, len = knoten.length; j < len; j++) {
 				if (knoten[j].nodeName === "UL" ||
 						knoten[j].nodeName === "TABLE") {
@@ -270,14 +270,14 @@ let hilfe = {
 	// Suchtreffer ausdrucken
 	sucheDrucken (start) {
 		// Ergebnisfeld leeren
-		const cont = document.getElementById("suchergebnisse");
+		let cont = document.getElementById("suchergebnisse");
 		// bei der Erstanzeige Ergebnisfeld leeren und in die Sektion wechseln
 		if (start === 0) {
 			helfer.keineKinder(cont);
 			hilfe.sektionWechseln("suche");
 		}
 		// keine Treffer
-		const e = hilfe.suchergebnis;
+		let e = hilfe.suchergebnis;
 		if (!e.treffer.length) {
 			let p = document.createElement("p");
 			p.classList.add("keine-treffer");

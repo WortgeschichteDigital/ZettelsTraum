@@ -7,7 +7,7 @@ let win, winBedeutungen, winHandbuch, winDokumentation, winChangelog, winUeberAp
 let appMenu, optionen, fenster;
 
 // Electron-Features einbinden
-const {app, BrowserWindow, ipcMain, Menu} = require("electron"),
+let {app, BrowserWindow, ipcMain, Menu} = require("electron"),
 	fs = require("fs"),
 	path = require("path");
 
@@ -302,7 +302,7 @@ layoutMenu.splice(layoutMenu.length - 1, 0, layoutMenuAnsicht[0]);
 let devtools = false;
 if (!app.isPackaged) {
 	devtools = true;
-	const menus = [layoutMenu, layoutMenuAnsicht];
+	let menus = [layoutMenu, layoutMenuAnsicht];
 	for (let i = 0, len = menus.length; i < len; i++) {
 		menus[i].push({
 			label: "&Dev",
@@ -439,12 +439,12 @@ appMenu = {
 	},
 	// erzeugt das normale Programm-Menü
 	erzeugen () {
-		const menu = Menu.buildFromTemplate(layoutMenu);
+		let menu = Menu.buildFromTemplate(layoutMenu);
 		win.setMenu(menu);
 	},
 	// erzeugt ein Menü, das nur den Punkt Ansicht hat
 	erzeugenAnsicht (fenster) {
-		const menu = Menu.buildFromTemplate(layoutMenuAnsicht);
+		let menu = Menu.buildFromTemplate(layoutMenuAnsicht);
 		fenster.setMenu(menu);
 		fenster.setMenuBarVisibility(false);
 	},
@@ -530,7 +530,7 @@ optionen = {
 		if (fs.existsSync(optionen.pfad)) {
 			const content = fs.readFileSync(optionen.pfad, "utf-8");
 			try {
-				const data = JSON.parse(content);
+				let data = JSON.parse(content);
 				for (let satz in data) {
 					if (!data.hasOwnProperty(satz)) {
 						continue;
@@ -698,7 +698,7 @@ fenster = {
 			return;
 		}
 		// Fenster öffnen
-		const Bildschirm = require("electron").screen.getPrimaryDisplay();
+		let Bildschirm = require("electron").screen.getPrimaryDisplay();
 		winHandbuch = new BrowserWindow({
 			title: "Handbuch",
 			icon: path.join(__dirname, "img", "icon", "linux", "icon_32px.png"),
@@ -738,7 +738,7 @@ fenster = {
 			return;
 		}
 		// Fenster öffnen
-		const Bildschirm = require("electron").screen.getPrimaryDisplay();
+		let Bildschirm = require("electron").screen.getPrimaryDisplay();
 		winDokumentation = new BrowserWindow({
 			title: "Technische Dokumentation",
 			icon: path.join(__dirname, "img", "icon", "linux", "icon_32px.png"),
@@ -888,7 +888,7 @@ fenster = {
 	status (typ) {
 		if (typ === "win") {
 			optionen.data.fenster.maximiert = win.isMaximized();
-			const bounds = win.getBounds();
+			let bounds = win.getBounds();
 			if (!optionen.data.fenster.maximiert && bounds) {
 				optionen.data.fenster.x = bounds.x;
 				optionen.data.fenster.y = bounds.y;
@@ -897,7 +897,7 @@ fenster = {
 			}
 		} else if (typ === "winBedeutungen") {
 			optionen.data["fenster-bedeutungen"].maximiert = winBedeutungen.isMaximized();
-			const bounds = winBedeutungen.getBounds();
+			let bounds = winBedeutungen.getBounds();
 			if (!optionen.data["fenster-bedeutungen"].maximiert && bounds) {
 				optionen.data["fenster-bedeutungen"].x = bounds.x;
 				optionen.data["fenster-bedeutungen"].y = bounds.y;
@@ -914,7 +914,7 @@ app.on("ready", function() {
 	// Menu der zuletzt verwendeter Karteien erzeugen
 	appMenu.zuletzt(false);
 	// Informationen zum Bildschirm auslesen und ggf. speichern
-	const Bildschirm = require("electron").screen.getPrimaryDisplay();
+	let Bildschirm = require("electron").screen.getPrimaryDisplay();
 	// Fenster standardmäßig maximalisiert öffnen
 	if (optionen.data.fenster.height === undefined) {
 		optionen.data.fenster.height = Bildschirm.workArea.height;

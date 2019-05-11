@@ -8,7 +8,7 @@ if (jahr_aktuell > 2019) {
 }
 
 // Installer erstellen
-const builder = require("electron-builder"),
+let builder = require("electron-builder"),
 	Arch = builder.Arch,
 	Platform = builder.Platform;
 builder.build({

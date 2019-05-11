@@ -6,6 +6,8 @@ let optionen = {
 	data: {
 		// Karteikarte
 		beleg: {
+			// Belegkontext in der Leseansicht kürzen
+			kuerzen: true,
 			// Trennstriche und Seitenumbrüche in der Leseansicht anzeigen
 			trennung: true,
 		},
@@ -114,15 +116,19 @@ let optionen = {
 			// Sachgebiete (Datum des letzten Abgleichs)
 			"sachgebiete-zuletzt": "",
 			// KARTEIKARTE
+			// Karteikarte nach dem Speichern direkt schließen
+			"karteikarte-schliessen": true,
 			// neue Karteikarten als unvollständig markieren
 			unvollstaendig: false,
+			// nach DTA-Import überprüft, ob das Kartei-Wort im Belegtext gefunden werden kann
+			"wort-check": true,
 			// Textfeld immer ergänzen, wenn aus einem Dropdown-Menü ein Wert
 			// ausgewählt wurde (betrifft Bedeutung und Textsorte)
 			"immer-ergaenzen": false,
 			// bestehende Karteikarten in der Leseansicht öffnen
 			leseansicht: true,
-			// Karteikarte nach dem Speichern direkt schließen
-			"karteikarte-schliessen": true,
+			// in Leseansicht über dem Belegtext ein Suchfeld einblenden
+			"karte-suchfeld": true,
 			// FILTERLEISTE
 			// alle anderen Filterblöcke zuklappen, wenn ein Filterblock geöffnet wird
 			"filter-zuklappen": false,
@@ -200,6 +206,7 @@ let optionen = {
 			liste.headerDetailsAnzeige(details[i], `detail_${details[i]}`);
 		}
 		// Icons im <caption> der Karteikarte
+		beleg.ctrlKuerzenAnzeige();
 		beleg.ctrlTrennungAnzeige();
 		// Optionen im Optionen-Fenster eintragen
 		let ee = document.querySelectorAll("#einstellungen input");

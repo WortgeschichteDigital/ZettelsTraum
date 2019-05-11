@@ -2,7 +2,7 @@
 
 window.addEventListener("load", function() {
 	// Programm-Name eintragen
-	const {app} = require("electron").remote;
+	let {app} = require("electron").remote;
 	document.getElementById("name").textContent = app.getName().replace("'", "’");
 	// Versionen eintragen
 	document.getElementById("version-electron").textContent = `Version ${process.versions.electron}`;

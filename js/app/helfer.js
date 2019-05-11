@@ -122,6 +122,16 @@ let helfer = {
 			}
 			return;
 		}
+		// Karteikarte ist aktiv, kein Overlay
+		if (!oben && !document.getElementById("beleg").classList.contains("aus")) {
+			// Ctrl + ↓ + Leseansicht aktiv
+			if (evt.ctrlKey &&
+					evt.which === 40 &&
+					document.getElementById("beleg-link-leseansicht").classList.contains("aktiv")) {
+				beleg.ctrlSpringen();
+			}
+			return;
+		}
 		// Cursor hoch od. runter
 		if (evt.which === 38 || evt.which === 40) { // hoch (↑) + runter (↓)
 			if (evt.ctrlKey && oben === "einstellungen") { // durch die Menüs in den Einstellungen navigieren
@@ -408,17 +418,21 @@ let helfer = {
 		if (evt.which === 46) {
 			bedeutungen.loeschenTastatur();
 		}
+		// Strg + K (wenn kein Overlay)
+		if (evt.ctrlKey && evt.which === 75 && helfer.belegOffen()) {
+			beleg.ctrlKuerzen();
+		}
 		// Strg + P (wenn kein Overlay)
 		if (evt.ctrlKey && evt.which === 80) {
 			drucken.tastatur();
 		}
-		// Strg + U (wenn im Beleg)
-		if (evt.ctrlKey && evt.which === 85 && helfer.belegOffen()) {
-			beleg.leseToggle(true);
-		}
 		// Strg + T (wenn im Beleg)
 		if (evt.ctrlKey && evt.which === 84 && helfer.belegOffen()) {
 			beleg.ctrlTrennung();
+		}
+		// Strg + U (wenn im Beleg)
+		if (evt.ctrlKey && evt.which === 85 && helfer.belegOffen()) {
+			beleg.leseToggle(true);
 		}
 	},
 	// überprüft, ob die Karteikarte offen ist und nicht durch irgendein

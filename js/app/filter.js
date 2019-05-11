@@ -1290,6 +1290,42 @@ let filter = {
 	},
 	// die Suche wird aufgerufen
 	suche () {
+		// ggf. das Suchfeld im Beleg fokussieren
+		const feld = document.getElementById("beleg-suchfeld");
+		if (feld &&
+				!document.getElementById("beleg").classList.contains("aus") &&
+				document.getElementById("beleg-link-leseansicht").classList.contains("aktiv")) {
+			if (notizen.geaendert) {
+				sicherheitsfrage.warnen(function() {
+					notizen.geaendert = false;
+					filter.suche();
+				}, {
+					notizen: true,
+					bedeutungen: false,
+					beleg: false,
+					kartei: false,
+				});
+				return;
+			}
+			// Overlays schließen
+			overlay.alleSchliessen();
+			// ggf. in den Blick scrollen
+			const rect = feld.getBoundingClientRect(),
+				header_height = document.querySelector("body > header").offsetHeight,
+				beleg_header_height = document.querySelector("#beleg header").offsetHeight,
+				quick = document.getElementById("quick");
+			let quick_height = quick.offsetHeight;
+			if (!quick.classList.contains("an")) {
+				quick_height = 0;
+			}
+			if (rect.bottom > window.innerHeight ||
+				rect.top - quick_height - header_height - beleg_header_height < 0) {
+				window.scrollTo(0, window.scrollY + rect.bottom - window.innerHeight + 10);
+			}
+			// Selektieren
+			feld.select();
+			return;
+		}
 		// Sicherheitsfrage, falls Notizen, Beleg, Bedeutungen noch nicht gespeichert sind
 		if (notizen.geaendert || bedeutungen.geaendert || beleg.geaendert) {
 			sicherheitsfrage.warnen(function() {

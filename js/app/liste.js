@@ -109,20 +109,25 @@ let liste = {
 		}
 		function markSetzen (kopf) {
 			setTimeout(() => kopf.classList.add("hinweis-beleg"), 0);
-			setTimeout(() => kopf.classList.remove("hinweis-beleg"), 1500);
+			setTimeout(() => kopf.classList.remove("hinweis-beleg"), 1000);
 		}
 	},
 	// Zwischenspeicher für den ermittelten Scroll-Status
 	statusScroll: {},
 	// Scroll-Status ermitteln
 	statusScrollBak () {
-		let header = document.querySelector("#liste-belege header").offsetHeight,
-			win = window.scrollY,
-			koepfe = document.querySelectorAll(".liste-kopf");
 		liste.statusScroll = {
 			id: "",
 			scroll: 0,
 		};
+		// keine Belege offen => keinen Scroll-Status ermitteln
+		if (!document.querySelector("#liste-belege-cont .schnitt-offen")) {
+			return;
+		}
+		// es sind Belege offen => Scroll-Status ermitteln
+		let header = document.querySelector("#liste-belege header").offsetHeight,
+			win = window.scrollY,
+			koepfe = document.querySelectorAll(".liste-kopf");
 		for (let i = 0, len = koepfe.length; i < len; i++) {
 			let scroll = koepfe[i].offsetTop - header - win;
 			if (scroll >= 0) {
@@ -469,9 +474,27 @@ let liste = {
 			// Jahreszahl zwischenspeichern
 			liste.belegeSortierenCache[id] = datum[zeiger];
 		}
-		// Belege aus demselben Jahr => jüngere Belege immer nach älteren sortieren
+		// Belege aus demselben Jahr
 		if (datum.a === datum.b) {
-			return parseInt(a, 10) - parseInt(b, 10);
+			let autor = [data.ka[a].au, data.ka[b].au];
+			// nach Belegnummer: auf- oder absteigend
+			if (autor[0] === autor[1]) {
+				if (optionen.data.belegliste.sort_aufwaerts) {
+					return parseInt(a, 10) - parseInt(b, 10);
+				} else {
+					return parseInt(b, 10) - parseInt(a, 10);
+				}
+			}
+			// nach Autor: alphabetisch auf- oder absteigend
+			autor.sort(helfer.sortAlpha);
+			let sortierung = [1, -1];
+			if (optionen.data.belegliste.sort_aufwaerts) {
+				sortierung.reverse();
+			}
+			if (autor[0] === data.ka[a].au) {
+				return sortierung[0];
+			}
+			return sortierung[1];
 		}
 		// Sortierung nach Jahr
 		if (optionen.data.belegliste.sort_aufwaerts) {
@@ -502,7 +525,7 @@ let liste = {
 			div.appendChild(p);
 			// Absatz ggf. kürzen
 			if (optionen.data.belegliste.beleg_kuerzen &&
-					!form_reg.test(bereinigen(p_prep[i]))) {
+					!form_reg.test(liste.textBereinigen(p_prep[i]))) {
 				if (zuletzt_gekuerzt) {
 					div.removeChild(div.lastChild);
 				} else {
@@ -519,12 +542,6 @@ let liste = {
 		}
 		// <div> zurückgeben
 		return div;
-		// Absatztext bereinigen, bevor eine Kürzung vollzogen wird
-		function bereinigen (text) {
-			text = text.replace(/<.+?>/g, "");
-			text = liste.belegTrennungWeg(text, true);
-			return text;
-		}
 	},
 	// generiert den Vorschautext des übergebenen Belegs inkl. Autorname (wenn vorhanden)
 	//   beleg_akt = Object
@@ -620,6 +637,13 @@ let liste = {
 		schnitt = schnitt.replace(reg, (m) => `<mark class="wort">${m}</mark>`);
 		return schnitt;
 	},
+	// den übergebenen Text bereinigen, z.B. bevor eine Kürzung vollzogen wird
+	// (diese Funktion wird auch von beleg.js benutzt)
+	textBereinigen (text) {
+		text = text.replace(/<.+?>/g, "");
+		text = liste.belegTrennungWeg(text, true);
+		return text;
+	},
 	// Suchtreffer hervorheben
 	//   text = String
 	//     (der Text, in dem die Ersetzung vorgenommen werden soll)
@@ -642,10 +666,21 @@ let liste = {
 			});
 		});
 		// Treffer innerhalb von Tags löschen
-		text = text.replace(/(<[^>]*?)<mark class="suche">(.+?)<\/mark>/g, function(m, p1, p2) {
-			return `${p1}${p2}`;
-		});
+		text = liste.suchtrefferBereinigen(text);
 		// Text zurückgeben
+		return text;
+	},
+	// Treffer innerhalb von Tags löschen
+	// (wird auch von beleg.js genutzt, darum ausgelagert)
+	//   text = String
+	//     (Text mit Suchmarkierungen)
+	suchtrefferBereinigen (text) {
+		const reg = new RegExp(`(<[^>]*?)<mark class="suche">(.+?)<\/mark>`, "g");
+		while (text.match(reg)) { // > 1 Treffer in ein un demselben Tag => mehrfach durchlaufen
+			text = text.replace(reg, function(m, p1, p2) {
+				return `${p1}${p2}`;
+			});
+		}
 		return text;
 	},
 	// einen einzelnen Beleg durch Klick auf den Belegkopf umschalten
