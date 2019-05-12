@@ -4,15 +4,15 @@ let erinnerungen = {
 	data: {
 		bearbeiterin: {
 			okay: false,
-			text: "Sie haben sich noch nicht registriert (→ <i>Programm &gt; Einstellungen &gt; Allgemeines &gt; BearbeiterIn</i>).",
+			text: "Sie haben sich noch nicht registriert (⇨ <i>Programm &gt; Einstellungen &gt; Allgemeines &gt; BearbeiterIn</i>).",
 		},
 		metadaten: {
 			okay: false,
-			text: "In den Metadaten der Kartei ist keine BearbeiterIn registriert (→ <i>Kartei &gt; Metadaten</i>).",
+			text: "In den Metadaten der Kartei ist keine BearbeiterIn registriert (⇨ <i>Kartei &gt; Metadaten</i>).",
 		},
 		redaktion: {
 			okay: false,
-			text: "Im Redaktionsfenster fehlen Angaben zu den BearbeiterInnen (→ <i>Kartei &gt; Redaktion</i>).",
+			text: "Im Redaktionsfenster fehlen Angaben zu den BearbeiterInnen (⇨ <i>Kartei &gt; Redaktion</i>).",
 		},
 	},
 	// überprüfen, ob auf etwas hingewiesen werden muss

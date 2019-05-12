@@ -78,6 +78,11 @@ let drucken = {
 			width: 2,
 		},
 		{
+			val: "bl",
+			name: "Wortbildung",
+			width: 2,
+		},
+		{
 			val: "qu",
 			name: "Quelle",
 			width: 2,

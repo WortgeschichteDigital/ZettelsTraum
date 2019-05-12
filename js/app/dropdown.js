@@ -145,6 +145,8 @@ let dropdown = {
 			dropdown.data = [...redaktion.ereignisse];
 		} else if (feld_id === "beleg-bd") {
 			dropdown.dataFormular("bd");
+		} else if (feld_id === "beleg-bl") {
+			dropdown.dataFormular("bl");
 		} else if (feld_id === "beleg-kr") {
 			dropdown.dataKorpora();
 		} else if (feld_id === "beleg-ts") {
@@ -299,7 +301,7 @@ let dropdown = {
 	//     (der Text, der eingetragen werden soll)
 	auswahl (feld, text) {
 		let caller = dropdown.caller; // muss zwischengespeichert werden, weil das Dropdown sich schließt, wenn sich das Dialog-Fenster öffnet
-		if (/^beleg-(bd|ts)/.test(caller) && feld.value) {
+		if (/^beleg-(bd|bl|ts)/.test(caller) && feld.value) {
 			// Steht der Wert schon im Feld?
 			let feld_val = feld.value.split("\n");
 			if (feld_val.indexOf(text) >= 0) {
@@ -354,7 +356,7 @@ let dropdown = {
 			feld.value = text;
 			feld.focus();
 			// Haben die Änderungen weitere Konsequenzen?
-			if (/^beleg-(bd|ts)/.test(caller)) {
+			if (/^beleg-(bd|bl|ts)/.test(caller)) {
 				helfer.textareaGrow(feld);
 				const id = caller.replace(/^beleg-/, "");
 				beleg.data[id] = helfer.textTrim(feld.value, true);

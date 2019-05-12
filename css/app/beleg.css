@@ -23,7 +23,15 @@
 	max-width: 800px;
 }
 
-#beleg-loeschen {
+#beleg-buttons {
+	position: relative;
+	z-index: 1;
+	padding-right: 25px;
+	width: fit-content;
+	background-color: #fff;
+}
+
+#beleg-buttons input:last-child {
 	margin-left: 45px;
 }
 
@@ -133,8 +141,12 @@
 
 #beleg textarea {
 	margin: 0 auto;
+	min-height: 24px;
 	max-height: 192px;
-	min-height: 48px;
+}
+
+#beleg textarea:invalid {
+	background: #fff url(../../img/beleg-mehrzeilig.svg) no-repeat left 2px;
 }
 
 #beleg textarea.dropdown-feld {
@@ -142,7 +154,7 @@
 }
 
 textarea#beleg-bs {
-	min-height: 96px;
+	min-height: 24px;
 	max-height: 288px;
 }
 

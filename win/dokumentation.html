@@ -379,7 +379,7 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);
 					
 					<p>Nach dem Laden einer <abbr title="Wortgeschichte digital">WGD</abbr>-Datei in <i class="app-name"></i> befinden sich die Daten im globalen Objekt <code class="quelltext">data</code>. Ihre Werte lassen sich dann in allen Funktionen des Hauptfensters durch einfache Statements wie <code class="quelltext">data.dc</code> lesen oder schreiben.</p>
 					
-					<p>Alle Dateien sind gleich aufgebaut (<span class="obacht">Datenformat Version 2</span>):</p>
+					<p>Alle Dateien sind gleich aufgebaut (<span class="obacht">Datenformat Version 3</span>):</p>
 					
 					<table>
 						<tr>
@@ -492,6 +492,12 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);
 							<td class="datentyp">Number</td>
 							<td><code class="quelltext">0–5</code></td>
 							<td>Markierung mit Sternen; <code class="quelltext">0</code> = unmarkiert, <code class="quelltext">5</code> = 5 Sterne</td>
+						</tr>
+						<tr class="wgd-ebene2">
+							<td><p><code class="quelltext">bl</code></p></td>
+							<td class="datentyp">String</td>
+							<td><code class="quelltext">\n</code> möglich</td>
+							<td>Wortbildung; mehrere Wortbildungen durch <code class="quelltext">\n</code> voneinander getrennt; neue Hierarchie beginnt mit <code class="quelltext">": "</code><br><span class="obacht">mit Version 3 ergänzt</span></td>
 						</tr>
 						<tr class="wgd-ebene2">
 							<td><p><code class="quelltext">bs</code></p></td>

@@ -184,7 +184,7 @@ let notizen = {
 	//     (true = Kartei wurde geändert, false = Änderung wurde gespeichert oder verworfen)
 	notizenGeaendert (geaendert) {
 		notizen.geaendert = geaendert;
-		// Asterisk ein- oder ausblenden
+		helfer.geaendert();
 		let asterisk = document.getElementById("notizen-geaendert");
 		if (geaendert) {
 			asterisk.classList.remove("aus");

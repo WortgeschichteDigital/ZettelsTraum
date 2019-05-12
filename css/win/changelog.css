@@ -13,7 +13,7 @@
 body {
 	margin: 0;
 	color: var(--text);
-	font: 16px/24px "Noto Sans", sans-serif;
+	font: 16px/24px "Noto Sans", "Noto Sans Symbols2", sans-serif;
 	user-select: none;
 }
 
@@ -60,8 +60,22 @@ abbr {
 	text-decoration: none;
 }
 
+code {
+	display: inline-block;
+	border-radius: 3px;
+	padding: 0 3px;
+	background-color: var(--text);
+	color: #fff;
+	font-family: "Noto Sans Mono", "Noto Sans Symbols2", monospace;
+}
+
+code.quelltext {
+	background-color: var(--hintergrund);
+	color: var(--text);
+}
+
 h2 {
-	margin: 0 0 10px -25px;
+	margin: 0 0 10px 0;
 	font-size: 18px;
 	font-weight: normal;
 	line-height: 26px;
@@ -94,7 +108,7 @@ kbd {
 	border-radius: 3px;
 	padding: 0 3px;
 	background-color: var(--hintergrund);
-	font-family: "Noto Sans Mono", monospace;
+	font-family: "Noto Sans Mono", "Noto Sans Symbols2", monospace;
 }
 
 p {
@@ -106,7 +120,7 @@ pre {
 	padding: 3px;
 	background-color: var(--text);
 	color: #fff;
-	font-family: "Noto Sans Mono", monospace;
+	font-family: "Noto Sans Mono", "Noto Sans Symbols2", monospace;
 	white-space: pre-wrap;
 }
 
@@ -134,8 +148,20 @@ li p {
 }
 
 /* Besonderheiten ------------------------------- */
-main > div {
-	padding: 20px 25px 0 25px;
+.version {
+	position: sticky;
+	top: 70px;
+	width: fit-content;
+	line-height: 32px;
+	background-color: #fff;
+	color: var(--textHell);
+	font-size: 14px;
+	font-style: italic;
+}
+
+main > div:not(.version) {
+	margin-top: -32px;
+	padding: 0 25px 0 50px;
 }
 
 .obacht {

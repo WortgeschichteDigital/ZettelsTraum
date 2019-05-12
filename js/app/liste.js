@@ -227,6 +227,8 @@ let liste = {
 				div.appendChild(liste.belegErstellen(id));
 				// Bedeutung
 				liste.bedeutungErstellen(data.ka[id].bd, div);
+				// Wortbildung
+				liste.wortbildungErstellen(data.ka[id].bl, div);
 				// Quellenangabe
 				div.appendChild(liste.quelleErstellen(id));
 				// Korpus
@@ -726,6 +728,33 @@ let liste = {
 			div.appendChild(p);
 		}
 	},
+	// erstellt die Anzeige der Wortbildungen
+	//   wortbildung = String
+	//     (die Wortbildungen)
+	//   cont = Element
+	//     (das ist der aktuelle Detailblock)
+	wortbildungErstellen (wortbildung, cont) {
+		// die Wortbildungs-Angabe kann fehlen
+		if (!wortbildung) {
+			return;
+		}
+		// <div> für Wortbildung
+		let div = document.createElement("div");
+		cont.appendChild(div);
+		div.classList.add("liste-bl", "liste-label");
+		// Label erstellen
+		let span = document.createElement("span");
+		div.appendChild(span);
+		span.classList.add("liste-label");
+		span.textContent = "Wortbildung";
+		// Absätze erzeugen
+		let p_prep = wortbildung.split("\n");
+		for (let i = 0, len = p_prep.length; i < len; i++) {
+			let p = document.createElement("p");
+			p.innerHTML = liste.suchtreffer(p_prep[i], "bl");
+			div.appendChild(p);
+		}
+	},
 	// erstellt den Absatz mit der Quellenangabe
 	//   id = String
 	//     (ID des Belegs)
@@ -971,7 +1000,7 @@ let liste = {
 		if (scroll_bak) {
 			liste.statusScrollBak();
 		}
-		let funktionen = ["bd", "qu", "kr", "ts", "no", "meta"];
+		let funktionen = ["bd", "bl", "qu", "kr", "ts", "no", "meta"];
 		for (let i = 0, len = funktionen.length; i < len; i++) {
 			let opt = `detail_${funktionen[i]}`,
 				ele = document.querySelectorAll(`.liste-${funktionen[i]}`);
@@ -1239,7 +1268,9 @@ let liste = {
 		// Einstellung umstellen und speichern
 		let opt = `detail_${funktion}`;
 		optionen.data.belegliste[opt] = !optionen.data.belegliste[opt];
-		if (funktion === "qu") {
+		if (funktion === "bd") {
+			optionen.data.belegliste.detail_bl = optionen.data.belegliste.detail_bd;
+		} else if (funktion === "qu") {
 			optionen.data.belegliste.detail_kr = optionen.data.belegliste.detail_qu;
 		}
 		optionen.speichern(false);

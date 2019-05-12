@@ -52,3 +52,8 @@
 	font-family: "Noto Sans Mono";
 	src: url(../fonts/NotoSansMono-Regular.woff2) format("woff2");
 }
+
+@font-face {
+	font-family: "Noto Sans Symbols2";
+	src: url(../fonts/NotoSansSymbols2-Regular.woff2) format("woff2");
+}

@@ -234,9 +234,9 @@ p.no-indent + .filter-baum, /* betrifft Verschiedenes > Filterlogik */
 }
 
 .filter-erweiterte-flex p {
-	flex: 1 0 125px;
+	flex: 1 0 130px;
 	padding: 0;
-	max-width: 125px;
+	max-width: 130px;
 	text-indent: 0;
 }
 
@@ -446,6 +446,7 @@ p.no-indent + .filter-baum, /* betrifft Verschiedenes > Filterlogik */
 	color: #fff;
 }
 
+.liste-kopf.hinweis-beleg .liste-jahr-hinweis:after,
 .liste-kopf.hinweis-beleg mark {
 	color: #fff;
 }
@@ -559,6 +560,7 @@ span.liste-label {
 }
 
 .liste-bd p,
+.liste-bl p,
 .liste-qu p,
 .liste-kr p,
 .liste-ts p,

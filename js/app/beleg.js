@@ -74,6 +74,7 @@ let beleg = {
 			bc: false, // Buchung
 			bd: "", // Bedeutung
 			be: 0, // Bewertung
+			bl: "", // Wortbildung
 			bs: "", // Beleg
 			bu: false, // Bücherdienstauftrag
 			da: "", // Belegdatum
@@ -254,8 +255,8 @@ let beleg = {
 			direktSchliessen();
 			return;
 		}
-		// ggf. Format von Bedeutung und Textsorte anpassen
-		let ds = ["bd", "ts"];
+		// ggf. Format von Bedeutung, Wortbildungen und Textsorte anpassen
+		let ds = ["bd", "bl", "ts"];
 		for (let i = 0, len = ds.length; i < len; i++) {
 			let ds_akt = ds[i];
 			beleg.data[ds_akt] = beleg.data[ds_akt].replace(/::/g, ": ").replace(/\n\s*\n/g, "\n");
@@ -423,6 +424,7 @@ let beleg = {
 				},
 				seite: "",
 				seite_zuletzt: "",
+				spalte: false,
 				serie: "",
 				serie_seite: "",
 				beleg: "",
@@ -431,7 +433,7 @@ let beleg = {
 				url: `http://www.deutschestextarchiv.de/${titel_id}/${fak}`,
 			};
 			const url_xml = `http://www.deutschestextarchiv.de/book/download_xml/${titel_id}`;
-			dta.blur();
+			document.activeElement.blur();
 			beleg.DTAImportRequest(url_xml, fak);
 		}
 	},
@@ -663,7 +665,10 @@ let beleg = {
 		const ele_start = xml.querySelector(`pb[facs="#f${fak.padStart(4, "0")}"]`),
 			ele_ende = xml.querySelector(`pb[facs="#f${fak_bis.padStart(4, "0")}"]`);
 		// Seite auslesen
-		beleg.DTAImportData.seite = beleg.DTAImportData.seite_zuletzt = ele_start.getAttribute("n");
+		const n = ele_start.getAttribute("n");
+		if (n) { // bei Seiten mit <cb> gibt es kein n-Attribut
+			beleg.DTAImportData.seite = beleg.DTAImportData.seite_zuletzt = n;
+		}
 		// Elemente ermitteln, die analysiert werden müssen
 		let parent;
 		if (ele_ende) {
@@ -771,14 +776,16 @@ let beleg = {
 				continue;
 			}
 			const reg = new RegExp(`\\[(${typ})\\](.+?)\\[\\/${typ}\\]`, "g");
-			text = text.replace(reg, function(m, p1, p2) {
-				let start = `<${rend[p1].ele}`;
-				if (rend[p1].class) {
-					start += ` class="${rend[p1].class}"`;
-				}
-				start += ">";
-				return `${start}${p2}</${rend[p1].ele}>`;
-			});
+			while (text.match(reg)) { // bei komischen Verschachtelungen kann es dazu kommen, dass beim 1. Durchgang nicht alle Tags ersetzt werden
+				text = text.replace(reg, function(m, p1, p2) {
+					let start = `<${rend[p1].ele}`;
+					if (rend[p1].class) {
+						start += ` class="${rend[p1].class}"`;
+					}
+					start += ">";
+					return `${start}${p2}</${rend[p1].ele}>`;
+				});
+			}
 		}
 		beleg.DTAImportData.beleg = helfer.textTrim(text, true);
 		function ana (ele) {
@@ -805,10 +812,24 @@ let beleg = {
 				} else {
 					if (ele.nodeName === "pb") { // Seitenumbruch
 						const n = ele.getAttribute("n");
-						if (start) {
+						if (!n) { // wenn Spalten => kein n-Attribut im <pb>
+							return;
+						}
+						text += `[:${n}:]`;
+						beleg.DTAImportData.seite_zuletzt = n;
+						return;
+					} else if (ele.nodeName === "cb") { // Spaltenumbruch
+						const n = ele.getAttribute("n");
+						if (!n) { // zur Sicherheit
+							return;
+						}
+						beleg.DTAImportData.spalte = true;
+						if (!beleg.DTAImportData.seite) {
+							beleg.DTAImportData.seite = n;
+						} else {
+							beleg.DTAImportData.seite_zuletzt = n;
 							text += `[:${n}:]`;
 						}
-						beleg.DTAImportData.seite_zuletzt = n;
 						return;
 					} else if (/^(closer|div|item|p)$/.test(ele.nodeName)) { // Absätze
 						text = helfer.textTrim(text, false);
@@ -952,8 +973,9 @@ let beleg = {
 		}
 		quelle += ` ${datum}`;
 		// Seite
+		const seite_spalte = dta.spalte ? "Sp" : "S";
 		if (dta.serie_seite) {
-			quelle += `, S. ${dta.serie_seite}`;
+			quelle += `, ${seite_spalte}. ${dta.serie_seite}`;
 			if (dta.seite) {
 				quelle += `, hier ${dta.seite}`;
 				if (dta.seite_zuletzt !== dta.seite) {
@@ -961,7 +983,7 @@ let beleg = {
 				}
 			}
 		} else if (dta.seite) {
-			quelle += `, S. ${dta.seite}`;
+			quelle += `, ${seite_spalte}. ${dta.seite}`;
 			if (dta.seite_zuletzt !== dta.seite) {
 				quelle += `–${dta.seite_zuletzt}`;
 			}
@@ -1007,6 +1029,7 @@ let beleg = {
 	//   geaendert = Boolean
 	belegGeaendert (geaendert) {
 		beleg.geaendert = geaendert;
+		helfer.geaendert();
 		let asterisk = document.getElementById("beleg-geaendert");
 		if (geaendert) {
 			asterisk.classList.remove("aus");
@@ -1014,27 +1037,28 @@ let beleg = {
 			asterisk.classList.add("aus");
 		}
 	},
-	// Beleg auf Enter speichern (wenn Fokus in Textfeld oder auf Checkbox)
+	// Speichern oder DTAImport starten (wenn Fokus auf einem Input-Element)
 	//   input = Element
 	//     (Element, auf dem das Event ausgeführt wird:
-	//     <input type="text">, <input type="checkbox">, <textarea>)
+	//     <input type="checkbox">, <input type="number">, <input type="text">, <textarea>)
 	belegSpeichern (input) {
 		input.addEventListener("keydown", function(evt) {
-			// auf Enter speichern
-			//   - Text-Input und Checkboxes: hier reicht Enter
-			//   - mit Strg + Enter geht der Befehl auch in Textareas
-			if (evt.which === 13 &&
-					(/^(checkbox|number|text)$/.test(this.type) || evt.ctrlKey)) {
-				evt.preventDefault();
+			if (evt.which === 13) {
+				if (evt.ctrlKey) {
+					evt.preventDefault();
+					beleg.aktionSpeichern();
+					return;
+				}
 				if (/^beleg-dta(-bis)*$/.test(this.id)) {
+					evt.preventDefault();
 					beleg.DTAImport();
 					return;
 				}
 				if (document.getElementById("dropdown") &&
-						/^beleg-(bd|kr|ts)/.test(this.id)) {
+						/^beleg-(bd|bl|kr|ts)/.test(this.id)) {
+					evt.preventDefault();
 					return;
 				}
-				beleg.aktionSpeichern();
 			}
 		});
 	},
@@ -1633,28 +1657,42 @@ let beleg = {
 				}
 				nP.innerHTML = text;
 			}
-			// ggf. Suchfeld erzeugen
-			if (wert === "bs" && v && optionen.data.einstellungen["karte-suchfeld"]) {
-				let p = document.createElement("p");
-				p.classList.add("input-text");
-				let input = document.createElement("input");
-				p.appendChild(input);
-				cont.appendChild(p);
-				input.id = "beleg-suchfeld";
-				input.type = "text";
-				input.value = beleg.leseSucheText;
-				input.setAttribute("placeholder", "Suche");
-				input.setAttribute("tabindex", "0");
-				beleg.leseSuche(input);
-				if (suche) {
-					input.focus();
-				}
+			// damit das Formular nach einer Suche nicht so hoppelt, einen leeren Absatz einbinden
+			if (wert === "bs" && suche) {
+				suchfeld(cont);
 			}
 		}
 		// Klick-Events an alles Links hängen
 		document.querySelectorAll("#beleg .link").forEach(function(i) {
 			liste.linksOeffnen(i);
 		});
+		// Suchfeld einblenden?
+		if (!suche && optionen.data.einstellungen["karte-suchfeld"]) {
+			setTimeout(function() {
+				let cont = document.getElementById("beleg-lese-bs");
+				if (cont.offsetHeight < 170) { // erst ab einer gewissen Beleg-Höhe anzeigen
+					return;
+				}
+				suchfeld(cont);
+			}, 0); // Timeout, damit die Höhe des Feldes ermittelt werden kann
+		}
+		// Suchfeld erzeugen
+		function suchfeld (cont) {
+			let p = document.createElement("p");
+			p.classList.add("input-text");
+			cont.appendChild(p);
+			let input = document.createElement("input");
+			p.appendChild(input);
+			input.id = "beleg-suchfeld";
+			input.type = "text";
+			input.value = beleg.leseSucheText;
+			input.setAttribute("placeholder", "Suche");
+			input.setAttribute("tabindex", "0");
+			beleg.leseSuche(input);
+			if (suche) {
+				input.focus();
+			}
+		}
 	},
 	// enthält den Wert des Suchfelds über dem Beleg in der Leseansicht
 	leseSucheText: "",
@@ -1697,7 +1735,11 @@ let beleg = {
 	ctrlLinks (a) {
 		a.addEventListener("click", function(evt) {
 			evt.preventDefault();
-			if (/leseansicht$/.test(this.id)) {
+			if (/navi-vorheriger$/.test(this.id)) {
+				beleg.ctrlNavi(false);
+			} else if (/navi-naechster$/.test(this.id)) {
+				beleg.ctrlNavi(true);
+			} else if (/leseansicht$/.test(this.id)) {
 				beleg.leseToggle(true);
 			} else if (/kuerzen$/.test(this.id)) {
 				beleg.ctrlKuerzen();
@@ -1786,6 +1828,71 @@ let beleg = {
 		setTimeout(function() {
 			marks[i].classList.remove("mark");
 		}, 1000);
+	},
+	// zur vorherigen/nächsten Karteikarte in der Belegliste springen
+	//   next = Boolean
+	//     (nächste Karte anzeigen
+	ctrlNavi (next) {
+		// Karteikarte geändert?
+		if (beleg.geaendert) {
+			sicherheitsfrage.warnen(function() {
+				beleg.geaendert = false;
+				fokus();
+				beleg.ctrlNavi(next);
+			}, {
+				notizen: false,
+				bedeutungen: false,
+				beleg: true,
+				kartei: false,
+			});
+			return;
+		}
+		// Belege in der Liste und Position des aktuellen Belegs ermitteln
+		let belege = [];
+		document.querySelectorAll(".liste-kopf").forEach(function(i) {
+			belege.push(i.dataset.id);
+		});
+		let pos = belege.indexOf("" + beleg.id_karte);
+		// neue Position
+		if (next) {
+			pos++;
+		} else {
+			pos--;
+		}
+		if (pos === -2) { // kann bei neuen, noch nicht gespeicherten Karteikarten passieren
+			pos = 0;
+		}
+		// erster oder letzter Beleg erreicht!
+		if (pos < 0 || pos === belege.length) {
+			dialog.oeffnen("alert", function() {
+				fokus();
+			});
+			dialog.text(`Der aktuelle Beleg ist ${next ? "der letzte" : "der erste" } in der Belegliste.`);
+			return;
+		}
+		// neuen Beleg öffnen:
+		//   1. in derselben Ansicht
+		//   2. mit demselben Icon fokussiert
+		//   3. mit derselben Scroll-Position
+		let leseansicht = document.getElementById("beleg-link-leseansicht");
+		const leseansicht_status = leseansicht.classList.contains("aktiv"),
+			scroll = window.scrollY;
+		beleg.oeffnen(parseInt(belege[pos], 10));
+		if (leseansicht.classList.contains("aktiv") !== leseansicht_status) {
+			beleg.leseToggle(false);
+		}
+		fokus();
+		window.scrollTo(0, scroll); // nach fokus()!
+		// Icon fokussieren
+		function fokus () {
+			let icon;
+			if (next) {
+				icon = document.getElementById("beleg-link-navi-naechster");
+			} else {
+				icon = document.getElementById("beleg-link-navi-vorheriger");
+			}
+			icon.focus();
+		}
 	},
 	// trägt eine Bedeutung ein, die aus dem Bedeutungen-Fenster
 	// an das Hauptfenster geschickt wurde

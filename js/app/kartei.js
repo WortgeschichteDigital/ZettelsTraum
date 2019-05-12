@@ -376,11 +376,12 @@ let kartei = {
 	//     (true = Kartei wurde geändert, false = Änderung wurde gespeichert oder verworfen)
 	karteiGeaendert (geaendert) {
 		kartei.geaendert = geaendert;
-		let icon = document.getElementById("kartei-geaendert");
+		helfer.geaendert();
+		let asterisk = document.getElementById("kartei-geaendert");
 		if (geaendert) {
-			icon.classList.add("geaendert");
+			asterisk.classList.add("geaendert");
 		} else {
-			icon.classList.remove("geaendert");
+			asterisk.classList.remove("geaendert");
 		}
 	},
 	// die App-Menüs teilweise deaktivieren oder komplett aktivieren
@@ -440,7 +441,7 @@ let kartei = {
 				//   derselbe Computer + dieselbe BenutzerIn
 				//   vor mehr als 12 Stunden gesperrt
 				if (host === datum_host_user[1] && user === datum_host_user[2] ||
-						new Date() - new Date(datum_host_user[0]) > 43200000) {
+						new Date() - new Date(datum_host_user[0]) > 432e5) {
 					return false; // nicht gesperrt
 				}
 				if (datum_host_user[2]) {

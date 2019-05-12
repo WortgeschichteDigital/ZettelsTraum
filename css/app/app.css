@@ -18,7 +18,7 @@ body {
 	margin: 0;
 	overflow-x: hidden;
 	color: var(--text);
-	font: 16px/24px "Noto Sans", sans-serif;
+	font: 16px/24px "Noto Sans", "Noto Sans Symbols2", sans-serif;
 	user-select: none;
 }
 
@@ -135,7 +135,7 @@ input,
 textarea {
 	margin: 0;
 	color: var(--text);
-	font: 16px/24px "Noto Sans", sans-serif;
+	font: 16px/24px "Noto Sans", "Noto Sans Symbols2", sans-serif;
 }
 
 input[type="date"],
@@ -275,6 +275,7 @@ textarea {
 	border: 1px solid var(--linie);
 	padding: 2px 5px;
 	width: calc(100% - 12px);
+	resize: none;
 }
 
 textarea:focus {

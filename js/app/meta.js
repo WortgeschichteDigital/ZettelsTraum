@@ -35,6 +35,7 @@ let meta = {
 			speicherort.classList.add("kein-wert");
 		}
 		speicherort.innerHTML = pfad;
+		document.getElementById("meta-ve").textContent = `Version ${data.ve}`;
 		document.getElementById("meta-re").textContent = data.re;
 		// Liste der BearbeterInnen erstellen
 		meta.bearbAuflisten();

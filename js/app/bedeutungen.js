@@ -763,6 +763,7 @@ let bedeutungen = {
 	//   geaendert = Boolean
 	bedeutungenGeaendert (geaendert) {
 		bedeutungen.geaendert = geaendert;
+		helfer.geaendert();
 		let asterisk = document.querySelector("#bedeutungen-cont h2 span");
 		if (geaendert) {
 			asterisk.classList.remove("aus");

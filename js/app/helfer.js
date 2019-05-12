@@ -195,12 +195,12 @@ let helfer = {
 		}
 	},
 	// mehrzeilige Textfelder automatisch an die Größe des Inhalts anpassen
-	// (größer als die angegeene max-height werden sie dabei nie)
+	// (größer als die angegebene max-height werden sie dabei nie)
 	//   textarea = Element
 	//     (Textfeld, dessen Eingaben hier abgefangen werden)
 	textareaGrow (textarea) {
 		textarea.style.height = "inherit";
-		textarea.style.height = `${textarea.scrollHeight - 4}px`; // padding = 4px, zählt zum scrollHeight dazu
+		textarea.style.height = `${textarea.scrollHeight - 4}px`; // 4px padding in scrollHeight enthalten
 	},
 	// Bereinigt Text, der in Textfeldern eingegeben wurde
 	//   text = String
@@ -361,6 +361,23 @@ let helfer = {
 					return "(uͤ|ü)";
 			}
 		});
+	},
+	// markiert in der Titelleiste des Programms, dass irgendeine Änderung
+	// noch nicht gespeichert wurde
+	geaendert () {
+		// Änderungsmarkierung?
+		let asterisk = "";
+		if (kartei.geaendert ||
+				notizen.geaendert ||
+				bedeutungen.geaendert ||
+				beleg.geaendert) {
+			asterisk = " *";
+		}
+		// Programmname
+		let {app} = require("electron").remote;
+		const app_name = app.getName().replace("'", "’");
+		// Dokumententitel
+		document.title = app_name + asterisk;
 	},
 	// Verteilerfunktion für den Tastaturbefehl Strg + S
 	speichern () {

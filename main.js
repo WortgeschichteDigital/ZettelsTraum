@@ -255,7 +255,7 @@ let layoutMenu = [
 			},
 			{ type: "separator" },
 			{
-				label: `Über ${app.getName()}`,
+				label: `Über ${app.getName().replace("'", "’")}`,
 				click: () => fenster.erstellenUeberApp("app"),
 			},
 			{
@@ -580,7 +580,7 @@ fenster = {
 	erstellen () {
 		// Fenster öffnen
 		win = new BrowserWindow({
-			title: app.getName(),
+			title: app.getName().replace("'", "’"),
 			icon: path.join(__dirname, "img", "icon", "linux", "icon_32px.png"),
 			x: optionen.data.fenster.x,
 			y: optionen.data.fenster.y,
@@ -781,8 +781,8 @@ fenster = {
 		winChangelog = new BrowserWindow({
 			title: "Changelog",
 			icon: path.join(__dirname, "img", "icon", "linux", "icon_32px.png"),
-			width: 600,
-			height: 600,
+			width: 625,
+			height: 625,
 			minWidth: 350,
 			minHeight: 350,
 			show: false,
@@ -812,7 +812,7 @@ fenster = {
 		winUeberApp = new BrowserWindow({
 			parent: fenster.findParent(opener),
 			modal: true,
-			title: `Über ${app.getName()}`,
+			title: `Über ${app.getName().replace("'", "’")}`,
 			icon: path.join(__dirname, "img", "icon", "linux", "icon_32px.png"),
 			width: 650,
 			height: 334,

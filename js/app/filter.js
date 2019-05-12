@@ -61,6 +61,12 @@ let filter = {
 				},
 				filter_folge: ["bedeutungen-undefined"],
 			},
+			wortbildungen: {
+				name: "Wortbildungen",
+				filter_vorhanden: false,
+				filter: {},
+				filter_folge: [],
+			},
 			korpora: {
 				name: "Korpora",
 				filter_vorhanden: belege.length ? true : false,
@@ -99,6 +105,10 @@ let filter = {
 						name: "Bücherdienst",
 						wert: 0,
 					},
+					notizen: {
+						name: "Notizen",
+						wert: 0,
+					},
 					buchung: {
 						name: "Buchung",
 						wert: 0,
@@ -112,6 +122,7 @@ let filter = {
 					"unvollstaendig",
 					"kontext",
 					"buecherdienst",
+					"notizen",
 					"buchung",
 					"markierung",
 				],
@@ -121,6 +132,10 @@ let filter = {
 			{
 				data: "bd",
 				typen: "bedeutungen",
+			},
+			{
+				data: "bl",
+				typen: "wortbildungen",
 			},
 			{
 				data: "kr",
@@ -133,12 +148,14 @@ let filter = {
 		];
 		for (let x = 0, len = belege.length; x < len; x++) {
 			let id = belege[x];
-			// BEDEUTUNGEN, KORPORA UND TEXTSORTEN
+			// BEDEUTUNGEN, WORTBILDUNGEN, KORPORA UND TEXTSORTEN
 			for (let i = 0, len = baeume.length; i < len; i++) {
 				let d = baeume[i].data,
 					t = baeume[i].typen;
 				if (!data.ka[id][d]) {
-					filter.typen[t].filter[`${t}-undefined`].wert++;
+					if (d !== "bl") { // Wortbildung hat kein undefined-Feld
+						filter.typen[t].filter[`${t}-undefined`].wert++;
+					}
 					continue;
 				}
 				let schon_gezaehlt = new Set(),
@@ -165,6 +182,10 @@ let filter = {
 					schon_gezaehlt.add(b[j]);
 				}
 			}
+			// WORTBILDUNGEN
+			if (data.ka[id].bl) {
+				filter.typen.wortbildungen.filter_vorhanden = true;
+			}
 			// VERSCHIEDENES
 			// Vollständigkeit
 			if (data.ka[id].un) {
@@ -181,6 +202,11 @@ let filter = {
 				filter.typen.verschiedenes.filter.buecherdienst.wert++;
 				filter.typen.verschiedenes.filter_vorhanden = true;
 			}
+			// Notizen
+			if (data.ka[id].no) {
+				filter.typen.verschiedenes.filter.notizen.wert++;
+				filter.typen.verschiedenes.filter_vorhanden = true;
+			}
 			// Buchung
 			if (data.ka[id].bc) {
 				filter.typen.verschiedenes.filter.buchung.wert++;
@@ -192,8 +218,8 @@ let filter = {
 				filter.typen.verschiedenes.filter_vorhanden = true;
 			}
 		}
-		// Bedeutungen, Korpora und Textsorten sortieren
-		let arr_typen = ["bedeutungen", "korpora", "textsorten"];
+		// Bedeutungen, Wortbildungen, Korpora und Textsorten sortieren
+		let arr_typen = ["bedeutungen", "wortbildungen", "korpora", "textsorten"];
 		for (let i = 0, len = arr_typen.length; i < len; i++) {
 			let arr = filter.typen[arr_typen[i]].filter_folge;
 			arr.sort(filter.baumSort);
@@ -376,14 +402,15 @@ let filter = {
 			liste.status(true);
 		});
 	},
-	// extrahiert die einzelnen Schichten, die in einer Bedeutungs- oder Textsortenangabe stecken
-	// (wird auch für die Korpora benutzt, weil es so leichter ist)
+	// extrahiert die einzelnen Schichten, die in einer Bedeutungs-, Wortbildungs-
+	// oder Textsortenangabe stecken
+	// (wird auch für Korpora benutzt, weil es so leichter ist)
 	//   baum = String
-	//     (Bedeutungs- bzw. Textsortenbaum oder Korpus als einzeiliger String)
+	//     (Bedeutungs-, Wortbildungs- bzw. Textsortenbaum oder Korpus als einzeiliger String)
 	//   dt = String
-	//     (Datentyp, also entweder "bedeutungen", "korpora", "textsorten" oder "")
+	//     (Datentyp, also entweder "bedeutungen", "wortbildungen", "korpora", "textsorten" oder "")
 	baumExtrakt (baum, dt) {
-		if (/^(bedeutungen|korpora|textsorten)/.test(dt)) {
+		if (/^(bedeutungen|wortbildungen|korpora|textsorten)/.test(dt)) {
 			dt += "-";
 		}
 		let extrakt = [],
@@ -398,8 +425,8 @@ let filter = {
 		}
 		return extrakt;
 	},
-	// Array mit Bedeutungsschichten sortieren, die aus Bedeutungs-, Korpus- und
-	// Textsortenangaben extrahiert wurden
+	// Array mit Bedeutungsschichten sortieren, die aus Bedeutungs-, Wortbildungs-,
+	// Korpus- und Textsortenangaben extrahiert wurden
 	baumSort (a, b) {
 		// undefined wird an den Anfang gesetzt
 		if (/undefined$/.test(a)) {
@@ -844,7 +871,7 @@ let filter = {
 			koepfe[0].nextSibling.classList.remove("aus");
 		}
 	},
-	// Cache mit regulären Ausdrücken für Bedeutungen, Korpora und Textsorten
+	// Cache mit regulären Ausdrücken für Bedeutungen, Wortbildungen, Korpora, Textsorten
 	// (wirkt sich wohl positiv auf die Performance aus)
 	regCacheBaum: {},
 	// Zwischenspeicher für die Daten der Volltextsuche
@@ -921,9 +948,10 @@ let filter = {
 		if (!Object.keys(filter.aktiveFilter).length) {
 			return karten;
 		}
-		// aktive Filter in Bedeutungen, Korpora und Textsorten
+		// aktive Filter in Bedeutungen, Wortbildungen, Korpora und Textsorten
 		let baumfilter = {
 			bd: [],
+			bl: [],
 			kr: [],
 			ts: [],
 		};
@@ -931,12 +959,14 @@ let filter = {
 			if (!filter.aktiveFilter.hasOwnProperty(i)) {
 				continue;
 			}
-			if (!/^(bedeutungen|korpora|textsorten)-/.test(i)) {
+			if (!/^(bedeutungen|wortbildungen|korpora|textsorten)-/.test(i)) {
 				continue;
 			}
 			let f = i.match(/^(.+?)-(.+)/);
 			if (f[1] === "bedeutungen") {
 				baumfilter.bd.push(f[2]);
+			} else if (f[1] === "wortbildungen") {
+				baumfilter.bl.push(f[2]);
 			} else if (f[1] === "korpora") {
 				baumfilter.kr.push(f[2]);
 			} else if (f[1] === "textsorten") {
@@ -978,7 +1008,7 @@ let filter = {
 					continue;
 				}
 			}
-			// Bedeutungen, Korpora und Textsorten
+			// Bedeutungen, Wortbildungen, Korpora und Textsorten
 			for (let bf in baumfilter) {
 				if (!baumfilter.hasOwnProperty(bf)) {
 					continue;
@@ -1026,6 +1056,12 @@ let filter = {
 			if (filter.aktiveFilter.buecherdienst &&
 					(data.ka[id].bu && !filter_inklusiv ||
 					!data.ka[id].bu && filter_inklusiv)) {
+				continue;
+			}
+			// Notizen
+			if (filter.aktiveFilter.notizen &&
+					(data.ka[id].no && !filter_inklusiv ||
+					!data.ka[id].no && filter_inklusiv)) {
 				continue;
 			}
 			// Buchung

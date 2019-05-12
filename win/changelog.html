@@ -21,8 +21,12 @@
 		<!-- CHANGELOG -->
 		<main>
 			<!-- 0.8.0 -->
+			<div class="version">0.8.0</div>
+			
 			<div>
 				<h2><span data-maintainer="Nico Dorn">Version 0.8.0-beta.5</span><time datetime="2019-05-10T10:42:52">10. Mai 2019</time></h2>
+				
+				<p><span class="obacht">Das Dateiformat hat sich geändert!</span> Ältere <abbr title="Wortgeschichte digital">WGD</abbr>-Dateien werden automatisch konvertiert; dabei wird eine Änderungsmarkierung gesetzt.</p>
 				
 				<h3>Neue Funktionen</h3>
 				
@@ -37,18 +41,28 @@ Sport
 						<p>Schlägt der Abgleich der importierten Sachgebiete mit denen der Sachgebiete-Datei fehl – weil <abbr title="zum Beispiel">z. B.</abbr> die Datei entfernt oder umbenannt wurde –, erscheint hinter dem Dateinamen ein kleines Icon: <img src="../img/fehler.svg" width="24" height="24" alt="">. Die einmal importierten Sachgebiete bleiben allerdings erhalten.</p>
 						<p>Die Sachgebietsliste wird für die kommende Funktion <i>Bedeutungsgerüst</i> benutzt.</p>
 					</li>
+					<li>
+						<p>Datenfeld Wortbildung: Die Karteikarte hat ein zusätzliches Textfeld erhalten, in dem Wortbildungen notiert werden können. Es funktioniert nach denselben Regeln wie <abbr title="zum Beispiel">z. B.</abbr> das Feld <i>Textsorte</i>: Mehrere Wortbildungen im selben Beleg werden durch einen Zeilenumbruch (<kbd>⏎</kbd>) voneinander getrennt; eine neue Hierarchieebene beginnt mit <code class="quelltext">: </code> (Doppelpunkt, gefolgt von einem Leerzeichen). Auf diese Weise können Wortbildungsbäume mit beliebiger Verschachtelungstiefe erzeugt werden. Eingaben wie <code class="quelltext">Derivation: Diminution: Mütterchen</code> oder <code class="quelltext">Komposition: Mutterherz</code> werden im <i>Worbildungen</i>-Filter (<abbr title="siehe">s.</abbr> nächster Punkt) in eine entsprechende Baumansicht überführt.</p>
+						<p>Eine Liste von Wortbildungen, die in der aktuellen Kartei bereits eingegeben wurden, erhält man durch Klick auf das Icon <img src="../img/dropdown.svg" width="24" height="24" alt=""> oder die Tastenkombination <kbd>Strg</kbd> + <kbd>⇩</kbd>, worauf ein Dropdown-Menü eingeblendet wird, wie es auch in anderen Datenfeldern benutzt wird. Beim Tippen im Feld <i>Wortbildung</i> werden automatisch entsprechende Vorschläge angezeigt.</p>
+						<p>In der Belegliste ist die Anzeige des neuen Datenfelds an das <i>Bedeutungs</i>-Feld gekoppelt. Wird die <i>Bedeutung</i> über das Icon <img src="../img/liste-bedeutung.svg" width="24" height="24" alt=""> ein- oder ausgeblendet, wird dadurch zugleich das <i>Wortbildungs</i>-Feld ein- oder ausgeblendet – wenn es denn gefüllt wurde.</p>
+						<p>Für die erweiterte Suche gilt diese Kopplung an das <i>Bedeutungs</i>-Feld nicht. Die Felder <i>Bedeutung</i> und <i>Wortbildung</i> können separat aus der Suche ausgeschlossen <abbr title="beziehungsweise">bzw.</abbr> in die Suche einbezogen werden.</p>
+					</li>
+					<li>Filter Wortbildungen: Das neue Datenfeld <i>Wortbildung</i> wurde auch in die Filterleiste integriert, sodass sich Belege mit einer bestimmten Wortbildung leicht aus den anderen Belegen heraussuchen lassen. Der <i>Wortbildungen</i>-Filter verhält sich weitgehend so wie <abbr title="zum Beispiel">z. B.</abbr> der <i>Textsorten</i>-Filter: Auch im <i>Wortbildungen</i>-Filter wird eine Baumansicht erzeugt, die beliebig tief verschachtelt sein darf; auch hier lassen sich Belege, denen eine spezifische Wortbildung zugeordnete wurde, durch Klick auf den entsprechenden Filter finden. Eine wesentliche Differenz zu anderen Filtern ist, dass es für Wortbildungen keinen Filter <i>(nicht bestimmt)</i> gibt. Darum erscheint der Filterblock <i>Wortbildungen</i> nur dann, wenn es in der Kartei Belege gibt, in denen das Datenfeld <i>Wortbildung</i> gefüllt wurde.</li>
+					<li>
+						<p>Karteikarte: Man kann sich nun die zu der aktuellen Belegliste gehörenden Karteikarten nacheinander ansehen, ohne die Karteikarte zu verlassen. Dazu wurden im Karteikartenkopf zwei neue Icons installiert, mit denen die Karteikarte mit dem Inhalt des vorherigen (<img src="../img/beleg-vorheriger.svg" width="24" height="24" alt="">) <abbr title="respektive">resp.</abbr> nächsten Belegs (<img src="../img/beleg-naechster.svg" width="24" height="24" alt="">) gefüllt werden kann.</p>
+						<p>Beim Laden der neuen Karteikarte bleibt die aktuelle Ansicht erhalten, egal ob Karteikarten standardmäßig in der Lese- oder der Formularansicht geöffnet werden (<abbr title="vergleiche">vgl.</abbr> <i>Programm &gt; Einstellungen &gt; Karteikarte &gt; Leseansicht</i>). Außerdem wird versucht, die aktuelle Scrollposition zu erhalten. Das Icon, auf das man geklickt hat, bleibt in jedem Fall fokussiert, sodass man mithilfe von <kbd>⏎</kbd> leicht und schnell den nächsten Beleg laden kann.</p>
+					</li>
 					<li>Karteikarte: In der Leseansicht kann der Belegkontext nun genauso gekürzt werden wie in der Belegliste. Um die Kürzung zu (de)aktivieren steht im Kopf der Karteikarte das Icon <img src="../img/liste-kuerzen.svg" width="24" height="24" alt=""> zur Verfügung. Das Kürzen kann auch über das Tastaturkürzel <kbd>Strg</kbd> + <kbd>K</kbd> ein- <abbr title="beziehungsweise">bzw.</abbr> ausgeschaltet werden.</li>
 					<li>
 						<p>Karteikarte: Mit dem Icon <img src="../img/beleg-springen.svg" width="24" height="24" alt=""> im Belegkopf kann man zu den im Belegtext markierten Textstellen springen. Zu diesen Textstellen zählen 1. die Hervorhebung des Karteiworts, 2. die mit der Funktion <img src="../img/tool-mark.svg" width="24" height="24" alt=""> im Beleg-Eingabefeld ausgezeichneten Textstellen und 3. die Suchtreffer (<abbr title="siehe">s.</abbr> nächster Punkt).</p>
 						<p>Beim Springen wird mit der ersten Textstelle begonnen und dann mit jedem Klick eine Textstelle vorgerückt. Ist die letzte Stelle im Beleg erreicht, wird wieder automatisch von vorne begonnen, also zur ersten Textstelle gesprungen. Wird keine Markierung gefunden, erscheint eine Meldung.</p>
-						<p>Die Funktion lässt sich auch über das Tastaturkürzel <kbd>Strg</kbd> + <kbd>↓</kbd> aufrufen.</p>
+						<p>Die Funktion lässt sich auch über das Tastaturkürzel <kbd>Strg</kbd> + <kbd>⇩</kbd> aufrufen.</p>
 					</li>
 					<li>
 						<p>Karteikarte: Unter dem Belegtext wird in der Leseansicht nun ein Suchfeld eingeblendet. Der in ihm eingegebene Text wird im Beleg orange hervorgehoben. Die Suche ist ganz schlicht gehalten, so wird zwischen Groß- und Kleinschreibung <abbr title="beispielsweise">bspw.</abbr> nicht unterschieden. Die Suchtreffer zählen zu den Markierungen, die man über die Sprungfunktion (<abbr title="siehe">s.</abbr> vorheriger Punkt) leicht erreichen/finden kann.</p>
 						<p>Ist die Karteikarte in der Leseansicht geöffnet und das Suchfeld sichtbar, zeigen alle Funktionen, die sonst die Volltextsuche in der Filterleiste öffnen würden, auf das Suchfeld in der aktuellen Karteikarte. Das Feld kann also durch das Tastaturkürzel <kbd>Strg</kbd> + <kbd>F</kbd>, via <i>Kartei &gt; Suche</i> oder über das Icon <img src="../img/quick-suche.svg" width="24" height="24" alt=""> in der Quick-Access-Bar fokussiert werden. Ist das Suchfeld nicht sichtbar, weil die Karteikarte sehr lang ist, sorgen diese Funktionen dafür, dass es automatisch in den Blick gescrollt wird.</p>
-						<p>Das Suchfeld erscheint nur, wenn im Beleg Text steht. Es lässt sich auf Wunsch ganz ausblenden (<i>Programm &gt; Einstellungen &gt; Karteikarte</i>).</p>
+						<p>Das Suchfeld erscheint nur, wenn im Beleg ein längerer Text steht (<abbr title="circa">ca.</abbr> ab sechs Zeilen). Es lässt sich auf Wunsch ganz ausblenden (<i>Programm &gt; Einstellungen &gt; Karteikarte</i>).</p>
 					</li>
-					<li>Karteikarte: Nach dem <abbr title="Deutsches Textarchiv">DTA</abbr>-Import wird nun überprüft, ob das Kartei-Wort im gerade importierten Belegtext gefunden werden kann. Ist dies nicht der Fall erscheint eine Meldung, die auf die vergebliche Suche aufmerksam macht. Die Überprüfung kann unter <i>Programm &gt; Einstellungen &gt; Karteikarte</i> ausgestellt werden.</li>
 				</ul>
 				
 				<h3>Verbesserungen</h3>
@@ -62,6 +76,14 @@ Sport
 					</li>
 					<li>Karteikarte: Das Layout der Kopfzeile wurde leicht verändert. Die Buttons <i>Speichern</i>, <i>Schließen</i>, <i>Löschen</i> und die Icons sind nun gemeinsam in einer Kopfzeile fixiert, also immer sicht- und erreichbar, selbst wenn die Karteikarte sehr lang ist und man weit nach unten scrollt.</li>
 					<li>Karteikarte: Im Kopf werden nur noch die Icons angezeigt, die in der gegenwärtigen Ansicht eine Funktion haben. In der Formularansicht wird <abbr title="zum Beispiel">z. B.</abbr> das Icon zum Kürzen des Kontexts (<img src="../img/liste-kuerzen.svg" width="24" height="24" alt="">) ausgeblendet, während es nach dem Wechsel in die Leseansicht wieder erscheint.</li>
+					<li>Karteikarte: Um die Karte visuell zu entspannen, sind nun alle leeren Textfelder einzeilig, auch diejenigen, die mehrzeilig werden können. Felder die prinzipiell mehrzeilig sein können (aber nicht müssen), zeigen dies durch das Icon <img src="../img/beleg-mehrzeilig-dunkel.svg" width="24" height="24" alt=""> an, das am linken Rand des Feldes erscheint, wenn es keinen Text enthält. Sobald man anfängt es mit Text zu füllen, verschwindet das Icon.</li>
+					<li>
+						<p>Karteikarte: Seit Version 0.1.0 lässt sich das Speichern der Karteikarte durch <kbd>⏎</kbd> anstoßen, wenn der Fokus sich in einem der Textfelder befindet. Fortan funktioniert das Speichern nur noch, wenn <kbd>Strg</kbd> + <kbd>⏎</kbd> gedrückt wird, eine Tastenkombination, die bislang nur für mehrzeilige Textfelder nötig war. Der Speicherbefehl ist nun also für alle Textfelder einheitlich und kann auch angestoßen werden, wenn man sich in einem <abbr title="Deutsches Textarchiv">DTA</abbr>-Feld befindet.</p>
+						<p>Der <abbr title="Deutsches Textarchiv">DTA</abbr>-Import lässt sich auch weiterhin mit einem einfachen <kbd>⏎</kbd> starten, wenn man sich in einem der beiden <abbr title="Deutsches Textarchiv">DTA</abbr>-Felder befindet.</p>
+					</li>
+					<li><abbr title="Deutsches Textarchiv">DTA</abbr>-Import: Nach dem Import wird nun überprüft, ob das Kartei-Wort im gerade importierten Belegtext gefunden werden kann. Ist dies nicht der Fall erscheint eine Meldung, die auf die vergebliche Suche aufmerksam macht. Die Überprüfung kann unter <i>Programm &gt; Einstellungen &gt; Karteikarte</i> ausgestellt werden.</li>
+					<li><abbr title="Deutsches Textarchiv">DTA</abbr>-Import: Textseiten mit Spalten werden nun als solche erkannt und deren Spaltennummern ausgelesen. In der Quellenangabe wird in solchen Fällen natürlich <q><abbr title="Seite">S.</abbr></q> durch <q><abbr title="Spalte">Sp.</abbr></q> ersetzt. Die Markierung des Spaltenwechsels im importierten Text behält hingegen das bekannte Format: <q>[:35:]</q> (wobei die <q>35</q> für die darauffolgende Spaltennummer steht).</li>
+					<li>Filterleiste: Unter <i>Verschiedenes</i> gibt es einen neuen Filter: <i>Notizen</i>. Mithilfe dieses Filters lassen sich alle Belege mit (inklusive Filterlogik) <abbr title="beziehungsweise">bzw.</abbr> ohne (exklusive Filterlogik) Notizen finden.</li>
 					<li>
 						<p>Filterleiste: In langen Filterblöcken mit Scrollleiste wird nach dem Neuaufbau der Filter jetzt auch die Scrollposition der Filterblöcke wiederhergestellt. So wird ein dysfunktionales Springen nach der Auswahl eines Filters verhindert: Man konnte unter Umständen nicht mehr sehen, was man eigentlich angeklickt hatte.</p>
 						<p>Ist der Reduktionsmodus aktiv (Funktion <img src="../img/filter-reduzieren.svg" width="24" height="24" alt="">) werden die Filterblöcke allerdings immer ganz nach oben gescrollt, weil sich die Anzahl der angezeigten Filter in diesem Modus <abbr title="in der Regel">i. d. R.</abbr> massiv reduziert, was eine deutlich kompliziertere Lösung des Problems erfordern würde.</p>
@@ -75,6 +97,9 @@ Sport
 					<li>Belegliste: Die Belegliste-Einstellungen sind nun auch über das Kontextmenü zu erreichen (Rechtsklick in einem beliebigen Belegkopf).</li>
 					<li>Belegliste: Kleinere visuelle Änderungen, um die Einheitlichkeit mit anderen Programmteilen zu erhöhen.</li>
 					<li>Im Tooltip aller Icons, deren Funktion nicht nur durch Klick, sondern auch durch ein Tastaturkürzel aufgerufen werden kann, wurde das entsprechende Tastaturkürzel notiert. Das Icon <img src="../img/drucken.svg" width="24" height="24" alt=""> hat in der Karteikarte nun <abbr title="zum Beispiel">z. B.</abbr> den Tooltip <q>Karte drucken (Strg + P)</q>.</li>
+					<li>Wurde der Inhalt einer Kartei geändert, aber noch nicht gespeichert, erscheint fortan in der Titelleiste des Programms ein Asterisk hinter dem App-Namen: <i><span class="app-name"></span> *</i>.</li>
+					<li>Metadaten-Fenster: Die Anzeige der Version des Dateiformats wurde ergänzt.</li>
+					<li>Der Changelog ist erwachsen geworden. Damit man den Überblick behält, gibt es jetzt am linken Rand eine Marginalie mit der Versionsnummer.</li>
 				</ul>
 				
 				<h3>Behobene Fehler</h3>
@@ -86,11 +111,16 @@ Sport
 					<li>Volltextsuche: Bei sehr kurzen Suchwörtern (<abbr title="zum Beispiel">z. B.</abbr> <q>an</q>) funktionierte die Hervorhebung der Suchtreffer im Belegtext nicht immer korrekt. Unter Umständen konnte der Inhalt von <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>-Tags sichtbar werden.</li>
 					<li>Filterleiste: Wurden in der <i>Belegliste</i> die zuvor gefilterten Belege so geändert, dass kein Beleg mehr auf den gewählten Filter zutraf, der Filter demnach gar nicht mehr existierte, war dieser Filter dennoch aktiv und filterte alle Belege heraus. Im Ergebnis erschien kein Beleg in der Liste, obwohl kein Filter mehr aktiv war.</li>
 					<li>Belegliste: Beim Löschen der Belege aus der <i>Belegliste</i> via Rechtsklick wurde in der Sicherheitsfrage nicht der komplette Kurztitel des zu löschenden Belegs angezeigt.</li>
+					<li><abbr title="Deutsches Textarchiv">DTA</abbr>-Import: Bei mehreren Textauszeichnungen gleichen Typs in einem Absatz wurden die temporären Platzhalter der Auszeichnungen unter Umständen nicht alle durch korrekte <abbr title="Hypertext Markup Language">HTML</abbr>-Tags ersetzt.</li>
 					<li><abbr title="Deutsches Textarchiv">DTA</abbr>-Import: Beim Auslesen der Textsorte gab es in Texten, die mehrere kommagetrennte Unterklassen haben, einen kleineren Importfehler.</li>
+					<li><abbr title="Deutsches Textarchiv">DTA</abbr>-Import: Wurde der Import via <kbd>⏎</kbd> im Ziffern-Feld oder über den Button angestoßen, behielt das Feld/der Button den Fokus. Das hätte zu einem versehentlichen Mehrfach-Import führen können.</li>
+					<li>An einigen Stellen im Text (besonders in diesem Dokument) wurden Glyphen verwendet, die in <i>Noto Sans (Mono)</i> nicht enthalten sind. Für solche Fälle wurde die Schriftart <i>Noto Sans Symbols2</i> eingebunden.</li>
 				</ul>
 			</div>
 			
 			<!-- 0.7.0 -->
+			<div class="version">0.7.0</div>
+			
 			<div>
 				<h2><span data-maintainer="Nico Dorn">Version 0.7.0</span><time datetime="2019-05-06T14:26:09">6. Mai 2019</time></h2>
 				
@@ -117,7 +147,7 @@ Mustermann, Erika
 				
 				<ul>
 					<li><abbr title="Deutsches Textarchiv">DTA</abbr>-Import: Fortan wird nur noch die Textsortenangabe <q>dwds1</q> importiert. (Die im <abbr title="Text Encoding Initiative" lang="en">TEI</abbr>-Header der <abbr title="Deutsches Textarchiv">DTA</abbr>-Texte unter <q>dwds2</q> gelisteten Textsorten stammen aus einer Frühzeit des Projekts und sind nicht so zuverlässig.)</li>
-					<li>Einstellungen: Die Tastatur-Navigation durch die Menüpunkte wurde auf <kbd>Strg</kbd> + <kbd>↑</kbd> / <kbd>↓</kbd> umgestellt, auch damit sie identisch zu der Navigation im <i>Handbuch</i> und der <i>technischen Dokumentation</i> funktioniert.</li>
+					<li>Einstellungen: Die Tastatur-Navigation durch die Menüpunkte wurde auf <kbd>Strg</kbd> + <kbd>⇧</kbd> / <kbd>⇩</kbd> umgestellt, auch damit sie identisch zu der Navigation im <i>Handbuch</i> und der <i>technischen Dokumentation</i> funktioniert.</li>
 					<li>Eingabefelder für Ziffern haben nun (wieder) Spin-Buttons (kleine Pfeile, mit denen die Ziffer im Feld hoch- oder runtergezählt werden kann).</li>
 					<li>Die <i>technische Dokumentation</i> wurde ergänzt <abbr title="beziehungsweise">bzw.</abbr> angepasst.</li>
 					<li><a href="#" class="ueber-electron"><i>Electron</i></a>-Update auf Version 4.2.0.</li>
@@ -132,6 +162,8 @@ Mustermann, Erika
 			</div>
 			
 			<!-- 0.6.0 -->
+			<div class="version">0.6.0</div>
+			
 			<div>
 				<h2><span data-maintainer="Nico Dorn">Version 0.6.0</span><time datetime="2019-04-28T08:54:46">28. April 2019</time></h2>
 				
@@ -170,6 +202,8 @@ Mustermann, Erika
 			</div>
 			
 			<!-- 0.5.0 -->
+			<div class="version">0.5.0</div>
+			
 			<div>
 				<h2><span data-maintainer="Nico Dorn">Version 0.5.0</span><time datetime="2019-04-23T13:02:11">23. April 2019</time></h2>
 				
@@ -223,6 +257,8 @@ Mustermann, Erika
 			</div>
 			
 			<!-- 0.4.0 -->
+			<div class="version">0.4.0</div>
+			
 			<div>
 				<h2><span data-maintainer="Nico Dorn">Version 0.4.0</span><time datetime="2019-04-17">17. April 2019</time></h2>
 				
@@ -260,7 +296,7 @@ Mustermann, Erika
 					<li>Belegliste: Die Lesbarkeit der Felder <i>Bedeutung</i> und <i>Textsorte</i> wurde verbessert. Wurden mehrere Bedeutungen <abbr title="beziehungsweise">bzw.</abbr> Textsorten eingetragen, werden sie in der Anzeige durch einen größeren Durchschuss voneinander getrennt.</li>
 					<li>Karteikarte: Die Textfelder <i>Bedeutung</i> und <i>Textsorte</i> können nun auch ohne Nachfrage aus dem zugehörigen Dropdown-Menü heraus ergänzt werden. Eine Option dafür findet sich in <i>Programm &gt; Einstellungen &gt; Karteikarte</i>. Die Option lässt sich auch über das Dialogfenster aktivieren, das erscheint, wenn ein Textfeld bereits gefüllt ist.</li>
 					<li>Dropdown-Menü: Immer dann, wenn der Inhalt eines Dropdown-Menüs unterhalb des Textfeldes nicht komplett angezeigt werden kann, wird das Menü automatisch über dem Textfeld geöffnet.</li>
-					<li>Anhänge und Redaktion: Nach dem Verschieben eines Eintrags wird das Pfeil-Icon des betreffenden Eintrags fokussiert. So kann ein Eintrag mithilfe von <kbd>↵</kbd> schneller und leichter über mehrere Positionen nach oben verschoben werden.</li>
+					<li>Anhänge und Redaktion: Nach dem Verschieben eines Eintrags wird das Pfeil-Icon des betreffenden Eintrags fokussiert. So kann ein Eintrag mithilfe von <kbd>⏎</kbd> schneller und leichter über mehrere Positionen nach oben verschoben werden.</li>
 					<li><i>Kartei &gt; Zuletzt verwendet:</i> Bisher gab es nur für die ersten sechs Einträge Tastaturkürzel. Ab sofort gibt es Kürzel bis Eintrag Nummer neun.</li>
 				</ul>
 				
@@ -271,7 +307,7 @@ Mustermann, Erika
 					<li>Filterleiste: Die Darstellung kompliziert verschachtelter Bedeutungsgerüste war mitunter grob falsch.</li>
 					<li>Filterleiste: Bei aktiviertem Reduktionsmodus wurde der Filterblock <i>Verschiedenes</i> nie als aktiv – also grün – markiert, wenn die Filterlogik auf <i>exklusiv</i> stand.</li>
 					<li>Karteikarte: In der Leseansicht wurde die Markierung mit Sternen fehlerhaft dargestellt.</li>
-					<li>Karteikarte: Wurde das Speichern der Karte durch das Drücken von <kbd>↵</kbd> oder <kbd>Strg</kbd> + <kbd>↵</kbd> angestoßen, während man sich in einem der Textfelder befand, verließ der Fokus das Textfeld.</li>
+					<li>Karteikarte: Wurde das Speichern der Karte durch das Drücken von <kbd>⏎</kbd> oder <kbd>Strg</kbd> + <kbd>⏎</kbd> angestoßen, während man sich in einem der Textfelder befand, verließ der Fokus das Textfeld.</li>
 					<li>Dropdown-Menü: Wurde mehrmals hintereinander auf denselben Schalter gedrückt, um ein Dropdown-Menü zu öffnen, funktionierte das Öffnen des Dropdowns via Tastaturkürzel mitunter nicht mehr.</li>
 					<li>Dropdown-Menü: In mehrzeiligen Feldern war der Pfeil zum Aufklappen des Menüs nicht mehr richtig zu sehen, wenn das Feld so groß geworden war, dass es eine Scrollleiste bekam.</li>
 					<li>Das Formular zur Eingabe neuer Belege <abbr title="beziehungsweise">bzw.</abbr> dessen Leseansicht wird nun durchgehend als <i>Karteikarte</i> und nicht mehr als <i>Belegzettel</i> bezeichnet.</li>
@@ -279,6 +315,8 @@ Mustermann, Erika
 			</div>
 			
 			<!-- 0.3.0 -->
+			<div class="version">0.3.0</div>
+			
 			<div>
 				<h2><span data-maintainer="Nico Dorn">Version 0.3.0</span><time datetime="2019-04-10">10. April 2019</time></h2>
 				
@@ -317,6 +355,8 @@ Mustermann, Erika
 			</div>
 			
 			<!-- 0.2.0 -->
+			<div class="version">0.2.0</div>
+			
 			<div>
 				<h2><span data-maintainer="Nico Dorn">Version 0.2.0</span><time datetime="2019-04-09">9. April 2019</time></h2>
 				
@@ -338,6 +378,8 @@ Mustermann, Erika
 			</div>
 			
 			<!-- 0.1.0 -->
+			<div class="version">0.1.0</div>
+			
 			<div>
 				<h2><span data-maintainer="Nico Dorn">Version 0.1.0</span><time datetime="2019-04-08">8. April 2019</time></h2>
 				

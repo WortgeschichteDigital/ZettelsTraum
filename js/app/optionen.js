@@ -24,6 +24,7 @@ let optionen = {
 			// erweiterte Suche: Datenfelder
 			"feld-au": true,
 			"feld-bd": true,
+			"feld-bl": true,
 			"feld-bs": true,
 			"feld-da": true,
 			"feld-kr": true,
@@ -54,6 +55,8 @@ let optionen = {
 			wort_hervorheben: false,
 			// Steuerung Details: Bedeutung einblenden
 			detail_bd: false,
+			// Steuerung Details: Wortbildung einblenden (ist mit Bedeutung gekoppelt)
+			detail_bl: false,
 			// Steuerung Details: Quelle einblenden
 			detail_qu: false,
 			// Steuerung Details: Korpus einblenden (ist mit Quelle gekoppelt)
@@ -476,7 +479,7 @@ let optionen = {
 	//     gespeichert werden, weil es Konsequenzen für die UI hat)
 	speichern_timeout: null,
 	speichern (sofort) {
-		let timeout = 60000;
+		let timeout = 6e4;
 		if (sofort) {
 			timeout = 0;
 		}
