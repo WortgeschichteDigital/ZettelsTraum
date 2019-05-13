@@ -83,7 +83,7 @@ let liste = {
 			let beleg_unsichtbar = markBelegsuche(liste.statusNeu);
 			// neuer Beleg könnte aufgrund der Filter versteckt sein
 			if (beleg_unsichtbar && !optionen.data.einstellungen["nicht-karte-gefiltert"]) {
-				dialog.oeffnen("alert", null);
+				dialog.oeffnen("alert");
 				dialog.text("Der Beleg wurde angelegt.\nWegen der aktuellen Filterregeln erscheint er jedoch nicht in der Belegliste.");
 				document.getElementById("dialog-text").appendChild(optionen.shortcut("Meldung nicht mehr anzeigen", "nicht-karte-gefiltert"));
 			} else if (!beleg_unsichtbar) { // zum Beleg scrollen
@@ -1024,7 +1024,7 @@ let liste = {
 			evt.stopPropagation();
 			let detail = this.title,
 				beleg_id = this.parentNode.dataset.id;
-			dialog.oeffnen("alert", null);
+			dialog.oeffnen("alert");
 			dialog.text(`<h3>${liste.detailAnzeigenH3(beleg_id)}</h3>\n${detail}`);
 		});
 	},

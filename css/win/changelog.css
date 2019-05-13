@@ -151,6 +151,7 @@ li p {
 .version {
 	position: sticky;
 	top: 70px;
+	margin-top: 50px;
 	width: fit-content;
 	line-height: 32px;
 	background-color: #fff;

@@ -198,20 +198,20 @@
 	margin-left: 24px;
 }
 
-#einstellungen-quick-icons {
+#einstellungen-cont .einstellungen-spalten {
 	columns: 2;
 	padding-left: 24px;
 }
 
-#einstellungen-quick-icons h3 {
+#einstellungen-cont .einstellungen-spalten h3 {
 	margin: 10px 0 5px 0;
 }
 
-#einstellungen-quick-icons h3:first-child {
+#einstellungen-cont .einstellungen-spalten h3:first-child {
 	margin-top: 0;
 }
 
-#einstellungen-quick-icons p {
+#einstellungen-cont .einstellungen-spalten p {
 	margin-bottom: 5px;
 	padding-left: 1px; /* damit beim Fokussieren der Checkbox der linke Rand nicht abgeschnitten erscheint */
 	overflow: hidden;

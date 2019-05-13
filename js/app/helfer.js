@@ -24,7 +24,7 @@ let helfer = {
 			}
 			// Ist eine Kartei geöffnet?
 			if (!kartei.wort) {
-				dialog.oeffnen("alert", null);
+				dialog.oeffnen("alert");
 				dialog.text(`Die Funktion <i>${this.title.replace(/ \(.+\)/, "")}</i> steht nur zur Verfügung, wenn eine Kartei offen ist.`);
 				return;
 			}
@@ -58,7 +58,7 @@ let helfer = {
 			} else if (id === "belege-auflisten") {
 				liste.anzeigen();
 			} else if (id === "belege-sortieren") { // TODO
-				dialog.oeffnen("alert", null);
+				dialog.oeffnen("alert");
 				dialog.text("Sorry!\nDiese Funktion ist noch nicht programmiert.");
 			}
 		});
@@ -123,7 +123,7 @@ let helfer = {
 			return;
 		}
 		// Karteikarte ist aktiv, kein Overlay
-		if (!oben && !document.getElementById("beleg").classList.contains("aus")) {
+		if (helfer.belegOffen()) {
 			// Ctrl + ↓ + Leseansicht aktiv
 			if (evt.ctrlKey &&
 					evt.which === 40 &&
@@ -434,6 +434,14 @@ let helfer = {
 		// Entf
 		if (evt.which === 46) {
 			bedeutungen.loeschenTastatur();
+		}
+		// Strg + Bild ↑ / ↓
+		if (evt.ctrlKey && (evt.which === 33 || evt.which === 34) && helfer.belegOffen()) {
+			let next = true;
+			if (evt.which === 33) {
+				next = false;
+			}
+			beleg.ctrlNavi(next);
 		}
 		// Strg + K (wenn kein Overlay)
 		if (evt.ctrlKey && evt.which === 75 && helfer.belegOffen()) {

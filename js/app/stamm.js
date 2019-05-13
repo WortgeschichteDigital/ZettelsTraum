@@ -5,7 +5,7 @@ let stamm = {
 	oeffnen () {
 		// wird die Variantenliste gerade erstellt, darf sich das Fenster nicht öffnen
 		if (!data.fv.length) {
-			dialog.oeffnen("alert", null);
+			dialog.oeffnen("alert");
 			dialog.text("Die Liste der Formvarianten wird gerade erstellt.\nVersuchen Sie es in ein paar Sekunden noch einmal!");
 			return;
 		}
@@ -207,7 +207,7 @@ let stamm = {
 			if (detail) {
 				text += `\n<h3>Fehlermeldung</h3>\n${detail}`;
 			}
-			dialog.oeffnen("alert", null);
+			dialog.oeffnen("alert");
 			dialog.text(text);
 		}
 		// ist noch kein Wort in der Liste => das Kartei-Wort einfügen

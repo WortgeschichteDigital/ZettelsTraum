@@ -90,6 +90,10 @@ p.force-wrap {
 	overflow-wrap: break-word;
 }
 
+p.checkbox {
+	padding-left: 1px;
+}
+
 p.input-text {
 	line-height: 30px;
 }

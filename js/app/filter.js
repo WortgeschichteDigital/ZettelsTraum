@@ -866,9 +866,14 @@ let filter = {
 			}
 			aktive_filter = true;
 		});
-		// sind alle Filter inaktiv => 1. Filter öffnen
+		// sind alle Filter inaktiv => standardmäßig zu öffnende Filter öffnen
 		if (!aktive_filter) {
-			koepfe[0].nextSibling.classList.remove("aus");
+			koepfe.forEach(function(i) {
+				const id = i.id.replace(/.+-/, "");
+				if (optionen.data.einstellungen[`filter-offen-${id}`]) {
+					i.nextSibling.classList.remove("aus");
+				}
+			});
 		}
 	},
 	// Cache mit regulären Ausdrücken für Bedeutungen, Wortbildungen, Korpora, Textsorten
@@ -1193,7 +1198,7 @@ let filter = {
 		// Macht es überhaupt Sinn, die Karte anzuzeigen?
 		const jahre = Object.keys(filter.zeitraumTrefferCache);
 		if (jahre.length === 1) {
-			dialog.oeffnen("alert", null);
+			dialog.oeffnen("alert");
 			dialog.text("Alle Belege befinden sich im selben Zeitraum.\nDie Verteilungsgrafik wird nicht anzeigt.");
 			return;
 		}

@@ -3,7 +3,7 @@
 let bedeutungenWin = {
 	// Fenster öffnen oder schließen
 	oeffnen (oeffnen) {
-		const {ipcRenderer} = require("electron");
+		let {ipcRenderer} = require("electron");
 		if (oeffnen) {
 			ipcRenderer.send("kartei-bedeutungen-fenster", true);
 		} else {
@@ -18,7 +18,7 @@ let bedeutungenWin = {
 			bedeutungen: bedeutungenWin.get(),
 		};
 		// Daten senden
-		const {ipcRenderer} = require("electron");
+		let {ipcRenderer} = require("electron");
 		ipcRenderer.send("kartei-bedeutungen-fenster-daten", daten);
 	},
 	// Bedeutungen aus den Karteikarten extrahieren

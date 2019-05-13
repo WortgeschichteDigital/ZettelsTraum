@@ -19,9 +19,9 @@ let anhaenge = {
 				return;
 			}
 			// scannen
-			const fs = require("fs"),
-				path = require("path");
-			let pfad = datei;
+			let fs = require("fs"),
+				path = require("path"),
+				pfad = datei;
 			if (!path.isAbsolute(datei)) {
 				pfad = `${path.parse(kartei.pfad).dir}/${datei}`;
 			}
@@ -107,7 +107,7 @@ let anhaenge = {
 	},
 	// Anhänge-Fenster einblenden
 	fenster () {
-		const fenster = document.getElementById("anhaenge");
+		let fenster = document.getElementById("anhaenge");
 		// Fenster öffnen oder in den Vordergrund holen
 		if (overlay.oeffnen(fenster)) { // Fenster ist schon offen
 			return;
@@ -221,11 +221,11 @@ let anhaenge = {
 	//     (Datei, die geöffnet werden soll)
 	oeffnen (datei) {
 		if (!anhaenge.data[datei].exists) {
-			dialog.oeffnen("alert", null);
+			dialog.oeffnen("alert");
 			dialog.text("Die Datei konnte nicht gefunden werden.");
 			return;
 		}
-		const {shell} = require("electron");
+		let {shell} = require("electron");
 		shell.openItem(anhaenge.data[datei].path);
 	},
 	// Öffnet beim Klick auf eine Überschrift im Anhänge-Fenster den entsprechenden Beleg
@@ -294,7 +294,7 @@ let anhaenge = {
 				anhaenge.auflistenBelege(cont);
 			}
 			// ggf. Pfeil-Icon fokussieren
-			const pfeil = cont.querySelector(`[data-datei="${datei}"] .anhaenge-aufwaerts`);
+			let pfeil = cont.querySelector(`[data-datei="${datei}"] .anhaenge-aufwaerts`);
 			if (pfeil) {
 				pfeil.focus();
 			}
@@ -358,10 +358,10 @@ let anhaenge = {
 	//     (Add-Button zum Hinzufügen eines Anhangs)
 	add (input) {
 		input.addEventListener("click", function() {
-			const obj = this.dataset.obj,
+			const obj = this.dataset.obj;
+			let {app, dialog} = require("electron").remote,
 				cont = this.parentNode.parentNode;
-			const {app, dialog} = require("electron").remote;
-			const opt = {
+			let opt = {
 				title: "Anhang hinzufügen",
 				defaultPath: app.getPath("documents"),
 				filters: [
@@ -399,7 +399,7 @@ let anhaenge = {
 	//     Werte durch Haarstriche getrennt)
 	addFiles (dateien, cont, obj) {
 		// Dateien hinzufügen
-		const path = require("path"),
+		let path = require("path"),
 			reg_pfad = new RegExp(helfer.escapeRegExp(`${path.dirname(kartei.pfad)}${path.sep}`));
 		let schon = [],
 			arr = anhaenge.getArr(obj);
@@ -414,7 +414,7 @@ let anhaenge = {
 		});
 		// melden, wenn Dateien schon im Array sind
 		if (schon.length) {
-			dialog.oeffnen("alert", null);
+			dialog.oeffnen("alert");
 			let text = "folgende Datei war";
 			if (schon.length > 1) {
 				text = "folgenden Dateien waren";

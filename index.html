@@ -117,9 +117,9 @@
 					></div
 					><div id="beleg-opt"
 						><span class="beleg-opt-block"
-							><a href="#" id="beleg-link-navi-vorheriger" title="vorheriger Beleg in der Liste"
+							><a href="#" id="beleg-link-navi-vorheriger" title="vorheriger Beleg in der Liste (Strg + Bild ↑)"
 								><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m7 14v-8l-3.5 3.5-1.5-1.5 6-6 6 6-1.5 1.5-3.5-3.5v8z"/></svg></a
-							><a href="#" id="beleg-link-navi-naechster" title="nächster Beleg in der Liste"
+							><a href="#" id="beleg-link-navi-naechster" title="nächster Beleg in der Liste (Strg + Bild ↓)"
 								><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m7 2v8l-3.5-3.5-1.5 1.5 6 6 6-6-1.5-1.5-3.5 3.5v-8z"/></svg></a
 						></span
 						><span class="beleg-opt-block"
@@ -129,7 +129,7 @@
 								><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="m7 4 5 5 5-5h-10zm-3 6v4h16v-4h-16zm8 5-5 5h10l-5-5z"/></svg></a
 							><a href="#" class="icon-leseansicht aus" id="beleg-link-trennung"
 								><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g><path d="m4 4v16h6v-2h-4v-12h4v-2h-4z"/><path d="m20 4v16h-6v-2h4v-12h-4v-2h4z"/><path d="m8 10v2h6v2h2v-2-2h-8z"/></g></svg></a
-							><a href="#" class="icon-leseansicht aus" id="beleg-link-springen"
+							><a href="#" class="icon-leseansicht aus" id="beleg-link-springen" title="zur nächsten Markierung springen (Strg + ↓)"
 								><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m7 1c-2.7527 0-5 2.2473-5 5v5h2v-5c0-1.6793 1.3207-3 3-3s3 1.3207 3 3v3h-2l3 5 3-5h-2v-3c0-2.7527-2.2473-5-5-5z"/></svg></a
 							><a href="#" class="druck-icon" id="beleg-link-drucken" title="Karte drucken (Strg + P)"
 								><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m4 1v2h8v-2h-8zm-2 3c-0.5 0-1 0.5-1 1v4c0 0.5 0.5 1 1 1h1v-2h10v2h1c0.5 0 1-0.5 1-1v-4c0-0.5-0.5-1-1-1h-12zm2 5v5h8v-5h-8z"/></svg></a
@@ -396,6 +396,8 @@
 					</ul>
 				</div>
 				<div>
+				
+					<!-- Allgemeines -->
 					<section id="einstellungen-sec-allgemeines">
 						<p class="input-text dropdown-cont"><input type="text" value="" class="dropdown-feld" id="einstellung-bearbeiterin"
 							><a href="#" class="dropdown-link-element dropdown-link-haengend" title="BearbeiterInnen auflisten"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m7 2v8l-3.5-3.5-1.5 1.5 6 6 6-6-1.5-1.5-3.5 3.5v-8z"/></svg></a
@@ -410,12 +412,14 @@
 						<p class="einzug"><input type="checkbox" id="einstellung-textkopie-wort-hinterlegt"
 							><label for="einstellung-textkopie-wort-hinterlegt">Kartei-Wort mit grauem Hintergrund kopieren</label></p>
 					</section>
+					
+					<!-- Menü -->
 					<section id="einstellungen-sec-menue" class="aus">
 						<p><input type="checkbox" id="einstellung-autoHideMenuBar"
 							><label for="einstellung-autoHideMenuBar">Menüleiste des Programms erst einblenden, wenn die Alt-Taste gedrückt wird <span class="einstellung-neustart">(Neustart erforderlich)</span></label></p>
 						<p><input type="checkbox" id="einstellung-quick"
 							><label for="einstellung-quick">Quick-Access-Bar anzeigen</label></p>
-						<div id="einstellungen-quick-icons">
+						<div class="einstellungen-spalten">
 							<h3>Programm</h3>
 							<p><input type="checkbox" id="einstellung-quick-programm-einstellungen"
 								><label for="einstellung-quick-programm-einstellungen">Einstellungen</label></p>
@@ -461,6 +465,8 @@
 								><label for="einstellung-quick-belege-sortieren">Sortieren</label></p>
 						</div>
 					</section>
+					
+					<!-- Bedeutungsgerüst -->
 					<section id="einstellungen-sec-bedeutungen" class="aus">
 						<p><input type="checkbox" id="einstellung-bedeutungen-schliessen"
 							><label for="einstellung-bedeutungen-schliessen">Bedeutungsgerüst nach dem Speichern schließen</label></p>
@@ -476,6 +482,8 @@
 							><label for="einstellung-sachgebiete-abgleich">Sachgebiete automatisch auffrischen</label></p>
 						<p class="einzug"><i>Zuletzt überprüft:</i> <span id="sachgebiete-zuletzt"></span></p>
 					</section>
+					
+					<!-- Karteikarte -->
 					<section id="einstellungen-sec-karteikarte" class="aus">
 						<p><input type="checkbox" id="einstellung-karteikarte-schliessen"
 							><label for="einstellung-karteikarte-schliessen">Karteikarte nach dem Speichern schließen</label></p>
@@ -492,6 +500,8 @@
 						<p><input type="checkbox" id="einstellung-karte-suchfeld"
 							><label for="einstellung-karte-suchfeld">Suchfeld unter dem Belegtext anzeigen</label></p>
 					</section>
+					
+					<!-- Filterleiste -->
 					<section id="einstellungen-sec-filter" class="aus">
 						<p><input type="checkbox" id="einstellung-filter-zuklappen"
 							><label for="einstellung-filter-zuklappen">beim Öffnen eines Filterblocks die anderen Blöcke zuklappen</label></p>
@@ -499,7 +509,26 @@
 							><label for="einstellung-filter-inaktive">inaktive Filterblöcke automatisch zuklappen</label></p>
 						<p><input type="checkbox" id="einstellung-nicht-karte-gefiltert"
 							><label for="einstellung-nicht-karte-gefiltert">nicht melden, wenn ein neuer Beleg wegen der Filterregeln nicht in der Belegliste erscheint</label></p>
+						<h3>Standardmäßig aufgeklappte Filterblöcke</h3>
+						<div class="einstellungen-spalten">
+							<p><input type="checkbox" id="einstellung-filter-offen-volltext"
+								><label for="einstellung-filter-offen-volltext">Volltext</label></p>
+							<p><input type="checkbox" id="einstellung-filter-offen-zeitraum"
+								><label for="einstellung-filter-offen-zeitraum">Zeitraum</label></p>
+							<p><input type="checkbox" id="einstellung-filter-offen-bedeutungen"
+								><label for="einstellung-filter-offen-bedeutungen">Bedeutungen</label></p>
+							<p><input type="checkbox" id="einstellung-filter-offen-wortbildungen"
+								><label for="einstellung-filter-offen-wortbildungen">Wortbildungen</label></p>
+							<p><input type="checkbox" id="einstellung-filter-offen-korpora"
+								><label for="einstellung-filter-offen-korpora">Korpora</label></p>
+							<p><input type="checkbox" id="einstellung-filter-offen-textsorten"
+								><label for="einstellung-filter-offen-textsorten">Textsorten</label></p>
+							<p><input type="checkbox" id="einstellung-filter-offen-verschiedenes"
+								><label for="einstellung-filter-offen-verschiedenes">Verschiedenes</label></p>
+						</div>
 					</section>
+					
+					<!-- Belegliste -->
 					<section id="einstellungen-sec-belegliste" class="aus">
 						<p><input type="checkbox" id="einstellung-textsorte"
 							><label for="einstellung-textsorte">Textsorte in den Belegkopf eintragen</label></p>

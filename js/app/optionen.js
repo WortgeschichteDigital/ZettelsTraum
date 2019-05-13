@@ -139,6 +139,14 @@ let optionen = {
 			"filter-inaktive": false,
 			// nicht warnen, wenn eine Karte erstellt wurde, sie aber wegen der Filterregeln nicht angezeigt wird
 			"nicht-karte-gefiltert": false,
+			// Filter, die standardmäßig geöffnet werden
+			"filter-offen-volltext": true,
+			"filter-offen-zeitraum": false,
+			"filter-offen-bedeutungen": false,
+			"filter-offen-wortbildungen": false,
+			"filter-offen-korpora": false,
+			"filter-offen-textsorten": false,
+			"filter-offen-verschiedenes": false,
 			// BELEGLISTE
 			// Textsorte in den Kopf der Belegliste eintragen
 			textsorte: false,
@@ -354,7 +362,7 @@ let optionen = {
 				img.width = "24";
 				img.height = "24";
 				img.addEventListener("click", function() {
-					dialog.oeffnen("alert", null);
+					dialog.oeffnen("alert");
 					dialog.text("Beim automatischen Abgleich der Sachgebiete-Datei ist ein Fehler aufgetreten.\nExistiert die angegebene Datei noch?");
 				});
 				const datei = document.getElementById("sachgebiete-datei");
@@ -441,7 +449,7 @@ let optionen = {
 		// keine Sachgebiete
 		if (!optionen.data.einstellungen.sachgebiete.length &&
 				!optionen.data.einstellungen["sachgebiete-datei"]) {
-			dialog.oeffnen("alert", null);
+			dialog.oeffnen("alert");
 			dialog.text("Es wurden noch Sachgebiete geladen!");
 			return;
 		}
@@ -468,7 +476,7 @@ let optionen = {
 	sachgebieteAnzeigen (a) {
 		a.addEventListener("click", function(evt) {
 			evt.preventDefault();
-			dialog.oeffnen("alert", null);
+			dialog.oeffnen("alert");
 			dialog.text(`<h3>Sachgebiete</h3>\n${optionen.data.einstellungen.sachgebiete.join("<br>")}`);
 		});
 	},
@@ -704,6 +712,7 @@ let optionen = {
 	shortcut (label_text, option) {
 		// Absatz erzeugen
 		let p = document.createElement("p");
+		p.classList.add("checkbox");
 		// Input
 		let input = document.createElement("input");
 		p.appendChild(input);

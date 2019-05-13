@@ -10,9 +10,9 @@ let dialog = {
 	// Dialog-Fenster öffnen
 	//   typ = String
 	//     (gibt den Dialog-Typ an, Werte: "alert", "prompt", "confirm")
-	//   funktion = function || null
+	//   funktion = function || undefined
 	//     (Funktion, die nach dem Schließen des Dialogs ausgeführt werden soll)
-	oeffnen (typ, funktion) {
+	oeffnen (typ, funktion = null) {
 		// Funktion zwischenspeichern
 		dialog.funktion = funktion;
 		// Overlay öffnen

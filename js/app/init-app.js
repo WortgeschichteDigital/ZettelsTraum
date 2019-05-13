@@ -217,7 +217,7 @@ window.addEventListener("load", function() {
 	ipcRenderer.on("belege-auflisten", () => liste.anzeigen());
 	ipcRenderer.on("optionen-zuletzt", (evt, zuletzt) => optionen.updateZuletzt(zuletzt));
 	ipcRenderer.on("dialog-anzeigen", function(evt, text) {
-		dialog.oeffnen("alert", null);
+		dialog.oeffnen("alert");
 		dialog.text(text);
 	});
 	ipcRenderer.on("bedeutungen-fenster-drucken", (evt, daten) => drucken.initBedeutungen(daten));

@@ -49,7 +49,7 @@ let drucken = {
 		drucken.getIds(id);
 		if (!drucken.kartenIds.length) { // keine Karteikarten, die gedruckt werden können
 			setTimeout(() => overlay.schliessen(fenster), 0); // ohne Timeout wird es nicht ausgeblendet
-			dialog.oeffnen("alert", null);
+			dialog.oeffnen("alert");
 			dialog.text("In der Belegliste sind keine Karteikarten, die gedruckt werden könnten.");
 			return;
 		}
@@ -196,7 +196,7 @@ let drucken = {
 	initBedeutungen (daten) {
 		// Sind überhaupt Bedeutungen vorhanden
 		if (/class="bd-win-keine"/.test(daten)) {
-			dialog.oeffnen("alert", null);
+			dialog.oeffnen("alert");
 			dialog.text("Es gibt kein Bedeutungsgerüst, das gedruckt werden könnte.");
 			return;
 		}

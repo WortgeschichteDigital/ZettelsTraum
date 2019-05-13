@@ -80,7 +80,7 @@ let erinnerungen = {
 		if (text.length > 1) {
 			punkt = "Die folgenden Punkte sollten";
 		}
-		dialog.oeffnen("alert", null);
+		dialog.oeffnen("alert");
 		dialog.text(`${punkt} vielleicht korrigiert werden:\n${text.join("\n")}`);
 	},
 };

@@ -122,7 +122,7 @@ let beleg = {
 			if (!leseansicht.classList.contains("aktiv")) {
 				beleg.leseToggle(false);
 			} else {
-				beleg.leseFill(false);
+				beleg.leseFill();
 			}
 		} else if (leseansicht.classList.contains("aktiv")) {
 			beleg.leseToggle(false);
@@ -1289,6 +1289,8 @@ let beleg = {
 		// gereinigtes HTML zurückgeben
 		return helfer.textTrim(text, true);
 		// rekursive Analyse der Tags
+		//   ele = Element
+		//     (Knoten im XML-Baum)
 		function ana (ele) {
 			if (ele.nodeType === 3) { // Text
 				text += ele.nodeValue.replace(/\n/g, "");
@@ -1584,16 +1586,16 @@ let beleg = {
 		}
 		// Textwerte eintragen
 		if (an) {
-			beleg.leseFill(false);
+			beleg.leseFill();
 		} else if (user) {
 			document.querySelectorAll("#beleg textarea").forEach((textarea) => helfer.textareaGrow(textarea));
 			document.getElementById("beleg-da").focus();
 		}
 	},
 	// aktuelle Werte des Belegs in die Leseansicht eintragen
-	//   suche = Boolean
+	//   suche = Boolean || undefined
 	//     (erneute Füllung des Formulars wurde durch eine Suche angestoßen)
-	leseFill (suche) {
+	leseFill (suche = false) {
 		// Sprungmarke zurücksetzen
 		beleg.ctrlSpringenPos = -1;
 		// Meta-Infos
@@ -1677,6 +1679,8 @@ let beleg = {
 			}, 0); // Timeout, damit die Höhe des Feldes ermittelt werden kann
 		}
 		// Suchfeld erzeugen
+		//   cont = Element
+		//     (das Beleg-Feld)
 		function suchfeld (cont) {
 			let p = document.createElement("p");
 			p.classList.add("input-text");
@@ -1759,7 +1763,7 @@ let beleg = {
 		beleg.ctrlKuerzenAnzeige();
 		// Belegtext in der Leseansicht ggf. neu aufbauen
 		if (document.getElementById("beleg-link-leseansicht").classList.contains("aktiv")) {
-			beleg.leseFill(false);
+			beleg.leseFill();
 		}
 	},
 	// Kürzung des Belegkontexts in der Leseansicht ein- bzw. ausblenden (Anzeige)
@@ -1782,7 +1786,7 @@ let beleg = {
 		beleg.ctrlTrennungAnzeige();
 		// Belegtext in der Leseansicht ggf. neu aufbauen
 		if (document.getElementById("beleg-link-leseansicht").classList.contains("aktiv")) {
-			beleg.leseFill(false);
+			beleg.leseFill();
 		}
 	},
 	// Trennstriche in der Leseansicht ein- bzw. ausblenden (Anzeige)
@@ -1802,7 +1806,7 @@ let beleg = {
 	ctrlSpringen () {
 		const marks = document.querySelectorAll("#beleg-lese-bs mark.suche, #beleg-lese-bs mark.user, #beleg-lese-bs mark.wort");
 		if (!marks.length) {
-			dialog.oeffnen("alert", null);
+			dialog.oeffnen("alert");
 			dialog.text("Keine Markierung gefunden.");
 			return;
 		}
@@ -1879,7 +1883,7 @@ let beleg = {
 			scroll = window.scrollY;
 		beleg.oeffnen(parseInt(belege[pos], 10));
 		if (leseansicht.classList.contains("aktiv") !== leseansicht_status) {
-			beleg.leseToggle(false);
+			beleg.leseToggle(true);
 		}
 		fokus();
 		window.scrollTo(0, scroll); // nach fokus()!
@@ -1901,13 +1905,13 @@ let beleg = {
 	bedeutungEintragen (bd) {
 		// Karteikarte ist nicht offen
 		if (document.getElementById("beleg").classList.contains("aus")) {
-			dialog.oeffnen("alert", null);
+			dialog.oeffnen("alert");
 			dialog.text("Es ist keine Karteikarte geöffnet, in die die Bedeutung eingetragen werden könnte.");
 			return;
 		}
 		// Karteikarte ist in der Leseansicht
 		if (document.getElementById("beleg-link-leseansicht").classList.contains("aktiv")) {
-			dialog.oeffnen("alert", null);
+			dialog.oeffnen("alert");
 			dialog.text("Die Karteikarte befindet sich in der Leseansicht.\nDie Bedeutung kann aber nur eingetragen werden, wenn sie sich in der Formularansicht befindet.");
 			return;
 		}

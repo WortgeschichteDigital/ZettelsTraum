@@ -25,7 +25,7 @@ let bedeutungen = {
 			if (!data.ka[id].bd) {
 				continue;
 			}
-			const bd = data.ka[id].bd.split("\n");
+			let bd = data.ka[id].bd.split("\n");
 			for (let i = 0, len = bd.length; i < len; i++) {
 				bedeutungen.baumErgaenzen(bd[i]);
 			}
@@ -53,8 +53,8 @@ let bedeutungen = {
 		if (bedeutungen.data.id[bd]) {
 			return;
 		}
-		const hie = bd.split(": ");
-		let hie_akt = [],
+		let hie = bd.split(": "),
+			hie_akt = [],
 			i = 0;
 		do {
 			hie_akt.push(hie[i]);
@@ -73,7 +73,7 @@ let bedeutungen = {
 	// Bedeutungen öffnen
 	oeffnen () {
 		// TODO temporär sperren
-// 		dialog.oeffnen("alert", null);
+// 		dialog.oeffnen("alert");
 // 		dialog.text("Sorry!\nDiese Funktion ist noch nicht programmiert.");
 // 		return;
 		// Bedeutungen sind schon offen
@@ -106,7 +106,7 @@ let bedeutungen = {
 		bedeutungen.zaehlungen = [];
 		bedeutungen.moveAktiv = false;
 		// Content vorbereiten
-		const cont = document.getElementById("bedeutungen-cont"),
+		let cont = document.getElementById("bedeutungen-cont"),
 			table = cont.querySelector("table");
 		while (table.childNodes.length > 1) { // Caption mit Überschrift erhalten
 			table.removeChild(table.lastChild);
@@ -240,7 +240,7 @@ let bedeutungen = {
 		if (!bedeutungen.moveAktiv) {
 			return;
 		}
-		const tr_aktiv = document.querySelector(".bedeutungen-aktiv");
+		let tr_aktiv = document.querySelector(".bedeutungen-aktiv");
 		if (evt.which === 38 && tr_aktiv.previousSibling) { // hoch
 			bedeutungen.moveAus();
 			bedeutungen.moveAn(parseInt(tr_aktiv.previousSibling.dataset.idx, 10), false);
@@ -255,7 +255,7 @@ let bedeutungen = {
 	moveListener (a) {
 		a.addEventListener("click", function(evt) {
 			evt.preventDefault();
-			const tr = this.parentNode.parentNode,
+			let tr = this.parentNode.parentNode,
 				tr_aktiv = bedeutungen.moveAus();
 			if (tr === tr_aktiv) {
 				return;
@@ -274,7 +274,7 @@ let bedeutungen = {
 		bedeutungen.moveAktiv = true;
 		bedeutungen.editFeldWeg();
 		// Top-Element markieren
-		const tr = document.querySelectorAll("#bedeutungen-cont tr")[idx];
+		let tr = document.querySelectorAll("#bedeutungen-cont tr")[idx];
 		tr.classList.add("bedeutungen-aktiv");
 		// affizierte markieren
 		const len_aktiv = bedeutungen.data.bd[idx].bd.length;
@@ -296,14 +296,14 @@ let bedeutungen = {
 				rose.push(n);
 			}
 		}
-		const icon = tr.firstChild.firstChild;
+		let icon = tr.firstChild.firstChild;
 		icon.setAttribute("class", `icon-link icon-move_${rose.join("-")}`);
 		setTimeout(function() {
 			icon.focus();
 		}, 0); // ohne Timeout kein Fokus
 		// erfolgreiche Bewegung markieren
 		if (moved) {
-			const tab = document.querySelector("#bedeutungen-cont table");
+			let tab = document.querySelector("#bedeutungen-cont table");
 			tab.classList.add("bedeutungen-moved");
 			clearTimeout(bedeutungen.timeout);
 			tab.classList.remove("bedeutungen-unmovable");
@@ -314,12 +314,12 @@ let bedeutungen = {
 	},
 	// Bewegung wieder ausschalten
 	moveAus () {
-		const tr = document.querySelector(".bedeutungen-aktiv");
+		let tr = document.querySelector(".bedeutungen-aktiv");
 		if (!tr) {
 			return null;
 		}
 		// Icon zurücksetzen
-		const icon = tr.firstChild.firstChild;
+		let icon = tr.firstChild.firstChild;
 		icon.setAttribute("class", `icon-link icon-move_37-38-39-40`);
 		// aktivierte Zeile deaktivieren
 		icon.blur();
@@ -434,7 +434,7 @@ let bedeutungen = {
 		// Bewegung unmöglich
 		let d = bedeutungen.moveData[evt.which];
 		if (!d.movable) {
-			const tab = document.querySelector("#bedeutungen-cont table");
+			let tab = document.querySelector("#bedeutungen-cont table");
 			tab.classList.add("bedeutungen-unmovable");
 			clearTimeout(bedeutungen.timeout);
 			tab.classList.remove("bedeutungen-moved");
@@ -444,7 +444,7 @@ let bedeutungen = {
 			return;
 		}
 		// Items bewegen
-		const items = bedeutungen.moveGetItems();
+		let items = bedeutungen.moveGetItems();
 		for (let i = 0, len = items.length; i < len; i++) {
 			let idx = items[i];
 			// spezielle Operationen
@@ -468,7 +468,7 @@ let bedeutungen = {
 				idx -= i;
 			}
 			// Element kopieren
-			const kopie = {
+			let kopie = {
 				bd: [...bedeutungen.data.bd[idx].bd],
 				sg: bedeutungen.data.bd[idx].sg,
 				al: bedeutungen.data.bd[idx].al,
@@ -503,10 +503,10 @@ let bedeutungen = {
 	},
 	// nach der Bewegung das Gerüst ggf. an die richtige Stelle scrollen
 	moveScroll () {
+		let tr = document.querySelector(".bedeutungen-aktiv");
 		const quick_height = document.getElementById("quick").offsetHeight,
 			header_height = document.querySelector("body > header").offsetHeight,
 			cont_top = document.getElementById("bedeutungen-cont").offsetTop,
-			tr = document.querySelector(".bedeutungen-aktiv"),
 			tr_top = tr.offsetTop,
 			tr_height = tr.offsetHeight;
 		// ggf. hochscrollen
@@ -527,13 +527,13 @@ let bedeutungen = {
 	loeschenListener (a) {
 		a.addEventListener("click", function(evt) {
 			evt.preventDefault();
-			const tr = this.parentNode.parentNode,
+			let tr = this.parentNode.parentNode,
 				idx = parseInt(tr.dataset.idx, 10);
 			if (!bedeutungen.moveAktiv) {
 				aktivieren();
 			} else {
-				const tr_aktiv = document.querySelector(".bedeutungen-aktiv"),
-					idx_aktiv = parseInt(tr_aktiv.dataset.idx, 10);
+				let tr_aktiv = document.querySelector(".bedeutungen-aktiv");
+				const idx_aktiv = parseInt(tr_aktiv.dataset.idx, 10);
 				if (idx_aktiv !== idx) {
 					bedeutungen.moveAus();
 					aktivieren();
@@ -561,8 +561,8 @@ let bedeutungen = {
 	},
 	// benötigte Werte ermitteln, bevor das Löschen angestoßen wird
 	loeschenPrep () {
-		const tr = document.querySelector(".bedeutungen-aktiv"),
-			idx = parseInt(tr.dataset.idx, 10),
+		let tr = document.querySelector(".bedeutungen-aktiv");
+		const idx = parseInt(tr.dataset.idx, 10),
 			zaehlung = tr.querySelector("b").firstChild.nodeValue;
 		bedeutungen.loeschen(idx, zaehlung);
 	},
@@ -572,8 +572,8 @@ let bedeutungen = {
 	//   zaehlung = String
 	//     (angezeigte Zählung)
 	loeschen (idx, zaehlung) {
-		const bd = bedeutungen.data.bd[idx].bd[bedeutungen.data.bd[idx].bd.length - 1],
-			items = bedeutungen.moveGetItems();
+		let items = bedeutungen.moveGetItems();
+		const bd = bedeutungen.data.bd[idx].bd[bedeutungen.data.bd[idx].bd.length - 1];
 		dialog.oeffnen("confirm", function() {
 			if (dialog.antwort) {
 				for (let i = items.length - 1; i >= 0; i--) {
@@ -677,7 +677,7 @@ let bedeutungen = {
 	},
 	// altes Eingabefeld ggf. entfernen
 	editFeldWeg () {
-		const edit = document.getElementById("bedeutungen-edit");
+		let edit = document.getElementById("bedeutungen-edit");
 		if (edit) {
 			bedeutungen.editEintragen(edit.parentNode);
 		}
@@ -686,7 +686,7 @@ let bedeutungen = {
 	//   ele = Element
 	//     (Element, in dem das Edit-Feld steht)
 	editEintragen (ele) {
-		const felder = {
+		let felder = {
 			sg: "Sachgebiet",
 			al: "Alias",
 		};

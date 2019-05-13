@@ -66,7 +66,7 @@ let overlay = {
 				} else {
 					dialog.antwort = true;
 				}
-			} else { // Schließen durch Link
+			} else { // Schließen durch Link oder Esc
 				dialog.antwort = null;
 			}
 			if (dialog.funktion) { // Soll eine Funktion ausgeführt werden?

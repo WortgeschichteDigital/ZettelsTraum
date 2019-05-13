@@ -303,7 +303,7 @@ let kartei = {
 	//   text = String
 	//     (Text, der im Dialog-Feld angezeigt werden soll)
 	dialogWrapper (text) {
-		dialog.oeffnen("alert", null);
+		dialog.oeffnen("alert");
 		dialog.text(text);
 	},
 	// Benutzer nach dem Wort fragen, für das eine Kartei angelegt werden soll
@@ -311,7 +311,7 @@ let kartei = {
 		dialog.oeffnen("prompt", function() {
 			let wort = dialog.getPromptText();
 			if (dialog.antwort && !wort) {
-				dialog.oeffnen("alert", null);
+				dialog.oeffnen("alert");
 				dialog.text("Sie müssen ein Wort eingeben, sonst kann keine Kartei angelegt werden.");
 			} else if (dialog.antwort && wort) {
 				kartei.lock(kartei.pfad, "unlock");
@@ -342,7 +342,7 @@ let kartei = {
 		dialog.oeffnen("prompt", function() {
 			let wort = dialog.getPromptText();
 			if (dialog.antwort && wort === kartei.wort) {
-				dialog.oeffnen("alert", null);
+				dialog.oeffnen("alert");
 				dialog.text("Das Wort wurde nicht geändert.");
 			} else if (dialog.antwort && wort) {
 				kartei.karteiGeaendert(true);
@@ -353,7 +353,7 @@ let kartei = {
 				kartei.wortEintragen();
 				bedeutungenWin.daten();
 			} else if (dialog.antwort && !wort) {
-				dialog.oeffnen("alert", null);
+				dialog.oeffnen("alert");
 				dialog.text("Sie müssen ein Wort eingeben, sonst kann das bestehende nicht geändert werden.");
 			}
 		});
@@ -411,7 +411,7 @@ let kartei = {
 				lockcontent = `${datum};;${host};;${user}`;
 			fs.writeFile(lockfile, lockcontent, function(err) {
 				if (err) {
-					dialog.oeffnen("alert", null);
+					dialog.oeffnen("alert");
 					dialog.text(`Beim Erstellen der Sperrdatei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.message}</p>`);
 				}
 			});
@@ -423,7 +423,7 @@ let kartei = {
 		} else if (aktion === "unlock") {
 			fs.unlink(lockfile, function(err) {
 				if (err) {
-					dialog.oeffnen("alert", null);
+					dialog.oeffnen("alert");
 					dialog.text(`Beim Löschen der Sperrdatei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.message}</p>`);
 				}
 			});
