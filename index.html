@@ -86,16 +86,20 @@
 			</div>
 		</section>
 		
-		<!-- BEDEUTUNGEN -->
+		<!-- BEDEUTUNGSGERÜST -->
 		<section id="bedeutungen" class="aus">
 			<header>
 				<div
 					><input type="button" value="Speichern" id="bedeutungen-speichern" tabindex="0"
 					><input type="button" value="Schließen" id="bedeutungen-schliessen" tabindex="0"
 					><div class="dropdown-cont"
-						><input type="text" value="" class="dropdown-feld" id="bedeutungen-hierarchie" readonly title="Zählung oberste Hierarchie"
+						><input type="text" value="" class="dropdown-feld" id="bedeutungen-hierarchie" tabindex="-1" readonly title="Zählung oberste Hierarchie"
 						><a href="#" class="dropdown-link-element" title="Zählung oberste Hierarchie"
 							><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m7 2v8l-3.5-3.5-1.5 1.5 6 6 6-6-1.5-1.5-3.5 3.5v-8z"/></svg></a
+						><span class="bedeutungen-opt-block"
+							><a href="#" class="druck-icon" id="bedeutungen-link-drucken" title="Bedeutungsgerüst drucken (Strg + P)"
+								><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m4 1v2h8v-2h-8zm-2 3c-0.5 0-1 0.5-1 1v4c0 0.5 0.5 1 1 1h1v-2h10v2h1c0.5 0 1-0.5 1-1v-4c0-0.5-0.5-1-1-1h-12zm2 5v5h8v-5h-8z"/></svg></a
+						></span
 					></div
 				></div
 			></header>
@@ -480,7 +484,8 @@
 						</tr></table>
 						<p id="sachgebiete-abgleich"><input type="checkbox" id="einstellung-sachgebiete-abgleich"
 							><label for="einstellung-sachgebiete-abgleich">Sachgebiete automatisch auffrischen</label></p>
-						<p class="einzug"><i>Zuletzt überprüft:</i> <span id="sachgebiete-zuletzt"></span></p>
+						<p class="einzug"><i>Letzter Abgleich:</i><span id="sachgebiete-zuletzt-abgleich"></span></p>
+						<p class="einzug"><i>Letztes Update:</i><span id="sachgebiete-zuletzt-update"></span></p>
 					</section>
 					
 					<!-- Karteikarte -->

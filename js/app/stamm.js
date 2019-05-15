@@ -274,18 +274,18 @@ let stamm = {
 		// alte, manuell hinzugefügte Varianten ermitteln, die nicht im DTA sind
 		let variantenZt = [];
 		for (let i = 0, len = data.fv.length; i < len; i++) {
-			if (data.fv[i].qu === "zt" && varianten.indexOf(data.fv[i].va) === -1) {
+			if (data.fv[i].qu === "zt" && !varianten.includes(data.fv[i].va)) {
 				variantenZt.push(data.fv[i].va);
 			}
 		}
 		// ggf. das Wort hinzufügen, falls es nicht in der eqlemma-Liste ist
-		if (varianten.indexOf(kartei.wort) === -1) {
+		if (!varianten.includes(kartei.wort)) {
 			variantenZt.push(kartei.wort);
 		}
 		// jetzt können die für die App relevanten Varianten endlich gepusht werden
 		data.fv = [];
 		for (let i = 0, len = varianten.length; i < len; i++) {
-			if (ex.indexOf(i) >= 0) {
+			if (ex.includes(i)) {
 				continue;
 			}
 			data.fv.push({

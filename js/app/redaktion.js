@@ -200,24 +200,8 @@ let redaktion = {
 		input.value = val;
 		dropdown.feld(input);
 		// Dropdown-Link erzeugen
-		let a = document.createElement("a");
+		let a = dropdown.makeLink("dropdown-link-td", droptypen[droptyp], true);
 		td.appendChild(a);
-		a.classList.add("dropdown-link-td");
-		a.href = "#";
-		a.title = droptypen[droptyp];
-		a.setAttribute("tabindex", "-1");
-		dropdown.link(a);
-		let svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-		svg.setAttribute("version", "1.1");
-		svg.setAttribute("width", "24");
-		svg.setAttribute("height", "24");
-		svg.setAttribute("viewBox", "0 0 24 24");
-		a.appendChild(svg);
-		let path = document.createElementNS("http://www.w3.org/2000/svg", "path");
-		path.setAttribute("transform", "translate(4 4)");
-		path.setAttribute("d", "m7 2v8l-3.5-3.5-1.5 1.5 6 6 6-6-1.5-1.5-3.5 3.5v-8z");
-		path.setAttribute("fill", "#212121");
-		svg.appendChild(path);
 	},
 	// Fokus auf ein Input-Feld setzen
 	// (ja, das muss leider über eine eigene Funktion geschehen)

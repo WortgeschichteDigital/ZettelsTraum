@@ -49,6 +49,11 @@
 	color: var(--text);
 }
 
+/* Styles zu .bedeutungen-opt-block → liste.css */
+.bedeutungen-opt-block {
+	top: 6px;
+}
+
 /* Tabelle -------------------------------------- */
 #bedeutungen-cont {
 	padding-bottom: 20px;
@@ -82,6 +87,14 @@
 	line-height: 30px;
 }
 
+#bedeutungen-cont .bedeutungen-neu td {
+	padding-top: 10px;
+}
+
+#bedeutungen-cont caption + .bedeutungen-neu td {
+	padding-top: 0;
+}
+
 #bedeutungen-cont td:first-child,
 #bedeutungen-cont td:nth-child(2) {
 	width: 24px;
@@ -98,8 +111,8 @@
 }
 
 #bedeutungen-cont td:nth-child(4) {
+	min-width: 62px;
 	background-color: var(--hintergrund);
-	white-space: nowrap;
 }
 
 #bedeutungen-cont td:nth-child(4):not(.leer) {
@@ -110,22 +123,46 @@
 	border-left: 1px solid var(--linie);
 	min-width: 62px;
 	background-color: var(--hintergrund);
-	white-space: nowrap;
 }
 
 #bedeutungen-cont span[contenteditable] {
 	display: inline-block;
 	border: 1px solid var(--linie);
 	padding: 0 5px;
-	min-width: 50px;
 	line-height: 24px;
 	color: var(--text);
 	text-indent: 0;
 }
 
+#bedeutungen-cont td:nth-child(4) span[contenteditable],
+#bedeutungen-cont td:last-child span[contenteditable] {
+	width: calc(100% - 12px);
+}
+
 #bedeutungen-cont span[contenteditable]:focus {
 	outline: 1px solid var(--farbe);
 	border-color: var(--farbe);
+}
+
+#bedeutungen-cont span[contenteditable].bedeutungen-changed {
+	outline-color: var(--farbeRot);
+	border-color: var(--farbeRot);
+}
+
+#bedeutungen-cont span[contenteditable].bedeutungen-saved {
+	outline-color: var(--farbeGruen);
+	border-color: var(--farbeGruen);
+}
+
+#bedeutungen-cont td:nth-child(4) span[contenteditable].dropdown-feld {
+	padding-right: 26px;
+	width: calc(100% - 33px);
+	min-width: 150px;
+}
+
+#bedeutungen-cont .dropdown-link-td {
+	top: 3px;
+	background-color: var(--hintergrund);
 }
 
 #bedeutungen-cont .bedeutungen-edit {
@@ -168,7 +205,7 @@
 
 #bedeutungen-cont .bedeutungen-unmovable .bedeutungen-aktiv td,
 #bedeutungen-cont .bedeutungen-unmovable .bedeutungen-affiziert td {
-	background-color: var(--textWarnung);
+	background-color: var(--farbeRot);
 }
 
 a[class*="icon-move"] {
@@ -296,6 +333,14 @@ a[class*="icon-move"] {
 	color: #fff;
 }
 
+#bedeutungen-cont #bedeutungen-neu {
+	width: calc(100% - 12px);
+}
+
+#bedeutungen-cont #bedeutungen-neu.leer {
+	color: var(--textSehrHell);
+	font-style: normal;
+}
 
 /* Besonderheiten ------------------------------- */
 .bedeutungen-dialog {

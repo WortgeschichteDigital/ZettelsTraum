@@ -24,7 +24,7 @@
 			<div class="version">0.8.0</div>
 			
 			<div>
-				<h2><span data-maintainer="Nico Dorn">Version 0.8.0-beta.5</span><time datetime="2019-05-10T10:42:52">10. Mai 2019</time></h2>
+				<h2><span data-maintainer="Nico Dorn">Version 0.8.0</span><time datetime="2019-05-15T17:33:26">15. Mai 2019</time></h2>
 				
 				<p><span class="obacht">Das Dateiformat hat sich geändert!</span> Ältere <abbr title="Wortgeschichte digital">WGD</abbr>-Dateien werden automatisch konvertiert; dabei wird eine Änderungsmarkierung gesetzt.</p>
 				
@@ -32,12 +32,20 @@
 				
 				<ul>
 					<li>
-						<p>Sachgebiete: In den <i>Programm-Einstellungen</i> unter <i>Bedeutungsgerüst</i> kann nun eine Datei mit einer Liste an Sachgebieten geladen werden. Die Datei mit den Sachgebieten muss denselben Regeln folgen wie die mit Version 0.7.0 eingeführte Personen-Datei: Es muss sich um eine Plain-Text-Datei handeln, für deren Erstellung <abbr title="zum Beispiel">z. B.</abbr> das kleine <i>Windows</i>-Programm <i>Editor</i> geeignet ist. Der Zeilenumbruch dient dabei als Trennzeichen. Jede Zeile enthält also ein Sachgebiet:</p>
-						<pre class="quelltext">Botanik
-Geographie
-Sport
-...</pre>
-						<p>Wurde einmal über den Button <i>Laden</i> eine Sachgebiete-Datei ausgewählt, bleibt diese mit dem Programm verknüpft, bis die Verknüpfung mithilfe des Buttons <i>Löschen</i> aufgehoben wird. <i class="app-name"></i> überprüft bei jedem Start ein Mal, ob sich der Inhalt der verknüpften Datei geändert hat. Ist dem der Fall, wird die Liste der Sachgebiete aus der Sachgebiete-Datei neu geladen. Dieser automatische Abgleich lässt sich über eine Checkbox abstellen.</p>
+						<p>Sachgebiete: In den <i>Programm-Einstellungen</i> unter <i>Bedeutungsgerüst</i> kann nun eine Datei mit einer Liste an Sachgebieten geladen werden. Dabei muss es sich um eine in <abbr title="UCS Transformation Format" lang="en">UTF</abbr>-8 enkodierte <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Datei handeln, die die folgende Struktur hat:</p>
+						<pre class="quelltext">&lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;
+&lt;sachgebiete&gt;
+	&lt;sachgebiet&gt;
+		&lt;id&gt;1&lt;/id&gt;
+		&lt;name&gt;Akustik&lt;/name&gt;
+	&lt;/sachgebiet&gt;
+	&lt;sachgebiet&gt;
+		&lt;id&gt;2&lt;/id&gt;
+		&lt;name&gt;Alchemie&lt;/name&gt;
+	&lt;/sachgebiet&gt;
+...
+&lt;/sachgebiete&gt;</pre>
+						<p>Wurde einmal über den Button <i>Laden</i> eine Sachgebiete-Datei ausgewählt, bleibt diese mit dem Programm verknüpft, bis die Verknüpfung mithilfe des Buttons <i>Löschen</i> aufgehoben wird. <i class="app-name"></i> überprüft bei jedem Start ein Mal, ob sich der Inhalt der verknüpften Datei geändert hat. Wurden in der Datei Sachgebiete gelöscht, werden diese auch in der importierten Liste gelöscht; wurden Sachgebiete umbenannt, wird der neue Name übernommen. Dieser automatische Abgleich lässt sich über eine Checkbox abstellen.</p>
 						<p>Schlägt der Abgleich der importierten Sachgebiete mit der Sachgebiete-Datei fehl – weil <abbr title="zum Beispiel">z. B.</abbr> die Datei entfernt oder umbenannt wurde –, erscheint hinter dem Dateinamen ein kleines Icon: <img src="../img/fehler.svg" width="24" height="24" alt="">. Die einmal importierten Sachgebiete bleiben allerdings erhalten.</p>
 						<p>Die Sachgebietsliste wird für die kommende Funktion <i>Bedeutungsgerüst</i> benutzt.</p>
 					</li>
@@ -48,7 +56,7 @@ Sport
 						<p>Für die erweiterte Suche gilt diese Kopplung an das <i>Bedeutungs</i>-Feld nicht. Die Felder <i>Bedeutung</i> und <i>Wortbildung</i> können separat aus der Suche ausgeschlossen <abbr title="beziehungsweise">bzw.</abbr> in die Suche einbezogen werden.</p>
 					</li>
 					<li>Filter Wortbildungen: Für das neue Datenfeld <i>Wortbildung</i> gibt es in der Filterleiste einen eigenen Filterblock, sodass sich Belege mit einer bestimmten Wortbildung leicht aus den anderen Belegen heraussuchen lassen. Der <i>Wortbildungen</i>-Filter verhält sich weitgehend so wie <abbr title="zum Beispiel">z. B.</abbr> der <i>Textsorten</i>-Filter: Auch im <i>Wortbildungen</i>-Filter wird eine Baumansicht erzeugt, die beliebig tief verschachtelt sein darf; auch hier lassen sich Belege, denen eine spezifische Wortbildung zugeordnete wurde, durch Klick auf den entsprechenden Filter finden. Eine wesentliche Differenz ist, dass es für Wortbildungen keinen Filter <i>(nicht bestimmt)</i> gibt. Darum erscheint der Filterblock <i>Wortbildungen</i> nur dann, wenn es in der Kartei Belege gibt, in denen das Datenfeld <i>Wortbildung</i> gefüllt wurde.</li>
-					<li>Filterleiste: Unter <i>Programm &gt; Einstellungen &gt; Filterleiste</i> kann festgelegt werden, welche Filterblöcke standardmäßig aufgeklappt sein sollen. Ist ein Filterblock hier angehakt, wird er automatisch geöffnet, wenn man eine Kartei öffnet oder alle Filter zurücksetzt (Funktion <img src="../img/filter-reset.svg" width="24" height="24" alt=""> im Kopf der Filterleiste). Entfernt man alle Haken, bleiben alle Filter geschlossen; sie müssen manuell geöffnet werden.</li>
+					<li>Filterleiste: Unter <i>Programm &gt; Einstellungen &gt; Filterleiste</i> kann festgelegt werden, welche Filterblöcke standardmäßig aufgeklappt sein sollen. Ist ein Filterblock hier angehakt, wird er automatisch geöffnet, wenn man eine Kartei öffnet oder alle Filter zurücksetzt (Funktion <img src="../img/filter-reset.svg" width="24" height="24" alt=""> im Kopf der Filterleiste). Entfernt man alle Haken, bleiben alle Filter erst einmal geschlossen; sie müssen dann manuell geöffnet werden.</li>
 					<li>
 						<p>Karteikarte: Man kann sich nun die zu der aktuellen Belegliste gehörenden Karteikarten nacheinander ansehen, ohne die Karteikarte zu verlassen. Dazu wurden im Karteikartenkopf zwei neue Icons installiert, mit denen die Karteikarte mit dem Inhalt des vorherigen (<img src="../img/beleg-vorheriger.svg" width="24" height="24" alt="">) <abbr title="respektive">resp.</abbr> nächsten Belegs (<img src="../img/beleg-naechster.svg" width="24" height="24" alt="">) in der Liste gefüllt werden kann.</p>
 						<p>Beim Laden der neuen Karteikarte bleibt die aktuelle Ansicht erhalten, egal ob Karteikarten standardmäßig in der Lese- oder der Formularansicht geöffnet werden (<abbr title="vergleiche">vgl.</abbr> <i>Programm &gt; Einstellungen &gt; Karteikarte &gt; Leseansicht</i>). Außerdem wird versucht, die aktuelle Scrollposition zu erhalten. Das Icon, auf das man geklickt hat, bleibt in jedem Fall fokussiert, sodass man mithilfe von <kbd>⏎</kbd> leicht und schnell den nächsten Beleg laden kann. Alternativ können auch die Tastaturkürzel <kbd>Strg</kbd> + <kbd>Bild ⇧</kbd> (vorheriger Beleg) und <kbd>Strg</kbd> + <kbd>Bild ⇩</kbd> (nächster Beleg) benutzt werden.</p>
@@ -83,7 +91,7 @@ Sport
 						<p>Der <abbr title="Deutsches Textarchiv">DTA</abbr>-Import lässt sich auch weiterhin mit einem einfachen <kbd>⏎</kbd> starten, wenn man sich in einem der beiden <abbr title="Deutsches Textarchiv">DTA</abbr>-Felder befindet.</p>
 					</li>
 					<li><abbr title="Deutsches Textarchiv">DTA</abbr>-Import: Nach dem Import wird nun überprüft, ob das Kartei-Wort im gerade importierten Belegtext gefunden werden kann. Ist dies nicht der Fall erscheint eine Meldung, die auf die vergebliche Suche aufmerksam macht. Die Überprüfung kann unter <i>Programm &gt; Einstellungen &gt; Karteikarte</i> ausgeschaltet werden.</li>
-					<li><abbr title="Deutsches Textarchiv">DTA</abbr>-Import: Textseiten mit Spalten werden nun als solche erkannt und deren Spaltennummern ausgelesen. In der Quellenangabe wird in solchen Fällen natürlich <q><abbr title="Seite">S.</abbr></q> durch <q><abbr title="Spalte">Sp.</abbr></q> ersetzt. Die Markierung des Spaltenwechsels im importierten Text behält hingegen das bekannte Format: <q>[:SPALTE:]</q>. (Der Platzhalter <i>SPALTE</i> zeigt die dieser Markierung folgende Spaltennummer an.)</li>
+					<li><abbr title="Deutsches Textarchiv">DTA</abbr>-Import: Textseiten mit Spalten werden nun als solche erkannt und deren Spaltennummern ausgelesen. In der Quellenangabe wird in solchen Fällen natürlich <q><abbr title="Seite">S.</abbr></q> durch <q><abbr title="Spalte">Sp.</abbr></q> ersetzt. Die Markierung des Spaltenwechsels im importierten Text behält hingegen das bekannte Format: <q>[:SPALTE:]</q>. (Der anstelle des Platzhalters <i>SPALTE</i> angezeigte Ziffer ist die dieser Markierung folgende Spaltennummer.)</li>
 					<li>Filterleiste: Unter <i>Verschiedenes</i> gibt es einen neuen Filter: <i>Notizen</i>. Mithilfe dieses Filters lassen sich alle Belege mit (inklusive Filterlogik) <abbr title="beziehungsweise">bzw.</abbr> ohne (exklusive Filterlogik) Notizen finden.</li>
 					<li>
 						<p>Filterleiste: In langen Filterblöcken mit Scrollleiste wird nach dem Neuaufbau der Filterleiste jetzt auch die Scrollposition der Filterblöcke wiederhergestellt. So wird ein dysfunktionales Springen nach der Auswahl eines Filters verhindert: Man konnte unter Umständen nicht mehr sehen, was man eigentlich angeklickt hatte.</p>
@@ -92,7 +100,7 @@ Sport
 					<li>Filterleiste: Um die Filterleiste visuell zu entlasten, erscheinen die Reset-Icons, mit deren Hilfe man einen einzelnen Filterblock zurücksetzen kann, erst, wenn man mit der Maus über die Kopfleiste eines Filters fährt. Ihre Funktionalität hat sich nicht geändert.</li>
 					<li>
 						<p>Belegliste: Die Sortierung der Belege wurde verbessert. Wie bisher werden die Belege zunächst einmal chronologisch auf- oder absteigend sortiert, je nachdem ob die Funktion <img src="../img/liste-aufwaerts.svg" width="24" height="24" alt=""> aktiviert ist oder nicht. Stammen zwei oder mehr Belege aus demselben Jahr, werden sie alphabetisch nach Autor sortiert: bei chronologisch aufsteigender Belegliste alphabetisch aufsteigend, bei chronologisch absteigender Belegliste alphabetisch absteigend. Sind auch die Autoren identisch, werden die Belege als Fallback nach Belegnummer sortiert: auch hier auf- oder absteigen, je nachdem wie die Chronologie der Liste ist.</p>
-						<p>(Bisher wurde als Fallback nur die Sortierung nach Belegnummern als Fallback genutzt und zwar immer aufsteigend, unabhängig von der Chronologie der Liste.)</p>
+						<p>(Bisher wurde als Fallback nur die Sortierung nach Belegnummern genutzt und zwar immer aufsteigend, unabhängig von der Chronologie der Liste.)</p>
 					</li>
 					<li>Belegliste: Beim Neuaufbau der Belegliste versucht das Programm, die Scrollposition auf Höhe des aktuell sichtbaren Inhalts wiederherzustellen. Diese Funktion steht bereits seit Version 0.1.0 zur Verfügung. Sind in der Liste keine Belege geöffnet, <abbr title="das heißt">d. h.</abbr> nur die Belegköpfe mit dem Vorschautext sichtbar, wird von nun an darauf verzichtet, die Scrollposition wiederherzustellen. Dieses veränderte Verhalten wird besonders bei der chronologischen Neusortierung einer langen Belegliste (Funktion <img src="../img/liste-aufwaerts.svg" width="24" height="24" alt="">) zu besseren Ergebnissen führen.</li>
 					<li>Belegliste: Die Belegliste-Einstellungen sind nun auch über das Kontextmenü zu erreichen (Rechtsklick in einem beliebigen Belegkopf).</li>
@@ -100,12 +108,14 @@ Sport
 					<li>Im Tooltip aller Icons, deren Funktion nicht nur durch Klick, sondern auch durch ein Tastaturkürzel aufgerufen werden kann, wurde das entsprechende Tastaturkürzel notiert. Das Icon <img src="../img/drucken.svg" width="24" height="24" alt=""> hat in der Karteikarte nun <abbr title="zum Beispiel">z. B.</abbr> den Tooltip <q>Karte drucken (Strg + P)</q>.</li>
 					<li>Wurde der Inhalt einer Kartei geändert, aber noch nicht gespeichert, erscheint fortan in der Titelleiste des Programms ein Asterisk hinter dem App-Namen: <i><span class="app-name"></span> *</i>.</li>
 					<li>Metadaten-Fenster: Die Version des Dateiformats wurde ergänzt.</li>
+					<li><a href="#" class="ueber-electron"><i>Electron</i></a>-Update auf Version 4.2.1.</li>
 				</ul>
 				
 				<h3>Behobene Fehler</h3>
 				
 				<ul>
 					<li><span class="obacht">Schwerer Fehler:</span> Neue Karteien wurden fälschlicherweise immer noch mit der Dateiformat-Version <strong>1</strong> getaggt. Richtig wäre hier aber die <strong>2</strong> gewesen, und zwar seit Version 0.4.0 von <i class="app-name"></i>. Der Fehler führte dazu, dass beim zweiten Öffnen einer neu erstellten Kartei in allen existierenden Belegen das Korpus-Feld gelöscht wurde. <span lang="la">Mea culpa, mea culpa, mea maxima culpa!</span></li>
+					<li><span class="obacht">Schwerer Fehler:</span> Wurde in einem Textfeld der Karteikarte ein nicht typographisches doppeltes Anführungszeichen (") verwendet, enthielt die Eingabe zugleich mehrere Hierarchien (eröffnet durch <q>: </q>) und waren die Anführungszeichen nicht in der untersten Hierarchie, sondern der obersten oder einer mittleren, führte dies zu einem Programmabsturz. Dabei gab es zwar keine Datenverluste, aber <abbr title="Wortgeschichte digital">WGD</abbr>-Dateien, in denen ein Textfeld auf diese Art und Weise gefüllt worden war, konnten nicht mehr geöffnet werden. Betroffen waren die Felder <i>Bedeutung</i>, <i>Korpus</i> und <i>Textsorte</i>.</li>
 					<li>Erinnerungen: Die Funktion, die darauf aufmerksam macht, dass an verschiedenen Stellen vergessen wurde, die BearbeiterIn einzutragen, wurde unter Umständen auch dann aufgerufen, wenn gar keine Kartei geöffnet war. Das führte zu einem Programmfehler.</li>
 					<li>Textkopie: Beim Kopieren eines ganzen Belegs mithilfe des Kopier-Icons <img src="../img/tool-kopieren.svg" width="24" height="24" alt=""> wurde die Hervorhebung des Worts nicht mitkopiert (<abbr title="vergleiche">vgl.</abbr> hierzu <i>Verbesserungen</i>).</li>
 					<li>Volltextsuche: Bei sehr kurzen Suchwörtern (<abbr title="zum Beispiel">z. B.</abbr> <q>an</q>) funktionierte die Hervorhebung der Suchtreffer im Belegtext nicht immer korrekt. Unter Umständen konnte der Inhalt von <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>-Tags sichtbar werden.</li>

@@ -263,8 +263,16 @@
 	font-style: italic;
 }
 
-#sachgebiete-abgleich {
+#sachgebiete-abgleich,
+#sachgebiete-abgleich + p {
 	margin-bottom: 5px;
+}
+
+#sachgebiete-abgleich + p i,
+#sachgebiete-abgleich + p + p i {
+	display: inline-block;
+	width: 125px;
+	text-indent: 0;
 }
 
 /* Formvarianten ------------------------ */

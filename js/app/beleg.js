@@ -1169,7 +1169,7 @@ let beleg = {
 			feld = document.getElementById(id);
 		// Text auslesen
 		let text = "";
-		if (id === "beleg-bs" && formate.indexOf("text/html") >= 0) {
+		if (id === "beleg-bs" && formate.includes("text/html")) {
 			text = beleg.toolsEinfuegenHtml(clipboard.readHTML());
 		} else {
 			text = clipboard.readText();
@@ -1296,7 +1296,7 @@ let beleg = {
 				text += ele.nodeValue.replace(/\n/g, "");
 			} else if (ele.nodeType === 1) { // Element
 				// Inline-Elemente ggf. gesondert behandeln
-				if (inline_keep.indexOf(ele.nodeName) >= 0 || speziell[ele.nodeName]) {
+				if (inline_keep.includes(ele.nodeName) || speziell[ele.nodeName]) {
 					ele.insertBefore(document.createTextNode(`[#${ele.nodeName}]`), ele.firstChild);
 					ele.appendChild(document.createTextNode(`[/${ele.nodeName}]`));
 				} else if (ele.nodeName === "Q") {

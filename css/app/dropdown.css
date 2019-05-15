@@ -67,6 +67,7 @@ textarea.dropdown-feld {
 	overflow-y: auto;
 	background-color: #fff;
 	font-size: 14px;
+	font-variant: normal;
 	line-height: 24px;
 	text-indent: 0; /* nötig wegen des Dropdowns im Optionen-Fenster */
 }

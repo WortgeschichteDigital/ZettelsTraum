@@ -1,7 +1,7 @@
 {
 	"name": "zettelstraum",
 	"productName": "Zettel’s Traum",
-	"version": "0.8.0-beta.8",
+	"version": "0.8.0",
 	"description": "Wortkartei-App von „Wortgeschichte digital“, dem an der „Akademie der Wissenschaften zu Göttingen“ angesiedelten Teilprojekt des „Zentrums für digitale Lexikographie der deutschen Sprache“",
 	"keywords": [
 		"Kartei",
@@ -30,8 +30,8 @@
 		"package-win": "electron-packager . zettelstraum --overwrite --asar --platform=win32 --arch=x64 --icon=img/icon/win/icon.ico --prune=true --out=../build --appCopyright=\"Akademie der Wissenschaften zu Göttingen\" --name=\"Zettel’s Traum\" --win32metadata.CompanyName=\"Akademie der Wissenschaften zu Göttingen\" --win32metadata.FileDescription=\"Zettel’s Traum\" --win32metadata.ProductName=\"Zettel’s Traum\" --win32metadata.InternalName=\"Zettel’s Traum\""
 	},
 	"devDependencies": {
-		"electron": "^4.2.0",
-		"electron-builder": "^20.39.0",
+		"electron": "^4.2.1",
+		"electron-builder": "^20.40.2",
 		"electron-packager": "^13.1.1"
 	}
 }

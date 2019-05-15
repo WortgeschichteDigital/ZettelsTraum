@@ -1,23 +1,32 @@
 "use strict";
 
 let bedeutungen = {
-	// speichert den Timeout für das Ausschalten der Hintergrundfarbe
-	// bei den Ereignissen unmovable und moved
+	// speichert den Timeout für das Ausschalten der Farbe
+	// bei den Ereignissen unmovable, moved und saved
 	timeout: null,
 	// Kopie des Bedeutungsgerüsts, ausgelesen aus data.bd
 	data: {},
-	// baut einen initialen, alphabetisch sortierten Bedeutungenbaum auf
+	// Generator zur Erzeugung der nächsten ID
+	makeId: null,
+	*idGenerator (id) {
+		while (true) {
+			yield id++;
+		}
+	},
+	// baut ein initiales, alphabetisch sortiertes Bedeutungsgerüst auf
 	// (falls in der Kartei noch keiner vorhanden ist; irgendwann ist diese Funktion wohl tot)
-	konstituieren () {
-		// Bedeutungenbaum ist vorhanden
+	konstit () {
+		// Bedeutungsgerüst ist vorhanden
 		if (data.bd.bd) {
 			return;
 		}
-		// Baum aufbauen
-		bedeutungen.data = {};
-		bedeutungen.data.sl = 2;
-		bedeutungen.data.bd = [];
-		bedeutungen.data.id = {};
+		// ID-Generator initialisieren
+		bedeutungen.makeId = bedeutungen.idGenerator(1);
+		// Gerüst aufbauen
+		bedeutungen.data = {}; // TODO data.bd
+		bedeutungen.data.sl = 2; // TODO data.bd
+		bedeutungen.data.bd = []; // TODO data.bd
+		bedeutungen.bedeutungVorhandenCache = {};
 		for (let id in data.ka) {
 			if (!data.ka.hasOwnProperty(id)) {
 				continue;
@@ -27,11 +36,11 @@ let bedeutungen = {
 			}
 			let bd = data.ka[id].bd.split("\n");
 			for (let i = 0, len = bd.length; i < len; i++) {
-				bedeutungen.baumErgaenzen(bd[i]);
+				bedeutungen.konstitErgaenzen(bd[i]);
 			}
 		}
-		// Einträge sortieren
-		bedeutungen.data.bd.sort(function(a, b) {
+		// Einträge im Gerüst sortieren
+		bedeutungen.data.bd.sort(function(a, b) { // TODO data.bd
 			for (let i = 0, len = a.bd.length; i < len; i++) {
 				if (a.bd[i] !== b.bd[i]) {
 					return helfer.sortAlpha(a.bd[i], b.bd[i]);
@@ -47,10 +56,14 @@ let bedeutungen = {
 				return 0;
 			}
 		});
+		// Einträge im Gerüst durchzählen
+		bedeutungen.konstitZaehlung(); // TODO data.bd
 	},
-	// Baum ggf. um die übergebene Bedeutung ergänzen
-	baumErgaenzen (bd) {
-		if (bedeutungen.data.id[bd]) {
+	// Gerüst ggf. um die übergebene Bedeutung ergänzen
+	//   bd = String
+	//     (Bedeutung ausgeschrieben, Hierarchien durch ": " getrennt)
+	konstitErgaenzen (bd) {
+		if (bedeutungen.bedeutungVorhanden(bd, true)) {
 			return;
 		}
 		let hie = bd.split(": "),
@@ -58,26 +71,98 @@ let bedeutungen = {
 			i = 0;
 		do {
 			hie_akt.push(hie[i]);
-			let id = hie_akt.join(": ");
-			if (!bedeutungen.data.id[id]) {
-				bedeutungen.data.id[id] = true;
-				bedeutungen.data.bd.push({
-					bd: [...hie_akt],
-					sg: "",
-					al: "",
-				});
+			if (!bedeutungen.bedeutungVorhanden(hie_akt.join(": "), true)) {
+				bedeutungen.data.bd.push(bedeutungen.konstitBedeutung(hie_akt)); // TODO data.bd
 			}
 			i++;
 		} while (hie[i]);
 	},
+	// gibt ein neues Bedeutungs-Objekt zurück
+	//   bd = Array
+	//     (die Bedeutung mit allen Hierarchieebenen)
+	konstitBedeutung (bd) {
+		return {
+			al: "",
+			bd: [...bd],
+			id: bedeutungen.makeId.next().value,
+			sg: "",
+			za: "",
+		};
+	},
+	// Bedeutungen durchzählen
+	//   arr = Array
+	//     (Array mit den Bedeutungen, die durchgezählt werden sollen)
+	konstitZaehlung (arr = bedeutungen.data.bd) {
+		bedeutungen.zaehlungen = [];
+		arr.forEach(function(i) {
+			i.za = bedeutungen.zaehlung(i.bd);
+		});
+	},
+	// Zählzeichen
+	zaehlzeichen: [
+		["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII", "XIII", "XIV", "XV", "XVI", "XVII", "XVIII", "IX", "XX"],
+		["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T"],
+		["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20"],
+		["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t"],
+		["α", "β", "γ", "δ", "ε", "ζ", "η", "θ", "ι", "κ", "λ", "μ", "ν", "ξ", "ο", "π", "ρ", "σ", "τ", "υ"],
+		Array(20).fill("•"),
+		Array(20).fill("◦"),
+	],
+	// speichert, wo man gerade mit der Zählung der einzelnen Hierarchien ist
+	zaehlungen: [],
+	// gibt das richtige Zählzeichen zurück
+	//   bd = Array
+	//     (Array mit allen Bedeutungen)
+	zaehlung (bd) {
+		// Ebene ermitteln
+		let ebene = bd.length - 1;
+		ebene += bedeutungen.data.sl;
+		// Ebene hochzählen
+		if (!bedeutungen.zaehlungen[ebene]) {
+			bedeutungen.zaehlungen[ebene] = 0;
+		}
+		bedeutungen.zaehlungen[ebene]++;
+		// alle tieferen Ebenen löschen
+		bedeutungen.zaehlungen.fill(0, ebene + 1);
+		// Zählzeichen ermitteln
+		let zeichen = "–";
+		if (bedeutungen.zaehlzeichen[ebene]) {
+			zeichen = bedeutungen.zaehlzeichen[ebene][bedeutungen.zaehlungen[ebene] - 1];
+		}
+		return zeichen;
+	},
+	// überprüft, ob die übergebene Bedeutung schon vorhanden ist
+	// (wird auch in beleg.js genutzt)
+	//   bd = String
+	//     (die Bedeutung, Hierarchien getrennt durch ": ")
+	//   cache = true || undefined
+	//     (ist die Bedeutung vorhanden, soll sie gecacht werden
+	//   arr = Array || undefined
+	//     (Array, in dem geschaut werden soll, ob die Bedeutung vorhanden ist)
+	bedeutungVorhandenCache: {},
+	bedeutungVorhanden (bd, cache = false, arr = bedeutungen.data.bd) {
+		if (cache && bedeutungen.bedeutungVorhandenCache[bd]) {
+			return true;
+		}
+		for (let i = 0, len = arr.length; i < len; i++) {
+			if (arr[i].bd.join(": ") === bd) {
+				if (cache) {
+					bedeutungen.bedeutungVorhandenCache[bd] = true;
+				}
+				return true;
+			}
+		}
+		return false;
+	},
 	// Bedeutungen öffnen
 	oeffnen () {
 		// TODO temporär sperren
-// 		dialog.oeffnen("alert");
-// 		dialog.text("Sorry!\nDiese Funktion ist noch nicht programmiert.");
-// 		return;
+		dialog.oeffnen("alert");
+		dialog.text("Sorry!\nDiese Funktion ist noch nicht programmiert.");
+		return;
 		// Bedeutungen sind schon offen
 		if (!document.getElementById("bedeutungen").classList.contains("aus")) {
+			helfer.auswahl(document.getElementById("bedeutungen-neu"));
 			return;
 		}
 		// aktueller Beleg ist noch nicht gespeichert
@@ -96,14 +181,14 @@ let bedeutungen = {
 		init();
 		// Bedeutungenformular anzeigen und initialisieren
 		function init () {
+			// TODO hier Kopie von data.bd => bedeutungen.data
 			document.getElementById("bedeutungen-hierarchie").value = bedeutungen.hierarchieEbenen[bedeutungen.data.sl];
 			bedeutungen.aufbauen();
 			helfer.sektionWechseln("bedeutungen");
 		}
 	},
-	// den Bedeutungenbaum aufbauen
+	// das Bedeutungsgerüst aufbauen
 	aufbauen () {
-		bedeutungen.zaehlungen = [];
 		bedeutungen.moveAktiv = false;
 		// Content vorbereiten
 		let cont = document.getElementById("bedeutungen-cont"),
@@ -112,7 +197,11 @@ let bedeutungen = {
 			table.removeChild(table.lastChild);
 		}
 		// Tabelle füllen
+		let lastId = 0;
 		bedeutungen.data.bd.forEach(function(i, n) {
+			// höchste ID ermitteln
+			lastId = i.id > lastId ? i.id : lastId;
+			// Zeile erzeugen
 			const bd = i.bd;
 			let tr = document.createElement("tr");
 			tr.dataset.idx = n;
@@ -143,12 +232,12 @@ let bedeutungen = {
 			td.classList.add("zaehlung");
 			let p = document.createElement("p"),
 				b = document.createElement("b");
-			b.textContent = bedeutungen.zaehlung(bd);
+			b.textContent = i.za;
 			p.appendChild(b);
 			let span = document.createElement("span");
 			span.dataset.feld = "bd";
-			span.textContent = bd[bd.length- 1];
-			bedeutungen.editListener(span);
+			span.innerHTML = bd[bd.length - 1];
+			bedeutungen.editContListener(span);
 			p.appendChild(span);
 			let div = document.createElement("div");
 			div.appendChild(p);
@@ -168,7 +257,7 @@ let bedeutungen = {
 				td.classList.add("leer");
 			}
 			td.textContent = sg;
-			bedeutungen.editListener(td);
+			bedeutungen.editContListener(td);
 			// Alias
 			td = document.createElement("td");
 			td.dataset.feld = "al";
@@ -179,8 +268,36 @@ let bedeutungen = {
 				td.classList.add("leer");
 			}
 			td.textContent = al;
-			bedeutungen.editListener(td);
+			bedeutungen.editContListener(td);
 		});
+		// Ergänzungszeile einrücken
+		bedeutungen.aufbauenErgaenzen(table);
+		// ggf. ID-Generator initialisieren
+		// (könnte bereits durch bedeutungen.konstit() geschehen sein)
+		if (!bedeutungen.makeId) {
+			bedeutungen.makeId = bedeutungen.idGenerator(lastId + 1);
+		}
+	},
+	// Zeile zum Ergänzen des Bedeutungsgerüsts einfügen
+	//   table = Element
+	//     (die Tabelle mit dem Bedeutungsgerüst)
+	aufbauenErgaenzen (table) {
+		let tr = document.createElement("tr");
+		table.appendChild(tr);
+		tr.classList.add("bedeutungen-neu");
+		for (let i = 0; i < 5; i++) {
+			let td = document.createElement("td");
+			td.textContent = " ";
+			tr.appendChild(td);
+		}
+		let span = document.createElement("span");
+		span.classList.add("leer");
+		span.id = "bedeutungen-neu";
+		span.setAttribute("contenteditable", "true");
+		span.textContent = "neue Bedeutung";
+		helfer.editPaste(span);
+		bedeutungen.ergaenzen(span);
+		tr.childNodes[2].replaceChild(span, tr.childNodes[2].firstChild);
 	},
 	// Werte für das Formular, mit dem die oberste Hierarchie der Zählzeichen festgelegt wird
 	hierarchieEbenen: [
@@ -195,42 +312,14 @@ let bedeutungen = {
 		if (idx === bedeutungen.data.sl) {
 			return;
 		}
+		// Werte ändern
 		bedeutungen.data.sl = idx;
+		bedeutungen.konstitZaehlung();
 		bedeutungen.bedeutungenGeaendert(true);
-		bedeutungen.aufbauen();
-	},
-	// Zählzeichen
-	zaehlzeichen: [
-		["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII", "XIII", "XIV", "XV", "XVI", "XVII", "XVIII", "IX", "XX"],
-		["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T"],
-		["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20"],
-		["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t"],
-		["α", "β", "γ", "δ", "ε", "ζ", "η", "θ", "ι", "κ", "λ", "μ", "ν", "ξ", "ο", "π", "ρ", "σ", "τ", "υ"],
-		Array(20).fill("•"),
-		Array(20).fill("◦"),
-	],
-	// speichert, wo man gerade mit der Zählung der einzelnen Hierarchien ist
-	zaehlungen: [],
-	// gibt das richtige Zählzeichen zurück
-	//   bd = Array
-	//     (Array mit allen Bedeutungen)
-	zaehlung (bd) {
-		// Ebene ermitteln
-		let ebene = bd.length - 1;
-		ebene += bedeutungen.data.sl;
-		// hochzählen
-		if (!bedeutungen.zaehlungen[ebene]) {
-			bedeutungen.zaehlungen[ebene] = 0;
-		}
-		bedeutungen.zaehlungen[ebene]++;
-		// alle höheren Zählungen löschen
-		bedeutungen.zaehlungen.fill(0, ebene + 1);
-		// Zählzeichen ermitteln
-		let zeichen = "–";
-		if (bedeutungen.zaehlzeichen[ebene]) {
-			zeichen = bedeutungen.zaehlzeichen[ebene][bedeutungen.zaehlungen[ebene] - 1];
-		}
-		return zeichen;
+		// neue Zählung eintragen
+		document.querySelectorAll("#bedeutungen-cont b").forEach(function(i, n) {
+			i.textContent = bedeutungen.data.bd[n].za;
+		});
 	},
 	// die vorherige oder nächste Bedeutung aufrufen
 	// (wird nur aufgerufen, wenn Ctrl + ↑ | ↓)
@@ -238,15 +327,61 @@ let bedeutungen = {
 	//     (Tastaturevent, über das die Funktion aufgerufen wurde)
 	navi (evt) {
 		if (!bedeutungen.moveAktiv) {
+			let tr = document.querySelector("#bedeutungen-cont tr");
+			if (hasIdx(tr)) {
+				bedeutungen.moveAn(parseInt(tr.dataset.idx, 10));
+			}
 			return;
 		}
 		let tr_aktiv = document.querySelector(".bedeutungen-aktiv");
-		if (evt.which === 38 && tr_aktiv.previousSibling) { // hoch
+		if (evt.which === 38 && hasIdx(tr_aktiv.previousSibling)) { // hoch
 			bedeutungen.moveAus();
-			bedeutungen.moveAn(parseInt(tr_aktiv.previousSibling.dataset.idx, 10), false);
-		} else if (evt.which === 40 && tr_aktiv.nextSibling) {
+			bedeutungen.moveAn(parseInt(tr_aktiv.previousSibling.dataset.idx, 10));
+		} else if (evt.which === 40 && hasIdx(tr_aktiv.nextSibling)) { // runter
 			bedeutungen.moveAus();
-			bedeutungen.moveAn(parseInt(tr_aktiv.nextSibling.dataset.idx, 10), false);
+			bedeutungen.moveAn(parseInt(tr_aktiv.nextSibling.dataset.idx, 10));
+		}
+		function hasIdx (tr) {
+			if (tr.dataset.idx) {
+				return true;
+			}
+			return false;
+		}
+	},
+	//
+	naviTab (evt) {
+		// nichts aktiviert
+		if (!bedeutungen.moveAktiv && !document.getElementById("bedeutungen-edit")) {
+			return;
+		}
+		evt.preventDefault();
+		// moveAktiv
+		if (bedeutungen.moveAktiv) {
+			let zeile = document.querySelector(".bedeutungen-aktiv");
+			if (evt.shiftKey) {
+				bedeutungen.editErstellen(zeile.lastChild);
+			} else {
+				bedeutungen.editErstellen(zeile.childNodes[2].querySelector("span"));
+			}
+			return;
+		}
+		// anderes Edit-Feld fokussieren oder die Zeile aktivieren
+		let edit = document.getElementById("bedeutungen-edit"),
+			felder = ["bd", "sg", "al"],
+			feld = edit.parentNode.dataset.feld,
+			pos = felder.indexOf(feld);
+		if (evt.shiftKey) {
+			pos--;
+		} else {
+			pos++;
+		}
+		let zeile = document.querySelector(".bedeutungen-edit");
+		if (pos < 0 || pos === felder.length) { // Zeile aktivieren
+			const idx = parseInt(zeile.dataset.idx, 10);
+			bedeutungen.moveAn(idx);
+		} else { // anderes Edit-Feld fokussieren
+			let neuesFeld = zeile.querySelector(`*[data-feld="${felder[pos]}"]`);
+			bedeutungen.editErstellen(neuesFeld);
 		}
 	},
 	// Listener für die Windrose
@@ -260,7 +395,7 @@ let bedeutungen = {
 			if (tr === tr_aktiv) {
 				return;
 			}
-			bedeutungen.moveAn(parseInt(tr.dataset.idx, 10), false);
+			bedeutungen.moveAn(parseInt(tr.dataset.idx, 10));
 		});
 	},
 	// eine der Bedeutungen ist aktiviert und kann nun mit allen Subbedeutungen bewegt werden
@@ -268,9 +403,9 @@ let bedeutungen = {
 	// Bedeutung nach dem Verschieben wieder aktivieren
 	//   idx = Number
 	//     (Index der aktiven Zeile)
-	//   moved = Boolean
+	//   moved = true || undefined
 	//     (die zu aktivierende Bedeutung wurde gerade bewegt)
-	moveAn (idx, moved) {
+	moveAn (idx, moved = false) {
 		bedeutungen.moveAktiv = true;
 		bedeutungen.editFeldWeg();
 		// Top-Element markieren
@@ -424,7 +559,7 @@ let bedeutungen = {
 			d[40].movable = true;
 		}
 	},
-	// Bedeutung im Bedeutungenbaum bewegen
+	// Bedeutung im Bedeutungsgerüst bewegen
 	move (evt) {
 		// kein Element aktiviert
 		if (!bedeutungen.moveAktiv) {
@@ -450,34 +585,26 @@ let bedeutungen = {
 			// spezielle Operationen
 			if (evt.which === 37) { // nach links
 				idx -= i;
-				const id = bedeutungen.data.bd[idx].bd.join(": ");
-				delete bedeutungen.data.id[id];
 				bedeutungen.data.bd[idx].bd.shift();
-				bedeutungen.data.id[bedeutungen.data.bd[idx].bd.join(": ")] = true;
 			} else if (evt.which === 39) { // nach rechts
-				const id = bedeutungen.data.bd[idx].bd.join(": ");
-				delete bedeutungen.data.id[id];
 				for (let j = 0, len = d.pad.length - 1; j < len; j++) {
 					bedeutungen.data.bd[idx].bd.shift();
 				}
 				for (let j = d.pad.length - 1; j >= 0; j--) {
 					bedeutungen.data.bd[idx].bd.unshift(d.pad[j]);
 				}
-				bedeutungen.data.id[bedeutungen.data.bd[idx].bd.join(": ")] = true;
 			} else if (evt.which === 40) { // nach unten
 				idx -= i;
 			}
 			// Element kopieren
-			let kopie = {
-				bd: [...bedeutungen.data.bd[idx].bd],
-				sg: bedeutungen.data.bd[idx].sg,
-				al: bedeutungen.data.bd[idx].al,
-			};
+			let kopie = Object.assign({}, bedeutungen.data.bd[idx]);
+			kopie.bd = [...bedeutungen.data.bd[idx].bd]; // Bedeutungs-Array extra kopieren
 			bedeutungen.data.bd.splice(idx, 1);
 			bedeutungen.data.bd.splice(idx + d.steps, 0, kopie);
 		}
 		// Tabelle neu aufbauen
 		const aktiv = parseInt(document.querySelector(".bedeutungen-aktiv").dataset.idx, 10);
+		bedeutungen.konstitZaehlung();
 		bedeutungen.aufbauen();
 		// Items refokussieren
 		if (evt.which === 37 || evt.which === 40) { // nach links + nach unten
@@ -542,7 +669,7 @@ let bedeutungen = {
 				}
 			}
 			function aktivieren () {
-				bedeutungen.moveAn(idx, false);
+				bedeutungen.moveAn(idx);
 				setTimeout(function() {
 					bedeutungen.loeschenPrep();
 				}, 500);
@@ -552,9 +679,7 @@ let bedeutungen = {
 	// Tastatur-Handler für Entf
 	loeschenTastatur () {
 		// ggf. abbrechen
-		if (!bedeutungen.moveAktiv ||
-				document.getElementById("bedeutungen").classList.contains("aus") ||
-				overlay.oben()) {
+		if (!bedeutungen.moveAktiv) {
 			return;
 		}
 		bedeutungen.loeschenPrep();
@@ -562,117 +687,156 @@ let bedeutungen = {
 	// benötigte Werte ermitteln, bevor das Löschen angestoßen wird
 	loeschenPrep () {
 		let tr = document.querySelector(".bedeutungen-aktiv");
-		const idx = parseInt(tr.dataset.idx, 10),
-			zaehlung = tr.querySelector("b").firstChild.nodeValue;
-		bedeutungen.loeschen(idx, zaehlung);
+		const idx = parseInt(tr.dataset.idx, 10);
+		bedeutungen.loeschen(idx);
 	},
 	// Löschen auf Nachfrage durchführen
 	//   idx = Number
 	//     (Index der Bedeutung)
-	//   zaehlung = String
-	//     (angezeigte Zählung)
-	loeschen (idx, zaehlung) {
+	loeschen (idx) {
 		let items = bedeutungen.moveGetItems();
 		const bd = bedeutungen.data.bd[idx].bd[bedeutungen.data.bd[idx].bd.length - 1];
 		dialog.oeffnen("confirm", function() {
 			if (dialog.antwort) {
 				for (let i = items.length - 1; i >= 0; i--) {
-					const idx = items[i],
-						id = bedeutungen.data.bd[idx].bd.join(": ");
-					delete bedeutungen.data.id[id];
-					bedeutungen.data.bd.splice(idx, 1);
+					bedeutungen.data.bd.splice(items[i], 1);
 				}
+				bedeutungen.konstitZaehlung();
 				bedeutungen.aufbauen();
 				bedeutungen.bedeutungenGeaendert(true);
 			} else {
 				document.querySelector(".bedeutungen-aktiv").firstChild.firstChild.focus();
 			}
 		});
-		dialog.text(`Soll die markierte Bedeutung\n<p class="bedeutungen-dialog"><b>${zaehlung}</b>${bd}</p>\n${items.length > 1 ? "mit all ihren Unterbedeutungen " : ""}wirklich gelöscht werden?`);
+		dialog.text(`Soll die markierte Bedeutung\n<p class="bedeutungen-dialog"><b>${bedeutungen.data.bd[idx].za}</b>${bd}</p>\n${items.length > 1 ? "mit all ihren Unterbedeutungen " : ""}wirklich gelöscht werden?`);
 	},
-	// erstellt ein Edit-Feld
+	// Listener für den Container, in dem ein Edit-Feld erstellt werden soll
 	//   ele = Element
 	//     (Element, in dem das Edit-Feld erstellt werden soll)
-	editListener (ele) {
+	editContListener (ele) {
 		ele.addEventListener("click", function() {
-			// Ist das Edit-Feld in dieser Zelle?
+			// Ist das Edit-Feld schon in diesem Element?
 			if (this.firstChild.id) {
 				return;
 			}
-			// ggf. altes Edit-Feld löschen
-			bedeutungen.editFeldWeg();
-			// Zeile und Container vorbereiten
-			bedeutungen.moveAus();
-			bedeutungen.editZeile(ele, true);
-			ele.classList.remove("leer");
-			// Edit-Feld erzeugen und einhängen
-			const idx = bedeutungen.editGetIdx(this),
-				feld = this.dataset.feld,
-				z = bedeutungen.data.bd[idx][feld];
-			let edit = document.createElement("span");
-			edit.setAttribute("contenteditable", "true");
-			edit.id = "bedeutungen-edit";
-			if (Array.isArray(z)) {
-				edit.textContent = z[z.length - 1];
-			} else {
-				edit.textContent = z;
-			}
-			ele.replaceChild(edit, ele.firstChild);
+			bedeutungen.editErstellen(this);
+		});
+	},
+	// Edit-Feld erstellen
+	//   ele = Element
+	//     (Element, in dem das Edit-Feld erstellt werden soll)
+	editErstellen (ele) {
+		// ggf. altes Edit-Feld löschen
+		bedeutungen.editFeldWeg();
+		// Zeile und Container vorbereiten
+		bedeutungen.moveAus();
+		bedeutungen.editZeile(ele, true);
+		ele.classList.remove("leer");
+		// Edit-Feld erzeugen und einhängen
+		const idx = bedeutungen.editGetIdx(ele),
+			feld = ele.dataset.feld,
+			z = bedeutungen.data.bd[idx][feld];
+		let edit = document.createElement("span");
+		edit.setAttribute("contenteditable", "true");
+		edit.id = "bedeutungen-edit";
+		if (Array.isArray(z)) {
+			edit.innerHTML = z[z.length - 1];
+		} else {
+			edit.textContent = z;
+		}
+		helfer.keineKinder(ele);
+		ele.appendChild(edit);
+		// Listener anhängen
+		helfer.editPaste(edit);
+		edit.addEventListener("input", function() {
+			bedeutungen.changed(this);
+		});
+		bedeutungen.editListener(edit);
+		// ggf. Dropdown-Link erzeugen und einhängen
+		if (feld === "sg") {
+			edit.parentNode.classList.add("dropdown-cont");
+			edit.classList.add("dropdown-feld");
+			let a = dropdown.makeLink("dropdown-link-td", "Sachgebiet auswählen");
+			ele.appendChild(a);
+			dropdown.feld(edit);
+		}
+		// Caret an das Ende des Feldes setzen
+		if (!edit.textContent) {
 			edit.focus();
-			// Event-Listener
-			edit.addEventListener("keydown", function(evt) {
-				if (evt.which === 27) { // Esc
-					evt.stopPropagation();
-					bedeutungen.editEintragen(this.parentNode);
-					return;
-				} else if (evt.which !== 13) { // kein Enter
-					return;
-				}
-				evt.preventDefault();
-				// Wert aus dem Edit-Feld ermitteln
-				const idx = bedeutungen.editGetIdx(this),
-					feld = this.parentNode.dataset.feld,
-					wert = helfer.textTrim(this.textContent, true);
-				// Wenn Alias: Wurde das Alias schon vergeben?
-				if (feld === "bd" && !wert) {
-					dialog.oeffnen("alert", function() {
-						edit.focus();
-					});
-					dialog.text("Sie haben keine Bedeutung eingetragen.");
-					return;
-				} else if (feld === "al") {
-					for (let i = 0, len = bedeutungen.data.bd.length; i < len; i++) {
-						if (!wert) {
-							break;
-						}
-						if (i === idx) {
-							continue;
-						}
-						if (bedeutungen.data.bd[i].al === wert) {
-							alias_schon_vergeben(this);
-							return;
-						}
+		} else {
+			let sel = window.getSelection();
+			sel.collapse(edit.lastChild, edit.lastChild.textContent.length);
+		}
+	},
+	// Listener für ein Edit-Feld
+	//   edit = Element
+	//     (das Edit-Feld)
+	editListener (edit) {
+		edit.addEventListener("keydown", function(evt) {
+			if (evt.which === 27 &&
+					!document.getElementById("dropdown")) { // Esc && Dropdown nicht offen
+				evt.stopPropagation();
+				bedeutungen.editEintragen(this.parentNode);
+				return;
+			} else if (evt.which !== 13 ||
+					document.getElementById("dropdown")) { // kein Enter || Dropdown offen
+				return;
+			}
+			evt.preventDefault();
+			// Wert aus dem Edit-Feld ermitteln
+			let edit = this;
+			const idx = bedeutungen.editGetIdx(edit),
+				feld = edit.parentNode.dataset.feld;
+			let wert = "";
+			if (feld === "bd") {
+				wert = helfer.textTrim(edit.innerHTML, true);
+			} else {
+				wert = helfer.textTrim(edit.textContent, true);
+			}
+			// Ist der Wert okay?
+			if (feld === "bd" && !wert) {
+				dialog.oeffnen("alert", function() {
+					edit.focus();
+				});
+				dialog.text("Sie haben keine Bedeutung eingegeben.");
+				return;
+			} else if (feld === "al") {
+				for (let i = 0, len = bedeutungen.data.bd.length; i < len; i++) {
+					if (!wert) {
+						break;
+					}
+					if (i === idx) {
+						continue;
+					}
+					if (bedeutungen.data.bd[i].al === wert) {
+						alias_schon_vergeben(edit);
+						return;
 					}
 				}
-				// Wert übernehmen
-				let z = bedeutungen.data.bd[idx];
-				if (Array.isArray(z[feld])) {
-					z[feld][z[feld].length - 1] = wert;
-				} else {
-					z[feld] = wert;
-				}
-				// Alias eintragen
-				bedeutungen.editEintragen(this.parentNode);
-				// Änderungsmarkierung setzen
-				bedeutungen.bedeutungenGeaendert(true);
-				// Alias schon vergeben
-				function alias_schon_vergeben (edit) {
-					dialog.oeffnen("alert", function() {
-						helfer.auswahl(edit);
-					});
-					dialog.text(`Das Alias <i>${wert}</i> wurde schon vergeben.`);
-				}
-			});
+			}
+			// Wert übernehmen
+			let z = bedeutungen.data.bd[idx];
+			if (Array.isArray(z[feld])) {
+				z[feld][z[feld].length - 1] = wert;
+			} else {
+				z[feld] = wert;
+			}
+			// visualisieren, dass sich was getan hat
+			bedeutungen.changed(edit);
+			edit.classList.add("bedeutungen-saved");
+			clearTimeout(bedeutungen.timeout);
+			bedeutungen.timeout = setTimeout(function() {
+				edit.classList.remove("bedeutungen-saved");
+			}, 500);
+			// Änderungsmarkierung setzen
+			bedeutungen.bedeutungenGeaendert(true);
+			// Alias schon vergeben
+			function alias_schon_vergeben (edit) {
+				dialog.oeffnen("alert", function() {
+					helfer.auswahl(edit);
+				});
+				dialog.text(`Das Alias <i>${wert}</i> wurde schon vergeben.`);
+			}
 		});
 	},
 	// altes Eingabefeld ggf. entfernen
@@ -705,8 +869,9 @@ let bedeutungen = {
 				ele.classList.remove("leer");
 			}
 		}
+		ele.classList.remove("dropdown-cont");
 		helfer.keineKinder(ele);
-		ele.appendChild(document.createTextNode(wert));
+		ele.innerHTML = wert;
 		bedeutungen.editZeile(ele, false);
 	},
 	// Index des betreffenden Elemenets suchen
@@ -730,11 +895,104 @@ let bedeutungen = {
 			tr.classList.remove("bedeutungen-edit");
 		}
 	},
+	// überprüfen, ob der Inhalt des Feldes geändert wurde
+	//   ele = Element
+	//     (das Edit-Feld, auf dessen Veränderungen geachtet werden soll)
+	changed (ele) {
+		// Varialben auslesen
+		const idx = parseInt(document.querySelector(".bedeutungen-edit").dataset.idx, 10),
+			feld = ele.parentNode.dataset.feld;
+		let wert = "";
+		if (feld === "bd") {
+			wert = helfer.textTrim(ele.innerHTML, true);
+		} else {
+			wert = helfer.textTrim(ele.textContent, true);
+		}
+		// Wert aus Datenobjekt auslesen
+		let ds = bedeutungen.data.bd[idx],
+			wert_ds = "";
+		if (Array.isArray(ds[feld])) {
+			wert_ds = ds[feld][ds[feld].length - 1];
+		} else {
+			wert_ds = ds[feld];
+		}
+		// Markieren setzen/entfernen
+		if (wert !== wert_ds) {
+			ele.classList.add("bedeutungen-changed");
+		} else {
+			ele.classList.remove("bedeutungen-changed");
+		}
+	},
+	// Bedeutung ergänzen
+	//   span = Element
+	//     (das Edit-Feld, über das eine Bedeutung ergänzt werden kann)
+	ergaenzen (span) {
+		span.addEventListener("keydown", function(evt) {
+			if (evt.which === 27) { // Esc (wegen der Einheitlichkeit mit anderen Edit-Feldern)
+				evt.stopPropagation();
+				this.blur();
+				return;
+			}
+			if (evt.which !== 13) { // kein Enter
+				return;
+			}
+			// Bedeutung hinzufügen
+			evt.preventDefault();
+			let feld = this;
+			const bd = helfer.textTrim(this.innerHTML, true);
+			// keine Bedeutung eingegeben
+			if (!bd) {
+				dialog.oeffnen("alert", function() {
+					helfer.auswahl(feld);
+				});
+				dialog.text("Sie haben keine Bedeutung eingegeben.");
+				return;
+			}
+			// Bedeutung schon vorhanden
+			if (bedeutungen.bedeutungVorhanden(bd)) {
+				dialog.oeffnen("alert", function() {
+					helfer.auswahl(feld);
+				});
+				dialog.text(`Die Bedeutung\n<p class="bedeutungen-dialog">${bd}</p>\nist schon vorhanden.`);
+				return;
+			}
+			// Bedeutung ergänzen, Gerüst neu aufbauen, Bedeutung aktivieren
+			bedeutungen.data.bd.push(bedeutungen.konstitBedeutung([bd]));
+			bedeutungen.konstitZaehlung();
+			bedeutungen.aufbauen();
+			bedeutungen.moveAn(bedeutungen.data.bd.length - 1, true);
+			bedeutungen.bedeutungenGeaendert(true);
+		});
+		span.addEventListener("focus", function() {
+			bedeutungen.moveAus();
+			bedeutungen.editFeldWeg();
+			if (this.classList.contains("leer")) {
+				this.classList.remove("leer");
+				this.textContent = "";
+			}
+		});
+		span.addEventListener("blur", function() {
+			if (!this.textContent) {
+				this.classList.add("leer");
+				this.textContent = "neue Bedeutung";
+			}
+		});
+	},
 	// Änderungen speichern
 	speichern () {
-		// Änderungsmarkierung zurücksetzen
+		// keine Änderungen
+		if (!bedeutungen.geaendert) {
+			bedeutungen.schliessen();
+			return;
+		}
+		// TODO Änderungen in Karteikarten anwenden
+		// TODO bedeutungen.data => data.bd
+		// TODO Änderungsmarkierung Kartei setzen
+		// TODO Bedeutungsgerüst-Fenster auffrischen
+// 		kartei.karteiGeaendert(true);
+		// Änderungsmarkierung Bedeutungen zurücksetzen
 		bedeutungen.bedeutungenGeaendert(false);
-		// direkt schließen
+		// ggf. direkt schließen
 		if (optionen.data.einstellungen["bedeutungen-schliessen"]) {
 			bedeutungen.schliessen();
 		}

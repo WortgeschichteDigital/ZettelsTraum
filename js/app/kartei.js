@@ -172,7 +172,6 @@ let kartei = {
 			// Konversion des Dateiformats anstoßen
 			konversion.start();
 			// Einleseoperationen
-			bedeutungen.konstituieren(); // für ältere Karteien, in denen data.bd noch nicht gefüllt ist
 			kartei.wort = data.wo;
 			kartei.wortEintragen();
 			kartei.pfad = datei;
@@ -241,7 +240,7 @@ let kartei = {
 			// ggf. BearbeiterIn hinzufügen
 			let bearb = optionen.data.einstellungen.bearbeiterin,
 				bearb_ergaenzt = false;
-			if (bearb && data.be.indexOf(bearb) === -1) {
+			if (bearb && !data.be.includes(bearb)) {
 				data.be.push(bearb);
 				bearb_ergaenzt = true;
 			}

@@ -9,6 +9,7 @@ let konversion = {
 	start () {
 		konversion.von1nach2();
 		konversion.von2nach3();
+		bedeutungen.konstit(); // TODO das gehört dann in die entsprechende Konversions-Funktion
 	},
 	// Konversion des Dateiformats von Version 1 nach Version 2
 	von1nach2 () {

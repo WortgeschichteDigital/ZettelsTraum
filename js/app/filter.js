@@ -263,15 +263,18 @@ let filter = {
 		// erneut aktive Filter ermitteln
 		filter.aktiveFilterErmitteln(true);
 		// sucht das <div>, in den ein Filter verschachtelt werden muss
-		function schachtelFinden(f) {
+		//   f = String
+		//     (Filter, ggf. mit Hierarchieebenen ": ")
+		function schachtelFinden (f) {
 			// Filter kürzen
 			let bd_arr = f.split(": ");
 			if (bd_arr.length > 1) {
 				bd_arr.pop();
 			}
 			f = bd_arr.join(": ");
+			f = f.replace(/"/g, '\\"'); // der Filter könnte " enthalten
 			// Schachtel suchen
-			const schachtel = cont.lastChild.querySelector(`[data-f^="${f}"]`);
+			let schachtel = cont.lastChild.querySelector(`[data-f^="${f}"]`);
 			if (schachtel) {
 				return schachtel;
 			}
@@ -514,7 +517,7 @@ let filter = {
 	//     (Daten zum Filter)
 	aufbauenFilter (f, obj) {
 		// Muss der Filter wirklich gedruckt werden?
-		if (!obj.wert && filter.exklusivAktiv.indexOf(f) === -1) {
+		if (!obj.wert && !filter.exklusivAktiv.includes(f)) {
 			return false;
 		}
 		// Sollte der Filter als Filterbaum dargestellt werden?
@@ -1000,7 +1003,7 @@ let filter = {
 		filter.volltextSuchePrep();
 		// Karten filtern
 		let karten_gefiltert = [];
-		x: for (let i = 0, len = karten.length; i < len; i++) {
+		forX: for (let i = 0, len = karten.length; i < len; i++) {
 			let id = karten[i];
 			// Volltext
 			if (filter.aktiveFilter.volltext && !filter.kartenFilternVolltext(id)) {
@@ -1009,7 +1012,7 @@ let filter = {
 			// Zeitraum
 			if (filter.aktiveFilter.zeitraum) {
 				let jahr = parseInt(liste.zeitschnittErmitteln(data.ka[id].da).jahr, 10);
-				if (filter_zeitraum.indexOf(jahr) === -1) {
+				if (!filter_zeitraum.includes(jahr)) {
 					continue;
 				}
 			}
@@ -1021,7 +1024,7 @@ let filter = {
 				let arr = baumfilter[bf];
 				if (arr.length) {
 					let okay = false;
-					if (!data.ka[id][bf] && arr.indexOf("undefined") >= 0) {
+					if (!data.ka[id][bf] && arr.includes("undefined")) {
 						okay = true;
 					} else if (data.ka[id][bf]) {
 						for (let j = 0, len = arr.length; j < len; j++) {
@@ -1041,7 +1044,7 @@ let filter = {
 						}
 					}
 					if (!okay) {
-						continue x;
+						continue forX;
 					}
 				}
 			}
@@ -1107,7 +1110,7 @@ let filter = {
 					treffer[j] = true;
 				}
 			}
-			if (treffer.indexOf(false) === -1) {
+			if (!treffer.includes(false)) {
 				return true;
 			}
 		}

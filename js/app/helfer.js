@@ -215,6 +215,42 @@ let helfer = {
 		}
 		return text;
 	},
+	// beim Pasten von Text in ein Edit-Feld den Text ggf. vorher bereinigen
+	//   ele = Element
+	//     (das betreffende Edit-Feld)
+	editPaste (ele) {
+		ele.addEventListener("paste", function(evt) {
+			// Muss der Text aufbereitet werden?
+			const clipHtml = evt.clipboardData.getData("text/html"),
+				clipText = evt.clipboardData.getData("text/plain");
+			if (!clipHtml && !/\n|\t/.test(clipText)) {
+				return;
+			}
+			// Text aufbereiten, ersetzen, pasten
+			evt.preventDefault();
+			let text = "";
+			if (clipHtml) {
+				text = reinigen(clipHtml, true);
+			} else {
+				text = reinigen(clipText);
+			}
+			text = helfer.textTrim(text, true);
+			const {clipboard} = require("electron");
+			clipboard.writeText(text);
+			document.execCommand("paste");
+			// Text bereinigen
+			//   text = String
+			//     (Clipboard-Text, der bereinigt werden soll
+			//   tags = true || undefined
+			//     (Tags entfernen)
+			function reinigen (text, tags = false) {
+				if (tags) {
+					text = text.replace(/<.+?>/g, "");
+				}
+				return text.replace(/[\n\t]+/g, " ");
+			}
+		});
+	},
 	// ergänzt Style-Information für eine Kopie im HTML-Format;
 	// löscht die nicht zum Original gehörenden Markierungen der BenutzerIn
 	//   html = String
@@ -421,19 +457,15 @@ let helfer = {
 				}
 				return;
 			}
-			// Belegformular schließen
+			// Karteikarte schließen
 			if (!document.getElementById("beleg").classList.contains("aus")) {
 				helfer.inputBlur();
 				beleg.aktionAbbrechen();
 			}
 		}
-		// Cursor links (←), hoch (↑), rechts (→), runter (↓)
-		if (evt.which >= 37 && evt.which <= 40) {
-			helfer.cursor(evt);
-		}
-		// Entf
-		if (evt.which === 46) {
-			bedeutungen.loeschenTastatur();
+		// Tabulator (wenn im Bedeutungsgerüst)
+		if (evt.which === 9 && helfer.bedeutungenOffen()) {
+			bedeutungen.naviTab(evt);
 		}
 		// Strg + Bild ↑ / ↓
 		if (evt.ctrlKey && (evt.which === 33 || evt.which === 34) && helfer.belegOffen()) {
@@ -443,22 +475,38 @@ let helfer = {
 			}
 			beleg.ctrlNavi(next);
 		}
-		// Strg + K (wenn kein Overlay)
+		// Cursor links (←), hoch (↑), rechts (→), runter (↓)
+		if (evt.which >= 37 && evt.which <= 40) {
+			helfer.cursor(evt);
+		}
+		// Entfernen (wenn im Bedeutungsgerüst)
+		if (evt.which === 46 && helfer.bedeutungenOffen()) {
+			bedeutungen.loeschenTastatur();
+		}
+		// Strg + K (wenn in Karteikarte)
 		if (evt.ctrlKey && evt.which === 75 && helfer.belegOffen()) {
 			beleg.ctrlKuerzen();
 		}
-		// Strg + P (wenn kein Overlay)
+		// Strg + P
 		if (evt.ctrlKey && evt.which === 80) {
 			drucken.tastatur();
 		}
-		// Strg + T (wenn im Beleg)
+		// Strg + T (wenn in Karteikarte)
 		if (evt.ctrlKey && evt.which === 84 && helfer.belegOffen()) {
 			beleg.ctrlTrennung();
 		}
-		// Strg + U (wenn im Beleg)
+		// Strg + U (wenn in Karteikarte)
 		if (evt.ctrlKey && evt.which === 85 && helfer.belegOffen()) {
 			beleg.leseToggle(true);
 		}
+	},
+	// überprüft, ob das Bedeutungsgerüst offen ist und nicht durch irgendein
+	// anderes Fenster verdeckt wird
+	bedeutungenOffen () {
+		if (!overlay.oben() && !document.getElementById("bedeutungen").classList.contains("aus")) {
+			return true;
+		}
+		return false;
 	},
 	// überprüft, ob die Karteikarte offen ist und nicht durch irgendein
 	// anderes Fenster verdeckt wird

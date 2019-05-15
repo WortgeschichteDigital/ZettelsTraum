@@ -18,6 +18,9 @@ let drucken = {
 		}
 		if (oben === "drucken") {
 			drucken.start();
+		} else if (!document.getElementById("bedeutungen").classList.contains("aus")) {
+			// TODO anstellen
+// 			drucken.initBedeutungen();
 		} else if (!document.getElementById("beleg").classList.contains("aus")) {
 			drucken.init("beleg-");
 		} else {
@@ -43,6 +46,12 @@ let drucken = {
 		const fenster = document.getElementById("drucken");
 		// Fenster öffnen oder in den Vordergrund holen
 		if (overlay.oeffnen(fenster)) { // Fenster ist schon offen
+			return;
+		}
+		// Bedeutungsgerüst?
+		if (/^bedeutungen-/.test(id)) {
+			// TODO anstellen
+// 			drucken.initBedeutungen();
 			return;
 		}
 		// Verteiler
@@ -194,6 +203,8 @@ let drucken = {
 	//   daten = String
 	//     (die HTML-Daten der Bedeutungen, die eingetragen werden sollen
 	initBedeutungen (daten) {
+		// TODO warnen, wenn Bedeutungsgerüst offen, aber noch nicht gespeichert
+		// TODO Bedeutungsgerüst direkt aus data.bd nehmen
 		// Sind überhaupt Bedeutungen vorhanden
 		if (/class="bd-win-keine"/.test(daten)) {
 			dialog.oeffnen("alert");

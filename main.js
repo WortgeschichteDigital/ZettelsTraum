@@ -411,7 +411,7 @@ appMenu = {
 		for (let j = 0, len = layoutMenu.length; j < len; j++) {
 			// sollen vielleicht alle Menüpunkte deaktiviert werden?
 			let alle = false;
-			if (elemente.indexOf(layoutMenu[j].id) >= 0) {
+			if (elemente.includes(layoutMenu[j].id)) {
 				alle = true;
 			}
 			// Submenu durchgehen
@@ -419,7 +419,7 @@ appMenu = {
 			for (let k = 0, len = submenu.length; k < len; k++) {
 				if (alle) {
 					toggle(submenu[k]);
-				} else if (elemente.indexOf(submenu[k].id) >= 0) {
+				} else if (elemente.includes(submenu[k].id)) {
 					toggle(submenu[k]);
 				}
 			}

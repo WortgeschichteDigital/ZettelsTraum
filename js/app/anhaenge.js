@@ -405,7 +405,7 @@ let anhaenge = {
 			arr = anhaenge.getArr(obj);
 		dateien.forEach(function(i) {
 			const datei = i.replace(reg_pfad, "");
-			if (arr.indexOf(datei) >= 0) {
+			if (arr.includes(datei)) {
 				schon.push(datei);
 				return;
 			}

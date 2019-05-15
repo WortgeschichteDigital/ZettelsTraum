@@ -111,13 +111,15 @@ let optionen = {
 			// Bedeutungsgerüst nach dem Speichern direkt schließen
 			"bedeutungen-schliessen": true,
 			// Sachgebiete
-			sachgebiete: [],
+			sachgebiete: {},
 			// Sachgebiete (Datei mit Liste an Sachgebieten)
 			"sachgebiete-datei": "",
 			// Sachgebiete (beim Start automatisch mit der Datei abgleichen)
 			"sachgebiete-abgleich": true,
 			// Sachgebiete (Datum des letzten Abgleichs)
-			"sachgebiete-zuletzt": "",
+			"sachgebiete-zuletzt-abgleich": "",
+			// Sachgebiete (Datum des letzten Updates)
+			"sachgebiete-zuletzt-update": "",
 			// KARTEIKARTE
 			// Karteikarte nach dem Speichern direkt schließen
 			"karteikarte-schliessen": true,
@@ -175,7 +177,11 @@ let optionen = {
 				continue;
 			}
 			if (helfer.checkType("Object", obj[o])) {
-				optionen.einlesen(obj[o], opt[o]);
+				if (o === "sachgebiete") {
+					obj[o] = Object.assign({}, opt[o]);
+				} else {
+					optionen.einlesen(obj[o], opt[o]);
+				}
 			} else {
 				obj[o] = opt[o];
 			}
@@ -303,11 +309,11 @@ let optionen = {
 	anwendenSachgebiete (init) {
 		// Sachgebiete eintragen
 		const sg = document.getElementById("sachgebiete");
-		if (optionen.data.einstellungen.sachgebiete.length) {
+		if (Object.keys(optionen.data.einstellungen.sachgebiete).length) {
 			sg.classList.remove("leer");
 			let a = document.createElement("a");
 			a.href = "#";
-			a.textContent = `${optionen.data.einstellungen.sachgebiete.length} Sachgebiete`;
+			a.textContent = `${Object.keys(optionen.data.einstellungen.sachgebiete).length} Sachgebiete`;
 			optionen.sachgebieteAnzeigen(a);
 			sg.replaceChild(a, sg.firstChild);
 		} else {
@@ -329,13 +335,20 @@ let optionen = {
 			datei.textContent = "keine Sachgebiete-Datei";
 			datei.removeAttribute("title");
 		}
-		// Datum der letzten Überprüfung eintragen
-		const zuletzt = document.getElementById("sachgebiete-zuletzt");
-		if (optionen.data.einstellungen["sachgebiete-zuletzt"]) {
-			zuletzt.parentNode.classList.remove("aus");
-			zuletzt.textContent = helfer.datumFormat(optionen.data.einstellungen["sachgebiete-zuletzt"]);
+		// Datum Sachgebiete eintragen
+		let sgAbgleich = document.getElementById("sachgebiete-zuletzt-abgleich");
+		if (optionen.data.einstellungen["sachgebiete-zuletzt-abgleich"]) {
+			sgAbgleich.parentNode.classList.remove("aus");
+			sgAbgleich.textContent = helfer.datumFormat(optionen.data.einstellungen["sachgebiete-zuletzt-abgleich"]);
 		} else {
-			zuletzt.parentNode.classList.add("aus");
+			sgAbgleich.parentNode.classList.add("aus");
+		}
+		let sgUpdate = document.getElementById("sachgebiete-zuletzt-update");
+		if (optionen.data.einstellungen["sachgebiete-zuletzt-update"]) {
+			sgUpdate.parentNode.classList.remove("aus");
+			sgUpdate.textContent = helfer.datumFormat(optionen.data.einstellungen["sachgebiete-zuletzt-update"]);
+		} else {
+			sgUpdate.parentNode.classList.add("aus");
 		}
 		// ggf. einen Check der Sachgebiete-Datei anstoßen
 		if (init) {
@@ -369,13 +382,40 @@ let optionen = {
 				datei.insertBefore(img, datei.firstChild);
 				return;
 			}
-			// Sachgebiete auslesen und ggf. abbrechen
-			const sachgebiete = optionen.sachgebieteLadenArr(content.split(/(\r|\n)/));
-			if (sachgebiete.join() !== optionen.data.einstellungen.sachgebiete.join()) {
-				optionen.data.einstellungen.sachgebiete = [...sachgebiete];
+			// Sachgebiete aus- und einlesen
+			let parser = new DOMParser(),
+				xml = parser.parseFromString(content, "text/xml"),
+				sachgebieteNeu = {},
+				update = false;
+			xml.querySelectorAll("sachgebiet").forEach(function(i) {
+				const id = i.querySelector("id").firstChild.nodeValue,
+					name = i.querySelector("name").firstChild.nodeValue;
+				sachgebieteNeu[id] = name;
+			});
+			let sachgebiete = optionen.data.einstellungen.sachgebiete;
+			for (let id in sachgebiete) { // veraltete Einträge löschen
+				if (!sachgebiete.hasOwnProperty(id)) {
+					continue;
+				}
+				if (!sachgebieteNeu[id]) {
+					update = true;
+					delete sachgebiete[id];
+				}
+			}
+			for (let id in sachgebieteNeu) { // neue Einträge anlegen, geänderte auffrischen
+				if (!sachgebieteNeu.hasOwnProperty(id)) {
+					continue;
+				}
+				if (!sachgebiete[id] || sachgebiete[id] !== sachgebieteNeu[id]) {
+					update = true;
+					sachgebiete[id] = sachgebieteNeu[id];
+				}
 			}
 			// Datum Abgleich speichern
-			optionen.data.einstellungen["sachgebiete-zuletzt"] = new Date().toISOString();
+			optionen.data.einstellungen["sachgebiete-zuletzt-abgleich"] = new Date().toISOString();
+			if (update) {
+				optionen.data.einstellungen["sachgebiete-zuletzt-update"] = new Date().toISOString();
+			}
 			// Optionen speichern
 			optionen.speichern(false);
 			// Überprüfung durchgeführt
@@ -392,8 +432,8 @@ let optionen = {
 			defaultPath: app.getPath("documents"),
 			filters: [
 				{
-					name: "Text-Datei",
-					extensions: ["txt"],
+					name: "XML-Datei",
+					extensions: ["xml"],
 				},
 				{
 					name: "Alle Dateien",
@@ -420,10 +460,18 @@ let optionen = {
 				// Pfad zur Datei speichern
 				optionen.data.einstellungen["sachgebiete-datei"] = datei[0];
 				// Sachgebiete aus- und einlesen
-				const sachgebiete = optionen.sachgebieteLadenArr(content.split(/(\r|\n)/));
-				optionen.data.einstellungen.sachgebiete = [...sachgebiete];
-				// Datum Abgleich speichern
-				optionen.data.einstellungen["sachgebiete-zuletzt"] = new Date().toISOString();
+				let parser = new DOMParser(),
+					xml = parser.parseFromString(content, "text/xml");
+				optionen.data.einstellungen.sachgebiete = {};
+				let sachgebiete = optionen.data.einstellungen.sachgebiete;
+				xml.querySelectorAll("sachgebiet").forEach(function(i) {
+					const id = i.querySelector("id").firstChild.nodeValue,
+						name = i.querySelector("name").firstChild.nodeValue;
+					sachgebiete[id] = name;
+				});
+				// Datum Abgleich/Update speichern
+				optionen.data.einstellungen["sachgebiete-zuletzt-abgleich"] = new Date().toISOString();
+				optionen.data.einstellungen["sachgebiete-zuletzt-update"] = new Date().toISOString();
 				// Optionen speichern
 				optionen.speichern(false);
 				// Anzeige auffrischen
@@ -431,23 +479,10 @@ let optionen = {
 			});
 		});
 	},
-	// Array mit Sachgebieten übernehmen
-	//   sachgebiete = Array
-	//     (eindimensionales Array mit Strings, in jedem Slot sollte ein Sachgebiet stehen)
-	sachgebieteLadenArr (sachgebiete) {
-		let arr = [];
-		for (let i = 0, len = sachgebiete.length; i < len; i++) {
-			const sachgebiet = sachgebiete[i].trim();
-			if (sachgebiet) {
-				arr.push(sachgebiet);
-			}
-		}
-		return arr;
-	},
 	// Liste der Sachgebiete leeren und Verknüpfung mit Datei entfernen
 	sachgebieteLoeschen () {
 		// keine Sachgebiete
-		if (!optionen.data.einstellungen.sachgebiete.length &&
+		if (!Object.keys(optionen.data.einstellungen.sachgebiete).length &&
 				!optionen.data.einstellungen["sachgebiete-datei"]) {
 			dialog.oeffnen("alert");
 			dialog.text("Es wurden noch Sachgebiete geladen!");
@@ -456,16 +491,16 @@ let optionen = {
 		// Sicherheitsfrage
 		dialog.oeffnen("confirm", function() {
 			if (dialog.antwort) {
-				optionen.data.einstellungen.sachgebiete = [];
+				optionen.data.einstellungen.sachgebiete = {};
 				optionen.data.einstellungen["sachgebiete-datei"] = "";
-				optionen.data.einstellungen["sachgebiete-zuletzt"] = "";
+				optionen.data.einstellungen["sachgebiete-zuletzt-abgleich"] = "";
 				optionen.speichern(false);
 				optionen.anwendenSachgebiete(false);
 			}
 		});
 		// Text zusammenstellen
 		let text = "Sollen die importierten Sachgebiete wirklich gelöscht werden?\n(Die Verknüpfung mit der aktuellen Sachgebiete-Datei wird in diesem Zuge ebenfalls entfernt.)";
-		if (!optionen.data.einstellungen.sachgebiete.length) {
+		if (!Object.keys(optionen.data.einstellungen.sachgebiete).length) {
 			text = "Soll die Verknüpfung mit der aktuellen Sachgebiete-Datei wirklich entfernt werden?";
 		}
 		dialog.text(text);
@@ -476,8 +511,10 @@ let optionen = {
 	sachgebieteAnzeigen (a) {
 		a.addEventListener("click", function(evt) {
 			evt.preventDefault();
+			let sachgebiete = Object.values(optionen.data.einstellungen.sachgebiete);
+			sachgebiete.sort(helfer.sortAlpha);
 			dialog.oeffnen("alert");
-			dialog.text(`<h3>Sachgebiete</h3>\n${optionen.data.einstellungen.sachgebiete.join("<br>")}`);
+			dialog.text(`<h3>Sachgebiete</h3>\n${sachgebiete.join("<br>")}`);
 		});
 	},
 	// Timeout für die Speicherfunktion setzen, die nicht zu häufig ablaufen soll und
@@ -514,7 +551,7 @@ let optionen = {
 	aendereZuletzt () {
 		// Datei ggf. entfernen (falls an einer anderen Stelle schon vorhanden)
 		let zuletzt = optionen.data.zuletzt;
-		if (zuletzt.indexOf(kartei.pfad) >= 0) {
+		if (zuletzt.includes(kartei.pfad)) {
 			zuletzt.splice(zuletzt.indexOf(kartei.pfad), 1);
 		}
 		// Datei vorne anhängen

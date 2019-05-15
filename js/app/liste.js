@@ -654,7 +654,7 @@ let liste = {
 	suchtreffer (text, ds) {
 		// keine Suche oder keine Suche im aktuellen Datensatz
 		if (!filter.volltextSuche.suche ||
-				filter.volltextSuche.ds.indexOf(ds) === -1) {
+				!filter.volltextSuche.ds.includes(ds)) {
 			return text;
 		}
 		// Suchtreffer hervorheben

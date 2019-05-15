@@ -71,7 +71,7 @@ let meta = {
 			p.appendChild(a);
 			// BearbeiterIn
 			let bearb = b[i];
-			if (optionen.data.personen.indexOf(bearb) === -1) {
+			if (!optionen.data.personen.includes(bearb)) {
 				bearb += " +";
 				p.title = "(BearbeiterIn manuell ergänzt)";
 			}
@@ -89,7 +89,7 @@ let meta = {
 			return;
 		}
 		// BearbeiterIn schon registriert
-		if (data.be.indexOf(va) >= 0) {
+		if (data.be.includes(va)) {
 			dialog.oeffnen("alert", () => be.select());
 			dialog.text("Die BearbeiterIn ist schon in der Liste.");
 			return;

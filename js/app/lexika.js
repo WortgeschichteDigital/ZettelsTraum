@@ -56,7 +56,7 @@ let lexika = {
 			input.type = "checkbox";
 			input.id = `lexikon-${i}`;
 			input.value = l[i];
-			if (data.le.indexOf(l[i]) >= 0) {
+			if (data.le.includes(l[i])) {
 				input.checked = true;
 			}
 			p.appendChild(input);

@@ -17,7 +17,7 @@ let dropdown = {
 				if (!d_tmp) {
 					continue;
 				}
-				if (dropdown.data.indexOf(d_tmp) === -1) {
+				if (!dropdown.data.includes(d_tmp)) {
 					dropdown.data.push(d_tmp);
 				}
 			}
@@ -33,7 +33,7 @@ let dropdown = {
 				continue;
 			}
 			const kr = data.ka[id].kr;
-			if (kr && korpora.indexOf(kr) === -1 && korpora_ergaenzt.indexOf(kr) === -1) {
+			if (kr && !korpora.includes(kr) && !korpora_ergaenzt.includes(kr)) {
 				korpora_ergaenzt.push(kr);
 			}
 		}
@@ -112,6 +112,35 @@ let dropdown = {
 			});
 		}
 	},
+	// Dropdown-Link erzeugen
+	//   cl = String
+	//     (class des Dropdown-Links)
+	//   title = String
+	//     (Title-Attribut des Dropdown-Links)
+	//    noTab = true || undefined
+	//     (Link wird aus der Tabliste ausgeschlossen
+	makeLink (cl, title, noTab = false) {
+		let a = document.createElement("a");
+		a.classList.add(cl);
+		a.href = "#";
+		a.title = title;
+		if (noTab) {
+			a.setAttribute("tabindex", "-1");
+		}
+		dropdown.link(a);
+		let svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+		svg.setAttribute("version", "1.1");
+		svg.setAttribute("width", "24");
+		svg.setAttribute("height", "24");
+		svg.setAttribute("viewBox", "0 0 24 24");
+		a.appendChild(svg);
+		let path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+		path.setAttribute("transform", "translate(4 4)");
+		path.setAttribute("d", "m7 2v8l-3.5-3.5-1.5 1.5 6 6 6-6-1.5-1.5-3.5 3.5v-8z");
+		path.setAttribute("fill", "#212121");
+		svg.appendChild(path);
+		return a;
+	},
 	// Klick-Event auf dem Link
 	//   a = Element
 	//     (Link, der geklickt wurde, um die Dropdown-Liste aufzubauen)
@@ -153,6 +182,8 @@ let dropdown = {
 			dropdown.dataFormular("ts");
 		} else if (feld_id === "bedeutungen-hierarchie") {
 			dropdown.data = [...bedeutungen.hierarchieEbenen];
+		} else if (feld_id === "bedeutungen-edit") {
+			dropdown.data = [...optionen.data.einstellungen.sachgebiete];
 		}
 		// Dropdown erzeugen und einhängen
 		let span = document.createElement("span");
@@ -184,6 +215,16 @@ let dropdown = {
 			drop.style.top = `${feld.offsetHeight + 4}px`;
 		}
 	},
+	// liest den Wert aus einem Dropdown-Feld aus
+	//   feld = Element
+	//     (das Dropdown-Feld)
+	feldWert (feld) {
+		if (feld.getAttribute("contenteditable")) {
+			return feld.textContent;
+		} else {
+			return feld.value;
+		}
+	},
 	// Wenn >= 0 heißt das, dass die Dropdownliste gefiltert wurde. Sie ist also
 	// aufgrund einer Tastatureingabe erstellt worden
 	cursor: -1,
@@ -195,7 +236,12 @@ let dropdown = {
 			feld = drop.parentNode.querySelector(".dropdown-feld");
 		// wird die Liste gefiltert?
 		if (filtern) {
-			dropdown.cursor = feld.selectionStart;
+			if (feld.getAttribute("contenteditable")) {
+				let sel = window.getSelection();
+				dropdown.cursor = sel.focusOffset;
+			} else {
+				dropdown.cursor = feld.selectionStart;
+			}
 		} else {
 			dropdown.cursor = -1;
 		}
@@ -203,10 +249,15 @@ let dropdown = {
 		helfer.keineKinder(drop);
 		// Elemente ggf. filtern
 		let items = [...dropdown.data],
-			va = helfer.textTrim(feld.value, true);
+			va = helfer.textTrim(dropdown.feldWert(feld), true);
 		if (filtern && va) {
 			let reg_chunks = "",
+				va_split = [];
+			if (feld.getAttribute("contenteditable")) {
+				va_split = va.split(", ");
+			} else {
 				va_split = va.split("\n");
+			}
 			va_split.forEach(function(i) {
 				if (!i) {
 					return;
@@ -219,7 +270,7 @@ let dropdown = {
 			let reg = new RegExp(reg_chunks, "i"),
 				gefiltert = [];
 			items.forEach(function(i) {
-				if (reg.test(i) && va_split.indexOf(i) === -1) {
+				if (reg.test(i) && !va_split.includes(i)) {
 					gefiltert.push(i);
 				}
 			});
@@ -301,14 +352,12 @@ let dropdown = {
 	//     (der Text, der eingetragen werden soll)
 	auswahl (feld, text) {
 		let caller = dropdown.caller; // muss zwischengespeichert werden, weil das Dropdown sich schließt, wenn sich das Dialog-Fenster öffnet
-		if (/^beleg-(bd|bl|ts)/.test(caller) && feld.value) {
+		const wert = dropdown.feldWert(feld);
+		if (wert && /^beleg-(bd|bl|ts)/.test(caller)) {
 			// Steht der Wert schon im Feld?
-			let feld_val = feld.value.split("\n");
-			if (feld_val.indexOf(text) >= 0) {
-				dialog.oeffnen("alert", function() {
-					feld.focus();
-				});
-				dialog.text("Der ausgewählte Wert muss nicht ergänzt werden, weil er bereits im Feld steht.");
+			let feld_val = wert.split("\n");
+			if (feld_val.includes(text)) {
+				eintragUnnoetig();
 				return;
 			}
 			// Wurde das Feld durch Texteingabe gefiltert?
@@ -329,48 +378,92 @@ let dropdown = {
 			dialog.text("Im Textfeld steht schon etwas. Soll es ergänzt werden?\n(Bei „Nein“ wird das Textfeld überschrieben.)");
 			document.getElementById("dialog-text").appendChild(optionen.shortcut("Textfeld künftig ohne Nachfrage ergänzen", "immer-ergaenzen"));
 			return;
+		} else if (wert && feld.getAttribute("contenteditable")) {
+			let feld_val = wert.split(", ");
+			if (feld_val.includes(text)) {
+				eintragUnnoetig();
+				return;
+			}
+			eintragen(true);
+			return;
 		}
 		eintragen(false);
 		// Eintragen
 		function eintragen (ergaenzen) {
 			if (ergaenzen) {
-				if (dropdown.cursor >= 0) {
-					let arr = [];
-					let feld_start = feld.value.substring(0, dropdown.cursor);
-					feld_start = feld_start.replace(/[^\n]+$/, "").replace(/\n$/, "");
-					if (feld_start) {
-						arr.push(feld_start);
+				if (feld.getAttribute("contenteditable")) {
+					if (dropdown.cursor >= 0) {
+						let arr = [],
+							feld_start = wert.substring(0, dropdown.cursor);
+						feld_start = feld_start.replace(/[^,]+$/, "").replace(/,$/, "").trim();
+						if (feld_start) {
+							arr.push(feld_start);
+						}
+						arr.push(text);
+						let feld_ende = wert.substring(dropdown.cursor);
+						feld_ende = feld_ende.replace(/^[^,]+/, "").replace(/^,/, "").trim();
+						if (feld_ende) {
+							arr.push(feld_ende);
+						}
+						text = arr.join(", ");
+					} else {
+						text = `${helfer.textTrim(wert, true)}, ${text}`;
 					}
-					arr.push(text);
-					let feld_ende = feld.value.substring(dropdown.cursor);
-					feld_ende = feld_ende.replace(/^[^\n]+/, "").replace(/^\n/, "");
-					if (feld_ende) {
-						arr.push(feld_ende);
-					}
-					text = arr.join("\n");
 				} else {
-					text = `${helfer.textTrim(feld.value, true)}\n${text}`;
+					if (dropdown.cursor >= 0) {
+						let arr = [],
+							feld_start = wert.substring(0, dropdown.cursor);
+						feld_start = feld_start.replace(/[^\n]+$/, "").replace(/\n$/, "");
+						if (feld_start) {
+							arr.push(feld_start);
+						}
+						arr.push(text);
+						let feld_ende = wert.substring(dropdown.cursor);
+						feld_ende = feld_ende.replace(/^[^\n]+/, "").replace(/^\n/, "");
+						if (feld_ende) {
+							arr.push(feld_ende);
+						}
+						text = arr.join("\n");
+					} else {
+						text = `${helfer.textTrim(wert, true)}\n${text}`;
+					}
 				}
 			}
 			// Auswahl übernehmen
-			feld.value = text;
+			if (feld.getAttribute("contenteditable")) {
+				feld.textContent = text;
+			} else {
+				feld.value = text;
+			}
 			feld.focus();
 			// Haben die Änderungen weitere Konsequenzen?
 			if (/^beleg-(bd|bl|ts)/.test(caller)) {
 				helfer.textareaGrow(feld);
 				const id = caller.replace(/^beleg-/, "");
-				beleg.data[id] = helfer.textTrim(feld.value, true);
+				beleg.data[id] = helfer.textTrim(wert, true);
 				beleg.belegGeaendert(true);
 			} else if (caller === "beleg-kr") {
-				beleg.data.kr = helfer.textTrim(feld.value, true);
+				beleg.data.kr = helfer.textTrim(wert, true);
 				beleg.belegGeaendert(true);
 			} else if (/^einstellung-/.test(caller)) {
 				optionen.aendereEinstellung(document.getElementById(caller));
 			} else if (caller === "bedeutungen-hierarchie") {
 				bedeutungen.hierarchie();
+			} else if (caller === "bedeutungen-edit") {
+				let edit = document.getElementById(caller);
+				bedeutungen.changed(edit);
+				let sel = window.getSelection();
+				sel.collapse(edit.firstChild, edit.textContent.length);
 			}
 			// Dropdown schließen
 			dropdown.schliessen();
+		}
+		// Eintrag unnötig
+		function eintragUnnoetig () {
+			dialog.oeffnen("alert", function() {
+				feld.focus();
+			});
+			dialog.text("Der ausgewählte Wert muss nicht ergänzt werden, weil er bereits im Feld steht.");
 		}
 	},
 	// Dropdown-Liste schließen
