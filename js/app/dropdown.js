@@ -183,7 +183,9 @@ let dropdown = {
 		} else if (feld_id === "bedeutungen-hierarchie") {
 			dropdown.data = [...bedeutungen.hierarchieEbenen];
 		} else if (feld_id === "bedeutungen-edit") {
-			dropdown.data = [...optionen.data.einstellungen.sachgebiete];
+			let sachgebiete = Object.values(optionen.data.einstellungen.sachgebiete);
+			sachgebiete.sort(helfer.sortAlpha);
+			dropdown.data = [...sachgebiete];
 		}
 		// Dropdown erzeugen und einhängen
 		let span = document.createElement("span");

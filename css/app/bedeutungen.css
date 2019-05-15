@@ -169,7 +169,7 @@
 	background-color: var(--hintergrund);
 }
 
-#bedeutungen-cont .zaehlung b,
+#bedeutungen-cont .zaehlung p > b,
 .bedeutungen-dialog b {
 	display: inline-block;
 	width: 35px;
@@ -348,4 +348,9 @@ a[class*="icon-move"] {
 	padding-left: 35px;
 	font-style: italic;
 	text-indent: -35px;
+}
+
+.bedeutungen-dialog-sg {
+	margin-left: 25px;
+	font-style: italic;
 }

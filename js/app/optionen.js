@@ -494,6 +494,7 @@ let optionen = {
 				optionen.data.einstellungen.sachgebiete = {};
 				optionen.data.einstellungen["sachgebiete-datei"] = "";
 				optionen.data.einstellungen["sachgebiete-zuletzt-abgleich"] = "";
+				optionen.data.einstellungen["sachgebiete-zuletzt-update"] = "";
 				optionen.speichern(false);
 				optionen.anwendenSachgebiete(false);
 			}

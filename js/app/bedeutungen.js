@@ -85,7 +85,7 @@ let bedeutungen = {
 			al: "",
 			bd: [...bd],
 			id: bedeutungen.makeId.next().value,
-			sg: "",
+			sg: [],
 			za: "",
 		};
 	},
@@ -157,9 +157,9 @@ let bedeutungen = {
 	// Bedeutungen öffnen
 	oeffnen () {
 		// TODO temporär sperren
-		dialog.oeffnen("alert");
-		dialog.text("Sorry!\nDiese Funktion ist noch nicht programmiert.");
-		return;
+// 		dialog.oeffnen("alert");
+// 		dialog.text("Sorry!\nDiese Funktion ist noch nicht programmiert.");
+// 		return;
 		// Bedeutungen sind schon offen
 		if (!document.getElementById("bedeutungen").classList.contains("aus")) {
 			helfer.auswahl(document.getElementById("bedeutungen-neu"));
@@ -251,8 +251,8 @@ let bedeutungen = {
 			td = document.createElement("td");
 			td.dataset.feld = "sg";
 			tr.appendChild(td);
-			let sg = i.sg;
-			if (!sg) {
+			let sg = bedeutungen.sgToText(i.sg);
+			if (!sg.length) {
 				sg = "Sachgebiet";
 				td.classList.add("leer");
 			}
@@ -599,6 +599,7 @@ let bedeutungen = {
 			// Element kopieren
 			let kopie = Object.assign({}, bedeutungen.data.bd[idx]);
 			kopie.bd = [...bedeutungen.data.bd[idx].bd]; // Bedeutungs-Array extra kopieren
+			kopie.sg = [...bedeutungen.data.bd[idx].sg]; // Sachgebiete-Array extra kopieren
 			bedeutungen.data.bd.splice(idx, 1);
 			bedeutungen.data.bd.splice(idx + d.steps, 0, kopie);
 		}
@@ -740,7 +741,11 @@ let bedeutungen = {
 		edit.setAttribute("contenteditable", "true");
 		edit.id = "bedeutungen-edit";
 		if (Array.isArray(z)) {
-			edit.innerHTML = z[z.length - 1];
+			if (feld === "bd") {
+				edit.innerHTML = z[z.length - 1];
+			} else if (feld === "sg") {
+				edit.textContent = bedeutungen.sgToText(z);
+			}
 		} else {
 			edit.textContent = z;
 		}
@@ -787,7 +792,8 @@ let bedeutungen = {
 			let edit = this;
 			const idx = bedeutungen.editGetIdx(edit),
 				feld = edit.parentNode.dataset.feld;
-			let wert = "";
+			let wert = "",
+				wert_sg = [];
 			if (feld === "bd") {
 				wert = helfer.textTrim(edit.innerHTML, true);
 			} else {
@@ -800,6 +806,24 @@ let bedeutungen = {
 				});
 				dialog.text("Sie haben keine Bedeutung eingegeben.");
 				return;
+			} else if (feld === "sg" && wert) {
+				if (!Object.values(optionen.data.einstellungen.sachgebiete).length) {
+					dialog.oeffnen("alert");
+					dialog.text("Keines der eingetragenen Sachgebiete wurde gespeichert.\nSie müssen zuerst eine Sachgebiete Datei laden. Dies geht unter:\n<i>Programm &gt; Einstellungen &gt; Bedeutungsgerüst &gt; Sachgebiete</i>.");
+				} else {
+					let auswertung = bedeutungen.sgToId(wert.split(", "));
+					wert_sg = [...auswertung.id_okay];
+					if (auswertung.sg_falsch.length) {
+						let e = "Die folgenden Einträge",
+							ev = ["sind", "werden"];
+						if (auswertung.sg_falsch.length === 1) {
+							e = "Der folgende Eintrag";
+							ev = ["ist", "wird"];
+						}
+						dialog.oeffnen("alert");
+						dialog.text(`${e} ${ev[0]} nicht in der aktuellen Sachgebiete-Liste und ${ev[1]} darum nicht gespeichert.\n<p class="bedeutungen-dialog-sg">${auswertung.sg_falsch.join("<br>")}</p>`);
+					}
+				}
 			} else if (feld === "al") {
 				for (let i = 0, len = bedeutungen.data.bd.length; i < len; i++) {
 					if (!wert) {
@@ -816,8 +840,10 @@ let bedeutungen = {
 			}
 			// Wert übernehmen
 			let z = bedeutungen.data.bd[idx];
-			if (Array.isArray(z[feld])) {
+			if (feld === "bd") {
 				z[feld][z[feld].length - 1] = wert;
+			} else if (feld === "sg") {
+				z[feld] = [...wert_sg];
 			} else {
 				z[feld] = wert;
 			}
@@ -859,7 +885,17 @@ let bedeutungen = {
 			z = bedeutungen.data.bd[idx][feld];
 		let wert = "";
 		if (Array.isArray(z)) {
-			wert = z[z.length - 1];
+			if (feld === "bd") {
+				wert = z[z.length - 1];
+			} else if (feld === "sg") {
+				if (!z.length) {
+					wert = felder[feld];
+					ele.classList.add("leer");
+				} else {
+					wert = bedeutungen.sgToText(z);
+					ele.classList.remove("leer");
+				}
+			}
 		} else {
 			wert = z;
 			if (!wert) { // kein Wert gespeichert
@@ -895,6 +931,43 @@ let bedeutungen = {
 			tr.classList.remove("bedeutungen-edit");
 		}
 	},
+	// Liste der IDs der Sachgebiete in Text verwandeln
+	//   arr = Array
+	//     (Array mit IDs [Numbers] der Sachgebiete)
+	sgToText (arr) {
+		let text = [],
+			sachgebiete = optionen.data.einstellungen.sachgebiete;
+		for (let sg of arr) {
+			if (sachgebiete[sg]) { // nicht mehr existente Sachgebiete werden einfach ignoriert
+				text.push(sachgebiete[sg]);
+			}
+		}
+		return text.join(", ");
+	},
+	// Textliste der Sachgebiete in IDs verwandeln;
+	// überprüft zugleich, ob die Sachgruppen vorhanden sind
+	//   arr = Array
+	//     (Liste mit Sachgebieten [Strings])
+	sgToId (arr) {
+		let out = {
+			id_okay: [],
+			sg_falsch: [],
+		};
+		let sachgebiete = optionen.data.einstellungen.sachgebiete;
+		forX: for (let sg of arr) {
+			for (let id in sachgebiete) {
+				if (!sachgebiete.hasOwnProperty(id)) {
+					continue;
+				}
+				if (sachgebiete[id] === sg) {
+					out.id_okay.push(id);
+					continue forX;
+				}
+			}
+			out.sg_falsch.push(sg);
+		}
+		return out;
+	},
 	// überprüfen, ob der Inhalt des Feldes geändert wurde
 	//   ele = Element
 	//     (das Edit-Feld, auf dessen Veränderungen geachtet werden soll)
@@ -912,7 +985,11 @@ let bedeutungen = {
 		let ds = bedeutungen.data.bd[idx],
 			wert_ds = "";
 		if (Array.isArray(ds[feld])) {
-			wert_ds = ds[feld][ds[feld].length - 1];
+			if (feld === "bd") {
+				wert_ds = ds[feld][ds[feld].length - 1];
+			} else if (feld === "sg") {
+				wert_ds = bedeutungen.sgToText(ds[feld]);
+			}
 		} else {
 			wert_ds = ds[feld];
 		}
