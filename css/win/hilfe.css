@@ -118,6 +118,7 @@ pre {
 	font-family: "Noto Sans Mono", "Noto Sans Symbols2", monospace;
 	white-space: pre-wrap;
 	user-select: text;
+	tab-size: 2;
 }
 
 pre.quelltext {
@@ -341,6 +342,7 @@ mark.suche {
 .datei {
 	font-family: "Noto Sans Mono", "Noto Sans Symbols2", monospace;
 }
+
 .datei.long {
 	word-break: break-all;
 }

@@ -271,12 +271,14 @@
 #sachgebiete-abgleich + p + p {
 	margin-bottom: 0;
 	color: var(--textHell);
+	font-size: 14px;
+	line-height: 20px;
 }
 
 #sachgebiete-abgleich + p i,
 #sachgebiete-abgleich + p + p i {
 	display: inline-block;
-	width: 125px;
+	width: 110px;
 	text-indent: 0;
 }
 

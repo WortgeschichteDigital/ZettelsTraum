@@ -24,12 +24,28 @@
 			<div class="version">0.9.0</div>
 			
 			<div>
-				<h2><span data-maintainer="Nico Dorn">Version 0.9.0</span><time datetime="2019-05-15T17:33:26">15. Mai 2019</time></h2>
+				<h2><span data-maintainer="Nico Dorn">Version 0.9.0-beta.2</span><time datetime="2019-05-17T15:12:38">17. Mai 2019</time></h2>
+				
+				<h3>Verbesserungen</h3>
+				
+				<ul>
+					<li>
+						<p>Sachgebiete: Vor dem Import der Sachgebiete-Datei wird diese auf Fehler überprüft. Wurden welche gefunden, wird der Import mit einer Fehlermeldung abgebrochen. Die Überprüfung findet auch vor dem automatischen Abgleich statt, führt aber nicht zu einer Fehlermeldung. Dass es zu einem Fehler kam, kann man dann allerdings unter <i>Programm &gt; Einstellungen &gt; Bedeutungsgerüst</i> an dem <img src="../img/fehler.svg" width="24" height="24" alt=""> hinter dem Namen der Sachgebiete-Datei erkennen. Klickt man auf das Kreuz, werden Details zum Fehler angezeigt.</p>
+						<p>Es wird geprüft, ob die <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Datei das erwartete Format hat. Als Fehler wird aber auch gewertet, wenn ein Sachgebiet mehr als einmal in der Datei auftaucht oder IDs doppelt vergeben wurden.</p>
+						<p>Ferner wird die aktuelle <span class="datei">Sachgebiete.xml</span> nach der Installation automatisch im Programmordner abgelegt, <abbr title="das heißt">d. h.</abbr> unter <i>Windows</i> in <span class="datei long">C:\Users\[BENUTZERNAME]\AppData\Local\Programs\zettelstraum\resources\</span>.</p>
+						<p>Hat man noch keine Sachgebiete-Datei geladen, holt sich <i class="app-name"></i> die Datei automatisch aus dem App-Ordner; sie bleibt mit der App verknüpft, sodass Änderungen (<abbr title="zum Beispiel">z. B.</abbr> nach einem Programm-Update) automatisch eingepflegt werden. Man muss sich also nicht notwendigerweise darum kümmern, eine Sachgebiete-Datei zu importieren. Der eigenständige Import wird von <i class="app-name"></i> allerdings nur ein Mal durchgeführt. Hebt man die Verknüpfung mit der Datei auf (Button <i>Löschen</i>) und wurde die Verknüpfung schon einmal automatisch angestoßen, wird die <span class="datei">Sachgebiete.xml</span> aus dem App-Ordner nicht noch einmal von selbst geladen. Man kann dies aber jederzeit manuell nachholen – oder auf Wunsch eine andere Sachgebiete-Datei laden, die man selbst erstellt hat, die an einem anderen Ort liegt <abbr title="und so weiter">usw.</abbr></p>
+						<p><span lang="en">Last but not least</span>: Die Sachgebiete-Datei wurde um eine Dokumententyp-Deklaration ergänzt.</p>
+					</li>
+					<li>Die Scripts zum Erstellen von Installern wurden verbessert (Modularisierung, bessere Fehlerbehandlung <abbr title="und so weiter">usw.</abbr>). Außerdem können mit ihnen jetzt RPM-Pakete für jene <i>Linux</i>-Distributionen erstellt werden, die dieses Format benötigen.</li>
+					<li>Die Überarbeitung der Installer-Scripts und ein paar Änderungen an der Dateistruktur machten eine Anpassung der <i>technischen Dokumentation</i> nötig.</li>
+				</ul>
 				
 				<h3>Behobene Fehler</h3>
 				
 				<ul>
+					<li><abbr title="Deutsches Textarchiv">DTA</abbr>-Import: Eine Regression führte dazu, das unter gewissen Umständen die Seitennummern von beim Import übersprungenen Seiten im importierten Text erschienen.</li>
 					<li>Sachgebiete: Nach dem Löschen der Sachgebiete-Datei unter <i>Programm &gt; Einstellungen &gt; Bedeutungsgerüst</i> wurde das Datum des letzten Updates nicht ausgeblendet.</li>
+					<li>Im Installer-Script für DEB-Pakete befanden sich noch absolute Pfadangaben.</li>
 				</ul>
 			</div>
 			

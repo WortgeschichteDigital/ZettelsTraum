@@ -120,6 +120,8 @@ let optionen = {
 			"sachgebiete-zuletzt-abgleich": "",
 			// Sachgebiete (Datum des letzten Updates)
 			"sachgebiete-zuletzt-update": "",
+			// Sachgebiete (wenn beim Programmstart keine Verknüpfung mit einer Sachgebiete-XML vorhanden ist, automatisch mit der Datei im Programm-Ordner verknüpfen; diese Verknüpfung wird nur einmal gemacht)
+			"sachgebiete-autoloading": true,
 			// KARTEIKARTE
 			// Karteikarte nach dem Speichern direkt schließen
 			"karteikarte-schliessen": true,
@@ -352,6 +354,24 @@ let optionen = {
 		}
 		// ggf. einen Check der Sachgebiete-Datei anstoßen
 		if (init) {
+			if (optionen.data.einstellungen["sachgebiete-autoloading"] &&
+					!optionen.data.einstellungen["sachgebiete-datei"]) {
+				let {app} = require("electron").remote,
+					path = require("path"),
+					basis = "";
+				// getAppPath() funktioniert nur in der nicht-paketierten App, in der paketierten
+				//   zeigt es auf [Installationsordner/resources/app.asar;
+				// getPath("exe") funktioniert nur in der paktierten Version, allerdings muss
+				//   noch der Name der ausführbaren Datei entfernt werden; in der nicht-paketierten
+				//   App zeigt es auf die ausführbare Datei des Node-Modules
+				if (app.isPackaged) {
+					basis = app.getPath("exe").replace(/zettelstraum(\.exe)*$/, "");
+				} else {
+					basis = app.getAppPath();
+				}
+				optionen.data.einstellungen["sachgebiete-datei"] = path.join(basis, "resources", "Sachgebiete.xml");
+				optionen.data.einstellungen["sachgebiete-autoloading"] = false;
+			}
 			optionen.sachgebieteCheck();
 		} else {
 			optionen.sachgebieteChecked = true;
@@ -370,22 +390,18 @@ let optionen = {
 		fs.readFile(optionen.data.einstellungen["sachgebiete-datei"], "utf-8", function(err, content) {
 			// Fehlermeldung (wahrscheinlich existiert die Datei nicht mehr)
 			if (err) {
-				let img = document.createElement("img");
-				img.src = "img/fehler.svg";
-				img.width = "24";
-				img.height = "24";
-				img.addEventListener("click", function() {
-					dialog.oeffnen("alert");
-					dialog.text("Beim automatischen Abgleich der Sachgebiete-Datei ist ein Fehler aufgetreten.\nExistiert die angegebene Datei noch?");
-				});
-				const datei = document.getElementById("sachgebiete-datei");
-				datei.insertBefore(img, datei.firstChild);
+				fehler();
+				optionen.sachgebieteFehlerMeldung = "Öffnen misslungen";
+				return;
+			}
+			// Datei parsen
+			let xml = optionen.sachgebieteParsen(content);
+			if (!xml) {
+				fehler();
 				return;
 			}
 			// Sachgebiete aus- und einlesen
-			let parser = new DOMParser(),
-				xml = parser.parseFromString(content, "text/xml"),
-				sachgebieteNeu = {},
+			let sachgebieteNeu = {},
 				update = false;
 			xml.querySelectorAll("sachgebiet").forEach(function(i) {
 				const id = i.querySelector("id").firstChild.nodeValue,
@@ -422,6 +438,18 @@ let optionen = {
 			optionen.sachgebieteChecked = true;
 			// Anzeige auffrischen
 			optionen.anwendenSachgebiete(false);
+			// Fehler-Kreuz einfügen
+			function fehler () {
+				let img = document.createElement("img");
+				img.src = "img/fehler.svg";
+				img.width = "24";
+				img.height = "24";
+				img.addEventListener("click", function() {
+					optionen.sachgebieteFehler();
+				});
+				const datei = document.getElementById("sachgebiete-datei");
+				datei.insertBefore(img, datei.firstChild);
+			}
 		});
 	},
 	// Datei mit Sachgebieten laden
@@ -457,11 +485,13 @@ let optionen = {
 					kartei.dialogWrapper(`Beim Öffnen der Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.message}</p>`);
 					return;
 				}
-				// Pfad zur Datei speichern
-				optionen.data.einstellungen["sachgebiete-datei"] = datei[0];
+				// Datei parsen
+				let xml = optionen.sachgebieteParsen(content);
+				if (!xml) {
+					optionen.sachgebieteFehler();
+					return;
+				}
 				// Sachgebiete aus- und einlesen
-				let parser = new DOMParser(),
-					xml = parser.parseFromString(content, "text/xml");
 				optionen.data.einstellungen.sachgebiete = {};
 				let sachgebiete = optionen.data.einstellungen.sachgebiete;
 				xml.querySelectorAll("sachgebiet").forEach(function(i) {
@@ -469,6 +499,8 @@ let optionen = {
 						name = i.querySelector("name").firstChild.nodeValue;
 					sachgebiete[id] = name;
 				});
+				// Pfad zur Datei speichern
+				optionen.data.einstellungen["sachgebiete-datei"] = datei[0];
 				// Datum Abgleich/Update speichern
 				optionen.data.einstellungen["sachgebiete-zuletzt-abgleich"] = new Date().toISOString();
 				optionen.data.einstellungen["sachgebiete-zuletzt-update"] = new Date().toISOString();
@@ -478,6 +510,78 @@ let optionen = {
 				optionen.anwendenSachgebiete(false);
 			});
 		});
+	},
+	// Content der geladenen Sachgebiete-Datei parsen und auf Fehler überprüfen
+	sachgebieteParsen (content) {
+		let parser = new DOMParser(),
+			xml = parser.parseFromString(content, "text/xml");
+		// <parsererror>
+		if (xml.querySelector("parsererror")) {
+			optionen.sachgebieteFehlerMeldung = `<abbr title="Extensible Markup Language">XML</span>-Datei korrupt`;
+			return null;
+		}
+		// <sachgebiete> und <sachgebiet>
+		if (!xml.querySelector("sachgebiete") ||
+				!xml.querySelector("sachgebiet")) {
+			optionen.sachgebieteFehlerMeldung = "unerwartetes Dateiformat";
+			return null;
+		}
+		// Tags <id> und <name> alle vorhanden, keine ID doppelt
+		let tag_fehlt = "",
+			ids = new Set(),
+			ids_doppelt = [],
+			sgs = new Set(),
+			sgs_doppelt = [];
+		for (let i of xml.querySelectorAll("sachgebiet")) {
+			if (!i.querySelector("id")) {
+				tag_fehlt = "id";
+				break;
+			} else if (!i.querySelector("name")) {
+				tag_fehlt = "name";
+				break;
+			}
+			let id = i.querySelector("id").firstChild.nodeValue;
+			if (ids.has(id)) {
+				ids_doppelt.push(id);
+			} else {
+				ids.add(id);
+			}
+			let sg = i.querySelector("name").firstChild.nodeValue;
+			if (sgs.has(sg)) {
+				sgs_doppelt.push(sg);
+			} else {
+				sgs.add(sg);
+			}
+		}
+		if (tag_fehlt) {
+			optionen.sachgebieteFehlerMeldung = `fehlender &lt;${tag_fehlt}&gt;-Tag`;
+			return null;
+		}
+		if (ids_doppelt.length) {
+			let plural = "s";
+			if (ids_doppelt.length === 1) {
+				plural = "";
+			}
+			optionen.sachgebieteFehlerMeldung = `doppelte ID${plural}: ${ids_doppelt.join(", ")}`;
+			return null;
+		}
+		if (sgs_doppelt.length) {
+			let text = "doppelte Sachgebiete: ";
+			if (sgs_doppelt.length === 1) {
+				text = "doppeltes Sachgebiet: ";
+			}
+			optionen.sachgebieteFehlerMeldung = text + sgs_doppelt.join(", ");
+			return null;
+		}
+		// alles okay => XML-Dokument zurückgeben
+		return xml;
+	},
+	// Fehlertyp, der beim Einlesen einer Sachgebiete-Datei aufgetreten ist
+	sachgebieteFehlerMeldung: "",
+	// Fehlermeldung anzeigen
+	sachgebieteFehler () {
+		dialog.oeffnen("alert");
+		kartei.dialogWrapper(`Beim Laden der Sachgebiete-Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${optionen.sachgebieteFehlerMeldung}</p>`);
 	},
 	// Liste der Sachgebiete leeren und Verknüpfung mit Datei entfernen
 	sachgebieteLoeschen () {
@@ -542,9 +646,9 @@ let optionen = {
 	},
 	// letzten Pfad speichern
 	aendereLetzterPfad () {
-		const path = require("path"),
-			reg = new RegExp(`^.+\\${path.sep}`),
-			pfad = kartei.pfad.match(reg)[0];
+		let path = require("path"),
+			reg = new RegExp(`^.+\\${path.sep}`);
+		const pfad = kartei.pfad.match(reg)[0];
 		optionen.data.letzter_pfad = pfad;
 		optionen.speichern(false);
 	},
@@ -615,9 +719,11 @@ let optionen = {
 				}
 				optionen.speichern(false);
 				// Rückmeldung
-				let fb = {
-					personen: optionen.data.personen.length,
-					text: "Personen",
+				let fb = new function() {
+					const len = optionen.data.personen.length;
+					this.personen = len === 1 ? "eine" : len;
+					this.verb = len === 1 ? "ist" : "sind";
+					this.text = len === 1 ? "Person" : "Personen";
 				};
 				// Liste wurde geleert
 				if (fb.personen === 0) {
@@ -625,10 +731,7 @@ let optionen = {
 					return;
 				}
 				// Liste enthält Personen
-				if (fb.personen === 1) {
-					fb.text = "Person";
-				}
-				kartei.dialogWrapper(`In der Personenliste stehen jetzt ${fb.personen} ${fb.text}.`);
+				kartei.dialogWrapper(`In der Liste ${fb.verb} jetzt ${fb.personen} ${fb.text}.`);
 			});
 		});
 	},

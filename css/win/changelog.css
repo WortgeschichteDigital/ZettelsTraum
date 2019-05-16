@@ -149,6 +149,14 @@ li p {
 }
 
 /* Besonderheiten ------------------------------- */
+.datei {
+	font-family: "Noto Sans Mono", "Noto Sans Symbols2", monospace;
+}
+
+.datei.long {
+	word-break: break-all;
+}
+
 .version {
 	position: sticky;
 	top: 70px;

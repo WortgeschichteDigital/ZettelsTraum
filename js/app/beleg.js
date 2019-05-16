@@ -815,7 +815,9 @@ let beleg = {
 						if (!n) { // wenn Spalten => kein n-Attribut im <pb>
 							return;
 						}
-						text += `[:${n}:]`;
+						if (start) { // Ja, das kann passieren! Unbedingt stehenlassen!
+							text += `[:${n}:]`;
+						}
 						beleg.DTAImportData.seite_zuletzt = n;
 						return;
 					} else if (ele.nodeName === "cb") { // Spaltenumbruch
@@ -828,7 +830,9 @@ let beleg = {
 							beleg.DTAImportData.seite = n;
 						} else {
 							beleg.DTAImportData.seite_zuletzt = n;
-							text += `[:${n}:]`;
+							if (start) { // Kann das passieren? Zur Sicherheit stehenlassen!
+								text += `[:${n}:]`;
+							}
 						}
 						return;
 					} else if (/^(closer|div|item|p)$/.test(ele.nodeName)) { // Absätze
@@ -1538,29 +1542,18 @@ let beleg = {
 	//     (Leseansicht wurde durch User aktiv gewechselt)
 	leseToggle (user) {
 		// Ansicht umstellen
-		const button = document.getElementById("beleg-link-leseansicht");
-		let an = true;
+		let button = document.getElementById("beleg-link-leseansicht"),
+			tab = document.querySelector("#beleg table"),
+			an = true;
 		if (button.classList.contains("aktiv")) {
 			an = false;
 			button.title = "zur Leseansicht wechseln (Strg + U)";
+			tab.classList.remove("leseansicht");
 		} else {
 			button.title = "zur Formularansicht wechseln (Strg + U)";
+			tab.classList.add("leseansicht");
 		}
 		button.classList.toggle("aktiv");
-		document.querySelectorAll(".beleg-form").forEach(function(i) {
-			if (an) {
-				i.classList.add("aus");
-			} else {
-				i.classList.remove("aus");
-			}
-		});
-		document.querySelectorAll(".beleg-lese").forEach(function(i) {
-			if (an) {
-				i.classList.remove("aus");
-			} else {
-				i.classList.add("aus");
-			}
-		});
 		// Header-Icons ein- oder ausblenden
 		document.querySelectorAll("#beleg .icon-leseansicht").forEach(function(i) {
 			if (an) {
@@ -1599,7 +1592,7 @@ let beleg = {
 		// Sprungmarke zurücksetzen
 		beleg.ctrlSpringenPos = -1;
 		// Meta-Infos
-		const cont = document.getElementById("beleg-lese-meta");
+		let cont = document.getElementById("beleg-lese-meta");
 		helfer.keineKinder(cont);
 		liste.metainfosErstellen(beleg.data, cont, "");
 		if (!cont.hasChildNodes()) {

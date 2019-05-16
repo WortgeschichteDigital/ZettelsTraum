@@ -261,6 +261,18 @@ textarea#beleg-bs {
 }
 
 /* Leseansicht ---------------------------------- */
+.beleg-lese {
+	display: none;
+}
+
+.leseansicht .beleg-lese {
+	display: table-row;
+}
+
+.leseansicht .beleg-form {
+	display: none;
+}
+
 .beleg-lese a {
 	cursor: pointer;
 }

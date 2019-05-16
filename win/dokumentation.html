@@ -148,7 +148,7 @@ npm install --save-dev electron-packager</pre>
 					
 					<p>Der <code>.</code> steht für das Quellverzeichnis und <code>zettelstraum</code> für den App-Namen. Über die zur Verfügung stehenden Optionen gibt die <a href="https://github.com/electron-userland/electron-packager/blob/master/docs/api.md"><abbr title="Application Programming Interface" lang="en">API</abbr></a>-Dokumentation des Packagers ausführlich Auskunft.</p>
 					
-					<p>Im Prinzip muss man sich mit dieser Dokumentation allerdings nicht weiter beschäftigen, da für das Paketieren bereits alles eingerichtet ist. In der <span class="datei">./package.json</span> sind die Kommandozeilen-Befehle im Abschnitt <code class="quelltext">"scripts"</code> für das Erstellen von <i>Linux-</i> und <i>Windows</i>-Paketen bereits eingetragen. Die Befehle gehen davon aus, dass sich oberhalb des Wurzelverzeichnisses der App ein Ordner namens <span class="datei">build</span> befindet. Hier wird die paketierte App abgelegt. Die Option <code>--overwrite</code> sorgt dafür, dass alte Paketierungen im Ordner <span class="datei">../build</span> vor dem erneuten Paketieren entfernt werden. Die Scripts können über die folgenden Befehle ausgeführt werden. Für <i>Linux</i>:</p>
+					<p>Im Prinzip muss man sich mit dieser Dokumentation allerdings nicht weiter beschäftigen, da für das Paketieren bereits alles eingerichtet ist. In der <span class="datei">./package.json</span> sind die Kommandozeilen-Befehle im Abschnitt <code class="quelltext">"scripts"</code> für das Erstellen von <i>Linux-</i> und <i>Windows</i>-Paketen bereits eingetragen. Die paketierte Version von <i class="app-name"></i> wird eine Ebene oberhalb des Wurzelverzeichnisses in einem Ordner namens <span class="datei">build</span> abgelegt. Existiert der Ordner nicht, wird er automatisch erzeugt. Die Option <code>--overwrite</code> sorgt dafür, dass alte Paketierungen im Ordner <span class="datei">../build</span> vor dem erneuten Paketieren entfernt werden. Die Scripts können über die folgenden Befehle ausgeführt werden. Für <i>Linux</i>:</p>
 					
 					<pre>npm run package-linux</pre>
 					
@@ -160,39 +160,44 @@ npm install --save-dev electron-packager</pre>
 					
 					<p>Im Ordner <span class="datei">../build</span> befinden sich nun die Unterordner <span class="datei">zettelstraum-linux-x64</span> <abbr title="beziehungsweise">bzw.</abbr> <span class="datei">zettelstraum-win32-x64</span>. Die Unterordner enthalten die ausführbare Datei <span class="datei">zettelstraum</span> <abbr title="beziehungsweise">bzw.</abbr> <span class="datei">zettelstraum.exe</span>. Über diese kann das paketierte Programm ohne vorherige Installation gestartet werden.</p>
 					
-					<p>Auch wenn die ausführbare Programm-Datei um die 100 Megabyte groß ist – ohne die anderen Dateien und Verzeichnisse, die sich im Paket-Ordner befinden, kann die App nicht gestartet werden. Soll sie auf ein anderes Betriebssystem kopiert werden, muss also immer der gesamte Ordner mit allen Dateien mitgenommen werden.</p>
+					<p>Auch wenn die ausführbare Programm-Datei um die 100 Megabyte groß ist – ohne die anderen Dateien und Verzeichnisse, die sich im Paket-Ordner befinden, kann die App nicht gestartet werden. Möchte man sie auf ein anderes Betriebssystem kopieren, muss also immer der gesamte Ordner mit allen Dateien mitgenommen werden.</p>
 					
 					<!-- Installer -->
 					<h2 id="framework-installer">Installer bauen</h2>
 					
-					<p>Ein bisschen schwieriger ist das Bauen von Installern für die verschiedenen Betriebssysteme und Architekturen. Im Folgenden wird beschrieben, wie man mithilfe von <a href="https://github.com/electron-userland/electron-builder">electron-builder</a> Installer für <i>Windows</i> und <i>Debian</i>/<i>Ubuntu</i> erzeugt.</p>
+					<p>Ein bisschen schwieriger ist das Bauen von Installern für die verschiedenen Betriebssysteme und Architekturen. Im Folgenden wird beschrieben, wie man mithilfe von <a href="https://github.com/electron-userland/electron-builder">electron-builder</a> Installer für <i>Windows</i> und <i>Linux</i> (DEB- oder RPM-Pakete) erzeugt.</p>
 					
 					<p>Zunächst einmal muss der Builder via <code>npm</code> installiert werden:</p>
 					
 					<pre>cd ./
 npm install --save-dev electron-builder</pre>
 					
-					<p>Die richtige Konfiguration des Builders zu finden, ist nicht so leicht, denn er kennt eine Vielzahl an <a href="https://www.electron.build/configuration/configuration">Konfigurationsmöglichkeiten</a>. Für das Erstellen eines <abbr title="Nullsoft Scriptable Install System" lang="en">NSIS</abbr>-Installers und eines DEB-Pakets finden sich im Wurzelverzeichnis der App bereits fertige Node-Scripts, die sich der <a href="https://www.electron.build/api/electron-builder" lang="en">Programmatic API</a> des Builders bedienen und einem die Konfigurationsarbeit abnehmen: <span class="datei">installer-win-nsis.js</span> <abbr title="beziehungsweise">bzw.</abbr> <span class="datei">installer-linux-deb.js</span>. Die Scripts erstellen Installer für eine 64-Bit-Architektur.</p>
+					<p>Die richtige Konfiguration des Builders zu finden, ist nicht so leicht, denn er kennt eine Vielzahl an <a href="https://www.electron.build/configuration/configuration">Konfigurationsmöglichkeiten</a>. Für das Erstellen eines <abbr title="Nullsoft Scriptable Install System" lang="en">NSIS</abbr>-Installers, eines DEB- und eines RPM-Pakets finden sich im Wurzelverzeichnis der App bereits fertige Node-Scripts, die sich der <a href="https://www.electron.build/api/electron-builder" lang="en">Programmatic API</a> des Builders bedienen und einem die Konfigurationsarbeit abnehmen: <span class="datei">installer-win.js</span> und <span class="datei">installer-linux.js</span>. Alle Scripts erstellen Installer für eine 64-Bit-Architektur.</p>
 					
-					<p>Ausgeführt werden sie mit <code>node</code>. Für den <i>Windows</i>-Installer heißt das:</p>
+					<p>Ausgeführt werden die Installer-Scripts mit <code>node</code>. Für den <i>Windows</i>-Installer heißt das:</p>
 					
-					<pre>node installer-win-nsis.js</pre>
+					<pre>node installer-win.js</pre>
 					
-					<p>und für den <i>Linux</i>-Installer:</p>
+					<p>und für die <i>Linux</i>-Installer:</p>
 					
-					<pre>node installer-linux-deb.js</pre>
-
-					<p>Nach <abbr title="circa">ca.</abbr> ein, zwei Minute (die genaue Zeit hängt natürlich vom Rechner ab), sollte die Meldung <code>Windows-Installer erstellt!</code> <abbr title="beziehungsweise">bzw.</abbr> <code>Linux-Installer erstellt!</code> erscheinen. Kommt diese Meldung, kann es eigentlich nicht zu größeren Fehlern gekommen sein. Im Verzeichnis <span class="datei">../build</span> (eine Ebene oberhalb des Wurzelverzeichnisses der App) befinden sich nun ein Ordner und mehrere Dateien. Interessant ist natürlich nur die Installer-Datei. Also entweder</p>
+					<pre>node installer-linux.js [deb|rpm]</pre>
 					
-					<ul>
-						<li class="datei">../build/zettelstraum_[VERSION]_[ARCHITEKTUR].deb</li>
-					</ul>
+					<p>Wird kein Argument angegeben, das den Paket-Typ spezifiziert, baut der <i>Linux</i>-Installer ein DEB-Paket.</p>
 					
-					<p>oder</p>
+					<p>Vor dem Start des eigentlichen Bauvorgangs wird überprüft, ob eine Ebene oberhalb des App-Verzeichnisses ein Ordner namens <span class="datei">build</span> existiert. Er wird <abbr title="gegebenenfalls">ggf.</abbr> automatisch erzeugt.</p>
 					
-					<ul>
-						<li class="datei">../build/zettelstraum_[VERSION]_[ARCHITEKTUR].exe</li>
-					</ul>
+					<p>Die Linux-Installer erwarten, dass in <span class="datei">../build</span> eine Plain-Text-Datei mit dem Namen <span class="datei">changelog</span> liegt. Ist kein Changelog vorhanden, wird automatisch eine leere Datei erzeugt. Im Ordner <span class="datei">./installer/</span> gibt es ein PHP-Script, das mithilfe der Changelog-Datei der App (<span class="datei">./win/changelog.html</span>) einen DEB- <abbr title="beziehungsweise">bzw.</abbr> RPM-Changelog automatisch erstellen kann (zum Ausführen wird eine Command-line-Version von PHP benötigt):</p>
+					
+					<pre>cd ./installer
+php make-changelog.php [FORMAT] [PFAD]</pre>
+					
+					<p>Als Formatangabe wird <code>deb</code> oder <code>rpm</code> erwartet; die Pfadangabe kann relativ oder absolut sein. Führt man das Script ohne Parameter aus, wird ein DEB-Changelog im Ordner <span class="datei">../../build</span> erstellt. Der Standard entspricht also diesem Aufruf:</p>
+					
+					<pre>php make-changelog.php deb ../../build</pre>
+					
+					<p>Nach <abbr title="circa">ca.</abbr> ein, zwei Minuten (die genaue Zeit hängt natürlich vom Rechner ab), sollte die Meldung <code>Windows-Installer erstellt!</code> <abbr title="beziehungsweise">bzw.</abbr> <code>Linux-Installer erstellt!</code> erscheinen. Kommt diese Meldung, kann es eigentlich nicht zu größeren Fehlern gekommen sein. Im Verzeichnis <span class="datei">../build</span> befinden sich nun ein Ordner und mehrere Dateien. Interessant ist natürlich nur die Installer-Datei:</p>
+					
+					<p class="datei">../build/zettelstraum_[VERSION]_[ARCHITEKTUR].(exe|deb|rpm)</p>
 					
 					<p>Die ausführbare exe-Datei kann nun auf einen Windows-Rechnern kopiert und installiert werden. (Getestet wurde die Installation nur auf <i>Windows 10</i>.)</p>
 					
@@ -204,7 +209,11 @@ npm install --save-dev electron-builder</pre>
 					
 					<pre>sudo dpkg -i zettelstraum*.deb</pre>
 					
-					<p>Der <abbr title="Wortgeschichte digital">WGD</abbr>-Dateityp sollte während der Installation automatisch registriert werden. Für den Fall, dass Probleme auftreten, finden sich im Programmordner Scripts, mit denen die Registrierung des Dateityps manuell vor- oder zurückgenommen werden kann. Die Scripts liegen in <span class="datei">/opt/zettelstraum/resources/filetype/linux/</span> und können mit <code>sh</code> ausgeführt werden.</p>
+					<p>Die Abhängigkeiten des RPM-Pakets kann man sich so anzeigen lassen:</p>
+					
+					<pre>rpm -qp --requires zettelstraum*.rpm</pre>
+					
+					<p>Der <abbr title="Wortgeschichte digital">WGD</abbr>-Dateityp sollte während der Installation automatisch registriert werden – und zwar sowohl durch den <i>Windows</i> als auch durch die <i>Linux</i>-Installer. Für den Fall, dass Probleme auftreten, finden sich im Programmordner Scripts, mit denen die Registrierung des Dateityps unter <i>Linux</i> manuell vor- oder zurückgenommen werden kann. Die Scripts liegen in <span class="datei">/opt/zettelstraum/resources/filetype/linux/</span> und können mit <code>sh</code> ausgeführt werden.</p>
 					
 					<pre>sh [de]register.sh</pre>
 					
@@ -217,9 +226,11 @@ npm install --save-dev electron-builder</pre>
 					
 					<p>Deinstalliert werden kann das Programm wie jede andere App über die Systemsteuerung von <i>Windows</i>.</p>
 					
-					<p>Der <strong>DEB-Installer</strong> erstellt einen Programmordner unter <span class="datei">/opt/zettelstraum/</span> und legt eine Desktop-Datei im Ordner <span class="datei">/usr/share/applications/</span> ab: <span class="datei">zettelstraum.desktop</span>. Das Programm sollte sich nach der Installation also ganz normal über das Programm-Menü des Betriebssystems starten lassen. Da eine Verknüpfung in <span class="datei">/usr/local/bin/</span> angelegt wird, lässt sich die App auch in der Konsole via <code>zettelstraum</code> starten.</p>
+					<p>Die <strong>Linux-Installer</strong> erstellen einen Programmordner unter <span class="datei">/opt/zettelstraum/</span> und legen eine Desktop-Datei im Ordner <span class="datei">/usr/share/applications/</span> ab: <span class="datei">zettelstraum.desktop</span>. Das Programm sollte sich nach der Installation also ganz normal über das Programm-Menü des Betriebssystems starten lassen.</p>
 					
-					<p>Deinstalliert werden kann es einfach mit dem Paketmanager:</p>
+					<p>Darüber hinaus legen sie auch eine Verknüpfung in <span class="datei">/usr/local/bin/</span> an. Die App kann somit auch über ein Terminal mit dem Befehl <code>zettelstraum</code> gestartet werden.</p>
+					
+					<p>Das DEB-Paket kann einfach mit dem Paketmanager deinstalliert werden:</p>
 					
 					<pre>sudo apt-get purge zettelstraum</pre>
 					
@@ -262,7 +273,7 @@ npm install --save-dev electron-builder</pre>
 					
 					<pre>npx asar extract app.asar [ZIELORDNER]</pre>
 					
-					<p>Das Archiv enthält den vollständigen Quelltext von <i class="app-name"></i>. Unter <i>Linux</i> fehlt allerdings der Unterordner <span class="datei">./filetype/</span>, in dem sich Scripts zum Registrieren des <abbr title="Wortgeschichte digital">WGD</abbr>-Dateityps und die passenden Icons befinden. Dieses Verzeichnis liegt bereits entpackt im selben Ordner wie die <span class="datei">app.asar</span>.</p>
+					<p>Das Archiv enthält den vollständigen Quelltext von <i class="app-name"></i>. Allerdings fehlt die Datei <span class="datei">./resources/Sachgebiete.xml</span>, die eine Liste an Sachgebieten für die Bedeutungsgerüst-Funktion enthält. Sie liegt bereits entpackt im selben Ordner wie die <span class="datei">app.asar</span>.</p>
 				</section>
 				
 				<!-- ORDNER UND DATEIEN -->
@@ -274,8 +285,9 @@ npm install --save-dev electron-builder</pre>
 					
 					<ul>
 						<li><span class="datei">./index.html</span>: <abbr title="Hyptertext Markupt Language" lang="en">HTML</abbr>-Datei, die beim Öffnen des Hauptfensters geladen wird</li>
-						<li><span class="datei">./installer-linux-deb.js</span>: Node-Script, das eine DEB-Datei erzeugt, mit der <i class="app-name"></i> auf <i>Debian</i>/<i>Ubuntu</i> <abbr title="und so weiter">usw.</abbr> installiert werden kann</li>
-						<li><span class="datei">./installer-win-nsis.js</span>: Node-Script, das einen <abbr title="Nullsoft Scriptable Install System" lang="en">NSIS</abbr>-Installer erzeugt, mit dem <i class="app-name"></i> auf <i>Windows</i> installiert werden kann</li>
+						<li><span class="datei">./installer-linux.js</span>: Node-Script, das eine DEB- oder RPM-Datei erzeugt, mit der <i class="app-name"></i> auf <i>Debian</i>/<i>Ubuntu</i> <abbr title="beziehungsweise">bzw.</abbr> Distributionen, die auf RPM setzen, installiert werden kann</li>
+						<li><span class="datei">./installer-win.js</span>: Node-Script, das einen <abbr title="Nullsoft Scriptable Install System" lang="en">NSIS</abbr>-Installer erzeugt, mit dem <i class="app-name"></i> auf <i>Windows</i> installiert werden kann</li>
+						<li><span class="datei">./installer.js</span>: gemeinsam genutzte Module für die Node-Scripts, die Installer erzeugen</li>
 						<li><span class="datei">./LICENSE.*.txt</span>: Lizenzbestimmungen von <i class="app-name"></i> den Icons und Fonts</li>
 						<li><span class="datei">./main.js</span>: Node-Script, das die App initialisiert, die Programmfenster öffnet, lädt, verwaltet und für vieles andere zuständig ist, was das Betriebssystem, auf dem <i class="app-name"></i> läuft, direkt betrifft</li>
 						<li><span class="datei">./package.json</span>: <abbr title="JavaScript Object Notation" lang="en">JSON</abbr>-Datei mit Meta-Informationen zu Programm, Autor und Lizenz sowie Angaben darüber, wie die App gestartet wird; <abbr title="vergleiche">vgl.</abbr> den Abschnitt <a href="#framework-starten">Starten der App</a></li>
@@ -292,11 +304,6 @@ npm install --save-dev electron-builder</pre>
 						<li><span class="datei">./css/win/*.css</span>: diese Stylesheets werden nur in den vom Hauptfenster abhängigen Nebenfenstern (also <abbr title="unter anderem">u. a.</abbr> dem <a href="#" class="link-handbuch">Handbuch</a> und diesem Fenster) benötigt</li>
 					</ul>
 					
-					<!-- File type -->
-					<h2 class="datei" id="ordner-filetype">./filetype/</h2>
-					
-					<p>Der Ordner enthält Icons für den <abbr title="Wortgeschichte digital">WGD</abbr>-Dateityp und Shell-Scripts, mit denen auf <i>Linux</i>-Systemen der Dateityp registriert oder entfernt werden kann. Es gibt auch eine <abbr title="Scalable Vector Graphics">SVG</abbr>-Version des Dateityp-Icons: <span class="datei">./img/datei-wgd.svg</span>.</p>
-					
 					<!-- Fonts -->
 					<h2 class="datei" id="ordner-fonts">./fonts/</h2>
 					
@@ -311,10 +318,10 @@ npm install --save-dev electron-builder</pre>
 						<li><span class="datei">./img/menu/*.png</span>: Bilddateien, die nur von den Menüs verwendet werden, die das Framework verwaltet; dazu zählen das App-Menü am oberen Rand des Hauptfensters und die Kontextmenüs, die auf Rechtsklick erscheinen</li>
 					</ul>
 					
-					<!-- File type -->
+					<!-- Installer -->
 					<h2 class="datei" id="ordner-installer">./installer/</h2>
 					
-					<p>Scripts, die für das Bauen von Installern nötig sind. Die Dateien werden im laufenden Betrieb von <i class="app-name"></i> nicht benötigt.</p>
+					<p>Scripts, die für das Bauen von Installern genutzt werden (können). Sie werden im laufenden Betrieb von <i class="app-name"></i> nicht ausgeführt.</p>
 					
 					<!-- JavaScript -->
 					<h2 class="datei" id="ordner-js">./js/</h2>
@@ -341,6 +348,13 @@ npm install --save-dev electron-builder</pre>
 						<li><span class="datei">./js/app/start.js</span>: regelt die Anzeige der Startseite, die beim Öffnen des Programms und nach dem Schließen einer Kartei angezeigt wird</li>
 						<li><span class="datei">./js/win/hilfe.js</span>: Funktionen für das <i>Handbuch</i> und die <i>technische Dokumentation</i> (also dieses Fenster)</li>
 					</ul>
+					
+					<!-- File type -->
+					<h2 class="datei" id="ordner-resources">./resources/</h2>
+					
+					<p>Der Unterordner <span class="datei">./resources/filetype/</span> enthält Icons für den <abbr title="Wortgeschichte digital">WGD</abbr>-Dateityp und Shell-Scripts, mit denen auf <i>Linux</i>-Systemen der Dateityp registriert oder entfernt werden kann. (Es gibt auch eine <abbr title="Scalable Vector Graphics">SVG</abbr>-Version des Dateityp-Icons: <span class="datei">./img/datei-wgd.svg</span>.)</p>
+					
+					<p>Außerdem findet sich in dem Ordner eine <abbr title="Extensible Markup Language">XML</abbr>-Datei mit Sachgebieten, die im Programm für die Bedeutungsgerüst-Funktion genutzt werden können: <span class="datei">./resources/Sachgebiete.xml</span>.</p>
 					
 					<!-- Fenster -->
 					<h2 class="datei" id="ordner-win">./win/</h2>
