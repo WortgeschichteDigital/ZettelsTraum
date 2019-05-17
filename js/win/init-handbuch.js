@@ -5,7 +5,7 @@ window.addEventListener("load", function() {
 	hilfe.sektionWechseln("karteien");
 	
 	// PROGRAMM-NAME EINTRAGEN
-	let {app} = require("electron").remote;
+	const {app} = require("electron").remote;
 	document.querySelectorAll(".app-name").forEach(function(i) {
 		i.textContent = app.getName().replace("'", "’");
 	});
@@ -31,7 +31,7 @@ window.addEventListener("load", function() {
 	});
 	// Über App
 	document.getElementById("icon").addEventListener("click", function() {
-		let {ipcRenderer} = require("electron");
+		const {ipcRenderer} = require("electron");
 		ipcRenderer.send("ueber-app", "handbuch");
 	});
 	// Navigation

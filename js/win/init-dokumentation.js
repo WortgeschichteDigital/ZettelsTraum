@@ -6,7 +6,7 @@ window.addEventListener("load", function() {
 	
 	// PROGRAMM-NAME EINTRAGEN
 	try { // damit die Dokumentation auch im Browser geladen werden kann und die Navigation funktioniert
-		let {app} = require("electron").remote;
+		const {app} = require("electron").remote;
 		document.querySelectorAll(".app-name").forEach(function(i) {
 			i.textContent = app.getName().replace("'", "’");
 		});
@@ -33,7 +33,7 @@ window.addEventListener("load", function() {
 	});
 	// Über App
 	try { // s.o.
-		let {ipcRenderer} = require("electron");
+		const {ipcRenderer} = require("electron");
 		document.getElementById("icon").addEventListener("click", () => ipcRenderer.send("ueber-app", "dokumentation"));
 		// Über Electron
 		document.querySelector(".ueber-electron").addEventListener("click", function(evt) {

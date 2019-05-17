@@ -1,5 +1,11 @@
 "use strict";
 
+// Pakettyp
+let typ = process.argv[2];
+if (!typ || !/^(nsis|zip)$/.test(typ)) {
+	typ = "nsis";
+}
+
 // Vorbereitung
 const builder = require("electron-builder"),
 	Arch = builder.Arch,
@@ -9,11 +15,11 @@ const builder = require("electron-builder"),
 let config = {};
 
 prepare.makeBuild()
-.then(function() {
-	makeConfig();
-	startInstaller();
-})
-.catch((err) => console.log(err));
+	.then(() => {
+		makeConfig();
+		startInstaller();
+	})
+	.catch(err => console.log(err));
 
 // Konfiguration
 function makeConfig () {
@@ -27,10 +33,10 @@ function makeConfig () {
 				output: "../build",
 			},
 			win: {
-				target: "nsis",
+				target: typ,
 				icon: "img/icon/win/icon.ico",
 			},
-			nsis: {
+			[typ]: {
 				artifactName: "zettelstraum_${version}_x64.${ext}",
 				license: "LICENSE.ZettelsTraum.txt",
 				shortcutName: "Zettel’s Traum",
@@ -55,11 +61,22 @@ function makeConfig () {
 			],
 		},
 	};
+	// Anpassungen
+	if (typ === "zip") {
+		config.config.productName = "zettelstraum";
+		delete config.config.zip;
+	}
 }
 
 // Installer
 function startInstaller () {
 	builder.build(config)
-	.then(() => console.log("\nWindows-Installer erstellt!"))
-	.catch((err) => console.log(`\nFEHLER!\n${err}`));
+	.then(() => {
+		if (typ === "zip") {
+			console.log("\nWindows-Paketierung erstellt!");
+		} else {
+			console.log("\nWindows-Installer erstellt!");
+		}
+	})
+	.catch(err => console.log(new Error(err)));
 }

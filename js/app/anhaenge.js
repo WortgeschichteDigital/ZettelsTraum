@@ -19,9 +19,9 @@ let anhaenge = {
 				return;
 			}
 			// scannen
-			let fs = require("fs"),
-				path = require("path"),
-				pfad = datei;
+			const fs = require("fs"),
+				path = require("path");
+			let pfad = datei;
 			if (!path.isAbsolute(datei)) {
 				pfad = `${path.parse(kartei.pfad).dir}/${datei}`;
 			}
@@ -225,7 +225,7 @@ let anhaenge = {
 			dialog.text("Die Datei konnte nicht gefunden werden.");
 			return;
 		}
-		let {shell} = require("electron");
+		const {shell} = require("electron");
 		shell.openItem(anhaenge.data[datei].path);
 	},
 	// Öffnet beim Klick auf eine Überschrift im Anhänge-Fenster den entsprechenden Beleg
@@ -358,9 +358,9 @@ let anhaenge = {
 	//     (Add-Button zum Hinzufügen eines Anhangs)
 	add (input) {
 		input.addEventListener("click", function() {
-			const obj = this.dataset.obj;
-			let {app, dialog} = require("electron").remote,
-				cont = this.parentNode.parentNode;
+			const obj = this.dataset.obj,
+				{app, dialog} = require("electron").remote;
+			let cont = this.parentNode.parentNode;
 			let opt = {
 				title: "Anhang hinzufügen",
 				defaultPath: app.getPath("documents"),
@@ -399,9 +399,9 @@ let anhaenge = {
 	//     Werte durch Haarstriche getrennt)
 	addFiles (dateien, cont, obj) {
 		// Dateien hinzufügen
-		let path = require("path"),
-			reg_pfad = new RegExp(helfer.escapeRegExp(`${path.dirname(kartei.pfad)}${path.sep}`));
-		let schon = [],
+		const path = require("path");
+		let reg_pfad = new RegExp(helfer.escapeRegExp(`${path.dirname(kartei.pfad)}${path.sep}`)),
+			schon = [],
 			arr = anhaenge.getArr(obj);
 		dateien.forEach(function(i) {
 			const datei = i.replace(reg_pfad, "");

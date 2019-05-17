@@ -356,9 +356,9 @@ let optionen = {
 		if (init) {
 			if (optionen.data.einstellungen["sachgebiete-autoloading"] &&
 					!optionen.data.einstellungen["sachgebiete-datei"]) {
-				let {app} = require("electron").remote,
-					path = require("path"),
-					basis = "";
+				const {app} = require("electron").remote,
+					path = require("path");
+				let basis = "";
 				// getAppPath() funktioniert nur in der nicht-paketierten App, in der paketierten
 				//   zeigt es auf [Installationsordner/resources/app.asar;
 				// getPath("exe") funktioniert nur in der paktierten Version, allerdings muss
@@ -455,7 +455,7 @@ let optionen = {
 	// Datei mit Sachgebieten laden
 	sachgebieteLaden () {
 		const {app, dialog} = require("electron").remote;
-		const opt = {
+		let opt = {
 			title: "Sachgebiete laden",
 			defaultPath: app.getPath("documents"),
 			filters: [
@@ -646,8 +646,8 @@ let optionen = {
 	},
 	// letzten Pfad speichern
 	aendereLetzterPfad () {
-		let path = require("path"),
-			reg = new RegExp(`^.+\\${path.sep}`);
+		const path = require("path");
+		let reg = new RegExp(`^.+\\${path.sep}`);
 		const pfad = kartei.pfad.match(reg)[0];
 		optionen.data.letzter_pfad = pfad;
 		optionen.speichern(false);
@@ -678,7 +678,7 @@ let optionen = {
 	// Personenliste einlesen
 	aenderePersonenliste () {
 		const {app, dialog} = require("electron").remote;
-		const opt = {
+		let opt = {
 			title: "Personenliste laden",
 			defaultPath: app.getPath("documents"),
 			filters: [
@@ -719,12 +719,13 @@ let optionen = {
 				}
 				optionen.speichern(false);
 				// Rückmeldung
-				let fb = new function() {
+				let fb_obj = function () {
 					const len = optionen.data.personen.length;
 					this.personen = len === 1 ? "eine" : len;
 					this.verb = len === 1 ? "ist" : "sind";
 					this.text = len === 1 ? "Person" : "Personen";
 				};
+				let fb = new fb_obj();
 				// Liste wurde geleert
 				if (fb.personen === 0) {
 					kartei.dialogWrapper("Die Personenliste wurde geleert.");

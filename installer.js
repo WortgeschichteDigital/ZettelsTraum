@@ -5,45 +5,42 @@ const fs = require("fs");
 module.exports = {
 	// Build-Ordner überprüfen
 	makeBuild () {
-		return new Promise(function(resolve, reject) {
+		return new Promise(function(resolve) {
 			if (!fs.existsSync("../build")) {
 				fs.mkdir("../build", function(err) {
 					if (err) {
-						reject(`\nFEHLER!\n${err}`);
-					} else {
-						resolve();
+						throw new Error(err.message);
 					}
+					resolve(true);
 				});
 			} else {
-				resolve();
+				resolve(true);
 			}
 		});
 	},
 	// ggf. leeren Changelog erstellen
 	makeChangelog () {
-		return new Promise(function(resolve, reject) {
+		return new Promise(function(resolve) {
 			if (!fs.existsSync("../build/changelog")) {
 				fs.writeFile("../build/changelog", "", function(err) {
 					if (err) {
-						reject(`\nFEHLER!\n${err}`);
-					} else {
-						resolve();
+						throw new Error(err.message);
 					}
+					resolve(true);
 				});
 			} else {
-				resolve();
+				resolve(true);
 			}
 		});
 	},
 	// Schlagwörter ermitteln
 	getKeywords () {
-		return new Promise(function(resolve, reject) {
+		return new Promise(function(resolve) {
 			fs.readFile("package.json", "utf-8", function(err, content) {
 				if (err) {
-					reject(`\nFEHLER!\n${err.message}`);
-				} else {
-					resolve(JSON.parse(content).keywords.join(";"));
+					throw new Error(err.message);
 				}
+				resolve(JSON.parse(content).keywords.join(";"));
 			});
 		});
 	},

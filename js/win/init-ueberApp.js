@@ -2,7 +2,7 @@
 
 window.addEventListener("load", function() {
 	// app initialisieren
-	let {app} = require("electron").remote;
+	const {app} = require("electron").remote;
 	// Programm-Name eintragen
 	document.querySelectorAll("main h1, #name").forEach(function(i) {
 		i.textContent = app.getName().replace("'", "’");

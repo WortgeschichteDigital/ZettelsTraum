@@ -410,8 +410,8 @@ let helfer = {
 			asterisk = " *";
 		}
 		// Programmname
-		let {app} = require("electron").remote;
-		const app_name = app.getName().replace("'", "’");
+		const {app} = require("electron").remote,
+			app_name = app.getName().replace("'", "’");
 		// Dokumententitel
 		document.title = app_name + asterisk;
 	},

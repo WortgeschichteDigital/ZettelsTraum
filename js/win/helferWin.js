@@ -8,8 +8,8 @@ let helferWin = {
 		a.title = a.getAttribute("href");
 		a.addEventListener("click", function(evt) {
 			evt.preventDefault();
-			const url = this.getAttribute("href");
-			let {shell} = require("electron");
+			const url = this.getAttribute("href"),
+				{shell} = require("electron");
 			shell.openExternal(url);
 		});
 	},
@@ -19,7 +19,7 @@ let helferWin = {
 	oeffneHandbuch (a) {
 		a.addEventListener("click", function(evt) {
 			evt.preventDefault();
-			let {ipcRenderer} = require("electron");
+			const {ipcRenderer} = require("electron");
 			ipcRenderer.send("hilfe-handbuch");
 		});
 	},
@@ -29,10 +29,10 @@ let helferWin = {
 	oeffneChangelog (a) {
 		a.addEventListener("click", function(evt) {
 			evt.preventDefault();
-			let {ipcRenderer} = require("electron");
+			const {ipcRenderer} = require("electron");
 			ipcRenderer.send("hilfe-changelog");
 			if (this.dataset.caller === "ueber-app") {
-				let {remote} = require("electron"),
+				const {remote} = require("electron"),
 					win = remote.getCurrentWindow();
 				win.close();
 			}
@@ -43,7 +43,7 @@ let helferWin = {
 	tastatur (evt) {
 		// Esc
 		if (evt.which === 27) {
-			let {remote} = require("electron"),
+			const {remote} = require("electron"),
 				win = remote.getCurrentWindow();
 			win.close();
 		}

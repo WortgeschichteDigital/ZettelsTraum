@@ -1167,9 +1167,9 @@ let beleg = {
 		// Element ermitteln
 		// Text einlesen
 		const {clipboard} = require("electron"),
-			formate = clipboard.availableFormats(),
 			id = link.parentNode.parentNode.firstChild.getAttribute("for"),
-			ds = id.replace(/^beleg-/, ""),
+			ds = id.replace(/^beleg-/, "");
+		let formate = clipboard.availableFormats(),
 			feld = document.getElementById(id);
 		// Text auslesen
 		let text = "";

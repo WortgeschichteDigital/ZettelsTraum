@@ -397,6 +397,22 @@ p.no-indent + .filter-baum, /* betrifft Verschiedenes > Filterlogik */
 	width: 32px;
 }
 
+/* TODO Lösung für die vielen Anzeige-Einstellungen
+ * wenn verworfen => .liste-opt-anzeige aus index.html löschen
+ */
+/*.liste-opt-anzeige a:not(.aktiv) {
+	display: none;
+}
+
+.liste-opt-anzeige a:first-child {
+	display: inline-block;
+}
+
+.liste-opt-anzeige:hover a,
+.liste-opt-anzeige:focus-within a {
+	display: inline-block;
+}*/
+
 .liste-strike {
 	position: relative;
 }

@@ -7,7 +7,7 @@ let win, winBedeutungen, winHandbuch, winDokumentation, winChangelog, winUeberAp
 let appMenu, optionen, fenster;
 
 // Electron-Features einbinden
-let {app, BrowserWindow, ipcMain, Menu} = require("electron"),
+const {app, BrowserWindow, ipcMain, Menu} = require("electron"),
 	fs = require("fs"),
 	path = require("path");
 
@@ -698,7 +698,7 @@ fenster = {
 			return;
 		}
 		// Fenster öffnen
-		let Bildschirm = require("electron").screen.getPrimaryDisplay();
+		const Bildschirm = require("electron").screen.getPrimaryDisplay();
 		winHandbuch = new BrowserWindow({
 			title: "Handbuch",
 			icon: path.join(__dirname, "img", "icon", "linux", "icon_32px.png"),
@@ -738,7 +738,7 @@ fenster = {
 			return;
 		}
 		// Fenster öffnen
-		let Bildschirm = require("electron").screen.getPrimaryDisplay();
+		const Bildschirm = require("electron").screen.getPrimaryDisplay();
 		winDokumentation = new BrowserWindow({
 			title: "Technische Dokumentation",
 			icon: path.join(__dirname, "img", "icon", "linux", "icon_32px.png"),
@@ -914,7 +914,7 @@ app.on("ready", function() {
 	// Menu der zuletzt verwendeter Karteien erzeugen
 	appMenu.zuletzt(false);
 	// Informationen zum Bildschirm auslesen und ggf. speichern
-	let Bildschirm = require("electron").screen.getPrimaryDisplay();
+	const Bildschirm = require("electron").screen.getPrimaryDisplay();
 	// Fenster standardmäßig maximalisiert öffnen
 	if (optionen.data.fenster.height === undefined) {
 		optionen.data.fenster.height = Bildschirm.workArea.height;

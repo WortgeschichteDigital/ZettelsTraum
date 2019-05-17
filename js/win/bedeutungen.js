@@ -118,7 +118,7 @@ let bedeutungen = {
 	},
 	// Bedeutungsbaum drucken
 	drucken () {
-		let {ipcRenderer} = require("electron");
+		const {ipcRenderer} = require("electron");
 		ipcRenderer.send("bedeutungen-fenster-drucken", document.getElementById("bd-win-cont").outerHTML);
 	},
 	// Bedeutung im Formular des Hauptfensters eintragen
@@ -126,8 +126,8 @@ let bedeutungen = {
 	//     (der Absatz, auf den geklickt wurde)
 	eintragen (p) {
 		p.addEventListener("click", function() {
-			const bd = this.parentNode.dataset.bd;
-			let {ipcRenderer} = require("electron");
+			const bd = this.parentNode.dataset.bd,
+				{ipcRenderer} = require("electron");
 			ipcRenderer.send("bedeutungen-fenster-eintragen", bd);
 		});
 	},

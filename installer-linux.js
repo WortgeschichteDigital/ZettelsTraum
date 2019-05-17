@@ -2,7 +2,7 @@
 
 // Pakettyp
 let typ = process.argv[2];
-if (!typ || !/^(deb|rpm)/.test(typ)) {
+if (!typ || !/^(deb|rpm|tar\.gz)$/.test(typ)) {
 	typ = "deb";
 }
 
@@ -16,14 +16,28 @@ let keywords = "",
 	config = {};
 
 prepare.makeBuild()
-.then(() => prepare.makeChangelog())
-.then(() => prepare.getKeywords())
-.then(function(result) {
-	keywords = result;
-	makeConfig();
-	startInstaller();
-})
-.catch((err) => console.log(err));
+	.then(() => {
+		if (typ === "tar.gz") {
+			return false;
+		} else {
+			prepare.makeChangelog();
+		}
+	})
+	.then(() => {
+		if (typ === "tar.gz") {
+			return false;
+		} else {
+			prepare.getKeywords();
+		}
+	})
+	.then(result => {
+		if (result) {
+			keywords = `${result};`;
+		}
+		makeConfig();
+		startInstaller();
+	})
+	.catch(err => console.log(err));
 
 // Konfiguration
 function makeConfig () {
@@ -45,7 +59,7 @@ function makeConfig () {
 				category: "Science",
 				desktop: {
 					Name: "Zettel’s Traum",
-					Keywords: `${keywords};`,
+					Keywords: keywords,
 				},
 			},
 			[typ]: {
@@ -53,7 +67,8 @@ function makeConfig () {
 				afterInstall: "installer/linux-after-install.sh",
 				afterRemove: "installer/linux-after-remove.sh",
 				fpm: [
-					"--license=GPL-3.0-only"
+					"--license=GPL-3.0-only",
+					`--${typ}-changelog=../build/changelog`,
 				],
 			},
 			fileAssociations: [
@@ -78,15 +93,20 @@ function makeConfig () {
 	// Anpassungen
 	if (typ === "deb") {
 		config.config[typ].priority = "optional";
-		config.config[typ].fpm.push("--deb-changelog=../build/changelog");
-	} else if (typ === "rpm") {
-		config.config[typ].fpm.push("--rpm-changelog=../build/changelog");
+	} else if (typ === "tar.gz") {
+		delete config.config["tar.gz"];
 	}
 }
 
 // Installer
 function startInstaller () {
 	builder.build(config)
-	.then(() => console.log("\nLinux-Installer erstellt!"))
-	.catch((err) => console.log(`\nFEHLER!\n${err}`));
+	.then(() => {
+		if (typ === "tar.gz") {
+			console.log("\nLinux-Paketierung erstellt!");
+		} else {
+			console.log("\nLinux-Installer erstellt!");
+		}
+	})
+	.catch(err => console.log(err));
 }

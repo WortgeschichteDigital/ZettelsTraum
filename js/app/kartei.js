@@ -399,8 +399,8 @@ let kartei = {
 		if (!datei) { // für just erstellte, aber noch nicht gespeicherte Dateien
 			return;
 		}
+		let pfad = datei.match(/^(.+[/\\]{1})(.+)$/);
 		const fs = require("fs"),
-			pfad = datei.match(/^(.+[/\\]{1})(.+)$/),
 			lockfile = `${pfad[1]}.~lock.${pfad[2]}#`;
 		if (aktion === "lock") {
 			const os = require("os"),
@@ -432,8 +432,8 @@ let kartei = {
 				if (!lockcontent) {
 					return true; // gesperrt (zur Sicherheit, weil unklarer Status)
 				}
-				const datum_host_user = lockcontent.split(";;"),
-					os = require("os"),
+				let datum_host_user = lockcontent.split(";;");
+				const os = require("os"),
 					host = os.hostname(),
 					user = os.userInfo().username;
 				// nicht sperren, wenn:
