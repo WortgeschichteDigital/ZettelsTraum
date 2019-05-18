@@ -1076,7 +1076,7 @@ let liste = {
 				liste.headerWortHervorheben();
 			} else if (funktion === "trennung") {
 				liste.headerTrennung();
-			} else if (/^(bd|qu|ts|no|meta)$/.test(funktion)) {
+			} else if (/^(bs|bd|bl|qu|kr|ts|no|meta)$/.test(funktion)) {
 				liste.headerDetails(funktion);
 			}
 		});
@@ -1265,17 +1265,19 @@ let liste = {
 	//   funktion = String
 	//     (verweist auf den Link, der geklickt wurde)
 	headerDetails (funktion) {
+		// Belegtext-Icon ist nur Platzhalter
+		if (funktion === "bs") {
+			dialog.oeffnen("alert");
+			dialog.text("Der Belegtext kann nicht ausgeblendet werden.");
+			return;
+		}
 		// Einstellung umstellen und speichern
 		let opt = `detail_${funktion}`;
 		optionen.data.belegliste[opt] = !optionen.data.belegliste[opt];
-		if (funktion === "bd") {
-			optionen.data.belegliste.detail_bl = optionen.data.belegliste.detail_bd;
-		} else if (funktion === "qu") {
-			optionen.data.belegliste.detail_kr = optionen.data.belegliste.detail_qu;
-		}
 		optionen.speichern(false);
 		// Anzeige der Icons auffrischen
 		liste.headerDetailsAnzeige(funktion, opt);
+		liste.headerDetailsLetztesIcon();
 		// Anzeige der Details in der Liste auffrischen
 		liste.detailsAnzeigen(true);
 	},
@@ -1287,7 +1289,9 @@ let liste = {
 	headerDetailsAnzeige (funktion, opt) {
 		let title = {
 			bd: "Bedeutung",
+			bl: "Wortbildung",
 			qu: "Quelle",
+			kr: "Korpus",
 			ts: "Textsorte",
 			no: "Notizen",
 			meta: "Metainfos",
@@ -1299,6 +1303,24 @@ let liste = {
 		} else {
 			link.classList.remove("aktiv");
 			link.title = `${title[funktion]} einblenden`;
+		}
+	},
+	// das letzte angezeigte Icon soll rechts keine border, dafür runde Kanten haben
+	headerDetailsLetztesIcon () {
+		// alte Markierung entfernen
+		let letztes = document.querySelector(".liste-opt-anzeige .liste-opt-anzeige-letztes");
+		if (letztes) {
+			letztes.classList.remove("liste-opt-anzeige-letztes");
+		}
+		// letztes aktives Element finden und ggf. markieren
+		let a = document.querySelectorAll(".liste-opt-anzeige a");
+		for (let i = a.length - 1; i >= 0; i--) {
+			if (a[i].classList.contains("aktiv")) {
+				if (i < a.length - 1) { // das letzte Icon muss nie markiert werden
+					a[i].classList.add("liste-opt-anzeige-letztes");
+				}
+				break;
+			}
 		}
 	},
 	// Datenfeld durch Klick auf ein Icon kopieren

@@ -354,7 +354,8 @@ p.no-indent + .filter-baum, /* betrifft Verschiedenes > Filterlogik */
 .bedeutungen-opt-block a:last-child,
 .beleg-opt-block a:last-child,
 .filter-ctrl-block a:last-child,
-.liste-opt-block a:last-child {
+.liste-opt-block a:last-child,
+.liste-opt-block:not(.liste-opt-anzeige-an):not(:hover):not(:focus-within) a.liste-opt-anzeige-letztes {
 	border-right: 0;
 	border-top-right-radius: 3px;
 	border-bottom-right-radius: 3px;
@@ -397,21 +398,15 @@ p.no-indent + .filter-baum, /* betrifft Verschiedenes > Filterlogik */
 	width: 32px;
 }
 
-/* TODO Lösung für die vielen Anzeige-Einstellungen
- * wenn verworfen => .liste-opt-anzeige aus index.html löschen
- */
-/*.liste-opt-anzeige a:not(.aktiv) {
+.liste-opt-anzeige a:not(.aktiv) {
 	display: none;
 }
 
-.liste-opt-anzeige a:first-child {
+.liste-opt-anzeige:hover a,
+.liste-opt-anzeige:focus-within a,
+.liste-opt-anzeige.liste-opt-anzeige-an a {
 	display: inline-block;
 }
-
-.liste-opt-anzeige:hover a,
-.liste-opt-anzeige:focus-within a {
-	display: inline-block;
-}*/
 
 .liste-strike {
 	position: relative;

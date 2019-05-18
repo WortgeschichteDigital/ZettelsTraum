@@ -442,10 +442,10 @@ let dropdown = {
 			if (/^beleg-(bd|bl|ts)/.test(caller)) {
 				helfer.textareaGrow(feld);
 				const id = caller.replace(/^beleg-/, "");
-				beleg.data[id] = helfer.textTrim(wert, true);
+				beleg.data[id] = helfer.textTrim(text, true);
 				beleg.belegGeaendert(true);
 			} else if (caller === "beleg-kr") {
-				beleg.data.kr = helfer.textTrim(wert, true);
+				beleg.data.kr = helfer.textTrim(text, true);
 				beleg.belegGeaendert(true);
 			} else if (/^einstellung-/.test(caller)) {
 				optionen.aendereEinstellung(document.getElementById(caller));

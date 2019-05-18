@@ -152,6 +152,8 @@ let optionen = {
 			"filter-offen-textsorten": false,
 			"filter-offen-verschiedenes": false,
 			// BELEGLISTE
+			// die Icons, die die Anzeige der Datenfelder in der Belegliste steuern, sollen immer an sein
+			"anzeige-icons-immer-an": false,
 			// Textsorte in den Kopf der Belegliste eintragen
 			textsorte: false,
 		},
@@ -220,10 +222,13 @@ let optionen = {
 		liste.headerTrennungAnzeige();
 		liste.headerWortHervorhebenAnzeige();
 		// Auswahllinks für Detail-Anzeige anpassen
-		let details = ["bd", "qu", "ts", "no", "meta"];
+		let details = ["bd", "bl", "qu", "kr", "ts", "no", "meta"];
 		for (let i = 0, len = details.length; i < len; i++) {
 			liste.headerDetailsAnzeige(details[i], `detail_${details[i]}`);
 		}
+		liste.headerDetailsLetztesIcon();
+		// Icons für die Detailanzeige immer sichtbar?
+		optionen.anwendenIconsDetails();
 		// Icons im <caption> der Karteikarte
 		beleg.ctrlKuerzenAnzeige();
 		beleg.ctrlTrennungAnzeige();
@@ -303,6 +308,23 @@ let optionen = {
 			} else {
 				affiziert[i].classList.remove("quick");
 			}
+		}
+	},
+	// Icons für die Detail-Anzeige im Kopf der Belegliste ggf. immer sichtbar (Listener)
+	anwendenIconsDetailsListener (input) {
+		input.addEventListener("change", function() {
+			optionen.data.einstellungen["anzeige-icons-immer-an"] = this.checked;
+			optionen.speichern(false);
+			optionen.anwendenIconsDetails();
+		});
+	},
+	// Icons für die Detail-Anzeige im Kopf der Belegliste ggf. immer sichtbar
+	anwendenIconsDetails () {
+		let iconsDetails = document.querySelector(".liste-opt-anzeige");
+		if (optionen.data.einstellungen["anzeige-icons-immer-an"]) {
+			iconsDetails.classList.add("liste-opt-anzeige-an");
+		} else {
+			iconsDetails.classList.remove("liste-opt-anzeige-an");
 		}
 	},
 	// Informationen zu den Sachgebieten auffrischen

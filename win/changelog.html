@@ -36,6 +36,12 @@
 						<p>Hat man noch keine Sachgebiete-Datei geladen, holt sich <i class="app-name"></i> die Datei automatisch aus dem App-Ordner; sie bleibt mit der App verknüpft, sodass Änderungen (<abbr title="zum Beispiel">z. B.</abbr> nach einem Programm-Update) automatisch eingepflegt werden. Man muss sich also nicht notwendigerweise darum kümmern, eine Sachgebiete-Datei zu importieren. Der eigenständige Import wird von <i class="app-name"></i> allerdings nur ein Mal durchgeführt. Hebt man die Verknüpfung mit der Datei auf (Button <i>Löschen</i>) und wurde die Verknüpfung schon einmal automatisch angestoßen, wird die <span class="datei">Sachgebiete.xml</span> aus dem App-Ordner nicht noch einmal von selbst geladen. Man kann dies aber jederzeit manuell nachholen – oder auf Wunsch eine andere Sachgebiete-Datei laden, die man selbst erstellt hat, die an einem anderen Ort liegt <abbr title="und so weiter">usw.</abbr></p>
 						<p><span lang="en">Last but not least</span>: Die Sachgebiete-Datei wurde um eine Dokumententyp-Deklaration ergänzt.</p>
 					</li>
+					<li>Belegliste: Für die Daten-Felder <i>Wortbildung</i> und <i>Korpus</i> gibt es nun eigene Icons (<img src="../img/liste-wortbildung.svg" width="24" height="24" alt=""> <abbr title="beziehugnsweise">bzw.</abbr> <img src="../img/liste-korpus.svg" width="24" height="24" alt="">), mit denen sie aus- oder eingeblendet werden können. Sie sind also nicht mehr an die Anzeige anderer Datenfelder gebunden.</li>
+					<li>
+						<p>Belegliste: Da der Kopf der Belegliste nun sehr viele Icons enthält, werden die inaktiven, also nicht grün hinterlegten Icons in dem Icon-Block, mit dem sich die Detail-Anzeige der Belege steuern lässt, standardmäßig ausgeblendet. Fährt man mit der Maus über den Block oder hat eines der Icons den Fokus (das passiert <abbr title="zum Beispiel">z. B.</abbr>, wenn man gerade eines angeklickt hat) sind immer alle Icons sichtbar – bis man mit der Maus woandershin fährt oder ein Element außerhalb dieses Icon-Blocks fokussiert, sprich: auf irgendetwas anderes klickt.</p>
+						<p>Das einzige Icon, das immer sichtbar ist, steht für den Belegtext selbst: <img src="../img/liste-beleg.svg" width="24" height="24" alt="">. Es hat nur eine Platzhalterfunktion, der Belegtext kann nicht ausgeblendet werden.</p>
+						<p>Für den Fall, dass man immer alle Icons in der Liste sehen will, gibt es eine Option unter <i>Programm &gt; Einstellungen &gt; Belegliste</i>.</p>
+					</li>
 					<li>Die Scripts zum Erstellen von Installern wurden verbessert (Modularisierung, bessere Fehlerbehandlung <abbr title="und so weiter">usw.</abbr>). Mit ihnen können jetzt auch RPM-Pakete für jene <i>Linux</i>-Distributionen erstellt werden, die dieses Format benötigen, aber auch komprimierte Archive, und zwar sowohl für <i>Windows</i> (ZIP) als auch <i>Linux</i> (TAR.GZ).</li>
 					<li>Die Überarbeitung der Installer-Scripts und ein paar Änderungen an der Dateistruktur machten eine Anpassung der <i>technischen Dokumentation</i> nötig.</li>
 				</ul>
@@ -43,6 +49,7 @@
 				<h3>Behobene Fehler</h3>
 				
 				<ul>
+					<li>Karteikarte: Wurden in einer Karteikarte die Felder <i>Bedeutung</i>, <i>Wortbildung</i>, <i>Korpus</i> oder <i>Textsorte</i> über das Dropdown-Menü gefüllt oder ergänzt, wurde die Karteikarte zwar als geändert markiert, der neue Wert im Korpus-Feld nach dem Speichern aber trotzdem nicht übernommen.</li>
 					<li><abbr title="Deutsches Textarchiv">DTA</abbr>-Import: Eine Regression führte dazu, das unter gewissen Umständen die Seitennummern von beim Import übersprungenen Seiten im importierten Text erschienen.</li>
 					<li>Sachgebiete: Nach dem Löschen der Sachgebiete-Datei unter <i>Programm &gt; Einstellungen &gt; Bedeutungsgerüst</i> wurde das Datum des letzten Updates nicht ausgeblendet.</li>
 					<li>Im Installer-Script für Linux-Pakete befanden sich noch absolute Pfadangaben.</li>
