@@ -55,6 +55,8 @@ window.addEventListener("load", function() {
 	document.getElementById("erinnerungen").addEventListener("click", () => erinnerungen.show());
 	// Notizen-Icon
 	document.getElementById("notizen-icon").addEventListener("click", () => notizen.oeffnen());
+	// Lexika-Icon
+	document.getElementById("lexika-icon").addEventListener("click", () => lexika.oeffnen());
 	// Programm-Icon
 	document.getElementById("icon").addEventListener("click", function() {
 		const {ipcRenderer} = require("electron");

@@ -63,6 +63,7 @@ let erinnerungen = {
 		} else {
 			icon.classList.add("aus");
 		}
+		helfer.kopfIcon();
 	},
 	// Erinnerungen auf Klick anzeigen
 	show () {

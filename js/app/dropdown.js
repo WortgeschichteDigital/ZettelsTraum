@@ -74,6 +74,10 @@ let dropdown = {
 		});
 		inp.addEventListener("keydown", function(evt) {
 			if (evt.which === 13) { // Enter
+				// bei Strg + Enter ist wohl abbrechen, weil wohl eine andere Funktion aufgerufen werden soll
+				if (evt.ctrlKey) {
+					return;
+				}
 				// Dropdown existiert noch nicht od. hält keine Vorschläge bereit
 				let drop = document.getElementById("dropdown");
 				if (!drop || drop.firstChild.classList.contains("keine-vorschlaege")) {
@@ -178,6 +182,8 @@ let dropdown = {
 			dropdown.dataFormular("bl");
 		} else if (feld_id === "beleg-kr") {
 			dropdown.dataKorpora();
+		} else if (feld_id === "beleg-sy") {
+			dropdown.dataFormular("sy");
 		} else if (feld_id === "beleg-ts") {
 			dropdown.dataFormular("ts");
 		} else if (feld_id === "bedeutungen-hierarchie") {
@@ -355,7 +361,7 @@ let dropdown = {
 	auswahl (feld, text) {
 		let caller = dropdown.caller; // muss zwischengespeichert werden, weil das Dropdown sich schließt, wenn sich das Dialog-Fenster öffnet
 		const wert = dropdown.feldWert(feld);
-		if (wert && /^beleg-(bd|bl|ts)/.test(caller)) {
+		if (wert && /^beleg-(bd|bl|sy|ts)/.test(caller)) {
 			// Steht der Wert schon im Feld?
 			let feld_val = wert.split("\n");
 			if (feld_val.includes(text)) {
@@ -439,7 +445,7 @@ let dropdown = {
 			}
 			feld.focus();
 			// Haben die Änderungen weitere Konsequenzen?
-			if (/^beleg-(bd|bl|ts)/.test(caller)) {
+			if (/^beleg-(bd|bl|sy|ts)/.test(caller)) {
 				helfer.textareaGrow(feld);
 				const id = caller.replace(/^beleg-/, "");
 				beleg.data[id] = helfer.textTrim(text, true);

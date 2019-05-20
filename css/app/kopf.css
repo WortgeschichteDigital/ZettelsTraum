@@ -161,7 +161,7 @@ body > header span {
 
 #kartei-geaendert {
 	visibility: hidden;
-	margin-left: 10px;
+	margin: 0 35px 0 10px;
 }
 
 #kartei-geaendert.geaendert {
@@ -170,12 +170,17 @@ body > header span {
 
 #erinnerungen,
 #notizen-icon,
-#kartei-anhaenge {
-	margin-left: 35px;
+#lexika-icon {
+	margin-right: 10px;
+}
+
+#kartei-anhaenge.rand {
+	margin-left: 25px;
 }
 
 #erinnerungen img,
 #notizen-icon img,
+#lexika-icon img,
 #kartei-anhaenge img {
 	position: relative;
 	bottom: 18px;

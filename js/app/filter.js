@@ -67,6 +67,12 @@ let filter = {
 				filter: {},
 				filter_folge: [],
 			},
+			synonyme: {
+				name: "Synonyme",
+				filter_vorhanden: false,
+				filter: {},
+				filter_folge: [],
+			},
 			korpora: {
 				name: "Korpora",
 				filter_vorhanden: belege.length ? true : false,
@@ -138,6 +144,10 @@ let filter = {
 				typen: "wortbildungen",
 			},
 			{
+				data: "sy",
+				typen: "synonyme",
+			},
+			{
 				data: "kr",
 				typen: "korpora",
 			},
@@ -148,12 +158,12 @@ let filter = {
 		];
 		for (let x = 0, len = belege.length; x < len; x++) {
 			let id = belege[x];
-			// BEDEUTUNGEN, WORTBILDUNGEN, KORPORA UND TEXTSORTEN
+			// BEDEUTUNGEN, WORTBILDUNGEN, SYNONYME, KORPORA UND TEXTSORTEN
 			for (let i = 0, len = baeume.length; i < len; i++) {
 				let d = baeume[i].data,
 					t = baeume[i].typen;
 				if (!data.ka[id][d]) {
-					if (d !== "bl") { // Wortbildung hat kein undefined-Feld
+					if (!/^(bl|sy)$/.test(d)) { // Wortbildung und Synonym hat kein undefined-Feld
 						filter.typen[t].filter[`${t}-undefined`].wert++;
 					}
 					continue;
@@ -185,6 +195,10 @@ let filter = {
 			// WORTBILDUNGEN
 			if (data.ka[id].bl) {
 				filter.typen.wortbildungen.filter_vorhanden = true;
+			}
+			// SYNONYM
+			if (data.ka[id].sy) {
+				filter.typen.synonyme.filter_vorhanden = true;
 			}
 			// VERSCHIEDENES
 			// Vollständigkeit
@@ -218,8 +232,8 @@ let filter = {
 				filter.typen.verschiedenes.filter_vorhanden = true;
 			}
 		}
-		// Bedeutungen, Wortbildungen, Korpora und Textsorten sortieren
-		let arr_typen = ["bedeutungen", "wortbildungen", "korpora", "textsorten"];
+		// Bedeutungen, Wortbildungen, Synonyme, Korpora und Textsorten sortieren
+		let arr_typen = ["bedeutungen", "wortbildungen", "synonyme", "korpora", "textsorten"];
 		for (let i = 0, len = arr_typen.length; i < len; i++) {
 			let arr = filter.typen[arr_typen[i]].filter_folge;
 			arr.sort(filter.baumSort);
@@ -406,14 +420,16 @@ let filter = {
 		});
 	},
 	// extrahiert die einzelnen Schichten, die in einer Bedeutungs-, Wortbildungs-
-	// oder Textsortenangabe stecken
+	// Synonym- oder Textsortenangabe stecken
 	// (wird auch für Korpora benutzt, weil es so leichter ist)
 	//   baum = String
-	//     (Bedeutungs-, Wortbildungs- bzw. Textsortenbaum oder Korpus als einzeiliger String)
+	//     (Bedeutungs-, Wortbildungs-, Synonym- bzw. Textsortenbaum oder Korpus
+	//      als einzeiliger String)
 	//   dt = String
-	//     (Datentyp, also entweder "bedeutungen", "wortbildungen", "korpora", "textsorten" oder "")
+	//     (Datentyp, also entweder "bedeutungen", "wortbildungen", "synonym", "korpora",
+	//      "textsorten" oder "")
 	baumExtrakt (baum, dt) {
-		if (/^(bedeutungen|wortbildungen|korpora|textsorten)/.test(dt)) {
+		if (/^(bedeutungen|wortbildungen|synonyme|korpora|textsorten)/.test(dt)) {
 			dt += "-";
 		}
 		let extrakt = [],
@@ -428,7 +444,7 @@ let filter = {
 		}
 		return extrakt;
 	},
-	// Array mit Bedeutungsschichten sortieren, die aus Bedeutungs-, Wortbildungs-,
+	// Array mit Bedeutungsschichten sortieren, die aus Bedeutungs-, Wortbildungs-, Synonym-,
 	// Korpus- und Textsortenangaben extrahiert wurden
 	baumSort (a, b) {
 		// undefined wird an den Anfang gesetzt
@@ -749,13 +765,11 @@ let filter = {
 	//   input = Element
 	//     (Check- oder Textbox in der Filterliste, die geändert wurde)
 	anwenden (input) {
-		let listener = "change",
-			timeout = 0;
+		let timeout = 0;
 		if (input.type === "text") {
-			listener = "input";
 			timeout = 250;
 		}
-		input.addEventListener(listener, function() {
+		input.addEventListener("input", function() {
 			filter.setZuletztAktiv(this);
 			if (this.id === "filter-volltext") {
 				filter.volltextSuchePrep();
@@ -879,7 +893,8 @@ let filter = {
 			});
 		}
 	},
-	// Cache mit regulären Ausdrücken für Bedeutungen, Wortbildungen, Korpora, Textsorten
+	// Cache mit regulären Ausdrücken für Bedeutungen, Wortbildungen, Synonyme,
+	// Korpora und Textsorten
 	// (wirkt sich wohl positiv auf die Performance aus)
 	regCacheBaum: {},
 	// Zwischenspeicher für die Daten der Volltextsuche
@@ -956,18 +971,19 @@ let filter = {
 		if (!Object.keys(filter.aktiveFilter).length) {
 			return karten;
 		}
-		// aktive Filter in Bedeutungen, Wortbildungen, Korpora und Textsorten
+		// aktive Filter in Bedeutungen, Wortbildungen, Synonymen, Korpora und Textsorten
 		let baumfilter = {
 			bd: [],
 			bl: [],
 			kr: [],
+			sy: [],
 			ts: [],
 		};
 		for (let i in filter.aktiveFilter) {
 			if (!filter.aktiveFilter.hasOwnProperty(i)) {
 				continue;
 			}
-			if (!/^(bedeutungen|wortbildungen|korpora|textsorten)-/.test(i)) {
+			if (!/^(bedeutungen|wortbildungen|synonyme||korpora|textsorten)-/.test(i)) {
 				continue;
 			}
 			let f = i.match(/^(.+?)-(.+)/);
@@ -975,6 +991,8 @@ let filter = {
 				baumfilter.bd.push(f[2]);
 			} else if (f[1] === "wortbildungen") {
 				baumfilter.bl.push(f[2]);
+			} else if (f[1] === "synonyme") {
+				baumfilter.sy.push(f[2]);
 			} else if (f[1] === "korpora") {
 				baumfilter.kr.push(f[2]);
 			} else if (f[1] === "textsorten") {
@@ -1016,7 +1034,7 @@ let filter = {
 					continue;
 				}
 			}
-			// Bedeutungen, Wortbildungen, Korpora und Textsorten
+			// Bedeutungen, Wortbildungen, Synonyme, Korpora und Textsorten
 			for (let bf in baumfilter) {
 				if (!baumfilter.hasOwnProperty(bf)) {
 					continue;

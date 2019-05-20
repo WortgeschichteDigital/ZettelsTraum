@@ -71,8 +71,9 @@
 		<header>
 			<h1 id="wort" class="keine-kartei">keine Kartei geöffnet</h1
 				><span id="kartei-geaendert">*</span
-				><span class="aus" id="erinnerungen"><img src="img/kopf-erinnerungen.svg" width="24" height="24" alt="" title="Erinnerungen anzeigen"></span
-				><span class="aus" id="notizen-icon"><img src="img/kopf-notizen.svg" width="24" height="24" alt="" title="Notizen anzeigen"></span
+				><span class="kopf-icon aus" id="erinnerungen"><img src="img/kopf-erinnerungen.svg" width="24" height="24" alt="" title="Erinnerungen anzeigen"></span
+				><span class="kopf-icon aus" id="notizen-icon"><img src="img/kopf-notizen.svg" width="24" height="24" alt="" title="Notizen anzeigen"></span
+				><span class="kopf-icon aus" id="lexika-icon"><img src="img/kopf-lexika.svg" width="24" height="24" alt="" title="überprüfte Lexika anzeigen"></span
 				><span id="kartei-anhaenge"></span
 				><span id="icon"><img src="img/icon.svg" width="48" height="48" alt=""></span>
 		</header>
@@ -133,7 +134,7 @@
 								><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="m7 4 5 5 5-5h-10zm-3 6v4h16v-4h-16zm8 5-5 5h10l-5-5z"/></svg></a
 							><a href="#" class="icon-leseansicht aus" id="beleg-link-trennung"
 								><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g><path d="m4 4v16h6v-2h-4v-12h4v-2h-4z"/><path d="m20 4v16h-6v-2h4v-12h-4v-2h4z"/><path d="m8 10v2h6v2h2v-2-2h-8z"/></g></svg></a
-							><a href="#" class="icon-leseansicht aus" id="beleg-link-springen" title="zur nächsten Markierung springen (Strg + ↓)"
+							><a href="#" id="beleg-link-springen" title="zum Wort im Belegtext springen (Strg + ↓)"
 								><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m7 1c-2.7527 0-5 2.2473-5 5v5h2v-5c0-1.6793 1.3207-3 3-3s3 1.3207 3 3v3h-2l3 5 3-5h-2v-3c0-2.7527-2.2473-5-5-5z"/></svg></a
 							><a href="#" class="druck-icon" id="beleg-link-drucken" title="Karte drucken (Strg + P)"
 								><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m4 1v2h8v-2h-8zm-2 3c-0.5 0-1 0.5-1 1v4c0 0.5 0.5 1 1 1h1v-2h10v2h1c0.5 0 1-0.5 1-1v-4c0-0.5-0.5-1-1-1h-12zm2 5v5h8v-5h-8z"/></svg></a
@@ -169,6 +170,8 @@
 					<td colspan="2"><input type="text" value="" id="beleg-dta" tabindex="0"
 						><input type="number" value="2" min="0" max="9999" id="beleg-dta-bis" tabindex="0"
 						><input type="button" value="Importieren" id="beleg-dta-button" tabindex="0"></td>
+				</tr><tr class="beleg-form">
+					<td colspan="2"><hr></td>
 				</tr><tr>
 					<th><label for="beleg-da">Datum</label
 						><span class="text-tools"
@@ -204,6 +207,8 @@
 					<td colspan="2"><textarea rows="1" id="beleg-bs" required></textarea></td>
 				</tr><tr class="beleg-lese">
 					<td colspan="2" id="beleg-lese-bs"></td>
+				</tr><tr class="beleg-form">
+					<td colspan="2"><hr></td>
 				</tr><tr>
 					<th colspan="2"><label for="beleg-bd">Bedeutung</label
 						><span class="text-tools"
@@ -216,16 +221,26 @@
 				</tr><tr class="beleg-lese">
 					<td colspan="2" id="beleg-lese-bd"></td>
 				</tr><tr>
-					<th colspan="2"><label for="beleg-bl">Wortbildung</label
+					<th><label for="beleg-bl">Wortbildung</label
+						><span class="text-tools"
+							><a href="#" class="icon-link icon-tools-kopieren" title="Text kopieren" tabindex="-1"> </a
+							><a href="#" class="icon-link icon-tools-einfuegen" title="Text einfügen" tabindex="-1"> </a></span></th>
+					<th><label for="beleg-sy">Synonym</label
 						><span class="text-tools"
 							><a href="#" class="icon-link icon-tools-kopieren" title="Text kopieren" tabindex="-1"> </a
 							><a href="#" class="icon-link icon-tools-einfuegen" title="Text einfügen" tabindex="-1"> </a></span></th>
 				</tr><tr class="beleg-form">
-					<td colspan="2" class="dropdown-cont"><textarea rows="1" class="dropdown-feld" id="beleg-bl" tabindex="0" required></textarea
+					<td class="dropdown-cont"><textarea rows="1" class="dropdown-feld" id="beleg-bl" tabindex="0" required></textarea
 						><a href="#" class="dropdown-link-td" title="Wortbildungen auflisten" tabindex="-1"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m7 2v8l-3.5-3.5-1.5 1.5 6 6 6-6-1.5-1.5-3.5 3.5v-8z"/></svg></a
 					></td>
+					<td class="dropdown-cont"><textarea rows="1" class="dropdown-feld" id="beleg-sy" tabindex="0" required></textarea
+						><a href="#" class="dropdown-link-td" title="Synonyme auflisten" tabindex="-1"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m7 2v8l-3.5-3.5-1.5 1.5 6 6 6-6-1.5-1.5-3.5 3.5v-8z"/></svg></a
+					></td>
 				</tr><tr class="beleg-lese">
-					<td colspan="2" id="beleg-lese-bl"></td>
+					<td id="beleg-lese-bl"></td>
+					<td id="beleg-lese-sy"></td>
+				</tr><tr class="beleg-form">
+					<td colspan="2"><hr></td>
 				</tr><tr>
 					<th colspan="2"><label for="beleg-qu">Quelle</label
 						><span class="text-tools"
@@ -254,6 +269,8 @@
 				</tr><tr class="beleg-lese">
 					<td id="beleg-lese-kr"></td>
 					<td id="beleg-lese-ts"></td>
+				</tr><tr class="beleg-form">
+					<td colspan="2"><hr></td>
 				</tr><tr>
 					<th colspan="2"><label for="beleg-no">Notizen</label
 						><span class="text-tools"
@@ -313,6 +330,9 @@
 								<p><input type="checkbox" id="filter-feld-bl" class="filter-optionen"
 									><label for="filter-feld-bl">Wortbildung</label
 									></p>
+								<p><input type="checkbox" id="filter-feld-sy" class="filter-optionen"
+									><label for="filter-feld-sy">Synonym</label
+									></p>
 								<p><input type="checkbox" id="filter-feld-qu" class="filter-optionen"
 									><label for="filter-feld-qu">Quelle</label
 									></p>
@@ -368,6 +388,8 @@
 							><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M 19 5 A 4 4 0 0 0 15 9 L 15 13 L 19 13 L 19 9 L 17 9 A 2 2 0 0 1 19 7 L 19 5 z M 5 11 L 5 15 L 7 15 A 2 2 0 0 1 5 17 L 5 19 A 4 4 0 0 0 9 15 L 9 11 L 5 11 z "/></svg></a
 						><a href="#" id="liste-link-bl"
 							><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m6.25 1-0.1543 1.8438a5.5 5.5 0 0 0-1.6074 0.92969l-1.6758-0.78906-1.75 3.0312 1.5215 1.0566a5.5 5.5 0 0 0-0.083984 0.92773 5.5 5.5 0 0 0 0.080078 0.93164l-1.5176 1.0527 1.75 3.0312 1.6719-0.78711a5.5 5.5 0 0 0 1.6113 0.92383l0.15039 1.8496h3.5l0.1543-1.8438a5.5 5.5 0 0 0 1.6074-0.92969l1.6758 0.78906 1.75-3.0312-1.5215-1.0566a5.5 5.5 0 0 0 0.083985-0.92773 5.5 5.5 0 0 0-0.080078-0.93164l1.5176-1.0527-1.75-3.0312-1.6719 0.78711a5.5 5.5 0 0 0-1.6113-0.92383l-0.15039-1.8496h-3.5zm1.75 5a2 2 0 0 1 2 2 2 2 0 0 1-2 2 2 2 0 0 1-2-2 2 2 0 0 1 2-2z"/></svg></a
+						><a href="#" id="liste-link-sy"
+							><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="m7 4c-1.662 0-3 1.338-3 3v10c0 1.662 1.338 3 3 3h10c1.662 0 3-1.338 3-3v-10c0-1.662-1.338-3-3-3h-10zm2.832 4.2871c1.008 0 1.8073 0.43256 2.5273 0.97656 0.592 0.432 1.1198 0.81641 1.8398 0.81641 0.928 0 1.8399-0.84897 2.3359-1.793l1.3125 0.99219c-0.8 1.344-2.0797 2.4336-3.6797 2.4336-0.992 0-1.8073-0.43256-2.5273-0.97656-0.592-0.432-1.1042-0.81641-1.8242-0.81641-0.944 0-1.8556 0.86497-2.3516 1.793l-1.3125-0.99219c0.816-1.344 2.0797-2.4336 3.6797-2.4336zm0 4c1.008 0 1.8073 0.43256 2.5273 0.97656 0.592 0.432 1.1198 0.81641 1.8398 0.81641 0.928 0 1.8399-0.86497 2.3359-1.793l1.3125 0.99219c-0.8 1.344-2.0797 2.4336-3.6797 2.4336-0.992 0-1.8073-0.43256-2.5273-0.97656-0.592-0.432-1.1042-0.81641-1.8242-0.81641-0.944 0-1.8556 0.84897-2.3516 1.793l-1.3125-0.99219c0.816-1.344 2.0797-2.4336 3.6797-2.4336z"/></svg></a
 						><a href="#" id="liste-link-qu"
 							><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M 7 4 C 5.338 4 4 5.338 4 7 L 4 17 C 4 18.662 5.338 20 7 20 L 17 20 C 18.662 20 20 18.662 20 17 L 20 7 C 20 5.338 18.662 4 17 4 L 7 4 z M 12 6.078125 C 13.575521 6.078125 14.800998 6.5208334 15.677734 7.40625 C 16.558811 8.2916666 17 9.5321181 17 11.125 C 17 12.21875 16.765625 13.159288 16.296875 13.949219 C 15.832465 14.739149 15.161892 15.335069 14.285156 15.734375 L 16.244141 17.921875 L 13.855469 17.921875 L 12.267578 16.150391 L 12.072266 16.150391 C 10.470703 16.150391 9.2237413 15.707682 8.3339844 14.822266 C 7.4442275 13.936849 7 12.704861 7 11.125 C 7 9.5494792 7.4427084 8.3140191 8.328125 7.4199219 C 9.2178819 6.5258247 10.44184 6.078125 12 6.078125 z M 12 7.8945312 C 11.236111 7.8945312 10.643663 8.1779514 10.222656 8.7421875 C 9.8016493 9.3064236 9.5917969 10.100694 9.5917969 11.125 C 9.5917969 12.166667 9.796658 12.963976 10.208984 13.519531 C 10.621311 14.070747 11.21875 14.347656 12 14.347656 C 12.768229 14.347656 13.362196 14.064236 13.783203 13.5 C 14.20421 12.935764 14.416016 12.144965 14.416016 11.125 C 14.416016 10.100694 14.20421 9.3064236 13.783203 8.7421875 C 13.362196 8.1779514 12.768229 7.8945312 12 7.8945312 z "/></svg></a
 						><a href="#" id="liste-link-kr"
@@ -504,7 +526,7 @@
 						<p><input type="checkbox" id="einstellung-wort-check"
 							><label for="einstellung-wort-check">nach dem <abbr title="Deutsches Textarchiv">DTA</abbr>-Import überprüfen, ob der Belegtext das Kartei-Wort enthält</label></p>
 						<p><input type="checkbox" id="einstellung-immer-ergaenzen"
-							><label for="einstellung-immer-ergaenzen">mehrzeilige Textfelder ohne Nachfrage ergänzen, wenn aus einem Dropdown-Menü ein Wert ausgewählt oder im Bedeutungsgerüst-Fenster eine Bedeutung angeklickt wurde</label></p>
+							><label for="einstellung-immer-ergaenzen">Textfelder beim Einfügen von Text via Icon, Menü-Eintrag oder Link ohne Nachfrage ergänzen</label></p>
 						<h3>Leseansicht</h3>
 						<p><input type="checkbox" id="einstellung-leseansicht"
 							><label for="einstellung-leseansicht">bestehende Karteikarte in der Leseansicht öffnen</label></p>
@@ -530,6 +552,8 @@
 								><label for="einstellung-filter-offen-bedeutungen">Bedeutungen</label></p>
 							<p><input type="checkbox" id="einstellung-filter-offen-wortbildungen"
 								><label for="einstellung-filter-offen-wortbildungen">Wortbildungen</label></p>
+							<p><input type="checkbox" id="einstellung-filter-offen-synonyme"
+								><label for="einstellung-filter-offen-synonyme">Synonyme</label></p>
 							<p><input type="checkbox" id="einstellung-filter-offen-korpora"
 								><label for="einstellung-filter-offen-korpora">Korpora</label></p>
 							<p><input type="checkbox" id="einstellung-filter-offen-textsorten"

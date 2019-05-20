@@ -63,6 +63,23 @@ let helfer = {
 			}
 		});
 	},
+	// wenn keine Kopf-Icons => Liste der Anhänge links ohne Margin
+	kopfIcon () {
+		let icons = document.querySelectorAll(".kopf-icon"),
+			iconsSichtbar = false;
+		for (let i of icons) {
+			if (!i.classList.contains("aus")) {
+				iconsSichtbar = true;
+				break;
+			}
+		}
+		let anhaenge = document.getElementById("kartei-anhaenge");
+		if (iconsSichtbar) {
+			anhaenge.classList.add("rand");
+		} else {
+			anhaenge.classList.remove("rand");
+		}
+	},
 	// übergebene Sektion einblenden, alle andere Sektionen ausblenden
 	//   sektion = String
 	//     (ID der einzublendenden Sektion)
@@ -125,10 +142,8 @@ let helfer = {
 		// Karteikarte ist aktiv, kein Overlay
 		if (helfer.belegOffen()) {
 			// Ctrl + ↓ + Leseansicht aktiv
-			if (evt.ctrlKey &&
-					evt.which === 40 &&
-					document.getElementById("beleg-link-leseansicht").classList.contains("aktiv")) {
-				beleg.ctrlSpringen();
+			if (evt.ctrlKey && evt.which === 40) {
+				beleg.ctrlSpringen(evt);
 			}
 			return;
 		}

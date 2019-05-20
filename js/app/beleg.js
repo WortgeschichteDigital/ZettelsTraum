@@ -84,6 +84,7 @@ let beleg = {
 			kr: "", // Korpus
 			no: "", // Notizen
 			qu: "", // Quelle
+			sy: "", // Synonym
 			ts: "", // Textsorte
 			un: optionen.data.einstellungen.unvollstaendig, // Bearbeitung unvollständig
 		};
@@ -132,6 +133,9 @@ let beleg = {
 	},
 	// Formular füllen und anzeigen
 	formular (neu) {
+		// regulären Ausdruck für Sprung zum Wort zurücksetzen
+		beleg.ctrlSpringenFormReg.again = false;
+		beleg.ctrlSpringenFormReset();
 		// Beleg-Titel eintragen
 		const beleg_titel = document.getElementById("beleg-titel"),
 			titel_text = document.createTextNode(`Beleg #${beleg.id_karte}`);
@@ -164,7 +168,10 @@ let beleg = {
 		// Formular einblenden
 		helfer.sektionWechseln("beleg");
 		// Textarea zurücksetzen
-		document.querySelectorAll("#beleg textarea").forEach((textarea) => helfer.textareaGrow(textarea));
+		document.querySelectorAll("#beleg textarea").forEach(function(textarea) {
+			textarea.scrollTop = 0;
+			helfer.textareaGrow(textarea);
+		});
 		// Fokus setzen
 		const leseansicht_aktiv = document.getElementById("beleg-link-leseansicht").classList.contains("aktiv");
 		if (neu && !leseansicht_aktiv) {
@@ -177,11 +184,7 @@ let beleg = {
 	//   feld = Element
 	//     (das Formularfeld, das geändert wurde)
 	formularGeaendert (feld) {
-		let event_typ = "input";
-		if (this.type === "checkbox") {
-			event_typ = "change";
-		}
-		feld.addEventListener(event_typ, function() {
+		feld.addEventListener("input", function() {
 			let feld = this.id.replace(/^beleg-/, "");
 			if (/^dta(-bis)*$/.test(feld)) { // #beleg-dta + #beleg-dta-bis gehören nicht zur Kartei, dienen nur zum DTA-Import
 				if (feld === "dta" &&
@@ -255,8 +258,8 @@ let beleg = {
 			direktSchliessen();
 			return;
 		}
-		// ggf. Format von Bedeutung, Wortbildungen und Textsorte anpassen
-		let ds = ["bd", "bl", "ts"];
+		// ggf. Format von Bedeutung, Wortbildung, Synonym und Textsorte anpassen
+		let ds = ["bd", "bl", "sy", "ts"];
 		for (let i = 0, len = ds.length; i < len; i++) {
 			let ds_akt = ds[i];
 			beleg.data[ds_akt] = beleg.data[ds_akt].replace(/::/g, ": ").replace(/\n\s*\n/g, "\n");
@@ -533,8 +536,8 @@ let beleg = {
 			auflage: bibl.querySelector("editionStmt edition"),
 			ort: bibl.querySelector("publicationStmt pubPlace"),
 			verlag: bibl.querySelector("publicationStmt publisher name"),
-			textsorte: sorte.querySelectorAll(`classCode[scheme$="dwds1main"]`), // querySelectorAll eigentlich nicht nötig; das ist ein Relikt aus der Zeit als auch "dwds2main" importiert wurde; besser so lassen, eine Änderung produziert nur Fehler
-			textsorte_sub: sorte.querySelectorAll(`classCode[scheme$="dwds1sub"]`),
+			textsorte: sorte.querySelectorAll(`classCode[scheme$="dtamain"], classCode[scheme$="dwds1main"]`),
+			textsorte_sub: sorte.querySelectorAll(`classCode[scheme$="dtasub"], classCode[scheme$="dwds1sub"]`),
 		};
 		for (let wert in werte) {
 			if (!werte.hasOwnProperty(wert)) {
@@ -914,7 +917,9 @@ let beleg = {
 					textsorte.push(ts);
 				}
 			}
-			beleg.data.ts = textsorte.join("\n");
+			// identische Werte eliminieren
+			let textsorteUnique = new Set(textsorte);
+			beleg.data.ts = Array.from(textsorteUnique).join("\n");
 		}
 		beleg.data.kr = "DTA";
 		// QUELLENANGABE ZUSAMMENSETZEN
@@ -1059,7 +1064,7 @@ let beleg = {
 					return;
 				}
 				if (document.getElementById("dropdown") &&
-						/^beleg-(bd|bl|kr|ts)/.test(this.id)) {
+						/^beleg-(bd|bl|kr|sy|ts)/.test(this.id)) {
 					evt.preventDefault();
 					return;
 				}
@@ -1178,27 +1183,42 @@ let beleg = {
 		} else {
 			text = clipboard.readText();
 		}
-		// Text einfügen
-		if (feld.value) {
-			dialog.oeffnen("confirm", function() {
-				if (dialog.antwort) {
-					feld.value = text;
-				} else if (dialog.antwort === false && feld.type === "text") { // Input-Text
-					feld.value += ` ${text}`;
-				} else if (dialog.antwort === false) { // Textareas
-					feld.value += `\n\n${text}`;
-				}
-				beleg.data[ds] = feld.value;
-				helfer.textareaGrow(feld);
-				beleg.belegGeaendert(true);
-			});
-			dialog.text("Das Feld enthält schon Text. Soll er überschrieben werden?\n(Bei <i>Nein</i> wird der Text ergänzt.)");
+		// Felder ist leer => Text direkt eintragen
+		if (!feld.value) {
+			eintragen(false);
 			return;
 		}
-		feld.value = text;
-		beleg.data[ds] = text;
-		helfer.textareaGrow(feld);
-		beleg.belegGeaendert(true);
+		// Feld ist gefüllt + Option immer ergänzen => Text direkt ergänzen
+		if (optionen.data.einstellungen["immer-ergaenzen"]) {
+			eintragen(true);
+			return;
+		}
+		// Feld ist gefüllt => ergänzen (true), überschreiben (false) oder abbrechen (null)?
+		dialog.oeffnen("confirm", function() {
+			if (dialog.antwort === true ||
+					dialog.antwort === false) {
+				eintragen(dialog.antwort);
+			}
+		});
+		dialog.text("Im Textfeld steht schon etwas. Soll es ergänzt werden?\n(Bei „Nein“ wird das Textfeld überschrieben.)");
+		document.getElementById("dialog-text").appendChild(optionen.shortcut("Textfeld künftig ohne Nachfrage ergänzen", "immer-ergaenzen"));
+		// Einfüge-Funktion
+		function eintragen (ergaenzen) {
+			if (ergaenzen) {
+				if (feld.type === "text") { // <input>
+					feld.value += ` ${text}`;
+				} else if (/^beleg-(bs|no|qu)$/.test(feld.id)) { // <textarea> (Beleg, Quelle, Notizen)
+					feld.value += `\n\n${text}`;
+				} else { // <textarea> (alle anderen)
+					feld.value += `\n${text}`;
+				}
+			} else {
+				feld.value = text;
+			}
+			beleg.data[ds] = feld.value;
+			helfer.textareaGrow(feld);
+			beleg.belegGeaendert(true);
+		}
 	},
 	// Bereitet HTML-Text zum Einfügen in das Beleg-Formular auf
 	//   html = String
@@ -1562,6 +1582,12 @@ let beleg = {
 				i.classList.add("aus");
 			}
 		});
+		// Title des Sprung-Icons anpassen
+		if (an) {
+			document.getElementById("beleg-link-springen").title = "zur nächsten Markierung springen (Strg + ↓)";
+		} else {
+			document.getElementById("beleg-link-springen").title = "zum Wort im Belegtext springen (Strg + ↓)";
+		}
 		// Einfüge-Icons ein- oder ausblenden
 		document.querySelectorAll("#beleg .icon-tools-einfuegen").forEach(function(i) {
 			if (an) {
@@ -1793,10 +1819,20 @@ let beleg = {
 			link.title = "Silbentrennung anzeigen (Strg + T)";
 		}
 	},
+	// Verteiler für die Sprungfunktion
+	//   evt = Event-Objekt
+	//     (kann fehlen, wenn über den Link im Kopf des Belegs aufgerufen)
+	ctrlSpringen (evt = null) {
+		if (document.getElementById("beleg-link-leseansicht").classList.contains("aktiv")) {
+			beleg.ctrlSpringenLese();
+		} else {
+			beleg.ctrlSpringenForm(evt);
+		}
+	},
 	// das letzte Element, zu dem in der Karteikarte gesprungen wurde
 	ctrlSpringenPos: -1,
 	// durch die Hervorhebungen in der Leseansicht der Karteikarte springen
-	ctrlSpringen () {
+	ctrlSpringenLese () {
 		const marks = document.querySelectorAll("#beleg-lese-bs mark.suche, #beleg-lese-bs mark.user, #beleg-lese-bs mark.wort");
 		if (!marks.length) {
 			dialog.oeffnen("alert");
@@ -1825,6 +1861,48 @@ let beleg = {
 		setTimeout(function() {
 			marks[i].classList.remove("mark");
 		}, 1000);
+	},
+	// regulärer Ausdruck für den Sprung im Beleg-Formular
+	ctrlSpringenFormReg: {
+		reg: null,
+		again: false,
+	},
+	// regulären Ausdruck für den Sprung im Beleg-Formular zurücksetzen
+	ctrlSpringenFormReset () {
+		beleg.ctrlSpringenFormReg.reg = new RegExp(`[^${helfer.ganzesWortRegExp.links}]*(${helfer.formVariRegExp()})[^${helfer.ganzesWortRegExp.rechts}]*`, "gi");
+	},
+	// <textarea> mit dem Belegtext zum Wort scrollen
+	ctrlSpringenForm (evt) {
+		if (evt) {
+			evt.preventDefault();
+		}
+		let textarea = document.getElementById("beleg-bs"),
+			val = textarea.value,
+			search = beleg.ctrlSpringenFormReg.reg.exec(val);
+		if (search) { // Wort gefunden
+			beleg.ctrlSpringenFormReg.again = false;
+			const ende = search.index + search[0].length;
+			textarea.scrollTop = 0;
+			textarea.value = val.substring(0, ende);
+			textarea.scrollTop = ende;
+			textarea.value = val;
+			if (textarea.scrollTop > 0) {
+				textarea.scrollTop = textarea.scrollTop + 120;
+			}
+			textarea.setSelectionRange(search.index, ende);
+			textarea.focus();
+		} else if (beleg.ctrlSpringenFormReg.again) { // Wort zum wiederholten Mal nicht gefunden => Wort nicht im Belegtext (oder nicht auffindbar)
+			beleg.ctrlSpringenFormReg.again = false;
+			dialog.oeffnen("alert", function() {
+				textarea.scrollTop = 0;
+				textarea.setSelectionRange(0, 0);
+				textarea.focus();
+			});
+			dialog.text("Wort nicht gefunden.");
+		} else { // Wort nicht gefunden => entweder nicht im Belegtext oder nicht von Index 0 aus gesucht => noch einmal suchen
+			beleg.ctrlSpringenFormReg.again = true;
+			beleg.ctrlSpringenForm(evt);
+		}
 	},
 	// zur vorherigen/nächsten Karteikarte in der Belegliste springen
 	//   next = Boolean

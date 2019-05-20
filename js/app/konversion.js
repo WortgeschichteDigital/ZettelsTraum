@@ -4,11 +4,12 @@ let konversion = {
 	// aktuelle Version des Dateiformats
 	// *** WICHTIG! *** WICHTIG! *** WICHTIG! ***
 	// Bei Änderungen anpassen!
-	version: 3,
+	version: 4,
 	// Verteilerfunktion
 	start () {
 		konversion.von1nach2();
 		konversion.von2nach3();
+		konversion.von3nach4();
 		bedeutungen.konstit(); // TODO das gehört dann in die entsprechende Konversions-Funktion
 	},
 	// Konversion des Dateiformats von Version 1 nach Version 2
@@ -39,6 +40,23 @@ let konversion = {
 				continue;
 			}
 			data.ka[id].bl = "";
+		}
+		// Versionsnummer hochzählen
+		data.ve++;
+		// Änderungsmarkierung setzen
+		kartei.karteiGeaendert(true);
+	},
+	// Konversion des Dateiformats von Version 2 nach Version 3
+	von3nach4 () {
+		if (data.ve > 3) {
+			return;
+		}
+		// Datenfeld "sy" (Wortbildung) in allen Karteikarten ergänzen
+		for (let id in data.ka) {
+			if (!data.ka.hasOwnProperty(id)) {
+				continue;
+			}
+			data.ka[id].sy = "";
 		}
 		// Versionsnummer hochzählen
 		data.ve++;

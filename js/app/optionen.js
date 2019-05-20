@@ -30,6 +30,7 @@ let optionen = {
 			"feld-kr": true,
 			"feld-no": true,
 			"feld-qu": true,
+			"feld-sy": true,
 			"feld-ts": true,
 			// speichert den gewünschten Zeitintervall, der in der Filterliste gewählt wurde
 			zeitraum: "100",
@@ -53,19 +54,14 @@ let optionen = {
 			trennung: false,
 			// Wort der Kartei in der Vorschau und im Beleg automatisch hervorheben
 			wort_hervorheben: false,
-			// Steuerung Details: Bedeutung einblenden
+			// Steuerung Details
 			detail_bd: false,
-			// Steuerung Details: Wortbildung einblenden (ist mit Bedeutung gekoppelt)
 			detail_bl: false,
-			// Steuerung Details: Quelle einblenden
+			detail_sy: false,
 			detail_qu: false,
-			// Steuerung Details: Korpus einblenden (ist mit Quelle gekoppelt)
 			detail_kr: false,
-			// Steuerung Details: Textsorte einblenden
 			detail_ts: false,
-			// Steuerung Details: Notizen einblenden
 			detail_no: false,
-			// Steuerung Details: Metainfos einblenden
 			detail_meta: false,
 		},
 		// Einstellungen-Dialog
@@ -148,6 +144,7 @@ let optionen = {
 			"filter-offen-zeitraum": false,
 			"filter-offen-bedeutungen": false,
 			"filter-offen-wortbildungen": false,
+			"filter-offen-synonyme": false,
 			"filter-offen-korpora": false,
 			"filter-offen-textsorten": false,
 			"filter-offen-verschiedenes": false,
@@ -222,7 +219,7 @@ let optionen = {
 		liste.headerTrennungAnzeige();
 		liste.headerWortHervorhebenAnzeige();
 		// Auswahllinks für Detail-Anzeige anpassen
-		let details = ["bd", "bl", "qu", "kr", "ts", "no", "meta"];
+		let details = ["bd", "bl", "sy", "qu", "kr", "ts", "no", "meta"];
 		for (let i = 0, len = details.length; i < len; i++) {
 			liste.headerDetailsAnzeige(details[i], `detail_${details[i]}`);
 		}
@@ -382,15 +379,19 @@ let optionen = {
 					path = require("path");
 				let basis = "";
 				// getAppPath() funktioniert nur in der nicht-paketierten App, in der paketierten
-				//   zeigt es auf [Installationsordner/resources/app.asar;
+				//   zeigt es auf [Installationsordner]/resources/app.asar;
 				// getPath("exe") funktioniert nur in der paktierten Version, allerdings muss
 				//   noch der Name der ausführbaren Datei entfernt werden; in der nicht-paketierten
 				//   App zeigt es auf die ausführbare Datei des Node-Modules
 				if (app.isPackaged) {
-					basis = app.getPath("exe").replace(/zettelstraum(\.exe)*$/, "");
+					let reg = new RegExp(`${helfer.escapeRegExp(path.sep)}zettelstraum(\.exe)*$`);
+					basis = app.getPath("exe").replace(reg, "");
 				} else {
 					basis = app.getAppPath();
 				}
+				// TODO Funktionierte nicht unter Windows; vor Release hier ausstellen
+				dialog.oeffnen("alert");
+				dialog.text(basis);
 				optionen.data.einstellungen["sachgebiete-datei"] = path.join(basis, "resources", "Sachgebiete.xml");
 				optionen.data.einstellungen["sachgebiete-autoloading"] = false;
 			}
@@ -765,11 +766,7 @@ let optionen = {
 		if (ele.type === "button") { // Lade-Button für die Personenliste
 			return;
 		}
-		let typ = "change"; // Checkbox und Number
-		if (ele.type === "text") {
-			typ = "input";
-		}
-		ele.addEventListener(typ, function() {
+		ele.addEventListener("input", function() {
 			optionen.aendereEinstellung(this);
 		});
 	},

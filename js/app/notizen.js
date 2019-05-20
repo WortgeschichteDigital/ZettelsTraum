@@ -170,6 +170,7 @@ let notizen = {
 		} else {
 			icon.classList.add("aus");
 		}
+		helfer.kopfIcon();
 	},
 	// registriert, wenn im Textfeld getippt wird
 	//   textarea = Element

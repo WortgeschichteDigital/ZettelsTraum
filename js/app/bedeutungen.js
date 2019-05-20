@@ -157,9 +157,9 @@ let bedeutungen = {
 	// Bedeutungen öffnen
 	oeffnen () {
 		// TODO temporär sperren
-// 		dialog.oeffnen("alert");
-// 		dialog.text("Sorry!\nDiese Funktion ist noch nicht programmiert.");
-// 		return;
+		dialog.oeffnen("alert");
+		dialog.text("Sorry!\nDiese Funktion ist noch nicht programmiert.");
+		return;
 		// Bedeutungen sind schon offen
 		if (!document.getElementById("bedeutungen").classList.contains("aus")) {
 			helfer.auswahl(document.getElementById("bedeutungen-neu"));

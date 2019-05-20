@@ -226,17 +226,55 @@ let liste = {
 				// Beleg
 				div.appendChild(liste.belegErstellen(id));
 				// Bedeutung
-				liste.bedeutungErstellen(data.ka[id].bd, div);
+				liste.detailErstellen({
+					cont: div,
+					ds: "bd",
+					h: "Bedeutung",
+					text: data.ka[id].bd,
+				});
 				// Wortbildung
-				liste.wortbildungErstellen(data.ka[id].bl, div);
+				liste.detailErstellen({
+					cont: div,
+					ds: "bl",
+					h: "Wortbildung",
+					text: data.ka[id].bl,
+				});
+				// Synonym
+				liste.detailErstellen({
+					cont: div,
+					ds: "sy",
+					h: "Synonym",
+					text: data.ka[id].sy,
+				});
 				// Quellenangabe
-				div.appendChild(liste.quelleErstellen(id));
+				liste.detailErstellen({
+					cont: div,
+					ds: "qu",
+					h: "Quelle",
+					text: data.ka[id].qu,
+					id: id,
+				});
 				// Korpus
-				liste.korpusErstellen(data.ka[id].kr, div);
+				liste.detailErstellen({
+					cont: div,
+					ds: "kr",
+					h: "Korpus",
+					text: data.ka[id].kr,
+				});
 				// Textsorte
-				liste.textsorteErstellen(data.ka[id].ts, div);
+				liste.detailErstellen({
+					cont: div,
+					ds: "ts",
+					h: "Textsorte",
+					text: data.ka[id].ts,
+				});
 				// Notizen
-				liste.notizenErstellen(data.ka[id].no, div);
+				liste.detailErstellen({
+					cont: div,
+					ds: "no",
+					h: "Notizen",
+					text: data.ka[id].no,
+				});
 				// Meta-Infos
 				liste.metainfosErstellen(data.ka[id], div, "liste-meta");
 			}
@@ -635,7 +673,7 @@ let liste = {
 		if (!optionen.data.belegliste.wort_hervorheben && !immer) {
 			return schnitt;
 		}
-		const reg = new RegExp(`[^${helfer.ganzesWortRegExp.links}]*(${helfer.formVariRegExp()})[^${helfer.ganzesWortRegExp.rechts}]*`, "gi");
+		let reg = new RegExp(`[^${helfer.ganzesWortRegExp.links}]*(${helfer.formVariRegExp()})[^${helfer.ganzesWortRegExp.rechts}]*`, "gi");
 		schnitt = schnitt.replace(reg, (m) => `<mark class="wort">${m}</mark>`);
 		return schnitt;
 	},
@@ -701,177 +739,50 @@ let liste = {
 			}
 		});
 	},
-	// erstellt die Anzeige der Bedeutung
-	//   bedeutung = String
-	//     (der Volltext der Bedeutung)
-	//   cont = Element
-	//     (das ist der aktuelle Detailblock)
-	bedeutungErstellen (bedeutung, cont) {
-		// eine Bedeutung kann fehlen
-		if (!bedeutung) {
+	// generische Funktion für das Erstellen eines Beleg-Details
+	//   config = Object
+	//     Enthält folgende Eigenschaften:
+	//        cont: Element (das ist der aktuelle Detailblock)
+	//        ds:   String  (Schlüssel des Datensatzes)
+	//        h:    String  (die Überschrift des Datenfelds)
+	//        id:   String  (ID der Karteikarte, nur gefüllt, wenn ein Kopier-Icon eingefügt werden soll)
+	//        text: String  (vollständiger Text des Datenfelds)
+	detailErstellen ({cont, ds, h, text, id = ""}) {
+		// Datenfeld kann leer sein
+		if (!text) {
 			return;
 		}
-		// <div> für Bedeutung
+		// <div> für Datenfeld erzeugen
 		let div = document.createElement("div");
 		cont.appendChild(div);
-		div.classList.add("liste-bd", "liste-label");
-		// Label erstellen
+		div.classList.add(`liste-${ds}`, "liste-label");
+		// ggf. Kopierlink erzeugen
+		if (id) {
+			let a = document.createElement("a");
+			div.appendChild(a);
+			a.classList.add("icon-link", "icon-tools-kopieren");
+			a.dataset.ds = `${id}|${ds}`;
+			liste.kopieren(a);
+		}
+		// Label erzeugen
 		let span = document.createElement("span");
 		div.appendChild(span);
 		span.classList.add("liste-label");
-		span.textContent = "Bedeutung";
+		span.textContent = h;
+		// Leerzeilen weg und Links erkennen (nur Notiz und Quelle)
+		if (/^(no|qu)$/.test(ds)) {
+			text = text.replace(/\n\s*\n/g, "\n");
+			text = liste.linksErkennen(text);
+		}
 		// Absätze erzeugen
-		let p_prep = bedeutung.split("\n");
-		for (let i = 0, len = p_prep.length; i < len; i++) {
+		for (let absatz of text.split("\n")) {
 			let p = document.createElement("p");
-			p.innerHTML = liste.suchtreffer(p_prep[i], "bd");
 			div.appendChild(p);
+			p.innerHTML = liste.suchtreffer(absatz, ds);
 		}
-	},
-	// erstellt die Anzeige der Wortbildungen
-	//   wortbildung = String
-	//     (die Wortbildungen)
-	//   cont = Element
-	//     (das ist der aktuelle Detailblock)
-	wortbildungErstellen (wortbildung, cont) {
-		// die Wortbildungs-Angabe kann fehlen
-		if (!wortbildung) {
-			return;
-		}
-		// <div> für Wortbildung
-		let div = document.createElement("div");
-		cont.appendChild(div);
-		div.classList.add("liste-bl", "liste-label");
-		// Label erstellen
-		let span = document.createElement("span");
-		div.appendChild(span);
-		span.classList.add("liste-label");
-		span.textContent = "Wortbildung";
-		// Absätze erzeugen
-		let p_prep = wortbildung.split("\n");
-		for (let i = 0, len = p_prep.length; i < len; i++) {
-			let p = document.createElement("p");
-			p.innerHTML = liste.suchtreffer(p_prep[i], "bl");
-			div.appendChild(p);
-		}
-	},
-	// erstellt den Absatz mit der Quellenangabe
-	//   id = String
-	//     (ID des Belegs)
-	quelleErstellen (id) {
-		// <div> für Quelle
-		let div = document.createElement("div");
-		div.classList.add("liste-qu", "liste-label");
-		// Kopierlink erzeugen
-		let a = document.createElement("a");
-		div.appendChild(a);
-		a.classList.add("icon-link", "icon-tools-kopieren");
-		a.dataset.ds = `${id}|qu`;
-		liste.kopieren(a);
-		// Label erstellen
-		let span = document.createElement("span");
-		span.classList.add("liste-label");
-		span.textContent = "Quelle";
-		div.appendChild(span);
-		// Absätze erzeugen
-		let prep = data.ka[id].qu.replace(/\n\s*\n/g, "\n"), // Leerzeilen löschen
-			p_prep = prep.split("\n");
-		for (let i = 0, len = p_prep.length; i < len; i++) {
-			// Text aufbereiten
-			let text = liste.linksErkennen(p_prep[i]);
-			// neuen Absatz erzeugen
-			let p = document.createElement("p");
-			p.innerHTML = liste.suchtreffer(text, "qu");
-			div.appendChild(p);
-		}
-		// Klick-Events an alles Links hängen
-		let links = div.querySelectorAll(".link");
-		for (let i = 0, len = links.length; i < len; i++) {
-			liste.linksOeffnen(links[i]);
-		}
-		// <div> zurückgeben
-		return div;
-	},
-	// erstellt die Anzeige des Korpus
-	//   korpus = String
-	//     (das Korpus)
-	//   cont = Element
-	//     (das ist der aktuelle Detailblock)
-	korpusErstellen (korpus, cont) {
-		// die Korpus-Angabe kann fehlen
-		if (!korpus) {
-			return;
-		}
-		// <div> für Korpus
-		let div = document.createElement("div");
-		cont.appendChild(div);
-		div.classList.add("liste-kr", "liste-label");
-		// Label erstellen
-		let span = document.createElement("span");
-		div.appendChild(span);
-		span.classList.add("liste-label");
-		span.textContent = "Korpus";
-		// Absatz erzeugen
-		let p = document.createElement("p");
-		p.innerHTML = liste.suchtreffer(korpus, "kr");
-		div.appendChild(p);
-	},
-	// erstellt die Anzeige der Textsorte
-	//   textsorte = String
-	//     (der Volltext der Textsorte)
-	//   cont = Element
-	//     (das ist der aktuelle Detailblock)
-	textsorteErstellen (textsorte, cont) {
-		// eine Textsorte kann fehlen
-		if (!textsorte) {
-			return;
-		}
-		// <div> für Textsorte
-		let div = document.createElement("div");
-		cont.appendChild(div);
-		div.classList.add("liste-ts", "liste-label");
-		// Label erstellen
-		let span = document.createElement("span");
-		div.appendChild(span);
-		span.classList.add("liste-label");
-		span.textContent = "Textsorte";
-		// Absätze erzeugen
-		let p_prep = textsorte.split("\n");
-		for (let i = 0, len = p_prep.length; i < len; i++) {
-			let p = document.createElement("p");
-			p.innerHTML = liste.suchtreffer(p_prep[i], "ts");
-			div.appendChild(p);
-		}
-	},
-	// erstellt die Anzeige der Notizen
-	//   notizen = String
-	//     (der Volltext der Notizen)
-	//   cont = Element
-	//     (das ist der aktuelle Detailblock)
-	notizenErstellen (notizen, cont) {
-		// Notizen können fehlen
-		if (!notizen) {
-			return;
-		}
-		// <div> für Notizen erzeugen und einhängen
-		let div = document.createElement("div");
-		div.classList.add("liste-no", "liste-label");
-		cont.appendChild(div);
-		// Label erstellen
-		let span = document.createElement("span");
-		span.classList.add("liste-label");
-		span.textContent = "Notizen";
-		div.appendChild(span);
-		// Absätze erzeugen
-		let prep = notizen.replace(/\n\s*\n/g, "\n"), // Leerzeilen löschen
-			p_prep = prep.split("\n");
-		for (let i = 0, len = p_prep.length; i < len; i++) {
-			// Text aufbereiten
-			let text = liste.linksErkennen(p_prep[i]);
-			// neuen Absatz erzeugen
-			let p = document.createElement("p");
-			p.innerHTML = liste.suchtreffer(text, "no");
-			div.appendChild(p);
+		// Klick-Events an Links hängen
+		for (let link of div.querySelectorAll(".link")) {
+			liste.linksOeffnen(link);
 		}
 	},
 	// Leiste mit Meta-Informationen zu der Karte erstellen
@@ -1000,7 +911,7 @@ let liste = {
 		if (scroll_bak) {
 			liste.statusScrollBak();
 		}
-		let funktionen = ["bd", "bl", "qu", "kr", "ts", "no", "meta"];
+		let funktionen = ["bd", "bl", "sy", "qu", "kr", "ts", "no", "meta"];
 		for (let i = 0, len = funktionen.length; i < len; i++) {
 			let opt = `detail_${funktionen[i]}`,
 				ele = document.querySelectorAll(`.liste-${funktionen[i]}`);
@@ -1076,7 +987,7 @@ let liste = {
 				liste.headerWortHervorheben();
 			} else if (funktion === "trennung") {
 				liste.headerTrennung();
-			} else if (/^(bs|bd|bl|qu|kr|ts|no|meta)$/.test(funktion)) {
+			} else if (/^(bs|bd|bl|sy|qu|kr|ts|no|meta)$/.test(funktion)) {
 				liste.headerDetails(funktion);
 			}
 		});
@@ -1267,7 +1178,9 @@ let liste = {
 	headerDetails (funktion) {
 		// Belegtext-Icon ist nur Platzhalter
 		if (funktion === "bs") {
-			dialog.oeffnen("alert");
+			dialog.oeffnen("alert", function() {
+				document.getElementById("liste-link-bs").focus();
+			});
 			dialog.text("Der Belegtext kann nicht ausgeblendet werden.");
 			return;
 		}
@@ -1290,6 +1203,7 @@ let liste = {
 		let title = {
 			bd: "Bedeutung",
 			bl: "Wortbildung",
+			sy: "Synonym",
 			qu: "Quelle",
 			kr: "Korpus",
 			ts: "Textsorte",

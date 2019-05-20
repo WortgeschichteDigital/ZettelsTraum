@@ -178,6 +178,7 @@ let kartei = {
 			optionen.aendereLetzterPfad();
 			optionen.aendereZuletzt();
 			notizen.icon();
+			lexika.icon();
 			anhaenge.scan(data.an);
 			anhaenge.makeIconList(data.an, document.getElementById("kartei-anhaenge"));
 			liste.aufbauen(true);
@@ -291,6 +292,7 @@ let kartei = {
 		wort.classList.add("keine-kartei");
 		wort.textContent = "keine Kartei geöffnet";
 		notizen.icon();
+		lexika.icon();
 		anhaenge.makeIconList(null, document.getElementById("kartei-anhaenge"));
 		start.zuletzt();
 		helfer.sektionWechseln("start");
@@ -323,6 +325,7 @@ let kartei = {
 				kartei.wortEintragen();
 				kartei.erstellen();
 				notizen.icon();
+				lexika.icon();
 				anhaenge.makeIconList(null, document.getElementById("kartei-anhaenge"));
 				kartei.menusDeaktivieren(false);
 				erinnerungen.check();

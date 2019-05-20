@@ -384,7 +384,7 @@ php make-changelog.php [FORMAT] [PFAD]</pre>
 					
 					<h2 id="js-integration">Integration von <i>Electron</i> und <i>Node.js</i></h2>
 					
-					<p>Eine Besonderheit des JavaScript-Codes ist, dass auf Objekte, Methoden und Eigenschaften von <i>Electron</i> und <i>Node.js</i> auch in den Renderer-Prozessen zurückgegriffen wird. Hierzu wird die in JavaScript sonst nicht vorhandene Methode <code class="quelltext">require()</code> benutzt.</p>
+					<p>Eine Besonderheit des JavaScript-Codes ist, dass auf Objekte, Methoden und Eigenschaften von <i>Electron</i> und <i>Node.js</i> auch in den Renderer-Prozessen zurückgegriffen wird. Hierzu wird die in JavaScript für gewöhnlich nicht vorhandene Methode <code class="quelltext">require()</code> zum Importieren von Modulen benutzt.</p>
 					
 					<p>Über <code class="quelltext">const {app} = require("electron").remote</code> <abbr title="zum Beispiel">z. B.</abbr> wird der Zugriff auf das App-Objekt im Main-Prozess ermöglicht. Und via <code class="quelltext">const path = require("path")</code> kann man das Node-Modul <a href="https://nodejs.org/api/path.html"><i>Path</i></a> laden, um sich neben vielem anderen <abbr title="zum Beispiel">z. B.</abbr> Informationen über den <i lang="en">path segment separator</i> im aktuellen Betriebssystem geben zu lassen (nämlich via <code class="quelltext">path.sep</code>). An einer Stelle wird auf diese Weise sogar ein Befehl in der Eingabeaufforderung von <i>Windows</i> ausgeführt:</p>
 					
@@ -399,7 +399,7 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);
 					
 					<p>Nach dem Laden einer <abbr title="Wortgeschichte digital">WGD</abbr>-Datei in <i class="app-name"></i> befinden sich die Daten im globalen Objekt <code class="quelltext">data</code>. Ihre Werte lassen sich dann in allen Funktionen des Hauptfensters durch einfache Statements wie <code class="quelltext">data.dc</code> lesen oder schreiben.</p>
 					
-					<p>Alle Dateien sind gleich aufgebaut (<span class="obacht">Datenformat Version 3</span>):</p>
+					<p>Alle Dateien sind gleich aufgebaut (<span class="obacht">Datenformat Version 4</span>):</p>
 					
 					<table>
 						<tr>
@@ -566,6 +566,12 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);
 							<td class="datentyp">String</td>
 							<td><code class="quelltext">\n</code> möglich</td>
 							<td>Notizen zur Karteikarte</td>
+						</tr>
+						<tr class="wgd-ebene2">
+							<td><p><code class="quelltext">sy</code></p></td>
+							<td class="datentyp">String</td>
+							<td><code class="quelltext">\n</code> möglich</td>
+							<td>Synonym; mehrere Synonyme durch <code class="quelltext">\n</code> voneinander getrennt; neue Hierarchie beginnt mit <code class="quelltext">": "</code><br><span class="obacht">mit Version 4 ergänzt</span></td>
 						</tr>
 						<tr class="wgd-ebene2">
 							<td><p><code class="quelltext">ts</code></p></td>

@@ -89,7 +89,12 @@ let drucken = {
 		{
 			val: "bl",
 			name: "Wortbildung",
-			width: 2,
+			width: 1,
+		},
+		{
+			val: "sy",
+			name: "Synonym",
+			width: 1,
 		},
 		{
 			val: "qu",

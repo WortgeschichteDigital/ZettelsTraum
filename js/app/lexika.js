@@ -84,6 +84,7 @@ let lexika = {
 			} else {
 				data.le.splice(data.le.indexOf(this.value), 1);
 			}
+			lexika.icon();
 			kartei.karteiGeaendert(true);
 		});
 	},
@@ -109,6 +110,8 @@ let lexika = {
 		data.le.sort(helfer.sortAlpha);
 		// Liste neu aufbauen
 		lexika.auflisten();
+		// Icon im Karteikopf ein-/ausblenden
+		lexika.icon();
 		// Änderungsmarkierung setzen
 		kartei.karteiGeaendert(true);
 	},
@@ -127,5 +130,15 @@ let lexika = {
 				lexika.ergaenzen();
 			}
 		});
+	},
+	// ändert den Status des Icons, je nachdem ob eines der Lexika abgehakt wurde oder nicht
+	icon () {
+		let icon = document.getElementById("lexika-icon");
+		if (!data.le || !data.le.length) {
+			icon.classList.add("aus");
+		} else {
+			icon.classList.remove("aus");
+		}
+		helfer.kopfIcon();
 	},
 };
