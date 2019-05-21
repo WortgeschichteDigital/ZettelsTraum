@@ -27,7 +27,7 @@ function makeConfig () {
 		targets: Platform.WINDOWS.createTarget(null, Arch.x64),
 		config: {
 			appId: "zdl.wgd.zettelstraum",
-			productName: "Zettel’s Traum",
+			productName: "zettelstraum",
 			copyright: `© ${jahr}, Akademie der Wissenschaften zu Göttingen`,
 			directories: {
 				output: "../build",

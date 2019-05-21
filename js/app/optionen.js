@@ -389,9 +389,6 @@ let optionen = {
 				} else {
 					basis = app.getAppPath();
 				}
-				// TODO Funktionierte nicht unter Windows; vor Release hier ausstellen
-				dialog.oeffnen("alert");
-				dialog.text(basis);
 				optionen.data.einstellungen["sachgebiete-datei"] = path.join(basis, "resources", "Sachgebiete.xml");
 				optionen.data.einstellungen["sachgebiete-autoloading"] = false;
 			}
