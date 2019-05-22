@@ -145,29 +145,9 @@ let optionen = {
 			textsorte: false,
 		},
 		// Taglisten, die aus XML-Dateien importiert wurden
-		tags: {
-			sachgebiete: {
-				data: {}, // Sachgebiete, Struktur "ID": "Sachgebiet"
-				datei: "", // Pfad zur Sachgebiete-XML
-				abgleich: "", // ISO-String Datum Abgleich
-				update: "", // ISO-String Datum Update
-				autoload: true, // wenn beim Programmstart keine Verknüpfung mit einer Sachgebiete-XML vorhanden ist, automatisch mit der Datei im Programm-Ordner verknüpfen; diese Verknüpfung wird nur einmal gemacht
-			},
-			register: {
-				data: {},
-				datei: "",
-				abgleich: "",
-				update: "",
-				autoload: true,
-			},
-			varietaeten: {
-				data: {},
-				datei: "",
-				abgleich: "",
-				update: "",
-				autoload: true,
-			},
-		},
+		tags: {},
+		// beim ersten Programmstart automatisch mit XML-Dateien aus App-Ordner verknüpfen
+		"tags-autoload-done": false,
 		// Liste mit Personen, die in dem Projekt arbeiten
 		// (wird über die Einstellungen geladen)
 		personen: [],
@@ -192,8 +172,8 @@ let optionen = {
 				continue;
 			}
 			if (helfer.checkType("Object", obj[o])) {
-				if (o === "data") {
-					obj[o] = Object.assign({}, opt[o]);
+				if (o === "tags") {
+					optionen.data.tags = {...opt[o]};
 				} else {
 					optionen.einlesen(obj[o], opt[o]);
 				}
@@ -206,8 +186,8 @@ let optionen = {
 	anwenden () {
 		// Quick-Access-Bar ein- oder ausschalten
 		optionen.anwendenQuickAccess();
-		// Anzeige der Sachgebiete auffrischen
-		optionen.anwendenSachgebiete(true);
+		// Tag-Dateien überprüfen => Anzeige auffrischen
+		optionen.anwendenTagsInit();
 		// Zeitfilter in der Filterleiste anpassen
 		let filter_zeitraum = document.getElementsByName("filter-zeitraum");
 		for (let i = 0, len = filter_zeitraum.length; i < len; i++) {
@@ -338,159 +318,220 @@ let optionen = {
 			iconsDetails.classList.remove("liste-opt-anzeige-an");
 		}
 	},
-	// Informationen zu den Sachgebieten auffrischen
-	//   init = Boolean
-	//     (Aufruf der Funktion beim Einlesen der Einstellungen)
-	anwendenSachgebiete (init) {
-		// Sachgebiete eintragen
-		const sg = document.getElementById("sachgebiete");
-		if (Object.keys(optionen.data.tags.sachgebiete.data).length) {
-			sg.classList.remove("leer");
-			let a = document.createElement("a");
-			a.href = "#";
-			a.textContent = `${Object.keys(optionen.data.tags.sachgebiete.data).length} Sachgebiete`;
-			optionen.sachgebieteAnzeigen(a);
-			sg.replaceChild(a, sg.firstChild);
-		} else {
-			sg.classList.add("leer");
-			sg.textContent = "keine Sachgebiete";
-		}
-		// Datei eintragen
-		const tab = document.querySelector(".sachgebiete"),
-			datei = document.getElementById("sachgebiete-datei");
-		if (optionen.data.tags.sachgebiete.datei) {
-			tab.classList.add("gefuellt");
-			datei.classList.remove("leer");
-			const pfad = `\u200E${optionen.data.tags.sachgebiete.datei}\u200E`; // vgl. meta.oeffnen()
-			datei.textContent = pfad;
-			datei.title = pfad;
-		} else {
-			tab.classList.remove("gefuellt");
-			datei.classList.add("leer");
-			datei.textContent = "keine Sachgebiete-Datei";
-			datei.removeAttribute("title");
-		}
-		// Datum Sachgebiete eintragen
-		let sgAbgleich = document.getElementById("sachgebiete-zuletzt-abgleich");
-		if (optionen.data.tags.sachgebiete.abgleich) {
-			sgAbgleich.parentNode.classList.remove("aus");
-			sgAbgleich.textContent = helfer.datumFormat(optionen.data.tags.sachgebiete.abgleich);
-		} else {
-			sgAbgleich.parentNode.classList.add("aus");
-		}
-		let sgUpdate = document.getElementById("sachgebiete-zuletzt-update");
-		if (optionen.data.tags.sachgebiete.update) {
-			sgUpdate.parentNode.classList.remove("aus");
-			sgUpdate.textContent = helfer.datumFormat(optionen.data.tags.sachgebiete.update);
-		} else {
-			sgUpdate.parentNode.classList.add("aus");
-		}
-		// ggf. einen Check der Sachgebiete-Datei anstoßen
-		if (init) {
-			if (optionen.data.tags.sachgebiete.autoload &&
-					!optionen.data.tags.sachgebiete.datei) {
-				const {app} = require("electron").remote,
-					path = require("path");
-				let basis = "";
-				// getAppPath() funktioniert nur in der nicht-paketierten App, in der paketierten
-				//   zeigt es auf [Installationsordner]/resources/app.asar;
-				// getPath("exe") funktioniert nur in der paktierten Version, allerdings muss
-				//   noch der Name der ausführbaren Datei entfernt werden; in der nicht-paketierten
-				//   App zeigt es auf die ausführbare Datei des Node-Modules
-				if (app.isPackaged) {
-					let reg = new RegExp(`${helfer.escapeRegExp(path.sep)}zettelstraum(\.exe)*$`);
-					basis = app.getPath("exe").replace(reg, "");
-				} else {
-					basis = app.getAppPath();
+	// bekannte Typen von Tag-Dateien
+	tagsTypen: {
+		register: ["Register", "Register"],
+		sachgebiete: ["Sachgebiet", "Sachgebiete"],
+		varietaeten: ["Varietät", "Varietäten"],
+	},
+	// Check der Tag-Dateien beim Starten der App
+	anwendenTagsInit () {
+		if (!optionen.data["tags-autoload-done"]) { // Tag-Dateien aus app/resources laden
+			optionen.tagsAutoLaden();
+		} else { // verknüpfte Tag-Dateien überprüfen
+			let promises = [];
+			for (let typ in optionen.data.tags) {
+				if (!optionen.data.tags.hasOwnProperty(typ)) {
+					continue;
 				}
-				optionen.data.tags.sachgebiete.datei = path.join(basis, "resources", "Sachgebiete.xml");
-				optionen.data.tags.sachgebiete.autoload = false;
+				promises.push(optionen.tagsCheckLaden({
+					typ: typ,
+					datei: optionen.data.tags[typ].datei,
+				}));
 			}
-			optionen.sachgebieteCheck();
-		} else {
-			optionen.sachgebieteChecked = true;
+			Promise.all(promises).then((result) => {
+				if (result.includes(true)) { // wenn mindestens eine Datei normal überprüft wurde
+					optionen.speichern(false);
+				}
+				optionen.anwendenTags();
+			});
 		}
 	},
-	// Sachgebiete-Datei wurde in dieser Session schon einmal überprüft
-	sachgebieteChecked: false,
-	// Sachgebiete-Datei überprüfen
-	sachgebieteCheck () {
-		if (optionen.sachgebieteChecked ||
-				!optionen.data.einstellungen["tags-auto-abgleich"] ||
-				!optionen.data.tags.sachgebiete.datei) {
-			return;
+	// Informationen zu den Tag-Dateien im Einstellungen-Fenster auffrischen
+	anwendenTags () {
+		// TODO UI
+// 		// Anzahl und Name eintragen
+// 		const sg = document.getElementById("sachgebiete");
+// 		if (Object.keys(optionen.data.tags.sachgebiete.data).length) {
+// 			sg.classList.remove("leer");
+// 			let a = document.createElement("a");
+// 			a.href = "#";
+// 			a.textContent = `${Object.keys(optionen.data.tags.sachgebiete.data).length} Sachgebiete`;
+// 			optionen.tagsAnzeigen(a);
+// 			sg.replaceChild(a, sg.firstChild);
+// 		} else {
+// 			sg.classList.add("leer");
+// 			sg.textContent = "keine Sachgebiete";
+// 		}
+// 		// Datei eintragen
+// 		const tab = document.querySelector(".sachgebiete"),
+// 			datei = document.getElementById("sachgebiete-datei");
+// 		if (optionen.data.tags.sachgebiete.datei) {
+// 			tab.classList.add("gefuellt");
+// 			datei.classList.remove("leer");
+// 			const pfad = `\u200E${optionen.data.tags.sachgebiete.datei}\u200E`; // vgl. meta.oeffnen()
+// 			datei.textContent = pfad;
+// 			datei.title = pfad;
+// 		} else {
+// 			tab.classList.remove("gefuellt");
+// 			datei.classList.add("leer");
+// 			datei.textContent = "keine Sachgebiete-Datei";
+// 			datei.removeAttribute("title");
+// 		}
+// 		// Datum eintragen
+// 		let sgAbgleich = document.getElementById("sachgebiete-zuletzt-abgleich");
+// 		if (optionen.data.tags.sachgebiete.abgleich) {
+// 			sgAbgleich.parentNode.classList.remove("aus");
+// 			sgAbgleich.textContent = helfer.datumFormat(optionen.data.tags.sachgebiete.abgleich);
+// 		} else {
+// 			sgAbgleich.parentNode.classList.add("aus");
+// 		}
+// 		let sgUpdate = document.getElementById("sachgebiete-zuletzt-update");
+// 		if (optionen.data.tags.sachgebiete.update) {
+// 			sgUpdate.parentNode.classList.remove("aus");
+// 			sgUpdate.textContent = helfer.datumFormat(optionen.data.tags.sachgebiete.update);
+// 		} else {
+// 			sgUpdate.parentNode.classList.add("aus");
+// 		}
+		// Fehler-Kreuz einfügen
+// 		function fehler () { // TODO nicht hier, sondern in anwendenTags()
+// 			let img = document.createElement("img");
+// 			img.src = "img/fehler.svg";
+// 			img.width = "24";
+// 			img.height = "24";
+// 			img.addEventListener("click", function() {
+// 				optionen.tagsFehler(this.dataset.typ);
+// 			});
+// 			const datei = document.getElementById("sachgebiete-datei");
+// 			datei.insertBefore(img, datei.firstChild);
+// 		}
+	},
+	// Tag-Dateien aus app/resources laden
+	tagsAutoLaden () {
+		// Programm-Pfad ermittelns
+		const {app} = require("electron").remote,
+			path = require("path");
+		let basis = "";
+		// getAppPath() funktioniert nur in der nicht-paketierten App, in der paketierten
+		//   zeigt es auf [Installationsordner]/resources/app.asar;
+		// getPath("exe") funktioniert nur in der paktierten Version, allerdings muss
+		//   noch der Name der ausführbaren Datei entfernt werden; in der nicht-paketierten
+		//   App zeigt es auf die ausführbare Datei des Node-Modules
+		if (app.isPackaged) {
+			let reg = new RegExp(`${helfer.escapeRegExp(path.sep)}zettelstraum(\.exe)*$`);
+			basis = app.getPath("exe").replace(reg, "");
+		} else {
+			basis = app.getAppPath();
 		}
-		const fs = require("fs");
-		fs.readFile(optionen.data.tags.sachgebiete.datei, "utf-8", function(err, content) {
-			// Fehlermeldung (wahrscheinlich existiert die Datei nicht mehr)
-			if (err) {
-				fehler();
-				optionen.sachgebieteFehlerMeldung = "Öffnen misslungen";
-				return;
-			}
-			// Datei parsen
-			let xml = optionen.sachgebieteParsen(content);
-			if (!xml) {
-				fehler();
-				return;
-			}
-			// Sachgebiete aus- und einlesen
-			let sachgebieteNeu = {},
-				update = false;
-			xml.querySelectorAll("sachgebiet").forEach(function(i) {
-				const id = i.querySelector("id").firstChild.nodeValue,
-					name = i.querySelector("name").firstChild.nodeValue;
-				sachgebieteNeu[id] = name;
-			});
-			let sachgebiete = optionen.data.tags.sachgebiete.data;
-			for (let id in sachgebiete) { // veraltete Einträge löschen
-				if (!sachgebiete.hasOwnProperty(id)) {
-					continue;
-				}
-				if (!sachgebieteNeu[id]) {
-					update = true;
-					delete sachgebiete[id];
-				}
-			}
-			for (let id in sachgebieteNeu) { // neue Einträge anlegen, geänderte auffrischen
-				if (!sachgebieteNeu.hasOwnProperty(id)) {
-					continue;
-				}
-				if (!sachgebiete[id] || sachgebiete[id] !== sachgebieteNeu[id]) {
-					update = true;
-					sachgebiete[id] = sachgebieteNeu[id];
-				}
-			}
-			// Datum Abgleich speichern
-			optionen.data.tags.sachgebiete.abgleich = new Date().toISOString();
-			if (update) {
-				optionen.data.tags.sachgebiete.update = new Date().toISOString();
-			}
-			// Optionen speichern
+		// Dateien überprüfen
+		let promises = [];
+		["Register.xml", "Sachgebiete.xml", "Varietaeten.xml"].forEach(function(i) {
+			promises.push(optionen.tagsCheckLaden({
+				datei: path.join(basis, "resources", i),
+			}));
+		});
+		Promise.all(promises).then(() => {
 			optionen.speichern(false);
-			// Überprüfung durchgeführt
-			optionen.sachgebieteChecked = true;
-			// Anzeige auffrischen
-			optionen.anwendenSachgebiete(false);
-			// Fehler-Kreuz einfügen
-			function fehler () {
-				let img = document.createElement("img");
-				img.src = "img/fehler.svg";
-				img.width = "24";
-				img.height = "24";
-				img.addEventListener("click", function() {
-					optionen.sachgebieteFehler();
-				});
-				const datei = document.getElementById("sachgebiete-datei");
-				datei.insertBefore(img, datei.firstChild);
-			}
+			optionen.anwendenTags();
+			optionen.data["tags-autoload-done"] = true;
 		});
 	},
-	// Datei mit Sachgebieten laden
-	sachgebieteLaden () {
+	// übergebene Tag-Datei überprüfen, Inhalte ggf. laden
+	//   datei = String
+	//     (Pfad zur XML-Datei, die überprüft werden soll)
+	//   typ = String || undefined
+	//     (Typ der Datei, entspricht dem Namen des Wurzelelements)
+	tagsCheckLaden ({datei, typ = "-"}) {
+		return new Promise((resolve) => {
+			const fs = require("fs");
+			fs.readFile(datei, "utf-8", (err, content) => {
+				// Fehlermeldung (wahrscheinlich existiert die Datei nicht mehr)
+				if (err) {
+					optionen.tagsFehlerMeldungen[typ] = err.message;
+					resolve(false);
+					return;
+				}
+				// Datei parsen
+				let xml = optionen.tagsParsen(content);
+				if (!xml) {
+					resolve(false);
+					return;
+				}
+				// ggf. Typ ermitteln, Konsistenz des Typs überprüfen
+				const xmlTyp = xml.documentElement.nodeName;
+				if (typ === "-") {
+					typ = xmlTyp;
+				} else if (typ !== xmlTyp) {
+					optionen.tagsFehlerMeldungen[typ] = `<abbr title="Extensible Markup Language">XML</span>-Dateityp geändert`;
+					resolve(false);
+					return;
+				}
+				// Items auslesen
+				let tagsNeu = {},
+					update = false;
+				xml.querySelectorAll("item").forEach(function(i) {
+					const id = i.querySelector("id").firstChild.nodeValue,
+						name = i.querySelector("name").firstChild.nodeValue,
+						abbr = i.querySelector("abbr");
+					tagsNeu[id] = {
+						name: name,
+					};
+					if (abbr) {
+						tagsNeu[id].abbr = abbr.firstChild.nodeValue;
+					}
+				});
+				// Einlesen
+				if (optionen.data.tags[typ]) { // Typ existiert => Änderungen ggf. übernehmen
+					let data = optionen.data.tags[typ].data;
+					for (let id in data) { // veraltete Einträge löschen
+						if (!data.hasOwnProperty(id)) {
+							continue;
+						}
+						if (!tagsNeu[id]) {
+							update = true;
+							delete data[id];
+						}
+					}
+					for (let id in tagsNeu) { // neue Einträge anlegen, geänderte auffrischen
+						if (!tagsNeu.hasOwnProperty(id)) {
+							continue;
+						}
+						if (!data[id] ||
+								data[id].name !== tagsNeu[id].name ||
+								data[id].abbr !== tagsNeu[id].abbr) {
+							update = true;
+							data[id] = {
+								name: tagsNeu[id].name
+							};
+							if (tagsNeu[id].abbr) {
+								data[id].abbr = tagsNeu[id].abbr;
+							}
+						}
+					}
+				} else { // Typ existiert noch nicht => einrichten
+					update = true;
+					optionen.data.tags[typ] = {
+						data: tagsNeu, // Daten
+						datei: datei, // Pfad zur Datei
+						abgleich: "", // Datum letzter Abgleich
+						update: "", // Datum letztes Update
+					};
+				}
+				// Datum Abgleich speichern
+				optionen.data.tags[typ].abgleich = new Date().toISOString();
+				if (update) {
+					optionen.data.tags[typ].update = new Date().toISOString();
+				}
+				// Promise auflösen
+				resolve(true);
+			});
+		});
+	},
+	// Tag-Datei manuell laden
+	tagsManuLaden () {
 		const {app, dialog} = require("electron").remote;
 		let opt = {
-			title: "Sachgebiete laden",
+			title: "Tag-Datei laden",
 			defaultPath: app.getPath("documents"),
 			filters: [
 				{
@@ -507,66 +548,80 @@ let optionen = {
 			],
 		};
 		// Dialog anzeigen
-		dialog.showOpenDialog(null, opt, function(datei) { // datei ist ein Array!
+		dialog.showOpenDialog(null, opt, datei => { // datei ist ein Array!
 			if (datei === undefined) {
 				kartei.dialogWrapper("Sie haben keine Datei ausgewählt.");
 				return;
 			}
 			const fs = require("fs");
-			fs.readFile(datei[0], "utf-8", function(err, content) {
+			fs.readFile(datei[0], "utf-8", (err, content) => {
 				// Fehlermeldung
 				if (err) {
-					kartei.dialogWrapper(`Beim Öffnen der Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.message}</p>`);
+					kartei.dialogWrapper(`Beim Laden der Tag-Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.message}</p>`);
 					return;
 				}
-				// Datei parsen
-				let xml = optionen.sachgebieteParsen(content);
+				// Tag-Datei parsen
+				let xml = optionen.tagsParsen(content),
+					typ = xml.documentElement.nodeName;
 				if (!xml) {
-					optionen.sachgebieteFehler();
+					optionen.tagsFehler(typ);
 					return;
 				}
-				// Sachgebiete aus- und einlesen
-				optionen.data.tags.sachgebiete.data = {};
-				let sachgebiete = optionen.data.tags.sachgebiete.data;
-				xml.querySelectorAll("sachgebiet").forEach(function(i) {
+				// Tag-Datei einlesen
+				optionen.data.tags[typ] = {
+					data: {}, // Daten
+					datei: datei[0], // Pfad zur Datei
+					abgleich: new Date().toISOString(), // Datum letzter Abgleich
+					update: new Date().toISOString(), // Datum letztes Update
+				};
+				let data = optionen.data.tags[typ].data;
+				xml.querySelectorAll("item").forEach(function(i) {
 					const id = i.querySelector("id").firstChild.nodeValue,
-						name = i.querySelector("name").firstChild.nodeValue;
-					sachgebiete[id] = name;
+						name = i.querySelector("name").firstChild.nodeValue,
+						abbr = i.querySelector("abbr");
+					data[id] = {
+						name: name,
+					};
+					if (abbr) {
+						data[id].abbr = abbr.firstChild.nodeValue;
+					}
 				});
-				// Pfad zur Datei speichern
-				optionen.data.tags.sachgebiete.datei = datei[0];
-				// Datum Abgleich/Update speichern
-				optionen.data.tags.sachgebiete.abgleich = new Date().toISOString();
-				optionen.data.tags.sachgebiete.update = new Date().toISOString();
 				// Optionen speichern
 				optionen.speichern(false);
 				// Anzeige auffrischen
-				optionen.anwendenSachgebiete(false);
+				optionen.anwendenTags();
 			});
 		});
 	},
-	// Content der geladenen Sachgebiete-Datei parsen und auf Fehler überprüfen
-	sachgebieteParsen (content) {
+	// Content der geladenen Tag-Datei parsen und auf Fehler überprüfen
+	//   content = String
+	//     (Inhalt der geladenen Tag-Datei)
+	tagsParsen (content) {
 		let parser = new DOMParser(),
-			xml = parser.parseFromString(content, "text/xml");
+			xml = parser.parseFromString(content, "text/xml"),
+			typ = xml.documentElement.nodeName;
 		// <parsererror>
 		if (xml.querySelector("parsererror")) {
-			optionen.sachgebieteFehlerMeldung = `<abbr title="Extensible Markup Language">XML</span>-Datei korrupt`;
+			optionen.tagsFehlerMeldungen[typ] = `<abbr title="Extensible Markup Language">XML</span>-Datei korrupt`;
 			return null;
 		}
-		// <sachgebiete> und <sachgebiet>
-		if (!xml.querySelector("sachgebiete") ||
-				!xml.querySelector("sachgebiet")) {
-			optionen.sachgebieteFehlerMeldung = "unerwartetes Dateiformat";
+		// kein <item>
+		if (!xml.querySelector("item")) {
+			optionen.tagsFehlerMeldungen[typ] = "unerwartetes Dateiformat";
 			return null;
 		}
-		// Tags <id> und <name> alle vorhanden, keine ID doppelt
+		// Strukturtests
 		let tag_fehlt = "",
+			tag_doppelt = "",
+			tag_unbekannt = "",
 			ids = new Set(),
 			ids_doppelt = [],
-			sgs = new Set(),
-			sgs_doppelt = [];
-		for (let i of xml.querySelectorAll("sachgebiet")) {
+			names = new Set(),
+			names_doppelt = [],
+			abbrs = new Set(),
+			abbrs_doppelt = [];
+		forX: for (let i of xml.querySelectorAll("item")) {
+			// fehlende Tags, die verpflichtend sind
 			if (!i.querySelector("id")) {
 				tag_fehlt = "id";
 				break;
@@ -574,86 +629,144 @@ let optionen = {
 				tag_fehlt = "name";
 				break;
 			}
+			// doppelt vergebene ID?
 			let id = i.querySelector("id").firstChild.nodeValue;
 			if (ids.has(id)) {
 				ids_doppelt.push(id);
 			} else {
 				ids.add(id);
 			}
-			let sg = i.querySelector("name").firstChild.nodeValue;
-			if (sgs.has(sg)) {
-				sgs_doppelt.push(sg);
+			// doppelt vergebener Name?
+			let name = i.querySelector("name").firstChild.nodeValue;
+			if (names.has(name)) {
+				names_doppelt.push(name);
 			} else {
-				sgs.add(sg);
+				names.add(name);
+			}
+			// doppelt vergebene Abkürzung?
+			if (i.querySelector("abbr")) {
+				let abbr = i.querySelector("abbr").firstChild.nodeValue;
+				if (abbrs.has(abbr)) {
+					abbrs_doppelt.push(abbr);
+				} else {
+					abbrs.add(abbr);
+				}
+			}
+			// doppelte eingefügte oder unbekannte Elemente?
+			let elemente = new Set();
+			for (let k of i.childNodes) {
+				if (k.nodeType !== 1) {
+					continue;
+				}
+				const knoten = k.nodeName;
+				if (!["abbr", "id", "name"].includes(knoten)) {
+					tag_unbekannt = knoten;
+					break forX;
+				} else if (elemente.has(knoten)) {
+					tag_doppelt = knoten;
+					break forX;
+				}
+				elemente.add(knoten);
 			}
 		}
+		// Fehlerbehandlung
 		if (tag_fehlt) {
-			optionen.sachgebieteFehlerMeldung = `fehlender &lt;${tag_fehlt}&gt;-Tag`;
+			optionen.tagsFehlerMeldungen[typ] = `fehlender &lt;${tag_fehlt}&gt;-Tag`;
+			return null;
+		}
+		if (tag_doppelt) {
+			optionen.tagsFehlerMeldungen[typ] = `doppelter &lt;${tag_doppelt}&gt;-Tag`;
+			return null;
+		}
+		if (tag_unbekannt) {
+			optionen.tagsFehlerMeldungen[typ] = `unbekannter &lt;${tag_unbekannt}&gt;-Tag`;
 			return null;
 		}
 		if (ids_doppelt.length) {
+			ids_doppelt = [...new Set(ids_doppelt)];
 			let plural = "s";
 			if (ids_doppelt.length === 1) {
 				plural = "";
 			}
-			optionen.sachgebieteFehlerMeldung = `doppelte ID${plural}: ${ids_doppelt.join(", ")}`;
+			optionen.tagsFehlerMeldungen[typ] = `doppelte ID${plural}: ${ids_doppelt.join(", ")}`;
 			return null;
 		}
-		if (sgs_doppelt.length) {
-			let text = "doppelte Sachgebiete: ";
-			if (sgs_doppelt.length === 1) {
-				text = "doppeltes Sachgebiet: ";
+		if (names_doppelt.length) {
+			names_doppelt = [...new Set(names_doppelt)];
+			let text = "doppelte Namen: ";
+			if (names_doppelt.length === 1) {
+				text = "doppelter Name: ";
 			}
-			optionen.sachgebieteFehlerMeldung = text + sgs_doppelt.join(", ");
+			optionen.tagsFehlerMeldungen[typ] = text + names_doppelt.join(", ");
 			return null;
 		}
-		// alles okay => XML-Dokument zurückgeben
+		if (abbrs_doppelt.length) {
+			abbrs_doppelt = [...new Set(abbrs_doppelt)];
+			let text = "doppelte Abkürzungen: ";
+			if (abbrs_doppelt.length === 1) {
+				text = "doppelte Abkürzung: ";
+			}
+			optionen.tagsFehlerMeldungen[typ] = text + abbrs_doppelt.join(", ");
+			return null;
+		}
+		// alles okay => alte Fehler-Meldungen ggf. entfernen + XML-Dokument zurückgeben
+		if (optionen.tagsFehlerMeldungen[typ]) {
+			delete optionen.tagsFehlerMeldungen[typ];
+		}
 		return xml;
 	},
-	// Fehlertyp, der beim Einlesen einer Sachgebiete-Datei aufgetreten ist
-	sachgebieteFehlerMeldung: "",
+	// Fehlertypen, die beim Einlesen einer Tag-Datei aufgetreten sind
+	tagsFehlerMeldungen: {},
 	// Fehlermeldung anzeigen
-	sachgebieteFehler () {
+	//   typ = String
+	//     (Typ der Tag-Datei, bei der der Fehler aufgetreten ist)
+	tagsFehler (typ) {
 		dialog.oeffnen("alert");
-		kartei.dialogWrapper(`Beim Laden der Sachgebiete-Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${optionen.sachgebieteFehlerMeldung}</p>`);
+		dialog.text(`Beim Laden der Tag-Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${optionen.tagsFehlerMeldungen[typ]}</p>`);
 	},
-	// Liste der Sachgebiete leeren und Verknüpfung mit Datei entfernen
-	sachgebieteLoeschen () {
-		// keine Sachgebiete
-		if (!Object.keys(optionen.data.tags.sachgebiete.data).length &&
-				!optionen.data.tags.sachgebiete.datei) {
-			dialog.oeffnen("alert");
-			dialog.text("Es wurden noch Sachgebiete geladen!");
-			return;
-		}
-		// Sicherheitsfrage
+	// Tag-Datei entfernen, Liste der Tags leeren
+	//   typ = String
+	//     (Typ der Tag-Datei, die entfernt werden soll)
+	tagsLoeschen (typ) {
 		dialog.oeffnen("confirm", function() {
 			if (dialog.antwort) {
-				optionen.data.tags.sachgebiete.data = {};
-				optionen.data.tags.sachgebiete.datei = "";
-				optionen.data.tags.sachgebiete.abgleich = "";
-				optionen.data.tags.sachgebiete.update = "";
+				delete optionen.data.tags[typ];
 				optionen.speichern(false);
-				optionen.anwendenSachgebiete(false);
+				optionen.anwendenTags();
 			}
 		});
-		// Text zusammenstellen
-		let text = "Sollen die importierten Sachgebiete wirklich gelöscht werden?\n(Die Verknüpfung mit der aktuellen Sachgebiete-Datei wird in diesem Zuge ebenfalls entfernt.)";
-		if (!Object.keys(optionen.data.tags.sachgebiete.data).length) {
-			text = "Soll die Verknüpfung mit der aktuellen Sachgebiete-Datei wirklich entfernt werden?";
+		let text = ["Tags", "Tag"];
+		if (optionen.tagsTypen[typ]) {
+			text = Array(2).fill(optionen.tagsTypen[typ][1]);
 		}
-		dialog.text(text);
+		dialog.text(`Sollen die importierten ${text[0]} wirklich gelöscht werden?\n(Die Verknüpfung mit der aktuellen ${text[1]}-Datei wird in diesem Zuge ebenfalls entfernt.)`);
 	},
-	// Liste der geladenen Sachgebiete anzeigen
+	// Liste der geladenen Tags anzeigen
 	//   a = Element
 	//     (Anker, auf den geklickt wurde)
-	sachgebieteAnzeigen (a) {
+	tagsAnzeigen (a) {
 		a.addEventListener("click", function(evt) {
 			evt.preventDefault();
-			let sachgebiete = Object.values(optionen.data.tags.sachgebiete.data);
-			sachgebiete.sort(helfer.sortAlpha);
+			const typ = this.dataset.typ;
+			let tags = [];
+			for (let id in optionen.data.tags[typ]) {
+				if (!optionen.data.tags[typ].hasOwnProperty(id)) {
+					continue;
+				}
+				let item = optionen.data.tags[typ][id],
+					tag = item.name;
+				if (item.abbr) {
+					tag += ` (${item.abbr})`;
+				}
+				tags.push(tag);
+			}
+			tags.sort(helfer.sortAlpha);
+			let h3 = "Tags";
+			if (optionen.tagsTypen[typ]) {
+				h3 = optionen.tagsTypen[typ][1];
+			}
 			dialog.oeffnen("alert");
-			dialog.text(`<h3>Sachgebiete</h3>\n${sachgebiete.join("<br>")}`);
+			dialog.text(`<h3>${h3}</h3>\n${tags.join("<br>")}`);
 		});
 	},
 	// Timeout für die Speicherfunktion setzen, die nicht zu häufig ablaufen soll und

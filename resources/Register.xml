@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!DOCTYPE register [
+	<!ELEMENT register (item)+>
+	<!ELEMENT item (id, name, abbr?)>
+	<!ELEMENT id (#PCDATA)>
+	<!ELEMENT name (#PCDATA)>
+	<!ELEMENT abbr (#PCDATA)>
+]>
+<register>
+	<item>
+		<id>1</id>
+		<name>umgangssprachlich</name>
+		<abbr>ugs.</abbr>
+	</item>
+	<item>
+		<id>2</id>
+		<name>gehoben</name>
+		<abbr>geh.</abbr>
+	</item>
+</register>

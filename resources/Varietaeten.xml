@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!DOCTYPE varietaeten [
+	<!ELEMENT varietaeten (item)+>
+	<!ELEMENT item (id, name)>
+	<!ELEMENT id (#PCDATA)>
+	<!ELEMENT name (#PCDATA)>
+]>
+<varietaeten>
+	<item>
+		<id>1</id>
+		<name>Jugendsprache</name>
+	</item>
+</varietaeten>

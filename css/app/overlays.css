@@ -228,58 +228,8 @@
 	height: 5px;
 }
 
-#einstellungen-cont .sachgebiete.gefuellt {
-	width: 100%;
-	table-layout: fixed;
-}
+#tags-abgleich {
 
-#einstellungen-cont .sachgebiete tr:first-child td {
-	padding-bottom: 10px;
-}
-
-#einstellungen-cont .sachgebiete td:last-child {
-	width: 105px;
-}
-
-#einstellungen-cont .sachgebiete img {
-	vertical-align: top;
-}
-
-#einstellungen-cont .sachgebiete input {
-	margin: 0;
-	width: 105px;
-}
-
-#sachgebiete-datei {
-	overflow: hidden;
-	text-overflow: ellipsis;
-	white-space: nowrap;
-}
-
-#sachgebiete.leer,
-#sachgebiete-datei.leer {
-	direction: ltr;
-	color: var(--textSehrHell);
-	font-style: italic;
-}
-
-#sachgebiete-abgleich {
-	margin-bottom: 5px;
-}
-
-#sachgebiete-abgleich + p,
-#sachgebiete-abgleich + p + p {
-	margin-bottom: 0;
-	color: var(--textHell);
-	font-size: 14px;
-	line-height: 20px;
-}
-
-#sachgebiete-abgleich + p i,
-#sachgebiete-abgleich + p + p i {
-	display: inline-block;
-	width: 110px;
-	text-indent: 0;
 }
 
 /* Formvarianten ------------------------ */
