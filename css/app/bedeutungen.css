@@ -115,10 +115,6 @@
 	background-color: var(--hintergrund);
 }
 
-#bedeutungen-cont td:nth-child(4):not(.leer) {
-	font-variant: small-caps;
-}
-
 #bedeutungen-cont td:last-child {
 	border-left: 1px solid var(--linie);
 	min-width: 62px;
@@ -154,17 +150,6 @@
 	border-color: var(--farbeGruen);
 }
 
-#bedeutungen-cont td:nth-child(4) span[contenteditable].dropdown-feld {
-	padding-right: 26px;
-	width: calc(100% - 33px);
-	min-width: 150px;
-}
-
-#bedeutungen-cont .dropdown-link-td {
-	top: 3px;
-	background-color: var(--hintergrund);
-}
-
 #bedeutungen-cont .bedeutungen-edit {
 	background-color: var(--hintergrund);
 }
@@ -190,6 +175,14 @@
 	margin: 0;
 	padding-left: 35px;
 	text-indent: -35px;
+}
+
+#bedeutungen-tagger-link {
+	color: var(--text);
+}
+
+#bedeutungen-cont .leer #bedeutungen-tagger-link {
+	font-style: italic;
 }
 
 #bedeutungen-cont .bedeutungen-aktiv td,

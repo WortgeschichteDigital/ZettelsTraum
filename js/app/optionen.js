@@ -329,6 +329,10 @@ let optionen = {
 		if (!optionen.data["tags-autoload-done"]) { // Tag-Dateien aus app/resources laden
 			optionen.tagsAutoLaden();
 		} else { // verknüpfte Tag-Dateien überprüfen
+			if (!optionen.data.einstellungen["tags-auto-abgleich"]) {
+				optionen.anwendenTags();
+				return;
+			}
 			let promises = [];
 			for (let typ in optionen.data.tags) {
 				if (!optionen.data.tags.hasOwnProperty(typ)) {
@@ -349,62 +353,96 @@ let optionen = {
 	},
 	// Informationen zu den Tag-Dateien im Einstellungen-Fenster auffrischen
 	anwendenTags () {
-		// TODO UI
-// 		// Anzahl und Name eintragen
-// 		const sg = document.getElementById("sachgebiete");
-// 		if (Object.keys(optionen.data.tags.sachgebiete.data).length) {
-// 			sg.classList.remove("leer");
-// 			let a = document.createElement("a");
-// 			a.href = "#";
-// 			a.textContent = `${Object.keys(optionen.data.tags.sachgebiete.data).length} Sachgebiete`;
-// 			optionen.tagsAnzeigen(a);
-// 			sg.replaceChild(a, sg.firstChild);
-// 		} else {
-// 			sg.classList.add("leer");
-// 			sg.textContent = "keine Sachgebiete";
-// 		}
-// 		// Datei eintragen
-// 		const tab = document.querySelector(".sachgebiete"),
-// 			datei = document.getElementById("sachgebiete-datei");
-// 		if (optionen.data.tags.sachgebiete.datei) {
-// 			tab.classList.add("gefuellt");
-// 			datei.classList.remove("leer");
-// 			const pfad = `\u200E${optionen.data.tags.sachgebiete.datei}\u200E`; // vgl. meta.oeffnen()
-// 			datei.textContent = pfad;
-// 			datei.title = pfad;
-// 		} else {
-// 			tab.classList.remove("gefuellt");
-// 			datei.classList.add("leer");
-// 			datei.textContent = "keine Sachgebiete-Datei";
-// 			datei.removeAttribute("title");
-// 		}
-// 		// Datum eintragen
-// 		let sgAbgleich = document.getElementById("sachgebiete-zuletzt-abgleich");
-// 		if (optionen.data.tags.sachgebiete.abgleich) {
-// 			sgAbgleich.parentNode.classList.remove("aus");
-// 			sgAbgleich.textContent = helfer.datumFormat(optionen.data.tags.sachgebiete.abgleich);
-// 		} else {
-// 			sgAbgleich.parentNode.classList.add("aus");
-// 		}
-// 		let sgUpdate = document.getElementById("sachgebiete-zuletzt-update");
-// 		if (optionen.data.tags.sachgebiete.update) {
-// 			sgUpdate.parentNode.classList.remove("aus");
-// 			sgUpdate.textContent = helfer.datumFormat(optionen.data.tags.sachgebiete.update);
-// 		} else {
-// 			sgUpdate.parentNode.classList.add("aus");
-// 		}
-		// Fehler-Kreuz einfügen
-// 		function fehler () { // TODO nicht hier, sondern in anwendenTags()
-// 			let img = document.createElement("img");
-// 			img.src = "img/fehler.svg";
-// 			img.width = "24";
-// 			img.height = "24";
-// 			img.addEventListener("click", function() {
-// 				optionen.tagsFehler(this.dataset.typ);
-// 			});
-// 			const datei = document.getElementById("sachgebiete-datei");
-// 			datei.insertBefore(img, datei.firstChild);
-// 		}
+		let cont = document.getElementById("tags-cont");
+		helfer.keineKinder(cont);
+		// Tabelle erstellen
+		let table = document.createElement("table");
+		cont.appendChild(table);
+		for (let typ in optionen.data.tags) {
+			if (!optionen.data.tags.hasOwnProperty(typ)) {
+				continue;
+			}
+			// Lösch-Icon
+			let tr = document.createElement("tr");
+			table.appendChild(tr);
+			tr.classList.add("tags-datei");
+			let td = document.createElement("td");
+			tr.appendChild(td);
+			td.setAttribute("rowspan", "2");
+			let a = document.createElement("a");
+			td.appendChild(a);
+			a.href = "#";
+			a.classList.add("icon-link", "icon-loeschen");
+			a.dataset.typ = typ;
+			optionen.tagsLoeschen(a);
+			// Datei-Pfad
+			td = document.createElement("td");
+			tr.appendChild(td);
+			td.setAttribute("dir", "rtl");
+			const pfad = `\u200E${optionen.data.tags[typ].datei}\u200E`; // vgl. meta.oeffnen()
+			td.textContent = pfad;
+			td.title = pfad;
+			// Fehler-Markierung
+			if (optionen.tagsFehlerMeldungen[typ]) {
+				let img = document.createElement("img");
+				td.insertBefore(img, td.firstChild);
+				img.dataset.typ = typ;
+				img.src = "img/fehler.svg";
+				img.width = "24";
+				img.height = "24";
+				optionen.tagsFehlerKlick(img);
+			}
+			// Sub-Tabelle
+			// (blöder Hack, aber anders geht das irgendwie nicht)
+			tr = document.createElement("tr");
+			table.appendChild(tr);
+			td = document.createElement("td");
+			tr.appendChild(td);
+			let tableSub = document.createElement("table");
+			td.appendChild(tableSub);
+			let trSub = document.createElement("tr");
+			tableSub.appendChild(trSub);
+			// Anzahl
+			let tdSub = document.createElement("td");
+			trSub.appendChild(tdSub);
+			a = document.createElement("a");
+			tdSub.appendChild(a);
+			a.dataset.typ = typ;
+			a.href = "#";
+			const len = Object.keys(optionen.data.tags[typ].data).length;
+			let text;
+			if (!optionen.tagsTypen[typ]) {
+				text = len === 1 ? "Tag" : "Tags";
+			} else {
+				let typen = optionen.tagsTypen[typ];
+				text = len === 1 ? typen[0] : typen[1];
+			}
+			a.textContent = `${len} ${text}`;
+			optionen.tagsAnzeigen(a);
+			// Daten
+			tdSub = document.createElement("td");
+			trSub.appendChild(tdSub);
+			let i = document.createElement("i");
+			tdSub.appendChild(i);
+			i.textContent = "Abgleich:";
+			let datum = helfer.datumFormat(optionen.data.tags[typ].abgleich);
+			tdSub.appendChild(document.createTextNode(datum));
+			tdSub.appendChild(document.createElement("br"));
+			i = document.createElement("i");
+			tdSub.appendChild(i);
+			i.textContent = "Update:";
+			datum = helfer.datumFormat(optionen.data.tags[typ].update);
+			tdSub.appendChild(document.createTextNode(datum));
+		}
+		// keine Tag-Dateien vorhanden
+		if (!table.hasChildNodes()) {
+			let tr = document.createElement("tr");
+			table.appendChild(tr);
+			let td = document.createElement("td");
+			tr.appendChild(td);
+			td.classList.add("tags-leer");
+			td.textContent = "keine Tag-Dateien";
+		}
 	},
 	// Tag-Dateien aus app/resources laden
 	tagsAutoLaden () {
@@ -452,13 +490,14 @@ let optionen = {
 					return;
 				}
 				// Datei parsen
-				let xml = optionen.tagsParsen(content);
+				let parsed = optionen.tagsParsen(content),
+					xml = parsed[0];
 				if (!xml) {
 					resolve(false);
 					return;
 				}
 				// ggf. Typ ermitteln, Konsistenz des Typs überprüfen
-				const xmlTyp = xml.documentElement.nodeName;
+				const xmlTyp = parsed[1];
 				if (typ === "-") {
 					typ = xmlTyp;
 				} else if (typ !== xmlTyp) {
@@ -561,8 +600,9 @@ let optionen = {
 					return;
 				}
 				// Tag-Datei parsen
-				let xml = optionen.tagsParsen(content),
-					typ = xml.documentElement.nodeName;
+				let parsed = optionen.tagsParsen(content),
+					xml = parsed[0],
+					typ = parsed[1];
 				if (!xml) {
 					optionen.tagsFehler(typ);
 					return;
@@ -603,12 +643,12 @@ let optionen = {
 		// <parsererror>
 		if (xml.querySelector("parsererror")) {
 			optionen.tagsFehlerMeldungen[typ] = `<abbr title="Extensible Markup Language">XML</span>-Datei korrupt`;
-			return null;
+			return [null, typ];
 		}
 		// kein <item>
 		if (!xml.querySelector("item")) {
 			optionen.tagsFehlerMeldungen[typ] = "unerwartetes Dateiformat";
-			return null;
+			return [null, typ];
 		}
 		// Strukturtests
 		let tag_fehlt = "",
@@ -672,15 +712,15 @@ let optionen = {
 		// Fehlerbehandlung
 		if (tag_fehlt) {
 			optionen.tagsFehlerMeldungen[typ] = `fehlender &lt;${tag_fehlt}&gt;-Tag`;
-			return null;
+			return [null, typ];
 		}
 		if (tag_doppelt) {
 			optionen.tagsFehlerMeldungen[typ] = `doppelter &lt;${tag_doppelt}&gt;-Tag`;
-			return null;
+			return [null, typ];
 		}
 		if (tag_unbekannt) {
 			optionen.tagsFehlerMeldungen[typ] = `unbekannter &lt;${tag_unbekannt}&gt;-Tag`;
-			return null;
+			return [null, typ];
 		}
 		if (ids_doppelt.length) {
 			ids_doppelt = [...new Set(ids_doppelt)];
@@ -689,7 +729,7 @@ let optionen = {
 				plural = "";
 			}
 			optionen.tagsFehlerMeldungen[typ] = `doppelte ID${plural}: ${ids_doppelt.join(", ")}`;
-			return null;
+			return [null, typ];
 		}
 		if (names_doppelt.length) {
 			names_doppelt = [...new Set(names_doppelt)];
@@ -698,7 +738,7 @@ let optionen = {
 				text = "doppelter Name: ";
 			}
 			optionen.tagsFehlerMeldungen[typ] = text + names_doppelt.join(", ");
-			return null;
+			return [null, typ];
 		}
 		if (abbrs_doppelt.length) {
 			abbrs_doppelt = [...new Set(abbrs_doppelt)];
@@ -707,16 +747,22 @@ let optionen = {
 				text = "doppelte Abkürzung: ";
 			}
 			optionen.tagsFehlerMeldungen[typ] = text + abbrs_doppelt.join(", ");
-			return null;
+			return [null, typ];
 		}
 		// alles okay => alte Fehler-Meldungen ggf. entfernen + XML-Dokument zurückgeben
 		if (optionen.tagsFehlerMeldungen[typ]) {
 			delete optionen.tagsFehlerMeldungen[typ];
 		}
-		return xml;
+		return [xml, typ];
 	},
 	// Fehlertypen, die beim Einlesen einer Tag-Datei aufgetreten sind
 	tagsFehlerMeldungen: {},
+	// Listener für die Fehler-Markierung
+	tagsFehlerKlick (img) {
+		img.addEventListener("click", function() {
+			optionen.tagsFehler(this.dataset.typ);
+		});
+	},
 	// Fehlermeldung anzeigen
 	//   typ = String
 	//     (Typ der Tag-Datei, bei der der Fehler aufgetreten ist)
@@ -725,21 +771,25 @@ let optionen = {
 		dialog.text(`Beim Laden der Tag-Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${optionen.tagsFehlerMeldungen[typ]}</p>`);
 	},
 	// Tag-Datei entfernen, Liste der Tags leeren
-	//   typ = String
-	//     (Typ der Tag-Datei, die entfernt werden soll)
-	tagsLoeschen (typ) {
-		dialog.oeffnen("confirm", function() {
-			if (dialog.antwort) {
-				delete optionen.data.tags[typ];
-				optionen.speichern(false);
-				optionen.anwendenTags();
+	//   a = Element
+	//     (Lösch-Icon, auf das geklickt wurde)
+	tagsLoeschen (a) {
+		a.addEventListener("click", function(evt) {
+			evt.preventDefault();
+			const typ = this.dataset.typ;
+			dialog.oeffnen("confirm", function() {
+				if (dialog.antwort) {
+					delete optionen.data.tags[typ];
+					optionen.speichern(false);
+					optionen.anwendenTags();
+				}
+			});
+			let text = ["Tags", "Tag"];
+			if (optionen.tagsTypen[typ]) {
+				text = Array(2).fill(optionen.tagsTypen[typ][1]);
 			}
+			dialog.text(`Sollen die importierten ${text[0]} wirklich gelöscht werden?\n(Die Verknüpfung mit der ${text[1]}-Datei wird in diesem Zuge ebenfalls entfernt.)`);
 		});
-		let text = ["Tags", "Tag"];
-		if (optionen.tagsTypen[typ]) {
-			text = Array(2).fill(optionen.tagsTypen[typ][1]);
-		}
-		dialog.text(`Sollen die importierten ${text[0]} wirklich gelöscht werden?\n(Die Verknüpfung mit der aktuellen ${text[1]}-Datei wird in diesem Zuge ebenfalls entfernt.)`);
 	},
 	// Liste der geladenen Tags anzeigen
 	//   a = Element
@@ -749,11 +799,11 @@ let optionen = {
 			evt.preventDefault();
 			const typ = this.dataset.typ;
 			let tags = [];
-			for (let id in optionen.data.tags[typ]) {
-				if (!optionen.data.tags[typ].hasOwnProperty(id)) {
+			for (let id in optionen.data.tags[typ].data) {
+				if (!optionen.data.tags[typ].data.hasOwnProperty(id)) {
 					continue;
 				}
-				let item = optionen.data.tags[typ][id],
+				let item = optionen.data.tags[typ].data[id],
 					tag = item.name;
 				if (item.abbr) {
 					tag += ` (${item.abbr})`;
@@ -766,7 +816,13 @@ let optionen = {
 				h3 = optionen.tagsTypen[typ][1];
 			}
 			dialog.oeffnen("alert");
-			dialog.text(`<h3>${h3}</h3>\n${tags.join("<br>")}`);
+			dialog.text(`<h3>${h3}</h3>\n<div class="dialog-tags-liste"></div>`);
+			let liste = document.querySelector(".dialog-tags-liste");
+			for (let tag of tags) {
+				let p = document.createElement("p");
+				p.textContent = tag;
+				liste.appendChild(p);
+			}
 		});
 	},
 	// Timeout für die Speicherfunktion setzen, die nicht zu häufig ablaufen soll und

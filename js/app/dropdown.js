@@ -188,10 +188,6 @@ let dropdown = {
 			dropdown.dataFormular("ts");
 		} else if (feld_id === "bedeutungen-hierarchie") {
 			dropdown.data = [...bedeutungen.hierarchieEbenen];
-		} else if (feld_id === "bedeutungen-edit") {
-			let sachgebiete = Object.values(optionen.data.einstellungen.sachgebiete);
-			sachgebiete.sort(helfer.sortAlpha);
-			dropdown.data = [...sachgebiete];
 		}
 		// Dropdown erzeugen und einhängen
 		let span = document.createElement("span");
@@ -457,11 +453,6 @@ let dropdown = {
 				optionen.aendereEinstellung(document.getElementById(caller));
 			} else if (caller === "bedeutungen-hierarchie") {
 				bedeutungen.hierarchie();
-			} else if (caller === "bedeutungen-edit") {
-				let edit = document.getElementById(caller);
-				bedeutungen.changed(edit);
-				let sel = window.getSelection();
-				sel.collapse(edit.firstChild, edit.textContent.length);
 			}
 			// Dropdown schließen
 			dropdown.schliessen();

@@ -62,6 +62,15 @@ let dialog = {
 				p.innerHTML = ab[2];
 				cont.appendChild(p);
 				continue;
+			} else if (/^<div class/.test(absaetze[i])) { // vordefinierter <div>
+				const d = absaetze[i].match(/<div class="(.+?)">(.*?)<\/div>/);
+				let div = document.createElement("div");
+				div.classList.add(d[1]);
+				if (d[2]) {
+					div.innerHTML = d[2];
+				}
+				cont.appendChild(div);
+				continue;
 			}
 			// normaler Absatz
 			let p = document.createElement("p");
