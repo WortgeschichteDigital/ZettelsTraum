@@ -375,6 +375,16 @@ let optionen = {
 			a.classList.add("icon-link", "icon-loeschen");
 			a.dataset.typ = typ;
 			optionen.tagsLoeschen(a);
+			// Reload-Icon
+			td = document.createElement("td");
+			tr.appendChild(td);
+			td.setAttribute("rowspan", "2");
+			a = document.createElement("a");
+			td.appendChild(a);
+			a.href = "#";
+			a.classList.add("icon-link", "icon-reload");
+			a.dataset.typ = typ;
+			optionen.tagsManuCheck(a);
 			// Datei-Pfad
 			td = document.createElement("td");
 			tr.appendChild(td);
@@ -461,18 +471,41 @@ let optionen = {
 		} else {
 			basis = app.getAppPath();
 		}
-		// Dateien überprüfen
-		let promises = [];
-		["Register.xml", "Sachgebiete.xml", "Varietaeten.xml"].forEach(function(i) {
-			promises.push(optionen.tagsCheckLaden({
-				datei: path.join(basis, "resources", i),
-			}));
-		});
-		Promise.all(promises).then(() => {
-			optionen.speichern(false);
-			optionen.anwendenTags();
-			optionen.data["tags-autoload-done"] = true;
-		});
+		// XML-Dateien ermitteln => Dateien überprüfen + laden
+		let xml = [],
+			promises = [];
+		new Promise((resolve, reject) => {
+			let config = {
+				encoding: "utf8",
+				withFileTypes: true,
+			};
+			const fs = require("fs");
+			fs.readdir(`${basis}/resources`, config, function(err, dateien) {
+				if (err) {
+					reject(false);
+					return;
+				}
+				for (let dirent of dateien) {
+					if (dirent.isFile() && /\.xml$/.test(dirent.name)) {
+						xml.push(dirent.name);
+					}
+				}
+				resolve(true);
+			});
+		})
+			.then(() => {
+				xml.forEach(function(i) {
+					promises.push(optionen.tagsCheckLaden({
+						datei: path.join(basis, "resources", i),
+					}));
+				});
+				Promise.all(promises).then(() => {
+					optionen.speichern(false);
+					optionen.anwendenTags();
+					optionen.data["tags-autoload-done"] = true;
+				});
+			})
+			.catch(() => optionen.anwendenTags());
 	},
 	// übergebene Tag-Datei überprüfen, Inhalte ggf. laden
 	//   datei = String
@@ -564,6 +597,25 @@ let optionen = {
 				// Promise auflösen
 				resolve(true);
 			});
+		});
+	},
+	// ausgewählte Tag-Liste manuell überprüfen
+	//   a = Element
+	//     (Reload-Icon)
+	tagsManuCheck (a) {
+		a.addEventListener("click", function(evt) {
+			evt.preventDefault();
+			const typ = this.dataset.typ;
+			optionen.tagsCheckLaden({
+				datei: optionen.data.tags[typ].datei,
+				typ: typ,
+			})
+				.then(result => {
+					if (result === true) { // Datei wurde normal überprüft
+						optionen.speichern(false);
+					}
+					optionen.anwendenTags();
+				});
 		});
 	},
 	// Tag-Datei manuell laden

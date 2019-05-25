@@ -306,6 +306,11 @@
 	mask-image: url(../../img/loeschen.svg);
 }
 
+.icon-reload {
+	-webkit-mask-image: url(../../img/reload.svg);
+	mask-image: url(../../img/reload.svg);
+}
+
 .dialog-tags-liste {
 	display: flex;
 	flex-wrap: wrap;

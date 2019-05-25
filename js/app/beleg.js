@@ -1819,10 +1819,14 @@ let beleg = {
 			link.title = "Silbentrennung anzeigen (Strg + T)";
 		}
 	},
-	// Verteiler für die Sprungfunktion
+	// Verteiler für die Sprungfunktion (Ctrl + ↓)
 	//   evt = Event-Objekt
 	//     (kann fehlen, wenn über den Link im Kopf des Belegs aufgerufen)
 	ctrlSpringen (evt = null) {
+		// Springen unterbinden, wenn (1.) Fokus in Dropdownfeld + (2.) Auslöser Tastaturkürzel
+		if (evt && document.activeElement.classList.contains("dropdown-feld")) {
+			return;
+		}
 		if (document.getElementById("beleg-link-leseansicht").classList.contains("aktiv")) {
 			beleg.ctrlSpringenLese();
 		} else {

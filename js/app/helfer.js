@@ -141,7 +141,7 @@ let helfer = {
 		}
 		// Karteikarte ist aktiv, kein Overlay
 		if (helfer.belegOffen()) {
-			// Ctrl + ↓ + Leseansicht aktiv
+			// Ctrl + ↓
 			if (evt.ctrlKey && evt.which === 40) {
 				beleg.ctrlSpringen(evt);
 			}
