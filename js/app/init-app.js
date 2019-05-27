@@ -122,7 +122,8 @@ window.addEventListener("load", function() {
 		optionen.aendereEinstellungListener(ee[i]);
 	}
 	document.getElementById("einstellung-personenliste").addEventListener("click", () => optionen.aenderePersonenliste());
-	document.getElementById("tags-laden").addEventListener("click", () => optionen.tagsManuLaden());
+	document.getElementById("sachgebiete-loeschen").addEventListener("click", () => optionen.sachgebieteLoeschen());
+	document.getElementById("sachgebiete-laden").addEventListener("click", () => optionen.sachgebieteLaden());
 	optionen.anwendenIconsDetailsListener(document.getElementById("einstellung-anzeige-icons-immer-an"));
 	// Formvarianten-Fenster
 	let stamm_inputs = document.querySelectorAll("#stamm input");

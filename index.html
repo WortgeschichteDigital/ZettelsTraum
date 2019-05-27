@@ -502,11 +502,18 @@
 					<section id="einstellungen-sec-bedeutungen" class="aus">
 						<p><input type="checkbox" id="einstellung-bedeutungen-schliessen"
 							><label for="einstellung-bedeutungen-schliessen">Bedeutungsgerüst nach dem Speichern schließen</label></p>
-						<h3>Tag-Dateien</h3>
-						<p><input type="checkbox" id="einstellung-tags-auto-abgleich"
-							><label for="einstellung-tags-auto-abgleich">Tag-Dateien automatisch auffrischen</label></p>
-						<div id="tags-cont"></div>
-						<p><input type="button" value="Tag-Datei laden" id="tags-laden"></p>
+						<h3>Sachgebiete</h3>
+						<table class="sachgebiete"><tr>
+								<td id="sachgebiete"> </td>
+								<td><input type="button" value="Löschen" id="sachgebiete-loeschen"></td>
+							</tr><tr>
+								<td dir="rtl" id="sachgebiete-datei"> </td>
+								<td><input type="button" value="Laden" id="sachgebiete-laden"></td>
+						</tr></table>
+						<p id="sachgebiete-abgleich"><input type="checkbox" id="einstellung-sachgebiete-abgleich"
+							><label for="einstellung-sachgebiete-abgleich">Sachgebiete automatisch auffrischen</label></p>
+						<p class="einzug"><i>Letzter Abgleich:</i><span id="sachgebiete-zuletzt-abgleich"></span></p>
+						<p class="einzug"><i>Letztes Update:</i><span id="sachgebiete-zuletzt-update"></span></p>
 					</section>
 					
 					<!-- Karteikarte -->

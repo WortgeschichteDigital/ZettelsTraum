@@ -2,7 +2,7 @@
 
 // Pakettyp
 let typ = process.argv[2];
-if (!typ || !/^(appImage|deb|rpm|tar\.gz)$/.test(typ)) {
+if (!typ || !/^(deb|rpm|tar\.gz)$/.test(typ)) {
 	typ = "deb";
 }
 
@@ -17,14 +17,14 @@ let keywords = "",
 
 prepare.makeBuild()
 	.then(() => {
-		if (/^(appImage|tar\.gz)$/.test(typ)) {
+		if (typ === "tar.gz") {
 			return false;
 		} else {
 			prepare.makeChangelog();
 		}
 	})
 	.then(() => {
-		if (/^(appImage|tar\.gz)$/.test(typ)) {
+		if (typ === "tar.gz") {
 			return false;
 		} else {
 			prepare.getKeywords();
@@ -80,20 +80,18 @@ function makeConfig () {
 			],
 			extraResources: [
 				{
-					from: "resources",
-					to: "./",
-					filter: ["*.xml", "filetype"],
+					from: "resources/Sachgebiete.xml",
+					to: "Sachgebiete.xml",
+				},
+				{
+					from: "resources/filetype",
+					to: "filetype",
 				},
 			],
 		},
 	};
 	// Anpassungen
-	if (typ === "appImage") {
-		delete config.config.appImage;
-		config.config.appImage = {
-			license: "LICENSE.ZettelsTraum.txt",
-		};
-	} else if (typ === "deb") {
+	if (typ === "deb") {
 		config.config[typ].priority = "optional";
 	} else if (typ === "tar.gz") {
 		delete config.config["tar.gz"];
@@ -104,7 +102,7 @@ function makeConfig () {
 function startInstaller () {
 	builder.build(config)
 	.then(() => {
-		if (/^(appImage|tar\.gz)$/.test(typ)) {
+		if (typ === "tar.gz") {
 			console.log("\nLinux-Paketierung erstellt!");
 		} else {
 			console.log("\nLinux-Installer erstellt!");

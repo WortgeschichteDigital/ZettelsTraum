@@ -167,14 +167,14 @@ npm install --save-dev electron-packager</pre>
 					<!-- Installer -->
 					<h2 id="framework-installer">Installer bauen</h2>
 					
-					<p>Ein bisschen schwieriger als die alleinige Paketierung ist das Bauen von Installern für die verschiedenen Betriebssysteme und Architekturen. Im Folgenden wird beschrieben, wie man mithilfe von <a href="https://github.com/electron-userland/electron-builder">electron-builder</a> Installer für <i>Windows</i> und <i>Linux</i> (AppImage, DEB- oder RPM-Pakete) erzeugt.</p>
+					<p>Ein bisschen schwieriger als die alleinige Paketierung ist das Bauen von Installern für die verschiedenen Betriebssysteme und Architekturen. Im Folgenden wird beschrieben, wie man mithilfe von <a href="https://github.com/electron-userland/electron-builder">electron-builder</a> Installer für <i>Windows</i> und <i>Linux</i> (DEB- oder RPM-Pakete) erzeugt.</p>
 					
 					<p>Zunächst einmal muss der Builder via <code>npm</code> installiert werden:</p>
 					
 					<pre>cd ./
 npm install --save-dev electron-builder</pre>
 					
-					<p>Die richtige Konfiguration des Builders zu finden, ist nicht so leicht, denn er kennt eine Vielzahl an <a href="https://www.electron.build/configuration/configuration">Konfigurationsmöglichkeiten</a>. Für das Erstellen eines <abbr title="Nullsoft Scriptable Install System" lang="en">NSIS</abbr>-Installers, eines AppImages, eines DEB- und eines RPM-Pakets finden sich im Wurzelverzeichnis der App bereits fertige Node-Scripts, die sich der <a href="https://www.electron.build/api/electron-builder" lang="en">Programmatic API</a> des Builders bedienen und einem die Konfigurationsarbeit abnehmen: <span class="datei">installer-win.js</span> und <span class="datei">installer-linux.js</span>. Alle Scripts erstellen Installer für eine 64-Bit-Architektur. Außerdem sind sie dafür eingerichtet, komprimierte Archive zu erstellen, die eine paketierte Version der App enthalten.</p>
+					<p>Die richtige Konfiguration des Builders zu finden, ist nicht so leicht, denn er kennt eine Vielzahl an <a href="https://www.electron.build/configuration/configuration">Konfigurationsmöglichkeiten</a>. Für das Erstellen eines <abbr title="Nullsoft Scriptable Install System" lang="en">NSIS</abbr>-Installers, eines DEB- und eines RPM-Pakets finden sich im Wurzelverzeichnis der App bereits fertige Node-Scripts, die sich der <a href="https://www.electron.build/api/electron-builder" lang="en">Programmatic API</a> des Builders bedienen und einem die Konfigurationsarbeit abnehmen: <span class="datei">installer-win.js</span> und <span class="datei">installer-linux.js</span>. Alle Scripts erstellen Installer für eine 64-Bit-Architektur. Außerdem sind sie dafür eingerichtet, komprimierte Archive zu erstellen, die eine paketierte Version der App enthalten.</p>
 					
 					<p>Ausgeführt werden die Installer-Scripts mit <code>node</code>. Für den <i>Windows</i>-Installer heißt das:</p>
 					
@@ -182,13 +182,13 @@ npm install --save-dev electron-builder</pre>
 					
 					<p>und für die <i>Linux</i>-Installer:</p>
 					
-					<pre>node installer-linux.js [appImage|deb|rpm|tar.gz]</pre>
+					<pre>node installer-linux.js [deb|rpm|tar.gz]</pre>
 					
 					<p>Wird kein Argument angegeben, das den Paket-Typ spezifiziert, baut das <i>Linux</i>-Script ein DEB-Paket und das <i>Windows</i>-Script einen <abbr title="Nullsoft Scriptable Install System" lang="en">NSIS</abbr>-Installer.</p>
 					
 					<p>Vor dem Start des eigentlichen Bauvorgangs wird überprüft, ob eine Ebene oberhalb des App-Verzeichnisses ein Ordner namens <span class="datei">build</span> existiert. Er wird <abbr title="gegebenenfalls">ggf.</abbr> automatisch erzeugt.</p>
 					
-					<p>Der Linux-Installer erwartet für DEB- und RPM-Pakete, dass in <span class="datei">../build</span> eine Plain-Text-Datei mit dem Namen <span class="datei">changelog</span> liegt. Ist kein Changelog vorhanden, wird automatisch eine leere Datei erzeugt. Im Ordner <span class="datei">./installer/</span> gibt es ein PHP-Script, das mithilfe der Changelog-Datei der App (<span class="datei">./win/changelog.html</span>) einen DEB- <abbr title="beziehungsweise">bzw.</abbr> RPM-Changelog automatisch erstellen kann (zum Ausführen wird eine Command-line-Version von PHP benötigt):</p>
+					<p>Die Linux-Installer erwarten, dass in <span class="datei">../build</span> eine Plain-Text-Datei mit dem Namen <span class="datei">changelog</span> liegt. Ist kein Changelog vorhanden, wird automatisch eine leere Datei erzeugt. Im Ordner <span class="datei">./installer/</span> gibt es ein PHP-Script, das mithilfe der Changelog-Datei der App (<span class="datei">./win/changelog.html</span>) einen DEB- <abbr title="beziehungsweise">bzw.</abbr> RPM-Changelog automatisch erstellen kann (zum Ausführen wird eine Command-line-Version von PHP benötigt):</p>
 					
 					<pre>cd ./installer
 php make-changelog.php [FORMAT] [PFAD]</pre>
@@ -201,7 +201,7 @@ php make-changelog.php [FORMAT] [PFAD]</pre>
 					
 					<p>Nach <abbr title="circa">ca.</abbr> ein, zwei Minuten (die genaue Zeit hängt natürlich vom Rechner, aber auch vom gewählten Installer ab), sollte die Meldung <code>Windows-Installer erstellt!</code> <abbr title="beziehungsweise">bzw.</abbr> <code>Linux-Installer erstellt!</code> erscheinen. Kommt diese Meldung, kann es eigentlich nicht zu größeren Fehlern gekommen sein. Im Verzeichnis <span class="datei">../build</span> befinden sich nun ein Ordner und mehrere Dateien. Interessant ist natürlich nur die Installer- <abbr title="beziehungsweise">bzw.</abbr> Archiv-Datei:</p>
 					
-					<p class="datei">zettelstraum_[VERSION]_[ARCHITEKTUR].(AppImage|deb|exe|rpm|tar.gz|zip)</p>
+					<p class="datei">zettelstraum_[VERSION]_[ARCHITEKTUR].(deb|exe|rpm|tar.gz|zip)</p>
 					
 					<p>Die ausführbare exe-Datei kann nun auf einen Windows-Rechnern kopiert und installiert werden. (Getestet wurde die Installation nur auf <i>Windows 10</i>.)</p>
 					
@@ -279,7 +279,7 @@ php make-changelog.php [FORMAT] [PFAD]</pre>
 					
 					<pre>npx asar extract app.asar [ZIELORDNER]</pre>
 					
-					<p>Das Archiv enthält den vollständigen Quelltext von <i class="app-name"></i>. Allerdings fehlen die Dateien <span class="datei">./resources/*.xml</span>, die Tag-Listen für die Bedeutungsgerüst-Funktion enthalten. Sie liegen bereits entpackt im selben Ordner wie die <span class="datei">app.asar</span>.</p>
+					<p>Das Archiv enthält den vollständigen Quelltext von <i class="app-name"></i>. Allerdings fehlt die Datei <span class="datei">./resources/Sachgebiete.xml</span>, die eine Liste an Sachgebieten für die Bedeutungsgerüst-Funktion enthält. Sie liegt bereits entpackt im selben Ordner wie die <span class="datei">app.asar</span>.</p>
 				</section>
 				
 				<!-- ORDNER UND DATEIEN -->
@@ -291,7 +291,7 @@ php make-changelog.php [FORMAT] [PFAD]</pre>
 					
 					<ul>
 						<li><span class="datei">./index.html</span>: <abbr title="Hyptertext Markupt Language" lang="en">HTML</abbr>-Datei, die beim Öffnen des Hauptfensters geladen wird</li>
-						<li><span class="datei">./installer-linux.js</span>: Node-Script, das eine DEB- oder RPM-Datei erzeugt, mit der <i class="app-name"></i> auf <i>Debian</i>/<i>Ubuntu</i> <abbr title="beziehungsweise">bzw.</abbr> Distributionen, die auf RPM setzen, installiert werden kann; alternativ kann auch ein TAR.GZ-Archiv oder ein auf den meisten Distributionen lauffähiges AppImage gebaut werden</li>
+						<li><span class="datei">./installer-linux.js</span>: Node-Script, das eine DEB- oder RPM-Datei erzeugt (alternativ auch ein TAR.GZ-Archiv), mit der <i class="app-name"></i> auf <i>Debian</i>/<i>Ubuntu</i> <abbr title="beziehungsweise">bzw.</abbr> Distributionen, die auf RPM setzen, installiert werden kann</li>
 						<li><span class="datei">./installer-win.js</span>: Node-Script, das einen <abbr title="Nullsoft Scriptable Install System" lang="en">NSIS</abbr>-Installer erzeugt (alternativ auch ein ZIP-Archiv), mit dem <i class="app-name"></i> auf <i>Windows</i> installiert werden kann</li>
 						<li><span class="datei">./installer.js</span>: ein gemeinsam genutztes Modul für die Node-Scripts, die Installer erzeugen</li>
 						<li><span class="datei">./LICENSE.*.txt</span>: Lizenzbestimmungen von <i class="app-name"></i> den Icons und Fonts</li>
@@ -360,7 +360,7 @@ php make-changelog.php [FORMAT] [PFAD]</pre>
 					
 					<p>Der Unterordner <span class="datei">./resources/filetype/</span> enthält Icons für den <abbr title="Wortgeschichte digital">WGD</abbr>-Dateityp und Shell-Scripts, mit denen auf <i>Linux</i>-Systemen der Dateityp registriert oder entfernt werden kann. (Es gibt auch eine <abbr title="Scalable Vector Graphics">SVG</abbr>-Version des Dateityp-Icons: <span class="datei">./img/datei-wgd.svg</span>.)</p>
 					
-					<p>Außerdem finden sich in dem Ordner <abbr title="Extensible Markup Language">XML</abbr>-Dateien mit Tag-Listen, die im Programm für die Bedeutungsgerüst-Funktion genutzt werden können.</p>
+					<p>Außerdem findet sich in dem Ordner eine <abbr title="Extensible Markup Language">XML</abbr>-Datei mit Sachgebieten, die im Programm für die Bedeutungsgerüst-Funktion genutzt werden können: <span class="datei">./resources/Sachgebiete.xml</span>.</p>
 					
 					<!-- Fenster -->
 					<h2 class="datei" id="ordner-win">./win/</h2>
