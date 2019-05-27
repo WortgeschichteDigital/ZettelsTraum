@@ -20,6 +20,25 @@
 		
 		<!-- CHANGELOG -->
 		<main>
+			<!-- 0.10.0 -->
+			<div class="version">0.10.0</div>
+			
+			<div>
+				<h2><span data-maintainer="Nico Dorn">Version 0.10.0-beta.4</span><time datetime="2019-05-25T12:57:57">25. Mai 2019</time></h2>
+				
+				<h3>Verbesserungen</h3>
+				
+				<ul>
+					<li>
+						<p>Tag-Dateien: Von nun an können beliebig viele Dateien zum Taggen der Bedeutungen im Bedeutungsgerüst geladen werden. Hierzu wurde das Interface, das seit Version 0.8.0 nur zum Laden einer Sachgebiete-Datei diente (<i>Programm &gt; Einstellungen &gt; Bedeutungsgerüst</i>), vollkommen überarbeitet und so abstrahiert, dass jenseits der zur Zeit verwendeten Dateitypen jederzeit Tag-Dateien neuen Typs importiert werden können – so sie denn den grundsätzlichen <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Regeln dieser Dateien folgen.</p>
+						<p>Bei der Installation werden drei Tag-Dateien mitgeliefert: neben der schon in der vorherigen Version existierenden <span class="datei">Sachgebiete.xml</span> die Dateien <span class="datei">Register.xml</span> und <span class="datei">Varietaeten.xml</span>. Die App lädt all diese Dateien einmalig beim ersten Programmstart. Wurden sie jedoch einmal mithilfe des Icons <img src="../img/loeschen.svg" width="24" height="24" alt=""> entfernt, müssen sie manuell wieder hinzugefügt werden.</p>
+						<p>Die Möglichkeit, das Programm mit <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Dateien zu verknüpfen, die sich an einem anderen Spericherort befinden, blieb natürlich erhalten.</p>
+						<p>Auch erhalten blieb die Option, die Dateien beim Programmstart automatisch auf Änderungen zu überprüfen. Neu hinzugekommen ist die Möglichkeit, diese Prüfung durch das Icon <img src="../img/reload.svg" width="24" height="24" alt=""> direkt anzustoßen. Auf diese Weise können gerade vorgenommene Ergänzungen in einer Tag-Liste direkt in der Bedeutungsgerüst-Funktion verwendet werden, ohne dass das Programm neu gestartet werden müsste.</p>
+					</li>
+					<li>Die Möglichkeit, ein AppImage zu erstellen, wurde im Installer-Script für Linux-Pakete ergänzt. Die <i>technische Dokumentation</i> wurde entsprechend ergänzt.</li>
+				</ul>
+			</div>
+			
 			<!-- 0.9.1 -->
 			<div class="version">0.9.1</div>
 			

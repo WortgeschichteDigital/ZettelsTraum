@@ -193,7 +193,7 @@ input[type="button"][value="Schließen"] {
 input[type="button"][value="DTA-Import"],
 input[type="button"][value="Importieren"],
 input[type="button"][value^="Personenliste"],
-input[type="button"][value^="Laden"] {
+input[type="button"][value="Tag-Datei laden"] {
 	background-image: url(../../img/button-import.svg);
 }
 

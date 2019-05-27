@@ -161,6 +161,7 @@ li p {
 	position: sticky;
 	top: 70px;
 	margin-top: 50px;
+	padding-right: 10px; /* nötig, damit schmale Nummern breitere überdecken */
 	width: fit-content;
 	line-height: 32px;
 	background-color: #fff;

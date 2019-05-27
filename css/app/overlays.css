@@ -13,6 +13,7 @@
 #notizen,
 #redaktion,
 #stamm,
+#tagger,
 #zeitraumgrafik {
 	position: fixed;
 	top: 0;
@@ -33,6 +34,7 @@
 #notizen > div,
 #redaktion > div,
 #stamm > div,
+#tagger > div,
 #zeitraumgrafik > div {
 	margin: 80px auto 0 auto;
 	border-bottom-right-radius: 10px;
@@ -50,6 +52,7 @@
 #notizen h2,
 #redaktion h2,
 #stamm h2,
+#tagger h2,
 #zeitraumgrafik h2 {
 	position: relative;
 }
@@ -63,6 +66,7 @@
 #notizen h2 a,
 #redaktion h2 a,
 #stamm h2 a,
+#tagger h2 a,
 #zeitraumgrafik h2 a {
 	position: absolute;
 	top: 2px;
@@ -228,58 +232,105 @@
 	height: 5px;
 }
 
-#einstellungen-cont .sachgebiete.gefuellt {
+#tags-cont table {
+	border-collapse: collapse;
+	border-spacing: 0;
 	width: 100%;
 	table-layout: fixed;
 }
 
-#einstellungen-cont .sachgebiete tr:first-child td {
-	padding-bottom: 10px;
-}
-
-#einstellungen-cont .sachgebiete td:last-child {
-	width: 105px;
-}
-
-#einstellungen-cont .sachgebiete img {
-	vertical-align: top;
-}
-
-#einstellungen-cont .sachgebiete input {
-	margin: 0;
-	width: 105px;
-}
-
-#sachgebiete-datei {
+#tags-cont td {
 	overflow: hidden;
-	text-overflow: ellipsis;
 	white-space: nowrap;
+	text-overflow: ellipsis;
 }
 
-#sachgebiete.leer,
-#sachgebiete-datei.leer {
-	direction: ltr;
+#tags-cont td:first-child {
+	padding-left: 5px;
+}
+
+#tags-cont tr.tags-datei:not(:first-child) td {
+	padding-top: 10px;
+}
+
+#tags-cont td[rowspan] {
+	padding-left: 0;
+	width: 24px;
+}
+
+#tags-cont td.tags-leer {
 	color: var(--textSehrHell);
+	text-align: center;
 	font-style: italic;
 }
 
-#sachgebiete-abgleich {
-	margin-bottom: 5px;
+#tags-cont .icon-link {
+	background-color: var(--textExtremHell);
 }
 
-#sachgebiete-abgleich + p,
-#sachgebiete-abgleich + p + p {
+#tags-cont .icon-link:hover {
+	background-color: var(--text);
+}
+
+#tags-cont .icon-link:focus {
+	background-color: var(--farbe);
+}
+
+#tags-cont table table {
 	margin-bottom: 0;
+}
+
+#tags-cont table table td:first-child {
+	padding-left: 0;
+	width: 125px;
+}
+
+#tags-cont table table td:last-child {
+	padding-right: 0;
 	color: var(--textHell);
 	font-size: 14px;
 	line-height: 20px;
 }
 
-#sachgebiete-abgleich + p i,
-#sachgebiete-abgleich + p + p i {
+#tags-cont i {
 	display: inline-block;
-	width: 110px;
-	text-indent: 0;
+	width: 65px;
+}
+
+#tags-cont img {
+	vertical-align: top;
+}
+
+#tags-laden {
+	margin-left: 0;
+}
+
+.icon-loeschen {
+	-webkit-mask-image: url(../../img/loeschen.svg);
+	mask-image: url(../../img/loeschen.svg);
+}
+
+.icon-reload {
+	-webkit-mask-image: url(../../img/reload.svg);
+	mask-image: url(../../img/reload.svg);
+}
+
+.dialog-tags-liste {
+	display: flex;
+	flex-wrap: wrap;
+	max-height: 240px;
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+
+.dialog-tags-liste p {
+	flex: 1 0 185px;
+	margin: 0;
+	padding-right: 20px;
+	max-width: 185px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }
 
 /* Formvarianten ------------------------ */
@@ -441,7 +492,7 @@
 
 #anhaenge-cont p:last-child {
 	margin-bottom: 0;
-} 
+}
 
 .anhaenge-add {
 	text-align: center;
@@ -694,6 +745,63 @@ input[id^="redaktion-datum"] {
 input[id^="redaktion-ereignis"],
 input[id^="redaktion-person"] {
 	width: calc(100% - 31px);
+}
+
+/* Tagger --------------------------------------- */
+#tagger > div {
+	margin-top: 40px;
+	max-width: 500px;
+}
+
+.icon-h-tagger {
+	-webkit-mask-image: url(../../img/heading-tagger.svg);
+	mask-image: url(../../img/heading-tagger.svg);
+}
+
+#tagger-cont {
+	padding: 10px;
+}
+
+#tagger-cont p:last-child {
+	margin-bottom: 0;
+}
+
+#tagger-cont p input:first-child {
+	margin-left: 0;
+}
+
+#tagger-typen {
+	margin-bottom: 15px;
+}
+
+#tagger-typen.leer {
+	color: var(--textSehrHell);
+	font-style: italic;
+	text-align: center;
+}
+
+#tagger-typen i {
+	display: inline-block;
+	width: 100px;
+	overflow: hidden;
+	vertical-align: top;
+	color: var(--textFarbe);
+	text-overflow: ellipsis;
+}
+
+#tagger-typen span[contenteditable] {
+	display: inline-block;
+	border: 1px solid var(--linie);
+	padding: 2px 26px 2px 5px;
+	width: calc(100% - 100px - 35px);
+	line-height: 24px;
+	color: var(--text);
+	text-indent: 0;
+}
+
+#tagger-typen span[contenteditable]:focus {
+	outline: 1px solid var(--farbe);
+	border-color: var(--farbe);
 }
 
 /* Zeitraumgrafik ------------------------------- */
