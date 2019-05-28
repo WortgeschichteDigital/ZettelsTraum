@@ -106,6 +106,8 @@ let optionen = {
 			// BEDEUTUNGSGERÜST
 			// Bedeutungsgerüst nach dem Speichern direkt schließen
 			"bedeutungen-schliessen": true,
+			// Tagger nach dem Speichern direkt schließen
+			"tagger-schliessen": true,
 			// XML-Dateien mit Tags sollten automatisch abgeglichen werden
 			"tags-auto-abgleich": true,
 			// KARTEIKARTE

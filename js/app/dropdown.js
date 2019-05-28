@@ -45,8 +45,11 @@ let dropdown = {
 	//     (ID des Dropdownfeldes, für das die Tagliste erstellt werden soll)
 	dataTags (feld_id) {
 		const typ = feld_id.replace(/^tagger-/, "");
-		let arr = [],
-			data = optionen.data.tags[typ].data;
+		let arr = [];
+		if (!optionen.data.tags[typ]) { // jemand könnte die Tag-Datei löschen, während der Tagger offen ist
+			return arr;
+		}
+		let data = optionen.data.tags[typ].data;
 		for (let id in data) {
 			if (!data.hasOwnProperty(id)) {
 				continue;
@@ -471,6 +474,9 @@ let dropdown = {
 				optionen.aendereEinstellung(document.getElementById(caller));
 			} else if (caller === "bedeutungen-hierarchie") {
 				bedeutungen.hierarchie();
+			} else if (/^tagger-/.test(caller)) {
+				let ele = document.getElementById(caller);
+				window.getSelection().collapse(ele.firstChild, ele.textContent.length);
 			}
 			// Dropdown schließen
 			dropdown.schliessen();

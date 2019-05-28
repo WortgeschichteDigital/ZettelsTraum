@@ -92,6 +92,9 @@ window.addEventListener("load", function() {
 	// Bedeutungen
 	document.getElementById("bedeutungen-speichern").addEventListener("click", () => bedeutungen.speichern());
 	document.getElementById("bedeutungen-schliessen").addEventListener("click", () => bedeutungen.schliessen());
+	// Tagger
+	document.getElementById("tagger-speichern").addEventListener("click", () => tagger.speichern());
+	document.getElementById("tagger-schliessen").addEventListener("click", () => tagger.schliessen());
 	// Belegliste-Filter
 	document.querySelectorAll("#liste-filter header a").forEach((a) => filter.ctrlButtons(a));
 	document.querySelectorAll(".filter-kopf").forEach(function(a) {
