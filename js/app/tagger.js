@@ -94,6 +94,7 @@ let tagger = {
 			console.log("hier");
 		});
 		observer.observe(span, {
+			subtree: true,
 			characterData: true,
 		});
 	},
