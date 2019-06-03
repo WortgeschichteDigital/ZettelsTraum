@@ -8,10 +8,30 @@ let tagger = {
 		let fenster = document.getElementById("tagger");
 		overlay.oeffnen(fenster);
 		fenster.dataset.idx = idx;
-		tagger.aufbauen(idx);
+		tagger.aufbauenBedeutung(idx);
+		tagger.aufbauen();
+	},
+	// Bedeutung eintragen, die hier getaggt wird
+	//   idx = String
+	//     (Index-Nummer im aktuellen Bedeutungsgerüst, zu der die Tags hinzugefügt werden sollen)
+	aufbauenBedeutung (idx) {
+		let cont = document.getElementById("tagger-bedeutung");
+		helfer.keineKinder(cont);
+		// Daten ermitteln
+		const i = parseInt(idx, 10);
+		bedeutungen.zaehlungTief(i).forEach(function(b) {
+			let nB = document.createElement("b");
+			nB.classList.add("zaehlung");
+			nB.textContent = b;
+			cont.appendChild(nB);
+		});
+		let span = document.createElement("span");
+		span.innerHTML = bedeutungen.data.bd[i].bd[bedeutungen.data.bd[i].bd.length - 1];
+		cont.appendChild(span);
 	},
 	// Tag-Kategorien aufbauen
 	aufbauen () {
+		tagger.filled = false;
 		let cont = document.getElementById("tagger-typen");
 		helfer.keineKinder(cont);
 		let typen = [];
@@ -21,7 +41,7 @@ let tagger = {
 			}
 			typen.push(typ);
 		}
-		typen.sort(helfer.sortAlpha);
+		typen.sort(tagger.typenSort);
 		for (let typ of typen) {
 			let p = document.createElement("p");
 			cont.appendChild(p);
@@ -39,6 +59,7 @@ let tagger = {
 			span.classList.add("dropdown-feld");
 			dropdown.feld(span);
 			tagger.listener(span);
+			helfer.editNoFormat(span);
 			// Dropdown-Link
 			let a = dropdown.makeLink("dropdown-link-td", `${name} auswählen`, true);
 			p.appendChild(a);
@@ -55,6 +76,24 @@ let tagger = {
 			tagger.fill();
 		}
 	},
+	// Tag-Typen sortieren
+	//   a = String
+	//   b = String
+	typenSort (a, b) {
+		// Sachgebiete immer oben
+		if (a === "sachgebiete") {
+			return -1;
+		} else if (b === "sachgebiete") {
+			return 1;
+		}
+		// alphanumerisch
+		let x = [a, b];
+		x.sort();
+		if (x[0] === a) {
+			return -1;
+		}
+		return 1;
+	},
 	// Namen einer Tag-Kategorie ermitteln
 	//   typ = String
 	//     (der Zeiger auf die Kategorie)
@@ -65,6 +104,8 @@ let tagger = {
 		}
 		return name;
 	},
+	// die Tag-Felder wurden noch nicht gefüllt => keine Änderungsmarkierung setzen
+	filled: false,
 	// Tags eintragen
 	fill () {
 		const idx = parseInt(document.getElementById("tagger").dataset.idx, 10);
@@ -86,20 +127,34 @@ let tagger = {
 			let feld = document.getElementById(`tagger-${i}`);
 			feld.textContent = tags[i].join(", ");
 		}
+		setTimeout(function() {
+			// der MutationObserver reagiert verzögert, darum muss hier ein Timeout stehen;
+			// 0 Millisekunden würde wohl auch gehen
+			tagger.filled = true;
+		}, 5);
 	},
 	// hört, ob sich in einem Edit-Feld etwas tut
 	listener (span) {
-		// TODO
 		let observer = new MutationObserver(function() {
-			console.log("hier");
+			if (!tagger.filled) {
+				return;
+			}
+			span.classList.add("changed");
+			tagger.taggerGeaendert(true);
 		});
 		observer.observe(span, {
+			childList: true,
 			subtree: true,
 			characterData: true,
 		});
 	},
 	// Tagger speichern
 	speichern () {
+		// Es wurde gar nichts geändert!
+		if (!tagger.geaendert) {
+			schliessen();
+			return;
+		}
 		// Werte der Felder auf Validität prüfen
 		let mismatch = [],
 			save = [],
@@ -153,13 +208,70 @@ let tagger = {
 		// korrekte Tags speichern
 		const idx = parseInt(document.getElementById("tagger").dataset.idx, 10);
 		bedeutungen.data.bd[idx].ta = save;
+		// Tags in die Tabelle eintragen
+		let zelle = document.querySelector(`#bedeutungen-cont tr[data-idx="${idx}"] td[data-feld="ta"]`);
+		helfer.keineKinder(zelle);
+		bedeutungen.aufbauenTags(save, zelle);
+		// Zeile mit den Tags aktivieren
+		bedeutungen.editZeile(zelle, true);
+		// Änderungsmarkierung Bedeutungsgerüst setzen
+		bedeutungen.bedeutungenGeaendert(true);
+		// Änderungsmarkierungen im Tagger entfernen
+		document.querySelectorAll("#tagger-typen .changed").forEach(function(i) {
+			i.classList.remove("changed");
+			i.classList.add("saved");
+			setTimeout(function() {
+				i.classList.remove("saved");
+			}, 500);
+		});
+		tagger.taggerGeaendert(false);
 		// Fenster ggf. schließen
-		if (optionen.data.einstellungen["tagger-schliessen"]) {
-			tagger.schliessen();
+		schliessen();
+		// Schließen-Funktion
+		function schliessen () {
+			if (optionen.data.einstellungen["tagger-schliessen"]) {
+				tagger.schliessen();
+			}
 		}
 	},
 	// Tagger schließen
 	schliessen () {
-		overlay.ausblenden(document.getElementById("tagger"));
+		// Änderungen wurden noch nicht gespeichert
+		if (tagger.geaendert) {
+			dialog.oeffnen("confirm", function() {
+				if (dialog.antwort) {
+					tagger.speichern();
+				} else if (dialog.antwort === false) {
+					tagger.taggerGeaendert(false);
+					ausblenden();
+				} else {
+					let feld = document.querySelector("#tagger-typen .dropdown-feld");
+					if (feld) {
+						feld.focus();
+					}
+				}
+			});
+			dialog.text("Die Änderungen an den Tags wurden noch nicht gespeichert.\nMöchten Sie die Eingaben nicht erst einmal speichern?");
+			return;
+		}
+		ausblenden();
+		// Fenster ausblenden
+		function ausblenden () {
+			overlay.ausblenden(document.getElementById("tagger"));
+		}
+	},
+	// Tags wurden geändert und noch nicht gespeichert
+	geaendert: false,
+	// Anzeigen, dass die Tags geändert wurden
+	//   geaendert = Boolean
+	taggerGeaendert (geaendert) {
+		tagger.geaendert = geaendert;
+		helfer.geaendert();
+		let asterisk = document.getElementById("tagger-geaendert");
+		if (geaendert) {
+			asterisk.classList.remove("aus");
+		} else {
+			asterisk.classList.add("aus");
+		}
 	},
 };

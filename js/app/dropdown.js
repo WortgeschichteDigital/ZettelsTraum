@@ -477,6 +477,8 @@ let dropdown = {
 			} else if (/^tagger-/.test(caller)) {
 				let ele = document.getElementById(caller);
 				window.getSelection().collapse(ele.firstChild, ele.textContent.length);
+				ele.classList.add("changed");
+				tagger.taggerGeaendert(true);
 			}
 			// Dropdown schließen
 			dropdown.schliessen();

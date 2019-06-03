@@ -131,6 +131,21 @@ let bedeutungen = {
 		}
 		return zeichen;
 	},
+	// gibt alle Ebenen der Zählung der übergebenen Bedeutung zurück
+	//   idx = Number
+	//     (Index der Bedeutung im Bedeutungsgerüst)
+	zaehlungTief (idx) {
+		let ebene = -1,
+			zaehlungen = [];
+		do {
+			zaehlungen.push(bedeutungen.data.bd[idx].za);
+			ebene = bedeutungen.data.bd[idx].bd.length;
+			while (idx > 0 && bedeutungen.data.bd[idx].bd.length >= ebene) {
+				idx--;
+			}
+		} while (ebene > 1);
+		return zaehlungen.reverse();
+	},
 	// überprüft, ob die übergebene Bedeutung schon vorhanden ist
 	// (wird auch in beleg.js genutzt)
 	//   bd = String
@@ -247,11 +262,7 @@ let bedeutungen = {
 			td = document.createElement("td");
 			td.dataset.feld = "ta";
 			tr.appendChild(td);
-			// TODO TAGS:
-			// - ggf. Werte einfügen
-			// - dann kein .leer und kein Standardtext
-			td.classList.add("leer");
-			td.textContent = "Tags";
+			bedeutungen.aufbauenTags(i.ta, td);
 			bedeutungen.openTagger(td);
 			// Alias
 			td = document.createElement("td");
@@ -271,6 +282,39 @@ let bedeutungen = {
 		// (könnte bereits durch bedeutungen.konstit() geschehen sein)
 		if (!bedeutungen.makeId) {
 			bedeutungen.makeId = bedeutungen.idGenerator(lastId + 1);
+		}
+	},
+	// Tags einer Bedeutung erzeugen und einhängen
+	// (wird auch vom Tagger genutzt)
+	//   ta = Array
+	//     (Array mit den Tags: ta.ty = Typ, ta.id = ID)
+	//   td = Element
+	//     (die Tabellenzelle, in die die Tags eingetragen werden sollen)
+	aufbauenTags (ta, td) {
+		// keine Tags vorhanden
+		if (!ta.length) {
+			td.classList.add("leer");
+			td.textContent = "Tags";
+			return;
+		}
+		// Tags eintragen
+		td.classList.remove("leer");
+		for (let tag of ta) {
+			if (!optionen.data.tags[tag.ty] ||
+					!optionen.data.tags[tag.ty].data[tag.id]) {
+				continue;
+			}
+			let span = document.createElement("span");
+			td.appendChild(span);
+			span.classList.add(`bedeutungen-tags-${tag.ty}`);
+			const name = optionen.data.tags[tag.ty].data[tag.id].name,
+				abbr = optionen.data.tags[tag.ty].data[tag.id].abbr;
+			if (abbr) {
+				span.textContent = abbr;
+				span.title = name;
+			} else {
+				span.textContent = name;
+			}
 		}
 	},
 	// Zeile zum Ergänzen des Bedeutungsgerüsts einfügen
@@ -343,7 +387,8 @@ let bedeutungen = {
 			return false;
 		}
 	},
-	//
+	// Navigation durch die Felder einer Bedeutung mit Tabs
+	//   evt = Event-Objekt
 	naviTab (evt) {
 		// nichts aktiviert
 		if (!bedeutungen.moveAktiv &&
@@ -385,6 +430,7 @@ let bedeutungen = {
 				bedeutungen.linkTagger(neuesFeld);
 			} else {
 				bedeutungen.editErstellen(neuesFeld);
+				bedeutungen.editZeile(neuesFeld, true); // Tagger-Link onblur => Zeile wird deaktiviert => Zeile muss wieder aktiviert werden
 			}
 		}
 	},
@@ -412,6 +458,7 @@ let bedeutungen = {
 	moveAn (idx, moved = false) {
 		bedeutungen.moveAktiv = true;
 		bedeutungen.editFeldWeg();
+		bedeutungen.editZeile(null);
 		// Top-Element markieren
 		let tr = document.querySelectorAll("#bedeutungen-cont tr")[idx];
 		tr.classList.add("bedeutungen-aktiv");
@@ -732,26 +779,31 @@ let bedeutungen = {
 	//   td = Element
 	//     (die Tabellenzelle, über die der Tagger geöffnet werden soll)
 	openTagger (td) {
-		// TODO TAGS
 		td.addEventListener("click", function() {
+			// Zeile aktivieren
+			bedeutungen.editFeldWeg();
+			bedeutungen.moveAus();
+			bedeutungen.editZeile(null);
+			// Tagger öffnen
 			const idx = this.parentNode.dataset.idx;
 			tagger.oeffnen(idx);
 		});
 	},
 	// Link zum Öffnen des Taggers erstellen
+	//   zelle = Element
+	//     (die Tabellenzelle für die Tags);
 	linkTagger (zelle) {
-		// TODO TAGS
 		// ggf. altes Edit-Feld löschen
 		bedeutungen.editFeldWeg();
 		// Zeile und Container vorbereiten
 		bedeutungen.moveAus();
 		bedeutungen.editZeile(zelle, true);
 		// Link zum Tagger einfügen
-		helfer.keineKinder(zelle);
 		let a = document.createElement("a");
 		a.href = "#";
 		a.id = "bedeutungen-tagger-link";
-		a.textContent = "Tags"; // TODO hier muss natürlich der richtige Content eingefügt werden
+		a.innerHTML = zelle.innerHTML;
+		helfer.keineKinder(zelle);
 		zelle.appendChild(a);
 		a.focus();
 		a.addEventListener("click", function(evt) {
@@ -761,7 +813,7 @@ let bedeutungen = {
 			tagger.oeffnen(idx);
 		});
 		a.addEventListener("blur", function() {
-			bedeutungen.editEintragen(this);
+			bedeutungen.editEintragen(this.parentNode);
 		});
 	},
 	// Listener für den Container, in dem ein Edit-Feld erstellt werden soll
@@ -794,14 +846,10 @@ let bedeutungen = {
 		edit.setAttribute("contenteditable", "true");
 		edit.id = "bedeutungen-edit";
 		if (Array.isArray(z)) {
-			if (feld === "bd") {
-				edit.innerHTML = z[z.length - 1];
-			} else if (feld === "ta") {
-				// TODO TAGS:
-				// hier müssen die Tags eingefügt werden
-			}
+			edit.innerHTML = z[z.length - 1];
 		} else {
 			edit.textContent = z;
+			helfer.editNoFormat(edit);
 		}
 		helfer.keineKinder(ele);
 		ele.appendChild(edit);
@@ -911,13 +959,11 @@ let bedeutungen = {
 			if (feld === "bd") {
 				wert = z[z.length - 1];
 			} else if (feld === "ta") {
-				// TODO TAGS:
-				// korrekten Wert in das Feld eintragen
 				if (!z.length) {
 					wert = felder[feld];
 					ele.classList.add("leer");
 				} else {
-					wert = felder[feld];
+					wert = ele.firstChild.innerHTML;
 					ele.classList.remove("leer");
 				}
 			}
@@ -949,6 +995,17 @@ let bedeutungen = {
 	//   edit = Boolean
 	//     (Zeile wird ediert)
 	editZeile (ele, edit) {
+		// es kann sein, dass noch eine andere Zeile aktiv ist
+		// (bes. wenn der Tagger geöffnet war)
+		let editAlt = document.querySelector(".bedeutungen-edit");
+		if (editAlt) {
+			editAlt.classList.remove("bedeutungen-edit");
+		}
+		// nur ausschalten
+		if (!ele) {
+			return;
+		}
+		// aktuelle Zeile aktivieren/deaktivieren
 		let tr = ele.parentNode;
 		while (tr.nodeName !== "TR") {
 			tr = tr.parentNode;

@@ -146,7 +146,15 @@ let optionen = {
 			// Textsorte in den Kopf der Belegliste eintragen
 			textsorte: false,
 		},
-		// Taglisten, die aus XML-Dateien importiert wurden
+		// Taglisten, die aus XML-Dateien importiert wurden; Aufbau:
+		//   TYP         Tag-Typ (String)
+		//     abgleich  Datum des letzten Abgleichs (ISO-String)
+		//     update    Datum des letzten Updates (ISO-String)
+		//     datei     Pfad zur XML-Datei (String)
+		//     data      Object
+		//       ID      String (numerische ID des Tags)
+		//         abbr  String (Abkürzung des Tags)
+		//         name  String (der Tag)
 		tags: {},
 		// beim ersten Programmstart automatisch mit XML-Dateien aus App-Ordner verknüpfen
 		"tags-autoload-done": false,
@@ -857,12 +865,7 @@ let optionen = {
 				if (!optionen.data.tags[typ].data.hasOwnProperty(id)) {
 					continue;
 				}
-				let item = optionen.data.tags[typ].data[id],
-					tag = item.name;
-				if (item.abbr) {
-					tag += ` (${item.abbr})`;
-				}
-				tags.push(tag);
+				tags.push(optionen.data.tags[typ].data[id].name);
 			}
 			tags.sort(helfer.sortAlpha);
 			let h3 = "Tags";

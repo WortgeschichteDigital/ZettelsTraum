@@ -97,6 +97,7 @@
 
 #bedeutungen-cont td:first-child,
 #bedeutungen-cont td:nth-child(2) {
+	padding: 0;
 	width: 24px;
 	background-color: var(--hintergrund);
 }
@@ -181,8 +182,20 @@
 	color: var(--text);
 }
 
+td:not(.leer) #bedeutungen-tagger-link:focus {
+	color: var(--farbe);
+}
+
 #bedeutungen-cont .leer #bedeutungen-tagger-link {
 	font-style: italic;
+}
+
+#bedeutungen-cont span[class^="bedeutungen-tags"]:not(:first-child)::before {
+	content: ", ";
+}
+
+#bedeutungen-cont .bedeutungen-tags-sachgebiete {
+	font-variant: small-caps;
 }
 
 #bedeutungen-cont .bedeutungen-aktiv td,

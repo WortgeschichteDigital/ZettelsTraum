@@ -758,6 +758,10 @@ input[id^="redaktion-person"] {
 	mask-image: url(../../img/heading-tagger.svg);
 }
 
+#tagger-geaendert {
+	margin-left: 5px;
+}
+
 #tagger-cont {
 	padding: 10px;
 }
@@ -770,8 +774,22 @@ input[id^="redaktion-person"] {
 	margin-left: 0;
 }
 
+#tagger-bedeutung {
+	margin-bottom: 25px;
+	padding-left: 35px;
+	font-size: 18px;
+	line-height: 28px;
+	text-indent: -35px;
+}
+
+#tagger-bedeutung b.zaehlung {
+	display: inline-block;
+	margin-right: 10px;
+	text-indent: 0;
+}
+
 #tagger-typen {
-	margin-bottom: 15px;
+	margin-bottom: 25px;
 }
 
 #tagger-typen.leer {
@@ -802,6 +820,16 @@ input[id^="redaktion-person"] {
 #tagger-typen span[contenteditable]:focus {
 	outline: 1px solid var(--farbe);
 	border-color: var(--farbe);
+}
+
+#tagger-typen span[contenteditable].changed {
+	outline-color: var(--farbeRot);
+	border-color: var(--farbeRot);
+}
+
+#tagger-typen span[contenteditable].saved {
+	outline-color: var(--farbeGruen);
+	border-color: var(--farbeGruen);
 }
 
 /* Zeitraumgrafik ------------------------------- */
