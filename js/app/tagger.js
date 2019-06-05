@@ -135,6 +135,14 @@ let tagger = {
 	},
 	// hört, ob sich in einem Edit-Feld etwas tut
 	listener (span) {
+		// Enter abfangen
+		span.addEventListener("keydown", function(evt) {
+			if (evt.which === 13 && !document.getElementById("dropdown")) {
+				evt.preventDefault();
+				tagger.speichern();
+			}
+		});
+		// Änderungen
 		let observer = new MutationObserver(function() {
 			if (!tagger.filled) {
 				return;
@@ -213,7 +221,9 @@ let tagger = {
 		helfer.keineKinder(zelle);
 		bedeutungen.aufbauenTags(save, zelle);
 		// Zeile mit den Tags aktivieren
-		bedeutungen.editZeile(zelle, true);
+		if (save.length) {
+			bedeutungen.editZeile(zelle, true);
+		}
 		// Änderungsmarkierung Bedeutungsgerüst setzen
 		bedeutungen.bedeutungenGeaendert(true);
 		// Änderungsmarkierungen im Tagger entfernen

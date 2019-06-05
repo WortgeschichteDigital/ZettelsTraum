@@ -173,7 +173,9 @@ let bedeutungen = {
 	oeffnen () {
 		// Bedeutungen sind schon offen
 		if (!document.getElementById("bedeutungen").classList.contains("aus")) {
-			helfer.auswahl(document.getElementById("bedeutungen-neu"));
+			if (document.getElementById("tagger").classList.contains("aus")) {
+				helfer.auswahl(document.getElementById("bedeutungen-neu"));
+			}
 			return;
 		}
 		// aktueller Beleg ist noch nicht gespeichert
@@ -193,6 +195,7 @@ let bedeutungen = {
 		// Bedeutungenformular anzeigen und initialisieren
 		function init () {
 			// TODO hier Kopie von data.bd => bedeutungen.data
+			document.getElementById("bedeutungen-gerueste").value = "Gerüst 1"; // TODO hier den Gerüst-Selektor füllen
 			document.getElementById("bedeutungen-hierarchie").value = bedeutungen.hierarchieEbenen[bedeutungen.data.sl];
 			bedeutungen.aufbauen();
 			helfer.sektionWechseln("bedeutungen");
@@ -773,7 +776,11 @@ let bedeutungen = {
 				document.querySelector(".bedeutungen-aktiv").firstChild.firstChild.focus();
 			}
 		});
-		dialog.text(`Soll die markierte Bedeutung\n<p class="bedeutungen-dialog"><b>${bedeutungen.data.bd[idx].za}</b>${bd}</p>\n${items.length > 1 ? "mit all ihren Unterbedeutungen " : ""}wirklich gelöscht werden?`);
+		let zaehlung = bedeutungen.zaehlungTief(idx);
+		for (let i = 0, len = zaehlung.length; i < len; i++) {
+			zaehlung[i] = `<b>${zaehlung[i]}</b>`;
+		}
+		dialog.text(`Soll die markierte Bedeutung\n<p class="bedeutungen-dialog">${zaehlung.join("")}${bd}</p>\n${items.length > 1 ? "mit all ihren Unterbedeutungen " : ""}wirklich gelöscht werden?`);
 	},
 	// Listener zum Öffnen des Taggers
 	//   td = Element

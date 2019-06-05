@@ -15,9 +15,10 @@ let kartei = {
 		// (falls Änderungen noch nicht übernommen wurden)
 		helfer.inputBlur();
 		// Obacht! Änderungen noch nicht gespeichert!
-		if (notizen.geaendert || bedeutungen.geaendert || beleg.geaendert || kartei.geaendert) {
+		if (notizen.geaendert || tagger.geaendert || bedeutungen.geaendert || beleg.geaendert || kartei.geaendert) {
 			sicherheitsfrage.warnen(funktion, {
 				notizen: true,
+				tagger: true,
 				bedeutungen: true,
 				beleg: true,
 				kartei: true,
@@ -158,6 +159,7 @@ let kartei = {
 			kartei.lock(datei, "lock");
 			// Daten werden eingelesen => Änderungsmarkierungen kommen weg
 			notizen.notizenGeaendert(false);
+			tagger.taggerGeaendert(false);
 			beleg.belegGeaendert(false);
 			bedeutungen.bedeutungenGeaendert(false);
 			kartei.karteiGeaendert(false);
@@ -280,6 +282,7 @@ let kartei = {
 	schliessen () {
 		kartei.lock(kartei.pfad, "unlock");
 		notizen.notizenGeaendert(false);
+		tagger.taggerGeaendert(false);
 		beleg.belegGeaendert(false);
 		bedeutungen.bedeutungenGeaendert(false);
 		kartei.karteiGeaendert(false);
@@ -317,6 +320,7 @@ let kartei = {
 			} else if (dialog.antwort && wort) {
 				kartei.lock(kartei.pfad, "unlock");
 				notizen.notizenGeaendert(false);
+				tagger.taggerGeaendert(false);
 				beleg.belegGeaendert(false);
 				bedeutungen.bedeutungenGeaendert(false);
 				kartei.karteiGeaendert(true);

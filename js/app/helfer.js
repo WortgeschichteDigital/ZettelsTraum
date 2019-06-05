@@ -430,6 +430,7 @@ let helfer = {
 		let asterisk = "";
 		if (kartei.geaendert ||
 				notizen.geaendert ||
+				tagger.geaendert ||
 				bedeutungen.geaendert ||
 				beleg.geaendert) {
 			asterisk = " *";
@@ -446,13 +447,26 @@ let helfer = {
 		if (oben === "notizen" && notizen.geaendert) {
 			notizen.speichern();
 		}
+		if (oben === "tagger" && tagger.geaendert) {
+			tagger.speichern();
+			// falls das Tagger-Fenster automatisch geschlossen wird
+			setTimeout(function() {
+				if (!overlay.oben() && bedeutungen.geaendert) {
+					bedeutungen.speichern();
+				}
+			}, 200); // das Ausblenden des Fensters dauert 200 Millisekunden; vgl. overlay.ausblenden()
+		}
 		if (!oben && bedeutungen.geaendert) {
 			bedeutungen.speichern();
 		}
 		if (!oben && beleg.geaendert) {
 			beleg.aktionSpeichern();
 		}
-		if (!notizen.geaendert && !bedeutungen.geaendert && !beleg.geaendert && kartei.geaendert) {
+		if (!notizen.geaendert &&
+				!tagger.geaendert &&
+				!bedeutungen.geaendert &&
+				!beleg.geaendert &&
+				kartei.geaendert) {
 			kartei.speichern(false);
 		}
 	},

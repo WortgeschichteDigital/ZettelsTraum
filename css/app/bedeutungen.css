@@ -26,11 +26,18 @@
 #bedeutungen header > div > div {
 	position: absolute;
 	top: -3px;
-	right: -24px;
+	right: 0;
+	padding-left: 25px;
 	height: 30px;
+	background-color: #fff;
 }
 
-#bedeutungen-hierarchie {
+#bedeutungen header > div > div span.dropdown-cont {
+	display: inline-block;
+}
+
+#bedeutungen-hierarchie,
+#bedeutungen-gerueste {
 	background-color: transparent;
 	width: 75px;
 	color: var(--textSehrHell);
@@ -38,20 +45,41 @@
 }
 
 #bedeutungen-hierarchie:focus,
-#bedeutungen-hierarchie:hover {
+#bedeutungen-hierarchie:hover,
+#bedeutungen-gerueste:focus,
+#bedeutungen-gerueste:hover {
 	outline: none;
 	border-color: var(--linie);
 	color: var(--text);
 }
 
 #bedeutungen-hierarchie:hover ~ a,
-#bedeutungen-hierarchie:focus ~ a {
+#bedeutungen-hierarchie:focus ~ a,
+#bedeutungen-gerueste:hover ~ a,
+#bedeutungen-gerueste:focus ~ a {
 	color: var(--text);
 }
 
 /* Styles zu .bedeutungen-opt-block → liste.css */
-.bedeutungen-opt-block {
+#bedeutungen header > div > div .bedeutungen-opt-block {
+	position: relative;
 	top: 6px;
+	margin-left: 0;
+}
+
+#bedeutungen-gerueste-config {
+	margin-left: 5px;
+	-webkit-mask-image: url(../../img/gerueste-config.svg);
+	mask-image: url(../../img/gerueste-config.svg);
+	background-color: var(--textExtremHell);
+}
+
+#bedeutungen-gerueste-config:hover {
+	background-color: var(--text);
+}
+
+#bedeutungen-gerueste-config:focus {
+	background-color: var(--farbe);
 }
 
 /* Tabelle -------------------------------------- */
@@ -155,13 +183,16 @@
 	background-color: var(--hintergrund);
 }
 
-#bedeutungen-cont .zaehlung p > b,
-.bedeutungen-dialog b {
+#bedeutungen-cont .zaehlung p > b {
 	display: inline-block;
 	width: 35px;
 	vertical-align: top;
 	text-align: center;
 	text-indent: 0;
+}
+
+.bedeutungen-dialog b {
+	margin-right: 10px;
 }
 
 #bedeutungen-cont .zaehlung div {

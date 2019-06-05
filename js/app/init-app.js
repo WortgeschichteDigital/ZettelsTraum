@@ -92,6 +92,7 @@ window.addEventListener("load", function() {
 	// Bedeutungen
 	document.getElementById("bedeutungen-speichern").addEventListener("click", () => bedeutungen.speichern());
 	document.getElementById("bedeutungen-schliessen").addEventListener("click", () => bedeutungen.schliessen());
+	document.getElementById("bedeutungen-gerueste-config").addEventListener("click", evt => bedeutungenGerueste.oeffnen(evt));
 	// Tagger
 	document.getElementById("tagger-speichern").addEventListener("click", () => tagger.speichern());
 	document.getElementById("tagger-schliessen").addEventListener("click", () => tagger.schliessen());
@@ -255,9 +256,10 @@ window.addEventListener("beforeunload", function(evt) {
 		optionen.speichernAnstossen();
 	}
 	// Schließen ggf. unterbrechen + Kartei ggf. entsperren
-	if (notizen.geaendert || bedeutungen.geaendert || beleg.geaendert || kartei.geaendert) {
+	if (notizen.geaendert || tagger.geaendert || bedeutungen.geaendert || beleg.geaendert || kartei.geaendert) {
 		sicherheitsfrage.warnen(function() {
 			notizen.geaendert = false;
+			tagger.geaendert = false;
 			bedeutungen.geaendert = false;
 			beleg.geaendert = false;
 			kartei.geaendert = false;
@@ -265,6 +267,7 @@ window.addEventListener("beforeunload", function(evt) {
 			app.quit();
 		}, {
 			notizen: true,
+			tagger: true,
 			bedeutungen: true,
 			beleg: true,
 			kartei: true,

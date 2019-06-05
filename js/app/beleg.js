@@ -29,8 +29,20 @@ let beleg = {
 	// Überprüfen, ob vor dem Erstellen eines neuen Belegs noch Änderungen
 	// gespeichert werden müssen.
 	erstellenPre () {
-		// Änderungen in Bedeutungen/im Beleg noch nicht gespeichert
-		if (bedeutungen.geaendert) {
+		// Änderungen im Tagger/in Bedeutungen/im Beleg noch nicht gespeichert
+		if (tagger.geaendert) {
+			dialog.oeffnen("confirm", function() {
+				if (dialog.antwort) {
+					tagger.speichern();
+				} else if (dialog.antwort === false) {
+					tagger.taggerGeaendert(false);
+					tagger.schliessen();
+					beleg.erstellen();
+				}
+			});
+			dialog.text("Die Tags wurden verändert, aber noch nicht gespeichert.\nMöchten Sie die Änderungen nicht erst einmal speichern?");
+			return;
+		} else if (bedeutungen.geaendert) {
 			dialog.oeffnen("confirm", function() {
 				if (dialog.antwort) {
 					bedeutungen.speichern();
@@ -1920,6 +1932,7 @@ let beleg = {
 				beleg.ctrlNavi(next);
 			}, {
 				notizen: false,
+				tagger: false,
 				bedeutungen: false,
 				beleg: true,
 				kartei: false,

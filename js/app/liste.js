@@ -4,7 +4,19 @@ let liste = {
 	// Zeigt die Karteikartenliste an, überprüft aber vorher
 	// ob noch etwas in Bearbeitung gespeichert werden muss
 	anzeigen () {
-		if (bedeutungen.geaendert) { // Bedeutungen noch nicht gespeichert
+		if (tagger.geaendert) { // Tags noch nicht gespeichert
+			dialog.oeffnen("confirm", function() {
+				if (dialog.antwort) {
+					tagger.speichern();
+				} else if (dialog.antwort === false) {
+					tagger.taggerGeaendert(false);
+					tagger.schliessen();
+					liste.wechseln();
+				}
+			});
+			dialog.text("Die Tags wurden verändert, aber noch nicht gespeichert.\nMöchten Sie die Änderungen nicht erst einmal speichern?");
+			return;
+		} else if (bedeutungen.geaendert) { // Bedeutungen noch nicht gespeichert
 			dialog.oeffnen("confirm", function() {
 				if (dialog.antwort) {
 					bedeutungen.speichern();

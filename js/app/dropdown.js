@@ -207,6 +207,8 @@ let dropdown = {
 			dropdown.dataFormular("ts");
 		} else if (feld_id === "bedeutungen-hierarchie") {
 			dropdown.data = [...bedeutungen.hierarchieEbenen];
+		} else if (feld_id === "bedeutungen-gerueste") {
+			dropdown.data = []; // TODO korrekt füllen
 		} else if (/^tagger-/.test(feld_id)) {
 			dropdown.data = dropdown.dataTags(feld_id);
 		}
