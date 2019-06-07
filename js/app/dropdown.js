@@ -59,6 +59,14 @@ let dropdown = {
 		arr.sort(helfer.sortAlpha);
 		return arr;
 	},
+	// Liste der Bedeutungsgerüste erstellen
+	dataGerueste () {
+		let arr = [];
+		Object.keys(bedeutungen.data.gr).forEach(function(i) {
+			arr.push(`Gerüst ${i}`);
+		});
+		return arr;
+	},
 	// Timeouts für Events im Textfeld
 	timeoutBlur: null,
 	timeoutFill: null,
@@ -208,7 +216,7 @@ let dropdown = {
 		} else if (feld_id === "bedeutungen-hierarchie") {
 			dropdown.data = [...bedeutungen.hierarchieEbenen];
 		} else if (feld_id === "bedeutungen-gerueste") {
-			dropdown.data = []; // TODO korrekt füllen
+			dropdown.data = dropdown.dataGerueste();
 		} else if (/^tagger-/.test(feld_id)) {
 			dropdown.data = dropdown.dataTags(feld_id);
 		}
@@ -476,6 +484,9 @@ let dropdown = {
 				optionen.aendereEinstellung(document.getElementById(caller));
 			} else if (caller === "bedeutungen-hierarchie") {
 				bedeutungen.hierarchie();
+			} else if (caller === "bedeutungen-gerueste") {
+				const geruest = text.replace(/^Gerüst /, "");
+				bedeutungen.geruestWechseln(geruest);
 			} else if (/^tagger-/.test(caller)) {
 				let ele = document.getElementById(caller);
 				window.getSelection().collapse(ele.firstChild, ele.textContent.length);

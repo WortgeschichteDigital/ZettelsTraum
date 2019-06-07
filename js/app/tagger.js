@@ -26,7 +26,7 @@ let tagger = {
 			cont.appendChild(nB);
 		});
 		let span = document.createElement("span");
-		span.innerHTML = bedeutungen.data.bd[i].bd[bedeutungen.data.bd[i].bd.length - 1];
+		span.innerHTML = bedeutungen.akt.bd[i].bd[bedeutungen.akt.bd[i].bd.length - 1];
 		cont.appendChild(span);
 	},
 	// Tag-Kategorien aufbauen
@@ -109,7 +109,7 @@ let tagger = {
 	// Tags eintragen
 	fill () {
 		const idx = parseInt(document.getElementById("tagger").dataset.idx, 10);
-		let ta = bedeutungen.data.bd[idx].ta,
+		let ta = bedeutungen.akt.bd[idx].ta,
 			tags = {};
 		for (let i of ta) {
 			if (!optionen.data.tags[i.ty]) { // Tag-Datei wurde entfernt
@@ -215,7 +215,7 @@ let tagger = {
 		}
 		// korrekte Tags speichern
 		const idx = parseInt(document.getElementById("tagger").dataset.idx, 10);
-		bedeutungen.data.bd[idx].ta = save;
+		bedeutungen.akt.bd[idx].ta = save;
 		// Tags in die Tabelle eintragen
 		let zelle = document.querySelector(`#bedeutungen-cont tr[data-idx="${idx}"] td[data-feld="ta"]`);
 		helfer.keineKinder(zelle);
