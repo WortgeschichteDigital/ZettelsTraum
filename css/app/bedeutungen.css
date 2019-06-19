@@ -26,18 +26,11 @@
 #bedeutungen header > div > div {
 	position: absolute;
 	top: -3px;
-	right: 0;
-	padding-left: 25px;
+	right: -24px;
 	height: 30px;
-	background-color: #fff;
 }
 
-#bedeutungen header > div > div span.dropdown-cont {
-	display: inline-block;
-}
-
-#bedeutungen-hierarchie,
-#bedeutungen-gerueste {
+#bedeutungen-hierarchie {
 	background-color: transparent;
 	width: 75px;
 	color: var(--textSehrHell);
@@ -45,41 +38,20 @@
 }
 
 #bedeutungen-hierarchie:focus,
-#bedeutungen-hierarchie:hover,
-#bedeutungen-gerueste:focus,
-#bedeutungen-gerueste:hover {
+#bedeutungen-hierarchie:hover {
 	outline: none;
 	border-color: var(--linie);
 	color: var(--text);
 }
 
 #bedeutungen-hierarchie:hover ~ a,
-#bedeutungen-hierarchie:focus ~ a,
-#bedeutungen-gerueste:hover ~ a,
-#bedeutungen-gerueste:focus ~ a {
+#bedeutungen-hierarchie:focus ~ a {
 	color: var(--text);
 }
 
 /* Styles zu .bedeutungen-opt-block → liste.css */
-#bedeutungen header > div > div .bedeutungen-opt-block {
-	position: relative;
-	top: 3px;
-	margin-left: 0;
-}
-
-#bedeutungen-gerueste-config {
-	margin-left: 5px;
-	-webkit-mask-image: url(../../img/gerueste-config.svg);
-	mask-image: url(../../img/gerueste-config.svg);
-	background-color: var(--textExtremHell);
-}
-
-#bedeutungen-gerueste-config:hover {
-	background-color: var(--text);
-}
-
-#bedeutungen-gerueste-config:focus {
-	background-color: var(--farbe);
+.bedeutungen-opt-block {
+	top: 6px;
 }
 
 /* Tabelle -------------------------------------- */
@@ -125,7 +97,6 @@
 
 #bedeutungen-cont td:first-child,
 #bedeutungen-cont td:nth-child(2) {
-	padding: 0;
 	width: 24px;
 	background-color: var(--hintergrund);
 }
@@ -142,6 +113,10 @@
 #bedeutungen-cont td:nth-child(4) {
 	min-width: 62px;
 	background-color: var(--hintergrund);
+}
+
+#bedeutungen-cont td:nth-child(4):not(.leer) {
+	font-variant: small-caps;
 }
 
 #bedeutungen-cont td:last-child {
@@ -179,20 +154,28 @@
 	border-color: var(--farbeGruen);
 }
 
+#bedeutungen-cont td:nth-child(4) span[contenteditable].dropdown-feld {
+	padding-right: 26px;
+	width: calc(100% - 33px);
+	min-width: 150px;
+}
+
+#bedeutungen-cont .dropdown-link-td {
+	top: 3px;
+	background-color: var(--hintergrund);
+}
+
 #bedeutungen-cont .bedeutungen-edit {
 	background-color: var(--hintergrund);
 }
 
-#bedeutungen-cont .zaehlung p > b {
+#bedeutungen-cont .zaehlung p > b,
+.bedeutungen-dialog b {
 	display: inline-block;
 	width: 35px;
 	vertical-align: top;
 	text-align: center;
 	text-indent: 0;
-}
-
-.bedeutungen-dialog b {
-	margin-right: 10px;
 }
 
 #bedeutungen-cont .zaehlung div {
@@ -207,26 +190,6 @@
 	margin: 0;
 	padding-left: 35px;
 	text-indent: -35px;
-}
-
-#bedeutungen-tagger-link {
-	color: var(--text);
-}
-
-td:not(.leer) #bedeutungen-tagger-link:focus {
-	color: var(--farbe);
-}
-
-#bedeutungen-cont .leer #bedeutungen-tagger-link {
-	font-style: italic;
-}
-
-#bedeutungen-cont span[class^="bedeutungen-tags"]:not(:first-child)::before {
-	content: ", ";
-}
-
-#bedeutungen-cont .bedeutungen-tags-sachgebiete {
-	font-variant: small-caps;
 }
 
 #bedeutungen-cont .bedeutungen-aktiv td,

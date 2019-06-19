@@ -52,10 +52,7 @@ let overlay = {
 			fenster = fenster.parentNode;
 		}
 		// Sonderbehandlung für das Notizen-Fenster
-		if (fenster.id === "tagger") {
-			tagger.schliessen();
-			return;
-		} else if (fenster.id === "notizen") {
+		if (fenster.id === "notizen") {
 			notizen.abbrechen();
 			return;
 		}

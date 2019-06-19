@@ -1,466 +1,541 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <!DOCTYPE sachgebiete [
-	<!ELEMENT sachgebiete (item)+>
-	<!ELEMENT item (id, name, abbr?)>
+	<!ELEMENT sachgebiete (sachgebiet)+>
+	<!ELEMENT sachgebiet (id, name)>
 	<!ELEMENT id (#PCDATA)>
 	<!ELEMENT name (#PCDATA)>
-	<!ELEMENT abbr (#PCDATA)>
 ]>
 <sachgebiete>
-	<item>
+	<sachgebiet>
 		<id>1</id>
 		<name>Akustik</name>
-	</item>
-	<item>
+	</sachgebiet>
+	<sachgebiet>
 		<id>2</id>
 		<name>Alchemie</name>
-	</item>
-	<item>
+	</sachgebiet>
+	<sachgebiet>
 		<id>3</id>
 		<name>Anatomie</name>
-	</item>
-	<item>
+	</sachgebiet>
+	<sachgebiet>
 		<id>4</id>
 		<name>Arbeitswelt</name>
-	</item>
-	<item>
+	</sachgebiet>
+	<sachgebiet>
 		<id>5</id>
 		<name>Archäologie</name>
-	</item>
-	<item>
+	</sachgebiet>
+	<sachgebiet>
 		<id>6</id>
 		<name>Architektur</name>
-	</item>
-	<item>
+	</sachgebiet>
+	<sachgebiet>
 		<id>7</id>
 		<name>Astronomie</name>
-	</item>
-	<item>
+	</sachgebiet>
+	<sachgebiet>
 		<id>8</id>
 		<name>Atomphysik</name>
-	</item>
-	<item>
+	</sachgebiet>
+	<sachgebiet>
 		<id>9</id>
-		<name>Bauwesen</name>
-	</item>
-	<item>
+		<name>Automobil</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>10</id>
-		<name>Belletristik</name>
-	</item>
-	<item>
+		<name>Bau</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>11</id>
-		<name>Bergbau</name>
-	</item>
-	<item>
+		<name>Bekleidungsindustrie</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>12</id>
-		<name>Bibliothekswesen</name>
-	</item>
-	<item>
+		<name>Belletristik</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>13</id>
-		<name>Bildende Kunst</name>
-	</item>
-	<item>
+		<name>Bergsport</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>14</id>
-		<name>Biologie</name>
-	</item>
-	<item>
+		<name>Bergbau</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>15</id>
-		<name>Botanik</name>
-	</item>
-	<item>
+		<name>Bibliothekswesen</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>16</id>
-		<name>Buchdruck</name>
-	</item>
-	<item>
+		<name>Bildhauerei</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>17</id>
-		<name>Chemie</name>
-	</item>
-	<item>
+		<name>Biologie</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>18</id>
-		<name>Diplomatie</name>
-	</item>
-	<item>
+		<name>Botanik</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>19</id>
-		<name>EDV</name>
-	</item>
-	<item>
+		<name>Buchbinderei</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>20</id>
-		<name>Elektrizität</name>
-	</item>
-	<item>
+		<name>Buchdruck</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>21</id>
-		<name>Ernährung</name>
-	</item>
-	<item>
+		<name>Chemie</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>22</id>
-		<name>Ethnologie</name>
-	</item>
-	<item>
+		<name>Chirurgie</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>23</id>
-		<name>Faschismus</name>
-	</item>
-	<item>
+		<name>Dichtkunst</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>24</id>
-		<name>Fernsehen</name>
-	</item>
-	<item>
+		<name>Diplomatie</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>25</id>
-		<name>Film</name>
-	</item>
-	<item>
+		<name>Eisenbahn</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>26</id>
-		<name>Finanzwesen</name>
-	</item>
-	<item>
+		<name>Elektrizität</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>27</id>
-		<name>Fischerei</name>
-	</item>
-	<item>
+		<name>Entomologie</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>28</id>
-		<name>Folklore</name>
-	</item>
-	<item>
+		<name>Ethnologie</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>29</id>
-		<name>Forstwirtschaft</name>
-	</item>
-	<item>
+		<name>Faschismus</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>30</id>
-		<name>Fotografie</name>
-	</item>
-	<item>
+		<name>Fernsehen</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>31</id>
-		<name>Gartenbau</name>
-	</item>
-	<item>
+		<name>Film</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>32</id>
-		<name>Gastronomie</name>
-	</item>
-	<item>
+		<name>Finanzwesen</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>33</id>
-		<name>Geografie</name>
-	</item>
-	<item>
+		<name>Fischerei</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>34</id>
-		<name>Geologie</name>
-	</item>
-	<item>
+		<name>Fischkunde</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>35</id>
-		<name>Geometrie</name>
-	</item>
-	<item>
+		<name>Fleischerei</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>36</id>
-		<name>Geschichte</name>
-	</item>
-	<item>
+		<name>Folklore</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>37</id>
-		<name>Gesellschaft</name>
-	</item>
-	<item>
+		<name>Forstwirtschaft</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>38</id>
-		<name>Grammatik</name>
-	</item>
-	<item>
+		<name>Fotografie</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>39</id>
-		<name>Handarbeit</name>
-	</item>
-	<item>
+		<name>Gartenbau</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>40</id>
-		<name>Handel</name>
-	</item>
-	<item>
+		<name>Gastronomie</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>41</id>
-		<name>Handwerk</name>
-	</item>
-	<item>
+		<name>Geografie</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>42</id>
-		<name>Haushalt</name>
-	</item>
-	<item>
+		<name>Geologie</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>43</id>
-		<name>Heraldik</name>
-	</item>
-	<item>
+		<name>Geometrie</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>44</id>
-		<name>Hochschule</name>
-	</item>
-	<item>
+		<name>Geschichte</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>45</id>
-		<name>Industrie</name>
-	</item>
-	<item>
+		<name>Gesellschaft</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>46</id>
-		<name>Informatik</name>
-	</item>
-	<item>
+		<name>Grammatik</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>47</id>
-		<name>Internet</name>
-	</item>
-	<item>
+		<name>Handarbeit</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>48</id>
-		<name>Jagd</name>
-	</item>
-	<item>
+		<name>Handel</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>49</id>
-		<name>Kino</name>
-	</item>
-	<item>
+		<name>Handwerk</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>50</id>
-		<name>Kirche</name>
-	</item>
-	<item>
+		<name>Haushalt</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>51</id>
-		<name>Kommunikation</name>
-	</item>
-	<item>
+		<name>Heraldik</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>52</id>
-		<name>Kommunismus</name>
-	</item>
-	<item>
+		<name>Hochschule</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>53</id>
-		<name>Krieg</name>
-	</item>
-	<item>
+		<name>Hydraulik</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>54</id>
-		<name>Kunst</name>
-	</item>
-	<item>
+		<name>Industrie</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>55</id>
-		<name>Landwirtschaft</name>
-	</item>
-	<item>
+		<name>Informatik</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>56</id>
-		<name>Lebensmittel</name>
-	</item>
-	<item>
+		<name>Inneneinrichtung</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>57</id>
-		<name>Literaturwissenschaft</name>
-	</item>
-	<item>
+		<name>Internet</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>58</id>
-		<name>Liturgie</name>
-	</item>
-	<item>
+		<name>Jagd</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>59</id>
-		<name>Luftfahrt</name>
-	</item>
-	<item>
+		<name>Kino</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>60</id>
-		<name>Maschinenbau</name>
-	</item>
-	<item>
+		<name>Kosmetik</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>61</id>
-		<name>Mathematik</name>
-	</item>
-	<item>
+		<name>Krieg</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>62</id>
-		<name>Mechanik</name>
-	</item>
-	<item>
+		<name>Kunst</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>63</id>
-		<name>Medien</name>
-	</item>
-	<item>
+		<name>Landwirtschaft</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>64</id>
-		<name>Medizin</name>
-	</item>
-	<item>
+		<name>Lebensmittel</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>65</id>
-		<name>Meteorologie</name>
-	</item>
-	<item>
+		<name>Literaturwissenschaft</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>66</id>
-		<name>Militär</name>
-	</item>
-	<item>
+		<name>Liturgie</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>67</id>
-		<name>Mineralogie</name>
-	</item>
-	<item>
+		<name>Luftfahrt</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>68</id>
-		<name>Mode</name>
-	</item>
-	<item>
+		<name>Luftwaffe</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>69</id>
-		<name>Musik</name>
-	</item>
-	<item>
+		<name>Malerei</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>70</id>
-		<name>Mythologie</name>
-	</item>
-	<item>
+		<name>Marine</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>71</id>
-		<name>Nationalsozialismus</name>
-	</item>
-	<item>
+		<name>Maschinenkunde</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>72</id>
-		<name>Numismatik</name>
-	</item>
-	<item>
+		<name>Mathematik</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>73</id>
-		<name>Okkultismus</name>
-	</item>
-	<item>
+		<name>Mechanik</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>74</id>
-		<name>Optik</name>
-	</item>
-	<item>
+		<name>Medizin</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>75</id>
-		<name>Ornithologie</name>
-	</item>
-	<item>
+		<name>Metallurgie</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>76</id>
-		<name>Pädagogik</name>
-	</item>
-	<item>
+		<name>Meteorologie</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>77</id>
-		<name>Paläografie</name>
-	</item>
-	<item>
+		<name>Militär</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>78</id>
-		<name>Parlament</name>
-	</item>
-	<item>
+		<name>Mineralogie</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>79</id>
-		<name>Pharmazie</name>
-	</item>
-	<item>
+		<name>Mittelalter</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>80</id>
-		<name>Philatelie</name>
-	</item>
-	<item>
+		<name>Mode</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>81</id>
-		<name>Philologie</name>
-	</item>
-	<item>
+		<name>Musik</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>82</id>
-		<name>Philosophie</name>
-	</item>
-	<item>
+		<name>Mythologie</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>83</id>
-		<name>Phonetik</name>
-	</item>
-	<item>
+		<name>Nationalsozialismus</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>84</id>
-		<name>Physik</name>
-	</item>
-	<item>
+		<name>Numismatik</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>85</id>
-		<name>Physiologie</name>
-	</item>
-	<item>
+		<name>Okkultismus</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>86</id>
-		<name>Politik</name>
-	</item>
-	<item>
+		<name>Optik</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>87</id>
-		<name>Postwesen</name>
-	</item>
-	<item>
+		<name>Ornithologie</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>88</id>
-		<name>Psychologie</name>
-	</item>
-	<item>
+		<name>Pädagogik</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>89</id>
-		<name>Radio</name>
-	</item>
-	<item>
+		<name>Paläografie</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>90</id>
-		<name>Raumfahrt</name>
-	</item>
-	<item>
+		<name>Parlament</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>91</id>
-		<name>Recht</name>
-	</item>
-	<item>
+		<name>Pferdesport</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>92</id>
-		<name>Religion</name>
-	</item>
-	<item>
+		<name>Pharmakologie</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>93</id>
-		<name>Rhetorik</name>
-	</item>
-	<item>
+		<name>Philatelie</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>94</id>
-		<name>Rundfunk</name>
-	</item>
-	<item>
+		<name>Philologie</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>95</id>
-		<name>Schifffahrt</name>
-	</item>
-	<item>
+		<name>Philosophie</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>96</id>
-		<name>Schule</name>
-	</item>
-	<item>
+		<name>Phonetik</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>97</id>
-		<name>Sexualität</name>
-	</item>
-	<item>
+		<name>Physik</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>98</id>
-		<name>Sozialismus</name>
-	</item>
-	<item>
+		<name>Physiologie</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>99</id>
-		<name>Soziologie</name>
-	</item>
-	<item>
+		<name>Politik</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>100</id>
-		<name>Sport</name>
-	</item>
-	<item>
+		<name>Post</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>101</id>
-		<name>Sprachwissenschaft</name>
-	</item>
-	<item>
+		<name>Psychologie</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>102</id>
-		<name>Statistik</name>
-	</item>
-	<item>
+		<name>Radio</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>103</id>
-		<name>Textilindustrie</name>
-	</item>
-	<item>
+		<name>Radiologie</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>104</id>
-		<name>Theater</name>
-	</item>
-	<item>
+		<name>Raumfahrt</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>105</id>
-		<name>Theologie</name>
-	</item>
-	<item>
+		<name>Recht</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>106</id>
-		<name>Tiermedizin</name>
-	</item>
-	<item>
+		<name>Religion</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>107</id>
-		<name>Tierzucht</name>
-	</item>
-	<item>
+		<name>Rhetorik</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>108</id>
-		<name>Verkehr</name>
-	</item>
-	<item>
+		<name>Rundfunk</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>109</id>
-		<name>Verlagswesen</name>
-	</item>
-	<item>
+		<name>Schifffahrt</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>110</id>
-		<name>Vermessungswesen</name>
-	</item>
-	<item>
+		<name>Schule</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>111</id>
-		<name>Versicherungswesen</name>
-	</item>
-	<item>
+		<name>Soziologie</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>112</id>
-		<name>Wirtschaft</name>
-	</item>
-	<item>
+		<name>Sport</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>113</id>
-		<name>Zeitungswesen</name>
-	</item>
-	<item>
+		<name>Sprachwissenschaft</name>
+	</sachgebiet>
+	<sachgebiet>
 		<id>114</id>
+		<name>Statistik</name>
+	</sachgebiet>
+	<sachgebiet>
+		<id>115</id>
+		<name>Straßenbau</name>
+	</sachgebiet>
+	<sachgebiet>
+		<id>116</id>
+		<name>Telefonie</name>
+	</sachgebiet>
+	<sachgebiet>
+		<id>117</id>
+		<name>Telegrafie</name>
+	</sachgebiet>
+	<sachgebiet>
+		<id>118</id>
+		<name>Textilindustrie</name>
+	</sachgebiet>
+	<sachgebiet>
+		<id>119</id>
+		<name>Theater</name>
+	</sachgebiet>
+	<sachgebiet>
+		<id>120</id>
+		<name>Theologie</name>
+	</sachgebiet>
+	<sachgebiet>
+		<id>121</id>
+		<name>Tiermedizin</name>
+	</sachgebiet>
+	<sachgebiet>
+		<id>122</id>
+		<name>Tierzucht</name>
+	</sachgebiet>
+	<sachgebiet>
+		<id>123</id>
+		<name>Tischlerei</name>
+	</sachgebiet>
+	<sachgebiet>
+		<id>124</id>
+		<name>Turnen</name>
+	</sachgebiet>
+	<sachgebiet>
+		<id>125</id>
+		<name>Verkehr</name>
+	</sachgebiet>
+	<sachgebiet>
+		<id>126</id>
+		<name>Verlagswesen</name>
+	</sachgebiet>
+	<sachgebiet>
+		<id>127</id>
+		<name>Vermessungswesen</name>
+	</sachgebiet>
+	<sachgebiet>
+		<id>128</id>
+		<name>Versicherungswesen</name>
+	</sachgebiet>
+	<sachgebiet>
+		<id>129</id>
+		<name>Viehzucht</name>
+	</sachgebiet>
+	<sachgebiet>
+		<id>130</id>
+		<name>Wirtschaft</name>
+	</sachgebiet>
+	<sachgebiet>
+		<id>131</id>
+		<name>Zahnmedizin</name>
+	</sachgebiet>
+	<sachgebiet>
+		<id>132</id>
+		<name>Zeitungswesen</name>
+	</sachgebiet>
+	<sachgebiet>
+		<id>133</id>
 		<name>Zoologie</name>
-	</item>
+	</sachgebiet>
 </sachgebiete>

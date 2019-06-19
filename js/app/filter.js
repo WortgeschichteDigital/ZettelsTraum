@@ -1363,7 +1363,6 @@ let filter = {
 					filter.suche();
 				}, {
 					notizen: true,
-					tagger: false,
 					bedeutungen: false,
 					beleg: false,
 					kartei: false,
@@ -1390,16 +1389,14 @@ let filter = {
 			return;
 		}
 		// Sicherheitsfrage, falls Notizen, Beleg, Bedeutungen noch nicht gespeichert sind
-		if (notizen.geaendert || tagger.geaendert || bedeutungen.geaendert || beleg.geaendert) {
+		if (notizen.geaendert || bedeutungen.geaendert || beleg.geaendert) {
 			sicherheitsfrage.warnen(function() {
 				notizen.geaendert = false;
-				tagger.taggerGeaendert(false);
 				bedeutungen.geaendert = false;
 				beleg.geaendert = false;
 				filter.suche();
 			}, {
 				notizen: true,
-				tagger: true,
 				bedeutungen: true,
 				beleg: true,
 				kartei: false,

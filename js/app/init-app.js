@@ -92,10 +92,6 @@ window.addEventListener("load", function() {
 	// Bedeutungen
 	document.getElementById("bedeutungen-speichern").addEventListener("click", () => bedeutungen.speichern());
 	document.getElementById("bedeutungen-schliessen").addEventListener("click", () => bedeutungen.schliessen());
-	document.getElementById("bedeutungen-gerueste-config").addEventListener("click", evt => bedeutungenGerueste.oeffnen(evt));
-	// Tagger
-	document.getElementById("tagger-speichern").addEventListener("click", () => tagger.speichern());
-	document.getElementById("tagger-schliessen").addEventListener("click", () => tagger.schliessen());
 	// Belegliste-Filter
 	document.querySelectorAll("#liste-filter header a").forEach((a) => filter.ctrlButtons(a));
 	document.querySelectorAll(".filter-kopf").forEach(function(a) {
@@ -126,9 +122,11 @@ window.addEventListener("load", function() {
 		optionen.aendereEinstellungListener(ee[i]);
 	}
 	document.getElementById("einstellung-personenliste").addEventListener("click", () => optionen.aenderePersonenliste());
-	document.getElementById("tags-laden").addEventListener("click", () => optionen.tagsManuLaden());
+	document.getElementById("sachgebiete-loeschen").addEventListener("click", () => optionen.sachgebieteLoeschen());
+	document.getElementById("sachgebiete-laden").addEventListener("click", () => optionen.sachgebieteLaden());
 	optionen.anwendenIconsDetailsListener(document.getElementById("einstellung-anzeige-icons-immer-an"));
 	// Formvarianten-Fenster
+	document.getElementById("stamm-online").addEventListener("click", evt => stamm.online(evt));
 	let stamm_inputs = document.querySelectorAll("#stamm input");
 	for (let i = 0, len = stamm_inputs.length; i < len; i++) {
 		if (stamm_inputs[i].type === "button") {
@@ -256,10 +254,9 @@ window.addEventListener("beforeunload", function(evt) {
 		optionen.speichernAnstossen();
 	}
 	// Schließen ggf. unterbrechen + Kartei ggf. entsperren
-	if (notizen.geaendert || tagger.geaendert || bedeutungen.geaendert || beleg.geaendert || kartei.geaendert) {
+	if (notizen.geaendert || bedeutungen.geaendert || beleg.geaendert || kartei.geaendert) {
 		sicherheitsfrage.warnen(function() {
 			notizen.geaendert = false;
-			tagger.geaendert = false;
 			bedeutungen.geaendert = false;
 			beleg.geaendert = false;
 			kartei.geaendert = false;
@@ -267,7 +264,6 @@ window.addEventListener("beforeunload", function(evt) {
 			app.quit();
 		}, {
 			notizen: true,
-			tagger: true,
 			bedeutungen: true,
 			beleg: true,
 			kartei: true,

@@ -308,4 +308,13 @@ let stamm = {
 			document.getElementById("stamm-text").focus();
 		}
 	},
+	// alle Formvarianten online anzeigen
+	//   evt = Event-Objekt
+	//     (das Event-Objekt, das beim Klick auf den Formvarianten-Link erzeugt wird)
+	online (evt) {
+		evt.preventDefault();
+		const url = `https://www.deutschestextarchiv.de/demo/cab/query?a=expand.eqlemma&fmt=text&clean=1&pretty=1&raw=1&q=${encodeURIComponent(kartei.wort)}`,
+			{shell} = require("electron");
+		shell.openExternal(url);
+	},
 };

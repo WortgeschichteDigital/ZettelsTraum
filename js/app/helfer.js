@@ -217,16 +217,6 @@ let helfer = {
 		textarea.style.height = "inherit";
 		textarea.style.height = `${textarea.scrollHeight - 4}px`; // 4px padding in scrollHeight enthalten
 	},
-	// Standardformatierungen in Edit-Feldern abfangen
-	//   edit = Element
-	//     (das Edit-Feld, das keine Standardformatierungen erhalten soll
-	editNoFormat (edit) {
-		edit.addEventListener("keydown", function(evt) {
-			if (evt.ctrlKey && (evt.which === 66  || evt.which === 73 || evt.which === 85)) { // Strg + B/I/U
-				evt.preventDefault();
-			}
-		});
-	},
 	// Bereinigt Text, der in Textfeldern eingegeben wurde
 	//   text = String
 	//     (der Text, der bereinigt werden soll)
@@ -430,7 +420,6 @@ let helfer = {
 		let asterisk = "";
 		if (kartei.geaendert ||
 				notizen.geaendert ||
-				tagger.geaendert ||
 				bedeutungen.geaendert ||
 				beleg.geaendert) {
 			asterisk = " *";
@@ -447,26 +436,13 @@ let helfer = {
 		if (oben === "notizen" && notizen.geaendert) {
 			notizen.speichern();
 		}
-		if (oben === "tagger" && tagger.geaendert) {
-			tagger.speichern();
-			// falls das Tagger-Fenster automatisch geschlossen wird
-			setTimeout(function() {
-				if (!overlay.oben() && bedeutungen.geaendert) {
-					bedeutungen.speichern();
-				}
-			}, 200); // das Ausblenden des Fensters dauert 200 Millisekunden; vgl. overlay.ausblenden()
-		}
 		if (!oben && bedeutungen.geaendert) {
 			bedeutungen.speichern();
 		}
 		if (!oben && beleg.geaendert) {
 			beleg.aktionSpeichern();
 		}
-		if (!notizen.geaendert &&
-				!tagger.geaendert &&
-				!bedeutungen.geaendert &&
-				!beleg.geaendert &&
-				kartei.geaendert) {
+		if (!notizen.geaendert && !bedeutungen.geaendert && !beleg.geaendert && kartei.geaendert) {
 			kartei.speichern(false);
 		}
 	},
