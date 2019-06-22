@@ -24,6 +24,13 @@ let dropdown = {
 		}
 		dropdown.data.sort(helfer.sortAlpha);
 	},
+	// sammelt die Bedeutungen für das Dropdown-Menü im Formular
+	dataBedeutungen () {
+		let bd = data.bd.gr[data.bd.gn].bd;
+		for (let i = 0, len = bd.length; i < len; i++) {
+			dropdown.data.push(bedeutungen.bedeutungenTief(data.bd.gn, bd[i].id, false, true));
+		}
+	},
 	// ergänzt die vordefinierte Liste der Korpora um manuell ergänzte
 	dataKorpora () {
 		let korpora = [...beleg.korpora],
@@ -39,6 +46,33 @@ let dropdown = {
 		}
 		korpora_ergaenzt.sort(helfer.sortAlpha);
 		dropdown.data = korpora_ergaenzt.concat(korpora);
+	},
+	// Tagliste erstellen
+	//   feld_id = String
+	//     (ID des Dropdownfeldes, für das die Tagliste erstellt werden soll)
+	dataTags (feld_id) {
+		const typ = feld_id.replace(/^tagger-/, "");
+		let arr = [];
+		if (!optionen.data.tags[typ]) { // jemand könnte die Tag-Datei löschen, während der Tagger offen ist
+			return arr;
+		}
+		let data = optionen.data.tags[typ].data;
+		for (let id in data) {
+			if (!data.hasOwnProperty(id)) {
+				continue;
+			}
+			arr.push(data[id].name);
+		}
+		arr.sort(helfer.sortAlpha);
+		return arr;
+	},
+	// Liste der Bedeutungsgerüste erstellen
+	dataGerueste () {
+		let arr = [];
+		Object.keys(bedeutungen.data.gr).forEach(function(i) {
+			arr.push(`Gerüst ${i}`);
+		});
+		return arr;
 	},
 	// Timeouts für Events im Textfeld
 	timeoutBlur: null,
@@ -177,7 +211,7 @@ let dropdown = {
 		} else if (/^redaktion-ereignis/.test(feld_id)) {
 			dropdown.data = [...redaktion.ereignisse];
 		} else if (feld_id === "beleg-bd") {
-			dropdown.dataFormular("bd");
+			dropdown.dataBedeutungen();
 		} else if (feld_id === "beleg-bl") {
 			dropdown.dataFormular("bl");
 		} else if (feld_id === "beleg-kr") {
@@ -188,10 +222,10 @@ let dropdown = {
 			dropdown.dataFormular("ts");
 		} else if (feld_id === "bedeutungen-hierarchie") {
 			dropdown.data = [...bedeutungen.hierarchieEbenen];
-		} else if (feld_id === "bedeutungen-edit") {
-			let sachgebiete = Object.values(optionen.data.einstellungen.sachgebiete);
-			sachgebiete.sort(helfer.sortAlpha);
-			dropdown.data = [...sachgebiete];
+		} else if (feld_id === "bedeutungen-gerueste") {
+			dropdown.data = dropdown.dataGerueste();
+		} else if (/^tagger-/.test(feld_id)) {
+			dropdown.data = dropdown.dataTags(feld_id);
 		}
 		// Dropdown erzeugen und einhängen
 		let span = document.createElement("span");
@@ -457,11 +491,14 @@ let dropdown = {
 				optionen.aendereEinstellung(document.getElementById(caller));
 			} else if (caller === "bedeutungen-hierarchie") {
 				bedeutungen.hierarchie();
-			} else if (caller === "bedeutungen-edit") {
-				let edit = document.getElementById(caller);
-				bedeutungen.changed(edit);
-				let sel = window.getSelection();
-				sel.collapse(edit.firstChild, edit.textContent.length);
+			} else if (caller === "bedeutungen-gerueste") {
+				const geruest = text.replace(/^Gerüst /, "");
+				bedeutungen.geruestWechseln(geruest);
+			} else if (/^tagger-/.test(caller)) {
+				let ele = document.getElementById(caller);
+				window.getSelection().collapse(ele.firstChild, ele.textContent.length);
+				ele.classList.add("changed");
+				tagger.taggerGeaendert(true);
 			}
 			// Dropdown schließen
 			dropdown.schliessen();

@@ -290,20 +290,53 @@ td[colspan] {
 tr.wgd-ebene1 td[colspan] p,
 tr.wgd-ebene1 p,
 tr.wgd-ebene2 td[colspan] p,
-tr.wgd-ebene2 p {
+tr.wgd-ebene2 p,
+tr.wgd-ebene3 td[colspan] p,
+tr.wgd-ebene3 p,
+tr.wgd-ebene4 td[colspan] p,
+tr.wgd-ebene4 p,
+tr.wgd-ebene5 td[colspan] p,
+tr.wgd-ebene5 p {
 	margin: 0 0 0 15px;
 	border-left: 3px solid var(--farbeB);
 	padding-left: 15px;
 }
 
 tr.wgd-ebene1 td[colspan] p,
-tr.wgd-ebene2 td[colspan] p {
+tr.wgd-ebene2 td[colspan] p,
+tr.wgd-ebene3 td[colspan] p,
+tr.wgd-ebene4 td[colspan] p,
+tr.wgd-ebene5 td[colspan] p {
 	border-color: transparent;
 }
 
 tr.wgd-ebene2 td[colspan] p,
 tr.wgd-ebene2 p {
 	margin-left: 43px;
+}
+
+tr.wgd-ebene3 td[colspan] p,
+tr.wgd-ebene3 p {
+	margin-left: 86px;
+}
+
+tr.wgd-ebene4 td[colspan] p,
+tr.wgd-ebene4 p {
+	margin-left: 129px;
+}
+
+tr.wgd-ebene5 td[colspan] p,
+tr.wgd-ebene5 p {
+	margin-left: 172px;
+}
+
+tr.wgd-alt td,
+tr.wgd-alt td code {
+	color: var(--textSehrHell);
+}
+
+tr.wgd-alt td p {
+	border-color: var(--textExtremHell);
 }
 
 /* Suche ---------------------------------------- */

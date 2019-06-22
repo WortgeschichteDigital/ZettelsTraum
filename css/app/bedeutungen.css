@@ -26,11 +26,18 @@
 #bedeutungen header > div > div {
 	position: absolute;
 	top: -3px;
-	right: -24px;
+	right: 0;
+	padding-left: 25px;
 	height: 30px;
+	background-color: #fff;
 }
 
-#bedeutungen-hierarchie {
+#bedeutungen header > div > div span.dropdown-cont {
+	display: inline-block;
+}
+
+#bedeutungen-hierarchie,
+#bedeutungen-gerueste {
 	background-color: transparent;
 	width: 75px;
 	color: var(--textSehrHell);
@@ -38,20 +45,41 @@
 }
 
 #bedeutungen-hierarchie:focus,
-#bedeutungen-hierarchie:hover {
+#bedeutungen-hierarchie:hover,
+#bedeutungen-gerueste:focus,
+#bedeutungen-gerueste:hover {
 	outline: none;
 	border-color: var(--linie);
 	color: var(--text);
 }
 
 #bedeutungen-hierarchie:hover ~ a,
-#bedeutungen-hierarchie:focus ~ a {
+#bedeutungen-hierarchie:focus ~ a,
+#bedeutungen-gerueste:hover ~ a,
+#bedeutungen-gerueste:focus ~ a {
 	color: var(--text);
 }
 
 /* Styles zu .bedeutungen-opt-block → liste.css */
-.bedeutungen-opt-block {
-	top: 6px;
+#bedeutungen header > div > div .bedeutungen-opt-block {
+	position: relative;
+	top: 3px;
+	margin-left: 0;
+}
+
+#bedeutungen-gerueste-config {
+	margin-left: 5px;
+	-webkit-mask-image: url(../../img/gerueste-config.svg);
+	mask-image: url(../../img/gerueste-config.svg);
+	background-color: var(--textExtremHell);
+}
+
+#bedeutungen-gerueste-config:hover {
+	background-color: var(--text);
+}
+
+#bedeutungen-gerueste-config:focus {
+	background-color: var(--farbe);
 }
 
 /* Tabelle -------------------------------------- */
@@ -96,27 +124,27 @@
 }
 
 #bedeutungen-cont td:first-child,
-#bedeutungen-cont td:nth-child(2) {
+#bedeutungen-cont td:nth-child(2),
+#bedeutungen-cont td:nth-child(3) {
+	padding: 0;
 	width: 24px;
+	max-width: 24px;
 	background-color: var(--hintergrund);
 }
 
-#bedeutungen-cont td:nth-child(2) {
+#bedeutungen-cont td:nth-child(2),
+#bedeutungen-cont td:nth-child(3) {
 	border-left: 1px solid var(--linie);
 }
 
-#bedeutungen-cont td:nth-child(3) {
+#bedeutungen-cont td:nth-child(4) {
 	min-width: 250px;
 	max-width: 700px;
 }
 
-#bedeutungen-cont td:nth-child(4) {
+#bedeutungen-cont td:nth-child(5) {
 	min-width: 62px;
 	background-color: var(--hintergrund);
-}
-
-#bedeutungen-cont td:nth-child(4):not(.leer) {
-	font-variant: small-caps;
 }
 
 #bedeutungen-cont td:last-child {
@@ -134,7 +162,7 @@
 	text-indent: 0;
 }
 
-#bedeutungen-cont td:nth-child(4) span[contenteditable],
+#bedeutungen-cont td:nth-child(5) span[contenteditable],
 #bedeutungen-cont td:last-child span[contenteditable] {
 	width: calc(100% - 12px);
 }
@@ -154,28 +182,20 @@
 	border-color: var(--farbeGruen);
 }
 
-#bedeutungen-cont td:nth-child(4) span[contenteditable].dropdown-feld {
-	padding-right: 26px;
-	width: calc(100% - 33px);
-	min-width: 150px;
-}
-
-#bedeutungen-cont .dropdown-link-td {
-	top: 3px;
-	background-color: var(--hintergrund);
-}
-
 #bedeutungen-cont .bedeutungen-edit {
 	background-color: var(--hintergrund);
 }
 
-#bedeutungen-cont .zaehlung p > b,
-.bedeutungen-dialog b {
+#bedeutungen-cont .zaehlung p > b {
 	display: inline-block;
 	width: 35px;
 	vertical-align: top;
 	text-align: center;
 	text-indent: 0;
+}
+
+.bedeutungen-dialog b {
+	margin-right: 10px;
 }
 
 #bedeutungen-cont .zaehlung div {
@@ -192,10 +212,40 @@
 	text-indent: -35px;
 }
 
+#bedeutungen-tagger-link {
+	color: var(--text);
+}
+
+td:not(.leer) #bedeutungen-tagger-link:focus {
+	color: var(--farbe);
+}
+
+#bedeutungen-cont .leer #bedeutungen-tagger-link {
+	font-style: italic;
+}
+
+#bedeutungen-cont span[class^="bedeutungen-tags"]:not(:first-child)::before {
+	content: ", ";
+}
+
+#bedeutungen-cont .bedeutungen-tags-sachgebiete {
+	font-variant: small-caps;
+}
+
 #bedeutungen-cont .bedeutungen-aktiv td,
 #bedeutungen-cont .bedeutungen-affiziert td {
 	background-color: var(--farbe);
 	color: #fff;
+}
+
+#bedeutungen-cont .bedeutungen-aktiv.bedeutungen-verschmelzen td,
+#bedeutungen-cont .bedeutungen-affiziert.bedeutungen-verschmelzen td {
+	background-color: var(--farbeGelb);
+}
+
+#bedeutungen-cont .bedeutungen-aktiv.bedeutungen-verschmelzen td:not(.leer),
+#bedeutungen-cont .bedeutungen-affiziert.bedeutungen-verschmelzen td:not(.leer) {
+	color: var(--text);
 }
 
 #bedeutungen-cont .bedeutungen-moved .bedeutungen-aktiv td,
@@ -302,12 +352,24 @@ a[class*="icon-move"] {
 	background-color: #fff;
 }
 
+#bedeutungen-cont .icon-verschmelzen {
+	-webkit-mask-image: url(../../img/verschmelzen.svg);
+	mask-image: url(../../img/verschmelzen.svg);
+	background-color: transparent;
+}
+
+#bedeutungen-cont .bedeutungen-aktiv .icon-verschmelzen {
+	background-color: #fff;
+}
+
 #bedeutungen-cont .icon-link {
 	position: relative;
 	top: 3px;
 }
 
-#bedeutungen-cont .icon-link:hover {
+#bedeutungen-cont .icon-link:hover,
+#bedeutungen-cont .bedeutungen-aktiv.bedeutungen-verschmelzen .icon-link:hover,
+#bedeutungen-cont .bedeutungen-affiziert.bedeutungen-verschmelzen .icon-link:hover {
 	background-color: var(--text);
 }
 
@@ -317,6 +379,14 @@ a[class*="icon-move"] {
 	background-color: #fff;
 }
 
+#bedeutungen-cont .bedeutungen-aktiv.bedeutungen-verschmelzen .icon-link {
+	background-color: var(--text);
+}
+
+#bedeutungen-cont .bedeutungen-affiziert.bedeutungen-verschmelzen .icon-link {
+	background-color: transparent;
+}
+
 #bedeutungen-cont .leer,
 #bedeutungen-cont .bedeutungen-aktiv .leer,
 #bedeutungen-cont .bedeutungen-affiziert .leer {
@@ -324,13 +394,15 @@ a[class*="icon-move"] {
 	font-style: italic;
 }
 
-#bedeutungen-cont .leer:hover {
-	color: var(--text);
-}
-
 #bedeutungen-cont .bedeutungen-aktiv .leer:hover,
 #bedeutungen-cont .bedeutungen-affiziert .leer:hover {
 	color: #fff;
+}
+
+#bedeutungen-cont .leer:hover,
+#bedeutungen-cont .bedeutungen-aktiv.bedeutungen-verschmelzen .leer:hover,
+#bedeutungen-cont .bedeutungen-affiziert.bedeutungen-verschmelzen .leer:hover {
+	color: var(--text);
 }
 
 #bedeutungen-cont #bedeutungen-neu {

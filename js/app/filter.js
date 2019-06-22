@@ -162,6 +162,10 @@ let filter = {
 			for (let i = 0, len = baeume.length; i < len; i++) {
 				let d = baeume[i].data,
 					t = baeume[i].typen;
+				// TODO Bedeutungen wieder einschalten
+				if (d === "bd") {
+					break;
+				}
 				if (!data.ka[id][d]) {
 					if (!/^(bl|sy)$/.test(d)) { // Wortbildung und Synonym hat kein undefined-Feld
 						filter.typen[t].filter[`${t}-undefined`].wert++;
@@ -1363,6 +1367,7 @@ let filter = {
 					filter.suche();
 				}, {
 					notizen: true,
+					tagger: false,
 					bedeutungen: false,
 					beleg: false,
 					kartei: false,
@@ -1389,14 +1394,16 @@ let filter = {
 			return;
 		}
 		// Sicherheitsfrage, falls Notizen, Beleg, Bedeutungen noch nicht gespeichert sind
-		if (notizen.geaendert || bedeutungen.geaendert || beleg.geaendert) {
+		if (notizen.geaendert || tagger.geaendert || bedeutungen.geaendert || beleg.geaendert) {
 			sicherheitsfrage.warnen(function() {
 				notizen.geaendert = false;
+				tagger.taggerGeaendert(false);
 				bedeutungen.geaendert = false;
 				beleg.geaendert = false;
 				filter.suche();
 			}, {
 				notizen: true,
+				tagger: true,
 				bedeutungen: true,
 				beleg: true,
 				kartei: false,

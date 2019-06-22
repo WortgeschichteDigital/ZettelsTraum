@@ -8,11 +8,13 @@
 #dialog,
 #drucken,
 #einstellungen,
+#gerueste,
 #lexika,
 #meta,
 #notizen,
 #redaktion,
 #stamm,
+#tagger,
 #zeitraumgrafik {
 	position: fixed;
 	top: 0;
@@ -28,11 +30,13 @@
 #dialog > div,
 #drucken > div,
 #einstellungen > div,
+#gerueste > div,
 #lexika > div,
 #meta > div,
 #notizen > div,
 #redaktion > div,
 #stamm > div,
+#tagger > div,
 #zeitraumgrafik > div {
 	margin: 80px auto 0 auto;
 	border-bottom-right-radius: 10px;
@@ -45,11 +49,13 @@
 #dialog h2,
 #drucken h2,
 #einstellungen h2,
+#gerueste h2,
 #lexika h2,
 #meta h2,
 #notizen h2,
 #redaktion h2,
 #stamm h2,
+#tagger h2,
 #zeitraumgrafik h2 {
 	position: relative;
 }
@@ -58,11 +64,13 @@
 #dialog h2 a,
 #drucken h2 a,
 #einstellungen h2 a,
+#gerueste h2 a,
 #lexika h2 a,
 #meta h2 a,
 #notizen h2 a,
 #redaktion h2 a,
 #stamm h2 a,
+#tagger h2 a,
 #zeitraumgrafik h2 a {
 	position: absolute;
 	top: 2px;
@@ -228,58 +236,105 @@
 	height: 5px;
 }
 
-#einstellungen-cont .sachgebiete.gefuellt {
+#tags-cont table {
+	border-collapse: collapse;
+	border-spacing: 0;
 	width: 100%;
 	table-layout: fixed;
 }
 
-#einstellungen-cont .sachgebiete tr:first-child td {
-	padding-bottom: 10px;
-}
-
-#einstellungen-cont .sachgebiete td:last-child {
-	width: 105px;
-}
-
-#einstellungen-cont .sachgebiete img {
-	vertical-align: top;
-}
-
-#einstellungen-cont .sachgebiete input {
-	margin: 0;
-	width: 105px;
-}
-
-#sachgebiete-datei {
+#tags-cont td {
 	overflow: hidden;
-	text-overflow: ellipsis;
 	white-space: nowrap;
+	text-overflow: ellipsis;
 }
 
-#sachgebiete.leer,
-#sachgebiete-datei.leer {
-	direction: ltr;
+#tags-cont td:first-child {
+	padding-left: 5px;
+}
+
+#tags-cont tr.tags-datei:not(:first-child) td {
+	padding-top: 10px;
+}
+
+#tags-cont td[rowspan] {
+	padding-left: 0;
+	width: 24px;
+}
+
+#tags-cont td.tags-leer {
 	color: var(--textSehrHell);
+	text-align: center;
 	font-style: italic;
 }
 
-#sachgebiete-abgleich {
-	margin-bottom: 5px;
+#tags-cont .icon-link {
+	background-color: var(--textExtremHell);
 }
 
-#sachgebiete-abgleich + p,
-#sachgebiete-abgleich + p + p {
+#tags-cont .icon-link:hover {
+	background-color: var(--text);
+}
+
+#tags-cont .icon-link:focus {
+	background-color: var(--farbe);
+}
+
+#tags-cont table table {
 	margin-bottom: 0;
+}
+
+#tags-cont table table td:first-child {
+	padding-left: 0;
+	width: 125px;
+}
+
+#tags-cont table table td:last-child {
+	padding-right: 0;
 	color: var(--textHell);
 	font-size: 14px;
 	line-height: 20px;
 }
 
-#sachgebiete-abgleich + p i,
-#sachgebiete-abgleich + p + p i {
+#tags-cont i {
 	display: inline-block;
-	width: 110px;
-	text-indent: 0;
+	width: 65px;
+}
+
+#tags-cont img {
+	vertical-align: top;
+}
+
+#tags-laden {
+	margin-left: 0;
+}
+
+.icon-loeschen {
+	-webkit-mask-image: url(../../img/loeschen.svg);
+	mask-image: url(../../img/loeschen.svg);
+}
+
+.icon-reload {
+	-webkit-mask-image: url(../../img/reload.svg);
+	mask-image: url(../../img/reload.svg);
+}
+
+.dialog-tags-liste {
+	display: flex;
+	flex-wrap: wrap;
+	max-height: 240px;
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+
+.dialog-tags-liste p {
+	flex: 1 0 185px;
+	margin: 0;
+	padding-right: 20px;
+	max-width: 185px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }
 
 /* Formvarianten ------------------------ */
@@ -458,7 +513,7 @@
 
 #anhaenge-cont p:last-child {
 	margin-bottom: 0;
-} 
+}
 
 .anhaenge-add {
 	text-align: center;
@@ -711,6 +766,151 @@ input[id^="redaktion-datum"] {
 input[id^="redaktion-ereignis"],
 input[id^="redaktion-person"] {
 	width: calc(100% - 31px);
+}
+
+/* Tagger --------------------------------------- */
+#tagger > div {
+	margin-top: 40px;
+	max-width: 500px;
+}
+
+.icon-h-tagger {
+	-webkit-mask-image: url(../../img/heading-tagger.svg);
+	mask-image: url(../../img/heading-tagger.svg);
+}
+
+#tagger-geaendert {
+	margin-left: 5px;
+}
+
+#tagger-cont {
+	padding: 10px;
+}
+
+#tagger-cont p:last-child {
+	margin-bottom: 0;
+}
+
+#tagger-cont p input:first-child {
+	margin-left: 0;
+}
+
+#tagger-bedeutung {
+	margin-bottom: 25px;
+	padding-left: 35px;
+	font-size: 18px;
+	line-height: 28px;
+	text-indent: -35px;
+}
+
+#tagger-bedeutung b.zaehlung {
+	display: inline-block;
+	margin-right: 10px;
+	text-indent: 0;
+}
+
+#tagger-typen {
+	margin-bottom: 25px;
+}
+
+#tagger-typen.leer {
+	color: var(--textSehrHell);
+	font-style: italic;
+	text-align: center;
+}
+
+#tagger-typen i {
+	display: inline-block;
+	width: 100px;
+	overflow: hidden;
+	vertical-align: top;
+	color: var(--textFarbe);
+	text-overflow: ellipsis;
+}
+
+#tagger-typen span[contenteditable] {
+	display: inline-block;
+	border: 1px solid var(--linie);
+	padding: 2px 26px 2px 5px;
+	width: calc(100% - 100px - 35px);
+	line-height: 24px;
+	color: var(--text);
+	text-indent: 0;
+}
+
+#tagger-typen span[contenteditable]:focus {
+	outline: 1px solid var(--farbe);
+	border-color: var(--farbe);
+}
+
+#tagger-typen span[contenteditable].changed {
+	outline-color: var(--farbeRot);
+	border-color: var(--farbeRot);
+}
+
+#tagger-typen span[contenteditable].saved {
+	outline-color: var(--farbeGruen);
+	border-color: var(--farbeGruen);
+}
+
+/* Gerüste -------------------------------------- */
+#gerueste > div {
+	margin-top: 40px;
+	max-width: 360px;
+}
+
+.icon-h-gerueste {
+	-webkit-mask-image: url(../../img/heading-gerueste.svg);
+	mask-image: url(../../img/heading-gerueste.svg);
+}
+
+#gerueste-cont {
+	padding: 10px;
+}
+
+.icon-add {
+	-webkit-mask-image: url(../../img/gerueste-add.svg);
+	mask-image: url(../../img/gerueste-add.svg);
+}
+
+#gerueste-cont table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+#gerueste-cont td {
+	padding: 5px 10px;
+	line-height: 30px;
+}
+
+#gerueste-cont td:first-child {
+	padding-left: 0;
+}
+
+#gerueste-cont td:last-child {
+	padding-right: 0;
+}
+
+#gerueste-cont td.leer {
+	color: var(--textSehrHell);
+	font-style: italic;
+}
+
+#gerueste-cont input {
+	width: 200px;
+}
+
+#gerueste-cont .icon-link {
+	vertical-align: text-bottom;
+	background-color: var(--textExtremHell);
+}
+
+#gerueste-cont .icon-link:hover {
+	background-color: var(--text);
+}
+
+#gerueste-cont .icon-link:focus {
+	background-color: var(--farbe);
 }
 
 /* Zeitraumgrafik ------------------------------- */

@@ -588,6 +588,16 @@ span.liste-label {
 	line-height: 20px;
 }
 
+.liste-bd b {
+	display: inline-block;
+	padding: 0 5px 0 15px;
+	text-align: center;
+}
+
+.liste-bd b:first-child {
+	padding-left: 0;
+}
+
 .liste-meta {
 	border-radius: 3px;
 	padding: 5px 10px;

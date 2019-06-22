@@ -315,3 +315,13 @@ textarea#beleg-bs {
 #beleg-lese-meta div span span {
 	overflow: hidden;
 }
+
+#beleg-lese-bd b {
+	display: inline-block;
+	padding: 0 5px 0 15px;
+	text-align: center;
+}
+
+#beleg-lese-bd b:first-child {
+	padding-left: 0;
+}

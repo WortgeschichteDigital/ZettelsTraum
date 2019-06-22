@@ -19,6 +19,7 @@
 		<script src="js/app/init-app.js"></script>
 		<script src="js/app/anhaenge.js"></script>
 		<script src="js/app/bedeutungen.js"></script>
+		<script src="js/app/bedeutungenGerueste.js"></script>
 		<script src="js/app/bedeutungenWin.js"></script>
 		<script src="js/app/beleg.js"></script>
 		<script src="js/app/dialog.js"></script>
@@ -40,6 +41,7 @@
 		<script src="js/app/sicherheitsfrage.js"></script>
 		<script src="js/app/stamm.js"></script>
 		<script src="js/app/start.js"></script>
+		<script src="js/app/tagger.js"></script>
 	</head>
 	<body>
 		<!-- QUICK ACCESS -->
@@ -93,10 +95,17 @@
 				<div
 					><input type="button" value="Speichern" id="bedeutungen-speichern" tabindex="0"
 					><input type="button" value="Schließen" id="bedeutungen-schliessen" tabindex="0"
-					><div class="dropdown-cont"
-						><input type="text" value="" class="dropdown-feld" id="bedeutungen-hierarchie" tabindex="-1" readonly title="Zählung oberste Hierarchie"
-						><a href="#" class="dropdown-link-element" title="Zählung oberste Hierarchie"
-							><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m7 2v8l-3.5-3.5-1.5 1.5 6 6 6-6-1.5-1.5-3.5 3.5v-8z"/></svg></a
+					><div
+						><span class="dropdown-cont"
+							><input type="text" value="" class="dropdown-feld" id="bedeutungen-gerueste" tabindex="-1" readonly title="Bedeutungsgerüst auswählen"
+							><a href="#" class="dropdown-link-element" title="Bedeutungsgerüst auswählen"
+								><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m7 2v8l-3.5-3.5-1.5 1.5 6 6 6-6-1.5-1.5-3.5 3.5v-8z"/></svg></a
+							><a href="#" class="icon-link" id="bedeutungen-gerueste-config" title="Bedeutungsgerüste konfigurieren"> </a
+						></span><span class="dropdown-cont"
+							><input type="text" value="" class="dropdown-feld" id="bedeutungen-hierarchie" tabindex="-1" readonly title="Zählung oberste Hierarchie"
+							><a href="#" class="dropdown-link-element" title="Zählung oberste Hierarchie"
+								><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m7 2v8l-3.5-3.5-1.5 1.5 6 6 6-6-1.5-1.5-3.5 3.5v-8z"/></svg></a
+						></span
 						><span class="bedeutungen-opt-block"
 							><a href="#" class="druck-icon" id="bedeutungen-link-drucken" title="Bedeutungsgerüst drucken (Strg + P)"
 								><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m4 1v2h8v-2h-8zm-2 3c-0.5 0-1 0.5-1 1v4c0 0.5 0.5 1 1 1h1v-2h10v2h1c0.5 0 1-0.5 1-1v-4c0-0.5-0.5-1-1-1h-12zm2 5v5h8v-5h-8z"/></svg></a
@@ -502,18 +511,14 @@
 					<section id="einstellungen-sec-bedeutungen" class="aus">
 						<p><input type="checkbox" id="einstellung-bedeutungen-schliessen"
 							><label for="einstellung-bedeutungen-schliessen">Bedeutungsgerüst nach dem Speichern schließen</label></p>
-						<h3>Sachgebiete</h3>
-						<table class="sachgebiete"><tr>
-								<td id="sachgebiete"> </td>
-								<td><input type="button" value="Löschen" id="sachgebiete-loeschen"></td>
-							</tr><tr>
-								<td dir="rtl" id="sachgebiete-datei"> </td>
-								<td><input type="button" value="Laden" id="sachgebiete-laden"></td>
-						</tr></table>
-						<p id="sachgebiete-abgleich"><input type="checkbox" id="einstellung-sachgebiete-abgleich"
-							><label for="einstellung-sachgebiete-abgleich">Sachgebiete automatisch auffrischen</label></p>
-						<p class="einzug"><i>Letzter Abgleich:</i><span id="sachgebiete-zuletzt-abgleich"></span></p>
-						<p class="einzug"><i>Letztes Update:</i><span id="sachgebiete-zuletzt-update"></span></p>
+						<h3>Tag-Fenster</h3>
+						<p><input type="checkbox" id="einstellung-tagger-schliessen"
+							><label for="einstellung-tagger-schliessen">Tag-Fenster nach dem Speichern schließen</label></p>
+						<h3>Tag-Dateien</h3>
+						<p><input type="checkbox" id="einstellung-tags-auto-abgleich"
+							><label for="einstellung-tags-auto-abgleich">Tag-Dateien automatisch auffrischen</label></p>
+						<div id="tags-cont"></div>
+						<p><input type="button" value="Tag-Datei laden" id="tags-laden"></p>
 					</section>
 					
 					<!-- Karteikarte -->
@@ -651,6 +656,26 @@
 			<h2><span class="icon-h icon-h-redaktion"> </span
 				>Redaktion<a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"> </a></h2>
 			<div id="redaktion-cont"></div>
+		</div></div>
+		
+		<!-- OVERLAY: Tags -->
+		<div id="tagger" class="overlay aus"><div>
+			<h2><span class="icon-h icon-h-tagger"> </span
+				>Tags<span id="tagger-geaendert" class="aus">*</span
+				><a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"> </a></h2>
+			<div id="tagger-cont">
+				<div id="tagger-bedeutung"></div>
+				<div id="tagger-typen"></div>
+				<p><input type="button" value="Speichern" id="tagger-speichern"
+					><input type="button" value="Schließen" id="tagger-schliessen"></p>
+			</div>
+		</div></div>
+		
+		<!-- OVERLAY: Gerüste -->
+		<div id="gerueste" class="overlay aus"><div>
+			<h2><span class="icon-h icon-h-gerueste"> </span
+				>Bedeutungsgerüste<a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"> </a></h2>
+			<div id="gerueste-cont"></div>
 		</div></div>
 		
 		<!-- OVERLAY: Zeitraumgrafik -->

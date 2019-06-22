@@ -29,8 +29,20 @@ let beleg = {
 	// Überprüfen, ob vor dem Erstellen eines neuen Belegs noch Änderungen
 	// gespeichert werden müssen.
 	erstellenPre () {
-		// Änderungen in Bedeutungen/im Beleg noch nicht gespeichert
-		if (bedeutungen.geaendert) {
+		// Änderungen im Tagger/in Bedeutungen/im Beleg noch nicht gespeichert
+		if (tagger.geaendert) {
+			dialog.oeffnen("confirm", function() {
+				if (dialog.antwort) {
+					tagger.speichern();
+				} else if (dialog.antwort === false) {
+					tagger.taggerGeaendert(false);
+					tagger.schliessen();
+					beleg.erstellen();
+				}
+			});
+			dialog.text("Die Tags wurden verändert, aber noch nicht gespeichert.\nMöchten Sie die Änderungen nicht erst einmal speichern?");
+			return;
+		} else if (bedeutungen.geaendert) {
 			dialog.oeffnen("confirm", function() {
 				if (dialog.antwort) {
 					bedeutungen.speichern();
@@ -110,7 +122,14 @@ let beleg = {
 				continue;
 			}
 			if (helfer.checkType("Array", data.ka[id][i])) {
-				beleg.data[i] = [...data.ka[id][i]];
+				if (helfer.checkType("Object", data.ka[id][i][0])) {
+					beleg.data[i] = [];
+					for (let j = 0, len = data.ka[id][i].length; j < len; j++) {
+						beleg.data[i].push({...data.ka[id][i][j]});
+					}
+				} else {
+					beleg.data[i] = [...data.ka[id][i]];
+				}
 			} else {
 				beleg.data[i] = data.ka[id][i];
 			}
@@ -155,6 +174,12 @@ let beleg = {
 				continue;
 			} else if (felder[i].type === "checkbox") {
 				felder[i].checked = beleg.data[feld];
+			} else if (feld === "bd") {
+				let bd = [];
+				for (let i = 0, len = beleg.data.bd.length; i < len; i++) {
+					bd.push(bedeutungen.bedeutungenTief(beleg.data.bd[i].gr, beleg.data.bd[i].id, false, true));
+				}
+				felder[i].value = bd.join("\n");
 			} else { // Text-Input und Textarea
 				felder[i].value = beleg.data[feld];
 			}
@@ -1683,6 +1708,19 @@ let beleg = {
 				suchfeld(cont);
 			}
 		}
+		// Bedeutungen
+		let contBd = document.getElementById("beleg-lese-bd");
+		if (beleg.data.bd.length) {
+			helfer.keineKinder(contBd);
+			for (let i = 0, len = beleg.data.bd.length; i < len; i++) {
+				let bd = bedeutungen.bedeutungenTief(beleg.data.bd[i].gr, beleg.data.bd[i].id),
+					p = document.createElement("p");
+				p.innerHTML = bd;
+				contBd.appendChild(p);
+			}
+		} else {
+			contBd.textContent = " ";
+		}
 		// Klick-Events an alles Links hängen
 		document.querySelectorAll("#beleg .link").forEach(function(i) {
 			liste.linksOeffnen(i);
@@ -1920,6 +1958,7 @@ let beleg = {
 				beleg.ctrlNavi(next);
 			}, {
 				notizen: false,
+				tagger: false,
 				bedeutungen: false,
 				beleg: true,
 				kartei: false,

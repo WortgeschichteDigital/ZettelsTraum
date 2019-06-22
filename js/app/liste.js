@@ -4,7 +4,19 @@ let liste = {
 	// Zeigt die Karteikartenliste an, überprüft aber vorher
 	// ob noch etwas in Bearbeitung gespeichert werden muss
 	anzeigen () {
-		if (bedeutungen.geaendert) { // Bedeutungen noch nicht gespeichert
+		if (tagger.geaendert) { // Tags noch nicht gespeichert
+			dialog.oeffnen("confirm", function() {
+				if (dialog.antwort) {
+					tagger.speichern();
+				} else if (dialog.antwort === false) {
+					tagger.taggerGeaendert(false);
+					tagger.schliessen();
+					liste.wechseln();
+				}
+			});
+			dialog.text("Die Tags wurden verändert, aber noch nicht gespeichert.\nMöchten Sie die Änderungen nicht erst einmal speichern?");
+			return;
+		} else if (bedeutungen.geaendert) { // Bedeutungen noch nicht gespeichert
 			dialog.oeffnen("confirm", function() {
 				if (dialog.antwort) {
 					bedeutungen.speichern();
@@ -747,10 +759,19 @@ let liste = {
 	//        h:    String  (die Überschrift des Datenfelds)
 	//        id:   String  (ID der Karteikarte, nur gefüllt, wenn ein Kopier-Icon eingefügt werden soll)
 	//        text: String  (vollständiger Text des Datenfelds)
+	//              Array   (bei Bedeutungen)
 	detailErstellen ({cont, ds, h, text, id = ""}) {
 		// Datenfeld kann leer sein
-		if (!text) {
+		if (!text || ds === "bd" && !text.length) {
 			return;
+		}
+		// Sonderbehandlung Bedeutungen
+		if (ds === "bd") {
+			let textTmp = [];
+			for (let i = 0, len = text.length; i < len; i++) {
+				textTmp.push(bedeutungen.bedeutungenTief(text[i].gr, text[i].id));
+			}
+			text = textTmp.join("\n");
 		}
 		// <div> für Datenfeld erzeugen
 		let div = document.createElement("div");
