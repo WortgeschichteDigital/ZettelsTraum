@@ -44,6 +44,10 @@ let sicherheitsfrage = {
 			typen.push("die Notizen");
 			mehrzahl += 2;
 		}
+		if (werte.tagger && tagger.geaendert) {
+			typen.push("die Tags");
+			mehrzahl += 2;
+		}
 		if (werte.bedeutungen && bedeutungen.geaendert) {
 			typen.push("die Bedeutungen");
 			mehrzahl += 2;
@@ -68,6 +72,8 @@ let sicherheitsfrage = {
 	speichern () {
 		if (sicherheitsfrage.werte.notizen && notizen.geaendert) {
 			notizen.speichern();
+		} else if (sicherheitsfrage.werte.tagger && tagger.geaendert) {
+			tagger.speichern();
 		} else if (sicherheitsfrage.werte.bedeutungen && bedeutungen.geaendert) {
 			bedeutungen.speichern();
 		} else if (sicherheitsfrage.werte.beleg && beleg.geaendert) {

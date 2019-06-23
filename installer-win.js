@@ -51,12 +51,9 @@ function makeConfig () {
 			],
 			extraResources: [
 				{
-					from: "resources/Sachgebiete.xml",
-					to: "Sachgebiete.xml",
-				},
-				{
-					from: "resources/filetype",
-					to: "filetype",
+					from: "resources",
+					to: "./",
+					filter: ["*.xml", "filetype"],
 				},
 			],
 		},
