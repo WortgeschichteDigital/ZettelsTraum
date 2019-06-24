@@ -236,7 +236,16 @@
 	height: 5px;
 }
 
+#tags-cont {
+	margin-bottom: 10px;
+	padding-right: 10px;
+	max-height: 212px;
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+
 #tags-cont table {
+	margin-bottom: 0;
 	border-collapse: collapse;
 	border-spacing: 0;
 	width: 100%;

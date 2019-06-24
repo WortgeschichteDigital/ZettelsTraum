@@ -84,7 +84,7 @@ let beleg = {
 			an: [], // Anhänge
 			au: "", // Autor
 			bc: false, // Buchung
-			bd: "", // Bedeutung
+			bd: [], // Bedeutung
 			be: 0, // Bewertung
 			bl: "", // Wortbildung
 			bs: "", // Beleg
@@ -139,18 +139,22 @@ let beleg = {
 		// in Lese- oder in Formularansicht öffnen?
 		const leseansicht = document.getElementById("beleg-link-leseansicht");
 		if (optionen.data.einstellungen.leseansicht) {
+			beleg.formular(false); // wegen der Bedeutungen *vor* dem Füllen der Leseansicht
 			if (!leseansicht.classList.contains("aktiv")) {
 				beleg.leseToggle(false);
 			} else {
 				beleg.leseFill();
 			}
-		} else if (leseansicht.classList.contains("aktiv")) {
-			beleg.leseToggle(false);
+		} else {
+			if (leseansicht.classList.contains("aktiv")) {
+				beleg.leseToggle(false);
+			}
+			beleg.formular(false); // wegen der Textarea-Größe *nach* dem Umschalten der Leseansicht
 		}
-		// Formular füllen und anzeigen
-		beleg.formular(false);
 	},
 	// Formular füllen und anzeigen
+	//   neu = Boolean
+	//     (neue Karteikarte erstellen)
 	formular (neu) {
 		// regulären Ausdruck für Sprung zum Wort zurücksetzen
 		beleg.ctrlSpringenFormReg.again = false;
@@ -177,6 +181,9 @@ let beleg = {
 			} else if (feld === "bd") {
 				let bd = [];
 				for (let i = 0, len = beleg.data.bd.length; i < len; i++) {
+					if (beleg.data.bd[i].gr !== data.bd.gn) { // Bedeutungen aus anderen Gerüsten nicht drucken
+						continue;
+					}
 					bd.push(bedeutungen.bedeutungenTief(beleg.data.bd[i].gr, beleg.data.bd[i].id, false, true));
 				}
 				felder[i].value = bd.join("\n");
@@ -223,7 +230,7 @@ let beleg = {
 			}
 			if (this.type === "checkbox") {
 				beleg.data[feld] = this.checked;
-			} else {
+			} else if (feld !== "bd") { // Daten des Bedeutungsfelds werden erst beim Speichern aufgefrischt; vgl. beleg.aktionSpeichern()
 				beleg.data[feld] = helfer.textTrim(this.value, true);
 			}
 			beleg.belegGeaendert(true);
@@ -284,11 +291,36 @@ let beleg = {
 			return;
 		}
 		// ggf. Format von Bedeutung, Wortbildung, Synonym und Textsorte anpassen
-		let ds = ["bd", "bl", "sy", "ts"];
+		let bdFeld = document.getElementById("beleg-bd"),
+			ds = ["bd", "bl", "sy", "ts"];
 		for (let i = 0, len = ds.length; i < len; i++) {
 			let ds_akt = ds[i];
-			beleg.data[ds_akt] = beleg.data[ds_akt].replace(/::/g, ": ").replace(/\n\s*\n/g, "\n");
+			if (ds_akt === "bd") {
+				bdFeld.value = beleg.bedeutungAufbereiten();
+			} else {
+				beleg.data[ds_akt] = beleg.data[ds_akt].replace(/::/g, ": ").replace(/\n\s*\n/g, "\n");
+			}
 		}
+		// Bedeutungen des aktuellen Gerüsts entfernen
+		for (let i = 0, len = beleg.data.bd.length; i < len; i++) {
+			if (beleg.data.bd[i].gr === data.bd.gn) {
+				beleg.data.bd.splice(i, 1);
+				i--;
+				len = beleg.data.bd.length;
+			}
+		}
+		// Bedeutung im Bedeutungefeld hinzufügen
+		bdFeld.value.split("\n").forEach(function(i) {
+			let bd = beleg.bedeutungSuchen(i);
+			// ggf. neue Bedeutung in das Gerüst eintragen
+			if (!bd.id) {
+				bd = beleg.bedeutungErgaenzen(i);
+			}
+			beleg.data.bd.push({
+				gr: data.bd.gn,
+				id: bd.id,
+			});
+		});
 		// ggf. Objekt anlegen
 		if (!data.ka[beleg.id_karte]) {
 			data.ka[beleg.id_karte] = {};
@@ -303,7 +335,14 @@ let beleg = {
 				continue;
 			}
 			if (helfer.checkType("Array", beleg.data[i])) {
-				data.ka[beleg.id_karte][i] = [...beleg.data[i]];
+				if (helfer.checkType("Object", beleg.data[i][0])) {
+					data.ka[beleg.id_karte][i] = [];
+					for (let j = 0, len = beleg.data[i].length; j < len; j++) {
+						data.ka[beleg.id_karte][i].push({...beleg.data[i][j]});
+					}
+				} else {
+					data.ka[beleg.id_karte][i] = [...beleg.data[i]];
+				}
 			} else {
 				data.ka[beleg.id_karte][i] = beleg.data[i];
 			}
@@ -1709,17 +1748,29 @@ let beleg = {
 			}
 		}
 		// Bedeutungen
-		let contBd = document.getElementById("beleg-lese-bd");
-		if (beleg.data.bd.length) {
-			helfer.keineKinder(contBd);
-			for (let i = 0, len = beleg.data.bd.length; i < len; i++) {
-				let bd = bedeutungen.bedeutungenTief(beleg.data.bd[i].gr, beleg.data.bd[i].id),
-					p = document.createElement("p");
-				p.innerHTML = bd;
+		let feldBd = beleg.bedeutungAufbereiten(),
+			contBd = document.getElementById("beleg-lese-bd");
+		helfer.keineKinder(contBd);
+		if (feldBd) {
+			feldBd.split("\n").forEach(function(i) {
+				const bd = beleg.bedeutungSuchen(i);
+				let p = document.createElement("p");
+				if (!bd.id) {
+					i.split(": ").forEach(function(j) {
+						let b = document.createElement("b");
+						p.appendChild(b);
+						b.textContent = "?";
+						p.appendChild(document.createTextNode(j));
+					});
+				} else {
+					p.innerHTML = bedeutungen.bedeutungenTief(data.bd.gn, bd.id);
+				}
 				contBd.appendChild(p);
-			}
+			});
 		} else {
-			contBd.textContent = " ";
+			let p = document.createElement("p");
+			p.textContent = " ";
+			contBd.appendChild(p);
 		}
 		// Klick-Events an alles Links hängen
 		document.querySelectorAll("#beleg .link").forEach(function(i) {
@@ -2012,11 +2063,72 @@ let beleg = {
 			icon.focus();
 		}
 	},
+	// typographische Aufbereitung des aktuellen Inhalts des Bedeutungsfeldes
+	bedeutungAufbereiten () {
+		return helfer.textTrim(document.getElementById("beleg-bd").value, true).replace(/::/g, ": ").replace(/\n\s*\n/g, "\n");
+	},
+	// sucht eine Bedeutung im Bedeutungsgerüst
+	//   bd = String
+	//     (die Bedeutung)
+	bedeutungSuchen (bd) {
+		let bdS = bd.split(": "),
+			bdA = data.bd.gr[data.bd.gn].bd;
+		// Alias ggf. durch vollen Bedeutungsstring ersetzen
+		for (let i = 0, len = bdS.length; i < len; i++) {
+			for (let j = 0, len = bdA.length; j < len; j++) {
+				if (bdS[i] === bdA[j].al) {
+					bdS[i] = bdA[j].bd[bdA[j].bd.length - 1];
+					break;
+				}
+			}
+		}
+		// Bedeutung suchen => ID zurückgeben
+		const bdSJ = bdS.join(": ");
+		for (let i = 0, len = bdA.length; i < len; i++) {
+			if (bdA[i].bd.join(": ") === bdSJ) {
+				return {
+					idx: i,
+					id: bdA[i].id
+				};
+			}
+		}
+		// Bedeutung nicht gefunden (IDs beginnen mit 1)
+		return {
+			idx: -1,
+			id: 0,
+		};
+	},
+	// manuell eingetragene Bedeutung in den Bedeutungsbaum einhängen
+	//   bd = String
+	//     (die Bedeutung; Hierarchien getrennt durch ": ")
+	bedeutungErgaenzen (bd) {
+		// Zeiger auf das betreffende Gerüst ermitteln
+		let gr = data.bd.gr[data.bd.gn];
+		// ggf. höchste ID ermitteln
+		if (!bedeutungen.makeId) {
+			let lastId = 0;
+			gr.bd.forEach(function(i) {
+				if (i.id > lastId) {
+					lastId = i.id;
+				}
+			});
+			bedeutungen.makeId = bedeutungen.idGenerator(lastId + 1);
+		}
+		// neue Bedeutung eintragen
+		// TODO das muss viel komplizierter sein
+		//   1. richtige Stelle finden, wenn ein Teil der Bedeutung schon bekannt ist
+		//   2. ggf. Bedeutungsbaum erzeugen (es könnte sein, dass direkt "neu: neu 1: neu 2" eingegeben wird, ohne dass "neu" existiert)
+		gr.bd.push(bedeutungen.konstitBedeutung(bd.split(": ")));
+		// Zählung auffrischen
+		bedeutungen.konstitZaehlung(gr.bd, gr.sl);
+		// ID zurückgeben
+		return beleg.bedeutungSuchen(bd);
+	},
 	// trägt eine Bedeutung ein, die aus dem Bedeutungen-Fenster
 	// an das Hauptfenster geschickt wurde
 	//   bd = String
 	//     (die Bedeutung)
-	bedeutungEintragen (bd) {
+	bedeutungEintragen (bd) { // TODO auf neue Architektur umstellen
 		// Karteikarte ist nicht offen
 		if (document.getElementById("beleg").classList.contains("aus")) {
 			dialog.oeffnen("alert");

@@ -23,6 +23,8 @@ let bedeutungenWin = {
 	},
 	// Bedeutungen aus den Karteikarten extrahieren
 	get () {
+		// TODO das muss so nicht mehr gemacht werden
+		return "";
 		let daten = {
 			bd: {},
 			bd_folge: [],

@@ -481,8 +481,13 @@ let dropdown = {
 			// Haben die Änderungen weitere Konsequenzen?
 			if (/^beleg-(bd|bl|sy|ts)/.test(caller)) {
 				helfer.textareaGrow(feld);
-				const id = caller.replace(/^beleg-/, "");
-				beleg.data[id] = helfer.textTrim(text, true);
+				if (caller === "beleg-bd") { // Daten des Bedeutungsfelds werden erst beim Speichern aufgefrischt; vgl. beleg.aktionSpeichern()
+					let bd = document.getElementById("beleg-bd");
+					bd.value = helfer.textTrim(bd.value, true);
+				} else {
+					const id = caller.replace(/^beleg-/, "");
+					beleg.data[id] = helfer.textTrim(text, true);
+				}
 				beleg.belegGeaendert(true);
 			} else if (caller === "beleg-kr") {
 				beleg.data.kr = helfer.textTrim(text, true);

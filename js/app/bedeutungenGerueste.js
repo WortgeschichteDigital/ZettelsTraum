@@ -97,7 +97,7 @@ let bedeutungenGerueste = {
 	// Gerüst hinzufügen
 	add () {
 		const name = document.querySelector("#gerueste-cont tr:last-child input").value,
-			id = bedeutungenGerueste.nextId;
+			id = bedeutungenGerueste.nextId.toString(); // wichtig, dass es ein String ist!
 		bedeutungen.data.gr[id] = {};
 		bedeutungen.data.gr[id].na = helfer.textTrim(name, true);
 		bedeutungen.data.gr[id].sl = 2;

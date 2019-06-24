@@ -100,7 +100,7 @@ let bedeutungen = {
 	//     (Array mit den Bedeutungen, die durchgezählt werden sollen)
 	//   sl = Number || undefined
 	//     (Start-Level der Zählung)
-	konstitZaehlung (arr = bedeutungen.akt.bd, sl = null) {
+	konstitZaehlung (arr = bedeutungen.akt.bd, sl = bedeutungen.akt.sl) {
 		bedeutungen.zaehlungen = [];
 		arr.forEach(function(i) {
 			i.za = bedeutungen.zaehlung(i.bd, sl);
@@ -239,6 +239,7 @@ let bedeutungen = {
 		document.getElementById("bedeutungen-gerueste").value = `Gerüst ${id}`;
 		document.getElementById("bedeutungen-hierarchie").value = bedeutungen.hierarchieEbenen[bedeutungen.akt.sl];
 		bedeutungen.aufbauen();
+		bedeutungen.bedeutungenGeaendert(true);
 	},
 	// Bedeutungen öffnen
 	oeffnen () {
@@ -909,7 +910,16 @@ let bedeutungen = {
 		const bd = bedeutungen.akt.bd[idx].bd[bedeutungen.akt.bd[idx].bd.length - 1];
 		dialog.oeffnen("confirm", function() {
 			if (dialog.antwort) {
-				bedeutungen.loeschenAusfuehren();
+				// Löschen für Karteikarten vormerken
+				let items = bedeutungen.moveGetItems();
+				for (let i = 0, len = items.length; i < len; i++) {
+					bedeutungen.aendernFuellen({
+						del: true,
+						id: bedeutungen.akt.bd[items[i]].id,
+					});
+				}
+				// Löschen im Gerüst ausführen
+				bedeutungen.loeschenAusfuehren(items);
 			} else {
 				document.querySelector(".bedeutungen-aktiv").firstChild.firstChild.focus();
 			}
@@ -922,8 +932,9 @@ let bedeutungen = {
 	},
 	// markierte Einträge werden gelöscht
 	// (wird auch für das Verschmelzen genutzt, darum ausgelagert)
-	loeschenAusfuehren () {
-		let items = bedeutungen.moveGetItems();
+	//   items = Array
+	//     (Liste mit Indizes, die gelöscht werden sollen)
+	loeschenAusfuehren (items) {
 		for (let i = items.length - 1; i >= 0; i--) {
 			bedeutungen.akt.bd.splice(items[i], 1);
 		}
@@ -971,10 +982,17 @@ let bedeutungen = {
 		dialog.oeffnen("confirm", function() {
 			if (dialog.antwort) {
 				const id = bedeutungen.akt.bd[idxZiel].id;
-				// Verschmelzen vorbereiten
-				// TODO Vorbereiten alle markierten Bedeutungen durch die Zielbedeutung ersetzen
+				// Verschmelzen für Karteikarten vormerken
+				let items = bedeutungen.moveGetItems();
+				for (let i = 0, len = items.length; i < len; i++) {
+					bedeutungen.aendernFuellen({
+						merge: true,
+						id: bedeutungen.akt.bd[items[i]].id,
+						idN: id,
+					});
+				}
 				// verschmolzene Bedeutungen löschen
-				bedeutungen.loeschenAusfuehren();
+				bedeutungen.loeschenAusfuehren(items);
 				// Verschmelzen visualisieren
 				for (let i = 0, len = bedeutungen.akt.bd.length; i < len; i++) {
 					if (bedeutungen.akt.bd[i].id === id) {
@@ -1338,22 +1356,69 @@ let bedeutungen = {
 	speichern () {
 		// keine Änderungen
 		if (!bedeutungen.geaendert) {
-			bedeutungen.schliessen();
+			schliessen();
 			return;
 		}
 		// Zählung der Bedeutungsgerüst-IDs zurücksetzen
 		bedeutungenGerueste.nextId = 0;
-		// TODO Änderungen in Karteikarten anwenden
-		// TODO bedeutungen.data => data.bd
-		// TODO Änderungsmarkierung Kartei setzen
-		// TODO Bedeutungsgerüst-Fenster auffrischen
+		// Änderungen in Karteikarten anwenden
+		bedeutungen.aendernAnwenden();
+		// Kopieren: bedeutungen.data => data.bd
+		bedeutungen.copyData(bedeutungen.data, data.bd);
+		// Bedeutungsgerüst-Fenster mit neuen Daten versorgen
+		bedeutungenWin.daten();
+		// Änderungsmarkierung setzen/zurücksetzen und schließen
 		kartei.karteiGeaendert(true);
-		// Änderungsmarkierung Bedeutungen zurücksetzen
 		bedeutungen.bedeutungenGeaendert(false);
-		// ggf. direkt schließen
-		if (optionen.data.einstellungen["bedeutungen-schliessen"]) {
-			bedeutungen.schliessen();
+		schliessen();
+		// Schließen-Funktion
+		function schliessen () {
+			if (optionen.data.einstellungen["bedeutungen-schliessen"]) {
+				bedeutungen.schliessen();
+			}
 		}
+	},
+	// speichert eine Änderungsliste mit Ersetzungen/Streichungen, die beim Speichern
+	// in den Karteikarten angewendet werden sollen
+	aendern: [],
+	// Änderungsliste füllen
+	aendernFuellen ({
+			del = false,
+			merge = false,
+			gr = bedeutungen.data.gn,
+			id = 0,
+			idN = 0,
+		}) {
+		bedeutungen.aendern.push({
+			del: del,
+			merge: merge,
+			gr: gr,
+			id: id,
+			idN: idN,
+		});
+	},
+	// Änderungsliste abarbeiten
+	aendernAnwenden () {
+		let a = bedeutungen.aendern;
+		for (let i = 0, len = a.length; i < len; i++) {
+			for (let id in data.ka) {
+				if (!data.ka.hasOwnProperty(id)) {
+					continue;
+				}
+				let bd = data.ka[id].bd;
+				for (let j = bd.length - 1; j >= 0; j--) {
+					if (bd[j].gr === a[i].gr && bd[j].id === a[i].id) {
+						if (a[i].del) { // Löschen
+							bd.splice(j, 1);
+						} else if (a[i].merge) { // Verschmelzen
+							bd[j].id = a[i].idN;
+						}
+					}
+				}
+			}
+		}
+		// Änderungsliste zurücksetzen
+		bedeutungen.aendern = [];
 	},
 	// Bedeutungen schließen
 	schliessen () {
@@ -1364,14 +1429,20 @@ let bedeutungen = {
 					bedeutungen.speichern();
 				} else if (dialog.antwort === false) {
 					bedeutungen.bedeutungenGeaendert(false);
-					liste.wechseln();
+					listeZeigen();
 				}
 			});
 			dialog.text("Das Bedeutungsgerüst wurde verändert, aber noch nicht gespeichert.\nMöchten Sie die Änderungen nicht erst einmal speichern?");
 			return;
 		}
 		// zur Liste wechseln
-		liste.wechseln();
+		listeZeigen();
+		// Funktionen vor Anzeigend er Liste
+		function listeZeigen () {
+			bedeutungen.aendern = [];
+			liste.status(true);
+			liste.wechseln();
+		}
 	},
 	// Bedeutungen wurden geändert und noch nicht gespeichert
 	geaendert: false,

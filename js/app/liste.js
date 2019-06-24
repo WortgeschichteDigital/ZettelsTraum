@@ -769,7 +769,13 @@ let liste = {
 		if (ds === "bd") {
 			let textTmp = [];
 			for (let i = 0, len = text.length; i < len; i++) {
+				if (text[i].gr !== data.bd.gn) { // nur Bedeutungen des aktuellen Gerüsts anzeigen
+					continue;
+				}
 				textTmp.push(bedeutungen.bedeutungenTief(text[i].gr, text[i].id));
+			}
+			if (!textTmp.length) { // im aktuellen Gerüst könnten keine passenden Bedeutungen sein
+				return;
 			}
 			text = textTmp.join("\n");
 		}
