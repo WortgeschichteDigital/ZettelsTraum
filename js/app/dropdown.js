@@ -28,7 +28,12 @@ let dropdown = {
 	dataBedeutungen () {
 		let bd = data.bd.gr[data.bd.gn].bd;
 		for (let i = 0, len = bd.length; i < len; i++) {
-			dropdown.data.push(bedeutungen.bedeutungenTief(data.bd.gn, bd[i].id, false, true));
+			dropdown.data.push(bedeutungen.bedeutungenTief({
+				gr: data.bd.gn,
+				id: bd[i].id,
+				za: false,
+				al: true,
+			}));
 		}
 	},
 	// ergänzt die vordefinierte Liste der Korpora um manuell ergänzte
@@ -484,6 +489,11 @@ let dropdown = {
 				if (caller === "beleg-bd") { // Daten des Bedeutungsfelds werden erst beim Speichern aufgefrischt; vgl. beleg.aktionSpeichern()
 					let bd = document.getElementById("beleg-bd");
 					bd.value = helfer.textTrim(bd.value, true);
+					// es ist möglich, dass die Leseansicht aktiv ist
+					// (beim Einfügen aus dem Bedeutungsgerüst-Fenster)
+					if (document.getElementById("beleg-link-leseansicht").classList.contains("aktiv")) {
+						beleg.leseFill();
+					}
 				} else {
 					const id = caller.replace(/^beleg-/, "");
 					beleg.data[id] = helfer.textTrim(text, true);

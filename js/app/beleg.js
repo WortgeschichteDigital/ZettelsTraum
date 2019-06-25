@@ -184,7 +184,12 @@ let beleg = {
 					if (beleg.data.bd[i].gr !== data.bd.gn) { // Bedeutungen aus anderen Gerüsten nicht drucken
 						continue;
 					}
-					bd.push(bedeutungen.bedeutungenTief(beleg.data.bd[i].gr, beleg.data.bd[i].id, false, true));
+					bd.push(bedeutungen.bedeutungenTief({
+						gr: beleg.data.bd[i].gr,
+						id: beleg.data.bd[i].id,
+						za: false,
+						al: true,
+					}));
 				}
 				felder[i].value = bd.join("\n");
 			} else { // Text-Input und Textarea
@@ -1205,6 +1210,38 @@ let beleg = {
 				text: text,
 				html: html,
 			});
+		} else if (ds === "bd") { // Bedeutung
+			const bd = beleg.bedeutungAufbereiten();
+			let bds = [];
+			bd.split("\n").forEach(function(i) {
+				const bd = beleg.bedeutungSuchen(i);
+				if (!bd.id) {
+					let bdsTmp = [];
+					i.split(": ").forEach(function(j, n) {
+						let vor = "   ";
+						if (!n) {
+							vor = "";
+						}
+						bdsTmp.push(`${vor}<b>?</b> ${j}`);
+					});
+					bds.push(bdsTmp.join(""));
+				} else {
+					bds.push(bedeutungen.bedeutungenTief({
+						gr: data.bd.gn,
+						id: bd.id,
+						leer: true,
+					}));
+				}
+			});
+			let html = "";
+			bds.forEach(function(i) {
+				html += `<p>${i}</p>`;
+			});
+			let text = bds.join("\n").replace(/<.+?>/g, "");
+			clipboard.write({
+				text: text,
+				html: html,
+			});
 		} else { // alle anderen Felder
 			clipboard.writeText(text);
 		}
@@ -1763,7 +1800,10 @@ let beleg = {
 						p.appendChild(document.createTextNode(j));
 					});
 				} else {
-					p.innerHTML = bedeutungen.bedeutungenTief(data.bd.gn, bd.id);
+					p.innerHTML = bedeutungen.bedeutungenTief({
+						gr: data.bd.gn,
+						id: bd.id,
+					});
 				}
 				contBd.appendChild(p);
 			});
@@ -2099,6 +2139,7 @@ let beleg = {
 		};
 	},
 	// manuell eingetragene Bedeutung in den Bedeutungsbaum einhängen
+	// (wird nur aufgerufen, wenn die Bedeutung noch nicht vorhanden ist)
 	//   bd = String
 	//     (die Bedeutung; Hierarchien getrennt durch ": ")
 	bedeutungErgaenzen (bd) {
@@ -2114,36 +2155,143 @@ let beleg = {
 			});
 			bedeutungen.makeId = bedeutungen.idGenerator(lastId + 1);
 		}
-		// neue Bedeutung eintragen
-		// TODO das muss viel komplizierter sein
-		//   1. richtige Stelle finden, wenn ein Teil der Bedeutung schon bekannt ist
-		//   2. ggf. Bedeutungsbaum erzeugen (es könnte sein, dass direkt "neu: neu 1: neu 2" eingegeben wird, ohne dass "neu" existiert)
-		gr.bd.push(bedeutungen.konstitBedeutung(bd.split(": ")));
+		// jetzt wird's kompliziert: korrekte Position der Bedeutung im Gerüst suchen
+		let bdS = bd.split(": "),
+			slice = 1,
+			arr = bdS.slice(0, slice),
+			arrVor = [],
+			arrTmpVor = [],
+			pos = -1; // der Index, an dessen Stelle das Einfügen beginnt
+		// 1. Position (initial) und Slice finden
+		for (let i = 0, len = gr.bd.length; i < len; i++) {
+			let arrTmp = gr.bd[i].bd.slice(0, slice);
+			if (arrTmp.join(": ") === arr.join(": ")) {
+				pos = i;
+				// passender Zweig gefunden
+				if (slice === bdS.length) {
+					// hier geht es nicht weiter
+					break;
+				} else {
+					// weiter in die Tiefe wandern
+					arrVor = [...arr];
+					arrTmpVor = [...arrTmp];
+					slice++;
+					arr = bdS.slice(0, slice);
+				}
+			} else if (arrVor.join(": ") !== arrTmpVor.join(": ")) {
+				// jetzt bin ich zu weit: ein neuer Zweig beginnt
+				break;
+			}
+		}
+		let bdAdd = bdS.slice(slice - 1);
+		// 2. Position korrigieren (hoch zum Slot, an dessen Stelle eingefügt wird)
+		if (pos === -1 || pos === gr.bd.length - 1) { // Sonderregel: die Bedeutung muss am Ende eingefügt werden
+			pos = gr.bd.length;
+		} else {
+			for (let i = pos + 1, len = gr.bd.length; i < len; i++) {
+				if (gr.bd[i].bd.length <= arrVor.length) {
+					pos = i;
+					break;
+				}
+			}
+		}
+		// 3. jetzt kann eingehängt werden (die nachfolgenden Slots rutschen alle um einen hoch)
+		for (let i = 0, len = bdAdd.length; i < len; i++) {
+			let bd = arrVor.concat(bdAdd.slice(0, i + 1));
+			gr.bd.splice(pos + i, 0, bedeutungen.konstitBedeutung(bd));
+		}
 		// Zählung auffrischen
 		bedeutungen.konstitZaehlung(gr.bd, gr.sl);
 		// ID zurückgeben
 		return beleg.bedeutungSuchen(bd);
 	},
-	// trägt eine Bedeutung ein, die aus dem Bedeutungen-Fenster
-	// an das Hauptfenster geschickt wurde
-	//   bd = String
-	//     (die Bedeutung)
-	bedeutungEintragen (bd) { // TODO auf neue Architektur umstellen
-		// Karteikarte ist nicht offen
-		if (document.getElementById("beleg").classList.contains("aus")) {
-			dialog.oeffnen("alert");
-			dialog.text("Es ist keine Karteikarte geöffnet, in die die Bedeutung eingetragen werden könnte.");
+	// trägt eine Bedeutung, die aus dem Bedeutungen-Fenster an das Hauptfenster geschickt wurde,
+	// in einer oder mehreren Karten ein (Verteilerfunktion)
+	//   bd = Object
+	//     (die Bedeutung mit Gerüstnummer [bd.gr] und ID [bd.id])
+	bedeutungEintragen (bd) {
+		// Ziel ermitteln
+		if (!document.getElementById("beleg").classList.contains("aus")) {
+			beleg.bedeutungEintragenKarte(bd);
+			return;
+		} else if (!document.getElementById("liste").classList.contains("aus")) {
+			beleg.bedeutungEintragenListe(bd);
 			return;
 		}
-		// Karteikarte ist in der Leseansicht
-		if (document.getElementById("beleg-link-leseansicht").classList.contains("aktiv")) {
+		// unklar, wo eingetragen werden soll => Fehlermeldung
+		dialog.oeffnen("alert");
+		dialog.text("Weder eine Karteikarte noch die Belegliste ist geöffnet.\nDie Bedeutung nur eingetragen werden, wenn eine der beiden Ansichten aktiv ist.");
+	},
+	// Bedeutung in eine einzelne Karteikarte eintragen
+	//   bd = Object
+	//     (die Bedeutung mit Gerüstnummer [bd.gr] und ID [bd.id])
+	bedeutungEintragenKarte (bd) {
+		// nicht aktives Gerüst => einfach eintragen, wenn nicht vorhanden
+		if (data.bd.gn !== bd.gr) {
+			if (bedeutungen.schonVorhanden({
+						bd: beleg.data.bd,
+						gr: bd.gr,
+						id: bd.id,
+					})) {
+				dialog.oeffnen("alert");
+				dialog.text("Die Bedeutung wurde <strong>nicht</strong> eingetragen. Grund: Sie ist schon vorhanden.\n(In der Karteikarte wird ein anderes Gerüst angezeigt als im Bedeutungsgerüst-Fenster.)");
+				return;
+			}
+			beleg.data.bd.push({...bd});
+			beleg.belegGeaendert(true);
 			dialog.oeffnen("alert");
-			dialog.text("Die Karteikarte befindet sich in der Leseansicht.\nDie Bedeutung kann aber nur eingetragen werden, wenn sie sich in der Formularansicht befindet.");
+			dialog.text("Die Bedeutung wurde eingetragen.\n(In der Karteikarte wird ein anderes Gerüst angezeigt als im Bedeutungsgerüst-Fenster.)");
 			return;
 		}
-		// Bedeutung an die Dropdown-Funktion übergeben, die entscheiden soll, wie verfahren wird
+		// aktives Gerüst => Text ermitteln und an die Dropdown-Funktion übergeben
+		let text = bedeutungen.bedeutungenTief({
+			gr: bd.gr,
+			id: bd.id,
+			za: false,
+		});
 		dropdown.caller = "beleg-bd";
 		dropdown.cursor = -1;
-		dropdown.auswahl(document.getElementById("beleg-bd"), bd);
+		dropdown.auswahl(document.getElementById("beleg-bd"), text);
+	},
+	// Bedeutung in jede Karte der Belegliste eintragen
+	//   bd = Object
+	//     (die Bedeutung mit Gerüstnummer [bd.gr] und ID [bd.id])
+	bedeutungEintragenListe (bd) {
+		const bdText = bedeutungen.bedeutungenTief({gr: bd.gr, id: bd.id});
+		// keine Belege in der Liste
+		if (!document.querySelector("#liste-belege-cont .liste-kopf")) {
+			dialog.oeffnen("alert");
+			dialog.text(`Die Belegliste zeigt derzeit keine Belege an. Die Bedeutung\n<p class="bedeutungen-dialog">${bdText}</p>\nkann darum in keine Karteikarte eingetragen werden.`);
+			return;
+		}
+		// Sicherheitsfrage
+		dialog.oeffnen("confirm", function() {
+			if (dialog.antwort) {
+				// Bedeutung eintragen
+				document.querySelectorAll("#liste-belege-cont .liste-kopf").forEach(function(i) {
+					const id = i.dataset.id;
+					if (!bedeutungen.schonVorhanden({
+								bd: data.ka[id].bd,
+								gr: bd.gr,
+								id: bd.id,
+							})) {
+						data.ka[id].bd.push({...bd});
+					}
+				});
+				kartei.karteiGeaendert(true);
+				// Rückmeldung
+				let geruest_inaktiv = "\n(Im Hauptfenster ist ein anderes Gerüst als im Bedeutungsgerüst-Fenster eingestellt.)";
+				if (data.bd.gn === bd.gr) {
+					geruest_inaktiv = "";
+				}
+				dialog.oeffnen("alert");
+				dialog.text(`Die Bedeutung\n<p class="bedeutungen-dialog">${bdText}</p>\nwurde in allen Karteikarten der Belegliste ergänzt.${geruest_inaktiv}`);
+				// Liste auffrischen
+				if (!geruest_inaktiv) {
+					liste.status(true);
+				}
+			}
+		});
+		dialog.text(`Soll die Bedeutung\n<p class="bedeutungen-dialog">${bdText}</p>\nwirklich in alle Karteikarten, die derzeit in der Belegliste sichtbar sind, eingetragen werden?`);
 	},
 };

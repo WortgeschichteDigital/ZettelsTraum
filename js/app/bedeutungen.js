@@ -15,6 +15,16 @@ let bedeutungen = {
 			yield id++;
 		}
 	},
+	// ermittelt, welche ID als nächste vergeben werden sollte
+	idInit () {
+		let lastId = 0;
+		bedeutungen.akt.bd.forEach(function(i) {
+			if (i.id > lastId) {
+				lastId = i.id;
+			}
+		});
+		bedeutungen.makeId = bedeutungen.idGenerator(lastId + 1);
+	},
 	// baut ein initiales, alphabetisch sortiertes Bedeutungsgerüst auf
 	// (falls in der Kartei noch keiner vorhanden ist; irgendwann ist diese Funktion wohl tot)
 	konstit () {
@@ -156,7 +166,7 @@ let bedeutungen = {
 		} while (ebene > 1);
 		return zaehlungen.reverse();
 	},
-	// gibt alle Bedeutungen mit Zählung als String zurück
+	// gibt Bedeutungen mit Zählung als String zurück
 	//   gr = String
 	//     (ID der Gerüst-Nummer)
 	//   id = Number
@@ -165,7 +175,9 @@ let bedeutungen = {
 	//     (das Zählzeichen soll angezeigt werden)
 	//   al = true || undefined
 	//     (hat die Bedeutung einen Alias, soll der Alias zurückgegeben werden)
-	bedeutungenTief (gr, id, za = true, al = false) {
+	//   leer = true || undefined
+	//     (vor und hinter den Zählzeichen werden Leerzeichen eingefügt)
+	bedeutungenTief ({gr, id, za = true, al = false, leer = false}) {
 		let arr = [],
 			bd = data.bd.gr[gr].bd,
 			bd_len = -1,
@@ -175,7 +187,7 @@ let bedeutungen = {
 			if (bd[i].id === id) {
 				bd_len = bd[i].bd.length;
 				idx = i - 1;
-				fuellen(i);
+				fuellen(i, false);
 				break;
 			}
 		}
@@ -183,7 +195,11 @@ let bedeutungen = {
 		for (let i = idx; i >= 0; i--) {
 			if (bd[i].bd.length < bd_len) {
 				bd_len = bd[i].bd.length;
-				fuellen(i);
+				let init = false;
+				if (bd_len === 1) {
+					init = true;
+				}
+				fuellen(i, init);
 				if (bd_len === 1) {
 					break;
 				}
@@ -195,9 +211,19 @@ let bedeutungen = {
 		}
 		return arr.join("");
 		// Array mit Werten füllen
-		function fuellen (i) {
+		//   i = Number
+		//     (Index der Bedeutung)
+		//   init = Boolean
+		//     (Zählung wird initialisiert; das ist für die Leerzeichen wichtig zu wissen)
+		function fuellen (i, init) {
 			let zaehlung = "";
-			if (za) {
+			if (za && leer) {
+				let zaehlungVor = "   ";
+				if (init) {
+					zaehlungVor = "";
+				}
+				zaehlung = `${zaehlungVor}<b>${bd[i].za}</b> `;
+			} else if (za) {
 				zaehlung = `<b>${bd[i].za}</b>`;
 			}
 			let bedeutung = bd[i].bd[bd_len - 1];
@@ -240,6 +266,7 @@ let bedeutungen = {
 		document.getElementById("bedeutungen-hierarchie").value = bedeutungen.hierarchieEbenen[bedeutungen.akt.sl];
 		bedeutungen.aufbauen();
 		bedeutungen.bedeutungenGeaendert(true);
+		bedeutungen.idInit();
 	},
 	// Bedeutungen öffnen
 	oeffnen () {
@@ -278,6 +305,10 @@ let bedeutungen = {
 			document.getElementById("bedeutungen-hierarchie").value = bedeutungen.hierarchieEbenen[bedeutungen.akt.sl];
 			bedeutungen.aufbauen();
 			helfer.sektionWechseln("bedeutungen");
+			// ggf. ID-Generator initialisieren; könnte bereits durch bedeutungen.konstit() geschehen sein
+			if (!bedeutungen.makeId) {
+				bedeutungen.idInit();
+			}
 		}
 	},
 	// fertigt eine tiefe Kopie der Bedeutungsgerüstdaten an
@@ -325,10 +356,7 @@ let bedeutungen = {
 		// Überschrift aufbereiten
 		bedeutungen.aufbauenH2();
 		// Tabelle füllen
-		let lastId = 0;
 		bedeutungen.akt.bd.forEach(function(i, n) {
-			// höchste ID ermitteln
-			lastId = i.id > lastId ? i.id : lastId;
 			// Zeile erzeugen
 			const bd = i.bd;
 			let tr = document.createElement("tr");
@@ -405,11 +433,6 @@ let bedeutungen = {
 		});
 		// Ergänzungszeile einrücken
 		bedeutungen.aufbauenErgaenzen(table);
-		// ggf. ID-Generator initialisieren
-		// (könnte bereits durch bedeutungen.konstit() geschehen sein)
-		if (!bedeutungen.makeId) {
-			bedeutungen.makeId = bedeutungen.idGenerator(lastId + 1);
-		}
 	},
 	// Überschrift des Bedeutungsgerüst ggf. anpassen
 	aufbauenH2 () {
@@ -1158,8 +1181,12 @@ let bedeutungen = {
 					if (i === idx) {
 						continue;
 					}
+					// Alias schon vergeben oder identisch mit einer Bedeutung?
 					if (bedeutungen.akt.bd[i].al === wert) {
-						alias_schon_vergeben(edit);
+						alias_schon_vergeben(edit, "alias");
+						return;
+					} else if (bedeutungen.akt.bd[i].bd[bedeutungen.akt.bd[i].bd.length - 1] === wert) {
+						alias_schon_vergeben(edit, "bedeutung");
 						return;
 					}
 				}
@@ -1181,11 +1208,15 @@ let bedeutungen = {
 			// Änderungsmarkierung setzen
 			bedeutungen.bedeutungenGeaendert(true);
 			// Alias schon vergeben
-			function alias_schon_vergeben (edit) {
+			function alias_schon_vergeben (edit, typ) {
 				dialog.oeffnen("alert", function() {
 					helfer.auswahl(edit);
 				});
-				dialog.text(`Das Alias <i>${wert}</i> wurde schon vergeben.`);
+				if (typ === "alias") {
+					dialog.text(`Das Alias <i>${wert}</i> wurde schon vergeben.`);
+				} else {
+					dialog.text(`Das Alias <i>${wert}</i> ist identisch mit einer Bedeutung.`);
+				}
 			}
 		});
 	},
@@ -1411,7 +1442,15 @@ let bedeutungen = {
 						if (a[i].del) { // Löschen
 							bd.splice(j, 1);
 						} else if (a[i].merge) { // Verschmelzen
-							bd[j].id = a[i].idN;
+							if (bedeutungen.schonVorhanden({
+										bd: bd,
+										id: a[i].idN,
+										gr: bedeutungen.data.gn,
+									})) {
+								bd.splice(j, 1);
+							} else {
+								bd[j].id = a[i].idN;
+							}
 						}
 					}
 				}
@@ -1419,6 +1458,15 @@ let bedeutungen = {
 		}
 		// Änderungsliste zurücksetzen
 		bedeutungen.aendern = [];
+	},
+	// ist die Bedeutung, mit der verschmolzen wird, in einer Karte schon vorhanden?
+	schonVorhanden ({bd, id, gr}) {
+		for (let i = 0, len = bd.length; i < len; i++) {
+			if (bd[i].gr === gr && bd[i].id === id) {
+				return true;
+			}
+		}
+		return false;
 	},
 	// Bedeutungen schließen
 	schliessen () {

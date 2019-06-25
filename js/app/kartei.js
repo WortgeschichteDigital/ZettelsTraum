@@ -35,7 +35,16 @@ let kartei = {
 		// globales Datenobjekt initialisieren
 		data = {
 			an: [], // Anhänge
-			bd: {}, // Bedeutungen
+			bd: { // Bedeutungsgerüste
+				gn: "1",
+				gr: {
+					"1": {
+						bd: [],
+						na: "",
+						sl: 2,
+					},
+				},
+			},
 			be: [], // BearbeiterIn
 			dc: new Date().toISOString(), // Datum Kartei-Erstellung
 			dm: "", // Datum Kartei-Änderung

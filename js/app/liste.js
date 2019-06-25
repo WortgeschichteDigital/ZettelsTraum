@@ -767,13 +767,7 @@ let liste = {
 		}
 		// Sonderbehandlung Bedeutungen
 		if (ds === "bd") {
-			let textTmp = [];
-			for (let i = 0, len = text.length; i < len; i++) {
-				if (text[i].gr !== data.bd.gn) { // nur Bedeutungen des aktuellen Gerüsts anzeigen
-					continue;
-				}
-				textTmp.push(bedeutungen.bedeutungenTief(text[i].gr, text[i].id));
-			}
+			let textTmp = liste.textBd(text);
 			if (!textTmp.length) { // im aktuellen Gerüst könnten keine passenden Bedeutungen sein
 				return;
 			}
@@ -811,6 +805,22 @@ let liste = {
 		for (let link of div.querySelectorAll(".link")) {
 			liste.linksOeffnen(link);
 		}
+	},
+	// Text aller Bedeutungen in ein Array schreiben
+	//   bd = Array
+	//     (Bedeutungen, wie sie in den Karteikarten stehen; d.h. Array mit Objects in den Slots)
+	textBd (bd) {
+		let arr = [];
+		for (let i = 0, len = bd.length; i < len; i++) {
+			if (bd[i].gr !== data.bd.gn) { // nur Bedeutungen des aktuellen Gerüsts anzeigen
+				continue;
+			}
+			arr.push(bedeutungen.bedeutungenTief({
+				gr: bd[i].gr,
+				id: bd[i].id,
+			}));
+		}
+		return arr;
 	},
 	// Leiste mit Meta-Informationen zu der Karte erstellen
 	//   beleg = Object

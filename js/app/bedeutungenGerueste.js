@@ -116,6 +116,21 @@ let bedeutungenGerueste = {
 			const id = this.parentNode.parentNode.dataset.id;
 			dialog.oeffnen("confirm", function() {
 				if (dialog.antwort) {
+					// betroffene Bedeutungen aus den Karteikarten zum Löschen vormerken
+					for (let i in data.ka) {
+						if (!data.ka.hasOwnProperty(i)) {
+							continue;
+						}
+						for (let j = 0, len = data.ka[i].bd.length; j < len; j++) {
+							if (data.ka[i].bd[j].gr === id) {
+								bedeutungen.aendernFuellen({
+									del: true,
+									gr: id,
+									id: data.ka[i].bd[j].id,
+								});
+							}
+						}
+					}
 					// Gerüst löschen
 					delete bedeutungen.data.gr[id];
 					// Gerüst im Hauptfenster ggf. wechseln, auf jeden Fall die Überschrift neu aufbauen
