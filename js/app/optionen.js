@@ -129,6 +129,8 @@ let optionen = {
 			"filter-zuklappen": false,
 			// inaktive Filterblöcke nach dem Neuaufbau der Filterleiste automatisch zuklappen
 			"filter-inaktive": false,
+			// untergeordnete Bedeutungen beim Filtern mit einbeziehen
+			"filter-unterbedeutungen": true,
 			// nicht warnen, wenn eine Karte erstellt wurde, sie aber wegen der Filterregeln nicht angezeigt wird
 			"nicht-karte-gefiltert": false,
 			// Filter, die standardmäßig geöffnet werden

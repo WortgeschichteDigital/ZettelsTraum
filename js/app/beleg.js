@@ -314,10 +314,14 @@ let beleg = {
 				len = beleg.data.bd.length;
 			}
 		}
-		// Bedeutung im Bedeutungefeld hinzufügen
+		// Bedeutung im Bedeutungsfeld hinzufügen
 		bdFeld.value.split("\n").forEach(function(i) {
-			let bd = beleg.bedeutungSuchen(i);
+			// Bedeutungsfeld könnte leer sein
+			if (!i) {
+				return;
+			}
 			// ggf. neue Bedeutung in das Gerüst eintragen
+			let bd = beleg.bedeutungSuchen(i);
 			if (!bd.id) {
 				bd = beleg.bedeutungErgaenzen(i);
 			}
@@ -2220,7 +2224,7 @@ let beleg = {
 		}
 		// unklar, wo eingetragen werden soll => Fehlermeldung
 		dialog.oeffnen("alert");
-		dialog.text("Weder eine Karteikarte noch die Belegliste ist geöffnet.\nDie Bedeutung nur eingetragen werden, wenn eine der beiden Ansichten aktiv ist.");
+		dialog.text("Weder eine Karteikarte noch die Belegliste ist geöffnet.\nDie Bedeutung kann nur eingetragen werden, wenn eine der beiden Ansichten aktiv ist.");
 	},
 	// Bedeutung in eine einzelne Karteikarte eintragen
 	//   bd = Object

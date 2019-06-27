@@ -72,9 +72,11 @@ let dropdown = {
 		return arr;
 	},
 	// Liste der Bedeutungsgerüste erstellen
-	dataGerueste () {
+	//   gr = Object
+	//     (Zweig mit den Gerüsten)
+	dataGerueste (gr) {
 		let arr = [];
-		Object.keys(bedeutungen.data.gr).forEach(function(i) {
+		Object.keys(gr).forEach(function(i) {
 			arr.push(`Gerüst ${i}`);
 		});
 		return arr;
@@ -228,7 +230,9 @@ let dropdown = {
 		} else if (feld_id === "bedeutungen-hierarchie") {
 			dropdown.data = [...bedeutungen.hierarchieEbenen];
 		} else if (feld_id === "bedeutungen-gerueste") {
-			dropdown.data = dropdown.dataGerueste();
+			dropdown.data = dropdown.dataGerueste(bedeutungen.data.gr);
+		} else if (feld_id === "bd-win-gerueste") {
+			dropdown.data = dropdown.dataGerueste(bedeutungen.data.bd.gr);
 		} else if (/^tagger-/.test(feld_id)) {
 			dropdown.data = dropdown.dataTags(feld_id);
 		}
@@ -509,6 +513,10 @@ let dropdown = {
 			} else if (caller === "bedeutungen-gerueste") {
 				const geruest = text.replace(/^Gerüst /, "");
 				bedeutungen.geruestWechseln(geruest);
+			} else if (caller === "bd-win-gerueste") {
+				const geruest = text.replace(/^Gerüst /, "");
+				bedeutungen.data.bd.gn = geruest;
+				bedeutungen.aufbauen();
 			} else if (/^tagger-/.test(caller)) {
 				let ele = document.getElementById(caller);
 				window.getSelection().collapse(ele.firstChild, ele.textContent.length);

@@ -73,7 +73,7 @@ h2 svg {
 #bd-win-drucken {
 	position: absolute;
 	right: 0;
-	bottom: 4px;
+	top: 3px;
 	display: inline-block;
 	border-radius: 3px;
 	width: 24px;
@@ -83,6 +83,50 @@ h2 svg {
 	color: var(--text);
 	text-decoration: none;
 	cursor: default;
+}
+
+.dropdown-cont {
+	position: absolute;
+	top: 2px;
+	right: 34px;
+}
+
+.dropdown-feld {
+	vertical-align: text-top;
+	border: 1px solid var(--linie);
+	padding: 2px 24px 2px 5px;
+	width: 75px;
+	color: var(--textSehrHell);
+	font: 16px/24px "Noto Sans", "Noto Sans Symbols2", sans-serif;
+	cursor: default;
+}
+
+.dropdown-link-element {
+	position: relative;
+	top: 5px;
+	left: -26px;
+	display: inline-block;
+	vertical-align: top;
+	width: 24px;
+	height: 24px;
+	background-color: #fff;
+	color: var(--textExtremHell);
+}
+
+.dropdown-link-element svg path {
+	fill: currentcolor;
+}
+
+.dropdown-feld:focus,
+.dropdown-feld:hover {
+	outline: none;
+	border-color: var(--linie);
+	color: var(--text);
+}
+
+.dropdown-feld:hover ~ a,
+.dropdown-feld:focus ~ a {
+	color: var(--text);
 }
 
 /* Bedeutungenbaum ------------------------------- */

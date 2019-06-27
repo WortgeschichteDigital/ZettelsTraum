@@ -115,6 +115,14 @@ p {
 	margin: 0 0 10px 0;
 }
 
+q.bedeutung::before {
+	content: "‚";
+}
+
+q.bedeutung::after {
+	content: "‘";
+}
+
 pre {
 	border-radius: 3px;
 	padding: 3px;

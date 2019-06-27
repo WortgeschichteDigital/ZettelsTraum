@@ -438,13 +438,12 @@ let bedeutungen = {
 	aufbauenH2 () {
 		// Überschrift ermitteln
 		let text = "Bedeutungsgerüst";
-		const gerueste = Object.keys(bedeutungen.data.gr).length;
-		if (gerueste > 1) {
+		if (Object.keys(bedeutungen.data.gr).length > 1) {
 			text += ` ${bedeutungen.data.gn}`;
-			const name = bedeutungen.data.gr[bedeutungen.data.gn].na;
-			if (name) {
-				text += ` (${bedeutungen.data.gr[bedeutungen.data.gn].na})`;
-			}
+		}
+		const name = bedeutungen.data.gr[bedeutungen.data.gn].na;
+		if (name) {
+			text += ` (${name})`;
 		}
 		// Überschrift eintragen
 		let h2 = document.querySelector("#bedeutungen-cont h2");
@@ -1460,6 +1459,7 @@ let bedeutungen = {
 		bedeutungen.aendern = [];
 	},
 	// ist die Bedeutung, mit der verschmolzen wird, in einer Karte schon vorhanden?
+	// (wird auch in filter.js benutzt, um zu gucken, ob eine Karte eine Bedeutung enthält)
 	schonVorhanden ({bd, id, gr}) {
 		for (let i = 0, len = bd.length; i < len; i++) {
 			if (bd[i].gr === gr && bd[i].id === id) {

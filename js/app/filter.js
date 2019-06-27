@@ -48,7 +48,7 @@ let filter = {
 			filter.jahrBelegeFuellen(belege);
 		}
 		filter.aufbauenZeitraum();
-		// dynamische Filter und Anzahl der passenden Karten ermitteln
+		// Variablen für dynamische Filter
 		filter.typen = {
 			bedeutungen: {
 				name: "Bedeutungen",
@@ -136,10 +136,6 @@ let filter = {
 		};
 		let baeume = [
 			{
-				data: "bd",
-				typen: "bedeutungen",
-			},
-			{
 				data: "bl",
 				typen: "wortbildungen",
 			},
@@ -156,16 +152,38 @@ let filter = {
 				typen: "textsorten",
 			},
 		];
+		// alle Bedeutungen aus dem aktuellen Bedeutungsgerüst pushen
+		let bd = data.bd.gr[data.bd.gn].bd;
+		for (let i = 0, len = bd.length; i < len; i++) {
+			const id = `bedeutungen-${data.bd.gn}_${bd[i].id}`;
+			let name = bd[i].bd[bd[i].bd.length - 1];
+			if (bd[i].al) {
+				name = bd[i].al;
+			}
+			filter.typen.bedeutungen.filter[id] = {
+				name: name,
+				wert: 0,
+			};
+			filter.typen.bedeutungen.filter_folge.push(id);
+		}
+		// dynamische Filter und Anzahl der passenden Karten ermitteln
 		for (let x = 0, len = belege.length; x < len; x++) {
 			let id = belege[x];
-			// BEDEUTUNGEN, WORTBILDUNGEN, SYNONYME, KORPORA UND TEXTSORTEN
+			// BEDEUTUNGEN
+			for (let i = 0, len = data.ka[id].bd.length; i < len; i++) {
+				if (data.ka[id].bd[i].gr !== data.bd.gn) {
+					continue;
+				}
+				const idBd = `bedeutungen-${data.bd.gn}_${data.ka[id].bd[i].id}`;
+				filter.typen.bedeutungen.filter[idBd].wert++;
+			}
+			if (!data.ka[id].bd.length) {
+				filter.typen.bedeutungen.filter["bedeutungen-undefined"].wert++;
+			}
+			// WORTBILDUNGEN, SYNONYME, KORPORA UND TEXTSORTEN
 			for (let i = 0, len = baeume.length; i < len; i++) {
 				let d = baeume[i].data,
 					t = baeume[i].typen;
-				// TODO Bedeutungen wieder einschalten
-				if (d === "bd") {
-					break;
-				}
 				if (!data.ka[id][d]) {
 					if (!/^(bl|sy)$/.test(d)) { // Wortbildung und Synonym hat kein undefined-Feld
 						filter.typen[t].filter[`${t}-undefined`].wert++;
@@ -183,7 +201,7 @@ let filter = {
 						};
 						filter.typen[t].filter_folge.push(b[j]);
 					}
-					// Wenn mehrere Bedeutungen oder Textsorten in einem Beleg auftauchen
+					// Wenn mehrere Textsorten usw. in einem Beleg auftauchen
 					// könnte es passieren, dass Belege doppelt gezählt werden. Ein Beispiel wäre:
 					// "Mensch: alt: groß\nMensch: alt: klein". Hier würden "Mensch" und "Mensch: alt"
 					// zweimal gezählt, obwohl sie im selben Beleg auftauchen. Da kann man
@@ -236,8 +254,10 @@ let filter = {
 				filter.typen.verschiedenes.filter_vorhanden = true;
 			}
 		}
-		// Bedeutungen, Wortbildungen, Synonyme, Korpora und Textsorten sortieren
-		let arr_typen = ["bedeutungen", "wortbildungen", "synonyme", "korpora", "textsorten"];
+		// statistische Angaben der Bedeutungen um die untergeordneten Bedeutungen ergänzen
+		filter.statistikBd(belege);
+		// Wortbildungen, Synonyme, Korpora und Textsorten sortieren
+		let arr_typen = ["wortbildungen", "synonyme", "korpora", "textsorten"];
 		for (let i = 0, len = arr_typen.length; i < len; i++) {
 			let arr = filter.typen[arr_typen[i]].filter_folge;
 			arr.sort(filter.baumSort);
@@ -263,13 +283,32 @@ let filter = {
 				if (!neuer_filter[0]) {
 					continue;
 				}
+				// Verschachtelungstiefe Bedeutungen ermitteln
+				if (/^bedeutungen-[0-9]/.test(f[i])) {
+					const d = f[i].match(/bedeutungen-(?<gr>[0-9]+)_(?<id>[0-9]+)/),
+						bd = data.bd.gr[d.groups.gr].bd,
+						id = parseInt(d.groups.id, 10);
+					for (let j = 0, len = bd.length; j < len; j++) {
+						if (bd[j].id === id) {
+							neuer_filter[1] = bd[j].bd.length - 1;
+							break;
+						}
+					}
+					neuer_filter[0].firstChild.dataset.tiefe = neuer_filter[1];
+				}
 				// in Filterbaum einhängen
 				//   [0] = Document-Fragment
 				//   [1] = Verschachtelungstiefe; 0 = ohne Verschachtelung, 1 = 1. Ebene usw.
 				if (neuer_filter[1] > 0) {
-					const schachtel = schachtelFinden(neuer_filter[0].firstChild.dataset.f);
+					let schachtel;
+					if (block === "bedeutungen") {
+						let e = cont.querySelectorAll(`[data-tiefe="${neuer_filter[1] - 1}"]`);
+						schachtel = e[e.length - 1];
+					} else {
+						schachtel = schachtelFinden(neuer_filter[0].firstChild.dataset.f);
+					}
 					schachtel.appendChild(neuer_filter[0]);
-				} else if (neuer_filter[1] === 0) { // die Bedeutung ist unterhalb einer Baumstruktur
+				} else if (neuer_filter[1] === 0) { // der Filter ist unterhalb einer Baumstruktur
 					cont.lastChild.appendChild(neuer_filter[0]);
 				}
 			}
@@ -280,7 +319,7 @@ let filter = {
 		filter.markierenSterne();
 		// erneut aktive Filter ermitteln
 		filter.aktiveFilterErmitteln(true);
-		// sucht das <div>, in den ein Filter verschachtelt werden muss
+		// die Funktionen sucht den <div>, in den ein Filter verschachtelt werden muss
 		//   f = String
 		//     (Filter, ggf. mit Hierarchieebenen ": ")
 		function schachtelFinden (f) {
@@ -298,6 +337,35 @@ let filter = {
 			}
 			// nichts gefunden => weiter kürzen
 			schachtelFinden(f);
+		}
+	},
+	// Statistik der Bedeutungen um untergeordnete Karten ergänzen
+	//   belege = Array
+	//     (die IDs der bereits gefilterten Belege)
+	statistikBd (belege) {
+		if (!optionen.data.einstellungen["filter-unterbedeutungen"]) {
+			return;
+		}
+		let ff = filter.typen.bedeutungen.filter_folge;
+		for (let i = 1, len = ff.length; i < len; i++) { // ab 1 => undefined ausschließen
+			let d = ff[i].match(/bedeutungen-[0-9]+_(?<id>[0-9]+)/),
+				darunter = filter.kartenUnterBd([`${data.bd.gn}_${d.groups.id}`]),
+				karten_schon = new Set();
+			for (let j = 0, len = darunter.length; j < len; j++) {
+				let d = darunter[j].match(/[0-9]+_(?<id>[0-9]+)/),
+					id = parseInt(d.groups.id, 10);
+				for (let k = 0, len = belege.length; k < len; k++) {
+					const idK = belege[k];
+					if (!karten_schon.has(idK) && bedeutungen.schonVorhanden({
+								bd: data.ka[idK].bd,
+								gr: data.bd.gn,
+								id: id,
+							})) {
+						filter.typen.bedeutungen.filter[ff[i]].wert++;
+						karten_schon.add(idK);
+					}
+				}
+			}
 		}
 	},
 	// Zwischenspeicher für die Zeiträume der aktuellen Belegliste
@@ -355,6 +423,7 @@ let filter = {
 			// Anzahl der Treffer anzeigen
 			let treffer = filter.aufbauenZeitraumTreffer(i, step);
 			if (!treffer) {
+				input.disabled = true;
 				continue;
 			}
 			let span = document.createElement("span");
@@ -423,17 +492,16 @@ let filter = {
 			liste.status(true);
 		});
 	},
-	// extrahiert die einzelnen Schichten, die in einer Bedeutungs-, Wortbildungs-
-	// Synonym- oder Textsortenangabe stecken
+	// extrahiert die einzelnen Schichten, die in einer Wortbildungs-, Synonym-
+	// oder Textsortenangabe stecken
 	// (wird auch für Korpora benutzt, weil es so leichter ist)
 	//   baum = String
-	//     (Bedeutungs-, Wortbildungs-, Synonym- bzw. Textsortenbaum oder Korpus
-	//      als einzeiliger String)
+	//     (Wortbildungs-, Synonym- bzw. Textsortenbaum oder Korpus als einzeiliger String)
 	//   dt = String
-	//     (Datentyp, also entweder "bedeutungen", "wortbildungen", "synonym", "korpora",
+	//     (Datentyp, also entweder "wortbildungen", "synonym", "korpora",
 	//      "textsorten" oder "")
 	baumExtrakt (baum, dt) {
-		if (/^(bedeutungen|wortbildungen|synonyme|korpora|textsorten)/.test(dt)) {
+		if (/^(wortbildungen|synonyme|korpora|textsorten)/.test(dt)) {
 			dt += "-";
 		}
 		let extrakt = [],
@@ -448,7 +516,7 @@ let filter = {
 		}
 		return extrakt;
 	},
-	// Array mit Bedeutungsschichten sortieren, die aus Bedeutungs-, Wortbildungs-, Synonym-,
+	// Array mit Schichten sortieren, die aus Wortbildungs-, Synonym-,
 	// Korpus- und Textsortenangaben extrahiert wurden
 	baumSort (a, b) {
 		// undefined wird an den Anfang gesetzt
@@ -537,8 +605,12 @@ let filter = {
 	//     (Daten zum Filter)
 	aufbauenFilter (f, obj) {
 		// Muss der Filter wirklich gedruckt werden?
-		if (!obj.wert && !filter.exklusivAktiv.includes(f)) {
-			return false;
+		if (/^bedeutungen-/.test(f)) {
+			if (obj.wert === 0 && f === "bedeutungen-undefined") {
+				return [null];
+			}
+		} else if (!obj.wert && !filter.exklusivAktiv.includes(f)) {
+			return [null];
 		}
 		// Sollte der Filter als Filterbaum dargestellt werden?
 		let baum = f.match(/: /g),
@@ -563,17 +635,22 @@ let filter = {
 		input.type = "checkbox";
 		filter.anwenden(input);
 		p.appendChild(input);
+		if (!obj.wert && /^bedeutungen-/.test(f)) {
+			input.disabled = true;
+		}
 		// Label
 		let label = document.createElement("label");
 		label.setAttribute("for", `filter-${f_enc}`);
-		label.textContent = obj.name;
+		label.innerHTML = obj.name;
 		p.appendChild(label);
 		// Anzahl der Belege
-		let span = document.createElement("span");
-		span.classList.add("filter-treffer");
-		span.textContent = `(${obj.wert})`;
-		span.title = `Anzahl der Belege, auf die der Filter „${obj.name}“ zutrifft`;
-		p.appendChild(span);
+		if (obj.wert) {
+			let span = document.createElement("span");
+			span.classList.add("filter-treffer");
+			span.textContent = `(${obj.wert})`;
+			span.title = `Anzahl der Belege, auf die der Filter „${obj.name}“ zutrifft`;
+			p.appendChild(span);
+		}
 		// ggf. Absatz mit Sternen aufbauen
 		if (f === "markierung") {
 			frag.lastChild.classList.add("markierung");
@@ -897,8 +974,7 @@ let filter = {
 			});
 		}
 	},
-	// Cache mit regulären Ausdrücken für Bedeutungen, Wortbildungen, Synonyme,
-	// Korpora und Textsorten
+	// Cache mit regulären Ausdrücken für Wortbildungen, Synonyme, Korpora und Textsorten
 	// (wirkt sich wohl positiv auf die Performance aus)
 	regCacheBaum: {},
 	// Zwischenspeicher für die Daten der Volltextsuche
@@ -1003,6 +1079,9 @@ let filter = {
 				baumfilter.ts.push(f[2]);
 			}
 		}
+		// das Bedeutungsarray ggf. um übergeordnete Bedeutungen auffüllen
+		let bdErg = filter.kartenUnterBd(baumfilter.bd);
+		baumfilter.bd = baumfilter.bd.concat(bdErg);
 		// bei vorhandemen Verschiedenes-Filtern
 		let filter_logik = document.getElementById("filter-logik-inklusiv"),
 			filter_inklusiv = true;
@@ -1046,7 +1125,23 @@ let filter = {
 				let arr = baumfilter[bf];
 				if (arr.length) {
 					let okay = false;
-					if (!data.ka[id][bf] && arr.includes("undefined")) {
+					if (bf === "bd") { // Bedeutungen
+						if (!data.ka[id].bd.length && arr.includes("undefined")) { // undefined
+							okay = true;
+						} else {
+							for (let j = 0, len = arr.length; j < len; j++) {
+								const d = arr[j].match(/(?<gr>[0-9]+)_(?<id>[0-9]+)/);
+								if (bedeutungen.schonVorhanden({
+											bd: data.ka[id].bd,
+											gr: d.groups.gr,
+											id: parseInt(d.groups.id, 10),
+										})) {
+									okay = true;
+									break;
+								}
+							}
+						}
+					} else if (!data.ka[id][bf] && arr.includes("undefined")) { // undefined
 						okay = true;
 					} else if (data.ka[id][bf]) {
 						for (let j = 0, len = arr.length; j < len; j++) {
@@ -1111,6 +1206,34 @@ let filter = {
 			karten_gefiltert.push(id);
 		}
 		return karten_gefiltert;
+	},
+	// Bedeutungenfilter um untergeordnete Bedeutungen ergänzen
+	//   arr = Array
+	//     (Filter, die angeklickt wurden)
+	kartenUnterBd (arr) {
+		// untergeordnete Filter wirklich mit einbeziehen?
+		if (!optionen.data.einstellungen["filter-unterbedeutungen"]) {
+			return [];
+		}
+		// untergeordnete Filter suchen
+		let arrErg = [];
+		for (let i = 0, len = arr.length; i < len; i++) {
+			let d = arr[i].match(/[0-9]+_(?<id>[0-9]+)/),
+				id = parseInt(d.groups.id, 10),
+				bd = data.bd.gr[data.bd.gn].bd,
+				bd_len = 0;
+			for (let j = 0, len = bd.length; j < len; j++) {
+				if (bd[j].id === id) { // hier geht der Bedeutungszweig los => danach aufnehmen
+					bd_len = bd[j].bd.length;
+				} else if (bd[j].bd.length <= bd_len) { // jetzt ist man wieder auf derselben Ebene wie beim Start => Abbruch
+					break;
+				} else if (bd_len) { // diese Bedeutung muss untergeordnet sein => Aufnahme
+					arrErg.push(`${data.bd.gn}_${bd[j].id}`);
+				}
+			}
+		}
+		// Array mit untergeordneten Filtern zurückgeben
+		return arrErg;
 	},
 	// Volltextfilter
 	//   id = String

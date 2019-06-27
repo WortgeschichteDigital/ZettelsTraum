@@ -19,8 +19,7 @@ let drucken = {
 		if (oben === "drucken") {
 			drucken.start();
 		} else if (!document.getElementById("bedeutungen").classList.contains("aus")) {
-			// TODO anstellen
-// 			drucken.initBedeutungen();
+			drucken.init("bedeutungen-");
 		} else if (!document.getElementById("beleg").classList.contains("aus")) {
 			drucken.init("beleg-");
 		} else {
@@ -42,7 +41,9 @@ let drucken = {
 	// Druckanzeige initialisieren (nur für Karteikarte und Belegliste)
 	//   id = String
 	//     (ID des Links, über den gedruckt wurde)
-	init (id) {
+	//   gn = String || undefined
+	//     (enthält die Bedeutungsgerüst-Nummer, wenn aus dem Bedeutungsgerüst-Fenster gedruckt wird)
+	init (id, gn) {
 		const fenster = document.getElementById("drucken");
 		// Fenster öffnen oder in den Vordergrund holen
 		if (overlay.oeffnen(fenster)) { // Fenster ist schon offen
@@ -50,8 +51,10 @@ let drucken = {
 		}
 		// Bedeutungsgerüst?
 		if (/^bedeutungen-/.test(id)) {
-			// TODO anstellen
-// 			drucken.initBedeutungen();
+			if (!gn) {
+				gn = bedeutungen.data.gn;
+			}
+			drucken.initBedeutungen(gn);
 			return;
 		}
 		// Verteiler
@@ -205,33 +208,66 @@ let drucken = {
 		});
 	},
 	// Druckfenster mit dem Bedeutungsbaum füllen
-	//   daten = String
-	//     (die HTML-Daten der Bedeutungen, die eingetragen werden sollen
-	initBedeutungen (daten) {
-		// TODO warnen, wenn Bedeutungsgerüst offen, aber noch nicht gespeichert
-		// TODO Bedeutungsgerüst direkt aus data.bd nehmen
+	//   gn = String
+	//     (die ID des Gerüsts, das gedruckt werden soll)
+	initBedeutungen (gn) {
+		let qu = data.bd;
+		if (!document.getElementById("bedeutungen").classList.contains("aus")) {
+			qu = bedeutungen.data;
+		}
 		// Sind überhaupt Bedeutungen vorhanden
-		if (/class="bd-win-keine"/.test(daten)) {
+		if (!qu.gr[gn].bd.length) {
+			setTimeout(() => overlay.schliessen(document.getElementById("drucken")), 0); // ohne Timeout wird es nicht ausgeblendet
 			dialog.oeffnen("alert");
 			dialog.text("Es gibt kein Bedeutungsgerüst, das gedruckt werden könnte.");
 			return;
 		}
-		// Fenster öffnen od. in den Vordergrund holen
-		const fenster = document.getElementById("drucken");
-		overlay.oeffnen(fenster);
 		// Content leeren
 		const cont = document.getElementById("drucken-cont");
 		helfer.keineKinder(cont);
 		cont.scrollTop = 0;
-		// Daten eintragen
-		cont.innerHTML = daten;
+		// Bedeutungen aufbauen
+		let bd = qu.gr[gn].bd;
+		for (let i = 0, len = bd.length; i < len; i++) {
+			// Schachteln erzeugen
+			let frag = document.createDocumentFragment(),
+				schachtel = frag;
+			for (let j = 0, len = bd[i].bd.length; j < len; j++) {
+				let div = document.createElement("div");
+				schachtel.appendChild(div);
+				div.classList.add("bd-win-baum");
+				schachtel = div;
+			}
+			// Absatz mit Zählung und Bedeutung
+			let p = document.createElement("p");
+			schachtel.appendChild(p);
+			p.dataset.id = bd[i].id;
+			// Zählung
+			let b = document.createElement("b");
+			p.appendChild(b);
+			b.textContent = bd[i].za;
+			// Bedeutung
+			let span = document.createElement("span");
+			p.appendChild(span);
+			span.innerHTML = bd[i].bd[bd[i].bd.length - 1];
+			// Fragment einhängen
+			cont.appendChild(frag);
+		}
 		// Überschrift ergänzen
+		let h = "Bedeutungsgerüst";
+		if (Object.keys(qu.gr).length > 1) {
+			h += ` ${gn}`;
+		}
+		if (qu.gr[qu.gn].na) {
+			h += ` (${qu.gr[qu.gn].na})`;
+		}
+		h += " – ";
 		let h3 = document.createElement("h3");
-		h3.textContent = "Bedeutungsgerüst ";
+		h3.textContent = h;
 		let i = document.createElement("i");
 		i.textContent = kartei.wort;
 		h3.appendChild(i);
-		cont.firstChild.insertBefore(h3, cont.firstChild.firstChild);
+		cont.insertBefore(h3, cont.firstChild);
 	},
 	// Druck starten
 	start () {
@@ -248,7 +284,7 @@ let drucken = {
 		// Bedeutungsbaum?
 		let cont = document.getElementById("drucken-cont"),
 			baum = false;
-		if (cont.firstChild.id === "bd-win-cont") {
+		if (cont.querySelector(".bd-win-baum")) {
 			baum = true;
 		}
 		// Ist Text ausgewählt und ist er im Bereich der Vorschau?
@@ -268,10 +304,6 @@ let drucken = {
 				html: html,
 			});
 			return;
-		}
-		// in der Baumansicht den umschließenden <div> ignorieren
-		if (baum) {
-			cont = cont.firstChild;
 		}
 		// Kein Text ausgewählt => die gesamte Vorschau wird kopiert
 		let html = cont.innerHTML;
@@ -295,9 +327,8 @@ let drucken = {
 		// Funktionen zum Aufbereiten des Bedeutungsbaums
 		function baumHtml (html) {
 			html = html.replace(/<\/b>/g, "</b> ");
-			html = html.replace(/<div.+?data-bd="(.+?)".*?><p>/g, function(m, p1) {
-				let ebenen = p1.split(": ").length - 1;
-				return `<div><p style="margin-left: ${0.5 * ebenen}cm">`;
+			html = html.replace(/<div class="bd-win-baum">/g, function() {
+				return `<div style="margin-left: ${0.5}cm">`;
 			});
 			return html;
 		}
@@ -305,10 +336,8 @@ let drucken = {
 			text = text.replace(/<\/h3>/, "\n\n");
 			text = text.replace(/<\/b>/g, " ");
 			text = text.replace(/<\/p>/g, "\n");
-			text = text.replace(/<div.+?data-bd="(.+?)".*?>/g, function(m, p1) {
-				let ebenen = p1.split(": ").length,
-					tabs = "".padEnd(ebenen - 1, "\t");
-				return tabs;
+			text = text.replace(/<div class="bd-win-baum">/g, function() {
+				return "\t";
 			});
 			return text;
 		}

@@ -5,6 +5,8 @@ window.addEventListener("load", function() {
 	document.addEventListener("keydown", helferWin.tastatur);
 	
 	// EVENTS INITIALISIEREN
+	document.querySelectorAll(".dropdown-feld").forEach((i) => dropdown.feld(i));
+	document.querySelectorAll(".dropdown-link-td, .dropdown-link-element").forEach((i) =>	dropdown.link(i));
 	const {ipcRenderer} = require("electron");
 	// Über App
 	document.getElementById("icon").addEventListener("click", () => ipcRenderer.send("ueber-app", "bedeutungen"));
@@ -15,5 +17,8 @@ window.addEventListener("load", function() {
 	});
 	
 	// ANFRAGEN DES MAIN-PROZESSES ABFANGEN
-	ipcRenderer.on("daten", (evt, daten) => bedeutungen.aufbauen(daten));
+	ipcRenderer.on("daten", (evt, daten) => {
+		bedeutungen.data = daten;
+		bedeutungen.aufbauen();
+	});
 });

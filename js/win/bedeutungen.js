@@ -1,26 +1,35 @@
 "use strict";
 
 let bedeutungen = {
-	// Nummer des aktiven Gerüsts
-	geruest: "",
+	// enthält die übergebenen Daten
+	data: {},
 	// Anzeige mit den gelieferten Daten aufbereiten
-	aufbauen (daten) {
+	aufbauen () {
 		// Wort eintragen
-		document.querySelector("h1").textContent = daten.wort;
+		document.querySelector("h1").textContent = bedeutungen.data.wort;
 		// Content leeren
 		let cont = document.getElementById("bd-win-cont");
 		helfer.keineKinder(cont);
+		// Details zum Bedeutungsgerüst in die Überschrift eintragen
+		let detail = "";
+		if (Object.keys(bedeutungen.data.bd.gr).length > 1) {
+			detail = ` ${bedeutungen.data.bd.gn}`;
+		}
+		if (bedeutungen.data.bd.gr[bedeutungen.data.bd.gn].na) {
+			detail += ` (${bedeutungen.data.bd.gr[bedeutungen.data.bd.gn].na})`;
+		}
+		document.getElementById("bd-win-geruest-detail").textContent = detail;
+		// Gerüst-Nummer in Dropdown-Feld
+		document.getElementById("bd-win-gerueste").value = `Gerüst ${bedeutungen.data.bd.gn}`;
 		// Sind überhaupt Bedeutungen vorhanden?
-		let bd = daten.bd.gr[daten.bd.gn].bd;
+		let bd = bedeutungen.data.bd.gr[bedeutungen.data.bd.gn].bd;
 		if (!bd.length) {
 			let p = document.createElement("p");
 			p.classList.add("bd-win-keine");
-			p.textContent = "kein Bedeutungsgerüst";
+			p.textContent = "keine Bedeutungen";
 			cont.appendChild(p);
 			return;
 		}
-		// aktuelle Gerüstnummer zwischenspeichern
-		bedeutungen.geruest = daten.bd.gn;
 		// Bedeutungen aufbauen
 		for (let i = 0, len = bd.length; i < len; i++) {
 			// Schachteln erzeugen
@@ -52,7 +61,7 @@ let bedeutungen = {
 	// Bedeutungsbaum drucken
 	drucken () {
 		const {ipcRenderer} = require("electron");
-		ipcRenderer.send("bedeutungen-fenster-drucken", document.getElementById("bd-win-cont").outerHTML); // TODO senden, welches Gerüst gedruckt werden soll
+		ipcRenderer.send("bedeutungen-fenster-drucken", bedeutungen.data.bd.gn);
 	},
 	// Bedeutung im Formular des Hauptfensters eintragen
 	//   p = Element
@@ -62,7 +71,7 @@ let bedeutungen = {
 			const id = parseInt(this.dataset.id, 10),
 				{ipcRenderer} = require("electron");
 			ipcRenderer.send("bedeutungen-fenster-eintragen", {
-				gr: bedeutungen.geruest,
+				gr: bedeutungen.data.bd.gn,
 				id: id,
 			});
 		});
