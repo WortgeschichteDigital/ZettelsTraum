@@ -789,6 +789,13 @@ let liste = {
 		let span = document.createElement("span");
 		div.appendChild(span);
 		span.classList.add("liste-label");
+		if (ds === "bd") {
+			const details = bedeutungen.aufbauenH2Details(data.bd, true);
+			if (details) {
+				h += details;
+			}
+			bedeutungenGeruest.listener(span);
+		}
 		span.textContent = h;
 		// Leerzeilen weg und Links erkennen (nur Notiz und Quelle)
 		if (/^(no|qu)$/.test(ds)) {

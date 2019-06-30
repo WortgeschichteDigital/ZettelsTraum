@@ -438,16 +438,33 @@ let bedeutungen = {
 	aufbauenH2 () {
 		// Überschrift ermitteln
 		let text = "Bedeutungsgerüst";
-		if (Object.keys(bedeutungen.data.gr).length > 1) {
-			text += ` ${bedeutungen.data.gn}`;
-		}
-		const name = bedeutungen.data.gr[bedeutungen.data.gn].na;
-		if (name) {
-			text += ` (${name})`;
+		const details = bedeutungen.aufbauenH2Details(bedeutungen.data, false);
+		if (details) {
+			text += details;
 		}
 		// Überschrift eintragen
 		let h2 = document.querySelector("#bedeutungen-cont h2");
 		h2.replaceChild(document.createTextNode(text), h2.firstChild);
+	},
+	// Details der Überschrift ermitteln
+	// (diese Funktion wird auch in anderen Kontexten genutzt, darum ausgelagert)
+	//   data = Object
+	//     (Objekt, aus dem die Details ausgelesen werden sollen: bedeutungen.data oder data.bd)
+	//   add_geruest = Boolean
+	//     (gibt an, ob "Gerüst" hinzugefügt werden soll
+	aufbauenH2Details (data, add_geruest) {
+		let details = "";
+		if (Object.keys(data.gr).length > 1) {
+			if (add_geruest) {
+				details += " – Gerüst";
+			}
+			details += ` ${data.gn}`;
+		}
+		const name = data.gr[data.gn].na;
+		if (name) {
+			details += ` (${name})`;
+		}
+		return details;
 	},
 	// Tags einer Bedeutung erzeugen und einhängen
 	// (wird auch vom Tagger genutzt)

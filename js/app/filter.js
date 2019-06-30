@@ -548,8 +548,20 @@ let filter = {
 		a.id = `filter-kopf-${name.toLowerCase()}`;
 		a.textContent = name;
 		filter.anzeigeUmschalten(a);
+		// ggf. Bezeichnungen des Bedeutungen-Filters eintragen
+		if (name === "Bedeutungen") {
+			const details = bedeutungen.aufbauenH2Details(data.bd, true);
+			if (details) {
+				let span = document.createElement("span");
+				span.classList.add("filter-bedeutungen-details");
+				span.textContent = details;
+				a.appendChild(span);
+				bedeutungenGeruest.listener(span);
+			}
+		}
 		// Bild für Block-Reset anhängen
 		let span = document.createElement("span");
+		span.classList.add("filter-reset");
 		a.appendChild(span);
 		span.textContent = " ";
 		span.title = "Filter in diesem Block zurücksetzen";

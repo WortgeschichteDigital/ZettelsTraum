@@ -19,6 +19,7 @@
 		<script src="js/app/init-app.js"></script>
 		<script src="js/app/anhaenge.js"></script>
 		<script src="js/app/bedeutungen.js"></script>
+		<script src="js/app/bedeutungenGeruest.js"></script>
 		<script src="js/app/bedeutungenGerueste.js"></script>
 		<script src="js/app/bedeutungenWin.js"></script>
 		<script src="js/app/beleg.js"></script>
@@ -62,6 +63,7 @@
 			><a href="#" id="quick-kartei-redaktion" class="icon-link" title="Kartei: Redaktion"> </a
 			><span class="quick-spacer"> </span
 			><a href="#" id="quick-kartei-bedeutungen" class="icon-link" title="Kartei: Bedeutungsgerüst (Strg + B)"> </a
+			><a href="#" id="quick-kartei-bedeutungen-wechseln" class="icon-link" title="Kartei: Bedeutungsgerüst wechseln"> </a
 			><a href="#" id="quick-kartei-bedeutungen-fenster" class="icon-link" title="Kartei: Bedeutungsgerüst-Fenster (Strg + Shift + B)"> </a
 			><a href="#" id="quick-kartei-suche" class="icon-link" title="Kartei: Suche (Strg + F)"> </a
 			><span class="quick-spacer"> </span
@@ -493,6 +495,8 @@
 							<p class="einstellungen-spacer"> </p>
 							<p><input type="checkbox" id="einstellung-quick-kartei-bedeutungen"
 								><label for="einstellung-quick-kartei-bedeutungen">Bedeutungsgerüst</label></p>
+							<p><input type="checkbox" id="einstellung-quick-kartei-bedeutungen-wechseln"
+								><label for="einstellung-quick-kartei-bedeutungen-wechseln">Bedeutungsgerüst wechseln</label></p>
 							<p><input type="checkbox" id="einstellung-quick-kartei-bedeutungen-fenster"
 								><label for="einstellung-quick-kartei-bedeutungen-fenster">Bedeutungsgerüst-Fenster</label></p>
 							<p><input type="checkbox" id="einstellung-quick-kartei-suche"
@@ -678,6 +682,19 @@
 			<h2><span class="icon-h icon-h-gerueste"> </span
 				>Bedeutungsgerüste<a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"> </a></h2>
 			<div id="gerueste-cont"></div>
+		</div></div>
+		
+		<!-- OVERLAY: Gerüst wechseln -->
+		<div id="geruestwechseln" class="overlay aus"><div>
+			<h2><span class="icon-h icon-h-geruestwechseln"> </span
+				>Bedeutungsgerüst wechseln<a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"> </a></h2>
+			<div id="geruestwechseln-cont"
+				><span class="dropdown-cont"
+					><input type="text" value="" class="dropdown-feld" id="geruestwechseln-dropdown" tabindex="-1" readonly title="Bedeutungsgerüst auswählen"
+					><a href="#" class="dropdown-link-element" title="Bedeutungsgerüst auswählen"
+						><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m7 2v8l-3.5-3.5-1.5 1.5 6 6 6-6-1.5-1.5-3.5 3.5v-8z"/></svg></a
+				></span
+			></div>
 		</div></div>
 		
 		<!-- OVERLAY: Zeitraumgrafik -->

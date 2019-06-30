@@ -231,6 +231,12 @@ let dropdown = {
 			dropdown.data = [...bedeutungen.hierarchieEbenen];
 		} else if (feld_id === "bedeutungen-gerueste") {
 			dropdown.data = dropdown.dataGerueste(bedeutungen.data.gr);
+		} else if (feld_id === "geruestwechseln-dropdown") {
+			if (!document.getElementById("bedeutungen").classList.contains("aus")) {
+				dropdown.data = dropdown.dataGerueste(bedeutungen.data.gr);
+			} else {
+				dropdown.data = dropdown.dataGerueste(data.bd.gr);
+			}
 		} else if (feld_id === "bd-win-gerueste") {
 			dropdown.data = dropdown.dataGerueste(bedeutungen.data.bd.gr);
 		} else if (/^tagger-/.test(feld_id)) {
@@ -513,9 +519,11 @@ let dropdown = {
 			} else if (caller === "bedeutungen-gerueste") {
 				const geruest = text.replace(/^Gerüst /, "");
 				bedeutungen.geruestWechseln(geruest);
-			} else if (caller === "bd-win-gerueste") {
+			} else if (caller === "geruestwechseln-dropdown") {
 				const geruest = text.replace(/^Gerüst /, "");
-				bedeutungen.data.bd.gn = geruest;
+				bedeutungenGeruest.wechseln(geruest);
+			} else if (caller === "bd-win-gerueste") {
+				bedeutungen.geruest = text.replace(/^Gerüst /, "");
 				bedeutungen.aufbauen();
 			} else if (/^tagger-/.test(caller)) {
 				let ele = document.getElementById(caller);

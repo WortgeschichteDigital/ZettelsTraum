@@ -98,6 +98,7 @@ let optionen = {
 			"quick-kartei-metadaten": false,
 			"quick-kartei-redaktion": false,
 			"quick-kartei-bedeutungen": false,
+			"quick-kartei-bedeutungen-wechseln": false,
 			"quick-kartei-bedeutungen-fenster": false,
 			"quick-kartei-suche": false,
 			"quick-belege-hinzufuegen": false,
@@ -1020,9 +1021,11 @@ let optionen = {
 		} else if (ele.type === "text" || ele.type === "number") {
 			optionen.data.einstellungen[e] = ele.value;
 		}
-		// ggf. Quick-Access-Bar umstellen
-		if (/^quick/.test(e)) {
+		// ggf. Konsequenzen on-the-fly
+		if (/^quick/.test(e)) { // Quick-Access-Bar umgestellt
 			optionen.anwendenQuickAccess();
+		} else if (e === "filter-unterbedeutungen") { // Verhalten Bedeutungen-Filter umgestellt
+			liste.status(true);
 		}
 		// Optionen speichern
 		optionen.speichern(false);

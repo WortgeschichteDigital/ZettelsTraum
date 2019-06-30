@@ -158,6 +158,12 @@ let layoutMenu = [
 				id: "kartei-bedeutungen",
 			},
 			{
+				label: "Bedeutungsgerüst wechseln",
+				icon: path.join(__dirname, "img", "menu", "kartei-bedeutungen-wechseln.png"),
+				click: () => win.webContents.send("kartei-bedeutungen-wechseln"),
+				id: "kartei-bedeutungen-wechseln",
+			},
+			{
 				label: "Bedeutungsgerüst-Fenster",
 				icon: path.join(__dirname, "img", "menu", "kartei-bedeutungen-fenster.png"),
 				click: () => fenster.erstellenBedeutungen(),
@@ -407,7 +413,7 @@ appMenu = {
 	},
 	// Menü-Elemente deaktivieren, wenn keine Kartei offen ist
 	deaktivieren (disable, update) {
-		let elemente = ["kartei-speichern", "kartei-speichern-unter", "kartei-formvarianten", "kartei-notizen", "kartei-anhaenge", "kartei-lexika", "kartei-metadaten", "kartei-redaktion", "kartei-bedeutungen", "kartei-bedeutungen-fenster", "kartei-suche", "kartei-schliessen", "belege"];
+		let elemente = ["kartei-speichern", "kartei-speichern-unter", "kartei-formvarianten", "kartei-notizen", "kartei-anhaenge", "kartei-lexika", "kartei-metadaten", "kartei-redaktion", "kartei-bedeutungen", "kartei-bedeutungen-wechseln", "kartei-bedeutungen-fenster", "kartei-suche", "kartei-schliessen", "belege"];
 		for (let j = 0, len = layoutMenu.length; j < len; j++) {
 			// sollen vielleicht alle Menüpunkte deaktiviert werden?
 			let alle = false;

@@ -49,6 +49,8 @@ let helfer = {
 				redaktion.oeffnen();
 			} else if (id === "kartei-bedeutungen") {
 				bedeutungen.oeffnen();
+			} else if (id === "kartei-bedeutungen-wechseln") {
+				bedeutungenGeruest.oeffnen();
 			} else if (id === "kartei-bedeutungen-fenster") {
 				bedeutungenWin.oeffnen(true);
 			} else if (id === "kartei-suche") {

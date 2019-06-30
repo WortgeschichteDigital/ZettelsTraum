@@ -9,6 +9,7 @@
 #drucken,
 #einstellungen,
 #gerueste,
+#geruestwechseln,
 #lexika,
 #meta,
 #notizen,
@@ -31,6 +32,7 @@
 #drucken > div,
 #einstellungen > div,
 #gerueste > div,
+#geruestwechseln > div,
 #lexika > div,
 #meta > div,
 #notizen > div,
@@ -50,6 +52,7 @@
 #drucken h2,
 #einstellungen h2,
 #gerueste h2,
+#geruestwechseln h2,
 #lexika h2,
 #meta h2,
 #notizen h2,
@@ -65,6 +68,7 @@
 #drucken h2 a,
 #einstellungen h2 a,
 #gerueste h2 a,
+#geruestwechseln h2 a,
 #lexika h2 a,
 #meta h2 a,
 #notizen h2 a,
@@ -920,6 +924,26 @@ input[id^="redaktion-person"] {
 
 #gerueste-cont .icon-link:focus {
 	background-color: var(--farbe);
+}
+
+/* Gerüst wechseln ------------------------------ */
+#geruestwechseln > div {
+	margin-top: 40px;
+	max-width: 300px;
+}
+
+.icon-h-geruestwechseln {
+	-webkit-mask-image: url(../../img/heading-geruestwechseln.svg);
+	mask-image: url(../../img/heading-geruestwechseln.svg);
+}
+
+#geruestwechseln-cont {
+	padding: 10px 10px 10px 34px;
+	text-align: center;
+}
+
+#geruestwechseln-cont span {
+	display: inline-block;
 }
 
 /* Zeitraumgrafik ------------------------------- */

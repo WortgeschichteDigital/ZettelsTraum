@@ -3,26 +3,32 @@
 let bedeutungen = {
 	// enthält die übergebenen Daten
 	data: {},
+	// ID des aktuellen Gerüsts
+	geruest: "",
 	// Anzeige mit den gelieferten Daten aufbereiten
 	aufbauen () {
 		// Wort eintragen
 		document.querySelector("h1").textContent = bedeutungen.data.wort;
+		// ggf. Gerüstnummer zwischenspeichern
+		if (!bedeutungen.geruest) {
+			bedeutungen.geruest = bedeutungen.data.bd.gn;
+		}
 		// Content leeren
 		let cont = document.getElementById("bd-win-cont");
 		helfer.keineKinder(cont);
 		// Details zum Bedeutungsgerüst in die Überschrift eintragen
 		let detail = "";
 		if (Object.keys(bedeutungen.data.bd.gr).length > 1) {
-			detail = ` ${bedeutungen.data.bd.gn}`;
+			detail = ` ${bedeutungen.geruest}`;
 		}
-		if (bedeutungen.data.bd.gr[bedeutungen.data.bd.gn].na) {
-			detail += ` (${bedeutungen.data.bd.gr[bedeutungen.data.bd.gn].na})`;
+		if (bedeutungen.data.bd.gr[bedeutungen.geruest].na) {
+			detail += ` (${bedeutungen.data.bd.gr[bedeutungen.geruest].na})`;
 		}
 		document.getElementById("bd-win-geruest-detail").textContent = detail;
 		// Gerüst-Nummer in Dropdown-Feld
-		document.getElementById("bd-win-gerueste").value = `Gerüst ${bedeutungen.data.bd.gn}`;
+		document.getElementById("bd-win-gerueste").value = `Gerüst ${bedeutungen.geruest}`;
 		// Sind überhaupt Bedeutungen vorhanden?
-		let bd = bedeutungen.data.bd.gr[bedeutungen.data.bd.gn].bd;
+		let bd = bedeutungen.data.bd.gr[bedeutungen.geruest].bd;
 		if (!bd.length) {
 			let p = document.createElement("p");
 			p.classList.add("bd-win-keine");
@@ -61,7 +67,7 @@ let bedeutungen = {
 	// Bedeutungsbaum drucken
 	drucken () {
 		const {ipcRenderer} = require("electron");
-		ipcRenderer.send("bedeutungen-fenster-drucken", bedeutungen.data.bd.gn);
+		ipcRenderer.send("bedeutungen-fenster-drucken", bedeutungen.geruest);
 	},
 	// Bedeutung im Formular des Hauptfensters eintragen
 	//   p = Element
@@ -71,7 +77,7 @@ let bedeutungen = {
 			const id = parseInt(this.dataset.id, 10),
 				{ipcRenderer} = require("electron");
 			ipcRenderer.send("bedeutungen-fenster-eintragen", {
-				gr: bedeutungen.data.bd.gn,
+				gr: bedeutungen.geruest,
 				id: id,
 			});
 		});

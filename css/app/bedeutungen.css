@@ -37,7 +37,8 @@
 }
 
 #bedeutungen-hierarchie,
-#bedeutungen-gerueste {
+#bedeutungen-gerueste,
+#geruestwechseln-dropdown {
 	background-color: transparent;
 	width: 75px;
 	color: var(--textSehrHell);
@@ -47,7 +48,9 @@
 #bedeutungen-hierarchie:focus,
 #bedeutungen-hierarchie:hover,
 #bedeutungen-gerueste:focus,
-#bedeutungen-gerueste:hover {
+#bedeutungen-gerueste:hover
+#geruestwechseln-dropdown:focus,
+#geruestwechseln-dropdown:hover {
 	outline: none;
 	border-color: var(--linie);
 	color: var(--text);
@@ -56,7 +59,9 @@
 #bedeutungen-hierarchie:hover ~ a,
 #bedeutungen-hierarchie:focus ~ a,
 #bedeutungen-gerueste:hover ~ a,
-#bedeutungen-gerueste:focus ~ a {
+#bedeutungen-gerueste:focus ~ a,
+#geruestwechseln-dropdown:hover ~ a,
+#geruestwechseln-dropdown:focus ~ a {
 	color: var(--text);
 }
 

@@ -218,6 +218,7 @@ window.addEventListener("load", function() {
 	ipcRenderer.on("kartei-metadaten", () => meta.oeffnen());
 	ipcRenderer.on("kartei-redaktion", () => redaktion.oeffnen());
 	ipcRenderer.on("kartei-bedeutungen", () => bedeutungen.oeffnen());
+	ipcRenderer.on("kartei-bedeutungen-wechseln", () => bedeutungenGeruest.oeffnen());
 	ipcRenderer.on("kartei-bedeutungen-fenster-daten", () => bedeutungenWin.daten());
 	ipcRenderer.on("kartei-suche", () => filter.suche());
 	ipcRenderer.on("belege-hinzufuegen", () => beleg.erstellenPre());

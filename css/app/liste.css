@@ -117,7 +117,16 @@
 	background-color: var(--farbe);
 }
 
-.filter-kopf span {
+.filter-kopf span.filter-bedeutungen-details {
+	display: inline-block;
+	vertical-align: bottom;
+	max-width: 50%;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.filter-kopf span.filter-reset {
 	position: absolute;
 	right: 5px;
 	top: 3px;
@@ -128,7 +137,7 @@
 	mask-image: url(../../img/filter-reset-block.svg);
 }
 
-.filter-kopf:hover span {
+.filter-kopf:hover span.filter-reset {
 	background-color: #fff;
 }
 
