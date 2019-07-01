@@ -578,10 +578,14 @@ span.liste-label {
 	top: -9px;
 	right: 10px;
 	padding: 0 5px;
+	max-width: 80%;
+	overflow: hidden;
 	background-color: #fff;
 	color: var(--textFarbe);
 	font-size: 12px;
 	line-height: 16px;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 	user-select: none;
 }
 

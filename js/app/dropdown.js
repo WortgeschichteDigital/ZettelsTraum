@@ -33,6 +33,7 @@ let dropdown = {
 				id: bd[i].id,
 				za: false,
 				al: true,
+				strip: true,
 			}));
 		}
 	},
@@ -74,9 +75,14 @@ let dropdown = {
 	// Liste der Bedeutungsgerüste erstellen
 	//   gr = Object
 	//     (Zweig mit den Gerüsten)
-	dataGerueste (gr) {
+	//   skipAkt = true || undefined
+	//     (das aktuelle Gerüst wird übersprungen; immer in bedeutungen.data gucken!)
+	dataGerueste (gr, skipAkt = false) {
 		let arr = [];
 		Object.keys(gr).forEach(function(i) {
+			if (skipAkt && i === bedeutungen.data.gn) {
+				return;
+			}
 			arr.push(`Gerüst ${i}`);
 		});
 		return arr;
@@ -231,6 +237,8 @@ let dropdown = {
 			dropdown.data = [...bedeutungen.hierarchieEbenen];
 		} else if (feld_id === "bedeutungen-gerueste") {
 			dropdown.data = dropdown.dataGerueste(bedeutungen.data.gr);
+		} else if (feld_id === "bedeutungen-gerueste-kopieren") {
+			dropdown.data = dropdown.dataGerueste(bedeutungen.data.gr, true);
 		} else if (feld_id === "geruestwechseln-dropdown") {
 			if (!document.getElementById("bedeutungen").classList.contains("aus")) {
 				dropdown.data = dropdown.dataGerueste(bedeutungen.data.gr);

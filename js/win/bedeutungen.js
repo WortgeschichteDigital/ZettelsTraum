@@ -19,10 +19,10 @@ let bedeutungen = {
 		// Details zum Bedeutungsgerüst in die Überschrift eintragen
 		let detail = "";
 		if (Object.keys(bedeutungen.data.bd.gr).length > 1) {
-			detail = ` ${bedeutungen.geruest}`;
+			detail = ` ${bedeutungen.geruest}`;
 		}
 		if (bedeutungen.data.bd.gr[bedeutungen.geruest].na) {
-			detail += ` (${bedeutungen.data.bd.gr[bedeutungen.geruest].na})`;
+			detail += ` (${bedeutungen.data.bd.gr[bedeutungen.geruest].na})`;
 		}
 		document.getElementById("bd-win-geruest-detail").textContent = detail;
 		// Gerüst-Nummer in Dropdown-Feld

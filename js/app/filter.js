@@ -170,14 +170,16 @@ let filter = {
 		for (let x = 0, len = belege.length; x < len; x++) {
 			let id = belege[x];
 			// BEDEUTUNGEN
+			let bdGefunden = false;
 			for (let i = 0, len = data.ka[id].bd.length; i < len; i++) {
 				if (data.ka[id].bd[i].gr !== data.bd.gn) {
 					continue;
 				}
+				bdGefunden = true;
 				const idBd = `bedeutungen-${data.bd.gn}_${data.ka[id].bd[i].id}`;
 				filter.typen.bedeutungen.filter[idBd].wert++;
 			}
-			if (!data.ka[id].bd.length) {
+			if (!bdGefunden) {
 				filter.typen.bedeutungen.filter["bedeutungen-undefined"].wert++;
 			}
 			// WORTBILDUNGEN, SYNONYME, KORPORA UND TEXTSORTEN
@@ -1138,19 +1140,26 @@ let filter = {
 				if (arr.length) {
 					let okay = false;
 					if (bf === "bd") { // Bedeutungen
-						if (!data.ka[id].bd.length && arr.includes("undefined")) { // undefined
-							okay = true;
-						} else {
-							for (let j = 0, len = arr.length; j < len; j++) {
-								const d = arr[j].match(/(?<gr>[0-9]+)_(?<id>[0-9]+)/);
-								if (bedeutungen.schonVorhanden({
-											bd: data.ka[id].bd,
-											gr: d.groups.gr,
-											id: parseInt(d.groups.id, 10),
-										})) {
-									okay = true;
-									break;
+						forY: for (let j = 0, len = arr.length; j < len; j++) {
+							// Ist für das aktuelle Gerüst eine Bedeutung in der Karte?
+							if (arr[j] === "undefined") {
+								for (let k = 0, len = data.ka[id].bd.length; k < len; k++) {
+									if (data.ka[id].bd[k].gr === data.bd.gn) {
+										continue forY;
+									}
 								}
+								okay = true;
+								continue;
+							}
+							// Ist die spezifische Bedeutung in der Karte?
+							const d = arr[j].match(/(?<gr>[0-9]+)_(?<id>[0-9]+)/);
+							if (bedeutungen.schonVorhanden({
+										bd: data.ka[id].bd,
+										gr: d.groups.gr,
+										id: parseInt(d.groups.id, 10),
+									})) {
+								okay = true;
+								break;
 							}
 						}
 					} else if (!data.ka[id][bf] && arr.includes("undefined")) { // undefined
@@ -1230,6 +1239,9 @@ let filter = {
 		// untergeordnete Filter suchen
 		let arrErg = [];
 		for (let i = 0, len = arr.length; i < len; i++) {
+			if (arr[i] === "undefined") {
+				continue;
+			}
 			let d = arr[i].match(/[0-9]+_(?<id>[0-9]+)/),
 				id = parseInt(d.groups.id, 10),
 				bd = data.bd.gr[data.bd.gn].bd,

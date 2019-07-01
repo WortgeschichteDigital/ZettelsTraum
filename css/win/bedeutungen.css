@@ -59,15 +59,26 @@ main {
 h2 {
 	position: relative;
 	margin: 80px 0 15px 0;
+	padding-right: 200px;
 	color: var(--textFarbe);
 	font-size: 24px;
 	font-style: italic;
 	font-weight: normal;
 	line-height: 38px;
+	white-space: nowrap;
 }
 
 h2 svg {
 	vertical-align: top;
+}
+
+#bd-win-geruest-detail {
+	display: inline-block;
+	max-width: 50%;
+	vertical-align: bottom;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }
 
 #bd-win-drucken {
@@ -89,6 +100,8 @@ h2 svg {
 	position: absolute;
 	top: 2px;
 	right: 34px;
+	padding-left: 25px;
+	background-color: #fff;
 }
 
 .dropdown-feld {

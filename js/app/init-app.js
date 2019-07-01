@@ -93,6 +93,7 @@ window.addEventListener("load", function() {
 	document.getElementById("bedeutungen-speichern").addEventListener("click", () => bedeutungen.speichern());
 	document.getElementById("bedeutungen-schliessen").addEventListener("click", () => bedeutungen.schliessen());
 	document.getElementById("bedeutungen-gerueste-config").addEventListener("click", evt => bedeutungenGerueste.oeffnen(evt));
+	document.querySelector(`[for="beleg-bd"]`).addEventListener("click", () => bedeutungenGeruest.oeffnen());
 	// Tagger
 	document.getElementById("tagger-speichern").addEventListener("click", () => tagger.speichern());
 	document.getElementById("tagger-schliessen").addEventListener("click", () => tagger.schliessen());

@@ -20,6 +20,10 @@ let bedeutungenGeruest = {
 		}
 		// Gerüste eintragen
 		document.getElementById("geruestwechseln-dropdown").value = `Gerüst ${obj.gn}`;
+		// das Gerüst könnte über das Bedeutung-Label der Karteikarte geöffnet worden sein
+		setTimeout(function() {
+			document.getElementById("beleg-bd").blur();
+		}, 5);
 	},
 	// Bedeutungsgerüst global wechseln
 	//   gn = String
@@ -54,7 +58,13 @@ let bedeutungenGeruest = {
 		data.bd.gn = gn;
 		// Konsequenzen des Wechsels
 		if (!document.getElementById("beleg").classList.contains("aus")) {
-			// TODO nur Bedeutungsfeld auffrischen
+			beleg.formularBedeutungLabel();
+			beleg.formularBedeutung();
+			if (document.getElementById("beleg-link-leseansicht").classList.contains("aktiv")) {
+				beleg.leseFillBedeutung();
+			}
+			beleg.listeGeaendert = true; // damit nach dem Schließen die Liste in jedem Fall aufgefrischt wird – auch wenn das Formular nicht gespeichert wird
+			document.getElementById("beleg-bd").focus();
 		} else if (!document.getElementById("liste").classList.contains("aus")) {
 			liste.status(true);
 		}

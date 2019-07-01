@@ -38,6 +38,7 @@
 
 #bedeutungen-hierarchie,
 #bedeutungen-gerueste,
+#bedeutungen-gerueste-kopieren,
 #geruestwechseln-dropdown {
 	background-color: transparent;
 	width: 75px;
@@ -48,7 +49,9 @@
 #bedeutungen-hierarchie:focus,
 #bedeutungen-hierarchie:hover,
 #bedeutungen-gerueste:focus,
-#bedeutungen-gerueste:hover
+#bedeutungen-gerueste:hover,
+#bedeutungen-gerueste-kopieren:focus,
+#bedeutungen-gerueste-kopieren:hover,
 #geruestwechseln-dropdown:focus,
 #geruestwechseln-dropdown:hover {
 	outline: none;
@@ -60,6 +63,8 @@
 #bedeutungen-hierarchie:focus ~ a,
 #bedeutungen-gerueste:hover ~ a,
 #bedeutungen-gerueste:focus ~ a,
+#bedeutungen-gerueste-kopieren:hover ~ a,
+#bedeutungen-gerueste-kopieren:focus ~ a,
 #geruestwechseln-dropdown:hover ~ a,
 #geruestwechseln-dropdown:focus ~ a {
 	color: var(--text);
@@ -126,6 +131,10 @@
 
 #bedeutungen-cont caption + .bedeutungen-neu td {
 	padding-top: 0;
+}
+
+#bedeutungen-cont .bedeutungen-neu .dropdown-cont {
+	display: inline-block;
 }
 
 #bedeutungen-cont td:first-child,

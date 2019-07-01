@@ -177,7 +177,9 @@ let bedeutungen = {
 	//     (hat die Bedeutung einen Alias, soll der Alias zurückgegeben werden)
 	//   leer = true || undefined
 	//     (vor und hinter den Zählzeichen werden Leerzeichen eingefügt)
-	bedeutungenTief ({gr, id, za = true, al = false, leer = false}) {
+	//   strip = true || undefined
+	//     (Tags werden aus der Bedeutung entfernt)
+	bedeutungenTief ({gr, id, za = true, al = false, leer = false, strip = false}) {
 		let arr = [],
 			bd = data.bd.gr[gr].bd,
 			bd_len = -1,
@@ -206,10 +208,16 @@ let bedeutungen = {
 			}
 		}
 		arr.reverse();
+		let joined = "";
 		if (!za) {
-			return arr.join(": ");
+			joined = arr.join(": ");
+		} else {
+			joined = arr.join("");
 		}
-		return arr.join("");
+		if (strip) {
+			joined = joined.replace(/<.+?>/g, "");
+		}
+		return joined;
 		// Array mit Werten füllen
 		//   i = Number
 		//     (Index der Bedeutung)
@@ -267,6 +275,27 @@ let bedeutungen = {
 		bedeutungen.aufbauen();
 		bedeutungen.bedeutungenGeaendert(true);
 		bedeutungen.idInit();
+	},
+	// Bedeutungsgerüst kopieren
+	geruestKopieren () {
+		const geruest = document.getElementById("bedeutungen-gerueste-kopieren").value.replace(/^Gerüst /, "");
+		let quelle = bedeutungen.data.gr[geruest];
+		// Start-Level übernehmen
+		bedeutungen.akt.sl = quelle.sl;
+		document.getElementById("bedeutungen-hierarchie").value = bedeutungen.hierarchieEbenen[bedeutungen.akt.sl];
+		// Bedeutungen kopieren + für das Eintragen in Karteikarten vormerken
+		for (let i = 0, len = quelle.bd.length; i < len; i++) {
+			bedeutungen.akt.bd.push(bedeutungen.makeCopy(i, quelle));
+			bedeutungen.aendernFuellen({
+				add: true,
+				gr: geruest,
+				grN: bedeutungen.data.gn,
+				id: quelle.bd[i].id,
+				idN: quelle.bd[i].id,
+			});
+		}
+		// Gerüst neu aufbauen
+		bedeutungen.aufbauen();
 	},
 	// Bedeutungen öffnen
 	oeffnen () {
@@ -431,6 +460,10 @@ let bedeutungen = {
 			td.textContent = al;
 			bedeutungen.editContListener(td);
 		});
+		// ggf. Kopierzeile einrücken
+		if (!bedeutungen.akt.bd.length && Object.keys(bedeutungen.data.gr).length > 1) {
+			bedeutungen.aufbauenKopieren(table);
+		}
 		// Ergänzungszeile einrücken
 		bedeutungen.aufbauenErgaenzen(table);
 	},
@@ -458,11 +491,11 @@ let bedeutungen = {
 			if (add_geruest) {
 				details += " – Gerüst";
 			}
-			details += ` ${data.gn}`;
+			details += ` ${data.gn}`;
 		}
 		const name = data.gr[data.gn].na;
 		if (name) {
-			details += ` (${name})`;
+			details += ` (${name})`;
 		}
 		return details;
 	},
@@ -499,6 +532,46 @@ let bedeutungen = {
 			}
 			span.title = `${typ}: ${name}`;
 		}
+	},
+	// Zeile zum Kopieren eines Bedeutungsgerüsts einfügen
+	//   table = Element
+	//     (die Tabelle mit dem Bedeutungsgerüst)
+	aufbauenKopieren (table) {
+		let tr = document.createElement("tr");
+		table.appendChild(tr);
+		tr.classList.add("bedeutungen-neu");
+		for (let i = 0; i < 6; i++) {
+			let td = document.createElement("td");
+			td.textContent = " ";
+			tr.appendChild(td);
+		}
+		// mögliche Gerüste ermitteln
+		let gerueste = Object.keys(bedeutungen.data.gr);
+		gerueste.splice(gerueste.indexOf(bedeutungen.data.gn), 1);
+		// Dropdown-Feld
+		let frag = document.createDocumentFragment();
+		let span = document.createElement("span");
+		frag.appendChild(span);
+		span.classList.add("dropdown-cont");
+		let input = document.createElement("input");
+		span.appendChild(input);
+		input.classList.add("dropdown-feld");
+		input.id = "bedeutungen-gerueste-kopieren";
+		input.readOnly = true;
+		input.title = "Bedeutungsgerüst auswählen";
+		input.type = "text";
+		input.value = `Gerüst ${gerueste[0]}`;
+		let a = dropdown.makeLink("dropdown-link-element", "Bedeutungsgerüst auswählen");
+		span.appendChild(a);
+		// Add-Button
+		let button = document.createElement("input");
+		button.type = "button";
+		button.value = "Kopieren";
+		span.appendChild(button);
+		// Fragment einhängen + Event-Listener anhängen
+		tr.childNodes[3].replaceChild(frag, tr.childNodes[3].firstChild);
+		dropdown.feld(document.getElementById("bedeutungen-gerueste-kopieren"));
+		button.addEventListener("click", () => bedeutungen.geruestKopieren());
 	},
 	// Zeile zum Ergänzen des Bedeutungsgerüsts einfügen
 	//   table = Element
@@ -885,13 +958,15 @@ let bedeutungen = {
 	// erstellt eine unabhängige Kopie eines Datensatzes
 	//   idx = Number
 	//     (Index des Eintrags, von dem eine Kopie erstellt werden soll)
-	makeCopy (idx) {
-		let kopie = Object.assign({}, bedeutungen.akt.bd[idx]);
+	//    obj = Object || undefined
+	//      (das Objekt, aus dem die Kopie angefertigt werden soll
+	makeCopy (idx, obj = bedeutungen.akt) {
+		let kopie = Object.assign({}, obj.bd[idx]);
 		// tiefe Kopie des Bedeutungen-Arrays
-		kopie.bd = [...bedeutungen.akt.bd[idx].bd];
+		kopie.bd = [...obj.bd[idx].bd];
 		// tiefe Kopie des Tags-Arrays
 		kopie.ta = [];
-		for (let o of bedeutungen.akt.bd[idx].ta) {
+		for (let o of obj.bd[idx].ta) {
 			kopie.ta.push({...o});
 		}
 		// Kopie zurückgeben
@@ -1432,14 +1507,18 @@ let bedeutungen = {
 	aendernFuellen ({
 			del = false,
 			merge = false,
+			add = false,
 			gr = bedeutungen.data.gn,
+			grN = "",
 			id = 0,
 			idN = 0,
 		}) {
 		bedeutungen.aendern.push({
 			del: del,
 			merge: merge,
+			add: add,
 			gr: gr,
+			grN: grN,
 			id: id,
 			idN: idN,
 		});
@@ -1467,6 +1546,11 @@ let bedeutungen = {
 							} else {
 								bd[j].id = a[i].idN;
 							}
+						} else if (a[i].add) { // Hinzufügen
+							bd.push({
+								gr: a[i].grN,
+								id: a[i].idN,
+							});
 						}
 					}
 				}

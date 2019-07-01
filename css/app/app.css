@@ -201,6 +201,10 @@ input[type="button"][value="Ergänzen"] {
 	background-image: url(../../img/button-ergaenzen.svg);
 }
 
+input[type="button"][value="Kopieren"] {
+	background-image: url(../../img/button-kopieren.svg);
+}
+
 input[type="button"][value="Löschen"] {
 	background-image: url(../../img/button-delete.svg);
 }

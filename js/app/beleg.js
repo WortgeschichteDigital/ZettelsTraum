@@ -179,23 +179,14 @@ let beleg = {
 			} else if (felder[i].type === "checkbox") {
 				felder[i].checked = beleg.data[feld];
 			} else if (feld === "bd") {
-				let bd = [];
-				for (let i = 0, len = beleg.data.bd.length; i < len; i++) {
-					if (beleg.data.bd[i].gr !== data.bd.gn) { // Bedeutungen aus anderen Gerüsten nicht drucken
-						continue;
-					}
-					bd.push(bedeutungen.bedeutungenTief({
-						gr: beleg.data.bd[i].gr,
-						id: beleg.data.bd[i].id,
-						za: false,
-						al: true,
-					}));
-				}
-				felder[i].value = bd.join("\n");
+				continue;
 			} else { // Text-Input und Textarea
 				felder[i].value = beleg.data[feld];
 			}
 		}
+		// Feld-Wert für Bedeutung eintragen
+		beleg.formularBedeutung();
+		beleg.formularBedeutungLabel();
 		// Bewertung eintragen
 		beleg.bewertungAnzeigen();
 		// Anhänge auflisten
@@ -216,6 +207,35 @@ let beleg = {
 		} else if (!leseansicht_aktiv) {
 			document.getElementById("beleg-da").focus();
 		}
+	},
+	// Bedeutung in das Formular eintragen
+	formularBedeutung () {
+		// Wert ermitteln
+		let bd = [];
+		for (let i = 0, len = beleg.data.bd.length; i < len; i++) {
+			if (beleg.data.bd[i].gr !== data.bd.gn) { // Bedeutungen aus anderen Gerüsten nicht drucken
+				continue;
+			}
+			bd.push(bedeutungen.bedeutungenTief({
+				gr: beleg.data.bd[i].gr,
+				id: beleg.data.bd[i].id,
+				za: false,
+				al: true,
+				strip: true,
+			}));
+		}
+		// Wert ins Feld eintragen
+		let feld = document.getElementById("beleg-bd");
+		feld.value = bd.join("\n");
+		// Feld anpassen
+		feld.scrollTop = 0;
+		helfer.textareaGrow(feld);
+	},
+	// Label der Bedeutung auffrischen
+	formularBedeutungLabel () {
+		const text = `Bedeutung${bedeutungen.aufbauenH2Details(data.bd, true)}`;
+		let label = document.querySelector(`[for="beleg-bd"]`);
+		label.textContent = text;
 	},
 	// Änderungen in einem Formular-Feld automatisch übernehmen
 	//   feld = Element
@@ -320,6 +340,10 @@ let beleg = {
 			if (!i) {
 				return;
 			}
+			// Tags entfernen
+			// (User könnten auf die Idee kommen, gleich <i>, <b>, <u> einzugeben;
+			// das macht die Sache nur kompliziert, weil z.B. das HTML auf Korrektheit getestet werden müsste)
+			i = i.replace(/<.+?>/g, "");
 			// ggf. neue Bedeutung in das Gerüst eintragen
 			let bd = beleg.bedeutungSuchen(i);
 			if (!bd.id) {
@@ -1789,33 +1813,7 @@ let beleg = {
 			}
 		}
 		// Bedeutungen
-		let feldBd = beleg.bedeutungAufbereiten(),
-			contBd = document.getElementById("beleg-lese-bd");
-		helfer.keineKinder(contBd);
-		if (feldBd) {
-			feldBd.split("\n").forEach(function(i) {
-				const bd = beleg.bedeutungSuchen(i);
-				let p = document.createElement("p");
-				if (!bd.id) {
-					i.split(": ").forEach(function(j) {
-						let b = document.createElement("b");
-						p.appendChild(b);
-						b.textContent = "?";
-						p.appendChild(document.createTextNode(j));
-					});
-				} else {
-					p.innerHTML = bedeutungen.bedeutungenTief({
-						gr: data.bd.gn,
-						id: bd.id,
-					});
-				}
-				contBd.appendChild(p);
-			});
-		} else {
-			let p = document.createElement("p");
-			p.textContent = " ";
-			contBd.appendChild(p);
-		}
+		beleg.leseFillBedeutung();
 		// Klick-Events an alles Links hängen
 		document.querySelectorAll("#beleg .link").forEach(function(i) {
 			liste.linksOeffnen(i);
@@ -1849,6 +1847,57 @@ let beleg = {
 				input.focus();
 			}
 		}
+	},
+	// Bedeutungsfeld der Leseansicht füllen
+	leseFillBedeutung () {
+		let feldBd = beleg.bedeutungAufbereiten(),
+			contBd = document.getElementById("beleg-lese-bd");
+		helfer.keineKinder(contBd);
+		if (feldBd) {
+			feldBd.split("\n").forEach(function(i) {
+				const bd = beleg.bedeutungSuchen(i);
+				let p = document.createElement("p");
+				if (!bd.id) {
+					i.split(": ").forEach(function(j) {
+						let b = document.createElement("b");
+						p.appendChild(b);
+						b.textContent = "?";
+						p.appendChild(document.createTextNode(j));
+					});
+				} else {
+					p.innerHTML = bedeutungen.bedeutungenTief({
+						gr: data.bd.gn,
+						id: bd.id,
+					});
+				}
+				let a = document.createElement("a");
+				a.classList.add("icon-link", "icon-entfernen");
+				a.dataset.bd = i;
+				a.href = "#";
+				beleg.leseBedeutungEx(a);
+				p.insertBefore(a, p.firstChild);
+				contBd.appendChild(p);
+			});
+		} else {
+			let p = document.createElement("p");
+			p.textContent = " ";
+			contBd.appendChild(p);
+		}
+	},
+	// Bedeutung in der Leseansicht aus dem Formular entfernen
+	leseBedeutungEx (a) {
+		a.addEventListener("click", function(evt) {
+			evt.preventDefault();
+			// Wert entfernen
+			let reg = new RegExp(`${helfer.escapeRegExp(this.dataset.bd)}(\n|$)`),
+				feld = document.getElementById("beleg-bd");
+			feld.value = feld.value.replace(reg, "");
+			feld.value = beleg.bedeutungAufbereiten();
+			// Ansicht auffrischen
+			beleg.leseFillBedeutung();
+			// Änderungsmarkierung setzen
+			beleg.belegGeaendert(true);
+		});
 	},
 	// enthält den Wert des Suchfelds über dem Beleg in der Leseansicht
 	leseSucheText: "",
@@ -2121,7 +2170,7 @@ let beleg = {
 		for (let i = 0, len = bdS.length; i < len; i++) {
 			for (let j = 0, len = bdA.length; j < len; j++) {
 				if (bdS[i] === bdA[j].al) {
-					bdS[i] = bdA[j].bd[bdA[j].bd.length - 1];
+					bdS[i] = bdA[j].bd[bdA[j].bd.length - 1].replace(/<.+?>/g, "");
 					break;
 				}
 			}
@@ -2129,10 +2178,10 @@ let beleg = {
 		// Bedeutung suchen => ID zurückgeben
 		const bdSJ = bdS.join(": ");
 		for (let i = 0, len = bdA.length; i < len; i++) {
-			if (bdA[i].bd.join(": ") === bdSJ) {
+			if (bdA[i].bd.join(": ").replace(/<.+?>/g, "") === bdSJ) {
 				return {
 					idx: i,
-					id: bdA[i].id
+					id: bdA[i].id,
 				};
 			}
 		}
@@ -2252,6 +2301,7 @@ let beleg = {
 			gr: bd.gr,
 			id: bd.id,
 			za: false,
+			strip: true,
 		});
 		dropdown.caller = "beleg-bd";
 		dropdown.cursor = -1;

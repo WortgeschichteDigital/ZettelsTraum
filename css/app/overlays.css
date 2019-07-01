@@ -898,10 +898,12 @@ input[id^="redaktion-person"] {
 
 #gerueste-cont td:first-child {
 	padding-left: 0;
+	vertical-align: top;
 }
 
 #gerueste-cont td:last-child {
 	padding-right: 0;
+	vertical-align: top;
 }
 
 #gerueste-cont td.leer {
