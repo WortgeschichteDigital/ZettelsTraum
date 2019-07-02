@@ -258,6 +258,23 @@ let filter = {
 		}
 		// statistische Angaben der Bedeutungen um die untergeordneten Bedeutungen ergänzen
 		filter.statistikBd(belege);
+		// wegen der Möglichkeit, aus dem Bedeutungsgerüst-Fenster Bedeutungen zu entfernen,
+		// kann es sein, dass eine Bedeutung aktiv ist, aber gar nicht mehr gefunden 
+		// werden kann; in solchen Fällen lässt sie sich nicht mehr deaktivieren, weswegen
+		// in der Liste keine Belege mehr gefunden werden können => solche Bedeutungen
+		// müssen deaktiviert werden
+		for (let a in filter.aktiveFilter) {
+			if (!filter.aktiveFilter.hasOwnProperty(a)) {
+				continue;
+			}
+			if (!/^bedeutungen-/.test(a)) {
+				continue;
+			}
+			if (!filter.typen.bedeutungen.filter[a] ||
+					!filter.typen.bedeutungen.filter[a].wert) {
+				filter_backup[`filter-${a}`] = false;
+			}
+		}
 		// Wortbildungen, Synonyme, Korpora und Textsorten sortieren
 		let arr_typen = ["wortbildungen", "synonyme", "korpora", "textsorten"];
 		for (let i = 0, len = arr_typen.length; i < len; i++) {
@@ -362,7 +379,7 @@ let filter = {
 								bd: data.ka[idK].bd,
 								gr: data.bd.gn,
 								id: id,
-							})) {
+							})[0]) {
 						filter.typen.bedeutungen.filter[ff[i]].wert++;
 						karten_schon.add(idK);
 					}
@@ -1157,7 +1174,7 @@ let filter = {
 										bd: data.ka[id].bd,
 										gr: d.groups.gr,
 										id: parseInt(d.groups.id, 10),
-									})) {
+									})[0]) {
 								okay = true;
 								break;
 							}

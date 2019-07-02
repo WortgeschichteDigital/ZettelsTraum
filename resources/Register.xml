@@ -9,8 +9,8 @@
 <register>
 	<item>
 		<id>1</id>
-		<name>amtlich</name>
-		<abbr>amtl.</abbr>
+		<name>amtssprachlich</name>
+		<abbr>amtsspr.</abbr>
 	</item>
 	<item>
 		<id>2</id>
@@ -24,96 +24,83 @@
 	</item>
 	<item>
 		<id>4</id>
-		<name>dichterisch</name>
-		<abbr>dichter.</abbr>
+		<name>derb</name>
 	</item>
 	<item>
 		<id>5</id>
-		<name>fachsprachlich</name>
-		<abbr>fachspr.</abbr>
-	</item>
-	<item>
-		<id>6</id>
-		<name>gaunersprachlich</name>
-		<abbr>gauernspr.</abbr>
-	</item>
-	<item>
-		<id>7</id>
 		<name>gehoben</name>
 		<abbr>geh.</abbr>
 	</item>
 	<item>
+		<id>6</id>
+		<name>ironisch</name>
+		<abbr>iron.</abbr>
+	</item>
+	<item>
+		<id>7</id>
+		<name>literarisch</name>
+		<abbr>lit.</abbr>
+	</item>
+	<item>
 		<id>8</id>
-		<name>hochsprachlich</name>
-		<abbr>hochspr.</abbr>
+		<name>rechtssprachlich</name>
+		<abbr>rechtsspr.</abbr>
 	</item>
 	<item>
 		<id>9</id>
-		<name>juristisch</name>
-		<abbr>jur.</abbr>
-	</item>
-	<item>
-		<id>10</id>
-		<name>Papierdeutsch</name>
-		<abbr>Papierdt.</abbr>
-	</item>
-	<item>
-		<id>11</id>
-		<name>rechtlich</name>
-		<abbr>rechtl.</abbr>
-	</item>
-	<item>
-		<id>12</id>
 		<name>scherzhaft</name>
 		<abbr>scherzh.</abbr>
 	</item>
 	<item>
-		<id>13</id>
+		<id>10</id>
 		<name>schriftsprachlich</name>
 		<abbr>schriftspr.</abbr>
 	</item>
 	<item>
-		<id>14</id>
-		<name>schülersprachlich</name>
-		<abbr>schülerspr.</abbr>
+		<id>11</id>
+		<name>skatologisch</name>
+		<abbr>skatolog.</abbr>
 	</item>
 	<item>
-		<id>15</id>
-		<name>seemännisch</name>
-		<abbr>seem.</abbr>
-	</item>
-	<item>
-		<id>16</id>
+		<id>12</id>
 		<name>spöttisch</name>
 		<abbr>spött.</abbr>
 	</item>
 	<item>
-		<id>17</id>
+		<id>13</id>
 		<name>standardsprachlich</name>
 		<abbr>standardspr.</abbr>
 	</item>
 	<item>
-		<id>18</id>
+		<id>14</id>
 		<name>übertragen</name>
 		<abbr>übertr.</abbr>
 	</item>
 	<item>
-		<id>19</id>
+		<id>15</id>
 		<name>umgangssprachlich</name>
 		<abbr>ugs.</abbr>
 	</item>
 	<item>
-		<id>20</id>
+		<id>16</id>
 		<name>ungebräuchlich</name>
 		<abbr>ungebr.</abbr>
 	</item>
 	<item>
-		<id>21</id>
+		<id>17</id>
 		<name>verächtlich</name>
 		<abbr>verächtl.</abbr>
 	</item>
 	<item>
-		<id>22</id>
+		<id>18</id>
+		<name>veraltend</name>
+	</item>
+	<item>
+		<id>19</id>
+		<name>veraltet</name>
+	</item>
+	<item>
+		<id>20</id>
 		<name>verhüllend</name>
 		<abbr>verhüll.</abbr>
 	</item>

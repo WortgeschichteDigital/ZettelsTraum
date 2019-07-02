@@ -133,7 +133,11 @@
 	padding-top: 0;
 }
 
-#bedeutungen-cont .bedeutungen-neu .dropdown-cont {
+#bedeutungen-cont .bedeutungen-kopieren td {
+	padding: 10px 5px;
+}
+
+#bedeutungen-cont .bedeutungen-kopieren .dropdown-cont {
 	display: inline-block;
 }
 

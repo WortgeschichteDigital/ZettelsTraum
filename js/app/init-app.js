@@ -230,7 +230,8 @@ window.addEventListener("load", function() {
 		dialog.text(text);
 	});
 	ipcRenderer.on("bedeutungen-fenster-drucken", (evt, gn) => drucken.init("bedeutungen-", gn));
-	ipcRenderer.on("bedeutungen-fenster-eintragen", (evt, bd) => beleg.bedeutungEintragen(bd));
+	ipcRenderer.on("bedeutungen-fenster-eintragen", (evt, bd) => beleg.bedeutungEinAustragen(bd, true));
+	ipcRenderer.on("bedeutungen-fenster-austragen", (evt, bd) => beleg.bedeutungEinAustragen(bd, false));
 	
 	// SYNCHRONE ANFRAGEN AN DEN MAIN-PROZESS STELLEN
 	// Optionen laden

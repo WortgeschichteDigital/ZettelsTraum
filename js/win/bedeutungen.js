@@ -37,7 +37,32 @@ let bedeutungen = {
 			return;
 		}
 		// Bedeutungen aufbauen
+		let icons = ["icon-add", "icon-remove"],
+			table = document.createElement("table");
+		cont.appendChild(table);
 		for (let i = 0, len = bd.length; i < len; i++) {
+			let tr = document.createElement("tr");
+			table.appendChild(tr);
+			// Zellen erzeugen
+			for (let j = 0; j < 3; j++) {
+				let td = document.createElement("td");
+				tr.appendChild(td);
+			}
+			// Icons erzeugen
+			for (let j = 0; j < 2; j++) {
+				let a = document.createElement("a");
+				tr.childNodes[j].appendChild(a);
+				a.classList.add("icon-link", icons[j]);
+				a.dataset.id = bd[i].id;
+				a.href = "#";
+				if (j === 0) {
+					a.title = "Bedeutung eintragen";
+					bedeutungen.eintragen(a);
+				} else {
+					a.title = "Bedeutung entfernen";
+					bedeutungen.austragen(a);
+				}
+			}
 			// Schachteln erzeugen
 			let frag = document.createDocumentFragment(),
 				schachtel = frag;
@@ -51,6 +76,7 @@ let bedeutungen = {
 			let p = document.createElement("p");
 			schachtel.appendChild(p);
 			p.dataset.id = bd[i].id;
+			p.title = "Bedeutung eintragen";
 			bedeutungen.eintragen(p);
 			// Zählung
 			let b = document.createElement("b");
@@ -61,7 +87,7 @@ let bedeutungen = {
 			p.appendChild(span);
 			span.innerHTML = bd[i].bd[bd[i].bd.length - 1];
 			// Fragment einhängen
-			cont.appendChild(frag);
+			tr.lastChild.appendChild(frag);
 		}
 	},
 	// Bedeutungsbaum drucken
@@ -69,14 +95,29 @@ let bedeutungen = {
 		const {ipcRenderer} = require("electron");
 		ipcRenderer.send("bedeutungen-fenster-drucken", bedeutungen.geruest);
 	},
-	// Bedeutung im Formular des Hauptfensters eintragen
-	//   p = Element
-	//     (die Bedeutung, auf die geklickt wurde)
-	eintragen (p) {
-		p.addEventListener("click", function() {
+	// Bedeutung im Formular/Belegliste des Hauptfensters eintragen
+	//   ele = Element
+	//     (angeklickte Bedeutung oder angeklicktes Add-Icon)
+	eintragen (ele) {
+		ele.addEventListener("click", function(evt) {
+			evt.preventDefault();
 			const id = parseInt(this.dataset.id, 10),
 				{ipcRenderer} = require("electron");
 			ipcRenderer.send("bedeutungen-fenster-eintragen", {
+				gr: bedeutungen.geruest,
+				id: id,
+			});
+		});
+	},
+	// Bedeutung aus Formular/Belegliste des Hauptfensters entfernen
+	//   ele = Element
+	//     (angeklicktes Remove-Icon)
+	austragen (ele) {
+		ele.addEventListener("click", function(evt) {
+			evt.preventDefault();
+			const id = parseInt(this.dataset.id, 10),
+				{ipcRenderer} = require("electron");
+			ipcRenderer.send("bedeutungen-fenster-austragen", {
 				gr: bedeutungen.geruest,
 				id: id,
 			});

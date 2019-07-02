@@ -46,7 +46,10 @@ let drucken = {
 	init (id, gn) {
 		const fenster = document.getElementById("drucken");
 		// Fenster öffnen oder in den Vordergrund holen
-		if (overlay.oeffnen(fenster)) { // Fenster ist schon offen
+		if (overlay.oeffnen(fenster) && id !== "bedeutungen-") {
+			// Fenster ist schon offen
+			// (ignorieren, wenn ein Bedeutungsgerüst an die Funktion geschickt wird,
+			// es könnte der Wunsch bestehen, jetzt ein anderes Gerüst zu drucken)
 			return;
 		}
 		// Bedeutungsgerüst?
@@ -250,6 +253,23 @@ let drucken = {
 			let span = document.createElement("span");
 			p.appendChild(span);
 			span.innerHTML = bd[i].bd[bd[i].bd.length - 1];
+			// ggf. Tags ergänzen
+			let tags = [];
+			for (let tag of bd[i].ta) {
+				if (!optionen.data.tags[tag.ty] ||
+						!optionen.data.tags[tag.ty].data[tag.id]) {
+					continue;
+				}
+				const abbr = optionen.data.tags[tag.ty].data[tag.id].abbr;
+				if (abbr) {
+					tags.push(abbr);
+				} else {
+					tags.push(optionen.data.tags[tag.ty].data[tag.id].name);
+				}
+			}
+			if (tags.length) {
+				span.appendChild(document.createTextNode(` [${tags.join("; ")}]`));
+			}
 			// Fragment einhängen
 			cont.appendChild(frag);
 		}

@@ -143,6 +143,48 @@ h2 svg {
 }
 
 /* Bedeutungenbaum ------------------------------- */
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+	width: 100%;
+	table-layout: fixed;
+}
+
+td {
+	padding: 0;
+}
+
+td:first-child,
+td:nth-child(2) {
+	width: 24px;
+}
+
+.icon-link {
+	display: inline-block;
+	width: 24px;
+	height: 24px;
+	background-color: transparent;
+	text-decoration: none;
+}
+
+.icon-link:hover {
+	background-color: var(--text);
+}
+
+.icon-link:focus {
+	background-color: var(--farbe);
+}
+
+.icon-add {
+	-webkit-mask-image: url(../../img/bedeutungen-add.svg);
+	mask-image: url(../../img/bedeutungen-add.svg);
+}
+
+.icon-remove {
+	-webkit-mask-image: url(../../img/bedeutungen-remove.svg);
+	mask-image: url(../../img/bedeutungen-remove.svg);
+}
+
 p.bd-win-keine {
 	margin: 0;
 	color: var(--textSehrHell);

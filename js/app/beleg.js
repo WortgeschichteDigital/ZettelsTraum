@@ -1889,15 +1889,26 @@ let beleg = {
 		a.addEventListener("click", function(evt) {
 			evt.preventDefault();
 			// Wert entfernen
-			let reg = new RegExp(`${helfer.escapeRegExp(this.dataset.bd)}(\n|$)`),
-				feld = document.getElementById("beleg-bd");
-			feld.value = feld.value.replace(reg, "");
-			feld.value = beleg.bedeutungAufbereiten();
+			beleg.leseBedeutungExFeld(this.dataset.bd);
 			// Ansicht auffrischen
 			beleg.leseFillBedeutung();
 			// Änderungsmarkierung setzen
 			beleg.belegGeaendert(true);
 		});
+	},
+	// Bedeutung aus dem Bedeutungsfeld entfernen
+	// (wird auch anderweitig verwendet => darum ausgelagert)
+	//   bd = String
+	//     (die Bedeutung, in der Form, in der sie im Formularfeld stehen könnte)
+	leseBedeutungExFeld (bd) {
+		let reg = new RegExp(`${helfer.escapeRegExp(bd)}(\n|$)`),
+			feld = document.getElementById("beleg-bd");
+		if (!reg.test(feld.value)) {
+			return false; // den Rückgabewert braucht man für das Austragen aus dem Bedeutungsgerüst-Fenster heraus
+		}
+		feld.value = feld.value.replace(reg, "");
+		feld.value = beleg.bedeutungAufbereiten();
+		return true;
 	},
 	// enthält den Wert des Suchfelds über dem Beleg in der Leseansicht
 	leseSucheText: "",
@@ -2259,16 +2270,26 @@ let beleg = {
 		return beleg.bedeutungSuchen(bd);
 	},
 	// trägt eine Bedeutung, die aus dem Bedeutungen-Fenster an das Hauptfenster geschickt wurde,
-	// in einer oder mehreren Karten ein (Verteilerfunktion)
+	// in einer oder mehreren Karten ein oder aus (Verteilerfunktion)
 	//   bd = Object
 	//     (die Bedeutung mit Gerüstnummer [bd.gr] und ID [bd.id])
-	bedeutungEintragen (bd) {
+	//   eintragen = Boolean
+	//     (eintragen oder austragen)
+	bedeutungEinAustragen (bd, eintragen) {
 		// Ziel ermitteln
 		if (!document.getElementById("beleg").classList.contains("aus")) {
-			beleg.bedeutungEintragenKarte(bd);
+			if (eintragen) {
+				beleg.bedeutungEintragenKarte(bd);
+			} else {
+				beleg.bedeutungAustragenKarte(bd);
+			}
 			return;
 		} else if (!document.getElementById("liste").classList.contains("aus")) {
-			beleg.bedeutungEintragenListe(bd);
+			if (eintragen) {
+				beleg.bedeutungEintragenListe(bd);
+			} else {
+				beleg.bedeutungAustragenListe(bd);
+			}
 			return;
 		}
 		// unklar, wo eingetragen werden soll => Fehlermeldung
@@ -2285,7 +2306,7 @@ let beleg = {
 						bd: beleg.data.bd,
 						gr: bd.gr,
 						id: bd.id,
-					})) {
+					})[0]) {
 				dialog.oeffnen("alert");
 				dialog.text("Die Bedeutung wurde <strong>nicht</strong> eingetragen. Grund: Sie ist schon vorhanden.\n(In der Karteikarte wird ein anderes Gerüst angezeigt als im Bedeutungsgerüst-Fenster.)");
 				return;
@@ -2306,6 +2327,46 @@ let beleg = {
 		dropdown.caller = "beleg-bd";
 		dropdown.cursor = -1;
 		dropdown.auswahl(document.getElementById("beleg-bd"), text);
+	},
+	// Bedeutung aus einer einzelneb Karteikarte entfernen
+	//   bd = Object
+	//     (die Bedeutung mit Gerüstnummer [bd.gr] und ID [bd.id])
+	bedeutungAustragenKarte (bd) {
+		// nicht aktives Gerüst => einfach austragen, wenn vorhanden
+		if (data.bd.gn !== bd.gr) {
+			let vorhanden = bedeutungen.schonVorhanden({
+				bd: beleg.data.bd,
+				gr: bd.gr,
+				id: bd.id,
+			});
+			if (vorhanden[0]) {
+				beleg.data.bd.splice(vorhanden[1], 1);
+				beleg.belegGeaendert(true);
+				dialog.oeffnen("alert");
+				dialog.text("Die Bedeutung wurde entfernt.\n(In der Karteikarte wird ein anderes Gerüst angezeigt als im Bedeutungsgerüst-Fenster.)");
+				return;
+			}
+			dialog.oeffnen("alert");
+			dialog.text("Die Bedeutung wurde <strong>nicht</strong> entfernt. Grund: Sie ist der aktuellen Karteikarte überhaupt nicht zugeordnet.\n(In der Karteikarte wird ein anderes Gerüst angezeigt als im Bedeutungsgerüst-Fenster.)");
+			return;
+		}
+		// aktives Gerüst => Text ermitteln und entfernen
+		let text = bedeutungen.bedeutungenTief({
+			gr: bd.gr,
+			id: bd.id,
+			za: false,
+			strip: true,
+		});
+		const ex = beleg.leseBedeutungExFeld(text);
+		if (!ex) {
+			dialog.oeffnen("alert");
+			dialog.text("Die Bedeutung wurde <strong>nicht</strong> entfernt. Grund: Sie ist der aktuellen Karteikarte überhaupt nicht zugeordnet.");
+			return;
+		}
+		beleg.belegGeaendert(true);
+		if (document.getElementById("beleg-link-leseansicht").classList.contains("aktiv")) {
+			beleg.leseFillBedeutung();
+		}
 	},
 	// Bedeutung in jede Karte der Belegliste eintragen
 	//   bd = Object
@@ -2328,7 +2389,7 @@ let beleg = {
 								bd: data.ka[id].bd,
 								gr: bd.gr,
 								id: bd.id,
-							})) {
+							})[0]) {
 						data.ka[id].bd.push({...bd});
 					}
 				});
@@ -2347,5 +2408,55 @@ let beleg = {
 			}
 		});
 		dialog.text(`Soll die Bedeutung\n<p class="bedeutungen-dialog">${bdText}</p>\nwirklich in alle Karteikarten, die derzeit in der Belegliste sichtbar sind, eingetragen werden?`);
+	},
+	// Bedeutung aus jeder Karte der Belegliste entfernen
+	//   bd = Object
+	//     (die Bedeutung mit Gerüstnummer [bd.gr] und ID [bd.id])
+	bedeutungAustragenListe (bd) {
+		const bdText = bedeutungen.bedeutungenTief({gr: bd.gr, id: bd.id});
+		// keine Belege in der Liste
+		if (!document.querySelector("#liste-belege-cont .liste-kopf")) {
+			dialog.oeffnen("alert");
+			dialog.text(`Die Belegliste zeigt derzeit keine Belege an. Die Bedeutung\n<p class="bedeutungen-dialog">${bdText}</p>\nkann darum aus keiner Karteikarte entfernt werden.`);
+			return;
+		}
+		// Sicherheitsfrage
+		dialog.oeffnen("confirm", function() {
+			if (dialog.antwort) {
+				// Bedeutung eintragen
+				let treffer = false;
+				document.querySelectorAll("#liste-belege-cont .liste-kopf").forEach(function(i) {
+					const id = i.dataset.id;
+					let vorhanden = bedeutungen.schonVorhanden({
+						bd: data.ka[id].bd,
+						gr: bd.gr,
+						id: bd.id,
+					});
+					if (vorhanden[0]) {
+						data.ka[id].bd.splice(vorhanden[1], 1);
+						treffer = true;
+					}
+				});
+				// Rückmeldung
+				let geruest_inaktiv = "\n(Im Hauptfenster ist ein anderes Gerüst als im Bedeutungsgerüst-Fenster eingestellt.)";
+				if (data.bd.gn === bd.gr) {
+					geruest_inaktiv = "";
+				}
+				if (!treffer) {
+					dialog.oeffnen("alert");
+					dialog.text(`Die Bedeutung\n<p class="bedeutungen-dialog">${bdText}</p>\nwurde in keiner der Karteikarten in der aktuellen Belegliste gefunden.${geruest_inaktiv}`);
+					return;
+				}
+				dialog.oeffnen("alert");
+				dialog.text(`Die Bedeutung\n<p class="bedeutungen-dialog">${bdText}</p>\nwurde aus allen Karteikarten der Belegliste entfernt.${geruest_inaktiv}`);
+				// Änderungsmarkierung
+				kartei.karteiGeaendert(true);
+				// Liste auffrischen
+				if (!geruest_inaktiv) {
+					liste.status(true);
+				}
+			}
+		});
+		dialog.text(`Soll die Bedeutung\n<p class="bedeutungen-dialog">${bdText}</p>\nwirklich aus allen Karteikarten, die derzeit in der Belegliste sichtbar sind, entfernt werden?`);
 	},
 };

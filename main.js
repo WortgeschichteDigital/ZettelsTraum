@@ -494,9 +494,18 @@ ipcMain.on("bedeutungen-fenster-drucken", function(evt, daten) {
 	win.focus();
 });
 
-// angeklickte Bedeutung aus dem Bedeutungsgerüst-Fenster an den Renderer-Prozess schicken
+// angeklickte Bedeutung im Gerüst-Fenster eintragen
 ipcMain.on("bedeutungen-fenster-eintragen", function(evt, bd) {
 	win.webContents.send("bedeutungen-fenster-eintragen", bd);
+	if (win.isMinimized()) {
+		win.restore();
+	}
+	win.focus();
+});
+
+// angeklickte Bedeutung im Gerüst-Fenster austragen
+ipcMain.on("bedeutungen-fenster-austragen", function(evt, bd) {
+	win.webContents.send("bedeutungen-fenster-austragen", bd);
 	if (win.isMinimized()) {
 		win.restore();
 	}
@@ -660,8 +669,8 @@ fenster = {
 			y: optionen.data["fenster-bedeutungen"].y,
 			width: optionen.data["fenster-bedeutungen"].width,
 			height: optionen.data["fenster-bedeutungen"].height,
-			minWidth: 350,
-			minHeight: 350,
+			minWidth: 400,
+			minHeight: 400,
 			show: false,
 			webPreferences: {
 				nodeIntegration: true,

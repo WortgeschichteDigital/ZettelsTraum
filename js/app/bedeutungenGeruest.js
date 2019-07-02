@@ -19,11 +19,9 @@ let bedeutungenGeruest = {
 			return;
 		}
 		// Gerüste eintragen
-		document.getElementById("geruestwechseln-dropdown").value = `Gerüst ${obj.gn}`;
-		// das Gerüst könnte über das Bedeutung-Label der Karteikarte geöffnet worden sein
-		setTimeout(function() {
-			document.getElementById("beleg-bd").blur();
-		}, 5);
+		let input = document.getElementById("geruestwechseln-dropdown");
+		input.value = `Gerüst ${obj.gn}`;
+		input.focus();
 	},
 	// Bedeutungsgerüst global wechseln
 	//   gn = String

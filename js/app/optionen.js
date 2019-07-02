@@ -333,9 +333,11 @@ let optionen = {
 	},
 	// bekannte Typen von Tag-Dateien
 	tagsTypen: {
+		regiolekte: ["Regiolekt", "Regiolekte"],
 		register: ["Register", "Register"],
 		sachgebiete: ["Sachgebiet", "Sachgebiete"],
-		varietaeten: ["Varietät", "Varietäten"],
+		soziolekte: ["Soziolekt", "Soziolekte"],
+		sprachen: ["Sprache", "Sprachen"],
 	},
 	// Check der Tag-Dateien beim Starten der App
 	anwendenTagsInit () {

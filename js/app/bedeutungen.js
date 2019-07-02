@@ -539,7 +539,7 @@ let bedeutungen = {
 	aufbauenKopieren (table) {
 		let tr = document.createElement("tr");
 		table.appendChild(tr);
-		tr.classList.add("bedeutungen-neu");
+		tr.classList.add("bedeutungen-kopieren");
 		for (let i = 0; i < 6; i++) {
 			let td = document.createElement("td");
 			td.textContent = " ";
@@ -626,6 +626,7 @@ let bedeutungen = {
 			if (hasIdx(tr)) {
 				bedeutungen.moveAn(parseInt(tr.dataset.idx, 10));
 			}
+			bedeutungen.moveScroll();
 			return;
 		}
 		let tr_aktiv = document.querySelector(".bedeutungen-aktiv");
@@ -636,6 +637,7 @@ let bedeutungen = {
 			bedeutungen.moveAus();
 			bedeutungen.moveAn(parseInt(tr_aktiv.nextSibling.dataset.idx, 10));
 		}
+		bedeutungen.moveScroll();
 		function hasIdx (tr) {
 			if (tr.dataset.idx) {
 				return true;
@@ -1541,7 +1543,7 @@ let bedeutungen = {
 										bd: bd,
 										id: a[i].idN,
 										gr: bedeutungen.data.gn,
-									})) {
+									})[0]) {
 								bd.splice(j, 1);
 							} else {
 								bd[j].id = a[i].idN;
@@ -1564,10 +1566,10 @@ let bedeutungen = {
 	schonVorhanden ({bd, id, gr}) {
 		for (let i = 0, len = bd.length; i < len; i++) {
 			if (bd[i].gr === gr && bd[i].id === id) {
-				return true;
+				return [true, i];
 			}
 		}
-		return false;
+		return [false, -1];
 	},
 	// Bedeutungen schließen
 	schliessen () {
