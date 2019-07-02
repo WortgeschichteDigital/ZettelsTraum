@@ -4,6 +4,7 @@
 #bedeutungen header {
 	position: sticky;
 	top: 70px;
+	z-index: 1;
 	padding: 0 0 10px 0;
 	height: 30px;
 	background-color: #fff;
@@ -225,6 +226,7 @@
 }
 
 #bedeutungen-cont .zaehlung p {
+	position: relative;
 	margin: 0;
 	padding-left: 35px;
 	text-indent: -35px;
@@ -430,6 +432,33 @@ a[class*="icon-move"] {
 #bedeutungen-cont #bedeutungen-neu.leer {
 	color: var(--textSehrHell);
 	font-style: normal;
+}
+
+/* Tools ---------------------------------------- */
+#bedeutungen-tools {
+	position: absolute;
+	top: -30px;
+	left: 35px;
+	margin-left: 0 !important;
+	box-shadow: var(--boxShadow);
+	border: 1px solid var(--linie);
+	padding: 0 10px;
+	height: 24px;
+	background-color: #fff;
+	text-indent: 0;
+}
+
+#bedeutungen-tools .icon-link {
+	top: 0;
+	background-color: var(--textExtremHell);
+}
+
+#bedeutungen-tools .icon-link:hover {
+	background-color: var(--text);
+}
+
+#bedeutungen-tools .icon-link:focus {
+	background-color: var(--farbe);
 }
 
 /* Besonderheiten ------------------------------- */

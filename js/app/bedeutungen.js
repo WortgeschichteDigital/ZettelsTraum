@@ -1222,6 +1222,10 @@ let bedeutungen = {
 		}
 		helfer.keineKinder(ele);
 		ele.appendChild(edit);
+		// für Bedeutungen-Edit Toolbox erzeugen
+		if (Array.isArray(z)) {
+			bedeutungen.editTools(true, edit);
+		}
 		// Listener anhängen
 		helfer.editPaste(edit);
 		edit.addEventListener("input", function() {
@@ -1236,6 +1240,56 @@ let bedeutungen = {
 			sel.collapse(edit.lastChild, edit.lastChild.textContent.length);
 		}
 	},
+	// Toolbox einblenden und positionieren oder ausblenden
+	//   an = Boolean
+	//     (Toolbox an- oder ausstellen)
+	//   ele = Element || undefined
+	//     (ggf. das Element, an dem sich die Positionierung ausrichten soll)
+	editTools (an, ele) {
+		if (!an) {
+			let tools = document.getElementById("bedeutungen-tools");
+			if (tools) {
+				tools.parentNode.removeChild(tools);
+			}
+			return;
+		}
+		let div = document.createElement("div");
+		div.id = "bedeutungen-tools";
+		let tools = [
+			{
+				cl: "icon-tools-bold",
+				title: "Fetten (Strg + B)",
+			},
+			{
+				cl: "icon-tools-italic",
+				title: "Kursivieren (Strg + I)",
+			},
+			{
+				cl: "icon-tools-underline",
+				title: "Kursivieren (Strg + U)",
+			},
+		];
+		for (let i = 0, len = tools.length; i < len; i++) {
+			let a = document.createElement("a");
+			a.classList.add("icon-link", tools[i].cl);
+			a.href = "#";
+			a.title = tools[i].title;
+			bedeutungen.editToolsExec(a);
+			div.appendChild(a);
+		}
+		ele.parentNode.parentNode.appendChild(div);
+	},
+	// Funktion der Text-Tools auf das Content-Feld anwenden
+	//   a = Element
+	//     (der Tools-Link, auf den geklickt wurde)
+	editToolsExec (a) {
+		a.addEventListener("click", function(evt) {
+			evt.preventDefault();
+			let funktion = this.getAttribute("class").match(/icon-tools-([^\s]+)/);
+			document.execCommand(funktion[1]);
+			this.parentNode.previousSibling.firstChild.focus();
+		});
+	},
 	// Listener für ein Edit-Feld
 	//   edit = Element
 	//     (das Edit-Feld)
@@ -1244,6 +1298,7 @@ let bedeutungen = {
 			if (evt.which === 27) { // Esc
 				evt.stopPropagation();
 				bedeutungen.editEintragen(this.parentNode);
+				bedeutungen.editTools(false);
 				return;
 			} else if (evt.which !== 13) { // kein Enter
 				return;
@@ -1319,6 +1374,7 @@ let bedeutungen = {
 		if (edit) {
 			bedeutungen.editEintragen(edit.parentNode);
 		}
+		bedeutungen.editTools(false);
 	},
 	// gespeicherten Wert des edierten Feldes in die übergebene Zelle eintragen
 	//   ele = Element
