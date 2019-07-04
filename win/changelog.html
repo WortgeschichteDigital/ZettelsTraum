@@ -24,7 +24,33 @@
 			<div class="version">0.11.0</div>
 			
 			<div>
-				<h2><span data-maintainer="Nico Dorn">Version 0.11.0-beta</span><time datetime="2019-07-02T14:50:13">2. Juli 2019</time></h2>
+				<h2><span data-maintainer="Nico Dorn">Version 0.11.0</span><time datetime="2019-07-04T15:51:41">4. Juli 2019</time></h2>
+				
+				<h3>Neue Funktionen</h3>
+				
+				<ul>
+					<li>
+						<p>Karteikarte: In das <i>Beleg</i>-Feld lassen sich nun Sonderzeichen eintragen, die über ein gewöhnliches Tastaturlayout nicht ohne Weiteres zu erreichen sind.</p>
+						<p>Zu diesem Zweck befindet sich über dem Feld nun ein zusätzliches Icon (<img src="../img/tool-sonderzeichen.svg" width="24" height="24" alt="">), mit dessen Hilfe sich ein Fenster öffnen lässt, in dem wiederum eine Liste an Sonderzeichen zu sehen ist. Durch Klick können diese an die Stelle des <i>Beleg</i>-Felds eingefügt werden, an der sich der Cursor gerade befindet. Ist im Formular Text markiert, wird dieser durch das ausgewählte Sonderzeichen überschrieben.</p>
+						<p>Die Zeichenliste lässt sich mit minimalem Aufwand um beliebig viele weitere Sonderzeichen ergänzen.</p>
+					</li>
+				</ul>
+				
+				<h3>Verbesserungen</h3>
+				
+				<ul>
+					<li>Bedeutungsgerüst-Funktion: Beim Eingeben einer neuen Bedeutung oder dem Ändern einer bestehenden wird eine kleine Toolleiste eingeblendet, über die sich die zulässigen Formatierungen vornehmen lassen: fetten, kursivieren, unterstreichen. Wie gehabt lassen sich diese Funktionen auch via Tastaturkürzel aufrufen: <kbd>Strg</kbd> + <kbd>B</kbd> / <kbd>I</kbd> / <kbd>U</kbd>.</li>
+					<li>Bedeutungsgerüst wechseln: Ist eine Karteikarte geöffnet, erhält das Bedeutungsfeld nach dem Schließen des Fensters den Fokus.</li>
+					<li>Filterleiste: Seit der letzten Version sind die Checkboxes jener Filter, die keine Treffer produzieren, ausgegraut und deaktiviert. Um die Orientierung zu erleichtern wird nun auch der zugehörige Text ausgegraut.</li>
+					<li><abbr title="Extensible Markup Language" lang="en">XML</abbr>-Ressourcen: Die Abkürzungen in der <span class="datei">Regiolekte.xml</span> und der <span class="datei">Sprachen.xml</span> wurden vereinheitlicht. (Dank an S. N.!)</li>
+				</ul>
+				
+				<h3>Behobene Fehler</h3>
+				<ul>
+					<li>Karteikarte/Bedeutungsgerüst: Wurde über die Eingabe im Bedeutungsfeld der Karteikarte zu der letzten, bereits zuvor angelegten Oberbedeutung des Bedeutungsgerüst, die schon mindestens eine Unterbedeutung enthielt, eine neue Unterbedeutung eingegeben, wurde diese neue Unterbedeutung fälschlicherweise der direkt vor der Oberbedeutung stehenden Bedeutung auf derselben Ebene zu- und untergeordnet. Dies führte in der Konsequenz zu einer Fehlzuordnung der Oberbedeutung zu der Karteikarte, die nicht etwa die gewünschte, sondern die direkt vorstehende Bedeutung auf derselben Ebene erhielt. Das klingt nicht nur kompliziert…</li>
+					<li>Bedeutungsgerüst wechseln: Wurde das Fenster aus der Karteikarte heraus geöffnet, erhielt das Formularelement keinen Fokus.</li>
+					<li>Karteikarte: Wurde in einem mehrzeiligen Textfeld mit Dropdown-Menü getippt, wurden für das Filtern der sich automatisch öffnenden Dropdown-Liste die Werte aller Zeilen berücksichtigt. Fortan wird zum Filtern nur noch der Text in der Zeile verwendet, in der gerade getippt wird.</li>
+				</ul>
 			</div>
 			
 			<!-- 0.10.0 -->

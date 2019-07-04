@@ -1475,6 +1475,12 @@ let beleg = {
 	//   link = Element
 	//     (Link, auf den geklickt wurde)
 	toolsText (link) {
+		// Sonderzeichen eingeben
+		const aktion = link.getAttribute("class").replace(/.+-/, "");
+		if (aktion === "sonderzeichen") {
+			sonderzeichen.oeffnen("beleg-bs");
+			return;
+		}
 		// Fokus in <textarea>
 		const ta = document.getElementById("beleg-bs");
 		ta.focus();
@@ -1517,7 +1523,6 @@ let beleg = {
 				ende: "</u>",
 			},
 		};
-		const aktion = link.getAttribute("class").replace(/.+-/, "");
 		// illegales Nesting über die Absatzgrenze hinaus?
 		let str_sel = window.getSelection().toString();
 		if (/\n/.test(str_sel)) {
@@ -2226,7 +2231,7 @@ let beleg = {
 			arrVor = [],
 			arrTmpVor = [],
 			pos = -1; // der Index, an dessen Stelle das Einfügen beginnt
-		// 1. Position (initial) und Slice finden
+		// 1) Position (initial) und Slice finden
 		for (let i = 0, len = gr.bd.length; i < len; i++) {
 			let arrTmp = gr.bd[i].bd.slice(0, slice);
 			if (arrTmp.join(": ") === arr.join(": ")) {
@@ -2248,18 +2253,21 @@ let beleg = {
 			}
 		}
 		let bdAdd = bdS.slice(slice - 1);
-		// 2. Position korrigieren (hoch zum Slot, an dessen Stelle eingefügt wird)
+		// 2) Position korrigieren (hoch zum Slot, an dessen Stelle eingefügt wird)
 		if (pos === -1 || pos === gr.bd.length - 1) { // Sonderregel: die Bedeutung muss am Ende eingefügt werden
 			pos = gr.bd.length;
 		} else {
-			for (let i = pos + 1, len = gr.bd.length; i < len; i++) {
-				if (gr.bd[i].bd.length <= arrVor.length) {
+			let i = pos,
+				len = gr.bd.length;
+			do { // diese Schleife muss mindestens einmal durchlaufen; darum keine gewöhnliche for-Schleife
+				i++;
+				if (!gr.bd[i] || gr.bd[i].bd.length <= arrVor.length) {
 					pos = i;
 					break;
 				}
-			}
+			} while (i < len);
 		}
-		// 3. jetzt kann eingehängt werden (die nachfolgenden Slots rutschen alle um einen hoch)
+		// 3) jetzt kann eingehängt werden (die nachfolgenden Slots rutschen alle um einen hoch)
 		for (let i = 0, len = bdAdd.length; i < len; i++) {
 			let bd = arrVor.concat(bdAdd.slice(0, i + 1));
 			gr.bd.splice(pos + i, 0, bedeutungen.konstitBedeutung(bd));

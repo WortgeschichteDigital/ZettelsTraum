@@ -127,6 +127,7 @@
 }
 
 #bedeutungen-cont .bedeutungen-neu td {
+	position: relative;
 	padding-top: 10px;
 }
 
@@ -446,6 +447,11 @@ a[class*="icon-move"] {
 	height: 24px;
 	background-color: #fff;
 	text-indent: 0;
+}
+
+#bedeutungen-tools.neue-bedeutung {
+	top: -20px;
+	left: 5px;
 }
 
 #bedeutungen-tools .icon-link {

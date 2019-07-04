@@ -1224,6 +1224,7 @@ let bedeutungen = {
 		ele.appendChild(edit);
 		// für Bedeutungen-Edit Toolbox erzeugen
 		if (Array.isArray(z)) {
+			clearTimeout(bedeutungen.ergaenzenToolsTimeout);
 			bedeutungen.editTools(true, edit);
 		}
 		// Listener anhängen
@@ -1277,7 +1278,15 @@ let bedeutungen = {
 			bedeutungen.editToolsExec(a);
 			div.appendChild(a);
 		}
-		ele.parentNode.parentNode.appendChild(div);
+		// Elternknoten finden
+		let parent = ele.parentNode;
+		while (!/^(P|TD)$/.test(parent.nodeName)) {
+			parent = parent.parentNode;
+		}
+		if (parent.nodeName === "TD") {
+			div.classList.add("neue-bedeutung");
+		}
+		parent.appendChild(div);
 	},
 	// Funktion der Text-Tools auf das Content-Feld anwenden
 	//   a = Element
@@ -1287,7 +1296,8 @@ let bedeutungen = {
 			evt.preventDefault();
 			let funktion = this.getAttribute("class").match(/icon-tools-([^\s]+)/);
 			document.execCommand(funktion[1]);
-			this.parentNode.previousSibling.firstChild.focus();
+			let feld = this.parentNode.parentNode.querySelector("[contenteditable]");
+			feld.focus();
 		});
 	},
 	// Listener für ein Edit-Feld
@@ -1477,6 +1487,8 @@ let bedeutungen = {
 			ele.classList.remove("bedeutungen-changed");
 		}
 	},
+	// speichert den Verweis auf den Timeout zum Ausblenden
+	ergaenzenToolsTimeout: null,
 	// Bedeutung ergänzen
 	//   span = Element
 	//     (das Edit-Feld, über das eine Bedeutung ergänzt werden kann)
@@ -1520,12 +1532,17 @@ let bedeutungen = {
 		span.addEventListener("focus", function() {
 			bedeutungen.moveAus();
 			bedeutungen.editFeldWeg();
+			clearTimeout(bedeutungen.ergaenzenToolsTimeout);
+			bedeutungen.editTools(true, this);
 			if (this.classList.contains("leer")) {
 				this.classList.remove("leer");
 				this.textContent = "";
 			}
 		});
 		span.addEventListener("blur", function() {
+			bedeutungen.ergaenzenToolsTimeout = setTimeout(function() {
+				bedeutungen.editTools(false);
+			}, 250); // ohne Timeout könnte man nicht raufklicken, weil die Toolbox beim Blur sofort verschwindet
 			if (!this.textContent) {
 				this.classList.add("leer");
 				this.textContent = "neue Bedeutung";

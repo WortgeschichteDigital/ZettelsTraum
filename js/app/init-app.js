@@ -89,6 +89,8 @@ window.addEventListener("load", function() {
 		}
 		beleg.ctrlLinks(a);
 	});
+	// Sonderzeichen
+	document.querySelectorAll("#sonderzeichen-cont span").forEach(i => sonderzeichen.eintragen(i));
 	// Bedeutungen
 	document.getElementById("bedeutungen-speichern").addEventListener("click", () => bedeutungen.speichern());
 	document.getElementById("bedeutungen-schliessen").addEventListener("click", () => bedeutungen.schliessen());

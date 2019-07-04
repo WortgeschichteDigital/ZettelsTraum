@@ -314,35 +314,52 @@ let dropdown = {
 		helfer.keineKinder(drop);
 		// Elemente ggf. filtern
 		let items = [...dropdown.data],
-			va = helfer.textTrim(dropdown.feldWert(feld), true);
-		if (filtern && va) {
+			va = dropdown.feldWert(feld),
+			vaTrimmed = helfer.textTrim(va, true);
+		if (filtern && vaTrimmed) {
 			let reg_chunks = "",
-				va_split = [];
+				va_split = [],
+				nur_aktuelle_zeile = false;
 			if (feld.getAttribute("contenteditable")) {
-				va_split = va.split(", ");
+				va_split = vaTrimmed.split(", ");
 			} else {
-				va_split = va.split("\n");
+				va_split = vaTrimmed.split("\n");
+				// nur aktuelle Zeile zum Filtern benutzen
+				nur_aktuelle_zeile = true;
+				let anfang = va.substring(0, dropdown.cursor),
+					anfangSp = anfang.split("\n"),
+					ende = va.substring(dropdown.cursor),
+					endeSp = ende.split("\n");
+				anfang = anfangSp[anfangSp.length - 1];
+				ende = endeSp[0];
+				reg_chunks = anfang + ende;
 			}
-			va_split.forEach(function(i) {
-				if (!i) {
-					return;
-				}
-				if (reg_chunks) {
-					reg_chunks += "|";
-				}
-				reg_chunks += helfer.escapeRegExp(i);
-			});
+			if (!nur_aktuelle_zeile) {
+				va_split.forEach(function(i) {
+					// leere Einträge ausschließen
+					if (!i) {
+						return;
+					}
+					// dieser Text wird berücksichtigt
+					if (reg_chunks) {
+						reg_chunks += "|";
+					}
+					reg_chunks += helfer.escapeRegExp(i);
+				});
+			}
 			let reg = new RegExp(reg_chunks, "i"),
 				gefiltert = [];
-			items.forEach(function(i) {
-				if (reg.test(i) && !va_split.includes(i)) {
-					gefiltert.push(i);
-				}
-			});
+			if (reg_chunks) { // wenn nur in der aktuellen Zeile gesucht wird, könnte diese leer sein => alles würde gefunden
+				items.forEach(function(i) {
+					if (reg.test(i) && !va_split.includes(i)) {
+						gefiltert.push(i);
+					}
+				});
+			}
 			items = [...gefiltert];
 		}
 		// Liste ist leer od. Textfeld ist leer (beim Aufrufen der Filterliste durch Tippen)
-		if (!items.length || !va && filtern) {
+		if (!items.length || !vaTrimmed && filtern) {
 			dropdown.schliessen();
 			return;
 		}

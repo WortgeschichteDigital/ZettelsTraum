@@ -9,7 +9,12 @@ let bedeutungenGeruest = {
 			obj = bedeutungen.data;
 		}
 		if (Object.keys(obj.gr).length === 1) {
-			dialog.oeffnen("alert");
+			dialog.oeffnen("alert", function() {
+				if (!document.getElementById("beleg").classList.contains("aus") &&
+						!document.getElementById("beleg-link-leseansicht").classList.contains("aktiv")) {
+					document.getElementById("beleg-bd").focus();
+				}
+			});
 			dialog.text("Die Kartei hat nur ein Bedeutungsgerüst.");
 			return;
 		}
@@ -21,7 +26,9 @@ let bedeutungenGeruest = {
 		// Gerüste eintragen
 		let input = document.getElementById("geruestwechseln-dropdown");
 		input.value = `Gerüst ${obj.gn}`;
-		input.focus();
+		setTimeout(function() {
+			input.focus();
+		}, 5); // ohne Timeout fokussiert das Fenster nicht
 	},
 	// Bedeutungsgerüst global wechseln
 	//   gn = String

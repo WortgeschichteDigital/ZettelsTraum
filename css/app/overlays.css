@@ -14,6 +14,7 @@
 #meta,
 #notizen,
 #redaktion,
+#sonderzeichen,
 #stamm,
 #tagger,
 #zeitraumgrafik {
@@ -37,6 +38,7 @@
 #meta > div,
 #notizen > div,
 #redaktion > div,
+#sonderzeichen > div,
 #stamm > div,
 #tagger > div,
 #zeitraumgrafik > div {
@@ -57,6 +59,7 @@
 #meta h2,
 #notizen h2,
 #redaktion h2,
+#sonderzeichen h2,
 #stamm h2,
 #tagger h2,
 #zeitraumgrafik h2 {
@@ -73,6 +76,7 @@
 #meta h2 a,
 #notizen h2 a,
 #redaktion h2 a,
+#sonderzeichen h2 a,
 #stamm h2 a,
 #tagger h2 a,
 #zeitraumgrafik h2 a {
@@ -946,6 +950,34 @@ input[id^="redaktion-person"] {
 
 #geruestwechseln-cont span {
 	display: inline-block;
+}
+
+/* Sonderzeichen -------------------------------- */
+#sonderzeichen > div {
+	margin-top: 40px;
+	max-width: 370px;
+}
+
+.icon-h-sonderzeichen {
+	-webkit-mask-image: url(../../img/heading-sonderzeichen.svg);
+	mask-image: url(../../img/heading-sonderzeichen.svg);
+}
+
+#sonderzeichen-cont {
+	padding: 10px 0 0 10px;
+}
+
+#sonderzeichen-cont span {
+	display: inline-block;
+	margin: 0 10px 10px 0;
+	border: 1px solid var(--linie);
+	width: 24px;
+	height: 24px;
+	text-align: center;
+}
+
+#sonderzeichen-cont span:hover {
+	background-color: var(--hintergrund);
 }
 
 /* Zeitraumgrafik ------------------------------- */

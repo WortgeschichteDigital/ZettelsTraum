@@ -10,7 +10,7 @@
 	<item>
 		<id>1</id>
 		<name>albanisch</name>
-		<abbr>alb.</abbr>
+		<abbr>alban.</abbr>
 	</item>
 	<item>
 		<id>2</id>
@@ -105,7 +105,7 @@
 	<item>
 		<id>20</id>
 		<name>armenisch</name>
-		<abbr>arm.</abbr>
+		<abbr>armen.</abbr>
 	</item>
 	<item>
 		<id>21</id>
@@ -115,7 +115,7 @@
 	<item>
 		<id>22</id>
 		<name>bretonisch</name>
-		<abbr>bret.</abbr>
+		<abbr>breton.</abbr>
 	</item>
 	<item>
 		<id>23</id>
@@ -190,7 +190,7 @@
 	<item>
 		<id>37</id>
 		<name>gotländisch</name>
-		<abbr>got.</abbr>
+		<abbr>gotländ.</abbr>
 	</item>
 	<item>
 		<id>38</id>
@@ -205,7 +205,7 @@
 	<item>
 		<id>40</id>
 		<name>hethitisch</name>
-		<abbr>heth.</abbr>
+		<abbr>hethit.</abbr>
 	</item>
 	<item>
 		<id>41</id>
@@ -245,7 +245,7 @@
 	<item>
 		<id>48</id>
 		<name>katalanisch</name>
-		<abbr>katal.</abbr>
+		<abbr>katalan.</abbr>
 	</item>
 	<item>
 		<id>49</id>
@@ -335,7 +335,7 @@
 	<item>
 		<id>66</id>
 		<name>nordfriesisch</name>
-		<abbr>nordfrs.</abbr>
+		<abbr>nordfries.</abbr>
 	</item>
 	<item>
 		<id>67</id>
@@ -375,7 +375,7 @@
 	<item>
 		<id>74</id>
 		<name>portugiesisch</name>
-		<abbr>port.</abbr>
+		<abbr>portugies.</abbr>
 	</item>
 	<item>
 		<id>75</id>
@@ -385,7 +385,7 @@
 	<item>
 		<id>76</id>
 		<name>rätoromanisch</name>
-		<abbr>rätorom.</abbr>
+		<abbr>rätoroman.</abbr>
 	</item>
 	<item>
 		<id>77</id>
@@ -395,7 +395,7 @@
 	<item>
 		<id>78</id>
 		<name>rumänisch</name>
-		<abbr>rum.</abbr>
+		<abbr>rumän.</abbr>
 	</item>
 	<item>
 		<id>79</id>
@@ -455,7 +455,7 @@
 	<item>
 		<id>90</id>
 		<name>tocharisch</name>
-		<abbr>toch.</abbr>
+		<abbr>tochar.</abbr>
 	</item>
 	<item>
 		<id>91</id>

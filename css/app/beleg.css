@@ -212,6 +212,10 @@ textarea#beleg-bs {
 	background-color: var(--text);
 }
 
+.text-tools-beleg a:first-child {
+	margin-right: 24px;
+}
+
 .icon-tools-einfuegen {
 	-webkit-mask-image: url(../../img/tool-einfuegen.svg);
 	mask-image: url(../../img/tool-einfuegen.svg);
@@ -250,6 +254,11 @@ textarea#beleg-bs {
 .icon-tools-size {
 	-webkit-mask-image: url(../../img/tool-size.svg);
 	mask-image: url(../../img/tool-size.svg);
+}
+
+.icon-tools-sonderzeichen {
+	-webkit-mask-image: url(../../img/tool-sonderzeichen.svg);
+	mask-image: url(../../img/tool-sonderzeichen.svg);
 }
 
 .icon-tools-spacing {

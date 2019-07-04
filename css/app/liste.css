@@ -265,6 +265,10 @@ p.no-indent + .filter-baum, /* betrifft Verschiedenes > Filterlogik */
 	color: var(--textFarbe);
 }
 
+#liste-filter input:disabled + label {
+	color: var(--textSehrHell);
+}
+
 #filter-bewertung {
 	margin: 5px 0 0 22px;
 }

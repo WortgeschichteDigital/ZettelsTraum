@@ -75,6 +75,10 @@ let overlay = {
 			if (dialog.funktion) { // Soll eine Funktion ausgeführt werden?
 				dialog.funktion();
 			}
+		} else if (fenster.id === "geruestwechseln" &&
+				!document.getElementById("beleg").classList.contains("aus") &&
+				!document.getElementById("beleg-link-leseansicht").classList.contains("aktiv")) {
+			document.getElementById("beleg-bd").focus();
 		}
 	},
 	// alle offenen Overlays schließen

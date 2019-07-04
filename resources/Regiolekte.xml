@@ -45,7 +45,7 @@
 	<item>
 		<id>8</id>
 		<name>fränkisch</name>
-		<abbr>fränk.</abbr>
+		<abbr>frk.</abbr>
 	</item>
 	<item>
 		<id>9</id>
@@ -55,7 +55,7 @@
 	<item>
 		<id>10</id>
 		<name>hochdeutsch</name>
-		<abbr>hochd.</abbr>
+		<abbr>hd.</abbr>
 	</item>
 	<item>
 		<id>11</id>
@@ -70,7 +70,7 @@
 	<item>
 		<id>13</id>
 		<name>landschaftlich</name>
-		<abbr>landsch.</abbr>
+		<abbr>landschaftl.</abbr>
 	</item>
 	<item>
 		<id>14</id>
@@ -100,22 +100,22 @@
 	<item>
 		<id>19</id>
 		<name>mittelfränkisch</name>
-		<abbr>mfränk.</abbr>
+		<abbr>mfrk.</abbr>
 	</item>
 	<item>
 		<id>20</id>
 		<name>moselfränkisch</name>
-		<abbr>mosfränk.</abbr>
+		<abbr>mosfrk.</abbr>
 	</item>
 	<item>
 		<id>21</id>
 		<name>mundartlich</name>
-		<abbr>mundart.</abbr>
+		<abbr>mdal.</abbr>
 	</item>
 	<item>
 		<id>22</id>
 		<name>niederdeutsch</name>
-		<abbr>niederd.</abbr>
+		<abbr>nd.</abbr>
 	</item>
 	<item>
 		<id>23</id>
@@ -150,12 +150,12 @@
 	<item>
 		<id>29</id>
 		<name>obersächsisch</name>
-		<abbr>obersächs.</abbr>
+		<abbr>obs.</abbr>
 	</item>
 	<item>
 		<id>30</id>
 		<name>österreichisch</name>
-		<abbr>österr.</abbr>
+		<abbr>öst.</abbr>
 	</item>
 	<item>
 		<id>31</id>
@@ -165,7 +165,7 @@
 	<item>
 		<id>32</id>
 		<name>ostmitteldeutsch</name>
-		<abbr>ostmd.</abbr>
+		<abbr>omd.</abbr>
 	</item>
 	<item>
 		<id>33</id>
@@ -250,17 +250,17 @@
 	<item>
 		<id>49</id>
 		<name>thüringisch</name>
-		<abbr>thüring.</abbr>
+		<abbr>thür.</abbr>
 	</item>
 	<item>
 		<id>50</id>
 		<name>westfälisch</name>
-		<abbr>westfäl.</abbr>
+		<abbr>westf.</abbr>
 	</item>
 	<item>
 		<id>51</id>
 		<name>westmitteldeutsch</name>
-		<abbr>westmd.</abbr>
+		<abbr>wmd.</abbr>
 	</item>
 	<item>
 		<id>52</id>
