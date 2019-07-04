@@ -22,3 +22,24 @@ window.addEventListener("load", function() {
 		bedeutungen.aufbauen();
 	});
 });
+
+window.addEventListener("beforeunload", function() {
+	const {remote, ipcRenderer} = require("electron"),
+		win = remote.getCurrentWindow();
+	let status = {
+		x: null,
+		y: null,
+		width: null,
+		height: null,
+		maximiert: win.isMaximized(),
+		winId: bedeutungen.data.winId,
+	};
+	const bounds = win.getBounds();
+	if (!status.maximiert && bounds) {
+		status.x = bounds.x;
+		status.y = bounds.y;
+		status.width = bounds.width;
+		status.height = bounds.height;
+	}
+	ipcRenderer.send("bedeutungen-fenster-status", status);
+});

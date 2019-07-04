@@ -76,7 +76,7 @@ let kartei = {
 		// alle Overlays schließen
 		overlay.alleSchliessen();
 		// Bedeutungsgerüst-Fenster schließen
-		bedeutungenWin.oeffnen(false);
+		bedeutungenWin.schliessen();
 		// neue Karte erstellen
 		beleg.erstellen();
 	},
@@ -175,7 +175,7 @@ let kartei = {
 			// alle Overlays schließen
 			overlay.alleSchliessen();
 			// Bedeutungsgerüst-Fenster schließen
-			bedeutungenWin.oeffnen(false);
+			bedeutungenWin.schliessen();
 			// alle Filter zurücksetzen (wichtig für Text- und Zeitraumfilter)
 			filter.ctrlReset(false);
 			// Okay! Datei kann eingelesen werden
@@ -296,7 +296,7 @@ let kartei = {
 		bedeutungen.bedeutungenGeaendert(false);
 		kartei.karteiGeaendert(false);
 		overlay.alleSchliessen();
-		bedeutungenWin.oeffnen(false);
+		bedeutungenWin.schliessen();
 		data = {};
 		kartei.wort = "";
 		kartei.pfad = "";

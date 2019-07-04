@@ -1,7 +1,7 @@
 "use strict";
 
 // globale Fensterobjekte
-let win, winBedeutungen, winHandbuch, winDokumentation, winChangelog, winUeberApp, winUeberElectron;
+let win, winHandbuch, winDokumentation, winChangelog, winUeberApp, winUeberElectron;
 
 // Funktionen-Container
 let appMenu, optionen, fenster;
@@ -166,7 +166,7 @@ let layoutMenu = [
 			{
 				label: "Bedeutungsgerüst-Fenster",
 				icon: path.join(__dirname, "img", "menu", "kartei-bedeutungen-fenster.png"),
-				click: () => fenster.erstellenBedeutungen(),
+				click: () => win.webContents.send("kartei-bedeutungen-fenster"),
 				accelerator: "CommandOrControl+Shift+B",
 				id: "kartei-bedeutungen-fenster",
 			},
@@ -468,25 +468,10 @@ ipcMain.on("ueber-app", (evt, opener) => fenster.erstellenUeberApp(opener));
 // Electron-Info aufrufen, wenn der Renderer-Prozess es wünscht
 ipcMain.on("ueber-electron", (evt, opener) => fenster.erstellenUeberElectron(opener));
 
-// Bedeutungsgerüst-Fenster öffnen/schließen, wenn der Renderer-Prozess es wünscht
-ipcMain.on("kartei-bedeutungen-fenster", function(evt, oeffnen) {
-	if (oeffnen) {
-		fenster.erstellenBedeutungen();
-	} else if (winBedeutungen) {
-		winBedeutungen.close();
-	}
-});
-
-// Daten an Bedeutungsgerüst-Fenster übergeben
-ipcMain.on("kartei-bedeutungen-fenster-daten", function(evt, daten) {
-	if (!winBedeutungen) {
-		return;
-	}
-	winBedeutungen.webContents.send("daten", daten);
-});
-
 // Druckauftrag aus dem Bedeutungsgerüst-Fenster an den Renderer-Prozess schicken
 ipcMain.on("bedeutungen-fenster-drucken", function(evt, daten) {
+	// TODO Ziel-Fenster über daten.winId ermitteln
+	daten = daten.gr;
 	win.webContents.send("bedeutungen-fenster-drucken", daten);
 	if (win.isMinimized()) {
 		win.restore();
@@ -496,6 +481,8 @@ ipcMain.on("bedeutungen-fenster-drucken", function(evt, daten) {
 
 // angeklickte Bedeutung im Gerüst-Fenster eintragen
 ipcMain.on("bedeutungen-fenster-eintragen", function(evt, bd) {
+	// TODO Ziel-Fenster über bd.winId ermitteln
+	delete bd.winId;
 	win.webContents.send("bedeutungen-fenster-eintragen", bd);
 	if (win.isMinimized()) {
 		win.restore();
@@ -505,11 +492,20 @@ ipcMain.on("bedeutungen-fenster-eintragen", function(evt, bd) {
 
 // angeklickte Bedeutung im Gerüst-Fenster austragen
 ipcMain.on("bedeutungen-fenster-austragen", function(evt, bd) {
+	// TODO Ziel-Fenster über bd.winId ermitteln
+	delete bd.winId;
 	win.webContents.send("bedeutungen-fenster-austragen", bd);
 	if (win.isMinimized()) {
 		win.restore();
 	}
 	win.focus();
+});
+
+// Status des gerade geschlossenen Bedeutungsgerüst-Fensters an das passende Hauptfenster schicken
+ipcMain.on("bedeutungen-fenster-status", function(evt, status) {
+	// TODO Ziel-Fenster über status.winId ermitteln
+	delete status.winId;
+	win.webContents.send("bedeutungen-fenster-status", status);
 });
 
 // Handbuch aufrufen, wenn der Renderer-Prozess es wünscht
@@ -529,13 +525,6 @@ optionen = {
 			y: undefined,
 			width: 1100,
 			height: undefined,
-			maximiert: false,
-		},
-		"fenster-bedeutungen": {
-			x: undefined,
-			y: undefined,
-			width: 650,
-			height: 600,
 			maximiert: false,
 		},
 		app: {},
@@ -561,11 +550,11 @@ optionen = {
 	},
 	// überschreibt die Optionen-Datei
 	schreiben () {
-		fs.writeFile(optionen.pfad, JSON.stringify(optionen.data), function(err) {
-			if (err) {
-				win.webContents.send("dialog-anzeigen", `Die Optionen-Datei konnte nicht gespeichert werden.\n<h3>Fehlermeldung</h3>\n${err.message}`);
-			}
-		});
+// 		fs.writeFile(optionen.pfad, JSON.stringify(optionen.data), function(err) {
+// 			if (err) {
+// 				win.webContents.send("dialog-anzeigen", `Die Optionen-Datei konnte nicht gespeichert werden.\n<h3>Fehlermeldung</h3>\n${err.message}`);
+// 			}
+// 		});
 	},
 };
 
@@ -629,17 +618,10 @@ fenster = {
 				win.maximize();
 			}
 		});
-		// Status des Fensters speichern
-		// Man könnte den Status noch zusätzlich bei den Events
-		// "resize" und "move" speichern, finde ich aber übertrieben.
-		win.on("close", () => fenster.status("win"));
 		// globales Fensterobjekt beim Schließen dereferenzieren
 		win.on("closed", function() {
 			win = null;
 			// ggf. noch offene Nebenfenster schließen
-			if (winBedeutungen) {
-				winBedeutungen.close();
-			}
 			if (winHandbuch) {
 				winHandbuch.close();
 			}
@@ -650,57 +632,6 @@ fenster = {
 				winChangelog.close();
 			}
 		});
-	},
-	// Bedeutungsgerüst-Fenster erstellen
-	erstellenBedeutungen () {
-		// Bedeutungsgerüst-Fenster ist bereits offen => Fenster fokussieren
-		if (winBedeutungen) {
-			if (winBedeutungen.isMinimized()) {
-				winBedeutungen.restore();
-			}
-			winBedeutungen.focus();
-			return;
-		}
-		// Fenster öffnen
-		winBedeutungen = new BrowserWindow({
-			title: "Bedeutungsgerüst",
-			icon: path.join(__dirname, "img", "icon", "linux", "icon_32px.png"),
-			x: optionen.data["fenster-bedeutungen"].x,
-			y: optionen.data["fenster-bedeutungen"].y,
-			width: optionen.data["fenster-bedeutungen"].width,
-			height: optionen.data["fenster-bedeutungen"].height,
-			minWidth: 400,
-			minHeight: 400,
-			show: false,
-			webPreferences: {
-				nodeIntegration: true,
-				devTools: devtools,
-				defaultEncoding: "utf-8",
-			},
-		});
-		// Menü erzeugen
-		appMenu.erzeugenAnsicht(winBedeutungen);
-		winBedeutungen.on("leave-full-screen", function() {
-			// nach Verlassen des Vollbilds muss die Menüleiste wieder ausgeblendet werden
-			// (ohne Timeout geht es nicht)
-			setTimeout(() => winBedeutungen.setMenuBarVisibility(false), 1);
-		});
-		// HTML laden
-		winBedeutungen.loadFile(path.join(__dirname, "win", "bedeutungen.html"));
-		// Fenster anzeigen, sobald alles geladen wurde
-		winBedeutungen.once("ready-to-show", function() {
-			winBedeutungen.show();
-			// ggf. maximieren
-			if (optionen.data["fenster-bedeutungen"].maximiert) {
-				winBedeutungen.maximize();
-			}
-			// Daten aus dem Renderer-Prozess holen
-			win.webContents.send("kartei-bedeutungen-fenster-daten");
-		});
-		// Status des Fensters speichern
-		winBedeutungen.on("close", () => fenster.status("winBedeutungen"));
-		// globales Fensterobjekt beim Schließen dereferenzieren
-		winBedeutungen.on("closed", () => winBedeutungen = null);
 	},
 	// Handbuch-Fenster erstellen
 	erstellenHandbuch () {
@@ -885,9 +816,8 @@ fenster = {
 	},
 	// Parent-Fenster ermitteln
 	findParent (opener) {
-		if (opener === "bedeutungen") {
-			return winBedeutungen;
-		} else if (opener === "handbuch") {
+		// TODO Parent für Bedeutungen-Fenster finden
+		if (opener === "handbuch") {
 			return winHandbuch;
 		} else if (opener === "dokumentation") {
 			return winDokumentation;
@@ -896,31 +826,6 @@ fenster = {
 		} else {
 			return win;
 		}
-	},
-	// Fenster-Status in den Optionen speichern (Haupt- und Bedeutungsgerüst-Fenster)
-	//   typ = String
-	//     ("win" für das Hauptfenster, "winBedeutungen" für das Bedeutungsgerüst-Fenster)
-	status (typ) {
-		if (typ === "win") {
-			optionen.data.fenster.maximiert = win.isMaximized();
-			let bounds = win.getBounds();
-			if (!optionen.data.fenster.maximiert && bounds) {
-				optionen.data.fenster.x = bounds.x;
-				optionen.data.fenster.y = bounds.y;
-				optionen.data.fenster.width = bounds.width;
-				optionen.data.fenster.height = bounds.height;
-			}
-		} else if (typ === "winBedeutungen") {
-			optionen.data["fenster-bedeutungen"].maximiert = winBedeutungen.isMaximized();
-			let bounds = winBedeutungen.getBounds();
-			if (!optionen.data["fenster-bedeutungen"].maximiert && bounds) {
-				optionen.data["fenster-bedeutungen"].x = bounds.x;
-				optionen.data["fenster-bedeutungen"].y = bounds.y;
-				optionen.data["fenster-bedeutungen"].width = bounds.width;
-				optionen.data["fenster-bedeutungen"].height = bounds.height;
-			}
-		}
-		optionen.schreiben();
 	},
 };
 

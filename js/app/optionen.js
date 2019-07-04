@@ -4,6 +4,22 @@ let optionen = {
 	// Speicherort aller Optionen
 	// (ausgenommen ist der Fenster-Status, der nur im Main-Prozess steht)
 	data: {
+		// Status des Hauptfensters
+		fenster: {
+			x: null,
+			y: null,
+			width: 1100,
+			height: null,
+			maximiert: false,
+		},
+		// Status des Bedeutungsgerüst-Fensters
+		"fenster-bedeutungen": {
+			x: null,
+			y: null,
+			width: 650,
+			height: 600,
+			maximiert: false,
+		},
 		// Karteikarte
 		beleg: {
 			// Belegkontext in der Leseansicht kürzen

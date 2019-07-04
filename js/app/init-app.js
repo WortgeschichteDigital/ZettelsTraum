@@ -222,7 +222,7 @@ window.addEventListener("load", function() {
 	ipcRenderer.on("kartei-redaktion", () => redaktion.oeffnen());
 	ipcRenderer.on("kartei-bedeutungen", () => bedeutungen.oeffnen());
 	ipcRenderer.on("kartei-bedeutungen-wechseln", () => bedeutungenGeruest.oeffnen());
-	ipcRenderer.on("kartei-bedeutungen-fenster-daten", () => bedeutungenWin.daten());
+	ipcRenderer.on("kartei-bedeutungen-fenster", () => bedeutungenWin.oeffnen());
 	ipcRenderer.on("kartei-suche", () => filter.suche());
 	ipcRenderer.on("belege-hinzufuegen", () => beleg.erstellenPre());
 	ipcRenderer.on("belege-auflisten", () => liste.anzeigen());
@@ -234,6 +234,7 @@ window.addEventListener("load", function() {
 	ipcRenderer.on("bedeutungen-fenster-drucken", (evt, gn) => drucken.init("bedeutungen-", gn));
 	ipcRenderer.on("bedeutungen-fenster-eintragen", (evt, bd) => beleg.bedeutungEinAustragen(bd, true));
 	ipcRenderer.on("bedeutungen-fenster-austragen", (evt, bd) => beleg.bedeutungEinAustragen(bd, false));
+	ipcRenderer.on("bedeutungen-fenster-status", (evt, status) => bedeutungenWin.status(status));
 	
 	// SYNCHRONE ANFRAGEN AN DEN MAIN-PROZESS STELLEN
 	// Optionen laden
@@ -257,10 +258,18 @@ window.addEventListener("load", function() {
 
 // Schließen unterbrechen, falls Daten noch nicht gespeichert wurden
 window.addEventListener("beforeunload", function(evt) {
-	// ggf. Optionen speichern
-	if (optionen.speichern_timeout) {
-		optionen.speichernAnstossen();
+	// Status des Fensters speichern
+	const {remote} = require("electron"),
+		win = remote.getCurrentWindow();
+	optionen.data.fenster.maximiert = win.isMaximized();
+	const bounds = win.getBounds();
+	if (!optionen.data.fenster.maximiert && bounds) {
+		optionen.data.fenster.x = bounds.x;
+		optionen.data.fenster.y = bounds.y;
+		optionen.data.fenster.width = bounds.width;
+		optionen.data.fenster.height = bounds.height;
 	}
+	optionen.speichernAnstossen();
 	// Schließen ggf. unterbrechen + Kartei ggf. entsperren
 	if (notizen.geaendert || tagger.geaendert || bedeutungen.geaendert || beleg.geaendert || kartei.geaendert) {
 		sicherheitsfrage.warnen(function() {

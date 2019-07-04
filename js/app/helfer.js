@@ -52,7 +52,7 @@ let helfer = {
 			} else if (id === "kartei-bedeutungen-wechseln") {
 				bedeutungenGeruest.oeffnen();
 			} else if (id === "kartei-bedeutungen-fenster") {
-				bedeutungenWin.oeffnen(true);
+				bedeutungenWin.oeffnen();
 			} else if (id === "kartei-suche") {
 				filter.suche();
 			} else if (id === "belege-hinzufuegen") {

@@ -93,7 +93,10 @@ let bedeutungen = {
 	// Bedeutungsbaum drucken
 	drucken () {
 		const {ipcRenderer} = require("electron");
-		ipcRenderer.send("bedeutungen-fenster-drucken", bedeutungen.geruest);
+		ipcRenderer.send("bedeutungen-fenster-drucken", {
+			gr: bedeutungen.geruest,
+			winId: bedeutungen.data.winId,
+		});
 	},
 	// Bedeutung im Formular/Belegliste des Hauptfensters eintragen
 	//   ele = Element
@@ -106,6 +109,7 @@ let bedeutungen = {
 			ipcRenderer.send("bedeutungen-fenster-eintragen", {
 				gr: bedeutungen.geruest,
 				id: id,
+				winId: bedeutungen.data.winId,
 			});
 		});
 	},
@@ -120,6 +124,7 @@ let bedeutungen = {
 			ipcRenderer.send("bedeutungen-fenster-austragen", {
 				gr: bedeutungen.geruest,
 				id: id,
+				winId: bedeutungen.data.winId,
 			});
 		});
 	},
