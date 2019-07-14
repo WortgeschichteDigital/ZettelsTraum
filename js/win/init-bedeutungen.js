@@ -9,7 +9,7 @@ window.addEventListener("load", function() {
 	document.querySelectorAll(".dropdown-link-td, .dropdown-link-element").forEach((i) =>	dropdown.link(i));
 	const {ipcRenderer} = require("electron");
 	// Über App
-	document.getElementById("icon").addEventListener("click", () => ipcRenderer.send("ueber-app", "bedeutungen"));
+	document.getElementById("icon").addEventListener("click", () => ipcRenderer.send("ueber-app"));
 	// Druck-Icon
 	document.getElementById("bd-win-drucken").addEventListener("click", function(evt) {
 		evt.preventDefault();

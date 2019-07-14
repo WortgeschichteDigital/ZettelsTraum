@@ -910,7 +910,8 @@ let optionen = {
 	//     gespeichert werden, weil es Konsequenzen für die UI hat)
 	speichern_timeout: null,
 	speichern (sofort) {
-		let timeout = 6e4;
+// 		let timeout = 6e4;
+		let timeout = 1e3;
 		if (sofort) {
 			timeout = 0;
 		}
@@ -922,8 +923,8 @@ let optionen = {
 	// Optionen zum speichern endgültig an den Main-Prozess schicken
 	speichernAnstossen () {
 		optionen.speichern_timeout = null;
-		const {ipcRenderer} = require("electron");
-		ipcRenderer.send("optionen-speichern", optionen.data);
+		const {ipcRenderer, remote} = require("electron");
+		ipcRenderer.send("optionen-speichern", optionen.data, remote.getCurrentWindow().id);
 	},
 	// letzten Pfad speichern
 	aendereLetzterPfad () {

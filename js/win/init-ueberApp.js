@@ -16,3 +16,10 @@ window.addEventListener("load", function() {
 	// Tastatur-Events abfangen
 	document.addEventListener("keydown", helferWin.tastatur);
 });
+
+window.addEventListener("beforeunload", function() {
+	// Fenster dereferenzieren
+	const {remote, ipcRenderer} = require("electron"),
+		win = remote.getCurrentWindow();
+	ipcRenderer.send("fenster-dereferenzieren", win.id);
+});

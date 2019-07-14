@@ -107,7 +107,7 @@ let bedeutungenWin = {
 			bedeutungenWin.daten();
 		});
 		// globales Fensterobjekt beim Schließen dereferenzieren
-		bedeutungenWin.win.on("closed", () => bedeutungenWin.win = null);
+		bedeutungenWin.win.on("close", () => bedeutungenWin.win = null);
 	},
 	// Bedeutungsgerüst-Fenster schließen
 	schliessen () {

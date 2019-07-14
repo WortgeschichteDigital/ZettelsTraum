@@ -60,7 +60,7 @@ window.addEventListener("load", function() {
 	// Programm-Icon
 	document.getElementById("icon").addEventListener("click", function() {
 		const {ipcRenderer} = require("electron");
-		ipcRenderer.send("ueber-app", "app");
+		ipcRenderer.send("ueber-app");
 	});
 	// Start-Sektion
 	document.getElementById("start-erstellen").addEventListener("click", () => kartei.wortErfragen());
@@ -258,6 +258,8 @@ window.addEventListener("load", function() {
 
 // Schließen unterbrechen, falls Daten noch nicht gespeichert wurden
 window.addEventListener("beforeunload", function(evt) {
+	// Bedeutungen-Fenster ggf. schließen
+	bedeutungenWin.schliessen();
 	// Status des Fensters speichern
 	const {remote} = require("electron"),
 		win = remote.getCurrentWindow();
@@ -290,5 +292,7 @@ window.addEventListener("beforeunload", function(evt) {
 		evt.returnValue = "false";
 	} else {
 		kartei.lock(kartei.pfad, "unlock");
+		const {ipcRenderer} = require("electron");
+		ipcRenderer.send("fenster-dereferenzieren", win.id);
 	}
 });

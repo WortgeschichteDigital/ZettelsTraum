@@ -1,7 +1,9 @@
 "use strict";
 
-// globale Fensterobjekte
-let win, winHandbuch, winDokumentation, winChangelog, winUeberApp, winUeberElectron;
+// Speicher-Objekt für alle Fenster
+// (die Bedeutungsgerüst-Fenster sind direkt an ein Hauptfenster gebunden;
+// sie werden hier nicht gespeichert)
+let win = {};
 
 // Funktionen-Container
 let appMenu, optionen, fenster;
@@ -20,16 +22,33 @@ if (!primary) {
 }
 
 app.on("second-instance", function(evt, argv) {
-	if (!win) {
-		return;
-	}
+	// Kartei öffnen?
 	if (/\.wgd$/.test(argv[1])) {
-		win.webContents.send("kartei-oeffnen", argv[1]);
+		// Kartei schon offen => Fenster fokussieren
+		let leereFenster = [];
+		for (let id in win) {
+			if (!win.hasOwnProperty(id)) {
+				continue;
+			}
+			if (win[id].kartei === argv[1]) {
+				let w = BrowserWindow.fromId(parseInt(id, 10));
+				if (w.isMinimized()) {
+					w.restore();
+				}
+				w.focus();
+				return;
+			} else if (win[id].typ === "index" && !win[id].kartei) {
+				leereFenster.push(parseInt(id, 10));
+			}
+		}
+		// Kartei noch nicht offen => Kartei öffnen
+		if (leereFenster.length) {
+			let w = BrowserWindow.fromId(leereFenster[0]);
+			w.webContents.send("kartei-oeffnen", argv[1]);
+		} else {
+			fenster.erstellen(); // TODO klappt das? Macht er die Kartei auf?
+		}
 	}
-	if (win.isMinimized()) {
-		win.restore();
-	}
-	win.focus();
 });
 
 // Bilderliste erstellen
@@ -58,13 +77,19 @@ let layoutMenu = [
 			{
 				label: "Einstellungen",
 				icon: path.join(__dirname, "img", "menu", "programm-einstellungen.png"),
-				click: () => win.webContents.send("programm-einstellungen"),
+				click: () => appMenu.aktion("programm-einstellungen"),
+			},
+			{ type: "separator" },
+			{
+				label: "Neues Fenster",
+				icon: path.join(__dirname, "img", "menu", "programm-neues-fenster.png"),
+				click: () => fenster.erstellen(),
 			},
 			{ type: "separator" },
 			{
 				label: "Beenden",
 				icon: path.join(__dirname, "img", "menu", "programm-beenden.png"),
-				role: "quit",
+				click: () => appMenu.aktion("programm-beenden"),
 				accelerator: "CommandOrControl+Q",
 			},
 		],
@@ -75,14 +100,14 @@ let layoutMenu = [
 			{
 				label: "Erstellen",
 				icon: path.join(__dirname, "img", "menu", "kartei-erstellen.png"),
-				click: () => win.webContents.send("kartei-erstellen"),
+				click: () => appMenu.aktion("kartei-erstellen"),
 				accelerator: "CommandOrControl+E",
 			},
 			{ type: "separator" },
 			{
 				label: "Öffnen",
 				icon: path.join(__dirname, "img", "menu", "kartei-oeffnen.png"),
-				click: () => win.webContents.send("kartei-oeffnen", ""),
+				click: () => appMenu.aktion("kartei-oeffnen", ""),
 				accelerator: "CommandOrControl+O",
 			},
 			{
@@ -93,14 +118,14 @@ let layoutMenu = [
 			{
 				label: "Speichern",
 				icon: path.join(__dirname, "img", "menu", "kartei-speichern.png"),
-				click: () => win.webContents.send("kartei-speichern"),
+				click: () => appMenu.aktion("kartei-speichern"),
 				accelerator: "CommandOrControl+S",
 				id: "kartei-speichern",
 			},
 			{
 				label: "Speichern unter",
 				icon: path.join(__dirname, "img", "menu", "kartei-speichern-unter.png"),
-				click: () => win.webContents.send("kartei-speichern-unter"),
+				click: () => appMenu.aktion("kartei-speichern-unter"),
 				accelerator: "CommandOrControl+Shift+S",
 				id: "kartei-speichern-unter",
 			},
@@ -108,7 +133,7 @@ let layoutMenu = [
 			{
 				label: "Schließen",
 				icon: path.join(__dirname, "img", "menu", "kartei-schliessen.png"),
-				click: () => win.webContents.send("kartei-schliessen"),
+				click: () => appMenu.aktion("kartei-schliessen"),
 				accelerator: "CommandOrControl+W",
 				id: "kartei-schliessen",
 			},
@@ -116,57 +141,57 @@ let layoutMenu = [
 			{
 				label: "Formvarianten",
 				icon: path.join(__dirname, "img", "menu", "kartei-formvarianten.png"),
-				click: () => win.webContents.send("kartei-formvarianten"),
+				click: () => appMenu.aktion("kartei-formvarianten"),
 				id: "kartei-formvarianten",
 			},
 			{
 				label: "Notizen",
 				icon: path.join(__dirname, "img", "menu", "kartei-notizen.png"),
-				click: () => win.webContents.send("kartei-notizen"),
+				click: () => appMenu.aktion("kartei-notizen"),
 				id: "kartei-notizen",
 			},
 			{
 				label: "Anhänge",
 				icon: path.join(__dirname, "img", "menu", "kartei-anhaenge.png"),
-				click: () => win.webContents.send("kartei-anhaenge"),
+				click: () => appMenu.aktion("kartei-anhaenge"),
 				id: "kartei-anhaenge",
 			},
 			{
 				label: "Überprüfte Lexika",
 				icon: path.join(__dirname, "img", "menu", "kartei-lexika.png"),
-				click: () => win.webContents.send("kartei-lexika"),
+				click: () => appMenu.aktion("kartei-lexika"),
 				id: "kartei-lexika",
 			},
 			{
 				label: "Metadaten",
 				icon: path.join(__dirname, "img", "menu", "kartei-metadaten.png"),
-				click: () => win.webContents.send("kartei-metadaten"),
+				click: () => appMenu.aktion("kartei-metadaten"),
 				id: "kartei-metadaten",
 			},
 			{
 				label: "Redaktion",
 				icon: path.join(__dirname, "img", "menu", "kartei-redaktion.png"),
-				click: () => win.webContents.send("kartei-redaktion"),
+				click: () => appMenu.aktion("kartei-redaktion"),
 				id: "kartei-redaktion",
 			},
 			{ type: "separator" },
 			{
 				label: "Bedeutungsgerüst",
 				icon: path.join(__dirname, "img", "menu", "kartei-bedeutungen.png"),
-				click: () => win.webContents.send("kartei-bedeutungen"),
+				click: () => appMenu.aktion("kartei-bedeutungen"),
 				accelerator: "CommandOrControl+B",
 				id: "kartei-bedeutungen",
 			},
 			{
 				label: "Bedeutungsgerüst wechseln",
 				icon: path.join(__dirname, "img", "menu", "kartei-bedeutungen-wechseln.png"),
-				click: () => win.webContents.send("kartei-bedeutungen-wechseln"),
+				click: () => appMenu.aktion("kartei-bedeutungen-wechseln"),
 				id: "kartei-bedeutungen-wechseln",
 			},
 			{
 				label: "Bedeutungsgerüst-Fenster",
 				icon: path.join(__dirname, "img", "menu", "kartei-bedeutungen-fenster.png"),
-				click: () => win.webContents.send("kartei-bedeutungen-fenster"),
+				click: () => appMenu.aktion("kartei-bedeutungen-fenster"),
 				accelerator: "CommandOrControl+Shift+B",
 				id: "kartei-bedeutungen-fenster",
 			},
@@ -174,7 +199,7 @@ let layoutMenu = [
 			{
 				label: "Suche",
 				icon: path.join(__dirname, "img", "menu", "kartei-suche.png"),
-				click: () => win.webContents.send("kartei-suche"),
+				click: () => appMenu.aktion("kartei-suche"),
 				accelerator: "CommandOrControl+F",
 				id: "kartei-suche",
 			},
@@ -187,19 +212,19 @@ let layoutMenu = [
 			{
 				label: "Hinzufügen",
 				icon: path.join(__dirname, "img", "menu", "belege-hinzufuegen.png"),
-				click: () => win.webContents.send("belege-hinzufuegen"),
+				click: () => appMenu.aktion("belege-hinzufuegen"),
 				accelerator: "CommandOrControl+N",
 			},
 			{
 				label: "Auflisten",
 				icon: path.join(__dirname, "img", "menu", "belege-auflisten.png"),
-				click: () => win.webContents.send("belege-auflisten"),
+				click: () => appMenu.aktion("belege-auflisten"),
 				accelerator: "CommandOrControl+L",
 			},
 			{
 				label: "Sortieren",
 				icon: path.join(__dirname, "img", "menu", "belege-sortieren.png"),
-				click: () => win.webContents.send("dialog-anzeigen", "Sorry!\nDiese Funktion ist noch nicht programmiert."), // TODO
+				click: () => appMenu.aktion("dialog-anzeigen", "Sorry!\nDiese Funktion ist noch nicht programmiert."), // TODO
 				accelerator: "CommandOrControl+H",
 			},
 		],
@@ -246,27 +271,27 @@ let layoutMenu = [
 			{
 				label: "Handbuch",
 				icon: path.join(__dirname, "img", "menu", "hilfe.png"),
-				click: () => fenster.erstellenHandbuch(),
+				click: () => fenster.erstellenNeben("handbuch"),
 				accelerator: "F1",
 			},
 			{ type: "separator" },
 			{
 				label: "Technische Dokumentation",
-				click: () => fenster.erstellenDokumentation(),
+				click: () => fenster.erstellenNeben("dokumentation"),
 			},
 			{ type: "separator" },
 			{
 				label: "Changelog",
-				click: () => fenster.erstellenChangelog(),
+				click: () => fenster.erstellenNeben("changelog"),
 			},
 			{ type: "separator" },
 			{
 				label: `Über ${app.getName().replace("'", "’")}`,
-				click: () => fenster.erstellenUeberApp("app"),
+				click: () => fenster.erstellenUeber("app"),
 			},
 			{
 				label: "Über Electron",
-				click: () => fenster.erstellenUeberElectron(),
+				click: () => fenster.erstellenUeber("electron"),
 			},
 		],
 	},
@@ -334,7 +359,9 @@ if (!app.isPackaged) {
 // Funktionen zum Menü
 appMenu = {
 	// überschreibt das Submenü mit den zuletzt verwendeten Karteien
-	zuletzt (update) {
+	//   id = Number
+	//     (die ID des betroffenen Fensters; kann 0 sein => kein Fenster betroffen)
+	zuletzt (id) {
 		// neues Submenü erzeugen
 		let zuletztVerwendet = {
 			label: "Zuletzt verwendet",
@@ -361,8 +388,8 @@ appMenu = {
 					zuletzt.splice(zuletzt.indexOf(loeschen[i]), 1);
 				}
 				// bereingte Kartei-Liste an den Renderer-Prozess schicken
-				if (update) {
-					win.webContents.send("optionen-zuletzt", optionen.data.app.zuletzt);
+				if (id) {
+					appMenu.aktion("optionen-zuletzt", optionen.data.app.zuletzt);
 				}
 			}
 		}
@@ -388,8 +415,8 @@ appMenu = {
 		// neue Liste einhängen
 		layoutMenu[1].submenu[pos] = zuletztVerwendet;
 		// Menü ggf. auffrischen
-		if (update) {
-			appMenu.erzeugen();
+		if (id) {
+			appMenu.erzeugen(id);
 		}
 	},
 	// Menüpunkt im Untermenü "Zuletzt verwendet" erzeugen
@@ -397,7 +424,7 @@ appMenu = {
 		let item = {
 			label: path.basename(datei, ".wgd"),
 			sublabel: datei,
-			click: () => win.webContents.send("kartei-oeffnen", datei),
+			click: () => appMenu.aktion("kartei-oeffnen", datei),
 		};
 		if (i <= 8) {
 			item.accelerator = `CommandOrControl+${i + 1}`;
@@ -407,12 +434,16 @@ appMenu = {
 	// Menü mit zuletzt benutzten Dateien leeren
 	zuletztLoeschen () {
 		optionen.data.app.zuletzt = [];
-		win.webContents.send("optionen-zuletzt", optionen.data.app.zuletzt);
+		appMenu.aktion("optionen-zuletzt", optionen.data.app.zuletzt);
 		optionen.schreiben();
-		appMenu.zuletzt(true);
+		appMenu.zuletzt(BrowserWindow.getFocusedWindow().id);
 	},
 	// Menü-Elemente deaktivieren, wenn keine Kartei offen ist
-	deaktivieren (disable, update) {
+	//   disable = Boolean
+	//     (Menü-Element deaktiveren oder eben nicht)
+	//   id = Number
+	//     (die ID des betroffenen Fensters; kann 0 sein => kein Fenster betroffen)
+	deaktivieren (disable, id) {
 		let elemente = ["kartei-speichern", "kartei-speichern-unter", "kartei-formvarianten", "kartei-notizen", "kartei-anhaenge", "kartei-lexika", "kartei-metadaten", "kartei-redaktion", "kartei-bedeutungen", "kartei-bedeutungen-wechseln", "kartei-bedeutungen-fenster", "kartei-suche", "kartei-schliessen", "belege"];
 		for (let j = 0, len = layoutMenu.length; j < len; j++) {
 			// sollen vielleicht alle Menüpunkte deaktiviert werden?
@@ -431,8 +462,8 @@ appMenu = {
 			}
 		}
 		// Programm-Menü erzeugen?
-		if (update) {
-			appMenu.erzeugen();
+		if (id) {
+			appMenu.erzeugen(id);
 		}
 		// Switch-Funktion, die enabled auf true od. false stellt
 		function toggle (item) {
@@ -444,75 +475,95 @@ appMenu = {
 		}
 	},
 	// erzeugt das normale Programm-Menü
-	erzeugen () {
+	//   id = Number
+	//     (ID des Fensters)
+	erzeugen (id) {
 		let menu = Menu.buildFromTemplate(layoutMenu);
-		win.setMenu(menu);
+		BrowserWindow.fromId(id).setMenu(menu);
 	},
-	// erzeugt ein Menü, das nur den Punkt Ansicht hat
+	// erzeugt ein Menü, das nur den Punkt Ansicht hat und versteckt wird
+	//   fenster = Object
+	//     (das Fenster-Objekt, in dem das Menü erscheinen soll)
 	erzeugenAnsicht (fenster) {
 		let menu = Menu.buildFromTemplate(layoutMenuAnsicht);
 		fenster.setMenu(menu);
 		fenster.setMenuBarVisibility(false);
 	},
+	// führt die gewählte Aktion im aktuellen Fenster aus
+	//   aktion = String
+	//     (die Aktion)
+	aktion (aktion) {
+		let w = BrowserWindow.getFocusedWindow();
+		if (aktion === "programm-beenden") {
+			for (let id in win) {
+				if (!win.hasOwnProperty(id)) {
+					continue;
+				}
+				BrowserWindow.fromId(parseInt(id, 10)).close();
+			}
+		} else {
+			w.webContents.send(aktion);
+		}
+	},
 };
 
 // Menüs deaktivieren, die nur bei offenen Karteikarten funktionieren
-appMenu.deaktivieren(true, false);
+appMenu.deaktivieren(true, 0);
 
 // Menüse aktivieren/deaktivieren, wenn der Renderer-Prozess es wünscht
-ipcMain.on("menus-deaktivieren", (evt, disable) => appMenu.deaktivieren(disable, true));
+ipcMain.on("menus-deaktivieren", (evt, disable, id) => appMenu.deaktivieren(disable, id));
 
 // Programm-Info aufrufen, wenn der Renderer-Prozess es wünscht
-ipcMain.on("ueber-app", (evt, opener) => fenster.erstellenUeberApp(opener));
+ipcMain.on("ueber-app", () => fenster.erstellenUeber("app"));
 
 // Electron-Info aufrufen, wenn der Renderer-Prozess es wünscht
-ipcMain.on("ueber-electron", (evt, opener) => fenster.erstellenUeberElectron(opener));
+ipcMain.on("ueber-electron", () => fenster.erstellenUeber("electron"));
 
 // Druckauftrag aus dem Bedeutungsgerüst-Fenster an den Renderer-Prozess schicken
 ipcMain.on("bedeutungen-fenster-drucken", function(evt, daten) {
-	// TODO Ziel-Fenster über daten.winId ermitteln
+	let w = BrowserWindow.fromId(daten.winId);
 	daten = daten.gr;
-	win.webContents.send("bedeutungen-fenster-drucken", daten);
-	if (win.isMinimized()) {
-		win.restore();
+	w.webContents.send("bedeutungen-fenster-drucken", daten);
+	if (w.isMinimized()) {
+		w.restore();
 	}
-	win.focus();
+	w.focus();
 });
 
 // angeklickte Bedeutung im Gerüst-Fenster eintragen
 ipcMain.on("bedeutungen-fenster-eintragen", function(evt, bd) {
-	// TODO Ziel-Fenster über bd.winId ermitteln
+	let w = BrowserWindow.fromId(bd.winId);
 	delete bd.winId;
-	win.webContents.send("bedeutungen-fenster-eintragen", bd);
-	if (win.isMinimized()) {
-		win.restore();
+	w.webContents.send("bedeutungen-fenster-eintragen", bd);
+	if (w.isMinimized()) {
+		w.restore();
 	}
-	win.focus();
+	w.focus();
 });
 
 // angeklickte Bedeutung im Gerüst-Fenster austragen
 ipcMain.on("bedeutungen-fenster-austragen", function(evt, bd) {
-	// TODO Ziel-Fenster über bd.winId ermitteln
+	let w = BrowserWindow.fromId(bd.winId);
 	delete bd.winId;
-	win.webContents.send("bedeutungen-fenster-austragen", bd);
-	if (win.isMinimized()) {
-		win.restore();
+	w.webContents.send("bedeutungen-fenster-austragen", bd);
+	if (w.isMinimized()) {
+		w.restore();
 	}
-	win.focus();
+	w.focus();
 });
 
 // Status des gerade geschlossenen Bedeutungsgerüst-Fensters an das passende Hauptfenster schicken
 ipcMain.on("bedeutungen-fenster-status", function(evt, status) {
-	// TODO Ziel-Fenster über status.winId ermitteln
+	let w = BrowserWindow.fromId(status.winId);
 	delete status.winId;
-	win.webContents.send("bedeutungen-fenster-status", status);
+	w.webContents.send("bedeutungen-fenster-status", status);
 });
 
 // Handbuch aufrufen, wenn der Renderer-Prozess es wünscht
-ipcMain.on("hilfe-handbuch", () => fenster.erstellenHandbuch());
+ipcMain.on("hilfe-handbuch", () => fenster.erstellenNeben("handbuch"));
 
 // Changelog aufrufen, wenn der Renderer-Prozess es wünscht
-ipcMain.on("hilfe-changelog", () => fenster.erstellenChangelog());
+ipcMain.on("hilfe-changelog", () => fenster.erstellenNeben("changelog"));
 
 // Optionen einlesen und speichern
 optionen = {
@@ -550,9 +601,10 @@ optionen = {
 	},
 	// überschreibt die Optionen-Datei
 	schreiben () {
+		// TODO umarbeiten
 // 		fs.writeFile(optionen.pfad, JSON.stringify(optionen.data), function(err) {
 // 			if (err) {
-// 				win.webContents.send("dialog-anzeigen", `Die Optionen-Datei konnte nicht gespeichert werden.\n<h3>Fehlermeldung</h3>\n${err.message}`);
+// 				appMenu.aktion("dialog-anzeigen", `Die Optionen-Datei konnte nicht gespeichert werden.\n<h3>Fehlermeldung</h3>\n${err.message}`);
 // 			}
 // 		});
 	},
@@ -567,11 +619,11 @@ ipcMain.on("optionen-senden", function(evt) {
 });
 
 // Optionen vom Renderer Process abfangen und speichern
-ipcMain.on("optionen-speichern", function(evt, opt) {
+ipcMain.on("optionen-speichern", function(evt, opt, id) {
 	if (optionen.data.app.zuletzt &&
 			optionen.data.app.zuletzt.join(",") !== opt.zuletzt.join(",")) {
 		optionen.data.app = opt;
-		appMenu.zuletzt(true); // Das sollte nicht unnötig oft aufgerufen werden!
+		appMenu.zuletzt(id); // Das sollte nicht unnötig oft aufgerufen werden!
 	} else {
 		optionen.data.app = opt;
 	}
@@ -580,10 +632,10 @@ ipcMain.on("optionen-speichern", function(evt, opt) {
 
 // Browser-Fenster
 fenster = {
-	// Hauptfenster erzeugen
+	// Hauptfenster erstellen
 	erstellen () {
 		// Fenster öffnen
-		win = new BrowserWindow({
+		let bw = new BrowserWindow({
 			title: app.getName().replace("'", "’"),
 			icon: path.join(__dirname, "img", "icon", "linux", "icon_32px.png"),
 			x: optionen.data.fenster.x,
@@ -600,98 +652,76 @@ fenster = {
 				defaultEncoding: "utf-8",
 			},
 		});
+		// Fenster-Objekt anlegen
+		win[bw.id] = {
+			typ: "index",
+			kartei: "",
+		};
 		// Menü erzeugen
-		appMenu.erzeugen();
+		appMenu.erzeugen(bw.id);
 		// HTML laden
-		win.loadFile(path.join(__dirname, "index.html"));
+		BrowserWindow.fromId(bw.id).loadFile(path.join(__dirname, "index.html"));
 		// Fenster anzeigen, sobald alles geladen wurde
-		win.once("ready-to-show", function() {
+		BrowserWindow.fromId(bw.id).once("ready-to-show", function() {
 			// ggf. übergebene Kartei öffnen
 			if (/\.wgd$/.test(process.argv[1])) {
 				// ein bisschen Timeout, sonst klappt das nicht
-				setTimeout(() => win.webContents.send("kartei-oeffnen", process.argv[1]), 100);
+				setTimeout(() => this.webContents.send("kartei-oeffnen", process.argv[1]), 100);
 			}
 			// Fenster anzeigen
-			win.show();
+			this.show();
 			// ggf. maximieren
 			if (optionen.data.fenster.maximiert) {
-				win.maximize();
-			}
-		});
-		// globales Fensterobjekt beim Schließen dereferenzieren
-		win.on("closed", function() {
-			win = null;
-			// ggf. noch offene Nebenfenster schließen
-			if (winHandbuch) {
-				winHandbuch.close();
-			}
-			if (winDokumentation) {
-				winDokumentation.close();
-			}
-			if (winChangelog) {
-				winChangelog.close();
+				this.maximize();
 			}
 		});
 	},
-	// Handbuch-Fenster erstellen
-	erstellenHandbuch () {
-		// Handbuch-Fenster ist bereits offen => Fenster fokussieren
-		if (winHandbuch) {
-			if (winHandbuch.isMinimized()) {
-				winHandbuch.restore();
+	// Neben-Fenster erstellen
+	//   typ = String
+	//     (der Typ des Neben-Fensters: "handbuch" || "dokumentation" || "changelog")
+	erstellenNeben (typ) {
+		// Ist das Fenster bereits offen? => Fenster fokussieren
+		for (let id in win) {
+			if (!win.hasOwnProperty(id)) {
+				continue;
 			}
-			winHandbuch.focus();
-			return;
+			if (win[id].typ === typ) {
+				let w = BrowserWindow.fromId(parseInt(id, 10));
+				if (w.isMinimized()) {
+					w.restore();
+				}
+				w.focus();
+				return;
+			}
 		}
-		// Fenster öffnen
+		// Titel und Dimensionen des Fensters ermitteln
+		let title = "";
 		const Bildschirm = require("electron").screen.getPrimaryDisplay();
-		winHandbuch = new BrowserWindow({
-			title: "Handbuch",
-			icon: path.join(__dirname, "img", "icon", "linux", "icon_32px.png"),
+		let bounds = {
 			width: 900,
 			height: Bildschirm.workArea.height,
 			minWidth: 700,
 			minHeight: 350,
-			show: false,
-			webPreferences: {
-				nodeIntegration: true,
-				devTools: devtools,
-				defaultEncoding: "utf-8",
-			},
-		});
-		// Menü erzeugen
-		appMenu.erzeugenAnsicht(winHandbuch);
-		winHandbuch.on("leave-full-screen", function() {
-			// nach Verlassen des Vollbilds muss die Menüleiste wieder ausgeblendet werden
-			// (ohne Timeout geht es nicht)
-			setTimeout(() => winHandbuch.setMenuBarVisibility(false), 1);
-		});
-		// HTML laden
-		winHandbuch.loadFile(path.join(__dirname, "win", "handbuch.html"));
-		// Fenster anzeigen, sobald alles geladen wurde
-		winHandbuch.once("ready-to-show", () => winHandbuch.show());
-		// globales Fensterobjekt beim Schließen dereferenzieren
-		winHandbuch.on("closed", () => winHandbuch = null);
-	},
-	// Doku-Fenster erstellen
-	erstellenDokumentation () {
-		// Doku-Fenster ist bereits offen => Fenster fokussieren
-		if (winDokumentation) {
-			if (winDokumentation.isMinimized()) {
-				winDokumentation.restore();
-			}
-			winDokumentation.focus();
-			return;
+		};
+		if (typ === "changelog") {
+			title = "Changelog";
+			bounds.width = 625;
+			bounds.height = 625;
+			bounds.minWidth = 350;
+			bounds.minHeight = 350;
+		} else if (typ === "dokumentation") {
+			title = "Technische Dokumentation";
+		} else if (typ === "handbuch") {
+			title = "Handbuch";
 		}
 		// Fenster öffnen
-		const Bildschirm = require("electron").screen.getPrimaryDisplay();
-		winDokumentation = new BrowserWindow({
-			title: "Technische Dokumentation",
+		let bw = new BrowserWindow({
+			title: title,
 			icon: path.join(__dirname, "img", "icon", "linux", "icon_32px.png"),
-			width: 900,
-			height: Bildschirm.workArea.height,
-			minWidth: 700,
-			minHeight: 350,
+			width: bounds.width,
+			height: bounds.height,
+			minWidth: bounds.minWidth,
+			minHeight: bounds.minHeight,
 			show: false,
 			webPreferences: {
 				nodeIntegration: true,
@@ -699,140 +729,105 @@ fenster = {
 				defaultEncoding: "utf-8",
 			},
 		});
+		// Fenster-Objekt anlegen
+		win[bw.id] = {
+			typ: typ,
+			kartei: "",
+		};
 		// Menü erzeugen
-		appMenu.erzeugenAnsicht(winDokumentation);
-		winDokumentation.on("leave-full-screen", function() {
+		appMenu.erzeugenAnsicht(bw);
+		bw.on("leave-full-screen", function() {
 			// nach Verlassen des Vollbilds muss die Menüleiste wieder ausgeblendet werden
 			// (ohne Timeout geht es nicht)
-			setTimeout(() => winDokumentation.setMenuBarVisibility(false), 1);
+			setTimeout(() => {
+				if (!this.id) {
+					// Die Funktion wird merkwürdigerweise auch aufgerufen, wenn das Fenster geschlossen wird;
+					// zu diesem Zeitpunkt könnte das Fenster-Objekt aber schon zerstört sein, was ich daran
+					// erkenne, dass es keine ID mehr gibt.
+					return;
+				}
+				this.setMenuBarVisibility(false);
+			}, 1);
 		});
 		// HTML laden
-		winDokumentation.loadFile(path.join(__dirname, "win", "dokumentation.html"));
+		bw.loadFile(path.join(__dirname, "win", `${typ}.html`));
 		// Fenster anzeigen, sobald alles geladen wurde
-		winDokumentation.once("ready-to-show", () => winDokumentation.show());
-		// globales Fensterobjekt beim Schließen dereferenzieren
-		winDokumentation.on("closed", () => winDokumentation = null);
-	},
-	// Changelog-Fenster erstellen
-	erstellenChangelog () {
-		// Changelog-Fenster ist bereits offen => Fenster fokussieren
-		if (winChangelog) {
-			if (winChangelog.isMinimized()) {
-				winChangelog.restore();
-			}
-			winChangelog.focus();
-			return;
-		}
-		// Fenster öffnen
-		winChangelog = new BrowserWindow({
-			title: "Changelog",
-			icon: path.join(__dirname, "img", "icon", "linux", "icon_32px.png"),
-			width: 625,
-			height: 625,
-			minWidth: 350,
-			minHeight: 350,
-			show: false,
-			webPreferences: {
-				nodeIntegration: true,
-				devTools: devtools,
-				defaultEncoding: "utf-8",
-			},
+		bw.once("ready-to-show", function() {
+			this.show();
 		});
-		// Menü erzeugen
-		appMenu.erzeugenAnsicht(winChangelog);
-		winChangelog.on("leave-full-screen", function() {
-			// nach Verlassen des Vollbilds muss die Menüleiste wieder ausgeblendet werden
-			// (ohne Timeout geht es nicht)
-			setTimeout(() => winChangelog.setMenuBarVisibility(false), 1);
-		});
-		// HTML laden
-		winChangelog.loadFile(path.join(__dirname, "win", "changelog.html"));
-		// Fenster anzeigen, sobald alles geladen wurde
-		winChangelog.once("ready-to-show", () => winChangelog.show());
-		// globales Fensterobjekt beim Schließen dereferenzieren
-		winChangelog.on("closed", () => winChangelog = null);
 	},
-	// Über-Fenster erstellen (App)
-	erstellenUeberApp (opener) {
-		// Fenster öffnen
-		winUeberApp = new BrowserWindow({
-			parent: fenster.findParent(opener),
-			modal: true,
-			title: `Über ${app.getName().replace("'", "’")}`,
-			icon: path.join(__dirname, "img", "icon", "linux", "icon_32px.png"),
-			width: 650,
-			height: 334,
-			useContentSize: true,
-			center: true,
-			resizable: false,
-			minimizable: false,
-			maximizable: false,
-			show: false,
-			webPreferences: {
-				nodeIntegration: true,
-				devTools: devtools,
-				defaultEncoding: "utf-8",
-			},
-		});
-		// Menü abschalten
-		winUeberApp.setMenuBarVisibility(false); // unpaketiert erscheint sonst ein Standardmenü
-		// HTML laden
-		winUeberApp.loadFile(path.join(__dirname, "win", "ueberApp.html"));
-		// Fenster anzeigen, sobald alles geladen wurde
-		winUeberApp.once("ready-to-show", () => winUeberApp.show());
-		// globales Fensterobjekt beim Schließen dereferenzieren
-		winUeberApp.on("closed", () => winUeberApp = null);
-	},
-	// Über-Fenster erstellen (Electron)
-	erstellenUeberElectron (opener) {
-		// Fenster öffnen
-		winUeberElectron = new BrowserWindow({
-			parent: fenster.findParent(opener),
-			modal: true,
-			title: "Über Electron",
-			icon: path.join(__dirname, "img", "icon", "linux", "icon_32px.png"),
-			width: 650,
-			height: 334,
-			useContentSize: true,
-			center: true,
-			resizable: false,
-			minimizable: false,
-			maximizable: false,
-			show: false,
-			webPreferences: {
-				nodeIntegration: true,
-				devTools: devtools,
-				defaultEncoding: "utf-8",
-			},
-		});
-		// Menü abschalten
-		winUeberElectron.setMenuBarVisibility(false); // unpaketiert erscheint sonst ein Standardmenü
-		// HTML laden
-		winUeberElectron.loadFile(path.join(__dirname, "win", "ueberElectron.html"));
-		// Fenster anzeigen, sobald alles geladen wurde
-		winUeberElectron.once("ready-to-show", () => winUeberElectron.show());
-		// globales Fensterobjekt beim Schließen dereferenzieren
-		winUeberElectron.on("closed", () => winUeberElectron = null);
-	},
-	// Parent-Fenster ermitteln
-	findParent (opener) {
-		// TODO Parent für Bedeutungen-Fenster finden
-		if (opener === "handbuch") {
-			return winHandbuch;
-		} else if (opener === "dokumentation") {
-			return winDokumentation;
-		} else if (opener === "changelog") {
-			return winChangelog;
+	// Über-Fenster erstellen
+	//   typ = String
+	//     (der Typ des Über-Fensters: "app" || "electron")
+	erstellenUeber (typ) {
+		// Titel Name der Seite ermitteln
+		let title, html;
+		if (typ === "app") {
+			title = `Über ${app.getName().replace("'", "’")}`;
+			html = "ueberApp";
 		} else {
-			return win;
+			title = "Über Electron";
+			html = "ueberElectron";
 		}
+		// Fenster öffnen
+		let bw = new BrowserWindow({
+			parent: BrowserWindow.getFocusedWindow(),
+			modal: true,
+			title: title,
+			icon: path.join(__dirname, "img", "icon", "linux", "icon_32px.png"),
+			width: 650,
+			height: 334,
+			useContentSize: true,
+			center: true,
+			resizable: false,
+			minimizable: false,
+			maximizable: false,
+			show: false,
+			webPreferences: {
+				nodeIntegration: true,
+				devTools: devtools,
+				defaultEncoding: "utf-8",
+			},
+		});
+		// Fenster-Objekt anlegen
+		win[bw.id] = {
+			typ: html,
+			kartei: "",
+		};
+		// Menü abschalten
+		bw.setMenuBarVisibility(false); // unpaketiert erscheint sonst ein Standardmenü
+		// HTML laden
+		bw.loadFile(path.join(__dirname, "win", `${html}.html`));
+		// Fenster anzeigen, sobald alles geladen wurde
+		bw.once("ready-to-show", function() {
+			this.show();
+		});
 	},
 };
+
+// Optionen auf Anfrage des Renderer-Prozesses synchron schicken
+ipcMain.on("fenster-dereferenzieren", function(evt, id) {
+	delete win[id];
+	// Sind noch Hauptfenster vorhanden?
+	let hauptfensterOffen = false;
+	for (let id in win) {
+		if (!win.hasOwnProperty(id)) {
+			continue;
+		}
+		if (win[id].typ === "index") {
+			hauptfensterOffen = true;
+			break;
+		}
+	}
+	if (!hauptfensterOffen) {
+		appMenu.aktion("programm-beenden");
+	}
+});
 
 // Initialisierung abgeschlossen => Browser-Fenster erstellen
 app.on("ready", function() {
 	// Menu der zuletzt verwendeter Karteien erzeugen
-	appMenu.zuletzt(false);
+	appMenu.zuletzt(0);
 	// Informationen zum Bildschirm auslesen und ggf. speichern
 	const Bildschirm = require("electron").screen.getPrimaryDisplay();
 	// Fenster standardmäßig maximalisiert öffnen
@@ -854,8 +849,8 @@ app.on("window-all-closed", function() {
 
 // App wiederherstellen, bzw. wieder öffnen
 app.on("activate", function() {
-	// auf MacOS wird das Fenster einfach nur wiederhergestellt
-	if (win === null) {
+	// auf MacOS wird einfach ein neues Fenster wiederhergestellt
+	if (Object.keys(win).length === 0) {
 		fenster.erstellen();
 	}
 });

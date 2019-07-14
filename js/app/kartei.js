@@ -403,8 +403,8 @@ let kartei = {
 	//   disable = Boolean
 	//     (true = Kartei wurde geschlossen, false = Kartei wurde geöffnet)
 	menusDeaktivieren (disable) {
-		const {ipcRenderer} = require("electron");
-		ipcRenderer.send("menus-deaktivieren", disable);
+		const {ipcRenderer, remote} = require("electron");
+		ipcRenderer.send("menus-deaktivieren", disable, remote.getCurrentWindow().id);
 	},
 	// Lock-Datei-Funktionen
 	//   datei = String

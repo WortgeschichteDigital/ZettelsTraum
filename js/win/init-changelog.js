@@ -3,7 +3,7 @@
 window.addEventListener("load", function() {
 	// Über App
 	const {ipcRenderer} = require("electron");
-	document.getElementById("icon").addEventListener("click", () => ipcRenderer.send("ueber-app", "changelog"));
+	document.getElementById("icon").addEventListener("click", () => ipcRenderer.send("ueber-app"));
 	// Über Electron
 	document.querySelector(".ueber-electron").addEventListener("click", function(evt) {
 		evt.preventDefault();
@@ -16,4 +16,11 @@ window.addEventListener("load", function() {
 	document.querySelectorAll(".app-name").forEach(function(i) {
 		i.textContent = app.getName().replace("'", "’");
 	});
+});
+
+window.addEventListener("beforeunload", function() {
+	// Fenster dereferenzieren
+	const {remote, ipcRenderer} = require("electron"),
+		win = remote.getCurrentWindow();
+	ipcRenderer.send("fenster-dereferenzieren", win.id);
 });

@@ -32,7 +32,7 @@ window.addEventListener("load", function() {
 	// Über App
 	document.getElementById("icon").addEventListener("click", function() {
 		const {ipcRenderer} = require("electron");
-		ipcRenderer.send("ueber-app", "handbuch");
+		ipcRenderer.send("ueber-app");
 	});
 	// Navigation
 	document.querySelectorAll(`a[class^="link-sektion-"`).forEach((i) => hilfe.sektion(i));
@@ -44,4 +44,11 @@ window.addEventListener("load", function() {
 	});
 	// externe Links TODO (gibt es sowas im Handbuch?)
 	document.querySelectorAll(`a[href^="http"]`).forEach((a) => helferWin.links(a));
+});
+
+window.addEventListener("beforeunload", function() {
+	// Fenster dereferenzieren
+	const {remote, ipcRenderer} = require("electron"),
+		win = remote.getCurrentWindow();
+	ipcRenderer.send("fenster-dereferenzieren", win.id);
 });
