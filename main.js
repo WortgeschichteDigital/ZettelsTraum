@@ -1,8 +1,8 @@
 "use strict";
 
-// Speicher-Objekt für alle Fenster
-// (die Bedeutungsgerüst-Fenster sind direkt an ein Hauptfenster gebunden;
-// sie werden hier nicht gespeichert)
+// Speicher-Objekt für die Fenster
+// (die Bedeutungsgerüst-Fenster sind direkt an ein Hauptfenster gebunden
+// und werden auch aus diesem geöffnet; sie werden hier nicht referenziert)
 let win = {};
 
 // Funktionen-Container
