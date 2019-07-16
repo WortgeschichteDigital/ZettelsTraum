@@ -25,7 +25,7 @@ window.addEventListener("load", function() {
 			return;
 		}
 		let pfad = evt.dataTransfer.files[0].path;
-		kartei.checkSpeichern(() => kartei.oeffnenEinlesen(pfad));
+		kartei.oeffnenEinlesen(pfad);
 	});
 	
 	// EVENTS INITIALISIEREN
@@ -204,9 +204,9 @@ window.addEventListener("load", function() {
 	});
 	ipcRenderer.on("kartei-oeffnen", function(evt, datei) {
 		if (datei) {
-			kartei.checkSpeichern(() => kartei.oeffnenEinlesen(datei));
+			kartei.oeffnenEinlesen(datei);
 		} else {
-			kartei.checkSpeichern(() => kartei.oeffnen());
+			kartei.oeffnen();
 		}
 	});
 	ipcRenderer.on("kartei-speichern", () => helfer.speichern());

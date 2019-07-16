@@ -31,11 +31,7 @@ app.on("second-instance", function(evt, argv) {
 				continue;
 			}
 			if (win[id].kartei === argv[1]) {
-				let w = BrowserWindow.fromId(parseInt(id, 10));
-				if (w.isMinimized()) {
-					w.restore();
-				}
-				w.focus();
+				fenster.fokus(BrowserWindow.fromId(parseInt(id, 10)));
 				return;
 			} else if (win[id].typ === "index" && !win[id].kartei) {
 				leereFenster.push(parseInt(id, 10));
@@ -46,7 +42,7 @@ app.on("second-instance", function(evt, argv) {
 			let w = BrowserWindow.fromId(leereFenster[0]);
 			w.webContents.send("kartei-oeffnen", argv[1]);
 		} else {
-			fenster.erstellen(); // TODO klappt das? Macht er die Kartei auf?
+			fenster.erstellen(argv[1]);
 		}
 	}
 });
@@ -83,7 +79,7 @@ let layoutMenu = [
 			{
 				label: "Neues Fenster",
 				icon: path.join(__dirname, "img", "menu", "programm-neues-fenster.png"),
-				click: () => fenster.erstellen(),
+				click: () => fenster.erstellen(""),
 			},
 			{ type: "separator" },
 			{
@@ -524,10 +520,7 @@ ipcMain.on("bedeutungen-fenster-drucken", function(evt, daten) {
 	let w = BrowserWindow.fromId(daten.winId);
 	daten = daten.gr;
 	w.webContents.send("bedeutungen-fenster-drucken", daten);
-	if (w.isMinimized()) {
-		w.restore();
-	}
-	w.focus();
+	fenster.fokus(w);
 });
 
 // angeklickte Bedeutung im Gerüst-Fenster eintragen
@@ -535,10 +528,7 @@ ipcMain.on("bedeutungen-fenster-eintragen", function(evt, bd) {
 	let w = BrowserWindow.fromId(bd.winId);
 	delete bd.winId;
 	w.webContents.send("bedeutungen-fenster-eintragen", bd);
-	if (w.isMinimized()) {
-		w.restore();
-	}
-	w.focus();
+	fenster.fokus(w);
 });
 
 // angeklickte Bedeutung im Gerüst-Fenster austragen
@@ -546,10 +536,7 @@ ipcMain.on("bedeutungen-fenster-austragen", function(evt, bd) {
 	let w = BrowserWindow.fromId(bd.winId);
 	delete bd.winId;
 	w.webContents.send("bedeutungen-fenster-austragen", bd);
-	if (w.isMinimized()) {
-		w.restore();
-	}
-	w.focus();
+	fenster.fokus(w);
 });
 
 // Status des gerade geschlossenen Bedeutungsgerüst-Fensters an das passende Hauptfenster schicken
@@ -633,7 +620,9 @@ ipcMain.on("optionen-speichern", function(evt, opt, id) {
 // Browser-Fenster
 fenster = {
 	// Hauptfenster erstellen
-	erstellen () {
+	//   kartei = String
+	//     (Pfad zur Kartei, die geöffnet werden soll)
+	erstellen (kartei) {
 		// Fenster öffnen
 		let bw = new BrowserWindow({
 			title: app.getName().replace("'", "’"),
@@ -664,9 +653,13 @@ fenster = {
 		// Fenster anzeigen, sobald alles geladen wurde
 		BrowserWindow.fromId(bw.id).once("ready-to-show", function() {
 			// ggf. übergebene Kartei öffnen
-			if (/\.wgd$/.test(process.argv[1])) {
+			if (/\.wgd$/.test(process.argv[1]) || kartei) {
+				let datei = kartei;
+				if (!datei) {
+					datei = process.argv[1];
+				}
 				// ein bisschen Timeout, sonst klappt das nicht
-				setTimeout(() => this.webContents.send("kartei-oeffnen", process.argv[1]), 100);
+				setTimeout(() => this.webContents.send("kartei-oeffnen", datei), 100);
 			}
 			// Fenster anzeigen
 			this.show();
@@ -686,11 +679,7 @@ fenster = {
 				continue;
 			}
 			if (win[id].typ === typ) {
-				let w = BrowserWindow.fromId(parseInt(id, 10));
-				if (w.isMinimized()) {
-					w.restore();
-				}
-				w.focus();
+				fenster.fokus(BrowserWindow.fromId(parseInt(id, 10)));
 				return;
 			}
 		}
@@ -803,7 +792,54 @@ fenster = {
 			this.show();
 		});
 	},
+	// das übergebene Fenster fokussieren
+	//   w = Object
+	//     (das Fenster-Objekt)
+	fokus (w) {
+		if (w.isMinimized()) {
+			w.restore();
+		}
+		setTimeout(() => w.focus(), 25); // Timeout, damit das Fenster zuverlässig den Fokus bekommt
+	},
 };
+
+// überprüft für den Renderer-Prozess, ob die übergebene Kartei schon offen ist
+ipcMain.on("kartei-schon-offen", function(evt, kartei) {
+	let offen = false;
+	for (let id in win) {
+		if (!win.hasOwnProperty(id)) {
+			continue;
+		}
+		if (win[id].kartei === kartei) {
+			fenster.fokus(BrowserWindow.fromId(parseInt(id, 10)));
+			offen = true;
+			break;
+		}
+	}
+	evt.returnValue = offen;
+});
+
+// registriert im Fenster-Objekt, welche Kartei geöffnet wurde
+ipcMain.on("kartei-geoeffnet", (evt, id, kartei) => win[id].kartei = kartei);
+
+// registriert im Fenster-Objekt, welche Kartei geöffnet wurde
+ipcMain.on("kartei-geschlossen", (evt, id) => win[id].kartei = "");
+
+// neues Haupt-Fenster auf Wunsch des Renderer-Prozesses öffnen (ggf. mit der übergebenen Kartei)
+ipcMain.on("kartei-laden", function(evt, kartei) {
+	for (let id in win) {
+		if (!win.hasOwnProperty(id)) {
+			continue;
+		}
+		if (win[id].typ === "index" && !win[id].kartei) {
+			let w = BrowserWindow.fromId(parseInt(id, 10));
+			w.webContents.send("kartei-oeffnen", kartei);
+			fenster.fokus(w);
+			return;
+		}
+	}
+	fenster.erstellen(kartei);
+});
 
 // Optionen auf Anfrage des Renderer-Prozesses synchron schicken
 ipcMain.on("fenster-dereferenzieren", function(evt, id) {
@@ -835,7 +871,7 @@ app.on("ready", function() {
 		optionen.data.fenster.height = Bildschirm.workArea.height;
 	}
 	// warten mit dem Öffnen des Fensters, bis die Optionen eingelesen wurden
-	fenster.erstellen();
+	fenster.erstellen("");
 });
 
 // App beenden, wenn alle Fenster geschlossen worden sind
@@ -851,6 +887,6 @@ app.on("window-all-closed", function() {
 app.on("activate", function() {
 	// auf MacOS wird einfach ein neues Fenster wiederhergestellt
 	if (Object.keys(win).length === 0) {
-		fenster.erstellen();
+		fenster.erstellen("");
 	}
 });

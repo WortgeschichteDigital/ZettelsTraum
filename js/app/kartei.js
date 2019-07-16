@@ -5,7 +5,7 @@ let kartei = {
 	wort: "",
 	// Pfad der geladenen Datei (dient zum automatischen Speichern der Datei)
 	pfad: "",
-	// Müssen vor dem Neuerstellen, Öffnen oder Schließen einer Kartei noch
+	// Müssen vor dem Schließen einer Kartei noch
 	// Änderungen gespeichert werden?
 	//   funktion = function
 	//     (diese übergebene Funktion soll eigentlich ausgeführt werden, zur Sicherheit
@@ -119,8 +119,9 @@ let kartei = {
 	//     dem Öffnen-Dialog oder via Drag-and-Drop)
 	oeffnenEinlesen (datei) {
 		// Ist die Kartei schon offen?
-		if (datei === kartei.pfad) {
-			kartei.dialogWrapper("Die Datei, die Sie zu öffnen versuchen, ist schon geöffnet.");
+		const {ipcRenderer, remote} = require("electron"),
+			schonOffen = ipcRenderer.sendSync("kartei-schon-offen", datei);
+		if (schonOffen) {
 			return;
 		}
 		// Ist die Datei gesperrt?
@@ -138,6 +139,11 @@ let kartei = {
 				}
 			}
 			kartei.dialogWrapper(`Beim Öffnen der Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\nDatei ist gesperrt${durch}`);
+			return;
+		}
+		// im aktuellen Fenster ist schon eine Kartei geöffnet => neues Hauptfenster öffnen
+		if (kartei.pfad) {
+			ipcRenderer.send("kartei-laden", datei);
 			return;
 		}
 		// Datei einlesen
@@ -162,10 +168,12 @@ let kartei = {
 				return;
 			}
 			// Datei sperren
-			if (kartei.pfad && datei !== kartei.pfad) {
+			if (kartei.pfad && datei !== kartei.pfad) { // TODO was passiert mit einer gelockten Datei, die in einem neuen Fenster geöffnet wird?
 				kartei.lock(kartei.pfad, "unlock");
 			}
 			kartei.lock(datei, "lock");
+			// Main melden, dass die Kartei in diesem Fenster geöffnet wurde
+			ipcRenderer.send("kartei-geoeffnet", remote.getCurrentWindow().id, datei);
 			// Daten werden eingelesen => Änderungsmarkierungen kommen weg
 			notizen.notizenGeaendert(false);
 			tagger.taggerGeaendert(false);
@@ -289,6 +297,8 @@ let kartei = {
 	},
 	// Kartei schließen
 	schliessen () {
+		const {ipcRenderer, remote} = require("electron");
+		ipcRenderer.send("kartei-geschlossen", remote.getCurrentWindow().id);
 		kartei.lock(kartei.pfad, "unlock");
 		notizen.notizenGeaendert(false);
 		tagger.taggerGeaendert(false);

@@ -19,7 +19,7 @@ let helfer = {
 				kartei.checkSpeichern(() => kartei.wortErfragen());
 				return;
 			} else if (id === "kartei-oeffnen") {
-				kartei.checkSpeichern(() => kartei.oeffnen());
+				kartei.oeffnen();
 				return;
 			}
 			// Ist eine Kartei geöffnet?
