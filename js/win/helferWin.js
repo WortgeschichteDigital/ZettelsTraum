@@ -43,9 +43,12 @@ let helferWin = {
 	tastatur (evt) {
 		// Esc
 		if (evt.which === 27) {
-			const {remote} = require("electron"),
-				win = remote.getCurrentWindow();
-			win.close();
+			// ohne Timeout wird zugleich das Hauptfenster geschlossen, von dem das Nebenfenster abhängig ist
+			setTimeout(function() {
+				const {remote} = require("electron"),
+					win = remote.getCurrentWindow();
+				win.close();
+			}, 50);
 		}
 		// Ctrl + Cursor hoch (↑), runter (↓) (nur in Hilfefenstern)
 		if (typeof hilfe !== "undefined" && evt.ctrlKey && (evt.which === 38 || evt.which === 40)) {

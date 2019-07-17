@@ -280,7 +280,6 @@ let layoutMenu = [
 				click: () => fenster.erstellenNeben("handbuch"),
 				accelerator: "F1",
 			},
-			{ type: "separator" },
 			{
 				label: "Technische Dokumentation",
 				click: () => fenster.erstellenNeben("dokumentation"),
@@ -289,6 +288,10 @@ let layoutMenu = [
 			{
 				label: "Changelog",
 				click: () => fenster.erstellenNeben("changelog"),
+			},
+			{
+				label: "Fehlerlog",
+				click: () => fenster.erstellenNeben("fehlerlog"),
 			},
 			{ type: "separator" },
 			{
@@ -684,7 +687,7 @@ fenster = {
 	},
 	// Neben-Fenster erstellen
 	//   typ = String
-	//     (der Typ des Neben-Fensters: "handbuch" || "dokumentation" || "changelog")
+	//     (der Typ des Neben-Fensters: "handbuch" || "dokumentation" || "changelog" || "fehlerlog")
 	erstellenNeben (typ) {
 		// Ist das Fenster bereits offen? => Fenster fokussieren
 		for (let id in win) {
@@ -705,8 +708,8 @@ fenster = {
 			minWidth: 700,
 			minHeight: 350,
 		};
-		if (typ === "changelog") {
-			title = "Changelog";
+		if (typ === "changelog" || typ === "fehlerlog") {
+			title = typ.substring(0, 1).toUpperCase() + typ.substring(1);
 			bounds.width = 625;
 			bounds.height = 625;
 			bounds.minWidth = 350;
@@ -995,3 +998,14 @@ app.on("activate", function() {
 		fenster.erstellen("");
 	}
 });
+
+
+/* PROGRAMMFEHLER *******************************/
+
+let fehler = [];
+
+ipcMain.on("fehler", function(evt, err) {
+	fehler.push(err);
+});
+
+ipcMain.on("fehler-senden", evt => evt.returnValue = fehler);

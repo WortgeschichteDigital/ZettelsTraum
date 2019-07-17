@@ -251,6 +251,11 @@ window.addEventListener("load", function() {
 	start.zuletzt();
 	// Programmstart-Overlay ausblenden
 	start.overlayAus();
+	// TEST
+	setTimeout(function() {
+		fehler();
+	}, 5000);
+	fehler();
 });
 
 // Schließen unterbrechen, falls Daten noch nicht gespeichert wurden
@@ -293,4 +298,17 @@ window.addEventListener("beforeunload", function(evt) {
 		const {ipcRenderer} = require("electron");
 		ipcRenderer.send("fenster-dereferenzieren", win.id);
 	}
+});
+
+window.addEventListener("error", function(evt) {
+	let err = {
+		time: new Date().toISOString(),
+		word: kartei.wort,
+		fileWgd: kartei.pfad,
+		fileJs: evt.filename,
+		message: evt.message,
+		line: evt.lineno,
+	};
+	const {ipcRenderer} = require("electron");
+	ipcRenderer.send("fehler", err);
 });
