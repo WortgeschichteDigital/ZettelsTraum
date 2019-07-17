@@ -1913,6 +1913,7 @@ let beleg = {
 		}
 		feld.value = feld.value.replace(reg, "");
 		feld.value = beleg.bedeutungAufbereiten();
+		helfer.textareaGrow(feld);
 		return true;
 	},
 	// enthält den Wert des Suchfelds über dem Beleg in der Leseansicht
@@ -1975,7 +1976,7 @@ let beleg = {
 	ctrlKuerzen () {
 		// Hervorhebung umstellen
 		optionen.data.beleg.kuerzen = !optionen.data.beleg.kuerzen;
-		optionen.speichern(false);
+		optionen.speichern();
 		// Link anpassen
 		beleg.ctrlKuerzenAnzeige();
 		// Belegtext in der Leseansicht ggf. neu aufbauen
@@ -1998,7 +1999,7 @@ let beleg = {
 	ctrlTrennung () {
 		// Hervorhebung umstellen
 		optionen.data.beleg.trennung = !optionen.data.beleg.trennung;
-		optionen.speichern(false);
+		optionen.speichern();
 		// Link anpassen
 		beleg.ctrlTrennungAnzeige();
 		// Belegtext in der Leseansicht ggf. neu aufbauen

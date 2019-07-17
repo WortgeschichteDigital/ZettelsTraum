@@ -576,7 +576,7 @@ let popup = {
 			label: "Kartei erstellen",
 			icon: path.join(__dirname, "img", "menu", "kartei-erstellen.png"),
 			click: function() {
-				kartei.checkSpeichern(() => kartei.wortErfragen());
+				kartei.wortErfragen();
 			},
 			accelerator: "CommandOrControl+E",
 		}));

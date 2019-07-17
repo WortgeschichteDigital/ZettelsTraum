@@ -101,6 +101,7 @@ let optionen = {
 			quick: false,
 			// Icons in der Quick-Access-Bar, die ein- oder ausgeblendet gehören
 			"quick-programm-einstellungen": false,
+			"quick-programm-neues-fenster": false,
 			"quick-programm-beenden": false,
 			"quick-kartei-erstellen": false,
 			"quick-kartei-oeffnen": false,
@@ -185,6 +186,31 @@ let optionen = {
 		// zuletzt verwendete Dokumente
 		zuletzt: [],
 	},
+	// Optionen on-the-fly empfangen
+	// (wird aufgerufen, wenn in einem anderen Hauptfenster Optionen geändert wurden)
+	//   data = Object
+	//     (die Optionen, strukturiert wie optionen.data)
+	empfangen (data) {
+		// Daten bereinigen um alles, was nicht synchronisiert werden soll
+		for (let block in data) {
+			if (!data.hasOwnProperty(block)) {
+				continue;
+			}
+			if (!/^(fenster|fenster-bedeutungen|einstellungen|tags|personen|letzter_pfad)$/.test(block)) {
+				delete data[block];
+				// diese Einstellungen werden nicht aus einem anderen Fenster übernommen
+				// (das führt nur zu einem unschönen Springen):
+				//   * beleg (steuert die Anzeige der Leseansicht der Karteikarte)
+				//   * filter (steuert die Einstellungen der Filterleiste)
+				//   * belegliste (steuert die Anzeige der Belegliste)
+				//   * zuletzt (wird extra behandelt und wenn nötig an alle Renderer-Prozesse geschickt)
+			}
+		}
+		// Daten einlesen
+		optionen.einlesen(optionen.data, data);
+		// Daten anwenden
+		optionen.anwendenEmpfangen();
+	},
 	// liest die vom Main-Prozess übergebenen Optionen ein
 	// (zur Sicherheit werden alle Optionen einzeln eingelesen;
 	// so kann ich ggf. Optionen einfach löschen)
@@ -253,6 +279,22 @@ let optionen = {
 		beleg.ctrlKuerzenAnzeige();
 		beleg.ctrlTrennungAnzeige();
 		// Optionen im Optionen-Fenster eintragen
+		optionen.anwendenEinstellungen();
+	},
+	// zieht die nötigen Kosequenzen aus den empfangen Optionen,
+	// die in einem anderen Hauptfenster geändert wurden
+	anwendenEmpfangen () {
+		// Quick-Access-Bar ein- oder ausschalten
+		optionen.anwendenQuickAccess();
+		// Liste der Tag-Dateien auffrischen
+		optionen.anwendenTags();
+		// Icons für die Detailanzeige immer sichtbar?
+		optionen.anwendenIconsDetails();
+		// Optionen im Optionen-Fenster eintragen
+		optionen.anwendenEinstellungen();
+	},
+	// die Einstellungen im Einstellungen-Fenster nach dem empfangen von Optionen anpassen
+	anwendenEinstellungen () {
 		let ee = document.querySelectorAll("#einstellungen input");
 		for (let i = 0, len = ee.length; i < len; i++) {
 			let e = ee[i].id.replace(/^einstellung-/, "");
@@ -334,7 +376,7 @@ let optionen = {
 	anwendenIconsDetailsListener (input) {
 		input.addEventListener("change", function() {
 			optionen.data.einstellungen["anzeige-icons-immer-an"] = this.checked;
-			optionen.speichern(false);
+			optionen.speichern();
 			optionen.anwendenIconsDetails();
 		});
 	},
@@ -376,7 +418,7 @@ let optionen = {
 			}
 			Promise.all(promises).then((result) => {
 				if (result.includes(true)) { // wenn mindestens eine Datei normal überprüft wurde
-					optionen.speichern(false);
+					optionen.speichern();
 				}
 				optionen.anwendenTags();
 			});
@@ -531,7 +573,7 @@ let optionen = {
 					}));
 				});
 				Promise.all(promises).then(() => {
-					optionen.speichern(false);
+					optionen.speichern();
 					optionen.anwendenTags();
 					optionen.data["tags-autoload-done"] = true;
 				});
@@ -643,7 +685,7 @@ let optionen = {
 			})
 				.then(result => {
 					if (result === true) { // Datei wurde normal überprüft
-						optionen.speichern(false);
+						optionen.speichern();
 					}
 					optionen.anwendenTags();
 				});
@@ -710,7 +752,7 @@ let optionen = {
 					}
 				});
 				// Optionen speichern
-				optionen.speichern(false);
+				optionen.speichern();
 				// Anzeige auffrischen
 				optionen.anwendenTags();
 			});
@@ -863,7 +905,7 @@ let optionen = {
 			dialog.oeffnen("confirm", function() {
 				if (dialog.antwort) {
 					delete optionen.data.tags[typ];
-					optionen.speichern(false);
+					optionen.speichern();
 					optionen.anwendenTags();
 				}
 			});
@@ -903,26 +945,9 @@ let optionen = {
 			}
 		});
 	},
-	// Timeout für die Speicherfunktion setzen, die nicht zu häufig ablaufen soll und
-	// nicht so häufig ablaufen muss.
-	//   sofort = Boolean
-	//     (wird die Liste der zuletzt geänderten Dateien modifiziert, muss das sofort
-	//     gespeichert werden, weil es Konsequenzen für die UI hat)
-	speichern_timeout: null,
-	speichern (sofort) {
-// 		let timeout = 6e4;
-		let timeout = 1e3;
-		if (sofort) {
-			timeout = 0;
-		}
-		clearTimeout(optionen.speichern_timeout);
-		optionen.speichern_timeout = setTimeout(function() {
-			optionen.speichernAnstossen();
-		}, timeout);
-	},
-	// Optionen zum speichern endgültig an den Main-Prozess schicken
-	speichernAnstossen () {
-		optionen.speichern_timeout = null;
+	// Optionen an den Main-Prozess schicken, der sie dann speichern soll
+	// (der Main-Prozess setzt einen Timeout, damit das nicht zu häufig geschieht)
+	speichern () {
 		const {ipcRenderer, remote} = require("electron");
 		ipcRenderer.send("optionen-speichern", optionen.data, remote.getCurrentWindow().id);
 	},
@@ -932,7 +957,7 @@ let optionen = {
 		let reg = new RegExp(`^.+\\${path.sep}`);
 		const pfad = kartei.pfad.match(reg)[0];
 		optionen.data.letzter_pfad = pfad;
-		optionen.speichern(false);
+		optionen.speichern();
 	},
 	// Liste der zuletzt verwendeten Karteien ergänzen
 	aendereZuletzt () {
@@ -948,7 +973,7 @@ let optionen = {
 			zuletzt.pop();
 		}
 		// Optionen speichern
-		optionen.speichern(true);
+		optionen.speichern();
 	},
 	// Liste der zuletzt verwendeten Karteien updaten (angestoßen durch Main-Prozess)
 	updateZuletzt(zuletzt) {
@@ -999,7 +1024,7 @@ let optionen = {
 						optionen.data.personen.push(person);
 					}
 				}
-				optionen.speichern(false);
+				optionen.speichern();
 				// Rückmeldung
 				let fb_obj = function () {
 					const len = optionen.data.personen.length;
@@ -1047,7 +1072,7 @@ let optionen = {
 			liste.status(true);
 		}
 		// Optionen speichern
-		optionen.speichern(false);
+		optionen.speichern();
 		// Erinnerungen-Icon auffrischen
 		erinnerungen.check();
 	},
@@ -1150,7 +1175,7 @@ let optionen = {
 				optionen.data.einstellungen[option] = false;
 				ein.checked = false;
 			}
-			optionen.speichern(false);
+			optionen.speichern();
 		});
 		// Label
 		let label = document.createElement("label");

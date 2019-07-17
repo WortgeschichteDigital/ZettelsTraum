@@ -11,12 +11,16 @@ let helfer = {
 			if (id === "programm-einstellungen") {
 				optionen.oeffnen();
 				return;
+			} else if (id === "programm-neues-fenster") {
+				const {ipcRenderer} = require("electron");
+				ipcRenderer.send("fenster-oeffnen");
+				return;
 			} else if (id === "programm-beenden") {
-				const {app} = require("electron").remote;
-				app.quit();
+				const {ipcRenderer} = require("electron");
+				ipcRenderer.send("programm-beenden");
 				return;
 			} else if (id === "kartei-erstellen") {
-				kartei.checkSpeichern(() => kartei.wortErfragen());
+				kartei.wortErfragen();
 				return;
 			} else if (id === "kartei-oeffnen") {
 				kartei.oeffnen();
@@ -34,7 +38,7 @@ let helfer = {
 			} else if (id === "kartei-speichern-unter") {
 				kartei.speichern(true);
 			} else if (id === "kartei-schliessen") {
-				kartei.checkSpeichern(() => kartei.schliessen());
+				kartei.schliessen();
 			} else if (id === "kartei-formvarianten") {
 				stamm.oeffnen();
 			} else if (id === "kartei-notizen") {
@@ -440,8 +444,13 @@ let helfer = {
 		// Programmname
 		const {app} = require("electron").remote,
 			app_name = app.getName().replace("'", "’");
+		// Wort
+		let wort = "";
+		if (kartei.wort) {
+			wort = `: ${kartei.wort}`;
+		}
 		// Dokumententitel
-		document.title = app_name + asterisk;
+		document.title = app_name + wort + asterisk;
 	},
 	// Verteilerfunktion für den Tastaturbefehl Strg + S
 	speichern () {

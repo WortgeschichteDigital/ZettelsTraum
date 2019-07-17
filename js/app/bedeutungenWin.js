@@ -118,6 +118,9 @@ let bedeutungenWin = {
 	},
 	// Daten zusammentragen und an das Bedeutungsgerüst-Fenster schicken
 	daten () {
+		if (!bedeutungenWin.win) {
+			return;
+		}
 		// Daten zusammentragen
 		const {remote} = require("electron");
 		let daten = {
@@ -140,6 +143,6 @@ let bedeutungenWin = {
 			}
 			optionen.data["fenster-bedeutungen"][wert] = status[wert];
 		}
-		optionen.speichern(false);
+		optionen.speichern();
 	},
 };

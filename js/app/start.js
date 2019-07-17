@@ -40,7 +40,7 @@ let start = {
 	dateiEntfernen (datei) {
 		const idx = optionen.data.zuletzt.indexOf(datei);
 		optionen.data.zuletzt.splice(idx, 1);
-		optionen.speichern(true);
+		optionen.speichern();
 		start.zuletzt();
 	},
 	// Kartei aus der Liste "Zuletzt verwendet" öffnen

@@ -198,10 +198,9 @@ window.addEventListener("load", function() {
 	
 	// ANFRAGEN DES MAIN-PROZESSES ABFANGEN
 	const {ipcRenderer} = require("electron");
+	ipcRenderer.on("optionen-empfangen", (evt, data) => optionen.empfangen(data));
 	ipcRenderer.on("programm-einstellungen", () => optionen.oeffnen());
-	ipcRenderer.on("kartei-erstellen", function() {
-		kartei.checkSpeichern(() => kartei.wortErfragen());
-	});
+	ipcRenderer.on("kartei-erstellen", () => kartei.wortErfragen());
 	ipcRenderer.on("kartei-oeffnen", function(evt, datei) {
 		if (datei) {
 			kartei.oeffnenEinlesen(datei);
@@ -211,9 +210,7 @@ window.addEventListener("load", function() {
 	});
 	ipcRenderer.on("kartei-speichern", () => helfer.speichern());
 	ipcRenderer.on("kartei-speichern-unter", () => kartei.speichern(true));
-	ipcRenderer.on("kartei-schliessen", function() {
-		kartei.checkSpeichern(() => kartei.schliessen());
-	});
+	ipcRenderer.on("kartei-schliessen", () => kartei.schliessen());
 	ipcRenderer.on("kartei-formvarianten", () => stamm.oeffnen());
 	ipcRenderer.on("kartei-notizen", () => notizen.oeffnen());
 	ipcRenderer.on("kartei-anhaenge", () => anhaenge.fenster());
@@ -271,7 +268,7 @@ window.addEventListener("beforeunload", function(evt) {
 		optionen.data.fenster.width = bounds.width;
 		optionen.data.fenster.height = bounds.height;
 	}
-	optionen.speichernAnstossen();
+	optionen.speichern();
 	// Schließen ggf. unterbrechen + Kartei ggf. entsperren
 	if (notizen.geaendert || tagger.geaendert || bedeutungen.geaendert || beleg.geaendert || kartei.geaendert) {
 		sicherheitsfrage.warnen(function() {
@@ -280,8 +277,9 @@ window.addEventListener("beforeunload", function(evt) {
 			bedeutungen.geaendert = false;
 			beleg.geaendert = false;
 			kartei.geaendert = false;
-			const {app} = require("electron").remote;
-			app.quit();
+			const {remote} = require("electron"),
+				win = remote.getCurrentWindow();
+			win.close();
 		}, {
 			notizen: true,
 			tagger: true,

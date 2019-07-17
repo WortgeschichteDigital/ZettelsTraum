@@ -24,7 +24,7 @@ body > header {
 	position: fixed;
 	top: 0;
 	left: 0;
-	z-index: 1;
+	z-index: 3; /* sonst kann die ausgeklappte Dropdown-Liste den Kopf überdecken */
 	border-bottom: 10px solid #fff;
 	padding: 0 10px;
 	width: calc(100% - 20px);

@@ -5,8 +5,9 @@ let kartei = {
 	wort: "",
 	// Pfad der geladenen Datei (dient zum automatischen Speichern der Datei)
 	pfad: "",
-	// Müssen vor dem Schließen einer Kartei noch
-	// Änderungen gespeichert werden?
+	// Müssen vor dem Schließen einer Kartei noch Änderungen gespeichert werden?
+	// (Diese Funktion wird nur noch benötigt, wenn dieses Hauptfenster erhalten bleiben soll;
+	// das entscheidet kartei.schliessen().)
 	//   funktion = function
 	//     (diese übergebene Funktion soll eigentlich ausgeführt werden, zur Sicherheit
 	//     wird aber erst einmal karte.checkSpeichern() ausgeführt)
@@ -168,9 +169,6 @@ let kartei = {
 				return;
 			}
 			// Datei sperren
-			if (kartei.pfad && datei !== kartei.pfad) { // TODO was passiert mit einer gelockten Datei, die in einem neuen Fenster geöffnet wird?
-				kartei.lock(kartei.pfad, "unlock");
-			}
 			kartei.lock(datei, "lock");
 			// Main melden, dass die Kartei in diesem Fenster geöffnet wurde
 			ipcRenderer.send("kartei-geoeffnet", remote.getCurrentWindow().id, datei);
@@ -204,6 +202,7 @@ let kartei = {
 			liste.wechseln();
 			kartei.menusDeaktivieren(false);
 			erinnerungen.check();
+			helfer.geaendert(); // trägt das Wort in die Titelleiste ein
 			// inaktive Filter schließen
 			// (wurde zwar schon über filter.ctrlReset() ausgeführt,
 			// muss hier aber noch einmal gemacht werden, um die dynamisch
@@ -292,11 +291,26 @@ let kartei = {
 				optionen.aendereLetzterPfad();
 				optionen.aendereZuletzt();
 				kartei.karteiGeaendert(false);
+				const {ipcRenderer, remote} = require("electron");
+				ipcRenderer.send("kartei-geoeffnet", remote.getCurrentWindow().id, pfad);
 			});
 		}
 	},
 	// Kartei schließen
 	schliessen () {
+		// Gibt es noch ein anderes Hauptfenster? Wenn ja => dieses Fenster komplett schließen
+		const {ipcRenderer, remote} = require("electron"),
+			win = remote.getCurrentWindow(),
+			hauptfensterOffen = ipcRenderer.sendSync("fenster-hauptfenster", win.id);
+		if (hauptfensterOffen) {
+			win.close();
+			return;
+		}
+		// das aktuelle Fenster ist das letzte Hauptfenster => die Kartei in diesem Fenster schließen, das Fenster erhalten
+		kartei.checkSpeichern(() => kartei.schliessenDurchfuehren());
+	},
+	// Kartei im aktuellen Fenster schließen, das Fenster selbst aber erhalten
+	schliessenDurchfuehren () {
 		const {ipcRenderer, remote} = require("electron");
 		ipcRenderer.send("kartei-geschlossen", remote.getCurrentWindow().id);
 		kartei.lock(kartei.pfad, "unlock");
@@ -313,6 +327,7 @@ let kartei = {
 		const wort = document.getElementById("wort");
 		wort.classList.add("keine-kartei");
 		wort.textContent = "keine Kartei geöffnet";
+		helfer.geaendert(); // trägt das Wort aus der Titelleiste aus
 		notizen.icon();
 		lexika.icon();
 		anhaenge.makeIconList(null, document.getElementById("kartei-anhaenge"));
@@ -331,6 +346,13 @@ let kartei = {
 	},
 	// Benutzer nach dem Wort fragen, für das eine Kartei angelegt werden soll
 	wortErfragen () {
+		// Ist schon eine Kartei offen? Wenn ja => neues Fenster öffnen, direkt nach dem Wort fragen
+		if (kartei.wort) {
+			const {ipcRenderer} = require("electron");
+			ipcRenderer.send("neues-wort");
+			return;
+		}
+		// Es ist noch keine Kartei offen => nach dem Wort fragen
 		dialog.oeffnen("prompt", function() {
 			let wort = dialog.getPromptText();
 			if (dialog.antwort && !wort) {
@@ -338,6 +360,8 @@ let kartei = {
 				dialog.text("Sie müssen ein Wort eingeben, sonst kann keine Kartei angelegt werden.");
 			} else if (dialog.antwort && wort) {
 				kartei.lock(kartei.pfad, "unlock");
+				const {ipcRenderer, remote} = require("electron");
+				ipcRenderer.send("kartei-geoeffnet", remote.getCurrentWindow().id, "neu");
 				notizen.notizenGeaendert(false);
 				tagger.taggerGeaendert(false);
 				beleg.belegGeaendert(false);

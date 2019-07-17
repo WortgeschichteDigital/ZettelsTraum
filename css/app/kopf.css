@@ -29,6 +29,11 @@
 	mask-image: url(../../img/quick-einstellungen.svg);
 }
 
+#quick-programm-neues-fenster {
+-webkit-mask-image: url(../../img/quick-neues-fenster.svg);
+mask-image: url(../../img/quick-neues-fenster.svg);
+}
+
 #quick-programm-beenden {
 	-webkit-mask-image: url(../../img/quick-beenden.svg);
 	mask-image: url(../../img/quick-beenden.svg);

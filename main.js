@@ -1,5 +1,7 @@
 "use strict";
 
+/* VARIABLEN ************************************/
+
 // Speicher-Objekt für die Fenster
 // (die Bedeutungsgerüst-Fenster sind direkt an ein Hauptfenster gebunden
 // und werden auch aus diesem geöffnet; sie werden hier nicht referenziert)
@@ -13,7 +15,9 @@ const {app, BrowserWindow, ipcMain, Menu} = require("electron"),
 	fs = require("fs"),
 	path = require("path");
 
-// Single-Instance-Test
+
+/* SINGLE-INSTANCE ******************************/
+
 let primary = app.requestSingleInstanceLock();
 
 if (!primary) {
@@ -47,7 +51,9 @@ app.on("second-instance", function(evt, argv) {
 	}
 });
 
-// Bilderliste erstellen
+
+/* BILDERLISTE **********************************/
+
 let bilder = [];
 fs.readdir(path.join(__dirname, "img"), function(err, img) {
 	for (let i = 0, len = img.length; i < len; i++) {
@@ -65,7 +71,10 @@ ipcMain.on("bilder-senden", function(evt) {
 	evt.returnValue = bilder;
 });
 
-// App-Menü-Vorlage
+
+/* APP-MENÜ *************************************/
+
+// Menü-Vorlagen
 let layoutMenu = [
 	{
 		label: "&Programm",
@@ -182,6 +191,7 @@ let layoutMenu = [
 				label: "Bedeutungsgerüst wechseln",
 				icon: path.join(__dirname, "img", "menu", "kartei-bedeutungen-wechseln.png"),
 				click: () => appMenu.aktion("kartei-bedeutungen-wechseln"),
+				accelerator: "CommandOrControl+Alt+B",
 				id: "kartei-bedeutungen-wechseln",
 			},
 			{
@@ -352,12 +362,12 @@ if (!app.isPackaged) {
 	}
 }
 
-// Funktionen zum Menü
+// Funktionen zum App-Menü
 appMenu = {
 	// überschreibt das Submenü mit den zuletzt verwendeten Karteien
-	//   id = Number
-	//     (die ID des betroffenen Fensters; kann 0 sein => kein Fenster betroffen)
-	zuletzt (id) {
+	//   update = Boolean
+	//     (die Fenster sollen ein Update über die zuletzt geöffneten Dateien erhalten)
+	zuletzt (update) {
 		// neues Submenü erzeugen
 		let zuletztVerwendet = {
 			label: "Zuletzt verwendet",
@@ -366,9 +376,9 @@ appMenu = {
 			submenu: [],
 		};
 		// Dateiliste ggf. ergänzen
-		if (optionen.data.app.zuletzt) {
+		if (optionen.data.zuletzt) {
 			let loeschen = [],
-				zuletzt = optionen.data.app.zuletzt;
+				zuletzt = optionen.data.zuletzt;
 			for (let i = 0, len = zuletzt.length; i < len; i++) {
 				// existiert die Datei noch?
 				if (!fs.existsSync(zuletzt[i])) {
@@ -382,10 +392,6 @@ appMenu = {
 			if (loeschen.length) {
 				for (let i = 0, len = loeschen.length; i < len; i++) {
 					zuletzt.splice(zuletzt.indexOf(loeschen[i]), 1);
-				}
-				// bereingte Kartei-Liste an den Renderer-Prozess schicken
-				if (id) {
-					appMenu.aktion("optionen-zuletzt", optionen.data.app.zuletzt);
 				}
 			}
 		}
@@ -410,12 +416,35 @@ appMenu = {
 		}
 		// neue Liste einhängen
 		layoutMenu[1].submenu[pos] = zuletztVerwendet;
-		// Menü ggf. auffrischen
-		if (id) {
-			appMenu.erzeugen(id);
+		// Menüs in den Hauptfenstern ggf. auffrischen
+		if (update) {
+			for (let id in win) {
+				if (!win.hasOwnProperty(id)) {
+					continue;
+				}
+				if (win[id].typ !== "index") {
+					continue;
+				}
+				// Fenster des Renderer-Prozess ermitteln
+				let w = BrowserWindow.fromId(parseInt(id, 10));
+				// App-Menü des Renderer-Prozesses auffrischen
+				let disable = false;
+				if (!win[id].kartei) {
+					disable = true;
+				}
+				appMenu.deaktivieren(disable, w.id);
+				// Dateiliste an den Renderer-Prozess schicken
+				w.webContents.send("optionen-zuletzt", optionen.data.zuletzt);
+			}
 		}
 	},
 	// Menüpunkt im Untermenü "Zuletzt verwendet" erzeugen
+	//   zuletztVerwendet = Object
+	//     (der Menüpunkt "Zuletzt verwendet")
+	//   datei = String
+	//     (Dateipfad)
+	//   i = Number
+	//     (Index-Punkt, an dem sich die Datei befindet)
 	zuletztItem (zuletztVerwendet, datei, i) {
 		let item = {
 			label: path.basename(datei, ".wgd"),
@@ -429,16 +458,15 @@ appMenu = {
 	},
 	// Menü mit zuletzt benutzten Dateien leeren
 	zuletztLoeschen () {
-		optionen.data.app.zuletzt = [];
-		appMenu.aktion("optionen-zuletzt", optionen.data.app.zuletzt);
+		optionen.data.zuletzt = [];
 		optionen.schreiben();
-		appMenu.zuletzt(BrowserWindow.getFocusedWindow().id);
+		appMenu.zuletzt(true);
 	},
 	// Menü-Elemente deaktivieren, wenn keine Kartei offen ist
 	//   disable = Boolean
 	//     (Menü-Element deaktiveren oder eben nicht)
 	//   id = Number
-	//     (die ID des betroffenen Fensters; kann 0 sein => kein Fenster betroffen)
+	//     (die ID des betroffenen Fensters; konnte auch mal 0 sein => kein Fenster betroffen)
 	deaktivieren (disable, id) {
 		let elemente = ["kartei-speichern", "kartei-speichern-unter", "kartei-formvarianten", "kartei-notizen", "kartei-anhaenge", "kartei-lexika", "kartei-metadaten", "kartei-redaktion", "kartei-bedeutungen", "kartei-bedeutungen-wechseln", "kartei-bedeutungen-fenster", "kartei-suche", "kartei-schliessen", "belege"];
 		for (let j = 0, len = layoutMenu.length; j < len; j++) {
@@ -462,6 +490,8 @@ appMenu = {
 			appMenu.erzeugen(id);
 		}
 		// Switch-Funktion, die enabled auf true od. false stellt
+		//   item = Object
+		//     (ein Menü-Objekt)
 		function toggle (item) {
 			if (disable) {
 				item.enabled = false;
@@ -488,7 +518,10 @@ appMenu = {
 	// führt die gewählte Aktion im aktuellen Fenster aus
 	//   aktion = String
 	//     (die Aktion)
-	aktion (aktion) {
+	//   parameter = String || Array || undefined
+	//     (einige Aktionen bekommen einen Wert übergeben; im Falle der zuletzt geöffneten
+	//     Dateien kann es auch ein Array sein)
+	aktion (aktion, parameter) {
 		let w = BrowserWindow.getFocusedWindow();
 		if (aktion === "programm-beenden") {
 			for (let id in win) {
@@ -497,87 +530,42 @@ appMenu = {
 				}
 				BrowserWindow.fromId(parseInt(id, 10)).close();
 			}
+		} else if (parameter) {
+			w.webContents.send(aktion, parameter);
 		} else {
 			w.webContents.send(aktion);
 		}
 	},
 };
 
-// Menüs deaktivieren, die nur bei offenen Karteikarten funktionieren
-appMenu.deaktivieren(true, 0);
-
 // Menüse aktivieren/deaktivieren, wenn der Renderer-Prozess es wünscht
 ipcMain.on("menus-deaktivieren", (evt, disable, id) => appMenu.deaktivieren(disable, id));
 
-// Programm-Info aufrufen, wenn der Renderer-Prozess es wünscht
-ipcMain.on("ueber-app", () => fenster.erstellenUeber("app"));
+// das Programm auf Wunsch eines Renderer-Prozesses komplett beenden
+ipcMain.on("programm-beenden", () => appMenu.aktion("programm-beenden"));
 
-// Electron-Info aufrufen, wenn der Renderer-Prozess es wünscht
-ipcMain.on("ueber-electron", () => fenster.erstellenUeber("electron"));
 
-// Druckauftrag aus dem Bedeutungsgerüst-Fenster an den Renderer-Prozess schicken
-ipcMain.on("bedeutungen-fenster-drucken", function(evt, daten) {
-	let w = BrowserWindow.fromId(daten.winId);
-	daten = daten.gr;
-	w.webContents.send("bedeutungen-fenster-drucken", daten);
-	fenster.fokus(w);
-});
+/* OPTIONEN *************************************/
 
-// angeklickte Bedeutung im Gerüst-Fenster eintragen
-ipcMain.on("bedeutungen-fenster-eintragen", function(evt, bd) {
-	let w = BrowserWindow.fromId(bd.winId);
-	delete bd.winId;
-	w.webContents.send("bedeutungen-fenster-eintragen", bd);
-	fenster.fokus(w);
-});
-
-// angeklickte Bedeutung im Gerüst-Fenster austragen
-ipcMain.on("bedeutungen-fenster-austragen", function(evt, bd) {
-	let w = BrowserWindow.fromId(bd.winId);
-	delete bd.winId;
-	w.webContents.send("bedeutungen-fenster-austragen", bd);
-	fenster.fokus(w);
-});
-
-// Status des gerade geschlossenen Bedeutungsgerüst-Fensters an das passende Hauptfenster schicken
-ipcMain.on("bedeutungen-fenster-status", function(evt, status) {
-	let w = BrowserWindow.fromId(status.winId);
-	delete status.winId;
-	w.webContents.send("bedeutungen-fenster-status", status);
-});
-
-// Handbuch aufrufen, wenn der Renderer-Prozess es wünscht
-ipcMain.on("hilfe-handbuch", () => fenster.erstellenNeben("handbuch"));
-
-// Changelog aufrufen, wenn der Renderer-Prozess es wünscht
-ipcMain.on("hilfe-changelog", () => fenster.erstellenNeben("changelog"));
-
-// Optionen einlesen und speichern
+// Funktionen zu den Optionen
 optionen = {
 	// Pfad zur Optionen-Datei
 	pfad: path.join(app.getPath("userData"), "einstellungen.json"),
 	// Objekt mit den gespeicherten Optionen
-	data: {
-		fenster: {
-			x: undefined,
-			y: undefined,
-			width: 1100,
-			height: undefined,
-			maximiert: false,
-		},
-		app: {},
-	},
+	data: {},
 	// liest die Optionen-Datei aus
 	lesen () {
 		if (fs.existsSync(optionen.pfad)) {
 			const content = fs.readFileSync(optionen.pfad, "utf-8");
 			try {
 				let data = JSON.parse(content);
-				for (let satz in data) {
-					if (!data.hasOwnProperty(satz)) {
-						continue;
-					}
-					optionen.data[satz] = data[satz];
+				if (data.app) {
+					// bis Version 0.11.0 waren die Optionen widersinnigerweise in verschiedene Zweige aufgeteilt; das kommt jetzt alles in optionen.data, sodass die Daten in den Renderer-Prozessen und im Main-Prozess komplett an einem identischen Ort liegen
+					optionen.data = data.app;
+					optionen.data.fenster = data.fenster;
+					optionen.data["fenster-bedeutungen"] = data["fenster-bedeutungen"];
+				} else {
+					optionen.data = data;
 				}
 			} catch (json_err) {
 				// kann die Optionen-Datei nicht eingelesen werden, ist sie wohl korrupt;
@@ -586,14 +574,15 @@ optionen = {
 			}
 		}
 	},
+	// Optionen werden nicht sofort geschrieben, sondern erst nach einem Timeout
+	schreibenTimeout: null,
 	// überschreibt die Optionen-Datei
 	schreiben () {
-		// TODO umarbeiten
-// 		fs.writeFile(optionen.pfad, JSON.stringify(optionen.data), function(err) {
-// 			if (err) {
-// 				appMenu.aktion("dialog-anzeigen", `Die Optionen-Datei konnte nicht gespeichert werden.\n<h3>Fehlermeldung</h3>\n${err.message}`);
-// 			}
-// 		});
+		fs.writeFile(optionen.pfad, JSON.stringify(optionen.data), function(err) {
+			if (err) {
+				appMenu.aktion("dialog-anzeigen", `Die Optionen-Datei konnte nicht gespeichert werden.\n<h3>Fehlermeldung</h3>\n${err.message}`);
+			}
+		});
 	},
 };
 
@@ -601,39 +590,59 @@ optionen = {
 optionen.lesen();
 
 // Optionen auf Anfrage des Renderer-Prozesses synchron schicken
-ipcMain.on("optionen-senden", function(evt) {
-	evt.returnValue = optionen.data.app;
-});
+ipcMain.on("optionen-senden", evt => evt.returnValue = optionen.data);
 
 // Optionen vom Renderer Process abfangen und speichern
-ipcMain.on("optionen-speichern", function(evt, opt, id) {
-	if (optionen.data.app.zuletzt &&
-			optionen.data.app.zuletzt.join(",") !== opt.zuletzt.join(",")) {
-		optionen.data.app = opt;
-		appMenu.zuletzt(id); // Das sollte nicht unnötig oft aufgerufen werden!
+ipcMain.on("optionen-speichern", function(evt, opt, winId) {
+	// Optionen übernehmen
+	if (optionen.data.zuletzt &&
+			optionen.data.zuletzt.join(",") !== opt.zuletzt.join(",")) {
+		optionen.data = opt;
+		appMenu.zuletzt(true); // Das sollte nicht unnötig oft aufgerufen werden!
 	} else {
-		optionen.data.app = opt;
+		optionen.data = opt;
 	}
-	optionen.schreiben();
+	// Optionen an alle Hauptfenster schicken, mit Ausnahme dem der übergebenen id
+	for (let id in win) {
+		if (!win.hasOwnProperty(id)) {
+			continue;
+		}
+		if (win[id].typ !== "index") {
+			continue;
+		}
+		const idInt = parseInt(id, 10);
+		if (idInt === winId) {
+			continue;
+		}
+		BrowserWindow.fromId(idInt).webContents.send("optionen-empfangen", optionen.data);
+	}
+	// Optionen nach Timeout in einstellungen.json schreiben
+	clearTimeout(optionen.schreibenTimeout);
+	optionen.schreibenTimeout = setTimeout(() => optionen.schreiben(), 6e4);
 });
 
-// Browser-Fenster
+
+/* BROWSER-FENSTER ******************************/
+
+// Funktionen zu den Browser-Fenstern
 fenster = {
 	// Hauptfenster erstellen
 	//   kartei = String
 	//     (Pfad zur Kartei, die geöffnet werden soll)
 	erstellen (kartei) {
 		// Fenster öffnen
+		// (die Optionen können noch fehlen)
+		const Bildschirm = require("electron").screen.getPrimaryDisplay();
 		let bw = new BrowserWindow({
 			title: app.getName().replace("'", "’"),
 			icon: path.join(__dirname, "img", "icon", "linux", "icon_32px.png"),
-			x: optionen.data.fenster.x,
-			y: optionen.data.fenster.y,
-			width: optionen.data.fenster.width,
-			height: optionen.data.fenster.height,
+			x: optionen.data.fenster ? optionen.data.fenster.x : null,
+			y: optionen.data.fenster ? optionen.data.fenster.y : null,
+			width: optionen.data.fenster ? optionen.data.fenster.width : 1100,
+			height: optionen.data.fenster ? optionen.data.fenster.height : Bildschirm.workArea.height,
 			minWidth: 600,
 			minHeight: 350,
-			autoHideMenuBar: optionen.data.app.einstellungen && optionen.data.app.einstellungen.autoHideMenuBar ? true : false, // optionen.data.app.einstellungen könnte noch fehlen (wenn keine Optionen-Datei vorhanden)
+			autoHideMenuBar: optionen.data.einstellungen ? optionen.data.einstellungen.autoHideMenuBar : false,
 			show: false,
 			webPreferences: {
 				nodeIntegration: true,
@@ -644,10 +653,10 @@ fenster = {
 		// Fenster-Objekt anlegen
 		win[bw.id] = {
 			typ: "index",
-			kartei: "",
+			kartei: "", // hier steht nichts oder ein Pfad; wurde die Kartei erstellt, aber noch nicht gespeichert hat es den Wert "neu"; nach dem ersten Speichern steht auch hier der Pfad
 		};
-		// Menü erzeugen
-		appMenu.erzeugen(bw.id);
+		// Menüs, die nur bei offenen Karteikarten funktionieren, deaktivieren und diese Menüs an das neue Fenster hängen
+		appMenu.deaktivieren(true, bw.id);
 		// HTML laden
 		BrowserWindow.fromId(bw.id).loadFile(path.join(__dirname, "index.html"));
 		// Fenster anzeigen, sobald alles geladen wurde
@@ -664,10 +673,14 @@ fenster = {
 			// Fenster anzeigen
 			this.show();
 			// ggf. maximieren
-			if (optionen.data.fenster.maximiert) {
+			// (die Option kann noch fehlen)
+			if (optionen.data.fenster &&
+					optionen.data.fenster.maximiert) {
 				this.maximize();
 			}
 		});
+		// ID des Fensters zurückgeben (wird mitunter direkt benötigt)
+		return bw.id;
 	},
 	// Neben-Fenster erstellen
 	//   typ = String
@@ -803,6 +816,76 @@ fenster = {
 	},
 };
 
+// Handbuch aufrufen, wenn der Renderer-Prozess es wünscht
+ipcMain.on("hilfe-handbuch", () => fenster.erstellenNeben("handbuch"));
+
+// Changelog aufrufen, wenn der Renderer-Prozess es wünscht
+ipcMain.on("hilfe-changelog", () => fenster.erstellenNeben("changelog"));
+
+// Programm-Info aufrufen, wenn der Renderer-Prozess es wünscht
+ipcMain.on("ueber-app", () => fenster.erstellenUeber("app"));
+
+// Electron-Info aufrufen, wenn der Renderer-Prozess es wünscht
+ipcMain.on("ueber-electron", () => fenster.erstellenUeber("electron"));
+
+// Druckauftrag aus dem Bedeutungsgerüst-Fenster an den Renderer-Prozess schicken
+ipcMain.on("bedeutungen-fenster-drucken", function(evt, daten) {
+	let w = BrowserWindow.fromId(daten.winId);
+	daten = daten.gr;
+	w.webContents.send("bedeutungen-fenster-drucken", daten);
+	fenster.fokus(w);
+});
+
+// angeklickte Bedeutung im Gerüst-Fenster eintragen
+ipcMain.on("bedeutungen-fenster-eintragen", function(evt, bd) {
+	let w = BrowserWindow.fromId(bd.winId);
+	delete bd.winId;
+	w.webContents.send("bedeutungen-fenster-eintragen", bd);
+	fenster.fokus(w);
+});
+
+// angeklickte Bedeutung im Gerüst-Fenster austragen
+ipcMain.on("bedeutungen-fenster-austragen", function(evt, bd) {
+	let w = BrowserWindow.fromId(bd.winId);
+	delete bd.winId;
+	w.webContents.send("bedeutungen-fenster-austragen", bd);
+	fenster.fokus(w);
+});
+
+// Status des gerade geschlossenen Bedeutungsgerüst-Fensters an das passende Hauptfenster schicken
+ipcMain.on("bedeutungen-fenster-status", function(evt, status) {
+	let w = BrowserWindow.fromId(status.winId);
+	delete status.winId;
+	w.webContents.send("bedeutungen-fenster-status", status);
+});
+
+// neue Kartei zu einem neuen Wort anlegen
+ipcMain.on("neues-wort", function() {
+	// neues Fenster öffnen oder ein bestehendes nutzen?
+	let neuesFenster = true,
+		timeout = 1500,
+		winId = 0;
+	for (let id in win) {
+		if (!win.hasOwnProperty(id)) {
+			continue;
+		}
+		if (win[id].typ === "index" && !win[id].kartei) {
+			winId = parseInt(id, 10);
+			timeout = 0;
+			neuesFenster = false;
+			break;
+		}
+	}
+	if (neuesFenster) {
+		winId = fenster.erstellen("");
+	}
+	// das Fenster fokussieren
+	let w = BrowserWindow.fromId(winId);
+	fenster.fokus(w);
+	// nach dem Wort fragen
+	setTimeout(() => w.webContents.send("kartei-erstellen"), timeout);
+});
+
 // überprüft für den Renderer-Prozess, ob die übergebene Kartei schon offen ist
 ipcMain.on("kartei-schon-offen", function(evt, kartei) {
 	let offen = false;
@@ -819,13 +902,7 @@ ipcMain.on("kartei-schon-offen", function(evt, kartei) {
 	evt.returnValue = offen;
 });
 
-// registriert im Fenster-Objekt, welche Kartei geöffnet wurde
-ipcMain.on("kartei-geoeffnet", (evt, id, kartei) => win[id].kartei = kartei);
-
-// registriert im Fenster-Objekt, welche Kartei geöffnet wurde
-ipcMain.on("kartei-geschlossen", (evt, id) => win[id].kartei = "");
-
-// neues Haupt-Fenster auf Wunsch des Renderer-Prozesses öffnen (ggf. mit der übergebenen Kartei)
+// die übergebene Kartei laden (in einem neuen oder bestehenden Hauptfenster)
 ipcMain.on("kartei-laden", function(evt, kartei) {
 	for (let id in win) {
 		if (!win.hasOwnProperty(id)) {
@@ -841,7 +918,34 @@ ipcMain.on("kartei-laden", function(evt, kartei) {
 	fenster.erstellen(kartei);
 });
 
-// Optionen auf Anfrage des Renderer-Prozesses synchron schicken
+// registriert im Fenster-Objekt, welche Kartei geöffnet wurde
+ipcMain.on("kartei-geoeffnet", (evt, id, kartei) => win[id].kartei = kartei);
+
+// deregistriert im Fenster-Objekt die Kartei, die geöffnet war
+ipcMain.on("kartei-geschlossen", (evt, id) => win[id].kartei = "");
+
+// neues, leeres Hauptfenster öffnen
+ipcMain.on("fenster-oeffnen", (evt) => fenster.erstellen(""));
+
+// feststellen, ob ein weiteres Hauptfenster offen ist
+ipcMain.on("fenster-hauptfenster", function(evt, idFrage) {
+	let hauptfensterOffen = false;
+	for (let id in win) {
+		if (!win.hasOwnProperty(id)) {
+			continue;
+		}
+		if (parseInt(id, 10) === idFrage) {
+			continue;
+		}
+		if (win[id].typ === "index") {
+			hauptfensterOffen = true;
+			break;
+		}
+	}
+	evt.returnValue = hauptfensterOffen;
+});
+
+// Fenster wurde geschlossen => im Fensterobjekt dereferenzieren
 ipcMain.on("fenster-dereferenzieren", function(evt, id) {
 	delete win[id];
 	// Sind noch Hauptfenster vorhanden?
@@ -860,16 +964,13 @@ ipcMain.on("fenster-dereferenzieren", function(evt, id) {
 	}
 });
 
+
+/* APP ******************************************/
+
 // Initialisierung abgeschlossen => Browser-Fenster erstellen
 app.on("ready", function() {
 	// Menu der zuletzt verwendeter Karteien erzeugen
-	appMenu.zuletzt(0);
-	// Informationen zum Bildschirm auslesen und ggf. speichern
-	const Bildschirm = require("electron").screen.getPrimaryDisplay();
-	// Fenster standardmäßig maximalisiert öffnen
-	if (optionen.data.fenster.height === undefined) {
-		optionen.data.fenster.height = Bildschirm.workArea.height;
-	}
+	appMenu.zuletzt(false);
 	// warten mit dem Öffnen des Fensters, bis die Optionen eingelesen wurden
 	fenster.erstellen("");
 });
@@ -879,6 +980,10 @@ app.on("window-all-closed", function() {
 	// auf MacOS bleibt das Programm üblicherweise aktiv,
 	// bis die BenutzerIn es explizit beendet
 	if (process.platform !== "darwin") {
+		// Optionen schreiben
+		clearTimeout(optionen.schreibenTimeout);
+		optionen.schreiben();
+		// App beenden
 		app.quit();
 	}
 });

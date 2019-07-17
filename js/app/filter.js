@@ -505,7 +505,7 @@ let filter = {
 		input.addEventListener("change", function() {
 			filter.setZuletztAktiv(this);
 			optionen.data.filter.zeitraum = this.id.match(/[0-9]+$/)[0];
-			optionen.speichern(false);
+			optionen.speichern();
 			filter.aufbauenZeitraum();
 			filter.aktiveFilterErmitteln(false);
 			liste.status(true);
@@ -625,7 +625,7 @@ let filter = {
 		input.addEventListener("change", function() {
 			filter.setZuletztAktiv(this);
 			optionen.data.filter.logik = this.id.match(/[a-z]+$/)[0];
-			optionen.speichern(false);
+			optionen.speichern();
 			liste.status(true);
 		});
 	},
@@ -848,7 +848,7 @@ let filter = {
 	filterOptionen (checkbox, refresh) {
 		const opt = checkbox.id.replace(/^filter-/, "");
 		optionen.data.filter[opt] = checkbox.checked;
-		optionen.speichern(false);
+		optionen.speichern();
 		if (refresh) {
 			filter.setZuletztAktiv(checkbox);
 			liste.status(true);
@@ -1465,7 +1465,7 @@ let filter = {
 	// Reduktionsmodus der Filter umschalten
 	ctrlReduzierenToggle () {
 		optionen.data.filter.reduzieren = !optionen.data.filter.reduzieren;
-		optionen.speichern(false);
+		optionen.speichern();
 		filter.ctrlReduzierenAnzeige();
 	},
 	// Reduktionsmodus der Filter visualisieren

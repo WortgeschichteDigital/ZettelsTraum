@@ -24,12 +24,41 @@
 			<div class="version">0.12.0</div>
 			
 			<div>
-				<h2><span data-maintainer="Nico Dorn">Version 0.12.0-beta.1</span><time datetime="2019-07-04T15:51:41">4. Juli 2019</time></h2>
+				<h2><span data-maintainer="Nico Dorn">Version 0.12.0</span><time datetime="2019-07-17T19:51:32">17. Juli 2019</time></h2>
 				
 				<h3>Neue Funktionen</h3>
 				
 				<ul>
-					<li><mark>Von nun an können mehrere Karteien nebeneinander geöffnet werden.</mark></li>
+					<li>
+						<p>Von nun an können beliebig viele Karteien parallel betrachtet und bearbeitet werden.</p>
+						<p>Ein neues, leeres Fenster ohne Kartei kann über <i>Programm &gt; Neues Fenster</i> oder über das Quick-Access-Icon <img src="../img/quick-neues-fenster.svg" width="24" height="24" alt=""> geöffnet werden. Solche Fenster können in beliebiger Zahl erzeugt werden, wobei sie alle genau dieselbe Funktionalität wie ein ganz gewöhnliches Startfenster aufweisen: Man kann in ihnen Karteien in jeder erdenklichen Weise öffnen (<abbr title="zum Beispiel">z. B.</abbr> aus der Liste zuletzt verwendeter Dateien, die auf dem Startbildschirm erscheint, aber auch via <span lang="en">Drag-and-Drop</span>) oder eine andere, nicht ausgegraute Funktion aus den Menüs aufrufen, in ihm also <abbr title="beispielsweise">bspw.</abbr> eine neue Kartei erstellen.</p>
+						<p>Die Funktionalität des Programms hat sich durch diesen Mehr-Fenster-Modus nicht geändert. Einige Funktionen zeigen allerdings ein leicht geändertes Verhalten, wenn bereits eine Kartei geöffnet ist:</p>
+						<p><i>Kartei &gt; Erstellen:</i> Es wird automatisch ein neues Fenster geöffnet, in dem die neue Kartei erstellt werden kann. Gibt man in diesem neuen Fenster kein Wort ein, hat man ein gewöhnliches leeres Fenster. Gibt es bereits ein leeres Fenster, wird dieses als solches erkannt und zum Erstellen der neuen Wort-Kartei benutzt.</p>
+						<p><i>Kartei &gt; Öffnen:</i> Die ausgewählte Kartei wird automatisch in einem neuen Fenster geöffnet. Sollte es bereits ein leeres Fenster geben, findet das Programm dieses und wird die Kartei automatisch in ihm laden.</p>
+						<p><i>Kartei &gt; Zuletzt verwendet:</i> Das Öffnen von Karteien über die Dateiliste funktioniert genauso wie das Öffnen via <i>Kartei &gt; Öffnen</i>: Die ausgewählte Kartei wird in einem schon existierenden leeren oder in einem neuen Fenster geöffnet.</p>
+						<p><i>Kartei &gt; Schließen:</i> Sind mehrere Karteien geöffnet oder gibt es mindestens ein weiteres leeres Fenster, wird nicht nur die aktuelle Kartei, sondern gleich das ganze Fenster geschlossen. Ist das aktuelle Fenster das letzte offene Fenster, in dem eine Kartei geöffnet werden kann, erscheint die Startseite mit der Liste der zuletzt verwendeten Karteien.</p>
+						<p>Für all diese Funktionen spielt es keine Rolle, ob die Kartei in dem Fenster, aus dem man sie aufruft, zuvor gespeichert wurde oder nicht. Sprich: Will man vor dem Speichern einer Kartei eine andere Kartei konsultieren, ist dies kein Problem: Man öffnet sie einfach parallel via <i>Kartei &gt; Öffnen</i>.</p>
+						<p>Zur Funktion <i>Programm &gt; Beenden</i>: Ganz egal, aus welchem Fenster heraus sie aufgerufen wird, es wird immer versucht, alle Programmfenster zu schließen. Sind in einem Programmfenster Daten noch nicht gespeichert, wird man wie gehabt gefragt, ob man diese Daten vor dem Beenden nicht erst einmal speichern möchte. Das Schließen des Programms wird in solchen Fällen aufgeschoben.</p>
+						<p>Hat man vor lauter Fenstern einmal den Überblick verloren und versucht eine bereits geöffnete Kartei noch einmal zu laden, wird der Ladevorgang abgebrochen und das Fenster mit der gewünschten, bereits geöffneten Kartei in den Vordergrund geholt.</p>
+						<p>Werden in einem der Fenster Einstellungen geändert (<i>Programm &gt; Einstellungen</i>), werden diese automatisch und umgehend auch für alle anderen Programmfenster wirksam. Hiervon ausgenommen sind alle Anzeigeoptionen und die Einstellungen, die man in der Filterleiste vornehmen kann. Ein Beispiel: Das Programm merkt sich zwar prinzipiell, ob man die Ansicht eines Belegs in der Belegliste gekürzt haben möchte oder nicht (Funktion <img src="../img/liste-kuerzen.svg" width="24" height="24" alt="">). Im laufenden Betrieb wird diese Einstellung aber nicht für andere Fenster übernommen, sodass man in unterschiedlichen Karteien unterschiedliche Ansichtsoptionen parallel verwenden kann und sich nicht plötzlich die Filter ändern, was wiederum Konsequenzen für die in der Belegliste sichtbaren Belege haben könnte. Die Ansichtsoptionen werden jedoch nach wie vor gespeichert, sodass sie beim Neustart in dem Zustand wiederhergestellt werden können, in dem sie beim Verlassen des Programms waren. Konkret heißt das: Es werden die Anzeigeoptionen des letzten Fensters gespeichert, das man in der aktuellen Session schließt.</p>
+						<p>Dies betrifft auch Position und Größe des Karteifensters und des Bedeutungsgerüstfensters. Auch hier gilt die Regel, dass Position und Größe des letzten Fensters gemerkt werden, das man beim Beenden der aktuellen Session schließt. (Alle Fenster anderen Typs, wie <abbr title="zum Beispiel">z. B.</abbr> der Changelog, werden immer in einer hartcodierten Standardgröße und an einer Standardposition geöffnet.)</p>
+						<p>Nicht nur die Einstellungen, sondern auch die Liste der zuletzt verwendeten Karteien (<i>Kartei &gt; Zuletzt verwendet</i>) wird in allen Programmfenstern permanent aktuell gehalten.</p>
+					</li>
+				</ul>
+				
+				<h3>Verbesserungen</h3>
+				
+				<ul>
+					<li>In der Titelleiste des Programms erscheint neben dem Programmnamen nun auch das Kartei-Wort, das im Fenster gerade geöffnet ist.</li>
+					<li>Bedeutungsgerüst wechseln: Die Funktion kann nun auch über das Tastaturkürzel <kbd>Strg</kbd> + <kbd>Alt</kbd> + <kbd>B</kbd> aufgerufen werden.</li>
+					<li><a href="#" class="ueber-electron"><i>Electron</i></a>-Update auf Version 4.2.7.</li>
+				</ul>
+				
+				<h3>Behoebene Fehler</h3>
+				
+				<ul>
+					<li>Karteikarte: War die Karteikarte in der Formularansicht und wurde über das Bedeutungsgerüst-Fenster eine der eingetragenen Bedeutungen entfernt, passte sich die Höhe des Textfeldes nicht automatisch an.</li>
+					<li>Bedeutungsgerüst-Fenster: War die Dropdown-Liste mit Bedeutungsgerüsten sichtbar und wurde mit dem Mausrad gescrollt, überdeckte die Liste den Fensterkopf.</li>
 				</ul>
 			</div>
 			
@@ -426,7 +455,7 @@ Mustermann, Erika
 				<h3>Verbesserungen</h3>
 				
 				<ul>
-					<li>Links zu Webseiten können nun via Drag-and-Drop in einen Browser gezogen und so geöffnet werden. Die Änderung betrifft alle externen Links in allen Programmfenstern.</li>
+					<li>Links zu Webseiten können nun via <span lang="en">Drag-and-Drop</span> in einen Browser gezogen und so geöffnet werden. Die Änderung betrifft alle externen Links in allen Programmfenstern.</li>
 					<li>Enthält eine Kartei viele lange Belege, war der Aufbau der Belegliste schon bei ein paar Dutzend Karteikarten mitunter recht träge. In solchen Fällen agiert die App nun deutlich performanter, ohne Abstriche bei der Funktionalität zu machen.</li>
 					<li>Die Ansicht des <i>Bedeutungsgerüst-Fensters</i>, des <i>Handbuchs</i> und der <i>technischen Dokumentation</i> lässt sich nun via Tastaturkürzel anpassen. Implementiert wurden alle Funktionen des Hauptfenster, die im Menü <i>Ansicht</i> zu finden sind. Das sind im Einzelnen:<br><kbd>Strg</kbd> + <kbd>⇧</kbd> + <kbd>+</kbd> (<i>Schrift vergrößern</i>), <kbd>Strg</kbd> + <kbd>-</kbd> (<i>Schrift verkleinern</i>), <kbd>Strg</kbd> + <kbd>0</kbd> (<i>Standardgröße</i>) und <kbd>F11</kbd> (<i>Vollbild</i>).</li>
 					<li>Belegliste und Karteikarte: Beim Import von Belgen aus dem <abbr title="Deutschen Textarchiv">DTA</abbr> werden Trennstriche am Zeilenende mit <q class="bedeutung">[¬]</q> markiert. Werden diese Trennstrichmarkierungen über die Funktion <img src="../img/liste-trennung.svg" width="24" height="24" alt=""> ausgeschaltet erscheint fortan ein Bindestrich, wenn das nächste Wort mit einem Großbuchstaben beginnt. Aus <q class="bedeutung">Eisenbahn[¬]Differentialtarife</q> wird nun also <q class="bedeutung">Eisenbahn-Differentialtarife</q> und nicht mehr <q class="bedeutung">EisenbahnDifferentialtarife</q>.</li>
