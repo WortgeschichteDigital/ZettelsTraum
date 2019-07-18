@@ -6,6 +6,8 @@ window.addEventListener("load", function() {
 	document.getElementById("icon").addEventListener("click", () => ipcRenderer.send("ueber-app"));
 	// Tastatur-Events abfangen
 	document.addEventListener("keydown", helferWin.tastatur);
+	// Listener an Kopier-Link hängen
+	fehlerlog.kopieren(document.getElementById("kopieren"));
 	// Fehler vom Main-Prozess holen
 	let fehler = ipcRenderer.sendSync("fehler-senden");
 	fehlerlog.fuellen(fehler);

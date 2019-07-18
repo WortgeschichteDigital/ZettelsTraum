@@ -251,11 +251,6 @@ window.addEventListener("load", function() {
 	start.zuletzt();
 	// Programmstart-Overlay ausblenden
 	start.overlayAus();
-	// TEST
-	setTimeout(function() {
-		fehler();
-	}, 5000);
-	fehler();
 });
 
 // Schließen unterbrechen, falls Daten noch nicht gespeichert wurden
@@ -308,6 +303,7 @@ window.addEventListener("error", function(evt) {
 		fileJs: evt.filename,
 		message: evt.message,
 		line: evt.lineno,
+		column: evt.colno,
 	};
 	const {ipcRenderer} = require("electron");
 	ipcRenderer.send("fehler", err);

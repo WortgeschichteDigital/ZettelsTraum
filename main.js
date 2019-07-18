@@ -2,7 +2,14 @@
 
 /* VARIABLEN ************************************/
 
-// Speicher-Objekt für die Fenster
+// Speicher-Objekt für die Fenster; Format der Einträge:
+//   "Fenster-ID" (numerischer String, beginnend mit 1; wird von Electron vergeben)
+//     typ: String (Typ des Fensters, "index" für Hauptfenster)
+//     kartei: String (Pfad zur Kartei, die gerade in dem Fenster geladen ist;
+//       immer leer in Fenstern, die nicht typ === "index" sind;
+//       kann in Fenstern vom typ === "index" leer sein, dann ist keine Kartei geladen;
+//       kann in Fenstern vom typ === "index" auch "neu" sein, dann wurde die Karte erstellt,
+//       aber noch nicht gespeichert)
 // (die Bedeutungsgerüst-Fenster sind direkt an ein Hauptfenster gebunden
 // und werden auch aus diesem geöffnet; sie werden hier nicht referenziert)
 let win = {};
@@ -1009,3 +1016,19 @@ ipcMain.on("fehler", function(evt, err) {
 });
 
 ipcMain.on("fehler-senden", evt => evt.returnValue = fehler);
+
+process.on("uncaughtException", function(err) {
+	fehler.push({
+		time: new Date().toISOString(),
+		word: "",
+		fileWgd: "",
+		fileJs: "main.js",
+		message: err.stack,
+		line: 0,
+		column: 0,
+	});
+	// auf der Konsole auswerfen, wenn nicht gepackt
+	if (devtools) {
+		console.log(`\x1b[47m\x1b[31m${err.stack}\x1b[0m`);
+	}
+});

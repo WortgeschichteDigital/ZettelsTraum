@@ -44,19 +44,50 @@ body > header h1 {
 	right: 10px;
 }
 
+#kopieren {
+	position: fixed;
+	top: 70px;
+	right: 10px;
+	width: 48px;
+	height: 34px;
+	background-color: #fff;
+	text-align: center;
+}
+
+#kopieren a {
+	display: inline-block;
+	outline: none;
+	border-radius: 3px;
+	width: 24px;
+	height: 24px;
+	padding: 0 5px;
+	background-color: var(--hintergrund);
+	color: var(--text);
+	text-decoration: none;
+	cursor: default;
+}
+
+#kopieren a:focus {
+	color: var(--farbe);
+}
+
+#kopieren svg path {
+	fill: currentcolor;
+}
+
 main {
 	margin-top: 70px;
 	padding: 0 10px 10px 10px;
 }
 
 /* Elemente ------------------------------------- */
-div {
+div:not(#kopieren) {
 	margin-top: 25px;
 	border-top: 1px solid var(--linie);
 	padding-top: 25px;
 }
 
-div:first-child {
+div:not(#kopieren):first-child {
 	border-top: none;
 }
 
@@ -70,6 +101,7 @@ h2 {
 
 p {
 	margin: 0 0 5px 25px;
+	overflow-wrap: break-word;
 }
 
 p.keine {
@@ -86,4 +118,14 @@ p.js {
 
 p.obacht {
 	color: var(--textWarnung);
+}
+
+p.version {
+	margin-left: 0;
+	color: var(--textHell);
+}
+
+p.version span {
+	display: inline-block;
+	width: 80px;
 }
