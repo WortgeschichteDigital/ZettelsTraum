@@ -269,11 +269,11 @@ let dropdown = {
 	},
 	// Dropdown korrekt positionieren
 	position () {
-		const drop = document.getElementById("dropdown"),
+		let drop = document.getElementById("dropdown"),
 			feld = drop.parentNode.querySelector(".dropdown-feld");
 		drop.style.left = `${feld.offsetLeft}px`;
 		drop.style.maxWidth = `${feld.parentNode.offsetWidth - 12}px`; // 12px padding und border
-		const rect = feld.getBoundingClientRect();
+		let rect = feld.getBoundingClientRect();
 		if (rect.top + rect.height + drop.offsetHeight + 5 > window.innerHeight) { // 5px hinzuzählen, damit unten immer ein bisschen Absatz bleibt
 			drop.style.top = `-${drop.offsetHeight + 4}px`;
 		} else {

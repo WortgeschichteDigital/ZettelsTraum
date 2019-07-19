@@ -137,7 +137,7 @@ let beleg = {
 		// Wert des Suchfelds der Leseansicht zurücksetzen
 		beleg.leseSucheText = "";
 		// in Lese- oder in Formularansicht öffnen?
-		const leseansicht = document.getElementById("beleg-link-leseansicht");
+		let leseansicht = document.getElementById("beleg-link-leseansicht");
 		if (optionen.data.einstellungen.leseansicht) {
 			beleg.formular(false); // wegen der Bedeutungen *vor* dem Füllen der Leseansicht
 			if (!leseansicht.classList.contains("aktiv")) {
@@ -160,7 +160,7 @@ let beleg = {
 		beleg.ctrlSpringenFormReg.again = false;
 		beleg.ctrlSpringenFormReset();
 		// Beleg-Titel eintragen
-		const beleg_titel = document.getElementById("beleg-titel"),
+		let beleg_titel = document.getElementById("beleg-titel"),
 			titel_text = document.createTextNode(`Beleg #${beleg.id_karte}`);
 		beleg_titel.replaceChild(titel_text, beleg_titel.firstChild);
 		// Feld-Werte eintragen
@@ -459,8 +459,8 @@ let beleg = {
 	DTAImportData: {},
 	// Daten aus dem DTA importieren
 	DTAImport () {
-		const dta = document.getElementById("beleg-dta"),
-			url = helfer.textTrim(dta.value, true);
+		let dta = document.getElementById("beleg-dta");
+		const url = helfer.textTrim(dta.value, true);
 		// URL fehlt
 		if (!url) {
 			dialog.oeffnen("alert", () => dta.select());
@@ -568,7 +568,7 @@ let beleg = {
 		if (/p=[0-9]+/.test(url)) {
 			fak = url.match(/p=([0-9]+)/)[1];
 		} else if (new RegExp(`${titel_id}\\/[0-9]+`).test(url)) {
-			const reg = new RegExp(`${titel_id}\\/([0-9]+)`);
+			let reg = new RegExp(`${titel_id}\\/([0-9]+)`);
 			fak = url.match(reg)[1];
 		}
 		return fak;
@@ -624,9 +624,9 @@ let beleg = {
 	//     enthält auch den TEI-Header)
 	DTAImportMeta (xml) {
 		// normale Werte
-		const bibl = xml.querySelector("teiHeader fileDesc sourceDesc biblFull"),
+		let bibl = xml.querySelector("teiHeader fileDesc sourceDesc biblFull"),
 			sorte = xml.querySelector("teiHeader profileDesc textClass");
-		const werte = {
+		let werte = {
 			titel: bibl.querySelector(`titleStmt title[type="main"]`),
 			untertitel: bibl.querySelectorAll(`titleStmt title[type="sub"]`),
 			band: bibl.querySelector(`titleStmt title[type="volume"]`),
@@ -762,7 +762,7 @@ let beleg = {
 			fak_bis = (int_fak + 1).toString();
 		}
 		// Start- und Endelement ermitteln
-		const ele_start = xml.querySelector(`pb[facs="#f${fak.padStart(4, "0")}"]`),
+		let ele_start = xml.querySelector(`pb[facs="#f${fak.padStart(4, "0")}"]`),
 			ele_ende = xml.querySelector(`pb[facs="#f${fak_bis.padStart(4, "0")}"]`);
 		// Seite auslesen
 		const n = ele_start.getAttribute("n");
@@ -875,7 +875,7 @@ let beleg = {
 			if (!rend.hasOwnProperty(typ)) {
 				continue;
 			}
-			const reg = new RegExp(`\\[(${typ})\\](.+?)\\[\\/${typ}\\]`, "g");
+			let reg = new RegExp(`\\[(${typ})\\](.+?)\\[\\/${typ}\\]`, "g");
 			while (text.match(reg)) { // bei komischen Verschachtelungen kann es dazu kommen, dass beim 1. Durchgang nicht alle Tags ersetzt werden
 				text = text.replace(reg, function(m, p1, p2) {
 					let start = `<${rend[p1].ele}`;
@@ -984,7 +984,7 @@ let beleg = {
 	// Daten in das Formular eintragen
 	DTAImportFill () {
 		// Werte eintragen
-		const dta = beleg.DTAImportData;
+		let dta = beleg.DTAImportData;
 		let datum_feld = dta.datum.entstehung;
 		if (!datum_feld && dta.datum.druck) {
 			datum_feld = dta.datum.druck;
@@ -1004,7 +1004,7 @@ let beleg = {
 				let ts = dta.textsorte[i],
 					ts_sub = dta.textsorte_sub[i];
 				if (ts_sub && /[,;] /.test(ts_sub)) {
-					const ts_sub_sp = ts_sub.split(/[,;] /);
+					let ts_sub_sp = ts_sub.split(/[,;] /);
 					for (let j = 0, len = ts_sub_sp.length; j < len; j++) {
 						textsorte.push(`${ts}: ${ts_sub_sp[j]}`);
 					}
@@ -1120,8 +1120,8 @@ let beleg = {
 		if (!beleg.data.bs || !optionen.data.einstellungen["wort-check"]) {
 			return;
 		}
-		const form_reg = new RegExp(helfer.formVariRegExp(), "i"),
-			text = beleg.data.bs;
+		let form_reg = new RegExp(helfer.formVariRegExp(), "i");
+		const text = beleg.data.bs;
 		if (!form_reg.test(liste.textBereinigen(text))) {
 			dialog.oeffnen("alert", function() {
 				document.getElementById("beleg-dta").focus();
@@ -1221,8 +1221,8 @@ let beleg = {
 		}
 		// Kein Text ausgewählt => das gesamte Feld wird kopiert
 		if (ds === "bs") { // Beleg
-			const p = text.replace(/\n\s*\n/g, "\n").split("\n");
-			let html = "";
+			let p = text.replace(/\n\s*\n/g, "\n").split("\n"),
+				html = "";
 			p.forEach(function(i) {
 				let text = i;
 				if (optionen.data.einstellungen["textkopie-wort"]) {
@@ -1242,7 +1242,7 @@ let beleg = {
 			const bd = beleg.bedeutungAufbereiten();
 			let bds = [];
 			bd.split("\n").forEach(function(i) {
-				const bd = beleg.bedeutungSuchen(i);
+				let bd = beleg.bedeutungSuchen(i);
 				if (!bd.id) {
 					let bdsTmp = [];
 					i.split(": ").forEach(function(j, n) {
@@ -1284,7 +1284,7 @@ let beleg = {
 	toolsKopierenAddQuelle (text, html, obj) {
 		if (html) {
 			text += "<hr>";
-			const quelle = obj.qu.split("\n");
+			let quelle = obj.qu.split("\n");
 			quelle.forEach(function(i) {
 				text += `<p>${i}</p>`;
 			});
@@ -1361,7 +1361,7 @@ let beleg = {
 		let container = document.createElement("div");
 		container.innerHTML = html;
 		// Inline-Tags, die erhalten bleiben bzw. ersetzt werden sollen
-		const inline_keep = [
+		let inline_keep = [
 			"B",
 			"CITE",
 			"DEL",
@@ -1421,7 +1421,7 @@ let beleg = {
 			if (!speziell.hasOwnProperty(tag)) {
 				continue;
 			}
-			const reg = new RegExp(`\\[#(${tag})\\](.+?)\\[\\/${tag}\\]`, "g");
+			let reg = new RegExp(`\\[#(${tag})\\](.+?)\\[\\/${tag}\\]`, "g");
 			text = text.replace(reg, function(m, p1, p2) {
 				let start = `<${speziell[p1].ele}`;
 				if (speziell[p1].class) {
@@ -1431,8 +1431,8 @@ let beleg = {
 			});
 		}
 		for (let i = 0, len = inline_keep.length; i < len; i++) {
-			const tag = inline_keep[i],
-				reg = new RegExp(`\\[#${tag}\\](.+?)\\[\\/${tag}\\]`, "g");
+			const tag = inline_keep[i];
+			let reg = new RegExp(`\\[#${tag}\\](.+?)\\[\\/${tag}\\]`, "g");
 			text = text.replace(reg, function(m, p1) {
 				return `<${tag.toLowerCase()}>${p1}</${tag.toLowerCase()}>`;
 			});
@@ -1482,10 +1482,10 @@ let beleg = {
 			return;
 		}
 		// Fokus in <textarea>
-		const ta = document.getElementById("beleg-bs");
+		let ta = document.getElementById("beleg-bs");
 		ta.focus();
 		// Tags ermitteln
-		const tags = {
+		let tags = {
 			antiqua: {
 				start: `<span class="dta-antiqua">`,
 				ende: "</span>",
@@ -1544,7 +1544,7 @@ let beleg = {
 			return;
 		}
 		// Aktion durchführen
-		const reg_start = new RegExp(`${helfer.escapeRegExp(tags[aktion].start)}$`),
+		let reg_start = new RegExp(`${helfer.escapeRegExp(tags[aktion].start)}$`),
 			reg_ende = new RegExp(`^${helfer.escapeRegExp(tags[aktion].ende)}`);
 		if (reg_start.test(str_start) && reg_ende.test(str_ende)) { // Tag entfernen
 			str_start = str_start.replace(reg_start, "");
@@ -1569,7 +1569,7 @@ let beleg = {
 	//     (String mit [oder ohne] HTML-Tags)
 	toolsTextNesting (str) {
 		// Sind überhaupt Tags im String?
-		const treffer = {
+		let treffer = {
 			auf: str.match(/<[a-z1-6]+/g),
 			zu: str.match(/<\/[a-z1-6]+>/g),
 		};
@@ -1577,7 +1577,7 @@ let beleg = {
 			return false;
 		}
 		// Analysieren, ob zuerst ein schließender Tag erscheint
-		const first_start = str.match(/<[a-z1-6]+/),
+		let first_start = str.match(/<[a-z1-6]+/),
 			first_end = str.match(/<\/[a-z1-6]+/);
 		if (first_start && first_end && first_end.index < first_start.index) {
 			return true; // offenbar illegales Nesting
@@ -1604,7 +1604,7 @@ let beleg = {
 		}
 		// Analysieren, ob es Diskrepanzen zwischen den
 		// öffnenden und schließenden Tags gibt
-		const arr = ["auf", "zu"];
+		let arr = ["auf", "zu"];
 		for (let i = 0; i < 2; i++) {
 			const a = arr[i],
 				b = arr[i === 1 ? 0 : 1];
@@ -1731,7 +1731,7 @@ let beleg = {
 			}
 		});
 		// Text-Tools für Beleg ein- oder ausblenden
-		const tools_beleg = document.querySelector(".text-tools-beleg");
+		let tools_beleg = document.querySelector(".text-tools-beleg");
 		if (an) {
 			tools_beleg.classList.add("aus");
 		} else {
@@ -1771,15 +1771,15 @@ let beleg = {
 				continue;
 			}
 			// Container leeren
-			const cont = document.getElementById(`beleg-lese-${wert}`);
+			let cont = document.getElementById(`beleg-lese-${wert}`);
 			if (!cont) { // die Datumsdatensätze dc und dm werden nicht angezeigt
 				continue;
 			}
 			helfer.keineKinder(cont);
 			// Absätze einhängen
-			const p = v.replace(/\n\s*\n/g, "\n").split("\n"),
-				form_reg = new RegExp(helfer.formVariRegExp(), "i");
-			let zuletzt_gekuerzt = false; // true, wenn der vorherige Absatz gekürzt wurde
+			const p = v.replace(/\n\s*\n/g, "\n").split("\n");
+			let form_reg = new RegExp(helfer.formVariRegExp(), "i"),
+				zuletzt_gekuerzt = false; // true, wenn der vorherige Absatz gekürzt wurde
 			for (let i = 0, len = p.length; i < len; i++) {
 				let nP = document.createElement("p");
 				cont.appendChild(nP);
@@ -1860,8 +1860,8 @@ let beleg = {
 		helfer.keineKinder(contBd);
 		if (feldBd) {
 			feldBd.split("\n").forEach(function(i) {
-				const bd = beleg.bedeutungSuchen(i);
-				let p = document.createElement("p");
+				let bd = beleg.bedeutungSuchen(i),
+					p = document.createElement("p");
 				if (!bd.id) {
 					i.split(": ").forEach(function(j) {
 						let b = document.createElement("b");
@@ -1942,7 +1942,7 @@ let beleg = {
 			return text;
 		}
 		// Treffer hervorheben
-		const reg = new RegExp(helfer.formVariSonderzeichen(helfer.escapeRegExp(s)), "gi");
+		let reg = new RegExp(helfer.formVariSonderzeichen(helfer.escapeRegExp(s)), "gi");
 		text = text.replace(reg, function(m) {
 			return `<mark class="suche">${m}</mark>`;
 		});
@@ -2036,7 +2036,7 @@ let beleg = {
 	ctrlSpringenPos: -1,
 	// durch die Hervorhebungen in der Leseansicht der Karteikarte springen
 	ctrlSpringenLese () {
-		const marks = document.querySelectorAll("#beleg-lese-bs mark.suche, #beleg-lese-bs mark.user, #beleg-lese-bs mark.wort");
+		let marks = document.querySelectorAll("#beleg-lese-bs mark.suche, #beleg-lese-bs mark.user, #beleg-lese-bs mark.wort");
 		if (!marks.length) {
 			dialog.oeffnen("alert");
 			dialog.text("Keine Markierung gefunden.");
@@ -2048,11 +2048,11 @@ let beleg = {
 			beleg.ctrlSpringenPos = 0;
 		}
 		// Zur Position springen
-		const rect = marks[beleg.ctrlSpringenPos].getBoundingClientRect(),
-			header_height = document.querySelector("body > header").offsetHeight,
-			beleg_header_height = document.querySelector("#beleg header").offsetHeight,
-			quick = document.getElementById("quick");
-		let quick_height = quick.offsetHeight;
+		let rect = marks[beleg.ctrlSpringenPos].getBoundingClientRect(),
+			quick = document.getElementById("quick"),
+			quick_height = quick.offsetHeight;
+		const header_height = document.querySelector("body > header").offsetHeight,
+			beleg_header_height = document.querySelector("#beleg header").offsetHeight;
 		if (!quick.classList.contains("an")) {
 			quick_height = 0;
 		}

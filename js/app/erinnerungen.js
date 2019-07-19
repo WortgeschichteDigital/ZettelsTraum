@@ -57,7 +57,7 @@ let erinnerungen = {
 	// Anzeige des Icons umschalten
 	//   an = Boolean
 	icon (an) {
-		const icon = document.getElementById("erinnerungen");
+		let icon = document.getElementById("erinnerungen");
 		if (an) {
 			icon.classList.remove("aus");
 		} else {

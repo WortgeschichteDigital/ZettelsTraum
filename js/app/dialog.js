@@ -56,15 +56,15 @@ let dialog = {
 				cont.appendChild(h3);
 				continue;
 			} else if (/^<p class/.test(absaetze[i])) { // vordefinierter Absatz
-				const ab = absaetze[i].match(/<p class="(.+?)">(.+?)<\/p>/);
-				let p = document.createElement("p");
+				let ab = absaetze[i].match(/<p class="(.+?)">(.+?)<\/p>/),
+					p = document.createElement("p");
 				p.classList.add(ab[1]);
 				p.innerHTML = ab[2];
 				cont.appendChild(p);
 				continue;
 			} else if (/^<div class/.test(absaetze[i])) { // vordefinierter <div>
-				const d = absaetze[i].match(/<div class="(.+?)">(.*?)<\/div>/);
-				let div = document.createElement("div");
+				let d = absaetze[i].match(/<div class="(.+?)">(.*?)<\/div>/),
+					div = document.createElement("div");
 				div.classList.add(d[1]);
 				if (d[2]) {
 					div.innerHTML = d[2];

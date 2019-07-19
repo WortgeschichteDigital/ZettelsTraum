@@ -5,7 +5,7 @@ let filter = {
 	//   keine = Boolean
 	//     (es sind keine Filter vorhanden)
 	keineFilter (keine) {
-		const filterliste = document.getElementById("liste-filter");
+		let filterliste = document.getElementById("liste-filter");
 		if (keine) {
 			filterliste.classList.add("keine-filter");
 		} else {
@@ -282,7 +282,7 @@ let filter = {
 			arr.sort(filter.baumSort);
 		}
 		// dynamische Filter drucken
-		const cont = document.getElementById("liste-filter-dynamisch");
+		let cont = document.getElementById("liste-filter-dynamisch");
 		helfer.keineKinder(cont);
 		for (let block in filter.typen) {
 			if (!filter.typen.hasOwnProperty(block)) {
@@ -295,17 +295,17 @@ let filter = {
 			if (block === "verschiedenes") {
 				cont.lastChild.appendChild(filter.aufbauenFilterlogik());
 			}
-			const f = filter.typen[block].filter_folge;
+			let f = filter.typen[block].filter_folge;
 			for (let i = 0, len = f.length; i < len; i++) {
-				const neuer_filter = filter.aufbauenFilter(f[i], filter.typen[block].filter[f[i]]);
+				let neuer_filter = filter.aufbauenFilter(f[i], filter.typen[block].filter[f[i]]);
 				// kein neuer Filter
 				if (!neuer_filter[0]) {
 					continue;
 				}
 				// Verschachtelungstiefe Bedeutungen ermitteln
 				if (/^bedeutungen-[0-9]/.test(f[i])) {
-					const d = f[i].match(/bedeutungen-(?<gr>[0-9]+)_(?<id>[0-9]+)/),
-						bd = data.bd.gr[d.groups.gr].bd,
+					let d = f[i].match(/bedeutungen-(?<gr>[0-9]+)_(?<id>[0-9]+)/);
+					const bd = data.bd.gr[d.groups.gr].bd,
 						id = parseInt(d.groups.id, 10);
 					for (let j = 0, len = bd.length; j < len; j++) {
 						if (bd[j].id === id) {
@@ -397,7 +397,7 @@ let filter = {
 	//     (Jahr des letzten Belegs)
 	aufbauenZeitraum () {
 		// Liste leeren
-		const cont = document.getElementById("filter-zeitraum-dynamisch");
+		let cont = document.getElementById("filter-zeitraum-dynamisch");
 		helfer.keineKinder(cont);
 		// Zeitraum-Cache leeren
 		filter.zeitraumTrefferCache = {};
@@ -707,14 +707,14 @@ let filter = {
 	},
 	// stellt die gespeicherte Markierung im Bewertungsfilter wieder her
 	markierenSterne () {
-		const filter_bewertung = document.getElementById("filter-bewertung");
+		let filter_bewertung = document.getElementById("filter-bewertung");
 		// keine Markierung gespeichert
 		if (!filter_bewertung) {
 			return;
 		}
 		// Markierung wiederherstellen
-		const be = parseInt(filter_bewertung.dataset.bewertung, 10),
-			sterne = document.querySelectorAll("#filter-bewertung a");
+		const be = parseInt(filter_bewertung.dataset.bewertung, 10);
+		let sterne = document.querySelectorAll("#filter-bewertung a");
 		for (let i = 0, len = sterne.length; i < len; i++) {
 			if (i < be) {
 				sterne[i].classList.add("aktiv");
@@ -860,7 +860,7 @@ let filter = {
 			evt.preventDefault();
 			filter.setZuletztAktiv(this);
 			this.classList.toggle("aktiv");
-			const cont = document.getElementById("filter-erweiterte-cont");
+			let cont = document.getElementById("filter-erweiterte-cont");
 			if (this.classList.contains("aktiv")) {
 				cont.classList.remove("aus");
 			} else {
@@ -948,7 +948,7 @@ let filter = {
 				if (!filter.typen[typ].filter.hasOwnProperty(f)) {
 					continue;
 				}
-				const f_check = document.getElementById(`filter-${encodeURI(f)}`);
+				let f_check = document.getElementById(`filter-${encodeURI(f)}`);
 				if (f_check && f_check.checked) {
 					filter.aktiveFilter[typ] = true;
 					break;
@@ -1062,7 +1062,7 @@ let filter = {
 	// aktive Verschiedenes-Filter bei exklusiver Filterlogik finden
 	getExklusivAktiv () {
 		filter.exklusivAktiv = [];
-		const inputs = document.querySelectorAll("#filter-kopf-verschiedenes + div .filter");
+		let inputs = document.querySelectorAll("#filter-kopf-verschiedenes + div .filter");
 		inputs.forEach(function(i) {
 			if (!i.checked) {
 				return;
@@ -1169,7 +1169,7 @@ let filter = {
 								continue;
 							}
 							// Ist die spezifische Bedeutung in der Karte?
-							const d = arr[j].match(/(?<gr>[0-9]+)_(?<id>[0-9]+)/);
+							let d = arr[j].match(/(?<gr>[0-9]+)_(?<id>[0-9]+)/);
 							if (bedeutungen.schonVorhanden({
 										bd: data.ka[id].bd,
 										gr: d.groups.gr,
@@ -1296,7 +1296,7 @@ let filter = {
 			}
 			text_rein = liste.belegTrennungWeg(text_rein, true);
 			for (let j = 0, len = treffer.length; j < len; j++) {
-				const reg = filter.volltextSuche.reg[j];
+				let reg = filter.volltextSuche.reg[j];
 				if (text_rein.match(reg)) {
 					treffer[j] = true;
 				}
@@ -1368,7 +1368,7 @@ let filter = {
 		img.addEventListener("click", function(evt) {
 			evt.stopPropagation();
 			filter.zuletztAktiv = this.parentNode.id;
-			const block = this.parentNode.nextSibling;
+			let block = this.parentNode.nextSibling;
 			block.querySelectorAll(".filter").forEach(function(i) {
 				if (i.type === "text") {
 					i.value = "";
@@ -1390,19 +1390,19 @@ let filter = {
 	// Zeitraumgrafik generieren und anzeigen
 	ctrlGrafik () {
 		// Macht es überhaupt Sinn, die Karte anzuzeigen?
-		const jahre = Object.keys(filter.zeitraumTrefferCache);
+		let jahre = Object.keys(filter.zeitraumTrefferCache);
 		if (jahre.length === 1) {
 			dialog.oeffnen("alert");
 			dialog.text("Alle Belege befinden sich im selben Zeitraum.\nDie Verteilungsgrafik wird nicht anzeigt.");
 			return;
 		}
 		// Fenster öffnen od. in den Vordergrund holen
-		const fenster = document.getElementById("zeitraumgrafik");
+		let fenster = document.getElementById("zeitraumgrafik");
 		if (overlay.oeffnen(fenster)) {
 			return;
 		}
 		// Canvas vorbereiten
-		const can = document.querySelector("#zeitraumgrafik-cont canvas"),
+		let can = document.querySelector("#zeitraumgrafik-cont canvas"),
 			ctx = can.getContext("2d");
 		ctx.clearRect(0, 0, can.width, can.height);
 		// Daten vorbereiten
@@ -1470,7 +1470,7 @@ let filter = {
 	},
 	// Reduktionsmodus der Filter visualisieren
 	ctrlReduzierenAnzeige () {
-		const link = document.getElementById("filter-ctrl-reduzieren");
+		let link = document.getElementById("filter-ctrl-reduzieren");
 		if (optionen.data.filter.reduzieren) {
 			link.classList.add("aktiv");
 			link.title = "Reduktionsmodus ausschalten";
@@ -1526,7 +1526,7 @@ let filter = {
 	// die Suche wird aufgerufen
 	suche () {
 		// ggf. das Suchfeld im Beleg fokussieren
-		const feld = document.getElementById("beleg-suchfeld");
+		let feld = document.getElementById("beleg-suchfeld");
 		if (feld &&
 				!document.getElementById("beleg").classList.contains("aus") &&
 				document.getElementById("beleg-link-leseansicht").classList.contains("aktiv")) {
@@ -1546,11 +1546,11 @@ let filter = {
 			// Overlays schließen
 			overlay.alleSchliessen();
 			// ggf. in den Blick scrollen
-			const rect = feld.getBoundingClientRect(),
-				header_height = document.querySelector("body > header").offsetHeight,
-				beleg_header_height = document.querySelector("#beleg header").offsetHeight,
-				quick = document.getElementById("quick");
-			let quick_height = quick.offsetHeight;
+			let rect = feld.getBoundingClientRect(),
+				quick = document.getElementById("quick"),
+				quick_height = quick.offsetHeight;
+			const header_height = document.querySelector("body > header").offsetHeight,
+				beleg_header_height = document.querySelector("#beleg header").offsetHeight;
 			if (!quick.classList.contains("an")) {
 				quick_height = 0;
 			}

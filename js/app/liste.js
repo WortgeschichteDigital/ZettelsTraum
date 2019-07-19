@@ -350,8 +350,8 @@ let liste = {
 	},
 	// In der Kartei sind keine Belege (mehr) und das sollte auch gezeigt werden.
 	aufbauenKeineBelege () {
-		const cont = document.getElementById("liste-belege-cont");
-		let div = document.createElement("div");
+		let cont = document.getElementById("liste-belege-cont"),
+			div = document.createElement("div");
 		div.classList.add("liste-kartei-leer");
 		div.textContent = "keine Belege";
 		cont.appendChild(div);
@@ -709,7 +709,7 @@ let liste = {
 		}
 		// Suchtreffer hervorheben
 		filter.volltextSuche.reg.forEach(function(i) {
-			const treffer = i.exec(text);
+			let treffer = i.exec(text);
 			text = text.replace(i, function(m) {
 				if (treffer.groups) {
 					return `${treffer.groups.vor}<mark class="suche">${treffer.groups.wort}</mark>${treffer.groups.nach}`;
@@ -727,7 +727,7 @@ let liste = {
 	//   text = String
 	//     (Text mit Suchmarkierungen)
 	suchtrefferBereinigen (text) {
-		const reg = new RegExp(`(<[^>]*?)<mark class="suche">(.+?)<\/mark>`, "g");
+		let reg = new RegExp(`(<[^>]*?)<mark class="suche">(.+?)<\/mark>`, "g");
 		while (text.match(reg)) { // > 1 Treffer in ein un demselben Tag => mehrfach durchlaufen
 			text = text.replace(reg, function(m, p1, p2) {
 				return `${p1}${p2}`;
@@ -1112,8 +1112,8 @@ let liste = {
 		if (optionen.data.belegliste.zeitschnitte !== "-") {
 			aktiv = `-${optionen.data.belegliste.zeitschnitte}`;
 		}
-		const id = `liste-link-zeitschnitte${aktiv}`, // der aktive Link
-			links = document.getElementsByClassName("liste-link-zeitschnitte"); // alle Links
+		const id = `liste-link-zeitschnitte${aktiv}`; // der aktive Link
+		let links = document.getElementsByClassName("liste-link-zeitschnitte"); // alle Links
 		for (let i = 0, len = links.length; i < len; i++) {
 			if (links[i].id === id) {
 				links[i].classList.add("aktiv");

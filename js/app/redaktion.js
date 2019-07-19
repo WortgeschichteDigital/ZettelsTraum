@@ -43,7 +43,7 @@ let redaktion = {
 	// erstellt die Tabelle im Redaktionsfenster
 	tabelle () {
 		// Content leeren
-		const cont = document.getElementById("redaktion-cont");
+		let cont = document.getElementById("redaktion-cont");
 		helfer.keineKinder(cont);
 		// Tabelle aufbauen und einhängen
 		let table = document.createElement("table");
@@ -316,7 +316,7 @@ let redaktion = {
 	},
 	// die Liste der Einträge soll ergänzt werden
 	eintragErgaenzen () {
-		const inputs = document.querySelectorAll("#redaktion-cont tr:last-child input");
+		let inputs = document.querySelectorAll("#redaktion-cont tr:last-child input");
 		let obj = {
 			da: "",
 			er: "",

@@ -84,7 +84,7 @@ let kartei = {
 	// bestehende Kartei öffnen (über den Öffnen-Dialog)
 	oeffnen () {
 		const {app, dialog} = require("electron").remote;
-		const opt = {
+		let opt = {
 			title: "Kartei öffnen",
 			defaultPath: app.getPath("documents"),
 			filters: [
@@ -126,7 +126,7 @@ let kartei = {
 			return;
 		}
 		// Ist die Datei gesperrt?
-		const lockcheck = kartei.lock(datei, "check");
+		let lockcheck = kartei.lock(datei, "check");
 		if (lockcheck) {
 			let durch = "";
 			if (Array.isArray(lockcheck)) {
@@ -228,7 +228,7 @@ let kartei = {
 		}
 		// Kartei-Datei muss angelegt werden
 		const path = require("path");
-		const opt = {
+		let opt = {
 			title: "Kartei speichern",
 			defaultPath: path.join(app.getPath("documents"), `${kartei.wort}.wgd`),
 			filters: [
@@ -324,7 +324,7 @@ let kartei = {
 		data = {};
 		kartei.wort = "";
 		kartei.pfad = "";
-		const wort = document.getElementById("wort");
+		let wort = document.getElementById("wort");
 		wort.classList.add("keine-kartei");
 		wort.textContent = "keine Kartei geöffnet";
 		helfer.geaendert(); // trägt das Wort aus der Titelleiste aus

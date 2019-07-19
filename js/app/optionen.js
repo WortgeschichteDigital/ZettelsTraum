@@ -616,8 +616,8 @@ let optionen = {
 					update = false;
 				xml.querySelectorAll("item").forEach(function(i) {
 					const id = i.querySelector("id").firstChild.nodeValue,
-						name = i.querySelector("name").firstChild.nodeValue,
-						abbr = i.querySelector("abbr");
+						name = i.querySelector("name").firstChild.nodeValue;
+					let abbr = i.querySelector("abbr");
 					tagsNeu[id] = {
 						name: name,
 					};
@@ -742,8 +742,8 @@ let optionen = {
 				let data = optionen.data.tags[typ].data;
 				xml.querySelectorAll("item").forEach(function(i) {
 					const id = i.querySelector("id").firstChild.nodeValue,
-						name = i.querySelector("name").firstChild.nodeValue,
-						abbr = i.querySelector("abbr");
+						name = i.querySelector("name").firstChild.nodeValue;
+					let abbr = i.querySelector("abbr");
 					data[id] = {
 						name: name,
 					};
@@ -1017,7 +1017,7 @@ let optionen = {
 				}
 				// Inhalt einlesen und speichern
 				optionen.data.personen = [];
-				const personen = content.split(/(\r|\n)/); // alle End-of-line-Styles berücksichtigen
+				let personen = content.split(/(\r|\n)/); // alle End-of-line-Styles berücksichtigen
 				for (let i = 0, len = personen.length; i < len; i++) {
 					const person = personen[i].trim();
 					if (person) {

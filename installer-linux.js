@@ -67,7 +67,6 @@ function makeConfig () {
 				afterInstall: "installer/linux-after-install.sh",
 				afterRemove: "installer/linux-after-remove.sh",
 				fpm: [
-					"--license=GPL-3.0-only",
 					`--${typ}-changelog=../build/changelog`,
 				],
 			},

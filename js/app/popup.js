@@ -178,8 +178,8 @@ let popup = {
 	getTargetSelection (pfad) {
 		// ermitteln, ob der ausgewählte Text in einem Bereicht steht,
 		// der berücksichtigt werden soll ("liste-details" oder "beleg-lese")
-		const sel = window.getSelection();
-		let bereich = false,
+		let sel = window.getSelection(),
+			bereich = false,
 			ele = sel.anchorNode,
 			bs = false, // true, wenn die Textauswahl innerhalb des Belegs ist
 			obj = {};

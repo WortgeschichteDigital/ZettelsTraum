@@ -44,7 +44,7 @@ let drucken = {
 	//   gn = String || undefined
 	//     (enthält die Bedeutungsgerüst-Nummer, wenn aus dem Bedeutungsgerüst-Fenster gedruckt wird)
 	init (id, gn) {
-		const fenster = document.getElementById("drucken");
+		let fenster = document.getElementById("drucken");
 		// Fenster öffnen oder in den Vordergrund holen
 		if (overlay.oeffnen(fenster) && id !== "bedeutungen-") {
 			// Fenster ist schon offen
@@ -145,7 +145,7 @@ let drucken = {
 	// Druckfenster mit dem Karteninhalt füllen
 	fillKarten () {
 		// Content leeren
-		const cont = document.getElementById("drucken-cont");
+		let cont = document.getElementById("drucken-cont");
 		helfer.keineKinder(cont);
 		cont.scrollTop = 0;
 		// Karten einhängen
@@ -159,8 +159,8 @@ let drucken = {
 			h3.textContent = liste.detailAnzeigenH3(i);
 			cont.appendChild(h3);
 			// Tabelle
-			const f = drucken.kartenFelder;
-			let table = document.createElement("table"),
+			let f = drucken.kartenFelder,
+				table = document.createElement("table"),
 				trTh, trTd;
 			cont.appendChild(table);
 			let nr = 2;
@@ -191,7 +191,7 @@ let drucken = {
 				let td = document.createElement("td");
 				trTd.appendChild(td);
 				if (helfer.checkType("String", wert)) {
-					const wert_p = wert.replace(/\n\s*\n/g, "\n").split("\n");
+					let wert_p = wert.replace(/\n\s*\n/g, "\n").split("\n");
 					for (let y = 0, len = wert_p.length; y < len; y++) {
 						let p = document.createElement("p"),
 							text = wert_p[y];
@@ -226,7 +226,7 @@ let drucken = {
 			return;
 		}
 		// Content leeren
-		const cont = document.getElementById("drucken-cont");
+		let cont = document.getElementById("drucken-cont");
 		helfer.keineKinder(cont);
 		cont.scrollTop = 0;
 		// Bedeutungen aufbauen

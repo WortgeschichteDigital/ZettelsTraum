@@ -261,7 +261,7 @@ window.addEventListener("beforeunload", function(evt) {
 	const {remote} = require("electron"),
 		win = remote.getCurrentWindow();
 	optionen.data.fenster.maximiert = win.isMaximized();
-	const bounds = win.getBounds();
+	let bounds = win.getBounds();
 	if (!optionen.data.fenster.maximiert && bounds) {
 		optionen.data.fenster.x = bounds.x;
 		optionen.data.fenster.y = bounds.y;
