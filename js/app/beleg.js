@@ -1969,6 +1969,8 @@ let beleg = {
 				beleg.ctrlTrennung();
 			} else if (/springen$/.test(this.id)) {
 				beleg.ctrlSpringen();
+			} else if (/kopieren$/.test(this.id)) {
+				kopieren.addKarte();
 			}
 		});
 	},

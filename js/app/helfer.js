@@ -66,6 +66,10 @@ let helfer = {
 			} else if (id === "belege-sortieren") { // TODO
 				dialog.oeffnen("alert");
 				dialog.text("Sorry!\nDiese Funktion ist noch nicht programmiert.");
+			} else if (id === "belege-kopieren") {
+				kopieren.init();
+			} else if (id === "belege-einfuegen") {
+				kopieren.einfuegen();
 			}
 		});
 	},
@@ -532,6 +536,10 @@ let helfer = {
 		// Entfernen (wenn im Bedeutungsgerüst)
 		if (evt.which === 46 && helfer.bedeutungenOffen()) {
 			bedeutungen.loeschenTastatur();
+		}
+		// Strg + I (wenn in Karteikarte)
+		if (evt.ctrlKey && evt.which === 73 && helfer.belegOffen()) {
+			kopieren.addKarte();
 		}
 		// Strg + K (wenn in Karteikarte)
 		if (evt.ctrlKey && evt.which === 75 && helfer.belegOffen()) {
