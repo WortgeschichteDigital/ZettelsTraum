@@ -240,6 +240,17 @@ let layoutMenu = [
 				click: () => appMenu.aktion("dialog-anzeigen", "Sorry!\nDiese Funktion ist noch nicht programmiert."), // TODO
 				accelerator: "CommandOrControl+H",
 			},
+			{ type: "separator" },
+			{
+				label: "Kopieren",
+				icon: path.join(__dirname, "img", "menu", "belege-kopieren.png"),
+				click: () => appMenu.aktion("belege-kopieren"),
+			},
+			{
+				label: "Einfügen",
+				icon: path.join(__dirname, "img", "menu", "belege-einfuegen.png"),
+				click: () => appMenu.aktion("belege-einfuegen"),
+			},
 		],
 	},
 	{
@@ -975,6 +986,61 @@ ipcMain.on("fenster-dereferenzieren", function(evt, id) {
 });
 
 
+/* KOPIEREN *************************************/
+
+let kopierenBasisdaten = {},
+	kopierenBasisdatenTimeout = null;
+
+ipcMain.on("kopieren-daten", function(evt, winId) {
+	// Daten zurücksetzen
+	kopierenBasisdaten = {
+		win: winId,
+		daten: {},
+	};
+	// Daten aus den Fenstern holen
+	for (let id in win) {
+		if (!win.hasOwnProperty(id)) {
+			continue;
+		}
+		const idInt = parseInt(id, 10);
+		if (idInt === winId) {
+			continue;
+		}
+		let w = BrowserWindow.fromId(idInt);
+		w.webContents.send("kopieren-basisdaten");
+	}
+	// Daten an das anfragende Fenster schicken
+	// (auch hier, damit es selbst dann eine Antwort bekommt,
+	// wenn keine weiteren Fenster offen sind)
+	kopierenBasisdatenTimeout = setTimeout(function() {
+		let w = BrowserWindow.fromId(kopierenBasisdaten.win);
+		w.webContents.send("kopieren-basisdaten-empfangen", kopierenBasisdaten.daten);
+	}, 25);
+});
+
+ipcMain.on("kopieren-basisdaten-lieferung", function(evt, daten) {
+	// keine Daten
+	if (!daten.belege) {
+		return;
+	}
+	// Daten registrieren
+	kopierenBasisdaten.daten[daten.id] = {};
+	kopierenBasisdaten.daten[daten.id].belege = daten.belege;
+	kopierenBasisdaten.daten[daten.id].wort = daten.wort;
+	kopierenBasisdaten.daten[daten.id].gerueste = {
+		aktuell: daten.gerueste.aktuell,
+		liste: {...daten.gerueste.liste},
+	};
+	// Daten an das anfragende Fenster schicken
+	// (damit nicht mehrere Meldungen gesendet werden => Timeout)
+	clearTimeout(kopierenBasisdatenTimeout);
+	kopierenBasisdatenTimeout = setTimeout(function() {
+		let w = BrowserWindow.fromId(kopierenBasisdaten.win);
+		w.webContents.send("kopieren-basisdaten-empfangen", kopierenBasisdaten.daten);
+	}, 25);
+});
+
+
 /* APP ******************************************/
 
 // Initialisierung abgeschlossen => Browser-Fenster erstellen
@@ -1029,6 +1095,6 @@ process.on("uncaughtException", function(err) {
 	});
 	// auf der Konsole auswerfen, wenn nicht gepackt
 	if (devtools) {
-		console.log(`\x1b[47m\x1b[31m${err.stack}\x1b[0m\n`);
+		console.log(`\x1b[47m\x1b[31m${err.stack}\x1b[0m`);
 	}
 });

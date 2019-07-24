@@ -1,7 +1,7 @@
 {
 	"name": "zettelstraum",
 	"productName": "Zettel’s Traum",
-	"version": "0.13.0",
+	"version": "0.14.0-beta.1",
 	"description": "Wortkartei-App von „Wortgeschichte digital“, dem an der „Akademie der Wissenschaften zu Göttingen“ angesiedelten Teilprojekt des „Zentrums für digitale Lexikographie der deutschen Sprache“",
 	"keywords": [
 		"Kartei",
@@ -28,7 +28,7 @@
 	},
 	"devDependencies": {
 		"electron": "^4.2.8",
-		"electron-builder": "^21.1.1",
-		"electron-packager": "^14.0.2"
+		"electron-builder": "^21.1.5",
+		"electron-packager": "^14.0.3"
 	}
 }

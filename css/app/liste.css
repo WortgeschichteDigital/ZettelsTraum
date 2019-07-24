@@ -321,6 +321,11 @@ p.no-indent + .filter-baum, /* betrifft Verschiedenes > Filterlogik */
 	top: 99px;
 }
 
+.icon-kopieren {
+	-webkit-mask-image: url(../../img/liste-kopieren.svg);
+	mask-image: url(../../img/liste-kopieren.svg);
+}
+
 .icon-bearbeiten {
 	-webkit-mask-image: url(../../img/liste-bearbeiten.svg);
 	mask-image: url(../../img/liste-bearbeiten.svg);
@@ -503,12 +508,12 @@ p.no-indent + .filter-baum, /* betrifft Verschiedenes > Filterlogik */
 	visibility: hidden;
 }
 
-.liste-bearbeiten {
+.liste-kopficon {
 	margin-right: 15px;
 	background-color: var(--textExtremHell);
 }
 
-.liste-bearbeiten:hover {
+.liste-kopficon:hover {
 	background-color: var(--text);
 }
 
