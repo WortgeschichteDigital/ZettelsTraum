@@ -121,8 +121,6 @@ let optionen = {
 			"quick-belege-hinzufuegen": false,
 			"quick-belege-auflisten": false,
 			"quick-belege-sortieren": false,
-			"quick-belege-kopieren": false,
-			"quick-belege-einfuegen": false,
 			// BEDEUTUNGSGERÜST
 			// Bedeutungsgerüst nach dem Speichern direkt schließen
 			"bedeutungen-schliessen": true,

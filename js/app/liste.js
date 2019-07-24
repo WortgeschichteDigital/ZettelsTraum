@@ -206,26 +206,13 @@ let liste = {
 					div.classList.add("schnitt-offen");
 				}
 				div.dataset.id = id;
-				// Kopficons einfügen
-				for (let i = 0; i < 2; i++) {
-					let a = document.createElement("a");
-					div.appendChild(a);
-					a.href = "#";
-					a.classList.add("liste-kopficon", "icon-link");
-					a.textContent = " ";
-					if (i === 0) { // Beleg kopieren
-						a.classList.add("icon-kopieren");
-						if (!kopieren.belege.length) {
-							a.classList.add("aus");
-						}
-						a.title = "Beleg kopieren";
-						kopieren.addListe(a);
-					} else { // Beleg bearbeiten
-						a.classList.add("icon-bearbeiten");
-						a.title = "Karteikarte öffnen";
-						liste.formularOeffnen(a);
-					}
-				}
+				// Beleg bearbeiten
+				let a = document.createElement("a");
+				a.href = "#";
+				a.classList.add("liste-bearbeiten", "icon-link", "icon-bearbeiten");
+				a.textContent = " ";
+				liste.formularOeffnen(a);
+				div.appendChild(a);
 				// Jahr
 				let span = document.createElement("span");
 				span.classList.add("liste-jahr");

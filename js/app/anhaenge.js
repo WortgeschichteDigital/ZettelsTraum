@@ -229,12 +229,10 @@ let anhaenge = {
 		shell.openItem(anhaenge.data[datei].path);
 	},
 	// Öffnet beim Klick auf eine Überschrift im Anhänge-Fenster den entsprechenden Beleg
-	// (wird auch in kopieren.js benutzt)
-	//   ele = Element
+	//   h3 = Element
 	//     (die Überschrift, auf die geklickt wurde)
-	belegOeffnen (ele) {
-		ele.addEventListener("click", function(evt) {
-			evt.preventDefault();
+	belegOeffnen (h3) {
+		h3.addEventListener("click", function() {
 			let id = this.dataset.id;
 			if (bedeutungen.geaendert) {
 				dialog.oeffnen("confirm", function() {

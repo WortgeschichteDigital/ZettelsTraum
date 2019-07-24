@@ -10,8 +10,6 @@
 #einstellungen,
 #gerueste,
 #geruestwechseln,
-#kopieren-einfuegen,
-#kopieren-liste,
 #lexika,
 #meta,
 #notizen,
@@ -36,8 +34,6 @@
 #einstellungen > div,
 #gerueste > div,
 #geruestwechseln > div,
-#kopieren-einfuegen > div,
-#kopieren-liste > div,
 #lexika > div,
 #meta > div,
 #notizen > div,
@@ -59,8 +55,6 @@
 #einstellungen h2,
 #gerueste h2,
 #geruestwechseln h2,
-#kopieren-einfuegen h2,
-#kopieren-liste h2,
 #lexika h2,
 #meta h2,
 #notizen h2,
@@ -78,8 +72,6 @@
 #einstellungen h2 a,
 #gerueste h2 a,
 #geruestwechseln h2 a,
-#kopieren-einfuegen h2 a,
-#kopieren-liste h2 a,
 #lexika h2 a,
 #meta h2 a,
 #notizen h2 a,
@@ -432,8 +424,7 @@
 }
 
 #stamm-liste .icon-link,
-#meta-be-liste .icon-link,
-#kopieren-liste-cont .icon-link {
+#meta-be-liste .icon-link {
 	position: relative;
 	top: -1px;
 	margin-right: 10px;
@@ -441,19 +432,13 @@
 	background-color: var(--textExtremHell);
 }
 
-#kopieren-liste-cont .icon-link {
-	position: static;
-}
-
 #stamm-liste .icon-link:focus,
-#meta-be-liste .icon-link:focus,
-#kopieren-liste-cont .icon-link:focus {
+#meta-be-liste .icon-link:focus {
 	background-color: var(--farbe);
 }
 
 #stamm-liste .icon-link:hover,
-#meta-be-liste .icon-link:hover,
-#kopieren-liste-cont .icon-link:hover {
+#meta-be-liste .icon-link:hover {
 	background-color: var(--text);
 }
 
@@ -1204,91 +1189,4 @@ input[id^="redaktion-person"] {
 
 #drucken-cont .bd-win-baum {
 	border-color: transparent;
-}
-
-/* Kopierfunktionen (Liste) --------------------- */
-#kopieren-liste > div {
-	margin-top: 40px;
-	max-width: 400px;
-}
-
-.icon-h-kopieren {
-	-webkit-mask-image: url(../../img/heading-kopieren.svg);
-	mask-image: url(../../img/heading-kopieren.svg);
-}
-
-#kopieren-liste-head {
-	position: relative;
-	margin: 10px 0;
-	text-align: center;
-}
-
-#kopieren-liste-head span {
-	display: inline-block;
-	margin-right: 40px;
-	border: 1px solid var(--linie);
-	border-radius: 10px;
-	padding: 5px;
-	width: 78px;
-}
-
-#kopieren-liste-head span:last-child {
-	margin-right: 0;
-}
-
-#kopieren-liste-head span:hover {
-	background-color: var(--hover);
-}
-
-#kopieren-liste-cont-rahmen {
-	padding: 10px;
-}
-
-#kopieren-liste-cont {
-	max-height: 290px;
-	overflow-y: auto;
-}
-
-#kopieren-liste-cont p {
-	margin-bottom: 5px;
-}
-
-#kopieren-liste-cont p.keine {
-	color: var(--textSehrHell);
-	font-style: italic;
-	text-align: center;
-}
-
-/* Kopierfunktionen (Einfügen) ------------------ */
-#kopieren-einfuegen > div {
-	margin-top: 40px;
-	max-width: 600px;
-}
-
-.icon-h-einfuegen {
-	-webkit-mask-image: url(../../img/heading-einfuegen.svg);
-	mask-image: url(../../img/heading-einfuegen.svg);
-}
-
-#kopieren-einfuegen-head {
-	position: relative;
-	margin: 10px 0;
-	text-align: center;
-}
-
-#kopieren-einfuegen-head span {
-	display: inline-block;
-	margin-right: 40px;
-	border: 1px solid var(--linie);
-	border-radius: 10px;
-	padding: 5px;
-	width: 84px;
-}
-
-#kopieren-einfuegen-head span:last-child {
-	margin-right: 0;
-}
-
-#kopieren-einfuegen-daten {
-	padding: 10px;
 }
