@@ -85,7 +85,7 @@ let beleg = {
 			au: "", // Autor
 			bc: false, // Buchung
 			bd: [], // Bedeutung
-			be: 0, // Bewertung
+			be: 0, // Bewertung (Markierung)
 			bl: "", // Wortbildung
 			bs: "", // Beleg
 			bu: false, // Bücherdienstauftrag
@@ -451,9 +451,13 @@ let beleg = {
 				liste.wechseln();
 				beleg.listeGeaendert = false;
 				bedeutungenWin.daten();
+				if (kopieren.an && kopieren.belege.includes(id.toString())) {
+					kopieren.belege.splice(kopieren.belege.indexOf(id.toString()), 1);
+					kopieren.uiText();
+				}
 			}
 		});
-		dialog.text(`Soll <i>${liste.detailAnzeigenH3(id)}</i> wirklich gelöscht werden?`);
+		dialog.text(`Soll <i>${liste.detailAnzeigenH3(id.toString())}</i> wirklich gelöscht werden?`);
 	},
 	// Daten, die importiert wurden
 	DTAImportData: {},
@@ -1971,6 +1975,8 @@ let beleg = {
 				beleg.ctrlSpringen();
 			} else if (/kopieren$/.test(this.id)) {
 				kopieren.addKarte();
+			} else if (/zwischenablage$/.test(this.id)) {
+				beleg.ctrlZwischenablage();
 			}
 		});
 	},
@@ -2108,6 +2114,15 @@ let beleg = {
 			beleg.ctrlSpringenFormReg.again = true;
 			beleg.ctrlSpringenForm(evt);
 		}
+	},
+	// Kopiert den aktuellen Beleg in die Zwischenablage,
+	// sodass er in eine andere Kartei kopiert werden kann
+	ctrlZwischenablage () {
+		const {clipboard, remote} = require("electron"),
+			daten = kopieren.datenBeleg(beleg.data);
+		daten.winId = remote.getCurrentWindow().id;
+		daten.wort = kartei.wort;
+		clipboard.writeText(JSON.stringify(daten));
 	},
 	// zur vorherigen/nächsten Karteikarte in der Belegliste springen
 	//   next = Boolean

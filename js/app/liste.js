@@ -215,7 +215,7 @@ let liste = {
 					a.textContent = " ";
 					if (i === 0) { // Beleg kopieren
 						a.classList.add("icon-kopieren");
-						if (!kopieren.belege.length) {
+						if (!kopieren.an) {
 							a.classList.add("aus");
 						}
 						a.title = "Beleg kopieren";

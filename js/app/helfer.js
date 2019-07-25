@@ -539,7 +539,11 @@ let helfer = {
 		}
 		// Strg + I (wenn in Karteikarte)
 		if (evt.ctrlKey && evt.which === 73 && helfer.belegOffen()) {
-			kopieren.addKarte();
+			if (kopieren.an) {
+				kopieren.addKarte();
+			} else {
+				beleg.ctrlZwischenablage();
+			}
 		}
 		// Strg + K (wenn in Karteikarte)
 		if (evt.ctrlKey && evt.which === 75 && helfer.belegOffen()) {

@@ -940,7 +940,19 @@ ipcMain.on("kartei-laden", function(evt, kartei) {
 });
 
 // registriert im Fenster-Objekt, welche Kartei geöffnet wurde
-ipcMain.on("kartei-geoeffnet", (evt, id, kartei) => win[id].kartei = kartei);
+ipcMain.on("kartei-geoeffnet", (evt, id, kartei) => {
+	if (!win[id]) {
+		// im Developer-Modus kann man den WebContent eines Fensters neu laden =>
+		// das Fenster wird aus win{} gelöscht und muss jetzt erst wieder angelegt werden,
+		// sonst produziert das einen Fehler und der Main-Prozess macht auch
+		// andere Dinge nicht mehr korrekt
+		win[id] = {
+			typ: "index",
+			kartei: "",
+		};
+	}
+	win[id].kartei = kartei;
+});
 
 // deregistriert im Fenster-Objekt die Kartei, die geöffnet war
 ipcMain.on("kartei-geschlossen", (evt, id) => win[id].kartei = "");
@@ -1026,11 +1038,8 @@ ipcMain.on("kopieren-basisdaten-lieferung", function(evt, daten) {
 	// Daten registrieren
 	kopierenBasisdaten.daten[daten.id] = {};
 	kopierenBasisdaten.daten[daten.id].belege = daten.belege;
+	kopierenBasisdaten.daten[daten.id].geruest = daten.geruest;
 	kopierenBasisdaten.daten[daten.id].wort = daten.wort;
-	kopierenBasisdaten.daten[daten.id].gerueste = {
-		aktuell: daten.gerueste.aktuell,
-		liste: {...daten.gerueste.liste},
-	};
 	// Daten an das anfragende Fenster schicken
 	// (damit nicht mehrere Meldungen gesendet werden => Timeout)
 	clearTimeout(kopierenBasisdatenTimeout);

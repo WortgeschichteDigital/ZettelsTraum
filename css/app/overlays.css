@@ -1206,10 +1206,15 @@ input[id^="redaktion-person"] {
 	border-color: transparent;
 }
 
-/* Kopierfunktionen (Liste) --------------------- */
-#kopieren-liste > div {
+/* Kopierfunktion ------------------------------- */
+#kopieren-liste > div,
+#kopieren-einfuegen > div {
 	margin-top: 40px;
 	max-width: 400px;
+}
+
+#kopieren-einfuegen > div {
+	max-width: 503px;
 }
 
 .icon-h-kopieren {
@@ -1217,13 +1222,25 @@ input[id^="redaktion-person"] {
 	mask-image: url(../../img/heading-kopieren.svg);
 }
 
-#kopieren-liste-head {
+.icon-h-einfuegen {
+	-webkit-mask-image: url(../../img/heading-einfuegen.svg);
+	mask-image: url(../../img/heading-einfuegen.svg);
+}
+
+#kopieren-einfuegen h3 {
+	margin: 20px 0 0 0;
+	padding-left: 10px;
+}
+
+#kopieren-liste-head,
+#kopieren-einfuegen-head {
 	position: relative;
 	margin: 10px 0;
 	text-align: center;
 }
 
-#kopieren-liste-head span {
+#kopieren-liste-head span,
+#kopieren-einfuegen-head span {
 	display: inline-block;
 	margin-right: 40px;
 	border: 1px solid var(--linie);
@@ -1232,11 +1249,13 @@ input[id^="redaktion-person"] {
 	width: 78px;
 }
 
-#kopieren-liste-head span:last-child {
+#kopieren-liste-head span:last-child,
+#kopieren-einfuegen-head span:last-child {
 	margin-right: 0;
 }
 
-#kopieren-liste-head span:hover {
+#kopieren-liste-head span:hover,
+#kopieren-einfuegen-head span:hover {
 	background-color: var(--hover);
 }
 
@@ -1259,38 +1278,43 @@ input[id^="redaktion-person"] {
 	text-align: center;
 }
 
-/* Kopierfunktionen (Einfügen) ------------------ */
-#kopieren-einfuegen > div {
-	margin-top: 40px;
-	max-width: 600px;
+#kopieren-einfuegen-formular {
+	padding: 10px 10px 0 10px;
 }
 
-.icon-h-einfuegen {
-	-webkit-mask-image: url(../../img/heading-einfuegen.svg);
-	mask-image: url(../../img/heading-einfuegen.svg);
+#kopieren-einfuegen-formular div {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	margin-bottom: 10px;
+	padding-bottom: 5px;
+	border-bottom: 1px solid var(--linie);
 }
 
-#kopieren-einfuegen-head {
-	position: relative;
-	margin: 10px 0;
-	text-align: center;
+#kopieren-einfuegen-formular div:last-child {
+	margin-bottom: 0;
+	border-bottom: none;
 }
 
-#kopieren-einfuegen-head span {
-	display: inline-block;
-	margin-right: 40px;
-	border: 1px solid var(--linie);
-	border-radius: 10px;
-	padding: 5px;
-	width: 84px;
+#kopieren-einfuegen-formular p {
+	margin-bottom: 5px;
+	padding: 0 10px 0 1px; /* 1px links, damit die linke Grenze des Outline onfocus angezeigt wird */
+	width: 150px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }
 
-#kopieren-einfuegen-head span:last-child {
-	margin-right: 0;
+#kopieren-einfuegen-formular input + label {
+	color: var(--textSehrHell);
+}
+
+#kopieren-einfuegen-formular input:checked + label {
+	color: var(--textFarbe);
 }
 
 #kopieren-einfuegen-daten {
-	padding: 10px;
+	padding: 10px 10px 0 10px;
 }
 
 #kopieren-einfuegen-daten p {
@@ -1303,6 +1327,13 @@ input[id^="redaktion-person"] {
 	border-top: 1px solid var(--linie);
 }
 
-#kopieren-einfuegen-daten p:hover {
+#kopieren-einfuegen-daten p.keine {
+	border-color: transparent;
+	color: var(--textSehrHell);
+	font-style: italic;
+	text-align: center;
+}
+
+#kopieren-einfuegen-daten p:not(.keine):hover {
 	background-color: var(--hintergrund);
 }

@@ -92,13 +92,15 @@ window.addEventListener("load", function() {
 	// Sonderzeichen
 	document.querySelectorAll("#sonderzeichen-cont span").forEach(i => sonderzeichen.eintragen(i));
 	// Kopierfunktion
+	kopieren.addListeAlle(document.getElementById("liste-link-kopieren"));
 	document.getElementById("kopieren").addEventListener("click", () => kopieren.liste());
 	document.getElementById("kopieren-liste-leeren").addEventListener("click", () => kopieren.listeLeeren());
 	document.getElementById("kopieren-liste-beenden").addEventListener("click", () => kopieren.uiOff());
 	document.getElementById("kopieren-liste-schliessen").addEventListener("click", () => overlay.schliessen(document.getElementById("kopieren-liste")));
 	document.getElementById("kopieren-einfuegen-einfuegen").addEventListener("click", () => kopieren.einfuegenAusfuehren());
-	document.getElementById("kopieren-einfuegen-auffrischen").addEventListener("click", () => kopieren.einfuegenBasisdaten());
+	document.getElementById("kopieren-einfuegen-reload").addEventListener("click", () => kopieren.einfuegenBasisdaten());
 	document.getElementById("kopieren-einfuegen-schliessen").addEventListener("click", () => overlay.schliessen(document.getElementById("kopieren-einfuegen")));
+	document.querySelectorAll("#kopieren-einfuegen-formular input").forEach(i => kopieren.einfuegenDatenfelder(i));
 	// Bedeutungen
 	document.getElementById("bedeutungen-speichern").addEventListener("click", () => bedeutungen.speichern());
 	document.getElementById("bedeutungen-schliessen").addEventListener("click", () => bedeutungen.schliessen());

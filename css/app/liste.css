@@ -364,7 +364,8 @@ p.no-indent + .filter-baum, /* betrifft Verschiedenes > Filterlogik */
 .bedeutungen-opt-block a:first-child,
 .beleg-opt-block a:first-child,
 .filter-ctrl-block a:first-child,
-.liste-opt-block a:first-child {
+.liste-opt-block a:first-child,
+.liste-opt-block a.kopieren-aus {
 	border-top-left-radius: 3px;
 	border-bottom-left-radius: 3px;
 }

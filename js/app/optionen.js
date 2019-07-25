@@ -168,6 +168,25 @@ let optionen = {
 			// Textsorte in den Kopf der Belegliste eintragen
 			textsorte: false,
 		},
+		// Datenfelder im Einfüge-Fenster der Kopierfunktion
+		kopieren: {
+			an: true, // Anhänge
+			au: true, // Autor
+			bc: false, // Buchung
+			bd: true, // Bedeutung
+			be: false, // Markierung
+			bl: true, // Wortbildung
+			bs: true, // Beleg
+			bu: false, // Bücherdienst
+			da: true, // Datum
+			ko: false, // Kontext?
+			kr: true, // Korpus
+			no: true, // Notizen
+			qu: true, // Quelle
+			sy: true, // Synonym
+			ts: true, // Textsorte
+			un: false, // unvollständig
+		},
 		// Taglisten, die aus XML-Dateien importiert wurden; Aufbau:
 		//   TYP         Tag-Typ (String)
 		//     abgleich  Datum des letzten Abgleichs (ISO-String)
