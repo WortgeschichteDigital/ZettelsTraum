@@ -1000,10 +1000,11 @@ ipcMain.on("fenster-dereferenzieren", function(evt, id) {
 
 /* KOPIEREN *************************************/
 
+// Basisdaten zu den möglichten Belegquellen ermitteln und an das anfragende Fenster schicken
 let kopierenBasisdaten = {},
 	kopierenBasisdatenTimeout = null;
 
-ipcMain.on("kopieren-daten", function(evt, winId) {
+ipcMain.on("kopieren-basisdaten", function(evt, winId) {
 	// Daten zurücksetzen
 	kopierenBasisdaten = {
 		win: winId,
@@ -1030,6 +1031,7 @@ ipcMain.on("kopieren-daten", function(evt, winId) {
 	}, 25);
 });
 
+// angefragte Basisdaten registrieren und an das anfragende Fenster schicken
 ipcMain.on("kopieren-basisdaten-lieferung", function(evt, daten) {
 	// keine Daten
 	if (!daten.belege) {
@@ -1047,6 +1049,28 @@ ipcMain.on("kopieren-basisdaten-lieferung", function(evt, daten) {
 		let w = BrowserWindow.fromId(kopierenBasisdaten.win);
 		w.webContents.send("kopieren-basisdaten-empfangen", kopierenBasisdaten.daten);
 	}, 25);
+});
+
+// Daten der gewünschten Belegquelle anfragen
+let kopierenWinIdAnfrage = -1;
+
+ipcMain.on("kopieren-daten", function(evt, winIdQuelle, winIdAnfrage) {
+	// Existiert das Fenster, aus dem die Daten kommen sollen, noch?
+	if (!win[winIdQuelle]) {
+		let w = BrowserWindow.fromId(winIdAnfrage);
+		w.webContents.send("dialog-anzeigen", "Beim Kopieren der Belege ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\nDas Fenster, das die Belege liefern sollte, existiert nicht mehr.");
+		return;
+	}
+	// Fenster existiert => Daten anfragen
+	kopierenWinIdAnfrage = winIdAnfrage;
+	let w = BrowserWindow.fromId(winIdQuelle);
+	w.webContents.send("kopieren-daten");
+});
+
+// angefragte Daten der gewünschten Belegquelle an das anfragende Fenster schicken
+ipcMain.on("kopieren-daten-lieferung", function(evt, daten) {
+	let w = BrowserWindow.fromId(kopierenWinIdAnfrage);
+	w.webContents.send("kopieren-daten-empfangen", daten);
 });
 
 

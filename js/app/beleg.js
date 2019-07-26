@@ -69,6 +69,20 @@ let beleg = {
 	// neue Karteikarte erstellen
 	erstellen () {
 		// nächste ID ermitteln
+		beleg.id_karte = beleg.idErmitteln();
+		// neues Karten-Objekt anlegen
+		beleg.data = beleg.karteErstellen();
+		// Wert des Suchfelds der Leseansicht zurücksetzen
+		beleg.leseSucheText = "";
+		// ggf. die Leseansicht verlassen
+		if (document.getElementById("beleg-link-leseansicht").classList.contains("aktiv")) {
+			beleg.leseToggle(false);
+		}
+		// Karte anzeigen
+		beleg.formular(true);
+	},
+	// ermittelt die nächste ID, die in der aktuellen Kartei vergeben werden sollte
+	idErmitteln () {
 		let id_karte = 0,
 			ids = Object.keys(data.ka);
 		for (let i = 0, len = ids.length; i < len; i++) {
@@ -78,9 +92,11 @@ let beleg = {
 			}
 		}
 		id_karte++;
-		beleg.id_karte = id_karte;
-		// neues Karten-Objekt anlegen
-		beleg.data = {
+		return id_karte;
+	},
+	// erstellt ein leeres Daten-Objekt für eine neue Karteikarte
+	karteErstellen () {
+		return {
 			an: [], // Anhänge
 			au: "", // Autor
 			bc: false, // Buchung
@@ -100,14 +116,6 @@ let beleg = {
 			ts: "", // Textsorte
 			un: optionen.data.einstellungen.unvollstaendig, // Bearbeitung unvollständig
 		};
-		// Wert des Suchfelds der Leseansicht zurücksetzen
-		beleg.leseSucheText = "";
-		// ggf. die Leseansicht verlassen
-		if (document.getElementById("beleg-link-leseansicht").classList.contains("aktiv")) {
-			beleg.leseToggle(false);
-		}
-		// Karte anzeigen
-		beleg.formular(true);
 	},
 	// bestehende Karteikarte öffnen
 	//   id = Number
@@ -382,7 +390,7 @@ let beleg = {
 		}
 		// Änderungsdatum speichern
 		data.ka[beleg.id_karte].dm = new Date().toISOString();
-		// Änderungsmarkierung weg
+		// Änderungsmarkierungen auffrischen
 		beleg.belegGeaendert(false);
 		beleg.listeGeaendert = true;
 		kartei.karteiGeaendert(true);
@@ -2120,6 +2128,7 @@ let beleg = {
 	ctrlZwischenablage () {
 		const {clipboard, remote} = require("electron"),
 			daten = kopieren.datenBeleg(beleg.data);
+		daten.typ = "wgd-kopie";
 		daten.winId = remote.getCurrentWindow().id;
 		daten.wort = kartei.wort;
 		clipboard.writeText(JSON.stringify(daten));

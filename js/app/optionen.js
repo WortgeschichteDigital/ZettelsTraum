@@ -90,6 +90,8 @@ let optionen = {
 			timeout: "10",
 			// Notizen-Fenster nach dem Speichern direkt schließen
 			"notizen-schliessen": true,
+			// Einfügen-Fenster (Kopierfunktion) nach dem Einfügen direkt schließen
+			"einfuegen-schliessen": true,
 			// Hervorhebung des Wort beim Kopieren von Text mitkopieren
 			"textkopie-wort": false,
 			// beim Kopieren ist das Wort grau hinterlegt
@@ -217,7 +219,7 @@ let optionen = {
 			if (!data.hasOwnProperty(block)) {
 				continue;
 			}
-			if (!/^(fenster|fenster-bedeutungen|einstellungen|tags|personen|letzter_pfad)$/.test(block)) {
+			if (!/^(fenster|fenster-bedeutungen|einstellungen|kopieren|tags|personen|letzter_pfad)$/.test(block)) {
 				delete data[block];
 				// diese Einstellungen werden nicht aus einem anderen Fenster übernommen
 				// (das führt nur zu einem unschönen Springen):

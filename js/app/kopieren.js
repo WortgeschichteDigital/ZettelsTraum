@@ -203,6 +203,7 @@ let kopieren = {
 				return;
 			}
 			optionen.data.kopieren[feld] = !optionen.data.kopieren[feld];
+			optionen.speichern();
 		});
 	},
 	// frischt den Text des Datenfelds Bedeutung auf
@@ -220,7 +221,7 @@ let kopieren = {
 	// Basisdaten der Karteien, aus denen Belege eingefügt werden können, anfordern
 	einfuegenBasisdaten () {
 		const {ipcRenderer, remote} = require("electron");
-		ipcRenderer.send("kopieren-daten", remote.getCurrentWindow().id);
+		ipcRenderer.send("kopieren-basisdaten", remote.getCurrentWindow().id);
 	},
 	// Zwischenspeicher für die Basisdaten der einfügbaren Belege
 	//   "ID" (ID des Fensters, von dem die Daten stammen)
@@ -333,9 +334,81 @@ let kopieren = {
 			}
 		});
 	},
-	// Einfügen ausführen
+	// Sicherheitschecks, ob vor dem Einfügen noch Dinge gespeichert werden müssen
+	einfuegenAusfuehrenPre () {
+		// TODO Sicherheitschecks
+		kopieren.einfuegenAusfuehren();
+	},
+	// Einfügen aus der gewünschten Datenquelle wird angestoßen
 	einfuegenAusfuehren () {
-		// TODO
+		// ermitteln, aus welcher Quelle eingefügt werden soll
+		let quellen = document.querySelectorAll("#kopieren-einfuegen-daten input"),
+			quelle = "";
+		for (let i of quellen) {
+			if (i.checked) {
+				quelle = i.value;
+				break;
+			}
+		}
+		// Quelle = Zwischenablage?
+		if (quelle === "0") {
+			kopieren.einfuegenEinlesen(kopieren.zwischenablage);
+			return;
+		}
+		// Quelle = Fenster
+		const {ipcRenderer, remote} = require("electron");
+		ipcRenderer.send("kopieren-daten", parseInt(quelle, 10), remote.getCurrentWindow().id);
+	},
+	// die übergebenen Daten werden eingelesen
+	//   daten = Array
+	//     (in jedem Slot ist eine Zettelkopie, wie sie in kopieren.datenBeleg() erstellt wird)
+	einfuegenEinlesen (daten) {
+		// Datenfelder ermitteln, die importiert werden sollen
+		let ds = [];
+		document.querySelectorAll("#kopieren-einfuegen-formular input").forEach(function(i) {
+			if (!i.checked) {
+				return;
+			}
+			ds.push(i.id.replace(/.+-/, ""));
+		});
+		// neue Karten anlegen
+		for (let i = 0, len = daten.length; i < len; i++) {
+			// eine neue Karte erzeugen
+			const id_karte = beleg.idErmitteln();
+			data.ka[id_karte] = beleg.karteErstellen();
+			// die Karte mit den gewünschten Datensätzen füllen
+			for (let j = 0, len = ds.length; j < len; j++) {
+				if (ds[j] === "bd") { // Bedeutungen
+					for (let k of daten[i].bd) {
+						let bd = beleg.bedeutungSuchen(k);
+						if (!bd.id) {
+							bd = beleg.bedeutungErgaenzen(k);
+						}
+						data.ka[id_karte].bd.push({
+							gr: data.bd.gn,
+							id: bd.id,
+						});
+					}
+				} else if (Array.isArray(daten[i][ds[j]])) { // eindimensionale Arrays
+					data.ka[id_karte][ds[j]] = [...daten[i][ds[j]]];
+				} else { // Primitiven
+					data.ka[id_karte][ds[j]] = daten[i][ds[j]];
+				}
+			}
+			// Speicherdatum ergänzen
+			data.ka[id_karte].dm = new Date().toISOString();
+		}
+		// Änderungsmarkierung
+		kartei.karteiGeaendert(true);
+		// BedeutungsgerüstFenster auffrischen
+		bedeutungenWin.daten();
+		// Liste und Filter neu aufbauen, Liste anzeigen
+		liste.status(true);
+		liste.wechseln();
+		// Einfüge-Fenster ggf. schließen
+		if (optionen.data.einstellungen["einfuegen-schliessen"]) {
+			overlay.schliessen(document.getElementById("kopieren-einfuegen"));
+		}
 	},
 	// Basisdaten über die Belegmenge und das Fenster an den Main-Prozess senden
 	basisdatenSenden () {
@@ -353,15 +426,18 @@ let kopieren = {
 	},
 	// alle Belegdaten an den Main-Prozess senden
 	datenSenden () {
-		// TODO
+		let daten = [];
+		for (let id of kopieren.belege) {
+			daten.push(kopieren.datenBeleg(data.ka[id]));
+		}
+		const {ipcRenderer} = require("electron");
+		ipcRenderer.send("kopieren-daten-lieferung", daten);
 	},
 	// fertigt eine Kopie des übergebenen Belegs an
 	//   quelle = Object
 	//     (Datenquelle des Belegs)
 	datenBeleg (quelle) {
-		let kopie = {
-			typ: "wgd-kopie",
-		};
+		let kopie = {};
 		for (let wert in quelle) {
 			if (!quelle.hasOwnProperty(wert)) {
 				continue;
