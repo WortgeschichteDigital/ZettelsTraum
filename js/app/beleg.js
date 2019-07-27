@@ -47,6 +47,7 @@ let beleg = {
 				if (dialog.antwort) {
 					bedeutungen.speichern();
 				} else if (dialog.antwort === false) {
+					bedeutungen.bedeutungenGeaendert(false);
 					beleg.erstellen();
 				}
 			});
@@ -57,6 +58,7 @@ let beleg = {
 				if (dialog.antwort) {
 					beleg.aktionSpeichern();
 				} else if (dialog.antwort === false) {
+					beleg.belegGeaendert(false);
 					beleg.erstellen();
 				}
 			});
@@ -2132,6 +2134,7 @@ let beleg = {
 		daten.winId = remote.getCurrentWindow().id;
 		daten.wort = kartei.wort;
 		clipboard.writeText(JSON.stringify(daten));
+		kopieren.animation("zwischenablage");
 	},
 	// zur vorherigen/nächsten Karteikarte in der Belegliste springen
 	//   next = Boolean

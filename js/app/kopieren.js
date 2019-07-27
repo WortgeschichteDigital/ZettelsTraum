@@ -113,6 +113,7 @@ let kopieren = {
 		}
 		kopieren.belege.push(id);
 		kopieren.uiText();
+		kopieren.animation("liste");
 	},
 	// Fenster mit Belegliste öffnen
 	liste () {
@@ -188,7 +189,7 @@ let kopieren = {
 			i.checked = optionen.data.kopieren[feld];
 		});
 		// Basisdaten anfragen und eintragen
-		kopieren.einfuegenBasisdaten();
+		kopieren.einfuegenBasisdaten(false);
 	},
 	// Listener für das Abhaken der Datenfelder
 	//   input = Element
@@ -219,9 +220,18 @@ let kopieren = {
 		}
 	},
 	// Basisdaten der Karteien, aus denen Belege eingefügt werden können, anfordern
-	einfuegenBasisdaten () {
+	//   animation = Boolean
+	//     (der Reload-Button soll animiert werden)
+	einfuegenBasisdaten (animation) {
 		const {ipcRenderer, remote} = require("electron");
 		ipcRenderer.send("kopieren-basisdaten", remote.getCurrentWindow().id);
+		if (animation) {
+			const button = document.getElementById("kopieren-einfuegen-reload");
+			button.classList.add("animation");
+			setTimeout(function() {
+				button.classList.remove("animation");
+			}, 1000);
+		}
 	},
 	// Zwischenspeicher für die Basisdaten der einfügbaren Belege
 	//   "ID" (ID des Fensters, von dem die Daten stammen)
@@ -336,7 +346,29 @@ let kopieren = {
 	},
 	// Sicherheitschecks, ob vor dem Einfügen noch Dinge gespeichert werden müssen
 	einfuegenAusfuehrenPre () {
-		// TODO Sicherheitschecks
+		if (bedeutungen.geaendert) {
+			dialog.oeffnen("confirm", function() {
+				if (dialog.antwort) {
+					bedeutungen.speichern();
+				} else if (dialog.antwort === false) {
+					bedeutungen.bedeutungenGeaendert(false);
+					kopieren.einfuegenAusfuehren();
+				}
+			});
+			dialog.text("Das Bedeutungsgerüst wurde verändert, aber noch nicht gespeichert.\nMöchten Sie die Änderungen nicht erst einmal speichern?");
+			return;
+		} else if (beleg.geaendert) {
+			dialog.oeffnen("confirm", function() {
+				if (dialog.antwort) {
+					beleg.aktionSpeichern();
+				} else if (dialog.antwort === false) {
+					beleg.belegGeaendert(false);
+					kopieren.einfuegenAusfuehren();
+				}
+			});
+			dialog.text("Der aktuell geöffnete Beleg ist noch nicht gespeichert.\nMöchten Sie ihn nicht erst einmal speichern?");
+			return;
+		}
 		kopieren.einfuegenAusfuehren();
 	},
 	// Einfügen aus der gewünschten Datenquelle wird angestoßen
@@ -349,6 +381,12 @@ let kopieren = {
 				quelle = i.value;
 				break;
 			}
+		}
+		// keine Belegquellen vorhanden
+		if (!quelle) {
+			dialog.oeffnen("alert");
+			dialog.text("Beim Kopieren der Belege ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\nEs gibt keine Belegquelle, die Belege zum Einfügen liefern könnte.");
+			return;
 		}
 		// Quelle = Zwischenablage?
 		if (quelle === "0") {
@@ -375,6 +413,9 @@ let kopieren = {
 		for (let i = 0, len = daten.length; i < len; i++) {
 			// eine neue Karte erzeugen
 			const id_karte = beleg.idErmitteln();
+			if (len === 1) { // wird nur ein Beleg kopiert, kann er nach dem Aufbau der Belegliste hervorgehoben werden
+				liste.statusNeu = id_karte.toString();
+			}
 			data.ka[id_karte] = beleg.karteErstellen();
 			// die Karte mit den gewünschten Datensätzen füllen
 			for (let j = 0, len = ds.length; j < len; j++) {
@@ -471,5 +512,54 @@ let kopieren = {
 			}
 		}
 		return kopie;
+	},
+	// Zwischenspeicher für den Timeout der Animation
+	animationTimeout: null,
+	// Animation, die anzeigt, wohin ein Beleg kopiert wurde
+	//   ziel = String
+	//     ("liste" || "zwischenablage")
+	animation (ziel) {
+		// ggf. Timeout clearen
+		clearTimeout(kopieren.animationTimeout);
+		// Element erzeugen oder ansprechen
+		let div = null;
+		if (document.getElementById("kopieren-animation")) {
+			div = document.getElementById("kopieren-animation");
+		} else {
+			div = document.createElement("div");
+			div.id = "kopieren-animation";
+			overlay.zIndex++;
+			div.style.zIndex = overlay.zIndex;
+		}
+		// Element füllen
+		helfer.keineKinder(div);
+		let img = document.createElement("img");
+		div.appendChild(img);
+		img.width = "96";
+		img.height = "96";
+		if (ziel === "zwischenablage") {
+			img.src = "img/kopieren-animation-zwischenablage.svg";
+		} else {
+			img.src = "img/kopieren-animation-kopieren.svg";
+			let span = document.createElement("span");
+			div.appendChild(span);
+			span.textContent = kopieren.belege.length;
+		}
+		// Element einhängen und wieder entfernen
+		document.querySelector("body").appendChild(div);
+		setTimeout(function() {
+			div.classList.add("an");
+		}, 1); // ohne Timeout geht es nicht
+		kopieren.animationTimeout = setTimeout(function() {
+			div.classList.remove("an");
+			setTimeout(function() {
+				if (!document.querySelector("body").contains(div)) {
+					// der <div> könnte bereits verschwunden sein
+					// (kann vorkommen, wenn im 500ms-Gap geklickt wird)
+					return;
+				}
+				document.querySelector("body").removeChild(div);
+			}, 500);
+		}, 1000);
 	},
 };

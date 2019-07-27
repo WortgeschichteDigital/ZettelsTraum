@@ -521,6 +521,20 @@ let helfer = {
 		if (evt.which === 9 && helfer.bedeutungenOffen()) {
 			bedeutungen.naviTab(evt);
 		}
+		// Enter
+		if (evt.which === 13 && overlay.oben() === "kopieren-einfuegen") {
+			evt.preventDefault();
+			kopieren.einfuegenAusfuehrenPre();
+			return;
+		}
+		// F5
+		if (evt.which === 116) {
+			evt.preventDefault();
+			if (overlay.oben() === "kopieren-einfuegen") {
+				kopieren.einfuegenBasisdaten(true);
+			}
+			return;
+		}
 		// Strg + Bild ↑ / ↓
 		if (evt.ctrlKey && (evt.which === 33 || evt.which === 34) && helfer.belegOffen()) {
 			let next = true;

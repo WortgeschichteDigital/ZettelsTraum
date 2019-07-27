@@ -89,7 +89,7 @@ let liste = {
 		}
 		// Scroll-Status wiederherstellen
 		liste.statusScrollReset();
-		// ggf. einen den neuen Beleg visuell hervorheben
+		// ggf. den neuen Beleg visuell hervorheben
 		if (liste.statusNeu) {
 			// neuen Beleg markieren
 			let beleg_unsichtbar = markBelegsuche(liste.statusNeu);

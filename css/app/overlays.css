@@ -1337,3 +1337,51 @@ input[id^="redaktion-person"] {
 #kopieren-einfuegen-daten p:not(.keine):hover {
 	background-color: var(--hintergrund);
 }
+
+#kopieren-einfuegen-reload {
+	transition: color .5s ease;
+}
+
+#kopieren-einfuegen-reload.animation {
+	color: var(--farbe);
+}
+
+#kopieren-einfuegen-reload svg {
+	width: 48px; /* das viewBox-Attribut reicht aus irgendeinem Grund nicht */
+	height: 48px;
+}
+
+#kopieren-einfuegen-reload svg path {
+	fill: currentcolor;
+}
+
+#kopieren-animation {
+	position: fixed;
+	top: calc(100vh / 2 - 50px);
+	left: calc(100vw / 2 - 50px);
+	opacity: 0;
+	border-radius: 20px;
+	width: 100px;
+	height: 100px;
+	background-color: rgba(255, 255, 255, .9);
+	text-align: center;
+	transition: opacity .5s ease;
+}
+
+#kopieren-animation.an {
+	opacity: 1;
+}
+
+#kopieren-animation img {
+	padding-top: 2px;
+}
+
+#kopieren-animation span {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100px;
+	font-size: 36px;
+	line-height: 100px;
+	text-shadow: -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff, 1px 1px 0 #fff;
+}

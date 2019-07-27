@@ -241,6 +241,7 @@ let anhaenge = {
 					if (dialog.antwort) {
 						bedeutungen.speichern();
 					} else if (dialog.antwort === false) {
+						bedeutungen.bedeutungenGeaendert(false);
 						oeffnen();
 					}
 				});
@@ -251,6 +252,7 @@ let anhaenge = {
 					if (dialog.antwort) {
 						beleg.aktionSpeichern();
 					} else if (dialog.antwort === false) {
+						beleg.belegGeaendert(false);
 						oeffnen();
 					}
 				});
