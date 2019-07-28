@@ -1635,8 +1635,15 @@ let bedeutungen = {
 		bedeutungen.aendern = [];
 	},
 	// ist die Bedeutung, mit der verschmolzen wird, in einer Karte schon vorhanden?
-	// (wird auch in filter.js benutzt, um zu gucken, ob eine Karte eine Bedeutung enthält)
-	schonVorhanden ({bd, id, gr}) {
+	// (wird auch in filter.js und kopieren.js benutzt, um zu gucken,
+	// ob eine Karte eine Bedeutung bereits enthält)
+	//   bd = Array
+	//     (in den Slots Objects mit den Bedeutungen [{}.id und {}.gr])
+	//   id = String
+	//     (die ID der Bedeutung)
+	//   gr = String
+	//     (die ID des Bedeutungsgerüsts)
+	schonVorhanden ({bd, gr, id}) {
 		for (let i = 0, len = bd.length; i < len; i++) {
 			if (bd[i].gr === gr && bd[i].id === id) {
 				return [true, i];

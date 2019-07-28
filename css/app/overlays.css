@@ -1127,7 +1127,7 @@ input[id^="redaktion-person"] {
 }
 
 #drucken-head span:first-child {
-	margin-right: 40px;
+	margin-right: 25px;
 }
 
 #drucken-head span:hover {
@@ -1210,10 +1210,6 @@ input[id^="redaktion-person"] {
 #kopieren-liste > div,
 #kopieren-einfuegen > div {
 	margin-top: 40px;
-	max-width: 400px;
-}
-
-#kopieren-einfuegen > div {
 	max-width: 503px;
 }
 
@@ -1242,7 +1238,7 @@ input[id^="redaktion-person"] {
 #kopieren-liste-head span,
 #kopieren-einfuegen-head span {
 	display: inline-block;
-	margin-right: 40px;
+	margin-right: 25px;
 	border: 1px solid var(--linie);
 	border-radius: 10px;
 	padding: 5px;
@@ -1272,14 +1268,67 @@ input[id^="redaktion-person"] {
 	margin-bottom: 5px;
 }
 
-#kopieren-liste-cont p.keine {
+#kopieren-liste-cont p.keine,
+#kopieren-einfuegen-daten p.keine,
+#kopieren-einfuegen-bedeutungen p {
 	color: var(--textSehrHell);
 	font-style: italic;
 	text-align: center;
 }
 
+#kopieren-einfuegen-daten,
+#kopieren-einfuegen-bedeutungen,
 #kopieren-einfuegen-formular {
 	padding: 10px 10px 0 10px;
+}
+
+#kopieren-einfuegen-daten p,
+#kopieren-einfuegen-bedeutungen p {
+	margin: 0;
+	padding: 5px 10px;
+	border-bottom: 1px solid var(--linie);
+}
+
+#kopieren-einfuegen-daten p:first-child {
+	border-top: 1px solid var(--linie);
+}
+
+#kopieren-einfuegen-daten p.keine,
+#kopieren-einfuegen-bedeutungen p {
+	border-color: transparent;
+}
+
+#kopieren-einfuegen-daten p:not(.keine):hover {
+	background-color: var(--hintergrund);
+}
+
+#kopieren-einfuegen-bedeutungen table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+#kopieren-einfuegen-bedeutungen td {
+	padding: 0 10px 5px 0;
+	line-height: 30px;
+}
+
+#kopieren-einfuegen-bedeutungen tr:last-child td {
+	padding-bottom: 0;
+}
+
+#kopieren-einfuegen-bedeutungen img {
+	vertical-align: text-bottom;
+}
+
+#kopieren-einfuegen-bedeutungen input {
+	outline: none;
+	width: 95px;
+	cursor: default;
+}
+
+#kopieren-einfuegen-bedeutungen a {
+	top: 3px;
+	right: 11px;
 }
 
 #kopieren-einfuegen-formular div {
@@ -1313,42 +1362,12 @@ input[id^="redaktion-person"] {
 	color: var(--textFarbe);
 }
 
-#kopieren-einfuegen-daten {
-	padding: 10px 10px 0 10px;
-}
-
-#kopieren-einfuegen-daten p {
-	margin: 0;
-	padding: 5px 10px;
-	border-bottom: 1px solid var(--linie);
-}
-
-#kopieren-einfuegen-daten p:first-child {
-	border-top: 1px solid var(--linie);
-}
-
-#kopieren-einfuegen-daten p.keine {
-	border-color: transparent;
-	color: var(--textSehrHell);
-	font-style: italic;
-	text-align: center;
-}
-
-#kopieren-einfuegen-daten p:not(.keine):hover {
-	background-color: var(--hintergrund);
-}
-
 #kopieren-einfuegen-reload {
 	transition: color .5s ease;
 }
 
 #kopieren-einfuegen-reload.animation {
 	color: var(--farbe);
-}
-
-#kopieren-einfuegen-reload svg {
-	width: 48px; /* das viewBox-Attribut reicht aus irgendeinem Grund nicht */
-	height: 48px;
 }
 
 #kopieren-einfuegen-reload svg path {

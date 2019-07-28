@@ -87,6 +87,15 @@ let dropdown = {
 		});
 		return arr;
 	},
+	// Gerüste-Auswahl im Einfügen-Fenster der Kopierfunktion
+	dataKopierenGerueste () {
+		let arr = [];
+		Object.keys(data.bd.gr).forEach(function(id) {
+			arr.push(`Gerüst ${id}`);
+		});
+		arr.push("kein Import");
+		return arr;
+	},
 	// Timeouts für Events im Textfeld
 	timeoutBlur: null,
 	timeoutFill: null,
@@ -249,6 +258,8 @@ let dropdown = {
 			dropdown.data = dropdown.dataGerueste(bedeutungen.data.bd.gr);
 		} else if (/^tagger-/.test(feld_id)) {
 			dropdown.data = dropdown.dataTags(feld_id);
+		} else if (/^kopieren-geruest-/.test(feld_id)) {
+			dropdown.data = dropdown.dataKopierenGerueste();
 		}
 		// Dropdown erzeugen und einhängen
 		let span = document.createElement("span");

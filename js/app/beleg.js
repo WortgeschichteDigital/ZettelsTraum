@@ -2209,9 +2209,11 @@ let beleg = {
 	// sucht eine Bedeutung im Bedeutungsgerüst
 	//   bd = String
 	//     (die Bedeutung)
-	bedeutungSuchen (bd) {
+	//   gn = String || undefined
+	//     (ID des Gerüsts, in dem gesucht werden soll)
+	bedeutungSuchen (bd, gn = data.bd.gn) {
 		let bdS = bd.split(": "),
-			bdA = data.bd.gr[data.bd.gn].bd;
+			bdA = data.bd.gr[gn].bd;
 		// Alias ggf. durch vollen Bedeutungsstring ersetzen
 		for (let i = 0, len = bdS.length; i < len; i++) {
 			for (let j = 0, len = bdA.length; j < len; j++) {
@@ -2241,9 +2243,11 @@ let beleg = {
 	// (wird nur aufgerufen, wenn die Bedeutung noch nicht vorhanden ist)
 	//   bd = String
 	//     (die Bedeutung; Hierarchien getrennt durch ": ")
-	bedeutungErgaenzen (bd) {
+	//   gn = String || undefined
+	//     (ID des Gerüsts, in dem gesucht werden soll)
+	bedeutungErgaenzen (bd, gn = data.bd.gn) {
 		// Zeiger auf das betreffende Gerüst ermitteln
-		let gr = data.bd.gr[data.bd.gn];
+		let gr = data.bd.gr[gn];
 		// ggf. höchste ID ermitteln
 		if (!bedeutungen.makeId) {
 			let lastId = 0;
@@ -2305,7 +2309,7 @@ let beleg = {
 		// Zählung auffrischen
 		bedeutungen.konstitZaehlung(gr.bd, gr.sl);
 		// ID zurückgeben
-		return beleg.bedeutungSuchen(bd);
+		return beleg.bedeutungSuchen(bd, gn);
 	},
 	// trägt eine Bedeutung, die aus dem Bedeutungen-Fenster an das Hauptfenster geschickt wurde,
 	// in einer oder mehreren Karten ein oder aus (Verteilerfunktion)

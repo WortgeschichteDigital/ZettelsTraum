@@ -183,6 +183,8 @@ let kopieren = {
 	// Overlay-Fenster zum Einfügen der Belege öffnen
 	einfuegen () {
 		overlay.oeffnen(document.getElementById("kopieren-einfuegen"));
+		// zuvor geladene Belegedatei löschen
+		kopieren.belegedatei = [];
 		// Datenfelder abhaken
 		document.querySelectorAll("#kopieren-einfuegen-formular input").forEach(function(i) {
 			const feld = i.id.replace(/.+-/, "");
@@ -207,18 +209,6 @@ let kopieren = {
 			optionen.speichern();
 		});
 	},
-	// frischt den Text des Datenfelds Bedeutung auf
-	// (sind mehrere Bedeutungsgerüste vorhanden, muss dies angezeigt werden)
-	//   gn = String
-	//     (die Gerüstnummer; kann leer sein)
-	einfuegenBedeutung (gn) {
-		let feld = document.getElementById("kopieren-feld-bd").nextSibling;
-		if (gn) {
-			feld.textContent = `Bedeutung #${gn}`;
-		} else {
-			feld.textContent = "Bedeutung";
-		}
-	},
 	// Basisdaten der Karteien, aus denen Belege eingefügt werden können, anfordern
 	//   animation = Boolean
 	//     (der Reload-Button soll animiert werden)
@@ -236,9 +226,11 @@ let kopieren = {
 	// Zwischenspeicher für die Basisdaten der einfügbaren Belege
 	//   "ID" (ID des Fensters, von dem die Daten stammen)
 	//     belege (Number; Anzahl der Belege, die kopiert werden können)
-	//     geruest (String; die Nummer des Bedeutungsgerüsts, dessen Bedeutungen kopiert werden)
+	//     gerueste (Array; eindimensional mit Strings gefüllt; die Strings = IDs der Bedeutungsgerüste)
 	//     wort (String; das Kartei-Wort)
 	basisdaten: {},
+	// Zwischenspeicher für die Daten der geladenen Belegedatei
+	belegedatei: [],
 	// Zwischenspeicher für die in der Zwischenablage gefundenen Daten
 	zwischenablage: [],
 	// Daten eintragen, die angeboten werden
@@ -251,27 +243,71 @@ let kopieren = {
 		// Zwischenablage auf Daten überprüfen
 		kopieren.einfuegenParseClipboard();
 		// keine Belegquellen
-		if (!Object.keys(daten).length && !kopieren.zwischenablage.length) {
+		if (!Object.keys(daten).length &&
+				!kopieren.belegedatei.length &&
+				!kopieren.zwischenablage.length) {
 			let p = document.createElement("p");
 			cont.appendChild(p);
 			p.classList.add("keine");
 			p.textContent = "keine Belegquellen gefunden";
+			kopieren.einfuegenBasisdatenBedeutungen("");
 			return;
 		}
-		// ggf. die Zwischenablage als ersten Datensatz einfügen
+		// ggf. die Belegedatei hinzufügen
+		if (kopieren.belegedatei.length) {
+			daten.belegedatei = {
+				belege: kopieren.belegedatei.length,
+				gerueste: [],
+				wort: "Belegedatei",
+			};
+			for (let beleg of kopieren.belegedatei) {
+				for (let bd of beleg.bd) {
+					if (!daten.belegedatei.gerueste.includes(bd.gr)) {
+						daten.belegedatei.gerueste.push(bd.gr);
+					}
+				}
+			}
+			daten.belegedatei.gerueste.sort();
+		}
+		// ggf. die Zwischenablage hinzufügen
 		if (kopieren.zwischenablage.length) {
-			daten["0"] = {
-				belege: 0,
-				geruest: "",
+			daten.zwischenablage = {
+				belege: 1,
+				gerueste: [],
 				wort: "Zwischenablage",
 			};
-		}
-		// Belegquellen aufbauen
-		let ausgewaehlt = false;
-		for (let id in daten) {
-			if (!daten.hasOwnProperty(id)) {
-				continue;
+			for (let bd of kopieren.zwischenablage[0].bd) {
+				if (!daten.zwischenablage.gerueste.includes(bd.gr)) {
+					daten.zwischenablage.gerueste.push(bd.gr);
+				}
 			}
+			daten.zwischenablage.gerueste.sort();
+		}
+		// Datensätze sortieren;
+		let ds = Object.keys(daten);
+		ds.sort(function(a, b) {
+			if (a === "belegedatei") {
+				return -1;
+			} else if (b === "belegedatei") {
+				return 1;
+			}
+			if (a === "zwischenablage") {
+				return -1;
+			} else if (b === "zwischenablage") {
+				return 1;
+			}
+			let x = [a, b];
+			x.sort();
+			if (x[0] === a) {
+				return -1;
+			}
+			return 1;
+		});
+		// Belegquellen aufbauen
+		let ausgewaehlt = false,
+			id_aktiv = "";
+		for (let i = 0, len = ds.length; i < len; i++) {
+			const id = ds[i];
 			// Absatz
 			let p = document.createElement("p");
 			cont.appendChild(p);
@@ -285,20 +321,25 @@ let kopieren = {
 			if (!ausgewaehlt) {
 				input.checked = true;
 				ausgewaehlt = true;
-				kopieren.einfuegenBedeutung(daten[id].geruest);
+				id_aktiv = id;
 			}
 			// Wort
-			p.appendChild(document.createTextNode(daten[id].wort));
+			if (/^[0-9]+$/.test(id)) {
+				let i = document.createElement("i");
+				i.textContent = daten[id].wort;
+				p.appendChild(i);
+			} else {
+				p.appendChild(document.createTextNode(daten[id].wort));
+			}
 			// Belege
-			if (!daten[id].belege) { // für die Zwischenablage wird keine Belegzahl angegeben
-				continue;
-			}
-			let plural = "Beleg";
+			let num = "Beleg";
 			if (daten[id].belege > 1) {
-				plural = "Belege";
+				num = "Belege";
 			}
-			p.appendChild(document.createTextNode(` (${daten[id].belege} ${plural})`));
+			p.appendChild(document.createTextNode(` (${daten[id].belege} ${num})`));
 		}
+		// Importformular für Bedeutungen aufbauen
+		kopieren.einfuegenBasisdatenBedeutungen(id_aktiv);
 	},
 	// die Zwischenablage überprüfen, ob in ihr ein Beleg steckt
 	einfuegenParseClipboard () {
@@ -331,18 +372,79 @@ let kopieren = {
 	//     (der Absatz, hinter dem sich der Datensatz verbirgt)
 	einfuegenDatensatzWaehlen (ele) {
 		ele.addEventListener("click", function() {
-			let ps = document.querySelectorAll("#kopieren-einfuegen-daten p");
+			let ps = document.querySelectorAll("#kopieren-einfuegen-daten p"),
+				id_aktiv = "";
 			for (let p of ps) {
 				let input = p.querySelector("input");
 				if (p === this) {
 					input.checked = true;
-					const gn = kopieren.basisdaten[this.firstChild.value].geruest;
-					kopieren.einfuegenBedeutung(gn);
+					id_aktiv = input.value;
 				} else {
 					input.checked = false;
 				}
 			}
+			kopieren.einfuegenBasisdatenBedeutungen(id_aktiv);
 		});
+	},
+	// Importformular für die Bedeutungen
+	//   id_aktiv = String
+	//     (ID des aktiven Datensatzes, kann leer sein)
+	einfuegenBasisdatenBedeutungen (id_aktiv) {
+		let cont = document.getElementById("kopieren-einfuegen-bedeutungen");
+		helfer.keineKinder(cont);
+		// Gerüste ermitteln
+		let gerueste = [];
+		if (id_aktiv) {
+			gerueste = kopieren.basisdaten[id_aktiv].gerueste;
+		}
+		// es könnte sein, dass die ausgewählten Belege keine Bedeutungen haben =>
+		// dann werden auch keine Bedeutungsgerüste gefunden
+		if (!gerueste.length) {
+			let p = document.createElement("p");
+			cont.appendChild(p);
+			p.classList.add("keine");
+			p.textContent = "keine Bedeutungen gefunden";
+			return;
+		}
+		// Tabelle erzeugen
+		let table = document.createElement("table");
+		cont.appendChild(table);
+		for (let i = 0, len = gerueste.length; i < len; i++) {
+			const id = gerueste[i];
+			let tr = document.createElement("tr");
+			table.appendChild(tr);
+			// Gerüst-ID
+			let td = document.createElement("td");
+			tr.appendChild(td);
+			td.textContent = `Gerüst ${id}`;
+			// Pfeil
+			td = document.createElement("td");
+			tr.appendChild(td);
+			let img = document.createElement("img");
+			td.appendChild(img);
+			img.src = "img/kopieren-nach.svg";
+			img.width = "24";
+			img.height = "24";
+			// Dropdown
+			td = document.createElement("td");
+			tr.appendChild(td);
+			td.classList.add("dropdown-cont");
+			let input = document.createElement("input");
+			td.appendChild(input);
+			input.classList.add("dropdown-feld");
+			input.id = `kopieren-geruest-${id}`;
+			input.readOnly = true;
+			input.title = "Bedeutungsgerüst auswählen";
+			input.type = "text";
+			if (i === 0) {
+				input.value = "Gerüst 1";
+			} else {
+				input.value = "kein Import";
+			}
+			dropdown.feld(input);
+			let a = dropdown.makeLink("dropdown-link-td", "Bedeutungsgerüst auswählen");
+			td.appendChild(a);
+		}
 	},
 	// Sicherheitschecks, ob vor dem Einfügen noch Dinge gespeichert werden müssen
 	einfuegenAusfuehrenPre () {
@@ -388,9 +490,9 @@ let kopieren = {
 			dialog.text("Beim Kopieren der Belege ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\nEs gibt keine Belegquelle, die Belege zum Einfügen liefern könnte.");
 			return;
 		}
-		// Quelle = Zwischenablage?
-		if (quelle === "0") {
-			kopieren.einfuegenEinlesen(kopieren.zwischenablage);
+		// Quelle = Zwischenablage oder Belegedatei
+		if (!/^[0-9]+$/.test(quelle)) {
+			kopieren.einfuegenEinlesen(kopieren[quelle]);
 			return;
 		}
 		// Quelle = Fenster
@@ -401,6 +503,17 @@ let kopieren = {
 	//   daten = Array
 	//     (in jedem Slot ist eine Zettelkopie, wie sie in kopieren.datenBeleg() erstellt wird)
 	einfuegenEinlesen (daten) {
+		// Bedeutungsmapper (welche Bedeutungen in welche Gerüste kommen)
+		let bdMap = {};
+		document.querySelectorAll("#kopieren-einfuegen-bedeutungen input").forEach(function(i) {
+			const idQuelle = i.id.replace(/.+-/, "");
+			let idZiel = "",
+				wert = i.value.match(/^Gerüst ([0-9]+)/);
+			if (wert) {
+				idZiel = wert[1];
+			}
+			bdMap[idQuelle] = idZiel;
+		});
 		// Datenfelder ermitteln, die importiert werden sollen
 		let ds = [];
 		document.querySelectorAll("#kopieren-einfuegen-formular input").forEach(function(i) {
@@ -420,13 +533,29 @@ let kopieren = {
 			// die Karte mit den gewünschten Datensätzen füllen
 			for (let j = 0, len = ds.length; j < len; j++) {
 				if (ds[j] === "bd") { // Bedeutungen
-					for (let k of daten[i].bd) {
-						let bd = beleg.bedeutungSuchen(k);
+					for (let k of daten[i].bd) { // sind keine Bedeutungen eingetragen, wird diese Schleife einfach nicht ausgeführt
+						// Sollen Bedeutungen aus diesem Gerüst überhaupt importiert werden?
+						//   k.gr = String (die ID des Bedeutungsgerüsts in der Quell-Kartei)
+						//   k.bd = String (die Bedeutung, ausgeschrieben mit Hierarchien ": ")
+						if (!bdMap[k.gr]) {
+							continue;
+						}
+						// Bedeutung importieren und ggf. im Gerüst ergänzen
+						let bd = beleg.bedeutungSuchen(k.bd, bdMap[k.gr]);
 						if (!bd.id) {
-							bd = beleg.bedeutungErgaenzen(k);
+							bd = beleg.bedeutungErgaenzen(k.bd, bdMap[k.gr]);
+						}
+						// Ist die Bedeutung schon vorhanden?
+						const schon_vorhanden = bedeutungen.schonVorhanden({
+								bd: data.ka[id_karte].bd,
+								gr: bdMap[k.gr],
+								id: bd.id,
+							});
+						if (schon_vorhanden[0]) {
+							continue;
 						}
 						data.ka[id_karte].bd.push({
-							gr: data.bd.gn,
+							gr: bdMap[k.gr],
 							id: bd.id,
 						});
 					}
@@ -458,11 +587,8 @@ let kopieren = {
 			id: remote.getCurrentWindow().id,
 			wort: kartei.wort,
 			belege: kopieren.belege.length,
-			geruest: "",
+			gerueste: Object.keys(data.bd.gr),
 		};
-		if (Object.keys(data.bd.gr).length > 1) {
-			daten.geruest = data.bd.gn;
-		}
 		ipcRenderer.send("kopieren-basisdaten-lieferung", daten);
 	},
 	// alle Belegdaten an den Main-Prozess senden
@@ -489,19 +615,18 @@ let kopieren = {
 			}
 			// Sonderbehandlung Bedeutung
 			if (wert === "bd") {
-				let bd = [];
+				kopie.bd = [];
 				for (let i = 0, len = quelle.bd.length; i < len; i++) {
-					if (quelle.bd[i].gr !== data.bd.gn) {
-						continue;
-					}
-					bd.push(bedeutungen.bedeutungenTief({
+					kopie.bd.push({
 						gr: quelle.bd[i].gr,
-						id: quelle.bd[i].id,
-						za: false,
-						strip: true,
-					}));
+						bd: bedeutungen.bedeutungenTief({
+							gr: quelle.bd[i].gr,
+							id: quelle.bd[i].id,
+							za: false,
+							strip: true,
+						}),
+					});
 				}
-				kopie.bd = bd;
 				continue;
 			}
 			// Wert kopieren
@@ -561,5 +686,101 @@ let kopieren = {
 				document.querySelector("body").removeChild(div);
 			}, 500);
 		}, 1000);
+	},
+	// Kopierliste in Datei exportieren
+	exportieren () {
+		// keine Belege in der Kopierliste
+		if (!kopieren.belege.length) {
+			kartei.dialogWrapper("Sie haben keine Belege ausgewählt.");
+			return;
+		}
+		// Daten zusammentragen
+		let daten = {
+			ty: "bwgd",
+			dt: [],
+		};
+		for (let id of kopieren.belege) {
+			daten.dt.push(kopieren.datenBeleg(data.ka[id]));
+		}
+		// Daten in Datei speichern
+		let num = "Belege";
+		if (kopieren.belege.length === 1) {
+			num = "Beleg";
+		}
+		const {app, dialog} = require("electron").remote,
+			path = require("path");
+		let opt = {
+			title: "Belege exportieren",
+			defaultPath: path.join(app.getPath("documents"), `${kartei.wort}, ${kopieren.belege.length} ${num}.bwgd`),
+			filters: [
+				{
+					name: "Wortgeschichte digital-Belege",
+					extensions: ["bwgd"],
+				},
+				{
+					name: "Alle Dateien",
+					extensions: ["*"],
+				},
+			],
+		};
+		dialog.showSaveDialog(null, opt, function(pfad) {
+			if (pfad === undefined) {
+				kartei.dialogWrapper("Die Belege wurden nicht gespeichert.");
+				return;
+			}
+			const fs = require("fs");
+			fs.writeFile(pfad, JSON.stringify(daten), function(err) {
+				if (err) {
+					kartei.dialogWrapper(`Beim Speichern der Belege ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.message}</p>`);
+				}
+			});
+		});
+	},
+	// Kopierliste aus Datei importieren
+	importieren () {
+		const {app, dialog} = require("electron").remote;
+		let opt = {
+			title: "Belege importieren",
+			defaultPath: app.getPath("documents"),
+			filters: [
+				{
+					name: "Wortgeschichte digital-Belege",
+					extensions: ["bwgd"],
+				},
+				{
+					name: "Alle Dateien",
+					extensions: ["*"],
+				},
+			],
+			properties: [
+				"openFile",
+			],
+		};
+		dialog.showOpenDialog(null, opt, function(datei) { // datei ist ein Array!
+			if (datei === undefined) {
+				kartei.dialogWrapper("Sie haben keine Datei ausgewählt.");
+				return;
+			}
+			const fs = require("fs");
+			fs.readFile(datei[0], "utf-8", function(err, content) {
+				if (err) {
+					kartei.dialogWrapper(`Beim Öffnen der Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.message}</p>`);
+					return;
+				}
+				let belegedatei_tmp = {};
+				try {
+					belegedatei_tmp = JSON.parse(content);
+				} catch (err_json) {
+					kartei.dialogWrapper(`Beim Einlesen der Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n${err_json}`);
+					return;
+				}
+				if (belegedatei_tmp.ty !== "bwgd") {
+					kartei.dialogWrapper("Die Datei wurde nicht eingelesen.\nEs handelt sich nicht um eine Belege-Datei von <i>Wortgeschichte digital</i>.");
+					return;
+				}
+				kopieren.belegedatei = belegedatei_tmp.dt;
+				kopieren.einfuegenBasisdaten(true);
+			});
+		});
 	},
 };

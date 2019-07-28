@@ -1040,7 +1040,7 @@ ipcMain.on("kopieren-basisdaten-lieferung", function(evt, daten) {
 	// Daten registrieren
 	kopierenBasisdaten.daten[daten.id] = {};
 	kopierenBasisdaten.daten[daten.id].belege = daten.belege;
-	kopierenBasisdaten.daten[daten.id].geruest = daten.geruest;
+	kopierenBasisdaten.daten[daten.id].gerueste = [...daten.gerueste];
 	kopierenBasisdaten.daten[daten.id].wort = daten.wort;
 	// Daten an das anfragende Fenster schicken
 	// (damit nicht mehrere Meldungen gesendet werden => Timeout)

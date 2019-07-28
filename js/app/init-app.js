@@ -96,9 +96,11 @@ window.addEventListener("load", function() {
 	document.getElementById("kopieren").addEventListener("click", () => kopieren.liste());
 	document.getElementById("kopieren-liste-leeren").addEventListener("click", () => kopieren.listeLeeren());
 	document.getElementById("kopieren-liste-beenden").addEventListener("click", () => kopieren.uiOff());
+	document.getElementById("kopieren-liste-export").addEventListener("click", () => kopieren.exportieren());
 	document.getElementById("kopieren-liste-schliessen").addEventListener("click", () => overlay.schliessen(document.getElementById("kopieren-liste")));
 	document.getElementById("kopieren-einfuegen-einfuegen").addEventListener("click", () => kopieren.einfuegenAusfuehrenPre());
 	document.getElementById("kopieren-einfuegen-reload").addEventListener("click", () => kopieren.einfuegenBasisdaten(true));
+	document.getElementById("kopieren-einfuegen-import").addEventListener("click", () => kopieren.importieren());
 	document.getElementById("kopieren-einfuegen-schliessen").addEventListener("click", () => overlay.schliessen(document.getElementById("kopieren-einfuegen")));
 	document.querySelectorAll("#kopieren-einfuegen-formular input").forEach(i => kopieren.einfuegenDatenfelder(i));
 	// Bedeutungen
