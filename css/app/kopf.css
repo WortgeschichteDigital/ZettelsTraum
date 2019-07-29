@@ -129,16 +129,6 @@ mask-image: url(../../img/quick-neues-fenster.svg);
 	mask-image: url(../../img/quick-sortieren.svg);
 }
 
-#quick-belege-kopieren {
-	-webkit-mask-image: url(../../img/quick-kopieren.svg);
-	mask-image: url(../../img/quick-kopieren.svg);
-}
-
-#quick-belege-einfuegen {
-	-webkit-mask-image: url(../../img/quick-einfuegen.svg);
-	mask-image: url(../../img/quick-einfuegen.svg);
-}
-
 .quick-spacer {
 	display: inline-block;
 	width: 20px;
@@ -215,35 +205,9 @@ body > header span {
 #icon {
 	position: absolute;
 	top: 6px;
-	right: 0;
 	width: 48px;
 	height: 48px;
+	right: 0;
 	padding: 0 10px;
 	background-color: var(--farbe);
-}
-
-/* Kopier-UI ------------------------------------ */
-#kopieren-aussen {
-	position: absolute;
-	top: 6px;
-	right: 68px;
-	padding-left: 10px;
-	width: 48px;
-	height: 48px;
-	background-color: var(--farbe);
-}
-
-#kopieren {
-	position: absolute;
-	right: 0;
-	border-radius: 10px;
-	width: 48px;
-	height: 48px;
-	background: #fff url(../../img/kopieren-gross-farbe.svg) no-repeat;
-	color: var(--text);
-	font-size: 16px;
-	font-weight: bold;
-	line-height: 48px;
-	text-align: center;
-	text-shadow: -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff, 1px 1px 0 #fff;
 }

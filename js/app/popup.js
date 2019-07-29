@@ -38,9 +38,6 @@ let popup = {
 		} else if (target === "wort") {
 			popup.menuWort(menu);
 			popup.menuBelege(menu, true);
-		} else if (target === "kopierfunktion") {
-			popup.menuKopierfunktion(menu);
-			popup.menuBelege(menu, true);
 		} else if (target === "notizen") {
 			popup.menuNotizen(menu);
 			popup.menuBelege(menu, true);
@@ -125,8 +122,6 @@ let popup = {
 				return "quick";
 			} else if (id === "wort" && kartei.wort) {
 				return "wort";
-			} else if (id === "kopieren") {
-				return "kopierfunktion";
 			} else if (id === "notizen-icon") {
 				return "notizen";
 			} else if (id === "kartei-anhaenge") {
@@ -346,18 +341,6 @@ let popup = {
 			label: "Wort ändern",
 			icon: path.join(__dirname, "img", "menu", "popup-wort.png"),
 			click: () => kartei.wortAendern(),
-		}));
-	},
-	// Kopieren-Menü füllen
-	//   menu = Object
-	//     (Menü-Objekt, an das die Menü-Items gehängt werden müssen)
-	menuKopierfunktion (menu) {
-		const {MenuItem} = require("electron").remote,
-			path = require("path");
-		menu.append(new MenuItem({
-			label: "Kopierfunktion beenden",
-			icon: path.join(__dirname, "img", "menu", "popup-beenden.png"),
-			click: () => kopieren.uiOff(),
 		}));
 	},
 	// Notizen-Menü füllen

@@ -20,48 +20,20 @@
 		
 		<!-- CHANGELOG -->
 		<main>
-			<!-- 0.14.0 -->
-			<div class="version">0.14.0</div>
+			<!-- 0.13.1 -->
+			<div class="version">0.13.1</div>
 			
 			<div>
-				<h2><span data-maintainer="Nico Dorn">Version 0.14.0-beta.1</span><time datetime="2019-07-25T11:00:25">25. Juli 2019</time></h2>
-				
-				<h3>Neue Funktionen</h3>
-				
-				<ul>
-					<li>
-						<p>Die Möglichkeit, Belege zwischen verschiedenen Karteien hin- und herzukopieren, wurde eingerichtet.</p>
-						<p>Dazu wurden im Menü <i>Belege</i> zwei Punkte ergänzt: <i>Kopieren</i> und <i>Einfügen</i>. Die dahinterstehenden Funktionen lassen sich auch über die Icons <img src="../img/quick-kopieren.svg" width="24" height="24" alt=""> <abbr title="beziehungsweise">bzw.</abbr> <img src="../img/quick-einfuegen.svg" width="24" height="24" alt=""> in der Quick-Access-Bar aufrufen. (Aktiviert werden können die Quick-Access-Icons wie gehabt über <i>Programm &gt; Einstellungen &gt; Menü</i>.)</p>
-						<p><i>Kopieren:</i> Will man einen oder mehrere Belege von einer Kartei in eine andere kopieren, müssen diese zunächst ausgewählt werden. Die Funktion <i>Belege &gt; Kopieren</i> aktiviert die Kopierfunktion, was mehrere Veränderungen an der Programmoberfläche bewirkt: (1.) Neben dem Programm-Icon im Kopf des Programms erscheint ein großes, blaues, unübersehbares Kopier-Icon: <img src="../img/tool-kopieren.svg" width="24" height="24" alt="">; (2.) in der Belegliste erscheint in jedem Belegkopf am linken Rand ein kleineres Kopier-Icon; (3.) neben dem Drucker-Icon im Kopf der Belegliste erscheint ein weiteres Kopier-Icon, ebenso wie (4.) im Kopf der Karteikarte.</p>
-						<p>Durch Klick auf eines der Kopier-Icons 2. – 4. können Belege der Kopierliste hinzugefügt werden. Wie viele Belege zum Kopieren bereits vorgemerkt sind, wird über dem Icon im Programmkopf und in einer kurzen Animation nach dem Kopiervorgang angezeigt. Das Kopier-Icon im Kopf der Belegliste neben dem Drucker-Icon (3.) dient dazu, <em>alle</em> in der aktuellen Belegliste sichtbaren Belege in die Kopierliste zu verschieben. Wohlgemerkt: Man kann die Liste weiterhin filtern, sodass in der aktuellen Belegliste nicht alle in der Kartei vorhandenen Belege angezeigt werden müssen. In einem solchen Fall würden dementsprechend nur die sichtbaren Belege in die Kopierliste aufgenommen.</p>
-						<p>Die Kopierfunktion interferriert übrigens mit keiner anderen Funktion des Programms. Es können auch bei aktivierter Kopierfunktion Belege zur Kartei hinzugefügt, die Bedeutungsgerüste bearbeitet, die Einstellungen verändert oder die Belegliste gefiltert werden – all dies hat keine Auswirkungen auf die Kopierfunktion. Wird ein Beleg aus der Kartei gelöscht, der zuvor der Kopierliste hinzugefügt wurde, entfernt das Programm diesen automatisch aus der Kopierliste.</p>
-						<p>Man kann sich in einem kleinen Fenster anzeigen lassen, welche Belege sich aktuell in der Kopierliste befinden. Das Fenster erreicht man über einen Klick auf das Kopier-Icon im Programmkopf oder einen erneuten Aufruf der Kopierfunktion via <i>Belege &gt; Kopieren</i>. Mithilfe des Icons <img src="../img/quick-schliessen.svg" width="24" height="24" alt=""> vor den Kurztiteln der Belege, kann der zugehörige Beleg aus der Liste entfernt werden. Über die Funktion <i>Leeren</i> im Fensterkopf kann man sie komplett löschen. Der Klick auf den Kurztitel des Belegs öffnet übrigens die zugehörige Karteikarte.</p>
-						<p>Beenden lässt sich die Kopierfunktion über <i>Beenden</i> im Kopf dieses Fensterchens oder via Rechtsklick auf dem Kopier-Icon im Programmkopf. Beim Beenden wird die Kopierliste geleert, sodass sie bei erneuter Aktivierung nicht mehr vorhanden ist.</p>
-						<p><i>Einfügen:</i> Zum Einfügen muss zunächst eine Kartei geöffnet werden, in die die zuvor mithilfe der Kopierfunktion vorgemerkten Belege kopiert werden sollen. Dies kann durchaus ein neues Fenster mit einer leeren Kartei sein. Ruft man in diesem neuen Fenster die Funktion <i>Belege &gt; Einfügen</i> auf, erscheint wiederum ein Fensterchen, dass einem über die Funktion <i>Einfügen</i> im Fensterkopf das Einfügen der zuvor ausgewählten Belege ermöglicht.</p>
-						<p>In dem Einfügen-Fenster wird unter <i>Belegquellen</i> aufgelistet, in welchen Karteien Kopierlisten erstellt wurden, die prinzipiell eingefügt werden können. Jetzt muss man nur noch die gewünschte Belegquelle auswählen (standardmäßig ist immer die erste Quelle in der Liste markiert) und dann auf <i>Einfügen</i> klicken (die Funktion lässt sich auch über das Tastaturkürzel <kbd>⏎</kbd> aufrufen): Das Fenster schließt sich, die Belegliste und die Filter werden neu aufgebaut; die gewünschten Belege wurden in die Kartei kopiert.</p>
-						<p>Die Funktion <i>Reload</i> im Kopf des Einfügen-Fensters dient dazu, die Belegquellen aufzufrischen. Verändert man die Kopierlisten in den anderen Karteien oder fügt gar neue hinzu, können die Änderungen angezeigt werden ohne den Umweg, das Einfügen-Fenster zu schließen und neu zu öffnen. Die Funktion lässt sich auch über das Tastaturkürzel <kbd>F5</kbd> aufrufen.</p>
-						<p>Standardmäßig schließt sich das Einfügen-Fenster zwar nach der Kopieroperation. Dieses Verhalten kann aber über eine Option in <i>Programm &gt; Einstellungen &gt; Allgemeines</i> geändert werden.</p>
-						<p>Beim Kopieren von Belegen müssen nicht immer alle Datenfelder kopiert werden. Im unteren Teil des Einfügen-Fensters werden alle Datenfelder aufgelistet, die prinzipiell kopiert werden können. Sind die Datenfelder in einer Karteikarte leer, wird ein leerer Wert kopiert; wird der Haken vor einem Datenfeld entfernt, wird es gar nicht kopiert, egal ob es im Original Daten enthält oder nicht. <i class="app-name"></i> merkt sich, welche Datenfelder hier ausgewählt wurden, und stellt die Auswahl nach dem Programmstart wieder her.</p>
-						<p>Werden Bedeutungen kopiert, wird das aktuelle Bedeutungsgerüst der Ziel-Kartei gegebenenfalls automatisch ergänzt. Importiert werden können allerdings nur die Bedeutungen aus dem Bedeutungsgerüst, das in der Quell-Kartei gerade aktiv ist. Welche Gerüstnummer in der Quell-Datei aktiv ist, wird in der Bezeichnung des Datenfeldes angezeigt: also <abbr title="zum Beispiel">z. B.</abbr> <q>Bedeutung #2</q> = die Bedeutung(en) aus Bedeutungsgerüst 2. Steht in der Bezeichnung des Datenfeldes nur <q>Bedeutung</q>, wird also keine Gerüstnummer angegeben, hat die Quell-Kartei nur ein einziges Bedeutungsgerüst. Möchte man Bedeutungen aus einem anderen Bedeutungsgerüst der Quell-Kartei kopieren, muss in der Quell-Kartei das Bedeutungsgerüst gewechselt werden, <abbr title="zum Beispiel">z. B.</abbr> via <i>Kartei &gt; Bedeutungsgerüst wechseln</i>.</p>
-						<p>Es gibt keine Algorithmen, die überprüfen, ob ein zum Kopieren ausgewählter Beleg in der Ziel-Kartei bereits vorhanden ist oder nicht. Hier muss man selbst achtgeben, dass nichts doppelt kopiert wird. Sollte dies einmal passieren, wäre das natürlich kein Problem, man kann die doppelten Belege manuell löschen.</p>
-						<p>Das Fenster, aus dem heraus Belege kopiert werden sollen, darf vor dem Einfügen im Übrigen <em>nicht</em> geschlossen werden!</p>
-						<p>Die Kopierfunktionen sind extra für den Anwendungsfall gedacht, größere Belegmengen zwischen den Karteien zu verschieben. Es ist aber auch möglich, nur eine einzige Karteikarte auf die Schnelle zu kopieren. Hierzu gibt es im Kopf der Karteikarte das immer sichtbare Icon <img src="../img/beleg-zwischenablage.svg" width="24" height="24" alt="">. Klickt man auf das Icon wird die aktuelle Karteikarte in die Zwischenablage des Computers geschoben. Ruft man nun in der Ziel-Datei die Funktion <i>Belege &gt; Einfügen</i> auf, erscheint als erste Belegquelle in der Liste die automatisch ausgewählte <q>Zwischenablage</q>. Durch einen Klick auf <i>Einfügen</i> wird der Beleg aus der Zwischenablage in die Ziel-Datei kopiert. Um diese Funktion zu nutzen, muss die Kopier-Funktion im Quell-Fenster nicht eigens aktiviert werden, allerdings kann man auf diese Weise immer nur einen Beleg kopieren.</p>
-						<p>Eine letzte, die Karteikarte betreffende Besonderheit ist noch zu beachten. Das Tastaturkürzel <kbd>Strg</kbd> + <kbd>I</kbd> ruft bei geöffneter Karteikarte die Kopierfunktion auf. Dabei ist das Kürzel doppelt belegt. Wurde die Funktion zum Kopieren größerer Belegmengen aktiviert (<i>Belege &gt; Kopieren</i>), wird die Karteikarte in die Kopierliste geschoben. Ist diese Kopierfunktion inaktiv, wird die Karteikarte in die Zwischenablage kopiert. Damit einem immer klar ist, was gerade geschehen ist (und das gerade etwas geschehen ist), wird für 1,5 Sekunden eine kleine Animation eingeblendet.</p>
-					</li>
-				</ul>
-				
-				<h3>Verbesserungen</h3>
-				
-				<ul>
-					<li>Einige seit Version 0.12.0 sinnlos gewordene Funktionsaufrufe beim Öffnen und Erstellen einer Kartei wurden entfernt, was diese beiden Operationen beschleunigen dürfte – wenn auch nur minimal.</li>
-				</ul>
+				<h2><span data-maintainer="Nico Dorn">Version 0.13.1</span><time datetime="2019-07-29T15:11:33">29. Juli 2019</time></h2>
 				
 				<h3>Behobene Fehler</h3>
 				
 				<ul>
-					<li>Bedeutungsgerüst/Karteikarte: Beim Ausführen verschiedener Aktionen wurde zur Sicherheit nachgefragt, ob Änderungen nicht erst einmal gespeichert werden sollten. Verneinte man dies wurde die Änderungsmarkierung des Bedeutungsgerüst <abbr title="beziehungsweise">bzw.</abbr> der Karteikarte mitunter nicht zurückgesetzt.</li>
-					<li>Belegliste: Das Icon zum Öffnen der Karteikarte hatte keinen erläuternden Tooltip.</li>
-					<li>Karteikarte: Für die Sicherheitsfrage vor dem Löschen eines Belegs konnte der Kurztitel des Belegs nicht ermittelt werden.</li>
+					<li>Wenn gerade eine neue Kartei erstellt wurde, diese aber noch nicht gespeichert war und man dann aus demselben Programmfenster eine bereits bestehende Kartei öffnen wollte (via <i>Kartei &gt; Öffnen</i>, <i>Kartei &gt; Zuletzt verwendet</i> oder Drag-and-Drop), gingen die in der neuen Kartei bereits eingegebenen Daten alle verloren, weil sich die bestehende Datei nicht in einem neuen, sondern in demselben Programmfenster öffnete.</li>
+					<li>
+						<p>Bedeutungsgerüst/Karteikarte: Wurde in der Karteikarte im Formularfeld <i>Bedeutung</i> eine neue Unterbedeutung zu einer bereits vorhandenen Bedeutung mit Alias eingegeben und bei der Eingabe das Alias benutzt, war das Programm nicht in der Lage, die korrekte Position der neuen Bedeutung im Bedeutungsgerüst zu finden. Darum wurde die neue Bedeutung dem Bedeutungsgerüst an einer falschen Position (nämlich am Ende des Gerüsts) hinzugefügt und danach nicht wiedergefunden, was eine Fehlerkaskade zur Folge hatte.</p>
+						<p>Ähnliche Fehler werden in Zukunft abgefangen; beim Speichern der Karteikarte erscheint gegebenenfalls eine Fehlermeldung.</p>
+					</li>
 				</ul>
 			</div>
 			

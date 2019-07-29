@@ -66,10 +66,6 @@ let helfer = {
 			} else if (id === "belege-sortieren") { // TODO
 				dialog.oeffnen("alert");
 				dialog.text("Sorry!\nDiese Funktion ist noch nicht programmiert.");
-			} else if (id === "belege-kopieren") {
-				kopieren.init();
-			} else if (id === "belege-einfuegen") {
-				kopieren.einfuegen();
 			}
 		});
 	},
@@ -521,20 +517,6 @@ let helfer = {
 		if (evt.which === 9 && helfer.bedeutungenOffen()) {
 			bedeutungen.naviTab(evt);
 		}
-		// Enter
-		if (evt.which === 13 && overlay.oben() === "kopieren-einfuegen") {
-			evt.preventDefault();
-			kopieren.einfuegenAusfuehrenPre();
-			return;
-		}
-		// F5
-		if (evt.which === 116) {
-			evt.preventDefault();
-			if (overlay.oben() === "kopieren-einfuegen") {
-				kopieren.einfuegenBasisdaten(true);
-			}
-			return;
-		}
 		// Strg + Bild ↑ / ↓
 		if (evt.ctrlKey && (evt.which === 33 || evt.which === 34) && helfer.belegOffen()) {
 			let next = true;
@@ -550,14 +532,6 @@ let helfer = {
 		// Entfernen (wenn im Bedeutungsgerüst)
 		if (evt.which === 46 && helfer.bedeutungenOffen()) {
 			bedeutungen.loeschenTastatur();
-		}
-		// Strg + I (wenn in Karteikarte)
-		if (evt.ctrlKey && evt.which === 73 && helfer.belegOffen()) {
-			if (kopieren.an) {
-				kopieren.addKarte();
-			} else {
-				beleg.ctrlZwischenablage();
-			}
 		}
 		// Strg + K (wenn in Karteikarte)
 		if (evt.ctrlKey && evt.which === 75 && helfer.belegOffen()) {

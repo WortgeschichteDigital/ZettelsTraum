@@ -47,7 +47,6 @@ let beleg = {
 				if (dialog.antwort) {
 					bedeutungen.speichern();
 				} else if (dialog.antwort === false) {
-					bedeutungen.bedeutungenGeaendert(false);
 					beleg.erstellen();
 				}
 			});
@@ -58,7 +57,6 @@ let beleg = {
 				if (dialog.antwort) {
 					beleg.aktionSpeichern();
 				} else if (dialog.antwort === false) {
-					beleg.belegGeaendert(false);
 					beleg.erstellen();
 				}
 			});
@@ -71,20 +69,6 @@ let beleg = {
 	// neue Karteikarte erstellen
 	erstellen () {
 		// nächste ID ermitteln
-		beleg.id_karte = beleg.idErmitteln();
-		// neues Karten-Objekt anlegen
-		beleg.data = beleg.karteErstellen();
-		// Wert des Suchfelds der Leseansicht zurücksetzen
-		beleg.leseSucheText = "";
-		// ggf. die Leseansicht verlassen
-		if (document.getElementById("beleg-link-leseansicht").classList.contains("aktiv")) {
-			beleg.leseToggle(false);
-		}
-		// Karte anzeigen
-		beleg.formular(true);
-	},
-	// ermittelt die nächste ID, die in der aktuellen Kartei vergeben werden sollte
-	idErmitteln () {
 		let id_karte = 0,
 			ids = Object.keys(data.ka);
 		for (let i = 0, len = ids.length; i < len; i++) {
@@ -94,16 +78,14 @@ let beleg = {
 			}
 		}
 		id_karte++;
-		return id_karte;
-	},
-	// erstellt ein leeres Daten-Objekt für eine neue Karteikarte
-	karteErstellen () {
-		return {
+		beleg.id_karte = id_karte;
+		// neues Karten-Objekt anlegen
+		beleg.data = {
 			an: [], // Anhänge
 			au: "", // Autor
 			bc: false, // Buchung
 			bd: [], // Bedeutung
-			be: 0, // Bewertung (Markierung)
+			be: 0, // Bewertung
 			bl: "", // Wortbildung
 			bs: "", // Beleg
 			bu: false, // Bücherdienstauftrag
@@ -118,6 +100,14 @@ let beleg = {
 			ts: "", // Textsorte
 			un: optionen.data.einstellungen.unvollstaendig, // Bearbeitung unvollständig
 		};
+		// Wert des Suchfelds der Leseansicht zurücksetzen
+		beleg.leseSucheText = "";
+		// ggf. die Leseansicht verlassen
+		if (document.getElementById("beleg-link-leseansicht").classList.contains("aktiv")) {
+			beleg.leseToggle(false);
+		}
+		// Karte anzeigen
+		beleg.formular(true);
 	},
 	// bestehende Karteikarte öffnen
 	//   id = Number
@@ -345,25 +335,32 @@ let beleg = {
 			}
 		}
 		// Bedeutung im Bedeutungsfeld hinzufügen
-		bdFeld.value.split("\n").forEach(function(i) {
+		let bdFeldSp = bdFeld.value.split("\n");
+		for (let i = 0, len = bdFeldSp.length; i < len; i++) {
+			let zeile = bdFeldSp[i];
 			// Bedeutungsfeld könnte leer sein
-			if (!i) {
-				return;
+			if (!zeile) {
+				continue;
 			}
 			// Tags entfernen
 			// (User könnten auf die Idee kommen, gleich <i>, <b>, <u> einzugeben;
 			// das macht die Sache nur kompliziert, weil z.B. das HTML auf Korrektheit getestet werden müsste)
-			i = i.replace(/<.+?>/g, "");
+			zeile = zeile.replace(/<.+?>/g, "");
 			// ggf. neue Bedeutung in das Gerüst eintragen
-			let bd = beleg.bedeutungSuchen(i);
+			let bd = beleg.bedeutungSuchen(zeile);
 			if (!bd.id) {
-				bd = beleg.bedeutungErgaenzen(i);
+				bd = beleg.bedeutungErgaenzen(zeile);
+				if (!bd.id) { // die Funktion ist kompliziert und fehleranfällig, lieber noch mal kontrollieren
+					dialog.oeffnen("alert");
+					dialog.text("Beim Speichern der Karteikarte ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\nEinhängen der neuen Bedeutung in das Bedeutungsgerüst fehlgeschalgen");
+					return;
+				}
 			}
 			beleg.data.bd.push({
 				gr: data.bd.gn,
 				id: bd.id,
 			});
-		});
+		}
 		// ggf. Objekt anlegen
 		if (!data.ka[beleg.id_karte]) {
 			data.ka[beleg.id_karte] = {};
@@ -392,7 +389,7 @@ let beleg = {
 		}
 		// Änderungsdatum speichern
 		data.ka[beleg.id_karte].dm = new Date().toISOString();
-		// Änderungsmarkierungen auffrischen
+		// Änderungsmarkierung weg
 		beleg.belegGeaendert(false);
 		beleg.listeGeaendert = true;
 		kartei.karteiGeaendert(true);
@@ -461,13 +458,9 @@ let beleg = {
 				liste.wechseln();
 				beleg.listeGeaendert = false;
 				bedeutungenWin.daten();
-				if (kopieren.an && kopieren.belege.includes(id.toString())) {
-					kopieren.belege.splice(kopieren.belege.indexOf(id.toString()), 1);
-					kopieren.uiText();
-				}
 			}
 		});
-		dialog.text(`Soll <i>${liste.detailAnzeigenH3(id.toString())}</i> wirklich gelöscht werden?`);
+		dialog.text(`Soll <i>${liste.detailAnzeigenH3(id)}</i> wirklich gelöscht werden?`);
 	},
 	// Daten, die importiert wurden
 	DTAImportData: {},
@@ -1983,10 +1976,6 @@ let beleg = {
 				beleg.ctrlTrennung();
 			} else if (/springen$/.test(this.id)) {
 				beleg.ctrlSpringen();
-			} else if (/kopieren$/.test(this.id)) {
-				kopieren.addKarte();
-			} else if (/zwischenablage$/.test(this.id)) {
-				beleg.ctrlZwischenablage();
 			}
 		});
 	},
@@ -2125,17 +2114,6 @@ let beleg = {
 			beleg.ctrlSpringenForm(evt);
 		}
 	},
-	// Kopiert den aktuellen Beleg in die Zwischenablage,
-	// sodass er in eine andere Kartei kopiert werden kann
-	ctrlZwischenablage () {
-		const {clipboard, remote} = require("electron"),
-			daten = kopieren.datenBeleg(beleg.data);
-		daten.typ = "wgd-kopie";
-		daten.winId = remote.getCurrentWindow().id;
-		daten.wort = kartei.wort;
-		clipboard.writeText(JSON.stringify(daten));
-		kopieren.animation("zwischenablage");
-	},
 	// zur vorherigen/nächsten Karteikarte in der Belegliste springen
 	//   next = Boolean
 	//     (nächste Karte anzeigen
@@ -2209,20 +2187,11 @@ let beleg = {
 	// sucht eine Bedeutung im Bedeutungsgerüst
 	//   bd = String
 	//     (die Bedeutung)
-	//   gn = String || undefined
-	//     (ID des Gerüsts, in dem gesucht werden soll)
-	bedeutungSuchen (bd, gn = data.bd.gn) {
+	bedeutungSuchen (bd) {
 		let bdS = bd.split(": "),
-			bdA = data.bd.gr[gn].bd;
+			bdA = data.bd.gr[data.bd.gn].bd;
 		// Alias ggf. durch vollen Bedeutungsstring ersetzen
-		for (let i = 0, len = bdS.length; i < len; i++) {
-			for (let j = 0, len = bdA.length; j < len; j++) {
-				if (bdS[i] === bdA[j].al) {
-					bdS[i] = bdA[j].bd[bdA[j].bd.length - 1].replace(/<.+?>/g, "");
-					break;
-				}
-			}
-		}
+		bdS = beleg.bedeutungAliasAufloesen(bdS, bdA);
 		// Bedeutung suchen => ID zurückgeben
 		const bdSJ = bdS.join(": ");
 		for (let i = 0, len = bdA.length; i < len; i++) {
@@ -2243,11 +2212,9 @@ let beleg = {
 	// (wird nur aufgerufen, wenn die Bedeutung noch nicht vorhanden ist)
 	//   bd = String
 	//     (die Bedeutung; Hierarchien getrennt durch ": ")
-	//   gn = String || undefined
-	//     (ID des Gerüsts, in dem gesucht werden soll)
-	bedeutungErgaenzen (bd, gn = data.bd.gn) {
+	bedeutungErgaenzen (bd) {
 		// Zeiger auf das betreffende Gerüst ermitteln
-		let gr = data.bd.gr[gn];
+		let gr = data.bd.gr[data.bd.gn];
 		// ggf. höchste ID ermitteln
 		if (!bedeutungen.makeId) {
 			let lastId = 0;
@@ -2258,9 +2225,11 @@ let beleg = {
 			});
 			bedeutungen.makeId = bedeutungen.idGenerator(lastId + 1);
 		}
+		// Alias ggf. durch vollen Bedeutungsstring ersetzen
+		let bdS = bd.split(": ");
+		bdS = beleg.bedeutungAliasAufloesen(bdS, gr.bd);
 		// jetzt wird's kompliziert: korrekte Position der Bedeutung im Gerüst suchen
-		let bdS = bd.split(": "),
-			slice = 1,
+		let slice = 1,
 			arr = bdS.slice(0, slice),
 			arrVor = [],
 			arrTmpVor = [],
@@ -2309,7 +2278,23 @@ let beleg = {
 		// Zählung auffrischen
 		bedeutungen.konstitZaehlung(gr.bd, gr.sl);
 		// ID zurückgeben
-		return beleg.bedeutungSuchen(bd, gn);
+		return beleg.bedeutungSuchen(bd);
+	},
+	// Alias durch vollen Bedeutungsstring ersetzen
+	//   bdS = Array
+	//     (in diesen Bedeutungen sollen die Aliasses aufgelöst werden)
+	//   bdA = Array
+	//     (in diesen Bedeutungen soll nach den Aliases gesucht werden)
+	bedeutungAliasAufloesen (bdS, bdA) {
+		for (let i = 0, len = bdS.length; i < len; i++) {
+			for (let j = 0, len = bdA.length; j < len; j++) {
+				if (bdS[i] === bdA[j].al) {
+					bdS[i] = bdA[j].bd[bdA[j].bd.length - 1].replace(/<.+?>/g, "");
+					break;
+				}
+			}
+		}
+		return bdS;
 	},
 	// trägt eine Bedeutung, die aus dem Bedeutungen-Fenster an das Hauptfenster geschickt wurde,
 	// in einer oder mehreren Karten ein oder aus (Verteilerfunktion)

@@ -229,19 +229,16 @@ let anhaenge = {
 		shell.openItem(anhaenge.data[datei].path);
 	},
 	// Öffnet beim Klick auf eine Überschrift im Anhänge-Fenster den entsprechenden Beleg
-	// (wird auch in kopieren.js benutzt)
-	//   ele = Element
+	//   h3 = Element
 	//     (die Überschrift, auf die geklickt wurde)
-	belegOeffnen (ele) {
-		ele.addEventListener("click", function(evt) {
-			evt.preventDefault();
+	belegOeffnen (h3) {
+		h3.addEventListener("click", function() {
 			let id = this.dataset.id;
 			if (bedeutungen.geaendert) {
 				dialog.oeffnen("confirm", function() {
 					if (dialog.antwort) {
 						bedeutungen.speichern();
 					} else if (dialog.antwort === false) {
-						bedeutungen.bedeutungenGeaendert(false);
 						oeffnen();
 					}
 				});
@@ -252,7 +249,6 @@ let anhaenge = {
 					if (dialog.antwort) {
 						beleg.aktionSpeichern();
 					} else if (dialog.antwort === false) {
-						beleg.belegGeaendert(false);
 						oeffnen();
 					}
 				});

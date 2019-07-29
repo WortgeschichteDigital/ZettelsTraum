@@ -321,11 +321,6 @@ p.no-indent + .filter-baum, /* betrifft Verschiedenes > Filterlogik */
 	top: 99px;
 }
 
-.icon-kopieren {
-	-webkit-mask-image: url(../../img/liste-kopieren.svg);
-	mask-image: url(../../img/liste-kopieren.svg);
-}
-
 .icon-bearbeiten {
 	-webkit-mask-image: url(../../img/liste-bearbeiten.svg);
 	mask-image: url(../../img/liste-bearbeiten.svg);
@@ -364,8 +359,7 @@ p.no-indent + .filter-baum, /* betrifft Verschiedenes > Filterlogik */
 .bedeutungen-opt-block a:first-child,
 .beleg-opt-block a:first-child,
 .filter-ctrl-block a:first-child,
-.liste-opt-block a:first-child,
-.liste-opt-block a.kopieren-aus {
+.liste-opt-block a:first-child {
 	border-top-left-radius: 3px;
 	border-bottom-left-radius: 3px;
 }
@@ -509,12 +503,12 @@ p.no-indent + .filter-baum, /* betrifft Verschiedenes > Filterlogik */
 	visibility: hidden;
 }
 
-.liste-kopficon {
+.liste-bearbeiten {
 	margin-right: 15px;
 	background-color: var(--textExtremHell);
 }
 
-.liste-kopficon:hover {
+.liste-bearbeiten:hover {
 	background-color: var(--text);
 }
 

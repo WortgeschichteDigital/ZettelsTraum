@@ -91,18 +91,6 @@ window.addEventListener("load", function() {
 	});
 	// Sonderzeichen
 	document.querySelectorAll("#sonderzeichen-cont span").forEach(i => sonderzeichen.eintragen(i));
-	// Kopierfunktion
-	kopieren.addListeAlle(document.getElementById("liste-link-kopieren"));
-	document.getElementById("kopieren").addEventListener("click", () => kopieren.liste());
-	document.getElementById("kopieren-liste-leeren").addEventListener("click", () => kopieren.listeLeeren());
-	document.getElementById("kopieren-liste-beenden").addEventListener("click", () => kopieren.uiOff());
-	document.getElementById("kopieren-liste-export").addEventListener("click", () => kopieren.exportieren());
-	document.getElementById("kopieren-liste-schliessen").addEventListener("click", () => overlay.schliessen(document.getElementById("kopieren-liste")));
-	document.getElementById("kopieren-einfuegen-einfuegen").addEventListener("click", () => kopieren.einfuegenAusfuehrenPre());
-	document.getElementById("kopieren-einfuegen-reload").addEventListener("click", () => kopieren.einfuegenBasisdaten(true));
-	document.getElementById("kopieren-einfuegen-import").addEventListener("click", () => kopieren.importieren());
-	document.getElementById("kopieren-einfuegen-schliessen").addEventListener("click", () => overlay.schliessen(document.getElementById("kopieren-einfuegen")));
-	document.querySelectorAll("#kopieren-einfuegen-formular input").forEach(i => kopieren.einfuegenDatenfelder(i));
 	// Bedeutungen
 	document.getElementById("bedeutungen-speichern").addEventListener("click", () => bedeutungen.speichern());
 	document.getElementById("bedeutungen-schliessen").addEventListener("click", () => bedeutungen.schliessen());
@@ -235,12 +223,6 @@ window.addEventListener("load", function() {
 	ipcRenderer.on("kartei-suche", () => filter.suche());
 	ipcRenderer.on("belege-hinzufuegen", () => beleg.erstellenPre());
 	ipcRenderer.on("belege-auflisten", () => liste.anzeigen());
-	ipcRenderer.on("belege-kopieren", () => kopieren.init());
-	ipcRenderer.on("belege-einfuegen", () => kopieren.einfuegen());
-	ipcRenderer.on("kopieren-basisdaten", () => kopieren.basisdatenSenden());
-	ipcRenderer.on("kopieren-basisdaten-empfangen", (evt, daten) => kopieren.einfuegenBasisdatenEintragen(daten));
-	ipcRenderer.on("kopieren-daten", () => kopieren.datenSenden());
-	ipcRenderer.on("kopieren-daten-empfangen", (evt, daten) => kopieren.einfuegenEinlesen(daten));
 	ipcRenderer.on("optionen-zuletzt", (evt, zuletzt) => optionen.updateZuletzt(zuletzt));
 	ipcRenderer.on("dialog-anzeigen", function(evt, text) {
 		dialog.oeffnen("alert");
