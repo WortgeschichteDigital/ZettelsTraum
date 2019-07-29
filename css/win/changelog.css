@@ -102,6 +102,12 @@ h3 {
 	font-weight: normal;
 }
 
+hr {
+	margin: 10px 0;
+	border: none;
+	border-top: 1px solid var(--linie);
+}
+
 kbd {
 	display: inline-block;
 	border: 1px solid var(--linie);
