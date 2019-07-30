@@ -20,6 +20,37 @@
 		
 		<!-- CHANGELOG -->
 		<main>
+			<!-- 0.13.3 -->
+			<div class="version">0.13.3</div>
+			
+			<div>
+				<h2><span data-maintainer="Nico Dorn">Version 0.13.3</span><time datetime="2019-07-30T18:39:02">30. Juli 2019</time></h2>
+				
+				<h3>Verbesserungen</h3>
+				
+				<ul>
+					<li>
+						<p>Bedeutungsgerüst: Das Programm unterstützt die BenutzerInnen nun besser dabei, keine formal verwirrenden oder gar irregulären Bedeutungsgerüste zu produzieren. Deswegen werden fortan mehrere bisher zulässige Operationen unterbunden:</p>
+						<p>(1.) Es können keine Bedeutungen mehr angelegt werden, die nur hinsichtlich ihrer Formatierung, <abbr title="das heißt">d. h.</abbr> durch Kursivierung, Fettung oder Unterstreichung, von anderen Bedeutungen der obersten Ebene abweichen.</p>
+						<p>(2.) Es können keine Bedeutungen mehr umbenannt werden, wenn auf derselben Ebene (desselben Bedeutungszweigs) bereits eine identische Bedeutung existiert. Auch in diesem Fall wird nicht akzeptiert, dass Bedeutungen sich nur durch ihre Formatierung unterscheiden.</p>
+						<p>(3.) Es können keine Bedeutungen mehr angelegt oder umbenannt werden, wenn sie dann mit einem Alias identisch wären.</p>
+						<p>(4.) Es kann kein Alias mehr angelegt werden, wenn er mit der Bedeutung, für die er stehen soll, identisch wäre.</p>
+						<p>(5.) Eine Bedeutung kann nicht mehr nach links oder rechts verschoben werden, wenn in der Zielebene des jeweiligen Bedeutungszweigs bereits eine identische Bedeutung steht. Formatierungen werden natürlich auch in diesem Fall als Unterscheidungskriterium ausgeschlossen.</p>
+					</li>
+					<li>Bedeutungsgerüst: Wenn in einem Bedeutungsgerüst eine Zeile gerade ediert wird, wenn also der Fokus im Bedeutungen- oder Alias-Feld oder auf dem Tags-Bereich liegt, verhält sich das Tastaturkürzel zur Navigation durch die Bedeutungen anders als in vorherigen Versionen. Wird <kbd>Strg</kbd> + <kbd>⇧</kbd> <abbr title="beziehungsweise">bzw.</abbr> <kbd>⇩</kbd> gedrückt, beginnt die Navigation nun nicht mehr bei der ersten Bedeutung des Bedeutungsgerüsts, sondern relativ zu der gerade aktiven Zeile. Ein Beispiel: Hat man gerade Bedeutung <abbr title="Nummer">Nr.</abbr> 3 ediert und drückt <kbd>Strg</kbd> + <kbd>⇩</kbd>, wird Bedeutung <abbr title="Nummer">Nr.</abbr> 4 fokussiert; drückt man <kbd>Strg</kbd> + <kbd>⇧</kbd> fokussiert das Programm Bedeutung <abbr title="Nummer">Nr.</abbr> 2. Früher wurde in beiden Fällen Bedeutung <abbr title="Nummer">Nr.</abbr> 1 ausgewählt.</li>
+				</ul>
+				
+				<h3>Behobene Fehler</h3>
+				
+				<ul>
+					<li>Der Text in Dropdown-Feldern wie dem zur Gerüst-Auswahl war auswählbar, obwohl diese Felder weder zur Texteingabe noch zum Kopieren von Text vorgesehen sind.</li>
+					<li>Bedeutungsgerüst: Im Textfeld zur Eingabe neuer Bedeutungen war die Tool-Leiste für Textformate falsch positioniert, wenn eine Kartei nur ein Bedeutungsgerüst hatte, in dem noch keine Bedeutung stand.</li>
+					<li>Bedeutungsgerüst: Wurde auf das Lösch-Icon einer Bedeutung geklickt, erhielt das Bestätigungsfenster keinen Fokus.</li>
+					<li>Karteikarte: Wurde in einer Karteikarte der Inhalt des Bedeutungsfelds bearbeitet und danach das Bedeutungsgerüst gewechselt, ohne dass die Karteikarte zuvor gespeichert wurde, gingen die Änderungen verloren. Das Wechseln des Gerüsts wird in solchen Fällen fortan unterbunden; stattdessen erscheint eine erklärende Warnmeldung.</li>
+					<li>Druckfunktion: Beim Drucken einer einzelnen Karteikarte oder aller Karten einer Belegliste wurde im Druckfenster anstelle der Bedeutung(en) fälschlicherweise nur <q>[object Object]</q> angezeigt – mitunter mehrfach. Der Fehler bestand seitdem die Bedeutungsgerüst-Funktion zur Verfügung steht, also seit Version 0.10.0.</li>
+				</ul>
+			</div>
+			
 			<!-- 0.13.2 -->
 			<div class="version">0.13.2</div>
 			

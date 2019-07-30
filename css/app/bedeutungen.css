@@ -454,6 +454,12 @@ a[class*="icon-move"] {
 	left: 5px;
 }
 
+#bedeutungen-tools.neue-bedeutung-leer {
+	/* für den Fall, dass nur ein Bedeutungsgerüst existiert, in dem noch keine Bedeutung steht */
+	top: -30px;
+	left: 5px;
+}
+
 #bedeutungen-tools .icon-link {
 	top: 0;
 	background-color: var(--textExtremHell);

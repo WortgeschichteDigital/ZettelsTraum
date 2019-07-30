@@ -280,6 +280,13 @@ input[type="radio"]:checked::before {
 	text-align: center;
 }
 
+input:read-only::selection {
+	 /* user-select: none funktioniert nicht
+			auf disabled kann ich sie auch nicht stellen, weil dann kein Klick-Event mehr gefeuert wird */
+	background-color: transparent;
+	color: inherit;
+}
+
 textarea {
 	display: block;
 	margin: 0;

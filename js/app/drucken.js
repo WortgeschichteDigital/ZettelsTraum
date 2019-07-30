@@ -180,7 +180,19 @@ let drucken = {
 				// Wert ermitteln
 				let wert = "";
 				if (Array.isArray(obj[f[x].val])) {
-					wert = obj[f[x].val].join("\n");
+					if (f[x].val === "bd") {
+						let wertTmp = [];
+						for (let bd of obj[f[x].val]) {
+							wertTmp.push(bedeutungen.bedeutungenTief({
+								gr: bd.gr,
+								id: bd.id,
+								leer: true,
+							}));
+						}
+						wert = wertTmp.join("\n");
+					} else {
+						wert = obj[f[x].val].join("\n");
+					}
 				} else {
 					wert = obj[f[x].val];
 				}

@@ -242,7 +242,6 @@ let bedeutungen = {
 		}
 	},
 	// überprüft, ob die übergebene Bedeutung schon vorhanden ist
-	// (wird auch in beleg.js genutzt)
 	//   bd = String
 	//     (die Bedeutung, Hierarchien getrennt durch ": ")
 	//   cache = true || undefined
@@ -621,7 +620,10 @@ let bedeutungen = {
 	//   evt = Event-Objekt
 	//     (Tastaturevent, über das die Funktion aufgerufen wurde)
 	navi (evt) {
-		if (!bedeutungen.moveAktiv) {
+		let trEditAktiv = document.querySelector("#bedeutungen-cont .bedeutungen-edit");
+		if (trEditAktiv) { // Zeile fokussiert (die Bedeutung/die Tags/das Alias)
+			bedeutungen.moveAn(parseInt(trEditAktiv.dataset.idx, 10));
+		} else if (!bedeutungen.moveAktiv) { // keine Zeile fokussiert
 			let tr = document.querySelector("#bedeutungen-cont tr");
 			if (hasIdx(tr)) {
 				bedeutungen.moveAn(parseInt(tr.dataset.idx, 10));
@@ -813,7 +815,8 @@ let bedeutungen = {
 		}
 		// neue Daten ermitteln
 		const idx = parseInt(document.querySelector(".bedeutungen-aktiv").dataset.idx, 10),
-			ebene = bedeutungen.akt.bd[idx].bd.length;
+			ebene = bedeutungen.akt.bd[idx].bd.length,
+			textBd = bedeutungen.editFormat(bedeutungen.akt.bd[idx].bd[ebene - 1]);
 		let d = bedeutungen.moveData;
 		// nach links
 		if (bedeutungen.akt.bd[idx].bd.length > 1) {
@@ -825,6 +828,14 @@ let bedeutungen = {
 				}
 				d[37].steps++;
 			}
+		}
+		let bdFehler = bedeutungen.editBdTest({
+			wert: textBd,
+			idx: idx,
+			ebene: ebene - 1,
+		});
+		if (bdFehler) {
+			d[37].movable = false;
 		}
 		// nach oben
 		if (idx > 0 && bedeutungen.akt.bd[idx - 1].bd.length >= bedeutungen.akt.bd[idx].bd.length) {
@@ -849,6 +860,14 @@ let bedeutungen = {
 		}
 		if (d[39].pad.length) {
 			d[39].movable = true;
+		}
+		bdFehler = bedeutungen.editBdTest({
+			wert: textBd,
+			idx: idx,
+			ebene: ebene + 1,
+		});
+		if (bdFehler) {
+			d[39].movable = false;
 		}
 		// nach unten
 		let gleiche_ebene = false;
@@ -1017,7 +1036,10 @@ let bedeutungen = {
 		// Löschen anstoßen
 		let tr = document.querySelector(".bedeutungen-aktiv");
 		const idx = parseInt(tr.dataset.idx, 10);
-		bedeutungen.loeschen(idx);
+		setTimeout(function() {
+			// ohne Timeout erhält das Confirm-Fenster nicht in jdem Fall den Fokus
+			bedeutungen.loeschen(idx);
+		}, 1);
 	},
 	// Löschen auf Nachfrage durchführen
 	//   idx = Number
@@ -1284,7 +1306,12 @@ let bedeutungen = {
 			parent = parent.parentNode;
 		}
 		if (parent.nodeName === "TD") {
-			div.classList.add("neue-bedeutung");
+			if (Object.keys(bedeutungen.data.gr).length === 1 &&
+					!bedeutungen.akt.bd.length) {
+				div.classList.add("neue-bedeutung-leer");
+			} else {
+				div.classList.add("neue-bedeutung");
+			}
 		}
 		parent.appendChild(div);
 	},
@@ -1320,28 +1347,32 @@ let bedeutungen = {
 				feld = edit.parentNode.dataset.feld;
 			let wert = "";
 			if (feld === "bd") {
-				wert = helfer.textTrim(edit.innerHTML, true);
+				wert = bedeutungen.editFormat(edit.innerHTML);
 			} else {
 				wert = helfer.textTrim(edit.textContent, true);
 			}
 			// Ist der Wert okay?
-			if (feld === "bd" && !wert) {
-				dialog.oeffnen("alert", function() {
-					edit.focus();
-				});
-				dialog.text("Sie haben keine Bedeutung eingegeben.");
-				return;
+			if (feld === "bd") {
+				const bdFehler = bedeutungen.editBdTest({wert, idx});
+				if (bdFehler) {
+					dialog.oeffnen("alert", function() {
+						edit.focus();
+					});
+					dialog.text(bdFehler);
+					return;
+				}
 			} else if (feld === "al") {
 				for (let i = 0, len = bedeutungen.akt.bd.length; i < len; i++) {
 					if (!wert) {
 						break;
 					}
-					if (i === idx) {
-						continue;
-					}
 					// Alias schon vergeben oder identisch mit einer Bedeutung?
 					if (bedeutungen.akt.bd[i].al === wert) {
-						alias_schon_vergeben(edit, "alias");
+						if (i === idx) {
+							alias_schon_vergeben(edit, "alias_identisch");
+						} else {
+							alias_schon_vergeben(edit, "alias");
+						}
 						return;
 					} else if (bedeutungen.akt.bd[i].bd[bedeutungen.akt.bd[i].bd.length - 1] === wert) {
 						alias_schon_vergeben(edit, "bedeutung");
@@ -1382,12 +1413,63 @@ let bedeutungen = {
 					helfer.auswahl(edit);
 				});
 				if (typ === "alias") {
-					dialog.text(`Das Alias <i>${wert}</i> wurde schon vergeben.`);
+					dialog.text(`Das Alias\n<p class="bedeutungen-dialog">${wert}</p>\nwurde schon vergeben.`);
+				} else if (typ === "alias_identisch") {
+					dialog.text(`Das Alias\n<p class="bedeutungen-dialog">${wert}</p>\nwäre identisch mit seiner Bedeutung.`);
 				} else {
-					dialog.text(`Das Alias <i>${wert}</i> ist identisch mit einer Bedeutung.`);
+					dialog.text(`Das Alias\n<p class="bedeutungen-dialog">${wert}</p>\nwäre identisch mit einer Bedeutung.`);
 				}
 			}
 		});
+	},
+	// Testet, ob die eingegebene Bedeutung akzeptiert werden kann
+	//   wert = String
+	//     (die Bedeutung; kann HTML-Tags enthalten)
+	//   idx = Number
+	//     (die Position der Bedeutung im Gerüst)
+	//   ebene = Number || undefined
+	//     (die Ebene, in der getestet werden soll
+	editBdTest ({wert, idx, ebene}) {
+		const wertTest = helfer.textTrim(wert.replace(/<.+?>/g, ""), true);
+		if (!ebene) {
+			ebene = bedeutungen.akt.bd[idx].bd.length;
+		}
+		// Bedeutung eingegeben?
+		if (!wertTest) {
+			return "Sie haben keine Bedeutung eingegeben.";
+		}
+		// Bedeutung identisch mit einem Alias?
+		for (let bd of bedeutungen.akt.bd) {
+			if (bd.al === wertTest) {
+				return `Die Bedeutung\n<p class="bedeutungen-dialog">${wert}</p>\nwäre identisch mit einem Alias.`;
+			}
+		}
+		// Bedeutung identische mit einer Bedeutung auf derselben Ebene desselben Bedeutungszweigs?
+		let start = idx;
+		if (ebene === 1) {
+			start = 0;
+		} else if (idx > 0) {
+			let pos = idx - 1;
+			while (bedeutungen.akt.bd[pos].bd.length >= ebene) {
+				start = pos;
+				pos--;
+			}
+			start = pos + 1;
+		}
+		for (let i = start, len = bedeutungen.akt.bd.length; i < len; i++) {
+			let ebeneTmp = bedeutungen.akt.bd[i].bd.length;
+			if (i === idx || ebeneTmp > ebene) { // die Bedeutung, die geändert wird, und Unterbedeutungen nicht überprüfen
+				continue;
+			}
+			if (ebeneTmp < ebene) { // hier beginnt ein neuer Zweig
+				break;
+			}
+			if (bedeutungen.akt.bd[i].bd[ebene - 1] === wertTest) {
+				return `Die Bedeutung\n<p class="bedeutungen-dialog">${wert}</p>\nexistiert bereits auf Bedeutungsebene ${ebene}${ebene > 1 ? " des aktuellen Bedeutungszweigs" : ""}.`;
+			}
+		}
+		// keine Fehler gefunden
+		return "";
 	},
 	// altes Eingabefeld ggf. entfernen
 	editFeldWeg () {
@@ -1470,6 +1552,15 @@ let bedeutungen = {
 			tr.classList.remove("bedeutungen-edit");
 		}
 	},
+	// korrigiert den Inhalt eines Edit-Feldes formal
+	//   cont = String
+	//     (der Text des Edit-Feldes; kann HTML-Tags enthalten)
+	editFormat (cont) {
+		cont = cont.replace(/&nbsp;/g, " ");
+		cont = cont.replace(/<br>/g, "");
+		cont = helfer.textTrim(cont, true);
+		return cont;
+	},
 	// überprüfen, ob der Inhalt des Feldes geändert wurde
 	//   ele = Element
 	//     (das Edit-Feld, auf dessen Veränderungen geachtet werden soll)
@@ -1516,21 +1607,17 @@ let bedeutungen = {
 			// Bedeutung hinzufügen
 			evt.preventDefault();
 			let feld = this;
-			const bd = helfer.textTrim(this.innerHTML, true);
-			// keine Bedeutung eingegeben
-			if (!bd) {
+			const bd = bedeutungen.editFormat(this.innerHTML);
+			// Ist es erlaubt diese Bedeutung so hinzuzufügen?
+			const bdFehler = bedeutungen.editBdTest({
+					wert: bd,
+					idx: 0,
+				});
+			if (bdFehler) {
 				dialog.oeffnen("alert", function() {
 					helfer.auswahl(feld);
 				});
-				dialog.text("Sie haben keine Bedeutung eingegeben.");
-				return;
-			}
-			// Bedeutung schon vorhanden
-			if (bedeutungen.bedeutungVorhanden(bd)) {
-				dialog.oeffnen("alert", function() {
-					helfer.auswahl(feld);
-				});
-				dialog.text(`Die Bedeutung\n<p class="bedeutungen-dialog">${bd}</p>\nist schon vorhanden.`);
+				dialog.text(bdFehler);
 				return;
 			}
 			// Bedeutung ergänzen, Gerüst neu aufbauen, Bedeutung aktivieren

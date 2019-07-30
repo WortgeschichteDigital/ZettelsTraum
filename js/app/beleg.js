@@ -255,7 +255,13 @@ let beleg = {
 			}
 			if (this.type === "checkbox") {
 				beleg.data[feld] = this.checked;
-			} else if (feld !== "bd") { // Daten des Bedeutungsfelds werden erst beim Speichern aufgefrischt; vgl. beleg.aktionSpeichern()
+			} else if (feld === "bd") {
+				// Daten des Bedeutungsfelds werden erst beim Speichern aufgefrischt;
+				// vgl. beleg.aktionSpeichern().
+				// Wurden die Daten hier geändert, darf das Gerüst aber erst
+				// nach dem Speichern gewechselt werden, sonst gehen die Änderungen verloren.
+				beleg.geaendertBd = true;
+			} else {
 				beleg.data[feld] = helfer.textTrim(this.value, true);
 			}
 			beleg.belegGeaendert(true);
@@ -1138,6 +1144,8 @@ let beleg = {
 	},
 	// Beleg wurde geändert und noch nicht gespeichert
 	geaendert: false,
+	// Bedeutung wurde geändert und nocht nicht gespeichert
+	geaendertBd: false,
 	// Anzeigen, dass der Beleg geändert wurde
 	//   geaendert = Boolean
 	belegGeaendert (geaendert) {
@@ -1147,6 +1155,7 @@ let beleg = {
 		if (geaendert) {
 			asterisk.classList.remove("aus");
 		} else {
+			beleg.geaendertBd = false;
 			asterisk.classList.add("aus");
 		}
 	},
