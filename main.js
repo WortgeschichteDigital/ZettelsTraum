@@ -240,17 +240,6 @@ let layoutMenu = [
 				click: () => appMenu.aktion("dialog-anzeigen", "Sorry!\nDiese Funktion ist noch nicht programmiert."), // TODO
 				accelerator: "CommandOrControl+H",
 			},
-			{ type: "separator" },
-			{
-				label: "Kopieren",
-				icon: path.join(__dirname, "img", "menu", "belege-kopieren.png"),
-				click: () => appMenu.aktion("belege-kopieren"),
-			},
-			{
-				label: "Einfügen",
-				icon: path.join(__dirname, "img", "menu", "belege-einfuegen.png"),
-				click: () => appMenu.aktion("belege-einfuegen"),
-			},
 		],
 	},
 	{
@@ -940,19 +929,7 @@ ipcMain.on("kartei-laden", function(evt, kartei) {
 });
 
 // registriert im Fenster-Objekt, welche Kartei geöffnet wurde
-ipcMain.on("kartei-geoeffnet", (evt, id, kartei) => {
-	if (!win[id]) {
-		// im Developer-Modus kann man den WebContent eines Fensters neu laden =>
-		// das Fenster wird aus win{} gelöscht und muss jetzt erst wieder angelegt werden,
-		// sonst produziert das einen Fehler und der Main-Prozess macht auch
-		// andere Dinge nicht mehr korrekt
-		win[id] = {
-			typ: "index",
-			kartei: "",
-		};
-	}
-	win[id].kartei = kartei;
-});
+ipcMain.on("kartei-geoeffnet", (evt, id, kartei) => win[id].kartei = kartei);
 
 // deregistriert im Fenster-Objekt die Kartei, die geöffnet war
 ipcMain.on("kartei-geschlossen", (evt, id) => win[id].kartei = "");
@@ -995,82 +972,6 @@ ipcMain.on("fenster-dereferenzieren", function(evt, id) {
 	if (!hauptfensterOffen) {
 		appMenu.aktion("programm-beenden");
 	}
-});
-
-
-/* KOPIEREN *************************************/
-
-// Basisdaten zu den möglichten Belegquellen ermitteln und an das anfragende Fenster schicken
-let kopierenBasisdaten = {},
-	kopierenBasisdatenTimeout = null;
-
-ipcMain.on("kopieren-basisdaten", function(evt, winId) {
-	// Daten zurücksetzen
-	kopierenBasisdaten = {
-		win: winId,
-		daten: {},
-	};
-	// Daten aus den Fenstern holen
-	for (let id in win) {
-		if (!win.hasOwnProperty(id)) {
-			continue;
-		}
-		const idInt = parseInt(id, 10);
-		if (idInt === winId) {
-			continue;
-		}
-		let w = BrowserWindow.fromId(idInt);
-		w.webContents.send("kopieren-basisdaten");
-	}
-	// Daten an das anfragende Fenster schicken
-	// (auch hier, damit es selbst dann eine Antwort bekommt,
-	// wenn keine weiteren Fenster offen sind)
-	kopierenBasisdatenTimeout = setTimeout(function() {
-		let w = BrowserWindow.fromId(kopierenBasisdaten.win);
-		w.webContents.send("kopieren-basisdaten-empfangen", kopierenBasisdaten.daten);
-	}, 25);
-});
-
-// angefragte Basisdaten registrieren und an das anfragende Fenster schicken
-ipcMain.on("kopieren-basisdaten-lieferung", function(evt, daten) {
-	// keine Daten
-	if (!daten.belege) {
-		return;
-	}
-	// Daten registrieren
-	kopierenBasisdaten.daten[daten.id] = {};
-	kopierenBasisdaten.daten[daten.id].belege = daten.belege;
-	kopierenBasisdaten.daten[daten.id].gerueste = [...daten.gerueste];
-	kopierenBasisdaten.daten[daten.id].wort = daten.wort;
-	// Daten an das anfragende Fenster schicken
-	// (damit nicht mehrere Meldungen gesendet werden => Timeout)
-	clearTimeout(kopierenBasisdatenTimeout);
-	kopierenBasisdatenTimeout = setTimeout(function() {
-		let w = BrowserWindow.fromId(kopierenBasisdaten.win);
-		w.webContents.send("kopieren-basisdaten-empfangen", kopierenBasisdaten.daten);
-	}, 25);
-});
-
-// Daten der gewünschten Belegquelle anfragen
-let kopierenWinIdAnfrage = -1;
-
-ipcMain.on("kopieren-daten", function(evt, winIdQuelle, winIdAnfrage) {
-	// Existiert das Fenster, aus dem die Daten kommen sollen, noch?
-	if (!win[winIdQuelle]) {
-		let w = BrowserWindow.fromId(winIdAnfrage);
-		w.webContents.send("dialog-anzeigen", "Beim Kopieren der Belege ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\nDas Fenster, das die Belege liefern sollte, existiert nicht mehr.");
-		return;
-	}
-	// Fenster existiert => Daten anfragen
-	kopierenWinIdAnfrage = winIdAnfrage;
-	let w = BrowserWindow.fromId(winIdQuelle);
-	w.webContents.send("kopieren-daten");
-});
-
-// angefragte Daten der gewünschten Belegquelle an das anfragende Fenster schicken
-ipcMain.on("kopieren-daten-lieferung", function(evt, daten) {
-	let w = BrowserWindow.fromId(kopierenWinIdAnfrage);
-	w.webContents.send("kopieren-daten-empfangen", daten);
 });
 
 
@@ -1128,6 +1029,6 @@ process.on("uncaughtException", function(err) {
 	});
 	// auf der Konsole auswerfen, wenn nicht gepackt
 	if (devtools) {
-		console.log(`\x1b[47m\x1b[31m${err.stack}\x1b[0m`);
+		console.log(`\x1b[47m\x1b[31m${err.stack}\x1b[0m\n`);
 	}
 });

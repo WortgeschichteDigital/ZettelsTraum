@@ -396,9 +396,6 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);
 				
 				<!-- WGD-DATEIFORMAT -->
 				<section id="sektion-wgd" class="suche">
-					<!-- WGD-Format -->
-					<h2 id="wgd-wgd"><abbr title="Wortgeschichte digital">WGD</abbr>-Format</h2>
-					
 					<p>Der Inhalt der <abbr title="Wortgeschichte digital">WGD</abbr>-Dateien ist im <abbr title="JavaScript Object Notation">JSON</abbr>-Format.</p>
 					
 					<p>Nach dem Laden einer <abbr title="Wortgeschichte digital">WGD</abbr>-Datei in <i class="app-name"></i> befinden sich die Daten im globalen Objekt <code class="quelltext">data</code>. Ihre Werte lassen sich dann in allen Funktionen des Hauptfensters durch einfache Statements wie <code class="quelltext">data.dc</code> lesen oder schreiben.</p>
@@ -765,80 +762,6 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);
 							<td class="datentyp">String</td>
 							<td> </td>
 							<td>Wort, zu dem die Kartei erstellt wurde</td>
-						</tr>
-					</table>
-					
-					<!-- BWGD-Format -->
-					<h2 id="wgd-bwgd"><abbr title="Belege Wortgeschichte digital">BWGD</abbr>-Format</h2>
-					
-					<p>Für die Kopierfunktionen (<i>Belege &gt; Kopieren</i> und <i>Belege &gt; Einfügen</i>) gibt es für den Import <abbr title="beziehungsweise">bzw.</abbr> Export von Beleglisten ein eigenes Austauschformat. Der Inhalt dieser <abbr title="Belege Wortgeschichte digital">BWGD</abbr>-Dateien ist ebenfalls im <abbr title="JavaScript Object Notation">JSON</abbr>-Format. Ihr Aufbau (<span class="obacht">Datenformat Version 1</span>):</p>
-					
-					<table>
-						<tr>
-							<th>Schlüssel</th>
-							<th>Datentyp</th>
-							<th>Format</th>
-							<th>Funktion</th>
-						</tr>
-						<tr>
-							<td><p><code class="quelltext">bl</code></p></td>
-							<td class="datentyp">Array</td>
-							<td> </td>
-							<td>Belegliste</td>
-						</tr>
-						<tr class="wgd-ebene1">
-							<td colspan="4"><p>In jedem Slot steht ein <span class="datentyp">Object</span>, das fast völlig identisch mit dem einer Karteikarte in <code class="quelltext">data.ka</code> ist, wie man es in gewöhnlichen <abbr title="Wortgeschichte digital">WGD</abbr>-Dateien findet. Dies sind die <strong>Differenzen:</strong></p></td>
-						</tr>
-						<tr class="wgd-ebene1">
-							<td><p><code class="quelltext">bd</code></p></td>
-							<td class="datentyp">Array</td>
-							<td>eindimensional,<br>mit <span class="datentyp">Objects</span> gefüllt</td>
-							<td>Bedeutungen</td>
-						</tr>
-						<tr class="wgd-ebene2">
-							<td colspan="4"><p>Die <span class="datentyp">Objects</span> in den Slots haben die folgenden Schlüssel und Werte:</p></td>
-						</tr>
-						<tr class="wgd-ebene2">
-							<td><p><code class="quelltext">bd</code></p></td>
-							<td class="datentyp">String</td>
-							<td><code class="quelltext">\n</code> möglich</td>
-							<td>Bedeutung; mehrere Bedeutungen durch <code class="quelltext">\n</code> voneinander getrennt; neue Hierarchie beginnt mit <code class="quelltext">": "</code>;<br><span class="obacht">der String enthält keine <abbr title="Hyptertext Markup Language" lang="en">HTML</abbr>-Tags</span></td>
-						</tr>
-						<tr class="wgd-ebene2">
-							<td><p><code class="quelltext">gr</code></p></td>
-							<td class="datentyp">String</td>
-							<td><code class="quelltext">/[0-9]+/</code>,<br>Start mit <code class="quelltext">1</code></td>
-							<td>ID des Bedeutungsgerüsts;<br><span class="obacht">identisch mit dem Wert der Originaldatei</span></td>
-						</tr>
-						<tr class="wgd-ebene2 wgd-alt">
-							<td><p><code class="quelltext">id</code></p></td>
-							<td class="datentyp">Number</td>
-							<td><code class="quelltext">1 – ∞</code></td>
-							<td>ID der Bedeutung;<br><span class="obacht">fehlt</span></td>
-						</tr>
-						<tr class="wgd-ebene1 wgd-alt">
-							<td><p><code class="quelltext">dc</code></p></td>
-							<td class="datentyp">String</td>
-							<td>ISO 8601-Datum:<br><code class="quelltext">"2001-11-01<br>T11:22:33.444Z"</code></td>
-							<td>Zeitpunkt, zu dem die Karteikarte erstellt wurde;<br><span class="obacht">fehlt</span></td>
-						</tr>
-						<tr class="wgd-ebene1 wgd-alt">
-							<td><p><code class="quelltext">dm</code></p></td>
-							<td class="datentyp">String</td>
-							<td>ISO 8601-Datum:<br><code class="quelltext">"2001-11-01<br>T11:22:33.444Z"</code></td>
-							<td>Zeitpunkt, zu dem die Karteikarte zuletzt gespeichert wurde;<br><span class="obacht">fehlt</span></td>
-						</tr>
-						<tr>
-							<td><p><code class="quelltext">ty</code></p></td>
-							<td class="datentyp">String</td>
-							<td>immer <code class="quelltext">"bwgd"</code></td>
-							<td>Dateityp; für Tests beim Importieren der Datei, damit nicht beliebige <abbr title="JavaScript Object Notation">JSON</abbr>-Daten in einem anderen Dateiformat geladen werden</td>
-						</tr>
-						<tr>
-							<td><p><code class="quelltext">ve</code></p></td>
-							<td class="datentyp">Number</td>
-							<td><code class="quelltext">/[0-9]+/</code></td>
-							<td>Versionsnummer des <abbr title="Belege Wortgeschichte digital">BWGD</abbr>-Dateiformats</td>
 						</tr>
 					</table>
 				</section>

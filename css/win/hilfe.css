@@ -287,10 +287,6 @@ td[colspan] {
 	font-style: italic;
 }
 
-td[colspan] code {
-	font-style: normal;
-}
-
 tr.wgd-ebene1 td[colspan] p,
 tr.wgd-ebene1 p,
 tr.wgd-ebene2 td[colspan] p,

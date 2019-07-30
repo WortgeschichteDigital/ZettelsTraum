@@ -1352,7 +1352,18 @@ let bedeutungen = {
 			// Wert übernehmen
 			let z = bedeutungen.akt.bd[idx];
 			if (feld === "bd") {
-				z[feld][z[feld].length - 1] = wert;
+				const ebene = z.bd.length,
+					idxChanged = ebene - 1;
+				z.bd[idxChanged] = wert;
+				// alle untergeordneten Bedeutungen müssen ebenfalls in diesem Index geändert werden
+				for (let i = idx + 1, len = bedeutungen.akt.bd.length; i < len; i++) {
+					// Das war's! Alle Unterbedeutungen wurden geändert
+					if (bedeutungen.akt.bd[i].bd.length <= ebene) {
+						break;
+					}
+					// String im Slot anpassen
+					bedeutungen.akt.bd[i].bd[idxChanged] = wert;
+				}
 			} else {
 				z[feld] = wert;
 			}
@@ -1635,15 +1646,8 @@ let bedeutungen = {
 		bedeutungen.aendern = [];
 	},
 	// ist die Bedeutung, mit der verschmolzen wird, in einer Karte schon vorhanden?
-	// (wird auch in filter.js und kopieren.js benutzt, um zu gucken,
-	// ob eine Karte eine Bedeutung bereits enthält)
-	//   bd = Array
-	//     (in den Slots Objects mit den Bedeutungen [{}.id und {}.gr])
-	//   id = String
-	//     (die ID der Bedeutung)
-	//   gr = String
-	//     (die ID des Bedeutungsgerüsts)
-	schonVorhanden ({bd, gr, id}) {
+	// (wird auch in filter.js benutzt, um zu gucken, ob eine Karte eine Bedeutung enthält)
+	schonVorhanden ({bd, id, gr}) {
 		for (let i = 0, len = bd.length; i < len; i++) {
 			if (bd[i].gr === gr && bd[i].id === id) {
 				return [true, i];
@@ -1688,5 +1692,74 @@ let bedeutungen = {
 		} else {
 			asterisk.classList.add("aus");
 		}
+	},
+	// überprüft, ob das Bedeutungsgerüst beim Umbenennen einer Bedeutung korrumpiert wurde
+	// (der Fehler war von 0.10.0 [2019-07-02] an da und wurde mit 0.13.2 [2019-07-30] behoben)
+	korruptionCheck () {
+		let korrupt = false;
+		forX: for (let id in data.bd.gr) {
+			if (!data.bd.gr.hasOwnProperty(id)) {
+				continue;
+			}
+			let bd = data.bd.gr[id].bd;
+			for (let i = 1, len = bd.length; i < len; i++) {
+				if (bd[i].bd.length === 1) { // die oberste Ebene *darf* nicht überprüft werden
+					continue;
+				}
+				let bdVor = bd[i - 1].bd;
+				for (let j = 0, len = bd[i].bd.length; j < len - 1; j++) { // der letzte Slot *darf* nicht überprüft werden
+					if (bd[i].bd[j] !== bdVor[j]) {
+						korrupt = true;
+						break forX;
+					}
+				}
+			}
+		}
+		// Bedeutungsgerüst ist nicht korrupt
+		if (!korrupt) {
+			return;
+		}
+		// Bedeutungsgüerst ist korrupt
+		dialog.oeffnen("confirm", function() {
+			if (dialog.antwort) {
+				bedeutungen.korruptionRepair();
+			}
+		});
+		let num = "Das Bedeutungsgerüst";
+		if (Object.keys(data.bd.gr).length > 1) {
+			num = "Mindestens eines der Bedeutungsgerüste";
+		}
+		dialog.text(`${num} dieser Kartei ist korrupt.\nSoll es automatisch repariert werden?`);
+	},
+	// repariert ein korruptes Bedeutungsgerüst
+	korruptionRepair () {
+		for (let id in data.bd.gr) {
+			if (!data.bd.gr.hasOwnProperty(id)) {
+				continue;
+			}
+			let bd = data.bd.gr[id].bd;
+			for (let i = 1, len = bd.length; i < len; i++) {
+				if (bd[i].bd.length === 1) { // die oberste Ebene *darf* nicht geändert werden
+					continue;
+				}
+				let bdVor = bd[i - 1].bd;
+				for (let j = 0, len = bd[i].bd.length; j < len - 1; j++) { // der letzte Slot *darf* nicht geändert werden
+					if (bd[i].bd[j] !== bdVor[j]) {
+						bd[i].bd[j] = bdVor[j];
+					}
+				}
+			}
+		}
+		// Änderungsmarkierung setzen
+		kartei.karteiGeaendert(true);
+		// Liste + Filter neu aufbauen
+		liste.aufbauen(true);
+		// Rückmeldung geben
+		dialog.oeffnen("alert");
+		let num = "Das Bedeutungsgerüst wurde";
+		if (Object.keys(data.bd.gr).length > 1) {
+			num = "Die Bedeutungsgerüste wurden";
+		}
+		dialog.text(`${num} repariert.\nBitte überprüfen Sie vor dem Speichern der Kartei das Ergebnis.`);
 	},
 };
