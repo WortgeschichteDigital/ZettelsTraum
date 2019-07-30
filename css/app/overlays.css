@@ -10,6 +10,8 @@
 #einstellungen,
 #gerueste,
 #geruestwechseln,
+#kopieren-einfuegen,
+#kopieren-liste,
 #lexika,
 #meta,
 #notizen,
@@ -34,6 +36,8 @@
 #einstellungen > div,
 #gerueste > div,
 #geruestwechseln > div,
+#kopieren-einfuegen > div,
+#kopieren-liste > div,
 #lexika > div,
 #meta > div,
 #notizen > div,
@@ -55,6 +59,8 @@
 #einstellungen h2,
 #gerueste h2,
 #geruestwechseln h2,
+#kopieren-einfuegen h2,
+#kopieren-liste h2,
 #lexika h2,
 #meta h2,
 #notizen h2,
@@ -72,6 +78,8 @@
 #einstellungen h2 a,
 #gerueste h2 a,
 #geruestwechseln h2 a,
+#kopieren-einfuegen h2 a,
+#kopieren-liste h2 a,
 #lexika h2 a,
 #meta h2 a,
 #notizen h2 a,
@@ -424,7 +432,8 @@
 }
 
 #stamm-liste .icon-link,
-#meta-be-liste .icon-link {
+#meta-be-liste .icon-link,
+#kopieren-liste-cont .icon-link {
 	position: relative;
 	top: -1px;
 	margin-right: 10px;
@@ -432,13 +441,19 @@
 	background-color: var(--textExtremHell);
 }
 
+#kopieren-liste-cont .icon-link {
+	position: static;
+}
+
 #stamm-liste .icon-link:focus,
-#meta-be-liste .icon-link:focus {
+#meta-be-liste .icon-link:focus,
+#kopieren-liste-cont .icon-link:focus {
 	background-color: var(--farbe);
 }
 
 #stamm-liste .icon-link:hover,
-#meta-be-liste .icon-link:hover {
+#meta-be-liste .icon-link:hover,
+#kopieren-liste-cont .icon-link:hover {
 	background-color: var(--text);
 }
 
@@ -1112,7 +1127,7 @@ input[id^="redaktion-person"] {
 }
 
 #drucken-head span:first-child {
-	margin-right: 40px;
+	margin-right: 25px;
 }
 
 #drucken-head span:hover {
@@ -1189,4 +1204,203 @@ input[id^="redaktion-person"] {
 
 #drucken-cont .bd-win-baum {
 	border-color: transparent;
+}
+
+/* Kopierfunktion ------------------------------- */
+#kopieren-liste > div,
+#kopieren-einfuegen > div {
+	margin-top: 40px;
+	max-width: 503px;
+}
+
+.icon-h-kopieren {
+	-webkit-mask-image: url(../../img/heading-kopieren.svg);
+	mask-image: url(../../img/heading-kopieren.svg);
+}
+
+.icon-h-einfuegen {
+	-webkit-mask-image: url(../../img/heading-einfuegen.svg);
+	mask-image: url(../../img/heading-einfuegen.svg);
+}
+
+#kopieren-einfuegen h3 {
+	margin: 20px 0 0 0;
+	padding-left: 10px;
+}
+
+#kopieren-liste-head,
+#kopieren-einfuegen-head {
+	position: relative;
+	margin: 10px 0;
+	text-align: center;
+}
+
+#kopieren-liste-head span,
+#kopieren-einfuegen-head span {
+	display: inline-block;
+	margin-right: 25px;
+	border: 1px solid var(--linie);
+	border-radius: 10px;
+	padding: 5px;
+	width: 78px;
+}
+
+#kopieren-liste-head span:last-child,
+#kopieren-einfuegen-head span:last-child {
+	margin-right: 0;
+}
+
+#kopieren-liste-head span:hover,
+#kopieren-einfuegen-head span:hover {
+	background-color: var(--hover);
+}
+
+#kopieren-liste-cont-rahmen {
+	padding: 10px;
+}
+
+#kopieren-liste-cont {
+	max-height: 290px;
+	overflow-y: auto;
+}
+
+#kopieren-liste-cont p {
+	margin-bottom: 5px;
+}
+
+#kopieren-liste-cont p.keine,
+#kopieren-einfuegen-daten p.keine,
+#kopieren-einfuegen-bedeutungen p {
+	color: var(--textSehrHell);
+	font-style: italic;
+	text-align: center;
+}
+
+#kopieren-einfuegen-daten,
+#kopieren-einfuegen-bedeutungen,
+#kopieren-einfuegen-formular {
+	padding: 10px 10px 0 10px;
+}
+
+#kopieren-einfuegen-daten p,
+#kopieren-einfuegen-bedeutungen p {
+	margin: 0;
+	padding: 5px 10px;
+	border-bottom: 1px solid var(--linie);
+}
+
+#kopieren-einfuegen-daten p:first-child {
+	border-top: 1px solid var(--linie);
+}
+
+#kopieren-einfuegen-daten p.keine,
+#kopieren-einfuegen-bedeutungen p {
+	border-color: transparent;
+}
+
+#kopieren-einfuegen-daten p:not(.keine):hover {
+	background-color: var(--hintergrund);
+}
+
+#kopieren-einfuegen-bedeutungen table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+#kopieren-einfuegen-bedeutungen td {
+	padding: 0 10px 5px 0;
+	line-height: 30px;
+}
+
+#kopieren-einfuegen-bedeutungen tr:last-child td {
+	padding-bottom: 0;
+}
+
+#kopieren-einfuegen-bedeutungen img {
+	vertical-align: text-bottom;
+}
+
+#kopieren-einfuegen-bedeutungen input {
+	outline: none;
+	width: 95px;
+	cursor: default;
+}
+
+#kopieren-einfuegen-bedeutungen a {
+	top: 3px;
+	right: 11px;
+}
+
+#kopieren-einfuegen-formular div {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	margin-bottom: 10px;
+	padding-bottom: 5px;
+	border-bottom: 1px solid var(--linie);
+}
+
+#kopieren-einfuegen-formular div:last-child {
+	margin-bottom: 0;
+	border-bottom: none;
+}
+
+#kopieren-einfuegen-formular p {
+	margin-bottom: 5px;
+	padding: 0 10px 0 1px; /* 1px links, damit die linke Grenze des Outline onfocus angezeigt wird */
+	width: 150px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+#kopieren-einfuegen-formular input + label {
+	color: var(--textSehrHell);
+}
+
+#kopieren-einfuegen-formular input:checked + label {
+	color: var(--textFarbe);
+}
+
+#kopieren-einfuegen-reload {
+	transition: color .5s ease;
+}
+
+#kopieren-einfuegen-reload.animation {
+	color: var(--farbe);
+}
+
+#kopieren-einfuegen-reload svg path {
+	fill: currentcolor;
+}
+
+#kopieren-animation {
+	position: fixed;
+	top: calc(100vh / 2 - 50px);
+	left: calc(100vw / 2 - 50px);
+	opacity: 0;
+	border-radius: 20px;
+	width: 100px;
+	height: 100px;
+	background-color: rgba(255, 255, 255, .9);
+	text-align: center;
+	transition: opacity .5s ease;
+}
+
+#kopieren-animation.an {
+	opacity: 1;
+}
+
+#kopieren-animation img {
+	padding-top: 2px;
+}
+
+#kopieren-animation span {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100px;
+	font-size: 36px;
+	line-height: 100px;
+	text-shadow: -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff, 1px 1px 0 #fff;
 }

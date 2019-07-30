@@ -38,6 +38,9 @@ let popup = {
 		} else if (target === "wort") {
 			popup.menuWort(menu);
 			popup.menuBelege(menu, true);
+		} else if (target === "kopierfunktion") {
+			popup.menuKopierfunktion(menu);
+			popup.menuBelege(menu, true);
 		} else if (target === "notizen") {
 			popup.menuNotizen(menu);
 			popup.menuBelege(menu, true);
@@ -61,6 +64,7 @@ let popup = {
 		} else if (target === "beleg-moddel") {
 			popup.menuBeleg(menu);
 			popup.menuBelegDel(menu);
+			popup.menuBelegCp(menu);
 			popup.menuBeleglisteConf(menu);
 			popup.menuBelege(menu, true);
 		} else if (target === "anhang") {
@@ -122,6 +126,8 @@ let popup = {
 				return "quick";
 			} else if (id === "wort" && kartei.wort) {
 				return "wort";
+			} else if (id === "kopieren") {
+				return "kopierfunktion";
 			} else if (id === "notizen-icon") {
 				return "notizen";
 			} else if (id === "kartei-anhaenge") {
@@ -343,6 +349,18 @@ let popup = {
 			click: () => kartei.wortAendern(),
 		}));
 	},
+	// Kopieren-Menü füllen
+	//   menu = Object
+	//     (Menü-Objekt, an das die Menü-Items gehängt werden müssen)
+	menuKopierfunktion (menu) {
+		const {MenuItem} = require("electron").remote,
+			path = require("path");
+		menu.append(new MenuItem({
+			label: "Kopierfunktion beenden",
+			icon: path.join(__dirname, "img", "menu", "popup-beenden.png"),
+			click: () => kopieren.uiOff(),
+		}));
+	},
 	// Notizen-Menü füllen
 	//   menu = Object
 	//     (Menü-Objekt, an das die Menü-Items gehängt werden müssen)
@@ -446,6 +464,18 @@ let popup = {
 			label: "Beleg löschen",
 			icon: path.join(__dirname, "img", "menu", "popup-loeschen.png"),
 			click: () => beleg.aktionLoeschenFrage(popup.belegID),
+		}));
+	},
+	// BelegCp-Menü füllen
+	//   menu = Object
+	//     (Menü-Objekt, an das die Menü-Items gehängt werden müssen)
+	menuBelegCp (menu) {
+		const {MenuItem} = require("electron").remote,
+			path = require("path");
+		menu.append(new MenuItem({
+			label: "Beleg in Zwischenablage kopieren",
+			icon: path.join(__dirname, "img", "menu", "popup-zwischenablage.png"),
+			click: () => beleg.ctrlZwischenablage(data.ka[popup.belegID]),
 		}));
 	},
 	// Belegliste-Conf-Menü füllen

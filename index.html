@@ -30,6 +30,7 @@
 		<script src="js/app/helfer.js"></script>
 		<script src="js/app/kartei.js"></script>
 		<script src="js/app/konversion.js"></script>
+		<script src="js/app/kopieren.js"></script>
 		<script src="js/app/lexika.js"></script>
 		<script src="js/app/liste.js"></script>
 		<script src="js/app/meta.js"></script>
@@ -47,7 +48,8 @@
 	</head>
 	<body>
 		<!-- QUICK ACCESS -->
-		<div id="quick"><a href="#" id="quick-programm-einstellungen" class="icon-link" title="Programm: Einstellungen"> </a
+		<div id="quick"
+			><a href="#" id="quick-programm-einstellungen" class="icon-link" title="Programm: Einstellungen"> </a
 			><a href="#" id="quick-programm-neues-fenster" class="icon-link" title="Programm: Neues Fenster"> </a
 			><a href="#" id="quick-programm-beenden" class="icon-link" title="Programm: Beenden (Strg + Q)"> </a
 			><span class="quick-spacer"> </span
@@ -71,7 +73,11 @@
 			><span class="quick-spacer"> </span
 			><a href="#" id="quick-belege-hinzufuegen" class="icon-link" title="Belege: Hinzufügen (Strg + N)"> </a
 			><a href="#" id="quick-belege-auflisten" class="icon-link" title="Belege: Auflisten (Strg + L)"> </a
-			><a href="#" id="quick-belege-sortieren" class="icon-link" title="Belege: Sortieren (Strg + H)"> </a></div>
+			><a href="#" id="quick-belege-sortieren" class="icon-link" title="Belege: Sortieren (Strg + H)"> </a
+			><span class="quick-spacer"> </span
+			><a href="#" id="quick-belege-kopieren" class="icon-link" title="Belege: Kopieren"> </a
+			><a href="#" id="quick-belege-einfuegen" class="icon-link" title="Belege: Einfügen"> </a
+		></div>
 	
 		<!-- KOPF -->
 		<header>
@@ -81,6 +87,7 @@
 				><span class="kopf-icon aus" id="notizen-icon"><img src="img/kopf-notizen.svg" width="24" height="24" alt="" title="Notizen anzeigen"></span
 				><span class="kopf-icon aus" id="lexika-icon"><img src="img/kopf-lexika.svg" width="24" height="24" alt="" title="überprüfte Lexika anzeigen"></span
 				><span id="kartei-anhaenge"></span
+				><span id="kopieren-aussen" class="aus"><span id="kopieren"></span></span
 				><span id="icon"><img src="img/icon.svg" width="48" height="48" alt=""></span>
 		</header>
 		
@@ -149,6 +156,10 @@
 								><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g><path d="m4 4v16h6v-2h-4v-12h4v-2h-4z"/><path d="m20 4v16h-6v-2h4v-12h-4v-2h4z"/><path d="m8 10v2h6v2h2v-2-2h-8z"/></g></svg></a
 							><a href="#" id="beleg-link-springen" title="zum Wort im Belegtext springen (Strg + ↓)"
 								><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m7 1c-2.7527 0-5 2.2473-5 5v5h2v-5c0-1.6793 1.3207-3 3-3s3 1.3207 3 3v3h-2l3 5 3-5h-2v-3c0-2.7527-2.2473-5-5-5z"/></svg></a
+							><a href="#" class="aus" id="beleg-link-kopieren" title="Beleg kopieren (Strg + I)"
+								><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m3 1.0039s-1 0-1 1v9s0 1 1 1h1v-9h8v-1c0-1-1-1-1-1h-8zm3 3s-1 0-1 1v10c0 1 1 1 1 1h8s1-0.001006 1-1.0039v-9.9961c0-1-1-1-1-1h-8zm1 2h6v8h-6v-8z"/></svg></a
+							><a href="#" id="beleg-link-zwischenablage" title="Beleg in Zwischenablage kopieren (Strg + I)"
+								><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="m12 4.0039c-1.1046 0-2 0.89543-2 2h-3c-1 0-1 1-1 1v3.9961h2v-2.9961h1v1h1.9961l-1.3828 1.3828 1.6348 1.6348-7.4609-0.021484v2l7.4609 0.021484-1.6348 1.6328 1.3496 1.3496h-2.9629v-2.0039h-2v3.0039c0 1 1 1 1 1h10s1 0 1-1v-11c0-1-1-1-1-1h-3c0-0.13807-0.00505-0.27605-0.03125-0.40625-0.18649-0.91137-1.0022-1.5937-1.9688-1.5938zm0 1c0.41421 0 0.75444 0.26608 0.90625 0.625 0.0506 0.11964 0.09375 0.23693 0.09375 0.375 0 0.55228-0.44771 1-1 1-0.55229 0-1-0.44772-1-1s0.44771-1 1-1zm3 3h1v9h-4.9629l3.9629-4.0039-3.9961-3.9961h3.9961v-1z"/></svg></a
 							><a href="#" class="druck-icon" id="beleg-link-drucken" title="Karte drucken (Strg + P)"
 								><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m4 1v2h8v-2h-8zm-2 3c-0.5 0-1 0.5-1 1v4c0 0.5 0.5 1 1 1h1v-2h10v2h1c0.5 0 1-0.5 1-1v-4c0-0.5-0.5-1-1-1h-12zm2 5v5h8v-5h-8z"/></svg></a
 						></span
@@ -420,7 +431,9 @@
 						><a href="#" class="liste-link-zeitschnitte" id="liste-link-zeitschnitte-100" title="Zeitschnitte alle 100 Jahre">100</a
 						><a href="#" class="liste-strike liste-link-zeitschnitte" id="liste-link-zeitschnitte" title="keine Zeitschnitte">100</a
 					></span><span class="liste-opt-block"
-						><a href="#" class="druck-icon" id="liste-link-drucken" title="Belegliste drucken (Strg + P)"
+						><a href="#" class="aus" id="liste-link-kopieren" title="Belege kopieren"
+							><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m3 1.0039s-1 0-1 1v9s0 1 1 1h1v-9h8v-1c0-1-1-1-1-1h-8zm3 3s-1 0-1 1v10c0 1 1 1 1 1h8s1-0.001006 1-1.0039v-9.9961c0-1-1-1-1-1h-8zm1 2h6v8h-6v-8z"/></svg></a
+						><a href="#" class="druck-icon kopieren-aus" id="liste-link-drucken" title="Belegliste drucken (Strg + P)"
 							><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m4 1v2h8v-2h-8zm-2 3c-0.5 0-1 0.5-1 1v4c0 0.5 0.5 1 1 1h1v-2h10v2h1c0.5 0 1-0.5 1-1v-4c0-0.5-0.5-1-1-1h-12zm2 5v5h8v-5h-8z"/></svg></a
 					></span><span id="liste-belege-anzahl"></span></header>
 				<div id="liste-belege-cont"></div>
@@ -453,6 +466,8 @@
 							><label for="einstellung-timeout">Sekunden Timeout bei Anfragen an das <abbr title="Deutsche Textarchiv">DTA</abbr></label></p>
 						<p><input type="checkbox" id="einstellung-notizen-schliessen"
 							><label for="einstellung-notizen-schliessen">Notizen-Fenster nach dem Speichern schließen</label></p>
+						<p><input type="checkbox" id="einstellung-einfuegen-schliessen"
+							><label for="einstellung-einfuegen-schliessen">Einfügen-Fenster nach dem Einfügen schließen</label></p>
 						<p><input type="checkbox" id="einstellung-textkopie-wort"
 							><label for="einstellung-textkopie-wort">Hervorhebung des Kartei-Worts beim Kopieren von Text erhalten</label></p>
 						<p class="einzug"><input type="checkbox" id="einstellung-textkopie-wort-hinterlegt"
@@ -513,6 +528,11 @@
 								><label for="einstellung-quick-belege-auflisten">Auflisten</label></p>
 							<p><input type="checkbox" id="einstellung-quick-belege-sortieren"
 								><label for="einstellung-quick-belege-sortieren">Sortieren</label></p>
+							<p class="einstellungen-spacer"> </p>
+							<p><input type="checkbox" id="einstellung-quick-belege-kopieren"
+								><label for="einstellung-quick-belege-kopieren">Kopieren</label></p>
+							<p><input type="checkbox" id="einstellung-quick-belege-einfuegen"
+								><label for="einstellung-quick-belege-einfuegen">Einfügen</label></p>
 						</div>
 					</section>
 					
@@ -760,6 +780,81 @@
 			></div>
 			<div id="drucken-cont-rahmen">
 				<div id="drucken-cont"></div>
+			</div>
+		</div></div>
+		
+		<!-- OVERLAY: Kopierfunktion (Liste) -->
+		<div id="kopieren-liste" class="overlay aus"><div>
+			<h2><span class="icon-h icon-h-kopieren"> </span
+				>Belege kopieren<a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"
+				> </a></h2>
+			<div id="kopieren-liste-head"
+				><span id="kopieren-liste-leeren"><img src="img/leeren-gross.svg" width="48" height="48" alt=""><br>Leeren</span
+				><span id="kopieren-liste-beenden"><img src="img/beenden-gross.svg" width="48" height="48" alt=""><br>Beenden</span
+				><span id="kopieren-liste-export"><img src="img/export-gross.svg" width="48" height="48" alt=""><br>Export</span
+				><span id="kopieren-liste-schliessen"><img src="img/schliessen-gross.svg" width="48" height="48" alt=""><br>Schließen</span
+			></div>
+			<div id="kopieren-liste-cont-rahmen">
+				<div id="kopieren-liste-cont"></div>
+			</div>
+		</div></div>
+		
+		<!-- OVERLAY: Kopierfunktion (Einfügen) -->
+		<div id="kopieren-einfuegen" class="overlay aus"><div>
+			<h2><span class="icon-h icon-h-einfuegen"> </span
+				>Belege einfügen<a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"
+				> </a></h2>
+			<div id="kopieren-einfuegen-head"
+				><span id="kopieren-einfuegen-einfuegen"><img src="img/einfuegen-gross.svg" width="48" height="48" alt=""><br>Einfügen</span
+				><span id="kopieren-einfuegen-reload"
+					><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48"><path d="m23.994 10c-7.732 0-14 6.268-14 14s6.268 14 14 14c6.3496 0 11.723-4.2064 13.438-10h-4.3124c-1.5485 3.519-5.0336 6-9.125 6-5.5228 0-10-4.4772-10-10s4.4772-10 10-10c2.7632 0 5.231 1.15 7.0312 2.9688l-5.0196 5.0312h12v-12l-4.1054 4.1054c-2.54-2.53-6.0384-4.1054-9.8984-4.1054h-0.0078z"/></svg
+					><br>Reload</span
+				><span id="kopieren-einfuegen-import"><img src="img/import-gross.svg" width="48" height="48" alt=""><br>Import</span
+				><span id="kopieren-einfuegen-schliessen"><img src="img/schliessen-gross.svg" width="48" height="48" alt=""><br>Schließen</span
+			></div>
+			<h3>Belegquellen</h3>
+			<div id="kopieren-einfuegen-daten"></div>
+			<h3>Bedeutungen</h3>
+			<div id="kopieren-einfuegen-bedeutungen"></div>
+			<h3>Datenfelder</h3>
+			<div id="kopieren-einfuegen-formular">
+				<div>
+					<p><input type="checkbox" id="kopieren-feld-da"
+						><label for="kopieren-feld-da">Datum</label></p>
+					<p><input type="checkbox" id="kopieren-feld-au"
+						><label for="kopieren-feld-au">Autor</label></p>
+					<p><input type="checkbox" id="kopieren-feld-bs"
+						><label for="kopieren-feld-bs">Beleg</label></p>
+					<p><input type="checkbox" id="kopieren-feld-qu"
+						><label for="kopieren-feld-qu">Quelle</label></p>
+					<p><input type="checkbox" id="kopieren-feld-kr"
+						><label for="kopieren-feld-kr">Korpus</label></p>
+					<p><input type="checkbox" id="kopieren-feld-ts"
+						><label for="kopieren-feld-ts">Textsorte</label></p>
+				</div><div>
+					<p><input type="checkbox" id="kopieren-feld-bd"
+						><label for="kopieren-feld-bd">Bedeutung</label></p>
+					<p><input type="checkbox" id="kopieren-feld-bl"
+						><label for="kopieren-feld-bl">Wortbildung</label></p>
+					<p><input type="checkbox" id="kopieren-feld-sy"
+						><label for="kopieren-feld-sy">Synonym</label></p>
+				</div><div>
+					<p><input type="checkbox" id="kopieren-feld-no"
+						><label for="kopieren-feld-no">Notizen</label></p>
+					<p><input type="checkbox" id="kopieren-feld-an"
+						><label for="kopieren-feld-an">Anhänge</label></p>
+				</div><div>
+					<p><input type="checkbox" id="kopieren-feld-un"
+						><label for="kopieren-feld-un">unvollständig</label></p>
+					<p><input type="checkbox" id="kopieren-feld-ko"
+						><label for="kopieren-feld-ko">Kontext?</label></p>
+					<p><input type="checkbox" id="kopieren-feld-bu"
+						><label for="kopieren-feld-bu">Bücherdienst</label></p>
+					<p><input type="checkbox" id="kopieren-feld-bc"
+						><label for="kopieren-feld-bc">Buchung</label></p>
+					<p><input type="checkbox" id="kopieren-feld-be"
+						><label for="kopieren-feld-be">Markierung</label></p>
+				</div>
 			</div>
 		</div></div>
 		

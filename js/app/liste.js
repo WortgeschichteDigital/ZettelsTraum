@@ -89,7 +89,7 @@ let liste = {
 		}
 		// Scroll-Status wiederherstellen
 		liste.statusScrollReset();
-		// ggf. einen den neuen Beleg visuell hervorheben
+		// ggf. den neuen Beleg visuell hervorheben
 		if (liste.statusNeu) {
 			// neuen Beleg markieren
 			let beleg_unsichtbar = markBelegsuche(liste.statusNeu);
@@ -206,13 +206,26 @@ let liste = {
 					div.classList.add("schnitt-offen");
 				}
 				div.dataset.id = id;
-				// Beleg bearbeiten
-				let a = document.createElement("a");
-				a.href = "#";
-				a.classList.add("liste-bearbeiten", "icon-link", "icon-bearbeiten");
-				a.textContent = " ";
-				liste.formularOeffnen(a);
-				div.appendChild(a);
+				// Kopficons einfügen
+				for (let i = 0; i < 2; i++) {
+					let a = document.createElement("a");
+					div.appendChild(a);
+					a.href = "#";
+					a.classList.add("liste-kopficon", "icon-link");
+					a.textContent = " ";
+					if (i === 0) { // Beleg kopieren
+						a.classList.add("icon-kopieren");
+						if (!kopieren.an) {
+							a.classList.add("aus");
+						}
+						a.title = "Beleg kopieren";
+						kopieren.addListe(a);
+					} else { // Beleg bearbeiten
+						a.classList.add("icon-bearbeiten");
+						a.title = "Beleg bearbeiten";
+						liste.formularOeffnen(a);
+					}
+				}
 				// Jahr
 				let span = document.createElement("span");
 				span.classList.add("liste-jahr");

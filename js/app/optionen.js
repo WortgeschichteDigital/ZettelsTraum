@@ -90,6 +90,8 @@ let optionen = {
 			timeout: "10",
 			// Notizen-Fenster nach dem Speichern direkt schließen
 			"notizen-schliessen": true,
+			// Einfügen-Fenster (Kopierfunktion) nach dem Einfügen direkt schließen
+			"einfuegen-schliessen": true,
 			// Hervorhebung des Wort beim Kopieren von Text mitkopieren
 			"textkopie-wort": false,
 			// beim Kopieren ist das Wort grau hinterlegt
@@ -121,6 +123,8 @@ let optionen = {
 			"quick-belege-hinzufuegen": false,
 			"quick-belege-auflisten": false,
 			"quick-belege-sortieren": false,
+			"quick-belege-kopieren": false,
+			"quick-belege-einfuegen": false,
 			// BEDEUTUNGSGERÜST
 			// Bedeutungsgerüst nach dem Speichern direkt schließen
 			"bedeutungen-schliessen": true,
@@ -166,6 +170,25 @@ let optionen = {
 			// Textsorte in den Kopf der Belegliste eintragen
 			textsorte: false,
 		},
+		// Datenfelder im Einfüge-Fenster der Kopierfunktion
+		kopieren: {
+			an: true, // Anhänge
+			au: true, // Autor
+			bc: false, // Buchung
+			bd: true, // Bedeutung
+			be: false, // Markierung
+			bl: true, // Wortbildung
+			bs: true, // Beleg
+			bu: false, // Bücherdienst
+			da: true, // Datum
+			ko: false, // Kontext?
+			kr: true, // Korpus
+			no: true, // Notizen
+			qu: true, // Quelle
+			sy: true, // Synonym
+			ts: true, // Textsorte
+			un: false, // unvollständig
+		},
 		// Taglisten, die aus XML-Dateien importiert wurden; Aufbau:
 		//   TYP         Tag-Typ (String)
 		//     abgleich  Datum des letzten Abgleichs (ISO-String)
@@ -196,7 +219,7 @@ let optionen = {
 			if (!data.hasOwnProperty(block)) {
 				continue;
 			}
-			if (!/^(fenster|fenster-bedeutungen|einstellungen|tags|personen|letzter_pfad)$/.test(block)) {
+			if (!/^(fenster|fenster-bedeutungen|einstellungen|kopieren|tags|personen|letzter_pfad)$/.test(block)) {
 				delete data[block];
 				// diese Einstellungen werden nicht aus einem anderen Fenster übernommen
 				// (das führt nur zu einem unschönen Springen):

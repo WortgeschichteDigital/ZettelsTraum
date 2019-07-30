@@ -143,8 +143,8 @@ let kartei = {
 			return;
 		}
 		// im aktuellen Fenster könnte eine Kartei geöffnet sein (kartei.pfad = true)
-		// im aktuellen Fenster köntne gerade eine neue Kartei angelegt,
-		//   aber noch nicht gespeichert sein (kartei.geaendert = true)
+		// im aktuellen Fenster könnte gerade eine neue Kartei angelegt,
+		//   aber noch nicht gespeichert worden sein (kartei.geaendert = true)
 		// => neues Hauptfenster öffnen
 		if (kartei.pfad || kartei.geaendert) {
 			ipcRenderer.send("kartei-laden", datei);
@@ -175,19 +175,11 @@ let kartei = {
 			kartei.lock(datei, "lock");
 			// Main melden, dass die Kartei in diesem Fenster geöffnet wurde
 			ipcRenderer.send("kartei-geoeffnet", remote.getCurrentWindow().id, datei);
-			// Daten werden eingelesen => Änderungsmarkierungen kommen weg
-			notizen.notizenGeaendert(false);
-			tagger.taggerGeaendert(false);
-			beleg.belegGeaendert(false);
-			bedeutungen.bedeutungenGeaendert(false);
-			kartei.karteiGeaendert(false);
 			// alle Overlays schließen
 			overlay.alleSchliessen();
-			// Bedeutungsgerüst-Fenster schließen
-			bedeutungenWin.schliessen();
 			// alle Filter zurücksetzen (wichtig für Text- und Zeitraumfilter)
 			filter.ctrlReset(false);
-			// Okay! Datei kann eingelesen werden
+			// Okay! Content kann eingelesen werden
 			data = JSON.parse(content);
 			// Konversion des Dateiformats anstoßen
 			konversion.start();
@@ -336,6 +328,7 @@ let kartei = {
 		notizen.icon();
 		lexika.icon();
 		anhaenge.makeIconList(null, document.getElementById("kartei-anhaenge"));
+		kopieren.uiOff(false);
 		start.zuletzt();
 		helfer.sektionWechseln("start");
 		kartei.menusDeaktivieren(true);
@@ -367,18 +360,11 @@ let kartei = {
 				kartei.lock(kartei.pfad, "unlock");
 				const {ipcRenderer, remote} = require("electron");
 				ipcRenderer.send("kartei-geoeffnet", remote.getCurrentWindow().id, "neu");
-				notizen.notizenGeaendert(false);
-				tagger.taggerGeaendert(false);
-				beleg.belegGeaendert(false);
-				bedeutungen.bedeutungenGeaendert(false);
 				kartei.karteiGeaendert(true);
 				filter.ctrlReset(false);
 				kartei.wort = wort;
 				kartei.wortEintragen();
 				kartei.erstellen();
-				notizen.icon();
-				lexika.icon();
-				anhaenge.makeIconList(null, document.getElementById("kartei-anhaenge"));
 				kartei.menusDeaktivieren(false);
 				erinnerungen.check();
 			}

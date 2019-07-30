@@ -623,7 +623,7 @@ let bedeutungen = {
 		let trEditAktiv = document.querySelector("#bedeutungen-cont .bedeutungen-edit");
 		if (trEditAktiv) { // Zeile fokussiert (die Bedeutung/die Tags/das Alias)
 			bedeutungen.moveAn(parseInt(trEditAktiv.dataset.idx, 10));
-		} else if (!bedeutungen.moveAktiv) { // keine Zeile fokussiert
+		} else if (!bedeutungen.moveAktiv) {
 			let tr = document.querySelector("#bedeutungen-cont tr");
 			if (hasIdx(tr)) {
 				bedeutungen.moveAn(parseInt(tr.dataset.idx, 10));
@@ -1368,14 +1368,14 @@ let bedeutungen = {
 					}
 					// Alias schon vergeben oder identisch mit einer Bedeutung?
 					if (bedeutungen.akt.bd[i].al === wert) {
+						alias_schon_vergeben(edit, "alias");
+						return;
+					} else if (bedeutungen.akt.bd[i].bd[bedeutungen.akt.bd[i].bd.length - 1] === wert) {
 						if (i === idx) {
 							alias_schon_vergeben(edit, "alias_identisch");
 						} else {
-							alias_schon_vergeben(edit, "alias");
+							alias_schon_vergeben(edit, "bedeutung");
 						}
-						return;
-					} else if (bedeutungen.akt.bd[i].bd[bedeutungen.akt.bd[i].bd.length - 1] === wert) {
-						alias_schon_vergeben(edit, "bedeutung");
 						return;
 					}
 				}
@@ -1415,7 +1415,7 @@ let bedeutungen = {
 				if (typ === "alias") {
 					dialog.text(`Das Alias\n<p class="bedeutungen-dialog">${wert}</p>\nwurde schon vergeben.`);
 				} else if (typ === "alias_identisch") {
-					dialog.text(`Das Alias\n<p class="bedeutungen-dialog">${wert}</p>\nwäre identisch mit seiner Bedeutung.`);
+					dialog.text(`Das Alias\n<p class="bedeutungen-dialog">${wert}</p>\nwäre identisch mit der Bedeutung, für die es stehen soll.`);
 				} else {
 					dialog.text(`Das Alias\n<p class="bedeutungen-dialog">${wert}</p>\nwäre identisch mit einer Bedeutung.`);
 				}
@@ -1733,8 +1733,15 @@ let bedeutungen = {
 		bedeutungen.aendern = [];
 	},
 	// ist die Bedeutung, mit der verschmolzen wird, in einer Karte schon vorhanden?
-	// (wird auch in filter.js benutzt, um zu gucken, ob eine Karte eine Bedeutung enthält)
-	schonVorhanden ({bd, id, gr}) {
+	// (wird auch in filter.js und kopieren.js benutzt, um zu gucken,
+	// ob eine Karte eine Bedeutung bereits enthält)
+	//   bd = Array
+	//     (in den Slots Objects mit den Bedeutungen [{}.id und {}.gr])
+	//   id = String
+	//     (die ID der Bedeutung)
+	//   gr = String
+	//     (die ID des Bedeutungsgerüsts)
+	schonVorhanden ({bd, gr, id}) {
 		for (let i = 0, len = bd.length; i < len; i++) {
 			if (bd[i].gr === gr && bd[i].id === id) {
 				return [true, i];
