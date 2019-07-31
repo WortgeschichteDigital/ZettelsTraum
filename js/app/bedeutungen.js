@@ -189,7 +189,11 @@ let bedeutungen = {
 			if (bd[i].id === id) {
 				bd_len = bd[i].bd.length;
 				idx = i - 1;
-				fuellen(i, false);
+				let init = false;
+				if (bd_len === 1) {
+					init = true;
+				}
+				fuellen(i, init);
 				break;
 			}
 		}
@@ -1064,7 +1068,7 @@ let bedeutungen = {
 		});
 		let zaehlung = bedeutungen.zaehlungTief(idx);
 		for (let i = 0, len = zaehlung.length; i < len; i++) {
-			zaehlung[i] = `<b>${zaehlung[i]}</b>`;
+			zaehlung[i] = `<b class="zaehlung">${zaehlung[i]}</b>`;
 		}
 		dialog.text(`Soll die markierte Bedeutung\n<p class="bedeutungen-dialog">${zaehlung.join("")}${bd}</p>\n${document.querySelector(".bedeutungen-affiziert") ? "mit all ihren Unterbedeutungen " : ""}wirklich gelöscht werden?`);
 	},
@@ -1259,8 +1263,12 @@ let bedeutungen = {
 		if (!edit.textContent) {
 			edit.focus();
 		} else {
-			let sel = window.getSelection();
-			sel.collapse(edit.lastChild, edit.lastChild.textContent.length);
+			let sel = window.getSelection(),
+				knoten = edit.lastChild;
+			while (knoten.hasChildNodes()) {
+				knoten = knoten.lastChild;
+			}
+			sel.collapse(knoten, knoten.textContent.length);
 		}
 	},
 	// Toolbox einblenden und positionieren oder ausblenden
@@ -1464,7 +1472,8 @@ let bedeutungen = {
 			if (ebeneTmp < ebene) { // hier beginnt ein neuer Zweig
 				break;
 			}
-			if (bedeutungen.akt.bd[i].bd[ebene - 1] === wertTest) {
+			const wertVergleich = helfer.textTrim(bedeutungen.akt.bd[i].bd[ebene - 1].replace(/<.+?>/g, ""), true);
+			if (wertVergleich === wertTest) {
 				return `Die Bedeutung\n<p class="bedeutungen-dialog">${wert}</p>\nexistiert bereits auf Bedeutungsebene ${ebene}${ebene > 1 ? " des aktuellen Bedeutungszweigs" : ""}.`;
 			}
 		}
@@ -1557,7 +1566,7 @@ let bedeutungen = {
 	//     (der Text des Edit-Feldes; kann HTML-Tags enthalten)
 	editFormat (cont) {
 		cont = cont.replace(/&nbsp;/g, " ");
-		cont = cont.replace(/<br>/g, "");
+		cont = cont.replace(/<br>|\sstyle=".+?"/g, "");
 		cont = helfer.textTrim(cont, true);
 		return cont;
 	},

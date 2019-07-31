@@ -77,10 +77,15 @@ Gerüst 2 &gt; Gerüst 1</pre>
 				<h3>Behobene Fehler</h3>
 				
 				<ul>
+					<li>Bedeutungsgerüst: Endete eine Bedeutung mit einem kursiv, fett oder unterstrichen formatierten Zeichen, war das Programm beim Fokussieren der Bedeutung nicht in der Lage, die gewünschte Caret-Position (am Ende des Feldes) zu finden. Dies produzierte einen Fehler, der dadurch sichtbar wurde, dass das Feld keinen Fokus erhielt.</li>
+					<li>Bedeutungsgerüst: Verwendete man beim Schreiben der Bedeutung verschachtelte Formatierungen speicherte das Programm mitunter einen mit Inline-Styles versehenen Bedeutungstext. Die Anzeige von Inline-Styles wird in <i class="app-name"></i> jedoch aus Sicherheitsgründen unterbunden. Sollten solches Styles durch verschachtelte Formatierungen entstehen, werden sie fortan beim Speichern entfernt.</li>
+					<li>Bedeutungsgerüst: Unter gewissen Umständen stellte die Formatierung einer Bedeutung beim Vergleich unterschiedlicher Bedeutungen immer noch ein Differenzmerkmal dar, obwohl sie das seit Version 0.13.3 nicht mehr sein sollte. In solchen Fällen konnten <abbr title="zum Beispiel">z. B.</abbr> immer noch Verschiebungen vorgenommen werden, die für die Konsistenz des Gerüsts potenziell schädlich waren.</li>
 					<li>Bedeutungsgerüst: Versuchte man ein Alias zu vergeben, das identisch mit der Bedeutung ist, für die es stehen soll, kam die falsche Fehlermeldung.</li>
+					<li>Bedeutungsgerüst: Bei Bedeutungen, in denen Wörter fett formatiert sind, erschienen hinter diesen Wörtern in manchen Dialogen zu große Spatien.</li>
 					<li>Bedeutungsgerüst/Karteikarte: Beim Ausführen verschiedener Aktionen wurde zur Sicherheit nachgefragt, ob Änderungen nicht erst einmal gespeichert werden sollten. Verneinte man dies wurde die Änderungsmarkierung des Bedeutungsgerüst <abbr title="beziehungsweise">bzw.</abbr> der Karteikarte mitunter nicht zurückgesetzt.</li>
 					<li>Belegliste: Das Icon zum Öffnen der Karteikarte hatte keinen erläuternden Tooltip.</li>
 					<li>Karteikarte: Für die Sicherheitsfrage vor dem Löschen eines Belegs konnte der Kurztitel des Belegs nicht ermittelt werden.</li>
+					<li>Druckfunktion: Bei Bedeutungen auf der obersten Ebene erschienen vor dem Zählzeichen mehrere, verwirrende Leerzeichen.</li>
 				</ul>
 			</div>
 			
