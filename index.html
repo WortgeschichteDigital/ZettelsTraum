@@ -388,6 +388,25 @@
 							><input type="radio" name="filter-zeitraum" id="filter-zeitraum-100"
 							><label for="filter-zeitraum-100">100er</label></p>
 						<div id="filter-zeitraum-dynamisch" class="filter-cont-max"></div>
+					</div
+					><a href="#" class="filter-kopf" id="filter-kopf-kartendatum">Kartendatum<span class="filter-reset" title="Filter in diesem Block zurücksetzen"> </span></a
+					><div class="filter-cont" id="filter-kartendatum">
+						<p class="no-indent"
+							><input type="checkbox" id="filter-kartendatum-erstellt"
+							><label for="filter-kartendatum-erstellt">erstellt</label
+							><input type="checkbox" id="filter-kartendatum-geaendert"
+							><label for="filter-kartendatum-geaendert">geändert</label
+						></p>
+						<p class="no-indent"
+							><label class="davor" for="filter-kartendatum-von">von</label
+							><input type="datetime-local" id="filter-kartendatum-von"
+							><a href="#" class="icon-link icon-jetzt" title="Datum und Zeit auf diesen Moment setzen"> </a
+						></p>
+						<p class="no-indent"
+							><label class="davor" for="filter-kartendatum-bis">bis</label
+							><input type="datetime-local" id="filter-kartendatum-bis"
+							><a href="#" class="icon-link icon-jetzt" title="Datum und Zeit auf diesen Moment setzen"> </a
+						></p>
 					</div><span id="liste-filter-dynamisch"></span> <!-- Das ist ein Trick. So kann man mit der Tastatur durch die Filterköpfe navigieren. -->
 				</div>
 			</div></div>
@@ -584,6 +603,8 @@
 								><label for="einstellung-filter-offen-volltext">Volltext</label></p>
 							<p><input type="checkbox" id="einstellung-filter-offen-zeitraum"
 								><label for="einstellung-filter-offen-zeitraum">Zeitraum</label></p>
+							<p><input type="checkbox" id="einstellung-filter-offen-kartendatum"
+								><label for="einstellung-filter-offen-kartendatum">Kartendatum</label></p>
 							<p><input type="checkbox" id="einstellung-filter-offen-bedeutungen"
 								><label for="einstellung-filter-offen-bedeutungen">Bedeutungen</label></p>
 							<p><input type="checkbox" id="einstellung-filter-offen-wortbildungen"

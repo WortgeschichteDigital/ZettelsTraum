@@ -939,6 +939,10 @@ let filter = {
 		if (filter_zeitraum.length) {
 			filter.aktiveFilter.zeitraum = true;
 		}
+		// Kartendatum-Filter
+		if (filter.kartendatumAktiv()) {
+			filter.aktiveFilter.kartendatum = true;
+		}
 		// dynamische Filter
 		for (let typ in filter.typen) {
 			if (!filter.typen.hasOwnProperty(typ)) {
@@ -1133,6 +1137,20 @@ let filter = {
 		// durch eine Änderung der Checkboxes oder Öffnen/Schließen des Erweiterungs-
 		// filters aufgerufen wird)
 		filter.volltextSuchePrep();
+		// Kartendatum vorbereiten
+		let kartendatumVon = null,
+			kartendatumBis = null,
+			kartendatumFeld = "";
+		if (filter.aktiveFilter.kartendatum) {
+			kartendatumVon = new Date(document.getElementById("filter-kartendatum-von").value);
+			kartendatumBis = new Date(document.getElementById("filter-kartendatum-bis").value);
+			kartendatumBis.setSeconds(59); // die ganze Minute mitnehmen
+			if (document.getElementById("filter-kartendatum-erstellt").checked) { // erstellt
+				kartendatumFeld = "dc";
+			} else { // geändert
+				kartendatumFeld = "dm";
+			}
+		}
 		// Karten filtern
 		let karten_gefiltert = [];
 		forX: for (let i = 0, len = karten.length; i < len; i++) {
@@ -1145,6 +1163,13 @@ let filter = {
 			if (filter.aktiveFilter.zeitraum) {
 				let jahr = parseInt(liste.zeitschnittErmitteln(data.ka[id].da).jahr, 10);
 				if (!filter_zeitraum.includes(jahr)) {
+					continue;
+				}
+			}
+			// Kartendatum
+			if (filter.aktiveFilter.kartendatum) {
+				let datum = new Date(data.ka[id][kartendatumFeld]);
+				if (datum < kartendatumVon || datum > kartendatumBis) {
 					continue;
 				}
 			}
@@ -1350,6 +1375,7 @@ let filter = {
 			}
 		});
 		filter.volltextSuche.suche = false;
+		filter.kartendatumInit();
 		let filter_bewertung = document.getElementById("filter-bewertung");
 		if (filter_bewertung) {
 			filter_bewertung.dataset.bewertung = "0";
@@ -1384,6 +1410,9 @@ let filter = {
 					}
 				}
 			});
+			if (block.id === "filter-kartendatum") {
+				filter.kartendatumInit();
+			}
 			liste.status(true);
 		});
 	},
@@ -1594,5 +1623,106 @@ let filter = {
 		input.parentNode.parentNode.classList.remove("aus");
 		// Suchfeld fokussieren
 		input.select();
+	},
+	// initialisiert den Kartendatum-Filter
+	kartendatumInit () {
+		// Checkboxes aus
+		document.querySelectorAll(`#filter-kartendatum input[type="checkbox"]`).forEach(function(i) {
+			i.checked = false;
+		});
+		// Ausgangsdatum an Erstellungsdatum der Karten anpassen
+		let von = null,
+			bis = null;
+		for (let id in data.ka) {
+			if (!data.ka.hasOwnProperty(id)) {
+				continue;
+			}
+			let datum = new Date(data.ka[id].dc);
+			if (!von || datum < von) {
+				von = datum;
+			}
+			if (!bis || datum > bis) {
+				bis = datum;
+			}
+		}
+		if (!von) { // es gibt noch keine Karteikarten
+			von = new Date();
+			bis = new Date();
+		}
+		filter.kartendatumEintragen(document.getElementById("filter-kartendatum-von"), von);
+		filter.kartendatumEintragen(document.getElementById("filter-kartendatum-bis"), bis);
+	},
+	// trägt das Kartendatum ein
+	//   feld = Element
+	//     (das Feld, in das eingetragen werden soll)
+	//   zeit = Date-Object
+	//     (die Zeit, die eingetragen werden soll)
+	kartendatumEintragen (feld, zeit) {
+		let jahr = zeit.getFullYear(),
+			monat = zeit.getMonth() + 1,
+			tag = zeit.getDate(),
+			stunde = zeit.getHours(),
+			minute = zeit.getMinutes();
+		monat = monat.toString().padStart(2, "0");
+		tag = tag.toString().padStart(2, "0");
+		stunde = stunde.toString().padStart(2, "0");
+		minute = minute.toString().padStart(2, "0");
+		feld.value = `${jahr}-${monat}-${tag}T${stunde}:${minute}`;
+	},
+	// Änderungen in den Checkboxes des Kartendatum-Filters abfangen
+	//   input = Element
+	//     (eine Checkbox)
+	kartendatumBox (input) {
+		input.addEventListener("change", function() {
+			let erstellt = document.getElementById("filter-kartendatum-erstellt"),
+				geaendert = document.getElementById("filter-kartendatum-geaendert");
+			if (this === erstellt && this.checked) {
+				geaendert.checked = false;
+			} else if (this === geaendert && this.checked) {
+				erstellt.checked = false;
+			}
+		});
+		filter.anwenden(input);
+	},
+	// ermittelt, ob der Kartendatum-Filter aktiv ist
+	kartendatumAktiv () {
+		let erstellt = document.getElementById("filter-kartendatum-erstellt"),
+			geaendert = document.getElementById("filter-kartendatum-geaendert");
+		if (erstellt.checked || geaendert.checked) {
+			return true;
+		}
+		return false;
+	},
+	// Änderungen in den Datumsfelder abfangen
+	//   input = Element
+	//     (ein Datumsfeld)
+	kartendatumFeld (input) {
+		input.addEventListener("change", function() {
+			filter.kartendatumCheck();
+		});
+		filter.anwenden(input);
+	},
+	// Zeit des Datumsfeldes auf den Augenblick des Klicks setzen
+	//   a = Element
+	//     (der Icon-Link zum Setzen des Datums)
+	kartendatumJetzt (a) {
+		a.addEventListener("click", function(evt) {
+			evt.preventDefault();
+			filter.kartendatumEintragen(this.previousSibling, new Date());
+			filter.kartendatumCheck();
+			// Filter anwenden
+			filter.setZuletztAktiv(document.getElementById("filter-kartendatum"));
+			liste.status(true);
+		});
+	},
+	// die Datumsfelder im Kartendatum-Filter auf Validität überprüfen
+	kartendatumCheck () {
+		let feldVon = document.getElementById("filter-kartendatum-von"),
+			feldBis = document.getElementById("filter-kartendatum-bis"),
+			von = new Date(feldVon.value),
+			bis = new Date(feldBis.value);
+		if (von > bis) {
+			filter.kartendatumEintragen(feldVon, bis);
+		}
 	},
 };

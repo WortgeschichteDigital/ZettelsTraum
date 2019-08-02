@@ -71,6 +71,8 @@ let kartei = {
 			data.be.push(optionen.data.einstellungen.bearbeiterin);
 			data.rd[0].pr = optionen.data.einstellungen.bearbeiterin;
 		}
+		// Kartendatum-Filter initialisieren
+		filter.kartendatumInit();
 		// Belegliste leeren: Es könnten noch Belege von einer vorherigen Karte vorhanden sein;
 		// außerdem könnte es sein, dass die Bearbeiter*in keinen Beleg erstellt
 		liste.aufbauen(true);
@@ -193,6 +195,7 @@ let kartei = {
 			lexika.icon();
 			anhaenge.scan(data.an);
 			anhaenge.makeIconList(data.an, document.getElementById("kartei-anhaenge"));
+			filter.kartendatumInit();
 			liste.aufbauen(true);
 			liste.wechseln();
 			kartei.menusDeaktivieren(false);

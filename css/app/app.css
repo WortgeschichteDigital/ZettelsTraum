@@ -143,6 +143,7 @@ textarea {
 }
 
 input[type="date"],
+input[type="datetime-local"],
 input[type="number"],
 input[type="text"] {
 	border: 1px solid var(--linie);
@@ -150,18 +151,21 @@ input[type="text"] {
 }
 
 input[type="date"]:focus,
+input[type="datetime-local"]:focus,
 input[type="number"]:focus,
 input[type="text"]:focus {
 	outline: 1px solid var(--farbe);
 	border-color: var(--farbe);
 }
 
-input[type="date"] {
+input[type="date"],
+input[type="datetime-local"] {
 	height: 24px;
 }
 
 input[type="date"]::-webkit-calendar-picker-indicator,
-input[type="date"]::-webkit-clear-button {
+input[type="date"]::-webkit-clear-button,
+input[type="datetime-local"]::-webkit-clear-button {
 	display: none;
 }
 
@@ -169,6 +173,10 @@ input[type="date"]::-webkit-inner-spin-button,
 input[type="date"]::-webkit-outer-spin-button {
 	-webkit-appearance: none;
 	margin: 0;
+}
+
+input[type="datetime-local"] {
+	width: 180px;
 }
 
 input[type="button"] {

@@ -214,6 +214,21 @@ p.no-indent + .filter-baum, /* betrifft Verschiedenes > Filterlogik */
 	width: calc(100% - 12px);
 }
 
+#filter-kartendatum p:first-child label + input {
+	margin-left: 25px;
+}
+
+#filter-kartendatum label.davor {
+	display: inline-block;
+	width: 37px;
+}
+
+#filter-kartendatum .icon-jetzt {
+	margin-left: 5px;
+	-webkit-mask-image: url(../../img/filter-jetzt.svg);
+	mask-image: url(../../img/filter-jetzt.svg);
+}
+
 #filter-erweiterte {
 	padding-left: 24px;
 	background: url(../../img/erweiterte-auf.svg) no-repeat left -2px;

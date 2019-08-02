@@ -16,9 +16,9 @@ window.addEventListener("load", function() {
 	});
 	
 	// DATEIEN VIA DRAG & DROP ÖFFNEN
-	document.addEventListener("dragover", (evt) => evt.preventDefault());
-	document.addEventListener("dragleave", (evt) => evt.preventDefault());
-	document.addEventListener("dragend", (evt) => evt.preventDefault());
+	document.addEventListener("dragover", evt => evt.preventDefault());
+	document.addEventListener("dragleave", evt => evt.preventDefault());
+	document.addEventListener("dragend", evt => evt.preventDefault());
 	document.addEventListener("drop", function(evt) {
 		evt.preventDefault();
 		if (!evt.dataTransfer.files.length) { // wenn z.B. Text gedropt wird
@@ -42,8 +42,8 @@ window.addEventListener("load", function() {
 		});
 	});
 	// alle Dropdown-Listen
-	document.querySelectorAll(".dropdown-feld").forEach((i) => dropdown.feld(i));
-	document.querySelectorAll(".dropdown-link-td, .dropdown-link-element").forEach((i) =>	dropdown.link(i));
+	document.querySelectorAll(".dropdown-feld").forEach(i => dropdown.feld(i));
+	document.querySelectorAll(".dropdown-link-td, .dropdown-link-element").forEach(i =>	dropdown.link(i));
 	// Quick-Access-Bar
 	let quick = document.querySelectorAll("#quick a");
 	for (let i = 0, len = quick.length; i < len; i++) {
@@ -112,20 +112,23 @@ window.addEventListener("load", function() {
 	document.getElementById("tagger-speichern").addEventListener("click", () => tagger.speichern());
 	document.getElementById("tagger-schliessen").addEventListener("click", () => tagger.schliessen());
 	// Belegliste-Filter
-	document.querySelectorAll("#liste-filter header a").forEach((a) => filter.ctrlButtons(a));
+	document.querySelectorAll("#liste-filter header a").forEach(a => filter.ctrlButtons(a));
 	document.querySelectorAll(".filter-kopf").forEach(function(a) {
 		filter.anzeigeUmschalten(a);
 		filter.ctrlResetBlock(a.lastChild);
 	});
 	filter.toggleErweiterte();
-	document.querySelectorAll(".filter-optionen").forEach((input) => filter.filterOptionenListener(input));
-	document.querySelectorAll(`a[id^="filter-datenfelder-"`).forEach((input) => filter.ctrlVolltextDs(input));
+	document.querySelectorAll(".filter-optionen").forEach(input => filter.filterOptionenListener(input));
+	document.querySelectorAll(`a[id^="filter-datenfelder-"]`).forEach(input => filter.ctrlVolltextDs(input));
 	filter.anwenden(document.getElementById("filter-volltext"));
 	let filter_zeitraum = document.getElementsByName("filter-zeitraum");
 	for (let i = 0, len = filter_zeitraum.length; i < len; i++) {
 		filter.wechselnZeitraum(filter_zeitraum[i]);
 	}
 	filter.backupKlappScroll(document.getElementById("filter-zeitraum-dynamisch"));
+	document.querySelectorAll(`#filter-kartendatum input[type="checkbox"]`).forEach(i => filter.kartendatumBox(i));
+	document.querySelectorAll(`#filter-kartendatum input[type="datetime-local"]`).forEach(i => filter.kartendatumFeld(i));
+	document.querySelectorAll("#filter-kartendatum .icon-jetzt").forEach(a => filter.kartendatumJetzt(a));
 	// Funktionen im Belegliste-Header
 	let liste_links = document.querySelectorAll("#liste header a");
 	for (let i = 0, len = liste_links.length; i < len; i++) {
@@ -201,7 +204,7 @@ window.addEventListener("load", function() {
 		drucken.listener(a);
 	});
 	// Druck-Fenster
-	document.querySelectorAll("#drucken-head span").forEach((span) => drucken.buttons(span));
+	document.querySelectorAll("#drucken-head span").forEach(span => drucken.buttons(span));
 	// Schließen-Links von Overlays
 	let overlay_links = document.querySelectorAll(".overlay-schliessen");
 	for (let i = 0, len = overlay_links.length; i < len; i++) {
