@@ -672,7 +672,7 @@ let filter = {
 		// Label
 		let label = document.createElement("label");
 		label.setAttribute("for", `filter-${f_enc}`);
-		label.innerHTML = obj.name;
+		label.innerHTML = helfer.escapeHtml(obj.name);
 		p.appendChild(label);
 		// Anzahl der Belege
 		if (obj.wert) {
@@ -1021,7 +1021,8 @@ let filter = {
 	// Variablen für die Volltextsuche vorbereiten
 	volltextSuchePrep () {
 		// Filter-Text ermitteln
-		const vt = helfer.textTrim(document.getElementById("filter-volltext").value, true);
+		let vt = document.getElementById("filter-volltext").value;
+		vt = helfer.textTrim(vt.replace(/[<>]+/g, ""), true); // macht nur Probleme, wenn erlaubt wird, nach Spitzklammern zu suchen
 		// kein Filtertext
 		if (!vt) {
 			filter.volltextSuche.suche = false;
@@ -1317,7 +1318,7 @@ let filter = {
 			if (ds === "bd") {
 				text_rein = liste.textBd(data.ka[id][ds]).join(" ").replace(/<.+?>/g, "");
 			} else {
-				text_rein = data.ka[id][ds].replace(/<.+?>/g, "");
+				text_rein = data.ka[id][ds];
 			}
 			text_rein = liste.belegTrennungWeg(text_rein, true);
 			for (let j = 0, len = treffer.length; j < len; j++) {

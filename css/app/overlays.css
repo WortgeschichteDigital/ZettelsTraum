@@ -10,6 +10,7 @@
 #einstellungen,
 #gerueste,
 #geruestwechseln,
+#karteisuche,
 #kopieren-einfuegen,
 #kopieren-liste,
 #lexika,
@@ -36,6 +37,7 @@
 #einstellungen > div,
 #gerueste > div,
 #geruestwechseln > div,
+#karteisuche > div,
 #kopieren-einfuegen > div,
 #kopieren-liste > div,
 #lexika > div,
@@ -59,6 +61,7 @@
 #einstellungen h2,
 #gerueste h2,
 #geruestwechseln h2,
+#karteisuche h2,
 #kopieren-einfuegen h2,
 #kopieren-liste h2,
 #lexika h2,
@@ -78,6 +81,7 @@
 #einstellungen h2 a,
 #gerueste h2 a,
 #geruestwechseln h2 a,
+#karteisuche h2 a,
 #kopieren-einfuegen h2 a,
 #kopieren-liste h2 a,
 #lexika h2 a,
@@ -362,7 +366,22 @@
 	white-space: nowrap;
 }
 
-/* Formvarianten ------------------------ */
+/* Karteisuche ---------------------------------- */
+#karteisuche > div {
+	margin-top: 40px;
+	max-width: 800px;
+}
+
+.icon-h-karteisuche {
+	-webkit-mask-image: url(../../img/heading-karteisuche.svg);
+	mask-image: url(../../img/heading-karteisuche.svg);
+}
+
+#karteisuche-cont {
+	padding: 10px;
+}
+
+/* Formvarianten -------------------------------- */
 #stamm > div {
 	margin-top: 40px;
 	max-width: 350px;

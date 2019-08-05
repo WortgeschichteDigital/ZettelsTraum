@@ -67,6 +67,9 @@ Gerüst 2 &gt; Gerüst 1</pre>
 						<p>Die <i>technische Dokumentation</i> wurde im Kapitel <i><abbr title="Wortgeschichte digital">WGD</abbr>-Dateiformat</i> um das <abbr title="Belege Wortgeschichte digital">BWGD</abbr>-Format ergänzt.</p>
 					</li>
 					<li>
+						<p>Karteisuche: …</p>
+					</li>
+					<li>
 						<p>Filterleiste: Es gibt einen neuen Filter: <i>Kartendatum</i>. Mit diesem Filter kann man die Belege minutengenau nach dem Erstellungs- oder Änderungsdatum der Karteikarte filtern. (Zum Filtern nach Datum des Belegs dient wie gehabt der Zeitraum-Filter.) Der Kartendatum-Filter kann <abbr title="zum Beispiel">z. B.</abbr> dazu dienen, gerade aus einer anderen Kartei importierte Belege in der Belegliste zu isolieren, um sie dann blockweise oder nacheinander zu bearbeiten.</p>
 						<p>Beim Öffnen der Kartei und beim Zurücksetzen des Filters wird das Von-Datum auf das Erstellungsdatum des ersten angelegten Belegs der Kartei gesetzt und das Bis-Datum auf das des letzten angelegten Belegs. In neu erstellten Karteien erhalten beide Felder das Erstellungsdatum der Kartei.</p>
 						<p>Mithilfe des Icons <img src="../img/filter-jetzt.svg" width="24" height="24" alt=""> kann das Datum des vorstehenden Feldes auf die aktuell laufende Minute gestellt werden. Die Datumsfelder lassen sich darüber hinaus manuell auf einen gewünschten Zeitpunkt einstellen. Unlogische Datumseingaben werden abgefangen: Sollte das Bis-Datum kleiner als das Von-Datum sein, wird das Von-Datum auf das Bis-Datum gesetzt.</p>
@@ -76,6 +79,10 @@ Gerüst 2 &gt; Gerüst 1</pre>
 				<h3>Verbesserungen</h3>
 				
 				<ul>
+					<li>
+						<p>Sonderzeichen: Die Liste der Sonderzeichen, die über das Sonderzeichen-Fenster (Funktion <img src="../img/tool-sonderzeichen.svg" width="24" height="24" alt="">) in das Belegfeld der Karteikarte eingefügt werden können, wurde um maskierte Spitzklammern ergänzt.</p>
+						<p>Ferner steht die Sonderzeichen-Funktion nun auch für das Bedeutungsfeld zur Verfügung, um Spitzklammern in Bedeutungen zu unterstützen.</p>
+					</li>
 					<li>Einige seit Version 0.12.0 sinnlos gewordene Funktionsaufrufe beim Öffnen und Erstellen einer Kartei wurden entfernt, was diese beiden Operationen beschleunigen dürfte – wenn auch nur minimal.</li>
 				</ul>
 				
@@ -85,12 +92,29 @@ Gerüst 2 &gt; Gerüst 1</pre>
 					<li>Bedeutungsgerüst: Endete eine Bedeutung mit einem kursiv, fett oder unterstrichen formatierten Zeichen, war das Programm beim Fokussieren der Bedeutung nicht in der Lage, die gewünschte Caret-Position (am Ende des Feldes) zu finden. Dies produzierte einen Fehler, der dadurch sichtbar wurde, dass das Feld keinen Fokus erhielt.</li>
 					<li>Bedeutungsgerüst: Verwendete man beim Schreiben der Bedeutung verschachtelte Formatierungen speicherte das Programm mitunter einen mit Inline-Styles versehenen Bedeutungstext. Die Anzeige von Inline-Styles wird in <i class="app-name"></i> jedoch aus Sicherheitsgründen unterbunden. Sollten solches Styles durch verschachtelte Formatierungen entstehen, werden sie fortan beim Speichern entfernt.</li>
 					<li>Bedeutungsgerüst: Unter gewissen Umständen stellte die Formatierung einer Bedeutung beim Vergleich unterschiedlicher Bedeutungen immer noch ein Differenzmerkmal dar, obwohl sie das seit Version 0.13.3 nicht mehr sein sollte. In solchen Fällen konnten <abbr title="zum Beispiel">z. B.</abbr> immer noch Verschiebungen vorgenommen werden, die für die Konsistenz des Gerüsts potenziell schädlich waren.</li>
-					<li>Bedeutungsgerüst: Versuchte man ein Alias zu vergeben, das identisch mit der Bedeutung ist, für die es stehen soll, kam die falsche Fehlermeldung.</li>
-					<li>Bedeutungsgerüst: Bei Bedeutungen, in denen Wörter fett formatiert sind, erschienen hinter diesen Wörtern in manchen Dialogen zu große Spatien.</li>
-					<li>Bedeutungsgerüst/Karteikarte: Beim Ausführen verschiedener Aktionen wurde zur Sicherheit nachgefragt, ob Änderungen nicht erst einmal gespeichert werden sollten. Verneinte man dies wurde die Änderungsmarkierung des Bedeutungsgerüst <abbr title="beziehungsweise">bzw.</abbr> der Karteikarte mitunter nicht zurückgesetzt.</li>
+					<li>Bedeutungsgerüst: Eine neu eingegebene Bedeutung, die identisch mit der allerersten Bedeutung auf der obersten Ebene des Bedeutungsgerüsts war, konnte hinzugefügt werden, obwohl dies eigentlich hätte unterbunden werden sollen.</li>
+					<li>Bedeutungsgerüst: Versuchte man ein Alias zu vergeben, das identisch mit der Bedeutung war, für die es stehen sollte, kam eine falsche Fehlermeldung.</li>
+					<li>Bedeutungsgerüst: Speicherte man ein Alias, ohne dessen Inhalt zu ändern, kam die Fehlermeldung, dass das Alias schon vergeben sei (was freilich stimmte, aber in dieser Situation vollkommen sinnlos war).</li>
+					<li>Bedeutungsgerüst: In manchen Dialogen, die Bedeutungen zitieren, in denen Wörter fett formatiert sind, erschienen hinter den gefetteten Wörtern zu große Spatien.</li>
+					<li>Bedeutungsgerüst: Es war möglich, Tags doppelt einzugeben, wenn man sie im Tagger-Fenster nicht über das Dropdown-Menü hinzufügte, sondern händisch eintippte.</li>
+					<li>
+						<p>Bedeutungsgerüst: Nach dem Hinzufügen oder Entfernen von Tags wurde nach dem Schließen des Tagger-Fensters die aktive Zeile im Bedeutungsgerüst nicht in jedem Fall markiert. In keinem Fall erhielt die Tabellenzelle mit den Tags den Fokus, sodass die weitere Navigation und Bearbeitung des Bedeutungsgerüsts allein mithilfe der Tastatur behindert wurde.</p>
+						<p>Ferner wird der Platzhaltertext <i>Tags</i>, der erscheint, wenn einer Bedeutung (noch) keine Tags zugeordnet sind, beim Fokussieren fortan farbig hervorgehoben, um deutlicher zu zeigen, in welcher Zelle der Fokus gerade liegt.</p>
+					</li>
+					<li>Bedeutungsgerüst/Karteikarte: Beim Ausführen verschiedener Aktionen wurde zur Sicherheit nachgefragt, ob Änderungen nicht erst einmal gespeichert werden sollten. Verneinte man dies, wurde die Änderungsmarkierung des Bedeutungsgerüst <abbr title="beziehungsweise">bzw.</abbr> der Karteikarte mitunter nicht zurückgesetzt.</li>
 					<li>Belegliste: Das Icon zum Öffnen der Karteikarte hatte keinen erläuternden Tooltip.</li>
+					<li>
+						<p>Karteikarte/Bedeutungsgerüst: Wurde in den Formularfeldern Text in Spitzklammern eingegeben, führte dies an vielen Stellen des Programms zu Darstellungsfehlern, die fortan abgefangen werden, sodass Text in Spitzklammern keine Probleme mehr bereiten sollte.</p>
+						<p>Für das Belegfeld ist allerdings zu beachten, dass der von Spitzklammern umschlossene Text dann als Tag fehlgedeutet wird. Darum müssen Spitzklammern hier maskiert werden – wenn man sie denn literal meint (<abbr title="vergleiche">vgl.</abbr> unter <i>Verbesserungen</i> den Punkt zu den Sonderzeichen).</p>
+						<p>Die Suchfunktion in der Leseansicht, die bei längeren Belegtexten eingeblendet wird, unterstützt nun auch das Suchen von Spitzklammern. Zum Suchen müssen diese nicht eigens maskiert werden. (Der Volltext-Filter, also die Suchfunktion über alle Belege, unterstützt das Suchen nach Spitzklammern nicht, würde dies doch große Probleme beim Hervorheben der Suchergebnisse bereiten. Im Volltext-Filter eingegebene Spitzklammern werden intern ignoriert.)</p>
+						<p>Im Bedeutungsfeld der Karteikarte sind Spitzklammern nur maskiert zulässig, können als solche aber problemlos eingefügt werden. Werden Spitzklammern im Bedeutungsfeld unmaskiert eingegeben, eliminiert sie das Programm automatisch beim Speichern.</p>
+						<p>Wird eine Bedeutung in der Bedeutungsgerüst-Funktion erstellt oder geändert ist die Maskierung von Spitzklammern nicht nötig; sie wird während der Eingabe automatisch vorgenommen. Im Alias der Bedeutungsgerüst-Funktion werden Spitzklammern hingegen überhaupt nicht geduldet und beim Speichern des Alias einfach gelöscht.</p>
+					</li>
+					<li>Karteikarte: Wurde über das Sonderzeichen-Fenster ein Zeichen in den Belegtext eingefügt, wurden die Änderungen unter Umständen nicht übernommen und gingen nach dem Speichern der Karte verloren.</li>
+					<li>Karteikarte: Leerzeichen am Ende einer manuell im Bedeutungsfeld eingegebenen Bedeutung wurden nicht in jedem Fall entfernt, bevor die Bedeutung in das Bedeutungsgerüst eingehängt wurde.</li>
 					<li>Karteikarte: Für die Sicherheitsfrage vor dem Löschen eines Belegs konnte der Kurztitel des Belegs nicht ermittelt werden.</li>
 					<li>Druckfunktion: Bei Bedeutungen auf der obersten Ebene erschienen vor dem Zählzeichen mehrere, verwirrende Leerzeichen.</li>
+					<li>Behebung visueller Glitches beim Fokussieren von Datumsfeldern.</li>
 				</ul>
 			</div>
 			

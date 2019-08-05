@@ -359,9 +359,9 @@ let beleg = {
 				continue;
 			}
 			// Tags entfernen
-			// (User könnten auf die Idee kommen, gleich <i>, <b>, <u> einzugeben;
+			// (User könnten auf die Idee kommen, gleich <i>, <b>, <u> oder Text in Spitzklammern einzugeben;
 			// das macht die Sache nur kompliziert, weil z.B. das HTML auf Korrektheit getestet werden müsste)
-			zeile = zeile.replace(/<.+?>/g, "");
+			zeile = helfer.textTrim(zeile.replace(/<.+?>|[<>]+/g, ""), true);
 			// ggf. neue Bedeutung in das Gerüst eintragen
 			let bd = beleg.bedeutungSuchen(zeile);
 			if (!bd.id) {
@@ -1208,7 +1208,8 @@ let beleg = {
 				beleg.toolsKopieren(this);
 			} else if (this.classList.contains("icon-tools-einfuegen")) {
 				beleg.toolsEinfuegen(this);
-			} else if (this.parentNode.classList.contains("text-tools-beleg")) {
+			} else if (this.parentNode.classList.contains("text-tools-beleg") ||
+				this.parentNode.classList.contains("text-tools-bedeutung")) {
 				beleg.toolsText(this);
 			}
 		});
@@ -1316,7 +1317,7 @@ let beleg = {
 			text += "<hr>";
 			let quelle = obj.qu.split("\n");
 			quelle.forEach(function(i) {
-				text += `<p>${i}</p>`;
+				text += `<p>${helfer.escapeHtml(i)}</p>`;
 			});
 		} else {
 			text += "\n\n---\n\n";
@@ -1508,7 +1509,8 @@ let beleg = {
 		// Sonderzeichen eingeben
 		const aktion = link.getAttribute("class").replace(/.+-/, "");
 		if (aktion === "sonderzeichen") {
-			sonderzeichen.oeffnen("beleg-bs");
+			const feld = link.parentNode.previousSibling.getAttribute("for");
+			sonderzeichen.oeffnen(feld);
 			return;
 		}
 		// Fokus in <textarea>
@@ -1760,12 +1762,14 @@ let beleg = {
 				i.classList.remove("aus");
 			}
 		});
-		// Text-Tools für Beleg ein- oder ausblenden
-		let tools_beleg = document.querySelector(".text-tools-beleg");
-		if (an) {
-			tools_beleg.classList.add("aus");
-		} else {
-			tools_beleg.classList.remove("aus");
+		// Text-Tools für Beleg und Bedeutung ein- oder ausblenden
+		let tools_beleg = document.querySelectorAll(".text-tools-beleg, .text-tools-bedeutung");
+		for (let tools of tools_beleg) {
+			if (an) {
+				tools.classList.add("aus");
+			} else {
+				tools.classList.remove("aus");
+			}
 		}
 		// Textwerte eintragen
 		if (an) {
@@ -1833,6 +1837,9 @@ let beleg = {
 					// Absatz einbinden
 					if (!optionen.data.beleg.trennung) {
 						text = liste.belegTrennungWeg(text, true);
+					}
+					if (wert !== "bd" && wert !== "bs") {
+						text = helfer.escapeHtml(text);
 					}
 					text = liste.linksErkennen(text);
 					if (wert === "bs") {
@@ -1967,7 +1974,7 @@ let beleg = {
 	//   text = String
 	//     (ein Absatz aus dem Belegtext)
 	leseSucheMark (text) {
-		const s = helfer.textTrim(beleg.leseSucheText, true);
+		const s = helfer.textTrim(helfer.escapeHtml(beleg.leseSucheText), true);
 		if (!s || !optionen.data.einstellungen["karte-suchfeld"]) {
 			return text;
 		}

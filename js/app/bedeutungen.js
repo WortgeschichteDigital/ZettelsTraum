@@ -1357,7 +1357,7 @@ let bedeutungen = {
 			if (feld === "bd") {
 				wert = bedeutungen.editFormat(edit.innerHTML);
 			} else {
-				wert = helfer.textTrim(edit.textContent, true);
+				wert = helfer.textTrim(edit.textContent.replace(/[<>]+/g, ""), true);
 			}
 			// Ist der Wert okay?
 			if (feld === "bd") {
@@ -1376,6 +1376,9 @@ let bedeutungen = {
 					}
 					// Alias schon vergeben oder identisch mit einer Bedeutung?
 					if (bedeutungen.akt.bd[i].al === wert) {
+						if (i === idx) { // sonst kommt eine Meldung, dass das Alias schon vergeben wurde
+							continue;
+						}
 						alias_schon_vergeben(edit, "alias");
 						return;
 					} else if (bedeutungen.akt.bd[i].bd[bedeutungen.akt.bd[i].bd.length - 1] === wert) {
@@ -1619,9 +1622,10 @@ let bedeutungen = {
 			const bd = bedeutungen.editFormat(this.innerHTML);
 			// Ist es erlaubt diese Bedeutung so hinzuzufügen?
 			const bdFehler = bedeutungen.editBdTest({
-					wert: bd,
-					idx: 0,
-				});
+				wert: bd,
+				idx: -1, // damit er bei 0 startet, die 1. Bedeutung aber nicht überspringt
+				ebene: 1,
+			});
 			if (bdFehler) {
 				dialog.oeffnen("alert", function() {
 					helfer.auswahl(feld);

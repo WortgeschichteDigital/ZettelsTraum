@@ -810,6 +810,10 @@ let liste = {
 			bedeutungenGeruest.listener(span);
 		}
 		span.textContent = h;
+		// Sonderzeichen escapen
+		if (ds !== "bd" && ds !== "bs") {
+			text = helfer.escapeHtml(text);
+		}
 		// Leerzeilen weg und Links erkennen (nur Notiz und Quelle)
 		if (/^(no|qu)$/.test(ds)) {
 			text = text.replace(/\n\s*\n/g, "\n");
@@ -922,12 +926,12 @@ let liste = {
 	//     (Plain-Text, in dem die Links umgewandelt werden sollen)
 	linksErkennen (text) {
 		text = text.replace(/http(s)*:[^\s]+|www\.[^\s]+/g, function(m) {
-			let reg = /[.:,;!?)\]}]+$/g,
+			let reg = /(&gt;|[.:,;!?)\]}>]+)$/g,
 				url = m.replace(reg, ""),
 				basis = m.match(/(https*:\/\/)*([^\/]+)/)[2].replace(reg, ""),
 				schluss = "";
 			if (m.match(reg)) {
-				schluss = m.replace(/.+?([.:,;!?)\]}]+)$/g, function(m, p) {
+				schluss = m.replace(/.+?(&gt;|[.:,;!?)\]}>]+)$/g, function(m, p) {
 					return p;
 				});
 			}
@@ -990,7 +994,7 @@ let liste = {
 	detailAnzeigen (span) {
 		span.addEventListener("click", function(evt) {
 			evt.stopPropagation();
-			let detail = this.title,
+			let detail = helfer.escapeHtml(this.title),
 				beleg_id = this.parentNode.dataset.id;
 			dialog.oeffnen("alert");
 			dialog.text(`<h3>${liste.detailAnzeigenH3(beleg_id)}</h3>\n${detail}`);

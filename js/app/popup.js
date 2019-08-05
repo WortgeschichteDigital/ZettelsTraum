@@ -257,7 +257,7 @@ let popup = {
 				text = beleg.toolsKopierenAddQuelle(text, false, obj);
 				html = beleg.toolsKopierenAddQuelle(html, true, obj);
 			}
-			popup.textauswahl.text = text;
+			popup.textauswahl.text = helfer.escapeHtml(text, true);
 			popup.textauswahl.html = html;
 			return true;
 		}

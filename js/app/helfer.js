@@ -8,12 +8,15 @@ let helfer = {
 		a.addEventListener("click", function(evt) {
 			evt.preventDefault();
 			let id = this.id.replace(/^quick-/, "");
-			if (id === "programm-einstellungen") {
-				optionen.oeffnen();
-				return;
-			} else if (id === "programm-neues-fenster") {
+			if (id === "programm-neues-fenster") {
 				const {ipcRenderer} = require("electron");
 				ipcRenderer.send("fenster-oeffnen");
+				return;
+			} else if (id === "programm-karteisuche") {
+				karteisuche.oeffnen();
+				return;
+			} else if (id === "programm-einstellungen") {
+				optionen.oeffnen();
 				return;
 			} else if (id === "programm-beenden") {
 				const {ipcRenderer} = require("electron");
@@ -399,6 +402,35 @@ let helfer = {
 	//     (Text, der escaped werden soll)
 	escapeRegExp (string) {
 		return string.replace(/\/|\(|\)|\[|\]|\{|\}|\.|\?|\\|\+|\*|\^|\$|\|/g, (m) => `\\${m}`);
+	},
+	// Zeichen maskieren
+	//   string = String
+	//     (Text, in dem Zeichen maskiert werden sollen)
+	//   undo = Boolean
+	//     (Maskierung zurücknehmen)
+	escapeHtml (string, undo = false) {
+		let zeichen = [
+			{
+				orig: "<",
+				mask: "&lt;",
+			},
+			{
+				orig: ">",
+				mask: "&gt;",
+			},
+		];
+		for (let z of zeichen) {
+			let reg, rep;
+			if (undo) {
+				reg = new RegExp(z.mask, "g");
+				rep = z.orig;
+			} else {
+				reg = new RegExp(z.orig, "g");
+				rep = z.mask;
+			}
+			string = string.replace(reg, rep);
+		}
+		return string;
 	},
 	// regulären Ausdruck mit allen Formvarianten erstellen
 	formVariRegExp () {

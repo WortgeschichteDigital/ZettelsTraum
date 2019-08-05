@@ -23,7 +23,13 @@ a[href^="#"] {
 }
 
 /* Farbe Textauswahl ---------------------------- */
-::selection {
+::selection,
+/* in date und datetime-local funktioniert ::selection nicht */
+input::-webkit-datetime-edit-day-field:focus,
+input::-webkit-datetime-edit-month-field:focus,
+input::-webkit-datetime-edit-year-field:focus,
+input::-webkit-datetime-edit-hour-field:focus,
+input::-webkit-datetime-edit-minute-field:focus {
 	background-color: var(--farbe);
 	color: #fff;
 }

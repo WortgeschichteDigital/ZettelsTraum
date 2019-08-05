@@ -183,6 +183,15 @@ let tagger = {
 						continue;
 					}
 					if (optionen.data.tags[kat].data[id].name === tag) {
+						// ist der Tag schon in der Speicherliste?
+						// (das könnte passieren, wenn man die Tags nicht aus dem Dropdown-Menü auswählt,
+						// sondern händisch eintippt)
+						for (let i of save) {
+							if (i.ty === kat && i.id === id) {
+								continue forX;
+							}
+						}
+						// Tag ist noch nicht in der Liste => aufnehmen
 						save.push({
 							ty: kat,
 							id: id,
@@ -208,9 +217,11 @@ let tagger = {
 				} else {
 					text += ", ";
 				}
-				text += `<s>${mm.name}</s>`;
+				text += `<s>${helfer.escapeHtml(mm.name)}</s>`;
 			}
-			dialog.oeffnen("alert");
+			dialog.oeffnen("alert", function() {
+				tagger.fokusTagzelle();
+			});
 			dialog.text(text);
 		}
 		// korrekte Tags speichern
@@ -220,10 +231,6 @@ let tagger = {
 		let zelle = document.querySelector(`#bedeutungen-cont tr[data-idx="${idx}"] td[data-feld="ta"]`);
 		helfer.keineKinder(zelle);
 		bedeutungen.aufbauenTags(save, zelle);
-		// Zeile mit den Tags aktivieren
-		if (save.length) {
-			bedeutungen.editZeile(zelle, true);
-		}
 		// Änderungsmarkierung Bedeutungsgerüst setzen
 		bedeutungen.bedeutungenGeaendert(true);
 		// Änderungsmarkierungen im Tagger entfernen
@@ -268,7 +275,15 @@ let tagger = {
 		// Fenster ausblenden
 		function ausblenden () {
 			overlay.ausblenden(document.getElementById("tagger"));
+			tagger.fokusTagzelle();
 		}
+	},
+	// Tabellenzelle mit den Tags fokussieren (nach dem Schließen)
+	fokusTagzelle () {
+		const idx = parseInt(document.getElementById("tagger").dataset.idx, 10);
+		let zelle = document.querySelector(`#bedeutungen-cont tr[data-idx="${idx}"] td[data-feld="ta"]`);
+		bedeutungen.editZeile(zelle, true);
+		bedeutungen.linkTagger(zelle);
 	},
 	// Tags wurden geändert und noch nicht gespeichert
 	geaendert: false,

@@ -87,15 +87,19 @@ let layoutMenu = [
 		label: "&Programm",
 		submenu: [
 			{
-				label: "Einstellungen",
-				icon: path.join(__dirname, "img", "menu", "programm-einstellungen.png"),
-				click: () => appMenu.aktion("programm-einstellungen"),
-			},
-			{ type: "separator" },
-			{
 				label: "Neues Fenster",
 				icon: path.join(__dirname, "img", "menu", "programm-neues-fenster.png"),
 				click: () => fenster.erstellen(""),
+			},
+			{
+				label: "Karteisuche",
+				icon: path.join(__dirname, "img", "menu", "programm-karteisuche.png"),
+				click: () => appMenu.aktion("programm-karteisuche"),
+			},
+			{
+				label: "Einstellungen",
+				icon: path.join(__dirname, "img", "menu", "programm-einstellungen.png"),
+				click: () => appMenu.aktion("programm-einstellungen"),
 			},
 			{ type: "separator" },
 			{

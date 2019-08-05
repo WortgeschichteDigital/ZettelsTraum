@@ -24,14 +24,19 @@
 	background-color: #fff;
 }
 
+#quick-programm-neues-fenster {
+	-webkit-mask-image: url(../../img/quick-neues-fenster.svg);
+	mask-image: url(../../img/quick-neues-fenster.svg);
+}
+
+#quick-programm-karteisuche {
+	-webkit-mask-image: url(../../img/quick-karteisuche.svg);
+	mask-image: url(../../img/quick-karteisuche.svg);
+}
+
 #quick-programm-einstellungen {
 	-webkit-mask-image: url(../../img/quick-einstellungen.svg);
 	mask-image: url(../../img/quick-einstellungen.svg);
-}
-
-#quick-programm-neues-fenster {
--webkit-mask-image: url(../../img/quick-neues-fenster.svg);
-mask-image: url(../../img/quick-neues-fenster.svg);
 }
 
 #quick-programm-beenden {

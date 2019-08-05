@@ -225,8 +225,17 @@ p.no-indent + .filter-baum, /* betrifft Verschiedenes > Filterlogik */
 
 #filter-kartendatum .icon-jetzt {
 	margin-left: 5px;
+	background-color: var(--textExtremHell);
 	-webkit-mask-image: url(../../img/filter-jetzt.svg);
 	mask-image: url(../../img/filter-jetzt.svg);
+}
+
+#filter-kartendatum .icon-jetzt:hover {
+	background-color: var(--text);
+}
+
+#filter-kartendatum .icon-jetzt:focus {
+	background-color: var(--farbe);
 }
 
 #filter-erweiterte {

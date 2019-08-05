@@ -23,13 +23,18 @@ let sonderzeichen = {
 				val = feld.value;
 			feld.focus();
 			// Zeichen eintragen + merkieren
-			const zeichen = this.textContent,
+			const zeichen = this.textContent.replace(/</, "&lt;").replace(/>/, "&gt;"),
 				start = feld.selectionStart,
 				ende = feld.selectionEnd,
 				textStart = val.substring(0, start),
 				textEnde = val.substring(ende);
 			feld.value = textStart + zeichen + textEnde;
 			feld.setSelectionRange(start, start + zeichen.length, "forward");
+			// Änderungen übernehmen (wenn aus dem Belegfeld der Karteikarte aufgerufen)
+			if (sonderzeichen.caller === "beleg-bs") {
+				beleg.data.bs = helfer.textTrim(feld.value, true);
+				beleg.belegGeaendert(true);
+			}
 		});
 	},
 };

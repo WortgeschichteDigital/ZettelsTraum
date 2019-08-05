@@ -102,8 +102,9 @@ let optionen = {
 			// Quick-Access-Bar anzeigen
 			quick: false,
 			// Icons in der Quick-Access-Bar, die ein- oder ausgeblendet gehören
-			"quick-programm-einstellungen": false,
 			"quick-programm-neues-fenster": false,
+			"quick-programm-karteisuche": false,
+			"quick-programm-einstellungen": false,
 			"quick-programm-beenden": false,
 			"quick-kartei-erstellen": false,
 			"quick-kartei-oeffnen": false,

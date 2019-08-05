@@ -237,7 +237,7 @@
 	color: var(--text);
 }
 
-td:not(.leer) #bedeutungen-tagger-link:focus {
+td #bedeutungen-tagger-link:focus {
 	color: var(--farbe);
 }
 

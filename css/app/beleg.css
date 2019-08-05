@@ -196,19 +196,22 @@ textarea#beleg-bs {
 	right: 6px;
 }
 
-.text-tools-beleg {
+.text-tools-beleg,
+.text-tools-bedeutung {
 	position: absolute;
 	right: 78px;
 }
 
 .text-tools a,
-.text-tools-beleg a {
+.text-tools-beleg a,
+.text-tools-bedeutung a {
 	display: inline-block;
 	background-color: var(--textExtremHell);
 }
 
 .text-tools a:hover,
-.text-tools-beleg a:hover {
+.text-tools-beleg a:hover,
+.text-tools-bedeutung a:hover {
 	background-color: var(--text);
 }
 

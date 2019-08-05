@@ -29,6 +29,7 @@
 		<script src="js/app/filter.js"></script>
 		<script src="js/app/helfer.js"></script>
 		<script src="js/app/kartei.js"></script>
+		<script src="js/app/karteisuche.js"></script>
 		<script src="js/app/konversion.js"></script>
 		<script src="js/app/kopieren.js"></script>
 		<script src="js/app/lexika.js"></script>
@@ -49,8 +50,9 @@
 	<body>
 		<!-- QUICK ACCESS -->
 		<div id="quick"
-			><a href="#" id="quick-programm-einstellungen" class="icon-link" title="Programm: Einstellungen"> </a
 			><a href="#" id="quick-programm-neues-fenster" class="icon-link" title="Programm: Neues Fenster"> </a
+			><a href="#" id="quick-programm-karteisuche" class="icon-link" title="Programm: Karteisuche"> </a
+			><a href="#" id="quick-programm-einstellungen" class="icon-link" title="Programm: Einstellungen"> </a
 			><a href="#" id="quick-programm-beenden" class="icon-link" title="Programm: Beenden (Strg + Q)"> </a
 			><span class="quick-spacer"> </span
 			><a href="#" id="quick-kartei-erstellen" class="icon-link" title="Kartei: Erstellen (Strg + E)"> </a
@@ -236,6 +238,9 @@
 					<td colspan="2"><hr></td>
 				</tr><tr>
 					<th colspan="2"><label for="beleg-bd">Bedeutung</label
+						><span class="text-tools-bedeutung"
+							><a href="#" class="icon-link icon-tools-sonderzeichen" title="Sonderzeichen einfügen" tabindex="-1"> </a
+							></span
 						><span class="text-tools"
 							><a href="#" class="icon-link icon-tools-kopieren" title="Text kopieren" tabindex="-1"> </a
 							><a href="#" class="icon-link icon-tools-einfuegen" title="Text einfügen" tabindex="-1"> </a></span></th>
@@ -501,10 +506,12 @@
 							><label for="einstellung-quick">Quick-Access-Bar anzeigen</label></p>
 						<div class="einstellungen-spalten">
 							<h3>Programm</h3>
-							<p><input type="checkbox" id="einstellung-quick-programm-einstellungen"
-								><label for="einstellung-quick-programm-einstellungen">Einstellungen</label></p>
 							<p><input type="checkbox" id="einstellung-quick-programm-neues-fenster"
 								><label for="einstellung-quick-programm-neues-fenster">Neues Fenster</label></p>
+							<p><input type="checkbox" id="einstellung-quick-programm-karteisuche"
+								><label for="einstellung-quick-programm-karteisuche">Karteisuche</label></p>
+							<p><input type="checkbox" id="einstellung-quick-programm-einstellungen"
+								><label for="einstellung-quick-programm-einstellungen">Einstellungen</label></p>
 							<p><input type="checkbox" id="einstellung-quick-programm-beenden"
 								><label for="einstellung-quick-programm-beenden">Beenden</label></p>
 							<h3>Kartei</h3>
@@ -631,6 +638,15 @@
 			</div>
 		</div></div>
 		
+		<!-- OVERLAY: Karteisuche -->
+		<div id="karteisuche" class="overlay aus"><div>
+			<h2><span class="icon-h icon-h-karteisuche"> </span
+				>Karteisuche<a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"> </a></h2>
+			<div id="karteisuche-cont">
+				[Formular]
+			</div>
+		</div></div>
+		
 		<!-- OVERLAY: Formvarianten -->
 		<div id="stamm" class="overlay aus"><div>
 			<h2><span class="icon-h icon-h-stamm"> </span
@@ -748,6 +764,8 @@
 			<h2><span class="icon-h icon-h-sonderzeichen"> </span
 				>Sonderzeichen einfügen<a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"> </a></h2>
 			<div id="sonderzeichen-cont"
+				><span>&lt;</span
+				><span>&gt;</span
 				><span>aͤ</span
 				><span>ẽ</span
 				><span>ñ</span

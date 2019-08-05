@@ -215,6 +215,7 @@ window.addEventListener("load", function() {
 	const {ipcRenderer} = require("electron");
 	ipcRenderer.on("optionen-empfangen", (evt, data) => optionen.empfangen(data));
 	ipcRenderer.on("programm-einstellungen", () => optionen.oeffnen());
+	ipcRenderer.on("programm-karteisuche", () => karteisuche.oeffnen());
 	ipcRenderer.on("kartei-erstellen", () => kartei.wortErfragen());
 	ipcRenderer.on("kartei-oeffnen", function(evt, datei) {
 		if (datei) {
