@@ -183,6 +183,8 @@ window.addEventListener("load", function() {
 			meta.aktionText(meta_inputs[i]);
 		}
 	}
+	// Karteisuche
+	document.getElementById("karteisuche-suchen").addEventListener("click", () => karteisuche.suchenPrep());
 	// Prompt-Textfeld
 	document.getElementById("dialog-prompt-text").addEventListener("keydown", function(evt) {
 		if (evt.which === 13) { // Enter im Textfeld führt die Aktion aus

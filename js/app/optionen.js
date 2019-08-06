@@ -172,6 +172,10 @@ let optionen = {
 			// Textsorte in den Kopf der Belegliste eintragen
 			textsorte: false,
 		},
+		// Einstellungen für die Karteisuche
+		karteisuche: {
+			pfade: [], // Pfade, in denen gesucht wird
+		},
 		// Datenfelder im Einfüge-Fenster der Kopierfunktion
 		kopieren: {
 			an: true, // Anhänge

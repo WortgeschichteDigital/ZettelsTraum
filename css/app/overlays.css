@@ -368,8 +368,9 @@
 
 /* Karteisuche ---------------------------------- */
 #karteisuche > div {
+	position: relative;
 	margin-top: 40px;
-	max-width: 800px;
+	max-width: 1000px;
 }
 
 .icon-h-karteisuche {
@@ -377,8 +378,114 @@
 	mask-image: url(../../img/heading-karteisuche.svg);
 }
 
+#karteisuche-suche-laeuft {
+	position: absolute;
+	top: 28px;
+	left: 0;
+	border-bottom-right-radius: 10px;
+	border-bottom-left-radius: 10px;
+	padding: 10px 0 0 165px;
+	width: calc(100% - 165px); /* 165px = padding-left */
+	height: calc(100% - 28px - 10px); /* 28px = Kopfleiste, 10px = padding-top */
+	background-color: rgba(255, 255, 255, .7);
+	color: var(--farbe);
+	font-style: italic;
+	font-weight: bold;
+}
+
 #karteisuche-cont {
+	display: grid;
+	grid-template-columns: calc(40% - 15px) calc(60% - 15px);
+	column-gap: 30px;
 	padding: 10px;
+}
+
+#karteisuche-cont input[type="button"] {
+	margin-left: 0;
+}
+
+#karteisuche-pfade p {
+	margin-bottom: 0;
+	height: 24px;
+}
+
+#karteisuche-pfade .add {
+	margin-bottom: 10px;
+	width: fit-content;
+	color: var(--textHell);
+	font-style: italic;
+}
+
+#karteisuche-pfade .add:hover {
+	color: var(--text);
+}
+
+#karteisuche-pfade .add:hover a {
+	background-color: var(--text);
+}
+
+#karteisuche-pfade a {
+	margin-right: 10px;
+	vertical-align: top;
+	background-color: var(--textExtremHell);
+}
+
+#karteisuche-pfade a:hover {
+	background-color: var(--text);
+}
+
+#karteisuche-pfade a:focus {
+	background-color: var(--farbe);
+}
+
+#karteisuche-pfade span {
+	display: inline-block;
+	width: calc(100% - 34px);
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+#karteisuche-pfade img {
+	vertical-align: top;
+}
+
+#karteisuche-treffer {
+	color: var(--textHell);
+	font-style: italic;
+}
+
+#karteisuche-karteien {
+	max-height: 371px;
+	overflow-y: auto;
+}
+
+#karteisuche-karteien p {
+	margin: 0;
+	border-bottom: 1px solid var(--linie);
+	padding: 5px 10px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+#karteisuche-karteien p:first-child {
+	border-top: 1px solid var(--linie);
+}
+
+#karteisuche-karteien p:hover {
+	background-color: var(--hintergrund);
+}
+
+#karteisuche-karteien p span {
+	display: inline-block;
+	color: var(--textFarbe);
+}
+
+#karteisuche-karteien p span:last-child {
+	margin-left: 10px;
+	color: var(--text);
+	font-size: 12px;
 }
 
 /* Formvarianten -------------------------------- */

@@ -225,6 +225,10 @@ input[type="button"][value="Speichern"] {
 	background-image: url(../../img/button-save.svg);
 }
 
+input[type="button"][value^="Suche"] {
+	background-image: url(../../img/button-suchen.svg);
+}
+
 input[type="checkbox"],
 input[type="radio"] {
 	position: relative;
