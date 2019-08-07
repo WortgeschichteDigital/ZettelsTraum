@@ -539,16 +539,16 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);
 							<td colspan="4"><p>Die <span class="datentyp">Objects</span> in den Slots haben die folgenden Schlüssel und Werte:</p></td>
 						</tr>
 						<tr class="wgd-ebene1">
-							<td><p><code class="quelltext">va</code></p></td>
-							<td class="datentyp">String</td>
-							<td> </td>
-							<td>Formvariante</td>
-						</tr>
-						<tr class="wgd-ebene1">
 							<td><p><code class="quelltext">qu</code></p></td>
 							<td class="datentyp">String</td>
 							<td><code class="quelltext">"dta"</code> oder <code class="quelltext">"zt"</code></td>
 							<td>Quelle der Formvariante; mit <code class="quelltext">"zt"</code> markierte Varianten wurden manuell ergänzt</td>
+						</tr>
+						<tr class="wgd-ebene1">
+							<td><p><code class="quelltext">va</code></p></td>
+							<td class="datentyp">String</td>
+							<td> </td>
+							<td>Formvariante</td>
 						</tr>
 						<tr>
 							<td><code class="quelltext">ha</code></td>
@@ -680,6 +680,12 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);
 							<td>Notizen zur Karteikarte</td>
 						</tr>
 						<tr class="wgd-ebene2">
+							<td><p><code class="quelltext">qu</code></p></td>
+							<td class="datentyp">String</td>
+							<td><code class="quelltext">\n</code> möglich</td>
+							<td>Quellenangabe</td>
+						</tr>
+						<tr class="wgd-ebene2">
 							<td><p><code class="quelltext">sy</code></p></td>
 							<td class="datentyp">String</td>
 							<td><code class="quelltext">\n</code> möglich</td>
@@ -696,12 +702,6 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);
 							<td class="datentyp">Boolean</td>
 							<td> </td>
 							<td>Beleg unvollständig (er muss weiter bearbeitet werden)</td>
-						</tr>
-						<tr class="wgd-ebene2">
-							<td><p><code class="quelltext">qu</code></p></td>
-							<td class="datentyp">String</td>
-							<td><code class="quelltext">\n</code> möglich</td>
-							<td>Quellenangabe</td>
 						</tr>
 						<tr>
 							<td><p><code class="quelltext">le</code></p></td>

@@ -185,6 +185,7 @@ window.addEventListener("load", function() {
 	}
 	// Karteisuche
 	document.getElementById("karteisuche-suchen").addEventListener("click", () => karteisuche.suchenPrep());
+	document.getElementById("karteisuche-add-filter").addEventListener("click", () => karteisuche.filterHinzufuegen());
 	// Prompt-Textfeld
 	document.getElementById("dialog-prompt-text").addEventListener("keydown", function(evt) {
 		if (evt.which === 13) { // Enter im Textfeld führt die Aktion aus

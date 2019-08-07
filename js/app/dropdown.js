@@ -228,10 +228,15 @@ let dropdown = {
 		dropdown.data = [];
 		if (feld_id === "einstellung-bearbeiterin" ||
 				feld_id === "meta-be" ||
-				/^redaktion-person/.test(feld_id)) {
+				/^redaktion-person/.test(feld_id) ||
+				/^karteisuche-(redaktion-)*person-/.test(feld_id)) {
 			dropdown.data = [...optionen.data.personen];
-		} else if (/^redaktion-ereignis/.test(feld_id)) {
+		} else if (/^redaktion-ereignis/.test(feld_id) ||
+				/^karteisuche-redaktion-ereignis-/.test(feld_id)) {
 			dropdown.data = [...redaktion.ereignisse];
+			if (/^karteisuche-redaktion-ereignis-/.test(feld_id)) {
+				dropdown.data.unshift("Kartei erstellt");
+			}
 		} else if (feld_id === "beleg-bd") {
 			dropdown.dataBedeutungen();
 		} else if (feld_id === "beleg-bl") {
@@ -260,6 +265,27 @@ let dropdown = {
 			dropdown.data = dropdown.dataTags(feld_id);
 		} else if (/^kopieren-geruest-/.test(feld_id)) {
 			dropdown.data = dropdown.dataKopierenGerueste();
+		} else if (/^karteisuche-filter-/.test(feld_id)) {
+			dropdown.data = Object.keys(karteisuche.filterTypen);
+		} else if (/^karteisuche-tag-typ-/.test(feld_id)) {
+			let typen = Object.keys(optionen.data.tags);
+			for (let i = 0, len = typen.length; i < len; i++) {
+				const typ = typen[i];
+				if (optionen.tagsTypen[typ]) {
+					typen[i] = optionen.tagsTypen[typ][1];
+				} else {
+					typen[i] = typ.substring(0, 1).toUpperCase() + typ.substring(1);
+				}
+			}
+			dropdown.data = typen;
+		} else if (/^karteisuche-tag-/.test(feld_id)) {
+			let typenFeld = document.getElementById(feld_id).parentNode.previousSibling.firstChild;
+			const typ = karteisuche.filterTagTyp(typenFeld);
+			dropdown.data = dropdown.dataTags(`tagger-${typ}`);
+		} else if (/^karteisuche-datum-typ/.test(feld_id)) {
+			dropdown.data = ["erstellt", "geändert"];
+		} else if (/^karteisuche-datum-dir/.test(feld_id)) {
+			dropdown.data = ["<=", ">="];
 		}
 		// Dropdown erzeugen und einhängen
 		let span = document.createElement("span");
@@ -566,6 +592,8 @@ let dropdown = {
 				window.getSelection().collapse(ele.firstChild, ele.textContent.length);
 				ele.classList.add("changed");
 				tagger.taggerGeaendert(true);
+			} else if (/^karteisuche-filter-/.test(caller)) {
+				karteisuche.filterFelder(caller);
 			}
 			// Dropdown schließen
 			dropdown.schliessen();

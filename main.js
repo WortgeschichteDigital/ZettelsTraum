@@ -928,16 +928,18 @@ ipcMain.on("kartei-schon-offen", function(evt, kartei) {
 });
 
 // die übergebene Kartei laden (in einem neuen oder bestehenden Hauptfenster)
-ipcMain.on("kartei-laden", function(evt, kartei) {
-	for (let id in win) {
-		if (!win.hasOwnProperty(id)) {
-			continue;
-		}
-		if (win[id].typ === "index" && !win[id].kartei) {
-			let w = BrowserWindow.fromId(parseInt(id, 10));
-			w.webContents.send("kartei-oeffnen", kartei);
-			fenster.fokus(w);
-			return;
+ipcMain.on("kartei-laden", function(evt, kartei, in_leerem_fenster = true) {
+	if (in_leerem_fenster) {
+		for (let id in win) {
+			if (!win.hasOwnProperty(id)) {
+				continue;
+			}
+			if (win[id].typ === "index" && !win[id].kartei) {
+				let w = BrowserWindow.fromId(parseInt(id, 10));
+				w.webContents.send("kartei-oeffnen", kartei);
+				fenster.fokus(w);
+				return;
+			}
 		}
 	}
 	fenster.erstellen(kartei);

@@ -175,6 +175,7 @@ let optionen = {
 		// Einstellungen für die Karteisuche
 		karteisuche: {
 			pfade: [], // Pfade, in denen gesucht wird
+			filter: [], // Filter, die zuletzt verwendet wurden
 		},
 		// Datenfelder im Einfüge-Fenster der Kopierfunktion
 		kopieren: {

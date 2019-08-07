@@ -370,7 +370,7 @@
 #karteisuche > div {
 	position: relative;
 	margin-top: 40px;
-	max-width: 1000px;
+	max-width: 1200px;
 }
 
 .icon-h-karteisuche {
@@ -395,9 +395,16 @@
 
 #karteisuche-cont {
 	display: grid;
-	grid-template-columns: calc(40% - 15px) calc(60% - 15px);
-	column-gap: 30px;
+	grid-template-columns: repeat(2, 50%);
 	padding: 10px;
+}
+
+#karteisuche-cont > div:last-child {
+	/* Trick, horizontal überlaufende Filter-Inputs zu verbergen,
+			die Dropdown-Menüs aber vertikal ausbrechen zu lassen */
+	position: relative;
+	padding-left: 30px;
+	background-color: #fff;
 }
 
 #karteisuche-cont input[type="button"] {
@@ -405,26 +412,29 @@
 }
 
 #karteisuche-pfade p {
-	margin-bottom: 0;
 	height: 24px;
 }
 
-#karteisuche-pfade .add {
+#karteisuche-pfade .add,
+#karteisuche-add-filter {
 	margin-bottom: 10px;
 	width: fit-content;
 	color: var(--textHell);
 	font-style: italic;
 }
 
-#karteisuche-pfade .add:hover {
+#karteisuche-pfade .add:hover,
+#karteisuche-add-filter:hover {
 	color: var(--text);
 }
 
-#karteisuche-pfade .add:hover a {
+#karteisuche-pfade .add:hover a,
+#karteisuche-add-filter:hover a {
 	background-color: var(--text);
 }
 
-#karteisuche-pfade a {
+#karteisuche-pfade a,
+#karteisuche-add-filter a {
 	margin-right: 10px;
 	vertical-align: top;
 	background-color: var(--textExtremHell);
@@ -448,6 +458,76 @@
 
 #karteisuche-pfade img {
 	vertical-align: top;
+}
+
+#karteisuche-add-filter {
+	margin: 0;
+}
+
+#karteisuche-filter p {
+	margin: 10px 0 0 0;
+	white-space: nowrap;
+}
+
+#karteisuche-filter p > a {
+	vertical-align: text-bottom;
+	background-color: var(--textExtremHell);
+}
+
+#karteisuche-filter p > a:hover {
+	background-color: var(--text);
+}
+
+#karteisuche-filter p > a:focus {
+	background-color: var(--farbe);
+}
+
+#karteisuche-filter p > span {
+	display: inline-block;
+	margin-left: 10px;
+	height: 30px;
+}
+
+#karteisuche-filter span input[type="text"] {
+	vertical-align: top;
+	width: 100px;
+}
+
+#karteisuche-filter span input.karteisuche-volltext {
+	width: 119px;
+}
+
+#karteisuche-filter span input.karteisuche-datum-typ {
+	width: 75px;
+}
+
+#karteisuche-filter span input.karteisuche-datum-dir {
+	width: 25px;
+}
+
+#karteisuche-filter input:read-only {
+	cursor: default;
+}
+
+#karteisuche-filter input[type="date"] {
+	width: 130px;
+}
+
+#karteisuche-filter input[type="date"]::-webkit-calendar-picker-indicator {
+	display: inline-block;
+}
+
+#karteisuche-filter input[type="checkbox"] {
+	z-index: 0;
+}
+
+#karteisuche-filter label {
+	color: var(--textFarbe);
+}
+
+#karteisuche-filter .dropdown-link-td {
+	top: 3px;
+	right: 2px;
 }
 
 #karteisuche-treffer {
@@ -919,6 +999,12 @@
 
 input[id^="redaktion-datum"] {
 	width: 110px;
+}
+
+input[id^="redaktion-datum"]::-webkit-inner-spin-button,
+input[id^="redaktion-datum"]::-webkit-outer-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
 }
 
 input[id^="redaktion-ereignis"],

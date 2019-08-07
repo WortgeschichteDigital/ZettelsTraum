@@ -37,4 +37,5 @@ input::-webkit-datetime-edit-minute-field:focus {
 /* Placeholder in Inputs ------------------------ */
 ::placeholder {
   color: var(--textSehrHell);
+	font-style: italic;
 }
