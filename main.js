@@ -23,6 +23,11 @@ const {app, BrowserWindow, ipcMain, Menu} = require("electron"),
 	path = require("path");
 
 
+/* LOCALE SETZEN ********************************/
+
+app.commandLine.appendSwitch("lang", "de");
+
+
 /* SINGLE-INSTANCE ******************************/
 
 let primary = app.requestSingleInstanceLock();

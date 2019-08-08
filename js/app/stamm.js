@@ -16,6 +16,8 @@ let stamm = {
 		}
 		// Liste erzeugen
 		stamm.auflisten();
+		// DTA-Icons erzeugen
+		stamm.onlineLinks();
 		// Fokus in das Textfeld
 		document.getElementById("stamm-text").focus();
 	},
@@ -156,42 +158,69 @@ let stamm = {
 			}
 		});
 	},
-	// Formvarianten des DTA laden
+	// speichert die Formvarianten, die das DTA liefert
+	dtaEqlemma: [],
+	// Promises vorbereiten
 	//   aktiv = Boolean
 	//     (der Download der Varianten wurde bewusst angestoßen => ggf. Fehlermeldungen anzeigen)
 	dtaGet (aktiv) {
-		let ajax = new XMLHttpRequest();
-		ajax.open("GET", `https://www.deutschestextarchiv.de/demo/cab/query?a=expand.eqlemma&fmt=json&clean=1&q=${encodeURIComponent(kartei.wort)}`, true);
-		ajax.timeout = parseInt(optionen.data.einstellungen.timeout, 10) * 1000;
-		ajax.addEventListener("load", function () {
-			if (ajax.status >= 200 && ajax.status < 300) {
-				// JSON parsen
-				let json = {};
-				try {
-					json = JSON.parse(ajax.response);
-				} catch (err) {
-					stamm.dtaFehler("Parsing-Fehler", err, aktiv);
-				}
-				// eqlemma-Liste extrahieren
-				let eqlemma = [];
-				try {
-					eqlemma = json.body[0].tokens[0].eqlemma;
-				} catch (err) {
-					stamm.dtaFehler("Parsing-Fehler", "eqlemma is missing", aktiv);
-				}
-				// Okay, die Liste kann geparst werden
-				stamm.dtaPush(eqlemma, aktiv);
-			} else {
-				stamm.dtaFehler("Download-Fehler", null, aktiv);
+		stamm.dtaEqlemma = [];
+		let promises = [];
+		kartei.wort.split(" ").forEach(function(i) {
+			promises.push(stamm.dtaRequest(i, aktiv));
+		});
+		Promise.all(promises).then(result => {
+			if (!result.includes(false)) {
+				stamm.dtaPush(stamm.dtaEqlemma, aktiv);
 			}
 		});
-		ajax.addEventListener("timeout", function () {
-			stamm.dtaFehler("Timeout-Fehler", null, aktiv);
+	},
+	// Request an das DTA schicken, um an die Formvarianten zu kommen
+	//   wort = String
+	//     (das Wort, zu dem die Formvarianten gezogen werden sollen)
+	//   aktiv = Boolean
+	//     (der Download der Varianten wurde bewusst angestoßen => ggf. Fehlermeldungen anzeigen)
+	dtaRequest (wort, aktiv) {
+		return new Promise(resolve => {
+			let ajax = new XMLHttpRequest();
+			ajax.open("GET", `https://www.deutschestextarchiv.de/demo/cab/query?a=expand.eqlemma&fmt=json&clean=1&q=${encodeURIComponent(wort)}`, true);
+			ajax.timeout = parseInt(optionen.data.einstellungen.timeout, 10) * 1000;
+			ajax.addEventListener("load", function () {
+				if (ajax.status >= 200 && ajax.status < 300) {
+					// JSON parsen
+					let json = {};
+					try {
+						json = JSON.parse(ajax.response);
+					} catch (err) {
+						stamm.dtaFehler("Parsing-Fehler", err, aktiv);
+						resolve(false);
+					}
+					// eqlemma-Liste extrahieren
+					let eqlemma = [];
+					try {
+						eqlemma = json.body[0].tokens[0].eqlemma;
+					} catch (err) {
+						stamm.dtaFehler("Parsing-Fehler", "eqlemma is missing", aktiv);
+						resolve(false);
+					}
+					// Okay, die Liste kann zwischengespeichert und nach dem Erfüllen aller Promises geparst werden
+					stamm.dtaEqlemma = stamm.dtaEqlemma.concat(eqlemma);
+					resolve(true);
+				} else {
+					stamm.dtaFehler("Download-Fehler", null, aktiv);
+					resolve(false);
+				}
+			});
+			ajax.addEventListener("timeout", function () {
+				stamm.dtaFehler("Timeout-Fehler", null, aktiv);
+				resolve(false);
+			});
+			ajax.addEventListener("error", function () {
+				stamm.dtaFehler("allgemeiner Fehler", null, aktiv);
+				resolve(false);
+			});
+			ajax.send(null);
 		});
-		ajax.addEventListener("error", function () {
-			stamm.dtaFehler("allgemeiner Fehler", null, aktiv);
-		});
-		ajax.send(null);
 	},
 	// Fehler beim Laden der Formvarianten des DTA
 	//   fehlertyp = String
@@ -212,9 +241,11 @@ let stamm = {
 		}
 		// ist noch kein Wort in der Liste => das Kartei-Wort einfügen
 		if (!data.fv.length) {
-			data.fv.push({
-				va: kartei.wort,
-				qu: "zt",
+			kartei.wort.split(" ").forEach(function(i) { // das "Wort" könnte aus mehreren Einzelwörtern bestehen
+				data.fv.push({
+					va: i,
+					qu: "zt",
+				});
 			});
 			kartei.karteiGeaendert(true);
 		}
@@ -279,9 +310,11 @@ let stamm = {
 			}
 		}
 		// ggf. das Wort hinzufügen, falls es nicht in der eqlemma-Liste ist
-		if (!varianten.includes(kartei.wort)) {
-			variantenZt.push(kartei.wort);
-		}
+		kartei.wort.split(" ").forEach(function(i) {
+			if (!varianten.includes(i)) {
+				variantenZt.push(i);
+			}
+		});
 		// jetzt können die für die App relevanten Varianten endlich gepusht werden
 		data.fv = [];
 		for (let i = 0, len = varianten.length; i < len; i++) {
@@ -308,13 +341,31 @@ let stamm = {
 			document.getElementById("stamm-text").focus();
 		}
 	},
+	// erzeugt die Links zum Aufrufen der Formvarianten auf der DTA-Seite
+	onlineLinks () {
+		let cont = document.getElementById("stamm-online");
+		helfer.keineKinder(cont);
+		// Links erzeugen
+		kartei.wort.split(" ").forEach(function(i) {
+			let a = document.createElement("a");
+			cont.appendChild(a);
+			a.classList.add("icon-link");
+			a.dataset.wort = i;
+			a.href = "#";
+			a.textContent = " ";
+			a.title = `alle Formvarianten zum Wort „${i}“ ansehen`;
+			stamm.online(a);
+		});
+	},
 	// alle Formvarianten online anzeigen
-	//   evt = Event-Objekt
-	//     (das Event-Objekt, das beim Klick auf den Formvarianten-Link erzeugt wird)
-	online (evt) {
-		evt.preventDefault();
-		const url = `https://www.deutschestextarchiv.de/demo/cab/query?a=expand.eqlemma&fmt=text&clean=1&pretty=1&raw=1&q=${encodeURIComponent(kartei.wort)}`,
-			{shell} = require("electron");
-		shell.openExternal(url);
+	//   a = Element
+	//     (ein Link, der die Formvarianten-Liste im Netz aufrufen soll)
+	online (a) {
+		a.addEventListener("click", function(evt) {
+			evt.preventDefault();
+			const url = `https://www.deutschestextarchiv.de/demo/cab/query?a=expand.eqlemma&fmt=text&clean=1&pretty=1&raw=1&q=${encodeURIComponent(this.dataset.wort)}`,
+				{shell} = require("electron");
+			shell.openExternal(url);
+		});
 	},
 };

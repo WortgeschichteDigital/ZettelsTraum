@@ -65,7 +65,7 @@ window.addEventListener("load", function() {
 	// Start-Sektion
 	document.getElementById("start-erstellen").addEventListener("click", () => kartei.wortErfragen());
 	document.getElementById("start-oeffnen").addEventListener("click", () => kartei.oeffnen());
-	// Belegformular
+	// Karteikarte
 	let beleg_inputs = document.querySelectorAll("#beleg input, #beleg textarea");
 	for (let i = 0, len = beleg_inputs.length; i < len; i++) {
 		if (beleg_inputs[i].type === "button") {
@@ -147,7 +147,6 @@ window.addEventListener("load", function() {
 	document.getElementById("tags-laden").addEventListener("click", () => optionen.tagsManuLaden());
 	optionen.anwendenIconsDetailsListener(document.getElementById("einstellung-anzeige-icons-immer-an"));
 	// Formvarianten-Fenster
-	document.getElementById("stamm-online").addEventListener("click", evt => stamm.online(evt));
 	let stamm_inputs = document.querySelectorAll("#stamm input");
 	for (let i = 0, len = stamm_inputs.length; i < len; i++) {
 		if (stamm_inputs[i].type === "button") {

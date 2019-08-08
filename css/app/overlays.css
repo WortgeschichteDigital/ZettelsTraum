@@ -514,11 +514,7 @@
 }
 
 #karteisuche-filter input[type="date"] {
-	width: 130px;
-}
-
-#karteisuche-filter input[type="date"]::-webkit-calendar-picker-indicator {
-	display: inline-block;
+	width: 127px;
 }
 
 #karteisuche-filter input[type="checkbox"] {
@@ -1002,13 +998,7 @@
 }
 
 input[id^="redaktion-datum"] {
-	width: 110px;
-}
-
-input[id^="redaktion-datum"]::-webkit-inner-spin-button,
-input[id^="redaktion-datum"]::-webkit-outer-spin-button {
-	-webkit-appearance: none;
-	margin: 0;
+	width: 127px;
 }
 
 input[id^="redaktion-ereignis"],

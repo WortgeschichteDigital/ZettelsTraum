@@ -163,7 +163,6 @@ input[type="datetime-local"] {
 	height: 24px;
 }
 
-input[type="date"]::-webkit-calendar-picker-indicator,
 input[type="date"]::-webkit-clear-button,
 input[type="datetime-local"]::-webkit-clear-button {
 	display: none;
