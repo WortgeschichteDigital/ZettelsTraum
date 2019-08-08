@@ -58,9 +58,14 @@ let helferWin = {
 		if (typeof hilfe !== "undefined" && evt.ctrlKey && evt.which === 70) {
 			document.getElementById("suchfeld").select();
 		}
-		// Strg + P (nur im Bedeutungsgerüst-Fenster)
-		if (typeof bedeutungen !== "undefined" && evt.ctrlKey && evt.which === 80) {
-			bedeutungen.drucken();
+		// Strg + P (Bedeutungsgerüst und Changelog)
+		if (evt.ctrlKey && evt.which === 80) {
+			console.log(document.title);
+			if (typeof bedeutungen !== "undefined") {
+				bedeutungen.drucken();
+			} else if (/^Changelog$/.test(document.title)) {
+				print();
+			}
 		}
 	},
 };

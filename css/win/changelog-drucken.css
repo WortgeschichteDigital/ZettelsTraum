@@ -1,0 +1,7 @@
+@charset "utf-8";
+
+/* Header und Druck-Icon ausblenden (überlagern sonst Textteile) */
+header,
+#changelog-drucken {
+	display: none;
+}

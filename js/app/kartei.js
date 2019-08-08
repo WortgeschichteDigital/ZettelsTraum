@@ -447,6 +447,13 @@ let kartei = {
 		const fs = require("fs"),
 			lockfile = `${pfad[1]}.~lock.${pfad[2]}#`;
 		if (aktion === "lock") {
+			// alte Datei ggf. löschen
+			// (Unter Windows gibt es Probleme, wenn die Datei direkt überschrieben werden soll.
+			// Ist das vielleicht ein Node-BUG? Eigentlich sollte das nämlich gehen.)
+			if (fs.existsSync(lockfile)) {
+				fs.unlinkSync(lockfile);
+			}
+			// Lock-Datei erstellen
 			const os = require("os"),
 				host = os.hostname(),
 				user = os.userInfo().username,

@@ -594,6 +594,8 @@ let dropdown = {
 				tagger.taggerGeaendert(true);
 			} else if (/^karteisuche-filter-/.test(caller)) {
 				karteisuche.filterFelder(caller);
+				// das erste Input-Feld hinter dem Caller fokussieren
+				document.getElementById(caller).parentNode.nextSibling.firstChild.focus();
 			}
 			// Dropdown schließen
 			dropdown.schliessen();

@@ -91,11 +91,13 @@ let layoutMenu = [
 				icon: path.join(__dirname, "img", "menu", "programm-neues-fenster.png"),
 				click: () => fenster.erstellen(""),
 			},
+			{ type: "separator" },
 			{
 				label: "Karteisuche",
 				icon: path.join(__dirname, "img", "menu", "programm-karteisuche.png"),
 				click: () => appMenu.aktion("programm-karteisuche"),
 			},
+			{ type: "separator" },
 			{
 				label: "Einstellungen",
 				icon: path.join(__dirname, "img", "menu", "programm-einstellungen.png"),

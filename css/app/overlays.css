@@ -456,6 +456,10 @@
 	white-space: nowrap;
 }
 
+#karteisuche-pfade input {
+	margin-left: 1px; /* damit beim Fokus das Outline links nicht abgeschnitten wird */
+}
+
 #karteisuche-pfade img {
 	vertical-align: top;
 }

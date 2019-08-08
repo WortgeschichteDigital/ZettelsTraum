@@ -23,6 +23,15 @@ let karteisuche = {
 	},
 	// Liste der ausgewählten Pfade aufbauen
 	pfadeAuflisten () {
+		// Check-Status sichern
+		let status = Array(optionen.data.karteisuche.pfade.length).fill(true),
+			inputs = document.querySelectorAll("#karteisuche-pfade input");
+		for (let i = 0, len = inputs.length; i < len; i++) {
+			if (!inputs[i].checked) {
+				status[i] = false;
+			}
+		}
+		// Content leeren
 		let cont = document.getElementById("karteisuche-pfade");
 		helfer.keineKinder(cont);
 		// Pfad hinzufügen
@@ -37,7 +46,8 @@ let karteisuche = {
 		p.appendChild(document.createTextNode("Pfad hinzufügen"));
 		// Pfade auflisten
 		const fs = require("fs");
-		for (let pfad of optionen.data.karteisuche.pfade) {
+		for (let i = 0, len = optionen.data.karteisuche.pfade.length; i < len; i++) {
+			const pfad = optionen.data.karteisuche.pfade[i];
 			let p = document.createElement("p");
 			cont.appendChild(p);
 			// Lösch-Icon
@@ -50,8 +60,22 @@ let karteisuche = {
 			// Pfad
 			let span = document.createElement("span");
 			p.appendChild(span);
-			span.textContent = pfad;
 			span.title = pfad;
+			// ggf. Checkbox einblenden
+			if (len > 1) {
+				let input = document.createElement("input");
+				span.insertBefore(input, span.firstChild);
+				input.checked = status[i];
+				input.id = `pfad-${i + 1}`;
+				input.type = "checkbox";
+				input.value = pfad;
+				let label = document.createElement("label");
+				span.appendChild(label);
+				label.setAttribute("for", `pfad-${i + 1}`);
+				label.textContent = pfad;
+			} else {
+				span.textContent = pfad;
+			}
 			// Existiert der Pfad noch?
 			if (karteisuche.pfadGefunden.includes(pfad)) {
 				continue;
@@ -60,7 +84,7 @@ let karteisuche = {
 				karteisuche.pfadGefunden.push(pfad);
 			} else {
 				let img = document.createElement("img");
-				span.insertBefore(img, span.firstChild);
+				span.insertBefore(img, span.lastChild);
 				img.src = "img/fehler.svg";
 				img.width = "24";
 				img.height = "24";
@@ -129,6 +153,8 @@ let karteisuche = {
 			dialog.text("Der Pfad konnte nicht gefunden werden.");
 		});
 	},
+	// speichert das Input-Element, das vor dem Start der Suche den Fokus hatte
+	suchenFokus: null,
 	// Suche vorbereiten
 	suchenPrep () {
 		// Erst Pfad hinzufügen!
@@ -136,7 +162,7 @@ let karteisuche = {
 			dialog.oeffnen("alert", function() {
 				karteisuche.pfadHinzufuegen();
 			});
-			dialog.text("Sie müssen zunächst einen Pfad hinzufügen.\nIn diesem Ordner wird dann gesucht.");
+			dialog.text("Sie müssen zunächst einen Pfad hinzufügen.\nIn diesem Pfad wird dann rekursiv gesucht.");
 			document.getElementById("karteisuche-suche-laeuft").classList.add("aus");
 			return;
 		}
@@ -151,19 +177,50 @@ let karteisuche = {
 			document.getElementById("karteisuche-suche-laeuft").classList.add("aus");
 			return;
 		}
+		// Pfade ermitteln, in denen gesucht werden soll
+		let pfade = [],
+			inputs = document.querySelectorAll("#karteisuche-pfade input");
+		if (inputs.length) {
+			for (let i of inputs) {
+				if (i.checked && karteisuche.pfadGefunden.includes(i.value)) {
+					pfade.push(i.value);
+				}
+			}
+		} else {
+			pfade = [...karteisuche.pfadGefunden];
+		}
+		// Wurden Pfade gefunden? Wenn nein => alle Checkboxes abgewählt
+		if (!pfade.length) {
+			dialog.oeffnen("alert");
+			let text = "Pfad";
+			if (optionen.data.karteisuche.pfade.length !== karteisuche.pfadGefunden.length) {
+				text = "der existierenden Pfade";
+			}
+			dialog.text(`Sie müssen mindestens einen ${text} auswählen.`);
+			document.getElementById("karteisuche-suche-laeuft").classList.add("aus");
+			return;
+		}
+		// Element mit Fokus speichern
+		karteisuche.suchenFokus = document.querySelector("#karteisuche input:focus");
+		if (karteisuche.suchenFokus) {
+			karteisuche.suchenFokus.blur();
+		} else {
+			karteisuche.suchenFokus = null;
+		}
 		// Okay, die Suche kann starten
-		document.querySelector("#karteisuche input").blur();
 		document.getElementById("karteisuche-suche-laeuft").classList.remove("aus");
 		setTimeout(function() {
-			karteisuche.suchen();
+			karteisuche.suchen(pfade);
 		}, 500);
 	},
 	// Suche starten
-	suchen () {
+	//   pfade = Array
+	//     (Pfade, in denen gesucht werden soll)
+	suchen (pfade) {
 		// Suche starten
 		karteisuche.wgd = [];
 		const fs = require("fs");
-		for (let pfad of karteisuche.pfadGefunden) {
+		for (let pfad of pfade) {
 			if (fs.existsSync(pfad)) {
 				karteisuche.wgdFinden(pfad);
 			}
@@ -192,8 +249,11 @@ let karteisuche = {
 		}
 		// passende Karteien auflisten
 		karteisuche.wgdAuflisten();
-		// Sperrbild weg
+		// Sperrbild weg und das zuletzt fokussierte Element wieder fokussieren
 		document.getElementById("karteisuche-suche-laeuft").classList.add("aus");
+		if (karteisuche.suchenFokus) {
+			karteisuche.suchenFokus.focus();
+		}
 		// Filter speichern
 		karteisuche.filterSpeichern();
 	},
@@ -379,7 +439,9 @@ let karteisuche = {
 		],
 	},
 	// fügt einen neuen Filter hinzu
-	filterHinzufuegen () {
+	//   manuell = Boolean || undefined
+	//     (der Filter wurde manuell hinzugefügt)
+	filterHinzufuegen (manuell = true) {
 		let cont = document.getElementById("karteisuche-filter"),
 			p = document.createElement("p");
 		cont.insertBefore(p, cont.firstChild);
@@ -406,6 +468,10 @@ let karteisuche = {
 		input.value = "";
 		span.appendChild(dropdown.makeLink("dropdown-link-td", "Filtertyp", true));
 		dropdown.feld(input);
+		// Filter fokussieren, wenn er manuell hinzugefügt wurde
+		if (manuell) {
+			input.focus();
+		}
 	},
 	// baut die zu einem Filter gehörigen Formularelemente auf
 	//   filterId = String
@@ -418,9 +484,14 @@ let karteisuche = {
 		while (p.childNodes.length > 2) {
 			p.removeChild(p.lastChild);
 		}
-		// nötige Inputs hinzufügen
+		// Filtertyp und ID ermitteln
 		const typ = filter.value,
 			id = filterId.replace(/.+-/, "");
+		// der Filtertyp könnte leer sein, wenn ein leerer Filter wiederhergestellt wird
+		if (!typ) {
+			return;
+		}
+		// die nötigen Inputs hinzufügen
 		let felder = karteisuche.filterTypen[typ];
 		for (let feld of felder) {
 			let span = document.createElement("span");
@@ -707,7 +778,7 @@ let karteisuche = {
 		for (let i = optionen.data.karteisuche.filter.length - 1; i >= 0; i--) {
 			let werte = optionen.data.karteisuche.filter[i];
 			// neuen Absatz erzeugen
-			karteisuche.filterHinzufuegen();
+			karteisuche.filterHinzufuegen(false);
 			let typ = document.querySelector("#karteisuche-filter input");
 			typ.value = werte[0];
 			// Filterfelder einhängen

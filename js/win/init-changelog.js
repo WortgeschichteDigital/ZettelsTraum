@@ -16,6 +16,17 @@ window.addEventListener("load", function() {
 	document.querySelectorAll(".app-name").forEach(function(i) {
 		i.textContent = app.getName().replace("'", "’");
 	});
+	// Dokumententitel setzen
+	// (Das brauche ich für das Tastaturkürzel der blöden Druckfunktion,
+	// um einen Test zu haben, dass ich mich wirklich im Changelog befinde.
+	// Wird document.title nicht explizit gesetzt, ist der Titel wie in der HTML-Datei,
+	// also quasi leer: " ".)
+	document.title = "Changelog";
+	// Druck-Icon
+	document.getElementById("changelog-drucken").addEventListener("click", function(evt) {
+		evt.preventDefault();
+		print();
+	});
 });
 
 window.addEventListener("beforeunload", function() {
