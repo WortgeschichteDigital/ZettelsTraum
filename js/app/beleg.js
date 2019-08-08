@@ -1197,29 +1197,6 @@ let beleg = {
 				}
 			}
 		});
-		// DTA-Feld ggf. direkt aus dem Clipboard füttern
-		if (input.id === "beleg-dta") {
-			input.addEventListener("focus", function() {
-				if (this.value || !optionen.data.einstellungen["url-eintragen"]) {
-					return;
-				}
-				const {clipboard} = require("electron"),
-					cp = clipboard.readText();
-				if (/^https*:\/\/www\.deutschestextarchiv\.de\//.test(cp)) {
-					setTimeout(function() {
-						// der Fokus könnte noch in einem anderen Feld sein, das dann gefüllt werden würde;
-						// man muss dem Fokus-Wechsel ein bisschen Zeit geben
-						if (document.activeElement.id !== "beleg-dta") {
-							// ist eine URL in der Zwischenablage, fokussiert man das DTA-Feld und löscht den Inhalt,
-							// defokussiert man das Programm und fokussiert es dann wieder, indem man direkt
-							// auf ein anderes Textfeld klickt, würde dieses Textfeld gefüllt werden
-							return;
-						}
-						document.execCommand("paste");
-					}, 5);
-				}
-			});
-		}
 	},
 	// Verteilerfunktion für Klick-Events der Tools
 	//   a = Element

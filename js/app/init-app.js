@@ -65,7 +65,7 @@ window.addEventListener("load", function() {
 	// Start-Sektion
 	document.getElementById("start-erstellen").addEventListener("click", () => kartei.wortErfragen());
 	document.getElementById("start-oeffnen").addEventListener("click", () => kartei.oeffnen());
-	// Karteikarte
+	// Belegformular
 	let beleg_inputs = document.querySelectorAll("#beleg input, #beleg textarea");
 	for (let i = 0, len = beleg_inputs.length; i < len; i++) {
 		if (beleg_inputs[i].type === "button") {

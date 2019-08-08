@@ -138,8 +138,6 @@ let optionen = {
 			"karteikarte-schliessen": true,
 			// neue Karteikarten als unvollständig markieren
 			unvollstaendig: false,
-			// beim Fokussieren des DTA-Import-Feldes automatisch die URL aus dem Clipboard eintragen
-			"url-eintragen": true,
 			// nach DTA-Import überprüft, ob das Kartei-Wort im Belegtext gefunden werden kann
 			"wort-check": true,
 			// Textfeld immer ergänzen, wenn aus einem Dropdown-Menü ein Wert
