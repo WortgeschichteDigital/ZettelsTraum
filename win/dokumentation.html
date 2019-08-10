@@ -403,7 +403,7 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);
 					
 					<p>Nach dem Laden einer <abbr title="Wortgeschichte digital">WGD</abbr>-Datei in <i class="app-name"></i> befinden sich die Daten im globalen Objekt <code class="quelltext">data</code>. Ihre Werte lassen sich dann in allen Funktionen des Hauptfensters durch einfache Statements wie <code class="quelltext">data.dc</code> lesen oder schreiben.</p>
 					
-					<p>Alle Dateien sind gleich aufgebaut (<span class="obacht">Datenformat Version 5</span>):</p>
+					<p>Alle Dateien sind gleich aufgebaut (<span class="obacht">Datenformat Version 6</span>):</p>
 					
 					<table>
 						<tr>
@@ -463,7 +463,7 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);
 						<tr class="wgd-ebene4">
 							<td><p><code class="quelltext">bd</code></p></td>
 							<td class="datentyp">Array</td>
-							<td>eindimensional,<br>mit <span class="datentyp">Strings</span> gefüllt</td>
+							<td>eindimensional,<br>mit <span class="datentyp">Strings</span> gefüllt,<br><code class="quelltext">&lt;b&gt;</code>, <code class="quelltext">&lt;i&gt;</code>, <code class="quelltext">&lt;u&gt;</code> möglich</td>
 							<td>Bedeutung mit dem kompletten Bedeutungspfad; im letzten Slot steht die Bedeutung dieses Eintrags, darüber die vererbten, übergeordneten Bedeutungen</td>
 						</tr>
 						<tr class="wgd-ebene4">
@@ -712,8 +712,8 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);
 						<tr>
 							<td><p><code class="quelltext">no</code></p></td>
 							<td class="datentyp">String</td>
-							<td><code class="quelltext">\n</code> möglich</td>
-							<td>Notizen zur Kartei</td>
+							<td> </td>
+							<td>Notizen zur Kartei; kann <abbr title="Hyptertext Markup Language" lang="en">HTML</abbr>-Tags enthalten;<br><span class="obacht">mit Version 6 von <i lang="en">plain text</i> auf <abbr title="Hyptertext Markup Language" lang="en">HTML</abbr> umgestellt</span></td>
 						</tr>
 						<tr>
 							<td><p><code class="quelltext">rd</code></p></td>

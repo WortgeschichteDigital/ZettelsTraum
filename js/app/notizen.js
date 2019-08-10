@@ -10,14 +10,14 @@ let notizen = {
 			feld.focus();
 			return;
 		}
-		// Notizen-Feld füllen bzw. leeren
-		if (data.no) {
-			feld.value = data.no;
-		} else {
-			feld.value = "";
-		}
-		// Größe des Notizfeldes zurücksetzen
-		helfer.textareaGrow(feld);
+		// Notizen-Feld mit den gespeicherten Daten füllen
+		notizen.eintragen = true;
+		feld.innerHTML = data.no; // data.no kann leer sein
+		setTimeout(function() {
+			// der MutationObserver reagiert verzögert, darum muss hier ein Timeout stehen;
+			// 0 Millisekunden würde wohl auch gehen
+			notizen.eintragen = false;
+		}, 5);
 		// Feld fokussieren
 		feld.focus();
 	},
@@ -48,7 +48,7 @@ let notizen = {
 			return;
 		}
 		// Änderungen speichern
-		data.no = helfer.textTrim(vorhanden.feld_value, false);
+		data.no = vorhanden.feld_value;
 		notizen.notizenGeaendert(false);
 		kartei.karteiGeaendert(true);
 		direktSchliessen();
@@ -139,9 +139,9 @@ let notizen = {
 		if (data.no) {
 			vorhanden.kartei = true;
 		}
-		let notiz = document.getElementById("notizen-feld").value;
-		notiz = helfer.textTrim(notiz, false);
-		if (notiz) {
+		let notiz = document.getElementById("notizen-feld").innerHTML;
+		if (notiz && notiz !== "<br>") {
+			// unter gewissen Umständen kann ein vereinzelter <br>-Tag im Feld stehen
 			vorhanden.feld = true;
 		}
 		vorhanden.feld_value = notiz;
@@ -172,11 +172,24 @@ let notizen = {
 		}
 		helfer.kopfIcon();
 	},
-	// registriert, wenn im Textfeld getippt wird
-	//   textarea = Element
-	//     (<textarea>, in dem die Notizen stehen)
-	change (textarea) {
-		textarea.addEventListener("input", () => notizen.notizenGeaendert(true));
+	// der gespeichert Wert wird gerade in das Notizenfeld eingetragen
+	eintragen: false,
+	// registriert, wenn im Textfeld Veränderungen auftreten
+	//   div = Element
+	//     (<div contenteditable="true">, in dem die Notizen stehen)
+	change (div) {
+		let observer = new MutationObserver(function() {
+			if (notizen.eintragen) { // Das Feld wird gerade gefüllt; dabei ändert sich aber natürlich nichts.
+				return;
+			}
+			div.classList.add("changed");
+			notizen.notizenGeaendert(true);
+		});
+		observer.observe(div, {
+			childList: true,
+			subtree: true,
+			characterData: true,
+		});
 	},
 	// speichert, ob der Inhalt des Notizenfelds geändert wurde
 	geaendert: false,

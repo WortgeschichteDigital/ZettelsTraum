@@ -4,13 +4,14 @@ let konversion = {
 	// aktuelle Version des Dateiformats
 	// *** WICHTIG! *** WICHTIG! *** WICHTIG! ***
 	// Bei Änderungen anpassen!
-	version: 5,
+	version: 6,
 	// Verteilerfunktion
 	start () {
 		konversion.von1nach2();
 		konversion.von2nach3();
 		konversion.von3nach4();
 		konversion.von4nach5();
+		konversion.von5nach6();
 	},
 	// Konversion des Dateiformats von Version 1 nach Version 2
 	von1nach2 () {
@@ -88,6 +89,33 @@ let konversion = {
 						break;
 					}
 				}
+			}
+		}
+		// Versionsnummer hochzählen
+		data.ve++;
+		// Änderungsmarkierung setzen
+		kartei.karteiGeaendert(true);
+	},
+	// Konversion des Dateiformats von Version 5 nach Version 6
+	von5nach6 () {
+		if (data.ve > 5) {
+			return;
+		}
+		// Format der Kartei-Notizen: plain text => HTML
+		if (data.no) {
+			// Spitzklammern maskieren
+			let notizen = data.no.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+			// Zeilenumbrüche in HTML überführen
+			let zeilen = notizen.split("\n");
+			data.no = zeilen[0]; // 1. Zeile ist nicht in <div> eingeschlossen
+			for (let i = 1, len = zeilen.length; i < len; i++) {
+				data.no += "<div>";
+				if (!zeilen[i]) {
+					data.no += "<br>"; // Leerzeile
+				} else {
+					data.no += zeilen[i];
+				}
+				data.no += "</div>";
 			}
 		}
 		// Versionsnummer hochzählen

@@ -701,11 +701,6 @@
 	padding: 10px;
 }
 
-#notizen-cont textarea {
-	min-height: 192px;
-	max-height: 384px;
-}
-
 #notizen-cont p {
 	position: relative;
 	margin: 10px 0 0 0;
@@ -723,6 +718,21 @@
 #notizen-geaendert {
 	display: inline-block;
 	margin-left: 5px;
+}
+
+#notizen-feld {
+	border: 1px solid var(--linie);
+	padding: 2px 5px;
+	width: calc(100% - 12px);
+	min-height: 192px;
+	max-height: 384px;
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+
+#notizen-feld:focus {
+	outline: 1px solid var(--farbe);
+	border-color: var(--farbe);
 }
 
 /* Anhänge -------------------------------------- */

@@ -156,11 +156,11 @@ window.addEventListener("load", function() {
 		}
 	}
 	// Notizen-Fenster
-	let notizen_inputs = document.querySelectorAll("#notizen input, #notizen textarea");
+	let notizen_inputs = document.querySelectorAll("#notizen input, #notizen-feld");
 	for (let i = 0, len = notizen_inputs.length; i < len; i++) {
-		if (notizen_inputs[i].type === "button") {
+		if (notizen_inputs[i].type === "button") { // Buttons
 			notizen.aktionButton(notizen_inputs[i]);
-		} else { // <textarea>
+		} else { // #notizen-feld
 			notizen.change(notizen_inputs[i]);
 		}
 	}
