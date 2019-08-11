@@ -2007,7 +2007,7 @@ let beleg = {
 			return `<mark class="suche">${m}</mark>`;
 		});
 		// Treffer innerhalb von Tags löschen
-		text = liste.suchtrefferBereinigen(text);
+		text = helfer.suchtrefferBereinigen(text);
 		// Text zurückgeben
 		return text;
 	},

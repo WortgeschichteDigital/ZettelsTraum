@@ -250,7 +250,7 @@ input[type="radio"]:focus {
 	border-color: var(--farbe);
 }
 
-input[type="checkbox"]:checked
+input[type="checkbox"]:checked,
 input[type="radio"]:checked {
 	border-color: var(--farbe);
 }

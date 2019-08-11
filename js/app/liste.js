@@ -731,21 +731,8 @@ let liste = {
 			});
 		});
 		// Treffer innerhalb von Tags löschen
-		text = liste.suchtrefferBereinigen(text);
+		text = helfer.suchtrefferBereinigen(text);
 		// Text zurückgeben
-		return text;
-	},
-	// Treffer innerhalb von Tags löschen
-	// (wird auch von beleg.js genutzt, darum ausgelagert)
-	//   text = String
-	//     (Text mit Suchmarkierungen)
-	suchtrefferBereinigen (text) {
-		let reg = new RegExp(`(<[^>]*?)<mark class="suche">(.+?)<\/mark>`, "g");
-		while (text.match(reg)) { // > 1 Treffer in ein un demselben Tag => mehrfach durchlaufen
-			text = text.replace(reg, function(m, p1, p2) {
-				return `${p1}${p2}`;
-			});
-		}
 		return text;
 	},
 	// einen einzelnen Beleg durch Klick auf den Belegkopf umschalten

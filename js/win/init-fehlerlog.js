@@ -1,6 +1,8 @@
 "use strict";
 
 window.addEventListener("load", function() {
+	// Fensterttyp registrieren
+	window.fenstertyp = "fehlerlog";
 	// Über App
 	const {ipcRenderer} = require("electron");
 	document.getElementById("icon").addEventListener("click", () => ipcRenderer.send("ueber-app"));

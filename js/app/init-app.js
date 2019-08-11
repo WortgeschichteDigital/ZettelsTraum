@@ -2,8 +2,11 @@
 
 // Initialisierung der App
 window.addEventListener("load", function() {
+	// Fensterttyp registrieren
+	window.fenstertyp = "index";
+	
 	// Globales Datenobjekt, in dem die Werte zur aktuellen
-	// Kartei gespeichert werden.
+	// Kartei gespeichert werden, anlegen
 	window.data = {};
 	
 	// TASTATUREINGABEN ABFANGEN

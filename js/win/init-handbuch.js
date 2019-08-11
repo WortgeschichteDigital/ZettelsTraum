@@ -1,6 +1,9 @@
 "use strict";
 
 window.addEventListener("load", function() {
+	// FENSTERTTYP REGISTRIEREN
+	window.fenstertyp = "handbuch";
+	
 	// KARTEIEN-SEKTION ANZEIGEN
 	hilfe.sektionWechseln("karteien");
 	

@@ -1,6 +1,8 @@
 "use strict";
 
 window.addEventListener("load", function() {
+	// Fensterttyp registrieren
+	window.fenstertyp = "electron";
 	// Programm-Name eintragen
 	const {app} = require("electron").remote;
 	document.getElementById("name").textContent = app.getName().replace("'", "’");

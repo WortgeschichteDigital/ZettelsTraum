@@ -305,7 +305,7 @@ php make-changelog.php [FORMAT] [PFAD]</pre>
 					<p>Der Ordner enthält die Stylesheets aller Fenster.</p>
 					
 					<ul>
-						<li><span class="datei">./css/*.css</span>: Stylesheets, die in mehr als einem Fenster benötigt werden und durch <code class="quelltext">@include</code> in andere Stylesheets eingebunden werden</li>
+						<li><span class="datei">./css/*.css</span>: Stylesheets, die in mehr als einem Fenster benötigt werden und – in der Regel – durch <code class="quelltext">@include</code> in andere Stylesheets eingebunden werden</li>
 						<li><span class="datei">./css/app/*.css</span>: Stylesheets, die im Hauptfenster des Programms geladen werden; in der <span class="datei">app.css</span> finden sich viele basale Definitionen, die anderen Dateien regeln das Layout einzelner Teile oder Funktionen der App</li>
 						<li><span class="datei">./css/win/*.css</span>: diese Stylesheets werden nur in den vom Hauptfenster abhängigen Nebenfenstern (also <abbr title="unter anderem">u. a.</abbr> dem <a href="#" class="link-handbuch">Handbuch</a> und diesem Fenster) benötigt</li>
 					</ul>
@@ -341,6 +341,7 @@ php make-changelog.php [FORMAT] [PFAD]</pre>
 					<p>Die Namen der JavaScript-Dateien zeigen an, welche Funktionalität die Scripts in ihnen bereitstellen. Manchmal ist dies nicht auf Anhieb klar, mitunter auch aus, sagen wir mal, <q class="einfach">historischen</q> Gründen: In einem frühen Programmierstadium wurde eine falsche Entscheidung getroffen, die später nicht revidiert wurde. Auch darum sollen einige der Dateien kurz beschrieben werden:</p>
 					
 					<ul>
+						<li><span class="datei">./js/suchleiste.js</span>: alle Funktionen, die die Suchleiste betreffen, die in verschiedenen Fenstern genutzt wird</li>
 						<li><span class="datei">./js/app/beleg.js</span>: die Karteikarte betreffende Funktionen, und zwar sowohl die der Formular- als auch die der Leseansicht</li>
 						<li><span class="datei">./js/app/dialog.js</span>: Overlay-Fenster mit Meldungen für und Fragen an die BenutzerIn erzeugen</li>
 						<li><span class="datei">./js/app/dropdown.js</span>: erzeugt das über einen Pfeil oder via Tastaturkürzel zu öffnende Dropdown-Menü, das aus einigen Textfeldern aufgerufen werden kann (<abbr title="zum Beispiel">z. B.</abbr> im Formular der Karteikarte)</li>

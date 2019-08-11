@@ -1,6 +1,8 @@
 "use strict";
 
 window.addEventListener("load", function() {
+	// Fensterttyp registrieren
+	window.fenstertyp = "app";
 	// app initialisieren
 	const {app} = require("electron").remote;
 	// Programm-Name eintragen

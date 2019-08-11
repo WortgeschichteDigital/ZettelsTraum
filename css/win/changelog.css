@@ -49,6 +49,10 @@ main {
 	padding: 0 10px 10px 10px;
 }
 
+main.padding-suchleiste {
+	padding-bottom: 51px;
+}
+
 /* Elemente ------------------------------------- */
 a {
 	outline: none;
@@ -214,4 +218,77 @@ main > div:not(.version) {
 
 .obacht {
 	color: var(--textWarnung);
+}
+
+/* Suchleiste (Styles aus Hauptfenster) --------- */
+.icon-link {
+	display: inline-block;
+	width: 24px;
+	height: 24px;
+	background-color: var(--text);
+	text-decoration: none;
+}
+
+.icon-link:focus {
+	background-color: var(--farbe);
+}
+
+.icon-schliessen {
+	-webkit-mask-image: url(../../img/heading-schliessen.svg);
+	mask-image: url(../../img/heading-schliessen.svg);
+}
+
+input[type="text"] {
+	margin: 0;
+	border: 1px solid var(--linie);
+	padding: 2px 5px;
+	color: var(--text);
+	font: 16px/24px "Noto Sans", "Noto Sans Symbols2", sans-serif;
+}
+
+input[type="text"]:focus {
+	outline: 1px solid var(--farbe);
+	border-color: var(--farbe);
+}
+
+input[type="checkbox"] {
+	position: relative;
+	top: 2px;
+	z-index: 1;
+	box-sizing: content-box;
+	margin: 0 7px 0 0;
+	border: 1px solid var(--linie);
+	padding: 0;
+	width: 13px;
+	height: 13px;
+	-webkit-appearance: none;
+	appearance: none;
+	background-color: #fff;
+	font-size: 16px;
+	line-height: 13px;
+}
+
+input[type="checkbox"]:focus {
+	outline: 1px solid var(--farbe);
+	border-color: var(--farbe);
+}
+
+input[type="checkbox"]:checked {
+	border-color: var(--farbe);
+}
+
+input[type="checkbox"]:checked:focus {
+	outline-color: var(--aktiv);
+}
+
+input[type="checkbox"]:checked::before {
+	position: absolute;
+	display: block;
+	content: "✓";
+	width: 13px;
+	background-color: var(--farbe);
+	color: #fff;
+	font-size: 12px;
+	font-weight: bold;
+	text-align: center;
 }

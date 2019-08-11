@@ -43,12 +43,24 @@ let helferWin = {
 	tastatur (evt) {
 		// Esc
 		if (evt.which === 27) {
+			// falls die Suchleiste auf ist und den Fokus hat
+			if (document.getElementById("suchleiste") &&
+					document.querySelector("#suchleiste:focus-within")) {
+				suchleiste.ausblenden();
+				return;
+			}
 			// ohne Timeout wird zugleich das Hauptfenster geschlossen, von dem das Nebenfenster abhängig ist
 			setTimeout(function() {
 				const {remote} = require("electron"),
 					win = remote.getCurrentWindow();
 				win.close();
 			}, 50);
+		}
+		// PageUp / PageDown (wenn im changelog)
+		if (fenstertyp === "changelog" &&
+				(evt.which === 32 || evt.which === 33 || evt.which === 34) &&
+				!(evt.ctrlKey || evt.altKey)) {
+			suchleiste.scrollen(evt);
 		}
 		// Ctrl + Cursor hoch (↑), runter (↓) (nur in Hilfefenstern)
 		if (typeof hilfe !== "undefined" && evt.ctrlKey && (evt.which === 38 || evt.which === 40)) {
@@ -58,12 +70,16 @@ let helferWin = {
 		if (typeof hilfe !== "undefined" && evt.ctrlKey && evt.which === 70) {
 			document.getElementById("suchfeld").select();
 		}
+		// Strg + F und F3
+		if (fenstertyp === "changelog" &&
+				(evt.ctrlKey && evt.which === 70 || evt.which === 114)) {
+			suchleiste.einblenden();
+		}
 		// Strg + P (Bedeutungsgerüst und Changelog)
 		if (evt.ctrlKey && evt.which === 80) {
-			console.log(document.title);
-			if (typeof bedeutungen !== "undefined") {
+			if (fenstertyp === "bedeutungen") {
 				bedeutungen.drucken();
-			} else if (/^Changelog$/.test(document.title)) {
+			} else if (fenstertyp === "changelog") {
 				print();
 			}
 		}

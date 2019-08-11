@@ -1,6 +1,9 @@
 "use strict";
 
 window.addEventListener("load", function() {
+	// FENSTERTTYP REGISTRIEREN
+	window.fenstertyp = "dokumentation";
+	
 	// START-SEKTION ANZEIGEN
 	hilfe.sektionWechseln("start");
 	

@@ -1,6 +1,9 @@
 "use strict";
 
 window.addEventListener("load", function() {
+	// FENSTERTTYP REGISTRIEREN
+	window.fenstertyp = "bedeutungen";
+	
 	// TASTATUREINGABEN ABFANGEN
 	document.addEventListener("keydown", helferWin.tastatur);
 	

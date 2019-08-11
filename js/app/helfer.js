@@ -253,6 +253,20 @@ let helfer = {
 		}
 		return text;
 	},
+	// Treffer innerhalb von Tags löschen
+	//   text = String
+	//     (Text mit Suchmarkierungen)
+	//   cl = String || undefined
+	//     (die Class des <mark>)
+	suchtrefferBereinigen (text, cl = "suche") {
+		let reg = new RegExp(`(<[^>]*?)<mark class="${cl}">(.+?)<\/mark>`, "g");
+		while (text.match(reg)) { // > 1 Treffer in ein un demselben Tag => mehrfach durchlaufen
+			text = text.replace(reg, function(m, p1, p2) {
+				return `${p1}${p2}`;
+			});
+		}
+		return text;
+	},
 	// beim Pasten von Text in ein Edit-Feld den Text ggf. vorher bereinigen
 	//   ele = Element
 	//     (das betreffende Edit-Feld)
