@@ -244,9 +244,24 @@ textarea#beleg-bs {
 	mask-image: url(../../img/tool-caps.svg);
 }
 
+.icon-tools-clear {
+	-webkit-mask-image: url(../../img/tool-clear.svg);
+	mask-image: url(../../img/tool-clear.svg);
+}
+
+.icon-tools-heading {
+	-webkit-mask-image: url(../../img/tool-heading.svg);
+	mask-image: url(../../img/tool-heading.svg);
+}
+
 .icon-tools-italic {
 	-webkit-mask-image: url(../../img/tool-italic.svg);
 	mask-image: url(../../img/tool-italic.svg);
+}
+
+.icon-tools-list {
+	-webkit-mask-image: url(../../img/tool-list.svg);
+	mask-image: url(../../img/tool-list.svg);
 }
 
 .icon-tools-mark {

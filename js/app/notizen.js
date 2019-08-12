@@ -139,13 +139,20 @@ let notizen = {
 		if (data.no) {
 			vorhanden.kartei = true;
 		}
-		let notiz = document.getElementById("notizen-feld").innerHTML;
+		let notiz = notizen.bereinigen(document.getElementById("notizen-feld").innerHTML);
 		if (notiz && notiz !== "<br>") {
 			// unter gewissen Umständen kann ein vereinzelter <br>-Tag im Feld stehen
 			vorhanden.feld = true;
 		}
 		vorhanden.feld_value = notiz;
 		return vorhanden;
+	},
+	// Notizen vor dem Speichern bereinigen
+	//   notiz = String
+	bereinigen (notiz) {
+		notiz = notiz.replace(/^(<div><br><\/div>)+|(<div><br><\/div>)+$/g, "");
+		notiz = notiz.replace(/\sstyle=".+?"/g, "");
+		return notiz;
 	},
 	// Aktionen beim Klick auf einen Button
 	//   button = Element
@@ -205,5 +212,62 @@ let notizen = {
 		} else {
 			asterisk.classList.add("aus");
 		}
+	},
+	// Funktion der Text-Tools auf Notizen-Feld anwenden
+	//   a = Element
+	//     (der Tools-Link, auf den geklickt wurde)
+	tools (a) {
+		a.addEventListener("click", function(evt) {
+			evt.preventDefault();
+			let funktion = this.getAttribute("class").match(/icon-tools-([^\s]+)/);
+			if (funktion[1] === "mark") {
+				// MARKIERUNG
+				// HTML clonen
+				let sel = window.getSelection(),
+					range = sel.getRangeAt(0),
+					clone = range.cloneContents(),
+					div = document.createElement("div");
+				div.appendChild(clone);
+				let content = div.innerHTML;
+				// Fokus wechseln und wiederherstellen
+				let parent = sel.focusNode.parentNode,
+					contentParent = parent.innerHTML;
+				// HTML einfügen
+				if (parent.nodeType === 1 &&
+						parent.nodeName === "MARK" &&
+						contentParent === content) { // Markierung entfernen
+					parent.parentNode.removeChild(parent);
+					document.execCommand("insertHTML", false, content);
+				} else { // Markierung hinzufügen
+					document.execCommand("insertHTML", false, `<mark class="user">${content}</mark>`);
+				}
+			} else if (funktion[1] === "heading") {
+				// ÜBERSCHRIFT
+				let sel = window.getSelection(),
+					absatz = sel.focusNode;
+				while (absatz.nodeType !== 1 ||
+						!/^(DIV|H3|LI)$/.test(absatz.nodeName)) {
+					absatz = absatz.parentNode;
+				}
+				if (absatz.nodeName === "H3") {
+					document.execCommand("formatBlock", false, "<DIV>");
+				} else {
+					document.execCommand("formatBlock", false, "<H3>");
+				}
+			} else if (funktion[1] === "list") {
+				// LISTE
+				document.execCommand("insertUnorderedList");
+			} else if (funktion[1] === "strike") {
+				// DURCHSTREICHEN
+				document.execCommand("strikeThrough");
+			} else if (funktion[1] === "clear") {
+				// FORMATIERUNGEN ENTFERNEN
+				document.execCommand("removeFormat");
+			} else {
+				// ALLE ANDEREN FUNKTIONEN
+				document.execCommand(funktion[1]);
+			}
+			document.getElementById("notizen-feld").focus();
+		});
 	},
 };

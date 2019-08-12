@@ -1297,7 +1297,7 @@ let bedeutungen = {
 			},
 			{
 				cl: "icon-tools-underline",
-				title: "Kursivieren (Strg + U)",
+				title: "Unterstreichen (Strg + U)",
 			},
 		];
 		for (let i = 0, len = tools.length; i < len; i++) {

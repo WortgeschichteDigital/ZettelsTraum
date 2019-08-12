@@ -113,7 +113,7 @@ let kopieren = {
 		}
 		kopieren.belege.push(id);
 		kopieren.uiText();
-		kopieren.animation("liste");
+		helfer.animation("liste");
 	},
 	// Fenster mit Belegliste öffnen
 	liste () {
@@ -651,55 +651,6 @@ let kopieren = {
 			}
 		}
 		return kopie;
-	},
-	// Zwischenspeicher für den Timeout der Animation
-	animationTimeout: null,
-	// Animation, die anzeigt, wohin ein Beleg kopiert wurde
-	//   ziel = String
-	//     ("liste" || "zwischenablage")
-	animation (ziel) {
-		// ggf. Timeout clearen
-		clearTimeout(kopieren.animationTimeout);
-		// Element erzeugen oder ansprechen
-		let div = null;
-		if (document.getElementById("kopieren-animation")) {
-			div = document.getElementById("kopieren-animation");
-		} else {
-			div = document.createElement("div");
-			div.id = "kopieren-animation";
-			overlay.zIndex++;
-			div.style.zIndex = overlay.zIndex;
-		}
-		// Element füllen
-		helfer.keineKinder(div);
-		let img = document.createElement("img");
-		div.appendChild(img);
-		img.width = "96";
-		img.height = "96";
-		if (ziel === "zwischenablage") {
-			img.src = "img/kopieren-animation-zwischenablage.svg";
-		} else {
-			img.src = "img/kopieren-animation-kopieren.svg";
-			let span = document.createElement("span");
-			div.appendChild(span);
-			span.textContent = kopieren.belege.length;
-		}
-		// Element einhängen und wieder entfernen
-		document.querySelector("body").appendChild(div);
-		setTimeout(function() {
-			div.classList.add("an");
-		}, 1); // ohne Timeout geht es nicht
-		kopieren.animationTimeout = setTimeout(function() {
-			div.classList.remove("an");
-			setTimeout(function() {
-				if (!document.querySelector("body").contains(div)) {
-					// der <div> könnte bereits verschwunden sein
-					// (kann vorkommen, wenn im 500ms-Gap geklickt wird)
-					return;
-				}
-				document.querySelector("body").removeChild(div);
-			}, 500);
-		}, 1000);
 	},
 	// Kopierliste in Datei exportieren
 	exportieren () {

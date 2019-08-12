@@ -18,10 +18,16 @@ window.addEventListener("load", function() {
 	document.querySelectorAll(".app-name").forEach(function(i) {
 		i.textContent = app.getName().replace("'", "’");
 	});
-	// Druck-Icon
-	document.getElementById("changelog-drucken").addEventListener("click", function(evt) {
-		evt.preventDefault();
-		print();
+	// Icons
+	document.querySelectorAll("#changelog-icons a").forEach(function(a) {
+		a.addEventListener("click", function(evt) {
+			evt.preventDefault();
+			if (/suchleiste$/.test(this.id)) {
+				suchleiste.einblenden();
+			} else if (/drucken$/.test(this.id)) {
+				print();
+			}
+		});
 	});
 });
 

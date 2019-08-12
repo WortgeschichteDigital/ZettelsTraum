@@ -9,14 +9,12 @@
 		<link rel="stylesheet" href="../css/win/changelog.css">
 		<link rel="stylesheet" href="../css/win/changelog-drucken.css" media="print">
 		
-		<link rel="stylesheet" href="../css/suchleiste.css">
+		<script src="../js/suchleiste.js"></script>
 		
 		<script src="../js/app/helfer.js"></script>
 		
 		<script src="../js/win/init-changelog.js"></script>
 		<script src="../js/win/helferWin.js"></script>
-		
-		<script src="../js/suchleiste.js"></script>
 	</head>
 	<body>
 		<!-- KOPF -->
@@ -27,9 +25,14 @@
 		
 		<!-- CHANGELOG -->
 		<main>
-			<a href="#" id="changelog-drucken" title="Changelog drucken (Strg + P)"
-				><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m4 1v2h8v-2h-8zm-2 3c-0.5 0-1 0.5-1 1v4c0 0.5 0.5 1 1 1h1v-2h10v2h1c0.5 0 1-0.5 1-1v-4c0-0.5-0.5-1-1-1h-12zm2 5v5h8v-5h-8z"/></svg
-			></a>
+			<span id="changelog-icons"
+				><a href="#" id="changelog-suchleiste" title="Changelog durchsuchen (Strg + F)"
+					><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m6.5 1a5.5 5.5 0 0 0-5.5 5.5 5.5 5.5 0 0 0 5.5 5.5 5.5 5.5 0 0 0 3.1172-0.969l3.6618 3.662a1 1 0 0 0 0.721 0.307 1 1 0 0 0 1-1 1 1 0 0 0-0.303-0.717l-3.67-3.6697a5.5 5.5 0 0 0 0.973-3.1133 5.5 5.5 0 0 0-5.5-5.5zm0 2a3.5 3.5 0 0 1 3.5 3.5 3.5 3.5 0 0 1-3.5 3.5 3.5 3.5 0 0 1-3.5-3.5 3.5 3.5 0 0 1 3.5-3.5z"/></svg
+				></a
+				><a href="#" id="changelog-drucken" title="Changelog drucken (Strg + P)"
+					><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m4 1v2h8v-2h-8zm-2 3c-0.5 0-1 0.5-1 1v4c0 0.5 0.5 1 1 1h1v-2h10v2h1c0.5 0 1-0.5 1-1v-4c0-0.5-0.5-1-1-1h-12zm2 5v5h8v-5h-8z"/></svg
+				></a
+			></span>
 			
 			<!-- 0.15.0 -->
 			<div class="version">0.15.0</div>
@@ -43,7 +46,11 @@
 				
 				<ul>
 					<li>
-						<p>Suchleiste: …</p>
+						<p>Suchleiste: Im Changelog steht nun eine Suchleiste zur Verfügung, mit der man ihn leicht und bequem durchsuchen kann. (In einer späteren Version wird die Leiste auch in die Hauptfenster, das Handbuch und die technische Dokumentation integriert.)</p>
+						<p>Die Leiste lässt sich über das Icon <img src="../img/quick-suche.svg" width="24" height="24" alt=""> oder das Tastaturkürzel <kbd>Strg</kbd> + <kbd>F</kbd> öffnen. Schließen lässt sie sich über das Icon <img src="../img/heading-schliessen.svg" width="24" height="24" alt=""> oder via <kbd>Esc</kbd>, wenn der Fokus im Suchfeld liegt. (Ist der Fokus nicht im Suchfeld, schließt <kbd>Esc</kbd> wie gehabt den Changelog.)</p>
+						<p>Die Suche ist schlicht gehalten. Die eingetippten Zeichen werden immer als Phrase interpretiert; Leerzeichen trennen die Suche mithin nicht in mehrere Begriffe auf (anders als dies die kompliziertere Volltextsuche im Hauptfenster tut). Das Berücksichtigen von Groß- und Kleinschreibung lässt sich durch die Option <i>genaue Schreibung</i> aktivieren. (Nach dem Aktivieren/Deaktivieren der Option muss neu gesucht werden, damit sie angewendet wird.)</p>
+						<p>Zur Navigation durch die Suchergebnisse gibt es drei Möglichkeiten: (1.) Navigation mit den Pfeilen in der Suchleiste; (2.) Drücken von <kbd>⏎</kbd>, wenn der Fokus im Suchfeld liegt, um zum nächsten Treffer zu kommen; (3.) Drücken von <kbd>F3</kbd>, um zum nächsten, <kbd>Shift</kbd> + <kbd>F3</kbd>, um zum vorherigen Treffer zu gelangen. (Ist die Leiste geschlossen, wird sie durch das Drücken von <kbd>F3</kbd> geöffnet.)</p>
+						<p>Erreicht man den letzten Treffer, beginnt die Suche automatisch von vorne, wenn man vorwärts durch die Suchtreffer springt. Navigiert man rückwärts durch die Treffer, wird nach dem ersten automatisch zum letzten gesprungen. Dieser Sprung wird durch eine kleine Animation visualisiert.</p>
 					</li>
 				</ul>
 				
@@ -58,9 +65,30 @@
 						<p>Formvarianten: Das Ermitteln der Formvarianten (Funktion <i>Kartei &gt; Formvarianten</i>) funktioniert nun auch, wenn das Kartei-Wort mehrgliedrig ist. In Fällen wie <i>kleine Leute</i> oder <i>politisch korrekt</i> wird das Wort an der Position des Leerzeichens aufgetrennt und für jedes der Wörter einzeln eine Liste an Formvarianten vom <abbr title="Deutsches Textarchiv">DTA</abbr> angefordert. Diese Listen werden dann zusammengeführt und erscheinen alphabetisch sortiert als eine Liste im Formvarianten-Fenster.</p>
 						<p>Für solche Fälle werden im unteren Teil des Fensters nun mehrere Icons (<img src="../img/redaktion-online.svg" width="24" height="24" alt="">) angezeigt, die zur vollständigen Liste der Formvarianten im <abbr title="Deutsches Textarchiv">DTA</abbr> führen. Jedes Icon steht für ein Wort aus dem mehrgliedrigen Kartei-Wort; aus einem Tooltip wird ersichtlich, welches Icon für welches Wort steht.</p>
 					</li>
-					<li>Notizen: …</li>
+					<li>
+						<p>Notizen: Das Textfeld in der Notizen-Funktion (<i>Kartei &gt; Notizen</i>) wurde in ein <abbr title="What You See Is What You Get" lang="en">WYSIWYG</abbr>-Feld umgewandelt, sprich: Es verhält sich fortan so, als ob man sich in einem Text-Editor wie <i lang="en">Word</i> befindet. Notizen im alten Plain-Text-Format werden beim Laden der Kartei automatisch in das aktuelle Format konvertiert.</p>
+						<p>Über dem Textfeld befindet sich nun eine Toolleiste mit Icons, um den Text in unterschiedlicher Weise zu formatieren. Ihre Funktion wird beim Rüberfahren mit der Maus erläutert.</p>
+						<p>Im ersten Block stehen Icons, die sich auf den ganzen Absatz beziehen:<br
+							><img src="../img/tool-heading.svg" width="24" height="24" alt=""> wandelt den aktuellen Absatz in eine Überschrift um;<br
+							><img src="../img/tool-list.svg" width="24" height="24" alt=""> erzeugt an der Position des Carets eine Liste oder wandelt die markierten Absätze in eine Liste mit <i lang="en">bullet points</i> um.</p>
+						<p>Im zweiten Block stehen Icons, die den markierten Text innerhalb eines Absatzes, einer Überschrift oder einer Liste formatieren:<br
+							><img src="../img/tool-bold.svg" width="24" height="24" alt=""> erzeugt fetten Text (Tastaturkürzel <kbd>Strg</kbd> + <kbd>B</kbd>);<br
+							><img src="../img/tool-italic.svg" width="24" height="24" alt=""> erzeugt kursiven Text (Tastaturkürzel <kbd>Strg</kbd> + <kbd>I</kbd>);<br
+							><img src="../img/tool-underline.svg" width="24" height="24" alt=""> erzeugt unterstrichenen Text (Tastaturkürzel <kbd>Strg</kbd> + <kbd>U</kbd>);<br
+							><img src="../img/tool-strike.svg" width="24" height="24" alt=""> erzeugt durchgestrichenen Text;<br
+							><img src="../img/tool-mark.svg" width="24" height="24" alt=""> erzeugt markierten Text.</p>
+						<p>Im letzten Block steht nur das Icon <img src="../img/tool-clear.svg" width="24" height="24" alt="">. Mit ihm können alle Formatierungen im markierten Bereich entfernt werden. Erhalten bleiben allerdings die Absatzformatierungen (Überschrift und Liste) und Textmarkierungen. Um auch diese Formatierungen zu entfernen, kann man so vorgehen:</p>
+						<p>Eine Textmarkierung lässt sich dadurch entfernen, dass man den gesamten Text innerhalb der Markierung auswählt und erneut auf <img src="../img/tool-mark.svg" width="24" height="24" alt=""> klickt. Zum Entfernen einer Liste oder einer Überschrift genügt es, in die entsprechende Zeile zu gehen und dann auf <img src="../img/tool-list.svg" width="24" height="24" alt=""> <abbr title="beziehungsweise">bzw.</abbr> <img src="../img/tool-heading.svg" width="24" height="24" alt=""> zu klicken.</p>
+					</li>
 					<li>Redaktion: Die Fehlentscheidung, das <span lang="en">User Interface</span> (also den Picker zum Öffnen des eingebauten Kalenders) im Datumsfeld der Redaktionsverwaltung unter <i>Kartei &gt; Redaktion</i> der Platzersparnis wegen auszublenden, wurde revidiert.</li>
-					<li>Die App wird nun immer mit der <span lang="en">Locale</span> (dem Gebietsschemaparameter) <i>de</i> gestartet, sodass die Datumsfelder auch dann ein deutsches Format haben, wenn das Betriebssystem, auf dem <i class="app-name"></i> läuft, eine andere Sprache hat.</li>
+					<li>Die App wird nun immer mit der <span lang="en">Locale</span> (dem Gebietsschemaparameter) <i>de</i> gestartet, sodass die Datumsfelder auch dann ein deutsches Format haben, wenn das Betriebssystem, auf dem <i class="app-name"></i> läuft, eine andere Sprache als Deutsch hat.</li>
+				</ul>
+				
+				<h3>Behobene Fehler</h3>
+				
+				<ul>
+					<li>Bedeutungsgerüst: In der Tool-Leiste war der Tooltip für das Unstreichen-Icon falsch.</li>
+					<li>Volltextfilter: Im Belegtext wurde auch nach Text gesucht, der innerhalb von <abbr title="Hypertext Markup Language">HTML</abbr>-Tags steht, also <abbr title="zum Beispiel">z. B.</abbr> nach Tag-Namen wie <code class="quelltext">span</code> oder Attributen und Werten wie <code class="quelltext">class="dta-gesperrt"</code>. Der Fehler war eine Regression zu Version 0.13.3.</li>
 				</ul>
 			</div>
 			
@@ -203,7 +231,7 @@ Gerüst 2 &gt; Gerüst 1</pre>
 					<li>Bedeutungsgerüst: Im Textfeld zur Eingabe neuer Bedeutungen war die Tool-Leiste für Textformate falsch positioniert, wenn eine Kartei nur ein Bedeutungsgerüst hatte, in dem noch keine Bedeutung stand.</li>
 					<li>Bedeutungsgerüst: Wurde auf das Lösch-Icon einer Bedeutung geklickt, erhielt das Bestätigungsfenster keinen Fokus.</li>
 					<li>Karteikarte: Wurde in einer Karteikarte der Inhalt des Bedeutungsfelds bearbeitet und danach das Bedeutungsgerüst gewechselt, ohne dass die Karteikarte zuvor gespeichert wurde, gingen die Änderungen verloren. Das Wechseln des Gerüsts wird in solchen Fällen fortan unterbunden; stattdessen erscheint eine erklärende Warnmeldung.</li>
-					<li>Druckfunktion: Beim Drucken einer einzelnen Karteikarte oder aller Karten einer Belegliste wurde im Druckfenster anstelle der Bedeutung(en) fälschlicherweise nur <q>[object Object]</q> angezeigt – mitunter mehrfach. Der Fehler bestand seitdem die Bedeutungsgerüst-Funktion zur Verfügung steht, also seit Version 0.10.0.</li>
+					<li>Druckfunktion: Beim Drucken einer einzelnen Karteikarte oder aller Karten einer Belegliste wurde im Druckfenster anstelle der Bedeutung(en) fälschlicherweise nur <q>[object Object]</q> angezeigt – mitunter mehrfach. Der Fehler bestand, seitdem die Bedeutungsgerüst-Funktion zur Verfügung steht, also seit Version 0.10.0.</li>
 				</ul>
 			</div>
 			

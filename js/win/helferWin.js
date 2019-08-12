@@ -56,7 +56,7 @@ let helferWin = {
 				win.close();
 			}, 50);
 		}
-		// PageUp / PageDown (wenn im changelog)
+		// PageUp / PageDown (wenn im Changelog)
 		if (fenstertyp === "changelog" &&
 				(evt.which === 32 || evt.which === 33 || evt.which === 34) &&
 				!(evt.ctrlKey || evt.altKey)) {
@@ -70,10 +70,13 @@ let helferWin = {
 		if (typeof hilfe !== "undefined" && evt.ctrlKey && evt.which === 70) {
 			document.getElementById("suchfeld").select();
 		}
-		// Strg + F und F3
-		if (fenstertyp === "changelog" &&
-				(evt.ctrlKey && evt.which === 70 || evt.which === 114)) {
+		// Strg + F (wenn im Changelog)
+		if (fenstertyp === "changelog" && evt.ctrlKey && evt.which === 70) {
 			suchleiste.einblenden();
+		}
+		// F3 (wenn im Changelog)
+		if (fenstertyp === "changelog" && evt.which === 114) {
+			suchleiste.f3(evt);
 		}
 		// Strg + P (Bedeutungsgerüst und Changelog)
 		if (evt.ctrlKey && evt.which === 80) {

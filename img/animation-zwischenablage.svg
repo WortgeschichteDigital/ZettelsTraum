@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="96" height="96" version="1.1" viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg">
+<metadata>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:dc="http://purl.org/dc/elements/1.1/"><rdf:Description dc:publisher="Papirus Development Team" dc:rights="GPL-3.0-only"></rdf:Description></rdf:RDF>
+</metadata>
+<path d="m48 18c-4.4184 0-8 3.5817-8 8h-12c-4 0-4 4-4 4v44c0 4 4 4 4 4h40s4 0 4-4v-44c0-4-4-4-4-4h-12c0-0.55228-0.0204-1.1042-0.125-1.625-0.74596-3.6455-4.0088-6.3748-7.8752-6.3748zm0 4c1.6568 0 3.0178 1.0643 3.625 2.5 0.2024 0.47856 0.375 0.94772 0.375 1.5 0 2.2091-1.7908 4-4 4s-4-1.7909-4-4 1.7908-4 4-4zm-16 12h4v4h24v-4h4v36h-32z" fill="#72a0cf"/>
+</svg>

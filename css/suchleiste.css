@@ -1,6 +1,6 @@
 @charset "utf-8";
 
-/* spezielle Icon-Links ------------------------- */
+/* Icon-Links ----------------------------------- */
 .icon-hoch {
 	-webkit-mask-image: url(../img/suchleiste-hoch.svg);
 	mask-image: url(../img/suchleiste-hoch.svg);
@@ -19,7 +19,7 @@
 	border-top: 1px solid var(--linie);
 	padding: 5px 54px 5px 15px;
 	height: 30px;
-	width: calc(100vw - 69px);
+	width: calc(100% - 69px);
 	overflow: hidden;
 	background-color: var(--hintergrund);
 	color: var(--textFarbe);
@@ -50,10 +50,10 @@
 #suchleiste-schliessen {
 	position: absolute;
 	top: 8px;
-	right: 15px;
+	right: 8px;
 }
 
-/* spezielle Markierungen ----------------------- */
+/* Markierungen --------------------------------- */
 mark.suchleiste {
 	border-radius: 3px;
 	padding: 0 3px;

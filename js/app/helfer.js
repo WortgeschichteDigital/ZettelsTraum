@@ -479,6 +479,66 @@ let helfer = {
 			}
 		});
 	},
+	// Zwischenspeicher für den Timeout der Animation
+	animationTimeout: null,
+	// Overlay-Animation, die anzeigt, was gerade geschehen ist
+	// (Kopier-Aktion oder Wrap der Suchleiste)
+	//   ziel = String
+	//     ("liste" || "zwischenablage" || "wrap")
+	animation (ziel) {
+		// ggf. Timeout clearen
+		clearTimeout(helfer.animationTimeout);
+		// Element erzeugen oder ansprechen
+		let div = null;
+		if (document.getElementById("animation")) {
+			div = document.getElementById("animation");
+		} else {
+			div = document.createElement("div");
+			div.id = "animation";
+			let zIndex = 99;
+			if (typeof overlay !== "undefined") { // steht nicht in allen Fenstern zur Verfügung
+				overlay.zIndex++;
+				zIndex = overlay.zIndex;
+			}
+			div.style.zIndex = zIndex;
+		}
+		// Element füllen
+		helfer.keineKinder(div);
+		let img = document.createElement("img");
+		div.appendChild(img);
+		img.width = "96";
+		img.height = "96";
+		if (ziel === "zwischenablage") {
+			img.src = "img/animation-zwischenablage.svg";
+		} else if (ziel === "liste") {
+			img.src = "img/animation-kopieren.svg";
+			let span = document.createElement("span");
+			div.appendChild(span);
+			span.textContent = kopieren.belege.length;
+		} else if (ziel === "wrap") {
+			let cd = "";
+			if (fenstertyp === "changelog") {
+				cd = "../";
+			}
+			img.src = `${cd}img/animation-wrap.svg`;
+		}
+		// Element einhängen und wieder entfernen
+		document.querySelector("body").appendChild(div);
+		setTimeout(function() {
+			div.classList.add("an");
+		}, 1); // ohne Timeout geht es nicht
+		helfer.animationTimeout = setTimeout(function() {
+			div.classList.remove("an");
+			setTimeout(function() {
+				if (!document.querySelector("body").contains(div)) {
+					// der <div> könnte bereits verschwunden sein
+					// (kann vorkommen, wenn er im 500ms-Gap noch einmal aktiviert wird)
+					return;
+				}
+				document.querySelector("body").removeChild(div);
+			}, 500);
+		}, 1000);
+	},
 	// markiert in der Titelleiste des Programms, dass irgendeine Änderung
 	// noch nicht gespeichert wurde
 	geaendert () {

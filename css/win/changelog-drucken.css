@@ -2,6 +2,7 @@
 
 /* Header und Druck-Icon ausblenden (überlagern sonst Textteile) */
 header,
-#changelog-drucken {
+#changelog-icons,
+#suchleiste {
 	display: none;
 }

@@ -56,10 +56,12 @@ let suchleiste = {
 			{
 				typ: "hoch",
 				text: "vorherigen",
+				short: "Shift + F3",
 			},
 			{
 				typ: "runter",
 				text: "nächsten",
+				short: "F3",
 			},
 		];
 		for (let pfeil of pfeile) {
@@ -69,7 +71,7 @@ let suchleiste = {
 			a.href = "#";
 			a.id = `suchleiste-${pfeil.typ}`;
 			a.textContent = " ";
-			a.title = `zum ${pfeil.text} Treffer`;
+			a.title = `zum ${pfeil.text} Treffer (${pfeil.short})`;
 			suchleiste.naviListener(a);
 		}
 		// genaue Schreibung
@@ -135,7 +137,7 @@ let suchleiste = {
 			e = document.querySelectorAll("div > h2, div > h3, div > p, ul li");
 		}
 		let genaue = document.getElementById("suchleiste-genaue").checked ? "" : "i",
-			reg = new RegExp(helfer.formVariSonderzeichen(helfer.escapeRegExp(textMitSpitz)), genaue),
+			reg = new RegExp(helfer.formVariSonderzeichen(helfer.escapeRegExp(textMitSpitz)).replace(/\s/g, "\\s"), genaue),
 			treffer = new Set();
 		for (let i of e) {
 			if (reg.test(i.innerText)) {
@@ -154,7 +156,7 @@ let suchleiste = {
 			textKomplex += "(<[^>]+>)?";
 			textKomplex += helfer.escapeRegExp(text.charAt(i));
 		}
-		textKomplex = helfer.formVariSonderzeichen(textKomplex);
+		textKomplex = helfer.formVariSonderzeichen(textKomplex).replace(/\s/g, "(&nbsp;|\\s)");
 		let regKomplex = new RegExp(textKomplex, "g" + genaue);
 		// Text hervorheben
 		for (let t of treffer) {
@@ -237,6 +239,24 @@ let suchleiste = {
 			input.classList.remove("keine-treffer");
 		}, 1000);
 	},
+	// Verhalten beim Drücken von F3 steuern
+	//   evt = Object
+	//     (das Event-Objekt)
+	f3 (evt) {
+		let leiste = document.getElementById("suchleiste");
+		if (!leiste || !leiste.classList.contains("an")) {
+			suchleiste.einblenden();
+			return;
+		} else if (!document.querySelector(".suchleiste")) {
+			suchleiste.suchenKeineTreffer();
+			return;
+		}
+		let next = true;
+		if (evt.shiftKey) {
+			next = false;
+		}
+		suchleiste.navi(next);
+	},
 	// Listener für die Navigationslinks
 	//   a = Element
 	//     (der Navigationslink)
@@ -279,11 +299,13 @@ let suchleiste = {
 			pos++;
 			if (pos > marks.length - 1) {
 				pos = 0;
+				helfer.animation("wrap");
 			}
 		} else {
 			pos--;
 			if (pos < 0) {
 				pos = marks.length - 1;
+				helfer.animation("wrap");
 			}
 		}
 		// aktive(s) Element(e) hervorheben
@@ -312,7 +334,7 @@ let suchleiste = {
 		let rect = marks[pos].getBoundingClientRect();
 		if (rect.top < headerHeight ||
 				rect.top > window.innerHeight - suchleisteHeight - 24) {
-			window.scrollTo(0, window.scrollY + rect.top - headerHeight - 48); // 24px = Höhe Standardzeile
+			window.scrollTo(0, window.scrollY + rect.top - headerHeight - 72); // 24px = Höhe Standardzeile
 		}
 	},
 	// seitenweises Scrollen
@@ -339,9 +361,9 @@ let suchleiste = {
 			suchleisteHeight = document.getElementById("suchleiste").offsetHeight;
 		let top = 0;
 		if (evt.which === 33) { // hoch (PageUp)
-			top = window.scrollY - window.innerHeight + headerHeight + suchleisteHeight + 24; // 24px = Höhe Standardzeile
+			top = window.scrollY - window.innerHeight + headerHeight + suchleisteHeight + 72; // 24px = Höhe Standardzeile
 		} else if (evt.which === 32 || evt.which === 34) { // runter (Space, PageDown)
-			top = window.scrollY + window.innerHeight - headerHeight - suchleisteHeight - 24;
+			top = window.scrollY + window.innerHeight - headerHeight - suchleisteHeight - 72;
 		}
 		// scrollen
 		window.scrollTo({

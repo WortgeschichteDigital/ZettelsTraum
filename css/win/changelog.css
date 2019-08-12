@@ -9,6 +9,10 @@
 /* Globale Klassen ------------------------------ */
 @import url(../global.css);
 
+/* Suchleiste ----------------------------------- */
+@import url(../animation.css);
+@import url(../suchleiste.css);
+
 /* Struktur-Elemente ---------------------------- */
 body {
 	margin: 0;
@@ -167,19 +171,34 @@ li p {
 }
 
 /* Besonderheiten ------------------------------- */
-#changelog-drucken {
+#changelog-icons {
 	position: fixed;
 	top: 70px;
 	right: 10px;
+	padding: 0 0 5px 10px;
+	background-color: #fff;
+}
+
+#changelog-icons a {
 	display: inline-block;
-	outline: none;
-	border-radius: 3px;
+	border-right: 1px solid var(--linie);
+	padding: 0 5px;
 	width: 24px;
 	height: 24px;
-	padding: 0 5px;
 	background-color: var(--hintergrund);
 	color: var(--text);
 	text-decoration: none;
+}
+
+#changelog-icons a:first-child {
+	border-top-left-radius: 3px;
+	border-bottom-left-radius: 3px;
+}
+
+#changelog-icons a:last-child {
+	border-right: 0;
+	border-top-right-radius: 3px;
+	border-bottom-right-radius: 3px;
 }
 
 #changelog-drucken svg path {

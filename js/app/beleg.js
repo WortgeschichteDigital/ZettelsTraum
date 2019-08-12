@@ -2183,7 +2183,7 @@ let beleg = {
 		daten.winId = remote.getCurrentWindow().id;
 		daten.wort = kartei.wort;
 		clipboard.writeText(JSON.stringify(daten));
-		kopieren.animation("zwischenablage");
+		helfer.animation("zwischenablage");
 	},
 	// zur vorherigen/nächsten Karteikarte in der Belegliste springen
 	//   next = Boolean

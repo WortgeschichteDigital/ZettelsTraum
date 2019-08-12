@@ -9,6 +9,9 @@
 /* Globale Klassen ------------------------------ */
 @import url(../global.css);
 
+/* Animation ------------------------------------ */
+@import url(../animation.css);
+
 /* Basis-Elemente ------------------------------- */
 abbr {
 	text-decoration: none;

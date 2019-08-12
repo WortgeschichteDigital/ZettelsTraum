@@ -1317,6 +1317,8 @@ let filter = {
 			let text_rein = "";
 			if (ds === "bd") {
 				text_rein = liste.textBd(data.ka[id][ds]).join(" ").replace(/<.+?>/g, "");
+			} else if (ds === "bs") {
+				text_rein = data.ka[id][ds].replace(/<.+?>/g, "");
 			} else {
 				text_rein = data.ka[id][ds];
 			}
