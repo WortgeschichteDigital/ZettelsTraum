@@ -221,25 +221,49 @@ let notizen = {
 			evt.preventDefault();
 			let funktion = this.getAttribute("class").match(/icon-tools-([^\s]+)/);
 			if (funktion[1] === "mark") {
-				// MARKIERUNG
-				// HTML clonen
+				// MARKIERUNG (alles etwas komplizierter)
+				// Clonen
 				let sel = window.getSelection(),
 					range = sel.getRangeAt(0),
 					clone = range.cloneContents(),
 					div = document.createElement("div");
 				div.appendChild(clone);
 				let content = div.innerHTML;
-				// Fokus wechseln und wiederherstellen
-				let parent = sel.focusNode.parentNode,
+				// Knoten und Content ermitteln
+				let focus = sel.focusNode,
+					contentFocus = focus.innerHTML,
+					parent = sel.anchorNode.parentNode,
 					contentParent = parent.innerHTML;
-				// HTML einfügen
-				if (parent.nodeType === 1 &&
-						parent.nodeName === "MARK" &&
-						contentParent === content) { // Markierung entfernen
-					parent.parentNode.removeChild(parent);
+				// Ersetzen
+				if (parent.nodeType === 1 && parent.nodeName === "MARK" && contentParent === content) {
+					// Markierung entfernen (parent)
+					// (wurde eine Markierung händisch ausgewählt => focusNode = #text)
+					let knoten = [];
+					for (let k of parent.childNodes) {
+						knoten.push(k);
+					}
+					let parentZuMark = parent.parentNode;
+					parentZuMark.removeChild(parent);
 					document.execCommand("insertHTML", false, content);
+					focusText(knoten, parentZuMark);
+				} else if (focus.nodeType === 1 && focus.nodeName === "MARK" && contentFocus === content) {
+					// Markierung entfernen (focus)
+					// (wurde eine Markierung gerade hinzugefügt => focusNode = <mark>)
+					let knoten = [];
+					for (let k of focus.childNodes) {
+						knoten.push(k);
+					}
+					let parentZuMark = focus.parentNode;
+					parentZuMark.removeChild(focus);
+					document.execCommand("insertHTML", false, content);
+					focusText(knoten, parentZuMark);
 				} else { // Markierung hinzufügen
 					document.execCommand("insertHTML", false, `<mark class="user">${content}</mark>`);
+					let mark = sel.focusNode;
+					while (mark.nodeType !== 1 || mark.nodeName !== "MARK") {
+						mark = mark.parentNode;
+					}
+					sel.selectAllChildren(mark);
 				}
 			} else if (funktion[1] === "heading") {
 				// ÜBERSCHRIFT
@@ -268,6 +292,68 @@ let notizen = {
 				document.execCommand(funktion[1]);
 			}
 			document.getElementById("notizen-feld").focus();
+			// Text nach Entfernen eines <mark> fokussieren
+			// (wird zumindest versucht; funktioniert nur, wenn innerhalb des <mark> keine
+			// weiteren Elemente verschachtelt waren)
+			//   knoten = Array
+			//     (Liste der Knoten, die sich in dem <mark> befanden)
+			//   parent = Element
+			//     (Element-Knoten der parent zum entfernten <mark> war)
+			function focusText (knoten, parent) {
+				let sel = window.getSelection();
+				if (sel.rangeCount > 0) {
+					sel.removeAllRanges();
+				}
+				// Range nur in einem Knoten
+				if (knoten.length === 1) {
+					let text = knoten[0].textContent;
+					for (let b of parent.childNodes) {
+						if (b.textContent.includes(text)) {
+							let idx = b.textContent.indexOf(text),
+								range = document.createRange();
+							range.setStart(b, idx);
+							range.setEnd(b, idx + text.length);
+							sel.addRange(range);
+							break;
+						}
+					}
+					return;
+				}
+				// Range über mehrere Knoten hinweg
+				let start = {
+					text: knoten[0].textContent,
+					knoten: null,
+					pos: -1,
+				};
+				let end = {
+					text: knoten[knoten.length - 1].textContent,
+					knoten: null,
+					pos: -1,
+				};
+				for (let b of parent.childNodes) {
+					if (!start.knoten && b.textContent.includes(start.text)) {
+						start.knoten = b;
+						while (start.knoten.nodeType !== 3) {
+							start.knoten = start.knoten.firstChild;
+						}
+						start.pos = b.textContent.indexOf(start.text);
+					} else if (start.knoten && !end.knoten && b.textContent.includes(end.text)) {
+						end.knoten = b;
+						while (end.knoten.nodeType !== 3) {
+							end.knoten = end.knoten.firstChild;
+						}
+						end.pos = b.textContent.length;
+						break;
+					}
+				}
+				// Knoten und Positionen auswählen
+				if (start.knoten && end.knoten) {
+					let range = document.createRange();
+					range.setStart(start.knoten, start.pos);
+					range.setEnd(end.knoten, end.pos);
+					sel.addRange(range);
+				}
+			}
 		});
 	},
 };
