@@ -222,42 +222,31 @@ let notizen = {
 			let funktion = this.getAttribute("class").match(/icon-tools-([^\s]+)/);
 			if (funktion[1] === "mark") {
 				// MARKIERUNG (alles etwas komplizierter)
-				// Clonen
+				// Range Clonen
 				let sel = window.getSelection(),
-					range = sel.getRangeAt(0),
-					clone = range.cloneContents(),
 					div = document.createElement("div");
-				div.appendChild(clone);
+				div.appendChild(sel.getRangeAt(0).cloneContents());
 				let content = div.innerHTML;
 				// Knoten und Content ermitteln
 				let focus = sel.focusNode,
-					contentFocus = focus.innerHTML,
+					isFocus = focus.nodeType === 1 && focus.nodeName === "MARK" && focus.innerHTML === content,
 					parent = sel.anchorNode.parentNode,
-					contentParent = parent.innerHTML;
-				// Ersetzen
-				if (parent.nodeType === 1 && parent.nodeName === "MARK" && contentParent === content) {
-					// Markierung entfernen (parent)
-					// (wurde eine Markierung händisch ausgewählt => focusNode = #text)
+					isParent = parent.nodeType === 1 && parent.nodeName === "MARK" && parent.innerHTML === content;
+				// ersetzen oder hinzufügen
+				if (isFocus || isParent) {
+					let bezug = parent; // Markierung händisch ausgewählt => focusNode = #text
+					if (isFocus) {
+						bezug = focus; // Markierung gerade hinzugefügt => focusNode = <mark>
+					}
 					let knoten = [];
-					for (let k of parent.childNodes) {
+					for (let k of bezug.childNodes) {
 						knoten.push(k);
 					}
-					let parentZuMark = parent.parentNode;
-					parentZuMark.removeChild(parent);
+					let parentZuMark = bezug.parentNode;
+					parentZuMark.removeChild(bezug);
 					document.execCommand("insertHTML", false, content);
 					focusText(knoten, parentZuMark);
-				} else if (focus.nodeType === 1 && focus.nodeName === "MARK" && contentFocus === content) {
-					// Markierung entfernen (focus)
-					// (wurde eine Markierung gerade hinzugefügt => focusNode = <mark>)
-					let knoten = [];
-					for (let k of focus.childNodes) {
-						knoten.push(k);
-					}
-					let parentZuMark = focus.parentNode;
-					parentZuMark.removeChild(focus);
-					document.execCommand("insertHTML", false, content);
-					focusText(knoten, parentZuMark);
-				} else { // Markierung hinzufügen
+				} else {
 					document.execCommand("insertHTML", false, `<mark class="user">${content}</mark>`);
 					let mark = sel.focusNode;
 					while (mark.nodeType !== 1 || mark.nodeName !== "MARK") {
@@ -293,8 +282,6 @@ let notizen = {
 			}
 			document.getElementById("notizen-feld").focus();
 			// Text nach Entfernen eines <mark> fokussieren
-			// (wird zumindest versucht; funktioniert nur, wenn innerhalb des <mark> keine
-			// weiteren Elemente verschachtelt waren)
 			//   knoten = Array
 			//     (Liste der Knoten, die sich in dem <mark> befanden)
 			//   parent = Element
@@ -304,7 +291,7 @@ let notizen = {
 				if (sel.rangeCount > 0) {
 					sel.removeAllRanges();
 				}
-				// Range nur in einem Knoten
+				// es war nur ein Knoten im entfernten <mark>
 				if (knoten.length === 1) {
 					let text = knoten[0].textContent;
 					for (let b of parent.childNodes) {
@@ -319,7 +306,7 @@ let notizen = {
 					}
 					return;
 				}
-				// Range über mehrere Knoten hinweg
+				// es waren mehrere Knoten im entfernten <mark>
 				let start = {
 					text: knoten[0].textContent,
 					knoten: null,
