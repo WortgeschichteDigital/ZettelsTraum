@@ -1014,9 +1014,10 @@ let filter = {
 	regCacheBaum: {},
 	// Zwischenspeicher für die Daten der Volltextsuche
 	volltextSuche: {
-		suche: false,
-		ds: [],
-		reg: [],
+		suche: false, // Volltext-Suche ist aktiv
+		ka: {}, // speichert welche Datensätze in welchen Karteikarten Treffer produziert haben
+		ds: [], // speichert die Datensätze, die durchsucht werden sollen
+		reg: [], // speichert die regulären Ausdrücke, mit denen gesucht werden soll
 	},
 	// Variablen für die Volltextsuche vorbereiten
 	volltextSuchePrep () {
@@ -1028,7 +1029,9 @@ let filter = {
 			filter.volltextSuche.suche = false;
 			return;
 		}
+		// Filtertext vorhanden
 		filter.volltextSuche.suche = true;
+		filter.volltextSuche.ka = {};
 		// erweiterte Filter aktiv?
 		const erweiterte = document.getElementById("filter-erweiterte").classList.contains("aktiv");
 		// zu durchsuchende Datensätze
@@ -1311,7 +1314,8 @@ let filter = {
 			return true;
 		}
 		// Volltextsuche
-		let treffer = Array(filter.volltextSuche.reg.length).fill(false);
+		let treffer = Array(filter.volltextSuche.reg.length).fill(false),
+			trefferDs = [];
 		for (let i = 0, len = filter.volltextSuche.ds.length; i < len; i++) {
 			const ds = filter.volltextSuche.ds[i];
 			let text_rein = "";
@@ -1327,11 +1331,13 @@ let filter = {
 				let reg = filter.volltextSuche.reg[j];
 				if (text_rein.match(reg)) {
 					treffer[j] = true;
+					trefferDs.push(ds);
 				}
 			}
-			if (!treffer.includes(false)) {
-				return true;
-			}
+		}
+		if (!treffer.includes(false)) {
+			filter.volltextSuche.ka[id] = trefferDs;
+			return true;
 		}
 		return false;
 	},

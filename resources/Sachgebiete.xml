@@ -467,4 +467,20 @@
 		<id>115</id>
 		<name>Imkerei</name>
 	</item>
+	<item>
+		<id>116</id>
+		<name>Policey</name>
+	</item>
+	<item>
+		<id>117</id>
+		<name>Technik</name>
+	</item>
+	<item>
+		<id>118</id>
+		<name>Verwaltungswesen</name>
+	</item>
+	<item>
+		<id>119</id>
+		<name>Wissenschaft</name>
+	</item>
 </sachgebiete>

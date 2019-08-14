@@ -415,7 +415,7 @@ let helfer = {
 	//   string = String
 	//     (Text, der escaped werden soll)
 	escapeRegExp (string) {
-		return string.replace(/\/|\(|\)|\[|\]|\{|\}|\.|\?|\\|\+|\*|\^|\$|\|/g, (m) => `\\${m}`);
+		return string.replace(/\/|\(|\)|\[|\]|\{|\}|\.|\?|\\|\+|\*|\^|\$|\|/g, m => `\\${m}`);
 	},
 	// Zeichen maskieren
 	//   string = String

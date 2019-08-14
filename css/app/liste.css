@@ -511,7 +511,7 @@ p.no-indent + .filter-baum, /* betrifft Verschiedenes > Filterlogik */
 	color: #fff;
 }
 
-.liste-kopf mark {
+.liste-kopf mark:not(.suche) {
 	padding: 0;
 	background-color: transparent;
 	font-weight: bold;

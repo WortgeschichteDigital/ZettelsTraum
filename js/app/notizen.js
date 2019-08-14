@@ -222,10 +222,18 @@ let notizen = {
 			let funktion = this.getAttribute("class").match(/icon-tools-([^\s]+)/);
 			if (funktion[1] === "mark") {
 				// MARKIERUNG (alles etwas komplizierter)
+				// keine Range vorhanden
+				let sel = window.getSelection();
+				if (sel.rangeCount > 0) {
+					document.getElementById("notizen-feld").focus();
+					return;
+				}
 				// Range Clonen
-				let sel = window.getSelection(),
-					div = document.createElement("div");
-				div.appendChild(sel.getRangeAt(0).cloneContents());
+				let range = sel.getRangeAt(0),
+					div = document.createElement("div"),
+					frag = document.createDocumentFragment();
+				div.appendChild(range.cloneContents());
+				frag.appendChild(range.cloneContents());
 				let content = div.innerHTML;
 				// Knoten und Content ermitteln
 				let focus = sel.focusNode,
@@ -244,14 +252,16 @@ let notizen = {
 					}
 					let parentZuMark = bezug.parentNode;
 					parentZuMark.removeChild(bezug);
-					document.execCommand("insertHTML", false, content);
+					range.insertNode(frag);
 					focusText(knoten, parentZuMark);
 				} else {
-					document.execCommand("insertHTML", false, `<mark class="user">${content}</mark>`);
-					let mark = sel.focusNode;
-					while (mark.nodeType !== 1 || mark.nodeName !== "MARK") {
-						mark = mark.parentNode;
-					}
+					let mark = document.createElement("mark");
+					mark.classList.add("user");
+					mark.innerHTML = content;
+					let {clipboard} = require("electron");
+					clipboard.writeHTML(mark.outerHTML);
+					range.deleteContents();
+					range.insertNode(mark);
 					sel.selectAllChildren(mark);
 				}
 			} else if (funktion[1] === "heading") {
@@ -287,6 +297,11 @@ let notizen = {
 			//   parent = Element
 			//     (Element-Knoten der parent zum entfernten <mark> war)
 			function focusText (knoten, parent) {
+				// Markierung war leer
+				if (!knoten.length) {
+					return;
+				}
+				// Ranges entfernen
 				let sel = window.getSelection();
 				if (sel.rangeCount > 0) {
 					sel.removeAllRanges();
@@ -318,18 +333,18 @@ let notizen = {
 					pos: -1,
 				};
 				for (let b of parent.childNodes) {
-					if (!start.knoten && b.textContent.includes(start.text)) {
+					if (!start.knoten && b.textContent === start.text) {
 						start.knoten = b;
 						while (start.knoten.nodeType !== 3) {
 							start.knoten = start.knoten.firstChild;
 						}
-						start.pos = b.textContent.indexOf(start.text);
+						start.pos = 0;
 					} else if (start.knoten && !end.knoten && b.textContent.includes(end.text)) {
 						end.knoten = b;
-						while (end.knoten.nodeType !== 3) {
-							end.knoten = end.knoten.firstChild;
+						while (end.knoten.nodeType === 1) {
+							end.knoten = end.knoten.lastChild;
 						}
-						end.pos = b.textContent.length;
+						end.pos = end.knoten.textContent.length;
 						break;
 					}
 				}

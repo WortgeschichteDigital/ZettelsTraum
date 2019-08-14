@@ -4,12 +4,20 @@ window.addEventListener("load", function() {
 	// Fensterttyp registrieren
 	window.fenstertyp = "changelog";
 	// Über App
-	const {ipcRenderer} = require("electron");
-	document.getElementById("icon").addEventListener("click", () => ipcRenderer.send("ueber-app"));
+	document.querySelectorAll("#icon, .ueber-app").forEach(function(i) {
+		i.addEventListener("click", function(evt) {
+			evt.preventDefault();
+			const {ipcRenderer} = require("electron");
+			ipcRenderer.send("ueber-app");
+		});
+	});
 	// Über Electron
-	document.querySelector(".ueber-electron").addEventListener("click", function(evt) {
-		evt.preventDefault();
-		ipcRenderer.send("ueber-electron", "changelog");
+	document.querySelectorAll(".ueber-electron").forEach(function(i) {
+		i.addEventListener("click", function(evt) {
+			evt.preventDefault();
+			const {ipcRenderer} = require("electron");
+			ipcRenderer.send("ueber-electron");
+		});
 	});
 	// Tastatur-Events abfangen
 	document.addEventListener("keydown", helferWin.tastatur);

@@ -41,7 +41,7 @@ window.addEventListener("load", function() {
 		// Über Electron
 		document.querySelector(".ueber-electron").addEventListener("click", function(evt) {
 			evt.preventDefault();
-			ipcRenderer.send("ueber-electron", "dokumentation");
+			ipcRenderer.send("ueber-electron");
 		});
 	} catch (err) {}
 	// Handbuch

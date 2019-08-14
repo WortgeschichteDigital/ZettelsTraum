@@ -1,7 +1,7 @@
 "use strict";
 
 let liste = {
-	// Zeigt die Karteikartenliste an, überprüft aber vorher
+	// Zeigt die Belegliste an, überprüft aber vorher,
 	// ob noch etwas in Bearbeitung gespeichert werden muss
 	anzeigen () {
 		if (tagger.geaendert) { // Tags noch nicht gespeichert
@@ -52,41 +52,31 @@ let liste = {
 	// Zwischenspeicher für die ID eines geänderten Belegs
 	// (damit der Beleg markiert wird)
 	statusGeaendert: "",
+	// Zwischenspeicher für die aufgeklappten Belege
+	statusOffen: {},
 	// speichert den Status der aktuellen Belegliste, d.h. ob die Karten auf oder zugeklappt sind
 	//   filter_init = Boolean
 	//     (speichert, ob die Filterliste initialisiert werden sollen)
 	status (filter_init) {
-		// Klapp-Status ermitteln
-		let offen = {},
-			koepfe_vor = document.querySelectorAll(".liste-kopf");
-		for (let i = 0, len = koepfe_vor.length; i < len; i++) {
-			let id = koepfe_vor[i].dataset.id;
-			if (koepfe_vor[i].classList.contains("schnitt-offen")) {
-				offen[id] = true;
+		// Klapp-Status sichern
+		liste.statusOffen = {};
+		let koepfe = document.querySelectorAll(".liste-kopf");
+		for (let i = 0, len = koepfe.length; i < len; i++) {
+			let id = koepfe[i].dataset.id;
+			if (koepfe[i].classList.contains("schnitt-offen")) {
+				liste.statusOffen[id] = true;
 			} else {
-				offen[id] = false;
+				liste.statusOffen[id] = false;
 			}
 		}
 		// ggf. den gerade erst erstellten Beleg als offenen Beleg hinzufügen
 		if (liste.statusNeu) {
-			offen[liste.statusNeu] = true;
+			liste.statusOffen[liste.statusNeu] = true;
 		}
 		// Scroll-Status speichern
 		liste.statusScrollBak();
 		// Liste aufbauen
 		liste.aufbauen(filter_init);
-		// Klapp-Status wiederherstellen
-		let koepfe_nach = document.querySelectorAll(".liste-kopf");
-		for (let i = 0, len = koepfe_nach.length; i < len; i++) {
-			let id = koepfe_nach[i].dataset.id;
-			if (offen[id] || offen[id] === undefined && optionen.data.belegliste.beleg) { // wurde ein Beleg zum Zeitpunkt der Sicherung nicht angezeigt, wird er aufgeklappt, wenn (theoretisch) alle Belege aufgeklappt sein sollten
-				koepfe_nach[i].classList.add("schnitt-offen");
-				koepfe_nach[i].nextSibling.classList.remove("aus");
-			} else {
-				koepfe_nach[i].classList.remove("schnitt-offen");
-				koepfe_nach[i].nextSibling.classList.add("aus");
-			}
-		}
 		// Scroll-Status wiederherstellen
 		liste.statusScrollReset();
 		// ggf. den neuen Beleg visuell hervorheben
@@ -202,9 +192,6 @@ let liste = {
 				// Beleg-Kopf erstellen
 				let div = document.createElement("div");
 				div.classList.add("liste-kopf");
-				if (optionen.data.belegliste.beleg) {
-					div.classList.add("schnitt-offen");
-				}
 				div.dataset.id = id;
 				// Kopficons einfügen
 				for (let i = 0; i < 2; i++) {
@@ -229,7 +216,7 @@ let liste = {
 				// Jahr
 				let span = document.createElement("span");
 				span.classList.add("liste-jahr");
-				span.textContent = zeitschnitt_akt.datum;
+				span.innerHTML = liste.suchtreffer(zeitschnitt_akt.datum, "da", id);
 				if (zeitschnitt_akt.datum !== data.ka[id].da) {
 					span.title = data.ka[id].da;
 					span.classList.add("liste-jahr-hinweis");
@@ -237,71 +224,21 @@ let liste = {
 				}
 				div.appendChild(span);
 				// Belegvorschau
-				div.appendChild(liste.belegVorschau(data.ka[id]));
+				div.appendChild(liste.belegVorschau(data.ka[id], id));
 				// <div> für Belegkopf einhängen
+				cont.appendChild(div);
 				liste.belegUmschalten(div);
-				cont.appendChild(div);
 				// <div> für die Detail-Ansicht erzeugen
-				div = document.createElement("div");
-				div.classList.add("liste-details");
-				if (!optionen.data.belegliste.beleg) {
-					div.classList.add("aus");
+				if (filter.volltextSuche.suche ||
+						optionen.data.belegliste.beleg && (typeof liste.statusOffen[id] === "undefined" || liste.statusOffen[id]) ||
+						!optionen.data.belegliste.beleg && liste.statusOffen[id]) {
+					if (liste.aufbauenDetailsBeiSuche(id)) {
+						div.classList.add("schnitt-offen");
+						liste.aufbauenDetails({
+							id: id,
+						});
+					}
 				}
-				cont.appendChild(div);
-				// Beleg
-				div.appendChild(liste.belegErstellen(id));
-				// Bedeutung
-				liste.detailErstellen({
-					cont: div,
-					ds: "bd",
-					h: "Bedeutung",
-					text: data.ka[id].bd,
-				});
-				// Wortbildung
-				liste.detailErstellen({
-					cont: div,
-					ds: "bl",
-					h: "Wortbildung",
-					text: data.ka[id].bl,
-				});
-				// Synonym
-				liste.detailErstellen({
-					cont: div,
-					ds: "sy",
-					h: "Synonym",
-					text: data.ka[id].sy,
-				});
-				// Quellenangabe
-				liste.detailErstellen({
-					cont: div,
-					ds: "qu",
-					h: "Quelle",
-					text: data.ka[id].qu,
-					id: id,
-				});
-				// Korpus
-				liste.detailErstellen({
-					cont: div,
-					ds: "kr",
-					h: "Korpus",
-					text: data.ka[id].kr,
-				});
-				// Textsorte
-				liste.detailErstellen({
-					cont: div,
-					ds: "ts",
-					h: "Textsorte",
-					text: data.ka[id].ts,
-				});
-				// Notizen
-				liste.detailErstellen({
-					cont: div,
-					ds: "no",
-					h: "Notizen",
-					text: data.ka[id].no,
-				});
-				// Meta-Infos
-				liste.metainfosErstellen(data.ka[id], div, "liste-meta");
 			}
 			// Jahrzehnt hoch- bzw. runterzählen
 			if (optionen.data.belegliste.sort_aufwaerts) {
@@ -312,8 +249,6 @@ let liste = {
 		}
 		// Anzeige der Zeitschnitte anpassen
 		liste.zeitschnitteAnpassen(false);
-		// Anzeige der Details anpassen
-		liste.detailsAnzeigen(false);
 		// Anzeige, dass kein Beleg vorhanden ist, ggf. ausblenden
 		liste.zeitschnitteKeineBelege();
 	},
@@ -399,6 +334,124 @@ let liste = {
 			cont.classList.remove("belege-gefiltert");
 		}
 		cont.textContent = anzahl;
+	},
+	// Detailblock aufbauen
+	//   id = Number
+	//     (ID der Karteikarte)
+	//   folgekopf = Element || undefined
+	//     (der Belegkopf, der dem mit der übergebenen ID folgt)
+	aufbauenDetails ({id, folgekopf}) {
+		// Detailblock aufbauen
+		let div = document.createElement("div");
+		div.classList.add("liste-details");
+		if (!folgekopf) {
+			folgekopf = document.querySelector(`.liste-kopf[data-id="${id}"]`).nextSibling;
+		}
+		if (!folgekopf) { // Detailblock muss am Ende der Liste eingehängt werden
+			document.getElementById("liste-belege-cont").appendChild(div);
+		} else {
+			folgekopf.parentNode.insertBefore(div, folgekopf);
+		}
+		// Beleg
+		div.appendChild(liste.belegErstellen(id));
+		// Bedeutung
+		if (!filter.volltextSuche.suche && optionen.data.belegliste.detail_bd ||
+				filter.volltextSuche.suche && filter.volltextSuche.ka[id].includes("bd")) {
+			liste.detailErstellen({
+				cont: div,
+				ds: "bd",
+				h: "Bedeutung",
+				text: data.ka[id].bd,
+				id,
+			});
+		}
+		// Wortbildung
+		if (!filter.volltextSuche.suche && optionen.data.belegliste.detail_bl ||
+				filter.volltextSuche.suche && filter.volltextSuche.ka[id].includes("bl")) {
+			liste.detailErstellen({
+				cont: div,
+				ds: "bl",
+				h: "Wortbildung",
+				text: data.ka[id].bl,
+				id,
+			});
+		}
+		// Synonym
+		if (!filter.volltextSuche.suche && optionen.data.belegliste.detail_sy ||
+				filter.volltextSuche.suche && filter.volltextSuche.ka[id].includes("sy")) {
+			liste.detailErstellen({
+				cont: div,
+				ds: "sy",
+				h: "Synonym",
+				text: data.ka[id].sy,
+				id,
+			});
+		}
+		// Quellenangabe
+		if (!filter.volltextSuche.suche && optionen.data.belegliste.detail_qu ||
+				filter.volltextSuche.suche && filter.volltextSuche.ka[id].includes("qu")) {
+			liste.detailErstellen({
+				cont: div,
+				ds: "qu",
+				h: "Quelle",
+				text: data.ka[id].qu,
+				id,
+				icon: true,
+			});
+		}
+		// Korpus
+		if (!filter.volltextSuche.suche && optionen.data.belegliste.detail_kr ||
+				filter.volltextSuche.suche && filter.volltextSuche.ka[id].includes("kr")) {
+			liste.detailErstellen({
+				cont: div,
+				ds: "kr",
+				h: "Korpus",
+				text: data.ka[id].kr,
+				id,
+			});
+		}
+		// Textsorte
+		if (!filter.volltextSuche.suche && optionen.data.belegliste.detail_ts ||
+				filter.volltextSuche.suche && filter.volltextSuche.ka[id].includes("ts")) {
+			liste.detailErstellen({
+				cont: div,
+				ds: "ts",
+				h: "Textsorte",
+				text: data.ka[id].ts,
+				id,
+			});
+		}
+		// Notizen
+		if (!filter.volltextSuche.suche && optionen.data.belegliste.detail_no ||
+				filter.volltextSuche.suche && filter.volltextSuche.ka[id].includes("no")) {
+			liste.detailErstellen({
+				cont: div,
+				ds: "no",
+				h: "Notizen",
+				text: data.ka[id].no,
+				id,
+			});
+		}
+		// Meta-Infos
+		if (!filter.volltextSuche.suche && optionen.data.belegliste.detail_meta) {
+			liste.metainfosErstellen(data.ka[id], div, "liste-meta");
+		}
+	},
+	// ermittelt, ob die Detail-Anzeige wirklich aufgebaut werden soll (für den Fall einer Suche)
+	//   id = String
+	//     (die ID der Karteikarte, um die es geht)
+	aufbauenDetailsBeiSuche (id) {
+		if (!filter.volltextSuche.suche) {
+			return true;
+		}
+		// ermitteln
+		let felder = ["bs", "bd", "bl", "sy", "qu", "kr", "ts", "no"];
+		for (let feld of felder) {
+			if (filter.volltextSuche.ka[id].includes(feld)) {
+				return true;
+			}
+		}
+		return false;
 	},
 	// Zeitschnitt ermitteln
 	//   datum = String
@@ -580,6 +633,14 @@ let liste = {
 		a.classList.add("icon-link", "icon-tools-kopieren");
 		a.dataset.ds = `${id}|bs`;
 		liste.kopieren(a);
+		// Suche ohne Treffer im Beleg
+		if (filter.volltextSuche.suche &&
+				!filter.volltextSuche.ka[id].includes("bs")) {
+			let p = document.createElement("p");
+			p.textContent = "[…]";
+			div.appendChild(p);
+			return div;
+		}
 		// Absätze erzeugen
 		let prep = data.ka[id].bs.replace(/\n\s*\n/g, "\n"), // Leerzeilen löschen
 			p_prep = prep.split("\n"),
@@ -589,8 +650,26 @@ let liste = {
 			let p = document.createElement("p");
 			div.appendChild(p);
 			// Absatz ggf. kürzen
-			if (optionen.data.belegliste.beleg_kuerzen &&
-					!form_reg.test(liste.textBereinigen(p_prep[i]))) {
+			if (filter.volltextSuche.suche) { // ggf. kürzen, wenn Suchtreffer nicht enthalten
+				const text_rein = p_prep[i].replace(/<.+?>/g, "");
+				let treffer = false;
+				for (let j = 0, len = filter.volltextSuche.reg.length; j < len; j++) {
+					if (text_rein.match(filter.volltextSuche.reg[j])) {
+						treffer = true;
+						break;
+					}
+				}
+				if (!treffer) {
+					if (zuletzt_gekuerzt) {
+						div.removeChild(div.lastChild);
+					} else {
+						p.textContent = "[…]";
+						zuletzt_gekuerzt = true;
+					}
+					continue;
+				}
+			} else if (optionen.data.belegliste.beleg_kuerzen &&
+					!form_reg.test(liste.textBereinigen(p_prep[i]))) { // ggf. kürzen, wenn Wort nicht enthalten
 				if (zuletzt_gekuerzt) {
 					div.removeChild(div.lastChild);
 				} else {
@@ -603,7 +682,7 @@ let liste = {
 			// ggf. Trennungszeichen entfernen
 			p_prep[i] = liste.belegTrennungWeg(p_prep[i], false);
 			// Absatz normal einhängen
-			p.innerHTML = liste.suchtreffer(liste.belegWortHervorheben(p_prep[i], false), "bs");
+			p.innerHTML = liste.suchtreffer(liste.belegWortHervorheben(p_prep[i], false), "bs", id);
 		}
 		// <div> zurückgeben
 		return div;
@@ -611,12 +690,14 @@ let liste = {
 	// generiert den Vorschautext des übergebenen Belegs inkl. Autorname (wenn vorhanden)
 	//   beleg_akt = Object
 	//     (Verweis auf den aktuellen Beleg)
-	belegVorschau (beleg_akt) {
+	//   id = String
+	//     (ID des aktuellen Belegs)
+	belegVorschau (beleg_akt, id) {
 		// Beleg aufbereiten
 		let schnitt = beleg_akt.bs.replace(/\n+/g, " "); // Absätze könnten mit Leerzeile eingegeben sein
 		schnitt = schnitt.replace(/<.+?>/g, ""); // HTML-Formatierungen vorher löschen!
 		schnitt = liste.belegTrennungWeg(schnitt, true); // Trennzeichen und Seitenumbrüche weg
-		// 1. Treffer im Text ermitteln, Beleg am Anfang ggf. kürzen
+		// 1. Treffer des Worts im Text ermitteln, Beleg am Anfang ggf. kürzen
 		let reg = new RegExp(helfer.formVariRegExp(), "gi");
 		if (reg.test(schnitt) &&
 				reg.lastIndex - kartei.wort.length > 35) {
@@ -626,7 +707,7 @@ let liste = {
 		if (schnitt.length > 280) {
 			schnitt = `${schnitt.substring(0, 250)}…`;
 		}
-		// Treffer hervorheben
+		// Wort hervorheben
 		schnitt = liste.belegWortHervorheben(schnitt, false);
 		// ggf. Autor angeben
 		let frag = document.createDocumentFragment();
@@ -634,11 +715,11 @@ let liste = {
 			let autor = beleg_akt.au.split(/,(.+)/),
 				autor_span = document.createElement("span");
 			frag.appendChild(autor_span);
-			autor_span.textContent = autor[0];
+			autor_span.innerHTML = liste.suchtreffer(autor[0], "au", id);
 			if (autor.length > 1) {
 				let span = document.createElement("span");
 				span.classList.add("liste-autor-detail");
-				span.textContent = `,${autor[1]}`;
+				span.innerHTML = liste.suchtreffer(`,${autor[1]}`, "au", id);
 				autor_span.appendChild(span);
 			}
 			liste.belegVorschauTs(autor_span, beleg_akt, " ", "");
@@ -714,10 +795,12 @@ let liste = {
 	//     (der Text, in dem die Ersetzung vorgenommen werden soll)
 	//   ds = String
 	//     (der Datensatz, aus dem der Text stammt, also "bs", "da", "au" usw.)
-	suchtreffer (text, ds) {
+	//   id = String
+	//     (ID des Belegs, in dem der Suchtreffer hervorgehoben werden soll)
+	suchtreffer (text, ds, id) {
 		// keine Suche oder keine Suche im aktuellen Datensatz
 		if (!filter.volltextSuche.suche ||
-				!filter.volltextSuche.ds.includes(ds)) {
+				!filter.volltextSuche.ka[id].includes(ds)) {
 			return text;
 		}
 		// Suchtreffer hervorheben
@@ -735,19 +818,19 @@ let liste = {
 		// Text zurückgeben
 		return text;
 	},
-	// einen einzelnen Beleg durch Klick auf den Belegkopf umschalten
+	// Details zu einem einzelnen Beleg durch Klick auf den Belegkopf ein- oder ausblenden
 	//   div = Element
 	//     (der Belegkopf, auf den geklickt werden kann)
 	belegUmschalten (div) {
 		div.addEventListener("click", function() {
-			// Beleg umschalten
-			let schnitt = this.nextSibling;
-			schnitt.classList.toggle("aus");
-			// Anzeige der Vorschau anpassen
-			if (schnitt.classList.contains("aus")) {
+			if (this.classList.contains("schnitt-offen")) {
 				this.classList.remove("schnitt-offen");
+				this.parentNode.removeChild(this.nextSibling);
 			} else {
 				this.classList.add("schnitt-offen");
+				liste.aufbauenDetails({
+					id: this.dataset.id,
+				});
 			}
 		});
 	},
@@ -757,10 +840,11 @@ let liste = {
 	//        cont: Element (das ist der aktuelle Detailblock)
 	//        ds:   String  (Schlüssel des Datensatzes)
 	//        h:    String  (die Überschrift des Datenfelds)
-	//        id:   String  (ID der Karteikarte, nur gefüllt, wenn ein Kopier-Icon eingefügt werden soll)
+	//        id:   String  (ID der Karteikarte)
 	//        text: String  (vollständiger Text des Datenfelds)
 	//              Array   (bei Bedeutungen)
-	detailErstellen ({cont, ds, h, text, id = ""}) {
+	//        icon: Boolean (Kopierlink soll erzeugt werden)
+	detailErstellen ({cont, ds, h, text, id, icon = false}) {
 		// Datenfeld kann leer sein
 		if (!text || ds === "bd" && !text.length) {
 			return;
@@ -778,7 +862,7 @@ let liste = {
 		cont.appendChild(div);
 		div.classList.add(`liste-${ds}`, "liste-label");
 		// ggf. Kopierlink erzeugen
-		if (id) {
+		if (icon) {
 			let a = document.createElement("a");
 			div.appendChild(a);
 			a.classList.add("icon-link", "icon-tools-kopieren");
@@ -810,7 +894,7 @@ let liste = {
 		for (let absatz of text.split("\n")) {
 			let p = document.createElement("p");
 			div.appendChild(p);
-			p.innerHTML = liste.suchtreffer(absatz, ds);
+			p.innerHTML = liste.suchtreffer(absatz, ds, id);
 		}
 		// Klick-Events an Links hängen
 		for (let link of div.querySelectorAll(".link")) {
@@ -952,29 +1036,6 @@ let liste = {
 			beleg.oeffnen(parseInt(this.parentNode.dataset.id, 10));
 		});
 	},
-	// Passt die Anzeige der Details im geöffneten Beleg an
-	//   scroll_back = Boolean
-	//     (beim Neuaufbau der Liste darf die Position nicht gemerkt werden)
-	detailsAnzeigen (scroll_bak) {
-		if (scroll_bak) {
-			liste.statusScrollBak();
-		}
-		let funktionen = ["bd", "bl", "sy", "qu", "kr", "ts", "no", "meta"];
-		for (let i = 0, len = funktionen.length; i < len; i++) {
-			let opt = `detail_${funktionen[i]}`,
-				ele = document.querySelectorAll(`.liste-${funktionen[i]}`);
-			for (let j = 0, len = ele.length; j < len; j++) {
-				if (optionen.data.belegliste[opt]) {
-					ele[j].classList.remove("aus");
-				} else {
-					ele[j].classList.add("aus");
-				}
-			}
-		}
-		if (scroll_bak) {
-			liste.statusScrollReset();
-		}
-	},
 	// Detail auf Klick anzeigen (wird derzeit nur für das Datum benutzt)
 	//   span = Element
 	//     (<span>, in dem das Detail steht)
@@ -1040,7 +1101,7 @@ let liste = {
 			}
 		});
 	},
-	// Filter ein- bzw. ausblenden
+	// Header-Icons: Filter ein- bzw. ausblenden
 	headerFilter () {
 		// Option ändern
 		optionen.data.belegliste.filterleiste = !optionen.data.belegliste.filterleiste;
@@ -1048,7 +1109,10 @@ let liste = {
 		// Anzeige anpassen
 		liste.headerFilterAnzeige(true);
 	},
-	// Filter ein- bzw. ausblenden (Anzeige der Filterleiste und des Links im Header anpassen)
+	// Header-Icons: Filter ein- bzw. ausblenden
+	// (Anzeige der Filterleiste und des Links im Header anpassen)
+	//   scroll_bak = Boolean
+	//     (Backup des Scrollstatus erstellen und wiederherstellen)
 	headerFilterAnzeige (scroll_bak) {
 		// Scroll-Status speichern
 		if (scroll_bak) {
@@ -1073,7 +1137,7 @@ let liste = {
 			setTimeout(() => liste.statusScrollReset(), 500);
 		}
 	},
-	// chronologisches Sortieren der Belege
+	// Header-Icons: chronologisches Sortieren der Belege
 	headerSortieren () {
 		// Option ändern
 		optionen.data.belegliste.sort_aufwaerts = !optionen.data.belegliste.sort_aufwaerts;
@@ -1083,7 +1147,7 @@ let liste = {
 		// Liste neu aufbauen
 		liste.status(false);
 	},
-	// chronologisches Sortieren der Belege (Anzeige im Header anpassen)
+	// Header-Icons: chronologisches Sortieren der Belege (Anzeige im Header anpassen)
 	headerSortierenAnzeige () {
 		let link = document.getElementById("liste-link-sortieren");
 		if (optionen.data.belegliste.sort_aufwaerts) {
@@ -1094,7 +1158,7 @@ let liste = {
 			link.title = "Chronologisch aufsteigend sortieren";
 		}
 	},
-	// Anzahl der Zeitschnitte festlegen, die angezeigt werden sollen
+	// Header-Icons: Anzahl der Zeitschnitte festlegen, die angezeigt werden sollen
 	//   funktion = String
 	//     (der letzte Teil der ID des Elements, also "liste-link-" + "funktion" = ID)
 	headerZeitschnitte (funktion) {
@@ -1110,7 +1174,7 @@ let liste = {
 		// Anzeige der Zeitschnitte in der Liste anpassen
 		liste.zeitschnitteAnpassen(true);
 	},
-	// Anzahl der Zeitschnitte festlegen, die angezeigt werden sollen (Anzeige im Header anpassen)
+	// Header-Icons: Anzahl der Zeitschnitte festlegen, die angezeigt werden sollen (Anzeige im Header anpassen)
 	headerZeitschnitteAnzeige () {
 		let aktiv = "";
 		if (optionen.data.belegliste.zeitschnitte !== "-") {
@@ -1126,27 +1190,38 @@ let liste = {
 			}
 		}
 	},
-	// Anzeige des kompletten Belegs umstellen
+	// Header-Icons: Anzeige der Details des Belegs umstellen
 	headerBeleg () {
 		// Variable umstellen
 		optionen.data.belegliste.beleg = !optionen.data.belegliste.beleg;
 		optionen.speichern();
 		// Link im Header anpassen
 		liste.headerBelegAnzeige();
+		// List geöffneter Belege zurückstellen
+		liste.statusOffen = {};
 		// Anzeige der Belege anpassen
-		let beleg = document.querySelectorAll("#liste-belege-cont .liste-details");
-		for (let i = 0, len = beleg.length; i < len; i++) {
-			let kopf = beleg[i].previousSibling;
+		document.querySelectorAll(".liste-kopf").forEach(function(i) {
+			const offen = i.classList.contains("schnitt-offen");
 			if (optionen.data.belegliste.beleg) {
-				beleg[i].classList.remove("aus");
-				kopf.classList.add("schnitt-offen");
+				const id = i.dataset.id;
+				if (!offen && liste.aufbauenDetailsBeiSuche(id)) {
+					i.classList.add("schnitt-offen");
+					liste.aufbauenDetails({
+						id,
+						folgekopf: i.nextSibling,
+					});
+				}
 			} else {
-				beleg[i].classList.add("aus");
-				kopf.classList.remove("schnitt-offen");
+				// da für die Suche die Einstellung übergangen wird, kann es sein, dass der Beleg
+				// gar nicht offen ist
+				i.classList.remove("schnitt-offen");
+				if (i.nextSibling && i.nextSibling.classList.contains("liste-details")) {
+					i.parentNode.removeChild(i.nextSibling);
+				}
 			}
-		}
+		});
 	},
-	// Anzeige des kompletten Belegs umstellen (Anzeige im Header anpassen)
+	// Header-Icons: Anzeige der Details des Belegs umstellen (Anzeige im Header anpassen)
 	headerBelegAnzeige () {
 		let link = document.getElementById("liste-link-beleg");
 		if (optionen.data.belegliste.beleg) {
@@ -1157,7 +1232,7 @@ let liste = {
 			link.title = "Komplettanzeige des Belegs einblenden";
 		}
 	},
-	// Kürzung des Belegs aus-/einschalten
+	// Header-Icons: Kürzung des Belegs aus-/einschalten
 	headerBelegKuerzen () {
 		// Kürzung umstellen
 		optionen.data.belegliste.beleg_kuerzen = !optionen.data.belegliste.beleg_kuerzen;
@@ -1167,7 +1242,7 @@ let liste = {
 		// Liste neu aufbauen
 		liste.status(false);
 	},
-	// Kürzung des Belegs aus-/einschalten (Anzeige im Header anpassen)
+	// Header-Icons: Kürzung des Belegs aus-/einschalten (Anzeige im Header anpassen)
 	headerBelegKuerzenAnzeige () {
 		let link = document.getElementById("liste-link-kuerzen");
 		if (optionen.data.belegliste.beleg_kuerzen) {
@@ -1178,7 +1253,7 @@ let liste = {
 			link.title = "Belegkontext kürzen";
 		}
 	},
-	// Silbentrennung im Beleg aus-/einschalten
+	// Header-Icons: Silbentrennung im Beleg aus-/einschalten
 	headerTrennung () {
 		// Hervorhebung umstellen
 		optionen.data.belegliste.trennung = !optionen.data.belegliste.trennung;
@@ -1188,7 +1263,7 @@ let liste = {
 		// Liste neu aufbauen
 		liste.status(false);
 	},
-	// Silbentrennung im Beleg aus-/einschalten (Anzeige im Header anpassen)
+	// Header-Icons: Silbentrennung im Beleg aus-/einschalten (Anzeige im Header anpassen)
 	headerTrennungAnzeige () {
 		let link = document.getElementById("liste-link-trennung");
 		if (optionen.data.belegliste.trennung) {
@@ -1199,7 +1274,7 @@ let liste = {
 			link.title = "Silbentrennung anzeigen";
 		}
 	},
-	// Hervorhebung des Worts im Beleg und der Vorschau aus-/einschalten
+	// Header-Icons: Hervorhebung des Worts im Beleg und der Vorschau aus-/einschalten
 	headerWortHervorheben () {
 		// Hervorhebung umstellen
 		optionen.data.belegliste.wort_hervorheben = !optionen.data.belegliste.wort_hervorheben;
@@ -1209,7 +1284,7 @@ let liste = {
 		// Liste neu aufbauen
 		liste.status(false);
 	},
-	// Hervorhebung des Worts im Beleg und der Vorschau aus-/einschalten (Anzeige im Header anpassen)
+	// Header-Icons: Hervorhebung des Worts im Beleg und der Vorschau aus-/einschalten (Anzeige im Header anpassen)
 	headerWortHervorhebenAnzeige () {
 		let link = document.getElementById("liste-link-hervorheben");
 		if (optionen.data.belegliste.wort_hervorheben) {
@@ -1220,7 +1295,7 @@ let liste = {
 			link.title = "Wort hervorheben";
 		}
 	},
-	// Steuerung der Detailanzeige ändern
+	// Header-Icons: Steuerung der Detailanzeige ändern
 	//   funktion = String
 	//     (verweist auf den Link, der geklickt wurde)
 	headerDetails (funktion) {
@@ -1240,9 +1315,27 @@ let liste = {
 		liste.headerDetailsAnzeige(funktion, opt);
 		liste.headerDetailsLetztesIcon();
 		// Anzeige der Details in der Liste auffrischen
-		liste.detailsAnzeigen(true);
+		liste.headerDetailsAuffrischen();
 	},
-	// Links zur Steuerung der Detailanzeige visuell anpassen
+	// Header-Icons: frischt die Anzeige der Details nach dem Ändern
+	// einer Anzeigeoption im Header der Belegliste auf
+	headerDetailsAuffrischen () {
+		// Scroll-Status speichern
+		liste.statusScrollBak();
+		// Detail-Anzeige auffrischen
+		document.querySelectorAll(".liste-kopf").forEach(function(i) {
+			if (!i.nextSibling || !i.nextSibling.classList.contains("liste-details")) {
+				return;
+			}
+			i.parentNode.removeChild(i.nextSibling);
+			liste.aufbauenDetails({
+				id: i.dataset.id,
+			});
+		});
+		// Scroll-Status wiederherstellen
+		liste.statusScrollReset();
+	},
+	// Header-Icons: Links zur Steuerung der Detailanzeige visuell anpassen
 	//   funktion = String
 	//     (verweist auf den Link, der geklickt wurde)
 	//   opt = String
@@ -1267,7 +1360,7 @@ let liste = {
 			link.title = `${title[funktion]} einblenden`;
 		}
 	},
-	// das letzte angezeigte Icon soll rechts keine border, dafür runde Kanten haben
+	// Header-Icons: das letzte angezeigte Icon soll rechts keine border, dafür runde Kanten haben
 	headerDetailsLetztesIcon () {
 		// alte Markierung entfernen
 		let letztes = document.querySelector(".liste-opt-anzeige .liste-opt-anzeige-letztes");

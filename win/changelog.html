@@ -34,6 +34,45 @@
 				></a
 			></span>
 			
+			<!-- 0.16.0 -->
+			<div class="version">0.16.0</div>
+			
+			<div>
+				<h2><span data-maintainer="Nico Dorn">Version 0.16.0-beta</span><time datetime="2019-08-14T07:51:48">14. August 2019</time></h2>
+				
+				<h3>Verbesserungen</h3>
+				
+				<ul>
+					<li>
+						<p>Belegliste: Die Performance beim Aufbau einer Belegliste, der beim Öffnen einer Kartei, durch das Hinzufügen oder Entfernen von Filtern, durch die chronologische Umsortierung der Belege <abbr title="und so weiter">usw.</abbr> angestoßen wird, wurde signifikant verbessert. In einer Test-Kartei konnte die Geschwindigkeit des Aufbaus bei geschlossener Belegliste, also einer Liste, in der keine Details zu den Belegen angezeigt werden, sogar verdoppelt werden. Funktional hat sich dabei nichts geändert.</p>
+						<p>Zur Erläuterung: Selbst die Verarbeitung großer Datenmengen sollte für die Performance des Programms keine entscheidende Rolle spielen. Der Flaschenhals ist nicht die intern verarbeitete Datenmenge, sondern vielmehr deren Anzeige am Bildschirm, sprich: die Länge der Belegliste und besonders der Umfang der angezeigten Details zu den Belegen. Sollte das Programm beim Aufbau der Belegliste träge erscheinen, kann man folgende Geschwindigkeitsoptimierungen vornehmen, die freilich alle auf eine Verringerung des angezeigten Texts in der Belegliste zielen:</p>
+						<p>(1.) den angezeigten Belegtext kürzen, sodass nur Absätze mit dem Karteiwort erscheinen (Funktion <img src="../img/liste-kuerzen.svg" width="24" height="24" alt="">);<br
+						>(2.) alle Datenfelder ausschalten, die man nicht unbedingt sehen muss (das geht über einen Klick auf die Icons in dem Icon-Block, der mit dem Beleg-Icon <img src="../img/liste-beleg.svg" width="24" height="24" alt=""> beginnt);<br
+						>(3.) die Detailansicht komplett abschalten (Funktion <img src="../img/liste-aufklappen.svg" width="24" height="24" alt="">), was zwar die radikalse, aber auch effektivste Maßnahme wäre; die Details zu den Belegen könnte man sich dann in der Leseansicht der Karteikarte ansehen (Funktion <img src="../img/liste-bearbeiten.svg" width="24" height="24" alt="">).</p>
+					</li>
+					<li>
+						<p>Volltextfilter/-suche: Die Suchfunktion wurde dahingehend überarbeitet, dass man an den herausgefilterten Belegen möglichst sofort erkennt, was in ihnen gefunden wurde. Funktional hat sich nichts geändert, die Anzeige der Ergebnisse weicht allerdings stark von der vorheriger Programmversionen ab:</p>
+						<p>(1.) Suchtreffer im Jahr und im Autornamen werden nun auch im Beleg-Kopf hervorgehoben. Zu bedenken ist allerdings, dass das Datumsfeld ein Freitextfeld ist, im Belegkopf aber nur eine Jahreszahl oder ein Jahrhundert angezeigt wird. Bei der Suche wird zwar das gesamte Feld durchsucht, der Treffer kann dann unter Umständen jedoch nicht markiert werden.</p>
+						<p>(2.) Wird der Suchtext in einem jener Datenfelder gefunden, die erst beim Aufklappen des Belegs sichtbar werden, wird die Detailanzeige automatisch aufgeklappt. Dabei wird die Funktion <img src="../img/liste-aufklappen.svg" width="24" height="24" alt=""> zunächst einmal übergangen: Belege werden auch dann aufgeklappt, wenn sie grundsätzlich zugeklappt sein sollen.</p>
+						<p>Gleichwohl hat das Klicken auf <img src="../img/liste-aufklappen.svg" width="24" height="24" alt=""> immer noch eine Wirkung. Man kann die Belege in der Liste durch das Icon immer noch <span lang="fr">en bloc</span> schließen und wieder öffnen, muss dies dann jedoch nachträglich machen. Geöffnet wird ein Beleg allerdings nur dann, wenn in einem der Detailfelder wirklich etwas gefunden wurde. Andernfalls bleibt er auch nach einem Klick auf das Icon geschlossen.</p>
+						<p>Immer funktioniert hingegen das Öffnen und Schließen eines einzelnen Belegs durch Klick auf den Belegkopf. Wurde nach einer Suche in keinem der Datenfelder, die in der Detailansicht stehen, etwas gefunden, erscheint dann allerdings nur das Kürzungszeichen <q>[…]</q> als Platzhalter für den Belegtext. Das Kopiericon daneben hat hingegen weiterhin seine Funktion: Es kopiert den kompletten Belegtext.</p>
+						<p>(3.) Die Funktion der Icons zur Steuerung der Detailanzeige (das sind alle Icons in dem Block, der mit <img src="../img/liste-beleg.svg" width="24" height="24" alt=""> beginnt) wird suspendiert, wenn die Suche aktiv ist. Wurde der Suchtext in einem Datenfeld gefunden, wird es auch angezeigt; umgekehrt wird es immer ausgeblendet, wenn in ihm nichts gefunden wurde. Es spielt dabei keine Rolle, ob das Icon für das Datenfeld aktiv ist oder nicht, ob also die Anzeige gewünscht wird oder nicht. Wurde der Suchtext gefunden, wird das Datenfeld angezeigt, wurde er nicht gefunden, bleibt es versteckt. Daran ändert auch ein nachträgliches Umschalten des entsprechenden Icons nichts.</p>
+						<p>(4.) Der Belegtext wird nach Möglichkeit gekürzt. Es werden nur Absätze eingeblendet, in denen der Suchtext zu finden ist. Dabei spielt es keine Rolle, ob das Kartei-Wort in einem Absatz gefunden wird oder nicht. Ist in ihm kein Suchtreffer, wird der Absatz ausgeblendet. Das hat zur Folge, dass der gesamte Belegtext auf ein <q>[…]</q> zusammenschrumpfen kann: Das heißt dann nichts anderes, als dass das Suchwort in ihm nicht gefunden wurde.</p>
+						<p>Das Icon <img src="../img/liste-hervorheben.svg" width="24" height="24" alt=""> zum Hervorheben des Kartei-Worts funktioniert dabei wie bisher. Ist das Icon aktiv und wird das Wort in einem Absatz gefunden, dann wird es auch hervorgehoben. Genauso wird auch weiterhin berücksichtigt, ob Trennzeichen (Funktion <img src="../img/liste-trennung.svg" width="24" height="24" alt="">) oder Zeitschnitte angezeigt und wie die Belege in der Liste chronologisch sortiert werden sollen (Funktion <img src="../img/liste-aufwaerts.svg" width="24" height="24" alt="">).</p>
+					</li>
+					<li>Die mitglieferte <span class="datei">Sachgebiete.xml</span> wurde ergänzt um die Wörter <i>Policey, Technik, Verwaltungswesen</i> und <i>Wissenschaft</i>.</li>
+					<li>Der Verweis auf den finanziellen Förderer des Projekts wurde in den Metadaten und im <a href="#" class="ueber-app">Über-Fenster</a> ergänzt.</li>
+				</ul>
+				
+				<h3>Behobene Fehler</h3>
+				
+				<ul>
+					<li>Notizen: Wurde in einem Absatz Text vom ersten oder vom letzten Buchstaben her ausgewählt, konnte dieser nicht markiert werden (Funktion <img src="../img/tool-mark.svg" width="24" height="24" alt="">). Die Fehlerbehebung geht leider auf Kosten der Funktionen <i>Bearbeiten &gt; Rückgängig</i> und <i>Bearbeiten &gt; Wiederherstellen</i>, die das Einfügen <abbr title="beziehungsweise">bzw.</abbr> Entfernen einer Textmarkierung nun nicht mehr zurücknehmen oder wiederherstellen können.</li>
+					<li>Notizen: Zahlreiche behobene Fehler bei der automatischen Auswahl des Textes, nachdem eine Markierung durch Klick auf <img src="../img/tool-mark.svg" width="24" height="24" alt=""> entfernt wurde.</li>
+					<li>Das <a href="#" class="ueber-electron">Über-Electron-Fenster</a> konnte nur über den ersten Link im Changelog geöffnet werden.</li>
+				</ul>
+			</div>
+			
 			<!-- 0.15.0 -->
 			<div class="version">0.15.0</div>
 			

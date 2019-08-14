@@ -219,12 +219,20 @@ let suchleiste = {
 	//     (HTML-Element, in dem HTML geändert wurde;
 	//     hier sollen Events ggf. wiederhergestellt werden)
 	suchenEventsWiederherstellen (ele) {
-		// Über-Fenster öffnen
+		// Über App öffnen
+		ele.querySelectorAll(".ueber-app").forEach(function(i) {
+			i.addEventListener("click", function(evt) {
+				evt.preventDefault();
+				const {ipcRenderer} = require("electron");
+				ipcRenderer.send("ueber-app");
+			});
+		});
+		// Über Electron öffnen
 		ele.querySelectorAll(".ueber-electron").forEach(function(i) {
 			i.addEventListener("click", function(evt) {
 				evt.preventDefault();
 				const {ipcRenderer} = require("electron");
-				ipcRenderer.send("ueber-electron", fenstertyp);
+				ipcRenderer.send("ueber-electron");
 			});
 		});
 	},
