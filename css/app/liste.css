@@ -126,7 +126,8 @@
 	white-space: nowrap;
 }
 
-.filter-kopf span.filter-reset {
+.filter-kopf span.filter-reset,
+.filter-kopf span.filter-notizen {
 	position: absolute;
 	right: 5px;
 	top: 3px;
@@ -137,7 +138,13 @@
 	mask-image: url(../../img/filter-reset-block.svg);
 }
 
-.filter-kopf:hover span.filter-reset {
+.filter-kopf span.filter-notizen {
+	-webkit-mask-image: url(../../img/filter-notizen.svg);
+	mask-image: url(../../img/filter-notizen.svg);
+}
+
+.filter-kopf:hover span.filter-reset,
+.filter-kopf:hover span.filter-notizen {
 	background-color: #fff;
 }
 

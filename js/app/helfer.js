@@ -521,6 +521,8 @@ let helfer = {
 				cd = "../";
 			}
 			img.src = `${cd}img/animation-wrap.svg`;
+		} else if (ziel === "duplikat") {
+			img.src = "img/animation-duplikat.svg";
 		}
 		// Element einhängen und wieder entfernen
 		document.querySelector("body").appendChild(div);

@@ -88,8 +88,6 @@ let optionen = {
 			// Timeout für Anfrage an das DTA in Sekunden
 			// (einfacher als String, wird bei Bedarf in Number konvertiert)
 			timeout: "10",
-			// Notizen-Fenster nach dem Speichern direkt schließen
-			"notizen-schliessen": true,
 			// Einfügen-Fenster (Kopierfunktion) nach dem Einfügen direkt schließen
 			"einfuegen-schliessen": true,
 			// Hervorhebung des Wort beim Kopieren von Text mitkopieren
@@ -126,6 +124,13 @@ let optionen = {
 			"quick-belege-sortieren": false,
 			"quick-belege-kopieren": false,
 			"quick-belege-einfuegen": false,
+			// NOTIZEN
+			// Notizen-Fenster nach dem Speichern direkt schließen
+			"notizen-schliessen": true,
+			// Notizen in der Filterleiste anzeigen
+			"notizen-filterleiste": false,
+			// Notizen in der Filterleiste standardmäßig öffnen
+			"filter-offen-notizen": true,
 			// BEDEUTUNGSGERÜST
 			// Bedeutungsgerüst nach dem Speichern direkt schließen
 			"bedeutungen-schliessen": true,
@@ -404,7 +409,21 @@ let optionen = {
 			}
 		}
 	},
+	// die Anzeige der Notizen in der Filterleiste wird umgestellt
+	//   input = Element
+	//     (die zugehörige Checkbox in den Einstellungen)
+	anwendenNotizenFilterleiste (input) {
+		input.addEventListener("change", function() {
+			if (this.checked) {
+				notizen.filterleiste();
+			} else {
+				notizen.filterleisteEntfernen();
+			}
+		});
+	},
 	// Icons für die Detail-Anzeige im Kopf der Belegliste ggf. immer sichtbar (Listener)
+	//   input = Element
+	//     (die zugehörige Checkbox in den Einstellungen)
 	anwendenIconsDetailsListener (input) {
 		input.addEventListener("change", function() {
 			optionen.data.einstellungen["anzeige-icons-immer-an"] = this.checked;

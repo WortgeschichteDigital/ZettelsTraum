@@ -65,6 +65,7 @@ let popup = {
 			popup.menuBeleg(menu);
 			popup.menuBelegDel(menu);
 			popup.menuBelegCp(menu);
+			popup.menuBelegDuplikat(menu);
 			popup.menuBeleglisteConf(menu);
 			popup.menuBelege(menu, true);
 		} else if (target === "anhang") {
@@ -476,6 +477,21 @@ let popup = {
 			label: "Beleg in Zwischenablage kopieren",
 			icon: path.join(__dirname, "img", "menu", "popup-zwischenablage.png"),
 			click: () => beleg.ctrlZwischenablage(data.ka[popup.belegID]),
+		}));
+	},
+	// BelegDuplikat-Menü füllen
+	//   menu = Object
+	//     (Menü-Objekt, an das die Menü-Items gehängt werden müssen)
+	menuBelegDuplikat (menu) {
+		const {MenuItem} = require("electron").remote,
+			path = require("path");
+		menu.append(new MenuItem({
+			label: "Beleg duplizieren",
+			icon: path.join(__dirname, "img", "menu", "popup-duplikat.png"),
+			click: function() {
+				const daten = [kopieren.datenBeleg(data.ka[popup.belegID])];
+				kopieren.einfuegenEinlesen(daten, true);
+			},
 		}));
 	},
 	// Belegliste-Conf-Menü füllen

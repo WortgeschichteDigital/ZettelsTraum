@@ -162,6 +162,8 @@
 								><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m3 1.0039s-1 0-1 1v9s0 1 1 1h1v-9h8v-1c0-1-1-1-1-1h-8zm3 3s-1 0-1 1v10c0 1 1 1 1 1h8s1-0.001006 1-1.0039v-9.9961c0-1-1-1-1-1h-8zm1 2h6v8h-6v-8z"/></svg></a
 							><a href="#" id="beleg-link-zwischenablage" title="Beleg in Zwischenablage kopieren (Strg + I)"
 								><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="m12 4.0039c-1.1046 0-2 0.89543-2 2h-3c-1 0-1 1-1 1v3.9961h2v-2.9961h1v1h1.9961l-1.3828 1.3828 1.6348 1.6348-7.4609-0.021484v2l7.4609 0.021484-1.6348 1.6328 1.3496 1.3496h-2.9629v-2.0039h-2v3.0039c0 1 1 1 1 1h10s1 0 1-1v-11c0-1-1-1-1-1h-3c0-0.13807-0.00505-0.27605-0.03125-0.40625-0.18649-0.91137-1.0022-1.5937-1.9688-1.5938zm0 1c0.41421 0 0.75444 0.26608 0.90625 0.625 0.0506 0.11964 0.09375 0.23693 0.09375 0.375 0 0.55228-0.44771 1-1 1-0.55229 0-1-0.44772-1-1s0.44771-1 1-1zm3 3h1v9h-4.9629l3.9629-4.0039-3.9961-3.9961h3.9961v-1z"/></svg></a
+							><a href="#" id="beleg-link-duplikat" title="Beleg duplizieren"
+								><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m4 4-3 3h11l3-3h-11zm0 5-3 3h11l3-3h-11z"/></svg></a
 							><a href="#" class="druck-icon" id="beleg-link-drucken" title="Karte drucken (Strg + P)"
 								><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m4 1v2h8v-2h-8zm-2 3c-0.5 0-1 0.5-1 1v4c0 0.5 0.5 1 1 1h1v-2h10v2h1c0.5 0 1-0.5 1-1v-4c0-0.5-0.5-1-1-1h-12zm2 5v5h8v-5h-8z"/></svg></a
 						></span
@@ -472,6 +474,7 @@
 					<ul>
 						<li><a href="#" id="einstellungen-link-allgemeines" class="aktiv">Allgemeines</a></li>
 						<li><a href="#" id="einstellungen-link-menue">Menü</a></li>
+						<li><a href="#" id="einstellungen-link-notizen">Notizen</a></li>
 						<li><a href="#" id="einstellungen-link-bedeutungen">Bedeutungsgerüst</a></li>
 						<li><a href="#" id="einstellungen-link-karteikarte">Karteikarte</a></li>
 						<li><a href="#" id="einstellungen-link-filter">Filterleiste</a></li>
@@ -479,7 +482,7 @@
 					</ul>
 				</div>
 				<div>
-				
+					
 					<!-- Allgemeines -->
 					<section id="einstellungen-sec-allgemeines">
 						<p class="input-text dropdown-cont"><input type="text" value="" class="dropdown-feld" id="einstellung-bearbeiterin"
@@ -488,8 +491,6 @@
 						<p class="button"><input type="button" value="Personenliste laden" id="einstellung-personenliste"></p>
 						<p class="input-text"><input type="number" value="10" min="5" max="180" id="einstellung-timeout"
 							><label for="einstellung-timeout">Sekunden Timeout bei Anfragen an das <abbr title="Deutsche Textarchiv">DTA</abbr></label></p>
-						<p><input type="checkbox" id="einstellung-notizen-schliessen"
-							><label for="einstellung-notizen-schliessen">Notizen-Fenster nach dem Speichern schließen</label></p>
 						<p><input type="checkbox" id="einstellung-einfuegen-schliessen"
 							><label for="einstellung-einfuegen-schliessen">Einfügen-Fenster nach dem Einfügen schließen</label></p>
 						<p><input type="checkbox" id="einstellung-textkopie-wort"
@@ -560,6 +561,16 @@
 							<p><input type="checkbox" id="einstellung-quick-belege-einfuegen"
 								><label for="einstellung-quick-belege-einfuegen">Einfügen</label></p>
 						</div>
+					</section>
+					
+					<!-- Notizen -->
+					<section id="einstellungen-sec-notizen" class="aus">
+						<p><input type="checkbox" id="einstellung-notizen-schliessen"
+							><label for="einstellung-notizen-schliessen">Notizen-Fenster nach dem Speichern schließen</label></p>
+						<p><input type="checkbox" id="einstellung-notizen-filterleiste"
+							><label for="einstellung-notizen-filterleiste">Notizen in der Filterleiste anzeigen</label></p>
+						<p class="einzug"><input type="checkbox" id="einstellung-filter-offen-notizen"
+							><label for="einstellung-filter-offen-notizen">Notizen in der Filterleiste standardmäßig aufklappen</label></p>
 					</section>
 					
 					<!-- Bedeutungsgerüst -->

@@ -500,24 +500,33 @@ let kopieren = {
 		ipcRenderer.send("kopieren-daten", parseInt(quelle, 10), remote.getCurrentWindow().id);
 	},
 	// die übergebenen Daten werden eingelesen
+	// (wird auch für zum Duplizieren von Belegen genutzt)
 	//   daten = Array
 	//     (in jedem Slot ist eine Zettelkopie, wie sie in kopieren.datenBeleg() erstellt wird)
-	einfuegenEinlesen (daten) {
+	//   duplikat = true || undefined
+	//     (der übergebene Beleg soll dupliziert werden)
+	einfuegenEinlesen (daten, duplikat = false) {
 		// Bedeutungsmapper (welche Bedeutungen in welche Gerüste kommen)
 		let bdMap = {};
-		document.querySelectorAll("#kopieren-einfuegen-bedeutungen input").forEach(function(i) {
-			const idQuelle = i.id.replace(/.+-/, "");
-			let idZiel = "",
-				wert = i.value.match(/^Gerüst ([0-9]+)/);
-			if (wert) {
-				idZiel = wert[1];
-			}
-			bdMap[idQuelle] = idZiel;
-		});
+		if (duplikat) {
+			Object.keys(data.bd.gr).forEach(function(i) {
+				bdMap[i] = i;
+			});
+		} else {
+			document.querySelectorAll("#kopieren-einfuegen-bedeutungen input").forEach(function(i) {
+				const idQuelle = i.id.replace(/.+-/, "");
+				let idZiel = "",
+					wert = i.value.match(/^Gerüst ([0-9]+)/);
+				if (wert) {
+					idZiel = wert[1];
+				}
+				bdMap[idQuelle] = idZiel;
+			});
+		}
 		// Datenfelder ermitteln, die importiert werden sollen
 		let ds = [];
 		document.querySelectorAll("#kopieren-einfuegen-formular input").forEach(function(i) {
-			if (!i.checked) {
+			if (!i.checked && !duplikat) {
 				return;
 			}
 			ds.push(i.id.replace(/.+-/, ""));
@@ -575,6 +584,11 @@ let kopieren = {
 		}
 		// Änderungsmarkierung
 		kartei.karteiGeaendert(true);
+		// die folgenden Operationen sind fast alle unnötig, wenn ein Beleg dupliziert wurde
+		if (duplikat) {
+			liste.status(true); // Liste und Filter neu aufbauen
+			return;
+		}
 		// BedeutungsgerüstFenster auffrischen
 		bedeutungenWin.daten();
 		// Liste und Filter neu aufbauen, Liste anzeigen

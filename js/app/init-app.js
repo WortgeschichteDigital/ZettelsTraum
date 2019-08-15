@@ -147,6 +147,7 @@ window.addEventListener("load", function() {
 		optionen.aendereEinstellungListener(ee[i]);
 	}
 	document.getElementById("einstellung-personenliste").addEventListener("click", () => optionen.aenderePersonenliste());
+	optionen.anwendenNotizenFilterleiste(document.getElementById("einstellung-notizen-filterleiste"));
 	document.getElementById("tags-laden").addEventListener("click", () => optionen.tagsManuLaden());
 	optionen.anwendenIconsDetailsListener(document.getElementById("einstellung-anzeige-icons-immer-an"));
 	// Formvarianten-Fenster

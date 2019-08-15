@@ -2033,6 +2033,8 @@ let beleg = {
 				kopieren.addKarte();
 			} else if (/zwischenablage$/.test(this.id)) {
 				beleg.ctrlZwischenablage(beleg.data);
+			} else if (/duplikat/.test(this.id)) {
+				beleg.ctrlDuplikat();
 			}
 		});
 	},
@@ -2184,6 +2186,12 @@ let beleg = {
 		daten.wort = kartei.wort;
 		clipboard.writeText(JSON.stringify(daten));
 		helfer.animation("zwischenablage");
+	},
+	// Dupliziert den übergebenen Beleg
+	ctrlDuplikat () {
+		const daten = [kopieren.datenBeleg(beleg.data)];
+		kopieren.einfuegenEinlesen(daten, true);
+		helfer.animation("duplikat");
 	},
 	// zur vorherigen/nächsten Karteikarte in der Belegliste springen
 	//   next = Boolean

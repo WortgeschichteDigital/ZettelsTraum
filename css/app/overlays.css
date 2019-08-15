@@ -751,17 +751,20 @@
 	border-color: var(--farbe);
 }
 
-#notizen-feld h3 {
+#notizen-feld h3,
+#filter-notizen-content h3 {
 	margin: 25px 0 10px 0;
 	font-size: 18px;
 	line-height: 28px;
 }
 
-#notizen-feld h3:first-child {
+#notizen-feld h3:first-child,
+#filter-notizen-content h3:first-child {
 	margin-top: 0;
 }
 
-#notizen-feld ul {
+#notizen-feld ul,
+#filter-notizen-content ul {
 	margin: 0;
 	padding: 0 0 0 25px;
 }

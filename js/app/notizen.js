@@ -52,6 +52,11 @@ let notizen = {
 		notizen.notizenGeaendert(false);
 		kartei.karteiGeaendert(true);
 		direktSchliessen();
+		// ggf. Notizen in der Filterleiste updaten
+		let notizenFilterleiste = document.getElementById("filter-notizen-content");
+		if (notizenFilterleiste) {
+			notizenFilterleiste.innerHTML = data.no;
+		}
 		// Notizen-Fenster ggf. schließen
 		function direktSchliessen () {
 			if (optionen.data.einstellungen["notizen-schliessen"]) {
@@ -224,7 +229,7 @@ let notizen = {
 				// MARKIERUNG (alles etwas komplizierter)
 				// keine Range vorhanden
 				let sel = window.getSelection();
-				if (sel.rangeCount > 0) {
+				if (sel.rangeCount === 0) {
 					document.getElementById("notizen-feld").focus();
 					return;
 				}
@@ -357,5 +362,27 @@ let notizen = {
 				}
 			}
 		});
+	},
+	// Notizen in der Filterleiste einblenden
+	filterleiste () {
+		if (!data.no || !optionen.data.einstellungen["notizen-filterleiste"]) {
+			return;
+		}
+		let filterCont = document.getElementById("liste-filter-dynamisch");
+		filterCont.appendChild(filter.aufbauenCont("Notizen"));
+		let div = document.createElement("div");
+		document.getElementById("filter-kopf-notizen").nextSibling.appendChild(div);
+		div.id = "filter-notizen-content";
+		div.innerHTML = data.no;
+	},
+	// Notizen aus der Filterleiste entfernen
+	filterleisteEntfernen () {
+		let filterkopf = document.getElementById("filter-kopf-notizen");
+		if (!filterkopf) {
+			return;
+		}
+		let parent = filterkopf.parentNode;
+		parent.removeChild(filterkopf.nextSibling);
+		parent.removeChild(filterkopf);
 	},
 };

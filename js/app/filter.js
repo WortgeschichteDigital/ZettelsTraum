@@ -332,6 +332,8 @@ let filter = {
 				}
 			}
 		}
+		// Notizen anhängen
+		notizen.filterleiste();
 		// Backup der Filtereinstellungen wiederherstellen
 		filter.backupWiederher(filter_backup);
 		// ggf. Markierung der Sterne wiederherstellen
@@ -580,11 +582,20 @@ let filter = {
 		}
 		// Bild für Block-Reset anhängen
 		let span = document.createElement("span");
-		span.classList.add("filter-reset");
 		a.appendChild(span);
 		span.textContent = " ";
-		span.title = "Filter in diesem Block zurücksetzen";
-		filter.ctrlResetBlock(span);
+		if (name === "Notizen") {
+			span.classList.add("filter-notizen");
+			span.title = "Notizen bearbeiten";
+			span.addEventListener("click", function(evt) {
+				evt.stopPropagation();
+				notizen.oeffnen();
+			});
+		} else {
+			span.classList.add("filter-reset");
+			span.title = "Filter in diesem Block zurücksetzen";
+			filter.ctrlResetBlock(span);
+		}
 		// Filter-Container
 		let div = document.createElement("div");
 		div.classList.add("filter-cont", "filter-cont-max");
