@@ -50,7 +50,6 @@ let kartei = {
 			dc: new Date().toISOString(), // Datum Kartei-Erstellung
 			dm: "", // Datum Kartei-Änderung
 			fv: [], // Formvarianten
-			ha: {}, // Kartenhaufen
 			ka: {}, // Karteikarten
 			le: [], // überprüfte Lexika usw.
 			no: "", // Notizen

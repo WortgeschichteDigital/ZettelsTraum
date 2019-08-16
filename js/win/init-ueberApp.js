@@ -12,7 +12,7 @@ window.addEventListener("load", function() {
 	// Programm-Version eintragen
 	document.getElementById("version").textContent = app.getVersion();
 	// externe Links
-	document.querySelectorAll(`a[href^="http"], a[href^="mailto"]`).forEach((a) => helferWin.links(a));
+	document.querySelectorAll(`a[href^="http"], a[href^="mailto"]`).forEach((a) => helfer.externeLinks(a));
 	// Changelog
 	helferWin.oeffneChangelog(document.getElementById("changelog"));
 	// Tastatur-Events abfangen

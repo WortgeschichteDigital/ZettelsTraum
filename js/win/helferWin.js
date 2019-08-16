@@ -1,18 +1,6 @@
 "use strict";
 
 let helferWin = {
-	// öffnet externe Links in einem Browser-Fenster
-	//   a = Element
-	//     (Link, auf dem geklickt wurde)
-	links (a) {
-		a.title = a.getAttribute("href");
-		a.addEventListener("click", function(evt) {
-			evt.preventDefault();
-			const url = this.getAttribute("href"),
-				{shell} = require("electron");
-			shell.openExternal(url);
-		});
-	},
 	// Handbuch über Link öffnen
 	//   a = Element
 	//     (Link, der zum Handbuch führen soll)
@@ -21,6 +9,16 @@ let helferWin = {
 			evt.preventDefault();
 			const {ipcRenderer} = require("electron");
 			ipcRenderer.send("hilfe-handbuch");
+		});
+	},
+	// Dokumentation über Link öffnen
+	//   a = Element
+	//     (Link, der zur Dokumentation führen soll)
+	oeffneDokumentation (a) {
+		a.addEventListener("click", function(evt) {
+			evt.preventDefault();
+			const {ipcRenderer} = require("electron");
+			ipcRenderer.send("hilfe-dokumentation");
 		});
 	},
 	// Changelog über Link öffnen
@@ -56,8 +54,8 @@ let helferWin = {
 				win.close();
 			}, 50);
 		}
-		// PageUp / PageDown (wenn im Changelog)
-		if (fenstertyp === "changelog" &&
+		// Space / PageUp / PageDown (wenn in Changelog oder Dokumentation)
+		if (/changelog|dokumentation|handbuch/.test(fenstertyp) &&
 				(evt.which === 32 || evt.which === 33 || evt.which === 34) &&
 				!(evt.ctrlKey || evt.altKey)) {
 			suchleiste.scrollen(evt);
@@ -70,12 +68,12 @@ let helferWin = {
 		if (typeof hilfe !== "undefined" && evt.ctrlKey && evt.which === 70) {
 			document.getElementById("suchfeld").select();
 		}
-		// Strg + F (wenn im Changelog)
+		// Strg + F (wenn in Changelog oder Dokumentation)
 		if (fenstertyp === "changelog" && evt.ctrlKey && evt.which === 70) {
 			suchleiste.einblenden();
 		}
-		// F3 (wenn im Changelog)
-		if (fenstertyp === "changelog" && evt.which === 114) {
+		// F3 (wenn in Changelog oder Dokumentation)
+		if (/changelog|dokumentation|handbuch/.test(fenstertyp) && evt.which === 114) {
 			suchleiste.f3(evt);
 		}
 		// Strg + P (Bedeutungsgerüst und Changelog)

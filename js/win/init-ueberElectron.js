@@ -12,7 +12,7 @@ window.addEventListener("load", function() {
 	document.getElementById("version-chromium").textContent = process.versions.chrome;
 	document.getElementById("version-v8").textContent = process.versions.v8;
 	// externe Links
-	document.querySelectorAll(`a[href^="http"]`).forEach((a) => helferWin.links(a));
+	document.querySelectorAll(`a[href^="http"]`).forEach((a) => helfer.externeLinks(a));
 	// Tastatur-Events abfangen
 	document.addEventListener("keydown", helferWin.tastatur);
 });

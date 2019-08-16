@@ -66,9 +66,6 @@ let helfer = {
 				beleg.erstellenPre();
 			} else if (id === "belege-auflisten") {
 				liste.anzeigen();
-			} else if (id === "belege-sortieren") { // TODO
-				dialog.oeffnen("alert");
-				dialog.text("Sorry!\nDiese Funktion ist noch nicht programmiert.");
 			} else if (id === "belege-kopieren") {
 				kopieren.init();
 			} else if (id === "belege-einfuegen") {
@@ -517,7 +514,7 @@ let helfer = {
 			span.textContent = kopieren.belege.length;
 		} else if (ziel === "wrap") {
 			let cd = "";
-			if (fenstertyp === "changelog") {
+			if (/changelog|dokumentation|handbuch/.test(fenstertyp)) {
 				cd = "../";
 			}
 			img.src = `${cd}img/animation-wrap.svg`;
@@ -540,6 +537,23 @@ let helfer = {
 				document.querySelector("body").removeChild(div);
 			}, 500);
 		}, 1000);
+	},
+	// öffnet externe Links in einem Browser-Fenster
+	//   a = Element
+	//     (Link, auf dem geklickt wurde)
+	externeLinks (a) {
+		a.title = a.getAttribute("href");
+		a.addEventListener("click", function(evt) {
+			evt.preventDefault();
+			let url = this.getAttribute("href");
+			// URL ggf. aufbereiten
+			if (!/^http/.test(url)) {
+				url = `https://${url}`;
+			}
+			// URL im Browser öffnen
+			const {shell} = require("electron");
+			shell.openExternal(url);
+		});
 	},
 	// markiert in der Titelleiste des Programms, dass irgendeine Änderung
 	// noch nicht gespeichert wurde

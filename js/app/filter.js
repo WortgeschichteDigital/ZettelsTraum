@@ -99,38 +99,38 @@ let filter = {
 				name: "Verschiedenes",
 				filter_vorhanden: filter.exklusivAktiv.length ? true : false,
 				filter: {
-					unvollstaendig: {
+					"verschiedenes-unvollstaendig": {
 						name: "unvollständig",
 						wert: 0,
 					},
-					kontext: {
+					"verschiedenes-kontext": {
 						name: "Kontext?",
 						wert: 0,
 					},
-					buecherdienst: {
+					"verschiedenes-buecherdienst": {
 						name: "Bücherdienst",
 						wert: 0,
 					},
-					notizen: {
+					"verschiedenes-notizen": {
 						name: "Notizen",
 						wert: 0,
 					},
-					buchung: {
+					"verschiedenes-buchung": {
 						name: "Buchung",
 						wert: 0,
 					},
-					markierung: {
+					"verschiedenes-markierung": {
 						name: "Markierung",
 						wert: 0,
 					},
 				},
 				filter_folge: [
-					"unvollstaendig",
-					"kontext",
-					"buecherdienst",
-					"notizen",
-					"buchung",
-					"markierung",
+					"verschiedenes-unvollstaendig",
+					"verschiedenes-kontext",
+					"verschiedenes-buecherdienst",
+					"verschiedenes-notizen",
+					"verschiedenes-buchung",
+					"verschiedenes-markierung",
 				],
 			},
 		};
@@ -227,32 +227,32 @@ let filter = {
 			// VERSCHIEDENES
 			// Vollständigkeit
 			if (data.ka[id].un) {
-				filter.typen.verschiedenes.filter.unvollstaendig.wert++;
+				filter.typen.verschiedenes.filter["verschiedenes-unvollstaendig"].wert++;
 				filter.typen.verschiedenes.filter_vorhanden = true;
 			}
 			// Kontext
 			if (data.ka[id].ko) {
-				filter.typen.verschiedenes.filter.kontext.wert++;
+				filter.typen.verschiedenes.filter["verschiedenes-kontext"].wert++;
 				filter.typen.verschiedenes.filter_vorhanden = true;
 			}
 			// Bücherdienst
 			if (data.ka[id].bu) {
-				filter.typen.verschiedenes.filter.buecherdienst.wert++;
+				filter.typen.verschiedenes.filter["verschiedenes-buecherdienst"].wert++;
 				filter.typen.verschiedenes.filter_vorhanden = true;
 			}
 			// Notizen
 			if (data.ka[id].no) {
-				filter.typen.verschiedenes.filter.notizen.wert++;
+				filter.typen.verschiedenes.filter["verschiedenes-notizen"].wert++;
 				filter.typen.verschiedenes.filter_vorhanden = true;
 			}
 			// Buchung
 			if (data.ka[id].bc) {
-				filter.typen.verschiedenes.filter.buchung.wert++;
+				filter.typen.verschiedenes.filter["verschiedenes-buchung"].wert++;
 				filter.typen.verschiedenes.filter_vorhanden = true;
 			}
-			// Bewertung
+			// Markierung
 			if (data.ka[id].be) {
-				filter.typen.verschiedenes.filter.markierung.wert++;
+				filter.typen.verschiedenes.filter["verschiedenes-markierung"].wert++;
 				filter.typen.verschiedenes.filter_vorhanden = true;
 			}
 		}
@@ -694,7 +694,7 @@ let filter = {
 			p.appendChild(span);
 		}
 		// ggf. Absatz mit Sternen aufbauen
-		if (f === "markierung") {
+		if (f === "verschiedenes-markierung") {
 			frag.lastChild.classList.add("markierung");
 			frag.appendChild(filter.aufbauenSterne());
 		}
@@ -705,7 +705,7 @@ let filter = {
 	aufbauenSterne () {
 		let p = document.createElement("p");
 		p.dataset.bewertung = "0";
-		p.id = "filter-bewertung";
+		p.id = "filter-verschiedenes-bewertung";
 		for (let i = 0; i < 5; i++) {
 			let a = document.createElement("a");
 			a.classList.add("icon-link", "icon-stern");
@@ -718,14 +718,14 @@ let filter = {
 	},
 	// stellt die gespeicherte Markierung im Bewertungsfilter wieder her
 	markierenSterne () {
-		let filter_bewertung = document.getElementById("filter-bewertung");
+		let filter_bewertung = document.getElementById("filter-verschiedenes-bewertung");
 		// keine Markierung gespeichert
 		if (!filter_bewertung) {
 			return;
 		}
 		// Markierung wiederherstellen
 		const be = parseInt(filter_bewertung.dataset.bewertung, 10);
-		let sterne = document.querySelectorAll("#filter-bewertung a");
+		let sterne = document.querySelectorAll("#filter-verschiedenes-bewertung a");
 		for (let i = 0, len = sterne.length; i < len; i++) {
 			if (i < be) {
 				sterne[i].classList.add("aktiv");
@@ -745,9 +745,9 @@ let filter = {
 				bak[i.id] = i.checked;
 			}
 		});
-		let filter_bewertung = document.getElementById("filter-bewertung");
+		let filter_bewertung = document.getElementById("filter-verschiedenes-bewertung");
 		if (filter_bewertung) {
-			bak["filter-bewertung"] = filter_bewertung.dataset.bewertung;
+			bak["filter-verschiedenes-bewertung"] = filter_bewertung.dataset.bewertung;
 		}
 		return bak;
 	},
@@ -767,9 +767,9 @@ let filter = {
 				i.checked = bak[i.id];
 			}
 		});
-		let filter_bewertung = document.getElementById("filter-bewertung");
-		if (bak["filter-bewertung"] && filter_bewertung) {
-			filter_bewertung.dataset.bewertung = bak["filter-bewertung"];
+		let filter_bewertung = document.getElementById("filter-verschiedenes-bewertung");
+		if (bak["filter-verschiedenes-bewertung"] && filter_bewertung) {
+			filter_bewertung.dataset.bewertung = bak["filter-verschiedenes-bewertung"];
 		}
 	},
 	// speichert den Klappstatus und die Scrollposition der Filterblöcke
@@ -912,7 +912,7 @@ let filter = {
 	},
 	anwendenSterne (stern) {
 		filter.setZuletztAktiv(stern);
-		let filter_bewertung = document.getElementById("filter-bewertung"),
+		let filter_bewertung = document.getElementById("filter-verschiedenes-bewertung"),
 			be = parseInt(filter_bewertung.dataset.bewertung, 10),
 			sterne = filter_bewertung.querySelectorAll("a");
 		for (let i = 0, len = sterne.length; i < len; i++) {
@@ -921,7 +921,7 @@ let filter = {
 				if (be === bewertung) {
 					filter_bewertung.dataset.bewertung = "0";
 				} else {
-					document.getElementById("filter-markierung").checked = true;
+					document.getElementById("filter-verschiedenes-markierung").checked = true;
 					filter_bewertung.dataset.bewertung = bewertung;
 				}
 				sterne[i].blur();
@@ -1142,7 +1142,7 @@ let filter = {
 			filter.exklusivAktiv = [];
 		}
 		// bei vorhandemen Bewertungsfilter
-		let filter_bewertung = document.getElementById("filter-bewertung"),
+		let filter_bewertung = document.getElementById("filter-verschiedenes-bewertung"),
 			be = 0;
 		if (filter_bewertung) {
 			be = parseInt(filter_bewertung.dataset.bewertung, 10);
@@ -1244,37 +1244,37 @@ let filter = {
 				}
 			}
 			// vollständig oder unvollständig
-			if (filter.aktiveFilter.unvollstaendig &&
+			if (filter.aktiveFilter["verschiedenes-unvollstaendig"] &&
 					(data.ka[id].un && !filter_inklusiv ||
 					!data.ka[id].un && filter_inklusiv)) {
 				continue;
 			}
 			// Kontext
-			if (filter.aktiveFilter.kontext &&
+			if (filter.aktiveFilter["verschiedenes-kontext"] &&
 					(data.ka[id].ko && !filter_inklusiv ||
 					!data.ka[id].ko && filter_inklusiv)) {
 				continue;
 			}
 			// Bücherdienst
-			if (filter.aktiveFilter.buecherdienst &&
+			if (filter.aktiveFilter["verschiedenes-buecherdienst"] &&
 					(data.ka[id].bu && !filter_inklusiv ||
 					!data.ka[id].bu && filter_inklusiv)) {
 				continue;
 			}
 			// Notizen
-			if (filter.aktiveFilter.notizen &&
+			if (filter.aktiveFilter["verschiedenes-notizen"] &&
 					(data.ka[id].no && !filter_inklusiv ||
 					!data.ka[id].no && filter_inklusiv)) {
 				continue;
 			}
 			// Buchung
-			if (filter.aktiveFilter.buchung &&
+			if (filter.aktiveFilter["verschiedenes-buchung"] &&
 					(data.ka[id].bc && !filter_inklusiv ||
 					!data.ka[id].bc && filter_inklusiv)) {
 				continue;
 			}
 			// Markierung
-			if (filter.aktiveFilter.markierung &&
+			if (filter.aktiveFilter["verschiedenes-markierung"] &&
 					(data.ka[id].be && !filter_inklusiv ||
 					!data.ka[id].be && filter_inklusiv ||
 					data.ka[id].be && filter_inklusiv && be > data.ka[id].be)) {
@@ -1396,7 +1396,7 @@ let filter = {
 		});
 		filter.volltextSuche.suche = false;
 		filter.kartendatumInit();
-		let filter_bewertung = document.getElementById("filter-bewertung");
+		let filter_bewertung = document.getElementById("filter-verschiedenes-bewertung");
 		if (filter_bewertung) {
 			filter_bewertung.dataset.bewertung = "0";
 			filter.markierenSterne();
@@ -1424,8 +1424,8 @@ let filter = {
 				} else if (i.type === "checkbox") {
 					i.checked = false;
 					// Sonderregel für die Sterne
-					if (i.id === "filter-markierung") {
-						document.getElementById("filter-bewertung").dataset.bewertung = "0";
+					if (i.id === "filter-verschiedenes-markierung") {
+						document.getElementById("filter-verschiedenes-bewertung").dataset.bewertung = "0";
 						filter.markierenSterne();
 					}
 				}

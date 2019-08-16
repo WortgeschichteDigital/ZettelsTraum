@@ -13,7 +13,7 @@ window.addEventListener("load", function() {
 		i.textContent = app.getName().replace("'", "’");
 	});
 	
-	// UMBRUCH IN LANGEN DATEIPFADE
+	// UMBRUCH IN LANGEN DATEIPFADEN
 	hilfe.dateiBreak();
 	
 	// TASTATUREINGABEN ABFANGEN
@@ -32,21 +32,40 @@ window.addEventListener("load", function() {
 		evt.preventDefault();
 		hilfe.sucheWechseln();
 	});
-	// Über App
-	document.getElementById("icon").addEventListener("click", function() {
-		const {ipcRenderer} = require("electron");
-		ipcRenderer.send("ueber-app");
+	document.getElementById("suchleiste-link").addEventListener("click", function(evt) {
+		evt.preventDefault();
+		suchleiste.einblenden();
 	});
+	// Über App
+	document.querySelectorAll("#icon, .ueber-app").forEach(function(i) {
+		i.addEventListener("click", function(evt) {
+			evt.preventDefault();
+			const {ipcRenderer} = require("electron");
+			ipcRenderer.send("ueber-app");
+		});
+	});
+	// Über Electron
+	document.querySelectorAll(".ueber-electron").forEach(function(i) {
+		i.addEventListener("click", function(evt) {
+			evt.preventDefault();
+			const {ipcRenderer} = require("electron");
+			ipcRenderer.send("ueber-electron");
+		});
+	});
+	// Dokumentation
+	document.querySelectorAll(".link-dokumentation").forEach(a => helferWin.oeffneDokumentation(a));
+	// Changelog
+	document.querySelectorAll(".link-changelog").forEach(a => helferWin.oeffneChangelog(a));
 	// Navigation
-	document.querySelectorAll(`a[class^="link-sektion-"`).forEach((i) => hilfe.sektion(i));
+	document.querySelectorAll(`a[class^="link-sektion-"`).forEach(i => hilfe.sektion(i));
 	// interne Sprung-Links
 	document.querySelectorAll(`a[href^="#"]`).forEach(function(a) {
 		if (/^#[a-z]/.test(a.getAttribute("href"))) {
 			hilfe.naviSprung(a);
 		}
 	});
-	// externe Links TODO (gibt es sowas im Handbuch?)
-	document.querySelectorAll(`a[href^="http"]`).forEach((a) => helferWin.links(a));
+	// externe Links
+	document.querySelectorAll(`a[href^="http"]`).forEach(a => helfer.externeLinks(a));
 });
 
 window.addEventListener("beforeunload", function() {

@@ -15,7 +15,7 @@ window.addEventListener("load", function() {
 		});
 	} catch (err) {}
 	
-	// UMBRUCH IN LANGEN DATEIPFADE
+	// UMBRUCH IN LANGEN DATEIPFADEN
 	hilfe.dateiBreak();
 	
 	// TASTATUREINGABEN ABFANGEN
@@ -34,20 +34,35 @@ window.addEventListener("load", function() {
 		evt.preventDefault();
 		hilfe.sucheWechseln();
 	});
-	// Über App
-	try { // s.o.
-		const {ipcRenderer} = require("electron");
-		document.getElementById("icon").addEventListener("click", () => ipcRenderer.send("ueber-app"));
+	document.getElementById("suchleiste-link").addEventListener("click", function(evt) {
+		evt.preventDefault();
+		suchleiste.einblenden();
+	});
+	// Über-Fenster
+	try { // s. o.
+		// Über App
+		document.querySelectorAll("#icon, .ueber-app").forEach(function(i) {
+			i.addEventListener("click", function(evt) {
+				evt.preventDefault();
+				const {ipcRenderer} = require("electron");
+				ipcRenderer.send("ueber-app");
+			});
+		});
 		// Über Electron
-		document.querySelector(".ueber-electron").addEventListener("click", function(evt) {
-			evt.preventDefault();
-			ipcRenderer.send("ueber-electron");
+		document.querySelectorAll(".ueber-electron").forEach(function(i) {
+			i.addEventListener("click", function(evt) {
+				evt.preventDefault();
+				const {ipcRenderer} = require("electron");
+				ipcRenderer.send("ueber-electron");
+			});
 		});
 	} catch (err) {}
 	// Handbuch
-	document.querySelectorAll(".link-handbuch").forEach((a) => helferWin.oeffneHandbuch(a));
+	document.querySelectorAll(".link-handbuch").forEach(a => helferWin.oeffneHandbuch(a));
+	// Changelog
+	document.querySelectorAll(".link-changelog").forEach(a => helferWin.oeffneChangelog(a));
 	// Navigation
-	document.querySelectorAll(`a[class^="link-sektion-"`).forEach((a) => hilfe.sektion(a));
+	document.querySelectorAll(`a[class^="link-sektion-"`).forEach(a => hilfe.sektion(a));
 	// interne Sprung-Links
 	document.querySelectorAll(`a[href^="#"]`).forEach(function(a) {
 		if (/^#[a-z]/.test(a.getAttribute("href"))) {
@@ -55,7 +70,7 @@ window.addEventListener("load", function() {
 		}
 	});
 	// externe Links
-	document.querySelectorAll(`a[href^="http"]`).forEach((a) => helferWin.links(a));
+	document.querySelectorAll(`a[href^="http"]`).forEach(a => helfer.externeLinks(a));
 });
 
 window.addEventListener("beforeunload", function() {

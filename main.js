@@ -245,12 +245,6 @@ let layoutMenu = [
 				click: () => appMenu.aktion("belege-auflisten"),
 				accelerator: "CommandOrControl+L",
 			},
-			{
-				label: "Sortieren",
-				icon: path.join(__dirname, "img", "menu", "belege-sortieren.png"),
-				click: () => appMenu.aktion("dialog-anzeigen", "Sorry!\nDiese Funktion ist noch nicht programmiert."), // TODO
-				accelerator: "CommandOrControl+H",
-			},
 			{ type: "separator" },
 			{
 				label: "Kopieren",
@@ -850,6 +844,9 @@ fenster = {
 
 // Handbuch aufrufen, wenn der Renderer-Prozess es wünscht
 ipcMain.on("hilfe-handbuch", () => fenster.erstellenNeben("handbuch"));
+
+// Dokumentation aufrufen, wenn der Renderer-Prozess es wünscht
+ipcMain.on("hilfe-dokumentation", () => fenster.erstellenNeben("dokumentation"));
 
 // Changelog aufrufen, wenn der Renderer-Prozess es wünscht
 ipcMain.on("hilfe-changelog", () => fenster.erstellenNeben("changelog"));

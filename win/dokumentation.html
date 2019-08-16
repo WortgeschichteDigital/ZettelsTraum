@@ -8,6 +8,8 @@
 		
 		<link rel="stylesheet" href="../css/win/hilfe.css">
 		
+		<script src="../js/suchleiste.js"></script>
+		
 		<script src="../js/app/helfer.js"></script>
 		
 		<script src="../js/win/init-dokumentation.js"></script>
@@ -25,8 +27,10 @@
 		<!-- GRID -->
 		<main>
 			<nav>
-				<p><input type="text" value="" placeholder="Suche" id="suchfeld"
-					><a href="#" id="suchfeld-lupe"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m6.5 1a5.5 5.5 0 0 0-5.5 5.5 5.5 5.5 0 0 0 5.5 5.5 5.5 5.5 0 0 0 3.1172-0.969l3.6618 3.662a1 1 0 0 0 0.721 0.307 1 1 0 0 0 1-1 1 1 0 0 0-0.303-0.717l-3.67-3.6697a5.5 5.5 0 0 0 0.973-3.1133 5.5 5.5 0 0 0-5.5-5.5zm0 2a3.5 3.5 0 0 1 3.5 3.5 3.5 3.5 0 0 1-3.5 3.5 3.5 3.5 0 0 1-3.5-3.5 3.5 3.5 0 0 1 3.5-3.5z" fill="#212121"/></svg></a></p>
+				<p class="suchform"><input type="text" value="" placeholder="Suche" id="suchfeld"
+					><a href="#" id="suchfeld-lupe" title="Suchergebnisse anzeigen"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m6.5 1a5.5 5.5 0 0 0-5.5 5.5 5.5 5.5 0 0 0 5.5 5.5 5.5 5.5 0 0 0 3.1172-0.969l3.6618 3.662a1 1 0 0 0 0.721 0.307 1 1 0 0 0 1-1 1 1 0 0 0-0.303-0.717l-3.67-3.6697a5.5 5.5 0 0 0 0.973-3.1133 5.5 5.5 0 0 0-5.5-5.5zm0 2a3.5 3.5 0 0 1 3.5 3.5 3.5 3.5 0 0 1-3.5 3.5 3.5 3.5 0 0 1-3.5-3.5 3.5 3.5 0 0 1 3.5-3.5z"/></svg></a
+					><a href="#" id="suchleiste-link" title="Suchleiste öffnen (F3)"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="m10.5 5a5.5 5.5 0 0 0-5.5 5.5 5.5 5.5 0 0 0 5.5 5.5 5.5 5.5 0 0 0 3.1172-0.96875l3.6621 3.6621a1 1 0 0 0 0.7207 0.30664 1 1 0 0 0 1-1 1 1 0 0 0-0.30273-0.7168l-3.6699-3.6699a5.5 5.5 0 0 0 0.97266-3.1133 5.5 5.5 0 0 0-5.5-5.5zm0 2a3.5 3.5 0 0 1 3.5 3.5 3.5 3.5 0 0 1-3.5 3.5 3.5 3.5 0 0 1-3.5-3.5 3.5 3.5 0 0 1 3.5-3.5zm-7.5 10v4h2 7.4316 8.5684v-4h-1.3379c0.44598 0.76574 0.34692 1.7566-0.31055 2.4141-0.78347 0.78348-2.0447 0.78348-2.8281 0l-2.1211-2.1211c-0.091249-0.091249-0.17024-0.19026-0.24024-0.29297h-1.7305-7.4316-2zm2 1h7.4316v2h-7.4316v-2z"/></svg></a
+				></p>
 				<ul>
 					<li><a href="#" class="link-sektion-framework kopf">Framework</a></li>
 					<li><a href="#" class="link-sektion-ordner kopf">Ordner und Dateien</a></li>
@@ -40,7 +44,7 @@
 				<section id="sektion-start">
 					<p class="obacht">Die technische Dokumentation ist nur für diejenigen gedacht, die das Programm bauen oder den Quellcode verändern wollen!</p>
 					
-					<p>Allen anderen BenutzerInnen hilft das <a href="#" class="link-handbuch">Handbuch</a> vielleicht eher weiter.</p>
+					<p>Allen anderen BenutzerInnen hilft das <a href="#" class="link-handbuch">Handbuch</a> oder eine Suche im recht ausführlichen <a href="#" class="link-changelog">Changelog</a> vielleicht eher weiter.</p>
 				</section>
 				
 				<!-- SUCHE -->
@@ -106,7 +110,7 @@ npm install --save-dev electron</pre>
 					
 					<p>Die stabile Version von <i>Electron</i> liefert nie die jüngste Ausgabe von <i>Chromium</i>. Technisch ist der im Framework arbeitende Browser somit zwar immer leicht veraltet, um die notwendigen Sicherheitsupdates kümmert sich das <i>Electron</i>-Team aber fortwährend.</p>
 					
-					<p>Neben der jüngsten stabilen Version von <i>Electron</i> werden auch ältere Ausgaben für einen längeren Zeitraum mit Updates versorgt. Möchte man nicht gleich mit dem ersten Release eines neuen Zweiges auf diesen wechseln, muss man den Releasezweig angeben, von dem man Updates beziehen will. Um es <abbr title="beispielsweise">bspw.</abbr> zu vermeiden, die gerade aktuelle Version 5.0 zu benutzen, muss man den Update-Befehl etwas anpassen, um weiterhin Updates des Release-Zweigs 4.1 zu bekommen:</p>
+					<p>Neben der jüngsten stabilen Version von <i>Electron</i> werden auch ältere Ausgaben für einen längeren Zeitraum mit Updates versorgt. Möchte man nicht gleich mit dem ersten Release eines neuen Zweiges auf diesen wechseln, muss man den Releasezweig angeben, von dem man Updates beziehen will. Um es <abbr title="beispielsweise">bspw.</abbr> zu vermeiden, die Version 5.0 zu benutzen, muss man den Update-Befehl etwas anpassen, um weiterhin Updates des Release-Zweigs 4.1 zu bekommen:</p>
 					
 					<pre>npm install --save-dev electron@4-1-x</pre>
 					
@@ -404,7 +408,7 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);
 					
 					<p>Nach dem Laden einer <abbr title="Wortgeschichte digital">WGD</abbr>-Datei in <i class="app-name"></i> befinden sich die Daten im globalen Objekt <code class="quelltext">data</code>. Ihre Werte lassen sich dann in allen Funktionen des Hauptfensters durch einfache Statements wie <code class="quelltext">data.dc</code> lesen oder schreiben.</p>
 					
-					<p>Alle Dateien sind gleich aufgebaut (<span class="obacht">Datenformat Version 6</span>):</p>
+					<p>Alle Dateien sind gleich aufgebaut (<span class="obacht">Datenformat Version 7</span>):</p>
 					
 					<table>
 						<tr>
@@ -551,11 +555,11 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);
 							<td> </td>
 							<td>Formvariante</td>
 						</tr>
-						<tr>
+						<tr class="wgd-alt">
 							<td><code class="quelltext">ha</code></td>
 							<td class="datentyp">Object</td>
 							<td> </td>
-							<td>reserviert für die Kartenhaufen-Funktion</td>
+							<td>reserviert für die Kartenhaufen-Funktion;<br><span class="obacht">mit Version 7 entfernt</span></td>
 						</tr>
 						<tr>
 							<td><code class="quelltext">ka</code></td>

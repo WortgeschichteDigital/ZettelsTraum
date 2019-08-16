@@ -300,15 +300,15 @@ p.no-indent + .filter-baum, /* betrifft Verschiedenes > Filterlogik */
 	color: var(--textSehrHell);
 }
 
-#filter-bewertung {
+#filter-verschiedenes-bewertung {
 	margin: 5px 0 0 22px;
 }
 
-#filter-bewertung a.aktiv {
+#filter-verschiedenes-bewertung a.aktiv {
 	background-color: var(--farbeStern);
 }
 
-#filter-bewertung a.aktiv:focus {
+#filter-verschiedenes-bewertung a.aktiv:focus {
 	background-color: var(--farbe);
 }
 

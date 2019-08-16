@@ -1881,7 +1881,7 @@ let beleg = {
 		beleg.leseFillBedeutung();
 		// Klick-Events an alles Links hängen
 		document.querySelectorAll("#beleg .link").forEach(function(i) {
-			liste.linksOeffnen(i);
+			helfer.externeLinks(i);
 		});
 		// Suchfeld einblenden?
 		if (!suche && optionen.data.einstellungen["karte-suchfeld"]) {

@@ -1,8 +1,19 @@
 "use strict";
 
 window.addEventListener("load", function() {
-	// Fensterttyp registrieren
+	// FENSTERTTYP REGISTRIEREN
 	window.fenstertyp = "changelog";
+	
+	// PROGRAMM-NAME EINTRAGEN
+	const {app} = require("electron").remote;
+	document.querySelectorAll(".app-name").forEach(function(i) {
+		i.textContent = app.getName().replace("'", "’");
+	});
+	
+	// TASTATUREINGABE ABFANGEN
+	document.addEventListener("keydown", helferWin.tastatur);
+	
+	// EVENTS INITIALISIEREN
 	// Über App
 	document.querySelectorAll("#icon, .ueber-app").forEach(function(i) {
 		i.addEventListener("click", function(evt) {
@@ -19,13 +30,10 @@ window.addEventListener("load", function() {
 			ipcRenderer.send("ueber-electron");
 		});
 	});
-	// Tastatur-Events abfangen
-	document.addEventListener("keydown", helferWin.tastatur);
-	// Programm-Name eintragen
-	const {app} = require("electron").remote;
-	document.querySelectorAll(".app-name").forEach(function(i) {
-		i.textContent = app.getName().replace("'", "’");
-	});
+	// Handbuch
+	document.querySelectorAll(".link-handbuch").forEach(a => helferWin.oeffneHandbuch(a));
+	// Dokumentation
+	document.querySelectorAll(".link-dokumentation").forEach(a => helferWin.oeffneDokumentation(a));
 	// Icons
 	document.querySelectorAll("#changelog-icons a").forEach(function(a) {
 		a.addEventListener("click", function(evt) {

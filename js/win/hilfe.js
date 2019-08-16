@@ -79,6 +79,10 @@ let hilfe = {
 	//   sektion = String
 	//     (Hinweis auf die Sektion, die eingeblendet werden soll)
 	sektionWechseln (sektion) {
+		// Suchleiste ggf. schließen
+		if (document.getElementById("suchleiste")) {
+			suchleiste.ausblenden();
+		}
 		// Navigation auffrischen
 		document.querySelectorAll("nav a.kopf").forEach(function(i) {
 			if (i.classList.contains(`link-sektion-${sektion}`)) {
@@ -149,6 +153,9 @@ let hilfe = {
 		});
 		input.addEventListener("focus", function() {
 			this.select();
+			if (document.getElementById("suchleiste")) {
+				suchleiste.ausblenden();
+			}
 		});
 	},
 	// Cache der Suchergebnisse

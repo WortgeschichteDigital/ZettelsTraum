@@ -27,7 +27,7 @@
 		<main>
 			<span id="changelog-icons"
 				><a href="#" id="changelog-suchleiste" title="Changelog durchsuchen (Strg + F)"
-					><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m6.5 1a5.5 5.5 0 0 0-5.5 5.5 5.5 5.5 0 0 0 5.5 5.5 5.5 5.5 0 0 0 3.1172-0.969l3.6618 3.662a1 1 0 0 0 0.721 0.307 1 1 0 0 0 1-1 1 1 0 0 0-0.303-0.717l-3.67-3.6697a5.5 5.5 0 0 0 0.973-3.1133 5.5 5.5 0 0 0-5.5-5.5zm0 2a3.5 3.5 0 0 1 3.5 3.5 3.5 3.5 0 0 1-3.5 3.5 3.5 3.5 0 0 1-3.5-3.5 3.5 3.5 0 0 1 3.5-3.5z"/></svg
+					><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="m10.5 5a5.5 5.5 0 0 0-5.5 5.5 5.5 5.5 0 0 0 5.5 5.5 5.5 5.5 0 0 0 3.1172-0.96875l3.6621 3.6621a1 1 0 0 0 0.7207 0.30664 1 1 0 0 0 1-1 1 1 0 0 0-0.30273-0.7168l-3.6699-3.6699a5.5 5.5 0 0 0 0.97266-3.1133 5.5 5.5 0 0 0-5.5-5.5zm0 2a3.5 3.5 0 0 1 3.5 3.5 3.5 3.5 0 0 1-3.5 3.5 3.5 3.5 0 0 1-3.5-3.5 3.5 3.5 0 0 1 3.5-3.5zm-7.5 10v4h2 7.4316 8.5684v-4h-1.3379c0.44598 0.76574 0.34692 1.7566-0.31055 2.4141-0.78347 0.78348-2.0447 0.78348-2.8281 0l-2.1211-2.1211c-0.091249-0.091249-0.17024-0.19026-0.24024-0.29297h-1.7305-7.4316-2zm2 1h7.4316v2h-7.4316v-2z"/></svg
 				></a
 				><a href="#" id="changelog-drucken" title="Changelog drucken (Strg + P)"
 					><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m4 1v2h8v-2h-8zm-2 3c-0.5 0-1 0.5-1 1v4c0 0.5 0.5 1 1 1h1v-2h10v2h1c0.5 0 1-0.5 1-1v-4c0-0.5-0.5-1-1-1h-12zm2 5v5h8v-5h-8z"/></svg
@@ -39,6 +39,36 @@
 			
 			<div>
 				<h2><span data-maintainer="Nico Dorn">Version 0.17.0</span><time datetime="2019-08-15T19:51:02">15. August 2019</time></h2>
+				
+				<p><span class="obacht">Das Dateiformat hat sich geändert!</span> Ältere <abbr title="Wortgeschichte digital">WGD</abbr>-Dateien werden automatisch konvertiert; dabei wird eine Änderungsmarkierung gesetzt.</p>
+				
+				<h3>Entfernte Funktionen</h3>
+				
+				<ul>
+					<li>Alle Code-Abschnitte und Interface-Elemente, die vorbereitend für eine Sortierfunktion der Belege angelegt worden waren, wurden <strong>entfernt</strong>.</li>
+				</ul>
+				
+				<h3>Neue Funktionen</h3>
+				
+				<ul>
+					<li>Die Suchleiste steht nun auch im <a href="#" class="link-handbuch">Handbuch</a> und der <a href="#" class="link-dokumentation">technischen Dokumentation</a> zur Verfügung. Da es in den beiden Fenstern bereits ein Suchfeld gibt, das via <kbd>Strg</kbd> + <kbd>F</kbd> fokussiert werden kann, lässt sich die Suchleiste nur über das Tastaturkürzel <kbd>F3</kbd> oder das Icon <img src="../img/suchleiste.svg" width="24" height="24" alt=""> aufrufen. Sie wird automatisch geschlossen, wenn man in einen anderen Bereich wechselt oder das Suchfeld des Fensters fokussiert.</li>
+				</ul>
+				
+				<h3>Verbesserungen</h3>
+				
+				<ul>
+					<li>Für Links, die die Suchleiste öffnen, gibt es nun ein eigenes Icon: <img src="../img/suchleiste.svg" width="24" height="24" alt="">.</li>
+				</ul>
+				
+				<h3>Behobene Fehler</h3>
+				
+				<ul>
+					<li>Filterleiste: Wurde in einer Kartei eine Notiz angelegt (<i>Kartei &gt; Notizen</i>), die man sich in der Filterleiste hat einblenden lassen, und gab es in der Kartei außerdem Karteikarten mit Notizen, sodass im Filterblock <i>Verschiedenes</i> der Filter <i>Notizen</i> zur Verfügung stand, wurde der Kopf des Notizenblocks in der Filterleiste grün eingefärbt, wenn man den <i>Notizen</i>-Filter unter <i>Verschiedenes</i> auswählte.</li>
+					<li>
+						<p>Suchleiste: Text, der über mehrfach verschachtelte Tags hinausging, konnte nicht markiert und in der Konsequenz auch nicht gefunden werden. Eine Suche nach dem Text <i>der Beispiel-Satz</i> liefert nun korrekterweise einen Treffer, selbst wenn der Text wie folgt getaggt ist:</p>
+						<pre class="quelltext">der &lt;i&gt;&lt;b&gt;&lt;u&gt;Beispiel&lt;/u&gt;&lt;/b&gt;&lt;/i&gt;-Satz</pre>
+					</li>
+				</ul>
 			</div>
 			
 			<!-- 0.16.0 -->
@@ -105,7 +135,7 @@
 				
 				<ul>
 					<li>
-						<p>Suchleiste: Im Changelog steht nun eine Suchleiste zur Verfügung, mit der man ihn leicht und bequem durchsuchen kann. (In den folgenden Versionen wird die Leiste nach und nach in das Hauptfenster, das Handbuch und die technische Dokumentation integriert.)</p>
+						<p>Suchleiste: Im Changelog steht nun eine Suchleiste zur Verfügung, mit der man ihn leicht und bequem durchsuchen kann. (In den folgenden Versionen wird die Leiste nach und nach in das Hauptfenster, das <a href="#" class="link-handbuch">Handbuch</a> und die <a href="#" class="link-dokumentation">technische Dokumentation</a> integriert.)</p>
 						<p>Die Leiste lässt sich über das Icon <img src="../img/quick-suche.svg" width="24" height="24" alt=""> oder das Tastaturkürzel <kbd>Strg</kbd> + <kbd>F</kbd> öffnen. Schließen lässt sie sich über das Icon <img src="../img/heading-schliessen.svg" width="24" height="24" alt=""> oder via <kbd>Esc</kbd>, wenn der Fokus im Suchfeld liegt. (Ist der Fokus nicht im Suchfeld, schließt <kbd>Esc</kbd> wie gehabt den Changelog.)</p>
 						<p>Die Suche ist schlicht gehalten. Die eingetippten Zeichen werden immer als Phrase interpretiert; Leerzeichen trennen die Suche mithin nicht in mehrere Begriffe auf (anders als dies die kompliziertere Volltextsuche im Hauptfenster tut). Das Berücksichtigen von Groß- und Kleinschreibung lässt sich durch die Option <i>genaue Schreibung</i> aktivieren. (Nach dem Aktivieren/Deaktivieren der Option muss neu gesucht werden, damit sie angewendet wird.)</p>
 						<p>Zur Navigation durch die Suchergebnisse gibt es drei Möglichkeiten: (1.) Navigation mit den Pfeilen in der Suchleiste; (2.) Drücken von <kbd>⏎</kbd>, wenn der Fokus im Suchfeld liegt, um zum nächsten Treffer zu kommen; (3.) Drücken von <kbd>F3</kbd>, um zum nächsten, <kbd>Shift</kbd> + <kbd>F3</kbd>, um zum vorherigen Treffer zu gelangen. (Ist die Leiste geschlossen, wird sie durch das Drücken von <kbd>F3</kbd> geöffnet.)</p>
@@ -195,7 +225,7 @@ Gerüst 2 &gt; Gerüst 1</pre>
 						<p><i>Export/Import:</i> Einen in die Zwischenablage kopierten Beleg kann man übrigens auch prinzipiell via E-Mail an andere BenutzerInnen von <i class="app-name"></i> verschicken. Man kann den auf den ersten Blick ein wenig verwirrend aussehenden Text einfach in eine E-Mail oder eine Text-Datei kopieren. Der andere Nutzer kann ihn dann seinerseits markieren,  kopieren und über die Funktion <i>Belege &gt; Einfügen</i> in eine seiner Karteien importieren. Sein Programm erkennt, dass ein Beleg in der Zwischenablage ist.</p>
 						<p>Auf diese Weise kann man natürlich nur einen einzigen Beleg austauschen. Für den Austausch ganzer Beleglisten gibt es die Funktionen <i>Export</i> (im Kopier-Fenster) und <i>Import</i> (im Einfügen-Fenster). Hat man mithilfe der Funktion <i>Belege &gt; Kopieren</i> eine Belegliste erstellt, kann man diese durch einfachen Klick auf den Button <i>Export</i> in einer <abbr title="Belege Wortgeschichte digital">BWGD</abbr>-Datei speichern. Diese Datei mit der Endung <span class="datei">*.bwgd</span> ist nicht mit einer gewöhnlichen <span class="datei">*.wgd</span>-Kartei zu verwechseln. Sie enthält nämlich keine vollständige Kartei mit Bedeutungsgerüst, Notizen, Dateianhängen <abbr title="und so weiter">usw.</abbr>, sondern nur eine Liste an Belegen. Sie kann auch nicht via Doppelklick geöffnet werden (es gibt keine Datei-Assoziierung mit <i class="app-name"></i>). Diese Belegliste kann man nun aber leicht anderen NutzerInnen schicken, die sie mithilfe der Funktion <i>Import</i> (im Einfügen-Fenster) in eine eigene Kartei an ihrem Rechner einfügen können.</p>
 						<p>Klickt man auf <i>Import</i> und wählt eine <abbr title="Belege Wortgeschichte digital">BWGD</abbr>-Datei aus, erscheint diese als erster Punkt in der Liste der Belegquellen. Durch einen Klick auf <i>Einfügen</i> werden alle Belege aus der Datei in die aktuelle Kartei kopiert.</p>
-						<p>Die <i>technische Dokumentation</i> wurde im Kapitel <i><abbr title="Wortgeschichte digital">WGD</abbr>-Dateiformat</i> um das <abbr title="Belege Wortgeschichte digital">BWGD</abbr>-Format ergänzt.</p>
+						<p>Die <a href="#" class="link-dokumentation">technische Dokumentation</a> wurde im Kapitel <i><abbr title="Wortgeschichte digital">WGD</abbr>-Dateiformat</i> um das <abbr title="Belege Wortgeschichte digital">BWGD</abbr>-Format ergänzt.</p>
 					</li>
 					<li>
 						<p>Karteisuche: Mithilfe der Funktion <i>Programm &gt; Karteisuche</i> kann man nun alle <abbr title="Wortgeschichte digital">WGD</abbr>-Dateien in einem oder mehreren Ordnern suchen und durchsuchen. Die Funktion lässt sich auch über das Icon <img src="../img/quick-karteisuche.svg" width="24" height="24" alt=""> aus der Quick-Access-Bar heraus aufrufen.</p>
@@ -352,7 +382,7 @@ Gerüst 2 &gt; Gerüst 1</pre>
 				
 				<ul>
 					<li>Bedeutungsgerüst-Fenster: Bei Tastatur-Navigation durch die Elemente des Fensters gab es ein paar visuelle Glitches.</li>
-					<li>Nebenfenster: Wurde aus einem Nebenfenster (Handbuch, Changelog <abbr title="und so weiter">usw.</abbr>) eines der Über-Fenster geöffnet und mit dem Tastaturkürzel <kbd>Esc</kbd> geschlossen, wurde zugleich mit dem Über- auch das Nebenfenster geschlossen.</li>
+					<li>Nebenfenster: Wurde aus einem Nebenfenster (<a href="#" class="link-handbuch">Handbuch</a>, Changelog <abbr title="und so weiter">usw.</abbr>) eines der Über-Fenster geöffnet und mit dem Tastaturkürzel <kbd>Esc</kbd> geschlossen, wurde zugleich mit dem Über- auch das Nebenfenster geschlossen.</li>
 					<li>Ein Fehler in der <span class="datei">package.json</span> führte dazu, dass der <span lang="en">build process</span> von Linux-Paketen abgebrochen wurde.</li>
 				</ul>
 			</div>
@@ -477,7 +507,7 @@ Gerüst 2 &gt; Gerüst 1</pre>
 						<p>Die Möglichkeit, das Programm mit <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Dateien zu verknüpfen, die sich an einem anderen Spericherort befinden, blieb natürlich erhalten.</p>
 						<p>Auch erhalten blieb die Option, die Dateien beim Programmstart automatisch auf Änderungen zu überprüfen. Neu hinzugekommen ist die Möglichkeit, diese Prüfung durch das Icon <img src="../img/reload.svg" width="24" height="24" alt=""> direkt anzustoßen. Auf diese Weise können gerade vorgenommene Ergänzungen in einer Tag-Liste direkt in der Bedeutungsgerüst-Funktion verwendet werden, ohne dass das Programm neu gestartet werden müsste.</p>
 					</li>
-					<li>Die Möglichkeit, ein AppImage zu erstellen, wurde im Installer-Script für Linux-Pakete ergänzt. Die <i>technische Dokumentation</i> wurde entsprechend geändert.</li>
+					<li>Die Möglichkeit, ein AppImage zu erstellen, wurde im Installer-Script für Linux-Pakete ergänzt. Die <a href="#" class="link-dokumentation">technische Dokumentation</a> wurde entsprechend geändert.</li>
 					<li><a href="#" class="ueber-electron"><i>Electron</i></a>-Update auf Version 4.2.6.</li>
 				</ul>
 			</div>
@@ -558,7 +588,7 @@ Gerüst 2 &gt; Gerüst 1</pre>
 					</li>
 					<li>Der Code für den Aufbau der Belegliste wurde teilweise restrukturiert und verschlankt.</li>
 					<li>Die Scripts zum Erstellen von Installern wurden verbessert (Modularisierung, bessere Fehlerbehandlung <abbr title="und so weiter">usw.</abbr>). Mit ihnen können jetzt auch RPM-Pakete für jene <i>Linux</i>-Distributionen erstellt werden, die dieses Format benötigen, und darüber hinaus komprimierte Archive, und zwar sowohl für <i>Windows</i> (ZIP) als auch <i>Linux</i> (TAR.GZ).</li>
-					<li>Die Überarbeitung der Installer-Scripts, Änderungen an der Datei- und Karteistruktur machten eine Anpassung der <i>technischen Dokumentation</i> nötig.</li>
+					<li>Die Überarbeitung der Installer-Scripts, Änderungen an der Datei- und Karteistruktur machten eine Anpassung der <a href="#" class="link-dokumentation">technischen Dokumentation</a> nötig.</li>
 					<li><a href="#" class="ueber-electron"><i>Electron</i></a>-Update auf Version 4.2.2.</li>
 				</ul>
 				
@@ -712,9 +742,9 @@ Mustermann, Erika
 				
 				<ul>
 					<li><abbr title="Deutsches Textarchiv">DTA</abbr>-Import: Fortan wird nur noch die Textsortenangabe <q class="bedeutung">dwds1</q> importiert. (Die im <abbr title="Text Encoding Initiative" lang="en">TEI</abbr>-Header der <abbr title="Deutsches Textarchiv">DTA</abbr>-Texte unter <q class="bedeutung">dwds2</q> gelisteten Textsorten stammen aus einer Frühzeit des Projekts und sind nicht so zuverlässig.)</li>
-					<li>Einstellungen: Die Tastatur-Navigation durch die Menüpunkte wurde auf <kbd>Strg</kbd> + <kbd>⇧</kbd> / <kbd>⇩</kbd> umgestellt, auch damit sie identisch zu der Navigation im <i>Handbuch</i> und der <i>technischen Dokumentation</i> funktioniert.</li>
+					<li>Einstellungen: Die Tastatur-Navigation durch die Menüpunkte wurde auf <kbd>Strg</kbd> + <kbd>⇧</kbd> / <kbd>⇩</kbd> umgestellt, auch damit sie identisch zu der Navigation im <a href="#" class="link-handbuch">Handbuch</a> und der <a href="#" class="link-dokumentation">technischen Dokumentation</a> funktioniert.</li>
 					<li>Eingabefelder für Ziffern haben nun (wieder) Spin-Buttons (kleine Pfeile, mit denen die Ziffer im Feld hoch- oder runtergezählt werden kann).</li>
-					<li>Die <i>technische Dokumentation</i> wurde ergänzt <abbr title="beziehungsweise">bzw.</abbr> angepasst.</li>
+					<li>Die <a href="#" class="link-dokumentation">technische Dokumentation</a> wurde ergänzt <abbr title="beziehungsweise">bzw.</abbr> angepasst.</li>
 					<li><a href="#" class="ueber-electron"><i>Electron</i></a>-Update auf Version 4.2.0.</li>
 				</ul>
 				
@@ -751,7 +781,7 @@ Mustermann, Erika
 					<li>Die Gliederung der Icons in der Quick-Access-Bar wurde leicht angepasst, um die Übersichtlichkeit zu erhöhen. Auch in den betreffenden Einstellungen (<i>Programm &gt; Einstellungen &gt; Menü</i>) sind die Funktionsgruppen nun klarer ersichtlich.</li>
 					<li>Wird versucht dieselbe Kartei, die aktuell bearbeitet wird, noch einmal zu öffnen, wird dieses erneute Öffnen unterbunden. Stattdessen erscheint eine Meldung, dass die Datei bereits geöffnet ist.</li>
 					<li>Startseite: Via Rechtsklick können nun einzelne Karteien aus der Liste zuletzt verwendeter Dateien entfernt werden. (Die Karteien werden natürlich nur aus der Liste entfernt und nicht von der Festplatte gelöscht.)</li>
-					<li>Die <i>technische Dokumentation</i> wurde an einigen Stellen ergänzt.</li>
+					<li>Die <a href="#" class="link-dokumentation">technische Dokumentation</a> wurde an einigen Stellen ergänzt.</li>
 					<li><a href="#" class="ueber-electron"><i>Electron</i></a>-Update auf Version 4.1.5.</li>
 				</ul>
 				
@@ -760,8 +790,8 @@ Mustermann, Erika
 				<ul>
 					<li>Startseite: Beim Leeren der Liste zuletzt verwendeter Karteien (Funktion <i>Kartei &gt; Zuletzt verwendet &gt; Liste löschen</i>) wurde die Ansicht der Startseite der App, auf der diese Liste auch zu sehen ist, nicht aufgefrischt. Ist die Startseite sichtbar, hat die Löschaktion auch dort eine unmittelbare Konsequenz: Die Liste zuletzt verwendeter Karteien verschwindet.</li>
 					<li>Bedeutungsgerüst-Fenster: Das Tastaturkürzel <kbd>Strg</kbd> + <kbd>P</kbd> funktionierte nicht mehr.</li>
-					<li>Hilfe-Fenster: Lange Pfadangaben werden nun besser umgebrochen, sodass das Fenster schmaler werden kann, ohne dass Text im Off verschwindet. Dies betrifft die <i>technische Dokumentation</i> und das <i>Handbuch</i> (sobald es geschrieben wurde).</li>
-					<li>Hilfe-Fenster: Das <i>Handuch</i> und die <i>technische Dokumentation</i> konnten über das App-Menü beliebig oft geöffnet werden. Ist das Fenster schon offen, wird es ab jetzt nicht noch einmal geöffnet, sondern erhält einfach den Fokus.</li>
+					<li>Hilfe-Fenster: Lange Pfadangaben werden nun besser umgebrochen, sodass das Fenster schmaler werden kann, ohne dass Text im Off verschwindet. Dies betrifft die <a href="#" class="link-dokumentation">technische Dokumentation</a> und das <a href="#" class="link-handbuch">Handbuch</a> (sobald es geschrieben wurde).</li>
+					<li>Hilfe-Fenster: Das <a href="#" class="link-handbuch">Handbuch</a> und die <a href="#" class="link-dokumentation">technische Dokumentation</a> konnten über das App-Menü beliebig oft geöffnet werden. Ist das Fenster schon offen, wird es ab jetzt nicht noch einmal geöffnet, sondern erhält einfach den Fokus.</li>
 					<li>Über-Fenster: Behebung visueller Glitches.</li>
 				</ul>
 			</div>
@@ -777,7 +807,7 @@ Mustermann, Erika
 				<h3>Neue Funktionen</h3>
 				
 				<ul>
-					<li>Die <i>technische Dokumentation</i> ist fertig. Wer sie lesen möchte, findet sie unter <i>Hilfe &gt; Technische Dokumentation</i>.</li>
+					<li>Die <a href="#" class="link-dokumentation">technische Dokumentation</a> ist fertig. Wer sie lesen möchte, findet sie unter <i>Hilfe &gt; Technische Dokumentation</i>.</li>
 					<li>
 						<p>Für die Installation unter <i>Windows</i> wird ab sofort ein <abbr title="Nullsoft Scriptable Install System" lang="en">NSIS</abbr>-Installer verwendet. Dieser Installer kann automatisch den <abbr title="Wortgeschichte digital">WGD</abbr>-Dateityp im Betriebssystem registrieren, sodass <abbr title="Wortgeschichte digital">WGD</abbr>-Dateien fortan einfach durch Klick im <i>Windows-Explorer</i> geöffnet werden können.</p>
 						<p>Das Erstellen von DEB-Paketen und das Registrieren der <abbr title="Wortgeschichte digital">WGD</abbr>-Dateien unter <i>Linux</i> wurde ebenfalls eingerichtet.</p>
@@ -794,7 +824,7 @@ Mustermann, Erika
 				<ul>
 					<li>Links zu Webseiten können nun via <span lang="en">Drag-and-Drop</span> in einen Browser gezogen und so geöffnet werden. Die Änderung betrifft alle externen Links in allen Programmfenstern.</li>
 					<li>Enthält eine Kartei viele lange Belege, war der Aufbau der Belegliste schon bei ein paar Dutzend Karteikarten mitunter recht träge. In solchen Fällen agiert die App nun deutlich performanter, ohne Abstriche bei der Funktionalität zu machen.</li>
-					<li>Die Ansicht des <i>Bedeutungsgerüst-Fensters</i>, des <i>Handbuchs</i> und der <i>technischen Dokumentation</i> lässt sich nun via Tastaturkürzel anpassen. Implementiert wurden alle Funktionen des Hauptfenster, die im Menü <i>Ansicht</i> zu finden sind. Das sind im Einzelnen:<br><kbd>Strg</kbd> + <kbd>⇧</kbd> + <kbd>+</kbd> (<i>Schrift vergrößern</i>), <kbd>Strg</kbd> + <kbd>-</kbd> (<i>Schrift verkleinern</i>), <kbd>Strg</kbd> + <kbd>0</kbd> (<i>Standardgröße</i>) und <kbd>F11</kbd> (<i>Vollbild</i>).</li>
+					<li>Die Ansicht des Bedeutungsgerüst-Fensters, des <a href="#" class="link-handbuch">Handbuch</a> und der <a href="#" class="link-dokumentation">technischen Dokumentation</a> lässt sich nun via Tastaturkürzel anpassen. Implementiert wurden alle Funktionen des Hauptfenster, die im Menü <i>Ansicht</i> zu finden sind. Das sind im Einzelnen:<br><kbd>Strg</kbd> + <kbd>⇧</kbd> + <kbd>+</kbd> (<i>Schrift vergrößern</i>), <kbd>Strg</kbd> + <kbd>-</kbd> (<i>Schrift verkleinern</i>), <kbd>Strg</kbd> + <kbd>0</kbd> (<i>Standardgröße</i>) und <kbd>F11</kbd> (<i>Vollbild</i>).</li>
 					<li>Belegliste und Karteikarte: Beim Import von Belgen aus dem <abbr title="Deutschen Textarchiv">DTA</abbr> werden Trennstriche am Zeilenende mit <q class="bedeutung">[¬]</q> markiert. Werden diese Trennstrichmarkierungen über die Funktion <img src="../img/liste-trennung.svg" width="24" height="24" alt=""> ausgeschaltet erscheint fortan ein Bindestrich, wenn das nächste Wort mit einem Großbuchstaben beginnt. Aus <q class="bedeutung">Eisenbahn[¬]Differentialtarife</q> wird nun also <q class="bedeutung">Eisenbahn-Differentialtarife</q> und nicht mehr <q class="bedeutung">EisenbahnDifferentialtarife</q>.</li>
 					<li>
 						<p>Notizen und Karteikarte: Seit Version 0.3.0 schließen sich Karteikarte und Notizenfenster nach dem Speichern nicht mehr automatisch. Von nun an gibt es Einstellungen, mit denen dieses Verhalten wiederhergestellt werden kann, und zwar unter <i>Programm &gt; Einstellungen &gt; Allgemeines</i> <abbr title="beziehungsweise">bzw.</abbr> <i>Programm &gt; Einstellungen &gt; Karteikarte</i>.</p>
@@ -809,7 +839,7 @@ Mustermann, Erika
 				<h3>Behobene Fehler</h3>
 				
 				<ul>
-					<li>Wurde das Hauptfenster der App über die Schließenfunktion der Fensterleiste geschlossen, blieben <abbr title="eventuell">evtl.</abbr> offene Nebenfenster (<i>Bedeutungsgerüst-Fenster</i>, <i>Handbuch</i>, <i>technische Dokumentation</i>) weiter geöffnet. Diese Fenster gehen nun mit dem Schließen des Hauptfenster automatisch zu.</li>
+					<li>Wurde das Hauptfenster der App über die Schließenfunktion der Fensterleiste geschlossen, blieben <abbr title="eventuell">evtl.</abbr> offene Nebenfenster (Bedeutungsgerüst-Fenster, <a href="#" class="link-handbuch">Handbuch</a>, <a href="#" class="link-dokumentation">technische Dokumentation</a>) weiter geöffnet. Diese Fenster gehen nun mit dem Schließen des Hauptfenster automatisch zu.</li>
 					<li>Anzeige des Belegtexts: Beim Ausblenden der Seitenumbruchsmarkierung (also <abbr title="zum Beispiel">z. B.</abbr> <q class="bedeutung">[:35:]</q>) wurde auch das Leerzeichen vor der Markierung entfernt, was mitunter zur Komposition nicht zusammengehöriger Wörter führte.</li>
 					<li>Kopieren des Belegtexts: Wurde der Belegtext über das Icon <img src="../img/tool-kopieren.svg" width="24" height="24" alt=""> in der Belegliste oder Karteikarte komplett kopiert, fanden sich im Plaintext noch HTML-Tags. Diese werden nun entfernt. (Die Änderung hat keine Auswirkungen, wenn der Text mit allen Formatierungen in ein Office-Programm eingefügt werden soll.)</li>
 					<li>Kopieren des Belegtextes: War das Wort der Kartei hervorgehoben (gefettet und gelb hinterlegt), veschwand es beim Einfügen in <i>LibreOffice</i> ganz.</li>
@@ -868,7 +898,7 @@ Mustermann, Erika
 				<h3>Behobene Fehler</h3>
 				
 				<ul>
-					<li>Viele Funktionen des Hauptfensters waren auch aus den Nebenfenstern (Handbuch, Dokumentation <abbr title="und so weiter">usw.</abbr>) heraus aufzurufen, wenn das zugehörige Tastaturkürzel gedrückt wurde. Dies könnte unerwünschte Effekte haben und wird fortan unterbunden.</li>
+					<li>Viele Funktionen des Hauptfensters waren auch aus den Nebenfenstern (<a href="#" class="link-handbuch">Handbuch</a>, <a href="#" class="link-dokumentation">Dokumentation</a> <abbr title="und so weiter">usw.</abbr>) heraus aufzurufen, wenn das zugehörige Tastaturkürzel gedrückt wurde. Dies könnte unerwünschte Effekte haben und wird fortan unterbunden.</li>
 					<li>Filterleiste: Die Darstellung kompliziert verschachtelter Bedeutungsgerüste war mitunter grob falsch.</li>
 					<li>Filterleiste: Bei aktiviertem Reduktionsmodus wurde der Filterblock <i>Verschiedenes</i> nie als aktiv – also grün – markiert, wenn die Filterlogik auf <i>exklusiv</i> stand.</li>
 					<li>Karteikarte: In der Leseansicht wurde die Markierung mit Sternen fehlerhaft dargestellt.</li>

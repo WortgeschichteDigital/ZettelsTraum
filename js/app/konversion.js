@@ -4,7 +4,7 @@ let konversion = {
 	// aktuelle Version des Dateiformats
 	// *** WICHTIG! *** WICHTIG! *** WICHTIG! ***
 	// Bei Änderungen anpassen!
-	version: 6,
+	version: 7,
 	// Verteilerfunktion
 	start () {
 		konversion.von1nach2();
@@ -12,6 +12,7 @@ let konversion = {
 		konversion.von3nach4();
 		konversion.von4nach5();
 		konversion.von5nach6();
+		konversion.von6nach7();
 	},
 	// Konversion des Dateiformats von Version 1 nach Version 2
 	von1nach2 () {
@@ -118,6 +119,18 @@ let konversion = {
 				data.no += "</div>";
 			}
 		}
+		// Versionsnummer hochzählen
+		data.ve++;
+		// Änderungsmarkierung setzen
+		kartei.karteiGeaendert(true);
+	},
+	// Konversion des Dateiformats von Version 6 nach Version 7
+	von6nach7 () {
+		if (data.ve > 6) {
+			return;
+		}
+		// reserviertes Datenfeld für die Sortierfunktion löschen
+		delete data.ha;
 		// Versionsnummer hochzählen
 		data.ve++;
 		// Änderungsmarkierung setzen

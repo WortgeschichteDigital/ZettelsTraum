@@ -121,7 +121,6 @@ let optionen = {
 			"quick-kartei-suche": false,
 			"quick-belege-hinzufuegen": false,
 			"quick-belege-auflisten": false,
-			"quick-belege-sortieren": false,
 			"quick-belege-kopieren": false,
 			"quick-belege-einfuegen": false,
 			// NOTIZEN

@@ -898,7 +898,7 @@ let liste = {
 		}
 		// Klick-Events an Links hängen
 		for (let link of div.querySelectorAll(".link")) {
-			liste.linksOeffnen(link);
+			helfer.externeLinks(link);
 		}
 	},
 	// Text aller Bedeutungen in ein Array schreiben
@@ -1006,25 +1006,9 @@ let liste = {
 					return p;
 				});
 			}
-			return `<a href="${url}" title="${url}" class="link">${basis}</a>${schluss}`;
+			return `<a href="${url}" class="link">${basis}</a>${schluss}`;
 		});
 		return text;
-	},
-	// Links in einem externen Browser-Fenster öffnen
-	//   link = Element
-	//     (der Link, auf den geklickt wurde)
-	linksOeffnen (link) {
-		link.addEventListener("click", function(evt) {
-			evt.preventDefault();
-			let url = this.title;
-			// URL ggf. aufbereiten
-			if (!/^http/.test(url)) {
-				url = `https://${url}`;
-			}
-			// URL im Browser öffnen
-			const {shell} = require("electron");
-			shell.openExternal(url);
-		});
 	},
 	// Klick-Event zum Öffnen des Karteikarten-Formulars
 	//   a = Element

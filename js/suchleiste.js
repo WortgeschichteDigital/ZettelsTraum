@@ -15,6 +15,8 @@ let suchleiste = {
 			leiste.firstChild.select();
 			if (fenstertyp === "changelog") {
 				document.querySelector("main").classList.add("padding-suchleiste");
+			} else if (/dokumentation|handbuch/.test(fenstertyp)) {
+				document.querySelector("section:not(.aus)").classList.add("padding-suchleiste");
 			}
 		}, 1);
 	},
@@ -36,6 +38,8 @@ let suchleiste = {
 		leiste.classList.remove("an");
 		if (fenstertyp === "changelog") {
 			document.querySelector("main").classList.remove("padding-suchleiste");
+		} else if (/dokumentation|handbuch/.test(fenstertyp)) {
+			document.querySelector("section:not(.aus)").classList.remove("padding-suchleiste");
 		}
 	},
 	// HTML der Suchleiste aufbauen
@@ -135,6 +139,8 @@ let suchleiste = {
 		let e;
 		if (fenstertyp === "changelog") {
 			e = document.querySelectorAll("div > h2, div > h3, div > p, ul li");
+		} else if (/dokumentation|handbuch/.test(fenstertyp)) {
+			e = document.querySelectorAll("section:not(.aus) > h2, section:not(.aus) > p, section:not(.aus) #suchergebnisse > p, section:not(.aus) > pre, section:not(.aus) li, section:not(.aus) td, section:not(.aus) th");
 		}
 		let genaue = document.getElementById("suchleiste-genaue").checked ? "" : "i",
 			reg = new RegExp(helfer.formVariSonderzeichen(helfer.escapeRegExp(textMitSpitz)).replace(/\s/g, "\\s"), genaue),
@@ -153,7 +159,7 @@ let suchleiste = {
 		// komplizierten RegExp erstellen
 		let textKomplex = helfer.escapeRegExp(text.charAt(0));
 		for (let i = 1, len = text.length; i < len; i++) {
-			textKomplex += "(<[^>]+>)?";
+			textKomplex += "(<[^>]+>)*";
 			textKomplex += helfer.escapeRegExp(text.charAt(i));
 		}
 		textKomplex = helfer.formVariSonderzeichen(textKomplex).replace(/\s/g, "(&nbsp;|\\s)");
@@ -174,6 +180,8 @@ let suchleiste = {
 					return `</mark>${m}<mark class="suchleiste">`;
 				});
 			}
+			// leere <mark> entfernen (kann passieren, wenn Tags verschachtelt sind)
+			m = m.replace(/<mark class="suchleiste"><\/mark>/g, "");
 			// Rückgabewert zusammenbauen
 			m = `<mark class="suchleiste">${m}</mark>`;
 			// alle <mark> ermitteln, die weder Anfang noch Ende sind
@@ -207,7 +215,7 @@ let suchleiste = {
 			knoten.add(i.parentNode);
 		});
 		for (let k of knoten) {
-			k.innerHTML = k.innerHTML.replace(/<mark.+?>(.+?)<\/mark>/g, ersetzenMark);
+			k.innerHTML = k.innerHTML.replace(/<mark.+?suchleiste.+?>(.+?)<\/mark>/g, ersetzenMark);
 			suchleiste.suchenEventsWiederherstellen(k);
 		}
 		function ersetzenMark (m, p1) {
@@ -219,7 +227,7 @@ let suchleiste = {
 	//     (HTML-Element, in dem HTML geändert wurde;
 	//     hier sollen Events ggf. wiederhergestellt werden)
 	suchenEventsWiederherstellen (ele) {
-		// Über App öffnen
+		// Über App öffnen (Changelog, Dokumentation und Handbuch)
 		ele.querySelectorAll(".ueber-app").forEach(function(i) {
 			i.addEventListener("click", function(evt) {
 				evt.preventDefault();
@@ -227,7 +235,7 @@ let suchleiste = {
 				ipcRenderer.send("ueber-app");
 			});
 		});
-		// Über Electron öffnen
+		// Über Electron öffnen (Changelog, Dokumentation und Handbuch)
 		ele.querySelectorAll(".ueber-electron").forEach(function(i) {
 			i.addEventListener("click", function(evt) {
 				evt.preventDefault();
@@ -235,6 +243,20 @@ let suchleiste = {
 				ipcRenderer.send("ueber-electron");
 			});
 		});
+		// Handbuch öffnen (Changelog, Dokumentation)
+		ele.querySelectorAll(".link-handbuch").forEach(a => helferWin.oeffneHandbuch(a));
+		// Handbuch öffnen (Changelog, Handbuch)
+		ele.querySelectorAll(".link-dokumentation").forEach(a => helferWin.oeffneDokumentation(a));
+		// Changelog öffnen (Dokumentation und Handbuch)
+		ele.querySelectorAll(".link-changelog").forEach(a => helferWin.oeffneChangelog(a));
+		// interne Sprung-Links (Dokumentation und Handbuch)
+		ele.querySelectorAll(`a[href^="#"]`).forEach(function(a) {
+			if (/^#[a-z]/.test(a.getAttribute("href"))) {
+				hilfe.naviSprung(a);
+			}
+		});
+		// externe Links
+		ele.querySelectorAll(`a[href^="http"]`).forEach(a => helfer.externeLinks(a));
 	},
 	// Zwischenspeicher für den Timeout
 	suchenKeineTrefferTimeout: null,
