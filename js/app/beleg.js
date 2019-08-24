@@ -1573,6 +1573,14 @@ let beleg = {
 				start: "<s>",
 				ende: "</s>",
 			},
+			superscript: {
+				start: "<sup>",
+				ende: "</sup>",
+			},
+			subscript: {
+				start: "<sub>",
+				ende: "</sub>",
+			},
 			underline: {
 				start: "<u>",
 				ende: "</u>",

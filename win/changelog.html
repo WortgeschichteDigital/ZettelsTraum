@@ -39,6 +39,23 @@
 			
 			<div>
 				<h2><span data-maintainer="Nico Dorn">Version 0.18.0-beta</span><time datetime="2019-08-20T13:47:05">20. August 2019</time></h2>
+				
+				<h3>Verbesserungen</h3>
+				
+				<ul>
+					<li>Karteikarte: Die Texttools für das Belegfeld wurden um Werkzeuge zum Hochstellen (<img src="../img/tool-superscript.svg" width="24" height="24" alt="">, Tag <code class="quelltext">&lt;sup&gt;</code>) und Tiefstellen (<img src="../img/tool-subscript.svg" width="24" height="24" alt="">, Tag <code class="quelltext">&lt;sub&gt;</code>) von Text ergänzt.</li>
+					<li>
+						<p>Notizen: Die Tools zum Hoch- und Tiefstellen von Text wurden auch in der Notizen-Funktion ergänzt.</p>
+						<p>Außerdem wurde ein Tool zum Erstellen geordneter, sprich: nummerierter Listen ergänzt. Das Icon <img src="../img/tool-list-ordered.svg" width="24" height="24" alt=""> verhält sich analog zu dem bereits älteren Icon <img src="../img/tool-list-unordered.svg" width="24" height="24" alt="">, mit dem ungeordnete Spiegelstrichlisten erzeugt werden können (<abbr title="siehe">s.</abbr> die Erläuterungen zu Version 0.15.0).</p>
+					</li>
+				</ul>
+				
+				<h3>Behobene Fehler</h3>
+				
+				<ul>
+					<li>Notizen: Unter gewissen Umständen wurde nicht erkannt, dass die Notizen (Funktion <i>Kartei &gt; Notizen</i>) leer waren, weil sich noch unsichtbare Tags im Feld befanden, die keinen Text umschlossen.</li>
+					<li>Notizen: Auch wenn man Notizen vollständig löschte, wurden sie erst nach dem Neuladen der Kartei aus der Filterleiste entfernt. (Die Anzeige in der Filterleiste musste zuvor unter <i>Programm &gt; Einstellungen &gt; Notizen</i> aktiviert worden sein.)</li>
+				</ul>
 			</div>
 			
 			<!-- 0.17.0 -->
@@ -166,7 +183,7 @@
 						<p>Über dem Textfeld befindet sich nun eine Toolleiste mit Icons, um den Text in unterschiedlicher Weise zu formatieren. Ihre Funktion wird beim Rüberfahren mit der Maus erläutert.</p>
 						<p>Im ersten Block stehen Icons, die sich auf den ganzen Absatz beziehen:<br
 							><img src="../img/tool-heading.svg" width="24" height="24" alt=""> wandelt den aktuellen Absatz in eine Überschrift um;<br
-							><img src="../img/tool-list.svg" width="24" height="24" alt=""> erzeugt an der Position des Carets eine Liste oder wandelt die markierten Absätze in eine Liste mit <i lang="en">bullet points</i> um.</p>
+							><img src="../img/tool-list-unordered.svg" width="24" height="24" alt=""> erzeugt an der Position des Carets eine Liste oder wandelt die markierten Absätze in eine Liste mit <i lang="en">bullet points</i> um.</p>
 						<p>Im zweiten Block stehen Icons, die den markierten Text innerhalb eines Absatzes, einer Überschrift oder einer Liste formatieren:<br
 							><img src="../img/tool-bold.svg" width="24" height="24" alt=""> erzeugt fetten Text (Tastaturkürzel <kbd>Strg</kbd> + <kbd>B</kbd>);<br
 							><img src="../img/tool-italic.svg" width="24" height="24" alt=""> erzeugt kursiven Text (Tastaturkürzel <kbd>Strg</kbd> + <kbd>I</kbd>);<br
@@ -174,7 +191,7 @@
 							><img src="../img/tool-strike.svg" width="24" height="24" alt=""> erzeugt durchgestrichenen Text;<br
 							><img src="../img/tool-mark.svg" width="24" height="24" alt=""> erzeugt markierten Text.</p>
 						<p>Im letzten Block steht nur das Icon <img src="../img/tool-clear.svg" width="24" height="24" alt="">. Mit ihm können alle Formatierungen im markierten Bereich entfernt werden. Erhalten bleiben allerdings die Absatzformatierungen (Überschrift und Liste) und Textmarkierungen. Um auch diese Formatierungen zu entfernen, kann man so vorgehen:</p>
-						<p>Eine Textmarkierung lässt sich dadurch entfernen, dass man den gesamten Text innerhalb der Markierung auswählt und erneut auf <img src="../img/tool-mark.svg" width="24" height="24" alt=""> klickt. Zum Entfernen einer Liste oder einer Überschrift genügt es, in die entsprechende Zeile zu gehen und dann auf <img src="../img/tool-list.svg" width="24" height="24" alt=""> <abbr title="beziehungsweise">bzw.</abbr> <img src="../img/tool-heading.svg" width="24" height="24" alt=""> zu klicken.</p>
+						<p>Eine Textmarkierung lässt sich dadurch entfernen, dass man den gesamten Text innerhalb der Markierung auswählt und erneut auf <img src="../img/tool-mark.svg" width="24" height="24" alt=""> klickt. Zum Entfernen einer Liste oder einer Überschrift genügt es, in die entsprechende Zeile zu gehen und dann auf <img src="../img/tool-list-unordered.svg" width="24" height="24" alt=""> <abbr title="beziehungsweise">bzw.</abbr> <img src="../img/tool-heading.svg" width="24" height="24" alt=""> zu klicken.</p>
 					</li>
 					<li>Redaktion: Die Fehlentscheidung, das <span lang="en">User Interface</span> (also den Picker zum Öffnen des eingebauten Kalenders) im Datumsfeld der Redaktionsverwaltung unter <i>Kartei &gt; Redaktion</i> der Platzersparnis halber auszublenden, wurde revidiert.</li>
 					<li>Die App wird nun immer mit der <span lang="en">Locale</span> (dem Gebietsschemaparameter) <i>de</i> gestartet, sodass die Datumsfelder auch dann ein deutsches Format haben, wenn das Betriebssystem, auf dem <i class="app-name"></i> läuft, eine andere Sprache als Deutsch hat.</li>

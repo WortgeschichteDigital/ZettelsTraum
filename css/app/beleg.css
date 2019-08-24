@@ -259,9 +259,14 @@ textarea#beleg-bs {
 	mask-image: url(../../img/tool-italic.svg);
 }
 
-.icon-tools-list {
-	-webkit-mask-image: url(../../img/tool-list.svg);
-	mask-image: url(../../img/tool-list.svg);
+.icon-tools-list-unordered {
+	-webkit-mask-image: url(../../img/tool-list-unordered.svg);
+	mask-image: url(../../img/tool-list-unordered.svg);
+}
+
+.icon-tools-list-ordered {
+	-webkit-mask-image: url(../../img/tool-list-ordered.svg);
+	mask-image: url(../../img/tool-list-ordered.svg);
 }
 
 .icon-tools-mark {
@@ -287,6 +292,16 @@ textarea#beleg-bs {
 .icon-tools-strike {
 	-webkit-mask-image: url(../../img/tool-strike.svg);
 	mask-image: url(../../img/tool-strike.svg);
+}
+
+.icon-tools-superscript {
+	-webkit-mask-image: url(../../img/tool-superscript.svg);
+	mask-image: url(../../img/tool-superscript.svg);
+}
+
+.icon-tools-subscript {
+	-webkit-mask-image: url(../../img/tool-subscript.svg);
+	mask-image: url(../../img/tool-subscript.svg);
 }
 
 .icon-tools-underline {

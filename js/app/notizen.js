@@ -53,10 +53,7 @@ let notizen = {
 		kartei.karteiGeaendert(true);
 		direktSchliessen();
 		// ggf. Notizen in der Filterleiste updaten
-		let notizenFilterleiste = document.getElementById("filter-notizen-content");
-		if (notizenFilterleiste) {
-			notizenFilterleiste.innerHTML = data.no;
-		}
+		notizen.filterleiste();
 		// Notizen-Fenster ggf. schließen
 		function direktSchliessen () {
 			if (optionen.data.einstellungen["notizen-schliessen"]) {
@@ -124,6 +121,7 @@ let notizen = {
 		// Löschfunktion
 		function loesche () {
 			data.no = "";
+			notizen.filterleisteEntfernen();
 			kartei.karteiGeaendert(true);
 			notizen.schliessen();
 		}
@@ -145,8 +143,8 @@ let notizen = {
 			vorhanden.kartei = true;
 		}
 		let notiz = notizen.bereinigen(document.getElementById("notizen-feld").innerHTML);
-		if (notiz && notiz !== "<br>") {
-			// unter gewissen Umständen kann ein vereinzelter <br>-Tag im Feld stehen
+		if (notiz.replace(/<.+?>/g, "")) {
+			// unter gewissen Umständen können noch Tags im Feld stehen, die aber keinen Text auszeichnen
 			vorhanden.feld = true;
 		}
 		vorhanden.feld_value = notiz;
@@ -282,9 +280,12 @@ let notizen = {
 				} else {
 					document.execCommand("formatBlock", false, "<H3>");
 				}
-			} else if (funktion[1] === "list") {
-				// LISTE
+			} else if (funktion[1] === "list-unordered") {
+				// LISTE (ungeordnet)
 				document.execCommand("insertUnorderedList");
+			} else if (funktion[1] === "list-ordered") {
+				// LISTE (geordnet)
+				document.execCommand("insertOrderedList");
 			} else if (funktion[1] === "strike") {
 				// DURCHSTREICHEN
 				document.execCommand("strikeThrough");
@@ -368,12 +369,14 @@ let notizen = {
 		if (!data.no || !optionen.data.einstellungen["notizen-filterleiste"]) {
 			return;
 		}
-		let filterCont = document.getElementById("liste-filter-dynamisch");
-		filterCont.appendChild(filter.aufbauenCont("Notizen"));
-		let div = document.createElement("div");
-		document.getElementById("filter-kopf-notizen").nextSibling.appendChild(div);
-		div.id = "filter-notizen-content";
-		div.innerHTML = data.no;
+		if (!document.getElementById("filter-notizen-content")) {
+			let filterCont = document.getElementById("liste-filter-dynamisch");
+			filterCont.appendChild(filter.aufbauenCont("Notizen"));
+			let div = document.createElement("div");
+			document.getElementById("filter-kopf-notizen").nextSibling.appendChild(div);
+			div.id = "filter-notizen-content";
+		}
+		document.getElementById("filter-notizen-content").innerHTML = data.no;
 	},
 	// Notizen aus der Filterleiste entfernen
 	filterleisteEntfernen () {

@@ -764,7 +764,9 @@
 }
 
 #notizen-feld ul,
-#filter-notizen-content ul {
+#filter-notizen-content ul,
+#notizen-feld ol,
+#filter-notizen-content ol {
 	margin: 0;
 	padding: 0 0 0 25px;
 }
