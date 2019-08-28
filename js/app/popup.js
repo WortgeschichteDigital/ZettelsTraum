@@ -602,15 +602,6 @@ let popup = {
 			click: () => liste.anzeigen(),
 			accelerator: "CommandOrControl+L",
 		}));
-		menu.append(new MenuItem({
-			label: "Belege sortieren",
-			icon: path.join(__dirname, "img", "menu", "belege-sortieren.png"),
-			click: function() { // TODO
-				dialog.oeffnen("alert");
-				dialog.text("Sorry!\nDiese Funktion ist noch nicht programmiert.");
-			},
-			accelerator: "CommandOrControl+H",
-		}));
 	},
 	// Kartei-Menü füllen
 	//   menu = Object

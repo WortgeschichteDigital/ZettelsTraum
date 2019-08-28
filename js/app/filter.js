@@ -119,6 +119,10 @@ let filter = {
 						name: "Buchung",
 						wert: 0,
 					},
+					"verschiedenes-metatext": {
+						name: "Metatext",
+						wert: 0,
+					},
 					"verschiedenes-markierung": {
 						name: "Markierung",
 						wert: 0,
@@ -130,6 +134,7 @@ let filter = {
 					"verschiedenes-buecherdienst",
 					"verschiedenes-notizen",
 					"verschiedenes-buchung",
+					"verschiedenes-metatext",
 					"verschiedenes-markierung",
 				],
 			},
@@ -248,6 +253,11 @@ let filter = {
 			// Buchung
 			if (data.ka[id].bc) {
 				filter.typen.verschiedenes.filter["verschiedenes-buchung"].wert++;
+				filter.typen.verschiedenes.filter_vorhanden = true;
+			}
+			// Metatext
+			if (data.ka[id].mt) {
+				filter.typen.verschiedenes.filter["verschiedenes-metatext"].wert++;
 				filter.typen.verschiedenes.filter_vorhanden = true;
 			}
 			// Markierung
@@ -1273,6 +1283,12 @@ let filter = {
 					!data.ka[id].bc && filter_inklusiv)) {
 				continue;
 			}
+			// Metatext
+			if (filter.aktiveFilter["verschiedenes-metatext"] &&
+					(data.ka[id].mt && !filter_inklusiv ||
+					!data.ka[id].mt && filter_inklusiv)) {
+				continue;
+			}
 			// Markierung
 			if (filter.aktiveFilter["verschiedenes-markierung"] &&
 					(data.ka[id].be && !filter_inklusiv ||
@@ -1605,7 +1621,11 @@ let filter = {
 			}
 			if (rect.bottom > window.innerHeight ||
 				rect.top - quick_height - header_height - beleg_header_height < 0) {
-				window.scrollTo(0, window.scrollY + rect.bottom - window.innerHeight + 10);
+				window.scrollTo({
+					left: 0,
+					top: window.scrollY + rect.bottom - window.innerHeight + 10,
+					behavior: "smooth",
+				});
 			}
 			// Selektieren
 			feld.select();

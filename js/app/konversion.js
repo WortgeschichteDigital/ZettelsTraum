@@ -4,7 +4,7 @@ let konversion = {
 	// aktuelle Version des Dateiformats
 	// *** WICHTIG! *** WICHTIG! *** WICHTIG! ***
 	// Bei Änderungen anpassen!
-	version: 7,
+	version: 8,
 	// Verteilerfunktion
 	start () {
 		konversion.von1nach2();
@@ -13,6 +13,7 @@ let konversion = {
 		konversion.von4nach5();
 		konversion.von5nach6();
 		konversion.von6nach7();
+		konversion.von7nach8();
 	},
 	// Konversion des Dateiformats von Version 1 nach Version 2
 	von1nach2 () {
@@ -131,6 +132,23 @@ let konversion = {
 		}
 		// reserviertes Datenfeld für die Sortierfunktion löschen
 		delete data.ha;
+		// Versionsnummer hochzählen
+		data.ve++;
+		// Änderungsmarkierung setzen
+		kartei.karteiGeaendert(true);
+	},
+	// Konversion des Dateiformats von Version 7 nach Version 8
+	von7nach8 () {
+		if (data.ve > 7) {
+			return;
+		}
+		// Datenfeld "mt" (Metatext) in allen Karteikarten ergänzen
+		for (let id in data.ka) {
+			if (!data.ka.hasOwnProperty(id)) {
+				continue;
+			}
+			data.ka[id].mt = false;
+		}
 		// Versionsnummer hochzählen
 		data.ve++;
 		// Änderungsmarkierung setzen

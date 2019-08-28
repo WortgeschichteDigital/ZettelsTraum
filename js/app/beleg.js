@@ -112,6 +112,7 @@ let beleg = {
 			dm: "", // Datum Karteikarten-Änderung
 			ko: false, // Kontext
 			kr: "", // Korpus
+			mt: false, // Metatext
 			no: "", // Notizen
 			qu: "", // Quelle
 			sy: "", // Synonym
@@ -2131,7 +2132,11 @@ let beleg = {
 			quick_height = 0;
 		}
 		const platz = window.innerHeight - header_height - beleg_header_height - quick_height;
-		window.scrollTo(0, window.scrollY + rect.bottom - window.innerHeight + Math.round(platz / 2));
+		window.scrollTo({
+			left: 0,
+			top: window.scrollY + rect.bottom - window.innerHeight + Math.round(platz / 2),
+			behavior: "smooth",
+		});
 		// Element markieren
 		const i = beleg.ctrlSpringenPos; // für schnelles Springen zwischenspeichern
 		marks[i].classList.add("mark");
@@ -2255,7 +2260,11 @@ let beleg = {
 			beleg.leseToggle(true);
 		}
 		fokus();
-		window.scrollTo(0, scroll); // nach fokus()!
+		window.scrollTo({
+			left: 0,
+			top: scroll,
+			behavior: "auto",
+		}); // nach fokus()! Das sollte nicht smooth sein!
 		// Icon fokussieren
 		function fokus () {
 			let icon;

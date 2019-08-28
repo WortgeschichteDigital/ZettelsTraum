@@ -426,11 +426,11 @@ mark.suche {
 
 .treffer {
 	outline-color: var(--farbe);
-	transition: outline-color 1s ease;
+	transition: outline-color 1.5s ease;
 }
 
 .treffer-nach {
-	transition: outline-color 1s ease;
+	transition: outline-color 1.5s ease;
 }
 
 

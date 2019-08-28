@@ -196,6 +196,7 @@ let optionen = {
 			da: true, // Datum
 			ko: false, // Kontext?
 			kr: true, // Korpus
+			mt: true, // Metatext
 			no: true, // Notizen
 			qu: true, // Quelle
 			sy: true, // Synonym

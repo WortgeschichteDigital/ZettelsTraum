@@ -40,6 +40,19 @@
 			<div>
 				<h2><span data-maintainer="Nico Dorn">Version 0.18.0-beta</span><time datetime="2019-08-20T13:47:05">20. August 2019</time></h2>
 				
+				<p><span class="obacht">Das Dateiformat hat sich geändert!</span> Ältere <abbr title="Wortgeschichte digital">WGD</abbr>-Dateien werden automatisch konvertiert; dabei wird eine Änderungsmarkierung gesetzt.</p>
+				
+				<h3>Neue Funktionen</h3>
+				
+				<ul>
+					<li>
+						<p>Karteikarte: Das neue Datenfeld Metatext (eine Checkbox im Kopf der Karteikarte) ermöglicht die Markierung eines Belegs als Text, der einen analytischen Blick auf das Kartei-Wort wirft. Denkbare Texttypen wären (historische) Wörterbücher, Artikel in einer Enzyklopädie, philosophische Abhandlungen <abbr title="und so weiter">usw.</abbr></p>
+						<p>Ist das Datenfeld abgehakt, erscheint es in der Belegliste mit dem Icon <img src="../img/liste-metatext.svg" width="24" height="24" alt=""> (wenn die Ansicht der Meta-Informationen zu den Karteikarten eingeschaltet ist; Funktion <img src="../img/liste-meta.svg" width="24" height="24" alt=""> im Listenkopf).</p>
+						<p>Wurde mindestens eine Karteikarte als Metatext markiert, erscheint in der Filterleiste im Filterblock <i>Verschiedenes</i> der Filter <i>Metatext</i>, mit dem sich die entsprechenden Belege finden (inklusive Filterlogik) oder ausschließen (exklusive Filterlogik) lassen.</p>
+						<p>Das Datenfeld wird auch in der Kopierfunktion berücksichtigt (<i>Belege &gt; Kopieren</i> <abbr title="beziehungsweise">bzw.</abbr> <i>Einfügen</i>). Da <i>Metatext</i> eine unveränderliche Texteigenschaft markiert, wird das Datenfeld standardmäßig mitkopiert. Es lässt sich im Fomular des Einfügefenster aber auch abwählen.</p>
+					</li>
+				</ul>
+				
 				<h3>Verbesserungen</h3>
 				
 				<ul>
@@ -48,13 +61,18 @@
 						<p>Notizen: Die Tools zum Hoch- und Tiefstellen von Text wurden auch in der Notizen-Funktion ergänzt.</p>
 						<p>Außerdem wurde ein Tool zum Erstellen geordneter, sprich: nummerierter Listen ergänzt. Das Icon <img src="../img/tool-list-ordered.svg" width="24" height="24" alt=""> verhält sich analog zu dem bereits älteren Icon <img src="../img/tool-list-unordered.svg" width="24" height="24" alt="">, mit dem ungeordnete Spiegelstrichlisten erzeugt werden können (<abbr title="siehe">s.</abbr> die Erläuterungen zu Version 0.15.0).</p>
 					</li>
+					<li>Kleinere visuelle Verbesserungen.</li>
 				</ul>
 				
 				<h3>Behobene Fehler</h3>
 				
 				<ul>
+					<li>Das durch Rechtsklick im Hauptfenster aufrufbare Popup-Menü ist nicht mehr erschienen, weil vergessen wurde, ein Interface-Element, das für die Sortierfunktion gedacht war, zu entfernen.</li>
+					<li>Karteikarte: Gab man als erstes Zeichen einer Bedeutung im Bedeutungsfeld ein Fragezeichen ein, öffnete sich das Dropdown-Menü nicht, selbst wenn es Bedeutungen mit einem Fragezeichen im Text gab.</li>
+					<li>Belegliste: Wurden im Feld <i>Autor</i> Spitzklammern benutzt, wurde in Spitzklammern eingeschlossener Text unter Umständen nicht in der Belegliste angezeigt.</li>
 					<li>Notizen: Unter gewissen Umständen wurde nicht erkannt, dass die Notizen (Funktion <i>Kartei &gt; Notizen</i>) leer waren, weil sich noch unsichtbare Tags im Feld befanden, die keinen Text umschlossen.</li>
-					<li>Notizen: Auch wenn man Notizen vollständig löschte, wurden sie erst nach dem Neuladen der Kartei aus der Filterleiste entfernt. (Die Anzeige in der Filterleiste musste zuvor unter <i>Programm &gt; Einstellungen &gt; Notizen</i> aktiviert worden sein.)</li>
+					<li>Notizen: Auch wenn man Notizen vollständig löschte, wurden sie erst nach einem Neuaufbau der Filterleiste (Wiederöffnen der Kartei, Anwendung eines Filters) entfernt. (Die Anzeige in der Filterleiste musste zuvor unter <i>Programm &gt; Einstellungen &gt; Notizen</i> aktiviert worden sein.)</li>
+					<li>Wurde über die Suche des <a href="#" class="link-handbuch">Handbuchs</a> oder der <a href="#" class="link-dokumentation">technischen Dokumentation</a> Text gefunden, der in einer Tabelle steht, wurde dieser nicht automatisch ins Blickfeld gescrollt.</li>
 				</ul>
 			</div>
 			

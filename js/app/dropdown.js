@@ -383,6 +383,8 @@ let dropdown = {
 					}
 					reg_chunks += helfer.escapeRegExp(i);
 				});
+			} else {
+				reg_chunks = helfer.escapeRegExp(reg_chunks);
 			}
 			let reg = new RegExp(reg_chunks, "i"),
 				gefiltert = [];

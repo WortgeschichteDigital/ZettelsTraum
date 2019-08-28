@@ -61,7 +61,7 @@
 					
 					<p><i class="app-name"></i> läuft auf dem <a href="https://electronjs.org/"><i>Electron</i></a>-Framework. <i>Electron</i> ist eine Kombination aus <a href="https://www.chromium.org/Home"><i>Chromium</i></a>, dem Open-Source-Browser, auf dem <i>Google Chrome</i> basiert, und <a href="https://nodejs.org/"><i>Node.js</i></a>, einer JavaScript-Laufzeitumgebung mit der Implementierung <i>V8</i>. Das Framework kann komplett via JavaScript gesteuert werden, weswegen zum Programmieren der App Kenntnisse in den Sprachen <abbr title="Hyptertext Markup Language" lang="en">HTML</abbr>, <abbr title="Cascading Style Sheets" lang="en">CSS</abbr> und JavaScript vollkommen ausreichen.</p>
 					
-					<p><i>Electron</i> übernimmt die schwierigen Aufgaben, die sich beim Programmieren einer Desktop-App stellen. Es kümmert sich um die Integration in das Betriebssystem, ermöglicht also lesende und schreibende Dateizugriffe sowie das Öffnen externer Programme, erzeugt die Dateidialoge zum Öffnen und Speichern der Karteien und verwaltet über den betriebssystemeigenen Fenster-Manager die einzelnen Programmfenster, in denen eine leicht eingedampfte Variante des <i>Chromium</i>-Browsers für die Anzeige zuständig ist. Jedes Programmfenster läuft in einem eigenen Renderer-Prozess, weswegen die einzelnen Fenster nicht direkt miteiander kommunizieren können. Das Öffnen der Programmfenster und die Darstellung der Fenster-Menüs werden im Wesentlichten über den Main-Prozess gesteuert, über den die App initialisiert wird. Dieser wiederum kann mit allen Fenstern kommunizieren.</p>
+					<p><i>Electron</i> übernimmt die schwierigen Aufgaben, die sich beim Programmieren einer Desktop-App stellen. Es kümmert sich um die Integration in das Betriebssystem, ermöglicht also lesende und schreibende Dateizugriffe sowie das Öffnen externer Programme, erzeugt die Dateidialoge zum Öffnen und Speichern der Karteien und verwaltet über den betriebssystemeigenen Fenster-Manager die einzelnen Programmfenster, in denen eine leicht eingedampfte Variante des <i>Chromium</i>-Browsers für die Anzeige zuständig ist. Jedes Programmfenster läuft in einem eigenen Renderer-Prozess, weswegen die einzelnen Fenster nicht direkt miteinander kommunizieren können. Das Öffnen der Programmfenster und die Darstellung der Fenster-Menüs werden im Wesentlichten über den Main-Prozess gesteuert, über den die App initialisiert wird. Dieser wiederum kann mit allen Fenstern kommunizieren.</p>
 					
 					<p>Der Main-Prozess wird über die Scripts in der Datei <span class="datei">./main.js</span> im Wurzelverzeichnis des Quellcodes gesteuert (das Wurzelverzeichnis des App-Codes wird im Folgenden immer durch <span class="datei">./</span> bezeichnet). Vermittelt über diesen Prozess können die Fenster miteinander in Kommunikation treten. Über das Objekt <code class="quelltext">ipcMain</code> hört der Main-Prozess auf Meldungen der Renderer-Prozesse, die diese via <code class="quelltext">ipcRenderer</code> abgeschickt haben (<abbr title="vergleiche">vgl.</abbr> den Code in <span class="datei">./main.js</span> und <span class="datei">./js/app/init-app.js</span>).</p>
 					
@@ -72,7 +72,7 @@
 					<!-- Installation -->
 					<h2 id="framework-installation">Installation von <i>Electron</i></h2>
 					
-					<p>Im Folgenden wird die Einrichtung von <i>Electron</i> auf einer <i>Linux</i>-Distribution beschrieben, die auf <a href="https://www.ubuntu.com/"><i>Ubuntu</i></a> basiert. Die Anweisungen dürften aber für alle Betriebssystem ähnlich sein, denn auch unter Windows wird <i>Node.js</i> <abbr title="beispielsweise">bspw.</abbr> über die Eingabeaufforderung gesteuert.</p>
+					<p>Im Folgenden wird die Einrichtung von <i>Electron</i> auf einer <i>Linux</i>-Distribution beschrieben, die auf <a href="https://www.ubuntu.com/"><i>Ubuntu</i></a> basiert. Die Anweisungen dürften aber für alle Betriebssystem ähnlich sein, denn auch unter <i>Windows</i> wird <i>Node.js</i> <abbr title="beispielsweise">bspw.</abbr> über die Eingabeaufforderung gesteuert.</p>
 					
 					<p>Zunächst muss <i>Node.js</i> mit seinem Paketmanager <code>npm</code> installiert werden (für <i>Windows</i> gibt es <a href="https://nodejs.org/en/download/">eigene Installer</a>):</p>
 					
@@ -166,7 +166,7 @@ npm install --save-dev electron-packager</pre>
 					
 					<p>Auch wenn die ausführbare Programm-Datei um die 100 Megabyte groß ist – ohne die anderen Dateien und Verzeichnisse, die sich im Paket-Ordner befinden, kann die App nicht gestartet werden. Möchte man sie auf ein anderes Betriebssystem kopieren, muss also immer der gesamte Ordner mit allen Dateien mitgenommen werden.</p>
 					
-					<p>Zum direkten erstellen eines komprimierten Archivs, können die im nächsten Abschnitt beschriebenen Installer-Scripts verwendet werden. Mit ihnen lassen sich für <i>Windows</i> leicht ein ZIP-Archiv und für <i>Linux</i> ein TAR.GZ-Archiv erstellen.</p>
+					<p>Zum direkten Erstellen eines komprimierten Archivs, können die im nächsten Abschnitt beschriebenen Installer-Scripts verwendet werden. Mit ihnen lassen sich für <i>Windows</i> leicht ein ZIP-Archiv und für <i>Linux</i> ein TAR.GZ-Archiv erstellen.</p>
 					
 					<!-- Installer -->
 					<h2 id="framework-installer">Installer bauen</h2>
@@ -207,7 +207,7 @@ php make-changelog.php [FORMAT] [PFAD]</pre>
 					
 					<p class="datei">zettelstraum_[VERSION]_[ARCHITEKTUR].(AppImage|deb|exe|rpm|tar.gz|zip)</p>
 					
-					<p>Die ausführbare exe-Datei kann nun auf einen Windows-Rechnern kopiert und installiert werden. (Getestet wurde die Installation nur auf <i>Windows 10</i>.)</p>
+					<p>Die ausführbare exe-Datei kann nun auf einen Windows-Rechner kopiert und installiert werden. (Getestet wurde die Installation nur auf <i>Windows 10</i>.)</p>
 					
 					<p>Für die Installation der DEB-Datei gibt es einige Abhängigkeiten, die zuvor <abbr title="gegebenenfalls">ggf.</abbr> aufgelöst werden müssen:</p>
 					
@@ -221,7 +221,7 @@ php make-changelog.php [FORMAT] [PFAD]</pre>
 					
 					<pre>rpm -qp --requires zettelstraum*.rpm</pre>
 					
-					<p>Der <abbr title="Wortgeschichte digital">WGD</abbr>-Dateityp sollte während der Installation automatisch registriert werden – und zwar sowohl durch den <i>Windows</i> als auch durch die <i>Linux</i>-Installer. Für den Fall, dass Probleme auftreten, finden sich im Programmordner Scripts, mit denen die Registrierung des Dateityps unter <i>Linux</i> manuell vor- oder zurückgenommen werden kann. Die Scripts liegen in <span class="datei">/opt/zettelstraum/resources/filetype/linux/</span> und können mit <code>sh</code> ausgeführt werden.</p>
+					<p>Der <abbr title="Wortgeschichte digital">WGD</abbr>-Dateityp sollte während der Installation automatisch registriert werden – und zwar sowohl durch den <i>Windows-</i> als auch durch die <i>Linux</i>-Installer. Für den Fall, dass Probleme auftreten, finden sich im Programmordner Scripts, mit denen die Registrierung des Dateityps unter <i>Linux</i> manuell vor- oder zurückgenommen werden kann. Die Scripts liegen in <span class="datei">/opt/zettelstraum/resources/filetype/linux/</span> und können mit <code>sh</code> ausgeführt werden.</p>
 					
 					<pre>sh [de]register.sh</pre>
 					
@@ -299,7 +299,7 @@ php make-changelog.php [FORMAT] [PFAD]</pre>
 						<li><span class="datei">./installer-win.js</span>: Node-Script, das einen <abbr title="Nullsoft Scriptable Install System" lang="en">NSIS</abbr>-Installer erzeugt (alternativ auch ein ZIP-Archiv), mit dem <i class="app-name"></i> auf <i>Windows</i> installiert werden kann</li>
 						<li><span class="datei">./installer.js</span>: ein gemeinsam genutztes Modul für die Node-Scripts, die Installer erzeugen</li>
 						<li><span class="datei">./LICENSE.*.txt</span>: Lizenzbestimmungen von <i class="app-name"></i> den Icons und Fonts</li>
-						<li><span class="datei">./main.js</span>: Node-Script, das die App initialisiert, die Programmfenster öffnet, lädt, verwaltet und für vieles andere zuständig ist, was das Betriebssystem, auf dem <i class="app-name"></i> läuft, direkt betrifft</li>
+						<li><span class="datei">./main.js</span>: Node-Script, das die App initialisiert, die Programmfenster öffnet, lädt, verwaltet und für viele andere Dinge zuständig ist, was das Betriebssystem, auf dem <i class="app-name"></i> läuft, direkt betrifft</li>
 						<li><span class="datei">./package.json</span>: <abbr title="JavaScript Object Notation" lang="en">JSON</abbr>-Datei mit Meta-Informationen zu Programm, Autor und Lizenz sowie Angaben darüber, wie die App gestartet wird; <abbr title="vergleiche">vgl.</abbr> den Abschnitt <a href="#framework-starten">Starten der App</a></li>
 					</ul>
 					
@@ -336,7 +336,7 @@ php make-changelog.php [FORMAT] [PFAD]</pre>
 					<!-- JavaScript -->
 					<h2 class="datei" id="ordner-js">./js/</h2>
 					
-					<p>Der Ordner enthält alle JavaScript-Dateien, die von den Renderer-Prozessen geladen werden. Im Unterordner <span class="datei">./js/app/</span> liegen Dateien, die (fast) ausschließlich vom Hauptfenster benutzt und in <span class="datei">./js/win/</span> Dateien, die ausschließlich von den Nebenfenstern geladen werden.</p>
+					<p>Der Ordner enthält alle JavaScript-Dateien, die von den Renderer-Prozessen geladen werden. Im Unterordner <span class="datei">./js/app/</span> liegen Dateien, die (fast) ausschließlich vom Hauptfenster genutzt werden, und in <span class="datei">./js/win/</span> Dateien, die ausschließlich in Nebenfenstern geladen werden.</p>
 					
 					<p>Die einzige Datei des Ordners <span class="datei">./js/app/</span>, die auch in Nebenfenstern benutzt wird, ist die <span class="datei">helfer.js</span>. Sie enthält meist kleinere Methoden, die in vielen verschiedenen Kontexten immer wieder genutzt werden. Analog dazu gibt es die Datei <span class="datei">./js/win/helferWin.js</span>, die allerdings nur von Nebenfenstern geladen wird.</p>
 					
@@ -347,7 +347,7 @@ php make-changelog.php [FORMAT] [PFAD]</pre>
 					<ul>
 						<li><span class="datei">./js/suchleiste.js</span>: alle Funktionen, die die Suchleiste betreffen, die in verschiedenen Fenstern genutzt wird</li>
 						<li><span class="datei">./js/app/beleg.js</span>: die Karteikarte betreffende Funktionen, und zwar sowohl die der Formular- als auch die der Leseansicht</li>
-						<li><span class="datei">./js/app/dialog.js</span>: Overlay-Fenster mit Meldungen für und Fragen an die BenutzerIn erzeugen</li>
+						<li><span class="datei">./js/app/dialog.js</span>: Overlay-Fenster, die Meldungen für und Fragen an die BenutzerIn ausgeben</li>
 						<li><span class="datei">./js/app/dropdown.js</span>: erzeugt das über einen Pfeil oder via Tastaturkürzel zu öffnende Dropdown-Menü, das aus einigen Textfeldern aufgerufen werden kann (<abbr title="zum Beispiel">z. B.</abbr> im Formular der Karteikarte)</li>
 						<li><span class="datei">./js/app/kartei.js</span>: regelt das Öffnen und Speichern der Wort-Kartei</li>
 						<li><span class="datei">./js/app/konversion.js</span>: konvertiert <abbr title="Wortgeschichte digital">WGD</abbr>-Dateien, sodass sie dem aktuellen <a href="#" class="link-sektion-wgd"><abbr title="Wortgeschichte digital">WGD</abbr>-Format</a> entsprechen</li>
@@ -378,7 +378,7 @@ php make-changelog.php [FORMAT] [PFAD]</pre>
 				<section id="sektion-js" class="suche">
 					<h2 id="js-code">JavaScript-Code</h2>
 					
-					<p>Der JavaScript-Code ist <i lang="en">vanilla</i>. Sprich: Es wurden keine Bibliotheken wie <i>jQuery</i> oder dergleichen verwendet. Programmiert wurde im <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode"><i lang="en">strict mode</i></a>, einer restringierten Variante von JavaScript, die <abbr title="zum Beispiel">z. B.</abbr> Zuweisungsoperationen zu nicht deklarierten Variablen unmöglicht macht und vieles mehr unterbindet, was potenziell gefährlich oder einfach schlechter Stil ist. Außerdem verspricht strikter Code Zukunftssicherheit, weil mögliche Ergänzungen in der ECMAScript-Spezifikation bereits bedacht sind.</p>
+					<p>Der JavaScript-Code ist <i lang="en">vanilla</i>. Sprich: Es wurden keine Bibliotheken wie <i>jQuery</i> oder dergleichen verwendet. Programmiert wurde im <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode"><i lang="en">strict mode</i></a>, einer restringierten Variante von JavaScript, die <abbr title="zum Beispiel">z. B.</abbr> Zuweisungsoperationen zu nicht deklarierten Variablen unmöglich macht und vieles mehr unterbindet, was potenziell gefährlich oder einfach schlechter Stil ist. Außerdem verspricht strikter Code Zukunftssicherheit, weil mögliche Ergänzungen in der ECMAScript-Spezifikation bereits bedacht sind.</p>
 					
 					<p>Beim Coden wurde der Grundregel gefolgt, Struktur, Layout und Funktion strikt voneinander zu trennen. In den <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>-Dateien finden sich darum weder <abbr title="Cascading Style Sheets" lang="en">CSS</abbr>-Style-Attribute noch Event-Handler von JavaScript. Die an Elemente gebundenen Events werden alle in den Dateien initialisiert, die <span class="datei">init-*.js</span> heißen.</p>
 					
@@ -408,7 +408,7 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);
 					
 					<p>Nach dem Laden einer <abbr title="Wortgeschichte digital">WGD</abbr>-Datei in <i class="app-name"></i> befinden sich die Daten im globalen Objekt <code class="quelltext">data</code>. Ihre Werte lassen sich dann in allen Funktionen des Hauptfensters durch einfache Statements wie <code class="quelltext">data.dc</code> lesen oder schreiben.</p>
 					
-					<p>Alle Dateien sind gleich aufgebaut (<span class="obacht">Datenformat Version 7</span>):</p>
+					<p>Alle Dateien sind gleich aufgebaut (<span class="obacht">Datenformat Version 8</span>):</p>
 					
 					<table>
 						<tr>
@@ -679,6 +679,12 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);
 							<td>Korpus, aus dem der Beleg stammt;<br><span class="obacht">mit Version 2 ergänzt</span></td>
 						</tr>
 						<tr class="wgd-ebene2">
+							<td><p><code class="quelltext">mt</code></p></td>
+							<td class="datentyp">Boolean</td>
+							<td> </td>
+							<td>Metatext (Beleg ist mit einer analytischen Haltung gegenüber dem Kartei-Wort verfasst);<br><span class="obacht">mit Version 8 ergänzt</span></td>
+						</tr>
+						<tr class="wgd-ebene2">
 							<td><p><code class="quelltext">no</code></p></td>
 							<td class="datentyp">String</td>
 							<td><code class="quelltext">\n</code> möglich</td>
@@ -868,7 +874,7 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);
 					
 					<p>Werden mehrere Seiten importiert, wird jeder Seitenumbruch nach diesem Muster markiert: <q>[:35:]</q>. Dabei steht hier die <q>35</q> für die Seitenangabe, die aus dem n-Attribute des <code class="quelltext">&lt;pb&gt;</code> ausgelesen wurde.</p>
 					
-					<p>Wird der den Import begrenzende <code class="quelltext">&lt;pb&gt;</code> nicht gefunden (weil man sich auf der letzten Seite des Texts befindet oder die BenutzerIn bei der Eingabe einen Fehler gemacht hat), wird versucht den Text des Buchs ab dem Start-<code class="quelltext">&lt;pb&gt;</code> komplett zu importieren.</p>
+					<p>Wird der den Import begrenzende <code class="quelltext">&lt;pb&gt;</code> nicht gefunden (weil man sich auf der letzten Seite des Texts befindet oder die BenutzerIn bei der Eingabe einen Fehler gemacht hat), wird versucht, den Text des Buchs ab dem Start-<code class="quelltext">&lt;pb&gt;</code> komplett zu importieren.</p>
 					
 					<p>Die Funktionen, die den Import durchführen, stehen alle in <span class="datei">./js/app/beleg.js</span>. Ihr Name beginnt immer mit <code class="quelltext">DTAImport</code>.</p>
 					

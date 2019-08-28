@@ -12,6 +12,9 @@
 /* Animation ------------------------------------ */
 @import url(../animation.css);
 
+/* Suchleiste ----------------------------------- */
+@import url(../suchleiste.css);
+
 /* Basis-Elemente ------------------------------- */
 abbr {
 	text-decoration: none;

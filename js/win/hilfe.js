@@ -53,7 +53,11 @@ let hilfe = {
 				hilfe.sektionWechseln(sek_ziel);
 			}
 			// Fenster an die korrekte Position scrollen
-			window.scrollTo(0, h2.offsetTop - 70 - 16); // -16, um oben immer ein bisschen padding zu haben; vgl. hilfe.sucheSprung()
+			window.scrollTo({
+				left: 0,
+				top: h2.offsetTop - 70 - 16, // -16, um oben immer ein bisschen padding zu haben; vgl. hilfe.sucheSprung()
+				behavior: "smooth",
+			});
 		});
 	},
 	// lange Dateipfade umbrechen
@@ -102,7 +106,11 @@ let hilfe = {
 		// Überschriftenliste aufbauen
 		hilfe.sektionenH(sektion);
 		// nach oben scrollen
-		window.scrollTo(0, 0);
+		window.scrollTo({
+			top: 0,
+			left: 0,
+			behavior: "auto",
+		});
 	},
 	// Überschriftenliste der aktiven Sektion aufbauen
 	sektionenH(sektion) {
@@ -347,7 +355,11 @@ let hilfe = {
 				sektion = hilfe.suchergebnis.treffer[idx].sektion,
 				knoten = hilfe.suchergebnis.treffer[idx].knoten;
 			hilfe.sektionWechseln(sektion);
-			window.scrollTo(0, knoten.offsetTop - 70 - 10); // -10, um oben immer ein bisschen padding zu haben; vgl. hilfe.naviSprung()
+			window.scrollTo({
+				left: 0,
+				top: knoten.getBoundingClientRect().top - 70 - 10, // -10, um oben immer ein bisschen padding zu haben; vgl. hilfe.naviSprung()
+				behavior: "smooth",
+			});
 			// Treffer-Knoten animieren
 			knoten.classList.add("treffer-vor");
 			setTimeout(function() {
@@ -356,14 +368,18 @@ let hilfe = {
 					knoten.classList.remove("treffer");
 					setTimeout(function() {
 						knoten.classList.remove("treffer-vor", "treffer-nach");
-					}, 1000);
-				}, 1000);
-			}, 0);
+					}, 1500);
+				}, 1500);
+			}, 500);
 		});
 	},
 	// in die Suchsektion wechseln
 	sucheWechseln () {
 		hilfe.sektionWechseln("suche");
-		window.scrollTo(0, hilfe.suchergebnis.scroll);
+		window.scrollTo({
+			left: 0,
+			top: hilfe.suchergebnis.scroll,
+			behavior: "auto",
+		});
 	},
 };

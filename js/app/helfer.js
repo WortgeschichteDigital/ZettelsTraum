@@ -112,9 +112,17 @@ let helfer = {
 		}
 		// Scroll-Status wiederherstellen od. nach oben scrollen
 		if (sektion === "liste") {
-			window.scrollTo(0, helfer.sektion_document_scroll);
+			window.scrollTo({
+				left: 0,
+				top: helfer.sektion_document_scroll,
+				behavior: "auto",
+			});
 		} else {
-			window.scrollTo(0, 0);
+			window.scrollTo({
+				left: 0,
+				top: 0,
+				behavior: "auto",
+			});
 		}
 	},
 	// eleminiert alle childNodes des übergebenen Objekts
@@ -647,6 +655,16 @@ let helfer = {
 		if (evt.which === 13 && overlay.oben() === "kopieren-einfuegen") {
 			evt.preventDefault();
 			kopieren.einfuegenAusfuehrenPre();
+			return;
+		}
+		// F3
+		if (evt.which === 114) {
+			evt.preventDefault();
+			if (!overlay.oben() &&
+					(!document.getElementById("liste").classList.contains("aus") ||
+					helfer.belegOffen() && document.getElementById("beleg-link-leseansicht").classList.contains("aktiv"))) {
+				suchleiste.f3(evt);
+			}
 			return;
 		}
 		// F5

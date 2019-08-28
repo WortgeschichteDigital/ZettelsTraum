@@ -109,8 +109,8 @@ h2 svg {
 	position: absolute;
 	top: 2px;
 	right: 34px;
-	padding-left: 25px;
-	background-color: #fff;
+	padding-left: 50px;
+	background-image: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1) 25px);
 }
 
 .dropdown-feld {

@@ -92,7 +92,11 @@ let liste = {
 				let id = liste.statusNeu; // wird unten geleert, darum hier zwischenspeichern
 				setTimeout(function() {
 					let scroll = document.querySelector(`.liste-kopf[data-id="${id}"]`).offsetTop - 34; // 34 = Höhe des Listen-Headers
-					window.scrollTo(0, scroll);
+					window.scrollTo({
+						left: 0,
+						top: scroll,
+						behavior: "auto",
+					});
 				}, 5); // ohne den Timeout ist offsetTop immer 0
 			}
 		} else if (liste.statusGeaendert) {
@@ -147,7 +151,11 @@ let liste = {
 		let kopf = document.querySelector(`.liste-kopf[data-id="${liste.statusScroll.id}"]`);
 		if (kopf) {
 			let header = document.querySelector("#liste-belege header").offsetHeight;
-			window.scrollTo(0, kopf.offsetTop - liste.statusScroll.scroll - header);
+			window.scrollTo({
+				left: 0,
+				top: kopf.offsetTop - liste.statusScroll.scroll - header,
+				behavior: "smooth",
+			});
 		}
 	},
 	// baut die Belegliste auf
@@ -712,7 +720,7 @@ let liste = {
 		// ggf. Autor angeben
 		let frag = document.createDocumentFragment();
 		if (beleg_akt.au) {
-			let autor = beleg_akt.au.split(/,(.+)/),
+			let autor = helfer.escapeHtml(beleg_akt.au).split(/,(.+)/),
 				autor_span = document.createElement("span");
 			frag.appendChild(autor_span);
 			autor_span.innerHTML = liste.suchtreffer(autor[0], "au", id);
@@ -927,7 +935,7 @@ let liste = {
 	//     entweder "liste-meta" oder "")
 	metainfosErstellen (beleg, cont, klasse) {
 		// Gibt es überhaupt Meta-Infos, die angezeigt werden müssen
-		if (!beleg.un && !beleg.ko && !beleg.bu && !beleg.bc && !beleg.be && !beleg.an.length) {
+		if (!beleg.un && !beleg.ko && !beleg.bu && !beleg.bc && !beleg.mt && !beleg.be && !beleg.an.length) {
 			return;
 		}
 		// es gibt also Infos
@@ -970,6 +978,15 @@ let liste = {
 			img.width = "24";
 			img.height = "24";
 			img.title = "Buchung";
+			div.appendChild(img);
+		}
+		// Metatext?
+		if (beleg.mt) {
+			let img = document.createElement("img");
+			img.src = "img/liste-metatext.svg";
+			img.width = "24";
+			img.height = "24";
+			img.title = "Metatext";
 			div.appendChild(img);
 		}
 		// Markierung?

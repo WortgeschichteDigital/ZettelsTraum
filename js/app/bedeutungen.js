@@ -309,7 +309,11 @@ let bedeutungen = {
 				helfer.auswahl(neu);
 				const rect = neu.getBoundingClientRect();
 				if (rect.bottom + 20 > window.innerHeight) {
-					window.scrollTo(0, rect.bottom + 20 - window.innerHeight + window.scrollY);
+					window.scrollTo({
+						left: 0,
+						top: rect.bottom + 20 - window.innerHeight + window.scrollY,
+						behavior: "smooth",
+					});
 				}
 			}
 			return;
@@ -971,13 +975,21 @@ let bedeutungen = {
 		// ggf. hochscrollen
 		let pos = cont_top + tr_top - quick_height - 10;
 		if (pos <= window.scrollY) {
-			window.scrollTo(0, pos);
+			window.scrollTo({
+				left: 0,
+				top: pos,
+				behavior: "smooth",
+			});
 			return;
 		}
 		// ggf. runterscrollen
 		pos = header_height + cont_top + tr_top + tr_height - quick_height;
 		if (pos - window.scrollY >= window.innerHeight) {
-			window.scrollTo(0, pos - tr_height - 10 - header_height);
+			window.scrollTo({
+				left: 0,
+				top: pos - tr_height - 10 - header_height,
+				behavior: "smooth",
+			});
 		}
 	},
 	// erstellt eine unabhängige Kopie eines Datensatzes

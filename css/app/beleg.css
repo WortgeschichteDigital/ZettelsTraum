@@ -1,6 +1,10 @@
 @charset "utf-8";
 
 /* Kopf ----------------------------------------- */
+#beleg.padding-suchleiste {
+	padding-bottom: 29px;
+}
+
 #beleg header {
 	position: sticky;
 	top: 70px;
@@ -26,9 +30,9 @@
 #beleg-buttons {
 	position: relative;
 	z-index: 1;
-	padding-right: 25px;
+	padding-right: 50px;
 	width: fit-content;
-	background-color: #fff;
+	background-image: linear-gradient(to left, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1) 25px);
 }
 
 #beleg-buttons input:last-child {

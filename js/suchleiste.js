@@ -17,6 +17,12 @@ let suchleiste = {
 				document.querySelector("main").classList.add("padding-suchleiste");
 			} else if (/dokumentation|handbuch/.test(fenstertyp)) {
 				document.querySelector("section:not(.aus)").classList.add("padding-suchleiste");
+			} else if (fenstertyp === "index") {
+				if (helfer.belegOffen()) { // Karteikarte
+					document.getElementById("beleg").classList.add("padding-suchleiste");
+				} else { // Belegliste
+					document.getElementById("liste-belege-cont").classList.add("padding-suchleiste");
+				}
 			}
 		}, 1);
 	},
@@ -36,11 +42,7 @@ let suchleiste = {
 		leiste.firstChild.blur();
 		leiste.firstChild.value = "";
 		leiste.classList.remove("an");
-		if (fenstertyp === "changelog") {
-			document.querySelector("main").classList.remove("padding-suchleiste");
-		} else if (/dokumentation|handbuch/.test(fenstertyp)) {
-			document.querySelector("section:not(.aus)").classList.remove("padding-suchleiste");
-		}
+		document.querySelector(".padding-suchleiste").classList.remove("padding-suchleiste");
 	},
 	// HTML der Suchleiste aufbauen
 	make () {
@@ -141,6 +143,12 @@ let suchleiste = {
 			e = document.querySelectorAll("div > h2, div > h3, div > p, ul li");
 		} else if (/dokumentation|handbuch/.test(fenstertyp)) {
 			e = document.querySelectorAll("section:not(.aus) > h2, section:not(.aus) > p, section:not(.aus) #suchergebnisse > p, section:not(.aus) > pre, section:not(.aus) li, section:not(.aus) td, section:not(.aus) th");
+		} else if (fenstertyp === "index") {
+			if (helfer.belegOffen()) { // Karteikarte (Leseansicht)
+				e = document.querySelectorAll("#beleg th, .beleg-lese td");
+			} else { // Belegliste
+				e = document.querySelectorAll(".liste-kopf > span, .liste-details");
+			}
 		}
 		let genaue = document.getElementById("suchleiste-genaue").checked ? "" : "i",
 			reg = new RegExp(helfer.formVariSonderzeichen(helfer.escapeRegExp(textMitSpitz)).replace(/\s/g, "\\s"), genaue),
@@ -362,9 +370,30 @@ let suchleiste = {
 		const headerHeight = document.querySelector("header").offsetHeight,
 			suchleisteHeight = document.getElementById("suchleiste").offsetHeight;
 		let rect = marks[pos].getBoundingClientRect();
+		if (fenstertyp === "index") {
+			if (helfer.belegOffen()) { // Karteikarte
+				
+			} else { // Belegliste
+				const kopf = document.getElementById("liste").offsetTop,
+					listenkopf = document.querySelector("#liste-belege header").offsetHeight;
+				if (rect.top < kopf + listenkopf ||
+						rect.top > window.innerHeight - suchleisteHeight - 24) {
+					window.scrollTo({
+						left: 0,
+						top: window.scrollY + rect.top - kopf - listenkopf - 72, // 24px = Höhe Standardzeile
+						behavior: "smooth",
+					});
+				}
+			}
+			return;
+		}
 		if (rect.top < headerHeight ||
 				rect.top > window.innerHeight - suchleisteHeight - 24) {
-			window.scrollTo(0, window.scrollY + rect.top - headerHeight - 72); // 24px = Höhe Standardzeile
+			window.scrollTo({
+				left: 0,
+				top: window.scrollY + rect.top - headerHeight - 72, // 24px = Höhe Standardzeile
+				behavior: "smooth",
+			});
 		}
 	},
 	// seitenweises Scrollen

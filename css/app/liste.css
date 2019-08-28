@@ -474,8 +474,8 @@ p.no-indent + .filter-baum, /* betrifft Verschiedenes > Filterlogik */
 #liste-belege-anzahl {
 	position: absolute;
 	right: 0;
-	padding: 0 5px 0 25px;
-	background-color: #fff;
+	padding: 0 5px 0 50px;
+	background-image: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1) 25px);
 }
 
 #liste-belege-anzahl.belege-gefiltert {
@@ -485,6 +485,10 @@ p.no-indent + .filter-baum, /* betrifft Verschiedenes > Filterlogik */
 /* Belegliste: Content -------------------------- */
 #liste-belege-cont {
 	margin: 0 0 25px 0;
+}
+
+#liste-belege-cont.padding-suchleiste {
+	padding-bottom: 51px;
 }
 
 #liste-belege-cont a,
@@ -518,7 +522,7 @@ p.no-indent + .filter-baum, /* betrifft Verschiedenes > Filterlogik */
 	color: #fff;
 }
 
-.liste-kopf mark:not(.suche) {
+.liste-kopf mark:not(.suche):not(.suchleiste) {
 	padding: 0;
 	background-color: transparent;
 	font-weight: bold;

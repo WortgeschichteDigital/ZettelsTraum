@@ -28,9 +28,9 @@
 	position: absolute;
 	top: -3px;
 	right: 0;
-	padding-left: 25px;
+	padding-left: 50px;
 	height: 30px;
-	background-color: #fff;
+	background-image: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1) 25px);
 }
 
 #bedeutungen header > div > div span.dropdown-cont {
