@@ -42,7 +42,10 @@ let suchleiste = {
 		leiste.firstChild.blur();
 		leiste.firstChild.value = "";
 		leiste.classList.remove("an");
-		document.querySelector(".padding-suchleiste").classList.remove("padding-suchleiste");
+		let padding = document.querySelector(".padding-suchleiste");
+		if (padding) {
+			padding.classList.remove("padding-suchleiste");
+		}
 	},
 	// HTML der Suchleiste aufbauen
 	make () {
@@ -265,6 +268,21 @@ let suchleiste = {
 		});
 		// externe Links
 		ele.querySelectorAll(`a[href^="http"]`).forEach(a => helfer.externeLinks(a));
+		// Kopierlinks in der Belegliste (Hauptfenster)
+		if (ele.classList.contains("liste-details")) {
+			ele.querySelectorAll(".icon-tools-kopieren").forEach(a => liste.kopieren(a));
+		}
+		// Icon-Tools in der Karteikarte (Hauptfenster)
+		let belegOffen = helfer.belegOffen();
+		if (belegOffen && ele.nodeName === "TH") {
+			ele.querySelectorAll(`[class*="icon-tools-"]`).forEach(a => beleg.toolsKlick(a));
+		}
+		// Bedeutungsgerüst wechseln aus der Karteikarte (Hauptfenster)
+		ele.querySelectorAll(`[for="beleg-bd"]`).forEach(label => {
+			label.addEventListener("click", () => bedeutungenGeruest.oeffnen());
+		});
+		// Bedeutung-entfernen-Icon in der Karteikarte (Hauptfenster)
+		ele.querySelectorAll(".icon-entfernen").forEach(a => beleg.leseBedeutungEx(a));
 	},
 	// Zwischenspeicher für den Timeout
 	suchenKeineTrefferTimeout: null,
@@ -287,13 +305,23 @@ let suchleiste = {
 			return;
 		} else if (!document.querySelector(".suchleiste")) {
 			suchleiste.suchenKeineTreffer();
+			fokus();
 			return;
 		}
+		fokus();
 		let next = true;
 		if (evt.shiftKey) {
 			next = false;
 		}
 		suchleiste.navi(next);
+		// Suchfeld ggf. fokussieren
+		// (Strg + F hat im Hauptfenster eine andere Funktion
+		// => nur so kann die Leiste via Tastaturkürzel erreicht werden)
+		function fokus() {
+			if (fenstertyp === "index") {
+				document.getElementById("suchleiste").firstChild.select();
+			}
+		}
 	},
 	// Listener für die Navigationslinks
 	//   a = Element
@@ -372,7 +400,16 @@ let suchleiste = {
 		let rect = marks[pos].getBoundingClientRect();
 		if (fenstertyp === "index") {
 			if (helfer.belegOffen()) { // Karteikarte
-				
+				const kopf = document.getElementById("beleg").offsetTop,
+					header = document.querySelector("#beleg header").offsetHeight;
+				if (rect.top < kopf + header ||
+						rect.top > window.innerHeight - suchleisteHeight - 24) {
+					window.scrollTo({
+						left: 0,
+						top: window.scrollY + rect.top - kopf - header - 72, // 24px = Höhe Standardzeile
+						behavior: "smooth",
+					});
+				}
 			} else { // Belegliste
 				const kopf = document.getElementById("liste").offsetTop,
 					listenkopf = document.querySelector("#liste-belege header").offsetHeight;
@@ -417,12 +454,24 @@ let suchleiste = {
 		evt.preventDefault();
 		// Zielposition berechnen
 		const headerHeight = document.querySelector("header").offsetHeight,
-			suchleisteHeight = document.getElementById("suchleiste").offsetHeight;
+			suchleisteHeight = document.getElementById("suchleiste").offsetHeight,
+			quick = document.getElementById("quick");
+		let indexPlus = 0; // zusätzliche Werte für das Hauptfenster (Fenstertyp "index")
+		if (quick) {
+			if (quick.classList.contains("an")) {
+				indexPlus = quick.offsetHeight;
+			}
+			if (!document.getElementById("liste").classList.contains("aus")) { // Belegliste
+				indexPlus += document.querySelector("#liste-belege header").offsetHeight;
+			} else { // Karteikarte
+				indexPlus += document.querySelector("#beleg header").offsetHeight;
+			}
+		}
 		let top = 0;
 		if (evt.which === 33) { // hoch (PageUp)
-			top = window.scrollY - window.innerHeight + headerHeight + suchleisteHeight + 72; // 24px = Höhe Standardzeile
+			top = window.scrollY - window.innerHeight + headerHeight + suchleisteHeight + indexPlus + 72; // 24px = Höhe Standardzeile
 		} else if (evt.which === 32 || evt.which === 34) { // runter (Space, PageDown)
-			top = window.scrollY + window.innerHeight - headerHeight - suchleisteHeight - 72;
+			top = window.scrollY + window.innerHeight - headerHeight - suchleisteHeight - indexPlus - 72;
 		}
 		// scrollen
 		window.scrollTo({

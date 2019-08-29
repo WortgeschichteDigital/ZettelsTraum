@@ -162,6 +162,10 @@ let liste = {
 	//   filter_init = Boolean
 	//     (true = Filter müssen erneut initialisiert werden)
 	aufbauen (filter_init) {
+		// Suchleiste ggf. ausblenden
+		if (document.getElementById("suchleiste")) {
+			suchleiste.ausblenden();
+		}
 		// die Basis der Belegliste vorbereiten
 		let belege = liste.aufbauenBasis(filter_init);
 		// Hat die Kartei überhaupt Belege?

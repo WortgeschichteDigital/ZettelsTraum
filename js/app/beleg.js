@@ -1759,6 +1759,10 @@ let beleg = {
 	//   user = Boolean
 	//     (Leseansicht wurde durch User aktiv gewechselt)
 	leseToggle (user) {
+		// Suchleiste ggf. ausblenden
+		if (document.getElementById("suchleiste")) {
+			suchleiste.ausblenden();
+		}
 		// Ansicht umstellen
 		let button = document.getElementById("beleg-link-leseansicht"),
 			tab = document.querySelector("#beleg table"),

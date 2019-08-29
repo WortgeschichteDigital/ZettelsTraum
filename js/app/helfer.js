@@ -96,6 +96,10 @@ let helfer = {
 	sektion_aktiv: "",
 	sektion_document_scroll: 0,
 	sektionWechseln (sektion) {
+		// Suchleiste ggf. ausblenden
+		if (document.getElementById("suchleiste")) {
+			suchleiste.ausblenden();
+		}
 		// Scroll-Status der Liste speichern oder wiederherstellen
 		if (helfer.sektion_aktiv === "liste") {
 			helfer.sektion_document_scroll = window.scrollY;
@@ -620,6 +624,12 @@ let helfer = {
 	tastatur (evt) {
 		// Esc
 		if (evt.which === 27) {
+			// falls die Suchleiste auf ist und den Fokus hat
+			if (document.getElementById("suchleiste") &&
+					document.querySelector("#suchleiste:focus-within")) {
+				suchleiste.ausblenden();
+				return;
+			}
 			// Dropdown schließen
 			if (document.getElementById("dropdown")) {
 				dropdown.schliessen();
@@ -656,6 +666,11 @@ let helfer = {
 			evt.preventDefault();
 			kopieren.einfuegenAusfuehrenPre();
 			return;
+		}
+		// Space / PageUp / PageDown (für Suchleiste)
+		if ((evt.which === 32 || evt.which === 33 || evt.which === 34) &&
+				!(evt.ctrlKey || evt.altKey)) {
+			suchleiste.scrollen(evt);
 		}
 		// F3
 		if (evt.which === 114) {
