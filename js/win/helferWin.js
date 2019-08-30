@@ -54,7 +54,7 @@ let helferWin = {
 				win.close();
 			}, 50);
 		}
-		// Space / PageUp / PageDown (wenn in Changelog oder Dokumentation)
+		// Space / PageUp / PageDown (wenn in Changelog, Dokumentation oder Handbuch)
 		if (/changelog|dokumentation|handbuch/.test(fenstertyp) &&
 				(evt.which === 32 || evt.which === 33 || evt.which === 34) &&
 				!(evt.ctrlKey || evt.altKey)) {
@@ -68,11 +68,11 @@ let helferWin = {
 		if (typeof hilfe !== "undefined" && evt.ctrlKey && evt.which === 70) {
 			document.getElementById("suchfeld").select();
 		}
-		// Strg + F (wenn in Changelog oder Dokumentation)
+		// Strg + F (wenn in Changelog)
 		if (fenstertyp === "changelog" && evt.ctrlKey && evt.which === 70) {
 			suchleiste.einblenden();
 		}
-		// F3 (wenn in Changelog oder Dokumentation)
+		// F3 (wenn in Changelog, Dokumentation oder Handbuch)
 		if (/changelog|dokumentation|handbuch/.test(fenstertyp) && evt.which === 114) {
 			suchleiste.f3(evt);
 		}

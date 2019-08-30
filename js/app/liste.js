@@ -154,7 +154,7 @@ let liste = {
 			window.scrollTo({
 				left: 0,
 				top: kopf.offsetTop - liste.statusScroll.scroll - header,
-				behavior: "smooth",
+				behavior: "auto",
 			});
 		}
 	},
@@ -162,10 +162,6 @@ let liste = {
 	//   filter_init = Boolean
 	//     (true = Filter müssen erneut initialisiert werden)
 	aufbauen (filter_init) {
-		// Suchleiste ggf. ausblenden
-		if (document.getElementById("suchleiste")) {
-			suchleiste.ausblenden();
-		}
 		// die Basis der Belegliste vorbereiten
 		let belege = liste.aufbauenBasis(filter_init);
 		// Hat die Kartei überhaupt Belege?
@@ -263,6 +259,10 @@ let liste = {
 		liste.zeitschnitteAnpassen(false);
 		// Anzeige, dass kein Beleg vorhanden ist, ggf. ausblenden
 		liste.zeitschnitteKeineBelege();
+		// ggf. Suche der Suchleiste erneut anstoßen (nur Neuaufbau)
+		if (document.getElementById("suchleiste")) {
+			suchleiste.suchen(true);
+		}
 	},
 	// basale Vorbereitungen für die Belegliste
 	//   filter_init = Boolean
@@ -844,6 +844,10 @@ let liste = {
 					id: this.dataset.id,
 				});
 			}
+			// ggf. Suche der Suchleiste erneut anstoßen (nur Neuaufbau)
+			if (document.getElementById("suchleiste")) {
+				suchleiste.suchen(true);
+			}
 		});
 	},
 	// generische Funktion für das Erstellen eines Beleg-Details
@@ -1103,6 +1107,8 @@ let liste = {
 				liste.headerTrennung();
 			} else if (/^(bs|bd|bl|sy|qu|kr|ts|no|meta)$/.test(funktion)) {
 				liste.headerDetails(funktion);
+			} else if (funktion === "suchleiste") {
+				suchleiste.einblenden();
 			}
 		});
 	},
@@ -1225,6 +1231,10 @@ let liste = {
 				}
 			}
 		});
+		// ggf. Suche der Suchleiste erneut anstoßen (nur Neuaufbau)
+		if (document.getElementById("suchleiste")) {
+			suchleiste.suchen(true);
+		}
 	},
 	// Header-Icons: Anzeige der Details des Belegs umstellen (Anzeige im Header anpassen)
 	headerBelegAnzeige () {
@@ -1321,6 +1331,10 @@ let liste = {
 		liste.headerDetailsLetztesIcon();
 		// Anzeige der Details in der Liste auffrischen
 		liste.headerDetailsAuffrischen();
+		// ggf. Suche der Suchleiste erneut anstoßen (nur Neuaufbau)
+		if (document.getElementById("suchleiste")) {
+			suchleiste.suchen(true);
+		}
 	},
 	// Header-Icons: frischt die Anzeige der Details nach dem Ändern
 	// einer Anzeigeoption im Header der Belegliste auf

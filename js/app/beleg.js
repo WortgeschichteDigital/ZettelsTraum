@@ -1972,6 +1972,10 @@ let beleg = {
 			beleg.leseFillBedeutung();
 			// Änderungsmarkierung setzen
 			beleg.belegGeaendert(true);
+			// ggf. Suche der Suchleiste erneut anstoßen (nur Neuaufbau)
+			if (document.getElementById("suchleiste")) {
+				suchleiste.suchen(true);
+			}
 		});
 	},
 	// Bedeutung aus dem Bedeutungsfeld entfernen
@@ -2048,6 +2052,8 @@ let beleg = {
 				beleg.ctrlZwischenablage(beleg.data);
 			} else if (/duplikat/.test(this.id)) {
 				beleg.ctrlDuplikat();
+			} else if (/suchleiste$/.test(this.id)) {
+				suchleiste.einblenden();
 			}
 		});
 	},
@@ -2061,6 +2067,10 @@ let beleg = {
 		// Belegtext in der Leseansicht ggf. neu aufbauen
 		if (document.getElementById("beleg-link-leseansicht").classList.contains("aktiv")) {
 			beleg.leseFill();
+		}
+		// ggf. Suche der Suchleiste erneut anstoßen (nur Neuaufbau)
+		if (document.getElementById("suchleiste")) {
+			suchleiste.suchen(true);
 		}
 	},
 	// Kürzung des Belegkontexts in der Leseansicht ein- bzw. ausblenden (Anzeige)
@@ -2084,6 +2094,10 @@ let beleg = {
 		// Belegtext in der Leseansicht ggf. neu aufbauen
 		if (document.getElementById("beleg-link-leseansicht").classList.contains("aktiv")) {
 			beleg.leseFill();
+		}
+		// ggf. Suche der Suchleiste erneut anstoßen (nur Neuaufbau)
+		if (document.getElementById("suchleiste")) {
+			suchleiste.suchen(true);
 		}
 	},
 	// Trennstriche in der Leseansicht ein- bzw. ausblenden (Anzeige)
@@ -2269,6 +2283,10 @@ let beleg = {
 			top: scroll,
 			behavior: "auto",
 		}); // nach fokus()! Das sollte nicht smooth sein!
+		// ggf. Suche der Suchleiste erneut anstoßen (nur Neuaufbau)
+		if (document.getElementById("suchleiste")) {
+			suchleiste.suchen(true);
+		}
 		// Icon fokussieren
 		function fokus () {
 			let icon;

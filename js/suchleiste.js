@@ -121,12 +121,17 @@ let suchleiste = {
 	// Zwischenspeicher für den Text der letzten erfolgreichen Suche
 	suchenZuletzt: "",
 	// Suche starten
-	suchen () {
+	//   neuaufbau = true || undefined
+	//     (die Suchergebnisse sollen nur neu aufgebaut werden, sonst nichts)
+	suchen (neuaufbau = false) {
 		// Suchtext vorhanden?
 		let text = document.getElementById("suchleiste-text").value,
 			textMitSpitz = helfer.textTrim(text, true);
 		text = helfer.textTrim(text.replace(/</g, "&lt;").replace(/>/g, "&gt;"), true);
 		if (!text) {
+			if (neuaufbau) {
+				return;
+			}
 			// alte Suche ggf. löschen
 			suchleiste.suchenReset();
 			// visualisieren, dass damit nichts gefunden werden kann
@@ -134,7 +139,7 @@ let suchleiste = {
 			return;
 		}
 		// Suchtext mit der letzten Suche identisch => eine Position weiterrücken
-		if (text === suchleiste.suchenZuletzt) {
+		if (text === suchleiste.suchenZuletzt && !neuaufbau) {
 			suchleiste.navi(true);
 			return;
 		}
@@ -163,7 +168,9 @@ let suchleiste = {
 		}
 		// Treffer?
 		if (!treffer.size) {
-			suchleiste.suchenKeineTreffer();
+			if (!neuaufbau) {
+				suchleiste.suchenKeineTreffer();
+			}
 			return;
 		}
 		suchleiste.suchenZuletzt = text;
@@ -181,7 +188,9 @@ let suchleiste = {
 			suchleiste.suchenEventsWiederherstellen(t);
 		}
 		// zum ersten Treffer springen
-		suchleiste.navi(true);
+		if (!neuaufbau) {
+			suchleiste.navi(true);
+		}
 		// Ersetzungsfunktion
 		// (ein bisschen komplizierter, um illegales Nesting zu vermeiden und
 		// die Suchtreffer schön aneinanderzuhängen, sodass sie wie ein Element aussehen)
@@ -273,8 +282,7 @@ let suchleiste = {
 			ele.querySelectorAll(".icon-tools-kopieren").forEach(a => liste.kopieren(a));
 		}
 		// Icon-Tools in der Karteikarte (Hauptfenster)
-		let belegOffen = helfer.belegOffen();
-		if (belegOffen && ele.nodeName === "TH") {
+		if (fenstertyp === "index" && helfer.belegOffen() && ele.nodeName === "TH") {
 			ele.querySelectorAll(`[class*="icon-tools-"]`).forEach(a => beleg.toolsKlick(a));
 		}
 		// Bedeutungsgerüst wechseln aus der Karteikarte (Hauptfenster)
@@ -305,23 +313,15 @@ let suchleiste = {
 			return;
 		} else if (!document.querySelector(".suchleiste")) {
 			suchleiste.suchenKeineTreffer();
-			fokus();
+			leiste.firstChild.select();
 			return;
 		}
-		fokus();
+		leiste.firstChild.select();
 		let next = true;
 		if (evt.shiftKey) {
 			next = false;
 		}
 		suchleiste.navi(next);
-		// Suchfeld ggf. fokussieren
-		// (Strg + F hat im Hauptfenster eine andere Funktion
-		// => nur so kann die Leiste via Tastaturkürzel erreicht werden)
-		function fokus() {
-			if (fenstertyp === "index") {
-				document.getElementById("suchleiste").firstChild.select();
-			}
-		}
 	},
 	// Listener für die Navigationslinks
 	//   a = Element
@@ -445,9 +445,10 @@ let suchleiste = {
 		if (!leiste || !leiste.classList.contains("an")) {
 			return;
 		}
-		// Fokus im Suchfeld?
+		// Space nicht abfangen, wenn Fokus auf <input>, <textarea>, contenteditable
+		let aktiv = document.activeElement;
 		if (evt.which === 32 &&
-				/^suchleiste-(text|genaue)$/.test(document.activeElement.id)) {
+				(/^(INPUT|TEXTAREA)$/.test(aktiv.nodeName) || aktiv.getAttribute("contenteditable"))) {
 			return;
 		}
 		// die Leiste ist an => ich übernehme das Scrollen vom Browser

@@ -96,6 +96,10 @@ let helfer = {
 	sektion_aktiv: "",
 	sektion_document_scroll: 0,
 	sektionWechseln (sektion) {
+		// Abbruch, wenn die Sektion gar nicht gewechsel werden muss
+		if (sektion === helfer.sektion_aktiv) {
+			return;
+		}
 		// Suchleiste ggf. ausblenden
 		if (document.getElementById("suchleiste")) {
 			suchleiste.ausblenden();
