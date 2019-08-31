@@ -74,8 +74,6 @@ let beleg = {
 		beleg.id_karte = beleg.idErmitteln();
 		// neues Karten-Objekt anlegen
 		beleg.data = beleg.karteErstellen();
-		// Wert des Suchfelds der Leseansicht zurücksetzen
-		beleg.leseSucheText = "";
 		// ggf. die Leseansicht verlassen
 		if (document.getElementById("beleg-link-leseansicht").classList.contains("aktiv")) {
 			beleg.leseToggle(false);
@@ -145,8 +143,6 @@ let beleg = {
 				beleg.data[i] = data.ka[id][i];
 			}
 		}
-		// Wert des Suchfelds der Leseansicht zurücksetzen
-		beleg.leseSucheText = "";
 		// in Lese- oder in Formularansicht öffnen?
 		let leseansicht = document.getElementById("beleg-link-leseansicht");
 		if (optionen.data.einstellungen.leseansicht) {
@@ -178,8 +174,7 @@ let beleg = {
 		let felder = document.querySelectorAll("#beleg input, #beleg textarea");
 		for (let i = 0, len = felder.length; i < len; i++) {
 			let feld = felder[i].id.replace(/^beleg-/, "");
-			if (felder[i].type === "button" ||
-					felder[i].id === "beleg-suchfeld") {
+			if (felder[i].type === "button") {
 				continue;
 			} else if (feld === "dta") {
 				felder[i].value = "";
@@ -1816,9 +1811,7 @@ let beleg = {
 		}
 	},
 	// aktuelle Werte des Belegs in die Leseansicht eintragen
-	//   suche = Boolean || undefined
-	//     (erneute Füllung des Formulars wurde durch eine Suche angestoßen)
-	leseFill (suche = false) {
+	leseFill () {
 		// Sprungmarke zurücksetzen
 		beleg.ctrlSpringenPos = -1;
 		// Meta-Infos
@@ -1880,14 +1873,9 @@ let beleg = {
 					text = liste.linksErkennen(text);
 					if (wert === "bs") {
 						text = liste.belegWortHervorheben(text, true);
-						text = beleg.leseSucheMark(text);
 					}
 				}
 				nP.innerHTML = text;
-			}
-			// damit das Formular nach einer Suche nicht so hoppelt, einen leeren Absatz einbinden
-			if (wert === "bs" && suche) {
-				suchfeld(cont);
 			}
 		}
 		// Bedeutungen
@@ -1896,35 +1884,6 @@ let beleg = {
 		document.querySelectorAll("#beleg .link").forEach(function(i) {
 			helfer.externeLinks(i);
 		});
-		// Suchfeld einblenden?
-		if (!suche && optionen.data.einstellungen["karte-suchfeld"]) {
-			setTimeout(function() {
-				let cont = document.getElementById("beleg-lese-bs");
-				if (cont.offsetHeight < 170) { // erst ab einer gewissen Beleg-Höhe anzeigen
-					return;
-				}
-				suchfeld(cont);
-			}, 0); // Timeout, damit die Höhe des Feldes ermittelt werden kann
-		}
-		// Suchfeld erzeugen
-		//   cont = Element
-		//     (das Beleg-Feld)
-		function suchfeld (cont) {
-			let p = document.createElement("p");
-			p.classList.add("input-text");
-			cont.appendChild(p);
-			let input = document.createElement("input");
-			p.appendChild(input);
-			input.id = "beleg-suchfeld";
-			input.type = "text";
-			input.value = beleg.leseSucheText;
-			input.setAttribute("placeholder", "Suche");
-			input.setAttribute("tabindex", "0");
-			beleg.leseSuche(input);
-			if (suche) {
-				input.focus();
-			}
-		}
 	},
 	// Bedeutungsfeld der Leseansicht füllen
 	leseFillBedeutung () {
@@ -1992,41 +1951,6 @@ let beleg = {
 		feld.value = beleg.bedeutungAufbereiten();
 		helfer.textareaGrow(feld);
 		return true;
-	},
-	// enthält den Wert des Suchfelds über dem Beleg in der Leseansicht
-	leseSucheText: "",
-	// speichert den Timeout für das Tippen im Suchfeld
-	leseSucheTimeout: null,
-	// Suche im Belegtext anstoßen
-	//   input = Element
-	//     (das Suchfeld)
-	leseSuche (input) {
-		input.addEventListener("input", function() {
-			clearTimeout(beleg.leseSucheTimeout);
-			const text = this.value;
-			beleg.leseSucheTimeout = setTimeout(function() {
-				beleg.leseSucheText = text;
-				beleg.leseFill(true);
-			}, 250);
-		});
-	},
-	// Suchtreffer im Belegtext markieren
-	//   text = String
-	//     (ein Absatz aus dem Belegtext)
-	leseSucheMark (text) {
-		const s = helfer.textTrim(helfer.escapeHtml(beleg.leseSucheText), true);
-		if (!s || !optionen.data.einstellungen["karte-suchfeld"]) {
-			return text;
-		}
-		// Treffer hervorheben
-		let reg = new RegExp(helfer.formVariSonderzeichen(helfer.escapeRegExp(s)), "gi");
-		text = text.replace(reg, function(m) {
-			return `<mark class="suche">${m}</mark>`;
-		});
-		// Treffer innerhalb von Tags löschen
-		text = helfer.suchtrefferBereinigen(text);
-		// Text zurückgeben
-		return text;
 	},
 	// Verteilerfunktion für die Links im <caption>-Block
 	//   a = Element
@@ -2129,7 +2053,7 @@ let beleg = {
 	ctrlSpringenPos: -1,
 	// durch die Hervorhebungen in der Leseansicht der Karteikarte springen
 	ctrlSpringenLese () {
-		let marks = document.querySelectorAll("#beleg-lese-bs mark.suche, #beleg-lese-bs mark.user, #beleg-lese-bs mark.wort");
+		let marks = document.querySelectorAll("#beleg mark.suchleiste, #beleg-lese-bs mark.user, #beleg-lese-bs mark.wort");
 		if (!marks.length) {
 			dialog.oeffnen("alert");
 			dialog.text("Keine Markierung gefunden.");

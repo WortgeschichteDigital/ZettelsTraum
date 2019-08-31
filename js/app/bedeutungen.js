@@ -1161,12 +1161,12 @@ let bedeutungen = {
 		const idx = parseInt(document.querySelector(".bedeutungen-aktiv").dataset.idx, 10);
 		let zaehlungIdx = bedeutungen.zaehlungTief(idx);
 		for (let i = 0, len = zaehlungIdx.length; i < len; i++) {
-			zaehlungIdx[i] = `<b>${zaehlungIdx[i]}</b>`;
+			zaehlungIdx[i] = `<b class="zaehlung">${zaehlungIdx[i]}</b>`;
 		}
 		const bdIdx = bedeutungen.akt.bd[idx].bd[bedeutungen.akt.bd[idx].bd.length - 1];
 		let zaehlungIdxZiel = bedeutungen.zaehlungTief(idxZiel);
 		for (let i = 0, len = zaehlungIdxZiel.length; i < len; i++) {
-			zaehlungIdxZiel[i] = `<b>${zaehlungIdxZiel[i]}</b>`;
+			zaehlungIdxZiel[i] = `<b class="zaehlung">${zaehlungIdxZiel[i]}</b>`;
 		}
 		const bdIdxZiel = bedeutungen.akt.bd[idxZiel].bd[bedeutungen.akt.bd[idxZiel].bd.length - 1];
 		dialog.text(`Soll die markierte Bedeutung\n<p class="bedeutungen-dialog">${zaehlungIdx.join("")}${bdIdx}</p>\n${document.querySelector(".bedeutungen-affiziert") ? "mit all ihren Unterbedeutungen " : ""}wirklich mit der Bedeutung\n<p class="bedeutungen-dialog">${zaehlungIdxZiel.join("")}${bdIdxZiel}</p>\nverschmolzen werden?`);
@@ -1382,6 +1382,12 @@ let bedeutungen = {
 					return;
 				}
 			} else if (feld === "al") {
+				// Doppelpunkt + Leerzeichen ist verboten
+				// (das gibt nur Probleme bei der Eingabe in der Karteikarte)
+				if (/: /.test(wert)) {
+					alias_schon_vergeben(edit, "trennzeichen");
+					return;
+				}
 				for (let i = 0, len = bedeutungen.akt.bd.length; i < len; i++) {
 					if (!wert) {
 						break;
@@ -1435,7 +1441,9 @@ let bedeutungen = {
 				dialog.oeffnen("alert", function() {
 					helfer.auswahl(edit);
 				});
-				if (typ === "alias") {
+				if (typ === "trennzeichen") {
+					dialog.text(`Das Alias\n<p class="bedeutungen-dialog">${wert}</p>\nist ungültig, weil es das reservierte Trennzeichen „: “ (Doppelpunkt + Leerzeichen) enthält.`);
+				} else if (typ === "alias") {
 					dialog.text(`Das Alias\n<p class="bedeutungen-dialog">${wert}</p>\nwurde schon vergeben.`);
 				} else if (typ === "alias_identisch") {
 					dialog.text(`Das Alias\n<p class="bedeutungen-dialog">${wert}</p>\nwäre identisch mit der Bedeutung, für die es stehen soll.`);

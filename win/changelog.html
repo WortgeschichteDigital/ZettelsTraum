@@ -38,21 +38,27 @@
 			<div class="version">0.18.0</div>
 			
 			<div>
-				<h2><span data-maintainer="Nico Dorn">Version 0.18.0-beta</span><time datetime="2019-08-20T13:47:05">20. August 2019</time></h2>
+				<h2><span data-maintainer="Nico Dorn">Version 0.18.0</span><time datetime="2019-08-31T14:12:31">31. August 2019</time></h2>
 				
 				<p><span class="obacht">Das Dateiformat hat sich geändert!</span> Ältere <abbr title="Wortgeschichte digital">WGD</abbr>-Dateien werden automatisch konvertiert; dabei wird eine Änderungsmarkierung gesetzt.</p>
+				
+				<h3>Entfernte Funktionen</h3>
+				
+				<ul>
+					<li>In der Leseansicht der Karteikarte wurde das mit Version 0.8.0 eingeführte Suchfeld für den Belegtext <strong>entfernt</strong>. An seine Stelle rückt die technisch ausgereiftere und vielseitigere Suchleiste, die alle Funktionen des Suchfelds und mehr bietet (<abbr title="siehe unten">s. u.</abbr>).</li>
+				</ul>
 				
 				<h3>Neue Funktionen</h3>
 				
 				<ul>
 					<li>
 						<p>Die Suchleiste steht nun auch im Hauptfenster zur Verfügung. Mit ihr kann der gerade in der Belegliste sichtbare Text oder die Leseansicht der Karteikarte durchsucht werden. Da <kbd>Strg</kbd> + <kbd>F</kbd> bereits auf den Volltextfilter zeigt, lässt sich die Suchleiste nur über das Tastaturkürzel <kbd>F3</kbd> oder das Icon <img src="../img/suchleiste.svg" width="24" height="24" alt=""> im Kopf der Belegliste <abbr title="beziehungsweise">bzw.</abbr> Karteikarte aufrufen. Sie wird automatisch geschlossen, wenn man in einen anderen Bereich oder von der Leseansicht der Karteikarte in die Formularansicht wechselt.</p>
-						<p>Funktional verhält sich die Suchleiste im Wesentlichen so, wie unten in den Anmerkungen zu Version 0.15.0 beschrieben. In der <i>Belegliste</i> kann man – wenn die Belege aufgeklappt sind – mit der Leiste alle sichtbaren Texte durchsuchen. Darüber hinaus wird im Belegkopf nach der Jahreszahl und dem Autornamen gesucht. Nicht durchsucht wird hingegen die Vorschau im Belegkopf. In der Leseansicht der <i>Karteikarte</i> kann man ebenfalls den kompletten sichtbaren Text durchsuchen, wozu auch die Überschriften der Datenfelder zählen.</p>
-						<p>Die Suchleiste funktioniert in der <i>Belegliste</i> problemlos in Kombination mit den Filtern – auch mit dem Volltextfilter. Ist sie geöffnet und werden die Filtereinstellungen geändert, wird nach dem Neuaufbau der Belegliste automatisch die letzte mit der Suchleiste ausgeführte Suche angestoßen. Der einzige Unterschied zum manuellen Auslösen der Suche besteht darin, dass nicht zum ersten Treffer gesprungen wird. Die Scrollposition der Belegliste bleibt somit erhalten. Dasselbe Verhalten legt die Leiste an den Tag, wenn die Anzeige der Datenfelder umgestellt wird. Lässt man sich mithilfe der Icons im Kopf der Belegliste ein bisher nicht sichtbares Datenfeld anzeigen, wird automatisch geschaut, ob in dem Text des Datenfelds das Wort, nach dem gesucht wurde, gefunden werden kann. Das funktioniert auch dann, wenn man einzelne Belege öffnet oder schließt oder die Funktion <img src="../img/liste-aufklappen.svg" width="24" height="24" alt=""> zum Umschalten der Ansicht aller Belege benutzt.</p>
+						<p>Funktional verhält sich die Suchleiste im Wesentlichen so, wie unten in den Anmerkungen zu Version 0.15.0 beschrieben. In der <i>Belegliste</i> kann man mit der Leiste alle sichtbaren Texte durchsuchen. Darüber hinaus wird im Belegkopf nach der Jahreszahl und dem Autornamen gesucht. Nicht durchsucht wird hingegen der Vorschautext im Belegkopf. In der Leseansicht der <i>Karteikarte</i> kann man ebenfalls den kompletten sichtbaren Text durchsuchen, wozu auch die Überschriften der Datenfelder zählen.</p>
+						<p>Die Suchleiste funktioniert in der <i>Belegliste</i> problemlos in Kombination mit allen Filtern, auch mit dem Volltextfilter. Ist sie geöffnet und werden die Filtereinstellungen geändert, wird nach dem Neuaufbau der Belegliste automatisch die letzte mit der Suchleiste ausgeführte Suche angestoßen. Der einzige Unterschied zum manuellen Auslösen der Suche besteht darin, dass nicht zum ersten Treffer gesprungen wird. Die Scrollposition der Belegliste bleibt somit erhalten. Dasselbe Verhalten legt die Leiste an den Tag, wenn die Anzeige der Datenfelder umgestellt wird. Lässt man sich mithilfe der Icons im Kopf der Belegliste ein bisher nicht sichtbares Datenfeld anzeigen, wird automatisch geschaut, ob in dem Text des gerade erschienenen Datenfelds das Wort, nach dem gesucht wurde, gefunden werden kann. Das funktioniert auch dann, wenn man einzelne Belege öffnet oder schließt oder die Funktion <img src="../img/liste-aufklappen.svg" width="24" height="24" alt=""> zum Umschalten der Ansicht aller Belege benutzt.</p>
 						<p>In der <i>Karteikarte</i> kann man die Anzeige des Belegs kürzen (Funktion <img src="../img/liste-kuerzen.svg" width="24" height="24" alt="">), die Trennzeichen ein- oder ausblenden (Funktion <img src="../img/liste-trennung.svg" width="24" height="24" alt="">) oder mit den Navigationspfeilen zu einem anderen Beleg springen. War die Suchleiste offen, bleibt sie in allen Fällen geöffnet und führt auch hier automatisch die zuletzt ausgeführte Suche aus. Auch in diesem Fall wird nicht zum ersten Treffer gesprungen; die Scrollposition der Karteikarte bleibt also erhalten.</p>
 					</li>
 					<li>
-						<p>Karteikarte: Das neue Datenfeld Metatext (eine Checkbox im Kopf der Karteikarte) ermöglicht die Markierung eines Belegs als Text, der einen analytischen Blick auf das Kartei-Wort wirft. Denkbare Texttypen wären (historische) Wörterbücher, Artikel in einer Enzyklopädie, philosophische Abhandlungen <abbr title="und so weiter">usw.</abbr></p>
+						<p>Karteikarte: Das neue Datenfeld <i>Metatext</i> (eine Checkbox im Kopf der Karteikarte) ermöglicht die Markierung eines Belegs als Text, der einen analytischen Blick auf das Kartei-Wort wirft. Denkbare Texttypen wären (historische) Wörterbücher, Artikel in einer Enzyklopädie, philosophische Abhandlungen <abbr title="und so weiter">usw.</abbr></p>
 						<p>Ist das Datenfeld abgehakt, erscheint es in der Belegliste mit dem Icon <img src="../img/liste-metatext.svg" width="24" height="24" alt=""> (wenn die Ansicht der Meta-Informationen zu den Karteikarten eingeschaltet ist; Funktion <img src="../img/liste-meta.svg" width="24" height="24" alt=""> im Listenkopf).</p>
 						<p>Wurde mindestens eine Karteikarte als Metatext markiert, erscheint in der Filterleiste im Filterblock <i>Verschiedenes</i> der Filter <i>Metatext</i>, mit dem sich die entsprechenden Belege finden (inklusive Filterlogik) oder ausschließen (exklusive Filterlogik) lassen.</p>
 						<p>Das Datenfeld wird auch in der Kopierfunktion berücksichtigt (<i>Belege &gt; Kopieren</i> <abbr title="beziehungsweise">bzw.</abbr> <i>Einfügen</i>). Da <i>Metatext</i> eine unveränderliche Texteigenschaft markiert, wird das Datenfeld standardmäßig mitkopiert. Es lässt sich im Fomular des Einfügefenster aber auch abwählen.</p>
@@ -62,6 +68,7 @@
 				<h3>Verbesserungen</h3>
 				
 				<ul>
+					<li>Im <i>Bedeutungsgerüst</i>, in der <i>Belegliste</i> und der <i>Karteikarte</i> wird das seitenweise Scrollen mithilfe der Tastatur (<kbd>Bild ⇧</kbd>, <kbd>Bild ⇩</kbd>, <kbd>Leertaste</kbd>) von nun an vom Programm übernommen. Auf diese Weise verschwindet kein Text mehr unter dem sehr hohen Programmkopf. Der Text wird nun vielmehr so gescrollt, dass in etwa drei Zeilen des aktuell sichtbaren Textes am oberen <abbr title="beziehungsweise">bzw.</abbr> unteren Bildschirmrand auch nach dem Scrollen noch im sichtbaren Bereich sind.</li>
 					<li>Suchleiste: Drückt man <kbd>F3</kbd> wird fortan nicht nur der nächste Treffer gesucht, sondern auch das Textfeld der Suchleiste fokussiert.</li>
 					<li>Karteikarte: Die Texttools für das Belegfeld wurden um Werkzeuge zum Hochstellen (<img src="../img/tool-superscript.svg" width="24" height="24" alt="">, Tag <code class="quelltext">&lt;sup&gt;</code>) und Tiefstellen (<img src="../img/tool-subscript.svg" width="24" height="24" alt="">, Tag <code class="quelltext">&lt;sub&gt;</code>) von Text ergänzt.</li>
 					<li>
@@ -69,12 +76,19 @@
 						<p>Außerdem wurde ein Tool zum Erstellen geordneter, sprich: nummerierter Listen hinzugefügt. Das Icon <img src="../img/tool-list-ordered.svg" width="24" height="24" alt=""> verhält sich analog zu dem bereits älteren Icon <img src="../img/tool-list-unordered.svg" width="24" height="24" alt="">, mit dem ungeordnete Spiegelstrichlisten erzeugt werden können (<abbr title="siehe">s.</abbr> die Erläuterungen zu Version 0.15.0).</p>
 					</li>
 					<li>Kleinere visuelle Verbesserungen.</li>
+					<li><a href="#" class="ueber-electron"><i>Electron</i></a>-Update auf Version 4.2.10.</li>
 				</ul>
 				
 				<h3>Behobene Fehler</h3>
 				
 				<ul>
-					<li>Das durch Rechtsklick im Hauptfenster aufrufbare Popup-Menü ist nicht mehr erschienen, weil vergessen wurde, ein Interface-Element, das für die Sortierfunktion gedacht war, zu entfernen.</li>
+					<li>Das durch Rechtsklick im Hauptfenster aufrufbare Popup-Menü ist meistens nicht mehr erschienen, weil vergessen wurde, ein Interface-Element, das für die Sortierfunktion gedacht war, zu entfernen.</li>
+					<li>
+						<p>Bedeutungsgerüst: Es ist prinzipiell problemlos möglich, in einer Bedeutung den Doppelpunkt mit einem darauf folgenden Leerzeichen zu verwenden. Obwohl <code class="quelltext">: </code> (Doppelpunkt + Leerzeichen) im Karteikartenformular als Trennzeichen für unterschiedliche Bedeutungsebenen dient, werden solche Bedeutungen als bereits im Gerüst vorhanden identifiziert und dem Beleg korrekt zugewiesen.</p>
+						<p>Problematisch wird das Ganze nur, wenn über die Eingabe in der Karteikarte einer solchen Bedeutung automatisch eine neue Unterbedeutung hinzugefügt werden soll, indem man sie nach dem Muster <code class="quelltext">...: Unterbedeutung</code> ergänzt. In solchen Fällen weiß das Programm nicht mehr, was es tun soll und erzeugt am Ende des Bedeutungsgerüsts einen neuen Bedeutungszweig. Dieses Problem wird <strong>nicht</strong> behoben, weil der Aufwand für diesen Sonderfall unverhältnismäßig hoch wäre und sich falsche Ergebnisse mithilfe der Verschmelzenfunktion im Bedeutungsgerüst leicht korrigieren lassen.</p>
+						<p>Wirklich problematisch wird das Ganze nur, wenn in einem Alias <code class="quelltext">: </code> (Doppelpunkt + Leerzeichen) benutzt wird. Darum wird das Programm von nun an kein Alias mehr akzeptieren, das das reservierte Trennzeichen enthält.</p>
+					</li>
+					<li>Bedeutungsgerüst: In der Sicherheitsfrage vor dem Verschmelzen von Bedeutungen war die Nummerierung nur schwer zu lesen, weil das Spatium hinter den Zählzeichen fehlte.</li>
 					<li>Karteikarte: Gab man als erstes Zeichen einer Bedeutung im Bedeutungsfeld ein Fragezeichen ein, öffnete sich das Dropdown-Menü nicht, selbst wenn es Bedeutungen mit einem Fragezeichen im Text gab.</li>
 					<li>Belegliste: Wurden im Feld <i>Autor</i> Spitzklammern benutzt, wurde in Spitzklammern eingeschlossener Text unter Umständen nicht in der Belegliste angezeigt.</li>
 					<li>Notizen: Unter gewissen Umständen wurde nicht erkannt, dass die Notizen (Funktion <i>Kartei &gt; Notizen</i>) leer waren, weil sich noch unsichtbare Tags im Feld befanden, die keinen Text umschlossen.</li>

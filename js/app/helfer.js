@@ -133,6 +133,46 @@ let helfer = {
 			});
 		}
 	},
+	// übernimmt das seitenweise Scrollen im Bedeutungsgerüst, der Belegliste und
+	// Leseansicht der Karteikarte
+	// (Grund: sonst wird Text unter dem Header versteckt)
+	//   evt = Object
+	//     (das Event-Objekt)
+	scrollen (evt) {
+		// nicht abfangen, wenn Overlay-Fenster offen ist
+		if (overlay.oben()) {
+			return;
+		}
+		// Space nicht abfangen, wenn Fokus auf <input>, <textarea>, contenteditable
+		let aktiv = document.activeElement;
+		if (evt.which === 32 &&
+				(/^(INPUT|TEXTAREA)$/.test(aktiv.nodeName) || aktiv.getAttribute("contenteditable"))) {
+			return;
+		}
+		// normales scrollen unterbinden
+		evt.preventDefault();
+		// aktive Sektion und deren Abstand nach oben ermitteln
+		let sektion = document.querySelector("body > section:not(.aus)"),
+			sektionHeader = sektion.querySelector("header");
+		const sektionTop = sektion.offsetTop;
+		let header = 0;
+		if (sektionHeader) {
+			header = sektionHeader.offsetHeight;
+		}
+		// Ziel-Position ermitteln
+		let top = 0;
+		if (evt.which === 33) { // hoch (PageUp)
+			top = window.scrollY - window.innerHeight + sektionTop + header + 72; // 24px = Höhe Standardzeile
+		} else if (evt.which === 32 || evt.which === 34) { // runter (Space, PageDown)
+			top = window.scrollY + window.innerHeight - sektionTop - header - 72; // 24px = Höhe Standardzeile
+		}
+		// scrollen
+		window.scrollTo({
+			left: 0,
+			top: top,
+			behavior: "smooth",
+		});
+	},
 	// eleminiert alle childNodes des übergebenen Objekts
 	//   obj = Element
 	//     (dieses Element soll von all seinen Kindern befreit werden)
@@ -674,7 +714,11 @@ let helfer = {
 		// Space / PageUp / PageDown (für Suchleiste)
 		if ((evt.which === 32 || evt.which === 33 || evt.which === 34) &&
 				!(evt.ctrlKey || evt.altKey)) {
-			suchleiste.scrollen(evt);
+			if (document.getElementById("suchleiste")) {
+				suchleiste.scrollen(evt);
+			} else {
+				helfer.scrollen(evt);
+			}
 		}
 		// F3
 		if (evt.which === 114) {

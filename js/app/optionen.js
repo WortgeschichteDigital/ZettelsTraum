@@ -151,8 +151,6 @@ let optionen = {
 			"immer-ergaenzen": false,
 			// bestehende Karteikarten in der Leseansicht öffnen
 			leseansicht: true,
-			// in Leseansicht über dem Belegtext ein Suchfeld einblenden
-			"karte-suchfeld": true,
 			// FILTERLEISTE
 			// alle anderen Filterblöcke zuklappen, wenn ein Filterblock geöffnet wird
 			"filter-zuklappen": false,

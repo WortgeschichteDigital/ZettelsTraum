@@ -472,7 +472,7 @@ let suchleiste = {
 		if (evt.which === 33) { // hoch (PageUp)
 			top = window.scrollY - window.innerHeight + headerHeight + suchleisteHeight + indexPlus + 72; // 24px = Höhe Standardzeile
 		} else if (evt.which === 32 || evt.which === 34) { // runter (Space, PageDown)
-			top = window.scrollY + window.innerHeight - headerHeight - suchleisteHeight - indexPlus - 72;
+			top = window.scrollY + window.innerHeight - headerHeight - suchleisteHeight - indexPlus - 72; // 24px = Höhe Standardzeile
 		}
 		// scrollen
 		window.scrollTo({
