@@ -167,10 +167,7 @@ let konversion = {
 			for (let i of woerter) {
 				data.fv[i] = {
 					an: true,
-					fo: [{
-						qu: "zt",
-						va: i,
-					}],
+					fo: [],
 				};
 			}
 		} else {

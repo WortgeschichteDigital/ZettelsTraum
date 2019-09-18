@@ -440,28 +440,6 @@ let helfer = {
 		}
 		return 1;
 	},
-	// Strings nach Länge sortieren (kürzeste zuletzt), Fallback: alphanumerische Sortierung
-	//   a = String
-	//   b = String
-	sortLengthAlpha (a, b) {
-		const a_len = a.length,
-			b_len = b.length;
-		if (a_len !== b_len) {
-			return b_len - a_len;
-		}
-		return helfer.sortAlpha(a, b);
-	},
-	// Strings nach Länge sortieren (kürzeste zuerst), Fallback: alphanumerische Sortierung
-	//   a = String
-	//   b = String
-	sortLengthAlphaKurz (a, b) {
-		const a_len = a.length,
-			b_len = b.length;
-		if (a_len !== b_len) {
-			return a_len - b_len;
-		}
-		return helfer.sortAlpha(a, b);
-	},
 	// ein übergebenes Datum formatiert ausgeben
 	//   datum = String
 	//     (im ISO 8601-Format)
@@ -539,7 +517,9 @@ let helfer = {
 			for (let i of data.fv[wort].fo) {
 				varianten.push(helfer.formVariSonderzeichen(helfer.escapeRegExp(i.va)));
 			}
-			helfer.formVariRegExpRegs.push(varianten.join("|"));
+			if (varianten.length) { // es könnten alle Formvarianten gelöscht worden sein
+				helfer.formVariRegExpRegs.push(varianten.join("|"));
+			}
 		}
 	},
 	// spezielle Buchstaben für einen regulären Suchausdruck um Sonderzeichen ergänzen

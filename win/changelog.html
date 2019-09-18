@@ -38,20 +38,12 @@
 			<div class="version">0.19.0</div>
 			
 			<div>
-				<h2><span>Version 0.19.0</span><time datetime="2019-09-18T08:38:34">18. September 2019</time></h2>
-				
-				<p><span class="obacht">Das Dateiformat hat sich geändert!</span> Ältere <abbr title="Wortgeschichte digital">WGD</abbr>-Dateien werden automatisch konvertiert; dabei wird eine Änderungsmarkierung gesetzt.</p>
+				<h2><span>Version 0.19.0-beta.1</span><time datetime="2019-09-15T10:58:39">15. September 2019</time></h2>
 				
 				<h3>Verbesserungen</h3>
 				
 				<ul>
-					<li>
-						<p>Formvarianten: Die Datenstruktur der Formvarianten wurde so umgestellt, dass die Kürzung von Belegen (Funktion <img src="../img/liste-kuerzen.svg" width="24" height="24" alt="">) bei mehrgliedrigen Karteiwörtern (<q>politisch korrekt</q> oder dergleichen) nun erwartbare Ergebnisse erzeugt. Konkret heißt das, dass in der Belegliste oder Karteikarte alle Absätze gekürzt werden, die nicht jedes Wort eines mehrgliedrigen Karteiworts enthalten. Zuvor durfte keines der Wörter enthalten sein; Absätze wurden also auch dann nicht gekürzt, wenn sie die Phrase oder Wortverbindung eigentlich gar nicht enthielten.</p>
-						<p>Bei der Konversion der Datenstruktur bleiben die bereits importierten oder manuell ergänzten Formvarianten erhalten. Allein für den Fall, dass das Wort der Kartei mehrgliedrig ist, muss man den <i><abbr title="Deutsches Textarchiv">DTA</abbr>-Import</i> im Formvariantenfenster (<i>Kartei &gt; Formvarianten</i>) neu auslösen.</p>
-						<p>Das Formvariantenfenster wurde nur dahingehend geändert, dass das Karteiwort nun in einer kleinen Box über den Formvarianten erscheint. Bei mehrgliedrigen Karteiwörtern steht jedes einzelne Wort in einer eigenen Box. Auf Klick in die Box wird die Liste der Formvarianten zu dem betreffenden Wort angezeigt. Ist das Karteiwort mehrgliedrig, erscheint vor den einzelnen Wörtern eine Checkbox, und zwar aus diesem Grund: Sind Präpositionen, Pronomina, Artikel oder dergleichen Teil des mehrgliedrigen Karteiworts, könnte es wünschenswert sein, dass diese für die Hervorhebung des Worts im Belegtext und für die Kürzung von Absätzen nicht berücksichtigt werden, zumal die automatische Links- und Rechtserweiterung des Karteiworts bei sehr kurzen Wörtern eigentlich in jedem Fall Fehler produziert. Für solche Fälle kann man die problematischen Wörter durch die Entfernung des Hakens in der Checkbox deaktivieren (und auf Wunsch später wieder aktivieren). Diese Deaktivierung wird in der Kartei gespeichert und muss nur einmal ausgeführt werden.</p>
-						<p>Die Möglichkeit, sich die Liste der Formvarianten im <abbr title="Deutsches Textarchiv">DTA</abbr> anzeigen zu lassen, ist erhalten geblieben. Das Icon zum Aufrufen der Webseite (<img src="../img/redaktion-online.svg" width="24" height="24" alt="">) befindet sich nun allerdings im Kopf der Kartei, hinter dem betreffenden Wort.</p>
-					</li>
-					<li>Volltextfilter: Das Hervorheben der Suchtreffer funktioniert nun auch über Taggrenzen hinweg. So werden <abbr title="zum Beispiel">z. B.</abbr> als Treffer erkannte Wörter, deren Endung in Antiqua gesetzt ist, von nun an komplett hervorgehoben. Zuvor endete die Hervorhebung an dem Punkt, an dem sich die Schriftart ändert.</li>
+					<li>Volltextfilter: Das Hervorheben der Suchtreffer funktioniert nun auch über Taggrenzen hinweg. So werden <abbr title="zum Beispiel">z. B.</abbr> Wörter, deren Endung in Antiqua ist, von nun an komplett hervorgehoben. Zuvor endete die Hervorhebung an dem Punkt, an dem sich die Schriftart ändert.</li>
 					<li>Karteikarte: Die Icons im Kopf der Karteikarte wurden leicht reorganisiert, um die Übersichtlichkeit zu verbessern. Außerdem wurde die Maximalbreite des Karteikartenkopfes erhöht.</li>
 					<li><a href="#" class="ueber-electron"><i>Electron</i></a>-Update auf Version 6.0.9.</li>
 				</ul>

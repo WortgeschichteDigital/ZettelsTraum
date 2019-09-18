@@ -1143,16 +1143,13 @@ let beleg = {
 		if (!beleg.data.bs || !optionen.data.einstellungen["wort-check"]) {
 			return;
 		}
-		const text = liste.textBereinigen(beleg.data.bs);
-		for (let i of helfer.formVariRegExpRegs) {
-			let form_reg = new RegExp(i, "i");
-			if (!form_reg.test(text)) {
-				dialog.oeffnen("alert", function() {
-					document.getElementById("beleg-dta").focus();
-				});
-				dialog.text("Das Kartei-Wort wurde im gerade importierten Belegtext nicht gefunden.");
-				break;
-			}
+		let form_reg = new RegExp(helfer.formVariRegExpRegs[0], "i");
+		const text = beleg.data.bs;
+		if (!form_reg.test(liste.textBereinigen(text))) {
+			dialog.oeffnen("alert", function() {
+				document.getElementById("beleg-dta").focus();
+			});
+			dialog.text("Das Kartei-Wort wurde im gerade importierten Belegtext nicht gefunden.");
 		}
 	},
 	// Beleg wurde geändert und noch nicht gespeichert
@@ -1846,7 +1843,8 @@ let beleg = {
 			helfer.keineKinder(cont);
 			// Absätze einhängen
 			const p = v.replace(/\n\s*\n/g, "\n").split("\n");
-			let zuletzt_gekuerzt = false; // true, wenn der vorherige Absatz gekürzt wurde
+			let form_reg = new RegExp(helfer.formVariRegExpRegs[0], "i"),
+				zuletzt_gekuerzt = false; // true, wenn der vorherige Absatz gekürzt wurde
 			for (let i = 0, len = p.length; i < len; i++) {
 				let nP = document.createElement("p");
 				cont.appendChild(nP);
@@ -1857,7 +1855,7 @@ let beleg = {
 					// Absatz ggf. kürzen
 					if (wert === "bs" &&
 							optionen.data.beleg.kuerzen &&
-							!liste.wortVorhanden(text)) {
+							!form_reg.test(liste.textBereinigen(text))) {
 						if (zuletzt_gekuerzt) {
 							cont.removeChild(cont.lastChild);
 						} else {
@@ -2097,7 +2095,7 @@ let beleg = {
 	},
 	// regulären Ausdruck für den Sprung im Beleg-Formular zurücksetzen
 	ctrlSpringenFormReset () {
-		beleg.ctrlSpringenFormReg.reg = new RegExp(`[^${helfer.ganzesWortRegExp.links}]*(${helfer.formVariRegExpRegs.join("|")})[^${helfer.ganzesWortRegExp.rechts}]*`, "gi");
+		beleg.ctrlSpringenFormReg.reg = new RegExp(`[^${helfer.ganzesWortRegExp.links}]*(${helfer.formVariRegExpRegs[0]})[^${helfer.ganzesWortRegExp.rechts}]*`, "gi");
 	},
 	// <textarea> mit dem Belegtext zum Wort scrollen
 	ctrlSpringenForm (evt) {

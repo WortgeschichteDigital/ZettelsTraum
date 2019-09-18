@@ -4,7 +4,7 @@ let stamm = {
 	// Formvarianten-Fenster einblenden
 	oeffnen () {
 		// wird die Variantenliste gerade erstellt, darf sich das Fenster nicht öffnen
-		if (!Object.keys(data.fv).length) {
+		if (!data.fv.length) {
 			dialog.oeffnen("alert");
 			dialog.text("Die Liste der Formvarianten wird gerade erstellt.\nVersuchen Sie es in ein paar Sekunden noch einmal!");
 			return;
@@ -14,114 +14,19 @@ let stamm = {
 		if (overlay.oeffnen(fenster)) { // Fenster ist schon offen
 			return;
 		}
-		// Kopf erzeugen
-		stamm.wortAkt = kartei.wort.split(" ")[0];
-		stamm.kopf();
 		// Liste erzeugen
 		stamm.auflisten();
+		// DTA-Icons erzeugen
+		stamm.onlineLinks();
 		// Fokus in das Textfeld
 		document.getElementById("stamm-text").focus();
 	},
-	// speichert den Bestandteil des/eines mehrgliedrigen Karteiworts, dessen Liste gerade zu sehen ist
-	// (ist das Karteiwort nur ein Wort => wortAkt === kartei.wort
-	// ist das Karteiwort mehrgliedrig => wortAkt === 1. Wort des mehrgliedrigen Worts)
-	wortAkt: "",
-	// Kopf aufbauen
-	kopf () {
-		let cont = document.getElementById("stamm-kopf");
-		helfer.keineKinder(cont);
-		// Wortblöcke aufbauen
-		let woerter = kartei.wort.split(" ");
-		for (let i = 0, len = woerter.length; i < len; i++) {
-			const wort = woerter[i];
-			let span = document.createElement("span");
-			cont.appendChild(span);
-			span.dataset.wort = wort;
-			if (i === 0) {
-				span.classList.add("aktiv");
-			}
-			if (len > 1) {
-				stamm.kopfAktiv(span);
-			}
-			// Input + Wort
-			if (len > 1) {
-				let input = document.createElement("input");
-				span.appendChild(input);
-				input.dataset.wort = wort;
-				input.type = "checkbox";
-				if (data.fv[wort].an) {
-					input.checked = true;
-				}
-				stamm.kopfToggle(input);
-			}
-			span.appendChild(document.createTextNode(wort));
-			// Internet-Icon
-			let a = document.createElement("a");
-			span.appendChild(a);
-			a.classList.add("icon-link");
-			a.dataset.wort = wort;
-			a.href = "#";
-			a.textContent = " ";
-			a.title = `alle Formvarianten zum Wort „${wort}“ ansehen`;
-			stamm.kopfOnline(a);
-		}
-	},
-	// Aktivierung eines Wortes umschalten
-	//   input = Element
-	//     (die Checkbox)
-	kopfToggle (input) {
-		input.addEventListener("click", function(evt) {
-			evt.stopPropagation();
-			// Ist überhaupt noch eine Checkbox aktiv?
-			if (!document.querySelector("#stamm-kopf input:checked")) {
-				this.checked = true;
-				return;
-			}
-			// Eintrag in Datenobjekt auffrischen
-			const wort = this.dataset.wort;
-			data.fv[wort].an = this.checked;
-			// Änderungsmarkierung setzen
-			kartei.karteiGeaendert(true);
-			// regulären Ausdruck mit allen Formvarianten neu erstellen
-			helfer.formVariRegExp();
-		});
-	},
-	// Wort auswählen, dessen Formvarianten aufgelistet werden sollen
-	//   span = Element
-	//     (der Inhaltsblock für das Wort))
-	kopfAktiv (span) {
-		span.addEventListener("click", function() {
-			if (this.classList.contains("aktiv")) {
-				return;
-			}
-			// Anzeige im Kopf ändern
-			let aktiv = document.querySelector("#stamm-kopf .aktiv");
-			aktiv.classList.remove("aktiv");
-			this.classList.add("aktiv");
-			// Liste ändern
-			stamm.wortAkt = this.dataset.wort;
-			stamm.auflisten();
-		});
-	},
-	// alle Formvarianten online anzeigen
-	//   a = Element
-	//     (ein Link, der die Formvarianten-Liste im Netz aufrufen soll)
-	kopfOnline (a) {
-		a.addEventListener("click", function(evt) {
-			evt.stopPropagation();
-			evt.preventDefault();
-			const url = `https://www.deutschestextarchiv.de/demo/cab/query?a=expand.eqlemma&fmt=text&clean=1&pretty=1&raw=1&q=${encodeURIComponent(this.dataset.wort)}`,
-				{shell} = require("electron");
-			shell.openExternal(url);
-		});
-	},
-	// Liste des aktuellen Worts aufbauen
+	// alle registrierten Einträge auflisten
 	auflisten () {
 		let cont = document.getElementById("stamm-liste");
 		helfer.keineKinder(cont);
 		// Einträge auflisten
-		let fo = data.fv[stamm.wortAkt].fo;
-		for (let i = 0, len = fo.length; i < len; i++) {
+		for (let i = 0, len = data.fv.length; i < len; i++) {
 			let p = document.createElement("p");
 			cont.appendChild(p);
 			// Platzhalter od. Löschlink
@@ -135,14 +40,14 @@ let stamm = {
 				let a = document.createElement("a");
 				a.href = "#";
 				a.classList.add("icon-link", "icon-entfernen");
-				a.dataset.fv = fo[i].va;
+				a.dataset.fv = data.fv[i].va;
 				stamm.entfernen(a);
 				p.appendChild(a);
 			}
 			// Text
-			p.appendChild(document.createTextNode(fo[i].va));
+			p.appendChild(document.createTextNode(data.fv[i].va));
 			// Variante aus dem DTA?
-			if (fo[i].qu === "dta") {
+			if (data.fv[i].qu === "dta") {
 				let span = document.createElement("span");
 				span.classList.add("dta");
 				span.textContent = "DTA";
@@ -162,26 +67,23 @@ let stamm = {
 			return;
 		}
 		// Variante schon registriert?
-		let fo = data.fv[stamm.wortAkt].fo;
-		for (let i = 0, len = fo.length; i < len; i++) {
-			if (fo[i].va === va) {
+		for (let i = 0, len = data.fv.length; i < len; i++) {
+			if (data.fv[i].va === va) {
 				abbruch();
 				return;
 			}
 		}
 		// Variante ergänzen und sortieren
 		text.value = "";
-		fo.push({
+		data.fv.push({
 			va: va,
 			qu: "zt",
 		});
-		stamm.sortieren(fo);
+		stamm.sortieren();
 		// Liste neu aufbauen
 		stamm.auflisten();
 		// Änderungsmarkierung setzen
 		kartei.karteiGeaendert(true);
-		// regulären Ausdruck mit allen Formvarianten neu erstellen
-		helfer.formVariRegExp();
 		// Abbruchmeldung
 		function abbruch () {
 			dialog.oeffnen("alert", () => text.select());
@@ -189,10 +91,8 @@ let stamm = {
 		}
 	},
 	// Liste der Formvariante sortieren
-	//   arr = Array
-	//     (Array mit den Varianten, das sortiert werden soll)
-	sortieren (arr) {
-		arr.sort(function(a, b) {
+	sortieren () {
+		data.fv.sort(function(a, b) {
 			// manuell hinzugefügte Varianten nach oben schieben
 			if (a.qu === "zt" && b.qu !== "zt") {
 				return -1;
@@ -211,8 +111,6 @@ let stamm = {
 		});
 	},
 	// Eintrag aus der Liste entfernen
-	//   a = Element
-	//     (der Entfernen-Link vor der betreffenden Formvariante)
 	entfernen (a) {
 		a.addEventListener("click", function(evt) {
 			evt.preventDefault();
@@ -220,22 +118,19 @@ let stamm = {
 			dialog.oeffnen("confirm", function() {
 				if (dialog.antwort) {
 					// Index ermitteln
-					let idx = -1,
-						fo = data.fv[stamm.wortAkt].fo;
-					for (let i = 0, len = fo.length; i < len; i++) {
-						if (fo[i].va === fv) {
+					let idx = -1;
+					for (let i = 0, len = data.fv.length; i < len; i++) {
+						if (data.fv[i].va === fv) {
 							idx = i;
 							break;
 						}
 					}
 					// Löschen
-					fo.splice(idx, 1);
+					data.fv.splice(idx, 1);
 					// neu auflisten
 					stamm.auflisten();
 					// Änderungsmarkierung setzen
 					kartei.karteiGeaendert(true);
-					// regulären Ausdruck mit allen Formvarianten neu erstellen
-					helfer.formVariRegExp();
 				} else {
 					document.getElementById("stamm-text").focus();
 				}
@@ -263,48 +158,21 @@ let stamm = {
 			}
 		});
 	},
-	// speichert die Formvarianten, die das DTA liefert in Arrays
-	// (in jedem Slot steht ein Objekt mit den Werten "hi" und "w";
-	// hinter "hi" verbirgt sich die Variante)
-	dtaEqlemma: {},
+	// speichert die Formvarianten, die das DTA liefert
+	dtaEqlemma: [],
 	// Promises vorbereiten
 	//   aktiv = Boolean
 	//     (der Download der Varianten wurde bewusst angestoßen => ggf. Fehlermeldungen anzeigen)
 	dtaGet (aktiv) {
-		stamm.dtaEqlemma = {};
-		let woerter = kartei.wort.split(" "),
-			promises = [];
-		// Wörter nach Länge sortieren und Objekte erzeugen
-		woerter.sort(helfer.sortLengthAlpha);
-		for (let wort of woerter) {
-			if (!data.fv[wort]) {
-				data.fv[wort] = {
-					an: true,
-					fo: [],
-				};
-			}
-		}
-		// Promises erzeugen und verarbeiten
-		woerter.forEach(function(i) {
+		stamm.dtaEqlemma = [];
+		let promises = [];
+		kartei.wort.split(" ").forEach(function(i) {
 			promises.push(stamm.dtaRequest(i, aktiv));
 		});
 		Promise.all(promises).then(result => {
 			if (!result.includes(false)) {
-				// keine Fehler => Varianten bereinigen und eintragen
-				stamm.dtaPush(aktiv);
-			} else {
-				// Fehler => zumindest die Karteiwörter eintragen
-				kartei.wort.split(" ").forEach(function(wort) {
-					if (!data.fv[wort].fo.length) {
-						data.fv[wort].fo = [{
-							qu: "zt",
-							va: wort,
-						}];
-					}
-				});
-				stamm.dtaAbschluss(aktiv);
+				stamm.dtaPush(stamm.dtaEqlemma, aktiv);
 			}
-			helfer.formVariRegExp();
 		});
 	},
 	// Request an das DTA schicken, um an die Formvarianten zu kommen
@@ -336,7 +204,7 @@ let stamm = {
 						resolve(false);
 					}
 					// Okay, die Liste kann zwischengespeichert und nach dem Erfüllen aller Promises geparst werden
-					stamm.dtaEqlemma[wort] = eqlemma;
+					stamm.dtaEqlemma = stamm.dtaEqlemma.concat(eqlemma);
 					resolve(true);
 				} else {
 					stamm.dtaFehler("Download-Fehler", null, aktiv);
@@ -371,110 +239,133 @@ let stamm = {
 			dialog.oeffnen("alert");
 			dialog.text(text);
 		}
-	},
-	// Arrays mit allen für die App relevanten Varianten in data.fv eintragen
-	//   aktiv = Boolean
-	//     (das Laden der Lemmaliste wurde von der Benutzerin angestoßen)
-	dtaPush (aktiv) {
-		let fehler = [];
-		for (let wort in stamm.dtaEqlemma) {
-			if (!stamm.dtaEqlemma.hasOwnProperty(wort)) {
-				continue;
-			}
-			// ein eindimensionales Array mit allen Varianten erzeugen
-			let varianten = [];
-			for (let i of stamm.dtaEqlemma[wort]) {
-				if (helfer.checkType("Object", i) && i.hi) {
-					varianten.push(i.hi);
-				} else if (helfer.checkType("String", i)) {
-					varianten.push(i);
-				}
-			}
-			// bei merkwürdigen Wörtern und Fällen könnte es sein, dass nichts
-			// ausgelesen werden konnte (z. B. wenn man sich vertippt)
-			if (!varianten.length) {
-				fehler.push(wort);
-				continue;
-			}
-			// Varianten nach Länge sortieren (kürzeste zuerst)
-			varianten.sort(helfer.sortLengthAlphaKurz);
-			// Varianten ermitteln, die kürzere Varianten enthalten
-			let ex = [];
-			for (let i = 0, len = varianten.length; i < len; i++) {
-				let variante = varianten[i];
-				for (let j = 0; j < len; j++) {
-					if (j === i) {
-						continue;
-					}
-					if (varianten[j].includes(variante)) {
-						ex.push(j);
-					}
-				}
-			}
-			// Varianten ermitteln, die nur in Groß- und Kleinschreibung variieren
-			let variantenKopie = [...varianten];
-			for (let i = 0, len = variantenKopie.length; i < len; i++) {
-				variantenKopie[i] = variantenKopie[i].toLowerCase();
-			}
-			for (let i = 1, len = variantenKopie.length; i < len; i++) {
-				if (variantenKopie[i] === variantenKopie[i - 1]) {
-					ex.push(i);
-				}
-			}
-			// alte, manuell hinzugefügte Varianten ermitteln, die nicht im DTA sind
-			let variantenZt = [];
-			if (data.fv[wort]) {
-				for (let i of data.fv[wort].fo) {
-					if (i.qu === "zt" &&
-							!varianten.includes(i.va)) {
-						variantenZt.push(i.va);
-					}
-				}
-			}
-			// ggf. das Wort hinzufügen, falls es nicht in der eqlemma-Liste ist
-			if (!varianten.includes(wort)) {
-				variantenZt.push(wort);
-			}
-			// jetzt können die für die App relevanten Varianten endlich eingetragen werden
-			data.fv[wort].fo = [];
-			for (let i = 0, len = varianten.length; i < len; i++) {
-				if (ex.includes(i)) {
-					continue;
-				}
-				data.fv[wort].fo.push({
-					va: varianten[i],
-					qu: "dta",
-				});
-			}
-			for (let i = 0, len = variantenZt.length; i < len; i++) {
-				data.fv[wort].fo.push({
-					va: variantenZt[i],
+		// ist noch kein Wort in der Liste => das Kartei-Wort einfügen
+		if (!data.fv.length) {
+			kartei.wort.split(" ").forEach(function(i) { // das "Wort" könnte aus mehreren Einzelwörtern bestehen
+				data.fv.push({
+					va: i,
 					qu: "zt",
 				});
-			}
-			// Varianten sortieren lassen
-			stamm.sortieren(data.fv[wort].fo);
+			});
+			kartei.karteiGeaendert(true);
 		}
-		// ggf. Fehlermeldung auswerfen
-		if (fehler.length) {
-			let num = "in der Lemmaliste";
-			if (fehler.length > 1) {
-				num = "in den Lemmalisten";
-			}
-			stamm.dtaFehler(`Fehler ${num} von ${fehler.join(", ")}`, null, aktiv);
-		}
-		// Abschluss
-		stamm.dtaAbschluss(aktiv);
 	},
-	// Import der Formvarianten abschließen, wenn aktiv durch User angestoßen
-	//   aktiv = Boolean
-	//     (Aktion wurde durch den User aktiv angestoßen)
-	dtaAbschluss (aktiv) {
-		if (!aktiv) {
+	// Array mit allen für die App relevanten Varianten pushen
+	//   eqlemma = Array
+	//     (Array mit den Varianten; in jedem Slot steht ein Objekt mit den Werten
+	//     "hi" und "w"; hinter "hi" verbirgt sich die Variante)
+	dtaPush (eqlemma, aktiv) {
+		// ein eindimensionales Array mit allen Varianten erzeugen
+		let varianten = [];
+		eqlemma.forEach(function(i) {
+			if (helfer.checkType("Object", i) && i.hi) {
+				varianten.push(i.hi);
+			} else if (helfer.checkType("String", i)) {
+				varianten.push(i);
+			}
+		});
+		// bei merkwürdigen Wörtern und Fällen könnte es sein, dass nichts
+		// ausgelesen werden konnte (z. B. wenn man sich vertippt)
+		if (!varianten.length) {
+			stamm.dtaFehler("Fehler in der Lemmaliste", null, aktiv);
 			return;
 		}
-		kartei.karteiGeaendert(true);
-		stamm.auflisten();
-		document.getElementById("stamm-text").focus();
+		// Varianten nach Länge sortieren (kürzeste zuerst)
+		varianten.sort(function(a, b) {
+			if (a.length > b.length) {
+				return 1;
+			} else if (a.length < b.length) {
+				return -1;
+			}
+			return 0;
+		});
+		// Varianten ermitteln, die kürzere Varianten enthalten
+		let ex = [];
+		for (let i = 0, len = varianten.length; i < len; i++) {
+			let variante = varianten[i];
+			for (let j = 0; j < len; j++) {
+				if (j === i) {
+					continue;
+				}
+				if (varianten[j].includes(variante)) {
+					ex.push(j);
+				}
+			}
+		}
+		// Varianten ermitteln, die nur in Groß- und Kleinschreibung variieren
+		let variantenKopie = [...varianten];
+		variantenKopie.forEach(function(i, n) {
+			variantenKopie[n] = i.toLowerCase();
+		});
+		for (let i = 1, len = variantenKopie.length; i < len; i++) {
+			if (variantenKopie[i] === variantenKopie[i - 1]) {
+				ex.push(i);
+			}
+		}
+		// alte, manuell hinzugefügte Varianten ermitteln, die nicht im DTA sind
+		let variantenZt = [];
+		for (let i = 0, len = data.fv.length; i < len; i++) {
+			if (data.fv[i].qu === "zt" && !varianten.includes(data.fv[i].va)) {
+				variantenZt.push(data.fv[i].va);
+			}
+		}
+		// ggf. das Wort hinzufügen, falls es nicht in der eqlemma-Liste ist
+		kartei.wort.split(" ").forEach(function(i) {
+			if (!varianten.includes(i)) {
+				variantenZt.push(i);
+			}
+		});
+		// jetzt können die für die App relevanten Varianten endlich gepusht werden
+		data.fv = [];
+		for (let i = 0, len = varianten.length; i < len; i++) {
+			if (ex.includes(i)) {
+				continue;
+			}
+			data.fv.push({
+				va: varianten[i],
+				qu: "dta",
+			});
+		}
+		for (let i = 0, len = variantenZt.length; i < len; i++) {
+			data.fv.push({
+				va: variantenZt[i],
+				qu: "zt",
+			});
+		}
+		// Varianten sortieren lassen
+		stamm.sortieren();
+		// ggf. Änderungsmarkierung machen und Liste neu aufbauen
+		if (aktiv) {
+			kartei.karteiGeaendert(true);
+			stamm.auflisten();
+			document.getElementById("stamm-text").focus();
+		}
+	},
+	// erzeugt die Links zum Aufrufen der Formvarianten auf der DTA-Seite
+	onlineLinks () {
+		let cont = document.getElementById("stamm-online");
+		helfer.keineKinder(cont);
+		// Links erzeugen
+		kartei.wort.split(" ").forEach(function(i) {
+			let a = document.createElement("a");
+			cont.appendChild(a);
+			a.classList.add("icon-link");
+			a.dataset.wort = i;
+			a.href = "#";
+			a.textContent = " ";
+			a.title = `alle Formvarianten zum Wort „${i}“ ansehen`;
+			stamm.online(a);
+		});
+	},
+	// alle Formvarianten online anzeigen
+	//   a = Element
+	//     (ein Link, der die Formvarianten-Liste im Netz aufrufen soll)
+	online (a) {
+		a.addEventListener("click", function(evt) {
+			evt.preventDefault();
+			const url = `https://www.deutschestextarchiv.de/demo/cab/query?a=expand.eqlemma&fmt=text&clean=1&pretty=1&raw=1&q=${encodeURIComponent(this.dataset.wort)}`,
+				{shell} = require("electron");
+			shell.openExternal(url);
+		});
 	},
 };
