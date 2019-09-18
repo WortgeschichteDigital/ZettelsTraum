@@ -1079,7 +1079,12 @@ let filter = {
 			if (!i) { // i dürfte eigentlich nicht leer sein, aber sicher ist sicher
 				return;
 			}
-			let reg = helfer.formVariSonderzeichen(helfer.escapeRegExp(i));
+			let reg = helfer.escapeRegExp(i.charAt(0));
+			for (let j = 1, len = i.length; j < len; j++) {
+				reg += "(<[^>]+>)*";
+				reg += helfer.escapeRegExp(i.charAt(j));
+			}
+			reg = helfer.formVariSonderzeichen(reg);
 			if (erweiterte && ganzes_wort) {
 				reg = `(?<vor>^|[${helfer.ganzesWortRegExp.links}]+)(?<wort>${reg})(?<nach>$|[${helfer.ganzesWortRegExp.rechts}]+)`;
 			}

@@ -49,7 +49,7 @@ let kartei = {
 			be: [], // BearbeiterIn
 			dc: new Date().toISOString(), // Datum Kartei-Erstellung
 			dm: "", // Datum Kartei-Änderung
-			fv: [], // Formvarianten
+			fv: {}, // Formvarianten
 			ka: {}, // Karteikarten
 			le: [], // überprüfte Lexika usw.
 			no: "", // Notizen
@@ -182,10 +182,13 @@ let kartei = {
 			filter.ctrlReset(false);
 			// Okay! Content kann eingelesen werden
 			data = JSON.parse(content);
+			// Karteiwort eintragen
+			// (muss wegen konversion.von8nach9() vor der Konersion geschehen)
+			kartei.wort = data.wo;
 			// Konversion des Dateiformats anstoßen
 			konversion.start();
 			// Einleseoperationen
-			kartei.wort = data.wo;
+			helfer.formVariRegExp();
 			kartei.wortEintragen();
 			kartei.pfad = datei;
 			optionen.aendereLetzterPfad();
@@ -365,6 +368,7 @@ let kartei = {
 				kartei.karteiGeaendert(true);
 				filter.ctrlReset(false);
 				kartei.wort = wort;
+				helfer.formVariRegExp();
 				kartei.wortEintragen();
 				kartei.erstellen();
 				kartei.menusDeaktivieren(false);
@@ -390,7 +394,7 @@ let kartei = {
 				kartei.karteiGeaendert(true);
 				kartei.wort = wort;
 				data.wo = wort;
-				data.fv = [];
+				data.fv = {};
 				stamm.dtaGet(false);
 				kartei.wortEintragen();
 				bedeutungenWin.daten();

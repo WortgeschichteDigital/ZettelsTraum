@@ -408,7 +408,7 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);
 					
 					<p>Nach dem Laden einer <abbr title="Wortgeschichte digital">WGD</abbr>-Datei in <i class="app-name"></i> befinden sich die Daten im globalen Objekt <code class="quelltext">data</code>. Ihre Werte lassen sich dann in allen Funktionen des Hauptfensters durch einfache Statements wie <code class="quelltext">data.dc</code> lesen oder schreiben.</p>
 					
-					<p>Alle Dateien sind gleich aufgebaut (<span class="obacht">Datenformat Version 8</span>):</p>
+					<p>Alle Dateien sind gleich aufgebaut (<span class="obacht">Datenformat Version 9</span>):</p>
 					
 					<table>
 						<tr>
@@ -536,20 +536,44 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);
 						</tr>
 						<tr>
 							<td><code class="quelltext">fv</code></td>
+							<td class="datentyp">Object</td>
+							<td> </td>
+							<td>Formvarianten zum Wort der Kartei, die aus dem <abbr title="Deutschen Textarchiv">DTA</abbr> geladen und/oder manuell eingegeben wurden;<br><span class="obacht">mit Version 9 von einem <span class="datentyp">Array</span> in ein <span class="datentyp">Object</span> konvertiert</span></td>
+						</tr>
+						<tr class="wgd-ebene1">
+							<td colspan="4"><p>Es folgen beliebig viele <span class="datentyp">Objects</span> mit einmaligen Schlüsseln:</p></td>
+						</tr>
+						<tr class="wgd-ebene1">
+							<td><p>(WORT)</p></td>
+							<td class="datentyp">Object</td>
+							<td> </td>
+							<td>eines der Wörter, aus denen das Karteiwort besteht</td>
+						</tr>
+						<tr class="wgd-ebene2">
+							<td colspan="4"><p>In jedem <span class="datentyp">Object</span> die folgenden Schlüssel und Werte:</p></td>
+						</tr>
+						<tr class="wgd-ebene3">
+							<td><p><code class="quelltext">an</code></p></td>
+							<td class="datentyp">Boolean</td>
+							<td> </td>
+							<td>Wort wird für die Hervorhebung <abbr title="beziehungsweise">bzw.</abbr> Suche des Karteiworts berücksichtigt</td>
+						</tr>
+						<tr class="wgd-ebene3">
+							<td><p><code class="quelltext">fo</code></p></td>
 							<td class="datentyp">Array</td>
 							<td>eindimensional,<br>mit <span class="datentyp">Objects</span> gefüllt</td>
-							<td>Formvarianten zum Wort der Kartei, die aus dem <abbr title="Deutschen Textarchiv">DTA</abbr> geladen und/oder manuell eingegeben wurden</td>
+							<td>Formvarianten;<br><span class="obacht">bis Version 8 war dieses <span class="datentyp">Array</span> identisch mit <code class="quelltext">data.fv</code></span></td>
 						</tr>
-						<tr class="wgd-ebene1">
+						<tr class="wgd-ebene4">
 							<td colspan="4"><p>Die <span class="datentyp">Objects</span> in den Slots haben die folgenden Schlüssel und Werte:</p></td>
 						</tr>
-						<tr class="wgd-ebene1">
+						<tr class="wgd-ebene4">
 							<td><p><code class="quelltext">qu</code></p></td>
 							<td class="datentyp">String</td>
 							<td><code class="quelltext">"dta"</code> oder <code class="quelltext">"zt"</code></td>
 							<td>Quelle der Formvariante; mit <code class="quelltext">"zt"</code> markierte Varianten wurden manuell ergänzt</td>
 						</tr>
-						<tr class="wgd-ebene1">
+						<tr class="wgd-ebene4">
 							<td><p><code class="quelltext">va</code></p></td>
 							<td class="datentyp">String</td>
 							<td> </td>

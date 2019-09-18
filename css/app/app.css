@@ -74,6 +74,18 @@ mark.suche {
 	color: #fff;
 }
 
+mark.suche-kein-start {
+	padding-left: 0;
+	border-top-left-radius: 0;
+	border-bottom-left-radius: 0;
+}
+
+mark.suche-kein-ende {
+	padding-right: 0;
+	border-top-right-radius: 0;
+	border-bottom-right-radius: 0;
+}
+
 mark.user {
 	background-color: var(--farbeGelb);
 }

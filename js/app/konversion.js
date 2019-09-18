@@ -4,7 +4,7 @@ let konversion = {
 	// aktuelle Version des Dateiformats
 	// *** WICHTIG! *** WICHTIG! *** WICHTIG! ***
 	// Bei Änderungen anpassen!
-	version: 8,
+	version: 9,
 	// Verteilerfunktion
 	start () {
 		konversion.von1nach2();
@@ -14,6 +14,7 @@ let konversion = {
 		konversion.von5nach6();
 		konversion.von6nach7();
 		konversion.von7nach8();
+		konversion.von8nach9();
 	},
 	// Konversion des Dateiformats von Version 1 nach Version 2
 	von1nach2 () {
@@ -148,6 +149,41 @@ let konversion = {
 				continue;
 			}
 			data.ka[id].mt = false;
+		}
+		// Versionsnummer hochzählen
+		data.ve++;
+		// Änderungsmarkierung setzen
+		kartei.karteiGeaendert(true);
+	},
+	// Konversion des Dateiformats von Version 8 nach Version 9
+	von8nach9 () {
+		if (data.ve > 8) {
+			return;
+		}
+		// Datenfeld "fv" konvertieren
+		if (/\s/.test(kartei.wort)) {
+			data.fv = {};
+			let woerter = kartei.wort.split(/\s/);
+			for (let i of woerter) {
+				data.fv[i] = {
+					an: true,
+					fo: [{
+						qu: "zt",
+						va: i,
+					}],
+				};
+			}
+		} else {
+			let fo = [];
+			data.fv.forEach(function(i) {
+				fo.push({...i});
+			});
+			data.fv = {
+				[kartei.wort]: {
+					an: true,
+					fo: fo,
+				},
+			};
 		}
 		// Versionsnummer hochzählen
 		data.ve++;

@@ -656,7 +656,6 @@ let liste = {
 		// Absätze erzeugen
 		let prep = data.ka[id].bs.replace(/\n\s*\n/g, "\n"), // Leerzeilen löschen
 			p_prep = prep.split("\n"),
-			form_reg = new RegExp(helfer.formVariRegExp(), "i"),
 			zuletzt_gekuerzt = false; // true, wenn der vorherige Absatz gekürzt wurde
 		for (let i = 0, len = p_prep.length; i < len; i++) {
 			let p = document.createElement("p");
@@ -681,7 +680,7 @@ let liste = {
 					continue;
 				}
 			} else if (optionen.data.belegliste.beleg_kuerzen &&
-					!form_reg.test(liste.textBereinigen(p_prep[i]))) { // ggf. kürzen, wenn Wort nicht enthalten
+					!liste.wortVorhanden(p_prep[i])) { // ggf. kürzen, wenn Wort nicht enthalten
 				if (zuletzt_gekuerzt) {
 					div.removeChild(div.lastChild);
 				} else {
@@ -710,7 +709,7 @@ let liste = {
 		schnitt = schnitt.replace(/<.+?>/g, ""); // HTML-Formatierungen vorher löschen!
 		schnitt = liste.belegTrennungWeg(schnitt, true); // Trennzeichen und Seitenumbrüche weg
 		// 1. Treffer des Worts im Text ermitteln, Beleg am Anfang ggf. kürzen
-		let reg = new RegExp(helfer.formVariRegExp(), "gi");
+		let reg = new RegExp(helfer.formVariRegExpRegs[0], "gi");
 		if (reg.test(schnitt) &&
 				reg.lastIndex - kartei.wort.length > 35) {
 			schnitt = `…${schnitt.substring(reg.lastIndex - kartei.wort.length - 25)}`;
@@ -791,9 +790,24 @@ let liste = {
 		if (!optionen.data.belegliste.wort_hervorheben && !immer) {
 			return schnitt;
 		}
-		let reg = new RegExp(`[^${helfer.ganzesWortRegExp.links}]*(${helfer.formVariRegExp()})[^${helfer.ganzesWortRegExp.rechts}]*`, "gi");
-		schnitt = schnitt.replace(reg, (m) => `<mark class="wort">${m}</mark>`);
+		for (let i of helfer.formVariRegExpRegs) {
+			let reg = new RegExp(`[^${helfer.ganzesWortRegExp.links}]*(${i})[^${helfer.ganzesWortRegExp.rechts}]*`, "gi");
+			schnitt = schnitt.replace(reg, (m) => `<mark class="wort">${m}</mark>`);
+		}
 		return schnitt;
+	},
+	// überprüft, ob das Karteiwort in dem übergebenen Text steht
+	//   text = String
+	//     (Text, der auf die Existenz des Karteiworts überprüft werden soll)
+	wortVorhanden (text) {
+		text = liste.textBereinigen(text);
+		for (let i of helfer.formVariRegExpRegs) {
+			let reg = new RegExp(i, "i");
+			if (!reg.test(text)) {
+				return false;
+			}
+		}
+		return true;
 	},
 	// den übergebenen Text bereinigen, z.B. bevor eine Kürzung vollzogen wird
 	// (diese Funktion wird auch von beleg.js benutzt)
@@ -816,19 +830,52 @@ let liste = {
 			return text;
 		}
 		// Suchtreffer hervorheben
+		let treffer;
 		filter.volltextSuche.reg.forEach(function(i) {
-			let treffer = i.exec(text);
-			text = text.replace(i, function(m) {
-				if (treffer.groups) {
-					return `${treffer.groups.vor}<mark class="suche">${treffer.groups.wort}</mark>${treffer.groups.nach}`;
-				}
-				return `<mark class="suche">${m}</mark>`;
-			});
+			treffer = i.exec(text);
+			text = text.replace(i, setzenMark);
 		});
 		// Treffer innerhalb von Tags löschen
 		text = helfer.suchtrefferBereinigen(text);
 		// Text zurückgeben
 		return text;
+		// Ersetzungsfunktion (vgl. suchleiste.suchen())
+		function setzenMark (m) {
+			if (treffer.groups) {
+				m = treffer.groups.wort;
+			}
+			if (/<.+?>/.test(m)) {
+				m = m.replace(/<.+?>/g, function(m) {
+					return `</mark>${m}<mark class="suche">`;
+				});
+			}
+			// leere <mark> entfernen (kann passieren, wenn Tags verschachtelt sind)
+			m = m.replace(/<mark class="suche"><\/mark>/g, "");
+			// Rückgabewert zusammenbauen
+			m = `<mark class="suche">${m}</mark>`;
+			// alle <mark> ermitteln, die weder Anfang noch Ende sind
+			const marks = m.match(/class="suche"/g).length;
+			if (marks > 1) { // marks === 1 => der einzige <mark>-Tag ist Anfang und Ende zugleich
+				let splitted = m.split(/class="suche"/);
+				m = "";
+				for (let i = 0, len = splitted.length; i < len; i++) {
+					if (i === 0) {
+						m += splitted[i] + `class="suche suche-kein-ende"`;
+					} else if (i === len - 2) {
+						m += splitted[i] + `class="suche suche-kein-start"`;
+					} else if (i < len - 1) {
+						m += splitted[i] + `class="suche suche-kein-start suche-kein-ende"`;
+					} else {
+						m += splitted[i];
+					}
+				}
+			}
+			// aufbereiteten Match auswerfen
+			if (treffer.groups) {
+				return `${treffer.groups.vor}${m}${treffer.groups.nach}`;
+			}
+			return m;
+		}
 	},
 	// Details zu einem einzelnen Beleg durch Klick auf den Belegkopf ein- oder ausblenden
 	//   div = Element

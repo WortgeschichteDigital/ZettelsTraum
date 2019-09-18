@@ -403,6 +403,7 @@ p.no-indent + .filter-baum, /* betrifft Verschiedenes > Filterlogik */
 
 .bedeutungen-opt-block a:last-child,
 .beleg-opt-block a:last-child,
+.beleg-opt-block a.beleg-opt-anzeige-letztes,
 .filter-ctrl-block a:last-child,
 .liste-opt-block a:last-child,
 .liste-opt-block:not(.liste-opt-anzeige-an):not(:hover):not(:focus-within) a.liste-opt-anzeige-letztes {
