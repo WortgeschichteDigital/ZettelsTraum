@@ -89,6 +89,7 @@ let bedeutungenGeruest = {
 	listener (ele) {
 		ele.addEventListener("click", function(evt) {
 			evt.stopPropagation();
+			evt.preventDefault();
 			bedeutungenGeruest.oeffnen();
 		});
 	},

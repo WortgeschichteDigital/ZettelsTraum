@@ -102,6 +102,10 @@ h2:first-child {
 	margin-top: 16px;
 }
 
+img {
+	vertical-align: text-bottom;
+}
+
 kbd {
 	display: inline-block;
 	border: 1px solid var(--linie);

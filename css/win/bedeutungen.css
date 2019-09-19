@@ -169,6 +169,7 @@ table {
 
 td {
 	padding: 0;
+	vertical-align: top;
 }
 
 td:first-child,
@@ -200,6 +201,11 @@ td:nth-child(2) {
 .icon-remove {
 	-webkit-mask-image: url(../../img/bedeutungen-remove.svg);
 	mask-image: url(../../img/bedeutungen-remove.svg);
+}
+
+td .icon-link {
+	position: relative;
+	top: 3px;
 }
 
 p.bd-win-keine {

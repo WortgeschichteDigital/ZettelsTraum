@@ -790,13 +790,15 @@ let liste = {
 		if (!optionen.data.belegliste.wort_hervorheben && !immer) {
 			return schnitt;
 		}
-		let reg = new RegExp(`[^${helfer.ganzesWortRegExp.links}]*(${helfer.formVariRegExpRegs[0]})[^${helfer.ganzesWortRegExp.rechts}]*`, "gi");
-		schnitt = schnitt.replace(reg, (m) => `<mark class="wort">${m}</mark>`);
+		for (let i of helfer.formVariRegExpRegs) {
+			let reg = new RegExp(`[^${helfer.ganzesWortRegExp.links}]*(${i})[^${helfer.ganzesWortRegExp.rechts}]*`, "gi");
+			schnitt = schnitt.replace(reg, (m) => `<mark class="wort">${m}</mark>`);
+		}
 		return schnitt;
 	},
-	// überprüft, ob das Wort in dem übergebenen Text steht
+	// überprüft, ob das Karteiwort in dem übergebenen Text steht
 	//   text = String
-	//     (Text, der auf die Existenz des Wortes überprüft werden soll)
+	//     (Text, der auf die Existenz des Karteiworts überprüft werden soll)
 	wortVorhanden (text) {
 		text = liste.textBereinigen(text);
 		for (let i of helfer.formVariRegExpRegs) {

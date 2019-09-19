@@ -22,6 +22,15 @@ a[href^="#"] {
 	cursor: default;
 }
 
+a[href^="http"]::after {
+	content: url(../img/link.svg);
+	padding-left: 3px;
+}
+
+footer a[href^="http"]::after {
+	content: url(../img/link-weiss.svg);
+}
+
 /* Farbe Textauswahl ---------------------------- */
 ::selection,
 /* in date und datetime-local funktioniert ::selection nicht */

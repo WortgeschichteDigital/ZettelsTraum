@@ -5,7 +5,7 @@ window.addEventListener("load", function() {
 	window.fenstertyp = "handbuch";
 	
 	// KARTEIEN-SEKTION ANZEIGEN
-	hilfe.sektionWechseln("karteien");
+	hilfe.sektionWechseln("start");
 	
 	// PROGRAMM-NAME EINTRAGEN
 	const {app} = require("electron").remote;
@@ -56,6 +56,13 @@ window.addEventListener("load", function() {
 	document.querySelectorAll(".link-dokumentation").forEach(a => helferWin.oeffneDokumentation(a));
 	// Changelog
 	document.querySelectorAll(".link-changelog").forEach(a => helferWin.oeffneChangelog(a));
+	// Suche fokussieren
+	document.querySelectorAll(".link-suche").forEach(a => {
+		a.addEventListener("click", function(evt) {
+			evt.preventDefault();
+			document.getElementById("suchfeld").select();
+		});
+	});
 	// Navigation
 	document.querySelectorAll(`a[class^="link-sektion-"`).forEach(i => hilfe.sektion(i));
 	// interne Sprung-Links

@@ -167,6 +167,10 @@ li img {
 	vertical-align: bottom;
 }
 
+li img.klein {
+	vertical-align: baseline;
+}
+
 li p {
 	margin-bottom: 5px;
 }

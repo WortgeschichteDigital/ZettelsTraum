@@ -599,6 +599,7 @@ let filter = {
 			span.title = "Notizen bearbeiten";
 			span.addEventListener("click", function(evt) {
 				evt.stopPropagation();
+				evt.preventDefault();
 				notizen.oeffnen();
 			});
 		} else {
@@ -1434,6 +1435,7 @@ let filter = {
 	ctrlResetBlock (img) {
 		img.addEventListener("click", function(evt) {
 			evt.stopPropagation();
+			evt.preventDefault();
 			filter.zuletztAktiv = this.parentNode.id;
 			let block = this.parentNode.nextSibling;
 			block.querySelectorAll(".filter").forEach(function(i) {
