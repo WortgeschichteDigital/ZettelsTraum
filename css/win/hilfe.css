@@ -437,7 +437,16 @@ mark.suche {
 	transition: outline-color 1.5s ease;
 }
 
-
 .obacht {
 	color: var(--textWarnung);
+}
+
+.erklaerung-icon img {
+	margin-right: 16px;
+}
+
+.info {
+	margin-left: 40px;
+	font-size: 14px;
+	line-height: 20px;
 }
