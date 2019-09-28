@@ -1406,6 +1406,8 @@ let beleg = {
 	//   html = String
 	//     (Text mit HTML-Tags, der aufbereitet und dann eingefügt werden soll)
 	toolsEinfuegenHtml (html) {
+		// Style-Block entfernen
+		html = html.replace(/<style.*?>(.|\n)+?<\/style>/, "");
 		// Inline-Styles löschen (widerspricht sonst der Content-Security-Policy)
 		html = html.replace(/<([a-zA-Z0-9]+) .+?>/g, function(m, p1) {
 			return `<${p1}>`;

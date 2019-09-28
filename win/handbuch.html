@@ -49,7 +49,7 @@
 			</nav>
 			<div>
 				<!-- START -->
-				<section id="sektion-start">
+				<section id="sektion-start" class="suche">
 					<h2 class="app-name"></h2>
 					
 					<p><i class="app-name"></i> ist ein Zettelkastenprogramm für historisch arbeitende Lexikographen. Die App entstand aus der Idee heraus, Belegsammlungen auf Zetteln, wie sie bereits seit den ersten Anfängen des <i>Deutschen Wörterbuchs</i> von Jacob und Wilhelm Grimm im Jahr 1838 in Gebrauch waren, in das digitale Zeitalter zu holen und sie durch eine Vielzahl an Such-, Filter- und Verwaltungsfunktionen zugänglich zu machen. <i class="app-name"></i> soll das Schreiben von historischen Wörterbuchartikeln, bei denen nicht selten mit sehr großen Massen an Textbelegen gearbeitet wird, komfortabler, <abbr title="das heißt">d. h.</abbr> schneller, übersichtlicher, schlicht und ergreifend leichter machen.</p>
@@ -62,7 +62,7 @@
 					
 					<h2>Der Name</h2>
 					
-					<p>Ein Wort zum Namen, auf den wir das Programm tauften: <i class="app-name"></i> soll natürlich ein lockerer Anklang an das gleichnamige Monumentalwerk Arno Schmidts sein, ein Autor, der nicht nur hier, sondern in seinem gesamten Œuvre zu einer eigenwilligen Orthographie und Interpunktion neigte. Für die im Deutschen unübliche (wenn auch nicht in allen Fällen irreguläre) Verwendung des Apostrophs zur Genitivmarkierung mag in diesem Fall auch eine Rolle spielen, dass <i>Zettel</i> (im Original <i>Bottom</i>) eine Figur aus Shakespeares <i lang="en">A Midsummer Night’s Dream</i>, die Figur mithin mit dem Englischen assoziiert ist. (Auch dass <i>Zettel</i> ein Eigenname ist, könnte Grund für das Apostroph sein; <abbr title="Vergleiche">vgl.</abbr> Schmidts Trilogie <i>Nobodaddy’s Kinder</i> mit dem zweiten Teil <i>Brand’s Haide</i>.)</p>
+					<p>Ein Wort zum Namen, auf den wir das Programm tauften: <i class="app-name"></i> soll natürlich ein lockerer Anklang an das gleichnamige Monumentalwerk Arno Schmidts sein, ein Autor, der nicht nur hier, sondern in seinem gesamten Œuvre zu einer eigenwilligen Orthographie und Interpunktion neigte. Für die im Deutschen unübliche (wenn auch nicht in allen Fällen irreguläre) Verwendung des Apostrophs zur Genitivmarkierung bei Eigennamen mag in diesem Fall auch eine Rolle spielen, dass <i>Zettel</i> (im Original <i>Bottom</i>) eine Figur aus Shakespeares <i lang="en">A Midsummer Night’s Dream</i>, die Figur mithin mit der englischen Sprache assoziiert ist. (Wobei schon allein der Umstand, dass <i>Zettel</i> ein Eigenname ist, für Schmidt Grund genug gewesen sein könnte, ein Apostroph zu verwenden; <abbr title="Vergleiche">vgl.</abbr> seine Trilogie <i>Nobodaddy’s Kinder</i> mit dem zweiten Teil <i>Brand’s Haide</i>.)</p>
 					
 					<p>Allzu elaborierte Hintergedanken hatten wir bei der Namensgebung allerdings nicht. Bezüge zu <i>Zettel’s Traum</i>, dem Buch, könnte man natürlich in der Monumentalität des Entwurfs sehen, den Wörterbuchprojekte gerne teilen; in der immensen Reichhaltigkeit, mit der über die Seiten des schmidtschen Werks Zitate verschiedenster Autoren verstreut wurden; oder in den rund 120 000 Notizzetteln, auf deren Grundlage Schmidt sein Großwerk verfasste, die ihn vielleicht sogar selbst auf den ironischen Titel brachten.</p>
 					
@@ -72,7 +72,7 @@
 					
 					<p>Das Handbuch ist tendenziell knapp gehalten. Es werden zwar alle Funktionen der App genannt, aber nicht immer ausführlich erläutert, zumal sie in vielen Fällen selbsterklärend sein sollten.</p>
 					
-					<p>Weil das Programm in dem Wörterbuchprojekt <a href="https://adw-goe.de/forschung/weitere-forschungsprojekte/wortgeschichte-digital-teilprojekt-im-zdl/"><i>Wortgeschichte digital</i></a> (WGd), für das es geschrieben wurde, schon in einer frühen Entwicklungsphase intensiv in Benutzung war, gibt es einen außergewöhnlich ausführlichen <a href="#" class="link-changelog">Changelog</a>, in dem für die Projektmitarbeiter sehr genau erläutert wurde, wie ein neu eingeführtes oder stark geändertes Feature benutzt wird. Werden Sie hier nicht fündig, lohnt es sich darum vielleicht, diesen <a href="#" class="link-changelog">Changelog</a> zu durchsuchen. Die Suchfunktion können Sie dort über das Tastaturkürzel <kbd>Strg</kbd> + <kbd>F</kbd> aufrufen.</p>
+					<p>Weil das Programm im Wörterbuchprojekt <a href="https://adw-goe.de/forschung/weitere-forschungsprojekte/wortgeschichte-digital-teilprojekt-im-zdl/"><i>Wortgeschichte digital</i></a> (WGd), für das es geschrieben wurde, schon in einer frühen Entwicklungsphase intensiv in Benutzung war, gibt es einen außergewöhnlich ausführlichen <a href="#" class="link-changelog">Changelog</a>, in dem für die Projektmitarbeiter sehr genau erläutert wurde, wie ein neu eingeführtes oder stark geändertes Feature benutzt wird. Werden Sie hier im Handbuch nicht fündig, lohnt es sich darum vielleicht, diesen <a href="#" class="link-changelog">Changelog</a> zu durchsuchen. Die Suchfunktion können Sie dort über das Tastaturkürzel <kbd>Strg</kbd> + <kbd>F</kbd> aufrufen.</p>
 					
 					<p>Ein paar mögliche Einstiegspunkte, um die App kennenzulernen:</p>
 					
@@ -171,7 +171,15 @@
 					
 					<p class="erklaerung-icon"><img src="../img/tool-einfuegen.svg" width="24" height="24" alt="">Text aus der Zwischenablage in das zugehörige Feld einfügen</p>
 					
+					<p class="info">Der Text in der Zwischenablage wird als Plain-Text, also ohne Formatierungen eingefügt. Bezogen auf das Feld <i>Beleg</i> verhält sich das Icon anders (<abbr title="siehe unten">s. u.</abbr>).</p>
+					
 					<p class="info">Steht bereits Text im Feld, fragt das Programm, ob es das Feld überschreiben oder ergänzen soll.</p>
+					
+					<p class="erklaerung-icon"><img src="../img/dropdown.svg" width="24" height="24" alt="">Dropdown-Menü mit Textvorschlägen öffnen</p>
+					
+					<p class="info">Für Felder, die am rechten Rand einen nach unten weisenden Pfeil haben, kann ein Dropdown-Menü geöffnet werden, das Textvorschläge enthält. Die Liste der Textvorschläge speist sich aus den anderen Karteikarten; sie ist alphabetisch sortiert (das Feld <i>Bedeutung</i> weicht von dieser Regel ab; <abbr title="siehe unten">s. u.</abbr>).</p>
+					
+					<p class="info">Ein Dropdown-Menü kann auch über das Tastaturkürzel <kbd>Strg</kbd> + <kbd>⇩</kbd> geöffnet werden. Dazu muss das entsprechende Feld fokussiert sein. Im geöffneten Menü lässt sich dann mit den Cursor-Tasten <kbd>⇧</kbd> <abbr title="beziehungsweise">bzw.</abbr> <kbd>⇩</kbd> navigieren. Den aktuell ausgewählten Eintrag (grün hinterlegt) kann man via <kbd>⏎</kbd> einfügen.</p>
 					
 					<p><b>unvollständig:</b> markiert die Karteikarte als noch nicht vollständig bearbeitet</p>
 					
@@ -187,17 +195,19 @@
 					
 					<p class="erklaerung-icon"><img src="../img/stern.svg" width="24" height="24" alt="">Möglichkeit für eine nicht an eine bestimmte Semantik gebundene Markierung der Karteikarte</p>
 					
-					<p class="info">Zur Markierung muss einfach auf einen der Sterne geklickt werden. Markiert wird immer der angeklickte Stern und alle links von ihm stehenden Sterne, woraus sich fünf mögliche Markierungsschritte ergeben: eins, zwei, drei, vier, fünf Sterne. Zur Aufhebung einer Markierung muss man einfach nur auf den letzten markierten Stern klicken.</p>
+					<p class="info">Zur Markierung muss einfach auf einen der Sterne geklickt werden. Markiert wird immer der angeklickte Stern und alle links von ihm stehenden Sterne, woraus sich fünf mögliche Markierungsschritte ergeben: eins, zwei, drei, vier, fünf Sterne. Zur Aufhebung einer Markierung genügt es, auf den letzten markierten Stern zu klicken.</p>
 					
 					<p><b>Datum:</b> <i>Pflichtfeld</i>; Entstehungs- oder Publikationsdatum des Belegs</p>
 					
-					<p class="info">Das Datumsfeld muss entweder eine vierstellige Jahreszahl (<abbr title="zum Beispiel">z. B.</abbr> <q>1789</q>) und/oder eine Jahrhundertangabe (in dem Format <q>18. Jh.</q>) enthalten. Die Zeitangabe kann um beliebige zusätzliche Informationen ergänzt werden. Für die Sortierung der Belege wird die Datumsangabe verwendet, die als erstes im Feld auftaucht. Stünde in dem Feld also <q>2010 [Nachdruck Ausgabe 1788]</q>, würde der Beleg in der <a href="#" class="link-sektion-belegliste">Belegliste</a> als Text aus dem Jahr <i>2010</i> behandelt; stünde in dem Feld <q>1788 [Nachdruck 2010]</q>, würde der Beleg als einer aus dem Jahr <i>1788</i> angesehen.</p>
+					<p class="info">Das Datumsfeld muss entweder eine vierstellige Jahreszahl (<abbr title="zum Beispiel">z. B.</abbr> <q>1789</q>) und/oder eine Jahrhundertangabe (in dem Format <q>18. Jh.</q>) enthalten. Die Zeitangabe kann um beliebige zusätzliche Informationen ergänzt werden.</p>
 					
-					<p class="info">Jahrhundertangaben werden auf das Jahr null datiert (nicht ganz korrekt, weil dieses Jahr bekanntlich noch zum vorherigen Jahrhundert gehört). Die Angabe <q>18. Jh.</q> im Datumsfeld behandelte den Beleg mithin so, als stamme er aus dem Jahr <i>1700</i>.</p>
+					<p class="info">Für die Sortierung der Belege wird die Datumsangabe verwendet, die als erstes im Feld auftaucht. Stünde in dem Feld also <q>2010 [Nachdruck Ausgabe 1788]</q>, würde der Beleg in der <a href="#" class="link-sektion-belegliste">Belegliste</a> als Text aus dem Jahr <i>2010</i> behandelt; stünde in dem Feld <q>1788 [Nachdruck 2010]</q>, würde der Beleg als einer aus dem Jahr <i>1788</i> angesehen.</p>
+					
+					<p class="info">Jahrhundertangaben werden auf das Jahr null datiert (nicht ganz korrekt, weil dieses Jahr bekanntlich noch zum vorherigen Jahrhundert gehört, aus mehreren Gründen aber leichter zu handhaben). Die Angabe <q>18. Jh.</q> im Datumsfeld behandelte den Beleg mithin so, als stamme er aus dem Jahr <i>1700</i>.</p>
 					
 					<p><b>Autor:</b> Urheber des Textes im Belegfeld</p>
 					
-					<p class="info">Wird der Name mit Komma, also im Format <q>Nachname, Vorname</q> eingegeben, kann er in der Vorschau der Belegliste gekürzt werden.</p>
+					<p class="info">Wird der Name mit Komma, also im Format <q>Nachname, Vorname</q> eingegeben, kann er in der Vorschau der Belegliste automatisch um den Vornamen gekürzt werden.</p>
 					
 					<p><b>Beleg:</b> <i>Pflichtfeld</i>; Belegtext</p>
 					
@@ -207,19 +217,21 @@
 					
 					<p class="info">Um Text zu formatieren, müssen sie ihn einfach nur markieren und auf eines der Text-Tool-Icons über dem Belegfeld klicken. Mit <img src="../img/tool-italic.svg" width="20" height="20" alt=""> lässt sich der markierte Text <abbr title="beispielsweise">bspw.</abbr> kursivieren. Welche Formatierungsfunktion die einzelnen Icons haben, steht in einem Tooltip, der angezeigt wird, wenn die Maus über dem Icon schwebt.</p>
 					
+					<p class="info">Die Funktion des Einfüge-Icons <img src="../img/tool-einfuegen.svg" width="20" height="20" alt=""> weicht leicht von dem anderer Felder ab. Normalerweise wird der in der Zwischenablage befindliche Text als Plain-Text, <abbr title="das heißt">d. h.</abbr> unformatiert, in das betreffende Feld hineinkopiert. Liegt in der Zwischenablage ein Text mit <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>-Tags, bleiben einfache Formatierungen wie fett (<code class="quelltext">&lt;b&gt;</code>), kursiv (<code class="quelltext">&lt;i&gt;</code>) oder unterstrichen (<code class="quelltext">&lt;u&gt;</code>) jedoch erhalten.</p>
+					
 					<p><b>Bedeutung:</b> mit dem Beleg verknüpfte Wortbedeutung(en)</p>
 					
 					<p class="info">Wenn Sie Bedeutungen händisch eingeben: Eine neue Hierarchieebene (Markierung des Beginns einer Unterbedeutung) beginnt mit einem <q>: </q> (Doppelpunkt, gefolgt von einem Leerzeichen). Mehrere Bedeutungen werden durch einen Zeilenumbruch voneinander getrennt. Spitzklammern sind nur maskiert zulässig (<abbr title="siehe oben">s. o.</abbr> zum Belegfeld). Ist eine Bedeutung neu, wurde sie also noch für keinen anderen Beleg verwendet, wird sie beim Speichern der Karteikarte automatisch an einer passenden Stelle des aktuellen <a href="#" class="link-sektion-bedeutungsgerust">Bedeutungsgerüsts</a> integriert.</p>
 					
-					<p class="info">Über den Pfeil am rechten Rand des Belegfeldes (<img src="../img/dropdown.svg" width="20" height="20" alt="">) kann man sich in einem Dropdown-Menü alle schon im Bedeutungsgerüst vorhandenen Bedeutungen anzeigen lassen. Sie erscheinen in der Sortierung, in der sie im Bedeutungsgerüst stehen.</p>
+					<p class="info">Bedeutungen können prinzipiell Spitzklammern (&lt; und &gt;) enthalten. Diese müssen aber maskiert eingegeben werden: &amp;lt; <abbr title="beziehungsweise">bzw.</abbr> &amp;gt;. Das Icon <img src="../img/tool-sonderzeichen.svg" width="20" height="20" alt=""> kann Sie dabei unterstützen.</p>
+					
+					<p class="info">Das Dropdown-Menü (das durch den Pfeil <img src="../img/dropdown.svg" width="20" height="20" alt=""> geöffnet werden kann) enthält alle schon im Bedeutungsgerüst vorhandenen Bedeutungen. Sie erscheinen hier nicht alphabetisch, sondern in der Sortierung, in der sie im Bedeutungsgerüst stehen.</p>
 					
 					<p class="info">Arbeiten Sie mit mehreren Bedeutungsgerüsten: Es werden immer nur die Bedeutungen des aktuellen Bedeutungsgerüsts angezeigt. Existieren in der aktuellen Kartei mehrere Gerüste, wird das aktuelle Gerüst über dem Belegfeld angezeigt, wo dann <q>Gerüst 1</q>, <q>Gerüst 2</q> <abbr title="und so weiter">usw.</abbr> steht. Mit einem Klick auf diesen Text können sie das Gerüst wechseln, womit sich dann (<abbr title="gegebenenfalls">ggf.</abbr>) auch die Bedeutungen im Bedeutungsfeld ändern.</p>
 					
 					<p><b>Wortbildung:</b> Liste an Wortbildungen, die im Beleg zu finden sind</p>
 					
 					<p class="info">Mehrere Wortbildungen werden durch einen Zeilenumbruch voneinander getrennt. Wie im Bedeutungsfeld können auch Wortbildungen Hierarchieebenen enthalten. Eine neue Ebene öffnen Sie, indem Sie <q>: </q> (Doppelpunkt, gefolgt von einem Leerzeichen) eingeben. Auf diese Weise können Wortbildungsbäume mit beliebiger Verschachtelungstiefe erzeugt werden. Eingaben wie <q>Derivation: Diminution: Mütterchen</q> oder <q>Komposition: Mutterherz</q> werden im zugehörigen <a href="#" class="link-sektion-filter">Filter</a> in einer Baumansicht dargestellt.</p>
-					
-					<p class="info">Bereits zuvor eingegebene Wortbildungen können über ein Dropdown-Menü (<img src="../img/dropdown.svg" width="20" height="20" alt="">) in alphabetischer Sortierung angezeigt und über diesen Weg auch eingefügt werden.</p>
 					
 					<p><b>Synonym:</b> Liste an Synonymen, die im Beleg zu finden sind</p>
 					
@@ -243,11 +255,11 @@
 					
 					<p><b>Anhänge:</b> Dateianhänge zu der Karteikarte</p>
 					
-					<p class="info">Durch Klick auf einen Anhang lässt sich dieser in dem Standardprogramm des Betriebssystems öffnen. Die Anhänge in dieser Liste sind an die aktuelle Karteikarte gebunden. Anhänge, die nicht zu einer einzelnen Karteikarte, sondern der Wortkartei als ganzen gehören, können über den Menüpunkt <i>Kartei &gt; Anhänge</i> hinzugefügt werden.</p>
+					<p class="info">Durch Klick auf einen Anhang lässt sich dieser in dem Standardprogramm des Betriebssystems öffnen. Die Anhänge in dieser Liste sind an die aktuelle Karteikarte gebunden. Anhänge, die nicht zu einer einzelnen Karteikarte, sondern zur Wortkartei selbst gehören, können über den Menüpunkt <i>Kartei &gt; Anhänge</i> hinzugefügt werden.</p>
 					
 					<h2 id="karteikarte-leseansicht">Leseansicht</h2>
 					
-					<p>Wie es der Name schon sagt: Die Leseansicht ist nur zum Lesen da. Allein die Bedeutungen können aus der Leseansicht heraus verändert werden. Vor jeder Bedeutung befindet sich ein Icon (<img src="../img/quick-schliessen.svg" width="24" height="24" alt="">), mit dem man die Bedeutung entfernen kann. Daneben lässt sich auch die Liste der Dateianhänge ergänzen oder bereinigen.</p>
+					<p>Wie es der Name schon sagt: Die Leseansicht ist nur für das bequeme Lesen von Karteikarten gedacht. Allein die Liste der Anhänge und die Bedeutungen können in dieser Ansicht modifiziert werden: Einzelne Bedeutungen können Sie mithilfe des Icons <img src="../img/quick-schliessen.svg" width="24" height="24" alt=""> entfernen. Die Bearbeitung der Dateianhänge funktioniert ohne Einschränkungen.</p>
 					
 					<p>In der Zeile über dem Datumsfeld können Icons auftauchen – wenn Checkboxes im Kopf der Formularansicht abgehakt wurden. Die Bedeutung der Icons erfährt man durch einen Tooltip beim rüberfahren der Maus. Es handelt sich um dieselben Icons, die auch in der Detailansicht der <a href="#" class="link-sektion-belegliste">Belegliste</a> auftauchen. Dort werden sie aufgelistet und erklärt.</p>
 				</section>
@@ -258,7 +270,7 @@
 				
 					<h2 id="bedeutungsgerust-kopfzeile">Kopfzeile</h2>
 					
-					<p>Prinzipiell kann mit beliebig vielen Bedeutungsgerüsten gearbeitet werden. Im <b>ersten Textfeld</b> der Kopfzeile sieht man, welches Bedeutungsgerüst im unteren Teil des Fensters gerade zu sehen ist (initial steht hier <q>Gerüst 1</q>). Durch Klick auf das Feld lässt sich das Gerüst ändern. Das hier eingestellte Gerüst wird nicht nur in der Gerüstfunktion, sondern auch an allen anderen Stellen des Programms, die auf die Gerüstdaten zurückgreifen, benutzt. (Das verwendete Gerüst kann nicht nur an dieser Stelle, sondern auch über das Menü <i>Kartei &gt; Bedeutungsgerüst wechseln</i> geändert werden.)</p>
+					<p>Prinzipiell kann mit beliebig vielen Bedeutungsgerüsten gearbeitet werden. Im <b>ersten Textfeld</b> der Kopfzeile sieht man, welches Bedeutungsgerüst im unteren Teil des Fensters gerade zu sehen ist (initial steht hier <q>Gerüst 1</q>). Durch Klick auf das Feld lässt sich das Gerüst ändern. Das hier eingestellte Gerüst wird nicht nur in der Gerüstfunktion, sondern auch an allen anderen Stellen der Kartei, an denen auf die Gerüstdaten zurückgegriffen wird, benutzt. (Das verwendete Gerüst kann nicht nur an dieser Stelle, sondern auch über das Menü <i>Kartei &gt; Bedeutungsgerüst wechseln</i> geändert werden.)</p>
 					
 					<p>Über das hinter dem Textfeld für das aktuell eingestellt Gerüst stehende Icon <img src="../img/gerueste-config.svg" width="24" height="24" alt=""> erreichen Sie ein Konfigurationsfenster, in dem Gerüste hinzugefügt, gelöscht und benannt werden können. <i>Gerüst 1</i> lässt sich nicht löschen. Hat man einem Gerüst einen Namen gegeben, erscheint dieser in der Überschrift des Bedeutungsgerüsts und auch im <a href="#bedeutungsgerust-fenster">Bedeutungsgerüst-Fenster</a>.</p>
 					
@@ -306,6 +318,8 @@
 				<!-- BELEGLISTE -->
 				<section id="sektion-belegliste" class="suche">
 					<p>[<mark>Belegliste</mark>]</p>
+					
+					<p>Icons der Detailansicht auflisten…</p>
 				</section>
 				
 				<!-- FILTER -->
