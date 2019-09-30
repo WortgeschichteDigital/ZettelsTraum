@@ -830,4 +830,19 @@ let helfer = {
 		}
 		return false;
 	},
+	// Öffnen der Demonstrationskartei
+	demoOeffnen () {
+		const {app} = require("electron").remote,
+			path = require("path");
+		let basis = "";
+		// vgl. optionen.tagsAutoLaden()
+		if (app.isPackaged) {
+			let reg = new RegExp(`${helfer.escapeRegExp(path.sep)}zettelstraum(\.exe)*$`);
+			basis = app.getPath("exe").replace(reg, "");
+		} else {
+			basis = app.getAppPath();
+		}
+		const pfad = path.join(basis, "resources", "Demonstrationskartei Team.wgd");
+		kartei.oeffnenEinlesen(pfad);
+	},
 };

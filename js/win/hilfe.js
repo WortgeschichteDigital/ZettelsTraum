@@ -113,7 +113,7 @@ let hilfe = {
 		});
 	},
 	// Überschriftenliste der aktiven Sektion aufbauen
-	sektionenH(sektion) {
+	sektionenH (sektion) {
 		// alte Liste entfernen
 		let nav = document.querySelector("nav");
 		let ul_h = nav.querySelector("ul.h");

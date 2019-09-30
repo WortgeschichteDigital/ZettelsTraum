@@ -155,10 +155,15 @@ q.einfach::after {
 	content: "‘";
 }
 
-section ul {
+section ul,
+section ol {
 	margin: 0;
 	padding: 0 0 0 30px;
 	list-style-type: disc;
+}
+
+section ol {
+	list-style-type: decimal;
 }
 
 section li {

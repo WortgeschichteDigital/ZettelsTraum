@@ -250,6 +250,7 @@ window.addEventListener("load", function() {
 	ipcRenderer.on("belege-auflisten", () => liste.anzeigen());
 	ipcRenderer.on("belege-kopieren", () => kopieren.init());
 	ipcRenderer.on("belege-einfuegen", () => kopieren.einfuegen());
+	ipcRenderer.on("hilfe-demo", () => helfer.demoOeffnen());
 	ipcRenderer.on("kopieren-basisdaten", () => kopieren.basisdatenSenden());
 	ipcRenderer.on("kopieren-basisdaten-empfangen", (evt, daten) => kopieren.einfuegenBasisdatenEintragen(daten));
 	ipcRenderer.on("kopieren-daten", () => kopieren.datenSenden());

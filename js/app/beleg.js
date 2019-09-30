@@ -2451,7 +2451,9 @@ let beleg = {
 	//   bd = Object
 	//     (die Bedeutung mit Gerüstnummer [bd.gr] und ID [bd.id])
 	bedeutungEintragenListe (bd) {
-		const bdText = bedeutungen.bedeutungenTief({gr: bd.gr, id: bd.id});
+		let bdText = bedeutungen.bedeutungenTief({gr: bd.gr, id: bd.id});
+		bdText = bdText.replace(/<b>/, `<b class="zaehlung">`); // erstes Zählzeichen
+		bdText = bdText.replace(/<b>/g, `<b class="zaehlung nach-text">`); // weitere Zählzeichen
 		// keine Belege in der Liste
 		if (!document.querySelector("#liste-belege-cont .liste-kopf")) {
 			dialog.oeffnen("alert");

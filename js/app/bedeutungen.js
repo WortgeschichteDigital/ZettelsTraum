@@ -624,10 +624,15 @@ let bedeutungen = {
 		});
 	},
 	// die vorherige oder nächste Bedeutung aufrufen
-	// (wird nur aufgerufen, wenn Ctrl + ↑ | ↓)
+	// (wird nur aufgerufen, wenn Ctrl + ↑ || Ctrl + ↓)
 	//   evt = Event-Objekt
 	//     (Tastaturevent, über das die Funktion aufgerufen wurde)
 	navi (evt) {
+		// Abbruch, falls noch keine Bedeutungen vorhanden sind
+		if (!bedeutungen.akt.bd.length) {
+			return;
+		}
+		// Bedeutungen vorhanden
 		let trEditAktiv = document.querySelector("#bedeutungen-cont .bedeutungen-edit");
 		if (trEditAktiv) { // Zeile fokussiert (die Bedeutung/die Tags/das Alias)
 			bedeutungen.moveAn(parseInt(trEditAktiv.dataset.idx, 10));

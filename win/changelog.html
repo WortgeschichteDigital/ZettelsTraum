@@ -40,10 +40,18 @@
 			<div>
 				<h2><span>Version 0.19.2</span><time datetime="2019-09-19T21:02:19">19. September 2019</time></h2>
 				
+				<h3>Neue Funktionen</h3>
+				
+				<ul>
+					<li><i class="app-name"></i> liefert ab dieser Version eine Demonstrationskartei mit, an der neue NutzerInnen sehen können, wie eine mit einem Bedeutungsgerüst versehene und mit Belegen gefüllte Wortkartei aussieht. Die Kartei kann via <i>Hilfe &gt; Demonstrationskartei</i> geöffnet werden.</li>
+				</ul>
+				
 				<h3>Behobene Fehler</h3>
 				
 				<ul>
-					<li>Karteikarte: Wurde in das Belegfeld mithilfe des Icons <img src="../img/tool-einfuegen.svg" width="24" height="24" alt=""> in <abbr title="Hypertext Markup Language" lang="en">HTML</abbr> formatierter Text eingefügt wurden vorhandene Layoutinformationen (<code class="quelltext">&lt;style&gt;...&lt;/style&gt;</code>) nicht entfernt.</li>
+					<li>Karteikarte: Wurde in das Belegfeld mithilfe des Icons <img src="../img/tool-einfuegen.svg" width="24" height="24" alt=""> in <abbr title="Hypertext Markup Language" lang="en">HTML</abbr> formatierter Text eingefügt, wurden vorhandene Layoutinformationen (<code class="quelltext">&lt;style&gt;...&lt;/style&gt;</code>) nicht entfernt.</li>
+					<li>Belegliste: Im Meldungsfenster, das beim blockweisen Hinzufügen von Bedeutungen aus dem Bedeutungsgerüst-Fenster erscheint, waren die Zählzeichen nicht vom Text der Bedeutung abgesetzt.</li>
+					<li>Bedeutungsgerüst: Enthielt ein Gerüst noch keine Bedeutungen und benutzte man das Tastaturkürzel <kbd>Strg</kbd> + <kbd>⇧</kbd> / <kbd>⇩</kbd> (das zum Navigieren durch die Bedeutungen dient), kam es zu einem Programmfehler.</li>
 				</ul>
 			</div>
 			
@@ -342,7 +350,7 @@ Gerüst 2 &gt; Gerüst 1</pre>
 						<p>Das Kopieren eines Belegs in die Zwischenablage ist auch aus der Belegliste heraus möglich. Bei Klick mit der rechten Maustaste auf einem Belegkopf erscheint ein Popup-Menü. In diesem gibt es nun einen Menüpunkt <i>Beleg in Zwischenablage kopieren</i>. Er ist immer vorhanden; die Kopierfunktion muss nicht eigens aktiviert werden, um ihn zu nutzen.</p>
 						<p>Eine letzte, die Karteikarte betreffende Besonderheit ist noch zu beachten. Das Tastaturkürzel <kbd>Strg</kbd> + <kbd>I</kbd> ruft bei geöffneter Karteikarte die Kopierfunktion auf. Dabei ist das Kürzel doppelt belegt. Wurde die Funktion zum Kopieren größerer Belegmengen aktiviert (<i>Belege &gt; Kopieren</i>), wird die Karteikarte in die Kopierliste geschoben. Ist diese Kopierfunktion inaktiv, wird die Karteikarte in die Zwischenablage kopiert. Damit einem immer klar ist, was gerade geschehen ist (und dass gerade etwas geschehen ist), wird für 1,5 Sekunden eine kleine Animation eingeblendet.</p>
 						<hr>
-						<p><i>Export/Import:</i> Einen in die Zwischenablage kopierten Beleg kann man übrigens auch prinzipiell via E-Mail an andere BenutzerInnen von <i class="app-name"></i> verschicken. Man kann den auf den ersten Blick ein wenig verwirrend aussehenden Text einfach in eine E-Mail oder eine Text-Datei kopieren. Der andere Nutzer kann ihn dann seinerseits markieren,  kopieren und über die Funktion <i>Belege &gt; Einfügen</i> in eine seiner Karteien importieren. Sein Programm erkennt, dass ein Beleg in der Zwischenablage ist.</p>
+						<p><i>Export/Import:</i> Einen in die Zwischenablage kopierten Beleg kann man übrigens auch prinzipiell via E-Mail an andere NutzerInnen von <i class="app-name"></i> verschicken. Man kann den auf den ersten Blick ein wenig verwirrend aussehenden Text einfach in eine E-Mail oder eine Text-Datei kopieren. Der andere Nutzer kann ihn dann seinerseits markieren,  kopieren und über die Funktion <i>Belege &gt; Einfügen</i> in eine seiner Karteien importieren. Sein Programm erkennt, dass ein Beleg in der Zwischenablage ist.</p>
 						<p>Auf diese Weise kann man natürlich nur einen einzigen Beleg austauschen. Für den Austausch ganzer Beleglisten gibt es die Funktionen <i>Export</i> (im Kopier-Fenster) und <i>Import</i> (im Einfügen-Fenster). Hat man mithilfe der Funktion <i>Belege &gt; Kopieren</i> eine Belegliste erstellt, kann man diese durch einfachen Klick auf den Button <i>Export</i> in einer <abbr title="Belege Wortgeschichte digital">BWGD</abbr>-Datei speichern. Diese Datei mit der Endung <span class="datei">*.bwgd</span> ist nicht mit einer gewöhnlichen <span class="datei">*.wgd</span>-Kartei zu verwechseln. Sie enthält nämlich keine vollständige Kartei mit Bedeutungsgerüst, Notizen, Dateianhängen <abbr title="und so weiter">usw.</abbr>, sondern nur eine Liste an Belegen. Sie kann auch nicht via Doppelklick geöffnet werden (es gibt keine Datei-Assoziierung mit <i class="app-name"></i>). Diese Belegliste kann man nun aber leicht anderen NutzerInnen schicken, die sie mithilfe der Funktion <i>Import</i> (im Einfügen-Fenster) in eine eigene Kartei an ihrem Rechner einfügen können.</p>
 						<p>Klickt man auf <i>Import</i> und wählt eine <abbr title="Belege Wortgeschichte digital">BWGD</abbr>-Datei aus, erscheint diese als erster Punkt in der Liste der Belegquellen. Durch einen Klick auf <i>Einfügen</i> werden alle Belege aus der Datei in die aktuelle Kartei kopiert.</p>
 						<p>Die <a href="#" class="link-dokumentation">technische Dokumentation</a> wurde im Kapitel <i><abbr title="Wortgeschichte digital">WGD</abbr>-Dateiformat</i> um das <abbr title="Belege Wortgeschichte digital">BWGD</abbr>-Format ergänzt.</p>
@@ -355,7 +363,7 @@ Gerüst 2 &gt; Gerüst 1</pre>
 						<p><i>Volltext:</i> Der Volltextfilter durchsucht in allen Karteikarten dieselben Felder wie die Suchfunktion in der Filterleiste (<abbr title="vergleiche">vgl.</abbr> unter <i>erweiterte Suchfilter</i> die Liste der Datenfelder). Darüber hinaus werden das Karteiwort und die Notizen (Funktion <i>Kartei &gt; Notizen</i>) in die Suche mit einbezogen.</p>
 						<p><i>Tag:</i> Mithilfe dieses Filters lassen sich Tags in den Bedeutungsgerüsten der Dateien suchen. So kann man <abbr title="beispielsweise">bspw.</abbr> Karteien finden, in denen Bedeutungen dem Sachgebiet <i>Zoologie</i> zugeordnet wurden.</p>
 						<p><i>Karteidatum:</i> Der Filter dient dazu, Karteien zu finden, die vor oder nach einem bestimmten Zeitpunkt (der immer ein bestimmter Tag ist) erstellt oder geändert wurden. Kombiniert man mehrere Karteidatumsfilter geschickt miteinander, kann man Karteien suchen, die innerhalb eines bestimmten Zeitraums erstellt oder geändert wurden. Es gibt keinen Algorithmus, der überprüft, ob die Logik der Datumsfilter stimmig ist. Wenn sie verquer sein sollte (Enddatum liegt vor Startdatum), werden unter Umständen einfach keine Karteien gefunden.</p>
-						<p><i>BearbeiterIn:</i> Mit diesem Filter lassen sich Karteien finden, in denen die genannte Person als BearbeiterIn registriert ist. Durchsucht wird das Datenfeld, das in <i>Kartei &gt; Metadaten</i> zu finden ist. Hat man sich in den Einstellungen (Reiter <i>Allgemeines</i>) einmal als BenutzerIn registriert, wird dieses Datenfeld beim Erstellen oder Bearbeiten von Karteien automatisch gefüllt.</p>
+						<p><i>BearbeiterIn:</i> Mit diesem Filter lassen sich Karteien finden, in denen die genannte Person als BearbeiterIn registriert ist. Durchsucht wird das Datenfeld, das in <i>Kartei &gt; Metadaten</i> zu finden ist. Hat man sich in den Einstellungen (Reiter <i>Allgemeines</i>) einmal als NutzerIn registriert, wird dieses Datenfeld beim Erstellen oder Bearbeiten von Karteien automatisch gefüllt.</p>
 						<p><i>Redaktion:</i> Über diesen Filter lassen sich Redaktionsereignisse und/oder mit solchen Ereignissen verknüpfte Personen finden. Für die Suche ist es nicht unbedingt nötig, sowohl ein Ereignis als auch eine Person anzugeben. Man kann genauso gut allein nach einer Person suchen, die für ein beliebiges Redaktionsereignis registriert wurde, oder Karteien finden, die ein spezifisches Redaktionsereignis wie <i>Artikel erstellt</i> aufweisen, und zwar personenunabhängig. Werden sowohl eine Person als auch ein Redaktionsereignis angegeben, werden nur Karteien aufgelistet, in denen das angegebene Ereignis mit der angegebenen Person verknüpft ist.</p>
 						<p>Das Programm erkennt, wenn ein Filter falsch oder gar nicht gefüllt wurde – und ignoriert ihn in solchen Fällen. So ist es zwar im Tag-Filter prinzipiell möglich, einen beliebigen Tag einzutippen (das wurde erlaubt, um die Tag-Liste filtern zu können). Wird dieser Tag in der ausgewählten Tag-Datei aber nicht gefunden oder hat man vergessen eine Tag-Datei auszuwählen, wird der Filter jedoch  stillschweigend übergangen.</p>
 						<p>Die verwendeten Filter sind immer mit einem logischen <i>UND</i> verknüpft: Eine Kartei muss immer <i>alle</i> Filterkriterien erfüllen, sonst wird sie nicht gelistet. Je mehr Filter definiert werden, umso spezifischer ist die Karteisuche. Erzielt man keine Treffer, bietet es sich also <abbr title="gegebenenfalls">ggf.</abbr> an, die Anzahl der Filter zu reduzieren.</p>
@@ -423,7 +431,7 @@ Gerüst 2 &gt; Gerüst 1</pre>
 				
 				<ul>
 					<li>
-						<p>Bedeutungsgerüst: Das Programm unterstützt die BenutzerInnen nun besser dabei, keine formal verwirrenden oder gar irregulären Bedeutungsgerüste zu produzieren. Deswegen werden fortan mehrere bisher zulässige Operationen unterbunden:</p>
+						<p>Bedeutungsgerüst: Das Programm unterstützt die NutzerInnen nun besser dabei, keine formal verwirrenden oder gar irregulären Bedeutungsgerüste zu produzieren. Deswegen werden fortan mehrere bisher zulässige Operationen unterbunden:</p>
 						<p>(1.) Es können keine Bedeutungen mehr angelegt werden, die nur hinsichtlich ihrer Formatierung, <abbr title="das heißt">d. h.</abbr> durch Kursivierung, Fettung oder Unterstreichung, von anderen Bedeutungen der obersten Ebene abweichen.</p>
 						<p>(2.) Es können keine Bedeutungen mehr umbenannt werden, wenn auf derselben Ebene (desselben Bedeutungszweigs) bereits eine identische Bedeutung existiert. Auch in diesem Fall wird nicht akzeptiert, dass Bedeutungen sich nur durch ihre Formatierung unterscheiden.</p>
 						<p>(3.) Es können keine Bedeutungen mehr angelegt oder umbenannt werden, wenn sie dann mit einem Alias identisch wären.</p>
@@ -847,7 +855,7 @@ Gerüst 2 &gt; Gerüst 1</pre>
 						<p>Wenn nur eine schwache Internetverbindung zur Verfügung steht, kann es sinnvoll sein, den Timeout stark zu erhöhen. Das Programm wartet dann entsprechend länger auf eine Antwort des Servers.</p>
 					</li>
 					<li>
-						<p>Die hardkodierte Liste der BearbeiterInnnen wurde gelöscht und durch eine Importfunktion ersetzt. Jetzt kann der Quelltext verbreitet werden, ohne dass dadurch zugleich eine Liste der MitarbeiterInnen des Projekts kursiert (Datenschutz!). Außerdem kann fortan jede BenutzerIn der App die Liste auch ohne Programmierkenntnisse anpassen.</p>
+						<p>Die hardkodierte Liste der BearbeiterInnnen wurde gelöscht und durch eine Importfunktion ersetzt. Jetzt kann der Quelltext verbreitet werden, ohne dass dadurch zugleich eine Liste der MitarbeiterInnen des Projekts kursiert (Datenschutz!). Außerdem kann fortan jede NutzerIn der App die Liste auch ohne Programmierkenntnisse anpassen.</p>
 						<p>Dazu muss einfach eine Plain-Text-Datei erstellt werden, die eine Liste an Personen enthält. Geeignet hierfür ist <abbr title="zum Beispiel">z. B.</abbr> das kleine <i>Windows</i>-Programm <i>Editor</i>. Der Zeilenumbruch dient dabei als Trennzeichen. Jede Zeile enthält also einen Personennamen:</p>
 						<pre class="quelltext">Müller, Thomas
 Mustermann, Erika
@@ -895,7 +903,7 @@ Mustermann, Erika
 				
 				<ul>
 					<li>
-						<p>Sperrdatei: Der Mechanismus der mit Version 0.5.0 eingeführten Sperrdatei, die ein kollaboratives Arbeiten in einem gemeinsamen Netzwerkordner ermöglicht, ohne dass man sich gegenseitig die Arbeit überschreibt, wurde stark verbessert: Wird von einer BenutzerIn eine Kartei geöffnet, die durch sie zuvor am selben Computer gesperrt wurde, behandelt das Programm die gesperrte Kartei wie eine nicht gesperrte – und öffnet sie ohne Probleme.</p>
+						<p>Sperrdatei: Der Mechanismus der mit Version 0.5.0 eingeführten Sperrdatei, die ein kollaboratives Arbeiten in einem gemeinsamen Netzwerkordner ermöglicht, ohne dass man sich gegenseitig die Arbeit überschreibt, wurde stark verbessert: Wird von einer NutzerIn eine Kartei geöffnet, die durch sie zuvor am selben Computer gesperrt wurde, behandelt das Programm die gesperrte Kartei wie eine nicht gesperrte – und öffnet sie ohne Probleme.</p>
 						<p>Dieses Verhalten ist <abbr title="zum Beispiel">z. B.</abbr> für den Fall eines Computerabsturzes wichtig, wenn dieselbe Person danach am selben Rechner dort weiterarbeiten möchte, wo sie zuvor aufgehört hat. Die vor dem Absturz geöffnete Kartei ist in dieser Situation nämlich immer noch gesperrt, da die App nicht ordungsgemäß beendet wurde, sondern zusammen mit dem Computer abgestürzt ist.</p>
 					</li>
 					<li>Die Gliederung der Icons in der Quick-Access-Bar wurde leicht angepasst, um die Übersichtlichkeit zu erhöhen. Auch in den betreffenden Einstellungen (<i>Programm &gt; Einstellungen &gt; Menü</i>) sind die Funktionsgruppen nun klarer ersichtlich.</li>
@@ -934,7 +942,7 @@ Mustermann, Erika
 					</li>
 					<li>
 						<p>Es gibt nun einen Sperrmechanismus, der das kollaborative Arbeiten an Wortkarteien ermöglicht.</p>
-						<p>Beim Öffnen einer Kartei wird diese automatisch für andere BenutzerInnen gesperrt; es erscheint nur eine Fehlermeldung. Dazu wird im selben Ordner, in dem die geöffnete Kartei liegt, eine Datei nach dem folgenden Namensmuster erstellt: <q class="bedeutung">.~lock.[KARTEINAME]#</q>. Aus der Kartei <q class="bedeutung">Freiheit.wgd</q> resultiert somit die Sperrdatei <q class="bedeutung">.~lock.Freiheit.wgd#</q>. Diese Datei ist standardmäßig versteckt.</p>
+						<p>Beim Öffnen einer Kartei wird diese automatisch für andere NutzerInnen gesperrt; es erscheint nur eine Fehlermeldung. Dazu wird im selben Ordner, in dem die geöffnete Kartei liegt, eine Datei nach dem folgenden Namensmuster erstellt: <q class="bedeutung">.~lock.[KARTEINAME]#</q>. Aus der Kartei <q class="bedeutung">Freiheit.wgd</q> resultiert somit die Sperrdatei <q class="bedeutung">.~lock.Freiheit.wgd#</q>. Diese Datei ist standardmäßig versteckt.</p>
 						<p>Sollte es beim Entsperren aus irgendeinem Grund zu einem Fehler kommen (Programmabsturz, Programmierfehler <abbr title="und so weiter">usw.</abbr>), kann die Sperrdatei problemlos manuell gelöscht werden. Danach lässt sich die betreffende Kartei wieder öffnen.</p>
 					</li>
 				</ul>

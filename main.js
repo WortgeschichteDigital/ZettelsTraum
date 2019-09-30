@@ -304,6 +304,10 @@ let layoutMenu = [
 				accelerator: "F1",
 			},
 			{
+				label: "Demonstrationskartei",
+				click: () => appMenu.aktion("hilfe-demo"),
+			},
+			{
 				label: "Technische Dokumentation",
 				click: () => fenster.erstellenNeben("dokumentation"),
 			},
@@ -844,6 +848,25 @@ fenster = {
 
 // Handbuch aufrufen, wenn der Renderer-Prozess es wünscht
 ipcMain.on("hilfe-handbuch", () => fenster.erstellenNeben("handbuch"));
+
+// Demonstrationskartei öffnen, wenn der Renderer-Prozess es wünscht
+ipcMain.on("hilfe-demo", () => {
+	// ggf. ein Hauptfenster suchen und fokussieren
+	let w = BrowserWindow.getFocusedWindow();
+	if (win[w.id].typ !== "index") {
+		for (let id in win) {
+			if (!win.hasOwnProperty(id)) {
+				continue;
+			}
+			if (win[id].typ === "index") {
+				fenster.fokus(BrowserWindow.fromId(parseInt(id, 10)));
+				break;
+			}
+		}
+	}
+	// Hauptfenster ist fokussiert (das dauert ggf. 25 ms)
+	setTimeout(() => appMenu.aktion("hilfe-demo"), 50);
+});
 
 // Dokumentation aufrufen, wenn der Renderer-Prozess es wünscht
 ipcMain.on("hilfe-dokumentation", () => fenster.erstellenNeben("dokumentation"));

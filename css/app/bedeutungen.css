@@ -215,7 +215,15 @@
 }
 
 .bedeutungen-dialog b.zaehlung {
-	margin-right: 10px;
+	margin: 0 10px;
+}
+
+.bedeutungen-dialog b.zaehlung:first-child {
+	margin-left: 0;
+}
+
+b.zaehlung ~ b.zaehlung:not(.nach-text) {
+	margin-left: 0;
 }
 
 #bedeutungen-cont .zaehlung div {

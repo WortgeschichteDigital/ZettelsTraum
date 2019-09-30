@@ -36,6 +36,14 @@ window.addEventListener("load", function() {
 		evt.preventDefault();
 		suchleiste.einblenden();
 	});
+	// Demonstrationskartei öffnen
+	document.querySelectorAll(".hilfe-demo").forEach(function(i) {
+		i.addEventListener("click", function(evt) {
+			evt.preventDefault();
+			const {ipcRenderer} = require("electron");
+			ipcRenderer.send("hilfe-demo");
+		});
+	});
 	// Über App
 	document.querySelectorAll("#icon, .ueber-app").forEach(function(i) {
 		i.addEventListener("click", function(evt) {
