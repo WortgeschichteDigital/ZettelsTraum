@@ -91,6 +91,7 @@ mark.user {
 }
 
 mark.wort {
+	position: relative;
 	background-color: var(--farbeGelb);
 	font-weight: bold;
 }
@@ -323,6 +324,69 @@ textarea {
 textarea:focus {
 	outline: 1px solid var(--farbe);
 	border-color: var(--farbe);
+}
+
+/* Annotierung Wort ----------------------------- */
+#annotierung-wort {
+	position: absolute;
+	top: -65px;
+	right: 0;
+	box-shadow: var(--boxShadow);
+	border: 1px solid var(--linie);
+	border-radius: 5px;
+	padding: 5px 5px;
+	width: 175px;
+	height: 48px;
+	background-color: #fff;
+	text-indent: 0;
+}
+
+#annotierung-wort > img {
+	position: absolute;
+	top: 0;
+	right: 0;
+}
+
+#annotierung-wort .farbe {
+	display: inline-block;
+	margin-right: 10px;
+	width: 12px;
+	height: 12px;
+	border: 1px solid var(--linie);
+}
+
+#annotierung-wort .farbe.aktiv {
+	outline: 2px solid var(--farbe);
+}
+
+.farbe.farbe0,
+.farbe0 mark.wort {
+	padding: 0;
+	background-color: transparent;
+	font-weight: normal;
+}
+
+.farbe.farbe1,
+.farbe1 mark.wort {
+	background-color: var(--farbeGelb);
+}
+
+.farbe.farbe2,
+.farbe2 mark.wort {
+	background-color: var(--hintergrundGruen);
+	color: #fff;
+}
+
+.farbe.farbe3,
+.farbe3 mark.wort {
+	background-color: var(--farbeRot);
+	color: #fff;
+}
+
+.farbe.farbe4,
+.farbe4 mark.wort {
+	background-color: var(--hintergrundBlau);
+	color: #fff;
 }
 
 /* DTA-Auszeichnungen in XML-Dokumenten --------- */

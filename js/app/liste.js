@@ -660,6 +660,8 @@ let liste = {
 		for (let i = 0, len = p_prep.length; i < len; i++) {
 			let p = document.createElement("p");
 			div.appendChild(p);
+			p.dataset.pnumber = i;
+			p.dataset.id = id;
 			// Absatz ggf. kürzen
 			if (filter.volltextSuche.suche) { // ggf. kürzen, wenn Suchtreffer nicht enthalten
 				const text_rein = p_prep[i].replace(/<.+?>/g, "");
@@ -694,6 +696,7 @@ let liste = {
 			p_prep[i] = liste.belegTrennungWeg(p_prep[i], false);
 			// Absatz normal einhängen
 			p.innerHTML = liste.suchtreffer(liste.belegWortHervorheben(p_prep[i], false), "bs", id);
+			beleg.wortAnnotierenInit(p);
 		}
 		// <div> zurückgeben
 		return div;

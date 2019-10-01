@@ -1324,6 +1324,10 @@ input[id^="redaktion-person"] {
 	overflow-y: auto;
 }
 
+#dialog-text img {
+	vertical-align: bottom;
+}
+
 #dialog-text *:last-child {
 	margin-bottom: 0;
 }

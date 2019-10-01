@@ -1852,6 +1852,8 @@ let beleg = {
 			for (let i = 0, len = p.length; i < len; i++) {
 				let nP = document.createElement("p");
 				cont.appendChild(nP);
+				nP.dataset.pnumber = i;
+				nP.dataset.id = "";
 				let text = p[i];
 				if (!text) {
 					text = " ";
@@ -1876,12 +1878,15 @@ let beleg = {
 					if (wert !== "bd" && wert !== "bs") {
 						text = helfer.escapeHtml(text);
 					}
-					text = liste.linksErkennen(text);
+					if (/^(no|qu)$/.test(wert)) {
+						text = liste.linksErkennen(text);
+					}
 					if (wert === "bs") {
 						text = liste.belegWortHervorheben(text, true);
 					}
 				}
 				nP.innerHTML = text;
+				beleg.wortAnnotierenInit(nP);
 			}
 		}
 		// Bedeutungen
@@ -2540,4 +2545,164 @@ let beleg = {
 		});
 		dialog.text(`Soll die Bedeutung\n<p class="bedeutungen-dialog">${bdText}</p>\nwirklich aus allen Karteikarten, die derzeit in der Belegliste sichtbar sind, entfernt werden?`);
 	},
+	// Annotierung eines Karteiworts initialisieren
+	//   p = Element
+	//     (Absatz, in dem sich markierte Wörter befinden können)
+	wortAnnotierenInit (p) {
+		p.querySelectorAll("mark.wort").forEach(function(i) {
+			i.addEventListener("click", function() {
+				beleg.wortAnnotierenMod(this);
+			});
+		});
+	},
+	// Popup für die Annotierung eines Karteiworts aufbauen
+	//   w = Element
+	//     (<mark class="wort">)
+	wortAnnotierenMod (w) {
+		if (!optionen.data.belegliste.trennung) {
+			dialog.oeffnen("alert");
+			dialog.text(`Karteiwörter können nur annotiert werden, wenn die Trennstriche und die Markierung der Seitenumbrüche nicht unterdrückt sind.\nSie müssen also zunächst die Funktion <img src="img/liste-trennung.svg" width="24" height="24" alt=""> aktivieren.`);
+			return;
+		}
+		// Werte auslesen (falls vorhanden)
+		let werte = {
+			farbe: 1,
+			text: "",
+		};
+		let dataNode = w.parentNode;
+		if (dataNode.nodeType === 1 &&
+				dataNode.classList.contains("annotierung-wort")) {
+			werte.farbe = parseInt(dataNode.dataset.farbe, 10);
+			werte.text = dataNode.dataset.text;
+		}
+		// UI ggf. entfernen
+		let aw = document.getElementById("annotierung-wort");
+		if (aw) {
+			aw.parentNode.removeChild(aw);
+		}
+		// UI erstellen
+		let span = document.createElement("span");
+		span.id = "annotierung-wort";
+		// Schließen-Icon
+		let img = document.createElement("img");
+		span.appendChild(img);
+		img.src = "img/heading-schliessen.svg";
+		img.width = "24";
+		img.height = "24";
+		// Farben
+		for (let i = 0; i < 5; i++) {
+			let farbe = document.createElement("span");
+			span.appendChild(farbe);
+			farbe.classList.add("farbe", `farbe${i}`);
+			if (werte.farbe === i) {
+				farbe.classList.add("aktiv");
+			}
+		}
+		// Text TODO
+		span.appendChild(document.createElement("br"));
+		// Popup einhängen und Events anhängen
+		w.appendChild(span);
+		beleg.wortAnnotierenModEvents();
+	},
+	// Events an das Annotieren-Feld hängen
+	wortAnnotierenModEvents () {
+		let aw = document.getElementById("annotierung-wort");
+		aw.addEventListener("click", evt => evt.stopPropagation());
+		aw.querySelector("img").addEventListener("click", function() {
+			this.parentNode.parentNode.removeChild(this.parentNode);
+		});
+		aw.querySelectorAll(".farbe").forEach(i => beleg.wortAnnotierenModFarbe(i));
+	},
+	// Farbe der Annotierung ändern
+	//   f = Element
+	//     (das <span> für die Farbe)
+	wortAnnotierenModFarbe (f) {
+		f.addEventListener("click", function() {
+			this.parentNode.querySelector(".aktiv").classList.remove("aktiv");
+			this.classList.add("aktiv");
+			beleg.wortAnnotieren();
+		});
+	},
+	// Annotierung eines Karteiworts umsetzen
+	wortAnnotieren () {
+		let werte = {
+			farbe: 1,
+			text: "",
+		};
+		let aw = document.getElementById("annotierung-wort"),
+			farben = aw.querySelectorAll(".farbe");
+		// Absatz ermitteln
+		let p = aw.parentNode;
+		while (p.nodeType !== 1 || p.nodeName !== "P") {
+			p = p.parentNode;
+		}
+		// Farbe ermitteln
+		for (let i = 0, len = farben.length; i < len; i++) {
+			if (farben[i].classList.contains("aktiv")) {
+				werte.farbe = i;
+				break;
+			}
+		}
+		// Text ermitteln TODO
+		// Anzeige auffrischen
+		let mark = aw.parentNode,
+			parent = mark.parentNode;
+		if (werte.farbe === 1 && !werte.text) {
+			if (parent.nodeType === 1 &&
+					parent.classList.contains("annotierung-wort")) {
+				let klon = mark.cloneNode(true);
+				parent.parentNode.replaceChild(klon, parent);
+				klon.addEventListener("click", function() {
+					beleg.wortAnnotierenMod(this);
+				});
+				beleg.wortAnnotierenModEvents();
+			}
+		} else if (parent.nodeType === 1 &&
+					parent.classList.contains("annotierung-wort")) {
+			parent.removeAttribute("class");
+			parent.classList.add("annotierung-wort", `farbe${werte.farbe}`);
+			parent.dataset.farbe = werte.farbe;
+			parent.dataset.text = werte.text;
+		} else {
+			let annotierung = document.createElement("span");
+			annotierung.appendChild(mark.cloneNode(true));
+			annotierung.classList.add("annotierung-wort", `farbe${werte.farbe}`);
+			annotierung.dataset.farbe = werte.farbe;
+			annotierung.dataset.text = werte.text;
+			parent.replaceChild(annotierung, mark);
+			annotierung.firstChild.addEventListener("click", function() {
+				beleg.wortAnnotierenMod(this);
+			});
+			beleg.wortAnnotierenModEvents();
+		}
+		// Belegschnitt ermitteln
+		let bs = "";
+		if (!p.dataset.id) { // Karteikarte
+			bs = document.getElementById("beleg-bs").value;
+		} else { // Belegliste
+			bs = data.ka[p.dataset.id].bs;
+		}
+		// Absatz-Text ermitteln
+		let klon = p.cloneNode(true),
+			awKlon = klon.querySelector("#annotierung-wort");
+		awKlon.parentNode.removeChild(awKlon);
+		let text = klon.innerHTML;
+		while (/<mark class/.test(text)) {
+			text = text.replace(/<mark class=".+?">(.+?)<\/mark>/, function(m, p1) {
+				return p1;
+			});
+		}
+		// Ergebnis in Datensatz eintragen
+		let absaetze = bs.replace(/\n\s*\n/g, "\n").split("\n");
+		absaetze[parseInt(p.dataset.pnumber, 10)] = text;
+		bs = absaetze.join("\n\n");
+		if (!p.dataset.id) { // Karteikarte
+			document.getElementById("beleg-bs").value = bs;
+			beleg.data.bs = bs;
+			beleg.belegGeaendert(true);
+		} else { // Belegliste
+			data.ka[p.dataset.id].bs = bs;
+			kartei.karteiGeaendert(true);
+		}
+	}
 };

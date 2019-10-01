@@ -263,6 +263,14 @@ let suchleiste = {
 				ipcRenderer.send("ueber-electron");
 			});
 		});
+		// Demonstrationskartei öffnen (Handbuch)
+		ele.querySelectorAll(".hilfe-demo").forEach(function(i) {
+			i.addEventListener("click", function(evt) {
+				evt.preventDefault();
+				const {ipcRenderer} = require("electron");
+				ipcRenderer.send("hilfe-demo");
+			});
+		});
 		// Handbuch öffnen (Changelog, Dokumentation)
 		ele.querySelectorAll(".link-handbuch").forEach(a => helferWin.oeffneHandbuch(a));
 		// Handbuch öffnen (Changelog, Handbuch)
@@ -291,6 +299,15 @@ let suchleiste = {
 		});
 		// Bedeutung-entfernen-Icon in der Karteikarte (Hauptfenster)
 		ele.querySelectorAll(".icon-entfernen").forEach(a => beleg.leseBedeutungEx(a));
+		// Annotierung (Hauptfenster)
+		ele.querySelectorAll("mark.wort").forEach(function(i) {
+			i.addEventListener("click", function() {
+				beleg.wortAnnotierenMod(this);
+			});
+		});
+		if (ele.querySelector("#annotierung-wort")) {
+			beleg.wortAnnotierenModEvents();
+		}
 	},
 	// Zwischenspeicher für den Timeout
 	suchenKeineTrefferTimeout: null,
