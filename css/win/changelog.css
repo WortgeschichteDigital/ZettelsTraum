@@ -126,6 +126,13 @@ kbd {
 	font-family: "Noto Sans Mono", "Noto Sans Symbols2", monospace;
 }
 
+mark.wort {
+	border-radius: 3px;
+	padding: 0 3px;
+	background-color: var(--farbeGelb);
+	font-weight: bold;
+}
+
 p {
 	margin: 0 0 10px 0;
 }

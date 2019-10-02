@@ -53,7 +53,7 @@ function makeConfig () {
 				{
 					from: "resources",
 					to: "./",
-					filter: ["*.xml", "filetype"],
+					filter: ["*.wgd", "*.xml", "filetype"],
 				},
 			],
 		},

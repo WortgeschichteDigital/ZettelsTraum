@@ -293,6 +293,7 @@ let kartei = {
 				optionen.aendereLetzterPfad();
 				optionen.aendereZuletzt();
 				kartei.karteiGeaendert(false);
+				helfer.animation("gespeichert");
 				const {ipcRenderer, remote} = require("electron");
 				ipcRenderer.send("kartei-geoeffnet", remote.getCurrentWindow().id, pfad);
 			});

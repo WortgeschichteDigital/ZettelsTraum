@@ -34,25 +34,41 @@
 				></a
 			></span>
 			
-			<!-- 0.19.2 -->
-			<div class="version">0.19.2</div>
+			<!-- 0.20.0 -->
+			<div class="version">0.20.0</div>
 			
 			<div>
-				<h2><span>Version 0.19.2</span><time datetime="2019-09-19T21:02:19">19. September 2019</time></h2>
+				<h2><span>Version 0.20.0</span><time datetime="2019-10-02T14:22:34">2. Oktober 2019</time></h2>
 				
 				<h3>Entfernte Funktionen</h3>
 				
 				<ul>
-					<li>Karteikarte: Im Belegtext der Leseansicht wurde nach Text gesucht, der für eine <abbr title="Uniform Resource Locator" lang="en">URL</abbr> stehen kann, woraufhin dieser als Hyperlink dargestellt wurde. Dieses Feature kann im Zusammenhang mit der Annotierung von Karteiwörtern (<abbr title="siehe unten">s. u.</abbr>) Probleme bereiten und wurde darum entfernt.</li>
+					<li>Karteikarte: Vor dem Aufbau des Belegtexts der Leseansicht wurde bisher immer nach Zeichenfolgen gesucht, die nach einer <abbr title="Uniform Resource Locator" lang="en">URL</abbr> aussehen, woraufhin diese als Hyperlink dargestellt wurden. Dieses Feature kann im Zusammenhang mit der Annotierung von Karteiwörtern (<abbr title="siehe unten">s. u.</abbr>) Probleme bereiten und wurde darum entfernt.</li>
 				</ul>
 				
 				<h3>Neue Funktionen</h3>
 				
 				<ul>
 					<li>
-						<p>Annotierung von Karteiwörtern: …</p>
+						<p>Annotierung von Karteiwörtern: In der Belegliste lässt sich mithilfe des Icons <img src="../img/liste-hervorheben.svg" width="24" height="24" alt=""> das Karteiwort im Belegtext hervorheben; in der Leseansicht der Karteikarte wird dies standardmäßig gemacht. Das Karteiwort <i>Freiheit</i> sieht dann im Text <abbr title="beispielsweise">bspw.</abbr> so aus: <mark class="wort">Freiheit</mark>. Für dieses Hervorheben wird die in der Kartei gespeicherte Liste der Formvarianten herangezogen, sodass es in aller Regel gut funktionieren sollte. Trotzdem kann es dabei zu Fehlern kommen, <abbr title="zum Beispiel">z. B.</abbr> bei Homonymien oder in Fällen, in denen das Karteiwort relativ kurz ist. Sehr kurze Karteiwörter können seit Version 0.19.0 im Formvarianten-Fenster (<i>Kartei &gt; Formvarianten</i>) von der Hervorhebung ausgeschlossen werden. Für Homonyme und andere fehlerhafte Worterkennungen kann die neue Annotierungsfunktion genutzt werden.</p>
+						<p>Von nun an sind die hervorgehobenen Karteiwörter klicksensitiv, und zwar sowohl in der Belegliste als auch in der Leseansicht der Karteikarte. Auf Klick öffnet sich direkt am Wort ein kleines Popup-Fenster. In diesem kann eine Text-Annotierung vorgenommen oder die Hervorhebungsfarbe verändert werden: Die Farbe ändert man durch Klick auf eines der Kästchen im oberen Teil des Fensters. Eine Notiz lässt sich durch Klick auf den Text unterhalb der Kästchen hinzufügen oder ändern. Wird im Textfeld <kbd>⏎</kbd> gedrückt, werden die Änderungen übernommen; wird <kbd>Esc</kbd> gedrückt, werden sie verworfen; die vorherige Notiz wird wiederhergestellt.</p>
+						<p>Wird die Farbe auf transparent gesetzt (das erste Kästchen links oben im sich öffnenden Popup-Fenster), versteht das Programm, dass es sich hier um einen falschen Treffer handelt. Das Wort wird nun nicht mehr visuell hervorgehoben. Beim Kürzen des Belegkontexts (Funktion <img src="../img/liste-kuerzen.svg" width="24" height="24" alt="">) wird der Absatz zukünftig nicht mehr angezeigt, es sei denn, es finden sich in ihm noch andere, korrekte Treffer des Karteiworts. Der Absatz wird nicht direkt nach der Transparenz-Markierung ausgeblendet. Man muss die Leseansicht der Karteikarte oder die Detailanzeige in der Belegliste zunächst neu aufbauen.</p>
+						<p>Wird eine andere Farbe zum Hervorheben gewählt (Grün, Rot oder Blau), wird das Wort auch weiterhin als korrekter Treffer behandelt, also einfach nur anders hervorgehoben.</p>
+						<p>Fügt man einen Textkommentar hinzu, erscheint dieser beim Hovern der Maus über dem Wort in einem Tooltip. Man muss das Popup-Fenster also nicht eigens öffnen, um die Text-Annotierung zu sehen.</p>
+						<p>Wurde die Farbe geändert und/oder ein Text annotiert, erscheint hinter dem Wort ein kleines Icon, dass auf die Annotierung oder Farbänderung hinweist: <img src="../img/annotierung.svg" width="12" height="12" alt="" class="klein">. Das Icon wird auch eingebunden, wenn die Farbe transparent gesetzt wurde, sodass man das Wort jederzeit wiederfindet.</p>
+						<p>Eine Annotierung kann nur vorgenommen oder geändert werden, wenn Trennstriche und Zeilenumbrüche sichtbar sind (Funktion <img src="../img/liste-trennung.svg" width="24" height="24" alt="">). Dies gilt auch für bestehende Annotierungen, die außerdem nur dann geändert werden können, wenn die Hervorhebung des Karteiworts aktiviert ist (Funktion <img src="../img/liste-hervorheben.svg" width="24" height="24" alt="">). Andernfalls reagieren die Karteiwörter nicht auf Klicks.</p>
+						<p>Die Annotierung wird dauerhaft in der Kartei gespeichert, deswegen bekommt die Kartei <abbr title="beziehungsweise">bzw.</abbr> die Karteikarte eine Änderungsmarkierung, nachdem ein Wort annotiert wurde. Gespeichert wird die Annotierung im Belegtext, sie ist also auch im Formular der Karteikarte sichtbar. Im Quelltext kann das Ganze dann <abbr title="zum Beispiel">z. B.</abbr> so aussehen:</p>
+						<pre class="quelltext"><code class="quelltext">&lt;span class="annotierung-wort farbe3" title="hier steht die Textnotiz"&gt;Freiheit&lt;/span&gt;</code></pre>
 					</li>
 					<li><i class="app-name"></i> liefert ab dieser Version eine Demonstrationskartei mit, an der neue NutzerInnen sehen können, wie eine mit einem Bedeutungsgerüst versehene und mit Belegen gefüllte Wortkartei aussieht. Die Kartei kann via <i>Hilfe &gt; Demonstrationskartei</i> geöffnet werden.</li>
+				</ul>
+				
+				<h3>Verbesserungen</h3>
+				
+				<ul>
+					<li>Nach dem erfolgreichen Speichern der Kartei wird nun eine kleine Animation angezeigt. Sie ähnelt der Animation, die beim Kopieren oder Duplizieren von Belegen erscheint.</li>
+					<li>Werden im Programmmenü die Befehle <i>Belege &gt; Hinzufügen</i> oder <i>Belege &gt; Auflisten</i> aufgerufen, werden nun alle Overlay-Fenster (das sind Fenster, die sich über die Anzeige legen und den Hintergrund ausgrauen) automatisch geschlossen. Dies geschieht auch, wenn die Funktionen über die Tastaturkürzel <kbd>Strg</kbd> + <kbd>N</kbd> <abbr title="beziehungsweise">bzw.</abbr> <kbd>Strg</kbd> + <kbd>L</kbd> aufgerufen werden.</li>
+					<li><a href="#" class="ueber-electron"><i>Electron</i></a>-Update auf Version 6.0.11.</li>
 				</ul>
 				
 				<h3>Behobene Fehler</h3>

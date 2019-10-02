@@ -329,16 +329,35 @@ textarea:focus {
 /* Annotierung Wort ----------------------------- */
 #annotierung-wort {
 	position: absolute;
-	top: -65px;
-	right: 0;
+	z-index: 1;
 	box-shadow: var(--boxShadow);
 	border: 1px solid var(--linie);
 	border-radius: 5px;
 	padding: 5px 5px;
 	width: 175px;
-	height: 48px;
 	background-color: #fff;
-	text-indent: 0;
+	font: 14px/24px "Noto Sans", "Noto Sans Symbols2", sans-serif;
+	font-weight: normal;
+}
+
+#annotierung-wort.links-oben {
+	top: -65px;
+	left: 0;
+}
+
+#annotierung-wort.rechts-oben {
+	top: -65px;
+	right: 0;
+}
+
+#annotierung-wort.links-unten {
+	top: 27px;
+	left: 0;
+}
+
+#annotierung-wort.rechts-unten {
+	top: 27px;
+	right: 0;
 }
 
 #annotierung-wort > img {
@@ -387,6 +406,50 @@ textarea:focus {
 .farbe4 mark.wort {
 	background-color: var(--hintergrundBlau);
 	color: #fff;
+}
+
+#annotierung-wort .text {
+	display: block;
+	padding: 1px 6px;
+	overflow: hidden;
+	color: var(--text);
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+#annotierung-wort .text.leer {
+	color: var(--textSehrHell);
+	font-style: italic;
+	cursor: default;
+}
+
+#annotierung-wort .text.aktiv {
+	padding: 0;
+}
+
+#annotierung-wort input {
+	display: block;
+	border: 1px solid var(--linie);
+	padding: 0 5px;
+	width: calc(100% - 12px);
+	font-size: 14px;
+}
+
+#annotierung-wort input:focus {
+	outline: 1px solid var(--farbe);
+	border-color: var(--farbe);
+}
+
+#annotierung-wort input.changed {
+	outline-color: var(--farbeRot);
+	border-color: var(--farbeRot);
+}
+
+.annotierung-wort::after {
+	content: url(../../img/annotierung.svg);
+	position: relative;
+	top: -5px;
+	margin-left: 2px;
 }
 
 /* DTA-Auszeichnungen in XML-Dokumenten --------- */

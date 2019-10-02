@@ -29,7 +29,7 @@ let beleg = {
 	// Überprüfen, ob vor dem Erstellen eines neuen Belegs noch Änderungen
 	// gespeichert werden müssen.
 	erstellenPre () {
-		// Änderungen im Tagger/in Bedeutungen/im Beleg noch nicht gespeichert
+		// Änderungen im Tagger/in Bedeutungen/in Notizen/im Beleg noch nicht gespeichert
 		if (tagger.geaendert) {
 			dialog.oeffnen("confirm", function() {
 				if (dialog.antwort) {
@@ -53,6 +53,17 @@ let beleg = {
 			});
 			dialog.text("Das Bedeutungsgerüst wurde verändert, aber noch nicht gespeichert.\nMöchten Sie die Änderungen nicht erst einmal speichern?");
 			return;
+		} else if (notizen.geaendert) {
+			dialog.oeffnen("confirm", function() {
+				if (dialog.antwort) {
+					notizen.speichern();
+				} else if (dialog.antwort === false) {
+					notizen.notizenGeaendert(false);
+					beleg.erstellen();
+				}
+			});
+			dialog.text("Die Notizen wurden geändert, aber noch nicht gespeichert.\nMöchten Sie die Notizen nicht erst einmal speichern?");
+			return;
 		} else if (beleg.geaendert) {
 			dialog.oeffnen("confirm", function() {
 				if (dialog.antwort) {
@@ -65,11 +76,13 @@ let beleg = {
 			dialog.text("Der aktuelle Beleg wurde geändert, aber noch nicht gespeichert.\nMöchten Sie den Beleg nicht erst einmal speichern?");
 			return;
 		}
-		// Beleg schon gespeichert
+		// Alles okay => neue Karte erstellen
 		beleg.erstellen();
 	},
 	// neue Karteikarte erstellen
 	erstellen () {
+		// alle Overlay-Fenster schließen
+		overlay.alleSchliessen();
 		// nächste ID ermitteln
 		beleg.id_karte = beleg.idErmitteln();
 		// neues Karten-Objekt anlegen
@@ -2561,7 +2574,7 @@ let beleg = {
 	wortAnnotierenMod (w) {
 		if (!optionen.data.belegliste.trennung) {
 			dialog.oeffnen("alert");
-			dialog.text(`Karteiwörter können nur annotiert werden, wenn die Trennstriche und die Markierung der Seitenumbrüche nicht unterdrückt sind.\nSie müssen also zunächst die Funktion <img src="img/liste-trennung.svg" width="24" height="24" alt=""> aktivieren.`);
+			dialog.text(`Das Annotieren von Karteiwörtern ist nur möglich, wenn Trennstriche und Seitenumbrüche sichtbar sind.\nSie müssen zunächst die Funktion <img src="img/liste-trennung.svg" width="24" height="24" alt=""> aktivieren.`);
 			return;
 		}
 		// Werte auslesen (falls vorhanden)
@@ -2572,8 +2585,11 @@ let beleg = {
 		let dataNode = w.parentNode;
 		if (dataNode.nodeType === 1 &&
 				dataNode.classList.contains("annotierung-wort")) {
-			werte.farbe = parseInt(dataNode.dataset.farbe, 10);
-			werte.text = dataNode.dataset.text;
+			let farbe = dataNode.getAttribute("class").match(/farbe([0-9]{1})/);
+			werte.farbe = parseInt(farbe[1], 10);
+			if (dataNode.title) {
+				werte.text = dataNode.title;
+			}
 		}
 		// UI ggf. entfernen
 		let aw = document.getElementById("annotierung-wort");
@@ -2598,8 +2614,29 @@ let beleg = {
 				farbe.classList.add("aktiv");
 			}
 		}
-		// Text TODO
-		span.appendChild(document.createElement("br"));
+		// Text
+		let txt = document.createElement("span");
+		span.appendChild(txt);
+		txt.classList.add("text");
+		if (werte.text) {
+			txt.textContent = werte.text;
+		} else {
+			txt.classList.add("leer");
+			txt.textContent = "Notiz hinzufügen";
+		}
+		// Position der UI festlegen
+		let pos = [];
+		if (w.offsetLeft < 187) {
+			pos.push("links");
+		} else {
+			pos.push("rechts");
+		}
+		if (w.offsetTop < 65) {
+			pos.push("unten");
+		} else {
+			pos.push("oben");
+		}
+		span.classList.add(pos.join("-"));
 		// Popup einhängen und Events anhängen
 		w.appendChild(span);
 		beleg.wortAnnotierenModEvents();
@@ -2612,6 +2649,7 @@ let beleg = {
 			this.parentNode.parentNode.removeChild(this.parentNode);
 		});
 		aw.querySelectorAll(".farbe").forEach(i => beleg.wortAnnotierenModFarbe(i));
+		beleg.wortAnnotierenModText(aw.querySelector(".text"));
 	},
 	// Farbe der Annotierung ändern
 	//   f = Element
@@ -2623,27 +2661,89 @@ let beleg = {
 			beleg.wortAnnotieren();
 		});
 	},
+	// Text der Annotierung ändern
+	//   t = Element
+	//     (das Textfeld)
+	wortAnnotierenModText (t) {
+		t.addEventListener("click", function() {
+			// Edit-Feld schon eingehängt
+			if (this.querySelector("input")) {
+				return;
+			}
+			// Container aufbereiten bzw. Text ermitteln
+			let text = "";
+			if (this.classList.contains("leer")) {
+				this.classList.remove("leer");
+			} else {
+				text = this.textContent;
+			}
+			// Edit-Feld einhängen
+			this.classList.add("aktiv");
+			let edit = document.createElement("input");
+			this.replaceChild(edit, this.firstChild);
+			edit.value = text;
+			edit.focus();
+			edit.addEventListener("input", function() {
+				this.classList.add("changed");
+			});
+			edit.addEventListener("keydown", function(evt) {
+				if (evt.which === 13 || evt.which === 27) {
+					beleg.wortAnnotierenModTextSpeichern(this, evt.which, text);
+				}
+			});
+		});
+	},
+	// Werte aus dem Annotationsfeld übernehmen
+	//   input = Element
+	//     (das Input-Feld)
+	//   which = Number
+	//     (das Tastatur-Event, 13 [Enter] oder 27 [Esc])
+	//   text = String || undefined
+	//     (der Originaltext, der vor dem Speichern im Feld stand)
+	wortAnnotierenModTextSpeichern (input, which, text = "") {
+		let textNeu = helfer.textTrim(input.value, true),
+			feld = input.parentNode;
+		if (which === 27) {
+			textNeu = text;
+		}
+		if (!textNeu) {
+			feld.classList.add("leer");
+			feld.textContent = "Notiz hinzufügen";
+		} else {
+			feld.textContent = textNeu;
+		}
+		feld.classList.remove("aktiv");
+		beleg.wortAnnotieren();
+	},
 	// Annotierung eines Karteiworts umsetzen
 	wortAnnotieren () {
+		let aw = document.getElementById("annotierung-wort");
 		let werte = {
 			farbe: 1,
 			text: "",
 		};
-		let aw = document.getElementById("annotierung-wort"),
-			farben = aw.querySelectorAll(".farbe");
-		// Absatz ermitteln
-		let p = aw.parentNode;
-		while (p.nodeType !== 1 || p.nodeName !== "P") {
-			p = p.parentNode;
+		// Text ermitteln
+		let feld = aw.querySelector(".text");
+		if (feld.firstChild.nodeType === 1) { // Textfeld ist noch aktiv
+			beleg.wortAnnotierenModTextSpeichern(feld.firstChild, 13);
+			return;
+		}
+		if (!feld.classList.contains("leer")) {
+			werte.text = feld.textContent;
 		}
 		// Farbe ermitteln
+		let farben = aw.querySelectorAll(".farbe");
 		for (let i = 0, len = farben.length; i < len; i++) {
 			if (farben[i].classList.contains("aktiv")) {
 				werte.farbe = i;
 				break;
 			}
 		}
-		// Text ermitteln TODO
+		// Absatz ermitteln
+		let p = aw.parentNode;
+		while (p.nodeType !== 1 || p.nodeName !== "P") {
+			p = p.parentNode;
+		}
 		// Anzeige auffrischen
 		let mark = aw.parentNode,
 			parent = mark.parentNode;
@@ -2661,14 +2761,16 @@ let beleg = {
 					parent.classList.contains("annotierung-wort")) {
 			parent.removeAttribute("class");
 			parent.classList.add("annotierung-wort", `farbe${werte.farbe}`);
-			parent.dataset.farbe = werte.farbe;
-			parent.dataset.text = werte.text;
+			if (werte.text) {
+				parent.title = werte.text;
+			}
 		} else {
 			let annotierung = document.createElement("span");
 			annotierung.appendChild(mark.cloneNode(true));
 			annotierung.classList.add("annotierung-wort", `farbe${werte.farbe}`);
-			annotierung.dataset.farbe = werte.farbe;
-			annotierung.dataset.text = werte.text;
+			if (werte.text) {
+				annotierung.title = werte.text;
+			}
 			parent.replaceChild(annotierung, mark);
 			annotierung.firstChild.addEventListener("click", function() {
 				beleg.wortAnnotierenMod(this);

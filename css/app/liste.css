@@ -338,7 +338,7 @@ p.no-indent + .filter-baum, /* betrifft Verschiedenes > Filterlogik */
 #liste-belege header {
 	position: sticky;
 	top: 70px;
-	z-index: 1;
+	z-index: 2;
 	padding: 0 0 10px 0;
 	width: 100%;
 	height: 24px;

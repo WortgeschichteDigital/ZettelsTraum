@@ -572,7 +572,7 @@ let helfer = {
 	// Overlay-Animation, die anzeigt, was gerade geschehen ist
 	// (Kopier-Aktion oder Wrap der Suchleiste)
 	//   ziel = String
-	//     ("liste" || "zwischenablage" || "wrap")
+	//     ("liste" || "zwischenablage" || "wrap" || "duplikat" || "gespeichert")
 	animation (ziel) {
 		// ggf. Timeout clearen
 		clearTimeout(helfer.animationTimeout);
@@ -611,6 +611,8 @@ let helfer = {
 			img.src = `${cd}img/animation-wrap.svg`;
 		} else if (ziel === "duplikat") {
 			img.src = "img/animation-duplikat.svg";
+		} else if (ziel === "gespeichert") {
+			img.src = "img/animation-gespeichert.svg";
 		}
 		// Element einhängen und wieder entfernen
 		document.querySelector("body").appendChild(div);
@@ -833,7 +835,9 @@ let helfer = {
 	// Öffnen der Demonstrationskartei
 	demoOeffnen () {
 		const {app} = require("electron").remote,
+			fs = require("fs"),
 			path = require("path");
+		// Programmpfad ermitteln
 		let basis = "";
 		// vgl. optionen.tagsAutoLaden()
 		if (app.isPackaged) {
@@ -842,7 +846,17 @@ let helfer = {
 		} else {
 			basis = app.getAppPath();
 		}
-		const pfad = path.join(basis, "resources", "Demonstrationskartei Team.wgd");
-		kartei.oeffnenEinlesen(pfad);
+		// Datei in den temporären Ordner kopieren
+		const quelle = path.join(basis, "resources", "Demonstrationskartei Team.wgd"),
+			ziel = path.join(app.getPath("temp"), "Demonstrationskartei Team.wgd");
+		fs.copyFile(quelle, ziel, err => {
+			if (err) {
+				dialog.oeffnen("alert");
+				dialog.text(`Beim Kopieren der Demonstrationsdatei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.message}</p>`);
+				return;
+			}
+			// Datei öffnen
+			kartei.oeffnenEinlesen(ziel);
+		});
 	},
 };

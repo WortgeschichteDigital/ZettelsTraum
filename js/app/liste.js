@@ -26,6 +26,18 @@ let liste = {
 				}
 			});
 			dialog.text("Das Bedeutungsgerüst wurde verändert, aber noch nicht gespeichert.\nMöchten Sie die Änderungen nicht erst einmal speichern?");
+			return;
+		} else if (notizen.geaendert) {
+			dialog.oeffnen("confirm", function() {
+				if (dialog.antwort) {
+					notizen.speichern();
+				} else if (dialog.antwort === false) {
+					notizen.notizenGeaendert(false);
+					liste.wechseln();
+				}
+			});
+			dialog.text("Die Notizen wurden geändert, aber noch nicht gespeichert.\nMöchten Sie die Notizen nicht erst einmal speichern?");
+			return;
 		} else if (beleg.geaendert) { // aktueller Beleg noch nicht gespeichert
 			dialog.oeffnen("confirm", function() {
 				if (dialog.antwort) {
@@ -36,12 +48,14 @@ let liste = {
 				}
 			});
 			dialog.text("Der aktuelle Beleg wurde noch nicht gespeichert.\nMöchten Sie ihn nicht erst einmal speichern?");
-		} else {
-			liste.wechseln();
+			return;
 		}
+		// Alles okay => neue Karte erstellen
+		liste.wechseln();
 	},
 	// zur Belegliste wechseln (von wo auch immer)
 	wechseln () {
+		overlay.alleSchliessen();
 		document.getElementById("liste").classList.add("preload");
 		helfer.sektionWechseln("liste");
 	},
@@ -803,10 +817,18 @@ let liste = {
 	//   text = String
 	//     (Text, der auf die Existenz des Karteiworts überprüft werden soll)
 	wortVorhanden (text) {
-		text = liste.textBereinigen(text);
+		const textRein = liste.textBereinigen(text);
 		for (let i of helfer.formVariRegExpRegs) {
-			let reg = new RegExp(i, "i");
-			if (!reg.test(text)) {
+			let reg = new RegExp(i, "gi"),
+				matches = textRein.match(reg);
+			// kein Treffer => Absatz kürzen
+			if (!matches) {
+				return false;
+			}
+			// wenn alle Treffer ausgeblendet sind (Annotierung mit transparenter Farbe) => Absatz kürzen
+			let regFarbe = new RegExp(`farbe0.+?>(${i})`, "gi"),
+				matchesFarbe = text.match(regFarbe);
+			if (matchesFarbe && matchesFarbe.length === matches.length) {
 				return false;
 			}
 		}
