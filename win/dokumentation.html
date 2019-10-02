@@ -44,7 +44,7 @@
 				<section id="sektion-start">
 					<p class="obacht">Die technische Dokumentation ist nur für diejenigen gedacht, die das Programm bauen oder den Quellcode verändern wollen!</p>
 					
-					<p>Allen anderen BenutzerInnen hilft das <a href="#" class="link-handbuch">Handbuch</a> oder eine Suche im recht ausführlichen <a href="#" class="link-changelog">Changelog</a> vielleicht eher weiter.</p>
+					<p>Allen anderen NutzerInnen hilft das <a href="#" class="link-handbuch">Handbuch</a> oder eine Suche im recht ausführlichen <a href="#" class="link-changelog">Changelog</a> vielleicht eher weiter.</p>
 				</section>
 				
 				<!-- SUCHE -->
@@ -232,7 +232,7 @@ php make-changelog.php [FORMAT] [PFAD]</pre>
 					<!-- Ordner -->
 					<h2 id="framework-ordner">Programm- und Konfigurationsordner</h2>
 					
-					<p>Der <strong><abbr title="Nullsoft Scriptable Install System" lang="en">NSIS</abbr>-Installer</strong> legt das Programm nach Doppelklick in einem lokalen Benutzerordner ab: <span class="datei">C:\Users\[BENUTZERNAME]\AppData\Local\Programs\zettelstraum\</span>. Soll eine neuere Version installiert werden, muss man <i class="app-name"></i> nur beenden (<abbr title="zum Beispiel">z. B.</abbr> via <kbd>Strg</kbd> + <kbd>Q</kbd>), auf der Installer-Datei doppelklicken und das war’s.</p>
+					<p>Der <strong><abbr title="Nullsoft Scriptable Install System" lang="en">NSIS</abbr>-Installer</strong> legt das Programm nach Doppelklick in einem lokalen User-Ordner ab: <span class="datei">C:\Users\[BENUTZERNAME]\AppData\Local\Programs\zettelstraum\</span>. Soll eine neuere Version installiert werden, muss man <i class="app-name"></i> nur beenden (<abbr title="zum Beispiel">z. B.</abbr> via <kbd>Strg</kbd> + <kbd>Q</kbd>), auf der Installer-Datei doppelklicken und das war’s.</p>
 					
 					<p>Deinstalliert werden kann das Programm wie jede andere App über die Systemsteuerung von <i>Windows</i>.</p>
 					
@@ -347,7 +347,7 @@ php make-changelog.php [FORMAT] [PFAD]</pre>
 					<ul>
 						<li><span class="datei">./js/suchleiste.js</span>: alle Funktionen, die die Suchleiste betreffen, die in verschiedenen Fenstern genutzt wird</li>
 						<li><span class="datei">./js/app/beleg.js</span>: die Karteikarte betreffende Funktionen, und zwar sowohl die der Formular- als auch die der Leseansicht</li>
-						<li><span class="datei">./js/app/dialog.js</span>: Overlay-Fenster, die Meldungen für und Fragen an die BenutzerIn ausgeben</li>
+						<li><span class="datei">./js/app/dialog.js</span>: Overlay-Fenster, die Meldungen für und Fragen an die NutzerIn ausgeben</li>
 						<li><span class="datei">./js/app/dropdown.js</span>: erzeugt das über einen Pfeil oder via Tastaturkürzel zu öffnende Dropdown-Menü, das aus einigen Textfeldern aufgerufen werden kann (<abbr title="zum Beispiel">z. B.</abbr> im Formular der Karteikarte)</li>
 						<li><span class="datei">./js/app/kartei.js</span>: regelt das Öffnen und Speichern der Wort-Kartei</li>
 						<li><span class="datei">./js/app/konversion.js</span>: konvertiert <abbr title="Wortgeschichte digital">WGD</abbr>-Dateien, sodass sie dem aktuellen <a href="#" class="link-sektion-wgd"><abbr title="Wortgeschichte digital">WGD</abbr>-Format</a> entsprechen</li>
@@ -898,24 +898,24 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);
 					
 					<p>Werden mehrere Seiten importiert, wird jeder Seitenumbruch nach diesem Muster markiert: <q>[:35:]</q>. Dabei steht hier die <q>35</q> für die Seitenangabe, die aus dem n-Attribute des <code class="quelltext">&lt;pb&gt;</code> ausgelesen wurde.</p>
 					
-					<p>Wird der den Import begrenzende <code class="quelltext">&lt;pb&gt;</code> nicht gefunden (weil man sich auf der letzten Seite des Texts befindet oder die BenutzerIn bei der Eingabe einen Fehler gemacht hat), wird versucht, den Text des Buchs ab dem Start-<code class="quelltext">&lt;pb&gt;</code> komplett zu importieren.</p>
+					<p>Wird der den Import begrenzende <code class="quelltext">&lt;pb&gt;</code> nicht gefunden (weil man sich auf der letzten Seite des Texts befindet oder die NutzerIn bei der Eingabe einen Fehler gemacht hat), wird versucht, den Text des Buchs ab dem Start-<code class="quelltext">&lt;pb&gt;</code> komplett zu importieren.</p>
 					
-					<p>Die Funktionen, die den Import durchführen, stehen alle in <span class="datei">./js/app/beleg.js</span>. Ihr Name beginnt immer mit <code class="quelltext">DTAImport</code>.</p>
+					<p>Die Funktionen, die den Import durchführen, stehen alle in <span class="datei">./js/app/belegImport.js</span>. Ihr Name beginnt immer mit <code class="quelltext">DTA</code>.</p>
 					
 					<!-- Sperrdatei -->
 					<h2 id="verschiedenes-sperrdatei">Lockfile</h2>
 					
-					<p>Wird mit <i class="app-name"></i> eine <abbr title="Wortgeschichte digital">WGD</abbr>-Datei geöffnet, wird im Quellordner der Datei automatisch eine Sperrdatei angelegt. Mithilfe dieser Lock-Datei wird das Öffnen der Kartei für andere BenutzerInnen temporär unterbunden, sodass ein kollaboratives Arbeiten in einem Netzwerkordner möglich ist, ohne dass sich die BenutzerInnen gegenseitig die Arbeit überschreiben. Beim Schließen der Kartei oder der App wird die Sperrdatei automatisch entfernt.</p>
+					<p>Wird mit <i class="app-name"></i> eine <abbr title="Wortgeschichte digital">WGD</abbr>-Datei geöffnet, wird im Quellordner der Datei automatisch eine Sperrdatei angelegt. Mithilfe dieser Lock-Datei wird das Öffnen der Kartei für andere NutzerInnen temporär unterbunden, sodass ein kollaboratives Arbeiten in einem Netzwerkordner möglich ist, ohne dass sich die NutzerInnen gegenseitig die Arbeit überschreiben. Beim Schließen der Kartei oder der App wird die Sperrdatei automatisch entfernt.</p>
 					
 					<p>Das Schreiben, Überprüfen und Löschen dieser Lock-Datei wird in <code class="quelltext">kartei.lock()</code> geregelt. Ist eine solche Sperrdatei vorhanden, wird das Öffnen der zugehörigen Kartei grundsätzlich unterbunden. Es gibt zwei Ausnahmen:</p>
 					
 					<ul>
-						<li>dieselbe BenutzerIn versucht die Kartei vom selben Computer aus zu öffnen,</li>
+						<li>dieselbe NutzerIn versucht die Kartei vom selben Computer aus zu öffnen,</li>
 						<li>die Lock-Datei wurde vor mehr als zwölf Stunden angelegt.</li>
 					</ul>
 					
 					<p>Der Name der Sperrdatei folgt demselben Format, das <abbr title="zum Beispiel">z. B.</abbr> auch <i>LibreOffice</i> verwendet: <span class="datei">.~lock.[DATEINAME]#</span>.</p>
-					<p>Im Inneren der Lock-Datei steht im Plaintext der auf die Millisekunde genaue Zeitpunkt der Anlage der Datei, der Name des sperrenden Rechners und der seiner BenutzerIn. Die einzelnen Werte werden durch <code class="quelltext">;;</code> voneinander getrennt. Das Ganze sieht dann in etwa so aus:</p>
+					<p>Im Inneren der Lock-Datei steht im Plaintext der auf die Millisekunde genaue Zeitpunkt der Anlage der Datei, der Name des sperrenden Rechners und der seiner NutzerIn. Die einzelnen Werte werden durch <code class="quelltext">;;</code> voneinander getrennt. Das Ganze sieht dann in etwa so aus:</p>
 					
 					<pre class="quelltext">2019-04-24T17:36:47.681Z;;nico-sein-rechner;;Nico</pre>
 				</section>

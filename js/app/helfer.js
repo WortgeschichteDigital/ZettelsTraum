@@ -485,6 +485,8 @@ let helfer = {
 	ganzesWortRegExp: {
 		links: `\\s/\\\\([\\\]{<>`,
 		rechts: `\\s"/\\\\)\\\]!?.:,;<>`,
+		linksWort: `\\s/\\{<>`, // für Hervorhebung Karteiwort gewisse Klammern ignorieren: [] ()
+		rechtsWort: `\\s"/\\!?.:,;<>`,
 	},
 	// Tokens mit spezieller Bedeutung für reguläre Ausdrücke escapen
 	//   string = String
@@ -536,8 +538,14 @@ let helfer = {
 			}
 			// Varianten zusammenstellen
 			let varianten = [];
-			for (let i of data.fv[wort].fo) {
-				varianten.push(helfer.formVariSonderzeichen(helfer.escapeRegExp(i.va)));
+			for (let form of data.fv[wort].fo) {
+				let text = helfer.escapeRegExp(form.va.charAt(0));
+				for (let i = 1, len = form.va.length; i < len; i++) {
+					text += "(<[^>]+>|\\[¬\\]| \\[:.+?:\\] )*";
+					text += helfer.escapeRegExp(form.va.charAt(i));
+				}
+				text = helfer.formVariSonderzeichen(text);
+				varianten.push(text);
 			}
 			helfer.formVariRegExpRegs.push(varianten.join("|"));
 		}
@@ -732,10 +740,15 @@ let helfer = {
 				}
 				return;
 			}
+			// Annotierungs-Popup schließen
+			if (annotieren.modSchliessen()) {
+				return;
+			}
 			// Karteikarte schließen
 			if (!document.getElementById("beleg").classList.contains("aus")) {
 				helfer.inputBlur();
 				beleg.aktionAbbrechen();
+				return;
 			}
 		}
 		// Tabulator (wenn im Bedeutungsgerüst)

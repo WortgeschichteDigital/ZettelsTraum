@@ -34,6 +34,47 @@
 				></a
 			></span>
 			
+			<!-- 0.21.0 -->
+			<div class="version">0.21.0</div>
+			
+			<div>
+				<h2><span>Version 0.21.0-beta</span><time datetime="2019-10-02T14:22:34">2. Oktober 2019</time></h2>
+				
+				<h3>Neue Funktionen</h3>
+				
+				<ul>
+					<li>
+						<p>Belegliste und Leseansicht der Karteikarte: Gekürzte Absätze im Belegtext ([…]; Funktion <img src="../img/liste-kuerzen.svg" width="24" height="24" alt="">) können nun auf Wunsch nach und nach eingeblendet werden. Dazu muss man nur auf einen der herausgekürzten Absätze klicken. Pro Klick wird ein neuer Absatz eingeblendet, und zwar vorzugsweise hinter der Kürzung. Ist die Kürzung am Ende des Belegs, wird der vorherige Absatz eingeblendet. Sind alle Absätze sichtbar, verschwindet das Kürzungszeichen.</p>
+						<p>Die Funktion ist besonders im Zusammenhang mit einer Volltextsuche hilfreich. In diesem Fall werden nämlich alle Absätze ausgeblendet, in denen es keine Suchtreffer gibt – selbst dann, wenn sie das Karteiwort enthalten.</p>
+					</li>
+				</ul>
+				
+				<h3>Verbesserungen</h3>
+				
+				<ul>
+					<li>Annotierung von Karteiwörtern: Das Popup-Fenster kann jetzt auch mit <kbd>Esc</kbd> geschlossen werden.</li>
+					<li>Belegliste: Beim Rechtsklick in der expandierten Detailansicht eines Belegs erscheint nun dasselbe ausführliche Popup-Menü wie beim Rechtsklick auf dem Belegkopf. Dies ist besonders für lange Belege von Vorteil: Man muss nun nicht mehr zum Belegkopf scrollen, um <abbr title="zum Beispiel">z. B.</abbr> die Karteikarte zu bearbeiten.</li>
+					<li>
+						<p>Belegliste und Karteikarte: Das Hervorheben des Karteiworts wurde stark verbessert:<br
+							>zuvor <q>Kolo[¬]nie</q>, jetzt <q><mark class="wort">Kolo[¬]nie</mark></q>;<br
+							>zuvor <q>Hand[¬]<mark class="wort">lungs-Colonien</mark></q>, jetzt <q><mark class="wort">Hand[¬]lungs-Colonien</mark></q>;<br
+							>zuvor <q>Pflanzungs-(<mark class="wort">Kultivations-)Kolonien</mark></q>, jetzt <q><mark class="wort">Pflanzungs-(Kultivations-)Kolonien</mark></q>;<br
+							>zuvor <q>Colo[¬] [:500:] nien</q>, jetzt <q><mark class="wort">Colo[¬] [:500:] nien</mark></q>;<br
+							>zuvor <q>Coloni<i>en</i></q>, jetzt <q><mark class="wort">Coloni<i>en</i></mark></q>.</p>
+						<p>Diese Verbesserung hat weitere positive Auswirkungen: Absätze, die früher noch gekürzt wurden, weil das Karteiwort nicht entdeckt werden konnte, bleiben nun sichtbar. Und die Sprungfunktion in der Formularansicht der Karteikarte (<img src="../img/beleg-springen.svg" width="24" height="24" alt="">) findet im Quelltext des Belegs nun sogar Treffer wie <code class="quelltext">Coloni&lt;/span&gt;en</code> oder <code class="quelltext">Colo[¬] [:351:] nien</code>.</p>
+					</li>
+					<li>Reorganisation der <abbr title="Deutsches Textarchiv">DTA</abbr>-Import- und der Annotieren-Scripts.</li>
+				</ul>
+				
+				<h3>Behobene Fehler</h3>
+				
+				<ul>
+					<li>Folgt im Belegtext auf einen kürzbaren Trennstrich (<q>[¬]</q>) ein Seitenumbruch (<abbr title="zum Beispiel">z. B.</abbr> <q>[:351:]</q>), bleibt beim Ausblenden der Trennstriche und Seitenumbrüche (Funktion <img src="../img/liste-trennung.svg" width="24" height="24" alt="">) nun kein Leerzeichen mehr stehen.</li>
+					<li>Belegliste: Spezielle Textauszeichnungen im Belegtext führten mitunter zu einem Zeilenumbruch.</li>
+					<li>Karteikarte: Behebung einiger Fehler beim Hervorheben von markierten Wörtern in der Leseansicht (Funktion <img src="../img/beleg-springen.svg" width="24" height="24" alt="">).</li>
+				</ul>
+			</div>
+			
 			<!-- 0.20.0 -->
 			<div class="version">0.20.0</div>
 			

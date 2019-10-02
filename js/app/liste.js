@@ -663,7 +663,7 @@ let liste = {
 		if (filter.volltextSuche.suche &&
 				!filter.volltextSuche.ka[id].includes("bs")) {
 			let p = document.createElement("p");
-			p.textContent = "[…]";
+			liste.belegAbsatz(p);
 			div.appendChild(p);
 			return div;
 		}
@@ -690,7 +690,7 @@ let liste = {
 					if (zuletzt_gekuerzt) {
 						div.removeChild(div.lastChild);
 					} else {
-						p.textContent = "[…]";
+						liste.belegAbsatz(p);
 						zuletzt_gekuerzt = true;
 					}
 					continue;
@@ -700,7 +700,7 @@ let liste = {
 				if (zuletzt_gekuerzt) {
 					div.removeChild(div.lastChild);
 				} else {
-					p.textContent = "[…]";
+					liste.belegAbsatz(p);
 					zuletzt_gekuerzt = true;
 				}
 				continue;
@@ -710,10 +710,94 @@ let liste = {
 			p_prep[i] = liste.belegTrennungWeg(p_prep[i], false);
 			// Absatz normal einhängen
 			p.innerHTML = liste.suchtreffer(liste.belegWortHervorheben(p_prep[i], false), "bs", id);
-			beleg.wortAnnotierenInit(p);
+			annotieren.init(p);
 		}
 		// <div> zurückgeben
 		return div;
+	},
+	// gekürzte Absätze darstellen
+	//   p = Element
+	//     (der Absatz, der gekürzt dargestellt wird
+	belegAbsatz (p) {
+		// gekürzten Absatz aufbauen
+		p.classList.add("gekuerzt");
+		delete p.dataset.pnumber;
+		p.appendChild(document.createTextNode("["));
+		let span = document.createElement("span");
+		span.classList.add("kuerzung");
+		p.appendChild(span);
+		span.textContent = "einblenden";
+		p.appendChild(document.createTextNode("…]"));
+		// gekürzten Absatz auf Klick erweitern
+		p.addEventListener("click", function() {
+			// ermitteln, welcher Absatz eingeblendet werden könnte
+			let k = kontext(this),
+				n = -1;
+			if (k.next >= 0 || k.prev >= 0) {
+				n = k.next >= 0 ? k.next - 1 : k.prev + 1;
+			}
+			// ID, Absätze und Text ermitteln
+			const id = this.dataset.id ? this.dataset.id : "";
+			let absaetze = [],
+				text = "";
+			if (id) {
+				absaetze = data.ka[id].bs.replace(/\n\s*\n/g, "\n").split("\n");
+			} else {
+				absaetze = beleg.data.bs.replace(/\n\s*\n/g, "\n").split("\n");
+			}
+			if (n === -1) {
+				n = absaetze.length - 1;
+			}
+			text = absaetze[n];
+			// neuen Absatz erzeugen
+			let p = document.createElement("p");
+			p.dataset.pnumber = n;
+			p.dataset.id = id;
+			if (id) {
+				text = liste.belegTrennungWeg(text, false);
+				p.innerHTML = liste.belegWortHervorheben(text, false);
+			} else {
+				if (!optionen.data.beleg.trennung) {
+					text = liste.belegTrennungWeg(text, true);
+				}
+				p.innerHTML = liste.belegWortHervorheben(text, true);
+			}
+			annotieren.init(p);
+			// neuen Absatz einhängen
+			const after = k.next >= 0 || k.prev === -1 && k.next === -1 ? true : false;
+			if (after) {
+				this.parentNode.insertBefore(p, this.nextSibling);
+			} else {
+				this.parentNode.insertBefore(p, this);
+			}
+			// gekürzten Absatz entfernen oder auffrischen
+			k = kontext(this);
+			if (after && k.next === 0 ||
+					after && k.next - k.prev === 1 ||
+					!after && k.prev === absaetze.length - 1) {
+				this.parentNode.removeChild(this);
+			}
+			// ggf. Suche der Suchleiste erneut anstoßen (nur Neuaufbau)
+			if (document.getElementById("suchleiste")) {
+				suchleiste.suchen(true);
+			}
+			// Nummer des vorherigen und des nachfolgenden Absatzes ermitteln
+			function kontext (pKurz) {
+				let prev = pKurz.previousSibling,
+					next = pKurz.nextSibling;
+				let n = {
+					prev: -1,
+					next: -1,
+				};
+				if (prev && prev.dataset.pnumber) { // vor dem ersten Absatz könnte der Kopierlink stehen
+					n.prev = parseInt(prev.dataset.pnumber, 10);
+				}
+				if (next) {
+					n.next = parseInt(next.dataset.pnumber, 10);
+				}
+				return n;
+			}
+		});
 	},
 	// generiert den Vorschautext des übergebenen Belegs inkl. Autorname (wenn vorhanden)
 	//   beleg_akt = Object
@@ -795,6 +879,9 @@ let liste = {
 		text = text.replace(/\[¬\]([A-Z]+)/, function(m, p1) {
 			return `-${p1}`;
 		});
+		if (/\] \[:/.test(text)) { // Seitenumbruch, davor kürzbarer Trennstrich
+			text = text.replace(/\] \[:/g, "][:");
+		}
 		return text.replace(/\[¬\]|\[:.+?:\]\s*/g, "");
 	},
 	// hebt ggf. das Wort der Kartei im übergebenen Text hervor
@@ -808,19 +895,49 @@ let liste = {
 			return schnitt;
 		}
 		for (let i of helfer.formVariRegExpRegs) {
-			let reg = new RegExp(`[^${helfer.ganzesWortRegExp.links}]*(${i})[^${helfer.ganzesWortRegExp.rechts}]*`, "gi");
-			schnitt = schnitt.replace(reg, (m) => `<mark class="wort">${m}</mark>`);
+			let reg = new RegExp(`[^${helfer.ganzesWortRegExp.linksWort}]*(${i})[^${helfer.ganzesWortRegExp.rechtsWort}]*`, "gi");
+			schnitt = helfer.suchtrefferBereinigen(schnitt.replace(reg, setzenMark), "wort");
 		}
 		return schnitt;
+		// Ersetzungsfunktion; vgl. suchleiste.suchen()
+		function setzenMark (m) {
+			if (/<.+?>/.test(m)) {
+				m = m.replace(/<.+?>/g, function(m) {
+					return `</mark>${m}<mark class="wort">`;
+				});
+			}
+			// leere <mark> entfernen (kann passieren, wenn Tags verschachtelt sind)
+			m = m.replace(/<mark class="wort"><\/mark>/g, "");
+			// Rückgabewert zusammenbauen
+			m = `<mark class="wort">${m}</mark>`;
+			// alle <mark> ermitteln, die weder Anfang noch Ende sind
+			const marks = m.match(/class="wort"/g).length;
+			if (marks > 1) { // marks === 1 => der einzige <mark>-Tag ist Anfang und Ende zugleich
+				let splitted = m.split(/class="wort"/);
+				m = "";
+				for (let i = 0, len = splitted.length; i < len; i++) {
+					if (i === 0) {
+						m += splitted[i] + `class="wort wort-kein-ende"`;
+					} else if (i === len - 2) {
+						m += splitted[i] + `class="wort wort-kein-start"`;
+					} else if (i < len - 1) {
+						m += splitted[i] + `class="wort wort-kein-start wort-kein-ende"`;
+					} else {
+						m += splitted[i];
+					}
+				}
+			}
+			// aufbereiteten Match auswerfen
+			return m;
+		}
 	},
 	// überprüft, ob das Karteiwort in dem übergebenen Text steht
 	//   text = String
 	//     (Text, der auf die Existenz des Karteiworts überprüft werden soll)
 	wortVorhanden (text) {
-		const textRein = liste.textBereinigen(text);
 		for (let i of helfer.formVariRegExpRegs) {
 			let reg = new RegExp(i, "gi"),
-				matches = textRein.match(reg);
+				matches = text.match(reg);
 			// kein Treffer => Absatz kürzen
 			if (!matches) {
 				return false;
@@ -833,13 +950,6 @@ let liste = {
 			}
 		}
 		return true;
-	},
-	// den übergebenen Text bereinigen, z.B. bevor eine Kürzung vollzogen wird
-	// (diese Funktion wird auch von beleg.js benutzt)
-	textBereinigen (text) {
-		text = text.replace(/<.+?>/g, "");
-		text = liste.belegTrennungWeg(text, true);
-		return text;
 	},
 	// Suchtreffer hervorheben
 	//   text = String

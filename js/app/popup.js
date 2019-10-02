@@ -150,6 +150,9 @@ let popup = {
 				} else if (pfad[i].classList.contains("liste-kopf")) {
 					popup.belegID = pfad[i].dataset.id;
 					return "beleg-moddel";
+				} else if (pfad[i].classList.contains("liste-details")) {
+					popup.belegID = pfad[i].previousSibling.dataset.id;
+					return "beleg-moddel";
 				} else if (pfad[i].classList.contains("liste-meta")) {
 					popup.belegID = pfad[i].parentNode.previousSibling.dataset.id;
 					return "beleg";

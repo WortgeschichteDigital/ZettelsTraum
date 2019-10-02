@@ -96,9 +96,21 @@ mark.wort {
 	font-weight: bold;
 }
 
+mark.wort-kein-start {
+	padding-left: 0;
+	border-top-left-radius: 0;
+	border-bottom-left-radius: 0;
+}
+
+mark.wort-kein-ende {
+	padding-right: 0;
+	border-top-right-radius: 0;
+	border-bottom-right-radius: 0;
+}
+
 mark.mark {
-	background-color: var(--farbeGruen);
-	color: #fff;
+	background-color: var(--farbeGruen) !important;
+	color: #fff !important;
 }
 
 p {
