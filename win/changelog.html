@@ -38,7 +38,7 @@
 			<div class="version">0.21.0</div>
 			
 			<div>
-				<h2><span>Version 0.21.0-beta</span><time datetime="2019-10-02T14:22:34">2. Oktober 2019</time></h2>
+				<h2><span>Version 0.21.0</span><time datetime="2019-10-03T20:05:15">3. Oktober 2019</time></h2>
 				
 				<h3>Neue Funktionen</h3>
 				
@@ -46,6 +46,14 @@
 					<li>
 						<p>Belegliste und Leseansicht der Karteikarte: Gekürzte Absätze im Belegtext ([…]; Funktion <img src="../img/liste-kuerzen.svg" width="24" height="24" alt="">) können nun auf Wunsch nach und nach eingeblendet werden. Dazu muss man nur auf einen der herausgekürzten Absätze klicken. Pro Klick wird ein neuer Absatz eingeblendet, und zwar vorzugsweise hinter der Kürzung. Ist die Kürzung am Ende des Belegs, wird der vorherige Absatz eingeblendet. Sind alle Absätze sichtbar, verschwindet das Kürzungszeichen.</p>
 						<p>Die Funktion ist besonders im Zusammenhang mit einer Volltextsuche hilfreich. In diesem Fall werden nämlich alle Absätze ausgeblendet, in denen es keine Suchtreffer gibt – selbst dann, wenn sie das Karteiwort enthalten.</p>
+					</li>
+					<li>
+						<p>Belegliste und Leseansicht der Karteikarte: Im Belegtext können nun beliebige Textteile farblich hervorgehoben werden. Das ist denkbar einfach:</p>
+						<p>1.) Text mit der Maus auswählen;<br>2.) Rechtsklick;<br>3.) <i>Textauswahl markieren</i>.</p>
+						<p>Die Funktion ist im Wesentlichen identisch mit der Annotierung von Karteiwörtern, die seit der letzten Version zur Verfügung steht. Die Unterschiede:</p>
+						<p>– Die Markierung wird gelöscht, wenn die Farbe auf transparent gesetzt wird (und eine evtl. vorhandene Textnotiz ebenfalls gelöscht wurde oder wird).<br>– Die Markierung kann mit der Funktion <img src="../img/liste-hervorheben.svg" width="24" height="24" alt=""> nicht ausgeblendet werden.<br>– Der Text der Markierung wird nicht fett hervorgehoben (wodurch er sich von der Markierung eines Karteiworts unterscheidet).</p>
+						<p>Mitunter kann der Versuch, eine Textauswahl zu markieren, eine Fehlermeldung provozieren. Der Grund wird in aller Regel sein, dass die Markierung des ausgewählten Textes zu einer illegalen Verschachtelung führen würde. <abbr title="Das heißt">D. h.</abbr> konkret: Sie müssen Ihre Textauswahl anpassen und es noch einmal versuchen.</p>
+						<p>(Hintergrund: <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>-Tags dürfen nicht über Kreuz verschachtelt werden. Der Code <code class="quelltext">&lt;b&gt;das &lt;i&gt;ist&lt;/b&gt; ein&lt;/i&gt; Text</code> wäre eine illegale Verschachtelung, weil der <code class="quelltext">&lt;i&gt;</code>-Tag den <code class="quelltext">&lt;b&gt;</code>-Tag über Kreuz schneidet. Korrekt sähe der Code so aus: <code class="quelltext">&lt;b&gt;das &lt;i&gt;ist&lt;/i&gt;&lt;/b&gt; &lt;i&gt;ein&lt;/i&gt; Text</code>.)</p>
 					</li>
 				</ul>
 				
@@ -55,7 +63,7 @@
 					<li>Annotierung von Karteiwörtern: Das Popup-Fenster kann jetzt auch mit <kbd>Esc</kbd> geschlossen werden.</li>
 					<li>Belegliste: Beim Rechtsklick in der expandierten Detailansicht eines Belegs erscheint nun dasselbe ausführliche Popup-Menü wie beim Rechtsklick auf dem Belegkopf. Dies ist besonders für lange Belege von Vorteil: Man muss nun nicht mehr zum Belegkopf scrollen, um <abbr title="zum Beispiel">z. B.</abbr> die Karteikarte zu bearbeiten.</li>
 					<li>
-						<p>Belegliste und Karteikarte: Das Hervorheben des Karteiworts wurde stark verbessert:<br
+						<p>Belegliste und Karteikarte: Das Hervorheben des Karteiworts wurde stark verbessert. Ein paar Beispiele, was sich geändert hat:<br
 							>zuvor <q>Kolo[¬]nie</q>, jetzt <q><mark class="wort">Kolo[¬]nie</mark></q>;<br
 							>zuvor <q>Hand[¬]<mark class="wort">lungs-Colonien</mark></q>, jetzt <q><mark class="wort">Hand[¬]lungs-Colonien</mark></q>;<br
 							>zuvor <q>Pflanzungs-(<mark class="wort">Kultivations-)Kolonien</mark></q>, jetzt <q><mark class="wort">Pflanzungs-(Kultivations-)Kolonien</mark></q>;<br
@@ -70,6 +78,7 @@
 				
 				<ul>
 					<li>Folgt im Belegtext auf einen kürzbaren Trennstrich (<q>[¬]</q>) ein Seitenumbruch (<abbr title="zum Beispiel">z. B.</abbr> <q>[:351:]</q>), bleibt beim Ausblenden der Trennstriche und Seitenumbrüche (Funktion <img src="../img/liste-trennung.svg" width="24" height="24" alt="">) nun kein Leerzeichen mehr stehen.</li>
+					<li>Annotierung von Karteiwörtern: Das Löschen der Textnotiz funktionierte nur, wenn zugleich die Farbe zurückgesetzt wurde.</li>
 					<li>Belegliste: Spezielle Textauszeichnungen im Belegtext führten mitunter zu einem Zeilenumbruch.</li>
 					<li>Karteikarte: Behebung einiger Fehler beim Hervorheben von markierten Wörtern in der Leseansicht (Funktion <img src="../img/beleg-springen.svg" width="24" height="24" alt="">).</li>
 				</ul>

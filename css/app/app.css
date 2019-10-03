@@ -86,14 +86,15 @@ mark.suche-kein-ende {
 	border-bottom-right-radius: 0;
 }
 
+mark.wort,
 mark.user {
-	background-color: var(--farbeGelb);
-}
-
-mark.wort {
 	position: relative;
 	background-color: var(--farbeGelb);
 	font-weight: bold;
+}
+
+mark.user {
+	font-weight: normal;
 }
 
 mark.wort-kein-start {
@@ -391,31 +392,36 @@ textarea:focus {
 }
 
 .farbe.farbe0,
-.farbe0 mark.wort {
+.farbe0 mark.wort,
+.farbe0 mark.user {
 	padding: 0;
 	background-color: transparent;
 	font-weight: normal;
 }
 
 .farbe.farbe1,
-.farbe1 mark.wort {
+.farbe1 mark.wort,
+.farbe1 mark.user {
 	background-color: var(--farbeGelb);
 }
 
 .farbe.farbe2,
-.farbe2 mark.wort {
+.farbe2 mark.wort,
+.farbe2 mark.user {
 	background-color: var(--hintergrundGruen);
 	color: #fff;
 }
 
 .farbe.farbe3,
-.farbe3 mark.wort {
+.farbe3 mark.wort,
+.farbe3 mark.user {
 	background-color: var(--farbeRot);
 	color: #fff;
 }
 
 .farbe.farbe4,
-.farbe4 mark.wort {
+.farbe4 mark.wort,
+.farbe4 mark.user {
 	background-color: var(--hintergrundBlau);
 	color: #fff;
 }

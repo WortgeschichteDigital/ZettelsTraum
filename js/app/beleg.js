@@ -942,7 +942,7 @@ let beleg = {
 			dialog.oeffnen("alert", function() {
 				ta.focus();
 			});
-			dialog.text("Die Formatierung kann an dieser Position nicht vorgenommen werden.\nGrund: illegale Verschachtelung.");
+			dialog.text(`Die Formatierung kann an dieser Position nicht vorgenommen werden.\n<h3>Fehlermeldung</h3>\nillegale Verschachtelung`);
 			return;
 		}
 		// Aktion durchführen

@@ -25,6 +25,9 @@ let popup = {
 		// Menü füllen
 		if (target === "kopieren") {
 			popup.menuKopieren(menu);
+			if (popup.selInBeleg()) {
+				popup.menuMarkieren(menu);
+			}
 			if (overlay.oben() === "drucken") {
 				popup.menuSchliessen(menu, true);
 			} else {
@@ -268,6 +271,19 @@ let popup = {
 		// keine Kopieranweisung geben
 		return false;
 	},
+	// ermittelt, ob eine Selection innerhalb des Belegtextes ist (Belegliste oder Leseansicht)
+	selInBeleg () {
+		let sel = window.getSelection(),
+			anchor = sel.anchorNode;
+		while (!(anchor.nodeName === "DIV" || anchor.nodeName === "TD")) {
+			anchor = anchor.parentNode;
+		}
+		if (anchor.classList.contains("liste-bs") ||
+				anchor.id === "beleg-lese-bs") {
+			return true;
+		}
+		return false;
+	},
 	// Kopieren-Menü füllen
 	//   menu = Object
 	//     (Menü-Objekt, an das die Menü-Items gehängt werden müssen)
@@ -284,6 +300,18 @@ let popup = {
 					html: popup.textauswahl.html,
 				});
 			},
+		}));
+	},
+	// Markieren-Menü füllen
+	//   menu = Object
+	//     (Menü-Objekt, an das die Menü-Items gehängt werden müssen)
+	menuMarkieren (menu) {
+		const {MenuItem} = require("electron").remote,
+			path = require("path");
+		menu.append(new MenuItem({
+			label: "Textauswahl markieren",
+			icon: path.join(__dirname, "img", "menu", "popup-markieren.png"),
+			click: () => annotieren.makeUser(),
 		}));
 	},
 	// Bearbeiten-Menü füllen

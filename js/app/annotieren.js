@@ -1,11 +1,36 @@
 "use strict";
 
 let annotieren = {
-	// Annotierung eines Karteiworts initialisieren
+	// versucht ein <mark class="user"> im markierten Text zu erzeugen
+	makeUser () {
+		if (!optionen.data.belegliste.trennung) {
+			annotieren.unmoeglich();
+			return;
+		}
+		let sel = window.getSelection(),
+			range = sel.getRangeAt(0),
+			mark = document.createElement("mark");
+		mark.classList.add("user");
+		try {
+			range.surroundContents(mark);
+			range.collapse();
+			annotieren.mod(mark);
+			annotieren.ausfuehren();
+		} catch (err) {
+			dialog.oeffnen("alert");
+			dialog.text(`Die Markierung kann an dieser Position nicht vorgenommen werden.\n<h3>Fehlermeldung</h3>\n${err.message}`);
+		}
+	},
+	// Meldung, dass das Annotieren nicht möglich ist
+	unmoeglich () {
+		dialog.oeffnen("alert");
+		dialog.text(`Das Annotieren ist nur möglich, wenn Trennstriche und Seitenumbrüche sichtbar sind.\nSie müssen zunächst die Funktion <img src="img/liste-trennung.svg" width="24" height="24" alt=""> aktivieren.`);
+	},
+	// Annotierung initialisieren
 	//   p = Element
 	//     (Absatz, in dem sich markierte Wörter befinden können)
 	init (p) {
-		p.querySelectorAll("mark.wort").forEach(function(i) {
+		p.querySelectorAll("mark.wort, mark.user").forEach(function(i) {
 			i.addEventListener("click", function() {
 				annotieren.mod(this);
 			});
@@ -13,6 +38,7 @@ let annotieren = {
 	},
 	// speichert wichtige Elemente und Werte, mit denen später gearbeitet wird
 	data: {
+		cl: "", // class der Markierung (wort || user)
 		p: null, // Absatz mit dem <mark>
 		data: null, // der die <mark> umschließende Datenknoten (.annotierung-wort)
 		start: null, // erster <mark>
@@ -22,8 +48,14 @@ let annotieren = {
 	},
 	// alle <mark> suchen, die gerade annotiert werden
 	//   w = Element
-	//     (<mark class="wort">, auf den geklickt wurde)
+	//     (<mark class="wort || user">, auf den geklickt wurde)
 	getMarks (w) {
+		// Klasse ermitteln
+		if (w.classList.contains("wort")) {
+			annotieren.data.cl = "wort";
+		} else {
+			annotieren.data.cl = "user";
+		}
 		// Absatz ermitteln
 		let p = w.parentNode;
 		while (p.nodeName !== "P") {
@@ -31,7 +63,7 @@ let annotieren = {
 		}
 		annotieren.data.p = p;
 		// ersten und letzten Mark ermitteln
-		let marks = p.querySelectorAll("mark.wort"),
+		let marks = p.querySelectorAll(`mark.${annotieren.data.cl}`),
 			posStart = -1,
 			posEnde = -1;
 		for (let i = 0, len = marks.length; i < len; i++) {
@@ -40,11 +72,11 @@ let annotieren = {
 				break;
 			}
 		}
-		while (marks[posStart].classList.contains("wort-kein-start")) {
+		while (marks[posStart].classList.contains(`${annotieren.data.cl}-kein-start`)) {
 			posStart--;
 		}
 		posEnde = posStart;
-		while (marks[posEnde].classList.contains("wort-kein-ende")) {
+		while (marks[posEnde].classList.contains(`${annotieren.data.cl}-kein-ende`)) {
 			posEnde++;
 		}
 		annotieren.data.start = marks[posStart];
@@ -62,13 +94,12 @@ let annotieren = {
 		}
 		annotieren.data.data = data;
 	},
-	// Popup für die Annotierung eines Karteiworts aufbauen
+	// Popup für die Annotierung aufbauen
 	//   w = Element
-	//     (<mark class="wort">, auf den geklickt wurde)
+	//     (<mark class="wort || user">, auf den geklickt wurde)
 	mod (w) {
 		if (!optionen.data.belegliste.trennung) {
-			dialog.oeffnen("alert");
-			dialog.text(`Das Annotieren von Karteiwörtern ist nur möglich, wenn Trennstriche und Seitenumbrüche sichtbar sind.\nSie müssen zunächst die Funktion <img src="img/liste-trennung.svg" width="24" height="24" alt=""> aktivieren.`);
+			annotieren.unmoeglich();
 			return;
 		}
 		// Marks ermitteln
@@ -218,7 +249,7 @@ let annotieren = {
 		feld.classList.remove("aktiv");
 		annotieren.ausfuehren();
 	},
-	// Annotierung eines Karteiworts umsetzen
+	// Annotierung umsetzen
 	ausfuehren () {
 		let aw = document.getElementById("annotierung-wort");
 		let werte = {
@@ -243,7 +274,19 @@ let annotieren = {
 			}
 		}
 		// Anzeige auffrischen
-		if (werte.farbe === 1 && !werte.text) { // Annotierung entfernen
+		const cl = annotieren.data.cl;
+		if (cl === "user" && werte.farbe === 0 && !werte.text) { // Annotierung entfernen (user)
+			let frag = document.createDocumentFragment(),
+				start = annotieren.data.start;
+			for (let i of start.childNodes) {
+				if (i.id === "annotierung-wort") {
+					continue;
+				}
+				frag.appendChild(i.cloneNode(true));
+			}
+			let data = annotieren.data.data;
+			data.parentNode.replaceChild(frag, data);
+		} else if (cl === "wort" && werte.farbe === 1 && !werte.text) { // Annotierung entfernen (wort)
 			let data = annotieren.data.data,
 				frag = document.createDocumentFragment();
 			annotieren.data.start = null;
@@ -251,7 +294,7 @@ let annotieren = {
 			for (let i of data.childNodes) {
 				let klon = i.cloneNode(true);
 				frag.appendChild(klon);
-				if (i.classList.contains("wort")) {
+				if (i.classList.contains(cl)) {
 					if (!annotieren.data.start) {
 						annotieren.data.start = klon;
 					} else {
@@ -272,6 +315,8 @@ let annotieren = {
 			data.classList.add("annotierung-wort", `farbe${werte.farbe}`);
 			if (werte.text) {
 				data.title = werte.text;
+			} else {
+				data.title = "";
 			}
 		} else { // Annotierung vornehmen
 			// Annotierung erzeugen
@@ -326,7 +371,7 @@ let annotieren = {
 					parent.removeChild(parent.childNodes[i]);
 				}
 				// Start- und Endknoten neu ermitteln
-				let marks = annotierung.querySelectorAll("mark.wort");
+				let marks = annotierung.querySelectorAll(`mark.${annotieren.data.cl}`);
 				annotieren.data.start = marks[0];
 				annotieren.data.ende = marks[marks.length - 1];
 			}
@@ -345,11 +390,13 @@ let annotieren = {
 		// Absatz-Text ermitteln
 		let klon = p.cloneNode(true),
 			awKlon = klon.querySelector("#annotierung-wort");
-		awKlon.parentNode.removeChild(awKlon);
+		if (awKlon) {
+			awKlon.parentNode.removeChild(awKlon);
+		}
 		let text = klon.innerHTML;
-		while (/<mark class/.test(text)) {
-			text = text.replace(/<mark class=".+?">(.+?)<\/mark>/, function(m, p1) {
-				return p1;
+		while (/<mark class="(wort|such)/.test(text)) {
+			text = text.replace(/<mark class="(wort|such).*?">(.+?)<\/mark>/, function(m, p1, p2) {
+				return p2;
 			});
 		}
 		// Ergebnis in Datensatz eintragen
@@ -366,7 +413,7 @@ let annotieren = {
 		}
 		// Events auffrischen
 		function events () {
-			let marks = annotieren.data.p.querySelectorAll("mark.wort");
+			let marks = annotieren.data.p.querySelectorAll(`mark.${annotieren.data.cl}`);
 			for (let i = annotieren.data.startN; i <= annotieren.data.endeN; i++) {
 				listener(marks[i]);
 			}
