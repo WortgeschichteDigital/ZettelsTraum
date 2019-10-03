@@ -337,6 +337,11 @@ textarea#beleg-bs {
 	user-select: text;
 }
 
+.beleg-lese p.einblenden {
+	overflow: hidden;
+	transition: height .5s ease;
+}
+
 #beleg .beleg-lese td {
 	border-bottom: 1px solid var(--linie);
 	padding-top: 10px;

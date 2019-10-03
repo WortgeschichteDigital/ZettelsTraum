@@ -770,6 +770,17 @@ let liste = {
 			} else {
 				this.parentNode.insertBefore(p, this);
 			}
+			// Einblenden animieren
+			let height = p.offsetHeight;
+			p.classList.add("einblenden");
+			p.style.height = "24px"; // initial Höhe Standardzeile, damit es nicht so springt
+			setTimeout(function() {
+				p.style.height = `${height}px`;
+				p.addEventListener("transitionend", function() {
+					this.classList.remove("einblenden");
+					this.style.removeProperty("height");
+				});
+			}, 0);
 			// gekürzten Absatz entfernen oder auffrischen
 			k = kontext(this);
 			if (after && k.next === 0 ||

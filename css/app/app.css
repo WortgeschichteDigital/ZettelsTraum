@@ -86,15 +86,15 @@ mark.suche-kein-ende {
 	border-bottom-right-radius: 0;
 }
 
-mark.wort,
 mark.user {
 	position: relative;
 	background-color: var(--farbeGelb);
-	font-weight: bold;
 }
 
-mark.user {
-	font-weight: normal;
+mark.wort {
+	position: relative;
+	background-color: var(--farbeGelb);
+	font-weight: bold;
 }
 
 mark.wort-kein-start {
@@ -349,8 +349,13 @@ textarea:focus {
 	padding: 5px 5px;
 	width: 175px;
 	background-color: #fff;
+	/* die folgenden Styles sind nötig, damit Textauszeichnungen oberhalb des <mark> nicht vererbt werden; s. u. die Styles .dta-* */
 	font: 14px/24px "Noto Sans", "Noto Sans Symbols2", sans-serif;
+	font-style: normal;
+	font-variant: normal;
 	font-weight: normal;
+	text-decoration: none;
+	letter-spacing: normal;
 }
 
 #annotierung-wort.links-oben {
