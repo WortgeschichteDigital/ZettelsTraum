@@ -47,6 +47,11 @@ let helferWin = {
 				suchleiste.ausblenden();
 				return;
 			}
+			// falls ein Vorschau-Bild angezeigt wird
+			if (document.getElementById("bild")) {
+				hilfe.bildSchliessen();
+				return;
+			}
 			// ohne Timeout wird zugleich das Hauptfenster geschlossen, von dem das Nebenfenster abhängig ist
 			setTimeout(function() {
 				const {remote} = require("electron"),

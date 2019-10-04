@@ -89,6 +89,38 @@ code.quelltext {
 	color: var(--text);
 }
 
+figure {
+	clear: left;
+	clear: right;
+	margin: 10px 0;
+	border: 1px solid var(--linie);
+	padding: 5px;
+}
+
+figure.left {
+	float: left;
+	margin: 0 10px 10px 0;
+	width: 35%;
+}
+
+figure.right {
+	float: right;
+	margin: 0 0 10px 10px;
+	width: 35%;
+}
+
+figure img {
+	width: 100%;
+}
+
+figcaption {
+	margin-top: 5px;
+	color: var(--textHell);
+	font-style: italic;
+	text-align: center;
+	line-height: 20px;
+}
+
 h2 {
 	margin: 30px 0 15px 0;
 	color: var(--textFarbe);
@@ -411,6 +443,48 @@ mark.suche {
 	color: var(--farbe);
 	font-style: italic;
 	text-align: center;
+}
+
+/* Bild ----------------------------------------- */
+#bild {
+	position: fixed;
+	top: 0;
+	left: 0;
+	padding: 25px;
+	width: calc(100vw - 50px); /* 50px padding */
+	height: 100vh;
+	background-color: rgba(180, 180, 180, .7);
+	opacity: 0;
+	transition: opacity .2s ease;
+}
+
+#bild.einblenden {
+	opacity: 1;
+}
+
+#bild-cont {
+	position: relative;
+	border-radius: 25px;
+	padding: 25px;
+	width: 90%;
+	background-color: #fff;
+	text-align: center;
+}
+
+#bild-cont h2 {
+	margin: 0 25px 10px 25px;
+	font-size: 20px;
+	line-height: 30px;
+}
+
+#bild-cont img {
+	max-width: 100%;
+}
+
+#bild-schliessen {
+	position: absolute;
+	top: 5px;
+	right: 5px;
 }
 
 /* Globale Klassen ------------------------------ */

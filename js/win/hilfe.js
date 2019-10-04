@@ -141,6 +141,44 @@ let hilfe = {
 			hilfe.naviSprung(a);
 		});
 	},
+	// speichert den Timeout für das Ausblenden des Bildes
+	bildTimeout: null,
+	// Vorschau-Bild auf Klick vergrößern und über die Seite legen
+	//   fig = Element
+	//     (das <figure>-Element, auf das geklickt wurde)
+	bild (fig) {
+		// Rahmen
+		let div = document.createElement("div");
+		document.body.appendChild(div);
+		div.id = "bild";
+		// Content
+		let cont = document.createElement("div");
+		div.appendChild(cont);
+		cont.id = "bild-cont";
+		cont.addEventListener("click", () => hilfe.bildSchliessen());
+		// Bild und Beschreibung einhängen
+		let h2 = document.createElement("h2");
+		cont.appendChild(h2);
+		h2.textContent = fig.querySelector("figcaption").textContent;
+		cont.appendChild(fig.querySelector("img").cloneNode());
+		// Schließen-Icon
+		let schliessen = document.createElement("img");
+		cont.appendChild(schliessen);
+		schliessen.id = "bild-schliessen";
+		schliessen.src = "../img/schliessen-gross.svg";
+		schliessen.width = "48";
+		schliessen.height = "48";
+		schliessen.title = "Bild schließen (Esc)";
+		// Einblenden
+		setTimeout(() => div.classList.add("einblenden"), 0);
+	},
+	// schließt das vergrößte Vorschau-Bild
+	bildSchliessen () {
+		let bild = document.getElementById("bild");
+		bild.classList.remove("einblenden");
+		clearTimeout(hilfe.bildTimeout);
+		hilfe.bildTimeout = setTimeout(() => bild.parentNode.removeChild(bild), 200);
+	},
 	// Variable, in der der Timeout der Suche gespeichert wird
 	sucheTimeout: null,
 	// Listener, über den die Suchfunktion angestoßen wird

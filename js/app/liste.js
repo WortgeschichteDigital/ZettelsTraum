@@ -366,7 +366,9 @@ let liste = {
 	//     (ID der Karteikarte)
 	//   folgekopf = Element || undefined
 	//     (der Belegkopf, der dem mit der übergebenen ID folgt)
-	aufbauenDetails ({id, folgekopf}) {
+	//   einblenden = true || undefined
+	//     (die Detailansicht soll eingeblendet werden)
+	aufbauenDetails ({id, folgekopf, einblenden = false}) {
 		// Detailblock aufbauen
 		let div = document.createElement("div");
 		div.classList.add("liste-details");
@@ -461,6 +463,12 @@ let liste = {
 		// Meta-Infos
 		if (!filter.volltextSuche.suche && optionen.data.belegliste.detail_meta) {
 			liste.metainfosErstellen(data.ka[id], div, "liste-meta");
+		}
+		if (einblenden) {
+			liste.belegUmschaltenZielhoehe = div.offsetHeight - 30; // 30px = padding-top + padding-bottom
+			div.style.height = "0";
+			div.style.paddingTop = "0";
+			div.style.paddingBottom = "0";
 		}
 	},
 	// ermittelt, ob die Detail-Anzeige wirklich aufgebaut werden soll (für den Fall einer Suche)
@@ -1023,6 +1031,10 @@ let liste = {
 			return m;
 		}
 	},
+	// Timeout für das Aus- bzw. Einblenden der Detailansicht
+	belegUmschaltenTimeout: null,
+	// speichert die Zielhöhe des Detail-Containers für das Einblenden
+	belegUmschaltenZielhoehe: -1,
 	// Details zu einem einzelnen Beleg durch Klick auf den Belegkopf ein- oder ausblenden
 	//   div = Element
 	//     (der Belegkopf, auf den geklickt werden kann)
@@ -1030,12 +1042,36 @@ let liste = {
 		div.addEventListener("click", function() {
 			if (this.classList.contains("schnitt-offen")) {
 				this.classList.remove("schnitt-offen");
-				this.parentNode.removeChild(this.nextSibling);
+				// Ausblenden animieren
+				let details = this.nextSibling;
+				details.classList.add("blenden");
+				details.style.height = `${details.offsetHeight - 30}px`; // 30px = padding-top + padding-bottom
+				setTimeout(function() {
+					details.style.height = "0px";
+					details.style.paddingTop = "0px";
+					details.style.paddingBottom = "0px";
+					clearTimeout(liste.belegUmschaltenTimeout);
+					liste.belegUmschaltenTimeout = setTimeout(() => details.parentNode.removeChild(details), 300);
+				}, 0);
 			} else {
 				this.classList.add("schnitt-offen");
 				liste.aufbauenDetails({
 					id: this.dataset.id,
+					einblenden: true,
 				});
+				// Einblenden animieren
+				let details = this.nextSibling;
+				setTimeout(function() {
+					details.classList.add("blenden");
+					details.style.height = `${liste.belegUmschaltenZielhoehe}px`;
+					details.style.removeProperty("padding-top");
+					details.style.removeProperty("padding-bottom");
+					clearTimeout(liste.belegUmschaltenTimeout);
+					liste.belegUmschaltenTimeout = setTimeout(() => {
+						details.style.removeProperty("height");
+						details.classList.remove("blenden");
+					}, 300);
+				}, 0);
 			}
 			// ggf. Suche der Suchleiste erneut anstoßen (nur Neuaufbau)
 			if (document.getElementById("suchleiste")) {

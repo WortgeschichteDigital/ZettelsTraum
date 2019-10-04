@@ -36,6 +36,12 @@ window.addEventListener("load", function() {
 		evt.preventDefault();
 		suchleiste.einblenden();
 	});
+	// Vorschau-Bilder
+	document.querySelectorAll("figure").forEach(function(i) {
+		i.addEventListener("click", function() {
+			hilfe.bild(this);
+		});
+	});
 	// Demonstrationskartei öffnen
 	document.querySelectorAll(".hilfe-demo").forEach(function(i) {
 		i.addEventListener("click", function(evt) {
