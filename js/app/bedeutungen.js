@@ -707,12 +707,16 @@ let bedeutungen = {
 			}
 		}
 	},
+	// speichert den Timeout für das Aktivieren des Drags
+	moveListenerDrag: null,
 	// Listener für die Windrose
 	//   a = Element
 	//     (der Link mit der Windrose)
 	moveListener (a) {
+		// Aktivierung
 		a.addEventListener("click", function(evt) {
 			evt.preventDefault();
+			clearTimeout(bedeutungen.moveListenerDrag);
 			let tr = this.parentNode.parentNode,
 				tr_verschmelzen = tr.classList.contains("bedeutungen-verschmelzen") ? true : false,
 				tr_aktiv = bedeutungen.moveAus();
@@ -721,10 +725,31 @@ let bedeutungen = {
 			}
 			bedeutungen.moveAn(parseInt(tr.dataset.idx, 10));
 		});
+		// Vorbereiten des Drag
+		a.addEventListener("mousedown", function() {
+			let tr = this.parentNode.parentNode;
+			bedeutungen.moveListenerDrag = setTimeout(() => {
+				// Header-Höhe berechnen
+				bedeutungenDrag.data.header = document.querySelector("body > header").offsetHeight;
+				bedeutungenDrag.data.header += document.querySelector("#bedeutungen > header").offsetHeight;
+				let quick = document.getElementById("quick");
+				if (quick.classList.contains("an")) {
+					bedeutungenDrag.data.header += quick.offsetHeight;
+				}
+				// Bedeutung markieren
+				bedeutungen.moveAus();
+				document.getElementById("bedeutungen-cont").classList.add("drag");
+				bedeutungen.moveAn(parseInt(tr.dataset.idx, 10));
+				// Maus-Events initialisieren
+				document.addEventListener("mousemove", bedeutungenDrag.mouse);
+				document.addEventListener("mouseup", bedeutungenDrag.end);
+				document.addEventListener("scroll", bedeutungenDrag.scroll); 
+			}, 500);
+		});
 	},
 	// eine der Bedeutungen ist aktiviert und kann nun mit allen Subbedeutungen bewegt werden
 	moveAktiv: false,
-	// Bedeutung nach dem Verschieben wieder aktivieren
+	// Bedeutung (mit allen Unterbedeutungen) aktivieren
 	//   idx = Number
 	//     (Index der aktiven Zeile)
 	//   moved = true || undefined

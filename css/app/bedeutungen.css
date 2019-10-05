@@ -267,6 +267,11 @@ td #bedeutungen-tagger-link:focus {
 	color: #fff;
 }
 
+#bedeutungen-cont.drag .bedeutungen-aktiv td,
+#bedeutungen-cont.drag .bedeutungen-affiziert td {
+	background-color: var(--farbeOrange);
+}
+
 #bedeutungen-cont .bedeutungen-aktiv.bedeutungen-verschmelzen td,
 #bedeutungen-cont .bedeutungen-affiziert.bedeutungen-verschmelzen td {
 	background-color: var(--farbeGelb);
@@ -371,6 +376,17 @@ a[class*="icon-move"] {
 	mask-image: url(../../img/move_40.svg);
 }
 
+#bedeutungen-drag-marker {
+	position: fixed;
+	border-radius: 3px;
+	height: 5px;
+	background-color: var(--farbeGruen);
+}
+
+#bedeutungen-drag-marker.drag-unmovable {
+	background-color: var(--farbeRot);
+}
+
 #bedeutungen-cont .icon-loeschen {
 	-webkit-mask-image: url(../../img/loeschen.svg);
 	mask-image: url(../../img/loeschen.svg);
@@ -413,6 +429,10 @@ a[class*="icon-move"] {
 }
 
 #bedeutungen-cont .bedeutungen-affiziert.bedeutungen-verschmelzen .icon-link {
+	background-color: transparent;
+}
+
+#bedeutungen-cont.drag tr:not(.bedeutungen-aktiv) .icon-link:hover {
 	background-color: transparent;
 }
 
