@@ -671,7 +671,7 @@ let liste = {
 		if (filter.volltextSuche.suche &&
 				!filter.volltextSuche.ka[id].includes("bs")) {
 			let p = document.createElement("p");
-			liste.belegAbsatz(p);
+			liste.belegAbsatzGekuerzt(p);
 			div.appendChild(p);
 			return div;
 		}
@@ -698,7 +698,7 @@ let liste = {
 					if (zuletzt_gekuerzt) {
 						div.removeChild(div.lastChild);
 					} else {
-						liste.belegAbsatz(p);
+						liste.belegAbsatzGekuerzt(p);
 						zuletzt_gekuerzt = true;
 					}
 					continue;
@@ -708,7 +708,7 @@ let liste = {
 				if (zuletzt_gekuerzt) {
 					div.removeChild(div.lastChild);
 				} else {
-					liste.belegAbsatz(p);
+					liste.belegAbsatzGekuerzt(p);
 					zuletzt_gekuerzt = true;
 				}
 				continue;
@@ -726,7 +726,7 @@ let liste = {
 	// gekürzte Absätze darstellen
 	//   p = Element
 	//     (der Absatz, der gekürzt dargestellt wird
-	belegAbsatz (p) {
+	belegAbsatzGekuerzt (p) {
 		// gekürzten Absatz aufbauen
 		p.classList.add("gekuerzt");
 		delete p.dataset.pnumber;
@@ -737,6 +737,12 @@ let liste = {
 		span.textContent = "einblenden";
 		p.appendChild(document.createTextNode("…]"));
 		// gekürzten Absatz auf Klick erweitern
+		liste.abelegAbsatzEinblenden(p);
+	},
+	// hebt die Kürzung eines Absatzes auf Klick auf
+	//   p = Element
+	//     (der gekürzte Absatz)
+	abelegAbsatzEinblenden (p) {
 		p.addEventListener("click", function() {
 			// ermitteln, welcher Absatz eingeblendet werden könnte
 			let k = kontext(this),

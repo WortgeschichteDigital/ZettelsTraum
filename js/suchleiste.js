@@ -289,6 +289,8 @@ let suchleiste = {
 		if (ele.classList.contains("liste-details")) {
 			ele.querySelectorAll(".icon-tools-kopieren").forEach(a => liste.kopieren(a));
 		}
+		// Einblenden-Funktion gekürzter Absätze (Hauptfenster)
+		ele.querySelectorAll(".gekuerzt").forEach(p => liste.abelegAbsatzEinblenden(p));
 		// Icon-Tools in der Karteikarte (Hauptfenster)
 		if (fenstertyp === "index" && helfer.belegOffen() && ele.nodeName === "TH") {
 			ele.querySelectorAll(`[class*="icon-tools-"]`).forEach(a => beleg.toolsKlick(a));
@@ -363,7 +365,7 @@ let suchleiste = {
 			suchleiste.suchenKeineTreffer();
 			return;
 		}
-		// aktives Element?
+		// aktives Element vorhanden?
 		let pos = -1,
 			aktiv = document.querySelectorAll(".suchleiste-aktiv");
 		if (aktiv.length) {
@@ -376,6 +378,29 @@ let suchleiste = {
 			// die Position muss korrigiert werden, wenn mehr als ein Element aktiv ist;
 			// ist nur ein Element aktiv, bleibt die Position mit dieser Formel identisch
 			pos += aktiv.length - 1;
+		}
+		// kein aktives Element vorhanden =>
+		// ersten Suchtreffer finden, der der derzeitigen Fensterposition folgt
+		if (!aktiv.length) {
+			let headerHeight = document.querySelector("body > header").offsetHeight,
+				quick = document.getElementById("quick");
+			if (quick) { // man ist im Hauptfenster
+				if (quick.classList.contains("an")) {
+					headerHeight += quick.offsetHeight;
+				}
+				if (!document.getElementById("beleg").classList.contains("aus")) { // in der Karteikarte
+					headerHeight += document.querySelector("#beleg > header").offsetHeight;
+				} else { // in der Belegliste
+					headerHeight += document.querySelector("#liste-belege > header").offsetHeight;
+				}
+			}
+			for (let i = 0, len = marks.length; i < len; i++) {
+				let rect = marks[i].getBoundingClientRect();
+				if (rect.top >= headerHeight) {
+					pos = i > 0 ? i - 1 : -1;
+					break;
+				}
+			}
 		}
 		// Position bestimmen
 		if (next) {

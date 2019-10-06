@@ -743,8 +743,8 @@ let bedeutungen = {
 				// Maus-Events initialisieren
 				document.addEventListener("mousemove", bedeutungenDrag.mouse);
 				document.addEventListener("mouseup", bedeutungenDrag.end);
-				document.addEventListener("scroll", bedeutungenDrag.scroll); 
-			}, 500);
+				document.addEventListener("scroll", bedeutungenDrag.markerAus); 
+			}, 250);
 		});
 	},
 	// eine der Bedeutungen ist aktiviert und kann nun mit allen Subbedeutungen bewegt werden
@@ -788,13 +788,7 @@ let bedeutungen = {
 		}, 0); // ohne Timeout kein Fokus
 		// erfolgreiche Bewegung markieren
 		if (moved) {
-			let tab = document.querySelector("#bedeutungen-cont table");
-			tab.classList.add("bedeutungen-moved");
-			clearTimeout(bedeutungen.timeout);
-			tab.classList.remove("bedeutungen-unmovable");
-			bedeutungen.timeout = setTimeout(function() {
-				tab.classList.remove("bedeutungen-moved");
-			}, 500);
+			bedeutungen.feedback("bedeutungen-moved");
 		}
 	},
 	// Bewegung wieder ausschalten
@@ -814,6 +808,10 @@ let bedeutungen = {
 		document.querySelectorAll(".bedeutungen-affiziert").forEach(function(i) {
 			i.classList.remove("bedeutungen-affiziert", "bedeutungen-verschmelzen");
 		});
+		// ggf. Drag deaktivieren
+		if (document.getElementById("bedeutungen-cont").classList.contains("drag")) {
+			bedeutungenDrag.end();
+		}
 		// vormals aktive Zeile zurückgeben
 		return tr;
 	},
@@ -936,13 +934,7 @@ let bedeutungen = {
 		// Bewegung unmöglich
 		let d = bedeutungen.moveData[evt.which];
 		if (!d.movable) {
-			let tab = document.querySelector("#bedeutungen-cont table");
-			tab.classList.add("bedeutungen-unmovable");
-			clearTimeout(bedeutungen.timeout);
-			tab.classList.remove("bedeutungen-moved");
-			bedeutungen.timeout = setTimeout(function() {
-				tab.classList.remove("bedeutungen-unmovable");
-			}, 500);
+			bedeutungen.feedback("bedeutungen-unmovable");
 			return;
 		}
 		// Items bewegen
@@ -982,7 +974,7 @@ let bedeutungen = {
 		}
 		// ggf. scrollen
 		bedeutungen.moveScroll();
-		// Bedeutungen wurden geändert
+		// Änderungsmarkierung setzen
 		bedeutungen.bedeutungenGeaendert(true);
 	},
 	// Elemente sammeln, die bewegt werden sollen
@@ -1021,6 +1013,18 @@ let bedeutungen = {
 				behavior: "smooth",
 			});
 		}
+	},
+	// Animation, die anzeigt, dass der Versuch, einen Bedeutungszweig zu bewegen, illegal war
+	//   typ = String
+	//     (die Klasse der Animation)
+	feedback (typ) {
+		let tab = document.querySelector("#bedeutungen-cont table");
+		tab.classList.remove("bedeutungen-moved", "bedeutungen-unmovable");
+		tab.classList.add(typ);
+		clearTimeout(bedeutungen.timeout);
+		bedeutungen.timeout = setTimeout(function() {
+			tab.classList.remove(typ);
+		}, 500);
 	},
 	// erstellt eine unabhängige Kopie eines Datensatzes
 	//   idx = Number
@@ -1180,7 +1184,7 @@ let bedeutungen = {
 				// Verschmelzen visualisieren
 				for (let i = 0, len = bedeutungen.akt.bd.length; i < len; i++) {
 					if (bedeutungen.akt.bd[i].id === id) {
-						visualisieren(i);
+						bedeutungen.moveAn(i, true);
 						break;
 					}
 				}
@@ -1200,17 +1204,6 @@ let bedeutungen = {
 		}
 		const bdIdxZiel = bedeutungen.akt.bd[idxZiel].bd[bedeutungen.akt.bd[idxZiel].bd.length - 1];
 		dialog.text(`Soll die markierte Bedeutung\n<p class="bedeutungen-dialog">${zaehlungIdx.join("")}${bdIdx}</p>\n${document.querySelector(".bedeutungen-affiziert") ? "mit all ihren Unterbedeutungen " : ""}wirklich mit der Bedeutung\n<p class="bedeutungen-dialog">${zaehlungIdxZiel.join("")}${bdIdxZiel}</p>\nverschmolzen werden?`);
-		// Verschieben visualisieren
-		function visualisieren (idx) {
-			let tr = document.querySelectorAll("#bedeutungen-cont tr")[idx];
-			tr.classList.add("bedeutungen-aktiv");
-			let tab = document.querySelector("#bedeutungen-cont table");
-			tab.classList.add("bedeutungen-moved");
-			bedeutungen.timeout = setTimeout(function() {
-				tab.classList.remove("bedeutungen-moved");
-				tr.classList.remove("bedeutungen-aktiv");
-			}, 500);
-		}
 	},
 	// Listener zum Öffnen des Taggers
 	//   td = Element

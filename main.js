@@ -86,6 +86,10 @@ ipcMain.on("bilder-senden", function(evt) {
 
 /* APP-MENÜ *************************************/
 
+// standardmäßig kein Menü anzeigen
+// (einzig verlässliche Methode, um die Über-Fenster ohne Menü zu erzeugen)
+Menu.setApplicationMenu(null);
+
 // Menü-Vorlagen
 let layoutMenu = [
 	{
@@ -826,8 +830,11 @@ fenster = {
 			typ: html,
 			kartei: "",
 		};
-		// Menü abschalten
-		bw.setMenuBarVisibility(false); // unpaketiert erscheint sonst ein Standardmenü
+		// Ansicht-Menü erzeugen
+		// (wenn das Dev-Menü gebraucht werden; ansonsten sollte das Fenster kein Menü haben)
+		if (devtools) {
+			appMenu.erzeugenAnsicht(bw);
+		}
 		// HTML laden
 		bw.loadFile(path.join(__dirname, "win", `${html}.html`));
 		// Fenster anzeigen, sobald alles geladen wurde

@@ -379,7 +379,7 @@ a[class*="icon-move"] {
 #bedeutungen-drag-marker {
 	position: fixed;
 	border-radius: 3px;
-	height: 5px;
+	height: 6px;
 	background-color: var(--farbeGruen);
 }
 
@@ -452,6 +452,10 @@ a[class*="icon-move"] {
 #bedeutungen-cont .bedeutungen-aktiv.bedeutungen-verschmelzen .leer:hover,
 #bedeutungen-cont .bedeutungen-affiziert.bedeutungen-verschmelzen .leer:hover {
 	color: var(--text);
+}
+
+#bedeutungen-cont.drag .leer:hover {
+	color: transparent;
 }
 
 #bedeutungen-cont #bedeutungen-neu {

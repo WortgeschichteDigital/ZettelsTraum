@@ -1205,7 +1205,7 @@ let beleg = {
 						if (zuletzt_gekuerzt) {
 							cont.removeChild(cont.lastChild);
 						} else {
-							liste.belegAbsatz(nP);
+							liste.belegAbsatzGekuerzt(nP);
 							zuletzt_gekuerzt = true;
 						}
 						continue;
