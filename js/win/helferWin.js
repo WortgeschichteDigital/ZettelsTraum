@@ -69,11 +69,7 @@ let helferWin = {
 		if (typeof hilfe !== "undefined" && evt.ctrlKey && (evt.which === 38 || evt.which === 40)) {
 			hilfe.naviMenue(evt.which);
 		}
-		// Cursor links (←), rechts (→) (nur im Handbuch)
-		if (fenstertyp === "handbuch" && (evt.which === 37 || evt.which === 39)) {
-			hilfe.bilderTastatur(evt.which);
-		}
-		// Strg + F (nur in Hilfefenstern)
+		// Cursor hoch (↑), runter (↓) (nur in Hilfefenstern)
 		if (typeof hilfe !== "undefined" && evt.ctrlKey && evt.which === 70) {
 			document.getElementById("suchfeld").select();
 		}

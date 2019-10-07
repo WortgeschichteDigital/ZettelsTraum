@@ -113,16 +113,6 @@ figure img {
 	width: 100%;
 }
 
-.bilder {
-	display: flex;
-	flex-direction: row;
-	flex-wrap: nowrap;
-}
-
-.bilder figure {
-	margin: 0 10px 10px 0;
-}
-
 figcaption {
 	margin-top: 5px;
 	color: var(--textHell);
@@ -495,18 +485,6 @@ mark.suche {
 	position: absolute;
 	top: 5px;
 	right: 5px;
-}
-
-#bilder-prev {
-	position: absolute;
-	top: calc(50% - 48px);
-	left: 0;
-}
-
-#bilder-next {
-	position: absolute;
-	top: calc(50% - 48px);
-	right: 0;
 }
 
 /* Globale Klassen ------------------------------ */

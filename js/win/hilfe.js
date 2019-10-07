@@ -148,15 +148,9 @@ let hilfe = {
 	//     (das <figure>-Element, auf das geklickt wurde)
 	bild (fig) {
 		// Rahmen
-		let div = document.getElementById("bild"),
-			schonAn = true;
-		if (!div) {
-			div = document.createElement("div");
-			document.body.appendChild(div);
-			div.id = "bild";
-			schonAn = false;
-		}
-		helfer.keineKinder(div);
+		let div = document.createElement("div");
+		document.body.appendChild(div);
+		div.id = "bild";
 		// Content
 		let cont = document.createElement("div");
 		div.appendChild(cont);
@@ -175,96 +169,8 @@ let hilfe = {
 		schliessen.width = "48";
 		schliessen.height = "48";
 		schliessen.title = "Bild schließen (Esc)";
-		// ggf. Icons zum Navigieren durch eine Bilderstrecke
-		hilfe.bilder(fig, cont);
 		// Einblenden
-		if (!schonAn) {
-			setTimeout(() => div.classList.add("einblenden"), 0);
-		}
-	},
-	// speichert die <figure>, die dem angezeigten Bild in einer Bilderstrecke
-	// vorangeht bzw. folgt
-	bilderData: {
-		prev: null,
-		next: null,
-	},
-	// ggf. Navigationsbilder für eine Bilderstrecke einbauen
-	//   fig = Element
-	//     (angeklickte <figure>)
-	//   cont = Element
-	//     (#bild-cont, also der Container, in dem das Bild groß angezeigt wird)
-	bilder (fig, cont) {
-		if (!fig.parentNode.classList.contains("bilder")) {
-			return;
-		}
-		// Position ermitteln, an der sich das geöffnete Bild befindet
-		let figs = fig.parentNode.querySelectorAll("figure");
-		for (let i = 0, len = figs.length; i < len; i++) {
-			if (figs[i] === fig) {
-				hilfe.bilderData.prev = null;
-				hilfe.bilderData.next = null;
-				if (i > 0) {
-					hilfe.bilderData.prev = figs[i - 1];
-				}
-				if (i + 1 < figs.length) {
-					hilfe.bilderData.next = figs[i + 1];
-				}
-				break;
-			}
-		}
-		// Navigationsbilder einhängen
-		let bilder = ["prev", "next"];
-		for (let i = 0; i < 2; i++) {
-			let img = document.createElement("img");
-			cont.appendChild(img);
-			img.id = `bilder-${bilder[i]}`;
-			img.width = "48";
-			img.height = "48";
-			if (hilfe.bilderData[bilder[i]]) {
-				img.src = `../img/bilder-${bilder[i]}.svg`;
-				if (i === 0) {
-					img.title = "vorheriges Bild (←)";
-				} else {
-					img.title = "nächstes Bild (→)";
-				}
-			} else {
-				img.src = `../img/bilder-${bilder[i]}-hell.svg`;
-				if (i === 0) {
-					img.title = "kein vorheriges Bild";
-				} else {
-					img.title = "kein nächstes Bild";
-				}
-			}
-			hilfe.bilderNav(img);
-		}
-	},
-	// Navigation durch die Bilder (Klick auf Icon)
-	//   img = Element
-	//     (Navigationsbild, auf das geklickt wurde)
-	bilderNav (img) {
-		img.addEventListener("click", function(evt) {
-			evt.stopPropagation();
-			let dir = this.id.match(/.+-(.+)/)[1];
-			if (hilfe.bilderData[dir]) {
-				hilfe.bild(hilfe.bilderData[dir]);
-			}
-		});
-	},
-	// Navigation durch die Bilder (Cursor)
-	//   key = Number
-	//     (Tastaturevent: 37 [←] oder 39 [→])
-	bilderTastatur (key) {
-		if (!document.getElementById("bild")) {
-			return;
-		}
-		let aktionen = {
-			37: "prev",
-			39: "next",
-		};
-		let dir = aktionen[key];
-		if (hilfe.bilderData[dir]) {
-			hilfe.bild(hilfe.bilderData[dir]);
-		}
+		setTimeout(() => div.classList.add("einblenden"), 0);
 	},
 	// schließt das vergrößte Vorschau-Bild
 	bildSchliessen () {
