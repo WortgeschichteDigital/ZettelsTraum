@@ -4,9 +4,6 @@ window.addEventListener("load", function() {
 	// FENSTERTTYP REGISTRIEREN
 	window.fenstertyp = "dokumentation";
 	
-	// START-SEKTION ANZEIGEN
-	hilfe.sektionWechseln("start");
-	
 	// PROGRAMM-NAME EINTRAGEN
 	try { // damit die Dokumentation auch im Browser geladen werden kann und die Navigation funktioniert
 		const {app} = require("electron").remote;
@@ -14,6 +11,9 @@ window.addEventListener("load", function() {
 			i.textContent = app.getName().replace("'", "’");
 		});
 	} catch (err) {}
+	
+	// START-SEKTION ANZEIGEN
+	hilfe.sektionWechseln("start");
 	
 	// UMBRUCH IN LANGEN DATEIPFADEN
 	hilfe.dateiBreak();

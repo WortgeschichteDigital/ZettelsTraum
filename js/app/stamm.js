@@ -43,7 +43,7 @@ let stamm = {
 			if (len > 1) {
 				stamm.kopfAktiv(span);
 			}
-			// Input + Wort
+			// Input
 			if (len > 1) {
 				let input = document.createElement("input");
 				span.appendChild(input);
@@ -51,9 +51,13 @@ let stamm = {
 				input.type = "checkbox";
 				if (data.fv[wort].an) {
 					input.checked = true;
+					input.title = "Wort deaktivieren";
+				} else {
+					input.title = "Wort aktivieren";
 				}
 				stamm.kopfToggle(input);
 			}
+			// Wort
 			span.appendChild(document.createTextNode(wort));
 			// Internet-Icon
 			let a = document.createElement("a");
@@ -80,6 +84,11 @@ let stamm = {
 			// Eintrag in Datenobjekt auffrischen
 			const wort = this.dataset.wort;
 			data.fv[wort].an = this.checked;
+			if (this.checked) {
+				this.title = "Wort deaktivieren";
+			} else {
+				this.title = "Wort aktivieren";
+			}
 			// Änderungsmarkierung setzen
 			kartei.karteiGeaendert(true);
 			// regulären Ausdruck mit allen Formvarianten neu erstellen

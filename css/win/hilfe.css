@@ -75,7 +75,6 @@ abbr {
 }
 
 code {
-	display: inline-block;
 	border-radius: 3px;
 	padding: 0 3px;
 	background-color: var(--text);
@@ -113,6 +112,16 @@ figure img {
 	width: 100%;
 }
 
+.bilder {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+}
+
+.bilder figure {
+	margin: 0 10px 10px 0;
+}
+
 figcaption {
 	margin-top: 5px;
 	color: var(--textHell);
@@ -138,6 +147,10 @@ img {
 	vertical-align: text-bottom;
 }
 
+img.klein {
+	vertical-align: baseline;
+}
+
 kbd {
 	display: inline-block;
 	border: 1px solid var(--linie);
@@ -153,6 +166,14 @@ p {
 
 section > p:first-child {
 	margin-top: 23px;
+}
+
+q.bedeutung::before {
+	content: "‚";
+}
+
+q.bedeutung::after {
+	content: "‘";
 }
 
 pre {
@@ -187,6 +208,14 @@ q.einfach::after {
 	content: "‘";
 }
 
+s.rot {
+	color: var(--farbeRot);
+}
+
+s.rot span {
+	color: var(--text);
+}
+
 section ul,
 section ol {
 	margin: 0;
@@ -207,6 +236,7 @@ nav {
 	position: sticky;
 	top: 70px;
 	padding: 20px 0 0 0;
+	overflow: hidden;
 	height: calc(100vh - 70px - 20px); /* 70px Header, 20px Padding */
 	background-color: var(--hintergrund);
 }
@@ -414,11 +444,18 @@ tr.wgd-alt td p {
 }
 
 /* Suche ---------------------------------------- */
-mark.suche {
+mark.suche,
+mark.wort {
 	border-radius: 3px;
 	padding: 0 3px;
 	background-color: var(--farbeOrange);
 	color: #fff;
+}
+
+mark.wort {
+	background-color: var(--farbeGelb);
+	color: var(--text);
+	font-weight: bold;
 }
 
 #suchergebnisse b {
@@ -487,6 +524,18 @@ mark.suche {
 	right: 5px;
 }
 
+#bilder-prev {
+	position: absolute;
+	top: calc(50% - 48px);
+	left: 0;
+}
+
+#bilder-next {
+	position: absolute;
+	top: calc(50% - 48px);
+	right: 0;
+}
+
 /* Globale Klassen ------------------------------ */
 .datei {
 	font-family: "Noto Sans Mono", "Noto Sans Symbols2", monospace;
@@ -522,6 +571,10 @@ mark.suche {
 
 .erklaerung-icon img {
 	margin-right: 16px;
+}
+
+.erklaerung-option {
+	font-style: italic;
 }
 
 .info {

@@ -4,14 +4,14 @@ window.addEventListener("load", function() {
 	// FENSTERTTYP REGISTRIEREN
 	window.fenstertyp = "handbuch";
 	
-	// KARTEIEN-SEKTION ANZEIGEN
-	hilfe.sektionWechseln("start");
-	
 	// PROGRAMM-NAME EINTRAGEN
 	const {app} = require("electron").remote;
 	document.querySelectorAll(".app-name").forEach(function(i) {
 		i.textContent = app.getName().replace("'", "’");
 	});
+	
+	// ÜBERBLICK-SEKTION ANZEIGEN
+	hilfe.sektionWechseln("einfuehrung");
 	
 	// UMBRUCH IN LANGEN DATEIPFADEN
 	hilfe.dateiBreak();

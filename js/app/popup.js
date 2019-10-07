@@ -64,12 +64,15 @@ let popup = {
 		} else if (target === "beleg") {
 			popup.menuBeleg(menu);
 			popup.menuBelege(menu, true);
+		} else if (target === "beleg-einstellungen") {
+			popup.menuBeleglisteConf(menu, false);
+			popup.menuBelege(menu, true);
 		} else if (target === "beleg-moddel") {
 			popup.menuBeleg(menu);
 			popup.menuBelegDel(menu);
 			popup.menuBelegCp(menu);
 			popup.menuBelegDuplikat(menu);
-			popup.menuBeleglisteConf(menu);
+			popup.menuBeleglisteConf(menu, true);
 			popup.menuBelege(menu, true);
 		} else if (target === "anhang") {
 			popup.menuAnhang(menu);
@@ -124,6 +127,11 @@ let popup = {
 				popup.belegID = pfad[i].dataset.id;
 				return "beleg";
 			}
+			// Elemente
+			if (pfad[i].nodeName === "HEADER" &&
+					pfad[i].parentNode.id === "liste-belege") {
+				return "beleg-einstellungen";
+			}
 			// IDs
 			const id = pfad[i].id;
 			if (id === "quick") {
@@ -156,9 +164,6 @@ let popup = {
 				} else if (pfad[i].classList.contains("liste-details")) {
 					popup.belegID = pfad[i].previousSibling.dataset.id;
 					return "beleg-moddel";
-				} else if (pfad[i].classList.contains("liste-meta")) {
-					popup.belegID = pfad[i].parentNode.previousSibling.dataset.id;
-					return "beleg";
 				} else if (pfad[i].classList.contains("anhaenge-item")) {
 					popup.anhangDatei = pfad[i].dataset.datei;
 					return "anhang";
@@ -528,12 +533,16 @@ let popup = {
 	// Belegliste-Conf-Menü füllen
 	//   menu = Object
 	//     (Menü-Objekt, an das die Menü-Items gehängt werden müssen)
-	menuBeleglisteConf (menu) {
+	//   separator = Boolean
+	//     (Separator einfügen)
+	menuBeleglisteConf (menu, separator) {
 		const {MenuItem} = require("electron").remote,
 			path = require("path");
-		menu.append(new MenuItem({
-			type: "separator",
-		}));
+		if (separator) {
+			menu.append(new MenuItem({
+				type: "separator",
+			}));
+		}
 		menu.append(new MenuItem({
 			label: "Belegliste-Einstellungen",
 			icon: path.join(__dirname, "img", "menu", "programm-einstellungen.png"),
