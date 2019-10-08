@@ -539,7 +539,6 @@ let karteisuche = {
 				span.appendChild(label);
 				label.setAttribute("for", `${feld.cl}-${id}`);
 				label.textContent = feld.ph;
-				
 			}
 		}
 	},

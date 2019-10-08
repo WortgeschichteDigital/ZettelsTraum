@@ -252,11 +252,25 @@ nav p.suchform {
 }
 
 nav p.suchform a {
+	position: relative;
+	top: 3px;
 	display: inline-block;
 	vertical-align: top;
 	width: 24px;
 	height: 24px;
 	color: var(--textExtremHell);
+}
+
+#suchleiste-link {
+	margin-left: 4px;
+}
+
+#navi-back {
+	margin-left: 8px;
+}
+
+nav p.suchform a svg path {
+	fill: currentcolor;
 }
 
 nav p.suchform a:hover {
@@ -267,21 +281,11 @@ nav p.suchform a:focus {
 	color: var(--farbe);
 }
 
-nav p.suchform a svg path {
-	fill: currentcolor;
-}
-
-nav p.suchform a:last-child {
-	position: relative;
-	top: 3px;
-	margin-left: 4px;
-}
-
 nav input {
 	margin: 0;
 	border: 1px solid var(--linie);
 	padding: 2px 5px;
-	width: calc(100% - 12px - 28px); /* 12px padding und border, 28px Suchleiste */
+	width: calc(100% - 12px - 28px - 56px); /* 12px padding und border, 28px Suchleiste, 56px Navigationspfeile */
 	color: var(--text);
 	font: 16px/24px "Noto Sans", "Noto Sans Symbols2", sans-serif;
 }
@@ -293,13 +297,12 @@ nav input:focus {
 
 nav p.lupe input {
 	padding-right: 25px;
-	width: calc(100% - 32px - 28px); /* 32px padding und border, 28px Suchleiste */
+	width: calc(100% - 32px - 28px - 56px); /* 32px padding und border, 28px Suchleiste, 56px Navigationspfeile */
 }
 
 #suchfeld-lupe {
 	position: absolute;
-	right: 34px;
-	top: 3px;
+	right: 90px;
 	display: none;
 	background-color: #fff;
 }

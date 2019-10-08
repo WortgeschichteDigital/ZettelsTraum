@@ -3,10 +3,10 @@
 window.addEventListener("load", function() {
 	// FENSTERTTYP REGISTRIEREN
 	window.fenstertyp = "bedeutungen";
-	
+
 	// TASTATUREINGABEN ABFANGEN
 	document.addEventListener("keydown", helferWin.tastatur);
-	
+
 	// EVENTS INITIALISIEREN
 	document.querySelectorAll(".dropdown-feld").forEach((i) => dropdown.feld(i));
 	document.querySelectorAll(".dropdown-link-td, .dropdown-link-element").forEach((i) =>	dropdown.link(i));
@@ -18,7 +18,7 @@ window.addEventListener("load", function() {
 		evt.preventDefault();
 		bedeutungen.drucken();
 	});
-	
+
 	// ANFRAGEN DES MAIN-PROZESSES ABFANGEN
 	ipcRenderer.on("daten", (evt, daten) => {
 		bedeutungen.data = daten;

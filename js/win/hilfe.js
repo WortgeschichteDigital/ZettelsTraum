@@ -35,22 +35,18 @@ let hilfe = {
 		a.addEventListener("click", function(evt) {
 			evt.preventDefault();
 			// aktive Sektion ermitteln
-			let sek = document.querySelectorAll("section"),
-				sek_aktiv = "";
-			for (let i = 0, len = sek.length; i < len; i++) {
-				if (!sek[i].classList.contains("aus")) {
-					sek_aktiv = sek[i].id.replace(/^sektion-/, "");
-					break;
-				}
-			}
+			const sek_aktiv = hilfe.sektionAktiv();
 			// Sprungziel ermitteln und ggf. die Sektion wechseln
 			const id = this.getAttribute("href").replace(/^#/, "");
 			let h2 = document.getElementById(id);
 			if (!new RegExp(`^${sek_aktiv}`).test(id)) {
-				const sek_ziel = id.replace(/^(.+?)-.+/, function(m, p1) {
+				const sek_ziel = id.replace(/^(.+)-.+/, function(m, p1) {
 					return p1;
 				});
 				hilfe.sektionWechseln(sek_ziel);
+			} else {
+				// History: Position merken
+				hilfe.history(sek_aktiv);
 			}
 			// Fenster an die korrekte Position scrollen
 			window.scrollTo({
@@ -58,14 +54,6 @@ let hilfe = {
 				top: h2.offsetTop - 70 - 16, // -16, um oben immer ein bisschen padding zu haben; vgl. hilfe.sucheSprung()
 				behavior: "smooth",
 			});
-		});
-	},
-	// lange Dateipfade umbrechen
-	dateiBreak () {
-		document.querySelectorAll(".datei").forEach(function(i) {
-			if (i.innerText.length > 30) {
-				i.classList.add("long");
-			}
 		});
 	},
 	// Klick-Event zum Wechseln der Sektion
@@ -79,10 +67,26 @@ let hilfe = {
 			this.blur();
 		});
 	},
+	// ermittelt die aktive Sektion
+	sektionAktiv () {
+		let sek = document.querySelectorAll("section");
+		for (let i = 0, len = sek.length; i < len; i++) {
+			if (!sek[i].classList.contains("aus")) {
+				return sek[i].id.replace(/^sektion-/, "");
+			}
+		}
+		return "";
+	},
 	// Sektion wechseln
 	//   sektion = String
 	//     (Hinweis auf die Sektion, die eingeblendet werden soll)
-	sektionWechseln (sektion) {
+	//   history = false || undefined
+	//     (die Bewegung soll gemerkt werden)
+	sektionWechseln (sektion, history = true) {
+		// History: Position merken
+		if (history) {
+			hilfe.history("");
+		}
 		// Suchleiste ggf. schließen
 		if (document.getElementById("suchleiste")) {
 			suchleiste.ausblenden();
@@ -113,6 +117,8 @@ let hilfe = {
 		});
 	},
 	// Überschriftenliste der aktiven Sektion aufbauen
+	//   sektion = String
+	//     (die aktive Sektion)
 	sektionenH (sektion) {
 		// alte Liste entfernen
 		let nav = document.querySelector("nav");
@@ -139,6 +145,14 @@ let hilfe = {
 			li.appendChild(a);
 			ul.appendChild(li);
 			hilfe.naviSprung(a);
+		});
+	},
+	// lange Dateipfade umbrechen
+	dateiBreak () {
+		document.querySelectorAll(".datei").forEach(function(i) {
+			if (i.innerText.length > 30) {
+				i.classList.add("long");
+			}
 		});
 	},
 	// speichert den Timeout für das Ausblenden des Bildes
@@ -511,6 +525,75 @@ let hilfe = {
 			left: 0,
 			top: hilfe.suchergebnis.scroll,
 			behavior: "auto",
+		});
+	},
+	// Daten
+	historyData: {
+		pos: [], // Positionen in der Liste
+		akt: -1, // aktuelle Position in der Liste
+	},
+	// aktuelle Position merken, wenn über einen Link ein Sprung ausgeführt wird
+	//   sek = String
+	//     (die derzeit aktive Sektion)
+	history (sek) {
+		// ggf. die aktive Sektion ermitteln
+		if (!sek) {
+			sek = hilfe.sektionAktiv();
+		}
+		// Speicherobjekt erstellen
+		let posNeu = {
+			scrollY: window.scrollY,
+			section: sek,
+		};
+		// ggf. die History-Daten kürzen;
+		let pos = hilfe.historyData.pos,
+			akt = hilfe.historyData.akt;
+		if (akt < pos.length - 1) {
+			pos.splice(akt + 1);
+		}
+		// identische Einträge nicht aufnehmen, ggf. Misserfolg melden
+		if (pos.length &&
+				pos[pos.length - 1].scrollY === posNeu.scrollY &&
+				pos[pos.length - 1].section === posNeu.section) {
+			return false;
+		}
+		// Daten anhängen
+		pos.push(posNeu);
+		hilfe.historyData.akt++;
+		// Erfolg melden
+		return true;
+	},
+	// zur vorherigen/nächsten Position in der History-Liste springen
+	//   next = Boolean
+	//     (zur nächsten Position springen)
+	historyNavi (next) {
+		let pos = hilfe.historyData.pos,
+			akt = hilfe.historyData.akt;
+		if (next) { // vorwärts
+			akt++;
+		} else { // rückwärts
+			if (pos.length &&
+					akt === pos.length - 1 &&
+					hilfe.history("")) {
+				akt++;
+			}
+			akt--;
+		}
+		if (!pos[akt]) {
+			return;
+		}
+		let ziel = pos[akt];
+		// Postion in der History auffrischen
+		hilfe.historyData.akt = akt;
+		// ggf. zur Sektion wechseln
+		if (ziel.section !== hilfe.sektionAktiv()) {
+			hilfe.sektionWechseln(ziel.section, false);
+		}
+		// Scroll-Position wiederherstellen
+		window.scrollTo({
+			left: 0,
+			top: ziel.scrollY,
+			behavior: "smooth",
 		});
 	},
 };

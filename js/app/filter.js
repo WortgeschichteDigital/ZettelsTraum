@@ -1583,7 +1583,7 @@ let filter = {
 					if (i === this) {
 						i.nextSibling.classList.toggle("aus");
 					} else {
-						i.nextSibling.classList.add("aus");	
+						i.nextSibling.classList.add("aus");
 					}
 				}, this);
 				return;

@@ -3,7 +3,7 @@
 window.addEventListener("load", function() {
 	// FENSTERTTYP REGISTRIEREN
 	window.fenstertyp = "dokumentation";
-	
+
 	// PROGRAMM-NAME EINTRAGEN
 	try { // damit die Dokumentation auch im Browser geladen werden kann und die Navigation funktioniert
 		const {app} = require("electron").remote;
@@ -11,22 +11,19 @@ window.addEventListener("load", function() {
 			i.textContent = app.getName().replace("'", "’");
 		});
 	} catch (err) {}
-	
-	// START-SEKTION ANZEIGEN
-	hilfe.sektionWechseln("start");
-	
+
 	// UMBRUCH IN LANGEN DATEIPFADEN
 	hilfe.dateiBreak();
-	
+
 	// TASTATUREINGABEN ABFANGEN
 	document.addEventListener("keydown", helferWin.tastatur);
-	
+
 	// RECHTSKLICK ABFANGEN
 	window.addEventListener("contextmenu", function(evt) {
 		evt.preventDefault();
 		popup.oeffnen(evt);
 	});
-	
+
 	// EVENTS INITIALISIEREN
 	// Suche
 	hilfe.sucheListener(document.getElementById("suchfeld"));
@@ -37,6 +34,14 @@ window.addEventListener("load", function() {
 	document.getElementById("suchleiste-link").addEventListener("click", function(evt) {
 		evt.preventDefault();
 		suchleiste.einblenden();
+	});
+	document.getElementById("navi-back").addEventListener("click", function(evt) {
+		evt.preventDefault();
+		hilfe.historyNavi(false);
+	});
+	document.getElementById("navi-forward").addEventListener("click", function(evt) {
+		evt.preventDefault();
+		hilfe.historyNavi(true);
 	});
 	// Über-Fenster
 	try { // s. o.
@@ -71,6 +76,9 @@ window.addEventListener("load", function() {
 	});
 	// externe Links
 	document.querySelectorAll(`a[href^="http"]`).forEach(a => helfer.externeLinks(a));
+
+	// START-SEKTION ANZEIGEN
+	hilfe.sektionWechseln("start", false);
 });
 
 window.addEventListener("beforeunload", function() {

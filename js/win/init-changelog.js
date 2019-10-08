@@ -3,16 +3,16 @@
 window.addEventListener("load", function() {
 	// FENSTERTTYP REGISTRIEREN
 	window.fenstertyp = "changelog";
-	
+
 	// PROGRAMM-NAME EINTRAGEN
 	const {app} = require("electron").remote;
 	document.querySelectorAll(".app-name").forEach(function(i) {
 		i.textContent = app.getName().replace("'", "’");
 	});
-	
+
 	// TASTATUREINGABE ABFANGEN
 	document.addEventListener("keydown", helferWin.tastatur);
-	
+
 	// EVENTS INITIALISIEREN
 	// Über App
 	document.querySelectorAll("#icon, .ueber-app").forEach(function(i) {

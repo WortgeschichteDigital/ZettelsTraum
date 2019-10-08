@@ -3,16 +3,16 @@
 	<head>
 		<meta charset="utf-8">
 		<meta http-equiv="Content-Security-Policy" content="default-src 'self'">
-		
+
 		<title> </title>
-		
+
 		<link rel="stylesheet" href="../css/win/changelog.css">
 		<link rel="stylesheet" href="../css/win/changelog-drucken.css" media="print">
-		
+
 		<script src="../js/suchleiste.js"></script>
-		
+
 		<script src="../js/app/helfer.js"></script>
-		
+
 		<script src="../js/win/init-changelog.js"></script>
 		<script src="../js/win/helferWin.js"></script>
 	</head>
@@ -22,7 +22,7 @@
 			<h1>Changelog</h1
 				><img src="../img/icon.svg" width="48" height="48" alt="" id="icon">
 		</header>
-		
+
 		<!-- CHANGELOG -->
 		<main>
 			<span id="changelog-icons"
@@ -33,34 +33,34 @@
 					><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m4 1v2h8v-2h-8zm-2 3c-0.5 0-1 0.5-1 1v4c0 0.5 0.5 1 1 1h1v-2h10v2h1c0.5 0 1-0.5 1-1v-4c0-0.5-0.5-1-1-1h-12zm2 5v5h8v-5h-8z"/></svg
 				></a
 			></span>
-			
+
 			<!-- 0.23.0 -->
 			<div class="version">0.23.0</div>
-			
+
 			<div>
 				<h2><span>Version 0.23.0-beta</span><time datetime="2019-10-07T13:07:55">7. Oktober 2019</time></h2>
-				
+
 				<h3>Verbesserungen</h3>
-				
+
 				<ul>
 					<li>Belegliste: Die Option <i>Belegliste-Einstellungen</i> erscheint nun auch dann im Rechtsklickmenü, wenn der Klick in der Kopfleiste der Belegliste erfolgt.</li>
 				</ul>
-				
+
 				<h3>Behobene Fehler</h3>
-				
+
 				<ul>
 					<li>Belegliste: Beim Rechtsklick auf die Metainfos in der Detailansicht der Belege erschien nur ein reduziertes Rechtsklickmenü.</li>
 				</ul>
 			</div>
-			
+
 			<!-- 0.22.0 -->
 			<div class="version">0.22.0</div>
-			
+
 			<div>
 				<h2><span>Version 0.22.0</span><time datetime="2019-10-07T13:07:55">7. Oktober 2019</time></h2>
-				
+
 				<h3>Neue Funktionen</h3>
-				
+
 				<ul>
 					<li>
 						<p>Bedeutungsgerüst: Bedeutungen können nun via Drag-and-Drop verschoben werden. Die Möglichkeit, Bedeutungen im Gerüst wie gehabt mit den Cursor-Tasten zu verschieben, ist natürlich erhalten geblieben.</p>
@@ -69,16 +69,16 @@
 						<p>Die Verschachtelungsebene, in die hinein eine Bedeutung geschoben werden soll, kann man dadurch festlegen, dass man die Maus im Gerüst weiter nach rechts bewegt. Die Linie, die die Zielposition der Bedeutung anzeigt, wird dabei immer kürzer, wodurch sie die Verschachtelungsebene an der Zielposition anzeigt.</p>
 					</li>
 				</ul>
-				
+
 				<h3>Verbesserungen</h3>
-				
+
 				<ul>
 					<li>Das Einblenden von gekürzten Absätzen (<q>[…]</q>) sowie das Öffnen und Schließen der Detailansicht eines Belegs in der Belegliste haben eine Animation erhalten.</li>
 					<li>Suchleiste: Startet man eine neue Suche, beginnt diese Suche ab jetzt nicht mehr oben im Dokument, sondern an der Stelle, an der man sich gerade befindet. Es wird somit nicht mehr zum ersten Treffer im Dokument gescrollt, sondern zum ersten Treffer, der sich im gegenwärtig sichtbaren Fensterbereich oder weiter unten befindet. Gibt es im sichtbaren Bereich oder weiter unten keinen Suchtreffer, wird wie gehabt zum ersten Treffer der Dokuments gescrollt.</li>
 				</ul>
-				
+
 				<h3>Behobene Fehler</h3>
-				
+
 				<ul>
 					<li>Kürzung des Belegkontexts: Führte man eine Suche mit der Suchleiste durch, funktionierte danach das Einblenden gekürzter Absätze (<q>[…]</q>) nicht mehr.</li>
 					<li>Annotierungsfunktion: Mitunter wurden Textformatierungen aus dem Umfeld der Annotierung in das Annotierungs-Popup hinein vererbt. Der Notizentext wurde dann <abbr title="zum Beispiel">z. B.</abbr> gesperrt dargestellt.</li>
@@ -87,15 +87,15 @@
 					<li>Die Fenster <a href="#" class="ueber-app">Über <span class="app-name"></span></a> und <a href="#" class="ueber-electron">Über Electron</a> hatten ein verstecktes Programmmenü, das in ihnen <abbr title="unter anderem">u. a.</abbr> einen unerwünschten Shortcut zum sofortigen Schließen der App (<kbd>Strg</kbd> + <kbd>Q</kbd>) registrierte. Das hätte Datenverluste zur Folge haben können. Außerdem erschien nach dem Öffnen manchmal am oberen Rand ein weißer Balken, der das Layout zerschoss.</li>
 				</ul>
 			</div>
-			
+
 			<!-- 0.21.0 -->
 			<div class="version">0.21.0</div>
-			
+
 			<div>
 				<h2><span>Version 0.21.0</span><time datetime="2019-10-03T20:05:15">3. Oktober 2019</time></h2>
-				
+
 				<h3>Neue Funktionen</h3>
-				
+
 				<ul>
 					<li>
 						<p>Belegliste und Leseansicht der Karteikarte: Gekürzte Absätze im Belegtext ([…]; Funktion <img src="../img/liste-kuerzen.svg" width="24" height="24" alt="">) können nun auf Wunsch nach und nach eingeblendet werden. Dazu muss man nur auf einen der herausgekürzten Absätze klicken. Pro Klick wird ein neuer Absatz eingeblendet, und zwar vorzugsweise hinter der Kürzung. Ist die Kürzung am Ende des Belegs, wird der vorherige Absatz eingeblendet. Sind alle Absätze sichtbar, verschwindet das Kürzungszeichen.</p>
@@ -110,9 +110,9 @@
 						<p>(Hintergrund: <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>-Tags dürfen nicht über Kreuz verschachtelt werden. Der Code <code class="quelltext">&lt;b&gt;das &lt;i&gt;ist&lt;/b&gt; ein&lt;/i&gt; Text</code> wäre eine illegale Verschachtelung, weil der <code class="quelltext">&lt;i&gt;</code>-Tag den <code class="quelltext">&lt;b&gt;</code>-Tag über Kreuz schneidet. Korrekt sähe der Code so aus: <code class="quelltext">&lt;b&gt;das &lt;i&gt;ist&lt;/i&gt;&lt;/b&gt; &lt;i&gt;ein&lt;/i&gt; Text</code>.)</p>
 					</li>
 				</ul>
-				
+
 				<h3>Verbesserungen</h3>
-				
+
 				<ul>
 					<li>Annotierung von Karteiwörtern: Das Popup-Fenster kann jetzt auch mit <kbd>Esc</kbd> geschlossen werden.</li>
 					<li>Belegliste: Beim Rechtsklick in der expandierten Detailansicht eines Belegs erscheint nun dasselbe ausführliche Popup-Menü wie beim Rechtsklick auf dem Belegkopf. Dies ist besonders für lange Belege von Vorteil: Man muss nun nicht mehr zum Belegkopf scrollen, um <abbr title="zum Beispiel">z. B.</abbr> die Karteikarte zu bearbeiten.</li>
@@ -127,9 +127,9 @@
 					</li>
 					<li>Reorganisation der <abbr title="Deutsches Textarchiv">DTA</abbr>-Import- und der Annotieren-Scripts.</li>
 				</ul>
-				
+
 				<h3>Behobene Fehler</h3>
-				
+
 				<ul>
 					<li>Folgt im Belegtext auf einen kürzbaren Trennstrich (<q>[¬]</q>) ein Seitenumbruch (<abbr title="zum Beispiel">z. B.</abbr> <q>[:351:]</q>), bleibt beim Ausblenden der Trennstriche und Seitenumbrüche (Funktion <img src="../img/liste-trennung.svg" width="24" height="24" alt="">) nun kein Leerzeichen mehr stehen.</li>
 					<li>Annotierung von Karteiwörtern: Das Löschen der Textnotiz funktionierte nur, wenn zugleich die Farbe zurückgesetzt wurde.</li>
@@ -137,21 +137,21 @@
 					<li>Karteikarte: Behebung einiger Fehler beim Hervorheben von markierten Wörtern in der Leseansicht (Funktion <img src="../img/beleg-springen.svg" width="24" height="24" alt="">).</li>
 				</ul>
 			</div>
-			
+
 			<!-- 0.20.0 -->
 			<div class="version">0.20.0</div>
-			
+
 			<div>
 				<h2><span>Version 0.20.0</span><time datetime="2019-10-02T14:22:34">2. Oktober 2019</time></h2>
-				
+
 				<h3>Entfernte Funktionen</h3>
-				
+
 				<ul>
 					<li>Karteikarte: Vor dem Aufbau des Belegtexts der Leseansicht wurde bisher immer nach Zeichenfolgen gesucht, die nach einer <abbr title="Uniform Resource Locator" lang="en">URL</abbr> aussehen, woraufhin diese als Hyperlink dargestellt wurden. Dieses Feature kann im Zusammenhang mit der Annotierung von Karteiwörtern (<abbr title="siehe unten">s. u.</abbr>) Probleme bereiten und wurde darum entfernt.</li>
 				</ul>
-				
+
 				<h3>Neue Funktionen</h3>
-				
+
 				<ul>
 					<li>
 						<p>Annotierung von Karteiwörtern: In der Belegliste lässt sich mithilfe des Icons <img src="../img/liste-hervorheben.svg" width="24" height="24" alt=""> das Karteiwort im Belegtext hervorheben; in der Leseansicht der Karteikarte wird dies standardmäßig gemacht. Das Karteiwort <i>Freiheit</i> sieht dann im Text <abbr title="beispielsweise">bspw.</abbr> so aus: <mark class="wort">Freiheit</mark>. Für dieses Hervorheben wird die in der Kartei gespeicherte Liste der Formvarianten herangezogen, sodass es in aller Regel gut funktionieren sollte. Trotzdem kann es dabei zu Fehlern kommen, <abbr title="zum Beispiel">z. B.</abbr> bei Homonymien oder in Fällen, in denen das Karteiwort relativ kurz ist. Sehr kurze Karteiwörter können seit Version 0.19.0 im Formvarianten-Fenster (<i>Kartei &gt; Formvarianten</i>) von der Hervorhebung ausgeschlossen werden. Für Homonyme und andere fehlerhafte Worterkennungen kann die neue Annotierungsfunktion genutzt werden.</p>
@@ -166,55 +166,55 @@
 					</li>
 					<li><i class="app-name"></i> liefert ab dieser Version eine Demonstrationskartei mit, an der neue NutzerInnen sehen können, wie eine mit einem Bedeutungsgerüst versehene und mit Belegen gefüllte Wortkartei aussieht. Die Kartei kann via <i>Hilfe &gt; Demonstrationskartei</i> geöffnet werden.</li>
 				</ul>
-				
+
 				<h3>Verbesserungen</h3>
-				
+
 				<ul>
 					<li>Nach dem erfolgreichen Speichern der Kartei wird nun eine kleine Animation angezeigt. Sie ähnelt der Animation, die beim Kopieren oder Duplizieren von Belegen erscheint.</li>
 					<li>Werden im Programmmenü die Befehle <i>Belege &gt; Hinzufügen</i> oder <i>Belege &gt; Auflisten</i> aufgerufen, werden nun alle Overlay-Fenster (das sind Fenster, die sich über die Anzeige legen und den Hintergrund ausgrauen) automatisch geschlossen. Dies geschieht auch, wenn die Funktionen über die Tastaturkürzel <kbd>Strg</kbd> + <kbd>N</kbd> <abbr title="beziehungsweise">bzw.</abbr> <kbd>Strg</kbd> + <kbd>L</kbd> aufgerufen werden.</li>
 					<li><a href="#" class="ueber-electron"><i>Electron</i></a>-Update auf Version 6.0.11.</li>
 				</ul>
-				
+
 				<h3>Behobene Fehler</h3>
-				
+
 				<ul>
 					<li>Karteikarte: Wurde in das Belegfeld mithilfe des Icons <img src="../img/tool-einfuegen.svg" width="24" height="24" alt=""> in <abbr title="Hypertext Markup Language" lang="en">HTML</abbr> formatierter Text eingefügt, wurden vorhandene Layoutinformationen (<code class="quelltext">&lt;style&gt;...&lt;/style&gt;</code>) nicht entfernt.</li>
 					<li>Belegliste: Im Meldungsfenster, das beim blockweisen Hinzufügen von Bedeutungen aus dem Bedeutungsgerüst-Fenster erscheint, waren die Zählzeichen nicht vom Text der Bedeutung abgesetzt.</li>
 					<li>Bedeutungsgerüst: Enthielt ein Gerüst noch keine Bedeutungen und benutzte man das Tastaturkürzel <kbd>Strg</kbd> + <kbd>⇧</kbd> / <kbd>⇩</kbd> (das zum Navigieren durch die Bedeutungen dient), kam es zu einem Programmfehler.</li>
 				</ul>
 			</div>
-			
+
 			<!-- 0.19.1 -->
 			<div class="version">0.19.1</div>
-			
+
 			<div>
 				<h2><span>Version 0.19.1</span><time datetime="2019-09-19T21:02:19">19. September 2019</time></h2>
-				
+
 				<h3>Verbesserungen</h3>
-				
+
 				<ul>
 					<li>Externe Links, die sich im Browser öffnen, werden nun durch ein spezielles Icon gekennzeichnet: <img src="../img/link.svg" width="12" height="12" alt="" class="klein">.</li>
 					<li><a href="#" class="ueber-electron"><i>Electron</i></a>-Update auf Version 6.0.10.</li>
 				</ul>
-				
+
 				<h3>Behobene Fehler</h3>
-				
+
 				<ul>
 					<li>Filterleiste: Ein Klick auf die (Reset-)Icons im Filterkopf oder den Text zum Umschalten des Bedeutungsgerüsts führte dazu, dass die Belegliste nach oben scrollte.</li>
 					<li>Bedeutungsgerüst-Fenster: Die Icons zum Hinzufügen <abbr title="beziehungsweise">bzw.</abbr> Entfernen von Bedeutungen waren mitunter falsch positioniert.</li>
 				</ul>
 			</div>
-			
+
 			<!-- 0.19.0 -->
 			<div class="version">0.19.0</div>
-			
+
 			<div>
 				<h2><span>Version 0.19.0</span><time datetime="2019-09-18T08:38:34">18. September 2019</time></h2>
-				
+
 				<p><span class="obacht">Das Dateiformat hat sich geändert!</span> Ältere <abbr title="Wortgeschichte digital">WGD</abbr>-Dateien werden automatisch konvertiert; dabei wird eine Änderungsmarkierung gesetzt.</p>
-				
+
 				<h3>Verbesserungen</h3>
-				
+
 				<ul>
 					<li>
 						<p>Formvarianten: Die Datenstruktur der Formvarianten wurde so umgestellt, dass die Kürzung von Belegen (Funktion <img src="../img/liste-kuerzen.svg" width="24" height="24" alt="">) bei mehrgliedrigen Karteiwörtern (<q>politisch korrekt</q> oder dergleichen) nun erwartbare Ergebnisse erzeugt. Konkret heißt das, dass in der Belegliste oder Karteikarte alle Absätze gekürzt werden, die nicht jedes Wort eines mehrgliedrigen Karteiworts enthalten. Zuvor durfte keines der Wörter enthalten sein; Absätze wurden also auch dann nicht gekürzt, wenn sie die Phrase oder Wortverbindung eigentlich gar nicht enthielten.</p>
@@ -227,23 +227,23 @@
 					<li><a href="#" class="ueber-electron"><i>Electron</i></a>-Update auf Version 6.0.9.</li>
 				</ul>
 			</div>
-			
+
 			<!-- 0.18.0 -->
 			<div class="version">0.18.0</div>
-			
+
 			<div>
 				<h2><span>Version 0.18.0</span><time datetime="2019-08-31T14:12:31">31. August 2019</time></h2>
-				
+
 				<p><span class="obacht">Das Dateiformat hat sich geändert!</span> Ältere <abbr title="Wortgeschichte digital">WGD</abbr>-Dateien werden automatisch konvertiert; dabei wird eine Änderungsmarkierung gesetzt.</p>
-				
+
 				<h3>Entfernte Funktionen</h3>
-				
+
 				<ul>
 					<li>In der Leseansicht der Karteikarte wurde das mit Version 0.8.0 eingeführte Suchfeld für den Belegtext <strong>entfernt</strong>. An seine Stelle rückt die technisch ausgereiftere und vielseitigere Suchleiste, die alle Funktionen des Suchfelds und mehr bietet (<abbr title="siehe unten">s. u.</abbr>).</li>
 				</ul>
-				
+
 				<h3>Neue Funktionen</h3>
-				
+
 				<ul>
 					<li>
 						<p>Die Suchleiste steht nun auch im Hauptfenster zur Verfügung. Mit ihr kann der gerade in der Belegliste sichtbare Text oder die Leseansicht der Karteikarte durchsucht werden. Da <kbd>Strg</kbd> + <kbd>F</kbd> bereits auf den Volltextfilter zeigt, lässt sich die Suchleiste nur über das Tastaturkürzel <kbd>F3</kbd> oder das Icon <img src="../img/suchleiste.svg" width="24" height="24" alt=""> im Kopf der Belegliste <abbr title="beziehungsweise">bzw.</abbr> Karteikarte aufrufen. Sie wird automatisch geschlossen, wenn man in einen anderen Bereich oder von der Leseansicht der Karteikarte in die Formularansicht wechselt.</p>
@@ -258,9 +258,9 @@
 						<p>Das Datenfeld wird auch in der Kopierfunktion berücksichtigt (<i>Belege &gt; Kopieren</i> <abbr title="beziehungsweise">bzw.</abbr> <i>Einfügen</i>). Da <i>Metatext</i> eine unveränderliche Texteigenschaft markiert, wird das Datenfeld standardmäßig mitkopiert. Es lässt sich im Fomular des Einfügefenster aber auch abwählen.</p>
 					</li>
 				</ul>
-				
+
 				<h3>Verbesserungen</h3>
-				
+
 				<ul>
 					<li>Im <i>Bedeutungsgerüst</i>, in der <i>Belegliste</i> und der <i>Karteikarte</i> wird das seitenweise Scrollen mithilfe der Tastatur (<kbd>Bild ⇧</kbd>, <kbd>Bild ⇩</kbd>, <kbd>Leertaste</kbd>) von nun an vom Programm übernommen. Auf diese Weise verschwindet kein Text mehr unter dem sehr hohen Programmkopf. Der Text wird nun vielmehr so gescrollt, dass in etwa drei Zeilen des aktuell sichtbaren Textes am oberen <abbr title="beziehungsweise">bzw.</abbr> unteren Bildschirmrand auch nach dem Scrollen noch im sichtbaren Bereich sind.</li>
 					<li>Suchleiste: Drückt man <kbd>F3</kbd> wird fortan nicht nur der nächste Treffer gesucht, sondern auch das Textfeld der Suchleiste fokussiert.</li>
@@ -272,9 +272,9 @@
 					<li>Kleinere visuelle Verbesserungen.</li>
 					<li><a href="#" class="ueber-electron"><i>Electron</i></a>-Update auf Version 4.2.10.</li>
 				</ul>
-				
+
 				<h3>Behobene Fehler</h3>
-				
+
 				<ul>
 					<li>Das durch Rechtsklick im Hauptfenster aufrufbare Popup-Menü ist meistens nicht mehr erschienen, weil vergessen wurde, ein Interface-Element, das für die Sortierfunktion gedacht war, zu entfernen.</li>
 					<li>
@@ -290,35 +290,35 @@
 					<li>Wurde über die Suche des <a href="#" class="link-handbuch">Handbuchs</a> oder der <a href="#" class="link-dokumentation">technischen Dokumentation</a> Text gefunden, der in einer Tabelle steht, wurde dieser nicht automatisch ins Blickfeld gescrollt.</li>
 				</ul>
 			</div>
-			
+
 			<!-- 0.17.0 -->
 			<div class="version">0.17.0</div>
-			
+
 			<div>
 				<h2><span>Version 0.17.0</span><time datetime="2019-08-20T13:47:05">20. August 2019</time></h2>
-				
+
 				<p><span class="obacht">Das Dateiformat hat sich geändert!</span> Ältere <abbr title="Wortgeschichte digital">WGD</abbr>-Dateien werden automatisch konvertiert; dabei wird eine Änderungsmarkierung gesetzt.</p>
-				
+
 				<h3>Entfernte Funktionen</h3>
-				
+
 				<ul>
 					<li>Alle Code-Abschnitte und Interface-Elemente, die vorbereitend für eine Sortierfunktion der Belege angelegt worden waren, wurden <strong>entfernt</strong>.</li>
 				</ul>
-				
+
 				<h3>Neue Funktionen</h3>
-				
+
 				<ul>
 					<li>Die Suchleiste steht nun auch im <a href="#" class="link-handbuch">Handbuch</a> und der <a href="#" class="link-dokumentation">technischen Dokumentation</a> zur Verfügung. Da es in den beiden Fenstern bereits ein Suchfeld gibt, das via <kbd>Strg</kbd> + <kbd>F</kbd> fokussiert werden kann, lässt sich die Suchleiste nur über das Tastaturkürzel <kbd>F3</kbd> oder das Icon <img src="../img/suchleiste.svg" width="24" height="24" alt=""> aufrufen. Sie wird automatisch geschlossen, wenn man in einen anderen Bereich wechselt oder das Suchfeld des Fensters fokussiert.</li>
 				</ul>
-				
+
 				<h3>Verbesserungen</h3>
-				
+
 				<ul>
 					<li>Für Links, die die Suchleiste öffnen, gibt es nun ein eigenes Icon: <img src="../img/suchleiste.svg" width="24" height="24" alt="">.</li>
 				</ul>
-				
+
 				<h3>Behobene Fehler</h3>
-				
+
 				<ul>
 					<li>Filterleiste: Wurde in einer Kartei eine Notiz angelegt (<i>Kartei &gt; Notizen</i>), die man sich in der Filterleiste hat einblenden lassen, und gab es in der Kartei außerdem Karteikarten mit Notizen, sodass im Filterblock <i>Verschiedenes</i> der Filter <i>Notizen</i> zur Verfügung stand, wurde der Kopf des Notizenblocks in der Filterleiste grün eingefärbt, wenn man den <i>Notizen</i>-Filter unter <i>Verschiedenes</i> auswählte.</li>
 					<li>
@@ -327,15 +327,15 @@
 					</li>
 				</ul>
 			</div>
-			
+
 			<!-- 0.16.0 -->
 			<div class="version">0.16.0</div>
-			
+
 			<div>
 				<h2><span>Version 0.16.0</span><time datetime="2019-08-15T19:51:02">15. August 2019</time></h2>
-				
+
 				<h3>Neue Funktionen</h3>
-				
+
 				<ul>
 					<li>
 						<p>Filterleiste: Notizen, die man über die Funktion <i>Kartei &gt; Notizen</i> hinzugefügt hat, können nun auf Wunsch in der Filterleiste angezeigt werden. Die Anzeige muss aktiviert werden unter <i>Programm &gt; Einstellungen &gt; Notizen</i>.</p>
@@ -346,9 +346,9 @@
 						<p>Der Klon unterscheidet sich nur darin vom Original, dass die versteckten Datumsfelder des neuen Belegs den Zeitpunkt des Klonens speichern, und darin, dass er eine andere ID hat. Die ID entspricht der in der Überschrift der Karteikarte zu sehenden Belegnummer. Da der Klon den Zeitpunkt seiner Entstehung gespeichert hat, lässt er sich leicht über den mit Version 0.14.0 eingeführten Filter <i>Kartendatum</i> finden.</p>
 					</li>
 				</ul>
-				
+
 				<h3>Verbesserungen</h3>
-				
+
 				<ul>
 					<li>
 						<p>Belegliste: Die Performance beim Aufbau einer Belegliste, der beim Öffnen einer Kartei, durch das Hinzufügen oder Entfernen von Filtern, durch die chronologische Umsortierung der Belege <abbr title="und so weiter">usw.</abbr> angestoßen wird, wurde signifikant verbessert. In einer Test-Kartei konnte die Geschwindigkeit des Aufbaus bei geschlossener Belegliste, also einer Liste, in der keine Details zu den Belegen angezeigt werden, sogar verdoppelt werden. Funktional hat sich dabei nichts geändert.</p>
@@ -370,26 +370,26 @@
 					<li>Die mitgelieferte <span class="datei">Sachgebiete.xml</span> wurde ergänzt um die Wörter <i>Policey, Technik, Verwaltungswesen</i> und <i>Wissenschaft</i>.</li>
 					<li>Der Verweis auf den finanziellen Förderer des Projekts wurde in den Metadaten und im <a href="#" class="ueber-app">Über-Fenster</a> ergänzt.</li>
 				</ul>
-				
+
 				<h3>Behobene Fehler</h3>
-				
+
 				<ul>
 					<li>Notizen: Wurde in einem Absatz Text vom ersten oder vom letzten Buchstaben her ausgewählt, konnte dieser nicht markiert werden (Funktion <img src="../img/tool-mark.svg" width="24" height="24" alt="">). Die Fehlerbehebung geht leider auf Kosten der Funktionen <i>Bearbeiten &gt; Rückgängig</i> und <i>Bearbeiten &gt; Wiederherstellen</i>, die das Einfügen <abbr title="beziehungsweise">bzw.</abbr> Entfernen einer Textmarkierung nun nicht mehr zurücknehmen oder wiederherstellen können.</li>
 					<li>Notizen: Zahlreiche behobene Fehler bei der automatischen Auswahl des Textes, nachdem eine Markierung durch Klick auf <img src="../img/tool-mark.svg" width="24" height="24" alt=""> entfernt wurde.</li>
 					<li>Das <a href="#" class="ueber-electron">Über-Electron-Fenster</a> konnte nur über den ersten Link im Changelog geöffnet werden.</li>
 				</ul>
 			</div>
-			
+
 			<!-- 0.15.0 -->
 			<div class="version">0.15.0</div>
-			
+
 			<div>
 				<h2><span>Version 0.15.0</span><time datetime="2019-08-14T07:51:48">14. August 2019</time></h2>
-				
+
 				<p><span class="obacht">Das Dateiformat hat sich geändert!</span> Ältere <abbr title="Wortgeschichte digital">WGD</abbr>-Dateien werden automatisch konvertiert; dabei wird eine Änderungsmarkierung gesetzt.</p>
-				
+
 				<h3>Neue Funktionen</h3>
-				
+
 				<ul>
 					<li>
 						<p>Suchleiste: Im Changelog steht nun eine Suchleiste zur Verfügung, mit der man ihn leicht und bequem durchsuchen kann. (In den folgenden Versionen wird die Leiste nach und nach in das Hauptfenster, das <a href="#" class="link-handbuch">Handbuch</a> und die <a href="#" class="link-dokumentation">technische Dokumentation</a> integriert.)</p>
@@ -399,9 +399,9 @@
 						<p>Erreicht man den letzten Treffer, beginnt die Suche automatisch von vorne, wenn man vorwärts durch die Suchtreffer springt. Navigiert man rückwärts durch die Treffer, wird nach dem ersten automatisch zum letzten gesprungen. Dieser Sprung wird durch eine kleine Animation visualisiert.</p>
 					</li>
 				</ul>
-				
+
 				<h3>Verbesserungen</h3>
-				
+
 				<ul>
 					<li>
 						<p>Karteikarte: Wenn man das <abbr title="Uniform Resource Locator" lang="en">URL</abbr>-Feld für den <abbr title="Deutsches Textarchiv">DTA</abbr>-Import fokussiert, wird eine sich in der Zwischenablage befindende <abbr title="Uniform Resource Locator" lang="en">URL</abbr> nun automatisch eingetragen. Dies geschieht allerdings nur, wenn das Feld leer ist und die <abbr title="Uniform Resource Locator" lang="en">URL</abbr> wirklich das <abbr title="Deutsches Textarchiv">DTA</abbr> referenziert. Da beim Erstellen einer neuen Karteikarte immer das <abbr title="Deutsches Textarchiv">DTA</abbr>-Import-Feld den Fokus erhält, muss man jetzt nur noch <kbd>⏎</kbd> drücken, um die Karteikarte zu füllen.</p>
@@ -429,23 +429,23 @@
 					<li>Redaktion: Die Fehlentscheidung, das <span lang="en">User Interface</span> (also den Picker zum Öffnen des eingebauten Kalenders) im Datumsfeld der Redaktionsverwaltung unter <i>Kartei &gt; Redaktion</i> der Platzersparnis halber auszublenden, wurde revidiert.</li>
 					<li>Die App wird nun immer mit der <span lang="en">Locale</span> (dem Gebietsschemaparameter) <i>de</i> gestartet, sodass die Datumsfelder auch dann ein deutsches Format haben, wenn das Betriebssystem, auf dem <i class="app-name"></i> läuft, eine andere Sprache als Deutsch hat.</li>
 				</ul>
-				
+
 				<h3>Behobene Fehler</h3>
-				
+
 				<ul>
 					<li>Bedeutungsgerüst: In der Tool-Leiste war der Tooltip für das Unterstreichen-Icon falsch.</li>
 					<li>Volltextfilter: Im Belegtext wurde auch nach Text gesucht, der innerhalb von <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>-Tags steht, also <abbr title="zum Beispiel">z. B.</abbr> nach Tag-Namen wie <code class="quelltext">span</code> oder Attributen und Werten wie <code class="quelltext">class="dta-gesperrt"</code>. Der Fehler war eine Regression zu Version 0.13.3.</li>
 				</ul>
 			</div>
-			
+
 			<!-- 0.14.0 -->
 			<div class="version">0.14.0</div>
-			
+
 			<div>
 				<h2><span>Version 0.14.0</span><time datetime="2019-08-08T15:17:32">8. August 2019</time></h2>
-				
+
 				<h3>Neue Funktionen</h3>
-				
+
 				<ul>
 					<li>
 						<p>Die Möglichkeit, Belege zwischen verschiedenen Karteien hin- und herzukopieren, wurde eingerichtet.</p>
@@ -504,9 +504,9 @@ Gerüst 2 &gt; Gerüst 1</pre>
 						<p>Mithilfe des Icons <img src="../img/filter-jetzt.svg" width="24" height="24" alt=""> kann das Datum des vorstehenden Feldes auf die aktuell laufende Minute gestellt werden. Die Datumsfelder lassen sich darüber hinaus manuell auf einen gewünschten Zeitpunkt einstellen. Unlogische Datumseingaben werden abgefangen: Sollte das Bis-Datum kleiner als das Von-Datum sein, wird das Von-Datum auf das Bis-Datum gesetzt.</p>
 					</li>
 				</ul>
-				
+
 				<h3>Verbesserungen</h3>
-				
+
 				<ul>
 					<li>
 						<p>Sonderzeichen: Die Liste der Sonderzeichen, die über das Sonderzeichen-Fenster (Funktion <img src="../img/tool-sonderzeichen.svg" width="24" height="24" alt="">) in das Belegfeld der Karteikarte eingefügt werden können, wurde um maskierte Spitzklammern ergänzt.</p>
@@ -516,9 +516,9 @@ Gerüst 2 &gt; Gerüst 1</pre>
 					<li>Einige seit Version 0.12.0 sinnlos gewordene Funktionsaufrufe beim Öffnen und Erstellen einer Kartei wurden entfernt, was diese beiden Operationen beschleunigen dürfte – wenn auch nur minimal.</li>
 					<li><a href="#" class="ueber-electron"><i>Electron</i></a>-Update auf Version 4.2.9.</li>
 				</ul>
-				
+
 				<h3>Behobene Fehler</h3>
-				
+
 				<ul>
 					<li>Bedeutungsgerüst: Endete eine Bedeutung mit einem kursiv, fett oder unterstrichen formatierten Zeichen, war das Programm beim Fokussieren der Bedeutung nicht in der Lage, die gewünschte Caret-Position (am Ende des Feldes) zu finden. Dies produzierte einen Fehler, der dadurch sichtbar wurde, dass das Feld keinen Fokus erhielt.</li>
 					<li>Bedeutungsgerüst: Verwendete man beim Schreiben der Bedeutung verschachtelte Formatierungen, speicherte das Programm mitunter einen mit Inline-Styles versehenen Bedeutungstext. Die Anzeige von Inline-Styles wird in <i class="app-name"></i> jedoch aus Sicherheitsgründen unterbunden. Sollten solches Styles durch verschachtelte Formatierungen entstehen, werden sie fortan beim Speichern entfernt.</li>
@@ -549,15 +549,15 @@ Gerüst 2 &gt; Gerüst 1</pre>
 					<li>Behebung visueller Glitches beim Fokussieren von Datumsfeldern.</li>
 				</ul>
 			</div>
-			
+
 			<!-- 0.13.3 -->
 			<div class="version">0.13.3</div>
-			
+
 			<div>
 				<h2><span>Version 0.13.3</span><time datetime="2019-07-30T18:39:02">30. Juli 2019</time></h2>
-				
+
 				<h3>Verbesserungen</h3>
-				
+
 				<ul>
 					<li>
 						<p>Bedeutungsgerüst: Das Programm unterstützt die NutzerInnen nun besser dabei, keine formal verwirrenden oder gar irregulären Bedeutungsgerüste zu produzieren. Deswegen werden fortan mehrere bisher zulässige Operationen unterbunden:</p>
@@ -569,9 +569,9 @@ Gerüst 2 &gt; Gerüst 1</pre>
 					</li>
 					<li>Bedeutungsgerüst: Wenn in einem Bedeutungsgerüst eine Zeile gerade ediert wird, wenn also der Fokus im Bedeutungen- oder Alias-Feld oder auf dem Tags-Bereich liegt, verhält sich das Tastaturkürzel zur Navigation durch die Bedeutungen anders als in vorherigen Versionen. Wird <kbd>Strg</kbd> + <kbd>⇧</kbd> <abbr title="beziehungsweise">bzw.</abbr> <kbd>⇩</kbd> gedrückt, beginnt die Navigation nun nicht mehr bei der ersten Bedeutung des Bedeutungsgerüsts, sondern relativ zu der gerade aktiven Zeile. Ein Beispiel: Hat man gerade Bedeutung <abbr title="Nummer">Nr.</abbr> 3 ediert und drückt <kbd>Strg</kbd> + <kbd>⇩</kbd>, wird Bedeutung <abbr title="Nummer">Nr.</abbr> 4 fokussiert; drückt man <kbd>Strg</kbd> + <kbd>⇧</kbd> fokussiert das Programm Bedeutung <abbr title="Nummer">Nr.</abbr> 2. Früher wurde in beiden Fällen Bedeutung <abbr title="Nummer">Nr.</abbr> 1 ausgewählt.</li>
 				</ul>
-				
+
 				<h3>Behobene Fehler</h3>
-				
+
 				<ul>
 					<li>Der Text in Dropdown-Feldern wie dem zur Gerüst-Auswahl war auswählbar, obwohl diese Felder weder zur Texteingabe noch zum Kopieren von Text vorgesehen sind.</li>
 					<li>Bedeutungsgerüst: Im Textfeld zur Eingabe neuer Bedeutungen war die Tool-Leiste für Textformate falsch positioniert, wenn eine Kartei nur ein Bedeutungsgerüst hatte, in dem noch keine Bedeutung stand.</li>
@@ -580,15 +580,15 @@ Gerüst 2 &gt; Gerüst 1</pre>
 					<li>Druckfunktion: Beim Drucken einer einzelnen Karteikarte oder aller Karten einer Belegliste wurde im Druckfenster anstelle der Bedeutung(en) fälschlicherweise nur <q>[object Object]</q> angezeigt – mitunter mehrfach. Der Fehler bestand, seitdem die Bedeutungsgerüst-Funktion zur Verfügung steht, also seit Version 0.10.0.</li>
 				</ul>
 			</div>
-			
+
 			<!-- 0.13.2 -->
 			<div class="version">0.13.2</div>
-			
+
 			<div>
 				<h2><span>Version 0.13.2</span><time datetime="2019-07-30T11:03:30">30. Juli 2019</time></h2>
-				
+
 				<h3>Behobene Fehler</h3>
-				
+
 				<ul>
 					<li>
 						<p>Bedeutungsgerüst: Beim Umbenennen einer Bedeutung wurden die Datensätze der untergeordneten Bedeutungen nicht angepasst. Dies führte dazu, dass das Bedeutungsgerüst formal korrumpiert wurde, was negative Konsequenzen hatte, wenn über die Karteikarte neue Bedeutungen hinzugefügt und automatisch in das Bedeutungsgerüst eingehängt wurden. In solchen Fällen war es nun mitunter unmöglich, die korrekte Position für die neue Bedeutung zu finden; sie wurde an einer falschen Stelle eingerückt, was sogar dazu führen konnte, dass Bedeutungen plötzlich doppelt auftauchten.</p>
@@ -596,15 +596,15 @@ Gerüst 2 &gt; Gerüst 1</pre>
 					</li>
 				</ul>
 			</div>
-			
+
 			<!-- 0.13.1 -->
 			<div class="version">0.13.1</div>
-			
+
 			<div>
 				<h2><span>Version 0.13.1</span><time datetime="2019-07-29T15:11:33">29. Juli 2019</time></h2>
-				
+
 				<h3>Behobene Fehler</h3>
-				
+
 				<ul>
 					<li>Wenn gerade eine neue Kartei erstellt wurde, diese aber noch nicht gespeichert war und man dann aus demselben Programmfenster eine bereits bestehende Kartei öffnen wollte (via <i>Kartei &gt; Öffnen</i>, <i>Kartei &gt; Zuletzt verwendet</i> oder Drag-and-Drop), gingen die in der neuen Kartei bereits eingegebenen Daten alle verloren, weil sich die bestehende Datei nicht in einem neuen, sondern im selben Programmfenster öffnete.</li>
 					<li>
@@ -613,45 +613,45 @@ Gerüst 2 &gt; Gerüst 1</pre>
 					</li>
 				</ul>
 			</div>
-			
+
 			<!-- 0.13.0 -->
 			<div class="version">0.13.0</div>
-			
+
 			<div>
 				<h2><span>Version 0.13.0</span><time datetime="2019-07-24T09:10:50">24. Juli 2019</time></h2>
-				
+
 				<h3>Neue Funktionen</h3>
-				
+
 				<ul>
 					<li>
 						<p>Fehlerlog: Programmfehler werden fortan intern protokolliert und können via <i>Hilfe &gt; Fehlerlog</i> eingesehen werden. Die genauen Informationen sind im Prinzip nur für den Maintainer relevant. In Fällen, in denen das Programm ein merkwürdiges Verhalten zeigt oder nicht so reagiert, wie man es erwarten würde, kann man an dieser Stelle jedoch nachsehen, ob gerade eben etwas im Programmcode schiefgelaufen ist und verschwendet keine Zeit mehr damit, auf eine korrekte Reaktion von <i class="app-name"></i> zu warten.</p>
 						<p>Mithilfe des Icons <img src="../img/tool-kopieren.svg" width="24" height="24" alt=""> im Kopf des Fehlerlogs kann es komplett in die Zwischenablage kopiert werden. (Das Icon erscheint nur, wenn es zu Fehlern kam.)</p>
 					</li>
 				</ul>
-				
+
 				<h3>Verbesserungen</h3>
-				
+
 				<ul>
 					<li><a href="#" class="ueber-electron"><i>Electron</i></a>-Update auf Version 4.2.8.</li>
 				</ul>
-				
+
 				<h3>Behobene Fehler</h3>
-				
+
 				<ul>
 					<li>Bedeutungsgerüst-Fenster: Bei Tastatur-Navigation durch die Elemente des Fensters gab es ein paar visuelle Glitches.</li>
 					<li>Nebenfenster: Wurde aus einem Nebenfenster (<a href="#" class="link-handbuch">Handbuch</a>, Changelog <abbr title="und so weiter">usw.</abbr>) eines der Über-Fenster geöffnet und mit dem Tastaturkürzel <kbd>Esc</kbd> geschlossen, wurde zugleich mit dem Über- auch das Nebenfenster geschlossen.</li>
 					<li>Ein Fehler in der <span class="datei">package.json</span> führte dazu, dass der <span lang="en">build process</span> von Linux-Paketen abgebrochen wurde.</li>
 				</ul>
 			</div>
-			
+
 			<!-- 0.12.0 -->
 			<div class="version">0.12.0</div>
-			
+
 			<div>
 				<h2><span>Version 0.12.0</span><time datetime="2019-07-17T19:51:32">17. Juli 2019</time></h2>
-				
+
 				<h3>Neue Funktionen</h3>
-				
+
 				<ul>
 					<li>
 						<p>Von nun an können beliebig viele Karteien parallel betrachtet und bearbeitet werden.</p>
@@ -669,31 +669,31 @@ Gerüst 2 &gt; Gerüst 1</pre>
 						<p>Nicht nur die Einstellungen, sondern auch die Liste der zuletzt verwendeten Karteien (<i>Kartei &gt; Zuletzt verwendet</i>) wird in allen Programmfenstern permanent aktuell gehalten.</p>
 					</li>
 				</ul>
-				
+
 				<h3>Verbesserungen</h3>
-				
+
 				<ul>
 					<li>In der Titelleiste des Programms erscheint neben dem Programmnamen nun auch das Kartei-Wort, das im Fenster gerade geöffnet ist.</li>
 					<li>Bedeutungsgerüst wechseln: Die Funktion kann nun auch über das Tastaturkürzel <kbd>Strg</kbd> + <kbd>Alt</kbd> + <kbd>B</kbd> aufgerufen werden.</li>
 					<li><a href="#" class="ueber-electron"><i>Electron</i></a>-Update auf Version 4.2.7.</li>
 				</ul>
-				
+
 				<h3>Behoebene Fehler</h3>
-				
+
 				<ul>
 					<li>Karteikarte: War die Karteikarte in der Formularansicht und wurde über das Bedeutungsgerüst-Fenster eine der eingetragenen Bedeutungen entfernt, passte sich die Höhe des Textfeldes nicht automatisch an.</li>
 					<li>Bedeutungsgerüst-Fenster: War die Dropdown-Liste mit Bedeutungsgerüsten sichtbar und wurde mit dem Mausrad gescrollt, überdeckte die Liste den Fensterkopf.</li>
 				</ul>
 			</div>
-			
+
 			<!-- 0.11.0 -->
 			<div class="version">0.11.0</div>
-			
+
 			<div>
 				<h2><span>Version 0.11.0</span><time datetime="2019-07-04T15:51:41">4. Juli 2019</time></h2>
-				
+
 				<h3>Neue Funktionen</h3>
-				
+
 				<ul>
 					<li>
 						<p>Karteikarte: In das <i>Beleg</i>-Feld lassen sich nun Sonderzeichen eintragen, die über ein gewöhnliches Tastaturlayout nicht ohne Weiteres zu erreichen sind.</p>
@@ -701,16 +701,16 @@ Gerüst 2 &gt; Gerüst 1</pre>
 						<p>Die Zeichenliste lässt sich mit minimalem Aufwand um beliebig viele weitere Sonderzeichen ergänzen.</p>
 					</li>
 				</ul>
-				
+
 				<h3>Verbesserungen</h3>
-				
+
 				<ul>
 					<li>Bedeutungsgerüst-Funktion: Beim Eingeben einer neuen Bedeutung oder dem Ändern einer bestehenden wird eine kleine Toolleiste eingeblendet, über die sich die zulässigen Formatierungen vornehmen lassen: fetten, kursivieren, unterstreichen. Wie gehabt lassen sich diese Funktionen auch via Tastaturkürzel aufrufen: <kbd>Strg</kbd> + <kbd>B</kbd> / <kbd>I</kbd> / <kbd>U</kbd>.</li>
 					<li>Bedeutungsgerüst wechseln: Ist eine Karteikarte geöffnet, erhält das Bedeutungsfeld nach dem Schließen des Fensters den Fokus.</li>
 					<li>Filterleiste: Seit der letzten Version sind die Checkboxes jener Filter, die keine Treffer produzieren, ausgegraut und deaktiviert. Um die Orientierung zu erleichtern wird nun auch der zugehörige Text ausgegraut.</li>
 					<li><abbr title="Extensible Markup Language" lang="en">XML</abbr>-Ressourcen: Die Abkürzungen in der <span class="datei">Regiolekte.xml</span> und der <span class="datei">Sprachen.xml</span> wurden vereinheitlicht. (Dank an S. N.!)</li>
 				</ul>
-				
+
 				<h3>Behobene Fehler</h3>
 				<ul>
 					<li>Karteikarte/Bedeutungsgerüst: Wurde über die Eingabe im Bedeutungsfeld der Karteikarte zu der letzten, bereits zuvor angelegten Oberbedeutung des Bedeutungsgerüst, die schon mindestens eine Unterbedeutung enthielt, eine neue Unterbedeutung eingegeben, wurde diese neue Unterbedeutung fälschlicherweise der direkt vor der Oberbedeutung stehenden Bedeutung auf derselben Ebene zu- und untergeordnet. Dies führte in der Konsequenz zu einer Fehlzuordnung der Oberbedeutung zu der Karteikarte, die nicht etwa die gewünschte, sondern die direkt vorstehende Bedeutung auf derselben Ebene erhielt. Das klingt nicht nur kompliziert…</li>
@@ -718,17 +718,17 @@ Gerüst 2 &gt; Gerüst 1</pre>
 					<li>Karteikarte: Wurde in einem mehrzeiligen Textfeld mit Dropdown-Menü getippt, wurden für das Filtern der sich automatisch öffnenden Dropdown-Liste die Werte aller Zeilen berücksichtigt. Fortan wird zum Filtern nur noch der Text in der Zeile verwendet, in der gerade getippt wird.</li>
 				</ul>
 			</div>
-			
+
 			<!-- 0.10.0 -->
 			<div class="version">0.10.0</div>
-			
+
 			<div>
 				<h2><span>Version 0.10.0</span><time datetime="2019-07-02T14:50:13">2. Juli 2019</time></h2>
-				
+
 				<p><span class="obacht">Das Dateiformat hat sich geändert!</span> Ältere <abbr title="Wortgeschichte digital">WGD</abbr>-Dateien werden automatisch konvertiert; dabei wird eine Änderungsmarkierung gesetzt.</p>
-				
+
 				<h3>Neue Funktionen</h3>
-				
+
 				<ul>
 					<li>
 						<p>Bedeutungsgerüst: Von nun an können Bedeutungsgerüste direkt und ohne den Umweg über die Eingabe von Bedeutungen in den Karteikarten angelegt werden. Die Funktion lässt sich via <i>Kartei &gt; Bedeutungsgerüst</i> oder mit dem Tastaturkürzel <kbd>Strg</kbd> + <kbd>B</kbd> aufrufen. Wird eine bereits bestehende <abbr title="Wortgeschichte digital">WGD</abbr>-Datei geöffnet, erzeugt <i class="app-name"></i> aus den vorhandenen Bedeutungen ein initiales Bedeutungsgerüst. Dieses Gerüst ist strikt alphabetisch sortiert, wobei eingegebene Hierarchie-Ebenen und die daraus resultierenden Verschachtelungen natürlich erhalten bleiben. Wird eine neue Kartei angelegt, bekommt diese immer ein leeres Bedeutungsgerüst mit auf den Weg.</p>
@@ -753,9 +753,9 @@ Gerüst 2 &gt; Gerüst 1</pre>
 					</li>
 					<li>Karteikarte: In der Leseansicht ist nun jede Bedeutung mit einem <img src="../img/meta-entfernen.svg" width="24" height="24" alt=""> versehen. Durch Klick kann sie einfach aus der Karteikarte entfernt werden. Das Entfernen wird natürlich erst nach dem Speichern der Karteikarte endgültig übernommen.</li>
 				</ul>
-				
+
 				<h3>Verbesserungen</h3>
-				
+
 				<ul>
 					<li>Filterleiste: Im Zeitraum-Filter werden Zeitschnitte, denen keine Belege zugeordnet sind, zwar wie gehabt angezeigt, sie lassen sich aber nicht mehr auswählen und werden ausgegraut – analog zu Bedeutungen, denen (noch) keine Belege zugeordnet wurden.</li>
 					<li>
@@ -768,44 +768,44 @@ Gerüst 2 &gt; Gerüst 1</pre>
 					<li><a href="#" class="ueber-electron"><i>Electron</i></a>-Update auf Version 4.2.6.</li>
 				</ul>
 			</div>
-			
+
 			<!-- 0.9.2 -->
 			<div class="version">0.9.2</div>
-			
+
 			<div>
 				<h2><span>Version 0.9.2</span><time datetime="2019-06-19T09:15:08">19. Juni 2019</time></h2>
-				
+
 				<h3>Verbesserungen</h3>
-				
+
 				<ul>
 					<li>Formvarianten: Über das Icon <img src="../img/redaktion-online.svg" width="24" height="24" alt=""> am unteren Rand des Formvarianten-Fensters kann die Webseite des <abbr title="Deutsches Textarchiv">DTA</abbr> mit allen bekannten Formvarianten zum aktuellen Kartei-Wort geöffnet werden.</li>
 					<li><a href="#" class="ueber-electron"><i>Electron</i></a>-Update auf Version 4.2.4.</li>
 				</ul>
 			</div>
-			
+
 			<!-- 0.9.1 -->
 			<div class="version">0.9.1</div>
-			
+
 			<div>
 				<h2><span>Version 0.9.1</span><time datetime="2019-05-27T09:07:47">27. Mai 2019</time></h2>
-				
+
 				<h3>Behobene Fehler</h3>
-				
+
 				<ul>
 					<li>Karteikarte: In der Formularansicht war das Tastaturkürzel <kbd>Strg</kbd> + <kbd>⇩</kbd> seit Version 0.9.0 unter Umständen doppelt belegt: Befand man sich in einem Feld mit Dropdown-Menü wurde sowohl die Funktion zum Öffnen des Menüs aufgerufen als auch die Sprungfunktion für das Belegfeld, mit deren Hilfe das Kartei-Wort gefunden werden kann. Im Endeffekt war das Öffnen des Dropdown-Menüs via Tastaturkürzel nicht mehr möglich. Befindet man sich in einem Feld, zu dem sich ein Dropdown-Menü öffnen lässt, wird das Aufrufen der Sprungfunktion via Tastaturkürzel von nun an blockiert.</li>
 				</ul>
 			</div>
-			
+
 			<!-- 0.9.0 -->
 			<div class="version">0.9.0</div>
-			
+
 			<div>
 				<h2><span>Version 0.9.0</span><time datetime="2019-05-21T13:02:07">21. Mai 2019</time></h2>
-				
+
 				<p><span class="obacht">Das Dateiformat hat sich geändert!</span> Ältere <abbr title="Wortgeschichte digital">WGD</abbr>-Dateien werden automatisch konvertiert; dabei wird eine Änderungsmarkierung gesetzt.</p>
-				
+
 				<h3>Neue Funktionen</h3>
-				
+
 				<ul>
 					<li>
 						<p>Datenfeld Synonym: Die Karteikarte hat ein zusätzliches Textfeld erhalten, in dem Synonyme notiert werden können. Es funktioniert genauso wie das Feld <i>Wortbildung</i>, das in der letzten Version 0.8.0 eingeführt wurde.</p>
@@ -819,9 +819,9 @@ Gerüst 2 &gt; Gerüst 1</pre>
 						<p>Analog zur Sprungfunktion in der Leseansicht, steht auch in der Formularansicht das Tastaturkürzel <kbd>Strg</kbd> + <kbd>⇩</kbd> zur Verfügung.</p>
 					</li>
 				</ul>
-				
+
 				<h3>Verbesserungen</h3>
-				
+
 				<ul>
 					<li>
 						<p>Sachgebiete: Vor dem Import der Sachgebiete-Datei wird diese auf Fehler überprüft. Wurden welche gefunden, wird der Import mit einer Fehlermeldung abgebrochen. Die Überprüfung findet auch vor dem automatischen Abgleich statt, führt aber nicht zu einer Fehlermeldung. Dass es zu einem Fehler kam, kann man dann allerdings unter <i>Programm &gt; Einstellungen &gt; Bedeutungsgerüst</i> an dem <img src="../img/fehler.svg" width="24" height="24" alt=""> hinter dem Namen der Sachgebiete-Datei erkennen. Klickt man auf das Kreuz, werden Details zum Fehler angezeigt.</p>
@@ -848,9 +848,9 @@ Gerüst 2 &gt; Gerüst 1</pre>
 					<li>Die Überarbeitung der Installer-Scripts, Änderungen an der Datei- und Karteistruktur machten eine Anpassung der <a href="#" class="link-dokumentation">technischen Dokumentation</a> nötig.</li>
 					<li><a href="#" class="ueber-electron"><i>Electron</i></a>-Update auf Version 4.2.2.</li>
 				</ul>
-				
+
 				<h3>Behobene Fehler</h3>
-				
+
 				<ul>
 					<li>Karteikarte: Wurden in einer Karteikarte die Felder <i>Bedeutung</i>, <i>Wortbildung</i>, <i>Korpus</i> oder <i>Textsorte</i> über das Dropdown-Menü gefüllt oder ergänzt, wurde die Karteikarte zwar als geändert markiert, der neue Wert im Korpus-Feld nach dem Speichern aber trotzdem nicht übernommen.</li>
 					<li>Karteikarte: Wurde das Speichern der Karte durch das Tastaturkürzel <kbd>Strg</kbd> + <kbd>⏎</kbd> angestoßen, während man sich in einem Feld mit geöffnetem Dropdown-Menü befand, wurde zusätzlich zum Speichervorgang die Übernahme des ausgewählten <abbr title="beziehungsweise">bzw.</abbr> ersten Menü-Punkts aus dem Dropdown-Menü ausgelöst. Dieses Verhalten wird fortan unterbunden; <kbd>Strg</kbd> + <kbd>⏎</kbd> stößt nur noch einen Speichervorgang an. Wird die Karteikarte nicht automatisch geschlossen, bleibt das Dropdown-Menü offen.</li>
@@ -860,17 +860,17 @@ Gerüst 2 &gt; Gerüst 1</pre>
 					<li>Im Installer-Script für Linux-Pakete befanden sich noch absolute Pfadangaben.</li>
 				</ul>
 			</div>
-			
+
 			<!-- 0.8.0 -->
 			<div class="version">0.8.0</div>
-			
+
 			<div>
 				<h2><span>Version 0.8.0</span><time datetime="2019-05-15T17:46:31">15. Mai 2019</time></h2>
-				
+
 				<p><span class="obacht">Das Dateiformat hat sich geändert!</span> Ältere <abbr title="Wortgeschichte digital">WGD</abbr>-Dateien werden automatisch konvertiert; dabei wird eine Änderungsmarkierung gesetzt.</p>
-				
+
 				<h3>Neue Funktionen</h3>
-				
+
 				<ul>
 					<li>
 						<p>Sachgebiete: In den <i>Programm-Einstellungen</i> unter <i>Bedeutungsgerüst</i> kann nun eine Datei mit einer Liste an Sachgebieten geladen werden. Dabei muss es sich um eine in <abbr title="UCS Transformation Format" lang="en">UTF</abbr>-8 enkodierte <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Datei handeln, die die folgende Struktur hat:</p>
@@ -914,9 +914,9 @@ Gerüst 2 &gt; Gerüst 1</pre>
 						<p>Das Suchfeld erscheint nur, wenn im Beleg ein längerer Text steht (<abbr title="circa">ca.</abbr> ab sechs Zeilen). Es lässt sich auf Wunsch ganz ausblenden (<i>Programm &gt; Einstellungen &gt; Karteikarte</i>).</p>
 					</li>
 				</ul>
-				
+
 				<h3>Verbesserungen</h3>
-				
+
 				<ul>
 					<li>
 						<p>Textkopie: Die mit Version 0.5.0 eingeführte Funktion, die Hervorhebung des Kartei-Worts mitzukopieren, wurde leicht modifiziert. Ob und wie die Hervorhebung des Kartei-Worts beim Kopieren mithilfe des Kopier-Icons <img src="../img/tool-kopieren.svg" width="24" height="24" alt=""> oder des Kontextmenüs (<i>Rechtsklick &gt; Textauswahl kopieren</i>) erhalten bleiben soll, kann von nun an genauer gesteuert werden:</p>
@@ -951,9 +951,9 @@ Gerüst 2 &gt; Gerüst 1</pre>
 					<li>Metadaten-Fenster: Die Version des Dateiformats wurde ergänzt.</li>
 					<li><a href="#" class="ueber-electron"><i>Electron</i></a>-Update auf Version 4.2.1.</li>
 				</ul>
-				
+
 				<h3>Behobene Fehler</h3>
-				
+
 				<ul>
 					<li><span class="obacht">Schwerer Fehler:</span> Neue Karteien wurden fälschlicherweise immer noch mit der Dateiformat-Version <strong>1</strong> getaggt. Richtig wäre hier aber die <strong>2</strong> gewesen, und zwar seit Version 0.4.0 von <i class="app-name"></i>. Der Fehler führte dazu, dass beim zweiten Öffnen einer neu erstellten Kartei in allen existierenden Belegen das Korpus-Feld gelöscht wurde. <span lang="la">Mea culpa, mea culpa, mea maxima culpa!</span></li>
 					<li><span class="obacht">Schwerer Fehler:</span> Wurde in einem Textfeld der Karteikarte ein nicht typographisches doppeltes Anführungszeichen (") verwendet, enthielt die Eingabe zugleich mehrere Hierarchien (eröffnet durch <q>: </q>, also ein Doppelpunkt, gefolgt von einem Leerzeichen) und waren die Anführungszeichen nicht in der untersten Hierarchie, sondern der obersten oder einer mittleren, führte dies zu einem Programmabsturz. Dabei gab es zwar keine Datenverluste, aber <abbr title="Wortgeschichte digital">WGD</abbr>-Dateien, in denen ein Textfeld auf diese Art und Weise gefüllt worden war, konnten nicht mehr geöffnet werden. Betroffen waren die Felder <i>Bedeutung</i>, <i>Korpus</i> und <i>Textsorte</i>.</li>
@@ -969,15 +969,15 @@ Gerüst 2 &gt; Gerüst 1</pre>
 					<li>An einigen Stellen im Text (besonders in diesem Dokument) wurden Glyphen verwendet, die in <i>Noto Sans (Mono)</i> nicht enthalten sind. Für solche Fälle wurde die Schriftart <i>Noto Sans Symbols2</i> eingebunden.</li>
 				</ul>
 			</div>
-			
+
 			<!-- 0.7.0 -->
 			<div class="version">0.7.0</div>
-			
+
 			<div>
 				<h2><span>Version 0.7.0</span><time datetime="2019-05-06T14:26:09">6. Mai 2019</time></h2>
-				
+
 				<h3>Neue Funktionen</h3>
-				
+
 				<ul>
 					<li>
 						<p>Einstellungen: Der Timeout für Anfragen an das <abbr title="Deutsche Textarchiv">DTA</abbr> kann nun geändert werden. Die Option findet sich unter <i>Einstellungen &gt; Allgemeines</i>. Zulässige Werte liegen zwischen 5 Sekunden und 3 Minuten (also 180 Sekunden).</p>
@@ -994,9 +994,9 @@ Mustermann, Erika
 					<li>Es gibt nun eine Funktion, die darauf aufmerksam macht, dass vergessen wurde, sich oder andere MitarbeiterInnen namentlich zu registrieren. Fehlen Angaben zu den BearbeiterInnen in den <i>Einstellungen</i>, den <i>Metadaten</i> oder im <i>Redaktionsfenster</i>, erscheint im Programmkopf neben dem Wort das Icon <img src="../img/dialog-alert.svg" width="24" height="24" alt="">. Klickt man auf das Icon, wird angezeigt, wo <abbr title="eventuell">evtl.</abbr> noch der Name einer BearbeiterIn eingegeben werden sollte.</li>
 					<li>Belegliste: Auf Wunsch kann zusätzlich zu Datum und Autor auch die Textsorte im Kopf der Belegliste eingeblendet werden. Die Option ist standardmäßig deaktiviert. Aktivieren lässt sie sich in den Optionen unter <i>Programm &gt; Einstellungen &gt; Belegliste</i>.</li>
 				</ul>
-				
+
 				<h3>Verbesserungen</h3>
-				
+
 				<ul>
 					<li><abbr title="Deutsches Textarchiv">DTA</abbr>-Import: Fortan wird nur noch die Textsortenangabe <q>dwds1</q> importiert. (Die im <abbr title="Text Encoding Initiative" lang="en">TEI</abbr>-Header der <abbr title="Deutsches Textarchiv">DTA</abbr>-Texte unter <q>dwds2</q> gelisteten Textsorten stammen aus einer Frühzeit des Projekts und sind nicht so zuverlässig.)</li>
 					<li>Einstellungen: Die Tastatur-Navigation durch die Menüpunkte wurde auf <kbd>Strg</kbd> + <kbd>⇧</kbd> / <kbd>⇩</kbd> umgestellt, auch damit sie identisch zu der Navigation im <a href="#" class="link-handbuch">Handbuch</a> und der <a href="#" class="link-dokumentation">technischen Dokumentation</a> funktioniert.</li>
@@ -1004,32 +1004,32 @@ Mustermann, Erika
 					<li>Die <a href="#" class="link-dokumentation">technische Dokumentation</a> wurde ergänzt <abbr title="beziehungsweise">bzw.</abbr> angepasst.</li>
 					<li><a href="#" class="ueber-electron"><i>Electron</i></a>-Update auf Version 4.2.0.</li>
 				</ul>
-				
+
 				<h3>Behobene Fehler</h3>
-				
+
 				<ul>
 					<li>Wurden an eine Kartei sehr viele Dateien angehängt, erschienen die Icons, die eigentlich im Kopf des Programmfensters stehen sollten, mitten auf der Seite. Bezogen auf die Überschrift zeigte sich der Fehler auch im Bedeutungsgerüst-Fenster, wenn es sehr schmal war und die Kartei nicht ein einzelnes Wort, sondern eine Wortverbindung betraf.</li>
 					<li>Behebung visueller Glitches unter <i>Einstellungen &gt; Menü</i>.</li>
 				</ul>
 			</div>
-			
+
 			<!-- 0.6.0 -->
 			<div class="version">0.6.0</div>
-			
+
 			<div>
 				<h2><span>Version 0.6.0</span><time datetime="2019-04-28T08:54:46">28. April 2019</time></h2>
-				
+
 				<h3>Neue Funktionen</h3>
-				
+
 				<ul>
 					<li>
 						<p>Wie Sie sehen: Der <i>Changelog</i> hat nun ein eigenes Fenster, das mehr Anzeigeraum bietet und das Hauptfenster nicht blockiert. So können parallel zum Lesen der Änderungen neue Funktionen ausprobiert werden.</p>
 						<p>Der <i>Changelog</i> ist wie gehabt aus dem Fenster <i>Über <span class="app-name"></span></i> heraus zu erreichen, aber auch direkt via <i>Hilfe &gt; Changelog</i>.</p>
 					</li>
 				</ul>
-				
+
 				<h3>Verbesserungen</h3>
-				
+
 				<ul>
 					<li>
 						<p>Sperrdatei: Der Mechanismus der mit Version 0.5.0 eingeführten Sperrdatei, die ein kollaboratives Arbeiten in einem gemeinsamen Netzwerkordner ermöglicht, ohne dass man sich gegenseitig die Arbeit überschreibt, wurde stark verbessert: Wird von einer NutzerIn eine Kartei geöffnet, die durch sie zuvor am selben Computer gesperrt wurde, behandelt das Programm die gesperrte Kartei wie eine nicht gesperrte – und öffnet sie ohne Probleme.</p>
@@ -1041,9 +1041,9 @@ Mustermann, Erika
 					<li>Die <a href="#" class="link-dokumentation">technische Dokumentation</a> wurde an einigen Stellen ergänzt.</li>
 					<li><a href="#" class="ueber-electron"><i>Electron</i></a>-Update auf Version 4.1.5.</li>
 				</ul>
-				
+
 				<h3>Behobene Fehler</h3>
-				
+
 				<ul>
 					<li>Startseite: Beim Leeren der Liste zuletzt verwendeter Karteien (Funktion <i>Kartei &gt; Zuletzt verwendet &gt; Liste löschen</i>) wurde die Ansicht der Startseite der App, auf der diese Liste auch zu sehen ist, nicht aufgefrischt. Ist die Startseite sichtbar, hat die Löschaktion auch dort eine unmittelbare Konsequenz: Die Liste zuletzt verwendeter Karteien verschwindet.</li>
 					<li>Bedeutungsgerüst-Fenster: Das Tastaturkürzel <kbd>Strg</kbd> + <kbd>P</kbd> funktionierte nicht mehr.</li>
@@ -1052,17 +1052,17 @@ Mustermann, Erika
 					<li>Über-Fenster: Behebung visueller Glitches.</li>
 				</ul>
 			</div>
-			
+
 			<!-- 0.5.0 -->
 			<div class="version">0.5.0</div>
-			
+
 			<div>
 				<h2><span>Version 0.5.0</span><time datetime="2019-04-23T13:02:11">23. April 2019</time></h2>
-				
+
 				<p><span class="obacht">Achtung!</span> Mit der Installation dieser Version gehen alle bisherigen Einstellungen verloren. (Sie können allerdings manuell wiederhergestellt werden.)</p>
-				
+
 				<h3>Neue Funktionen</h3>
-				
+
 				<ul>
 					<li>Die <a href="#" class="link-dokumentation">technische Dokumentation</a> ist fertig. Wer sie lesen möchte, findet sie unter <i>Hilfe &gt; Technische Dokumentation</i>.</li>
 					<li>
@@ -1075,9 +1075,9 @@ Mustermann, Erika
 						<p>Sollte es beim Entsperren aus irgendeinem Grund zu einem Fehler kommen (Programmabsturz, Programmierfehler <abbr title="und so weiter">usw.</abbr>), kann die Sperrdatei problemlos manuell gelöscht werden. Danach lässt sich die betreffende Kartei wieder öffnen.</p>
 					</li>
 				</ul>
-				
+
 				<h3>Verbesserungen</h3>
-				
+
 				<ul>
 					<li>Links zu Webseiten können nun via <span lang="en">Drag-and-Drop</span> in einen Browser gezogen und so geöffnet werden. Die Änderung betrifft alle externen Links in allen Programmfenstern.</li>
 					<li>Enthält eine Kartei viele lange Belege, war der Aufbau der Belegliste schon bei ein paar Dutzend Karteikarten mitunter recht träge. In solchen Fällen agiert die App nun deutlich performanter, ohne Abstriche bei der Funktionalität zu machen.</li>
@@ -1092,9 +1092,9 @@ Mustermann, Erika
 					<li>Drucken: Das Wort der Kartei wird für den Ausdruck nun fett hervorgehoben und grau hinterlegt. Allerdings kann die graue Hinterlegung nicht direkt gedruckt werden. Ist sie unverzichtbar, muss man den Text kopieren (Kopierfunktion im Kopf der Druckfensters), in ein Textverarbeitungsprogramm einfügen und von dort aus drucken.</li>
 					<li>Notizen und Karteikarte: Die Buttons, die früher <i>Abbrechen</i> hießen, wurden in <i>Schließen</i> umbenannt, weil sich <i>Notizen-Fenster</i> oder <i>Karteikarte</i> nach dem Speichern nicht mehr notwendigerweise direkt schließen müssen. Die Funktionalität der Buttons hat sich dabei nicht geändert.</li>
 				</ul>
-				
+
 				<h3>Behobene Fehler</h3>
-				
+
 				<ul>
 					<li>Wurde das Hauptfenster der App über die Schließenfunktion der Fensterleiste geschlossen, blieben <abbr title="eventuell">evtl.</abbr> offene Nebenfenster (Bedeutungsgerüst-Fenster, <a href="#" class="link-handbuch">Handbuch</a>, <a href="#" class="link-dokumentation">technische Dokumentation</a>) weiter geöffnet. Diese Fenster gehen nun mit dem Schließen des Hauptfenster automatisch zu.</li>
 					<li>Anzeige des Belegtexts: Beim Ausblenden der Seitenumbruchsmarkierung (also <abbr title="zum Beispiel">z. B.</abbr> <q>[:35:]</q>) wurde auch das Leerzeichen vor der Markierung entfernt, was mitunter zur Komposition nicht zusammengehöriger Wörter führte.</li>
@@ -1107,17 +1107,17 @@ Mustermann, Erika
 					<li>Dropdown-Menü: Die Logik des Dialogs, der aufpoppt, wenn in einem der Datenfelder des Belegs bereits Text steht, wurde wieder in seinen ursprünglichen Zustand versetzt: <i>Ja</i> bedeutet ergänzen, <i>Nein</i> überschreiben (Rücknahme der Änderung von Version 0.3.0, die sich dann doch als ungut herausstellte).</li>
 				</ul>
 			</div>
-			
+
 			<!-- 0.4.0 -->
 			<div class="version">0.4.0</div>
-			
+
 			<div>
 				<h2><span>Version 0.4.0</span><time datetime="2019-04-17">17. April 2019</time></h2>
-				
+
 				<p><span class="obacht">Das Dateiformat hat sich geändert!</span> Ältere <abbr title="Wortgeschichte digital">WGD</abbr>-Dateien werden automatisch konvertiert; dabei wird eine Änderungsmarkierung gesetzt.</p>
-				
+
 				<h3>Neue Funktionen</h3>
-				
+
 				<ul>
 					<li>
 						<p>Bedeutungsgerüst-Fenster: Es gibt nun ein separates Fenster, in dem die bisher gesammelten Bedeutungen zum jeweiligen Wort in einer Baumstruktur angezeigt werden. Geöffnet werden kann das Fenster über das Menü (<i>Kartei &gt; Bedeutungsgerüst-Fenster</i>), das Tastaturkürzel <kbd>Strg</kbd> + <kbd>⇧</kbd> + <kbd>B</kbd> oder das Icon <img src="../img/quick-bedeutungen-fenster.svg" width="24" height="24" alt=""> in der Quick-Access-Bar.</p>
@@ -1139,9 +1139,9 @@ Mustermann, Erika
 					</li>
 					<li>Filter Korpora: Das neue Datenfeld <i>Korpus</i> ermöglichte ferner die Integration eines neuen Filters, mit dem sich die Belegliste nach den in den Karteikarten angegebenen Korpora filtern lässt. Der <i>Korpora</i>-Filter verhält sich genauso wie der <i>Bedeutungen-</i> und <i>Textsorten</i>-Filter: Belege, in denen kein Korpus angegeben wurde, lassen sich über den Filter <i>(nicht bestimmt)</i> finden.</li>
 				</ul>
-				
+
 				<h3>Verbesserungen</h3>
-				
+
 				<ul>
 					<li>Die Breite der Filterleiste passt sich dynamisch an die Breite des Programmfensters an. Sie nimmt nun 40 % des verfügbaren Platzes ein, jedoch mindestens 300 Pixel und höchstens 600 Pixel, was dem Doppelten der bisherigen fixen Breite entspricht.</li>
 					<li>Anstelle von <i>DejaVu</i> wird als Schriftart fortan <i>Noto</i> benutzt. (Einige im <abbr title="Deutschen Textarchiv">DTA</abbr> häufig verwendete Glyphen sind in <i>DejaVu</i> nicht vorhanden.)</li>
@@ -1151,9 +1151,9 @@ Mustermann, Erika
 					<li>Anhänge und Redaktion: Nach dem Verschieben eines Eintrags wird das Pfeil-Icon des betreffenden Eintrags fokussiert. So kann ein Eintrag mithilfe von <kbd>⏎</kbd> schneller und leichter über mehrere Positionen nach oben verschoben werden.</li>
 					<li><i>Kartei &gt; Zuletzt verwendet:</i> Bisher gab es nur für die ersten sechs Einträge Tastaturkürzel. Ab sofort gibt es Kürzel bis Eintrag Nummer neun.</li>
 				</ul>
-				
+
 				<h3>Behobene Fehler</h3>
-				
+
 				<ul>
 					<li>Viele Funktionen des Hauptfensters waren auch aus den Nebenfenstern (<a href="#" class="link-handbuch">Handbuch</a>, <a href="#" class="link-dokumentation">Dokumentation</a> <abbr title="und so weiter">usw.</abbr>) heraus aufzurufen, wenn das zugehörige Tastaturkürzel gedrückt wurde. Dies könnte unerwünschte Effekte haben und wird fortan unterbunden.</li>
 					<li>Filterleiste: Die Darstellung kompliziert verschachtelter Bedeutungsgerüste war mitunter grob falsch.</li>
@@ -1165,22 +1165,22 @@ Mustermann, Erika
 					<li>Das Formular zur Eingabe neuer Belege <abbr title="beziehungsweise">bzw.</abbr> dessen Leseansicht wird nun durchgehend als <i>Karteikarte</i> und nicht mehr als <i>Belegzettel</i> bezeichnet.</li>
 				</ul>
 			</div>
-			
+
 			<!-- 0.3.0 -->
 			<div class="version">0.3.0</div>
-			
+
 			<div>
 				<h2><span>Version 0.3.0</span><time datetime="2019-04-10">10. April 2019</time></h2>
-				
+
 				<h3>Neue Funktionen</h3>
-				
+
 				<ul>
 					<li>Karteikarte: Mit dem Tastaturkürzel <kbd>Strg</kbd> + <kbd>U</kbd> kann jetzt zwischen Formular- und Leseansicht gewechselt werden.</li>
 					<li>Karteikarte: In der Leseansicht gibt es nun eine Funktion zum Aus- <abbr title="beziehungsweise">bzw.</abbr> Einblenden der Silbentrennung und Seitenumbrüche. Diese Einstellung wird gespeichert und beim Neustart des Programms wiederhergestellt. Sie ist auch über das Tastaturkürzel <kbd>Strg</kbd> + <kbd>T</kbd> zu erreichen.</li>
 				</ul>
-				
+
 				<h3>Verbesserungen</h3>
-				
+
 				<ul>
 					<li>Das Tastaturkürzel <kbd>Strg</kbd> + <kbd>S</kbd> und die Funktion <i>Kartei &gt; Speichern</i> rufen den Speicherbefehl nun auch für das Notizen-Fenster und die Karteikarte auf. Verläuft das Speichern der Notizen <abbr title="beziehungsweise">bzw.</abbr> des Belegs fehlerfrei, wird direkt im Anschluss die Kartei gespeichert.</li>
 					<li>Meldungen, dass keine Änderungen vorgenommen wurden und ein Speichern unnötig sei, wurden entfernt.</li>
@@ -1193,9 +1193,9 @@ Mustermann, Erika
 					<li>Dropdown-Menü: Wird infolge einer Texteingabe ein Wert aus einer gefilterten Vorschlagsliste ausgewählt, wird automatisch die Zeile überschrieben, in der begonnen wurde zu tippen.</li>
 					<li>Dropdown-Menü: Versehntliches Einfügen von Leerzeilen zwischen den Werten wird in mehrzeiligen Feldern von nun an vermieden.</li>
 				</ul>
-				
+
 				<h3>Behobene Fehler</h3>
-				
+
 				<ul>
 					<li>DTA-Import: Der Import der letzten Seite eines Werks war mitunter nur unvollständig.</li>
 					<li>Karteikarte: Wenn die Felder mit den Feldüberschriften sehr schmal wurden, konnten sich Text und Kopier-Icon unter Umständen überlappen.</li>
@@ -1205,36 +1205,36 @@ Mustermann, Erika
 					<li>Dropdown-Menü: Wurden in der Karteikarte die Felder <i>Bedeutung</i> oder <i>Textsorte</i> über das Dropdown-Menü gefüllt, wurden die Werte beim Speichern nicht übernommen.</li>
 				</ul>
 			</div>
-			
+
 			<!-- 0.2.0 -->
 			<div class="version">0.2.0</div>
-			
+
 			<div>
 				<h2><span>Version 0.2.0</span><time datetime="2019-04-09">9. April 2019</time></h2>
-				
+
 				<h3>Verbesserungen</h3>
-				
+
 				<ul>
 					<li>Suchfunktion: Das Finden von Wörtern mit Sonderzeichen (ẽ und ñ) wurde verbessert.</li>
 					<li>Belegtext: Beim Kopieren wird die Quellenangabe automatisch mitkopiert. Dies betrifft alle Kopierfunktionen: das Kopieren via Icon und das Kopieren einer Textauswahl via Kontextmenü; beides sowohl in der Belegliste als auch in der Karteikarte.</li>
 					<li>Karteikarte: Die Texttools erkennen illegales Nesting jetzt in mehr Fällen als zuvor.</li>
 				</ul>
-				
+
 				<h3>Behobene Fehler</h3>
-				
+
 				<ul>
 					<li>Karteikarte: Das Einfügen von Text im Belegfeld durch Klick auf das Einfüge-Icon funktionierte nicht.</li>
 					<li>Karteikarte: Beim Einfügen von Text im Belegfeld durch Klick auf das Einfüge-Icon wurden einfache Zeilenumbrüche im HTML-Quelltext ignoriert.</li>
 					<li>Karteikarte: Ein Hinweis auf illegales Nesting erschien nicht in jedem Fall.</li>
 				</ul>
 			</div>
-			
+
 			<!-- 0.1.0 -->
 			<div class="version">0.1.0</div>
-			
+
 			<div>
 				<h2><span>Version 0.1.0</span><time datetime="2019-04-08">8. April 2019</time></h2>
-				
+
 				<p>Erste freigegebene Version.</p>
 			</div>
 		</main>

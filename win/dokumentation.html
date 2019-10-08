@@ -3,15 +3,15 @@
 	<head>
 		<meta charset="utf-8">
 		<meta http-equiv="Content-Security-Policy" content="default-src 'self'">
-		
+
 		<title> </title>
-		
+
 		<link rel="stylesheet" href="../css/win/hilfe.css">
-		
+
 		<script src="../js/suchleiste.js"></script>
-		
+
 		<script src="../js/app/helfer.js"></script>
-		
+
 		<script src="../js/win/init-dokumentation.js"></script>
 		<script src="../js/win/helferWin.js"></script>
 		<script src="../js/win/hilfe.js"></script>
@@ -23,13 +23,15 @@
 			<h1>Technische Dokumentation</h1
 				><img src="../img/icon.svg" width="48" height="48" alt="" id="icon">
 		</header>
-		
+
 		<!-- GRID -->
 		<main>
 			<nav>
 				<p class="suchform"><input type="text" value="" placeholder="Suche" id="suchfeld"
 					><a href="#" id="suchfeld-lupe" title="Suchergebnisse anzeigen"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m6.5 1a5.5 5.5 0 0 0-5.5 5.5 5.5 5.5 0 0 0 5.5 5.5 5.5 5.5 0 0 0 3.1172-0.969l3.6618 3.662a1 1 0 0 0 0.721 0.307 1 1 0 0 0 1-1 1 1 0 0 0-0.303-0.717l-3.67-3.6697a5.5 5.5 0 0 0 0.973-3.1133 5.5 5.5 0 0 0-5.5-5.5zm0 2a3.5 3.5 0 0 1 3.5 3.5 3.5 3.5 0 0 1-3.5 3.5 3.5 3.5 0 0 1-3.5-3.5 3.5 3.5 0 0 1 3.5-3.5z"/></svg></a
 					><a href="#" id="suchleiste-link" title="Suchleiste öffnen (F3)"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="m10.5 5a5.5 5.5 0 0 0-5.5 5.5 5.5 5.5 0 0 0 5.5 5.5 5.5 5.5 0 0 0 3.1172-0.96875l3.6621 3.6621a1 1 0 0 0 0.7207 0.30664 1 1 0 0 0 1-1 1 1 0 0 0-0.30273-0.7168l-3.6699-3.6699a5.5 5.5 0 0 0 0.97266-3.1133 5.5 5.5 0 0 0-5.5-5.5zm0 2a3.5 3.5 0 0 1 3.5 3.5 3.5 3.5 0 0 1-3.5 3.5 3.5 3.5 0 0 1-3.5-3.5 3.5 3.5 0 0 1 3.5-3.5zm-7.5 10v4h2 7.4316 8.5684v-4h-1.3379c0.44598 0.76574 0.34692 1.7566-0.31055 2.4141-0.78347 0.78348-2.0447 0.78348-2.8281 0l-2.1211-2.1211c-0.091249-0.091249-0.17024-0.19026-0.24024-0.29297h-1.7305-7.4316-2zm2 1h7.4316v2h-7.4316v-2z"/></svg></a
+					><a href="#" id="navi-back" title="rückwärts navigieren (Alt + ←)"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m14 7h-8l3.5-3.5-1.5-1.5-6 6 6 6 1.5-1.5-3.5-3.5h8z" fill="#212121"/></svg></a
+					><a href="#" id="navi-forward" title="vorwärts navigieren (Alt + →)"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m2 9h8l-3.5 3.5 1.5 1.5 6-6-6-6-1.5 1.5 3.5 3.5h-8z" fill="#212121"/></svg></a
 				></p>
 				<ul>
 					<li><a href="#" class="link-sektion-framework kopf">Framework</a></li>
@@ -43,256 +45,256 @@
 				<!-- START -->
 				<section id="sektion-start">
 					<p class="obacht">Die technische Dokumentation ist nur für diejenigen gedacht, die das Programm bauen oder den Quellcode bearbeiten wollen!</p>
-					
+
 					<p>Allen anderen NutzerInnen hilft das <a href="#" class="link-handbuch">Handbuch</a> oder eine Suche im recht ausführlichen <a href="#" class="link-changelog">Changelog</a> vielleicht eher weiter.</p>
 				</section>
-				
+
 				<!-- SUCHE -->
 				<section id="sektion-suche">
 					<h2>Suchergebnisse</h2>
-					
+
 					<div id="suchergebnisse"></div>
 				</section>
-				
+
 				<!-- TECHNIK -->
 				<section id="sektion-framework" class="suche">
 					<!-- Electron -->
 					<h2 id="framework-electron"><i>Electron</i>-Framework</h2>
-					
+
 					<p><i class="app-name"></i> läuft auf dem <a href="https://electronjs.org/"><i>Electron</i></a>-Framework. <i>Electron</i> ist eine Kombination aus <a href="https://www.chromium.org/Home"><i>Chromium</i></a>, dem Open-Source-Browser, auf dem <i>Google Chrome</i> basiert, und <a href="https://nodejs.org/"><i>Node.js</i></a>, einer JavaScript-Laufzeitumgebung mit der Implementierung <i>V8</i>. Das Framework kann komplett via JavaScript gesteuert werden, weswegen zum Programmieren der App Kenntnisse in den Sprachen <abbr title="Hyptertext Markup Language" lang="en">HTML</abbr>, <abbr title="Cascading Style Sheets" lang="en">CSS</abbr> und JavaScript vollkommen ausreichen.</p>
-					
+
 					<p><i>Electron</i> übernimmt die schwierigen Aufgaben, die sich beim Programmieren einer Desktop-App stellen. Es kümmert sich um die Integration in das Betriebssystem, ermöglicht also lesende und schreibende Dateizugriffe sowie das Öffnen externer Programme, erzeugt die Dateidialoge zum Öffnen und Speichern der Karteien und verwaltet über den betriebssystemeigenen Fenster-Manager die einzelnen Programmfenster, in denen eine leicht eingedampfte Variante des <i>Chromium</i>-Browsers für die Anzeige zuständig ist. Jedes Programmfenster läuft in einem eigenen Renderer-Prozess, weswegen die einzelnen Fenster nicht direkt miteinander kommunizieren können. Das Öffnen der Programmfenster und die Darstellung der Fenster-Menüs werden im Wesentlichten über den Main-Prozess gesteuert, über den die App initialisiert wird. Dieser wiederum kann mit allen Fenstern kommunizieren.</p>
-					
+
 					<p>Der Main-Prozess wird über die Scripts in der Datei <span class="datei">./main.js</span> im Wurzelverzeichnis des Quellcodes gesteuert (das Wurzelverzeichnis des App-Codes wird im Folgenden immer durch <span class="datei">./</span> bezeichnet). Vermittelt über diesen Prozess können die Fenster miteinander in Kommunikation treten. Über das Objekt <code class="quelltext">ipcMain</code> hört der Main-Prozess auf Meldungen der Renderer-Prozesse, die diese via <code class="quelltext">ipcRenderer</code> abgeschickt haben (<abbr title="vergleiche">vgl.</abbr> den Code in <span class="datei">./main.js</span> und <span class="datei">./js/app/init-app.js</span>).</p>
-					
+
 					<p>Daneben erleichtert <i>Electron</i> das <a href="#framework-paketieren">Paketieren der App</a> für die Betriebssysteme <i>Linux</i>, <i>Windows</i> und <i>macOS</i> enorm. Außerdem können <a href="#framework-installer">Installer</a> für die einzelnen Betriebssysteme gebaut werden.</p>
-					
+
 					<p>Die <abbr title="Application Programming Interface" lang="en">API</abbr> von <i>Electron</i> ist sehr gut <a href="https://electronjs.org/docs">dokumentiert</a>; das Framework-Motto <q lang="en">It’s easier than you think</q>, somit gar nicht falsch. Für einen raschen Einstieg empfiehlt sich das zweiteilige, sehr übersichtliche <a href="https://electronjs.org/docs/tutorial/quick-start">Quick-Start-Tutorial</a>.</p>
-					
+
 					<!-- Installation -->
 					<h2 id="framework-installation">Installation von <i>Electron</i></h2>
-					
+
 					<p>Im Folgenden wird die Einrichtung von <i>Electron</i> auf einer <i>Linux</i>-Distribution beschrieben, die auf <a href="https://www.ubuntu.com/"><i>Ubuntu</i></a> basiert. Die Anweisungen dürften aber für alle Betriebssystem ähnlich sein, denn auch unter <i>Windows</i> wird <i>Node.js</i> <abbr title="beispielsweise">bspw.</abbr> über die Eingabeaufforderung gesteuert.</p>
-					
+
 					<p>Zunächst muss <i>Node.js</i> mit seinem Paketmanager <code>npm</code> installiert werden (für <i>Windows</i> gibt es <a href="https://nodejs.org/en/download/">eigene Installer</a>):</p>
-					
+
 					<pre>sudo apt-get install nodejs</pre>
-					
+
 					<p>Über die Eingaben <code>node -v</code> und <code>npm -v</code> bekommt man die Versionsnummern von <i>Node.js</i> <abbr title="beziehungsweise">bzw.</abbr> dessen Paketmanager angezeigt – ein einfacher Test, ob die Installation geklappt hat. Im Falle des Paketmanagers könnte ein Update ratsam sein:</p>
-					
+
 					<pre>sudo npm install -g npm@latest</pre>
-					
+
 					<p>Global lassen sich Programme aus dem <i>Node.js</i>-Respository (wie <abbr title="zum Beispiel">z. B.</abbr> das überaus hilfreiche <a href="https://jshint.com/">JSHint</a>) mithilfe des Schalters <code>-g</code> und Rootrechten (hier erlangt via <code>sudo</code>) installieren:</p>
-					
+
 					<pre>sudo npm install -g [PROGRAMM]</pre>
-					
+
 					<p><i>Electron</i> sollte allerdings nicht global, sondern lokal, <abbr title="das heißt">d. h.</abbr> im App-Ordern, installiert werden, sonst gibt es bei der späteren Paketierung mitunter Probleme – so zumindest meine Erfahrung. Das Zeichen für den aktuellen Pfad (<span class="datei">./</span>) steht hier und im Folgenden für das Wurzelverzeichnis der App, in dem <abbr title="unter anderem">u. a.</abbr> die Datei <span class="datei">./package.json</span> liegt. Die Installation ist simpel:</p>
-					
+
 					<pre>cd ./
 npm install --save-dev electron</pre>
-					
+
 					<p>Während der Installation werden der Ordner <span class="datei">./node_modules/</span> und die Datei <span class="datei">./package-lock.json</span> erstellt. Der Ordner <span class="datei">./node_modules/</span> kann mehrere Hundert Megabyte groß sein!</p>
-					
+
 					<p>Da im Herzen von <i>Electron</i> ein Browser schlägt und Browser fortwährend mit Sicherheitsupdates versorgt werden wollen, gibt es sehr häufig (<abbr title="in der Regel">i. d. R.</abbr> alle ein bis zwei Wochen) <a href="https://electronjs.org/releases/stable"><i>Electron</i>-Updates</a>. Das Update funktioniert genauso wie die Erstinstallation:</p>
-					
+
 					<pre>npm install --save-dev electron</pre>
-					
+
 					<p>Welche <i>Electron</i>-Version im App-Ordner installiert ist, kann man dem Fenster <a href="#" class="ueber-electron"><i>Über Electron</i></a> (auch aufzurufen über das Menü <i>Hilfe</i> im Hauptfenster von <i class="app-name"></i>) oder der <span class="datei">./package.json</span> entnehmen:</p>
-					
+
 					<pre class="quelltext">"devDependencies": {
 	"electron": "^4.1.4",
 	...
 }</pre>
-					
+
 					<p>Über die aktuelle Version im <i>Node.js</i>-Respository gibt der Paketmanager Auskunft:</p>
-					
+
 					<pre>npm show electron version</pre>
-					
+
 					<p>Die stabile Version von <i>Electron</i> liefert nie die jüngste Ausgabe von <i>Chromium</i>. Technisch ist der im Framework arbeitende Browser somit zwar immer leicht veraltet, um die notwendigen Sicherheitsupdates kümmert sich das <i>Electron</i>-Team aber fortwährend.</p>
-					
+
 					<p>Neben der jüngsten stabilen Version von <i>Electron</i> werden auch ältere Ausgaben für einen längeren Zeitraum mit Updates versorgt. Möchte man nicht gleich mit dem ersten Release eines neuen Zweiges auf diesen wechseln, muss man den Releasezweig angeben, von dem man Updates beziehen will. Um es <abbr title="beispielsweise">bspw.</abbr> zu vermeiden, die Version 5.0 zu benutzen, muss man den Update-Befehl etwas anpassen, um weiterhin Updates des Release-Zweigs 4.1 zu bekommen:</p>
-					
+
 					<pre>npm install --save-dev electron@4-1-x</pre>
-					
+
 					<p>Darüber, welche Zweige alle zur Verfügung stehen, gibt diese Eingabe Auskunft:</p>
-					
+
 					<pre>npm view electron</pre>
-					
+
 					<!-- Starten -->
 					<h2 id="framework-starten">Starten der App</h2>
-					
+
 					<p>Wie die App gestartet werden soll, wird in der Datei <span class="datei">./package.json</span> festgelegt. Die <span class="datei">./package.json</span> enthält neben Meta-Informationen zu Programm, Autor und Lizenz nämlich auch Scripts zum Starten und Paketieren von <i class="app-name"></i>. Die folgende Zeile legt fest, über welche Script-Datei der Main-Prozess initialisiert wird:</p>
-					
+
 					<pre class="quelltext">"main": "main.js",</pre>
-					
+
 					<p>Und unter <code class="quelltext">"scripts"</code> steht <abbr title="unter anderem">u. a.</abbr> die Information, wie das Programm gestartet werden soll:</p>
-					
+
 					<pre class="quelltext">"scripts": {
 	"start": "electron .",
 	...
 }</pre>
-					
+
 					<p>Für den Start der App ist bereits alles eingerichtet. Nach der Installation von <i>Electron</i> muss man im Programmordner nur noch den folgenden Befehl ausführen:</p>
-					
+
 					<pre>npm start</pre>
-					
+
 					<p>Nun sollte <i class="app-name"></i> im Entwickler-Modus gestartet werden. <abbr title="Das heißt">D. h.</abbr> konkret, dass sich über das Tastaturkürzel <kbd>Strg</kbd> + <kbd>⇧</kbd> + <kbd>I</kbd> die <i lang="en">Developer Tools</i> von <i>Chromium</i> öffnen lassen, die in der paketierten Version nicht mehr aufgerufen werden können. Außerdem erscheint im Hauptfenster das App-Menü <i>Dev</i>, das nach der Paketierung verschwunden ist.</p>
-					
+
 					<!-- Paketieren -->
 					<h2 id="framework-paketieren">Paketieren der App</h2>
-					
+
 					<p>Das Paketieren von <i class="app-name"></i> ist denkbar einfach. Zunächst muss der <a href="https://github.com/electron-userland/electron-packager/">Packager von <i>Electron</i></a> installiert werden:</p>
-					
+
 					<pre>cd ./
 npm install --save-dev electron-packager</pre>
 
 					<p>Der Packager wird – natürlich – über die Kommandozeile bedient:</p>
-					
+
 					<pre>electron-packager . zettelstraum [OPTIONEN]</pre>
-					
+
 					<p>Der <code>.</code> steht für das Quellverzeichnis und <code>zettelstraum</code> für den App-Namen. Über die zur Verfügung stehenden Optionen gibt die <a href="https://github.com/electron-userland/electron-packager/blob/master/docs/api.md"><abbr title="Application Programming Interface" lang="en">API</abbr></a>-Dokumentation des Packagers ausführlich Auskunft.</p>
-					
+
 					<p>Im Prinzip muss man sich mit dieser Dokumentation allerdings nicht weiter beschäftigen, da für das Paketieren bereits alles eingerichtet ist. In der <span class="datei">./package.json</span> sind die Kommandozeilen-Befehle im Abschnitt <code class="quelltext">"scripts"</code> für das Erstellen von <i>Linux-</i> und <i>Windows</i>-Paketen bereits eingetragen. Die paketierte Version von <i class="app-name"></i> wird eine Ebene oberhalb des Wurzelverzeichnisses in einem Ordner namens <span class="datei">build</span> abgelegt. Existiert der Ordner nicht, wird er automatisch erzeugt. Die Option <code>--overwrite</code> sorgt dafür, dass alte Paketierungen im Ordner <span class="datei">../build</span> vor dem erneuten Paketieren entfernt werden. Die Scripts können über die folgenden Befehle ausgeführt werden. Für <i>Linux</i>:</p>
-					
+
 					<pre>npm run package-linux</pre>
-					
+
 					<p>Und für <i>Windows</i>:</p>
-					
+
 					<pre>npm run package-win</pre>
-					
+
 					<p>Die vordefinierten Scripts erstellen Pakete für eine 64-Bit-Architektur. Dies kann natürlich nach Belieben angepasst werden. Wie, darüber gibt die <a href="https://github.com/electron-userland/electron-packager/blob/master/docs/api.md"><abbr title="Application Programming Interface" lang="en">API</abbr></a> des Packagers Auskunft.</p>
-					
+
 					<p>Im Ordner <span class="datei">../build</span> befinden sich nun die Unterordner <span class="datei">zettelstraum-linux-x64</span> <abbr title="beziehungsweise">bzw.</abbr> <span class="datei">zettelstraum-win32-x64</span>. Die Unterordner enthalten die ausführbare Datei <span class="datei">zettelstraum</span> <abbr title="beziehungsweise">bzw.</abbr> <span class="datei">zettelstraum.exe</span>. Über diese kann das paketierte Programm ohne vorherige Installation gestartet werden.</p>
-					
+
 					<p>Auch wenn die ausführbare Programm-Datei um die 100 Megabyte groß ist – ohne die anderen Dateien und Verzeichnisse, die sich im Paket-Ordner befinden, kann die App nicht gestartet werden. Möchte man sie auf ein anderes Betriebssystem kopieren, muss also immer der gesamte Ordner mit allen Dateien mitgenommen werden.</p>
-					
+
 					<p>Zum direkten Erstellen eines komprimierten Archivs, können die im nächsten Abschnitt beschriebenen Installer-Scripts verwendet werden. Mit ihnen lassen sich für <i>Windows</i> leicht ein ZIP-Archiv und für <i>Linux</i> ein TAR.GZ-Archiv erstellen.</p>
-					
+
 					<!-- Installer -->
 					<h2 id="framework-installer">Installer bauen</h2>
-					
+
 					<p>Ein bisschen schwieriger als die alleinige Paketierung ist das Bauen von Installern für die verschiedenen Betriebssysteme und Architekturen. Im Folgenden wird beschrieben, wie man mithilfe von <a href="https://github.com/electron-userland/electron-builder">electron-builder</a> Installer für <i>Windows</i> und <i>Linux</i> (AppImage, DEB- oder RPM-Pakete) erzeugt.</p>
-					
+
 					<p>Zunächst einmal muss der Builder via <code>npm</code> installiert werden:</p>
-					
+
 					<pre>cd ./
 npm install --save-dev electron-builder</pre>
-					
+
 					<p>Die richtige Konfiguration des Builders zu finden, ist nicht so leicht, denn er kennt eine Vielzahl an <a href="https://www.electron.build/configuration/configuration">Konfigurationsmöglichkeiten</a>. Für das Erstellen eines <abbr title="Nullsoft Scriptable Install System" lang="en">NSIS</abbr>-Installers, eines AppImages, eines DEB- und eines RPM-Pakets finden sich im Wurzelverzeichnis der App bereits fertige Node-Scripts, die sich der <a href="https://www.electron.build/api/electron-builder" lang="en">Programmatic API</a> des Builders bedienen und einem die Konfigurationsarbeit abnehmen: <span class="datei">installer-win.js</span> und <span class="datei">installer-linux.js</span>. Alle Scripts erstellen Installer für eine 64-Bit-Architektur. Außerdem sind sie dafür eingerichtet, komprimierte Archive zu erstellen, die eine paketierte Version der App enthalten.</p>
-					
+
 					<p>Ausgeführt werden die Installer-Scripts mit <code>node</code>. Für den <i>Windows</i>-Installer heißt das:</p>
-					
+
 					<pre>node installer-win.js [nsis|zip]</pre>
-					
+
 					<p>und für die <i>Linux</i>-Installer:</p>
-					
+
 					<pre>node installer-linux.js [appImage|deb|rpm|tar.gz]</pre>
-					
+
 					<p>Wird kein Argument angegeben, das den Paket-Typ spezifiziert, baut das <i>Linux</i>-Script ein DEB-Paket und das <i>Windows</i>-Script einen <abbr title="Nullsoft Scriptable Install System" lang="en">NSIS</abbr>-Installer.</p>
-					
+
 					<p>Vor dem Start des eigentlichen Bauvorgangs wird überprüft, ob eine Ebene oberhalb des App-Verzeichnisses ein Ordner namens <span class="datei">build</span> existiert. Er wird <abbr title="gegebenenfalls">ggf.</abbr> automatisch erzeugt.</p>
-					
+
 					<p>Der Linux-Installer erwartet für DEB- und RPM-Pakete, dass in <span class="datei">../build</span> eine Plain-Text-Datei mit dem Namen <span class="datei">changelog</span> liegt. Ist kein Changelog vorhanden, wird automatisch eine leere Datei erzeugt. Im Ordner <span class="datei">./installer/</span> gibt es ein PHP-Script, das mithilfe der Changelog-Datei der App (<span class="datei">./win/changelog.html</span>) einen DEB- <abbr title="beziehungsweise">bzw.</abbr> RPM-Changelog automatisch erstellen kann (zum Ausführen wird eine Command-line-Version von PHP benötigt):</p>
-					
+
 					<pre>cd ./installer
 php make-changelog.php [FORMAT] [PFAD]</pre>
-					
+
 					<p>Als Formatangabe wird <code>deb</code> oder <code>rpm</code> erwartet; die Pfadangabe kann relativ oder absolut sein. Führt man das Script ohne Parameter aus, wird ein DEB-Changelog im Ordner <span class="datei">../../build</span> erstellt. Der Standard entspricht also diesem Aufruf:</p>
-					
+
 					<pre>php make-changelog.php deb ../../build</pre>
-					
+
 					<p>Für das Erstellen eines komprimierten TAR.GZ-Pakets spielt dieser Changelog natürlich keine Rolle.</p>
-					
+
 					<p>Nach <abbr title="circa">ca.</abbr> ein, zwei Minuten (die genaue Zeit hängt natürlich vom Rechner, aber auch vom gewählten Installer ab), sollte die Meldung <code>Windows-Installer erstellt!</code> <abbr title="beziehungsweise">bzw.</abbr> <code>Linux-Installer erstellt!</code> erscheinen. Kommt diese Meldung, kann es eigentlich nicht zu größeren Fehlern gekommen sein. Im Verzeichnis <span class="datei">../build</span> befinden sich nun ein Ordner und mehrere Dateien. Interessant ist natürlich nur die Installer- <abbr title="beziehungsweise">bzw.</abbr> Archiv-Datei:</p>
-					
+
 					<p class="datei">zettelstraum_[VERSION]_[ARCHITEKTUR].(AppImage|deb|exe|rpm|tar.gz|zip)</p>
-					
+
 					<p>Die ausführbare exe-Datei kann nun auf einen Windows-Rechner kopiert und installiert werden. (Getestet wurde die Installation nur auf <i>Windows 10</i>.)</p>
-					
+
 					<p>Für die Installation der DEB-Datei gibt es einige Abhängigkeiten, die zuvor <abbr title="gegebenenfalls">ggf.</abbr> aufgelöst werden müssen:</p>
-					
+
 					<pre>sudo apt-get install gconf2 gconf-service libnotify4 libappindicator1 libxtst6 libnss3 libxss</pre>
-					
+
 					<p>Danach kann das Paket installiert werden:</p>
-					
+
 					<pre>sudo dpkg -i zettelstraum*.deb</pre>
-					
+
 					<p>Die Abhängigkeiten des RPM-Pakets kann man sich so anzeigen lassen:</p>
-					
+
 					<pre>rpm -qp --requires zettelstraum*.rpm</pre>
-					
+
 					<p>Der <abbr title="Wortgeschichte digital">WGD</abbr>-Dateityp sollte während der Installation automatisch registriert werden – und zwar sowohl durch den <i>Windows-</i> als auch durch die <i>Linux</i>-Installer. Für den Fall, dass Probleme auftreten, finden sich im Programmordner Scripts, mit denen die Registrierung des Dateityps unter <i>Linux</i> manuell vor- oder zurückgenommen werden kann. Die Scripts liegen in <span class="datei">/opt/zettelstraum/resources/filetype/linux/</span> und können mit <code>sh</code> ausgeführt werden.</p>
-					
+
 					<pre>sh [de]register.sh</pre>
-					
+
 					<p>Für diesen Vorgang werden <abbr title="eventuell">evtl.</abbr> Root-Rechte benötigt.</p>
-					
+
 					<p>Die Archiv-Dateien kann man an einem beliebigen Ort entpacken. Das Programm lässt sich über die ausführbare Datei <span class="datei">zettelstraum(.exe)</span> starten (vgl. <a href="#framework-paketieren">Paketieren der App</a>).</p>
-					
+
 					<!-- Ordner -->
 					<h2 id="framework-ordner">Programm- und Konfigurationsordner</h2>
-					
+
 					<p>Der <strong><abbr title="Nullsoft Scriptable Install System" lang="en">NSIS</abbr>-Installer</strong> legt das Programm nach Doppelklick in einem lokalen User-Ordner ab: <span class="datei">C:\Users\[BENUTZERNAME]\AppData\Local\Programs\zettelstraum\</span>. Soll eine neuere Version installiert werden, muss man <i class="app-name"></i> nur beenden (<abbr title="zum Beispiel">z. B.</abbr> via <kbd>Strg</kbd> + <kbd>Q</kbd>), auf der Installer-Datei doppelklicken und das war’s.</p>
-					
+
 					<p>Deinstalliert werden kann das Programm wie jede andere App über die Systemsteuerung von <i>Windows</i>.</p>
-					
+
 					<p>Die <strong>Linux-Installer</strong> erstellen einen Programmordner unter <span class="datei">/opt/zettelstraum/</span> und legen eine Desktop-Datei im Ordner <span class="datei">/usr/share/applications/</span> ab: <span class="datei">zettelstraum.desktop</span>. Das Programm sollte sich nach der Installation also ganz normal über das Programm-Menü des Betriebssystems starten lassen.</p>
-					
+
 					<p>Darüber hinaus legen sie auch eine Verknüpfung in <span class="datei">/usr/local/bin/</span> an. Die App kann somit auch über ein Terminal mit dem Befehl <code>zettelstraum</code> gestartet werden.</p>
-					
+
 					<p>Das DEB-Paket kann einfach mit dem Paketmanager deinstalliert werden:</p>
-					
+
 					<pre>sudo apt-get purge zettelstraum</pre>
-					
+
 					<p>Die Registrierung des <abbr title="Wortgeschichte digital">WGD</abbr>-Dateityps sollte dabei automatisch rückgängig gemacht werden (<abbr title="vergleiche">vgl.</abbr> dazu den Abschnitt <a href="#framework-installer">Installer bauen</a>).</p>
-					
+
 					<p>Ob die App nun paketiert und installiert ist oder einfach via <code>npm start</code> aufgerufen wurde, das <i>Electron</i>-Framework erstellt automatisch einen Konfigurationsordner im Standard-Konfigurationsverzeichnis des Betriebssystems. Das ist unter <i>Linux</i>:</p>
-					
+
 					<ul>
 						<li class="datei">~/.config/<span class="app-name"></span>/</li>
 					</ul>
-					
+
 					<p>Und unter <i>Windows 10</i>:</p>
-					
+
 					<ul>
 						<li class="datei">C:\Users\[BENUTZERNAME]\AppData\Roaming\<span class="app-name"></span>\</li>
 					</ul>
-					
+
 					<p>Die Dateien in dem Ordner werden alle von <i>Electron</i> verwaltet – bis auf die Datei <span class="datei">einstellungen.json</span>. Diese wird von der <span class="datei">./main.js</span> erstellt. In ihr werden die Einstellungen des Hauptfensters der App und die Größe und Position von einigen (aber nicht allen) Programmfenstern gespeichert. Welche Werte die App anlegt, lässt sich dem Objekt <code class="quelltext">optionen.data</code> in der Datei <span class="datei">./js/app/optionen.js</span> entnehmen. Die durch die Datei <span class="datei">./main.js</span> angelegten Werte finden sich <abbr title="ebenda">ebd.</abbr> im gleichnamigen Objekt <code class="quelltext">optionen.data</code>.</p>
-					
+
 					<!-- Quelltext -->
 					<h2 id="framework-quelltext">Quelltext in der paketierten und installierten App</h2>
-					
+
 					<p>Durch die Option <code>--asar</code> wird der Quelltext beim <a href="#framework-paketieren">Paketieren</a> in einer Archivdatei abgelegt: <span class="datei">app.asar</span>. In den Paket-Ordnern <span class="datei">zettelstraum-linux-x64</span> <abbr title="beziehungsweise">bzw.</abbr> <span class="datei">zettelstraum-win32-x64</span> befindet sich die Datei im Unterordner <span class="datei">resources</span>.</p>
-					
+
 					<p>Der Quelltext der App ist auch in den Installern <abbr title="beziehungsweise">bzw.</abbr> komprimierten Archiv-Dateien: Er wird im jeweiligen Programmordner ebenfalls im Unterordner <span class="datei">resources</span> abgelegt. Also entweder in</p>
-					
+
 					<ul>
 						<li class="datei">C:\Users\[BENUTZERNAME]\AppData\Local\Programs\zettelstraum\resources\</li>
 					</ul>
-					
+
 					<p>oder in</p>
-					
+
 					<ul>
 						<li class="datei">/opt/zettelstraum/resources/</li>
 					</ul>
-					
+
 					<p><a href="https://github.com/electron/asar">Asar</a> ist das Archiv-Programm von <i>Electron</i>, das ähnlich wie <code>tar</code> funktioniert: Der Inhalt ist nicht komprimiert, es werden schlicht Ordner und Dateien in einem Archiv zusammengefasst.</p>
-					
+
 					<p>Entpacken lässt es sich via:</p>
-					
+
 					<pre>npx asar extract app.asar [ZIELORDNER]</pre>
-					
+
 					<p>Das Archiv enthält den vollständigen Quelltext von <i class="app-name"></i>. Allerdings fehlen die Dateien <span class="datei">./resources/*.xml</span>, die Tag-Listen für die Bedeutungsgerüst-Funktion enthalten. Sie liegen bereits entpackt im selben Ordner wie die <span class="datei">app.asar</span>.</p>
 				</section>
-				
+
 				<!-- ORDNER UND DATEIEN -->
 				<section id="sektion-ordner" class="suche">
 					<p>Im Folgenden wird summarisch beschrieben, welche Ordner und Dateien sich im Quellcode befinden, um die Orientierung für den Einsteig ein wenig zu erleichtern.</p>
-					
+
 					<!-- Root -->
 					<h2 class="datei" id="ordner-root">./</h2>
-					
+
 					<ul>
 						<li><span class="datei">./index.html</span>: <abbr title="Hyptertext Markupt Language" lang="en">HTML</abbr>-Datei, die beim Öffnen des Hauptfensters geladen wird</li>
 						<li><span class="datei">./installer-linux.js</span>: Node-Script, das eine DEB- oder RPM-Datei erzeugt, mit der <i class="app-name"></i> auf <i>Debian</i>/<i>Ubuntu</i> <abbr title="beziehungsweise">bzw.</abbr> Distributionen, die auf RPM setzen, installiert werden kann; alternativ kann auch ein TAR.GZ-Archiv oder ein auf den meisten Distributionen lauffähiges AppImage gebaut werden</li>
@@ -302,48 +304,48 @@ php make-changelog.php [FORMAT] [PFAD]</pre>
 						<li><span class="datei">./main.js</span>: Node-Script, das die App initialisiert, die Programmfenster öffnet, lädt, verwaltet und für viele andere Dinge zuständig ist, was das Betriebssystem, auf dem <i class="app-name"></i> läuft, direkt betrifft</li>
 						<li><span class="datei">./package.json</span>: <abbr title="JavaScript Object Notation" lang="en">JSON</abbr>-Datei mit Meta-Informationen zu Programm, Autor und Lizenz sowie Angaben darüber, wie die App gestartet wird; <abbr title="vergleiche">vgl.</abbr> den Abschnitt <a href="#framework-starten">Starten der App</a></li>
 					</ul>
-					
+
 					<!-- CSS -->
 					<h2 class="datei" id="ordner-css">./css/</h2>
-					
+
 					<p>Der Ordner enthält die Stylesheets aller Fenster.</p>
-					
+
 					<ul>
 						<li><span class="datei">./css/*.css</span>: Stylesheets, die in mehr als einem Fenster benötigt werden und durch <code class="quelltext">@include</code> in andere Stylesheets eingebunden werden</li>
 						<li><span class="datei">./css/app/*.css</span>: Stylesheets, die im Hauptfenster des Programms geladen werden; in der <span class="datei">app.css</span> finden sich viele basale Definitionen, die anderen Dateien regeln das Layout einzelner Teile oder Funktionen der App</li>
 						<li><span class="datei">./css/win/*.css</span>: diese Stylesheets werden nur in den vom Hauptfenster abhängigen Nebenfenstern (also <abbr title="unter anderem">u. a.</abbr> dem <a href="#" class="link-handbuch">Handbuch</a> und diesem Fenster) benötigt</li>
 					</ul>
-					
+
 					<!-- Fonts -->
 					<h2 class="datei" id="ordner-fonts">./fonts/</h2>
-					
+
 					<p>Der Ordner enthält die Schriftarten, die durch die Datei <span class="datei">./css/fonts.css</span> geladen werden.</p>
-					
+
 					<!-- Images -->
 					<h2 class="datei" id="ordner-img">./img/</h2>
-					
+
 					<ul>
 						<li><span class="datei">./img/*.svg</span>: Vektorgrafiken, die sowohl für das Hauptfenster der App als auch für deren Nebenfenster genutzt werden; nicht alle Grafiken werden aus diesem Ordner geladen, mitunter sind sie als <abbr title="Extensible Markup Language">XML</abbr> direkt in den Quelltext der <abbr title="Hyptertext Markup Language">HTML</abbr>-Dateien eingefügt worden</li>
 						<li><span class="datei">./img/icon/</span>: Bilddateien mit dem Programm-Icon in verschiedenen Größen für unterschiedliche Betriebssysteme; für <i>Windows</i> gibt es eine <span class="datei">icon.ico</span>, für <i>macOS</i> eine <span class="datei">icon.icns</span> und für <i>Linux</i> einen Ordner mit <abbr title="Portable Network Graphics" lang="en">PNG</abbr>-Dateien</li>
 						<li><span class="datei">./img/menu/*.png</span>: Bilddateien, die nur von den Menüs verwendet werden, die das Framework verwaltet; dazu zählen das App-Menü am oberen Rand des Hauptfensters und die Kontextmenüs, die auf Rechtsklick erscheinen</li>
 					</ul>
-					
+
 					<!-- Installer -->
 					<h2 class="datei" id="ordner-installer">./installer/</h2>
-					
+
 					<p>Scripts, die für das Bauen von Installern genutzt werden (können). Sie werden im laufenden Betrieb von <i class="app-name"></i> nicht ausgeführt.</p>
-					
+
 					<!-- JavaScript -->
 					<h2 class="datei" id="ordner-js">./js/</h2>
-					
+
 					<p>Der Ordner enthält alle JavaScript-Dateien, die von den Renderer-Prozessen geladen werden. Im Unterordner <span class="datei">./js/app/</span> liegen Dateien, die (fast) ausschließlich vom Hauptfenster genutzt werden, und in <span class="datei">./js/win/</span> Dateien, die ausschließlich in Nebenfenstern geladen werden.</p>
-					
+
 					<p>Die einzige Datei des Ordners <span class="datei">./js/app/</span>, die auch in Nebenfenstern benutzt wird, ist die <span class="datei">helfer.js</span>. Sie enthält meist kleinere Methoden, die in vielen verschiedenen Kontexten immer wieder genutzt werden. Analog dazu gibt es die Datei <span class="datei">./js/win/helferWin.js</span>, die allerdings nur von Nebenfenstern geladen wird.</p>
-					
+
 					<p>Jede JavaScript-Datei enthält ein Objekt, das denselben Namen wie die Datei trägt. Es gibt allerdings Ausnahmen: Dies sind zum einen die JavaScript-Dateien im <a href="#ordner-root">Wurzelverzeichnis der App</a> und zum anderen Dateien mit dem Namensmuster <span class="datei">init-*.js</span>. In letzteren werden Events des Fensters initialisiert, zu dem die Datei gehört. Der Name der <abbr title="Hyptertext Markup Language">HTML</abbr>-Dateien im <a href="#ordner-win">Ordner <span class="datei">./win/</span></a> steht jeweils anstelle des Asterisks.</p>
-					
+
 					<p>Die Namen der JavaScript-Dateien zeigen an, welche Funktionalität die Scripts in ihnen bereitstellen. Manchmal ist dies nicht auf Anhieb klar, mitunter auch aus, sagen wir mal, <q class="einfach">historischen</q> Gründen: In einem frühen Programmierstadium wurde eine falsche Entscheidung getroffen, die später nicht revidiert wurde. Auch darum sollen einige der Dateien kurz beschrieben werden:</p>
-					
+
 					<ul>
 						<li><span class="datei">./js/suchleiste.js</span>: alle Funktionen, die die Suchleiste betreffen, die in verschiedenen Fenstern genutzt wird</li>
 						<li><span class="datei">./js/app/beleg.js</span>: die Karteikarte betreffende Funktionen, und zwar sowohl die der Formular- als auch die der Leseansicht</li>
@@ -360,56 +362,56 @@ php make-changelog.php [FORMAT] [PFAD]</pre>
 						<li><span class="datei">./js/app/tagger.js</span>: Overlay-Fenster, über das das Bedeutungsgerüst mit Tags versehen werden kann</li>
 						<li><span class="datei">./js/win/hilfe.js</span>: Funktionen für das <i>Handbuch</i> und die <i>technische Dokumentation</i> (also dieses Fenster)</li>
 					</ul>
-					
+
 					<!-- File type -->
 					<h2 class="datei" id="ordner-resources">./resources/</h2>
-					
+
 					<p>Der Unterordner <span class="datei">./resources/filetype/</span> enthält Icons für den <abbr title="Wortgeschichte digital">WGD</abbr>-Dateityp und Shell-Scripts, mit denen auf <i>Linux</i>-Systemen der Dateityp registriert oder entfernt werden kann. (Es gibt auch eine <abbr title="Scalable Vector Graphics">SVG</abbr>-Version des Dateityp-Icons: <span class="datei">./img/datei-wgd.svg</span>.)</p>
-					
+
 					<p>Außerdem finden sich in dem Ordner <abbr title="Extensible Markup Language">XML</abbr>-Dateien mit Tag-Listen, die im Programm für die Bedeutungsgerüst-Funktion genutzt werden können.</p>
-					
+
 					<!-- Fenster -->
 					<h2 class="datei" id="ordner-win">./win/</h2>
-					
+
 					<p>Der Ordner enthält die <abbr title="Hypertext Markup Language">HTML</abbr>-Dateien, die in den Nebenfenstern geladen werden.</p>
 				</section>
-				
+
 				<!-- JAVASCRIPT -->
 				<section id="sektion-js" class="suche">
 					<h2 id="js-code">JavaScript-Code</h2>
-					
+
 					<p>Der JavaScript-Code ist <i lang="en">vanilla</i>. Sprich: Es wurden keine Bibliotheken wie <i>jQuery</i> oder dergleichen verwendet. Programmiert wurde im <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode"><i lang="en">strict mode</i></a>, einer restringierten Variante von JavaScript, die <abbr title="zum Beispiel">z. B.</abbr> Zuweisungsoperationen zu nicht deklarierten Variablen unmöglich macht und vieles mehr unterbindet, was potenziell gefährlich oder einfach schlechter Stil ist. Außerdem verspricht strikter Code Zukunftssicherheit, weil mögliche Ergänzungen in der ECMAScript-Spezifikation bereits bedacht sind.</p>
-					
+
 					<p>Beim Coden wurde der Grundregel gefolgt, Struktur, Layout und Funktion strikt voneinander zu trennen. In den <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>-Dateien finden sich darum weder <abbr title="Cascading Style Sheets" lang="en">CSS</abbr>-Style-Attribute noch Event-Handler von JavaScript. Die an Elemente gebundenen Events werden alle in den Dateien initialisiert, die <span class="datei">init-*.js</span> heißen.</p>
-					
+
 					<p>Der JavaScript-Code wurde extensiv kommentiert. Im Ergebnis sollte immer nachvollziehbar sein, welche Aufgabe das Script an der jeweiligen Stelle erfüllt. So wird <abbr title="zum Beispiel">z. B.</abbr> bei jeder Funktion angegeben, wozu sie dient und welchen Variablentyp die Argumente haben.</p>
-					
+
 					<p>Alle Funktionen stecken in Objekten, um den Namensraum des Fensters nicht zu vermüllen. Dabei steht in jeder JavaScript-Datei ein Objekt, das exakt denselben Namen wie die Datei trägt. Sucht man also die Methode <code class="quelltext">popup.oeffnen()</code> oder die Eigenschaft <code class="quelltext">popup.belegID</code> muss man nur nach der Datei <span class="datei">popup.js</span> Ausschau halten. Eine Ausnahme von diesem Schema bilden allein die Scripts im Wurzelverzeichnis und Dateien mit dem Namensmuster <span class="datei">init-*.js</span>. In letzteren werden Eventobjekte des Fensters initialisiert, zu dem die jeweilige Datei gehört. Das betreffende Fenster lässt sich leicht aus dem Dateinamen ableiten.</p>
-					
+
 					<p><abbr title="Vergleiche">Vgl.</abbr> zu den JavaScript-Dateien die ausführlicheren Anmerkungen im Kapitel <a href="#ordner-js">Ordner und Dateien</a>.</p>
-					
+
 					<h2 id="js-integration">Integration von <i>Electron</i> und <i>Node.js</i></h2>
-					
+
 					<p>Eine Besonderheit des JavaScript-Codes ist, dass auf Objekte, Methoden und Eigenschaften von <i>Electron</i> und <i>Node.js</i> auch in den Renderer-Prozessen zurückgegriffen wird. Hierzu wird die in JavaScript für gewöhnlich nicht vorhandene Methode <code class="quelltext">require()</code> zum Importieren von Modulen benutzt.</p>
-					
+
 					<p>Über <code class="quelltext">const {app} = require("electron").remote</code> <abbr title="zum Beispiel">z. B.</abbr> wird der Zugriff auf das App-Objekt im Main-Prozess ermöglicht. Und via <code class="quelltext">const path = require("path")</code> kann man das Node-Modul <a href="https://nodejs.org/api/path.html"><i>Path</i></a> laden, um sich neben vielem anderen <abbr title="zum Beispiel">z. B.</abbr> Informationen über den <i lang="en">path segment separator</i> im aktuellen Betriebssystem geben zu lassen (nämlich via <code class="quelltext">path.sep</code>). An einer Stelle wird auf diese Weise sogar ein Befehl in der Eingabeaufforderung von <i>Windows</i> ausgeführt:</p>
-					
+
 					<pre class="quelltext">const child_process = require("child_process");
 child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);
 </pre>
 				</section>
-				
+
 				<!-- WGD-DATEIFORMAT -->
 				<section id="sektion-wgd" class="suche">
 					<!-- WGD-Format -->
 					<h2 id="wgd-wgd"><abbr title="Wortgeschichte digital">WGD</abbr>-Format</h2>
-					
+
 					<p>Der Inhalt der <abbr title="Wortgeschichte digital">WGD</abbr>-Dateien ist im <abbr title="JavaScript Object Notation">JSON</abbr>-Format.</p>
-					
+
 					<p>Nach dem Laden einer <abbr title="Wortgeschichte digital">WGD</abbr>-Datei in <i class="app-name"></i> befinden sich die Daten im globalen Objekt <code class="quelltext">data</code>. Ihre Werte lassen sich dann in allen Funktionen des Hauptfensters durch einfache Statements wie <code class="quelltext">data.dc</code> lesen oder schreiben.</p>
-					
+
 					<p>Alle Dateien sind gleich aufgebaut (<span class="obacht">Datenformat Version 9</span>):</p>
-					
+
 					<table>
 						<tr>
 							<th>Schlüssel</th>
@@ -802,12 +804,12 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);
 							<td>Wort, zu dem die Kartei erstellt wurde</td>
 						</tr>
 					</table>
-					
+
 					<!-- BWGD-Format -->
 					<h2 id="wgd-bwgd"><abbr title="Belege Wortgeschichte digital">BWGD</abbr>-Format</h2>
-					
+
 					<p>Für die Kopierfunktionen (<i>Belege &gt; Kopieren</i> und <i>Belege &gt; Einfügen</i>) gibt es für den Import <abbr title="beziehungsweise">bzw.</abbr> Export von Beleglisten ein eigenes Austauschformat. Der Inhalt dieser <abbr title="Belege Wortgeschichte digital">BWGD</abbr>-Dateien ist ebenfalls im <abbr title="JavaScript Object Notation">JSON</abbr>-Format. Ihr Aufbau (<span class="obacht">Datenformat Version 1</span>):</p>
-					
+
 					<table>
 						<tr>
 							<th>Schlüssel</th>
@@ -877,46 +879,46 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);
 						</tr>
 					</table>
 				</section>
-				
+
 				<!-- VERSCHIEDENES -->
 				<section id="sektion-verschiedenes" class="suche">
 					<!-- DTA-Import -->
 					<h2 id="verschiedenes-dta"><abbr title="Deutsches Textarchiv">DTA</abbr>-Import</h2>
-					
+
 					<p>Importiert wird grundsätzlich der gesamte Text der Seite, die sich hinter der eingegebenen URL im Karteikarten-Formular verbirgt – mit einigen wenigen Ausnahmen. Ignoriert werden die Textinhalte in:</p>
-					
+
 					<ul>
 						<li>Kustoden (<code class="quelltext">&lt;catch&gt;</code>),</li>
 						<li>Kolumnentiteln (<code class="quelltext">&lt;header&gt;</code>),</li>
 						<li>Bogensignaturen (<code class="quelltext">&lt;sig&gt;</code>),</li>
 						<li>Schreib- oder Setzfehlern (<code class="quelltext">&lt;sic&gt;</code>), wobei der korrigierte Text in <code class="quelltext">&lt;corr&gt;</code> importiert wird.</li>
 					</ul>
-					
+
 					<p>Beim Import wird versucht, Inline-Formatierungen wie Kursivierungen, Fettungen oder Sperrungen zu erhalten. Auf einen Absatz bezogene Formatierungen (Zentrierung oder <abbr title="dergleichen">dgl.</abbr>) werden immer ignoriert.</p>
-					
+
 					<p>Die Trennstriche am Ende einer Textzeile (das sind <q>-</q> oder <q>¬</q>) werden zu <q>[¬]</q> normalisiert, sodass sie für die Leseansicht der Belege automatisch ausgeblendet werden können.</p>
-					
+
 					<p>Werden mehrere Seiten importiert, wird jeder Seitenumbruch nach diesem Muster markiert: <q>[:35:]</q>. Dabei steht hier die <q>35</q> für die Seitenangabe, die aus dem n-Attribute des <code class="quelltext">&lt;pb&gt;</code> ausgelesen wurde.</p>
-					
+
 					<p>Wird der den Import begrenzende <code class="quelltext">&lt;pb&gt;</code> nicht gefunden (weil man sich auf der letzten Seite des Texts befindet oder die NutzerIn bei der Eingabe einen Fehler gemacht hat), wird versucht, den Text des Buchs ab dem Start-<code class="quelltext">&lt;pb&gt;</code> komplett zu importieren.</p>
-					
+
 					<p>Die Funktionen, die den Import durchführen, stehen alle in <span class="datei">./js/app/belegImport.js</span>. Ihr Name beginnt immer mit <code class="quelltext">DTA</code>.</p>
-					
+
 					<!-- Sperrdatei -->
 					<h2 id="verschiedenes-sperrdatei">Lockfile</h2>
-					
+
 					<p>Wird mit <i class="app-name"></i> eine <abbr title="Wortgeschichte digital">WGD</abbr>-Datei geöffnet, wird im Quellordner der Datei automatisch eine Sperrdatei angelegt. Mithilfe dieser Lock-Datei wird das Öffnen der Kartei für andere NutzerInnen temporär unterbunden, sodass ein kollaboratives Arbeiten in einem Netzwerkordner möglich ist, ohne dass sich die NutzerInnen gegenseitig die Arbeit überschreiben. Beim Schließen der Kartei oder der App wird die Sperrdatei automatisch entfernt.</p>
-					
+
 					<p>Das Schreiben, Überprüfen und Löschen dieser Lock-Datei wird in <code class="quelltext">kartei.lock()</code> geregelt. Ist eine solche Sperrdatei vorhanden, wird das Öffnen der zugehörigen Kartei grundsätzlich unterbunden. Es gibt zwei Ausnahmen:</p>
-					
+
 					<ul>
 						<li>dieselbe NutzerIn versucht die Kartei vom selben Computer aus zu öffnen,</li>
 						<li>die Lock-Datei wurde vor mehr als zwölf Stunden angelegt.</li>
 					</ul>
-					
+
 					<p>Der Name der Sperrdatei folgt demselben Format, das <abbr title="zum Beispiel">z. B.</abbr> auch <i>LibreOffice</i> verwendet: <span class="datei">.~lock.[DATEINAME]#</span>.</p>
 					<p>Im Inneren der Lock-Datei steht im Plaintext der auf die Millisekunde genaue Zeitpunkt der Anlage der Datei, der Name des sperrenden Rechners und der seiner NutzerIn. Die einzelnen Werte werden durch <code class="quelltext">;;</code> voneinander getrennt. Das Ganze sieht dann in etwa so aus:</p>
-					
+
 					<pre class="quelltext">2019-04-24T17:36:47.681Z;;nico-sein-rechner;;Nico</pre>
 				</section>
 			</div>

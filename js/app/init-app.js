@@ -4,20 +4,20 @@
 window.addEventListener("load", function() {
 	// Fensterttyp registrieren
 	window.fenstertyp = "index";
-	
+
 	// Globales Datenobjekt, in dem die Werte zur aktuellen
 	// Kartei gespeichert werden, anlegen
 	window.data = {};
-	
+
 	// TASTATUREINGABEN ABFANGEN
 	document.addEventListener("keydown", helfer.tastatur);
-	
+
 	// RECHTSKLICK ABFANGEN
 	window.addEventListener("contextmenu", function(evt) {
 		evt.preventDefault();
 		popup.oeffnen(evt);
 	});
-	
+
 	// DATEIEN VIA DRAG & DROP ÖFFNEN
 	document.addEventListener("dragover", evt => evt.preventDefault());
 	document.addEventListener("dragleave", evt => evt.preventDefault());
@@ -30,7 +30,7 @@ window.addEventListener("load", function() {
 		let pfad = evt.dataTransfer.files[0].path;
 		kartei.oeffnenEinlesen(pfad);
 	});
-	
+
 	// EVENTS INITIALISIEREN
 	// alle <textarea>
 	document.querySelectorAll("textarea").forEach(function(textarea) {
@@ -219,7 +219,7 @@ window.addEventListener("load", function() {
 	for (let i = 0, len = overlay_links.length; i < len; i++) {
 		overlay.initSchliessen(overlay_links[i]);
 	}
-	
+
 	// ANFRAGEN DES MAIN-PROZESSES ABFANGEN
 	const {ipcRenderer} = require("electron");
 	ipcRenderer.on("optionen-empfangen", (evt, data) => optionen.empfangen(data));
@@ -264,7 +264,7 @@ window.addEventListener("load", function() {
 	ipcRenderer.on("bedeutungen-fenster-eintragen", (evt, bd) => beleg.bedeutungEinAustragen(bd, true));
 	ipcRenderer.on("bedeutungen-fenster-austragen", (evt, bd) => beleg.bedeutungEinAustragen(bd, false));
 	ipcRenderer.on("bedeutungen-fenster-status", (evt, status) => bedeutungenWin.status(status));
-	
+
 	// SYNCHRONE ANFRAGEN AN DEN MAIN-PROZESS STELLEN
 	// Optionen laden
 	let opt = ipcRenderer.sendSync("optionen-senden");
@@ -277,7 +277,7 @@ window.addEventListener("load", function() {
 		bilder_preload[i] = new Image();
 		bilder_preload[i].src = `img/${bilder[i]}`;
 	}
-	
+
 	// Start-Sektion initialisieren
 	// Obacht! Erst aufrufen, nachdem die Optionen geladen wurden!
 	start.zuletzt();

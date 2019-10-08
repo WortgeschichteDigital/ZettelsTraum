@@ -189,7 +189,6 @@ let bedeutungenGerueste = {
 			}, 5); // das gibt sonst Probleme, wenn das Enter-Event bereits abgefeuert wurde
 		});
 	},
-	
 	// Name aus dem Input-Feld übernehmen (Listener)
 	//   input = Element
 	//     (das aktive Input-Element)

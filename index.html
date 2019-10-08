@@ -3,9 +3,9 @@
 	<head>
 		<meta charset="utf-8">
 		<meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src http://www.deutschestextarchiv.de https://www.deutschestextarchiv.de">
-		
+
 		<title> </title>
-		
+
 		<link rel="stylesheet" href="css/app/app.css">
 		<link rel="stylesheet" href="css/app/bedeutungen.css">
 		<link rel="stylesheet" href="css/app/beleg.css">
@@ -15,9 +15,9 @@
 		<link rel="stylesheet" href="css/app/dropdown.css">
 		<link rel="stylesheet" href="css/app/start.css">
 		<link rel="stylesheet" href="css/app/drucken.css" media="print">
-		
+
 		<script src="js/suchleiste.js"></script>
-		
+
 		<script src="js/app/init-app.js"></script>
 		<script src="js/app/anhaenge.js"></script>
 		<script src="js/app/annotieren.js"></script>
@@ -83,7 +83,7 @@
 			><a href="#" id="quick-belege-kopieren" class="icon-link" title="Belege: Kopieren"> </a
 			><a href="#" id="quick-belege-einfuegen" class="icon-link" title="Belege: Einfügen"> </a
 		></div>
-	
+
 		<!-- KOPF -->
 		<header>
 			<h1 id="wort" class="keine-kartei">keine Kartei geöffnet</h1
@@ -95,7 +95,7 @@
 				><span id="kopieren-aussen" class="aus"><span id="kopieren"></span></span
 				><span id="icon"><img src="img/icon.svg" width="48" height="48" alt=""></span>
 		</header>
-		
+
 		<!-- STARTSEKTION -->
 		<section id="start">
 			<span id="start-erstellen">Kartei erstellen</span><span id="start-oeffnen">Kartei öffnen</span>
@@ -104,7 +104,7 @@
 				<ul id="start-liste"></ul>
 			</div>
 		</section>
-		
+
 		<!-- BEDEUTUNGSGERÜST -->
 		<section id="bedeutungen" class="aus">
 			<header>
@@ -135,7 +135,7 @@
 				></caption></table>
 			</div>
 		</section>
-		
+
 		<!-- KARTEIKARTE -->
 		<section id="beleg" class="aus">
 			<header>
@@ -330,7 +330,7 @@
 				</tr>
 			</table>
 		</section>
-		
+
 		<!-- BELEGLISTE -->
 		<section id="liste" class="aus">
 			<!-- scheinbar unnötig verschachtelt; ist aber nötig damit position: sticky für #liste-filter funktioniert -->
@@ -478,7 +478,7 @@
 				<div id="liste-belege-cont"></div>
 			</div>
 		</section>
-		
+
 		<!-- OVERLAY: Einstellungen -->
 		<div id="einstellungen" class="overlay aus"><div>
 			<h2><span class="icon-h icon-h-einstellungen"> </span>Einstellungen<a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"> </a></h2>
@@ -495,7 +495,7 @@
 					</ul>
 				</div>
 				<div>
-					
+
 					<!-- Allgemeines -->
 					<section id="einstellungen-sec-allgemeines">
 						<p class="input-text dropdown-cont"><input type="text" value="" class="dropdown-feld" id="einstellung-bearbeiterin"
@@ -511,7 +511,7 @@
 						<p class="einzug"><input type="checkbox" id="einstellung-textkopie-wort-hinterlegt"
 							><label for="einstellung-textkopie-wort-hinterlegt">Kartei-Wort mit grauem Hintergrund kopieren</label></p>
 					</section>
-					
+
 					<!-- Menü -->
 					<section id="einstellungen-sec-menue" class="aus">
 						<p><input type="checkbox" id="einstellung-autoHideMenuBar"
@@ -573,7 +573,7 @@
 								><label for="einstellung-quick-belege-einfuegen">Einfügen</label></p>
 						</div>
 					</section>
-					
+
 					<!-- Notizen -->
 					<section id="einstellungen-sec-notizen" class="aus">
 						<p><input type="checkbox" id="einstellung-notizen-schliessen"
@@ -583,7 +583,7 @@
 						<p class="einzug"><input type="checkbox" id="einstellung-filter-offen-notizen"
 							><label for="einstellung-filter-offen-notizen">Notizen in der Filterleiste standardmäßig aufklappen</label></p>
 					</section>
-					
+
 					<!-- Bedeutungsgerüst -->
 					<section id="einstellungen-sec-bedeutungen" class="aus">
 						<p><input type="checkbox" id="einstellung-bedeutungen-schliessen"
@@ -597,7 +597,7 @@
 						<div id="tags-cont"></div>
 						<p><input type="button" value="Tag-Datei laden" id="tags-laden"></p>
 					</section>
-					
+
 					<!-- Karteikarte -->
 					<section id="einstellungen-sec-karteikarte" class="aus">
 						<p><input type="checkbox" id="einstellung-karteikarte-schliessen"
@@ -615,7 +615,7 @@
 						<p><input type="checkbox" id="einstellung-leseansicht"
 							><label for="einstellung-leseansicht">bestehende Karteikarte in der Leseansicht öffnen</label></p>
 					</section>
-					
+
 					<!-- Filterleiste -->
 					<section id="einstellungen-sec-filter" class="aus">
 						<p><input type="checkbox" id="einstellung-filter-zuklappen"
@@ -648,7 +648,7 @@
 								><label for="einstellung-filter-offen-verschiedenes">Verschiedenes</label></p>
 						</div>
 					</section>
-					
+
 					<!-- Belegliste -->
 					<section id="einstellungen-sec-belegliste" class="aus">
 						<p><input type="checkbox" id="einstellung-anzeige-icons-immer-an"
@@ -659,7 +659,7 @@
 				</div>
 			</div>
 		</div></div>
-		
+
 		<!-- OVERLAY: Karteisuche -->
 		<div id="karteisuche" class="overlay aus"><div>
 			<h2><span class="icon-h icon-h-karteisuche"> </span
@@ -677,7 +677,7 @@
 			</div>
 			<div id="karteisuche-suche-laeuft" class="aus">Suche läuft …</div>
 		</div></div>
-		
+
 		<!-- OVERLAY: Formvarianten -->
 		<div id="stamm" class="overlay aus"><div>
 			<h2><span class="icon-h icon-h-stamm"> </span
@@ -690,7 +690,7 @@
 				<p class="dta"><input type="button" value="DTA-Import" id="stamm-dta"></p>
 			</div>
 		</div></div>
-		
+
 		<!-- OVERLAY: Notizen -->
 		<div id="notizen" class="overlay aus"><div>
 			<h2><span class="icon-h icon-h-notizen"> </span
@@ -722,7 +722,7 @@
 					><input type="button" value="Löschen" id="notizen-loeschen"></p>
 			</div>
 		</div></div>
-		
+
 		<!-- OVERLAY: Anhänge -->
 		<div id="anhaenge" class="overlay aus"><div>
 			<h2><span class="icon-h icon-h-anhaenge"> </span
@@ -731,7 +731,7 @@
 				<div id="anhaenge-cont" data-anhaenge="kartei"></div>
 			</div>
 		</div></div>
-		
+
 		<!-- OVERLAY: Überprüfte Lexika -->
 		<div id="lexika" class="overlay aus"><div>
 			<h2><span class="icon-h icon-h-lexika"> </span
@@ -742,7 +742,7 @@
 					><input type="button" value="Ergänzen" id="lexika-ergaenzen"></p>
 			</div>
 		</div></div>
-		
+
 		<!-- OVERLAY: Metadaten -->
 		<div id="meta" class="overlay aus"><div>
 			<h2><span class="icon-h icon-h-meta"> </span
@@ -769,14 +769,14 @@
 				</div>
 			</div>
 		</div></div>
-		
+
 		<!-- OVERLAY: Redaktion -->
 		<div id="redaktion" class="overlay aus"><div>
 			<h2><span class="icon-h icon-h-redaktion"> </span
 				>Redaktion<a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"> </a></h2>
 			<div id="redaktion-cont"></div>
 		</div></div>
-		
+
 		<!-- OVERLAY: Tags -->
 		<div id="tagger" class="overlay aus"><div>
 			<h2><span class="icon-h icon-h-tagger"> </span
@@ -789,14 +789,14 @@
 					><input type="button" value="Schließen" id="tagger-schliessen"></p>
 			</div>
 		</div></div>
-		
+
 		<!-- OVERLAY: Gerüste -->
 		<div id="gerueste" class="overlay aus"><div>
 			<h2><span class="icon-h icon-h-gerueste"> </span
 				>Bedeutungsgerüste<a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"> </a></h2>
 			<div id="gerueste-cont"></div>
 		</div></div>
-		
+
 		<!-- OVERLAY: Gerüst wechseln -->
 		<div id="geruestwechseln" class="overlay aus"><div>
 			<h2><span class="icon-h icon-h-geruestwechseln"> </span
@@ -809,7 +809,7 @@
 				></span
 			></div>
 		</div></div>
-		
+
 		<!-- OVERLAY: Sonderzeichen -->
 		<div id="sonderzeichen" class="overlay aus"><div>
 			<h2><span class="icon-h icon-h-sonderzeichen"> </span
@@ -825,7 +825,7 @@
 				><span>uͤ</span
 			></div>
 		</div></div>
-		
+
 		<!-- OVERLAY: Zeitraumgrafik -->
 		<div id="zeitraumgrafik" class="overlay aus"><div>
 			<h2><span class="icon-h icon-h-zeitraumgrafik"> </span
@@ -835,7 +835,7 @@
 				<div><canvas width="700" height="400"></canvas></div>
 			</div>
 		</div></div>
-		
+
 		<!-- OVERLAY: Dialog-Fenster -->
 		<div id="dialog" class="overlay aus"><div>
 			<h2><span class="icon-h"> </span
@@ -858,7 +858,7 @@
 					><input type="button" value="Nein" id="dialog-nein-button"></p>
 			</div>
 		</div></div>
-		
+
 		<!-- OVERLAY: Drucken -->
 		<div id="drucken" class="overlay aus"><div>
 			<h2><span class="icon-h icon-h-drucken"> </span
@@ -872,7 +872,7 @@
 				<div id="drucken-cont"></div>
 			</div>
 		</div></div>
-		
+
 		<!-- OVERLAY: Kopierfunktion (Liste) -->
 		<div id="kopieren-liste" class="overlay aus"><div>
 			<h2><span class="icon-h icon-h-kopieren"> </span
@@ -888,7 +888,7 @@
 				<div id="kopieren-liste-cont"></div>
 			</div>
 		</div></div>
-		
+
 		<!-- OVERLAY: Kopierfunktion (Einfügen) -->
 		<div id="kopieren-einfuegen" class="overlay aus"><div>
 			<h2><span class="icon-h icon-h-einfuegen"> </span
@@ -949,7 +949,7 @@
 				</div>
 			</div>
 		</div></div>
-		
+
 		<!-- PROGRAMMSTART -->
 		<div id="programmstart"> </div>
 	</body>

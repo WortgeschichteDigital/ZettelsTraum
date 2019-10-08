@@ -3,28 +3,25 @@
 window.addEventListener("load", function() {
 	// FENSTERTTYP REGISTRIEREN
 	window.fenstertyp = "handbuch";
-	
+
 	// PROGRAMM-NAME EINTRAGEN
 	const {app} = require("electron").remote;
 	document.querySelectorAll(".app-name").forEach(function(i) {
 		i.textContent = app.getName().replace("'", "’");
 	});
-	
-	// ÜBERBLICK-SEKTION ANZEIGEN
-	hilfe.sektionWechseln("einfuehrung");
-	
+
 	// UMBRUCH IN LANGEN DATEIPFADEN
 	hilfe.dateiBreak();
-	
+
 	// TASTATUREINGABEN ABFANGEN
 	document.addEventListener("keydown", helferWin.tastatur);
-	
+
 	// RECHTSKLICK ABFANGEN
 	window.addEventListener("contextmenu", function(evt) {
 		evt.preventDefault();
 		popup.oeffnen(evt);
 	});
-	
+
 	// EVENTS INITIALISIEREN
 	// Suche
 	hilfe.sucheListener(document.getElementById("suchfeld"));
@@ -35,6 +32,14 @@ window.addEventListener("load", function() {
 	document.getElementById("suchleiste-link").addEventListener("click", function(evt) {
 		evt.preventDefault();
 		suchleiste.einblenden();
+	});
+	document.getElementById("navi-back").addEventListener("click", function(evt) {
+		evt.preventDefault();
+		hilfe.historyNavi(false);
+	});
+	document.getElementById("navi-forward").addEventListener("click", function(evt) {
+		evt.preventDefault();
+		hilfe.historyNavi(true);
 	});
 	// Vorschau-Bilder
 	document.querySelectorAll("figure").forEach(function(i) {
@@ -87,6 +92,9 @@ window.addEventListener("load", function() {
 	});
 	// externe Links
 	document.querySelectorAll(`a[href^="http"]`).forEach(a => helfer.externeLinks(a));
+
+	// EINFÜHRUNGSSEKTION ANZEIGEN
+	hilfe.sektionWechseln("einfuehrung", false);
 });
 
 window.addEventListener("beforeunload", function() {
