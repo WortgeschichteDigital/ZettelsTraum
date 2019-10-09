@@ -200,6 +200,11 @@ let kartei = {
 			filter.kartendatumInit();
 			liste.aufbauen(true);
 			liste.wechseln();
+			window.scrollTo({
+				left: 0,
+				top: 0,
+				behavior: "auto",
+			}); // war in dem Fenster schon eine Kartei offen, bleibt sonst die Scrollposition der vorherigen Kartei erhalten
 			kartei.menusDeaktivieren(false);
 			erinnerungen.check();
 			helfer.geaendert(); // trägt das Wort in die Titelleiste ein

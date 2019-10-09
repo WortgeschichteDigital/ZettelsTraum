@@ -83,6 +83,7 @@ let bedeutungenGeruest = {
 		} else if (!document.getElementById("liste").classList.contains("aus")) {
 			liste.status(true);
 		}
+		kartei.karteiGeaendert(true);
 	},
 	// Listener für Überschriften zum Öffnen des Fensters
 	//   ele = Element

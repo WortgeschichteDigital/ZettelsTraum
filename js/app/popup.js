@@ -10,6 +10,8 @@ let popup = {
 	belegID: "",
 	// speichert den Anhang, der geöffnet werden soll
 	anhangDatei: "",
+	// das angeklickte Anhang-Icon steht in der Detailansicht eines Belegs
+	anhangDateiBeleg: false,
 	// speichert die Datei aus der Liste zu verwendeter Dateien, der gelöscht werden soll
 	startDatei: "",
 	// speichert das Element, auf das sich das Event bezieht
@@ -30,6 +32,17 @@ let popup = {
 			}
 			if (overlay.oben() === "drucken") {
 				popup.menuSchliessen(menu, true);
+				popup.menuBelege(menu, true);
+			} else if (!document.getElementById("beleg").classList.contains("aus")) {
+				popup.menuBelegConf(menu, true);
+				popup.menuBelege(menu, true);
+			} else if (!document.getElementById("liste").classList.contains("aus")) {
+				popup.menuBeleg(menu, true);
+				popup.menuBelegDel(menu);
+				popup.menuBelegCp(menu);
+				popup.menuBelegDuplikat(menu);
+				popup.menuBeleglisteConf(menu, true);
+				popup.menuBelege(menu, true);
 			} else {
 				popup.menuBelege(menu, true);
 			}
@@ -37,18 +50,25 @@ let popup = {
 			popup.menuBearbeiten(menu);
 		} else if (target === "quick") {
 			popup.menuQuick(menu);
-			popup.menuBelege(menu, true);
+			if (kartei.wort) {
+				popup.menuBelege(menu, true);
+			} else {
+				popup.menuKartei(menu, true);
+			}
 		} else if (target === "wort") {
 			popup.menuWort(menu);
 			popup.menuBelege(menu, true);
-		} else if (target === "kopierfunktion") {
-			popup.menuKopierfunktion(menu);
+		} else if (target === "erinnerungen") {
+			popup.menuErinnerungen(menu);
 			popup.menuBelege(menu, true);
 		} else if (target === "notizen") {
 			popup.menuNotizen(menu);
 			popup.menuBelege(menu, true);
-		} else if (target === "anhaenge") {
-			popup.menuAnhaenge(menu);
+		} else if (target === "lexika") {
+			popup.menuLexika(menu);
+			popup.menuBelege(menu, true);
+		} else if (target === "kopierfunktion") {
+			popup.menuKopierfunktion(menu);
 			popup.menuBelege(menu, true);
 		} else if (target === "filter-conf") {
 			popup.menuFilterConf(menu);
@@ -58,11 +78,25 @@ let popup = {
 			popup.menuBelege(menu, true);
 		} else if (target === "start-datei") {
 			popup.menuStartDatei(menu);
+			popup.menuKartei(menu, true);
 		} else if (target === "link") {
-			popup.menuLink(menu);
+			if (!document.getElementById("beleg").classList.contains("aus")) {
+				popup.menuLink(menu, true);
+				popup.menuBelegConf(menu, false);
+			} else if (!document.getElementById("liste").classList.contains("aus")) {
+				popup.menuLink(menu, true);
+				popup.menuBeleg(menu);
+				popup.menuBelegDel(menu);
+				popup.menuBelegCp(menu);
+				popup.menuBelegDuplikat(menu);
+				popup.menuBeleglisteConf(menu, true);
+			} else {
+				popup.menuLink(menu, false);
+			}
 			popup.menuBelege(menu, true);
 		} else if (target === "beleg") {
 			popup.menuBeleg(menu);
+			popup.menuSchliessen(menu, true);
 			popup.menuBelege(menu, true);
 		} else if (target === "beleg-einstellungen") {
 			popup.menuBeleglisteConf(menu, false);
@@ -76,13 +110,23 @@ let popup = {
 			popup.menuBelege(menu, true);
 		} else if (target === "anhang") {
 			popup.menuAnhang(menu);
-			if (!overlay.oben()) { // nicht im Anhänge-Fenster
-				popup.menuBelege(menu, true);
+			if (!document.getElementById("beleg").classList.contains("aus")) {
+				popup.menuBelegConf(menu, true);
+			} else if (popup.anhangDateiBeleg) {
+				popup.menuBeleg(menu, true);
+				popup.menuBelegDel(menu);
+				popup.menuBelegCp(menu);
+				popup.menuBelegDuplikat(menu);
+				popup.menuBeleglisteConf(menu, true);
+			} else if (overlay.oben() === "anhaenge") {
+				popup.menuSchliessen(menu, true);
 			}
+			popup.menuBelege(menu, true);
 		} else if (target === "schliessen") {
 			popup.menuSchliessen(menu, false);
+			popup.menuBelege(menu, true);
 		} else if (target === "beleg-conf") {
-			popup.menuBelegConf(menu);
+			popup.menuBelegConf(menu, false);
 			popup.menuBelege(menu, true);
 		} else if (target === "bedeutungen-conf") {
 			popup.menuBedeutungenConf(menu);
@@ -122,15 +166,27 @@ let popup = {
 				return "textfeld";
 			}
 			// Überschriften
-			if (pfad[i].nodeName === "H3" &&
+			if (pfad[i].nodeName === "A" &&
+					!pfad[i].classList.contains("icon-link") &&
+					overlay.oben() === "kopieren-liste") {
+				popup.belegID = pfad[i].dataset.id;
+				return "beleg";
+			} else if (pfad[i].nodeName === "H3" &&
 					overlay.oben() === "anhaenge") {
 				popup.belegID = pfad[i].dataset.id;
 				return "beleg";
-			}
-			// Elemente
-			if (pfad[i].nodeName === "HEADER" &&
+			} else if (pfad[i].nodeName === "HEADER" &&
 					pfad[i].parentNode.id === "liste-belege") {
 				return "beleg-einstellungen";
+			} else if (pfad[i].nodeName === "IMG" &&
+					pfad[i].dataset.datei) {
+				popup.anhangDatei = pfad[i].dataset.datei;
+				if (pfad[i].parentNode.parentNode.classList.contains("liste-meta")) {
+					popup.anhangDateiBeleg = true;
+				} else {
+					popup.anhangDateiBeleg = false;
+				}
+				return "anhang";
 			}
 			// IDs
 			const id = pfad[i].id;
@@ -138,12 +194,14 @@ let popup = {
 				return "quick";
 			} else if (id === "wort" && kartei.wort) {
 				return "wort";
-			} else if (id === "kopieren") {
-				return "kopierfunktion";
+			} else if (id === "erinnerungen") {
+				return "erinnerungen";
 			} else if (id === "notizen-icon") {
 				return "notizen";
-			} else if (id === "kartei-anhaenge") {
-				return "anhaenge";
+			} else if (id === "lexika-icon") {
+				return "lexika";
+			} else if (id === "kopieren") {
+				return "kopierfunktion";
 			} else if (id === "liste-filter") {
 				return "filter-conf";
 			} else if (id === "liste-belege-anzahl" &&
@@ -398,6 +456,18 @@ let popup = {
 			click: () => kopieren.uiOff(),
 		}));
 	},
+	// Erinnerungen-Menü füllen
+	//   menu = Object
+	//     (Menü-Objekt, an das die Menü-Items gehängt werden müssen)
+	menuErinnerungen (menu) {
+		const {MenuItem} = require("electron").remote,
+			path = require("path");
+		menu.append(new MenuItem({
+			label: "Erinnerungen",
+			icon: path.join(__dirname, "img", "menu", "erinnerungen.png"),
+			click: () => erinnerungen.show(),
+		}));
+	},
 	// Notizen-Menü füllen
 	//   menu = Object
 	//     (Menü-Objekt, an das die Menü-Items gehängt werden müssen)
@@ -410,16 +480,16 @@ let popup = {
 			click: () => notizen.oeffnen(),
 		}));
 	},
-	// Anhänge-Menü füllen
+	// Lexika-Menü füllen
 	//   menu = Object
 	//     (Menü-Objekt, an das die Menü-Items gehängt werden müssen)
-	menuAnhaenge (menu) {
+	menuLexika (menu) {
 		const {MenuItem} = require("electron").remote,
 			path = require("path");
 		menu.append(new MenuItem({
-			label: "Anhänge-Fenster",
-			icon: path.join(__dirname, "img", "menu", "kartei-anhaenge.png"),
-			click: () => anhaenge.fenster(),
+			label: "Lexika-Fenster",
+			icon: path.join(__dirname, "img", "menu", "kartei-lexika.png"),
+			click: () => lexika.oeffnen(),
 		}));
 	},
 	// Filter-Conf-Menü füllen
@@ -464,7 +534,9 @@ let popup = {
 	// Link-Menü füllen
 	//   menu = Object
 	//     (Menü-Objekt, an das die Menü-Items gehängt werden müssen)
-	menuLink (menu) {
+	//   separator = Boolean
+	//     (Separator einfügen)
+	menuLink (menu, separator) {
 		const {MenuItem} = require("electron").remote,
 			path = require("path");
 		menu.append(new MenuItem({
@@ -475,13 +547,25 @@ let popup = {
 				clipboard.writeText(popup.element.title);
 			},
 		}));
+		if (separator) {
+			menu.append(new MenuItem({
+				type: "separator",
+			}));
+		}
 	},
 	// Beleg-Menü füllen
 	//   menu = Object
 	//     (Menü-Objekt, an das die Menü-Items gehängt werden müssen)
-	menuBeleg (menu) {
+	//   separator = true || undefined
+	//     (Separator einfügen)
+	menuBeleg (menu, separator = false) {
 		const {MenuItem} = require("electron").remote,
 			path = require("path");
+		if (separator) {
+			menu.append(new MenuItem({
+				type: "separator",
+			}));
+		}
 		menu.append(new MenuItem({
 			label: "Beleg bearbeiten",
 			icon: path.join(__dirname, "img", "menu", "popup-beleg.png"),
@@ -590,9 +674,16 @@ let popup = {
 	// Beleg-Conf-Menü füllen
 	//   menu = Object
 	//     (Menü-Objekt, an das die Menü-Items gehängt werden müssen)
-	menuBelegConf (menu) {
+	//   separator = Boolean
+	//     (Separator einfügen)
+	menuBelegConf (menu, separator) {
 		const {MenuItem} = require("electron").remote,
 			path = require("path");
+		if (separator) {
+			menu.append(new MenuItem({
+				type: "separator",
+			}));
+		}
 		menu.append(new MenuItem({
 			label: "Karteikarten-Einstellungen",
 			icon: path.join(__dirname, "img", "menu", "programm-einstellungen.png"),
@@ -636,19 +727,29 @@ let popup = {
 			click: () => beleg.erstellenPre(),
 			accelerator: "CommandOrControl+N",
 		}));
-		menu.append(new MenuItem({
-			label: "Belege auflisten",
-			icon: path.join(__dirname, "img", "menu", "belege-auflisten.png"),
-			click: () => liste.anzeigen(),
-			accelerator: "CommandOrControl+L",
-		}));
+		if (overlay.oben() ||
+				document.getElementById("liste").classList.contains("aus")) {
+			menu.append(new MenuItem({
+				label: "Belege auflisten",
+				icon: path.join(__dirname, "img", "menu", "belege-auflisten.png"),
+				click: () => liste.anzeigen(),
+				accelerator: "CommandOrControl+L",
+			}));
+		}
 	},
 	// Kartei-Menü füllen
 	//   menu = Object
 	//     (Menü-Objekt, an das die Menü-Items gehängt werden müssen)
-	menuKartei (menu) {
+	//   separator = true || undefined
+	//     (Separator einfügen)
+	menuKartei (menu, separator = false) {
 		const {MenuItem} = require("electron").remote,
 			path = require("path");
+		if (separator) {
+			menu.append(new MenuItem({
+				type: "separator",
+			}));
+		}
 		menu.append(new MenuItem({
 			label: "Kartei erstellen",
 			icon: path.join(__dirname, "img", "menu", "kartei-erstellen.png"),
