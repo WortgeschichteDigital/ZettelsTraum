@@ -8,6 +8,8 @@ let popup = {
 	},
 	// speichert die ID des Belegs, der bearbeitet werden soll
 	belegID: "",
+	// speichert die ID des Overlay-Fenster, das betroffen ist
+	overlayID: "",
 	// speichert den Anhang, der geöffnet werden soll
 	anhangDatei: "",
 	// das angeklickte Anhang-Icon steht in der Detailansicht eines Belegs
@@ -70,6 +72,10 @@ let popup = {
 		} else if (target === "kopierfunktion") {
 			popup.menuKopierfunktion(menu);
 			popup.menuBelege(menu, true);
+		} else if (target === "notizen-conf") {
+			popup.menuNotizen(menu);
+			popup.menuNotizenConf(menu);
+			popup.menuBelege(menu, true);
 		} else if (target === "filter-conf") {
 			popup.menuFilterConf(menu);
 			popup.menuBelege(menu, true);
@@ -124,12 +130,19 @@ let popup = {
 			popup.menuBelege(menu, true);
 		} else if (target === "schliessen") {
 			popup.menuSchliessen(menu, false);
+			if (popup.overlayID === "notizen") {
+				popup.menuNotizenConf(menu);
+			} else if (popup.overlayID === "tagger" ||
+					popup.overlayID === "gerueste" ||
+					popup.overlayID === "geruestwechseln") {
+				popup.menuBedeutungenConf(menu, true);
+			}
 			popup.menuBelege(menu, true);
 		} else if (target === "beleg-conf") {
 			popup.menuBelegConf(menu, false);
 			popup.menuBelege(menu, true);
 		} else if (target === "bedeutungen-conf") {
-			popup.menuBedeutungenConf(menu);
+			popup.menuBedeutungenConf(menu, false);
 			popup.menuBelege(menu, true);
 		} else if (target === "belege") {
 			popup.menuBelege(menu, false);
@@ -202,6 +215,8 @@ let popup = {
 				return "lexika";
 			} else if (id === "kopieren") {
 				return "kopierfunktion";
+			} else if (id === "filter-notizen-content" || id === "filter-kopf-notizen") {
+				return "notizen-conf";
 			} else if (id === "liste-filter") {
 				return "filter-conf";
 			} else if (id === "liste-belege-anzahl" &&
@@ -226,6 +241,7 @@ let popup = {
 					popup.anhangDatei = pfad[i].dataset.datei;
 					return "anhang";
 				} else if (pfad[i].classList.contains("overlay")) {
+					popup.overlayID = pfad[i].id;
 					return "schliessen";
 				}
 			}
@@ -492,6 +508,24 @@ let popup = {
 			click: () => lexika.oeffnen(),
 		}));
 	},
+	// Notizen-Conf-Menü füllen
+	//   menu = Object
+	//     (Menü-Objekt, an das die Menü-Items gehängt werden müssen)
+	menuNotizenConf (menu) {
+		const {MenuItem} = require("electron").remote,
+			path = require("path");
+		menu.append(new MenuItem({
+			type: "separator",
+		}));
+		menu.append(new MenuItem({
+			label: "Notizen-Einstellungen",
+			icon: path.join(__dirname, "img", "menu", "programm-einstellungen.png"),
+			click: function() {
+				optionen.oeffnen();
+				optionen.sektionWechseln(document.getElementById("einstellungen-link-notizen"));
+			},
+		}));
+	},
 	// Filter-Conf-Menü füllen
 	//   menu = Object
 	//     (Menü-Objekt, an das die Menü-Items gehängt werden müssen)
@@ -696,9 +730,16 @@ let popup = {
 	// Bedeutungen-Conf-Menü füllen
 	//   menu = Object
 	//     (Menü-Objekt, an das die Menü-Items gehängt werden müssen)
-	menuBedeutungenConf (menu) {
+	//   separator = Boolean
+	//     (Separator einfügen)
+	menuBedeutungenConf (menu, separator) {
 		const {MenuItem} = require("electron").remote,
 			path = require("path");
+		if (separator) {
+			menu.append(new MenuItem({
+				type: "separator",
+			}));
+		}
 		menu.append(new MenuItem({
 			label: "Bedeutungsgerüst-Einstellungen",
 			icon: path.join(__dirname, "img", "menu", "programm-einstellungen.png"),

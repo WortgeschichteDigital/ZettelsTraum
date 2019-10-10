@@ -42,12 +42,12 @@
 					<li><a href="#" class="link-sektion-filter kopf intern">Filter</a></li>
 					<li><a href="#" class="link-sektion-einstellungen kopf intern">Einstellungen</a></li>
 					<li><a href="#" class="link-sektion-tastaturkuerzel kopf intern">Tastaturkürzel</a></li>
-					<li><a href="#" class="link-sektion-menue-programm kopf intern">Menü: Programm</a></li>
-					<li><a href="#" class="link-sektion-menue-kartei kopf intern">Menü: Kartei</a></li>
-					<li><a href="#" class="link-sektion-menue-belege kopf intern">Menü: Belege</a></li>
-					<li><a href="#" class="link-sektion-menue-bearbeiten kopf intern">Menü: Bearbeiten</a></li>
-					<li><a href="#" class="link-sektion-menue-ansicht kopf intern">Menü: Ansicht</a></li>
-					<li><a href="#" class="link-sektion-menue-hilfe kopf intern">Menü: Hilfe</a></li>
+					<li><a href="#" class="link-sektion-menue-programm kopf intern">Menü Programm</a></li>
+					<li><a href="#" class="link-sektion-menue-kartei kopf intern">Menü Kartei</a></li>
+					<li><a href="#" class="link-sektion-menue-belege kopf intern">Menü Belege</a></li>
+					<li><a href="#" class="link-sektion-menue-bearbeiten kopf intern">Menü Bearbeiten</a></li>
+					<li><a href="#" class="link-sektion-menue-ansicht kopf intern">Menü Ansicht</a></li>
+					<li><a href="#" class="link-sektion-menue-hilfe kopf intern">Menü Hilfe</a></li>
 				</ul>
 			</nav>
 			<div>
@@ -164,7 +164,7 @@
 
 					<p class="info">Durchsucht werden sowohl die Überschriften der Karteikartenfelder als auch der in den Feldern stehende Text. Die Namen von mit der Karte verknüpften Dateien (Anhänge) bleiben außen vor. <abbr title="Vergleiche">Vgl.</abbr> die <a href="#belegliste-suchleiste">Erläuterungen im <abbr title="Abschnitt">Abschn.</abbr> Belegliste</a>.</p>
 
-					<p class="erklaerung-icon"><img src="../img/beleg-springen.svg" width="24" height="24" alt="">Tastaturkürzel <kbd>Strg</kbd> + <kbd>⇩</kbd>; <i>Leseansicht</i>: zur nächsten Markierung (Karteiwort, Suchtreffer) springen; <i>Formularansicht</i>: zum Karteiwort im Belegtext springen</p>
+					<p class="erklaerung-icon" id="karteikarte-sprungfunktion"><img src="../img/beleg-springen.svg" width="24" height="24" alt="">Tastaturkürzel <kbd>Strg</kbd> + <kbd>⇩</kbd>; <i>Leseansicht</i>: zur nächsten Markierung (Karteiwort, Suchtreffer) springen; <i>Formularansicht</i>: zum Karteiwort im Belegtext springen</p>
 
 					<p class="erklaerung-icon"><img src="../img/tool-kopieren.svg" width="24" height="24" alt="">Tastaturkürzel <kbd>Strg</kbd> + <kbd>I</kbd>; nur bei aktivierter <a href="#menue-belege-kopieren">Kopierfunktion</a>; Beleg in die Kopierliste aufnehmen</p>
 
@@ -215,10 +215,23 @@
 
 					<p class="erklaerung-icon"><img src="../img/dropdown.svg" width="24" height="24" alt="">Dropdown-Menü mit Textvorschlägen öffnen</p>
 
-					<div class="info">
-						<p>Für Felder, die am rechten Rand einen nach unten weisenden Pfeil haben, kann ein Dropdown-Menü geöffnet werden, das Textvorschläge enthält. Die Liste der Textvorschläge speist sich aus den anderen Karteikarten; sie ist alphabetisch sortiert (das Feld <i>Bedeutung</i> weicht von dieser Regel ab; <abbr title="siehe unten">s. u.</abbr>).</p>
+					<figure class="right" title="zum Vergrößern anklicken">
+						<img src="../img/win/hb-karteikarte-dropdown.png" alt="">
+						<figcaption>ein Dropdown-Menü</figcaption>
+					</figure>
 
-						<p>Ein Dropdown-Menü kann auch über das Tastaturkürzel <kbd>Strg</kbd> + <kbd>⇩</kbd> geöffnet werden. Dazu muss das entsprechende Feld fokussiert sein. Im geöffneten Menü lässt sich dann mit den Cursor-Tasten <kbd>⇧</kbd> <abbr title="beziehungsweise">bzw.</abbr> <kbd>⇩</kbd> navigieren. Den aktuell ausgewählten Eintrag (grün hinterlegt) kann man via <kbd>⏎</kbd> einfügen.</p>
+					<div class="info">
+						<p>Für Felder, die am rechten Rand einen nach unten weisenden Pfeil haben, kann ein Dropdown-Menü geöffnet werden, das Textvorschläge enthält. Die Liste der Textvorschläge speist sich aus bereits eingegebenen Werten in anderen Karteikarten, den Einträgen im Bedeutungsgerüst und vordefinierten Listen. Das ist abhängig von dem Feld, dessen Menü geöffnet wird. In der Regel sind Dropdown-Menüs alphabetisch sortiert. Das Menü des <a href="#karteikarte-bedeutung">Felds <i>Bedeutung</i></a> weicht von dieser Regel allerdings ebenso ab wie das der Korpora, für die es eine hartcodierte Liste gibt. Die Einträge erscheinen in der Reihenfolge dieser vordefinierten Liste; manuell ergänzte Korpora werden nicht eingerückt, sondern immer <em>über</em> den hartcodierten Werten angezeigt.</p>
+
+						<p>In einer neuen Wortkartei, in der bestimmte Karteikartenfelder noch nie ausgefüllt wurden, werden die Dropdown-Menüs zunächst mitunter leer sein. In ihnen steht dann nur die Meldung <q>keine Vorschläge vorhanden</q>. Das ändert sich nach und nach, sobald Sie Karteikarten erstellt und gespeichert haben.</p>
+
+						<p>Befindet man sich in einem Feld mit Dropdown-Menü, kann man das Öffnen, Schließen und Einfügen mit der Tastatur steuern. Zum Öffnen dient das Tastaturkürzel <kbd>Strg</kbd> + <kbd>⇩</kbd>. Ist das Menü einmal geöffnet, lässt sich in ihm mit den Cursor-Tasten <kbd>⇧</kbd> <abbr title="beziehungsweise">bzw.</abbr> <kbd>⇩</kbd> navigieren. Den aktuell ausgewählten Eintrag (grün hinterlegt) kann man via <kbd>⏎</kbd> einfügen. Möchte man den Vorgang abbrechen, kann man ein Dropdown-Menü schließen, indem man <kbd>Esc</kbd> drückt oder das Textfeld, zu dem es gehört, verlässt.</p>
+
+						<p>Tastaturkürzel wie <kbd>Strg</kbd> + <kbd>⇩</kbd> sind mitunter doppelt belegt und rufen je nach Kontext andere Funktionen auf. Befinden Sie sich nicht in einem Textfeld, zu dem sich ein Dropdown-Menü öffnen lässt, führt dieses Kürzel die <a href="#karteikarte-sprungfunktion">Sprungfunktion</a> <img src="../img/beleg-springen.svg" width="20" height="20" alt=""> aus und die App fokussiert das Belegfeld.</p>
+
+						<p>Ist das Textfeld bereits gefüllt, fragt die App vor dem Einfügen, ob der im Menü ausgewählte Wert ergänzt oder überschrieben werden soll. Fast alle Felder mit Dropdown-Menü können mehrere Werte enthalten, getrennt durch einen Zeilenumbruch (das Korpus-Feld stellt hier eine Ausnahme dar). Steht der ausgewählte Wert bereits im Feld, kann er über das Dropdown-Menü nicht noch einmal eingefügt werden.</p>
+
+						<p>Dropdown-Menüs wie die in der Karteikarte tauchen an vielen Stellen des Programms auf. Sie funktionieren immer gleich mit einem Unterschied: Dropdown-Menüs in anderen Programmteilen lassen sich einfach durch <kbd>⇩</kbd> öffnen (wozu man natürlich das zugehörige Feld fokussiert haben muss). In der Karteikarte muss zusätzlich <kbd>Strg</kbd> gedrückt werden, weil man sonst keine Möglichkeit mehr hätte, in mehrzeiligen Textfelder mit den Cursor-Tasten zu navigieren.</p>
 					</div>
 
 					<p id="karteikarte-unvollstaendig"><b>unvollständig:</b> markiert die Karteikarte als noch nicht vollständig bearbeitet</p>
@@ -265,7 +278,7 @@
 						<p>Die Funktion des Einfüge-Icons <img src="../img/tool-einfuegen.svg" width="20" height="20" alt=""> weicht leicht von dem anderer Felder ab. Normalerweise wird der in der Zwischenablage befindliche Text als Plain-Text, <abbr title="das heißt">d. h.</abbr> unformatiert, in das betreffende Feld hineinkopiert. Liegt in der Zwischenablage ein Text mit <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>-Tags, bleiben einfache Formatierungen wie fett (<code class="quelltext">&lt;b&gt;</code>), kursiv (<code class="quelltext">&lt;i&gt;</code>) oder unterstrichen (<code class="quelltext">&lt;u&gt;</code>) jedoch erhalten.</p>
 					</div>
 
-					<p><b>Bedeutung:</b> mit dem Beleg verknüpfte Wortbedeutung(en)</p>
+					<p id="karteikarte-bedeutung"><b>Bedeutung:</b> mit dem Beleg verknüpfte Wortbedeutung(en)</p>
 
 					<div class="info">
 						<p>Wenn Sie Bedeutungen händisch eingeben: Eine neue Hierarchieebene (Markierung des Beginns einer Unterbedeutung) beginnt mit einem <q>: </q> (Doppelpunkt, gefolgt von einem Leerzeichen). Mehrere Bedeutungen werden durch einen Zeilenumbruch voneinander getrennt. Spitzklammern sind nur maskiert zulässig (<abbr title="siehe oben">s. o.</abbr> zum Belegfeld). Ist eine Bedeutung neu, wurde sie also noch für keinen anderen Beleg verwendet, wird sie beim Speichern der Karteikarte automatisch an einer passenden Stelle des aktuellen <a href="#" class="link-sektion-bedeutungsgeruest">Bedeutungsgerüsts</a> integriert.</p>
@@ -277,7 +290,7 @@
 						<p>Arbeiten Sie mit mehreren Bedeutungsgerüsten: Es werden immer nur die Bedeutungen des aktuellen Bedeutungsgerüsts angezeigt. Existieren in der aktuellen Kartei mehrere Gerüste, wird das aktuelle Gerüst über dem Belegfeld angezeigt, wo dann <q>Gerüst 1</q>, <q>Gerüst 2</q> <abbr title="und so weiter">usw.</abbr> steht. Mit einem Klick auf diesen Text können sie das Gerüst wechseln, womit sich dann (<abbr title="gegebenenfalls">ggf.</abbr>) auch die Bedeutungen im Bedeutungsfeld ändern.</p>
 					</div>
 
-					<p><b>Wortbildung:</b> Liste an Wortbildungen, die im Beleg zu finden sind</p>
+					<p id="karteikarte-wortbildung"><b>Wortbildung:</b> Liste an Wortbildungen, die im Beleg zu finden sind</p>
 
 					<p class="info">Mehrere Wortbildungen werden durch einen Zeilenumbruch voneinander getrennt. Wie im Bedeutungsfeld können auch Wortbildungen Hierarchieebenen enthalten. Eine neue Ebene öffnen Sie, indem Sie <q>: </q> (Doppelpunkt, gefolgt von einem Leerzeichen) eingeben. Auf diese Weise können Wortbildungsbäume mit beliebiger Verschachtelungstiefe erzeugt werden. Eingaben wie <q>Derivation: Diminution: Mütterchen</q> oder <q>Komposition: Mutterherz</q> werden im zugehörigen <a href="#" class="link-sektion-filter">Filter</a> in einer Baumansicht dargestellt.</p>
 
@@ -337,7 +350,7 @@
 						<figcaption>Kopieren eines Bedeutungsgerüsts</figcaption>
 					</figure>
 
-					<p>Haben Sie ein <b>neues Bedeutungsgerüst</b> hinzugefügt (das geht über das Icon <img src="../img/gerueste-config.svg" width="24" height="24" alt="">), können Sie dieses durch einen einfachen Klick mit den Bedeutungen eines bereits bestehenden Gerüsts füllen (hilfreich, falls Sie ein Gerüst stark modifizieren, seine ursprüngliche Form jedoch zugleich erhalten wollen). Anstelle der einzelnen Bedeutungen sehen Sie in dem neuen Bedeutungsgerüst ein Textfeld und einen Button mit dem Text <i>Kopieren</i>. Mit dem Textfeld wählen Sie das Gerüst aus, dessen Bedeutungen kopiert werden sollen, durch einen Klick auf <i>Kopieren</i> lösen Sie die Operation aus. Beim Kopieren des Gerüsts werden die Karteikarten, die mit den Bedeutungen des Quellgerüsts verknüpft waren, automatisch um die Bedeutungen des neuen Gerüsts ergänzt. In diesem Moment haben Sie also zwei identische Gerüste, die den identischen Karteikarten mit den identischen Bedeutungen zugeordnet sind.</p>
+					<p id="bedeutungsgeruest-neu">Haben Sie ein <b>neues Bedeutungsgerüst</b> hinzugefügt (das geht über das Icon <img src="../img/gerueste-config.svg" width="24" height="24" alt="">), können Sie dieses durch einen einfachen Klick mit den Bedeutungen eines bereits bestehenden Gerüsts füllen (hilfreich, falls Sie ein Gerüst stark modifizieren, seine ursprüngliche Form jedoch zugleich erhalten wollen). Anstelle der einzelnen Bedeutungen sehen Sie in dem neuen Bedeutungsgerüst ein Textfeld und einen Button mit dem Text <i>Kopieren</i>. Mit dem Textfeld wählen Sie das Gerüst aus, dessen Bedeutungen kopiert werden sollen, durch einen Klick auf <i>Kopieren</i> lösen Sie die Operation aus. Beim Kopieren des Gerüsts werden die Karteikarten, die mit den Bedeutungen des Quellgerüsts verknüpft waren, automatisch um die Bedeutungen des neuen Gerüsts ergänzt. In diesem Moment haben Sie also zwei identische Gerüste, die den identischen Karteikarten mit den identischen Bedeutungen zugeordnet sind.</p>
 
 					<p>Im <b>zweiten Textfeld</b> der Kopfleiste lässt sich festlegen, mit welcher Zählung das aktuelle Bedeutungsgerüst beginnen soll. Standardmäßig beginnt die Zählung der Bedeutungen mit arabischen Ziffern (1, 2, 3 <abbr title="und so weiter">usw.</abbr>). Die Einstellung der Zählung in der obersten Ebene bezieht sich immer nur auf das aktuelle Gerüst. Es kann also jedes Gerüst eine andere Zählung haben. Die Abfolge der Zählzeichen ist wie folgt: I – A – 1 – a – α – • – ◦. Bedeutungen ab der achten Verschachtelungsebene erhalten immer einen Spiegelstrich (–), wenn Sie eine römische Nummerierung wählen. Ansonsten wird schon auf der sechsten <abbr title="beziehungsweise">bzw.</abbr> siebten Ebene der Spiegelstrich verwendet.</p>
 
@@ -356,7 +369,7 @@
 
 					<p>Der Text von Bedeutungen ist immer einzeilig, Zeilenumbrüche sind also nicht zulässig und werden unterbunden. Es stehen drei Formatierungen zur Verfügung: Fetten (<kbd>Strg</kbd> + <kbd>B</kbd>), Kursivieren (<kbd>Strg</kbd> + <kbd>I</kbd>), Unterstreichen (<kbd>Strg</kbd> + <kbd>U</kbd>). Die Formatierungsbefehle können auch über die Toolbar vorgenommen werden, die beim Fokussieren des Textfeldes erscheint.</p>
 
-					<p><b>Verschieben:</b> Die Bedeutungen können im Gerüst frei verschoben werden. Dazu muss auf die Windrose in der ersten Spalte vor der Bedeutung geklickt werden. Die Windrose erscheint, sobald man mit der Maus über die erste Spalte fährt. Sie zeigt an, in welche Richtung die markierte Bedeutung mit den Cursortasten verschoben werden kann. Einige Beispiele:</p>
+					<p><b>Verschieben:</b> Die Bedeutungen können im Gerüst frei verschoben werden. Dazu muss auf die Windrose in der ersten Spalte vor der Bedeutung geklickt werden. Die Windrose erscheint, sobald man mit der Maus über die erste Spalte fährt. Sie zeigt an, in welche Richtung die markierte Bedeutung mit den Cursor-Tasten verschoben werden kann. Einige Beispiele:</p>
 
 					<p class="erklaerung-icon"><img src="../img/move_37-38-39-40.svg" width="24" height="24" alt="">die Bedeutung kann in alle Richtungen verschoben werden;</p>
 
@@ -364,7 +377,7 @@
 
 					<p class="erklaerung-icon"><img src="../img/move_.svg" width="24" height="24" alt="">die Bedeutung kann nicht verschoben werden.</p>
 
-					<p>Ist eine Bedeutung markiert, kann sie mithilfe der Cursortasten verschoben werden. Dabei werden automatisch alle Unterbedeutungen mit verschoben. Welche Bedeutungen alle verschoben werden, sieht man daran, dass sie beim Klick auf die Windrose blau hinterlegt werden. Die Zählzeichen der Bedeutungen werden beim Verschieben automatisch angepasst.</p>
+					<p>Ist eine Bedeutung markiert, kann sie mithilfe der Cursor-Tasten verschoben werden. Dabei werden automatisch alle Unterbedeutungen mit verschoben. Welche Bedeutungen alle verschoben werden, sieht man daran, dass sie beim Klick auf die Windrose blau hinterlegt werden. Die Zählzeichen der Bedeutungen werden beim Verschieben automatisch angepasst.</p>
 
 					<p>Das Verschieben einer Unterbedeutung in eine andere Oberbedeutung, ist mit der Tastatur nur über einen Umweg möglich. Hierzu müssen Sie die Unterbedeutung zunächst so weit nach links verschieben, dass Sie sie in einem zweiten Schritt derart in der Vertikalen bewegen können, dass sie am Ende direkt unterhalb des Zweiges steht, in dem sich die Zielbedeutung befindet. Indem die Bedeutung nun nach rechts verschoben wird, wird sie Teil des Zielbedeutungszweiges und kann an die entsprechende Stelle gerückt werden.</p>
 
@@ -465,7 +478,7 @@
 
 					<p class="info">Die Tag-Listen speisen sich aus Tag-Dateien (im <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Format), die mit dem Programm verknüpft wurden. Welche Dateien dies sind, können Sie im Einstellungen-Fenster einsehen: <i>Programm &gt; Einstellungen &gt; Bedeutungsgerüst &gt; Tag-Dateien</i>. Wie Sie diese ändern wird unter <a href="#" class="link-sektion-einstellungen">Einstellungen</a> beschrieben.</p>
 
-					<p><b>Alias:</b> Wenn ausformulierte Bedeutungen lang werden, kann dies die Übersicht in der <a href="#" class="link-sektion-filter">Filterleiste</a> und in der <a href="#karteikarte-formularansicht">Formularansicht der Karteikarte</a> stark beeinträchtigen. Zu diesem Zweck können Sie Bedeutungen mit einem Alias versehen. In der Formularansicht der Karteikarte, im zugehörigen Dropdown-Menü und in der Filterleiste erscheint dann anstelle der eigentlich Bedeutung das Alias. Im Bedeutungsgerüst-Fenster, in der Belegliste und der Leseansicht der Karteikarte sollten lange Bedeutungsangaben nicht störend sein, weswegen sie hier immer in ausgeschriebene Form gedruckt werden.</p>
+					<p id="bedeutungsgeruest-alias"><b>Alias:</b> Wenn ausformulierte Bedeutungen lang werden, kann dies die Übersicht in der <a href="#" class="link-sektion-filter">Filterleiste</a> und in der <a href="#karteikarte-formularansicht">Formularansicht der Karteikarte</a> stark beeinträchtigen. Zu diesem Zweck können Sie Bedeutungen mit einem Alias versehen. In der Formularansicht der Karteikarte, im zugehörigen Dropdown-Menü und in der Filterleiste erscheint dann anstelle der eigentlich Bedeutung das Alias. Im Bedeutungsgerüst-Fenster, in der Belegliste und der Leseansicht der Karteikarte sollten lange Bedeutungsangaben nicht störend sein, weswegen sie hier immer in ausgeschriebene Form gedruckt werden.</p>
 
 					<p>So vergeben Sie ein Alias:</p>
 
@@ -567,7 +580,7 @@
 
 						<p>Eine automatisch erfolgte Kürzung kann man durch Klick auf den gekürzten Absatz nach und nach rückgängig machen, um mehr Kontext zu erhalten. Pro Klick wird ein zum angezeigten Text benachbarter Absatz eingeblendet. Ist an der zuvor gekürzten Stelle der komplette Text sichtbar, verschwindet das Kürzungszeichen.</p>
 
-						<p>Um das Karteiwort möglichst zuverlässig zu erkennen, werden beim Erstellen einer Kartei automatisch Formvarianten des <abbr title="Deutsches Textarchiv">DTA</abbr> geladen (<i>Kartei &gt; Formvarianten</i>; <abbr title="siehe">s.</abbr> auch <a href="#" class="link-sektion-menue-kartei">Menü: Kartei</a>). Sollte das Karteiwort im Belegtext nicht erkannt oder sollten sogar falsche Wörter hervorgehoben werden, können Sie das Problem vielleicht dadurch beheben, dass Sie die Liste der Formvarianten modifizieren, also ergänzen oder bereinigen. Bestand zum Zeitpunkt des Erstellens der Kartei keine Internetverbindung, sollten Sie das Laden der Formvarianten noch einmal manuell anstoßen. Dafür gibt es einen Button im Formvarianten-Fenster (<i>Kartei &gt; Formvarianten</i>).</p>
+						<p>Um das Karteiwort möglichst zuverlässig zu erkennen, werden beim Erstellen einer Kartei automatisch Formvarianten des <abbr title="Deutsches Textarchiv">DTA</abbr> geladen (<i>Kartei &gt; Formvarianten</i>; <abbr title="siehe">s.</abbr> auch <a href="#" class="link-sektion-menue-kartei">Menü Kartei</a>). Sollte das Karteiwort im Belegtext nicht erkannt oder sollten sogar falsche Wörter hervorgehoben werden, können Sie das Problem vielleicht dadurch beheben, dass Sie die Liste der Formvarianten modifizieren, also ergänzen oder bereinigen. Bestand zum Zeitpunkt des Erstellens der Kartei keine Internetverbindung, sollten Sie das Laden der Formvarianten noch einmal manuell anstoßen. Dafür gibt es einen Button im Formvarianten-Fenster (<i>Kartei &gt; Formvarianten</i>).</p>
 					</div>
 
 					<p class="erklaerung-icon"><img src="../img/liste-trennung.svg" width="24" height="24" alt="">Silbentrennung im Belegtext ein- oder ausblenden</p>
@@ -729,22 +742,22 @@
 					</figure>
 
 					<p>Aktiviert man die Funktion <img src="../img/liste-aufklappen.svg" width="24" height="24" alt=""> oder klickt auf die <a href="#belegliste-kopfleisteBelege">Kopfleiste eines Belegs</a> wird die Detailansicht geöffnet. In ihr können Sie, wie es der Name schon sagt, die Details zu den Belegen sehen. Prinzipiell können hier alle Inhalte angezeigt werden, die in der Karteikarte eingetragen worden sind, standardmäßig wird aber nur der Belegtext eingeblendet, dieser allerdings komplett (es sei denn, die Funktion <img src="../img/liste-kuerzen.svg" width="24" height="24" alt=""> zum <a href="#belegliste-kuerzung">Kürzen des Kontexts um das Karteiwort herum</a> wurde aktiviert). Wollen Sie weitere Elemente (<abbr title="das heißt">d. h.</abbr> den Inhalt weiterer Datenfelder) sehen, müssen Sie zunächst die entsprechenden Icons aktivieren, die die <a href="#belegliste-platzhalter">Anzeige der Detailansicht steuern</a>. Jedes Element kann ausgeblendet werden mit Ausnahme des Belegtexts.</p>
-					
+
 					<p><b>Elemente</b> werden in der Detailansicht nur dann angezeigt, wenn sie vorher in der Karteikarte auch gefüllt wurden. Haben Sie <abbr title="beispielsweise">bspw.</abbr> zu einem Beleg keine Informationen zu Synonymen hinterlegt, wird das Element in der Detailansicht selbst dann nicht angezeigt, wenn das Icon <img src="../img/liste-synonym.svg" width="24" height="24" alt=""> aktiviert ist.</p>
-					
+
 					<p>Das Layout der Datenfelder ist immer dasselbe: Am rechten Rand steht in einer Überschrift, um welches Datenfeld es sich handelt, darunter der Text des Datenfeldes. Allein der Belegtext (keine Überschrift) und die <b>Metainfos</b> zum Beleg stellen hier eine Ausnahme dar. Die Metainfos erscheinen gesammelt in einer grau hinterlegten Leiste und werden durch <a href="#belegliste-metainfos">Icons</a> dargestellt.</p>
-					
+
 					<p>Wurde ein Beleg um <b>Dateianhänge</b> ergänzt, werden auch diese in der Metainfo-Leiste angezeigt, ebenfalls als Icon. Durch Klick auf die Datei-Icons können die Anhänge im Standardprogramm des Betriebssystems geöffnet werden.</p>
-					
+
 					<p>Arbeiten Sie mit mehreren <a href="#" class="link-sektion-bedeutungsgeruest">Bedeutungsgerüsten</a>, wird in der Überschrift <i>Bedeutung</i> angegeben, aus welchem Gerüst die angezeigte Bedeutung stammt. Diese Überschrift ist klicksensitiv; über sie kann die Funktion <i>Kartei &gt; Bedeutungsgerüst wechseln</i> aufgerufen werden.</p>
-					
+
 					<p id="belegliste-kopierenIcon">Am linken Rand neben Belegtext und Quellenangabe stehen <b>Kopier-Icons</b>: <img src="../img/tool-kopieren.svg" width="24" height="24" alt="">. Über sie kann man mit nur einem Klick den Belegtext <abbr title="beziehungsweise">bzw.</abbr> die Quellenangabe in die Zwischenablage des Rechners schieben, um sie in ein anderes (Textverarbeitungs-)Programm einzufügen. Beim Kopieren des Belegtexts wird automatisch die Quellenangabe mitkopiert. Dabei wird immer der komplette Belegtext kopiert, und zwar auch, wenn der Kontext gekürzt wurde (Funktion <img src="../img/liste-kuerzen.svg" width="24" height="24" alt="">).</p>
-					
+
 					<p id="belegliste-kopierenAuswahl">Wenn Sie möchten, können Sie nur einen <b>Teil des Belegtexts kopieren</b>: den gewünschten Text mit der Maus markieren, Rechtsklick, <i>Textauswahl kopieren</i>. Auch in diesem Fall wird die Quellenangabe automatisch ergänzt. Auch deswegen sollten Sie Textteile immer auf diese Weise kopieren. Die vom Framework der App verwaltete Kopierfunktion <kbd>Strg</kbd> + <kbd>C</kbd> ergänzt die Quellenangabe nicht und sorgt auch nicht für eine Bereinigung der Formatierung.</p>
-					
+
 					<div class="info">
 						<p>Weswegen eine Bereinigung der Textformate nötig sein kann: In <i class="app-name"></i> importierte Texte werden, der besseren Lesbarkeit am Bildschirrm wegen, durchgehend mit einer Antiquaschrift dargestellt. Tauchen in aus dem <abbr title="Deutschen Textarchiv">DTA</abbr> importierten historischen Texten, die in Fraktur gesetzt sind, Passagen in Antiqua auf, werden diese in der Programmansicht durch eine Serifenschrift dargestellt. Beim Kopieren via Rechtsklick wird aus der Serife wieder eine Antiqua. Fügen Sie den kopierten Text dann in ein Textverarbeitungsprogramm wie <i>LibreOffice Writer</i> oder <i>Microsoft Word</i> ein und haben Sie dort zuvor eine Serifenschrift (wie <abbr title="zum Beispiel">z. B.</abbr> <span lang="en">Times New Roman</span>) eingestellt, erscheinen die Textteile, die im Originaltext Fraktur waren, als Serife und die, die in Antiqua gesetzt waren, als Antiqua.</p>
-						
+
 						<p>Das Kopieren via Rechtsklick funktioniert nicht nur im Belegtext, sondern in allen Elementen, die in der Detailansicht angezeigt werden. Für die <a href="#karteikarte-leseansicht">Leseansicht der Karteikarte</a> gilt in Sachen Kopieren übrigens dasselbe wie für die Detailansicht der Belegliste: Auch hier sollten Sie zum Kopieren das Kopier-Icon oder das Rechtsklickmenü verwenden.</p>
 					</div>
 
@@ -773,76 +786,373 @@
 					</div>
 
 					<p class="erklaerung-icon"><img src="../img/liste-bearbeiten.svg" width="24" height="24" alt="">Beleg bearbeiten</p>
-					
+
 					<p class="info">Dient zum Öffnen der Karteikarte. Dieser Punkt erscheint in allen Rechtsklickmenüs der Belegliste, sodass Sie nicht unbedingt zur Kopfleiste des Belegs scrollen müssen, um die <a href="#" class="link-sektion-karteikarte">Karteikarte</a> zu öffnen, was <abbr title="besonders">bes.</abbr> bei langen Belegen hilfreich sein kann. Ob die Karteikarte in der Lese- oder der Formularansicht geöffnet wird, hängt von einer <a href="#einstellungen-karteikarteLeseansicht">Einstellung</a> ab. Standardmäßig wird die Leseansicht geöffnet.</p>
 
 					<p class="erklaerung-icon"><img src="../img/loeschen.svg" width="24" height="24" alt="">Beleg löschen</p>
-					
+
 					<p class="info">Vor dem Löschen des Belegs wird zur Sicherheit noch einmal nachgefragt. Das Löschen eines Belegs kann nicht rückgängig gemacht werden! Die einzige Möglichkeit, einen gelöschten Beleg wiederherzustellen, besteht darin, die Kartei zu schließen, ohne sie zu speichern, und sie dann wieder zu öffnen.</p>
 
 					<p class="erklaerung-icon"><img src="../img/beleg-zwischenablage.svg" width="24" height="24" alt="">Beleg in Zwischenablage kopieren</p>
-					
+
 					<p class="info">Kopiert werden alle Datenfelder des Belegs. Das Kopierformat ist nicht menschen-, dafür aber sehr gut maschinenlesbar. So kann der Beleg schnell in eine andere Kartei kopiert werden. <abbr title="Vergleiche">Vgl.</abbr> dazu die <a href="#karteikarte-zwischenablage">Erläuterungen im <abbr title="Abschnitt">Abschn.</abbr> Karteikarte</a>. Wollen Sie den Belegtext in ein Textverarbeitungsprogramm einfügen, benutzen Sie besser das Kopier-Icon <img src="../img/tool-kopieren.svg" width="20" height="20" alt="">.</p>
 
 					<p class="erklaerung-icon"><img src="../img/beleg-duplikat.svg" width="24" height="24" alt="">Beleg duplizieren</p>
-					
+
 					<p class="info">Es wird ein inhaltlich hundertprozentiger Klon des Belegs erstellt, der umgehend in der Belegliste erscheint. Der einzige Unterschied ist die Belegnummer (sichtbar in der Überschrift der Karteikarte).</p>
 
 					<p class="erklaerung-icon"><img src="../img/quick-einstellungen.svg" width="24" height="24" alt="">Belegliste-Einstellungen</p>
-					
+
 					<p class="info">Öffnet das <a href="#" class="link-sektion-einstellungen">Einstellungen-Fenster</a> und wechselt direkt in den <abbr title="Abschnitt">Abschn.</abbr> Belegliste.</p>
 
 					<p class="erklaerung-icon"><img src="../img/quick-hinzufuegen.svg" width="24" height="24" alt="">Beleg hinzufügen</p>
-					
+
 					<p class="info">Öffnet eine neue leere <a href="#karteikarte-formularansicht">Karteikarte in der Formularansicht</a>.</p>
 
 					<p class="erklaerung-icon"><img src="../img/tool-kopieren.svg" width="24" height="24" alt="">Textauswahl kopieren</p>
-					
+
 					<p class="info">Erscheint nur beim Rechtsklick auf markiertem Text. Details dazu, wie das Kopieren abläuft, <a href="#belegliste-kopierenAuswahl"><abbr title="siehe oben">s. o.</abbr></a>.</p>
 
 					<p class="erklaerung-icon"><img src="../img/tool-mark.svg" width="24" height="24" alt="">Textauswahl markieren</p>
-					
+
 					<p class="info">Erscheint nur beim Rechtsklick auf markiertem Belegtext. Details zur Annotierungsfunktion <a href="#belegliste-karteiwortHervorheben"><abbr title="siehe oben">s. o.</abbr></a></p>
 
 					<p class="erklaerung-icon"><img src="../img/liste-link.svg" width="24" height="24" alt="">Textauswahl markieren</p>
-					
+
 					<p class="info">Erscheint nur beim Rechtsklick auf einem Internet-Link. Kopiert wird die <abbr title="Uniform Resource Locator" lang="en">URL</abbr> des Links.</p>
 
 					<p class="erklaerung-icon"><img src="../img/quick-oeffnen.svg" width="24" height="24" alt="">Anhang öffnen</p>
-					
+
 					<p class="info">Erscheint nur beim Rechtsklick auf einem Dateianhang-Icon in der Metainfo-Leiste. <i class="app-name"></i> öffnet die Datei im als Standard festgelegten Programm des Betriebssytems. Welches dies ist, hängt in aller Regel von der Dateiendung ab.</p>
 				</section>
 
 				<!-- FILTER -->
 				<section id="sektion-filter" class="suche">
-					<h2 id="filter-kopfleiste">Kopfleiste</h2>
+					<h2 id="filter-leiste">Filterleiste</h2>
 
-					<h2 id="filter-volltext">Volltext</h2>
+					<figure class="right" title="zum Vergrößern anklicken">
+						<img src="../img/win/hb-filter-normal.png" alt="">
+						<figcaption>die App mit geöffneter Filterleiste</figcaption>
+					</figure>
+
+					<p>Die Filter dienen dazu, die <a href="#" class="link-sektion-belegliste">Belegliste</a> gezielt zu kürzen, um nur Textbelege mit einer bestimmten Semantik, aus einem bestimmten Zeitraum, Korpus <abbr title="und so weiter">usw.</abbr> zu sehen. Die Filterleiste lässt sich über das Icon <img src="../img/liste-filter.svg" width="24" height="24" alt=""> in der <a href="#belegliste-kopfleiste">Kopfleiste der Belegliste</a> öffnen und schließen.</p>
+
+					<p>Wurden Filter einmal aktiviert, spielt es für die Anzeige der Belegliste keine Rolle, ob die Filterleiste sichtbar oder unsichtbar ist. Die Filter werden so lange angewandt, bis sie explizit zurückgesetzt worden sind. Ist die Filterleiste ausgeblendet, sehen Sie an der Angabe zur Anzahl der Belege oben rechts in der Kopfleiste der Belegliste, ob die Filter aktiv sind oder nicht. Ist die Schrift schwarz, sind keine Filter aktiv – oder Sie haben einen Filter ausgewählt, der die Liste nicht wirklich gefilter hat, weil er auf alle Belege zutrifft. Tippen Sie im <i>Volltext</i>-Filter <abbr title="beispielsweise">bspw.</abbr> einfach nur <q>e</q> ein, ist die Wahrscheinlichkeit sehr groß, dass er auf alle Belege zutrifft. Wurde die Belegliste hingegen so gefiltert, dass nicht mehr alle Belege der Kartei angezeigt werden, wird die Schrift rot und sieht dann <abbr title="zum Beispiel">z. B.</abbr> so aus: <span class="obacht">7/19 Belegen</span>.</p>
+
+					<figure class="right" title="zum Vergrößern anklicken">
+						<img src="../img/win/hb-filter-belegliste-reset.png" alt="">
+						<figcaption>Zurücksetzen der Filter über den Kopf der Belegliste</figcaption>
+					</figure>
+
+					<p>In diesem Falll können Sie die Filter zurücksetzen, ohne die geschlossene Filterleiste extra zu öffnen. Bei Rechtsklick auf den roten Text in der Kopfleiste der Belegliste erscheint ein Menüpunkt für den Reset.</p>
+
+					<p>Die einzelnen Filterblöcke lassen sich durch einen Klick auf den blauen Filterkopf öffnen, sodass alle in der jeweiligen Filterkategorie zur Verfügung stehenden Filter erscheinen. Die in Klammern stehende Zahl hinter den nun sichtbaren Filtern zeigt an, wie viele Belege es in der Belegliste insgesamt gibt, auf die der jeweilige Filter zutrifft. Filter, für die es keine Treffer gibt, werden ausgegraut. Solche Filter können im Filterblock <i>Zeitraum</i> erscheinen, um deutlich zu machen, für welche Zeiträume Lücken in der Belegsammlung zu finden sind, und unter gewissen Umständen im <a href="#filter-bedeutungen">Filter <i>Bedeutungen</i></a> (dazu unten mehr).</p>
+
+					<p>Wurde in einem Filterblock ein Filter ausgewählt, ist in dieser Kategorie also ein Filter aktiv, färbt sich der Filterkopf grün. Die gewählten Filter bleiben auch dann aktiv, wenn Sie den Filterblock nach der Auswahl eines Filters wieder schließen. Für die einzelnen Filterblöcke gilt somit dasselbe wie für die Filterleiste im Ganzen: Der Umstand, dass Filter nicht sichtbar sind, heißt keineswegs, dass sie nicht aktiv sind. Dass es in einem geschlossenen Block aktive Filter gibt, erkennen Sie an der grünen Farbe des Filterkopfs. Zurückgesetzt werden können Filter, indem man die entsprechenden Checkboxes wieder abwählt oder auf das Icon <img src="../img/filter-reset.svg" width="24" height="24" alt=""> klickt, das beim Herüberfahren der Maus über einem Filterblock erscheint. Die Reset-Funktion des Icons beschränkt sich auf den Filterblock, zu dem es gehört. Im Kopf der Filterleiste gibt es dasselbe Icon noch einmal. Mit ihm können alle Filter zurückgesetzt werden.</p>
+
+					<div class="bilder">
+						<figure title="zum Vergrößern anklicken">
+							<img src="../img/win/hb-filter-modus1.png" alt="">
+							<figcaption>ein geöffneter Filterblock</figcaption>
+						</figure>
+
+						<figure title="zum Vergrößern anklicken">
+							<img src="../img/win/hb-filter-modus2.png" alt="">
+							<figcaption>aktiver Filterblock mit sichtbarem Reset-Icon</figcaption>
+						</figure>
+
+						<figure title="zum Vergrößern anklicken">
+							<img src="../img/win/hb-filter-modus3.png" alt="">
+							<figcaption>Filterblock mit ausgegrauten Filtern</figcaption>
+						</figure>
+					</div>
+
+					<p>Dafür, welche Filterblöcke standardmäßig geöffnet sein sollen und wie sich das Programm verhält, wenn Sie auf einen der Filterköpfe klicken, gibt es spezielle <a href="#einstellungen-filterleiste">Einstellungen</a>.</p>
+
+					<figure class="right" title="zum Vergrößern anklicken">
+						<img src="../img/win/hb-filter-verteilung.png" alt="">
+						<figcaption>zeitliche Verteilung der Belege</figcaption>
+					</figure>
+
+					<p>Im Kopf der Filterleiste gibt es ein Icon (<img src="../img/filter-zeitraumgrafik.svg" width="24" height="24" alt="">), mit dem Sie sich die zeitliche Verteilung der in der Kartei gesammelten Belege in einem Diagramm anzeigen lassen können. Auf der x-Achse finden sich Zeitschnitte in 10-, 50- oder 100-Jahresschritten. Die Abstände der angezeigten Zeitschnitte hängen zum einen von der Einstellung im <a href="#filter-zeitraum"><i>Zeitraum</i>-Filter</a> ab und zum anderen von dem zur Verfügung stehenden Platz. Auf der y-Achse ist die Anzahl der Belege aufgetragen. Die Kurve selbst orientiert sich immer an der Einstellung der Zeitschnitte im <i>Zeitraum</i>-Filter. Selbst wenn auf der y-Achse nicht genug Platz ist, um alle 10-Jahresschritte zu markieren, wird die Kurve in 10-Jahresschritten gezeichnet. Die Höhe eines Punktes in der Kurve ergibt sich aus der Anzahl der Belege, die sich innerhalb eines Zeitschnitts (vom Beginn bis zum Ende minus ein Jahr) befinden.</p>
 
 					<h2 id="filter-dynamische">Dynamische Filter</h2>
+
+					<p>Die meisten Filter werden dynamisch erstellt und gefüllt, vordefiniert sind nur die Filterkategorien, die sich wiederum an den zur Verfügung stehenden Datenfeldern der <a href="#" class="link-sektion-karteikarte">Karteikarte</a> orientieren. Welche Filter genau es in den einzelnen Kategorien gibt, hängt davon ab, wie die Karteikarten der Wortkartei gefüllt wurden, denn fast alle Filter werden dynamisch erzeugt. Dynamisch gefüllt werden die Filter <i>Zeitraum, Bedeutungen, Wortbildungen, Synonyme, Korpora, Textsorten</i> und <i>Verschiedenes</i>.</p>
+
+					<p>Kann eine Filterkategorie nicht mit konkreten Filtern gefüllt werden, weil in keiner der Karteikarten entsprechende Daten zu finden sind, erscheint sie nicht in der Filterleiste. Sie müssen sich also nicht sorgen, wenn <abbr title="beispielsweise">bspw.</abbr> der Filterblock <a href="#filter-verschiedenes"><i>Verschiedenes</i></a> nicht angezeigt wird. Der Grund ist einfach, dass Sie in den Karteikarten bisher keine Eingaben gemacht haben, die zu dieser Kategorie gehören.</p>
+
+					<figure class="right" title="zum Vergrößern anklicken">
+						<img src="../img/win/hb-filter-minimal.png" alt="">
+						<figcaption>Filterleiste einer minimal gefüllten Kartei</figcaption>
+					</figure>
+
+					<p>In einer Kartei ohne Belege werden die Filter nicht angezeigt. Sobald mindestens eine Karteikarte minimal gefüllt und gespeichert wurde (sprich: die Textfelder Datum, Beleg und Quelle sind ausgefüllt), werden die Filter <i>Volltext, Zeitraum, Kartendatum, Bedeutungen, Korpora</i> und <i>Textsorten</i> angezeigt. Dass der <i>Zeitraum</i>-Filter erscheint, ist nur logisch, weil Sie beim Erstellen einer Karteikarte zwingend eine Jahreszahl oder zumindest ein Jahrhundert eingeben müssen. Ansonsten würde die App sich weigern, die Karte zu speichern. Im Falle der Filter <i>Bedeutungen, Korpora</i> und <i>Textsorten</i> ist es so, dass auch dann ein Filter erstellt wird, wenn es sozusagen einen <q>negativen Befund</q> gibt. Fehlen in einer Karteikarte Einträge in den Datenfeldern Bedeutung, Korpus oder Textsorte, wird automatisch der Filter <i>(nicht bestimmt)</i> erzeugt. Mit ihm können Sie Belege finden, denen Sie <abbr title="zum Beispiel">z. B.</abbr> noch keine Bedeutung zugewiesen haben.</p>
+
+					<p><b>Volltext:</b> Belege nach dem Vorkommen beliebiger Wörter filtern</p>
+
+					<div class="info">
+						<p>Der <i>Volltext</i>-Filter ist zugleich die <b>Suchfunktion der App</b>. Deswegen ist er auch der einzige Filter, der direkt über ein Tastaturkürzel zu erreichen ist (<kbd>Strg</kbd> + <kbd>F</kbd>) und der im Programmmenü auftaucht (<i>Kartei &gt; Suche</i>). Das Tastaturkürzel können Sie im Hauptfenster des Programms jederzeit aufrufen – auch wenn die Filterleiste noch geschlossen ist, ganz egal in welcher Ansicht Sie sich befinden.</p>
+
+						<p>Geben Sie mehrere <b>Suchwörter</b> ein (getrennt durch ein Leerzeichen), werden nur Belege gefunden, die jedes dieser Suchwörter enthalten. Dabei müssen die Suchwörter nicht notwendigerweise in ein und demselben Datenfeld gefunden werden. Suchen Sie in der <a href="#" class="hilfe-demo">Demonstrationskartei</a> <abbr title="zum Beispiel">z. B.</abbr> nach <q>kellner persönlichkeit</q> wird der Beleg von 1998 angezeigt, obwohl <q>persönlichkeit</q> nur im Belegtext und <q>kellner</q> nur in den Datenfeldern <i>Autor, Quelle, Notizen</i> gefunden wird.
+
+						<p>Die Standardsuche unterscheidet nicht zwischen <b>Groß- und Kleinschreibung</b>. Hierzu müssten Sie zunächst eine Einstellung in den <a href="#filter-erweiterteSuchfilter">erweiterten Suchfiltern</a> aktivieren.</p>
+
+						<p>Ist der Suchfilter aktiv, wird die Belegliste nicht einfach nur gefiltert. Zum einen wird im Gegensatz zum Verwenden anderer Filter für jeden Beleg die <b>Detailansicht</b> geöffnet. Zum anderen wird die (gewünschte) <a href="#belegliste-platzhalter">Konfiguration</a> der <a href="#belegliste-detailansicht">Detailansicht</a> übergangen: Das Programm berücksichtigt in solchen Fällen nicht mehr, ob Sie das Element <i>Quelle</i> in der Detailansicht sehen möchten oder nicht. Gibt es in einem Datenfeld einen Treffer, wird das entsprechende Element in der Belegliste eingeblendet, gibt es keinen Treffer, wird es ausgeblendet – und zwar selbst dann, wenn Sie es in der Detailansicht eigentlich immer sehen möchten. Dieses Verhalten kann sogar dazu führen, dass der Belegtext komplett ausgeblendet wird, sprich zu einer einzigen Kürzung zusammenschrumpft: <q>[…]</q>. Diese Kürzung können Sie allerdings durch einen <a href="#belegliste-kuerzung">Klick auf das Auslassungszeichen</a> sukzessive rückgängig machen.</p>
+
+						<p id="filter-erweiterteSuchfilter">Mithilfe der Einstellungen in den <b>erweiterten Suchfiltern</b> können Sie die Suchergebnisse feiner steuern:</p>
+
+						<ul>
+							<li><b>Phrasensuche:</b> Befinden sich Leerzeichen im Suchfeld, wird der Suchausdruck nicht mehr in mehrere Suchwörter aufgeteilt, sondern als ein einziges Wort behandelt. Sie bekommen also nur noch Belege angezeigt, in denen die im Suchfeld stehenden Wörter in exakt der eingegebenen Reihenfolge auftauchen.</li>
+
+							<li><b>genaue Schreibung:</b> Unterschiede zwischen Groß- und Kleinschreibung werden bei der Suche berücksichtigt.</li>
+
+							<li><b>ganzes Wort:</b> Die Suchwörter produzieren nur Treffer, wenn sie als ganzes Wort auftauchen, es also links und rechts eines Treffers eine Wortgrenze gibt, die durch einen Punkt, eine Klammer, ein Leerzeichen oder dergleichen markiert ist. Eine Suche nach <q>Team</q> würde in diesem Fall <q>Teams</q> oder <q>Teamvergleich</q> nicht mehr finden. Ist die Option deaktiviert, wird trunkiert gesucht.</li>
+
+							<li><b>Datenfelder:</b> Durch Abwahl einzelner Datenfelder können Sie die Suche einschränken. Ist allein das Datenfeld <i>Beleg</i> abgehakt, wird <abbr title="beispielsweise">bspw.</abbr> nur der Belegtext durchsucht.</li>
+						</ul>
+
+						<p>Die erweiterten Suchfilter können einfach dadurch deaktiviert werden, dass Sie sie schließen. Die in ihnen vorgenommenen Einstellungen werden gespeichert und beim Neustart des Programms wiederhergestellt.</p>
+					</div>
+
+					<p id="filter-zeitraum"><b>Zeitraum:</b> Belege nach Zeitraum filtern</p>
+
+					<div class="info">
+						<p>Die zur Verfügung stehenden Zeitschnitte werden dynamnisch erzeugt: Dazu wird in einem ersten Schritt geschaut, zu welchem Zeitschnitt der älteste Textbeleg in der Kartei gehört und zu welchem der jüngste. Danach werden alle Zeitschnitte dazwischen ergänzt, und zwar in der Frequenz, die in der ersten Zeile durch die runden Radio-Buttons vorgegeben ist: in 10er-, 50er- oder 100er-Schritten.</p>
+
+						<p>Diese Methode kann dazu führen, dass ausgegraute Filter aufgebaut werden, die nicht aktiviert werden können, weil hinter ihnen keine Belege stehen. Ein Beispiel: Lassen Sie sich in einer Wortkartei die Filter in 100er-Schritten anzeigen und haben einen singulären Beleg aus dem 17. Jahrhundert und dann erst wieder Belege aus dem 19. und 20. Jahrhundert, werden zwar die Zeitschnitte <i>1600, 1700, 1800</i> und <i>1900</i> aufgebaut. Der Zeitschnitt 1700 ist jedoch ausgegraut, weil hinter ihm keine Belege stehen. Auf diese Weise können Sie auf einem Blick erkennen, wo es in ihrer Belegsammlung Lücken gibt und diese <abbr title="gegebenenfalls">ggf.</abbr> noch einmal gesondert überprüfen.</p>
+
+						<p>Sie haben gewiss erkannt, dass die Jahrhundertgrenzen hier nicht der gängigen Definition gemäß gezogen werden, sondern so getan wird, als würden Jahrhunderte mit dem Jahr null beginnen. Dies ist inhaltlich nicht korrekt, lässt sich aber leichter berechnen und dürfte auch den Umgang mit den Belegen vereinfachen.</p>
+
+						<p>Durch das Aktivieren eines Zeitschnittfilters werden alle Belege gefunden, die vom Beginn dieses Zeitschnitts bis zum Beginn des nächsten Zeitschnitts datiert wurden, das letzte Jahr exklusive. Sind 100er-Schritte eingestellt steht der Filter <i>1800</i> somit für alle Belege, die vom Jahr 1800 bis <abbr title="inklusive">inkl.</abbr> 1899 datieren.</p>
+					</div>
+
+					<p><b>Kartendatum:</b> Belege herausfiltern, die zu einem bestimmen Zeitraum angelegt oder geändert wurden</p>
+
+					<div class="info">
+						<p>Dieser Filter weicht insofern von den anderen Filtern ab, als es bei ihm nicht um inhaltliche Kriterien der Belege, sondern rein formale der Belegsammlung geht. Legen Sie eine <a href="#" class="link-sektion-karteikarte">Karteikarte</a> an oder ändern sie in einer bestehenden Karteikarte ein Datenfeld, werden beim Speichern in zwei versteckten, sprich: auf der Programmoberfläche nicht sichtbaren, Datenfeldern die genauen Daten der jeweiligen Aktion vermerkt. Nur diese beiden Datenfelder werden vom <i>Kartendatum</i>-Filter angesprochen. Es geht hier also <em>nicht</em> um das <a href="#karteikarte-datum">Datumsfeld in der Karteikarte</a>!</p>
+
+						<p>Beim Öffnen einer Kartei und beim Zurücksetzen dieses Filters wird das Von-Datum auf das Erstellungsdatum des zuerst angelegten Belegs der Kartei gesetzt und das Bis-Datum auf das des zuletzt angelegten Belegs. In neu erstellten Karteien erhalten beide Felder das Erstellungsdatum der Kartei.</p>
+
+						<p>Mithilfe des Icons <img src="../img/filter-jetzt.svg" width="20" height="20" alt=""> kann das Datum des vorstehenden Feldes auf die aktuell laufende Minute gesetzt werden. Die Datumsfelder lassen sich darüber hinaus manuell auf jeden gewünschten Zeitpunkt einstellen. Unlogische Datumseingaben werden abgefangen: Sollte das Bis-Datum kleiner als das Von-Datum sein, wird das Von-Datum auf das Bis-Datum gesetzt.</p>
+					</div>
+
+					<p id="filter-bedeutungen"><b>Bedeutungen:</b> Belege nach den ihnen zugeordneten Bedeutungen filtern</p>
+
+					<div class="info">
+						<p>Die Filter im <i>Bedeutungen</i>-Block geben die im <a href="#" class="link-sektion-bedeutungsgeruest">Bedeutungsgerüst</a> zu findenden Bedeutungen eins zu eins wieder, und zwar in der Reihenfolge, wie sie im Gerüst zu finden sind, und mit derselben Hierarchisierung, die sie <abbr title="ebenda">ebd.</abbr> haben (dargestellt durch Einrückungen). Allein die Zählzeichen wurden der Übersichtlichkeit halber ausgelassen. Wurde einer Bedeutung im Bedeutungsgerüst ein <a href="#bedeutungsgeruest-alias">Alias</a> zugewiesen, wird an dieser Stelle nicht die (<abbr title="eventuell">evtl.</abbr> lange) Bedeutungsformulierung, sondern das (<abbr title="in der Regel">i. d. R.</abbr> kürzere) Alias eingeblendet.</p>
+
+						<p>Arbeiten Sie mit <a href="#bedeutungsgeruest-neu">mehreren Bedeutungsgerüsten</a>: Es werden immer die Bedeutungen im aktuellen Bedeutungsgerüst angezeigt. Sind mehrere Bedeutungsgerüste vorhanden, wird im Filterkopf eingeblendet, welches Bedeutungsgerüst gerade aktiv ist. Diese Gerüstangabe ist klicksensitiv und öffnet die Funktion <a href="#menue-kartei-bedeutungsgeruestWechseln">Bedeutungsgerüst wechseln</a>.</p>
+
+						<p>Gibt es Belege in der Sammlung, denen bisher keine Bedeutungen zugewiesen wurden, erscheint an erster Stelle der Filter <i>(nicht bestimmt)</i>.</p>
+
+						<p>Die Bedeutungen werden immer alle angezeigt, auch beim Filtern im <a href="#filter-reduktionsmodus">Reduktionsmodus</a>. Unter gewissen Umständen kann es darum geschehen, dass Bedeutungen ausgegraut werden. Dies passiert immer dann,</p>
+
+						<ol>
+							<li>wenn für eine Bedeutung in der Belegliste (noch) keine Belege zu finden sind, denen sie zugeordnet wurden;</li>
+							<li>wenn die Belegliste zuvor im Reduktionsmodus gefiltert wurde und die noch in ihr zu findenden Belege nicht alle vorhandenen Bedeutungen enthalten;</li>
+							<li>wenn die <a href="#einstellungen-filterleisteUntergeordnete">Einstellung, untergeordnete Bedeutung beim Filtern mit einzubeziehen</a>, ausgeschaltet wurde.</li>
+						</ol>
+
+						<p>Der 1. Fall kann eintreten, wenn sie das Bedeutungsgerüst vor der Belegsammlung erstellt und noch nicht zu jeder Position einen Beleg gefunden haben.</p>
+
+						<p>Auf den 2. Fall wird <a href="#filter-reduktionsmodus">unten im Zusammenhang mit dem Reduktionsmodus</a> genauer eingegangen.</p>
+
+						<p>Der 3. Fall tritt immer dann auf, wenn Sie beim Taggen der Bedeutungen in den Karteikarten nie die Oberbedeutung vergeben, sondern immer nur Bedeutungen in den tieferen Hierarchieebenen verwenden. Ein Beispiel: Nehmen wir an, Sie hätten eine Kartei zum Wort <i>Rest</i> erstellt. Bei der Recherche haben Sie die Bedeutung <q class="bedeutung">Überbleibsel</q> ermittelt, die Karteikarten aber immer nur mit Unterbedeutungen wie <q class="bedeutung">von einer Meterware</q>, <q class="bedeutung">von einem Geldbetrag</q> <abbr title="und so weiter">usw.</abbr> getaggt. Haben Sie die Einstellung zum Einbeziehen der Unterbedeutung ausgeschaltet, würde <q class="bedeutung">Überbleibsel</q> keinen Treffer mehr generieren, eben weil die Karteikarten immer nur mit den differenzierteren Definitionen getaggt wurden. In diesem Fall würde die Oberbedeutung <q class="bedeutung">Überbleibsel</q> ausgegraut, was freilich der Extremfall wäre. Haben Sie Karteikarten manchmal auch mit <q class="bedeutung">Überbleibsel</q> getaggt, ändert sich durch das Ausschalten der Einstellung allein die Zählung der Belege, die den einzelnen Bedeutungen zugeordnet sind (angezeigt durch die eingeklammerte Ziffer hinter den Bedeutungen).</p>
+					</div>
+
+					<p><b>Wortbildungen:</b> Belege nach Wortbildungen filtern</p>
+
+					<p class="info">Ähnlich wie im <i>Bedeutungen</i>-Filter können auch hier Hierarchieebenen auftauchen (dargestellt durch Einrückungen), und zwar immer dann, wenn Sie sie beim Taggen der Karteikarten geöffnet haben. <abbr title="Siehe">S.</abbr> dazu die <a href="#karteikarte-wortbildung">Erläuterungen im <abbr title="Abschnitt">Abschn.</abbr> Karteikarte</a>.</p>
+
+					<p><b>Synonyme:</b> Belege nach Synonymen filtern</p>
+
+					<p class="info">Für diesen Filter gilt dasselbe wie für die <i>Wortbildungen</i>.</p>
+
+					<p><b>Korpora:</b> Belege nach Korpus filtern</p>
+
+					<p class="info">Für diesen Filter gilt dasselbe wie für die <i>Wortbildungen</i>. Zusätzlich gilt: Gibt es Belege in der Sammlung, denen bisher kein Korpus zugewiesen wurde, erscheint an erster Stelle der Filter <i>(nicht bestimmt)</i>.</p>
+
+					<p><b>Textsorten:</b> Belege nach Textsorte filtern</p>
+
+					<p class="info">Für diesen Filter gilt dasselbe wie für die <i>Korpora</i>.</p>
+
+					<p id="filter-verschiedenes"><b>Verschiedenes:</b> Belege nach verschiedenen Markierungen und Eigenschaften filtern</p>
+
+					<div class="info">
+						<p>Dieser Filter versammelt alle Markierungsmöglichkeiten, die sich <a href="#karteikarte-unvollstaendig">ganz oben in der Karteikarte finden</a>: <i>unvollständig, Kontext?, Bücherdienst, Buchung, Metatext</i> und die Markierung mit Sternen (<img src="../img/stern.svg" width="20" height="20" alt="">). Darüber hinaus kann auch noch der Filter <i>Notizen</i> auftauchen, mit dem sich alle Belege finden lassen, die Notizen enthalten.</p>
+
+						<p>Dieser Filterblock hat zwei Besonderheiten:</p>
+
+						<ol>
+							<li>lassen sich im Gegensatz zu allen anderen Filtern zwei verschiedene Filterlogiken verwenden: eine inklusive und eine exklusive. Diese werden genauer <a href="#filter-logik">im Zusammenhang mit der Funktionsweise der Filter</a> erläutert.</li>
+
+							<li>ist der Filter <i>Markierung</i> zweigeteilt: Er besteht sowohl aus einer Checkbox zum Abhaken als auch aus Sternen zum Auswählen.</li>
+						</ol>
+
+						<p>Zum <b>Filter <i>Markierung</i>:</b> Durch das Abhaken der Checkbox können Sie alle Karteikarten finden, die mit einem oder mehreren Sternen markiert wurden. Zusätzlich können Sie, indem Sie unter dem Filter auf einen der schwarzen Sterne klicken, festlegen, mit wie vielen Sternen die Belege <em>mindestens</em> getaggt sein müssen. Klicken Sie auf den dritten Stern, sodass die ersten drei Sterne sich gelb einfärben, finden Sie nur noch Belege, die mit drei, vier oder fünf Sternen markiert wurden. Klicken Sie auf den vierten Stern, finden Sie nur noch Belege, die mit vier oder fünf Sternen markiert wurden. Allein den ersten Stern zu markieren, differenziert den <i>Markierungs</i>-Filter somit nicht weiter aus, bedeutet doch schon die Aktivivierung der Checkbox: Zeige mir alle Belege, die mit einem oder mehr Sternen markiert wurden! Ist die Checkbox des <i>Markierungs-</i>Filters nicht aktiviert, hat die Markierung der Sterne an dieser Stelle keine Funktion.</p>
+
+						<p>Das Deaktivieren der Sterne funktioniert genauso wie in der Karteikarte: Klicken sie auf den letzten gelben Stern, werden alle Sterne wieder schwarz.</p>
+
+						<p>Wird im <a href="#filter-reduktionsmodus">Reduktionsmodus</a> gefiltert, haben die Sterne auch dann keine Funktion, wenn der <i>Markierungs-</i>Filter aktiviert wurde.</p>
+					</div>
+
+					<h2 id="filter-funktionsweise">Funktionsweise</h2>
+
+					<p>Die einzelnen Filter summieren sich in unterschiedlicher Weise auf. So führt das gleichzeitige Aktivieren von Filtern unterschiedlicher Kategorien – normalerweise – zu einer immer kürzeren Belegliste, weil die Filter der unterschiedlichen Filterkategorien durch ein logisches Und miteinander verknüpft sind.</p>
+
+					<p>Ein Beispiel: Aktivieren Sie in der <a href="#" class="hilfe-demo">Demonstrationskartei</a> <abbr title="zum Beispiel">z. B.</abbr> <i>Zeitraum &gt; 1900</i> und <i>Bedeutungen &gt; Zugtiergespann</i> bekommen Sie nur zwei Belege angezeigt, obwohl es im Zeitraum 1900–1999 insgesamt 13 Belege und mit der Bedeutung <q class="bedeutung">Zugtiergespann</q> immerhin noch drei Belege gibt. Denn: Es gibt nur zwei Belege, die sowohl aus dem Zeitraum 1900–1999 stammen <em>und</em> zugleich mit der Bedeutung <q class="bedeutung">Zugtiergespann</q> getaggt wurden. Zur Verdeutlichung: Wären die genannten Filter mit einem logischen Oder verknüpft, wäre die Belegliste in diesem Fall sogar 14 Belege lang: die 13 Belege aus dem Zeitraum 1900–1999 plus den Beleg von 1859, in dem sich das Wort <i>Team</i> mit der Bedeutung <q class="bedeutung">Zugtiergespann</q> findet. Eine Oder-Verknüpfung der verschiedenen Filterblöcke wurde allerdings nicht implementiert. Sie werden immer durch ein Und vernknüpft.</p>
+
+					<p>Innerhalb einer Filterkategorie verhalten sich die Filter freilich genau andersherum als über die Filterkategorien hinweg: Sie werden durch ein logisches Oder miteinander verknüpft. Aktivieren Sie in der Demonstrationskartei <i>Bedeutungen &gt; Zugtiergespann</i> und <i>Bedeutungen &gt; Mannschaft im Sport</i> erhalten Sie zehn Treffer. Drei Belege mit der Bedeutung <q class="bedeutung">Zugtiergespann</q> und sieben mit <q class="bedeutung">Mannschaft im Sport</q> – weil die Filter innerhalb der Kategorie <i>Bedeutungen</i> durch ein logisches Oder miteinander verknüpft wurden. Wenden Sie nun zusätzlich den Filter <i>Zeitraum &gt; 1900</i> an, reduziert sich die Belegliste auf sieben Treffer, weil für Filter unterschiedlicher Kategorien ein logisches Und gilt. Die beiden Belege aus dem Jahr 2016 und der von 1859, die bis zu diesem Zeitpunkt noch angezeigt worden waren, bleiben nun im Filter hängen.</p>
+
+					<p id="filter-reduktionsmodus">Die Lage ändert und verkompliziert sich noch, wenn Sie den <b>Reduktionsmodus</b> aktivieren. Er verbirgt sich hinter dem Icon <img src="../img/filter-reduzieren.svg" width="24" height="24" alt=""> im Kopf der Filterleiste. Mit aktiviertem Reduktionsmodus reduzieren sich die <a href="#filter-dynamische">dynamischen Filter</a> mit jedem Filtervorgang ein Stückchen mehr. Der Grund ist, dass sie nun nur noch aus den Belegen gefüllt werden, die nach der Anwendung eines Filters in der Belegliste übrig geblieben sind. Anders formuliert: Normalerweise speisen sich die Inhalte der dynamischen Filter aus allen in der Kartei vorhandenen Belegen. Im Reduktionsmodus werden die dynamischen Filter nach jedem Filtervorgang neu aufgebaut. Analysiert werden dabei aber nur noch die Belege, die es zuvor durch den Filter geschafft haben. Dies führt – in aller Regel – zu einer Reduktion der zur Verfügung stehenden dynamischen Filter.</p>
+
+					<p>Ein praktisches Beispiel: In der <a href="#" class="hilfe-demo">Demonstrationskartei</a> finden sich Belege, die fünf verschiedenen Textsorten zugeordnet wurden: Belletristik, Gebrauchsliteratur, Reisebericht, Wissenschaft, Zeitung. Aktivieren Sie den Reduktionsmodus! Öffnen Sie dann den Filterblock <i>Zeitraum</i> und klicken Sie auf <i>2000</i>! Sie sehen sofort, wie die Filter <i>1800</i> und <i>1900</i> verschwinden – weil es in den fünf verbliebenen Belegen in der Belegliste keine Belege mehr aus dem Zeitraum 1800–1999 gibt. Alle stammen aus den 2000er-Jahren, weswegen keine anderen Zeitraumfilter mehr aufgebaut werden. Die dynamischen Filter im Block <i>Textsorten</i> wurden noch stärker reduziert: Es wird nur noch der Filter <i>Zeitung</i> angezeigt – weil alle Belege aus den 2000er-Jahren mit dieser und keiner anderen Textsorte getaggt worden sind. Sie können das Spielchen noch weiter treiben und die Belegliste weiter reduzieren, indem Sie <i>Wortbildungen &gt; Teamvergleich</i> hinzuschalten. Im Block <i>Textsorten</i> ist nun auch noch die Unterkategorie <i>Zeitung: Reise</i> verschwunden.</p>
+
+					<figure class="right" title="zum Vergrößern anklicken">
+						<img src="../img/win/hb-filter-reduktionsmodus.png" alt="">
+						<figcaption>Filtern der Belege im Reduktionsmodus</figcaption>
+					</figure>
+
+					<p>Ein <b>Anwendungsbeispiel</b>, für das das <b>Filtern im Reduktionsmodus</b> besonders gut geeignet ist: In den dynamischen Filtern werden die zur Verfügung stehenden Filter im Reduktionsmodus, wie gezeigt, immer weiter reduziert. <i>Textsorten, Korpora</i> <abbr title="und so weiter">usw.</abbr>, die in den Belegen eigentlich zu finden sind, verschwinden nach und nach aus der Filterleiste. Anders verhält sich jedoch der <a href="#filter-bedeutungen">Filter <i>Bedeutungen</i></a>: In diesem Block werden immer alle Bedeutungen angezeigt, die sich im <a href="#" class="link-sektion-bedeutungsgeruest">Bedeutungsgerüst</a> finden. Im Reduktionsmodus verändert sich allerdings die hinter den einzelnen Bedeutungen angegebene Anzahl der Belege, die mit den Bedeutungen getaggt wurden – und zwar bis zu dem Punkt, an dem für eine bestimmte Bedeutung überhaupt keine Belege mehr in der gefilterten Belegliste zu finden sind. Bedeutungen, die in den gefilterten Belegen nicht realisiert werden, werden ausgegraut. Filtern Sie im Reduktionsmodus einen Zeitraum heraus, können Sie so auf einen Blick feststellen, welche Bedeutungen in just diesem Zeitraum realisiert wurden: Sie sind grün und nicht ausgegraut. Im Beispielbild ist das für den Zeitraum 1800–1899 allein die Bedeutung <q class="bedeutung">Zugtiergespann</q>.</p>
+
+					<p id="filter-logik">Die Filter folgen alle einer inklusiven Logik: Sie lassen Belege durch ihr Sieb, wenn diese Belege das, wonach gefiltert wurde, enthalten. Für die Filter der Kategorie <i>Verschiedenes</i> können Sie diese Logik allerdings umkehren, indem sie explizit den Radio-Button für eine <b>exklusive Filterlogik</b> auswählen (erscheint nach dem Öffnen des Filterblocks am oberen Rand). Aktivieren Sie in der <a href="#" class="hilfe-demo">Demonstrationskartei</a> den Filter <i>Verschiedenes &gt; Buchung</i>, reduziert sich die Belegliste auf 15 Belege – wenn sie die standardmäßig eingestellte Filterlogik auf inklusiv belassen. Stellen Sie den Filter auf exklusiv um, erhalten Sie nur noch vier Treffer: Es handelt sich um alle Belege, auf die der Filter <i>Buchung</i> nicht zutrifft. Diese exklusive Logik steht nur für die Filter in der Kategorie <i>Verschiedenes</i> zur Verfügung. Wenden Sie gleichzeitig Filter anderer Kategorien an, folgen diese auch weiterhin einer inklusiven Filterlogik mit Und-Verknüpfung.</p>
+
+					<p>Wenn Sie sich im <b>Reduktionsmodus</b> befinden und unter <i>Verschiedenes</i> <b>mit exklusiver Logik</b> den Filter <i>Buchung</i> aktivieren, bekommen Sie ein merkwürdiges Ergebnis: Da es nun in der Belegliste keinen Treffer mehr gibt, auf den der Filter <i>Buchung</i> zutrifft, müsste dieser eigentlich verschwinden, denn Sie sind ja im Reduktionsmodus. Da er aber gerade aktiv ist, könnten Sie ihn nicht mehr abwählen, wenn er ausgeblendet werden würde. Darum werden in diesem besonderen Fall Filter unter <i>Verschiedenes</i> auch dann noch eingeblendet, wenn sie gar keine Treffer produzieren.</p>
+
+					<h2 id="filter-notizen">Notizen</h2>
+
+					<figure class="right" title="zum Vergrößern anklicken">
+						<img src="../img/win/hb-filter-notizen.png" alt="">
+						<figcaption>Notizen in der Filterleiste</figcaption>
+					</figure>
+
+					<p>Die Filterleiste kann für ein Feature missbraucht werden, das mit den Filtern eigentlich nichts zu tun hat: das Einblenden von <a href="#menue-kartei-notizen">Notizen zur Kartei</a>, die auf Wunsch hinter dem letzten Filter stehen können. Diese Notizen sehen auf den ersten Blick wie ein Filter aus, weil sie wie die anderen Filterblöcke auch einen Filterkopf haben, den man auf Klick öffnen und schließen kann. Anstelle des Reset-Icons erscheint allerdings ein Stift-Icon (<img src="../img/liste-notizen.svg" width="24" height="24" alt="">), über das man die Notizen öffnen und bearbeiten kann. Die unter dem Kopf eingeblendeten Notizen können nur gelesen werden. Zum Ändern müssen Sie die Notizenfunktion öffnen, <abbr title="zum Beispiel">z. B.</abbr> über das Stift-Icon oder über das Programmmenü <i>Kartei &gt; Notizen</i>.</p>
+
+					<p>Um sich die Notizen in der Filterleiste anzeigen zu lassen, müssen sie zunächst die entsprechende <a href="#einstellungen-notizenFilterleiste">Einstellung</a> aktivieren.</p>
 				</section>
 
 				<!-- EINSTELLUNGEN -->
 				<section id="sektion-einstellungen" class="suche">
 					<h2 id="einstellungen-allgemeines">Allgemeines</h2>
 
+					<p class="erklaerung-option">BearbeiterIn auf diesem Rechner</p>
+
+					<p class="info"><mark>…</mark></p>
+
+					<p class="erklaerung-option">Sekunden Timeout bei Anfragen an das <abbr title="Deutsche Textarchiv">DTA</abbr></p>
+
+					<p class="info"><mark>…</mark></p>
+
+					<p class="erklaerung-option">Einfügen-Fenster nach dem Einfügen schließen</p>
+
+					<p class="info"><mark>…</mark></p>
+
+					<p class="erklaerung-option">Hervorhebung des Kartei-Worts beim Kopieren von Text erhalten</p>
+
+					<p class="info"><mark>…</mark></p>
+
+					<p class="erklaerung-option">Kartei-Wort mit grauem Hintergrund kopieren</p>
+
+					<p class="info"><mark>…</mark></p>
+
 					<h2 id="einstellungen-menue">Menü</h2>
+
+					<p class="erklaerung-option">Menüleiste des Programms erst einblenden, wenn die Alt-Taste gedrückt wird</p>
+
+					<p class="info"><mark>…</mark></p>
+
+					<p class="erklaerung-option">Quick-Access-Bar anzeigen</p>
+
+					<p class="info"><mark>…</mark></p>
 
 					<h2 id="einstellungen-notizen">Notizen</h2>
 
+					<p>Die folgenden Einstellungen betreffen die <a href="#menue-kartei-notizen">Notizen-Funktion</a>, die über das Programmmenü <i>Kartei &gt; Notizen</i> aufgerufen werden kann.</p>
+
+					<p class="erklaerung-option">Notizen-Fenster nach dem Speichern schließen</p>
+
+					<p class="info"><mark>…</mark></p>
+
+					<p class="erklaerung-option" id="einstellungen-notizenFilterleiste">Notizen in der Filterleiste anzeigen</p>
+
+					<p class="info">Wurden Notizen verfasst, die nicht eine einzelne Karteikarte, sondern die Kartei im Ganzen betreffen, können diese nicht nur im Notizen-Fenster eingesehen werden, sondern auf Wunsch auch als <a href="#filter-notizen"><q>Pseudofilter</q> in der Filterleiste</a> erscheinen. Dazu muss man diese Einstellung, die standardmäßig aus ist, aktivieren. Auf diese Weise können sie die Notizen immer im Blick behalten. Voraussetzung ist natürlich ein Bildschirm, dessen Auflösung groß genug ist, sonst werden die Notizen am unteren Bildschirmrand abgeschnitten und verschwinden im Off.</p>
+
+					<p class="erklaerung-option">Notizen in der Filterleiste standardmäßig aufklappen</p>
+
+					<p class="info"><mark>…</mark></p>
+
 					<h2 id="einstellungen-bedeutungsgeruest">Bedeutungsgerüst</h2>
 
-					<p><mark>Format Tag-Dateien beschreiben</mark></p>
+					<p>Die folgenden Einstellungen betreffen die <a href="#" class="link-sektion-bedeutungsgeruest">Bedeutungsgerüst-Funktion</a>, die über das Programmmenü <i>Kartei &gt; Bedeutungsgerüst</i> oder das Tastaturkürzel <kbd>Strg</kbd> + <kbd>B</kbd> aufgerufen werden kann.</p>
+
+					<p class="erklaerung-option">Bedeutungsgerüst nach dem Speichern schließen</p>
+
+					<p class="info"><mark>…</mark></p>
+
+					<p class="erklaerung-option">Tag-Fenster nach dem Speichern schließen</p>
+
+					<p class="info"><mark>…</mark></p>
+
+					<p class="erklaerung-option">Tag-Dateien automatisch auffrischen</p>
+
+					<p class="info"><mark>Format Tag-Dateien detalliert beschreiben</mark></p>
 
 					<h2 id="einstellungen-karteikarte">Karteikarte</h2>
 
+					<p>Die folgenden Einstellungen betreffen die <a href="#" class="link-sektion-karteikarte">Karteikarte</a>. Neue Karteikarten können über das Programmmenü <i>Belege &gt; Hinzufügen</i> oder das Tastaturkürzel <kbd>Strg</kbd> + <kbd>N</kbd> erstellt werden.</p>
+
+					<p class="erklaerung-option">Karteikarte nach dem Speichern schließen</p>
+
+					<p class="info"><mark>…</mark></p>
+
+					<p class="erklaerung-option">neue Karteikarte als unvollständig markieren</p>
+
+					<p class="info"><mark>…</mark></p>
+
+					<p class="erklaerung-option"><abbr title="Uniform Resource Locator" lang="en">URL</abbr> aus der Zwischenablage automatisch in das <abbr title="Deutsches Textarchiv">DTA</abbr>-Import-Feld eintragen</p>
+
+					<p class="info"><mark>…</mark></p>
+
+					<p class="erklaerung-option">nach dem <abbr title="Deutsches Textarchiv">DTA</abbr>-Import überprüfen, ob der Belegtext das Kartei-Wort enthält</p>
+
+					<p class="info"><mark>…</mark></p>
+
+					<p class="erklaerung-option">Textfelder beim Einfügen von Text via Icon, Menü-Eintrag oder Link ohne Nachfrage ergänzen</p>
+
+					<p class="info"><mark>…</mark></p>
+
 					<p class="erklaerung-option" id="einstellungen-karteikarteLeseansicht">bestehende Karteikarte in der Leseansicht öffnen</p>
-					
+
 					<p class="info"><mark>…</mark></p>
 
 					<h2 id="einstellungen-filterleiste">Filterleiste</h2>
 
+					<p>Die folgenden Einstellungen betreffen die <a href="#" class="link-sektion-filter">Filter</a> in der <a href="#" class="link-sektion-belegliste">Belegliste</a>, die dort über das Icon <img src="../img/liste-filter.svg" width="24" height="24" alt=""> in der <a href="#belegliste-kopfleiste">Kopfleiste</a> eingeblendet werden können.</p>
+
+					<p class="erklaerung-option">beim Öffnen eines Filterblocks die anderen Blöcke zuklappen</p>
+
+					<p class="info"><mark>…</mark></p>
+
+					<p class="erklaerung-option">inaktive Filterblöcke automatisch zuklappen</p>
+
+					<p class="info"><mark>…</mark></p>
+
+					<p class="erklaerung-option" id="einstellungen-filterleisteUntergeordnete">untergeordnete Bedeutungen beim Filtern mit einbeziehen</p>
+
+					<p class="info"><mark>…</mark></p>
+
+					<p class="erklaerung-option">nicht melden, wenn ein neuer Beleg wegen der Filterregeln nicht in der Belegliste erscheint</p>
+
+					<p class="info"><mark>…</mark></p>
+
+					<p class="erklaerung-option">Standardmäßig aufgeklappte Filterblöcke</p>
+
+					<p class="info"><mark>…</mark></p>
+
 					<h2 id="einstellungen-belegliste">Belegliste</h2>
+
+					<p>Die folgenden Einstellungen betreffen die <a href="#" class="link-sektion-belegliste">Belegliste</a>, die über das Programmmenü <i>Belege &gt; Auflisten</i> oder das Tastaturkürzel <kbd>Strg</kbd> + <kbd>L</kbd> aufgerufen werden kann.</p>
 
 					<p class="erklaerung-option" id="einstellungen-beleglisteIcons">die Icons zur Steuerung der Detail-Anzeige sollen immer alle sichtbar sein</p>
 
@@ -869,12 +1179,18 @@
 
 				<!-- MENÜ: PROGRAMM -->
 				<section id="sektion-menue-programm" class="suche">
-					<p>[<mark>Menü: Programm</mark>]</p>
+					<p>[<mark>Menü Programm</mark>]</p>
 				</section>
 
 				<!-- MENÜ: KARTEI -->
 				<section id="sektion-menue-kartei" class="suche">
-					<p>[<mark>Menü: Kartei</mark>]</p>
+					<p class="erklaerung-icon" id="menue-kartei-notizen"><img src="../img/liste-notizen.svg" width="24" height="24" alt="">Notizen</p>
+
+					<p class="info"><mark>Erläuterungen</mark></p>
+
+					<p class="erklaerung-icon" id="menue-kartei-bedeutungsgeruestWechseln"><img src="../img/quick-bedeutungen-wechseln.svg" width="24" height="24" alt="">Bedeutungsgerüst wechseln</p>
+
+					<p class="info"><mark>Erläuterungen</mark></p>
 				</section>
 
 				<!-- MENÜ: BELEGE -->
@@ -886,17 +1202,17 @@
 
 				<!-- MENÜ: BEARBEITEN -->
 				<section id="sektion-menue-bearbeiten" class="suche">
-					<p>[<mark>Menü: Bearbeiten</mark>]</p>
+					<p>[<mark>Menü Bearbeiten</mark>]</p>
 				</section>
 
 				<!-- MENÜ: ANSICHT -->
 				<section id="sektion-menue-ansicht" class="suche">
-					<p>[<mark>Menü: Ansicht</mark>]</p>
+					<p>[<mark>Menü Ansicht</mark>]</p>
 				</section>
 
 				<!-- MENÜ: HILFE -->
 				<section id="sektion-menue-hilfe" class="suche">
-					<p>[<mark>Menü: Hilfe</mark>]</p>
+					<p>[<mark>Menü Hilfe</mark>]</p>
 				</section>
 			</div>
 		</main>

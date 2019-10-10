@@ -596,7 +596,7 @@ let filter = {
 		span.textContent = " ";
 		if (name === "Notizen") {
 			span.classList.add("filter-notizen");
-			span.title = "Notizen bearbeiten";
+			span.title = "Notizen-Fenster anzeigen";
 			span.addEventListener("click", function(evt) {
 				evt.stopPropagation();
 				evt.preventDefault();

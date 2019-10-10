@@ -27,6 +27,7 @@ body > header {
 	position: fixed;
 	top: 0;
 	left: 0;
+	z-index: 1; /* wegen der "Checkboxes" in Handbuch > Einstellungen */
 	border-bottom: 10px solid #fff;
 	padding: 0 10px;
 	width: calc(100% - 20px);
@@ -490,6 +491,7 @@ mark.wort {
 	position: fixed;
 	top: 0;
 	left: 0;
+	z-index: 1;
 	padding: 25px;
 	width: calc(100vw - 50px); /* 50px padding */
 	height: 100vh;
@@ -577,7 +579,19 @@ mark.wort {
 }
 
 .erklaerung-option {
+	position: relative;
+	margin-left: 40px;
 	font-style: italic;
+}
+
+.erklaerung-option::before {
+	position: absolute;
+	top: 0;
+	left: -40px;
+	content: "☑";
+	width: 40px;
+	color: var(--farbeB);
+	font-style: normal;
 }
 
 .info {

@@ -342,12 +342,12 @@ let layoutMenuAnsicht = [
 		label: "&Ansicht",
 		submenu: [
 			{
-				label: "Schrift vergrößern",
+				label: "Anzeige vergrößern",
 				icon: path.join(__dirname, "img", "menu", "ansicht-zoom-plus.png"),
 				role: "zoomIn",
 			},
 			{
-				label: "Schrift verkleinern",
+				label: "Anzeige verkleinern",
 				icon: path.join(__dirname, "img", "menu", "ansicht-zoom-minus.png"),
 				role: "zoomOut",
 			},
