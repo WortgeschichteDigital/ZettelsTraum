@@ -32,28 +32,38 @@ let hilfe = {
 	// korrigiert den Sprung nach Klick auf einen internen Link,
 	// sodass er nicht hinter dem Header verschwindet
 	naviSprung (a) {
+		if (a.classList.contains("link-handbuch") ||
+				a.classList.contains("link-dokumentation")) {
+			return;
+		}
 		a.addEventListener("click", function(evt) {
 			evt.preventDefault();
-			// aktive Sektion ermitteln
-			const sek_aktiv = hilfe.sektionAktiv();
-			// Sprungziel ermitteln und ggf. die Sektion wechseln
 			const id = this.getAttribute("href").replace(/^#/, "");
-			let h2 = document.getElementById(id);
-			if (!new RegExp(`^${sek_aktiv}`).test(id)) {
-				const sek_ziel = id.replace(/^(.+)-.+/, function(m, p1) {
-					return p1;
-				});
-				hilfe.sektionWechseln(sek_ziel);
-			} else {
-				// History: Position merken
-				hilfe.history(sek_aktiv);
-			}
-			// Fenster an die korrekte Position scrollen
-			window.scrollTo({
-				left: 0,
-				top: h2.offsetTop - 70 - 16, // -16, um oben immer ein bisschen padding zu haben; vgl. hilfe.sucheSprung()
-				behavior: "smooth",
+			hilfe.naviSprungAusfuehren(id);
+		});
+	},
+	// Sprung zu dem übergebenen Ziel ausführen
+	//   id = String
+	//     (Zielangabe, also ID, zu der hin der Sprung ausgeführt werden soll)
+	naviSprungAusfuehren (id) {
+		// aktive Sektion ermitteln
+		const sek_aktiv = hilfe.sektionAktiv();
+		// Sprungziel ermitteln und ggf. die Sektion wechseln
+		let ziel = document.getElementById(id);
+		if (!new RegExp(`^${sek_aktiv}`).test(id)) {
+			const sek_ziel = id.replace(/^(.+)-.+/, function(m, p1) {
+				return p1;
 			});
+			hilfe.sektionWechseln(sek_ziel);
+		} else {
+			// History: Position merken
+			hilfe.history(sek_aktiv);
+		}
+		// Fenster an die korrekte Position scrollen
+		window.scrollTo({
+			left: 0,
+			top: ziel.offsetTop - 70 - 16, // -16, um oben immer ein bisschen padding zu haben; vgl. hilfe.sucheSprung()
+			behavior: "smooth",
 		});
 	},
 	// Klick-Event zum Wechseln der Sektion

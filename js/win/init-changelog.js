@@ -30,10 +30,8 @@ window.addEventListener("load", function() {
 			ipcRenderer.send("ueber-electron");
 		});
 	});
-	// Handbuch
-	document.querySelectorAll(".link-handbuch").forEach(a => helferWin.oeffneHandbuch(a));
-	// Dokumentation
-	document.querySelectorAll(".link-dokumentation").forEach(a => helferWin.oeffneDokumentation(a));
+	// Handbuch und Dokumentation
+	document.querySelectorAll(".link-handbuch, .link-dokumentation").forEach(a => helferWin.oeffne(a));
 	// Icons
 	document.querySelectorAll("#changelog-icons a").forEach(function(a) {
 		a.addEventListener("click", function(evt) {

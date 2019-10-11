@@ -150,7 +150,7 @@ let suchleiste = {
 		if (fenstertyp === "changelog") {
 			e = document.querySelectorAll("div > h2, div > h3, div > p, ul li");
 		} else if (/dokumentation|handbuch/.test(fenstertyp)) {
-			e = document.querySelectorAll("section:not(.aus) > h2, section:not(.aus) > p, section:not(.aus) #suchergebnisse > p, section:not(.aus) > pre, section:not(.aus) li, section:not(.aus) td, section:not(.aus) th");
+			e = document.querySelectorAll("section:not(.aus) > h2, section:not(.aus) > p, section:not(.aus) #suchergebnisse > p, section:not(.aus) > div p, section:not(.aus) > pre, section:not(.aus) li, section:not(.aus) td, section:not(.aus) th");
 		} else if (fenstertyp === "index") {
 			if (helfer.belegOffen()) { // Karteikarte (Leseansicht)
 				e = document.querySelectorAll("#beleg th, .beleg-lese td");
@@ -235,7 +235,7 @@ let suchleiste = {
 			knoten.add(i.parentNode);
 		});
 		for (let k of knoten) {
-			k.innerHTML = k.innerHTML.replace(/<mark.+?suchleiste.+?>(.+?)<\/mark>/g, ersetzenMark);
+			k.innerHTML = k.innerHTML.replace(/<mark[^<]+suchleiste[^<]+>(.+?)<\/mark>/g, ersetzenMark);
 			suchleiste.suchenEventsWiederherstellen(k);
 		}
 		function ersetzenMark (m, p1) {
@@ -271,15 +271,16 @@ let suchleiste = {
 				ipcRenderer.send("hilfe-demo");
 			});
 		});
-		// Handbuch öffnen (Changelog, Dokumentation)
-		ele.querySelectorAll(".link-handbuch").forEach(a => helferWin.oeffneHandbuch(a));
-		// Handbuch öffnen (Changelog, Handbuch)
-		ele.querySelectorAll(".link-dokumentation").forEach(a => helferWin.oeffneDokumentation(a));
+		// Handbuch und Dokumentation öffnen (Changelog, Dokumentation, Handbuch)
+		ele.querySelectorAll(".link-handbuch, .link-dokumentation").forEach(a => helferWin.oeffne(a));
 		// Changelog öffnen (Dokumentation und Handbuch)
 		ele.querySelectorAll(".link-changelog").forEach(a => helferWin.oeffneChangelog(a));
+		// Links zu Sektionen (Dokumentation und Handbuch)
+		ele.querySelectorAll(`a[class^="link-sektion-"`).forEach(a => hilfe.sektion(a));
 		// interne Sprung-Links (Dokumentation und Handbuch)
 		ele.querySelectorAll(`a[href^="#"]`).forEach(function(a) {
-			if (/^#[a-z]/.test(a.getAttribute("href"))) {
+			if (typeof hilfe !== "undefined" &&
+					/^#[a-z]/.test(a.getAttribute("href"))) {
 				hilfe.naviSprung(a);
 			}
 		});

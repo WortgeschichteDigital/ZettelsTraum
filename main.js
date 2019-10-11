@@ -719,14 +719,20 @@ fenster = {
 	// Neben-Fenster erstellen
 	//   typ = String
 	//     (der Typ des Neben-Fensters: "handbuch" || "dokumentation" || "changelog" || "fehlerlog")
-	erstellenNeben (typ) {
+	//   abschnitt = String || undefined
+	//     (Abschnitt, der im Fenster geöffnet werden soll; nur "handbuch" und "dokumentation")
+	erstellenNeben (typ, abschnitt = "") {
 		// Ist das Fenster bereits offen? => Fenster fokussieren
 		for (let id in win) {
 			if (!win.hasOwnProperty(id)) {
 				continue;
 			}
 			if (win[id].typ === typ) {
-				fenster.fokus(BrowserWindow.fromId(parseInt(id, 10)));
+				let w = BrowserWindow.fromId(parseInt(id, 10));
+				fenster.fokus(w);
+				if (abschnitt) {
+					w.webContents.send("oeffne-abschnitt", abschnitt);
+				}
 				return;
 			}
 		}
@@ -790,6 +796,9 @@ fenster = {
 		// Fenster anzeigen, sobald alles geladen wurde
 		bw.once("ready-to-show", function() {
 			this.show();
+			if (abschnitt) {
+				setTimeout(() => this.webContents.send("oeffne-abschnitt", abschnitt), 500);
+			}
 		});
 	},
 	// Über-Fenster erstellen
@@ -854,7 +863,7 @@ fenster = {
 };
 
 // Handbuch aufrufen, wenn der Renderer-Prozess es wünscht
-ipcMain.on("hilfe-handbuch", () => fenster.erstellenNeben("handbuch"));
+ipcMain.on("hilfe-handbuch", (evt, abschnitt) => fenster.erstellenNeben("handbuch", abschnitt));
 
 // Demonstrationskartei öffnen, wenn der Renderer-Prozess es wünscht
 ipcMain.on("hilfe-demo", () => {
@@ -876,7 +885,7 @@ ipcMain.on("hilfe-demo", () => {
 });
 
 // Dokumentation aufrufen, wenn der Renderer-Prozess es wünscht
-ipcMain.on("hilfe-dokumentation", () => fenster.erstellenNeben("dokumentation"));
+ipcMain.on("hilfe-dokumentation", (evt, abschnitt) => fenster.erstellenNeben("dokumentation", abschnitt));
 
 // Changelog aufrufen, wenn der Renderer-Prozess es wünscht
 ipcMain.on("hilfe-changelog", () => fenster.erstellenNeben("changelog"));

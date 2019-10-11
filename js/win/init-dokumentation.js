@@ -63,7 +63,7 @@ window.addEventListener("load", function() {
 		});
 	} catch (err) {}
 	// Handbuch
-	document.querySelectorAll(".link-handbuch").forEach(a => helferWin.oeffneHandbuch(a));
+	document.querySelectorAll(".link-handbuch").forEach(a => helferWin.oeffne(a));
 	// Changelog
 	document.querySelectorAll(".link-changelog").forEach(a => helferWin.oeffneChangelog(a));
 	// Navigation
@@ -76,6 +76,10 @@ window.addEventListener("load", function() {
 	});
 	// externe Links
 	document.querySelectorAll(`a[href^="http"]`).forEach(a => helfer.externeLinks(a));
+
+	// SIGNALE DES MAIN-PROZESSES
+	const {ipcRenderer} = require("electron");
+	ipcRenderer.on("oeffne-abschnitt", (evt, abschnitt) => hilfe.naviSprungAusfuehren(abschnitt));
 
 	// START-SEKTION ANZEIGEN
 	hilfe.sektionWechseln("start", false);

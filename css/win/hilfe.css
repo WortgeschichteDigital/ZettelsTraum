@@ -574,7 +574,21 @@ mark.wort {
 	color: var(--textWarnung);
 }
 
-.erklaerung-icon img {
+.erklaerung-icon {
+	padding-left: 40px;
+	text-indent: -40px;
+}
+
+.erklaerung-icon * {
+	text-indent: 0;
+}
+
+.erklaerung-icon-menues {
+	font-style: italic;
+}
+
+.erklaerung-icon img,
+.erklaerung-icon-menues img {
 	margin-right: 16px;
 }
 

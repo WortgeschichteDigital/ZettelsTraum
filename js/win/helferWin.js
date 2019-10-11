@@ -1,24 +1,22 @@
 "use strict";
 
 let helferWin = {
-	// Handbuch über Link öffnen
+	// Handbuch oder technische Dokumentation über Link öffnen
 	//   a = Element
 	//     (Link, der zum Handbuch führen soll)
-	oeffneHandbuch (a) {
+	oeffne (a) {
 		a.addEventListener("click", function(evt) {
 			evt.preventDefault();
+			// Handbuch oder Dokumentation?
+			let fenster = "hilfe-dokumentation";
+			if (this.classList.contains("link-handbuch")) {
+				fenster = "hilfe-handbuch";
+			}
+			// ggf. Abschnitt ermitteln
+			const abschnitt = a.getAttribute("href").replace(/^#/, "");
+			// Signal an den Main-Prozess
 			const {ipcRenderer} = require("electron");
-			ipcRenderer.send("hilfe-handbuch");
-		});
-	},
-	// Dokumentation über Link öffnen
-	//   a = Element
-	//     (Link, der zur Dokumentation führen soll)
-	oeffneDokumentation (a) {
-		a.addEventListener("click", function(evt) {
-			evt.preventDefault();
-			const {ipcRenderer} = require("electron");
-			ipcRenderer.send("hilfe-dokumentation");
+			ipcRenderer.send(fenster, abschnitt);
 		});
 	},
 	// Changelog über Link öffnen

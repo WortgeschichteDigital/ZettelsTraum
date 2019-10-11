@@ -3,7 +3,9 @@
 let annotieren = {
 	// versucht ein <mark class="user"> im markierten Text zu erzeugen
 	makeUser () {
-		if (!optionen.data.belegliste.trennung) {
+		const listeAus = document.getElementById("liste").classList.contains("aus");
+		if (!listeAus && !optionen.data.belegliste.trennung ||
+				listeAus && !optionen.data.beleg.trennung) {
 			annotieren.unmoeglich();
 			return;
 		}
@@ -98,7 +100,9 @@ let annotieren = {
 	//   w = Element
 	//     (<mark class="wort || user">, auf den geklickt wurde)
 	mod (w) {
-		if (!optionen.data.belegliste.trennung) {
+		const listeAus = document.getElementById("liste").classList.contains("aus");
+		if (!listeAus && !optionen.data.belegliste.trennung ||
+				listeAus && !optionen.data.beleg.trennung) {
 			annotieren.unmoeglich();
 			return;
 		}
