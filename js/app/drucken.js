@@ -356,6 +356,8 @@ let drucken = {
 			text: text,
 			html: html,
 		});
+		// Animation, die anzeigt, dass die Zwischenablage gefüllt wurde
+		helfer.animation("zwischenablage");
 		// Funktionen zum Aufbereiten des Bedeutungsbaums
 		function baumHtml (html) {
 			html = html.replace(/<\/b>/g, "</b> ");

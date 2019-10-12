@@ -308,39 +308,41 @@ let beleg = {
 	// Vormerken, dass die Liste neu aufgebaut werden muss
 	listeGeaendert: false,
 	// Beleg speichern
-	aktionSpeichern () {
+	//   nieSchliessen = true || undefined
+	//     (die Karteikarte sollte nach dem Speichern auf keinen Fall geschlossen werden)
+	aktionSpeichern (nieSchliessen = false) {
 		// Test: Datum angegeben?
 		let da = document.getElementById("beleg-da"),
 			dav = helfer.textTrim(da.value, true);
 		if (!dav) {
 			dialog.oeffnen("alert", () => da.select());
 			dialog.text("Sie müssen ein Datum angeben.");
-			return;
+			return false;
 		}
 		// Test: Datum mit vierstelliger Jahreszahl oder Jahrhundertangabe?
 		if (!/[0-9]{4}|[0-9]{2}\.\sJh\./.test(dav)) {
 			dialog.oeffnen("alert", () => da.select());
 			dialog.text("Das Datum muss eine vierstellige Jahreszahl (z. B. „1813“) oder eine Jahrhundertangabe (z. B. „17. Jh.“) enthalten.\nZusätzlich können auch andere Angaben gemacht werden (z. B. „ca. 1815“, „1610, vielleicht 1611“).");
-			return;
+			return false;
 		}
 		// Test: Beleg angegeben?
 		let bs = document.getElementById("beleg-bs");
 		if (!helfer.textTrim(bs.value, true)) {
 			dialog.oeffnen("alert", () => bs.select());
 			dialog.text("Sie müssen einen Beleg eingeben.");
-			return;
+			return false;
 		}
 		// Test: Quelle angegeben?
 		let qu = document.getElementById("beleg-qu");
 		if (!helfer.textTrim(qu.value, true)) {
 			dialog.oeffnen("alert", () => qu.select());
 			dialog.text("Sie müssen eine Quelle angeben.");
-			return;
+			return false;
 		}
 		// Beleg wurde nicht geändert
 		if (!beleg.geaendert) {
 			direktSchliessen();
-			return;
+			return false;
 		}
 		// ggf. Format von Bedeutung, Wortbildung, Synonym und Textsorte anpassen
 		let bdFeld = document.getElementById("beleg-bd"),
@@ -380,7 +382,7 @@ let beleg = {
 				if (!bd.id) { // die Funktion ist kompliziert und fehleranfällig, lieber noch mal kontrollieren
 					dialog.oeffnen("alert");
 					dialog.text("Beim Speichern der Karteikarte ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\nEinhängen der neuen Bedeutung in das Bedeutungsgerüst fehlgeschalgen");
-					return;
+					return false;
 				}
 			}
 			beleg.data.bd.push({
@@ -424,9 +426,11 @@ let beleg = {
 		bedeutungenWin.daten();
 		// Schließen?
 		direktSchliessen();
+		// Speichern war erfolgreich
+		return true;
 		// Karteikarte ggf. schließen
 		function direktSchliessen () {
-			if (optionen.data.einstellungen["karteikarte-schliessen"]) {
+			if (!nieSchliessen && optionen.data.einstellungen["karteikarte-schliessen"]) {
 				beleg.aktionAbbrechen();
 			}
 		}
@@ -587,7 +591,7 @@ let beleg = {
 		beleg.toolsKopierenExec(ds, beleg.data, text, document.querySelector(`#beleg-lese-${ds} p`));
 	},
 	// führt die Kopieroperation aus (eigene Funktion,
-	// weil sie auch für die Kopierfunktion im Beleg benutzt wird)
+	// weil sie auch für die Kopierfunktion in der Belegliste benutzt wird)
 	//   ds = String
 	//     (Bezeichner des Datensatzes)
 	//   obj = Object
@@ -664,6 +668,8 @@ let beleg = {
 		} else { // alle anderen Felder
 			clipboard.writeText(text);
 		}
+		// Animation, die anzeigt, dass die Zwischenablage gefüllt wurde
+		helfer.animation("zwischenablage");
 	},
 	// Quellenangabe zum Belegtext hinzufügen
 	//   text = String
@@ -1512,13 +1518,27 @@ let beleg = {
 	},
 	// Dupliziert den übergebenen Beleg
 	ctrlDuplikat () {
-		const daten = [kopieren.datenBeleg(beleg.data)];
-		kopieren.einfuegenEinlesen(daten, true);
+		// Versuchen noch nicht gespeicherte Änderungen anzuwenden;
+		// scheitert das => abbrechen
+		if (beleg.geaendert && !beleg.aktionSpeichern(true)) {
+			return;
+		}
+		// Duplizieren kann durchgeführt werden
+		const daten = [kopieren.datenBeleg(beleg.data)],
+			id_karte = kopieren.einfuegenEinlesen(daten, true);
+		// Duplikat öffnen (in derselben Ansicht)
+		let leseansicht = document.getElementById("beleg-link-leseansicht");
+		const leseansicht_status = leseansicht.classList.contains("aktiv");
+		beleg.oeffnen(id_karte);
+		if (leseansicht.classList.contains("aktiv") !== leseansicht_status) {
+			beleg.leseToggle(true);
+		}
+		// Animation anzeigen
 		helfer.animation("duplikat");
 	},
 	// zur vorherigen/nächsten Karteikarte in der Belegliste springen
 	//   next = Boolean
-	//     (nächste Karte anzeigen
+	//     (nächste Karte anzeigen)
 	ctrlNavi (next) {
 		// Karteikarte geändert?
 		if (beleg.geaendert) {

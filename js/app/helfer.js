@@ -604,23 +604,23 @@ let helfer = {
 		div.appendChild(img);
 		img.width = "96";
 		img.height = "96";
+		let cd = "";
+		if (/changelog|fehlerlog|dokumentation|handbuch/.test(fenstertyp)) {
+			cd = "../";
+		}
 		if (ziel === "zwischenablage") {
-			img.src = "img/animation-zwischenablage.svg";
+			img.src = `${cd}img/animation-zwischenablage.svg`;
 		} else if (ziel === "liste") {
-			img.src = "img/animation-kopieren.svg";
+			img.src = `${cd}img/animation-kopieren.svg`;
 			let span = document.createElement("span");
 			div.appendChild(span);
 			span.textContent = kopieren.belege.length;
 		} else if (ziel === "wrap") {
-			let cd = "";
-			if (/changelog|dokumentation|handbuch/.test(fenstertyp)) {
-				cd = "../";
-			}
 			img.src = `${cd}img/animation-wrap.svg`;
 		} else if (ziel === "duplikat") {
-			img.src = "img/animation-duplikat.svg";
+			img.src = `${cd}img/animation-duplikat.svg`;
 		} else if (ziel === "gespeichert") {
-			img.src = "img/animation-gespeichert.svg";
+			img.src = `${cd}img/animation-gespeichert.svg`;
 		}
 		// Element einhängen und wieder entfernen
 		document.querySelector("body").appendChild(div);

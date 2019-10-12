@@ -1,10 +1,11 @@
 "use strict";
 
 let stamm = {
+	ladevorgang: false,
 	// Formvarianten-Fenster einblenden
 	oeffnen () {
 		// wird die Variantenliste gerade erstellt, darf sich das Fenster nicht öffnen
-		if (!Object.keys(data.fv).length) {
+		if (stamm.ladevorgang) {
 			dialog.oeffnen("alert");
 			dialog.text("Die Liste der Formvarianten wird gerade erstellt.\nVersuchen Sie es in ein paar Sekunden noch einmal!");
 			return;
@@ -280,6 +281,7 @@ let stamm = {
 	//   aktiv = Boolean
 	//     (der Download der Varianten wurde bewusst angestoßen => ggf. Fehlermeldungen anzeigen)
 	dtaGet (aktiv) {
+		stamm.ladevorgang = true;
 		stamm.dtaEqlemma = {};
 		let woerter = kartei.wort.split(" "),
 			promises = [];
@@ -314,6 +316,7 @@ let stamm = {
 				stamm.dtaAbschluss(aktiv);
 			}
 			helfer.formVariRegExp();
+			stamm.ladevorgang = false;
 		});
 	},
 	// Request an das DTA schicken, um an die Formvarianten zu kommen

@@ -113,6 +113,8 @@ let fehlerlog = {
 			// Text kopieren
 			const {clipboard} = require("electron");
 			clipboard.writeText(text);
+			// Animation, die anzeigt, dass die Zwischenablage gefüllt wurde
+			helfer.animation("zwischenablage");
 		});
 	},
 };

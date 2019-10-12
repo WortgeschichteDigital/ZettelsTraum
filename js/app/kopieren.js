@@ -532,10 +532,14 @@ let kopieren = {
 			ds.push(i.id.replace(/.+-/, ""));
 		});
 		// neue Karten anlegen
-		let fehler_bedeutungen = new Set();
+		let fehler_bedeutungen = new Set(),
+			id_karte_duplikat = 0;
 		for (let i = 0, len = daten.length; i < len; i++) {
 			// eine neue Karte erzeugen
 			const id_karte = beleg.idErmitteln();
+			if (duplikat) { // ID für das spätere Öffnen der Karteikarte zwischenspeichern (falls duplizieren aus Karteikarte heraus)
+				id_karte_duplikat = id_karte;
+			}
 			if (len === 1) { // wird nur ein Beleg kopiert, kann er nach dem Aufbau der Belegliste hervorgehoben werden
 				liste.statusNeu = id_karte.toString();
 			}
@@ -587,7 +591,7 @@ let kopieren = {
 		// die folgenden Operationen sind fast alle unnötig, wenn ein Beleg dupliziert wurde
 		if (duplikat) {
 			liste.status(true); // Liste und Filter neu aufbauen
-			return;
+			return id_karte_duplikat;
 		}
 		// BedeutungsgerüstFenster auffrischen
 		bedeutungenWin.daten();
@@ -737,7 +741,7 @@ let kopieren = {
 			],
 		};
 		dialog.showOpenDialog(null, opt, function(datei) { // datei ist ein Array!
-			if (datei === undefined) {
+			if (!datei.length) {
 				kartei.dialogWrapper("Sie haben keine Datei ausgewählt.");
 				return;
 			}

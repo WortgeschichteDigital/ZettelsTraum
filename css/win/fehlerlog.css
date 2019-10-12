@@ -9,6 +9,9 @@
 /* Globale Klassen ------------------------------ */
 @import url(../global.css);
 
+/* Animation ------------------------------------ */
+@import url(../animation.css);
+
 /* Struktur-Elemente ---------------------------- */
 body {
 	margin: 0;
@@ -81,13 +84,13 @@ main {
 }
 
 /* Elemente ------------------------------------- */
-div:not(#kopieren) {
+div:not(#kopieren):not(#animation) {
 	margin-top: 25px;
 	border-top: 1px solid var(--linie);
 	padding-top: 25px;
 }
 
-div:not(#kopieren):first-child {
+div:not(#kopieren):not(#animation):first-child {
 	border-top: none;
 }
 

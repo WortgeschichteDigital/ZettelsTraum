@@ -385,7 +385,7 @@ let anhaenge = {
 			}
 			// Dialog anzeigen
 			dialog.showOpenDialog(null, opt, function(dateien) { // dateien ist ein Array!
-				if (dateien === undefined) {
+				if (!dateien.length) {
 					kartei.dialogWrapper("Sie haben keine Datei ausgewählt.");
 					return;
 				}

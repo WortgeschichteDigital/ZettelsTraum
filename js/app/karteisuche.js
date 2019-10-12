@@ -112,7 +112,7 @@ let karteisuche = {
 			],
 		};
 		dialog.showOpenDialog(null, opt, function(pfad) { // pfad ist ein Array!
-			if (pfad === undefined) {
+			if (!pfad.length) {
 				kartei.dialogWrapper("Sie haben keinen Pfad ausgewählt.");
 				return;
 			}

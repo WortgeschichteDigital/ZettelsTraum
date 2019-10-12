@@ -108,7 +108,7 @@ let kartei = {
 		}
 		// Dialog anzeigen
 		dialog.showOpenDialog(null, opt, function(datei) { // datei ist ein Array!
-			if (datei === undefined) {
+			if (!datei.length) {
 				kartei.dialogWrapper("Sie haben keine Datei ausgewählt.");
 				return;
 			}
@@ -198,6 +198,7 @@ let kartei = {
 			anhaenge.scan(data.an);
 			anhaenge.makeIconList(data.an, document.getElementById("kartei-anhaenge"));
 			filter.kartendatumInit();
+			liste.statusOffen = {}; // sonst werden unter Umständen Belege aufgeklappt, selbst wenn alle geschlossen sein sollten; s. Changelog zu Version 0.23.0
 			liste.aufbauen(true);
 			liste.wechseln();
 			window.scrollTo({

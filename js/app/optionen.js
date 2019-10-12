@@ -762,7 +762,7 @@ let optionen = {
 		};
 		// Dialog anzeigen
 		dialog.showOpenDialog(null, opt, datei => { // datei ist ein Array!
-			if (datei === undefined) {
+			if (!datei.length) {
 				kartei.dialogWrapper("Sie haben keine Datei ausgewählt.");
 				return;
 			}
@@ -1053,7 +1053,7 @@ let optionen = {
 		};
 		// Dialog anzeigen
 		dialog.showOpenDialog(null, opt, function(datei) { // datei ist ein Array!
-			if (datei === undefined) {
+			if (!datei.length) {
 				kartei.dialogWrapper("Sie haben keine Datei ausgewählt.");
 				return;
 			}
