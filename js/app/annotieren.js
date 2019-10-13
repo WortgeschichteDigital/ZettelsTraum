@@ -413,6 +413,7 @@ let annotieren = {
 			beleg.belegGeaendert(true);
 		} else { // Belegliste
 			data.ka[p.dataset.id].bs = bs;
+			// TODO Kartendatum auffrischen
 			kartei.karteiGeaendert(true);
 		}
 		// Events auffrischen
