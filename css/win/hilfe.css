@@ -274,6 +274,10 @@ nav p.suchform a svg path {
 	fill: currentcolor;
 }
 
+nav p.suchform a.navigierbar {
+	color: var(--text);
+}
+
 nav p.suchform a:hover {
 	color: var(--text);
 }

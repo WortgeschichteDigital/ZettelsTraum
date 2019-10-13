@@ -111,23 +111,25 @@ let karteisuche = {
 				"openDirectory",
 			],
 		};
-		dialog.showOpenDialog(null, opt, function(pfad) { // pfad ist ein Array!
-			if (!pfad.length) {
-				kartei.dialogWrapper("Sie haben keinen Pfad ausgewählt.");
-				return;
-			}
-			// Ist der Pfad schon in der Liste?
-			if (optionen.data.karteisuche.pfade.includes(pfad[0])) {
-				kartei.dialogWrapper("Der gewählte Pfad wurde schon aufgenommen.");
-				return;
-			}
-			// Pfad hinzufügen
-			karteisuche.pfadGefunden.push(pfad[0]);
-			optionen.data.karteisuche.pfade.push(pfad[0]);
-			optionen.speichern();
-			// Liste auffrischen
-			karteisuche.pfadeAuflisten();
-		});
+		dialog.showOpenDialog(null, opt)
+			.then(result => {
+				if (result.canceled) {
+					kartei.dialogWrapper("Sie haben keinen Pfad ausgewählt.");
+					return;
+				}
+				// Ist der Pfad schon in der Liste?
+				if (optionen.data.karteisuche.pfade.includes(result.filePaths[0])) {
+					kartei.dialogWrapper("Der gewählte Pfad wurde schon aufgenommen.");
+					return;
+				}
+				// Pfad hinzufügen
+				karteisuche.pfadGefunden.push(result.filePaths[0]);
+				optionen.data.karteisuche.pfade.push(result.filePaths[0]);
+				optionen.speichern();
+				// Liste auffrischen
+				karteisuche.pfadeAuflisten();
+			})
+			.catch(err => kartei.dialogWrapper(`Beim Öffnen des Datei-Dialogs ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.message}</p>`));
 	},
 	// Pfad aus der Liste entfernen
 	//   a = Element

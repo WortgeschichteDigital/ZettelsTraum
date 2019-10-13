@@ -707,18 +707,20 @@ let kopieren = {
 				},
 			],
 		};
-		dialog.showSaveDialog(null, opt, function(pfad) {
-			if (pfad === undefined) {
-				kartei.dialogWrapper("Die Belege wurden nicht gespeichert.");
-				return;
-			}
-			const fs = require("fs");
-			fs.writeFile(pfad, JSON.stringify(daten), function(err) {
-				if (err) {
-					kartei.dialogWrapper(`Beim Speichern der Belege ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.message}</p>`);
+		dialog.showSaveDialog(null, opt)
+			.then(result => {
+				if (result.canceled) {
+					kartei.dialogWrapper("Die Belege wurden nicht gespeichert.");
+					return;
 				}
-			});
-		});
+				const fs = require("fs");
+				fs.writeFile(result.filePath, JSON.stringify(daten), function(err) {
+					if (err) {
+						kartei.dialogWrapper(`Beim Speichern der Belege ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.message}</p>`);
+					}
+				});
+			})
+			.catch(err => kartei.dialogWrapper(`Beim Öffnen des Datei-Dialogs ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.message}</p>`));
 	},
 	// Kopierliste aus Datei importieren
 	importieren () {
@@ -740,31 +742,33 @@ let kopieren = {
 				"openFile",
 			],
 		};
-		dialog.showOpenDialog(null, opt, function(datei) { // datei ist ein Array!
-			if (!datei.length) {
-				kartei.dialogWrapper("Sie haben keine Datei ausgewählt.");
-				return;
-			}
-			const fs = require("fs");
-			fs.readFile(datei[0], "utf-8", function(err, content) {
-				if (err) {
-					kartei.dialogWrapper(`Beim Öffnen der Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.message}</p>`);
+		dialog.showOpenDialog(null, opt)
+			.then(result => {
+				if (result.canceled) {
+					kartei.dialogWrapper("Sie haben keine Datei ausgewählt.");
 					return;
 				}
-				let belegedatei_tmp = {};
-				try {
-					belegedatei_tmp = JSON.parse(content);
-				} catch (err_json) {
-					kartei.dialogWrapper(`Beim Einlesen der Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n${err_json}`);
-					return;
-				}
-				if (belegedatei_tmp.ty !== "bwgd") {
-					kartei.dialogWrapper("Die Datei wurde nicht eingelesen.\nEs handelt sich nicht um eine Belege-Datei von <i>Wortgeschichte digital</i>.");
-					return;
-				}
-				kopieren.belegedatei = belegedatei_tmp.bl;
-				kopieren.einfuegenBasisdaten(true);
-			});
-		});
+				const fs = require("fs");
+				fs.readFile(result.filePaths[0], "utf-8", function(err, content) {
+					if (err) {
+						kartei.dialogWrapper(`Beim Öffnen der Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.message}</p>`);
+						return;
+					}
+					let belegedatei_tmp = {};
+					try {
+						belegedatei_tmp = JSON.parse(content);
+					} catch (err_json) {
+						kartei.dialogWrapper(`Beim Einlesen der Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n${err_json}`);
+						return;
+					}
+					if (belegedatei_tmp.ty !== "bwgd") {
+						kartei.dialogWrapper(`Beim Einlesen der Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\nkeine Belege-Datei von <i>Wortgeschichte digital</i>`);
+						return;
+					}
+					kopieren.belegedatei = belegedatei_tmp.bl;
+					kopieren.einfuegenBasisdaten(true);
+				});
+			})
+			.catch(err => kartei.dialogWrapper(`Beim Öffnen des Datei-Dialogs ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.message}</p>`));
 	},
 };

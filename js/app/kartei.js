@@ -107,13 +107,15 @@ let kartei = {
 			opt.defaultPath = optionen.data.letzter_pfad;
 		}
 		// Dialog anzeigen
-		dialog.showOpenDialog(null, opt, function(datei) { // datei ist ein Array!
-			if (!datei.length) {
-				kartei.dialogWrapper("Sie haben keine Datei ausgewählt.");
-				return;
-			}
-			kartei.oeffnenEinlesen(datei[0]);
-		});
+		dialog.showOpenDialog(null, opt)
+			.then(result => {
+				if (result.canceled) {
+					kartei.dialogWrapper("Sie haben keine Datei ausgewählt.");
+					return;
+				}
+				kartei.oeffnenEinlesen(result.filePaths[0]);
+			})
+			.catch(err => kartei.dialogWrapper(`Beim Öffnen des Datei-Dialogs ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.message}</p>`));
 	},
 	// die übergebene Datei einlesen
 	//   datei = String
@@ -255,13 +257,15 @@ let kartei = {
 			opt.defaultPath = path.join(optionen.data.letzter_pfad, `${kartei.wort}.wgd`);
 		}
 		// Dialog anzeigen
-		dialog.showSaveDialog(null, opt, function(pfad) {
-			if (pfad === undefined) {
-				kartei.dialogWrapper("Die Kartei wurde nicht gespeichert.");
-				return;
-			}
-			speichern(pfad);
-		});
+		dialog.showSaveDialog(null, opt)
+			.then(result => {
+				if (result.canceled) {
+					kartei.dialogWrapper("Die Kartei wurde nicht gespeichert.");
+					return;
+				}
+				speichern(result.filePath);
+			})
+			.catch(err => kartei.dialogWrapper(`Beim Öffnen des Datei-Dialogs ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.message}</p>`));
 		// Speicher-Funktion
 		function speichern (pfad) {
 			// ggf. BearbeiterIn hinzufügen

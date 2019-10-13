@@ -65,6 +65,8 @@ let hilfe = {
 			top: ziel.offsetTop - 70 - 16, // -16, um oben immer ein bisschen padding zu haben; vgl. hilfe.sucheSprung()
 			behavior: "smooth",
 		});
+		// History: Pfeile auffrischen (nachdem der Scroll beendet wurde)
+		hilfe.historyScrollArrows();
 	},
 	// Klick-Event zum Wechseln der Sektion
 	//   a = Element
@@ -125,6 +127,8 @@ let hilfe = {
 			left: 0,
 			behavior: "auto",
 		});
+		// History: Pfeile auffrischen
+		hilfe.historyArrows();
 	},
 	// Überschriftenliste der aktiven Sektion aufbauen
 	//   sektion = String
@@ -541,6 +545,9 @@ let hilfe = {
 	historyData: {
 		pos: [], // Positionen in der Liste
 		akt: -1, // aktuelle Position in der Liste
+		scrollAktiv: false, // speichert, ob gerade gescrollt wird
+		scrollInterval: null, // Intervall, der schaut, ob scrollAktiv noch true ist
+		scrollCheck: null, // Timeout, der das Ende des Scrollen feststellt und scrollAktiv auf false setzt
 	},
 	// aktuelle Position merken, wenn über einen Link ein Sprung ausgeführt wird
 	//   sek = String
@@ -605,5 +612,47 @@ let hilfe = {
 			top: ziel.scrollY,
 			behavior: "smooth",
 		});
+		// Pfeile auffrischen (nachdem der Scroll beendet wurde)
+		hilfe.historyScrollArrows();
+	},
+	// frischt die Pfeile auf, sobald der Scroll beendet wurde
+	historyScrollArrows () {
+		hilfe.historyData.scrollAktiv = true;
+		hilfe.historyData.scrollInterval = setInterval(() => {
+			if (hilfe.historyData.scrollAktiv) {
+				return;
+			}
+			clearInterval(hilfe.historyData.scrollInterval);
+			document.removeEventListener("scroll", hilfe.historyScroll);
+			hilfe.historyArrows();
+		}, 10);
+		document.addEventListener("scroll", hilfe.historyScroll);
+	},
+	// überprüft, ob der Scroll vorbei ist
+	historyScroll () {
+		clearTimeout(hilfe.historyData.scrollCheck);
+		hilfe.historyData.scrollCheck = setTimeout(() => hilfe.historyData.scrollAktiv = false, 25);
+	},
+	// Pfeilfarbe anpassen
+	historyArrows () {
+		let data = hilfe.historyData,
+			back = document.getElementById("navi-back"),
+			forward = document.getElementById("navi-forward");
+		// aktuelle Position
+		const section = hilfe.sektionAktiv(),
+			scrollY = window.scrollY;
+		// rückwärts
+		if (data.pos.length > 1 && data.akt > 0 ||
+				data.pos.length === 1 && (data.pos[0].section !== section || data.pos[0].scrollY !== scrollY)) {
+			back.classList.add("navigierbar");
+		} else {
+			back.classList.remove("navigierbar");
+		}
+		// vorwärts
+		if (data.akt >=0 && data.akt < data.pos.length - 1) {
+			forward.classList.add("navigierbar");
+		} else {
+			forward.classList.remove("navigierbar");
+		}
 	},
 };

@@ -378,6 +378,7 @@ let popup = {
 					text: popup.textauswahl.text,
 					html: popup.textauswahl.html,
 				});
+				helfer.animation("zwischenablage");
 			},
 		}));
 	},

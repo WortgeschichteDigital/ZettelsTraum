@@ -384,13 +384,15 @@ let anhaenge = {
 				opt.defaultPath = optionen.data.letzter_pfad;
 			}
 			// Dialog anzeigen
-			dialog.showOpenDialog(null, opt, function(dateien) { // dateien ist ein Array!
-				if (!dateien.length) {
-					kartei.dialogWrapper("Sie haben keine Datei ausgewählt.");
-					return;
-				}
-				anhaenge.addFiles(dateien, cont, obj);
-			});
+			dialog.showOpenDialog(null, opt)
+				.then(result => {
+					if (result.canceled) {
+						kartei.dialogWrapper("Sie haben keine Datei ausgewählt.");
+						return;
+					}
+					anhaenge.addFiles(result.filePaths, cont, obj);
+				})
+				.catch(err => kartei.dialogWrapper(`Beim Öffnen des Datei-Dialogs ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.message}</p>`));
 		});
 	},
 	// Dateien ggf. hinzufügen

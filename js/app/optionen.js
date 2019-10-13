@@ -761,51 +761,53 @@ let optionen = {
 			],
 		};
 		// Dialog anzeigen
-		dialog.showOpenDialog(null, opt, datei => { // datei ist ein Array!
-			if (!datei.length) {
-				kartei.dialogWrapper("Sie haben keine Datei ausgewählt.");
-				return;
-			}
-			const fs = require("fs");
-			fs.readFile(datei[0], "utf-8", (err, content) => {
-				// Fehlermeldung
-				if (err) {
-					kartei.dialogWrapper(`Beim Laden der Tag-Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.message}</p>`);
+		dialog.showOpenDialog(null, opt)
+			.then(result => {
+				if (result.canceled) {
+					kartei.dialogWrapper("Sie haben keine Datei ausgewählt.");
 					return;
 				}
-				// Tag-Datei parsen
-				let parsed = optionen.tagsParsen(content),
-					xml = parsed[0],
-					typ = parsed[1];
-				if (!xml) {
-					optionen.tagsFehler(typ);
-					return;
-				}
-				// Tag-Datei einlesen
-				optionen.data.tags[typ] = {
-					data: {}, // Daten
-					datei: datei[0], // Pfad zur Datei
-					abgleich: new Date().toISOString(), // Datum letzter Abgleich
-					update: new Date().toISOString(), // Datum letztes Update
-				};
-				let data = optionen.data.tags[typ].data;
-				xml.querySelectorAll("item").forEach(function(i) {
-					const id = i.querySelector("id").firstChild.nodeValue,
-						name = i.querySelector("name").firstChild.nodeValue;
-					let abbr = i.querySelector("abbr");
-					data[id] = {
-						name: name,
-					};
-					if (abbr) {
-						data[id].abbr = abbr.firstChild.nodeValue;
+				const fs = require("fs");
+				fs.readFile(result.filePaths[0], "utf-8", (err, content) => {
+					// Fehlermeldung
+					if (err) {
+						kartei.dialogWrapper(`Beim Laden der Tag-Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.message}</p>`);
+						return;
 					}
+					// Tag-Datei parsen
+					let parsed = optionen.tagsParsen(content),
+						xml = parsed[0],
+						typ = parsed[1];
+					if (!xml) {
+						optionen.tagsFehler(typ);
+						return;
+					}
+					// Tag-Datei einlesen
+					optionen.data.tags[typ] = {
+						data: {}, // Daten
+						datei: result.filePaths[0], // Pfad zur Datei
+						abgleich: new Date().toISOString(), // Datum letzter Abgleich
+						update: new Date().toISOString(), // Datum letztes Update
+					};
+					let data = optionen.data.tags[typ].data;
+					xml.querySelectorAll("item").forEach(function(i) {
+						const id = i.querySelector("id").firstChild.nodeValue,
+							name = i.querySelector("name").firstChild.nodeValue;
+						let abbr = i.querySelector("abbr");
+						data[id] = {
+							name: name,
+						};
+						if (abbr) {
+							data[id].abbr = abbr.firstChild.nodeValue;
+						}
+					});
+					// Optionen speichern
+					optionen.speichern();
+					// Anzeige auffrischen
+					optionen.anwendenTags();
 				});
-				// Optionen speichern
-				optionen.speichern();
-				// Anzeige auffrischen
-				optionen.anwendenTags();
-			});
-		});
+			})
+			.catch(err => kartei.dialogWrapper(`Beim Öffnen des Datei-Dialogs ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.message}</p>`));
 	},
 	// Content der geladenen Tag-Datei parsen und auf Fehler überprüfen
 	//   content = String
@@ -1052,45 +1054,47 @@ let optionen = {
 			],
 		};
 		// Dialog anzeigen
-		dialog.showOpenDialog(null, opt, function(datei) { // datei ist ein Array!
-			if (!datei.length) {
-				kartei.dialogWrapper("Sie haben keine Datei ausgewählt.");
-				return;
-			}
-			const fs = require("fs");
-			fs.readFile(datei[0], "utf-8", function(err, content) {
-				// Fehlermeldung
-				if (err) {
-					kartei.dialogWrapper(`Beim Öffnen der Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.message}</p>`);
+		dialog.showOpenDialog(null, opt)
+			.then(result => {
+				if (result.canceled) {
+					kartei.dialogWrapper("Sie haben keine Datei ausgewählt.");
 					return;
 				}
-				// Inhalt einlesen und speichern
-				optionen.data.personen = [];
-				let personen = content.split(/(\r|\n)/); // alle End-of-line-Styles berücksichtigen
-				for (let i = 0, len = personen.length; i < len; i++) {
-					const person = personen[i].trim();
-					if (person) {
-						optionen.data.personen.push(person);
+				const fs = require("fs");
+				fs.readFile(result.filePaths[0], "utf-8", function(err, content) {
+					// Fehlermeldung
+					if (err) {
+						kartei.dialogWrapper(`Beim Öffnen der Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.message}</p>`);
+						return;
 					}
-				}
-				optionen.speichern();
-				// Rückmeldung
-				let fb_obj = function () {
-					const len = optionen.data.personen.length;
-					this.personen = len === 1 ? "eine" : len;
-					this.verb = len === 1 ? "ist" : "sind";
-					this.text = len === 1 ? "Person" : "Personen";
-				};
-				let fb = new fb_obj();
-				// Liste wurde geleert
-				if (fb.personen === 0) {
-					kartei.dialogWrapper("Die Personenliste wurde geleert.");
-					return;
-				}
-				// Liste enthält Personen
-				kartei.dialogWrapper(`In der Liste ${fb.verb} jetzt ${fb.personen} ${fb.text}.`);
-			});
-		});
+					// Inhalt einlesen und speichern
+					optionen.data.personen = [];
+					let personen = content.split(/(\r|\n)/); // alle End-of-line-Styles berücksichtigen
+					for (let i = 0, len = personen.length; i < len; i++) {
+						const person = personen[i].trim();
+						if (person) {
+							optionen.data.personen.push(person);
+						}
+					}
+					optionen.speichern();
+					// Rückmeldung
+					let fb_obj = function () {
+						const len = optionen.data.personen.length;
+						this.personen = len === 1 ? "eine" : len;
+						this.verb = len === 1 ? "ist" : "sind";
+						this.text = len === 1 ? "Person" : "Personen";
+					};
+					let fb = new fb_obj();
+					// Liste wurde geleert
+					if (fb.personen === 0) {
+						kartei.dialogWrapper("Die Personenliste wurde geleert.");
+						return;
+					}
+					// Liste enthält Personen
+					kartei.dialogWrapper(`In der Liste ${fb.verb} jetzt ${fb.personen} ${fb.text}.`);
+				});
+			})
+			.catch(err => kartei.dialogWrapper(`Beim Öffnen des Datei-Dialogs ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.message}</p>`));
 	},
 	// auf Änderung der Einstellungen achten
 	//   ele = Element
