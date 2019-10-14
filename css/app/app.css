@@ -378,6 +378,16 @@ textarea:focus {
 	right: 0;
 }
 
+#annotierung-wort.links-neben {
+	top: -10px;
+	left: -192px;
+}
+
+#annotierung-wort.rechts-neben {
+	top: -10px;
+	right: -192px;
+}
+
 #annotierung-wort > img {
 	position: absolute;
 	top: 0;

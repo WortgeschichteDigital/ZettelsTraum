@@ -123,6 +123,10 @@ let filter = {
 						name: "Metatext",
 						wert: 0,
 					},
+					"verschiedenes-annotierung": {
+						name: "Annotierung",
+						wert: 0,
+					},
 					"verschiedenes-markierung": {
 						name: "Markierung",
 						wert: 0,
@@ -134,6 +138,7 @@ let filter = {
 					"verschiedenes-buecherdienst",
 					"verschiedenes-notizen",
 					"verschiedenes-buchung",
+					"verschiedenes-annotierung",
 					"verschiedenes-metatext",
 					"verschiedenes-markierung",
 				],
@@ -172,6 +177,10 @@ let filter = {
 			filter.typen.bedeutungen.filter_folge.push(id);
 		}
 		// dynamische Filter und Anzahl der passenden Karten ermitteln
+		let regAnnotierung = /farbe[1-9]/;
+		if (optionen.data.einstellungen["filter-transparente"]) {
+			regAnnotierung = /farbe[0-9]/;
+		}
 		for (let x = 0, len = belege.length; x < len; x++) {
 			let id = belege[x];
 			// BEDEUTUNGEN
@@ -253,6 +262,11 @@ let filter = {
 			// Buchung
 			if (data.ka[id].bc) {
 				filter.typen.verschiedenes.filter["verschiedenes-buchung"].wert++;
+				filter.typen.verschiedenes.filter_vorhanden = true;
+			}
+			// Annotierung
+			if (/annotierung-wort/.test(data.ka[id].bs) && regAnnotierung.test(data.ka[id].bs)) {
+				filter.typen.verschiedenes.filter["verschiedenes-annotierung"].wert++;
 				filter.typen.verschiedenes.filter_vorhanden = true;
 			}
 			// Metatext
@@ -1183,6 +1197,10 @@ let filter = {
 			}
 		}
 		// Karten filtern
+		let regAnnotierung = /farbe[1-9]/;
+		if (optionen.data.einstellungen["filter-transparente"]) {
+			regAnnotierung = /farbe[0-9]/;
+		}
 		let karten_gefiltert = [];
 		forX: for (let i = 0, len = karten.length; i < len; i++) {
 			let id = karten[i];
@@ -1287,6 +1305,12 @@ let filter = {
 			if (filter.aktiveFilter["verschiedenes-buchung"] &&
 					(data.ka[id].bc && !filter_inklusiv ||
 					!data.ka[id].bc && filter_inklusiv)) {
+				continue;
+			}
+			// Annotierung
+			if (filter.aktiveFilter["verschiedenes-annotierung"] &&
+					(/annotierung-wort/.test(data.ka[id].bs) && regAnnotierung.test(data.ka[id].bs) && !filter_inklusiv ||
+					!(/annotierung-wort/.test(data.ka[id].bs) && regAnnotierung.test(data.ka[id].bs)) && filter_inklusiv)) {
 				continue;
 			}
 			// Metatext

@@ -153,20 +153,41 @@ let annotieren = {
 		}
 		// Position der UI festlegen
 		let pos = [],
-			knoten = null;
-		if (annotieren.data.start.offsetLeft < 187) {
+			knoten = null,
+			neben = false,
+			hoeheDetails = 0;
+		if (annotieren.data.start.offsetLeft < 187) { // links neben der Markierung
 			pos.push("links");
 			knoten = annotieren.data.start;
-		} else {
+		} else { // rechts neben der Markierung
 			pos.push("rechts");
 			knoten = annotieren.data.ende;
 		}
+		if (!listeAus) { // in der Belegliste muss geschaut werden, ob genug Platz da ist
+			let details = knoten.parentNode;
+			while (!details.classList.contains("liste-details")) {
+				details = details.parentNode;
+			}
+			hoeheDetails = details.offsetHeight;
+		}
 		if (knoten.offsetTop < 65) {
 			pos.push("unten");
+			if (!listeAus &&
+					knoten.offsetTop + knoten.offsetHeight + 65 > hoeheDetails) {
+				neben = true; // Platzmangel im Details-Block!
+			}
 		} else {
 			pos.push("oben");
 		}
-		span.classList.add(pos.join("-"));
+		if (neben) { // Beleg ist sehr, sehr flach (z. B. einzeilig) => neben der Markierung positionieren
+			if (annotieren.data.start.offsetLeft - 187 < 55) { // rechts neben der Markierung
+				span.classList.add("rechts-neben");
+			} else { // links neben der Markierung
+				span.classList.add("links-neben");
+			}
+		} else {
+			span.classList.add(pos.join("-"));
+		}
 		// Popup einhängen und Events anhängen
 		knoten.appendChild(span);
 		annotieren.modEvents();
@@ -412,10 +433,16 @@ let annotieren = {
 			beleg.data.bs = bs;
 			beleg.belegGeaendert(true);
 		} else { // Belegliste
-			data.ka[p.dataset.id].bs = bs;
-			// TODO Kartendatum auffrischen
+			data.ka[p.dataset.id].bs = bs; // Belegtext
+			data.ka[p.dataset.id].dm = new Date().toISOString(); // Änderungsdatum
 			kartei.karteiGeaendert(true);
 		}
+		// Filterleiste neu aufbauen
+		let belege = [];
+		document.querySelectorAll(".liste-kopf").forEach(function(i) {
+			belege.push(i.dataset.id);
+		});
+		filter.aufbauen(belege);
 		// Events auffrischen
 		function events () {
 			let marks = annotieren.data.p.querySelectorAll(`mark.${annotieren.data.cl}`);

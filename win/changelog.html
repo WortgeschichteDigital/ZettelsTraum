@@ -38,7 +38,33 @@
 			<div class="version">0.24.0</div>
 
 			<div>
-				<h2><span>Version 0.24.0</span><time datetime="2019-10-13T17:13:35">13. Oktober 2019</time></h2>
+				<h2><span>Version 0.24.0-beta.1</span><time datetime="2019-10-14T13:59:30">14. Oktober 2019</time></h2>
+
+				<h3>Neue Funktionen</h3>
+
+				<ul>
+					<li>
+						<p>Filterleiste: Im Filterblock <i>Verschiedenes</i> gibt es einen neuen Filter: <i>Annotierungen</i>. Weil es ein dynamischer Filter ist, erscheint er nur, wenn in der Kartei Belege zu finden sind, in denen Karteiwörter oder Textteile annotiert wurden.</p>
+						<p>Wurde beim Annotieren die Hintergrundfarbe auf transparent gesetzt, wird der Beleg mit dem <i>Annotierungen</i>-Filter standardmäßig nicht gefunden. Unter <i>Programm &gt; Einstellungen &gt; Filterleiste</i> gibt es jedoch eine Checkbox, die man aktivieren kann, um beim Filtern auch Annotierungen mit einzubeziehen, die eine tranparente Hintergrundfarbe haben.</p>
+					</li>
+				</ul>
+
+				<h3>Verbesserungen</h3>
+
+				<ul>
+					<li>Die Standardeinstellungen wurden geändert, was das Schließen von Funktionen und Fenstern angeht, in denen ein Speichervorgang ausgelöst werden kann. Die Funktionen und Fenster bleiben nach dem Speichern fortan standardmäßig geöffnet, man muss sie also in einem zweiten Schritt schließen – wenn man nicht die entsprechenden Einstellungen händisch aktiviert. Betroffen sind das Notizen-Fenster (<i>Kartei &gt; Notizen</i>), das Bedeutungsgerüst (<i>Kartei &gt; Bedeutungsgerüst</i>) und das aus diesem heraus zu öffnende Tag-Fenster sowie die Karteikarte. Diese Änderungen greifen nur bei Neuinstallationen des Programms; bei bestehenden Installationen werden die Einstellungen <em>nicht</em> automatisch geändert.</li>
+					<li>Der Titel des Drucken-Fensters wurde in <i>Druckvorschau</i> geändert.</li>
+				</ul>
+
+				<h3>Behobene Fehler</h3>
+
+				<ul>
+					<li>Annotierungsfunktion: Wurden über die Belegliste Annotierungen vorgenommen, wurde das Änderungsdatum der betreffenden Karteikarte nicht angepasst.</li>
+					<li>Annotierungsfunktion: In einer Detailansicht, die sehr flach war, weil der Beleg nur wenige Zeilen umfasste und keine weiteren Details eingeblendet wurden, konnte es geschehen, dass das Annotierungsfenster hinter dem in der Liste folgenden Belegkopf verschwand. In solchen Fällen wird es nun links oder rechts neben dem zu annotierenden Text angezeigt, je nachdem wie viel Platz an den entsprechenden Stellen zur Verfügung steht.</li>
+					<li>Belegliste: Die mit Version 0.20.0 erfolgte Reparatur der Anzeige des Meldungsfensters, das beim blockweisen Hinzufügen von Bedeutungen aus dem Bedeutungsgerüst-Fenster erscheint, hat das Austragen von Bedeutungen nicht berücksichtigt. Die Zählzeichen werden nun auch in diesem Fall vom Text der Bedeutung abgesetzt dargestellt.</li>
+					<li>Bedeutungsgerüst-Fenster: Das Ein- oder Austragen von Bedeutungen in Belegliste oder Karteikarte wird nun unterbunden, wenn sie durch ein anderes Fenster verdeckt werden (potenzielle Fehlerquelle).</li>
+					<li>Bedeutungsgerüst-Fenster: Beim blockweisen Ein- oder Austragen von Bedeutungen in allen in der Belegliste sichtbaren Belegen wurde das Änderungsdatum der Belege nicht aufgefrischt.</li>
+				</ul>
 			</div>
 
 			<!-- 0.23.0 -->
@@ -51,7 +77,7 @@
 
 				<ul>
 					<li>Karteikarte: Das Duplizieren von Belegen aus einer geöffneten Karteikarte heraus (Funktion <img src="../img/beleg-duplikat.svg" width="24" height="24" alt="">) wurde verbessert. Nach dem Duplizieren wird die aktuelle Karteikarte geschlossen und dafür das Duplikat geladen. Die aktuell eingestellte (Lese- oder Formular-)Ansicht der Karteikarte bleibt dabei erhalten. Gibt es Änderungen in der Karteikarte, die noch nicht gespeichert wurden, wird der Speichervorgang automatisch angestoßen. Das Duplizieren wird nur ausgeführt, wenn dieser Speichervorgang reibungslos, <abbr title="das heißt">d. h.</abbr> ohne Fehler vonstatten ging.</li>
-					<li>Die Rechtsklickmenüs wurden verbessert: Die Menüpunkte <i>Beleg hinzufügen</i> und <i>Belege auflisten</i> werden nun in fast allen Kontexten angeboten. Ist man bereits in der Belegliste wird die Option <i>Belege auflisten</i> – anders als zuvor – allerdings nicht mehr angezeigt (zumal sie hier sinnlos war und ist). Der Punkt <i>Belegliste-Einstellungen</i> erscheint nun auch dann, wenn der Klick in der Kopfleiste der Belegliste erfolgt. Das zuvor stark reduzierte Menü, das beim Rechtsklick auf den Metainfos der Belegliste erschien, ist nun vollständig. Werden Notizen (Funktion <i>Kartei &gt; Notizen</i>) in der Filterleiste angezeigt, werden beim Klick auf ihnen oder dem zu ihnen gehörenden Filterkopf die Menüpunkte <i>Notizen-Fenster</i> und <i>Notizen-Einstellungen</i> angeboten. Letzterer Menüpunkt erscheint nun auch im Notizen-Fenster selbst. Aus dem Tags-Fenster heraus kann man jetzt die <i>Bedeutungsgerüst-Einstellungen</i> öffnen (wo sich auch Einstellungen zum Tags-Fenster befinden), ebenso wie aus dem Bedeutungsgerüste- und dem Bedeutungsgerüst-wechseln-Fenster. Fehlende Menüpunkt beim Rechtsklick im Programmkopf (<i>Erinnerungen</i> und <i>Lexika-Fenster</i>) wurden ergänzt, ebenso wie der mitunter fehlende Punkt <i>Karteikarten-Einstellungen</i> in der Karteikarte. Im Anhänge-Fenster erscheint der Menüpunkt <i>Fenster schließen</i> nun in jedem Fall und im Fenster der Kopierfunktion (<i>Belege &gt; Kopieren</i>) gibt es fortan – wie im Anhänge-Fenster – einen Menüpunkt zum Öffnen des Belegs. Auf dem Startbildschirm (der angezeigt wird, wenn noch keine Kartei geöffnet wurde) erscheint nun überall <i>Kartei erstellen</i>. Und schließlich: Alle Icons, die für einen Karteianhang stehen, haben nun einen Menüpunkt <i>Anhang öffnen</i>.</li>
+					<li>Die Rechtsklickmenüs wurden verbessert: Die Menüpunkte <i>Beleg hinzufügen</i> und <i>Belege auflisten</i> werden nun in fast allen Kontexten angeboten. Ist man bereits in der Belegliste wird die Option <i>Belege auflisten</i> – anders als zuvor – allerdings nicht mehr angezeigt (zumal sie hier sinnlos war und ist). Der Punkt <i>Belegliste-Einstellungen</i> erscheint nun auch dann, wenn der Klick in der Kopfleiste der Belegliste erfolgt. Das zuvor stark reduzierte Menü, das beim Rechtsklick auf den Metainfos der Belegliste erschien, ist nun vollständig. Werden Notizen (Funktion <i>Kartei &gt; Notizen</i>) in der Filterleiste angezeigt, werden beim Klick auf ihnen oder dem zu ihnen gehörenden Filterkopf die Menüpunkte <i>Notizen-Fenster</i> und <i>Notizen-Einstellungen</i> angeboten. Letzterer Menüpunkt erscheint nun auch im Notizen-Fenster selbst. Aus dem Tag-Fenster heraus kann man jetzt die <i>Bedeutungsgerüst-Einstellungen</i> öffnen (wo sich auch Einstellungen zum Tag-Fenster befinden), ebenso wie aus dem Bedeutungsgerüste- und dem Bedeutungsgerüst-wechseln-Fenster. Fehlende Menüpunkt beim Rechtsklick im Programmkopf (<i>Erinnerungen</i> und <i>Lexika-Fenster</i>) wurden ergänzt, ebenso wie der mitunter fehlende Punkt <i>Karteikarten-Einstellungen</i> in der Karteikarte. Im Anhänge-Fenster erscheint der Menüpunkt <i>Fenster schließen</i> nun in jedem Fall und im Fenster der Kopierfunktion (<i>Belege &gt; Kopieren</i>) gibt es fortan – wie im Anhänge-Fenster – einen Menüpunkt zum Öffnen des Belegs. Auf dem Startbildschirm (der angezeigt wird, wenn noch keine Kartei geöffnet wurde) erscheint nun überall <i>Kartei erstellen</i>. Und schließlich: Alle Icons, die für einen Karteianhang stehen, haben nun einen Menüpunkt <i>Anhang öffnen</i>.</li>
 					<li>Überall, wo Kopier-Icons (<img src="../img/tool-kopieren.svg" width="24" height="24" alt="">) betätigt werden, und auch beim Kopieren via <i>Rechtsklick &gt; Textauswahl kopieren</i> erscheint nun eine kurze Animation, die anzeigt, dass Text in die Zwischenablage des Systems geschoben wurde. Diese Funktion wurde für die Belegliste, die Karteikarte, die Druckvorschau und das Fehlerlog-Fenster (<i>Hilfe &gt; Fehlerlog</i>) ergänzt.</li>
 					<li>Die Namen der ersten beiden Punkte im Programmmenü <i>Ansicht</i> wurden von <i>Schrift vergrößern/verkleinern</i> in <i>Anzeige vergrößern/verkleinern</i> geändert, weil nicht nur die Schrift, sondern auch Bilder und andere Elemente von der Vergrößerung/Verkleinerung betroffen sind.</li>
 					<li>Auf die <a href="#" class="link-dokumentation">technische Dokumentation</a> und das <a href="#" class="link-handbuch">Handbuch</a> können nun Links gesetzt werden, die nicht nur das Fenster öffnen, sondern im Anschluss auch noch einen übergebenen Abschnitt direkt ansteuern. (Das wird wichtig, sobald das Handbuch fertig ist.)</li>

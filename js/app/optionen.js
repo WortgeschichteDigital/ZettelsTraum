@@ -125,21 +125,21 @@ let optionen = {
 			"quick-belege-einfuegen": false,
 			// NOTIZEN
 			// Notizen-Fenster nach dem Speichern direkt schließen
-			"notizen-schliessen": true,
+			"notizen-schliessen": false,
 			// Notizen in der Filterleiste anzeigen
 			"notizen-filterleiste": false,
 			// Notizen in der Filterleiste standardmäßig öffnen
 			"filter-offen-notizen": true,
 			// BEDEUTUNGSGERÜST
 			// Bedeutungsgerüst nach dem Speichern direkt schließen
-			"bedeutungen-schliessen": true,
+			"bedeutungen-schliessen": false,
 			// Tagger nach dem Speichern direkt schließen
-			"tagger-schliessen": true,
+			"tagger-schliessen": false,
 			// XML-Dateien mit Tags sollten automatisch abgeglichen werden
 			"tags-auto-abgleich": true,
 			// KARTEIKARTE
 			// Karteikarte nach dem Speichern direkt schließen
-			"karteikarte-schliessen": true,
+			"karteikarte-schliessen": false,
 			// neue Karteikarten als unvollständig markieren
 			unvollstaendig: false,
 			// beim Fokussieren des DTA-Import-Feldes automatisch die URL aus dem Clipboard eintragen
@@ -158,6 +158,8 @@ let optionen = {
 			"filter-inaktive": false,
 			// untergeordnete Bedeutungen beim Filtern mit einbeziehen
 			"filter-unterbedeutungen": true,
+			// Belge, die nur Annotierungen mit transparenter Hintergrundfarbe haben, ebenfalls mit einbeziehen
+			"filter-transparente": false,
 			// nicht warnen, wenn eine Karte erstellt wurde, sie aber wegen der Filterregeln nicht angezeigt wird
 			"nicht-karte-gefiltert": false,
 			// Filter, die standardmäßig geöffnet werden

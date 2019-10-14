@@ -1737,6 +1737,12 @@ let beleg = {
 	//   eintragen = Boolean
 	//     (eintragen oder austragen)
 	bedeutungEinAustragen (bd, eintragen) {
+		// Overlay-Fenster ist offen => Abbruch
+		if (overlay.oben()) {
+			dialog.oeffnen("alert");
+			dialog.text(`Bedeutungen können nur ${eintragen ? "eingetragen" : "ausgetragen"} werden, wenn Karteikarte oder Belegliste nicht durch andere Fenster verdeckt werden.`);
+			return;
+		}
 		// Ziel ermitteln
 		if (!document.getElementById("beleg").classList.contains("aus")) {
 			if (eintragen) {
@@ -1755,7 +1761,7 @@ let beleg = {
 		}
 		// unklar, wo eingetragen werden soll => Fehlermeldung
 		dialog.oeffnen("alert");
-		dialog.text("Weder eine Karteikarte noch die Belegliste ist geöffnet.\nDie Bedeutung kann nur eingetragen werden, wenn eine der beiden Ansichten aktiv ist.");
+		dialog.text(`Weder eine Karteikarte noch die Belegliste ist geöffnet.\nDie Bedeutung kann nur ${eintragen ? "eingetragen" : "ausgetragen"} werden, wenn eine der beiden Ansichten aktiv ist.`);
 	},
 	// Bedeutung in eine einzelne Karteikarte eintragen
 	//   bd = Object
@@ -1833,9 +1839,7 @@ let beleg = {
 	//   bd = Object
 	//     (die Bedeutung mit Gerüstnummer [bd.gr] und ID [bd.id])
 	bedeutungEintragenListe (bd) {
-		let bdText = bedeutungen.bedeutungenTief({gr: bd.gr, id: bd.id});
-		bdText = bdText.replace(/<b>/, `<b class="zaehlung">`); // erstes Zählzeichen
-		bdText = bdText.replace(/<b>/g, `<b class="zaehlung nach-text">`); // weitere Zählzeichen
+		const bdText = beleg.bedeutungenEinAustragenText(bd);
 		// keine Belege in der Liste
 		if (!document.querySelector("#liste-belege-cont .liste-kopf")) {
 			dialog.oeffnen("alert");
@@ -1854,6 +1858,7 @@ let beleg = {
 								id: bd.id,
 							})[0]) {
 						data.ka[id].bd.push({...bd});
+						data.ka[id].dm = new Date().toISOString();
 					}
 				});
 				kartei.karteiGeaendert(true);
@@ -1876,7 +1881,7 @@ let beleg = {
 	//   bd = Object
 	//     (die Bedeutung mit Gerüstnummer [bd.gr] und ID [bd.id])
 	bedeutungAustragenListe (bd) {
-		const bdText = bedeutungen.bedeutungenTief({gr: bd.gr, id: bd.id});
+		const bdText = beleg.bedeutungenEinAustragenText(bd);
 		// keine Belege in der Liste
 		if (!document.querySelector("#liste-belege-cont .liste-kopf")) {
 			dialog.oeffnen("alert");
@@ -1897,6 +1902,7 @@ let beleg = {
 					});
 					if (vorhanden[0]) {
 						data.ka[id].bd.splice(vorhanden[1], 1);
+						data.ka[id].dm = new Date().toISOString();
 						treffer = true;
 					}
 				});
@@ -1921,5 +1927,15 @@ let beleg = {
 			}
 		});
 		dialog.text(`Soll die Bedeutung\n<p class="bedeutungen-dialog">${bdText}</p>\nwirklich aus allen Karteikarten, die derzeit in der Belegliste sichtbar sind, entfernt werden?`);
+	},
+	// bereitet den Bedeutungstext auf, der beim Ein- oder Austragen von Bedeutungen
+	// in der Belegliste angezeigt wird
+	//   bd = Object
+	//     (die Bedeutung mit Gerüstnummer [bd.gr] und ID [bd.id])
+	bedeutungenEinAustragenText (bd) {
+		let bdText = bedeutungen.bedeutungenTief({gr: bd.gr, id: bd.id});
+		bdText = bdText.replace(/<b>/, `<b class="zaehlung">`); // erstes Zählzeichen
+		bdText = bdText.replace(/<b>/g, `<b class="zaehlung nach-text">`); // weitere Zählzeichen
+		return bdText;
 	},
 };
