@@ -672,7 +672,7 @@ let belegImport = {
 				dialog.oeffnen("alert", function() {
 					document.getElementById("beleg-dta").focus();
 				});
-				dialog.text("Das Kartei-Wort wurde im gerade importierten Belegtext nicht gefunden.");
+				dialog.text("Das Karteiwort wurde im gerade importierten Belegtext nicht gefunden.");
 				break;
 			}
 		}

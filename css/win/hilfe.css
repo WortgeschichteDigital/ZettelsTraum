@@ -598,8 +598,13 @@ mark.wort {
 
 .erklaerung-option {
 	position: relative;
+	margin-top: 25px;
 	margin-left: 40px;
 	font-style: italic;
+}
+
+h2 + .erklaerung-option {
+	margin-top: 0;
 }
 
 .erklaerung-option::before {

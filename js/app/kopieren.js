@@ -227,7 +227,7 @@ let kopieren = {
 	//   "ID" (ID des Fensters, von dem die Daten stammen)
 	//     belege (Number; Anzahl der Belege, die kopiert werden können)
 	//     gerueste (Array; eindimensional mit Strings gefüllt; die Strings = IDs der Bedeutungsgerüste)
-	//     wort (String; das Kartei-Wort)
+	//     wort (String; das Karteiwort)
 	basisdaten: {},
 	// Zwischenspeicher für die Daten der geladenen Belegedatei
 	belegedatei: [],

@@ -368,7 +368,7 @@
 
 					<p class="info">Es kann nur ein Korpus angegeben werden. Die Verwendung von Hierarchieebenen steht aber auch hier zur Verfügung, genauso wie im Wortbildungsfeld.</p>
 
-					<p><b>Textsorte:</b> Textklasse oder -sorte, aus der der Belegtext stammt</p>
+					<p id="karteikarte-textsorte"><b>Textsorte:</b> Textklasse oder -sorte, aus der der Belegtext stammt</p>
 
 					<p class="info">Für das Textsortenfeld gilt mutatis mutandis das gleiche wie für das Wortbildungsfeld.</p>
 
@@ -656,7 +656,7 @@
 
 				<!-- BELEGLISTE -->
 				<section id="sektion-belegliste" class="suche">
-					<p>Die Belegliste ist die Standardansicht, die beim Öffnen einer Kartei geladen wird, und zu der die App immer wieder zurückkehrt, wenn eine andere Funktion geschlossen wird. Haben Sie sich in einer der anderen Ansichten verloren, können Sie über den Menüpunkt <a href="#menue-belege-auflisten"><i>Belege &gt; Auflisten</i></a> oder via <kbd>Strg</kbd> + <kbd>L</kbd> einfach zur Belegliste zurückkehren.</p>
+					<p>Die Belegliste ist die Standardansicht, die beim Öffnen einer bestehenden Kartei geladen wird, und zu der die App immer wieder zurückkehrt, wenn alle anderen Funktionen geschlossen werden. Haben Sie sich in einer der anderen Ansichten verloren, können Sie über den Menüpunkt <a href="#menue-belege-auflisten"><i>Belege &gt; Auflisten</i></a> oder via <kbd>Strg</kbd> + <kbd>L</kbd> jederzeit zur Belegliste zurückkehren.</p>
 
 					<h2 id="belegliste-kopfleiste">Kopfleiste</h2>
 
@@ -667,7 +667,9 @@
 
 					<p>Am rechten Rand der Kopfleiste steht die <b>Anzahl der Belege</b>, die gerade in der Liste sichtbar sind. Ist die Ziffer schwarz dargestellt, werden alle Belege der Kartei angezeigt. Wurde die Liste <a href="#" class="link-sektion-filter">gefiltert</a>, ändert sich die Anzeige: In roter Schrift wird gemeldet, wie viele Belege von den insgesamt vorhandenen zu sehen sind. Die Anzeige sieht dann <abbr title="zum Beispiel">z. B.</abbr> so aus: <span class="obacht">7/19 Belegen</span>.</p>
 
-					<p>Die Icons in der Kopfleiste dienen fast ausschließlich dazu, die Anzeige der Belegliste zu steuern. Es handelt sich bei ihnen im Grunde um Programmeinstellungen, die Sie nur einmal vornehmen müssen und die nach dem Neustart der App genau so wiederhergestellt werden, wie sie beim Verlassen waren. Fast alle Icons können zwei Zustände haben: aktiviert oder deaktiviert. Ist die hinter einem Icon stehende Funktion aktiviert, bekommt das Icon einen grünen Hintergrund. Im Einzelnen stehen die Icons für die folgenden Funktionen:</p>
+					<p>Die Icons in der Kopfleiste dienen fast ausschließlich dazu, die Anzeige der Belegliste zu steuern. Es handelt sich bei ihnen im Grunde um Programmeinstellungen, die Sie nur einmal vornehmen müssen und die nach dem Neustart der App genau so wiederhergestellt werden, wie sie beim Verlassen waren. Fast alle Icons können zwei Zustände haben: aktiviert oder deaktiviert. Ist die hinter einem Icon stehende Funktion aktiviert, bekommt das Icon einen grünen Hintergrund.</p>
+
+					<p>Im Einzelnen stehen die Icons für die folgenden Funktionen:</p>
 
 					<p class="erklaerung-icon"><img src="../img/liste-filter.svg" width="24" height="24" alt="">Ein- <abbr title="beziehungsweise">bzw.</abbr> Ausblenden der Filterleiste</p>
 
@@ -683,7 +685,7 @@
 
 					<p class="erklaerung-icon"><img src="../img/liste-aufklappen.svg" width="24" height="24" alt=""><a href="#belegliste-detailansicht">Detailansicht</a> der Belege umschalten</p>
 
-					<p class="info">Beim Aktivieren des Icons werden alle Belege in der Liste aufgeklappt, sodass die Details sichbar werden. Welche Details dies genau sind, hängt von den Detaileinstellungen ab (<abbr title="siehe unten">s. u.</abbr>). Deaktiviert man das Icon, werden die Belege wieder zugeklappt, sodass nur die <a href="#belegliste-kopfleisteBelege">Kopfleisten</a> mit knapper Belegvorschau sichtbar sind. Einzelne Belege können durch einen Klick auf die Kopfleiste jederzeit auf- <abbr title="beziehungsweise">bzw.</abbr> zugeklappt werden, ganz egal, ob die Detailansicht aller Belege aktiviert oder deaktiviert ist.</p>
+					<p class="info">Beim Aktivieren des Icons werden alle Belege in der Liste aufgeklappt, sodass die Details sichbar werden. Um welche Details es sich hierbei genau hndelt, hängt von den <a href="#belegliste-platzhalter">Detaileinstellungen</a> ab. Deaktiviert man das Icon, werden die Belege wieder zugeklappt, sodass nur die <a href="#belegliste-kopfleisteBelege">Kopfleisten</a> mit knapper Belegvorschau sichtbar sind. Einzelne Belege können durch einen Klick auf die Kopfleiste jederzeit auf- <abbr title="beziehungsweise">bzw.</abbr> zugeklappt werden, ganz egal, ob die Detailansicht aller Belege aktiviert oder deaktiviert ist.</p>
 
 					<p class="erklaerung-icon" id="belegliste-kuerzung"><img src="../img/liste-kuerzen.svg" width="24" height="24" alt="">Kürzung des Belegkontextes</p>
 
@@ -702,38 +704,40 @@
 					<p class="erklaerung-icon" id="belegliste-karteiwortHervorheben"><img src="../img/liste-hervorheben.svg" width="24" height="24" alt="">Karteiwort im Belegtext hervorheben</p>
 
 					<div class="info">
-						<p>Ist das Icon aktiviert, versucht das Programm alle Vorkommen des Karteiworts im Belegtext gelb hervorzuheben. Haben Sie eine Karte zum Wort <i>Freiheit</i> erstellt, könnte die Hervorhebung so aussehen: <mark class="wort">Freiheit</mark>. Für das Hervorheben des Karteiworts werden ebenso wie für die Kürzungsfunktion (<abbr title="siehe oben">s. o.</abbr>) die aus dem <abbr title="Deutschen Textarchiv">DTA</abbr> importierten Formvarianten herangezogen. Die Markierung funktioniert gut, wenn die Liste der Formvarianten gut ist, sodass auch variierende Schreibungen wie <i>Fraiheit</i> oder <i>Freyheit</i> automatisch markiert werden sollten. Die Markierung bleibt dabei nicht auf das Karteiwort selbst beschränkt; es wird automatisch eine Links- und Rechtserweiterung des Worts vorgenommen, sodass Varianten mit Affix ebenso markiert werden sollten wie Komposita oder andere Derivativa. Darum dürften Sie in den Belegen auch Markierungen wie <mark class="wort">Freiheiten</mark> oder <mark class="wort">Freiheitsversprechen</mark> finden.</p>
+						<p>Ist das Icon aktiviert, versucht das Programm, alle Vorkommen des Karteiworts im Belegtext gelb hervorzuheben. Haben Sie eine Kartei zum Wort <i>Freiheit</i> erstellt, könnte die Hervorhebung so aussehen: <mark class="wort">Freiheit</mark>. Für das Hervorheben des Karteiworts werden ebenso wie für die <a href="#belegliste-kuerzung">Kürzungsfunktion</a> die aus dem <abbr title="Deutschen Textarchiv">DTA</abbr> importierten Formvarianten herangezogen. Die Markierung funktioniert gut, wenn die Liste der Formvarianten gut ist, sodass auch variierende Schreibungen wie <i>Fraiheit</i> oder <i>Freyheit</i> automatisch markiert werden sollten. Die Markierung bleibt dabei nicht auf das Karteiwort selbst beschränkt; es wird automatisch eine Links- und Rechtserweiterung des Worts vorgenommen, sodass Varianten mit Affix ebenso markiert werden sollten wie Komposita oder andere Derivativa. Darum dürften Sie in den Belegen auch Markierungen wie <mark class="wort">Freiheiten</mark> oder <mark class="wort">Freiheitsversprechen</mark> finden.</p>
 
-						<p>Die Qualität der automatischen Markierung hat natürlich seine Grenzen, die besonders bei sehr kurzen Wörtern und erst recht bei Homonymen sichtbar werden. Haben Sie eine Kartei zum Wort <i>Tor</i> werden auch Wörter wie <mark class="wort">Senator</mark>, <mark class="wort">Territorium</mark> oder <mark class="wort">historisch</mark> hervorgehoben. Und arbeiten Sie zum Wort <i>Masse</i> im Sinne von <q class="bedeutung">Menschenmasse</q>, wird die App nicht erkennen können, ob im Text von der physikalischen Größe oder einer Menschengruppe die Rede ist.</p>
+						<p>Die Güte einer solchen automatischen Markierung hat natürlich ihre Grenzen, die besonders bei sehr kurzen Wörtern und erst recht bei Homonymen sichtbar werden. Haben Sie eine Kartei zum Wort <i>Tor</i>, werden auch Wörter wie <mark class="wort">Senator</mark>, <mark class="wort">Territorium</mark> oder <mark class="wort">historisch</mark> hervorgehoben. Und arbeiten Sie zum Wort <i>Masse</i> im Sinne von <q class="bedeutung">Menschenmasse</q>, wird die App nicht erkennen können, ob im Text von der physikalischen Größe oder einer Menschengruppe die Rede ist.</p>
 
 						<figure class="right" title="zum Vergrößern anklicken">
 							<img src="../img/win/hb-belegliste-annotierung.png" alt="">
 							<figcaption>die Annotierungsfunktion</figcaption>
 						</figure>
 
-						<p id="belegliste-annotierenBeleg">Für solche Fälle lassen sich einzelne Vorkommen der Karteiwörter im <b>Belegtext</b> bequem <b>annotieren</b>. Dazu müssen Sie sich zunächst den Belegtext anzeigen lassen (Klick auf einen Karteikartenkopf oder <img src="../img/liste-aufklappen.svg" width="20" height="20" alt="">) und die Trennstriche einblenden (<img src="../img/liste-trennung.svg" width="20" height="20" alt="">). Klicken Sie jetzt auf ein gelb markiertes Karteiwort, öffnet sich ein Popup-Fenster, in dem Sie die Markierungsfarbe ändern und/oder eine Notiz hinzufügen können. Wählen Sie als Farbe transparent, hat das nicht nur visuelle Konsequenzen. Treffer von Karteiwörtern, die in dieser Weise markiert wurden, werden von der App fortan so behandelt, als wären es gar keine Treffer. <abbr title="Das heißt">D. h.</abbr> konkret: Versucht das Programm den Belegtext um Absätze zu kürzen, in denen das Karteiwort nicht auftaucht (<abbr title="siehe oben">s. o.</abbr>), wird ein Absatz, in dem das Karteiwort transparent gesetzt wurde, so behandelt, als würde das Karteiwort in diesem Absatz nicht auftauchen. Der Absatz wird in diesem Fall herausgekürzt.</p>
+						<p id="belegliste-annotierenBeleg">Für solche Fälle lassen sich einzelne Vorkommen der Karteiwörter im <b>Belegtext</b> bequem <b>annotieren</b>. Dazu müssen Sie sich zunächst den Belegtext anzeigen lassen (Klick auf einen Karteikartenkopf oder <img src="../img/liste-aufklappen.svg" width="20" height="20" alt="">) und die Trennstriche einblenden (<img src="../img/liste-trennung.svg" width="20" height="20" alt="">). Klicken Sie jetzt auf ein gelb markiertes Karteiwort, öffnet sich ein Popup-Fenster, in dem Sie die Markierungsfarbe ändern und/oder eine Notiz hinzufügen können. Wählen Sie als Farbe transparent, hat das nicht nur visuelle Konsequenzen. Treffer von Karteiwörtern, die in dieser Weise markiert wurden, werden von der App fortan so behandelt, als wären es gar keine Treffer. <abbr title="Das heißt">D. h.</abbr> konkret: Versucht das Programm den Belegtext <a href="#belegliste-kuerzung">um Absätze zu kürzen</a>, in denen das Karteiwort nicht auftaucht, wird ein Absatz, in dem das Karteiwort transparent gesetzt wurde, so behandelt, als würde das Karteiwort in diesem Absatz nicht auftauchen. Der Absatz wird in diesem Fall herausgekürzt.</p>
 
-						<p>Damit Sie selbst bei transparent gesetzten Wörtern auch später noch erkennen, dass sie gesondert annotiert wurden, erscheint hinter der annotierten Stelle das Icon <img src="../img/annotierung.svg" width="12" height="12" alt="" class="klein">. Um eine Annotierung komplett zu löschen, müssen Sie eine <abbr title="eventuell">evtl.</abbr> hinzugefügte Notiz entfernen und als Farbe Gelb wählen.</p>
+						<p>Damit Sie selbst bei transparent gesetzten Wörtern auch später noch erkennen, dass sie annotiert wurden, erscheint hinter der annotierten Stelle das Icon <img src="../img/annotierung.svg" width="12" height="12" alt="" class="klein">. Um die Annotierung eines Karteiworts komplett zu löschen, müssen Sie eine <abbr title="eventuell">evtl.</abbr> hinzugefügte Notiz entfernen und als Farbe Gelb wählen – die Standardfarbe.</p>
 
-						<p id="belegliste-annotieren">Die Annotierungsfunktion kann nicht nur für Karteiwörter benutzt werden. Im Prinzip können Sie mit ihr einen <b>beliebigen Abschnitt im Belegtext markieren</b>. Hierzu müssen Sie nur den Text mit der Maus auswählen, der markiert werden soll, auf dem ausgewählten Text rechtsklicken und <i>Textauswahl markieren</i> wählen. Es öffnet sich das gleiche Popup-Fenster wie beim Klick auf ein Karteiwort. Der einzige Unterschied zur Annotierung von Karteiwörtern: Die Markierung wird in diesem Fall gelöscht, wenn die Farbe transparent gesetzt wird.</p>
+						<p id="belegliste-annotieren">Die Annotierungsfunktion kann nicht nur für Karteiwörter benutzt werden. Im Prinzip können Sie mit ihr einen beliebigen <b>Abschnitt im Belegtext markieren</b>. Hierzu müssen Sie nur den Text mit der Maus auswählen, der markiert werden soll, auf dem ausgewählten Text rechtsklicken und <i>Textauswahl markieren</i> wählen. Es öffnet sich das gleiche Popup-Fenster wie beim Klick auf ein Karteiwort. Der einzige Unterschied zur Annotierung von Karteiwörtern: Die Markierung wird in diesem Fall gelöscht, wenn die Farbe transparent gesetzt wird.</p>
 
-						<p id="belegliste-nesting">Das Annotieren von Teilen des Belegtextes kann fehlschlagen. In solchen Fällen erscheint eine Fehlermeldung. In der Regel wird der Grund sein, dass sie gewisse Elemente im Text nur zum Teil ausgewählt haben. Ändern Sie in solchen Fällen die Textauswahl mit der Maus und versuchen es erneut! (Hintergrund: <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>-Tags dürfen nicht über Kreuz verschachtelt werden. Der Code <code class="quelltext long">&lt;b&gt;das &lt;i&gt;ist&lt;/b&gt; ein&lt;/i&gt; Text</code> wäre eine illegale Verschachtelung, weil der <code class="quelltext">&lt;i&gt;</code>-Tag den <code class="quelltext">&lt;b&gt;</code>-Tag über Kreuz schneidet. Korrekt sähe der Code so aus: <code class="quelltext long">&lt;b&gt;das &lt;i&gt;ist&lt;/i&gt;&lt;/b&gt; &lt;i&gt;ein&lt;/i&gt; Text</code>. Für die Annotierung heißt das konkret, dass Sie Textteile, die <abbr title="zum Beispiel">z. B.</abbr> gefettet sind, nicht nur teilweise, sondern komplett auswählen müssen.)</p>
+						<p>Das Annotieren von Teilen des Belegtextes kann fehlschlagen. In solchen Fällen erscheint eine Fehlermeldung. In der Regel wird der Grund sein, dass sie gewisse Elemente im Text nur zum Teil ausgewählt haben. Ändern Sie in solchen Fällen die Textauswahl mit der Maus und versuchen es erneut!</p>
+
+						<p id="belegliste-nesting">(Hintergrund: <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>-Tags dürfen nicht über Kreuz verschachtelt werden. Der Code <code class="quelltext long">&lt;b&gt;das &lt;i&gt;ist&lt;/b&gt; ein&lt;/i&gt; Text</code> wäre eine illegale Verschachtelung, weil der <code class="quelltext">&lt;i&gt;</code>-Container den <code class="quelltext">&lt;b&gt;</code>-Container über Kreuz schneidet. Korrekt sähe der Code so aus: <code class="quelltext long">&lt;b&gt;das &lt;i&gt;ist&lt;/i&gt;&lt;/b&gt; &lt;i&gt;ein&lt;/i&gt; Text</code>. Für die Annotierung heißt das konkret, dass Sie Textteile, die <abbr title="zum Beispiel">z. B.</abbr> gefettet sind, nicht nur teilweise, sondern komplett auswählen müssen.)</p>
 
 						<p>Die Annotierungsfunktion steht in derselben Weise auch in der <a href="#karteikarte-leseansicht">Leseansicht</a> der <b>Karteikarte</b> zur Verfügung.</p>
 
-						<p>Annotierte Belege lassen sich über einen <b>Filter</b> im Block <a href="#filter-verschiedenes"><i>Verschiedenes</i></a> aus der Belegliste herausfiltern. Der Filter erscheint, sobald es annotierte Belege gibt. Gefunden werden sowohl Belege, deren Karteiwörter mit einem Kommentar oder einer anderen Hintergrundfarbe ausgezeichnet wurden, als auch solche, die eine freihändische Markierung von Textstellen haben. Annotierungen mit transparenter Hintergrundfarbe werden von dem Filter standardmäßig nicht erfasst. Die Haltung der App lässt sich in der Frage über eine Anpassung seiner <a href="#einstellungen-filterleisteTransparente">Einstellungen</a> aber problemlos ändern.</p>
+						<p>Annotierte Belege lassen sich über einen <b>Filter</b> im Block <a href="#filter-verschiedenes"><i>Verschiedenes</i></a> aus der Belegliste herausfiltern. Der Filter erscheint, sobald es annotierte Belege gibt. Gefunden werden sowohl Belege, deren Karteiwörter mit einem Kommentar oder einer anderen Hintergrundfarbe ausgezeichnet wurden, als auch solche, die eine freihändische Markierung von Textstellen haben. Annotierungen mit transparenter Hintergrundfarbe werden von dem Filter standardmäßig nicht erfasst. Die Haltung der App lässt sich in der Frage über eine Anpassung ihrer <a href="#einstellungen-filterleisteTransparente">Einstellungen</a> aber problemlos ändern.</p>
 					</div>
 
 					<p class="erklaerung-icon" id="belegliste-platzhalter"><img src="../img/liste-beleg.svg" width="24" height="24" alt="">Detailansicht: Platzhalter-Icon für den Belegtext</p>
 
 					<div class="info">
-						<p>Im Kopf der Belegliste befinden sich sehr viele Icons. Um die Übersicht zu erhöhen, werden alle Icons, die für das Ein- und Ausblenden von Elementen der Detailansicht der Belege zuständig sind, standardmäßig ausgeblendet – wenn sie inaktiv sind. Bei den Elementen der Detailansicht handelt es sich um die Quellenangabe, die Bedeutung, die Notizen <abbr title="und so weiter">usw.</abbr> Für jedes dieser Elemente gibt es im Icon-Block, der mit dem Platzerhalter-Icon für den Belegtext beginnt, ein eigenes Icon, sodass die Anzeige sehr genau konfiguriert werden kann.</p>
+						<p>Im Kopf der Belegliste befinden sich sehr viele Icons. Um die Übersicht zu erhöhen, werden alle Icons, die für das Ein- und Ausblenden von Elementen der <a href="#belegliste-detailansicht">Detailansicht der Belege</a> zuständig sind, standardmäßig ausgeblendet – wenn sie inaktiv sind. Bei den Elementen der Detailansicht handelt es sich um die Quellenangabe, die Bedeutung, die Notizen <abbr title="und so weiter">usw.</abbr> Für jedes dieser Elemente gibt es im Icon-Block, der mit dem Platzerhalter-Icon für den Belegtext beginnt, ein eigenes Icon, sodass die Anzeige sehr genau konfiguriert werden kann.</p>
 
 						<p>Ist in der Karteikarte zu einem der Belege eine Position nicht gefüllt, wird diese in der Detailansicht auch nicht sichtbar – selbst wenn das entsprechende Icon aktiviert wurde.</p>
 
 						<p>Das Platzhalter-Icon ist immer grün hinterlegt, weil der Belegtext in der Komplettansicht im Gegensatz zu allen anderen Elementen nicht ausgeblendet werden kann.</p>
 
-						<p>Um alle Icons zur Steuerung der Detailansicht zu sehen, muss man mit der Maus nur über das Platzhalter-Icon fahren. Wurde ein Icon aktiviert, wird es grün hinterlegt und ist fortan immer sichtbar. Es gibt eine <a href="#einstellungen-beleglisteIcons">Einstellung</a>, mit deren Hilfe man alle Icons immer angezeigt bekommt, ganz egal ob sie aktiviert oder deaktiviert sind.</p>
+						<p>Um alle Icons zur Steuerung der Detailansicht zu sehen, muss man mit der Maus über das Platzhalter-Icon fahren. Wurde ein Icon aktiviert, wird es grün hinterlegt und ist fortan immer sichtbar. Es gibt eine <a href="#einstellungen-beleglisteIcons">Einstellung</a>, mit deren Hilfe man alle Icons immer angezeigt bekommt, ganz egal ob sie aktiviert oder deaktiviert sind.</p>
 					</div>
 
 					<p class="erklaerung-icon"><img src="../img/liste-bedeutung.svg" width="24" height="24" alt="">Detailansicht: Bedeutung ein- oder ausblenden</p>
@@ -784,7 +788,7 @@
 					<div class="info">
 						<p>Mit der Suchleiste können Sie alle sichtbaren Texte in der Belegliste durchsuchen, mit Ausnahme der kurzen Belegvorschau in der Kopfleiste der Belege. Durchsucht werden also die Jahresangaben, der Autorennamen und (falls eingeblendet) die Textsortenangabe in der Kopfleiste sowie der gesamte sichtbare Text im Bereich der <a href="#belegliste-detailansicht">Detailansicht</a>. Ausgeblendete Elemente und gekürzte Absätze werden demnach nicht durchsucht.</p>
 
-						<p>Für eine Suche über den gesamten Inhalt der Kartei ist die Suchleiste ungeeignet. Hierzu dient der <a href="#filter-volltext">Volltextfilter</a>.</p>
+						<p>Für eine Suche über den gesamten Inhalt der Kartei ist die Suchleiste ungeeignet. Hierzu dient der <a href="#filter-volltext">Volltextfilter</a>. Für eine Suche über eine Sammlung an Karteien steht die <a href="#menue-programm-karteisuche">Karteisuche</a> zur Verfügung.</p>
 
 						<p>Eine Suche mit der Suchleiste startet immer an dem Punkt des Fensters, an dem Sie sich gerade befinden. <abbr title="Das heißt">D. h.</abbr>, dass bei einer neuen Suche nicht etwa zum ersten Treffer in der Belegliste gesprungen wird, sondern zum ersten im aktuellen Ausschnitt des Fensters sichtbaren Treffer. Gibt es im sichtbaren Bereich keinen Treffer, wird zunächst geschaut, ob es weiter unten in der Belegliste einen Treffer gibt. Erst dann, wenn auch hier die Suche erfolglos ist, wird zum ersten Treffer im Dokument gesprungen.</p>
 
@@ -798,7 +802,7 @@
 					<p class="erklaerung-icon"><img src="../img/drucken.svg" width="24" height="24" alt="">Tastaturkürzel <kbd>Strg</kbd> + <kbd>P</kbd>; Belegliste drucken</p>
 
 					<div class="info">
-						<p>Es werden nur die gerade in der Belegliste sichtbaren Belege gedruckt. Die Anzahl der sichtbaren Belege kann von der Gesamtanzahl der Belege in der Kartei abweichen, wenn die Liste <a href="#" class="link-sektion-filter">gefiltert</a> wurde. Dabei werden immer alle vorhandenen Informationen zu den Belegen gedruckt. Die Konfiguration der Detailansicht in der Belegliste wird demnach ignoriert.</p>
+						<p>Es werden nur die gerade in der Belegliste sichtbaren Belege gedruckt. Die Anzahl der sichtbaren Belege kann von der Gesamtzahl der Belege in der Kartei abweichen, wenn die Liste <a href="#" class="link-sektion-filter">gefiltert</a> wurde. Dabei werden immer alle vorhandenen Informationen zu den Belegen gedruckt. Die Konfiguration der Detailansicht in der Belegliste wird demnach ignoriert.</p>
 
 						<p>In dem Vorschaufenster, das erscheint, kann man die Belege in die Zwischenablage kopieren, um sie in ein Textverarbeitungsprogramm oder einen Plain-Text-Editor einzufügen.</p>
 					</div>
@@ -810,7 +814,7 @@
 						<figcaption>die Kopfleiste eines Belegs</figcaption>
 					</figure>
 
-					<p>Die Kopfleiste der Belege dient dazu, eine erste Idee zu bekommen, um welchen Beleg es sich handelt. Klickt man auf die Leiste, öffnet <abbr title="beziehungsweise">bzw.</abbr> schließt sich die Detailansicht des Belegs.</p>
+					<p>Die Kopfleiste der Belege dient dazu, eine erste Idee zu bekommen, um welchen Beleg es sich handelt. Klickt man auf die Leiste, öffnet <abbr title="beziehungsweise">bzw.</abbr> schließt sich die <a href="#belegliste-detailansicht">Detailansicht des Belegs</a>.</p>
 
 					<p>Oben sehen Sie eine Kopfleiste mit allen Elementen, die (unter gewissen Umständen) sichtbar sein können. Dies sind im Einzelnen:</p>
 
@@ -825,7 +829,7 @@
 					<div class="info">
 						<p>Das Datum in der Kopfleiste gibt nicht notwendigerweise exakt das Datum wieder, das in das Karteikartenformular eingetragen wurde. An dieser Stelle steht entweder eine vierstellige Jahreszahl oder eine Jahrhundertangabe, je nachdem ob das eine oder das andere zuerst im Datumsfeld der Karteikarte zu finden ist (<abbr title="vergleiche">vgl.</abbr> die <a href="#karteikarte-datum">Erläuterungen zum Datumsfeld</a> im <abbr title="Abschnitt">Abschn.</abbr> <a href="#" class="link-sektion-karteikarte">Karteikarte</a>).
 
-						<p>Stehen weitere, hier nicht sichtbare Informationen im Datumsfeld, wird dies durch einen roten Asterisk (<span class="obacht">*</span>) angezeigt. Was tatsächlich im Feld steht, zeigt ein Tooltip, der erscheint, wenn man mit der Maus über dem Datum schwebt. Auf Klick öffnet sich in solchen Fällen ein Meldungsfenster, in dem der komplette Inhalt des Datumsfeldes steht. (Bei Daten ohne Asterisk führt ein Klick zum Öffnen oder Schließen der Detailansicht des Belegs.)</p>
+						<p>Stehen weitere, hier nicht sichtbare Informationen im Datumsfeld, wird dies durch einen roten Asterisk (<span class="obacht">*</span>) angezeigt. Was tatsächlich im Feld steht, zeigt ein Tooltip, der erscheint, wenn man mit der Maus über dem Datum schwebt. Auf Klick öffnet sich in solchen Fällen ein Meldungsfenster, in dem der komplette Inhalt des Datumsfeldes steht. Bei Daten ohne Asterisk führt ein Klick zum Öffnen oder Schließen der Detailansicht des Belegs. In solchen Fällen entspricht die Anzeige dem Inhalt des Textfeldes in der Karteikarte zu einhundert Prozent</p>
 					</div>
 
 					<p><b>Autor:</b> Urheber des Belegtextes</p>
@@ -834,12 +838,12 @@
 
 					<p><b>Textsorte</b> des Belegs</p>
 
-					<p class="info">Die Textsorte wird nur angezeigt, wenn <a href="#einstellungen-beleglisteTextsorte">die entsprechende Einstellung</a> aktiviert wurde.</p>
+					<p class="info">Die Textsorte wird an dieser Stelle nur angezeigt, wenn <a href="#einstellungen-beleglisteTextsorte">die entsprechende Einstellung</a> aktiviert wurde.</p>
 
 					<p><b>Vorschau</b> des Belegtextes</p>
 
 					<div class="info">
-						<p>An dieser Stelle wird nur ein Ausschnitt des Belegstextes angezeigt. Dabei wird versucht, das erste Auftreten des Karteiworts im Text zu finden, um ein paar Wörter davor und ein paar Wörter nach dieser Position anzuzeigen. Wird das Karteiwort nicht im Text gefunden, beginnt die Vorschau mit dem ersten Wort des Belegs.</p>
+						<p>Es erscheint nur ein Ausschnitt des Belegstextes, es sei denn, der Beleg ist sehr kurz. Beim Ermitteln des Ausschnitts wird versucht, das erste Auftreten des Karteiworts im Belegtext zu finden, um ein paar Wörter davor und ein paar Wörter nach dieser Position anzuzeigen. Wird das Karteiwort nicht gefunden, beginnt die Vorschau mit dem ersten Wort des Belegs.</p>
 
 						<p>Fett hervorgehoben wird das Karteiwort nur dann, wenn die Funktion <img src="../img/liste-hervorheben.svg" width="20" height="20" alt=""> in der Kopfleiste der Belegliste aktiviert wurde.</p>
 
@@ -853,27 +857,27 @@
 						<figcaption>Detailansicht eines Belegs</figcaption>
 					</figure>
 
-					<p>Aktiviert man die Funktion <img src="../img/liste-aufklappen.svg" width="24" height="24" alt=""> oder klickt auf die <a href="#belegliste-kopfleisteBelege">Kopfleiste eines Belegs</a> wird die Detailansicht geöffnet. In ihr können Sie, wie es der Name schon sagt, die Details zu den Belegen sehen. Prinzipiell können hier alle Inhalte angezeigt werden, die in der Karteikarte eingetragen worden sind, standardmäßig wird aber nur der Belegtext eingeblendet, dieser allerdings komplett (es sei denn, die Funktion <img src="../img/liste-kuerzen.svg" width="24" height="24" alt=""> zum <a href="#belegliste-kuerzung">Kürzen des Kontexts um das Karteiwort herum</a> wurde aktiviert). Wollen Sie weitere Elemente (<abbr title="das heißt">d. h.</abbr> den Inhalt weiterer Datenfelder) sehen, müssen Sie zunächst die entsprechenden Icons aktivieren, die die <a href="#belegliste-platzhalter">Anzeige der Detailansicht steuern</a>. Jedes Element kann ausgeblendet werden mit Ausnahme des Belegtexts.</p>
+					<p>Aktiviert man die Funktion <img src="../img/liste-aufklappen.svg" width="24" height="24" alt=""> oder klickt auf die <a href="#belegliste-kopfleisteBelege">Kopfleiste eines Belegs</a> wird die Detailansicht geöffnet. In ihr können Sie, wie es der Name schon sagt, die Details zu den Belegen sehen. Prinzipiell können hier alle Inhalte angezeigt werden, die in der Karteikarte eingetragen worden sind, standardmäßig wird aber nur der Belegtext eingeblendet, dieser allerdings komplett (es sei denn, die Funktion <img src="../img/liste-kuerzen.svg" width="24" height="24" alt=""> zum <a href="#belegliste-kuerzung">Kürzen des Kontexts um das Karteiwort herum</a> wurde aktiviert). Wollen Sie weitere Elemente (<abbr title="das heißt">d. h.</abbr> den Inhalt weiterer Datenfelder) sehen, müssen Sie zunächst die entsprechenden Icons aktivieren, die die <a href="#belegliste-platzhalter">Anzeige der Detailansicht steuern</a>. Jedes Element kann ausgeblendet werden mit Ausnahme des Belegtextes.</p>
 
 					<p><b>Elemente</b> werden in der Detailansicht nur dann angezeigt, wenn sie vorher in der Karteikarte auch gefüllt wurden. Haben Sie <abbr title="beispielsweise">bspw.</abbr> zu einem Beleg keine Informationen zu Synonymen hinterlegt, wird das Element in der Detailansicht selbst dann nicht angezeigt, wenn das Icon <img src="../img/liste-synonym.svg" width="24" height="24" alt=""> aktiviert ist.</p>
 
-					<p>Das Layout der Datenfelder ist immer dasselbe: Am rechten Rand steht in einer Überschrift, um welches Datenfeld es sich handelt, darunter der Text des Datenfeldes. Allein der Belegtext (keine Überschrift) und die <b>Metainfos</b> zum Beleg stellen hier eine Ausnahme dar. Die Metainfos erscheinen gesammelt in einer grau hinterlegten Leiste und werden durch <a href="#belegliste-metainfos">Icons</a> dargestellt.</p>
+					<p>Das Layout der Datenfelder ist immer dasselbe: Am rechten Rand steht in einer Überschrift, um welches Datenfeld es sich handelt, darunter der Text des Datenfeldes. In den Textfeldern der Karteikarte eingefügte Zeilenumbrüche werden benutzt, um den Text in Absätze zu gliedern. Allein der Belegtext (keine Überschrift) und die <b>Metainfos</b> zum Beleg stellen hier eine Ausnahme dar. Die Metainfos erscheinen gesammelt in einer grau hinterlegten Leiste und werden durch <a href="#belegliste-metainfos">Icons</a> dargestellt.</p>
 
 					<p>Wurde ein Beleg um <b>Dateianhänge</b> ergänzt, werden auch diese in der Metainfo-Leiste angezeigt, ebenfalls als Icon. Durch Klick auf die Datei-Icons können die Anhänge im Standardprogramm des Betriebssystems geöffnet werden.</p>
 
 					<p>Arbeiten Sie mit mehreren <a href="#" class="link-sektion-bedeutungsgeruest">Bedeutungsgerüsten</a>, wird in der Überschrift <i>Bedeutung</i> angegeben, aus welchem Gerüst die angezeigte Bedeutung stammt. Diese Überschrift ist klicksensitiv; über sie kann die Funktion <a href="#menue-kartei-bedeutungsgeruestWechseln"><i>Kartei &gt; Bedeutungsgerüst wechseln</i></a> aufgerufen werden.</p>
 
-					<p id="belegliste-kopierenIcon">Am linken Rand neben Belegtext und Quellenangabe stehen <b>Kopier-Icons</b>: <img src="../img/tool-kopieren.svg" width="24" height="24" alt="">. Über sie kann man mit nur einem Klick den Belegtext <abbr title="beziehungsweise">bzw.</abbr> die Quellenangabe in die Zwischenablage des Rechners schieben, um sie in ein anderes (Textverarbeitungs-)Programm einzufügen. Beim Kopieren des Belegtexts wird automatisch die Quellenangabe mitkopiert. Dabei wird immer der komplette Belegtext kopiert, und zwar auch, wenn der Kontext gekürzt wurde (Funktion <img src="../img/liste-kuerzen.svg" width="24" height="24" alt="">).</p>
+					<p id="belegliste-kopierenIcon">Am linken Rand neben Belegtext und Quellenangabe stehen <b>Kopier-Icons</b>: <img src="../img/tool-kopieren.svg" width="24" height="24" alt="">. Über sie kann man mit nur einem Klick den Belegtext <abbr title="beziehungsweise">bzw.</abbr> die Quellenangabe in die Zwischenablage des Rechners schieben, um sie in ein anderes (Textverarbeitungs-)Programm einzufügen. Beim Kopieren des Belegtextes wird automatisch die Quellenangabe mitkopiert. Dabei wird immer der komplette Belegtext kopiert, und zwar auch, wenn der Kontext gekürzt wurde (Funktion <img src="../img/liste-kuerzen.svg" width="24" height="24" alt="">).</p>
 
-					<p id="belegliste-kopierenAuswahl">Wenn Sie möchten, können Sie nur einen <b>Teil des Belegtexts kopieren</b>: den gewünschten Text mit der Maus markieren, Rechtsklick, <i>Textauswahl kopieren</i>. Auch in diesem Fall wird die Quellenangabe automatisch ergänzt. Auch deswegen sollten Sie Textteile immer auf diese Weise kopieren. Die vom Framework der App verwaltete Kopierfunktion <kbd>Strg</kbd> + <kbd>C</kbd> ergänzt die Quellenangabe nicht und sorgt auch nicht für eine Bereinigung der Formatierung.</p>
+					<p id="belegliste-kopierenAuswahl">Wenn Sie möchten, können Sie nur einen <b>Teil des Belegtextes kopieren</b>: den gewünschten Text mit der Maus markieren, Rechtsklick, <i>Textauswahl kopieren</i>. Auch in diesem Fall wird die Quellenangabe automatisch ergänzt. Nicht nur deswegen sollten Sie Textteile immer auf diese Weise kopieren. Die vom Framework der App verwaltete Kopierfunktion <kbd>Strg</kbd> + <kbd>C</kbd> ergänzt die Quellenangabe nicht und sorgt auch nicht für eine Bereinigung der Formatierung.</p>
 
 					<div class="info">
-						<p>Weswegen eine Bereinigung der Textformate nötig sein kann: In <i class="app-name"></i> importierte Texte werden, der besseren Lesbarkeit am Bildschirrm wegen, durchgehend mit einer Antiquaschrift dargestellt. Tauchen in aus dem <abbr title="Deutschen Textarchiv">DTA</abbr> importierten historischen Texten, die in Fraktur gesetzt sind, Passagen in Antiqua auf, werden diese in der Programmansicht durch eine Serifenschrift dargestellt. Beim Kopieren via Rechtsklick wird aus der Serife wieder eine Antiqua. Fügen Sie den kopierten Text dann in ein Textverarbeitungsprogramm wie <i>LibreOffice Writer</i> oder <i>Microsoft Word</i> ein und haben Sie dort zuvor eine Serifenschrift (wie <abbr title="zum Beispiel">z. B.</abbr> <span lang="en">Times New Roman</span>) eingestellt, erscheinen die Textteile, die im Originaltext Fraktur waren, als Serife und die, die in Antiqua gesetzt waren, als Antiqua.</p>
+						<p id="belegliste-bereinigen">Weswegen eine <b>Bereinigung der Textformate</b> nötig sein kann: In <i class="app-name"></i> importierte Texte werden, der besseren Lesbarkeit am Bildschirm wegen, durchgehend mit einer Antiquaschrift dargestellt. Tauchen in aus dem <abbr title="Deutschen Textarchiv">DTA</abbr> importierten historischen Texten, die in Fraktur gesetzt sind, Passagen in Antiqua auf, werden diese in der Programmansicht durch eine Serifenschrift dargestellt. Beim Kopieren via Rechtsklick wird aus der Serife wieder eine Antiqua. Fügen Sie den kopierten Text dann in ein Textverarbeitungsprogramm wie <i>LibreOffice Writer</i> oder <i>Microsoft Word</i> ein und haben Sie dort zuvor eine Serifenschrift (wie <abbr title="zum Beispiel">z. B.</abbr> <span lang="en">Times New Roman</span>) eingestellt, erscheinen die Textteile, die im Originaltext Fraktur waren, als Serife und die, die in Antiqua gesetzt waren, als Antiqua.</p>
 
 						<p>Das Kopieren via Rechtsklick funktioniert nicht nur im Belegtext, sondern in allen Elementen, die in der Detailansicht angezeigt werden. Für die <a href="#karteikarte-leseansicht">Leseansicht der Karteikarte</a> gilt in Sachen Kopieren übrigens dasselbe wie für die Detailansicht der Belegliste: Auch hier sollten Sie zum Kopieren das Kopier-Icon oder das Rechtsklickmenü verwenden.</p>
 					</div>
 
-					<p>Die <b>Rechtsklickmenüs</b> des Programms sind kontextabhängig. Im Falle der Belegliste können sie recht umfangreich sein:</p>
+					<p>Die <b>Rechtsklickmenüs</b> der App sind kontextabhängig. Im Falle der Belegliste können sie recht umfangreich sein:</p>
 
 					<div class="bilder">
 						<figure title="zum Vergrößern anklicken">
@@ -903,19 +907,33 @@
 
 					<p class="erklaerung-icon"><img src="../img/loeschen.svg" width="24" height="24" alt="">Beleg löschen</p>
 
-					<p class="info">Vor dem Löschen des Belegs wird zur Sicherheit noch einmal nachgefragt. Das Löschen eines Belegs kann nicht rückgängig gemacht werden! Die einzige Möglichkeit, einen gelöschten Beleg wiederherzustellen, besteht darin, die Kartei zu schließen, ohne sie zu speichern, und sie dann wieder zu öffnen.</p>
+					<div class="info">
+						<p>Vor dem Löschen des Belegs wird zur Sicherheit noch einmal nachgefragt. Das Löschen eines Belegs kann nicht rückgängig gemacht werden!</p>
 
-					<p class="erklaerung-icon"><img src="../img/beleg-zwischenablage.svg" width="24" height="24" alt="">Beleg in Zwischenablage kopieren</p>
+						<p>Eine Möglichkeit, einen gelöschten Beleg wiederherzustellen, besteht darin, die Kartei zu schließen, ohne sie zu speichern, und sie dann wieder zu öffnen. Eine zweite bestünde darin, den Beleg aus einem Backup wiederherzustellen. Zum Wiederherstellen eines einzelnen Belegs aus einem Backup können Sie so vorgehen:</p>
 
-					<p class="info">Kopiert werden alle Datenfelder des Belegs. Das Kopierformat ist nicht menschen-, dafür aber sehr gut maschinenlesbar. So kann der Beleg schnell in eine andere Kartei kopiert werden. <abbr title="Vergleiche">Vgl.</abbr> dazu die <a href="#karteikarte-zwischenablage">Erläuterungen im <abbr title="Abschnitt">Abschn.</abbr> Karteikarte</a>. Wollen Sie den Belegtext in ein Textverarbeitungsprogramm einfügen, benutzen Sie besser das Kopier-Icon <img src="../img/tool-kopieren.svg" width="20" height="20" alt="">.</p>
+						<ol>
+							<li>Öffnen Sie das Backup <em>und</em> die aktuelle Version der Kartei. (<i class="app-name"></i> wird für jede der beiden Karteien ein eigenes Programmfenstern aufbauen.)</li>
+
+							<li>Suchen Sie in der Backup-Kartei den Beleg, den Sie wiederherstellen wollen. Dann: <i>Rechtsklick &gt; <a href="#belegliste-zwischenablage">Beleg in Zwischenablage kopieren</a></i>.</li>
+
+							<li>Rufen Sie in dem Programmfenster, in dem die aktuelle Version der Kartei zu finden ist, die Funktion <a href="#menue-belege-einfuegen"><i>Belege &gt; Einfügen</i></a> auf.</li>
+
+							<li>In der Liste unter der Überschrift <i>Belegquellen</i> sehen Sie den Punkt: <i>Zwischenablage (1 Beleg)</i>. Ist er noch nicht ausgewählt, wählen Sie ihn aus und klicken oben im Fenster auf das Einfügen-Icon <img src="../img/tool-einfuegen.svg" width="20" height="20" alt="">. <i lang="it">Ecco fatto!</i></li>
+						</ol>
+					</div>
+
+					<p class="erklaerung-icon" id="belegliste-zwischenablage"><img src="../img/beleg-zwischenablage.svg" width="24" height="24" alt="">Beleg in Zwischenablage kopieren</p>
+
+					<p class="info">Kopiert werden alle Datenfelder des Belegs. Das Kopierformat ist nicht menschen-, dafür aber sehr gut maschinenlesbar. So kann der Beleg schnell in eine andere Kartei kopiert werden. <abbr title="Vergleiche">Vgl.</abbr> dazu die <a href="#karteikarte-zwischenablage">Erläuterungen im <abbr title="Abschnitt">Abschn.</abbr> Karteikarte</a>. Wollen Sie den Belegtext in ein Textverarbeitungsprogramm einfügen, benutzen Sie besser das <a href="#belegliste-kopierenIcon">Kopier-Icon</a> <img src="../img/tool-kopieren.svg" width="20" height="20" alt="">.</p>
 
 					<p class="erklaerung-icon"><img src="../img/beleg-duplikat.svg" width="24" height="24" alt="">Beleg duplizieren</p>
 
-					<p class="info">Es wird ein inhaltlich hundertprozentiger Klon des Belegs erstellt, der umgehend in der Belegliste erscheint. Der einzige Unterschied ist die Belegnummer (sichtbar in der Überschrift der Karteikarte).</p>
+					<p class="info">Es wird ein inhaltlich hundertprozentiger Klon des Belegs erstellt, der umgehend in der Belegliste erscheint. Der einzige Unterschied zum Quellbeleg ist die Belegnummer (sichtbar in der Überschrift der Karteikarte).</p>
 
 					<p class="erklaerung-icon"><img src="../img/quick-einstellungen.svg" width="24" height="24" alt="">Belegliste-Einstellungen</p>
 
-					<p class="info">Öffnet das <a href="#" class="link-sektion-einstellungen">Einstellungen-Fenster</a> und wechselt direkt in den <abbr title="Abschnitt">Abschn.</abbr> Belegliste.</p>
+					<p class="info">Öffnet das <a href="#" class="link-sektion-einstellungen">Einstellungen-Fenster</a> und wechselt direkt in den <a href="#einstellungen-belegliste"><abbr title="Abschnitt">Abschn.</abbr> Belegliste</a>.</p>
 
 					<p class="erklaerung-icon"><img src="../img/quick-hinzufuegen.svg" width="24" height="24" alt="">Beleg hinzufügen</p>
 
@@ -923,19 +941,19 @@
 
 					<p class="erklaerung-icon"><img src="../img/tool-kopieren.svg" width="24" height="24" alt="">Textauswahl kopieren</p>
 
-					<p class="info">Erscheint nur beim Rechtsklick auf markiertem Text. Details dazu, wie das Kopieren abläuft, <a href="#belegliste-kopierenAuswahl"><abbr title="siehe oben">s. o.</abbr></a>.</p>
+					<p class="info">Erscheint nur beim Rechtsklick auf markiertem Text. <a href="#belegliste-kopierenAuswahl">Details dazu, wie das Kopieren abläuft</a>, finden Sie weiter oben.</p>
 
 					<p class="erklaerung-icon"><img src="../img/tool-mark.svg" width="24" height="24" alt="">Textauswahl markieren</p>
 
-					<p class="info">Erscheint nur beim Rechtsklick auf markiertem Belegtext. Details zur Annotierungsfunktion <a href="#belegliste-karteiwortHervorheben"><abbr title="siehe oben">s. o.</abbr></a></p>
+					<p class="info">Erscheint nur beim Rechtsklick auf markiertem Belegtext. <a href="#belegliste-karteiwortHervorheben">Details zur Annotierungsfunktion</a> finden Sie weiter oben.</p>
 
-					<p class="erklaerung-icon"><img src="../img/liste-link.svg" width="24" height="24" alt="">Textauswahl markieren</p>
+					<p class="erklaerung-icon"><img src="../img/liste-link.svg" width="24" height="24" alt="">Link kopieren</p>
 
-					<p class="info">Erscheint nur beim Rechtsklick auf einem Internet-Link. Kopiert wird die <abbr title="Uniform Resource Locator" lang="en">URL</abbr> des Links.</p>
+					<p class="info">Erscheint nur beim Rechtsklick auf einem Internet-Link. Kopiert wird die <abbr title="Uniform Resource Locator" lang="en">URL</abbr> des Links, nicht der angezeigte Text.</p>
 
 					<p class="erklaerung-icon"><img src="../img/quick-oeffnen.svg" width="24" height="24" alt="">Anhang öffnen</p>
 
-					<p class="info">Erscheint nur beim Rechtsklick auf einem Dateianhang-Icon in der Metainfo-Leiste. <i class="app-name"></i> öffnet die Datei im als Standard festgelegten Programm des Betriebssytems. Welches dies ist, hängt in aller Regel von der Dateiendung ab.</p>
+					<p class="info">Erscheint nur beim Rechtsklick auf einem Dateianhang-Icon in der Metainfo-Leiste. <i class="app-name"></i> öffnet die Datei im als Standard festgelegten Programm des Betriebssytems. Welches dies ist, hängt vom Dateityp (und der Dateiendung) ab.</p>
 				</section>
 
 				<!-- FILTER -->
@@ -958,7 +976,7 @@
 
 					<p>In diesem Falll können Sie die Filter zurücksetzen, ohne die geschlossene Filterleiste extra zu öffnen. Bei Rechtsklick auf den roten Text in der Kopfleiste der Belegliste erscheint ein Menüpunkt für den Reset.</p>
 
-					<p>Die einzelnen Filterblöcke lassen sich durch einen Klick auf den blauen Filterkopf öffnen, sodass alle in der jeweiligen Filterkategorie zur Verfügung stehenden Filter erscheinen. Die in Klammern stehende Zahl hinter den nun sichtbaren Filtern zeigt an, wie viele Belege es in der Belegliste insgesamt gibt, auf die der jeweilige Filter zutrifft. Filter, für die es keine Treffer gibt, werden ausgegraut. Solche Filter können im Filterblock <i>Zeitraum</i> erscheinen, um deutlich zu machen, für welche Zeiträume Lücken in der Belegsammlung zu finden sind, und unter gewissen Umständen im <a href="#filter-bedeutungen">Filter <i>Bedeutungen</i></a> (dazu unten mehr).</p>
+					<p>Die einzelnen Filterblöcke lassen sich durch Klick auf die blauen Filterköpfe öffnen, sodass alle in der jeweiligen Filterkategorie zur Verfügung stehenden Filter erscheinen. Die in Klammern stehende Zahl hinter den nun sichtbaren Filtern zeigt an, wie viele Belege es in der Belegliste insgesamt gibt, auf die der jeweilige Filter zutrifft. Filter, für die es keine Treffer gibt, werden ausgegraut. Solche Filter können im Filterblock <i>Zeitraum</i> erscheinen, um deutlich zu machen, für welche Zeiträume Lücken in der Belegsammlung zu finden sind, und unter gewissen Umständen im <a href="#filter-bedeutungen">Filter <i>Bedeutungen</i></a> (dazu unten mehr).</p>
 
 					<p>Wurde in einem Filterblock ein Filter ausgewählt, ist in dieser Kategorie also ein Filter aktiv, färbt sich der Filterkopf grün. Die gewählten Filter bleiben auch dann aktiv, wenn Sie den Filterblock nach der Auswahl eines Filters wieder schließen. Für die einzelnen Filterblöcke gilt somit dasselbe wie für die Filterleiste im Ganzen: Der Umstand, dass Filter nicht sichtbar sind, heißt keineswegs, dass sie nicht aktiv sind. Dass es in einem geschlossenen Block aktive Filter gibt, erkennen Sie an der grünen Farbe des Filterkopfs. Zurückgesetzt werden können Filter, indem man die entsprechenden Checkboxes wieder abwählt oder auf das Icon <img src="../img/filter-reset.svg" width="24" height="24" alt=""> klickt, das beim Herüberfahren der Maus über einem Filterblock erscheint. Die Reset-Funktion des Icons beschränkt sich auf den Filterblock, zu dem es gehört. Im Kopf der Filterleiste gibt es dasselbe Icon noch einmal. Mit ihm können alle Filter zurückgesetzt werden.</p>
 
@@ -986,13 +1004,13 @@
 						<figcaption>zeitliche Verteilung der Belege</figcaption>
 					</figure>
 
-					<p>Im Kopf der Filterleiste gibt es ein Icon (<img src="../img/filter-zeitraumgrafik.svg" width="24" height="24" alt="">), mit dem Sie sich die zeitliche Verteilung der in der Kartei gesammelten Belege in einem Diagramm anzeigen lassen können. Auf der x-Achse finden sich Zeitschnitte in 10-, 50- oder 100-Jahresschritten. Die Abstände der angezeigten Zeitschnitte hängen zum einen von der Einstellung im <a href="#filter-zeitraum"><i>Zeitraum</i>-Filter</a> ab und zum anderen von dem zur Verfügung stehenden Platz. Auf der y-Achse ist die Anzahl der Belege aufgetragen. Die Kurve selbst orientiert sich immer an der Einstellung der Zeitschnitte im <i>Zeitraum</i>-Filter. Selbst wenn auf der y-Achse nicht genug Platz ist, um alle 10-Jahresschritte zu markieren, wird die Kurve in 10-Jahresschritten gezeichnet. Die Höhe eines Punktes in der Kurve ergibt sich aus der Anzahl der Belege, die sich innerhalb eines Zeitschnitts (vom Beginn bis zum Ende minus ein Jahr) befinden.</p>
+					<p>Im Kopf der Filterleiste gibt es ein Icon (<img src="../img/filter-zeitraumgrafik.svg" width="24" height="24" alt="">), mit dem Sie sich die zeitliche Verteilung der in der Kartei gesammelten Belege in einem Diagramm anzeigen lassen können. Auf der x-Achse finden sich Zeitschnitte in 10-, 50- oder 100-Jahresschritten. Die Abstände der angezeigten Zeitschnitte hängen zum einen von der Einstellung im <a href="#filter-zeitraum"><i>Zeitraum</i>-Filter</a> ab und zum anderen von dem zur Verfügung stehenden Platz. Auf der y-Achse ist die Anzahl der Belege aufgetragen. Die Kurve selbst orientiert sich immer an der Einstellung der Zeitschnitte im <i>Zeitraum</i>-Filter. Selbst wenn auf der y-Achse <abbr title="beispielsweise">bspw.</abbr> nicht genug Platz ist, um alle 10-Jahresschritte zu markieren, wird die Kurve in 10-Jahresschritten gezeichnet. Die Höhe eines Punktes in der Kurve ergibt sich aus der Anzahl der Belege, die sich innerhalb eines Zeitschnitts (vom Beginn bis zum Ende minus ein Jahr) befinden.</p>
 
-					<h2 id="filter-dynamische">Dynamische Filter</h2>
+					<h2 id="filter-dynamische">Hartcodierte und dynamische Filter</h2>
 
-					<p>Die meisten Filter werden dynamisch erstellt und gefüllt, vordefiniert sind nur die Filterkategorien, die sich wiederum an den zur Verfügung stehenden Datenfeldern der <a href="#" class="link-sektion-karteikarte">Karteikarte</a> orientieren. Welche Filter genau es in den einzelnen Kategorien gibt, hängt davon ab, wie die Karteikarten der Wortkartei gefüllt wurden, denn fast alle Filter werden dynamisch erzeugt. Dynamisch gefüllt werden die Filter <i>Zeitraum, Bedeutungen, Wortbildungen, Synonyme, Korpora, Textsorten</i> und <i>Verschiedenes</i>.</p>
+					<p>Die meisten Filter werden dynamisch erzeugt, vordefiniert sind nur die Filterkategorien, die sich wiederum an den zur Verfügung stehenden Datenfeldern der <a href="#" class="link-sektion-karteikarte">Karteikarte</a> orientieren. Welche Filter genau es in den einzelnen Kategorien gibt, hängt davon ab, wie die Karteikarten von Ihnen gefüllt wurden, denn – wie gesagt – fast alle Filter werden dynamisch erzeugt. Konkret sind dies die Filter in den Filterblöcken <i>Zeitraum, Bedeutungen, Wortbildungen, Synonyme, Korpora, Textsorten</i> und <i>Verschiedenes</i>.</p>
 
-					<p>Kann eine Filterkategorie nicht mit konkreten Filtern gefüllt werden, weil in keiner der Karteikarten entsprechende Daten zu finden sind, erscheint sie nicht in der Filterleiste. Sie müssen sich also nicht sorgen, wenn <abbr title="beispielsweise">bspw.</abbr> der Filterblock <a href="#filter-verschiedenes"><i>Verschiedenes</i></a> nicht angezeigt wird. Der Grund ist einfach, dass Sie in den Karteikarten bisher keine Eingaben gemacht haben, die zu dieser Kategorie gehören.</p>
+					<p>Kann eine Filterkategorie nicht mit konkreten Filtern gefüllt werden, weil in keiner der Karteikarten entsprechende Daten zu finden sind, erscheint sie nicht in der Filterleiste. Sie müssen sich also nicht sorgen, wenn <abbr title="beispielsweise">bspw.</abbr> der Filterblock <a href="#filter-verschiedenes"><i>Verschiedenes</i></a> in Ihrer Kartei nicht angezeigt wird. Die App ist nicht kaputt. Der Grund ist einfach, dass Sie in den Karteikarten bisher keine Eingaben gemacht haben, die zu dieser Kategorie gehören.</p>
 
 					<figure class="right" title="zum Vergrößern anklicken">
 						<img src="../img/win/hb-filter-minimal.png" alt="">
@@ -1010,9 +1028,9 @@
 
 						<p>Die Standardsuche unterscheidet nicht zwischen <b>Groß- und Kleinschreibung</b>. Hierzu müssten Sie zunächst eine Einstellung in den <a href="#filter-erweiterteSuchfilter">erweiterten Suchfiltern</a> aktivieren.</p>
 
-						<p>Ist der Suchfilter aktiv, wird die Belegliste nicht einfach nur gefiltert. Zum einen wird im Gegensatz zum Verwenden anderer Filter für jeden Beleg die <b>Detailansicht</b> geöffnet. Zum anderen wird die (gewünschte) <a href="#belegliste-platzhalter">Konfiguration</a> der <a href="#belegliste-detailansicht">Detailansicht</a> übergangen: Das Programm berücksichtigt in solchen Fällen nicht mehr, ob Sie das Element <i>Quelle</i> in der Detailansicht sehen möchten oder nicht. Gibt es in einem Datenfeld einen Treffer, wird das entsprechende Element in der Belegliste eingeblendet, gibt es keinen Treffer, wird es ausgeblendet – und zwar selbst dann, wenn Sie es in der Detailansicht eigentlich immer sehen möchten. Dieses Verhalten kann sogar dazu führen, dass der Belegtext komplett ausgeblendet wird, sprich zu einer einzigen Kürzung zusammenschrumpft: <q>[…]</q>. Diese Kürzung können Sie allerdings durch einen <a href="#belegliste-kuerzung">Klick auf das Auslassungszeichen</a> sukzessive rückgängig machen.</p>
+						<p>Ist der Suchfilter aktiv, wird die Belegliste nicht einfach nur gefiltert. Zum einen wird im Gegensatz zum Verwenden anderer Filter für jeden Beleg die <b>Detailansicht</b> geöffnet – wenn der Suchtext in einem Datenfeld gefunden wurde, das nur dort angezeigt werden kann. Zum anderen wird die (gewünschte) <a href="#belegliste-platzhalter">Konfiguration</a> der <a href="#belegliste-detailansicht">Detailansicht</a> übergangen: Das Programm berücksichtigt in solchen Fällen nicht mehr, ob Sie das Element <i>Quelle</i> in der Detailansicht sehen möchten oder nicht. Gibt es in einem Datenfeld einen Treffer, wird das entsprechende Element in der Belegliste eingeblendet, gibt es keinen Treffer, wird es ausgeblendet – und zwar selbst dann, wenn Sie es in der Detailansicht eigentlich immer sehen möchten. Dieses Verhalten kann sogar dazu führen, dass der Belegtext komplett ausgeblendet wird, sprich zu einer einzigen Kürzung zusammenschrumpft: <q>[…]</q>. Diese Kürzung können Sie allerdings durch einen <a href="#belegliste-kuerzung">Klick auf das Auslassungszeichen</a> sukzessive rückgängig machen.</p>
 
-						<p id="filter-erweiterteSuchfilter">Mithilfe der Einstellungen in den <b>erweiterten Suchfiltern</b> können Sie die Suchergebnisse feiner steuern:</p>
+						<p id="filter-erweiterteSuchfilter">Mithilfe der Einstellungen in den <b>erweiterten Suchfiltern</b> können Sie die Suche genauer justieren:</p>
 
 						<ul>
 							<li><b>Phrasensuche:</b> Befinden sich Leerzeichen im Suchfeld, wird der Suchausdruck nicht mehr in mehrere Suchwörter aufgeteilt, sondern als ein einziges Wort behandelt. Sie bekommen also nur noch Belege angezeigt, in denen die im Suchfeld stehenden Wörter in exakt der eingegebenen Reihenfolge auftauchen.</li>
@@ -1024,25 +1042,25 @@
 							<li><b>Datenfelder:</b> Durch Abwahl einzelner Datenfelder können Sie die Suche einschränken. Ist allein das Datenfeld <i>Beleg</i> abgehakt, wird <abbr title="beispielsweise">bspw.</abbr> nur der Belegtext durchsucht.</li>
 						</ul>
 
-						<p>Die erweiterten Suchfilter können einfach dadurch deaktiviert werden, dass Sie sie schließen. Die in ihnen vorgenommenen Einstellungen werden gespeichert und beim Neustart des Programms wiederhergestellt.</p>
+						<p>Die erweiterten Suchfilter können dadurch deaktiviert werden, dass Sie sie schließen. Die in ihnen vorgenommenen Einstellungen werden gespeichert und beim Neustart des Programms wiederhergestellt.</p>
 					</div>
 
-					<p id="filter-zeitraum"><b>Zeitraum:</b> Belege nach Zeitraum filtern</p>
+					<p id="filter-zeitraum"><b>Zeitraum:</b> Belege nach Entstehungs- oder Publikationsdatum filtern</p>
 
 					<div class="info">
-						<p>Die zur Verfügung stehenden Zeitschnitte werden dynamnisch erzeugt: Dazu wird in einem ersten Schritt geschaut, zu welchem Zeitschnitt der älteste Textbeleg in der Kartei gehört und zu welchem der jüngste. Danach werden alle Zeitschnitte dazwischen ergänzt, und zwar in der Frequenz, die in der ersten Zeile durch die runden Radio-Buttons vorgegeben ist: in 10er-, 50er- oder 100er-Schritten.</p>
+						<p>Die zur Verfügung stehenden Zeitschnitte werden dynamnisch erzeugt: Dazu wird in einem ersten Schritt geschaut, zu welchem Zeitschnitt der älteste Textbeleg in der Kartei gehört und zu welchem der jüngste. Danach werden alle Zeitschnitte dazwischen ergänzt, und zwar in der Frequenz, die in der ersten Zeile des aufgeklappten Filters durch die runden Radio-Buttons vorgegeben ist: in 10er-, 50er- oder 100er-Schritten.</p>
 
 						<p>Diese Methode kann dazu führen, dass ausgegraute Filter aufgebaut werden, die nicht aktiviert werden können, weil hinter ihnen keine Belege stehen. Ein Beispiel: Lassen Sie sich in einer Wortkartei die Filter in 100er-Schritten anzeigen und haben einen singulären Beleg aus dem 17. Jahrhundert und dann erst wieder Belege aus dem 19. und 20. Jahrhundert, werden zwar die Zeitschnitte <i>1600, 1700, 1800</i> und <i>1900</i> aufgebaut. Der Zeitschnitt 1700 ist jedoch ausgegraut, weil hinter ihm keine Belege stehen. Auf diese Weise können Sie auf einem Blick erkennen, wo es in ihrer Belegsammlung Lücken gibt und diese <abbr title="gegebenenfalls">ggf.</abbr> noch einmal gesondert überprüfen.</p>
 
-						<p>Sie haben gewiss erkannt, dass die Jahrhundertgrenzen hier nicht der gängigen Definition gemäß gezogen werden, sondern so getan wird, als würden Jahrhunderte mit dem Jahr null beginnen. Dies ist inhaltlich nicht korrekt, lässt sich aber leichter berechnen und dürfte auch den Umgang mit den Belegen vereinfachen.</p>
+						<p>Sie haben gewiss erkannt, dass die Jahrhundertgrenzen hier nicht der gängigen Definition gemäß gezogen werden, sondern so getan wird, als würden Jahrhunderte mit dem Jahr null beginnen. Dies ist inhaltlich nicht korrekt, lässt sich aber leichter berechnen und dürfte auch den Umgang mit den Belegen vereinfachen. <abbr title="Vergleiche">Vgl.</abbr> die Erläuterungen zum <a href="#karteikarte-datum">Datumsfeld der Karteikarte</a>.</p>
 
 						<p>Durch das Aktivieren eines Zeitschnittfilters werden alle Belege gefunden, die vom Beginn dieses Zeitschnitts bis zum Beginn des nächsten Zeitschnitts datiert wurden, das letzte Jahr exklusive. Sind 100er-Schritte eingestellt steht der Filter <i>1800</i> somit für alle Belege, die vom Jahr 1800 bis <abbr title="inklusive">inkl.</abbr> 1899 datieren.</p>
 					</div>
 
-					<p><b>Kartendatum:</b> Belege herausfiltern, die zu einem bestimmen Zeitraum angelegt oder geändert wurden</p>
+					<p><b>Kartendatum:</b> zu einem bestimmen Zeitraum angelegte oder geänderte Belege herausfiltern</p>
 
 					<div class="info">
-						<p>Dieser Filter weicht insofern von den anderen Filtern ab, als es bei ihm nicht um inhaltliche Kriterien der Belege, sondern rein formale der Belegsammlung geht. Legen Sie eine <a href="#" class="link-sektion-karteikarte">Karteikarte</a> an oder ändern sie in einer bestehenden Karteikarte ein Datenfeld, werden beim Speichern in zwei versteckten, sprich: auf der Programmoberfläche nicht sichtbaren, Datenfeldern die genauen Daten der jeweiligen Aktion vermerkt. Nur diese beiden Datenfelder werden vom <i>Kartendatum</i>-Filter angesprochen. Es geht hier also <em>nicht</em> um das <a href="#karteikarte-datum">Datumsfeld in der Karteikarte</a>!</p>
+						<p>Dieser Filter weicht insofern von den anderen Filtern ab, als es bei ihm nicht um inhaltliche Kriterien der Belege, sondern rein formale der Belegsammlung geht. Legen Sie eine <a href="#" class="link-sektion-karteikarte">Karteikarte</a> an oder ändern Sie in einer bestehenden Karteikarte ein Datenfeld, werden beim Speichern in zwei versteckten, sprich: auf der Programmoberfläche nicht sichtbaren, Datenfeldern die genauen Daten der jeweiligen Aktion vermerkt. Nur diese beiden Datenfelder werden vom <i>Kartendatum</i>-Filter angesprochen. Es geht hier also <em>nicht</em> um das <a href="#karteikarte-datum">Datumsfeld in der Karteikarte</a>!</p>
 
 						<p>Beim Öffnen einer Kartei und beim Zurücksetzen dieses Filters wird das Von-Datum auf das Erstellungsdatum des zuerst angelegten Belegs der Kartei gesetzt und das Bis-Datum auf das des zuletzt angelegten Belegs. In neu erstellten Karteien erhalten beide Felder das Erstellungsdatum der Kartei.</p>
 
@@ -1061,9 +1079,9 @@
 						<p>Die Bedeutungen werden immer alle angezeigt, auch beim Filtern im <a href="#filter-reduktionsmodus">Reduktionsmodus</a>. Unter gewissen Umständen kann es darum geschehen, dass Bedeutungen ausgegraut werden. Dies passiert immer dann,</p>
 
 						<ol>
-							<li>wenn für eine Bedeutung in der Belegliste (noch) keine Belege zu finden sind, denen sie zugeordnet wurden;</li>
+							<li>wenn für eine Bedeutung in der Belegliste (noch) keine Belege zu finden sind, denen sie zugeordnet wurde;</li>
 							<li>wenn die Belegliste zuvor im Reduktionsmodus gefiltert wurde und die noch in ihr zu findenden Belege nicht alle vorhandenen Bedeutungen enthalten;</li>
-							<li>wenn die <a href="#einstellungen-filterleisteUntergeordnete">Einstellung, untergeordnete Bedeutung beim Filtern mit einzubeziehen</a>, ausgeschaltet wurde.</li>
+							<li>wenn die <a href="#einstellungen-filterleisteUntergeordnete">Einstellung, untergeordnete Bedeutungen beim Filtern mit einzubeziehen</a>, ausgeschaltet wurde.</li>
 						</ol>
 
 						<p>Der 1. Fall kann eintreten, wenn sie das Bedeutungsgerüst vor der Belegsammlung erstellt und noch nicht zu jeder Position einen Beleg gefunden haben.</p>
@@ -1102,18 +1120,18 @@
 							<li>ist der Filter <i>Markierung</i> zweigeteilt: Er besteht sowohl aus einer Checkbox zum Abhaken als auch aus Sternen zum Auswählen.</li>
 						</ol>
 
-						<p>Zum <b>Filter <i>Markierung</i>:</b> Durch das Abhaken der Checkbox können Sie alle Karteikarten finden, die mit einem oder mehreren Sternen markiert wurden. Zusätzlich können Sie, indem Sie unter dem Filter auf einen der schwarzen Sterne klicken, festlegen, mit wie vielen Sternen die Belege <em>mindestens</em> getaggt sein müssen. Klicken Sie auf den dritten Stern, sodass die ersten drei Sterne sich gelb einfärben, finden Sie nur noch Belege, die mit drei, vier oder fünf Sternen markiert wurden. Klicken Sie auf den vierten Stern, finden Sie nur noch Belege, die mit vier oder fünf Sternen markiert wurden. Allein den ersten Stern zu markieren, differenziert den <i>Markierungs</i>-Filter somit nicht weiter aus, bedeutet doch schon die Aktivivierung der Checkbox: Zeige mir alle Belege, die mit einem oder mehr Sternen markiert wurden! Ist die Checkbox des <i>Markierungs-</i>Filters nicht aktiviert, hat die Markierung der Sterne an dieser Stelle keine Funktion.</p>
+						<p>Zum <b>Filter <i>Markierung</i>:</b> Durch das Abhaken der Checkbox können Sie alle Karteikarten finden, die mit einem oder mehr Sternen markiert wurden. Zusätzlich können Sie, indem Sie unter dem Filter auf einen der schwarzen Sterne klicken, festlegen, mit wie vielen Sternen die Belege <em>mindestens</em> getaggt sein müssen. Klicken Sie auf den dritten Stern, sodass die ersten drei Sterne sich gelb einfärben, finden Sie nur noch Belege, die mit drei, vier oder fünf Sternen markiert wurden. Klicken Sie auf den vierten Stern, finden Sie nur noch Belege, die mit vier oder fünf Sternen markiert wurden. Allein den ersten Stern zu markieren, differenziert den <i>Markierungs</i>-Filter somit nicht weiter aus, bedeutet doch schon die Aktivivierung der Checkbox: Zeige mir alle Belege, die mit einem oder mehr Sternen markiert wurden! Ist die Checkbox des <i>Markierungs-</i>Filters nicht aktiviert, hat die Markierung der Sterne an dieser Stelle keine Funktion.</p>
 
 						<p>Das Deaktivieren der Sterne funktioniert genauso wie in der Karteikarte: Klicken sie auf den letzten gelben Stern, werden alle Sterne wieder schwarz.</p>
 
-						<p>Wird im <a href="#filter-reduktionsmodus">Reduktionsmodus</a> gefiltert, haben die Sterne auch dann keine Funktion, wenn der <i>Markierungs-</i>Filter aktiviert wurde.</p>
+						<p>Wird im <a href="#filter-reduktionsmodus">Reduktionsmodus</a> gefiltert, haben die Sterne nur dann eine Funktion, wenn die Suchlogik inklusiv ist. Bei exklusiver Filterlogik sind sie auch dann funktionslos, wenn der <i>Markierungs-</i>Filter aktiviert wurde.</p>
 					</div>
 
 					<h2 id="filter-funktionsweise">Funktionsweise</h2>
 
 					<p>Die einzelnen Filter summieren sich in unterschiedlicher Weise auf. So führt das gleichzeitige Aktivieren von Filtern unterschiedlicher Kategorien – normalerweise – zu einer immer kürzeren Belegliste, weil die Filter der unterschiedlichen Filterkategorien durch ein logisches Und miteinander verknüpft sind.</p>
 
-					<p>Ein Beispiel: Aktivieren Sie in der <a href="#" class="hilfe-demo">Demonstrationskartei</a> <abbr title="zum Beispiel">z. B.</abbr> <i>Zeitraum &gt; 1900</i> und <i>Bedeutungen &gt; Zugtiergespann</i> bekommen Sie nur zwei Belege angezeigt, obwohl es im Zeitraum 1900–1999 insgesamt 13 Belege und mit der Bedeutung <q class="bedeutung">Zugtiergespann</q> immerhin noch drei Belege gibt. Denn: Es gibt nur zwei Belege, die sowohl aus dem Zeitraum 1900–1999 stammen <em>und</em> zugleich mit der Bedeutung <q class="bedeutung">Zugtiergespann</q> getaggt wurden. Zur Verdeutlichung: Wären die genannten Filter mit einem logischen Oder verknüpft, wäre die Belegliste in diesem Fall sogar 14 Belege lang: die 13 Belege aus dem Zeitraum 1900–1999 plus den Beleg von 1859, in dem sich das Wort <i>Team</i> mit der Bedeutung <q class="bedeutung">Zugtiergespann</q> findet. Eine Oder-Verknüpfung der verschiedenen Filterblöcke wurde allerdings nicht implementiert. Sie werden immer durch ein Und vernknüpft.</p>
+					<p>Ein Beispiel: Aktivieren Sie in der <a href="#" class="hilfe-demo">Demonstrationskartei</a> <i>Zeitraum &gt; 1900</i> und <i>Bedeutungen &gt; Zugtiergespann</i>, bekommen Sie nur zwei Belege angezeigt, obwohl es im Zeitraum 1900–1999 insgesamt 13 Belege und mit der Bedeutung <q class="bedeutung">Zugtiergespann</q> immerhin noch drei Belege gibt. Denn: Es gibt nur zwei Belege, die sowohl aus dem Zeitraum 1900–1999 stammen <em>und</em> zugleich mit der Bedeutung <q class="bedeutung">Zugtiergespann</q> getaggt wurden. Zur Verdeutlichung: Wären die genannten Filter mit einem logischen Oder verknüpft, wäre die Belegliste in diesem Fall sogar 14 Belege lang: die 13 Belege aus dem Zeitraum 1900–1999 plus den Beleg von 1859, in dem sich das Wort <i>Team</i> mit der Bedeutung <q class="bedeutung">Zugtiergespann</q> findet. Eine Oder-Verknüpfung der verschiedenen Filterblöcke wurde allerdings nicht implementiert. Sie werden immer durch ein Und miteinander verknüpft.</p>
 
 					<p>Innerhalb einer Filterkategorie verhalten sich die Filter freilich genau andersherum als über die Filterkategorien hinweg: Sie werden durch ein logisches Oder miteinander verknüpft. Aktivieren Sie in der Demonstrationskartei <i>Bedeutungen &gt; Zugtiergespann</i> und <i>Bedeutungen &gt; Mannschaft im Sport</i> erhalten Sie zehn Treffer. Drei Belege mit der Bedeutung <q class="bedeutung">Zugtiergespann</q> und sieben mit <q class="bedeutung">Mannschaft im Sport</q> – weil die Filter innerhalb der Kategorie <i>Bedeutungen</i> durch ein logisches Oder miteinander verknüpft wurden. Wenden Sie nun zusätzlich den Filter <i>Zeitraum &gt; 1900</i> an, reduziert sich die Belegliste auf sieben Treffer, weil für Filter unterschiedlicher Kategorien ein logisches Und gilt. Die beiden Belege aus dem Jahr 2016 und der von 1859, die bis zu diesem Zeitpunkt noch angezeigt worden waren, bleiben nun im Filter hängen.</p>
 
@@ -1126,7 +1144,7 @@
 						<figcaption>Filtern der Belege im Reduktionsmodus</figcaption>
 					</figure>
 
-					<p>Ein <b>Anwendungsbeispiel</b>, für das das <b>Filtern im Reduktionsmodus</b> besonders gut geeignet ist: In den dynamischen Filtern werden die zur Verfügung stehenden Filter im Reduktionsmodus, wie gezeigt, immer weiter reduziert. <i>Textsorten, Korpora</i> <abbr title="und so weiter">usw.</abbr>, die in den Belegen eigentlich zu finden sind, verschwinden nach und nach aus der Filterleiste. Anders verhält sich jedoch der <a href="#filter-bedeutungen">Filter <i>Bedeutungen</i></a>: In diesem Block werden immer alle Bedeutungen angezeigt, die sich im <a href="#" class="link-sektion-bedeutungsgeruest">Bedeutungsgerüst</a> finden. Im Reduktionsmodus verändert sich allerdings die hinter den einzelnen Bedeutungen angegebene Anzahl der Belege, die mit den Bedeutungen getaggt wurden – und zwar bis zu dem Punkt, an dem für eine bestimmte Bedeutung überhaupt keine Belege mehr in der gefilterten Belegliste zu finden sind. Bedeutungen, die in den gefilterten Belegen nicht realisiert werden, werden ausgegraut. Filtern Sie im Reduktionsmodus einen Zeitraum heraus, können Sie so auf einen Blick feststellen, welche Bedeutungen in just diesem Zeitraum realisiert wurden: Sie sind grün und nicht ausgegraut. Im Beispielbild ist das für den Zeitraum 1800–1899 allein die Bedeutung <q class="bedeutung">Zugtiergespann</q>.</p>
+					<p>Ein <b>Anwendungsbeispiel</b>, für das das <b>Filtern im Reduktionsmodus</b> besonders gut geeignet ist: In den dynamischen Filtern werden die zur Verfügung stehenden Filter im Reduktionsmodus, wie gezeigt, immer weiter reduziert. <i>Textsorten, Korpora</i> <abbr title="und so weiter">usw.</abbr>, die in den Belegen eigentlich zu finden sind (wenn auch nicht in den derzeit sichtbaren), verschwinden nach und nach aus der Filterleiste. Anders verhält sich jedoch der <a href="#filter-bedeutungen">Filter <i>Bedeutungen</i></a>: In diesem Block werden immer alle Bedeutungen angezeigt, die sich im <a href="#" class="link-sektion-bedeutungsgeruest">Bedeutungsgerüst</a> finden. Im Reduktionsmodus verändert sich allerdings die hinter den einzelnen Bedeutungen angegebene Anzahl der Belege, die mit den Bedeutungen getaggt wurden – und zwar bis zu dem Punkt, an dem für eine bestimmte Bedeutung überhaupt keine Belege mehr in der gefilterten Belegliste zu finden sind. Bedeutungen, die in den gefilterten Belegen nicht realisiert werden, werden ausgegraut. Filtern Sie im Reduktionsmodus einen Zeitraum heraus, können Sie so auf einen Blick feststellen, welche Bedeutungen in just diesem Zeitraum realisiert wurden: Sie sind grün und nicht ausgegraut. Im Beispielbild ist das für den Zeitraum 1800–1899 allein die Bedeutung <q class="bedeutung">Zugtiergespann</q>.</p>
 
 					<p id="filter-logik">Die Filter folgen alle einer inklusiven Logik: Sie lassen Belege durch ihr Sieb, wenn diese Belege das, wonach gefiltert wurde, enthalten. Für die Filter der Kategorie <i>Verschiedenes</i> können Sie diese Logik allerdings umkehren, indem sie explizit den Radio-Button für eine <b>exklusive Filterlogik</b> auswählen (erscheint nach dem Öffnen des Filterblocks am oberen Rand). Aktivieren Sie in der <a href="#" class="hilfe-demo">Demonstrationskartei</a> den Filter <i>Verschiedenes &gt; Buchung</i>, reduziert sich die Belegliste auf 15 Belege – wenn sie die standardmäßig eingestellte Filterlogik auf inklusiv belassen. Stellen Sie den Filter auf exklusiv um, erhalten Sie nur noch vier Treffer: Es handelt sich um alle Belege, auf die der Filter <i>Buchung</i> nicht zutrifft. Diese exklusive Logik steht nur für die Filter in der Kategorie <i>Verschiedenes</i> zur Verfügung. Wenden Sie gleichzeitig Filter anderer Kategorien an, folgen diese auch weiterhin einer inklusiven Filterlogik mit Und-Verknüpfung.</p>
 
@@ -1150,33 +1168,104 @@
 
 					<p class="erklaerung-option">BearbeiterIn auf diesem Rechner</p>
 
-					<p class="info"><mark>…</mark></p>
+					<div class="info">
+						<p><i>Standard:</i> leer</p>
+
+						<p>Registrieren Sie sich, kann das Programm Ihren Namen an anderen Stellen, an denen BearbeiterInnen vermerkt werden, automatisch eintragen. Dies könnte hilfreich sein, wenn <i class="app-name"></i> nicht nur von Ihnen allein, sondern in einem größeren Projekt genutzt wird und man später nachvollziehen möchte, wer Wortkarteien erstellt und/oder bearbeitet hat.</p>
+
+						<p>Immer dann, wenn eine Kartei gespeichert wird, registriert die App, welche Person für das Speichern verantwortlich war, und schreibt diese in eine Liste der BearbeiterInnen. Diese Liste wird in der Kartei gespeichert. Dabei greift die App auf den in diesem Feld eingetragenen Namen zurück. Dem Fenster <a href="#menue-kartei-metadaten"><i>Kartei &gt; Metadaten</i></a> lässt sich entnehmen, wer alles in dieser Liste steht. Dort können Personen manuell ergänzt oder wieder entfernt werden.</p>
+
+						<p>Auch beim Erstellen einer neuen Wortkartei wird auf den hier eingetragenen Namen zurückgegriffen. In diesem Fall wird nämlich automatisch das Redaktionsereignis <i>Kartei erstellt</i> angelegt und mit dem Namen der registrierten BearbeterIn verknüpft. Die Redaktionsereignisse können Sie im Fenster <a href="#menue-kartei-redaktion"><i>Kartei &gt; Redaktion</i></a> einsehen und bearbeiten.</p>
+
+						<p>Arbeiten Sie in einem Projekt mit mehreren MitarbeiterInnen, könnte es sogar sinnvoll sein, eine Datei mit einer Personenliste zu erstellen, die sich jeder einmalig in sein Programm lädt. So könnte dann an allen Stellen des Programms, wo auf Personennamen der BearbeiterInnen zurückgegriffen wird, ein mit den in der Liste zu findenden Namen gefülltes <a href="#karteikarte-dropdown">Dropdown-Menü</a> aufgebaut werden. Orte, an denen sich solche Menüs befinden, sind dieses Textfeld, das BearbeiterInnen-Feld im <a href="#menue-kartei-metadaten">Metadaten-Fenster</a> und die Personenfelder im <a href="#menue-kartei-redaktion">Redaktions-Fenster</a>.</p>
+
+						<p>Eine solche Personenliste kann über den Button <i>Personenliste laden</i> ausgewählt und eingelesen werden. Es muss sich dabei um eine Plain-Text-Datei handeln. Zum Erstellen geeignet sind demnach schlichte Textprogramme wie <abbr title="zum Beispiel">z. B.</abbr> der <i>Editor</i> von <i>Windows</i>. Komplexe Dateiformate, wie sie von Office-Programmen erstellt werden, sind hierfür gleichwohl ungeeignet (es sei denn, Sie speichern eine darin erzeugte Personenliste explizit als Textdatei mit der Endung <span class="datei">.txt</span>). Der Zeilenumbruch dient dabei als Trennzeichen. Jede Zeile der Datei darf mithin einen Personennamen enthalten:</p>
+
+						<pre class="quelltext">Müller, Thomas
+Mustermann, Erika
+...</pre>
+
+						<p>Registrieren Sie sich nicht, nervt Sie das Programm durch das Icon <img src="../img/dialog-alert.svg" width="20" height="20" alt="">, das in diesem Fall im Kopf des Hauptfensters rechts neben dem Karteiwort erscheint, sobald eine Kartei geöffnet ist.</p>
+					</div>
 
 					<p class="erklaerung-option">Sekunden Timeout bei Anfragen an das <abbr title="Deutsche Textarchiv">DTA</abbr></p>
 
-					<p class="info"><mark>…</mark></p>
+					<div class="info">
+						<p><i>Standard:</i> 10</p>
+
+						<p><a href="#" class="link-sektion-karteikarte">Karteikarten</a> können mit Texten aus dem <abbr title="Deutsche Textarchiv">DTA</abbr> automatisch gefüllt werden, wenn man eine entsprechende <abbr title="Uniform Resource Locator" lang="en">URL</abbr> angibt. Und die Funktion <a href="#menue-kartei-formvarianten"><i>Kartei &gt; Formvarianten</i></a> lädt beim Erstellen einer Kartei automatisch eine Liste an Formvarianten – ebenfalls aus dem <abbr title="Deutsche Textarchiv">DTA</abbr>.</p>
+
+						<p>In beiden Fällen sendet die App intern eine Anfrage an die <abbr title="Deutsche Textarchiv">DTA</abbr>-Webseite. Erhält es nach der hier eingegebenen Zeitspanne keine Antwort, wird die Anfrage mit einem Timeout-Fehler abgebrochen und ein Dialogfenster geöffnet, das über diesen Fehler informiert. Arbeiten Sie in einer Umgebung mit schlechter Internetverbindung (<abbr title="zum Beispiel">z. B.</abbr> im Zug), könnte es hilfreich sein, diesen Wert ein bisschen anzuheben. Die App wartet dann entsprechend länger, ehe sie die Anfrage als gescheitert bewertet.</p>
+					</div>
 
 					<p class="erklaerung-option">Einfügen-Fenster nach dem Einfügen schließen</p>
 
-					<p class="info"><mark>…</mark></p>
+					<div class="info">
+						<p><i>Standard:</i> aktiviert</p>
 
-					<p class="erklaerung-option">Hervorhebung des Kartei-Worts beim Kopieren von Text erhalten</p>
+						<p>Es geht um das Fenster, das durch die Funktion <a href="#menue-belege-einfuegen"><i>Belege &gt; Einfügen</i></a> geöffnet wird. Die Funktion dient dazu, Belege, die in einer anderen Kartei zum Kopieren vorgemerkt wurden, in die aktuelle Kartei zu kopieren. Ist diese Checkbox aktiviert, wird das Fenster direkt nach dem Einfügen geschlossen.</p>
 
-					<p class="info"><mark>…</mark></p>
+						<p>Führen Sie wiederholt kleinere Einfügeoperationen aus, könnte es sinnvoll sein, die Checkbox zu deaktivieren. Dann müssten Sie das Einfügen-Fenster nicht immer wieder aufs Neue öffnen.</p>
+					</div>
 
-					<p class="erklaerung-option">Kartei-Wort mit grauem Hintergrund kopieren</p>
+					<p class="erklaerung-option" id="einstellungen-allgemeinesHervorhebung">Hervorhebung des Karteiworts beim Kopieren von Text erhalten</p>
 
-					<p class="info"><mark>…</mark></p>
+					<div class="info">
+						<p><i>Standard:</i> nicht aktiviert</p>
+
+						<p>Sowohl in der <a href="#" class="link-sektion-belegliste">Belegliste</a> als auch in der <a href="#" class="link-sektion-karteikarte">Karteikarte</a> stehen Kopierbefehle zur Verfügung (via Rechtsklick oder über die Kopier-Icons <img src="../img/tool-kopieren.svg" width="20" height="20" alt="">), die ein bisschen anders agieren, als das vom <a href="#framework-electron" class="link-dokumentation">Framework</a> verwaltete Tastaturkürzel <kbd>Strg</kbd> + <kbd>C</kbd>. Dazu gehört, dass diese Kopierfunktionen den <a href="#belegliste-bereinigen">Text bereinigen</a>. Solche Operationen betreffen in besonderer Weise das Kopieren von Belegtext und um den geht es hier.</p>
+
+						<p>Wird das Karteiwort im <a href="#belegliste-karteiwortHervorheben">Belegtext der Belegliste hervorgehoben</a> oder wird aus der Karteikarte Belegtext kopiert (wo das Karteiwort immer hervorgehoben wird), wird diese Hervorhebung normalerweise eliminiert, weil sie nicht Teil des Originaltextes ist. Erhalten bleibt sie nur, wenn Sie diese Einstellung aktivieren. Fügen Sie den kopierten Text dann in ein Textverarbeitungsprogramm ein, erscheint das Karteiwort fett.</p>
+
+						<p>Memento: Das Karteiwort wird nur dann hervorgehoben, wenn es im kopierten Text bereits hervorgehoben war! Die Hervorhebung wird durch das Aktivieren dieser Option nicht nachträglich ergänzt.</p>
+					</div>
+
+					<p class="erklaerung-option">Karteiwort mit grauem Hintergrund kopieren</p>
+
+					<div class="info">
+						<p><i>Standard:</i> nicht aktiviert</p>
+
+						<p>Diese Einstellung wirkt nur im Zusammenhang mit der vorherigen, die das <a href="#einstellungen-allgemeinesHervorhebung">Löschen oder Erhalten der Hervorhebung des Karteiworts beim Kopieren</a> steuert. Ist diese Einstellung aktiviert, wird das Karteiwort nach dem Einfügen des Belegtextes in einem Textverarbeitungsprogramm zusätzlich zur Fettung grau hinterlegt.</p>
+					</div>
 
 					<h2 id="einstellungen-menue">Menü</h2>
 
 					<p class="erklaerung-option">Menüleiste des Programms erst einblenden, wenn die Alt-Taste gedrückt wird</p>
 
-					<p class="info"><mark>…</mark></p>
+					<div class="info">
+						<p><i>Standard:</i> nicht aktiviert</p>
+
+						<p>Die Menüleiste befindet sich (unter <i>Linux</i> und <i>Windows</i>) am oberen Rand des Hauptfensters. Möchte man sie ausblenden, muss man diese Option aktivieren und das Programm neu starten. Zum temporären Einblenden der Leiste, ohne die auf viele Funktion der App nicht zugegriffen werden könnte, dient danach die <kbd>Alt</kbd>-Taste. Die Menüleiste erscheint und man kann die gewünschten Funktionen ausführen. Danach verliert sie wieder den Fokus und verschwindet im Off.</p>
+
+						<p>An Menüpunkte gebundene Tastaturkürzel wie das Öffnen einer leeren Karteikarte mit <kbd>Strg</kbd> + <kbd>N</kbd>, stehen auch mit ausgeblendeter Menüleiste zur Verfügung.</p>
+
+						<div class="bilder">
+							<figure title="zum Vergrößern anklicken">
+								<img src="../img/win/hb-einstellungen-menueleiste-an.png" alt="">
+								<figcaption>Programmfenster mit Menüleiste</figcaption>
+							</figure>
+
+							<figure title="zum Vergrößern anklicken">
+								<img src="../img/win/hb-einstellungen-menueleiste-aus.png" alt="">
+								<figcaption>Programmfenster ohne Menüleiste</figcaption>
+							</figure>
+						</div>
+					</div>
 
 					<p class="erklaerung-option">Quick-Access-Bar anzeigen</p>
 
-					<p class="info"><mark>…</mark></p>
+					<div class="info">
+						<p><i>Standard:</i> nicht aktiviert</p>
+
+						<figure class="right" title="zum Vergrößern anklicken">
+							<img src="../img/win/hb-einstellungen-quick.png" alt="">
+							<figcaption>Quick-Access-Bar mit einigen Icons</figcaption>
+						</figure>
+
+						<p>Bei der Quick-Access-Bar handelt es sich um eine kleine Leiste am oberen Rand des Programmfensters, in der Icons abgelegt werden können. Die Icons ermöglichen einen Schnellzugriff auf eine Vielzahl an Funktionen, denn für jeden der Punkte in den Menüs <i>Programm, Kartei</i> und <i>Belege</i> steht ein eigenes Icon zur Verfügung – ausgenommen der Funktion <i>Kartei &gt; Zuletzt verwendet</i>.</p>
+
+						<p>Die Icons, die angezeigt werden sollen, wählt man sich aus der Liste unterhalb dieser Einstellung aus. Die Quick-Access-Bar wird nur eingeblendet, wenn mindestens eine Funktion aus dieser Liste ausgewählt <em>und</em> die Option <i>Quick-Access-Bar anzeigen</i> aktiviert wurde.</p>
+					</div>
 
 					<h2 id="einstellungen-notizen">Notizen</h2>
 
@@ -1184,15 +1273,35 @@
 
 					<p class="erklaerung-option">Notizen-Fenster nach dem Speichern schließen</p>
 
-					<p class="info"><mark>…</mark></p>
+					<div class="info">
+						<p><i>Standard:</i> nicht aktiviert</p>
+
+						<p>Stößt man das Speichern der <a href="#menue-kartei-notizen">Kartei-Notizen</a> über den Button <i>Speichern</i> oder das Tastaturkürzel <kbd>Strg</kbd> + <kbd>S</kbd> an, bleibt das Notizen-Fenster standardmäßig geöffnet, sodass man direkt im Anschluss weitere Änderungen vornehmen kann. Soll das Fenster umgehend nach dem Speichern geschlossen werden (weil Sie danach für gewöhnlich mit einer anderen Programmfunktion weiterarbeiten), muss diese Einstellung aktiviert werden.</p>
+					</div>
 
 					<p class="erklaerung-option" id="einstellungen-notizenFilterleiste">Notizen in der Filterleiste anzeigen</p>
 
-					<p class="info">Wurden Notizen verfasst, die nicht eine einzelne Karteikarte, sondern die Kartei im Ganzen betreffen, können diese nicht nur im Notizen-Fenster eingesehen werden, sondern auf Wunsch auch als <a href="#filter-notizen"><q>Pseudofilter</q> in der Filterleiste</a> erscheinen. Dazu muss man diese Einstellung, die standardmäßig aus ist, aktivieren. Auf diese Weise können sie die Notizen immer im Blick behalten. Voraussetzung ist natürlich ein Bildschirm, dessen Auflösung groß genug ist, sonst werden die Notizen am unteren Bildschirmrand abgeschnitten und verschwinden im Off.</p>
+					<div class="info">
+						<p><i>Standard:</i> nicht aktiviert</p>
+
+						<p>Wurden <a href="#menue-kartei-notizen">Kartei-Notizen</a> verfasst, können diese nicht nur im Notizen-Fenster eingesehen werden, sondern auf Wunsch auch als <a href="#filter-notizen"><q>Pseudofilter</q> in der Filterleiste</a> unterhalb der anderen Filter erscheinen. Dazu muss diese Einstellung jedoch zunächst aktiviert werden.</p>
+
+						<p>Auf diese Weise haben Sie die Notizen in der Standardansicht des Programms – der <a href="#" class="link-sektion-belegliste">Belegliste</a> – immer im Blick. Voraussetzung dafür ist natürlich ein Bildschirm, dessen Auflösung groß genug ist. Ist er zu flach, werden die Notizen am unteren Bildschirmrand abgeschnitten und verschwinden im Off.</p>
+					</div>
 
 					<p class="erklaerung-option">Notizen in der Filterleiste standardmäßig aufklappen</p>
 
-					<p class="info"><mark>…</mark></p>
+					<div class="info">
+						<p><i>Standard:</i> aktiviert</p>
+
+						<p>Werden <a href="#menue-kartei-notizen">Kartei-Notizen</a> in der Filterleiste angezeigt, sehen Sie <a href="#filter-notizen">einem Filterblock zum Verwechseln ähnlich</a>. Obgleich sie niemals die Funktion eines Filters annehmen können, kann man mit ihnen genauso interagieren wie mit allen anderen Filterblöcken, zumindest was das Auf- und Zuklappen angeht.</p>
+
+						<p>Für den Fall, dass alle Filter zurückgesetzt werden (das geht <span lang="fr">en bloc</span> über das Icon <img src="../img/filter-reset.svg" width="20" height="20" alt=""> im Kopf der <a href="#" class="link-sektion-filter">Filterleiste</a>), werden die Filterblöcke geschlossen – mit Ausnahme derjenigen, die standardmäßig aufgeklappt sein sollen. Welche Blöcke dies sind, kann man eigens in einer <a href="#einstellungen-filterleisteStandardmaessig">Einstellung</a> festlegen. Diese Einstellung zu den Notizen ist das Pendant zu jener zu den Filtern.</p>
+
+						<p>Ist die Einstellung aktiviert, werden die Notizen nach dem Zurücksetzen der Filter aufgeklappt. Möchten Sie die Notizen in der Filterleiste nur von Zeit zu Zeit eigenhändig aufklappen, sollten Sie diese Einstellung deaktivieren.</p>
+
+						<p>Die Einstellung hat nur einen Effekt, wenn diejenige zur <a href="#einstellungen-notizenFilterleiste">Anzeige der Notizen in der Filterleiste</a> auch aktiviert ist.</p>
+					</div>
 
 					<h2 id="einstellungen-bedeutungsgeruest">Bedeutungsgerüst</h2>
 
@@ -1200,15 +1309,23 @@
 
 					<p class="erklaerung-option">Bedeutungsgerüst nach dem Speichern schließen</p>
 
-					<p class="info"><mark>…</mark></p>
+					<div class="info">
+						<p><i>Standard:</i> nicht aktiviert</p>
+					</div>
 
 					<p class="erklaerung-option">Tag-Fenster nach dem Speichern schließen</p>
 
-					<p class="info"><mark>…</mark></p>
+					<div class="info">
+						<p><i>Standard:</i> nicht aktiviert</p>
+					</div>
 
 					<p class="erklaerung-option">Tag-Dateien automatisch auffrischen</p>
 
-					<p class="info"><mark>Format Tag-Dateien detalliert beschreiben</mark></p>
+					<div class="info">
+						<p><i>Standard:</i> aktiviert</p>
+
+						<p><mark>Format Tag-Dateien detalliert beschreiben</mark></p>
+					</div>
 
 					<h2 id="einstellungen-karteikarte">Karteikarte</h2>
 
@@ -1216,27 +1333,39 @@
 
 					<p class="erklaerung-option">Karteikarte nach dem Speichern schließen</p>
 
-					<p class="info"><mark>…</mark></p>
+					<div class="info">
+						<p><i>Standard:</i> nicht aktiviert</p>
+					</div>
 
 					<p class="erklaerung-option">neue Karteikarte als unvollständig markieren</p>
 
-					<p class="info"><mark>…</mark></p>
+					<div class="info">
+						<p><i>Standard:</i> nicht aktiviert</p>
+					</div>
 
 					<p class="erklaerung-option"><abbr title="Uniform Resource Locator" lang="en">URL</abbr> aus der Zwischenablage automatisch in das <abbr title="Deutsches Textarchiv">DTA</abbr>-Import-Feld eintragen</p>
 
-					<p class="info"><mark>…</mark></p>
+					<div class="info">
+						<p><i>Standard:</i> aktiviert</p>
+					</div>
 
-					<p class="erklaerung-option">nach dem <abbr title="Deutsches Textarchiv">DTA</abbr>-Import überprüfen, ob der Belegtext das Kartei-Wort enthält</p>
+					<p class="erklaerung-option">nach dem <abbr title="Deutsches Textarchiv">DTA</abbr>-Import überprüfen, ob der Belegtext das Karteiwort enthält</p>
 
-					<p class="info"><mark>…</mark></p>
+					<div class="info">
+						<p><i>Standard:</i> aktiviert</p>
+					</div>
 
 					<p class="erklaerung-option">Textfelder beim Einfügen von Text via Icon, Menü-Eintrag oder Link ohne Nachfrage ergänzen</p>
 
-					<p class="info"><mark>…</mark></p>
+					<div class="info">
+						<p><i>Standard:</i> nicht aktiviert</p>
+					</div>
 
 					<p class="erklaerung-option" id="einstellungen-karteikarteLeseansicht">bestehende Karteikarte in der Leseansicht öffnen</p>
 
-					<p class="info"><mark>…</mark></p>
+					<div class="info">
+						<p><i>Standard:</i> aktiviert</p>
+					</div>
 
 					<h2 id="einstellungen-filterleiste">Filterleiste</h2>
 
@@ -1244,46 +1373,62 @@
 
 					<p class="erklaerung-option">beim Öffnen eines Filterblocks die anderen Blöcke zuklappen</p>
 
-					<p class="info"><mark>…</mark></p>
+					<div class="info">
+						<p><i>Standard:</i> nicht aktiviert</p>
+					</div>
 
 					<p class="erklaerung-option">inaktive Filterblöcke automatisch zuklappen</p>
 
-					<p class="info"><mark>…</mark></p>
+					<div class="info">
+						<p><i>Standard:</i> nicht aktiviert</p>
+					</div>
 
 					<p class="erklaerung-option" id="einstellungen-filterleisteUntergeordnete">untergeordnete Bedeutungen beim Filtern mit einbeziehen</p>
 
-					<p class="info"><mark>…</mark></p>
+					<div class="info">
+						<p><i>Standard:</i> aktiviert</p>
+					</div>
 
 					<p class="erklaerung-option" id="einstellungen-filterleisteTransparente">Annotierungen mit transparenter Hintergrundfarbe mit einbeziehen</p>
 
-					<p class="info"><mark>…</mark></p>
+					<div class="info">
+						<p><i>Standard:</i> nicht aktiviert</p>
+					</div>
 
 					<p class="erklaerung-option">nicht melden, wenn ein neuer Beleg wegen der Filterregeln nicht in der Belegliste erscheint</p>
 
-					<p class="info"><mark>…</mark></p>
+					<div class="info">
+						<p><i>Standard:</i> nicht aktiviert</p>
+					</div>
 
-					<p class="erklaerung-option">Standardmäßig aufgeklappte Filterblöcke</p>
+					<p class="erklaerung-option" id="einstellungen-filterleisteStandardmaessig">Standardmäßig aufgeklappte Filterblöcke</p>
 
-					<p class="info"><mark>…</mark></p>
+					<div class="info">
+						<p><i>Standard:</i> Volltext aktiviert</p>
+					</div>
 
 					<h2 id="einstellungen-belegliste">Belegliste</h2>
 
 					<p>Die folgenden Einstellungen betreffen die <a href="#" class="link-sektion-belegliste">Belegliste</a>, die über den Menüpunkt <a href="#menue-belege-auflisten"><i>Belege &gt; Auflisten</i></a> oder das Tastaturkürzel <kbd>Strg</kbd> + <kbd>L</kbd> aufgerufen werden kann.</p>
 
-					<p class="erklaerung-option" id="einstellungen-beleglisteIcons">die Icons zur Steuerung der Detail-Anzeige sollen immer alle sichtbar sein</p>
+					<p class="erklaerung-option" id="einstellungen-beleglisteIcons">die Icons zur Steuerung der Detailansicht sollen immer alle sichtbar sein</p>
 
 					<div class="info">
-						<p>Welche Elemente in der Detailansicht der Belegliste angezeigt werden sollen, lässt sich durch Icons in der Kopfleiste der Belegliste steuern. Da in dieser Kopfleiste sehr viele Icons zu finden sind, werden die nicht aktiven Icons zum Einblenden von Elementen in der Belegliste (die Quellenangabe, die Notizen <abbr title="und so weiter">usw.</abbr>) standardmäßig ausgeblendet und erscheinen erst, wenn man mit der Maus über das Platzhalter-Icon für den Belegtext (<img src="../img/liste-beleg.svg" width="20" height="20" alt="">) fährt. <abbr title="Vergleiche">Vgl.</abbr> die <a href="#belegliste-platzhalter">Anmerkungen zum Platzhalter-Icon im <abbr title="Abschnitt">Abschn.</abbr> Belegliste</a>.</p>
+						<p><i>Standard:</i> nicht aktiviert</p>
 
-						<p><i>Aktiviert:</i> Die Icons zur Steuerung der Detailansicht der Belege sind immer alle sichtbar, ob sie aktiv sind oder nicht.</p>
+						<p>Welche Elemente in der <a href="#belegliste-detailansicht">Detailansicht der Belegliste</a> angezeigt werden sollen, lässt sich durch Icons in der <a href="#belegliste-kopfleiste">Kopfleiste der Belegliste</a> steuern. Da in dieser Kopfleiste sehr viele Icons zu finden sind, werden die nicht aktiven Icons zum Einblenden von Elementen in der Belegliste (die Quellenangabe, die Notizen <abbr title="und so weiter">usw.</abbr>) standardmäßig ausgeblendet und erscheinen erst, wenn man mit der Maus über das Platzhalter-Icon für den Belegtext (<img src="../img/liste-beleg.svg" width="20" height="20" alt="">) fährt. <abbr title="Vergleiche">Vgl.</abbr> die <a href="#belegliste-platzhalter">Anmerkungen zum Platzhalter-Icon im <abbr title="Abschnitt">Abschn.</abbr> Belegliste</a>.</p>
+
+						<p>Aktivieren Sie diese Einstellung werden immer alle Icons zur Steuerung der Anzeige der Belegliste angezeigt, ganz egal, ob sie aktiviert sind oder nicht. Wenn Ihr Bildschirm nicht breit genug oder das Programmfenster zu klein ist, kann dies freilich zur Folge haben, dass Icons aus der Kopfleiste der Belegliste nicht mehr sicht- oder erreichbar sind – <abbr title="besonders">bes.</abbr> bei geöffneter Filterleiste.</p>
 					</div>
 
 					<p class="erklaerung-option" id="einstellungen-beleglisteTextsorte">Textsorte in den Belegkopf eintragen</p>
 
 					<div class="info">
-						<p><mark>…</mark></p>
+						<p><i>Standard:</i> nicht aktiviert</p>
 
-						<p><i>Aktiviert:</i> Die Textsorte wird in den Kopfleisten der Belege eingeblendet.</p>
+						<p>In der Belegliste kann man sich auf Wunsch in der <a href="#belegliste-kopfleisteBelege">Kopfleiste der Belege</a> die Textsorte einblenden lassen. Bei aktivierter Einstellung erscheint sie in Klammern und Kapitälchen hinter dem Autor, so denn in der zugehörigen Karteikarte das <a href="#karteikarte-textsorte">Textsorten-Feld</a> gefüllt wurde. Für die Eingabe von Textsorten besteht die Möglichkeit, Hierarchieebenen zu öffnen, <abbr title="zum Beispiel">z. B.</abbr> durch die Eingabe <q>Wissenschaft: Philosophie</q> oder <q>Wissenschaft: Chemie</q>. Im Belegkopf wird allerdings immer nur die oberste Ebene eingetragen, was hier in beiden Fällen <q>Wissenschaft</q> wäre.</p>
+
+						<p>Nach dem Aktivieren der Einstellung muss die Belegliste neu aufgebaut werden, damit die Textsorten sichtbar werden. Dies geschieht <abbr title="zum Beispiel">z. B.</abbr> dann, wenn Sie die Liste <a href="#" class="link-sektion-filter">filtern</a>, oder dann, wenn Sie sie <a href="#belegliste-sortierung">umsortieren</a> (Funktion <img src="../img/liste-aufwaerts.svg" width="20" height="20" alt="">).</p>
 					</div>
 				</section>
 
@@ -1299,7 +1444,7 @@
 
 					<p class="info"><mark>…</mark></p>
 
-					<p class="erklaerung-icon-menues"><img src="../img/quick-suche.svg" width="24" height="24" alt="">Karteisuche</p>
+					<p class="erklaerung-icon-menues" id="menue-programm-karteisuche"><img src="../img/quick-suche.svg" width="24" height="24" alt="">Karteisuche</p>
 
 					<p class="info"><mark>…</mark></p>
 
@@ -1354,11 +1499,11 @@
 
 					<p class="info"><mark>…</mark></p>
 
-					<p class="erklaerung-icon-menues"><img src="../img/quick-metadaten.svg" width="24" height="24" alt="">Metadaten</p>
+					<p class="erklaerung-icon-menues" id="menue-kartei-metadaten"><img src="../img/quick-metadaten.svg" width="24" height="24" alt="">Metadaten</p>
 
 					<p class="info"><mark>…</mark></p>
 
-					<p class="erklaerung-icon-menues"><img src="../img/quick-redaktion.svg" width="24" height="24" alt="">Redaktion</p>
+					<p class="erklaerung-icon-menues" id="menue-kartei-redaktion"><img src="../img/quick-redaktion.svg" width="24" height="24" alt="">Redaktion</p>
 
 					<p class="info"><mark>…</mark></p>
 
