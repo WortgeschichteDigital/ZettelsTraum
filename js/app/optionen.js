@@ -59,9 +59,6 @@ let optionen = {
 			filterleiste: false,
 			// chronologischen Richtung, in der die Belege sortiert werden sollen
 			sort_aufwaerts: false,
-			// Dichte der Zeitschnitte oder Zeitschnitte ausblenden
-			// mögliche Werte: "10", "50", "100", "-" (keine Schnitte anzeigen)
-			zeitschnitte: "-",
 			// kompletten Beleg anzeigen oder ausblenden
 			beleg: false,
 			// Absätze im Beleg ohne Worttreffer gekürzt darstellen
@@ -79,6 +76,9 @@ let optionen = {
 			detail_ts: false,
 			detail_no: false,
 			detail_meta: false,
+			// Dichte der Zeitschnitte oder Zeitschnitte ausblenden
+			// mögliche Werte: "10", "50", "100", "-" (keine Schnitte anzeigen)
+			zeitschnitte: "-",
 		},
 		// Einstellungen-Dialog
 		einstellungen: {

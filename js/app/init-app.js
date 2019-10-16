@@ -1,7 +1,7 @@
 "use strict";
 
 // Initialisierung der App
-window.addEventListener("load", function() {
+window.addEventListener("load", () => {
 	// Fensterttyp registrieren
 	window.fenstertyp = "index";
 
@@ -13,7 +13,7 @@ window.addEventListener("load", function() {
 	document.addEventListener("keydown", helfer.tastatur);
 
 	// RECHTSKLICK ABFANGEN
-	window.addEventListener("contextmenu", function(evt) {
+	window.addEventListener("contextmenu", evt => {
 		evt.preventDefault();
 		popup.oeffnen(evt);
 	});
@@ -22,7 +22,7 @@ window.addEventListener("load", function() {
 	document.addEventListener("dragover", evt => evt.preventDefault());
 	document.addEventListener("dragleave", evt => evt.preventDefault());
 	document.addEventListener("dragend", evt => evt.preventDefault());
-	document.addEventListener("drop", function(evt) {
+	document.addEventListener("drop", evt => {
 		evt.preventDefault();
 		if (!evt.dataTransfer.files.length) { // wenn z.B. Text gedropt wird
 			return;
@@ -33,13 +33,13 @@ window.addEventListener("load", function() {
 
 	// EVENTS INITIALISIEREN
 	// alle <textarea>
-	document.querySelectorAll("textarea").forEach(function(textarea) {
+	document.querySelectorAll("textarea").forEach(textarea => {
 		textarea.addEventListener("input", function() {
 			helfer.textareaGrow(this);
 		});
 	});
 	// alle <input type="number">
-	document.querySelectorAll(`input[type="number"]`).forEach(function(i) {
+	document.querySelectorAll(`input[type="number"]`).forEach(i => {
 		i.addEventListener("change", function() {
 			helfer.inputNumber(this);
 		});
@@ -48,10 +48,7 @@ window.addEventListener("load", function() {
 	document.querySelectorAll(".dropdown-feld").forEach(i => dropdown.feld(i));
 	document.querySelectorAll(".dropdown-link-td, .dropdown-link-element").forEach(i =>	dropdown.link(i));
 	// Quick-Access-Bar
-	let quick = document.querySelectorAll("#quick a");
-	for (let i = 0, len = quick.length; i < len; i++) {
-		helfer.quickAccess(quick[i]);
-	}
+	document.querySelectorAll("#quick a").forEach(a => helfer.quickAccess(a));
 	// Wort-Element
 	document.getElementById("wort").addEventListener("click", () => kartei.wortAendern());
 	// Erinnerungen-Icon
@@ -61,7 +58,7 @@ window.addEventListener("load", function() {
 	// Lexika-Icon
 	document.getElementById("lexika-icon").addEventListener("click", () => lexika.oeffnen());
 	// Programm-Icon
-	document.getElementById("icon").addEventListener("click", function() {
+	document.getElementById("icon").addEventListener("click", () => {
 		const {ipcRenderer} = require("electron");
 		ipcRenderer.send("ueber-app");
 	});
@@ -69,24 +66,22 @@ window.addEventListener("load", function() {
 	document.getElementById("start-erstellen").addEventListener("click", () => kartei.wortErfragen());
 	document.getElementById("start-oeffnen").addEventListener("click", () => kartei.oeffnen());
 	// Karteikarte
-	let beleg_inputs = document.querySelectorAll("#beleg input, #beleg textarea");
-	for (let i = 0, len = beleg_inputs.length; i < len; i++) {
-		if (beleg_inputs[i].type === "button") {
-			beleg.aktionButton(beleg_inputs[i]);
+	document.querySelectorAll("#beleg input, #beleg textarea").forEach(i => {
+		if (i.type === "button") {
+			beleg.aktionButton(i);
 		} else {
-			beleg.formularGeaendert(beleg_inputs[i]);
-			beleg.belegSpeichern(beleg_inputs[i]);
+			beleg.formularGeaendert(i);
+			beleg.belegSpeichern(i);
 		}
-	}
-	let beleg_links = document.querySelectorAll("#beleg .icon-link");
-	for (let i = 0, len = beleg_links.length; i < len; i++) {
-		if (beleg_links[i].classList.contains("icon-stern")) { // Bewertung
-			beleg.bewertungEvents(beleg_links[i]);
-		} else if (/icon-tools-/.test(beleg_links[i].getAttribute("class"))) { // Text-Tools
-			beleg.toolsKlick(beleg_links[i]);
+	});
+	document.querySelectorAll("#beleg .icon-link").forEach(a => {
+		if (a.classList.contains("icon-stern")) { // Bewertung
+			beleg.bewertungEvents(a);
+		} else if (/icon-tools-/.test(a.getAttribute("class"))) { // Text-Tools
+			beleg.toolsKlick(a);
 		}
-	}
-	document.querySelectorAll(".beleg-opt-block a").forEach(function(a) {
+	});
+	document.querySelectorAll(".beleg-opt-block a").forEach(a => {
 		if (a.classList.contains("druck-icon")) {
 			return;
 		}
@@ -116,7 +111,7 @@ window.addEventListener("load", function() {
 	document.getElementById("tagger-schliessen").addEventListener("click", () => tagger.schliessen());
 	// Belegliste-Filter
 	document.querySelectorAll("#liste-filter header a").forEach(a => filter.ctrlButtons(a));
-	document.querySelectorAll(".filter-kopf").forEach(function(a) {
+	document.querySelectorAll(".filter-kopf").forEach(a => {
 		filter.anzeigeUmschalten(a);
 		filter.ctrlResetBlock(a.lastChild);
 	});
@@ -124,71 +119,53 @@ window.addEventListener("load", function() {
 	document.querySelectorAll(".filter-optionen").forEach(input => filter.filterOptionenListener(input));
 	document.querySelectorAll(`a[id^="filter-datenfelder-"]`).forEach(input => filter.ctrlVolltextDs(input));
 	filter.anwenden(document.getElementById("filter-volltext"));
-	let filter_zeitraum = document.getElementsByName("filter-zeitraum");
-	for (let i = 0, len = filter_zeitraum.length; i < len; i++) {
-		filter.wechselnZeitraum(filter_zeitraum[i]);
-	}
+	document.getElementsByName("filter-zeitraum").forEach(i => filter.wechselnZeitraum(i));
 	filter.backupKlappScroll(document.getElementById("filter-zeitraum-dynamisch"));
 	document.querySelectorAll(`#filter-kartendatum input[type="checkbox"]`).forEach(i => filter.kartendatumBox(i));
 	document.querySelectorAll(`#filter-kartendatum input[type="datetime-local"]`).forEach(i => filter.kartendatumFeld(i));
 	document.querySelectorAll("#filter-kartendatum .icon-jetzt").forEach(a => filter.kartendatumJetzt(a));
 	// Funktionen im Belegliste-Header
-	let liste_links = document.querySelectorAll("#liste header a");
-	for (let i = 0, len = liste_links.length; i < len; i++) {
-		liste.header(liste_links[i]);
-	}
+	document.querySelectorAll("#liste header a").forEach(a => liste.header(a));
 	// Einstellungen-Fenster
-	let ee_menu = document.querySelectorAll("#einstellungen ul a");
-	for (let i = 0, len = ee_menu.length; i < len; i++) {
-		optionen.sektionWechselnLink(ee_menu[i]);
-	}
-	let ee = document.querySelectorAll("#einstellungen input");
-	for (let i = 0, len = ee.length; i < len; i++) {
-		optionen.aendereEinstellungListener(ee[i]);
-	}
+	document.querySelectorAll("#einstellungen ul a").forEach(a => optionen.sektionWechselnLink(a));
+	document.querySelectorAll("#einstellungen input").forEach(i => optionen.aendereEinstellungListener(i));
 	document.getElementById("einstellung-personenliste").addEventListener("click", () => optionen.aenderePersonenliste());
 	optionen.anwendenNotizenFilterleiste(document.getElementById("einstellung-notizen-filterleiste"));
 	document.getElementById("tags-laden").addEventListener("click", () => optionen.tagsManuLaden());
 	optionen.anwendenIconsDetailsListener(document.getElementById("einstellung-anzeige-icons-immer-an"));
 	// Formvarianten-Fenster
-	let stamm_inputs = document.querySelectorAll("#stamm input");
-	for (let i = 0, len = stamm_inputs.length; i < len; i++) {
-		if (stamm_inputs[i].type === "button") {
-			stamm.aktionButton(stamm_inputs[i]);
+	document.querySelectorAll("#stamm input").forEach(i => {
+		if (i.type === "button") {
+			stamm.aktionButton(i);
 		} else { // Text-Input
-			stamm.aktionText(stamm_inputs[i]);
+			stamm.aktionText(i);
 		}
-	}
-	// Notizen-Fenster
-	document.querySelectorAll("#notizen .icon-link").forEach(function(a) {
-		notizen.tools(a);
 	});
-	let notizen_inputs = document.querySelectorAll("#notizen input, #notizen-feld");
-	for (let i = 0, len = notizen_inputs.length; i < len; i++) {
-		if (notizen_inputs[i].type === "button") { // Buttons
-			notizen.aktionButton(notizen_inputs[i]);
+	// Notizen-Fenster
+	document.querySelectorAll("#notizen-cont .icon-link").forEach(a => notizen.tools(a));
+	document.querySelectorAll("#notizen input, #notizen-feld").forEach(i => {
+		if (i.type === "button") {
+			notizen.aktionButton(i);
 		} else { // #notizen-feld
-			notizen.change(notizen_inputs[i]);
+			notizen.change(i);
 		}
-	}
+	});
 	// Lexika-Fenster
-	let lexika_inputs = document.querySelectorAll("#lexika input");
-	for (let i = 0, len = lexika_inputs.length; i < len; i++) {
-		if (lexika_inputs[i].type === "button") {
-			lexika.aktionButton(lexika_inputs[i]);
+	document.querySelectorAll("#lexika input").forEach(i => {
+		if (i.type === "button") {
+			lexika.aktionButton(i);
 		} else { // Text-Input
-			lexika.aktionText(lexika_inputs[i]);
+			lexika.aktionText(i);
 		}
-	}
+	});
 	// Metadaten-Fenster
-	let meta_inputs = document.querySelectorAll("#meta input");
-	for (let i = 0, len = meta_inputs.length; i < len; i++) {
-		if (meta_inputs[i].type === "button") {
-			meta.aktionButton(meta_inputs[i]);
+	document.querySelectorAll("#meta input").forEach(i => {
+		if (i.type === "button") {
+			meta.aktionButton(i);
 		} else { // Text-Input
-			meta.aktionText(meta_inputs[i]);
+			meta.aktionText(i);
 		}
-	}
+	});
 	// Karteisuche
 	document.getElementById("karteisuche-suchen").addEventListener("click", () => karteisuche.suchenPrep());
 	document.getElementById("karteisuche-add-filter").addEventListener("click", () => karteisuche.filterHinzufuegen());
@@ -199,26 +176,19 @@ window.addEventListener("load", function() {
 		}
 	});
 	// Dialog-Buttons
-	let dialog_buttons = ["dialog-ok-button", "dialog-abbrechen-button", "dialog-ja-button", "dialog-nein-button"];
-	for (let i = 0, len = dialog_buttons.length; i < len; i++) {
-		dialog_schliessen(dialog_buttons[i]);
-	}
-	function dialog_schliessen (button) {
+	["dialog-ok-button", "dialog-abbrechen-button", "dialog-ja-button", "dialog-nein-button"].forEach(button => {
 		document.getElementById(button).addEventListener("click", function() {
 			overlay.schliessen(this);
 		});
-	}
-	// Druck-Links
-	document.querySelectorAll(".druck-icon").forEach(function(a) {
-		drucken.listener(a);
 	});
+	// Druck-Links
+	document.querySelectorAll(".druck-icon").forEach(a => drucken.listener(a));
 	// Druck-Fenster
 	document.querySelectorAll("#drucken-head span").forEach(span => drucken.buttons(span));
 	// Schließen-Links von Overlays
-	let overlay_links = document.querySelectorAll(".overlay-schliessen");
-	for (let i = 0, len = overlay_links.length; i < len; i++) {
-		overlay.initSchliessen(overlay_links[i]);
-	}
+	document.querySelectorAll(".overlay-schliessen").forEach(a => overlay.initSchliessen(a));
+	// Handbuch-Links von Overlays
+	document.querySelectorAll(".icon-handbuch").forEach(a => helfer.handbuchLink(a));
 
 	// ANFRAGEN DES MAIN-PROZESSES ABFANGEN
 	const {ipcRenderer} = require("electron");
@@ -226,7 +196,7 @@ window.addEventListener("load", function() {
 	ipcRenderer.on("programm-einstellungen", () => optionen.oeffnen());
 	ipcRenderer.on("programm-karteisuche", () => karteisuche.oeffnen());
 	ipcRenderer.on("kartei-erstellen", () => kartei.wortErfragen());
-	ipcRenderer.on("kartei-oeffnen", function(evt, datei) {
+	ipcRenderer.on("kartei-oeffnen", (evt, datei) => {
 		if (datei) {
 			kartei.oeffnenEinlesen(datei);
 		} else {
@@ -256,7 +226,7 @@ window.addEventListener("load", function() {
 	ipcRenderer.on("kopieren-daten", () => kopieren.datenSenden());
 	ipcRenderer.on("kopieren-daten-empfangen", (evt, daten) => kopieren.einfuegenEinlesen(daten));
 	ipcRenderer.on("optionen-zuletzt", (evt, zuletzt) => optionen.updateZuletzt(zuletzt));
-	ipcRenderer.on("dialog-anzeigen", function(evt, text) {
+	ipcRenderer.on("dialog-anzeigen", (evt, text) => {
 		dialog.oeffnen("alert");
 		dialog.text(text);
 	});
@@ -286,7 +256,7 @@ window.addEventListener("load", function() {
 });
 
 // Schließen unterbrechen, falls Daten noch nicht gespeichert wurden
-window.addEventListener("beforeunload", function(evt) {
+window.addEventListener("beforeunload", evt => {
 	// Bedeutungen-Fenster ggf. schließen
 	bedeutungenWin.schliessen();
 	// Status des Fensters speichern
@@ -327,7 +297,7 @@ window.addEventListener("beforeunload", function(evt) {
 	}
 });
 
-window.addEventListener("error", function(evt) {
+window.addEventListener("error", evt => {
 	let err = {
 		time: new Date().toISOString(),
 		word: kartei.wort,

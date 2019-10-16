@@ -538,7 +538,7 @@ let popup = {
 			icon: path.join(__dirname, "img", "menu", "programm-einstellungen.png"),
 			click: function() {
 				optionen.oeffnen();
-				optionen.sektionWechseln(document.getElementById("einstellungen-link-filter"));
+				optionen.sektionWechseln(document.getElementById("einstellungen-link-filterleiste"));
 			},
 		}));
 	},
@@ -746,7 +746,7 @@ let popup = {
 			icon: path.join(__dirname, "img", "menu", "programm-einstellungen.png"),
 			click: function() {
 				optionen.oeffnen();
-				optionen.sektionWechseln(document.getElementById("einstellungen-link-bedeutungen"));
+				optionen.sektionWechseln(document.getElementById("einstellungen-link-bedeutungsgeruest"));
 			},
 		}));
 	},

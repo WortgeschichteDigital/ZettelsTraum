@@ -43,27 +43,29 @@
 				<h3>Neue Funktionen</h3>
 
 				<ul>
+					<li>Overlay-Fenster: In den Overlay-Fenstern findet sich nun neben dem Schließen-Icon zusätzlich das Icon <img src="../img/heading-handbuch.svg" width="24" height="24" alt="">, mit dem man direkt an die Stelle des <a href="#" class="link-handbuch">Handbuchs</a> gelangt, an der Erläuterungen zu dem Fenster stehen.</li>
 					<li>
-						<p>Filterleiste: Im Filterblock <i>Verschiedenes</i> gibt es einen neuen Filter: <i>Annotierungen</i>. Weil es ein dynamischer Filter ist, erscheint er nur, wenn in der Kartei Belege zu finden sind, in denen Karteiwörter oder Textteile annotiert wurden.</p>
-						<p>Wurde beim Annotieren die Hintergrundfarbe auf transparent gesetzt, wird der Beleg mit dem <i>Annotierungen</i>-Filter standardmäßig nicht gefunden. Unter <i>Programm &gt; Einstellungen &gt; Filterleiste</i> gibt es jedoch eine Checkbox, die man aktivieren kann, um beim Filtern auch Annotierungen mit einzubeziehen, die eine tranparente Hintergrundfarbe haben.</p>
+						<p>Filterleiste: Im Filterblock <i>Verschiedenes</i> gibt es einen neuen Filter: <i>Annotierung</i>. Weil es ein dynamischer Filter ist, erscheint er nur, wenn in der Kartei Belege zu finden sind, in denen Karteiwörter oder Textteile annotiert wurden.</p>
+						<p>Wurde beim Annotieren die Hintergrundfarbe auf transparent gesetzt, wird der Beleg mit dem <i>Annotierung</i>-Filter standardmäßig nicht gefunden. Unter <a href="#einstellungen-filterleiste" class="link-handbuch"><i>Programm &gt; Einstellungen &gt; Filterleiste</i></a> gibt es jedoch <a href="#einstellungen-filterleisteTransparente" class="link-handbuch">eine Checkbox</a>, die man aktivieren kann, um beim Filtern auch Annotierungen mit einzubeziehen, die eine tranparente Hintergrundfarbe haben.</p>
 					</li>
 				</ul>
 
 				<h3>Verbesserungen</h3>
 
 				<ul>
-					<li>Die Standardeinstellungen wurden geändert, was das Schließen von Funktionen und Fenstern angeht, in denen ein Speichervorgang ausgelöst werden kann. Die Funktionen und Fenster bleiben nach dem Speichern fortan standardmäßig geöffnet, man muss sie also in einem zweiten Schritt schließen – wenn man nicht die entsprechenden Einstellungen händisch aktiviert. Betroffen sind das Notizen-Fenster (<i>Kartei &gt; Notizen</i>), das Bedeutungsgerüst (<i>Kartei &gt; Bedeutungsgerüst</i>) und das aus diesem heraus zu öffnende Tag-Fenster sowie die Karteikarte. Diese Änderungen greifen nur bei Neuinstallationen des Programms; bei bestehenden Installationen werden die Einstellungen <em>nicht</em> automatisch geändert.</li>
-					<li>Der Titel des Drucken-Fensters wurde in <i>Druckvorschau</i> geändert.</li>
+					<li>Die Standardeinstellungen wurden geändert, was das Schließen von Funktionen und Fenstern angeht, in denen ein Speichervorgang ausgelöst werden kann. Die Funktionen und Fenster bleiben nach dem Speichern fortan standardmäßig geöffnet, man muss sie also in einem zweiten Schritt schließen – wenn man nicht die entsprechenden Einstellungen händisch aktiviert. Betroffen sind das Notizen-Fenster (<i>Kartei &gt; Notizen</i>), das Bedeutungsgerüst (<i>Kartei &gt; Bedeutungsgerüst</i>) und das aus diesem heraus zu öffnende Tag-Fenster sowie die Karteikarte. Diese Änderungen greifen nur bei Neuinstallationen des Programms; bei bestehenden Installationen werden die Einstellungen <em>nicht</em> automatisch angepasst.</li>
+					<li>Neue Programmfenster werden nun nach Möglichkeit nicht mehr an derselben Position geöffnet, an der sich das Fenster befindet, aus dem heraus sie geöffnet werden. Standardmäßig werden sie relativ zum gerade fokussierten Fenster um 100 Pixel nach rechts und 100 Pixel nach unten verschoben, allerdings nur, wenn sie dadurch nicht im Off verschwinden. Alternativ wird versucht, sie um 100 Pixel nach links und/oder 100 Pixel nach oben zu versetzen. Würden sie bei irgendeiner der Kombinationen nicht mehr vollständig auf dem Bildschirm sichtbar sein oder weiß die App nicht, welches Programmfenster gerade fokussiert ist (weil eine neue Kartei <abbr title="zum Beispiel">z. B.</abbr> aus einem Dateimanager heraus aufgerufen wurde), öffnet sich das Fenster <a href="#einstellungen-fenster" class="link-handbuch">an der letzten gespeicherten Position</a>.</li>
 				</ul>
 
 				<h3>Behobene Fehler</h3>
 
 				<ul>
 					<li>Annotierungsfunktion: Wurden über die Belegliste Annotierungen vorgenommen, wurde das Änderungsdatum der betreffenden Karteikarte nicht angepasst.</li>
-					<li>Annotierungsfunktion: In einer Detailansicht, die sehr flach war, weil der Beleg nur wenige Zeilen umfasste und keine weiteren Details eingeblendet wurden, konnte es geschehen, dass das Annotierungsfenster hinter dem in der Liste folgenden Belegkopf verschwand. In solchen Fällen wird es nun links oder rechts neben dem zu annotierenden Text angezeigt, je nachdem wie viel Platz an den entsprechenden Stellen zur Verfügung steht.</li>
+					<li>Annotierungsfunktion: In einer Detailansicht, die sehr flach war, weil der Beleg nur wenige Zeilen umfasste und keine weiteren Details eingeblendet wurden, konnte es geschehen, dass das Annotierungsfenster hinter dem in der Liste folgenden Belegkopf verschwand. In solchen Fällen wird das Fenster nun links oder rechts neben dem zu annotierenden Text angezeigt, je nachdem wie viel Platz an den entsprechenden Stellen zur Verfügung steht.</li>
 					<li>Belegliste: Die mit Version 0.20.0 erfolgte Reparatur der Anzeige des Meldungsfensters, das beim blockweisen Hinzufügen von Bedeutungen aus dem Bedeutungsgerüst-Fenster erscheint, hat das Austragen von Bedeutungen nicht berücksichtigt. Die Zählzeichen werden nun auch in diesem Fall vom Text der Bedeutung abgesetzt dargestellt.</li>
-					<li>Bedeutungsgerüst-Fenster: Das Ein- oder Austragen von Bedeutungen in Belegliste oder Karteikarte wird nun unterbunden, wenn sie durch ein anderes Fenster verdeckt werden (potenzielle Fehlerquelle).</li>
+					<li>Bedeutungsgerüst-Fenster: Das Ein- oder Austragen von Bedeutungen in Belegliste oder Karteikarte wird nun unterbunden, wenn sie durch ein Overlay-Fenster verdeckt werden (potenzielle Fehlerquelle).</li>
 					<li>Bedeutungsgerüst-Fenster: Beim blockweisen Ein- oder Austragen von Bedeutungen in allen in der Belegliste sichtbaren Belegen wurde das Änderungsdatum der Belege nicht aufgefrischt.</li>
+					<li>Notizen-Fenster: Der Klick auf das Schließen-Icon produzierte einen Fehler, weil das Programm irrigerweise annahm, es handle sich hierbei um ein Text-Tool.</li>
 				</ul>
 			</div>
 

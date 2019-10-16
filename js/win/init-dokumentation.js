@@ -1,13 +1,13 @@
 "use strict";
 
-window.addEventListener("load", function() {
+window.addEventListener("load", () => {
 	// FENSTERTTYP REGISTRIEREN
 	window.fenstertyp = "dokumentation";
 
 	// PROGRAMM-NAME EINTRAGEN
 	try { // damit die Dokumentation auch im Browser geladen werden kann und die Navigation funktioniert
 		const {app} = require("electron").remote;
-		document.querySelectorAll(".app-name").forEach(function(i) {
+		document.querySelectorAll(".app-name").forEach(i => {
 			i.textContent = app.getName().replace("'", "’");
 		});
 	} catch (err) {}
@@ -19,7 +19,7 @@ window.addEventListener("load", function() {
 	document.addEventListener("keydown", helferWin.tastatur);
 
 	// RECHTSKLICK ABFANGEN
-	window.addEventListener("contextmenu", function(evt) {
+	window.addEventListener("contextmenu", evt => {
 		evt.preventDefault();
 		popup.oeffnen(evt);
 	});
@@ -27,35 +27,35 @@ window.addEventListener("load", function() {
 	// EVENTS INITIALISIEREN
 	// Suche
 	hilfe.sucheListener(document.getElementById("suchfeld"));
-	document.getElementById("suchfeld-lupe").addEventListener("click", function(evt) {
+	document.getElementById("suchfeld-lupe").addEventListener("click", evt => {
 		evt.preventDefault();
 		hilfe.sucheWechseln();
 	});
-	document.getElementById("suchleiste-link").addEventListener("click", function(evt) {
+	document.getElementById("suchleiste-link").addEventListener("click", evt => {
 		evt.preventDefault();
 		suchleiste.einblenden();
 	});
-	document.getElementById("navi-back").addEventListener("click", function(evt) {
+	document.getElementById("navi-back").addEventListener("click", evt => {
 		evt.preventDefault();
 		hilfe.historyNavi(false);
 	});
-	document.getElementById("navi-forward").addEventListener("click", function(evt) {
+	document.getElementById("navi-forward").addEventListener("click", evt => {
 		evt.preventDefault();
 		hilfe.historyNavi(true);
 	});
 	// Über-Fenster
 	try { // s. o.
 		// Über App
-		document.querySelectorAll("#icon, .ueber-app").forEach(function(i) {
-			i.addEventListener("click", function(evt) {
+		document.querySelectorAll("#icon, .ueber-app").forEach(i => {
+			i.addEventListener("click", evt => {
 				evt.preventDefault();
 				const {ipcRenderer} = require("electron");
 				ipcRenderer.send("ueber-app");
 			});
 		});
 		// Über Electron
-		document.querySelectorAll(".ueber-electron").forEach(function(i) {
-			i.addEventListener("click", function(evt) {
+		document.querySelectorAll(".ueber-electron").forEach(i => {
+			i.addEventListener("click", evt => {
 				evt.preventDefault();
 				const {ipcRenderer} = require("electron");
 				ipcRenderer.send("ueber-electron");
@@ -69,7 +69,7 @@ window.addEventListener("load", function() {
 	// Navigation
 	document.querySelectorAll(`a[class^="link-sektion-"`).forEach(a => hilfe.sektion(a));
 	// interne Sprung-Links
-	document.querySelectorAll(`a[href^="#"]`).forEach(function(a) {
+	document.querySelectorAll(`a[href^="#"]`).forEach(a => {
 		if (/^#[a-z]/.test(a.getAttribute("href"))) {
 			hilfe.naviSprung(a);
 		}
@@ -85,7 +85,7 @@ window.addEventListener("load", function() {
 	hilfe.sektionWechseln("start", false);
 });
 
-window.addEventListener("beforeunload", function() {
+window.addEventListener("beforeunload", () => {
 	// Fenster dereferenzieren
 	const {remote, ipcRenderer} = require("electron"),
 		win = remote.getCurrentWindow();

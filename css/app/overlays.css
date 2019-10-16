@@ -103,6 +103,12 @@
 	mask-image: url(../../img/heading-schliessen.svg);
 }
 
+.icon-handbuch {
+	-webkit-mask-image: url(../../img/heading-handbuch.svg);
+	mask-image: url(../../img/heading-handbuch.svg);
+	right: 34px !important;
+}
+
 .overlay {
 	opacity: 0;
 	transition: opacity .2s ease;
@@ -1218,7 +1224,7 @@ input[id^="redaktion-person"] {
 /* Gerüst wechseln ------------------------------ */
 #geruestwechseln > div {
 	margin-top: 40px;
-	max-width: 300px;
+	max-width: 325px;
 }
 
 .icon-h-geruestwechseln {

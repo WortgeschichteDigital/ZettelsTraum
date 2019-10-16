@@ -481,16 +481,16 @@
 
 		<!-- OVERLAY: Einstellungen -->
 		<div id="einstellungen" class="overlay aus"><div>
-			<h2><span class="icon-h icon-h-einstellungen"> </span>Einstellungen<a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"> </a></h2>
+			<h2><span class="icon-h icon-h-einstellungen"> </span>Einstellungen<a href="#" class="icon-link icon-handbuch" title="Abschnitt im Handbuch öffnen" data-handbuch="einstellungen"> </a><a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"> </a></h2>
 			<div id="einstellungen-cont">
 				<div>
 					<ul>
 						<li><a href="#" id="einstellungen-link-allgemeines" class="aktiv">Allgemeines</a></li>
 						<li><a href="#" id="einstellungen-link-menue">Menü</a></li>
 						<li><a href="#" id="einstellungen-link-notizen">Notizen</a></li>
-						<li><a href="#" id="einstellungen-link-bedeutungen">Bedeutungsgerüst</a></li>
+						<li><a href="#" id="einstellungen-link-bedeutungsgeruest">Bedeutungsgerüst</a></li>
 						<li><a href="#" id="einstellungen-link-karteikarte">Karteikarte</a></li>
-						<li><a href="#" id="einstellungen-link-filter">Filterleiste</a></li>
+						<li><a href="#" id="einstellungen-link-filterleiste">Filterleiste</a></li>
 						<li><a href="#" id="einstellungen-link-belegliste">Belegliste</a></li>
 					</ul>
 				</div>
@@ -585,7 +585,7 @@
 					</section>
 
 					<!-- Bedeutungsgerüst -->
-					<section id="einstellungen-sec-bedeutungen" class="aus">
+					<section id="einstellungen-sec-bedeutungsgeruest" class="aus">
 						<p><input type="checkbox" id="einstellung-bedeutungen-schliessen"
 							><label for="einstellung-bedeutungen-schliessen">Bedeutungsgerüst nach dem Speichern schließen</label></p>
 						<h3>Tag-Fenster</h3>
@@ -617,7 +617,7 @@
 					</section>
 
 					<!-- Filterleiste -->
-					<section id="einstellungen-sec-filter" class="aus">
+					<section id="einstellungen-sec-filterleiste" class="aus">
 						<p><input type="checkbox" id="einstellung-filter-zuklappen"
 							><label for="einstellung-filter-zuklappen">beim Öffnen eines Filterblocks die anderen Blöcke zuklappen</label></p>
 						<p><input type="checkbox" id="einstellung-filter-inaktive"
@@ -665,7 +665,7 @@
 		<!-- OVERLAY: Karteisuche -->
 		<div id="karteisuche" class="overlay aus"><div>
 			<h2><span class="icon-h icon-h-karteisuche"> </span
-				>Karteisuche<a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"> </a></h2>
+				>Karteisuche<a href="#" class="icon-link icon-handbuch" title="Abschnitt im Handbuch öffnen" data-handbuch="menue-programm-karteisuche"> </a><a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"> </a></h2>
 			<div id="karteisuche-cont">
 				<div>
 					<p><input type="button" value="Suche starten" id="karteisuche-suchen"></p>
@@ -683,7 +683,7 @@
 		<!-- OVERLAY: Formvarianten -->
 		<div id="stamm" class="overlay aus"><div>
 			<h2><span class="icon-h icon-h-stamm"> </span
-				>Formvarianten<a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"> </a></h2>
+				>Formvarianten<a href="#" class="icon-link icon-handbuch" title="Abschnitt im Handbuch öffnen" data-handbuch="menue-kartei-formvarianten"> </a><a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"> </a></h2>
 			<div id="stamm-cont">
 				<div id="stamm-kopf"></div>
 				<div id="stamm-liste"></div>
@@ -697,7 +697,7 @@
 		<div id="notizen" class="overlay aus"><div>
 			<h2><span class="icon-h icon-h-notizen"> </span
 				>Notizen<span id="notizen-geaendert" class="aus">*</span
-				><a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"> </a></h2>
+				><a href="#" class="icon-link icon-handbuch" title="Abschnitt im Handbuch öffnen" data-handbuch="menue-kartei-notizen"> </a><a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"> </a></h2>
 			<div id="notizen-cont">
 				<p
 					><span
@@ -728,7 +728,7 @@
 		<!-- OVERLAY: Anhänge -->
 		<div id="anhaenge" class="overlay aus"><div>
 			<h2><span class="icon-h icon-h-anhaenge"> </span
-				>Anhänge<a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"> </a></h2>
+				>Anhänge<a href="#" class="icon-link icon-handbuch" title="Abschnitt im Handbuch öffnen" data-handbuch="menue-kartei-anhaenge"> </a><a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"> </a></h2>
 			<div id="anhaenge-rahmen">
 				<div id="anhaenge-cont" data-anhaenge="kartei"></div>
 			</div>
@@ -737,7 +737,7 @@
 		<!-- OVERLAY: Überprüfte Lexika -->
 		<div id="lexika" class="overlay aus"><div>
 			<h2><span class="icon-h icon-h-lexika"> </span
-				>Überprüfte Lexika<a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"> </a></h2>
+				>Überprüfte Lexika<a href="#" class="icon-link icon-handbuch" title="Abschnitt im Handbuch öffnen" data-handbuch="menue-kartei-lexika"> </a><a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"> </a></h2>
 			<div id="lexika-cont">
 				<div id="lexika-liste"></div>
 				<p class="input-text"><input type="text" value="" id="lexika-text"
@@ -748,7 +748,7 @@
 		<!-- OVERLAY: Metadaten -->
 		<div id="meta" class="overlay aus"><div>
 			<h2><span class="icon-h icon-h-meta"> </span
-				>Metadaten<a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"> </a></h2>
+				>Metadaten<a href="#" class="icon-link icon-handbuch" title="Abschnitt im Handbuch öffnen" data-handbuch="menue-kartei-metadaten"> </a><a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"> </a></h2>
 			<div id="meta-cont">
 				<div>
 					<h3>Erstellt</h3>
@@ -775,7 +775,7 @@
 		<!-- OVERLAY: Redaktion -->
 		<div id="redaktion" class="overlay aus"><div>
 			<h2><span class="icon-h icon-h-redaktion"> </span
-				>Redaktion<a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"> </a></h2>
+				>Redaktion<a href="#" class="icon-link icon-handbuch" title="Abschnitt im Handbuch öffnen" data-handbuch="menue-kartei-redaktion"> </a><a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"> </a></h2>
 			<div id="redaktion-cont"></div>
 		</div></div>
 
@@ -783,7 +783,7 @@
 		<div id="tagger" class="overlay aus"><div>
 			<h2><span class="icon-h icon-h-tagger"> </span
 				>Tags<span id="tagger-geaendert" class="aus">*</span
-				><a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"> </a></h2>
+				><a href="#" class="icon-link icon-handbuch" title="Abschnitt im Handbuch öffnen" data-handbuch="bedeutungsgeruest-tagFenster"> </a><a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"> </a></h2>
 			<div id="tagger-cont">
 				<div id="tagger-bedeutung"></div>
 				<div id="tagger-typen"></div>
@@ -795,14 +795,14 @@
 		<!-- OVERLAY: Gerüste -->
 		<div id="gerueste" class="overlay aus"><div>
 			<h2><span class="icon-h icon-h-gerueste"> </span
-				>Bedeutungsgerüste<a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"> </a></h2>
+				>Bedeutungsgerüste<a href="#" class="icon-link icon-handbuch" title="Abschnitt im Handbuch öffnen" data-handbuch="bedeutungsgeruest-konfigurationsfenster"> </a><a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"> </a></h2>
 			<div id="gerueste-cont"></div>
 		</div></div>
 
 		<!-- OVERLAY: Gerüst wechseln -->
 		<div id="geruestwechseln" class="overlay aus"><div>
 			<h2><span class="icon-h icon-h-geruestwechseln"> </span
-				>Bedeutungsgerüst wechseln<a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"> </a></h2>
+				>Bedeutungsgerüst wechseln<a href="#" class="icon-link icon-handbuch" title="Abschnitt im Handbuch öffnen" data-handbuch="menue-kartei-bedeutungsgeruestWechseln"> </a><a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"> </a></h2>
 			<div id="geruestwechseln-cont"
 				><span class="dropdown-cont"
 					><input type="text" value="" class="dropdown-feld" id="geruestwechseln-dropdown" tabindex="-1" readonly title="Bedeutungsgerüst auswählen"
@@ -815,7 +815,7 @@
 		<!-- OVERLAY: Sonderzeichen -->
 		<div id="sonderzeichen" class="overlay aus"><div>
 			<h2><span class="icon-h icon-h-sonderzeichen"> </span
-				>Sonderzeichen einfügen<a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"> </a></h2>
+				>Sonderzeichen einfügen<a href="#" class="icon-link icon-handbuch" title="Abschnitt im Handbuch öffnen" data-handbuch="karteikarte-sonderzeichen"> </a><a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"> </a></h2>
 			<div id="sonderzeichen-cont"
 				><span>&lt;</span
 				><span>&gt;</span
@@ -831,7 +831,7 @@
 		<!-- OVERLAY: Zeitraumgrafik -->
 		<div id="zeitraumgrafik" class="overlay aus"><div>
 			<h2><span class="icon-h icon-h-zeitraumgrafik"> </span
-				>Zeitliche Verteilung<a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"
+				>Zeitliche Verteilung<a href="#" class="icon-link icon-handbuch" title="Abschnitt im Handbuch öffnen" data-handbuch="filter-zeitraumgrafik"> </a><a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"
 				> </a></h2>
 			<div id="zeitraumgrafik-cont">
 				<div><canvas width="700" height="400"></canvas></div>
@@ -864,7 +864,7 @@
 		<!-- OVERLAY: Druckvorschau -->
 		<div id="drucken" class="overlay aus"><div>
 			<h2><span class="icon-h icon-h-drucken"> </span
-				>Druckvorschau<a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"
+				>Druckvorschau<a href="#" class="icon-link icon-handbuch" title="Abschnitt im Handbuch öffnen" data-handbuch="bedeutungsgeruest-druckvorschau"> </a><a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"
 				> </a></h2>
 			<div id="drucken-head"
 				><span><img src="img/drucken-gross.svg" width="48" height="48" alt=""><br>Drucken</span
@@ -878,7 +878,7 @@
 		<!-- OVERLAY: Kopierfunktion (Liste) -->
 		<div id="kopieren-liste" class="overlay aus"><div>
 			<h2><span class="icon-h icon-h-kopieren"> </span
-				>Belege kopieren<a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"
+				>Belege kopieren<a href="#" class="icon-link icon-handbuch" title="Abschnitt im Handbuch öffnen" data-handbuch="menue-belege-kopieren"> </a><a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"
 				> </a></h2>
 			<div id="kopieren-liste-head"
 				><span id="kopieren-liste-leeren"><img src="img/leeren-gross.svg" width="48" height="48" alt=""><br>Leeren</span
@@ -894,7 +894,7 @@
 		<!-- OVERLAY: Kopierfunktion (Einfügen) -->
 		<div id="kopieren-einfuegen" class="overlay aus"><div>
 			<h2><span class="icon-h icon-h-einfuegen"> </span
-				>Belege einfügen<a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"
+				>Belege einfügen<a href="#" class="icon-link icon-handbuch" title="Abschnitt im Handbuch öffnen" data-handbuch="menue-belege-einfuegen"> </a><a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"
 				> </a></h2>
 			<div id="kopieren-einfuegen-head"
 				><span id="kopieren-einfuegen-einfuegen"><img src="img/einfuegen-gross.svg" width="48" height="48" alt=""><br>Einfügen</span

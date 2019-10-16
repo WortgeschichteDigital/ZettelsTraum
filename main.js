@@ -664,16 +664,38 @@ fenster = {
 	//   kartei = String
 	//     (Pfad zur Kartei, die geöffnet werden soll)
 	erstellen (kartei) {
+		// Position und Größe des Fensters ermitteln;
+		const Bildschirm = require("electron").screen.getPrimaryDisplay();
+		let x = optionen.data.fenster ? optionen.data.fenster.x : null,
+			y = optionen.data.fenster ? optionen.data.fenster.y : null,
+			width = optionen.data.fenster ? optionen.data.fenster.width : 1100,
+			height = optionen.data.fenster ? optionen.data.fenster.height : Bildschirm.workArea.height;
+		// Position des Fensters anpassen, falls das gerade fokussierte Fenster ein Hauptfenster ist
+		let w = BrowserWindow.getFocusedWindow();
+		if (w && win[w.id].typ === "index") {
+			let wBounds = w.getBounds();
+			// Verschieben in der Horizontalen
+			if (wBounds.x + width + 100 <= Bildschirm.workArea.width) {
+				x = wBounds.x + 100;
+			} else if (wBounds.x - 100 >= 0) {
+				x = wBounds.x - 100;
+			}
+			// Verschieben in der Vertikalen
+			if (wBounds.y + height + 100 <= Bildschirm.workArea.height) {
+				y = wBounds.y + 100;
+			} else if (wBounds.y - 100 >= 0) {
+				y = wBounds.y - 100;
+			}
+		}
 		// Fenster öffnen
 		// (die Optionen können noch fehlen)
-		const Bildschirm = require("electron").screen.getPrimaryDisplay();
 		let bw = new BrowserWindow({
 			title: app.getName().replace("'", "’"),
 			icon: path.join(__dirname, "img", "icon", "linux", "icon_32px.png"),
-			x: optionen.data.fenster ? optionen.data.fenster.x : null,
-			y: optionen.data.fenster ? optionen.data.fenster.y : null,
-			width: optionen.data.fenster ? optionen.data.fenster.width : 1100,
-			height: optionen.data.fenster ? optionen.data.fenster.height : Bildschirm.workArea.height,
+			x: x,
+			y: y,
+			width: width,
+			height: height,
 			minWidth: 600,
 			minHeight: 350,
 			autoHideMenuBar: optionen.data.einstellungen ? optionen.data.einstellungen.autoHideMenuBar : false,
@@ -1135,12 +1157,12 @@ app.on("ready", function() {
 
 // App beenden, wenn alle Fenster geschlossen worden sind
 app.on("window-all-closed", function() {
+	// Optionen schreiben
+	clearTimeout(optionen.schreibenTimeout);
+	optionen.schreiben();
 	// auf MacOS bleibt das Programm üblicherweise aktiv,
 	// bis die BenutzerIn es explizit beendet
 	if (process.platform !== "darwin") {
-		// Optionen schreiben
-		clearTimeout(optionen.schreibenTimeout);
-		optionen.schreiben();
 		// App beenden
 		app.quit();
 	}

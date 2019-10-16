@@ -1,6 +1,6 @@
 "use strict";
 
-window.addEventListener("load", function() {
+window.addEventListener("load", () => {
 	// Fensterttyp registrieren
 	window.fenstertyp = "fehlerlog";
 	// Über App
@@ -15,7 +15,7 @@ window.addEventListener("load", function() {
 	fehlerlog.fuellen(fehler);
 });
 
-window.addEventListener("beforeunload", function() {
+window.addEventListener("beforeunload", () => {
 	// Fenster dereferenzieren
 	const {remote, ipcRenderer} = require("electron"),
 		win = remote.getCurrentWindow();

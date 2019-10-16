@@ -1,12 +1,12 @@
 "use strict";
 
-window.addEventListener("load", function() {
+window.addEventListener("load", () => {
 	// FENSTERTTYP REGISTRIEREN
 	window.fenstertyp = "changelog";
 
 	// PROGRAMM-NAME EINTRAGEN
 	const {app} = require("electron").remote;
-	document.querySelectorAll(".app-name").forEach(function(i) {
+	document.querySelectorAll(".app-name").forEach(i => {
 		i.textContent = app.getName().replace("'", "’");
 	});
 
@@ -15,16 +15,16 @@ window.addEventListener("load", function() {
 
 	// EVENTS INITIALISIEREN
 	// Über App
-	document.querySelectorAll("#icon, .ueber-app").forEach(function(i) {
-		i.addEventListener("click", function(evt) {
+	document.querySelectorAll("#icon, .ueber-app").forEach(i => {
+		i.addEventListener("click", evt => {
 			evt.preventDefault();
 			const {ipcRenderer} = require("electron");
 			ipcRenderer.send("ueber-app");
 		});
 	});
 	// Über Electron
-	document.querySelectorAll(".ueber-electron").forEach(function(i) {
-		i.addEventListener("click", function(evt) {
+	document.querySelectorAll(".ueber-electron").forEach(i => {
+		i.addEventListener("click", evt => {
 			evt.preventDefault();
 			const {ipcRenderer} = require("electron");
 			ipcRenderer.send("ueber-electron");
@@ -33,7 +33,7 @@ window.addEventListener("load", function() {
 	// Handbuch und Dokumentation
 	document.querySelectorAll(".link-handbuch, .link-dokumentation").forEach(a => helferWin.oeffne(a));
 	// Icons
-	document.querySelectorAll("#changelog-icons a").forEach(function(a) {
+	document.querySelectorAll("#changelog-icons a").forEach(a => {
 		a.addEventListener("click", function(evt) {
 			evt.preventDefault();
 			if (/suchleiste$/.test(this.id)) {
@@ -45,7 +45,7 @@ window.addEventListener("load", function() {
 	});
 });
 
-window.addEventListener("beforeunload", function() {
+window.addEventListener("beforeunload", () => {
 	// Fenster dereferenzieren
 	const {remote, ipcRenderer} = require("electron"),
 		win = remote.getCurrentWindow();

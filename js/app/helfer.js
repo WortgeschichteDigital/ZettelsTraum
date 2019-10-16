@@ -872,4 +872,25 @@ let helfer = {
 			kartei.oeffnenEinlesen(ziel);
 		});
 	},
+	// Handbuch an einer bestimmten Stelle aufschlagen
+	//   a = Element
+	//     (der Link, der einen abschnitt im Handbuch referenziert)
+	handbuchLink (a) {
+		a.addEventListener("click", function(evt) {
+			evt.preventDefault();
+			let abschnitt = this.dataset.handbuch;
+			// Aufruf aus den Einstellungen => Abschnitt um Sektionen-ID ergänzen
+			if (overlay.oben() === "einstellungen") {
+				for (let section of document.querySelectorAll("#einstellungen-cont section")) {
+					if (!section.classList.contains("aus")) {
+						abschnitt += `-${section.id.replace(/.+-/, "")}`;
+						break;
+					}
+				}
+			}
+			// Signal an den Main-Prozess
+			const {ipcRenderer} = require("electron");
+			ipcRenderer.send("hilfe-handbuch", abschnitt);
+		});
+	},
 };

@@ -114,7 +114,7 @@
 					<p>Einige Hinweise, die Ihnen den Umgang mit dem Handbuch <abbr title="eventuell">evtl.</abbr> erleichtern:</p>
 
 					<ul>
-						<li>Ist Ihnen die <b>Schrift zu klein</b>, können Sie sie mit einem Tastaturkürzel vergrößern: unter <i>Windows</i> <kbd>Strg</kbd> + <kbd>+</kbd>, unter <i>Linux</i> <kbd>Strg</kbd> + <kbd>Shift</kbd> + <kbd>+</kbd>. (Nicht das + neben dem Nummernblock, sondern das neben der Enter-Taste.)</li>
+						<li>Ist Ihnen die <b>Schrift zu klein</b>, können Sie sie mit dem Tastaturkürzel <kbd>Strg</kbd> + <kbd>Shift</kbd> + <kbd>+</kbd> vergrößern. (Nicht das + neben dem Nummernblock, sondern das neben der Enter-Taste.)</li>
 
 						<li>Ist Ihnen die <b>Schrift zu groß</b>, können Sie sie mit dem Tastaturkürzel <kbd>Strg</kbd> + <kbd>-</kbd> verkleinern.</li>
 
@@ -132,12 +132,14 @@
 
 						<li>Den aktuell geöffneten Abschnitt können Sie mit der <b>Suchleiste</b> durchsuchen. Sie lässt sich über <kbd>F3</kbd> oder das Icon <img src="../img/suchleiste.svg" width="24" height="24" alt=""> (rechts neben dem Suchfeld) öffnen.</li>
 
+						<li>Durch die einzelnen <b>Abschnitte</b> des Handbuchs können Sie mit dem Tastaturkürzeln <kbd>Strg</kbd> + <kbd>⇧</kbd> <abbr title="beziehungsweise">bzw.</abbr> <kbd>⇩</kbd> navigieren.</li>
+
 						<li>
 							<p>Das Handbuch merkt sich, welche Links oder Menüpunkte im Inhaltsverzeichnis Sie anklicken und speichert Sie in einer <b>Verlaufshistorie</b>. Mit dem Pfeil <img src="../img/hilfe-navi-back.svg" width="24" height="24" alt=""> (rechts neben dem Suchfeld) können Sie zur vorherigen Position zurückspringen und mit <img src="../img/hilfe-navi-forward.svg" width="24" height="24" alt=""> danach in der Verlaufshistorie wieder vorwärts wandern.</p>
 
 							<p>Sie können auch mit den Tastaturkürzeln <kbd>Alt</kbd> + <kbd>⇦</kbd> <abbr title="beziehungsweise">bzw.</abbr> <kbd>⇨</kbd> durch die Verlaufshistorie navigieren (dieselben Kürzel wie in gängigen Internetbrowsern).</p>
 
-							<p>Das Handbuch merkt sich den genauen Punkt, an dem Sie waren, als Sie auf einen Link oder Menüpunkt geklickt haben.</p>
+							<p>Das Handbuch merkt sich in der Verlaufshistorie immer den genauen Punkt, an dem Sie waren, als Sie auf einen Link oder Menüpunkt geklickt haben – also nicht nur den Abschnitt, sondern auch die Scroll-Position.</p>
 						</li>
 
 						<li>
@@ -325,7 +327,7 @@
 					<div class="info">
 						<p id="karteikarte-maskieren">Der Inhalt des Textfeldes wird so behandelt, als sei er in <abbr title="Hypertext Markup Language" lang="en">HTML</abbr> formatiert (was bei einem automatischen Import aus dem <abbr title="Deutschen Textarchiv">DTA</abbr> tatsächlich wohl immer der Fall ist). Sie können zur Auszeichnung des Textes somit alle standardisierten <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>-Tags verwenden. Das heißt aber auch, dass die Spitzklammern &lt; und &gt; maskiert werden müssen, wenn sie literal und nicht als Begrenzungen von Tags gemeint sind. Wollen Sie literale Spitzklammern eingeben, müssen Sie <code class="quelltext">&amp;lt;</code> <abbr title="beziehungsweise">bzw.</abbr> <code class="quelltext">&amp;gt;</code> tippen.</p>
 
-						<p>Über das Icon <img src="../img/tool-sonderzeichen.svg" width="20" height="20" alt=""> können einige Sonderzeichen an der Stelle des Belegs eingefügt werden, an der sich der Cursor gerade befindet, darunter auch die maskierten Spitzklammern.</p>
+						<p id="karteikarte-sonderzeichen">Über das Icon <img src="../img/tool-sonderzeichen.svg" width="20" height="20" alt=""> können einige Sonderzeichen an der Stelle des Belegs eingefügt werden, an der sich der Cursor gerade befindet, darunter auch die maskierten Spitzklammern.</p>
 
 						<p>Um Text zu formatieren, müssen sie ihn einfach nur markieren und auf eines der Text-Tool-Icons über dem Belegfeld klicken. Mit <img src="../img/tool-italic.svg" width="20" height="20" alt=""> lässt sich der markierte Text <abbr title="beispielsweise">bspw.</abbr> kursivieren. Welche Formatierungsfunktion die einzelnen Icons haben, steht in einem Tooltip, der angezeigt wird, wenn die Maus über dem Icon schwebt.</p>
 
@@ -417,7 +419,7 @@
 
 					<p>Zum Ändern des aktuellen Gerüsts muss nicht notwendigerweise die Bedeutungsgerüst-Funktion geöffnet werden. Sie können das Gerüst karteiweit auch über den Menüpunkt <a href="#menue-kartei-bedeutungsgeruestWechseln"><i>Kartei &gt; Bedeutungsgerüst wechseln</i></a> ändern. Ist das Bedeutungsgerüst nicht geöffnet, wird die im Bedeutungsgerüst-wechseln-Fenster vorgenommene Einstellung umgehend umgesetzt.</p>
 
-					<p>Über das hinter dem Textfeld für das aktuell eingestellte Gerüst stehende Icon <img src="../img/gerueste-config.svg" width="24" height="24" alt=""> erreichen Sie ein <b>Konfigurationsfenster</b>, in dem Gerüste hinzugefügt, gelöscht und (um)benannt werden können. <i>Gerüst 1</i> lässt sich nicht löschen. Hat man einem Gerüst einen Namen gegeben, erscheint dieser in der Überschrift des Bedeutungsgerüsts und auch im <a href="#bedeutungsgeruest-fenster">Bedeutungsgerüst-Fenster</a> sowie an den entsprechenden Stellen in der <a href="#" class="link-sektion-belegliste">Belegliste</a>, der <a href="#" class="link-sektion-filter">Filterleiste</a> und der <a href="#" class="link-sektion-karteikarte">Karteikarte</a>.</p>
+					<p id="bedeutungsgeruest-konfigurationsfenster">Über das hinter dem Textfeld für das aktuell eingestellte Gerüst stehende Icon <img src="../img/gerueste-config.svg" width="24" height="24" alt=""> erreichen Sie ein <b>Konfigurationsfenster</b>, in dem Gerüste hinzugefügt, gelöscht und (um)benannt werden können. <i>Gerüst 1</i> lässt sich nicht löschen. Hat man einem Gerüst einen Namen gegeben, erscheint dieser in der Überschrift des Bedeutungsgerüsts und auch im <a href="#bedeutungsgeruest-fenster">Bedeutungsgerüst-Fenster</a> sowie an den entsprechenden Stellen in der <a href="#" class="link-sektion-belegliste">Belegliste</a>, der <a href="#" class="link-sektion-filter">Filterleiste</a> und der <a href="#" class="link-sektion-karteikarte">Karteikarte</a>.</p>
 
 					<p>Zum (Um-)Benennen eines Gerüsts müssen Sie im Konfigurationsfenster auf den Namen oder den Platzhaltertext <i>kein Name</i> klicken. Änderungen in dem sich öffnenden Textfeld speichern Sie durch <kbd>⏎</kbd>.</p>
 
@@ -578,7 +580,7 @@
 
 					<p class="info">Die Tag-Listen speisen sich aus Tag-Dateien (im <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Format), die mit dem Programm verknüpft wurden. Welche Dateien dies sind, können Sie im Einstellungen-Fenster einsehen: <i>Programm &gt; Einstellungen &gt; Bedeutungsgerüst &gt; Tag-Dateien</i>. Wie Sie diese ändern wird <a href="#einstellungen-bedeutungsgeruest">im betreffenden <abbr title="Abschnitt">Abschn.</abbr> zu den Einstellungen</a> beschrieben.</p>
 
-					<p>Die Textfelder im Tag-Fenster haben <a href="#karteikarte-dropdown">Dropdown-Menüs</a>, die ganz genauso wie alle Dropdown-Menüs im Programm funktionieren: Sie können Sie über den Pfeil <img src="../img/dropdown.svg" width="20" height="20" alt=""> oder <kbd>⇩</kbd> öffnen, um die gesamte Liste zu sehen. Beim Tippen im Feld baut sich das Menü hingegen automatisch mit einer gefilterten Vorschlagsliste auf. Die Textfelder sind immer einzeilig; mehrere Werte werden durch <code class="quelltext">, </code> (Komma, gefolgt von einem Leerzeichen) voneinander getrennt.</p>
+					<p id="bedeutungsgeruest-tagFenster">Die Textfelder im Tag-Fenster haben <a href="#karteikarte-dropdown">Dropdown-Menüs</a>, die ganz genauso wie alle Dropdown-Menüs im Programm funktionieren: Sie können Sie über den Pfeil <img src="../img/dropdown.svg" width="20" height="20" alt=""> oder <kbd>⇩</kbd> öffnen, um die gesamte Liste zu sehen. Beim Tippen im Feld baut sich das Menü hingegen automatisch mit einer gefilterten Vorschlagsliste auf. Die Textfelder sind immer einzeilig; mehrere Werte werden durch <code class="quelltext">, </code> (Komma, gefolgt von einem Leerzeichen) voneinander getrennt.</p>
 
 					<p>Ist eines der Textfelder fokussiert, können Sie mit <kbd>⏎</kbd> das Speichern des Tag-Fensters auslösen. (Ist noch ein Dropdown-Menü geöffnet löst <kbd>⏎</kbd> wie gehabt die Auswahl des im Menü selektierten Wertes aus.) Drücken Sie hingegen <kbd>Esc</kbd>, schließt sich das Tag-Fenster.</p>
 
@@ -1004,7 +1006,7 @@
 						<figcaption>zeitliche Verteilung der Belege</figcaption>
 					</figure>
 
-					<p>Im Kopf der Filterleiste gibt es ein Icon (<img src="../img/filter-zeitraumgrafik.svg" width="24" height="24" alt="">), mit dem Sie sich die zeitliche Verteilung der in der Kartei gesammelten Belege in einem Diagramm anzeigen lassen können. Auf der x-Achse finden sich Zeitschnitte in 10-, 50- oder 100-Jahresschritten. Die Abstände der angezeigten Zeitschnitte hängen zum einen von der Einstellung im <a href="#filter-zeitraum"><i>Zeitraum</i>-Filter</a> ab und zum anderen von dem zur Verfügung stehenden Platz. Auf der y-Achse ist die Anzahl der Belege aufgetragen. Die Kurve selbst orientiert sich immer an der Einstellung der Zeitschnitte im <i>Zeitraum</i>-Filter. Selbst wenn auf der y-Achse <abbr title="beispielsweise">bspw.</abbr> nicht genug Platz ist, um alle 10-Jahresschritte zu markieren, wird die Kurve in 10-Jahresschritten gezeichnet. Die Höhe eines Punktes in der Kurve ergibt sich aus der Anzahl der Belege, die sich innerhalb eines Zeitschnitts (vom Beginn bis zum Ende minus ein Jahr) befinden.</p>
+					<p id="filter-zeitraumgrafik">Im Kopf der Filterleiste gibt es ein Icon (<img src="../img/filter-zeitraumgrafik.svg" width="24" height="24" alt="">), mit dem Sie sich die zeitliche Verteilung der in der Kartei gesammelten Belege in einem Diagramm anzeigen lassen können. Auf der x-Achse finden sich Zeitschnitte in 10-, 50- oder 100-Jahresschritten. Die Abstände der angezeigten Zeitschnitte hängen zum einen von der Einstellung im <a href="#filter-zeitraum"><i>Zeitraum</i>-Filter</a> ab und zum anderen von dem zur Verfügung stehenden Platz. Auf der y-Achse ist die Anzahl der Belege aufgetragen. Die Kurve selbst orientiert sich immer an der Einstellung der Zeitschnitte im <i>Zeitraum</i>-Filter. Selbst wenn auf der y-Achse <abbr title="beispielsweise">bspw.</abbr> nicht genug Platz ist, um alle 10-Jahresschritte zu markieren, wird die Kurve in 10-Jahresschritten gezeichnet. Die Höhe eines Punktes in der Kurve ergibt sich aus der Anzahl der Belege, die sich innerhalb eines Zeitschnitts (vom Beginn bis zum Ende minus ein Jahr) befinden.</p>
 
 					<h2 id="filter-dynamische">Hartcodierte und dynamische Filter</h2>
 
@@ -1164,6 +1166,38 @@
 
 				<!-- EINSTELLUNGEN -->
 				<section id="sektion-einstellungen" class="suche">
+					<p>Das Verhalten und die Ansicht der App lässt sich in vielerlei Hinsicht anpassen. Einen großen Teil der möglichen Anpassungen kann man in dem internen Programmfenster vornehmen, das über den Menüpunkt <a href="#menue-programm-einstellungen"><i>Programm &gt; Einstellungen</i></a> zu erreichen ist. Die dort zu findenden Konfigurationsmöglichkeiten werden <a href="#einstellungen-allgemeines">in diesem Abschnitt weiter unten</a> detailliert beschrieben.</p>
+
+					<p>Alle im Einstellungen-Fenster vorgenommenen Änderungen werden umgehend an die anderen Hauptfenster des Programms übermittelt und dort sofort wirksam. Insofern verhalten sich diese Einstellungen anders als Einstellungen, die an anderen Stellen des Programms vorgenommen werden können. Denn Konfigurationsmöglichkeiten, die von der App gespeichert und nach einem Neustart wiederhergestellt werden, finden sich in vielen Funktionen und Ansichten. Ein wesentlicher Unterschied besteht allerdings darin, dass sie nicht sofort in allen Programmfenstern aktiv werden, weil dies die Flexibilität des Handlings der Oberfläche einschränken würde.</p>
+
+					<p>Weitere Konfigurationsmöglichkeiten befinden sich in diesen Programmteilen:</p>
+
+					<ul>
+						<li>
+							<p id="einstellungen-weitereBelegliste"><b>Belegliste:</b> Der Status aller <a href="#belegliste-kopfleiste">Icons in der Kopfleiste</a>, die aktiviert (in der Ansicht also grün hinterlegt) oder deaktiviert (grau hinterlegt) werden können, wird nach dem Neustart der App wiederhergestellt. Änderungen bleiben dabei auf das Programmfenster beschränkt, in dem sie vorgenommen wurden. Auf diese Weise können Sie in verschiedenen Programmfenstern die Ansicht der Belegliste je individuell gestalten.</p>
+
+							<p>Arbeiten Sie mit mehreren Fenstern: Beim Schließen des Programms wird der Icon-Status desjenigen Fensters dauerhaft gespeichert, das als letztes geschlossen wurde.</p>
+						</li>
+
+						<li>
+							<p><b>Filterleiste:</b> Auch in der Filterleiste gibt es Einstellungen, die zwar gespeichert und wiederhergestellt, aber nicht sofort in allen Programmfenstern wirksam werden. Dies sind im Einzelnen die Konfiguration der <a href="#filter-erweiterteSuchfilter"><i>erweiterten Suchfilter</i></a>, die Frequenz der Zeitschnitte im <a href="#filter-zeitraum"><i>Zeitraum</i>-Filter</a> und die <a href="#filter-logik">Filterlogik</a> im <a href="#filter-verschiedenes">Filter <i>Verschiedenes</i></a>.</p>
+
+							<p>Arbeiten Sie mit mehreren Fenstern: Beim Schließen des Programms werden die Konfigurationen desjenigen Fensters dauerhaft gespeichert, das als letztes geschlossen wurde.</p>
+						</li>
+
+						<li>
+							<p><b>Karteikarte:</b> Für die Icons in der <a href="#karteikarte-kopfleiste">Kopfleiste der Leseansicht</a>, die aktivier- und deaktivierbar sind, gilt dasselbe wie für die <a href="#einstellungen-weitereBelegliste">Icons in der Belegliste</a>: Sie werden nicht sofort in anderen Programmfenstern aktiv; gespeichert wird der Icon-Status desjenigen Programmfensters, das als letztes geschlossen wurde.</p>
+						</li>
+
+						<li><b>Karteisuche:</b> Benutzen Sie die hinter dem Menüpunkt <a href="#menue-programm-karteisuche"><i>Programm &gt; Karteisuche</i></a> stehende Funktion, werden die dort eingegebenen Pfade und Filter ebenfalls gespeichert. Auch die hier vorgenommenen Einstellungen beziehen sich nur auf das aktuelle Programmfenster. Und auch in diesem Fall gilt, dass die Konfiguration des zuletzt geschlossenen Fensters nach dem Neustart wiederhergestellt wird.</li>
+
+						<li><b>Kopierfunktion:</b> Die Konfiguration der beim Kopieren zu übernehmenden Datenfelder im <a href="#menue-belege-einfuegen">Einfügen-Fenster der Kopierfunktion</a> werden gespeichert und nach dem Neustart der App wiederhergestellt. Anders als die zuvor erwähnten Konfigurationsmöglichkeiten außerhalb des Einstellungen-Fensters werden Änderungen jedoch unmittelbar an alle anderen Programmfenster übertragen. Allerdings werden sie dort erst dann aktiv, wenn das Einfügen-Fenster geschlossen und erneut geöffnet wurde.</li>
+
+						<li id="einstellungen-fenster"><b>Fenstergröße und -position:</b> Beim Schließen merkt sich das Programm die Größe und Position des Programmfensters, um diese nach dem Neustart wiederherzustellen. Dasselbe wird mit dem <a href="#bedeutungsgeruest-fenster">Bedeutungsgerüst-Fenster</a> gemacht. Da mehrere Programm- und Bedeutungsgerüst-Fenster zugleich geöffnet werden können: Gespeichert werden immer die Werte des zuletzt geschlossenen Fensters.</li>
+
+						<li><b>Zuletzt verwendet:</b> Die <a href="#menue-kartei-zuletztVerwendet">Liste der zuletzt geöffneten Karteien</a> wird in allen Programmfenstern auf dem neusten Stand gehalten. Öffnen Sie aus einem der Programmfenster heraus eine Kartei, werden alle offenen Programmfenster umgehend darüber benachrichtigt, welches die zuletzt geöffnete Kartei ist.</li>
+					</ul>
+
 					<h2 id="einstellungen-allgemeines">Allgemeines</h2>
 
 					<p class="erklaerung-option">BearbeiterIn auf diesem Rechner</p>
@@ -1262,7 +1296,7 @@ Mustermann, Erika
 							<figcaption>Quick-Access-Bar mit einigen Icons</figcaption>
 						</figure>
 
-						<p>Bei der Quick-Access-Bar handelt es sich um eine kleine Leiste am oberen Rand des Programmfensters, in der Icons abgelegt werden können. Die Icons ermöglichen einen Schnellzugriff auf eine Vielzahl an Funktionen, denn für jeden der Punkte in den Menüs <i>Programm, Kartei</i> und <i>Belege</i> steht ein eigenes Icon zur Verfügung – ausgenommen der Funktion <i>Kartei &gt; Zuletzt verwendet</i>.</p>
+						<p>Bei der Quick-Access-Bar handelt es sich um eine kleine Leiste am oberen Rand des Programmfensters, in der Icons abgelegt werden können. Die Icons ermöglichen einen Schnellzugriff auf eine Vielzahl an Funktionen, denn für jeden der Punkte in den Menüs <i>Programm, Kartei</i> und <i>Belege</i> steht ein eigenes Icon zur Verfügung – ausgenommen der Funktion <a href="#menue-kartei-zuletztVerwendet"><i>Kartei &gt; Zuletzt verwendet</i></a>.</p>
 
 						<p>Die Icons, die angezeigt werden sollen, wählt man sich aus der Liste unterhalb dieser Einstellung aus. Die Quick-Access-Bar wird nur eingeblendet, wenn mindestens eine Funktion aus dieser Liste ausgewählt <em>und</em> die Option <i>Quick-Access-Bar anzeigen</i> aktiviert wurde.</p>
 					</div>
@@ -1442,32 +1476,51 @@ Mustermann, Erika
 				<section id="sektion-menue-programm" class="suche">
 					<p class="erklaerung-icon-menues"><img src="../img/quick-neues-fenster.svg" width="24" height="24" alt="">Neues Fenster</p>
 
-					<p class="info"><mark>…</mark></p>
+					<div class="info">
+						<figure class="right" title="zum Vergrößern anklicken">
+							<img src="../img/win/hb-menue-programm-start.png" alt="">
+							<figcaption>Startseite der App</figcaption>
+						</figure>
+
+						<p>Öffnet ein leeres Hauptfenster. Angezeigt wird die Startseite mit den Buttons <i>Kartei erstellen</i> und <i>Kartei öffnen</i> sowie eine Liste der zuletzt verwendeten Karteien.</p>
+
+						<p>Die Liste zuletzt verwendeter Karteien ist auf zehn Einträge begrenzt. Sobald eine gelistete Kartei geöffnet wird, rückt diese an die oberste Stelle der Liste. Wird eine elfte Kartei geöffnet, verschwindet der letzte Listeneintrag. Es verschwindet also der Eintrag der Kartei, die am längsten nicht geöffnet wurde. Auf Wunsch können Sie in dieser Ansicht einzelne Einträge manuell aus der Liste entfernen: <i>Rechtsklick &gt; Aus Liste entfernen</i>.</p>
+
+						<p>Zum Erstellen einer neuen Kartei kann man auch auf den Platzhaltertext <i>keine Kartei geöffnet</i> klicken. Außerdem kann man die Befehle in der Menüleiste nutzen. Allerdings stehen einem im Menü <a href="#" class="link-sektion-menue-kartei">Kartei</a> nur die Befehle <i>Erstellen, Öffnen</i> und <i>Zuletzt verwendet</i> und im Menü <a href="#" class="link-sektion-menue-belege">Belege</a> überhaupt kein Punkt zur Verfügung. Unter <i>Linux</i> und <i>Windows</i> sind die deaktivierten Einträge ausgegraut; in <i>macOS</i> reagiert das Programm nicht, wenn man einen deaktivierten Eintrag auswählt.</p>
+
+						<p>Wird in einem Programmfenster, in dem gerade eine Kartei geöffnet ist, eine weitere <a href="#menue-kartei-oeffnen">Kartei geöffnet</a> oder eine <a href="#menue-kartei-erstellen">neue Kartei erstellt</a>, wird automatisch zum nächsten leeren Fenster gewechselt, sodass Fenster wie dieses auf Ihrem Desktop nicht überhandnehmen.</p>
+
+						<p>Beim Start der App wird überprüft, ob die Karteien in der Liste noch auf dem Rechner zu finden sind. Ist dem nicht der Fall, werden sie aus der Liste entfernt.</p>
+					</div>
 
 					<p class="erklaerung-icon-menues" id="menue-programm-karteisuche"><img src="../img/quick-suche.svg" width="24" height="24" alt="">Karteisuche</p>
 
 					<p class="info"><mark>…</mark></p>
 
-					<p class="erklaerung-icon-menues"><img src="../img/quick-einstellungen.svg" width="24" height="24" alt="">Einstellungen</p>
+					<p class="erklaerung-icon-menues" id="menue-programm-einstellungen"><img src="../img/quick-einstellungen.svg" width="24" height="24" alt="">Einstellungen</p>
 
-					<p class="info"><mark>…</mark></p>
+					<p class="info">Öffnet im Hauptfenster ein internes Fenster, das alle andere Funktionen verdeckt. In diesem Fenster finden Sie ein ganzes Bündel an Konfigurationsmöglichkeiten, die ausführlich im <a href="#" class="link-sektion-einstellungen"><abbr title="Abschnitt">Abschn.</abbr> Einstellungen</a> beschrieben werden.</p>
 
 					<p class="erklaerung-icon-menues"><img src="../img/quick-beenden.svg" width="24" height="24" alt="">Beenden</p>
 
-					<p class="info"><mark>…</mark></p>
+					<div class="info">
+						<p>Schließt alle Programmfenster und beendet das Programm. Unter <i>macOS</i> werden zwar alle Fenster geschlossen, das Programm bleibt aber solange aktiv, bis Sie es explizit beenden.</p>
+
+						<p>Gibt es Programmfenster, in denen Änderungen noch nicht übernommen wurden, fragt Sie die App, ob Sie diese nicht erst einmal speichern möchten. Erst dann werden die Fenster geschlossen. Mitunter müssen Sie das Schließen dieser Fenster noch einmal selbst anstoßen. Das hängt davon ab, was genau noch nicht gespeichert war.</p>
+					</div>
 				</section>
 
 				<!-- MENÜPUNKT KARTEI -->
 				<section id="sektion-menue-kartei" class="suche">
-					<p class="erklaerung-icon-menues"><img src="../img/quick-erstellen.svg" width="24" height="24" alt="">Erstellen</p>
+					<p class="erklaerung-icon-menues" id="menue-kartei-erstellen"><img src="../img/quick-erstellen.svg" width="24" height="24" alt="">Erstellen</p>
 
 					<p class="info"><mark>…</mark></p>
 
-					<p class="erklaerung-icon-menues"><img src="../img/quick-oeffnen.svg" width="24" height="24" alt="">Öffnen</p>
+					<p class="erklaerung-icon-menues" id="menue-kartei-oeffnen"><img src="../img/quick-oeffnen.svg" width="24" height="24" alt="">Öffnen</p>
 
 					<p class="info"><mark>…</mark></p>
 
-					<p class="erklaerung-icon-menues"><img src="../img/heading-zuletzt.svg" width="24" height="24" alt="">Zuletzt verwendet</p>
+					<p class="erklaerung-icon-menues" id="menue-kartei-zuletztVerwendet"><img src="../img/heading-zuletzt.svg" width="24" height="24" alt="">Zuletzt verwendet</p>
 
 					<p class="info"><mark>…</mark></p>
 
@@ -1495,7 +1548,7 @@ Mustermann, Erika
 
 					<p class="info"><mark>…</mark></p>
 
-					<p class="erklaerung-icon-menues"><img src="../img/quick-lexika.svg" width="24" height="24" alt="">Überprüfte Lexika</p>
+					<p class="erklaerung-icon-menues" id="menue-kartei-lexika"><img src="../img/quick-lexika.svg" width="24" height="24" alt="">Überprüfte Lexika</p>
 
 					<p class="info"><mark>…</mark></p>
 
