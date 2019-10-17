@@ -85,7 +85,7 @@ let karteisuche = {
 			} else {
 				let img = document.createElement("img");
 				span.insertBefore(img, span.lastChild);
-				img.src = "img/fehler.svg";
+				img.src = "img/x-dick-rot.svg";
 				img.width = "24";
 				img.height = "24";
 				karteisuche.pfadFehler(img);

@@ -275,8 +275,6 @@ let suchleiste = {
 		ele.querySelectorAll(".link-handbuch, .link-dokumentation").forEach(a => helferWin.oeffne(a));
 		// Changelog öffnen (Dokumentation und Handbuch)
 		ele.querySelectorAll(".link-changelog").forEach(a => helferWin.oeffneChangelog(a));
-		// Links zu Sektionen (Dokumentation und Handbuch)
-		ele.querySelectorAll(`a[class^="link-sektion-"`).forEach(a => hilfe.sektion(a));
 		// interne Sprung-Links (Dokumentation und Handbuch)
 		ele.querySelectorAll(`a[href^="#"]`).forEach(function(a) {
 			if (typeof hilfe !== "undefined" &&

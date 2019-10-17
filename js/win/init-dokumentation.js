@@ -66,8 +66,6 @@ window.addEventListener("load", () => {
 	document.querySelectorAll(".link-handbuch").forEach(a => helferWin.oeffne(a));
 	// Changelog
 	document.querySelectorAll(".link-changelog").forEach(a => helferWin.oeffneChangelog(a));
-	// Navigation
-	document.querySelectorAll(`a[class^="link-sektion-"`).forEach(a => hilfe.sektion(a));
 	// interne Sprung-Links
 	document.querySelectorAll(`a[href^="#"]`).forEach(a => {
 		if (/^#[a-z]/.test(a.getAttribute("href"))) {

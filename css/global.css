@@ -23,12 +23,12 @@ a[href^="#"] {
 }
 
 a[href^="http"]::after {
-	content: url(../img/link.svg);
+	content: url(../img/link-extern-gruen-12.svg);
 	padding-left: 3px;
 }
 
 footer a[href^="http"]::after {
-	content: url(../img/link-weiss.svg);
+	content: url(../img/link-extern-weiss-12.svg);
 }
 
 /* Farbe Textauswahl ---------------------------- */

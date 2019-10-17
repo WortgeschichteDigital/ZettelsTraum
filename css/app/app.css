@@ -210,7 +210,7 @@ input[type="button"] {
 	border: 0;
 	border-radius: 3px;
 	padding: 0 8px 0 33px;
-	background: var(--farbeB) url(../../img/button-check.svg) no-repeat 4px center;
+	background: var(--farbeB) url(../../img/check-weiss.svg) no-repeat 4px center;
 	color: #fff;
 }
 
@@ -220,38 +220,38 @@ input[type="button"]:focus {
 
 input[type="button"][value="Abbrechen"],
 input[type="button"][value="Schließen"] {
-	background-image: url(../../img/button-cancel.svg);
+	background-image: url(../../img/x-dick-weiss.svg);
 }
 
 input[type="button"][value="DTA-Import"],
 input[type="button"][value="Importieren"],
 input[type="button"][value^="Personenliste"],
 input[type="button"][value="Tag-Datei laden"] {
-	background-image: url(../../img/button-import.svg);
+	background-image: url(../../img/dokument-import-weiss.svg);
 }
 
 input[type="button"][value="Ergänzen"] {
-	background-image: url(../../img/button-ergaenzen.svg);
+	background-image: url(../../img/plus-weiss.svg);
 }
 
 input[type="button"][value="Kopieren"] {
-	background-image: url(../../img/button-kopieren.svg);
+	background-image: url(../../img/kopieren-weiss.svg);
 }
 
 input[type="button"][value="Löschen"] {
-	background-image: url(../../img/button-delete.svg);
+	background-image: url(../../img/muelleimer-weiss.svg);
 }
 
 input[type="button"][value="Nein"] {
-	background-image: url(../../img/button-no.svg);
+	background-image: url(../../img/stopp-weiss.svg);
 }
 
 input[type="button"][value="Speichern"] {
-	background-image: url(../../img/button-save.svg);
+	background-image: url(../../img/speichern-weiss.svg);
 }
 
 input[type="button"][value^="Suche"] {
-	background-image: url(../../img/button-suchen.svg);
+	background-image: url(../../img/lupe-weiss.svg);
 }
 
 input[type="checkbox"],
@@ -479,7 +479,7 @@ textarea:focus {
 }
 
 .annotierung-wort::after {
-	content: url(../../img/annotierung.svg);
+	content: url(../../img/zeilen-3,5-12.svg);
 	position: relative;
 	top: -5px;
 	margin-left: 2px;

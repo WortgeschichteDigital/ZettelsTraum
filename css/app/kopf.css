@@ -25,108 +25,108 @@
 }
 
 #quick-programm-neues-fenster {
-	-webkit-mask-image: url(../../img/quick-neues-fenster.svg);
-	mask-image: url(../../img/quick-neues-fenster.svg);
+	-webkit-mask-image: url(../../img/fenster-plus.svg);
+	mask-image: url(../../img/fenster-plus.svg);
 }
 
 #quick-programm-karteisuche {
-	-webkit-mask-image: url(../../img/quick-karteisuche.svg);
-	mask-image: url(../../img/quick-karteisuche.svg);
+	-webkit-mask-image: url(../../img/lupe.svg);
+	mask-image: url(../../img/lupe.svg);
 }
 
 #quick-programm-einstellungen {
-	-webkit-mask-image: url(../../img/quick-einstellungen.svg);
-	mask-image: url(../../img/quick-einstellungen.svg);
+	-webkit-mask-image: url(../../img/zahnrad.svg);
+	mask-image: url(../../img/zahnrad.svg);
 }
 
 #quick-programm-beenden {
-	-webkit-mask-image: url(../../img/quick-beenden.svg);
-	mask-image: url(../../img/quick-beenden.svg);
+	-webkit-mask-image: url(../../img/ausgang.svg);
+	mask-image: url(../../img/ausgang.svg);
 }
 
 #quick-kartei-erstellen {
-	-webkit-mask-image: url(../../img/quick-erstellen.svg);
-	mask-image: url(../../img/quick-erstellen.svg);
+	-webkit-mask-image: url(../../img/dokument-plus.svg);
+	mask-image: url(../../img/dokument-plus.svg);
 }
 
 #quick-kartei-oeffnen {
-	-webkit-mask-image: url(../../img/quick-oeffnen.svg);
-	mask-image: url(../../img/quick-oeffnen.svg);
+	-webkit-mask-image: url(../../img/oeffnen.svg);
+	mask-image: url(../../img/oeffnen.svg);
 }
 
 #quick-kartei-speichern {
-	-webkit-mask-image: url(../../img/quick-speichern.svg);
-	mask-image: url(../../img/quick-speichern.svg);
+	-webkit-mask-image: url(../../img/speichern.svg);
+	mask-image: url(../../img/speichern.svg);
 }
 
 #quick-kartei-speichern-unter {
-	-webkit-mask-image: url(../../img/quick-speichern-unter.svg);
-	mask-image: url(../../img/quick-speichern-unter.svg);
+	-webkit-mask-image: url(../../img/speichern-unter.svg);
+	mask-image: url(../../img/speichern-unter.svg);
 }
 
 #quick-kartei-formvarianten {
-	-webkit-mask-image: url(../../img/quick-formvarianten.svg);
-	mask-image: url(../../img/quick-formvarianten.svg);
+	-webkit-mask-image: url(../../img/formvarianten.svg);
+	mask-image: url(../../img/formvarianten.svg);
 }
 
 #quick-kartei-notizen {
-	-webkit-mask-image: url(../../img/quick-notizen.svg);
-	mask-image: url(../../img/quick-notizen.svg);
+	-webkit-mask-image: url(../../img/stift.svg);
+	mask-image: url(../../img/stift.svg);
 }
 
 #quick-kartei-anhaenge {
-	-webkit-mask-image: url(../../img/quick-anhaenge.svg);
-	mask-image: url(../../img/quick-anhaenge.svg);
+	-webkit-mask-image: url(../../img/bueroklammer.svg);
+	mask-image: url(../../img/bueroklammer.svg);
 }
 
 #quick-kartei-lexika {
-	-webkit-mask-image: url(../../img/quick-lexika.svg);
-	mask-image: url(../../img/quick-lexika.svg);
+	-webkit-mask-image: url(../../img/buecher.svg);
+	mask-image: url(../../img/buecher.svg);
 }
 
 #quick-kartei-metadaten {
-	-webkit-mask-image: url(../../img/quick-metadaten.svg);
-	mask-image: url(../../img/quick-metadaten.svg);
+	-webkit-mask-image: url(../../img/zeilen-4,0.svg);
+	mask-image: url(../../img/zeilen-4,0.svg);
 }
 
 #quick-kartei-redaktion {
-	-webkit-mask-image: url(../../img/quick-redaktion.svg);
-	mask-image: url(../../img/quick-redaktion.svg);
+	-webkit-mask-image: url(../../img/personen.svg);
+	mask-image: url(../../img/personen.svg);
 }
 
 #quick-kartei-bedeutungen {
-	-webkit-mask-image: url(../../img/quick-bedeutungen.svg);
-	mask-image: url(../../img/quick-bedeutungen.svg);
+	-webkit-mask-image: url(../../img/geruest.svg);
+	mask-image: url(../../img/geruest.svg);
 }
 
 #quick-kartei-bedeutungen-wechseln {
-	-webkit-mask-image: url(../../img/quick-bedeutungen-wechseln.svg);
-	mask-image: url(../../img/quick-bedeutungen-wechseln.svg);
+	-webkit-mask-image: url(../../img/geruest-zahnrad.svg);
+	mask-image: url(../../img/geruest-zahnrad.svg);
 }
 
 #quick-kartei-bedeutungen-fenster {
-	-webkit-mask-image: url(../../img/quick-bedeutungen-fenster.svg);
-	mask-image: url(../../img/quick-bedeutungen-fenster.svg);
+	-webkit-mask-image: url(../../img/fenster.svg);
+	mask-image: url(../../img/fenster.svg);
 }
 
 #quick-kartei-suche {
-	-webkit-mask-image: url(../../img/quick-suche.svg);
-	mask-image: url(../../img/quick-suche.svg);
+	-webkit-mask-image: url(../../img/lupe.svg);
+	mask-image: url(../../img/lupe.svg);
 }
 
 #quick-kartei-schliessen {
-	-webkit-mask-image: url(../../img/quick-schliessen.svg);
-	mask-image: url(../../img/quick-schliessen.svg);
+	-webkit-mask-image: url(../../img/x-dick.svg);
+	mask-image: url(../../img/x-dick.svg);
 }
 
 #quick-belege-hinzufuegen {
-	-webkit-mask-image: url(../../img/quick-hinzufuegen.svg);
-	mask-image: url(../../img/quick-hinzufuegen.svg);
+	-webkit-mask-image: url(../../img/dokument-plus.svg);
+	mask-image: url(../../img/dokument-plus.svg);
 }
 
 #quick-belege-auflisten {
-	-webkit-mask-image: url(../../img/quick-auflisten.svg);
-	mask-image: url(../../img/quick-auflisten.svg);
+	-webkit-mask-image: url(../../img/liste-bullets.svg);
+	mask-image: url(../../img/liste-bullets.svg);
 }
 
 #quick-belege-sortieren {
@@ -135,13 +135,68 @@
 }
 
 #quick-belege-kopieren {
-	-webkit-mask-image: url(../../img/quick-kopieren.svg);
-	mask-image: url(../../img/quick-kopieren.svg);
+	-webkit-mask-image: url(../../img/kopieren.svg);
+	mask-image: url(../../img/kopieren.svg);
 }
 
 #quick-belege-einfuegen {
-	-webkit-mask-image: url(../../img/quick-einfuegen.svg);
-	mask-image: url(../../img/quick-einfuegen.svg);
+	-webkit-mask-image: url(../../img/einfuegen.svg);
+	mask-image: url(../../img/einfuegen.svg);
+}
+
+#quick-bearbeiten-rueckgaengig {
+	-webkit-mask-image: url(../../img/pfeil-rund-links.svg);
+	mask-image: url(../../img/pfeil-rund-links.svg);
+}
+
+#quick-bearbeiten-wiederherstellen {
+	-webkit-mask-image: url(../../img/pfeil-rund-rechts.svg);
+	mask-image: url(../../img/pfeil-rund-rechts.svg);
+}
+
+#quick-bearbeiten-ausschneiden {
+	-webkit-mask-image: url(../../img/schere.svg);
+	mask-image: url(../../img/schere.svg);
+}
+
+#quick-bearbeiten-kopieren {
+	-webkit-mask-image: url(../../img/kopieren.svg);
+	mask-image: url(../../img/kopieren.svg);
+}
+
+#quick-bearbeiten-einfuegen {
+	-webkit-mask-image: url(../../img/einfuegen.svg);
+	mask-image: url(../../img/einfuegen.svg);
+}
+
+#quick-bearbeiten-alles-auswaehlen {
+	-webkit-mask-image: url(../../img/auswaehlen.svg);
+	mask-image: url(../../img/auswaehlen.svg);
+}
+
+#quick-ansicht-anzeige-vergroessern {
+	-webkit-mask-image: url(../../img/plus-quadrat.svg);
+	mask-image: url(../../img/plus-quadrat.svg);
+}
+
+#quick-ansicht-anzeige-verkleinern {
+	-webkit-mask-image: url(../../img/minus-quadrat.svg);
+	mask-image: url(../../img/minus-quadrat.svg);
+}
+
+#quick-ansicht-standardgroesse {
+	-webkit-mask-image: url(../../img/fenster-standard.svg);
+	mask-image: url(../../img/fenster-standard.svg);
+}
+
+#quick-ansicht-vollbild {
+	-webkit-mask-image: url(../../img/fenster-vollbild.svg);
+	mask-image: url(../../img/fenster-vollbild.svg);
+}
+
+#quick-hilfe-handbuch {
+	-webkit-mask-image: url(../../img/kreis-fragezeichen.svg);
+	mask-image: url(../../img/kreis-fragezeichen.svg);
 }
 
 .quick-spacer {
@@ -244,7 +299,7 @@ body > header span {
 	border-radius: 10px;
 	width: 48px;
 	height: 48px;
-	background: #fff url(../../img/kopieren-gross-farbe.svg) no-repeat;
+	background: #fff url(../../img/kopieren-blau-48.svg) no-repeat;
 	color: var(--text);
 	font-size: 16px;
 	font-weight: bold;

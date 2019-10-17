@@ -15,14 +15,14 @@ let redaktion = {
 	// (das muss in einem getrennten Objekt sein, weil die Ereignisse
 	// für das Dropdown-Menü einfach zu kopieren sein müssen)
 	ereignisseIcons: {
-		"Kartei erstellt": "redaktion-kartei.svg",
-		"Artikel erstellt": "redaktion-artikel.svg",
-		"Redaktion 1 (Leitung)": "redaktion-korrektur.svg",
-		"Revision": "redaktion-revision.svg",
-		"Redaktion 2 (Kollegium)": "redaktion-korrektur.svg",
-		"Redaktion 3 (Projektleitung)": "redaktion-korrektur.svg",
-		"XML-Auszeichnung": "redaktion-xml.svg",
-		"Artikel online": "redaktion-online.svg",
+		"Kartei erstellt": "dokument-plus.svg",
+		"Artikel erstellt": "dokument.svg",
+		"Redaktion 1 (Leitung)": "auge.svg",
+		"Revision": "stift-quadrat.svg",
+		"Redaktion 2 (Kollegium)": "auge.svg",
+		"Redaktion 3 (Projektleitung)": "auge.svg",
+		"XML-Auszeichnung": "xml.svg",
+		"Artikel online": "kreis-welt.svg",
 	},
 	// Schlüssel der Feldtypen ermitteln, die in jedem Eintrag vorhanden sind
 	feldtypen: {

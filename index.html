@@ -63,7 +63,7 @@
 			><a href="#" id="quick-kartei-erstellen" class="icon-link" title="Kartei: Erstellen (Strg + E)"> </a
 			><a href="#" id="quick-kartei-oeffnen" class="icon-link" title="Kartei: Öffnen (Strg + O)"> </a
 			><a href="#" id="quick-kartei-speichern" class="icon-link" title="Kartei: Speichern (Strg + S)"> </a
-			><a href="#" id="quick-kartei-speichern-unter" class="icon-link" title="Kartei: Speichern unter (Strg + Shift + S)"> </a
+			><a href="#" id="quick-kartei-speichern-unter" class="icon-link" title="Kartei: Speichern unter (Strg + Umsch + S)"> </a
 			><a href="#" id="quick-kartei-schliessen" class="icon-link" title="Kartei: Schließen (Strg + W)"> </a
 			><span class="quick-spacer"> </span
 			><a href="#" id="quick-kartei-formvarianten" class="icon-link" title="Kartei: Formvarianten"> </a
@@ -75,25 +75,39 @@
 			><span class="quick-spacer"> </span
 			><a href="#" id="quick-kartei-bedeutungen" class="icon-link" title="Kartei: Bedeutungsgerüst (Strg + B)"> </a
 			><a href="#" id="quick-kartei-bedeutungen-wechseln" class="icon-link" title="Kartei: Bedeutungsgerüst wechseln (Strg + Alt + B)"> </a
-			><a href="#" id="quick-kartei-bedeutungen-fenster" class="icon-link" title="Kartei: Bedeutungsgerüst-Fenster (Strg + Shift + B)"> </a
+			><a href="#" id="quick-kartei-bedeutungen-fenster" class="icon-link" title="Kartei: Bedeutungsgerüst-Fenster (Strg + Umsch + B)"> </a
 			><a href="#" id="quick-kartei-suche" class="icon-link" title="Kartei: Suche (Strg + F)"> </a
 			><span class="quick-spacer"> </span
 			><a href="#" id="quick-belege-hinzufuegen" class="icon-link" title="Belege: Hinzufügen (Strg + N)"> </a
 			><a href="#" id="quick-belege-auflisten" class="icon-link" title="Belege: Auflisten (Strg + L)"> </a
 			><a href="#" id="quick-belege-kopieren" class="icon-link" title="Belege: Kopieren"> </a
 			><a href="#" id="quick-belege-einfuegen" class="icon-link" title="Belege: Einfügen"> </a
+			><span class="quick-spacer"> </span
+			><a href="#" id="quick-bearbeiten-rueckgaengig" class="icon-link" title="Bearbeiten: Rückgängig (Strg + Z)"> </a
+			><a href="#" id="quick-bearbeiten-wiederherstellen" class="icon-link" title="Bearbeiten: Wiederherstellen (Strg + Umsch + Z)"> </a
+			><a href="#" id="quick-bearbeiten-ausschneiden" class="icon-link" title="Bearbeiten: Ausschneiden (Strg + X)"> </a
+			><a href="#" id="quick-bearbeiten-kopieren" class="icon-link" title="Bearbeiten: Kopieren (Strg + C)"> </a
+			><a href="#" id="quick-bearbeiten-einfuegen" class="icon-link" title="Bearbeiten: Einfügen (Strg + V)"> </a
+			><a href="#" id="quick-bearbeiten-alles-auswaehlen" class="icon-link" title="Bearbeiten: Alles auswählen (Strg + A)"> </a
+			><span class="quick-spacer"> </span
+			><a href="#" id="quick-ansicht-anzeige-vergroessern" class="icon-link" title="Ansicht: Anzeige vergrößern (Strg + Umsch + +)"> </a
+			><a href="#" id="quick-ansicht-anzeige-verkleinern" class="icon-link" title="Ansicht: Anzeige verkleinern (Strg + -)"> </a
+			><a href="#" id="quick-ansicht-standardgroesse" class="icon-link" title="Ansicht: Standardgröße (Strg + 0)"> </a
+			><a href="#" id="quick-ansicht-vollbild" class="icon-link" title="Ansicht: Vollbild (F11)"> </a
+			><span class="quick-spacer"> </span
+			><a href="#" id="quick-hilfe-handbuch" class="icon-link" title="Hilfe: Handbuch (F1)"> </a
 		></div>
 
 		<!-- KOPF -->
 		<header>
 			<h1 id="wort" class="keine-kartei">keine Kartei geöffnet</h1
 				><span id="kartei-geaendert">*</span
-				><span class="kopf-icon aus" id="erinnerungen"><img src="img/kopf-erinnerungen.svg" width="24" height="24" alt="" title="Erinnerungen anzeigen"></span
-				><span class="kopf-icon aus" id="notizen-icon"><img src="img/kopf-notizen.svg" width="24" height="24" alt="" title="Notizen-Fenster anzeigen"></span
-				><span class="kopf-icon aus" id="lexika-icon"><img src="img/kopf-lexika.svg" width="24" height="24" alt="" title="überprüfte Lexika anzeigen"></span
+				><span class="kopf-icon aus" id="erinnerungen"><img src="img/kreis-info-weiss.svg" width="24" height="24" alt="" title="Erinnerungen anzeigen"></span
+				><span class="kopf-icon aus" id="notizen-icon"><img src="img/stift-weiss.svg" width="24" height="24" alt="" title="Notizen-Fenster anzeigen"></span
+				><span class="kopf-icon aus" id="lexika-icon"><img src="img/buecher-weiss.svg" width="24" height="24" alt="" title="überprüfte Lexika anzeigen"></span
 				><span id="kartei-anhaenge"></span
 				><span id="kopieren-aussen" class="aus"><span id="kopieren"></span></span
-				><span id="icon"><img src="img/icon.svg" width="48" height="48" alt=""></span>
+				><span id="icon"><img src="img/icon-app-weiss-48.svg" width="48" height="48" alt=""></span>
 		</header>
 
 		<!-- STARTSEKTION -->
@@ -517,8 +531,8 @@
 						<p><input type="checkbox" id="einstellung-autoHideMenuBar"
 							><label for="einstellung-autoHideMenuBar">Menüleiste des Programms erst einblenden, wenn die Alt-Taste gedrückt wird <span class="einstellung-neustart">(Neustart erforderlich)</span></label></p>
 						<p><input type="checkbox" id="einstellung-quick"
-							><label for="einstellung-quick">Quick-Access-Bar anzeigen</label></p>
-						<div class="einstellungen-spalten">
+							><label for="einstellung-quick">Quick-Access-Bar anzeigen</label> <a href="#" id="einstellungen-quick-alle">alle</a> | <a href="#" id="einstellungen-quick-keine">keine</a> | <a href="#" id="einstellungen-quick-standards">Standards</a></p>
+						<div class="einstellungen-spalten" id="einstellungen-quick-funktionen">
 							<h3>Programm</h3>
 							<p><input type="checkbox" id="einstellung-quick-programm-neues-fenster"
 								><label for="einstellung-quick-programm-neues-fenster">Neues Fenster</label></p>
@@ -571,6 +585,32 @@
 								><label for="einstellung-quick-belege-kopieren">Kopieren</label></p>
 							<p><input type="checkbox" id="einstellung-quick-belege-einfuegen"
 								><label for="einstellung-quick-belege-einfuegen">Einfügen</label></p>
+							<h3>Bearbeiten</h3>
+							<p><input type="checkbox" id="einstellung-quick-bearbeiten-rueckgaengig"
+								><label for="einstellung-quick-bearbeiten-rueckgaengig">Rückgängig</label></p>
+							<p><input type="checkbox" id="einstellung-quick-bearbeiten-wiederherstellen"
+								><label for="einstellung-quick-bearbeiten-wiederherstellen">Wiederherstellen</label></p>
+							<p class="einstellungen-spacer"> </p>
+							<p><input type="checkbox" id="einstellung-quick-bearbeiten-ausschneiden"
+								><label for="einstellung-quick-bearbeiten-ausschneiden">Ausschneiden</label></p>
+							<p><input type="checkbox" id="einstellung-quick-bearbeiten-kopieren"
+								><label for="einstellung-quick-bearbeiten-kopieren">Kopieren</label></p>
+							<p><input type="checkbox" id="einstellung-quick-bearbeiten-einfuegen"
+								><label for="einstellung-quick-bearbeiten-einfuegen">Einfügen</label></p>
+							<p><input type="checkbox" id="einstellung-quick-bearbeiten-alles-auswaehlen"
+								><label for="einstellung-quick-bearbeiten-alles-auswaehlen">Alles auswählen</label></p>
+							<h3>Ansicht</h3>
+							<p><input type="checkbox" id="einstellung-quick-ansicht-anzeige-vergroessern"
+								><label for="einstellung-quick-ansicht-anzeige-vergroessern">Anzeige vergrößern</label></p>
+							<p><input type="checkbox" id="einstellung-quick-ansicht-anzeige-verkleinern"
+								><label for="einstellung-quick-ansicht-anzeige-verkleinern">Anzeige verkleinern</label></p>
+							<p><input type="checkbox" id="einstellung-quick-ansicht-standardgroesse"
+								><label for="einstellung-quick-ansicht-standardgroesse">Standardgröße</label></p>
+							<p><input type="checkbox" id="einstellung-quick-ansicht-vollbild"
+								><label for="einstellung-quick-ansicht-vollbild">Vollbild</label></p>
+							<h3>Hilfe</h3>
+							<p><input type="checkbox" id="einstellung-quick-hilfe-handbuch"
+								><label for="einstellung-quick-hilfe-handbuch">Handbuch</label></p>
 						</div>
 					</section>
 
@@ -629,7 +669,7 @@
 						<p><input type="checkbox" id="einstellung-nicht-karte-gefiltert"
 							><label for="einstellung-nicht-karte-gefiltert">nicht melden, wenn ein neuer Beleg wegen der Filterregeln nicht in der Belegliste erscheint</label></p>
 						<h3>Standardmäßig aufgeklappte Filterblöcke</h3>
-						<div class="einstellungen-spalten">
+						<div class="einstellungen-spalten einstellungen-spalten-flach">
 							<p><input type="checkbox" id="einstellung-filter-offen-volltext"
 								><label for="einstellung-filter-offen-volltext">Volltext</label></p>
 							<p><input type="checkbox" id="einstellung-filter-offen-zeitraum"
@@ -665,7 +705,7 @@
 		<!-- OVERLAY: Karteisuche -->
 		<div id="karteisuche" class="overlay aus"><div>
 			<h2><span class="icon-h icon-h-karteisuche"> </span
-				>Karteisuche<a href="#" class="icon-link icon-handbuch" title="Abschnitt im Handbuch öffnen" data-handbuch="menue-programm-karteisuche"> </a><a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"> </a></h2>
+				>Karteisuche<a href="#" class="icon-link icon-handbuch" title="Abschnitt im Handbuch öffnen" data-handbuch="menueProgramm-karteisuche"> </a><a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"> </a></h2>
 			<div id="karteisuche-cont">
 				<div>
 					<p><input type="button" value="Suche starten" id="karteisuche-suchen"></p>
@@ -683,7 +723,7 @@
 		<!-- OVERLAY: Formvarianten -->
 		<div id="stamm" class="overlay aus"><div>
 			<h2><span class="icon-h icon-h-stamm"> </span
-				>Formvarianten<a href="#" class="icon-link icon-handbuch" title="Abschnitt im Handbuch öffnen" data-handbuch="menue-kartei-formvarianten"> </a><a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"> </a></h2>
+				>Formvarianten<a href="#" class="icon-link icon-handbuch" title="Abschnitt im Handbuch öffnen" data-handbuch="menueKartei-formvarianten"> </a><a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"> </a></h2>
 			<div id="stamm-cont">
 				<div id="stamm-kopf"></div>
 				<div id="stamm-liste"></div>
@@ -697,7 +737,7 @@
 		<div id="notizen" class="overlay aus"><div>
 			<h2><span class="icon-h icon-h-notizen"> </span
 				>Notizen<span id="notizen-geaendert" class="aus">*</span
-				><a href="#" class="icon-link icon-handbuch" title="Abschnitt im Handbuch öffnen" data-handbuch="menue-kartei-notizen"> </a><a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"> </a></h2>
+				><a href="#" class="icon-link icon-handbuch" title="Abschnitt im Handbuch öffnen" data-handbuch="menueKartei-notizen"> </a><a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"> </a></h2>
 			<div id="notizen-cont">
 				<p
 					><span
@@ -728,7 +768,7 @@
 		<!-- OVERLAY: Anhänge -->
 		<div id="anhaenge" class="overlay aus"><div>
 			<h2><span class="icon-h icon-h-anhaenge"> </span
-				>Anhänge<a href="#" class="icon-link icon-handbuch" title="Abschnitt im Handbuch öffnen" data-handbuch="menue-kartei-anhaenge"> </a><a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"> </a></h2>
+				>Anhänge<a href="#" class="icon-link icon-handbuch" title="Abschnitt im Handbuch öffnen" data-handbuch="menueKartei-anhaenge"> </a><a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"> </a></h2>
 			<div id="anhaenge-rahmen">
 				<div id="anhaenge-cont" data-anhaenge="kartei"></div>
 			</div>
@@ -737,7 +777,7 @@
 		<!-- OVERLAY: Überprüfte Lexika -->
 		<div id="lexika" class="overlay aus"><div>
 			<h2><span class="icon-h icon-h-lexika"> </span
-				>Überprüfte Lexika<a href="#" class="icon-link icon-handbuch" title="Abschnitt im Handbuch öffnen" data-handbuch="menue-kartei-lexika"> </a><a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"> </a></h2>
+				>Überprüfte Lexika<a href="#" class="icon-link icon-handbuch" title="Abschnitt im Handbuch öffnen" data-handbuch="menueKartei-lexika"> </a><a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"> </a></h2>
 			<div id="lexika-cont">
 				<div id="lexika-liste"></div>
 				<p class="input-text"><input type="text" value="" id="lexika-text"
@@ -748,7 +788,7 @@
 		<!-- OVERLAY: Metadaten -->
 		<div id="meta" class="overlay aus"><div>
 			<h2><span class="icon-h icon-h-meta"> </span
-				>Metadaten<a href="#" class="icon-link icon-handbuch" title="Abschnitt im Handbuch öffnen" data-handbuch="menue-kartei-metadaten"> </a><a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"> </a></h2>
+				>Metadaten<a href="#" class="icon-link icon-handbuch" title="Abschnitt im Handbuch öffnen" data-handbuch="menueKartei-metadaten"> </a><a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"> </a></h2>
 			<div id="meta-cont">
 				<div>
 					<h3>Erstellt</h3>
@@ -775,7 +815,7 @@
 		<!-- OVERLAY: Redaktion -->
 		<div id="redaktion" class="overlay aus"><div>
 			<h2><span class="icon-h icon-h-redaktion"> </span
-				>Redaktion<a href="#" class="icon-link icon-handbuch" title="Abschnitt im Handbuch öffnen" data-handbuch="menue-kartei-redaktion"> </a><a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"> </a></h2>
+				>Redaktion<a href="#" class="icon-link icon-handbuch" title="Abschnitt im Handbuch öffnen" data-handbuch="menueKartei-redaktion"> </a><a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"> </a></h2>
 			<div id="redaktion-cont"></div>
 		</div></div>
 
@@ -802,7 +842,7 @@
 		<!-- OVERLAY: Gerüst wechseln -->
 		<div id="geruestwechseln" class="overlay aus"><div>
 			<h2><span class="icon-h icon-h-geruestwechseln"> </span
-				>Bedeutungsgerüst wechseln<a href="#" class="icon-link icon-handbuch" title="Abschnitt im Handbuch öffnen" data-handbuch="menue-kartei-bedeutungsgeruestWechseln"> </a><a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"> </a></h2>
+				>Bedeutungsgerüst wechseln<a href="#" class="icon-link icon-handbuch" title="Abschnitt im Handbuch öffnen" data-handbuch="menueKartei-bedeutungsgeruestWechseln"> </a><a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"> </a></h2>
 			<div id="geruestwechseln-cont"
 				><span class="dropdown-cont"
 					><input type="text" value="" class="dropdown-feld" id="geruestwechseln-dropdown" tabindex="-1" readonly title="Bedeutungsgerüst auswählen"
@@ -867,8 +907,8 @@
 				>Druckvorschau<a href="#" class="icon-link icon-handbuch" title="Abschnitt im Handbuch öffnen" data-handbuch="bedeutungsgeruest-druckvorschau"> </a><a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"
 				> </a></h2>
 			<div id="drucken-head"
-				><span><img src="img/drucken-gross.svg" width="48" height="48" alt=""><br>Drucken</span
-				><span><img src="img/kopieren-gross.svg" width="48" height="48" alt=""><br>Kopieren</span
+				><span><img src="img/drucker-48.svg" width="48" height="48" alt=""><br>Drucken</span
+				><span><img src="img/kopieren-48.svg" width="48" height="48" alt=""><br>Kopieren</span
 			></div>
 			<div id="drucken-cont-rahmen">
 				<div id="drucken-cont"></div>
@@ -878,13 +918,13 @@
 		<!-- OVERLAY: Kopierfunktion (Liste) -->
 		<div id="kopieren-liste" class="overlay aus"><div>
 			<h2><span class="icon-h icon-h-kopieren"> </span
-				>Belege kopieren<a href="#" class="icon-link icon-handbuch" title="Abschnitt im Handbuch öffnen" data-handbuch="menue-belege-kopieren"> </a><a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"
+				>Belege kopieren<a href="#" class="icon-link icon-handbuch" title="Abschnitt im Handbuch öffnen" data-handbuch="menueBelege-kopieren"> </a><a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"
 				> </a></h2>
 			<div id="kopieren-liste-head"
-				><span id="kopieren-liste-leeren"><img src="img/leeren-gross.svg" width="48" height="48" alt=""><br>Leeren</span
-				><span id="kopieren-liste-beenden"><img src="img/beenden-gross.svg" width="48" height="48" alt=""><br>Beenden</span
-				><span id="kopieren-liste-export"><img src="img/export-gross.svg" width="48" height="48" alt=""><br>Export</span
-				><span id="kopieren-liste-schliessen"><img src="img/schliessen-gross.svg" width="48" height="48" alt=""><br>Schließen</span
+				><span id="kopieren-liste-leeren"><img src="img/muelleimer-48.svg" width="48" height="48" alt=""><br>Leeren</span
+				><span id="kopieren-liste-beenden"><img src="img/ausgang-48.svg" width="48" height="48" alt=""><br>Beenden</span
+				><span id="kopieren-liste-export"><img src="img/dokument-export-48.svg" width="48" height="48" alt=""><br>Export</span
+				><span id="kopieren-liste-schliessen"><img src="img/x-dick-48.svg" width="48" height="48" alt=""><br>Schließen</span
 			></div>
 			<div id="kopieren-liste-cont-rahmen">
 				<div id="kopieren-liste-cont"></div>
@@ -894,15 +934,15 @@
 		<!-- OVERLAY: Kopierfunktion (Einfügen) -->
 		<div id="kopieren-einfuegen" class="overlay aus"><div>
 			<h2><span class="icon-h icon-h-einfuegen"> </span
-				>Belege einfügen<a href="#" class="icon-link icon-handbuch" title="Abschnitt im Handbuch öffnen" data-handbuch="menue-belege-einfuegen"> </a><a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"
+				>Belege einfügen<a href="#" class="icon-link icon-handbuch" title="Abschnitt im Handbuch öffnen" data-handbuch="menueBelege-einfuegen"> </a><a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"
 				> </a></h2>
 			<div id="kopieren-einfuegen-head"
-				><span id="kopieren-einfuegen-einfuegen"><img src="img/einfuegen-gross.svg" width="48" height="48" alt=""><br>Einfügen</span
+				><span id="kopieren-einfuegen-einfuegen"><img src="img/einfuegen-48.svg" width="48" height="48" alt=""><br>Einfügen</span
 				><span id="kopieren-einfuegen-reload"
 					><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48"><path d="m23.994 10c-7.732 0-14 6.268-14 14s6.268 14 14 14c6.3496 0 11.723-4.2064 13.438-10h-4.3124c-1.5485 3.519-5.0336 6-9.125 6-5.5228 0-10-4.4772-10-10s4.4772-10 10-10c2.7632 0 5.231 1.15 7.0312 2.9688l-5.0196 5.0312h12v-12l-4.1054 4.1054c-2.54-2.53-6.0384-4.1054-9.8984-4.1054h-0.0078z"/></svg
 					><br>Reload</span
-				><span id="kopieren-einfuegen-import"><img src="img/import-gross.svg" width="48" height="48" alt=""><br>Import</span
-				><span id="kopieren-einfuegen-schliessen"><img src="img/schliessen-gross.svg" width="48" height="48" alt=""><br>Schließen</span
+				><span id="kopieren-einfuegen-import"><img src="img/dokument-import-48.svg" width="48" height="48" alt=""><br>Import</span
+				><span id="kopieren-einfuegen-schliessen"><img src="img/x-dick-48.svg" width="48" height="48" alt=""><br>Schließen</span
 			></div>
 			<h3>Belegquellen</h3>
 			<div id="kopieren-einfuegen-daten"></div>

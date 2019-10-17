@@ -26,7 +26,7 @@ let hilfe = {
 			pos = 0;
 		}
 		// Sektion wechseln
-		let sektion = links[pos].classList.item(0).replace(/^link-sektion-/, "");
+		const sektion = links[pos].getAttribute("href").replace(/^#/, "");
 		hilfe.sektionWechseln(sektion);
 	},
 	// korrigiert den Sprung nach Klick auf einen internen Link,
@@ -46,38 +46,25 @@ let hilfe = {
 	//   id = String
 	//     (Zielangabe, also ID, zu der hin der Sprung ausgeführt werden soll)
 	naviSprungAusfuehren (id) {
-		// aktive Sektion ermitteln
+		// ggf. die Sektion wechseln
 		const sek_aktiv = hilfe.sektionAktiv();
-		// Sprungziel ermitteln und ggf. die Sektion wechseln
-		let ziel = document.getElementById(id);
 		if (!new RegExp(`^${sek_aktiv}`).test(id)) {
-			const sek_ziel = id.replace(/^(.+)-.+/, function(m, p1) {
-				return p1;
-			});
+			const sek_ziel = id.split("-")[0];
 			hilfe.sektionWechseln(sek_ziel);
 		} else {
 			// History: Position merken
 			hilfe.history(sek_aktiv);
 		}
-		// Fenster an die korrekte Position scrollen
-		window.scrollTo({
-			left: 0,
-			top: ziel.offsetTop - 70 - 16, // -16, um oben immer ein bisschen padding zu haben; vgl. hilfe.sucheSprung()
-			behavior: "smooth",
-		});
+		// ggf. Fenster an die korrekte Position scrollen
+		if (/-/.test(id)) {
+			window.scrollTo({
+				left: 0,
+				top: document.getElementById(id).offsetTop - 70 - 16, // -16, um oben immer ein bisschen padding zu haben; vgl. hilfe.sucheSprung()
+				behavior: "smooth",
+			});
+		}
 		// History: Pfeile auffrischen (nachdem der Scroll beendet wurde)
 		hilfe.historyScrollArrows();
-	},
-	// Klick-Event zum Wechseln der Sektion
-	//   a = Element
-	//     (Link zur gewünschten Sektion)
-	sektion (a) {
-		a.addEventListener("click", function(evt) {
-			evt.preventDefault();
-			const sektion = this.classList.item(0).replace(/^link-sektion-/, "");
-			hilfe.sektionWechseln(sektion);
-			this.blur();
-		});
 	},
 	// ermittelt die aktive Sektion
 	sektionAktiv () {
@@ -105,7 +92,7 @@ let hilfe = {
 		}
 		// Navigation auffrischen
 		document.querySelectorAll("nav a.kopf").forEach(function(i) {
-			if (i.classList.contains(`link-sektion-${sektion}`)) {
+			if (i.getAttribute("href") === `#${sektion}`) {
 				i.classList.add("aktiv");
 			} else {
 				i.classList.remove("aktiv");
@@ -198,7 +185,7 @@ let hilfe = {
 		let schliessen = document.createElement("img");
 		cont.appendChild(schliessen);
 		schliessen.id = "bild-schliessen";
-		schliessen.src = "../img/schliessen-gross.svg";
+		schliessen.src = "../img/x-dick-48.svg";
 		schliessen.width = "48";
 		schliessen.height = "48";
 		schliessen.title = "Bild schließen (Esc)";
@@ -249,14 +236,14 @@ let hilfe = {
 			img.width = "48";
 			img.height = "48";
 			if (hilfe.bilderData[bilder[i]]) {
-				img.src = `../img/bilder-${bilder[i]}.svg`;
+				img.src = `../img/pfeil-spitz-${bilder[i] === "next" ? "rechts" : "links"}-48.svg`;
 				if (i === 0) {
 					img.title = "vorheriges Bild (←)";
 				} else {
 					img.title = "nächstes Bild (→)";
 				}
 			} else {
-				img.src = `../img/bilder-${bilder[i]}-hell.svg`;
+				img.src = `../img/pfeil-spitz-${bilder[i] === "next" ? "rechts" : "links"}-grau-48.svg`;
 				if (i === 0) {
 					img.title = "kein vorheriges Bild";
 				} else {

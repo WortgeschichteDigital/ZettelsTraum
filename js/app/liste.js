@@ -1190,7 +1190,7 @@ let liste = {
 		// Karte unvollständig?
 		if (beleg.un) {
 			let img = document.createElement("img");
-			img.src = "img/liste-unvollstaendig.svg";
+			img.src = "img/kreis-unvollstaendig.svg";
 			img.width = "24";
 			img.height = "24";
 			img.title = "unvollständig";
@@ -1199,7 +1199,7 @@ let liste = {
 		// Kontext unklar?
 		if (beleg.ko) {
 			let img = document.createElement("img");
-			img.src = "img/liste-kontext.svg";
+			img.src = "img/kontext.svg";
 			img.width = "24";
 			img.height = "24";
 			img.title = "Kontext?";
@@ -1208,7 +1208,7 @@ let liste = {
 		// Bücherdienstauftrag?
 		if (beleg.bu) {
 			let img = document.createElement("img");
-			img.src = "img/liste-buecherdienst.svg";
+			img.src = "img/buch.svg";
 			img.width = "24";
 			img.height = "24";
 			img.title = "Bücherdienst";
@@ -1217,7 +1217,7 @@ let liste = {
 		// Buchung?
 		if (beleg.bc) {
 			let img = document.createElement("img");
-			img.src = "img/liste-buchung.svg";
+			img.src = "img/buch-check-gruen.svg";
 			img.width = "24";
 			img.height = "24";
 			img.title = "Buchung";
@@ -1226,7 +1226,7 @@ let liste = {
 		// Metatext?
 		if (beleg.mt) {
 			let img = document.createElement("img");
-			img.src = "img/liste-metatext.svg";
+			img.src = "img/augen.svg";
 			img.width = "24";
 			img.height = "24";
 			img.title = "Metatext";

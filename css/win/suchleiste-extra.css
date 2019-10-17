@@ -14,8 +14,8 @@
 }
 
 .icon-schliessen {
-	-webkit-mask-image: url(../../img/heading-schliessen.svg);
-	mask-image: url(../../img/heading-schliessen.svg);
+	-webkit-mask-image: url(../../img/x.svg);
+	mask-image: url(../../img/x.svg);
 }
 
 input[type="text"] {

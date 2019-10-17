@@ -23,23 +23,23 @@ let bedeutungenWin = {
 				submenu: [
 					{
 						label: "Schrift vergrößern",
-						icon: path.join(__dirname, "img", "menu", "ansicht-zoom-plus.png"),
+						icon: path.join(__dirname, "img", "menu", "plus-quadrat.png"),
 						role: "zoomIn",
 					},
 					{
 						label: "Schrift verkleinern",
-						icon: path.join(__dirname, "img", "menu", "ansicht-zoom-minus.png"),
+						icon: path.join(__dirname, "img", "menu", "minus-quadrat.png"),
 						role: "zoomOut",
 					},
 					{
 						label: "Standardgröße",
-						icon: path.join(__dirname, "img", "menu", "ansicht-zoom-standard.png"),
+						icon: path.join(__dirname, "img", "menu", "fenster-standard.png"),
 						role: "resetZoom",
 					},
 					{ type: "separator" },
 					{
 						label: "Vollbild",
-						icon: path.join(__dirname, "img", "menu", "ansicht-vollbild.png"),
+						icon: path.join(__dirname, "img", "menu", "fenster-vollbild.png"),
 						role: "toggleFullScreen",
 					},
 				],

@@ -26,7 +26,7 @@ let annotieren = {
 	// Meldung, dass das Annotieren nicht möglich ist
 	unmoeglich () {
 		dialog.oeffnen("alert");
-		dialog.text(`Das Annotieren ist nur möglich, wenn Trennstriche und Seitenumbrüche sichtbar sind.\nSie müssen zunächst die Funktion <img src="img/liste-trennung.svg" width="24" height="24" alt=""> aktivieren.`);
+		dialog.text(`Das Annotieren ist nur möglich, wenn Trennstriche und Seitenumbrüche sichtbar sind.\nSie müssen zunächst die Funktion <img src="img/trennzeichen.svg" width="24" height="24" alt=""> aktivieren.`);
 	},
 	// Annotierung initialisieren
 	//   p = Element
@@ -129,7 +129,7 @@ let annotieren = {
 		// Schließen-Icon
 		let img = document.createElement("img");
 		span.appendChild(img);
-		img.src = "img/heading-schliessen.svg";
+		img.src = "img/x.svg";
 		img.width = "24";
 		img.height = "24";
 		// Farben

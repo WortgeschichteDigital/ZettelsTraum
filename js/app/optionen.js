@@ -103,10 +103,10 @@ let optionen = {
 			"quick-programm-neues-fenster": false,
 			"quick-programm-karteisuche": false,
 			"quick-programm-einstellungen": false,
-			"quick-programm-beenden": false,
+			"quick-programm-beenden": true,
 			"quick-kartei-erstellen": false,
-			"quick-kartei-oeffnen": false,
-			"quick-kartei-speichern": false,
+			"quick-kartei-oeffnen": true,
+			"quick-kartei-speichern": true,
 			"quick-kartei-speichern-unter": false,
 			"quick-kartei-schliessen": false,
 			"quick-kartei-formvarianten": false,
@@ -118,11 +118,22 @@ let optionen = {
 			"quick-kartei-bedeutungen": false,
 			"quick-kartei-bedeutungen-wechseln": false,
 			"quick-kartei-bedeutungen-fenster": false,
-			"quick-kartei-suche": false,
-			"quick-belege-hinzufuegen": false,
-			"quick-belege-auflisten": false,
+			"quick-kartei-suche": true,
+			"quick-belege-hinzufuegen": true,
+			"quick-belege-auflisten": true,
 			"quick-belege-kopieren": false,
 			"quick-belege-einfuegen": false,
+			"quick-bearbeiten-rueckgaengig": false,
+			"quick-bearbeiten-wiederherstellen": false,
+			"quick-bearbeiten-ausschneiden": false,
+			"quick-bearbeiten-kopieren": false,
+			"quick-bearbeiten-einfuegen": false,
+			"quick-bearbeiten-alles-auswaehlen": false,
+			"quick-ansicht-anzeige-vergroessern": false,
+			"quick-ansicht-anzeige-verkleinern": false,
+			"quick-ansicht-standardgroesse": false,
+			"quick-ansicht-vollbild": false,
+			"quick-hilfe-handbuch": true,
 			// NOTIZEN
 			// Notizen-Fenster nach dem Speichern direkt schließen
 			"notizen-schliessen": false,
@@ -521,7 +532,7 @@ let optionen = {
 				let img = document.createElement("img");
 				td.insertBefore(img, td.firstChild);
 				img.dataset.typ = typ;
-				img.src = "img/fehler.svg";
+				img.src = "img/x-dick-rot.svg";
 				img.width = "24";
 				img.height = "24";
 				optionen.tagsFehlerKlick(img);
@@ -1130,6 +1141,32 @@ let optionen = {
 		optionen.speichern();
 		// Erinnerungen-Icon auffrischen
 		erinnerungen.check();
+	},
+	// Funktionen für die Quick-Access-Bar blockweise aus- oder abwählten
+	//   a = Element
+	//     (der Link, der die Aktion triggert)
+	quickSelect (a) {
+		a.addEventListener("click", function(evt) {
+			evt.preventDefault();
+			let standards = ["quick-programm-beenden", "quick-kartei-oeffnen", "quick-kartei-speichern", "quick-kartei-suche", "quick-belege-hinzufuegen", "quick-belege-auflisten", "quick-hilfe-handbuch"];
+			const aktion = this.id.match(/.+-(.+)/)[1];
+			document.querySelectorAll("#einstellungen-quick-funktionen input").forEach(i => {
+				const e = i.id.replace(/^einstellung-/, "");
+				if (aktion === "standards") {
+					if (standards.includes(e)) {
+						i.checked = true;
+					} else {
+						i.checked = false;
+					}
+				} else if (aktion === "alle") {
+					i.checked = true;
+				} else if (aktion === "keine") {
+					i.checked = false;
+				}
+				optionen.data.einstellungen[e] = i.checked;
+			});
+			optionen.anwendenQuickAccess();
+		});
 	},
 	// das Optionen-Fenster öffnen
 	oeffnen () {

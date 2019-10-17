@@ -48,7 +48,19 @@ window.addEventListener("load", () => {
 	document.querySelectorAll(".dropdown-feld").forEach(i => dropdown.feld(i));
 	document.querySelectorAll(".dropdown-link-td, .dropdown-link-element").forEach(i =>	dropdown.link(i));
 	// Quick-Access-Bar
-	document.querySelectorAll("#quick a").forEach(a => helfer.quickAccess(a));
+	document.addEventListener("mousedown", function() {
+		helfer.quickAccessRolesActive = document.activeElement;
+	});
+	document.querySelectorAll("#quick a").forEach(a => {
+		if (/^quick-(bearbeiten|ansicht)-/.test(a.id)) {
+			helfer.quickAccessRoles(a);
+		} else {
+			helfer.quickAccess(a);
+		}
+	});
+	if (process.platform === "win32") { // Korrekt des Shortcuts unter Windows
+		document.getElementById("quick-bearbeiten-wiederherstellen").title = "Bearbeiten: Wiederherstellen (Strg + Y)";
+	}
 	// Wort-Element
 	document.getElementById("wort").addEventListener("click", () => kartei.wortAendern());
 	// Erinnerungen-Icon
@@ -130,6 +142,7 @@ window.addEventListener("load", () => {
 	document.querySelectorAll("#einstellungen ul a").forEach(a => optionen.sektionWechselnLink(a));
 	document.querySelectorAll("#einstellungen input").forEach(i => optionen.aendereEinstellungListener(i));
 	document.getElementById("einstellung-personenliste").addEventListener("click", () => optionen.aenderePersonenliste());
+	document.querySelectorAll("#einstellungen-quick-alle, #einstellungen-quick-keine, #einstellungen-quick-standards").forEach(a => optionen.quickSelect(a));
 	optionen.anwendenNotizenFilterleiste(document.getElementById("einstellung-notizen-filterleiste"));
 	document.getElementById("tags-laden").addEventListener("click", () => optionen.tagsManuLaden());
 	optionen.anwendenIconsDetailsListener(document.getElementById("einstellung-anzeige-icons-immer-an"));

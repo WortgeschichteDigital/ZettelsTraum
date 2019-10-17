@@ -134,13 +134,13 @@
 	width: 24px;
 	height: 24px;
 	background-color: transparent;
-	-webkit-mask-image: url(../../img/filter-reset-block.svg);
-	mask-image: url(../../img/filter-reset-block.svg);
+	-webkit-mask-image: url(../../img/pfeil-kreis-weiss.svg);
+	mask-image: url(../../img/pfeil-kreis-weiss.svg);
 }
 
 .filter-kopf span.filter-notizen {
-	-webkit-mask-image: url(../../img/filter-notizen.svg);
-	mask-image: url(../../img/filter-notizen.svg);
+	-webkit-mask-image: url(../../img/stift-weiss.svg);
+	mask-image: url(../../img/stift-weiss.svg);
 }
 
 .filter-kopf:hover span.filter-reset,
@@ -233,8 +233,8 @@ p.no-indent + .filter-baum, /* betrifft Verschiedenes > Filterlogik */
 #filter-kartendatum .icon-jetzt {
 	margin-left: 5px;
 	background-color: var(--textExtremHell);
-	-webkit-mask-image: url(../../img/filter-jetzt.svg);
-	mask-image: url(../../img/filter-jetzt.svg);
+	-webkit-mask-image: url(../../img/uhr.svg);
+	mask-image: url(../../img/uhr.svg);
 }
 
 #filter-kartendatum .icon-jetzt:hover {
@@ -247,11 +247,11 @@ p.no-indent + .filter-baum, /* betrifft Verschiedenes > Filterlogik */
 
 #filter-erweiterte {
 	padding-left: 24px;
-	background: url(../../img/erweiterte-auf.svg) no-repeat left -2px;
+	background: url(../../img/plus.svg) no-repeat left -2px;
 }
 
 #filter-erweiterte.aktiv {
-	background-image: url(../../img/erweiterte-zu.svg);
+	background-image: url(../../img/minus.svg);
 }
 
 #filter-erweiterte-cont {
@@ -353,13 +353,13 @@ p.no-indent + .filter-baum, /* betrifft Verschiedenes > Filterlogik */
 }
 
 .icon-kopieren {
-	-webkit-mask-image: url(../../img/liste-kopieren.svg);
-	mask-image: url(../../img/liste-kopieren.svg);
+	-webkit-mask-image: url(../../img/kopieren.svg);
+	mask-image: url(../../img/kopieren.svg);
 }
 
 .icon-bearbeiten {
-	-webkit-mask-image: url(../../img/liste-bearbeiten.svg);
-	mask-image: url(../../img/liste-bearbeiten.svg);
+	-webkit-mask-image: url(../../img/karteikarte.svg);
+	mask-image: url(../../img/karteikarte.svg);
 }
 
 .bedeutungen-opt-block,

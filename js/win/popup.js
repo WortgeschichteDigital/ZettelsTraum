@@ -92,7 +92,7 @@ let popup = {
 			path = require("path");
 		menu.append(new MenuItem({
 			label: "Textauswahl kopieren",
-			icon: path.join(__dirname, "../", "img", "menu", "bearbeiten-kopieren.png"),
+			icon: path.join(__dirname, "../", "img", "menu", "kopieren.png"),
 			click: function() {
 				const {clipboard} = require("electron");
 				clipboard.writeText(popup.textauswahl);
@@ -107,7 +107,7 @@ let popup = {
 			path = require("path");
 		menu.append(new MenuItem({
 			label: "Code kopieren",
-			icon: path.join(__dirname, "../", "img", "menu", "bearbeiten-kopieren.png"),
+			icon: path.join(__dirname, "../", "img", "menu", "kopieren.png"),
 			click: function() {
 				const {clipboard} = require("electron");
 				clipboard.writeText(popup.element.innerText);
@@ -122,12 +122,12 @@ let popup = {
 			path = require("path");
 		menu.append(new MenuItem({
 			label: "Rückgängig",
-			icon: path.join(__dirname, "../", "img", "menu", "bearbeiten-rueckgaengig.png"),
+			icon: path.join(__dirname, "../", "img", "menu", "pfeil-rund-links.png"),
 			role: "undo",
 		}));
 		menu.append(new MenuItem({
 			label: "Wiederherstellen",
-			icon: path.join(__dirname, "../", "img", "menu", "bearbeiten-wiederherstellen.png"),
+			icon: path.join(__dirname, "../", "img", "menu", "pfeil-rund-rechts.png"),
 			role: "redo",
 		}));
 		menu.append(new MenuItem({
@@ -135,22 +135,22 @@ let popup = {
 		}));
 		menu.append(new MenuItem({
 			label: "Ausschneiden",
-			icon: path.join(__dirname, "../", "img", "menu", "bearbeiten-ausschneiden.png"),
+			icon: path.join(__dirname, "../", "img", "menu", "schere.png"),
 			role: "cut",
 		}));
 		menu.append(new MenuItem({
 			label: "Kopieren",
-			icon: path.join(__dirname, "../", "img", "menu", "bearbeiten-kopieren.png"),
+			icon: path.join(__dirname, "../", "img", "menu", "kopieren.png"),
 			role: "copy",
 		}));
 		menu.append(new MenuItem({
 			label: "Einfügen",
-			icon: path.join(__dirname, "../", "img", "menu", "bearbeiten-einfuegen.png"),
+			icon: path.join(__dirname, "../", "img", "menu", "einfuegen.png"),
 			role: "paste",
 		}));
 		menu.append(new MenuItem({
 			label: "Alles auswählen",
-			icon: path.join(__dirname, "../", "img", "menu", "bearbeiten-auswaehlen.png"),
+			icon: path.join(__dirname, "../", "img", "menu", "auswaehlen.png"),
 			role: "selectAll",
 		}));
 	},
@@ -162,7 +162,7 @@ let popup = {
 			path = require("path");
 		menu.append(new MenuItem({
 			label: "Link kopieren",
-			icon: path.join(__dirname, "../", "img", "menu", "popup-link.png"),
+			icon: path.join(__dirname, "../", "img", "menu", "link.png"),
 			click: function() {
 				const {clipboard} = require("electron");
 				clipboard.writeText(popup.element.getAttribute("href"));

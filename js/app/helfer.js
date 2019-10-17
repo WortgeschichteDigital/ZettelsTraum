@@ -1,13 +1,13 @@
 "use strict";
 
 let helfer = {
-	// Klicks in der der Quick-Access-Bar verteilen
+	// Klicks in der Quick-Access-Bar verteilen
 	//   a = Element
-	//     (Link in der Quick-Access-Bar);
+	//     (Icon-Link in der Quick-Access-Bar)
 	quickAccess (a) {
 		a.addEventListener("click", function(evt) {
 			evt.preventDefault();
-			let id = this.id.replace(/^quick-/, "");
+			const id = this.id.replace(/^quick-/, "");
 			if (id === "programm-neues-fenster") {
 				const {ipcRenderer} = require("electron");
 				ipcRenderer.send("fenster-oeffnen");
@@ -27,6 +27,10 @@ let helfer = {
 				return;
 			} else if (id === "kartei-oeffnen") {
 				kartei.oeffnen();
+				return;
+			} else if (id === "hilfe-handbuch") {
+				const {ipcRenderer} = require("electron");
+				ipcRenderer.send("hilfe-handbuch", "");
 				return;
 			}
 			// Ist eine Kartei geöffnet?
@@ -70,6 +74,52 @@ let helfer = {
 				kopieren.init();
 			} else if (id === "belege-einfuegen") {
 				kopieren.einfuegen();
+			}
+		});
+	},
+	// speichert das Element, das vor einem Mousedown-Event aktiv war
+	quickAccessRolesActive: null,
+	// Klicks in der Quick-Access-Bar verteilen (Roles in Bearbeiten und Ansicht)
+	//   a = Element
+	//     (Icon-Link in der Quick-Access-Bar)
+	quickAccessRoles (a) {
+		a.addEventListener("click", function(evt) {
+			evt.preventDefault();
+			const id = this.id.replace(/^quick-/, ""),
+				{remote} = require("electron"),
+				win = remote.getCurrentWindow();
+			if (id === "bearbeiten-rueckgaengig") {
+				helfer.quickAccessRolesActive.focus();
+				win.webContents.undo();
+			} else if (id === "bearbeiten-wiederherstellen") {
+				helfer.quickAccessRolesActive.focus();
+				win.webContents.redo();
+			} else if (id === "bearbeiten-ausschneiden") {
+				helfer.quickAccessRolesActive.focus();
+				win.webContents.cut();
+			} else if (id === "bearbeiten-kopieren") {
+				helfer.quickAccessRolesActive.focus();
+				win.webContents.copy();
+			} else if (id === "bearbeiten-einfuegen") {
+				helfer.quickAccessRolesActive.focus();
+				win.webContents.paste();
+			} else if (id === "bearbeiten-alles-auswaehlen") {
+				helfer.quickAccessRolesActive.focus();
+				win.webContents.selectAll();
+			} else if (id === "ansicht-anzeige-vergroessern") {
+				const faktor = Math.round((win.webContents.getZoomFactor() + 0.1) * 10) / 10;
+				win.webContents.setZoomFactor(faktor);
+			} else if (id === "ansicht-anzeige-verkleinern") {
+				const faktor = Math.round((win.webContents.getZoomFactor() - 0.1) * 10) / 10;
+				win.webContents.setZoomFactor(faktor);
+			} else if (id === "ansicht-standardgroesse") {
+				win.webContents.setZoomFactor(1);
+			} else if (id === "ansicht-vollbild") {
+				if (win.isFullScreen()) {
+					win.setFullScreen(false);
+				} else {
+					win.setFullScreen(true);
+				}
 			}
 		});
 	},
@@ -609,18 +659,18 @@ let helfer = {
 			cd = "../";
 		}
 		if (ziel === "zwischenablage") {
-			img.src = `${cd}img/animation-zwischenablage.svg`;
+			img.src = `${cd}img/einfuegen-blau-96.svg`;
 		} else if (ziel === "liste") {
-			img.src = `${cd}img/animation-kopieren.svg`;
+			img.src = `${cd}img/kopieren-blau-96.svg`;
 			let span = document.createElement("span");
 			div.appendChild(span);
 			span.textContent = kopieren.belege.length;
 		} else if (ziel === "wrap") {
-			img.src = `${cd}img/animation-wrap.svg`;
+			img.src = `${cd}img/pfeil-kreis-blau-96.svg`;
 		} else if (ziel === "duplikat") {
-			img.src = `${cd}img/animation-duplikat.svg`;
+			img.src = `${cd}img/duplizieren-blau-96.svg`;
 		} else if (ziel === "gespeichert") {
-			img.src = `${cd}img/animation-gespeichert.svg`;
+			img.src = `${cd}img/speichern-blau-96.svg`;
 		}
 		// Element einhängen und wieder entfernen
 		document.querySelector("body").appendChild(div);
@@ -629,7 +679,7 @@ let helfer = {
 		}, 1); // ohne Timeout geht es nicht
 		helfer.animationTimeout = setTimeout(function() {
 			div.classList.remove("an");
-			setTimeout(function() {
+			helfer.animationTimeout = setTimeout(function() {
 				if (!document.querySelector("body").contains(div)) {
 					// der <div> könnte bereits verschwunden sein
 					// (kann vorkommen, wenn er im 500ms-Gap noch einmal aktiviert wird)

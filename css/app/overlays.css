@@ -99,13 +99,13 @@
 }
 
 .icon-schliessen {
-	-webkit-mask-image: url(../../img/heading-schliessen.svg);
-	mask-image: url(../../img/heading-schliessen.svg);
+	-webkit-mask-image: url(../../img/x.svg);
+	mask-image: url(../../img/x.svg);
 }
 
 .icon-handbuch {
-	-webkit-mask-image: url(../../img/heading-handbuch.svg);
-	mask-image: url(../../img/heading-handbuch.svg);
+	-webkit-mask-image: url(../../img/kreis-fragezeichen.svg);
+	mask-image: url(../../img/kreis-fragezeichen.svg);
 	right: 34px !important;
 }
 
@@ -125,8 +125,8 @@
 }
 
 .icon-h-einstellungen {
-	-webkit-mask-image: url(../../img/heading-einstellungen.svg);
-	mask-image: url(../../img/heading-einstellungen.svg);
+	-webkit-mask-image: url(../../img/zahnrad.svg);
+	mask-image: url(../../img/zahnrad.svg);
 }
 
 #einstellungen-cont {
@@ -233,12 +233,22 @@
 }
 
 #einstellungen-cont .einstellungen-spalten {
-	columns: 2;
+	display: flex;
+	flex-direction: column;
+	flex-wrap: wrap;
 	padding-left: 24px;
+	height: 400px;
+	overflow-x: auto;
+	overflow-y: hidden;
+}
+
+#einstellungen-cont .einstellungen-spalten.einstellungen-spalten-flach {
+	height: 145px;
 }
 
 #einstellungen-cont .einstellungen-spalten h3 {
 	margin: 10px 0 5px 0;
+	width: 200px;
 }
 
 #einstellungen-cont .einstellungen-spalten h3:first-child {
@@ -246,12 +256,17 @@
 }
 
 #einstellungen-cont .einstellungen-spalten p {
-	margin-bottom: 5px;
+	margin: 0 10px 5px 0;
 	padding-left: 1px; /* damit beim Fokussieren der Checkbox der linke Rand nicht abgeschnitten erscheint */
+	width: 240px;
 	overflow: hidden;
 	text-indent: 0;
 	text-overflow: ellipsis;
 	white-space: nowrap;
+}
+
+#einstellungen-quick-alle {
+	margin-left: 45px;
 }
 
 .einstellung-neustart {
@@ -345,13 +360,13 @@
 }
 
 .icon-loeschen {
-	-webkit-mask-image: url(../../img/loeschen.svg);
-	mask-image: url(../../img/loeschen.svg);
+	-webkit-mask-image: url(../../img/muelleimer.svg);
+	mask-image: url(../../img/muelleimer.svg);
 }
 
 .icon-reload {
-	-webkit-mask-image: url(../../img/reload.svg);
-	mask-image: url(../../img/reload.svg);
+	-webkit-mask-image: url(../../img/pfeil-kreis.svg);
+	mask-image: url(../../img/pfeil-kreis.svg);
 }
 
 .dialog-tags-liste {
@@ -380,8 +395,8 @@
 }
 
 .icon-h-karteisuche {
-	-webkit-mask-image: url(../../img/heading-karteisuche.svg);
-	mask-image: url(../../img/heading-karteisuche.svg);
+	-webkit-mask-image: url(../../img/lupe.svg);
+	mask-image: url(../../img/lupe.svg);
 }
 
 #karteisuche-suche-laeuft {
@@ -581,8 +596,8 @@
 }
 
 .icon-h-stamm {
-	-webkit-mask-image: url(../../img/heading-formvarianten.svg);
-	mask-image: url(../../img/heading-formvarianten.svg);
+	-webkit-mask-image: url(../../img/formvarianten.svg);
+	mask-image: url(../../img/formvarianten.svg);
 }
 
 #stamm-kopf {
@@ -605,8 +620,8 @@
 }
 
 #stamm-kopf a {
-	-webkit-mask-image: url(../../img/redaktion-online.svg);
-	mask-image: url(../../img/redaktion-online.svg);
+	-webkit-mask-image: url(../../img/kreis-welt.svg);
+	mask-image: url(../../img/kreis-welt.svg);
 	background-color: var(--textSehrHell);
 }
 
@@ -704,8 +719,8 @@
 }
 
 .icon-entfernen {
-	-webkit-mask-image: url(../../img/meta-entfernen.svg);
-	mask-image: url(../../img/meta-entfernen.svg);
+	-webkit-mask-image: url(../../img/x-dick.svg);
+	mask-image: url(../../img/x-dick.svg);
 }
 
 /* Notizen -------------------------------------- */
@@ -715,8 +730,8 @@
 }
 
 .icon-h-notizen {
-	-webkit-mask-image: url(../../img/heading-notizen.svg);
-	mask-image: url(../../img/heading-notizen.svg);
+	-webkit-mask-image: url(../../img/stift.svg);
+	mask-image: url(../../img/stift.svg);
 }
 
 #notizen-cont {
@@ -800,8 +815,8 @@
 }
 
 .icon-h-anhaenge {
-	-webkit-mask-image: url(../../img/heading-anhaenge.svg);
-	mask-image: url(../../img/heading-anhaenge.svg);
+	-webkit-mask-image: url(../../img/bueroklammer.svg);
+	mask-image: url(../../img/bueroklammer.svg);
 }
 
 #anhaenge-rahmen {
@@ -874,13 +889,13 @@
 }
 
 .anhaenge-aufwaerts {
-	-webkit-mask-image: url(../../img/anhaenge-aufwaerts.svg);
-	mask-image: url(../../img/anhaenge-aufwaerts.svg);
+	-webkit-mask-image: url(../../img/pfeil-gerade-hoch.svg);
+	mask-image: url(../../img/pfeil-gerade-hoch.svg);
 }
 
 .anhaenge-loeschen {
-	-webkit-mask-image: url(../../img/loeschen.svg);
-	mask-image: url(../../img/loeschen.svg);
+	-webkit-mask-image: url(../../img/muelleimer.svg);
+	mask-image: url(../../img/muelleimer.svg);
 }
 
 .anhaenge-platzhalter {
@@ -897,8 +912,8 @@
 }
 
 .icon-h-lexika {
-	-webkit-mask-image: url(../../img/heading-lexika.svg);
-	mask-image: url(../../img/heading-lexika.svg);
+	-webkit-mask-image: url(../../img/buecher.svg);
+	mask-image: url(../../img/buecher.svg);
 }
 
 #lexika-cont {
@@ -933,8 +948,8 @@
 }
 
 .icon-h-meta {
-	-webkit-mask-image: url(../../img/heading-meta.svg);
-	mask-image: url(../../img/heading-meta.svg);
+	-webkit-mask-image: url(../../img/zeilen-4,0.svg);
+	mask-image: url(../../img/zeilen-4,0.svg);
 }
 
 #meta-cont {
@@ -979,18 +994,18 @@
 }
 
 .icon-h-redaktion {
-	-webkit-mask-image: url(../../img/heading-redaktion.svg);
-	mask-image: url(../../img/heading-redaktion.svg);
+	-webkit-mask-image: url(../../img/personen.svg);
+	mask-image: url(../../img/personen.svg);
 }
 
 .icon-redaktion-aufwaerts {
-	-webkit-mask-image: url(../../img/redaktion-aufwaerts.svg);
-	mask-image: url(../../img/redaktion-aufwaerts.svg);
+	-webkit-mask-image: url(../../img/pfeil-gerade-hoch.svg);
+	mask-image: url(../../img/pfeil-gerade-hoch.svg);
 }
 
 .icon-redaktion-loeschen {
-	-webkit-mask-image: url(../../img/redaktion-loeschen.svg);
-	mask-image: url(../../img/redaktion-loeschen.svg);
+	-webkit-mask-image: url(../../img/muelleimer.svg);
+	mask-image: url(../../img/muelleimer.svg);
 }
 
 #redaktion-cont {
@@ -1081,8 +1096,8 @@ input[id^="redaktion-person"] {
 }
 
 .icon-h-tagger {
-	-webkit-mask-image: url(../../img/heading-tagger.svg);
-	mask-image: url(../../img/heading-tagger.svg);
+	-webkit-mask-image: url(../../img/etikett.svg);
+	mask-image: url(../../img/etikett.svg);
 }
 
 #tagger-geaendert {
@@ -1166,8 +1181,8 @@ input[id^="redaktion-person"] {
 }
 
 .icon-h-gerueste {
-	-webkit-mask-image: url(../../img/heading-gerueste.svg);
-	mask-image: url(../../img/heading-gerueste.svg);
+	-webkit-mask-image: url(../../img/geruest.svg);
+	mask-image: url(../../img/geruest.svg);
 }
 
 #gerueste-cont {
@@ -1175,8 +1190,8 @@ input[id^="redaktion-person"] {
 }
 
 .icon-add {
-	-webkit-mask-image: url(../../img/gerueste-add.svg);
-	mask-image: url(../../img/gerueste-add.svg);
+	-webkit-mask-image: url(../../img/plus-dick.svg);
+	mask-image: url(../../img/plus-dick.svg);
 }
 
 #gerueste-cont table {
@@ -1228,8 +1243,8 @@ input[id^="redaktion-person"] {
 }
 
 .icon-h-geruestwechseln {
-	-webkit-mask-image: url(../../img/heading-geruestwechseln.svg);
-	mask-image: url(../../img/heading-geruestwechseln.svg);
+	-webkit-mask-image: url(../../img/geruest-zahnrad.svg);
+	mask-image: url(../../img/geruest-zahnrad.svg);
 }
 
 #geruestwechseln-cont {
@@ -1248,8 +1263,8 @@ input[id^="redaktion-person"] {
 }
 
 .icon-h-sonderzeichen {
-	-webkit-mask-image: url(../../img/heading-sonderzeichen.svg);
-	mask-image: url(../../img/heading-sonderzeichen.svg);
+	-webkit-mask-image: url(../../img/pi.svg);
+	mask-image: url(../../img/pi.svg);
 }
 
 #sonderzeichen-cont {
@@ -1276,8 +1291,8 @@ input[id^="redaktion-person"] {
 }
 
 .icon-h-zeitraumgrafik {
-	-webkit-mask-image: url(../../img/heading-zeitraumgrafik.svg);
-	mask-image: url(../../img/heading-zeitraumgrafik.svg);
+	-webkit-mask-image: url(../../img/diagramm.svg);
+	mask-image: url(../../img/diagramm.svg);
 }
 
 #zeitraumgrafik-cont {
@@ -1306,18 +1321,18 @@ input[id^="redaktion-person"] {
 }
 
 .prompt .icon-h {
-	-webkit-mask-image: url(../../img/dialog-prompt.svg);
-	mask-image: url(../../img/dialog-prompt.svg);
+	-webkit-mask-image: url(../../img/kreis-info.svg);
+	mask-image: url(../../img/kreis-info.svg);
 }
 
 .confirm .icon-h {
-	-webkit-mask-image: url(../../img/dialog-confirm.svg);
-	mask-image: url(../../img/dialog-confirm.svg);
+	-webkit-mask-image: url(../../img/kreis-fragezeichen.svg);
+	mask-image: url(../../img/kreis-fragezeichen.svg);
 }
 
 .alert .icon-h {
-	-webkit-mask-image: url(../../img/dialog-alert.svg);
-	mask-image: url(../../img/dialog-alert.svg);
+	-webkit-mask-image: url(../../img/kreis-ausrufezeichen.svg);
+	mask-image: url(../../img/kreis-ausrufezeichen.svg);
 }
 
 #dialog-rahmen {
@@ -1386,8 +1401,8 @@ input[id^="redaktion-person"] {
 }
 
 .icon-h-drucken {
-	-webkit-mask-image: url(../../img/heading-drucken.svg);
-	mask-image: url(../../img/heading-drucken.svg);
+	-webkit-mask-image: url(../../img/drucker.svg);
+	mask-image: url(../../img/drucker.svg);
 }
 
 #drucken-head {
@@ -1492,13 +1507,13 @@ input[id^="redaktion-person"] {
 }
 
 .icon-h-kopieren {
-	-webkit-mask-image: url(../../img/heading-kopieren.svg);
-	mask-image: url(../../img/heading-kopieren.svg);
+	-webkit-mask-image: url(../../img/kopieren.svg);
+	mask-image: url(../../img/kopieren.svg);
 }
 
 .icon-h-einfuegen {
-	-webkit-mask-image: url(../../img/heading-einfuegen.svg);
-	mask-image: url(../../img/heading-einfuegen.svg);
+	-webkit-mask-image: url(../../img/einfuegen.svg);
+	mask-image: url(../../img/einfuegen.svg);
 }
 
 #kopieren-einfuegen h3 {

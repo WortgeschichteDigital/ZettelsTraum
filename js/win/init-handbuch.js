@@ -82,8 +82,6 @@ window.addEventListener("load", () => {
 			document.getElementById("suchfeld").select();
 		});
 	});
-	// Navigation
-	document.querySelectorAll(`a[class^="link-sektion-"`).forEach(i => hilfe.sektion(i));
 	// interne Sprung-Links
 	document.querySelectorAll(`a[href^="#"]`).forEach(a => {
 		if (/^#[a-z]/.test(a.getAttribute("href"))) {

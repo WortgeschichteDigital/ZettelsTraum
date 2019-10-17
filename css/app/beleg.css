@@ -157,7 +157,7 @@
 }
 
 #beleg textarea:invalid {
-	background: #fff url(../../img/beleg-mehrzeilig.svg) no-repeat left 2px;
+	background: #fff url(../../img/zeilen-2,5-grau.svg) no-repeat left 2px;
 }
 
 #beleg textarea.dropdown-feld {
@@ -224,93 +224,93 @@ textarea#beleg-bs {
 }
 
 .icon-tools-einfuegen {
-	-webkit-mask-image: url(../../img/tool-einfuegen.svg);
-	mask-image: url(../../img/tool-einfuegen.svg);
+	-webkit-mask-image: url(../../img/einfuegen.svg);
+	mask-image: url(../../img/einfuegen.svg);
 }
 
 .icon-tools-kopieren {
-	-webkit-mask-image: url(../../img/tool-kopieren.svg);
-	mask-image: url(../../img/tool-kopieren.svg);
+	-webkit-mask-image: url(../../img/kopieren.svg);
+	mask-image: url(../../img/kopieren.svg);
 }
 
 .icon-tools-antiqua {
-	-webkit-mask-image: url(../../img/tool-antiqua.svg);
-	mask-image: url(../../img/tool-antiqua.svg);
+	-webkit-mask-image: url(../../img/text-antiqua.svg);
+	mask-image: url(../../img/text-antiqua.svg);
 }
 
 .icon-tools-bold {
-	-webkit-mask-image: url(../../img/tool-bold.svg);
-	mask-image: url(../../img/tool-bold.svg);
+	-webkit-mask-image: url(../../img/text-fett.svg);
+	mask-image: url(../../img/text-fett.svg);
 }
 
 .icon-tools-caps {
-	-webkit-mask-image: url(../../img/tool-caps.svg);
-	mask-image: url(../../img/tool-caps.svg);
+	-webkit-mask-image: url(../../img/text-kapitaelchen.svg);
+	mask-image: url(../../img/text-kapitaelchen.svg);
 }
 
 .icon-tools-clear {
-	-webkit-mask-image: url(../../img/tool-clear.svg);
-	mask-image: url(../../img/tool-clear.svg);
+	-webkit-mask-image: url(../../img/pinsel.svg);
+	mask-image: url(../../img/pinsel.svg);
 }
 
 .icon-tools-heading {
-	-webkit-mask-image: url(../../img/tool-heading.svg);
-	mask-image: url(../../img/tool-heading.svg);
+	-webkit-mask-image: url(../../img/text-antiqua.svg);
+	mask-image: url(../../img/text-antiqua.svg);
 }
 
 .icon-tools-italic {
-	-webkit-mask-image: url(../../img/tool-italic.svg);
-	mask-image: url(../../img/tool-italic.svg);
+	-webkit-mask-image: url(../../img/text-kursiv.svg);
+	mask-image: url(../../img/text-kursiv.svg);
 }
 
 .icon-tools-list-unordered {
-	-webkit-mask-image: url(../../img/tool-list-unordered.svg);
-	mask-image: url(../../img/tool-list-unordered.svg);
+	-webkit-mask-image: url(../../img/liste-bullets-gross.svg);
+	mask-image: url(../../img/liste-bullets-gross.svg);
 }
 
 .icon-tools-list-ordered {
-	-webkit-mask-image: url(../../img/tool-list-ordered.svg);
-	mask-image: url(../../img/tool-list-ordered.svg);
+	-webkit-mask-image: url(../../img/liste-zahlen-gross.svg);
+	mask-image: url(../../img/liste-zahlen-gross.svg);
 }
 
 .icon-tools-mark {
-	-webkit-mask-image: url(../../img/tool-mark.svg);
-	mask-image: url(../../img/tool-mark.svg);
+	-webkit-mask-image: url(../../img/text-markiert.svg);
+	mask-image: url(../../img/text-markiert.svg);
 }
 
 .icon-tools-size {
-	-webkit-mask-image: url(../../img/tool-size.svg);
-	mask-image: url(../../img/tool-size.svg);
+	-webkit-mask-image: url(../../img/text-gross.svg);
+	mask-image: url(../../img/text-gross.svg);
 }
 
 .icon-tools-sonderzeichen {
-	-webkit-mask-image: url(../../img/tool-sonderzeichen.svg);
-	mask-image: url(../../img/tool-sonderzeichen.svg);
+	-webkit-mask-image: url(../../img/pi.svg);
+	mask-image: url(../../img/pi.svg);
 }
 
 .icon-tools-spacing {
-	-webkit-mask-image: url(../../img/tool-spacing.svg);
-	mask-image: url(../../img/tool-spacing.svg);
+	-webkit-mask-image: url(../../img/text-gesperrt.svg);
+	mask-image: url(../../img/text-gesperrt.svg);
 }
 
 .icon-tools-strike {
-	-webkit-mask-image: url(../../img/tool-strike.svg);
-	mask-image: url(../../img/tool-strike.svg);
+	-webkit-mask-image: url(../../img/text-durchgestrichen.svg);
+	mask-image: url(../../img/text-durchgestrichen.svg);
 }
 
 .icon-tools-superscript {
-	-webkit-mask-image: url(../../img/tool-superscript.svg);
-	mask-image: url(../../img/tool-superscript.svg);
+	-webkit-mask-image: url(../../img/text-hochgestellt.svg);
+	mask-image: url(../../img/text-hochgestellt.svg);
 }
 
 .icon-tools-subscript {
-	-webkit-mask-image: url(../../img/tool-subscript.svg);
-	mask-image: url(../../img/tool-subscript.svg);
+	-webkit-mask-image: url(../../img/text-tiefgestellt.svg);
+	mask-image: url(../../img/text-tiefgestellt.svg);
 }
 
 .icon-tools-underline {
-	-webkit-mask-image: url(../../img/tool-underline.svg);
-	mask-image: url(../../img/tool-underline.svg);
+	-webkit-mask-image: url(../../img/text-unterstrichen.svg);
+	mask-image: url(../../img/text-unterstrichen.svg);
 }
 
 /* Leseansicht ---------------------------------- */

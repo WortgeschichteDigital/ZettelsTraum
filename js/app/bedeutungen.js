@@ -403,7 +403,7 @@ let bedeutungen = {
 			tr.appendChild(td);
 			let a = document.createElement("a");
 			td.appendChild(a);
-			a.classList.add("icon-link", "icon-move_37-38-39-40");
+			a.classList.add("icon-link", "icon-windrose_37-38-39-40");
 			a.href = "#";
 			a.title = "Bedeutung verschieben";
 			a.textContent = " ";
@@ -782,7 +782,7 @@ let bedeutungen = {
 			}
 		}
 		let icon = tr.firstChild.firstChild;
-		icon.setAttribute("class", `icon-link icon-move_${rose.join("-")}`);
+		icon.setAttribute("class", `icon-link icon-windrose_${rose.join("-")}`);
 		setTimeout(function() {
 			icon.focus();
 		}, 0); // ohne Timeout kein Fokus
@@ -799,7 +799,7 @@ let bedeutungen = {
 		}
 		// Icon zurücksetzen
 		let icon = tr.firstChild.firstChild;
-		icon.setAttribute("class", `icon-link icon-move_37-38-39-40`);
+		icon.setAttribute("class", `icon-link icon-windrose_37-38-39-40`);
 		// aktivierte Zeile deaktivieren
 		icon.blur();
 		tr.classList.remove("bedeutungen-aktiv", "bedeutungen-verschmelzen");

@@ -194,13 +194,13 @@ td:nth-child(2) {
 }
 
 .icon-add {
-	-webkit-mask-image: url(../../img/bedeutungen-add.svg);
-	mask-image: url(../../img/bedeutungen-add.svg);
+	-webkit-mask-image: url(../../img/plus.svg);
+	mask-image: url(../../img/plus.svg);
 }
 
 .icon-remove {
-	-webkit-mask-image: url(../../img/bedeutungen-remove.svg);
-	mask-image: url(../../img/bedeutungen-remove.svg);
+	-webkit-mask-image: url(../../img/minus.svg);
+	mask-image: url(../../img/minus.svg);
 }
 
 td .icon-link {

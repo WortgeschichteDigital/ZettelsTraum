@@ -97,25 +97,25 @@ let layoutMenu = [
 		submenu: [
 			{
 				label: "Neues Fenster",
-				icon: path.join(__dirname, "img", "menu", "programm-neues-fenster.png"),
+				icon: path.join(__dirname, "img", "menu", "fenster-plus.png"),
 				click: () => fenster.erstellen(""),
 			},
 			{ type: "separator" },
 			{
 				label: "Karteisuche",
-				icon: path.join(__dirname, "img", "menu", "programm-karteisuche.png"),
+				icon: path.join(__dirname, "img", "menu", "lupe.png"),
 				click: () => appMenu.aktion("programm-karteisuche"),
 			},
 			{ type: "separator" },
 			{
 				label: "Einstellungen",
-				icon: path.join(__dirname, "img", "menu", "programm-einstellungen.png"),
+				icon: path.join(__dirname, "img", "menu", "zahnrad.png"),
 				click: () => appMenu.aktion("programm-einstellungen"),
 			},
 			{ type: "separator" },
 			{
 				label: "Beenden",
-				icon: path.join(__dirname, "img", "menu", "programm-beenden.png"),
+				icon: path.join(__dirname, "img", "menu", "ausgang.png"),
 				click: () => appMenu.aktion("programm-beenden"),
 				accelerator: "CommandOrControl+Q",
 			},
@@ -126,14 +126,14 @@ let layoutMenu = [
 		submenu: [
 			{
 				label: "Erstellen",
-				icon: path.join(__dirname, "img", "menu", "kartei-erstellen.png"),
+				icon: path.join(__dirname, "img", "menu", "dokument-plus.png"),
 				click: () => appMenu.aktion("kartei-erstellen"),
 				accelerator: "CommandOrControl+E",
 			},
 			{ type: "separator" },
 			{
 				label: "Öffnen",
-				icon: path.join(__dirname, "img", "menu", "kartei-oeffnen.png"),
+				icon: path.join(__dirname, "img", "menu", "oeffnen.png"),
 				click: () => appMenu.aktion("kartei-oeffnen", ""),
 				accelerator: "CommandOrControl+O",
 			},
@@ -144,14 +144,14 @@ let layoutMenu = [
 			{ type: "separator" },
 			{
 				label: "Speichern",
-				icon: path.join(__dirname, "img", "menu", "kartei-speichern.png"),
+				icon: path.join(__dirname, "img", "menu", "speichern.png"),
 				click: () => appMenu.aktion("kartei-speichern"),
 				accelerator: "CommandOrControl+S",
 				id: "kartei-speichern",
 			},
 			{
 				label: "Speichern unter",
-				icon: path.join(__dirname, "img", "menu", "kartei-speichern-unter.png"),
+				icon: path.join(__dirname, "img", "menu", "speichern-unter.png"),
 				click: () => appMenu.aktion("kartei-speichern-unter"),
 				accelerator: "CommandOrControl+Shift+S",
 				id: "kartei-speichern-unter",
@@ -159,7 +159,7 @@ let layoutMenu = [
 			{ type: "separator" },
 			{
 				label: "Schließen",
-				icon: path.join(__dirname, "img", "menu", "kartei-schliessen.png"),
+				icon: path.join(__dirname, "img", "menu", "x-dick.png"),
 				click: () => appMenu.aktion("kartei-schliessen"),
 				accelerator: "CommandOrControl+W",
 				id: "kartei-schliessen",
@@ -167,58 +167,58 @@ let layoutMenu = [
 			{ type: "separator" },
 			{
 				label: "Formvarianten",
-				icon: path.join(__dirname, "img", "menu", "kartei-formvarianten.png"),
+				icon: path.join(__dirname, "img", "menu", "formvarianten.png"),
 				click: () => appMenu.aktion("kartei-formvarianten"),
 				id: "kartei-formvarianten",
 			},
 			{
 				label: "Notizen",
-				icon: path.join(__dirname, "img", "menu", "kartei-notizen.png"),
+				icon: path.join(__dirname, "img", "menu", "stift.png"),
 				click: () => appMenu.aktion("kartei-notizen"),
 				id: "kartei-notizen",
 			},
 			{
 				label: "Anhänge",
-				icon: path.join(__dirname, "img", "menu", "kartei-anhaenge.png"),
+				icon: path.join(__dirname, "img", "menu", "bueroklammer.png"),
 				click: () => appMenu.aktion("kartei-anhaenge"),
 				id: "kartei-anhaenge",
 			},
 			{
 				label: "Überprüfte Lexika",
-				icon: path.join(__dirname, "img", "menu", "kartei-lexika.png"),
+				icon: path.join(__dirname, "img", "menu", "buecher.png"),
 				click: () => appMenu.aktion("kartei-lexika"),
 				id: "kartei-lexika",
 			},
 			{
 				label: "Metadaten",
-				icon: path.join(__dirname, "img", "menu", "kartei-metadaten.png"),
+				icon: path.join(__dirname, "img", "menu", "zeilen-4,0.png"),
 				click: () => appMenu.aktion("kartei-metadaten"),
 				id: "kartei-metadaten",
 			},
 			{
 				label: "Redaktion",
-				icon: path.join(__dirname, "img", "menu", "kartei-redaktion.png"),
+				icon: path.join(__dirname, "img", "menu", "personen.png"),
 				click: () => appMenu.aktion("kartei-redaktion"),
 				id: "kartei-redaktion",
 			},
 			{ type: "separator" },
 			{
 				label: "Bedeutungsgerüst",
-				icon: path.join(__dirname, "img", "menu", "kartei-bedeutungen.png"),
+				icon: path.join(__dirname, "img", "menu", "geruest.png"),
 				click: () => appMenu.aktion("kartei-bedeutungen"),
 				accelerator: "CommandOrControl+B",
 				id: "kartei-bedeutungen",
 			},
 			{
 				label: "Bedeutungsgerüst wechseln",
-				icon: path.join(__dirname, "img", "menu", "kartei-bedeutungen-wechseln.png"),
+				icon: path.join(__dirname, "img", "menu", "geruest-zahnrad.png"),
 				click: () => appMenu.aktion("kartei-bedeutungen-wechseln"),
 				accelerator: "CommandOrControl+Alt+B",
 				id: "kartei-bedeutungen-wechseln",
 			},
 			{
 				label: "Bedeutungsgerüst-Fenster",
-				icon: path.join(__dirname, "img", "menu", "kartei-bedeutungen-fenster.png"),
+				icon: path.join(__dirname, "img", "menu", "fenster.png"),
 				click: () => appMenu.aktion("kartei-bedeutungen-fenster"),
 				accelerator: "CommandOrControl+Shift+B",
 				id: "kartei-bedeutungen-fenster",
@@ -226,7 +226,7 @@ let layoutMenu = [
 			{ type: "separator" },
 			{
 				label: "Suche",
-				icon: path.join(__dirname, "img", "menu", "kartei-suche.png"),
+				icon: path.join(__dirname, "img", "menu", "lupe.png"),
 				click: () => appMenu.aktion("kartei-suche"),
 				accelerator: "CommandOrControl+F",
 				id: "kartei-suche",
@@ -239,25 +239,25 @@ let layoutMenu = [
 		submenu: [
 			{
 				label: "Hinzufügen",
-				icon: path.join(__dirname, "img", "menu", "belege-hinzufuegen.png"),
+				icon: path.join(__dirname, "img", "menu", "dokument-plus.png"),
 				click: () => appMenu.aktion("belege-hinzufuegen"),
 				accelerator: "CommandOrControl+N",
 			},
 			{
 				label: "Auflisten",
-				icon: path.join(__dirname, "img", "menu", "belege-auflisten.png"),
+				icon: path.join(__dirname, "img", "menu", "liste-bullets.png"),
 				click: () => appMenu.aktion("belege-auflisten"),
 				accelerator: "CommandOrControl+L",
 			},
 			{ type: "separator" },
 			{
 				label: "Kopieren",
-				icon: path.join(__dirname, "img", "menu", "belege-kopieren.png"),
+				icon: path.join(__dirname, "img", "menu", "kopieren.png"),
 				click: () => appMenu.aktion("belege-kopieren"),
 			},
 			{
 				label: "Einfügen",
-				icon: path.join(__dirname, "img", "menu", "belege-einfuegen.png"),
+				icon: path.join(__dirname, "img", "menu", "einfuegen.png"),
 				click: () => appMenu.aktion("belege-einfuegen"),
 			},
 		],
@@ -267,33 +267,33 @@ let layoutMenu = [
 		submenu: [
 			{
 				label: "Rückgängig",
-				icon: path.join(__dirname, "img", "menu", "bearbeiten-rueckgaengig.png"),
+				icon: path.join(__dirname, "img", "menu", "pfeil-rund-links.png"),
 				role: "undo",
 			},
 			{
 				label: "Wiederherstellen",
-				icon: path.join(__dirname, "img", "menu", "bearbeiten-wiederherstellen.png"),
+				icon: path.join(__dirname, "img", "menu", "pfeil-rund-rechts.png"),
 				role: "redo",
 			},
 			{ type: "separator" },
 			{
 				label: "Ausschneiden",
-				icon: path.join(__dirname, "img", "menu", "bearbeiten-ausschneiden.png"),
+				icon: path.join(__dirname, "img", "menu", "schere.png"),
 				role: "cut",
 			},
 			{
 				label: "Kopieren",
-				icon: path.join(__dirname, "img", "menu", "bearbeiten-kopieren.png"),
+				icon: path.join(__dirname, "img", "menu", "kopieren.png"),
 				role: "copy",
 			},
 			{
 				label: "Einfügen",
-				icon: path.join(__dirname, "img", "menu", "bearbeiten-einfuegen.png"),
+				icon: path.join(__dirname, "img", "menu", "einfuegen.png"),
 				role: "paste",
 			},
 			{
 				label: "Alles auswählen",
-				icon: path.join(__dirname, "img", "menu", "bearbeiten-auswaehlen.png"),
+				icon: path.join(__dirname, "img", "menu", "auswaehlen.png"),
 				role: "selectAll",
 			},
 		],
@@ -303,7 +303,7 @@ let layoutMenu = [
 		submenu: [
 			{
 				label: "Handbuch",
-				icon: path.join(__dirname, "img", "menu", "hilfe.png"),
+				icon: path.join(__dirname, "img", "menu", "kreis-fragezeichen.png"),
 				click: () => fenster.erstellenNeben("handbuch"),
 				accelerator: "F1",
 			},
@@ -343,23 +343,23 @@ let layoutMenuAnsicht = [
 		submenu: [
 			{
 				label: "Anzeige vergrößern",
-				icon: path.join(__dirname, "img", "menu", "ansicht-zoom-plus.png"),
+				icon: path.join(__dirname, "img", "menu", "plus-quadrat.png"),
 				role: "zoomIn",
 			},
 			{
 				label: "Anzeige verkleinern",
-				icon: path.join(__dirname, "img", "menu", "ansicht-zoom-minus.png"),
+				icon: path.join(__dirname, "img", "menu", "minus-quadrat.png"),
 				role: "zoomOut",
 			},
 			{
 				label: "Standardgröße",
-				icon: path.join(__dirname, "img", "menu", "ansicht-zoom-standard.png"),
+				icon: path.join(__dirname, "img", "menu", "fenster-standard.png"),
 				role: "resetZoom",
 			},
 			{ type: "separator" },
 			{
 				label: "Vollbild",
-				icon: path.join(__dirname, "img", "menu", "ansicht-vollbild.png"),
+				icon: path.join(__dirname, "img", "menu", "fenster-vollbild.png"),
 				role: "toggleFullScreen",
 			},
 		],
@@ -405,7 +405,7 @@ appMenu = {
 		// neues Submenü erzeugen
 		let zuletztVerwendet = {
 			label: "Zuletzt verwendet",
-			icon: path.join(__dirname, "img", "menu", "kartei-zuletzt.png"),
+			icon: path.join(__dirname, "img", "menu", "uhr.png"),
 			id: "kartei-zuletzt",
 			submenu: [],
 		};
@@ -672,7 +672,7 @@ fenster = {
 			height = optionen.data.fenster ? optionen.data.fenster.height : Bildschirm.workArea.height;
 		// Position des Fensters anpassen, falls das gerade fokussierte Fenster ein Hauptfenster ist
 		let w = BrowserWindow.getFocusedWindow();
-		if (w && win[w.id].typ === "index") {
+		if (w && win[w.id] && win[w.id].typ === "index") { // Test win[w.id] nur für Dev
 			let wBounds = w.getBounds();
 			// Verschieben in der Horizontalen
 			if (wBounds.x + width + 100 <= Bildschirm.workArea.width) {
@@ -778,8 +778,7 @@ fenster = {
 		} else if (typ === "handbuch") {
 			title = "Handbuch";
 		}
-		// Fenster öffnen
-		let bw = new BrowserWindow({
+		let opt = {
 			title: title,
 			icon: path.join(__dirname, "img", "icon", "linux", "icon_32px.png"),
 			width: bounds.width,
@@ -792,7 +791,38 @@ fenster = {
 				devTools: devtools,
 				defaultEncoding: "utf-8",
 			},
-		});
+		};
+		// ggf. die Position des Fensters festlegen; sonst wird es zentriert
+		// (damit Handbuch und Dokumentation nicht übereinanderliegen,
+		// wenn sie auseinander geöffnet werden)
+		if (typ === "dokumentation" || typ === "handbuch") {
+			let w = BrowserWindow.getFocusedWindow(),
+				x = -1,
+				y = -1;
+			if (w && win[w.id] && /dokumentation|handbuch/.test(win[w.id].typ)) { // Test win[w.id] nur für Dev
+				let wBounds = w.getBounds();
+				// Verschieben in der Horizontalen
+				if (wBounds.x + bounds.width + 100 <= Bildschirm.workArea.width) {
+					x = wBounds.x + 100;
+				} else if (wBounds.x - 100 >= 0) {
+					x = wBounds.x - 100;
+				}
+				// Verschieben in der Vertikalen
+				if (wBounds.y + bounds.height + 100 <= Bildschirm.workArea.height) {
+					y = wBounds.y + 100;
+				} else if (wBounds.y - 100 >= 0) {
+					y = wBounds.y - 100;
+				}
+			}
+			if (x >= 0 || y >= 0) {
+				x = x === -1 ? 0 : x;
+				y = y === -1 ? 0 : y;
+				opt.x = x;
+				opt.y = y;
+			}
+		}
+		// Fenster öffnen
+		let bw = new BrowserWindow(opt);
 		// Fenster-Objekt anlegen
 		win[bw.id] = {
 			typ: typ,

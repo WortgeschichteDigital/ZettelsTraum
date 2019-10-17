@@ -371,7 +371,7 @@ let popup = {
 			path = require("path");
 		menu.append(new MenuItem({
 			label: "Textauswahl kopieren",
-			icon: path.join(__dirname, "img", "menu", "bearbeiten-kopieren.png"),
+			icon: path.join(__dirname, "img", "menu", "kopieren.png"),
 			click: function() {
 				const {clipboard} = require("electron");
 				clipboard.write({
@@ -390,7 +390,7 @@ let popup = {
 			path = require("path");
 		menu.append(new MenuItem({
 			label: "Textauswahl markieren",
-			icon: path.join(__dirname, "img", "menu", "popup-markieren.png"),
+			icon: path.join(__dirname, "img", "menu", "text-markiert.png"),
 			click: () => annotieren.makeUser(),
 		}));
 	},
@@ -402,12 +402,12 @@ let popup = {
 			path = require("path");
 		menu.append(new MenuItem({
 			label: "Rückgängig",
-			icon: path.join(__dirname, "img", "menu", "bearbeiten-rueckgaengig.png"),
+			icon: path.join(__dirname, "img", "menu", "pfeil-rund-links.png"),
 			role: "undo",
 		}));
 		menu.append(new MenuItem({
 			label: "Wiederherstellen",
-			icon: path.join(__dirname, "img", "menu", "bearbeiten-wiederherstellen.png"),
+			icon: path.join(__dirname, "img", "menu", "pfeil-rund-rechts.png"),
 			role: "redo",
 		}));
 		menu.append(new MenuItem({
@@ -415,22 +415,22 @@ let popup = {
 		}));
 		menu.append(new MenuItem({
 			label: "Ausschneiden",
-			icon: path.join(__dirname, "img", "menu", "bearbeiten-ausschneiden.png"),
+			icon: path.join(__dirname, "img", "menu", "schere.png"),
 			role: "cut",
 		}));
 		menu.append(new MenuItem({
 			label: "Kopieren",
-			icon: path.join(__dirname, "img", "menu", "bearbeiten-kopieren.png"),
+			icon: path.join(__dirname, "img", "menu", "kopieren.png"),
 			role: "copy",
 		}));
 		menu.append(new MenuItem({
 			label: "Einfügen",
-			icon: path.join(__dirname, "img", "menu", "bearbeiten-einfuegen.png"),
+			icon: path.join(__dirname, "img", "menu", "einfuegen.png"),
 			role: "paste",
 		}));
 		menu.append(new MenuItem({
 			label: "Alles auswählen",
-			icon: path.join(__dirname, "img", "menu", "bearbeiten-auswaehlen.png"),
+			icon: path.join(__dirname, "img", "menu", "auswaehlen.png"),
 			role: "selectAll",
 		}));
 	},
@@ -442,7 +442,7 @@ let popup = {
 			path = require("path");
 		menu.append(new MenuItem({
 			label: "Quick-Access-Bar konfigurieren",
-			icon: path.join(__dirname, "img", "menu", "programm-einstellungen.png"),
+			icon: path.join(__dirname, "img", "menu", "zahnrad.png"),
 			click: function() {
 				optionen.oeffnen();
 				optionen.sektionWechseln(document.getElementById("einstellungen-link-menue"));
@@ -457,7 +457,7 @@ let popup = {
 			path = require("path");
 		menu.append(new MenuItem({
 			label: "Wort ändern",
-			icon: path.join(__dirname, "img", "menu", "popup-wort.png"),
+			icon: path.join(__dirname, "img", "menu", "text-pfeil-kreis.png"),
 			click: () => kartei.wortAendern(),
 		}));
 	},
@@ -469,7 +469,7 @@ let popup = {
 			path = require("path");
 		menu.append(new MenuItem({
 			label: "Kopierfunktion beenden",
-			icon: path.join(__dirname, "img", "menu", "popup-beenden.png"),
+			icon: path.join(__dirname, "img", "menu", "ausgang.png"),
 			click: () => kopieren.uiOff(),
 		}));
 	},
@@ -481,7 +481,7 @@ let popup = {
 			path = require("path");
 		menu.append(new MenuItem({
 			label: "Erinnerungen",
-			icon: path.join(__dirname, "img", "menu", "erinnerungen.png"),
+			icon: path.join(__dirname, "img", "menu", "kreis-info.png"),
 			click: () => erinnerungen.show(),
 		}));
 	},
@@ -493,7 +493,7 @@ let popup = {
 			path = require("path");
 		menu.append(new MenuItem({
 			label: "Notizen-Fenster",
-			icon: path.join(__dirname, "img", "menu", "kartei-notizen.png"),
+			icon: path.join(__dirname, "img", "menu", "stift.png"),
 			click: () => notizen.oeffnen(),
 		}));
 	},
@@ -505,7 +505,7 @@ let popup = {
 			path = require("path");
 		menu.append(new MenuItem({
 			label: "Lexika-Fenster",
-			icon: path.join(__dirname, "img", "menu", "kartei-lexika.png"),
+			icon: path.join(__dirname, "img", "menu", "buecher.png"),
 			click: () => lexika.oeffnen(),
 		}));
 	},
@@ -520,7 +520,7 @@ let popup = {
 		}));
 		menu.append(new MenuItem({
 			label: "Notizen-Einstellungen",
-			icon: path.join(__dirname, "img", "menu", "programm-einstellungen.png"),
+			icon: path.join(__dirname, "img", "menu", "zahnrad.png"),
 			click: function() {
 				optionen.oeffnen();
 				optionen.sektionWechseln(document.getElementById("einstellungen-link-notizen"));
@@ -535,7 +535,7 @@ let popup = {
 			path = require("path");
 		menu.append(new MenuItem({
 			label: "Filter-Einstellungen",
-			icon: path.join(__dirname, "img", "menu", "programm-einstellungen.png"),
+			icon: path.join(__dirname, "img", "menu", "zahnrad.png"),
 			click: function() {
 				optionen.oeffnen();
 				optionen.sektionWechseln(document.getElementById("einstellungen-link-filterleiste"));
@@ -550,7 +550,7 @@ let popup = {
 			path = require("path");
 		menu.append(new MenuItem({
 			label: "Filter zurücksetzen",
-			icon: path.join(__dirname, "img", "menu", "popup-filter.png"),
+			icon: path.join(__dirname, "img", "menu", "pfeil-kreis.png"),
 			click: () => filter.ctrlReset(true),
 		}));
 	},
@@ -562,7 +562,7 @@ let popup = {
 			path = require("path");
 		menu.append(new MenuItem({
 			label: "Aus Liste entfernen",
-			icon: path.join(__dirname, "img", "menu", "popup-loeschen.png"),
+			icon: path.join(__dirname, "img", "menu", "muelleimer.png"),
 			click: () => start.dateiEntfernen(popup.startDatei),
 		}));
 	},
@@ -576,7 +576,7 @@ let popup = {
 			path = require("path");
 		menu.append(new MenuItem({
 			label: "Link kopieren",
-			icon: path.join(__dirname, "img", "menu", "popup-link.png"),
+			icon: path.join(__dirname, "img", "menu", "link.png"),
 			click: function() {
 				const {clipboard} = require("electron");
 				clipboard.writeText(popup.element.title);
@@ -603,7 +603,7 @@ let popup = {
 		}
 		menu.append(new MenuItem({
 			label: "Beleg bearbeiten",
-			icon: path.join(__dirname, "img", "menu", "popup-beleg.png"),
+			icon: path.join(__dirname, "img", "menu", "karteikarte.png"),
 			click: function() {
 				overlay.alleSchliessen(); // der Beleg kann auch aus einem Overlay-Fenster geöffnet werden
 				beleg.oeffnen(parseInt(popup.belegID, 10));
@@ -618,7 +618,7 @@ let popup = {
 			path = require("path");
 		menu.append(new MenuItem({
 			label: "Beleg löschen",
-			icon: path.join(__dirname, "img", "menu", "popup-loeschen.png"),
+			icon: path.join(__dirname, "img", "menu", "muelleimer.png"),
 			click: () => beleg.aktionLoeschenFrage(popup.belegID),
 		}));
 	},
@@ -630,7 +630,7 @@ let popup = {
 			path = require("path");
 		menu.append(new MenuItem({
 			label: "Beleg in Zwischenablage kopieren",
-			icon: path.join(__dirname, "img", "menu", "popup-zwischenablage.png"),
+			icon: path.join(__dirname, "img", "menu", "einfuegen-pfeil.png"),
 			click: () => beleg.ctrlZwischenablage(data.ka[popup.belegID]),
 		}));
 	},
@@ -642,7 +642,7 @@ let popup = {
 			path = require("path");
 		menu.append(new MenuItem({
 			label: "Beleg duplizieren",
-			icon: path.join(__dirname, "img", "menu", "popup-duplikat.png"),
+			icon: path.join(__dirname, "img", "menu", "duplizieren.png"),
 			click: function() {
 				const daten = [kopieren.datenBeleg(data.ka[popup.belegID])];
 				kopieren.einfuegenEinlesen(daten, true);
@@ -664,7 +664,7 @@ let popup = {
 		}
 		menu.append(new MenuItem({
 			label: "Belegliste-Einstellungen",
-			icon: path.join(__dirname, "img", "menu", "programm-einstellungen.png"),
+			icon: path.join(__dirname, "img", "menu", "zahnrad.png"),
 			click: function() {
 				optionen.oeffnen();
 				optionen.sektionWechseln(document.getElementById("einstellungen-link-belegliste"));
@@ -679,7 +679,7 @@ let popup = {
 			path = require("path");
 		menu.append(new MenuItem({
 			label: "Anhang öffnen",
-			icon: path.join(__dirname, "img", "menu", "popup-oeffnen.png"),
+			icon: path.join(__dirname, "img", "menu", "oeffnen.png"),
 			click: () => anhaenge.oeffnen(popup.anhangDatei),
 		}));
 	},
@@ -698,7 +698,7 @@ let popup = {
 		}
 		menu.append(new MenuItem({
 			label: "Fenster schließen",
-			icon: path.join(__dirname, "img", "menu", "popup-schliessen.png"),
+			icon: path.join(__dirname, "img", "menu", "x-dick.png"),
 			click: function() {
 				const id_oben = overlay.oben();
 				overlay.schliessen(document.getElementById(id_oben));
@@ -721,7 +721,7 @@ let popup = {
 		}
 		menu.append(new MenuItem({
 			label: "Karteikarten-Einstellungen",
-			icon: path.join(__dirname, "img", "menu", "programm-einstellungen.png"),
+			icon: path.join(__dirname, "img", "menu", "zahnrad.png"),
 			click: function() {
 				optionen.oeffnen();
 				optionen.sektionWechseln(document.getElementById("einstellungen-link-karteikarte"));
@@ -743,7 +743,7 @@ let popup = {
 		}
 		menu.append(new MenuItem({
 			label: "Bedeutungsgerüst-Einstellungen",
-			icon: path.join(__dirname, "img", "menu", "programm-einstellungen.png"),
+			icon: path.join(__dirname, "img", "menu", "zahnrad.png"),
 			click: function() {
 				optionen.oeffnen();
 				optionen.sektionWechseln(document.getElementById("einstellungen-link-bedeutungsgeruest"));
@@ -765,7 +765,7 @@ let popup = {
 		}
 		menu.append(new MenuItem({
 			label: "Beleg hinzufügen",
-			icon: path.join(__dirname, "img", "menu", "belege-hinzufuegen.png"),
+			icon: path.join(__dirname, "img", "menu", "dokument-plus.png"),
 			click: () => beleg.erstellenPre(),
 			accelerator: "CommandOrControl+N",
 		}));
@@ -773,7 +773,7 @@ let popup = {
 				document.getElementById("liste").classList.contains("aus")) {
 			menu.append(new MenuItem({
 				label: "Belege auflisten",
-				icon: path.join(__dirname, "img", "menu", "belege-auflisten.png"),
+				icon: path.join(__dirname, "img", "menu", "liste-bullets.png"),
 				click: () => liste.anzeigen(),
 				accelerator: "CommandOrControl+L",
 			}));
@@ -794,7 +794,7 @@ let popup = {
 		}
 		menu.append(new MenuItem({
 			label: "Kartei erstellen",
-			icon: path.join(__dirname, "img", "menu", "kartei-erstellen.png"),
+			icon: path.join(__dirname, "img", "menu", "dokument-plus.png"),
 			click: function() {
 				kartei.wortErfragen();
 			},

@@ -422,7 +422,7 @@ let kopieren = {
 			tr.appendChild(td);
 			let img = document.createElement("img");
 			td.appendChild(img);
-			img.src = "img/kopieren-nach.svg";
+			img.src = "img/pfeil-gerade-rechts.svg";
 			img.width = "24";
 			img.height = "24";
 			// Dropdown

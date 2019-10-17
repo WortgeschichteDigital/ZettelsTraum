@@ -80,8 +80,8 @@
 
 #bedeutungen-gerueste-config {
 	margin-left: 5px;
-	-webkit-mask-image: url(../../img/gerueste-config.svg);
-	mask-image: url(../../img/gerueste-config.svg);
+	-webkit-mask-image: url(../../img/zahnrad.svg);
+	mask-image: url(../../img/zahnrad.svg);
 	background-color: var(--textExtremHell);
 }
 
@@ -292,88 +292,88 @@ td #bedeutungen-tagger-link:focus {
 	background-color: var(--farbeRot);
 }
 
-a[class*="icon-move"] {
+a[class*="icon-windrose"] {
 	background-color: transparent;
 }
 
-.icon-move_ {
-	-webkit-mask-image: url(../../img/move_.svg);
-	mask-image: url(../../img/move_.svg);
+.icon-windrose_ {
+	-webkit-mask-image: url(../../img/windrose_.svg);
+	mask-image: url(../../img/windrose_.svg);
 }
 
-.icon-move_37-38-39-40 {
-	-webkit-mask-image: url(../../img/move_37-38-39-40.svg);
-	mask-image: url(../../img/move_37-38-39-40.svg);
+.icon-windrose_37-38-39-40 {
+	-webkit-mask-image: url(../../img/windrose_37-38-39-40.svg);
+	mask-image: url(../../img/windrose_37-38-39-40.svg);
 }
 
-.icon-move_37-38-39 {
-	-webkit-mask-image: url(../../img/move_37-38-39.svg);
-	mask-image: url(../../img/move_37-38-39.svg);
+.icon-windrose_37-38-39 {
+	-webkit-mask-image: url(../../img/windrose_37-38-39.svg);
+	mask-image: url(../../img/windrose_37-38-39.svg);
 }
 
-.icon-move_37-38-40 {
-	-webkit-mask-image: url(../../img/move_37-38-40.svg);
-	mask-image: url(../../img/move_37-38-40.svg);
+.icon-windrose_37-38-40 {
+	-webkit-mask-image: url(../../img/windrose_37-38-40.svg);
+	mask-image: url(../../img/windrose_37-38-40.svg);
 }
 
-.icon-move_37-38 {
-	-webkit-mask-image: url(../../img/move_37-38.svg);
-	mask-image: url(../../img/move_37-38.svg);
+.icon-windrose_37-38 {
+	-webkit-mask-image: url(../../img/windrose_37-38.svg);
+	mask-image: url(../../img/windrose_37-38.svg);
 }
 
-.icon-move_37-39-40 {
-	-webkit-mask-image: url(../../img/move_37-39-40.svg);
-	mask-image: url(../../img/move_37-39-40.svg);
+.icon-windrose_37-39-40 {
+	-webkit-mask-image: url(../../img/windrose_37-39-40.svg);
+	mask-image: url(../../img/windrose_37-39-40.svg);
 }
 
-.icon-move_37-39 {
-	-webkit-mask-image: url(../../img/move_37-39.svg);
-	mask-image: url(../../img/move_37-39.svg);
+.icon-windrose_37-39 {
+	-webkit-mask-image: url(../../img/windrose_37-39.svg);
+	mask-image: url(../../img/windrose_37-39.svg);
 }
 
-.icon-move_37-40 {
-	-webkit-mask-image: url(../../img/move_37-40.svg);
-	mask-image: url(../../img/move_37-40.svg);
+.icon-windrose_37-40 {
+	-webkit-mask-image: url(../../img/windrose_37-40.svg);
+	mask-image: url(../../img/windrose_37-40.svg);
 }
 
-.icon-move_37 {
-	-webkit-mask-image: url(../../img/move_37.svg);
-	mask-image: url(../../img/move_37.svg);
+.icon-windrose_37 {
+	-webkit-mask-image: url(../../img/windrose_37.svg);
+	mask-image: url(../../img/windrose_37.svg);
 }
 
-.icon-move_38-39-40 {
-	-webkit-mask-image: url(../../img/move_38-39-40.svg);
-	mask-image: url(../../img/move_38-39-40.svg);
+.icon-windrose_38-39-40 {
+	-webkit-mask-image: url(../../img/windrose_38-39-40.svg);
+	mask-image: url(../../img/windrose_38-39-40.svg);
 }
 
-.icon-move_38-39 {
-	-webkit-mask-image: url(../../img/move_38-39.svg);
-	mask-image: url(../../img/move_38-39.svg);
+.icon-windrose_38-39 {
+	-webkit-mask-image: url(../../img/windrose_38-39.svg);
+	mask-image: url(../../img/windrose_38-39.svg);
 }
 
-.icon-move_38-40 {
-	-webkit-mask-image: url(../../img/move_38-40.svg);
-	mask-image: url(../../img/move_38-40.svg);
+.icon-windrose_38-40 {
+	-webkit-mask-image: url(../../img/windrose_38-40.svg);
+	mask-image: url(../../img/windrose_38-40.svg);
 }
 
-.icon-move_38 {
-	-webkit-mask-image: url(../../img/move_38.svg);
-	mask-image: url(../../img/move_38.svg);
+.icon-windrose_38 {
+	-webkit-mask-image: url(../../img/windrose_38.svg);
+	mask-image: url(../../img/windrose_38.svg);
 }
 
-.icon-move_39-40 {
-	-webkit-mask-image: url(../../img/move_39-40.svg);
-	mask-image: url(../../img/move_39-40.svg);
+.icon-windrose_39-40 {
+	-webkit-mask-image: url(../../img/windrose_39-40.svg);
+	mask-image: url(../../img/windrose_39-40.svg);
 }
 
-.icon-move_39 {
-	-webkit-mask-image: url(../../img/move_39.svg);
-	mask-image: url(../../img/move_39.svg);
+.icon-windrose_39 {
+	-webkit-mask-image: url(../../img/windrose_39.svg);
+	mask-image: url(../../img/windrose_39.svg);
 }
 
-.icon-move_40 {
-	-webkit-mask-image: url(../../img/move_40.svg);
-	mask-image: url(../../img/move_40.svg);
+.icon-windrose_40 {
+	-webkit-mask-image: url(../../img/windrose_40.svg);
+	mask-image: url(../../img/windrose_40.svg);
 }
 
 #bedeutungen-drag-marker {
@@ -388,8 +388,8 @@ a[class*="icon-move"] {
 }
 
 #bedeutungen-cont .icon-loeschen {
-	-webkit-mask-image: url(../../img/loeschen.svg);
-	mask-image: url(../../img/loeschen.svg);
+	-webkit-mask-image: url(../../img/muelleimer.svg);
+	mask-image: url(../../img/muelleimer.svg);
 	background-color: transparent;
 }
 
@@ -398,8 +398,8 @@ a[class*="icon-move"] {
 }
 
 #bedeutungen-cont .icon-verschmelzen {
-	-webkit-mask-image: url(../../img/verschmelzen.svg);
-	mask-image: url(../../img/verschmelzen.svg);
+	-webkit-mask-image: url(../../img/pfeil-verbinden-rechts.svg);
+	mask-image: url(../../img/pfeil-verbinden-rechts.svg);
 	background-color: transparent;
 }
 
