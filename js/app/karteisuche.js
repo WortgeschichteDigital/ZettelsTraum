@@ -218,21 +218,22 @@ let karteisuche = {
 	// Suche starten
 	//   pfade = Array
 	//     (Pfade, in denen gesucht werden soll)
-	suchen (pfade) {
+	async suchen (pfade) {
 		// Suche starten
 		karteisuche.wgd = [];
-		const fs = require("fs");
-		for (let pfad of pfade) {
-			if (fs.existsSync(pfad)) {
-				karteisuche.wgdFinden(pfad);
+		const fs = require("fs"),
+			fsPromises = fs.promises;
+		for (let ordner of pfade) {
+			const existiert = await karteisuche.existenzOrdner(ordner);
+			if (existiert) {
+				await karteisuche.ordnerParsen(ordner);
 			}
 		}
 		// Filterwerte sammeln
 		karteisuche.filterWerteSammeln();
 		// Karteien analysieren
 		for (let kartei of karteisuche.wgd) {
-			const fs = require("fs"),
-				content = fs.readFileSync(kartei.pfad, {encoding: "utf-8", flag: "r"});
+			const content = await fsPromises.readFile(kartei.pfad, {encoding: "utf-8", flag: "r"});
 			// Kartei einlesen
 			let datei = {};
 			try {
@@ -259,32 +260,55 @@ let karteisuche = {
 		// Filter speichern
 		karteisuche.filterSpeichern();
 	},
+	// überprüft, ob der übergebene Ordner noch existiert
+	//   ordner = String
+	//     (Ordner, dessen Existenz überprüft werden soll)
+	existenzOrdner (ordner) {
+		return new Promise(resolve => {
+			const fs = require("fs");
+			resolve(fs.existsSync(ordner)); // das asynchrone fs.exists() ist deprecated
+		});
+	},
 	// WGD-Dateien, die gefunden wurden;
 	// Array enthält Objekte:
 	//   pfad (String; Pfad zur Kartei)
 	//   wort (String; Wort der Kartei)
 	//   passt (Boolean; passt zu den Suchfiltern)
 	wgd: [],
-	// WGD-Dateien suchen
-	//   pfadStart = String
-	//     (Ordner von dem aus die Suche beginnen soll)
-	wgdFinden (pfadStart) {
+	// findet alle Pfade in einem übergebenen Ordner
+	//   ordner = String
+	//     (Ordner, von dem aus die Suche beginnen soll)
+	async ordnerParsen (ordner) {
 		const fs = require("fs"),
-			path = require("path");
-		let inhalt = fs.readdirSync(pfadStart);
-		for (let i of inhalt) {
-			const pfad = path.join(pfadStart, i);
-			let stat = fs.lstatSync(pfad);
-			if (stat.isDirectory()){
-				karteisuche.wgdFinden(pfad);
-			} else if (/\.wgd$/.test(pfad)) {
+			fsPromises = fs.promises;
+		try {
+			let files = await fsPromises.readdir(ordner);
+			for (let i of files) {
+				const path = require("path"),
+					pfad = path.join(ordner, i);
+				await karteisuche.pfadPruefen(pfad);
+			}
+		} catch (err) {} // Auslesen des Ordners fehlgeschlagen
+	},
+	// überprüft einen übergebenen Pfad: Ordner oder WGD-Datei?
+	//   pfad = String
+	//     (Ordner, von dem aus die Suche beginnen soll)
+	async pfadPruefen (pfad) {
+		const fs = require("fs"),
+			fsPromises = fs.promises;
+		try {
+			await fsPromises.access(pfad, fs.constants.R_OK); // Lesezugriff auf Pfad? Wenn kein Zugriff => throw
+			let stats = await fsPromises.lstat(pfad); // Natur des Pfades?
+			if (stats.isDirectory()) { // Ordner => parsen
+				karteisuche.ordnerParsen(pfad);
+			} else if (/\.wgd$/.test(pfad)) { // WGD-Datei => merken
 				karteisuche.wgd.push({
 					pfad: pfad,
 					wort: "",
 					passt: false,
 				});
 			}
-		}
+		} catch (err) {} // wahrscheinlich besteht kein Zugriff auf den Pfad
 	},
 	// WGD-Dateien auflisten
 	wgdAuflisten () {
