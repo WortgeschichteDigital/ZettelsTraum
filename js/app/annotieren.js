@@ -153,9 +153,7 @@ let annotieren = {
 		}
 		// Position der UI festlegen
 		let pos = [],
-			knoten = null,
-			neben = false,
-			hoeheDetails = 0;
+			knoten = null;
 		if (annotieren.data.start.offsetLeft < 187) { // links neben der Markierung
 			pos.push("links");
 			knoten = annotieren.data.start;
@@ -163,31 +161,12 @@ let annotieren = {
 			pos.push("rechts");
 			knoten = annotieren.data.ende;
 		}
-		if (!listeAus) { // in der Belegliste muss geschaut werden, ob genug Platz da ist
-			let details = knoten.parentNode;
-			while (!details.classList.contains("liste-details")) {
-				details = details.parentNode;
-			}
-			hoeheDetails = details.offsetHeight;
-		}
 		if (knoten.offsetTop < 65) {
 			pos.push("unten");
-			if (!listeAus &&
-					knoten.offsetTop + knoten.offsetHeight + 65 > hoeheDetails) {
-				neben = true; // Platzmangel im Details-Block!
-			}
 		} else {
 			pos.push("oben");
 		}
-		if (neben) { // Beleg ist sehr, sehr flach (z. B. einzeilig) => neben der Markierung positionieren
-			if (annotieren.data.start.offsetLeft - 187 < 55) { // rechts neben der Markierung
-				span.classList.add("rechts-neben");
-			} else { // links neben der Markierung
-				span.classList.add("links-neben");
-			}
-		} else {
-			span.classList.add(pos.join("-"));
-		}
+		span.classList.add(pos.join("-"));
 		// Popup einhängen und Events anhängen
 		knoten.appendChild(span);
 		annotieren.modEvents();

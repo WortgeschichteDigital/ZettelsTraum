@@ -345,6 +345,7 @@ let layoutMenuAnsicht = [
 				label: "Anzeige vergrößern",
 				icon: path.join(__dirname, "img", "menu", "plus-quadrat.png"),
 				role: "zoomIn",
+				accelerator: "CommandOrControl+=",
 			},
 			{
 				label: "Anzeige verkleinern",

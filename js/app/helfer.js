@@ -411,26 +411,31 @@ let helfer = {
 	//   html = String
 	//     (der Quelltext, in dem die Ersetzungen vorgenommen werden sollen)
 	clipboardHtml (html) {
-		// temporäre Hervorhebungen löschen
-		html = html.replace(/<mark class="(suche|user)">(.+?)<\/mark>/g, function(m, p1, p2) {
-			return p2;
-		});
-		// Worthervorhebung
+		// temporären Container erstellen
+		let cont = document.createElement("div");
+		cont.innerHTML = html;
+		// Hervorhebungen, die standardmäßig gelöscht gehören
+		let marks = [".suche", ".suchleiste", ".user"];
+		if (!optionen.data.einstellungen["textkopie-wort"]) { // Hervorhebung Karteiwort ebenfalls löschen
+			marks.push(".wort");
+		} else {
+			marks.push(".farbe0 .wort");
+		}
+		helfer.clipboardHtmlErsetzen(cont, marks.join(", "));
+		// Hervorhebung Karteiwort ggf. umwandeln
 		if (optionen.data.einstellungen["textkopie-wort"]) {
+			// Layout festlegen
 			let style = "font-weight: bold";
 			if (optionen.data.einstellungen["textkopie-wort-hinterlegt"]) {
 				style += "; background-color: #e5e5e5";
 			}
-			html = html.replace(/<mark class="wort">(.+?)<\/mark>/g, function(m, p1) {
-				return `<span style="${style}">${p1}</span>`;
-			});
-		} else {
-			html = html.replace(/<mark class="wort">(.+?)<\/mark>/g, function(m, p1) {
-				return p1;
-			});
+			// verbliebene Karteiwort-Hervorhebungen umwandeln
+			helfer.clipboardHtmlErsetzen(cont, ".wort", "span", style);
 		}
-		// normale Styles
-		const styles = {
+		// Annotierungen endgültig löschen
+		helfer.clipboardHtmlErsetzen(cont, ".annotierung-wort");
+		// DTA-Klassen umwandeln
+		let styles = {
 			"dta-antiqua": "font-family: sans-serif",
 			"dta-blau": "color: blue",
 			"dta-doppelt": "text-decoration: underline double",
@@ -444,14 +449,41 @@ let helfer = {
 			if (!styles.hasOwnProperty(style)) {
 				continue;
 			}
-			html = html.replace(/class="(.+?)"/g, function(m, p1) {
-				if (styles[p1]) {
-					return `style="${styles[p1]}"`;
-				}
-				return m;
+			stylesAnpassen(style);
+		}
+		// Ergebnis der Bereinigung zurückggeben
+		return cont.innerHTML;
+		// Ersetzungsfunktion für die DTA-Layout-Container
+		function stylesAnpassen (style) {
+			cont.querySelectorAll(`.${style}`).forEach(i => {
+				i.setAttribute("style", styles[style]);
+				i.removeAttribute("class");
 			});
 		}
-		return html;
+	},
+	// Ersetzungsfunktion für zu löschende bzw. umzuwandelnde Element-Container
+	//   selectors = String
+	//     (Liste der Selektoren)
+	//   container = String || undefined
+	//     (steuert die Art des Ersatz-Containers)
+	//   style = String || undefined
+	//     (steuert die Art des Layouts im Ersatz-Container)
+	clipboardHtmlErsetzen (cont, selectors, typ = "frag", style = "") {
+		let quelle = cont.querySelector(selectors);
+		while (quelle) { // die Elemente könnten verschachtelt sein
+			let ersatz;
+			if (typ === "span") {
+				ersatz = document.createElement("span");
+				ersatz.setAttribute("style", style);
+			} else {
+				ersatz = document.createDocumentFragment();
+			}
+			for (let i = 0, len = quelle.childNodes.length; i < len; i++) {
+				ersatz.appendChild(quelle.childNodes[i].cloneNode(true));
+			}
+			quelle.parentNode.replaceChild(ersatz, quelle);
+			quelle = cont.querySelector(selectors);
+		}
 	},
 	// Strings für alphanumerische Sortierung aufbereiten
 	//   s = String
@@ -729,33 +761,40 @@ let helfer = {
 		// Dokumententitel
 		document.title = app_name + wort + asterisk;
 	},
-	// Verteilerfunktion für den Tastaturbefehl Strg + S
-	speichern () {
-		const oben = overlay.oben();
-		if (oben === "notizen" && notizen.geaendert) {
-			notizen.speichern();
+	// Verteilerfunktion für "Kartei > Speichern" bzw. den Tastaturbefehl Strg + S;
+	// der Befehl soll eine Speicherkaskade auslösen
+	async speichern () {
+		if (notizen.geaendert) {
+			const resNotizen = await new Promise(resolve => resolve(notizen.speichern()));
+			if (!resNotizen) { // beim Speichern der Notizen ist etwas schiefgelaufen
+				return;
+			}
 		}
-		if (oben === "tagger" && tagger.geaendert) {
+		if (beleg.geaendert) {
+			const resBeleg = await new Promise(resolve => resolve(beleg.aktionSpeichern()));
+			if (!resBeleg) { // beim Speichern der Karteikarte ist etwas schiefgelaufen
+				return;
+			}
+		}
+		if (tagger.geaendert) {
 			tagger.speichern();
-			// falls das Tagger-Fenster automatisch geschlossen wird
 			setTimeout(function() {
-				if (!overlay.oben() && bedeutungen.geaendert) {
-					bedeutungen.speichern();
-				}
-			}, 200); // das Ausblenden des Fensters dauert 200 Millisekunden; vgl. overlay.ausblenden()
-		}
-		if (!oben && bedeutungen.geaendert) {
+				bedeutungen.speichern();
+				karteiSpeichern();
+			}, 200); // Ausblenden des Tagger-Fensters dauert 200 ms; vgl. overlay.ausblenden()
+		} else if (bedeutungen.geaendert) {
 			bedeutungen.speichern();
 		}
-		if (!oben && beleg.geaendert) {
-			beleg.aktionSpeichern();
-		}
-		if (!notizen.geaendert &&
-				!tagger.geaendert &&
-				!bedeutungen.geaendert &&
-				!beleg.geaendert &&
-				kartei.geaendert) {
-			kartei.speichern(false);
+		karteiSpeichern();
+		// Funktion zum Speichern der Kartei
+		function karteiSpeichern () {
+			if (!notizen.geaendert &&
+					!tagger.geaendert &&
+					!bedeutungen.geaendert &&
+					!beleg.geaendert &&
+					kartei.geaendert) {
+				kartei.speichern(false);
+			}
 		}
 	},
 	// Tastatur-Events abfangen und verarbeiten

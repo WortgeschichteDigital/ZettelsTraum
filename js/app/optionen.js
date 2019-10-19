@@ -90,9 +90,9 @@ let optionen = {
 			timeout: "10",
 			// Einfügen-Fenster (Kopierfunktion) nach dem Einfügen direkt schließen
 			"einfuegen-schliessen": true,
-			// Hervorhebung des Wort beim Kopieren von Text mitkopieren
+			// Hervorhebung des Karteiworts beim Kopieren von Text mitkopieren
 			"textkopie-wort": false,
-			// beim Kopieren ist das Wort grau hinterlegt
+			// beim Kopieren ist das Karteiworts grau hinterlegt
 			"textkopie-wort-hinterlegt": false,
 			// MENÜ
 			// Menü-Leiste ausblenden (einblenden, wenn Alt gedruckt)

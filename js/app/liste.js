@@ -465,6 +465,7 @@ let liste = {
 			liste.metainfosErstellen(data.ka[id], div, "liste-meta");
 		}
 		if (einblenden) {
+			div.classList.add("blenden-prep");
 			liste.belegUmschaltenZielhoehe = div.offsetHeight - 30; // 30px = padding-top + padding-bottom
 			div.style.height = "0";
 			div.style.paddingTop = "0";
@@ -671,6 +672,7 @@ let liste = {
 		if (filter.volltextSuche.suche &&
 				!filter.volltextSuche.ka[id].includes("bs")) {
 			let p = document.createElement("p");
+			p.dataset.id = id;
 			liste.belegAbsatzGekuerzt(p);
 			div.appendChild(p);
 			return div;
@@ -1050,7 +1052,10 @@ let liste = {
 				this.classList.remove("schnitt-offen");
 				// Ausblenden animieren
 				let details = this.nextSibling;
-				details.classList.add("blenden");
+				if (details.querySelector("#annotierung-wort")) {
+					annotieren.modSchliessen();
+				}
+				details.classList.add("blenden", "blenden-prep");
 				details.style.height = `${details.offsetHeight - 30}px`; // 30px = padding-top + padding-bottom
 				setTimeout(function() {
 					details.style.height = "0px";
@@ -1075,7 +1080,7 @@ let liste = {
 					clearTimeout(liste.belegUmschaltenTimeout);
 					liste.belegUmschaltenTimeout = setTimeout(() => {
 						details.style.removeProperty("height");
-						details.classList.remove("blenden");
+						details.classList.remove("blenden", "blenden-prep");
 					}, 300);
 				}, 0);
 			}

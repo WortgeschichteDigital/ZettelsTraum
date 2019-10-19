@@ -132,6 +132,8 @@ let suchleiste = {
 			if (neuaufbau) {
 				return;
 			}
+			// ggf. Annotierungs-Popup schließen
+			annotieren.modSchliessen();
 			// alte Suche ggf. löschen
 			suchleiste.suchenReset();
 			// visualisieren, dass damit nichts gefunden werden kann
@@ -143,6 +145,8 @@ let suchleiste = {
 			suchleiste.navi(true);
 			return;
 		}
+		// ggf. Annotierungs-Popup schließen
+		annotieren.modSchliessen();
 		// alte Suche löschen
 		suchleiste.suchenReset();
 		// Elemente mit Treffer zusammentragen
@@ -301,14 +305,11 @@ let suchleiste = {
 		// Bedeutung-entfernen-Icon in der Karteikarte (Hauptfenster)
 		ele.querySelectorAll(".icon-entfernen").forEach(a => beleg.leseBedeutungEx(a));
 		// Annotierung (Hauptfenster)
-		ele.querySelectorAll("mark.wort").forEach(function(i) {
+		ele.querySelectorAll("mark.wort, mark.user").forEach(function(i) {
 			i.addEventListener("click", function() {
-				beleg.wortAnnotierenMod(this);
+				annotieren.mod(this);
 			});
 		});
-		if (ele.querySelector("#annotierung-wort")) {
-			beleg.wortAnnotierenModEvents();
-		}
 	},
 	// Zwischenspeicher für den Timeout
 	suchenKeineTrefferTimeout: null,

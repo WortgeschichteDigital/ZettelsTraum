@@ -211,6 +211,8 @@ let drucken = {
 							text = liste.belegWortHervorheben(text, true);
 						}
 						p.innerHTML = text;
+						helfer.clipboardHtmlErsetzen(p, ".user, .farbe0 .wort");
+						helfer.clipboardHtmlErsetzen(p, ".annotierung-wort");
 						td.appendChild(p);
 					}
 				}
@@ -322,7 +324,7 @@ let drucken = {
 		// Ist Text ausgewählt und ist er im Bereich der Vorschau?
 		if (window.getSelection().toString() &&
 				popup.getTargetSelection([cont])) {
-			let html = helfer.clipboardHtml(popup.textauswahl.html);
+			let html = popup.textauswahl.html;
 			if (baum) {
 				html = baumHtml(html);
 			}

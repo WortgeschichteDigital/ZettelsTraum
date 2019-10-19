@@ -299,11 +299,17 @@ php make-changelog.php [FORMAT] [PFAD]</pre>
 
 					<ul>
 						<li><span class="datei">./index.html</span>: <abbr title="Hyptertext Markupt Language" lang="en">HTML</abbr>-Datei, die beim Öffnen des Hauptfensters geladen wird</li>
+
 						<li><span class="datei">./installer-linux.js</span>: Node-Script, das eine DEB- oder RPM-Datei erzeugt, mit der <i class="app-name"></i> auf <i>Debian</i>/<i>Ubuntu</i> <abbr title="beziehungsweise">bzw.</abbr> Distributionen, die auf RPM setzen, installiert werden kann; alternativ kann auch ein TAR.GZ-Archiv oder ein auf den meisten Distributionen lauffähiges AppImage gebaut werden</li>
+
 						<li><span class="datei">./installer-win.js</span>: Node-Script, das einen <abbr title="Nullsoft Scriptable Install System" lang="en">NSIS</abbr>-Installer erzeugt (alternativ auch ein ZIP-Archiv), mit dem <i class="app-name"></i> auf <i>Windows</i> installiert werden kann</li>
+
 						<li><span class="datei">./installer.js</span>: ein gemeinsam genutztes Modul für die Node-Scripts, die Installer erzeugen</li>
+
 						<li><span class="datei">./LICENSE.*.txt</span>: Lizenzbestimmungen von <i class="app-name"></i> den Icons und Fonts</li>
+
 						<li><span class="datei">./main.js</span>: Node-Script, das die App initialisiert, die Programmfenster öffnet, lädt, verwaltet und für viele andere Dinge zuständig ist, was das Betriebssystem, auf dem <i class="app-name"></i> läuft, direkt betrifft</li>
+
 						<li><span class="datei">./package.json</span>: <abbr title="JavaScript Object Notation" lang="en">JSON</abbr>-Datei mit Meta-Informationen zu Programm, Autor und Lizenz sowie Angaben darüber, wie die App gestartet wird; <abbr title="vergleiche">vgl.</abbr> den Abschnitt <a href="#framework-starten">Starten der App</a></li>
 					</ul>
 
@@ -314,7 +320,9 @@ php make-changelog.php [FORMAT] [PFAD]</pre>
 
 					<ul>
 						<li><span class="datei">./css/*.css</span>: Stylesheets, die in mehr als einem Fenster benötigt werden und durch <code class="quelltext">@include</code> in andere Stylesheets eingebunden werden</li>
+
 						<li><span class="datei">./css/app/*.css</span>: Stylesheets, die im Hauptfenster des Programms geladen werden; in der <span class="datei">app.css</span> finden sich viele basale Definitionen, die anderen Dateien regeln das Layout einzelner Teile oder Funktionen der App</li>
+
 						<li><span class="datei">./css/win/*.css</span>: diese Stylesheets werden nur in den vom Hauptfenster abhängigen Nebenfenstern (also <abbr title="unter anderem">u. a.</abbr> dem <a href="#" class="link-handbuch">Handbuch</a> und diesem Fenster) benötigt</li>
 					</ul>
 
@@ -328,7 +336,9 @@ php make-changelog.php [FORMAT] [PFAD]</pre>
 
 					<ul>
 						<li><span class="datei">./img/*.svg</span>: Vektorgrafiken, die sowohl für das Hauptfenster der App als auch für deren Nebenfenster genutzt werden; nicht alle Grafiken werden aus diesem Ordner geladen, mitunter sind sie als <abbr title="Extensible Markup Language">XML</abbr> direkt in den Quelltext der <abbr title="Hyptertext Markup Language">HTML</abbr>-Dateien eingefügt worden</li>
+
 						<li><span class="datei">./img/icon/</span>: Bilddateien mit dem Programm-Icon in verschiedenen Größen für unterschiedliche Betriebssysteme; für <i>Windows</i> gibt es eine <span class="datei">icon.ico</span>, für <i>macOS</i> eine <span class="datei">icon.icns</span> und für <i>Linux</i> einen Ordner mit <abbr title="Portable Network Graphics" lang="en">PNG</abbr>-Dateien</li>
+
 						<li><span class="datei">./img/menu/*.png</span>: Bilddateien, die nur von den Menüs verwendet werden, die das Framework verwaltet; dazu zählen das App-Menü am oberen Rand des Hauptfensters und die Kontextmenüs, die auf Rechtsklick erscheinen</li>
 					</ul>
 
@@ -350,18 +360,31 @@ php make-changelog.php [FORMAT] [PFAD]</pre>
 
 					<ul>
 						<li><span class="datei">./js/suchleiste.js</span>: alle Funktionen, die die Suchleiste betreffen, die in verschiedenen Fenstern genutzt wird</li>
+
 						<li><span class="datei">./js/app/beleg.js</span>: die Karteikarte betreffende Funktionen, und zwar sowohl die der Formular- als auch die der Leseansicht</li>
+
 						<li><span class="datei">./js/app/dialog.js</span>: Overlay-Fenster, die Meldungen für und Fragen an die NutzerIn ausgeben</li>
+
 						<li><span class="datei">./js/app/dropdown.js</span>: erzeugt das über einen Pfeil oder via Tastaturkürzel zu öffnende Dropdown-Menü, das aus einigen Textfeldern aufgerufen werden kann (<abbr title="zum Beispiel">z. B.</abbr> im Formular der Karteikarte)</li>
+
 						<li><span class="datei">./js/app/kartei.js</span>: regelt das Öffnen und Speichern der Wort-Kartei</li>
+
 						<li><span class="datei">./js/app/konversion.js</span>: konvertiert <abbr title="Wortgeschichte digital">WGD</abbr>-Dateien, sodass sie dem aktuellen <a href="#wgd"><abbr title="Wortgeschichte digital">WGD</abbr>-Format</a> entsprechen</li>
+
 						<li><span class="datei">./js/app/liste.js</span>: regelt den Aufbau und die Funktionen der Belegliste; die Filterleiste links neben den Belegen wird allerdings via <span class="datei">./js/app/filter.js</span> gesteuert</li>
+
 						<li><span class="datei">./js/app/optionen.js</span>: Funktionen, die sich um die Programm-Einstellungen und die Speicheraufträge an den Main-Prozess kümmern</li>
+
 						<li><span class="datei">./js/app/overlay.js</span>: ein größeres Helferobjekt, das die Anzeige aller Overlay-Fenster steuert (das sind Fenster, die die Hauptanzeige überlagern und den Hintergrund leicht ausgrauen)</li>
+
 						<li><span class="datei">./js/app/popup.js</span>: baut das Kontextmenü zusammen, das bei Rechtsklick im Hauptfenster erscheint; die Funktion <code class="quelltext">popup.getTargetSelection()</code> wird auch von vielen anderen Methoden genutzt</li>
+
 						<li><span class="datei">./js/app/stamm.js</span>: Anzeigen, Aufbauen und Füllen des Fensters mit den Formvarianten</li>
+
 						<li><span class="datei">./js/app/start.js</span>: regelt die Anzeige der Startseite, die beim Öffnen des Programms und nach dem Schließen einer Kartei angezeigt wird</li>
+
 						<li><span class="datei">./js/app/tagger.js</span>: Overlay-Fenster, über das das Bedeutungsgerüst mit Tags versehen werden kann</li>
+
 						<li><span class="datei">./js/win/hilfe.js</span>: Funktionen für das <i>Handbuch</i> und die <i>technische Dokumentation</i> (also dieses Fenster)</li>
 					</ul>
 
@@ -891,8 +914,11 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);
 
 					<ul>
 						<li>Kustoden (<code class="quelltext">&lt;catch&gt;</code>),</li>
+
 						<li>Kolumnentiteln (<code class="quelltext">&lt;header&gt;</code>),</li>
+
 						<li>Bogensignaturen (<code class="quelltext">&lt;sig&gt;</code>),</li>
+
 						<li>Schreib- oder Setzfehlern (<code class="quelltext">&lt;sic&gt;</code>), wobei der korrigierte Text in <code class="quelltext">&lt;corr&gt;</code> importiert wird.</li>
 					</ul>
 
@@ -915,6 +941,7 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);
 
 					<ul>
 						<li>dieselbe NutzerIn versucht die Kartei vom selben Computer aus zu öffnen,</li>
+
 						<li>die Lock-Datei wurde vor mehr als zwölf Stunden angelegt.</li>
 					</ul>
 

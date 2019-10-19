@@ -335,7 +335,7 @@ let popup = {
 			// HTML aufbereiten
 			let html = container.innerHTML;
 			if (optionen.data.einstellungen["textkopie-wort"] &&
-					!/class="wort"/.test(html)) {
+					!container.querySelector(".wort")) {
 				html = liste.belegWortHervorheben(html, true);
 			}
 			html = helfer.clipboardHtml(html);

@@ -607,10 +607,9 @@ let beleg = {
 		// Ist Text ausgewählt und ist er im Bereich des Kopier-Icons?
 		if (window.getSelection().toString() &&
 				popup.getTargetSelection([ele])) {
-			let html = helfer.clipboardHtml(popup.textauswahl.html);
 			clipboard.write({
 				text: popup.textauswahl.text,
-				html: html,
+				html: popup.textauswahl.html,
 			});
 			return;
 		}

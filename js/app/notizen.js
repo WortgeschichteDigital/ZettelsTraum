@@ -27,7 +27,7 @@ let notizen = {
 		// Es wurde gar nichts geändert!
 		if (!notizen.geaendert) {
 			direktSchliessen();
-			return;
+			return false;
 		}
 		let vorhanden = notizen.vorhanden();
 		// keine Notizen im Feld, aber Notizen in der Kartei
@@ -40,12 +40,12 @@ let notizen = {
 				}
 			});
 			dialog.text("Das Notizfeld ist leer.\nSollen die in der Kartei gespeicherten Notizen gelöscht werden?");
-			return;
+			return false;
 		}
 		// keine Notizen im Feld
 		if (!vorhanden.feld) {
 			feld.focus();
-			return;
+			return false;
 		}
 		// Änderungen speichern
 		data.no = vorhanden.feld_value;
@@ -54,6 +54,8 @@ let notizen = {
 		direktSchliessen();
 		// ggf. Notizen in der Filterleiste updaten
 		notizen.filterleiste();
+		// erfolgreich gespeichert
+		return true;
 		// Notizen-Fenster ggf. schließen
 		function direktSchliessen () {
 			if (optionen.data.einstellungen["notizen-schliessen"]) {

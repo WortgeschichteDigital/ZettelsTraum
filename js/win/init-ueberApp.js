@@ -11,13 +11,6 @@ window.addEventListener("load", () => {
 	});
 	// Programm-Version eintragen
 	document.getElementById("version").textContent = app.getVersion();
-	// Copyright-Jahre eintragen
-	let copyrightJahr = "2019",
-		jetzt = new Date();
-	if (jetzt.getFullYear() !== 2019) {
-		copyrightJahr += `–${jetzt.getFullYear()}`;
-	}
-	document.getElementById("copyright-jahr").textContent = copyrightJahr;
 	// externe Links
 	document.querySelectorAll(`a[href^="http"], a[href^="mailto"]`).forEach(a => helfer.externeLinks(a));
 	// Changelog
