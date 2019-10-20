@@ -34,6 +34,16 @@ let helferWin = {
 			}
 		});
 	},
+	// Fehlerlog über Link öffnen
+	//   a = Element
+	//     (Link, der zum Fehlerlog führen soll)
+	oeffneFehlerlog (a) {
+		a.addEventListener("click", function(evt) {
+			evt.preventDefault();
+			const {ipcRenderer} = require("electron");
+			ipcRenderer.send("hilfe-fehlerlog");
+		});
+	},
 	// Tastatur-Events abfangen und verarbeiten
 	//   evt = Event-Objekt
 	tastatur (evt) {

@@ -228,42 +228,18 @@ let anhaenge = {
 		const {shell} = require("electron");
 		shell.openItem(anhaenge.data[datei].path);
 	},
-	// Öffnet beim Klick auf eine Überschrift im Anhänge-Fenster den entsprechenden Beleg
+	// Öffnen der Karteikarte durch Klick auf eine Überschrift im Anhänge-Fenster (Listener)
 	// (wird auch in kopieren.js benutzt)
 	//   ele = Element
 	//     (die Überschrift, auf die geklickt wurde)
 	belegOeffnen (ele) {
 		ele.addEventListener("click", function(evt) {
 			evt.preventDefault();
-			let id = this.dataset.id;
-			if (bedeutungen.geaendert) {
-				dialog.oeffnen("confirm", function() {
-					if (dialog.antwort) {
-						bedeutungen.speichern();
-					} else if (dialog.antwort === false) {
-						bedeutungen.bedeutungenGeaendert(false);
-						oeffnen();
-					}
-				});
-				dialog.text("Das Bedeutungsgerüst wurde verändert, aber noch nicht gespeichert.\nMöchten Sie die Änderungen nicht erst einmal speichern?");
-				return;
-			} else if (beleg.geaendert) {
-				dialog.oeffnen("confirm", function() {
-					if (dialog.antwort) {
-						beleg.aktionSpeichern();
-					} else if (dialog.antwort === false) {
-						beleg.belegGeaendert(false);
-						oeffnen();
-					}
-				});
-				dialog.text("Der aktuell geöffnete Beleg ist noch nicht gespeichert.\nMöchten Sie ihn nicht erst einmal speichern?");
-				return;
-			}
-			oeffnen();
-			function oeffnen () {
+			const id = this.dataset.id;
+			erstSpeichern.init(() => {
 				overlay.alleSchliessen();
 				beleg.oeffnen(id);
-			}
+			});
 		});
 	},
 	// Sortiert den Anhang um eine Position nach oben

@@ -412,6 +412,10 @@ a[class*="icon-windrose"] {
 	top: 3px;
 }
 
+#bedeutungen-cont .icon-link:focus {
+	background-color: var(--farbe);
+}
+
 #bedeutungen-cont .icon-link:hover,
 #bedeutungen-cont .bedeutungen-aktiv.bedeutungen-verschmelzen .icon-link:hover,
 #bedeutungen-cont .bedeutungen-affiziert.bedeutungen-verschmelzen .icon-link:hover {
@@ -464,7 +468,7 @@ a[class*="icon-windrose"] {
 
 #bedeutungen-cont #bedeutungen-neu.leer {
 	color: var(--textSehrHell);
-	font-style: normal;
+	font-style: italic;
 }
 
 /* Tools ---------------------------------------- */

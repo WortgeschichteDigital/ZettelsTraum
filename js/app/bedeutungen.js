@@ -318,22 +318,9 @@ let bedeutungen = {
 			}
 			return;
 		}
-		// aktueller Beleg ist noch nicht gespeichert
-		if (beleg.geaendert) {
-			dialog.oeffnen("confirm", function() {
-				if (dialog.antwort) {
-					beleg.aktionSpeichern();
-				} else if (dialog.antwort === false) {
-					beleg.belegGeaendert(false);
-					init();
-				}
-			});
-			dialog.text("Der aktuelle Beleg wurde geändert, aber noch nicht gespeichert.\nMöchten Sie den Beleg nicht erst einmal speichern?");
-			return;
-		}
-		init();
 		// Bedeutungenformular anzeigen und initialisieren
-		function init () {
+		erstSpeichern.init(() => {
+			overlay.alleSchliessen();
 			bedeutungen.data = {};
 			bedeutungen.copyData(data.bd, bedeutungen.data);
 			bedeutungen.akt = bedeutungen.data.gr[bedeutungen.data.gn];
@@ -345,7 +332,7 @@ let bedeutungen = {
 			if (!bedeutungen.makeId) {
 				bedeutungen.idInit();
 			}
-		}
+		});
 	},
 	// fertigt eine tiefe Kopie der Bedeutungsgerüstdaten an
 	//   q = Object
@@ -1223,6 +1210,12 @@ let bedeutungen = {
 	//   zelle = Element
 	//     (die Tabellenzelle für die Tags);
 	linkTagger (zelle) {
+		// Tagger-Link wurde schon erstellt
+		// (die Funktion macht nach dem Schließen des Tag-Fensters sonst Probleme)
+		if (zelle.firstChild.nodeType === 1 &&
+				zelle.firstChild.nodeName === "A") {
+			return;
+		}
 		// ggf. altes Edit-Feld löschen
 		bedeutungen.editFeldWeg();
 		// Zeile und Container vorbereiten
@@ -1708,7 +1701,7 @@ let bedeutungen = {
 		// keine Änderungen
 		if (!bedeutungen.geaendert) {
 			schliessen();
-			return;
+			return false;
 		}
 		// Zählung der Bedeutungsgerüst-IDs zurücksetzen
 		bedeutungenGerueste.nextId = 0;
@@ -1722,6 +1715,8 @@ let bedeutungen = {
 		kartei.karteiGeaendert(true);
 		bedeutungen.bedeutungenGeaendert(false);
 		schliessen();
+		// Speichern erfolgreich
+		return true;
 		// Schließen-Funktion
 		function schliessen () {
 			if (optionen.data.einstellungen["bedeutungen-schliessen"]) {
@@ -1805,29 +1800,13 @@ let bedeutungen = {
 		}
 		return [false, -1];
 	},
-	// Bedeutungen schließen
+	// Bedeutungen schließen und zur Belegliste wechseln
 	schliessen () {
-		// Bedeutungen noch nicht gespeichert
-		if (bedeutungen.geaendert) {
-			dialog.oeffnen("confirm", function() {
-				if (dialog.antwort) {
-					bedeutungen.speichern();
-				} else if (dialog.antwort === false) {
-					bedeutungen.bedeutungenGeaendert(false);
-					listeZeigen();
-				}
-			});
-			dialog.text("Das Bedeutungsgerüst wurde verändert, aber noch nicht gespeichert.\nMöchten Sie die Änderungen nicht erst einmal speichern?");
-			return;
-		}
-		// zur Liste wechseln
-		listeZeigen();
-		// Funktionen vor Anzeigend er Liste
-		function listeZeigen () {
+		erstSpeichern.init(() => {
 			bedeutungen.aendern = [];
 			liste.status(true);
 			liste.wechseln();
-		}
+		});
 	},
 	// Bedeutungen wurden geändert und noch nicht gespeichert
 	geaendert: false,

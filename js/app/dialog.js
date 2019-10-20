@@ -12,7 +12,9 @@ let dialog = {
 	//     (gibt den Dialog-Typ an, Werte: "alert", "prompt", "confirm")
 	//   funktion = function || undefined
 	//     (Funktion, die nach dem Schließen des Dialogs ausgeführt werden soll)
-	oeffnen (typ, funktion = null) {
+	//   platzhalter = String || undefined
+	//     (Platzhaltertext für das Prompt-Feld)
+	oeffnen (typ, funktion = null, platzhalter = "") {
 		// Funktion zwischenspeichern
 		dialog.funktion = funktion;
 		// Overlay öffnen
@@ -25,6 +27,7 @@ let dialog = {
 			fenster.classList.remove("alert");
 			let textfeld = fenster.querySelector("input");
 			textfeld.value = "";
+			textfeld.placeholder = platzhalter;
 			textfeld.focus();
 		} else if (typ === "confirm") { // Confirm
 			fenster.classList.remove("prompt");

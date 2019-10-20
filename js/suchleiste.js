@@ -133,7 +133,9 @@ let suchleiste = {
 				return;
 			}
 			// ggf. Annotierungs-Popup schließen
-			annotieren.modSchliessen();
+			if (fenstertyp === "index") {
+				annotieren.modSchliessen();
+			}
 			// alte Suche ggf. löschen
 			suchleiste.suchenReset();
 			// visualisieren, dass damit nichts gefunden werden kann
@@ -146,7 +148,9 @@ let suchleiste = {
 			return;
 		}
 		// ggf. Annotierungs-Popup schließen
-		annotieren.modSchliessen();
+		if (fenstertyp === "index") {
+			annotieren.modSchliessen();
+		}
 		// alte Suche löschen
 		suchleiste.suchenReset();
 		// Elemente mit Treffer zusammentragen

@@ -766,7 +766,7 @@ let popup = {
 		menu.append(new MenuItem({
 			label: "Beleg hinzufügen",
 			icon: path.join(__dirname, "img", "menu", "dokument-plus.png"),
-			click: () => beleg.erstellenPre(),
+			click: () => erstSpeichern.init(() => beleg.erstellen()),
 			accelerator: "CommandOrControl+N",
 		}));
 		if (overlay.oben() ||
@@ -774,7 +774,7 @@ let popup = {
 			menu.append(new MenuItem({
 				label: "Belege auflisten",
 				icon: path.join(__dirname, "img", "menu", "liste-bullets.png"),
-				click: () => liste.anzeigen(),
+				click: () => erstSpeichern.init(() => liste.wechseln()),
 				accelerator: "CommandOrControl+L",
 			}));
 		}

@@ -32,14 +32,7 @@ let notizen = {
 		let vorhanden = notizen.vorhanden();
 		// keine Notizen im Feld, aber Notizen in der Kartei
 		if (!vorhanden.feld && vorhanden.kartei) {
-			dialog.oeffnen("confirm", function() {
-				if (dialog.antwort) {
-					notizen.loeschen(true);
-				} else {
-					feld.focus();
-				}
-			});
-			dialog.text("Das Notizfeld ist leer.\nSollen die in der Kartei gespeicherten Notizen gelöscht werden?");
+			notizen.frageLoeschenGespeicherte(false);
 			return false;
 		}
 		// keine Notizen im Feld
@@ -71,10 +64,15 @@ let notizen = {
 			notizen.schliessen();
 			return;
 		}
-		// keine Notizen im Feld trotz Änderungsmarkierung => direkt schließen
+		// Änderungsmarkierung, aber keine Notizen im Feld und keine in Kartei => direkt schließen
 		let vorhanden = notizen.vorhanden();
-		if (!vorhanden.feld) {
+		if (!vorhanden.feld && !vorhanden.kartei) {
 			notizen.schliessen();
+			return;
+		}
+		// Änderungsmarkierung, aber keine Notizen im Feld, dafür in Kartei => fragen, ob löschen
+		if (!vorhanden.feld && vorhanden.kartei) {
+			notizen.frageLoeschenGespeicherte(true);
 			return;
 		}
 		// Es sind also Notizen im Notizfeld. Speichern?
@@ -127,6 +125,21 @@ let notizen = {
 			kartei.karteiGeaendert(true);
 			notizen.schliessen();
 		}
+	},
+	// Fragt nach, ob gespeicherte Notizen gelöscht werden sollen
+	//   schliessen = Boolean
+	//     (Notizen sollen geschlossen werden, wenn das Löschen abgelehnt wird)
+	frageLoeschenGespeicherte (schliessen) {
+		dialog.oeffnen("confirm", function() {
+			if (dialog.antwort) {
+				notizen.loeschen(true);
+			} else if (schliessen) { // Aufruf durch notizen.abbrechen()
+				notizen.schliessen();
+			} else { // Aufruf durch notizen.speichern()
+				document.getElementById("notizen-feld").focus();
+			}
+		});
+		dialog.text("Das Notizfeld ist leer.\nSollen die in der Kartei gespeicherten Notizen gelöscht werden?");
 	},
 	// Funktionen, die beim Schließen aufgerufen werden sollten
 	schliessen () {

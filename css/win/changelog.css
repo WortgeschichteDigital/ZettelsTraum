@@ -65,6 +65,10 @@ a {
 	text-decoration: none;
 }
 
+a:not(.icon-link):focus {
+	text-decoration: underline;
+}
+
 abbr {
 	text-decoration: none;
 }
@@ -213,11 +217,11 @@ li p {
 	border-bottom-right-radius: 3px;
 }
 
-#changelog-drucken svg path {
+#changelog-icons a svg path {
 	fill: currentcolor;
 }
 
-#changelog-drucken:focus {
+#changelog-icons a:focus {
 	color: var(--farbe) !important;
 }
 

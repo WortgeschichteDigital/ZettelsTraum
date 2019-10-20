@@ -1,4 +1,4 @@
-<!-- <!doctype html> -->
+<!doctype html>
 <html lang="de">
 	<head>
 		<meta charset="utf-8">
@@ -114,7 +114,7 @@
 					<p>Einige Hinweise, die Ihnen den Umgang mit dem Handbuch <abbr title="eventuell">evtl.</abbr> erleichtern:</p>
 
 					<ul>
-						<li>Ist Ihnen die <b>Schrift zu klein</b>, können Sie sie mit dem Tastaturkürzel <kbd>Strg</kbd> + <kbd>Umsch</kbd> + <kbd>+</kbd> vergrößern. (Nicht das + neben dem Nummernblock, sondern das neben der Enter-Taste.)</li>
+						<li>Ist Ihnen die <b>Schrift zu klein</b>, können Sie sie mit dem Tastaturkürzel <kbd>Strg</kbd> + <kbd>+</kbd> vergrößern. (Nicht das + neben dem Nummernblock, sondern das neben der Enter-Taste.)</li>
 
 						<li>Ist Ihnen die <b>Schrift zu groß</b>, können Sie sie mit dem Tastaturkürzel <kbd>Strg</kbd> + <kbd>-</kbd> verkleinern.</li>
 
@@ -453,7 +453,7 @@
 						<figcaption>Textfeld zum Hinzufügen von Bedeutungen</figcaption>
 					</figure>
 
-					<p><b>Hinzufügen:</b> In der letzten Zeile des Bedeutungsgerüsts finden Sie ein Textfeld, mit dem man das Gerüst um eine neue Bedeutung ergänzen kann. Sobald Sie in ihm eine Definition eingegeben haben, müssen Sie nur noch <kbd>⏎</kbd> drücken und die neue Bedeutung wird auf der obersten Ebene des Bedeutungsgerüsts als letzte Bedeutung eingehängt.</p>
+					<p id="bedeutungsgeruest-hinzufuegen"><b>Hinzufügen:</b> In der letzten Zeile des Bedeutungsgerüsts finden Sie ein Textfeld, mit dem man das Gerüst um eine neue Bedeutung ergänzen kann. Sobald Sie in ihm eine Definition eingegeben haben, müssen Sie nur noch <kbd>⏎</kbd> drücken und die neue Bedeutung wird auf der obersten Ebene des Bedeutungsgerüsts als letzte Bedeutung eingehängt.</p>
 
 					<p>Der Text von Bedeutungen ist immer einzeilig, Zeilenumbrüche sind also nicht zulässig und werden unterbunden. Es stehen drei Formatierungen zur Verfügung: Fetten (<kbd>Strg</kbd> + <kbd>B</kbd>), Kursivieren (<kbd>Strg</kbd> + <kbd>I</kbd>), Unterstreichen (<kbd>Strg</kbd> + <kbd>U</kbd>). Die Formatierungsbefehle können auch über die Toolbar vorgenommen werden, die beim Fokussieren des Textfeldes erscheint.</p>
 
@@ -867,7 +867,7 @@
 
 					<p>Wurde ein Beleg um <b>Dateianhänge</b> ergänzt, werden auch diese in der Metainfo-Leiste angezeigt, ebenfalls als Icon. Durch Klick auf die Datei-Icons können die Anhänge im Standardprogramm des Betriebssystems geöffnet werden.</p>
 
-					<p>Arbeiten Sie mit mehreren <a href="#bedeutungsgeruest">Bedeutungsgerüsten</a>, wird in der Überschrift <i>Bedeutung</i> angegeben, aus welchem Gerüst die angezeigte Bedeutung stammt. Diese Überschrift ist klicksensitiv; über sie kann die Funktion <a href="#menueKartei-bedeutungsgeruestWechseln"><i>Kartei &gt; Bedeutungsgerüst wechseln</i></a> aufgerufen werden.</p>
+					<p id="belegliste-bedeutungsgeruest">Arbeiten Sie mit mehreren <a href="#bedeutungsgeruest">Bedeutungsgerüsten</a>, wird in der Überschrift <i>Bedeutung</i> angegeben, aus welchem Gerüst die angezeigte Bedeutung stammt. Diese Überschrift ist klicksensitiv; über sie kann die Funktion <a href="#menueKartei-bedeutungsgeruestWechseln"><i>Kartei &gt; Bedeutungsgerüst wechseln</i></a> aufgerufen werden.</p>
 
 					<p id="belegliste-kopierenIcon">Am linken Rand neben Belegtext und Quellenangabe stehen <b>Kopier-Icons</b>: <img src="../img/kopieren.svg" width="24" height="24" alt="">. Über sie kann man mit nur einem Klick den Belegtext <abbr title="beziehungsweise">bzw.</abbr> die Quellenangabe in die Zwischenablage des Rechners schieben, um diese in ein anderes (Textverarbeitungs-)Programm einzufügen. Beim Kopieren des Belegtextes wird automatisch die Quellenangabe mitkopiert. Dabei wird immer der komplette Belegtext kopiert, und zwar auch, wenn der Kontext gekürzt wurde (Funktion <img src="../img/kuerzung.svg" width="24" height="24" alt="">). <abbr title="Eventuell">Evtl.</abbr> im Text vorhandene Trennzeichen und Seitenumbrüche sind in der Kopie sichtbar, selbst wenn Sie in der aktuellen Anzeige ausgeschaltet wurden (Funktion <img src="../img/trennzeichen.svg" width="24" height="24" alt="">).</p>
 
@@ -1234,6 +1234,14 @@ Mustermann, Erika
 						<p>In beiden Fällen sendet die App intern eine Anfrage an die <abbr title="Deutsche Textarchiv">DTA</abbr>-Webseite. Erhält es nach der hier eingegebenen Zeitspanne keine Antwort, wird die Anfrage mit einem Timeout-Fehler abgebrochen und ein Dialogfenster geöffnet, das über diesen Fehler informiert. Arbeiten Sie in einer Umgebung mit schlechter Internetverbindung (<abbr title="zum Beispiel">z. B.</abbr> im Zug), könnte es hilfreich sein, diesen Wert ein bisschen anzuheben. Die App wartet dann entsprechend länger, ehe sie die Anfrage als gescheitert bewertet.</p>
 					</div>
 
+					<p class="erklaerung-option" id="einstellungen-allgemeinesSpeicherkaskade">der Speichern-Befehl löst eine Speicherkaskade aus</p>
+
+					<div class="info">
+						<p><i>Standard:</i> aktiviert</p>
+
+						<p>Wenn der Befehl <a href="#menueKartei-speichern"><i>Kartei &gt; Speichern</i></a> aufgerufen wird, wird bei aktivierter Einstellung eine Speicherkaskade ausgelöst: Die App stößt dann in allen Funktionen, in denen Änderungen noch nicht übernommen worden sind, das Speichern an. Ist die Funktion deaktivert wird das Speichern nur in der gerade sichtbaren Funktion ausgelöst. Stehen keine Änderungen mehr aus, wird die Kartei an sich gespeichert. Es sei denn, dies ist schon gesehehen. Weitere Details in den <a href="#menueKartei-speichern">Erläuterungen zum <i>Speichern</i>-Befehl</a>.</p>
+					</div>
+
 					<p class="erklaerung-option">Einfügen-Fenster nach dem Einfügen schließen</p>
 
 					<div class="info">
@@ -1465,8 +1473,6 @@ Mustermann, Erika
 						<p><i>Standard:</i> nicht aktiviert</p>
 
 						<p>In der Belegliste kann man sich auf Wunsch in der <a href="#belegliste-kopfleisteBelege">Kopfleiste der Belege</a> die Textsorte einblenden lassen. Bei aktivierter Einstellung erscheint sie in Klammern und Kapitälchen hinter dem Autor, so denn in der zugehörigen Karteikarte das <a href="#karteikarte-textsorte">Textsorten-Feld</a> gefüllt wurde. Für die Eingabe von Textsorten besteht die Möglichkeit, Hierarchieebenen zu öffnen, <abbr title="zum Beispiel">z. B.</abbr> durch die Eingabe <q>Wissenschaft: Philosophie</q> oder <q>Wissenschaft: Chemie</q>. Im Belegkopf wird allerdings immer nur die oberste Ebene eingetragen, was hier in beiden Fällen <q>Wissenschaft</q> wäre.</p>
-
-						<p>Nach dem Aktivieren der Einstellung muss die Belegliste neu aufgebaut werden, damit die Textsorten sichtbar werden. Dies geschieht <abbr title="zum Beispiel">z. B.</abbr> dann, wenn Sie die Liste <a href="#filter">filtern</a>, oder dann, wenn Sie sie <a href="#belegliste-sortierung">umsortieren</a> (Funktion <img src="../img/pfeil-gerade-hoch.svg" width="20" height="20" alt="">).</p>
 					</div>
 				</section>
 
@@ -1519,7 +1525,9 @@ Mustermann, Erika
 
 					<p class="erklaerung-icon-menues" id="menueProgramm-karteisuche"><img src="../img/lupe.svg" width="24" height="24" alt="">Karteisuche</p>
 
-					<p class="info"><mark>…</mark></p>
+					<div class="info">
+						<p><mark>…</mark></p>
+					</div>
 
 					<p class="erklaerung-icon-menues" id="menueProgramm-einstellungen"><img src="../img/zahnrad.svg" width="24" height="24" alt="">Einstellungen</p>
 
@@ -1587,9 +1595,11 @@ Mustermann, Erika
 					<p class="erklaerung-icon-menues" id="menueKartei-speichern"><img src="../img/speichern.svg" width="24" height="24" alt="">Speichern</p>
 
 					<div class="info">
-						<p>Stößt alle ausstehenden Speichervorgänge im aktuellen Hauptfenster an.</p>
+						<p>Stößt einen oder mehrere Speichervorgänge im aktuellen Hauptfenster an.</p>
 
-						<p>Mit dem Befehl wird somit nicht nur die Kartei gespeichert, er initiiert vielmehr eine ganze <b>Speicherkaskade</b>. Erfasst werden von ihm die <a href="#menueKartei-notizen">Notizen-Funktion</a>, die <a href="#karteikarte">Karteikarte</a>, das <a href="#bedeutungsgeruest-tagFenster">Tag-Fenster</a>, das <a href="#bedeutungsgeruest">Bedeutungsgerüst</a> und schließlich die Kartei selbst – und zwar in genau dieser Reihenfolge. Gibt es in einer der genannten Funktionen noch ausstehende Änderungen führt der <i>Speichern</i>-Befehl (auch wenn er über das Tastaturkürzel <kbd>Strg</kbd> + <kbd>S</kbd> angestoßen wird) dazu, dass diese in die Kartei übernommen und die Kartei danach auf die Festplatte geschrieben wird. Dabei ist zu bedenken, dass das Speichern der Notizen und das der Karteikarte scheitern können: Für die Notizen gibt es den Fall, dass eine Entscheidung der NutzerIn erfragt wird; in Bezug auf die Karteikarte gibt es mehrere Fehler, die beim Ausfüllen gemacht werden können, was das Speichern unmöglich macht. In diesen Fällen wird die Kaskade abgebrochen.</p>
+						<p>Wie genau der Befehl agiert, <a href="#einstellungen-allgemeinesSpeicherkaskade">hängt von einer Einstellung</a> ab. Standardmäßig, also mit aktivierter Einstellung, wird mit ihm nicht nur die Kartei gespeichert; er initiiert vielmehr eine ganze <b>Speicherkaskade</b>. Erfasst werden dabei die <a href="#menueKartei-notizen">Notizen-Funktion</a>, die <a href="#karteikarte">Karteikarte</a>, das <a href="#bedeutungsgeruest-tagFenster">Tag-Fenster</a>, das <a href="#bedeutungsgeruest">Bedeutungsgerüst</a> und schließlich die Kartei selbst – und zwar in genau dieser Reihenfolge. Gibt es in einer der genannten Funktionen noch ausstehende Änderungen führt der <i>Speichern</i>-Befehl (auch wenn er über das Tastaturkürzel <kbd>Strg</kbd> + <kbd>S</kbd> angestoßen wird) dazu, dass diese in die Kartei übernommen und die Kartei danach auf die Festplatte geschrieben wird. Dabei ist zu bedenken, dass das Speichern der Notizen und das der Karteikarte scheitern können: Für die Notizen gibt es den Fall, dass eine Entscheidung der NutzerIn erfragt wird; in Bezug auf die Karteikarte gibt es mehrere Fehler, die beim Ausfüllen gemacht werden können, was das Speichern verhindert. In diesen Fällen wird die Kaskade abgebrochen und es erscheint ein Dialogfenster.</p>
+
+						<p>Wurde die <a href="#einstellungen-allgemeinesSpeicherkaskade">Einstellung</a>, von der bereits die Rede war, deaktiviert, wird das Speichern <b>nur für die gerade sichtbare Funktion</b> angestoßen. Ein Beispiel: Ist das Notizen-Fenster geöffnet, werden nur die Notizen gespeichert, auch wenn darunter, also durch das Notizen-Fenster verdeckt, noch eine Karteikarte geöffnet ist, in der ebenfalls Änderungen ausstehen. Wird eine Funktion, in der noch Änderungen anhängig sind, durch ein Dialogfenster verdeckt, führt der Befehl das Speichern nicht aus, erfasst er doch in diesem Modus immer nur das, was an der Programmoberfläche gerade sichtbar ist. Stehen keine Änderungen in einer der oben genannten Funktionen mehr aus, wird die Kartei selbst gespeichert – und zwar unabhängig davon, was in der Anzeige sichtbar ist.</p>
 
 						<p>Gibt es <b>keine Änderungen</b>, die gespeichert werden müssten, hat der Befehl keine Funktion. Er bricht ergebnislos und ohne Meldung ab.</p>
 					</div>
@@ -1601,71 +1611,142 @@ Mustermann, Erika
 
 						<p>Es öffnet sich ein <b>Dialogfenster des Betriebssystems</b>, in dem Sie einen anderen Ordner und/oder Namen für die aktuelle Kartei wählen können.</p>
 
-						<p>Anders als der <a href="#menueKartei-speichern"><i>Speichern</i>-Befehl</a> wird durch diesen Befehl <b>keine Speicherkaskade</b> ausgelöst. Stehen in einer der Funktionen der App noch Änderungen aus, müssen Sie danach das Übernehmen der Änderungen explizit anstoßen: entweder Funktion für Funktion, indem Sie die jeweiligen <i>Speichern</i>-Buttons drücken, oder durch das Ausführen des Befehls <i>Kartei &gt; Speichern</i>, der die besagte Speicherkaskade auslöst.</p>
+						<p>Anders als der <a href="#menueKartei-speichern"><i>Speichern</i>-Befehl</a> wird durch diesen Befehl <b>niemals eine Speicherkaskade</b> ausgelöst. Überhaupt löst dieser Befehl in keiner der in den Erläuterungen zum <i>Speichern</i>-Befehl genannten Funktionen die Übernahme der Änderungen aus. Stehen in einer von ihnen noch Änderungen aus, müssen Sie das Speichern explizit anstoßen: entweder Funktion für Funktion, indem Sie die jeweiligen <i>Speichern</i>-Buttons drücken, oder durch das Ausführen des Befehls <i>Kartei &gt; Speichern</i>, der je nachdem, ob <a href="#einstellungen-allgemeinesSpeicherkaskade">die betreffende Einstellung</a> aktiviert oder deaktiviert ist, eine Speicherkaskade auslöst oder nur die gerade sichtbare Funktion betrifft.</p>
 					</div>
 
-					<p class="erklaerung-icon-menues"><img src="../img/x-dick.svg" width="24" height="24" alt="">Schließen</p>
+					<p class="erklaerung-icon-menues" id="menueKartei-schliessen"><img src="../img/x-dick.svg" width="24" height="24" alt="">Schließen</p>
 
-					<p class="info"><mark>…</mark></p>
+					<div class="info">
+						<p>Schließt die Kartei im aktuellen Hauptfenster.</p>
+
+						<p>Stehen noch <b>Änderungen</b> zur Übernahme aus, werden Sie gefragt, ob Sie diese nicht erst einmal speichern möchten. Durch das Aufrufen des Befehls kann es also nicht zu Datenverlusten kommen.</p>
+
+						<p>Ist noch ein zu der Kartei gehöhrendes <b>Bedeutungsgerüst-Fenster</b> offen, wird dieses <a href="#bedeutungsgeruest-fenster">Bedeutungsgerüst-Fenster</a> automatisch mit geschlossen.</p>
+
+						<p>Da Sie in <i class="app-name"></i> mit mehreren Wortkarteien parallel arbeiten können: Gibt es noch <b>andere Hauptfenster</b>, in denen Wortkarteien aktiv sind, verschwindet das Fenster, in dem Sie den <i>Schließen</i>-Befehl ausführen, komplett. Handelt es sich um das letzte verbliebene Hauptfenster, wird das Programm nicht verlassen, sondern die <b>Startseite</b> der App angzeigt (<abbr title="siehe">s.</abbr> dazu die Funktion <a href="#menueProgramm-neuesFenster"><i>Programm &gt; Neues Fenster</i></a>).</p>
+
+						<p>Zum endgültigen <b>Verlassen des Programms</b> ist der Befehle <a href="#menueProgramm-beenden"><i>Programm &gt; Beenden</i></a> besser geeignet.</p>
+					</div>
 
 					<p class="erklaerung-icon-menues" id="menueKartei-formvarianten"><img src="../img/formvarianten.svg" width="24" height="24" alt="">Formvarianten</p>
 
-					<p class="info"><mark>…</mark></p>
+					<div class="info">
+						<p><mark>…</mark></p>
+					</div>
 
 					<p class="erklaerung-icon-menues" id="menueKartei-notizen"><img src="../img/stift.svg" width="24" height="24" alt="">Notizen</p>
 
-					<p class="info"><mark>…</mark></p>
+					<div class="info">
+						<p><mark>…</mark></p>
+					</div>
 
 					<p class="erklaerung-icon-menues" id="menueKartei-anhaenge"><img src="../img/bueroklammer.svg" width="24" height="24" alt="">Anhänge</p>
 
-					<p class="info"><mark>…</mark></p>
+					<div class="info">
+						<p><mark>…</mark></p>
+					</div>
 
 					<p class="erklaerung-icon-menues" id="menueKartei-lexika"><img src="../img/buecher.svg" width="24" height="24" alt="">Überprüfte Lexika</p>
 
-					<p class="info"><mark>…</mark></p>
+					<div class="info">
+						<p><mark>…</mark></p>
+					</div>
 
 					<p class="erklaerung-icon-menues" id="menueKartei-metadaten"><img src="../img/zeilen-4,0.svg" width="24" height="24" alt="">Metadaten</p>
 
-					<p class="info"><mark>…</mark></p>
+					<div class="info">
+						<p><mark>…</mark></p>
+					</div>
 
 					<p class="erklaerung-icon-menues" id="menueKartei-redaktion"><img src="../img/personen.svg" width="24" height="24" alt="">Redaktion</p>
 
-					<p class="info"><mark>…</mark></p>
+					<div class="info">
+						<p><mark>…</mark></p>
+					</div>
 
 					<p class="erklaerung-icon-menues" id="menueKartei-bedeutungsgeruest"><img src="../img/geruest.svg" width="24" height="24" alt="">Bedeutungsgerüst</p>
 
-					<p class="info"><mark>…</mark></p>
+					<div class="info">
+						<p>Öffnet die <a href="#bedeutungsgeruest">Bedeutungsgerüst-Funktion</a>.</p>
+
+						<p>Dabei werden alle <b>Dialogfenster</b>, die die Anzeige überdecken, automatisch geschlossen. Wurden in einem Dialogfenster oder der noch geöffneten <b>Karteikarte</b> Änderungen noch nicht gespeichert, werden Sie darauf aufmerksam gemacht, bevor die Bedeutungsgerüst-Funktion eingeblendet wird.</p>
+
+						<p>Ist die Bedeutungsgerüst-Funktion <b>bereits geöffnet</b>, führt der Befehl dazu, dass das Textfeld zur <a href="#bedeutungsgeruest-hinzufuegen">Eingabe einer neuen Bedeutung</a> fokussiert wird. Wird die Bedeutungsgerüst-Funktion zu diesem Zeitpunkt allerdings durch ein Dialogfenster verdeckt, hat der Befehl keinerlei Konsequenzen.</p>
+					</div>
 
 					<p class="erklaerung-icon-menues" id="menueKartei-bedeutungsgeruestWechseln"><img src="../img/geruest-zahnrad.svg" width="24" height="24" alt="">Bedeutungsgerüst wechseln</p>
 
-					<p class="info"><mark>…</mark></p>
+					<div class="info">
+						<p>Öffnet ein Dialogfenster zum Auswählen eines <a href="#bedeutungsgeruest">Bedeutungsgerüsts</a>.</p>
+
+						<figure class="right" title="zum Vergrößern anklicken">
+							<img src="../img/win/hb-menueKartei-bedeutungsgeruest-wechseln.png" alt="">
+							<figcaption>Dialogfenster zum Wechseln des Bedeutungsgerüsts</figcaption>
+						</figure>
+
+						<p>Die Funktion kann nur aufgerufen werden, wenn Sie <b>mehrere Bedeutungsgerüste</b> angelegt haben. In diesem Fall können Sie in dem kleinen Dialogfenster eines der Gerüste auswählen. Befinden Sie sich in der Bedeutungsgerüst-Funktion, hat das Dialogfenster dieselbe Funktion wie das erste Textfeld in der <a href="#bedeutungsgeruest-kopfleiste">Kopfleiste</a> der Funktion: Wechseln Sie das Gerüst, wird es zunächst nur in der Bedeutungsgerüst-Funktion gewechselt. Damit die Auswahl eines anderen Gerüsts karteiweit umgesetzt wird, müssten Sie erst den <i>Speichern</i>-Button drücken. Den Befehl in diesem Kontext aufzurufen, ist somit zwar möglich, aber nicht unbedingt nötig.</p>
+
+						<p>Der Befehl ist vielmehr dafür gedacht, dass Sie <b>zum Ändern des aktuellen Gerüsts</b> nicht eigens die Bedeutungsgerüst-Funktion öffnen müssen. Ist diese geschlossen, wird das im Dialogfenster ausgewählte Bedeutungsgerüsts umgehend karteiweit aktiviert. <abbr title="Das heißt">D. h.</abbr>, dass alle Funktionen der App, die auf Bedeutungsgerüstdaten zurückgreifen, sich danach auf das neu eingestellte Gerüst beziehen. Dies betrifft den <a href="#filter-bedeutungen">Bedeutungen-Filter</a>, die Anzeige der <a href="#belegliste-bedeutungsgeruest">Bedeutungen in der Detailansicht der Belegliste</a> und die Anzeige der Bedeutungen in der <a href="#karteikarte">Karteikarte</a>. Für das <a href="#bedeutungsgeruest-fenster">Bedeutungsgerüst-Fenster</a> hingegen werden die Änderungen nicht übernommen. Hier können Sie ein anderes als das im Hauptfenster aktive Bedeutungsgerüst eingestellt haben.</p>
+					</div>
 
 					<p class="erklaerung-icon-menues" id="menueKartei-bedeutungsgeruestFenster"><img src="../img/fenster.svg" width="24" height="24" alt="">Bedeutungsgerüst-Fenster</p>
 
-					<p class="info"><mark>…</mark></p>
+					<div class="info">
+						<p>Öffnet das <a href="#bedeutungsgeruest-fenster">Bedeutungsgerüst-Fenster</a>.</p>
+
+						<p>Der Befehl öffnet das <b>Gerüst zur aktuellen Kartei</b> in einem Nebenfenster, das wiederum an die im aktuellen Hauptfenster geladene Kartei gebunden ist. <a href="#menueKartei-schliessen">Schließen</a> Sie die Kartei, schließt sich auch das zugehörige Bedeutungsgerüst-Fenster.</p>
+						
+						<p>Da es möglich ist, in <i class="app-name"></i> mit mehreren Wortkarteien gleichzeitig zu arbeiten, können auch <b>mehrere Bedeutungsgerüst-Fenster</b> gleichzeitig geöffnet sein. Diese sind aber immer an die zugehörige Kartei und das Hauptfenster, in dem diese geöffnet ist, gebunden. Es kann also nicht passieren, dass Sie versehentlich eine Bedeutung aus einem der geöffneten Bedeutungsgerüst-Fenster in eine <a href="#karteikarte">Karteikarte</a> eintragen, die sich in einem Fenster mit einem ganze anderen Karteiwort befindet.</p>
+					</div>
 
 					<p class="erklaerung-icon-menues" id="menueKartei-suche"><img src="../img/lupe.svg" width="24" height="24" alt="">Suche</p>
 
-					<p class="info"><mark>…</mark></p>
+					<div class="info">
+						<p>Öffnet den <a href="#filter-volltext">Volltextfilter</a>.</p>
+
+						<p>Der <b>Volltextfilter</b> ist zugleich die Suchfunktion der App, mit der Sie (quasi) alle Textdaten, die sich in ihr befinden durchsuchen können. Allein die Namen der <a href="#menueKartei-anhaenge">Dateianhänge</a> werden ignoriert.</p>
+
+						<p>Der <b>Befehl</b> schließt alle Dialogfenster, die das Hauptfenster verdecken, und ruft die <a href="#belegliste">Belegliste</a> auf, falls diese noch nicht aktiv sein sollte. Außerdem wird – falls geschlossen – die <a href="#filter">Filterleiste</a> geöffnet, der Volltextfilter aufgeklappt und das Eingabefeld fokussiert.</p>
+
+						<p>Stehen in einer der Funktionen, die der Befehl zu schließen versucht, noch <b>Änderungen</b> aus, werden Sie gefragt, ob Sie diese speichern oder verwerfen möchten.</p>
+
+						<p>Für eine <a href="#menueProgramm-karteisuche">karteiübergreifende Suche</a> steht Ihnen die <b>Karteisuche</b> zur Verfügung.</p>
+					</div>
 				</section>
 
 				<!-- MENÜPUNKT BELEGE -->
 				<section id="sektion-menueBelege" class="suche">
 					<p class="erklaerung-icon-menues" id="menueBelege-hinzufuegen"><img src="../img/dokument-plus.svg" width="24" height="24" alt="">Hinzufügen</p>
 
-					<p class="info"><mark>…</mark></p>
+					<div class="info">
+						<p>Erstellt eine neue <a href="#karteikarte">Karteikarte</a>.</p>
+
+						<p>Steht in irgendeiner Funktionen die Übernahme von <b>Änderungen</b> noch aus, fragt das Programm, ob diese nicht erst einmal gesichert werden sollen. Das Ausführen des Befehls an sich führt also niemals zu Datenverlusten.</p>
+
+						<p>Danach werden alle <b>Dialogfenster</b> im aktuellen Hauptfenster geschlossen und die <b>Karteikarte</b> mit einem leeren <a href="#karteikarte-formularansicht">Formular</a> geöffnet. Erst wenn dieses ausgefüllt und gespeichert wurde, wird der neue Beleg wirklich erstellt. Bis zu diesem Zeitpunkt sind alle Änderungen somit temporär: Verlässt man die Karte, ohne sie zu speichern, ist alles so, als hätte man den Befehl nie aufgerufen.</p>
+					</div>
 
 					<p class="erklaerung-icon-menues" id="menueBelege-auflisten"><img src="../img/liste-bullets.svg" width="24" height="24" alt="">Auflisten</p>
 
-					<p class="info"><mark>…</mark></p>
+					<div class="info">
+						<p>Zeigt die <a href="#belegliste">Belegliste</a> an.</p>
+
+						<p>Die Belegliste ist gleichsam die <b>Standardansicht</b> der App. Der Befehl hilft einem somit, zu dieser Ansicht zurückzukehren, wenn man sich in zu vielen Dialogfenstern und Funktionen verloren hat. Löst man ihn aus, werden alle die Anzeige überlagernden Dialogfenster geschlossen und die Belegliste geöffnet – wenn sie denn nicht schon offfen ist.</p>
+
+						<p>Steht die Übernahme von <b>Änderungen</b> in einem Fenster oder einer Funktion noch aus, fragt die App, ob diese nicht erst einmal gesichert werden sollen. Durch das Auslösen des Befehls kann es somit nicht zu Datenverlusten kommen.</p>
+					</div>
 
 					<p class="erklaerung-icon-menues" id="menueBelege-kopieren"><img src="../img/kopieren.svg" width="24" height="24" alt="">Kopieren</p>
 
-					<p class="info"><mark>…</mark></p>
+					<div class="info">
+						<p><mark>…</mark></p>
+					</div>
 
 					<p class="erklaerung-icon-menues" id="menueBelege-einfuegen"><img src="../img/einfuegen.svg" width="24" height="24" alt="">Einfügen</p>
 
-					<p class="info"><mark>…</mark></p>
+					<div class="info">
+						<p><mark>…</mark></p>
+					</div>
 				</section>
 
 				<!-- MENÜPUNKT BEARBEITEN -->
@@ -1673,6 +1754,8 @@ Mustermann, Erika
 					<p class="erklaerung-icon-menues" id="menueBearbeiten-rueckgaengig"><img src="../img/pfeil-rund-links.svg" width="24" height="24" alt="">Rückgängig</p>
 
 					<div class="info">
+						<p>Macht eine Texteingabe rückgängig.</p>
+
 						<p>Diese Funktion <strong class="obacht">bezieht sich nur auf Textfelder</strong>!</p>
 
 						<figure class="right" title="zum Vergrößern anklicken">
@@ -1688,6 +1771,8 @@ Mustermann, Erika
 					<p class="erklaerung-icon-menues"><img src="../img/pfeil-rund-rechts.svg" width="24" height="24" alt="">Wiederherstellen</p>
 
 					<div class="info">
+						<p>Stellt eine rückgängig gemachte Texteingabe wieder her.</p>
+
 						<p>Diese Funktion <strong class="obacht">bezieht sich nur auf Textfelder</strong>!</p>
 
 						<p>Ansonsten gilt dasselbe, was oben zur Funktion <a href="#menueBearbeiten-rueckgaengig"><i>Rückgängig</i></a> geschrieben wurde.</p>
@@ -1696,6 +1781,8 @@ Mustermann, Erika
 					<p class="erklaerung-icon-menues"><img src="../img/schere.svg" width="24" height="24" alt="">Ausschneiden</p>
 
 					<div class="info">
+						<p>Schneidet markierten Text aus.</p>
+
 						<p>Diese Funktion steht <strong class="obacht">nur in Textfeldern</strong> zur Verfügung!</p>
 
 						<p>Sie können <abbr title="beispielsweise">bspw.</abbr> nicht einfach Teile eines Belegs ausschneiden, dessen Text Sie zuvor in der <a href="#belegliste">Belegliste</a> markiert haben. Dazu müssen Sie zunächst in die <a href="#karteikarte-formularansicht">Formularansicht der Karteikarte</a> wechseln.</p>
@@ -1704,7 +1791,9 @@ Mustermann, Erika
 					<p class="erklaerung-icon-menues"><img src="../img/kopieren.svg" width="24" height="24" alt="">Kopieren</p>
 
 					<div class="info">
-						<p>Mit dieser Funktion können Sie jeden Text kopieren, den Sie zuvor markiert haben. Die Möglichkeit, Text zu markieren, ist freilich beschränkt. Allerdings wird diese von der App an allen wesentlichen Stellen eingeräumt: in der <a href="#belegliste-detailansicht">Detailansicht der Belegliste</a>, in der <a href="#karteikarte-leseansicht">Leseansicht der Karteikarte</a> und in allen Textfeldern, die so zahlreich sind, dass sie hier nicht aufgezählt werden sollen.</p>
+						<p>Kopiert markierten Text.</p>
+
+						<p>Prinzipiell können Sie mit dieser Funktion <b>jeden Text</b> kopieren, den Sie zuvor mit Maus oder Tastatur markiert haben. Die Möglichkeit, Text zu markieren, ist in der App freilich beschränkt. Allerdings wird diese von der App an allen wesentlichen Stellen eingeräumt: in der <a href="#belegliste-detailansicht">Detailansicht der Belegliste</a>, in der <a href="#karteikarte-leseansicht">Leseansicht der Karteikarte</a> und in allen Textfeldern, die so zahlreich sind, dass sie hier nicht aufgezählt werden sollen.</p>
 
 						<p>Bedenken müssen Sie nur, dass diese Kopierfunktion vom <a href="#framework" class="link-dokumentation">Framework</a> verwaltet wird, was in dem Moment relevant wird, wenn sie aus der Belegliste oder Leseansicht der Karteikarte markierten Text kopieren möchten. Das Framework versucht beim Kopieren nämlich so viele <b>Formatierungsinformationen</b> wie nur irgend möglich zu erhalten. Das klingt zunächst einmal positiv, kann aber durchaus problematisch werden. So wird für die Textanzeige in <i class="app-name"></i> <abbr title="beispielsweise">bspw.</abbr> die mitgelieferte Schriftart <i>Noto Sans</i> verwendet – eine Information, die beim Kopieren mit dieser Funktion erhalten bleibt. Fügen Sie den so kopierten Text in ein Office-Programm ein, wird dieses versuchen, ihn ebenfalls mit <i>Noto Sans</i> darzustellen und die von Ihnen eingestellte Schriftart ignorieren. Außerdem kann gerade der Belegtext in der <a href="#belegliste-detailansicht">Detailansicht der Belegliste</a> mit Informationen angereichert sein, die <span lang="la">ad hoc</span> hinzugefügt wurden, mithin gar nicht zum Beleg an sich gehören. Dies sind <a href="#belegliste-karteiwortHervorheben">Hervorhebungen des Karteiworts</a>, Markierungen von Suchergebnissen des <a href="#filter-volltext">Volltextfilters</a> und/oder der <a href="#belegliste-suchleiste">Suchleiste</a> und nicht zuletzt persönliche <a href="#belegliste-annotierenBeleg">Annotierungen</a>.</p>
 
@@ -1716,16 +1805,22 @@ Mustermann, Erika
 					<p class="erklaerung-icon-menues"><img src="../img/einfuegen.svg" width="24" height="24" alt="">Einfügen</p>
 
 					<div class="info">
+						<p>Fügt Text aus der Zwischenablage ein.</p>
+
 						<p>Diese Funktion steht <strong class="obacht">nur in Textfeldern</strong> zur Verfügung!</p>
 
-						<p>In der <a href="#karteikarte-formularansicht">Formularansicht der Karteikarte</a> kann zum Einfügen auch das Icon <img src="../img/einfuegen.svg" width="20" height="20" alt=""> genutzt werden. Steht bereits Text in einem Feld, werden Sie nach Klick auf dem Icon gefragt, ob Sie diesen ergänzen oder überschreiben möchten.</p>
+						<p>In der <a href="#karteikarte-formularansicht">Formularansicht</a> der <b>Karteikarte</b> kann zum Einfügen auch das Icon <img src="../img/einfuegen.svg" width="20" height="20" alt=""> genutzt werden. Steht bereits Text in einem Feld, werden Sie nach Klick auf dem Icon gefragt, ob Sie diesen ergänzen oder überschreiben möchten.</p>
 
 						<p>Für das <b>Einfügen von in <abbr title="Hypertext Markup Language" lang="en">HTML</abbr> formatiertem Text</b> in das <a href="#karteikarte-beleg">Belegfeld der Karteikarte</a> ist es hingegen sinnvoll, nicht diese Einfügen-Funktion oder <kbd>Strg</kbd> + <kbd>V</kbd> zu nutzen. (Solchen Text haben Sie <abbr title="zum Beispiel">z. B.</abbr> dann in der Zwischenablage, wenn Sie im Browser Text von einer Webseite kopieren.) Denn beim Klick auf das über dem Feld stehende Icon <img src="../img/einfuegen.svg" width="20" height="20" alt=""> überprüft die App, ob sich in der Zwischenablage Text mit Formatierungsangaben befindet, bereinigt ihn und <a href="#karteikarte-belegEinfuegen">erhält einen guten Teil der Formatierungen</a>. Nutzen Sie diese vom <a href="#framework" class="link-dokumentation">Framework</a> verwaltete Einfügen-Funktion, wird immer nur Plain-Text (also Text ohne Formatierungsinformationen wie fett, kursiv oder unterstrichen) in das Belegfeld hineinkopiert.</p>
 					</div>
 
 					<p class="erklaerung-icon-menues"><img src="../img/auswaehlen.svg" width="24" height="24" alt="">Alles auswählen</p>
 
-					<p class="info">Ist ein Textfeld fokussiert, markiert diese Funktion den gesamten Inhalt des Feldes. Befinden Sie sich in der <a href="#karteikarte-leseansicht">Leseansicht der Karteikarte</a> wird der gesamte markierbare Text ausgewählt, wozu die Feldüberschriften allerdings nicht zählen. Ist die <a href="#belegliste">Belegliste</a> sichtbar, wird wiederum der Text aller <a href="#belegliste-detailansicht">geöffneten Belege</a> markiert. Auch in diesem Fall zählen die Überschriften nicht dazu. Kurzum: In diesen beiden Ansichten macht die Auswahl des gesamten Textes keinen Sinn. Möchten Sie den Inhalt einer Karteikarte komplett kopieren, um ihn in ein Textverarbeitungsprogramm einzufügen, bietet sich hingegen die <a href="#karteikarte-drucken">Kopierfunktion der Druckvorschau</a> an.</p>
+					<div class="info">
+						<p>Wählt den gesamten Text im fokussierten Bereich aus.</p>
+
+						<p>Ist ein <b>Textfeld</b> fokussiert, markiert diese Funktion den gesamten Inhalt des Feldes. Befinden Sie sich in der <a href="#karteikarte-leseansicht">Leseansicht</a> der <b>Karteikarte</b> wird der gesamte markierbare Text ausgewählt, wozu die Feldüberschriften allerdings nicht zählen. Ist die <b>Belegliste</b> sichtbar, wird wiederum der Text aller <a href="#belegliste-detailansicht">geöffneten Belege</a> markiert. Auch in diesem Fall zählen die Überschriften nicht dazu. Kurzum: In diesen beiden Ansichten macht die Auswahl des gesamten Textes keinen Sinn. Möchten Sie den Inhalt einer Karteikarte komplett kopieren, um ihn in ein Textverarbeitungsprogramm einzufügen, bietet sich hingegen die <a href="#karteikarte-drucken">Kopierfunktion der Druckvorschau</a> an.</p>
+					</div>
 				</section>
 
 				<!-- MENÜPUNKT ANSICHT -->
@@ -1733,25 +1828,39 @@ Mustermann, Erika
 					<p class="erklaerung-icon-menues" id="menueAnsicht-anzeigeVergroessern"><img src="../img/plus-quadrat.svg" width="24" height="24" alt="">Anzeige vergrößern</p>
 
 					<div class="info">
-						<p>Skaliert die Anzeige des Programms nach oben. Sie wird mit jedem Schritt (Klick) um zehn Prozentpunkte vergrößert. Betroffen von der Vergrößerung ist nicht nur die Schrift; auch Bilder und andere Elemente werden entsprechend angepasst. Das Programm merkt sich, dass sie die Anzeige skaliert haben, und stellt die Vergrößerung nach dem Neustart wieder her.</p>
+						<p>Skaliert die Anzeige des Programms nach oben.</p>
+
+						<p>Die Anzeige wird mit jedem Schritt (Klick) um <b>zehn Prozentpunkte</b> vergrößert. Betroffen von der Vergrößerung ist nicht nur die Schrift; auch Bilder und andere Elemente werden entsprechend angepasst. Das Programm merkt sich, dass sie die Anzeige skaliert haben, und stellt die Vergrößerung nach dem Neustart wieder her.</p>
 
 						<p>Von der Vergrößerung erfasst werden nur die <b>Hauptfenster der App</b>, in denen die Karteien angezeigt werden. Sie wird allerdings automatisch für alle offenen Hauptfenster übernommen, auch wenn Sie über die entsprechenden <a href="#einstellungen-quick">Icons in der Quick-Access-Bar</a> aufgerufen wird.</p>
 
-						<p>Skalierungsoptionen wie diese (auch die zur <a href="#menueAnsicht-anzeigeVerkleinern">Verkleinerung der Anzeige</a>) stehen <b>in Nebenfenstern</b> wie diesem oder dem <a href="#bedeutungsgeruest-fenster">Bedeutungsgerüst-Fenster</a> ebenfalls zur Verfügung. Da in diesen Nebenfenstern keine Menüleiste angezeigt wird, müssten Sie die Vergrößerung allerdings über das Tastaturkürzel <kbd>Strg</kbd> + <kbd>Umsch</kbd> + <kbd>+</kbd> aufrufen.</p>
+						<p>Skalierungsoptionen wie diese (auch die zur <a href="#menueAnsicht-anzeigeVerkleinern">Verkleinerung der Anzeige</a>) stehen <b>in Nebenfenstern</b> wie diesem oder dem <a href="#bedeutungsgeruest-fenster">Bedeutungsgerüst-Fenster</a> ebenfalls zur Verfügung. Da in diesen Nebenfenstern keine Menüleiste angezeigt wird, müssten Sie die Vergrößerung allerdings über das Tastaturkürzel <kbd>Strg</kbd> + <kbd>+</kbd> aufrufen.</p>
+
+						<p>Das im Menü <b>angezeigt Tastaturkürzel</b> <kbd>Strg</kbd> + <kbd>=</kbd> ist <strong class="obacht">falsch</strong> und wegen eines Fehlers im <a href="#framework" class="link-dokumentation">Framework</a> derzeit leider nicht zu korrigieren.</p>
 					</div>
 
-					<p class="erklaerung-icon-menues" id="#menueAnsicht-anzeigeVerkleinern"><img src="../img/minus-quadrat.svg" width="24" height="24" alt="">Anzeige verkleinern</p>
+					<p class="erklaerung-icon-menues" id="menueAnsicht-anzeigeVerkleinern"><img src="../img/minus-quadrat.svg" width="24" height="24" alt="">Anzeige verkleinern</p>
 
-					<p class="info">Skaliert die Anzeige des Programms nach unten. Ansonsten gilt dasselbe wie für die <a href="#menueAnsicht-anzeigeVergroessern">Vergrößerung der Anzeige</a>. In Nebenfenstern ohne Menüleiste kann die Verkleinerung durch das Tastaturkürzel <kbd>Strg</kbd> + <kbd>-</kbd> aufgerufen werden.</p>
+					<div class="info">
+						<p>Skaliert die Anzeige des Programms nach unten.</p>
 
-					<p class="erklaerung-icon-menues"><img src="../img/fenster-standard.svg" width="24" height="24" alt="">Standardgröße</p>
+						<p>Ansonsten gilt <span lang="la">mutatis mutandis</span> dasselbe wie für die <a href="#menueAnsicht-anzeigeVergroessern">Vergrößerung der Anzeige</a>. In Nebenfenstern ohne Menüleiste kann die Verkleinerung durch das Tastaturkürzel <kbd>Strg</kbd> + <kbd>-</kbd> aufgerufen werden.</p>
+					</div>
 
-					<p class="info">Skaliert die Anzeige des Programms auf 100 %. Ansonsten gilt dasselbe wie für die <a href="#menueAnsicht-anzeigeVergroessern">Vergrößerung der Anzeige</a>. In Nebenfenstern ohne Menüleiste kann die Standardgröße durch das Tastaturkürzel <kbd>Strg</kbd> + <kbd>0</kbd> wiederhergestellt werden.</p>
+					<p class="erklaerung-icon-menues" id="menueAnsicht-standardgroesse"><img src="../img/fenster-standard.svg" width="24" height="24" alt="">Standardgröße</p>
+
+					<div class="info">
+						<p>Skaliert die Anzeige des Programms auf 100 %.</p>
+
+						<p>Ansonsten gilt <span lang="la">mutatis mutandis</span> dasselbe wie für die <a href="#menueAnsicht-anzeigeVergroessern">Vergrößerung der Anzeige</a>. In Nebenfenstern ohne Menüleiste kann die Standardgröße durch das Tastaturkürzel <kbd>Strg</kbd> + <kbd>0</kbd> wiederhergestellt werden.</p>
+					</div>
 
 					<p class="erklaerung-icon-menues"><img src="../img/fenster-vollbild.svg" width="24" height="24" alt="">Vollbild</p>
 
 					<div class="info">
-						<p>Wechselt in die Vollbild-Anzeige: Fenster- und Menüleiste verschwinden, das Programmfenster nimmt den ganzen Bildschirm ein. Zum Verlassen der Vollbild-Anzeige müssen Sie das Tastaturkürzel <kbd>F11</kbd> drücken. Haben Sie sich das Icon für die Vollbild-Anzeige (<img src="../img/fenster-vollbild.svg" width="20" height="20" alt="">) in die <a href="#einstellungen-quick">Quick-Access-Bar</a> gelegt, können Sie auch mit diesem zwischen Vollbild- und Standard-Anzeige wechseln.</p>
+						<p>Wechselt in die Vollbild-Anzeige.</p>
+
+						<p>In der Vollbild-Anzeige verschwinden Fenster- und Menüleiste, der Inhalt des Programmfensters nimmt somit den ganzen Bildschirm ein. Zum <b>Verlassen der Vollbild-Anzeige</b> müssen Sie das Tastaturkürzel <kbd>F11</kbd> drücken. Haben Sie sich das Icon für die Vollbild-Anzeige (<img src="../img/fenster-vollbild.svg" width="20" height="20" alt="">) in die <a href="#einstellungen-quick">Quick-Access-Bar</a> gelegt, können Sie auch mit diesem zwischen Vollbild- und Standard-Anzeige wechseln.</p>
 
 						<p><b>In Nebenfenstern</b> können Sie die Vollbild-Anzeige via <kbd>F11</kbd> aufrufen und beenden.</p>
 					</div>
@@ -1761,24 +1870,36 @@ Mustermann, Erika
 				<section id="sektion-menueHilfe" class="suche">
 					<p class="erklaerung-icon-menues" id="menueHilfe-handbuch"><img src="../img/kreis-fragezeichen.svg" width="24" height="24" alt="">Handbuch</p>
 
-					<p class="info">Öffnet dieses Fenster im <a href="#einfuehrung"><abbr title="Abschnitt">Abschn.</abbr> Einführung</a>.</p>
+					<div class="info">
+						<p>Öffnet dieses Fenster.</p>
+
+						<p>Ist das Fenster noch nicht geöffnet, wird der <a href="#einfuehrung"><abbr title="Abschnitt">Abschn.</abbr> Einführung</a> aufgeschlagen. Ist es bereits geöffnet, wird es einfach nur in den Vordergrund geholt.</p>
+					</div>
 
 					<p class="erklaerung-icon-menues"><img src="../img/kreis-leer.svg" width="24" height="24" alt="">Demonstrationskartei</p>
 
 					<div class="info">
-						<p>Bei der Installation von <i class="app-name"></i> wird im Programm-Ordner (im selben Ordner, in dem der <a href="#framework-quelltext" class="link-dokumentation">paketierte Quelltext</a> liegt) eine Kartei abgelegt, die bereits einige Belege und ein Bedeutungsgerüst enthält. Diese <a href="#" class="hilfe-demo">Demonstrationskartei</a> ist für Einsteiger gedacht, damit sie an einer kleineren Kartei direkt ausprobieren können, wie das Programm funktioniert.</p>
+						<p>Lädt eine <a href="#" class="hilfe-demo">Demonstrationskartei</a>.</p>
+
+						<p>Bei der Installation von <i class="app-name"></i> wird im Programm-Ordner (im selben Ordner, in dem der <a href="#framework-quelltext" class="link-dokumentation">paketierte Quelltext</a> liegt) eine Kartei abgelegt, die bereits einige Belege und ein Bedeutungsgerüst enthält. Diese Demonstrationskartei ist <b>für Einsteiger</b> gedacht, damit sie an einer kleineren Kartei direkt ausprobieren können, wie das Programm funktioniert.</p>
 
 						<p>Lädt man die Kartei über diesen Menüpunkt wird das Original aus dem Programmordner in einen temporären Systemordner kopiert. Diese <b>temporäre Kartei</b> wird dann von der App geladen. Sie können also gefahrlos Änderungen an der Kartei vornehmen und diese auch speichern. Öffnen Sie die Demonstrationskartei erneut via <i>Hilfe &gt; Demonstrationskartei</i>, wird die temporäre Kartei wieder mit dem Original überschrieben, das prinzipiell nicht angetastet wird.</p>
 					</div>
 
 					<p class="erklaerung-icon-menues"><img src="../img/kreis-leer.svg" width="24" height="24" alt="">Technische Dokumentation</p>
 
-					<p class="info">Die <a href="#" class="link-dokumentation">technische Dokumentation</a> ist nur für diejenigen gedacht, die das Programm bauen oder den Quellcode bearbeiten wollen. Sie enthält <abbr title="unter anderem">u. a.</abbr> Informationen zum verwendeten <a href="#framework" class="link-dokumentation">Framework</a>, Hinweise dazu, <a href="#framework-paketieren" class="link-dokumentation">wie man das Programm paketiert</a>, und nicht zuletzt eine genaue Dokumentation des <a href="#wgd-wgd" class="link-dokumentation"><abbr title="Wortgeschichte digital">WGD</abbr>-Dateiformats</a>.</p>
+					<div class="info">
+						<p>Öffnet ein Fenster mit der <a href="#" class="link-dokumentation">technische Dokumentation</a>.</p>
+
+						<p>Die technische Dokumentation ist nur für diejenigen gedacht, die das <b>Programm bauen</b> oder den <b>Quellcode bearbeiten</b> wollen. Sie enthält <abbr title="unter anderem">u. a.</abbr> Informationen zum verwendeten <a href="#framework" class="link-dokumentation">Framework</a>, Hinweise dazu, <a href="#framework-paketieren" class="link-dokumentation">wie man das Programm paketiert</a>, und nicht zuletzt eine genaue Dokumentation des <a href="#wgd-wgd" class="link-dokumentation"><abbr title="Wortgeschichte digital">WGD</abbr>-Dateiformats</a>.</p>
+					</div>
 
 					<p class="erklaerung-icon-menues"><img src="../img/kreis-leer.svg" width="24" height="24" alt="">Changelog</p>
 
 					<div class="info">
-						<p>Im <a href="#" class="link-changelog">Changelog</a> werden die Änderungen in den Programmversionen aufgelistet: neue (und mitunter auch entfernte) Funktionen, Verbesserungen, behobene Fehler. Der Changelog ist außergewöhnlich ausführlich – entwicklungsgeschichtlich bedingt. Denn die App war in dem Lexikographieprojekt <a href="https://adw-goe.de/forschung/weitere-forschungsprojekte/wortgeschichte-digital-teilprojekt-im-zdl/"><i>Wortgeschichte digital</i></a> (WGd) schon in einer frühen Entwicklungsphase in Benutzung, weswegen es nötig war, die NutzerInnen ausführlich über Änderungen auf dem Laufenden zu halten.</p>
+						<p>Öffnet ein Fenster mit dem <a href="#" class="link-changelog">Changelog</a>.</p>
+
+						<p>Im Changelog werden die <b>Änderungen in den Programmversionen</b> aufgelistet: neue (und mitunter auch entfernte) Funktionen, Verbesserungen, behobene Fehler. Der Changelog ist außergewöhnlich ausführlich – entwicklungsgeschichtlich bedingt. Denn die App war in dem Lexikographieprojekt <a href="https://adw-goe.de/forschung/weitere-forschungsprojekte/wortgeschichte-digital-teilprojekt-im-zdl/"><i>Wortgeschichte digital</i></a> (WGd) schon in einer frühen Entwicklungsphase in Benutzung, weswegen es nötig war, die NutzerInnen ausführlich über Änderungen auf dem Laufenden zu halten.</p>
 
 						<p>Falls Sie hier im Handbuch zu einer Funktion nicht genügend Informationen finden, hilft Ihnen vielleicht eine Suche im Changelog weiter. Die <b>Suchleiste</b> können Sie dort via <kbd>Strg</kbd> + <kbd>F</kbd> öffnen.</p>
 					</div>
@@ -1786,6 +1907,8 @@ Mustermann, Erika
 					<p class="erklaerung-icon-menues"><img src="../img/kreis-leer.svg" width="24" height="24" alt="">Fehlerlog</p>
 
 					<div class="info">
+						<p>Öffnet ein Fenster mit dem <a href="#" class="link-fehlerlog">Fehlerlog</a>.</p>
+
 						<figure class="right" title="zum Vergrößern anklicken">
 							<img src="../img/win/hb-hilfe-fehlerlog.png" alt="">
 							<figcaption>ein Eintrag im Fehlerlog</figcaption>
@@ -1800,11 +1923,19 @@ Mustermann, Erika
 
 					<p class="erklaerung-icon-menues" id="menueHilfe-ueberApp"><img src="../img/kreis-leer.svg" width="24" height="24" alt="">Über <span class="app-name"></span></p>
 
-					<p class="info"><a href="#" class="ueber-app">In diesem Fenster</a> finden sich ein paar Informationen zu <i class="app-name"></i>: zum Kontext, in dem das Programm entstanden ist, zur Rechteinhaberin, zu den Lizenzen der App und ihrer Teile, und zum Entwickler.</p>
+					<div class="info">
+						<p>Öffnet das Fenster <a href="#" class="ueber-app">Über <span class="app-name"></span></a>.</p>
+
+						<p>In dem Fenster finden sich ein paar Informationen zu <i class="app-name"></i>: zum Kontext, in dem das Programm entstanden ist, zur Rechteinhaberin, zu den Lizenzen der App und ihrer Teile sowie zum Entwickler.</p>
+					</div>
 
 					<p class="erklaerung-icon-menues"><img src="../img/kreis-leer.svg" width="24" height="24" alt="">Über Electron</p>
 
-					<p class="info"><a href="#" class="ueber-electron">Dieses Fenster</a> informiert über die aktuell verwendete Version des <a href="#framework" class="link-dokumentation">Frameworks</a> (<a href="https://electronjs.org/">Electron</a>) und die Lizenz, unter der es steht.</p>
+					<div class="info">
+						<p>Öffnet das Fenster <a href="#" class="ueber-electron">Über Electron</a>.</p>
+
+						<p>Das Fenster informiert über die aktuell verwendete Version des <a href="#framework" class="link-dokumentation"><i>Electron</i>-Frameworks</a> und einiger seiner Teile sowie über die Lizenz, unter der es steht.</p>
+					</div>
 				</section>
 			</div>
 		</main>

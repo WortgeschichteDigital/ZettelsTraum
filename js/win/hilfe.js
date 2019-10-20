@@ -140,7 +140,6 @@ let hilfe = {
 		document.querySelectorAll(`section[id="sektion-${sektion}"] h2`).forEach(function(h2) {
 			let li = document.createElement("li"),
 				a = document.createElement("a");
-			a.classList.add("intern");
 			a.href = `#${h2.id}`;
 			a.innerHTML = h2.innerHTML;
 			li.appendChild(a);

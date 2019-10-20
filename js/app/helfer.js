@@ -67,9 +67,9 @@ let helfer = {
 			} else if (id === "kartei-suche") {
 				filter.suche();
 			} else if (id === "belege-hinzufuegen") {
-				beleg.erstellenPre();
+				erstSpeichern.init(() => beleg.erstellen());
 			} else if (id === "belege-auflisten") {
-				liste.anzeigen();
+				erstSpeichern.init(() => liste.wechseln());
 			} else if (id === "belege-kopieren") {
 				kopieren.init();
 			} else if (id === "belege-einfuegen") {
@@ -763,27 +763,38 @@ let helfer = {
 	},
 	// Verteilerfunktion für "Kartei > Speichern" bzw. den Tastaturbefehl Strg + S;
 	// der Befehl soll eine Speicherkaskade auslösen
-	async speichern () {
-		if (notizen.geaendert) {
-			const resNotizen = await new Promise(resolve => resolve(notizen.speichern()));
-			if (!resNotizen) { // beim Speichern der Notizen ist etwas schiefgelaufen
+	speichern () {
+		// keine Speicherkaskade
+		// (nur eine der ausstehenden Änderungen speichern)
+		if (!optionen.data.einstellungen.speicherkaskade) {
+			if (karteiSpeichern()) { // erfolgreich nur, wenn andere Änderungen schon gespeichert
 				return;
 			}
-		}
-		if (beleg.geaendert) {
-			const resBeleg = await new Promise(resolve => resolve(beleg.aktionSpeichern()));
-			if (!resBeleg) { // beim Speichern der Karteikarte ist etwas schiefgelaufen
-				return;
-			}
-		}
-		if (tagger.geaendert) {
-			tagger.speichern();
-			setTimeout(function() {
+			const oben = overlay.oben();
+			if (oben === "notizen" && notizen.geaendert) {
+				notizen.speichern();
+			} else if (oben === "tagger" && tagger.geaendert) {
+				tagger.speichern();
+			} else if (!oben && beleg.geaendert) {
+				beleg.aktionSpeichern();
+			} else if (!oben && bedeutungen.geaendert) {
 				bedeutungen.speichern();
-				karteiSpeichern();
-			}, 200); // Ausblenden des Tagger-Fensters dauert 200 ms; vgl. overlay.ausblenden()
-		} else if (bedeutungen.geaendert) {
-			bedeutungen.speichern();
+			}
+			return;
+		}
+		// Speicherkaskade
+		// (versuchen, alle ausstehenden Änderungen zu übernehmen)
+		if (notizen.geaendert && !notizen.speichern()) {
+			return; // beim Speichern der Notizen ist etwas schiefgelaufen
+		}
+		if (beleg.geaendert && !beleg.aktionSpeichern()) {
+			return; // beim Speichern der Karteikarte ist etwas schiefgelaufen
+		}
+		if (tagger.geaendert && !tagger.speichern()) {
+			return; // beim Speichern der Tags ist etwas schiefgelaufen
+		}
+		if (bedeutungen.geaendert && !bedeutungen.speichern()) {
+			return; // beim Speichern der Bedeutungen ist etwas schiefgelaufen (kann derzeit [2019-10-20] gar nicht sein; rein präventive Maßnahme)
 		}
 		karteiSpeichern();
 		// Funktion zum Speichern der Kartei
@@ -794,7 +805,9 @@ let helfer = {
 					!beleg.geaendert &&
 					kartei.geaendert) {
 				kartei.speichern(false);
+				return true;
 			}
+			return false;
 		}
 	},
 	// Tastatur-Events abfangen und verarbeiten
@@ -847,7 +860,7 @@ let helfer = {
 		// Enter
 		if (evt.which === 13 && overlay.oben() === "kopieren-einfuegen") {
 			evt.preventDefault();
-			kopieren.einfuegenAusfuehrenPre();
+			erstSpeichern.init(() => kopieren.einfuegenAusfuehren());
 			return;
 		}
 		// Space / PageUp / PageDown (für Suchleiste)

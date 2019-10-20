@@ -26,59 +26,6 @@ let beleg = {
 		"Webkorpus 2016c",
 		"Die ZEIT",
 	],
-	// Überprüfen, ob vor dem Erstellen eines neuen Belegs noch Änderungen
-	// gespeichert werden müssen.
-	erstellenPre () {
-		// Änderungen im Tagger/in Bedeutungen/in Notizen/im Beleg noch nicht gespeichert
-		if (tagger.geaendert) {
-			dialog.oeffnen("confirm", function() {
-				if (dialog.antwort) {
-					tagger.speichern();
-				} else if (dialog.antwort === false) {
-					tagger.taggerGeaendert(false);
-					tagger.schliessen();
-					beleg.erstellen();
-				}
-			});
-			dialog.text("Die Tags wurden verändert, aber noch nicht gespeichert.\nMöchten Sie die Änderungen nicht erst einmal speichern?");
-			return;
-		} else if (bedeutungen.geaendert) {
-			dialog.oeffnen("confirm", function() {
-				if (dialog.antwort) {
-					bedeutungen.speichern();
-				} else if (dialog.antwort === false) {
-					bedeutungen.bedeutungenGeaendert(false);
-					beleg.erstellen();
-				}
-			});
-			dialog.text("Das Bedeutungsgerüst wurde verändert, aber noch nicht gespeichert.\nMöchten Sie die Änderungen nicht erst einmal speichern?");
-			return;
-		} else if (notizen.geaendert) {
-			dialog.oeffnen("confirm", function() {
-				if (dialog.antwort) {
-					notizen.speichern();
-				} else if (dialog.antwort === false) {
-					notizen.notizenGeaendert(false);
-					beleg.erstellen();
-				}
-			});
-			dialog.text("Die Notizen wurden geändert, aber noch nicht gespeichert.\nMöchten Sie die Notizen nicht erst einmal speichern?");
-			return;
-		} else if (beleg.geaendert) {
-			dialog.oeffnen("confirm", function() {
-				if (dialog.antwort) {
-					beleg.aktionSpeichern();
-				} else if (dialog.antwort === false) {
-					beleg.belegGeaendert(false);
-					beleg.erstellen();
-				}
-			});
-			dialog.text("Der aktuelle Beleg wurde geändert, aber noch nicht gespeichert.\nMöchten Sie den Beleg nicht erst einmal speichern?");
-			return;
-		}
-		// Alles okay => neue Karte erstellen
-		beleg.erstellen();
-	},
 	// neue Karteikarte erstellen
 	erstellen () {
 		// alle Overlay-Fenster schließen
@@ -438,29 +385,17 @@ let beleg = {
 	// Bearbeiten des Belegs beenden, Beleg also schließen
 	// (Der Button hieß früher "Abbrechen", darum heißt die Funktion noch so)
 	aktionAbbrechen () {
-		// Änderungen noch speichern?
-		if (beleg.geaendert) {
-			dialog.oeffnen("confirm", function() {
-				if (dialog.antwort) {
-					beleg.aktionSpeichern();
-				} else if (dialog.antwort === false) {
-					abbrechen();
-				}
-			});
-			dialog.text("Der aktuelle Beleg wurde geändert, aber noch nicht gespeichert.\nMöchten Sie den Beleg nicht erst einmal speichern?");
-			return;
-		}
-		// Änderungen sind schon gespeichert
-		abbrechen();
-		// Funktion zum Abbrechen
-		function abbrechen () {
-			beleg.belegGeaendert(false);
+		erstSpeichern.init(() => {
 			if (beleg.listeGeaendert) {
 				liste.status(true);
 			}
 			liste.wechseln();
 			beleg.listeGeaendert = false;
-		}
+		}, {
+			notizen: false,
+			tagger: false,
+			bedeutungen: false,
+		});
 	},
 	// Beleg löschen
 	aktionLoeschen () {
@@ -1541,16 +1476,10 @@ let beleg = {
 	ctrlNavi (next) {
 		// Karteikarte geändert?
 		if (beleg.geaendert) {
-			sicherheitsfrage.warnen(function() {
-				beleg.geaendert = false;
-				fokus();
-				beleg.ctrlNavi(next);
-			}, {
+			erstSpeichern.init(() => beleg.ctrlNavi(next), {
 				notizen: false,
 				tagger: false,
 				bedeutungen: false,
-				beleg: true,
-				kartei: false,
 			});
 			return;
 		}

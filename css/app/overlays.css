@@ -144,6 +144,10 @@
 	border-bottom-left-radius: 10px;
 }
 
+#einstellungen-cont a:not(.icon-link):focus {
+	text-decoration: underline;
+}
+
 #einstellungen-cont table {
 	margin: 0 0 10px 0;
 	border-collapse: collapse;
@@ -187,6 +191,7 @@
 #einstellungen-cont li a:focus,
 #einstellungen-cont li a.aktiv:focus {
 	background-color: var(--farbe);
+	text-decoration: none !important;
 }
 
 #einstellungen-cont input[type="text"] {
@@ -436,6 +441,23 @@
 	height: 24px;
 }
 
+#karteisuche-pfade a,
+#karteisuche-add-filter a {
+	margin-right: 10px;
+	vertical-align: top;
+	background-color: var(--textExtremHell);
+}
+
+#karteisuche-pfade a:focus,
+#karteisuche-add-filter a:focus {
+	background-color: var(--farbe);
+}
+
+#karteisuche-pfade a:hover,
+#karteisuche-add-filter a:hover {
+	background-color: var(--text);
+}
+
 #karteisuche-pfade .add,
 #karteisuche-add-filter {
 	margin-bottom: 10px;
@@ -452,21 +474,6 @@
 #karteisuche-pfade .add:hover a,
 #karteisuche-add-filter:hover a {
 	background-color: var(--text);
-}
-
-#karteisuche-pfade a,
-#karteisuche-add-filter a {
-	margin-right: 10px;
-	vertical-align: top;
-	background-color: var(--textExtremHell);
-}
-
-#karteisuche-pfade a:hover {
-	background-color: var(--text);
-}
-
-#karteisuche-pfade a:focus {
-	background-color: var(--farbe);
 }
 
 #karteisuche-pfade span {
@@ -698,6 +705,10 @@
 #meta-be-liste .icon-link:hover,
 #kopieren-liste-cont .icon-link:hover {
 	background-color: var(--text);
+}
+
+#kopieren-liste-cont a:not(.icon-link):focus {
+	text-decoration: underline;
 }
 
 #stamm-liste p {

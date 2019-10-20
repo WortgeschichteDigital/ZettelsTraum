@@ -108,7 +108,7 @@ window.addEventListener("load", () => {
 	document.getElementById("kopieren-liste-beenden").addEventListener("click", () => kopieren.uiOff());
 	document.getElementById("kopieren-liste-export").addEventListener("click", () => kopieren.exportieren());
 	document.getElementById("kopieren-liste-schliessen").addEventListener("click", () => overlay.schliessen(document.getElementById("kopieren-liste")));
-	document.getElementById("kopieren-einfuegen-einfuegen").addEventListener("click", () => kopieren.einfuegenAusfuehrenPre());
+	document.getElementById("kopieren-einfuegen-einfuegen").addEventListener("click", () => erstSpeichern.init(() => kopieren.einfuegenAusfuehren()));
 	document.getElementById("kopieren-einfuegen-reload").addEventListener("click", () => kopieren.einfuegenBasisdaten(true));
 	document.getElementById("kopieren-einfuegen-import").addEventListener("click", () => kopieren.importieren());
 	document.getElementById("kopieren-einfuegen-schliessen").addEventListener("click", () => overlay.schliessen(document.getElementById("kopieren-einfuegen")));
@@ -229,8 +229,8 @@ window.addEventListener("load", () => {
 	ipcRenderer.on("kartei-bedeutungen-wechseln", () => bedeutungenGeruest.oeffnen());
 	ipcRenderer.on("kartei-bedeutungen-fenster", () => bedeutungenWin.oeffnen());
 	ipcRenderer.on("kartei-suche", () => filter.suche());
-	ipcRenderer.on("belege-hinzufuegen", () => beleg.erstellenPre());
-	ipcRenderer.on("belege-auflisten", () => liste.anzeigen());
+	ipcRenderer.on("belege-hinzufuegen", () => erstSpeichern.init(() => beleg.erstellen()));
+	ipcRenderer.on("belege-auflisten", () => erstSpeichern.init(() => liste.wechseln()));
 	ipcRenderer.on("belege-kopieren", () => kopieren.init());
 	ipcRenderer.on("belege-einfuegen", () => kopieren.einfuegen());
 	ipcRenderer.on("hilfe-demo", () => helfer.demoOeffnen());
@@ -285,21 +285,16 @@ window.addEventListener("beforeunload", evt => {
 	}
 	optionen.speichern();
 	// Schließen ggf. unterbrechen + Kartei ggf. entsperren
-	if (notizen.geaendert || tagger.geaendert || bedeutungen.geaendert || beleg.geaendert || kartei.geaendert) {
-		sicherheitsfrage.warnen(function() {
-			notizen.geaendert = false;
-			tagger.geaendert = false;
-			bedeutungen.geaendert = false;
-			beleg.geaendert = false;
-			kartei.geaendert = false;
+	if (notizen.geaendert ||
+			tagger.geaendert ||
+			bedeutungen.geaendert ||
+			beleg.geaendert ||
+			kartei.geaendert) {
+		erstSpeichern.init(() => {
 			const {remote} = require("electron"),
 				win = remote.getCurrentWindow();
 			win.close();
 		}, {
-			notizen: true,
-			tagger: true,
-			bedeutungen: true,
-			beleg: true,
 			kartei: true,
 		});
 		evt.returnValue = "false";

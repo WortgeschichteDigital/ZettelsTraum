@@ -446,33 +446,6 @@ let kopieren = {
 			td.appendChild(a);
 		}
 	},
-	// Sicherheitschecks, ob vor dem Einfügen noch Dinge gespeichert werden müssen
-	einfuegenAusfuehrenPre () {
-		if (bedeutungen.geaendert) {
-			dialog.oeffnen("confirm", function() {
-				if (dialog.antwort) {
-					bedeutungen.speichern();
-				} else if (dialog.antwort === false) {
-					bedeutungen.bedeutungenGeaendert(false);
-					kopieren.einfuegenAusfuehren();
-				}
-			});
-			dialog.text("Das Bedeutungsgerüst wurde verändert, aber noch nicht gespeichert.\nMöchten Sie die Änderungen nicht erst einmal speichern?");
-			return;
-		} else if (beleg.geaendert) {
-			dialog.oeffnen("confirm", function() {
-				if (dialog.antwort) {
-					beleg.aktionSpeichern();
-				} else if (dialog.antwort === false) {
-					beleg.belegGeaendert(false);
-					kopieren.einfuegenAusfuehren();
-				}
-			});
-			dialog.text("Der aktuell geöffnete Beleg ist noch nicht gespeichert.\nMöchten Sie ihn nicht erst einmal speichern?");
-			return;
-		}
-		kopieren.einfuegenAusfuehren();
-	},
 	// Einfügen aus der gewünschten Datenquelle wird angestoßen
 	einfuegenAusfuehren () {
 		// ermitteln, aus welcher Quelle eingefügt werden soll

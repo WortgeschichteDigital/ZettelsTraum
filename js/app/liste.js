@@ -1,58 +1,6 @@
 "use strict";
 
 let liste = {
-	// Zeigt die Belegliste an, überprüft aber vorher,
-	// ob noch etwas in Bearbeitung gespeichert werden muss
-	anzeigen () {
-		if (tagger.geaendert) { // Tags noch nicht gespeichert
-			dialog.oeffnen("confirm", function() {
-				if (dialog.antwort) {
-					tagger.speichern();
-				} else if (dialog.antwort === false) {
-					tagger.taggerGeaendert(false);
-					tagger.schliessen();
-					liste.wechseln();
-				}
-			});
-			dialog.text("Die Tags wurden verändert, aber noch nicht gespeichert.\nMöchten Sie die Änderungen nicht erst einmal speichern?");
-			return;
-		} else if (bedeutungen.geaendert) { // Bedeutungen noch nicht gespeichert
-			dialog.oeffnen("confirm", function() {
-				if (dialog.antwort) {
-					bedeutungen.speichern();
-				} else if (dialog.antwort === false) {
-					bedeutungen.bedeutungenGeaendert(false);
-					liste.wechseln();
-				}
-			});
-			dialog.text("Das Bedeutungsgerüst wurde verändert, aber noch nicht gespeichert.\nMöchten Sie die Änderungen nicht erst einmal speichern?");
-			return;
-		} else if (notizen.geaendert) {
-			dialog.oeffnen("confirm", function() {
-				if (dialog.antwort) {
-					notizen.speichern();
-				} else if (dialog.antwort === false) {
-					notizen.notizenGeaendert(false);
-					liste.wechseln();
-				}
-			});
-			dialog.text("Die Notizen wurden geändert, aber noch nicht gespeichert.\nMöchten Sie die Notizen nicht erst einmal speichern?");
-			return;
-		} else if (beleg.geaendert) { // aktueller Beleg noch nicht gespeichert
-			dialog.oeffnen("confirm", function() {
-				if (dialog.antwort) {
-					beleg.aktionSpeichern();
-				} else if (dialog.antwort === false) {
-					beleg.belegGeaendert(false);
-					liste.wechseln();
-				}
-			});
-			dialog.text("Der aktuelle Beleg wurde noch nicht gespeichert.\nMöchten Sie ihn nicht erst einmal speichern?");
-			return;
-		}
-		// Alles okay => neue Karte erstellen
-		liste.wechseln();
-	},
 	// zur Belegliste wechseln (von wo auch immer)
 	wechseln () {
 		overlay.alleSchliessen();

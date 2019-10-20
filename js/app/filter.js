@@ -1621,38 +1621,23 @@ let filter = {
 	},
 	// die Suche wird aufgerufen
 	suche () {
-		// Sicherheitsfrage, falls Notizen, Beleg, Bedeutungen noch nicht gespeichert sind
-		if (notizen.geaendert || tagger.geaendert || bedeutungen.geaendert || beleg.geaendert) {
-			sicherheitsfrage.warnen(function() {
-				notizen.geaendert = false;
-				tagger.taggerGeaendert(false);
-				bedeutungen.geaendert = false;
-				beleg.geaendert = false;
-				filter.suche();
-			}, {
-				notizen: true,
-				tagger: true,
-				bedeutungen: true,
-				beleg: true,
-				kartei: false,
-			});
-			return;
-		}
-		// Bedeutungen schließen
-		bedeutungen.schliessen();
-		// Beleg schließen
-		beleg.aktionAbbrechen();
-		// alle Overlays schließen (da gehört auch das Notizen-Fenster zu)
-		overlay.alleSchliessen();
-		// ggf. Filter öffnen
-		if (!optionen.data.belegliste.filterleiste) {
-			liste.headerFilter();
-		}
-		// Suche öffnen
-		let input = document.getElementById("filter-volltext");
-		input.parentNode.parentNode.classList.remove("aus");
-		// Suchfeld fokussieren
-		input.select();
+		erstSpeichern.init(() => {
+			// Bedeutungen schließen
+			bedeutungen.schliessen();
+			// Beleg schließen
+			beleg.aktionAbbrechen();
+			// alle Overlays schließen
+			overlay.alleSchliessen();
+			// ggf. Filter öffnen
+			if (!optionen.data.belegliste.filterleiste) {
+				liste.headerFilter();
+			}
+			// Suche öffnen
+			let input = document.getElementById("filter-volltext");
+			input.parentNode.parentNode.classList.remove("aus");
+			// Suchfeld fokussieren
+			input.select();
+		});
 	},
 	// initialisiert den Kartendatum-Filter
 	kartendatumInit () {

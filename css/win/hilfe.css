@@ -71,6 +71,10 @@ a {
 	text-decoration: none;
 }
 
+a:not(.icon-link):focus {
+	text-decoration: underline;
+}
+
 abbr {
 	text-decoration: none;
 }
@@ -350,6 +354,7 @@ nav li a.aktiv {
 nav li a.kopf:focus,
 nav li a.aktiv:focus {
 	background-color: var(--farbe);
+	text-decoration: none;
 }
 
 /* Tabellen ------------------------------------- */

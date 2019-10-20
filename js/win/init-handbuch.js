@@ -75,6 +75,8 @@ window.addEventListener("load", () => {
 	document.querySelectorAll(".link-dokumentation").forEach(a => helferWin.oeffne(a));
 	// Changelog
 	document.querySelectorAll(".link-changelog").forEach(a => helferWin.oeffneChangelog(a));
+	// Fehlerlog
+	document.querySelectorAll(".link-fehlerlog").forEach(a => helferWin.oeffneFehlerlog(a));
 	// Suche fokussieren
 	document.querySelectorAll(".link-suche").forEach(a => {
 		a.addEventListener("click", evt => {

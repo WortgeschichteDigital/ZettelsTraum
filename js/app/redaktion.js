@@ -186,8 +186,14 @@ let redaktion = {
 	//     (der einmalige Anteil der Feld-ID; wichtig für das Dropdown-Menü)
 	inputText (td, val, droptyp, id) {
 		let droptypen = {
-			ereignis: "Ereignisse auflisten",
-			person: "BearbeiterInnen auflisten",
+			ereignis: {
+				placeholder: "Ereignis",
+				title: "Ereignisse auflisten",
+			},
+			person: {
+				placeholder: "Person",
+				title: "BearbeiterInnen auflisten",
+			},
 		};
 		// <td> als Dropdown-Container bestimmen
 		td.classList.add("dropdown-cont");
@@ -198,9 +204,10 @@ let redaktion = {
 		input.id = `redaktion-${droptyp}-${id}`;
 		input.type = "text";
 		input.value = val;
+		input.placeholder = droptypen[droptyp].placeholder;
 		dropdown.feld(input);
 		// Dropdown-Link erzeugen
-		let a = dropdown.makeLink("dropdown-link-td", droptypen[droptyp], true);
+		let a = dropdown.makeLink("dropdown-link-td", droptypen[droptyp].title, true);
 		td.appendChild(a);
 	},
 	// Fokus auf ein Input-Feld setzen

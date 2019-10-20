@@ -42,7 +42,7 @@ let bedeutungenGeruest = {
 	},
 	// Bedeutungsgerüst global wechseln
 	//   gn = String
-	//     (Gerüstnummer, auf die gewechseln werden soll)
+	//     (Gerüstnummer, auf die gewechselt werden soll)
 	wechseln (gn) {
 		// Bedeutungen sind offen
 		if (!document.getElementById("bedeutungen").classList.contains("aus")) {

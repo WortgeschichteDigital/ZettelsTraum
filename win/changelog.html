@@ -46,36 +46,58 @@
 					<li>Overlay-Fenster: In den Overlay-Fenstern findet sich nun neben dem Schließen-Icon zusätzlich das Icon <img src="../img/kreis-fragezeichen.svg" width="24" height="24" alt="">, mit dem man direkt an die Stelle des <a href="#" class="link-handbuch">Handbuchs</a> gelangt, an der Erläuterungen zum betreffenden Fenster stehen.</li>
 
 					<li>
-						<p>Filterleiste: Im Filterblock <i>Verschiedenes</i> gibt es einen neuen Filter: <i>Annotierung</i>. Weil es ein dynamischer Filter ist, erscheint er nur, wenn in der Kartei Belege zu finden sind, in denen Karteiwörter oder Textteile annotiert wurden.</p>
+						<p><a href="#filter" class="link-handbuch">Filterleiste</a>: Im Filterblock <i>Verschiedenes</i> gibt es einen neuen Filter: <i>Annotierung</i>. Weil es ein dynamischer Filter ist, erscheint er nur, wenn in der Kartei Belege zu finden sind, in denen Karteiwörter oder Textteile annotiert wurden.</p>
 
 						<p>Wurde beim Annotieren die Hintergrundfarbe auf transparent gesetzt, wird der Beleg mit dem <i>Annotierung</i>-Filter standardmäßig nicht gefunden. Unter <a href="#einstellungen-filterleiste" class="link-handbuch"><i>Programm &gt; Einstellungen &gt; Filterleiste</i></a> gibt es jedoch <a href="#einstellungen-filterleisteTransparente" class="link-handbuch">eine Checkbox</a>, die man aktivieren kann, um beim Filtern auch Annotierungen mit einzubeziehen, die eine tranparente Hintergrundfarbe haben.</p>
 					</li>
+
+					<li><a href="#einstellungen" class="link-handbuch">Einstellungen</a>: Wie genau der Befehl <a href="#menueKartei-speichern" class="link-handbuch"><i>Kartei &gt; Speichern</i></a> agiert, lässt sich nun durch <a href="#einstellungen-allgemeinesSpeicherkaskade" class="link-handbuch">eine neue Einstellung</a> beeinflussen.</li>
 				</ul>
 
 				<h3>Verbesserungen</h3>
 
 				<ul>
 					<li>
-						<p>Quick-Access-Bar: Für alle Funktionen der Programmmenüs <i>Bearbeiten</i> und <i>Ansicht</i> gibt es nun ebenfalls Icons in der Leiste. Außerdem wurde ein Icon für den Aufruf des <a href="#" class="link-handbuch">Handbuchs</a> hinzugefügt.</p>
+						<p><a href="#einstellungen-quick" class="link-handbuch">Quick-Access-Bar</a>: Für alle Funktionen der Programmmenüs <i>Bearbeiten</i> und <i>Ansicht</i> gibt es nun ebenfalls Icons in der Leiste. Außerdem wurde ein Icon für den Aufruf des <a href="#" class="link-handbuch">Handbuchs</a> hinzugefügt.</p>
 
 						<p>Bei Neuinstallation des Programms sind nun einige der zur Verfügung stehenden Funktionen standardmäßig ausgewählt. Die Quick-Access-Bar selbst bleibt jedoch wie bisher standardmäßig ausgeblendet, muss also wie gehabt erst aktiviert werden.</p>
 
-						<p>Ferner wurden <a href="#einstellungen-quick" class="link-handbuch">Einstellungen zur Quick-Access-Bar</a> reorganisiert und um die Möglichkeit ergänzt, alle, keine oder nur die Standard-Funktionen auszuwählen.</p>
+						<p>Ferner wurden die Einstellungen zur Quick-Access-Bar reorganisiert und um die Möglichkeit ergänzt, alle, keine oder nur die Standard-Funktionen auszuwählen.</p>
 					</li>
 
-					<li>Die Standardeinstellungen wurden geändert, was das Schließen von Funktionen und Fenstern angeht, in denen ein Speichervorgang ausgelöst werden kann. Die Funktionen und Fenster bleiben nach dem Speichern fortan standardmäßig geöffnet, man muss sie also in einem zweiten Schritt schließen – wenn man nicht die entsprechenden Einstellungen händisch aktiviert. Betroffen sind das Notizen-Fenster (<a href="#menueKartei-notizen" class="link-handbuch"><i>Kartei &gt; Notizen</i></a>), das Bedeutungsgerüst (<a href="#bedeutungsgeruest" class="link-handbuch"><i>Kartei &gt; Bedeutungsgerüst</i></a>) und das aus diesem heraus zu öffnende <a href="#bedeutungsgeruest-tagFenster" class="link-handbuch">Tag-Fenster</a> sowie die <a href="#karteikarte" class="link-handbuch">Karteikarte</a>. Diese Änderungen greifen nur bei Neuinstallationen des Programms; bei bestehenden Installationen werden die Einstellungen <em>nicht</em> automatisch angepasst.</li>
+					<li><a href="#einstellungen" class="link-handbuch">Einstellungen</a>: Die Einstellung zum <a href="#einstellungen-beleglisteTextsorte" class="link-handbuch">Anzeigen der Textsorte im Belegkopf</a> wird in der Belegliste des aktuell fokussierten Hauptfensters nun umgehend umgesetzt. Die Belegliste muss somit nicht mehr eigens neu aufgebaut werden, damit die Textsorten sichtbar werden.</li>
+
+					<li>Einstellungen: Die Standards wurden geändert, was das Schließen von Funktionen und Fenstern angeht, in denen ein Speichervorgang ausgelöst werden kann. Die Funktionen und Fenster bleiben nach dem Speichern fortan standardmäßig geöffnet, man muss sie also in einem zweiten Schritt schließen – wenn man nicht die entsprechenden Einstellungen händisch aktiviert. Betroffen sind das Notizen-Fenster (<a href="#menueKartei-notizen" class="link-handbuch"><i>Kartei &gt; Notizen</i></a>), das Bedeutungsgerüst (<a href="#bedeutungsgeruest" class="link-handbuch"><i>Kartei &gt; Bedeutungsgerüst</i></a>) und das aus diesem heraus zu öffnende <a href="#bedeutungsgeruest-tagFenster" class="link-handbuch">Tag-Fenster</a> sowie die <a href="#karteikarte" class="link-handbuch">Karteikarte</a>. Diese Änderungen greifen nur bei Neuinstallationen des Programms; bei bestehenden Installationen werden die Einstellungen <em>nicht</em> automatisch angepasst.</li>
+
+					<li>
+						<p>Vor dem Beenden des Programms (<a href="#menueProgramm-beenden"><i>Programm &gt; Beenden</i></a>) wurde schon immer überprüft, ob es Änderungen gibt, die noch nicht gespeichert wurden. Wollte man diese speichern, wurde der Vorgang zum Beenden des Programms komplett abgebrochen und für <em>eine</em> der Funktionen der Speichervorgang angestoßen. Gab es mehrere Funktionen, in denen Änderungen noch nicht übernommen waren, musste man den Vorgang solange wiederholen, bis keine Änderung mehr ausstand. Erst dann hat sich das Programm regulär geschlossen.</p>
+
+						<p>Jetzt werden die ausstehenden Änderungen sukzessive abgearbeitet, und zwar in der Reihenfolge der <a href="#menueKartei-speichern" class="link-handbuch">Speicherkaskade</a>. Dabei fragt das Programm bei jeder Funktion nach, ob für diese Änderungen übernommen werden sollen. Bestätigt man alle Fragen mit <i>Ja</i> und treten keine Fehler auf, wird das Programm sofort geschlossen. Der Vorgang läuft nun also in einem Zug ab.</p>
+
+						<p>Auch dann, wenn das Programm nicht beendet, sondern eine Funktion aufgerufen wird, für die andere Funktionen geschlossen werden müssen, zeigt sich nun dasselbe Verhalten. Man muss nicht mehr mühsam eine Funktion nach der anderen speichern. Alles läuft in einem Zug ab. Es werden zwar mehrere Fragen gestellt, danach wird jedoch genau der Befehl ausgeführt, den man ursprünglich ausführen wollte.</p>
+
+						<p>Dieses neue Verhalten ist die Konsequenz einer größeren Umbaumaßnahme des Speichersystems, die wegen einer Verbesserung der Funktionsweise der erwähnten Speicherkaskade nötig geworden war. Diese hat nämlich nicht immer gut funktioniert, war mitunter sogar dysfunktional (<abbr title="siehe unten">s. u.</abbr> die Anmerkungen zu den behobenen Fehlern).</p>
+
+						<p>Durch den Umbau wurde der Quellcode deutlich verschlankt und ist nun leichter zu warten.</p>
+					</li>
 
 					<li>
 						<p>Neue Programmfenster werden nun nach Möglichkeit nicht mehr an derselben Position geöffnet, an der sich das Fenster befindet, aus dem heraus sie geöffnet werden. Standardmäßig werden sie relativ zum gerade fokussierten Fenster um 100 Pixel nach rechts und 100 Pixel nach unten verschoben, allerdings nur, wenn sie dadurch nicht im Off verschwinden. Alternativ wird versucht, sie um 100 Pixel nach links und/oder 100 Pixel nach oben zu versetzen. Würden sie bei irgendeiner der Kombinationen nicht mehr vollständig auf dem Bildschirm sichtbar sein oder weiß die App nicht, welches Programmfenster gerade fokussiert ist (weil eine neue Kartei <abbr title="zum Beispiel">z. B.</abbr> aus einem Dateimanager heraus aufgerufen wurde), öffnet sich das Fenster <a href="#einstellungen-fenster" class="link-handbuch">an der letzten gespeicherten Position</a>.</p>
 
 						<p>Genauso verfahren auch das <a href="#" class="link-handbuch">Handbuch</a> und die <a href="#" class="link-dokumentation">technische Dokumentation</a>. Damit die beiden Fenster, die beim Öffnen immer dieselbe Größe haben, nicht übereinanderliegen und einander verdecken, werden auch sie <abbr title="gegebenenfalls">ggf.</abbr> um 100 Pixel zueinander verschoben. Wird eines dieser Fenster nicht aus dem jeweils anderen Fenster aufgerufen, öffnet es sich wie gehabt zentriert.</p>
 					</li>
+
+					<li>An verschiedenen Stellen des Programms wurden Platzhaltertexte für leere Textfelder ergänzt, sodass nun alle Textfelder einen solchen Platzhalter haben sollten, der erscheint, wenn noch keine Eingabe getätigt wurde. Die <a href="#karteikarte" class="link-handbuch">Karteikarte</a> wurde davon ausgenommen, um das Formular nicht noch unruhiger zu machen.</li>
+
+					<li>Das Icon für die Funktion <a href="#menueAnsicht-standardgroesse" class="link-handbuch"><i>Ansicht &gt; Standardgröße</i></a> wurde geändert: <img src="../img/fenster-standard.svg" width="24" height="24" alt="">. Es ist nun klarer vom Icon für die Vollbild-Anzeige (<img src="../img/fenster-vollbild.svg" width="24" height="24" alt="">), dafür den Icons zum Vergrößern und Verkleinern der Anzeige ähnlicher.</li>
+
+					<li>Das Tastaturkürzel für die Funktion <a href="#menueAnsicht-anzeigeVergroessern" class="link-handbuch"><i>Ansicht &gt; Anzeige vergrößern</i></a> wurde auf <kbd>Strg</kbd> + <kbd>+</kbd> geändert. Es passt nun besser zum Kürzel für das Verkleinern der Anzeige: <kbd>Strg</kbd> + <kbd>-</kbd>. Die Änderung bezieht sich auf alle Programmfenster, in denen es zur Verfügung steht.</li>
 				</ul>
 
 				<h3>Behobene Fehler</h3>
 
 				<ul>
-					<li>Annotierungsfunktion: Wurden über die Belegliste Annotierungen vorgenommen, wurde das Änderungsdatum der betreffenden Karteikarte nicht angepasst.</li>
+					<li><a href="#belegliste-karteiwortHervorheben" class="link-handbuch">Annotierungsfunktion</a>: Wurden über die Belegliste Annotierungen vorgenommen, wurde das Änderungsdatum der betreffenden Karteikarte nicht angepasst.</li>
 
 					<li>Annotierungsfunktion: Nach der Suche mit der Suchleiste konnte die Annotierungsfunktion mitunter nicht mehr genutzt werden.</li>
 
@@ -85,13 +107,15 @@
 
 					<li>Annotierungsfunktion: Karteiwörter, deren Farbe auf transparent gesetzt wurde und die somit als falschpositive Treffer markiert waren, wurden beim Kopieren von Belegtext mit den Kopierfunktionen <i>Rechtsklick &gt; Textauswahl kopieren</i> oder <img src="../img/kopieren.svg" width="24" height="24" alt=""> trotzdem hervorgehoben, wenn die <a href="#einstellungen-allgemeinesHervorhebung" class="link-handbuch">entsprechende Einstellung</a> aktiviert war.</li>
 
-					<li>Belegliste: Führte das Filtern der Belegliste mit dem <a href="#filter-volltext" class="link-handbuch">Volltextfilter</a> dazu, dass in einem angezeigten Belege alle Absätze gekürzt wurden (<q>[…]</q>), weil in ihnen das Suchwort nicht gefunden wurde, konnte die Kürzung des Textes nicht mehr durch Klick auf den Absatz rückgängig gemacht werden.</li>
+					<li><a href="#belegliste" class="link-handbuch">Belegliste</a>: Führte das Filtern der Belegliste mit dem <a href="#filter-volltext" class="link-handbuch">Volltextfilter</a> dazu, dass in einem angezeigten Belege alle Absätze gekürzt wurden (<q>[…]</q>), weil in ihnen das Suchwort nicht gefunden wurde, konnte die Kürzung des Textes nicht mehr durch Klick auf den Absatz rückgängig gemacht werden.</li>
 
 					<li>Belegliste: Die mit Version 0.20.0 erfolgte Reparatur der Anzeige des Meldungsfensters, das beim blockweisen Hinzufügen von Bedeutungen aus dem Bedeutungsgerüst-Fenster erscheint, hat das Austragen von Bedeutungen nicht berücksichtigt. Die Zählzeichen werden nun auch in diesem Fall vom Text der Bedeutung abgesetzt dargestellt.</li>
 
-					<li>Belegliste und Karteikarte: Beim Kopieren einer Textauswahl mit den Kopierfunktionen <i>Rechtsklick &gt; Textauswahl kopieren</i> oder <img src="../img/kopieren.svg" width="24" height="24" alt="">, die den Belegtext vor dem Kopieren bereinigen, konnte es dazu kommen, dass Hervorhebungen von Suchtreffern (des Volltextfilters und der Suchleiste) und Karteiwörtern sowie Annotierungen gar nicht oder nicht korrekt entfernt wurden. Dies konnte wiederum zur Folge haben, dass Teile des kopierten Textes nach dem Einfügen in ein Textverarbeitungsprogramm verschluckt wurden.</li>
+					<li>Belegliste und <a href="#karteikarte" class="link-handbuch">Karteikarte</a>: Beim Kopieren einer Textauswahl mit den Kopierfunktionen <i>Rechtsklick &gt; Textauswahl kopieren</i> oder <img src="../img/kopieren.svg" width="24" height="24" alt="">, die den Belegtext vor dem Kopieren bereinigen, konnte es dazu kommen, dass Hervorhebungen von Suchtreffern (des Volltextfilters und der Suchleiste) und Karteiwörtern sowie Annotierungen gar nicht oder nicht korrekt entfernt wurden. Dies konnte wiederum zur Folge haben, dass Teile des kopierten Textes nach dem Einfügen in ein Textverarbeitungsprogramm verschluckt wurden.</li>
 
-					<li>Bedeutungsgerüst-Fenster: Das Ein- oder Austragen von Bedeutungen in Belegliste oder Karteikarte wird nun unterbunden, wenn sie durch ein Overlay-Fenster verdeckt werden (potenzielle Fehlerquelle).</li>
+					<li><a href="#bedeutungsgeruest" class="link-handbuch">Bedeutungsgerüst</a>: Navigiert man im Bedeutungsgerüst mit der <kbd>Tab</kbd>-Taste, ohne dass bereits eine der Bedeutungen ausgewählt wurde, kann man in der Bedeutungstabelle nacheinander die Icons zum Verschieben, Löschen, Verschmelzen fokussieren und via <kbd>⏎</kbd> aufrufen. Die Icons für das Verschieben und Verschmelzen wurden jedoch nicht blau hervorgehoben. Es war somit nicht sichtbar, wo der Fokus gerade lag.</li>
+
+					<li><a href="#bedeutungsgeruest-fenster" class="link-handbuch">Bedeutungsgerüst-Fenster</a>: Das Ein- oder Austragen von Bedeutungen in Belegliste oder Karteikarte wird nun unterbunden, wenn sie durch ein Overlay-Fenster verdeckt werden (potenzielle Fehlerquelle).</li>
 
 					<li>Bedeutungsgerüst-Fenster: Beim blockweisen Ein- oder Austragen von Bedeutungen in allen in der Belegliste sichtbaren Belegen wurde das Änderungsdatum der Belege nicht aufgefrischt.</li>
 
@@ -99,9 +123,11 @@
 
 					<li>Druckvorschau: Annotierungen wurden für die Druckvorschau nicht entfernt, der Text wurde mit den entsprechenden farblichen Hervorhebungen gedruckt. Bei annotierten Karteiwörtern konnte dies dazu führen, dass weißer Text auf grauem Grund gedruckt wurde; und wurde vom <a href="#framework" class="link-dokumentation">Framework</a> für den Druck die Hintergrundfarbe automatisch entfernt (dieses Verhalten lässt sich nicht unterbinden), kam es mitunter sogar zum Druck von weißem Text auf weißem Grund. Eine weitere Folge dieses Fehlers war, dass das Kopieren einer Textauswahl (via <i>Rechtsklick &gt; Textauswahl kopieren</i> oder <img src="../img/kopieren.svg" width="24" height="24" alt="">) dazu führen konnte, dass Text nach dem Einfügen in ein Textverarbeitungsprogramm verschwand.</li>
 
-					<li>Notizen-Fenster: Der Klick auf das Schließen-Icon produzierte einen Fehler, weil das Programm irrigerweise annahm, es handle sich hierbei um eines der Textformatierungs-Tools.</li>
+					<li><a href="#menueKartei-notizen" class="link-handbuch">Notizen-Fenster</a>: Der Klick auf das Schließen-Icon produzierte einen Fehler, weil das Programm irrigerweise annahm, es handle sich hierbei um eines der Textformatierungs-Tools.</li>
 
-					<li>Belege kopieren: Beim Vormerken von Belegen zum Kopieren (<a href="#menueBelege-kopieren" class="link-handbuch"><i>Belege &gt; Kopieren</i></a>) kam es in der Animation, die zeigt, dass ein Beleg in die Kopierliste geschoben wurde und wie viele Belege sich jetzt in der Liste befinden, mitunter zu einem unschönen Flackern.</li>
+					<li>Notizen-Fenster: Waren bereits Notizen gespeichert und löschte man danach alle Eingaben im Textfeld, wurde die Notizen-Funktion trotz der nicht gespeicherten Änderungen umgehend geschlossen, wenn man den <i>Schließen</i>-Button oder <kbd>Esc</kbd> drückte. Die zuvor gespeicherten Notizen blieben also erhalten, obwohl sie aus dem Feld gelöscht worden waren. Tritt dieser Fall ein, fragt das Programm nun nach, ob die gespeicherten Notizen in der Kartei gelöscht werden sollen. Lehnt man das ab, wird das Fenster einfach nur geschlossen. Die Notizen bleiben erhalten.</li>
+
+					<li><a href="#menueBelege-kopieren" class="link-handbuch">Belege kopieren</a>: Beim Vormerken von Belegen zum Kopieren kam es in der Animation, die zeigt, dass ein Beleg in die Kopierliste geschoben wurde und wie viele Belege sich jetzt in der Liste befinden, mitunter zu einem unschönen Flackern.</li>
 
 					<li>
 						<p><a href="#menueProgramm-karteisuche" class="link-handbuch">Karteisuche</a>: Befanden sich in einem der angegebenen Suchpfade Ordner oder Dateien, auf die keine Zugriffsrechte bestanden, produzierte dies einen Fehler, der zum Absturz der gesamten Suchaktion führte: Der Sperrbildschirm mit dem Hinweis <q>Suche läuft…</q> blieb bestehen und ging erst nach einem Neustart der App wieder weg.</p>
@@ -109,11 +135,17 @@
 						<p>Die Reparatur hat den positiven Nebeneffekt, dass die Suche nun vollkommen asynchron abläuft. Dauert sie sehr lange (weil in einem Ordner oder langsamen Netzwerk gesucht wird), kann man das Dialog-Fenster problemlos verlassen, mit anderen Programmfunktionen weiterarbeiten und später schauen, ob die Suche mittlerweile zu einem Ergebnis gekommen ist.</p>
 					</li>
 
-					<li>Die Speicherkaskade, die der Befehl <a href="#menueKartei-speichern" class="link-handbuch"><i>Kartei &gt; Speichern</i></a> anstoßen sollte (auch wenn er via <kbd>Strg</kbd> + <kbd>S</kbd> aufgerufen wurde), hat nicht immer gut funktioniert. Unter gewissen Bedingungen blieb die Kaskade stecken und musste noch einmal initiiert werden. Jetzt werden immer alle Speichervorgänge ausgeführt, die noch ausstehen – auch wenn es sich um mehrere handelt. Sie werden in dieser Reihenfolge abgearbeitet: Speichern der Notizen, der Karteikarte, des Tag-Fensters, des Bedeutungsgerüsts, der Kartei. Die Kaskade wird allein dann unterbrochen, wenn entweder die Notizen oder die Karteikarte nicht gespeichert werden konnten, weil entweder eine Entscheidung der NutzerIn gefragt oder die Eingabe noch nicht korrekt ist.</li>
+					<li>Karteisuche: Es gab ein paar visuelle Probleme im Konfigurationsbereich: Es war nicht immer sichtbar, wo der Fokus war, und die Icon-Farben änderten sich nicht immer beim Herüberfahren mit der Maus.</li>
+
+					<li>Die Speicherkaskade, die der Befehl <a href="#menueKartei-speichern" class="link-handbuch"><i>Kartei &gt; Speichern</i></a> anstoßen sollte (auch wenn er via <kbd>Strg</kbd> + <kbd>S</kbd> aufgerufen wurde), hat nicht immer gut funktioniert. Unter gewissen Bedingungen blieb die Kaskade stecken und musste noch einmal initiiert werden. Jetzt werden immer alle Speichervorgänge ausgeführt, die noch ausstehen – auch wenn es sich um mehrere handelt. Sie werden in dieser Reihenfolge abgearbeitet: Speichern der Notizen, der Karteikarte, des Tag-Fensters, des Bedeutungsgerüsts, der Kartei. Die Kaskade wird allein dann unterbrochen, wenn entweder die Notizen oder die Karteikarte nicht gespeichert werden konnten oder wenn vor dem Speichern der Tags irreguläre Eingaben eliminiert wurden, also nur dann, wenn entweder eine Entscheidung der NutzerIn gefragt oder die Eingabe noch nicht korrekt ist oder war.</li>
+
+					<li>Navigierte man mit der <kbd>Tab</kbd>-Taste durch die einzelnen Elemente der Programmoberfläche, konnte man nicht erkenne, ob ein Textlink den Fokus hatte oder nicht. Fortan werden Textlinks sowohl in den Haupt- als auch in den Nebenfenstern unterstrichen, wenn sie den Fokus haben.</li>
+					
+					<li>Das Suchleiste-Icon hier im Changelog wurde nicht blau hinterlegt, wenn es den Fokus hatte.</li>
 
 					<li>Das Icon im Programmmenü für die Funktion <a href="#menueKartei-formvarianten" class="link-handbuch"><i>Kartei &gt; Formvarianten</i></a> war veraltet.</li>
 
-					<li>Reorganisation der Programm-Icons: Das Chaso im Icon-Ordner, das sich mit der Zeit entwickelt hatte, wurde behoben. Dabei wurden <abbr title="unter anderem">u. a.</abbr> gut 50 doppelte und daher unnötige Icons entfernt.</li>
+					<li>Reorganisation der Programm-Icons: Das Chaos im Icon-Ordner, das sich mit der Zeit entwickelt hatte, wurde behoben. Dabei wurden <abbr title="unter anderem">u. a.</abbr> gut 50 doppelte und daher unnötige Icons entfernt.</li>
 				</ul>
 			</div>
 

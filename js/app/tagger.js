@@ -161,7 +161,7 @@ let tagger = {
 		// Es wurde gar nichts geändert!
 		if (!tagger.geaendert) {
 			schliessen();
-			return;
+			return false;
 		}
 		// Werte der Felder auf Validität prüfen
 		let mismatch = [],
@@ -244,6 +244,12 @@ let tagger = {
 		tagger.taggerGeaendert(false);
 		// Fenster ggf. schließen
 		schliessen();
+		// Rückmeldung, ob das Speichern erfolgreich war
+		if (mismatch.length) {
+			return false;
+		} else {
+			return true;
+		}
 		// Schließen-Funktion
 		function schliessen () {
 			if (optionen.data.einstellungen["tagger-schliessen"]) {
@@ -253,30 +259,14 @@ let tagger = {
 	},
 	// Tagger schließen
 	schliessen () {
-		// Änderungen wurden noch nicht gespeichert
-		if (tagger.geaendert) {
-			dialog.oeffnen("confirm", function() {
-				if (dialog.antwort) {
-					tagger.speichern();
-				} else if (dialog.antwort === false) {
-					tagger.taggerGeaendert(false);
-					ausblenden();
-				} else {
-					let feld = document.querySelector("#tagger-typen .dropdown-feld");
-					if (feld) {
-						feld.focus();
-					}
-				}
-			});
-			dialog.text("Die Änderungen an den Tags wurden noch nicht gespeichert.\nMöchten Sie die Eingaben nicht erst einmal speichern?");
-			return;
-		}
-		ausblenden();
-		// Fenster ausblenden
-		function ausblenden () {
+		erstSpeichern.init(() => {
 			overlay.ausblenden(document.getElementById("tagger"));
 			tagger.fokusTagzelle();
-		}
+		}, {
+			notizen: false,
+			bedeutungen: false,
+			beleg: false,
+		});
 	},
 	// Tabellenzelle mit den Tags fokussieren (nach dem Schließen)
 	fokusTagzelle () {

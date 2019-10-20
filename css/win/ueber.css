@@ -45,9 +45,17 @@ a {
 	outline: none;
 }
 
+a:focus {
+	text-decoration: underline;
+}
+
 footer a {
 	color: #fff;
 	text-decoration: underline;
+}
+
+footer a:focus {
+	text-decoration: none;
 }
 
 h1 {

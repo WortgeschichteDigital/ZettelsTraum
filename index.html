@@ -31,6 +31,7 @@
 		<script src="js/app/dialog.js"></script>
 		<script src="js/app/drucken.js"></script>
 		<script src="js/app/erinnerungen.js"></script>
+		<script src="js/app/erstSpeichern.js"></script>
 		<script src="js/app/filter.js"></script>
 		<script src="js/app/helfer.js"></script>
 		<script src="js/app/kartei.js"></script>
@@ -46,7 +47,6 @@
 		<script src="js/app/dropdown.js"></script>
 		<script src="js/app/popup.js"></script>
 		<script src="js/app/redaktion.js"></script>
-		<script src="js/app/sicherheitsfrage.js"></script>
 		<script src="js/app/sonderzeichen.js"></script>
 		<script src="js/app/stamm.js"></script>
 		<script src="js/app/start.js"></script>
@@ -362,7 +362,7 @@
 				<div
 					><a href="#" class="filter-kopf" id="filter-kopf-volltext">Volltext<span class="filter-reset" title="Filter in diesem Block zurücksetzen"> </span></a
 					><div class="filter-cont">
-						<p class="no-indent"><input type="text" value="" class="filter" id="filter-volltext"></p>
+						<p class="no-indent"><input type="text" value="" placeholder="Suchtext" class="filter" id="filter-volltext"></p>
 						<p class="no-indent small"><a href="#" id="filter-erweiterte">erweiterte Suchfilter</a></p>
 						<div id="filter-erweiterte-cont" class="aus">
 							<p class="no-indent"><input type="checkbox" id="filter-phrase" class="filter-optionen"
@@ -512,12 +512,14 @@
 
 					<!-- Allgemeines -->
 					<section id="einstellungen-sec-allgemeines">
-						<p class="input-text dropdown-cont"><input type="text" value="" class="dropdown-feld" id="einstellung-bearbeiterin"
+						<p class="input-text dropdown-cont"><input type="text" value="" placeholder="Person" class="dropdown-feld" id="einstellung-bearbeiterin"
 							><a href="#" class="dropdown-link-element dropdown-link-haengend" title="BearbeiterInnen auflisten"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m7 2v8l-3.5-3.5-1.5 1.5 6 6 6-6-1.5-1.5-3.5 3.5v-8z"/></svg></a
 							><label for="einstellung-bearbeiterin">BearbeiterIn auf diesem Rechner</label></p>
 						<p class="button"><input type="button" value="Personenliste laden" id="einstellung-personenliste"></p>
 						<p class="input-text"><input type="number" value="10" min="5" max="180" id="einstellung-timeout"
 							><label for="einstellung-timeout">Sekunden Timeout bei Anfragen an das <abbr title="Deutsche Textarchiv">DTA</abbr></label></p>
+						<p><input type="checkbox" id="einstellung-speicherkaskade"
+							><label for="einstellung-speicherkaskade">der Speichern-Befehl löst eine Speicherkaskade aus</label></p>
 						<p><input type="checkbox" id="einstellung-einfuegen-schliessen"
 							><label for="einstellung-einfuegen-schliessen">Einfügen-Fenster nach dem Einfügen schließen</label></p>
 						<p><input type="checkbox" id="einstellung-textkopie-wort"
@@ -727,7 +729,7 @@
 			<div id="stamm-cont">
 				<div id="stamm-kopf"></div>
 				<div id="stamm-liste"></div>
-				<p class="input-text"><input type="text" value="" id="stamm-text"
+				<p class="input-text"><input type="text" value="" placeholder="Formvariante" id="stamm-text"
 					><input type="button" value="Ergänzen" id="stamm-ergaenzen"></p>
 				<p class="dta"><input type="button" value="DTA-Import" id="stamm-dta"></p>
 			</div>
@@ -780,7 +782,7 @@
 				>Überprüfte Lexika<a href="#" class="icon-link icon-handbuch" title="Abschnitt im Handbuch öffnen" data-handbuch="menueKartei-lexika"> </a><a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"> </a></h2>
 			<div id="lexika-cont">
 				<div id="lexika-liste"></div>
-				<p class="input-text"><input type="text" value="" id="lexika-text"
+				<p class="input-text"><input type="text" value="" placeholder="Lexikon" id="lexika-text"
 					><input type="button" value="Ergänzen" id="lexika-ergaenzen"></p>
 			</div>
 		</div></div>
@@ -805,7 +807,7 @@
 					<h3>BearbeiterInnen</h3>
 					<div id="meta-be-liste"></div>
 					<p class="input-text dropdown-cont"
-						><input type="text" value="" class="dropdown-feld" id="meta-be"
+						><input type="text" value="" placeholder="Person" class="dropdown-feld" id="meta-be"
 						><a href="#" class="dropdown-link-element" title="BearbeiterInnen auflisten"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m7 2v8l-3.5-3.5-1.5 1.5 6 6 6-6-1.5-1.5-3.5 3.5v-8z"/></svg></a
 						><input type="button" value="Ergänzen" id="meta-be-ergaenzen"></p>
 				</div>

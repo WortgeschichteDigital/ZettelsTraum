@@ -88,6 +88,8 @@ let optionen = {
 			// Timeout für Anfrage an das DTA in Sekunden
 			// (einfacher als String, wird bei Bedarf in Number konvertiert)
 			timeout: "10",
+			// Kartei > Speichern führt zu einer Speicherkaskade
+			speicherkaskade: true,
 			// Einfügen-Fenster (Kopierfunktion) nach dem Einfügen direkt schließen
 			"einfuegen-schliessen": true,
 			// Hervorhebung des Karteiworts beim Kopieren von Text mitkopieren
@@ -1136,13 +1138,15 @@ let optionen = {
 			optionen.anwendenQuickAccess();
 		} else if (e === "filter-unterbedeutungen") { // Verhalten Bedeutungen-Filter umgestellt
 			liste.status(true);
+		} else if (e === "textsorte") { // Textsorten-Anzeige im Belegkopf der Belegliste umgestellt
+			liste.status(false);
 		}
 		// Optionen speichern
 		optionen.speichern();
 		// Erinnerungen-Icon auffrischen
 		erinnerungen.check();
 	},
-	// Funktionen für die Quick-Access-Bar blockweise aus- oder abwählten
+	// Funktionen für die Quick-Access-Bar blockweise aus- oder abwählen
 	//   a = Element
 	//     (der Link, der die Aktion triggert)
 	quickSelect (a) {

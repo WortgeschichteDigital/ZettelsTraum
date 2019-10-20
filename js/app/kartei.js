@@ -5,30 +5,6 @@ let kartei = {
 	wort: "",
 	// Pfad der geladenen Datei (dient zum automatischen Speichern der Datei)
 	pfad: "",
-	// Müssen vor dem Schließen einer Kartei noch Änderungen gespeichert werden?
-	// (Diese Funktion wird nur noch benötigt, wenn dieses Hauptfenster erhalten bleiben soll;
-	// das entscheidet kartei.schliessen().)
-	//   funktion = function
-	//     (diese übergebene Funktion soll eigentlich ausgeführt werden, zur Sicherheit
-	//     wird aber erst einmal karte.checkSpeichern() ausgeführt)
-	checkSpeichern (funktion) {
-		// zur Sicherheit den Fokus aus Textfeldern nehmen
-		// (falls Änderungen noch nicht übernommen wurden)
-		helfer.inputBlur();
-		// Obacht! Änderungen noch nicht gespeichert!
-		if (notizen.geaendert || tagger.geaendert || bedeutungen.geaendert || beleg.geaendert || kartei.geaendert) {
-			sicherheitsfrage.warnen(funktion, {
-				notizen: true,
-				tagger: true,
-				bedeutungen: true,
-				beleg: true,
-				kartei: true,
-			});
-			return;
-		}
-		// alle Änderungen bereits gespeichert
-		funktion();
-	},
 	// neue Kartei erstellen
 	erstellen () {
 		// Kartei-Pfad löschen
@@ -220,24 +196,78 @@ let kartei = {
 			bedeutungen.korruptionCheck();
 		});
 	},
-	// geöffnete Kartei speichern
+	// Speichern (Verteilerfunktion)
+	// (gibt false zurück, wenn die Kartei nicht unmittelbar gespeichert werden konnte)
 	//   speichern_unter = Boolean
 	//     (nicht automatisch in der aktuellen Datei speichern, sondern immer
 	//     den Speichern-Dialog anzeigen)
-	speichern (speichern_unter) {
+	async speichern (speichern_unter) {
 		// Wurden überhaupt Änderungen vorgenommen?
-		if (!speichern_unter && !kartei.geaendert) {
-			return;
+		if (!kartei.geaendert && !speichern_unter) {
+			return false;
 		}
-		// Dialog-Komponente laden
-		const {app, dialog} = require("electron").remote;
 		// Kartei-Datei besteht bereits
 		if (kartei.pfad && !speichern_unter) {
-			speichern(kartei.pfad);
-			return;
+			const resultat = await kartei.speichernDurchfuehren(kartei.pfad);
+			return resultat;
 		}
 		// Kartei-Datei muss angelegt werden
-		const path = require("path");
+		kartei.speichernUnter();
+		return false; // Kartei wurde nicht unmittelbar gespeichert
+	},
+	// Speichern wird ausgeführt (Pfad ist bekannt)
+	//   pfad = String
+	//     (Pfad der Kartei)
+	speichernDurchfuehren (pfad) {
+		return new Promise(resolve => {
+			// ggf. BearbeiterIn hinzufügen
+			const bearb = optionen.data.einstellungen.bearbeiterin;
+			let bearb_ergaenzt = false;
+			if (bearb && !data.be.includes(bearb)) {
+				data.be.push(bearb);
+				bearb_ergaenzt = true;
+			}
+			// einige Werte müssen vor dem Speichern angepasst werden
+			const dm_alt = data.dm,
+				re_alt = data.re;
+			data.dm = new Date().toISOString();
+			data.re++;
+			// Dateisystemzugriff
+			const fs = require("fs"),
+				fsPromises = fs.promises;
+			fsPromises.writeFile(pfad, JSON.stringify(data))
+				.then(() => {
+					if (!kartei.pfad) {
+						kartei.lock(pfad, "lock");
+					} else if (pfad !== kartei.pfad) {
+						kartei.lock(kartei.pfad, "unlock");
+						kartei.lock(pfad, "lock");
+					}
+					kartei.pfad = pfad;
+					optionen.aendereLetzterPfad();
+					optionen.aendereZuletzt();
+					kartei.karteiGeaendert(false);
+					helfer.animation("gespeichert");
+					const {ipcRenderer, remote} = require("electron");
+					ipcRenderer.send("kartei-geoeffnet", remote.getCurrentWindow().id, pfad);
+					resolve(true);
+				})
+				.catch(err => {
+					kartei.dialogWrapper(`Beim Speichern der Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.message}</p>`);
+					// passiert ein Fehler, müssen manche Werte zurückgesetzt werden
+					if (bearb_ergaenzt) {
+						data.be.splice(data.be.indexOf(bearb), 1);
+					}
+					data.dm = dm_alt;
+					data.re = re_alt;
+					resolve(false);
+				});
+		});
+	},
+	// Speichern: fragen, in welchem Pfad die Kartei gespeichert werden soll
+	speichernUnter () {
+		const {app, dialog} = require("electron").remote,
+			path = require("path");
 		let opt = {
 			title: "Kartei speichern",
 			defaultPath: path.join(app.getPath("documents"), `${kartei.wort}.wgd`),
@@ -263,51 +293,9 @@ let kartei = {
 					kartei.dialogWrapper("Die Kartei wurde nicht gespeichert.");
 					return;
 				}
-				speichern(result.filePath);
+				kartei.speichernDurchfuehren(result.filePath);
 			})
 			.catch(err => kartei.dialogWrapper(`Beim Öffnen des Datei-Dialogs ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.message}</p>`));
-		// Speicher-Funktion
-		function speichern (pfad) {
-			// ggf. BearbeiterIn hinzufügen
-			let bearb = optionen.data.einstellungen.bearbeiterin,
-				bearb_ergaenzt = false;
-			if (bearb && !data.be.includes(bearb)) {
-				data.be.push(bearb);
-				bearb_ergaenzt = true;
-			}
-			// einige Werte müssen vor dem Speichern angepasst werden
-			let dm_alt = data.dm,
-				re_alt = data.re;
-			data.dm = new Date().toISOString();
-			data.re++;
-			// Dateisystemzugriff
-			const fs = require("fs");
-			fs.writeFile(pfad, JSON.stringify(data), function(err) {
-				if (err) {
-					kartei.dialogWrapper(`Beim Speichern der Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.message}</p>`);
-					// passiert ein Fehler, müssen manche Werte zurückgesetzt werden
-					if (bearb_ergaenzt) {
-						data.be.splice(data.be.indexOf(bearb), 1);
-					}
-					data.dm = dm_alt;
-					data.re = re_alt;
-					return;
-				}
-				if (!kartei.pfad) {
-					kartei.lock(pfad, "lock");
-				} else if (pfad !== kartei.pfad) {
-					kartei.lock(kartei.pfad, "unlock");
-					kartei.lock(pfad, "lock");
-				}
-				kartei.pfad = pfad;
-				optionen.aendereLetzterPfad();
-				optionen.aendereZuletzt();
-				kartei.karteiGeaendert(false);
-				helfer.animation("gespeichert");
-				const {ipcRenderer, remote} = require("electron");
-				ipcRenderer.send("kartei-geoeffnet", remote.getCurrentWindow().id, pfad);
-			});
-		}
 	},
 	// Kartei schließen
 	schliessen () {
@@ -320,7 +308,11 @@ let kartei = {
 			return;
 		}
 		// das aktuelle Fenster ist das letzte Hauptfenster => die Kartei in diesem Fenster schließen, das Fenster erhalten
-		kartei.checkSpeichern(() => kartei.schliessenDurchfuehren());
+		erstSpeichern.init(() => {
+			kartei.schliessenDurchfuehren();
+		}, {
+			kartei: true,
+		});
 	},
 	// Kartei im aktuellen Fenster schließen, das Fenster selbst aber erhalten
 	schliessenDurchfuehren () {
@@ -385,7 +377,7 @@ let kartei = {
 				kartei.menusDeaktivieren(false);
 				erinnerungen.check();
 			}
-		});
+		}, "Karteiwort");
 		dialog.text("Zu welchem Wort soll die Kartei angelegt werden?");
 	},
 	// Wort durch Benutzer ändern
@@ -413,7 +405,7 @@ let kartei = {
 				dialog.oeffnen("alert");
 				dialog.text("Sie müssen ein Wort eingeben, sonst kann das bestehende nicht geändert werden.");
 			}
-		});
+		}, "Karteiwort");
 		dialog.text("Soll das Wort geändert werden?");
 		// Text im Prompt-Input eintragen
 		let prompt_text = document.getElementById("dialog-prompt-text");

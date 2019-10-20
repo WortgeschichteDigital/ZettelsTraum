@@ -77,6 +77,7 @@ let bedeutungenGerueste = {
 		td.appendChild(input);
 		input.type = "text";
 		input.value = "";
+		input.placeholder = "Name";
 		input.addEventListener("keydown", function(evt) {
 			if (evt.which === 13) {
 				bedeutungenGerueste.add();
@@ -161,6 +162,7 @@ let bedeutungenGerueste = {
 			let input = document.createElement("input");
 			input.type = "text";
 			input.value = bedeutungen.data.gr[id].na;
+			input.placeholder = "Name";
 			this.replaceChild(input, this.firstChild);
 			this.firstChild.focus();
 			bedeutungenGerueste.writeNameListener(input);

@@ -330,6 +330,10 @@ textarea#beleg-bs {
 	cursor: pointer;
 }
 
+.beleg-lese a:focus {
+	text-decoration: underline;
+}
+
 .beleg-lese p {
 	margin: 0 auto 10px auto;
 	padding: 0 6px;

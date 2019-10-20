@@ -943,6 +943,9 @@ ipcMain.on("hilfe-dokumentation", (evt, abschnitt) => fenster.erstellenNeben("do
 // Changelog aufrufen, wenn der Renderer-Prozess es wünscht
 ipcMain.on("hilfe-changelog", () => fenster.erstellenNeben("changelog"));
 
+// Fehlerlog aufrufen, wenn der Renderer-Prozess es wünscht
+ipcMain.on("hilfe-fehlerlog", () => fenster.erstellenNeben("fehlerlog"));
+
 // Programm-Info aufrufen, wenn der Renderer-Prozess es wünscht
 ipcMain.on("ueber-app", () => fenster.erstellenUeber("app"));
 
