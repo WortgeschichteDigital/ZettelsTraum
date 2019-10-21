@@ -385,16 +385,12 @@ let beleg = {
 	// Bearbeiten des Belegs beenden, Beleg also schließen
 	// (Der Button hieß früher "Abbrechen", darum heißt die Funktion noch so)
 	aktionAbbrechen () {
-		erstSpeichern.init(() => {
+		speichern.checkInit(() => {
 			if (beleg.listeGeaendert) {
 				liste.status(true);
 			}
 			liste.wechseln();
 			beleg.listeGeaendert = false;
-		}, {
-			notizen: false,
-			tagger: false,
-			bedeutungen: false,
 		});
 	},
 	// Beleg löschen
@@ -455,7 +451,8 @@ let beleg = {
 	//     <input type="checkbox">, <input type="number">, <input type="text">, <textarea>)
 	belegSpeichern (input) {
 		input.addEventListener("keydown", function(evt) {
-			if (evt.which === 13) {
+			tastatur.detectModifiers(evt);
+			if ((!tastatur.modifiers || tastatur.modifiers === "Ctrl") && evt.key === "Enter") {
 				if (evt.ctrlKey) {
 					evt.preventDefault();
 					beleg.aktionSpeichern();
@@ -1476,11 +1473,7 @@ let beleg = {
 	ctrlNavi (next) {
 		// Karteikarte geändert?
 		if (beleg.geaendert) {
-			erstSpeichern.init(() => beleg.ctrlNavi(next), {
-				notizen: false,
-				tagger: false,
-				bedeutungen: false,
-			});
+			speichern.checkInit(() => beleg.ctrlNavi(next));
 			return;
 		}
 		// Belege in der Liste und Position des aktuellen Belegs ermitteln

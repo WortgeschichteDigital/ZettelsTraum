@@ -7,7 +7,7 @@ window.addEventListener("load", () => {
 	const {ipcRenderer} = require("electron");
 	document.getElementById("icon").addEventListener("click", () => ipcRenderer.send("ueber-app"));
 	// Tastatur-Events abfangen
-	document.addEventListener("keydown", helferWin.tastatur);
+	document.addEventListener("keydown", tastatur.init);
 	// Listener an Kopier-Link hängen
 	fehlerlog.kopieren(document.getElementById("kopieren"));
 	// Fehler vom Main-Prozess holen

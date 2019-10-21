@@ -4,7 +4,7 @@ let erinnerungen = {
 	data: {
 		bearbeiterin: {
 			okay: false,
-			text: "Sie haben sich noch nicht registriert (⇨ <i>Programm &gt; Einstellungen &gt; Allgemeines &gt; BearbeiterIn</i>).",
+			text: "Sie haben sich noch nicht registriert (⇨ <i>APP &gt; Einstellungen &gt; Allgemeines &gt; BearbeiterIn</i>).",
 		},
 		metadaten: {
 			okay: false,
@@ -12,7 +12,7 @@ let erinnerungen = {
 		},
 		redaktion: {
 			okay: false,
-			text: "Im Redaktionsfenster fehlen Angaben zu den BearbeiterInnen (⇨ <i>Kartei &gt; Redaktion</i>).",
+			text: "Im Redaktionsfenster fehlen Angaben zu den BearbeiterInnen (⇨ <i>Kartei &gt; Redaktion</i>).",
 		},
 	},
 	// überprüfen, ob auf etwas hingewiesen werden muss
@@ -75,7 +75,7 @@ let erinnerungen = {
 			if (erinnerungen.data[i].okay) {
 				continue;
 			}
-			text.push(`• ${erinnerungen.data[i].text}`);
+			text.push(`• ${erinnerungen.data[i].text.replace(/APP/g, appName)}`);
 		}
 		let punkt = "Der folgende Punkt sollte";
 		if (text.length > 1) {

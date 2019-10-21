@@ -102,10 +102,10 @@ let optionen = {
 			// Quick-Access-Bar anzeigen
 			quick: false,
 			// Icons in der Quick-Access-Bar, die ein- oder ausgeblendet gehören
-			"quick-programm-neues-fenster": false,
-			"quick-programm-karteisuche": false,
-			"quick-programm-einstellungen": false,
-			"quick-programm-beenden": true,
+			"quick-app-neues-fenster": false,
+			"quick-app-karteisuche": false,
+			"quick-app-einstellungen": false,
+			"quick-app-beenden": true,
 			"quick-kartei-erstellen": false,
 			"quick-kartei-oeffnen": true,
 			"quick-kartei-speichern": true,
@@ -1152,7 +1152,7 @@ let optionen = {
 	quickSelect (a) {
 		a.addEventListener("click", function(evt) {
 			evt.preventDefault();
-			let standards = ["quick-programm-beenden", "quick-kartei-oeffnen", "quick-kartei-speichern", "quick-kartei-suche", "quick-belege-hinzufuegen", "quick-belege-auflisten", "quick-hilfe-handbuch"];
+			let standards = ["quick-app-beenden", "quick-kartei-oeffnen", "quick-kartei-speichern", "quick-kartei-suche", "quick-belege-hinzufuegen", "quick-belege-auflisten", "quick-hilfe-handbuch"];
 			const aktion = this.id.match(/.+-(.+)/)[1];
 			document.querySelectorAll("#einstellungen-quick-funktionen input").forEach(i => {
 				const e = i.id.replace(/^einstellung-/, "");
@@ -1219,10 +1219,9 @@ let optionen = {
 		document.querySelector("#einstellungen section:not(.aus) input").focus();
 	},
 	// durch die Menüelemente navigieren
-	//   tastaturcode = Number
-	//     (der durch das Event übergebene Tastaturcode, kann hier nur
-	//     38 [aufwärts] od. 40 [abwärts] sein)
-	naviMenue (tastaturcode) {
+	//   evt = Object
+	//     (Event-Object des keydown)
+	naviMenue (evt) {
 		// aktives Element ermitteln
 		let links = document.querySelectorAll("#einstellungen li a"),
 			aktiv = document.querySelector("#einstellungen a.aktiv"),
@@ -1234,7 +1233,7 @@ let optionen = {
 			}
 		}
 		// zu aktivierendes Element ermitteln
-		if (tastaturcode === 38) {
+		if (evt.key === "ArrowUp") {
 			pos--;
 		} else {
 			pos++;

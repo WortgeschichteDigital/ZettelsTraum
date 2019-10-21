@@ -9,6 +9,7 @@
 		<link rel="stylesheet" href="../css/win/hilfe.css">
 
 		<script src="../js/suchleiste.js"></script>
+		<script src="../js/tastatur.js"></script>
 
 		<script src="../js/app/helfer.js"></script>
 
@@ -42,7 +43,7 @@
 					<li><a href="#filter" class="kopf intern">Filter</a></li>
 					<li><a href="#einstellungen" class="kopf intern">Einstellungen</a></li>
 					<li><a href="#tastaturkuerzel" class="kopf intern">Tastaturkürzel</a></li>
-					<li><a href="#menueProgramm" class="kopf intern">Menüpunkt <i>Programm</i></a></li>
+					<li><a href="#menueApp" class="kopf intern">Menüpunkt <i class="app-name"></i></a></li>
 					<li><a href="#menueKartei" class="kopf intern">Menüpunkt <i>Kartei</i></a></li>
 					<li><a href="#menueBelege" class="kopf intern">Menüpunkt <i>Belege</i></a></li>
 					<li><a href="#menueBearbeiten" class="kopf intern">Menüpunkt <i>Bearbeiten</i></a></li>
@@ -159,9 +160,9 @@
 
 				<!-- KARTEIKARTE -->
 				<section id="sektion-karteikarte" class="suche">
-					<p>Eine <b>neue Karteikarte</b> kann man über den Menüpunkt <a href="#menueBelege-hinzufuegen"><i>Belege &gt; Hinzufügen</i></a> oder das Tastaturkürzel <kbd>Strg</kbd> + <kbd>N</kbd> erstellen.</p>
+					<p>Eine <b>neue Karteikarte</b> kann man über den Menüpunkt <a href="#menueBelege-hinzufuegen"><i>Belege &gt; Hinzufügen</i></a> oder das Tastaturkürzel <kbd>Strg</kbd> + <kbd>N</kbd> erstellen.</p>
 
-					<p><b>Bestehende Karteikarten</b> lassen sich aus der <a href="#belegliste">Belegliste</a> heraus öffnen. Dazu muss man auf das Icon <img src="../img/karteikarte.svg" width="24" height="24" alt=""> im grau hinterlegten Kopf mit der Belegvorschau klicken. Alternativ kann man an einer beliebigen Stelle in der <a href="#belegliste-kopfleisteBelege">Kopfleiste eines Belegs</a> oder in dessen <a href="#belegliste-detailansicht">Detailansicht</a> <i>Rechtsklick &gt; Beleg bearbeiten</i> wählen.</p>
+					<p><b>Bestehende Karteikarten</b> lassen sich aus der <a href="#belegliste">Belegliste</a> heraus öffnen. Dazu muss man auf das Icon <img src="../img/karteikarte.svg" width="24" height="24" alt=""> im grau hinterlegten Kopf mit der Belegvorschau klicken. Alternativ kann man an einer beliebigen Stelle in der <a href="#belegliste-kopfleisteBelege">Kopfleiste eines Belegs</a> oder in dessen <a href="#belegliste-detailansicht">Detailansicht</a> <i>Rechtsklick &gt; Beleg bearbeiten</i> wählen.</p>
 
 					<p>Die Karteikarte hat zwei Ansichten: eine <b>Lese-</b> und eine <b>Formularansicht</b>. Die Ansicht lässt sich im Kopf der Karte durch Klick auf das Icon <img src="../img/auge.svg" width="24" height="24" alt=""> oder durch das Tastaturkürzel <kbd>Strg</kbd> + <kbd>U</kbd> umschalten.</p>
 
@@ -223,7 +224,7 @@
 					<div class="info">
 						<p>Die Funktion kopiert den gesamten Inhalt der aktuellen Karteikarte in einem computerlesbaren Austauschformat in die Zwischenablage, von wo aus er in beliebige Programme oder auch E-Mails eingefügt werden kann. (Möchten Sie eine komplette Karteikarte in einem menschenlesbaren Format in ein Textverarbeitungsprogramm einfügen, bietet sich die <a href="#karteikarte-drucken">Druckfunktion</a> an.)</p>
 
-						<p>Ein in die Zwischenablage kopierter Beleg lässt sich auch in eine andere mit <i class="app-name"></i> geöffnete Kartei einfügen. Hierzu muss in der Zielkartei die Funktion <a href="#menueBelege-einfuegen"><i>Belege &gt; Einfügen</i></a> aufgerufen werden. Für den Austausch größerer Belegmengen ist die Exportfunktion von <a href="#menueBelege-kopieren"><i>Belege &gt; Kopieren</i></a> besser geeignet. Für das Kopieren von mehreren Belegen zwischen unterschiedlichen Wortkarteien auf demselben Rechner müssen die Belege nicht eigens exportiert werden (<abbr title="siehe">s.</abbr> dazu die Erläuterungen zur erwähnten <a href="#menueBelege-kopieren">Kopierfunktion</a>).</p>
+						<p>Ein in die Zwischenablage kopierter Beleg lässt sich auch in eine andere mit <i class="app-name"></i> geöffnete Kartei einfügen. Hierzu muss in der Zielkartei die Funktion <a href="#menueBelege-einfuegen"><i>Belege &gt; Einfügen</i></a> aufgerufen werden. Für den Austausch größerer Belegmengen ist die Exportfunktion von <a href="#menueBelege-kopieren"><i>Belege &gt; Kopieren</i></a> besser geeignet. Für das Kopieren von mehreren Belegen zwischen unterschiedlichen Wortkarteien auf demselben Rechner müssen die Belege nicht eigens exportiert werden (<abbr title="siehe">s.</abbr> dazu die Erläuterungen zur erwähnten <a href="#menueBelege-kopieren">Kopierfunktion</a>).</p>
 
 						<p>Das Tastaturkürzel <kbd>Strg</kbd> + <kbd>I</kbd> ist doppelt belegt. Ist die <a href="#menueBelege-kopieren">Kopierfunktion</a> aktiv, wird der aktuelle Beleg zum Kopieren vorgemerkt; ansonsten wird eine Kopie in die Zwischenablage geschoben.</p>
 					</div>
@@ -325,7 +326,7 @@
 					<p id="karteikarte-beleg"><b>Beleg:</b> <i>Pflichtfeld</i>; Belegtext</p>
 
 					<div class="info">
-						<p id="karteikarte-maskieren">Der Inhalt des Textfeldes wird so behandelt, als sei er in <abbr title="Hypertext Markup Language" lang="en">HTML</abbr> formatiert (was bei einem automatischen Import aus dem <abbr title="Deutschen Textarchiv">DTA</abbr> tatsächlich wohl immer der Fall ist). Sie können zur Auszeichnung des Textes somit alle standardisierten <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>-Tags verwenden. Das heißt aber auch, dass die Spitzklammern &lt; und &gt; maskiert werden müssen, wenn sie literal und nicht als Begrenzungen von Tags gemeint sind. Wollen Sie literale Spitzklammern eingeben, müssen Sie <code class="quelltext">&amp;lt;</code> <abbr title="beziehungsweise">bzw.</abbr> <code class="quelltext">&amp;gt;</code> tippen.</p>
+						<p id="karteikarte-maskieren">Der Inhalt des Textfeldes wird so behandelt, als sei er in <abbr title="Hypertext Markup Language" lang="en">HTML</abbr> formatiert (was bei einem automatischen Import aus dem <abbr title="Deutschen Textarchiv">DTA</abbr> tatsächlich wohl immer der Fall ist). Sie können zur Auszeichnung des Textes somit alle standardisierten <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>-Tags verwenden. Das heißt aber auch, dass die Spitzklammern &lt; und &gt; maskiert werden müssen, wenn sie literal und nicht als Begrenzungen von Tags gemeint sind. Wollen Sie literale Spitzklammern eingeben, müssen Sie <code class="quelltext">&amp;lt;</code> <abbr title="beziehungsweise">bzw.</abbr> <code class="quelltext">&amp;gt;</code> tippen.</p>
 
 						<p id="karteikarte-sonderzeichen">Über das Icon <img src="../img/pi.svg" width="20" height="20" alt=""> können einige Sonderzeichen an der Stelle des Belegs eingefügt werden, an der sich der Cursor gerade befindet, darunter auch die maskierten Spitzklammern.</p>
 
@@ -380,7 +381,7 @@
 
 					<p><b>Anhänge:</b> Dateianhänge zu der Karteikarte</p>
 
-					<p class="info">Durch Klick auf einen Anhang lässt sich dieser in dem Standardprogramm des Betriebssystems öffnen. Die Anhänge in dieser Liste sind an die aktuelle Karteikarte gebunden. Anhänge, die nicht zu einer einzelnen Karteikarte, sondern zur Wortkartei selbst gehören, können über den Menüpunkt <a href="#menueKartei-anhaenge"><i>Kartei &gt; Anhänge</i></a> hinzugefügt werden.</p>
+					<p class="info">Durch Klick auf einen Anhang lässt sich dieser in dem Standardprogramm des Betriebssystems öffnen. Die Anhänge in dieser Liste sind an die aktuelle Karteikarte gebunden. Anhänge, die nicht zu einer einzelnen Karteikarte, sondern zur Wortkartei selbst gehören, können über den Menüpunkt <a href="#menueKartei-anhaenge"><i>Kartei &gt; Anhänge</i></a> hinzugefügt werden.</p>
 
 					<h2 id="karteikarte-leseansicht">Leseansicht</h2>
 
@@ -400,7 +401,7 @@
 
 				<!-- BEDEUTUNGSGERÜST -->
 				<section id="sektion-bedeutungsgeruest" class="suche">
-					<p>Die Bedeutungsgerüst-Funktion kann über den Menüpunkt <a href="#menueKartei-bedeutungsgeruest"><i>Kartei &gt; Bedeutungsgerüst</i></a> oder das Tastaturkürzel <kbd>Strg</kbd> + <kbd>B</kbd> geöffnet werden.</p>
+					<p>Die Bedeutungsgerüst-Funktion kann über den Menüpunkt <a href="#menueKartei-bedeutungsgeruest"><i>Kartei &gt; Bedeutungsgerüst</i></a> oder das Tastaturkürzel <kbd>Strg</kbd> + <kbd>B</kbd> geöffnet werden.</p>
 
 					<p>Sie dient zum zentralen Verwalten von Bedeutungesgerüsten, die karteiweit genutzt werden. Ergänzungen und Änderungen, die man hier vornimmt, werden nach dem Speichern automatisch von allen Funktionen übernommen, die auf Bedeutungsgerüstdaten zurückgreifen: dem <a href="#bedeutungsgeruest-fenster">Bedeutungsgerüst-Fenster</a>, dem <i>Bedeutungen</i>-Filter in der <a href="#filter">Filterleiste</a> und nicht zuletzt der <a href="#karteikarte">Karteikarte</a> und allen Funktionen, die zum Füllen oder Darstellen der Karteninhalte dienen. Sie müssen also nicht Dutzende Karteikarten bearbeiten, wenn sie die Formulierung einer Bedeutung ändern oder diese an eine andere Position des Gerüsts schieben. Es genügt, die Änderung im Bedeutungsgerüst vorzunehmen; alle Karteikarten werden automatisch angepasst.</p>
 
@@ -417,7 +418,7 @@
 
 					<p>Änderungen des Gerüsts an dieser Stelle haben Auswirkungen auf das gesamte Programm. Es wird fortan also nicht nur in der Gerüstfunktion, sondern auch an allen anderen Stellen der Kartei, an denen auf Gerüstdaten zurückgegriffen wird, das ausgewählte Gerüst benutzt.</p>
 
-					<p>Zum Ändern des aktuellen Gerüsts muss nicht notwendigerweise die Bedeutungsgerüst-Funktion geöffnet werden. Sie können das Gerüst karteiweit auch über den Menüpunkt <a href="#menueKartei-bedeutungsgeruestWechseln"><i>Kartei &gt; Bedeutungsgerüst wechseln</i></a> ändern. Ist das Bedeutungsgerüst nicht geöffnet, wird die im Bedeutungsgerüst-wechseln-Fenster vorgenommene Einstellung umgehend umgesetzt.</p>
+					<p>Zum Ändern des aktuellen Gerüsts muss nicht notwendigerweise die Bedeutungsgerüst-Funktion geöffnet werden. Sie können das Gerüst karteiweit auch über den Menüpunkt <a href="#menueKartei-bedeutungsgeruestWechseln"><i>Kartei &gt; Bedeutungsgerüst wechseln</i></a> ändern. Ist das Bedeutungsgerüst nicht geöffnet, wird die im Bedeutungsgerüst-wechseln-Fenster vorgenommene Einstellung umgehend umgesetzt.</p>
 
 					<p id="bedeutungsgeruest-konfigurationsfenster">Über das hinter dem Textfeld für das aktuell eingestellte Gerüst stehende Icon <img src="../img/zahnrad.svg" width="24" height="24" alt=""> erreichen Sie ein <b>Konfigurationsfenster</b>, in dem Gerüste hinzugefügt, gelöscht und (um)benannt werden können. <i>Gerüst 1</i> lässt sich nicht löschen. Hat man einem Gerüst einen Namen gegeben, erscheint dieser in der Überschrift des Bedeutungsgerüsts und auch im <a href="#bedeutungsgeruest-fenster">Bedeutungsgerüst-Fenster</a> sowie an den entsprechenden Stellen in der <a href="#belegliste">Belegliste</a>, der <a href="#filter">Filterleiste</a> und der <a href="#karteikarte">Karteikarte</a>.</p>
 
@@ -459,9 +460,9 @@
 
 					<p id="bedeutungsgeruest-verschieben"><b>Verschieben:</b> Die Bedeutungen können im Gerüst frei verschoben werden – zumindest prinzipiell. Dazu muss auf die Windrose in der ersten Spalte vor der Bedeutung geklickt werden. Die Windrose erscheint, sobald man mit der Maus über die erste Spalte fährt. Sie zeigt an, in welche Richtung die markierte Bedeutung mit den Cursor-Tasten verschoben werden kann. Einige Beispiele:</p>
 
-					<p class="erklaerung-icon"><img src="../img/windrose_37-38-39-40.svg" width="24" height="24" alt="">die Bedeutung kann in alle Richtungen verschoben werden;</p>
+					<p class="erklaerung-icon"><img src="../img/windrose_l-u-r-d.svg" width="24" height="24" alt="">die Bedeutung kann in alle Richtungen verschoben werden;</p>
 
-					<p class="erklaerung-icon"><img src="../img/windrose_38-39.svg" width="24" height="24" alt="">die Bedeutung kann nur nach oben oder rechts verschoben werden;</p>
+					<p class="erklaerung-icon"><img src="../img/windrose_u-r.svg" width="24" height="24" alt="">die Bedeutung kann nur nach oben oder rechts verschoben werden;</p>
 
 					<p class="erklaerung-icon"><img src="../img/windrose_.svg" width="24" height="24" alt="">die Bedeutung kann nicht verschoben werden.</p>
 
@@ -528,7 +529,7 @@
 						<li>
 							<p>Öffnen Sie das Bedeutungsgerüst-Fenster.</p>
 
-							<p class="info">Das geht über den Menüpunkt <a href="#menueKartei-bedeutungsgeruestFenster"><i>Kartei &gt; Bedeutungsgerüst-Fenster</i></a> oder via Tastaturkürzel <kbd>Strg</kbd> + <kbd>Umsch</kbd> + <kbd>B</kbd>.</p>
+							<p class="info">Das geht über den Menüpunkt <a href="#menueKartei-bedeutungsgeruestFenster"><i>Kartei &gt; Bedeutungsgerüst-Fenster</i></a> oder via Tastaturkürzel <kbd>Strg</kbd> + <kbd>Umsch</kbd> + <kbd>B</kbd>.</p>
 						</li>
 
 						<li>
@@ -544,7 +545,7 @@
 						<li>
 							<p>Öffnen Sie die Karteikarte zum ersten Beleg in der Liste.</p>
 
-							<p class="info">Das geht über das Icon <img src="../img/karteikarte.svg" width="20" height="20" alt=""> in der <a href="#belegliste-kopfleisteBelege">Kopfleiste des Belegs</a> oder via <i>Rechtsklick &gt; Beleg bearbeiten</i>.</p>
+							<p class="info">Das geht über das Icon <img src="../img/karteikarte.svg" width="20" height="20" alt=""> in der <a href="#belegliste-kopfleisteBelege">Kopfleiste des Belegs</a> oder via <i>Rechtsklick &gt; Beleg bearbeiten</i>.</p>
 						</li>
 
 						<li>
@@ -578,7 +579,7 @@
 
 					<p>Sie können einer Bedeutung beliebig viele Tags aus beliebig vielen Kategorien zuordnen – und diese jederzeit wieder entfernen oder ändern, wenn Sie sich später umentscheiden. Akzeptiert werden allerdings nur Tags, die in der zugehörigen Tag-Datei vorhanden sind. Diese Beschränkung wurde eingeführt, damit Tags möglichst normiert vergeben werden.</p>
 
-					<p class="info">Die Tag-Listen speisen sich aus Tag-Dateien (im <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Format), die mit dem Programm verknüpft wurden. Welche Dateien dies sind, können Sie im Einstellungen-Fenster einsehen: <i>Programm &gt; Einstellungen &gt; Bedeutungsgerüst &gt; Tag-Dateien</i>. Wie Sie diese ändern wird <a href="#einstellungen-bedeutungsgeruest">im betreffenden <abbr title="Abschnitt">Abschn.</abbr> zu den Einstellungen</a> beschrieben.</p>
+					<p class="info">Die Tag-Listen speisen sich aus Tag-Dateien (im <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Format), die mit dem Programm verknüpft wurden. Welche Dateien dies sind, können Sie im Einstellungen-Fenster einsehen: <i><span class="app-name"></span> &gt; Einstellungen &gt; Bedeutungsgerüst &gt; Tag-Dateien</i>. Wie Sie diese ändern wird <a href="#einstellungen-bedeutungsgeruest">im betreffenden <abbr title="Abschnitt">Abschn.</abbr> zu den Einstellungen</a> beschrieben.</p>
 
 					<p id="bedeutungsgeruest-tagFenster">Die Textfelder im Tag-Fenster haben <a href="#karteikarte-dropdown">Dropdown-Menüs</a>, die ganz genauso wie alle Dropdown-Menüs im Programm funktionieren: Sie können Sie über den Pfeil <img src="../img/pfeil-gerade-runter.svg" width="20" height="20" alt=""> oder <kbd>⇩</kbd> öffnen, um die gesamte Liste zu sehen. Beim Tippen im Feld baut sich das Menü hingegen automatisch mit einer gefilterten Vorschlagsliste auf. Die Textfelder sind immer einzeilig; mehrere Werte werden durch <code class="quelltext">, </code> (Komma, gefolgt von einem Leerzeichen) voneinander getrennt.</p>
 
@@ -641,9 +642,9 @@
 						<figcaption>das Bedeutungsgerüst-Fenster</figcaption>
 					</figure>
 
-					<p>Mithilfe des Bedeutungsgerüst-Fensters können Sie beim Arbeiten mit einer Kartei das Bedeutungsgerüst immer im Blick haben, ohne eigens in die Bedeutungsgerüst-Funktion wechseln zu müssen. Öffnen lässt es sich über den Menüpunkt <a href="#menueKartei-bedeutungsgeruestFenster"><i>Kartei &gt; Bedeutungsgerüst-Fenster</i></a> oder über das Tastaturkürzel <kbd>Strg</kbd> + <kbd>Umsch</kbd> + <kbd>B</kbd>.</p>
+					<p>Mithilfe des Bedeutungsgerüst-Fensters können Sie beim Arbeiten mit einer Kartei das Bedeutungsgerüst immer im Blick haben, ohne eigens in die Bedeutungsgerüst-Funktion wechseln zu müssen. Öffnen lässt es sich über den Menüpunkt <a href="#menueKartei-bedeutungsgeruestFenster"><i>Kartei &gt; Bedeutungsgerüst-Fenster</i></a> oder über das Tastaturkürzel <kbd>Strg</kbd> + <kbd>Umsch</kbd> + <kbd>B</kbd>.</p>
 
-					<p>Arbeiten Sie mit <b>mehreren Gerüsten</b>, können Sie das angezeigte Gerüst über das Auswahlmenü im Kopf des Bedeutungsgerüst-Fensters jederzeit wechseln. Dies hat allerdings keine Auswirkung auf das Hauptfenster der Kartei (das Fenster, in dem <abbr title="unter anderem">u. a.</abbr> die <a href="#belegliste">Belegliste</a> angezeigt wird). Die Filterleiste und die Karteikarte im Hauptfenster kann in solchen Fällen auf die Bedeutungen in einem anderen Gerüst zurückgreifen als das Gerüst, das Sie gerade im Bedeutungsgerüst-Fenster sehen. Das Gerüst im Hauptfenster können sie via <a href="#menueKartei-bedeutungsgeruestWechseln"><i>Kartei &gt; Bedeutungsgerüst wechseln</i></a> oder <kbd>Alt</kbd> + <kbd>Strg</kbd> + <kbd>B</kbd> ändern.</p>
+					<p>Arbeiten Sie mit <b>mehreren Gerüsten</b>, können Sie das angezeigte Gerüst über das Auswahlmenü im Kopf des Bedeutungsgerüst-Fensters jederzeit wechseln. Dies hat allerdings keine Auswirkung auf das Hauptfenster der Kartei (das Fenster, in dem <abbr title="unter anderem">u. a.</abbr> die <a href="#belegliste">Belegliste</a> angezeigt wird). Die Filterleiste und die Karteikarte im Hauptfenster kann in solchen Fällen auf die Bedeutungen in einem anderen Gerüst zurückgreifen als das Gerüst, das Sie gerade im Bedeutungsgerüst-Fenster sehen. Das Gerüst im Hauptfenster können sie via <a href="#menueKartei-bedeutungsgeruestWechseln"><i>Kartei &gt; Bedeutungsgerüst wechseln</i></a> oder <kbd>Alt</kbd> + <kbd>Strg</kbd> + <kbd>B</kbd> ändern.</p>
 
 					<p>Das Icon <img src="../img/drucker.svg" width="24" height="24" alt=""> öffnet die <b>Druckvorschau</b> im Hauptfenster der Kartei. Von hier aus können Sie das <a href="#bedeutungsgeruest-druckvorschau">Bedeutungsgerüst entweder ausdrucken oder in die Zwischenablage kopieren</a>.</p>
 
@@ -658,7 +659,7 @@
 
 				<!-- BELEGLISTE -->
 				<section id="sektion-belegliste" class="suche">
-					<p>Die Belegliste ist die Standardansicht, die beim Öffnen einer bestehenden Kartei geladen wird, und zu der die App immer wieder zurückkehrt, wenn alle anderen Funktionen geschlossen werden. Haben Sie sich in einer der anderen Ansichten verloren, können Sie über den Menüpunkt <a href="#menueBelege-auflisten"><i>Belege &gt; Auflisten</i></a> oder via <kbd>Strg</kbd> + <kbd>L</kbd> jederzeit zur Belegliste zurückkehren.</p>
+					<p>Die Belegliste ist die Standardansicht, die beim Öffnen einer bestehenden Kartei geladen wird, und zu der die App immer wieder zurückkehrt, wenn alle anderen Funktionen geschlossen werden. Haben Sie sich in einer der anderen Ansichten verloren, können Sie über den Menüpunkt <a href="#menueBelege-auflisten"><i>Belege &gt; Auflisten</i></a> oder via <kbd>Strg</kbd> + <kbd>L</kbd> jederzeit zur Belegliste zurückkehren.</p>
 
 					<h2 id="belegliste-kopfleiste">Kopfleiste</h2>
 
@@ -696,7 +697,7 @@
 
 						<p>Eine automatisch erfolgte Kürzung kann man durch Klick auf den gekürzten Absatz nach und nach rückgängig machen, um mehr Kontext zu erhalten. Pro Klick wird ein zum angezeigten Text benachbarter Absatz eingeblendet. Ist an der zuvor gekürzten Stelle der komplette Text sichtbar, verschwindet das Kürzungszeichen.</p>
 
-						<p>Um das Karteiwort möglichst zuverlässig zu erkennen, werden beim Erstellen einer Kartei automatisch Formvarianten des <abbr title="Deutsches Textarchiv">DTA</abbr> geladen (<a href="#menueKartei-formvarianten"><i>Kartei &gt; Formvarianten</i></a>). Sollte das Karteiwort im Belegtext nicht erkannt oder sollten sogar falsche Wörter hervorgehoben werden, können Sie das Problem vielleicht dadurch beheben, dass Sie die Liste der Formvarianten modifizieren, also ergänzen oder bereinigen. Bestand zum Zeitpunkt des Erstellens der Kartei keine Internetverbindung, sollten Sie das Laden der Formvarianten noch einmal manuell anstoßen. Dafür gibt es einen Button im Formvarianten-Fenster (<i>Kartei &gt; Formvarianten</i>).</p>
+						<p>Um das Karteiwort möglichst zuverlässig zu erkennen, werden beim Erstellen einer Kartei automatisch Formvarianten des <abbr title="Deutsches Textarchiv">DTA</abbr> geladen (<a href="#menueKartei-formvarianten"><i>Kartei &gt; Formvarianten</i></a>). Sollte das Karteiwort im Belegtext nicht erkannt oder sollten sogar falsche Wörter hervorgehoben werden, können Sie das Problem vielleicht dadurch beheben, dass Sie die Liste der Formvarianten modifizieren, also ergänzen oder bereinigen. Bestand zum Zeitpunkt des Erstellens der Kartei keine Internetverbindung, sollten Sie das Laden der Formvarianten noch einmal manuell anstoßen. Dafür gibt es einen Button im Formvarianten-Fenster (<i>Kartei &gt; Formvarianten</i>).</p>
 					</div>
 
 					<p class="erklaerung-icon" id="belegliste-trennzeichen"><img src="../img/trennzeichen.svg" width="24" height="24" alt="">Silbentrennung im Belegtext ein- oder ausblenden</p>
@@ -790,7 +791,7 @@
 					<div class="info">
 						<p>Mit der Suchleiste können Sie alle sichtbaren Texte in der Belegliste durchsuchen, mit Ausnahme der kurzen Belegvorschau in der Kopfleiste der Belege. Durchsucht werden also die Jahresangaben, der Autorennamen und (falls eingeblendet) die Textsortenangabe in der Kopfleiste sowie der gesamte sichtbare Text im Bereich der <a href="#belegliste-detailansicht">Detailansicht</a>. Ausgeblendete Elemente und gekürzte Absätze werden demnach nicht durchsucht.</p>
 
-						<p>Für eine Suche über den gesamten Inhalt der Kartei ist die Suchleiste ungeeignet. Hierzu dient der <a href="#filter-volltext">Volltextfilter</a>. Für eine Suche über eine Sammlung an Karteien steht die <a href="#menueProgramm-karteisuche">Karteisuche</a> zur Verfügung.</p>
+						<p>Für eine Suche über den gesamten Inhalt der Kartei ist die Suchleiste ungeeignet. Hierzu dient der <a href="#filter-volltext">Volltextfilter</a>. Für eine Suche über eine Sammlung an Karteien steht die <a href="#menueApp-karteisuche">Karteisuche</a> zur Verfügung.</p>
 
 						<p>Eine Suche mit der Suchleiste startet immer an dem Punkt des Fensters, an dem Sie sich gerade befinden. <abbr title="Das heißt">D. h.</abbr>, dass bei einer neuen Suche nicht etwa zum ersten Treffer in der Belegliste gesprungen wird, sondern zum ersten im aktuellen Ausschnitt des Fensters sichtbaren Treffer. Gibt es im sichtbaren Bereich keinen Treffer, wird zunächst geschaut, ob es weiter unten in der Belegliste einen Treffer gibt. Erst dann, wenn auch hier die Suche erfolglos ist, wird zum ersten Treffer im Dokument gesprungen.</p>
 
@@ -867,7 +868,7 @@
 
 					<p>Wurde ein Beleg um <b>Dateianhänge</b> ergänzt, werden auch diese in der Metainfo-Leiste angezeigt, ebenfalls als Icon. Durch Klick auf die Datei-Icons können die Anhänge im Standardprogramm des Betriebssystems geöffnet werden.</p>
 
-					<p id="belegliste-bedeutungsgeruest">Arbeiten Sie mit mehreren <a href="#bedeutungsgeruest">Bedeutungsgerüsten</a>, wird in der Überschrift <i>Bedeutung</i> angegeben, aus welchem Gerüst die angezeigte Bedeutung stammt. Diese Überschrift ist klicksensitiv; über sie kann die Funktion <a href="#menueKartei-bedeutungsgeruestWechseln"><i>Kartei &gt; Bedeutungsgerüst wechseln</i></a> aufgerufen werden.</p>
+					<p id="belegliste-bedeutungsgeruest">Arbeiten Sie mit mehreren <a href="#bedeutungsgeruest">Bedeutungsgerüsten</a>, wird in der Überschrift <i>Bedeutung</i> angegeben, aus welchem Gerüst die angezeigte Bedeutung stammt. Diese Überschrift ist klicksensitiv; über sie kann die Funktion <a href="#menueKartei-bedeutungsgeruestWechseln"><i>Kartei &gt; Bedeutungsgerüst wechseln</i></a> aufgerufen werden.</p>
 
 					<p id="belegliste-kopierenIcon">Am linken Rand neben Belegtext und Quellenangabe stehen <b>Kopier-Icons</b>: <img src="../img/kopieren.svg" width="24" height="24" alt="">. Über sie kann man mit nur einem Klick den Belegtext <abbr title="beziehungsweise">bzw.</abbr> die Quellenangabe in die Zwischenablage des Rechners schieben, um diese in ein anderes (Textverarbeitungs-)Programm einzufügen. Beim Kopieren des Belegtextes wird automatisch die Quellenangabe mitkopiert. Dabei wird immer der komplette Belegtext kopiert, und zwar auch, wenn der Kontext gekürzt wurde (Funktion <img src="../img/kuerzung.svg" width="24" height="24" alt="">). <abbr title="Eventuell">Evtl.</abbr> im Text vorhandene Trennzeichen und Seitenumbrüche sind in der Kopie sichtbar, selbst wenn Sie in der aktuellen Anzeige ausgeschaltet wurden (Funktion <img src="../img/trennzeichen.svg" width="24" height="24" alt="">).</p>
 
@@ -919,9 +920,9 @@
 						<ol>
 							<li>Öffnen Sie das Backup <em>und</em> die aktuelle Version der Kartei. (<i class="app-name"></i> wird für jede der beiden Karteien ein eigenes Programmfenstern aufbauen.)</li>
 
-							<li>Suchen Sie in der Backup-Kartei den Beleg, den Sie wiederherstellen wollen. Dann: <i>Rechtsklick &gt; <a href="#belegliste-zwischenablage">Beleg in Zwischenablage kopieren</a></i>.</li>
+							<li>Suchen Sie in der Backup-Kartei den Beleg, den Sie wiederherstellen wollen. Dann: <i>Rechtsklick &gt; <a href="#belegliste-zwischenablage">Beleg in Zwischenablage kopieren</a></i>.</li>
 
-							<li>Rufen Sie in dem Programmfenster, in dem die aktuelle Version der Kartei zu finden ist, die Funktion <a href="#menueBelege-einfuegen"><i>Belege &gt; Einfügen</i></a> auf.</li>
+							<li>Rufen Sie in dem Programmfenster, in dem die aktuelle Version der Kartei zu finden ist, die Funktion <a href="#menueBelege-einfuegen"><i>Belege &gt; Einfügen</i></a> auf.</li>
 
 							<li>In der Liste unter der Überschrift <i>Belegquellen</i> sehen Sie den Punkt: <i>Zwischenablage (1 Beleg)</i>. Ist er noch nicht ausgewählt, wählen Sie ihn aus und klicken oben im Fenster auf das Einfügen-Icon <img src="../img/einfuegen.svg" width="20" height="20" alt="">. <i lang="it">Ecco fatto!</i></li>
 						</ol>
@@ -1026,7 +1027,7 @@
 					<p id="filter-volltext"><b>Volltext:</b> Belege nach dem Vorkommen beliebiger Wörter filtern</p>
 
 					<div class="info">
-						<p>Der <i>Volltext</i>-Filter ist zugleich die <b>Suchfunktion der App</b>. Deswegen ist er auch der einzige Filter, der direkt über ein Tastaturkürzel zu erreichen ist (<kbd>Strg</kbd> + <kbd>F</kbd>) und der im Programmmenü auftaucht (<a href="#menueKartei-suche"><i>Kartei &gt; Suche</i></a>). Das Tastaturkürzel können Sie im Hauptfenster des Programms jederzeit aufrufen – auch wenn die Filterleiste noch geschlossen ist, ganz egal in welcher Ansicht Sie sich befinden.</p>
+						<p>Der <i>Volltext</i>-Filter ist zugleich die <b>Suchfunktion der App</b>. Deswegen ist er auch der einzige Filter, der direkt über ein Tastaturkürzel zu erreichen ist (<kbd>Strg</kbd> + <kbd>F</kbd>) und der im Programmmenü auftaucht (<a href="#menueKartei-suche"><i>Kartei &gt; Suche</i></a>). Das Tastaturkürzel können Sie im Hauptfenster des Programms jederzeit aufrufen – auch wenn die Filterleiste noch geschlossen ist, ganz egal in welcher Ansicht Sie sich befinden.</p>
 
 						<p>Geben Sie mehrere <b>Suchwörter</b> ein (getrennt durch ein Leerzeichen), werden nur Belege gefunden, die jedes dieser Suchwörter enthalten. Dabei müssen die Suchwörter nicht notwendigerweise in ein und demselben Datenfeld gefunden werden. Suchen Sie in der <a href="#" class="hilfe-demo">Demonstrationskartei</a> <abbr title="zum Beispiel">z. B.</abbr> nach <q>kellner persönlichkeit</q> wird der Beleg von 1998 angezeigt, obwohl <q>persönlichkeit</q> nur im Belegtext und <q>kellner</q> nur in den Datenfeldern <i>Autor, Quelle, Notizen</i> gefunden wird.
 
@@ -1135,13 +1136,13 @@
 
 					<p>Die einzelnen Filter summieren sich in unterschiedlicher Weise auf. So führt das gleichzeitige Aktivieren von Filtern unterschiedlicher Kategorien – normalerweise – zu einer immer kürzeren Belegliste, weil die Filter der unterschiedlichen Filterkategorien durch ein logisches Und miteinander verknüpft sind.</p>
 
-					<p>Ein Beispiel: Aktivieren Sie in der <a href="#" class="hilfe-demo">Demonstrationskartei</a> <i>Zeitraum &gt; 1900</i> und <i>Bedeutungen &gt; Zugtiergespann</i>, bekommen Sie nur zwei Belege angezeigt, obwohl es im Zeitraum 1900–1999 insgesamt 13 Belege und mit der Bedeutung <q class="bedeutung">Zugtiergespann</q> immerhin noch drei Belege gibt. Denn: Es gibt nur zwei Belege, die sowohl aus dem Zeitraum 1900–1999 stammen <em>und</em> zugleich mit der Bedeutung <q class="bedeutung">Zugtiergespann</q> getaggt wurden. Zur Verdeutlichung: Wären die genannten Filter mit einem logischen Oder verknüpft, wäre die Belegliste in diesem Fall sogar 14 Belege lang: die 13 Belege aus dem Zeitraum 1900–1999 plus den Beleg von 1859, in dem sich das Wort <i>Team</i> mit der Bedeutung <q class="bedeutung">Zugtiergespann</q> findet. Eine Oder-Verknüpfung der verschiedenen Filterblöcke wurde allerdings nicht implementiert. Sie werden immer durch ein Und miteinander verknüpft.</p>
+					<p>Ein Beispiel: Aktivieren Sie in der <a href="#" class="hilfe-demo">Demonstrationskartei</a> <i>Zeitraum &gt; 1900</i> und <i>Bedeutungen &gt; Zugtiergespann</i>, bekommen Sie nur zwei Belege angezeigt, obwohl es im Zeitraum 1900–1999 insgesamt 13 Belege und mit der Bedeutung <q class="bedeutung">Zugtiergespann</q> immerhin noch drei Belege gibt. Denn: Es gibt nur zwei Belege, die sowohl aus dem Zeitraum 1900–1999 stammen <em>und</em> zugleich mit der Bedeutung <q class="bedeutung">Zugtiergespann</q> getaggt wurden. Zur Verdeutlichung: Wären die genannten Filter mit einem logischen Oder verknüpft, wäre die Belegliste in diesem Fall sogar 14 Belege lang: die 13 Belege aus dem Zeitraum 1900–1999 plus den Beleg von 1859, in dem sich das Wort <i>Team</i> mit der Bedeutung <q class="bedeutung">Zugtiergespann</q> findet. Eine Oder-Verknüpfung der verschiedenen Filterblöcke wurde allerdings nicht implementiert. Sie werden immer durch ein Und miteinander verknüpft.</p>
 
-					<p>Innerhalb einer Filterkategorie verhalten sich die Filter freilich genau andersherum als über die Filterkategorien hinweg: Sie werden durch ein logisches Oder miteinander verknüpft. Aktivieren Sie in der Demonstrationskartei <i>Bedeutungen &gt; Zugtiergespann</i> und <i>Bedeutungen &gt; Mannschaft im Sport</i> erhalten Sie zehn Treffer. Drei Belege mit der Bedeutung <q class="bedeutung">Zugtiergespann</q> und sieben mit <q class="bedeutung">Mannschaft im Sport</q> – weil die Filter innerhalb der Kategorie <i>Bedeutungen</i> durch ein logisches Oder miteinander verknüpft wurden. Wenden Sie nun zusätzlich den Filter <i>Zeitraum &gt; 1900</i> an, reduziert sich die Belegliste auf sieben Treffer, weil für Filter unterschiedlicher Kategorien ein logisches Und gilt. Die beiden Belege aus dem Jahr 2016 und der von 1859, die bis zu diesem Zeitpunkt noch angezeigt worden waren, bleiben nun im Filter hängen.</p>
+					<p>Innerhalb einer Filterkategorie verhalten sich die Filter freilich genau andersherum als über die Filterkategorien hinweg: Sie werden durch ein logisches Oder miteinander verknüpft. Aktivieren Sie in der Demonstrationskartei <i>Bedeutungen &gt; Zugtiergespann</i> und <i>Bedeutungen &gt; Mannschaft im Sport</i> erhalten Sie zehn Treffer. Drei Belege mit der Bedeutung <q class="bedeutung">Zugtiergespann</q> und sieben mit <q class="bedeutung">Mannschaft im Sport</q> – weil die Filter innerhalb der Kategorie <i>Bedeutungen</i> durch ein logisches Oder miteinander verknüpft wurden. Wenden Sie nun zusätzlich den Filter <i>Zeitraum &gt; 1900</i> an, reduziert sich die Belegliste auf sieben Treffer, weil für Filter unterschiedlicher Kategorien ein logisches Und gilt. Die beiden Belege aus dem Jahr 2016 und der von 1859, die bis zu diesem Zeitpunkt noch angezeigt worden waren, bleiben nun im Filter hängen.</p>
 
 					<p id="filter-reduktionsmodus">Die Lage ändert und verkompliziert sich noch, wenn Sie den <b>Reduktionsmodus</b> aktivieren. Er verbirgt sich hinter dem Icon <img src="../img/reduzieren.svg" width="24" height="24" alt=""> im Kopf der Filterleiste. Mit aktiviertem Reduktionsmodus reduzieren sich die <a href="#filter-dynamische">dynamischen Filter</a> mit jedem Filtervorgang ein Stückchen mehr. Der Grund ist, dass sie nun nur noch aus den Belegen gefüllt werden, die nach der Anwendung eines Filters in der Belegliste übrig geblieben sind. Anders formuliert: Normalerweise speisen sich die Inhalte der dynamischen Filter aus allen in der Kartei vorhandenen Belegen. Im Reduktionsmodus werden die dynamischen Filter nach jedem Filtervorgang neu aufgebaut. Analysiert werden dabei aber nur noch die Belege, die es zuvor durch den Filter geschafft haben. Dies führt – in aller Regel – zu einer Reduktion der zur Verfügung stehenden dynamischen Filter.</p>
 
-					<p>Ein praktisches Beispiel: In der <a href="#" class="hilfe-demo">Demonstrationskartei</a> finden sich Belege, die fünf verschiedenen Textsorten zugeordnet wurden: Belletristik, Gebrauchsliteratur, Reisebericht, Wissenschaft, Zeitung. Aktivieren Sie den Reduktionsmodus! Öffnen Sie dann den Filterblock <i>Zeitraum</i> und klicken Sie auf <i>2000</i>! Sie sehen sofort, wie die Filter <i>1800</i> und <i>1900</i> verschwinden – weil es in den fünf verbliebenen Belegen in der Belegliste keine Belege mehr aus dem Zeitraum 1800–1999 gibt. Alle stammen aus den 2000er-Jahren, weswegen keine anderen Zeitraumfilter mehr aufgebaut werden. Die dynamischen Filter im Block <i>Textsorten</i> wurden noch stärker reduziert: Es wird nur noch der Filter <i>Zeitung</i> angezeigt – weil alle Belege aus den 2000er-Jahren mit dieser und keiner anderen Textsorte getaggt worden sind. Sie können das Spielchen noch weiter treiben und die Belegliste weiter reduzieren, indem Sie <i>Wortbildungen &gt; Teamvergleich</i> hinzuschalten. Im Block <i>Textsorten</i> ist nun auch noch die Unterkategorie <i>Zeitung: Reise</i> verschwunden.</p>
+					<p>Ein praktisches Beispiel: In der <a href="#" class="hilfe-demo">Demonstrationskartei</a> finden sich Belege, die fünf verschiedenen Textsorten zugeordnet wurden: Belletristik, Gebrauchsliteratur, Reisebericht, Wissenschaft, Zeitung. Aktivieren Sie den Reduktionsmodus! Öffnen Sie dann den Filterblock <i>Zeitraum</i> und klicken Sie auf <i>2000</i>! Sie sehen sofort, wie die Filter <i>1800</i> und <i>1900</i> verschwinden – weil es in den fünf verbliebenen Belegen in der Belegliste keine Belege mehr aus dem Zeitraum 1800–1999 gibt. Alle stammen aus den 2000er-Jahren, weswegen keine anderen Zeitraumfilter mehr aufgebaut werden. Die dynamischen Filter im Block <i>Textsorten</i> wurden noch stärker reduziert: Es wird nur noch der Filter <i>Zeitung</i> angezeigt – weil alle Belege aus den 2000er-Jahren mit dieser und keiner anderen Textsorte getaggt worden sind. Sie können das Spielchen noch weiter treiben und die Belegliste weiter reduzieren, indem Sie <i>Wortbildungen &gt; Teamvergleich</i> hinzuschalten. Im Block <i>Textsorten</i> ist nun auch noch die Unterkategorie <i>Zeitung: Reise</i> verschwunden.</p>
 
 					<figure class="right" title="zum Vergrößern anklicken">
 						<img src="../img/win/hb-filter-reduktionsmodus.png" alt="">
@@ -1150,7 +1151,7 @@
 
 					<p>Ein <b>Anwendungsbeispiel</b>, für das das <b>Filtern im Reduktionsmodus</b> besonders gut geeignet ist: In den dynamischen Filtern werden die zur Verfügung stehenden Filter im Reduktionsmodus, wie gezeigt, immer weiter reduziert. <i>Textsorten, Korpora</i> <abbr title="und so weiter">usw.</abbr>, die in den Belegen eigentlich zu finden sind (wenn auch nicht in den derzeit sichtbaren), verschwinden nach und nach aus der Filterleiste. Anders verhält sich jedoch der <a href="#filter-bedeutungen">Filter <i>Bedeutungen</i></a>: In diesem Block werden immer alle Bedeutungen angezeigt, die sich im <a href="#bedeutungsgeruest">Bedeutungsgerüst</a> finden. Im Reduktionsmodus verändert sich allerdings die hinter den einzelnen Bedeutungen angegebene Anzahl der Belege, die mit den Bedeutungen getaggt wurden – und zwar bis zu dem Punkt, an dem für eine bestimmte Bedeutung überhaupt keine Belege mehr in der gefilterten Belegliste zu finden sind. Bedeutungen, die in den gefilterten Belegen nicht realisiert werden, werden ausgegraut. Filtern Sie im Reduktionsmodus einen Zeitraum heraus, können Sie so auf einen Blick feststellen, welche Bedeutungen in just diesem Zeitraum realisiert wurden: Sie sind grün und nicht ausgegraut. Im Beispielbild ist das für den Zeitraum 1800–1899 allein die Bedeutung <q class="bedeutung">Zugtiergespann</q>.</p>
 
-					<p id="filter-logik">Die Filter folgen alle einer inklusiven Logik: Sie lassen Belege durch ihr Sieb, wenn diese Belege das, wonach gefiltert wurde, enthalten. Für die Filter der Kategorie <i>Verschiedenes</i> können Sie diese Logik allerdings umkehren, indem sie explizit den Radio-Button für eine <b>exklusive Filterlogik</b> auswählen (erscheint nach dem Öffnen des Filterblocks am oberen Rand). Aktivieren Sie in der <a href="#" class="hilfe-demo">Demonstrationskartei</a> den Filter <i>Verschiedenes &gt; Buchung</i>, reduziert sich die Belegliste auf 15 Belege – wenn sie die standardmäßig eingestellte Filterlogik auf inklusiv belassen. Stellen Sie den Filter auf exklusiv um, erhalten Sie nur noch vier Treffer: Es handelt sich um alle Belege, auf die der Filter <i>Buchung</i> nicht zutrifft. Diese exklusive Logik steht nur für die Filter in der Kategorie <i>Verschiedenes</i> zur Verfügung. Wenden Sie gleichzeitig Filter anderer Kategorien an, folgen diese auch weiterhin einer inklusiven Filterlogik mit Und-Verknüpfung.</p>
+					<p id="filter-logik">Die Filter folgen alle einer inklusiven Logik: Sie lassen Belege durch ihr Sieb, wenn diese Belege das, wonach gefiltert wurde, enthalten. Für die Filter der Kategorie <i>Verschiedenes</i> können Sie diese Logik allerdings umkehren, indem sie explizit den Radio-Button für eine <b>exklusive Filterlogik</b> auswählen (erscheint nach dem Öffnen des Filterblocks am oberen Rand). Aktivieren Sie in der <a href="#" class="hilfe-demo">Demonstrationskartei</a> den Filter <i>Verschiedenes &gt; Buchung</i>, reduziert sich die Belegliste auf 15 Belege – wenn sie die standardmäßig eingestellte Filterlogik auf inklusiv belassen. Stellen Sie den Filter auf exklusiv um, erhalten Sie nur noch vier Treffer: Es handelt sich um alle Belege, auf die der Filter <i>Buchung</i> nicht zutrifft. Diese exklusive Logik steht nur für die Filter in der Kategorie <i>Verschiedenes</i> zur Verfügung. Wenden Sie gleichzeitig Filter anderer Kategorien an, folgen diese auch weiterhin einer inklusiven Filterlogik mit Und-Verknüpfung.</p>
 
 					<p>Wenn Sie sich im <b>Reduktionsmodus</b> befinden und unter <i>Verschiedenes</i> <b>mit exklusiver Logik</b> den Filter <i>Buchung</i> aktivieren, bekommen Sie ein merkwürdiges Ergebnis: Da es nun in der Belegliste keinen Treffer mehr gibt, auf den der Filter <i>Buchung</i> zutrifft, müsste dieser eigentlich verschwinden, denn Sie sind ja im Reduktionsmodus. Da er aber gerade aktiv ist, könnten Sie ihn nicht mehr abwählen, wenn er ausgeblendet werden würde. Darum werden in diesem besonderen Fall Filter unter <i>Verschiedenes</i> auch dann noch eingeblendet, wenn sie gar keine Treffer produzieren.</p>
 
@@ -1161,14 +1162,14 @@
 						<figcaption>Notizen in der Filterleiste</figcaption>
 					</figure>
 
-					<p>Die Filterleiste kann für ein Feature missbraucht werden, das mit den Filtern eigentlich nichts zu tun hat: das Einblenden von <a href="#menueKartei-notizen">Notizen zur Kartei</a>, die auf Wunsch hinter dem letzten Filter stehen können. Diese Notizen sehen auf den ersten Blick wie ein Filter aus, weil sie wie die anderen Filterblöcke auch einen Filterkopf haben, den man auf Klick öffnen und schließen kann. Anstelle des Reset-Icons erscheint allerdings ein Stift-Icon (<img src="../img/stift.svg" width="24" height="24" alt="">), über das man die Notizen öffnen und bearbeiten kann. Die unter dem Kopf eingeblendeten Notizen können nur gelesen werden. Zum Ändern müssen Sie die Notizenfunktion öffnen, <abbr title="zum Beispiel">z. B.</abbr> über das Stift-Icon oder über den Menüpunkt <a href="#menueKartei-notizen"><i>Kartei &gt; Notizen</i></a>.</p>
+					<p>Die Filterleiste kann für ein Feature missbraucht werden, das mit den Filtern eigentlich nichts zu tun hat: das Einblenden von <a href="#menueKartei-notizen">Notizen zur Kartei</a>, die auf Wunsch hinter dem letzten Filter stehen können. Diese Notizen sehen auf den ersten Blick wie ein Filter aus, weil sie wie die anderen Filterblöcke auch einen Filterkopf haben, den man auf Klick öffnen und schließen kann. Anstelle des Reset-Icons erscheint allerdings ein Stift-Icon (<img src="../img/stift.svg" width="24" height="24" alt="">), über das man die Notizen öffnen und bearbeiten kann. Die unter dem Kopf eingeblendeten Notizen können nur gelesen werden. Zum Ändern müssen Sie die Notizenfunktion öffnen, <abbr title="zum Beispiel">z. B.</abbr> über das Stift-Icon oder über den Menüpunkt <a href="#menueKartei-notizen"><i>Kartei &gt; Notizen</i></a>.</p>
 
 					<p>Um sich die Notizen in der Filterleiste anzeigen zu lassen, müssen sie zunächst die entsprechende <a href="#einstellungen-notizenFilterleiste">Einstellung</a> aktivieren.</p>
 				</section>
 
 				<!-- EINSTELLUNGEN -->
 				<section id="sektion-einstellungen" class="suche">
-					<p>Das Verhalten und die Ansicht der App lässt sich in vielerlei Hinsicht anpassen. Einen großen Teil der möglichen Anpassungen kann man in dem internen Programmfenster vornehmen, das über den Menüpunkt <a href="#menueProgramm-einstellungen"><i>Programm &gt; Einstellungen</i></a> zu erreichen ist. Die dort zu findenden Konfigurationsmöglichkeiten werden <a href="#einstellungen-allgemeines">in diesem Abschnitt weiter unten</a> detailliert beschrieben.</p>
+					<p>Das Verhalten und die Ansicht der App lässt sich in vielerlei Hinsicht anpassen. Einen großen Teil der möglichen Anpassungen kann man in dem internen Programmfenster vornehmen, das über den Menüpunkt <a href="#menueApp-einstellungen"><i><span class="app-name"></span> &gt; Einstellungen</i></a> zu erreichen ist. Die dort zu findenden Konfigurationsmöglichkeiten werden <a href="#einstellungen-allgemeines">in diesem Abschnitt weiter unten</a> detailliert beschrieben.</p>
 
 					<p>Alle im Einstellungen-Fenster vorgenommenen Änderungen werden umgehend an die anderen Hauptfenster des Programms übermittelt und dort sofort wirksam. Insofern verhalten sich diese Einstellungen anders als Einstellungen, die an anderen Stellen des Programms vorgenommen werden können. Denn Konfigurationsmöglichkeiten, die von der App gespeichert und nach einem Neustart wiederhergestellt werden, finden sich in vielen Funktionen und Ansichten. Ein wesentlicher Unterschied besteht allerdings darin, dass sie nicht sofort in allen Programmfenstern aktiv werden, weil dies die Flexibilität des Handlings der Oberfläche einschränken würde.</p>
 
@@ -1191,7 +1192,7 @@
 							<p><b>Karteikarte:</b> Für die Icons in der <a href="#karteikarte-kopfleiste">Kopfleiste der Leseansicht</a>, die aktivier- und deaktivierbar sind, gilt dasselbe wie für die <a href="#einstellungen-weitereBelegliste">Icons in der Belegliste</a>: Sie werden nicht sofort in anderen Programmfenstern aktiv; gespeichert wird der Icon-Status desjenigen Programmfensters, das als letztes geschlossen wurde.</p>
 						</li>
 
-						<li><b>Karteisuche:</b> Benutzen Sie die hinter dem Menüpunkt <a href="#menueProgramm-karteisuche"><i>Programm &gt; Karteisuche</i></a> stehende Funktion, werden die dort eingegebenen Pfade und Filter ebenfalls gespeichert. Auch die hier vorgenommenen Einstellungen beziehen sich nur auf das aktuelle Programmfenster. Und auch in diesem Fall gilt, dass die Konfiguration des zuletzt geschlossenen Fensters nach dem Neustart wiederhergestellt wird.</li>
+						<li><b>Karteisuche:</b> Benutzen Sie die hinter dem Menüpunkt <a href="#menueApp-karteisuche"><i><span class="app-name"></span> &gt; Karteisuche</i></a> stehende Funktion, werden die dort eingegebenen Pfade und Filter ebenfalls gespeichert. Auch die hier vorgenommenen Einstellungen beziehen sich nur auf das aktuelle Programmfenster. Und auch in diesem Fall gilt, dass die Konfiguration des zuletzt geschlossenen Fensters nach dem Neustart wiederhergestellt wird.</li>
 
 						<li><b>Kopierfunktion:</b> Die Konfiguration der beim Kopieren zu übernehmenden Datenfelder im <a href="#menueBelege-einfuegen">Einfügen-Fenster der Kopierfunktion</a> werden gespeichert und nach dem Neustart der App wiederhergestellt. Anders als die zuvor erwähnten Konfigurationsmöglichkeiten außerhalb des Einstellungen-Fensters werden Änderungen jedoch unmittelbar an alle anderen Programmfenster übertragen. Allerdings werden sie dort erst dann aktiv, wenn das Einfügen-Fenster geschlossen und erneut geöffnet wurde.</li>
 
@@ -1209,9 +1210,9 @@
 
 						<p>Registrieren Sie sich, kann das Programm Ihren Namen an anderen Stellen, an denen BearbeiterInnen vermerkt werden, automatisch eintragen. Dies könnte hilfreich sein, wenn <i class="app-name"></i> nicht nur von Ihnen allein, sondern in einem größeren Projekt genutzt wird und man später nachvollziehen möchte, wer Wortkarteien erstellt und/oder bearbeitet hat.</p>
 
-						<p>Immer dann, wenn eine Kartei gespeichert wird, registriert die App, welche Person für das Speichern verantwortlich war, und schreibt diese in eine Liste der BearbeiterInnen. Diese Liste wird in der Kartei gespeichert. Dabei greift die App auf den in diesem Feld eingetragenen Namen zurück. Dem Fenster <a href="#menueKartei-metadaten"><i>Kartei &gt; Metadaten</i></a> lässt sich entnehmen, wer alles in dieser Liste steht. Dort können Personen manuell ergänzt oder wieder entfernt werden.</p>
+						<p>Immer dann, wenn eine Kartei gespeichert wird, registriert die App, welche Person für das Speichern verantwortlich war, und schreibt diese in eine Liste der BearbeiterInnen. Diese Liste wird in der Kartei gespeichert. Dabei greift die App auf den in diesem Feld eingetragenen Namen zurück. Dem Fenster <a href="#menueKartei-metadaten"><i>Kartei &gt; Metadaten</i></a> lässt sich entnehmen, wer alles in dieser Liste steht. Dort können Personen manuell ergänzt oder wieder entfernt werden.</p>
 
-						<p>Auch beim Erstellen einer neuen Wortkartei wird auf den hier eingetragenen Namen zurückgegriffen. In diesem Fall wird nämlich automatisch das Redaktionsereignis <i>Kartei erstellt</i> angelegt und mit dem Namen der registrierten BearbeterIn verknüpft. Die Redaktionsereignisse können Sie im Fenster <a href="#menueKartei-redaktion"><i>Kartei &gt; Redaktion</i></a> einsehen und bearbeiten.</p>
+						<p>Auch beim Erstellen einer neuen Wortkartei wird auf den hier eingetragenen Namen zurückgegriffen. In diesem Fall wird nämlich automatisch das Redaktionsereignis <i>Kartei erstellt</i> angelegt und mit dem Namen der registrierten BearbeterIn verknüpft. Die Redaktionsereignisse können Sie im Fenster <a href="#menueKartei-redaktion"><i>Kartei &gt; Redaktion</i></a> einsehen und bearbeiten.</p>
 
 						<p>Arbeiten Sie in einem Projekt mit mehreren MitarbeiterInnen, könnte es sogar sinnvoll sein, eine Datei mit einer Personenliste zu erstellen, die sich jeder einmalig in sein Programm lädt. So könnte dann an allen Stellen des Programms, wo auf Personennamen der BearbeiterInnen zurückgegriffen wird, ein mit den in der Liste zu findenden Namen gefülltes <a href="#karteikarte-dropdown">Dropdown-Menü</a> aufgebaut werden. Orte, an denen sich solche Menüs befinden, sind dieses Textfeld, das BearbeiterInnen-Feld im <a href="#menueKartei-metadaten">Metadaten-Fenster</a> und die Personenfelder im <a href="#menueKartei-redaktion">Redaktions-Fenster</a>.</p>
 
@@ -1229,7 +1230,7 @@ Mustermann, Erika
 					<div class="info">
 						<p><i>Standard:</i> 10</p>
 
-						<p><a href="#karteikarte">Karteikarten</a> können mit Texten aus dem <abbr title="Deutsche Textarchiv">DTA</abbr> automatisch gefüllt werden, wenn man eine entsprechende <abbr title="Uniform Resource Locator" lang="en">URL</abbr> angibt. Und die Funktion <a href="#menueKartei-formvarianten"><i>Kartei &gt; Formvarianten</i></a> lädt beim Erstellen einer Kartei automatisch eine Liste an Formvarianten – ebenfalls aus dem <abbr title="Deutsche Textarchiv">DTA</abbr>.</p>
+						<p><a href="#karteikarte">Karteikarten</a> können mit Texten aus dem <abbr title="Deutsche Textarchiv">DTA</abbr> automatisch gefüllt werden, wenn man eine entsprechende <abbr title="Uniform Resource Locator" lang="en">URL</abbr> angibt. Und die Funktion <a href="#menueKartei-formvarianten"><i>Kartei &gt; Formvarianten</i></a> lädt beim Erstellen einer Kartei automatisch eine Liste an Formvarianten – ebenfalls aus dem <abbr title="Deutsche Textarchiv">DTA</abbr>.</p>
 
 						<p>In beiden Fällen sendet die App intern eine Anfrage an die <abbr title="Deutsche Textarchiv">DTA</abbr>-Webseite. Erhält es nach der hier eingegebenen Zeitspanne keine Antwort, wird die Anfrage mit einem Timeout-Fehler abgebrochen und ein Dialogfenster geöffnet, das über diesen Fehler informiert. Arbeiten Sie in einer Umgebung mit schlechter Internetverbindung (<abbr title="zum Beispiel">z. B.</abbr> im Zug), könnte es hilfreich sein, diesen Wert ein bisschen anzuheben. Die App wartet dann entsprechend länger, ehe sie die Anfrage als gescheitert bewertet.</p>
 					</div>
@@ -1239,7 +1240,7 @@ Mustermann, Erika
 					<div class="info">
 						<p><i>Standard:</i> aktiviert</p>
 
-						<p>Wenn der Befehl <a href="#menueKartei-speichern"><i>Kartei &gt; Speichern</i></a> aufgerufen wird, wird bei aktivierter Einstellung eine Speicherkaskade ausgelöst: Die App stößt dann in allen Funktionen, in denen Änderungen noch nicht übernommen worden sind, das Speichern an. Ist die Funktion deaktivert wird das Speichern nur in der gerade sichtbaren Funktion ausgelöst. Stehen keine Änderungen mehr aus, wird die Kartei an sich gespeichert. Es sei denn, dies ist schon gesehehen. Weitere Details in den <a href="#menueKartei-speichern">Erläuterungen zum <i>Speichern</i>-Befehl</a>.</p>
+						<p>Wenn der Befehl <a href="#menueKartei-speichern"><i>Kartei &gt; Speichern</i></a> aufgerufen wird, wird bei aktivierter Einstellung eine Speicherkaskade ausgelöst: Die App stößt dann in allen Funktionen, in denen Änderungen noch nicht übernommen worden sind, das Speichern an. Ist die Funktion deaktivert wird das Speichern nur in der gerade sichtbaren Funktion ausgelöst. Stehen keine Änderungen mehr aus, wird die Kartei an sich gespeichert. Es sei denn, dies ist schon gesehehen. Weitere Details in den <a href="#menueKartei-speichern">Erläuterungen zum <i>Speichern</i>-Befehl</a>.</p>
 					</div>
 
 					<p class="erklaerung-option">Einfügen-Fenster nach dem Einfügen schließen</p>
@@ -1247,7 +1248,7 @@ Mustermann, Erika
 					<div class="info">
 						<p><i>Standard:</i> aktiviert</p>
 
-						<p>Es geht um das Fenster, das durch die Funktion <a href="#menueBelege-einfuegen"><i>Belege &gt; Einfügen</i></a> geöffnet wird. Die Funktion dient dazu, Belege, die in einer anderen Kartei zum Kopieren vorgemerkt wurden, in die aktuelle Kartei zu kopieren. Ist diese Checkbox aktiviert, wird das Fenster direkt nach dem Einfügen geschlossen.</p>
+						<p>Es geht um das Fenster, das durch die Funktion <a href="#menueBelege-einfuegen"><i>Belege &gt; Einfügen</i></a> geöffnet wird. Die Funktion dient dazu, Belege, die in einer anderen Kartei zum Kopieren vorgemerkt wurden, in die aktuelle Kartei zu kopieren. Ist diese Checkbox aktiviert, wird das Fenster direkt nach dem Einfügen geschlossen.</p>
 
 						<p>Führen Sie wiederholt kleinere Einfügeoperationen aus, könnte es sinnvoll sein, die Checkbox zu deaktivieren. Dann müssten Sie das Einfügen-Fenster nicht immer wieder aufs Neue öffnen.</p>
 					</div>
@@ -1274,10 +1275,12 @@ Mustermann, Erika
 
 					<h2 id="einstellungen-menue">Menü</h2>
 
-					<p class="erklaerung-option">Menüleiste des Programms erst einblenden, wenn die Alt-Taste gedrückt wird</p>
+					<p class="erklaerung-option" id="einstellungen-menueleisteAusblenden">Menüleiste des Programms erst einblenden, wenn die Alt-Taste gedrückt wird</p>
 
 					<div class="info">
 						<p><i>Standard:</i> nicht aktiviert</p>
+
+						<p>Die Option steht <strong class="obacht">in <i>macOS</i> nicht</strong> zur Verfügung!</p>
 
 						<p>Die Menüleiste befindet sich (unter <i>Linux</i> und <i>Windows</i>) am oberen Rand des Hauptfensters. Möchte man sie ausblenden, muss man diese Option aktivieren und das Programm neu starten. Zum temporären Einblenden der Leiste, ohne die auf viele Funktion der App nicht zugegriffen werden könnte, dient danach die <kbd>Alt</kbd>-Taste. Die Menüleiste erscheint und man kann die gewünschten Funktionen ausführen. Danach verliert sie wieder den Fokus und verschwindet im Off.</p>
 
@@ -1301,7 +1304,7 @@ Mustermann, Erika
 					<div class="info">
 						<p><i>Standard:</i> nicht aktiviert</p>
 
-						<p>Bei der Quick-Access-Bar handelt es sich um eine kleine Leiste am oberen Rand des Programmfensters, in der Icons abgelegt werden können. Die Icons ermöglichen einen Schnellzugriff auf eine Vielzahl an Funktionen, denn für jeden der Punkte in den Menüs <i>Programm, Kartei, Belege, Bearbeiten</i> und <i>Ansicht</i> steht ein eigenes Icon zur Verfügung – ausgenommen <a href="#menueKartei-zuletztVerwendet"><i>Kartei &gt; Zuletzt verwendet</i></a>. Außerdem kann man sich auch noch ein Icon zum Öffnen dieses Handbuchs hinzufügen.</p>
+						<p>Bei der Quick-Access-Bar handelt es sich um eine kleine Leiste am oberen Rand des Programmfensters, in der Icons abgelegt werden können. Die Icons ermöglichen einen Schnellzugriff auf eine Vielzahl an Funktionen, denn für jeden der Punkte in den Menüs <i><span class="app-name"></span>, Kartei, Belege, Bearbeiten</i> und <i>Ansicht</i> steht ein eigenes Icon zur Verfügung – ausgenommen <a href="#menueKartei-zuletztVerwendet"><i>Kartei &gt; Zuletzt verwendet</i></a>. Außerdem kann man sich auch noch ein Icon zum Öffnen dieses Handbuchs hinzufügen.</p>
 
 						<figure title="zum Vergrößern anklicken">
 							<img src="../img/win/hb-einstellungen-quick.png" alt="">
@@ -1310,12 +1313,12 @@ Mustermann, Erika
 
 						<p>Die Icons, die angezeigt werden sollen, wählt man sich aus der Liste unterhalb dieser Einstellung aus. Die Quick-Access-Bar wird nur eingeblendet, wenn mindestens eine Funktion aus dieser Liste ausgewählt <em>und</em> die Option <i>Quick-Access-Bar anzeigen</i> aktiviert wurde.</p>
 
-						<p>Standardmäßig werden Icons zu diesen Funktionen angezeigt: <a href="#menueProgramm-beenden"><i>Programm &gt; Beenden</i></a>, <a href="#menueKartei-oeffnen"><i>Kartei &gt; Öffnen</i></a>, <a href="#menueKartei-speichern"><i>Kartei &gt; Speichern</i></a>, <a href="#menueKartei-suche"><i>Kartei &gt; Suche</i></a>, <a href="#menueBelege-hinzufuegen"><i>Belege &gt; Hinzufügen</i></a>, <a href="#menueBelege-auflisten"><i>Belege &gt; Auflisten</i></a> und <a href="#menueHilfe-handbuch"><i>Hilfe &gt; Handbuch</i></a>.</p>
+						<p>Standardmäßig werden Icons zu diesen Funktionen angezeigt: <a href="#menueApp-beenden"><i><span class="app-name"></span> &gt; Beenden</i></a>, <a href="#menueKartei-oeffnen"><i>Kartei &gt; Öffnen</i></a>, <a href="#menueKartei-speichern"><i>Kartei &gt; Speichern</i></a>, <a href="#menueKartei-suche"><i>Kartei &gt; Suche</i></a>, <a href="#menueBelege-hinzufuegen"><i>Belege &gt; Hinzufügen</i></a>, <a href="#menueBelege-auflisten"><i>Belege &gt; Auflisten</i></a> und <a href="#menueHilfe-handbuch"><i>Hilfe &gt; Handbuch</i></a>.</p>
 					</div>
 
 					<h2 id="einstellungen-notizen">Notizen</h2>
 
-					<p>Die folgenden Einstellungen betreffen die <a href="#menueKartei-notizen">Notizen-Funktion</a>, die über den Menüpunkt <a href="#menueKartei-notizen"><i>Kartei &gt; Notizen</i></a> aufgerufen werden kann.</p>
+					<p>Die folgenden Einstellungen betreffen die <a href="#menueKartei-notizen">Notizen-Funktion</a>, die über den Menüpunkt <a href="#menueKartei-notizen"><i>Kartei &gt; Notizen</i></a> aufgerufen werden kann.</p>
 
 					<p class="erklaerung-option">Notizen-Fenster nach dem Speichern schließen</p>
 
@@ -1351,7 +1354,7 @@ Mustermann, Erika
 
 					<h2 id="einstellungen-bedeutungsgeruest">Bedeutungsgerüst</h2>
 
-					<p>Die folgenden Einstellungen betreffen die <a href="#bedeutungsgeruest">Bedeutungsgerüst-Funktion</a>, die über den Menüpunkt <a href="#menueKartei-bedeutungsgeruest"><i>Kartei &gt; Bedeutungsgerüst</i></a> oder das Tastaturkürzel <kbd>Strg</kbd> + <kbd>B</kbd> aufgerufen werden kann.</p>
+					<p>Die folgenden Einstellungen betreffen die <a href="#bedeutungsgeruest">Bedeutungsgerüst-Funktion</a>, die über den Menüpunkt <a href="#menueKartei-bedeutungsgeruest"><i>Kartei &gt; Bedeutungsgerüst</i></a> oder das Tastaturkürzel <kbd>Strg</kbd> + <kbd>B</kbd> aufgerufen werden kann.</p>
 
 					<p class="erklaerung-option">Bedeutungsgerüst nach dem Speichern schließen</p>
 
@@ -1359,7 +1362,7 @@ Mustermann, Erika
 						<p><i>Standard:</i> nicht aktiviert</p>
 					</div>
 
-					<p class="erklaerung-option">Tag-Fenster nach dem Speichern schließen</p>
+					<p class="erklaerung-option" id="einstellungen-tagFenster">Tag-Fenster nach dem Speichern schließen</p>
 
 					<div class="info">
 						<p><i>Standard:</i> nicht aktiviert</p>
@@ -1375,7 +1378,7 @@ Mustermann, Erika
 
 					<h2 id="einstellungen-karteikarte">Karteikarte</h2>
 
-					<p>Die folgenden Einstellungen betreffen die <a href="#karteikarte">Karteikarte</a>. Neue Karteikarten können über den Menüpunkt <a href="#menueBelege-hinzufuegen"><i>Belege &gt; Hinzufügen</i></a> oder das Tastaturkürzel <kbd>Strg</kbd> + <kbd>N</kbd> erstellt werden.</p>
+					<p>Die folgenden Einstellungen betreffen die <a href="#karteikarte">Karteikarte</a>. Neue Karteikarten können über den Menüpunkt <a href="#menueBelege-hinzufuegen"><i>Belege &gt; Hinzufügen</i></a> oder das Tastaturkürzel <kbd>Strg</kbd> + <kbd>N</kbd> erstellt werden.</p>
 
 					<p class="erklaerung-option">Karteikarte nach dem Speichern schließen</p>
 
@@ -1455,7 +1458,7 @@ Mustermann, Erika
 
 					<h2 id="einstellungen-belegliste">Belegliste</h2>
 
-					<p>Die folgenden Einstellungen betreffen die <a href="#belegliste">Belegliste</a>, die über den Menüpunkt <a href="#menueBelege-auflisten"><i>Belege &gt; Auflisten</i></a> oder das Tastaturkürzel <kbd>Strg</kbd> + <kbd>L</kbd> aufgerufen werden kann.</p>
+					<p>Die folgenden Einstellungen betreffen die <a href="#belegliste">Belegliste</a>, die über den Menüpunkt <a href="#menueBelege-auflisten"><i>Belege &gt; Auflisten</i></a> oder das Tastaturkürzel <kbd>Strg</kbd> + <kbd>L</kbd> aufgerufen werden kann.</p>
 
 					<p class="erklaerung-option" id="einstellungen-beleglisteIcons">die Icons zur Steuerung der Detailansicht sollen immer alle sichtbar sein</p>
 
@@ -1501,13 +1504,21 @@ Mustermann, Erika
 					<p><mark>…</mark></p>
 				</section>
 
-				<!-- MENÜPUNKT PROGRAMM -->
-				<section id="sektion-menueProgramm" class="suche">
-					<p class="erklaerung-icon-menues" id="menueProgramm-neuesFenster"><img src="../img/fenster-plus.svg" width="24" height="24" alt="">Neues Fenster</p>
+				<!-- MENÜPUNKT APP -->
+				<section id="sektion-menueApp" class="suche">
+					<p>Dieser Menüpunkt fehlt in <b>Nebenfenstern</b>, außer unter <b><i>macOS</i></b>. Dort gibt es ihn auch dort. Er enthält dann allerdings nur diesen Befehl:</p>
+					
+					<p class="erklaerung-icon-menues" id="menueApp-fensterSchliessen"><img src="../img/fenster-schliessen.svg" width="24" height="24" alt="">Fenster schließen</p>
+
+					<p class="info">Schließt das aktuelle Fenster.</p>
+
+					<p class="abschnitt">In den <b>Hauptfenstern</b> aller Betriebssysteme (<i>Windows</i>, <i>Linux</i> und <i>macOS</i>) können hingegen die folgenden Befehle aufgerufen werden:</p>
+
+					<p class="erklaerung-icon-menues" id="menueApp-neuesFenster"><img src="../img/fenster-plus.svg" width="24" height="24" alt="">Neues Fenster</p>
 
 					<div class="info">
 						<figure class="right" title="zum Vergrößern anklicken">
-							<img src="../img/win/hb-menueProgramm-start.png" alt="">
+							<img src="../img/win/hb-menueApp-start.png" alt="">
 							<figcaption>Startseite der App</figcaption>
 						</figure>
 
@@ -1515,7 +1526,7 @@ Mustermann, Erika
 
 						<p>Angezeigt wird die <b>Startseite</b> mit den Buttons <i>Kartei erstellen</i> und <i>Kartei öffnen</i> sowie eine Liste der zuletzt verwendeten Karteien.</p>
 
-						<p>Die Liste <b>zuletzt verwendeter Karteien</b> ist auf zehn Einträge begrenzt. Sobald eine gelistete Kartei geöffnet wird, rückt diese an die oberste Stelle der Liste. Wird eine elfte Kartei geöffnet, verschwindet der letzte Listeneintrag. Es verschwindet also der Eintrag der Kartei, die am längsten nicht geöffnet wurde. Auf Wunsch können Sie in dieser Ansicht einzelne Einträge manuell aus der Liste entfernen: <i>Rechtsklick &gt; Aus Liste entfernen</i>. Beim Start der App wird überprüft, ob die Karteien in der Liste noch auf dem Rechner zu finden sind. Ist dem nicht der Fall, werden sie aus der Liste entfernt.</p>
+						<p>Die Liste <b>zuletzt verwendeter Karteien</b> ist auf zehn Einträge begrenzt. Sobald eine gelistete Kartei geöffnet wird, rückt diese an die oberste Stelle der Liste. Wird eine elfte Kartei geöffnet, verschwindet der letzte Listeneintrag. Es verschwindet also der Eintrag der Kartei, die am längsten nicht geöffnet wurde. Auf Wunsch können Sie in dieser Ansicht einzelne Einträge manuell aus der Liste entfernen: <i>Rechtsklick &gt; Aus Liste entfernen</i>. Beim Start der App wird überprüft, ob die Karteien in der Liste noch auf dem Rechner zu finden sind. Ist dem nicht der Fall, werden sie aus der Liste entfernt.</p>
 
 						<p>Zum <b>Erstellen einer neuen Kartei</b> kann man auch auf den Platzhaltertext <i>keine Kartei geöffnet</i> klicken. Außerdem kann man die Befehle in der Menüleiste nutzen. Allerdings stehen einem im Menü <a href="#menueKartei">Kartei</a> nur die Befehle <i>Erstellen, Öffnen</i> und <i>Zuletzt verwendet</i> und im Menü <a href="#menueBelege">Belege</a> überhaupt kein Punkt zur Verfügung. Unter <i>Linux</i> und <i>Windows</i> sind die deaktivierten Einträge ausgegraut; in <i>macOS</i> reagiert das Programm nicht, wenn man einen deaktivierten Eintrag auswählt.</p>
 
@@ -1523,13 +1534,13 @@ Mustermann, Erika
 
 					</div>
 
-					<p class="erklaerung-icon-menues" id="menueProgramm-karteisuche"><img src="../img/lupe.svg" width="24" height="24" alt="">Karteisuche</p>
+					<p class="erklaerung-icon-menues" id="menueApp-karteisuche"><img src="../img/lupe.svg" width="24" height="24" alt="">Karteisuche</p>
 
 					<div class="info">
 						<p><mark>…</mark></p>
 					</div>
 
-					<p class="erklaerung-icon-menues" id="menueProgramm-einstellungen"><img src="../img/zahnrad.svg" width="24" height="24" alt="">Einstellungen</p>
+					<p class="erklaerung-icon-menues" id="menueApp-einstellungen"><img src="../img/zahnrad.svg" width="24" height="24" alt="">Einstellungen</p>
 
 					<div class="info">
 						<p>Öffnet das Dialogfenster <i>Einstellungen</i>.</p>
@@ -1537,7 +1548,7 @@ Mustermann, Erika
 						<p>Das Dialogfenster verdeckt die übrigen Funktionen des Programms. In ihm finden Sie ein ganzes Bündel an <b>Konfigurationsmöglichkeiten</b>, die ausführlich im <a href="#einstellungen"><abbr title="Abschnitt">Abschn.</abbr> Einstellungen</a> beschrieben werden.</p>
 					</div>
 
-					<p class="erklaerung-icon-menues" id="menueProgramm-beenden"><img src="../img/ausgang.svg" width="24" height="24" alt="">Beenden</p>
+					<p class="erklaerung-icon-menues" id="menueApp-beenden"><img src="../img/ausgang.svg" width="24" height="24" alt="">Beenden</p>
 
 					<div class="info">
 						<p>Schließt alle Programmfenster und beendet das Programm.</p>
@@ -1550,6 +1561,8 @@ Mustermann, Erika
 
 				<!-- MENÜPUNKT KARTEI -->
 				<section id="sektion-menueKartei" class="suche">
+					<p>Dieser Menüpunkt steht nur in <b>Hauptfenstern</b> zur Verfügung.</p>
+
 					<p class="erklaerung-icon-menues" id="menueKartei-erstellen"><img src="../img/dokument-plus.svg" width="24" height="24" alt="">Erstellen</p>
 
 					<div class="info">
@@ -1559,7 +1572,7 @@ Mustermann, Erika
 
 						<p>Zur <b>Form der Eingabe</b>: Es ist nicht sinnvoll, in dem Dialogfenster, das Sie nach dem Wort fragt, etwas einzugeben, was in irgendeiner Weise an den Beginn eines klassischen Wörterbucheintrags erinnert. Schon eine Eingabe wie <q>Auto, das</q> wäre an dieser Stelle eher problematisch. Denn das Programm versucht, zu dem Wort oder den Wörtern, die Sie eingegeben haben, Formvarianten zu finden, um diese im Belegtext hervorzuheben. Möchten Sie einen Wörterbuchartikel zum Substantiv <i>Auto</i> schreiben, interessiert Sie der Artikel <i>das</i> wahrscheinlich eher nicht. Geben Sie in einem solchen Fall lieber nur <q>Auto</q> ein.</p>
 
-						<p>Andererseits ist es vollkommen unproblematisch, <b>Wortverbindungen</b> wie <q>politisch korrekt</q> oder Redewendungen wie <q>Kopf an Kopf</q> einzugeben. Im letzten Fall wollen Sie wahrscheinlich nicht, dass die Präposition <i>an</i> im Belegtext hervorgehoben wird, zumal eine trunkierte Hervorhebung zahlreiche falschpositive Markierungen produzieren wird. Die Hervorhebung einzelner Wörter kann man in der Funktion <a href="#menueKartei-formvarianten"><i>Kartei &gt; Formvarianten</i></a> abstellen.</p>
+						<p>Andererseits ist es vollkommen unproblematisch, <b>Wortverbindungen</b> wie <q>politisch korrekt</q> oder Redewendungen wie <q>Kopf an Kopf</q> einzugeben. Im letzten Fall wollen Sie wahrscheinlich nicht, dass die Präposition <i>an</i> im Belegtext hervorgehoben wird, zumal eine trunkierte Hervorhebung zahlreiche falschpositive Markierungen produzieren wird. Die Hervorhebung einzelner Wörter kann man in der Funktion <a href="#menueKartei-formvarianten"><i>Kartei &gt; Formvarianten</i></a> abstellen.</p>
 					</div>
 
 					<p class="erklaerung-icon-menues" id="menueKartei-oeffnen"><img src="../img/oeffnen.svg" width="24" height="24" alt="">Öffnen</p>
@@ -1572,7 +1585,7 @@ Mustermann, Erika
 						<p>Es gibt <b>weitere Wege</b>, eine bestehende Kartei zu öffnen:</p>
 
 						<ul>
-							<li>Haben Sie die Kartei erst jüngst genutzt, befindet sie sich <abbr title="eventuell">evtl.</abbr> noch in der Liste zuletzt verwendeter Karteien, die sie über die Funktion <a href="#menueKartei-zuletztVerwendet"><i>Kartei &gt; Zuletzt verwendet</i></a> oder die Startseite des Programms (<abbr title="vergleiche">vgl.</abbr> <a href="#menueProgramm-neuesFenster"><i>Programm &gt; Neues Fenster</i></a>) erreichen.</li>
+							<li>Haben Sie die Kartei erst jüngst genutzt, befindet sie sich <abbr title="eventuell">evtl.</abbr> noch in der Liste zuletzt verwendeter Karteien, die sie über die Funktion <a href="#menueKartei-zuletztVerwendet"><i>Kartei &gt; Zuletzt verwendet</i></a> oder die Startseite des Programms (<abbr title="vergleiche">vgl.</abbr> <a href="#menueApp-neuesFenster"><i><span class="app-name"></span> &gt; Neues Fenster</i></a>) erreichen.</li>
 
 							<li>Wenn Sie das Programm in ihrem Betriebssystem installiert haben, also keine portable, paketierte Version verwenden, wird eine Dateiverknüpfung mit <abbr title="Wortgeschichte digital">WGD</abbr>-Dateien erzeugt. Sie können dann in Ihrem Dateimanager (<abbr title="zum Beispiel">z. B.</abbr> dem <i>Windows Explorer</i>) einfach auf eine Datei mit der Endung <span class="datei">*.wgd</span> klicken und das Programm öffnet diese in einem neuen oder bestehenden Fenster.</li>
 
@@ -1587,9 +1600,9 @@ Mustermann, Erika
 					<div class="info">
 						<p>Zeigt die zuletzt verwendeten Karteien an.</p>
 
-						<p>Die Funktion steht <strong class="obacht">in <i>macOS</i> nicht</strong> zur Verfügung!</p>
+						<p>Der Menüpunkt steht <strong class="obacht">in <i>macOS</i> nicht</strong> zur Verfügung!</p>
 
-						<p>Über den Menüpunkt kann man sich eine <b>Liste</b> der zuletzt verwendeten Karteien anzeigen lassen. Die Liste ist auf zehn Einträge begrenzt und kann durch den Befehl <i>Liste löschen</i> (hinter dem letzten Eintrag) komplett geleert werden. Auf der Startseite der App findet sich dieselbe Liste. Dort können Sie gezielt einzelne Einträge aus ihr entfernen. <abbr title="Siehe">S.</abbr> die Anmerkungen zum Menüpunkt <a href="#menueProgramm-neuesFenster"><i>Programm &gt; Neues Fenster</i></a>, wo auch genauer erklärt wird, wie das Programm die Liste pflegt.</p>
+						<p>Über den Menüpunkt kann man sich eine <b>Liste</b> der zuletzt verwendeten Karteien anzeigen lassen. Die Liste ist auf zehn Einträge begrenzt und kann durch den Befehl <i>Liste löschen</i> (hinter dem letzten Eintrag) komplett geleert werden. Auf der Startseite der App findet sich dieselbe Liste. Dort können Sie gezielt einzelne Einträge aus ihr entfernen. <abbr title="Siehe">S.</abbr> die Anmerkungen zum Menüpunkt <a href="#menueApp-neuesFenster"><i><span class="app-name"></span> &gt; Neues Fenster</i></a>, wo auch genauer erklärt wird, wie das Programm die Liste pflegt.</p>
 					</div>
 
 					<p class="erklaerung-icon-menues" id="menueKartei-speichern"><img src="../img/speichern.svg" width="24" height="24" alt="">Speichern</p>
@@ -1604,14 +1617,14 @@ Mustermann, Erika
 						<p>Gibt es <b>keine Änderungen</b>, die gespeichert werden müssten, hat der Befehl keine Funktion. Er bricht ergebnislos und ohne Meldung ab.</p>
 					</div>
 
-					<p class="erklaerung-icon-menues"><img src="../img/speichern-unter.svg" width="24" height="24" alt="">Speichern unter</p>
+					<p class="erklaerung-icon-menues" id="menueKartei-speichernUnter"><img src="../img/speichern-unter.svg" width="24" height="24" alt="">Speichern unter</p>
 
 					<div class="info">
 						<p>Speichert die Kartei des aktuellen Hauptfensters an einem beliebigen Ort.</p>
 
 						<p>Es öffnet sich ein <b>Dialogfenster des Betriebssystems</b>, in dem Sie einen anderen Ordner und/oder Namen für die aktuelle Kartei wählen können.</p>
 
-						<p>Anders als der <a href="#menueKartei-speichern"><i>Speichern</i>-Befehl</a> wird durch diesen Befehl <b>niemals eine Speicherkaskade</b> ausgelöst. Überhaupt löst dieser Befehl in keiner der in den Erläuterungen zum <i>Speichern</i>-Befehl genannten Funktionen die Übernahme der Änderungen aus. Stehen in einer von ihnen noch Änderungen aus, müssen Sie das Speichern explizit anstoßen: entweder Funktion für Funktion, indem Sie die jeweiligen <i>Speichern</i>-Buttons drücken, oder durch das Ausführen des Befehls <i>Kartei &gt; Speichern</i>, der je nachdem, ob <a href="#einstellungen-allgemeinesSpeicherkaskade">die betreffende Einstellung</a> aktiviert oder deaktiviert ist, eine Speicherkaskade auslöst oder nur die gerade sichtbare Funktion betrifft.</p>
+						<p>Anders als der <a href="#menueKartei-speichern"><i>Speichern</i>-Befehl</a> wird durch diesen Befehl <b>niemals eine Speicherkaskade</b> ausgelöst. Überhaupt löst dieser Befehl in keiner der in den Erläuterungen zum <i>Speichern</i>-Befehl genannten Funktionen die Übernahme der Änderungen aus. Stehen in einer von ihnen noch Änderungen aus, müssen Sie das Speichern explizit anstoßen: entweder Funktion für Funktion, indem Sie die jeweiligen <i>Speichern</i>-Buttons drücken, oder durch das Ausführen des Befehls <i>Kartei &gt; Speichern</i>, der je nachdem, ob <a href="#einstellungen-allgemeinesSpeicherkaskade">die betreffende Einstellung</a> aktiviert oder deaktiviert ist, eine Speicherkaskade auslöst oder nur die gerade sichtbare Funktion betrifft.</p>
 					</div>
 
 					<p class="erklaerung-icon-menues" id="menueKartei-schliessen"><img src="../img/x-dick.svg" width="24" height="24" alt="">Schließen</p>
@@ -1623,9 +1636,9 @@ Mustermann, Erika
 
 						<p>Ist noch ein zu der Kartei gehöhrendes <b>Bedeutungsgerüst-Fenster</b> offen, wird dieses <a href="#bedeutungsgeruest-fenster">Bedeutungsgerüst-Fenster</a> automatisch mit geschlossen.</p>
 
-						<p>Da Sie in <i class="app-name"></i> mit mehreren Wortkarteien parallel arbeiten können: Gibt es noch <b>andere Hauptfenster</b>, in denen Wortkarteien aktiv sind, verschwindet das Fenster, in dem Sie den <i>Schließen</i>-Befehl ausführen, komplett. Handelt es sich um das letzte verbliebene Hauptfenster, wird das Programm nicht verlassen, sondern die <b>Startseite</b> der App angzeigt (<abbr title="siehe">s.</abbr> dazu die Funktion <a href="#menueProgramm-neuesFenster"><i>Programm &gt; Neues Fenster</i></a>).</p>
+						<p>Da Sie in <i class="app-name"></i> mit mehreren Wortkarteien parallel arbeiten können: Gibt es noch <b>andere Hauptfenster</b>, in denen Wortkarteien aktiv sind, verschwindet das Fenster, in dem Sie den <i>Schließen</i>-Befehl ausführen, komplett. Handelt es sich um das letzte verbliebene Hauptfenster, wird das Programm nicht verlassen, sondern die <b>Startseite</b> der App angzeigt (<abbr title="siehe">s.</abbr> dazu die Funktion <a href="#menueApp-neuesFenster"><i><span class="app-name"></span> &gt; Neues Fenster</i></a>).</p>
 
-						<p>Zum endgültigen <b>Verlassen des Programms</b> ist der Befehle <a href="#menueProgramm-beenden"><i>Programm &gt; Beenden</i></a> besser geeignet.</p>
+						<p>Zum endgültigen <b>Verlassen des Programms</b> ist der Befehle <a href="#menueApp-beenden"><i><span class="app-name"></span> &gt; Beenden</i></a> besser geeignet.</p>
 					</div>
 
 					<p class="erklaerung-icon-menues" id="menueKartei-formvarianten"><img src="../img/formvarianten.svg" width="24" height="24" alt="">Formvarianten</p>
@@ -1710,12 +1723,14 @@ Mustermann, Erika
 
 						<p>Stehen in einer der Funktionen, die der Befehl zu schließen versucht, noch <b>Änderungen</b> aus, werden Sie gefragt, ob Sie diese speichern oder verwerfen möchten.</p>
 
-						<p>Für eine <a href="#menueProgramm-karteisuche">karteiübergreifende Suche</a> steht Ihnen die <b>Karteisuche</b> zur Verfügung.</p>
+						<p>Für eine <a href="#menueApp-karteisuche">karteiübergreifende Suche</a> steht Ihnen die <b>Karteisuche</b> zur Verfügung.</p>
 					</div>
 				</section>
 
 				<!-- MENÜPUNKT BELEGE -->
 				<section id="sektion-menueBelege" class="suche">
+					<p>Dieser Menüpunkt steht nur in <b>Hauptfenstern</b> zur Verfügung.</p>
+
 					<p class="erklaerung-icon-menues" id="menueBelege-hinzufuegen"><img src="../img/dokument-plus.svg" width="24" height="24" alt="">Hinzufügen</p>
 
 					<div class="info">
@@ -1751,6 +1766,8 @@ Mustermann, Erika
 
 				<!-- MENÜPUNKT BEARBEITEN -->
 				<section id="sektion-menueBearbeiten" class="suche">
+					<p>Dieser Menüpunkt steht nur in <b>Hauptfenstern</b> zur Verfügung.</p>
+
 					<p class="erklaerung-icon-menues" id="menueBearbeiten-rueckgaengig"><img src="../img/pfeil-rund-links.svg" width="24" height="24" alt="">Rückgängig</p>
 
 					<div class="info">
@@ -1797,7 +1814,7 @@ Mustermann, Erika
 
 						<p>Bedenken müssen Sie nur, dass diese Kopierfunktion vom <a href="#framework" class="link-dokumentation">Framework</a> verwaltet wird, was in dem Moment relevant wird, wenn sie aus der Belegliste oder Leseansicht der Karteikarte markierten Text kopieren möchten. Das Framework versucht beim Kopieren nämlich so viele <b>Formatierungsinformationen</b> wie nur irgend möglich zu erhalten. Das klingt zunächst einmal positiv, kann aber durchaus problematisch werden. So wird für die Textanzeige in <i class="app-name"></i> <abbr title="beispielsweise">bspw.</abbr> die mitgelieferte Schriftart <i>Noto Sans</i> verwendet – eine Information, die beim Kopieren mit dieser Funktion erhalten bleibt. Fügen Sie den so kopierten Text in ein Office-Programm ein, wird dieses versuchen, ihn ebenfalls mit <i>Noto Sans</i> darzustellen und die von Ihnen eingestellte Schriftart ignorieren. Außerdem kann gerade der Belegtext in der <a href="#belegliste-detailansicht">Detailansicht der Belegliste</a> mit Informationen angereichert sein, die <span lang="la">ad hoc</span> hinzugefügt wurden, mithin gar nicht zum Beleg an sich gehören. Dies sind <a href="#belegliste-karteiwortHervorheben">Hervorhebungen des Karteiworts</a>, Markierungen von Suchergebnissen des <a href="#filter-volltext">Volltextfilters</a> und/oder der <a href="#belegliste-suchleiste">Suchleiste</a> und nicht zuletzt persönliche <a href="#belegliste-annotierenBeleg">Annotierungen</a>.</p>
 
-						<p>Kurzum: Für solche Fälle ist es durchaus sinnvoll, dass vor dem Kopieren der <b>Text bereinigt</b> wird. <i class="app-name"></i> übernimmt dies für Sie, jedoch müssen Sie dafür auf die entsprechenden Funktionen zurückgreifen und diese Kopierfunktion und das Tastaturkürzel <kbd>Strg</kbd> + <kbd>C</kbd> ignorieren. Wollen Sie in der <a href="#belegliste">Belegliste</a> oder der <a href="#karteikarte-leseansicht">Leseansicht der Karteikarte</a> markierten Text kopieren, machen Sie dies am besten via <i>Rechtsklick &gt; Textauswahl kopieren</i> und/oder nutzen Sie eines der nebenstehenden Kopier-Icons (<img src="../img/kopieren.svg" width="20" height="20" alt="">). Ist Text markiert, kopieren diese Icons übrigens nur die Textauswahl und nicht den Text des gesamten Feldes. Beim Kopieren wird der Text dann in jedem Fall bereinigt. Im <a href="#belegliste"><abbr title="Abschnitt">Abschn.</abbr> Belegliste</a> gibt es einige <a href="#belegliste-bereinigen">Hinweise, was bei der Bereinigung geschieht</a>. Man kann das Programm so konfigurieren, dass die <a href="#einstellungen-allgemeinesHervorhebung">Hervorhebung des Karteiworts beim Kopieren erhalten</a> bleibt.</p>
+						<p>Kurzum: Für solche Fälle ist es durchaus sinnvoll, dass vor dem Kopieren der <b>Text bereinigt</b> wird. <i class="app-name"></i> übernimmt dies für Sie, jedoch müssen Sie dafür auf die entsprechenden Funktionen zurückgreifen und diese Kopierfunktion und das Tastaturkürzel <kbd>Strg</kbd> + <kbd>C</kbd> ignorieren. Wollen Sie in der <a href="#belegliste">Belegliste</a> oder der <a href="#karteikarte-leseansicht">Leseansicht der Karteikarte</a> markierten Text kopieren, machen Sie dies am besten via <i>Rechtsklick &gt; Textauswahl kopieren</i> und/oder nutzen Sie eines der nebenstehenden Kopier-Icons (<img src="../img/kopieren.svg" width="20" height="20" alt="">). Ist Text markiert, kopieren diese Icons übrigens nur die Textauswahl und nicht den Text des gesamten Feldes. Beim Kopieren wird der Text dann in jedem Fall bereinigt. Im <a href="#belegliste"><abbr title="Abschnitt">Abschn.</abbr> Belegliste</a> gibt es einige <a href="#belegliste-bereinigen">Hinweise, was bei der Bereinigung geschieht</a>. Man kann das Programm so konfigurieren, dass die <a href="#einstellungen-allgemeinesHervorhebung">Hervorhebung des Karteiworts beim Kopieren erhalten</a> bleibt.</p>
 
 						<p>Geht es nur darum Plain-Text (also nicht formatierten Text) aus Textfeldern herauszukopieren, ist diese vom Framework verwaltete Kopierfunktion freilich gut geeignet. In <b><abbr title="What You See Is What You Get" lang="en">WYSIWYG</abbr>-Textfeldern</b> wie dem der <a href="#menueKartei-notizen">Notizen-Funktion</a> oder denen für die Bedeutungen im <a href="#bedeutungsgeruest">Bedeutungsgerüst</a> gilt freilich dasselbe wie für Text, der in der Belegliste markiert wurde. Da davon auszugehen ist, dass man Texte aus diesen Feldern eher nicht herauskopiert, um sie in Textverarbeitungsprogramme einzufügen, gibt es hierfür bisher keine Funktion, die den markierten Text vor dem Kopieren bereinigt.</p>
 					</div>
@@ -1825,6 +1842,10 @@ Mustermann, Erika
 
 				<!-- MENÜPUNKT ANSICHT -->
 				<section id="sektion-menueAnsicht" class="suche">
+					<p>Dieser Menüpunkt steht nur in <b>Hauptfenstern</b> zur Verfügung – außer unter <b><i>macOS</i></b>, wo es ihn auch in <b>Nebenfenstern</b> gibt.</p>
+
+					<p>Die <b>Tastaturkürzel</b> aller Befehle funktionieren unter <b><i>Windows</i> und <i>Linux</i></b> allerdings auch in allen Nebenfenstern.</p>
+
 					<p class="erklaerung-icon-menues" id="menueAnsicht-anzeigeVergroessern"><img src="../img/plus-quadrat.svg" width="24" height="24" alt="">Anzeige vergrößern</p>
 
 					<div class="info">
@@ -1860,14 +1881,18 @@ Mustermann, Erika
 					<div class="info">
 						<p>Wechselt in die Vollbild-Anzeige.</p>
 
-						<p>In der Vollbild-Anzeige verschwinden Fenster- und Menüleiste, der Inhalt des Programmfensters nimmt somit den ganzen Bildschirm ein. Zum <b>Verlassen der Vollbild-Anzeige</b> müssen Sie das Tastaturkürzel <kbd>F11</kbd> drücken. Haben Sie sich das Icon für die Vollbild-Anzeige (<img src="../img/fenster-vollbild.svg" width="20" height="20" alt="">) in die <a href="#einstellungen-quick">Quick-Access-Bar</a> gelegt, können Sie auch mit diesem zwischen Vollbild- und Standard-Anzeige wechseln.</p>
+						<p>In der Vollbild-Anzeige verschwinden Fenster- und Menüleiste, der Inhalt des Programmfensters nimmt somit den ganzen Bildschirm ein. Unter <i>Windows</i> wird die <b>Menüleiste</b> wieder sichtbar, wenn Sie den Mauszeiger an den oberen Rand des Bildschirms bewegen; unter <i>Linux</i> ist sie immer ausgeblendet, sodass Sie nur noch über die <a href="#tastaturkuerzel">Tastaturkürzel</a> Zugriff auf die Befehle haben.</p>
 
-						<p><b>In Nebenfenstern</b> können Sie die Vollbild-Anzeige via <kbd>F11</kbd> aufrufen und beenden.</p>
+						<p>Zum <b>Verlassen der Vollbild-Anzeige</b> müssen Sie das Tastaturkürzel <kbd>F11</kbd> drücken. Falls Sie als Betriebssystem <i>Windows</i> haben, können Sie alternativ erneut den Menüpunkt <i>Ansicht &gt; Vollbild</i> aufrufen. Und haben Sie sich das Icon für die Vollbild-Anzeige (<img src="../img/fenster-vollbild.svg" width="20" height="20" alt="">) in die <a href="#einstellungen-quick">Quick-Access-Bar</a> gelegt, können Sie auch mit diesem zwischen Vollbild- und Standard-Anzeige wechseln.</p>
+
+						<p><b>In Nebenfenstern</b> können Sie die Vollbild-Anzeige nur via <kbd>F11</kbd> aufrufen und beenden.</p>
 					</div>
 				</section>
 
 				<!-- MENÜPUNKT HILFE -->
 				<section id="sektion-menueHilfe" class="suche">
+					<p>Dieser Menüpunkt steht nur in <b>Hauptfenstern</b> zur Verfügung.</p>
+
 					<p class="erklaerung-icon-menues" id="menueHilfe-handbuch"><img src="../img/kreis-fragezeichen.svg" width="24" height="24" alt="">Handbuch</p>
 
 					<div class="info">
@@ -1883,7 +1908,7 @@ Mustermann, Erika
 
 						<p>Bei der Installation von <i class="app-name"></i> wird im Programm-Ordner (im selben Ordner, in dem der <a href="#framework-quelltext" class="link-dokumentation">paketierte Quelltext</a> liegt) eine Kartei abgelegt, die bereits einige Belege und ein Bedeutungsgerüst enthält. Diese Demonstrationskartei ist <b>für Einsteiger</b> gedacht, damit sie an einer kleineren Kartei direkt ausprobieren können, wie das Programm funktioniert.</p>
 
-						<p>Lädt man die Kartei über diesen Menüpunkt wird das Original aus dem Programmordner in einen temporären Systemordner kopiert. Diese <b>temporäre Kartei</b> wird dann von der App geladen. Sie können also gefahrlos Änderungen an der Kartei vornehmen und diese auch speichern. Öffnen Sie die Demonstrationskartei erneut via <i>Hilfe &gt; Demonstrationskartei</i>, wird die temporäre Kartei wieder mit dem Original überschrieben, das prinzipiell nicht angetastet wird.</p>
+						<p>Lädt man die Kartei über diesen Menüpunkt wird das Original aus dem Programmordner in einen temporären Systemordner kopiert. Diese <b>temporäre Kartei</b> wird dann von der App geladen. Sie können also gefahrlos Änderungen an der Kartei vornehmen und diese auch speichern. Öffnen Sie die Demonstrationskartei erneut via <i>Hilfe &gt; Demonstrationskartei</i>, wird die temporäre Kartei wieder mit dem Original überschrieben, das prinzipiell nicht angetastet wird.</p>
 					</div>
 
 					<p class="erklaerung-icon-menues"><img src="../img/kreis-leer.svg" width="24" height="24" alt="">Technische Dokumentation</p>

@@ -14,7 +14,7 @@ window.addEventListener("load", () => {
 	// externe Links
 	document.querySelectorAll(`a[href^="http"]`).forEach(a => helfer.externeLinks(a));
 	// Tastatur-Events abfangen
-	document.addEventListener("keydown", helferWin.tastatur);
+	document.addEventListener("keydown", tastatur.init);
 });
 
 window.addEventListener("beforeunload", () => {

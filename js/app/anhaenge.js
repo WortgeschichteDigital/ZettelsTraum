@@ -107,8 +107,12 @@ let anhaenge = {
 	},
 	// Anhänge-Fenster einblenden
 	fenster () {
-		let fenster = document.getElementById("anhaenge");
+		// Sperre für macOS (Menüpunkte können nicht deaktiviert werden)
+		if (!kartei.wort) {
+			return;
+		}
 		// Fenster öffnen oder in den Vordergrund holen
+		let fenster = document.getElementById("anhaenge");
 		if (overlay.oeffnen(fenster)) { // Fenster ist schon offen
 			return;
 		}
@@ -236,7 +240,7 @@ let anhaenge = {
 		ele.addEventListener("click", function(evt) {
 			evt.preventDefault();
 			const id = this.dataset.id;
-			erstSpeichern.init(() => {
+			speichern.checkInit(() => {
 				overlay.alleSchliessen();
 				beleg.oeffnen(id);
 			});

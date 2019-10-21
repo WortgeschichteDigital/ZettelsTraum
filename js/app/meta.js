@@ -3,8 +3,12 @@
 let meta = {
 	// Metadaten-Fenster einblenden
 	oeffnen () {
-		let fenster = document.getElementById("meta");
+		// Sperre für macOS (Menüpunkte können nicht deaktiviert werden)
+		if (!kartei.wort) {
+			return;
+		}
 		// Fenster öffnen oder in den Vordergrund holen
+		let fenster = document.getElementById("meta");
 		if (overlay.oeffnen(fenster)) { // Fenster ist schon offen
 			return;
 		}
@@ -137,10 +141,10 @@ let meta = {
 	// Tastatureingaben im Textfeld
 	aktionText (input) {
 		input.addEventListener("keydown", function(evt) {
-			// Enter
-			if (evt.which === 13) {
+			tastatur.detectModifiers(evt);
+			if (!tastatur.modifiers && evt.key === "Enter") {
 				evt.preventDefault();
-			if (document.getElementById("dropdown")) {
+				if (document.getElementById("dropdown")) {
 					return;
 				}
 				meta.bearbErgaenzen();

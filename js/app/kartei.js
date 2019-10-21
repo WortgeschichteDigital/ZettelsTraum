@@ -196,29 +196,35 @@ let kartei = {
 			bedeutungen.korruptionCheck();
 		});
 	},
-	// Speichern (Verteilerfunktion)
-	// (gibt false zurück, wenn die Kartei nicht unmittelbar gespeichert werden konnte)
+	// Speichern: Verteilerfunktion
+	// (Rückgabewerte:
+	//     false: es wurde nicht gespeichert oder der User muss eine Entscheidung treffen;
+	//     true: es wurde erfolgreich gespeichert)
 	//   speichern_unter = Boolean
 	//     (nicht automatisch in der aktuellen Datei speichern, sondern immer
-	//     den Speichern-Dialog anzeigen)
+	//     den Speichern-Dialog öffnen)
 	async speichern (speichern_unter) {
+		// Sperre für macOS (Menüpunkte können nicht deaktiviert werden)
+		if (!kartei.wort) {
+			return;
+		}
 		// Wurden überhaupt Änderungen vorgenommen?
 		if (!kartei.geaendert && !speichern_unter) {
 			return false;
 		}
 		// Kartei-Datei besteht bereits
 		if (kartei.pfad && !speichern_unter) {
-			const resultat = await kartei.speichernDurchfuehren(kartei.pfad);
+			const resultat = await kartei.speichernSchreiben(kartei.pfad);
 			return resultat;
 		}
 		// Kartei-Datei muss angelegt werden
 		kartei.speichernUnter();
-		return false; // Kartei wurde nicht unmittelbar gespeichert
+		return false;
 	},
-	// Speichern wird ausgeführt (Pfad ist bekannt)
+	// Speichern: Kartei schreiben
 	//   pfad = String
-	//     (Pfad der Kartei)
-	speichernDurchfuehren (pfad) {
+	//     (Zielpfad der Kartei)
+	speichernSchreiben (pfad) {
 		return new Promise(resolve => {
 			// ggf. BearbeiterIn hinzufügen
 			const bearb = optionen.data.einstellungen.bearbeiterin;
@@ -250,6 +256,7 @@ let kartei = {
 					helfer.animation("gespeichert");
 					const {ipcRenderer, remote} = require("electron");
 					ipcRenderer.send("kartei-geoeffnet", remote.getCurrentWindow().id, pfad);
+					// das Speichern hat fehlerfrei funktioniert
 					resolve(true);
 				})
 				.catch(err => {
@@ -260,11 +267,12 @@ let kartei = {
 					}
 					data.dm = dm_alt;
 					data.re = re_alt;
+					// beim Speichern ist ein Fehler aufgetreten
 					resolve(false);
 				});
 		});
 	},
-	// Speichern: fragen, in welchem Pfad die Kartei gespeichert werden soll
+	// Speichern: Pfad ermitteln
 	speichernUnter () {
 		const {app, dialog} = require("electron").remote,
 			path = require("path");
@@ -293,12 +301,16 @@ let kartei = {
 					kartei.dialogWrapper("Die Kartei wurde nicht gespeichert.");
 					return;
 				}
-				kartei.speichernDurchfuehren(result.filePath);
+				kartei.speichernSchreiben(result.filePath);
 			})
 			.catch(err => kartei.dialogWrapper(`Beim Öffnen des Datei-Dialogs ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.message}</p>`));
 	},
 	// Kartei schließen
 	schliessen () {
+		// Sperre für macOS (Menüpunkte können nicht deaktiviert werden)
+		if (!kartei.wort) {
+			return;
+		}
 		// Gibt es noch ein anderes Hauptfenster? Wenn ja => dieses Fenster komplett schließen
 		const {ipcRenderer, remote} = require("electron"),
 			win = remote.getCurrentWindow(),
@@ -308,7 +320,7 @@ let kartei = {
 			return;
 		}
 		// das aktuelle Fenster ist das letzte Hauptfenster => die Kartei in diesem Fenster schließen, das Fenster erhalten
-		erstSpeichern.init(() => {
+		speichern.checkInit(() => {
 			kartei.schliessenDurchfuehren();
 		}, {
 			kartei: true,

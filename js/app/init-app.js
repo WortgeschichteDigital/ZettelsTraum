@@ -9,8 +9,22 @@ window.addEventListener("load", () => {
 	// Kartei gespeichert werden, anlegen
 	window.data = {};
 
+	// Programmname eintragen
+	const {app} = require("electron").remote;
+	window.appName = app.getName().replace("'", "’");
+	document.querySelectorAll(".app-name").forEach(i => {
+		i.textContent = appName;
+	});
+
+	// ANPASSUNGEN MACOS
+	if (process.platform === "darwin") {
+		// Option zum Ausblenden der Menüleiste verstecken
+		let option = document.getElementById("einstellung-autoHideMenuBar").parentNode;
+		option.classList.add("aus");
+	}
+
 	// TASTATUREINGABEN ABFANGEN
-	document.addEventListener("keydown", helfer.tastatur);
+	document.addEventListener("keydown", tastatur.init);
 
 	// RECHTSKLICK ABFANGEN
 	window.addEventListener("contextmenu", evt => {
@@ -58,7 +72,7 @@ window.addEventListener("load", () => {
 			helfer.quickAccess(a);
 		}
 	});
-	if (process.platform === "win32") { // Korrekt des Shortcuts unter Windows
+	if (process.platform === "win32") { // Korrektur des Shortcuts unter Windows
 		document.getElementById("quick-bearbeiten-wiederherstellen").title = "Bearbeiten: Wiederherstellen (Strg + Y)";
 	}
 	// Wort-Element
@@ -108,7 +122,7 @@ window.addEventListener("load", () => {
 	document.getElementById("kopieren-liste-beenden").addEventListener("click", () => kopieren.uiOff());
 	document.getElementById("kopieren-liste-export").addEventListener("click", () => kopieren.exportieren());
 	document.getElementById("kopieren-liste-schliessen").addEventListener("click", () => overlay.schliessen(document.getElementById("kopieren-liste")));
-	document.getElementById("kopieren-einfuegen-einfuegen").addEventListener("click", () => erstSpeichern.init(() => kopieren.einfuegenAusfuehren()));
+	document.getElementById("kopieren-einfuegen-einfuegen").addEventListener("click", () => speichern.checkInit(() => kopieren.einfuegenAusfuehren()));
 	document.getElementById("kopieren-einfuegen-reload").addEventListener("click", () => kopieren.einfuegenBasisdaten(true));
 	document.getElementById("kopieren-einfuegen-import").addEventListener("click", () => kopieren.importieren());
 	document.getElementById("kopieren-einfuegen-schliessen").addEventListener("click", () => overlay.schliessen(document.getElementById("kopieren-einfuegen")));
@@ -184,7 +198,8 @@ window.addEventListener("load", () => {
 	document.getElementById("karteisuche-add-filter").addEventListener("click", () => karteisuche.filterHinzufuegen());
 	// Prompt-Textfeld
 	document.getElementById("dialog-prompt-text").addEventListener("keydown", function(evt) {
-		if (evt.which === 13) { // Enter im Textfeld führt die Aktion aus
+		tastatur.detectModifiers(evt);
+		if (!tastatur.modifiers && evt.key === "Enter") {
 			overlay.schliessen(this);
 		}
 	});
@@ -206,8 +221,8 @@ window.addEventListener("load", () => {
 	// ANFRAGEN DES MAIN-PROZESSES ABFANGEN
 	const {ipcRenderer} = require("electron");
 	ipcRenderer.on("optionen-empfangen", (evt, data) => optionen.empfangen(data));
-	ipcRenderer.on("programm-einstellungen", () => optionen.oeffnen());
-	ipcRenderer.on("programm-karteisuche", () => karteisuche.oeffnen());
+	ipcRenderer.on("app-einstellungen", () => optionen.oeffnen());
+	ipcRenderer.on("app-karteisuche", () => karteisuche.oeffnen());
 	ipcRenderer.on("kartei-erstellen", () => kartei.wortErfragen());
 	ipcRenderer.on("kartei-oeffnen", (evt, datei) => {
 		if (datei) {
@@ -216,7 +231,7 @@ window.addEventListener("load", () => {
 			kartei.oeffnen();
 		}
 	});
-	ipcRenderer.on("kartei-speichern", () => helfer.speichern());
+	ipcRenderer.on("kartei-speichern", () => speichern.kaskade());
 	ipcRenderer.on("kartei-speichern-unter", () => kartei.speichern(true));
 	ipcRenderer.on("kartei-schliessen", () => kartei.schliessen());
 	ipcRenderer.on("kartei-formvarianten", () => stamm.oeffnen());
@@ -229,8 +244,20 @@ window.addEventListener("load", () => {
 	ipcRenderer.on("kartei-bedeutungen-wechseln", () => bedeutungenGeruest.oeffnen());
 	ipcRenderer.on("kartei-bedeutungen-fenster", () => bedeutungenWin.oeffnen());
 	ipcRenderer.on("kartei-suche", () => filter.suche());
-	ipcRenderer.on("belege-hinzufuegen", () => erstSpeichern.init(() => beleg.erstellen()));
-	ipcRenderer.on("belege-auflisten", () => erstSpeichern.init(() => liste.wechseln()));
+	ipcRenderer.on("belege-hinzufuegen", () => {
+		// Sperre für macOS (Menüpunkte können nicht deaktiviert werden)
+		if (!kartei.wort) {
+			return;
+		}
+		speichern.checkInit(() => beleg.erstellen());
+	});
+	ipcRenderer.on("belege-auflisten", () => {
+		// Sperre für macOS (Menüpunkte können nicht deaktiviert werden)
+		if (!kartei.wort) {
+			return;
+		}
+		speichern.checkInit(() => liste.wechseln());
+	});
 	ipcRenderer.on("belege-kopieren", () => kopieren.init());
 	ipcRenderer.on("belege-einfuegen", () => kopieren.einfuegen());
 	ipcRenderer.on("hilfe-demo", () => helfer.demoOeffnen());
@@ -290,7 +317,7 @@ window.addEventListener("beforeunload", evt => {
 			bedeutungen.geaendert ||
 			beleg.geaendert ||
 			kartei.geaendert) {
-		erstSpeichern.init(() => {
+		speichern.checkInit(() => {
 			const {remote} = require("electron"),
 				win = remote.getCurrentWindow();
 			win.close();

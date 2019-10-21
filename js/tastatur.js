@@ -1,0 +1,313 @@
+"use strict";
+
+let tastatur = {
+	// Abfangen der Tastatur-Events initialisieren
+	//   evt = Object
+	//     (Event-Object des keydown)
+	init (evt) {
+		// Repeats unterbinden
+		if (evt.repeat) {
+			return;
+		}
+		// Modifiers ermitteln
+		tastatur.detectModifiers(evt);
+		// Event weiterleiten
+		if (fenstertyp === "index") {
+			tastatur.haupt(evt);
+		} else {
+			tastatur.neben(evt);
+		}
+	},
+	// Tastatur-Events des Hauptfensters
+	//   evt = Object
+	//     (Event-Object des keydown)
+	haupt (evt) {
+		const m = tastatur.modifiers,
+			overlayId = overlay.oben();
+		// Key "Escape"
+		if (!m && evt.key === "Escape") {
+			// falls die Suchleiste auf ist und den Fokus hat
+			if (document.getElementById("suchleiste") &&
+					document.querySelector("#suchleiste:focus-within")) {
+				suchleiste.ausblenden();
+				return;
+			}
+			// Dropdown schließen
+			if (document.getElementById("dropdown")) {
+				dropdown.schliessen();
+				return;
+			}
+			// Overlay-Fenster schließen
+			if (overlayId) {
+				let link = document.querySelector(`#${overlayId} h2 .icon-schliessen`);
+				overlay.schliessen(link);
+				return;
+			}
+			// Bedeutungsgerüst-Formular schließen
+			if (helfer.bedeutungenOffen()) {
+				if (bedeutungen.moveAktiv) {
+					bedeutungen.moveAus();
+				} else {
+					bedeutungen.schliessen();
+				}
+				return;
+			}
+			// Annotierungs-Popup schließen
+			if (annotieren.modSchliessen()) {
+				return;
+			}
+			// Karteikarte schließen
+			if (!document.getElementById("beleg").classList.contains("aus")) {
+				helfer.inputBlur();
+				beleg.aktionAbbrechen();
+				return;
+			}
+			return;
+		}
+		// Key "Tab"
+		if ((!m || m === "Shift") && evt.key === "Tab" && helfer.bedeutungenOffen()) {
+			bedeutungen.naviTab(evt);
+			return;
+		}
+		// Key "Enter"
+		if (!m && evt.key === "Enter" && overlayId === "kopieren-einfuegen") {
+			evt.preventDefault();
+			speichern.checkInit(() => kopieren.einfuegenAusfuehren());
+			return;
+		}
+		// Key " " || "PageUp" || "PageDown"
+		if (!m && /^( |PageDown|PageUp)$/.test(evt.key)) {
+			let leiste = document.getElementById("suchleiste");
+			if (leiste && leiste.classList.contains("an")) {
+				suchleiste.scrollen(evt);
+			} else {
+				helfer.scrollen(evt);
+			}
+			return;
+		} else if (m === "Ctrl" && /^(PageUp|PageDown)$/.test(evt.key) && helfer.belegOffen()) {
+			const next = evt.key === "PageDown" ? true : false;
+			beleg.ctrlNavi(next);
+			return;
+		}
+		// Key "F3"
+		if ((!m || m === "Shift") && evt.key === "F3") {
+			if (!overlayId &&
+					(!document.getElementById("liste").classList.contains("aus") ||
+					helfer.belegOffen() && document.getElementById("beleg-link-leseansicht").classList.contains("aktiv"))) {
+				suchleiste.f3(evt);
+			}
+			return;
+		}
+		// Key "F5"
+		if (!m && evt.key === "F5" && overlayId === "kopieren-einfuegen") {
+			kopieren.einfuegenBasisdaten(true);
+			return;
+		}
+		// Key "ArrowDown" || "ArrowLeft" || "ArrowRight" || "ArrowUp"
+		if ((!m || m === "Ctrl") && /^(ArrowDown|ArrowLeft|ArrowRight|ArrowUp)$/.test(evt.key)) {
+			tastatur.hauptArrows(evt, overlayId);
+			return;
+		}
+		// Key "Delete"
+		if (evt.key === "Delete" && helfer.bedeutungenOffen()) {
+			bedeutungen.loeschenTastatur();
+			return;
+		}
+		// DRUCKEN: Key "p"
+		if (m === "Ctrl" && evt.key === "p") {
+			drucken.tastatur();
+			return;
+		}
+		// KARTEIKARTE: Key "i" || "k" || "t" || "u"
+		if (m === "Ctrl" && helfer.belegOffen()) {
+			if (evt.key === "i") {
+				if (kopieren.an) {
+					kopieren.addKarte();
+				} else {
+					beleg.ctrlZwischenablage(beleg.data);
+				}
+			} else if (evt.key === "k") {
+				beleg.ctrlKuerzen();
+			} else if (evt.key === "t") {
+				beleg.ctrlTrennung();
+			} else if (evt.key === "u") {
+				beleg.leseToggle(true);
+			}
+			return;
+		}
+	},
+	// alle Events, die mit den Navigationspfeilen zusammenhängen
+	//   evt = Object
+	//     (Event-Object des keydown)
+	//   overlayId = String
+	//     (die ID des obersten Overlays; leer, wenn kein Overlay-Fenser offen ist)
+	hauptArrows (evt, overlayId) {
+		const m = tastatur.modifiers;
+		// BEDEUTUNGEN sind aktiv, kein Overlay
+		if (helfer.bedeutungenOffen()) {
+			if (m === "Ctrl" && /^(ArrowDown|ArrowUp)$/.test(evt.key)) {
+				bedeutungen.navi(evt);
+			} else if (!m) {
+				bedeutungen.move(evt);
+			}
+			return;
+		}
+		// KARTEIKARTE ist aktiv, kein Overlay
+		if (helfer.belegOffen()) {
+			if (m === "Ctrl" && evt.key === "ArrowDown") {
+				beleg.ctrlSpringen(evt);
+			}
+			return;
+		}
+		// NAVIGATION HOCH || RUNTER
+		if (/^(ArrowDown|ArrowUp)$/.test(evt.key)) {
+			if (m === "Ctrl" && overlayId === "einstellungen") {
+				evt.preventDefault();
+				optionen.naviMenue(evt);
+			}
+			return;
+		}
+		// Abbruch, wenn "Ctrl"
+		if (evt.ctrlKey) {
+			return;
+		}
+		// NAVIGATION LINKS || RECHTS
+		let aktiv = document.activeElement;
+		// Ist das aktive Element ein Anker oder ein Button?
+		if (!(aktiv.nodeName === "A" || aktiv.nodeName === "INPUT" && aktiv.type === "button")) {
+			return;
+		}
+		// Parent-Block ermitteln
+		let parent = aktiv.parentNode;
+		while (!/^(BODY|DIV|HEADER|P|TD|TH)$/.test(parent.nodeName)) { // BODY nur zur Sicherheit, falls ich in der Zukunft vergesse, die Liste ggf. zu ergänzen
+			parent = parent.parentNode;
+		}
+		// Elemente sammeln und Fokus-Position ermitteln
+		let elemente = parent.querySelectorAll(`a, input[type="button"]`),
+			pos = -1;
+		for (let i = 0, len = elemente.length; i < len; i++) {
+			if (elemente[i] === aktiv) {
+				pos = i;
+				break;
+			}
+		}
+		// Position des zu fokussierenden Elements ermitteln
+		do {
+			if (evt.key === "ArrowLeft" && pos > 0) { // zurück
+				pos--;
+			} else if (evt.key === "ArrowLeft") { // letzte Position
+				pos = elemente.length - 1;
+			} else if (evt.key === "ArrowRight" && pos < elemente.length - 1) { // vorwärts
+				pos++;
+			} else if (evt.key === "ArrowRight") { // 1. Position
+				pos = 0;
+			}
+			// Buttons können versteckt sein, das geschieht aber alles im CSS-Code;
+			// hat der Button ein display === "none" ist er versteckt und kann nicht
+			// fokussiert werden. Normal ist display === "inline-block".
+		} while (getComputedStyle(elemente[pos]).display === "none");
+		// Das Element kann fokussiert werden
+		elemente[pos].focus();
+	},
+	// Tastatur-Events der Nebenfenster
+	//   evt = Object
+	//     (Event-Object des keydown)
+	neben (evt) {
+		const m = tastatur.modifiers;
+		// Key "Escape"
+		if (!m && evt.key === "Escape") {
+			// falls die Suchleiste auf ist und den Fokus hat
+			if (document.getElementById("suchleiste") &&
+					document.querySelector("#suchleiste:focus-within")) {
+				suchleiste.ausblenden();
+				return;
+			}
+			// falls ein Vorschau-Bild angezeigt wird
+			if (document.getElementById("bild")) {
+				hilfe.bildSchliessen();
+				return;
+			}
+			// Fenster schließen
+			const {remote} = require("electron"),
+				win = remote.getCurrentWindow();
+			win.close();
+			return;
+		}
+		// Key " " || "PageUp" || "PageDown" (Changelog, Dokumentation, Handbuch)
+		if (/changelog|dokumentation|handbuch/.test(fenstertyp) &&
+				!m && /^( |PageDown|PageUp)$/.test(evt.key)) {
+			suchleiste.scrollen(evt);
+			return;
+		}
+		// Key "ArrowDown" || "ArrowUp" (Dokumentation, Handbuch)
+		if (/dokumentation|handbuch/.test(fenstertyp) &&
+				m === "Ctrl" && /^(ArrowDown|ArrowUp)$/.test(evt.key)) {
+			hilfe.naviMenue(evt);
+			return;
+		}
+		// Key "ArrowLeft" || "ArrowRight (Dokumentation, Handbuch)
+		if (/dokumentation|handbuch/.test(fenstertyp) &&
+				m === "Alt" && /^(ArrowLeft|ArrowRight)$/.test(evt.key)) {
+			const dir = evt.key === "ArrowRight" ? true : false;
+			hilfe.historyNavi(dir);
+			return;
+		}
+		// Key "ArrowLeft" || "ArrowRight (Handbuch)
+		if (fenstertyp === "handbuch" &&
+				!m && /^(ArrowLeft|ArrowRight)$/.test(evt.key)) {
+			hilfe.bilderTastatur(evt);
+			return;
+		}
+		// Key "F3" (Changelog, Dokumentation, Handbuch)
+		if (/changelog|dokumentation|handbuch/.test(fenstertyp) &&
+				(!m || m === "Shift") && evt.key === "F3") {
+			suchleiste.f3(evt);
+			return;
+		}
+		// Key "f" (Changelog, Dokumentation, Handbuch)
+		if (m === "Ctrl" && evt.key === "f") {
+			if (fenstertyp === "changelog") {
+				suchleiste.einblenden();
+			} else if (/dokumentation|handbuch/.test(fenstertyp)) {
+				document.getElementById("suchfeld").select();
+			}
+			return;
+		}
+		// Key "p" (Bedeutungsgerüst, Changelog)
+		if (m === "Ctrl" && evt.key === "p") {
+			if (fenstertyp === "bedeutungen") {
+				bedeutungen.drucken();
+			} else if (fenstertyp === "changelog") {
+				print();
+			}
+			return;
+		}
+	},
+	// Zwischenspeicher für die gedrückten Modifiers
+	modifiers: "",
+	// ermittelt die gedrückten Modifiers und erstellt einen String
+	//   evt = Object
+	//     (Event-Object des keydown)
+	detectModifiers (evt) {
+		let s = [];
+		if (evt.altKey) {
+			s.push("Alt");
+		}
+		if (evt.getModifierState("AltGraph")) {
+			s.push("AltGr");
+		}
+		if (evt.getModifierState("CapsLock")) {
+			s.push("Caps");
+		}
+		if (evt.ctrlKey) {
+			s.push("Ctrl");
+		}
+		if (evt.metaKey) {
+			s.push("Meta");
+		}
+		if (evt.shiftKey) {
+			s.push("Shift");
+		}
+		tastatur.modifiers = s.join("+");
+	},
+};

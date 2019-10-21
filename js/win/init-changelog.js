@@ -11,7 +11,7 @@ window.addEventListener("load", () => {
 	});
 
 	// TASTATUREINGABE ABFANGEN
-	document.addEventListener("keydown", helferWin.tastatur);
+	document.addEventListener("keydown", tastatur.init);
 
 	// EVENTS INITIALISIEREN
 	// Über App

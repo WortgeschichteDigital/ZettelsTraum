@@ -8,19 +8,19 @@ let helfer = {
 		a.addEventListener("click", function(evt) {
 			evt.preventDefault();
 			const id = this.id.replace(/^quick-/, "");
-			if (id === "programm-neues-fenster") {
+			if (id === "app-neues-fenster") {
 				const {ipcRenderer} = require("electron");
 				ipcRenderer.send("fenster-oeffnen");
 				return;
-			} else if (id === "programm-karteisuche") {
+			} else if (id === "app-karteisuche") {
 				karteisuche.oeffnen();
 				return;
-			} else if (id === "programm-einstellungen") {
+			} else if (id === "app-einstellungen") {
 				optionen.oeffnen();
 				return;
-			} else if (id === "programm-beenden") {
+			} else if (id === "app-beenden") {
 				const {ipcRenderer} = require("electron");
-				ipcRenderer.send("programm-beenden");
+				ipcRenderer.send("app-beenden");
 				return;
 			} else if (id === "kartei-erstellen") {
 				kartei.wortErfragen();
@@ -67,9 +67,9 @@ let helfer = {
 			} else if (id === "kartei-suche") {
 				filter.suche();
 			} else if (id === "belege-hinzufuegen") {
-				erstSpeichern.init(() => beleg.erstellen());
+				speichern.checkInit(() => beleg.erstellen());
 			} else if (id === "belege-auflisten") {
-				erstSpeichern.init(() => liste.wechseln());
+				speichern.checkInit(() => liste.wechseln());
 			} else if (id === "belege-kopieren") {
 				kopieren.init();
 			} else if (id === "belege-einfuegen") {
@@ -195,7 +195,7 @@ let helfer = {
 		}
 		// Space nicht abfangen, wenn Fokus auf <input>, <textarea>, contenteditable
 		let aktiv = document.activeElement;
-		if (evt.which === 32 &&
+		if (evt.key === " " &&
 				(/^(INPUT|TEXTAREA)$/.test(aktiv.nodeName) || aktiv.getAttribute("contenteditable"))) {
 			return;
 		}
@@ -211,9 +211,9 @@ let helfer = {
 		}
 		// Ziel-Position ermitteln
 		let top = 0;
-		if (evt.which === 33) { // hoch (PageUp)
+		if (evt.key === "PageUp") { // hoch
 			top = window.scrollY - window.innerHeight + sektionTop + header + 72; // 24px = Höhe Standardzeile
-		} else if (evt.which === 32 || evt.which === 34) { // runter (Space, PageDown)
+		} else if (/^( |PageDown)$/.test(evt.key)) { // runter
 			top = window.scrollY + window.innerHeight - sektionTop - header - 72; // 24px = Höhe Standardzeile
 		}
 		// scrollen
@@ -240,74 +240,6 @@ let helfer = {
 		let sel = window.getSelection();
 		sel.removeAllRanges();
 		sel.addRange(range);
-	},
-	// ermöglicht die Navigation mit dem Cursor durch Buttons und Links
-	//   evt = Event-Objekt
-	//     (wird von helfer.tastatur() übergeben)
-	cursor (evt) {
-		const oben = overlay.oben();
-		// Bedeutungen sind aktiv, kein Overlay
-		if (!oben && !document.getElementById("bedeutungen").classList.contains("aus")) {
-			if (evt.ctrlKey && (evt.which === 38 || evt.which === 40)) { // Ctrl + hoch (↑) oder runter (↓)
-				bedeutungen.navi(evt);
-			} else if (!evt.ctrlKey) {
-				bedeutungen.move(evt);
-			}
-			return;
-		}
-		// Karteikarte ist aktiv, kein Overlay
-		if (helfer.belegOffen()) {
-			// Ctrl + ↓
-			if (evt.ctrlKey && evt.which === 40) {
-				beleg.ctrlSpringen(evt);
-			}
-			return;
-		}
-		// Cursor hoch od. runter
-		if (evt.which === 38 || evt.which === 40) { // hoch (↑) + runter (↓)
-			if (evt.ctrlKey && oben === "einstellungen") { // durch die Menüs in den Einstellungen navigieren
-				evt.preventDefault();
-				optionen.naviMenue(evt.which);
-			}
-			return;
-		}
-		// Cursor links od. rechts
-		let aktiv = document.activeElement;
-		// Ist das aktive Element ein Anker oder ein Button?
-		if (!(aktiv.nodeName === "A" || aktiv.nodeName === "INPUT" && aktiv.type === "button")) {
-			return;
-		}
-		// Parent-Block ermitteln
-		let parent = aktiv.parentNode;
-		while (!/^(BODY|DIV|HEADER|P|TD|TH)$/.test(parent.nodeName)) { // BODY nur zur Sicherheit, falls ich in der Zukunft vergesse die Liste ggf. zu ergänzen
-			parent = parent.parentNode;
-		}
-		// Elemente sammeln und Fokus-Position ermitteln
-		let elemente = parent.querySelectorAll(`a, input[type="button"]`),
-			pos = -1;
-		for (let i = 0, len = elemente.length; i < len; i++) {
-			if (elemente[i] === aktiv) {
-				pos = i;
-				break;
-			}
-		}
-		// Position des zu fokussierenden Elements ermitteln
-		do {
-			if (evt.which === 37 && pos > 0) { // zurück
-				pos--;
-			} else if (evt.which === 37) { // letzte Position
-				pos = elemente.length - 1;
-			} else if (evt.which === 39 && pos < elemente.length - 1) { // vorwärts
-				pos++;
-			} else if (evt.which === 39) { // 1. Position
-				pos = 0;
-			}
-			// Buttons können versteckt sein, das geschieht aber alles im CSS-Code;
-			// hat der Button ein display === "none" ist er versteckt und kann nicht
-			// fokussiert werden. Normal ist display === "inline-block".
-		} while (getComputedStyle(elemente[pos]).display === "none");
-		// Das Element kann fokussiert werden
-		elemente[pos].focus();
 	},
 	// Fokus aus Formularfeldern entfernen
 	inputBlur () {
@@ -338,7 +270,8 @@ let helfer = {
 	//     (das Edit-Feld, das keine Standardformatierungen erhalten soll
 	editNoFormat (edit) {
 		edit.addEventListener("keydown", function(evt) {
-			if (evt.ctrlKey && (evt.which === 66  || evt.which === 73 || evt.which === 85)) { // Strg + B/I/U
+			tastatur.detectModifiers(evt);
+			if (tastatur.modifiers === "Ctrl" && /^(b|i|u)$/.test(evt.key)) {
 				evt.preventDefault();
 			}
 		});
@@ -760,176 +693,6 @@ let helfer = {
 		}
 		// Dokumententitel
 		document.title = app_name + wort + asterisk;
-	},
-	// Verteilerfunktion für "Kartei > Speichern" bzw. den Tastaturbefehl Strg + S;
-	// der Befehl soll eine Speicherkaskade auslösen
-	speichern () {
-		// keine Speicherkaskade
-		// (nur eine der ausstehenden Änderungen speichern)
-		if (!optionen.data.einstellungen.speicherkaskade) {
-			if (karteiSpeichern()) { // erfolgreich nur, wenn andere Änderungen schon gespeichert
-				return;
-			}
-			const oben = overlay.oben();
-			if (oben === "notizen" && notizen.geaendert) {
-				notizen.speichern();
-			} else if (oben === "tagger" && tagger.geaendert) {
-				tagger.speichern();
-			} else if (!oben && beleg.geaendert) {
-				beleg.aktionSpeichern();
-			} else if (!oben && bedeutungen.geaendert) {
-				bedeutungen.speichern();
-			}
-			return;
-		}
-		// Speicherkaskade
-		// (versuchen, alle ausstehenden Änderungen zu übernehmen)
-		if (notizen.geaendert && !notizen.speichern()) {
-			return; // beim Speichern der Notizen ist etwas schiefgelaufen
-		}
-		if (beleg.geaendert && !beleg.aktionSpeichern()) {
-			return; // beim Speichern der Karteikarte ist etwas schiefgelaufen
-		}
-		if (tagger.geaendert && !tagger.speichern()) {
-			return; // beim Speichern der Tags ist etwas schiefgelaufen
-		}
-		if (bedeutungen.geaendert && !bedeutungen.speichern()) {
-			return; // beim Speichern der Bedeutungen ist etwas schiefgelaufen (kann derzeit [2019-10-20] gar nicht sein; rein präventive Maßnahme)
-		}
-		karteiSpeichern();
-		// Funktion zum Speichern der Kartei
-		function karteiSpeichern () {
-			if (!notizen.geaendert &&
-					!tagger.geaendert &&
-					!bedeutungen.geaendert &&
-					!beleg.geaendert &&
-					kartei.geaendert) {
-				kartei.speichern(false);
-				return true;
-			}
-			return false;
-		}
-	},
-	// Tastatur-Events abfangen und verarbeiten
-	//   evt = Event-Objekt
-	tastatur (evt) {
-		// Esc
-		if (evt.which === 27) {
-			// falls die Suchleiste auf ist und den Fokus hat
-			if (document.getElementById("suchleiste") &&
-					document.querySelector("#suchleiste:focus-within")) {
-				suchleiste.ausblenden();
-				return;
-			}
-			// Dropdown schließen
-			if (document.getElementById("dropdown")) {
-				dropdown.schliessen();
-				return;
-			}
-			// Overlay-Fenster schließen
-			let overlay_oben_id = overlay.oben();
-			if (overlay_oben_id) {
-				let link = document.querySelector(`#${overlay_oben_id} a`);
-				overlay.schliessen(link);
-				return;
-			}
-			// Bedeutungsgerüst-Formular schließen
-			if (!document.getElementById("bedeutungen").classList.contains("aus")) {
-				if (bedeutungen.moveAktiv) {
-					bedeutungen.moveAus();
-				} else {
-					bedeutungen.schliessen();
-				}
-				return;
-			}
-			// Annotierungs-Popup schließen
-			if (annotieren.modSchliessen()) {
-				return;
-			}
-			// Karteikarte schließen
-			if (!document.getElementById("beleg").classList.contains("aus")) {
-				helfer.inputBlur();
-				beleg.aktionAbbrechen();
-				return;
-			}
-		}
-		// Tabulator (wenn im Bedeutungsgerüst)
-		if (evt.which === 9 && helfer.bedeutungenOffen()) {
-			bedeutungen.naviTab(evt);
-		}
-		// Enter
-		if (evt.which === 13 && overlay.oben() === "kopieren-einfuegen") {
-			evt.preventDefault();
-			erstSpeichern.init(() => kopieren.einfuegenAusfuehren());
-			return;
-		}
-		// Space / PageUp / PageDown (für Suchleiste)
-		if ((evt.which === 32 || evt.which === 33 || evt.which === 34) &&
-				!(evt.ctrlKey || evt.altKey)) {
-			if (document.getElementById("suchleiste")) {
-				suchleiste.scrollen(evt);
-			} else {
-				helfer.scrollen(evt);
-			}
-		}
-		// F3
-		if (evt.which === 114) {
-			evt.preventDefault();
-			if (!overlay.oben() &&
-					(!document.getElementById("liste").classList.contains("aus") ||
-					helfer.belegOffen() && document.getElementById("beleg-link-leseansicht").classList.contains("aktiv"))) {
-				suchleiste.f3(evt);
-			}
-			return;
-		}
-		// F5
-		if (evt.which === 116) {
-			evt.preventDefault();
-			if (overlay.oben() === "kopieren-einfuegen") {
-				kopieren.einfuegenBasisdaten(true);
-			}
-			return;
-		}
-		// Strg + Bild ↑ / ↓
-		if (evt.ctrlKey && (evt.which === 33 || evt.which === 34) && helfer.belegOffen()) {
-			let next = true;
-			if (evt.which === 33) {
-				next = false;
-			}
-			beleg.ctrlNavi(next);
-		}
-		// Cursor links (←), hoch (↑), rechts (→), runter (↓)
-		if (evt.which >= 37 && evt.which <= 40) {
-			helfer.cursor(evt);
-		}
-		// Entfernen (wenn im Bedeutungsgerüst)
-		if (evt.which === 46 && helfer.bedeutungenOffen()) {
-			bedeutungen.loeschenTastatur();
-		}
-		// Strg + I (wenn in Karteikarte)
-		if (evt.ctrlKey && evt.which === 73 && helfer.belegOffen()) {
-			if (kopieren.an) {
-				kopieren.addKarte();
-			} else {
-				beleg.ctrlZwischenablage(beleg.data);
-			}
-		}
-		// Strg + K (wenn in Karteikarte)
-		if (evt.ctrlKey && evt.which === 75 && helfer.belegOffen()) {
-			beleg.ctrlKuerzen();
-		}
-		// Strg + P
-		if (evt.ctrlKey && evt.which === 80) {
-			drucken.tastatur();
-		}
-		// Strg + T (wenn in Karteikarte)
-		if (evt.ctrlKey && evt.which === 84 && helfer.belegOffen()) {
-			beleg.ctrlTrennung();
-		}
-		// Strg + U (wenn in Karteikarte)
-		if (evt.ctrlKey && evt.which === 85 && helfer.belegOffen()) {
-			beleg.leseToggle(true);
-		}
 	},
 	// überprüft, ob das Bedeutungsgerüst offen ist und nicht durch irgendein
 	// anderes Fenster verdeckt wird

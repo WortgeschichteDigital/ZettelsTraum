@@ -9,6 +9,7 @@
 		<link rel="stylesheet" href="../css/win/hilfe.css">
 
 		<script src="../js/suchleiste.js"></script>
+		<script src="../js/tastatur.js"></script>
 
 		<script src="../js/app/helfer.js"></script>
 
@@ -360,6 +361,8 @@ php make-changelog.php [FORMAT] [PFAD]</pre>
 
 					<ul>
 						<li><span class="datei">./js/suchleiste.js</span>: alle Funktionen, die die Suchleiste betreffen, die in verschiedenen Fenstern genutzt wird</li>
+
+						<li><span class="datei">./js/tastatur.js</span>: zentrale Funktionen für die Reaktion auf Tastatur-Events, die nicht vom <a href="#framework">Framework</a> verwaltet werden; wird von allen Fenstern genutzt</li>
 
 						<li><span class="datei">./js/app/beleg.js</span>: die Karteikarte betreffende Funktionen, und zwar sowohl die der Formular- als auch die der Leseansicht</li>
 
@@ -833,7 +836,7 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);
 					<!-- BWGD-Format -->
 					<h2 id="wgd-bwgd"><abbr title="Belege Wortgeschichte digital">BWGD</abbr>-Format</h2>
 
-					<p>Für die Kopierfunktionen (<i>Belege &gt; Kopieren</i> und <i>Belege &gt; Einfügen</i>) gibt es für den Import <abbr title="beziehungsweise">bzw.</abbr> Export von Beleglisten ein eigenes Austauschformat. Der Inhalt dieser <abbr title="Belege Wortgeschichte digital">BWGD</abbr>-Dateien ist ebenfalls im <abbr title="JavaScript Object Notation">JSON</abbr>-Format. Ihr Aufbau (<span class="obacht">Datenformat Version 1</span>):</p>
+					<p>Für die Kopierfunktionen (<i>Belege &gt; Kopieren</i> und <i>Belege &gt; Einfügen</i>) gibt es für den Import <abbr title="beziehungsweise">bzw.</abbr> Export von Beleglisten ein eigenes Austauschformat. Der Inhalt dieser <abbr title="Belege Wortgeschichte digital">BWGD</abbr>-Dateien ist ebenfalls im <abbr title="JavaScript Object Notation">JSON</abbr>-Format. Ihr Aufbau (<span class="obacht">Datenformat Version 1</span>):</p>
 
 					<table>
 						<tr>

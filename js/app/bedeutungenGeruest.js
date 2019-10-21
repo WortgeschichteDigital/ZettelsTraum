@@ -3,6 +3,10 @@
 let bedeutungenGeruest = {
 	// Fenster öffnen
 	oeffnen () {
+		// Sperre für macOS (Menüpunkte können nicht deaktiviert werden)
+		if (!kartei.wort) {
+			return;
+		}
 		// Fenster wirklich öffnen?
 		let obj = data.bd;
 		if (!document.getElementById("bedeutungen").classList.contains("aus")) {

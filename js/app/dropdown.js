@@ -129,11 +129,8 @@ let dropdown = {
 			}, 250);
 		});
 		inp.addEventListener("keydown", function(evt) {
-			if (evt.which === 13) { // Enter
-				// bei Strg + Enter ist wohl abbrechen, weil wohl eine andere Funktion aufgerufen werden soll
-				if (evt.ctrlKey) {
-					return;
-				}
+			tastatur.detectModifiers(evt);
+			if (!tastatur.modifiers && evt.key === "Enter") {
 				// Dropdown existiert noch nicht od. hält keine Vorschläge bereit
 				let drop = document.getElementById("dropdown");
 				if (!drop || drop.firstChild.classList.contains("keine-vorschlaege")) {
@@ -151,19 +148,21 @@ let dropdown = {
 				setTimeout(function() {
 					dropdown.auswahl(feld, aktiv.textContent);
 				}, 10); // damit andere Enter-Events, die an dem Input hängen, nicht auch noch ausgelöst werden
-			} else if (evt.which === 38 || evt.which === 40) { // Cursor hoch (↑) od. runter (↓)
-				let fenster = document.getElementById("dropdown");
-				if (!fenster && !evt.ctrlKey && document.activeElement.nodeName === "TEXTAREA") { // sonst man in textareas nicht mehr navigieren
+			} else if (/^(ArrowDown|ArrowUp)$/.test(evt.key)) {
+				let drop = document.getElementById("dropdown");
+				if (!drop && !evt.ctrlKey && document.activeElement.nodeName === "TEXTAREA") { // sonst kann man in textareas nicht mehr navigieren
 					return;
 				}
 				evt.preventDefault();
 				// Dropdown existiert noch nicht
-				if (!fenster) {
+				if (!drop) {
 					dropdown.init(this.id);
 					return;
 				}
-				// im Dropdown-Feld navigieren
-				dropdown.navigation(evt.which);
+				// im Dropdown-Feld navigieren, wenn keine Modifiers gedrückt wurden
+				if (!tastatur.modifiers) {
+					dropdown.navigation(evt);
+				}
 			}
 		});
 		if (inp.getAttribute("readonly") !== null) {
@@ -416,9 +415,9 @@ let dropdown = {
 		dropdown.position();
 	},
 	// Tastatur-Navigation in der Dropdown-Liste
-	//   tastaturcode = Number
-	//     (Tastaturcode 38 [hoch] od. 40 [runter])
-	navigation (tastaturcode) {
+	//   evt = Object
+	//     (Event-Object des keydown)
+	navigation (evt) {
 		let drop = document.getElementById("dropdown"),
 			opts = drop.querySelectorAll("span");
 		// ggf. abbrechen, wenn keine Vorschläge vorhanden sind
@@ -433,7 +432,7 @@ let dropdown = {
 			}
 			opts[i].classList.remove("aktiv");
 		}
-		if (tastaturcode === 38) {
+		if (evt.key === "ArrowUp") {
 			pos--;
 		} else {
 			pos++;

@@ -110,7 +110,8 @@ let suchleiste = {
 	//     (der Text-Input der Suchleiste)
 	suchenListener (input) {
 		input.addEventListener("keydown", function(evt) {
-			if (evt.which === 13) {
+			tastatur.detectModifiers(evt);
+			if (!tastatur.modifiers && evt.key === "Enter") {
 				suchleiste.suchen();
 			}
 		});
@@ -484,7 +485,7 @@ let suchleiste = {
 	// wird nur aufgerufen, bei PageUp, PageDown, Space;
 	// aber nur, wenn weder Ctrl, noch Alt gedrückt sind)
 	//   evt = Object
-	//     (das Event-Objekt)
+	//     (das Tastatur-Event-Objekt)
 	scrollen (evt) {
 		// Ist die Leiste überhaupt an?
 		let leiste = document.getElementById("suchleiste");
@@ -493,7 +494,7 @@ let suchleiste = {
 		}
 		// Space nicht abfangen, wenn Fokus auf <input>, <textarea>, contenteditable
 		let aktiv = document.activeElement;
-		if (evt.which === 32 &&
+		if (evt.key === " " &&
 				(/^(INPUT|TEXTAREA)$/.test(aktiv.nodeName) || aktiv.getAttribute("contenteditable"))) {
 			return;
 		}
@@ -515,9 +516,9 @@ let suchleiste = {
 			}
 		}
 		let top = 0;
-		if (evt.which === 33) { // hoch (PageUp)
+		if (evt.key === "PageUp") { // hoch
 			top = window.scrollY - window.innerHeight + headerHeight + suchleisteHeight + indexPlus + 72; // 24px = Höhe Standardzeile
-		} else if (evt.which === 32 || evt.which === 34) { // runter (Space, PageDown)
+		} else if (/^( |PageDown)$/.test(evt.key)) { // runter
 			top = window.scrollY + window.innerHeight - headerHeight - suchleisteHeight - indexPlus - 72; // 24px = Höhe Standardzeile
 		}
 		// scrollen

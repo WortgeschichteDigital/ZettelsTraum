@@ -79,7 +79,8 @@ let bedeutungenGerueste = {
 		input.value = "";
 		input.placeholder = "Name";
 		input.addEventListener("keydown", function(evt) {
-			if (evt.which === 13) {
+			tastatur.detectModifiers(evt);
+			if (!tastatur.modifiers && evt.key === "Enter") {
 				bedeutungenGerueste.add();
 			}
 		});
@@ -173,13 +174,12 @@ let bedeutungenGerueste = {
 	//     (das aktive Input-Element)
 	writeNameListener (input) {
 		input.addEventListener("keydown", function(evt) {
-			// Enter
-			if (evt.which === 13) {
+			tastatur.detectModifiers(evt);
+			if (!tastatur.modifiers && evt.key === "Enter") {
 				bedeutungenGerueste.writeName(this, true);
 				return;
 			}
-			// Esc
-			if (evt.which === 27) {
+			if (!tastatur.modifiers && evt.key === "Escape") {
 				evt.stopPropagation();
 				bedeutungenGerueste.writeName(this, false);
 				return;

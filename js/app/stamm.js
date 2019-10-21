@@ -4,6 +4,10 @@ let stamm = {
 	ladevorgang: false,
 	// Formvarianten-Fenster einblenden
 	oeffnen () {
+		// Sperre für macOS (Menüpunkte können nicht deaktiviert werden)
+		if (!kartei.wort) {
+			return;
+		}
 		// wird die Variantenliste gerade erstellt, darf sich das Fenster nicht öffnen
 		if (stamm.ladevorgang) {
 			dialog.oeffnen("alert");
@@ -266,8 +270,8 @@ let stamm = {
 	// Tastatureingaben im Textfeld abfangen
 	aktionText (input) {
 		input.addEventListener("keydown", function(evt) {
-			// Enter
-			if (evt.which === 13) {
+			tastatur.detectModifiers(evt);
+			if (!tastatur.modifiers && evt.key === "Enter") {
 				evt.preventDefault();
 				stamm.ergaenzen();
 			}

@@ -16,7 +16,7 @@ window.addEventListener("load", () => {
 	hilfe.dateiBreak();
 
 	// TASTATUREINGABEN ABFANGEN
-	document.addEventListener("keydown", helferWin.tastatur);
+	document.addEventListener("keydown", tastatur.init);
 
 	// RECHTSKLICK ABFANGEN
 	window.addEventListener("contextmenu", evt => {

@@ -7,6 +7,10 @@ let kopieren = {
 	belege: [],
 	// Kopier-Prozess initialisieren
 	init () {
+		// Sperre für macOS (Menüpunkte können nicht deaktiviert werden)
+		if (!kartei.wort) {
+			return;
+		}
 		// Ist die Funktion schon an?
 		if (kopieren.an) {
 			kopieren.liste();
@@ -182,6 +186,11 @@ let kopieren = {
 	},
 	// Overlay-Fenster zum Einfügen der Belege öffnen
 	einfuegen () {
+		// Sperre für macOS (Menüpunkte können nicht deaktiviert werden)
+		if (!kartei.wort) {
+			return;
+		}
+		// Overlay-Fenster öffnen
 		overlay.oeffnen(document.getElementById("kopieren-einfuegen"));
 		// zuvor geladene Belegedatei löschen
 		kopieren.belegedatei = [];

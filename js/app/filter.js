@@ -928,7 +928,8 @@ let filter = {
 		// das Volltextsuch-Feld sollte auch auf Enter hören
 		if (input.type === "text") {
 			input.addEventListener("keydown", function(evt) {
-				if (evt.which === 13) {
+				tastatur.detectModifiers(evt);
+				if (!tastatur.modifiers && evt.key === "Enter") {
 					filter.volltextSuchePrep();
 					liste.status(true);
 				}
@@ -1621,7 +1622,11 @@ let filter = {
 	},
 	// die Suche wird aufgerufen
 	suche () {
-		erstSpeichern.init(() => {
+		// Sperre für macOS (Menüpunkte können nicht deaktiviert werden)
+		if (!kartei.wort) {
+			return;
+		}
+		speichern.checkInit(() => {
 			// Bedeutungen schließen
 			bedeutungen.schliessen();
 			// Beleg schließen

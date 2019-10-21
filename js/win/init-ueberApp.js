@@ -6,7 +6,7 @@ window.addEventListener("load", () => {
 	// app initialisieren
 	const {app} = require("electron").remote;
 	// Programm-Name eintragen
-	document.querySelectorAll("main h1, #name").forEach(i => {
+	document.querySelectorAll("main h1, #name, .app-name").forEach(i => {
 		i.textContent = app.getName().replace("'", "’");
 	});
 	// Programm-Version eintragen
@@ -16,7 +16,7 @@ window.addEventListener("load", () => {
 	// Changelog
 	helferWin.oeffneChangelog(document.getElementById("changelog"));
 	// Tastatur-Events abfangen
-	document.addEventListener("keydown", helferWin.tastatur);
+	document.addEventListener("keydown", tastatur.init);
 });
 
 window.addEventListener("beforeunload", () => {

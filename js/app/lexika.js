@@ -16,8 +16,12 @@ let lexika = {
 	},
 	// Lexika-Fenster einblenden
 	oeffnen () {
-		let fenster = document.getElementById("lexika");
+		// Sperre für macOS (Menüpunkte können nicht deaktiviert werden)
+		if (!kartei.wort) {
+			return;
+		}
 		// Fenster öffnen oder in den Vordergrund holen
+		let fenster = document.getElementById("lexika");
 		if (overlay.oeffnen(fenster)) { // Fenster ist schon offen
 			return;
 		}
@@ -124,8 +128,8 @@ let lexika = {
 	// Tastatureingaben im Textfeld
 	aktionText (input) {
 		input.addEventListener("keydown", function(evt) {
-			// Enter
-			if (evt.which === 13) {
+			tastatur.detectModifiers(evt);
+			if (!tastatur.modifiers && evt.key === "Enter") {
 				evt.preventDefault();
 				lexika.ergaenzen();
 			}

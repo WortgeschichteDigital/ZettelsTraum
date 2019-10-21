@@ -24,22 +24,22 @@
 	background-color: #fff;
 }
 
-#quick-programm-neues-fenster {
+#quick-app-neues-fenster {
 	-webkit-mask-image: url(../../img/fenster-plus.svg);
 	mask-image: url(../../img/fenster-plus.svg);
 }
 
-#quick-programm-karteisuche {
+#quick-app-karteisuche {
 	-webkit-mask-image: url(../../img/lupe.svg);
 	mask-image: url(../../img/lupe.svg);
 }
 
-#quick-programm-einstellungen {
+#quick-app-einstellungen {
 	-webkit-mask-image: url(../../img/zahnrad.svg);
 	mask-image: url(../../img/zahnrad.svg);
 }
 
-#quick-programm-beenden {
+#quick-app-beenden {
 	-webkit-mask-image: url(../../img/ausgang.svg);
 	mask-image: url(../../img/ausgang.svg);
 }

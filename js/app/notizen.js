@@ -3,9 +3,13 @@
 let notizen = {
 	// Fenster für Notizen einblenden
 	oeffnen () {
+		// Sperre für macOS (Menüpunkte können nicht deaktiviert werden)
+		if (!kartei.wort) {
+			return;
+		}
+		// Fenster öffnen oder in den Vordergrund holen
 		let fenster = document.getElementById("notizen"),
 			feld = document.getElementById("notizen-feld");
-		// Fenster öffnen oder in den Vordergrund holen
 		if (overlay.oeffnen(fenster)) { // Fenster ist schon offen
 			feld.focus();
 			return;

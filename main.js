@@ -86,14 +86,10 @@ ipcMain.on("bilder-senden", function(evt) {
 
 /* APP-MENÜ *************************************/
 
-// standardmäßig kein Menü anzeigen
-// (einzig verlässliche Methode, um die Über-Fenster ohne Menü zu erzeugen)
-Menu.setApplicationMenu(null);
-
 // Menü-Vorlagen
 let layoutMenu = [
 	{
-		label: "&Programm",
+		label: `&${app.getName().replace("'", "’")}`,
 		submenu: [
 			{
 				label: "Neues Fenster",
@@ -104,19 +100,19 @@ let layoutMenu = [
 			{
 				label: "Karteisuche",
 				icon: path.join(__dirname, "img", "menu", "lupe.png"),
-				click: () => appMenu.aktion("programm-karteisuche"),
+				click: () => appMenu.aktion("app-karteisuche"),
 			},
 			{ type: "separator" },
 			{
 				label: "Einstellungen",
 				icon: path.join(__dirname, "img", "menu", "zahnrad.png"),
-				click: () => appMenu.aktion("programm-einstellungen"),
+				click: () => appMenu.aktion("app-einstellungen"),
 			},
 			{ type: "separator" },
 			{
 				label: "Beenden",
 				icon: path.join(__dirname, "img", "menu", "ausgang.png"),
-				click: () => appMenu.aktion("programm-beenden"),
+				click: () => appMenu.aktion("app-beenden"),
 				accelerator: "CommandOrControl+Q",
 			},
 		],
@@ -367,6 +363,20 @@ let layoutMenuAnsicht = [
 	},
 ];
 
+let layoutMenuMac = [
+	{
+		label: `${app.getName().replace("'", "’")}`,
+		submenu: [
+			{
+				label: "Fenster schließen",
+				icon: path.join(__dirname, "img", "menu", "fenster-schliessen.png"),
+				click: () => fenster.schliessen(),
+				accelerator: "CommandOrControl+W",
+			},
+		],
+	},
+];
+
 // Ansicht im Hauptmenü ergänzen
 layoutMenu.splice(layoutMenu.length - 1, 0, layoutMenuAnsicht[0]);
 
@@ -397,12 +407,38 @@ if (!app.isPackaged) {
 	}
 }
 
+// Windows/Linux: standardmäßig kein Menü anzeigen
+// (einzig verlässliche Methode, um Über-Fenster ohne Menü zu erzeugen)
+if (process.platform !== "darwin") {
+	Menu.setApplicationMenu(null);
+}
+
+// macOs: Menüvorlagen aufbereiten
+if (process.platform === "darwin") {
+	// Standardmenüs anpassen
+	for (let menu of [layoutMenu, layoutMenuAnsicht]) {
+		for (let mp of menu) {
+			mp.label = mp.label.replace("&", "");
+			const zuletztIdx = mp.submenu.findIndex(i => i.id === "kartei-zuletzt");
+			if (zuletztIdx >= 0) {
+				mp.submenu.splice(zuletztIdx, 1);
+			}
+		}
+	}
+	// Ansichtmenü ergänzen
+	layoutMenuAnsicht.unshift(layoutMenuMac[0]);
+}
+
 // Funktionen zum App-Menü
 appMenu = {
 	// überschreibt das Submenü mit den zuletzt verwendeten Karteien
 	//   update = Boolean
 	//     (die Fenster sollen ein Update über die zuletzt geöffneten Dateien erhalten)
 	zuletzt (update) {
+		// für macOS gibt es ein anderes Menüsystem
+		if (process.platform === "darwin") {
+			return;
+		}
 		// neues Submenü erzeugen
 		let zuletztVerwendet = {
 			label: "Zuletzt verwendet",
@@ -503,6 +539,11 @@ appMenu = {
 	//   id = Number
 	//     (die ID des betroffenen Fensters; konnte auch mal 0 sein => kein Fenster betroffen)
 	deaktivieren (disable, id) {
+		// für macOS gibt es ein anderes Menüsystem
+		if (process.platform === "darwin") {
+			return;
+		}
+		// zu deaktivierende Menüpunkte durchgehen
 		let elemente = ["kartei-speichern", "kartei-speichern-unter", "kartei-formvarianten", "kartei-notizen", "kartei-anhaenge", "kartei-lexika", "kartei-metadaten", "kartei-redaktion", "kartei-bedeutungen", "kartei-bedeutungen-wechseln", "kartei-bedeutungen-fenster", "kartei-suche", "kartei-schliessen", "belege"];
 		for (let j = 0, len = layoutMenu.length; j < len; j++) {
 			// sollen vielleicht alle Menüpunkte deaktiviert werden?
@@ -546,9 +587,19 @@ appMenu = {
 	//   fenster = Object
 	//     (das Fenster-Objekt, in dem das Menü erscheinen soll)
 	erzeugenAnsicht (fenster) {
+		// für macOS gibt es ein anderes Menüsystem
+		if (process.platform === "darwin") {
+			return;
+		}
+		// Menü für Windows und Linux erzeugen
 		let menu = Menu.buildFromTemplate(layoutMenuAnsicht);
 		fenster.setMenu(menu);
 		fenster.setMenuBarVisibility(false);
+	},
+	// erzeugt die Menüleiste in macOS
+	erzeugenMac (vorlage) {
+		let menu = Menu.buildFromTemplate(vorlage);
+		Menu.setApplicationMenu(menu);
 	},
 	// führt die gewählte Aktion im aktuellen Fenster aus
 	//   aktion = String
@@ -558,7 +609,7 @@ appMenu = {
 	//     Dateien kann es auch ein Array sein)
 	aktion (aktion, parameter) {
 		let w = BrowserWindow.getFocusedWindow();
-		if (aktion === "programm-beenden") {
+		if (aktion === "app-beenden") {
 			for (let id in win) {
 				if (!win.hasOwnProperty(id)) {
 					continue;
@@ -577,7 +628,7 @@ appMenu = {
 ipcMain.on("menus-deaktivieren", (evt, disable, id) => appMenu.deaktivieren(disable, id));
 
 // das Programm auf Wunsch eines Renderer-Prozesses komplett beenden
-ipcMain.on("programm-beenden", () => appMenu.aktion("programm-beenden"));
+ipcMain.on("app-beenden", () => appMenu.aktion("app-beenden"));
 
 
 /* OPTIONEN *************************************/
@@ -692,7 +743,7 @@ fenster = {
 		// (die Optionen können noch fehlen)
 		let bw = new BrowserWindow({
 			title: app.getName().replace("'", "’"),
-			icon: path.join(__dirname, "img", "icon", "linux", "icon_32px.png"),
+			icon: fenster.icon(),
 			x: x,
 			y: y,
 			width: width,
@@ -712,8 +763,13 @@ fenster = {
 			typ: "index",
 			kartei: "", // hier steht nichts oder ein Pfad; wurde die Kartei erstellt, aber noch nicht gespeichert hat es den Wert "neu"; nach dem ersten Speichern steht auch hier der Pfad
 		};
-		// Menüs, die nur bei offenen Karteikarten funktionieren, deaktivieren und diese Menüs an das neue Fenster hängen
-		appMenu.deaktivieren(true, bw.id);
+		// Windows/Linux: Menüs, die nur bei offenen Karteikarten funktionieren, deaktivieren; Menüleiste an das neue Fenster hängen
+		// macOS: beim Fokussieren des Fensters Standardmenü erzeugen
+		if (process.platform !== "darwin") {
+			appMenu.deaktivieren(true, bw.id);
+		} else if (process.platform === "darwin") {
+			BrowserWindow.fromId(bw.id).on("focus", () => appMenu.erzeugenMac(layoutMenu));
+		}
 		// HTML laden
 		BrowserWindow.fromId(bw.id).loadFile(path.join(__dirname, "index.html"));
 		// Fenster anzeigen, sobald alles geladen wurde
@@ -781,7 +837,7 @@ fenster = {
 		}
 		let opt = {
 			title: title,
-			icon: path.join(__dirname, "img", "icon", "linux", "icon_32px.png"),
+			icon: fenster.icon(),
 			width: bounds.width,
 			height: bounds.height,
 			minWidth: bounds.minWidth,
@@ -829,21 +885,26 @@ fenster = {
 			typ: typ,
 			kartei: "",
 		};
-		// Menü erzeugen
-		appMenu.erzeugenAnsicht(bw);
-		bw.on("leave-full-screen", function() {
-			// nach Verlassen des Vollbilds muss die Menüleiste wieder ausgeblendet werden
-			// (ohne Timeout geht es nicht)
-			setTimeout(() => {
-				if (!this.id) {
-					// Die Funktion wird merkwürdigerweise auch aufgerufen, wenn das Fenster geschlossen wird;
-					// zu diesem Zeitpunkt könnte das Fenster-Objekt aber schon zerstört sein, was ich daran
-					// erkenne, dass es keine ID mehr gibt.
-					return;
-				}
-				this.setMenuBarVisibility(false);
-			}, 1);
-		});
+		// Windows/Linux: verstecktes Ansicht-Menü erzeugen
+		// macOS: angepasstes Ansicht-Menü erzeugen
+		if (process.platform !== "darwin") {
+			appMenu.erzeugenAnsicht(bw);
+			bw.on("leave-full-screen", function() {
+				// nach Verlassen des Vollbilds muss die Menüleiste wieder ausgeblendet werden
+				// (ohne Timeout geht es nicht)
+				setTimeout(() => {
+					if (!this.id) {
+						// Die Funktion wird merkwürdigerweise auch aufgerufen, wenn das Fenster geschlossen wird;
+						// zu diesem Zeitpunkt könnte das Fenster-Objekt aber schon zerstört sein, was ich daran
+						// erkenne, dass es keine ID mehr gibt.
+						return;
+					}
+					this.setMenuBarVisibility(false);
+				}, 1);
+			});
+		} else if (process.platform === "darwin") {
+			bw.on("focus", () => appMenu.erzeugenMac(layoutMenuAnsicht));
+		}
 		// HTML laden
 		bw.loadFile(path.join(__dirname, "win", `${typ}.html`));
 		// Fenster anzeigen, sobald alles geladen wurde
@@ -872,7 +933,7 @@ fenster = {
 			parent: BrowserWindow.getFocusedWindow(),
 			modal: true,
 			title: title,
-			icon: path.join(__dirname, "img", "icon", "linux", "icon_32px.png"),
+			icon: fenster.icon(),
 			width: 650,
 			height: 334,
 			useContentSize: true,
@@ -892,10 +953,12 @@ fenster = {
 			typ: html,
 			kartei: "",
 		};
-		// Ansicht-Menü erzeugen
-		// (wenn das Dev-Menü gebraucht werden; ansonsten sollte das Fenster kein Menü haben)
-		if (devtools) {
+		// Windows/Linux: Menü nur erzeugen, wenn Dev-Tools zugänglich sein sollen; sonst haben die Fenster kein Menü
+		// macOS: minimales Menü mit nur einem Punkt erzeugen
+		if (process.platform !== "darwin" && devtools) {
 			appMenu.erzeugenAnsicht(bw);
+		} else if (process.platform === "darwin") {
+			bw.on("focus", () => appMenu.erzeugenMac(layoutMenuMac));
 		}
 		// HTML laden
 		bw.loadFile(path.join(__dirname, "win", `${html}.html`));
@@ -903,6 +966,18 @@ fenster = {
 		bw.once("ready-to-show", function() {
 			this.show();
 		});
+	},
+	// ermittelt das zum Betriebssystem passende Programm-Icon
+	icon () {
+		if (process.platform === "win32") {
+			return path.join(__dirname, "img", "icon", "win", "icon.ico");
+		} else if (process.platform === "darwin") {
+			return path.join(__dirname, "img", "icon", "mac", "icon.icns");
+		} else if (process.platform === "linux") {
+			return path.join(__dirname, "img", "icon", "linux", "icon_32px.png");
+		} else {
+			return null;
+		}
 	},
 	// das übergebene Fenster fokussieren
 	//   w = Object
@@ -912,6 +987,15 @@ fenster = {
 			w.restore();
 		}
 		setTimeout(() => w.focus(), 25); // Timeout, damit das Fenster zuverlässig den Fokus bekommt
+	},
+	// schließt das aktuelle Fenster
+	// (macOS bekommt in Nebenfenstern einen extra Menüpunkt,
+	// der nur den Befehl "Fenster schließen" hat)
+	schliessen () {
+		let w = BrowserWindow.getFocusedWindow();
+		if (w) { // nur zur Sicherheit, muss eigentlich immer da sein
+			w.close();
+		}
 	},
 };
 
@@ -1098,7 +1182,7 @@ ipcMain.on("fenster-dereferenzieren", function(evt, id) {
 		}
 	}
 	if (!hauptfensterOffen) {
-		appMenu.aktion("programm-beenden");
+		appMenu.aktion("app-beenden");
 	}
 });
 

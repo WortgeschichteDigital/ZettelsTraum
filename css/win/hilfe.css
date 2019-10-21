@@ -583,6 +583,10 @@ mark.wort {
 	color: var(--textWarnung);
 }
 
+.abschnitt {
+	margin-top: 25px;
+}
+
 .erklaerung-icon {
 	padding-left: 40px;
 	text-indent: -40px;

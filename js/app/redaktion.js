@@ -32,8 +32,12 @@ let redaktion = {
 	},
 	// Redaktionsfenster einblenden
 	oeffnen () {
-		let fenster = document.getElementById("redaktion");
+		// Sperre für macOS (Menüpunkte können nicht deaktiviert werden)
+		if (!kartei.wort) {
+			return;
+		}
 		// Fenster öffnen oder in den Vordergrund holen
+		let fenster = document.getElementById("redaktion");
 		if (overlay.oeffnen(fenster)) { // Fenster ist schon offen
 			return;
 		}
@@ -223,7 +227,7 @@ let redaktion = {
 	inputSubmit (id) {
 		document.getElementById(id).addEventListener("keydown", function(evt) {
 			// Abbruch, wenn nicht Enter gedrückt wurde
-			if (evt.which !== 13) {
+			if (evt.key !== "Enter") {
 				return;
 			}
 			// Abbruch, wenn Enter gedrückt wurde, aber das Dropdown-Menü offen ist
@@ -264,8 +268,7 @@ let redaktion = {
 	//     (ID des Inputfelds, das auf Enter hören soll)
 	inputReset (id) {
 		document.getElementById(id).addEventListener("keydown", function(evt) {
-			// Es wurde nicht Esc gedrückt
-			if (evt.which !== 27) {
+			if (evt.key !== "Escape") {
 				return;
 			}
 			// Schließen des Redaktionsfensters unterbinden

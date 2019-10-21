@@ -137,7 +137,7 @@ let tagger = {
 	listener (span) {
 		// Enter abfangen
 		span.addEventListener("keydown", function(evt) {
-			if (evt.which === 13 && !document.getElementById("dropdown")) {
+			if (evt.key === "Enter" && !document.getElementById("dropdown")) {
 				evt.preventDefault();
 				tagger.speichern();
 			}
@@ -201,26 +201,39 @@ let tagger = {
 				}
 				// Tag ist nicht in der Liste
 				mismatch.push({
-					typ: tagger.getName(kat),
-					name: tag,
+					kat: kat,
+					tag: tag,
 				});
 			}
 		}
 		// inkorrekte Tags, weil nicht in der Liste
 		if (mismatch.length) {
+			tagger.filled = false; // da der MutationObserver verzögert reagiert, muss er kurzfristig ausgeschaltet werden
 			let text = "Die folgenden Tags wurden in der zugehörigen Tag-Datei nicht gefunden. Sie wurden <em>nicht</em> gespeichert.",
 				lastH3 = "";
 			for (let mm of mismatch) {
-				if (mm.typ !== lastH3) {
-					lastH3 = mm.typ;
-					text += `\n<h3>${mm.typ}</h3>\n`;
+				// Meldungstext erzeugen
+				if (mm.kat !== lastH3) {
+					lastH3 = mm.kat;
+					text += `\n<h3>${tagger.getName(mm.kat)}</h3>\n`;
 				} else {
 					text += ", ";
 				}
-				text += `<s>${helfer.escapeHtml(mm.name)}</s>`;
+				text += `<s>${helfer.escapeHtml(mm.tag)}</s>`;
+				// Feld auffrischen
+				let feld = document.getElementById(`tagger-${mm.kat}`),
+					feldText = feld.textContent,
+					tag = helfer.escapeRegExp(mm.tag),
+					reg = new RegExp(`^${tag}(,\\s*)*|,\\s*${tag}`);
+				feld.textContent = feldText.replace(reg, "");
 			}
 			dialog.oeffnen("alert", function() {
-				tagger.fokusTagzelle();
+				tagger.filled = true;
+				if (optionen.data.einstellungen["tagger-schliessen"]) {
+					tagger.fokusTagzelle();
+				} else {
+					document.querySelector("#tagger-typen [contenteditable]").focus();
+				}
 			});
 			dialog.text(text);
 		}
@@ -259,7 +272,7 @@ let tagger = {
 	},
 	// Tagger schließen
 	schliessen () {
-		erstSpeichern.init(() => {
+		speichern.checkInit(() => {
 			overlay.ausblenden(document.getElementById("tagger"));
 			tagger.fokusTagzelle();
 		}, {

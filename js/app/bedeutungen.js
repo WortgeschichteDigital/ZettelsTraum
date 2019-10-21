@@ -302,6 +302,10 @@ let bedeutungen = {
 	},
 	// Bedeutungen öffnen
 	oeffnen () {
+		// Sperre für macOS (Menüpunkte können nicht deaktiviert werden)
+		if (!kartei.wort) {
+			return;
+		}
 		// Bedeutungen sind schon offen
 		if (!document.getElementById("bedeutungen").classList.contains("aus")) {
 			if (!overlay.oben()) {
@@ -319,7 +323,7 @@ let bedeutungen = {
 			return;
 		}
 		// Bedeutungenformular anzeigen und initialisieren
-		erstSpeichern.init(() => {
+		speichern.checkInit(() => {
 			overlay.alleSchliessen();
 			bedeutungen.data = {};
 			bedeutungen.copyData(data.bd, bedeutungen.data);
@@ -390,7 +394,7 @@ let bedeutungen = {
 			tr.appendChild(td);
 			let a = document.createElement("a");
 			td.appendChild(a);
-			a.classList.add("icon-link", "icon-windrose_37-38-39-40");
+			a.classList.add("icon-link", "icon-windrose_l-u-r-d");
 			a.href = "#";
 			a.title = "Bedeutung verschieben";
 			a.textContent = " ";
@@ -612,8 +616,8 @@ let bedeutungen = {
 	},
 	// die vorherige oder nächste Bedeutung aufrufen
 	// (wird nur aufgerufen, wenn Ctrl + ↑ || Ctrl + ↓)
-	//   evt = Event-Objekt
-	//     (Tastaturevent, über das die Funktion aufgerufen wurde)
+	//   evt = Object
+	//     (Event-Object des keydown)
 	navi (evt) {
 		// Abbruch, falls noch keine Bedeutungen vorhanden sind
 		if (!bedeutungen.akt.bd.length) {
@@ -632,10 +636,10 @@ let bedeutungen = {
 			return;
 		}
 		let tr_aktiv = document.querySelector(".bedeutungen-aktiv");
-		if (evt.which === 38 && hasIdx(tr_aktiv.previousSibling)) { // hoch
+		if (evt.key === "ArrowUp" && hasIdx(tr_aktiv.previousSibling)) { // hoch
 			bedeutungen.moveAus();
 			bedeutungen.moveAn(parseInt(tr_aktiv.previousSibling.dataset.idx, 10));
-		} else if (evt.which === 40 && hasIdx(tr_aktiv.nextSibling)) { // runter
+		} else if (evt.key === "ArrowDown" && hasIdx(tr_aktiv.nextSibling)) { // runter
 			bedeutungen.moveAus();
 			bedeutungen.moveAn(parseInt(tr_aktiv.nextSibling.dataset.idx, 10));
 		}
@@ -649,6 +653,7 @@ let bedeutungen = {
 	},
 	// Navigation durch die Felder einer Bedeutung mit Tabs
 	//   evt = Event-Objekt
+	//     (Keyboard-Event)
 	naviTab (evt) {
 		// nichts aktiviert
 		if (!bedeutungen.moveAktiv &&
@@ -786,7 +791,7 @@ let bedeutungen = {
 		}
 		// Icon zurücksetzen
 		let icon = tr.firstChild.firstChild;
-		icon.setAttribute("class", `icon-link icon-windrose_37-38-39-40`);
+		icon.setAttribute("class", `icon-link icon-windrose_l-u-r-d`);
 		// aktivierte Zeile deaktivieren
 		icon.blur();
 		tr.classList.remove("bedeutungen-aktiv", "bedeutungen-verschmelzen");
@@ -805,20 +810,20 @@ let bedeutungen = {
 	// speichert die Daten zwischen, welche Bewegungen möglich sind und
 	// wie sie ausgeführt werden sollten
 	moveData: {
-		37: { // nach links
+		l: { // nach links 37
 			movable: false,
 			steps: 0,
 		},
-		38: { // nach oben
+		u: { // nach oben 38
 			movable: false,
 			steps: 0,
 		},
-		39: { // nach rechts
+		r: { // nach rechts 39
 			movable: false,
 			steps: 0,
 			pad: [],
 		},
-		40: { // nach unten
+		d: { // nach unten 40
 			movable: false,
 			steps: 0,
 		},
@@ -826,14 +831,14 @@ let bedeutungen = {
 	// ermitteln, in welche Richtung der aktive Block bewegt werden kann
 	moveGetData () {
 		// Daten zurücksetzen
-		for (let n in bedeutungen.moveData) {
-			if (!bedeutungen.moveData.hasOwnProperty(n)) {
+		for (let dir in bedeutungen.moveData) {
+			if (!bedeutungen.moveData.hasOwnProperty(dir)) {
 				continue;
 			}
-			bedeutungen.moveData[n].movable = false;
-			bedeutungen.moveData[n].steps = 0;
-			if (bedeutungen.moveData[n].pad) {
-				bedeutungen.moveData[n].pad = [];
+			bedeutungen.moveData[dir].movable = false;
+			bedeutungen.moveData[dir].steps = 0;
+			if (bedeutungen.moveData[dir].pad) {
+				bedeutungen.moveData[dir].pad = [];
 			}
 		}
 		// neue Daten ermitteln
@@ -843,13 +848,13 @@ let bedeutungen = {
 		let d = bedeutungen.moveData;
 		// nach links
 		if (bedeutungen.akt.bd[idx].bd.length > 1) {
-			d[37].movable = true;
+			d.l.movable = true;
 			for (let i = idx + 1, len = bedeutungen.akt.bd.length; i < len; i++) {
 				const ebene_tmp = bedeutungen.akt.bd[i].bd.length;
 				if (ebene_tmp <= ebene - 1) {
 					break;
 				}
-				d[37].steps++;
+				d.l.steps++;
 			}
 		}
 		let bdFehler = bedeutungen.editBdTest({
@@ -858,17 +863,17 @@ let bedeutungen = {
 			ebene: ebene - 1,
 		});
 		if (bdFehler) {
-			d[37].movable = false;
+			d.l.movable = false;
 		}
 		// nach oben
 		if (idx > 0 && bedeutungen.akt.bd[idx - 1].bd.length >= bedeutungen.akt.bd[idx].bd.length) {
-			d[38].movable = true;
-			d[38].steps = -1;
+			d.u.movable = true;
+			d.u.steps = -1;
 			for (let i = idx - 1; i >= 0; i--) {
 				if (bedeutungen.akt.bd[i].bd.length <= ebene) {
 					break;
 				}
-				d[38].steps--;
+				d.u.steps--;
 			}
 		}
 		// nach rechts
@@ -876,13 +881,13 @@ let bedeutungen = {
 			const ebene_tmp = bedeutungen.akt.bd[i].bd.length;
 			if (ebene_tmp <= ebene) {
 				if (ebene_tmp === ebene) {
-					d[39].pad = [...bedeutungen.akt.bd[i].bd];
+					d.r.pad = [...bedeutungen.akt.bd[i].bd];
 				}
 				break;
 			}
 		}
-		if (d[39].pad.length) {
-			d[39].movable = true;
+		if (d.r.pad.length) {
+			d.r.movable = true;
 		}
 		bdFehler = bedeutungen.editBdTest({
 			wert: textBd,
@@ -890,7 +895,7 @@ let bedeutungen = {
 			ebene: ebene + 1,
 		});
 		if (bdFehler) {
-			d[39].movable = false;
+			d.r.movable = false;
 		}
 		// nach unten
 		let gleiche_ebene = false;
@@ -905,21 +910,24 @@ let bedeutungen = {
 				}
 				gleiche_ebene = true;
 			}
-			d[40].steps++;
+			d.d.steps++;
 		}
-		if (gleiche_ebene && d[40].steps) {
-			d[40].movable = true;
+		if (gleiche_ebene && d.d.steps) {
+			d.d.movable = true;
 		}
 	},
 	// Bedeutung im Bedeutungsgerüst bewegen
+	//   evt = Object
+	//     (Event-Object des keydown)
 	move (evt) {
 		// kein Element aktiviert
 		if (!bedeutungen.moveAktiv) {
 			return;
 		}
 		evt.preventDefault();
+		const dir = evt.key.match(/Arrow([A-Z])/)[1].toLowerCase();
 		// Bewegung unmöglich
-		let d = bedeutungen.moveData[evt.which];
+		let d = bedeutungen.moveData[dir];
 		if (!d.movable) {
 			bedeutungen.feedback("bedeutungen-unmovable");
 			return;
@@ -929,17 +937,17 @@ let bedeutungen = {
 		for (let i = 0, len = items.length; i < len; i++) {
 			let idx = items[i];
 			// spezielle Operationen
-			if (evt.which === 37) { // nach links
+			if (dir === "l") { // nach links
 				idx -= i;
 				bedeutungen.akt.bd[idx].bd.shift();
-			} else if (evt.which === 39) { // nach rechts
+			} else if (dir === "r") { // nach rechts
 				for (let j = 0, len = d.pad.length - 1; j < len; j++) {
 					bedeutungen.akt.bd[idx].bd.shift();
 				}
 				for (let j = d.pad.length - 1; j >= 0; j--) {
 					bedeutungen.akt.bd[idx].bd.unshift(d.pad[j]);
 				}
-			} else if (evt.which === 40) { // nach unten
+			} else if (dir === "d") { // nach unten
 				idx -= i;
 			}
 			// Element kopieren
@@ -952,11 +960,11 @@ let bedeutungen = {
 		bedeutungen.konstitZaehlung();
 		bedeutungen.aufbauen();
 		// Items refokussieren
-		if (evt.which === 37 || evt.which === 40) { // nach links + nach unten
+		if (dir === "l" || dir === "d") { // nach links + nach unten
 			bedeutungen.moveAn(aktiv + d.steps - items.length + 1, true);
-		} else if (evt.which === 38) { // nach oben
+		} else if (dir === "u") { // nach oben
 			bedeutungen.moveAn(aktiv + d.steps, true);
-		} else if (evt.which === 39) { // nach rechts
+		} else if (dir === "r") { // nach rechts
 			bedeutungen.moveAn(aktiv, true);
 		}
 		// ggf. scrollen
@@ -1368,12 +1376,13 @@ let bedeutungen = {
 	//     (das Edit-Feld)
 	editListener (edit) {
 		edit.addEventListener("keydown", function(evt) {
-			if (evt.which === 27) { // Esc
+			tastatur.detectModifiers(evt);
+			if (!tastatur.modifiers && evt.key === "Escape") {
 				evt.stopPropagation();
 				bedeutungen.editEintragen(this.parentNode);
 				bedeutungen.editTools(false);
 				return;
-			} else if (evt.which !== 13) { // kein Enter
+			} else if (evt.key !== "Enter") {
 				return;
 			}
 			evt.preventDefault();
@@ -1644,12 +1653,13 @@ let bedeutungen = {
 	//     (das Edit-Feld, über das eine Bedeutung ergänzt werden kann)
 	ergaenzen (span) {
 		span.addEventListener("keydown", function(evt) {
-			if (evt.which === 27) { // Esc (wegen der Einheitlichkeit mit anderen Edit-Feldern)
+			tastatur.detectModifiers(evt);
+			if (!tastatur.modifiers && evt.key === "Escape") { // wegen der Einheitlichkeit mit anderen Edit-Feldern
 				evt.stopPropagation();
 				this.blur();
 				return;
 			}
-			if (evt.which !== 13) { // kein Enter
+			if (evt.key !== "Enter") {
 				return;
 			}
 			// Bedeutung hinzufügen
@@ -1802,7 +1812,7 @@ let bedeutungen = {
 	},
 	// Bedeutungen schließen und zur Belegliste wechseln
 	schliessen () {
-		erstSpeichern.init(() => {
+		speichern.checkInit(() => {
 			bedeutungen.aendern = [];
 			liste.status(true);
 			liste.wechseln();

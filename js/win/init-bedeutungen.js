@@ -5,7 +5,7 @@ window.addEventListener("load", () => {
 	window.fenstertyp = "bedeutungen";
 
 	// TASTATUREINGABEN ABFANGEN
-	document.addEventListener("keydown", helferWin.tastatur);
+	document.addEventListener("keydown", tastatur.init);
 
 	// EVENTS INITIALISIEREN
 	document.querySelectorAll(".dropdown-feld").forEach(i => dropdown.feld(i));

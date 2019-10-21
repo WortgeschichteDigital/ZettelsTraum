@@ -17,6 +17,7 @@
 		<link rel="stylesheet" href="css/app/drucken.css" media="print">
 
 		<script src="js/suchleiste.js"></script>
+		<script src="js/tastatur.js"></script>
 
 		<script src="js/app/init-app.js"></script>
 		<script src="js/app/anhaenge.js"></script>
@@ -31,7 +32,6 @@
 		<script src="js/app/dialog.js"></script>
 		<script src="js/app/drucken.js"></script>
 		<script src="js/app/erinnerungen.js"></script>
-		<script src="js/app/erstSpeichern.js"></script>
 		<script src="js/app/filter.js"></script>
 		<script src="js/app/helfer.js"></script>
 		<script src="js/app/kartei.js"></script>
@@ -48,6 +48,7 @@
 		<script src="js/app/popup.js"></script>
 		<script src="js/app/redaktion.js"></script>
 		<script src="js/app/sonderzeichen.js"></script>
+		<script src="js/app/speichern.js"></script>
 		<script src="js/app/stamm.js"></script>
 		<script src="js/app/start.js"></script>
 		<script src="js/app/tagger.js"></script>
@@ -55,10 +56,10 @@
 	<body>
 		<!-- QUICK ACCESS -->
 		<div id="quick"
-			><a href="#" id="quick-programm-neues-fenster" class="icon-link" title="Programm: Neues Fenster"> </a
-			><a href="#" id="quick-programm-karteisuche" class="icon-link" title="Programm: Karteisuche"> </a
-			><a href="#" id="quick-programm-einstellungen" class="icon-link" title="Programm: Einstellungen"> </a
-			><a href="#" id="quick-programm-beenden" class="icon-link" title="Programm: Beenden (Strg + Q)"> </a
+			><a href="#" id="quick-app-neues-fenster" class="icon-link" title="App: Neues Fenster"> </a
+			><a href="#" id="quick-app-karteisuche" class="icon-link" title="App: Karteisuche"> </a
+			><a href="#" id="quick-app-einstellungen" class="icon-link" title="App: Einstellungen"> </a
+			><a href="#" id="quick-app-beenden" class="icon-link" title="App: Beenden (Strg + Q)"> </a
 			><span class="quick-spacer"> </span
 			><a href="#" id="quick-kartei-erstellen" class="icon-link" title="Kartei: Erstellen (Strg + E)"> </a
 			><a href="#" id="quick-kartei-oeffnen" class="icon-link" title="Kartei: Öffnen (Strg + O)"> </a
@@ -535,15 +536,15 @@
 						<p><input type="checkbox" id="einstellung-quick"
 							><label for="einstellung-quick">Quick-Access-Bar anzeigen</label> <a href="#" id="einstellungen-quick-alle">alle</a> | <a href="#" id="einstellungen-quick-keine">keine</a> | <a href="#" id="einstellungen-quick-standards">Standards</a></p>
 						<div class="einstellungen-spalten" id="einstellungen-quick-funktionen">
-							<h3>Programm</h3>
-							<p><input type="checkbox" id="einstellung-quick-programm-neues-fenster"
-								><label for="einstellung-quick-programm-neues-fenster">Neues Fenster</label></p>
-							<p><input type="checkbox" id="einstellung-quick-programm-karteisuche"
-								><label for="einstellung-quick-programm-karteisuche">Karteisuche</label></p>
-							<p><input type="checkbox" id="einstellung-quick-programm-einstellungen"
-								><label for="einstellung-quick-programm-einstellungen">Einstellungen</label></p>
-							<p><input type="checkbox" id="einstellung-quick-programm-beenden"
-								><label for="einstellung-quick-programm-beenden">Beenden</label></p>
+							<h3 class="app-name"></h3>
+							<p><input type="checkbox" id="einstellung-quick-app-neues-fenster"
+								><label for="einstellung-quick-app-neues-fenster">Neues Fenster</label></p>
+							<p><input type="checkbox" id="einstellung-quick-app-karteisuche"
+								><label for="einstellung-quick-app-karteisuche">Karteisuche</label></p>
+							<p><input type="checkbox" id="einstellung-quick-app-einstellungen"
+								><label for="einstellung-quick-app-einstellungen">Einstellungen</label></p>
+							<p><input type="checkbox" id="einstellung-quick-app-beenden"
+								><label for="einstellung-quick-app-beenden">Beenden</label></p>
 							<h3>Kartei</h3>
 							<p><input type="checkbox" id="einstellung-quick-kartei-erstellen"
 								><label for="einstellung-quick-kartei-erstellen">Erstellen</label></p>
@@ -707,7 +708,7 @@
 		<!-- OVERLAY: Karteisuche -->
 		<div id="karteisuche" class="overlay aus"><div>
 			<h2><span class="icon-h icon-h-karteisuche"> </span
-				>Karteisuche<a href="#" class="icon-link icon-handbuch" title="Abschnitt im Handbuch öffnen" data-handbuch="menueProgramm-karteisuche"> </a><a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"> </a></h2>
+				>Karteisuche<a href="#" class="icon-link icon-handbuch" title="Abschnitt im Handbuch öffnen" data-handbuch="menueApp-karteisuche"> </a><a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"> </a></h2>
 			<div id="karteisuche-cont">
 				<div>
 					<p><input type="button" value="Suche starten" id="karteisuche-suchen"></p>

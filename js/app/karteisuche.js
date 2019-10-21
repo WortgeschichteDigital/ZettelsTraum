@@ -571,8 +571,10 @@ let karteisuche = {
 	// Suche mit Enter starten
 	filterFelderListener (input) {
 		input.addEventListener("keydown", function(evt) {
-			if (evt.which === 13 &&
-					!document.getElementById("dropdown")) { // Enter
+			tastatur.detectModifiers(evt);
+			if (!tastatur.modifiers &&
+					evt.key === "Enter" &&
+					!document.getElementById("dropdown")) {
 				evt.preventDefault();
 				karteisuche.suchenPrep();
 			}

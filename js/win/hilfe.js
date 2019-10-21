@@ -2,8 +2,9 @@
 
 let hilfe = {
 	// mit der Tastatur durch durch die Menüelemente navigieren
-	//   tastaturcode = Number
-	naviMenue (tastaturcode) {
+	//   evt = Object
+	//     (Event-Object des keydown)
+	naviMenue (evt) {
 		// aktives Element ermitteln
 		let links = document.querySelectorAll("nav a.kopf"),
 			aktiv = document.querySelector("nav a.aktiv"),
@@ -15,7 +16,7 @@ let hilfe = {
 			}
 		}
 		// zu aktivierendes Element ermitteln
-		if (tastaturcode === 38) {
+		if (evt.key === "ArrowUp") {
 			pos--;
 		} else {
 			pos++;
@@ -264,17 +265,17 @@ let hilfe = {
 		});
 	},
 	// Navigation durch die Bilder (Cursor)
-	//   key = Number
-	//     (Tastaturevent: 37 [←] oder 39 [→])
-	bilderTastatur (key) {
+	//   evt = Object
+	//     (Event-Object des keydown)
+	bilderTastatur (evt) {
 		if (!document.getElementById("bild")) {
 			return;
 		}
 		let aktionen = {
-			37: "prev",
-			39: "next",
+			"ArrowLeft": "prev",
+			"ArrowRight": "next",
 		};
-		let dir = aktionen[key];
+		let dir = aktionen[evt.key];
 		if (hilfe.bilderData[dir]) {
 			hilfe.bild(hilfe.bilderData[dir]);
 		}
@@ -299,7 +300,8 @@ let hilfe = {
 			}, 250);
 		});
 		input.addEventListener("keydown", function(evt) {
-			if (evt.which === 13) {
+			tastatur.detectModifiers(evt);
+			if (!tastatur.modifiers && evt.key === "Enter") {
 				clearTimeout(hilfe.sucheTimeout);
 				hilfe.suche();
 			}
@@ -358,8 +360,7 @@ let hilfe = {
 			const sektion = sek_suche[i].id.replace(/^sektion-/, "");
 			let knoten = sek_suche[i].childNodes;
 			for (let j = 0, len = knoten.length; j < len; j++) {
-				if (knoten[j].nodeName === "UL" ||
-						knoten[j].nodeName === "TABLE") {
+				if (/^(DIV|OL|TABLE|UL)$/.test(knoten[j].nodeName)) {
 					let knoten_tief = knoten[j].childNodes;
 					if (knoten[j].nodeName === "TABLE") {
 						knoten_tief = knoten[j].querySelectorAll("tr");
@@ -396,16 +397,20 @@ let hilfe = {
 				let s = text.match(e.reg[i]);
 				if (s) {
 					regs++;
-					gewicht += s.length;
+					gewicht += s.length; // Anzahl der Treffer im Textausschnitt
 					let idx_tmp = text.split(e.reg[i])[0].length;
 					if (idx === -1 || idx_tmp < idx) {
 						idx = idx_tmp;
 					}
 				}
 			}
-			gewicht *= regs;
-			if (knoten.nodeName === "H2") { // Treffer in Überschriften vierfach gewichten
-				gewicht *= 4;
+			gewicht *= regs; // Anzahl Treffer im Textausschnitt multipliziert mal Anzahl der regulären Ausdrücke, die Treffer produzieren
+			if (knoten.nodeName === "H2") {
+				gewicht *= 10; // Treffer in Überschriften höher gewichten
+			} else if (/erklaerung-(icon|option)/.test(knoten.getAttribute("class"))) {
+				gewicht *= 5; // Treffer in Erklärungsköpfen höher gewichten
+			} else if (knoten.nodeName === "FIGURE") {
+				gewicht *= 2; // Treffer in Abbildungsunterschriften höher gewichten
 			}
 			// Treffer!
 			if (gewicht) {

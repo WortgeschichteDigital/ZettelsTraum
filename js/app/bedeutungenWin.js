@@ -3,8 +3,14 @@
 let bedeutungenWin = {
 	// Zwischenspeicher für den Verweis auf das Bedeutungsgerüst-Fenster
 	win: null,
+	// enthält die Menüvorlage (nur für macOS relevant)
+	vorlageMenu: [],
 	// Bedeutungsgerüst-Fenster öffnen
 	oeffnen () {
+		// Sperre für macOS (Menüpunkte können nicht deaktiviert werden)
+		if (!kartei.wort) {
+			return;
+		}
 		// Bedeutungsgerüst-Fenster ist bereits offen => Fenster fokussieren
 		if (bedeutungenWin.win) {
 			if (bedeutungenWin.win.isMinimized()) {
@@ -16,7 +22,7 @@ let bedeutungenWin = {
 		// Module laden
 		const {app, BrowserWindow, Menu} = require("electron").remote,
 			path = require("path");
-		// Menü-Template
+		// Menü-Templates
 		let layoutMenuAnsicht = [
 			{
 				label: "&Ansicht",
@@ -25,6 +31,7 @@ let bedeutungenWin = {
 						label: "Schrift vergrößern",
 						icon: path.join(__dirname, "img", "menu", "plus-quadrat.png"),
 						role: "zoomIn",
+						accelerator: "CommandOrControl+=",
 					},
 					{
 						label: "Schrift verkleinern",
@@ -41,6 +48,23 @@ let bedeutungenWin = {
 						label: "Vollbild",
 						icon: path.join(__dirname, "img", "menu", "fenster-vollbild.png"),
 						role: "toggleFullScreen",
+					},
+				],
+			},
+		];
+		let layoutMenuMac = [
+			{
+				label: `${app.getName().replace("'", "’")}`,
+				submenu: [
+					{
+						label: "Fenster schließen",
+						icon: path.join(__dirname, "img", "menu", "fenster-schliessen.png"),
+						click: () => {
+							const {remote} = require("electron"),
+								win = remote.getCurrentWindow();
+							win.close();
+						},
+						accelerator: "CommandOrControl+W",
 					},
 				],
 			},
@@ -67,11 +91,21 @@ let bedeutungenWin = {
 					},
 				],
 			});
+			if (process.platform === "darwin") {
+				layoutMenuAnsicht[layoutMenuAnsicht.length - 1].label = "Dev";
+			}
+		}
+		// Menüvorlagen für macOS aufbereiten
+		if (process.platform === "darwin") {
+			// Standardmenü anpassen
+			layoutMenuAnsicht[0].label = "Ansicht";
+			// Ansichtmenü ergänzen
+			layoutMenuAnsicht.unshift(layoutMenuMac[0]);
 		}
 		// Fenster öffnen
 		bedeutungenWin.win = new BrowserWindow({
 			title: `Bedeutungsgerüst: ${kartei.wort}`,
-			icon: path.join(__dirname, "img", "icon", "linux", "icon_32px.png"),
+			icon: bedeutungenWin.icon(),
 			x: optionen.data["fenster-bedeutungen"].x,
 			y: optionen.data["fenster-bedeutungen"].y,
 			width: optionen.data["fenster-bedeutungen"].width,
@@ -86,14 +120,23 @@ let bedeutungenWin = {
 			},
 		});
 		// Menü erzeugen
-		let menu = Menu.buildFromTemplate(layoutMenuAnsicht);
-		bedeutungenWin.win.setMenu(menu);
-		bedeutungenWin.win.setMenuBarVisibility(false);
-		bedeutungenWin.win.on("leave-full-screen", function() {
-			// nach Verlassen des Vollbilds muss die Menüleiste wieder ausgeblendet werden
-			// (ohne Timeout geht es nicht)
-			setTimeout(() => bedeutungenWin.win.setMenuBarVisibility(false), 1);
-		});
+		if (process.platform !== "darwin") {
+			let menu = Menu.buildFromTemplate(layoutMenuAnsicht);
+			bedeutungenWin.win.setMenu(menu);
+			bedeutungenWin.win.setMenuBarVisibility(false);
+			bedeutungenWin.win.on("leave-full-screen", function() {
+				// nach Verlassen des Vollbilds muss die Menüleiste wieder ausgeblendet werden
+				// (ohne Timeout geht es nicht)
+				setTimeout(() => bedeutungenWin.win.setMenuBarVisibility(false), 1);
+			});
+		} else if (process.platform === "darwin") {
+			bedeutungenWin.vorlage = layoutMenuAnsicht;
+			bedeutungenWin.win.on("focus", () => {
+				const {Menu} = require("electron").remote;
+				let menu = Menu.buildFromTemplate(bedeutungenWin.vorlage);
+				Menu.setApplicationMenu(menu);
+			});
+		}
 		// HTML laden
 		bedeutungenWin.win.loadFile(path.join(__dirname, "win", "bedeutungen.html"));
 		// Fenster anzeigen, sobald alles geladen wurde
@@ -144,5 +187,18 @@ let bedeutungenWin = {
 			optionen.data["fenster-bedeutungen"][wert] = status[wert];
 		}
 		optionen.speichern();
+	},
+	// ermittelt das zum Betriebssystem passende Programm-Icon
+	icon () {
+		const path = require("path");
+		if (process.platform === "win32") {
+			return path.join(__dirname, "img", "icon", "win", "icon.ico");
+		} else if (process.platform === "darwin") {
+			return path.join(__dirname, "img", "icon", "mac", "icon.icns");
+		} else if (process.platform === "linux") {
+			return path.join(__dirname, "img", "icon", "linux", "icon_32px.png");
+		} else {
+			return null;
+		}
 	},
 };

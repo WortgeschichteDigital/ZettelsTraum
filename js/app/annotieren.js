@@ -224,9 +224,10 @@ let annotieren = {
 				this.classList.add("changed");
 			});
 			edit.addEventListener("keydown", function(evt) {
-				if (evt.which === 13 || evt.which === 27) {
+				tastatur.detectModifiers(evt);
+				if (!tastatur.modifiers && /^(Enter|Escape)$/.test(evt.key)) {
 					evt.stopPropagation();
-					annotieren.modTextSpeichern(this, evt.which, text);
+					annotieren.modTextSpeichern(this, evt.key, text);
 				}
 			});
 		});
@@ -234,14 +235,14 @@ let annotieren = {
 	// Werte aus dem Annotationsfeld übernehmen
 	//   input = Element
 	//     (das Input-Feld)
-	//   which = Number
-	//     (das Tastatur-Event, 13 [Enter] oder 27 [Esc])
+	//   key = String
+	//     (Taste, die gedrückt wurde: "Enter" || "Escape")
 	//   text = String || undefined
 	//     (der Originaltext, der vor dem Speichern im Feld stand)
-	modTextSpeichern (input, which, text = "") {
+	modTextSpeichern (input, key, text = "") {
 		let textNeu = helfer.textTrim(input.value, true),
 			feld = input.parentNode;
-		if (which === 27) {
+		if (key === "Escape") {
 			textNeu = text;
 		}
 		if (!textNeu) {
@@ -291,8 +292,14 @@ let annotieren = {
 			let data = annotieren.data.data;
 			data.parentNode.replaceChild(frag, data);
 		} else if (cl === "wort" && werte.farbe === 1 && !werte.text) { // Annotierung entfernen (wort)
-			let data = annotieren.data.data,
-				frag = document.createDocumentFragment();
+			let data = annotieren.data.data;
+			if (!data) {
+				// noch keine Annotierung vorhanden => nichts entfernen und nichts auffrischen
+				// (kann passieren, wenn Popup geöffnet, Textfeld fokussiert und dann Esc gedrückt;
+				// oder Popup geöffnet, auf das gelbe Quadrat geklickt)
+				return;
+			}
+			let frag = document.createDocumentFragment();
 			annotieren.data.start = null;
 			annotieren.data.ende = null;
 			for (let i of data.childNodes) {
