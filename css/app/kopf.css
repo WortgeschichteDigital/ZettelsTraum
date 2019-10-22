@@ -24,6 +24,10 @@
 	background-color: #fff;
 }
 
+#quick a:focus {
+	background-color: var(--highlight);
+}
+
 #quick-app-neues-fenster {
 	-webkit-mask-image: url(../../img/fenster-plus.svg);
 	mask-image: url(../../img/fenster-plus.svg);

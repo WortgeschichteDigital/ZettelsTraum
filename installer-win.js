@@ -68,12 +68,12 @@ function makeConfig () {
 // Installer
 function startInstaller () {
 	builder.build(config)
-	.then(() => {
-		if (typ === "zip") {
-			console.log("\nWindows-Paketierung erstellt!");
-		} else {
-			console.log("\nWindows-Installer erstellt!");
-		}
-	})
-	.catch(err => console.log(new Error(err)));
+		.then(() => {
+			if (typ === "zip") {
+				console.log("\nWindows-Paketierung erstellt!");
+			} else {
+				console.log("\nWindows-Installer erstellt!");
+			}
+		})
+		.catch(err => console.log(new Error(err)));
 }

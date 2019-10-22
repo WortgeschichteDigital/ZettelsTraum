@@ -47,7 +47,7 @@
 					<li>
 						<p><i class="app-name"></i> läuft nun auch auf <i>macOS</i>.</p>
 
-						<p>Es gibt nur minimale Unterschiede, alle deswegen, weil das Menüsystem dort anders funktioniert als unter <i>Windows</i> und <i>Linux</i>:</p>
+						<p>Es gibt nur minimale Unterschiede zu den <i>Windows-</i> und <i>Linux</i>-Versionen, alle liegen darin begründet, dass das Menüsystem unter <i>macOS</i> anders funktioniert:</p>
 
 						<p>1.) Den Menüpunkt <a href="#menueKartei-zuletztVerwendet" class="link-handbuch"><i>Kartei &gt; Zuletzt verwendet</i></a> gibt es unter <i>macOS</i> nicht. Um eine Liste der zuletzt verwendeten Karteien zu sehen, kann man ein <a href="#menueApp-neuesFenster" class="link-handbuch">neues, leeres Fenster</a> öffnen.</p>
 
@@ -121,6 +121,10 @@
 					<li>Reorganisation der Programm-Icons: Das Chaos im Icon-Ordner, das sich mit der Zeit entwickelt hatte, wurde behoben. Dabei wurden <abbr title="unter anderem">u. a.</abbr> gut 50 doppelte und daher unnötige Icons entfernt.</li>
 
 					<li>Programmfenster werden jetzt mit einem zum Betriebssystem passenden Icon geöffnet.</li>
+
+					<li>Zum Paketieren der App werden nun keine Kommandozeilenbefehle mehr benutzt, sondern ein moderneres Node-Script. <abbr title="Vergleiche">Vgl.</abbr> den <abbr title="Abschnitt">Abschn.</abbr> zum <a href="#framework-paketieren" class="link-dokumentation">Paketieren der App</a> in der <a href="#" class="link-dokumentation">technischen Dokumentation</a>.</li>
+
+					<li><a href="#" class="ueber-electron"><i>Electron</i></a>-Update auf Version 6.1.0.</li>
 				</ul>
 
 				<h3>Behobene Fehler</h3>
@@ -172,11 +176,17 @@
 
 					<li>Karteisuche: Es gab ein paar visuelle Probleme im Konfigurationsbereich: Es war nicht immer sichtbar, wo der Fokus war, und die Icon-Farben änderten sich nicht immer beim Herüberfahren mit der Maus.</li>
 
-					<li>Navigierte man mit der <kbd>Tab</kbd>-Taste durch die einzelnen Elemente der Programmoberfläche, konnte man nicht erkenne, ob ein Textlink den Fokus hatte oder nicht. Fortan werden Textlinks sowohl in den Haupt- als auch in den Nebenfenstern unterstrichen, wenn sie den Fokus haben.</li>
-					
+					<li>Navigierte man mit der <kbd>Tab</kbd>-Taste durch die einzelnen Elemente der Programmoberfläche, konnte man nicht erkennen, ob ein Textlink den Fokus hatte oder nicht. Fortan werden Textlinks sowohl in den Haupt- als auch in den Nebenfenstern unterstrichen, wenn sie den Fokus haben.</li>
+
+					<li>Es war nicht zu erkennen, ob ein Icon in der Quick-Access-Bar den Fokus hatte oder nicht. Jetzt werden fokussierte Icons dort mit einer hellgrünen Farbe hinterlegt.</li>
+
 					<li>Das Suchleiste-Icon hier im Changelog wurde nicht blau hinterlegt, wenn es den Fokus hatte.</li>
 
+					<li>Die Navigation in Icon- oder Button-Gruppen, in denen der Fokus liegt, funktionierte mit den Navigationspfeilen <kbd>⇦</kbd> <abbr title="beziehungsweise">bzw.</abbr> <kbd>⇨</kbd> mitunter nicht mehr korrekt.</li>
+
 					<li>Das Icon im Programmmenü für die Funktion <a href="#menueKartei-formvarianten" class="link-handbuch"><i>Kartei &gt; Formvarianten</i></a> war veraltet.</li>
+
+					<li>Beim Öffnen des <a href="#" class="link-handbuch">Handbuchs</a> und der <a href="#" class="link-dokumentation">technischen Dokumentaiton</a> flackerten der Fensterinhalt mitunter stark.</li>
 				</ul>
 			</div>
 

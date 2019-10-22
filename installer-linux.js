@@ -102,12 +102,12 @@ function makeConfig () {
 // Installer
 function startInstaller () {
 	builder.build(config)
-	.then(() => {
-		if (/^(appImage|tar\.gz)$/.test(typ)) {
-			console.log("\nLinux-Paketierung erstellt!");
-		} else {
-			console.log("\nLinux-Installer erstellt!");
-		}
-	})
-	.catch(err => console.log(err));
+		.then(() => {
+			if (/^(appImage|tar\.gz)$/.test(typ)) {
+				console.log("\nLinux-Paketierung erstellt!");
+			} else {
+				console.log("\nLinux-Installer erstellt!");
+			}
+		})
+		.catch(err => console.log(err));
 }

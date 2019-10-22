@@ -59,9 +59,9 @@ let start = {
 		setTimeout(function() {
 			let ps = document.getElementById("programmstart");
 			ps.classList.add("gestartet");
-			// dieser Timeout korrespondiert mit der in der start.css festgelegten
-			// Transition-Länge
-			setTimeout(() => ps.classList.add("aus"), 500);
+			ps.addEventListener("transitionend", function() {
+				this.classList.add("aus");
+			});
 		}, 500);
 	},
 };

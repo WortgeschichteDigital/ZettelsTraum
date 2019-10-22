@@ -92,13 +92,16 @@ window.addEventListener("load", () => {
 	});
 	// externe Links
 	document.querySelectorAll(`a[href^="http"]`).forEach(a => helfer.externeLinks(a));
-	
+
+	// EINFÜHRUNGSSEKTION ANZEIGEN
+	hilfe.sektionWechseln("einfuehrung", false);
+
 	// SIGNALE DES MAIN-PROZESSES
 	const {ipcRenderer} = require("electron");
 	ipcRenderer.on("oeffne-abschnitt", (evt, abschnitt) => hilfe.naviSprungAusfuehren(abschnitt));
 
-	// EINFÜHRUNGSSEKTION ANZEIGEN
-	hilfe.sektionWechseln("einfuehrung", false);
+	// Laden-Overlay ausblenden
+	hilfe.ladenAus();
 });
 
 window.addEventListener("beforeunload", () => {

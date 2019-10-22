@@ -67,12 +67,12 @@ function makeConfig () {
 // Installer
 function startInstaller () {
 	builder.build(config)
-	.then(() => {
-		if (typ === "tar.gz") {
-			console.log("\nmacOS-Paketierung erstellt!");
-		} else {
-			console.log("\nmacOS-Installer erstellt!");
-		}
-	})
-	.catch(err => console.log(err));
+		.then(() => {
+			if (typ === "tar.gz") {
+				console.log("\nmacOS-Paketierung erstellt!");
+			} else {
+				console.log("\nmacOS-Installer erstellt!");
+			}
+		})
+		.catch(err => console.log(err));
 }

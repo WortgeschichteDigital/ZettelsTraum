@@ -911,7 +911,7 @@ fenster = {
 		bw.once("ready-to-show", function() {
 			this.show();
 			if (abschnitt) {
-				setTimeout(() => this.webContents.send("oeffne-abschnitt", abschnitt), 500);
+				this.webContents.send("oeffne-abschnitt", abschnitt);
 			}
 		});
 	},

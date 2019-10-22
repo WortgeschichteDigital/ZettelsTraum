@@ -147,16 +147,15 @@ let tastatur = {
 		if (helfer.bedeutungenOffen()) {
 			if (m === "Ctrl" && /^(ArrowDown|ArrowUp)$/.test(evt.key)) {
 				bedeutungen.navi(evt);
-			} else if (!m) {
+				return;
+			} else if (!m && bedeutungen.moveAktiv) {
 				bedeutungen.move(evt);
+				return;
 			}
-			return;
 		}
 		// KARTEIKARTE ist aktiv, kein Overlay
-		if (helfer.belegOffen()) {
-			if (m === "Ctrl" && evt.key === "ArrowDown") {
-				beleg.ctrlSpringen(evt);
-			}
+		if (helfer.belegOffen() && m === "Ctrl" && evt.key === "ArrowDown") {
+			beleg.ctrlSpringen(evt);
 			return;
 		}
 		// NAVIGATION HOCH || RUNTER
@@ -183,8 +182,16 @@ let tastatur = {
 			parent = parent.parentNode;
 		}
 		// Elemente sammeln und Fokus-Position ermitteln
-		let elemente = parent.querySelectorAll(`a, input[type="button"]`),
-			pos = -1;
+		let elemente = [];
+		parent.querySelectorAll(`a, input[type="button"]`).forEach(e => {
+			if ( e.nodeName === "INPUT" || e.nodeName === "A" && /filter-kopf|icon-link|navi-link/.test(e.getAttribute("class")) ) {
+				elemente.push(e);
+			}
+		});
+		if (!elemente.length) {
+			return;
+		}
+		let pos = -1;
 		for (let i = 0, len = elemente.length; i < len; i++) {
 			if (elemente[i] === aktiv) {
 				pos = i;
@@ -227,10 +234,11 @@ let tastatur = {
 				hilfe.bildSchliessen();
 				return;
 			}
-			// Fenster schließen
-			const {remote} = require("electron"),
-				win = remote.getCurrentWindow();
-			win.close();
+			setTimeout(() => {
+				const {remote} = require("electron"),
+					win = remote.getCurrentWindow();
+				win.close();
+			}, 50); // ohne Timeout wird sonst mitunter das Nebenfenster geschlossen, aus dem dieses Nebenfenster geöffnet wurde
 			return;
 		}
 		// Key " " || "PageUp" || "PageDown" (Changelog, Dokumentation, Handbuch)

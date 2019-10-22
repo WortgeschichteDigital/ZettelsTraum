@@ -646,4 +646,15 @@ let hilfe = {
 			forward.classList.remove("navigierbar");
 		}
 	},
+	// das Laden-Overlay ausblenden
+	// (sonst flackern Dokumentation und Handbuch am Anfang)
+	ladenAus () {
+		setTimeout(function() {
+			let laden = document.getElementById("laden");
+			laden.classList.add("geladen");
+			laden.addEventListener("transitionend", function() {
+				this.classList.add("aus");
+			});
+		}, 250);
+	},
 };

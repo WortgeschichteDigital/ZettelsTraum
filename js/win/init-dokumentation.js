@@ -75,12 +75,15 @@ window.addEventListener("load", () => {
 	// externe Links
 	document.querySelectorAll(`a[href^="http"]`).forEach(a => helfer.externeLinks(a));
 
+	// START-SEKTION ANZEIGEN
+	hilfe.sektionWechseln("start", false);
+
 	// SIGNALE DES MAIN-PROZESSES
 	const {ipcRenderer} = require("electron");
 	ipcRenderer.on("oeffne-abschnitt", (evt, abschnitt) => hilfe.naviSprungAusfuehren(abschnitt));
 
-	// START-SEKTION ANZEIGEN
-	hilfe.sektionWechseln("start", false);
+	// Laden-Overlay ausblenden
+	hilfe.ladenAus();
 });
 
 window.addEventListener("beforeunload", () => {
