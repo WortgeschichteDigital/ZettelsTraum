@@ -12,6 +12,7 @@ const packager = require("electron-packager"),
 	jahr = prepare.getYear();
 
 let config = {
+	platform: typ,
 	arch: "x64",
 	dir: "./",
 	out: "../build",
@@ -22,21 +23,16 @@ let config = {
 	asar: true,
 	prune: true,
 	junk: true,
-	name: "Zettel’s Traum",
+	name: "zettelstraum",
 	appCopyright: `© ${jahr} Akademie der Wissenschaften zu Göttingen`,
 };
 
 switch (typ) {
 	case "darwin":
-		config.platform = "darwin";
 		config.icon = "img/icon/mac/icon.icns";
 		config.appCategoryType = "public.app-category.utilities";
 		break;
-	case "linux":
-		config.platform = "linux";
-		break;
 	case "win32":
-		config.platform = "win32";
 		config.icon = "img/icon/win/icon.ico";
 		config.win32metadata = {
 			CompanyName: "Nico Dorn <ndorn@gwdg.de>",
@@ -49,13 +45,16 @@ switch (typ) {
 
 // Paketierer
 packager(config)
-	.then(paths => {
+	.then(() => {
 		let os = "Linux";
 		if (typ === "darwin") {
 			os = "macOS";
 		} else if (typ === "win32") {
 			os = "Windows";
 		}
-		console.log(`\n${os}-Paketierung erstellt!\n  ${paths[0]}`);
+		console.log(`${os}-Paketierung erstellt!`);
 	})
-	.catch( err => console.log(new Error(err)) );
+	.catch(err => {
+		console.log(new Error(err));
+		process.exit(1);
+	});

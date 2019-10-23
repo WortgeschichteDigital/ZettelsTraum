@@ -14,6 +14,7 @@
 
 		<script src="../js/app/helfer.js"></script>
 
+		<script src="../js/win/init-common.js"></script>
 		<script src="../js/win/init-changelog.js"></script>
 		<script src="../js/win/helferWin.js"></script>
 	</head>
@@ -39,7 +40,7 @@
 			<div class="version">0.24.0</div>
 
 			<div>
-				<h2><span>Version 0.24.0-beta.1</span><time datetime="2019-10-14T13:59:30">14. Oktober 2019</time></h2>
+				<h2><span>Version 0.24.0-beta.2</span><time datetime="2019-10-23T21:59:30">23. Oktober 2019</time></h2>
 
 				<h3>Neue Funktionen</h3>
 
@@ -124,6 +125,8 @@
 
 					<li>Zum Paketieren der App werden nun keine Kommandozeilenbefehle mehr benutzt, sondern ein moderneres Node-Script. <abbr title="Vergleiche">Vgl.</abbr> den <abbr title="Abschnitt">Abschn.</abbr> zum <a href="#framework-paketieren" class="link-dokumentation">Paketieren der App</a> in der <a href="#" class="link-dokumentation">technischen Dokumentation</a>.</li>
 
+					<li>Die Init-Scripts der Nebenfenster wurden reorganisiert. Sie lassen sich jetzt leichter verwalten. Bei der Aktion wurde immens viel doppelter Code eliminiert.</li>
+
 					<li><a href="#" class="ueber-electron"><i>Electron</i></a>-Update auf Version 6.1.0.</li>
 				</ul>
 
@@ -187,6 +190,8 @@
 					<li>Das Icon im Programmmenü für die Funktion <a href="#menueKartei-formvarianten" class="link-handbuch"><i>Kartei &gt; Formvarianten</i></a> war veraltet.</li>
 
 					<li>Beim Öffnen des <a href="#" class="link-handbuch">Handbuchs</a> und der <a href="#" class="link-dokumentation">technischen Dokumentaiton</a> flackerten der Fensterinhalt mitunter stark.</li>
+
+					<li>Das Installieren und Deinstallieren von DEB-Paketen war reichlich langsam, was an unnötigen Kommandos zur Registrierung des <abbr title="Wortgeschichte digital">WGD</abbr>-Dateityps lag. Diese funktioniert seit einiger Zeit <span lang="en">out of the box</span>, zumindest weitgehend.</li>
 				</ul>
 			</div>
 

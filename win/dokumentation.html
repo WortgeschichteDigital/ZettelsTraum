@@ -13,6 +13,7 @@
 
 		<script src="../js/app/helfer.js"></script>
 
+		<script src="../js/win/init-common.js"></script>
 		<script src="../js/win/init-dokumentation.js"></script>
 		<script src="../js/win/helferWin.js"></script>
 		<script src="../js/win/hilfe.js"></script>
@@ -68,9 +69,9 @@
 
 					<p><i>Electron</i> übernimmt die schwierigen Aufgaben, die sich beim Programmieren einer Desktop-App stellen. Es kümmert sich um die Integration in das Betriebssystem, ermöglicht also lesende und schreibende Dateizugriffe sowie das Öffnen externer Programme, erzeugt die Dateidialoge zum Öffnen und Speichern der Karteien und verwaltet über den betriebssystemeigenen Fenster-Manager die einzelnen Programmfenster, in denen eine leicht eingedampfte Variante des <i>Chromium</i>-Browsers für die Anzeige zuständig ist. Jedes Programmfenster läuft in einem eigenen Renderer-Prozess, weswegen die einzelnen Fenster nicht direkt miteinander kommunizieren können. Das Öffnen der Programmfenster und die Darstellung der Fenster-Menüs werden im Wesentlichten über den Main-Prozess gesteuert, über den die App initialisiert wird. Dieser wiederum kann mit allen Fenstern kommunizieren.</p>
 
-					<p>Der Main-Prozess wird über die Scripts in der Datei <span class="datei">./main.js</span> im Wurzelverzeichnis des Quellcodes gesteuert (das Wurzelverzeichnis des App-Codes wird im Folgenden immer durch <span class="datei">./</span> bezeichnet). Vermittelt über diesen Prozess können die Fenster miteinander in Kommunikation treten. Über das Objekt <code class="quelltext">ipcMain</code> hört der Main-Prozess auf Meldungen der Renderer-Prozesse, die diese via <code class="quelltext">ipcRenderer</code> abgeschickt haben (<abbr title="vergleiche">vgl.</abbr> den Code in <span class="datei">./main.js</span> und <span class="datei">./js/app/init-app.js</span>).</p>
+					<p>Der Main-Prozess wird über die Scripts in der Datei <span class="datei">./main.js</span> im Wurzelverzeichnis des Quellcodes gesteuert (das Wurzelverzeichnis, in dem der App-Code liegt, wird im Folgenden immer durch <span class="datei">./</span> bezeichnet). Vermittelt über diesen Prozess können die Fenster miteinander in Kommunikation treten. Über das Objekt <code class="quelltext">ipcMain</code> hört der Main-Prozess auf Meldungen der Renderer-Prozesse, die diese via <code class="quelltext">ipcRenderer</code> abgeschickt haben (<abbr title="vergleiche">vgl.</abbr> den Code in <span class="datei">./main.js</span> und <span class="datei">./js/app/init-app.js</span>).</p>
 
-					<p>Daneben erleichtert <i>Electron</i> das <a href="#framework-paketieren">Paketieren der App</a> für die Betriebssysteme <i>Linux</i>, <i>Windows</i> und <i>macOS</i> enorm. Außerdem können <a href="#framework-installer">Installer</a> für die einzelnen Betriebssysteme gebaut werden.</p>
+					<p>Daneben erleichtert <i>Electron</i> das <a href="#framework-paketieren">Paketieren der App</a> für die Betriebssysteme <i>Linux</i>, <i>Windows</i> und <i>macOS</i> enorm. Außerdem können relativ leicht <a href="#framework-installer">Installer</a> für die einzelnen Betriebssysteme gebaut werden.</p>
 
 					<p>Die <abbr title="Application Programming Interface" lang="en">API</abbr> von <i>Electron</i> ist sehr gut <a href="https://electronjs.org/docs">dokumentiert</a>; das Framework-Motto <q lang="en">It’s easier than you think</q>, somit gar nicht falsch. Für einen raschen Einstieg empfiehlt sich das zweiteilige, sehr übersichtliche <a href="https://electronjs.org/docs/tutorial/quick-start">Quick-Start-Tutorial</a>.</p>
 
@@ -79,7 +80,7 @@
 
 					<p>Im Folgenden wird die Einrichtung von <i>Electron</i> auf einer <i>Linux</i>-Distribution beschrieben, die auf <a href="https://www.ubuntu.com/"><i>Ubuntu</i></a> basiert. Die Anweisungen dürften aber für alle Betriebssystem ähnlich sein, denn auch unter <i>Windows</i> wird <i>Node.js</i> <abbr title="beispielsweise">bspw.</abbr> über die Eingabeaufforderung gesteuert.</p>
 
-					<p>Zunächst muss <i>Node.js</i> mit seinem Paketmanager <code>npm</code> installiert werden (für <i>Windows</i> gibt es <a href="https://nodejs.org/en/download/">eigene Installer</a>):</p>
+					<p>Zunächst muss <i>Node.js</i> mit seinem Paketmanager <code>npm</code> installiert werden (für <i>Windows</i> und <i>macOS</i> gibt es <a href="https://nodejs.org/en/download/">eigene Installer</a>):</p>
 
 					<pre>sudo apt-get install nodejs</pre>
 
@@ -96,7 +97,7 @@
 					<pre>cd ./
 npm install --save-dev electron</pre>
 
-					<p>Während der Installation werden der Ordner <span class="datei">./node_modules/</span> und die Datei <span class="datei">./package-lock.json</span> erstellt. Der Ordner <span class="datei">./node_modules/</span> kann mehrere Hundert Megabyte groß sein!</p>
+					<p>Während der Installation werden der Ordner <span class="datei">./node_modules/</span> und die Datei <span class="datei">./package-lock.json</span> erzeugt. Der Ordner <span class="datei">./node_modules/</span> kann mehrere Hundert Megabyte groß sein!</p>
 
 					<p>Da im Herzen von <i>Electron</i> ein Browser schlägt und Browser fortwährend mit Sicherheitsupdates versorgt werden wollen, gibt es sehr häufig (<abbr title="in der Regel">i. d. R.</abbr> alle ein bis zwei Wochen) <a href="https://electronjs.org/releases/stable"><i>Electron</i>-Updates</a>. Das Update funktioniert genauso wie die Erstinstallation:</p>
 
@@ -113,9 +114,9 @@ npm install --save-dev electron</pre>
 
 					<pre>npm show electron version</pre>
 
-					<p>Die stabile Version von <i>Electron</i> liefert nie die jüngste Ausgabe von <i>Chromium</i>. Technisch ist der im Framework arbeitende Browser somit zwar immer leicht veraltet, um die notwendigen Sicherheitsupdates kümmert sich das <i>Electron</i>-Team aber fortwährend.</p>
+					<p>Die stabile Version von <i>Electron</i> liefert normalerweise nicht die jüngste Ausgabe von <i>Chromium</i>. Technisch ist der im Framework arbeitende Browser somit zwar meist leicht veraltet, um die notwendigen Sicherheitsupdates kümmert sich das <i>Electron</i>-Team aber fortwährend.</p>
 
-					<p>Neben der jüngsten stabilen Version von <i>Electron</i> werden auch ältere Ausgaben für einen längeren Zeitraum mit Updates versorgt. Möchte man nicht gleich mit dem ersten Release eines neuen Zweiges auf diesen wechseln, muss man den Releasezweig angeben, von dem man Updates beziehen will. Um es <abbr title="beispielsweise">bspw.</abbr> zu vermeiden, die Version 5.0 zu benutzen, muss man den Update-Befehl etwas anpassen, um weiterhin Updates des Release-Zweigs 4.1 zu bekommen:</p>
+					<p>Neben der jüngsten stabilen Version von <i>Electron</i> werden auch ältere Ausgaben für einen längeren Zeitraum mit Updates versorgt. Möchte man nicht gleich mit dem ersten Release eines neuen Zweiges auf diesen wechseln, muss man den Releasezweig angeben, von dem man Updates beziehen will. Um es <abbr title="beispielsweise">bspw.</abbr> zu vermeiden, die Version 5.0.x zu benutzen, muss man den Update-Befehl etwas anpassen, um weiterhin Updates des Release-Zweigs 4.1.x zu bekommen:</p>
 
 					<pre>npm install --save-dev electron@4-1-x</pre>
 
@@ -130,18 +131,19 @@ npm install --save-dev electron</pre>
 
 					<pre class="quelltext">"main": "main.js",</pre>
 
-					<p>Und unter <code class="quelltext">"scripts"</code> steht <abbr title="unter anderem">u. a.</abbr> die Information, wie das Programm gestartet werden soll:</p>
+					<p>Und unter <code class="quelltext">"scripts"</code> steht die Information, wie das Programm gestartet werden soll:</p>
 
 					<pre class="quelltext">"scripts": {
-	"start": "electron .",
-	...
+	"start": "electron ."
 }</pre>
+
+					<p>(An diese Stelle könnte man auch Scripts zum <a href="#framework-paketieren">Paketieren der App</a> schreiben. Das geht aber mittlerweile deutlich komfortabler auch mit einem Node-Script.)
 
 					<p>Für den Start der App ist bereits alles eingerichtet. Nach der Installation von <i>Electron</i> muss man im Programmordner nur noch den folgenden Befehl ausführen:</p>
 
 					<pre>npm start</pre>
 
-					<p>Nun sollte <i class="app-name"></i> im Entwickler-Modus gestartet werden. <abbr title="Das heißt">D. h.</abbr> konkret, dass sich über das Tastaturkürzel <kbd>Strg</kbd> + <kbd>⇧</kbd> + <kbd>I</kbd> die <i lang="en">Developer Tools</i> von <i>Chromium</i> öffnen lassen, die in der paketierten Version nicht mehr aufgerufen werden können. Außerdem erscheint im Hauptfenster das App-Menü <i>Dev</i>, das nach der Paketierung verschwunden ist.</p>
+					<p>Nun sollte <i class="app-name"></i> im Entwickler-Modus gestartet werden. <abbr title="Das heißt">D. h.</abbr> konkret, dass sich über das Tastaturkürzel <kbd>Strg</kbd> + <kbd>⇧</kbd> + <kbd>I</kbd> die <i lang="en">Developer Tools</i> von <i>Chromium</i> öffnen lassen, die in der paketierten Version nicht mehr aufgerufen werden können. Außerdem erscheint in der Menüleiste des Hauptfensters der Menüpunkt <i>Dev</i>, der beim Paketieren eliminiert wird.</p>
 
 					<!-- Paketieren -->
 					<h2 id="framework-paketieren">Paketieren der App</h2>
@@ -151,53 +153,93 @@ npm install --save-dev electron</pre>
 					<pre>cd ./
 npm install --save-dev electron-packager</pre>
 
-					<p>Der Packager wird – natürlich – über die Kommandozeile bedient:</p>
+					<p>Den Packager könnte man durchaus über die Kommandozeile bedienen:</p>
 
 					<pre>electron-packager . zettelstraum [OPTIONEN]</pre>
 
-					<p>Der <code>.</code> steht für das Quellverzeichnis und <code>zettelstraum</code> für den App-Namen. Über die zur Verfügung stehenden Optionen gibt die <a href="https://github.com/electron-userland/electron-packager/blob/master/docs/api.md"><abbr title="Application Programming Interface" lang="en">API</abbr></a>-Dokumentation des Packagers ausführlich Auskunft.</p>
+					<p>Der <code>.</code> steht für das Quellverzeichnis und <code>zettelstraum</code> für den App-Namen.</p>
 
-					<p>Im Prinzip muss man sich mit dieser Dokumentation allerdings nicht weiter beschäftigen, da für das Paketieren bereits alles eingerichtet ist. In der <span class="datei">./package.json</span> sind die Kommandozeilen-Befehle im Abschnitt <code class="quelltext">"scripts"</code> für das Erstellen von <i>Linux-</i> und <i>Windows</i>-Paketen bereits eingetragen. Die paketierte Version von <i class="app-name"></i> wird eine Ebene oberhalb des Wurzelverzeichnisses in einem Ordner namens <span class="datei">build</span> abgelegt. Existiert der Ordner nicht, wird er automatisch erzeugt. Die Option <code>--overwrite</code> sorgt dafür, dass alte Paketierungen im Ordner <span class="datei">../build</span> vor dem erneuten Paketieren entfernt werden. Die Scripts können über die folgenden Befehle ausgeführt werden. Für <i>Linux</i>:</p>
+					<p>Besser ist es jedoch, ihn über ein Node-Script zu steuern. Das macht das Ganze variabler und deutlich übersichtlicher. Über die zur Verfügung stehenden Optionen gibt die <a href="https://github.com/electron-userland/electron-packager/blob/master/docs/api.md"><abbr title="Application Programming Interface" lang="en">API</abbr></a>-Dokumentation des Packagers ausführlich Auskunft.</p>
 
-					<pre>npm run package-linux</pre>
+					<p>Im Prinzip muss man sich mit dieser Dokumentation allerdings nicht weiter beschäftigen, da für das Paketieren bereits alles eingerichtet ist: In der <span class="datei">./packager.js</span> befinden sich Node-Scripts, die das Erstellen von <i>Linux-</i>, <i>Windows-</i> und <i>macOS</i>-Paketen übernehmen. Die paketierte Version von <i class="app-name"></i> wird nach dem Ausführen eine Ebene oberhalb des Wurzelverzeichnisses in einem Ordner namens <span class="datei">build</span> abgelegt. Existiert der Ordner nicht, wird er automatisch erzeugt. Die Option <code class="quelltext">overwrite: true</code> sorgt dafür, dass alte Paketierungen im Ordner <span class="datei">../build</span> vor dem erneuten Paketieren entfernt werden. Die Scripts können über die folgenden Befehle ausgeführt werden.</p>
 
-					<p>Und für <i>Windows</i>:</p>
+					<ul>
+						<li>
+							<p>Für <i>Linux</i>:</p>
 
-					<pre>npm run package-win</pre>
+							<pre>node packager.js linux</pre>
+						</li>
 
-					<p>Die vordefinierten Scripts erstellen Pakete für eine 64-Bit-Architektur. Dies kann natürlich nach Belieben angepasst werden. Wie, darüber gibt die <a href="https://github.com/electron-userland/electron-packager/blob/master/docs/api.md"><abbr title="Application Programming Interface" lang="en">API</abbr></a> des Packagers Auskunft.</p>
+						<li>
+							<p>Für <i>Windows</i>:</p>
 
-					<p>Im Ordner <span class="datei">../build</span> befinden sich nun die Unterordner <span class="datei">zettelstraum-linux-x64</span> <abbr title="beziehungsweise">bzw.</abbr> <span class="datei">zettelstraum-win32-x64</span>. Die Unterordner enthalten die ausführbare Datei <span class="datei">zettelstraum</span> <abbr title="beziehungsweise">bzw.</abbr> <span class="datei">zettelstraum.exe</span>. Über diese kann das paketierte Programm ohne vorherige Installation gestartet werden.</p>
+							<pre>node packager.js win32</pre>
+						</li>
 
-					<p>Auch wenn die ausführbare Programm-Datei um die 100 Megabyte groß ist – ohne die anderen Dateien und Verzeichnisse, die sich im Paket-Ordner befinden, kann die App nicht gestartet werden. Möchte man sie auf ein anderes Betriebssystem kopieren, muss also immer der gesamte Ordner mit allen Dateien mitgenommen werden.</p>
+						<li>
+							<p>Für <i>macOS</i>:</p>
 
-					<p>Zum direkten Erstellen eines komprimierten Archivs, können die im nächsten Abschnitt beschriebenen Installer-Scripts verwendet werden. Mit ihnen lassen sich für <i>Windows</i> leicht ein ZIP-Archiv und für <i>Linux</i> ein TAR.GZ-Archiv erstellen.</p>
+							<pre>node packager.js darwin</pre>
+						</li>
+					</ul>
+
+					<p>Die mitgelieferten Scripts erstellen Pakete für eine 64-Bit-Architektur. Dies kann natürlich nach Belieben angepasst werden. Wie, darüber gibt die besagte <a href="https://github.com/electron-userland/electron-packager/blob/master/docs/api.md"><abbr title="Application Programming Interface" lang="en">API</abbr></a> des Packagers Auskunft.</p>
+
+					<p>Im Ordner <span class="datei">../build</span> befinden sich nun die Unterordner <span class="datei">zettelstraum-linux-x64</span>, <span class="datei">zettelstraum-win32-x64</span> <abbr title="beziehungsweise">bzw.</abbr> <span class="datei">zettelstraum-darwin-x64</span>. Die Unterordner enthalten eine ausführbare Datei, über die die App gestartet werden kann:</p>
+
+					<ul>
+						<li><i>Linux</i>: <span class="datei">zettelstraum-linux-x64/zettelstraum</span></li>
+
+						<li><i>Windows</i>: <span class="datei">zettelstraum-win32-x64/zettelstraum.exe</span></li>
+
+						<li><i>macOS</i>: <span class="datei">zettelstraum-darwin-x64/zettelstraum.app/Contents/MacOS/zettelstraum</span></li>
+					</ul>
+
+					<p>Auch wenn die ausführbare Programmdatei (im Falle von <i>Linux</i> und <i>Windows</i>) um die 100 Megabyte groß ist – ohne die anderen Dateien und Verzeichnisse, die sich im Paketordner befinden, kann die App nicht gestartet werden. Möchte man sie auf ein anderes Betriebssystem kopieren, muss also immer der gesamte Ordner mit allen Dateien mitgenommen werden.</p>
+
+					<p>Zum direkten Erstellen eines komprimierten Archivs, können die im nächsten Abschnitt beschriebenen Installer-Scripts verwendet werden. Mit ihnen lassen sich für <i>Windows</i> leicht ein ZIP-Archiv und für <i>Linux</i> und <i>macOS</i> ein TAR.GZ-Archiv erstellen.</p>
 
 					<!-- Installer -->
 					<h2 id="framework-installer">Installer bauen</h2>
 
-					<p>Ein bisschen schwieriger als die alleinige Paketierung ist das Bauen von Installern für die verschiedenen Betriebssysteme und Architekturen. Im Folgenden wird beschrieben, wie man mithilfe von <a href="https://github.com/electron-userland/electron-builder">electron-builder</a> Installer für <i>Windows</i> und <i>Linux</i> (AppImage, DEB- oder RPM-Pakete) erzeugt.</p>
+					<p>Ein bisschen schwieriger als die alleinige Paketierung ist das Bauen von Installern für die verschiedenen Betriebssysteme und Architekturen. Im Folgenden wird beschrieben, wie man mithilfe von <a href="https://github.com/electron-userland/electron-builder">electron-builder</a> Installer für <i>Windows</i> (<abbr title="Nullsoft Scriptable Install System" lang="en">NSIS</abbr>), <i>macOS</i> (<abbr title="Apple Disk Image" lang="en">DMG</abbr>)  und <i>Linux</i> (DEB <abbr title="oder">od.</abbr> RPM) erzeugt.</p>
 
 					<p>Zunächst einmal muss der Builder via <code>npm</code> installiert werden:</p>
 
 					<pre>cd ./
 npm install --save-dev electron-builder</pre>
 
-					<p>Die richtige Konfiguration des Builders zu finden, ist nicht so leicht, denn er kennt eine Vielzahl an <a href="https://www.electron.build/configuration/configuration">Konfigurationsmöglichkeiten</a>. Für das Erstellen eines <abbr title="Nullsoft Scriptable Install System" lang="en">NSIS</abbr>-Installers, eines AppImages, eines DEB- und eines RPM-Pakets finden sich im Wurzelverzeichnis der App bereits fertige Node-Scripts, die sich der <a href="https://www.electron.build/api/electron-builder" lang="en">Programmatic API</a> des Builders bedienen und einem die Konfigurationsarbeit abnehmen: <span class="datei">installer-win.js</span> und <span class="datei">installer-linux.js</span>. Alle Scripts erstellen Installer für eine 64-Bit-Architektur. Außerdem sind sie dafür eingerichtet, komprimierte Archive zu erstellen, die eine paketierte Version der App enthalten.</p>
+					<p>Die richtige Konfiguration des Builders zu finden, ist nicht so leicht, denn er kennt eine Vielzahl an <a href="https://www.electron.build/configuration/configuration">Konfigurationsmöglichkeiten</a>. Für das Erstellen von <abbr title="Nullsoft Scriptable Install System" lang="en">NSIS</abbr>-Installern, von <abbr title="Apple Disk Image" lang="en">DMG</abbr>-, DEB- und RPM-Paketen sowie von AppImages finden sich im Wurzelverzeichnis der App bereits fertige Node-Scripts, die sich der <a href="https://www.electron.build/api/electron-builder" lang="en">Programmatic API</a> des Builders bedienen und einem die Konfigurationsarbeit abnehmen: <span class="datei">installer-(linux|mac|win).js</span>. Alle Scripts erstellen Installer für eine 64-Bit-Architektur. Außerdem sind sie dafür eingerichtet, komprimierte Archive zu erstellen, die eine paketierte Version der App enthalten (ZIP im Falle von <i>Windows</i>, TAR.GZ im Falle von <i>Linux</i> und <i>macOS</i>). Gemeinsam genutzte Funktionen der Installer-Scripts stehen in der Datei <span class="datei">installer.js</span>.</p>
 
-					<p>Ausgeführt werden die Installer-Scripts mit <code>node</code>. Für den <i>Windows</i>-Installer heißt das:</p>
+					<p>Ausgeführt werden die Installer-Scripts mit <code>node</code>:</p>
 
-					<pre>node installer-win.js [nsis|zip]</pre>
+					<ul>
+						<li>
+							<p><i>Linux</i>:</p>
 
-					<p>und für die <i>Linux</i>-Installer:</p>
+							<pre>node installer-linux.js [appImage|deb|rpm|tar.gz]</pre>
+						</li>
 
-					<pre>node installer-linux.js [appImage|deb|rpm|tar.gz]</pre>
+						<li>
+							<p><i>Windows</i>:</p>
 
-					<p>Wird kein Argument angegeben, das den Paket-Typ spezifiziert, baut das <i>Linux</i>-Script ein DEB-Paket und das <i>Windows</i>-Script einen <abbr title="Nullsoft Scriptable Install System" lang="en">NSIS</abbr>-Installer.</p>
+							<pre>node installer-win.js [nsis|zip]</pre>
+						</li>
+
+						<li>
+							<p><i>macOS</i>:</p>
+
+							<pre>node installer-mac.js [dmg|tar.gz]</pre>
+						</li>
+					</ul>
+
+					<p><abbr title="Apple Disk Image" lang="en">DMG</abbr>-Pakete können nur unter <i>macOS</i> gebaut werden, wo man sich zunächst natürlich die entsprechende Entwicklungsumgebung eingerichtet haben muss. Darum konnte <span class="obacht">nicht getestet</span> werden, ob der Installer wirklich funktionstüchtige Images auswirft. Bei Korrekturbedarf gerne <a href="#" class="ueber-app">kontaktieren</a>.</p>
+
+					<p>Wird kein Argument angegeben, das den Paket-Typ spezifiziert, baut das <i>Linux</i>-Script ein DEB-Paket, das <i>Windows</i>-Script einen <abbr title="Nullsoft Scriptable Install System" lang="en">NSIS</abbr>-Installer und das <i>macOS</i>-Script ein <abbr title="Apple Disk Image" lang="en">DMG</abbr>-Paket.</p>
 
 					<p>Vor dem Start des eigentlichen Bauvorgangs wird überprüft, ob eine Ebene oberhalb des App-Verzeichnisses ein Ordner namens <span class="datei">build</span> existiert. Er wird <abbr title="gegebenenfalls">ggf.</abbr> automatisch erzeugt.</p>
 
-					<p>Der Linux-Installer erwartet für DEB- und RPM-Pakete, dass in <span class="datei">../build</span> eine Plain-Text-Datei mit dem Namen <span class="datei">changelog</span> liegt. Ist kein Changelog vorhanden, wird automatisch eine leere Datei erzeugt. Im Ordner <span class="datei">./installer/</span> gibt es ein PHP-Script, das mithilfe der Changelog-Datei der App (<span class="datei">./win/changelog.html</span>) einen DEB- <abbr title="beziehungsweise">bzw.</abbr> RPM-Changelog automatisch erstellen kann (zum Ausführen wird eine Command-line-Version von PHP benötigt):</p>
+					<p>Der Linux-Installer erwartet für DEB- und RPM-Pakete, dass in <span class="datei">../build</span> eine Plain-Text-Datei mit dem Namen <span class="datei">changelog</span> liegt. Ist kein Changelog vorhanden, wird automatisch eine leere Datei erzeugt. Im Ordner <span class="datei">./installer/</span> gibt es ein PHP-Script, das mithilfe der <a href="#" class="link-changelog">Changelog</a>-Datei der App (<span class="datei">./win/changelog.html</span>) und der Datei <span class="datei">./installer/maintainer.json</span> einen DEB- <abbr title="beziehungsweise">bzw.</abbr> RPM-Changelog automatisch erstellen kann (zum Ausführen wird eine Command-line-Version von PHP benötigt):</p>
 
 					<pre>cd ./installer
 php make-changelog.php [FORMAT] [PFAD]</pre>
@@ -208,15 +250,15 @@ php make-changelog.php [FORMAT] [PFAD]</pre>
 
 					<p>Für das Erstellen eines komprimierten TAR.GZ-Pakets spielt dieser Changelog natürlich keine Rolle.</p>
 
-					<p>Nach <abbr title="circa">ca.</abbr> ein, zwei Minuten (die genaue Zeit hängt natürlich vom Rechner, aber auch vom gewählten Installer ab), sollte die Meldung <code>Windows-Installer erstellt!</code> <abbr title="beziehungsweise">bzw.</abbr> <code>Linux-Installer erstellt!</code> erscheinen. Kommt diese Meldung, kann es eigentlich nicht zu größeren Fehlern gekommen sein. Im Verzeichnis <span class="datei">../build</span> befinden sich nun ein Ordner und mehrere Dateien. Interessant ist natürlich nur die Installer- <abbr title="beziehungsweise">bzw.</abbr> Archiv-Datei:</p>
+					<p>Nach <abbr title="circa">ca.</abbr> ein, zwei Minuten (die genaue Zeit hängt natürlich vom Rechner, aber auch vom gewählten Installer ab), sollte eine Meldung wie <code>Linux-Installer erstellt!</code> erscheinen. Kommt diese Meldung, kann es eigentlich nicht zu größeren Fehlern gekommen sein. Im Verzeichnis <span class="datei">../build</span> befinden sich nun ein Ordner und mehrere Dateien. Interessant ist natürlich nur die Installer- <abbr title="beziehungsweise">bzw.</abbr> Archiv-Datei:</p>
 
-					<p class="datei">zettelstraum_[VERSION]_[ARCHITEKTUR].(AppImage|deb|exe|rpm|tar.gz|zip)</p>
+					<p class="datei">zettelstraum_[VERSION]_[ARCHITEKTUR].(AppImage|deb|dmg|exe|rpm|tar.gz|zip)</p>
 
 					<p>Die ausführbare exe-Datei kann nun auf einen Windows-Rechner kopiert und installiert werden. (Getestet wurde die Installation nur auf <i>Windows 10</i>.)</p>
 
 					<p>Für die Installation der DEB-Datei gibt es einige Abhängigkeiten, die zuvor <abbr title="gegebenenfalls">ggf.</abbr> aufgelöst werden müssen:</p>
 
-					<pre>sudo apt-get install gconf2 gconf-service libnotify4 libappindicator1 libxtst6 libnss3 libxss</pre>
+					<pre>sudo apt-get install libgtk-3-0 libnotify4 libnss3 libxss1 libxtst6 xdg-utils libatspi2.0-0 libuuid1 libappindicator3-1 libsecret-1-0</pre>
 
 					<p>Danach kann das Paket installiert werden:</p>
 
@@ -232,6 +274,8 @@ php make-changelog.php [FORMAT] [PFAD]</pre>
 
 					<p>Für diesen Vorgang werden <abbr title="eventuell">evtl.</abbr> Root-Rechte benötigt.</p>
 
+					<p>Bei der Installation werden auch Dateityp-Icons abgelegt: <span class="datei">/usr/share/icons/hicolor/*/mimetypes/application-x-wgd.png</span>, und zwar jeweils in den Unterordnern <span class="datei">16x16</span>, <span class="datei">22x22</span>, <span class="datei">32x32</span>, <span class="datei">48x48</span>, <span class="datei">64x64</span> und <span class="datei">128x128</span>. Es könnte sein, dass die Desktopumgebung diese Icons den <abbr title="Wortgeschichte digital">WGD</abbr>-Dateien nicht automatisch zuordnet. Dies mit der UI des Systems manuell zu reparieren, sollte allerdings kein Problem sein, weil die Icons in den erwartbaren Standardordnern liegen.</p>
+
 					<p>Die Archiv-Dateien kann man an einem beliebigen Ort entpacken. Das Programm lässt sich über die ausführbare Datei <span class="datei">zettelstraum(.exe)</span> starten (vgl. <a href="#framework-paketieren">Paketieren der App</a>).</p>
 
 					<!-- Ordner -->
@@ -243,43 +287,49 @@ php make-changelog.php [FORMAT] [PFAD]</pre>
 
 					<p>Die <strong>Linux-Installer</strong> erstellen einen Programmordner unter <span class="datei">/opt/zettelstraum/</span> und legen eine Desktop-Datei im Ordner <span class="datei">/usr/share/applications/</span> ab: <span class="datei">zettelstraum.desktop</span>. Das Programm sollte sich nach der Installation also ganz normal über das Programm-Menü des Betriebssystems starten lassen.</p>
 
-					<p>Darüber hinaus legen sie auch eine Verknüpfung in <span class="datei">/usr/local/bin/</span> an. Die App kann somit auch über ein Terminal mit dem Befehl <code>zettelstraum</code> gestartet werden.</p>
+					<p>Darüber hinaus wird auch eine Verknüpfung in <span class="datei">/usr/local/bin/</span> angelegt. Die App kann somit problemlos über ein Terminal mit dem Befehl <code>zettelstraum</code> gestartet werden.</p>
 
-					<p>Das DEB-Paket kann einfach mit dem Paketmanager deinstalliert werden:</p>
+					<p>Das DEB-Paket kann mit dem Paketmanager deinstalliert werden:</p>
 
 					<pre>sudo apt-get purge zettelstraum</pre>
 
 					<p>Die Registrierung des <abbr title="Wortgeschichte digital">WGD</abbr>-Dateityps sollte dabei automatisch rückgängig gemacht werden (<abbr title="vergleiche">vgl.</abbr> dazu den Abschnitt <a href="#framework-installer">Installer bauen</a>).</p>
 
-					<p>Ob die App nun paketiert und installiert ist oder einfach via <code>npm start</code> aufgerufen wurde, das <i>Electron</i>-Framework erstellt automatisch einen Konfigurationsordner im Standard-Konfigurationsverzeichnis des Betriebssystems. Das ist unter <i>Linux</i>:</p>
+					<p>Für <strong>macOS</strong> konnte das Ganze mangels System mit einer entsprechenden Entwicklungsumgebung <span class="obacht">nicht getestet</span> werden.</p>
+
+					<p>Ob die App nun paketiert und installiert ist oder einfach via <code>npm start</code> aufgerufen wurde, das <i>Electron</i>-Framework erstellt automatisch einen Konfigurationsordner im Standard-Konfigurationsverzeichnis des Betriebssystems:</p>
 
 					<ul>
-						<li class="datei">~/.config/<span class="app-name"></span>/</li>
+						<li><i>Linux</i>: <span class="datei">~/.config/<span class="app-name"></span>/</span></li>
+
+						<li><i>Windows</i>: <span class="datei">C:\Users\[BENUTZERNAME]\AppData\Roaming\<span class="app-name"></span>\</span></li>
+
+						<li><i>macOS</i>: <span class="datei">~/Library/Application Support/<span class="app-name"></span>/</span></li>
 					</ul>
 
-					<p>Und unter <i>Windows 10</i>:</p>
-
-					<ul>
-						<li class="datei">C:\Users\[BENUTZERNAME]\AppData\Roaming\<span class="app-name"></span>\</li>
-					</ul>
-
-					<p>Die Dateien in dem Ordner werden alle von <i>Electron</i> verwaltet – bis auf die Datei <span class="datei">einstellungen.json</span>. Diese wird von der <span class="datei">./main.js</span> erstellt. In ihr werden die Einstellungen des Hauptfensters der App und die Größe und Position von einigen (aber nicht allen) Programmfenstern gespeichert. Welche Werte die App anlegt, lässt sich dem Objekt <code class="quelltext">optionen.data</code> in der Datei <span class="datei">./js/app/optionen.js</span> entnehmen. Die durch die Datei <span class="datei">./main.js</span> angelegten Werte finden sich <abbr title="ebenda">ebd.</abbr> im gleichnamigen Objekt <code class="quelltext">optionen.data</code>.</p>
+					<p>Die Dateien in dem Ordner werden alle von <i>Electron</i> verwaltet – bis auf die Datei <span class="datei">einstellungen.json</span>. Diese wird von der <span class="datei">./main.js</span> erstellt. In ihr werden die Einstellungen des Hauptfensters der App und die Größe und Position von einigen (aber nicht allen) Programmfenstern gespeichert. Welche Werte die App anlegt, lässt sich dem Objekt <code class="quelltext">optionen.data</code> in der Datei <span class="datei">./js/app/optionen.js</span> entnehmen.</p>
 
 					<!-- Quelltext -->
 					<h2 id="framework-quelltext">Quelltext in der paketierten und installierten App</h2>
 
-					<p>Durch die Option <code>--asar</code> wird der Quelltext beim <a href="#framework-paketieren">Paketieren</a> in einer Archivdatei abgelegt: <span class="datei">app.asar</span>. In den Paket-Ordnern <span class="datei">zettelstraum-linux-x64</span> <abbr title="beziehungsweise">bzw.</abbr> <span class="datei">zettelstraum-win32-x64</span> befindet sich die Datei im Unterordner <span class="datei">resources</span>.</p>
-
-					<p>Der Quelltext der App ist auch in den Installern <abbr title="beziehungsweise">bzw.</abbr> komprimierten Archiv-Dateien: Er wird im jeweiligen Programmordner ebenfalls im Unterordner <span class="datei">resources</span> abgelegt. Also entweder in</p>
+					<p>Durch die Option <code class="quelltext">asar: true</code> wird der Quelltext beim <a href="#framework-paketieren">Paketieren</a> in einer Archivdatei abgelegt: <span class="datei">app.asar</span>. Sie befindet sich an dieser Stelle:</p>
 
 					<ul>
-						<li class="datei">C:\Users\[BENUTZERNAME]\AppData\Local\Programs\zettelstraum\resources\</li>
+						<li><i>Linux</i>: <span class="datei">zettelstraum-linux-x64/resources/app.asar</span></li>
+
+						<li><i>Windows</i>: <span class="datei">zettelstraum-win32-x64/resources/app.asar</span></li>
+
+						<li><i>macOS</i>: <span class="datei">zettelstraum-darwin-x64/zettelstraum.app/Contents/Resources/app.asar</span></li>
 					</ul>
 
-					<p>oder in</p>
+					<p>Der Quelltext der App wird auch beim Installieren im jeweiligen Installationsordner abgelegt:</p>
 
 					<ul>
-						<li class="datei">/opt/zettelstraum/resources/</li>
+						<li><i>Linux</i>: <span class="datei">/opt/zettelstraum/resources/app.asar</span></li>
+
+						<li><i>Windows</i>: <span class="datei">C:\Users\[BENUTZERNAME]\AppData\Local\Programs\zettelstraum\resources\app.asar</span></li>
+
+						<li><i>macOS</i>: <span class="datei">???/app.asar</span></li>
 					</ul>
 
 					<p><a href="https://github.com/electron/asar">Asar</a> ist das Archiv-Programm von <i>Electron</i>, das ähnlich wie <code>tar</code> funktioniert: Der Inhalt ist nicht komprimiert, es werden schlicht Ordner und Dateien in einem Archiv zusammengefasst.</p>
@@ -288,7 +338,7 @@ php make-changelog.php [FORMAT] [PFAD]</pre>
 
 					<pre>npx asar extract app.asar [ZIELORDNER]</pre>
 
-					<p>Das Archiv enthält den vollständigen Quelltext von <i class="app-name"></i>. Allerdings fehlen die Dateien <span class="datei">./resources/*.xml</span>, die Tag-Listen für die Bedeutungsgerüst-Funktion enthalten. Sie liegen bereits entpackt im selben Ordner wie die <span class="datei">app.asar</span>.</p>
+					<p>Das Archiv enthält den vollständigen Quelltext von <i class="app-name"></i>. Allerdings fehlen in der installierten App die Dateien aus dem Ordner <span class="datei">./resources/*</span>. Sie liegen bereits entpackt im selben Ordner wie die <span class="datei">app.asar</span>.</p>
 				</section>
 
 				<!-- ORDNER UND DATEIEN -->
@@ -301,17 +351,21 @@ php make-changelog.php [FORMAT] [PFAD]</pre>
 					<ul>
 						<li><span class="datei">./index.html</span>: <abbr title="Hyptertext Markupt Language" lang="en">HTML</abbr>-Datei, die beim Öffnen des Hauptfensters geladen wird</li>
 
-						<li><span class="datei">./installer-linux.js</span>: Node-Script, das eine DEB- oder RPM-Datei erzeugt, mit der <i class="app-name"></i> auf <i>Debian</i>/<i>Ubuntu</i> <abbr title="beziehungsweise">bzw.</abbr> Distributionen, die auf RPM setzen, installiert werden kann; alternativ kann auch ein TAR.GZ-Archiv oder ein auf den meisten Distributionen lauffähiges AppImage gebaut werden</li>
+						<li><span class="datei">./installer-linux.js</span>: Node-Script, das ein DEB- oder RPM-Paket erzeugt, mit dem <i class="app-name"></i> auf <i>Debian</i>/<i>Ubuntu</i> <abbr title="beziehungsweise">bzw.</abbr> Distributionen, die auf RPM setzen, installiert werden kann; alternativ kann auch ein auf den meisten Distributionen lauffähiges AppImage gebaut oder das Programm in ein TAR.GZ-Archiv <a href="#ordner-packager">gepackt</a> werden</li>
 
-						<li><span class="datei">./installer-win.js</span>: Node-Script, das einen <abbr title="Nullsoft Scriptable Install System" lang="en">NSIS</abbr>-Installer erzeugt (alternativ auch ein ZIP-Archiv), mit dem <i class="app-name"></i> auf <i>Windows</i> installiert werden kann</li>
+						<li><span class="datei">./installer-mac.js</span>: Node-Script, das einen <abbr title="Apple Disk Image" lang="en">DMG</abbr>-Paket erzeugt, mit dem <i class="app-name"></i> auf <i>macOS</i> installiert werden kann; alternativ kann man eine als TAR.GZ komprimierte Paketierung erstellen; <abbr title="Apple Disk Image" lang="en">DMG</abbr>-Pakete können nur in <i>macOS</i> gebaut werden, darum wurde <span class="obacht">nicht getestet</span>, ob das Paket, das das Script erzeugt, wirklich funktioniert</li>
 
-						<li><span class="datei">./installer.js</span>: ein gemeinsam genutztes Modul für die Node-Scripts, die Installer erzeugen</li>
+						<li><span class="datei">./installer-win.js</span>: Node-Script, das einen <abbr title="Nullsoft Scriptable Install System" lang="en">NSIS</abbr>-Installer erzeugt mit dem <i class="app-name"></i> auf <i>Windows</i> installiert werden kann; alternativ kann man eine als ZIP komprimierte Paketierung erstellen</li>
 
-						<li><span class="datei">./LICENSE.*.txt</span>: Lizenzbestimmungen von <i class="app-name"></i> den Icons und Fonts</li>
+						<li><span class="datei">./installer.js</span>: ein gemeinsam genutztes Modul für die Node-Scripts, die Installer erzeugen sowie für die <a href="#ordner-packager">packager.js</a></li>
+
+						<li><span class="datei">./LICENSE.*.txt</span>: Lizenzbestimmungen von <i class="app-name"></i>, den Icons und Fonts</li>
 
 						<li><span class="datei">./main.js</span>: Node-Script, das die App initialisiert, die Programmfenster öffnet, lädt, verwaltet und für viele andere Dinge zuständig ist, was das Betriebssystem, auf dem <i class="app-name"></i> läuft, direkt betrifft</li>
 
 						<li><span class="datei">./package.json</span>: <abbr title="JavaScript Object Notation" lang="en">JSON</abbr>-Datei mit Meta-Informationen zu Programm, Autor und Lizenz sowie Angaben darüber, wie die App gestartet wird; <abbr title="vergleiche">vgl.</abbr> den Abschnitt <a href="#framework-starten">Starten der App</a></li>
+
+						<li id="ordner-packager"><span class="datei">./packager.js</span>: Node-Script, mit dem die App für <i>Windows, macOS</i> oder <i>Linux</i> paketiert werden kann; dabei werden keine Installer, sondern portable Ordner erzeugt, in denen eine ausführbare Datei zu finden ist</li>
 					</ul>
 
 					<!-- CSS -->
@@ -341,12 +395,14 @@ php make-changelog.php [FORMAT] [PFAD]</pre>
 						<li><span class="datei">./img/icon/</span>: Bilddateien mit dem Programm-Icon in verschiedenen Größen für unterschiedliche Betriebssysteme; für <i>Windows</i> gibt es eine <span class="datei">icon.ico</span>, für <i>macOS</i> eine <span class="datei">icon.icns</span> und für <i>Linux</i> einen Ordner mit <abbr title="Portable Network Graphics" lang="en">PNG</abbr>-Dateien</li>
 
 						<li><span class="datei">./img/menu/*.png</span>: Bilddateien, die nur von den Menüs verwendet werden, die das Framework verwaltet; dazu zählen das App-Menü am oberen Rand des Hauptfensters und die Kontextmenüs, die auf Rechtsklick erscheinen</li>
+
+						<li><span class="datei">./img/win/*.png</span>: Bilddateien, die von den Nebenfenstern (<a href="#" class="link-handbuch">Handbuch</a>, diese Dokumentation <abbr title="und so weiter">usw.</abbr>) geladen werden</li>
 					</ul>
 
 					<!-- Installer -->
 					<h2 class="datei" id="ordner-installer">./installer/</h2>
 
-					<p>Scripts, die für das Bauen von Installern genutzt werden (können). Sie werden im laufenden Betrieb von <i class="app-name"></i> nicht ausgeführt.</p>
+					<p>Scripts und Resourcen, die für das Bauen von Installern genutzt werden (können). Sie werden im laufenden Betrieb von <i class="app-name"></i> nicht ausgeführt.</p>
 
 					<!-- JavaScript -->
 					<h2 class="datei" id="ordner-js">./js/</h2>
@@ -355,7 +411,7 @@ php make-changelog.php [FORMAT] [PFAD]</pre>
 
 					<p>Die einzige Datei des Ordners <span class="datei">./js/app/</span>, die auch in Nebenfenstern benutzt wird, ist die <span class="datei">helfer.js</span>. Sie enthält meist kleinere Methoden, die in vielen verschiedenen Kontexten immer wieder genutzt werden. Analog dazu gibt es die Datei <span class="datei">./js/win/helferWin.js</span>, die allerdings nur von Nebenfenstern geladen wird.</p>
 
-					<p>Jede JavaScript-Datei enthält ein Objekt, das denselben Namen wie die Datei trägt. Es gibt allerdings Ausnahmen: Dies sind zum einen die JavaScript-Dateien im <a href="#ordner-root">Wurzelverzeichnis der App</a> und zum anderen Dateien mit dem Namensmuster <span class="datei">init-*.js</span>. In letzteren werden Events des Fensters initialisiert, zu dem die Datei gehört. Der Name der <abbr title="Hyptertext Markup Language">HTML</abbr>-Dateien im <a href="#ordner-win">Ordner <span class="datei">./win/</span></a> steht jeweils anstelle des Asterisks.</p>
+					<p>Jede JavaScript-Datei enthält ein Objekt, das denselben Namen wie die Datei trägt. Es gibt allerdings Ausnahmen: Dies sind zum einen die JavaScript-Dateien im <a href="#ordner-root">Wurzelverzeichnis der App</a> und zum anderen Dateien mit dem Namensmuster <span class="datei">init-*.js</span>. In letzteren werden Events des Fensters initialisiert, zu dem die Datei gehört. Der Name der <abbr title="Hyptertext Markup Language">HTML</abbr>-Dateien im <a href="#ordner-win">Ordner <span class="datei">./win/</span></a> steht jeweils anstelle des Asterisks. Eine Ausnahme bildet nur die <span class="datei">init-common.js</span>. Sie wird von allen Nebenfenstern genutzt.</p>
 
 					<p>Die Namen der JavaScript-Dateien zeigen an, welche Funktionalität die Scripts in ihnen bereitstellen. Manchmal ist dies nicht auf Anhieb klar, mitunter auch aus, sagen wir mal, <q class="einfach">historischen</q> Gründen: In einem frühen Programmierstadium wurde eine falsche Entscheidung getroffen, die später nicht revidiert wurde. Auch darum sollen einige der Dateien kurz beschrieben werden:</p>
 
@@ -396,7 +452,7 @@ php make-changelog.php [FORMAT] [PFAD]</pre>
 
 					<p>Der Unterordner <span class="datei">./resources/filetype/</span> enthält Icons für den <abbr title="Wortgeschichte digital">WGD</abbr>-Dateityp und Shell-Scripts, mit denen auf <i>Linux</i>-Systemen der Dateityp registriert oder entfernt werden kann. (Es gibt auch eine <abbr title="Scalable Vector Graphics">SVG</abbr>-Version des Dateityp-Icons: <span class="datei">./img/datei-wgd.svg</span>.)</p>
 
-					<p>Außerdem finden sich in dem Ordner <abbr title="Extensible Markup Language">XML</abbr>-Dateien mit Tag-Listen, die im Programm für die Bedeutungsgerüst-Funktion genutzt werden können.</p>
+					<p>Außerdem finden sich in dem Ordner <abbr title="Extensible Markup Language">XML</abbr>-Dateien mit Tag-Listen und eine <a href="#" class="hilfe-demo">Demonstrationskartei</a>, die im Programm für die Bedeutungsgerüst-Funktion genutzt werden können.</p>
 
 					<!-- Fenster -->
 					<h2 class="datei" id="ordner-win">./win/</h2>
@@ -410,11 +466,11 @@ php make-changelog.php [FORMAT] [PFAD]</pre>
 
 					<p>Der JavaScript-Code ist <i lang="en">vanilla</i>. Sprich: Es wurden keine Bibliotheken wie <i>jQuery</i> oder dergleichen verwendet. Programmiert wurde im <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode"><i lang="en">strict mode</i></a>, einer restringierten Variante von JavaScript, die <abbr title="zum Beispiel">z. B.</abbr> Zuweisungsoperationen zu nicht deklarierten Variablen unmöglich macht und vieles mehr unterbindet, was potenziell gefährlich oder einfach schlechter Stil ist. Außerdem verspricht strikter Code Zukunftssicherheit, weil mögliche Ergänzungen in der ECMAScript-Spezifikation bereits bedacht sind.</p>
 
-					<p>Beim Coden wurde der Grundregel gefolgt, Struktur, Layout und Funktion strikt voneinander zu trennen. In den <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>-Dateien finden sich darum weder <abbr title="Cascading Style Sheets" lang="en">CSS</abbr>-Style-Attribute noch Event-Handler von JavaScript. Die an Elemente gebundenen Events werden alle in den Dateien initialisiert, die <span class="datei">init-*.js</span> heißen.</p>
+					<p>Beim Coden wurde der Grundregel gefolgt, Struktur, Layout und Funktion strikt voneinander zu trennen. In den <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>-Dateien finden sich darum weder <abbr title="Cascading Style Sheets" lang="en">CSS</abbr>-Style-Attribute noch Event-Handler von JavaScript. Die an Elemente gebundenen Events werden alle über Dateien initialisiert, die <span class="datei">init-*.js</span> heißen.</p>
 
 					<p>Der JavaScript-Code wurde extensiv kommentiert. Im Ergebnis sollte immer nachvollziehbar sein, welche Aufgabe das Script an der jeweiligen Stelle erfüllt. So wird <abbr title="zum Beispiel">z. B.</abbr> bei jeder Funktion angegeben, wozu sie dient und welchen Variablentyp die Argumente haben.</p>
 
-					<p>Alle Funktionen stecken in Objekten, um den Namensraum des Fensters nicht zu vermüllen. Dabei steht in jeder JavaScript-Datei ein Objekt, das exakt denselben Namen wie die Datei trägt. Sucht man also die Methode <code class="quelltext">popup.oeffnen()</code> oder die Eigenschaft <code class="quelltext">popup.belegID</code> muss man nur nach der Datei <span class="datei">popup.js</span> Ausschau halten. Eine Ausnahme von diesem Schema bilden allein die Scripts im Wurzelverzeichnis und Dateien mit dem Namensmuster <span class="datei">init-*.js</span>. In letzteren werden Eventobjekte des Fensters initialisiert, zu dem die jeweilige Datei gehört. Das betreffende Fenster lässt sich leicht aus dem Dateinamen ableiten.</p>
+					<p>Alle Funktionen stecken in Objekten, um den Namensraum des Dokuments nicht zu vermüllen. Dabei steht in jeder JavaScript-Datei ein Objekt, das exakt denselben Namen wie die Datei trägt. Sucht man also die Methode <code class="quelltext">popup.oeffnen()</code> oder die Eigenschaft <code class="quelltext">popup.belegID</code> muss man nur nach der Datei <span class="datei">popup.js</span> Ausschau halten. Eine Ausnahme von diesem Schema bilden allein die Scripts im Wurzelverzeichnis und Dateien mit dem Namensmuster <span class="datei">init-*.js</span>. In letzteren werden Eventobjekte des Fensters initialisiert, zu dem die jeweilige Datei gehört. Das betreffende Fenster lässt sich leicht aus dem Dateinamen ableiten.</p>
 
 					<p><abbr title="Vergleiche">Vgl.</abbr> zu den JavaScript-Dateien die ausführlicheren Anmerkungen im Kapitel <a href="#ordner-js">Ordner und Dateien</a>.</p>
 

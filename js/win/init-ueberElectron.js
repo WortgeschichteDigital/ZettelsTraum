@@ -1,25 +1,20 @@
 "use strict";
 
 window.addEventListener("load", () => {
-	// Fensterttyp registrieren
+	// FENSTERTTYP REGISTRIEREN
 	window.fenstertyp = "electron";
-	// Programm-Name eintragen
-	const {app} = require("electron").remote;
-	document.getElementById("name").textContent = app.getName().replace("'", "’");
-	// Versionen eintragen
-	document.getElementById("version-electron").textContent = `Version ${process.versions.electron}`;
-	document.getElementById("version-nodejs").textContent = process.versions.node;
-	document.getElementById("version-chromium").textContent = process.versions.chrome;
-	document.getElementById("version-v8").textContent = process.versions.v8;
-	// externe Links
-	document.querySelectorAll(`a[href^="http"]`).forEach(a => helfer.externeLinks(a));
-	// Tastatur-Events abfangen
-	document.addEventListener("keydown", tastatur.init);
-});
 
-window.addEventListener("beforeunload", () => {
-	// Fenster dereferenzieren
-	const {remote, ipcRenderer} = require("electron"),
-		win = remote.getCurrentWindow();
-	ipcRenderer.send("fenster-dereferenzieren", win.id);
+	// INIT-COMMON
+	initCommon.appName();
+	initCommon.events();
+
+	// VERSIONEN EINTRAGEN
+	["electron", "node", "chrome", "v8"].forEach(i => {
+		let element = document.getElementById(`version-${i}`);
+		if (i === "electron") {
+			element.textContent = `Version ${process.versions[i]}`;
+		} else {
+			element.textContent = process.versions[i];
+		}
+	});
 });
