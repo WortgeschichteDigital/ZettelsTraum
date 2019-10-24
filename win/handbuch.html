@@ -1241,7 +1241,7 @@ Mustermann, Erika
 					<div class="info">
 						<p><i>Standard:</i> aktiviert</p>
 
-						<p>Wenn der Befehl <a href="#menueKartei-speichern"><i>Kartei &gt; Speichern</i></a> aufgerufen wird, wird bei aktivierter Einstellung eine Speicherkaskade ausgelöst: Die App stößt dann in allen Funktionen, in denen Änderungen noch nicht übernommen worden sind, das Speichern an. Ist die Funktion deaktivert wird das Speichern nur in der gerade sichtbaren Funktion ausgelöst. Stehen keine Änderungen mehr aus, wird die Kartei an sich gespeichert. Es sei denn, dies ist schon gesehehen. Weitere Details in den <a href="#menueKartei-speichern">Erläuterungen zum <i>Speichern</i>-Befehl</a>.</p>
+						<p>Wenn der Befehl <a href="#menueKartei-speichern"><i>Kartei &gt; Speichern</i></a> aufgerufen wird, wird bei aktivierter Einstellung eine Speicherkaskade ausgelöst: Die App stößt dann in allen Funktionen, in denen Änderungen noch nicht übernommen worden sind, das Speichern an. Ist die Funktion deaktivert, wird das Speichern nur in der gerade sichtbaren Funktion ausgelöst. Stehen keine Änderungen mehr aus, wird die Kartei an sich gespeichert. Es sei denn, dies ist schon gesehehen. Weitere Details in den <a href="#menueKartei-speichern">Erläuterungen zum <i>Speichern</i>-Befehl</a>.</p>
 					</div>
 
 					<p class="erklaerung-option">Einfügen-Fenster nach dem Einfügen schließen</p>
@@ -1492,6 +1492,10 @@ Mustermann, Erika
 
 					<p><mark>Alt + Menü-Shortcut nicht vergessen</mark></p>
 
+					<p><mark>macOS: Wiederherstellen ist wie unter Linux Umsch + Command + Z</mark></p>
+
+					<p><mark>macOS: Vollbild = Ctrl + Command + F</mark></p>
+
 					<h2 id="tastaturkuerzel-karteikarte">Karteikarte</h2>
 
 					<p><mark>…</mark></p>
@@ -1529,7 +1533,7 @@ Mustermann, Erika
 
 						<p>Die Liste <b>zuletzt verwendeter Karteien</b> ist auf zehn Einträge begrenzt. Sobald eine gelistete Kartei geöffnet wird, rückt diese an die oberste Stelle der Liste. Wird eine elfte Kartei geöffnet, verschwindet der letzte Listeneintrag. Es verschwindet also der Eintrag der Kartei, die am längsten nicht geöffnet wurde. Auf Wunsch können Sie in dieser Ansicht einzelne Einträge manuell aus der Liste entfernen: <i>Rechtsklick &gt; Aus Liste entfernen</i>. Beim Start der App wird überprüft, ob die Karteien in der Liste noch auf dem Rechner zu finden sind. Ist dem nicht der Fall, werden sie aus der Liste entfernt.</p>
 
-						<p>Zum <b>Erstellen einer neuen Kartei</b> kann man auch auf den Platzhaltertext <i>keine Kartei geöffnet</i> klicken. Außerdem kann man die Befehle in der Menüleiste nutzen. Allerdings stehen einem im Menü <a href="#menueKartei">Kartei</a> nur die Befehle <i>Erstellen, Öffnen</i> und <i>Zuletzt verwendet</i> und im Menü <a href="#menueBelege">Belege</a> überhaupt kein Punkt zur Verfügung. Unter <i>Linux</i> und <i>Windows</i> sind die deaktivierten Einträge ausgegraut; in <i>macOS</i> reagiert das Programm nicht, wenn man einen deaktivierten Eintrag auswählt.</p>
+						<p>Zum <b>Erstellen einer neuen Kartei</b> kann man auch auf den Platzhaltertext <i>keine Kartei geöffnet</i> klicken. Außerdem kann man die Befehle in der Menüleiste nutzen. Allerdings stehen einem im Menü <a href="#menueKartei">Kartei</a> nur die Befehle <i>Erstellen, Öffnen</i> und <i>Zuletzt verwendet</i> und im Menü <a href="#menueBelege">Belege</a> überhaupt kein Punkt zur Verfügung. Unter <i>Linux</i> und <i>Windows</i> sind die deaktivierten Einträge ausgegraut; in <i>macOS</i>, wo die Einträge nicht ausgegraut werden können, reagiert das Programm mit der Meldung, dass die Einträge erst nach dem Öffnen einer Kartei nutzbar seien.</p>
 
 						<p>Wird in einem Programmfenster, in dem gerade eine Kartei geöffnet ist, eine weitere <a href="#menueKartei-oeffnen">Kartei geöffnet</a> oder eine <a href="#menueKartei-erstellen">neue Kartei erstellt</a>, wird automatisch zum nächsten leeren Fenster gewechselt, sodass <b>leere Fenster</b> wie dieses auf Ihrem Desktop nicht überhandnehmen.</p>
 
@@ -1769,6 +1773,8 @@ Mustermann, Erika
 				<section id="sektion-menueBearbeiten" class="suche">
 					<p>Dieser Menüpunkt steht nur in <b>Hauptfenstern</b> zur Verfügung.</p>
 
+					<p>Unter <i>macOS</i> wird das <i>Bearbeiten</i>-Menü um den Befehl <i>Emoji &amp; Symbole</i> ergänzt. Dies macht das Betriebssystem automatisch; es ist in der App eigentlich nicht vorgesehen.</p>
+
 					<p class="erklaerung-icon-menues" id="menueBearbeiten-rueckgaengig"><img src="../img/pfeil-rund-links.svg" width="24" height="24" alt="">Rückgängig</p>
 
 					<div class="info">
@@ -1859,6 +1865,8 @@ Mustermann, Erika
 						<p>Skalierungsoptionen wie diese (auch die zur <a href="#menueAnsicht-anzeigeVerkleinern">Verkleinerung der Anzeige</a>) stehen <b>in Nebenfenstern</b> wie diesem oder dem <a href="#bedeutungsgeruest-fenster">Bedeutungsgerüst-Fenster</a> ebenfalls zur Verfügung. Da in diesen Nebenfenstern keine Menüleiste angezeigt wird, müssten Sie die Vergrößerung allerdings über das Tastaturkürzel <kbd>Strg</kbd> + <kbd>+</kbd> aufrufen.</p>
 
 						<p>Das im Menü <b>angezeigt Tastaturkürzel</b> <kbd>Strg</kbd> + <kbd>=</kbd> ist <strong class="obacht">falsch</strong> und wegen eines Fehlers im <a href="#framework" class="link-dokumentation">Framework</a> derzeit leider nicht zu korrigieren.</p>
+
+						<p>Unter <i>macOS</i> hingegen muss wirklich <kbd>⌘</kbd> + <kbd>=</kbd> gedrückt werden; sonst funktioniert das Kürzel nicht.</p>
 					</div>
 
 					<p class="erklaerung-icon-menues" id="menueAnsicht-anzeigeVerkleinern"><img src="../img/minus-quadrat.svg" width="24" height="24" alt="">Anzeige verkleinern</p>
@@ -1882,11 +1890,11 @@ Mustermann, Erika
 					<div class="info">
 						<p>Wechselt in die Vollbild-Anzeige.</p>
 
-						<p>In der Vollbild-Anzeige verschwinden Fenster- und Menüleiste, der Inhalt des Programmfensters nimmt somit den ganzen Bildschirm ein. Unter <i>Windows</i> wird die <b>Menüleiste</b> wieder sichtbar, wenn Sie den Mauszeiger an den oberen Rand des Bildschirms bewegen; unter <i>Linux</i> ist sie immer ausgeblendet, sodass Sie nur noch über die <a href="#tastaturkuerzel">Tastaturkürzel</a> Zugriff auf die Befehle haben.</p>
+						<p>In der Vollbild-Anzeige verschwinden Fenster- und Menüleiste, der Inhalt des Programmfensters nimmt somit den ganzen Bildschirm ein. Unter <i>Windows</i> und <i>macOS</i> wird die <b>Menüleiste</b> wieder sichtbar, wenn Sie den Mauszeiger an den oberen Rand des Bildschirms bewegen; unter <i>Linux</i> ist sie immer ausgeblendet, sodass Sie nur noch über die <a href="#tastaturkuerzel">Tastaturkürzel</a> Zugriff auf die Befehle haben.</p>
 
-						<p>Zum <b>Verlassen der Vollbild-Anzeige</b> müssen Sie das Tastaturkürzel <kbd>F11</kbd> drücken. Falls Sie als Betriebssystem <i>Windows</i> haben, können Sie alternativ erneut den Menüpunkt <i>Ansicht &gt; Vollbild</i> aufrufen. Und haben Sie sich das Icon für die Vollbild-Anzeige (<img src="../img/fenster-vollbild.svg" width="20" height="20" alt="">) in die <a href="#einstellungen-quick">Quick-Access-Bar</a> gelegt, können Sie auch mit diesem zwischen Vollbild- und Standard-Anzeige wechseln.</p>
+						<p>Zum <b>Verlassen der Vollbild-Anzeige</b> müssen Sie unter <i>Linux</i> das Tastaturkürzel <kbd>F11</kbd> drücken. Falls Sie als Betriebssystem <i>Windows</i> oder <i>macOS</i> haben, können Sie alternativ erneut den Menüpunkt <i>Ansicht &gt; Vollbild</i> aufrufen. Und haben Sie sich das Icon für die Vollbild-Anzeige (<img src="../img/fenster-vollbild.svg" width="20" height="20" alt="">) in die <a href="#einstellungen-quick">Quick-Access-Bar</a> gelegt, können Sie auch mit diesem zwischen Vollbild- und Standard-Anzeige wechseln.</p>
 
-						<p><b>In Nebenfenstern</b> können Sie die Vollbild-Anzeige nur via <kbd>F11</kbd> aufrufen und beenden.</p>
+						<p><b>In Nebenfenstern</b> können Sie die Vollbild-Anzeige nur via <kbd>F11</kbd> aufrufen und beenden. Unter <i>macOS</i> lautet das Kürzel abweichend <kbd>Ctrl</kbd> + <kbd>⌘</kbd> + <kbd>F</kbd>.</p>
 					</div>
 				</section>
 

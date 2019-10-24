@@ -601,12 +601,18 @@ let optionen = {
 		//   zeigt es auf [Installationsordner]/resources/app.asar;
 		// getPath("exe") funktioniert nur in der paktierten Version, allerdings muss
 		//   noch der Name der ausführbaren Datei entfernt werden; in der nicht-paketierten
-		//   App zeigt es auf die ausführbare Datei des Node-Modules
+		//   App zeigt es auf die ausführbare Datei des Node-Modules; unter macOS muss auch noch
+		//   der Pfad geändert werden
 		if (app.isPackaged) {
-			let reg = new RegExp(`${helfer.escapeRegExp(path.sep)}zettelstraum(\.exe)*$`);
+			const sep = helfer.escapeRegExp(path.sep);
+			let reg = new RegExp(`${sep}(MacOS${sep})*zettelstraum(\.exe)*$`);
 			basis = app.getPath("exe").replace(reg, "");
 		} else {
 			basis = app.getAppPath();
+		}
+		let resources = "resources";
+		if (process.platform === "darwin") {
+			resources = "Resources";
 		}
 		// XML-Dateien ermitteln => Dateien überprüfen + laden
 		let xml = [],
@@ -617,7 +623,7 @@ let optionen = {
 				withFileTypes: true,
 			};
 			const fs = require("fs");
-			fs.readdir(`${basis}/resources`, config, function(err, dateien) {
+			fs.readdir(path.join(basis, resources), config, function(err, dateien) {
 				if (err) {
 					reject(false);
 					return;
@@ -633,7 +639,7 @@ let optionen = {
 			.then(() => {
 				xml.forEach(function(i) {
 					promises.push(optionen.tagsCheckLaden({
-						datei: path.join(basis, "resources", i),
+						datei: path.join(basis, resources, i),
 					}));
 				});
 				Promise.all(promises).then(() => {

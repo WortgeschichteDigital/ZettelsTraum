@@ -205,7 +205,9 @@ let kartei = {
 	//     den Speichern-Dialog öffnen)
 	async speichern (speichern_unter) {
 		// Sperre für macOS (Menüpunkte können nicht deaktiviert werden)
-		if (!kartei.wort) {
+		if (!kartei.wort && speichern_unter) {
+			dialog.oeffnen("alert");
+			dialog.text("Um die Funktion <i>Kartei &gt; Speichern unter</i> zu nutzen, muss eine Kartei geöffnet sein.");
 			return;
 		}
 		// Wurden überhaupt Änderungen vorgenommen?
@@ -309,6 +311,8 @@ let kartei = {
 	schliessen () {
 		// Sperre für macOS (Menüpunkte können nicht deaktiviert werden)
 		if (!kartei.wort) {
+			dialog.oeffnen("alert");
+			dialog.text("Um die Funktion <i>Kartei &gt; Schließen</i> zu nutzen, muss eine Kartei geöffnet sein.");
 			return;
 		}
 		// Gibt es noch ein anderes Hauptfenster? Wenn ja => dieses Fenster komplett schließen

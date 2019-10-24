@@ -5,6 +5,8 @@ let meta = {
 	oeffnen () {
 		// Sperre für macOS (Menüpunkte können nicht deaktiviert werden)
 		if (!kartei.wort) {
+			dialog.oeffnen("alert");
+			dialog.text("Um die Funktion <i>Kartei &gt; Metadaten</i> zu nutzen, muss eine Kartei geöffnet sein.");
 			return;
 		}
 		// Fenster öffnen oder in den Vordergrund holen

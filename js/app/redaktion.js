@@ -34,6 +34,8 @@ let redaktion = {
 	oeffnen () {
 		// Sperre für macOS (Menüpunkte können nicht deaktiviert werden)
 		if (!kartei.wort) {
+			dialog.oeffnen("alert");
+			dialog.text("Um die Funktion <i>Kartei &gt; Redaktion</i> zu nutzen, muss eine Kartei geöffnet sein.");
 			return;
 		}
 		// Fenster öffnen oder in den Vordergrund holen
@@ -52,14 +54,6 @@ let redaktion = {
 		// Tabelle aufbauen und einhängen
 		let table = document.createElement("table");
 		cont.appendChild(table);
-		// Tabellenkopf
-		let tr = document.createElement("tr");
-		table.appendChild(tr);
-		kopfzelle(tr, " ");
-		kopfzelle(tr, "Datum");
-		kopfzelle(tr, "Ereignis");
-		kopfzelle(tr, "BearbeiterIn");
-		kopfzelle(tr, " ");
 		// Tabellenzellen
 		data.rd.forEach(function(i, n) {
 			let tr = document.createElement("tr");
@@ -105,12 +99,6 @@ let redaktion = {
 		});
 		// Zeile für neuen Eintrag
 		redaktion.tabelleNeu(table);
-		// Kopfzellen erzeugen
-		function kopfzelle (tr, text) {
-			let th = document.createElement("th");
-			th.textContent = text;
-			tr.appendChild(th);
-		}
 	},
 	// Zeile für einen neuen Eintrag erzeugen
 	//   table = Element

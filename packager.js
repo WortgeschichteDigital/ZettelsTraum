@@ -23,8 +23,8 @@ let config = {
 	asar: true,
 	prune: true,
 	junk: true,
-	name: "zettelstraum",
-	appCopyright: `© ${jahr} Akademie der Wissenschaften zu Göttingen`,
+	name: "Zettel’s Traum",
+	appCopyright: `© ${jahr}, Akademie der Wissenschaften zu Göttingen`,
 };
 
 switch (typ) {
@@ -45,7 +45,38 @@ switch (typ) {
 
 // Paketierer
 packager(config)
+	.then(async () => {
+		const fs = require("fs"),
+			fsPromises = fs.promises,
+			ordnerAlt = `Zettel’s Traum-${typ}-x64`,
+			ordnerNeu = `zettelstraum-${typ}-x64`;
+		// ggf. alten Ordner umbenennen
+		// (fsPromises.rmdir() hat zwar einen rekursiven Löschmodus,
+		// ist aber noch experimentell und funktioniert nicht gut)
+		let renameCount = 0,
+			renameString = "";
+		while (fs.existsSync(`../build/${ordnerNeu}${renameString}`)) {
+			renameCount++;
+			renameString = `-${renameCount}`;
+		}
+		if (renameCount > 0) {
+			await fsPromises.rename(`../build/${ordnerNeu}`, `../build/${ordnerNeu}${renameString}`);
+		}
+		// Ordner umbenennen
+		await fsPromises.rename(`../build/${ordnerAlt}`, `../build/${ordnerNeu}`);
+		// Resources müssen umkopiert werden
+		let resources = `../build/${ordnerNeu}/resources`;
+		if (typ === "darwin") {
+			resources = `../build/${ordnerNeu}/Zettel’s Traum.app/Contents/Resources`;
+		}
+		let files = await fsPromises.readdir(`${resources}/resources`);
+		for (let f of files) {
+			await fsPromises.rename(`${resources}/resources/${f}`, `${resources}/${f}`);
+		}
+		await fsPromises.rmdir(`${resources}/resources`);
+	})
 	.then(() => {
+		// Feedback
 		let os = "Linux";
 		if (typ === "darwin") {
 			os = "macOS";

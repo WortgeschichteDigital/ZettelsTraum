@@ -719,13 +719,18 @@ let helfer = {
 		let basis = "";
 		// vgl. optionen.tagsAutoLaden()
 		if (app.isPackaged) {
-			let reg = new RegExp(`${helfer.escapeRegExp(path.sep)}zettelstraum(\.exe)*$`);
+			const sep = helfer.escapeRegExp(path.sep);
+			let reg = new RegExp(`${sep}(MacOS${sep})*zettelstraum(\.exe)*$`);
 			basis = app.getPath("exe").replace(reg, "");
 		} else {
 			basis = app.getAppPath();
 		}
 		// Datei in den temporären Ordner kopieren
-		const quelle = path.join(basis, "resources", "Demonstrationskartei Team.wgd"),
+		let resources = "resources";
+		if (process.platform === "darwin") {
+			resources = "Resources";
+		}
+		const quelle = path.join(basis, resources, "Demonstrationskartei Team.wgd"),
 			ziel = path.join(app.getPath("temp"), "Demonstrationskartei Team.wgd");
 		fs.copyFile(quelle, ziel, err => {
 			if (err) {

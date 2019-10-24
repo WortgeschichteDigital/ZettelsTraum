@@ -304,6 +304,8 @@ let bedeutungen = {
 	oeffnen () {
 		// Sperre für macOS (Menüpunkte können nicht deaktiviert werden)
 		if (!kartei.wort) {
+			dialog.oeffnen("alert");
+			dialog.text("Um die Funktion <i>Kartei &gt; Bedeutungsgerüst</i> zu nutzen, muss eine Kartei geöffnet sein.");
 			return;
 		}
 		// Bedeutungen sind schon offen

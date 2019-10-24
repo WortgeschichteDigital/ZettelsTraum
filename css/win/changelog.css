@@ -17,6 +17,7 @@
 /* Struktur-Elemente ---------------------------- */
 body {
 	margin: 0;
+	background-color: #fff;
 	color: var(--text);
 	font: 16px/24px "Noto Sans", "Noto Sans Symbols2", sans-serif;
 	user-select: none;

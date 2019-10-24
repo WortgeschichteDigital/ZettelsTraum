@@ -382,7 +382,7 @@ layoutMenu.splice(layoutMenu.length - 1, 0, layoutMenuAnsicht[0]);
 
 // ggf. Developer-Menü ergänzen
 let devtools = false;
-if (!app.isPackaged) {
+if (!app.isPackaged || true) {
 	devtools = true;
 	let menus = [layoutMenu, layoutMenuAnsicht];
 	for (let i = 0, len = menus.length; i < len; i++) {
@@ -911,7 +911,18 @@ fenster = {
 		bw.once("ready-to-show", function() {
 			this.show();
 			if (abschnitt) {
-				this.webContents.send("oeffne-abschnitt", abschnitt);
+				let timeout = 0;
+				if (process.platform === "darwin") {
+					// macOS lahmt offenbar ein wenig mit dem Aufbau des Fensters;
+					// gibt es kein Timeout, springt er niemals zum Abschnitt;
+					// Timeout muss ziemlich hoch sein
+					timeout = 500;
+				}
+				setTimeout(() => {
+					// ohne Timeout funktioniert es zumindest unter macOS nicht;
+					// das Fenster braucht wohl ein wenig Zeit, um sich aufzubauen
+					this.webContents.send("oeffne-abschnitt", abschnitt);
+				}, timeout);
 			}
 		});
 	},

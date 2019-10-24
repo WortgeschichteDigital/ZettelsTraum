@@ -167,7 +167,7 @@ let tastatur = {
 			return;
 		}
 		// Abbruch, wenn "Ctrl"
-		if (evt.ctrlKey) {
+		if (m === "Ctrl") {
 			return;
 		}
 		// NAVIGATION LINKS || RECHTS
@@ -311,7 +311,13 @@ let tastatur = {
 			s.push("Ctrl");
 		}
 		if (evt.metaKey) {
-			s.push("Meta");
+			if (process.platform === "darwin") {
+				// unter macOS ist es besser, wenn die Command-Taste wie Ctrl agiert
+				// (in den Electron-Menüs wird dies automatisch so umgesetzt)
+				s.push("Ctrl");
+			} else {
+				s.push("Meta");
+			}
 		}
 		if (evt.shiftKey) {
 			s.push("Shift");

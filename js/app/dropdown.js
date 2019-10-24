@@ -150,7 +150,7 @@ let dropdown = {
 				}, 10); // damit andere Enter-Events, die an dem Input hängen, nicht auch noch ausgelöst werden
 			} else if (/^(ArrowDown|ArrowUp)$/.test(evt.key)) {
 				let drop = document.getElementById("dropdown");
-				if (!drop && !evt.ctrlKey && document.activeElement.nodeName === "TEXTAREA") { // sonst kann man in textareas nicht mehr navigieren
+				if (!drop && tastatur.modifiers !== "Ctrl" && document.activeElement.nodeName === "TEXTAREA") { // sonst kann man in textareas nicht mehr navigieren
 					return;
 				}
 				evt.preventDefault();

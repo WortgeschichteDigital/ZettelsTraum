@@ -40,7 +40,13 @@
 			<div class="version">0.24.0</div>
 
 			<div>
-				<h2><span>Version 0.24.0-beta.2</span><time datetime="2019-10-23T21:59:30">23. Oktober 2019</time></h2>
+				<h2><span>Version 0.24.0-beta.2</span><time datetime="2019-10-24T08:12:57">24. Oktober 2019</time></h2>
+
+				<h3>Entfernte Funktionen</h3>
+
+				<ul>
+					<li>Für Entwickler: Die Möglichkeit, mit den Installer-Scripts auch Paketierungen zu erstellen, wurde <strong>entfernt</strong>. Für Paketierungen der App gibt es nun das Script <span class="datei">packager.js</span>. Die neu hinzugefügten Build-Scripts (<abbr title="siehe unten">s. u.</abbr>) können die damit gebauten Ordner automatisch in Archive packen. Es besteht also keine Notwendigkeit mehr für diese Funktion.</li>
+				</ul>
 
 				<h3>Neue Funktionen</h3>
 
@@ -66,6 +72,8 @@
 
 						<p>Wurde beim Annotieren die Hintergrundfarbe auf transparent gesetzt, wird der Beleg mit dem <i>Annotierung</i>-Filter standardmäßig nicht gefunden. Unter <a href="#einstellungen-filterleiste" class="link-handbuch"><i><span class="app-name"></span> &gt; Einstellungen &gt; Filterleiste</i></a> gibt es jedoch <a href="#einstellungen-filterleisteTransparente" class="link-handbuch">eine Checkbox</a>, die man aktivieren kann, um beim Filtern auch Annotierungen mit einzubeziehen, die eine tranparente Hintergrundfarbe haben.</p>
 					</li>
+
+					<li>Für Entwickler: Im Ordner <span class="datei">./installer/</span> gibt es nun ein Build-Script: <span class="datei">build.sh</span>. Mit ihm kann man die App unter <i>Linux</i> komfortabel bauen. <a href="#ordner-installer" class="link-dokumentation">Details zu den Scripts in der technischen Dokumentation</a>.</li>
 				</ul>
 
 				<h3>Verbesserungen</h3>
@@ -107,7 +115,11 @@
 						<p>Genauso verfahren auch das <a href="#" class="link-handbuch">Handbuch</a> und die <a href="#" class="link-dokumentation">technische Dokumentation</a>. Damit die beiden Fenster, die beim Öffnen immer dieselbe Größe haben, nicht übereinanderliegen und einander verdecken, werden auch sie <abbr title="gegebenenfalls">ggf.</abbr> um 100 Pixel zueinander verschoben. Wird eines dieser Fenster nicht aus dem jeweils anderen Fenster aufgerufen, öffnet es sich wie gehabt zentriert.</p>
 					</li>
 
-					<li>An verschiedenen Stellen des Programms wurden Platzhaltertexte für leere Textfelder ergänzt, sodass nun alle Textfelder einen solchen Platzhalter haben sollten. Er erscheint, wenn in dem Feld noch keine Eingabe getätigt wurde. Die <a href="#karteikarte" class="link-handbuch">Karteikarte</a> wurde davon ausgenommen, um das Formular nicht noch unruhiger zu machen.</li>
+					<li>
+						<p>An verschiedenen Stellen des Programms wurden Platzhaltertexte für leere Textfelder ergänzt, sodass nun alle Textfelder einen solchen Platzhalter haben sollten. Er erscheint, wenn in dem Feld noch keine Eingabe getätigt wurde. Die <a href="#karteikarte" class="link-handbuch">Karteikarte</a> wurde davon ausgenommen, um das Formular nicht noch unruhiger zu machen.</p>
+
+						<p>Als Nebeneffekt dieser Änderung konnte die erklärende Kopfzeile im <a href="#menueKartei-redaktion" class="link-handbuch">Redaktions-Fenster</a> entfernt werden. Die Platzhalter übernehmen ihre Funktion.</p>
+					</li>
 
 					<li>Das Icon für die Funktion <a href="#menueAnsicht-standardgroesse" class="link-handbuch"><i>Ansicht &gt; Standardgröße</i></a> wurde geändert: <img src="../img/fenster-standard.svg" width="24" height="24" alt="">. Es ist nun klarer vom Icon für die Vollbild-Anzeige (<img src="../img/fenster-vollbild.svg" width="24" height="24" alt="">) unterschieden, dafür den Icons zum Vergrößern und Verkleinern der Anzeige ähnlicher.</li>
 
@@ -127,7 +139,7 @@
 
 					<li>Die Init-Scripts der Nebenfenster wurden reorganisiert. Sie lassen sich jetzt leichter verwalten. Bei der Aktion wurde immens viel doppelter Code eliminiert.</li>
 
-					<li><a href="#" class="ueber-electron"><i>Electron</i></a>-Update auf Version 6.1.0.</li>
+					<li><a href="#" class="ueber-electron"><i>Electron</i></a>-Update auf Version 6.1.1.</li>
 				</ul>
 
 				<h3>Behobene Fehler</h3>
@@ -356,7 +368,7 @@
 				<h3>Entfernte Funktionen</h3>
 
 				<ul>
-					<li>Karteikarte: Vor dem Aufbau des Belegtexts der Leseansicht wurde bisher immer nach Zeichenfolgen gesucht, die nach einer <abbr title="Uniform Resource Locator" lang="en">URL</abbr> aussehen, woraufhin diese als Hyperlink dargestellt wurden. Dieses Feature kann im Zusammenhang mit der Annotierung von Karteiwörtern (<abbr title="siehe unten">s. u.</abbr>) Probleme bereiten und wurde darum entfernt.</li>
+					<li>Karteikarte: Vor dem Aufbau des Belegtexts der Leseansicht wurde bisher immer nach Zeichenfolgen gesucht, die nach einer <abbr title="Uniform Resource Locator" lang="en">URL</abbr> aussehen, woraufhin diese als Hyperlink dargestellt wurden. Dieses Feature kann im Zusammenhang mit der Annotierung von Karteiwörtern (<abbr title="siehe unten">s. u.</abbr>) Probleme bereiten und wurde darum <strong>entfernt</strong>.</li>
 				</ul>
 
 				<h3>Neue Funktionen</h3>

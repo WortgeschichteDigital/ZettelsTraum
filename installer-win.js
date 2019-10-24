@@ -1,10 +1,7 @@
 "use strict";
 
 // Pakettyp
-let typ = process.argv[2];
-if (!typ || !/^(nsis|zip)$/.test(typ)) {
-	typ = "nsis";
-}
+let typ = "nsis";
 
 // Vorbereitung
 const builder = require("electron-builder"),
@@ -61,23 +58,12 @@ function makeConfig () {
 			],
 		},
 	};
-	// Anpassungen
-	if (typ === "zip") {
-		config.config.productName = "zettelstraum";
-		delete config.config.zip;
-	}
 }
 
 // Installer
 function startInstaller () {
 	builder.build(config)
-		.then(() => {
-			if (typ === "zip") {
-				console.log("Windows-Paketierung erstellt!");
-			} else {
-				console.log("Windows-Installer erstellt!");
-			}
-		})
+		.then(() => console.log("Windows-Installer erstellt!"))
 		.catch(err => {
 			console.log(new Error(err));
 			process.exit(1);

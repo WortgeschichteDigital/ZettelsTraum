@@ -247,6 +247,8 @@ window.addEventListener("load", () => {
 	ipcRenderer.on("belege-hinzufuegen", () => {
 		// Sperre für macOS (Menüpunkte können nicht deaktiviert werden)
 		if (!kartei.wort) {
+			dialog.oeffnen("alert");
+			dialog.text("Um die Funktion <i>Belege &gt; Hinzufügen</i> zu nutzen, muss eine Kartei geöffnet sein.");
 			return;
 		}
 		speichern.checkInit(() => beleg.erstellen());
@@ -254,6 +256,8 @@ window.addEventListener("load", () => {
 	ipcRenderer.on("belege-auflisten", () => {
 		// Sperre für macOS (Menüpunkte können nicht deaktiviert werden)
 		if (!kartei.wort) {
+			dialog.oeffnen("alert");
+			dialog.text("Um die Funktion <i>Belege &gt; Auflisten</i> zu nutzen, muss eine Kartei geöffnet sein.");
 			return;
 		}
 		speichern.checkInit(() => liste.wechseln());

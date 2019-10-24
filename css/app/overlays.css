@@ -1041,7 +1041,6 @@
 	margin: 0 auto;
 }
 
-#redaktion-cont th,
 #redaktion-cont td {
 	padding: 0 5px 5px 5px;
 	vertical-align: top;
@@ -1049,7 +1048,6 @@
 	white-space: nowrap;
 }
 
-#redaktion-cont th:first-child,
 #redaktion-cont td:first-child {
 	padding-left: 0;
 	min-width: 24px;
@@ -1071,17 +1069,10 @@
 	white-space: normal;
 }
 
-#redaktion-cont th:last-child,
 #redaktion-cont td:last-child {
 	padding-right: 0;
 	min-width: 24px;
 	max-width: 24px;
-}
-
-#redaktion-cont th {
-	font-style: italic;
-	font-weight: normal;
-	text-align: left;
 }
 
 #redaktion-cont img {

@@ -9,6 +9,8 @@ let kopieren = {
 	init () {
 		// Sperre für macOS (Menüpunkte können nicht deaktiviert werden)
 		if (!kartei.wort) {
+			dialog.oeffnen("alert");
+			dialog.text("Um die Funktion <i>Belege &gt; Kopieren</i> zu nutzen, muss eine Kartei geöffnet sein.");
 			return;
 		}
 		// Ist die Funktion schon an?
@@ -188,6 +190,8 @@ let kopieren = {
 	einfuegen () {
 		// Sperre für macOS (Menüpunkte können nicht deaktiviert werden)
 		if (!kartei.wort) {
+			dialog.oeffnen("alert");
+			dialog.text("Um die Funktion <i>Belege &gt; Einfügen</i> zu nutzen, muss eine Kartei geöffnet sein.");
 			return;
 		}
 		// Overlay-Fenster öffnen

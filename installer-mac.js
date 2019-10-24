@@ -1,10 +1,7 @@
 "use strict";
 
 // Pakettyp
-let typ = process.argv[2];
-if (!typ || !/^(dmg|tar\.gz)$/.test(typ)) {
-	typ = "dmg";
-}
+let typ = "dmg";
 
 // Vorbereitung
 const builder = require("electron-builder"),
@@ -61,22 +58,12 @@ function makeConfig () {
 			],
 		},
 	};
-	// Anpassungen
-	if (typ === "tar.gz") {
-		delete config.config["tar.gz"];
-	}
 }
 
 // Installer
 function startInstaller () {
 	builder.build(config)
-		.then(() => {
-			if (typ === "tar.gz") {
-				console.log("macOS-Paketierung erstellt!");
-			} else {
-				console.log("macOS-Installer erstellt!");
-			}
-		})
+		.then(() => console.log("macOS-Installer erstellt!"))
 		.catch(err => {
 			console.log(new Error(err));
 			process.exit(1);

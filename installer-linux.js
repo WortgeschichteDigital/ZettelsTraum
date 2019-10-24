@@ -2,7 +2,7 @@
 
 // Pakettyp
 let typ = process.argv[2];
-if (!typ || !/^(appImage|deb|rpm|tar\.gz)$/.test(typ)) {
+if (!typ || !/^(appImage|deb|rpm)$/.test(typ)) {
 	typ = "deb";
 }
 
@@ -17,14 +17,14 @@ let keywords = "",
 
 prepare.makeBuild()
 	.then(() => {
-		if (/^(appImage|tar\.gz)$/.test(typ)) {
+		if (typ === "appImage") {
 			return false;
 		} else {
 			prepare.makeChangelog();
 		}
 	})
 	.then(() => {
-		if (/^(appImage|tar\.gz)$/.test(typ)) {
+		if (typ === "appImage") {
 			return false;
 		} else {
 			prepare.getKeywords();
@@ -97,8 +97,6 @@ function makeConfig () {
 		};
 	} else if (typ === "deb") {
 		config.config[typ].priority = "optional";
-	} else if (typ === "tar.gz") {
-		delete config.config["tar.gz"];
 	}
 }
 
@@ -106,7 +104,7 @@ function makeConfig () {
 function startInstaller () {
 	builder.build(config)
 		.then(() => {
-			if (/^(appImage|tar\.gz)$/.test(typ)) {
+			if (typ === "appImage") {
 				console.log("Linux-Paketierung erstellt!");
 			} else {
 				console.log("Linux-Installer erstellt!");

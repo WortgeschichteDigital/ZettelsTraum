@@ -453,7 +453,7 @@ let beleg = {
 		input.addEventListener("keydown", function(evt) {
 			tastatur.detectModifiers(evt);
 			if ((!tastatur.modifiers || tastatur.modifiers === "Ctrl") && evt.key === "Enter") {
-				if (evt.ctrlKey) {
+				if (tastatur.modifiers === "Ctrl") {
 					evt.preventDefault();
 					beleg.aktionSpeichern();
 					return;

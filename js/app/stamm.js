@@ -6,6 +6,8 @@ let stamm = {
 	oeffnen () {
 		// Sperre für macOS (Menüpunkte können nicht deaktiviert werden)
 		if (!kartei.wort) {
+			dialog.oeffnen("alert");
+			dialog.text("Um die Funktion <i>Kartei &gt; Formvarianten</i> zu nutzen, muss eine Kartei geöffnet sein.");
 			return;
 		}
 		// wird die Variantenliste gerade erstellt, darf sich das Fenster nicht öffnen

@@ -9,6 +9,8 @@ let bedeutungenWin = {
 	oeffnen () {
 		// Sperre für macOS (Menüpunkte können nicht deaktiviert werden)
 		if (!kartei.wort) {
+			dialog.oeffnen("alert");
+			dialog.text("Um die Funktion <i>Kartei &gt; Bedeutungsgerüst-Fenster</i> zu nutzen, muss eine Kartei geöffnet sein.");
 			return;
 		}
 		// Bedeutungsgerüst-Fenster ist bereits offen => Fenster fokussieren

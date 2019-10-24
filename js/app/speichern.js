@@ -141,6 +141,8 @@ let speichern = {
 	kaskade () {
 		// Sperre für macOS (Menüpunkte können nicht deaktiviert werden)
 		if (!kartei.wort) {
+			dialog.oeffnen("alert");
+			dialog.text("Um die Funktion <i>Kartei &gt; Speichern</i> zu nutzen, muss eine Kartei geöffnet sein.");
 			return;
 		}
 		// keine Speicherkaskade
