@@ -36,16 +36,18 @@
 				></a
 			></span>
 
-			<!-- 0.24.0 -->
+			<!-- Start Versionsblock 0.24.0 -->
 			<div class="version">0.24.0</div>
 
 			<div>
-				<h2><span>Version 0.24.0-beta.2</span><time datetime="2019-10-24T08:12:57">24. Oktober 2019</time></h2>
+				<h2><span>Version 0.24.0-beta</span><time datetime="2019-10-25T19:52:10">25. Oktober 2019</time></h2>
 
 				<h3>Entfernte Funktionen</h3>
 
 				<ul>
-					<li>Für Entwickler: Die Möglichkeit, mit den Installer-Scripts auch Paketierungen zu erstellen, wurde <strong>entfernt</strong>. Für Paketierungen der App gibt es nun das Script <span class="datei">packager.js</span>. Die neu hinzugefügten Build-Scripts (<abbr title="siehe unten">s. u.</abbr>) können die damit gebauten Ordner automatisch in Archive packen. Es besteht also keine Notwendigkeit mehr für diese Funktion.</li>
+					<li>Das Tastaturkürzel <kbd>Esc</kbd> zum Schließen der Nebenfenster wurde <strong>entfernt</strong>. Nur noch die Über-Fenster, also <a href="#" class="ueber-app">Über <span class="app-name"></span></a> und <a href="#" class="ueber-electron">Über Electron</a>, können fortan auf diese Weise geschlossen werden. Das Feature war in den anderen Nebenfenstern, in denen <kbd>Esc</kbd> mittlerweile auch anderweitig genutzt wird, mitunter ein wenig dysfunktional.</li>
+
+					<li>Für Entwickler: Die Möglichkeit, mit den Installer-Scripts auch Paketierungen zu erstellen, wurde <strong>entfernt</strong>. Für Paketierungen der App gibt es nun das Script <span class="datei">packager.js</span>. Die neu hinzugefügten Build-Scripts (<abbr title="siehe unten">s. u.</abbr>) können die damit gebauten Ordner automatisch in Archive packen. Es besteht also kein Anwendungsfeld mehr für diese Funktion.</li>
 				</ul>
 
 				<h3>Neue Funktionen</h3>
@@ -62,7 +64,13 @@
 
 						<p>3.) In Nebenfenstern gibt es unter <i>macOS</i> (und zwar nur dort) einen Menüpunkt <i class="app-name"></i>, der allein den Befehl <a href="#menueApp-fensterSchliessen" class="link-handbuch"><i>Fenster schließen</i></a> enthält. (Der Menüpunkt <i>Programm</i> wurde umbenannt; <abbr title="siehe unten">s. u.</abbr>)</p>
 
-						<p>Die entsprechenden Anweisungen zum Paktieren der App wurden eingerichtet und funktionieren. Das Erzeugen von <abbr title="Apple Disk Image" lang="en">DMG</abbr>-Dateien hingegen wurde zwar eingerichtet, kann und wird aber nicht getestet, weil dies nur in <i>macOS</i> ginge, wo eine Entwicklungsumgebung eingerichtet werden müsste <abbr title="und so weiter">usw.</abbr> Die <a href="#" class="link-dokumentation">technische Dokumentation</a> wurde entsprechend angepasst.</p>
+						<p>Die entsprechenden Anweisungen zum Paktieren der App wurden eingerichtet und funktionieren. Das Erzeugen von <abbr title="Apple Disk Image" lang="en">DMG</abbr>-Dateien hingegen wurde zwar eingerichtet, kann und wird aber nicht getestet, weil dies nur in <i>macOS</i> ginge, wo eine Entwicklungsumgebung aufgesetzt werden müsste <abbr title="und so weiter">usw.</abbr></p>
+					</li>
+
+					<li>
+						<p>Das <a href="#" class="link-handbuch">Handbuch</a> ist fertig.</p>
+
+						<p>Am Ende der Einführung stehen einige sehr knappe <a href="#einfuehrung-benutzung" class="link-handbuch">technische Hinweise zur Benutzung</a>, die einem helfen, in der Textmasse schnell das Gesuchte zu finden.</p>
 					</li>
 
 					<li>Overlay-Fenster: In den Overlay-Fenstern findet sich nun neben dem Schließen-Icon zusätzlich das Icon <img src="../img/kreis-fragezeichen.svg" width="24" height="24" alt="">, mit dem man direkt an die Stelle des <a href="#" class="link-handbuch">Handbuchs</a> gelangt, an der Erläuterungen zum betreffenden Fenster stehen.</li>
@@ -73,7 +81,15 @@
 						<p>Wurde beim Annotieren die Hintergrundfarbe auf transparent gesetzt, wird der Beleg mit dem <i>Annotierung</i>-Filter standardmäßig nicht gefunden. Unter <a href="#einstellungen-filterleiste" class="link-handbuch"><i><span class="app-name"></span> &gt; Einstellungen &gt; Filterleiste</i></a> gibt es jedoch <a href="#einstellungen-filterleisteTransparente" class="link-handbuch">eine Checkbox</a>, die man aktivieren kann, um beim Filtern auch Annotierungen mit einzubeziehen, die eine tranparente Hintergrundfarbe haben.</p>
 					</li>
 
-					<li>Für Entwickler: Im Ordner <span class="datei">./installer/</span> gibt es nun ein Build-Script: <span class="datei">build.sh</span>. Mit ihm kann man die App unter <i>Linux</i> komfortabel bauen. <a href="#ordner-installer" class="link-dokumentation">Details zu den Scripts in der technischen Dokumentation</a>.</li>
+					<li>
+						<p>Für Entwickler: Die Installer-Scripts wurden reorganisiert, verbessert und erweitert.</p>
+
+						<p>Zum einen wurden die Scripts alle aus dem Wurzelverzeichnis der App in den Ordner <span class="datei">./installer/</span> geschoben, was die Dateistruktur deutlich überischtlicher macht. Die Installer-Scripts müssen zwar weiterhin, aus dem Wurzelverzeichnis heraus aufgerufen werden (ansonsten werden die Node-Module nicht gefunden), alle Installer-Resourcen befinden sich nun jedoch gebündelt in einem einzigen Verzeichnis.</p>
+
+						<p>Zum anderen wird fortan beim Aufrufen des <code class="quelltext">fs</code>-Moduls in den Node-Scripts nach Möglichkeit auf <code class="quelltext">fsPromises</code>-Varianten zurückgegriffen (für <code class="quelltext">fs.existsSync()</code> steht leider nur eine synchrone Variante zur Verfügung). Dabei wurden <span class="fr">en passant</span> ein paar Fehler behoben.</p>
+
+						<p>Schließlich gibt es nun im Ordner <span class="datei">./installer/</span> zwei neue Build-Scripts: <span class="datei">build.sh</span> und <span class="datei">build-modules.sh</span>, die einem das Bauen erheblich erleichtern. Mit ihnen können unter <i>Linux</i> die benötigten Module installiert <abbr title="beziehungsweise">bzw.</abbr> mit Updates versorgt oder die App komfortabel gebaut werden. <a href="#ordner-installer" class="link-dokumentation">Details zu diesen Scripts in der technischen Dokumentation</a>.</p>
+					</li>
 				</ul>
 
 				<h3>Verbesserungen</h3>
@@ -123,11 +139,11 @@
 
 					<li>Das Icon für die Funktion <a href="#menueAnsicht-standardgroesse" class="link-handbuch"><i>Ansicht &gt; Standardgröße</i></a> wurde geändert: <img src="../img/fenster-standard.svg" width="24" height="24" alt="">. Es ist nun klarer vom Icon für die Vollbild-Anzeige (<img src="../img/fenster-vollbild.svg" width="24" height="24" alt="">) unterschieden, dafür den Icons zum Vergrößern und Verkleinern der Anzeige ähnlicher.</li>
 
-					<li>Das Tastaturkürzel für die Funktion <a href="#menueAnsicht-anzeigeVergroessern" class="link-handbuch"><i>Ansicht &gt; Anzeige vergrößern</i></a> wurde auf <kbd>Strg</kbd> + <kbd>+</kbd> geändert. Es passt nun besser zum Kürzel für das Verkleinern der Anzeige: <kbd>Strg</kbd> + <kbd>-</kbd>. Die Änderung bezieht sich auf alle Programmfenster, in denen es zur Verfügung steht.</li>
+					<li>Das Tastaturkürzel für die Funktion <a href="#menueAnsicht-anzeigeVergroessern" class="link-handbuch"><i>Ansicht &gt; Anzeige vergrößern</i></a> wurde auf <kbd class="nochange">Strg</kbd> + <kbd>+</kbd> geändert (unter <i>macOS</i> <kbd>⌘</kbd> + <kbd>=</kbd>). Es passt nun besser zum Kürzel für das Verkleinern der Anzeige: <kbd>Strg</kbd> + <kbd>-</kbd>. Die Änderung bezieht sich auf alle Programmfenster, in denen es zur Verfügung steht.</li>
 
 					<li>Die Gewichtung der Suchergebnisse im <a href="#" class="link-handbuch">Handbuch</a> und der <a href="#" class="link-dokumentation">technischen Dokumentation</a> wurde verbessert.</li>
 
-					<li>Die Verarbeitung derjenigen Tastaturkürzel, die nicht vom Main-Prozess getriggert werden, wurde auf eine solidere Basis gestellt: Der Wert <code class="quelltext">which</code> wird nicht mehr abgefragt (weil <span lang="en">deprecated</span>); Kürzel werden nur noch akzeptiert, wenn sie mit genau den Modifiern gedrückt werden, die vorgesehen sind (Modifiertasten sind <abbr title="unter anderem">u. a.</abbr> <kbd>Strg</kbd>, <kbd>Alt</kbd> und <kbd>Umsch</kbd>); nicht zuletzt wurde bei der Aktion die Codebasis verschlankt und vereinheitlicht.</li>
+					<li>Die Verarbeitung derjenigen Tastaturkürzel, die nicht vom Main-Prozess getriggert werden, wurde auf eine solidere Basis gestellt: Der Wert <code class="quelltext">which</code> wird nicht mehr abgefragt (weil <a href="https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/which"><span lang="en">deprecated</span></a>); Kürzel werden nur noch akzeptiert, wenn sie mit genau den Modifiern gedrückt werden, die vorgesehen sind (Modifiertasten sind <abbr title="unter anderem">u. a.</abbr> <kbd>Strg</kbd>, <kbd>Alt</kbd> und <kbd>Umsch</kbd>); nicht zuletzt wurde bei der Aktion die Codebasis verschlankt und vereinheitlicht.</li>
 
 					<li>Der erste Punkt in der Menüleiste wurde von <i>Programm</i> in <i class="app-name"></i> umbenannt. So gibt es systemübergreifend eine einheitliche Benennung der Menüpunkte, denn in <i>macOS</i> trägt der erste Menüpunkt immer den Namen der App.</li>
 
@@ -135,11 +151,15 @@
 
 					<li>Programmfenster werden jetzt mit einem zum Betriebssystem passenden Icon geöffnet.</li>
 
-					<li>Zum Paketieren der App werden nun keine Kommandozeilenbefehle mehr benutzt, sondern ein moderneres Node-Script. <abbr title="Vergleiche">Vgl.</abbr> den <abbr title="Abschnitt">Abschn.</abbr> zum <a href="#framework-paketieren" class="link-dokumentation">Paketieren der App</a> in der <a href="#" class="link-dokumentation">technischen Dokumentation</a>.</li>
-
 					<li>Die Init-Scripts der Nebenfenster wurden reorganisiert. Sie lassen sich jetzt leichter verwalten. Bei der Aktion wurde immens viel doppelter Code eliminiert.</li>
 
-					<li><a href="#" class="ueber-electron"><i>Electron</i></a>-Update auf Version 6.1.1.</li>
+					<li>Die <a href="#" class="link-dokumentation">technische Dokumentation</a> wurde wegen der vielen Änderungen und Ergänzungen auf der technischen Ebene in den Abschnitten <a href="#framework" class="link-dokumentation">Framework</a> sowie <a href="#ordner" class="link-dokumentation">Ordner und Dateien</a> überarbeitet.</li>
+
+					<li>Für Entwickler: Zum Paketieren der App werden nun keine Kommandozeilenbefehle mehr genutzt, sondern ein moderneres Node-Script. <abbr title="Vergleiche">Vgl.</abbr> den <abbr title="Abschnitt">Abschn.</abbr> zum <a href="#framework-paketieren" class="link-dokumentation">Paketieren der App</a> in der <a href="#" class="link-dokumentation">technischen Dokumentation</a>.</li>
+
+					<li>Für Entwickler: Die Scripts zum nachträglichen Registrieren oder Deregistrieren des <abbr title="Wortgeschichte digital">WGD</abbr>-Dateityps unter <i>Linux</i> (<span class="datei">./resources/filetype/linux/[de]register.sh</span>) wurden verbessert: Sie sollten Sich nun aus allen Ordner heraus aufrufen lassen.</li>
+
+					<li><a href="#" class="ueber-electron"><i>Electron</i></a>-Update auf Version 6.1.2.</li>
 				</ul>
 
 				<h3>Behobene Fehler</h3>
@@ -203,11 +223,11 @@
 
 					<li>Beim Öffnen des <a href="#" class="link-handbuch">Handbuchs</a> und der <a href="#" class="link-dokumentation">technischen Dokumentaiton</a> flackerten der Fensterinhalt mitunter stark.</li>
 
-					<li>Das Installieren und Deinstallieren von DEB-Paketen war reichlich langsam, was an unnötigen Kommandos zur Registrierung des <abbr title="Wortgeschichte digital">WGD</abbr>-Dateityps lag. Diese funktioniert seit einiger Zeit <span lang="en">out of the box</span>, zumindest weitgehend.</li>
+					<li>Das Installieren und Deinstallieren von DEB-Paketen war reichlich langsam, was an einer unnötigen Dopplung von Kommandos zur Registrierung des <abbr title="Wortgeschichte digital">WGD</abbr>-Dateityps lag. Diese funktioniert seit einiger Zeit zwar prinzipiell <span lang="en">out of the box</span>, aber nur unvollständig (Dateityp-Icons wurden nicht registriert). Der Vorgang wird für Linux-Pakete darum nun wieder vollkommen von selbst geschriebenen Scripts übernommen.</li>
 				</ul>
 			</div>
 
-			<!-- 0.23.0 -->
+			<!-- Start Versionsblock 0.23.0 -->
 			<div class="version">0.23.0</div>
 
 			<div>
@@ -252,7 +272,7 @@
 				</ul>
 			</div>
 
-			<!-- 0.22.0 -->
+			<!-- Start Versionsblock 0.22.0 -->
 			<div class="version">0.22.0</div>
 
 			<div>
@@ -295,7 +315,7 @@
 				</ul>
 			</div>
 
-			<!-- 0.21.0 -->
+			<!-- Start Versionsblock 0.21.0 -->
 			<div class="version">0.21.0</div>
 
 			<div>
@@ -359,7 +379,7 @@
 				</ul>
 			</div>
 
-			<!-- 0.20.0 -->
+			<!-- Start Versionsblock 0.20.0 -->
 			<div class="version">0.20.0</div>
 
 			<div>
@@ -418,7 +438,7 @@
 				</ul>
 			</div>
 
-			<!-- 0.19.1 -->
+			<!-- Start Versionsblock 0.19.1 -->
 			<div class="version">0.19.1</div>
 
 			<div>
@@ -441,7 +461,7 @@
 				</ul>
 			</div>
 
-			<!-- 0.19.0 -->
+			<!-- Start Versionsblock 0.19.0 -->
 			<div class="version">0.19.0</div>
 
 			<div>
@@ -470,7 +490,7 @@
 				</ul>
 			</div>
 
-			<!-- 0.18.0 -->
+			<!-- Start Versionsblock 0.18.0 -->
 			<div class="version">0.18.0</div>
 
 			<div>
@@ -555,7 +575,7 @@
 				</ul>
 			</div>
 
-			<!-- 0.17.0 -->
+			<!-- Start Versionsblock 0.17.0 -->
 			<div class="version">0.17.0</div>
 
 			<div>
@@ -594,7 +614,7 @@
 				</ul>
 			</div>
 
-			<!-- 0.16.0 -->
+			<!-- Start Versionsblock 0.16.0 -->
 			<div class="version">0.16.0</div>
 
 			<div>
@@ -663,7 +683,7 @@
 				</ul>
 			</div>
 
-			<!-- 0.15.0 -->
+			<!-- Start Versionsblock 0.15.0 -->
 			<div class="version">0.15.0</div>
 
 			<div>
@@ -737,7 +757,7 @@
 				</ul>
 			</div>
 
-			<!-- 0.14.0 -->
+			<!-- Start Versionsblock 0.14.0 -->
 			<div class="version">0.14.0</div>
 
 			<div>
@@ -922,7 +942,7 @@ Gerüst 2 &gt; Gerüst 1</pre>
 				</ul>
 			</div>
 
-			<!-- 0.13.3 -->
+			<!-- Start Versionsblock 0.13.3 -->
 			<div class="version">0.13.3</div>
 
 			<div>
@@ -963,7 +983,7 @@ Gerüst 2 &gt; Gerüst 1</pre>
 				</ul>
 			</div>
 
-			<!-- 0.13.2 -->
+			<!-- Start Versionsblock 0.13.2 -->
 			<div class="version">0.13.2</div>
 
 			<div>
@@ -980,7 +1000,7 @@ Gerüst 2 &gt; Gerüst 1</pre>
 				</ul>
 			</div>
 
-			<!-- 0.13.1 -->
+			<!-- Start Versionsblock 0.13.1 -->
 			<div class="version">0.13.1</div>
 
 			<div>
@@ -999,7 +1019,7 @@ Gerüst 2 &gt; Gerüst 1</pre>
 				</ul>
 			</div>
 
-			<!-- 0.13.0 -->
+			<!-- Start Versionsblock 0.13.0 -->
 			<div class="version">0.13.0</div>
 
 			<div>
@@ -1032,7 +1052,7 @@ Gerüst 2 &gt; Gerüst 1</pre>
 				</ul>
 			</div>
 
-			<!-- 0.12.0 -->
+			<!-- Start Versionsblock 0.12.0 -->
 			<div class="version">0.12.0</div>
 
 			<div>
@@ -1089,7 +1109,7 @@ Gerüst 2 &gt; Gerüst 1</pre>
 				</ul>
 			</div>
 
-			<!-- 0.11.0 -->
+			<!-- Start Versionsblock 0.11.0 -->
 			<div class="version">0.11.0</div>
 
 			<div>
@@ -1129,7 +1149,7 @@ Gerüst 2 &gt; Gerüst 1</pre>
 				</ul>
 			</div>
 
-			<!-- 0.10.0 -->
+			<!-- Start Versionsblock 0.10.0 -->
 			<div class="version">0.10.0</div>
 
 			<div>
@@ -1204,7 +1224,7 @@ Gerüst 2 &gt; Gerüst 1</pre>
 				</ul>
 			</div>
 
-			<!-- 0.9.2 -->
+			<!-- Start Versionsblock 0.9.2 -->
 			<div class="version">0.9.2</div>
 
 			<div>
@@ -1219,7 +1239,7 @@ Gerüst 2 &gt; Gerüst 1</pre>
 				</ul>
 			</div>
 
-			<!-- 0.9.1 -->
+			<!-- Start Versionsblock 0.9.1 -->
 			<div class="version">0.9.1</div>
 
 			<div>
@@ -1232,7 +1252,7 @@ Gerüst 2 &gt; Gerüst 1</pre>
 				</ul>
 			</div>
 
-			<!-- 0.9.0 -->
+			<!-- Start Versionsblock 0.9.0 -->
 			<div class="version">0.9.0</div>
 
 			<div>
@@ -1325,7 +1345,7 @@ Gerüst 2 &gt; Gerüst 1</pre>
 				</ul>
 			</div>
 
-			<!-- 0.8.0 -->
+			<!-- Start Versionsblock 0.8.0 -->
 			<div class="version">0.8.0</div>
 
 			<div>
@@ -1487,7 +1507,7 @@ Gerüst 2 &gt; Gerüst 1</pre>
 				</ul>
 			</div>
 
-			<!-- 0.7.0 -->
+			<!-- Start Versionsblock 0.7.0 -->
 			<div class="version">0.7.0</div>
 
 			<div>
@@ -1542,7 +1562,7 @@ Mustermann, Erika
 				</ul>
 			</div>
 
-			<!-- 0.6.0 -->
+			<!-- Start Versionsblock 0.6.0 -->
 			<div class="version">0.6.0</div>
 
 			<div>
@@ -1593,7 +1613,7 @@ Mustermann, Erika
 				</ul>
 			</div>
 
-			<!-- 0.5.0 -->
+			<!-- Start Versionsblock 0.5.0 -->
 			<div class="version">0.5.0</div>
 
 			<div>
@@ -1670,7 +1690,7 @@ Mustermann, Erika
 				</ul>
 			</div>
 
-			<!-- 0.4.0 -->
+			<!-- Start Versionsblock 0.4.0 -->
 			<div class="version">0.4.0</div>
 
 			<div>
@@ -1753,7 +1773,7 @@ Mustermann, Erika
 				</ul>
 			</div>
 
-			<!-- 0.3.0 -->
+			<!-- Start Versionsblock 0.3.0 -->
 			<div class="version">0.3.0</div>
 
 			<div>
@@ -1808,7 +1828,7 @@ Mustermann, Erika
 				</ul>
 			</div>
 
-			<!-- 0.2.0 -->
+			<!-- Start Versionsblock 0.2.0 -->
 			<div class="version">0.2.0</div>
 
 			<div>
@@ -1835,7 +1855,7 @@ Mustermann, Erika
 				</ul>
 			</div>
 
-			<!-- 0.1.0 -->
+			<!-- Start Versionsblock 0.1.0 -->
 			<div class="version">0.1.0</div>
 
 			<div>

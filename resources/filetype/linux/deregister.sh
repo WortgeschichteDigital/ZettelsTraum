@@ -1,59 +1,60 @@
-#!/bin/sh
+#!/bin/bash
 
-dir=$PWD
+cat <<- EOF
+
+
+      ZZZZZZZZZZZZTTTTTTTTTTTT
+      ZZZZZZZZZZZZTTTTTTTTTTTT
+              ZZZ      TT
+             ZZZ       TT
+            ZZZ        TT
+           ZZZ         TT
+          ZZZ          TT
+         ZZZ           TT
+        ZZZ            TT
+       ZZZ             TT
+      ZZZZZZZZZZZZ     TT
+      ZZZZZZZZZZZZ     TT
+
+      $(echo -e "\033[48;5;254;38;5;63m  *.wgd deregistrieren  \033[0m")
+
+
+EOF
+
+dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 if ! test -e "$dir/zdl-wgd.xml"; then
-	dir=/opt/zettelstraum/resources/filetype/linux
-	if ! test -e "$dir/zdl-wgd.xml"; then
-		echo ""
-		echo "zdl-wgd.xml nicht gefunden!"
-		echo ""
-		echo "Am besten rufen Sie das Script so auf:"
-		echo "  cd /opt/zettelstraum/resources/filetype/linux"
-		echo "  sh register.sh"
-		echo ""
-		exit 1
-	fi
+	echo -e "zdl-wgd.xml nicht gefunden!\n"
+	exit 1
 fi
 
 if ! command -v xdg-mime >/dev/null 2>&1; then
-	echo ""
-	echo "xdg-mime nicht gefunden!"
-	echo ""
+	echo -e "xdg-mime nicht gefunden!\n"
 	echo "Sie müssen die xdg-utils installieren:"
-	echo "  apt install xdg-utils"
-	echo ""
+	echo -e "  apt install xdg-utils\n"
 	exit 1
 fi
 
 cd "$dir"
 
-echo ""
 echo "* MIME-Typ deinstallieren"
 xdg-mime uninstall zdl-wgd.xml
-if [ "$?" != "0" ]; then
-	echo ""
-	echo "Deinstallation fehlgeschlagen!"
-	echo ""
+if (( $? > 0 )); then
+	echo -e "\nDeinstallation fehlgeschlagen!\n"
 	exit 1
 fi
 
-echo ""
-echo "* Icons deinstallieren"
+echo -e "\n* Icons deinstallieren"
 xdg-icon-resource uninstall --context mimetypes --size 16 application-x-wgd
 xdg-icon-resource uninstall --context mimetypes --size 22 application-x-wgd
 xdg-icon-resource uninstall --context mimetypes --size 32 application-x-wgd
 xdg-icon-resource uninstall --context mimetypes --size 48 application-x-wgd
 xdg-icon-resource uninstall --context mimetypes --size 64 application-x-wgd
 xdg-icon-resource uninstall --context mimetypes --size 128 application-x-wgd
-if [ "$?" != "0" ]; then
-	echo ""
-	echo "Deinstallation fehlgeschlagen!"
-	echo ""
+if (( $? > 0 )); then
+	echo -e "\nDeinstallation fehlgeschlagen!\n"
 	exit 1
 fi
 
-echo ""
-echo "Der MIME-Typ application/x-wgd wurde erfolgreich entfernt!"
-echo ""
+echo -e "\nDer MIME-Typ application/x-wgd wurde erfolgreich entfernt!\n"
 
 exit 0

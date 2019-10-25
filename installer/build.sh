@@ -1,7 +1,43 @@
 #!/bin/bash
 
-# Working Directory
-dir=$PWD
+presets=(
+	"internes Release"
+	"GitHub-Release"
+)
+preset1=(
+	"type=installer|os=linux|pkg=deb|main=Nico_Dorn|update=j|clean=j"
+	"type=installer|os=win|pkg=nsis|update=n|clean=j"
+	"type=packager|os=mac|arch=gz|update=n|clean=j"
+)
+preset2=(
+	"type=installer|os=linux|pkg=deb|main=Nico_Dorn|update=j|clean=j"
+	"type=installer|os=win|pkg=nsis|update=n|clean=j"
+	"type=packager|os=linux|arch=gz|update=n|clean=j"
+	"type=packager|os=mac|arch=gz|update=n|clean=j"
+	"type=packager|os=win|arch=zip|update=n|clean=j"
+)
+
+cat <<- EOF
+
+
+      ZZZZZZZZZZZZTTTTTTTTTTTT
+      ZZZZZZZZZZZZTTTTTTTTTTTT
+              ZZZ      TT
+             ZZZ       TT
+            ZZZ        TT
+           ZZZ         TT
+          ZZZ          TT
+         ZZZ           TT
+        ZZZ            TT
+       ZZZ             TT
+      ZZZZZZZZZZZZ     TT
+      ZZZZZZZZZZZZ     TT
+
+      $(echo -e "\033[48;5;254;38;5;63m          Build         \033[0m")
+EOF
+
+# Script Directory ermitteln
+dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 
 # package.json nicht gefunden
 if ! test -e "${dir}/../package.json"; then
@@ -119,8 +155,8 @@ konfiguration() {
 	if [ "$type" = "packager" ]; then
 		# Kompression
 		while : ; do
-			read -ep "Archiv (-/tar.gz/zip): " arch
-			if ! echo "$arch" | egrep -q "^(-|tar\.gz|zip)$"; then
+			read -ep "Archiv (-/gz/zip): " arch
+			if ! echo "$arch" | egrep -q "^(-|gz|zip)$"; then
 				zeilenWeg 1
 				continue
 			fi
@@ -130,7 +166,7 @@ konfiguration() {
 	
 	# HTML-Update
 	while : ; do
-		read -ep "HTML updaten (j/n): " update
+		read -ep "HTML-Update (j/n): " update
 		if ! echo "$update" | egrep -q "^(j|n)$"; then
 			zeilenWeg 1
 			continue
@@ -140,7 +176,7 @@ konfiguration() {
 
 	# Bereinigen
 	while : ; do
-		read -ep "Am Ende aufräumen (j/n): " clean
+		read -ep "Aufräumen (j/n): " clean
 		if ! echo "$clean" | egrep -q "^(j|n)$"; then
 			zeilenWeg 1
 			continue
@@ -163,8 +199,16 @@ konfiguration() {
 	job+="|clean=${clean}"
 }
 
-# Changelog auffrischen
+# HTML-Update
 updateHtml() {
+	# App-Version ermitteln
+	version=$(appVersion)
+
+	# HTML-Update nicht für Beta-Versionen
+	if echo "$version" | grep -q "beta"; then
+		return
+	fi
+
 	# Copyright-Jahr in "Über App" updaten
 	htmlUeber="${dir}/../win/ueberApp.html"
 	copyrightJahr="2019"
@@ -179,7 +223,15 @@ updateHtml() {
 
 	# Changelog auffrischen
 	echo -e "  \033[1;32m*\033[0m Changelog auffrischen"
+
 	htmlChangelog="${dir}/../win/changelog.html"
+
+	zeileKommentar="<!-- Start Versionsblock ${version} -->"
+	sed -i "0,/<!-- Start Versionsblock .* -->/s/<!-- Start Versionsblock .* -->/${zeileKommentar}/" "$htmlChangelog"
+
+	zeileVersion="<div class=\"version\">${version}<\/div>"
+	sed -i "0,/<div class=\"version\">.*<\/div>/s/<div class=\"version\">.*<\/div>/${zeileVersion}/" "$htmlChangelog"
+
 	monate=(
 		"Januar"
 		"Februar"
@@ -198,9 +250,8 @@ updateHtml() {
 	monat=$(date +%-m)
 	monat=${monate[$[$monat - 1]]}
 	jetzt=$(date +%Y-%m-%dT%H:%M:%S)
-	version=$(appVersion)
-	zeile="<h2><span>Version ${version}<\/span><time datetime=\"${jetzt}\">${tag}. ${monat} $(date +%Y)<\/time><\/h2>"
-	sed -i "0,/<h2>.*<\/h2>/s/<h2>.*<\/h2>/${zeile}/" "$htmlChangelog"
+	zeileH2="<h2><span>Version ${version}<\/span><time datetime=\"${jetzt}\">${tag}. ${monat} $(date +%Y)<\/time><\/h2>"
+	sed -i "0,/<h2>.*<\/h2>/s/<h2>.*<\/h2>/${zeileH2}/" "$htmlChangelog"
 }
 
 # Maintainer eintragen
@@ -215,12 +266,13 @@ setMaintainer() {
 
 	# Maintainer eingetragen
 	echo -e "  \033[1;32m*\033[0m Maintainer eintragen"
-	if [ "$(cat build-changelog-maintainer.json | jq -r ".[\"${version}\"]")" = "null" ]; then
-		json=$(cat build-changelog-maintainer.json | jq -c ".[\"${version}\"] = \"${main//_/ }\"")
+	maintainer="${dir}/build-changelog-maintainer.json"
+	if [ "$(cat "$maintainer"  | jq -r ".[\"${version}\"]")" = "null" ]; then
+		json=$(cat "$maintainer" | jq -c ".[\"${version}\"] = \"${main//_/ }\"")
 	else
-		json=$(cat build-changelog-maintainer.json | jq -c ". + { \"${version}\": \"${main//_/ }\" }")
+		json=$(cat "$maintainer" | jq -c ". + { \"${version}\": \"${main//_/ }\" }")
 	fi
-	echo $json > build-changelog-maintainer.json
+	echo $json > "$maintainer"
 }
 
 makeArchive() {
@@ -230,7 +282,11 @@ makeArchive() {
 	# Dateiname
 	version=$(appVersion)
 	system=$(codeName)
-	file="zettelstraum_${version}_${system}_x64.${arch}"
+	ext=$arch
+	if [ "$arch" = "gz" ]; then
+		ext="tar.gz";
+	fi
+	file="zettelstraum_${version}_${system}_x64.${ext}"
 
 	# altes Archiv löschen
 	if test -e "$file"; then
@@ -238,10 +294,15 @@ makeArchive() {
 	fi
 
 	# neues Archiv erstellen
-	if [ "$arch" = "tar.gz" ]; then
+	if [ "$arch" = "gz" ]; then
 		tar -c -f $file -z zettelstraum-${system}-x64
 	elif [ "$arch" = "zip" ]; then
 		zip -qr $file zettelstraum-${system}-x64
+	fi
+
+	# Quellordner umbenennen
+	if [ "$clean" = "j" ]; then
+		mv zettelstraum-${system}-x64 zettelstraum-${system}-x64-packed
 	fi
 
 	cd "$dir"
@@ -250,7 +311,8 @@ makeArchive() {
 # Job ausführen
 #   $1 = String mit Variablen, Trennzeichen "|"
 execJob() {
-	echo -e "\n\n  \033[1;32m*\033[0m Job starten: $1"
+	echo -e "  \033[1;32m*\033[0m Job starten: $1"
+	echo -e "    App-Version: \033[38;5;63m$(appVersion)\033[0m"
 
 	# Variablen zurücksetzen und dann neu einlesen
 	type=""
@@ -287,16 +349,16 @@ execJob() {
 		fi
 	fi
 
-	# Changelog auffrischen
+	# changelog.html und ueberApp.html auffrischen
 	if [ "$update" = "j" ]; then
-	 updateHtml
+		updateHtml
 	fi
 
 	# Maintainer und Changelog
 	if ! test -z "$main"; then
 		setMaintainer
 		echo -e "  \033[1;32m*\033[0m Changelog erstellen"
-		php build-changelog.php $pkg "../../build"
+		php "${dir}/build-changelog.php" $pkg "$dir"
 		if (( $? > 0 )); then
 			return
 		fi
@@ -305,8 +367,8 @@ execJob() {
 	# Installer
 	if [ "$type" = "installer" ]; then
 		echo -e "  \033[1;32m*\033[0m Installer ausführen"
-		cd ../
-		node installer-${os}.js $pkg
+		cd "${dir}/../"
+		node ./installer/installer-${os}.js $pkg
 		if (( $? > 0 )); then
 			echo -e "\033[1;31mFehler!\033[0m\n  \033[1;31m*\033[0m Installer-Script abgebrochen"
 			cd "$dir"
@@ -317,8 +379,8 @@ execJob() {
 	# Packager
 	if [ "$type" = "packager" ]; then
 		echo -e "  \033[1;32m*\033[0m Packager ausführen"
-		cd ../
-		node packager.js $(codeName)
+		cd "${dir}/../"
+		node ./installer/packager.js $(codeName)
 		if (( $? > 0 )); then
 			echo -e "\033[1;31mFehler!\033[0m\n  \033[1;31m*\033[0m Installer-Script abgebrochen"
 			cd "$dir"
@@ -329,7 +391,7 @@ execJob() {
 	cd "$dir"
 
 	# Archiv erstellen
-	if echo "$arch" | egrep -q "^(tar\.gz|zip)$"; then
+	if echo "$arch" | egrep -q "^(gz|zip)$"; then
 		makeArchive
 	fi
 
@@ -337,16 +399,9 @@ execJob() {
 	if [ "$clean" = "j" ]; then
 		echo -e "  \033[1;32m*\033[0m ../../build aufräumen"
 
-		# regulärer Ausdruck
-		reg="\.AppImage|\.deb|\.dmg|\.exe|\.rpm|\.tar\.gz|\.zip"
-		if [ "$type" = "packager" ] && [ "$arch" = "-" ]; then
-			reg+="|zettelstraum-$(codeName)-x64"
-		fi
-		reg="($reg)\$"
-
 		# Bereinigen
 		while read f; do
-			if echo "$f" | egrep -q "$reg"; then
+			if echo "$f" | egrep -q "(zettelstraum-(darwin|linux|win32)-x64|\.AppImage|\.deb|\.dmg|\.exe|\.rpm|\.tar\.gz|\.zip)\$"; then
 				continue
 			fi
 			rm -r "$f"
@@ -354,13 +409,50 @@ execJob() {
 	fi
 }
 
+# Liste der Presets ausdrucken
+presetsPrint() {
+	echo -e "\n"
+	for (( i=0; i<${#presets[@]}; i++ )); do
+		echo " [$[i + 1]] ${presets[$i]}"
+	done
+	echo " [x] Abbruch"
+	while : ; do
+		read -ep "  " preset
+		if [ "$preset" = "x" ] || echo "$preset" | egrep -q "^[1-9]{1}$" && (( preset  <= ${#presets[@]} )); then
+			presetsExec $preset
+			break
+		else
+			zeilenWeg 1
+		fi
+	done
+}
+
+# Preset ausführen
+presetsExec() {
+	# Variablen vorbereiten
+	arrayName="preset$1"
+	array="${arrayName}[@]"
+	presetNr=$[$1 - 1]
+
+	# Jobs durchführen
+	n=1
+	for j in "${!array}"; do
+		echo -e "\n  \033[1;33m*\033[0m Preset \"${presets[$presetNr]}\": \033[1;33mJob ${n}\033[0m\n"
+		execJob "$j"
+		(( n++ ))
+	done
+	
+	# Jobs erledigt
+	echo -e "\n  \033[1;32m*\033[0m Preset \"${presets[$presetNr]}\": \033[1;32mErledigt!\033[0m"
+}
+
 # Starter
 while : ; do
 	echo -e "\n"
 
 	# Auswahl treffern
-	read -ep "Ausführen (job/preset/modules/exit): " action
-	if ! echo "$action" | egrep -q "^(job|preset|modules|exit)$"; then
+	read -ep "Ausführen (job/preset/config/modules/exit): " action
+	if ! echo "$action" | egrep -q "^(job|preset|config|modules|exit)$"; then
 		zeilenWeg 3
 		continue
 	fi
@@ -369,14 +461,20 @@ while : ; do
 	if [ "$action" = "job" ]; then
 		echo -e "\n"
 		konfiguration
+		echo -e "\n"
 		execJob "$job"
+	# Konfiguration anzeigen
+	elif [ "$action" = "config" ]; then
+		echo -e "\n"
+		konfiguration
+		echo -e "\n\nJob-Konfiguration:\n  \033[1;32m*\033[0m $job"
 	# Preset auswählen
 	elif [ "$action" = "preset" ]; then
-		continue
+		presetsPrint
 	# Module auffrischen
 	elif [ "$action" = "modules" ]; then
-		bash build-modules.sh inc
-		continue
+		echo -e "\n"
+		bash "${dir}/build-modules.sh" inc
 	# Script verlassen
 	elif [ "$action" = "exit" ]; then
 		exit 0

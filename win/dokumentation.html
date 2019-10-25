@@ -60,14 +60,14 @@
 					<div id="suchergebnisse"></div>
 				</section>
 
-				<!-- TECHNIK -->
+				<!-- FRAMEWORK -->
 				<section id="sektion-framework" class="suche">
 					<!-- Electron -->
 					<h2 id="framework-electron"><i>Electron</i>-Framework</h2>
 
 					<p><i class="app-name"></i> läuft auf dem <a href="https://electronjs.org/"><i>Electron</i></a>-Framework. <i>Electron</i> ist eine Kombination aus <a href="https://www.chromium.org/Home"><i>Chromium</i></a>, dem Open-Source-Browser, auf dem <i>Google Chrome</i> basiert, und <a href="https://nodejs.org/"><i>Node.js</i></a>, einer JavaScript-Laufzeitumgebung mit der Implementierung <i>V8</i>. Das Framework kann komplett via JavaScript gesteuert werden, weswegen zum Programmieren der App Kenntnisse in den Sprachen <abbr title="Hyptertext Markup Language" lang="en">HTML</abbr>, <abbr title="Cascading Style Sheets" lang="en">CSS</abbr> und JavaScript vollkommen ausreichen.</p>
 
-					<p><i>Electron</i> übernimmt die schwierigen Aufgaben, die sich beim Programmieren einer Desktop-App stellen. Es kümmert sich um die Integration in das Betriebssystem, ermöglicht also lesende und schreibende Dateizugriffe sowie das Öffnen externer Programme, erzeugt die Dateidialoge zum Öffnen und Speichern der Karteien und verwaltet über den betriebssystemeigenen Fenster-Manager die einzelnen Programmfenster, in denen eine leicht eingedampfte Variante des <i>Chromium</i>-Browsers für die Anzeige zuständig ist. Jedes Programmfenster läuft in einem eigenen Renderer-Prozess, weswegen die einzelnen Fenster nicht direkt miteinander kommunizieren können. Das Öffnen der Programmfenster und die Darstellung der Fenster-Menüs werden im Wesentlichten über den Main-Prozess gesteuert, über den die App initialisiert wird. Dieser wiederum kann mit allen Fenstern kommunizieren.</p>
+					<p><i>Electron</i> übernimmt die schwierigen Aufgaben, die sich beim Programmieren einer Desktop-App stellen. Es kümmert sich um die Integration in das Betriebssystem, ermöglicht also lesende und schreibende Dateizugriffe sowie das Öffnen externer Programme, erzeugt die Dateidialoge zum Öffnen und Speichern der Karteien und verwaltet über den betriebssystemeigenen Fenstermanager die einzelnen Programmfenster, in denen eine leicht eingedampfte Variante des <i>Chromium</i>-Browsers für die Anzeige zuständig ist. Jedes Programmfenster läuft in einem eigenen Renderer-Prozess, weswegen die einzelnen Fenster nicht direkt miteinander kommunizieren können. Das Öffnen der Programmfenster und die Darstellung der Fenstermenüs werden im Wesentlichten über den Main-Prozess gesteuert, über den die App initialisiert wird. Dieser wiederum kann mit allen Fenstern kommunizieren.</p>
 
 					<p>Der Main-Prozess wird über die Scripts in der Datei <span class="datei">./main.js</span> im Wurzelverzeichnis des Quellcodes gesteuert (das Wurzelverzeichnis, in dem der App-Code liegt, wird im Folgenden immer durch <span class="datei">./</span> bezeichnet). Vermittelt über diesen Prozess können die Fenster miteinander in Kommunikation treten. Über das Objekt <code class="quelltext">ipcMain</code> hört der Main-Prozess auf Meldungen der Renderer-Prozesse, die diese via <code class="quelltext">ipcRenderer</code> abgeschickt haben (<abbr title="vergleiche">vgl.</abbr> den Code in <span class="datei">./main.js</span> und <span class="datei">./js/app/init-app.js</span>).</p>
 
@@ -126,9 +126,7 @@ npm install --save-dev electron</pre>
 
 					<p>All das, was hier erklärt wurde, brauchen Sie nicht unbedingt händisch ausführen. Es genügt im Grunde, wenn Sie <i>Node.js</i> installieren. Danach können Sie es sich leicht machen und ein mitgeliefertes Script aufrufen, das den Rest für Sie übernimmt – zumindest wenn Ihre Entwicklungsumgebung unter <i>Linux</i> läuft:</p>
 
-					<pre>cd ./installer
-bash build-modules.sh
-</pre>
+					<pre>bash ./installer/build-modules.sh</pre>
 
 					<p>Installiert werden dabei die nötigen Module zum Ausführen und Bauen von <i class="app-name"></i>. Sind diese bereits installiert, wird ein Update angestoßen – falls noch eins aussteht. Das Ausführen des Scripts erzeugt den Ordner <span class="datei">node_modules</span> und die Datei <span class="datei">package-lock.json</span> im App-Verzeichnis. In der <span class="datei">package.json</span> werden die Werte in <code class="quelltext">"devDependencies"</code> aufgefrischt.</p>
 
@@ -145,13 +143,13 @@ bash build-modules.sh
 	"start": "electron ."
 }</pre>
 
-					<p>(An diese Stelle könnte man auch Scripts zum <a href="#framework-paketieren">Paketieren der App</a> schreiben. Das geht aber mittlerweile deutlich komfortabler auch mit einem Node-Script.)
+					<p>(An diese Stelle könnte man auch Scripts zum <a href="#framework-paketieren">Paketieren der App</a> schreiben. Das geht aber mittlerweile deutlich komfortabler und variabler mit einem Node-Script.)
 
 					<p>Für den Start der App ist bereits alles eingerichtet. Nach der Installation von <i>Electron</i> muss man im Programmordner nur noch den folgenden Befehl ausführen:</p>
 
 					<pre>npm start</pre>
 
-					<p>Nun sollte <i class="app-name"></i> im Entwickler-Modus gestartet werden. <abbr title="Das heißt">D. h.</abbr> konkret, dass sich über das Tastaturkürzel <kbd>Strg</kbd> + <kbd>⇧</kbd> + <kbd>I</kbd> die <i lang="en">Developer Tools</i> von <i>Chromium</i> öffnen lassen, die in der paketierten Version nicht mehr aufgerufen werden können. Außerdem erscheint in der Menüleiste des Hauptfensters der Menüpunkt <i>Dev</i>, der beim Paketieren eliminiert wird.</p>
+					<p>Nun sollte <i class="app-name"></i> im Entwickler-Modus gestartet werden. <abbr title="Das heißt">D. h.</abbr> konkret, dass sich über das Tastaturkürzel <kbd class="nochange">Strg</kbd> + <kbd>⇧</kbd> + <kbd>I</kbd> die <i lang="en">Developer Tools</i> von <i>Chromium</i> öffnen lassen, die in der paketierten Version nicht mehr aufgerufen werden können. Außerdem erscheint in der Menüleiste des Hauptfensters der Menüpunkt <i>Dev</i>, der beim Paketieren eliminiert wird.</p>
 
 					<!-- Paketieren -->
 					<h2 id="framework-paketieren">Paketieren der App</h2>
@@ -169,27 +167,29 @@ npm install --save-dev electron-packager</pre>
 
 					<p>Besser ist es jedoch, ihn über ein Node-Script zu steuern. Das macht das Ganze variabler und deutlich übersichtlicher. Über die zur Verfügung stehenden Optionen gibt die <a href="https://github.com/electron-userland/electron-packager/blob/master/docs/api.md"><abbr title="Application Programming Interface" lang="en">API</abbr></a>-Dokumentation des Packagers ausführlich Auskunft.</p>
 
-					<p>Im Prinzip muss man sich mit dieser Dokumentation allerdings nicht weiter beschäftigen, da für das Paketieren bereits alles eingerichtet ist: In der <span class="datei">./packager.js</span> befinden sich Node-Scripts, die das Erstellen von <i>Linux-</i>, <i>Windows-</i> und <i>macOS</i>-Paketen übernehmen. Die paketierte Version von <i class="app-name"></i> wird nach dem Ausführen eine Ebene oberhalb des Wurzelverzeichnisses in einem Ordner namens <span class="datei">build</span> abgelegt. Existiert der Ordner nicht, wird er automatisch erzeugt. Die Option <code class="quelltext">overwrite: true</code> sorgt dafür, dass alte Paketierungen im Ordner <span class="datei">../build</span> vor dem erneuten Paketieren entfernt werden. Die Scripts können über die folgenden Befehle ausgeführt werden.</p>
+					<p>Im Prinzip muss man sich mit dieser Dokumentation allerdings nicht weiter beschäftigen, da für das Paketieren bereits alles eingerichtet ist: In der Datei <span class="datei">./installer/packager.js</span> befindet sich ein Node-Script, das das Erstellen von <i>Linux-</i>, <i>Windows-</i> und <i>macOS</i>-Paketen übernimmt. Die paketierte Version von <i class="app-name"></i> wird nach dem Ausführen eine Ebene oberhalb des Wurzelverzeichnisses in einem Ordner namens <span class="datei">build</span> abgelegt. Existiert der Ordner nicht, wird er automatisch erzeugt. Die Option <code class="quelltext">overwrite: true</code> sorgt dafür, dass alte Paketierungen im Ordner <span class="datei">../build</span> vor dem erneuten Paketieren entfernt werden. Das Script kann über die folgenden Befehle ausgeführt werden.</p>
 
 					<ul>
 						<li>
 							<p>Für <i>Linux</i>:</p>
 
-							<pre>node packager.js linux</pre>
+							<pre>node installer/packager.js linux</pre>
 						</li>
 
 						<li>
 							<p>Für <i>Windows</i>:</p>
 
-							<pre>node packager.js win32</pre>
+							<pre>node installer/packager.js win32</pre>
 						</li>
 
 						<li>
 							<p>Für <i>macOS</i>:</p>
 
-							<pre>node packager.js darwin</pre>
+							<pre>node installer/packager.js darwin</pre>
 						</li>
 					</ul>
+
+					<p>Dabei ist wichtig, dass die <span lang="en">working directory</span> das Wurzelverzeichnis der App ist. Andernfalls findet das Script die Node-Module nicht.</p>
 
 					<p>Die mitgelieferten Scripts erstellen Pakete für eine 64-Bit-Architektur. Dies kann natürlich nach Belieben angepasst werden. Wie, darüber gibt die besagte <a href="https://github.com/electron-userland/electron-packager/blob/master/docs/api.md"><abbr title="Application Programming Interface" lang="en">API</abbr></a> des Packagers Auskunft.</p>
 
@@ -203,7 +203,7 @@ npm install --save-dev electron-packager</pre>
 						<li><i>macOS</i>: <span class="datei">zettelstraum-darwin-x64/zettelstraum.app/Contents/MacOS/zettelstraum</span></li>
 					</ul>
 
-					<p>Unter <i>macOS</i> ist die angegebene ausführbare Datei nur interessant, wenn das Programm über die Kommandozeile (also via <i>Terminal</i>) gestartet werden soll. Ansonsten reicht natürlich ein Doppelklick auf den Ordner <span class="datei">zettelstraum.app</span>. Das System erkennt automatisch, dass es sich hierbei um eine App handelt und startet sie.</p>
+					<p>Unter <i>macOS</i> ist die angegebene ausführbare Datei nur interessant, wenn das Programm über die Kommandozeile (also via <i>Terminal</i>) gestartet werden soll. Ansonsten reicht natürlich ein Doppelklick auf den Ordner <span class="datei">zettelstraum.app</span>. Das System erkennt automatisch, dass dahinter ein Programm der Ausführung harrt und startet es.</p>
 
 					<p>Auch wenn die ausführbare Programmdatei (im Falle von <i>Linux</i> und <i>Windows</i>) um die 100 Megabyte groß ist – ohne die anderen Dateien und Verzeichnisse, die sich im Paketordner befinden, kann die App nicht gestartet werden. Möchte man sie auf ein anderes Betriebssystem kopieren, muss also immer der gesamte Ordner mit allen Dateien mitgenommen werden.</p>
 
@@ -219,7 +219,7 @@ npm install --save-dev electron-packager</pre>
 					<pre>cd ./
 npm install --save-dev electron-builder</pre>
 
-					<p>Die richtige Konfiguration des Builders zu finden, ist nicht so leicht, denn er kennt eine Vielzahl an <a href="https://www.electron.build/configuration/configuration">Konfigurationsmöglichkeiten</a>. Für das Erstellen von <abbr title="Nullsoft Scriptable Install System" lang="en">NSIS</abbr>-Installern, von <abbr title="Apple Disk Image" lang="en">DMG</abbr>-, DEB- und RPM-Paketen sowie von AppImages finden sich im Wurzelverzeichnis der App bereits fertige Node-Scripts, die sich der <a href="https://www.electron.build/api/electron-builder" lang="en">Programmatic API</a> des Builders bedienen und einem die Konfigurationsarbeit abnehmen: <span class="datei">installer-(linux|mac|win).js</span>. Alle Scripts erstellen Installer für eine 64-Bit-Architektur. Gemeinsam genutzte Funktionen der Installer-Scripts stehen in der Datei <span class="datei">installer.js</span>.</p>
+					<p>Die richtige Konfiguration des Builders zu finden, ist nicht so leicht, denn er kennt eine Vielzahl an <a href="https://www.electron.build/configuration/configuration">Konfigurationsmöglichkeiten</a>. Für das Erstellen von <abbr title="Nullsoft Scriptable Install System" lang="en">NSIS</abbr>-Installern, von <abbr title="Apple Disk Image" lang="en">DMG</abbr>-, DEB- und RPM-Paketen sowie von AppImages gibt es bereits fertige Node-Scripts, die sich der <a href="https://www.electron.build/api/electron-builder" lang="en">Programmatic API</a> des Builders bedienen und einem die Konfigurationsarbeit bereits abgenommen haben: <span class="datei">./installer/installer-(linux|mac|win).js</span>. Alle Scripts erstellen Installer für eine 64-Bit-Architektur. Gemeinsam genutzte Funktionen der Installer-Scripts stehen im Modul <span class="datei">./installer/installer.js</span>.</p>
 
 					<p>Ausgeführt werden die Installer-Scripts mit <code>node</code>:</p>
 
@@ -227,48 +227,43 @@ npm install --save-dev electron-builder</pre>
 						<li>
 							<p><i>Linux</i>:</p>
 
-							<pre>node installer-linux.js [appImage|deb|rpm]</pre>
+							<pre>node installer/installer-linux.js [appImage|deb|rpm]</pre>
 						</li>
 
 						<li>
 							<p><i>Windows</i>:</p>
 
-							<pre>node installer-win.js [nsis]</pre>
+							<pre>node installer/installer-win.js [nsis]</pre>
 						</li>
 
 						<li>
 							<p><i>macOS</i>:</p>
 
-							<pre>node installer-mac.js [dmg]</pre>
+							<pre>node installer/installer-mac.js [dmg]</pre>
 						</li>
 					</ul>
 
+					<p>Dabei ist wichtig, dass die <span lang="en">working directory</span> das Wurzelverzeichnis der App ist. Andernfalls finden die Scripts die Node-Module nicht.</p>
+
 					<p><abbr title="Apple Disk Image" lang="en">DMG</abbr>-Pakete können nur unter <i>macOS</i> gebaut werden, wo man sich zunächst natürlich die entsprechende Entwicklungsumgebung eingerichtet haben muss. Darum konnte <span class="obacht">nicht getestet</span> werden, ob der Installer wirklich funktionstüchtige Images auswirft. Bei Korrekturbedarf gerne <a href="#" class="ueber-app">kontaktieren</a>.</p>
 
-					<p>Wird kein Argument angegeben, das den Paket-Typ spezifiziert, baut das <i>Linux</i>-Script ein DEB-Paket, das <i>Windows</i>-Script einen <abbr title="Nullsoft Scriptable Install System" lang="en">NSIS</abbr>-Installer und das <i>macOS</i>-Script ein <abbr title="Apple Disk Image" lang="en">DMG</abbr>-Paket.</p>
+					<p>Wird kein Argument angegeben, das den Pakettyp spezifiziert, baut das <i>Linux</i>-Script ein DEB-Paket, das <i>Windows</i>-Script einen <abbr title="Nullsoft Scriptable Install System" lang="en">NSIS</abbr>-Installer und das <i>macOS</i>-Script ein <abbr title="Apple Disk Image" lang="en">DMG</abbr>-Paket.</p>
 
 					<p>Vor dem Start des eigentlichen Bauvorgangs wird überprüft, ob eine Ebene oberhalb des App-Verzeichnisses ein Ordner namens <span class="datei">build</span> existiert. Er wird <abbr title="gegebenenfalls">ggf.</abbr> automatisch erzeugt.</p>
 
-					<p>Der Linux-Installer erwartet für DEB- und RPM-Pakete, dass in <span class="datei">../build</span> eine Plain-Text-Datei mit dem Namen <span class="datei">changelog</span> liegt. Ist kein Changelog vorhanden, wird automatisch eine leere Datei erzeugt. Im Ordner <span class="datei">./installer/</span> gibt es ein PHP-Script, das mithilfe der <a href="#" class="link-changelog">Changelog</a>-Datei der App (<span class="datei">./win/changelog.html</span>) und der Datei <span class="datei">./installer/maintainer.json</span> einen DEB- <abbr title="beziehungsweise">bzw.</abbr> RPM-Changelog automatisch erstellen kann (zum Ausführen wird eine Command-line-Version von PHP benötigt):</p>
+					<p>Der Linux-Installer erwartet für DEB- und RPM-Pakete, dass in <span class="datei">../build</span> eine Plain-Text-Datei mit dem Namen <span class="datei">changelog</span> liegt. Ist kein Changelog vorhanden, wird automatisch eine leere Datei erzeugt. Im Ordner <span class="datei">./installer/</span> gibt es ein PHP-Script, das mithilfe der <a href="#" class="link-changelog">Changelog</a>-Datei der App (<span class="datei">./win/changelog.html</span>) und der Datei <span class="datei">./installer/build-changelog-maintainer.json</span> einen DEB- <abbr title="beziehungsweise">bzw.</abbr> RPM-Changelog automatisch erstellen kann (zum Ausführen wird eine Command-line-Version von PHP benötigt):</p>
 
-					<pre>cd ./installer
-php build-changelog.php [FORMAT] [PFAD]</pre>
+					<pre>php build-changelog.php [FORMAT] [PFAD]</pre>
 
-					<p>Als Formatangabe wird <code>deb</code> oder <code>rpm</code> erwartet; die Pfadangabe kann relativ oder absolut sein. Führt man das Script ohne Parameter aus, wird ein DEB-Changelog im Ordner <span class="datei">../../build</span> erstellt. Der Standard entspricht also diesem Aufruf:</p>
+					<p>Eigentlich ist nicht vorgesehen, dieses PHP-Script direkt auszuführen. Man sollte sich lieber der <a href="#framework-buildScript"><span class="datei">./installer/build.sh</span></a> bedienen, die das Changelog-Script bei Bedarf korrekt aufruft.</p>
 
-					<pre>php build-changelog.php deb ../../build</pre>
-
-					<p>Nach <abbr title="circa">ca.</abbr> ein, zwei Minuten (die genaue Zeit hängt natürlich vom Rechner, aber auch vom gewählten Installer ab), sollte eine Meldung wie <code>Linux-Installer erstellt!</code> erscheinen. Kommt diese Meldung, kann es eigentlich nicht zu größeren Fehlern gekommen sein. Im Verzeichnis <span class="datei">../build</span> befinden sich nun ein Ordner und mehrere Dateien. Interessant ist natürlich nur die Installer- <abbr title="beziehungsweise">bzw.</abbr> Archiv-Datei:</p>
+					<p>Nach <abbr title="circa">ca.</abbr> ein, zwei Minuten (die genaue Zeit hängt natürlich vom Rechner, aber auch vom gewählten Installer ab), sollte eine Meldung wie <code>Linux-Installer erstellt!</code> erscheinen. Kommt diese Meldung, kann es eigentlich nicht zu größeren Fehlern gekommen sein. Im Verzeichnis <span class="datei">../build</span> befinden sich nun ein Ordner und mehrere Dateien. Interessant ist natürlich nur die Installer-Datei:</p>
 
 					<p class="datei">zettelstraum_[VERSION]_[ARCHITEKTUR].(AppImage|deb|dmg|exe|rpm)</p>
 
 					<p>Die ausführbare exe-Datei kann nun auf einen Windows-Rechner kopiert und installiert werden. (Getestet wurde die Installation nur auf <i>Windows 10</i>.)</p>
 
-					<p>Für die Installation der DEB-Datei gibt es einige Abhängigkeiten, die zuvor <abbr title="gegebenenfalls">ggf.</abbr> aufgelöst werden müssen:</p>
-
-					<pre>sudo apt-get install libgtk-3-0 libnotify4 libnss3 libxss1 libxtst6 xdg-utils libatspi2.0-0 libuuid1 libappindicator3-1 libsecret-1-0</pre>
-
-					<p>Danach kann das Paket installiert werden:</p>
+					<p>Die DEB-Datei kann mit <span lang="en">Debian Package</span> installiert werden:</p>
 
 					<pre>sudo dpkg -i zettelstraum*.deb</pre>
 
@@ -276,35 +271,62 @@ php build-changelog.php [FORMAT] [PFAD]</pre>
 
 					<pre>rpm -qp --requires zettelstraum*.rpm</pre>
 
-					<p>Der <abbr title="Wortgeschichte digital">WGD</abbr>-Dateityp sollte während der Installation automatisch registriert werden – und zwar sowohl durch den <i>Windows-</i> als auch durch die <i>Linux</i>-Installer. Für den Fall, dass Probleme auftreten, finden sich im Programmordner Scripts, mit denen die Registrierung des Dateityps unter <i>Linux</i> manuell vor- oder zurückgenommen werden kann. Die Scripts liegen in <span class="datei">/opt/zettelstraum/resources/filetype/linux/</span> und können mit <code>sh</code> ausgeführt werden.</p>
+					<p>Der <abbr title="Wortgeschichte digital">WGD</abbr>-Dateityp sollte während der Installation automatisch registriert werden – und zwar sowohl durch den <i>Windows-</i> als auch durch die <i>Linux</i>-Installer. (Der <i>macOS</i>-Installer wurde wie gesagt nicht getestet.) Für den Fall, dass Probleme auftreten, finden sich im Programmordner Scripts, mit denen die Registrierung des Dateityps unter <i>Linux</i> manuell vor- oder zurückgenommen werden kann. Die Scripts liegen in <span class="datei">/opt/zettelstraum/resources/filetype/linux/</span> und können mit <code>bash</code> ausgeführt werden.</p>
 
-					<pre>sh [de]register.sh</pre>
+					<pre>bash [de]register.sh</pre>
 
 					<p>Für diesen Vorgang werden <abbr title="eventuell">evtl.</abbr> Root-Rechte benötigt.</p>
 
-					<p>Bei der Installation werden auch Dateityp-Icons abgelegt: <span class="datei">/usr/share/icons/hicolor/*/mimetypes/application-x-wgd.png</span>, und zwar jeweils in den Unterordnern <span class="datei">16x16</span>, <span class="datei">22x22</span>, <span class="datei">32x32</span>, <span class="datei">48x48</span>, <span class="datei">64x64</span> und <span class="datei">128x128</span>. Es könnte sein, dass die Desktopumgebung diese Icons den <abbr title="Wortgeschichte digital">WGD</abbr>-Dateien nicht automatisch zuordnet. Dies mit der UI des Systems manuell zu reparieren, sollte allerdings kein Problem sein, weil die Icons in den erwartbaren Standardordnern liegen.</p>
+					<p>Bei der Installation unter <i>Linux</i> werden übrigens auch Dateityp-Icons abgelegt: <span class="datei">/usr/share/icons/hicolor/*/mimetypes/application-x-wgd.png</span>, und zwar jeweils in den Unterordnern <span class="datei">16x16</span>, <span class="datei">22x22</span>, <span class="datei">32x32</span>, <span class="datei">48x48</span>, <span class="datei">64x64</span> und <span class="datei">128x128</span>.</p>
 
-					<p id="framework-buildScript">Die Installer und auch die <a href="#framework-paketieren"><span class="datei">packager.js</span></a> lassen sich über ein mitgeliefertes Build-Script steuern:</p>
+					<h2 id="framework-buildScript">Build-Script</h2>
 
-					<pre>cd ./installer
-bash build.sh</pre>
+					<p>Die Installer und auch die <a href="#framework-paketieren"><span class="datei">packager.js</span></a> lassen sich über ein mitgeliefertes Build-Script steuern:</p>
 
-					<p>Nach dem Aufruf kann man die Funktionsweise des Scripts über Texteingaben steuern. Das Ergebnis wird im erwähnten Ordner <span class="datei">../build/</span> abgelegt. Die Fragen im Script sind reichlich knapp gehalten. Darum ein paar kurze Erläuterungen:</p>
+					<pre>bash installer/build.sh</pre>
+
+					<p>Nach dem Aufruf kann man das Script über Texteingaben steuern. Das Ergebnis eines Bauvorgangs wird im erwähnten Ordner <span class="datei">../build/</span> abgelegt. Die Optionen und Fragen im Script sind reichlich knapp gehalten, vielleicht sogar kryptisch. Darum hier ein paar kurze Erläuterungen.</p>
+
+					<p>Aufgaben, die ausgeführt werden können:</p>
 
 					<ul>
-						<li><i>Typ:</i> Hier geht es darum, ob Installer erstellt werden sollen oder portable Pakete. Für die Installer werden die Dateien <span class="datei">./installer-(linux|mac|win).js</span> ausgeführt, für die Pakete die <span class="datei">packager.js</span>.</li>
+						<li><i>job:</i> Startet die Konfiguration eines einzelnen Build-Jobs. Das Script fragt nach und nach ab, was genau getan werden soll und führt den Job dann aus.</li>
+
+						<li><i>preset:</i> Startet ein in den ersten Zeilen des Scripts definiertes Preset, das durchaus auch aus mehreren Jobs bestehen kann. Die Presets können natürlich nach Belieben ergänzt oder geändert werden.</li>
+
+						<li><i>config:</i> Startet die Konfigurationsabfrage, aber keinen Job. Stattdessen wird nur der Konfigurationsstring ausgeworfen. Hilfreich, wenn man sich einen Preset anlegen möchte.</li>
+
+						<li><i>modules:</i> Führt <code>bash installer/build-modules.sh</code> aus. Das Script installiert die benötigten Node-Module oder führt ein Update bereits installierter Module aus.</li>
+
+						<li><i>exit:</i> Verlässt das Script.</li>
+					</ul>
+
+					<p>Zu den Abfragen, die beim Konfigurieren eines Jobs gestellt werden:</p>
+
+					<ul>
+						<li><i>Typ:</i> Hier geht es darum, ob Installer erstellt werden sollen oder portable Pakete. Für die Installer werden die Dateien <span class="datei">installer-(linux|mac|win).js</span> ausgeführt, für die Pakete die <span class="datei">packager.js</span>.</li>
 
 						<li><i>OS:</i> Das Betriebssystem, auf dem Paket oder Installer laufen sollen.</li>
 
 						<li><i>Format:</i> Das Format des Installers, das natürlich nur abgefragt wird, wenn ein Installer erstellt werden soll. Das Format der Paketierungen hängt allein vom gewählten Betriebssystem ab.</li>
 
-						<li><i>Maintainer:</i> Der Maintainer der App muss in die Changelogs eingetragen werden, die in DEB- und RPM-Pakete integriert werden. Hier kann der Name des Maintainers für die Version eingetragen werden, die man gerade baut. Der Maintainer wird nur dann eingetragen, wenn es keine Beta-Version ist. Er wird in der Datei <span class="datei">./installer/build-changelog-maintainer.json</span> gespeichert.</li>
+						<li>
+							<p><i>Maintainer:</i> Hier kann der Name des Maintainers für die Version der App angegeben werden, die man gerade baut. Der Maintainer muss in die Changelogs eingetragen werden, die in DEB- und RPM-Pakete integriert werden; deswegen braucht das Script diese Information.</p>
+
+							<p>Der Maintainer wird allerdings nur dann eingetragen, wenn es sich bei der gebauten Fassung <em>nicht</em> um eine Beta-Version handelt, will sagen: Steht im Versionstring irgendwo <code class="quelltext">beta</code>, wird die Eingabe ignoriert. Ansonsten wird sie in der Datei <span class="datei">./installer/build-changelog-maintainer.json</span> gespeichert.</p>
+
+							<p>Die Mail-Adresse des Maintainers wird wiederum über eine Angabe oben in der <span class="datei">./installer/build-changelog.php</span> aufgelöst.</p>
+						</li>
 
 						<li><i>Archiv:</i> Pakete liegen nach dem Bauen, anders als Installer, nur als Ordnerstruktur vor. Auf Wunsch kann man sie in einem Archiv komprimieren.</li>
 
-						<li><i>HTML updaten:</i> Das Build-Datum kann automatisch in die Datei <span class="datei">./win/changelog.html</span> eingetragen werden. Hier wird immer der erste <code class="quelltext">&lt;h2&gt;</code>-Tag im Dokument aufgefrischt. Die älteren bleiben unangetastet. Außerdem wird <abbr title="gegebenenfalls">ggf.</abbr> das Copyright-Jahr in der <span class="datei">./win/ueberApp.html</span> aufgefrischt.</li>
+						<li>
+							<p><i><abbr title="Hyptertext Markup Language">HTML</abbr>-Update:</i> Das Build-Datum und die Versionsnummer können automatisch in die Datei <span class="datei">./win/changelog.html</span> eingetragen werden. Angesprochen wird dabei immer der oberste Versionsblock mit dem <code class="quelltext">&lt;h2&gt;</code>-, dem dazugehörenden <code class="quelltext">&lt;div class="version"&gt;</code>-Tag und Kommentar. Außerdem wird <abbr title="gegebenenfalls">ggf.</abbr> das Copyright-Jahr in der <span class="datei">./win/ueberApp.html</span> aufgefrischt.</p>
 
-						<li><i>Am Ende aufräumen:</i> Der Ordner <span class="datei">../build/</span> kann nach dem Erledigen eines Build-Jobs automatisch bereinigt werden. Temporäre Dateien werden gelöscht, es bleiben nur Installer und Archive erhalten. Wird ein Paketordner nicht gepackt, wird auch dieser nicht gelöscht. Andere, nicht gepackte Paketordner hingegen werden entfernt.</li>
+							<p>Wird eine Beta-Version gebaut, werden die <abbr title="Hyptertext Markup Language">HTML</abbr>-Updates in keinem Fall ausgeführt.</p>
+						</li>
+
+						<li><i>Aufräumen:</i> Der Ordner <span class="datei">../build/</span> kann nach dem Erledigen eines Build-Jobs automatisch bereinigt werden. Temporäre Dateien werden gelöscht, es bleiben nur Installer, Archive und nicht archivierte Paketordner erhalten.</li>
 					</ul>
 
 					<!-- Ordner -->
@@ -380,21 +402,11 @@ bash build.sh</pre>
 					<ul>
 						<li><span class="datei">./index.html</span>: <abbr title="Hyptertext Markupt Language" lang="en">HTML</abbr>-Datei, die beim Öffnen des Hauptfensters geladen wird</li>
 
-						<li><span class="datei">./installer-linux.js</span>: Node-Script, das ein DEB- oder RPM-Paket erzeugt, mit dem <i class="app-name"></i> auf <i>Debian</i>/<i>Ubuntu</i> <abbr title="beziehungsweise">bzw.</abbr> Distributionen, die auf RPM setzen, installiert werden kann</li>
-
-						<li><span class="datei">./installer-mac.js</span>: Node-Script, das einen <abbr title="Apple Disk Image" lang="en">DMG</abbr>-Paket erzeugt, mit dem <i class="app-name"></i> auf <i>macOS</i> installiert werden kann; <abbr title="Apple Disk Image" lang="en">DMG</abbr>-Pakete können nur in <i>macOS</i> gebaut werden, darum wurde <span class="obacht">nicht getestet</span>, ob das Paket, das das Script erzeugen können sollte, wirklich funktioniert</li>
-
-						<li><span class="datei">./installer-win.js</span>: Node-Script, das einen <abbr title="Nullsoft Scriptable Install System" lang="en">NSIS</abbr>-Installer erzeugt mit dem <i class="app-name"></i> auf <i>Windows</i> installiert werden kann</li>
-
-						<li><span class="datei">./installer.js</span>: ein gemeinsam genutztes Modul für die Node-Scripts, die Installer erzeugen sowie für die <a href="#ordner-packager">packager.js</a></li>
-
-						<li><span class="datei">./LICENSE.*.txt</span>: Lizenzbestimmungen von <i class="app-name"></i>, den Icons und Fonts</li>
+						<li><span class="datei">./LICENSE.*.txt</span>: Lizenzbestimmungen von <i class="app-name"></i>, den eingebundenen Icons und Fonts</li>
 
 						<li><span class="datei">./main.js</span>: Node-Script, das die App initialisiert, die Programmfenster öffnet, lädt, verwaltet und für viele andere Dinge zuständig ist, was das Betriebssystem, auf dem <i class="app-name"></i> läuft, direkt betrifft</li>
 
 						<li><span class="datei">./package.json</span>: <abbr title="JavaScript Object Notation" lang="en">JSON</abbr>-Datei mit Meta-Informationen zu Programm, Autor und Lizenz sowie Angaben darüber, wie die App gestartet wird; <abbr title="vergleiche">vgl.</abbr> den Abschnitt <a href="#framework-starten">Starten der App</a></li>
-
-						<li id="ordner-packager"><span class="datei">./packager.js</span>: Node-Script, mit dem die App für <i>Windows, macOS</i> oder <i>Linux</i> paketiert werden kann; dabei werden keine Installer, sondern portable Ordner erzeugt, in denen eine ausführbare Datei zu finden ist</li>
 					</ul>
 
 					<!-- CSS -->
@@ -425,7 +437,7 @@ bash build.sh</pre>
 
 						<li><span class="datei">./img/menu/*.png</span>: Bilddateien, die nur von den Menüs verwendet werden, die das Framework verwaltet; dazu zählen das App-Menü am oberen Rand des Hauptfensters und die Kontextmenüs, die auf Rechtsklick erscheinen</li>
 
-						<li><span class="datei">./img/win/*.png</span>: Bilddateien, die von den Nebenfenstern (<a href="#" class="link-handbuch">Handbuch</a>, diese Dokumentation <abbr title="und so weiter">usw.</abbr>) geladen werden</li>
+						<li><span class="datei">./img/win/*.png</span>: Bilddateien, die nur von Nebenfenstern (<a href="#" class="link-handbuch">Handbuch</a>, diese Dokumentation <abbr title="und so weiter">usw.</abbr>) geladen werden</li>
 					</ul>
 
 					<!-- Installer -->
@@ -437,7 +449,7 @@ bash build.sh</pre>
 						<li>
 							<p><span class="datei">./installer/build.sh</span>: Build-Script, mit dem die App komfortabel paketiert werden kann. Das Script kann unter <i>Linux</i> via <code>bash build.sh</code> ausgeführt werden. Die Parameter werden über Texteingaben abgefragt.</p>
 
-							<p>Im Script können auch Presets angelegt werden, um mehrere Pakete verschiedener Natur mit einem Befehl zu bauen. Die Presets können in den ersten Zeilen der Datei angelegt werden; Muster stehen bereits drin.</p>
+							<p>Im Script können auch Presets angelegt werden, um mehrere Pakete verschiedener Natur mit einem Befehl zu bauen. Die Presets können in den ersten Zeilen der Datei angelegt werden; Muster sind bereits enthalten.</p>
 						</li>
 
 						<li><span class="datei">./installer/build-modules.sh</span>: Der Aufruf des Scripts installiert die nötigen <i>Electron</i>-Module im App-Ordner. Sind sie bereits installiert, führt es ein Update aus. Das Script kann auch aus der Datei <span class="datei">build.sh</span> heraus aufgerufen werden.</li>
@@ -446,11 +458,32 @@ bash build.sh</pre>
 
 						<li><span class="datei">./installer/build-changlog-maintainer.json</span>: Enthält Angaben zum Maintainer der einzelnen Versionen von <i class="app-name"></i>. Die Datei wird <abbr title="gegebenenfalls">ggf.</abbr> von der <span class="datei">build.sh</span> ergänzt und von der <span class="datei">build-changelog.php</span> genutzt, um die Maintainer-Infos in die DEB- und RPM-Changelogs zu schreiben.</li>
 
-						<li><span class="datei">./installer/linux-after-install.sh</span>: Shell-Befehle, die beim Erstellen von DEB- und RPM-Paketen durch die <a href="#ordner-root">Installer im Wurzelverzeichnis</a> in die Pakete eingebunden und während der Installation ausgeführt werden. Sie sind <span class="obacht">nur für dieses Szenario</span> gedacht!.</li>
+						<li><span class="datei">./installer/installer.js</span>: ein gemeinsam genutztes Modul für die Node-Scripts, die Installer erzeugen sowie für die <a href="#ordner-packager">packager.js</a></li>
+
+						<li>
+							<p><span class="datei">./installer/installer-linux.js</span>: Node-Script, das ein DEB- oder RPM-Paket erzeugt, mit dem <i class="app-name"></i> auf <i>Debian</i>/<i>Ubuntu</i> <abbr title="beziehungsweise">bzw.</abbr> Distributionen, die auf RPM setzen, installiert werden kann.</p>
+
+							<p>Dieses und die folgenden Installer-Scripts (auch die <span class="datei">packager.js</span>) müssen aus dem App-Ordner heraus aufgerufen werden. Andernfalls finden sie die Node-Module nicht:</p>
+
+							<pre>cd ./
+node installer/installer-linux.js deb</pre>
+						</li>
+
+						<li><span class="datei">./installer/installer-mac.js</span>: Node-Script, das einen <abbr title="Apple Disk Image" lang="en">DMG</abbr>-Paket erzeugt, mit dem <i class="app-name"></i> auf <i>macOS</i> installiert werden kann. <abbr title="Apple Disk Image" lang="en">DMG</abbr>-Pakete können nur in <i>macOS</i> gebaut werden, darum wurde <span class="obacht">nicht getestet</span>, ob das Paket, das das Script erzeugen können sollte, wirklich funktioniert.</li>
+
+						<li><span class="datei">./installer/installer-win.js</span>: Node-Script, das einen <abbr title="Nullsoft Scriptable Install System" lang="en">NSIS</abbr>-Installer erzeugt mit dem <i class="app-name"></i> auf <i>Windows</i> installiert werden kann.</li>
+
+						<li>
+							<p><span class="datei">./installer/linux-after-install.sh</span>: Shell-Befehle, die beim Erstellen von DEB- und RPM-Paketen mit eingebunden und während der Installation ausgeführt werden. Sie erzeugen einen Symlink zum Programm und führen die Dateityp-Assoziierung durch.</p>
+
+							<p>Die Scripts sind <span class="obacht">nur für dieses Szenario</span> gedacht! Wollen Sie die Dateityp-Assoziierung wieder aufheben oder neu erstellen, nutzen Sie lieber die Scripts im <a href="#ordner-resources">Filetype-Ordner</a>.</p>
+						</li>
 
 						<li><span class="datei">./installer/linux-after-remove.sh</span>: Shell-Befehle, die von DEB- und RPM-Paketen nach der Deinstallation ausgeführt werden.</li>
 
-						<li><span class="datei">./installer/mac-brackground.png</span>: Hintergrundbild für <abbr title="Apple Disk Image" lang="en">DMG</abbr>-Pakete. Es wird vom entsprechenden Installer genutzt.</li>
+						<li><span class="datei">./installer/mac-brackground.png</span>: Hintergrundbild für <abbr title="Apple Disk Image" lang="en">DMG</abbr>-Pakete. Es wird vom entsprechenden Installer-Script genutzt.</li>
+
+						<li id="ordner-packager"><span class="datei">./packager.js</span>: Node-Script, mit dem die App für <i>Windows, macOS</i> oder <i>Linux</i> paketiert werden kann; dabei werden keine Installer, sondern portable Ordner erzeugt, in denen eine ausführbare Datei zu finden ist. Details dazu unter <a href="#framework-paketieren">Paketieren der App</a>.</li>
 					</ul>
 
 					<!-- JavaScript -->
@@ -493,7 +526,7 @@ bash build.sh</pre>
 
 						<li><span class="datei">./js/app/tagger.js</span>: Overlay-Fenster, über das das Bedeutungsgerüst mit Tags versehen werden kann</li>
 
-						<li><span class="datei">./js/win/hilfe.js</span>: Funktionen für das <i>Handbuch</i> und die <i>technische Dokumentation</i> (also dieses Fenster)</li>
+						<li><span class="datei">./js/win/hilfe.js</span>: Funktionen für das <a href="#" class="link-handbuch"><i>Handbuch</i></a> und die <i>technische Dokumentation</i> (also dieses Fenster)</li>
 					</ul>
 
 					<!-- File type -->
@@ -530,8 +563,7 @@ bash build.sh</pre>
 					<p>Über <code class="quelltext">const {app} = require("electron").remote</code> <abbr title="zum Beispiel">z. B.</abbr> wird der Zugriff auf das App-Objekt im Main-Prozess ermöglicht. Und via <code class="quelltext">const path = require("path")</code> kann man das Node-Modul <a href="https://nodejs.org/api/path.html"><i>Path</i></a> laden, um sich neben vielem anderen <abbr title="zum Beispiel">z. B.</abbr> Informationen über den <i lang="en">path segment separator</i> im aktuellen Betriebssystem geben zu lassen (nämlich via <code class="quelltext">path.sep</code>). An einer Stelle wird auf diese Weise sogar ein Befehl in der Eingabeaufforderung von <i>Windows</i> ausgeführt:</p>
 
 					<pre class="quelltext">const child_process = require("child_process");
-child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);
-</pre>
+child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
 				</section>
 
 				<!-- WGD-DATEIFORMAT -->

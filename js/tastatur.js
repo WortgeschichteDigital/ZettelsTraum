@@ -234,11 +234,13 @@ let tastatur = {
 				hilfe.bildSchliessen();
 				return;
 			}
-			setTimeout(() => {
-				const {remote} = require("electron"),
-					win = remote.getCurrentWindow();
-				win.close();
-			}, 50); // ohne Timeout wird sonst mitunter das Nebenfenster geschlossen, aus dem dieses Nebenfenster geöffnet wurde
+			// Über-Fenster schließen
+			if (!/^(app|electron)$/.test(fenstertyp)) {
+				return;
+			}
+			const {remote} = require("electron"),
+				win = remote.getCurrentWindow();
+			win.close();
 			return;
 		}
 		// Key " " || "PageUp" || "PageDown" (Changelog, Dokumentation, Handbuch)

@@ -5,30 +5,34 @@ $maintainerMail = [
 
 $wochentag = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
-$format = "deb";
-if (isset($argv[1]) && $argv[1] == "rpm") {
-	$format = $argv[1];
-}
-
-$outdir = "../../build";
-if (isset($argv[2])) {
-	$outdir = $argv[2];
-}
-if (!file_exists($outdir)) {
-	fwrite(STDERR, "\033[1;31mFehler!\033[0m\n  \033[1;31m*\033[0m Verzeichnis $outdir nicht gefunden");
+$format = $argv[1];
+if (!preg_match("/^(deb|rpm)$/", $format)) {
+	fwrite(STDERR, "\033[1;31mFehler!\033[0m\n  \033[1;31m*\033[0m Changlog-Format $format unbekannt");
 	exit(1);
 }
 
-$html_file = "../win/changelog.html";
+$outdir = $argv[2] . "/../../build";
+if (!file_exists($outdir)) {
+	fwrite(STDERR, "\033[1;31mFehler!\033[0m\n  \033[1;31m*\033[0m " . str_replace($argv[2], "", $outdir) . " nicht gefunden");
+	exit(1);
+}
+
+$html_file = $argv[2] . "/../win/changelog.html";
 if (!file_exists($html_file)) {
-	fwrite(STDERR, "\033[1;31mFehler!\033[0m\n  \033[1;31m*\033[0m $html_file nicht gefunden");
+	fwrite(STDERR, "\033[1;31mFehler!\033[0m\n  \033[1;31m*\033[0m " . str_replace($argv[2], "", $html_file) . " nicht gefunden");
+	exit(1);
+}
+
+$json = $argv[2] . "/build-changelog-maintainer.json";
+if (!file_exists($html_file)) {
+	fwrite(STDERR, "\033[1;31mFehler!\033[0m\n  \033[1;31m*\033[0m " . str_replace($argv[2], "", $json) . " nicht gefunden");
 	exit(1);
 }
 
 // Changelog erstellen
 $maintainer = [];
-if (file_exists("build-changelog-maintainer.json")) {
-	$maintainer = json_decode(file_get_contents("build-changelog-maintainer.json"), JSON_OBJECT_AS_ARRAY);
+if (file_exists($json)) {
+	$maintainer = json_decode(file_get_contents($json), JSON_OBJECT_AS_ARRAY);
 }
 $cl = "";
 $html = file($html_file);

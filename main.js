@@ -382,7 +382,7 @@ layoutMenu.splice(layoutMenu.length - 1, 0, layoutMenuAnsicht[0]);
 
 // ggf. Developer-Menü ergänzen
 let devtools = false;
-if (!app.isPackaged || true) {
+if (!app.isPackaged) {
 	devtools = true;
 	let menus = [layoutMenu, layoutMenuAnsicht];
 	for (let i = 0, len = menus.length; i < len; i++) {
@@ -644,15 +644,7 @@ optionen = {
 		if (fs.existsSync(optionen.pfad)) {
 			const content = fs.readFileSync(optionen.pfad, "utf-8");
 			try {
-				let data = JSON.parse(content);
-				if (data.app) {
-					// bis Version 0.11.0 waren die Optionen widersinnigerweise in verschiedene Zweige aufgeteilt; das kommt jetzt alles in optionen.data, sodass die Daten in den Renderer-Prozessen und im Main-Prozess komplett an einem identischen Ort liegen
-					optionen.data = data.app;
-					optionen.data.fenster = data.fenster;
-					optionen.data["fenster-bedeutungen"] = data["fenster-bedeutungen"];
-				} else {
-					optionen.data = data;
-				}
+				optionen.data = JSON.parse(content);
 			} catch (json_err) {
 				// kann die Optionen-Datei nicht eingelesen werden, ist sie wohl korrupt;
 				// dann lösche ich sie halt einfach

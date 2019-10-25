@@ -6,8 +6,29 @@ modules=(
 	"electron-packager"
 )
 
-# Working Directory
-dir=$PWD
+if [ "$1" != "inc" ]; then
+	cat <<- EOF
+
+
+      ZZZZZZZZZZZZTTTTTTTTTTTT
+      ZZZZZZZZZZZZTTTTTTTTTTTT
+              ZZZ      TT
+             ZZZ       TT
+            ZZZ        TT
+           ZZZ         TT
+          ZZZ          TT
+         ZZZ           TT
+        ZZZ            TT
+       ZZZ             TT
+      ZZZZZZZZZZZZ     TT
+      ZZZZZZZZZZZZ     TT
+
+      $(echo -e "\033[48;5;254;38;5;63m         Modules        \033[0m")
+	EOF
+fi
+
+# Script Directory ermitteln
+dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 
 # package.json nicht gefunden
 if ! test -e "${dir}/../package.json"; then
@@ -44,7 +65,7 @@ getVersion() {
 
 # Module installieren
 installModules() {
-	echo -e "\n\n  \033[1;32m*\033[0m Module installieren oder updaten"
+	echo -e "  \033[1;32m*\033[0m Module installieren oder updaten"
 
 	for (( i=0; i<${#modules[@]}; i++ )); do
 		moduleBase=${modules[$i]%%@*}
@@ -80,7 +101,9 @@ else
 		read -ep "Module installieren oder updaten (j/n): " install
 
 		if [ "$install" = "j" ]; then
+			echo -e "\n"
 			installModules
+			exit 0
 		elif [ "$install" = "n" ]; then
 			exit 0
 		else
