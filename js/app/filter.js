@@ -898,9 +898,9 @@ let filter = {
 			this.classList.toggle("aktiv");
 			let cont = document.getElementById("filter-erweiterte-cont");
 			if (this.classList.contains("aktiv")) {
-				cont.classList.remove("aus");
+				filter.anzeigeUmschaltenAnim(cont, true);
 			} else {
-				cont.classList.add("aus");
+				filter.anzeigeUmschaltenAnim(cont, false);
 			}
 			liste.status(true);
 		});
@@ -1599,26 +1599,78 @@ let filter = {
 		});
 	},
 	// klappt die Filterblöcke auf oder zu (Event-Listener)
+	//   a = Element
+	//     (Filterkopf)
 	anzeigeUmschalten (a) {
 		a.addEventListener("click", function(evt) {
 			evt.preventDefault();
 			// wenn nur ein Filter offen sein sollte und der aktive Filter gerade zugeklappt ist
 			if (optionen.data.einstellungen["filter-zuklappen"]) {
-				document.querySelectorAll(".filter-kopf").forEach(function(i) {
+				document.querySelectorAll(".filter-kopf").forEach(i => {
+					let block = i.nextSibling;
 					if (i === this) {
-						i.nextSibling.classList.toggle("aus");
-					} else {
-						i.nextSibling.classList.add("aus");
+						filter.anzeigeUmschaltenAnim(block, block.classList.contains("aus"));
+					} else if (!block.classList.contains("aus")) {
+						filter.anzeigeUmschaltenAnim(block, false);
 					}
-				}, this);
+				});
 				return;
 			}
 			// wenn mehrere Filter offen sein dürfen
-			this.nextSibling.classList.toggle("aus");
+			let block = this.nextSibling;
+			filter.anzeigeUmschaltenAnim(block, block.classList.contains("aus"));
 			if (this.classList.contains("aktiv")) {
 				this.blur();
 			}
 		});
+	},
+	// speichert die Filterblöcke, in denen gerade eine Animation läuft
+	anzeigeUmschaltenAktiv: new Set(),
+	// Animation zum Auf- oder Zuklappen der Filter
+	//   block = Element
+	//     (Filterkopf)
+	//   auf = Boolean
+	//     (Filterblock aufklappen)
+	anzeigeUmschaltenAnim (block, auf) {
+		// läuft in dem Block gerade eine Anmiation? => beenden lassen
+		if (filter.anzeigeUmschaltenAktiv.has(block)) {
+			return;
+		}
+		filter.anzeigeUmschaltenAktiv.add(block);
+		// zuklappen
+		if (!auf) {
+			
+			block.style.height = `${block.offsetHeight}px`;
+			setTimeout(() => {
+				block.classList.add("blenden");
+				block.style.height = "0";
+				block.style.marginBottom = "0";
+				setTimeout(() => {
+					block.classList.add("aus");
+					block.classList.remove("blenden");
+					block.style.height = null;
+					block.style.marginBottom = null;
+					filter.anzeigeUmschaltenAktiv.delete(block);
+				}, 300);
+			}, 0);
+			return;
+		}
+		// aufklappen
+		block.classList.remove("aus");
+		const zielHoehe = block.offsetHeight;
+		block.classList.add("blenden");
+		block.style.height = "0";
+		block.style.marginBottom = "0";
+		setTimeout(() => {
+			block.style.height = `${zielHoehe}px`;
+			block.style.marginBottom = `10px`;
+			setTimeout(() => {
+				block.style.height = null;
+				block.style.marginBottom = null;
+				block.classList.remove("blenden");
+				filter.anzeigeUmschaltenAktiv.delete(block);
+			}, 300);
+		}, 0);
 	},
 	// die Suche wird aufgerufen
 	suche () {

@@ -1047,11 +1047,11 @@ let beleg = {
 		if (button.classList.contains("aktiv")) {
 			an = false;
 			button.classList.add("beleg-opt-anzeige-letztes");
-			button.title = "zur Leseansicht wechseln (Strg + U)";
+			button.title = `zur Leseansicht wechseln (${tastatur.shortcutsTextAktuell("Strg")} + U)`;
 			tab.classList.remove("leseansicht");
 		} else {
 			button.classList.remove("beleg-opt-anzeige-letztes");
-			button.title = "zur Formularansicht wechseln (Strg + U)";
+			button.title = `zur Formularansicht wechseln (${tastatur.shortcutsTextAktuell("Strg")} + U)`;
 			tab.classList.add("leseansicht");
 		}
 		button.classList.toggle("aktiv");
@@ -1065,9 +1065,9 @@ let beleg = {
 		});
 		// Title des Sprung-Icons anpassen
 		if (an) {
-			document.getElementById("beleg-link-springen").title = "zur nächsten Markierung springen (Strg + ↓)";
+			document.getElementById("beleg-link-springen").title = `zur nächsten Markierung springen (${tastatur.shortcutsTextAktuell("Strg")} + ↓)`;
 		} else {
-			document.getElementById("beleg-link-springen").title = "zum Wort im Belegtext springen (Strg + ↓)";
+			document.getElementById("beleg-link-springen").title = `zum Wort im Belegtext springen (${tastatur.shortcutsTextAktuell("Strg")} + ↓)`;
 		}
 		// Einfüge-Icons ein- oder ausblenden
 		document.querySelectorAll("#beleg .icon-tools-einfuegen").forEach(function(i) {
@@ -1290,10 +1290,10 @@ let beleg = {
 		let link = document.getElementById("beleg-link-kuerzen");
 		if (optionen.data.beleg.kuerzen) {
 			link.classList.add("aktiv");
-			link.title = "Belegkontext anzeigen (Strg + K)";
+			link.title = `Belegkontext anzeigen (${tastatur.shortcutsTextAktuell("Strg")} + K)`;
 		} else {
 			link.classList.remove("aktiv");
-			link.title = "Belegkontext kürzen (Strg + K)";
+			link.title = `Belegkontext kürzen (${tastatur.shortcutsTextAktuell("Strg")} + K)`;
 		}
 	},
 	// Trennstriche in der Leseansicht ein- bzw. ausblenden
@@ -1317,10 +1317,10 @@ let beleg = {
 		let link = document.getElementById("beleg-link-trennung");
 		if (optionen.data.beleg.trennung) {
 			link.classList.add("aktiv");
-			link.title = "Silbentrennung nicht anzeigen (Strg + T)";
+			link.title = `Silbentrennung nicht anzeigen (${tastatur.shortcutsTextAktuell("Strg")} + T)`;
 		} else {
 			link.classList.remove("aktiv");
-			link.title = "Silbentrennung anzeigen (Strg + T)";
+			link.title = `Silbentrennung anzeigen (${tastatur.shortcutsTextAktuell("Strg")} + T)`;
 		}
 	},
 	// Verteiler für die Sprungfunktion (Ctrl + ↓)

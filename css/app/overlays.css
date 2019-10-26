@@ -974,6 +974,11 @@
 	margin: 10px 0 5px 0;
 }
 
+#meta-cont h3 img {
+	margin-left: 15px;
+	vertical-align: bottom;
+}
+
 #meta-cont p {
 	margin-bottom: 5px;
 	overflow: hidden;

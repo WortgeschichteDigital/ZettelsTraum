@@ -85,13 +85,13 @@ main {
 }
 
 /* Elemente ------------------------------------- */
-div:not(#kopieren):not(#animation) {
+main div {
 	margin-top: 25px;
 	border-top: 1px solid var(--linie);
 	padding-top: 25px;
 }
 
-div:not(#kopieren):not(#animation):first-child {
+main div:first-child {
 	border-top: none;
 }
 

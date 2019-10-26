@@ -5,16 +5,19 @@ window.addEventListener("load", () => {
 	window.fenstertyp = "handbuch";
 
 	// INIT-COMMON
+	initCommon.listenerMain();
 	initCommon.appName();
 	initCommon.events();
 	initCommon.eventsSuche();
 	initCommon.eventsPopup();
-	initCommon.listenerMain();
+
+	// ANZEIGE TASTATURKÜRZEL ANPASSEN
+	tastatur.shortcutsText();
 
 	// UMBRUCH IN LANGEN DATEIPFADEN
 	hilfe.dateiBreak();
 
 	// ANZEIGE INITIALISIEREN
-	hilfe.sektionWechseln("einfuehrung", false);
-	hilfe.ladenAus();
+	hilfe.sektionWechseln("einfuehrung"); // damit sich das Inhaltsverzeichnis aufbaut
+	helfer.fensterGeladen();
 });

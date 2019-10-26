@@ -7,6 +7,9 @@ window.addEventListener("load", () => {
 	// INIT-COMMON
 	initCommon.events();
 
+	// ANZEIGE TASTATURKÜRZEL ANPASSEN
+	tastatur.shortcutsText();
+
 	// ICONS
 	fehlerlog.kopieren(document.getElementById("kopieren"));
 
@@ -14,4 +17,7 @@ window.addEventListener("load", () => {
 	const {ipcRenderer} = require("electron");
 	let fehler = ipcRenderer.sendSync("fehler-senden");
 	fehlerlog.fuellen(fehler);
+
+	// ANZEIGE INITIALISIEREN
+	helfer.fensterGeladen();
 });

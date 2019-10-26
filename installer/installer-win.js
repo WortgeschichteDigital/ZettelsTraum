@@ -7,7 +7,7 @@ let typ = "nsis";
 const builder = require("electron-builder"),
 	Arch = builder.Arch,
 	Platform = builder.Platform,
-	prepare = require("./installer.js"),
+	prepare = require("./installer"),
 	jahr = prepare.getYear();
 let config = {};
 

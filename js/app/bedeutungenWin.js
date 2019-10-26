@@ -56,7 +56,7 @@ let bedeutungenWin = {
 		];
 		let layoutMenuMac = [
 			{
-				label: `${app.getName().replace("'", "’")}`,
+				label: app.getName(),
 				submenu: [
 					{
 						label: "Fenster schließen",
@@ -108,19 +108,23 @@ let bedeutungenWin = {
 		bedeutungenWin.win = new BrowserWindow({
 			title: `Bedeutungsgerüst: ${kartei.wort}`,
 			icon: bedeutungenWin.icon(),
+			backgroundColor: "#386ea6",
 			x: optionen.data["fenster-bedeutungen"].x,
 			y: optionen.data["fenster-bedeutungen"].y,
 			width: optionen.data["fenster-bedeutungen"].width,
 			height: optionen.data["fenster-bedeutungen"].height,
 			minWidth: 400,
 			minHeight: 400,
-			show: false,
 			webPreferences: {
 				nodeIntegration: true,
 				devTools: devtools,
 				defaultEncoding: "utf-8",
 			},
 		});
+		// ggf. maximieren
+		if (optionen.data["fenster-bedeutungen"].maximiert) {
+			bedeutungenWin.win.maximize();
+		}
 		// Menü erzeugen
 		if (process.platform !== "darwin") {
 			let menu = Menu.buildFromTemplate(layoutMenuAnsicht);
@@ -129,7 +133,7 @@ let bedeutungenWin = {
 			bedeutungenWin.win.on("leave-full-screen", function() {
 				// nach Verlassen des Vollbilds muss die Menüleiste wieder ausgeblendet werden
 				// (ohne Timeout geht es nicht)
-				setTimeout(() => bedeutungenWin.win.setMenuBarVisibility(false), 1);
+				setTimeout(() => bedeutungenWin.win.setMenuBarVisibility(false), 0);
 			});
 		} else if (process.platform === "darwin") {
 			bedeutungenWin.vorlage = layoutMenuAnsicht;
@@ -141,15 +145,10 @@ let bedeutungenWin = {
 		}
 		// HTML laden
 		bedeutungenWin.win.loadFile(path.join(__dirname, "win", "bedeutungen.html"));
-		// Fenster anzeigen, sobald alles geladen wurde
-		bedeutungenWin.win.once("ready-to-show", function() {
-			bedeutungenWin.win.show();
-			// ggf. maximieren
-			if (optionen.data["fenster-bedeutungen"].maximiert) {
-				bedeutungenWin.win.maximize();
-			}
-			// Daten aus dem Renderer-Prozess holen
-			bedeutungenWin.daten();
+		// Daten aus dem Renderer-Prozess holen
+		bedeutungenWin.win.webContents.once("did-finish-load", function() {
+			// die IPC-Listener im Renderer-Prozess müssen erst initialisiert werden
+			setTimeout(() => bedeutungenWin.daten(), 25);
 		});
 		// globales Fensterobjekt beim Schließen dereferenzieren
 		bedeutungenWin.win.on("close", () => bedeutungenWin.win = null);

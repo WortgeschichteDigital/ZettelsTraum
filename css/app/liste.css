@@ -98,7 +98,7 @@
 .filter-kopf {
 	position: relative;
 	display: block;
-	margin: 10px 0;
+	margin: 0 0 10px 0;
 	padding: 3px 5px 2px 5px; /* ein bisschen krum, damit der Kopf exakt dieselbe Höhe hat, wie ein Listenkopf */
 	background-color: var(--farbeB);
 	color: #fff;
@@ -149,7 +149,7 @@
 }
 
 .filter-cont {
-	margin: 0 10px 0 9px; /* vgl. .filter-cont p */
+	margin: 0 10px 10px 9px; /* vgl. .filter-cont p */
 }
 
 .filter-cont-max {
@@ -160,6 +160,11 @@
 
 .filter-cont-max p:last-child {
 	margin-bottom: 0;
+}
+
+.filter-cont.blenden {
+	overflow: hidden;
+	transition: height .3s ease, margin-bottom .3s ease;
 }
 
 .filter-cont a:focus {
@@ -255,7 +260,13 @@ p.no-indent + .filter-baum, /* betrifft Verschiedenes > Filterlogik */
 }
 
 #filter-erweiterte-cont {
+	margin-bottom: -5px;
 	padding-left: 24px;
+}
+
+#filter-erweiterte-cont.blenden {
+	overflow: hidden;
+	transition: height .3s ease, margin-bottom .3s ease;
 }
 
 #filter-erweiterte-cont h3 {
@@ -278,6 +289,10 @@ p.no-indent + .filter-baum, /* betrifft Verschiedenes > Filterlogik */
 	padding: 0;
 	max-width: 130px;
 	text-indent: 0;
+}
+
+#filter-zeitraum-dynamisch p:last-child {
+	padding-bottom: 0;
 }
 
 #filter-datenfelder {

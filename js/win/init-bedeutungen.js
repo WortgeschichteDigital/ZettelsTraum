@@ -5,8 +5,11 @@ window.addEventListener("load", () => {
 	window.fenstertyp = "bedeutungen";
 
 	// INIT-COMMON
-	initCommon.events();
 	initCommon.listenerMain();
+	initCommon.events();
+
+	// ANZEIGE TASTATURKÜRZEL ANPASSEN
+	tastatur.shortcutsText();
 
 	// ICONS
 	document.getElementById("bd-win-drucken").addEventListener("click", evt => {
@@ -17,4 +20,7 @@ window.addEventListener("load", () => {
 	// DROPDOWN
 	document.querySelectorAll(".dropdown-feld").forEach(i => dropdown.feld(i));
 	document.querySelectorAll(".dropdown-link-td, .dropdown-link-element").forEach(i => dropdown.link(i));
+
+	// ANZEIGE INITIALISIEREN
+	helfer.fensterGeladen();
 });

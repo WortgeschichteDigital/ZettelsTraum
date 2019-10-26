@@ -1327,15 +1327,15 @@ let bedeutungen = {
 		let tools = [
 			{
 				cl: "icon-tools-bold",
-				title: "Fetten (Strg + B)",
+				title: `Fetten (${tastatur.shortcutsTextAktuell("Strg")} + B)`,
 			},
 			{
 				cl: "icon-tools-italic",
-				title: "Kursivieren (Strg + I)",
+				title: `Kursivieren (${tastatur.shortcutsTextAktuell("Strg")} + I)`,
 			},
 			{
 				cl: "icon-tools-underline",
-				title: "Unterstreichen (Strg + U)",
+				title: `Unterstreichen (${tastatur.shortcutsTextAktuell("Strg")} + U)`,
 			},
 		];
 		for (let i = 0, len = tools.length; i < len; i++) {

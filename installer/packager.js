@@ -8,7 +8,7 @@ if (!typ || !/^(darwin|linux|win32)$/.test(typ)) {
 
 // Vorbereitung
 const packager = require("electron-packager"),
-	prepare = require("./installer.js"),
+	prepare = require("./installer"),
 	jahr = prepare.getYear();
 
 let config = {

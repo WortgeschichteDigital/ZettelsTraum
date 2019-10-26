@@ -593,26 +593,11 @@ let optionen = {
 	},
 	// Tag-Dateien aus app/resources laden
 	tagsAutoLaden () {
-		// Programm-Pfad ermittelns
-		const {app} = require("electron").remote,
-			path = require("path");
-		let basis = "";
-		// getAppPath() funktioniert nur in der nicht-paketierten App, in der paketierten
-		//   zeigt es auf [Installationsordner]/resources/app.asar;
-		// getPath("exe") funktioniert nur in der paktierten Version, allerdings muss
-		//   noch der Name der ausführbaren Datei entfernt werden; in der nicht-paketierten
-		//   App zeigt es auf die ausführbare Datei des Node-Modules; unter macOS muss auch noch
-		//   der Pfad geändert werden
-		if (app.isPackaged) {
-			const sep = helfer.escapeRegExp(path.sep);
-			let reg = new RegExp(`${sep}(MacOS${sep})*zettelstraum(\.exe)*$`);
-			basis = app.getPath("exe").replace(reg, "");
-		} else {
-			basis = app.getAppPath();
-		}
-		let resources = "resources";
-		if (process.platform === "darwin") {
-			resources = "Resources";
+		// Resources-Pfad ermitteln
+		let resources = process.resourcesPath;
+		if (/node_modules/.test(resources)) {
+			// App ist nicht paketiert => resourcesPath zeigt auf die resources von Electron
+			resources = `${resources.replace(/node_modules.+/, "")}resources`;
 		}
 		// XML-Dateien ermitteln => Dateien überprüfen + laden
 		let xml = [],
@@ -623,7 +608,7 @@ let optionen = {
 				withFileTypes: true,
 			};
 			const fs = require("fs");
-			fs.readdir(path.join(basis, resources), config, function(err, dateien) {
+			fs.readdir(resources, config, function(err, dateien) {
 				if (err) {
 					reject(false);
 					return;
@@ -637,9 +622,10 @@ let optionen = {
 			});
 		})
 			.then(() => {
+				const path = require("path");
 				xml.forEach(function(i) {
 					promises.push(optionen.tagsCheckLaden({
-						datei: path.join(basis, resources, i),
+						datei: path.join(resources, i),
 					}));
 				});
 				Promise.all(promises).then(() => {

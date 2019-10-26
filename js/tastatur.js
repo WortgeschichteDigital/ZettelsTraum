@@ -182,9 +182,14 @@ let tastatur = {
 			parent = parent.parentNode;
 		}
 		// Elemente sammeln und Fokus-Position ermitteln
-		let elemente = [];
+		let elemente = [],
+			regA = /filter-kopf|icon-link|navi-link/;
+		if (parent.parentNode.id === "liste-filter") {
+			// sonst findet er auch die Icon-Links in der Filterleiste
+			regA = /filter-kopf/;
+		}
 		parent.querySelectorAll(`a, input[type="button"]`).forEach(e => {
-			if ( e.nodeName === "INPUT" || e.nodeName === "A" && /filter-kopf|icon-link|navi-link/.test(e.getAttribute("class")) ) {
+			if ( e.nodeName === "INPUT" || e.nodeName === "A" && regA.test(e.getAttribute("class")) ) {
 				elemente.push(e);
 			}
 		});
@@ -325,5 +330,49 @@ let tastatur = {
 			s.push("Shift");
 		}
 		tastatur.modifiers = s.join("+");
+	},
+	// Beschreibung von Tastaturkürzeln unter macOS anpassen
+	shortcutsText () {
+		if (process.platform !== "darwin") {
+			return;
+		}
+		let kuerzel = {
+			Strg: "⌘",
+			Alt: "⌥",
+		};
+		// <kbd>
+		document.querySelectorAll("kbd").forEach(i => {
+			if (i.classList.contains("nochange")) {
+				return;
+			}
+			if (i.textContent === "Strg") {
+				i.textContent = kuerzel.Strg;
+			} else if (i.textContent === "Alt") {
+				i.textContent = kuerzel.Alt;
+			}
+		});
+		// title=""
+		document.querySelectorAll("[title]").forEach(i => {
+			if (/Strg \+/.test(i.title)) {
+				i.title = i.title.replace(/Strg \+/, `${kuerzel.Strg} +`);
+			}
+			if (/Alt \+/.test(i.title)) {
+				i.title = i.title.replace(/Alt \+/, `${kuerzel.Alt} +`);
+			}
+		});
+	},
+	// auf Anfrage das aktuelle Kürzel zurückgeben
+	// (unter macOS muss es geändert werden)
+	//   text = String
+	//     (das Tastaturkürzel, das ggf. angepasst werden soll)
+	shortcutsTextAktuell (text) {
+		if (process.platform !== "darwin") {
+			return text;
+		}
+		let kuerzel = {
+			Strg: "⌘",
+			Alt: "⌥",
+		};
+		return kuerzel[text];
 	},
 };

@@ -1,20 +1,30 @@
 #!/bin/bash
 
 presets=(
-	"internes Release"
-	"GitHub-Release"
+	"GitHub"
+	"Arbeitsgruppe"
+	"Test (Linux)"
+	"Test (alle)"
 )
 preset1=(
-	"type=installer|os=linux|pkg=deb|main=Nico_Dorn|update=j|clean=j"
-	"type=installer|os=win|pkg=nsis|update=n|clean=j"
-	"type=packager|os=mac|arch=gz|update=n|clean=j"
-)
-preset2=(
 	"type=installer|os=linux|pkg=deb|main=Nico_Dorn|update=j|clean=j"
 	"type=installer|os=win|pkg=nsis|update=n|clean=j"
 	"type=packager|os=linux|arch=gz|update=n|clean=j"
 	"type=packager|os=mac|arch=gz|update=n|clean=j"
 	"type=packager|os=win|arch=zip|update=n|clean=j"
+)
+preset2=(
+	"type=installer|os=linux|pkg=deb|main=Nico_Dorn|update=j|clean=j"
+	"type=installer|os=win|pkg=nsis|update=n|clean=j"
+	"type=packager|os=mac|arch=gz|update=n|clean=j"
+)
+preset3=(
+	"type=packager|os=linux|arch=-|update=n|clean=j"
+)
+preset4=(
+	"type=packager|os=linux|arch=-|update=n|clean=j"
+	"type=packager|os=win|arch=-|update=n|clean=j"
+	"type=packager|os=mac|arch=gz|update=n|clean=j"
 )
 
 cat <<- EOF
@@ -72,7 +82,7 @@ appVersion() {
 	echo $(grep '"version":' "$packageJson" | perl -pe 's/.+: "(.+?)",/\1/')
 }
 
-codeName() {
+sysName() {
 	declare -A sys
 	sys[linux]="linux"
 	sys[mac]="darwin"
@@ -281,7 +291,7 @@ makeArchive() {
 
 	# Dateiname
 	version=$(appVersion)
-	system=$(codeName)
+	system=$(sysName)
 	ext=$arch
 	if [ "$arch" = "gz" ]; then
 		ext="tar.gz";
@@ -380,7 +390,7 @@ execJob() {
 	if [ "$type" = "packager" ]; then
 		echo -e "  \033[1;32m*\033[0m Packager ausführen"
 		cd "${dir}/../"
-		node ./installer/packager.js $(codeName)
+		node ./installer/packager.js $(sysName)
 		if (( $? > 0 )); then
 			echo -e "\033[1;31mFehler!\033[0m\n  \033[1;31m*\033[0m Installer-Script abgebrochen"
 			cd "$dir"
@@ -429,17 +439,13 @@ presetsPrint() {
 
 # Preset ausführen
 presetsExec() {
-	# Variablen vorbereiten
-	arrayName="preset$1"
-	array="${arrayName}[@]"
-	presetNr=$[$1 - 1]
-
 	# Jobs durchführen
-	n=1
-	for j in "${!array}"; do
-		echo -e "\n  \033[1;33m*\033[0m Preset \"${presets[$presetNr]}\": \033[1;33mJob ${n}\033[0m\n"
-		execJob "$j"
-		(( n++ ))
+	declare -n array="preset$1"
+	presetNr=$[$1 - 1]
+	for (( i=0; i<${#array[@]}; i++ )); do
+		echo -en "\n  \033[1;33m*\033[0m Preset \"${presets[$presetNr]}\":"
+		echo -e " \033[1;33mJob $[i + 1]/${#array[@]}\033[0m\n"
+		execJob "${array[$i]}"
 	done
 	
 	# Jobs erledigt

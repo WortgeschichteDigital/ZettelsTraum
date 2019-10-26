@@ -7,8 +7,15 @@ window.addEventListener("load", () => {
 	// INIT-COMMON
 	initCommon.appName();
 	initCommon.events();
+	initCommon.eventsPopup();
+
+	// ANZEIGE TASTATURKÜRZEL ANPASSEN
+	tastatur.shortcutsText();
 
 	// PROGRAMM-VERSION EINTRAGEN
 	const {app} = require("electron").remote;
 	document.getElementById("version").textContent = app.getVersion();
+
+	// ANZEIGE INITIALISIEREN
+	helfer.fensterGeladen();
 });

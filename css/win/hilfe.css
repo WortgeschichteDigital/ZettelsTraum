@@ -335,6 +335,11 @@ nav ul.h {
 	margin: 5px 10px 0 10px;
 }
 
+nav ul.blenden {
+	overflow: hidden;
+	transition: height .3s ease, margin-top .3s ease;
+}
+
 nav ul.h li {
 	margin-bottom: 5px;
 	padding-left: 15px;
@@ -472,28 +477,38 @@ mark.wort {
 	font-weight: bold;
 }
 
+
+#suchergebnisse a {
+	display: block;
+	margin-bottom: 15px;
+	color: var(--text);
+}
+
+#suchergebnisse a:hover,
+#suchergebnisse a:focus {
+	color: var(--farbe);
+	text-decoration: none;
+}
+
+#suchergebnisse a.mehr-treffer {
+	color: var(--farbe);
+	font-style: italic;
+	text-align: center;
+}
+
+#suchergebnisse a.mehr-treffer:hover,
+#suchergebnisse a.mehr-treffer:focus {
+	text-decoration: underline;
+}
+
 #suchergebnisse b {
 	padding-right: 15px;
-}
-
-#suchergebnisse p {
-	margin-bottom: 15px;
-}
-
-#suchergebnisse p:hover {
-	color: var(--farbe);
 }
 
 #suchergebnisse p.keine-treffer {
 	color: var(--textSehrHell);
 	text-align: center;
 	font-style: italic;
-}
-
-#suchergebnisse p.mehr-treffer {
-	color: var(--farbe);
-	font-style: italic;
-	text-align: center;
 }
 
 /* Bild ----------------------------------------- */

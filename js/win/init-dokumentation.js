@@ -5,16 +5,18 @@ window.addEventListener("load", () => {
 	window.fenstertyp = "dokumentation";
 
 	// INIT-COMMON
+	initCommon.listenerMain();
 	initCommon.appName();
 	initCommon.events();
 	initCommon.eventsSuche();
 	initCommon.eventsPopup();
-	initCommon.listenerMain();
+
+	// ANZEIGE TASTATURKÜRZEL ANPASSEN
+	tastatur.shortcutsText();
 
 	// UMBRUCH IN LANGEN DATEIPFADEN
 	hilfe.dateiBreak();
 
 	// ANZEIGE INITIALISIEREN
-	hilfe.sektionWechseln("start", false);
-	hilfe.ladenAus();
+	helfer.fensterGeladen();
 });

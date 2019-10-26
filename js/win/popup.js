@@ -9,6 +9,7 @@ let popup = {
 	//   evt = Event-Object
 	//     (das Ereignis-Objekt, das beim Rechtsklick erzeugt wird)
 	oeffnen (evt) {
+		// Klickziel ermitteln
 		const target = popup.getTarget(evt.path);
 		if (!target) {
 			return;
@@ -26,6 +27,8 @@ let popup = {
 			popup.menuBearbeiten(menu);
 		} else if (target === "link") {
 			popup.menuLink(menu);
+		} else if (target === "mail") {
+			popup.menuMail(menu);
 		}
 		// Menü anzeigen
 		menu.popup({
@@ -62,6 +65,9 @@ let popup = {
 			if (/^http/.test(pfad[i].getAttribute("href"))) {
 				popup.element = pfad[i];
 				return "link";
+			} else if (/^mailto:/.test(pfad[i].getAttribute("href"))) {
+				popup.element = pfad[i];
+				return "mail";
 			}
 		}
 	},
@@ -166,6 +172,21 @@ let popup = {
 			click: function() {
 				const {clipboard} = require("electron");
 				clipboard.writeText(popup.element.getAttribute("href"));
+			},
+		}));
+	},
+	// Mail-Menü füllen
+	//   menu = Object
+	//     (Menü-Objekt, an das die Menü-Items gehängt werden müssen)
+	menuMail (menu) {
+		const {MenuItem} = require("electron").remote,
+			path = require("path");
+		menu.append(new MenuItem({
+			label: "Adresse kopieren",
+			icon: path.join(__dirname, "../", "img", "menu", "brief.png"),
+			click: function() {
+				const {clipboard} = require("electron");
+				clipboard.writeText(popup.element.getAttribute("href").replace(/^mailto:/, ""));
 			},
 		}));
 	},

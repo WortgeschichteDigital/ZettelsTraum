@@ -10,7 +10,7 @@ if (!typ || !/^(appImage|deb|rpm)$/.test(typ)) {
 const builder = require("electron-builder"),
 	Arch = builder.Arch,
 	Platform = builder.Platform,
-	prepare = require("./installer.js"),
+	prepare = require("./installer"),
 	jahr = prepare.getYear();
 let keywords = "",
 	config = {};

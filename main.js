@@ -89,7 +89,7 @@ ipcMain.on("bilder-senden", function(evt) {
 // Menü-Vorlagen
 let layoutMenu = [
 	{
-		label: `&${app.getName().replace("'", "’")}`,
+		label: `&${app.getName()}`,
 		submenu: [
 			{
 				label: "Neues Fenster",
@@ -322,7 +322,7 @@ let layoutMenu = [
 			},
 			{ type: "separator" },
 			{
-				label: `Über ${app.getName().replace("'", "’")}`,
+				label: `Über ${app.getName()}`,
 				click: () => fenster.erstellenUeber("app"),
 			},
 			{
@@ -365,7 +365,7 @@ let layoutMenuAnsicht = [
 
 let layoutMenuMac = [
 	{
-		label: `${app.getName().replace("'", "’")}`,
+		label: app.getName(),
 		submenu: [
 			{
 				label: "Fenster schließen",
@@ -734,8 +734,9 @@ fenster = {
 		// Fenster öffnen
 		// (die Optionen können noch fehlen)
 		let bw = new BrowserWindow({
-			title: app.getName().replace("'", "’"),
+			title: app.getName(),
 			icon: fenster.icon(),
+			backgroundColor: "#386ea6",
 			x: x,
 			y: y,
 			width: width,
@@ -743,13 +744,18 @@ fenster = {
 			minWidth: 600,
 			minHeight: 350,
 			autoHideMenuBar: optionen.data.einstellungen ? optionen.data.einstellungen.autoHideMenuBar : false,
-			show: false,
 			webPreferences: {
 				nodeIntegration: true,
 				devTools: devtools,
 				defaultEncoding: "utf-8",
 			},
 		});
+		// ggf. maximieren
+		// (die Option kann noch fehlen)
+		if (optionen.data.fenster &&
+				optionen.data.fenster.maximiert) {
+			bw.maximize();
+		}
 		// Fenster-Objekt anlegen
 		win[bw.id] = {
 			typ: "index",
@@ -760,28 +766,19 @@ fenster = {
 		if (process.platform !== "darwin") {
 			appMenu.deaktivieren(true, bw.id);
 		} else if (process.platform === "darwin") {
-			BrowserWindow.fromId(bw.id).on("focus", () => appMenu.erzeugenMac(layoutMenu));
+			bw.on("focus", () => appMenu.erzeugenMac(layoutMenu));
 		}
 		// HTML laden
-		BrowserWindow.fromId(bw.id).loadFile(path.join(__dirname, "index.html"));
-		// Fenster anzeigen, sobald alles geladen wurde
-		BrowserWindow.fromId(bw.id).once("ready-to-show", function() {
-			// ggf. übergebene Kartei öffnen
+		bw.loadFile(path.join(__dirname, "index.html"));
+		// ggf. übergebene Kartei öffnen
+		bw.webContents.once("did-finish-load", function() {
 			if (/\.wgd$/.test(process.argv[1]) || kartei) {
 				let datei = kartei;
 				if (!datei) {
 					datei = process.argv[1];
 				}
-				// ein bisschen Timeout, sonst klappt das nicht
-				setTimeout(() => this.webContents.send("kartei-oeffnen", datei), 100);
-			}
-			// Fenster anzeigen
-			this.show();
-			// ggf. maximieren
-			// (die Option kann noch fehlen)
-			if (optionen.data.fenster &&
-					optionen.data.fenster.maximiert) {
-				this.maximize();
+				// die IPC-Listener im Renderer-Prozess müssen erst initialisiert werden
+				setTimeout(() => this.send("kartei-oeffnen", datei), 25);
 			}
 		});
 		// ID des Fensters zurückgeben (wird mitunter direkt benötigt)
@@ -830,11 +827,11 @@ fenster = {
 		let opt = {
 			title: title,
 			icon: fenster.icon(),
+			backgroundColor: "#386ea6",
 			width: bounds.width,
 			height: bounds.height,
 			minWidth: bounds.minWidth,
 			minHeight: bounds.minHeight,
-			show: false,
 			webPreferences: {
 				nodeIntegration: true,
 				devTools: devtools,
@@ -892,29 +889,28 @@ fenster = {
 						return;
 					}
 					this.setMenuBarVisibility(false);
-				}, 1);
+				}, 0);
 			});
 		} else if (process.platform === "darwin") {
 			bw.on("focus", () => appMenu.erzeugenMac(layoutMenuAnsicht));
 		}
 		// HTML laden
 		bw.loadFile(path.join(__dirname, "win", `${typ}.html`));
-		// Fenster anzeigen, sobald alles geladen wurde
-		bw.once("ready-to-show", function() {
-			this.show();
+		// Fenster fokussieren
+		// (wird der Changelog aus dem Über-App-Fenster geöffnet, hat er z.B. nicht den Fokus)
+		fenster.fokus(bw);
+		// ggf. Abschnitt öffnen
+		bw.webContents.once("did-finish-load", function() {
 			if (abschnitt) {
-				let timeout = 0;
+				let timeout = 25;
 				if (process.platform === "darwin") {
 					// macOS lahmt offenbar ein wenig mit dem Aufbau des Fensters;
 					// gibt es kein Timeout, springt er niemals zum Abschnitt;
 					// Timeout muss ziemlich hoch sein
 					timeout = 500;
 				}
-				setTimeout(() => {
-					// ohne Timeout funktioniert es zumindest unter macOS nicht;
-					// das Fenster braucht wohl ein wenig Zeit, um sich aufzubauen
-					this.webContents.send("oeffne-abschnitt", abschnitt);
-				}, timeout);
+				// die IPC-Listener im Renderer-Prozess müssen erst initialisiert werden
+				setTimeout(() => this.send("oeffne-abschnitt", abschnitt), timeout);
 			}
 		});
 	},
@@ -925,7 +921,7 @@ fenster = {
 		// Titel Name der Seite ermitteln
 		let title, html;
 		if (typ === "app") {
-			title = `Über ${app.getName().replace("'", "’")}`;
+			title = `Über ${app.getName()}`;
 			html = "ueberApp";
 		} else {
 			title = "Über Electron";
@@ -937,14 +933,13 @@ fenster = {
 			modal: true,
 			title: title,
 			icon: fenster.icon(),
+			backgroundColor: "#386ea6",
 			width: 650,
 			height: 334,
-			useContentSize: true,
 			center: true,
 			resizable: false,
 			minimizable: false,
 			maximizable: false,
-			show: false,
 			webPreferences: {
 				nodeIntegration: true,
 				devTools: devtools,
@@ -965,10 +960,6 @@ fenster = {
 		}
 		// HTML laden
 		bw.loadFile(path.join(__dirname, "win", `${html}.html`));
-		// Fenster anzeigen, sobald alles geladen wurde
-		bw.once("ready-to-show", function() {
-			this.show();
-		});
 	},
 	// ermittelt das zum Betriebssystem passende Programm-Icon
 	icon () {
@@ -1021,7 +1012,7 @@ ipcMain.on("hilfe-demo", () => {
 		}
 	}
 	// Hauptfenster ist fokussiert (das dauert ggf. 25 ms)
-	setTimeout(() => appMenu.aktion("hilfe-demo"), 50);
+	setTimeout(() => appMenu.aktion("hilfe-demo"), 25);
 });
 
 // Dokumentation aufrufen, wenn der Renderer-Prozess es wünscht

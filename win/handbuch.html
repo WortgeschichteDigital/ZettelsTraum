@@ -54,7 +54,7 @@
 			</nav>
 			<div>
 				<!-- SUCHE -->
-				<section id="sektion-suche">
+				<section id="sektion-suche" class="aus">
 					<h2>Suchergebnisse</h2>
 
 					<div id="suchergebnisse"></div>
@@ -116,7 +116,7 @@
 					<p>Einige Hinweise, die Ihnen den Umgang mit dem Handbuch <abbr title="eventuell">evtl.</abbr> erleichtern:</p>
 
 					<ul>
-						<li>Ist Ihnen die <b>Schrift zu klein</b>, können Sie sie mit dem Tastaturkürzel <kbd>Strg</kbd> + <kbd>+</kbd> vergrößern. (Nicht das + neben dem Nummernblock, sondern das neben der Enter-Taste.)</li>
+						<li>Ist Ihnen die <b>Schrift zu klein</b>, können Sie sie mit dem Tastaturkürzel <kbd class="nochange">Strg</kbd> + <kbd>+</kbd> vergrößern. (Nicht das <kbd>+</kbd> neben dem Nummernblock, sondern das neben der <kbd>⏎</kbd>-Taste. Unter <i>macOS</i> ist das Kürzel <kbd>⌘</kbd> + <kbd>=</kbd>.)</li>
 
 						<li>Ist Ihnen die <b>Schrift zu groß</b>, können Sie sie mit dem Tastaturkürzel <kbd>Strg</kbd> + <kbd>-</kbd> verkleinern.</li>
 
@@ -153,14 +153,14 @@
 				</section>
 
 				<!-- KURZANLEIGUNG -->
-				<section id="sektion-kurzanleitung" class="suche">
+				<section id="sektion-kurzanleitung" class="suche aus">
 					<p>[<mark>Kurzanleitung</mark>]</p>
 
 					<p>Demonstrationskartei</p>
 				</section>
 
 				<!-- KARTEIKARTE -->
-				<section id="sektion-karteikarte" class="suche">
+				<section id="sektion-karteikarte" class="suche aus">
 					<p>Eine <b>neue Karteikarte</b> kann man über den Menüpunkt <a href="#menueBelege-hinzufuegen"><i>Belege &gt; Hinzufügen</i></a> oder das Tastaturkürzel <kbd>Strg</kbd> + <kbd>N</kbd> erstellen.</p>
 
 					<p><b>Bestehende Karteikarten</b> lassen sich aus der <a href="#belegliste">Belegliste</a> heraus öffnen. Dazu muss man auf das Icon <img src="../img/karteikarte.svg" width="24" height="24" alt=""> im grau hinterlegten Kopf mit der Belegvorschau klicken. Alternativ kann man an einer beliebigen Stelle in der <a href="#belegliste-kopfleisteBelege">Kopfleiste eines Belegs</a> oder in dessen <a href="#belegliste-detailansicht">Detailansicht</a> <i>Rechtsklick &gt; Beleg bearbeiten</i> wählen.</p>
@@ -401,7 +401,7 @@
 				</section>
 
 				<!-- BEDEUTUNGSGERÜST -->
-				<section id="sektion-bedeutungsgeruest" class="suche">
+				<section id="sektion-bedeutungsgeruest" class="suche aus">
 					<p>Die Bedeutungsgerüst-Funktion kann über den Menüpunkt <a href="#menueKartei-bedeutungsgeruest"><i>Kartei &gt; Bedeutungsgerüst</i></a> oder das Tastaturkürzel <kbd>Strg</kbd> + <kbd>B</kbd> geöffnet werden.</p>
 
 					<p>Sie dient zum zentralen Verwalten von Bedeutungesgerüsten, die karteiweit genutzt werden. Ergänzungen und Änderungen, die man hier vornimmt, werden nach dem Speichern automatisch von allen Funktionen übernommen, die auf Bedeutungsgerüstdaten zurückgreifen: dem <a href="#bedeutungsgeruest-fenster">Bedeutungsgerüst-Fenster</a>, dem <i>Bedeutungen</i>-Filter in der <a href="#filter">Filterleiste</a> und nicht zuletzt der <a href="#karteikarte">Karteikarte</a> und allen Funktionen, die zum Füllen oder Darstellen der Karteninhalte dienen. Sie müssen also nicht Dutzende Karteikarten bearbeiten, wenn sie die Formulierung einer Bedeutung ändern oder diese an eine andere Position des Gerüsts schieben. Es genügt, die Änderung im Bedeutungsgerüst vorzunehmen; alle Karteikarten werden automatisch angepasst.</p>
@@ -659,7 +659,7 @@
 				</section>
 
 				<!-- BELEGLISTE -->
-				<section id="sektion-belegliste" class="suche">
+				<section id="sektion-belegliste" class="suche aus">
 					<p>Die Belegliste ist die Standardansicht, die beim Öffnen einer bestehenden Kartei geladen wird, und zu der die App immer wieder zurückkehrt, wenn alle anderen Funktionen geschlossen werden. Haben Sie sich in einer der anderen Ansichten verloren, können Sie über den Menüpunkt <a href="#menueBelege-auflisten"><i>Belege &gt; Auflisten</i></a> oder via <kbd>Strg</kbd> + <kbd>L</kbd> jederzeit zur Belegliste zurückkehren.</p>
 
 					<h2 id="belegliste-kopfleiste">Kopfleiste</h2>
@@ -960,10 +960,14 @@
 					<p class="erklaerung-icon"><img src="../img/oeffnen.svg" width="24" height="24" alt="">Anhang öffnen</p>
 
 					<p class="info">Erscheint nur beim Rechtsklick auf einem Dateianhang-Icon in der Metainfo-Leiste. <i class="app-name"></i> öffnet die Datei im als Standard festgelegten Programm des Betriebssytems. Welches dies ist, hängt vom Dateityp (und der Dateiendung) ab.</p>
+
+					<p class="erklaerung-icon"><img src="../img/ordner.svg" width="24" height="24" alt="">Ordner öffnen</p>
+
+					<p class="info">Erscheint nur beim Rechtsklick auf einem Dateianhang-Icon in der Metainfo-Leiste. <i class="app-name"></i> öffnet den Dateimanager des Betriebssystems mit dem Ordner, in dem der Anhang liegt.</p>
 				</section>
 
 				<!-- FILTER -->
-				<section id="sektion-filter" class="suche">
+				<section id="sektion-filter" class="suche aus">
 					<h2 id="filter-leiste">Filterleiste</h2>
 
 					<figure class="right" title="zum Vergrößern anklicken">
@@ -1169,7 +1173,7 @@
 				</section>
 
 				<!-- EINSTELLUNGEN -->
-				<section id="sektion-einstellungen" class="suche">
+				<section id="sektion-einstellungen" class="suche aus">
 					<p>Das Verhalten und die Ansicht der App lässt sich in vielerlei Hinsicht anpassen. Einen großen Teil der möglichen Anpassungen kann man in dem internen Programmfenster vornehmen, das über den Menüpunkt <a href="#menueApp-einstellungen"><i><span class="app-name"></span> &gt; Einstellungen</i></a> zu erreichen ist. Die dort zu findenden Konfigurationsmöglichkeiten werden <a href="#einstellungen-allgemeines">in diesem Abschnitt weiter unten</a> detailliert beschrieben.</p>
 
 					<p>Alle im Einstellungen-Fenster vorgenommenen Änderungen werden umgehend an die anderen Hauptfenster des Programms übermittelt und dort sofort wirksam. Insofern verhalten sich diese Einstellungen anders als Einstellungen, die an anderen Stellen des Programms vorgenommen werden können. Denn Konfigurationsmöglichkeiten, die von der App gespeichert und nach einem Neustart wiederhergestellt werden, finden sich in vielen Funktionen und Ansichten. Ein wesentlicher Unterschied besteht allerdings darin, dass sie nicht sofort in allen Programmfenstern aktiv werden, weil dies die Flexibilität des Handlings der Oberfläche einschränken würde.</p>
@@ -1481,7 +1485,7 @@ Mustermann, Erika
 				</section>
 
 				<!-- TASTATURKÜRZEL -->
-				<section id="sektion-tastaturkuerzel" class="suche">
+				<section id="sektion-tastaturkuerzel" class="suche aus">
 					<p><mark>Einleitendes: viele Kürzel, alle Programmteile; Grundsätzlich: im Maschinenraum der App arbeitet ein Internet-Browser => manches funktioniert wie in einem Browser z.B. das Wandern via Tab oder das Drücken von Enter auf einem fokussierten Element</mark></p>
 
 					<h2 id="tastaturkuerzel-alle">Alle Shortcuts</h2>
@@ -1495,6 +1499,8 @@ Mustermann, Erika
 					<p><mark>macOS: Wiederherstellen ist wie unter Linux Umsch + Command + Z</mark></p>
 
 					<p><mark>macOS: Vollbild = Ctrl + Command + F</mark></p>
+
+					<p><mark>Anmerken, dass unter macOS die Beschreibung der Tastaturkürzel überall automatisch angepasst wird (in &lt;kbd&gt; und title="")</mark></p>
 
 					<h2 id="tastaturkuerzel-karteikarte">Karteikarte</h2>
 
@@ -1510,7 +1516,7 @@ Mustermann, Erika
 				</section>
 
 				<!-- MENÜPUNKT APP -->
-				<section id="sektion-menueApp" class="suche">
+				<section id="sektion-menueApp" class="suche aus">
 					<p>Dieser Menüpunkt fehlt in <b>Nebenfenstern</b>, außer unter <b><i>macOS</i></b>. Dort gibt es ihn auch dort. Er enthält dann allerdings nur diesen Befehl:</p>
 					
 					<p class="erklaerung-icon-menues" id="menueApp-fensterSchliessen"><img src="../img/fenster-schliessen.svg" width="24" height="24" alt="">Fenster schließen</p>
@@ -1532,6 +1538,8 @@ Mustermann, Erika
 						<p>Angezeigt wird die <b>Startseite</b> mit den Buttons <i>Kartei erstellen</i> und <i>Kartei öffnen</i> sowie eine Liste der zuletzt verwendeten Karteien.</p>
 
 						<p>Die Liste <b>zuletzt verwendeter Karteien</b> ist auf zehn Einträge begrenzt. Sobald eine gelistete Kartei geöffnet wird, rückt diese an die oberste Stelle der Liste. Wird eine elfte Kartei geöffnet, verschwindet der letzte Listeneintrag. Es verschwindet also der Eintrag der Kartei, die am längsten nicht geöffnet wurde. Auf Wunsch können Sie in dieser Ansicht einzelne Einträge manuell aus der Liste entfernen: <i>Rechtsklick &gt; Aus Liste entfernen</i>. Beim Start der App wird überprüft, ob die Karteien in der Liste noch auf dem Rechner zu finden sind. Ist dem nicht der Fall, werden sie aus der Liste entfernt.</p>
+
+						<p>Man kann sich mithilfe der Liste auch den Ordner im Dateimanager des Betriebssystems anzeigen lassen, in dem eine Kartei liegt: <i>Rechtsklick &gt; Ordner öffnen</i>.</p>
 
 						<p>Zum <b>Erstellen einer neuen Kartei</b> kann man auch auf den Platzhaltertext <i>keine Kartei geöffnet</i> klicken. Außerdem kann man die Befehle in der Menüleiste nutzen. Allerdings stehen einem im Menü <a href="#menueKartei">Kartei</a> nur die Befehle <i>Erstellen, Öffnen</i> und <i>Zuletzt verwendet</i> und im Menü <a href="#menueBelege">Belege</a> überhaupt kein Punkt zur Verfügung. Unter <i>Linux</i> und <i>Windows</i> sind die deaktivierten Einträge ausgegraut; in <i>macOS</i>, wo die Einträge nicht ausgegraut werden können, reagiert das Programm mit der Meldung, dass die Einträge erst nach dem Öffnen einer Kartei nutzbar seien.</p>
 
@@ -1565,7 +1573,7 @@ Mustermann, Erika
 				</section>
 
 				<!-- MENÜPUNKT KARTEI -->
-				<section id="sektion-menueKartei" class="suche">
+				<section id="sektion-menueKartei" class="suche aus">
 					<p>Dieser Menüpunkt steht nur in <b>Hauptfenstern</b> zur Verfügung.</p>
 
 					<p class="erklaerung-icon-menues" id="menueKartei-erstellen"><img src="../img/dokument-plus.svg" width="24" height="24" alt="">Erstellen</p>
@@ -1733,7 +1741,7 @@ Mustermann, Erika
 				</section>
 
 				<!-- MENÜPUNKT BELEGE -->
-				<section id="sektion-menueBelege" class="suche">
+				<section id="sektion-menueBelege" class="suche aus">
 					<p>Dieser Menüpunkt steht nur in <b>Hauptfenstern</b> zur Verfügung.</p>
 
 					<p class="erklaerung-icon-menues" id="menueBelege-hinzufuegen"><img src="../img/dokument-plus.svg" width="24" height="24" alt="">Hinzufügen</p>
@@ -1770,7 +1778,7 @@ Mustermann, Erika
 				</section>
 
 				<!-- MENÜPUNKT BEARBEITEN -->
-				<section id="sektion-menueBearbeiten" class="suche">
+				<section id="sektion-menueBearbeiten" class="suche aus">
 					<p>Dieser Menüpunkt steht nur in <b>Hauptfenstern</b> zur Verfügung.</p>
 
 					<p>Unter <i>macOS</i> wird das <i>Bearbeiten</i>-Menü um den Befehl <i>Emoji &amp; Symbole</i> ergänzt. Dies macht das Betriebssystem automatisch; es ist in der App eigentlich nicht vorgesehen.</p>
@@ -1848,7 +1856,7 @@ Mustermann, Erika
 				</section>
 
 				<!-- MENÜPUNKT ANSICHT -->
-				<section id="sektion-menueAnsicht" class="suche">
+				<section id="sektion-menueAnsicht" class="suche aus">
 					<p>Dieser Menüpunkt steht nur in <b>Hauptfenstern</b> zur Verfügung – außer unter <b><i>macOS</i></b>, wo es ihn auch in <b>Nebenfenstern</b> gibt.</p>
 
 					<p>Die <b>Tastaturkürzel</b> aller Befehle funktionieren unter <b><i>Windows</i> und <i>Linux</i></b> allerdings auch in allen Nebenfenstern.</p>
@@ -1899,7 +1907,7 @@ Mustermann, Erika
 				</section>
 
 				<!-- MENÜPUNKT HILFE -->
-				<section id="sektion-menueHilfe" class="suche">
+				<section id="sektion-menueHilfe" class="suche aus">
 					<p>Dieser Menüpunkt steht nur in <b>Hauptfenstern</b> zur Verfügung.</p>
 
 					<p class="erklaerung-icon-menues" id="menueHilfe-handbuch"><img src="../img/kreis-fragezeichen.svg" width="24" height="24" alt="">Handbuch</p>
@@ -1974,7 +1982,7 @@ Mustermann, Erika
 			</div>
 		</main>
 
-		<!-- LADEN -->
-		<div id="laden"> </div>
+		<!-- FENSTERLADEN -->
+		<div id="fensterladen"><img src="../img/icon-app-weiss-48.svg" width="96" height="96" alt=""></div>
 	</body>
 </html>

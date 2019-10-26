@@ -91,6 +91,8 @@ let hilfe = {
 		if (document.getElementById("suchleiste")) {
 			suchleiste.ausblenden();
 		}
+		// Überschriftenliste aufbauen
+		hilfe.sektionenH(sektion);
 		// Navigation auffrischen
 		document.querySelectorAll("nav a.kopf").forEach(function(i) {
 			if (i.getAttribute("href") === `#${sektion}`) {
@@ -107,8 +109,6 @@ let hilfe = {
 				i.classList.add("aus");
 			}
 		});
-		// Überschriftenliste aufbauen
-		hilfe.sektionenH(sektion);
 		// nach oben scrollen
 		window.scrollTo({
 			top: 0,
@@ -117,26 +117,50 @@ let hilfe = {
 		});
 		// History: Pfeile auffrischen
 		hilfe.historyArrows();
+		// Suche: ggf. Link fokussieren
+		if (!history && sektion === "suche") {
+			hilfe.sucheFokus();
+		}
 	},
 	// Überschriftenliste der aktiven Sektion aufbauen
 	//   sektion = String
 	//     (die aktive Sektion)
-	sektionenH (sektion) {
-		// alte Liste entfernen
-		let nav = document.querySelector("nav");
-		let ul_h = nav.querySelector("ul.h");
-		if (ul_h) {
-			ul_h.parentNode.removeChild(ul_h);
-		}
-		// aktive Sektion ermitteln
-		let aktiv = nav.querySelector("a.aktiv");
+	async sektionenH (sektion) {
+		// alte Listen entfernen
+		// (wenn man sehr schnell hoch und runter geht,
+		// können sonst Listen übrigbleiben)
+		document.querySelectorAll("nav li ul").forEach(ul => {
+			ul.classList.add("blenden");
+			ul.style.height = `${ul.offsetHeight}px`;
+			setTimeout(() => {
+				ul.style.height = "0";
+				ul.style.marginTop = "0";
+				setTimeout(() => {
+					// besser mit Timeout, ontransitionend würde zweimal aufgerufen
+					// => Probleme mit dem Entfernen
+					if (document.querySelector("nav").contains(ul)) {
+						ul.parentNode.removeChild(ul);
+					}
+				}, 300);
+			}, 0);
+		});
+		// zu aktivierende Sektion ermitteln
+		let aktiv = document.querySelector(`nav a[href="#${sektion}"]`);
+		// die Suchseite hat niemals ein Inhaltsverzeichnis
 		if (!aktiv) {
 			return;
 		}
-		// neuen Listencontainer erstellen und einhängen
+		// wenn mit der Liste gerade etwas gemacht wird => kurz warten
+		if (aktiv.nextSibling) {
+			await new Promise(resolve => setTimeout(resolve, 300));
+			// es könnte sein, dass die Überschriftenliste gerade eingeblendet wurde
+			if (aktiv.nextSibling) {
+				return;
+			}
+		}
+		// neuen Listencontainer erstellen
 		let ul = document.createElement("ul");
 		ul.classList.add("h");
-		aktiv.parentNode.appendChild(ul);
 		// Listencontainer füllen
 		document.querySelectorAll(`section[id="sektion-${sektion}"] h2`).forEach(function(h2) {
 			let li = document.createElement("li"),
@@ -147,6 +171,21 @@ let hilfe = {
 			ul.appendChild(li);
 			hilfe.naviSprung(a);
 		});
+		// Listencontainer einhängen?
+		if (ul.hasChildNodes()) {
+			aktiv.parentNode.appendChild(ul);
+			let zielHoehe = ul.offsetHeight;
+			ul.style.height = "0";
+			ul.style.marginTop = "0";
+			setTimeout(() => {
+				ul.classList.add("blenden");
+				ul.style.height = `${zielHoehe}px`;
+				ul.style.marginTop = "5px";
+				ul.addEventListener("transitionend", () => {
+					ul.classList.remove("blenden");
+				});
+			}, 0);
+		}
 	},
 	// lange Dateipfade umbrechen
 	dateiBreak () {
@@ -303,7 +342,7 @@ let hilfe = {
 			tastatur.detectModifiers(evt);
 			if (!tastatur.modifiers && evt.key === "Enter") {
 				clearTimeout(hilfe.sucheTimeout);
-				hilfe.suche();
+				hilfe.suche(true);
 			}
 		});
 		input.addEventListener("focus", function() {
@@ -319,11 +358,12 @@ let hilfe = {
 		scroll: 0, // Scrollposition vor dem Wechseln aus der Suchliste
 		reg: [], // Liste der regulären Ausdrücke
 		treffer: [], // Treffer
+		lastClick: -1, // Index des letzten Klicks (verweist auf suchergebnis.treffer)
 	},
 	// Dokument durchsuchen
 	//   enter = Boolean
 	//     (die Suche wurde via Enter angestoßen)
-	suche () {
+	suche (enter) {
 		// Suchtext ermitteln
 		let feld = document.getElementById("suchfeld");
 		const val = helfer.textTrim(feld.value, true);
@@ -346,6 +386,7 @@ let hilfe = {
 			scroll: 0,
 			reg: [],
 			treffer: [],
+			lastClick: -1,
 		};
 		let e = hilfe.suchergebnis;
 		// reguläre Ausdrücke
@@ -384,6 +425,10 @@ let hilfe = {
 		});
 		// Treffer drucken
 		hilfe.sucheDrucken(0);
+		// ggf. den ersten Treffer fokussieren
+		if (enter) {
+			hilfe.sucheFokus();
+		}
 		// Text durchsuchen, Treffer merken
 		function durchsuchen (sektion, knoten) {
 			if (knoten.nodeType !== 1) {
@@ -454,50 +499,56 @@ let hilfe = {
 		for (let i = start, len = e.treffer.length; i < len; i++) {
 			// immer nur 10 Suchergebnisse auf einmal drucken
 			if (i === start + 10) {
-				let p = document.createElement("p");
-				p.dataset.idx = i;
-				p.classList.add("mehr-treffer");
-				p.textContent = "mehr Treffer";
-				hilfe.sucheNachladen(p);
-				cont.appendChild(p);
+				let a = document.createElement("a");
+				cont.appendChild(a);
+				a.href = "#";
+				a.dataset.idx = i;
+				a.classList.add("mehr-treffer");
+				a.textContent = "mehr Treffer";
+				hilfe.sucheNachladen(a);
 				break;
 			}
-			// Absatz erzeugen
-			let p = document.createElement("p");
-			p.dataset.idx = i;
-			cont.appendChild(p);
+			// Treffer erzeugen
+			let a = document.createElement("a");
+			cont.appendChild(a);
+			a.href = "#";
+			a.dataset.idx = i;
+			hilfe.sucheSprung(a);
 			// Treffernummer drucken
 			let b = document.createElement("b");
+			a.appendChild(b);
 			b.textContent = i + 1;
-			p.appendChild(b);
 			// Text erzeugen und einhängen
-			let span = document.createElement("span"),
-				text = e.treffer[i].text;
+			let span = document.createElement("span");
+			a.appendChild(span);
+			let text = e.treffer[i].text;
 			for (let j = 0, len = e.reg.length; j < len; j++) {
 				text = text.replace(e.reg[j], function(m) {
 					return `<mark class="suche">${m}</mark>`;
 				});
 			}
 			span.innerHTML = text;
-			hilfe.sucheSprung(p);
-			p.appendChild(span);
 		}
 	},
 	// weitere Treffer laden
-	//   p = Element
-	//     (der Absatz zum Nachladen der Treffer)
-	sucheNachladen (p) {
-		p.addEventListener("click", function() {
+	//   a = Element
+	//     (der Link zum Nachladen der Treffer)
+	sucheNachladen (a) {
+		a.addEventListener("click", function(evt) {
+			evt.preventDefault();
 			const idx = parseInt(this.dataset.idx, 10);
 			this.parentNode.removeChild(this);
 			hilfe.sucheDrucken(idx);
+			hilfe.suchergebnis.lastClick = idx;
+			hilfe.sucheFokus();
 		});
 	},
 	// zur Stelle im Text springen, in der der Treffer zu finden ist
-	//   p = Element
-	//     (Absatz mit der Vorschau des Treffers)
-	sucheSprung (p) {
-		p.addEventListener("click", function() {
+	//   a = Element
+	//     (Link mit der Vorschau des Treffers)
+	sucheSprung (a) {
+		a.addEventListener("click", function(evt) {
+			evt.preventDefault();
 			// Scroll-Position sichern
 			hilfe.suchergebnis.scroll = window.scrollY;
 			// Sektion wechseln und zum Treffer-Knoten wechseln
@@ -510,6 +561,8 @@ let hilfe = {
 				top: knoten.getBoundingClientRect().top - 70 - 10, // -10, um oben immer ein bisschen padding zu haben; vgl. hilfe.naviSprung()
 				behavior: "smooth",
 			});
+			// merken, welche Treffer angeklickt wurde
+			hilfe.suchergebnis.lastClick = idx;
 			// Treffer-Knoten animieren
 			knoten.classList.add("treffer-vor");
 			setTimeout(function() {
@@ -531,6 +584,17 @@ let hilfe = {
 			top: hilfe.suchergebnis.scroll,
 			behavior: "auto",
 		});
+		hilfe.sucheFokus();
+	},
+	// zuletzt fokussierten Link in der Suche wieder fokussieren
+	sucheFokus () {
+		if (hilfe.suchergebnis.treffer.length) {
+			let idx = hilfe.suchergebnis.lastClick;
+			if (idx === -1) {
+				idx = 0;
+			}
+			document.querySelectorAll("#suchergebnisse a")[idx].focus();
+		}
 	},
 	// Daten
 	historyData: {
@@ -645,16 +709,5 @@ let hilfe = {
 		} else {
 			forward.classList.remove("navigierbar");
 		}
-	},
-	// das Laden-Overlay ausblenden
-	// (sonst flackern Dokumentation und Handbuch am Anfang)
-	ladenAus () {
-		setTimeout(function() {
-			let laden = document.getElementById("laden");
-			laden.classList.add("geladen");
-			laden.addEventListener("transitionend", function() {
-				this.classList.add("aus");
-			});
-		}, 250);
 	},
 };

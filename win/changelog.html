@@ -17,6 +17,7 @@
 		<script src="../js/win/init-common.js"></script>
 		<script src="../js/win/init-changelog.js"></script>
 		<script src="../js/win/helferWin.js"></script>
+		<script src="../js/win/popup.js"></script>
 	</head>
 	<body>
 		<!-- KOPF -->
@@ -64,6 +65,8 @@
 
 						<p>3.) In Nebenfenstern gibt es unter <i>macOS</i> (und zwar nur dort) einen Menüpunkt <i class="app-name"></i>, der allein den Befehl <a href="#menueApp-fensterSchliessen" class="link-handbuch"><i>Fenster schließen</i></a> enthält. (Der Menüpunkt <i>Programm</i> wurde umbenannt; <abbr title="siehe unten">s. u.</abbr>)</p>
 
+						<p>4.) Werden hier im Changelog, im <a href="#" class="link-handbuch">Handbuch</a> oder anderen Fenstern Tastaturkürzel genannt, werden diese unter <i>macOS</i> automatisch geändert: <kbd class="nochange">Strg</kbd> wird zu <kbd>⌘</kbd>, <kbd class="nochange">Alt</kbd> wird zu <kbd>⌥</kbd>.</p>
+
 						<p>Die entsprechenden Anweisungen zum Paktieren der App wurden eingerichtet und funktionieren. Das Erzeugen von <abbr title="Apple Disk Image" lang="en">DMG</abbr>-Dateien hingegen wurde zwar eingerichtet, kann und wird aber nicht getestet, weil dies nur in <i>macOS</i> ginge, wo eine Entwicklungsumgebung aufgesetzt werden müsste <abbr title="und so weiter">usw.</abbr></p>
 					</li>
 
@@ -79,6 +82,12 @@
 						<p><a href="#filter" class="link-handbuch">Filterleiste</a>: Im Filterblock <i>Verschiedenes</i> gibt es einen neuen Filter: <i>Annotierung</i>. Weil es ein dynamischer Filter ist, erscheint er nur, wenn in der Kartei Belege zu finden sind, in denen Karteiwörter oder Textteile annotiert wurden.</p>
 
 						<p>Wurde beim Annotieren die Hintergrundfarbe auf transparent gesetzt, wird der Beleg mit dem <i>Annotierung</i>-Filter standardmäßig nicht gefunden. Unter <a href="#einstellungen-filterleiste" class="link-handbuch"><i><span class="app-name"></span> &gt; Einstellungen &gt; Filterleiste</i></a> gibt es jedoch <a href="#einstellungen-filterleisteTransparente" class="link-handbuch">eine Checkbox</a>, die man aktivieren kann, um beim Filtern auch Annotierungen mit einzubeziehen, die eine tranparente Hintergrundfarbe haben.</p>
+					</li>
+
+					<li>
+						<p>Bei Rechtsklick auf einem Anhang-Icon, in einer Anhänge- oder Karteiliste (in der <a href="#menueApp-karteisuche" class="link-handbuch">Karteisuche</a> oder auf der <a href="#menueApp-neuesFenster" class="link-handbuch">Startseite</a>) wird nun der Menüpunkt <i>Ordner öffnen</i> angeboten. Auf Klick öffnet sich der Dateimanager des Betriebssystems in dem Ordner, in dem sich die entsprechende Datei befindet.</p>
+
+						<p>Außerdem findet sich im <a href="#menueKartei-metadaten" class="link-handbuch">Metadaten-Fenster</a> in der Überschrift <i>Speicherort</i> nun das Icon <img src="../img/ordner.svg" width="24" height="24" alt="">. Auf Klick öffnet es den Dateimanager des System mit dem Ordner, in dem die aktuelle Kartei liegt.</p>
 					</li>
 
 					<li>
@@ -143,9 +152,23 @@
 
 					<li>Die Gewichtung der Suchergebnisse im <a href="#" class="link-handbuch">Handbuch</a> und der <a href="#" class="link-dokumentation">technischen Dokumentation</a> wurde verbessert.</li>
 
+					<li>Die Navigation in den Suchergebnissen des Handbuchs und der technischen Dokumentation wurde verbessert. Drück man im Suchfeld <kbd>⏎</kbd>, wird das erste Suchergebnis fokussiert. Nun kann man mit <kbd>Tab</kbd> durch die Ergebnisse navigieren und mit einem erneuten <kbd>⏎</kbd>, zur entsprechenden Stelle im Dokument springen. Navigiert man zurück zu den Suchergebnissen, ist der Link fokussiert, der zuletzt angeklickt worden war. Wurde kein Link angeklickt, wird der erste fokussiert.</li>
+
 					<li>Die Verarbeitung derjenigen Tastaturkürzel, die nicht vom Main-Prozess getriggert werden, wurde auf eine solidere Basis gestellt: Der Wert <code class="quelltext">which</code> wird nicht mehr abgefragt (weil <a href="https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/which"><span lang="en">deprecated</span></a>); Kürzel werden nur noch akzeptiert, wenn sie mit genau den Modifiern gedrückt werden, die vorgesehen sind (Modifiertasten sind <abbr title="unter anderem">u. a.</abbr> <kbd>Strg</kbd>, <kbd>Alt</kbd> und <kbd>Umsch</kbd>); nicht zuletzt wurde bei der Aktion die Codebasis verschlankt und vereinheitlicht.</li>
 
 					<li>Der erste Punkt in der Menüleiste wurde von <i>Programm</i> in <i class="app-name"></i> umbenannt. So gibt es systemübergreifend eine einheitliche Benennung der Menüpunkte, denn in <i>macOS</i> trägt der erste Menüpunkt immer den Namen der App.</li>
+
+					<li>Das Auf- und Zuklappen der <a href="#filter" class="link-handbuch">Filter</a> wird nun animiert.</li>
+
+					<li>Das Auf- und Zuklappen des Inhaltsverzeichnisses im Handbuch und der technischen Dokumentation wird nun animiert.</li>
+
+					<li>
+						<p>Das Öffnen der Programmfenster ist mit dem Anwachsen des Quellcodes immer langsamer geworden. Die Art und Weise, wie Programmfenster geöffnet werden, wurde darum neu geregelt. Sie öffnen sich zwar nun deutlich rascher, zeigen nach dem Aufruf aber zunächst eine Art Sperrbild, das verschwindet, sobald der Content verfügbar ist.</p>
+
+						<p>Diese Korrektur behebt zugleich ein unruhiges Flackern, das beim Öffnen des <a href="#" class="link-handbuch">Handbuchs</a> und der <a href="#" class="link-dokumentation">technischen Dokumentaiton</a> zu sehen war.</p>
+					</li>
+
+					<li>Hier im Changelog und in den Über-Fenstern gibt es nun auch ein kontextualisiertes Rechtsklickmenü, <abbr title="zum Beispiel">z. B.</abbr> zum Kopieren von Internet- und Mailadressen.</li>
 
 					<li>Reorganisation der Programm-Icons: Das Chaos im Icon-Ordner, das sich mit der Zeit entwickelt hatte, wurde behoben. Dabei wurden <abbr title="unter anderem">u. a.</abbr> gut 50 doppelte und daher unnötige Icons entfernt.</li>
 
@@ -159,7 +182,7 @@
 
 					<li>Für Entwickler: Die Scripts zum nachträglichen Registrieren oder Deregistrieren des <abbr title="Wortgeschichte digital">WGD</abbr>-Dateityps unter <i>Linux</i> (<span class="datei">./resources/filetype/linux/[de]register.sh</span>) wurden verbessert: Sie sollten Sich nun aus allen Ordner heraus aufrufen lassen.</li>
 
-					<li><a href="#" class="ueber-electron"><i>Electron</i></a>-Update auf Version 6.1.2.</li>
+					<li><a href="#" class="ueber-electron"><i>Electron</i></a>-Update auf Version 7.0.0.</li>
 				</ul>
 
 				<h3>Behobene Fehler</h3>
@@ -220,8 +243,6 @@
 					<li>Die Navigation in Icon- oder Button-Gruppen, in denen der Fokus liegt, funktionierte mit den Navigationspfeilen <kbd>⇦</kbd> <abbr title="beziehungsweise">bzw.</abbr> <kbd>⇨</kbd> mitunter nicht mehr korrekt.</li>
 
 					<li>Das Icon im Programmmenü für die Funktion <a href="#menueKartei-formvarianten" class="link-handbuch"><i>Kartei &gt; Formvarianten</i></a> war veraltet.</li>
-
-					<li>Beim Öffnen des <a href="#" class="link-handbuch">Handbuchs</a> und der <a href="#" class="link-dokumentation">technischen Dokumentaiton</a> flackerten der Fensterinhalt mitunter stark.</li>
 
 					<li>Das Installieren und Deinstallieren von DEB-Paketen war reichlich langsam, was an einer unnötigen Dopplung von Kommandos zur Registrierung des <abbr title="Wortgeschichte digital">WGD</abbr>-Dateityps lag. Diese funktioniert seit einiger Zeit zwar prinzipiell <span lang="en">out of the box</span>, aber nur unvollständig (Dateityp-Icons wurden nicht registriert). Der Vorgang wird für Linux-Pakete darum nun wieder vollkommen von selbst geschriebenen Scripts übernommen.</li>
 				</ul>
@@ -1864,5 +1885,8 @@ Mustermann, Erika
 				<p>Erste freigegebene Version.</p>
 			</div>
 		</main>
+
+		<!-- FENSTERLADEN -->
+		<div id="fensterladen"><img src="../img/icon-app-weiss-48.svg" width="96" height="96" alt=""></div>
 	</body>
 </html>

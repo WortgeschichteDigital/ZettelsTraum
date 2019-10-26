@@ -1,7 +1,7 @@
 #!/bin/bash
 
 modules=(
-	"electron@6-1-x"
+	"electron@7-0-x"
 	"electron-builder"
 	"electron-packager"
 )
@@ -67,12 +67,14 @@ getVersion() {
 installModules() {
 	echo -e "  \033[1;32m*\033[0m Module installieren oder updaten"
 
+	cd "${dir}/../"
+
 	for (( i=0; i<${#modules[@]}; i++ )); do
 		moduleBase=${modules[$i]%%@*}
 		echo -e "\n*** ${moduleBase} ***"
 		
 		# nicht installiert => installieren
-		lokal="${dir}/../node_modules/${moduleBase}/package.json"
+		lokal="node_modules/${moduleBase}/package.json"
 		if ! test -e "$lokal"; then
 			echo -e "  \033[1;32m*\033[0m Installation\n"
 			npm install --save-dev ${modules[$i]}
@@ -89,6 +91,8 @@ installModules() {
 		fi
 		echo -e "installiert \033[1;32m$(getVersion "$lokal")\033[0m"
 	done
+
+	cd "$dir"
 }
 
 # Starter

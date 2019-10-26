@@ -1,11 +1,22 @@
 "use strict";
 
 let initCommon = {
+	// Listener für Signale des Main-Prozesses
+	listenerMain () {
+		const {ipcRenderer} = require("electron");
+		// Abschnitt öffnen (Dokumentation, Handbuch)
+		ipcRenderer.on("oeffne-abschnitt", (evt, abschnitt) => hilfe.naviSprungAusfuehren(abschnitt));
+		// Gerüstdaten übernehmen (Bedeutungen)
+		ipcRenderer.on("daten", (evt, daten) => {
+			bedeutungen.data = daten;
+			bedeutungen.aufbauen();
+		});
+	},
 	// Programmname in Elemente eintragen
 	appName () {
 		const {app} = require("electron").remote;
 		document.querySelectorAll(".app-name").forEach(i => {
-			i.textContent = app.getName().replace("'", "’");
+			i.textContent = app.getName();
 		});
 	},
 	// Events initialisieren
@@ -87,17 +98,6 @@ let initCommon = {
 		window.addEventListener("contextmenu", evt => {
 			evt.preventDefault();
 			popup.oeffnen(evt);
-		});
-	},
-	// Listener für Signale des Main-Prozesses
-	listenerMain () {
-		const {ipcRenderer} = require("electron");
-		// Abschnitt öffnen (Dokumentation, Handbuch)
-		ipcRenderer.on("oeffne-abschnitt", (evt, abschnitt) => hilfe.naviSprungAusfuehren(abschnitt));
-		// Gerüstdaten übernehmen (Bedeutungen)
-		ipcRenderer.on("daten", (evt, daten) => {
-			bedeutungen.data = daten;
-			bedeutungen.aufbauen();
 		});
 	},
 };

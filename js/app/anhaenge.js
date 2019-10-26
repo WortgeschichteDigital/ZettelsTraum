@@ -225,14 +225,21 @@ let anhaenge = {
 	// Öffnet die übergebene Datei
 	//   datei = "String"
 	//     (Datei, die geöffnet werden soll)
-	oeffnen (datei) {
+	//   ordner = true || undefined
+	//     (Dateiordner im Filemanager öffnen)
+	oeffnen (datei, ordner = false) {
 		if (!anhaenge.data[datei].exists) {
 			dialog.oeffnen("alert");
 			dialog.text("Die Datei konnte nicht gefunden werden.");
 			return;
 		}
-		const {shell} = require("electron");
-		shell.openItem(anhaenge.data[datei].path);
+		const {shell} = require("electron"),
+			pfad = anhaenge.data[datei].path;
+		if (ordner) {
+			shell.showItemInFolder(pfad);
+		} else {
+			shell.openItem(pfad);
+		}
 	},
 	// Öffnen der Karteikarte durch Klick auf eine Überschrift im Anhänge-Fenster (Listener)
 	// (wird auch in kopieren.js benutzt)

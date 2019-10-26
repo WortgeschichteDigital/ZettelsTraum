@@ -7,6 +7,10 @@ window.addEventListener("load", () => {
 	// INIT-COMMON
 	initCommon.appName();
 	initCommon.events();
+	initCommon.eventsPopup();
+
+	// ANZEIGE TASTATURKÜRZEL ANPASSEN
+	tastatur.shortcutsText();
 
 	// ICONS
 	document.querySelectorAll("#changelog-icons a").forEach(a => {
@@ -19,4 +23,7 @@ window.addEventListener("load", () => {
 			}
 		});
 	});
+
+	// ANZEIGE INITIALISIEREN
+	helfer.fensterGeladen();
 });

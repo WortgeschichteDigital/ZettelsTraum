@@ -7,6 +7,10 @@ window.addEventListener("load", () => {
 	// INIT-COMMON
 	initCommon.appName();
 	initCommon.events();
+	initCommon.eventsPopup();
+
+	// ANZEIGE TASTATURKÜRZEL ANPASSEN
+	tastatur.shortcutsText();
 
 	// VERSIONEN EINTRAGEN
 	["electron", "node", "chrome", "v8"].forEach(i => {
@@ -17,4 +21,7 @@ window.addEventListener("load", () => {
 			element.textContent = process.versions[i];
 		}
 	});
+
+	// ANZEIGE INITIALISIEREN
+	helfer.fensterGeladen();
 });

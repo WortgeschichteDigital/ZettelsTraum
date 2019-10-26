@@ -16,16 +16,23 @@ let popup = {
 	anhangDateiBeleg: false,
 	// speichert die Datei aus der Liste zu verwendeter Dateien, der gelöscht werden soll
 	startDatei: "",
+	// speichert den Pfad aus einer Karteiliste (zur Zeit, 2019-10-26, nur Karteisuche)
+	karteiPfad: "",
 	// speichert das Element, auf das sich das Event bezieht
 	element: null,
 	// Popup öffnen
 	//   evt = Event-Object
 	//     (das Ereignis-Objekt, das beim Rechtsklick erzeugt wird)
 	oeffnen (evt) {
+		// Klickziel ermitteln
+		const target = popup.getTarget(evt.path);
+		if (!target) {
+			return;
+		}
+		// Menü initialisieren
 		const {remote} = require("electron"),
 			{Menu} = remote,
-			menu = new Menu(),
-			target = popup.getTarget(evt.path);
+			menu = new Menu();
 		// Menü füllen
 		if (target === "kopieren") {
 			popup.menuKopieren(menu);
@@ -138,6 +145,10 @@ let popup = {
 				popup.menuBedeutungenConf(menu, true);
 			}
 			popup.menuBelege(menu, true);
+		} else if (target === "kartei-pfad") {
+			popup.menuKarteiPfad(menu);
+			popup.menuSchliessen(menu, false);
+			popup.menuBelege(menu, true);
 		} else if (target === "beleg-conf") {
 			popup.menuBelegConf(menu, false);
 			popup.menuBelege(menu, true);
@@ -203,7 +214,9 @@ let popup = {
 			}
 			// IDs
 			const id = pfad[i].id;
-			if (id === "quick") {
+			if (id === "fensterladen") {
+				return "";
+			} else if (id === "quick") {
 				return "quick";
 			} else if (id === "wort" && kartei.wort) {
 				return "wort";
@@ -244,6 +257,11 @@ let popup = {
 					popup.overlayID = pfad[i].id;
 					return "schliessen";
 				}
+			}
+			// Datasets
+			if (pfad[i].dataset && pfad[i].dataset.pfad) {
+				popup.karteiPfad = pfad[i].dataset.pfad;
+				return "kartei-pfad";
 			}
 			// IDs untergeordnet
 			// (müssen nach "Klassen" überprüft werden)
@@ -565,6 +583,14 @@ let popup = {
 			icon: path.join(__dirname, "img", "menu", "muelleimer.png"),
 			click: () => start.dateiEntfernen(popup.startDatei),
 		}));
+		menu.append(new MenuItem({
+			type: "separator",
+		}));
+		menu.append(new MenuItem({
+			label: "Ordner öffnen",
+			icon: path.join(__dirname, "img", "menu", "ordner.png"),
+			click: () => helfer.ordnerOeffnen(popup.startDatei),
+		}));
 	},
 	// Link-Menü füllen
 	//   menu = Object
@@ -682,6 +708,11 @@ let popup = {
 			icon: path.join(__dirname, "img", "menu", "oeffnen.png"),
 			click: () => anhaenge.oeffnen(popup.anhangDatei),
 		}));
+		menu.append(new MenuItem({
+			label: "Ordner öffnen",
+			icon: path.join(__dirname, "img", "menu", "ordner.png"),
+			click: () => anhaenge.oeffnen(popup.anhangDatei, true),
+		}));
 	},
 	// Schließen-Menü füllen
 	//   menu = Object
@@ -704,6 +735,21 @@ let popup = {
 				overlay.schliessen(document.getElementById(id_oben));
 			},
 			accelerator: "Esc",
+		}));
+	},
+	// Kartei-Pfad-Menü füllen
+	//   menu = Object
+	//     (Menü-Objekt, an das die Menü-Items gehängt werden müssen)
+	menuKarteiPfad (menu) {
+		const {MenuItem} = require("electron").remote,
+			path = require("path");
+		menu.append(new MenuItem({
+			label: "Ordner öffnen",
+			icon: path.join(__dirname, "img", "menu", "ordner.png"),
+			click: () => helfer.ordnerOeffnen(popup.karteiPfad),
+		}));
+		menu.append(new MenuItem({
+			type: "separator",
 		}));
 	},
 	// Beleg-Conf-Menü füllen

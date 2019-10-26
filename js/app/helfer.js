@@ -123,6 +123,16 @@ let helfer = {
 			}
 		});
 	},
+	// das Fensterladen-Overlay ausblenden
+	fensterGeladen () {
+		setTimeout(function() {
+			let fl = document.getElementById("fensterladen");
+			fl.classList.add("geladen");
+			fl.addEventListener("transitionend", function() {
+				this.classList.add("aus");
+			});
+		}, 500);
+	},
 	// wenn keine Kopf-Icons => Liste der Anhänge links ohne Margin
 	kopfIcon () {
 		let icons = document.querySelectorAll(".kopf-icon"),
@@ -671,6 +681,13 @@ let helfer = {
 			shell.openExternal(url);
 		});
 	},
+	// öffnet den Dateimanager im Ordner der übergebenen Datei
+	//   pfad = String
+	//     (Pfad zu einer Datei)
+	ordnerOeffnen (pfad) {
+		let {shell} = require("electron");
+		shell.showItemInFolder(pfad);
+	},
 	// markiert in der Titelleiste des Programms, dass irgendeine Änderung
 	// noch nicht gespeichert wurde
 	geaendert () {
@@ -685,7 +702,7 @@ let helfer = {
 		}
 		// Programmname
 		const {app} = require("electron").remote,
-			app_name = app.getName().replace("'", "’");
+			app_name = app.getName();
 		// Wort
 		let wort = "";
 		if (kartei.wort) {
@@ -715,22 +732,13 @@ let helfer = {
 		const {app} = require("electron").remote,
 			fs = require("fs"),
 			path = require("path");
-		// Programmpfad ermitteln
-		let basis = "";
-		// vgl. optionen.tagsAutoLaden()
-		if (app.isPackaged) {
-			const sep = helfer.escapeRegExp(path.sep);
-			let reg = new RegExp(`${sep}(MacOS${sep})*zettelstraum(\.exe)*$`);
-			basis = app.getPath("exe").replace(reg, "");
-		} else {
-			basis = app.getAppPath();
+		// Resources-Pfad ermitteln
+		let resources = process.resourcesPath;
+		if (/node_modules/.test(resources)) {
+			// App ist nicht paketiert => resourcesPath zeigt auf die resources von Electron
+			resources = `${resources.replace(/node_modules.+/, "")}resources`;
 		}
-		// Datei in den temporären Ordner kopieren
-		let resources = "resources";
-		if (process.platform === "darwin") {
-			resources = "Resources";
-		}
-		const quelle = path.join(basis, resources, "Demonstrationskartei Team.wgd"),
+		const quelle = path.join(resources, "Demonstrationskartei Team.wgd"),
 			ziel = path.join(app.getPath("temp"), "Demonstrationskartei Team.wgd");
 		fs.copyFile(quelle, ziel, err => {
 			if (err) {
