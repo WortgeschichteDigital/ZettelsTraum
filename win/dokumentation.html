@@ -13,7 +13,7 @@
 
 		<script src="../js/app/helfer.js"></script>
 
-		<script src="../js/win/init-common.js"></script>
+		<script src="../js/win/init-win.js"></script>
 		<script src="../js/win/init-dokumentation.js"></script>
 		<script src="../js/win/helferWin.js"></script>
 		<script src="../js/win/hilfe.js"></script>
@@ -489,11 +489,11 @@ node installer/installer-linux.js deb</pre>
 					<!-- JavaScript -->
 					<h2 class="datei" id="ordner-js">./js/</h2>
 
-					<p>Der Ordner enthält alle JavaScript-Dateien, die von den Renderer-Prozessen geladen werden. Im Unterordner <span class="datei">./js/app/</span> liegen Dateien, die (fast) ausschließlich vom Hauptfenster genutzt werden, und in <span class="datei">./js/win/</span> Dateien, die ausschließlich in Nebenfenstern geladen werden.</p>
+					<p>Der Ordner enthält alle JavaScript-Dateien, die von den Renderer-Prozessen geladen werden. Im Unterordner <span class="datei">./js/app/</span> liegen Dateien, die (fast) ausschließlich vom Hauptfenster genutzt werden, und in <span class="datei">./js/win/</span> Dateien, die ausschließlich in Nebenfenstern geladen werden. In <span class="datei">./js/main/</span> wiederum finden sich Module, die allein die <span class="datei">main.js</span> benutzt.</p>
 
-					<p>Die einzige Datei des Ordners <span class="datei">./js/app/</span>, die auch in Nebenfenstern benutzt wird, ist die <span class="datei">helfer.js</span>. Sie enthält meist kleinere Methoden, die in vielen verschiedenen Kontexten immer wieder genutzt werden. Analog dazu gibt es die Datei <span class="datei">./js/win/helferWin.js</span>, die allerdings nur von Nebenfenstern geladen wird.</p>
+					<p>Eine Datei des Ordners <span class="datei">./js/app/</span>, die auch in Nebenfenstern genutzt wird, ist die <span class="datei">helfer.js</span>. Sie enthält meist kleinere Methoden, die in vielen verschiedenen Kontexten immer wieder genutzt werden. Analog dazu gibt es die Datei <span class="datei">./js/win/helferWin.js</span>, die allerdings nur von Nebenfenstern geladen wird.</p>
 
-					<p>Jede JavaScript-Datei enthält ein Objekt, das denselben Namen wie die Datei trägt. Es gibt allerdings Ausnahmen: Dies sind zum einen die JavaScript-Dateien im <a href="#ordner-root">Wurzelverzeichnis der App</a> und zum anderen Dateien mit dem Namensmuster <span class="datei">init-*.js</span>. In letzteren werden Events des Fensters initialisiert, zu dem die Datei gehört. Der Name der <abbr title="Hyptertext Markup Language">HTML</abbr>-Dateien im <a href="#ordner-win">Ordner <span class="datei">./win/</span></a> steht jeweils anstelle des Asterisks. Eine Ausnahme bildet nur die <span class="datei">init-common.js</span>. Sie wird von allen Nebenfenstern genutzt.</p>
+					<p>Jede JavaScript-Datei enthält ein Objekt, das denselben Namen wie die Datei trägt. Es gibt allerdings Ausnahmen: Dies sind zum einen die JavaScript-Dateien im <a href="#ordner-root">Wurzelverzeichnis der App</a> und zum anderen Dateien mit dem Namensmuster <span class="datei">init-*.js</span>. In letzteren werden Events des Fensters initialisiert, zu dem die Datei gehört. Der Name der <abbr title="Hyptertext Markup Language">HTML</abbr>-Dateien im <a href="#ordner-win">Ordner <span class="datei">./win/</span></a> steht jeweils anstelle des Asterisks. Eine Ausnahme bildet nur die <span class="datei">init-win.js</span>. Sie wird von allen Nebenfenstern genutzt.</p>
 
 					<p>Die Namen der JavaScript-Dateien zeigen an, welche Funktionalität die Scripts in ihnen bereitstellen. Manchmal ist dies nicht auf Anhieb klar, mitunter auch aus, sagen wir mal, <q class="einfach">historischen</q> Gründen: In einem frühen Programmierstadium wurde eine falsche Entscheidung getroffen, die später nicht revidiert wurde. Auch darum sollen einige der Dateien kurz beschrieben werden:</p>
 

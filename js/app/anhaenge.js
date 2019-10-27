@@ -352,11 +352,11 @@ let anhaenge = {
 	add (input) {
 		input.addEventListener("click", function() {
 			const obj = this.dataset.obj,
-				{app, dialog} = require("electron").remote;
+				{dialog} = require("electron").remote;
 			let cont = this.parentNode.parentNode;
 			let opt = {
 				title: "Anhang hinzufügen",
-				defaultPath: app.getPath("documents"),
+				defaultPath: appInfo.documents,
 				filters: [
 					{
 						name: "Alle Dateien",

@@ -85,42 +85,13 @@ let helfer = {
 	quickAccessRoles (a) {
 		a.addEventListener("click", function(evt) {
 			evt.preventDefault();
-			const id = this.id.replace(/^quick-/, ""),
-				{remote} = require("electron"),
-				win = remote.getCurrentWindow();
-			if (id === "bearbeiten-rueckgaengig") {
+			const befehl = this.id.replace(/^quick-/, ""),
+				{ipcRenderer} = require("electron");
+			let fokus = ["bearbeiten-rueckgaengig", "bearbeiten-wiederherstellen", "bearbeiten-ausschneiden", "bearbeiten-kopieren", "bearbeiten-einfuegen", "bearbeiten-alles-auswaehlen"];
+			if (fokus.includes(befehl)) {
 				helfer.quickAccessRolesActive.focus();
-				win.webContents.undo();
-			} else if (id === "bearbeiten-wiederherstellen") {
-				helfer.quickAccessRolesActive.focus();
-				win.webContents.redo();
-			} else if (id === "bearbeiten-ausschneiden") {
-				helfer.quickAccessRolesActive.focus();
-				win.webContents.cut();
-			} else if (id === "bearbeiten-kopieren") {
-				helfer.quickAccessRolesActive.focus();
-				win.webContents.copy();
-			} else if (id === "bearbeiten-einfuegen") {
-				helfer.quickAccessRolesActive.focus();
-				win.webContents.paste();
-			} else if (id === "bearbeiten-alles-auswaehlen") {
-				helfer.quickAccessRolesActive.focus();
-				win.webContents.selectAll();
-			} else if (id === "ansicht-anzeige-vergroessern") {
-				const faktor = Math.round((win.webContents.getZoomFactor() + 0.1) * 10) / 10;
-				win.webContents.setZoomFactor(faktor);
-			} else if (id === "ansicht-anzeige-verkleinern") {
-				const faktor = Math.round((win.webContents.getZoomFactor() - 0.1) * 10) / 10;
-				win.webContents.setZoomFactor(faktor);
-			} else if (id === "ansicht-standardgroesse") {
-				win.webContents.setZoomFactor(1);
-			} else if (id === "ansicht-vollbild") {
-				if (win.isFullScreen()) {
-					win.setFullScreen(false);
-				} else {
-					win.setFullScreen(true);
-				}
 			}
+			ipcRenderer.invoke("quick-roles", befehl);
 		});
 	},
 	// das Fensterladen-Overlay ausblenden
@@ -428,6 +399,13 @@ let helfer = {
 			quelle = cont.querySelector(selectors);
 		}
 	},
+	// Text in die Zwischenablage schieben
+	//   text = Object
+	//     (enthält Plain-Text und ggf. auch HTML)
+	toClipboard (text) {
+		const {clipboard} = require("electron");
+		clipboard.write(text);
+	},
 	// Strings für alphanumerische Sortierung aufbereiten
 	//   s = String
 	//     (String, der aufbereitet werden soll)
@@ -630,7 +608,7 @@ let helfer = {
 		img.width = "96";
 		img.height = "96";
 		let cd = "";
-		if (/changelog|fehlerlog|dokumentation|handbuch/.test(fenstertyp)) {
+		if (/changelog|fehlerlog|dokumentation|handbuch/.test(winInfo.typ)) {
 			cd = "../";
 		}
 		if (ziel === "zwischenablage") {
@@ -700,16 +678,13 @@ let helfer = {
 				beleg.geaendert) {
 			asterisk = " *";
 		}
-		// Programmname
-		const {app} = require("electron").remote,
-			app_name = app.getName();
 		// Wort
 		let wort = "";
 		if (kartei.wort) {
 			wort = `: ${kartei.wort}`;
 		}
 		// Dokumententitel
-		document.title = app_name + wort + asterisk;
+		document.title = appInfo.name + wort + asterisk;
 	},
 	// überprüft, ob das Bedeutungsgerüst offen ist und nicht durch irgendein
 	// anderes Fenster verdeckt wird
@@ -729,8 +704,7 @@ let helfer = {
 	},
 	// Öffnen der Demonstrationskartei
 	demoOeffnen () {
-		const {app} = require("electron").remote,
-			fs = require("fs"),
+		const fs = require("fs"),
 			path = require("path");
 		// Resources-Pfad ermitteln
 		let resources = process.resourcesPath;
@@ -739,7 +713,7 @@ let helfer = {
 			resources = `${resources.replace(/node_modules.+/, "")}resources`;
 		}
 		const quelle = path.join(resources, "Demonstrationskartei Team.wgd"),
-			ziel = path.join(app.getPath("temp"), "Demonstrationskartei Team.wgd");
+			ziel = path.join(appInfo.temp, "Demonstrationskartei Team.wgd");
 		fs.copyFile(quelle, ziel, err => {
 			if (err) {
 				dialog.oeffnen("alert");

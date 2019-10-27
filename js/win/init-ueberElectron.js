@@ -1,13 +1,11 @@
 "use strict";
 
-window.addEventListener("load", () => {
-	// FENSTERTTYP REGISTRIEREN
-	window.fenstertyp = "electron";
-
-	// INIT-COMMON
-	initCommon.appName();
-	initCommon.events();
-	initCommon.eventsPopup();
+window.addEventListener("load", async () => {
+	// INIT
+	await initWin.infos();
+	initWin.appName();
+	initWin.events();
+	initWin.eventsPopup();
 
 	// ANZEIGE TASTATURKÜRZEL ANPASSEN
 	tastatur.shortcutsText();
@@ -22,6 +20,6 @@ window.addEventListener("load", () => {
 		}
 	});
 
-	// ANZEIGE INITIALISIEREN
+	// FENSTER FREISCHALTEN
 	helfer.fensterGeladen();
 });

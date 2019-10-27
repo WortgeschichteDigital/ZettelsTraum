@@ -1,42 +1,21 @@
 "use strict";
 
 // Initialisierung der App
-window.addEventListener("load", () => {
-	// GRUNDLEGENDES
-	// Fensterttyp registrieren
-	window.fenstertyp = "index";
+window.addEventListener("load", async () => {
+	// VARIABLEN ANLEGEN
+	// Infos zu App und Fenster erfragen
+	const {ipcRenderer} = require("electron");
+	let info = await ipcRenderer.invoke("infos-senden");
+	window.appInfo = info.appInfo;
+	window.winInfo = info.winInfo;
 
-	// globales Datenobjekt für die aktuelle Kartei
+	// globales Datenobjekt für Kartei
 	window.data = {};
 
-	// Anpassungen macOS
-	if (process.platform === "darwin") {
-		// Option zum Ausblenden der Menüleiste verstecken
-		let option = document.getElementById("einstellung-autoHideMenuBar").parentNode;
-		option.classList.add("aus");
-	}
-	
-	// Anpassungen Windows
-	if (process.platform === "win32") {
-		// Korrektur des Bearbeiten-Shortcuts
-		document.getElementById("quick-bearbeiten-wiederherstellen").title = "Bearbeiten: Wiederherstellen (Strg + Y)";
-	}
-
-	// Programmname eintragen
-	const {app} = require("electron").remote;
-	window.appName = app.getName();
-	document.querySelectorAll(".app-name").forEach(i => {
-		i.textContent = appName;
-	});
-
-	// Anzeige Tastaturkürzel anpassen
-	tastatur.shortcutsText();
-
-	// IPC-LISTENER
-	const {ipcRenderer} = require("electron");
-	ipcRenderer.on("optionen-empfangen", (evt, data) => optionen.empfangen(data));
-	ipcRenderer.on("app-einstellungen", () => optionen.oeffnen());
+	// IPC-LISTENER INITIALISIEREN
+	// Menüpunkte
 	ipcRenderer.on("app-karteisuche", () => karteisuche.oeffnen());
+	ipcRenderer.on("app-einstellungen", () => optionen.oeffnen());
 	ipcRenderer.on("kartei-erstellen", () => kartei.wortErfragen());
 	ipcRenderer.on("kartei-oeffnen", (evt, datei) => {
 		if (datei) {
@@ -79,19 +58,24 @@ window.addEventListener("load", () => {
 	ipcRenderer.on("belege-kopieren", () => kopieren.init());
 	ipcRenderer.on("belege-einfuegen", () => kopieren.einfuegen());
 	ipcRenderer.on("hilfe-demo", () => helfer.demoOeffnen());
+	// Kopierfunktion
 	ipcRenderer.on("kopieren-basisdaten", () => kopieren.basisdatenSenden());
 	ipcRenderer.on("kopieren-basisdaten-empfangen", (evt, daten) => kopieren.einfuegenBasisdatenEintragen(daten));
 	ipcRenderer.on("kopieren-daten", () => kopieren.datenSenden());
 	ipcRenderer.on("kopieren-daten-empfangen", (evt, daten) => kopieren.einfuegenEinlesen(daten));
-	ipcRenderer.on("optionen-zuletzt", (evt, zuletzt) => optionen.updateZuletzt(zuletzt));
-	ipcRenderer.on("dialog-anzeigen", (evt, text) => {
-		dialog.oeffnen("alert");
-		dialog.text(text);
-	});
+	// Einstellungen
+	ipcRenderer.on("optionen-empfangen", (evt, data) => optionen.empfangen(data));
+	ipcRenderer.on("optionen-zuletzt", (evt, karteien) => zuletzt.update(karteien));
+	// Bedeutungsgerüst-Fenster
 	ipcRenderer.on("bedeutungen-fenster-drucken", (evt, gn) => drucken.init("bedeutungen-", gn));
 	ipcRenderer.on("bedeutungen-fenster-eintragen", (evt, bd) => beleg.bedeutungEinAustragen(bd, true));
 	ipcRenderer.on("bedeutungen-fenster-austragen", (evt, bd) => beleg.bedeutungEinAustragen(bd, false));
 	ipcRenderer.on("bedeutungen-fenster-status", (evt, status) => bedeutungenWin.status(status));
+	// Dialog
+	ipcRenderer.on("dialog-anzeigen", (evt, text) => {
+		dialog.oeffnen("alert");
+		dialog.text(text);
+	});
 
 	// EVENTS: TASTATUREINGABEN
 	document.addEventListener("keydown", tastatur.init);
@@ -290,21 +274,39 @@ window.addEventListener("load", () => {
 	// Handbuch-Links von Overlays
 	document.querySelectorAll(".icon-handbuch").forEach(a => helfer.handbuchLink(a));
 
+	// VISUELLE ANPASSUNGEN
+	// App-Namen eintragen
+	document.querySelectorAll(".app-name").forEach(i => i.textContent = appInfo.name);
+	// Windows
+	if (process.platform === "win32") {
+		// Korrektur des Bearbeiten-Shortcuts
+		document.getElementById("quick-bearbeiten-wiederherstellen").title = "Bearbeiten: Wiederherstellen (Strg + Y)";
+	}
+	// macOS
+	if (process.platform === "darwin") {
+		// Option zum Ausblenden der Menüleiste verstecken
+		let option = document.getElementById("einstellung-autoHideMenuBar").parentNode;
+		option.classList.add("aus");
+	}
+	// Tastaturkürzel ändern
+	tastatur.shortcutsText();
+
 	// IPC-ANFRAGEN
+	// Bilder vorladen
+	let bilderPreload = [],
+		bilder = await ipcRenderer.invoke("bilder-senden");
+	for (let b of bilder) {
+		let img = new Image();
+		img.src = `img/${b}`;
+		bilderPreload.push(img);
+	}
 	// Optionen laden
-	let opt = ipcRenderer.sendSync("optionen-senden");
+	let opt = await ipcRenderer.invoke("optionen-senden");
 	optionen.einlesen(optionen.data, opt);
 	optionen.anwenden();
-	// Bilder vorladen (damit es nicht flackert)
-	let bilder = ipcRenderer.sendSync("bilder-senden"),
-		bilder_preload = [];
-	for (let i = 0, len = bilder.length; i < len; i++) {
-		bilder_preload[i] = new Image();
-		bilder_preload[i].src = `img/${bilder[i]}`;
-	}
 
-	// ANZEIGE INITIALISIEREN
-	start.zuletzt(); // Obacht! Erst aufrufen, nachdem die Optionen geladen wurden!
+	// FENSTER FREISCHALTEN
+	zuletzt.aufbauen();
 	helfer.fensterGeladen();
 });
 
@@ -331,9 +333,8 @@ window.addEventListener("beforeunload", evt => {
 			beleg.geaendert ||
 			kartei.geaendert) {
 		speichern.checkInit(() => {
-			const {remote} = require("electron"),
-				win = remote.getCurrentWindow();
-			win.close();
+			const {ipcRenderer} = require("electron");
+			ipcRenderer.invoke("fenster-schliessen");
 		}, {
 			kartei: true,
 		});

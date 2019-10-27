@@ -13,11 +13,11 @@ let suchleiste = {
 			let leiste = document.getElementById("suchleiste");
 			leiste.classList.add("an");
 			leiste.firstChild.select();
-			if (fenstertyp === "changelog") {
+			if (winInfo.typ === "changelog") {
 				document.querySelector("main").classList.add("padding-suchleiste");
-			} else if (/dokumentation|handbuch/.test(fenstertyp)) {
+			} else if (/dokumentation|handbuch/.test(winInfo.typ)) {
 				document.querySelector("section:not(.aus)").classList.add("padding-suchleiste");
-			} else if (fenstertyp === "index") {
+			} else if (winInfo.typ === "index") {
 				if (helfer.belegOffen()) { // Karteikarte
 					document.getElementById("beleg").classList.add("padding-suchleiste");
 				} else { // Belegliste
@@ -134,7 +134,7 @@ let suchleiste = {
 				return;
 			}
 			// ggf. Annotierungs-Popup schließen
-			if (fenstertyp === "index") {
+			if (winInfo.typ === "index") {
 				annotieren.modSchliessen();
 			}
 			// alte Suche ggf. löschen
@@ -149,18 +149,18 @@ let suchleiste = {
 			return;
 		}
 		// ggf. Annotierungs-Popup schließen
-		if (fenstertyp === "index") {
+		if (winInfo.typ === "index") {
 			annotieren.modSchliessen();
 		}
 		// alte Suche löschen
 		suchleiste.suchenReset();
 		// Elemente mit Treffer zusammentragen
 		let e;
-		if (fenstertyp === "changelog") {
+		if (winInfo.typ === "changelog") {
 			e = document.querySelectorAll("div > h2, div > h3, div > p, ul li");
-		} else if (/dokumentation|handbuch/.test(fenstertyp)) {
+		} else if (/dokumentation|handbuch/.test(winInfo.typ)) {
 			e = document.querySelectorAll("section:not(.aus) > h2, section:not(.aus) > p, section:not(.aus) #suchergebnisse > p, section:not(.aus) > div p, section:not(.aus) > pre, section:not(.aus) li, section:not(.aus) td, section:not(.aus) th");
-		} else if (fenstertyp === "index") {
+		} else if (winInfo.typ === "index") {
 			if (helfer.belegOffen()) { // Karteikarte (Leseansicht)
 				e = document.querySelectorAll("#beleg th, .beleg-lese td");
 			} else { // Belegliste
@@ -300,7 +300,7 @@ let suchleiste = {
 		// Einblenden-Funktion gekürzter Absätze (Hauptfenster)
 		ele.querySelectorAll(".gekuerzt").forEach(p => liste.abelegAbsatzEinblenden(p));
 		// Icon-Tools in der Karteikarte (Hauptfenster)
-		if (fenstertyp === "index" && helfer.belegOffen() && ele.nodeName === "TH") {
+		if (winInfo.typ === "index" && helfer.belegOffen() && ele.nodeName === "TH") {
 			ele.querySelectorAll(`[class*="icon-tools-"]`).forEach(a => beleg.toolsKlick(a));
 		}
 		// Bedeutungsgerüst wechseln aus der Karteikarte (Hauptfenster)
@@ -445,7 +445,7 @@ let suchleiste = {
 		const headerHeight = document.querySelector("header").offsetHeight,
 			suchleisteHeight = document.getElementById("suchleiste").offsetHeight;
 		let rect = marks[pos].getBoundingClientRect();
-		if (fenstertyp === "index") {
+		if (winInfo.typ === "index") {
 			if (helfer.belegOffen()) { // Karteikarte
 				const kopf = document.getElementById("beleg").offsetTop,
 					header = document.querySelector("#beleg header").offsetHeight;

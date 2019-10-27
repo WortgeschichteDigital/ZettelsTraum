@@ -233,7 +233,7 @@ let optionen = {
 		personen: [],
 		// letzter Pfad, der beim Speichern oder Öffnen einer Datei benutzt wurde
 		letzter_pfad: "",
-		// zuletzt verwendete Dokumente
+		// zuletzt verwendete Karteien
 		zuletzt: [],
 	},
 	// Optionen on-the-fly empfangen
@@ -749,10 +749,10 @@ let optionen = {
 	},
 	// Tag-Datei manuell laden
 	tagsManuLaden () {
-		const {app, dialog} = require("electron").remote;
+		const {dialog} = require("electron").remote;
 		let opt = {
 			title: "Tag-Datei laden",
-			defaultPath: app.getPath("documents"),
+			defaultPath: appInfo.documents,
 			filters: [
 				{
 					name: "XML-Datei",
@@ -1006,8 +1006,8 @@ let optionen = {
 	// Optionen an den Main-Prozess schicken, der sie dann speichern soll
 	// (der Main-Prozess setzt einen Timeout, damit das nicht zu häufig geschieht)
 	speichern () {
-		const {ipcRenderer, remote} = require("electron");
-		ipcRenderer.send("optionen-speichern", optionen.data, remote.getCurrentWindow().id);
+		const {ipcRenderer} = require("electron");
+		ipcRenderer.send("optionen-speichern", optionen.data, winInfo.winId);
 	},
 	// letzten Pfad speichern
 	aendereLetzterPfad () {
@@ -1017,35 +1017,12 @@ let optionen = {
 		optionen.data.letzter_pfad = pfad;
 		optionen.speichern();
 	},
-	// Liste der zuletzt verwendeten Karteien ergänzen
-	aendereZuletzt () {
-		// Datei ggf. entfernen (falls an einer anderen Stelle schon vorhanden)
-		let zuletzt = optionen.data.zuletzt;
-		if (zuletzt.includes(kartei.pfad)) {
-			zuletzt.splice(zuletzt.indexOf(kartei.pfad), 1);
-		}
-		// Datei vorne anhängen
-		zuletzt.unshift(kartei.pfad);
-		// Liste auf 10 Einträge begrenzen
-		if (zuletzt.length > 10) {
-			zuletzt.pop();
-		}
-		// Optionen speichern
-		optionen.speichern();
-	},
-	// Liste der zuletzt verwendeten Karteien updaten (angestoßen durch Main-Prozess)
-	updateZuletzt(zuletzt) {
-		optionen.data.zuletzt = zuletzt;
-		if (!document.getElementById("start").classList.contains("aus")) {
-			start.zuletzt();
-		}
-	},
 	// Personenliste einlesen
 	aenderePersonenliste () {
-		const {app, dialog} = require("electron").remote;
+		const {dialog} = require("electron").remote;
 		let opt = {
 			title: "Personenliste laden",
-			defaultPath: app.getPath("documents"),
+			defaultPath: appInfo.documents,
 			filters: [
 				{
 					name: "Text-Datei",

@@ -28,9 +28,8 @@ let helferWin = {
 			const {ipcRenderer} = require("electron");
 			ipcRenderer.send("hilfe-changelog");
 			if (this.dataset.caller === "ueber-app") {
-				const {remote} = require("electron"),
-					win = remote.getCurrentWindow();
-				win.close();
+				const {ipcRenderer} = require("electron");
+				ipcRenderer.invoke("fenster-schliessen");
 			}
 		});
 	},

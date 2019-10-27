@@ -1,21 +1,18 @@
 "use strict";
 
-window.addEventListener("load", () => {
-	// FENSTERTTYP REGISTRIEREN
-	window.fenstertyp = "app";
-
-	// INIT-COMMON
-	initCommon.appName();
-	initCommon.events();
-	initCommon.eventsPopup();
+window.addEventListener("load", async () => {
+	// INIT
+	await initWin.infos();
+	initWin.appName();
+	initWin.events();
+	initWin.eventsPopup();
 
 	// ANZEIGE TASTATURKÜRZEL ANPASSEN
 	tastatur.shortcutsText();
 
 	// PROGRAMM-VERSION EINTRAGEN
-	const {app} = require("electron").remote;
-	document.getElementById("version").textContent = app.getVersion();
+	document.getElementById("version").textContent = appInfo.version;
 
-	// ANZEIGE INITIALISIEREN
+	// FENSTER FREISCHALTEN
 	helfer.fensterGeladen();
 });

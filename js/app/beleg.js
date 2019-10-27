@@ -1438,11 +1438,11 @@ let beleg = {
 	//   dt = Object
 	//     (das Datenobjekt, aus dem heraus der Beleg in die Zwischenablage kopiert werden soll)
 	ctrlZwischenablage (dt) {
-		const {clipboard, remote} = require("electron"),
+		const {clipboard} = require("electron"),
 			daten = kopieren.datenBeleg(dt);
 		daten.typ = "bwgd";
 		daten.version = 1;
-		daten.winId = remote.getCurrentWindow().id;
+		daten.winId = winInfo.winId;
 		daten.wort = kartei.wort;
 		clipboard.writeText(JSON.stringify(daten));
 		helfer.animation("zwischenablage");

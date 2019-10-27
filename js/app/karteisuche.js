@@ -103,10 +103,10 @@ let karteisuche = {
 	},
 	// Pfad zur Pfadliste hinzufügen
 	pfadHinzufuegen () {
-		const {app, dialog} = require("electron").remote;
+		const {dialog} = require("electron").remote;
 		let opt = {
 			title: "Pfad hinzufügen",
-			defaultPath: app.getPath("documents"),
+			defaultPath: appInfo.documents,
 			properties: [
 				"openDirectory",
 			],

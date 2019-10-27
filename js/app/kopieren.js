@@ -226,8 +226,8 @@ let kopieren = {
 	//   animation = Boolean
 	//     (der Reload-Button soll animiert werden)
 	einfuegenBasisdaten (animation) {
-		const {ipcRenderer, remote} = require("electron");
-		ipcRenderer.send("kopieren-basisdaten", remote.getCurrentWindow().id);
+		const {ipcRenderer} = require("electron");
+		ipcRenderer.send("kopieren-basisdaten", winInfo.winId);
 		if (animation) {
 			const button = document.getElementById("kopieren-einfuegen-reload");
 			button.classList.add("animation");
@@ -372,9 +372,7 @@ let kopieren = {
 			return;
 		}
 		// Stammen die Daten aus diesem Fenster?
-		const {remote} = require("electron"),
-			winId = remote.getCurrentWindow().id;
-		if (daten.winId === winId && daten.wort === kartei.wort) {
+		if (daten.winId === winInfo.winId && daten.wort === kartei.wort) {
 			return;
 		}
 		// Die Daten sind offenbar okay!
@@ -482,8 +480,8 @@ let kopieren = {
 			return;
 		}
 		// Quelle = Fenster
-		const {ipcRenderer, remote} = require("electron");
-		ipcRenderer.send("kopieren-daten", parseInt(quelle, 10), remote.getCurrentWindow().id);
+		const {ipcRenderer} = require("electron");
+		ipcRenderer.send("kopieren-daten", parseInt(quelle, 10), winInfo.winId);
 	},
 	// die übergebenen Daten werden eingelesen
 	// (wird auch für zum Duplizieren von Belegen genutzt)
@@ -600,9 +598,9 @@ let kopieren = {
 	},
 	// Basisdaten über die Belegmenge und das Fenster an den Main-Prozess senden
 	basisdatenSenden () {
-		const {ipcRenderer, remote} = require("electron");
+		const {ipcRenderer} = require("electron");
 		let daten = {
-			id: remote.getCurrentWindow().id,
+			id: winInfo.winId,
 			wort: kartei.wort,
 			belege: kopieren.belege.length,
 			gerueste: Object.keys(data.bd.gr),
@@ -677,11 +675,11 @@ let kopieren = {
 		if (kopieren.belege.length === 1) {
 			num = "Beleg";
 		}
-		const {app, dialog} = require("electron").remote,
+		const {dialog} = require("electron").remote,
 			path = require("path");
 		let opt = {
 			title: "Belege exportieren",
-			defaultPath: path.join(app.getPath("documents"), `${kartei.wort}, ${kopieren.belege.length} ${num}.bwgd`),
+			defaultPath: path.join(appInfo.documents, `${kartei.wort}, ${kopieren.belege.length} ${num}.bwgd`),
 			filters: [
 				{
 					name: "Wortgeschichte digital-Belege",
@@ -710,10 +708,10 @@ let kopieren = {
 	},
 	// Kopierliste aus Datei importieren
 	importieren () {
-		const {app, dialog} = require("electron").remote;
+		const {dialog} = require("electron").remote;
 		let opt = {
 			title: "Belege importieren",
-			defaultPath: app.getPath("documents"),
+			defaultPath: appInfo.documents,
 			filters: [
 				{
 					name: "Wortgeschichte digital-Belege",

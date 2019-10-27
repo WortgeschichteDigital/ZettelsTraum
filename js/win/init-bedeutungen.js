@@ -1,12 +1,11 @@
 "use strict";
 
-window.addEventListener("load", () => {
-	// FENSTERTTYP REGISTRIEREN
-	window.fenstertyp = "bedeutungen";
-
-	// INIT-COMMON
-	initCommon.listenerMain();
-	initCommon.events();
+window.addEventListener("load", async () => {
+	// INIT
+	await initWin.infos();
+	initWin.ipcListener();
+	initWin.appName();
+	initWin.events();
 
 	// ANZEIGE TASTATURKÜRZEL ANPASSEN
 	tastatur.shortcutsText();
@@ -21,6 +20,6 @@ window.addEventListener("load", () => {
 	document.querySelectorAll(".dropdown-feld").forEach(i => dropdown.feld(i));
 	document.querySelectorAll(".dropdown-link-td, .dropdown-link-element").forEach(i => dropdown.link(i));
 
-	// ANZEIGE INITIALISIEREN
+	// FENSTER FREISCHALTEN
 	helfer.fensterGeladen();
 });

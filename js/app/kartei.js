@@ -60,10 +60,10 @@ let kartei = {
 	},
 	// bestehende Kartei öffnen (über den Öffnen-Dialog)
 	oeffnen () {
-		const {app, dialog} = require("electron").remote;
+		const {dialog} = require("electron").remote;
 		let opt = {
 			title: "Kartei öffnen",
-			defaultPath: app.getPath("documents"),
+			defaultPath: appInfo.documents,
 			filters: [
 				{
 					name: "Wortgeschichte digital-Datei",
@@ -97,10 +97,10 @@ let kartei = {
 	//   datei = String
 	//     (Dateipfad; kommt von der Startseite, dem Main-Prozess,
 	//     dem Öffnen-Dialog oder via Drag-and-Drop)
-	oeffnenEinlesen (datei) {
+	async oeffnenEinlesen (datei) {
 		// Ist die Kartei schon offen?
-		const {ipcRenderer, remote} = require("electron"),
-			schonOffen = ipcRenderer.sendSync("kartei-schon-offen", datei);
+		const {ipcRenderer} = require("electron"),
+			schonOffen = await ipcRenderer.invoke("kartei-schon-offen", datei);
 		if (schonOffen) {
 			return;
 		}
@@ -153,7 +153,7 @@ let kartei = {
 			// Datei sperren
 			kartei.lock(datei, "lock");
 			// Main melden, dass die Kartei in diesem Fenster geöffnet wurde
-			ipcRenderer.send("kartei-geoeffnet", remote.getCurrentWindow().id, datei);
+			ipcRenderer.send("kartei-geoeffnet", winInfo.winId, datei);
 			// alle Overlays schließen
 			overlay.alleSchliessen();
 			// alle Filter zurücksetzen (wichtig für Text- und Zeitraumfilter)
@@ -170,7 +170,7 @@ let kartei = {
 			kartei.wortEintragen();
 			kartei.pfad = datei;
 			optionen.aendereLetzterPfad();
-			optionen.aendereZuletzt();
+			zuletzt.aendern();
 			notizen.icon();
 			lexika.icon();
 			anhaenge.scan(data.an);
@@ -253,11 +253,11 @@ let kartei = {
 					}
 					kartei.pfad = pfad;
 					optionen.aendereLetzterPfad();
-					optionen.aendereZuletzt();
+					zuletzt.aendern();
 					kartei.karteiGeaendert(false);
 					helfer.animation("gespeichert");
-					const {ipcRenderer, remote} = require("electron");
-					ipcRenderer.send("kartei-geoeffnet", remote.getCurrentWindow().id, pfad);
+					const {ipcRenderer} = require("electron");
+					ipcRenderer.send("kartei-geoeffnet", winInfo.winId, pfad);
 					// das Speichern hat fehlerfrei funktioniert
 					resolve(true);
 				})
@@ -276,11 +276,11 @@ let kartei = {
 	},
 	// Speichern: Pfad ermitteln
 	speichernUnter () {
-		const {app, dialog} = require("electron").remote,
+		const {dialog} = require("electron").remote,
 			path = require("path");
 		let opt = {
 			title: "Kartei speichern",
-			defaultPath: path.join(app.getPath("documents"), `${kartei.wort}.wgd`),
+			defaultPath: path.join(appInfo.documents, `${kartei.wort}.wgd`),
 			filters: [
 				{
 					name: "Wortgeschichte digital-Datei",
@@ -308,7 +308,7 @@ let kartei = {
 			.catch(err => kartei.dialogWrapper(`Beim Öffnen des Datei-Dialogs ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.message}</p>`));
 	},
 	// Kartei schließen
-	schliessen () {
+	async schliessen () {
 		// Sperre für macOS (Menüpunkte können nicht deaktiviert werden)
 		if (!kartei.wort) {
 			dialog.oeffnen("alert");
@@ -316,11 +316,10 @@ let kartei = {
 			return;
 		}
 		// Gibt es noch ein anderes Hauptfenster? Wenn ja => dieses Fenster komplett schließen
-		const {ipcRenderer, remote} = require("electron"),
-			win = remote.getCurrentWindow(),
-			hauptfensterOffen = ipcRenderer.sendSync("fenster-hauptfenster", win.id);
+		const {ipcRenderer} = require("electron"),
+			hauptfensterOffen = await ipcRenderer.invoke("fenster-hauptfenster", winInfo.winId);
 		if (hauptfensterOffen) {
-			win.close();
+			ipcRenderer.invoke("fenster-schliessen");
 			return;
 		}
 		// das aktuelle Fenster ist das letzte Hauptfenster => die Kartei in diesem Fenster schließen, das Fenster erhalten
@@ -332,8 +331,8 @@ let kartei = {
 	},
 	// Kartei im aktuellen Fenster schließen, das Fenster selbst aber erhalten
 	schliessenDurchfuehren () {
-		const {ipcRenderer, remote} = require("electron");
-		ipcRenderer.send("kartei-geschlossen", remote.getCurrentWindow().id);
+		const {ipcRenderer} = require("electron");
+		ipcRenderer.send("kartei-geschlossen", winInfo.winId);
 		kartei.lock(kartei.pfad, "unlock");
 		notizen.notizenGeaendert(false);
 		tagger.taggerGeaendert(false);
@@ -353,7 +352,7 @@ let kartei = {
 		lexika.icon();
 		anhaenge.makeIconList(null, document.getElementById("kartei-anhaenge"));
 		kopieren.uiOff(false);
-		start.zuletzt();
+		zuletzt.aufbauen();
 		helfer.sektionWechseln("start");
 		kartei.menusDeaktivieren(true);
 		erinnerungen.icon(false);
@@ -382,8 +381,8 @@ let kartei = {
 				dialog.text("Sie müssen ein Wort eingeben, sonst kann keine Kartei angelegt werden.");
 			} else if (dialog.antwort && wort) {
 				kartei.lock(kartei.pfad, "unlock");
-				const {ipcRenderer, remote} = require("electron");
-				ipcRenderer.send("kartei-geoeffnet", remote.getCurrentWindow().id, "neu");
+				const {ipcRenderer} = require("electron");
+				ipcRenderer.send("kartei-geoeffnet", winInfo.winId, "neu");
 				kartei.karteiGeaendert(true);
 				filter.ctrlReset(false);
 				kartei.wort = wort;
@@ -453,8 +452,8 @@ let kartei = {
 	//   disable = Boolean
 	//     (true = Kartei wurde geschlossen, false = Kartei wurde geöffnet)
 	menusDeaktivieren (disable) {
-		const {ipcRenderer, remote} = require("electron");
-		ipcRenderer.send("menus-deaktivieren", disable, remote.getCurrentWindow().id);
+		const {ipcRenderer} = require("electron");
+		ipcRenderer.send("menus-deaktivieren", disable, winInfo.winId);
 	},
 	// Lock-Datei-Funktionen
 	//   datei = String

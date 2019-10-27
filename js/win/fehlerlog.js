@@ -63,11 +63,10 @@ let fehlerlog = {
 		let p = document.createElement("p");
 		div.appendChild(p);
 		p.classList.add("version");
-		const {app} = require("electron").remote,
-		os = require("os");
+		const os = require("os");
 		let daten = [{
 			type: "App",
-			data: app.getVersion(),
+			data: appInfo.version,
 		},
 		{
 			type: "Electron",

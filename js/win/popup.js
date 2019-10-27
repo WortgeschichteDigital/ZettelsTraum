@@ -14,26 +14,22 @@ let popup = {
 		if (!target) {
 			return;
 		}
-		// Menü initialisieren
-		const {remote} = require("electron"),
-			{Menu} = remote,
-			menu = new Menu();
-		// Menü füllen
+		// Menü entwerfen
+		let items = [];
 		if (target === "kopieren") {
-			popup.menuKopieren(menu);
+			items = ["kopierenNebenfenster"];
 		} else if (target === "kopieren-code") {
-			popup.menuKopierenCode(menu);
+			items = ["kopierenCode"];
 		} else if (target === "textfeld") {
-			popup.menuBearbeiten(menu);
+			items = ["bearbeitenRueckgaengig", "bearbeitenWiederherstellen", "sep", "bearbeitenAusschneiden", "bearbeitenKopieren", "bearbeitenEinfuegen", "bearbeitenAlles"];
 		} else if (target === "link") {
-			popup.menuLink(menu);
+			items = ["link"];
 		} else if (target === "mail") {
-			popup.menuMail(menu);
+			items = ["mail"];
 		}
-		// Menü anzeigen
-		menu.popup({
-			window: remote.getCurrentWindow(),
-		});
+		// Menü vom Main-Prozess erzeugen lassen
+		const {ipcRenderer} = require("electron");
+		ipcRenderer.invoke("popup", items);
 	},
 	// ermittelt das für den Rechtsklick passende Klickziel
 	//   pfad = Array
@@ -89,105 +85,5 @@ let popup = {
 			return true;
 		}
 		return false;
-	},
-	// Kopieren-Menü füllen
-	//   menu = Object
-	//     (Menü-Objekt, an das die Menü-Items gehängt werden müssen)
-	menuKopieren (menu) {
-		const {MenuItem} = require("electron").remote,
-			path = require("path");
-		menu.append(new MenuItem({
-			label: "Textauswahl kopieren",
-			icon: path.join(__dirname, "../", "img", "menu", "kopieren.png"),
-			click: function() {
-				const {clipboard} = require("electron");
-				clipboard.writeText(popup.textauswahl);
-			},
-		}));
-	},
-	// Code-Kopie-Menü füllen
-	//   menu = Object
-	//     (Menü-Objekt, an das die Menü-Items gehängt werden müssen)
-	menuKopierenCode (menu) {
-		const {MenuItem} = require("electron").remote,
-			path = require("path");
-		menu.append(new MenuItem({
-			label: "Code kopieren",
-			icon: path.join(__dirname, "../", "img", "menu", "kopieren.png"),
-			click: function() {
-				const {clipboard} = require("electron");
-				clipboard.writeText(popup.element.innerText);
-			},
-		}));
-	},
-	// Bearbeiten-Menü füllen
-	//   menu = Object
-	//     (Menü-Objekt, an das die Menü-Items gehängt werden müssen)
-	menuBearbeiten (menu) {
-		const {MenuItem} = require("electron").remote,
-			path = require("path");
-		menu.append(new MenuItem({
-			label: "Rückgängig",
-			icon: path.join(__dirname, "../", "img", "menu", "pfeil-rund-links.png"),
-			role: "undo",
-		}));
-		menu.append(new MenuItem({
-			label: "Wiederherstellen",
-			icon: path.join(__dirname, "../", "img", "menu", "pfeil-rund-rechts.png"),
-			role: "redo",
-		}));
-		menu.append(new MenuItem({
-			type: "separator"
-		}));
-		menu.append(new MenuItem({
-			label: "Ausschneiden",
-			icon: path.join(__dirname, "../", "img", "menu", "schere.png"),
-			role: "cut",
-		}));
-		menu.append(new MenuItem({
-			label: "Kopieren",
-			icon: path.join(__dirname, "../", "img", "menu", "kopieren.png"),
-			role: "copy",
-		}));
-		menu.append(new MenuItem({
-			label: "Einfügen",
-			icon: path.join(__dirname, "../", "img", "menu", "einfuegen.png"),
-			role: "paste",
-		}));
-		menu.append(new MenuItem({
-			label: "Alles auswählen",
-			icon: path.join(__dirname, "../", "img", "menu", "auswaehlen.png"),
-			role: "selectAll",
-		}));
-	},
-	// Link-Menü füllen
-	//   menu = Object
-	//     (Menü-Objekt, an das die Menü-Items gehängt werden müssen)
-	menuLink (menu) {
-		const {MenuItem} = require("electron").remote,
-			path = require("path");
-		menu.append(new MenuItem({
-			label: "Link kopieren",
-			icon: path.join(__dirname, "../", "img", "menu", "link.png"),
-			click: function() {
-				const {clipboard} = require("electron");
-				clipboard.writeText(popup.element.getAttribute("href"));
-			},
-		}));
-	},
-	// Mail-Menü füllen
-	//   menu = Object
-	//     (Menü-Objekt, an das die Menü-Items gehängt werden müssen)
-	menuMail (menu) {
-		const {MenuItem} = require("electron").remote,
-			path = require("path");
-		menu.append(new MenuItem({
-			label: "Adresse kopieren",
-			icon: path.join(__dirname, "../", "img", "menu", "brief.png"),
-			click: function() {
-				const {clipboard} = require("electron");
-				clipboard.writeText(popup.element.getAttribute("href").replace(/^mailto:/, ""));
-			},
-		}));
 	},
 };

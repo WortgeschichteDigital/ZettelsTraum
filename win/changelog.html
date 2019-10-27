@@ -14,7 +14,7 @@
 
 		<script src="../js/app/helfer.js"></script>
 
-		<script src="../js/win/init-common.js"></script>
+		<script src="../js/win/init-win.js"></script>
 		<script src="../js/win/init-changelog.js"></script>
 		<script src="../js/win/helferWin.js"></script>
 		<script src="../js/win/popup.js"></script>
@@ -174,7 +174,15 @@
 
 					<li>Programmfenster werden jetzt mit einem zum Betriebssystem passenden Icon geöffnet.</li>
 
-					<li>Die Init-Scripts der Nebenfenster wurden reorganisiert. Sie lassen sich jetzt leichter verwalten. Bei der Aktion wurde immens viel doppelter Code eliminiert.</li>
+					<li>
+						<p>Es hat sich viel <span lang="en">under the hood</span> getan: Der Quelltext wurde an zahlreichen Stellen stark restrukturiert, was ihn nicht nur klarer und moderner machte, sondern auch hunderte Zeilen doppelten oder überflüssig komplizierten Codes einsparte.</p>
+
+						<p>Umgebaut wurden besonders die Init-Scripts aller Nebenfenster und die Art und Weise, wie Rechtsklickmenüs erzeugt werden.</p>
+
+						<p>Zugleich wurde damit begonnen, Aufrufe des Remote-Moduls aus den Renderer-Prozessen zu entfernen, weil sie ein <a href="https://medium.com/@nornagon/electrons-remote-module-considered-harmful-70d69500f31">potenzielles Sicherheitsrisiko</a> darstellen. So konnten Aufrufe des App- und des <mark>Menu-Moduls</mark> in dieser Version von <i class="app-name"></i> bereits komplett in den Hauptprozess verlagert werden, wo sie auch hingehören.</p>
+
+						<p>Ferner fand an vielen Stellen einer stärkere Promisifizierung statt – sowohl in der <span class="datei">main.js</span>, die darüber hinaus reorganisiert wurde, als auch in den Renderer-Prozessen, <mark>aus denen heraus nun keine synchronen Anfragen mehr an den Hauptprozess gestellt werden. [Geht das überhaupt? onbeforeunload könnte ein Problem sein]</mark></p>
+					</li>
 
 					<li>Die <a href="#" class="link-dokumentation">technische Dokumentation</a> wurde wegen der vielen Änderungen und Ergänzungen auf der technischen Ebene in den Abschnitten <a href="#framework" class="link-dokumentation">Framework</a> sowie <a href="#ordner" class="link-dokumentation">Ordner und Dateien</a> überarbeitet.</li>
 

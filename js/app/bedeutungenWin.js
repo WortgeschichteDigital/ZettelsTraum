@@ -22,7 +22,7 @@ let bedeutungenWin = {
 			return;
 		}
 		// Module laden
-		const {app, BrowserWindow, Menu} = require("electron").remote,
+		const {BrowserWindow, Menu} = require("electron").remote,
 			path = require("path");
 		// Menü-Templates
 		let layoutMenuAnsicht = [
@@ -56,15 +56,14 @@ let bedeutungenWin = {
 		];
 		let layoutMenuMac = [
 			{
-				label: app.getName(),
+				label: appInfo.name,
 				submenu: [
 					{
 						label: "Fenster schließen",
 						icon: path.join(__dirname, "img", "menu", "fenster-schliessen.png"),
 						click: () => {
-							const {remote} = require("electron"),
-								win = remote.getCurrentWindow();
-							win.close();
+							const {ipcRenderer} = require("electron");
+							ipcRenderer.invoke("fenster-schliessen");
 						},
 						accelerator: "CommandOrControl+W",
 					},
@@ -73,7 +72,7 @@ let bedeutungenWin = {
 		];
 		// Devtools
 		let devtools = false;
-		if (!app.isPackaged) {
+		if (!appInfo.packaged) {
 			devtools = true;
 			layoutMenuAnsicht.push({
 				label: "&Dev",
@@ -166,11 +165,10 @@ let bedeutungenWin = {
 			return;
 		}
 		// Daten zusammentragen
-		const {remote} = require("electron");
 		let daten = {
 			wort: kartei.wort,
 			bd: data.bd,
-			winId: remote.getCurrentWindow().id,
+			winId: winInfo.winId,
 		};
 		// Daten senden
 		bedeutungenWin.win.webContents.send("daten", daten);

@@ -29,141 +29,121 @@ let popup = {
 		if (!target) {
 			return;
 		}
-		// Menü initialisieren
-		const {remote} = require("electron"),
-			{Menu} = remote,
-			menu = new Menu();
-		// Menü füllen
+		// Menü entwerfen
+		let items = [];
 		if (target === "kopieren") {
-			popup.menuKopieren(menu);
+			items = ["kopieren"];
 			if (popup.selInBeleg()) {
-				popup.menuMarkieren(menu);
+				items.push("markieren");
 			}
 			if (overlay.oben() === "drucken") {
-				popup.menuSchliessen(menu, true);
-				popup.menuBelege(menu, true);
+				items.push("sep", "schliessen", "sep", "belegHinzufuegen");
+				popup.belegeAuflisten(items);
 			} else if (!document.getElementById("beleg").classList.contains("aus")) {
-				popup.menuBelegConf(menu, true);
-				popup.menuBelege(menu, true);
+				items.push("sep", "karteikarteConf", "sep", "belegHinzufuegen");
+				popup.belegeAuflisten(items);
 			} else if (!document.getElementById("liste").classList.contains("aus")) {
-				popup.menuBeleg(menu, true);
-				popup.menuBelegDel(menu);
-				popup.menuBelegCp(menu);
-				popup.menuBelegDuplikat(menu);
-				popup.menuBeleglisteConf(menu, true);
-				popup.menuBelege(menu, true);
+				items.push("sep", "belegBearbeiten", "belegLoeschen", "belegZwischenablage", "belegDuplizieren", "sep", "beleglisteConf", "sep", "belegHinzufuegen");
+				popup.belegeAuflisten(items);
 			} else {
-				popup.menuBelege(menu, true);
+				items.push("sep", "belegHinzufuegen");
+				popup.belegeAuflisten(items);
 			}
 		} else if (target === "textfeld") {
-			popup.menuBearbeiten(menu);
+			items = ["bearbeitenRueckgaengig", "bearbeitenWiederherstellen", "sep", "bearbeitenAusschneiden", "bearbeitenKopieren", "bearbeitenEinfuegen", "bearbeitenAlles"];
 		} else if (target === "quick") {
-			popup.menuQuick(menu);
+			items = ["quickConf"];
 			if (kartei.wort) {
-				popup.menuBelege(menu, true);
+				items.push("sep", "belegHinzufuegen");
+				popup.belegeAuflisten(items);
 			} else {
-				popup.menuKartei(menu, true);
+				items.push("sep", "karteiErstellen");
 			}
 		} else if (target === "wort") {
-			popup.menuWort(menu);
-			popup.menuBelege(menu, true);
+			items = ["wort", "sep", "belegHinzufuegen"];
+			popup.belegeAuflisten(items);
 		} else if (target === "erinnerungen") {
-			popup.menuErinnerungen(menu);
-			popup.menuBelege(menu, true);
+			items = ["erinnerungen", "sep", "belegHinzufuegen"];
+			popup.belegeAuflisten(items);
 		} else if (target === "notizen") {
-			popup.menuNotizen(menu);
-			popup.menuBelege(menu, true);
+			items = ["notizen", "sep", "belegHinzufuegen"];
+			popup.belegeAuflisten(items);
 		} else if (target === "lexika") {
-			popup.menuLexika(menu);
-			popup.menuBelege(menu, true);
+			items = ["lexika", "sep", "belegHinzufuegen"];
+			popup.belegeAuflisten(items);
 		} else if (target === "kopierfunktion") {
-			popup.menuKopierfunktion(menu);
-			popup.menuBelege(menu, true);
+			items = ["kopierfunktion", "sep", "belegHinzufuegen"];
+			popup.belegeAuflisten(items);
 		} else if (target === "notizen-conf") {
-			popup.menuNotizen(menu);
-			popup.menuNotizenConf(menu);
-			popup.menuBelege(menu, true);
+			items = ["notizen", "sep", "notizenConf", "sep", "belegHinzufuegen"];
+			popup.belegeAuflisten(items);
 		} else if (target === "filter-conf") {
-			popup.menuFilterConf(menu);
-			popup.menuBelege(menu, true);
+			items = ["filterConf", "sep", "belegHinzufuegen"];
+			popup.belegeAuflisten(items);
 		} else if (target === "filter-reset") {
-			popup.menuFilterReset(menu);
-			popup.menuBelege(menu, true);
+			items = ["filterReset", "sep", "belegHinzufuegen"];
+			popup.belegeAuflisten(items);
 		} else if (target === "start-datei") {
-			popup.menuStartDatei(menu);
-			popup.menuKartei(menu, true);
+			items = ["karteiEntfernen", "sep", "ordner", "sep", "karteiErstellen"];
 		} else if (target === "link") {
 			if (!document.getElementById("beleg").classList.contains("aus")) {
-				popup.menuLink(menu, true);
-				popup.menuBelegConf(menu, false);
+				items.push("link", "sep", "karteikarteConf");
 			} else if (!document.getElementById("liste").classList.contains("aus")) {
-				popup.menuLink(menu, true);
-				popup.menuBeleg(menu);
-				popup.menuBelegDel(menu);
-				popup.menuBelegCp(menu);
-				popup.menuBelegDuplikat(menu);
-				popup.menuBeleglisteConf(menu, true);
+				items.push("link", "sep", "belegBearbeiten", "belegLoeschen", "belegZwischenablage", "belegDuplizieren", "sep", "beleglisteConf");
 			} else {
-				popup.menuLink(menu, false);
+				items.push("link");
 			}
-			popup.menuBelege(menu, true);
+			items.push("sep", "belegHinzufuegen");
+			popup.belegeAuflisten(items);
 		} else if (target === "beleg") {
-			popup.menuBeleg(menu);
-			popup.menuSchliessen(menu, true);
-			popup.menuBelege(menu, true);
+			items = ["belegBearbeiten", "sep", "schliessen", "sep", "belegHinzufuegen"];
+			popup.belegeAuflisten(items);
 		} else if (target === "beleg-einstellungen") {
-			popup.menuBeleglisteConf(menu, false);
-			popup.menuBelege(menu, true);
+			items = ["beleglisteConf", "sep", "belegHinzufuegen"];
+			popup.belegeAuflisten(items);
 		} else if (target === "beleg-moddel") {
-			popup.menuBeleg(menu);
-			popup.menuBelegDel(menu);
-			popup.menuBelegCp(menu);
-			popup.menuBelegDuplikat(menu);
-			popup.menuBeleglisteConf(menu, true);
-			popup.menuBelege(menu, true);
+			items = ["belegBearbeiten", "belegLoeschen", "belegZwischenablage", "belegDuplizieren", "sep", "beleglisteConf", "sep", "belegHinzufuegen"];
+			popup.belegeAuflisten(items);
 		} else if (target === "anhang") {
-			popup.menuAnhang(menu);
+			items = ["anhang", "ordnerAnhang"];
 			if (!document.getElementById("beleg").classList.contains("aus")) {
-				popup.menuBelegConf(menu, true);
+				items.push("sep", "karteikarteConf");
 			} else if (popup.anhangDateiBeleg) {
-				popup.menuBeleg(menu, true);
-				popup.menuBelegDel(menu);
-				popup.menuBelegCp(menu);
-				popup.menuBelegDuplikat(menu);
-				popup.menuBeleglisteConf(menu, true);
+				items.push("sep", "belegBearbeiten", "belegLoeschen", "belegZwischenablage", "belegDuplizieren", "sep", "beleglisteConf");
 			} else if (overlay.oben() === "anhaenge") {
-				popup.menuSchliessen(menu, true);
+				items.push("sep", "schliessen");
 			}
-			popup.menuBelege(menu, true);
+			items.push("sep", "belegHinzufuegen");
+			popup.belegeAuflisten(items);
 		} else if (target === "schliessen") {
-			popup.menuSchliessen(menu, false);
+			items = ["schliessen"];
 			if (popup.overlayID === "notizen") {
-				popup.menuNotizenConf(menu);
+				items.push("sep", "notizenConf");
 			} else if (popup.overlayID === "tagger" ||
 					popup.overlayID === "gerueste" ||
 					popup.overlayID === "geruestwechseln") {
-				popup.menuBedeutungenConf(menu, true);
+				items.push("sep", "bedeutungenConf");
 			}
-			popup.menuBelege(menu, true);
+			items.push("sep", "belegHinzufuegen");
+			popup.belegeAuflisten(items);
 		} else if (target === "kartei-pfad") {
-			popup.menuKarteiPfad(menu);
-			popup.menuSchliessen(menu, false);
-			popup.menuBelege(menu, true);
+			items = ["ordnerKartei", "sep", "schliessen", "sep", "belegHinzufuegen"];
+			popup.belegeAuflisten(items);
 		} else if (target === "beleg-conf") {
-			popup.menuBelegConf(menu, false);
-			popup.menuBelege(menu, true);
+			items = ["karteikarteConf", "sep", "belegHinzufuegen"];
+			popup.belegeAuflisten(items);
 		} else if (target === "bedeutungen-conf") {
-			popup.menuBedeutungenConf(menu, false);
-			popup.menuBelege(menu, true);
+			items = ["bedeutungenConf", "sep", "belegHinzufuegen"];
+			popup.belegeAuflisten(items);
 		} else if (target === "belege") {
-			popup.menuBelege(menu, false);
+			items = ["belegHinzufuegen"];
+			popup.belegeAuflisten(items);
 		} else if (target === "kartei") {
-			popup.menuKartei(menu);
+			items = ["karteiErstellen"];
 		}
-		// Menü anzeigen
-		menu.popup({
-			window: remote.getCurrentWindow(),
-		});
+		// Menü vom Main-Prozess erzeugen lassen
+		const {ipcRenderer} = require("electron");
+		ipcRenderer.invoke("popup", items);
 	},
 	// ermittelt das für den Rechtsklick "passendste" Klickziel
 	//   pfad = Array
@@ -381,470 +361,11 @@ let popup = {
 		}
 		return false;
 	},
-	// Kopieren-Menü füllen
-	//   menu = Object
-	//     (Menü-Objekt, an das die Menü-Items gehängt werden müssen)
-	menuKopieren (menu) {
-		const {MenuItem} = require("electron").remote,
-			path = require("path");
-		menu.append(new MenuItem({
-			label: "Textauswahl kopieren",
-			icon: path.join(__dirname, "img", "menu", "kopieren.png"),
-			click: function() {
-				const {clipboard} = require("electron");
-				clipboard.write({
-					text: popup.textauswahl.text,
-					html: popup.textauswahl.html,
-				});
-				helfer.animation("zwischenablage");
-			},
-		}));
-	},
-	// Markieren-Menü füllen
-	//   menu = Object
-	//     (Menü-Objekt, an das die Menü-Items gehängt werden müssen)
-	menuMarkieren (menu) {
-		const {MenuItem} = require("electron").remote,
-			path = require("path");
-		menu.append(new MenuItem({
-			label: "Textauswahl markieren",
-			icon: path.join(__dirname, "img", "menu", "text-markiert.png"),
-			click: () => annotieren.makeUser(),
-		}));
-	},
-	// Bearbeiten-Menü füllen
-	//   menu = Object
-	//     (Menü-Objekt, an das die Menü-Items gehängt werden müssen)
-	menuBearbeiten (menu) {
-		const {MenuItem} = require("electron").remote,
-			path = require("path");
-		menu.append(new MenuItem({
-			label: "Rückgängig",
-			icon: path.join(__dirname, "img", "menu", "pfeil-rund-links.png"),
-			role: "undo",
-		}));
-		menu.append(new MenuItem({
-			label: "Wiederherstellen",
-			icon: path.join(__dirname, "img", "menu", "pfeil-rund-rechts.png"),
-			role: "redo",
-		}));
-		menu.append(new MenuItem({
-			type: "separator"
-		}));
-		menu.append(new MenuItem({
-			label: "Ausschneiden",
-			icon: path.join(__dirname, "img", "menu", "schere.png"),
-			role: "cut",
-		}));
-		menu.append(new MenuItem({
-			label: "Kopieren",
-			icon: path.join(__dirname, "img", "menu", "kopieren.png"),
-			role: "copy",
-		}));
-		menu.append(new MenuItem({
-			label: "Einfügen",
-			icon: path.join(__dirname, "img", "menu", "einfuegen.png"),
-			role: "paste",
-		}));
-		menu.append(new MenuItem({
-			label: "Alles auswählen",
-			icon: path.join(__dirname, "img", "menu", "auswaehlen.png"),
-			role: "selectAll",
-		}));
-	},
-	// Quick-Access-Bar-Menü füllen
-	//   menu = Object
-	//     (Menü-Objekt, an das die Menü-Items gehängt werden müssen)
-	menuQuick (menu) {
-		const {MenuItem} = require("electron").remote,
-			path = require("path");
-		menu.append(new MenuItem({
-			label: "Quick-Access-Bar konfigurieren",
-			icon: path.join(__dirname, "img", "menu", "zahnrad.png"),
-			click: function() {
-				optionen.oeffnen();
-				optionen.sektionWechseln(document.getElementById("einstellungen-link-menue"));
-			},
-		}));
-	},
-	// Wort-Menü füllen
-	//   menu = Object
-	//     (Menü-Objekt, an das die Menü-Items gehängt werden müssen)
-	menuWort (menu) {
-		const {MenuItem} = require("electron").remote,
-			path = require("path");
-		menu.append(new MenuItem({
-			label: "Wort ändern",
-			icon: path.join(__dirname, "img", "menu", "text-pfeil-kreis.png"),
-			click: () => kartei.wortAendern(),
-		}));
-	},
-	// Kopieren-Menü füllen
-	//   menu = Object
-	//     (Menü-Objekt, an das die Menü-Items gehängt werden müssen)
-	menuKopierfunktion (menu) {
-		const {MenuItem} = require("electron").remote,
-			path = require("path");
-		menu.append(new MenuItem({
-			label: "Kopierfunktion beenden",
-			icon: path.join(__dirname, "img", "menu", "ausgang.png"),
-			click: () => kopieren.uiOff(),
-		}));
-	},
-	// Erinnerungen-Menü füllen
-	//   menu = Object
-	//     (Menü-Objekt, an das die Menü-Items gehängt werden müssen)
-	menuErinnerungen (menu) {
-		const {MenuItem} = require("electron").remote,
-			path = require("path");
-		menu.append(new MenuItem({
-			label: "Erinnerungen",
-			icon: path.join(__dirname, "img", "menu", "kreis-info.png"),
-			click: () => erinnerungen.show(),
-		}));
-	},
-	// Notizen-Menü füllen
-	//   menu = Object
-	//     (Menü-Objekt, an das die Menü-Items gehängt werden müssen)
-	menuNotizen (menu) {
-		const {MenuItem} = require("electron").remote,
-			path = require("path");
-		menu.append(new MenuItem({
-			label: "Notizen-Fenster",
-			icon: path.join(__dirname, "img", "menu", "stift.png"),
-			click: () => notizen.oeffnen(),
-		}));
-	},
-	// Lexika-Menü füllen
-	//   menu = Object
-	//     (Menü-Objekt, an das die Menü-Items gehängt werden müssen)
-	menuLexika (menu) {
-		const {MenuItem} = require("electron").remote,
-			path = require("path");
-		menu.append(new MenuItem({
-			label: "Lexika-Fenster",
-			icon: path.join(__dirname, "img", "menu", "buecher.png"),
-			click: () => lexika.oeffnen(),
-		}));
-	},
-	// Notizen-Conf-Menü füllen
-	//   menu = Object
-	//     (Menü-Objekt, an das die Menü-Items gehängt werden müssen)
-	menuNotizenConf (menu) {
-		const {MenuItem} = require("electron").remote,
-			path = require("path");
-		menu.append(new MenuItem({
-			type: "separator",
-		}));
-		menu.append(new MenuItem({
-			label: "Notizen-Einstellungen",
-			icon: path.join(__dirname, "img", "menu", "zahnrad.png"),
-			click: function() {
-				optionen.oeffnen();
-				optionen.sektionWechseln(document.getElementById("einstellungen-link-notizen"));
-			},
-		}));
-	},
-	// Filter-Conf-Menü füllen
-	//   menu = Object
-	//     (Menü-Objekt, an das die Menü-Items gehängt werden müssen)
-	menuFilterConf (menu) {
-		const {MenuItem} = require("electron").remote,
-			path = require("path");
-		menu.append(new MenuItem({
-			label: "Filter-Einstellungen",
-			icon: path.join(__dirname, "img", "menu", "zahnrad.png"),
-			click: function() {
-				optionen.oeffnen();
-				optionen.sektionWechseln(document.getElementById("einstellungen-link-filterleiste"));
-			},
-		}));
-	},
-	// Filter-Reset-Menü füllen
-	//   menu = Object
-	//     (Menü-Objekt, an das die Menü-Items gehängt werden müssen)
-	menuFilterReset (menu) {
-		const {MenuItem} = require("electron").remote,
-			path = require("path");
-		menu.append(new MenuItem({
-			label: "Filter zurücksetzen",
-			icon: path.join(__dirname, "img", "menu", "pfeil-kreis.png"),
-			click: () => filter.ctrlReset(true),
-		}));
-	},
-	// Start-Datei-Menü füllen
-	//   menu = Object
-	//     (Menü-Objekt, an das die Menü-Items gehängt werden müssen)
-	menuStartDatei (menu) {
-		const {MenuItem} = require("electron").remote,
-			path = require("path");
-		menu.append(new MenuItem({
-			label: "Aus Liste entfernen",
-			icon: path.join(__dirname, "img", "menu", "muelleimer.png"),
-			click: () => start.dateiEntfernen(popup.startDatei),
-		}));
-		menu.append(new MenuItem({
-			type: "separator",
-		}));
-		menu.append(new MenuItem({
-			label: "Ordner öffnen",
-			icon: path.join(__dirname, "img", "menu", "ordner.png"),
-			click: () => helfer.ordnerOeffnen(popup.startDatei),
-		}));
-	},
-	// Link-Menü füllen
-	//   menu = Object
-	//     (Menü-Objekt, an das die Menü-Items gehängt werden müssen)
-	//   separator = Boolean
-	//     (Separator einfügen)
-	menuLink (menu, separator) {
-		const {MenuItem} = require("electron").remote,
-			path = require("path");
-		menu.append(new MenuItem({
-			label: "Link kopieren",
-			icon: path.join(__dirname, "img", "menu", "link.png"),
-			click: function() {
-				const {clipboard} = require("electron");
-				clipboard.writeText(popup.element.title);
-			},
-		}));
-		if (separator) {
-			menu.append(new MenuItem({
-				type: "separator",
-			}));
-		}
-	},
-	// Beleg-Menü füllen
-	//   menu = Object
-	//     (Menü-Objekt, an das die Menü-Items gehängt werden müssen)
-	//   separator = true || undefined
-	//     (Separator einfügen)
-	menuBeleg (menu, separator = false) {
-		const {MenuItem} = require("electron").remote,
-			path = require("path");
-		if (separator) {
-			menu.append(new MenuItem({
-				type: "separator",
-			}));
-		}
-		menu.append(new MenuItem({
-			label: "Beleg bearbeiten",
-			icon: path.join(__dirname, "img", "menu", "karteikarte.png"),
-			click: function() {
-				overlay.alleSchliessen(); // der Beleg kann auch aus einem Overlay-Fenster geöffnet werden
-				beleg.oeffnen(parseInt(popup.belegID, 10));
-			},
-		}));
-	},
-	// BelegDel-Menü füllen
-	//   menu = Object
-	//     (Menü-Objekt, an das die Menü-Items gehängt werden müssen)
-	menuBelegDel (menu) {
-		const {MenuItem} = require("electron").remote,
-			path = require("path");
-		menu.append(new MenuItem({
-			label: "Beleg löschen",
-			icon: path.join(__dirname, "img", "menu", "muelleimer.png"),
-			click: () => beleg.aktionLoeschenFrage(popup.belegID),
-		}));
-	},
-	// BelegCp-Menü füllen
-	//   menu = Object
-	//     (Menü-Objekt, an das die Menü-Items gehängt werden müssen)
-	menuBelegCp (menu) {
-		const {MenuItem} = require("electron").remote,
-			path = require("path");
-		menu.append(new MenuItem({
-			label: "Beleg in Zwischenablage kopieren",
-			icon: path.join(__dirname, "img", "menu", "einfuegen-pfeil.png"),
-			click: () => beleg.ctrlZwischenablage(data.ka[popup.belegID]),
-		}));
-	},
-	// BelegDuplikat-Menü füllen
-	//   menu = Object
-	//     (Menü-Objekt, an das die Menü-Items gehängt werden müssen)
-	menuBelegDuplikat (menu) {
-		const {MenuItem} = require("electron").remote,
-			path = require("path");
-		menu.append(new MenuItem({
-			label: "Beleg duplizieren",
-			icon: path.join(__dirname, "img", "menu", "duplizieren.png"),
-			click: function() {
-				const daten = [kopieren.datenBeleg(data.ka[popup.belegID])];
-				kopieren.einfuegenEinlesen(daten, true);
-			},
-		}));
-	},
-	// Belegliste-Conf-Menü füllen
-	//   menu = Object
-	//     (Menü-Objekt, an das die Menü-Items gehängt werden müssen)
-	//   separator = Boolean
-	//     (Separator einfügen)
-	menuBeleglisteConf (menu, separator) {
-		const {MenuItem} = require("electron").remote,
-			path = require("path");
-		if (separator) {
-			menu.append(new MenuItem({
-				type: "separator",
-			}));
-		}
-		menu.append(new MenuItem({
-			label: "Belegliste-Einstellungen",
-			icon: path.join(__dirname, "img", "menu", "zahnrad.png"),
-			click: function() {
-				optionen.oeffnen();
-				optionen.sektionWechseln(document.getElementById("einstellungen-link-belegliste"));
-			},
-		}));
-	},
-	// Anhang-Menü füllen
-	//   menu = Object
-	//     (Menü-Objekt, an das die Menü-Items gehängt werden müssen)
-	menuAnhang (menu) {
-		const {MenuItem} = require("electron").remote,
-			path = require("path");
-		menu.append(new MenuItem({
-			label: "Anhang öffnen",
-			icon: path.join(__dirname, "img", "menu", "oeffnen.png"),
-			click: () => anhaenge.oeffnen(popup.anhangDatei),
-		}));
-		menu.append(new MenuItem({
-			label: "Ordner öffnen",
-			icon: path.join(__dirname, "img", "menu", "ordner.png"),
-			click: () => anhaenge.oeffnen(popup.anhangDatei, true),
-		}));
-	},
-	// Schließen-Menü füllen
-	//   menu = Object
-	//     (Menü-Objekt, an das die Menü-Items gehängt werden müssen)
-	//   separator = Boolean
-	//     (Separator einfügen)
-	menuSchliessen (menu, separator) {
-		const {MenuItem} = require("electron").remote,
-			path = require("path");
-		if (separator) {
-			menu.append(new MenuItem({
-				type: "separator",
-			}));
-		}
-		menu.append(new MenuItem({
-			label: "Fenster schließen",
-			icon: path.join(__dirname, "img", "menu", "x-dick.png"),
-			click: function() {
-				const id_oben = overlay.oben();
-				overlay.schliessen(document.getElementById(id_oben));
-			},
-			accelerator: "Esc",
-		}));
-	},
-	// Kartei-Pfad-Menü füllen
-	//   menu = Object
-	//     (Menü-Objekt, an das die Menü-Items gehängt werden müssen)
-	menuKarteiPfad (menu) {
-		const {MenuItem} = require("electron").remote,
-			path = require("path");
-		menu.append(new MenuItem({
-			label: "Ordner öffnen",
-			icon: path.join(__dirname, "img", "menu", "ordner.png"),
-			click: () => helfer.ordnerOeffnen(popup.karteiPfad),
-		}));
-		menu.append(new MenuItem({
-			type: "separator",
-		}));
-	},
-	// Beleg-Conf-Menü füllen
-	//   menu = Object
-	//     (Menü-Objekt, an das die Menü-Items gehängt werden müssen)
-	//   separator = Boolean
-	//     (Separator einfügen)
-	menuBelegConf (menu, separator) {
-		const {MenuItem} = require("electron").remote,
-			path = require("path");
-		if (separator) {
-			menu.append(new MenuItem({
-				type: "separator",
-			}));
-		}
-		menu.append(new MenuItem({
-			label: "Karteikarten-Einstellungen",
-			icon: path.join(__dirname, "img", "menu", "zahnrad.png"),
-			click: function() {
-				optionen.oeffnen();
-				optionen.sektionWechseln(document.getElementById("einstellungen-link-karteikarte"));
-			},
-		}));
-	},
-	// Bedeutungen-Conf-Menü füllen
-	//   menu = Object
-	//     (Menü-Objekt, an das die Menü-Items gehängt werden müssen)
-	//   separator = Boolean
-	//     (Separator einfügen)
-	menuBedeutungenConf (menu, separator) {
-		const {MenuItem} = require("electron").remote,
-			path = require("path");
-		if (separator) {
-			menu.append(new MenuItem({
-				type: "separator",
-			}));
-		}
-		menu.append(new MenuItem({
-			label: "Bedeutungsgerüst-Einstellungen",
-			icon: path.join(__dirname, "img", "menu", "zahnrad.png"),
-			click: function() {
-				optionen.oeffnen();
-				optionen.sektionWechseln(document.getElementById("einstellungen-link-bedeutungsgeruest"));
-			},
-		}));
-	},
-	// Belege-Menü füllen
-	//   menu = Object
-	//     (Menü-Objekt, an das die Menü-Items gehängt werden müssen)
-	//   separator = Boolean
-	//     (Separator einfügen)
-	menuBelege (menu, separator) {
-		const {MenuItem} = require("electron").remote,
-			path = require("path");
-		if (separator) {
-			menu.append(new MenuItem({
-				type: "separator",
-			}));
-		}
-		menu.append(new MenuItem({
-			label: "Beleg hinzufügen",
-			icon: path.join(__dirname, "img", "menu", "dokument-plus.png"),
-			click: () => speichern.checkInit(() => beleg.erstellen()),
-			accelerator: "CommandOrControl+N",
-		}));
+	// Befehl "Belege auflisten" ggf. zu den Items hinzufügen
+	belegeAuflisten (items) {
 		if (overlay.oben() ||
 				document.getElementById("liste").classList.contains("aus")) {
-			menu.append(new MenuItem({
-				label: "Belege auflisten",
-				icon: path.join(__dirname, "img", "menu", "liste-bullets.png"),
-				click: () => speichern.checkInit(() => liste.wechseln()),
-				accelerator: "CommandOrControl+L",
-			}));
+			items.push("belegeAuflisten");
 		}
-	},
-	// Kartei-Menü füllen
-	//   menu = Object
-	//     (Menü-Objekt, an das die Menü-Items gehängt werden müssen)
-	//   separator = true || undefined
-	//     (Separator einfügen)
-	menuKartei (menu, separator = false) {
-		const {MenuItem} = require("electron").remote,
-			path = require("path");
-		if (separator) {
-			menu.append(new MenuItem({
-				type: "separator",
-			}));
-		}
-		menu.append(new MenuItem({
-			label: "Kartei erstellen",
-			icon: path.join(__dirname, "img", "menu", "dokument-plus.png"),
-			click: function() {
-				kartei.wortErfragen();
-			},
-			accelerator: "CommandOrControl+E",
-		}));
 	},
 };

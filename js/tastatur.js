@@ -12,7 +12,7 @@ let tastatur = {
 		// Modifiers ermitteln
 		tastatur.detectModifiers(evt);
 		// Event weiterleiten
-		if (fenstertyp === "index") {
+		if (winInfo.typ === "index") {
 			tastatur.haupt(evt);
 		} else {
 			tastatur.neben(evt);
@@ -240,59 +240,58 @@ let tastatur = {
 				return;
 			}
 			// Über-Fenster schließen
-			if (!/^(app|electron)$/.test(fenstertyp)) {
+			if (!/^(app|electron)$/.test(winInfo.typ)) {
 				return;
 			}
-			const {remote} = require("electron"),
-				win = remote.getCurrentWindow();
-			win.close();
+			const {ipcRenderer} = require("electron");
+			ipcRenderer.invoke("fenster-schliessen");
 			return;
 		}
 		// Key " " || "PageUp" || "PageDown" (Changelog, Dokumentation, Handbuch)
-		if (/changelog|dokumentation|handbuch/.test(fenstertyp) &&
+		if (/changelog|dokumentation|handbuch/.test(winInfo.typ) &&
 				!m && /^( |PageDown|PageUp)$/.test(evt.key)) {
 			suchleiste.scrollen(evt);
 			return;
 		}
 		// Key "ArrowDown" || "ArrowUp" (Dokumentation, Handbuch)
-		if (/dokumentation|handbuch/.test(fenstertyp) &&
+		if (/dokumentation|handbuch/.test(winInfo.typ) &&
 				m === "Ctrl" && /^(ArrowDown|ArrowUp)$/.test(evt.key)) {
 			hilfe.naviMenue(evt);
 			return;
 		}
 		// Key "ArrowLeft" || "ArrowRight (Dokumentation, Handbuch)
-		if (/dokumentation|handbuch/.test(fenstertyp) &&
+		if (/dokumentation|handbuch/.test(winInfo.typ) &&
 				m === "Alt" && /^(ArrowLeft|ArrowRight)$/.test(evt.key)) {
 			const dir = evt.key === "ArrowRight" ? true : false;
 			hilfe.historyNavi(dir);
 			return;
 		}
 		// Key "ArrowLeft" || "ArrowRight (Handbuch)
-		if (fenstertyp === "handbuch" &&
+		if (winInfo.typ === "handbuch" &&
 				!m && /^(ArrowLeft|ArrowRight)$/.test(evt.key)) {
 			hilfe.bilderTastatur(evt);
 			return;
 		}
 		// Key "F3" (Changelog, Dokumentation, Handbuch)
-		if (/changelog|dokumentation|handbuch/.test(fenstertyp) &&
+		if (/changelog|dokumentation|handbuch/.test(winInfo.typ) &&
 				(!m || m === "Shift") && evt.key === "F3") {
 			suchleiste.f3(evt);
 			return;
 		}
 		// Key "f" (Changelog, Dokumentation, Handbuch)
 		if (m === "Ctrl" && evt.key === "f") {
-			if (fenstertyp === "changelog") {
+			if (winInfo.typ === "changelog") {
 				suchleiste.einblenden();
-			} else if (/dokumentation|handbuch/.test(fenstertyp)) {
+			} else if (/dokumentation|handbuch/.test(winInfo.typ)) {
 				document.getElementById("suchfeld").select();
 			}
 			return;
 		}
 		// Key "p" (Bedeutungsgerüst, Changelog)
 		if (m === "Ctrl" && evt.key === "p") {
-			if (fenstertyp === "bedeutungen") {
+			if (winInfo.typ === "bedeutungen") {
 				bedeutungen.drucken();
-			} else if (fenstertyp === "changelog") {
+			} else if (winInfo.typ === "changelog") {
 				print();
 			}
 			return;
