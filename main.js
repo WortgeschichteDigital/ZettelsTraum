@@ -3,7 +3,7 @@
 /* MODULE & VARIABLEN ***************************/
 
 // Electron- und Node-Module
-const {app, BrowserWindow, ipcMain, Menu} = require("electron"),
+const {app, BrowserWindow, ipcMain, Menu, webContents} = require("electron"),
 	fs = require("fs"),
 	fsP = fs.promises,
 	path = require("path");
@@ -17,6 +17,7 @@ const dienste = require("./js/main/dienste"),
 //     contentsId:  Number (ID des webContents im Fenster)
 //     typ:         String (Typ des Fensters:
 //       "index"         = Hauptfenster
+//       "bedeutungen"   = Nebenfenster "Bedeutungsgerüst" (eins pro Hauptfenster möglich)
 //       "changelog"     = Nebenfenster "Changelog"
 //       "dokumentation" = Nebenfenster "technische Dokumentation"
 //       "handbuch"      = Nebenfenster "Handbuch"
@@ -302,7 +303,7 @@ layoutMenu = [
 			{
 				label: "Handbuch",
 				icon: path.join(__dirname, "img", "menu", "kreis-fragezeichen.png"),
-				click: () => fenster.erstellenNeben("handbuch"),
+				click: () => fenster.erstellenNeben({typ: "handbuch"}),
 				accelerator: "F1",
 			},
 			{
@@ -311,16 +312,16 @@ layoutMenu = [
 			},
 			{
 				label: "Technische Dokumentation",
-				click: () => fenster.erstellenNeben("dokumentation"),
+				click: () => fenster.erstellenNeben({typ: "dokumentation"}),
 			},
 			{ type: "separator" },
 			{
 				label: "Changelog",
-				click: () => fenster.erstellenNeben("changelog"),
+				click: () => fenster.erstellenNeben({typ: "changelog"}),
 			},
 			{
 				label: "Fehlerlog",
-				click: () => fenster.erstellenNeben("fehlerlog"),
+				click: () => fenster.erstellenNeben({typ: "fehlerlog"}),
 			},
 			{ type: "separator" },
 			{
@@ -634,7 +635,7 @@ optionen = {
 	// überschreibt die Optionen-Datei
 	schreiben () {
 		fsP.writeFile(optionen.pfad, JSON.stringify(optionen.data))
-			.catch(err => appMenu.befehl("dialog-anzeigen", `Die Optionen-Datei konnte nicht gespeichert werden.\n<h3>Fehlermeldung</h3>\n${err.message}`));
+			.catch(err => fenster.befehlAnHauptfenster("dialog-anzeigen", `Die Optionen-Datei konnte nicht gespeichert werden.\n<h3>Fehlermeldung</h3>\n${err.message}`));
 	},
 };
 
@@ -724,22 +725,25 @@ fenster = {
 	},
 	// Neben-Fenster erstellen
 	//   typ = String
-	//     (der Typ des Neben-Fensters: "handbuch" || "dokumentation" || "changelog" || "fehlerlog")
+	//     (der Typ des Neben-Fensters: "bedeutungen" || "changelog" || "dokumentation" || "fehlerlog" || "handbuch")
 	//   abschnitt = String || undefined
 	//     (Abschnitt, der im Fenster geöffnet werden soll; nur "handbuch" und "dokumentation")
-	erstellenNeben (typ, abschnitt = "") {
-		// Ist das Fenster bereits offen? => Fenster fokussieren
-		for (let id in win) {
-			if (!win.hasOwnProperty(id)) {
-				continue;
-			}
-			if (win[id].typ === typ) {
-				let w = BrowserWindow.fromId(parseInt(id, 10));
-				fenster.fokus(w);
-				if (abschnitt) {
-					w.webContents.send("oeffne-abschnitt", abschnitt);
+	erstellenNeben ({typ, abschnitt = "", bdTitle = "", bdCaller = null}) {
+		// ist das Fenster bereits offen? => Fenster fokussieren
+		// (bei Bedeutungsgerüst-Fenstern wissen die Hauptfenster, wenn sie auf sind)
+		if (typ !== "bedeutungen") {
+			for (let id in win) {
+				if (!win.hasOwnProperty(id)) {
+					continue;
 				}
-				return;
+				if (win[id].typ === typ) {
+					let w = BrowserWindow.fromId(parseInt(id, 10));
+					fenster.fokus(w);
+					if (abschnitt) {
+						w.webContents.send("oeffne-abschnitt", abschnitt);
+					}
+					return;
+				}
 			}
 		}
 		// Titel und Dimensionen des Fensters ermitteln
@@ -776,6 +780,15 @@ fenster = {
 				defaultEncoding: "utf-8",
 			},
 		};
+		if (typ === "bedeutungen") {
+			opt.title = bdTitle;
+			opt.x = optionen.data["fenster-bedeutungen"].x;
+			opt.y = optionen.data["fenster-bedeutungen"].y;
+			opt.width = optionen.data["fenster-bedeutungen"].width;
+			opt.height = optionen.data["fenster-bedeutungen"].height;
+			opt.minWidth = 400;
+			opt.minHeight = 400;
+		}
 		// ggf. die Position des Fensters festlegen; sonst wird es zentriert
 		// (damit Handbuch und Dokumentation nicht übereinanderliegen,
 		// wenn sie auseinander geöffnet werden)
@@ -807,6 +820,11 @@ fenster = {
 		}
 		// Fenster öffnen
 		let bw = new BrowserWindow(opt);
+		// ggf. maximieren
+		if (typ === "bedeutungen" &&
+				optionen.data["fenster-bedeutungen"].maximiert) {
+			bw.maximize();
+		}
 		// Windows/Linux: verstecktes Ansicht-Menü erzeugen
 		// macOS: angepasstes Ansicht-Menü erzeugen
 		if (process.platform !== "darwin") {
@@ -837,8 +855,9 @@ fenster = {
 		bw.webContents.on("dom-ready", function() {
 			fenster.objekt(bw.id, this.id, typ);
 		});
-		// ggf. Abschnitt öffnen
+		// Seite ist fertig geladen
 		bw.webContents.once("did-finish-load", function() {
+			// ggf. Abschnitt öffnen
 			if (abschnitt) {
 				let timeout = 25;
 				if (process.platform === "darwin") {
@@ -850,7 +869,13 @@ fenster = {
 				// die IPC-Listener im Renderer-Prozess müssen erst initialisiert werden
 				setTimeout(() => this.send("oeffne-abschnitt", abschnitt), timeout);
 			}
+			// ggf. Daten an das Bedeutungsgerüst schicken
+			if (bdCaller) {
+				setTimeout(() => bdCaller.send("bedeutungen-fenster-daten"), 25);
+			}
 		});
+		// ID des Web-Content zurückgeben
+		return bw.webContents.id;
 	},
 	// Über-Fenster erstellen
 	//   typ = String
@@ -921,6 +946,30 @@ fenster = {
 			return path.join(__dirname, "img", "icon", "linux", "icon_32px.png");
 		} else {
 			return null;
+		}
+	},
+	// schickt eine IPC-Meldung an ein Hauptfenster
+	// (löst das Problem, dass nicht immer klar ist, ob ein Hauptfenster den Fokus hat)
+	//   befehl = String
+	//     (der IPC-Channel)
+	//   arg = String || undefined
+	//     (Befehlsargument, könnte prinzipiell alles sein, was in JSON linearisiert werden kann)
+	befehlAnHauptfenster (befehl, arg = "") {
+		let bw = BrowserWindow.getFocusedWindow();
+		if (bw && win[bw.id].typ === "index") {
+			bw.webContents.send(befehl, arg);
+			return;
+		}
+		for (let w in win) {
+			if (!win.hasOwnProperty(w)) {
+				continue;
+			}
+			if (win[w].typ === "index") {
+				let bw = BrowserWindow.fromId(parseInt(w, 10));
+				bw.webContents.send(befehl, arg);
+				fenster.fokus(bw);
+				return;
+			}
 		}
 	},
 	// das übergebene Fenster fokussieren
@@ -1014,7 +1063,7 @@ app.on("second-instance", (evt, argv) => {
 ipcMain.on("fehler", (evt, err) => fehler.push(err));
 
 // Fehler an Renderer-Prozess senden
-ipcMain.on("fehler-senden", evt => evt.returnValue = fehler);
+ipcMain.handle("fehler-senden", () => fehler);
 
 
 // ***** INIT *****
@@ -1088,35 +1137,19 @@ ipcMain.on("optionen-speichern", (evt, opt, winId) => {
 
 // ***** FENSTER *****
 // Handbuch öffnen
-ipcMain.on("hilfe-handbuch", (evt, abschnitt) => fenster.erstellenNeben("handbuch", abschnitt));
+ipcMain.on("hilfe-handbuch", (evt, abschnitt) => fenster.erstellenNeben({typ: "handbuch", abschnitt: abschnitt}));
 
 // Demonstrationskartei öffnen
-ipcMain.on("hilfe-demo", () => {
-	// ggf. ein Hauptfenster suchen und fokussieren
-	let w = BrowserWindow.getFocusedWindow();
-	if (win[w.id].typ !== "index") {
-		for (let id in win) {
-			if (!win.hasOwnProperty(id)) {
-				continue;
-			}
-			if (win[id].typ === "index") {
-				fenster.fokus(BrowserWindow.fromId(parseInt(id, 10)));
-				break;
-			}
-		}
-	}
-	// Hauptfenster ist fokussiert (das dauert ggf. 25 ms)
-	setTimeout(() => appMenu.befehl("hilfe-demo"), 25);
-});
+ipcMain.on("hilfe-demo", () => fenster.befehlAnHauptfenster("hilfe-demo"));
 
 // Dokumentation öffnen
-ipcMain.on("hilfe-dokumentation", (evt, abschnitt) => fenster.erstellenNeben("dokumentation", abschnitt));
+ipcMain.on("hilfe-dokumentation", (evt, abschnitt) => fenster.erstellenNeben({typ: "dokumentation", abschnitt: abschnitt}));
 
 // Changelog öffnen
-ipcMain.on("hilfe-changelog", () => fenster.erstellenNeben("changelog"));
+ipcMain.on("hilfe-changelog", () => fenster.erstellenNeben({typ: "changelog"}));
 
 // Fehlerlog öffnen
-ipcMain.on("hilfe-fehlerlog", () => fenster.erstellenNeben("fehlerlog"));
+ipcMain.on("hilfe-fehlerlog", () => fenster.erstellenNeben({typ: "fehlerlog"}));
 
 // "Über App" öffnen
 ipcMain.on("ueber-app", () => fenster.erstellenUeber("app"));
@@ -1124,41 +1157,67 @@ ipcMain.on("ueber-app", () => fenster.erstellenUeber("app"));
 // "Über Electron" öffnen
 ipcMain.on("ueber-electron", () => fenster.erstellenUeber("electron"));
 
+// Fenster fokussieren
+ipcMain.handle("fenster-fokus", evt => {
+	let bw = BrowserWindow.fromWebContents(evt.sender);
+	fenster.fokus(bw);
+});
+
 // Fenster schließen
 ipcMain.handle("fenster-schliessen", evt => {
 	let w = BrowserWindow.fromWebContents(evt.sender);
 	w.close();
 });
 
-// Druckauftrag aus dem Bedeutungsgerüst-Fenster an Renderer-Prozess schicken
-ipcMain.on("bedeutungen-fenster-drucken", (evt, daten) => {
-	let w = BrowserWindow.fromId(daten.winId); // TODO kriege ich über win{}.contentsId === evt.sender.id
-	daten = daten.gr;
-	w.webContents.send("bedeutungen-fenster-drucken", daten);
-	fenster.fokus(w);
+// Fenster-Dimensionen in den Einstellungen speichern
+ipcMain.handle("fenster-status", (evt, winId, fenster) => {
+	let bw = BrowserWindow.fromId(winId),
+		bounds = bw.getBounds(),
+		opt = optionen.data[fenster];
+	// Status in den Optionen speichern
+	opt.x = bounds.x;
+	opt.y = bounds.y;
+	opt.width = bounds.width;
+	opt.height = bounds.height;
+	opt.maximiert = bw.isMaximized();
+	// Status an alle Hauptfenster melden
+	let status = {
+		x: opt.x,
+		y: opt.y,
+		width: opt.width,
+		height: opt.height,
+		maximiert: opt.maximiert,
+	};
+	for (let w in win) {
+		if (!win.hasOwnProperty(w)) {
+			continue;
+		}
+		if (win[w].typ !== "index" || parseInt(w, 10) === winId) {
+			continue;
+		}
+		let bw = BrowserWindow.fromId(parseInt(w, 10));
+		bw.webContents.send("optionen-fenster", fenster, status);
+	}
+	return status;
 });
 
-// im Gerüst-Fenster angeklickte Bedeutung im Hauptfenster eintragen
-ipcMain.on("bedeutungen-fenster-eintragen", (evt, bd) => {
-	let w = BrowserWindow.fromId(bd.winId); // TODO Nonsens! kriege ich über BrowserWindow.fromWebContents(evt.sender)
-	delete bd.winId;
-	w.webContents.send("bedeutungen-fenster-eintragen", bd);
-	fenster.fokus(w);
+// Bedeutungsgerüst-Fenster öffnen
+ipcMain.handle("bedeutungen-oeffnen", (evt, title) => {
+	return fenster.erstellenNeben({typ: "bedeutungen", bdTitle: title, bdCaller: evt.sender});
 });
 
-// im Gerüst-Fenster angeklickte Bedeutung im Hauptfenster austragen
-ipcMain.on("bedeutungen-fenster-austragen", (evt, bd) => {
-	let w = BrowserWindow.fromId(bd.winId);
-	delete bd.winId;
-	w.webContents.send("bedeutungen-fenster-austragen", bd);
-	fenster.fokus(w);
+// Bedeutungsgerüst-Fenster schliessen
+ipcMain.handle("bedeutungen-schliessen", (evt, contentsId) => {
+	let wc = webContents.fromId(contentsId),
+		bw = BrowserWindow.fromWebContents(wc);
+	bw.close();
 });
 
-// Status des gerade geschlossenen Bedeutungsgerüst-Fensters an das passende Hauptfenster schicken
-ipcMain.on("bedeutungen-fenster-status", (evt, status) => {
-	let w = BrowserWindow.fromId(status.winId);
-	delete status.winId;
-	w.webContents.send("bedeutungen-fenster-status", status);
+// Bedeutungsgerüst-Fenster fokussieren
+ipcMain.handle("bedeutungen-fokussieren", (evt, contentsId) => {
+	let wc = webContents.fromId(contentsId),
+		bw = BrowserWindow.fromWebContents(wc);
+	fenster.fokus(bw);
 });
 
 // neue Kartei zu einem neuen Wort anlegen
@@ -1336,4 +1395,8 @@ ipcMain.on("kopieren-daten-lieferung", (evt, daten) => {
 
 
 // ***** QUODLIBETICA *****
+// Befehle in den Menüpunkten "Bearbeiten" und "Ansicht" ausführen
 ipcMain.handle("quick-roles", (evt, befehl) => dienste.quickRoles(evt.sender, befehl));
+
+// Dateidialoge öffnen
+ipcMain.handle("datei-dialog", async (evt, args) => await dienste.dateiDialog(args));

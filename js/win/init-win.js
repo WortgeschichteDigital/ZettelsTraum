@@ -106,29 +106,13 @@ let initWin = {
 	},
 };
 
-window.addEventListener("beforeunload", (evt) => {
+window.addEventListener("beforeunload", async () => {
+	const {ipcRenderer} = require("electron");
+	// Bedeutungsgerüst-Fenster
+	if (winInfo.typ === "bedeutungen") {
+		ipcRenderer.sendTo(bedeutungen.data.contentsId, "bedeutungen-fenster-geschlossen");
+		await ipcRenderer.invoke("fenster-status", winInfo.winId, "fenster-bedeutungen");
+	}
 	// Fenster dereferenzieren
-	const {remote, ipcRenderer} = require("electron"),
-		win = remote.getCurrentWindow();
-	if (winInfo.typ !== "bedeutungen") {
-		ipcRenderer.send("fenster-dereferenzieren", win.id);
-		return;
-	}
-	// Bedeutungen-Fenster dereferenzieren
-	let status = {
-		x: null,
-		y: null,
-		width: null,
-		height: null,
-		maximiert: win.isMaximized(),
-		winId: bedeutungen.data.winId,
-	};
-	const bounds = win.getBounds();
-	if (!status.maximiert && bounds) {
-		status.x = bounds.x;
-		status.y = bounds.y;
-		status.width = bounds.width;
-		status.height = bounds.height;
-	}
-	ipcRenderer.send("bedeutungen-fenster-status", status);
+	ipcRenderer.send("fenster-dereferenzieren", winInfo.winId);
 });

@@ -102,8 +102,7 @@ let karteisuche = {
 		});
 	},
 	// Pfad zur Pfadliste hinzufügen
-	pfadHinzufuegen () {
-		const {dialog} = require("electron").remote;
+	async pfadHinzufuegen () {
 		let opt = {
 			title: "Pfad hinzufügen",
 			defaultPath: appInfo.documents,
@@ -111,25 +110,39 @@ let karteisuche = {
 				"openDirectory",
 			],
 		};
-		dialog.showOpenDialog(null, opt)
-			.then(result => {
-				if (result.canceled) {
-					kartei.dialogWrapper("Sie haben keinen Pfad ausgewählt.");
-					return;
-				}
-				// Ist der Pfad schon in der Liste?
-				if (optionen.data.karteisuche.pfade.includes(result.filePaths[0])) {
-					kartei.dialogWrapper("Der gewählte Pfad wurde schon aufgenommen.");
-					return;
-				}
-				// Pfad hinzufügen
-				karteisuche.pfadGefunden.push(result.filePaths[0]);
-				optionen.data.karteisuche.pfade.push(result.filePaths[0]);
-				optionen.speichern();
-				// Liste auffrischen
-				karteisuche.pfadeAuflisten();
-			})
-			.catch(err => kartei.dialogWrapper(`Beim Öffnen des Datei-Dialogs ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.message}</p>`));
+		// Wo wurde zuletzt eine Datei gespeichert oder geöffnet?
+		if (optionen.data.letzter_pfad) {
+			opt.defaultPath = optionen.data.letzter_pfad;
+		}
+		// Dialog anzeigen
+		const {ipcRenderer} = require("electron");
+		let result = await ipcRenderer.invoke("datei-dialog", {
+			open: true,
+			winId: winInfo.winId,
+			opt: opt,
+		});
+		// Fehler oder keine Datei ausgewählt
+		if (result.message) { // Fehler
+			dialog.oeffnen("alert");
+			dialog.text(`Beim Öffnen des Datei-Dialogs ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${result.message}</p>`);
+			return;
+		} else if (result.canceled) { // keine Datei ausgewählt
+			dialog.oeffnen("alert");
+			dialog.text("Sie haben keinen Pfad ausgewählt.");
+			return;
+		}
+		// Ist der Pfad schon in der Liste?
+		if (optionen.data.karteisuche.pfade.includes(result.filePaths[0])) {
+			dialog.oeffnen("alert");
+			dialog.text("Der gewählte Pfad wurde schon aufgenommen.");
+			return;
+		}
+		// Pfad hinzufügen
+		karteisuche.pfadGefunden.push(result.filePaths[0]);
+		optionen.data.karteisuche.pfade.push(result.filePaths[0]);
+		optionen.speichern();
+		// Liste auffrischen
+		karteisuche.pfadeAuflisten();
 	},
 	// Pfad aus der Liste entfernen
 	//   a = Element
@@ -222,7 +235,7 @@ let karteisuche = {
 		// Suche starten
 		karteisuche.wgd = [];
 		const fs = require("fs"),
-			fsPromises = fs.promises;
+			fsP = fs.promises;
 		for (let ordner of pfade) {
 			const existiert = await karteisuche.existenzOrdner(ordner);
 			if (existiert) {
@@ -233,7 +246,7 @@ let karteisuche = {
 		karteisuche.filterWerteSammeln();
 		// Karteien analysieren
 		for (let kartei of karteisuche.wgd) {
-			const content = await fsPromises.readFile(kartei.pfad, {encoding: "utf-8", flag: "r"});
+			const content = await fsP.readFile(kartei.pfad, {encoding: "utf-8", flag: "r"});
 			// Kartei einlesen
 			let datei = {};
 			try {
@@ -280,9 +293,9 @@ let karteisuche = {
 	//     (Ordner, von dem aus die Suche beginnen soll)
 	async ordnerParsen (ordner) {
 		const fs = require("fs"),
-			fsPromises = fs.promises;
+			fsP = fs.promises;
 		try {
-			let files = await fsPromises.readdir(ordner);
+			let files = await fsP.readdir(ordner);
 			for (let i of files) {
 				const path = require("path"),
 					pfad = path.join(ordner, i);
@@ -295,10 +308,10 @@ let karteisuche = {
 	//     (Ordner, von dem aus die Suche beginnen soll)
 	async pfadPruefen (pfad) {
 		const fs = require("fs"),
-			fsPromises = fs.promises;
+			fsP = fs.promises;
 		try {
-			await fsPromises.access(pfad, fs.constants.R_OK); // Lesezugriff auf Pfad? Wenn kein Zugriff => throw
-			let stats = await fsPromises.lstat(pfad); // Natur des Pfades?
+			await fsP.access(pfad, fs.constants.R_OK); // Lesezugriff auf Pfad? Wenn kein Zugriff => throw
+			let stats = await fsP.lstat(pfad); // Natur des Pfades?
 			if (stats.isDirectory()) { // Ordner => parsen
 				karteisuche.ordnerParsen(pfad);
 			} else if (/\.wgd$/.test(pfad)) { // WGD-Datei => merken

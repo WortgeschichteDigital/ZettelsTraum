@@ -748,8 +748,7 @@ let optionen = {
 		});
 	},
 	// Tag-Datei manuell laden
-	tagsManuLaden () {
-		const {dialog} = require("electron").remote;
+	async tagsManuLaden () {
 		let opt = {
 			title: "Tag-Datei laden",
 			defaultPath: appInfo.documents,
@@ -768,53 +767,63 @@ let optionen = {
 			],
 		};
 		// Dialog anzeigen
-		dialog.showOpenDialog(null, opt)
-			.then(result => {
-				if (result.canceled) {
-					kartei.dialogWrapper("Sie haben keine Datei ausgewählt.");
+		const {ipcRenderer} = require("electron");
+		let result = await ipcRenderer.invoke("datei-dialog", {
+			open: true,
+			winId: winInfo.winId,
+			opt: opt,
+		});
+		// Fehler oder keine Datei ausgewählt
+		if (result.message) {
+			dialog.oeffnen("alert");
+			dialog.text(`Beim Öffnen des Datei-Dialogs ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${result.message}</p>`);
+			return;
+		} else if (result.canceled) {
+			dialog.oeffnen("alert");
+			dialog.text("Sie haben keine Datei ausgewählt.");
+			return;
+		}
+		// Datei laden
+		const fs = require("fs"),
+			fsP = fs.promises;
+		fsP.readFile(result.filePaths[0], {encoding: "utf-8"})
+			.then(content => {
+				// Tag-Datei parsen
+				let parsed = optionen.tagsParsen(content),
+					xml = parsed[0],
+					typ = parsed[1];
+				if (!xml) {
+					optionen.tagsFehler(typ);
 					return;
 				}
-				const fs = require("fs");
-				fs.readFile(result.filePaths[0], "utf-8", (err, content) => {
-					// Fehlermeldung
-					if (err) {
-						kartei.dialogWrapper(`Beim Laden der Tag-Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.message}</p>`);
-						return;
-					}
-					// Tag-Datei parsen
-					let parsed = optionen.tagsParsen(content),
-						xml = parsed[0],
-						typ = parsed[1];
-					if (!xml) {
-						optionen.tagsFehler(typ);
-						return;
-					}
-					// Tag-Datei einlesen
-					optionen.data.tags[typ] = {
-						data: {}, // Daten
-						datei: result.filePaths[0], // Pfad zur Datei
-						abgleich: new Date().toISOString(), // Datum letzter Abgleich
-						update: new Date().toISOString(), // Datum letztes Update
+				// Tag-Datei einlesen
+				optionen.data.tags[typ] = {
+					data: {}, // Daten
+					datei: result.filePaths[0], // Pfad zur Datei
+					abgleich: new Date().toISOString(), // Datum letzter Abgleich
+					update: new Date().toISOString(), // Datum letztes Update
+				};
+				let data = optionen.data.tags[typ].data;
+				xml.querySelectorAll("item").forEach(function(i) {
+					const id = i.querySelector("id").firstChild.nodeValue,
+						name = i.querySelector("name").firstChild.nodeValue;
+					let abbr = i.querySelector("abbr");
+					data[id] = {
+						name: name,
 					};
-					let data = optionen.data.tags[typ].data;
-					xml.querySelectorAll("item").forEach(function(i) {
-						const id = i.querySelector("id").firstChild.nodeValue,
-							name = i.querySelector("name").firstChild.nodeValue;
-						let abbr = i.querySelector("abbr");
-						data[id] = {
-							name: name,
-						};
-						if (abbr) {
-							data[id].abbr = abbr.firstChild.nodeValue;
-						}
-					});
-					// Optionen speichern
-					optionen.speichern();
-					// Anzeige auffrischen
-					optionen.anwendenTags();
+					if (abbr) {
+						data[id].abbr = abbr.firstChild.nodeValue;
+					}
 				});
+				// Optionen speichern
+				optionen.speichern();
+				// Anzeige auffrischen
+				optionen.anwendenTags();
 			})
-			.catch(err => kartei.dialogWrapper(`Beim Öffnen des Datei-Dialogs ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.message}</p>`));
+			.catch(err => {
+				dialog.oeffnen("alert");
+				dialog.text(`Beim Laden der Tag-Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.message}</p>`);
+			});
 	},
 	// Content der geladenen Tag-Datei parsen und auf Fehler überprüfen
 	//   content = String
@@ -1018,8 +1027,7 @@ let optionen = {
 		optionen.speichern();
 	},
 	// Personenliste einlesen
-	aenderePersonenliste () {
-		const {dialog} = require("electron").remote;
+	async aenderePersonenliste () {
 		let opt = {
 			title: "Personenliste laden",
 			defaultPath: appInfo.documents,
@@ -1038,47 +1046,58 @@ let optionen = {
 			],
 		};
 		// Dialog anzeigen
-		dialog.showOpenDialog(null, opt)
-			.then(result => {
-				if (result.canceled) {
-					kartei.dialogWrapper("Sie haben keine Datei ausgewählt.");
+		const {ipcRenderer} = require("electron");
+		let result = await ipcRenderer.invoke("datei-dialog", {
+			open: true,
+			winId: winInfo.winId,
+			opt: opt,
+		});
+		// Fehler oder keine Datei ausgewählt
+		if (result.message) {
+			dialog.oeffnen("alert");
+			dialog.text(`Beim Öffnen des Datei-Dialogs ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${result.message}</p>`);
+			return;
+		} else if (result.canceled) {
+			dialog.oeffnen("alert");
+			dialog.text("Sie haben keine Datei ausgewählt.");
+			return;
+		}
+		// Datei laden
+		const fs = require("fs"),
+			fsP = fs.promises;
+		fsP.readFile(result.filePaths[0], {encoding: "utf-8"})
+			.then(content => {
+				// Inhalt einlesen und speichern
+				optionen.data.personen = [];
+				content.split(/(\r|\n)/).forEach(i => { // alle End-of-line-Styles berücksichtigen
+					const person = i.trim();
+					if (person) {
+						optionen.data.personen.push(person);
+					}
+				});
+				optionen.speichern();
+				// Rückmeldung
+				let fb_obj = function () {
+					const len = optionen.data.personen.length;
+					this.personen = len === 1 ? "eine" : len;
+					this.verb = len === 1 ? "ist" : "sind";
+					this.text = len === 1 ? "Person" : "Personen";
+				};
+				let fb = new fb_obj();
+				// Liste wurde geleert
+				if (fb.personen === 0) {
+					dialog.oeffnen("alert");
+					dialog.text("Die Personenliste wurde geleert.");
 					return;
 				}
-				const fs = require("fs");
-				fs.readFile(result.filePaths[0], "utf-8", function(err, content) {
-					// Fehlermeldung
-					if (err) {
-						kartei.dialogWrapper(`Beim Öffnen der Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.message}</p>`);
-						return;
-					}
-					// Inhalt einlesen und speichern
-					optionen.data.personen = [];
-					let personen = content.split(/(\r|\n)/); // alle End-of-line-Styles berücksichtigen
-					for (let i = 0, len = personen.length; i < len; i++) {
-						const person = personen[i].trim();
-						if (person) {
-							optionen.data.personen.push(person);
-						}
-					}
-					optionen.speichern();
-					// Rückmeldung
-					let fb_obj = function () {
-						const len = optionen.data.personen.length;
-						this.personen = len === 1 ? "eine" : len;
-						this.verb = len === 1 ? "ist" : "sind";
-						this.text = len === 1 ? "Person" : "Personen";
-					};
-					let fb = new fb_obj();
-					// Liste wurde geleert
-					if (fb.personen === 0) {
-						kartei.dialogWrapper("Die Personenliste wurde geleert.");
-						return;
-					}
-					// Liste enthält Personen
-					kartei.dialogWrapper(`In der Liste ${fb.verb} jetzt ${fb.personen} ${fb.text}.`);
-				});
+				// Liste enthält Personen
+				dialog.oeffnen("alert");
+				dialog.text(`In der Liste ${fb.verb} jetzt ${fb.personen} ${fb.text}.`);
 			})
-			.catch(err => kartei.dialogWrapper(`Beim Öffnen des Datei-Dialogs ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.message}</p>`));
+			.catch(err => {
+				dialog.oeffnen("alert");
+				dialog.text(`Beim Öffnen der Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.message}</p>`);
+			});
 	},
 	// auf Änderung der Einstellungen achten
 	//   ele = Element

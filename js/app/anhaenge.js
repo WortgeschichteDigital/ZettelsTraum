@@ -350,10 +350,8 @@ let anhaenge = {
 	//   input = Element
 	//     (Add-Button zum Hinzufügen eines Anhangs)
 	add (input) {
-		input.addEventListener("click", function() {
-			const obj = this.dataset.obj,
-				{dialog} = require("electron").remote;
-			let cont = this.parentNode.parentNode;
+		input.addEventListener("click", async function() {
+			// Optionen für Dateidialog
 			let opt = {
 				title: "Anhang hinzufügen",
 				defaultPath: appInfo.documents,
@@ -373,15 +371,26 @@ let anhaenge = {
 				opt.defaultPath = optionen.data.letzter_pfad;
 			}
 			// Dialog anzeigen
-			dialog.showOpenDialog(null, opt)
-				.then(result => {
-					if (result.canceled) {
-						kartei.dialogWrapper("Sie haben keine Datei ausgewählt.");
-						return;
-					}
-					anhaenge.addFiles(result.filePaths, cont, obj);
-				})
-				.catch(err => kartei.dialogWrapper(`Beim Öffnen des Datei-Dialogs ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.message}</p>`));
+			const {ipcRenderer} = require("electron");
+			let result = await ipcRenderer.invoke("datei-dialog", {
+				open: true,
+				winId: winInfo.winId,
+				opt: opt,
+			});
+			// Fehler oder keine Datei ausgewählt
+			if (result.message) {
+				dialog.oeffnen("alert");
+				dialog.text(`Beim Öffnen des Datei-Dialogs ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${result.message}</p>`);
+				return;
+			} else if (result.canceled) {
+				dialog.oeffnen("alert");
+				dialog.text("Sie haben keine Datei ausgewählt.");
+				return;
+			}
+			// Datei ausgewählt
+			const obj = this.dataset.obj;
+			let cont = this.parentNode.parentNode;
+			anhaenge.addFiles(result.filePaths, cont, obj);
 		});
 	},
 	// Dateien ggf. hinzufügen

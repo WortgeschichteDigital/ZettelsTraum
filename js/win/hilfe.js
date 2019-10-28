@@ -357,6 +357,7 @@ let hilfe = {
 		val: "", // letzter bereinigter Suchwert
 		scroll: 0, // Scrollposition vor dem Wechseln aus der Suchliste
 		reg: [], // Liste der regulären Ausdrücke
+		regPhrase: null, // regulärer Ausdruck für den gesamten Suchtext
 		treffer: [], // Treffer
 		lastClick: -1, // Index des letzten Klicks (verweist auf suchergebnis.treffer)
 	},
@@ -385,10 +386,14 @@ let hilfe = {
 			val: val,
 			scroll: 0,
 			reg: [],
+			regPhrase: null,
 			treffer: [],
 			lastClick: -1,
 		};
 		let e = hilfe.suchergebnis;
+		if (/\s/.test(val)) { // nur, wenn es mehrere Wörter gibt
+			e.regPhrase = new RegExp(helfer.escapeRegExp(val), "i");
+		}
 		// reguläre Ausdrücke
 		let val_sp = val.split(/\s/);
 		for (let i = 0, len = val_sp.length; i < len; i++) {
@@ -456,6 +461,10 @@ let hilfe = {
 				gewicht *= 5; // Treffer in Erklärungsköpfen höher gewichten
 			} else if (knoten.nodeName === "FIGURE") {
 				gewicht *= 2; // Treffer in Abbildungsunterschriften höher gewichten
+			}
+			if (e.regPhrase && e.regPhrase.test(text)) {
+				gewicht *= 10; // Treffer mit komplettem Suchausdruck höher gewichten
+				idx = text.split(e.regPhrase)[0].length;
 			}
 			// Treffer!
 			if (gewicht) {

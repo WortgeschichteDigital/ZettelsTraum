@@ -114,9 +114,9 @@ npm install --save-dev electron</pre>
 
 					<pre>npm show electron version</pre>
 
-					<p>Die stabile Version von <i>Electron</i> liefert normalerweise nicht die jüngste Ausgabe von <i>Chromium</i>. Technisch ist der im Framework arbeitende Browser somit zwar meist leicht veraltet, um die notwendigen Sicherheitsupdates kümmert sich das <i>Electron</i>-Team aber fortwährend.</p>
+					<p>Der jüngste stabile Versionszweig von <i>Electron</i> liefert zum Zeitpunkt der Veröffentlichung immer die aktuelle Ausgabe von <i>Chromium</i> mit, hebt die <i>Chromium</i>-Version mit den folgenden Minor-Releases aber nicht mehr an. Technisch ist der im Framework arbeitende Browser somit zwar meist leicht veraltet, um die notwendigen Sicherheitsupdates kümmert sich das <i>Electron</i>-Team aber <a href="https://electronjs.org/docs/tutorial/support#supported-versions">für 36 Wochen</a>, <abbr title="das heißt">d. h.</abbr> über drei Major-Release-Zyklen hinweg. Danach erreicht ein Release-Zweig <abbr title="End-of-life" lang="en">EOL</abbr>.</p>
 
-					<p>Neben der jüngsten stabilen Version von <i>Electron</i> werden auch ältere Ausgaben für einen längeren Zeitraum mit Updates versorgt. Möchte man nicht gleich mit dem ersten Release eines neuen Zweiges auf diesen wechseln, muss man den Releasezweig angeben, von dem man Updates beziehen will. Um es <abbr title="beispielsweise">bspw.</abbr> zu vermeiden, die Version 5.0.x zu benutzen, muss man den Update-Befehl etwas anpassen, um weiterhin Updates des Release-Zweigs 4.1.x zu bekommen:</p>
+					<p>Möchte man nicht gleich mit dem ersten Release eines neuen Zweiges auf diesen wechseln, muss man den Releasezweig angeben, von dem man Updates beziehen will. Um es <abbr title="beispielsweise">bspw.</abbr> zu vermeiden, die Version 5.0.x zu benutzen, muss man den Update-Befehl etwas anpassen, um weiterhin Updates des Release-Zweigs 4.1.x zu bekommen:</p>
 
 					<pre>npm install --save-dev electron@4-1-x</pre>
 

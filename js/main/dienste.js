@@ -1,6 +1,6 @@
 "use strict";
 
-const {BrowserWindow} = require("electron"),
+const {BrowserWindow, dialog} = require("electron"),
 	fs = require("fs"),
 	fsP = fs.promises,
 	path = require("path");
@@ -22,6 +22,27 @@ module.exports = {
 			svg.push(p);
 		}
 		return svg;
+	},
+	// Datei-Dialog anzeigen
+	//   open = Boolean
+	//     (der showOpenDialog() soll angezeigt werden; sonst showSaveDailog())
+	//   winId = Number
+	//     (ID des Browser-Fensters)
+	//   opt = Object
+	//     (Einstellungen, die dem Dialog übergeben werden
+	dateiDialog ({open, winId, opt}) {
+		return new Promise(resolve => {
+			let bw = BrowserWindow.fromId(winId);
+			if (open) {
+				dialog.showOpenDialog(bw, opt)
+					.then(result => resolve(result))
+					.catch(err => resolve(err));
+			} else {
+				dialog.showSaveDialog(bw, opt)
+					.then(result => resolve(result))
+					.catch(err => resolve(err));
+			}
+		});
 	},
 	// führt Roles aus, die nicht über das Programmmenü, sondern Icons in der
 	// Quick-Access-Bar aufgerufen wurden

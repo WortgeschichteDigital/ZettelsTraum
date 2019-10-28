@@ -278,6 +278,11 @@ let tastatur = {
 			suchleiste.f3(evt);
 			return;
 		}
+		// Key "F5" (Fehlerlog)
+		if (winInfo.typ === "fehlerlog" && !m && evt.key === "F5") {
+			fehlerlog.reload();
+			return;
+		}
 		// Key "f" (Changelog, Dokumentation, Handbuch)
 		if (m === "Ctrl" && evt.key === "f") {
 			if (winInfo.typ === "changelog") {

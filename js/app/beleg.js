@@ -1796,7 +1796,7 @@ let beleg = {
 				}
 			}
 		});
-		dialog.text(`Soll die Bedeutung\n<p class="bedeutungen-dialog">${bdText}</p>\nwirklich in alle Karteikarten, die derzeit in der Belegliste sichtbar sind, eingetragen werden?`);
+		dialog.text(`Soll die Bedeutung\n<p class="bedeutungen-dialog">${bdText}</p>\nwirklich in alle Karteikarten, die derzeit in der Belegliste sichtbar sind, <strong>eingetragen</strong> werden?`);
 	},
 	// Bedeutung aus jeder Karte der Belegliste entfernen
 	//   bd = Object
@@ -1847,7 +1847,7 @@ let beleg = {
 				}
 			}
 		});
-		dialog.text(`Soll die Bedeutung\n<p class="bedeutungen-dialog">${bdText}</p>\nwirklich aus allen Karteikarten, die derzeit in der Belegliste sichtbar sind, entfernt werden?`);
+		dialog.text(`Soll die Bedeutung\n<p class="bedeutungen-dialog">${bdText}</p>\nwirklich aus allen Karteikarten, die derzeit in der Belegliste sichtbar sind, <strong>entfernt</strong> werden?`);
 	},
 	// bereitet den Bedeutungstext auf, der beim Ein- oder Austragen von Bedeutungen
 	// in der Belegliste angezeigt wird

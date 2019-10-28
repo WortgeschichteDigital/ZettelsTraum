@@ -66,11 +66,18 @@ window.addEventListener("load", async () => {
 	// Einstellungen
 	ipcRenderer.on("optionen-empfangen", (evt, data) => optionen.empfangen(data));
 	ipcRenderer.on("optionen-zuletzt", (evt, karteien) => zuletzt.update(karteien));
+	ipcRenderer.on("optionen-fenster", (evt, fenster, status) => optionen.data[fenster] = status);
 	// Bedeutungsgerüst-Fenster
-	ipcRenderer.on("bedeutungen-fenster-drucken", (evt, gn) => drucken.init("bedeutungen-", gn));
-	ipcRenderer.on("bedeutungen-fenster-eintragen", (evt, bd) => beleg.bedeutungEinAustragen(bd, true));
-	ipcRenderer.on("bedeutungen-fenster-austragen", (evt, bd) => beleg.bedeutungEinAustragen(bd, false));
-	ipcRenderer.on("bedeutungen-fenster-status", (evt, status) => bedeutungenWin.status(status));
+	ipcRenderer.on("bedeutungen-fenster-daten", () => bedeutungenWin.daten());
+	ipcRenderer.on("bedeutungen-fenster-geschlossen", () => bedeutungenWin.contentsId = 0);
+	ipcRenderer.on("bedeutungen-fenster-drucken", (evt, gn) => {
+		drucken.init("bedeutungen-", gn);
+		helfer.fensterFokus();
+	});
+	ipcRenderer.on("bedeutungen-fenster-umtragen", (evt, bd, eintragen) => {
+		beleg.bedeutungEinAustragen(bd, eintragen);
+		helfer.fensterFokus();
+	});
 	// Dialog
 	ipcRenderer.on("dialog-anzeigen", (evt, text) => {
 		dialog.oeffnen("alert");
@@ -311,20 +318,12 @@ window.addEventListener("load", async () => {
 });
 
 // Schließen unterbrechen, falls Daten noch nicht gespeichert wurden
-window.addEventListener("beforeunload", evt => {
+window.addEventListener("beforeunload", async evt => {
 	// Bedeutungen-Fenster ggf. schließen
 	bedeutungenWin.schliessen();
 	// Status des Fensters speichern
-	const {remote} = require("electron"),
-		win = remote.getCurrentWindow();
-	optionen.data.fenster.maximiert = win.isMaximized();
-	let bounds = win.getBounds();
-	if (!optionen.data.fenster.maximiert && bounds) {
-		optionen.data.fenster.x = bounds.x;
-		optionen.data.fenster.y = bounds.y;
-		optionen.data.fenster.width = bounds.width;
-		optionen.data.fenster.height = bounds.height;
-	}
+	const {ipcRenderer} = require("electron");
+	optionen.data.fenster = await ipcRenderer.invoke("fenster-status", winInfo.winId, "fenster");
 	optionen.speichern();
 	// Schließen ggf. unterbrechen + Kartei ggf. entsperren
 	if (notizen.geaendert ||
@@ -341,8 +340,7 @@ window.addEventListener("beforeunload", evt => {
 		evt.returnValue = "false";
 	} else {
 		kartei.lock(kartei.pfad, "unlock");
-		const {ipcRenderer} = require("electron");
-		ipcRenderer.send("fenster-dereferenzieren", win.id);
+		ipcRenderer.send("fenster-dereferenzieren", winInfo.winId);
 	}
 });
 

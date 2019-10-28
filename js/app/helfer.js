@@ -104,6 +104,11 @@ let helfer = {
 			});
 		}, 500);
 	},
+	// fordert den Main-Prozess auf, dieses Fenster zu fokussieren
+	fensterFokus () {
+		const {ipcRenderer} = require("electron");
+		ipcRenderer.invoke("fenster-fokus");
+	},
 	// wenn keine Kopf-Icons => Liste der Anhänge links ohne Margin
 	kopfIcon () {
 		let icons = document.querySelectorAll(".kopf-icon"),

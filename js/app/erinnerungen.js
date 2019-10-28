@@ -75,7 +75,7 @@ let erinnerungen = {
 			if (erinnerungen.data[i].okay) {
 				continue;
 			}
-			text.push(`• ${erinnerungen.data[i].text.replace(/APP/g, appName)}`);
+			text.push(`• ${erinnerungen.data[i].text.replace(/APP/g, appInfo.name)}`);
 		}
 		let punkt = "Der folgende Punkt sollte";
 		if (text.length > 1) {

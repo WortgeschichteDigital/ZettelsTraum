@@ -150,6 +150,8 @@
 
 					<li>Das Tastaturkürzel für die Funktion <a href="#menueAnsicht-anzeigeVergroessern" class="link-handbuch"><i>Ansicht &gt; Anzeige vergrößern</i></a> wurde auf <kbd class="nochange">Strg</kbd> + <kbd>+</kbd> geändert (unter <i>macOS</i> <kbd>⌘</kbd> + <kbd>=</kbd>). Es passt nun besser zum Kürzel für das Verkleinern der Anzeige: <kbd>Strg</kbd> + <kbd>-</kbd>. Die Änderung bezieht sich auf alle Programmfenster, in denen es zur Verfügung steht.</li>
 
+					<li>Der <a href="#" class="link-fehlerlog">Fehlerlog</a> hat jetzt ein Reload-Icon: <img src="../img/pfeil-kreis.svg" width="24" height="24" alt="">. Das Neuladen geht auch via <kbd>F5</kbd>.</li>
+
 					<li>Die Gewichtung der Suchergebnisse im <a href="#" class="link-handbuch">Handbuch</a> und der <a href="#" class="link-dokumentation">technischen Dokumentation</a> wurde verbessert.</li>
 
 					<li>Die Navigation in den Suchergebnissen des Handbuchs und der technischen Dokumentation wurde verbessert. Drück man im Suchfeld <kbd>⏎</kbd>, wird das erste Suchergebnis fokussiert. Nun kann man mit <kbd>Tab</kbd> durch die Ergebnisse navigieren und mit einem erneuten <kbd>⏎</kbd>, zur entsprechenden Stelle im Dokument springen. Navigiert man zurück zu den Suchergebnissen, ist der Link fokussiert, der zuletzt angeklickt worden war. Wurde kein Link angeklickt, wird der erste fokussiert.</li>
@@ -177,11 +179,11 @@
 					<li>
 						<p>Es hat sich viel <span lang="en">under the hood</span> getan: Der Quelltext wurde an zahlreichen Stellen stark restrukturiert, was ihn nicht nur klarer und moderner machte, sondern auch hunderte Zeilen doppelten oder überflüssig komplizierten Codes einsparte.</p>
 
-						<p>Umgebaut wurden besonders die Init-Scripts aller Nebenfenster und die Art und Weise, wie Rechtsklickmenüs erzeugt werden.</p>
+						<p>Umgebaut wurden besonders die Init-Scripts aller Nebenfenster, das Öffnen von Bedeutungsgerüst-Fenstern und die Art und Weise, wie Rechtsklickmenüs und Dateidialoge erzeugt werden.</p>
 
-						<p>Zugleich wurde damit begonnen, Aufrufe des Remote-Moduls aus den Renderer-Prozessen zu entfernen, weil sie ein <a href="https://medium.com/@nornagon/electrons-remote-module-considered-harmful-70d69500f31">potenzielles Sicherheitsrisiko</a> darstellen. So konnten Aufrufe des App- und des <mark>Menu-Moduls</mark> in dieser Version von <i class="app-name"></i> bereits komplett in den Hauptprozess verlagert werden, wo sie auch hingehören.</p>
+						<p>Ferner wurden alle Aufrufe des Remote-Moduls – davon gab es eine nicht unbeträchtliche Zahl! – aus den Renderer-Prozessen entfernen. Die Verwendung dieses <i>Electron</i>-Moduls stellte ein <a href="https://medium.com/@nornagon/electrons-remote-module-considered-harmful-70d69500f31">potenzielles Sicherheitsrisiko</a> für die App dar. Alle über diese <q>Fernbedienung</q> getätigten Aufrufe wurden komplett in den Hauptprozess verlagert, wo sie auch hingehören.</p>
 
-						<p>Ferner fand an vielen Stellen einer stärkere Promisifizierung statt – sowohl in der <span class="datei">main.js</span>, die darüber hinaus reorganisiert wurde, als auch in den Renderer-Prozessen, <mark>aus denen heraus nun keine synchronen Anfragen mehr an den Hauptprozess gestellt werden. [Geht das überhaupt? onbeforeunload könnte ein Problem sein]</mark></p>
+						<p>Ferner fand an vielen Stellen einer stärkere Promisifizierung statt – sowohl in der <span class="datei">main.js</span>, die darüber hinaus reorganisiert wurde, als auch in den Renderer-Prozessen, aus denen heraus nun keinerlei synchrone Anfragen mehr an den Hauptprozess gestellt werden.</p>
 					</li>
 
 					<li>Die <a href="#" class="link-dokumentation">technische Dokumentation</a> wurde wegen der vielen Änderungen und Ergänzungen auf der technischen Ebene in den Abschnitten <a href="#framework" class="link-dokumentation">Framework</a> sowie <a href="#ordner" class="link-dokumentation">Ordner und Dateien</a> überarbeitet.</li>

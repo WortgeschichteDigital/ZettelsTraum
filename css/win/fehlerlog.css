@@ -48,34 +48,44 @@ body > header h1 {
 	right: 10px;
 }
 
-#kopieren {
+body > div {
 	position: fixed;
 	top: 70px;
 	right: 10px;
-	width: 48px;
-	height: 34px;
+	border-bottom-left-radius: 3px;
+	padding: 0 0 5px 5px;
 	background-color: #fff;
-	text-align: center;
 }
 
-#kopieren a {
+body > div a {
 	display: inline-block;
 	outline: none;
-	border-radius: 3px;
+	border-right: 1px solid var(--linie);
+	padding: 0 5px;
 	width: 24px;
 	height: 24px;
-	padding: 0 5px;
 	background-color: var(--hintergrund);
 	color: var(--text);
 	text-decoration: none;
-	cursor: default;
 }
 
-#kopieren a:focus {
+body > div a:first-child {
+	border-top-left-radius: 3px;
+	border-bottom-left-radius: 3px;
+}
+
+body > div a:last-child,
+body > div a.last {
+	border-right: 0;
+	border-top-right-radius: 3px;
+	border-bottom-right-radius: 3px;
+}
+
+body > div a:focus {
 	color: var(--farbe);
 }
 
-#kopieren svg path {
+body > div svg path {
 	fill: currentcolor;
 }
 
@@ -111,8 +121,11 @@ p {
 p.keine {
 	margin-left: 0;
 	color: var(--textSehrHell);
-	font-style: italic;
 	text-align: center;
+}
+
+p.keine.ei {
+	color: var(--textHell);
 }
 
 p.js {
@@ -132,4 +145,8 @@ p.version {
 p.version span {
 	display: inline-block;
 	width: 80px;
+}
+
+.gesperrt {
+	letter-spacing: 0.125em;
 }

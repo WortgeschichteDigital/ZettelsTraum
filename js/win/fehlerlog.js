@@ -6,7 +6,9 @@ let fehlerlog = {
 	//     (Liste der Fehler, die in dieser Session aufgetreten sind)
 	fuellen (fehler) {
 		let cont = document.querySelector("main"),
+			reload = document.getElementById("reload"),
 			copy = document.getElementById("kopieren");
+		helfer.keineKinder(cont);
 		// keine Fehler
 		if (!fehler.length) {
 			let div = document.createElement("div");
@@ -14,11 +16,16 @@ let fehlerlog = {
 			let p = document.createElement("p");
 			div.appendChild(p);
 			p.classList.add("keine");
-			p.textContent = "keine Fehler";
+			if (fehlerlog.ei.count >= 5) {
+				p.classList.add("ei");
+			}
+			p.innerHTML = fehlerlog.eiText();
+			reload.classList.add("last");
 			copy.classList.add("aus");
 			return;
 		}
 		// Fehler
+		reload.classList.remove("last");
 		copy.classList.remove("aus");
 		for (let n = fehler.length - 1; n >= 0; n--) {
 			let i = fehler[n];
@@ -94,6 +101,69 @@ let fehlerlog = {
 		monate = ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"];
 		let d = new Date(datum);
 		return `${wochentage[d.getDay()]}, ${d.getDate()}. ${monate[d.getMonth()]} ${d.getFullYear()}, ${d.getHours()}:${d.getMinutes() < 10 ? `0${d.getMinutes()}` : d.getMinutes()}:${d.getSeconds() < 10 ? `0${d.getSeconds()}` : d.getSeconds()} Uhr`;
+	},
+	// ein Ei
+	ei: {
+		count: -1,
+		texte: [
+			"Nein, <i>keine Fehler.</i>",
+			"Immer noch <i>keine Fehler.</i>",
+			"Nein, nein. <i>Keine Fehler.</i>",
+			"Nope, <i>keine Fehler.</i>",
+			"Wie gesagt: <i>Keine Fehler.</i>",
+			"Immer noch <i>keine Fehler!</i>",
+			"Lassen Sie mich raten! Sie suchen – <em>Fehler</em>.",
+			"Soweit ich weiß: Hier gibt es gerade <em>keine Fehler.</em>",
+			"Wie ich bereits anmerkte: <em>Keine Fehler!</em>",
+			"Wirklich! <strong>Keine Fehler!</strong>",
+			"<strong class='gesperrt'>Keine Fehler!</strong>",
+			"<strong>Immer noch <span class='gesperrt'>keine Fehler!</span></strong>",
+			"<q>Auch er bereute seine Fehler sehr<br>Ja, und bejammerte sein Unglück noch viel mehr.</q>",
+			"Nichts zu bereuen, nichts zu bejammern, weil: <strong class='gesperrt'>Keine Fehler!</strong>",
+			"Kennen Sie eigentlich das Sprechstück <i>Publikumsbeschimpfung</i>?",
+			"Also: … <i>Ach</i>, dann doch lieber ein Gedicht. Denn:",
+			`<q>Ach, noch in der letzten Stunde<br>
+				werde ich verbindlich sein.<br>
+				Klopft der Tod an meine Türe,<br>
+				rufe ich geschwind: Herein!</q>`,
+			`<q>Woran soll es gehn? Ans Sterben?<br>
+				Hab ich zwar noch nie gemacht,<br>
+				doch wir werd’n das Kind schon schaukeln –<br>
+				na, das wäre ja gelacht!</q>`,
+			`<q>Interessant so eine Sanduhr!<br>
+				Ja, die halt ich gern mal fest.<br>
+				Ach – und das ist Ihre Sense?<br>
+				Und die gibt mir dann den Rest?</q>`,
+			`<q>Wohin soll ich mich jetzt wenden?<br>
+				Links? Von Ihnen aus gesehn?<br>
+				Ach, von mir aus! Bis zur Grube?<br>
+				Und wie soll es weitergehn?</q>`,
+			`<q>Ja, die Uhr ist abgelaufen.<br>
+				Wollen Sie die jetzt zurück?<br>
+				Gibt’s die irgendwo zu kaufen?<br>
+				Ein so ausgefall’nes Stück</q>`,
+			`<q>Findet man nicht alle Tage,<br>
+				womit ich nur sagen will<br>
+				– ach! Ich soll hier nichts mehr sagen?<br>
+				Geht in Ordnung! Bin schon</q>`,
+		],
+	},
+	eiText () {
+		let ei = fehlerlog.ei;
+		if (ei.count - 10 >= ei.texte.length) {
+			return " ";
+		} else if (ei.count >= 10) {
+			return ei.texte[ei.count - 10];
+		}
+		return "<i>keine Fehler</i>";
+	},
+	async reload () {
+		const {ipcRenderer} = require("electron");
+		let fehler = await ipcRenderer.invoke("fehler-senden");
+		// Ei
+		fehlerlog.ei.count = fehler.length ? -1 : fehlerlog.ei.count + 1;
+		// Anzeige auffrischen
+		fehlerlog.fuellen(fehler);
 	},
 	// Fehler aus dem Fenster kopieren
 	//   a = Element

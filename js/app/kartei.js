@@ -242,8 +242,8 @@ let kartei = {
 			data.re++;
 			// Dateisystemzugriff
 			const fs = require("fs"),
-				fsPromises = fs.promises;
-			fsPromises.writeFile(pfad, JSON.stringify(data))
+				fsP = fs.promises;
+			fsP.writeFile(pfad, JSON.stringify(data))
 				.then(() => {
 					if (!kartei.pfad) {
 						kartei.lock(pfad, "lock");

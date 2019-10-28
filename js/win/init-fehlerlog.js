@@ -9,12 +9,14 @@ window.addEventListener("load", async () => {
 	tastatur.shortcutsText();
 
 	// ICONS
+	document.getElementById("reload").addEventListener("click", evt => {
+		evt.preventDefault();
+		fehlerlog.reload();
+	});
 	fehlerlog.kopieren(document.getElementById("kopieren"));
 
 	// FEHLER BEIM MAIN-PROZESS ERFRAGEN
-	const {ipcRenderer} = require("electron");
-	let fehler = ipcRenderer.sendSync("fehler-senden");
-	fehlerlog.fuellen(fehler);
+	fehlerlog.reload();
 
 	// FENSTER FREISCHALTEN
 	helfer.fensterGeladen();
