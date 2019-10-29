@@ -47,8 +47,10 @@ let liste = {
 			let beleg_unsichtbar = markBelegsuche(liste.statusNeu);
 			// neuer Beleg könnte aufgrund der Filter versteckt sein
 			if (beleg_unsichtbar && !optionen.data.einstellungen["nicht-karte-gefiltert"]) {
-				dialog.oeffnen("alert");
-				dialog.text("Der Beleg wurde angelegt.\nWegen der aktuellen Filterregeln erscheint er jedoch nicht in der Belegliste.");
+				dialog.oeffnen({
+					typ: "alert",
+					text: "Der Beleg wurde angelegt.\nWegen der aktuellen Filterregeln erscheint er jedoch nicht in der Belegliste.",
+				});
 				document.getElementById("dialog-text").appendChild(optionen.shortcut("Meldung nicht mehr anzeigen", "nicht-karte-gefiltert"));
 			} else if (!beleg_unsichtbar) { // zum Beleg scrollen
 				let id = liste.statusNeu; // wird unten geleert, darum hier zwischenspeichern
@@ -1241,8 +1243,10 @@ let liste = {
 			evt.stopPropagation();
 			let detail = helfer.escapeHtml(this.title),
 				beleg_id = this.parentNode.dataset.id;
-			dialog.oeffnen("alert");
-			dialog.text(`<h3>${liste.detailAnzeigenH3(beleg_id)}</h3>\n${detail}`);
+			dialog.oeffnen({
+				typ: "alert",
+				text: `<h3>${liste.detailAnzeigenH3(beleg_id)}</h3>\n${detail}`,
+			});
 		});
 	},
 	// Text der Überschrift für die Detailanzeige erstellen
@@ -1504,10 +1508,13 @@ let liste = {
 	headerDetails (funktion) {
 		// Belegtext-Icon ist nur Platzhalter
 		if (funktion === "bs") {
-			dialog.oeffnen("alert", function() {
-				document.getElementById("liste-link-bs").focus();
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Der Belegtext kann nicht ausgeblendet werden.",
+				callback: () => {
+					document.getElementById("liste-link-bs").focus();
+				},
 			});
-			dialog.text("Der Belegtext kann nicht ausgeblendet werden.");
 			return;
 		}
 		// Einstellung umstellen und speichern

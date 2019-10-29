@@ -29,8 +29,8 @@ const dienste = require("./js/main/dienste"),
 //       kann in Fenstern vom typ === "index" leer sein, dann ist keine Kartei geladen;
 //       kann in Fenstern vom typ === "index" auch "neu" sein, dann wurde die Karte erstellt,
 //       aber noch nicht gespeichert)
-// (die Bedeutungsgerüst-Fenster sind direkt an ein Hauptfenster gebunden
-// und werden auch aus diesem geöffnet; sie werden hier nicht referenziert)
+//     exit:        true || undefined (wird dem Objekt kurz vor dem Schließen hinzugefügt,
+//       damit dieses Schließen nicht blockiert wird; s. BrowserWindow.on("close"))
 let win = {};
 
 // Developer-Tools sollen angezeigt werden (oder nicht)
@@ -431,9 +431,7 @@ if (process.platform === "darwin") {
 
 appMenu = {
 	// überschreibt das Submenü mit den zuletzt verwendeten Karteien
-	//   update = Boolean
-	//     (die Fenster sollen ein Update über die zuletzt geöffneten Dateien erhalten)
-	zuletzt (update) {
+	zuletzt () {
 		// für macOS gibt es ein anderes Menüsystem
 		if (process.platform === "darwin") {
 			return;
@@ -470,27 +468,6 @@ appMenu = {
 		}
 		// neue Liste einhängen
 		layoutMenu[1].submenu[pos] = layoutZuletzt;
-		// Menüs in den Hauptfenstern ggf. auffrischen
-		if (update) {
-			for (let id in win) {
-				if (!win.hasOwnProperty(id)) {
-					continue;
-				}
-				if (win[id].typ !== "index") {
-					continue;
-				}
-				// Fenster des Renderer-Prozess ermitteln
-				let w = BrowserWindow.fromId(parseInt(id, 10));
-				// App-Menü des Renderer-Prozesses auffrischen
-				let disable = false;
-				if (!win[id].kartei) {
-					disable = true;
-				}
-				appMenu.deaktivieren(disable, w.id);
-				// Dateiliste an den Renderer-Prozess schicken
-				w.webContents.send("optionen-zuletzt", optionen.data.zuletzt);
-			}
-		}
 	},
 	// Menüpunkt im Untermenü "Zuletzt verwendet" erzeugen
 	//   layoutZuletzt = Object
@@ -510,11 +487,35 @@ appMenu = {
 		}
 		layoutZuletzt.submenu.push(item);
 	},
+	// Menüs in den Hauptfenstern auffrischen
+	zuletztUpdate () {
+		for (let id in win) {
+			if (!win.hasOwnProperty(id)) {
+				continue;
+			}
+			if (win[id].typ !== "index") {
+				continue;
+			}
+			// Fenster des Renderer-Prozesses ermitteln
+			let w = BrowserWindow.fromId(parseInt(id, 10));
+			// App-Menü des Renderer-Prozesses auffrischen
+			if (process.platform !== "darwin") {
+				let disable = false;
+				if (!win[id].kartei) {
+					disable = true;
+				}
+				appMenu.deaktivieren(disable, w.id);
+			}
+			// Dateiliste an den Renderer-Prozess schicken
+			w.webContents.send("optionen-zuletzt", optionen.data.zuletzt);
+		}
+	},
 	// Menü mit zuletzt benutzten Dateien leeren
 	zuletztLoeschen () {
 		optionen.data.zuletzt = [];
 		optionen.schreiben();
-		appMenu.zuletzt(true);
+		appMenu.zuletzt();
+		appMenu.zuletztUpdate();
 	},
 	// Menü-Elemente deaktivieren, wenn keine Kartei offen ist
 	//   disable = Boolean
@@ -685,6 +686,7 @@ fenster = {
 			autoHideMenuBar: optionen.data.einstellungen ? optionen.data.einstellungen.autoHideMenuBar : false,
 			webPreferences: {
 				nodeIntegration: true,
+				enableRemoteModule: false,
 				devTools: devtools,
 				defaultEncoding: "utf-8",
 			},
@@ -704,6 +706,9 @@ fenster = {
 		}
 		// HTML laden
 		bw.loadFile(path.join(__dirname, "index.html"));
+		// Fenster fokussieren
+		// (mitunter ist das Fenster sonst nicht im Vordergrund)
+		fenster.fokus(bw);
 		// Fenster-Objekt anlegen
 		// (wird Fenster neu geladen => Fenster-Objekt neu anlegen)
 		bw.webContents.on("dom-ready", function() {
@@ -718,6 +723,32 @@ fenster = {
 				}
 				// die IPC-Listener im Renderer-Prozess müssen erst initialisiert werden
 				setTimeout(() => this.send("kartei-oeffnen", datei), 25);
+			}
+		});
+		// Aktionen vor dem Schließen des Fensters
+		bw.on("close", function(evt) {
+			// beforeUnload() im Fenster ausführen
+			if (!win[this.id].exit) {
+				evt.preventDefault();
+				this.webContents.send("before-unload");
+				return;
+			}
+			// Fenster dereferenzieren
+			delete win[this.id];
+			// Sind noch Hauptfenster vorhanden?
+			let hauptfensterOffen = false;
+			for (let id in win) {
+				if (!win.hasOwnProperty(id)) {
+					continue;
+				}
+				if (win[id].typ === "index") {
+					hauptfensterOffen = true;
+					break;
+				}
+			}
+			// App ggf. komplett beenden
+			if (!hauptfensterOffen) {
+				appMenu.befehl("app-beenden");
 			}
 		});
 		// ID des Fensters zurückgeben (wird mitunter direkt benötigt)
@@ -776,6 +807,7 @@ fenster = {
 			minHeight: bounds.minHeight,
 			webPreferences: {
 				nodeIntegration: true,
+				enableRemoteModule: false,
 				devTools: devtools,
 				defaultEncoding: "utf-8",
 			},
@@ -848,7 +880,7 @@ fenster = {
 		// HTML laden
 		bw.loadFile(path.join(__dirname, "win", `${typ}.html`));
 		// Fenster fokussieren
-		// (wird der Changelog aus dem Über-App-Fenster geöffnet, hat er z.B. nicht den Fokus)
+		// (mitunter ist das Fenster sonst nicht im Vordergrund)
 		fenster.fokus(bw);
 		// Fenster-Objekt anlegen
 		// (wird Fenster neu geladen => Fenster-Objekt neu anlegen)
@@ -873,6 +905,17 @@ fenster = {
 			if (bdCaller) {
 				setTimeout(() => bdCaller.send("bedeutungen-fenster-daten"), 25);
 			}
+		});
+		// Aktionen vor dem Schließen des Fensters
+		bw.on("close", function(evt) {
+			// beforeUnload() im Fenster ausführen
+			if (!win[this.id].exit) {
+				evt.preventDefault();
+				this.webContents.send("before-unload");
+				return;
+			}
+			// Fenster dereferenzieren
+			delete win[this.id];
 		});
 		// ID des Web-Content zurückgeben
 		return bw.webContents.id;
@@ -905,6 +948,7 @@ fenster = {
 			maximizable: false,
 			webPreferences: {
 				nodeIntegration: true,
+				enableRemoteModule: false,
 				devTools: devtools,
 				defaultEncoding: "utf-8",
 			},
@@ -922,6 +966,17 @@ fenster = {
 		// (wird Fenster neu geladen => Fenster-Objekt neu anlegen)
 		bw.webContents.on("dom-ready", function() {
 			fenster.objekt(bw.id, this.id, typ);
+		});
+		// Aktionen vor dem Schließen des Fensters
+		bw.on("close", function(evt) {
+			// beforeUnload() im Fenster ausführen
+			if (!win[this.id].exit) {
+				evt.preventDefault();
+				this.webContents.send("before-unload");
+				return;
+			}
+			// Fenster dereferenzieren
+			delete win[this.id];
 		});
 	},
 	// legt ein Fenster-Objekt an
@@ -1000,7 +1055,7 @@ app.on("ready", async () => {
 	// Optionen einlesen
 	await optionen.lesen();
 	// Menu der zuletzt verwendeten Karteien erzeugen
-	appMenu.zuletzt(false);
+	appMenu.zuletzt();
 	// warten mit dem Öffnen des Fensters, bis die Optionen eingelesen wurden
 	fenster.erstellen("");
 });
@@ -1106,12 +1161,13 @@ ipcMain.handle("popup", (evt, items) => popup.make(evt.sender, items));
 ipcMain.handle("optionen-senden", () => optionen.data);
 
 // Optionen empfangen und speichern
-ipcMain.on("optionen-speichern", (evt, opt, winId) => {
+ipcMain.handle("optionen-speichern", (evt, opt, winId) => {
 	// Optionen übernehmen
 	if (optionen.data.zuletzt &&
 			optionen.data.zuletzt.join(",") !== opt.zuletzt.join(",")) {
 		optionen.data = opt;
-		appMenu.zuletzt(true); // Das sollte nicht unnötig oft aufgerufen werden!
+		appMenu.zuletzt();
+		appMenu.zuletztUpdate(); // Das sollte nicht unnötig oft aufgerufen werden!
 	} else {
 		optionen.data = opt;
 	}
@@ -1166,6 +1222,13 @@ ipcMain.handle("fenster-fokus", evt => {
 // Fenster schließen
 ipcMain.handle("fenster-schliessen", evt => {
 	let w = BrowserWindow.fromWebContents(evt.sender);
+	w.close();
+});
+
+// Fenster endgültig schließen
+ipcMain.handle("fenster-schliessen-endgueltig", evt => {
+	let w = BrowserWindow.fromWebContents(evt.sender);
+	win[w.id].exit = true;
 	w.close();
 });
 
@@ -1302,25 +1365,6 @@ ipcMain.handle("fenster-hauptfenster", (evt, idFrage) => {
 		}
 	}
 	return false;
-});
-
-// Fenster wurde geschlossen => im Fensterobjekt dereferenzieren
-ipcMain.on("fenster-dereferenzieren", (evt, id) => {
-	delete win[id];
-	// Sind noch Hauptfenster vorhanden?
-	let hauptfensterOffen = false;
-	for (let id in win) {
-		if (!win.hasOwnProperty(id)) {
-			continue;
-		}
-		if (win[id].typ === "index") {
-			hauptfensterOffen = true;
-			break;
-		}
-	}
-	if (!hauptfensterOffen) {
-		appMenu.befehl("app-beenden");
-	}
 });
 
 

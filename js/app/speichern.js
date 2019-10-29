@@ -41,95 +41,110 @@ let speichern = {
 	// überprüft, ob Änderungen noch nicht gespeichert wurden
 	check () {
 		if (speichern.checkScope.notizen && notizen.geaendert) {
-			dialog.oeffnen("confirm", function() {
-				if (dialog.antwort && notizen.speichern()) {
-					if (optionen.data.einstellungen["notizen-schliessen"]) {
-						setTimeout(() => speichern.check(), 200); // bei Overlay-Fenstern wichtig, sonst gibt es Probleme mit den folgenden Operationen
-					} else {
-						speichern.check();
-					}
-				} else if (dialog.antwort === false) {
-					notizen.notizenGeaendert(false);
-					speichern.check();
-				} else {
-					speichern.checkAktiv = false;
-					setTimeout(() => {
-						if (overlay.oben() === "notizen") {
-							document.getElementById("notizen-feld").focus();
+			dialog.oeffnen({
+				typ: "confirm",
+				text: "Die Notizen wurden geändert, aber noch nicht gespeichert.\nMöchten Sie die Änderungen nicht erst einmal speichern?",
+				callback: () => {
+					if (dialog.antwort && notizen.speichern()) {
+						if (optionen.data.einstellungen["notizen-schliessen"]) {
+							setTimeout(() => speichern.check(), 200); // bei Overlay-Fenstern wichtig, sonst gibt es Probleme mit den folgenden Operationen
+						} else {
+							speichern.check();
 						}
-					}, 200); // die Zeit braucht der Dialog, um ausgeblendet zu werden
-				}
+					} else if (dialog.antwort === false) {
+						notizen.notizenGeaendert(false);
+						speichern.check();
+					} else {
+						speichern.checkAktiv = false;
+						setTimeout(() => {
+							if (overlay.oben() === "notizen") {
+								document.getElementById("notizen-feld").focus();
+							}
+						}, 200); // die Zeit braucht der Dialog, um ausgeblendet zu werden
+					}
+				},
 			});
-			dialog.text("Die Notizen wurden geändert, aber noch nicht gespeichert.\nMöchten Sie die Änderungen nicht erst einmal speichern?");
 			return;
 		} else if (speichern.checkScope.tagger && tagger.geaendert) {
-			dialog.oeffnen("confirm", function() {
-				if (dialog.antwort && tagger.speichern()) {
-					if (optionen.data.einstellungen["tagger-schliessen"]) {
-						setTimeout(() => speichern.check(), 200); // bei Overlay-Fenstern wichtig, sonst gibt es Probleme mit den folgenden Operationen
-					} else {
-						speichern.check();
-					}
-				} else if (dialog.antwort === false) {
-					tagger.taggerGeaendert(false);
-					speichern.check();
-				} else {
-					speichern.checkAktiv = false;
-					setTimeout(() => {
-						if (overlay.oben() === "tagger") {
-							let feld = document.querySelector("#tagger-typen .dropdown-feld");
-							if (feld) {
-								feld.focus();
-							}
+			dialog.oeffnen({
+				typ: "confirm",
+				text: "Die Tags wurden geändert, aber noch nicht gespeichert.\nMöchten Sie die Änderungen nicht erst einmal speichern?",
+				callback: () => {
+					if (dialog.antwort && tagger.speichern()) {
+						if (optionen.data.einstellungen["tagger-schliessen"]) {
+							setTimeout(() => speichern.check(), 200); // bei Overlay-Fenstern wichtig, sonst gibt es Probleme mit den folgenden Operationen
+						} else {
+							speichern.check();
 						}
-					}, 200); // die Zeit braucht der Dialog, um ausgeblendet zu werden
-				}
+					} else if (dialog.antwort === false) {
+						tagger.taggerGeaendert(false);
+						speichern.check();
+					} else {
+						speichern.checkAktiv = false;
+						setTimeout(() => {
+							if (overlay.oben() === "tagger") {
+								let feld = document.querySelector("#tagger-typen .dropdown-feld");
+								if (feld) {
+									feld.focus();
+								}
+							}
+						}, 200); // die Zeit braucht der Dialog, um ausgeblendet zu werden
+					}
+				},
 			});
-			dialog.text("Die Tags wurden geändert, aber noch nicht gespeichert.\nMöchten Sie die Änderungen nicht erst einmal speichern?");
 			return;
 		} else if (speichern.checkScope.bedeutungen && bedeutungen.geaendert) {
-			dialog.oeffnen("confirm", function() {
-				if (dialog.antwort && bedeutungen.speichern()) {
-					speichern.check();
-				} else if (dialog.antwort === false) {
-					bedeutungen.bedeutungenGeaendert(false);
-					speichern.check();
-				} else {
-					speichern.checkAktiv = false;
-				}
+			dialog.oeffnen({
+				typ: "confirm",
+				text: "Das Bedeutungsgerüst wurde geändert, aber noch nicht gespeichert.\nMöchten Sie die Änderungen nicht erst einmal speichern?",
+				callback: () => {
+					if (dialog.antwort && bedeutungen.speichern()) {
+						speichern.check();
+					} else if (dialog.antwort === false) {
+						bedeutungen.bedeutungenGeaendert(false);
+						speichern.check();
+					} else {
+						speichern.checkAktiv = false;
+					}
+				},
 			});
-			dialog.text("Das Bedeutungsgerüst wurde geändert, aber noch nicht gespeichert.\nMöchten Sie die Änderungen nicht erst einmal speichern?");
 			return;
 		} else if (speichern.checkScope.beleg && beleg.geaendert) {
-			dialog.oeffnen("confirm", function() {
-				if (dialog.antwort && beleg.aktionSpeichern()) {
-					speichern.check();
-				} else if (dialog.antwort === false) {
-					beleg.belegGeaendert(false);
-					speichern.check();
-				} else {
-					speichern.checkAktiv = false;
-				}
+			dialog.oeffnen({
+				typ: "confirm",
+				text: "Die Karteikarte wurde geändert, aber noch nicht gespeichert.\nMöchten Sie die Änderungen nicht erst einmal speichern?",
+				callback: () => {
+					if (dialog.antwort && beleg.aktionSpeichern()) {
+						speichern.check();
+					} else if (dialog.antwort === false) {
+						beleg.belegGeaendert(false);
+						speichern.check();
+					} else {
+						speichern.checkAktiv = false;
+					}
+				},
 			});
-			dialog.text("Die Karteikarte wurde geändert, aber noch nicht gespeichert.\nMöchten Sie die Änderungen nicht erst einmal speichern?");
 			return;
 		} else if (speichern.checkScope.kartei && kartei.geaendert) {
-			dialog.oeffnen("confirm", async function() {
-				if (dialog.antwort) {
-					const resultat = await kartei.speichern(false);
-					if (!resultat) {
+			dialog.oeffnen({
+				typ: "confirm",
+				text: "Die Kartei wurde geändert, aber noch nicht gespeichert.\nMöchten Sie die Änderungen nicht erst einmal speichern?",
+				callback: async () => {
+					if (dialog.antwort) {
+						const resultat = await kartei.speichern(false);
+						if (!resultat) {
+							speichern.checkAktiv = false;
+							return; // Speichern ist gescheitert, oder erfordert Reaktion des Users => Callback nicht ausführen
+						}
+						speichern.check();
+					} else if (dialog.antwort === false) {
+						kartei.karteiGeaendert(false);
+						speichern.check();
+					} else {
 						speichern.checkAktiv = false;
-						return; // Speichern ist gescheitert, oder erfordert Reaktion des Users => Callback nicht ausführen
 					}
-					speichern.check();
-				} else if (dialog.antwort === false) {
-					kartei.karteiGeaendert(false);
-					speichern.check();
-				} else {
-					speichern.checkAktiv = false;
-				}
+				},
 			});
-			dialog.text("Die Kartei wurde geändert, aber noch nicht gespeichert.\nMöchten Sie die Änderungen nicht erst einmal speichern?");
 			return;
 		}
 		speichern.checkAktiv = false; // muss vor dem Callback stehen, weil der wieder zu Aufrufen dieser Funktion führen kann; und die muss dann unbedingt durchlaufen, damit der neue Callback auch aufgerufen wird
@@ -141,8 +156,10 @@ let speichern = {
 	kaskade () {
 		// Sperre für macOS (Menüpunkte können nicht deaktiviert werden)
 		if (!kartei.wort) {
-			dialog.oeffnen("alert");
-			dialog.text("Um die Funktion <i>Kartei &gt; Speichern</i> zu nutzen, muss eine Kartei geöffnet sein.");
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Um die Funktion <i>Kartei &gt; Speichern</i> zu nutzen, muss eine Kartei geöffnet sein.",
+			});
 			return;
 		}
 		// keine Speicherkaskade

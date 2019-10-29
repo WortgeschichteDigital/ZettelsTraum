@@ -304,8 +304,10 @@ let bedeutungen = {
 	oeffnen () {
 		// Sperre für macOS (Menüpunkte können nicht deaktiviert werden)
 		if (!kartei.wort) {
-			dialog.oeffnen("alert");
-			dialog.text("Um die Funktion <i>Kartei &gt; Bedeutungsgerüst</i> zu nutzen, muss eine Kartei geöffnet sein.");
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Um die Funktion <i>Kartei &gt; Bedeutungsgerüst</i> zu nutzen, muss eine Kartei geöffnet sein.",
+			});
 			return;
 		}
 		// Bedeutungen sind schon offen
@@ -1093,27 +1095,30 @@ let bedeutungen = {
 	//     (Index der Bedeutung)
 	loeschen (idx) {
 		const bd = bedeutungen.akt.bd[idx].bd[bedeutungen.akt.bd[idx].bd.length - 1];
-		dialog.oeffnen("confirm", function() {
-			if (dialog.antwort) {
-				// Löschen für Karteikarten vormerken
-				let items = bedeutungen.moveGetItems();
-				for (let i = 0, len = items.length; i < len; i++) {
-					bedeutungen.aendernFuellen({
-						del: true,
-						id: bedeutungen.akt.bd[items[i]].id,
-					});
-				}
-				// Löschen im Gerüst ausführen
-				bedeutungen.loeschenAusfuehren(items);
-			} else {
-				document.querySelector(".bedeutungen-aktiv").firstChild.firstChild.focus();
-			}
-		});
 		let zaehlung = bedeutungen.zaehlungTief(idx);
 		for (let i = 0, len = zaehlung.length; i < len; i++) {
 			zaehlung[i] = `<b class="zaehlung">${zaehlung[i]}</b>`;
 		}
-		dialog.text(`Soll die markierte Bedeutung\n<p class="bedeutungen-dialog">${zaehlung.join("")}${bd}</p>\n${document.querySelector(".bedeutungen-affiziert") ? "mit all ihren Unterbedeutungen " : ""}wirklich gelöscht werden?`);
+		dialog.oeffnen({
+			typ: "confirm",
+			text: `Soll die markierte Bedeutung\n<p class="bedeutungen-dialog">${zaehlung.join("")}${bd}</p>\n${document.querySelector(".bedeutungen-affiziert") ? "mit all ihren Unterbedeutungen " : ""}wirklich gelöscht werden?`,
+			callback: () => {
+				if (dialog.antwort) {
+					// Löschen für Karteikarten vormerken
+					let items = bedeutungen.moveGetItems();
+					for (let i = 0, len = items.length; i < len; i++) {
+						bedeutungen.aendernFuellen({
+							del: true,
+							id: bedeutungen.akt.bd[items[i]].id,
+						});
+					}
+					// Löschen im Gerüst ausführen
+					bedeutungen.loeschenAusfuehren(items);
+				} else {
+					document.querySelector(".bedeutungen-aktiv").firstChild.firstChild.focus();
+				}
+			},
+		});
 	},
 	// markierte Einträge werden gelöscht
 	// (wird auch für das Verschmelzen genutzt, darum ausgelagert)
@@ -1164,31 +1169,6 @@ let bedeutungen = {
 	//   idxZiel = Number
 	//     (Index-Nummer der Bedeutung, in die hinein der markierte Bedeutungszweig geschoben wird)
 	verschmelzen (idxZiel) {
-		dialog.oeffnen("confirm", function() {
-			if (dialog.antwort) {
-				const id = bedeutungen.akt.bd[idxZiel].id;
-				// Verschmelzen für Karteikarten vormerken
-				let items = bedeutungen.moveGetItems();
-				for (let i = 0, len = items.length; i < len; i++) {
-					bedeutungen.aendernFuellen({
-						merge: true,
-						id: bedeutungen.akt.bd[items[i]].id,
-						idN: id,
-					});
-				}
-				// verschmolzene Bedeutungen löschen
-				bedeutungen.loeschenAusfuehren(items);
-				// Verschmelzen visualisieren
-				for (let i = 0, len = bedeutungen.akt.bd.length; i < len; i++) {
-					if (bedeutungen.akt.bd[i].id === id) {
-						bedeutungen.moveAn(i, true);
-						break;
-					}
-				}
-			} else {
-				document.querySelector(".bedeutungen-aktiv").childNodes[2].firstChild.focus();
-			}
-		});
 		const idx = parseInt(document.querySelector(".bedeutungen-aktiv").dataset.idx, 10);
 		let zaehlungIdx = bedeutungen.zaehlungTief(idx);
 		for (let i = 0, len = zaehlungIdx.length; i < len; i++) {
@@ -1200,7 +1180,35 @@ let bedeutungen = {
 			zaehlungIdxZiel[i] = `<b class="zaehlung">${zaehlungIdxZiel[i]}</b>`;
 		}
 		const bdIdxZiel = bedeutungen.akt.bd[idxZiel].bd[bedeutungen.akt.bd[idxZiel].bd.length - 1];
-		dialog.text(`Soll die markierte Bedeutung\n<p class="bedeutungen-dialog">${zaehlungIdx.join("")}${bdIdx}</p>\n${document.querySelector(".bedeutungen-affiziert") ? "mit all ihren Unterbedeutungen " : ""}wirklich mit der Bedeutung\n<p class="bedeutungen-dialog">${zaehlungIdxZiel.join("")}${bdIdxZiel}</p>\nverschmolzen werden?`);
+		dialog.oeffnen({
+			typ: "confirm",
+			text: `Soll die markierte Bedeutung\n<p class="bedeutungen-dialog">${zaehlungIdx.join("")}${bdIdx}</p>\n${document.querySelector(".bedeutungen-affiziert") ? "mit all ihren Unterbedeutungen " : ""}wirklich mit der Bedeutung\n<p class="bedeutungen-dialog">${zaehlungIdxZiel.join("")}${bdIdxZiel}</p>\nverschmolzen werden?`,
+			callback: () => {
+				if (dialog.antwort) {
+					const id = bedeutungen.akt.bd[idxZiel].id;
+					// Verschmelzen für Karteikarten vormerken
+					let items = bedeutungen.moveGetItems();
+					for (let i = 0, len = items.length; i < len; i++) {
+						bedeutungen.aendernFuellen({
+							merge: true,
+							id: bedeutungen.akt.bd[items[i]].id,
+							idN: id,
+						});
+					}
+					// verschmolzene Bedeutungen löschen
+					bedeutungen.loeschenAusfuehren(items);
+					// Verschmelzen visualisieren
+					for (let i = 0, len = bedeutungen.akt.bd.length; i < len; i++) {
+						if (bedeutungen.akt.bd[i].id === id) {
+							bedeutungen.moveAn(i, true);
+							break;
+						}
+					}
+				} else {
+					document.querySelector(".bedeutungen-aktiv").childNodes[2].firstChild.focus();
+				}
+			},
+		});
 	},
 	// Listener zum Öffnen des Taggers
 	//   td = Element
@@ -1402,10 +1410,13 @@ let bedeutungen = {
 			if (feld === "bd") {
 				const bdFehler = bedeutungen.editBdTest({wert, idx});
 				if (bdFehler) {
-					dialog.oeffnen("alert", function() {
-						edit.focus();
+					dialog.oeffnen({
+						typ: "alert",
+						text: bdFehler,
+						callback: () => {
+							edit.focus();
+						},
 					});
-					dialog.text(bdFehler);
 					return;
 				}
 			} else if (feld === "al") {
@@ -1465,18 +1476,23 @@ let bedeutungen = {
 			bedeutungen.bedeutungenGeaendert(true);
 			// Alias schon vergeben
 			function alias_schon_vergeben (edit, typ) {
-				dialog.oeffnen("alert", function() {
-					helfer.auswahl(edit);
-				});
+				let text = "";
 				if (typ === "trennzeichen") {
-					dialog.text(`Das Alias\n<p class="bedeutungen-dialog">${wert}</p>\nist ungültig, weil es das reservierte Trennzeichen „: “ (Doppelpunkt + Leerzeichen) enthält.`);
+					text = `Das Alias\n<p class="bedeutungen-dialog">${wert}</p>\nist ungültig, weil es das reservierte Trennzeichen „: “ (Doppelpunkt + Leerzeichen) enthält.`;
 				} else if (typ === "alias") {
-					dialog.text(`Das Alias\n<p class="bedeutungen-dialog">${wert}</p>\nwurde schon vergeben.`);
+					text = `Das Alias\n<p class="bedeutungen-dialog">${wert}</p>\nwurde schon vergeben.`;
 				} else if (typ === "alias_identisch") {
-					dialog.text(`Das Alias\n<p class="bedeutungen-dialog">${wert}</p>\nwäre identisch mit der Bedeutung, für die es stehen soll.`);
+					text = `Das Alias\n<p class="bedeutungen-dialog">${wert}</p>\nwäre identisch mit der Bedeutung, für die es stehen soll.`;
 				} else {
-					dialog.text(`Das Alias\n<p class="bedeutungen-dialog">${wert}</p>\nwäre identisch mit einer Bedeutung.`);
+					text = `Das Alias\n<p class="bedeutungen-dialog">${wert}</p>\nwäre identisch mit einer Bedeutung.`;
 				}
+				dialog.oeffnen({
+					typ: "alert",
+					text: text,
+					callback: () => {
+						helfer.auswahl(edit);
+					},
+				});
 			}
 		});
 	},
@@ -1675,10 +1691,13 @@ let bedeutungen = {
 				ebene: 1,
 			});
 			if (bdFehler) {
-				dialog.oeffnen("alert", function() {
-					helfer.auswahl(feld);
+				dialog.oeffnen({
+					typ: "alert",
+					text: bdFehler,
+					callback: () => {
+						helfer.auswahl(feld);
+					},
 				});
-				dialog.text(bdFehler);
 				return;
 			}
 			// Bedeutung ergänzen, Gerüst neu aufbauen, Bedeutung aktivieren
@@ -1861,16 +1880,19 @@ let bedeutungen = {
 			return;
 		}
 		// Bedeutungsgüerst ist korrupt
-		dialog.oeffnen("confirm", function() {
-			if (dialog.antwort) {
-				bedeutungen.korruptionRepair();
-			}
-		});
 		let num = "Das Bedeutungsgerüst";
 		if (Object.keys(data.bd.gr).length > 1) {
 			num = "Mindestens eines der Bedeutungsgerüste";
 		}
-		dialog.text(`${num} dieser Kartei ist korrupt.\nSoll es automatisch repariert werden?`);
+		dialog.oeffnen({
+			typ: "confirm",
+			text: `${num} dieser Kartei ist korrupt.\nSoll es automatisch repariert werden?`,
+			callback: () => {
+				if (dialog.antwort) {
+					bedeutungen.korruptionRepair();
+				}
+			},
+		});
 	},
 	// repariert ein korruptes Bedeutungsgerüst
 	korruptionRepair () {
@@ -1896,11 +1918,13 @@ let bedeutungen = {
 		// Liste + Filter neu aufbauen
 		liste.aufbauen(true);
 		// Rückmeldung geben
-		dialog.oeffnen("alert");
 		let num = "Das Bedeutungsgerüst wurde";
 		if (Object.keys(data.bd.gr).length > 1) {
 			num = "Die Bedeutungsgerüste wurden";
 		}
-		dialog.text(`${num} repariert.\nBitte überprüfen Sie vor dem Speichern der Kartei das Ergebnis.`);
+		dialog.oeffnen({
+			typ: "alert",
+			text: `${num} repariert.\nBitte überprüfen Sie vor dem Speichern der Kartei das Ergebnis.`,
+		});
 	},
 };

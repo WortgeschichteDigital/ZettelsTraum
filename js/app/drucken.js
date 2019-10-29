@@ -64,8 +64,10 @@ let drucken = {
 		drucken.getIds(id);
 		if (!drucken.kartenIds.length) { // keine Karteikarten, die gedruckt werden können
 			setTimeout(() => overlay.schliessen(fenster), 0); // ohne Timeout wird es nicht ausgeblendet
-			dialog.oeffnen("alert");
-			dialog.text("In der Belegliste sind keine Karteikarten, die gedruckt werden könnten.");
+			dialog.oeffnen({
+				typ: "alert",
+				text: "In der Belegliste sind keine Karteikarten, die gedruckt werden könnten.",
+			});
 			return;
 		}
 		drucken.fillKarten();
@@ -235,8 +237,10 @@ let drucken = {
 		// Sind überhaupt Bedeutungen vorhanden
 		if (!qu.gr[gn].bd.length) {
 			setTimeout(() => overlay.schliessen(document.getElementById("drucken")), 0); // ohne Timeout wird es nicht ausgeblendet
-			dialog.oeffnen("alert");
-			dialog.text("Es gibt kein Bedeutungsgerüst, das gedruckt werden könnte.");
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Es gibt kein Bedeutungsgerüst, das gedruckt werden könnte.",
+			});
 			return;
 		}
 		// Content leeren

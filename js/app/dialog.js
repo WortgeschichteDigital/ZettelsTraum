@@ -3,20 +3,24 @@
 let dialog = {
 	// Speicherort für Funktionen, die nach dem Schließen
 	// des Dialogs ausgeführt werden.
-	funktion: function() {},
+	callback: null,
 	// Speicherort für die Nutzerantwort, die aus einem Bestätigungsdialog resultiert.
 	// Mögliche Werte: true (Okay od. Ja) || false (Abbrechen od. Nein) || null (Schließen durch Link)
 	antwort: null,
 	// Dialog-Fenster öffnen
 	//   typ = String
 	//     (gibt den Dialog-Typ an, Werte: "alert", "prompt", "confirm")
-	//   funktion = function || undefined
-	//     (Funktion, die nach dem Schließen des Dialogs ausgeführt werden soll)
+	//   text = String
+	//     (Text, der in das Meldungsfeld eingetragen werden soll)
 	//   platzhalter = String || undefined
 	//     (Platzhaltertext für das Prompt-Feld)
-	oeffnen (typ, funktion = null, platzhalter = "") {
+	//   funktion = function || undefined
+	//     (Funktion, die nach dem Schließen des Dialogs ausgeführt werden soll)
+	oeffnen ({typ, text, platzhalter = "", callback = null}) {
+		// Text eintragen
+		dialog.text(text);
 		// Funktion zwischenspeichern
-		dialog.funktion = funktion;
+		dialog.callback = callback;
 		// Overlay öffnen
 		let fenster = document.getElementById("dialog");
 		overlay.oeffnen(fenster);

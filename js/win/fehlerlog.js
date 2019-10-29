@@ -16,12 +16,18 @@ let fehlerlog = {
 			let p = document.createElement("p");
 			div.appendChild(p);
 			p.classList.add("keine");
-			if (fehlerlog.ei.count >= 5) {
+			if (fehlerlog.ei.count >= 10) {
 				p.classList.add("ei");
 			}
 			p.innerHTML = fehlerlog.eiText();
 			reload.classList.add("last");
 			copy.classList.add("aus");
+			if (fehlerlog.ei.count > 0) {
+				p.classList.add("updated");
+				p.addEventListener("animationend", function() {
+					this.classList.remove("updated");
+				});
+			}
 			return;
 		}
 		// Fehler

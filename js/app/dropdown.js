@@ -488,14 +488,17 @@ let dropdown = {
 				return;
 			}
 			// Ergänzen oder überschreiben?
-			dialog.oeffnen("confirm", function() {
-				if (dialog.antwort) {
-					eintragen(true);
-				} else if (dialog.antwort === false) {
-					eintragen(false);
-				}
+			dialog.oeffnen({
+				typ: "confirm",
+				text: "Im Textfeld steht schon etwas. Soll es ergänzt werden?\n(Bei „Nein“ wird das Textfeld überschrieben.)",
+				callback: () => {
+					if (dialog.antwort) {
+						eintragen(true);
+					} else if (dialog.antwort === false) {
+						eintragen(false);
+					}
+				},
 			});
-			dialog.text("Im Textfeld steht schon etwas. Soll es ergänzt werden?\n(Bei „Nein“ wird das Textfeld überschrieben.)");
 			document.getElementById("dialog-text").appendChild(optionen.shortcut("Textfeld künftig ohne Nachfrage ergänzen", "immer-ergaenzen"));
 			return;
 		} else if (wert && feld.getAttribute("contenteditable")) {
@@ -603,10 +606,13 @@ let dropdown = {
 		}
 		// Eintrag unnötig
 		function eintragUnnoetig () {
-			dialog.oeffnen("alert", function() {
-				feld.focus();
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Der ausgewählte Wert muss nicht ergänzt werden, weil er bereits im Feld steht.",
+				callback: () => {
+					feld.focus();
+				},
 			});
-			dialog.text("Der ausgewählte Wert muss nicht ergänzt werden, weil er bereits im Feld steht.");
 		}
 	},
 	// Dropdown-Liste schließen

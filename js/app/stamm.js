@@ -6,14 +6,18 @@ let stamm = {
 	oeffnen () {
 		// Sperre für macOS (Menüpunkte können nicht deaktiviert werden)
 		if (!kartei.wort) {
-			dialog.oeffnen("alert");
-			dialog.text("Um die Funktion <i>Kartei &gt; Formvarianten</i> zu nutzen, muss eine Kartei geöffnet sein.");
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Um die Funktion <i>Kartei &gt; Formvarianten</i> zu nutzen, muss eine Kartei geöffnet sein.",
+			});
 			return;
 		}
 		// wird die Variantenliste gerade erstellt, darf sich das Fenster nicht öffnen
 		if (stamm.ladevorgang) {
-			dialog.oeffnen("alert");
-			dialog.text("Die Liste der Formvarianten wird gerade erstellt.\nVersuchen Sie es in ein paar Sekunden noch einmal!");
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Die Liste der Formvarianten wird gerade erstellt.\nVersuchen Sie es in ein paar Sekunden noch einmal!",
+			});
 			return;
 		}
 		// Fenster öffnen oder in den Vordergrund holen
@@ -173,8 +177,13 @@ let stamm = {
 			va = helfer.textTrim(text.value);
 		// Uppala! Keine Variante angegeben!
 		if (!va) {
-			dialog.oeffnen("alert", () => text.select());
-			dialog.text("Sie haben keine Variante eingegeben.");
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Sie haben keine Variante eingegeben.",
+				callback: () => {
+					text.select();
+				},
+			});
 			return;
 		}
 		// Variante schon registriert?
@@ -200,8 +209,13 @@ let stamm = {
 		helfer.formVariRegExp();
 		// Abbruchmeldung
 		function abbruch () {
-			dialog.oeffnen("alert", () => text.select());
-			dialog.text("Die Variante ist schon in der Liste.");
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Die Variante ist schon in der Liste.",
+				callback: () => {
+					text.select();
+				},
+			});
 		}
 	},
 	// Liste der Formvariante sortieren
@@ -233,30 +247,33 @@ let stamm = {
 		a.addEventListener("click", function(evt) {
 			evt.preventDefault();
 			let fv = this.dataset.fv;
-			dialog.oeffnen("confirm", function() {
-				if (dialog.antwort) {
-					// Index ermitteln
-					let idx = -1,
-						fo = data.fv[stamm.wortAkt].fo;
-					for (let i = 0, len = fo.length; i < len; i++) {
-						if (fo[i].va === fv) {
-							idx = i;
-							break;
+			dialog.oeffnen({
+				typ: "confirm",
+				text: `Soll <i>${fv}</i> wirklich aus der Liste entfernt werden?`,
+				callback: () => {
+					if (dialog.antwort) {
+						// Index ermitteln
+						let idx = -1,
+							fo = data.fv[stamm.wortAkt].fo;
+						for (let i = 0, len = fo.length; i < len; i++) {
+							if (fo[i].va === fv) {
+								idx = i;
+								break;
+							}
 						}
+						// Löschen
+						fo.splice(idx, 1);
+						// neu auflisten
+						stamm.auflisten();
+						// Änderungsmarkierung setzen
+						kartei.karteiGeaendert(true);
+						// regulären Ausdruck mit allen Formvarianten neu erstellen
+						helfer.formVariRegExp();
+					} else {
+						document.getElementById("stamm-text").focus();
 					}
-					// Löschen
-					fo.splice(idx, 1);
-					// neu auflisten
-					stamm.auflisten();
-					// Änderungsmarkierung setzen
-					kartei.karteiGeaendert(true);
-					// regulären Ausdruck mit allen Formvarianten neu erstellen
-					helfer.formVariRegExp();
-				} else {
-					document.getElementById("stamm-text").focus();
-				}
+				},
 			});
-			dialog.text(`Soll <i>${fv}</i> wirklich aus der Liste entfernt werden?`);
 		});
 	},
 	// Klick auf Button
@@ -386,8 +403,10 @@ let stamm = {
 			if (detail) {
 				text += `\n<h3>Fehlermeldung</h3>\n${detail}`;
 			}
-			dialog.oeffnen("alert");
-			dialog.text(text);
+			dialog.oeffnen({
+				typ: "alert",
+				text: text,
+			});
 		}
 	},
 	// Arrays mit allen für die App relevanten Varianten in data.fv eintragen

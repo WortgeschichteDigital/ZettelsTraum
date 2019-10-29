@@ -34,8 +34,10 @@ let redaktion = {
 	oeffnen () {
 		// Sperre für macOS (Menüpunkte können nicht deaktiviert werden)
 		if (!kartei.wort) {
-			dialog.oeffnen("alert");
-			dialog.text("Um die Funktion <i>Kartei &gt; Redaktion</i> zu nutzen, muss eine Kartei geöffnet sein.");
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Um die Funktion <i>Kartei &gt; Redaktion</i> zu nutzen, muss eine Kartei geöffnet sein.",
+			});
 			return;
 		}
 		// Fenster öffnen oder in den Vordergrund holen
@@ -370,14 +372,17 @@ let redaktion = {
 		a.addEventListener("click", function(evt) {
 			evt.preventDefault();
 			const slot = parseInt(this.parentNode.parentNode.dataset.slot, 10);
-			dialog.oeffnen("confirm", function() {
-				if (dialog.antwort) {
-					data.rd.splice(slot, 1);
-					kartei.karteiGeaendert(true);
-					redaktion.tabelle();
-				}
+			dialog.oeffnen({
+				typ: "confirm",
+				text: `Soll der Eintrag <i>${data.rd[slot].er}</i> mit dem Datum <i>${data.rd[slot].da}</i> wirklich gelöscht werden?`,
+				callback: () => {
+					if (dialog.antwort) {
+						data.rd.splice(slot, 1);
+						kartei.karteiGeaendert(true);
+						redaktion.tabelle();
+					}
+				},
 			});
-			dialog.text(`Soll der Eintrag <i>${data.rd[slot].er}</i> mit dem Datum <i>${data.rd[slot].da}</i> wirklich gelöscht werden?`);
 		});
 	},
 	// Meldung auswerfen, falls mit den Eingaben etwas nicht stimmt
@@ -386,7 +391,12 @@ let redaktion = {
 	//   feld = Element
 	//     (Feld, das später fokussiert werden soll)
 	alert (text, feld) {
-		dialog.oeffnen("alert", () => feld.focus());
-		dialog.text(text);
+		dialog.oeffnen({
+			typ: "alert",
+			text: text,
+			callback: () => {
+				feld.focus();
+			},
+		});
 	},
 };

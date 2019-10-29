@@ -40,8 +40,10 @@ window.addEventListener("load", async () => {
 	ipcRenderer.on("belege-hinzufuegen", () => {
 		// Sperre für macOS (Menüpunkte können nicht deaktiviert werden)
 		if (!kartei.wort) {
-			dialog.oeffnen("alert");
-			dialog.text("Um die Funktion <i>Belege &gt; Hinzufügen</i> zu nutzen, muss eine Kartei geöffnet sein.");
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Um die Funktion <i>Belege &gt; Hinzufügen</i> zu nutzen, muss eine Kartei geöffnet sein.",
+			});
 			return;
 		}
 		speichern.checkInit(() => beleg.erstellen());
@@ -49,8 +51,10 @@ window.addEventListener("load", async () => {
 	ipcRenderer.on("belege-auflisten", () => {
 		// Sperre für macOS (Menüpunkte können nicht deaktiviert werden)
 		if (!kartei.wort) {
-			dialog.oeffnen("alert");
-			dialog.text("Um die Funktion <i>Belege &gt; Auflisten</i> zu nutzen, muss eine Kartei geöffnet sein.");
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Um die Funktion <i>Belege &gt; Auflisten</i> zu nutzen, muss eine Kartei geöffnet sein.",
+			});
 			return;
 		}
 		speichern.checkInit(() => liste.wechseln());
@@ -80,9 +84,13 @@ window.addEventListener("load", async () => {
 	});
 	// Dialog
 	ipcRenderer.on("dialog-anzeigen", (evt, text) => {
-		dialog.oeffnen("alert");
-		dialog.text(text);
+		dialog.oeffnen({
+			typ: "alert",
+			text: text,
+		});
 	});
+	// Before-Unload
+	ipcRenderer.on("before-unload", () => helfer.beforeUnload());
 
 	// EVENTS: TASTATUREINGABEN
 	document.addEventListener("keydown", tastatur.init);
@@ -158,6 +166,7 @@ window.addEventListener("load", async () => {
 			beleg.belegSpeichern(i);
 		}
 	});
+	document.getElementById("beleg-bs").addEventListener("paste", evt => beleg.pasteBs(evt));
 	document.querySelectorAll("#beleg .icon-link").forEach(a => {
 		if (a.classList.contains("icon-stern")) { // Bewertung
 			beleg.bewertungEvents(a);
@@ -235,6 +244,7 @@ window.addEventListener("load", async () => {
 			notizen.change(i);
 		}
 	});
+	document.getElementById("notizen-feld").addEventListener("paste", evt => notizen.paste(evt));
 	// Lexika-Fenster
 	document.querySelectorAll("#lexika input").forEach(i => {
 		if (i.type === "button") {
@@ -315,33 +325,6 @@ window.addEventListener("load", async () => {
 	// FENSTER FREISCHALTEN
 	zuletzt.aufbauen();
 	helfer.fensterGeladen();
-});
-
-// Schließen unterbrechen, falls Daten noch nicht gespeichert wurden
-window.addEventListener("beforeunload", async evt => {
-	// Bedeutungen-Fenster ggf. schließen
-	bedeutungenWin.schliessen();
-	// Status des Fensters speichern
-	const {ipcRenderer} = require("electron");
-	optionen.data.fenster = await ipcRenderer.invoke("fenster-status", winInfo.winId, "fenster");
-	optionen.speichern();
-	// Schließen ggf. unterbrechen + Kartei ggf. entsperren
-	if (notizen.geaendert ||
-			tagger.geaendert ||
-			bedeutungen.geaendert ||
-			beleg.geaendert ||
-			kartei.geaendert) {
-		speichern.checkInit(() => {
-			const {ipcRenderer} = require("electron");
-			ipcRenderer.invoke("fenster-schliessen");
-		}, {
-			kartei: true,
-		});
-		evt.returnValue = "false";
-	} else {
-		kartei.lock(kartei.pfad, "unlock");
-		ipcRenderer.send("fenster-dereferenzieren", winInfo.winId);
-	}
 });
 
 // Fehler an den Main-Prozess melden

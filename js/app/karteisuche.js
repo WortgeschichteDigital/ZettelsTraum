@@ -123,18 +123,24 @@ let karteisuche = {
 		});
 		// Fehler oder keine Datei ausgewählt
 		if (result.message) { // Fehler
-			dialog.oeffnen("alert");
-			dialog.text(`Beim Öffnen des Datei-Dialogs ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${result.message}</p>`);
+			dialog.oeffnen({
+				typ: "alert",
+				text: `Beim Öffnen des Dateidialogs ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${result.message}</p>`,
+			});
 			return;
 		} else if (result.canceled) { // keine Datei ausgewählt
-			dialog.oeffnen("alert");
-			dialog.text("Sie haben keinen Pfad ausgewählt.");
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Sie haben keinen Pfad ausgewählt.",
+			});
 			return;
 		}
 		// Ist der Pfad schon in der Liste?
 		if (optionen.data.karteisuche.pfade.includes(result.filePaths[0])) {
-			dialog.oeffnen("alert");
-			dialog.text("Der gewählte Pfad wurde schon aufgenommen.");
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Der gewählte Pfad wurde schon aufgenommen.",
+			});
 			return;
 		}
 		// Pfad hinzufügen
@@ -164,8 +170,10 @@ let karteisuche = {
 	//     (das Fehler-Icon)
 	pfadFehler (img) {
 		img.addEventListener("click", function() {
-			dialog.oeffnen("alert");
-			dialog.text("Der Pfad konnte nicht gefunden werden.");
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Der Pfad konnte nicht gefunden werden.",
+			});
 		});
 	},
 	// speichert das Input-Element, das vor dem Start der Suche den Fokus hatte
@@ -174,21 +182,26 @@ let karteisuche = {
 	suchenPrep () {
 		// Erst Pfad hinzufügen!
 		if (!optionen.data.karteisuche.pfade.length) {
-			dialog.oeffnen("alert", function() {
-				karteisuche.pfadHinzufuegen();
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Sie müssen zunächst einen Pfad hinzufügen.\nIn diesem Pfad wird dann rekursiv gesucht.",
+				callback: () => {
+					karteisuche.pfadHinzufuegen();
+				},
 			});
-			dialog.text("Sie müssen zunächst einen Pfad hinzufügen.\nIn diesem Pfad wird dann rekursiv gesucht.");
 			document.getElementById("karteisuche-suche-laeuft").classList.add("aus");
 			return;
 		}
 		// Keiner der Pfade wurde gefunden!
 		if (!karteisuche.pfadGefunden.length) {
-			dialog.oeffnen("alert");
 			let text = "Der Pfad in der Liste konnte nicht gefunden werden.";
 			if (optionen.data.karteisuche.pfade.length > 1) {
 				text = "Die Pfade in der Liste konnten nicht gefunden werden.";
 			}
-			dialog.text(text);
+			dialog.oeffnen({
+				typ: "alert",
+				text: text,
+			});
 			document.getElementById("karteisuche-suche-laeuft").classList.add("aus");
 			return;
 		}
@@ -206,12 +219,14 @@ let karteisuche = {
 		}
 		// Wurden Pfade gefunden? Wenn nein => alle Checkboxes abgewählt
 		if (!pfade.length) {
-			dialog.oeffnen("alert");
 			let text = "Pfad";
 			if (optionen.data.karteisuche.pfade.length !== karteisuche.pfadGefunden.length) {
 				text = "der existierenden Pfade";
 			}
-			dialog.text(`Sie müssen mindestens einen ${text} auswählen.`);
+			dialog.oeffnen({
+				typ: "alert",
+				text: `Sie müssen mindestens einen ${text} auswählen.`,
+			});
 			document.getElementById("karteisuche-suche-laeuft").classList.add("aus");
 			return;
 		}
@@ -234,8 +249,7 @@ let karteisuche = {
 	async suchen (pfade) {
 		// Suche starten
 		karteisuche.wgd = [];
-		const fs = require("fs"),
-			fsP = fs.promises;
+		const fsP = require("fs").promises;
 		for (let ordner of pfade) {
 			const existiert = await karteisuche.existenzOrdner(ordner);
 			if (existiert) {
@@ -246,7 +260,7 @@ let karteisuche = {
 		karteisuche.filterWerteSammeln();
 		// Karteien analysieren
 		for (let kartei of karteisuche.wgd) {
-			const content = await fsP.readFile(kartei.pfad, {encoding: "utf-8", flag: "r"});
+			const content = await fsP.readFile(kartei.pfad, {encoding: "utf-8"});
 			// Kartei einlesen
 			let datei = {};
 			try {
@@ -292,8 +306,7 @@ let karteisuche = {
 	//   ordner = String
 	//     (Ordner, von dem aus die Suche beginnen soll)
 	async ordnerParsen (ordner) {
-		const fs = require("fs"),
-			fsP = fs.promises;
+		const fsP = require("fs").promises;
 		try {
 			let files = await fsP.readdir(ordner);
 			for (let i of files) {

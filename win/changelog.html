@@ -141,6 +141,18 @@
 					</li>
 
 					<li>
+						<p><a href="#karteikarte" class="link-handbuch">Karteikarte</a>: Fügte man in das Textfeld <i>Beleg</i> Text aus der Zwischenablage mithilfe des Icons <img src="../img/einfuegen.svg" width="24" height="24" alt=""> ein, wurde schon zuvor analysiert, ob in diesem Text <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>-Formatierungen zu finden waren. Wenn ja, wurde er bereinigt und mit den für sinnvoll und unschädlich erachteten Tags in das Textfeld eingefügt.</p>
+
+						<p>Dies funktioniert nun auch, wenn man das Tastaturkürzel <kbd>Strg</kbd> + <kbd>V</kbd>, die entsprechende Funktion im <a href="#menueBearbeiten" class="link-handbuch">Menü Bearbeiten</a> oder das Rechtsklickmenü nutzt – mit dem wesentlichen Unterschied, dass der bereinigte Text an der Stelle eingefügt wird, an der sich der Cursor gerade befindet. Mithilfe des Icons konnte man das Feld nur überschreiben oder am Ende ergänzen.</p>
+
+						<p>Selbst dann, wenn sich kein formatierter Text in der Zwischenablage befindet, sondern nur Plain-Text, wird nun beim Einfügen von Text in das <i>Beleg</i>-Feld eine Bereinigen vorgenommen, um unerwünschte <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>-Tags zu eliminieren. Dies gilt auch für das Einfügen mithilfe des Icons <img src="../img/einfuegen.svg" width="24" height="24" alt="">. Tippen darf man hingegen prinzipiell was man will – und dies wird dann auch so gespeichert.</p>
+
+						<p><span class="obacht">Sicherheit:</span> Das automatische Bereinigen des Originaltextes ist zugleich eine Sicherheitsmaßnahme. Da das Textfeld <i>Beleg</i> prinzipiell jeden <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>-Tag enthalten darf und dieser bei der Darstellung in der <a href="#belegliste" class="link-handbuch">Belegliste</a> und in der <a href="#karteikarte-leseansicht" class="link-handbuch">Leseansicht der Karteikarte</a> auch interpretiert wird, könnte man auf diese Weise ungewollt Schadcode in die App laden. Das Sicherheitsrisiko ist zur Zeit allerdings überschaubar, da die strikte <span lang="en">Content Security Policy</span> des Programms das Laden wohl verhindern würde.</p>
+					</li>
+
+					<li><span class="obacht">Sicherheit:</span> Auch in der <a href="#menueKartei-notizen" class="link-handbuch">Notizen-Funktion</a> wird das Einfügen von Text via <kbd>Strg</kbd> + <kbd>V</kbd> oder die Programmmenüs nun abgefangen. Der Text wird vor dem Einfügen radikal von allen <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>-Tags befreit, keine Formatierung bleibt erhalten, allein Absätze werden ermittelt und durch Leerzeilen voneinander getrennt. Unkontrollierte <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>-Formatierungen wären in diesem Textfeld ebenso bedenklich wie im Textfeld <i>Beleg</i> der Karteikarte (<abbr title="siehe oben">s. o.</abbr>).</li>
+
+					<li>
 						<p>An verschiedenen Stellen des Programms wurden Platzhaltertexte für leere Textfelder ergänzt, sodass nun alle Textfelder einen solchen Platzhalter haben sollten. Er erscheint, wenn in dem Feld noch keine Eingabe getätigt wurde. Die <a href="#karteikarte" class="link-handbuch">Karteikarte</a> wurde davon ausgenommen, um das Formular nicht noch unruhiger zu machen.</p>
 
 						<p>Als Nebeneffekt dieser Änderung konnte die erklärende Kopfzeile im <a href="#menueKartei-redaktion" class="link-handbuch">Redaktions-Fenster</a> entfernt werden. Die Platzhalter übernehmen ihre Funktion.</p>
@@ -181,9 +193,9 @@
 
 						<p>Umgebaut wurden besonders die Init-Scripts aller Nebenfenster, das Öffnen von Bedeutungsgerüst-Fenstern und die Art und Weise, wie Rechtsklickmenüs und Dateidialoge erzeugt werden.</p>
 
-						<p>Ferner wurden alle Aufrufe des Remote-Moduls – davon gab es eine nicht unbeträchtliche Zahl! – aus den Renderer-Prozessen entfernen. Die Verwendung dieses <i>Electron</i>-Moduls stellte ein <a href="https://medium.com/@nornagon/electrons-remote-module-considered-harmful-70d69500f31">potenzielles Sicherheitsrisiko</a> für die App dar. Alle über diese <q>Fernbedienung</q> getätigten Aufrufe wurden komplett in den Hauptprozess verlagert, wo sie auch hingehören.</p>
+						<p><span class="obacht">Sicherheit:</span> Ferner wurden alle Aufrufe des Remote-Moduls – davon gab es eine nicht unbeträchtliche Zahl! – aus den Renderer-Prozessen entfernt. Die Verwendung dieses <i>Electron</i>-Moduls stellte ein <a href="https://medium.com/@nornagon/electrons-remote-module-considered-harmful-70d69500f31">potenzielles Sicherheitsrisiko</a> für die App dar. Alle ürsprünglich über diese <q>Fernbedienung</q> getätigten Aufrufe wurden mit dieser Version in den Hauptprozess verlagert, wo sie auch hingehören.</p>
 
-						<p>Ferner fand an vielen Stellen einer stärkere Promisifizierung statt – sowohl in der <span class="datei">main.js</span>, die darüber hinaus reorganisiert wurde, als auch in den Renderer-Prozessen, aus denen heraus nun keinerlei synchrone Anfragen mehr an den Hauptprozess gestellt werden.</p>
+						<p>Ferner fand an vielen Stellen einer stärkere Promisifizierung statt – sowohl in der <span class="datei">main.js</span>, die darüber hinaus reorganisiert wurde, als auch in den Renderer-Prozessen, aus denen heraus nun keinerlei synchrone Anfragen mehr an den Hauptprozess gestellt werden. Alle Dateisystemzugriffe erfolgen nun asynchron, sodass die App durch sie nicht blockiert wird (mit Ausnahme des bereits oben erwähnten <code class="quelltext">fs.existsSync()</code>).</p>
 					</li>
 
 					<li>Die <a href="#" class="link-dokumentation">technische Dokumentation</a> wurde wegen der vielen Änderungen und Ergänzungen auf der technischen Ebene in den Abschnitten <a href="#framework" class="link-dokumentation">Framework</a> sowie <a href="#ordner" class="link-dokumentation">Ordner und Dateien</a> überarbeitet.</li>

@@ -9,46 +9,74 @@ let belegImport = {
 		const url = helfer.textTrim(dta.value, true);
 		// URL fehlt
 		if (!url) {
-			dialog.oeffnen("alert", () => dta.select());
-			dialog.text("Sie haben keine URL eingegeben.");
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Sie haben keine URL eingegeben.",
+				callback: () => {
+					dta.select();
+				},
+			});
 			return;
 		}
 		// Ist das überhaupt eine URL?
 		if (!/^https*:\/\//.test(url)) {
-			dialog.oeffnen("alert", () => dta.select());
-			dialog.text("Das scheint keine URL zu sein.");
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Das scheint keine URL zu sein.",
+				callback: () => {
+					dta.select();
+				},
+			});
 			return;
 		}
 		// URL nicht vom DTA
 		if (!/^https*:\/\/www\.deutschestextarchiv\.de\//.test(url)) {
-			dialog.oeffnen("alert", () => dta.select());
-			dialog.text("Die URL stammt nicht vom DTA.");
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Die URL stammt nicht vom DTA.",
+				callback: () => {
+					dta.select();
+				},
+			});
 			return;
 		}
 		// Titel-ID ermitteln
 		let titel_id = belegImport.DTAGetTitelId(url);
 		if (!titel_id) {
-			dialog.oeffnen("alert", () => dta.focus());
-			dialog.text("Beim ermitteln der Titel-ID ist etwas schiefgelaufen.\nIst die URL korrekt?");
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Beim ermitteln der Titel-ID ist etwas schiefgelaufen.\nIst die URL korrekt?",
+				callback: () => {
+					dta.focus();
+				},
+			});
 			return;
 		}
 		// Faksimileseite ermitteln
 		let fak = belegImport.DTAGetFak(url, titel_id);
 		if (!fak) {
-			dialog.oeffnen("alert", () => dta.focus());
-			dialog.text("Beim ermitteln der Seite ist etwas schiefgelaufen.\nIst die URL korrekt?");
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Beim ermitteln der Seite ist etwas schiefgelaufen.\nIst die URL korrekt?",
+				callback: () => {
+					dta.focus();
+				},
+			});
 			return;
 		}
 		// Ist die Kartei schon ausgefüllt?
 		if (beleg.data.da || beleg.data.au || beleg.data.bs || beleg.data.kr || beleg.data.ts || beleg.data.qu) {
-			dialog.oeffnen("confirm", function() {
-				if (dialog.antwort) {
-					startImport();
-				} else {
-					dta.focus();
-				}
+			dialog.oeffnen({
+				typ: "confirm",
+				text: "Die Karteikarte ist teilweise schon gefüllt.\nDie Felder <i>Datum, Autor, Beleg, Korpus, Textsorte</i> und <i>Quelle</i> werden beim Importieren der Textdaten aus dem DTA überschrieben.\nMöchten Sie den DTA-Import wirklich starten?",
+				callback: () => {
+					if (dialog.antwort) {
+						startImport();
+					} else {
+						dta.focus();
+					}
+				},
 			});
-			dialog.text("Die Karteikarte ist teilweise schon gefüllt.\nDie Felder <i>Datum, Autor, Beleg, Korpus, Textsorte</i> und <i>Quelle</i> werden beim Importieren der Textdaten aus dem DTA überschrieben.\nMöchten Sie den DTA-Import wirklich starten?");
 			return;
 		}
 		// Dann mal los...
@@ -158,11 +186,14 @@ let belegImport = {
 	//   fehlertyp = String
 	//     (die Beschreibung des Fehlers)
 	DTAFehler (fehlertyp) {
-		dialog.oeffnen("alert", function() {
-			let dta = document.getElementById("beleg-dta");
-			dta.select();
+		dialog.oeffnen({
+			typ: "alert",
+			text: `Beim Download der Textdaten aus dem DTA ist ein <strong>Fehler</strong> aufgetreten.\n<h3>Fehlertyp</h3>\n${fehlertyp}`,
+			callback: () => {
+				let dta = document.getElementById("beleg-dta");
+				dta.select();
+			},
 		});
-		dialog.text(`Beim Download der Textdaten aus dem DTA ist ein <strong>Fehler</strong> aufgetreten.\n<h3>Fehlertyp</h3>\n${fehlertyp}`);
 	},
 	// DTA-Import: Meta-Daten des Titels importieren
 	//   xml = Document
@@ -669,10 +700,13 @@ let belegImport = {
 		for (let i of helfer.formVariRegExpRegs) {
 			let form_reg = new RegExp(i, "i");
 			if (!form_reg.test(beleg.data.bs)) {
-				dialog.oeffnen("alert", function() {
-					document.getElementById("beleg-dta").focus();
+				dialog.oeffnen({
+					typ: "alert",
+					text: "Das Karteiwort wurde im gerade importierten Belegtext nicht gefunden.",
+					callback: () => {
+						document.getElementById("beleg-dta").focus();
+					},
 				});
-				dialog.text("Das Karteiwort wurde im gerade importierten Belegtext nicht gefunden.");
 				break;
 			}
 		}

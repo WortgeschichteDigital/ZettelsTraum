@@ -72,8 +72,8 @@ let overlay = {
 			} else { // Schließen durch Link oder Esc
 				dialog.antwort = null;
 			}
-			if (dialog.funktion) { // Soll eine Funktion ausgeführt werden?
-				dialog.funktion();
+			if (dialog.callback) { // Soll eine Funktion ausgeführt werden?
+				dialog.callback();
 			}
 		} else if (fenster.id === "geruestwechseln" &&
 				!document.getElementById("beleg").classList.contains("aus") &&

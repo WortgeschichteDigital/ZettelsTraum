@@ -5,8 +5,10 @@ let bedeutungenGeruest = {
 	oeffnen () {
 		// Sperre für macOS (Menüpunkte können nicht deaktiviert werden)
 		if (!kartei.wort) {
-			dialog.oeffnen("alert");
-			dialog.text("Um die Funktion <i>Kartei &gt; Bedeutungsgerüst wechseln</i> zu nutzen, muss eine Kartei geöffnet sein.");
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Um die Funktion <i>Kartei &gt; Bedeutungsgerüst wechseln</i> zu nutzen, muss eine Kartei geöffnet sein.",
+			});
 			return;
 		}
 		// Fenster wirklich öffnen?
@@ -15,16 +17,22 @@ let bedeutungenGeruest = {
 			obj = bedeutungen.data;
 		}
 		if (Object.keys(obj.gr).length === 1) {
-			dialog.oeffnen("alert", function() {
-				bedeutungenGeruest.bedeutungsfeldFokus();
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Die Kartei hat nur ein Bedeutungsgerüst.",
+				callback: () => {
+					bedeutungenGeruest.bedeutungsfeldFokus();
+				},
 			});
-			dialog.text("Die Kartei hat nur ein Bedeutungsgerüst.");
 			return;
 		} else if (beleg.geaendertBd) {
-			dialog.oeffnen("alert", function() {
-				bedeutungenGeruest.bedeutungsfeldFokus();
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Sie haben das Bedeutungsfeld geändert, aber noch nicht gespeichert.\nBeim Wechsel des Bedeutungsgerüsts vor dem Speichern gingen die Änderungen verloren.",
+				callback: () => {
+					bedeutungenGeruest.bedeutungsfeldFokus();
+				},
 			});
-			dialog.text("Sie haben das Bedeutungsfeld geändert, aber noch nicht gespeichert.\nBeim Wechsel des Bedeutungsgerüsts vor dem Speichern gingen die Änderungen verloren.");
 			return;
 		}
 		// Fenster öffnen

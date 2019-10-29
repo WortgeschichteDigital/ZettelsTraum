@@ -1489,8 +1489,10 @@ let filter = {
 		// Macht es überhaupt Sinn, die Karte anzuzeigen?
 		let jahre = Object.keys(filter.zeitraumTrefferCache);
 		if (jahre.length === 1) {
-			dialog.oeffnen("alert");
-			dialog.text("Alle Belege befinden sich im selben Zeitraum.\nDie Verteilungsgrafik wird nicht anzeigt.");
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Alle Belege befinden sich im selben Zeitraum.\nDie Verteilungsgrafik wird nicht anzeigt.",
+			});
 			return;
 		}
 		// Fenster öffnen od. in den Vordergrund holen
@@ -1676,8 +1678,10 @@ let filter = {
 	suche () {
 		// Sperre für macOS (Menüpunkte können nicht deaktiviert werden)
 		if (!kartei.wort) {
-			dialog.oeffnen("alert");
-			dialog.text("Um die Funktion <i>Kartei &gt; Suche</i> zu nutzen, muss eine Kartei geöffnet sein.");
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Um die Funktion <i>Kartei &gt; Suche</i> zu nutzen, muss eine Kartei geöffnet sein.",
+			});
 			return;
 		}
 		speichern.checkInit(() => {

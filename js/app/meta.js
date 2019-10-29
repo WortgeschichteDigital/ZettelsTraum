@@ -5,8 +5,10 @@ let meta = {
 	oeffnen () {
 		// Sperre für macOS (Menüpunkte können nicht deaktiviert werden)
 		if (!kartei.wort) {
-			dialog.oeffnen("alert");
-			dialog.text("Um die Funktion <i>Kartei &gt; Metadaten</i> zu nutzen, muss eine Kartei geöffnet sein.");
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Um die Funktion <i>Kartei &gt; Metadaten</i> zu nutzen, muss eine Kartei geöffnet sein.",
+			});
 			return;
 		}
 		// Fenster öffnen oder in den Vordergrund holen
@@ -90,14 +92,24 @@ let meta = {
 			va = helfer.textTrim(be.value);
 		// Uppala! Keine BearbeiterIn angegeben!
 		if (!va) {
-			dialog.oeffnen("alert", () => be.select());
-			dialog.text("Sie haben keinen Namen eingegeben.");
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Sie haben keinen Namen eingegeben.",
+				callback: () => {
+					be.select();
+				},
+			});
 			return;
 		}
 		// BearbeiterIn schon registriert
 		if (data.be.includes(va)) {
-			dialog.oeffnen("alert", () => be.select());
-			dialog.text("Die BearbeiterIn ist schon in der Liste.");
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Die BearbeiterIn ist schon in der Liste.",
+				callback: () => {
+					be.select();
+				},
+			});
 			return;
 		}
 		// BearbeiterIn ergänzen und sortieren
@@ -117,21 +129,24 @@ let meta = {
 		a.addEventListener("click", function(evt) {
 			evt.preventDefault();
 			let bearb = this.dataset.bearb;
-			dialog.oeffnen("confirm", function() {
-				if (dialog.antwort) {
-					// Löschen
-					data.be.splice(data.be.indexOf(bearb), 1);
-					// neu auflisten
-					meta.bearbAuflisten();
-					// Änderungsmarkierung setzen
-					kartei.karteiGeaendert(true);
-					// Erinnerungen-Icon auffrischen
-					erinnerungen.check();
-				} else {
-					document.getElementById("meta-be").focus();
-				}
+			dialog.oeffnen({
+				typ: "confirm",
+				text: `Soll <i>${bearb}</i> wirklich aus der Liste entfernt werden?`,
+				callback: () => {
+					if (dialog.antwort) {
+						// Löschen
+						data.be.splice(data.be.indexOf(bearb), 1);
+						// neu auflisten
+						meta.bearbAuflisten();
+						// Änderungsmarkierung setzen
+						kartei.karteiGeaendert(true);
+						// Erinnerungen-Icon auffrischen
+						erinnerungen.check();
+					} else {
+						document.getElementById("meta-be").focus();
+					}
+				},
 			});
-			dialog.text(`Soll <i>${bearb}</i> wirklich aus der Liste entfernt werden?`);
 		});
 	},
 	// Klick auf Button

@@ -115,9 +115,15 @@ let bedeutungenGerueste = {
 	del (a) {
 		a.addEventListener("click", function(evt) {
 			evt.preventDefault();
-			const id = this.parentNode.parentNode.dataset.id;
-			dialog.oeffnen("confirm", function() {
-				if (dialog.antwort) {
+			const id = this.parentNode.parentNode.dataset.id,
+				name = bedeutungen.data.gr[id].na ? bedeutungen.data.gr[id].na : "";
+			dialog.oeffnen({
+				typ: "confirm",
+				text: `Soll <i>Gerüst ${id}${name ? ` (${name})` : ""}</i> wirklich gelöscht werden?`,
+				callback: () => {
+					if (!dialog.antwort) {
+						return;
+					}
 					// betroffene Bedeutungen aus den Karteikarten zum Löschen vormerken
 					for (let i in data.ka) {
 						if (!data.ka.hasOwnProperty(i)) {
@@ -145,10 +151,8 @@ let bedeutungenGerueste = {
 					bedeutungenGerueste.aufbauen();
 					// Änderungsmarkierung setzen
 					bedeutungen.bedeutungenGeaendert(true);
-				}
+				},
 			});
-			const name = bedeutungen.data.gr[id].na ? bedeutungen.data.gr[id].na : "";
-			dialog.text(`Soll <i>Gerüst ${id}${name ? ` (${name})` : ""}</i> wirklich gelöscht werden?`);
 		});
 	},
 	// Name eines Gerüstes eingeben/ändern

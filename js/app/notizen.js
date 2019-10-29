@@ -5,8 +5,10 @@ let notizen = {
 	oeffnen () {
 		// Sperre für macOS (Menüpunkte können nicht deaktiviert werden)
 		if (!kartei.wort) {
-			dialog.oeffnen("alert");
-			dialog.text("Um die Funktion <i>Kartei &gt; Notizen</i> zu nutzen, muss eine Kartei geöffnet sein.");
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Um die Funktion <i>Kartei &gt; Notizen</i> zu nutzen, muss eine Kartei geöffnet sein.",
+			});
 			return;
 		}
 		// Fenster öffnen oder in den Vordergrund holen
@@ -82,17 +84,20 @@ let notizen = {
 			return;
 		}
 		// Es sind also Notizen im Notizfeld. Speichern?
-		dialog.oeffnen("confirm", function() {
-			if (dialog.antwort) {
-				notizen.speichern();
-				notizen.schliessen();
-			} else if (dialog.antwort === false) {
-				notizen.schliessen();
-			} else {
-				document.getElementById("notizen-feld").focus();
-			}
+		dialog.oeffnen({
+			typ: "confirm",
+			text: "Die Notizen wurden noch nicht gespeichert.\nMöchten Sie die Eingaben nicht erst einmal speichern?",
+			callback: () => {
+				if (dialog.antwort) {
+					notizen.speichern();
+					notizen.schliessen();
+				} else if (dialog.antwort === false) {
+					notizen.schliessen();
+				} else {
+					document.getElementById("notizen-feld").focus();
+				}
+			},
 		});
-		dialog.text("Die Notizen wurden noch nicht gespeichert.\nMöchten Sie die Eingaben nicht erst einmal speichern?");
 	},
 	// Notizen löschen
 	//   confirmed = Boolean
@@ -109,13 +114,6 @@ let notizen = {
 			return;
 		}
 		// Sicherheitsfrage
-		dialog.oeffnen("confirm", function() {
-			if (dialog.antwort) {
-				loesche();
-			} else {
-				document.getElementById("notizen-feld").focus();
-			}
-		});
 		let speicher = [];
 		if (vorhanden.kartei) {
 			speicher.push("in der Kartei");
@@ -123,7 +121,17 @@ let notizen = {
 		if (vorhanden.feld) {
 			speicher.push("im Notizfeld");
 		}
-		dialog.text(`Sollen die Notizen ${speicher.join(" und ")} wirklich gelöscht werden?`);
+		dialog.oeffnen({
+			typ: "confirm",
+			text: `Sollen die Notizen ${speicher.join(" und ")} wirklich gelöscht werden?`,
+			callback: () => {
+				if (dialog.antwort) {
+					loesche();
+				} else {
+					document.getElementById("notizen-feld").focus();
+				}
+			},
+		});
 		// Löschfunktion
 		function loesche () {
 			data.no = "";
@@ -136,16 +144,19 @@ let notizen = {
 	//   schliessen = Boolean
 	//     (Notizen sollen geschlossen werden, wenn das Löschen abgelehnt wird)
 	frageLoeschenGespeicherte (schliessen) {
-		dialog.oeffnen("confirm", function() {
-			if (dialog.antwort) {
-				notizen.loeschen(true);
-			} else if (schliessen) { // Aufruf durch notizen.abbrechen()
-				notizen.schliessen();
-			} else { // Aufruf durch notizen.speichern()
-				document.getElementById("notizen-feld").focus();
-			}
+		dialog.oeffnen({
+			typ: "confirm",
+			text: "Das Notizfeld ist leer.\nSollen die in der Kartei gespeicherten Notizen gelöscht werden?",
+			callback: () => {
+				if (dialog.antwort) {
+					notizen.loeschen(true);
+				} else if (schliessen) { // Aufruf durch notizen.abbrechen()
+					notizen.schliessen();
+				} else { // Aufruf durch notizen.speichern()
+					document.getElementById("notizen-feld").focus();
+				}
+			},
 		});
-		dialog.text("Das Notizfeld ist leer.\nSollen die in der Kartei gespeicherten Notizen gelöscht werden?");
 	},
 	// Funktionen, die beim Schließen aufgerufen werden sollten
 	schliessen () {
@@ -221,6 +232,23 @@ let notizen = {
 			subtree: true,
 			characterData: true,
 		});
+	},
+	// blockiert die Verarbeitung von notizen.paste() kurzzeitig
+	pasteBlock: false,
+	// fängt das Pasten von Text ab und bereinigt den Text
+	//   evt = Object
+	//     (das Event-Objekt des Paste-Events)
+	paste (evt) {
+		if (notizen.pasteBlock) {
+			return;
+		}
+		let text = beleg.pasteBs(evt, false);
+		text = text.replace(/<.+?>/g, "");
+		const {clipboard} = require("electron");
+		clipboard.writeText(text);
+		notizen.pasteBlock = true;
+		document.execCommand("paste");
+		notizen.pasteBlock = false;
 	},
 	// speichert, ob der Inhalt des Notizenfelds geändert wurde
 	geaendert: false,

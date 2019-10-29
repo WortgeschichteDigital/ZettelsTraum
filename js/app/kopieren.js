@@ -9,8 +9,10 @@ let kopieren = {
 	init () {
 		// Sperre für macOS (Menüpunkte können nicht deaktiviert werden)
 		if (!kartei.wort) {
-			dialog.oeffnen("alert");
-			dialog.text("Um die Funktion <i>Belege &gt; Kopieren</i> zu nutzen, muss eine Kartei geöffnet sein.");
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Um die Funktion <i>Belege &gt; Kopieren</i> zu nutzen, muss eine Kartei geöffnet sein.",
+			});
 			return;
 		}
 		// Ist die Funktion schon an?
@@ -41,12 +43,15 @@ let kopieren = {
 	//     (vor dem Beenden der Funktion sollte nachgefragt werden)
 	uiOff (fragen = true) {
 		if (fragen && kopieren.belege.length) {
-			dialog.oeffnen("confirm", function() {
-				if (dialog.antwort) {
-					off();
-				}
+			dialog.oeffnen({
+				typ: "confirm",
+				text: "Soll die Kopierfunktion wirklich beendet werden?\nDie Liste der zu kopierenden Belege wird dabei geleert.",
+				callback: () => {
+					if (dialog.antwort) {
+						off();
+					}
+				},
 			});
-			dialog.text("Soll die Kopierfunktion wirklich beendet werden?\nDie Liste der zu kopierenden Belege wird dabei geleert.");
 			return;
 		}
 		off();
@@ -113,8 +118,10 @@ let kopieren = {
 	//     (ID der Karteikarte/des Belegs)
 	add (id) {
 		if (kopieren.belege.includes(id)) {
-			dialog.oeffnen("alert");
-			dialog.text(`<i>${liste.detailAnzeigenH3(id)}</i> ist schon in der Liste der zu kopierenden Belege.`);
+			dialog.oeffnen({
+				typ: "alert",
+				text: `<i>${liste.detailAnzeigenH3(id)}</i> ist schon in der Liste der zu kopierenden Belege.`,
+			});
 			return;
 		}
 		kopieren.belege.push(id);
@@ -177,21 +184,26 @@ let kopieren = {
 			return;
 		}
 		// Sicherheitsfrage
-		dialog.oeffnen("confirm", function() {
-			if (dialog.antwort) {
-				kopieren.belege = [];
-				kopieren.uiText();
-				kopieren.listeAufbauen();
-			}
+		dialog.oeffnen({
+			typ: "confirm",
+			text: "Soll die Liste der zu kopierenden Belege wirklich geleert werden?",
+			callback: () => {
+				if (dialog.antwort) {
+					kopieren.belege = [];
+					kopieren.uiText();
+					kopieren.listeAufbauen();
+				}
+			},
 		});
-		dialog.text("Soll die Liste der zu kopierenden Belege wirklich geleert werden?");
 	},
 	// Overlay-Fenster zum Einfügen der Belege öffnen
 	einfuegen () {
 		// Sperre für macOS (Menüpunkte können nicht deaktiviert werden)
 		if (!kartei.wort) {
-			dialog.oeffnen("alert");
-			dialog.text("Um die Funktion <i>Belege &gt; Einfügen</i> zu nutzen, muss eine Kartei geöffnet sein.");
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Um die Funktion <i>Belege &gt; Einfügen</i> zu nutzen, muss eine Kartei geöffnet sein.",
+			});
 			return;
 		}
 		// Overlay-Fenster öffnen
@@ -214,8 +226,10 @@ let kopieren = {
 			const feld = this.id.replace(/.+-/, "");
 			if (/^(bs|da|qu)$/.test(feld)) {
 				this.checked = true;
-				dialog.oeffnen("alert");
-				dialog.text("Die Datenfelder Datum, Beleg und Quelle müssen zwingend importiert werden.");
+				dialog.oeffnen({
+					typ: "alert",
+					text: "Die Datenfelder Datum, Beleg und Quelle müssen zwingend importiert werden.",
+				});
 				return;
 			}
 			optionen.data.kopieren[feld] = !optionen.data.kopieren[feld];
@@ -470,8 +484,10 @@ let kopieren = {
 		}
 		// keine Belegquellen vorhanden
 		if (!quelle) {
-			dialog.oeffnen("alert");
-			dialog.text("Beim Kopieren der Belege ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\nEs gibt keine Belegquelle, die Belege zum Einfügen liefern könnte.");
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Beim Kopieren der Belege ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\nEs gibt keine Belegquelle, die Belege zum Einfügen liefern könnte.",
+			});
 			return;
 		}
 		// Quelle = Zwischenablage oder Belegedatei
@@ -592,8 +608,10 @@ let kopieren = {
 			for (let id of fehler_bedeutungen) {
 				fehler_belege.push(liste.detailAnzeigenH3(id.toString()));
 			}
-			dialog.oeffnen("alert");
-			dialog.text(`Beim Importieren der Bedeutungen ist es in den folgenden Belegen zu einem Fehler gekommen:\n${fehler_belege.join("<br>")}`);
+			dialog.oeffnen({
+				typ: "alert",
+				text: `Beim Importieren der Bedeutungen ist es in den folgenden Belegen zu einem Fehler gekommen:\n${fehler_belege.join("<br>")}`,
+			});
 		}
 	},
 	// Basisdaten über die Belegmenge und das Fenster an den Main-Prozess senden
@@ -655,10 +673,13 @@ let kopieren = {
 		return kopie;
 	},
 	// Kopierliste in Datei exportieren
-	exportieren () {
+	async exportieren () {
 		// keine Belege in der Kopierliste
 		if (!kopieren.belege.length) {
-			kartei.dialogWrapper("Sie haben keine Belege ausgewählt.");
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Sie haben keine Belege ausgewählt.",
+			});
 			return;
 		}
 		// Daten zusammentragen
@@ -675,8 +696,7 @@ let kopieren = {
 		if (kopieren.belege.length === 1) {
 			num = "Beleg";
 		}
-		const {dialog} = require("electron").remote,
-			path = require("path");
+		const path = require("path");
 		let opt = {
 			title: "Belege exportieren",
 			defaultPath: path.join(appInfo.documents, `${kartei.wort}, ${kopieren.belege.length} ${num}.bwgd`),
@@ -691,24 +711,39 @@ let kopieren = {
 				},
 			],
 		};
-		dialog.showSaveDialog(null, opt)
-			.then(result => {
-				if (result.canceled) {
-					kartei.dialogWrapper("Die Belege wurden nicht gespeichert.");
-					return;
-				}
-				const fs = require("fs");
-				fs.writeFile(result.filePath, JSON.stringify(daten), function(err) {
-					if (err) {
-						kartei.dialogWrapper(`Beim Speichern der Belege ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.message}</p>`);
-					}
+		// Dialog anzeigen
+		const {ipcRenderer} = require("electron");
+		let result = await ipcRenderer.invoke("datei-dialog", {
+			open: false,
+			winId: winInfo.winId,
+			opt: opt,
+		});
+		// Fehler oder keine Datei ausgewählt
+		if (result.message) {
+			dialog.oeffnen({
+				typ: "alert",
+				text: `Beim Öffnen des Dateidialogs ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${result.message}</p>`,
+			});
+			return;
+		} else if (result.canceled) {
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Die Belege wurden nicht gespeichert.",
+			});
+			return;
+		}
+		// Datei schreiben
+		const fsP = require("fs").promises;
+		fsP.writeFile(result.filePath, JSON.stringify(daten))
+			.catch(err => {
+				dialog.oeffnen({
+					typ: "alert",
+					text: `Beim Speichern der Belege ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.message}</p>`,
 				});
-			})
-			.catch(err => kartei.dialogWrapper(`Beim Öffnen des Datei-Dialogs ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.message}</p>`));
+			});
 	},
 	// Kopierliste aus Datei importieren
-	importieren () {
-		const {dialog} = require("electron").remote;
+	async importieren () {
 		let opt = {
 			title: "Belege importieren",
 			defaultPath: appInfo.documents,
@@ -726,33 +761,56 @@ let kopieren = {
 				"openFile",
 			],
 		};
-		dialog.showOpenDialog(null, opt)
-			.then(result => {
-				if (result.canceled) {
-					kartei.dialogWrapper("Sie haben keine Datei ausgewählt.");
+		// Dialog anzeigen
+		const {ipcRenderer} = require("electron");
+		let result = await ipcRenderer.invoke("datei-dialog", {
+			open: true,
+			winId: winInfo.winId,
+			opt: opt,
+		});
+		// Fehler oder keine Datei ausgewählt
+		if (result.message) {
+			dialog.oeffnen({
+				typ: "alert",
+				text: `Beim Öffnen des Dateidialogs ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${result.message}</p>`,
+			});
+			return;
+		} else if (result.canceled) {
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Sie haben keine Datei ausgewählt.",
+			});
+			return;
+		}
+		// Datei einlesen
+		const fsP = require("fs").promises;
+		fsP.readFile(result.filePaths[0], {encoding: "utf-8"})
+			.then(content => {
+				let belegedatei_tmp = {};
+				try {
+					belegedatei_tmp = JSON.parse(content);
+				} catch (err_json) {
+					dialog.oeffnen({
+						typ: "alert",
+						text: `Beim Einlesen der Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n${err_json}`,
+					});
 					return;
 				}
-				const fs = require("fs");
-				fs.readFile(result.filePaths[0], "utf-8", function(err, content) {
-					if (err) {
-						kartei.dialogWrapper(`Beim Öffnen der Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.message}</p>`);
-						return;
-					}
-					let belegedatei_tmp = {};
-					try {
-						belegedatei_tmp = JSON.parse(content);
-					} catch (err_json) {
-						kartei.dialogWrapper(`Beim Einlesen der Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n${err_json}`);
-						return;
-					}
-					if (belegedatei_tmp.ty !== "bwgd") {
-						kartei.dialogWrapper(`Beim Einlesen der Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\nkeine Belege-Datei von <i>Wortgeschichte digital</i>`);
-						return;
-					}
-					kopieren.belegedatei = belegedatei_tmp.bl;
-					kopieren.einfuegenBasisdaten(true);
-				});
+				if (belegedatei_tmp.ty !== "bwgd") {
+					dialog.oeffnen({
+						typ: "alert",
+						text: `Beim Einlesen der Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\nkeine Belege-Datei von <i>Wortgeschichte digital</i>`,
+					});
+					return;
+				}
+				kopieren.belegedatei = belegedatei_tmp.bl;
+				kopieren.einfuegenBasisdaten(true);
 			})
-			.catch(err => kartei.dialogWrapper(`Beim Öffnen des Datei-Dialogs ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.message}</p>`));
+			.catch(err => {
+				dialog.oeffnen({
+					typ: "alert",
+					text: `Beim Öffnen der Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.message}</p>`,
+				});
+			});
 	},
 };

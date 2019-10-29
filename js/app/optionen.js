@@ -602,28 +602,16 @@ let optionen = {
 		// XML-Dateien ermitteln => Dateien überprüfen + laden
 		let xml = [],
 			promises = [];
-		new Promise((resolve, reject) => {
-			let config = {
-				encoding: "utf8",
-				withFileTypes: true,
-			};
-			const fs = require("fs");
-			fs.readdir(resources, config, function(err, dateien) {
-				if (err) {
-					reject(false);
-					return;
-				}
+		const fsP = require("fs").promises;
+		fsP.readdir(resources, {withFileTypes: true})
+			.then(dateien => {
 				for (let dirent of dateien) {
 					if (dirent.isFile() && /\.xml$/.test(dirent.name)) {
 						xml.push(dirent.name);
 					}
 				}
-				resolve(true);
-			});
-		})
-			.then(() => {
 				const path = require("path");
-				xml.forEach(function(i) {
+				xml.forEach(i => {
 					promises.push(optionen.tagsCheckLaden({
 						datei: path.join(resources, i),
 					}));
@@ -643,89 +631,89 @@ let optionen = {
 	//     (Typ der Datei, entspricht dem Namen des Wurzelelements)
 	tagsCheckLaden ({datei, typ = "-"}) {
 		return new Promise((resolve) => {
-			const fs = require("fs");
-			fs.readFile(datei, "utf-8", (err, content) => {
-				// Fehlermeldung (wahrscheinlich existiert die Datei nicht mehr)
-				if (err) {
-					optionen.tagsFehlerMeldungen[typ] = err.message;
-					resolve(false);
-					return;
-				}
-				// Datei parsen
-				let parsed = optionen.tagsParsen(content),
-					xml = parsed[0];
-				if (!xml) {
-					resolve(false);
-					return;
-				}
-				// ggf. Typ ermitteln, Konsistenz des Typs überprüfen
-				const xmlTyp = parsed[1];
-				if (typ === "-") {
-					typ = xmlTyp;
-				} else if (typ !== xmlTyp) {
-					optionen.tagsFehlerMeldungen[typ] = `<abbr title="Extensible Markup Language">XML</span>-Dateityp geändert`;
-					resolve(false);
-					return;
-				}
-				// Items auslesen
-				let tagsNeu = {},
-					update = false;
-				xml.querySelectorAll("item").forEach(function(i) {
-					const id = i.querySelector("id").firstChild.nodeValue,
-						name = i.querySelector("name").firstChild.nodeValue;
-					let abbr = i.querySelector("abbr");
-					tagsNeu[id] = {
-						name: name,
-					};
-					if (abbr) {
-						tagsNeu[id].abbr = abbr.firstChild.nodeValue;
+			const fsP = require("fs").promises;
+			fsP.readFile(datei, {encoding: "utf-8"})
+				.then(content => {
+					// Datei parsen
+					let parsed = optionen.tagsParsen(content),
+						xml = parsed[0];
+					if (!xml) {
+						resolve(false);
+						return;
 					}
-				});
-				// Einlesen
-				if (optionen.data.tags[typ]) { // Typ existiert => Änderungen ggf. übernehmen
-					let data = optionen.data.tags[typ].data;
-					for (let id in data) { // veraltete Einträge löschen
-						if (!data.hasOwnProperty(id)) {
-							continue;
-						}
-						if (!tagsNeu[id]) {
-							update = true;
-							delete data[id];
-						}
+					// ggf. Typ ermitteln, Konsistenz des Typs überprüfen
+					const xmlTyp = parsed[1];
+					if (typ === "-") {
+						typ = xmlTyp;
+					} else if (typ !== xmlTyp) {
+						optionen.tagsFehlerMeldungen[typ] = `<abbr title="Extensible Markup Language">XML</span>-Dateityp geändert`;
+						resolve(false);
+						return;
 					}
-					for (let id in tagsNeu) { // neue Einträge anlegen, geänderte auffrischen
-						if (!tagsNeu.hasOwnProperty(id)) {
-							continue;
+					// Items auslesen
+					let tagsNeu = {},
+						update = false;
+					xml.querySelectorAll("item").forEach(function(i) {
+						const id = i.querySelector("id").firstChild.nodeValue,
+							name = i.querySelector("name").firstChild.nodeValue;
+						let abbr = i.querySelector("abbr");
+						tagsNeu[id] = {
+							name: name,
+						};
+						if (abbr) {
+							tagsNeu[id].abbr = abbr.firstChild.nodeValue;
 						}
-						if (!data[id] ||
-								data[id].name !== tagsNeu[id].name ||
-								data[id].abbr !== tagsNeu[id].abbr) {
-							update = true;
-							data[id] = {
-								name: tagsNeu[id].name
-							};
-							if (tagsNeu[id].abbr) {
-								data[id].abbr = tagsNeu[id].abbr;
+					});
+					// Einlesen
+					if (optionen.data.tags[typ]) { // Typ existiert => Änderungen ggf. übernehmen
+						let data = optionen.data.tags[typ].data;
+						for (let id in data) { // veraltete Einträge löschen
+							if (!data.hasOwnProperty(id)) {
+								continue;
+							}
+							if (!tagsNeu[id]) {
+								update = true;
+								delete data[id];
 							}
 						}
+						for (let id in tagsNeu) { // neue Einträge anlegen, geänderte auffrischen
+							if (!tagsNeu.hasOwnProperty(id)) {
+								continue;
+							}
+							if (!data[id] ||
+									data[id].name !== tagsNeu[id].name ||
+									data[id].abbr !== tagsNeu[id].abbr) {
+								update = true;
+								data[id] = {
+									name: tagsNeu[id].name
+								};
+								if (tagsNeu[id].abbr) {
+									data[id].abbr = tagsNeu[id].abbr;
+								}
+							}
+						}
+					} else { // Typ existiert noch nicht => einrichten
+						update = true;
+						optionen.data.tags[typ] = {
+							data: tagsNeu, // Daten
+							datei: datei, // Pfad zur Datei
+							abgleich: "", // Datum letzter Abgleich
+							update: "", // Datum letztes Update
+						};
 					}
-				} else { // Typ existiert noch nicht => einrichten
-					update = true;
-					optionen.data.tags[typ] = {
-						data: tagsNeu, // Daten
-						datei: datei, // Pfad zur Datei
-						abgleich: "", // Datum letzter Abgleich
-						update: "", // Datum letztes Update
-					};
-				}
-				// Datum Abgleich speichern
-				optionen.data.tags[typ].abgleich = new Date().toISOString();
-				if (update) {
-					optionen.data.tags[typ].update = new Date().toISOString();
-				}
-				// Promise auflösen
-				resolve(true);
-			});
+					// Datum Abgleich speichern
+					optionen.data.tags[typ].abgleich = new Date().toISOString();
+					if (update) {
+						optionen.data.tags[typ].update = new Date().toISOString();
+					}
+					// Promise auflösen
+					resolve(true);
+				})
+				.catch(err => {
+					// Fehlermeldung (wahrscheinlich existiert die Datei nicht mehr)
+					optionen.tagsFehlerMeldungen[typ] = err.message;
+					resolve(false);
+				});
 		});
 	},
 	// ausgewählte Tag-Liste manuell überprüfen
@@ -775,17 +763,20 @@ let optionen = {
 		});
 		// Fehler oder keine Datei ausgewählt
 		if (result.message) {
-			dialog.oeffnen("alert");
-			dialog.text(`Beim Öffnen des Datei-Dialogs ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${result.message}</p>`);
+			dialog.oeffnen({
+				typ: "alert",
+				text: `Beim Öffnen des Dateidialogs ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${result.message}</p>`,
+			});
 			return;
 		} else if (result.canceled) {
-			dialog.oeffnen("alert");
-			dialog.text("Sie haben keine Datei ausgewählt.");
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Sie haben keine Datei ausgewählt.",
+			});
 			return;
 		}
 		// Datei laden
-		const fs = require("fs"),
-			fsP = fs.promises;
+		const fsP = require("fs").promises;
 		fsP.readFile(result.filePaths[0], {encoding: "utf-8"})
 			.then(content => {
 				// Tag-Datei parsen
@@ -821,8 +812,10 @@ let optionen = {
 				optionen.anwendenTags();
 			})
 			.catch(err => {
-				dialog.oeffnen("alert");
-				dialog.text(`Beim Laden der Tag-Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.message}</p>`);
+				dialog.oeffnen({
+					typ: "alert",
+					text: `Beim Laden der Tag-Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.message}</p>`,
+				});
 			});
 	},
 	// Content der geladenen Tag-Datei parsen und auf Fehler überprüfen
@@ -959,8 +952,10 @@ let optionen = {
 	//   typ = String
 	//     (Typ der Tag-Datei, bei der der Fehler aufgetreten ist)
 	tagsFehler (typ) {
-		dialog.oeffnen("alert");
-		dialog.text(`Beim Laden der Tag-Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${optionen.tagsFehlerMeldungen[typ]}</p>`);
+		dialog.oeffnen({
+			typ: "alert",
+			text: `Beim Laden der Tag-Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${optionen.tagsFehlerMeldungen[typ]}</p>`,
+		});
 	},
 	// Tag-Datei entfernen, Liste der Tags leeren
 	//   a = Element
@@ -969,18 +964,21 @@ let optionen = {
 		a.addEventListener("click", function(evt) {
 			evt.preventDefault();
 			const typ = this.dataset.typ;
-			dialog.oeffnen("confirm", function() {
-				if (dialog.antwort) {
-					delete optionen.data.tags[typ];
-					optionen.speichern();
-					optionen.anwendenTags();
-				}
-			});
 			let text = ["Tags", "Tag"];
 			if (optionen.tagsTypen[typ]) {
 				text = Array(2).fill(optionen.tagsTypen[typ][1]);
 			}
-			dialog.text(`Sollen die importierten ${text[0]} wirklich gelöscht werden?\n(Die Verknüpfung mit der ${text[1]}-Datei wird in diesem Zuge ebenfalls entfernt.)`);
+			dialog.oeffnen({
+				typ: "confirm",
+				text: `Sollen die importierten ${text[0]} wirklich gelöscht werden?\n(Die Verknüpfung mit der ${text[1]}-Datei wird in diesem Zuge ebenfalls entfernt.)`,
+				callback: () => {
+					if (dialog.antwort) {
+						delete optionen.data.tags[typ];
+						optionen.speichern();
+						optionen.anwendenTags();
+					}
+				},
+			});
 		});
 	},
 	// Liste der geladenen Tags anzeigen
@@ -1002,8 +1000,10 @@ let optionen = {
 			if (optionen.tagsTypen[typ]) {
 				h3 = optionen.tagsTypen[typ][1];
 			}
-			dialog.oeffnen("alert");
-			dialog.text(`<h3>${h3}</h3>\n<div class="dialog-tags-liste"></div>`);
+			dialog.oeffnen({
+				typ: "alert",
+				text: `<h3>${h3}</h3>\n<div class="dialog-tags-liste"></div>`,
+			});
 			let liste = document.querySelector(".dialog-tags-liste");
 			for (let tag of tags) {
 				let p = document.createElement("p");
@@ -1016,7 +1016,7 @@ let optionen = {
 	// (der Main-Prozess setzt einen Timeout, damit das nicht zu häufig geschieht)
 	speichern () {
 		const {ipcRenderer} = require("electron");
-		ipcRenderer.send("optionen-speichern", optionen.data, winInfo.winId);
+		ipcRenderer.invoke("optionen-speichern", optionen.data, winInfo.winId);
 	},
 	// letzten Pfad speichern
 	aendereLetzterPfad () {
@@ -1054,17 +1054,20 @@ let optionen = {
 		});
 		// Fehler oder keine Datei ausgewählt
 		if (result.message) {
-			dialog.oeffnen("alert");
-			dialog.text(`Beim Öffnen des Datei-Dialogs ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${result.message}</p>`);
+			dialog.oeffnen({
+				typ: "alert",
+				text: `Beim Öffnen des Dateidialogs ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${result.message}</p>`,
+			});
 			return;
 		} else if (result.canceled) {
-			dialog.oeffnen("alert");
-			dialog.text("Sie haben keine Datei ausgewählt.");
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Sie haben keine Datei ausgewählt.",
+			});
 			return;
 		}
 		// Datei laden
-		const fs = require("fs"),
-			fsP = fs.promises;
+		const fsP = require("fs").promises;
 		fsP.readFile(result.filePaths[0], {encoding: "utf-8"})
 			.then(content => {
 				// Inhalt einlesen und speichern
@@ -1086,17 +1089,23 @@ let optionen = {
 				let fb = new fb_obj();
 				// Liste wurde geleert
 				if (fb.personen === 0) {
-					dialog.oeffnen("alert");
-					dialog.text("Die Personenliste wurde geleert.");
+					dialog.oeffnen({
+						typ: "alert",
+						text: "Die Personenliste wurde geleert.",
+					});
 					return;
 				}
 				// Liste enthält Personen
-				dialog.oeffnen("alert");
-				dialog.text(`In der Liste ${fb.verb} jetzt ${fb.personen} ${fb.text}.`);
+				dialog.oeffnen({
+					typ: "alert",
+					text: `In der Liste ${fb.verb} jetzt ${fb.personen} ${fb.text}.`,
+				});
 			})
 			.catch(err => {
-				dialog.oeffnen("alert");
-				dialog.text(`Beim Öffnen der Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.message}</p>`);
+				dialog.oeffnen({
+					typ: "alert",
+					text: `Beim Öffnen der Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.message}</p>`,
+				});
 			});
 	},
 	// auf Änderung der Einstellungen achten

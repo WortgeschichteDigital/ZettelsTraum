@@ -227,15 +227,18 @@ let tagger = {
 					reg = new RegExp(`^${tag}(,\\s*)*|,\\s*${tag}`);
 				feld.textContent = feldText.replace(reg, "");
 			}
-			dialog.oeffnen("alert", function() {
-				tagger.filled = true;
-				if (optionen.data.einstellungen["tagger-schliessen"]) {
-					tagger.fokusTagzelle();
-				} else {
-					document.querySelector("#tagger-typen [contenteditable]").focus();
-				}
+			dialog.oeffnen({
+				typ: "alert",
+				text: text,
+				callback: () => {
+					tagger.filled = true;
+					if (optionen.data.einstellungen["tagger-schliessen"]) {
+						tagger.fokusTagzelle();
+					} else {
+						document.querySelector("#tagger-typen [contenteditable]").focus();
+					}
+				},
 			});
-			dialog.text(text);
 		}
 		// korrekte Tags speichern
 		const idx = parseInt(document.getElementById("tagger").dataset.idx, 10);

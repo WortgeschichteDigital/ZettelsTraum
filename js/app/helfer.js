@@ -35,8 +35,10 @@ let helfer = {
 			}
 			// Ist eine Kartei geöffnet?
 			if (!kartei.wort) {
-				dialog.oeffnen("alert");
-				dialog.text(`Die Funktion <i>${this.title.replace(/ \(.+\)/, "")}</i> steht nur zur Verfügung, wenn eine Kartei offen ist.`);
+				dialog.oeffnen({
+					typ: "alert",
+					text: `Die Funktion <i>${this.title.replace(/ \(.+\)/, "")}</i> steht nur zur Verfügung, wenn eine Kartei offen ist.`,
+				});
 				return;
 			}
 			// diese Funktionen stehen nur bei einer geöffneten Kartei zur Verfügung
@@ -709,25 +711,26 @@ let helfer = {
 	},
 	// Öffnen der Demonstrationskartei
 	demoOeffnen () {
-		const fs = require("fs"),
-			path = require("path");
 		// Resources-Pfad ermitteln
 		let resources = process.resourcesPath;
 		if (/node_modules/.test(resources)) {
 			// App ist nicht paketiert => resourcesPath zeigt auf die resources von Electron
 			resources = `${resources.replace(/node_modules.+/, "")}resources`;
 		}
-		const quelle = path.join(resources, "Demonstrationskartei Team.wgd"),
+		const fsP = require("fs").promises,
+			path = require("path"),
+			quelle = path.join(resources, "Demonstrationskartei Team.wgd"),
 			ziel = path.join(appInfo.temp, "Demonstrationskartei Team.wgd");
-		fs.copyFile(quelle, ziel, err => {
-			if (err) {
-				dialog.oeffnen("alert");
-				dialog.text(`Beim Kopieren der Demonstrationsdatei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.message}</p>`);
-				return;
-			}
-			// Datei öffnen
-			kartei.oeffnenEinlesen(ziel);
-		});
+		fsP.copyFile(quelle, ziel)
+			.then(() => {
+				kartei.oeffnenEinlesen(ziel);
+			})
+			.catch(err => {
+				dialog.oeffnen({
+					typ: "alert",
+					text: `Beim Kopieren der Demonstrationsdatei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.message}</p>`,
+				});
+			});
 	},
 	// Handbuch an einer bestimmten Stelle aufschlagen
 	//   a = Element
@@ -749,5 +752,35 @@ let helfer = {
 			const {ipcRenderer} = require("electron");
 			ipcRenderer.send("hilfe-handbuch", abschnitt);
 		});
+	},
+	// führt mitunter asynchrone Operationen aus, die nach und nach
+	// vor dem Schließen eines Hauptfensters abgearbeitet werden müssen;
+	// danach wird ein endgültiger Schließen-Befehl an das Main gegeben
+	async beforeUnload () {
+		// Schließen unterbrechen, wenn ungespeicherte Änderungen
+		if (notizen.geaendert ||
+				tagger.geaendert ||
+				bedeutungen.geaendert ||
+				beleg.geaendert ||
+				kartei.geaendert) {
+			speichern.checkInit(() => {
+				const {ipcRenderer} = require("electron");
+				ipcRenderer.invoke("fenster-schliessen");
+			}, {
+				kartei: true,
+			});
+			return;
+		}
+		// Bedeutungen-Fenster ggf. schließen
+		bedeutungenWin.schliessen();
+		// Kartei entsperren
+		await kartei.lock(kartei.pfad, "unlock");
+		// Status des Fensters speichern
+		const {ipcRenderer} = require("electron");
+		optionen.data.fenster = await ipcRenderer.invoke("fenster-status", winInfo.winId, "fenster");
+		// Optionen speichern
+		await ipcRenderer.invoke("optionen-speichern", optionen.data, winInfo.winId);
+		// Fenster endgültig schließen
+		ipcRenderer.invoke("fenster-schliessen-endgueltig");
 	},
 };

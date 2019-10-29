@@ -18,8 +18,10 @@ let lexika = {
 	oeffnen () {
 		// Sperre für macOS (Menüpunkte können nicht deaktiviert werden)
 		if (!kartei.wort) {
-			dialog.oeffnen("alert");
-			dialog.text("Um die Funktion <i>Kartei &gt; Überprüfte Lexika</i> zu nutzen, muss eine Kartei geöffnet sein.");
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Um die Funktion <i>Kartei &gt; Überprüfte Lexika</i> zu nutzen, muss eine Kartei geöffnet sein.",
+			});
 			return;
 		}
 		// Fenster öffnen oder in den Vordergrund holen
@@ -100,14 +102,24 @@ let lexika = {
 			va = helfer.textTrim(le.value);
 		// Uppala! Kein Wert!
 		if (!va) {
-			dialog.oeffnen("alert", () => le.select());
-			dialog.text("Sie haben keinen Titel eingegeben.");
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Sie haben keinen Titel eingegeben.",
+				callback: () => {
+					le.select();
+				},
+			});
 			return;
 		}
 		// Lexikon gibt es schon
 		if (document.querySelector(`#lexika-liste input[value="${va}"]`)) {
-			dialog.oeffnen("alert", () => le.select());
-			dialog.text("Das Lexikon ist schon in der Liste.");
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Das Lexikon ist schon in der Liste.",
+				callback: () => {
+					le.select();
+				},
+			});
 			return;
 		}
 		// Lexikon ergänzen und sortieren

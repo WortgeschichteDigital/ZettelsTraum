@@ -59,8 +59,7 @@ let kartei = {
 		beleg.erstellen();
 	},
 	// bestehende Kartei öffnen (über den Öffnen-Dialog)
-	oeffnen () {
-		const {dialog} = require("electron").remote;
+	async oeffnen () {
 		let opt = {
 			title: "Kartei öffnen",
 			defaultPath: appInfo.documents,
@@ -83,15 +82,28 @@ let kartei = {
 			opt.defaultPath = optionen.data.letzter_pfad;
 		}
 		// Dialog anzeigen
-		dialog.showOpenDialog(null, opt)
-			.then(result => {
-				if (result.canceled) {
-					kartei.dialogWrapper("Sie haben keine Datei ausgewählt.");
-					return;
-				}
-				kartei.oeffnenEinlesen(result.filePaths[0]);
-			})
-			.catch(err => kartei.dialogWrapper(`Beim Öffnen des Datei-Dialogs ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.message}</p>`));
+		const {ipcRenderer} = require("electron");
+		let result = await ipcRenderer.invoke("datei-dialog", {
+			open: true,
+			winId: winInfo.winId,
+			opt: opt,
+		});
+		// Fehler oder keine Datei ausgewählt
+		if (result.message) {
+			dialog.oeffnen({
+				typ: "alert",
+				text: `Beim Öffnen des Dateidialogs ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${result.message}</p>`,
+			});
+			return;
+		} else if (result.canceled) {
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Sie haben keine Datei ausgewählt.",
+			});
+			return;
+		}
+		// Datei einlesen
+		kartei.oeffnenEinlesen(result.filePaths[0]);
 	},
 	// die übergebene Datei einlesen
 	//   datei = String
@@ -105,7 +117,7 @@ let kartei = {
 			return;
 		}
 		// Ist die Datei gesperrt?
-		let lockcheck = kartei.lock(datei, "check");
+		let lockcheck = await kartei.lock(datei, "check");
 		if (lockcheck) {
 			let durch = "";
 			if (Array.isArray(lockcheck)) {
@@ -118,7 +130,10 @@ let kartei = {
 						break;
 				}
 			}
-			kartei.dialogWrapper(`Beim Öffnen der Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\nDatei ist gesperrt${durch}`);
+			dialog.oeffnen({
+				typ: "alert",
+				text: `Beim Öffnen der Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\nDatei ist gesperrt${durch}`,
+			});
 			return;
 		}
 		// im aktuellen Fenster könnte eine Kartei geöffnet sein (kartei.pfad = true)
@@ -130,71 +145,80 @@ let kartei = {
 			return;
 		}
 		// Datei einlesen
-		const fs = require("fs");
-		fs.readFile(datei, "utf-8", function(err, content) {
-			if (err) {
-				kartei.dialogWrapper(`Beim Öffnen der Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.message}</p>`);
-				return;
-			}
-			// Daten einlesen
-			let data_tmp = {};
-			// Folgt die Datei einer wohlgeformten JSON?
-			try {
-				data_tmp = JSON.parse(content);
-			} catch (err_json) {
-				kartei.dialogWrapper(`Beim Einlesen der Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n${err_json}`);
-				return;
-			}
-			// Wirklich eine wgd-Datei?
-			if (data_tmp.ty !== "wgd") {
-				kartei.dialogWrapper("Die Datei wurde nicht eingelesen.\nEs handelt sich nicht um eine Karteikasten-Datei von <i>Wortgeschichte digital</i>.");
-				return;
-			}
-			// Datei sperren
-			kartei.lock(datei, "lock");
-			// Main melden, dass die Kartei in diesem Fenster geöffnet wurde
-			ipcRenderer.send("kartei-geoeffnet", winInfo.winId, datei);
-			// alle Overlays schließen
-			overlay.alleSchliessen();
-			// alle Filter zurücksetzen (wichtig für Text- und Zeitraumfilter)
-			filter.ctrlReset(false);
-			// Okay! Content kann eingelesen werden
-			data = JSON.parse(content);
-			// Karteiwort eintragen
-			// (muss wegen konversion.von8nach9() vor der Konersion geschehen)
-			kartei.wort = data.wo;
-			// Konversion des Dateiformats anstoßen
-			konversion.start();
-			// Einleseoperationen
-			helfer.formVariRegExp();
-			kartei.wortEintragen();
-			kartei.pfad = datei;
-			optionen.aendereLetzterPfad();
-			zuletzt.aendern();
-			notizen.icon();
-			lexika.icon();
-			anhaenge.scan(data.an);
-			anhaenge.makeIconList(data.an, document.getElementById("kartei-anhaenge"));
-			filter.kartendatumInit();
-			liste.statusOffen = {}; // sonst werden unter Umständen Belege aufgeklappt, selbst wenn alle geschlossen sein sollten; s. Changelog zu Version 0.23.0
-			liste.aufbauen(true);
-			liste.wechseln();
-			window.scrollTo({
-				left: 0,
-				top: 0,
-				behavior: "auto",
-			}); // war in dem Fenster schon eine Kartei offen, bleibt sonst die Scrollposition der vorherigen Kartei erhalten
-			kartei.menusDeaktivieren(false);
-			erinnerungen.check();
-			helfer.geaendert(); // trägt das Wort in die Titelleiste ein
-			// inaktive Filter schließen
-			// (wurde zwar schon über filter.ctrlReset() ausgeführt,
-			// muss hier aber noch einmal gemacht werden, um die dynamisch
-			// aufgebauten Filter auch zu schließen)
-			filter.inaktiveSchliessen(true);
-			// Bedeutungsgerüst auf Korruption überprüfen
-			bedeutungen.korruptionCheck();
-		});
+		const fsP = require("fs").promises;
+		fsP.readFile(datei, {encoding: "utf-8"})
+			.then(content => {
+				// Daten einlesen
+				let data_tmp = {};
+				// Folgt die Datei einer wohlgeformten JSON?
+				try {
+					data_tmp = JSON.parse(content);
+				} catch (err_json) {
+					dialog.oeffnen({
+						typ: "alert",
+						text: `Beim Einlesen der Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n${err_json}`,
+					});
+					return;
+				}
+				// Wirklich eine wgd-Datei?
+				if (data_tmp.ty !== "wgd") {
+					dialog.oeffnen({
+						typ: "alert",
+						text: "Die Datei wurde nicht eingelesen.\nEs handelt sich nicht um eine Karteikasten-Datei von <i>Wortgeschichte digital</i>.",
+					});
+					return;
+				}
+				// Datei sperren
+				kartei.lock(datei, "lock");
+				// Main melden, dass die Kartei in diesem Fenster geöffnet wurde
+				ipcRenderer.send("kartei-geoeffnet", winInfo.winId, datei);
+				// alle Overlays schließen
+				overlay.alleSchliessen();
+				// alle Filter zurücksetzen (wichtig für Text- und Zeitraumfilter)
+				filter.ctrlReset(false);
+				// Okay! Content kann eingelesen werden
+				data = JSON.parse(content);
+				// Karteiwort eintragen
+				// (muss wegen konversion.von8nach9() vor der Konersion geschehen)
+				kartei.wort = data.wo;
+				// Konversion des Dateiformats anstoßen
+				konversion.start();
+				// Einleseoperationen
+				helfer.formVariRegExp();
+				kartei.wortEintragen();
+				kartei.pfad = datei;
+				optionen.aendereLetzterPfad();
+				zuletzt.aendern();
+				notizen.icon();
+				lexika.icon();
+				anhaenge.scan(data.an);
+				anhaenge.makeIconList(data.an, document.getElementById("kartei-anhaenge"));
+				filter.kartendatumInit();
+				liste.statusOffen = {}; // sonst werden unter Umständen Belege aufgeklappt, selbst wenn alle geschlossen sein sollten; s. Changelog zu Version 0.23.0
+				liste.aufbauen(true);
+				liste.wechseln();
+				window.scrollTo({
+					left: 0,
+					top: 0,
+					behavior: "auto",
+				}); // war in dem Fenster schon eine Kartei offen, bleibt sonst die Scrollposition der vorherigen Kartei erhalten
+				kartei.menusDeaktivieren(false);
+				erinnerungen.check();
+				helfer.geaendert(); // trägt das Wort in die Titelleiste ein
+				// inaktive Filter schließen
+				// (wurde zwar schon über filter.ctrlReset() ausgeführt,
+				// muss hier aber noch einmal gemacht werden, um die dynamisch
+				// aufgebauten Filter auch zu schließen)
+				filter.inaktiveSchliessen(true);
+				// Bedeutungsgerüst auf Korruption überprüfen
+				bedeutungen.korruptionCheck();
+			})
+			.catch(err => {
+				dialog.oeffnen({
+					typ: "alert",
+					text: `Beim Öffnen der Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.message}</p>`,
+				});
+			});
 	},
 	// Speichern: Verteilerfunktion
 	// (Rückgabewerte:
@@ -206,8 +230,10 @@ let kartei = {
 	async speichern (speichern_unter) {
 		// Sperre für macOS (Menüpunkte können nicht deaktiviert werden)
 		if (!kartei.wort && speichern_unter) {
-			dialog.oeffnen("alert");
-			dialog.text("Um die Funktion <i>Kartei &gt; Speichern unter</i> zu nutzen, muss eine Kartei geöffnet sein.");
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Um die Funktion <i>Kartei &gt; Speichern unter</i> zu nutzen, muss eine Kartei geöffnet sein.",
+			});
 			return;
 		}
 		// Wurden überhaupt Änderungen vorgenommen?
@@ -241,8 +267,7 @@ let kartei = {
 			data.dm = new Date().toISOString();
 			data.re++;
 			// Dateisystemzugriff
-			const fs = require("fs"),
-				fsP = fs.promises;
+			const fsP = require("fs").promises;
 			fsP.writeFile(pfad, JSON.stringify(data))
 				.then(() => {
 					if (!kartei.pfad) {
@@ -262,7 +287,10 @@ let kartei = {
 					resolve(true);
 				})
 				.catch(err => {
-					kartei.dialogWrapper(`Beim Speichern der Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.message}</p>`);
+					dialog.oeffnen({
+						typ: "alert",
+						text: `Beim Speichern der Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.message}</p>`,
+					});
 					// passiert ein Fehler, müssen manche Werte zurückgesetzt werden
 					if (bearb_ergaenzt) {
 						data.be.splice(data.be.indexOf(bearb), 1);
@@ -275,9 +303,8 @@ let kartei = {
 		});
 	},
 	// Speichern: Pfad ermitteln
-	speichernUnter () {
-		const {dialog} = require("electron").remote,
-			path = require("path");
+	async speichernUnter () {
+		const path = require("path");
 		let opt = {
 			title: "Kartei speichern",
 			defaultPath: path.join(appInfo.documents, `${kartei.wort}.wgd`),
@@ -297,22 +324,37 @@ let kartei = {
 			opt.defaultPath = path.join(optionen.data.letzter_pfad, `${kartei.wort}.wgd`);
 		}
 		// Dialog anzeigen
-		dialog.showSaveDialog(null, opt)
-			.then(result => {
-				if (result.canceled) {
-					kartei.dialogWrapper("Die Kartei wurde nicht gespeichert.");
-					return;
-				}
-				kartei.speichernSchreiben(result.filePath);
-			})
-			.catch(err => kartei.dialogWrapper(`Beim Öffnen des Datei-Dialogs ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.message}</p>`));
+		const {ipcRenderer} = require("electron");
+		let result = await ipcRenderer.invoke("datei-dialog", {
+			open: false,
+			winId: winInfo.winId,
+			opt: opt,
+		});
+		// Fehler oder keine Datei ausgewählt
+		if (result.message) {
+			dialog.oeffnen({
+				typ: "alert",
+				text: `Beim Öffnen des Dateidialogs ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${result.message}</p>`,
+			});
+			return;
+		} else if (result.canceled) {
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Die Kartei wurde nicht gespeichert.",
+			});
+			return;
+		}
+		// Kartei speichern
+		kartei.speichernSchreiben(result.filePath);
 	},
 	// Kartei schließen
 	async schliessen () {
 		// Sperre für macOS (Menüpunkte können nicht deaktiviert werden)
 		if (!kartei.wort) {
-			dialog.oeffnen("alert");
-			dialog.text("Um die Funktion <i>Kartei &gt; Schließen</i> zu nutzen, muss eine Kartei geöffnet sein.");
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Um die Funktion <i>Kartei &gt; Schließen</i> zu nutzen, muss eine Kartei geöffnet sein.",
+			});
 			return;
 		}
 		// Gibt es noch ein anderes Hauptfenster? Wenn ja => dieses Fenster komplett schließen
@@ -357,14 +399,6 @@ let kartei = {
 		kartei.menusDeaktivieren(true);
 		erinnerungen.icon(false);
 	},
-	// Dialogwrapper für die Öffnen- und Speichern-Funktionen
-	// (da gibt es einen Namenskonflikt mit Electrons {dialog})
-	//   text = String
-	//     (Text, der im Dialog-Feld angezeigt werden soll)
-	dialogWrapper (text) {
-		dialog.oeffnen("alert");
-		dialog.text(text);
-	},
 	// Benutzer nach dem Wort fragen, für das eine Kartei angelegt werden soll
 	wortErfragen () {
 		// Ist schon eine Kartei offen? Wenn ja => neues Fenster öffnen, direkt nach dem Wort fragen
@@ -374,26 +408,32 @@ let kartei = {
 			return;
 		}
 		// Es ist noch keine Kartei offen => nach dem Wort fragen
-		dialog.oeffnen("prompt", function() {
-			let wort = dialog.getPromptText();
-			if (dialog.antwort && !wort) {
-				dialog.oeffnen("alert");
-				dialog.text("Sie müssen ein Wort eingeben, sonst kann keine Kartei angelegt werden.");
-			} else if (dialog.antwort && wort) {
-				kartei.lock(kartei.pfad, "unlock");
-				const {ipcRenderer} = require("electron");
-				ipcRenderer.send("kartei-geoeffnet", winInfo.winId, "neu");
-				kartei.karteiGeaendert(true);
-				filter.ctrlReset(false);
-				kartei.wort = wort;
-				helfer.formVariRegExp();
-				kartei.wortEintragen();
-				kartei.erstellen();
-				kartei.menusDeaktivieren(false);
-				erinnerungen.check();
-			}
-		}, "Karteiwort");
-		dialog.text("Zu welchem Wort soll die Kartei angelegt werden?");
+		dialog.oeffnen({
+			typ: "prompt",
+			text: "Zu welchem Wort soll die Kartei angelegt werden?",
+			platzhalter: "Karteiwort",
+			callback: () => {
+				let wort = dialog.getPromptText();
+				if (dialog.antwort && !wort) {
+					dialog.oeffnen({
+						typ: "alert",
+						text: "Sie müssen ein Wort eingeben, sonst kann keine Kartei angelegt werden.",
+					});
+				} else if (dialog.antwort && wort) {
+					kartei.lock(kartei.pfad, "unlock");
+					const {ipcRenderer} = require("electron");
+					ipcRenderer.send("kartei-geoeffnet", winInfo.winId, "neu");
+					kartei.karteiGeaendert(true);
+					filter.ctrlReset(false);
+					kartei.wort = wort;
+					helfer.formVariRegExp();
+					kartei.wortEintragen();
+					kartei.erstellen();
+					kartei.menusDeaktivieren(false);
+					erinnerungen.check();
+				}
+			},
+		});
 	},
 	// Wort durch Benutzer ändern
 	wortAendern () {
@@ -403,25 +443,33 @@ let kartei = {
 			return;
 		}
 		// anbieten, das Wort zu ändern
-		dialog.oeffnen("prompt", function() {
-			let wort = dialog.getPromptText();
-			if (dialog.antwort && wort === kartei.wort) {
-				dialog.oeffnen("alert");
-				dialog.text("Das Wort wurde nicht geändert.");
-			} else if (dialog.antwort && wort) {
-				kartei.karteiGeaendert(true);
-				kartei.wort = wort;
-				data.wo = wort;
-				data.fv = {};
-				stamm.dtaGet(false);
-				kartei.wortEintragen();
-				bedeutungenWin.daten();
-			} else if (dialog.antwort && !wort) {
-				dialog.oeffnen("alert");
-				dialog.text("Sie müssen ein Wort eingeben, sonst kann das bestehende nicht geändert werden.");
-			}
-		}, "Karteiwort");
-		dialog.text("Soll das Wort geändert werden?");
+		dialog.oeffnen({
+			typ: "prompt",
+			text: "Soll das Wort geändert werden?",
+			platzhalter: "Karteiwort",
+			callback: () => {
+				let wort = dialog.getPromptText();
+				if (dialog.antwort && wort === kartei.wort) {
+					dialog.oeffnen({
+						typ: "alert",
+						text: "Das Wort wurde nicht geändert.",
+					});
+				} else if (dialog.antwort && wort) {
+					kartei.karteiGeaendert(true);
+					kartei.wort = wort;
+					data.wo = wort;
+					data.fv = {};
+					stamm.dtaGet(false);
+					kartei.wortEintragen();
+					bedeutungenWin.daten();
+				} else if (dialog.antwort && !wort) {
+					dialog.oeffnen({
+						typ: "alert",
+						text: "Sie müssen ein Wort eingeben, sonst kann das bestehende nicht geändert werden.",
+					});
+				}
+			},
+		});
 		// Text im Prompt-Input eintragen
 		let prompt_text = document.getElementById("dialog-prompt-text");
 		prompt_text.value = kartei.wort;
@@ -461,48 +509,60 @@ let kartei = {
 	//   aktion = String
 	//     (lock, unlock, check)
 	lock (datei, aktion) {
-		if (!datei) { // für just erstellte, aber noch nicht gespeicherte Dateien
-			return;
-		}
-		let pfad = datei.match(/^(.+[/\\]{1})(.+)$/);
-		const fs = require("fs"),
-			lockfile = `${pfad[1]}.~lock.${pfad[2]}#`;
-		if (aktion === "lock") {
-			// alte Datei ggf. löschen
-			// (Unter Windows gibt es Probleme, wenn die Datei direkt überschrieben werden soll.
-			// Ist das vielleicht ein Node-BUG? Eigentlich sollte das nämlich gehen.)
-			if (fs.existsSync(lockfile)) {
-				fs.unlinkSync(lockfile);
+		return new Promise(async resolve => {
+			if (!datei) { // für just erstellte, aber noch nicht gespeicherte Dateien
+				resolve(true);
+				return;
 			}
-			// Lock-Datei erstellen
-			const os = require("os"),
-				host = os.hostname(),
-				user = os.userInfo().username,
-				datum = new Date().toISOString(),
-				lockcontent = `${datum};;${host};;${user}`;
-			fs.writeFile(lockfile, lockcontent, function(err) {
-				if (err) {
-					dialog.oeffnen("alert");
-					dialog.text(`Beim Erstellen der Sperrdatei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.message}</p>`);
+			let pfad = datei.match(/^(.+[/\\]{1})(.+)$/);
+			const fs = require("fs"),
+				fsP = fs.promises,
+				lockfile = `${pfad[1]}.~lock.${pfad[2]}#`;
+			if (aktion === "lock") {
+				// alte Datei ggf. löschen
+				// (Unter Windows gibt es Probleme, wenn die Datei direkt überschrieben werden soll.
+				// Ist das vielleicht ein Node-BUG? Eigentlich sollte das nämlich gehen.)
+				if (fs.existsSync(lockfile)) {
+					const erfolg = await kartei.lockUnlink(lockfile);
+					if (!erfolg) {
+						resolve(false);
+						return;
+					}
 				}
-			});
-			// Datei unter Windows verstecken
-			if (process.platform === "win32") {
-				const child_process = require("child_process");
-				child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);
-			}
-		} else if (aktion === "unlock") {
-			fs.unlink(lockfile, function(err) {
-				if (err) {
-					dialog.oeffnen("alert");
-					dialog.text(`Beim Löschen der Sperrdatei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.message}</p>`);
+				// Lock-Datei erstellen
+				const os = require("os"),
+					host = os.hostname(),
+					user = os.userInfo().username,
+					datum = new Date().toISOString(),
+					lockcontent = `${datum};;${host};;${user}`;
+				fsP.writeFile(lockfile, lockcontent)
+					.then(() => {
+						// Datei unter Windows verstecken
+						if (process.platform === "win32") {
+							const child_process = require("child_process");
+							child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);
+						}
+						resolve(true);
+					})
+					.catch(err => {
+						dialog.oeffnen({
+							typ: "alert",
+							text: `Beim Erstellen der Sperrdatei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.message}</p>`,
+						});
+						resolve(false);
+					});
+			} else if (aktion === "unlock") {
+				const erfolg = await kartei.lockUnlink(lockfile);
+				resolve(erfolg);
+			} else if (aktion === "check") {
+				if (!fs.existsSync(lockfile)) {
+					resolve(false); // keine Kartei => nicht gesperrt
+					return;
 				}
-			});
-		} else if (aktion === "check") {
-			if (fs.existsSync(lockfile)) {
-				const lockcontent = fs.readFileSync(lockfile, "utf-8");
+				const lockcontent = await kartei.lockRead(lockfile);
 				if (!lockcontent) {
-					return true; // gesperrt (zur Sicherheit, weil unklarer Status)
+					resolve(true); // gesperrt (zur Sicherheit, weil unklarer Status oder Fehler)
+					return;
 				}
 				let datum_host_user = lockcontent.split(";;");
 				const os = require("os"),
@@ -513,14 +573,47 @@ let kartei = {
 				//   vor mehr als 12 Stunden gesperrt
 				if (host === datum_host_user[1] && user === datum_host_user[2] ||
 						new Date() - new Date(datum_host_user[0]) > 432e5) {
-					return false; // nicht gesperrt
+					resolve(false); // nicht gesperrt
+				} else if (datum_host_user[2]) {
+					resolve(["user", datum_host_user[2]]); // gesperrt
+				} else {
+					resolve(["computer", datum_host_user[1]]); // gesperrt
 				}
-				if (datum_host_user[2]) {
-					return ["user", datum_host_user[2]]; // gesperrt
-				}
-				return ["computer", datum_host_user[1]]; // gesperrt
 			}
-			return false; // nicht gesperrt
-		}
+		});
+	},
+	// Lock-Datei löschen
+	//   lockfile = String
+	//     (Pfad zur Lock-Datei)
+	lockUnlink (lockfile) {
+		return new Promise(resolve => {
+			const fsP = require("fs").promises;
+			fsP.unlink(lockfile)
+				.then(() => resolve(true))
+				.catch(err => {
+					dialog.oeffnen({
+						typ: "alert",
+						text: `Beim Löschen der Sperrdatei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.message}</p>`
+					});
+					resolve(false);
+				});
+		});
+	},
+	// Lock-Datei einlesen
+	//   lockfile = String
+	//     (Pfad zur Lock-Datei)
+	lockRead (lockfile) {
+		return new Promise(resolve => {
+			const fsP = require("fs").promises;
+			fsP.readFile(lockfile, {encoding: "utf-8"})
+				.then(content => resolve(content))
+				.catch(err => {
+					dialog.oeffnen({
+						typ: "alert",
+						text: `Beim Lesen der Sperrdatei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.message}</p>`
+					});
+					resolve("");
+				});
+		});
 	},
 };

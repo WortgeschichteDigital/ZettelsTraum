@@ -19,14 +19,18 @@ let annotieren = {
 			annotieren.mod(mark);
 			annotieren.ausfuehren();
 		} catch (err) {
-			dialog.oeffnen("alert");
-			dialog.text(`Die Markierung kann an dieser Position nicht vorgenommen werden.\n<h3>Fehlermeldung</h3>\n${err.message}`);
+			dialog.oeffnen({
+				typ: "alert",
+				text: `Die Markierung kann an dieser Position nicht vorgenommen werden.\n<h3>Fehlermeldung</h3>\n${err.message}`,
+			});
 		}
 	},
 	// Meldung, dass das Annotieren nicht möglich ist
 	unmoeglich () {
-		dialog.oeffnen("alert");
-		dialog.text(`Das Annotieren ist nur möglich, wenn Trennstriche und Seitenumbrüche sichtbar sind.\nSie müssen zunächst die Funktion <img src="img/trennzeichen.svg" width="24" height="24" alt=""> aktivieren.`);
+		dialog.oeffnen({
+			typ: "alert",
+			text: `Das Annotieren ist nur möglich, wenn Trennstriche und Seitenumbrüche sichtbar sind.\nSie müssen zunächst die Funktion <img src="img/trennzeichen.svg" width="24" height="24" alt=""> aktivieren.`,
+		});
 	},
 	// Annotierung initialisieren
 	//   p = Element

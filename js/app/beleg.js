@@ -262,28 +262,48 @@ let beleg = {
 		let da = document.getElementById("beleg-da"),
 			dav = helfer.textTrim(da.value, true);
 		if (!dav) {
-			dialog.oeffnen("alert", () => da.select());
-			dialog.text("Sie müssen ein Datum angeben.");
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Sie müssen ein Datum angeben.",
+				callback: () => {
+					da.select();
+				},
+			});
 			return false;
 		}
 		// Test: Datum mit vierstelliger Jahreszahl oder Jahrhundertangabe?
 		if (!/[0-9]{4}|[0-9]{2}\.\sJh\./.test(dav)) {
-			dialog.oeffnen("alert", () => da.select());
-			dialog.text("Das Datum muss eine vierstellige Jahreszahl (z. B. „1813“) oder eine Jahrhundertangabe (z. B. „17. Jh.“) enthalten.\nZusätzlich können auch andere Angaben gemacht werden (z. B. „ca. 1815“, „1610, vielleicht 1611“).");
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Das Datum muss eine vierstellige Jahreszahl (z. B. „1813“) oder eine Jahrhundertangabe (z. B. „17. Jh.“) enthalten.\nZusätzlich können auch andere Angaben gemacht werden (z. B. „ca. 1815“, „1610, vielleicht 1611“).",
+				callback: () => {
+					da.select();
+				},
+			});
 			return false;
 		}
 		// Test: Beleg angegeben?
 		let bs = document.getElementById("beleg-bs");
 		if (!helfer.textTrim(bs.value, true)) {
-			dialog.oeffnen("alert", () => bs.select());
-			dialog.text("Sie müssen einen Beleg eingeben.");
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Sie müssen einen Beleg eingeben.",
+				callback: () => {
+					bs.select();
+				},
+			});
 			return false;
 		}
 		// Test: Quelle angegeben?
 		let qu = document.getElementById("beleg-qu");
 		if (!helfer.textTrim(qu.value, true)) {
-			dialog.oeffnen("alert", () => qu.select());
-			dialog.text("Sie müssen eine Quelle angeben.");
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Sie müssen eine Quelle angeben.",
+				callback: () => {
+					qu.select();
+				},
+			});
 			return false;
 		}
 		// Beleg wurde nicht geändert
@@ -327,8 +347,10 @@ let beleg = {
 			if (!bd.id) {
 				bd = beleg.bedeutungErgaenzen(zeile);
 				if (!bd.id) { // die Funktion ist kompliziert und fehleranfällig, lieber noch mal kontrollieren
-					dialog.oeffnen("alert");
-					dialog.text("Beim Speichern der Karteikarte ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\nEinhängen der neuen Bedeutung in das Bedeutungsgerüst fehlgeschalgen");
+					dialog.oeffnen({
+						typ: "alert",
+						text: "Beim Speichern der Karteikarte ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\nEinhängen der neuen Bedeutung in das Bedeutungsgerüst fehlgeschalgen",
+					});
 					return false;
 				}
 			}
@@ -409,8 +431,13 @@ let beleg = {
 	//   id = Number
 	//     (ID des Belegs)
 	aktionLoeschenFrage (id) {
-		dialog.oeffnen("confirm", function() {
-			if (dialog.antwort) {
+		dialog.oeffnen({
+			typ: "confirm",
+			text: `Soll <i>${liste.detailAnzeigenH3(id.toString())}</i> wirklich gelöscht werden?`,
+			callback: () => {
+				if (!dialog.antwort) {
+					return;
+				}
 				delete data.ka[id];
 				beleg.belegGeaendert(false);
 				kartei.karteiGeaendert(true);
@@ -424,9 +451,8 @@ let beleg = {
 					kopieren.belege.splice(kopieren.belege.indexOf(id.toString()), 1);
 					kopieren.uiText();
 				}
-			}
+			},
 		});
-		dialog.text(`Soll <i>${liste.detailAnzeigenH3(id.toString())}</i> wirklich gelöscht werden?`);
 	},
 	// Beleg wurde geändert und noch nicht gespeichert
 	geaendert: false,
@@ -492,6 +518,43 @@ let beleg = {
 					}, 5);
 				}
 			});
+		}
+	},
+	// blockiert die Verarbeitung von beleg.pasteBs() kurzzeitig
+	pasteBsBlock: false,
+	// fängt das Pasten im Belegfeld ab
+	// (wird auch von notizen.paste() benutz)
+	//   evt = Object
+	//     (das Event-Objekt des Paste-Events)
+	//   pasten = false || undefined
+	//     (der bereinigte Text soll gepastet werden)
+	pasteBs (evt, pasten = true) {
+		if (beleg.pasteBsBlock) {
+			return;
+		}
+		// Welche Daten gibt es in der Zwischenablage?
+		const clipHtml = evt.clipboardData.getData("text/html"),
+			clipText = evt.clipboardData.getData("text/plain");
+		if (!clipHtml && !clipText) {
+			return;
+		}
+		// Text bereinigen und pasten
+		evt.preventDefault();
+		const {clipboard} = require("electron");
+		let text = "";
+		if (clipHtml) {
+			text = clipboard.readHTML();
+		} else {
+			text = clipboard.readText();
+		}
+		text = beleg.toolsEinfuegenHtml(text);
+		if (pasten) {
+			clipboard.writeText(text);
+			beleg.pasteBsBlock = true;
+			document.execCommand("paste");
+			beleg.pasteBsBlock = false;
+		} else {
+			return text;
 		}
 	},
 	// Verteilerfunktion für Klick-Events der Tools
@@ -629,14 +692,18 @@ let beleg = {
 		// Element ermitteln
 		// Text einlesen
 		const {clipboard} = require("electron"),
-			id = link.parentNode.parentNode.firstChild.getAttribute("for"),
+			id = link.closest("th").firstChild.getAttribute("for"),
 			ds = id.replace(/^beleg-/, "");
-		let formate = clipboard.availableFormats(),
-			feld = document.getElementById(id);
+		let feld = document.getElementById(id);
 		// Text auslesen
 		let text = "";
-		if (id === "beleg-bs" && formate.includes("text/html")) {
-			text = beleg.toolsEinfuegenHtml(clipboard.readHTML());
+		if (id === "beleg-bs") {
+			if (clipboard.availableFormats().includes("text/html")) {
+				text = clipboard.readHTML();
+			} else {
+				text = clipboard.readText(); // aus Sicherheitsgründen auch Plain-Text bereinigen
+			}
+			text = beleg.toolsEinfuegenHtml(text);
 		} else {
 			text = clipboard.readText();
 		}
@@ -651,13 +718,16 @@ let beleg = {
 			return;
 		}
 		// Feld ist gefüllt => ergänzen (true), überschreiben (false) oder abbrechen (null)?
-		dialog.oeffnen("confirm", function() {
-			if (dialog.antwort === true ||
-					dialog.antwort === false) {
-				eintragen(dialog.antwort);
-			}
+		dialog.oeffnen({
+			typ: "confirm",
+			text: "Im Textfeld steht schon etwas. Soll es ergänzt werden?\n(Bei „Nein“ wird das Textfeld überschrieben.)",
+			callback: () => {
+				if (dialog.antwort === true ||
+						dialog.antwort === false) {
+					eintragen(dialog.antwort);
+				}
+			},
 		});
-		dialog.text("Im Textfeld steht schon etwas. Soll es ergänzt werden?\n(Bei „Nein“ wird das Textfeld überschrieben.)");
 		document.getElementById("dialog-text").appendChild(optionen.shortcut("Textfeld künftig ohne Nachfrage ergänzen", "immer-ergaenzen"));
 		// Einfüge-Funktion
 		function eintragen (ergaenzen) {
@@ -876,10 +946,13 @@ let beleg = {
 			str_ende = ta.value.substring(ende);
 		// illegales Nesting von Inline-Tags?
 		if (beleg.toolsTextNesting(str_sel)) {
-			dialog.oeffnen("alert", function() {
-				ta.focus();
+			dialog.oeffnen({
+				typ: "alert",
+				text: `Die Formatierung kann an dieser Position nicht vorgenommen werden.\n<h3>Fehlermeldung</h3>\nillegale Verschachtelung`,
+				callback: () => {
+					ta.focus();
+				},
 			});
-			dialog.text(`Die Formatierung kann an dieser Position nicht vorgenommen werden.\n<h3>Fehlermeldung</h3>\nillegale Verschachtelung`);
 			return;
 		}
 		// Aktion durchführen
@@ -1343,8 +1416,10 @@ let beleg = {
 	ctrlSpringenLese () {
 		let marks = document.querySelectorAll("#beleg mark.suchleiste, #beleg-lese-bs mark.user, #beleg-lese-bs mark.wort");
 		if (!marks.length) {
-			dialog.oeffnen("alert");
-			dialog.text("Keine Markierung gefunden.");
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Keine Markierung gefunden.",
+			});
 			return;
 		}
 		// Element ermitteln
@@ -1422,12 +1497,15 @@ let beleg = {
 			textarea.focus();
 		} else if (beleg.ctrlSpringenFormReg.again) { // Wort zum wiederholten Mal nicht gefunden => Wort nicht im Belegtext (oder nicht auffindbar)
 			beleg.ctrlSpringenFormReg.again = false;
-			dialog.oeffnen("alert", function() {
-				textarea.scrollTop = 0;
-				textarea.setSelectionRange(0, 0);
-				textarea.focus();
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Wort nicht gefunden.",
+				callback: () => {
+					textarea.scrollTop = 0;
+					textarea.setSelectionRange(0, 0);
+					textarea.focus();
+				},
 			});
-			dialog.text("Wort nicht gefunden.");
 		} else { // Wort nicht gefunden => entweder nicht im Belegtext oder nicht von Index 0 aus gesucht => noch einmal suchen
 			beleg.ctrlSpringenFormReg.again = true;
 			beleg.ctrlSpringenForm(evt);
@@ -1493,10 +1571,13 @@ let beleg = {
 		}
 		// erster oder letzter Beleg erreicht!
 		if (pos < 0 || pos === belege.length) {
-			dialog.oeffnen("alert", function() {
-				fokus();
+			dialog.oeffnen({
+				typ: "alert",
+				text: `Der aktuelle Beleg ist ${next ? "der letzte" : "der erste" } in der Belegliste.`,
+				callback: () => {
+					fokus();
+				},
 			});
-			dialog.text(`Der aktuelle Beleg ist ${next ? "der letzte" : "der erste" } in der Belegliste.`);
 			return;
 		}
 		// neuen Beleg öffnen:
@@ -1660,8 +1741,10 @@ let beleg = {
 	bedeutungEinAustragen (bd, eintragen) {
 		// Overlay-Fenster ist offen => Abbruch
 		if (overlay.oben()) {
-			dialog.oeffnen("alert");
-			dialog.text(`Bedeutungen können nur ${eintragen ? "eingetragen" : "ausgetragen"} werden, wenn Karteikarte oder Belegliste nicht durch andere Fenster verdeckt werden.`);
+			dialog.oeffnen({
+				typ: "alert",
+				text: `Bedeutungen können nur ${eintragen ? "eingetragen" : "ausgetragen"} werden, wenn Karteikarte oder Belegliste nicht durch andere Fenster verdeckt werden.`,
+			});
 			return;
 		}
 		// Ziel ermitteln
@@ -1681,8 +1764,10 @@ let beleg = {
 			return;
 		}
 		// unklar, wo eingetragen werden soll => Fehlermeldung
-		dialog.oeffnen("alert");
-		dialog.text(`Weder eine Karteikarte noch die Belegliste ist geöffnet.\nDie Bedeutung kann nur ${eintragen ? "eingetragen" : "ausgetragen"} werden, wenn eine der beiden Ansichten aktiv ist.`);
+		dialog.oeffnen({
+			typ: "alert",
+			text: `Weder eine Karteikarte noch die Belegliste ist geöffnet.\nDie Bedeutung kann nur ${eintragen ? "eingetragen" : "ausgetragen"} werden, wenn eine der beiden Ansichten aktiv ist.`,
+		});
 	},
 	// Bedeutung in eine einzelne Karteikarte eintragen
 	//   bd = Object
@@ -1695,14 +1780,18 @@ let beleg = {
 						gr: bd.gr,
 						id: bd.id,
 					})[0]) {
-				dialog.oeffnen("alert");
-				dialog.text("Die Bedeutung wurde <strong>nicht</strong> eingetragen. Grund: Sie ist schon vorhanden.\n(In der Karteikarte wird ein anderes Gerüst angezeigt als im Bedeutungsgerüst-Fenster.)");
+				dialog.oeffnen({
+					typ: "alert",
+					text: "Die Bedeutung wurde <strong>nicht</strong> eingetragen. Grund: Sie ist schon vorhanden.\n(In der Karteikarte wird ein anderes Gerüst angezeigt als im Bedeutungsgerüst-Fenster.)",
+				});
 				return;
 			}
 			beleg.data.bd.push({...bd});
 			beleg.belegGeaendert(true);
-			dialog.oeffnen("alert");
-			dialog.text("Die Bedeutung wurde eingetragen.\n(In der Karteikarte wird ein anderes Gerüst angezeigt als im Bedeutungsgerüst-Fenster.)");
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Die Bedeutung wurde eingetragen.\n(In der Karteikarte wird ein anderes Gerüst angezeigt als im Bedeutungsgerüst-Fenster.)",
+			});
 			return;
 		}
 		// aktives Gerüst => Text ermitteln und an die Dropdown-Funktion übergeben
@@ -1730,12 +1819,16 @@ let beleg = {
 			if (vorhanden[0]) {
 				beleg.data.bd.splice(vorhanden[1], 1);
 				beleg.belegGeaendert(true);
-				dialog.oeffnen("alert");
-				dialog.text("Die Bedeutung wurde entfernt.\n(In der Karteikarte wird ein anderes Gerüst angezeigt als im Bedeutungsgerüst-Fenster.)");
+				dialog.oeffnen({
+					typ: "alert",
+					text: "Die Bedeutung wurde entfernt.\n(In der Karteikarte wird ein anderes Gerüst angezeigt als im Bedeutungsgerüst-Fenster.)",
+				});
 				return;
 			}
-			dialog.oeffnen("alert");
-			dialog.text("Die Bedeutung wurde <strong>nicht</strong> entfernt. Grund: Sie ist der aktuellen Karteikarte überhaupt nicht zugeordnet.\n(In der Karteikarte wird ein anderes Gerüst angezeigt als im Bedeutungsgerüst-Fenster.)");
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Die Bedeutung wurde <strong>nicht</strong> entfernt. Grund: Sie ist der aktuellen Karteikarte überhaupt nicht zugeordnet.\n(In der Karteikarte wird ein anderes Gerüst angezeigt als im Bedeutungsgerüst-Fenster.)",
+			});
 			return;
 		}
 		// aktives Gerüst => Text ermitteln und entfernen
@@ -1747,8 +1840,10 @@ let beleg = {
 		});
 		const ex = beleg.leseBedeutungExFeld(text);
 		if (!ex) {
-			dialog.oeffnen("alert");
-			dialog.text("Die Bedeutung wurde <strong>nicht</strong> entfernt. Grund: Sie ist der aktuellen Karteikarte überhaupt nicht zugeordnet.");
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Die Bedeutung wurde <strong>nicht</strong> entfernt. Grund: Sie ist der aktuellen Karteikarte überhaupt nicht zugeordnet.",
+			});
 			return;
 		}
 		beleg.belegGeaendert(true);
@@ -1763,13 +1858,20 @@ let beleg = {
 		const bdText = beleg.bedeutungenEinAustragenText(bd);
 		// keine Belege in der Liste
 		if (!document.querySelector("#liste-belege-cont .liste-kopf")) {
-			dialog.oeffnen("alert");
-			dialog.text(`Die Belegliste zeigt derzeit keine Belege an. Die Bedeutung\n<p class="bedeutungen-dialog">${bdText}</p>\nkann darum in keine Karteikarte eingetragen werden.`);
+			dialog.oeffnen({
+				typ: "alert",
+				text: `Die Belegliste zeigt derzeit keine Belege an. Die Bedeutung\n<p class="bedeutungen-dialog">${bdText}</p>\nkann darum in keine Karteikarte eingetragen werden.`,
+			});
 			return;
 		}
 		// Sicherheitsfrage
-		dialog.oeffnen("confirm", function() {
-			if (dialog.antwort) {
+		dialog.oeffnen({
+			typ: "confirm",
+			text: `Soll die Bedeutung\n<p class="bedeutungen-dialog">${bdText}</p>\nwirklich in alle Karteikarten, die derzeit in der Belegliste sichtbar sind, <strong>eingetragen</strong> werden?`,
+			callback: () => {
+				if (!dialog.antwort) {
+					return;
+				}
 				// Bedeutung eintragen
 				document.querySelectorAll("#liste-belege-cont .liste-kopf").forEach(function(i) {
 					const id = i.dataset.id;
@@ -1788,15 +1890,16 @@ let beleg = {
 				if (data.bd.gn === bd.gr) {
 					geruest_inaktiv = "";
 				}
-				dialog.oeffnen("alert");
-				dialog.text(`Die Bedeutung\n<p class="bedeutungen-dialog">${bdText}</p>\nwurde in allen Karteikarten der Belegliste ergänzt.${geruest_inaktiv}`);
+				dialog.oeffnen({
+					typ: "alert",
+					text: `Die Bedeutung\n<p class="bedeutungen-dialog">${bdText}</p>\nwurde in allen Karteikarten der Belegliste ergänzt.${geruest_inaktiv}`,
+				});
 				// Liste auffrischen
 				if (!geruest_inaktiv) {
 					liste.status(true);
 				}
-			}
+			},
 		});
-		dialog.text(`Soll die Bedeutung\n<p class="bedeutungen-dialog">${bdText}</p>\nwirklich in alle Karteikarten, die derzeit in der Belegliste sichtbar sind, <strong>eingetragen</strong> werden?`);
 	},
 	// Bedeutung aus jeder Karte der Belegliste entfernen
 	//   bd = Object
@@ -1805,13 +1908,20 @@ let beleg = {
 		const bdText = beleg.bedeutungenEinAustragenText(bd);
 		// keine Belege in der Liste
 		if (!document.querySelector("#liste-belege-cont .liste-kopf")) {
-			dialog.oeffnen("alert");
-			dialog.text(`Die Belegliste zeigt derzeit keine Belege an. Die Bedeutung\n<p class="bedeutungen-dialog">${bdText}</p>\nkann darum aus keiner Karteikarte entfernt werden.`);
+			dialog.oeffnen({
+				typ: "alert",
+				text: `Die Belegliste zeigt derzeit keine Belege an. Die Bedeutung\n<p class="bedeutungen-dialog">${bdText}</p>\nkann darum aus keiner Karteikarte entfernt werden.`,
+			});
 			return;
 		}
 		// Sicherheitsfrage
-		dialog.oeffnen("confirm", function() {
-			if (dialog.antwort) {
+		dialog.oeffnen({
+			typ: "confirm",
+			text: `Soll die Bedeutung\n<p class="bedeutungen-dialog">${bdText}</p>\nwirklich aus allen Karteikarten, die derzeit in der Belegliste sichtbar sind, <strong>entfernt</strong> werden?`,
+			callback: () => {
+				if (!dialog.antwort) {
+					return;
+				}
 				// Bedeutung eintragen
 				let treffer = false;
 				document.querySelectorAll("#liste-belege-cont .liste-kopf").forEach(function(i) {
@@ -1833,21 +1943,24 @@ let beleg = {
 					geruest_inaktiv = "";
 				}
 				if (!treffer) {
-					dialog.oeffnen("alert");
-					dialog.text(`Die Bedeutung\n<p class="bedeutungen-dialog">${bdText}</p>\nwurde in keiner der Karteikarten in der aktuellen Belegliste gefunden.${geruest_inaktiv}`);
+					dialog.oeffnen({
+						typ: "alert",
+						text: `Die Bedeutung\n<p class="bedeutungen-dialog">${bdText}</p>\nwurde in keiner der Karteikarten in der aktuellen Belegliste gefunden.${geruest_inaktiv}`,
+					});
 					return;
 				}
-				dialog.oeffnen("alert");
-				dialog.text(`Die Bedeutung\n<p class="bedeutungen-dialog">${bdText}</p>\nwurde aus allen Karteikarten der Belegliste entfernt.${geruest_inaktiv}`);
+				dialog.oeffnen({
+					typ: "alert",
+					text: `Die Bedeutung\n<p class="bedeutungen-dialog">${bdText}</p>\nwurde aus allen Karteikarten der Belegliste entfernt.${geruest_inaktiv}`,
+				});
 				// Änderungsmarkierung
 				kartei.karteiGeaendert(true);
 				// Liste auffrischen
 				if (!geruest_inaktiv) {
 					liste.status(true);
 				}
-			}
+			},
 		});
-		dialog.text(`Soll die Bedeutung\n<p class="bedeutungen-dialog">${bdText}</p>\nwirklich aus allen Karteikarten, die derzeit in der Belegliste sichtbar sind, <strong>entfernt</strong> werden?`);
 	},
 	// bereitet den Bedeutungstext auf, der beim Ein- oder Austragen von Bedeutungen
 	// in der Belegliste angezeigt wird

@@ -109,8 +109,10 @@ let anhaenge = {
 	fenster () {
 		// Sperre für macOS (Menüpunkte können nicht deaktiviert werden)
 		if (!kartei.wort) {
-			dialog.oeffnen("alert");
-			dialog.text("Um die Funktion <i>Kartei &gt; Anhänge</i> zu nutzen, muss eine Kartei geöffnet sein.");
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Um die Funktion <i>Kartei &gt; Anhänge</i> zu nutzen, muss eine Kartei geöffnet sein.",
+			});
 			return;
 		}
 		// Fenster öffnen oder in den Vordergrund holen
@@ -229,8 +231,10 @@ let anhaenge = {
 	//     (Dateiordner im Filemanager öffnen)
 	oeffnen (datei, ordner = false) {
 		if (!anhaenge.data[datei].exists) {
-			dialog.oeffnen("alert");
-			dialog.text("Die Datei konnte nicht gefunden werden.");
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Die Datei konnte nicht gefunden werden.",
+			});
 			return;
 		}
 		const {shell} = require("electron"),
@@ -304,8 +308,13 @@ let anhaenge = {
 				obj = this.parentNode.dataset.obj,
 				datei = this.parentNode.dataset.datei,
 				arr = anhaenge.getArr(obj);
-			dialog.oeffnen("confirm", function() {
-				if (dialog.antwort) {
+			dialog.oeffnen({
+				typ: "confirm",
+				text: `Soll die folgende Datei wirklich aus der Liste entfernt werden?\n<p class="force-wrap">${datei}</p>`,
+				callback: () => {
+					if (!dialog.antwort) {
+						return;
+					}
 					arr.splice(arr.indexOf(datei), 1);
 					// Änderungsmarkierung
 					anhaenge.geaendert(cont);
@@ -323,9 +332,8 @@ let anhaenge = {
 					if (cont.dataset.anhaenge === "kartei") {
 						anhaenge.auflistenBelege(cont);
 					}
-				}
+				},
 			});
-			dialog.text(`Soll die folgende Datei wirklich aus der Liste entfernt werden?\n<p class="force-wrap">${datei}</p>`);
 		});
 	},
 	// Add-Button erzeugen, der über einer Anhängeliste steht
@@ -379,12 +387,16 @@ let anhaenge = {
 			});
 			// Fehler oder keine Datei ausgewählt
 			if (result.message) {
-				dialog.oeffnen("alert");
-				dialog.text(`Beim Öffnen des Datei-Dialogs ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${result.message}</p>`);
+				dialog.oeffnen({
+					typ: "alert",
+					text: `Beim Öffnen des Dateidialogs ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${result.message}</p>`,
+				});
 				return;
 			} else if (result.canceled) {
-				dialog.oeffnen("alert");
-				dialog.text("Sie haben keine Datei ausgewählt.");
+				dialog.oeffnen({
+					typ: "alert",
+					text: "Sie haben keine Datei ausgewählt.",
+				});
 				return;
 			}
 			// Datei ausgewählt
@@ -418,12 +430,14 @@ let anhaenge = {
 		});
 		// melden, wenn Dateien schon im Array sind
 		if (schon.length) {
-			dialog.oeffnen("alert");
 			let text = "folgende Datei war";
 			if (schon.length > 1) {
 				text = "folgenden Dateien waren";
 			}
-			dialog.text(`Die ${text} schon angehängt:\n${schon.join("<br>")}`);
+			dialog.oeffnen({
+				typ: "alert",
+				text: `Die ${text} schon angehängt:\n${schon.join("<br>")}`,
+			});
 		}
 		// Abbruch, wenn keine neuen Dateien hinzugefügt wurden
 		if (schon.length === dateien.length) {

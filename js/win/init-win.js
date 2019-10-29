@@ -11,6 +11,8 @@ let initWin = {
 			bedeutungen.data = daten;
 			bedeutungen.aufbauen();
 		});
+		// Before-Unload
+		ipcRenderer.on("before-unload", () => helferWin.beforeUnload());
 	},
 	// Infos zu App und Fenster erfragen
 	async infos () {
@@ -105,14 +107,3 @@ let initWin = {
 		});
 	},
 };
-
-window.addEventListener("beforeunload", async () => {
-	const {ipcRenderer} = require("electron");
-	// Bedeutungsgerüst-Fenster
-	if (winInfo.typ === "bedeutungen") {
-		ipcRenderer.sendTo(bedeutungen.data.contentsId, "bedeutungen-fenster-geschlossen");
-		await ipcRenderer.invoke("fenster-status", winInfo.winId, "fenster-bedeutungen");
-	}
-	// Fenster dereferenzieren
-	ipcRenderer.send("fenster-dereferenzieren", winInfo.winId);
-});

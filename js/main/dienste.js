@@ -1,8 +1,7 @@
 "use strict";
 
 const {BrowserWindow, dialog} = require("electron"),
-	fs = require("fs"),
-	fsP = fs.promises,
+	fsP = require("fs").promises,
 	path = require("path");
 
 let svg = [];
@@ -23,7 +22,7 @@ module.exports = {
 		}
 		return svg;
 	},
-	// Datei-Dialog anzeigen
+	// Dateidialog anzeigen
 	//   open = Boolean
 	//     (der showOpenDialog() soll angezeigt werden; sonst showSaveDailog())
 	//   winId = Number
