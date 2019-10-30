@@ -43,6 +43,7 @@
 }
 
 #start-liste li {
+	position: relative;
 	border-bottom: 1px solid var(--linie);
 	padding: 0 10px;
 	overflow: hidden;
@@ -60,7 +61,13 @@
 	font-size: 20px;
 }
 
-#start-liste span:last-child {
+#start-liste span + span {
 	margin-left: 15px;
 	font-size: 12px;
+}
+
+#start-liste img {
+	position: absolute;
+	top: 0;
+	left: 0;
 }

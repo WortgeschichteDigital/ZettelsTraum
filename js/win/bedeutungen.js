@@ -84,6 +84,7 @@ let bedeutungen = {
 			// Zählung
 			let b = document.createElement("b");
 			p.appendChild(b);
+			b.classList.add("zaehlung");
 			b.textContent = bd[i].za;
 			// Bedeutung
 			let span = document.createElement("span");

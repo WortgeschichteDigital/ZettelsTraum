@@ -1,8 +1,6 @@
 "use strict";
 
 let zuletzt = {
-	// speichert Karteien, die verschwunden sind
-	verschwunden: [],
 	// baut die Liste auf
 	aufbauen () {
 		let cont = document.getElementById("start-zuletzt");
@@ -31,6 +29,10 @@ let zuletzt = {
 			span = document.createElement("span");
 			span.textContent = datei;
 			li.appendChild(span);
+			// Markierung, dass die Datei verschwunden ist
+			if (zuletzt.verschwunden.includes(datei)) {
+				li.appendChild(zuletzt.verschwundenImg());
+			}
 			// Listenpunkt einhängen
 			zuletzt.karteiOeffnen(li);
 			liste.appendChild(li);
@@ -78,5 +80,40 @@ let zuletzt = {
 		if (!document.getElementById("start").classList.contains("aus")) {
 			zuletzt.aufbauen();
 		}
+	},
+	// speichert Karteien, die verschwunden sind
+	verschwunden: [],
+	// markiert Karteien auf der Startseite als verschwunden
+	//   verschwunden = Array
+	//     (Liste der Karteien, die nicht mehr gefunden wurden)
+	verschwundenUpdate (verschwunden) {
+		zuletzt.verschwunden = verschwunden;
+		document.querySelectorAll("#start-liste li").forEach(i => {
+			let datei = i.dataset.datei;
+			if (verschwunden.includes(datei)) {
+				i.appendChild(zuletzt.verschwundenImg());
+			} else if (i.querySelector("img")) {
+				i.removeChild(i.querySelector("img"));
+			}
+		});
+	},
+	// erzeugt ein Image, das eine Kartei als verschwunden markiert
+	verschwundenImg () {
+		let img = document.createElement("img");
+		img.src = "img/x-dick-rot.svg";
+		img.width = "24";
+		img.height = "24";
+		return img;
+	},
+	// eine verschwundene Kartei wurde wiedergefunden
+	//   datei = String
+	//     (Kartei, die gerade geöffnet oder gespeichert wurde)
+	verschwundenCheck (datei) {
+		if (!zuletzt.verschwunden.includes(datei)) {
+			return;
+		}
+		zuletzt.verschwunden.splice(datei.indexOf(datei), 1);
+		const {ipcRenderer} = require("electron");
+		ipcRenderer.invoke("optionen-zuletzt-wiedergefunden", zuletzt.verschwunden);
 	},
 };

@@ -487,6 +487,33 @@ appMenu = {
 		}
 		layoutZuletzt.submenu.push(item);
 	},
+	// überprüft, ob die zuletzt verwendeten Karteien noch vorhanden sind
+	zuletztCheck () {
+		let fs = require("fs");
+		for (let i of optionen.data.zuletzt) {
+			if (!fs.existsSync(i)) {
+				appMenu.zuletztVerschwunden.push(i);
+			}
+		}
+		if (appMenu.zuletztVerschwunden.length) {
+			appMenu.zuletztVerschwundenInform();
+		}
+	},
+	// speichert Dateipfade von Karteien, die verschwunden sind
+	zuletztVerschwunden: [],
+	// informiert die Browserfenster über Dateipfade mit Karteien, die nicht gefunden wurden
+	zuletztVerschwundenInform () {
+		for (let id in win) {
+			if (!win.hasOwnProperty(id)) {
+				continue;
+			}
+			if (win[id].typ !== "index") {
+				continue;
+			}
+			let w = BrowserWindow.fromId(parseInt(id, 10));
+			w.webContents.send("optionen-zuletzt-verschwunden", appMenu.zuletztVerschwunden);
+		}
+	},
 	// Menüs in den Hauptfenstern auffrischen
 	zuletztUpdate () {
 		for (let id in win) {
@@ -716,6 +743,10 @@ fenster = {
 		});
 		// ggf. übergebene Kartei öffnen
 		bw.webContents.once("did-finish-load", function() {
+			if (appMenu.zuletztVerschwunden.length) {
+				// die IPC-Listener im Renderer-Prozess müssen erst initialisiert werden
+				setTimeout(() => this.send("optionen-zuletzt-verschwunden", appMenu.zuletztVerschwunden), 25);
+			}
 			if (/\.wgd$/.test(process.argv[1]) || kartei) {
 				let datei = kartei;
 				if (!datei) {
@@ -942,6 +973,7 @@ fenster = {
 			backgroundColor: "#386ea6",
 			width: 650,
 			height: 334,
+			useContentSize: true, // Nur in Über-Fenstern nutzen! In einer nicht paketierten Version von Linux ist das Fenster dann zu hoch; in einer paketierten ist hingegen alles in Ordnung.
 			center: true,
 			resizable: false,
 			minimizable: false,
@@ -1058,6 +1090,10 @@ app.on("ready", async () => {
 	appMenu.zuletzt();
 	// warten mit dem Öffnen des Fensters, bis die Optionen eingelesen wurden
 	fenster.erstellen("");
+	// überprüfen, ob die zuletzt verwendten Karteien noch vorhanden sind
+	setTimeout(() => {
+		appMenu.zuletztCheck();
+	}, 5000);
 });
 
 // App beenden, wenn alle Fenster geschlossen worden sind
@@ -1188,6 +1224,12 @@ ipcMain.handle("optionen-speichern", (evt, opt, winId) => {
 	// Optionen nach Timeout in einstellungen.json schreiben
 	clearTimeout(optionen.schreibenTimeout);
 	optionen.schreibenTimeout = setTimeout(() => optionen.schreiben(), 6e4);
+});
+
+// verschwundene Kartei wurde wiedergefunden
+ipcMain.handle("optionen-zuletzt-wiedergefunden", (evt, verschwunden) => {
+	appMenu.zuletztVerschwunden = verschwunden;
+	appMenu.zuletztVerschwundenInform();
 });
 
 

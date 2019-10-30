@@ -14,7 +14,7 @@
 	text-indent: -37px;
 }
 
-.bd-win-baum b {
+.bd-win-baum b.zaehlung {
 	display: inline-block;
 	width: 37px;
 	text-align: center;

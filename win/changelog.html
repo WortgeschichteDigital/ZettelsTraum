@@ -135,6 +135,10 @@
 					</li>
 
 					<li>
+						<p>Die <a href="#menueKartei-zuletztVerwendet" class="link-handbuch">Liste zuletzt verwendeter Karteien</a> wird nun nicht mehr automatisch bereinigt. Es wird zwar immer noch beim Programmstart überprüft, ob Karteien gefunden wurden, nicht gefundene werden jedoch nur noch als fehlend markiert (<img src="../img/x-dick-rot.svg" width="24" height="24" alt="">), aber nicht mehr aus der Liste entfernt. <a href="#menueApp-neuesFenster" class="link-handbuch">Details dazu im Handbuch.</a> Dieses neue Verhalten dürfte den Start der App nebenbei ein wenig beschleunigen, da die Überprüfung nun zeitversetzt stattfindet.</p>
+					</li>
+
+					<li>
 						<p>Neue Programmfenster werden nun nach Möglichkeit nicht mehr an derselben Position geöffnet, an der sich das Fenster befindet, aus dem heraus sie geöffnet werden. Standardmäßig werden sie relativ zum gerade fokussierten Fenster um 100 Pixel nach rechts und 100 Pixel nach unten verschoben, allerdings nur, wenn sie dadurch nicht im Off verschwinden. Alternativ wird versucht, sie um 100 Pixel nach links und/oder 100 Pixel nach oben zu versetzen. Würden sie bei irgendeiner der Kombinationen nicht mehr vollständig auf dem Bildschirm sichtbar sein oder weiß die App nicht, welches Programmfenster gerade fokussiert ist (weil eine neue Kartei <abbr title="zum Beispiel">z. B.</abbr> aus einem Dateimanager heraus aufgerufen wurde), öffnet sich das Fenster <a href="#einstellungen-fenster" class="link-handbuch">an der letzten gespeicherten Position</a>.</p>
 
 						<p>Genauso verfahren auch das <a href="#" class="link-handbuch">Handbuch</a> und die <a href="#" class="link-dokumentation">technische Dokumentation</a>. Damit die beiden Fenster, die beim Öffnen immer dieselbe Größe haben, nicht übereinanderliegen und einander verdecken, werden auch sie <abbr title="gegebenenfalls">ggf.</abbr> um 100 Pixel zueinander verschoben. Wird eines dieser Fenster nicht aus dem jeweils anderen Fenster aufgerufen, öffnet es sich wie gehabt zentriert.</p>
@@ -157,6 +161,8 @@
 
 						<p>Als Nebeneffekt dieser Änderung konnte die erklärende Kopfzeile im <a href="#menueKartei-redaktion" class="link-handbuch">Redaktions-Fenster</a> entfernt werden. Die Platzhalter übernehmen ihre Funktion.</p>
 					</li>
+
+					<li>In den Erinnerungen, die im Kopf des Hauptfensters erscheinen, wenn eine Formalie übersehen wurde (Icon <img src="../img/kreis-ausrufezeichen.svg" width="24" height="24" alt="">), sind die Funktionen, in denen noch etwas nachgetragen werden sollte, nun verlinkt. Man kann sie also via Klick direkt aus dem Meldungsfenster öffnen.</li>
 
 					<li>Das Icon für die Funktion <a href="#menueAnsicht-standardgroesse" class="link-handbuch"><i>Ansicht &gt; Standardgröße</i></a> wurde geändert: <img src="../img/fenster-standard.svg" width="24" height="24" alt="">. Es ist nun klarer vom Icon für die Vollbild-Anzeige (<img src="../img/fenster-vollbild.svg" width="24" height="24" alt="">) unterschieden, dafür den Icons zum Vergrößern und Verkleinern der Anzeige ähnlicher.</li>
 
@@ -222,13 +228,21 @@
 
 					<li>Annotierungsfunktion: Öffnete man das Annotierungspopup zum Annotieren eines noch nicht annotierten Karteiworts und klickte man dann auf das Textfeld und danach sofort wieder auf <kbd>Esc</kbd> oder klickte man auf das gelbe Quadrat, kam es zu einem Fehler. Das Annotierungspopup musste erst wieder geschlossen und neu geöffnet werden, ansonsten funktionierte es nicht mehr.</li>
 
-					<li><a href="#belegliste" class="link-handbuch">Belegliste</a>: Führte das Filtern der Belegliste mit dem <a href="#filter-volltext" class="link-handbuch">Volltextfilter</a> dazu, dass in einem angezeigten Belege alle Absätze gekürzt wurden (<q>[…]</q>), weil in ihnen das Suchwort nicht gefunden wurde, konnte die Kürzung des Textes nicht mehr durch Klick auf den Absatz rückgängig gemacht werden.</li>
+					<li>Annotierungsfunktion: Unter gewissen Umständen wurden Absätze in der Belegliste und in der Leseansicht der Karteikarte nicht gekürzt (bei aktivierter Funktion <img src="../img/trennzeichen.svg" width="24" height="24" alt="">), obwohl sie nur einen Treffer des Karteiworts enthielten und dieser als falschpositiver Treffer markiert war (<abbr title="das heißt">d. h.</abbr> seine Hintergrundfarbe war auf transparent gesetzt worden).</li>
+
+					<li><a href="#belegliste" class="link-handbuch">Belegliste</a>: Führte das Filtern der Belegliste mit dem <a href="#filter-volltext" class="link-handbuch">Volltextfilter</a> dazu, dass in einem der angezeigten Belege alle Absätze gekürzt wurden (<q>[…]</q>), weil in ihnen das Suchwort nicht gefunden wurde, konnte die Kürzung des Textes nicht mehr durch Klick auf den Absatz rückgängig gemacht werden.</li>
 
 					<li>Belegliste: Die mit Version 0.20.0 erfolgte Reparatur der Anzeige des Meldungsfensters, das beim blockweisen Hinzufügen von Bedeutungen aus dem Bedeutungsgerüst-Fenster erscheint, hat das Austragen von Bedeutungen nicht berücksichtigt. Die Zählzeichen werden nun auch in diesem Fall vom Text der Bedeutung abgesetzt dargestellt.</li>
 
+					<li>Belegliste: Im Meldungsfenster, das beim Eintragen von Bedeutungen aus dem <a href="#bedeutungsgeruest-fenster" class="link-handbuch">Bedeutungsgerüst-Fenster</a> erscheint, wurden gefettete Wörter in Bedeutungsdefinitionen vom Rest des Textes links und rechts um 10 Pixel abgesetzt.</li>
+
 					<li>Belegliste und <a href="#karteikarte" class="link-handbuch">Karteikarte</a>: Beim Kopieren einer Textauswahl mit den Kopierfunktionen <i>Rechtsklick &gt; Textauswahl kopieren</i> oder <img src="../img/kopieren.svg" width="24" height="24" alt="">, die den Belegtext vor dem Kopieren bereinigen, konnte es dazu kommen, dass Hervorhebungen von Suchtreffern (des Volltextfilters und der Suchleiste) und Karteiwörtern sowie Annotierungen gar nicht oder nicht korrekt entfernt wurden. Dies konnte wiederum zur Folge haben, dass Teile des kopierten Textes nach dem Einfügen in ein Textverarbeitungsprogramm verschluckt wurden.</li>
 
+					<li>Filterleiste: Formatierungen in Bedeutungsdefinitionen sind in Filternamen als <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>-Tags dargestellt worden, also <abbr title="zum Beispiel">z. B.</abbr>: <q>Mannschaft im &lt;i&gt;Sport&lt;/i&gt;</q>. Jetzt werden die Formatierungen korrekt visualisiert: <q>Mannschaft im <i>Sport</i></q>.</li>
+
 					<li><a href="#bedeutungsgeruest" class="link-handbuch">Bedeutungsgerüst</a>: Navigiert man im Bedeutungsgerüst mit der <kbd>Tab</kbd>-Taste, ohne dass bereits eine der Bedeutungen ausgewählt wurde, kann man in der Bedeutungstabelle nacheinander die Icons zum Verschieben, Löschen, Verschmelzen fokussieren und via <kbd>⏎</kbd> aufrufen. Die Icons für das Verschieben und Verschmelzen wurden jedoch nicht blau hervorgehoben. Es war somit nicht sichtbar, wo der Fokus gerade lag.</li>
+
+					<li>Bedeutungsgerüst: Wenn eine Bedeutung mit Formatierungen (Fettung, Kursivierung, Unterstreichung) versehen war, war es möglich einen wörtlich identischen Alias zu erstellen. Jetzt werden Formatierungen der Bedeutungsdefinition nicht mehr als Unterscheidungskriterium gewertet (wie es eigentlich schon immer sein sollte); ein wörtlich identisches Alias wird nicht akzeptiert.</li>
 
 					<li><a href="#bedeutungsgeruest-tagFenster" class="link-handbuch">Tag-Fenster</a>: In den Textfeldern eingegebene Tags, die sich nicht in den Tag-Dateien finden, werden beim Speichern eliminiert und nicht übernommen, worüber die NutzerIn auch benachrichtigt wird. Blieb das Tag-Fenster nach dem Speichern offen, weil die <a href="#einstellungen-tagFenster" class="link-handbuch">entsprechende Einstellung zum Schließen deaktiviert</a> war, blieben die fehlerhaften Tags jedoch in den Textfeldern stehen. Ein verwirrendes Verhalten, das mit dieser Version korrigiert wird: Fehlerhafte Tags werden nun beim Speichern auch aus den Textfeldern entfernt.</li>
 
@@ -236,9 +250,11 @@
 
 					<li>Bedeutungsgerüst-Fenster: Beim blockweisen Ein- oder Austragen von Bedeutungen in allen in der Belegliste sichtbaren Belegen wurde das Änderungsdatum der Belege nicht aufgefrischt.</li>
 
+					<li>Bedeutungsgerüst-Fenster: Fettungen innerhalb einer Bedeutungsdefinition wurden links und rechts vom übrigen Text um 10 Pixel abgesetzt.</li>
+
 					<li>Seit Version 0.18.0 übernimmt das Programm das seitenweise Scrollen mithilfe der Tastatur im <a href="#bedeutungsgeruest" class="link-handbuch">Bedeutungsgerüst</a>, in der <a href="#belegliste" class="link-handbuch">Belegliste</a> und in der <a href="#karteikarte" class="link-handbuch">Karteikarte</a>. Das funktionierte jedoch nicht mehr, wenn die <a href="#belegliste-suchleiste" class="link-handbuch">Suchleiste</a> einmal geöffnet und wieder geschlossen worden war.</li>
 
-					<li>Druchvorschau: Karteiwörter, die als transparent annotiert waren, wurden in der Druckvorschau trotzdem hervorgehoben und letztlich auch mit dieser Hervorhebung gedruckt.</li>
+					<li>Druckvorschau: Karteiwörter, die als transparent annotiert waren, wurden in der Druckvorschau trotzdem hervorgehoben und letztlich auch mit dieser Hervorhebung gedruckt.</li>
 
 					<li>Druckvorschau: Annotierungen wurden für die Druckvorschau nicht entfernt, der Text wurde mit den entsprechenden farblichen Hervorhebungen gedruckt. Bei annotierten Karteiwörtern konnte dies dazu führen, dass weißer Text auf grauem Grund gedruckt wurde; und wurde vom <a href="#framework" class="link-dokumentation">Framework</a> für den Druck die Hintergrundfarbe automatisch entfernt (dieses Verhalten lässt sich nicht unterbinden), kam es mitunter sogar zum Druck von weißem Text auf weißem Grund. Eine weitere Folge dieses Fehlers war, dass das Kopieren einer Textauswahl (via <i>Rechtsklick &gt; Textauswahl kopieren</i> oder <img src="../img/kopieren.svg" width="24" height="24" alt="">) dazu führen konnte, dass Text nach dem Einfügen in ein Textverarbeitungsprogramm verschwand.</li>
 

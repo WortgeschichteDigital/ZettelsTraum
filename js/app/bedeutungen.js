@@ -173,17 +173,23 @@ let bedeutungen = {
 	//     (ID der Bedeutung)
 	//   za = false || undefined
 	//     (das Zählzeichen soll angezeigt werden)
+	//   zaCl = true || undefined
+	//     (das Zählzeichen soll die class "zaehlung" erhalten)
 	//   al = true || undefined
 	//     (hat die Bedeutung einen Alias, soll der Alias zurückgegeben werden)
 	//   leer = true || undefined
 	//     (vor und hinter den Zählzeichen werden Leerzeichen eingefügt)
 	//   strip = true || undefined
 	//     (Tags werden aus der Bedeutung entfernt)
-	bedeutungenTief ({gr, id, za = true, al = false, leer = false, strip = false}) {
+	bedeutungenTief ({gr, id, za = true, zaCl = false, al = false, leer = false, strip = false}) {
 		let arr = [],
 			bd = data.bd.gr[gr].bd,
 			bd_len = -1,
-			idx = -1;
+			idx = -1,
+			cl = "";
+		if (zaCl) {
+			cl = ` class="zaehlung"`;
+		}
 		// Bedeutung finden
 		for (let i = 0, len = bd.length; i < len; i++) {
 			if (bd[i].id === id) {
@@ -234,9 +240,9 @@ let bedeutungen = {
 				if (init) {
 					zaehlungVor = "";
 				}
-				zaehlung = `${zaehlungVor}<b>${bd[i].za}</b> `;
+				zaehlung = `${zaehlungVor}<b${cl}>${bd[i].za}</b> `;
 			} else if (za) {
-				zaehlung = `<b>${bd[i].za}</b>`;
+				zaehlung = `<b${cl}>${bd[i].za}</b>`;
 			}
 			let bedeutung = bd[i].bd[bd_len - 1];
 			if (al && bd[i].al) {
@@ -1097,7 +1103,11 @@ let bedeutungen = {
 		const bd = bedeutungen.akt.bd[idx].bd[bedeutungen.akt.bd[idx].bd.length - 1];
 		let zaehlung = bedeutungen.zaehlungTief(idx);
 		for (let i = 0, len = zaehlung.length; i < len; i++) {
-			zaehlung[i] = `<b class="zaehlung">${zaehlung[i]}</b>`;
+			let zaehlungTief = "";
+			if (i > 0) {
+				zaehlungTief = " zaehlung-tief";
+			}
+			zaehlung[i] = `<b class="zaehlung${zaehlungTief}">${zaehlung[i]}</b>`;
 		}
 		dialog.oeffnen({
 			typ: "confirm",
@@ -1172,12 +1182,20 @@ let bedeutungen = {
 		const idx = parseInt(document.querySelector(".bedeutungen-aktiv").dataset.idx, 10);
 		let zaehlungIdx = bedeutungen.zaehlungTief(idx);
 		for (let i = 0, len = zaehlungIdx.length; i < len; i++) {
-			zaehlungIdx[i] = `<b class="zaehlung">${zaehlungIdx[i]}</b>`;
+			let zaehlungTief = "";
+			if (i > 0) {
+				zaehlungTief = " zaehlung-tief";
+			}
+			zaehlungIdx[i] = `<b class="zaehlung${zaehlungTief}">${zaehlungIdx[i]}</b>`;
 		}
 		const bdIdx = bedeutungen.akt.bd[idx].bd[bedeutungen.akt.bd[idx].bd.length - 1];
 		let zaehlungIdxZiel = bedeutungen.zaehlungTief(idxZiel);
 		for (let i = 0, len = zaehlungIdxZiel.length; i < len; i++) {
-			zaehlungIdxZiel[i] = `<b class="zaehlung">${zaehlungIdxZiel[i]}</b>`;
+			let zaehlungTief = "";
+			if (i > 0) {
+				zaehlungTief = " zaehlung-tief";
+			}
+			zaehlungIdxZiel[i] = `<b class="zaehlung${zaehlungTief}">${zaehlungIdxZiel[i]}</b>`;
 		}
 		const bdIdxZiel = bedeutungen.akt.bd[idxZiel].bd[bedeutungen.akt.bd[idxZiel].bd.length - 1];
 		dialog.oeffnen({
@@ -1437,7 +1455,9 @@ let bedeutungen = {
 						}
 						alias_schon_vergeben(edit, "alias");
 						return;
-					} else if (bedeutungen.akt.bd[i].bd[bedeutungen.akt.bd[i].bd.length - 1] === wert) {
+					}
+					const bdTextRein = bedeutungen.akt.bd[i].bd[bedeutungen.akt.bd[i].bd.length - 1].replace(/<.+?>/g, "");
+					if (bdTextRein === wert) {
 						if (i === idx) {
 							alias_schon_vergeben(edit, "alias_identisch");
 						} else {

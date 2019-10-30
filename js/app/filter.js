@@ -708,7 +708,11 @@ let filter = {
 		// Label
 		let label = document.createElement("label");
 		label.setAttribute("for", `filter-${f_enc}`);
-		label.innerHTML = helfer.escapeHtml(obj.name);
+		if (/^bedeutungen-/.test(f)) {
+			label.innerHTML = obj.name;
+		} else {
+			label.innerHTML = helfer.escapeHtml(obj.name);
+		}
 		p.appendChild(label);
 		// Anzahl der Belege
 		if (obj.wert) {

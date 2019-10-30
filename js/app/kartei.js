@@ -168,6 +168,8 @@ let kartei = {
 					});
 					return;
 				}
+				// War die Datei evtl. verschwunden?
+				zuletzt.verschwundenCheck(datei);
 				// Datei sperren
 				kartei.lock(datei, "lock");
 				// Main melden, dass die Kartei in diesem Fenster geöffnet wurde
@@ -270,6 +272,7 @@ let kartei = {
 			const fsP = require("fs").promises;
 			fsP.writeFile(pfad, JSON.stringify(data))
 				.then(() => {
+					zuletzt.verschwundenCheck(pfad);
 					if (!kartei.pfad) {
 						kartei.lock(pfad, "lock");
 					} else if (pfad !== kartei.pfad) {

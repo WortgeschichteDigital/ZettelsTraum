@@ -912,6 +912,7 @@ let liste = {
 	//   text = String
 	//     (Text, der auf die Existenz des Karteiworts überprüft werden soll)
 	wortVorhanden (text) {
+		let regFarbe = new RegExp(`farbe0.+?>`, "g");
 		for (let i of helfer.formVariRegExpRegs) {
 			let reg = new RegExp(i, "gi"),
 				matches = text.match(reg);
@@ -920,8 +921,7 @@ let liste = {
 				return false;
 			}
 			// wenn alle Treffer ausgeblendet sind (Annotierung mit transparenter Farbe) => Absatz kürzen
-			let regFarbe = new RegExp(`farbe0.+?>(${i})`, "gi"),
-				matchesFarbe = text.match(regFarbe);
+			let matchesFarbe = text.match(regFarbe);
 			if (matchesFarbe && matchesFarbe.length === matches.length) {
 				return false;
 			}

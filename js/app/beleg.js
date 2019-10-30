@@ -1855,7 +1855,7 @@ let beleg = {
 	//   bd = Object
 	//     (die Bedeutung mit Gerüstnummer [bd.gr] und ID [bd.id])
 	bedeutungEintragenListe (bd) {
-		const bdText = beleg.bedeutungenEinAustragenText(bd);
+		const bdText = bedeutungen.bedeutungenTief({gr: bd.gr, id: bd.id, zaCl: true});
 		// keine Belege in der Liste
 		if (!document.querySelector("#liste-belege-cont .liste-kopf")) {
 			dialog.oeffnen({
@@ -1905,7 +1905,7 @@ let beleg = {
 	//   bd = Object
 	//     (die Bedeutung mit Gerüstnummer [bd.gr] und ID [bd.id])
 	bedeutungAustragenListe (bd) {
-		const bdText = beleg.bedeutungenEinAustragenText(bd);
+		const bdText = bedeutungen.bedeutungenTief({gr: bd.gr, id: bd.id, zaCl: true});
 		// keine Belege in der Liste
 		if (!document.querySelector("#liste-belege-cont .liste-kopf")) {
 			dialog.oeffnen({
@@ -1961,15 +1961,5 @@ let beleg = {
 				}
 			},
 		});
-	},
-	// bereitet den Bedeutungstext auf, der beim Ein- oder Austragen von Bedeutungen
-	// in der Belegliste angezeigt wird
-	//   bd = Object
-	//     (die Bedeutung mit Gerüstnummer [bd.gr] und ID [bd.id])
-	bedeutungenEinAustragenText (bd) {
-		let bdText = bedeutungen.bedeutungenTief({gr: bd.gr, id: bd.id});
-		bdText = bdText.replace(/<b>/, `<b class="zaehlung">`); // erstes Zählzeichen
-		bdText = bdText.replace(/<b>/g, `<b class="zaehlung nach-text">`); // weitere Zählzeichen
-		return bdText;
 	},
 };

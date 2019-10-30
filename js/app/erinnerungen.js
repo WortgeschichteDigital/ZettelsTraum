@@ -4,15 +4,15 @@ let erinnerungen = {
 	data: {
 		bearbeiterin: {
 			okay: false,
-			text: "Sie haben sich noch nicht registriert (⇨ <i>APP &gt; Einstellungen &gt; Allgemeines &gt; BearbeiterIn</i>).",
+			text: `Sie haben sich <a href="#" class="link-erinnerung" data-funktion="einstellungen-allgemeines">noch nicht registriert</a> (⇨ <i>APP &gt; Einstellungen &gt; Allgemeines &gt; BearbeiterIn</i>).`,
 		},
 		metadaten: {
 			okay: false,
-			text: "In den Metadaten der Kartei ist keine BearbeiterIn registriert (⇨ <i>Kartei &gt; Metadaten</i>).",
+			text: `In den <a href="#" class="link-erinnerung" data-funktion="metadaten">Metadaten der Kartei</a> ist keine BearbeiterIn registriert (⇨ <i>Kartei &gt; Metadaten</i>).`,
 		},
 		redaktion: {
 			okay: false,
-			text: "Im Redaktionsfenster fehlen Angaben zu den BearbeiterInnen (⇨ <i>Kartei &gt; Redaktion</i>).",
+			text: `Im <a href="#" class="link-erinnerung" data-funktion="redaktion">Redaktionsfenster</a> fehlen Angaben zu den BearbeiterInnen (⇨ <i>Kartei &gt; Redaktion</i>).`,
 		},
 	},
 	// überprüfen, ob auf etwas hingewiesen werden muss
@@ -84,6 +84,28 @@ let erinnerungen = {
 		dialog.oeffnen({
 			typ: "alert",
 			text: `${punkt} vielleicht korrigiert werden:\n${text.join("\n")}`,
+		});
+		document.querySelectorAll("#dialog-text a").forEach(a => erinnerungen.listener(a));
+	},
+	// Klick-Listener für die Verlinkungen im Erinnerungenfenser
+	//   a = Element
+	//     (der Link im Erinnerungenfenster, der zu der Funktion führt)
+	listener (a) {
+		a.addEventListener("click", function(evt) {
+			evt.preventDefault();
+			let funktion = this.dataset.funktion;
+			switch (funktion) {
+				case "einstellungen-allgemeines":
+					optionen.oeffnen();
+					optionen.sektionWechseln(document.querySelector("#einstellungen ul a"));
+					break;
+				case "metadaten":
+					meta.oeffnen();
+					break;
+				case "redaktion":
+					redaktion.oeffnen();
+					break;
+			}
 		});
 	},
 };

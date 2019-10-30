@@ -266,6 +266,7 @@ let drucken = {
 			// Zählung
 			let b = document.createElement("b");
 			p.appendChild(b);
+			b.classList.add("zaehlung");
 			b.textContent = bd[i].za;
 			// Bedeutung
 			let span = document.createElement("span");
@@ -374,11 +375,9 @@ let drucken = {
 		}
 		function baumText (text) {
 			text = text.replace(/<\/h3>/, "\n\n");
-			text = text.replace(/<\/b>/g, " ");
+			text = text.replace(/<b class="zaehlung">(.+?)<\/b>/g, (m, p1) => `${p1} `);
 			text = text.replace(/<\/p>/g, "\n");
-			text = text.replace(/<div class="bd-win-baum">/g, function() {
-				return "\t";
-			});
+			text = text.replace(/<div class="bd-win-baum">/g, () => "\t");
 			return text;
 		}
 		function cleanText (text) {

@@ -218,11 +218,8 @@
 	margin: 0 10px;
 }
 
-.bedeutungen-dialog b.zaehlung:first-child {
-	margin-left: 0;
-}
-
-b.zaehlung ~ b.zaehlung:not(.nach-text) {
+.bedeutungen-dialog b.zaehlung:first-child,
+.bedeutungen-dialog b.zaehlung-tief {
 	margin-left: 0;
 }
 

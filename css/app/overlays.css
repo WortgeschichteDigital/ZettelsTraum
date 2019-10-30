@@ -565,7 +565,7 @@
 
 #karteisuche-karteien {
 	max-height: 371px;
-	overflow-y: auto;
+	overflow-x: hidden;
 }
 
 #karteisuche-karteien p {
@@ -586,7 +586,6 @@
 }
 
 #karteisuche-karteien p span {
-	display: inline-block;
 	color: var(--textFarbe);
 }
 

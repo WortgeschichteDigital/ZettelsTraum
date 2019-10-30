@@ -70,6 +70,7 @@ window.addEventListener("load", async () => {
 	// Einstellungen
 	ipcRenderer.on("optionen-empfangen", (evt, data) => optionen.empfangen(data));
 	ipcRenderer.on("optionen-zuletzt", (evt, karteien) => zuletzt.update(karteien));
+	ipcRenderer.on("optionen-zuletzt-verschwunden", (evt, verschwunden) => zuletzt.verschwundenUpdate(verschwunden));
 	ipcRenderer.on("optionen-fenster", (evt, fenster, status) => optionen.data[fenster] = status);
 	// Bedeutungsgerüst-Fenster
 	ipcRenderer.on("bedeutungen-fenster-daten", () => bedeutungenWin.daten());
