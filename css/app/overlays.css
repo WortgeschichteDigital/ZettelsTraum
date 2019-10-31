@@ -360,8 +360,18 @@
 	vertical-align: top;
 }
 
+#tags-cont + p {
+	position: relative;
+}
+
 #tags-laden {
 	margin-left: 0;
+}
+
+#tags-zuruecksetzen {
+	position: absolute;
+	top: 0;
+	right: 0;
 }
 
 .icon-loeschen {

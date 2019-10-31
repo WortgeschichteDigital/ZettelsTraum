@@ -51,6 +51,10 @@ let kopieren = {
 	winIdAnfrage: -1,
 };
 
+// Variable für Abgleich der Tag-Dateien
+// (soll nur einmal pro Session stattfinden)
+let tagDateienAbgleich = true;
+
 // Funktionen-Container
 let appMenu, optionen, fenster;
 
@@ -625,7 +629,18 @@ appMenu = {
 				if (!win.hasOwnProperty(id)) {
 					continue;
 				}
-				BrowserWindow.fromId(parseInt(id, 10)).close();
+				if (win[id].typ === "bedeutungen") {
+					// Bedeutungsgerüst-Fenster werden vom zugehörigen Hauptfenster geschlossen
+					// (kann zu einem Fehler führen, wenn hier auch noch einmal versucht wird,
+					// sie zu schließen)
+					continue;
+				}
+				let w = BrowserWindow.fromId(parseInt(id, 10));
+				if (w) {
+					// Fenster wurde schon geschlossen
+					// (kann bei App > Beenden irgendwie passieren)
+					w.close();
+				}
 			}
 		} else if (parameter) {
 			w.webContents.send(befehl, parameter);
@@ -821,8 +836,8 @@ fenster = {
 			title = typ.substring(0, 1).toUpperCase() + typ.substring(1);
 			bounds.width = 625;
 			bounds.height = 625;
-			bounds.minWidth = 350;
-			bounds.minHeight = 350;
+			bounds.minWidth = 400;
+			bounds.minHeight = 400;
 		} else if (typ === "dokumentation") {
 			title = "Technische Dokumentation";
 		} else if (typ === "handbuch") {
@@ -1232,6 +1247,16 @@ ipcMain.handle("optionen-zuletzt-wiedergefunden", (evt, verschwunden) => {
 	appMenu.zuletztVerschwundenInform();
 });
 
+// Anfrage, ob die Tag-Dateien abgeglichen werden solle
+// (soll nur einmal pro Session geschehen)
+ipcMain.handle("optionen-tag-dateien-abgleich", () => {
+	if (tagDateienAbgleich) {
+		tagDateienAbgleich = false;
+		return true; // Tag-Dateien abgleichen
+	}
+	return false; // Tag-Dateien nicht abgleichen
+});
+
 
 // ***** FENSTER *****
 // Handbuch öffnen
@@ -1270,6 +1295,11 @@ ipcMain.handle("fenster-schliessen", evt => {
 // Fenster endgültig schließen
 ipcMain.handle("fenster-schliessen-endgueltig", evt => {
 	let w = BrowserWindow.fromWebContents(evt.sender);
+	if (!w) {
+		// Fenster wurde schon geschlossen
+		// (kann bei App > Beenden irgendwie passieren)
+		return;
+	}
 	win[w.id].exit = true;
 	w.close();
 });

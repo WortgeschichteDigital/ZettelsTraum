@@ -475,10 +475,15 @@ let helfer = {
 	// ein übergebenes Datum formatiert ausgeben
 	//   datum = String
 	//     (im ISO 8601-Format)
-	datumFormat (datum) {
+	//   knapp = true || undefined
+	//     (eine knappere Version des Datums wird zurückgegeben)
+	datumFormat (datum, knapp = false) {
 		let wochentage = ["Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"],
 			monate = ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"];
 		let d = new Date(datum);
+		if (knapp) {
+			return `${d.getDate()}. ${d.getMonth() + 1}. ${d.getFullYear()}, ${d.getHours()}:${d.getMinutes() < 10 ? `0${d.getMinutes()}` : d.getMinutes()} Uhr`;
+		}
 		return `${wochentage[d.getDay()]}, ${d.getDate()}. ${monate[d.getMonth()]} ${d.getFullYear()}, ${d.getHours()}:${d.getMinutes() < 10 ? `0${d.getMinutes()}` : d.getMinutes()} Uhr`;
 	},
 	// überprüft den Typ des übergebenen Objekts zuverlässig
@@ -755,7 +760,7 @@ let helfer = {
 	},
 	// führt mitunter asynchrone Operationen aus, die nach und nach
 	// vor dem Schließen eines Hauptfensters abgearbeitet werden müssen;
-	// danach wird ein endgültiger Schließen-Befehl an das Main gegeben
+	// danach wird ein endgültiger Schließen-Befehl an Main gegeben
 	async beforeUnload () {
 		// Schließen unterbrechen, wenn ungespeicherte Änderungen
 		if (notizen.geaendert ||
@@ -772,7 +777,7 @@ let helfer = {
 			return;
 		}
 		// Bedeutungen-Fenster ggf. schließen
-		bedeutungenWin.schliessen();
+		await bedeutungenWin.schliessen();
 		// Kartei entsperren
 		await kartei.lock(kartei.pfad, "unlock");
 		// Status des Fensters speichern

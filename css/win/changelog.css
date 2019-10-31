@@ -17,6 +17,7 @@
 /* Struktur-Elemente ---------------------------- */
 body {
 	margin: 0;
+	overflow-x: hidden;
 	background-color: #fff;
 	color: var(--text);
 	font: 16px/24px "Noto Sans", "Noto Sans Symbols2", sans-serif;
@@ -190,10 +191,9 @@ li p {
 /* Besonderheiten ------------------------------- */
 #changelog-icons {
 	position: fixed;
-	top: 70px;
-	right: 10px;
-	padding: 0 0 5px 10px;
-	background-color: #fff;
+	top: 18px;
+	right: 88px;
+	z-index: 1;
 }
 
 #changelog-icons a {
@@ -202,7 +202,7 @@ li p {
 	padding: 0 5px;
 	width: 24px;
 	height: 24px;
-	background-color: var(--hintergrund);
+	background-color: #fff;
 	color: var(--text);
 	text-decoration: none;
 }

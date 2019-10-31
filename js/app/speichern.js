@@ -150,9 +150,8 @@ let speichern = {
 		speichern.checkAktiv = false; // muss vor dem Callback stehen, weil der wieder zu Aufrufen dieser Funktion führen kann; und die muss dann unbedingt durchlaufen, damit der neue Callback auch aufgerufen wird
 		speichern.checkCallback();
 	},
-	// Verteilerfunktion für "Kartei > Speichern" bzw. den Tastaturbefehl Strg + S;
-	// die Funktion kann eine Speicherkaskade auslösen oder nur Die Änderungen in der
-	// gerade sichtbaren Funktion speichern
+	// Verteilerfunktion für "Kartei > Speichern" bzw. den Tastaturbefehl Strg + S
+	// (es gibt drei verschiedene Verhaltensweisen des Befehls)
 	kaskade () {
 		// Sperre für macOS (Menüpunkte können nicht deaktiviert werden)
 		if (!kartei.wort) {
@@ -162,12 +161,17 @@ let speichern = {
 			});
 			return;
 		}
-		// keine Speicherkaskade
-		// (nur eine der ausstehenden Änderungen speichern)
-		if (!optionen.data.einstellungen.speicherkaskade) {
-			if (karteiSpeichern()) { // erfolgreich nur, wenn andere Änderungen schon gespeichert
-				return;
+		// Option 3: nur Kartei speichern
+		// (speichert Kartei, selbst wenn Änderungen in anderen Funktionen noch nicht übernommen)
+		if (optionen.data.einstellungen.speichern === "3") {
+			if (kartei.geaendert) {
+				kartei.speichern(false);
 			}
+			return;
+		}
+		// Option 2: nur aktive Funktion speichern
+		// (nur Änderungen in der aktuell sichtbaren Funktion speichern)
+		if (optionen.data.einstellungen.speichern === "2") {
 			const oben = overlay.oben();
 			if (oben === "notizen" && notizen.geaendert) {
 				notizen.speichern();
@@ -177,11 +181,14 @@ let speichern = {
 				beleg.aktionSpeichern();
 			} else if (!oben && bedeutungen.geaendert) {
 				bedeutungen.speichern();
+			} else if (!oben && kartei.geaendert &&
+					!document.getElementById("liste").classList.contains("aus")) {
+				kartei.speichern(false);
 			}
 			return;
 		}
-		// Speicherkaskade
-		// (versuchen, alle ausstehenden Änderungen zu übernehmen)
+		// Option 1: Speicherkaskade anstoßen
+		// (versuchen, alle ausstehenden Änderungen nacheinander zu übernehmen)
 		if (notizen.geaendert && !notizen.speichern()) {
 			return; // beim Speichern der Notizen ist etwas schiefgelaufen
 		}
@@ -194,18 +201,8 @@ let speichern = {
 		if (bedeutungen.geaendert && !bedeutungen.speichern()) {
 			return; // beim Speichern der Bedeutungen ist etwas schiefgelaufen (kann derzeit [2019-10-20] gar nicht sein; rein präventive Maßnahme)
 		}
-		karteiSpeichern();
-		// Funktion zum Speichern der Kartei
-		function karteiSpeichern () {
-			if (!notizen.geaendert &&
-					!tagger.geaendert &&
-					!bedeutungen.geaendert &&
-					!beleg.geaendert &&
-					kartei.geaendert) {
-				kartei.speichern(false);
-				return true;
-			}
-			return false;
+		if (kartei.geaendert) {
+			kartei.speichern(false);
 		}
 	},
 };

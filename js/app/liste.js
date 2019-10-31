@@ -912,21 +912,51 @@ let liste = {
 	//   text = String
 	//     (Text, der auf die Existenz des Karteiworts überprüft werden soll)
 	wortVorhanden (text) {
-		let regFarbe = new RegExp(`farbe0.+?>`, "g");
-		for (let i of helfer.formVariRegExpRegs) {
-			let reg = new RegExp(i, "gi"),
-				matches = text.match(reg);
-			// kein Treffer => Absatz kürzen
-			if (!matches) {
-				return false;
-			}
-			// wenn alle Treffer ausgeblendet sind (Annotierung mit transparenter Farbe) => Absatz kürzen
-			let matchesFarbe = text.match(regFarbe);
-			if (matchesFarbe && matchesFarbe.length === matches.length) {
-				return false;
+		// temporäres Element mit hervorgehobenen Karteiwörtern erzeugen
+		let div = document.createElement("div");
+		div.innerHTML = liste.belegWortHervorheben(text, true);
+		// Test 1: Kommt überhaupt ein Karteiwort im Text vor?
+		if (!div.querySelector(".wort")) {
+			return false;
+		}
+		// Test 2: Sind evtl. alle Treffer des Karteiworts als falschpositive markiert?
+		let marks = div.querySelectorAll(".wort:not(.wort-kein-start)"),
+			transparent = 0;
+		for (let m of marks) {
+			if (m.closest(".farbe0")) {
+				// Test ist nur problematisch, wenn ein Karteiwort in eine Textmarkierung eingeschlossen ist, deren Hintergrundfarbe transparent gesetzt wurde; nur: Wer macht sowas?
+				transparent++;
 			}
 		}
-		return true;
+		if (marks.length === transparent) {
+			return false;
+		}
+		// Test 3: Ist das Karteiwort mehrgliedrig? Wenn nein => alles okay (das Wort taucht auf)
+		if (helfer.formVariRegExpRegs.length === 1) {
+			return true;
+		}
+		// Test 4: Tauchen alle Wörter eines mehrgliedrigen Karteiworts auf?
+		let woerter = Array(helfer.formVariRegExpRegs.length).fill(false),
+			alleMarks = div.querySelectorAll(".wort");
+		for (let i = 0, len = alleMarks.length; i < len; i++) {
+			let treffer = alleMarks[i].textContent;
+			if (alleMarks[i].classList.contains("wort-kein-ende")) {
+				do {
+					i++;
+					treffer += alleMarks[i].textContent;
+				} while (i < len - 1 && alleMarks[i].classList.contains("wort-kein-ende"));
+			}
+			for (let j = 0, len = helfer.formVariRegExpRegs.length; j < len; j++) {
+				let reg = new RegExp(helfer.formVariRegExpRegs[j], "i");
+				if (reg.test(treffer)) {
+					woerter[j] = true;
+				}
+			}
+			if (!woerter.includes(false)) {
+				return true; // es wurden alle Karteiwörter gefunden (hier testen, um unnötige Durchläufe zu sparen)
+			}
+		}
+		return false; // manche Karteiwörter wurden nicht gefunden
 	},
 	// Suchtreffer hervorheben
 	//   text = String

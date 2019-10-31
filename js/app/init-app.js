@@ -227,6 +227,7 @@ window.addEventListener("load", async () => {
 	document.querySelectorAll("#einstellungen-quick-alle, #einstellungen-quick-keine, #einstellungen-quick-standards").forEach(a => optionen.quickSelect(a));
 	optionen.anwendenNotizenFilterleiste(document.getElementById("einstellung-notizen-filterleiste"));
 	document.getElementById("tags-laden").addEventListener("click", () => optionen.tagsManuLaden());
+	document.getElementById("tags-zuruecksetzen").addEventListener("click", () => optionen.tagsZuruecksetzen());
 	optionen.anwendenIconsDetailsListener(document.getElementById("einstellung-anzeige-icons-immer-an"));
 	// Formvarianten-Fenster
 	document.querySelectorAll("#stamm input").forEach(i => {

@@ -88,8 +88,11 @@ let optionen = {
 			// Timeout für Anfrage an das DTA in Sekunden
 			// (einfacher als String, wird bei Bedarf in Number konvertiert)
 			timeout: "10",
-			// Kartei > Speichern führt zu einer Speicherkaskade
-			speicherkaskade: true,
+			// legt das Verhalten von Kartei > Speichern fest
+			//   1 = Speicherkaskade
+			//   2 = nur aktive Funktion speichern
+			//   3 = nur Kartei speichern
+			speichern: "1",
 			// Einfügen-Fenster (Kopierfunktion) nach dem Einfügen direkt schließen
 			"einfuegen-schliessen": true,
 			// Hervorhebung des Karteiworts beim Kopieren von Text mitkopieren
@@ -343,7 +346,7 @@ let optionen = {
 		// Optionen im Optionen-Fenster eintragen
 		optionen.anwendenEinstellungen();
 	},
-	// die Einstellungen im Einstellungen-Fenster nach dem empfangen von Optionen anpassen
+	// die Einstellungen im Einstellungen-Fenster nach dem Empfangen von Optionen anpassen
 	anwendenEinstellungen () {
 		let ee = document.querySelectorAll("#einstellungen input");
 		for (let i = 0, len = ee.length; i < len; i++) {
@@ -354,6 +357,14 @@ let optionen = {
 				ee[i].value = optionen.data.einstellungen[e] ? optionen.data.einstellungen[e] : "";
 			}
 		}
+		// Kartei > Speichern anwenden
+		document.getElementsByName("einstellung-speichern").forEach(i => {
+			if (i.value === optionen.data.einstellungen.speichern) {
+				i.checked = true;
+			} else {
+				i.checked = false;
+			}
+		});
 	},
 	// Quick-Access-Bar ein- bzw. ausblenden
 	anwendenQuickAccess () {
@@ -462,14 +473,22 @@ let optionen = {
 		sprachen: ["Sprache", "Sprachen"],
 	},
 	// Check der Tag-Dateien beim Starten der App
-	anwendenTagsInit () {
+	async anwendenTagsInit () {
 		if (!optionen.data["tags-autoload-done"]) { // Tag-Dateien aus app/resources laden
 			optionen.tagsAutoLaden();
-		} else { // verknüpfte Tag-Dateien überprüfen
+		} else { // Informationen zu den verknüpften Tag-Dateien anzeigen
+			optionen.anwendenTags();
+			// keinen Tag-Dateien-Abgleich durchführen
 			if (!optionen.data.einstellungen["tags-auto-abgleich"]) {
-				optionen.anwendenTags();
 				return;
 			}
+			// Wurde in dieser Session schon ein Tag-Dateien-Abgleich gemacht?
+			const {ipcRenderer} = require("electron"),
+				abgleich = await ipcRenderer.invoke("optionen-tag-dateien-abgleich");
+			if (!abgleich) {
+				return;
+			}
+			// Tag-Dateien abgleichen
 			let promises = [];
 			for (let typ in optionen.data.tags) {
 				if (!optionen.data.tags.hasOwnProperty(typ)) {
@@ -572,13 +591,13 @@ let optionen = {
 			let i = document.createElement("i");
 			tdSub.appendChild(i);
 			i.textContent = "Abgleich:";
-			let datum = helfer.datumFormat(optionen.data.tags[typ].abgleich);
+			let datum = helfer.datumFormat(optionen.data.tags[typ].abgleich, true);
 			tdSub.appendChild(document.createTextNode(datum));
 			tdSub.appendChild(document.createElement("br"));
 			i = document.createElement("i");
 			tdSub.appendChild(i);
 			i.textContent = "Update:";
-			datum = helfer.datumFormat(optionen.data.tags[typ].update);
+			datum = helfer.datumFormat(optionen.data.tags[typ].update, true);
 			tdSub.appendChild(document.createTextNode(datum));
 		}
 		// keine Tag-Dateien vorhanden
@@ -762,7 +781,7 @@ let optionen = {
 			opt: opt,
 		});
 		// Fehler oder keine Datei ausgewählt
-		if (result.message) {
+		if (result.message || !Object.keys(result).length) {
 			dialog.oeffnen({
 				typ: "alert",
 				text: `Beim Öffnen des Dateidialogs ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${result.message}</p>`,
@@ -1012,6 +1031,27 @@ let optionen = {
 			}
 		});
 	},
+	// Setzt die Liste der Tag-Dateien auf den Auslieferungszustand zurück
+	tagsZuruecksetzen () {
+		dialog.oeffnen({
+			typ: "confirm",
+			text: "Sollen die Tag-Dateien wirklich zurückgesetzt werden?\n(Vorhandene Tag-Dateien werden aus der Liste entfernt. Danach werden Verknüpfungen mit den mitgelieferten Tag-Dateien erzeugt.)",
+			callback: () => {
+				if (!dialog.antwort) {
+					return;
+				}
+				// Verknüpfungen aufheben
+				for (let typ in optionen.data.tags) {
+					if (!optionen.data.tags.hasOwnProperty(typ)) {
+						continue;
+					}
+					delete optionen.data.tags[typ];
+				}
+				// Tag-Dateien neu laden
+				optionen.tagsAutoLaden();
+			},
+		});
+	},
 	// Optionen an den Main-Prozess schicken, der sie dann speichern soll
 	// (der Main-Prozess setzt einen Timeout, damit das nicht zu häufig geschieht)
 	speichern () {
@@ -1053,7 +1093,7 @@ let optionen = {
 			opt: opt,
 		});
 		// Fehler oder keine Datei ausgewählt
-		if (result.message) {
+		if (result.message || !Object.keys(result).length) {
 			dialog.oeffnen({
 				typ: "alert",
 				text: `Beim Öffnen des Dateidialogs ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${result.message}</p>`,
@@ -1129,6 +1169,10 @@ let optionen = {
 			optionen.data.einstellungen[e] = ele.checked;
 		} else if (ele.type === "text" || ele.type === "number") {
 			optionen.data.einstellungen[e] = ele.value;
+		}
+		// Kartei > Speichern
+		if (ele.name === "einstellung-speichern") {
+			optionen.data.einstellungen.speichern = ele.value;
 		}
 		// ggf. Konsequenzen on-the-fly
 		if (/^quick/.test(e)) { // Quick-Access-Bar umgestellt

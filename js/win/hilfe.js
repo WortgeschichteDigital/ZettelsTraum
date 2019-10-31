@@ -392,10 +392,11 @@ let hilfe = {
 		};
 		let e = hilfe.suchergebnis;
 		if (/\s/.test(val)) { // nur, wenn es mehrere Wörter gibt
-			e.regPhrase = new RegExp(helfer.escapeRegExp(val), "i");
+			e.regPhrase = new RegExp(helfer.escapeRegExp(val), "gi");
 		}
 		// reguläre Ausdrücke
 		let val_sp = val.split(/\s/);
+		val_sp.sort(helfer.sortLengthAlpha);
 		for (let i = 0, len = val_sp.length; i < len; i++) {
 			let reg = new RegExp(helfer.escapeRegExp(val_sp[i]), "gi");
 			e.reg.push(reg);
@@ -462,7 +463,7 @@ let hilfe = {
 			} else if (knoten.nodeName === "FIGURE") {
 				gewicht *= 2; // Treffer in Abbildungsunterschriften höher gewichten
 			}
-			if (e.regPhrase && e.regPhrase.test(text)) {
+			if (e.regPhrase && text.match(e.regPhrase)) {
 				gewicht *= 10; // Treffer mit komplettem Suchausdruck höher gewichten
 				idx = text.split(e.regPhrase)[0].length;
 			}
@@ -527,16 +528,28 @@ let hilfe = {
 			let b = document.createElement("b");
 			a.appendChild(b);
 			b.textContent = i + 1;
-			// Text erzeugen und einhängen
+			// Text erzeugen, Suchtreffer markieren und einhängen
 			let span = document.createElement("span");
 			a.appendChild(span);
 			let text = e.treffer[i].text;
+			if (e.regPhrase) {
+				text = text.replace(e.regPhrase, function(m) {
+					return `<mark class="suche">${m}</mark>`;
+				});
+			}
 			for (let j = 0, len = e.reg.length; j < len; j++) {
 				text = text.replace(e.reg[j], function(m) {
 					return `<mark class="suche">${m}</mark>`;
 				});
 			}
-			span.innerHTML = text;
+			span.innerHTML = helfer.suchtrefferBereinigen(text);
+			// verschachtelte Treffer entfernen
+			let inner = span.querySelector(".suche .suche");
+			while (inner) {
+				let text = document.createTextNode(inner.textContent);
+				inner.parentNode.replaceChild(text, inner);
+				inner = span.querySelector(".suche .suche");
+			}
 		}
 	},
 	// weitere Treffer laden

@@ -266,7 +266,7 @@ let beleg = {
 				typ: "alert",
 				text: "Sie müssen ein Datum angeben.",
 				callback: () => {
-					da.select();
+					beleg.selectFormEle(da);
 				},
 			});
 			return false;
@@ -277,7 +277,7 @@ let beleg = {
 				typ: "alert",
 				text: "Das Datum muss eine vierstellige Jahreszahl (z. B. „1813“) oder eine Jahrhundertangabe (z. B. „17. Jh.“) enthalten.\nZusätzlich können auch andere Angaben gemacht werden (z. B. „ca. 1815“, „1610, vielleicht 1611“).",
 				callback: () => {
-					da.select();
+					beleg.selectFormEle(da);
 				},
 			});
 			return false;
@@ -289,7 +289,7 @@ let beleg = {
 				typ: "alert",
 				text: "Sie müssen einen Beleg eingeben.",
 				callback: () => {
-					bs.select();
+					beleg.selectFormEle(bs);
 				},
 			});
 			return false;
@@ -301,7 +301,7 @@ let beleg = {
 				typ: "alert",
 				text: "Sie müssen eine Quelle angeben.",
 				callback: () => {
-					qu.select();
+					beleg.selectFormEle(qu);
 				},
 			});
 			return false;
@@ -403,6 +403,29 @@ let beleg = {
 				beleg.aktionAbbrechen();
 			}
 		}
+	},
+	// ein Element soll selektiert werden;
+	// ist es nicht im Blick => in den Blick scrollen
+	//   ele = Element
+	//     (das Element, das selektiert werden soll)
+	selectFormEle (ele) {
+		let hBody = document.querySelector("body > header").offsetHeight,
+			hKarte = document.querySelector("#beleg > header").offsetHeight,
+			quick = document.getElementById("quick"),
+			hQuick = quick.offsetHeight,
+			h = hBody + hKarte,
+			rect = ele.getBoundingClientRect();
+		if (quick.classList.contains("an")) {
+			h += hQuick;
+		}
+		if (rect.top - 24 < h || rect.top + 24 > window.innerHeight) {
+			scrollTo({
+				left: 0,
+				top: rect.top + window.scrollY - h - 24,
+				behavior: "smooth",
+			});
+		}
+		ele.select();
 	},
 	// Bearbeiten des Belegs beenden, Beleg also schließen
 	// (Der Button hieß früher "Abbrechen", darum heißt die Funktion noch so)

@@ -719,7 +719,7 @@ let kopieren = {
 			opt: opt,
 		});
 		// Fehler oder keine Datei ausgewählt
-		if (result.message) {
+		if (result.message || !Object.keys(result).length) {
 			dialog.oeffnen({
 				typ: "alert",
 				text: `Beim Öffnen des Dateidialogs ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${result.message}</p>`,
@@ -769,7 +769,7 @@ let kopieren = {
 			opt: opt,
 		});
 		// Fehler oder keine Datei ausgewählt
-		if (result.message) {
+		if (result.message || !Object.keys(result).length) {
 			dialog.oeffnen({
 				typ: "alert",
 				text: `Beim Öffnen des Dateidialogs ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${result.message}</p>`,

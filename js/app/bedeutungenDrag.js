@@ -70,8 +70,12 @@ let bedeutungenDrag = {
 				marker.style.left = `${td.left + (ebene - 1) * 35}px`;
 				marker.style.width = `${td.width - (ebene - 1) * 35}px`;
 				marker.classList.remove("aus", "drag-unmovable");
+				let bdCont = document.getElementById("bedeutungen-cont");
+				bdCont.classList.add("move");
+				bdCont.classList.remove("no-drop");
 				if (!bedeutungenDrag.movable()) {
 					marker.classList.add("drag-unmovable");
+					bdCont.classList.add("no-drop");
 				}
 				return;
 			}
@@ -94,6 +98,7 @@ let bedeutungenDrag = {
 		let marker = document.getElementById("bedeutungen-drag-marker");
 		if (marker) {
 			marker.classList.add("aus");
+			document.getElementById("bedeutungen-cont").classList.remove("move", "no-drop");
 		}
 	},
 	// Drag-Mode beenden
@@ -106,7 +111,7 @@ let bedeutungenDrag = {
 			// die Bedeutung ggf. bewegen
 			bedeutungenDrag.move();
 			// Status des Gerüsts zurücksetzen entfernen
-			document.getElementById("bedeutungen-cont").classList.remove("drag");
+			document.getElementById("bedeutungen-cont").classList.remove("drag", "move", "no-drop");
 			// Marker entfernen
 			let marker = document.getElementById("bedeutungen-drag-marker");
 			if (marker) { // es könnte sein, dass der Marker noch gar nicht initialisiert wurde

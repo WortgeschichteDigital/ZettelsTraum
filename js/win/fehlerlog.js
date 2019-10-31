@@ -115,7 +115,6 @@ let fehlerlog = {
 			"Nein, <i>keine Fehler.</i>",
 			"Immer noch <i>keine Fehler.</i>",
 			"Nein, nein. <i>Keine Fehler.</i>",
-			"Nope, <i>keine Fehler.</i>",
 			"Wie gesagt: <i>Keine Fehler.</i>",
 			"Immer noch <i>keine Fehler!</i>",
 			"Lassen Sie mich raten! Sie suchen – <em>Fehler</em>.",

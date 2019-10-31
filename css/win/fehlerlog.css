@@ -15,6 +15,7 @@
 /* Struktur-Elemente ---------------------------- */
 body {
 	margin: 0;
+	overflow-x: hidden;
 	background-color: #fff;
 	color: var(--text);
 	font: 16px/24px "Noto Sans", "Noto Sans Symbols2", sans-serif;
@@ -50,11 +51,9 @@ body > header h1 {
 
 body > div {
 	position: fixed;
-	top: 70px;
-	right: 10px;
-	border-bottom-left-radius: 3px;
-	padding: 0 0 5px 5px;
-	background-color: #fff;
+	top: 18px;
+	right: 88px;
+	z-index: 1;
 }
 
 body > div a {
@@ -64,7 +63,7 @@ body > div a {
 	padding: 0 5px;
 	width: 24px;
 	height: 24px;
-	background-color: var(--hintergrund);
+	background-color: #fff;
 	color: var(--text);
 	text-decoration: none;
 }

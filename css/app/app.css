@@ -255,6 +255,10 @@ input[type="button"][value^="Suche"] {
 	background-image: url(../../img/lupe-weiss.svg);
 }
 
+input[type="button"][value^="Zurücksetzen"] {
+	background-image: url(../../img/pfeil-kreis-weiss.svg);
+}
+
 input[type="checkbox"],
 input[type="radio"] {
 	position: relative;

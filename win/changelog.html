@@ -90,6 +90,8 @@
 						<p>Außerdem findet sich im <a href="#menueKartei-metadaten" class="link-handbuch">Metadaten-Fenster</a> in der Überschrift <i>Speicherort</i> nun das Icon <img src="../img/ordner.svg" width="24" height="24" alt="">. Auf Klick öffnet es den Dateimanager des System mit dem Ordner, in dem die aktuelle Kartei liegt.</p>
 					</li>
 
+					<li><a href="#einstellungen" class="link-handbuch">Einstellungen</a>: Die Liste der <a href="#einstellungen-tagDateien" class="link-handbuch">Tag-Dateien</a> kann nun zurückgesetzt werden, wofür es unter der Liste einen neuen Button gibt. Die Funktion kann praktisch sein, wenn man eine nicht fest installierte, portable Version von <i class="app-name"></i> nutzt, wie sie <abbr title="zum Beispiel">z. B.</abbr> für <i>macOS</i> angeboten wird. Verschiebt man den Ordner, können die mitgelieferten Tag-Dateien, die beim ersten Programmstart geladen wurden, nicht mehr gefunden werden. Eine Malaise, die durch das Zurücksetzen mit einem Klick behoben werden kann.</li>
+
 					<li>
 						<p>Für Entwickler: Die Installer-Scripts wurden reorganisiert, verbessert und erweitert.</p>
 
@@ -121,13 +123,11 @@
 
 						<p>Der <i>Speichern</i>-Befehl führte schon länger dazu, dass gleich mehrere noch nicht gespeicherte Änderungen in einem Rutsch übernommen wurden: Gab es Änderungen in der <a href="#karteikarte" class="link-handbuch">Karteikarte</a> wurden zunächst diese und direkt im Anschluss die geänderte Kartei selbst gespeichert. War jedoch zusätzlich noch das <a href="#menueKartei-notizen" class="link-handbuch">Notizen-Fenster</a> geöffnet und waren auch hier Änderungen anhängig, brach der <i>Speichern</i>-Befehl nach dem Speichern der Notizen ab und musste erneut aufgerufen werden.</p>
 
-						<p>Von nun an führt der <i>Speichern</i>-Befehl standardmäßig zu einer echten Speicherkaskade: Es wird versucht <em>alle</em> ausstehenden Änderungen zu speichern – egal um wie viele es sich handelt. Die Programmteile, in denen es Speicherbefehle gibt, werden dabei in dieser Reihenfolge abgearbeitet: Notizen, Karteikarte, <a href="#bedeutungsgeruest-tagFenster" class="link-handbuch">Tag-Fenster</a>, <a href="#bedeutungsgeruest" class="link-handbuch">Bedeutungsgerüst</a> und schließlich die Kartei selbst. Die Kaskade wird allein dann unterbrochen, wenn an einer der Stellen ein Fehler auftritt und/oder eine kompliziertere Interaktion der NutzerIn erforderlich wird. Dies kann <abbr title="zum Beispiel">z. B.</abbr> geschehen, wenn vor dem Speichern der Tags irreguläre Eingaben eliminiert wurden, worüber die NutzerIn informiert werden sollte; oder wenn die Karteikarte nicht regelkonform ausgefüllt wurde, also  <abbr title="beispielsweise">bspw.</abbr> ein <a href="#karteikarte-pflichtfelder" class="link-handbuch">Pflichtfeld</a> leer geblieben ist.</p>
-
-						<p>Dass eine Speicherkaskade ausgeführt wird, ist allerdings nur das Standardverhalten des Programms. Zusätzlich gibt es nun nämlich <a href="#einstellungen-allgemeinesSpeicherkaskade" class="link-handbuch">eine Einstellung</a>, mit der man steuern kann, wie genau der Befehl <a href="#menueKartei-speichern" class="link-handbuch"><i>Kartei &gt; Speichern</i></a> agieren soll. Entweder triggert er eine Speicherkaskade oder es wird nur die gerade sichtbare Funktion gespeichert (Details im <a href="#einstellungen-allgemeinesSpeicherkaskade" class="link-handbuch">verlinkten Handbuchabschnitt</a>).</p>
+						<p>Von nun an führt der <i>Speichern</i>-Befehl standardmäßig zu einer echten Speicherkaskade: Es wird versucht <em>alle</em> ausstehenden Änderungen zu speichern – egal um wie viele es sich handelt. Dass eine Speicherkaskade ausgeführt wird, ist allerdings nur das Standardverhalten des Programms. Zusätzlich gibt es nun nämlich <a href="#einstellungen-allgemeinesSpeichern" class="link-handbuch">zwei weitere Einstellungen</a>, mit denen man steuern kann, wie genau der Befehl <a href="#menueKartei-speichern" class="link-handbuch"><i>Kartei &gt; Speichern</i></a> agieren soll. Details im <a href="#einstellungen-allgemeinesSpeichern" class="link-handbuch">entsprechenden Handbuchabschnitt</a>.</p>
 
 						<p><span lang="en">Last, but not least</span> wurde die Art und Weise modifiziert, in der das Programm reagiert, wenn ein Befehl Funktionen schließen will, in denen noch Änderungen ausstehen. Dieser Fall kann <abbr title="zum Beispiel">z. B.</abbr> dann eintreten, wenn das Programm beendet werden soll (<a href="#menueApp-beenden" class="link-handbuch"><i><span class="app-name"></span> &gt; Beenden</i></a>). Es wurde zwar schon zuvor überprüft, ob es Änderungen gibt, die noch nicht gespeichert wurden. Wollte man diese zunächst speichern, wurde der Vorgang zum Beenden des Programms allerdings komplett abgebrochen und allein <em>einer</em> der verbliebenen Speichervorgänge angestoßen. Gab es mehrere Funktionen, in denen Änderungen noch nicht übernommen worden waren, musste man somit noch einmal den <i>Beenden-</i> oder zunächsten den <i>Speichern-</i> und dann den <i>Beenden</i>-Befehl aufrufen. Es waren somit mehrere Befehlsaufrufe nötig, bis keine Änderung mehr ausstand und das Programm endlich geschlossen werden konnte.</p>
 
-						<p>Jetzt werden die ausstehenden Änderungen sukzessive abgearbeitet, und zwar in der Reihenfolge der erwähnten <a href="#menueKartei-speichern" class="link-handbuch">Speicherkaskade</a>. Dabei fragt das Programm bei jeder Funktion, die betroffen ist, nach, ob Änderungen übernommen werden sollen oder nicht. Bestätigt man alle Fragen mit <i>Ja</i> oder <i>Nein</i> und läuft dabei alles reibungslos ab, wird der Befehl, den man ursprünglich ausführen wollte sofort ausgelöst: Wollte man das Programm beenden, wird es beendet; wollte man eine leere Karteikarte öffnen, wird sie geöffnet <abbr title="und so weiter">usw.</abbr> Alles läuft nun in einem Zuge ab.</p>
+						<p>Jetzt werden die ausstehenden Änderungen sukzessive abgearbeitet, und zwar in der Reihenfolge der erwähnten <a href="#einstellungen-allgemeinesSpeichern" class="link-handbuch">Speicherkaskade</a>. Dabei fragt das Programm bei jeder Funktion, die betroffen ist, nach, ob Änderungen übernommen werden sollen oder nicht. Bestätigt man alle Fragen mit <i>Ja</i> oder <i>Nein</i> und läuft dabei alles reibungslos ab, wird der Befehl, den man ursprünglich ausführen wollte, sofort ausgelöst: Wollte man das Programm beenden, wird es beendet; wollte man eine leere Karteikarte öffnen, wird sie geöffnet <abbr title="und so weiter">usw.</abbr> Alles läuft nun in einem Rutsch.</p>
 
 						<p>Unterbrechen kann man diese Kaskade, indem man eines der Dialogfenser, in dem die Frage gestellt wird, ob man die Änderungen nicht speichern wolle, schließt, ohne mit <i>Ja</i> oder <i>Nein</i> zu antworten. Dies geht via <kbd>Esc</kbd> oder über das Schließen-Icon <img src="../img/x.svg" width="24" height="24" alt="">.</p>
 
@@ -162,6 +162,8 @@
 						<p>Als Nebeneffekt dieser Änderung konnte die erklärende Kopfzeile im <a href="#menueKartei-redaktion" class="link-handbuch">Redaktions-Fenster</a> entfernt werden. Die Platzhalter übernehmen ihre Funktion.</p>
 					</li>
 
+					<li>Wird im <a href="#bedeutungsgeruest" class="link-handbuch">Bedeutungsgerüst</a> eine Bedeutung via Drag-and-Drop verschoben, zeigt nun nicht nur die Markierungslinie, sondern auch der Maus-Cursor an, ob die Bedeutung an die aktuelle Stelle geschoben werden darf oder nicht.</li>
+
 					<li>In den Erinnerungen, die im Kopf des Hauptfensters erscheinen, wenn eine Formalie übersehen wurde (Icon <img src="../img/kreis-ausrufezeichen.svg" width="24" height="24" alt="">), sind die Funktionen, in denen noch etwas nachgetragen werden sollte, nun verlinkt. Man kann sie also via Klick direkt aus dem Meldungsfenster öffnen.</li>
 
 					<li>Das Icon für die Funktion <a href="#menueAnsicht-standardgroesse" class="link-handbuch"><i>Ansicht &gt; Standardgröße</i></a> wurde geändert: <img src="../img/fenster-standard.svg" width="24" height="24" alt="">. Es ist nun klarer vom Icon für die Vollbild-Anzeige (<img src="../img/fenster-vollbild.svg" width="24" height="24" alt="">) unterschieden, dafür den Icons zum Vergrößern und Verkleinern der Anzeige ähnlicher.</li>
@@ -170,9 +172,17 @@
 
 					<li>Der <a href="#" class="link-fehlerlog">Fehlerlog</a> hat jetzt ein Reload-Icon: <img src="../img/pfeil-kreis.svg" width="24" height="24" alt="">. Das Neuladen geht auch via <kbd>F5</kbd>.</li>
 
-					<li>Die Gewichtung der Suchergebnisse im <a href="#" class="link-handbuch">Handbuch</a> und der <a href="#" class="link-dokumentation">technischen Dokumentation</a> wurde verbessert.</li>
+					<li>Die in einer kleinen Leiste fixierten Icons hier im Changelog wurden in den Fensterkopf verschoben, weil sie an ihrer vorherigen Position den freien Blick behinderten und lästig fielen. Dasselbe wurde mit der Icon-Leiste im Fehlerlog gemacht.</li>
 
-					<li>Die Navigation in den Suchergebnissen des Handbuchs und der technischen Dokumentation wurde verbessert. Drück man im Suchfeld <kbd>⏎</kbd>, wird das erste Suchergebnis fokussiert. Nun kann man mit <kbd>Tab</kbd> durch die Ergebnisse navigieren und mit einem erneuten <kbd>⏎</kbd>, zur entsprechenden Stelle im Dokument springen. Navigiert man zurück zu den Suchergebnissen, ist der Link fokussiert, der zuletzt angeklickt worden war. Wurde kein Link angeklickt, wird der erste fokussiert.</li>
+					<li>
+						<p>Verschiedenene Verbesserungen der Suche im <a href="#" class="link-handbuch">Handbuch</a> und der <a href="#" class="link-dokumentation">technischen Dokumentation</a>:</p>
+
+						<p>– Gewichtung der Suchergebnisse: Besser passende Treffer zu den Suchbegriffen erschienen schon zuvor weiter oben in der Liste. Der Algorithmus zum Ermitteln der Gewichtung wurde nun jedoch deutlich verbessert.</p>
+
+						<p>– Navigation in den Suchergebnissen: Drück man im Suchfeld <kbd>⏎</kbd>, wird das erste Suchergebnis fokussiert. Nun kann man mit <kbd>Tab</kbd> durch die Ergebnisse navigieren und mit einem erneuten <kbd>⏎</kbd>, zur entsprechenden Stelle im Dokument springen. Navigiert man zurück zu den Suchergebnissen, ist der Link fokussiert, der zuletzt angeklickt worden war. Wurde kein Link angeklickt, wird der erste fokussiert.</p>
+
+						<p>– Markierung der Suchtreffer: Werden die eingegebenen Suchbegriffe als Phrase gefunden, werden sie im Vorschautext auch als Phrase markiert. Außerdem kommt es nicht mehr zu verschachtelten Markierungen, was merkwürdige Polsterungen zur Folge haben konnte.</p>
+					</li>
 
 					<li>Die Verarbeitung derjenigen Tastaturkürzel, die nicht vom Main-Prozess getriggert werden, wurde auf eine solidere Basis gestellt: Der Wert <code class="quelltext">which</code> wird nicht mehr abgefragt (weil <a href="https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/which"><span lang="en">deprecated</span></a>); Kürzel werden nur noch akzeptiert, wenn sie mit genau den Modifiern gedrückt werden, die vorgesehen sind (Modifiertasten sind <abbr title="unter anderem">u. a.</abbr> <kbd>Strg</kbd>, <kbd>Alt</kbd> und <kbd>Umsch</kbd>); nicht zuletzt wurde bei der Aktion die Codebasis verschlankt und vereinheitlicht.</li>
 
@@ -228,7 +238,7 @@
 
 					<li>Annotierungsfunktion: Öffnete man das Annotierungspopup zum Annotieren eines noch nicht annotierten Karteiworts und klickte man dann auf das Textfeld und danach sofort wieder auf <kbd>Esc</kbd> oder klickte man auf das gelbe Quadrat, kam es zu einem Fehler. Das Annotierungspopup musste erst wieder geschlossen und neu geöffnet werden, ansonsten funktionierte es nicht mehr.</li>
 
-					<li>Annotierungsfunktion: Unter gewissen Umständen wurden Absätze in der Belegliste und in der Leseansicht der Karteikarte nicht gekürzt (bei aktivierter Funktion <img src="../img/trennzeichen.svg" width="24" height="24" alt="">), obwohl sie nur einen Treffer des Karteiworts enthielten und dieser als falschpositiver Treffer markiert war (<abbr title="das heißt">d. h.</abbr> seine Hintergrundfarbe war auf transparent gesetzt worden).</li>
+					<li>Annotierungsfunktion: Unter gewissen Umständen wurden Absätze in der Belegliste und in der Leseansicht der Karteikarte nicht gekürzt (bei aktivierter Funktion <img src="../img/trennzeichen.svg" width="24" height="24" alt="">), obwohl sie nur einen Treffer des Karteiworts enthielten und dieser als falschpositiver Treffer markiert war (<abbr title="das heißt">d. h.</abbr>: seine Hintergrundfarbe war auf transparent gesetzt worden). Im Ergebnis wurd die Überprüfung auf Existenz eines Karteiworts in einem Absatz auf eine neue, deutlich solidere Basis gestellt.</li>
 
 					<li><a href="#belegliste" class="link-handbuch">Belegliste</a>: Führte das Filtern der Belegliste mit dem <a href="#filter-volltext" class="link-handbuch">Volltextfilter</a> dazu, dass in einem der angezeigten Belege alle Absätze gekürzt wurden (<q>[…]</q>), weil in ihnen das Suchwort nicht gefunden wurde, konnte die Kürzung des Textes nicht mehr durch Klick auf den Absatz rückgängig gemacht werden.</li>
 
@@ -239,6 +249,8 @@
 					<li>Belegliste und <a href="#karteikarte" class="link-handbuch">Karteikarte</a>: Beim Kopieren einer Textauswahl mit den Kopierfunktionen <i>Rechtsklick &gt; Textauswahl kopieren</i> oder <img src="../img/kopieren.svg" width="24" height="24" alt="">, die den Belegtext vor dem Kopieren bereinigen, konnte es dazu kommen, dass Hervorhebungen von Suchtreffern (des Volltextfilters und der Suchleiste) und Karteiwörtern sowie Annotierungen gar nicht oder nicht korrekt entfernt wurden. Dies konnte wiederum zur Folge haben, dass Teile des kopierten Textes nach dem Einfügen in ein Textverarbeitungsprogramm verschluckt wurden.</li>
 
 					<li>Filterleiste: Formatierungen in Bedeutungsdefinitionen sind in Filternamen als <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>-Tags dargestellt worden, also <abbr title="zum Beispiel">z. B.</abbr>: <q>Mannschaft im &lt;i&gt;Sport&lt;/i&gt;</q>. Jetzt werden die Formatierungen korrekt visualisiert: <q>Mannschaft im <i>Sport</i></q>.</li>
+
+					<li>Karteikarte: Wurde eines der <a href="#karteikarte-pflichtfelder" class="link-handbuch">Pflichtfelder der Karteikarte</a> nicht oder nicht korrekt ausgefüllt, kam schon bisher eine Fehlermeldung und das entsprechende Feld wurde nach dem Schließen der Meldung fokussiert. War das Feld allerdings nicht im sichtbaren Bereich, wurde es auch nicht in den sichtbaren Bereich des Fensters gescrollt. Ein mangelhaftes Verhalten, das nun korrigiert wurde.</li>
 
 					<li><a href="#bedeutungsgeruest" class="link-handbuch">Bedeutungsgerüst</a>: Navigiert man im Bedeutungsgerüst mit der <kbd>Tab</kbd>-Taste, ohne dass bereits eine der Bedeutungen ausgewählt wurde, kann man in der Bedeutungstabelle nacheinander die Icons zum Verschieben, Löschen, Verschmelzen fokussieren und via <kbd>⏎</kbd> aufrufen. Die Icons für das Verschieben und Verschmelzen wurden jedoch nicht blau hervorgehoben. Es war somit nicht sichtbar, wo der Fokus gerade lag.</li>
 
@@ -271,6 +283,10 @@
 					</li>
 
 					<li>Karteisuche: Es gab ein paar visuelle Probleme im Konfigurationsbereich: Es war nicht immer sichtbar, wo der Fokus war, und die Icon-Farben änderten sich nicht immer beim Herüberfahren mit der Maus.</li>
+
+					<li><a href="#einstellungen" class="link-handbuch">Einstellungen</a>: Das Datum des Abgleichs und Updates von <a href="#einstellungen-tagDateien" class="link-handbuch">Tag-Dateien</a> war nicht immer vollständig sichtbar. Von nun an wird ein kürzeres Datumsformat genutzt.</li>
+
+					<li>Einstellungen: Eigentlich sollte der Abgleich der mit dem Programm verknüpften Tag-Dateien nur einmal pro Programmsession durchgeführt werden. Tatsächlich geschah dies jedes Mal, wenn ein neues oder leeres Programmfenster geöffnet wurde. Fortan wird der Abgleich nur noch einmal pro Programmsession angestoßen.</li>
 
 					<li>Navigierte man mit der <kbd>Tab</kbd>-Taste durch die einzelnen Elemente der Programmoberfläche, konnte man nicht erkennen, ob ein Textlink den Fokus hatte oder nicht. Fortan werden Textlinks sowohl in den Haupt- als auch in den Nebenfenstern unterstrichen, wenn sie den Fokus haben.</li>
 

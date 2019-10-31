@@ -1240,14 +1240,6 @@ Mustermann, Erika
 						<p>In beiden Fällen sendet die App intern eine Anfrage an die <abbr title="Deutsche Textarchiv">DTA</abbr>-Webseite. Erhält es nach der hier eingegebenen Zeitspanne keine Antwort, wird die Anfrage mit einem Timeout-Fehler abgebrochen und ein Dialogfenster geöffnet, das über diesen Fehler informiert. Arbeiten Sie in einer Umgebung mit schlechter Internetverbindung (<abbr title="zum Beispiel">z. B.</abbr> im Zug), könnte es hilfreich sein, diesen Wert ein bisschen anzuheben. Die App wartet dann entsprechend länger, ehe sie die Anfrage als gescheitert bewertet.</p>
 					</div>
 
-					<p class="erklaerung-option" id="einstellungen-allgemeinesSpeicherkaskade">der Speichern-Befehl löst eine Speicherkaskade aus</p>
-
-					<div class="info">
-						<p><i>Standard:</i> aktiviert</p>
-
-						<p>Wenn der Befehl <a href="#menueKartei-speichern"><i>Kartei &gt; Speichern</i></a> aufgerufen wird, wird bei aktivierter Einstellung eine Speicherkaskade ausgelöst: Die App stößt dann in allen Funktionen, in denen Änderungen noch nicht übernommen worden sind, das Speichern an. Ist die Funktion deaktivert, wird das Speichern nur in der gerade sichtbaren Funktion ausgelöst. Stehen keine Änderungen mehr aus, wird die Kartei an sich gespeichert. Es sei denn, dies ist schon gesehehen. Weitere Details in den <a href="#menueKartei-speichern">Erläuterungen zum <i>Speichern</i>-Befehl</a>.</p>
-					</div>
-
 					<p class="erklaerung-option">Einfügen-Fenster nach dem Einfügen schließen</p>
 
 					<div class="info">
@@ -1276,6 +1268,40 @@ Mustermann, Erika
 						<p><i>Standard:</i> nicht aktiviert</p>
 
 						<p>Diese Einstellung wirkt nur im Zusammenhang mit der vorherigen, die das <a href="#einstellungen-allgemeinesHervorhebung">Löschen oder Erhalten der Hervorhebung des Karteiworts beim Kopieren</a> steuert. Ist diese Einstellung aktiviert, wird das Karteiwort nach dem Einfügen des Belegtextes in einem Textverarbeitungsprogramm zusätzlich zur Fettung grau hinterlegt.</p>
+					</div>
+
+					<p class="erklaerung-option" id="einstellungen-allgemeinesSpeichern">Speichern-Befehl</p>
+
+					<div class="info">
+						<p><i>Standard:</i> Speicherkaskade anstoßen</p>
+
+						<p>Der Befehl <a href="#menueKartei-speichern"><i>Kartei &gt; Speichern</i></a> kann drei verschiedene Verhaltensweisen an den Tag legen. Welche kann man an dieser Stelle festlegen:</p>
+
+						<ol>
+							<li>
+								<p><i>Speicherkaskade anstoßen</i></p>
+
+								<p>In diesem Fall löst die App in allen Funktionen, in denen Änderungen noch nicht übernommen worden sind, den jeweiligen <i>Speichern</i>-Befehl aus. Verläuft das Speichern in allen Funktionen ohne Probleme, wird am Schluss die Kartei gespeichert. Treten jedoch in einer der Funktionen Fehler auf, die das Eingreifen der Nutzerin erforderlich machen, wird die Speicherkaskade an der problematischen Position abgebrochen. (So ein Fehler kann <abbr title="zum Beispiel">z. B.</abbr> sein, dass ein <a href="#karteikarte-pflichtfelder">Pflichtfeld der Karteikarte</a> nicht ausgefüllt wurde.) In solchen Fällen wird grundsätzlich eine Fehlermeldung angezeigt, sodass man nicht ratlos zurückbleibt. Das Speichern erfolgt in dieser Reihenfolge: <a href="#menueKartei-notizen">Notizen</a>, <a href="#karteikarte">Karteikarte</a>, <a href="#bedeutungsgeruest-tagFenster">Tag-Fenster</a>, <a href="#bedeutungsgeruest">Bedeutungsgerüst</a>, Kartei.</p>
+							</li>
+
+							<li>
+								<p><i>nur aktive Funktion speichern</i></p>
+
+								<p>Der <i>Speichern</i>-Befehl betrifft in diesem Fall nur die Funktion, die gerade aktiv, <abbr title="das heißt">d. h.</abbr> sichtbar ist. Sichtbar heißt wiederum, dass die Funktion nicht durch irgendeinen Dialog verdeckt werden darf. Ist <abbr title="beispielsweise">bspw.</abbr> die <a href="#menueKartei-notizen">Notizen-Funktion</a> geöffnet, wurden in ihr Änderungen vorgenommen, die noch nicht gespeichert wurden, <em>und</em> wird die Funktion im Moment durch das ebenfalls geöffnete <a href="#menueKartei-lexika">Lexika-Fenster</a> verdeckt, wird überhaupt kein <i>Speichern</i>-Befehl ausgelöst. Erst wenn man das Lexika-Fenster schließt und die Notizen wieder in den Blick kommen, hat der Speichern-Befehl in diesem Fall eine Funktion.</p>
+
+								<p>Die Kartei selbst wird bei dieser Einstellung erst dann gespeichert, wenn die Standardansicht – das ist die <a href="#belegliste">Belegliste</a> – im Blick ist. Wird diese durch irgendein Dialogfenster verdeckt, hat der <i>Speichern</i>-Befehl auch in diesem Fall keine Funktion. Dasselbe gilt natürlich für die Karteikarte und das Bedeutungsgerüst: Werden sie durch einen Dialog verdeckt, können auch sie mit dem Speichern-Befehl nun nicht mehr gespeichert werden.</p>
+
+								<p>Diese Option eignet sich <span lang="la">summa summarum</span> für alle, die genau kontrollieren möchten, was gerade gespeichert wird.</p>
+							</li>
+
+							<li>
+								<p><i>nur Kartei speichern</i></p>
+
+								<p>Die dritte und letzte Verhaltensweise ist wohl diejenige, die am erwartbarsten für diesen Befehl ist. Wurden an der Kartei Änderungen vorgenommen, weil man <abbr title="zum Beispiel">z. B.</abbr> eine neue Karteikarte angelegt oder eine Bedeutung in das Bedeutungsgerüst eingetragen hat, wird die Kartei gespeichert. Allerdings wird in diesem Fall immer <em>nur</em> die Kartei gespeichert. Für alle anderen Funktionen, die einen <i>Speichern</i>-Befehl kennen, bedeutet dies: Man muss händisch auf den <i>Speichern</i>-Knopf klicken, und zwar ausnahmslos.</p>
+
+								<p>Wurden an der Kartei keine Änderungen vorgenommen, hat der Befehl in dieser Konfiguration keine Funktion.</p>
+							</li>
+						</ol>
 					</div>
 
 					<h2 id="einstellungen-menue">Menü</h2>
@@ -1373,7 +1399,7 @@ Mustermann, Erika
 						<p><i>Standard:</i> nicht aktiviert</p>
 					</div>
 
-					<p class="erklaerung-option">Tag-Dateien automatisch auffrischen</p>
+					<p class="erklaerung-option" id="einstellungen-tagDateien">Tag-Dateien automatisch auffrischen</p>
 
 					<div class="info">
 						<p><i>Standard:</i> aktiviert</p>
@@ -1625,9 +1651,7 @@ Mustermann, Erika
 					<div class="info">
 						<p>Stößt einen oder mehrere Speichervorgänge im aktuellen Hauptfenster an.</p>
 
-						<p>Wie genau der Befehl agiert, <a href="#einstellungen-allgemeinesSpeicherkaskade">hängt von einer Einstellung</a> ab. Standardmäßig, also mit aktivierter Einstellung, wird mit ihm nicht nur die Kartei gespeichert; er initiiert vielmehr eine ganze <b>Speicherkaskade</b>. Erfasst werden dabei die <a href="#menueKartei-notizen">Notizen-Funktion</a>, die <a href="#karteikarte">Karteikarte</a>, das <a href="#bedeutungsgeruest-tagFenster">Tag-Fenster</a>, das <a href="#bedeutungsgeruest">Bedeutungsgerüst</a> und schließlich die Kartei selbst – und zwar in genau dieser Reihenfolge. Gibt es in einer der genannten Funktionen noch ausstehende Änderungen führt der <i>Speichern</i>-Befehl (auch wenn er über das Tastaturkürzel <kbd>Strg</kbd> + <kbd>S</kbd> angestoßen wird) dazu, dass diese in die Kartei übernommen und die Kartei danach auf die Festplatte geschrieben wird. Dabei ist zu bedenken, dass das Speichern der Notizen und das der Karteikarte scheitern können: Für die Notizen gibt es den Fall, dass eine Entscheidung der NutzerIn erfragt wird; in Bezug auf die Karteikarte gibt es mehrere Fehler, die beim Ausfüllen gemacht werden können, was das Speichern verhindert. In diesen Fällen wird die Kaskade abgebrochen und es erscheint ein Dialogfenster.</p>
-
-						<p>Wurde die <a href="#einstellungen-allgemeinesSpeicherkaskade">Einstellung</a>, von der bereits die Rede war, deaktiviert, wird das Speichern <b>nur für die gerade sichtbare Funktion</b> angestoßen. Ein Beispiel: Ist das Notizen-Fenster geöffnet, werden nur die Notizen gespeichert, auch wenn darunter, also durch das Notizen-Fenster verdeckt, noch eine Karteikarte geöffnet ist, in der ebenfalls Änderungen ausstehen. Wird eine Funktion, in der noch Änderungen anhängig sind, durch ein Dialogfenster verdeckt, führt der Befehl das Speichern nicht aus, erfasst er doch in diesem Modus immer nur das, was an der Programmoberfläche gerade sichtbar ist. Stehen keine Änderungen in einer der oben genannten Funktionen mehr aus, wird die Kartei selbst gespeichert – und zwar unabhängig davon, was in der Anzeige sichtbar ist.</p>
+						<p>Wie genau der Befehl agiert, <a href="#einstellungen-allgemeinesSpeichern">hängt von einer Einstellung</a> ab. Standardmäßig, wenn man die Einstellungen nicht angepasst hat, wird mit ihm nicht nur die Kartei gespeichert; er initiiert vielmehr eine regelrechte <b>Speicherkaskade</b>. Erfasst werden dabei die <a href="#menueKartei-notizen">Notizen-Funktion</a>, die <a href="#karteikarte">Karteikarte</a>, das <a href="#bedeutungsgeruest-tagFenster">Tag-Fenster</a>, das <a href="#bedeutungsgeruest">Bedeutungsgerüst</a> und schließlich die Kartei selbst – und zwar in genau dieser Reihenfolge. Gibt es in einer der genannten Funktionen noch ausstehende Änderungen führt der <i>Speichern</i>-Befehl (auch wenn er über das Tastaturkürzel <kbd>Strg</kbd> + <kbd>S</kbd> angestoßen wird) somit dazu, dass diese in die Kartei übernommen und die Kartei danach auf die Festplatte geschrieben wird. <abbr title="Siehe">S.</abbr> <a href="#einstellungen-allgemeinesSpeichern">eine genauere Beschreibung der Einstellungsmöglichkeiten im <abbr title="Abschnitt">Abschn.</abbr> <i>Einstellungen</i></a>.</p>
 
 						<p>Gibt es <b>keine Änderungen</b>, die gespeichert werden müssten, hat der Befehl keine Funktion. Er bricht ergebnislos und ohne Meldung ab.</p>
 					</div>
@@ -1637,9 +1661,9 @@ Mustermann, Erika
 					<div class="info">
 						<p>Speichert die Kartei des aktuellen Hauptfensters an einem beliebigen Ort.</p>
 
-						<p>Es öffnet sich ein <b>Dialogfenster des Betriebssystems</b>, in dem Sie einen anderen Ordner und/oder Namen für die aktuelle Kartei wählen können.</p>
+						<p>Es öffnet sich ein <b>Dialogfenster des Betriebssystems</b>, in dem Sie einen anderen Ordner und/oder Namen für die aktuelle Kartei wählen können. Nach dem Bestätigen wird die Kartei dort gespeichert. Die vorherige Kartei bleibt natürlich bestehen. Arbeiten Sie nahtlos mit der Kopie weiter, werden allen weiteren Änderungen nur in dieser gespeichert.</p>
 
-						<p>Anders als der <a href="#menueKartei-speichern"><i>Speichern</i>-Befehl</a> wird durch diesen Befehl <b>niemals eine Speicherkaskade</b> ausgelöst. Überhaupt löst dieser Befehl in keiner der in den Erläuterungen zum <i>Speichern</i>-Befehl genannten Funktionen die Übernahme der Änderungen aus. Stehen in einer von ihnen noch Änderungen aus, müssen Sie das Speichern explizit anstoßen: entweder Funktion für Funktion, indem Sie die jeweiligen <i>Speichern</i>-Buttons drücken, oder durch das Ausführen des Befehls <i>Kartei &gt; Speichern</i>, der je nachdem, ob <a href="#einstellungen-allgemeinesSpeicherkaskade">die betreffende Einstellung</a> aktiviert oder deaktiviert ist, eine Speicherkaskade auslöst oder nur die gerade sichtbare Funktion betrifft.</p>
+						<p>Anders als der <a href="#menueKartei-speichern"><i>Speichern</i>-Befehl</a> wird durch diesen Befehl <b>niemals eine Speicherkaskade</b> ausgelöst. Ferner stößt er in keinem Fall das Speichern noch ausstehender Änderungen in irgendeiner <a href="#einstellungen-allgemeinesSpeichern">Funktion, die von der Speicherkaskade erfasst wird</a>, an. Stehen noch Änderungen aus, müssen Sie diese eigenhändig speichern: entweder Funktion für Funktion, indem Sie die jeweiligen <i>Speichern</i>-Buttons drücken, oder durch das Ausführen des Befehls <i>Kartei &gt; Speichern</i>, der unter Umständen aber auch nur das Speichern der Kartei selbst auslöst und die einzelnen Funktionen übergeht. Das hängt davon ab, <a href="#einstellungen-allgemeinesSpeichern">wie der <i>Speichern</i>-Befehl konfiguriert wurde</a>.</p>
 					</div>
 
 					<p class="erklaerung-icon-menues" id="menueKartei-schliessen"><img src="../img/x-dick.svg" width="24" height="24" alt="">Schließen</p>

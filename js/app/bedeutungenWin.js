@@ -24,12 +24,16 @@ let bedeutungenWin = {
 	},
 	// Bedeutungsgerüst-Fenster schließen
 	schliessen () {
-		if (!bedeutungenWin.contentsId) {
-			return;
-		}
-		const {ipcRenderer} = require("electron");
-		ipcRenderer.invoke("bedeutungen-schliessen", bedeutungenWin.contentsId);
-		bedeutungenWin.contentsId = 0;
+		return new Promise(async resolve => {
+			if (!bedeutungenWin.contentsId) {
+				resolve(false);
+				return;
+			}
+			const {ipcRenderer} = require("electron");
+			await ipcRenderer.invoke("bedeutungen-schliessen", bedeutungenWin.contentsId);
+			bedeutungenWin.contentsId = 0;
+			resolve(true);
+		});
 	},
 	// Daten zusammentragen und an das Bedeutungsgerüst-Fenster schicken
 	daten () {

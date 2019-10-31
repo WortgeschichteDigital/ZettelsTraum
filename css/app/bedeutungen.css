@@ -98,6 +98,16 @@
 	padding-bottom: 20px;
 }
 
+#bedeutungen-cont.move,
+#bedeutungen-cont.move * {
+	cursor: move;
+}
+
+#bedeutungen-cont.no-drop,
+#bedeutungen-cont.no-drop * {
+	cursor: not-allowed;
+}
+
 #bedeutungen-cont h2 {
 	margin: 15px 0 10px 74px; /* 74px = 2 Zellen links + 5px Padding der Gerüstzelle + Border*/
 	padding: 0;
@@ -378,10 +388,12 @@ a[class*="icon-windrose"] {
 	border-radius: 3px;
 	height: 6px;
 	background-color: var(--farbeGruen);
+	cursor: move;
 }
 
 #bedeutungen-drag-marker.drag-unmovable {
 	background-color: var(--farbeRot);
+	cursor: not-allowed;
 }
 
 #bedeutungen-cont .icon-loeschen {
