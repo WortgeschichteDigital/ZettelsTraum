@@ -158,6 +158,29 @@ let tastatur = {
 			beleg.ctrlSpringen(evt);
 			return;
 		}
+		// EINSTELLUNGEN QUICK-CONFIG
+		if (m === "Ctrl" &&
+				!document.getElementById("einstellungen-sec-menue").classList.contains("aus") &&
+				document.querySelector("#quick-config .aktiv")) {
+			evt.preventDefault();
+			let dir = "";
+			switch (evt.key) {
+				case "ArrowUp":
+					dir = "hoch";
+					break;
+				case "ArrowRight":
+					dir = "rechts";
+					break;
+				case "ArrowDown":
+					dir = "runter";
+					break;
+				case "ArrowLeft":
+					dir = "links";
+					break;
+			}
+			quick.moveConfig(dir);
+			return;
+		}
 		// NAVIGATION HOCH || RUNTER
 		if (/^(ArrowDown|ArrowUp)$/.test(evt.key)) {
 			if (m === "Ctrl" && overlayId === "einstellungen") {

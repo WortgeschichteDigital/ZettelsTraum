@@ -131,16 +131,9 @@ window.addEventListener("load", async () => {
 	// alle Dropdown-Listen
 	document.querySelectorAll(".dropdown-feld").forEach(i => dropdown.feld(i));
 	document.querySelectorAll(".dropdown-link-td, .dropdown-link-element").forEach(i =>	dropdown.link(i));
-	// Quick-Access-Bar
+	// aktives Element für Quick-Access-Bar zwischenspeichern
 	document.addEventListener("mousedown", function() {
-		helfer.quickAccessRolesActive = document.activeElement;
-	});
-	document.querySelectorAll("#quick a").forEach(a => {
-		if (/^quick-(bearbeiten|ansicht)-/.test(a.id)) {
-			helfer.quickAccessRoles(a);
-		} else {
-			helfer.quickAccess(a);
-		}
+		quick.accessRolesActive = document.activeElement;
 	});
 	// Wort-Element
 	document.getElementById("wort").addEventListener("click", () => kartei.wortAendern());
@@ -224,7 +217,8 @@ window.addEventListener("load", async () => {
 	document.querySelectorAll("#einstellungen ul a").forEach(a => optionen.sektionWechselnLink(a));
 	document.querySelectorAll("#einstellungen input").forEach(i => optionen.aendereEinstellungListener(i));
 	document.getElementById("einstellung-personenliste").addEventListener("click", () => optionen.aenderePersonenliste());
-	document.querySelectorAll("#einstellungen-quick-alle, #einstellungen-quick-keine, #einstellungen-quick-standards").forEach(a => optionen.quickSelect(a));
+	document.querySelectorAll("#einstellungen-quick-alle, #einstellungen-quick-standard, #einstellungen-quick-keine").forEach(a => quick.preset(a));
+	document.querySelectorAll("#quick-config div:nth-child(2) img").forEach(img => quick.eventsPfeile(img));
 	optionen.anwendenNotizenFilterleiste(document.getElementById("einstellung-notizen-filterleiste"));
 	document.getElementById("tags-laden").addEventListener("click", () => optionen.tagsManuLaden());
 	document.getElementById("tags-zuruecksetzen").addEventListener("click", () => optionen.tagsZuruecksetzen());
@@ -296,11 +290,6 @@ window.addEventListener("load", async () => {
 	// VISUELLE ANPASSUNGEN
 	// App-Namen eintragen
 	document.querySelectorAll(".app-name").forEach(i => i.textContent = appInfo.name);
-	// Windows
-	if (process.platform === "win32") {
-		// Korrektur des Bearbeiten-Shortcuts
-		document.getElementById("quick-bearbeiten-wiederherstellen").title = "Bearbeiten: Wiederherstellen (Strg + Y)";
-	}
 	// macOS
 	if (process.platform === "darwin") {
 		// Option zum Ausblenden der Menüleiste verstecken

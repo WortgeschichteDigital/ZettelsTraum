@@ -68,6 +68,11 @@
 	mask-image: url(../../img/speichern-unter.svg);
 }
 
+#quick-kartei-schliessen {
+	-webkit-mask-image: url(../../img/x-dick.svg);
+	mask-image: url(../../img/x-dick.svg);
+}
+
 #quick-kartei-formvarianten {
 	-webkit-mask-image: url(../../img/formvarianten.svg);
 	mask-image: url(../../img/formvarianten.svg);
@@ -118,11 +123,6 @@
 	mask-image: url(../../img/lupe.svg);
 }
 
-#quick-kartei-schliessen {
-	-webkit-mask-image: url(../../img/x-dick.svg);
-	mask-image: url(../../img/x-dick.svg);
-}
-
 #quick-belege-hinzufuegen {
 	-webkit-mask-image: url(../../img/dokument-plus.svg);
 	mask-image: url(../../img/dokument-plus.svg);
@@ -131,11 +131,6 @@
 #quick-belege-auflisten {
 	-webkit-mask-image: url(../../img/liste-bullets.svg);
 	mask-image: url(../../img/liste-bullets.svg);
-}
-
-#quick-belege-sortieren {
-	-webkit-mask-image: url(../../img/quick-sortieren.svg);
-	mask-image: url(../../img/quick-sortieren.svg);
 }
 
 #quick-belege-kopieren {

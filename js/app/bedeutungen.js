@@ -1352,6 +1352,10 @@ let bedeutungen = {
 		div.id = "bedeutungen-tools";
 		let tools = [
 			{
+				cl: "icon-tools-save",
+				title: "Speichern (Enter)",
+			},
+			{
 				cl: "icon-tools-bold",
 				title: `Fetten (${tastatur.shortcutsTextAktuell("Strg")} + B)`,
 			},
@@ -1393,10 +1397,14 @@ let bedeutungen = {
 	editToolsExec (a) {
 		a.addEventListener("click", function(evt) {
 			evt.preventDefault();
-			let funktion = this.getAttribute("class").match(/icon-tools-([^\s]+)/);
-			document.execCommand(funktion[1]);
-			let feld = this.parentNode.parentNode.querySelector("[contenteditable]");
+			let feld = this.parentNode.parentNode.querySelector("[contenteditable]"),
+				funktion = this.getAttribute("class").match(/icon-tools-([^\s]+)/);
 			feld.focus();
+			if (funktion[1] === "save") {
+				feld.dispatchEvent( new KeyboardEvent("keydown", {key: "Enter"}) );
+			} else {
+				document.execCommand(funktion[1]);
+			}
 		});
 	},
 	// Listener für ein Edit-Feld

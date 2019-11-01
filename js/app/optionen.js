@@ -104,41 +104,8 @@ let optionen = {
 			autoHideMenuBar: false,
 			// Quick-Access-Bar anzeigen
 			quick: false,
-			// Icons in der Quick-Access-Bar, die ein- oder ausgeblendet gehören
-			"quick-app-neues-fenster": false,
-			"quick-app-karteisuche": false,
-			"quick-app-einstellungen": false,
-			"quick-app-beenden": true,
-			"quick-kartei-erstellen": false,
-			"quick-kartei-oeffnen": true,
-			"quick-kartei-speichern": true,
-			"quick-kartei-speichern-unter": false,
-			"quick-kartei-schliessen": false,
-			"quick-kartei-formvarianten": false,
-			"quick-kartei-notizen": false,
-			"quick-kartei-anhaenge": false,
-			"quick-kartei-lexika": false,
-			"quick-kartei-metadaten": false,
-			"quick-kartei-redaktion": false,
-			"quick-kartei-bedeutungen": false,
-			"quick-kartei-bedeutungen-wechseln": false,
-			"quick-kartei-bedeutungen-fenster": false,
-			"quick-kartei-suche": true,
-			"quick-belege-hinzufuegen": true,
-			"quick-belege-auflisten": true,
-			"quick-belege-kopieren": false,
-			"quick-belege-einfuegen": false,
-			"quick-bearbeiten-rueckgaengig": false,
-			"quick-bearbeiten-wiederherstellen": false,
-			"quick-bearbeiten-ausschneiden": false,
-			"quick-bearbeiten-kopieren": false,
-			"quick-bearbeiten-einfuegen": false,
-			"quick-bearbeiten-alles-auswaehlen": false,
-			"quick-ansicht-anzeige-vergroessern": false,
-			"quick-ansicht-anzeige-verkleinern": false,
-			"quick-ansicht-standardgroesse": false,
-			"quick-ansicht-vollbild": false,
-			"quick-hilfe-handbuch": true,
+			// Icons in der Quick-Access-Bar
+			"quick-icons": [...quick.iconsStandard],
 			// NOTIZEN
 			// Notizen-Fenster nach dem Speichern direkt schließen
 			"notizen-schliessen": false,
@@ -292,8 +259,10 @@ let optionen = {
 	},
 	// nach dem Laden müssen manche Optionen direkt angewendet werden
 	anwenden () {
-		// Quick-Access-Bar ein- oder ausschalten
-		optionen.anwendenQuickAccess();
+		// Quick-Access-Bar auffrischen
+		quick.toggle();
+		quick.fill();
+		quick.fillConfig();
 		// Tag-Dateien überprüfen => Anzeige auffrischen
 		optionen.anwendenTagsInit();
 		// Zeitfilter in der Filterleiste anpassen
@@ -337,8 +306,10 @@ let optionen = {
 	// zieht die nötigen Kosequenzen aus den empfangen Optionen,
 	// die in einem anderen Hauptfenster geändert wurden
 	anwendenEmpfangen () {
-		// Quick-Access-Bar ein- oder ausschalten
-		optionen.anwendenQuickAccess();
+		// Quick-Access-Bar auffrischen
+		quick.toggle();
+		quick.fill();
+		quick.fillConfig();
 		// Liste der Tag-Dateien auffrischen
 		optionen.anwendenTags();
 		// Icons für die Detailanzeige immer sichtbar?
@@ -365,73 +336,6 @@ let optionen = {
 				i.checked = false;
 			}
 		});
-	},
-	// Quick-Access-Bar ein- bzw. ausblenden
-	anwendenQuickAccess () {
-		let quick = document.getElementById("quick");
-		// Icons ein- oder ausblenden
-		let icons = quick.querySelectorAll("a"),
-			icons_alle_aus = true;
-		for (let i = 0, len = icons.length; i < len; i++) {
-			if (optionen.data.einstellungen[icons[i].id]) {
-				icons[i].classList.remove("aus");
-				icons_alle_aus = false;
-			} else {
-				icons[i].classList.add("aus");
-			}
-		}
-		// Spacer ein- oder ausblenden
-		if (optionen.data.einstellungen.quick && !icons_alle_aus) {
-			let spacer = document.querySelectorAll(".quick-spacer");
-			spacer.forEach(function(i) {
-				i.classList.add("aus");
-			});
-			spacer.forEach(function(i) {
-				let prev = i.previousSibling,
-					next = i.nextSibling,
-					vor = false,
-					nach = false;
-				// vorherige Elemente
-				do {
-					if (!prev.classList.contains("aus")) {
-						if (!prev.classList.contains("quick-spacer")) {
-							vor = true;
-						}
-						break;
-					}
-					prev = prev.previousSibling;
-				} while (prev);
-				// folgende Elemente
-				do {
-					if (!next.classList.contains("aus")) {
-						nach = true;
-						break;
-					}
-					next = next.nextSibling;
-				} while (next);
-				// ein- od. ausschalten
-				if (vor && nach) {
-					i.classList.remove("aus");
-				} else {
-					i.classList.add("aus");
-				}
-			});
-		}
-		// Bar ein- oder ausblenden
-		if (optionen.data.einstellungen.quick && !icons_alle_aus) {
-			quick.classList.add("an");
-		} else {
-			quick.classList.remove("an");
-		}
-		// affizierte Elemente anpassen
-		let affiziert = document.querySelectorAll("body > header, body > section");
-		for (let i = 0, len = affiziert.length; i < len; i++) {
-			if (optionen.data.einstellungen.quick && !icons_alle_aus) {
-				affiziert[i].classList.add("quick");
-			} else {
-				affiziert[i].classList.remove("quick");
-			}
-		}
 	},
 	// die Anzeige der Notizen in der Filterleiste wird umgestellt
 	//   input = Element
@@ -1175,8 +1079,8 @@ let optionen = {
 			optionen.data.einstellungen.speichern = ele.value;
 		}
 		// ggf. Konsequenzen on-the-fly
-		if (/^quick/.test(e)) { // Quick-Access-Bar umgestellt
-			optionen.anwendenQuickAccess();
+		if (e === "quick") { // Quick-Access-Bar umgestellt
+			quick.toggle();
 		} else if (e === "filter-unterbedeutungen") { // Verhalten Bedeutungen-Filter umgestellt
 			liste.status(true);
 		} else if (e === "textsorte") { // Textsorten-Anzeige im Belegkopf der Belegliste umgestellt
@@ -1186,32 +1090,6 @@ let optionen = {
 		optionen.speichern();
 		// Erinnerungen-Icon auffrischen
 		erinnerungen.check();
-	},
-	// Funktionen für die Quick-Access-Bar blockweise aus- oder abwählen
-	//   a = Element
-	//     (der Link, der die Aktion triggert)
-	quickSelect (a) {
-		a.addEventListener("click", function(evt) {
-			evt.preventDefault();
-			let standards = ["quick-app-beenden", "quick-kartei-oeffnen", "quick-kartei-speichern", "quick-kartei-suche", "quick-belege-hinzufuegen", "quick-belege-auflisten", "quick-hilfe-handbuch"];
-			const aktion = this.id.match(/.+-(.+)/)[1];
-			document.querySelectorAll("#einstellungen-quick-funktionen input").forEach(i => {
-				const e = i.id.replace(/^einstellung-/, "");
-				if (aktion === "standards") {
-					if (standards.includes(e)) {
-						i.checked = true;
-					} else {
-						i.checked = false;
-					}
-				} else if (aktion === "alle") {
-					i.checked = true;
-				} else if (aktion === "keine") {
-					i.checked = false;
-				}
-				optionen.data.einstellungen[e] = i.checked;
-			});
-			optionen.anwendenQuickAccess();
-		});
 	},
 	// das Optionen-Fenster öffnen
 	oeffnen () {
@@ -1243,6 +1121,8 @@ let optionen = {
 				sektionen[i].classList.add("aus");
 			}
 		}
+		// ggf. aktives Element in der Konfiguration der Quick-Access-Bar deaktivieren
+		quick.rmAktiv();
 		// 1. Input fokussieren
 		optionen.sektionWechselnInput();
 	},

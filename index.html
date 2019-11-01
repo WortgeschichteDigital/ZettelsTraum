@@ -42,8 +42,9 @@
 		<script src="js/app/liste.js"></script>
 		<script src="js/app/meta.js"></script>
 		<script src="js/app/notizen.js"></script>
-		<script src="js/app/optionen.js"></script>
+		<script defer src="js/app/optionen.js"></script> <!-- defer! -->
 		<script src="js/app/overlay.js"></script>
+		<script src="js/app/quick.js"></script>
 		<script src="js/app/dropdown.js"></script>
 		<script src="js/app/popup.js"></script>
 		<script src="js/app/redaktion.js"></script>
@@ -54,50 +55,8 @@
 		<script src="js/app/zuletzt.js"></script>
 	</head>
 	<body>
-		<!-- QUICK ACCESS -->
-		<div id="quick"
-			><a href="#" id="quick-app-neues-fenster" class="icon-link" title="App: Neues Fenster"> </a
-			><a href="#" id="quick-app-karteisuche" class="icon-link" title="App: Karteisuche"> </a
-			><a href="#" id="quick-app-einstellungen" class="icon-link" title="App: Einstellungen"> </a
-			><a href="#" id="quick-app-beenden" class="icon-link" title="App: Beenden (Strg + Q)"> </a
-			><span class="quick-spacer"> </span
-			><a href="#" id="quick-kartei-erstellen" class="icon-link" title="Kartei: Erstellen (Strg + E)"> </a
-			><a href="#" id="quick-kartei-oeffnen" class="icon-link" title="Kartei: Öffnen (Strg + O)"> </a
-			><a href="#" id="quick-kartei-speichern" class="icon-link" title="Kartei: Speichern (Strg + S)"> </a
-			><a href="#" id="quick-kartei-speichern-unter" class="icon-link" title="Kartei: Speichern unter (Strg + Umsch + S)"> </a
-			><a href="#" id="quick-kartei-schliessen" class="icon-link" title="Kartei: Schließen (Strg + W)"> </a
-			><span class="quick-spacer"> </span
-			><a href="#" id="quick-kartei-formvarianten" class="icon-link" title="Kartei: Formvarianten"> </a
-			><a href="#" id="quick-kartei-notizen" class="icon-link" title="Kartei: Notizen"> </a
-			><a href="#" id="quick-kartei-anhaenge" class="icon-link" title="Kartei: Anhänge"> </a
-			><a href="#" id="quick-kartei-lexika" class="icon-link" title="Kartei: Überprüfte Lexika"> </a
-			><a href="#" id="quick-kartei-metadaten" class="icon-link" title="Kartei: Metadaten"> </a
-			><a href="#" id="quick-kartei-redaktion" class="icon-link" title="Kartei: Redaktion"> </a
-			><span class="quick-spacer"> </span
-			><a href="#" id="quick-kartei-bedeutungen" class="icon-link" title="Kartei: Bedeutungsgerüst (Strg + B)"> </a
-			><a href="#" id="quick-kartei-bedeutungen-wechseln" class="icon-link" title="Kartei: Bedeutungsgerüst wechseln (Strg + Alt + B)"> </a
-			><a href="#" id="quick-kartei-bedeutungen-fenster" class="icon-link" title="Kartei: Bedeutungsgerüst-Fenster (Strg + Umsch + B)"> </a
-			><a href="#" id="quick-kartei-suche" class="icon-link" title="Kartei: Suche (Strg + F)"> </a
-			><span class="quick-spacer"> </span
-			><a href="#" id="quick-belege-hinzufuegen" class="icon-link" title="Belege: Hinzufügen (Strg + N)"> </a
-			><a href="#" id="quick-belege-auflisten" class="icon-link" title="Belege: Auflisten (Strg + L)"> </a
-			><a href="#" id="quick-belege-kopieren" class="icon-link" title="Belege: Kopieren"> </a
-			><a href="#" id="quick-belege-einfuegen" class="icon-link" title="Belege: Einfügen"> </a
-			><span class="quick-spacer"> </span
-			><a href="#" id="quick-bearbeiten-rueckgaengig" class="icon-link" title="Bearbeiten: Rückgängig (Strg + Z)"> </a
-			><a href="#" id="quick-bearbeiten-wiederherstellen" class="icon-link" title="Bearbeiten: Wiederherstellen (Strg + Umsch + Z)"> </a
-			><a href="#" id="quick-bearbeiten-ausschneiden" class="icon-link" title="Bearbeiten: Ausschneiden (Strg + X)"> </a
-			><a href="#" id="quick-bearbeiten-kopieren" class="icon-link" title="Bearbeiten: Kopieren (Strg + C)"> </a
-			><a href="#" id="quick-bearbeiten-einfuegen" class="icon-link" title="Bearbeiten: Einfügen (Strg + V)"> </a
-			><a href="#" id="quick-bearbeiten-alles-auswaehlen" class="icon-link" title="Bearbeiten: Alles auswählen (Strg + A)"> </a
-			><span class="quick-spacer"> </span
-			><a href="#" id="quick-ansicht-anzeige-vergroessern" class="icon-link" title="Ansicht: Anzeige vergrößern (Strg + +)"> </a
-			><a href="#" id="quick-ansicht-anzeige-verkleinern" class="icon-link" title="Ansicht: Anzeige verkleinern (Strg + -)"> </a
-			><a href="#" id="quick-ansicht-standardgroesse" class="icon-link" title="Ansicht: Standardgröße (Strg + 0)"> </a
-			><a href="#" id="quick-ansicht-vollbild" class="icon-link" title="Ansicht: Vollbild (F11)"> </a
-			><span class="quick-spacer"> </span
-			><a href="#" id="quick-hilfe-handbuch" class="icon-link" title="Hilfe: Handbuch (F1)"> </a
-		></div>
+		<!-- QUICK-ACCESS-BAR -->
+		<div id="quick"></div>
 
 		<!-- KOPF -->
 		<header>
@@ -541,86 +500,22 @@
 						<p><input type="checkbox" id="einstellung-autoHideMenuBar"
 							><label for="einstellung-autoHideMenuBar">Menüleiste des Programms erst einblenden, wenn die Alt-Taste gedrückt wird <span class="einstellung-neustart">(Neustart erforderlich)</span></label></p>
 						<p><input type="checkbox" id="einstellung-quick"
-							><label for="einstellung-quick">Quick-Access-Bar anzeigen</label> <a href="#" id="einstellungen-quick-alle">alle</a> | <a href="#" id="einstellungen-quick-keine">keine</a> | <a href="#" id="einstellungen-quick-standards">Standards</a></p>
-						<div class="einstellungen-spalten" id="einstellungen-quick-funktionen">
-							<h3 class="app-name"></h3>
-							<p><input type="checkbox" id="einstellung-quick-app-neues-fenster"
-								><label for="einstellung-quick-app-neues-fenster">Neues Fenster</label></p>
-							<p><input type="checkbox" id="einstellung-quick-app-karteisuche"
-								><label for="einstellung-quick-app-karteisuche">Karteisuche</label></p>
-							<p><input type="checkbox" id="einstellung-quick-app-einstellungen"
-								><label for="einstellung-quick-app-einstellungen">Einstellungen</label></p>
-							<p><input type="checkbox" id="einstellung-quick-app-beenden"
-								><label for="einstellung-quick-app-beenden">Beenden</label></p>
-							<h3>Kartei</h3>
-							<p><input type="checkbox" id="einstellung-quick-kartei-erstellen"
-								><label for="einstellung-quick-kartei-erstellen">Erstellen</label></p>
-							<p><input type="checkbox" id="einstellung-quick-kartei-oeffnen"
-								><label for="einstellung-quick-kartei-oeffnen">Öffnen</label></p>
-							<p><input type="checkbox" id="einstellung-quick-kartei-speichern"
-								><label for="einstellung-quick-kartei-speichern">Speichern</label></p>
-							<p><input type="checkbox" id="einstellung-quick-kartei-speichern-unter"
-								><label for="einstellung-quick-kartei-speichern-unter">Speichern unter</label></p>
-							<p><input type="checkbox" id="einstellung-quick-kartei-schliessen"
-								><label for="einstellung-quick-kartei-schliessen">Schließen</label></p>
-							<p class="einstellungen-spacer"> </p>
-							<p><input type="checkbox" id="einstellung-quick-kartei-formvarianten"
-								><label for="einstellung-quick-kartei-formvarianten">Formvarianten</label></p>
-							<p><input type="checkbox" id="einstellung-quick-kartei-notizen"
-								><label for="einstellung-quick-kartei-notizen">Notizen</label></p>
-							<p><input type="checkbox" id="einstellung-quick-kartei-anhaenge"
-								><label for="einstellung-quick-kartei-anhaenge">Anhänge</label></p>
-							<p><input type="checkbox" id="einstellung-quick-kartei-lexika"
-								><label for="einstellung-quick-kartei-lexika">Überprüfte Lexika</label></p>
-							<p><input type="checkbox" id="einstellung-quick-kartei-metadaten"
-								><label for="einstellung-quick-kartei-metadaten">Metadaten</label></p>
-							<p><input type="checkbox" id="einstellung-quick-kartei-redaktion"
-								><label for="einstellung-quick-kartei-redaktion">Redaktion</label></p>
-							<p class="einstellungen-spacer"> </p>
-							<p><input type="checkbox" id="einstellung-quick-kartei-bedeutungen"
-								><label for="einstellung-quick-kartei-bedeutungen">Bedeutungsgerüst</label></p>
-							<p><input type="checkbox" id="einstellung-quick-kartei-bedeutungen-wechseln"
-								><label for="einstellung-quick-kartei-bedeutungen-wechseln">Bedeutungsgerüst wechseln</label></p>
-							<p><input type="checkbox" id="einstellung-quick-kartei-bedeutungen-fenster"
-								><label for="einstellung-quick-kartei-bedeutungen-fenster">Bedeutungsgerüst-Fenster</label></p>
-							<p><input type="checkbox" id="einstellung-quick-kartei-suche"
-								><label for="einstellung-quick-kartei-suche">Suche</label></p>
-							<h3>Belege</h3>
-							<p><input type="checkbox" id="einstellung-quick-belege-hinzufuegen"
-								><label for="einstellung-quick-belege-hinzufuegen">Hinzufügen</label></p>
-							<p><input type="checkbox" id="einstellung-quick-belege-auflisten"
-								><label for="einstellung-quick-belege-auflisten">Auflisten</label></p>
-							<p class="einstellungen-spacer"> </p>
-							<p><input type="checkbox" id="einstellung-quick-belege-kopieren"
-								><label for="einstellung-quick-belege-kopieren">Kopieren</label></p>
-							<p><input type="checkbox" id="einstellung-quick-belege-einfuegen"
-								><label for="einstellung-quick-belege-einfuegen">Einfügen</label></p>
-							<h3>Bearbeiten</h3>
-							<p><input type="checkbox" id="einstellung-quick-bearbeiten-rueckgaengig"
-								><label for="einstellung-quick-bearbeiten-rueckgaengig">Rückgängig</label></p>
-							<p><input type="checkbox" id="einstellung-quick-bearbeiten-wiederherstellen"
-								><label for="einstellung-quick-bearbeiten-wiederherstellen">Wiederherstellen</label></p>
-							<p class="einstellungen-spacer"> </p>
-							<p><input type="checkbox" id="einstellung-quick-bearbeiten-ausschneiden"
-								><label for="einstellung-quick-bearbeiten-ausschneiden">Ausschneiden</label></p>
-							<p><input type="checkbox" id="einstellung-quick-bearbeiten-kopieren"
-								><label for="einstellung-quick-bearbeiten-kopieren">Kopieren</label></p>
-							<p><input type="checkbox" id="einstellung-quick-bearbeiten-einfuegen"
-								><label for="einstellung-quick-bearbeiten-einfuegen">Einfügen</label></p>
-							<p><input type="checkbox" id="einstellung-quick-bearbeiten-alles-auswaehlen"
-								><label for="einstellung-quick-bearbeiten-alles-auswaehlen">Alles auswählen</label></p>
-							<h3>Ansicht</h3>
-							<p><input type="checkbox" id="einstellung-quick-ansicht-anzeige-vergroessern"
-								><label for="einstellung-quick-ansicht-anzeige-vergroessern">Anzeige vergrößern</label></p>
-							<p><input type="checkbox" id="einstellung-quick-ansicht-anzeige-verkleinern"
-								><label for="einstellung-quick-ansicht-anzeige-verkleinern">Anzeige verkleinern</label></p>
-							<p><input type="checkbox" id="einstellung-quick-ansicht-standardgroesse"
-								><label for="einstellung-quick-ansicht-standardgroesse">Standardgröße</label></p>
-							<p><input type="checkbox" id="einstellung-quick-ansicht-vollbild"
-								><label for="einstellung-quick-ansicht-vollbild">Vollbild</label></p>
-							<h3>Hilfe</h3>
-							<p><input type="checkbox" id="einstellung-quick-hilfe-handbuch"
-								><label for="einstellung-quick-hilfe-handbuch">Handbuch</label></p>
+							><label for="einstellung-quick">Quick-Access-Bar anzeigen</label
+						></p>
+						<p id="quick-config-presets"
+							><a href="#" id="einstellungen-quick-alle">alle</a> | <a href="#" id="einstellungen-quick-standard">Standard</a> | <a href="#" id="einstellungen-quick-keine">keine</a
+						></p>
+						<div id="quick-config">
+							<div id="quick-config-selected"></div>
+							<div
+								><img src="img/pfeil-gerade-hoch.svg" width="24" height="24" alt="" id="quick-config-hoch" title="weiter nach oben (Strg + ↑)"
+								><br
+								><img src="img/pfeil-gerade-links.svg" width="24" height="24" alt="" id="quick-config-links" title="hinzufügen (Strg + ←)"
+								><img src="img/pfeil-gerade-rechts.svg" width="24" height="24" alt="" id="quick-config-rechts" title="entfernen (Strg + →)"
+								><br
+								><img src="img/pfeil-gerade-runter.svg" width="24" height="24" alt="" id="quick-config-runter" title="weiter nach unten (Strg + ↓)"
+							></div>
+							<div id="quick-config-selectable"></div>
 						</div>
 					</section>
 
@@ -682,7 +577,7 @@
 						<p><input type="checkbox" id="einstellung-nicht-karte-gefiltert"
 							><label for="einstellung-nicht-karte-gefiltert">nicht melden, wenn ein neuer Beleg wegen der Filterregeln nicht in der Belegliste erscheint</label></p>
 						<h3>Standardmäßig aufgeklappte Filterblöcke</h3>
-						<div class="einstellungen-spalten einstellungen-spalten-flach">
+						<div class="einstellungen-spalten">
 							<p><input type="checkbox" id="einstellung-filter-offen-volltext"
 								><label for="einstellung-filter-offen-volltext">Volltext</label></p>
 							<p><input type="checkbox" id="einstellung-filter-offen-zeitraum"

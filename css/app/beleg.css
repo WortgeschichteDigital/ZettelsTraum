@@ -278,6 +278,11 @@ textarea#beleg-bs {
 	mask-image: url(../../img/text-markiert.svg);
 }
 
+.icon-tools-save {
+	-webkit-mask-image: url(../../img/speichern.svg);
+	mask-image: url(../../img/speichern.svg);
+}
+
 .icon-tools-size {
 	-webkit-mask-image: url(../../img/text-gross.svg);
 	mask-image: url(../../img/text-gross.svg);

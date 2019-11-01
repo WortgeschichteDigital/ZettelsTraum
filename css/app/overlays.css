@@ -242,36 +242,83 @@
 	flex-direction: column;
 	flex-wrap: wrap;
 	padding-left: 24px;
-	height: 400px;
-	overflow-x: auto;
-	overflow-y: hidden;
-}
-
-#einstellungen-cont .einstellungen-spalten.einstellungen-spalten-flach {
 	height: 145px;
-}
-
-#einstellungen-cont .einstellungen-spalten h3 {
-	margin: 10px 0 5px 0;
-	width: 200px;
-}
-
-#einstellungen-cont .einstellungen-spalten h3:first-child {
-	margin-top: 0;
 }
 
 #einstellungen-cont .einstellungen-spalten p {
 	margin: 0 10px 5px 0;
 	padding-left: 1px; /* damit beim Fokussieren der Checkbox der linke Rand nicht abgeschnitten erscheint */
-	width: 240px;
 	overflow: hidden;
 	text-indent: 0;
 	text-overflow: ellipsis;
 	white-space: nowrap;
 }
 
-#einstellungen-quick-alle {
-	margin-left: 45px;
+p#quick-config-presets {
+	padding-left: 0;
+	text-align: center;
+	text-indent: 0;
+}
+
+p#quick-config-presets a {
+	display: inline-block;
+	width: 80px;
+	text-align: center;
+}
+
+#quick-config {
+	display: grid;
+	grid-template-columns: calc(50% - 39px) 58px calc(50% - 39px);
+	margin-left: 24px;
+	height: 270px;
+}
+
+#quick-config div:first-child,
+#quick-config div:last-child {
+	position: relative;
+	border: 1px solid var(--linie);
+	padding: 4px;
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+
+#quick-config div:nth-child(2) {
+	padding-top: 97px;
+	text-align: center;
+}
+
+#quick-config div:nth-child(2) img {
+	margin: 0;
+}
+
+#quick-config a {
+	display: block;
+	height: 24px;
+	padding: 1px 5px;
+	overflow: hidden;
+	color: var(--text);
+	font-size: 14px;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+#quick-config a:focus {
+	background-color: var(--highlight);
+	text-decoration: none !important;
+}
+
+#quick-config a.aktiv {
+	outline: 2px solid var(--farbe);
+}
+
+#quick-config img {
+	margin-right: 5px;
+	vertical-align: bottom;
+}
+
+#quick-config hr {
+	margin: 11px 0;
+	border: 1px solid var(--text);
 }
 
 .einstellung-neustart {
