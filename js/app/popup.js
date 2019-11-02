@@ -200,7 +200,7 @@ let popup = {
 				return "quick";
 			} else if (id === "wort" && kartei.wort) {
 				return "wort";
-			} else if (id === "erinnerungen") {
+			} else if (id === "erinnerungen-icon") {
 				return "erinnerungen";
 			} else if (id === "notizen-icon") {
 				return "notizen";

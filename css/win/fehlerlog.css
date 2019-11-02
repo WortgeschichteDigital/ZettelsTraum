@@ -49,45 +49,6 @@ body > header h1 {
 	right: 10px;
 }
 
-body > div {
-	position: fixed;
-	top: 18px;
-	right: 88px;
-	z-index: 1;
-}
-
-body > div a {
-	display: inline-block;
-	outline: none;
-	border-right: 1px solid var(--linie);
-	padding: 0 5px;
-	width: 24px;
-	height: 24px;
-	background-color: #fff;
-	color: var(--text);
-	text-decoration: none;
-}
-
-body > div a:first-child {
-	border-top-left-radius: 3px;
-	border-bottom-left-radius: 3px;
-}
-
-body > div a:last-child,
-body > div a.last {
-	border-right: 0;
-	border-top-right-radius: 3px;
-	border-bottom-right-radius: 3px;
-}
-
-body > div a:focus {
-	color: var(--farbe);
-}
-
-body > div svg path {
-	fill: currentcolor;
-}
-
 main {
 	margin-top: 70px;
 	padding: 0 10px 10px 10px;

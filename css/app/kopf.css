@@ -240,45 +240,30 @@ body > header span {
 
 #kartei-geaendert {
 	visibility: hidden;
-	margin: 0 35px 0 10px;
+	margin: 0 0 0 10px;
 }
 
 #kartei-geaendert.geaendert {
 	visibility: visible;
 }
 
-#erinnerungen,
-#notizen-icon,
-#lexika-icon {
-	margin-right: 10px;
+/* Kopf-Icons ----------------------------------- */
+#kartei-anhaenge {
+	padding: 2px 0;
+	height: 24px;
+	line-height: 24px;
 }
 
-#kartei-anhaenge.rand {
-	margin-left: 25px;
-}
-
-#erinnerungen img,
-#notizen-icon img,
-#lexika-icon img,
-#kartei-anhaenge img {
-	position: relative;
-	bottom: 18px;
-	vertical-align: bottom;
+#kartei-anhaenge.not-first {
+	border-left: 1px solid var(--linie);
 }
 
 #kartei-anhaenge img {
-	margin-right: 10px;
+	margin-left: 5px;
 }
 
-/* App-Icon ------------------------------------- */
-#icon {
-	position: absolute;
-	top: 6px;
-	right: 0;
-	width: 48px;
-	height: 48px;
-	padding: 0 10px;
-	background-color: var(--farbe);
+#kartei-anhaenge img:last-child {
+	margin-right: 5px;
 }
 
 /* Kopier-UI ------------------------------------ */
@@ -286,10 +271,11 @@ body > header span {
 	position: absolute;
 	top: 6px;
 	right: 68px;
-	padding-left: 10px;
+	z-index: 1;
+	padding-left: 50px;
 	width: 48px;
 	height: 48px;
-	background-color: var(--farbe);
+	background-image: linear-gradient(to right, rgba(114, 160, 207, 0), rgba(114, 160, 207, 1) 25px);
 }
 
 #kopieren {
@@ -305,4 +291,15 @@ body > header span {
 	line-height: 48px;
 	text-align: center;
 	text-shadow: -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff, 1px 1px 0 #fff;
+}
+
+/* App-Icon ------------------------------------- */
+#icon {
+	position: absolute;
+	top: 6px;
+	right: 0;
+	width: 48px;
+	height: 48px;
+	padding: 0 10px 0 50px;
+	background-image: linear-gradient(to right, rgba(114, 160, 207, 0), rgba(114, 160, 207, 1) 25px);
 }

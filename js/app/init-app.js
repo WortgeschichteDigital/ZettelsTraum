@@ -138,7 +138,7 @@ window.addEventListener("load", async () => {
 	// Wort-Element
 	document.getElementById("wort").addEventListener("click", () => kartei.wortAendern());
 	// Erinnerungen-Icon
-	document.getElementById("erinnerungen").addEventListener("click", () => erinnerungen.show());
+	document.getElementById("erinnerungen-icon").addEventListener("click", () => erinnerungen.show());
 	// Notizen-Icon
 	document.getElementById("notizen-icon").addEventListener("click", () => notizen.oeffnen());
 	// Lexika-Icon

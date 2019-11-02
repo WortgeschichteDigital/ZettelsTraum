@@ -189,43 +189,6 @@ li p {
 }
 
 /* Besonderheiten ------------------------------- */
-#changelog-icons {
-	position: fixed;
-	top: 18px;
-	right: 88px;
-	z-index: 1;
-}
-
-#changelog-icons a {
-	display: inline-block;
-	border-right: 1px solid var(--linie);
-	padding: 0 5px;
-	width: 24px;
-	height: 24px;
-	background-color: #fff;
-	color: var(--text);
-	text-decoration: none;
-}
-
-#changelog-icons a:first-child {
-	border-top-left-radius: 3px;
-	border-bottom-left-radius: 3px;
-}
-
-#changelog-icons a:last-child {
-	border-right: 0;
-	border-top-right-radius: 3px;
-	border-bottom-right-radius: 3px;
-}
-
-#changelog-icons a svg path {
-	fill: currentcolor;
-}
-
-#changelog-icons a:focus {
-	color: var(--farbe) !important;
-}
-
 .datei {
 	font-family: "Noto Sans Mono", "Noto Sans Symbols2", monospace;
 }

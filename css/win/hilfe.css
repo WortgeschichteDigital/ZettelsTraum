@@ -267,12 +267,8 @@ nav p.suchform a {
 	color: var(--textExtremHell);
 }
 
-#suchleiste-link {
-	margin-left: 4px;
-}
-
 #navi-back {
-	margin-left: 8px;
+	margin-left: 4px;
 }
 
 nav p.suchform a svg path {
@@ -295,7 +291,7 @@ nav input {
 	margin: 0;
 	border: 1px solid var(--linie);
 	padding: 2px 5px;
-	width: calc(100% - 12px - 28px - 56px); /* 12px padding und border, 28px Suchleiste, 56px Navigationspfeile */
+	width: calc(100% - 12px - 52px); /* 12px padding und border, 52px Navigationspfeile */
 	color: var(--text);
 	font: 16px/24px "Noto Sans", "Noto Sans Symbols2", sans-serif;
 }
@@ -307,12 +303,12 @@ nav input:focus {
 
 nav p.lupe input {
 	padding-right: 25px;
-	width: calc(100% - 32px - 28px - 56px); /* 32px padding und border, 28px Suchleiste, 56px Navigationspfeile */
+	width: calc(100% - 32px - 52px); /* 32px padding und border, 52px Navigationspfeile */
 }
 
 #suchfeld-lupe {
 	position: absolute;
-	right: 90px;
+	right: 58px;
 	display: none;
 	background-color: #fff;
 }
@@ -521,6 +517,7 @@ mark.wort {
 	width: calc(100vw - 50px); /* 50px padding */
 	height: 100vh;
 	background-color: rgba(180, 180, 180, .7);
+	backdrop-filter: blur(3px);
 	opacity: 0;
 	transition: opacity .2s ease;
 }

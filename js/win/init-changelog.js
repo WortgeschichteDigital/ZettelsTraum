@@ -12,7 +12,7 @@ window.addEventListener("load", async () => {
 	tastatur.shortcutsText();
 
 	// ICONS
-	document.querySelectorAll("#changelog-icons a").forEach(a => {
+	document.querySelectorAll("#kopf-icons a").forEach(a => {
 		a.addEventListener("click", function(evt) {
 			evt.preventDefault();
 			if (/suchleiste$/.test(this.id)) {

@@ -157,6 +157,6 @@ let lexika = {
 		} else {
 			icon.classList.remove("aus");
 		}
-		helfer.kopfIcon();
+		helfer.kopfIcons();
 	},
 };

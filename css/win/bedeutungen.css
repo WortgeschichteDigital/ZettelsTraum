@@ -15,6 +15,7 @@
 /* Struktur-Elemente ---------------------------- */
 body {
 	margin: 0;
+	overflow-x: hidden;
 	background-color: #fff;
 	color: var(--text);
 	font: 16px/24px "Noto Sans", "Noto Sans Symbols2", sans-serif;
@@ -60,7 +61,6 @@ main {
 h2 {
 	position: relative;
 	margin: 80px 0 15px 0;
-	padding-right: 200px;
 	color: var(--textFarbe);
 	font-size: 24px;
 	font-style: italic;
@@ -69,53 +69,16 @@ h2 {
 	white-space: nowrap;
 }
 
-h2 svg {
-	vertical-align: top;
-}
-
-#bd-win-geruest-detail {
-	display: inline-block;
-	max-width: 50%;
-	vertical-align: bottom;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	white-space: nowrap;
-}
-
-#bd-win-drucken {
-	position: absolute;
-	right: 0;
-	top: 3px;
-	display: inline-block;
-	outline: none;
-	border-radius: 3px;
-	width: 24px;
-	height: 24px;
-	padding: 0 5px;
-	background-color: var(--hintergrund);
-	color: var(--text);
-	text-decoration: none;
-	cursor: default;
-}
-
-#bd-win-drucken:focus {
-	color: var(--farbe);
-}
-
-#bd-win-drucken svg path {
-	fill: currentcolor;
-}
-
 .dropdown-cont {
 	position: absolute;
 	top: 2px;
-	right: 34px;
-	padding-left: 50px;
+	right: -10px;
+	padding: 0 10px 0 50px;
 	background-image: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1) 25px);
 }
 
 .dropdown-feld {
-	vertical-align: text-top;
+	vertical-align: text-bottom;
 	border: 1px solid var(--linie);
 	padding: 2px 24px 2px 5px;
 	width: 75px;
@@ -124,20 +87,24 @@ h2 svg {
 	cursor: default;
 }
 
-.dropdown-link-element {
-	position: relative;
-	top: 5px;
-	left: -26px;
+.dropdown-link-td {
+	position: absolute;
+	top: 8px;
+	right: 11px;
 	display: inline-block;
-	vertical-align: top;
 	outline: none;
+	vertical-align: top;
 	width: 24px;
 	height: 24px;
 	background-color: #fff;
 	color: var(--textExtremHell);
 }
 
-.dropdown-link-element svg path {
+.dropdown-link-td svg {
+	vertical-align: top;
+}
+
+.dropdown-link-td svg path {
 	fill: currentcolor;
 }
 
@@ -158,6 +125,10 @@ input:read-only::selection {
 			auf disabled kann ich sie auch nicht stellen, weil dann kein Klick-Event mehr gefeuert wird */
 	background-color: transparent;
 	color: inherit;
+}
+
+#dropdown {
+	margin-top: 2px; /* kleiner Fix, damit das Menü auch hier ein bisschen abgesetzt ist */
 }
 
 /* Bedeutungenbaum ------------------------------- */

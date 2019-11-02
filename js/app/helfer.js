@@ -16,21 +16,35 @@ let helfer = {
 		const {ipcRenderer} = require("electron");
 		ipcRenderer.invoke("fenster-fokus");
 	},
-	// wenn keine Kopf-Icons => Liste der Anhänge links ohne Margin
-	kopfIcon () {
-		let icons = document.querySelectorAll(".kopf-icon"),
-			iconsSichtbar = false;
-		for (let i of icons) {
-			if (!i.classList.contains("aus")) {
-				iconsSichtbar = true;
-				break;
-			}
+	// Anzeige der Icon-Leiste im Kopf des Hauptfensters anpassen
+	kopfIcons () {
+		let kopfLeiste = document.getElementById("kopf-icons");
+		// letzten sichtbaren Icon-Link markieren
+		let last = kopfLeiste.querySelector(".last");
+		if (last) {
+			last.classList.remove("last");
 		}
+		let aAn = kopfLeiste.querySelectorAll("a:not(.aus)");
+		if (aAn.length) {
+			aAn[aAn.length - 1].classList.add("last");
+		}
+		// ggf. die Anhänge-Icons anzeigen
 		let anhaenge = document.getElementById("kartei-anhaenge");
-		if (iconsSichtbar) {
-			anhaenge.classList.add("rand");
+		if (anhaenge.hasChildNodes()) {
+			anhaenge.classList.remove("aus");
+			if (aAn.length) {
+				anhaenge.classList.add("not-first");
+			} else {
+				anhaenge.classList.remove("not-first");
+			}
 		} else {
-			anhaenge.classList.remove("rand");
+			anhaenge.classList.add("aus");
+		}
+		// Icon-Leiste ggf. komplett ausschalten
+		if (!aAn.length && !anhaenge.hasChildNodes()) {
+			kopfLeiste.classList.add("aus");
+		} else {
+			kopfLeiste.classList.remove("aus");
 		}
 	},
 	// übergebene Sektion einblenden, alle andere Sektionen ausblenden
@@ -582,6 +596,17 @@ let helfer = {
 	ordnerOeffnen (pfad) {
 		let {shell} = require("electron");
 		shell.showItemInFolder(pfad);
+	},
+	// prüft, ob eine Datei existiert
+	//   datei = String
+	//     (Pfad zur Datei)
+	exists (datei) {
+		return new Promise(resolve => {
+			const fsP = require("fs").promises;
+			fsP.access(datei)
+				.then(() => resolve(true))
+				.catch(() => resolve(false));
+		});
 	},
 	// markiert in der Titelleiste des Programms, dass irgendeine Änderung
 	// noch nicht gespeichert wurde

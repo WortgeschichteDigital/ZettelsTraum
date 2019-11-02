@@ -68,3 +68,38 @@ input::-webkit-datetime-edit-minute-field:focus {
 #fensterladen.geladen {
 	opacity: 0;
 }
+
+/* Kopf-Icons ----------------------------------- */
+#kopf-icons {
+	position: relative;
+	top: 3px;
+	display: inline-block;
+	margin-left: 25px;
+	height: 28px;
+	overflow: hidden;
+	line-height: 24px;
+}
+
+#kopf-icons a {
+	outline: none;
+	display: inline-block;
+	border-right: 1px solid var(--linie);
+	padding: 2px 5px;
+	width: 24px;
+	height: 24px;
+	color: #fff;
+	text-decoration: none;
+}
+
+#kopf-icons a:last-child,
+#kopf-icons a.last {
+	border-right: 0;
+}
+
+#kopf-icons a svg path {
+	fill: currentcolor;
+}
+
+#kopf-icons a:focus {
+	color: var(--highlight);
+}

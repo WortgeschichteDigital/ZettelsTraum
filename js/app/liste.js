@@ -1232,8 +1232,7 @@ let liste = {
 		// Anhänge?
 		if (beleg.an.length && klasse) {
 			let cont_span = document.createElement("span");
-			anhaenge.scan(beleg.an);
-			anhaenge.makeIconList(beleg.an, cont_span);
+			anhaenge.makeIconList(beleg.an, cont_span, true);
 			div.appendChild(cont_span);
 		}
 	},

@@ -212,7 +212,7 @@ let notizen = {
 		} else {
 			icon.classList.add("aus");
 		}
-		helfer.kopfIcon();
+		helfer.kopfIcons();
 	},
 	// der gespeichert Wert wird gerade in das Notizenfeld eingetragen
 	eintragen: false,

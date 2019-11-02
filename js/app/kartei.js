@@ -193,8 +193,7 @@ let kartei = {
 				zuletzt.aendern();
 				notizen.icon();
 				lexika.icon();
-				anhaenge.scan(data.an);
-				anhaenge.makeIconList(data.an, document.getElementById("kartei-anhaenge"));
+				anhaenge.makeIconList(data.an, document.getElementById("kartei-anhaenge"), true);
 				filter.kartendatumInit();
 				liste.statusOffen = {}; // sonst werden unter Umständen Belege aufgeklappt, selbst wenn alle geschlossen sein sollten; s. Changelog zu Version 0.23.0
 				liste.aufbauen(true);
@@ -518,14 +517,14 @@ let kartei = {
 				return;
 			}
 			let pfad = datei.match(/^(.+[/\\]{1})(.+)$/);
-			const fs = require("fs"),
-				fsP = fs.promises,
+			const fsP = require("fs").promises,
 				lockfile = `${pfad[1]}.~lock.${pfad[2]}#`;
 			if (aktion === "lock") {
 				// alte Datei ggf. löschen
 				// (Unter Windows gibt es Probleme, wenn die Datei direkt überschrieben werden soll.
 				// Ist das vielleicht ein Node-BUG? Eigentlich sollte das nämlich gehen.)
-				if (fs.existsSync(lockfile)) {
+				const exists = await helfer.exists(lockfile);
+				if (exists) {
 					const erfolg = await kartei.lockUnlink(lockfile);
 					if (!erfolg) {
 						resolve(false);
@@ -558,7 +557,8 @@ let kartei = {
 				const erfolg = await kartei.lockUnlink(lockfile);
 				resolve(erfolg);
 			} else if (aktion === "check") {
-				if (!fs.existsSync(lockfile)) {
+				const exists = await helfer.exists(lockfile);
+				if (!exists) {
 					resolve(false); // keine Kartei => nicht gesperrt
 					return;
 				}

@@ -431,10 +431,10 @@ let beleg = {
 	// (Der Button hieß früher "Abbrechen", darum heißt die Funktion noch so)
 	aktionAbbrechen () {
 		speichern.checkInit(() => {
+			liste.wechseln(); // erst zur Liste wechseln, sonst wird die Meldung, dass der neue Beleg gerade nicht sichtbar ist, sofort wieder ausgeblendet
 			if (beleg.listeGeaendert) {
 				liste.status(true);
 			}
-			liste.wechseln();
 			beleg.listeGeaendert = false;
 		});
 	},

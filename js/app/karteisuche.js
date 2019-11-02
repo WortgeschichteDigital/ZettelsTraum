@@ -22,7 +22,7 @@ let karteisuche = {
 		}
 	},
 	// Liste der ausgewählten Pfade aufbauen
-	pfadeAuflisten () {
+	async pfadeAuflisten () {
 		// Check-Status sichern
 		let status = Array(optionen.data.karteisuche.pfade.length).fill(true),
 			inputs = document.querySelectorAll("#karteisuche-pfade input");
@@ -45,7 +45,6 @@ let karteisuche = {
 		a.classList.add("icon-link", "icon-add");
 		p.appendChild(document.createTextNode("Pfad hinzufügen"));
 		// Pfade auflisten
-		const fs = require("fs");
 		for (let i = 0, len = optionen.data.karteisuche.pfade.length; i < len; i++) {
 			const pfad = optionen.data.karteisuche.pfade[i];
 			let p = document.createElement("p");
@@ -80,7 +79,8 @@ let karteisuche = {
 			if (karteisuche.pfadGefunden.includes(pfad)) {
 				continue;
 			}
-			if (fs.existsSync(pfad)) {
+			const exists = await helfer.exists(pfad);
+			if (exists) {
 				karteisuche.pfadGefunden.push(pfad);
 			} else {
 				let img = document.createElement("img");
@@ -251,8 +251,8 @@ let karteisuche = {
 		karteisuche.wgd = [];
 		const fsP = require("fs").promises;
 		for (let ordner of pfade) {
-			const existiert = await karteisuche.existenzOrdner(ordner);
-			if (existiert) {
+			const exists = await helfer.exists(ordner);
+			if (exists) {
 				await karteisuche.ordnerParsen(ordner);
 			}
 		}
@@ -286,15 +286,6 @@ let karteisuche = {
 		}
 		// Filter speichern
 		karteisuche.filterSpeichern();
-	},
-	// überprüft, ob der übergebene Ordner noch existiert
-	//   ordner = String
-	//     (Ordner, dessen Existenz überprüft werden soll)
-	existenzOrdner (ordner) {
-		return new Promise(resolve => {
-			const fs = require("fs");
-			resolve(fs.existsSync(ordner)); // das asynchrone fs.exists() ist deprecated
-		});
 	},
 	// WGD-Dateien, die gefunden wurden;
 	// Array enthält Objekte:

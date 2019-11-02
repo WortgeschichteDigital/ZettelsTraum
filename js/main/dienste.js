@@ -22,6 +22,16 @@ module.exports = {
 		}
 		return svg;
 	},
+	// prüft, ob eine Datei existiert
+	//   datei = String
+	//     (Pfad zur Datei)
+	exists (datei) {
+		return new Promise(resolve => {
+			fsP.access(datei)
+				.then(() => resolve(true))
+				.catch(() => resolve(false));
+		});
+	},
 	// Dateidialog anzeigen
 	//   open = Boolean
 	//     (der showOpenDialog() soll angezeigt werden; sonst showSaveDailog())

@@ -57,13 +57,13 @@ let erinnerungen = {
 	// Anzeige des Icons umschalten
 	//   an = Boolean
 	icon (an) {
-		let icon = document.getElementById("erinnerungen");
+		let icon = document.getElementById("erinnerungen-icon");
 		if (an) {
 			icon.classList.remove("aus");
 		} else {
 			icon.classList.add("aus");
 		}
-		helfer.kopfIcon();
+		helfer.kopfIcons();
 	},
 	// Erinnerungen auf Klick anzeigen
 	show () {

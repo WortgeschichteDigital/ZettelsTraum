@@ -492,10 +492,10 @@ appMenu = {
 		layoutZuletzt.submenu.push(item);
 	},
 	// überprüft, ob die zuletzt verwendeten Karteien noch vorhanden sind
-	zuletztCheck () {
-		let fs = require("fs");
+	async zuletztCheck () {
 		for (let i of optionen.data.zuletzt) {
-			if (!fs.existsSync(i)) {
+			const exists = await dienste.exists(i);
+			if (!exists) {
 				appMenu.zuletztVerschwunden.push(i);
 			}
 		}
@@ -660,7 +660,8 @@ optionen = {
 	data: {},
 	// liest die Optionen-Datei aus
 	async lesen () {
-		if (!fs.existsSync(optionen.pfad)) {
+		const exists = await dienste.exists(optionen.pfad);
+		if (!exists) {
 			return;
 		}
 		let content = await fsP.readFile(optionen.pfad, {
