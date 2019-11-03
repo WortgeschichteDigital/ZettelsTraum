@@ -61,7 +61,10 @@ let appMenu, optionen, fenster;
 
 /* PROGRAMMFEHLER *******************************/
 
-process.on("uncaughtException", err => {
+process.on("uncaughtException", err => onError(err));
+process.on("unhandledRejection", err => onError(err));
+
+function onError (err) {
 	fehler.push({
 		time: new Date().toISOString(),
 		word: "",
@@ -75,7 +78,7 @@ process.on("uncaughtException", err => {
 	if (devtools) {
 		console.log(`\x1b[47m\x1b[31m${err.stack}\x1b[0m`);
 	}
-});
+}
 
 
 /* LOCALE SETZEN ********************************/
@@ -679,7 +682,10 @@ optionen = {
 	// überschreibt die Optionen-Datei
 	schreiben () {
 		fsP.writeFile(optionen.pfad, JSON.stringify(optionen.data))
-			.catch(err => fenster.befehlAnHauptfenster("dialog-anzeigen", `Die Optionen-Datei konnte nicht gespeichert werden.\n<h3>Fehlermeldung</h3>\n${err.message}`));
+			.catch(err => {
+				fenster.befehlAnHauptfenster("dialog-anzeigen", `Die Optionen-Datei konnte nicht gespeichert werden.\n<h3>Fehlermeldung</h3>\n${err.name}: ${err.message}`);
+				throw err;
+			});
 	},
 };
 

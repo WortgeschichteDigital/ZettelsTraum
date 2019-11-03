@@ -518,6 +518,10 @@ a[class*="icon-windrose"] {
 	background-color: var(--farbe);
 }
 
+#bedeutungen-tools .block-start {
+	margin-left: 10px;
+}
+
 /* Besonderheiten ------------------------------- */
 .bedeutungen-dialog {
 	margin-left: 25px;

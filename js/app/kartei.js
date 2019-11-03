@@ -96,10 +96,6 @@ let kartei = {
 			});
 			return;
 		} else if (result.canceled) {
-			dialog.oeffnen({
-				typ: "alert",
-				text: "Sie haben keine Datei ausgewählt.",
-			});
 			return;
 		}
 		// Datei einlesen
@@ -156,7 +152,7 @@ let kartei = {
 				} catch (err_json) {
 					dialog.oeffnen({
 						typ: "alert",
-						text: `Beim Einlesen der Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n${err_json}`,
+						text: `Beim Einlesen der Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n${err_json.name}: ${err_json.message}`,
 					});
 					return;
 				}
@@ -217,8 +213,9 @@ let kartei = {
 			.catch(err => {
 				dialog.oeffnen({
 					typ: "alert",
-					text: `Beim Öffnen der Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.message}</p>`,
+					text: `Beim Öffnen der Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.name}: ${err.message}</p>`,
 				});
+				throw err;
 			});
 	},
 	// Speichern: Verteilerfunktion
@@ -255,12 +252,14 @@ let kartei = {
 	//     (Zielpfad der Kartei)
 	speichernSchreiben (pfad) {
 		return new Promise(resolve => {
-			// ggf. BearbeiterIn hinzufügen
+			// ggf. BearbeiterIn hinzufügen oder an die Spitze der Liste holen
 			const bearb = optionen.data.einstellungen.bearbeiterin;
-			let bearb_ergaenzt = false;
-			if (bearb && !data.be.includes(bearb)) {
-				data.be.push(bearb);
-				bearb_ergaenzt = true;
+			let beAlt = [...data.be];
+			if (bearb) {
+				if (data.be.includes(bearb)) {
+					data.be.splice(data.be.indexOf(bearb), 1);
+				}
+				data.be.unshift(bearb);
 			}
 			// einige Werte müssen vor dem Speichern angepasst werden
 			const dm_alt = data.dm,
@@ -291,16 +290,15 @@ let kartei = {
 				.catch(err => {
 					dialog.oeffnen({
 						typ: "alert",
-						text: `Beim Speichern der Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.message}</p>`,
+						text: `Beim Speichern der Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.name}: ${err.message}</p>`,
 					});
 					// passiert ein Fehler, müssen manche Werte zurückgesetzt werden
-					if (bearb_ergaenzt) {
-						data.be.splice(data.be.indexOf(bearb), 1);
-					}
+					data.be = [...beAlt];
 					data.dm = dm_alt;
 					data.re = re_alt;
 					// beim Speichern ist ein Fehler aufgetreten
 					resolve(false);
+					throw err;
 				});
 		});
 	},
@@ -340,10 +338,6 @@ let kartei = {
 			});
 			return;
 		} else if (result.canceled) {
-			dialog.oeffnen({
-				typ: "alert",
-				text: "Die Kartei wurde nicht gespeichert.",
-			});
 			return;
 		}
 		// Kartei speichern
@@ -549,9 +543,10 @@ let kartei = {
 					.catch(err => {
 						dialog.oeffnen({
 							typ: "alert",
-							text: `Beim Erstellen der Sperrdatei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.message}</p>`,
+							text: `Beim Erstellen der Sperrdatei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.name}: ${err.message}</p>`,
 						});
 						resolve(false);
+						throw err;
 					});
 			} else if (aktion === "unlock") {
 				const erfolg = await kartei.lockUnlink(lockfile);
@@ -596,9 +591,10 @@ let kartei = {
 				.catch(err => {
 					dialog.oeffnen({
 						typ: "alert",
-						text: `Beim Löschen der Sperrdatei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.message}</p>`
+						text: `Beim Löschen der Sperrdatei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.name}: ${err.message}</p>`
 					});
 					resolve(false);
+					throw err;
 				});
 		});
 	},
@@ -613,9 +609,10 @@ let kartei = {
 				.catch(err => {
 					dialog.oeffnen({
 						typ: "alert",
-						text: `Beim Lesen der Sperrdatei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.message}</p>`
+						text: `Beim Lesen der Sperrdatei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.name}: ${err.message}</p>`
 					});
 					resolve("");
+					throw err;
 				});
 		});
 	},

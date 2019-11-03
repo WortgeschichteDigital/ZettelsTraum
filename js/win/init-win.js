@@ -1,5 +1,6 @@
 "use strict";
 
+// INITIALISIERUNG DES FENSTERS
 let initWin = {
 	// Listener für Signale des Main-Prozesses
 	ipcListener () {
@@ -107,3 +108,7 @@ let initWin = {
 		});
 	},
 };
+
+// FEHLER AN MAIN SCHICKEN
+window.addEventListener("error", evt => helfer.onError(evt));
+window.addEventListener("unhandledrejection", evt => helfer.onError(evt));

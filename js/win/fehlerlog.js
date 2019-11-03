@@ -47,7 +47,7 @@ let fehlerlog = {
 				p = document.createElement("p");
 				div.appendChild(p);
 				if (!i.word) {
-					p.textContent = "[leeres Fenster]";
+					p.textContent = "[leeres Hauptfenster]";
 				} else {
 					p.textContent = `${i.word} (${i.fileWgd})`;
 				}

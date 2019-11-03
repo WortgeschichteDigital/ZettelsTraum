@@ -21,7 +21,7 @@ let annotieren = {
 		} catch (err) {
 			dialog.oeffnen({
 				typ: "alert",
-				text: `Die Markierung kann an dieser Position nicht vorgenommen werden.\n<h3>Fehlermeldung</h3>\n${err.message}`,
+				text: `Die Markierung kann an dieser Position nicht vorgenommen werden.\n<h3>Fehlermeldung</h3>\n${err.name}: ${err.message}`,
 			});
 		}
 	},

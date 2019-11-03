@@ -466,15 +466,25 @@ p#quick-config-presets a {
 	position: absolute;
 	top: 28px;
 	left: 0;
+	z-index: 1;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 	border-bottom-right-radius: 10px;
 	border-bottom-left-radius: 10px;
-	padding: 10px 0 0 165px;
-	width: calc(100% - 165px); /* 165px = padding-left */
-	height: calc(100% - 28px - 10px); /* 28px = Kopfleiste, 10px = padding-top */
+	width: 100%;
+	height: calc(100% - 28px); /* 28px Kopfleiste */
 	background-color: rgba(255, 255, 255, .7);
 	color: var(--farbe);
+	font-size: 30px;
 	font-style: italic;
 	font-weight: bold;
+	backdrop-filter: blur(2px);
+}
+
+#karteisuche-suche-laeuft span {
+	display: inline-block;
+	width: 25px;
 }
 
 #karteisuche-cont {
@@ -1108,6 +1118,11 @@ p#quick-config-presets a {
 	vertical-align: top;
 	line-height: 30px;
 	white-space: nowrap;
+}
+
+#redaktion-cont td.leer {
+	color: var(--textSehrHell);
+	font-style: italic;
 }
 
 #redaktion-cont td:first-child {

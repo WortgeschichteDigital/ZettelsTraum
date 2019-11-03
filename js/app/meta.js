@@ -65,23 +65,21 @@ let meta = {
 			return;
 		}
 		// BearbeiterInnen auflisten
-		let b = [...data.be];
-		b.reverse();
-		for (let i = 0, len = b.length; i < len; i++) {
+		for (let i = 0, len = data.be.length; i < len; i++) {
 			let p = document.createElement("p");
 			cont.appendChild(p);
 			// Lösch-Link
 			let a = document.createElement("a");
 			a.href = "#";
 			a.classList.add("icon-link", "icon-entfernen");
-			a.dataset.bearb = b[i];
+			a.dataset.bearb = data.be[i];
 			meta.bearbEntfernen(a);
 			p.appendChild(a);
 			// BearbeiterIn
-			let bearb = b[i];
+			let bearb = data.be[i];
 			if (!optionen.data.personen.includes(bearb)) {
 				bearb += " +";
-				p.title = "(BearbeiterIn manuell ergänzt)";
+				p.title = "BearbeiterIn nicht in der Personenliste";
 			}
 			p.appendChild(document.createTextNode(bearb));
 		}
@@ -114,7 +112,7 @@ let meta = {
 		}
 		// BearbeiterIn ergänzen und sortieren
 		be.value = "";
-		data.be.push(va);
+		data.be.unshift(va);
 		// Liste neu aufbauen
 		meta.bearbAuflisten();
 		// Änderungsmarkierung setzen

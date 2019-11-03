@@ -84,7 +84,7 @@
 					</li>
 
 					<li>
-						<p>Bei Rechtsklick auf einem Anhang-Icon, in einer Anhänge- oder Karteiliste (in der <a href="#menueApp-karteisuche" class="link-handbuch">Karteisuche</a> oder auf der <a href="#menueApp-neuesFenster" class="link-handbuch">Startseite</a>) wird nun der Menüpunkt <i>Ordner öffnen</i> angeboten. Auf Klick öffnet sich der Dateimanager des Betriebssystems in dem Ordner, in dem sich die entsprechende Datei befindet.</p>
+						<p>Bei Rechtsklick auf einem Anhang-Icon, in einer Anhänge- oder Karteiliste (in der <a href="#menueApp-karteisuche" class="link-handbuch">Karteisuche</a> oder in der <a href="#menueApp-neuesFenster" class="link-handbuch">Startansicht</a>) und auf einem Suchpfad der Karteisuche wird nun der Menüpunkt <i>Ordner öffnen</i> angeboten. Auf Klick öffnet sich der Dateimanager des Betriebssystems, entweder <em>mit</em> dem Ordner (wenn es beim Öffnen um einen Pfad geht) oder <em>in</em> dem Ordner (in dem sich die entsprechende Datei befindet).</p>
 
 						<p>Außerdem findet sich im <a href="#menueKartei-metadaten" class="link-handbuch">Metadaten-Fenster</a> in der Überschrift <i>Speicherort</i> nun das Icon <img src="../img/ordner.svg" width="24" height="24" alt="">. Auf Klick öffnet es den Dateimanager des System mit dem Ordner, in dem die aktuelle Kartei liegt.</p>
 					</li>
@@ -163,6 +163,10 @@
 						<p>Als Nebeneffekt dieser Änderung konnte die erklärende Kopfzeile im <a href="#menueKartei-redaktion" class="link-handbuch">Redaktions-Fenster</a> entfernt werden. Die Platzhalter übernehmen ihre Funktion.</p>
 					</li>
 
+					<li><a href="#menueKartei-redaktion" class="link-handbuch">Redaktionsfenster</a>: Wurde für ein Redaktionsereignis keine Person registriert, wird nun nicht mehr ein <q>?</q>, sondern der ausgegraute, kursive Text <q>keine Person</q> gedruckt. Das ist nicht nur schicker, sondern auch konsistenter mit der <abbr title="User Interface" lang="en">UI</abbr> der anderen Programmteile.</li>
+
+					<li><a href="#menueKartei-metadaten" class="link-handbuch">Metadatenfenster</a>: Die Person, die die Kartei zuletzt gespeichert hat, wird nun immer an den Anfang der Liste der BearbeterInnen gesetzt. Zuvor war es so, dass die Liste nicht angerührt wurde, wenn derjenige, der eine Kartei gespeichert hat, bereits in der Liste stand.</li>
+
 					<li><a href="#bedeutungsgeruest" class="link-handbuch">Bedeutungsgerüst</a>: Die Toolbar, die erscheint, wenn man eine neue Bedeutung erstellen oder eine bestehende ändern möchte, hat nun ein Speichern-Icon: <img src="../img/speichern.svg" width="24" height="24" alt="">.</li>
 
 					<li>Bedeutungsgerüst: Wird eine Bedeutung via Drag-and-Drop verschoben, zeigt nun nicht nur die Markierungslinie, sondern auch der Maus-Cursor an, ob die Bedeutung an die aktuelle Stelle geschoben werden darf oder nicht.</li>
@@ -172,6 +176,8 @@
 					<li>Das Icon für die Funktion <a href="#menueAnsicht-standardgroesse" class="link-handbuch"><i>Ansicht &gt; Standardgröße</i></a> wurde geändert: <img src="../img/fenster-standard.svg" width="24" height="24" alt="">. Es ist nun klarer vom Icon für die Vollbild-Anzeige (<img src="../img/fenster-vollbild.svg" width="24" height="24" alt="">) unterschieden, dafür den Icons zum Vergrößern und Verkleinern der Anzeige ähnlicher.</li>
 
 					<li>Das Tastaturkürzel für die Funktion <a href="#menueAnsicht-anzeigeVergroessern" class="link-handbuch"><i>Ansicht &gt; Anzeige vergrößern</i></a> wurde auf <kbd class="nochange">Strg</kbd> + <kbd>+</kbd> geändert (unter <i>macOS</i> <kbd>⌘</kbd> + <kbd>=</kbd>). Es passt nun besser zum Kürzel für das Verkleinern der Anzeige: <kbd>Strg</kbd> + <kbd>-</kbd>. Die Änderung bezieht sich auf alle Programmfenster, in denen es zur Verfügung steht.</li>
+
+					<li>Brach man den beim Öffnen oder Speichern einer Datei oder eines Pfades erscheinenden Dateidialog ab, ohne eine Datei oder eine Pfad auszuwählen, wurde bisher ein Dialogfenster angezeigt, das einem widersinngerweise mitteilte, was man gerade getan hat. Dieses Dialogfenster wird nun nicht mehr angezeigt.</li>
 
 					<li>Der <a href="#" class="link-fehlerlog">Fehlerlog</a> hat jetzt ein Reload-Icon: <img src="../img/pfeil-kreis.svg" width="24" height="24" alt="">. Das Neuladen geht auch via <kbd>F5</kbd>.</li>
 
@@ -192,6 +198,8 @@
 					<li>Das Auf- und Zuklappen der <a href="#filter" class="link-handbuch">Filter</a> wird nun animiert.</li>
 
 					<li>Das Auf- und Zuklappen des Inhaltsverzeichnisses im Handbuch und der technischen Dokumentation wird nun animiert.</li>
+
+					<li><a href="#menueApp-karteisuche" class="link-handbuch">Karteisuche</a>: Der Sperrbildschirm, der anzeigt, dass eine Suche läuft, hat eine kleine Textanimation erhalten.</li>
 
 					<li>
 						<p>Das Öffnen der Programmfenster ist mit dem Anwachsen des Quellcodes immer langsamer geworden. Die Art und Weise, wie Programmfenster geöffnet werden, wurde darum neu geregelt. Sie öffnen sich zwar nun deutlich rascher, zeigen nach dem Aufruf aber zunächst eine Art Sperrbild, das verschwindet, sobald der Content verfügbar ist.</p>
@@ -216,6 +224,8 @@
 					</li>
 
 					<li>Die <a href="#" class="link-dokumentation">technische Dokumentation</a> wurde wegen der vielen Änderungen und Ergänzungen auf der technischen Ebene in den Abschnitten <a href="#framework" class="link-dokumentation">Framework</a> sowie <a href="#ordner" class="link-dokumentation">Ordner und Dateien</a> überarbeitet.</li>
+
+					<li>Für Entwickler: Fehler innerhalb einer Promise, die bisher von einem Catch-Handler verschluckt wurden, werden fortan ausgeworfen und geloggt. Sie sind also auch im <a href="#" class="link-fehlerlog">Fehlerlog</a> einsehbar.</li>
 
 					<li>Für Entwickler: Zum Paketieren der App werden nun keine Kommandozeilenbefehle mehr genutzt, sondern ein moderneres Node-Script. <abbr title="Vergleiche">Vgl.</abbr> den <abbr title="Abschnitt">Abschn.</abbr> zum <a href="#framework-paketieren" class="link-dokumentation">Paketieren der App</a> in der <a href="#" class="link-dokumentation">technischen Dokumentation</a>.</li>
 
@@ -282,14 +292,18 @@
 					<li>
 						<p><a href="#menueApp-karteisuche" class="link-handbuch">Karteisuche</a>: Befanden sich in einem der angegebenen Suchpfade Ordner oder Dateien, auf die keine Zugriffsrechte bestanden, produzierte dies einen Fehler, der zum Absturz der gesamten Suchaktion führte: Der Sperrbildschirm mit dem Hinweis <q>Suche läuft…</q> blieb bestehen und ging erst nach einem Neustart der App wieder weg.</p>
 
-						<p>Die Reparatur hat den positiven Nebeneffekt, dass die Suche nun vollkommen asynchron abläuft. Dauert sie sehr lange (weil in einem Ordner oder langsamen Netzwerk gesucht wird), kann man das Dialog-Fenster problemlos verlassen, mit anderen Programmfunktionen weiterarbeiten und später schauen, ob die Suche mittlerweile zu einem Ergebnis gekommen ist.</p>
+						<p>Die Reparatur hat den positiven Nebeneffekt, dass die Suche nun vollkommen asynchron abläuft. Dauert sie sehr lange (weil in einem Ordner oder langsamen Netzwerk gesucht wird), kann man das Dialogfenster problemlos verlassen, mit anderen Programmfunktionen weiterarbeiten und später schauen, ob die Suche mittlerweile zu einem Ergebnis gekommen ist.</p>
 					</li>
+
+					<li>Karteisuche: Wurde einer der angegebenen Pfade nicht gefunden, gab es keine Möglichkeit, seine Existenz noch einmal während der Laufzeit des Programms zu überprüfen. Sprich: Man musste die App neu starten. Das System der Überprüfung wurde darum dahingehend geändert, dass die Existenz der Karteipfade nun vor jeder Suche aufs Neue geprüft wird.</li>
 
 					<li>Karteisuche: Es gab ein paar visuelle Probleme im Konfigurationsbereich: Es war nicht immer sichtbar, wo der Fokus war, und die Icon-Farben änderten sich nicht immer beim Herüberfahren mit der Maus.</li>
 
 					<li><a href="#einstellungen" class="link-handbuch">Einstellungen</a>: Das Datum des Abgleichs und Updates von <a href="#einstellungen-tagDateien" class="link-handbuch">Tag-Dateien</a> war nicht immer vollständig sichtbar. Von nun an wird ein kürzeres Datumsformat genutzt.</li>
 
 					<li>Einstellungen: Eigentlich sollte der Abgleich der mit dem Programm verknüpften Tag-Dateien nur einmal pro Programmsession durchgeführt werden. Tatsächlich geschah dies jedes Mal, wenn ein neues oder leeres Programmfenster geöffnet wurde. Fortan wird der Abgleich nur noch einmal pro Programmsession angestoßen.</li>
+
+					<li>Mitunter erschienen im Rechtsklickmenü die Befehle <i>Beleg hinzufügen</i> und <i>Belege auflisten</i>, obwohl gar keine Kartei geöffnet war. Betroffen waren die Meldungsfenster, die Karteisuche und der Einstellungendialog.</li>
 
 					<li>Navigierte man mit der <kbd>Tab</kbd>-Taste durch die einzelnen Elemente der Programmoberfläche, konnte man nicht erkennen, ob ein Textlink den Fokus hatte oder nicht. Fortan werden Textlinks sowohl in den Haupt- als auch in den Nebenfenstern unterstrichen, wenn sie den Fokus haben.</li>
 

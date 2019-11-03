@@ -726,10 +726,6 @@ let kopieren = {
 			});
 			return;
 		} else if (result.canceled) {
-			dialog.oeffnen({
-				typ: "alert",
-				text: "Die Belege wurden nicht gespeichert.",
-			});
 			return;
 		}
 		// Datei schreiben
@@ -738,8 +734,9 @@ let kopieren = {
 			.catch(err => {
 				dialog.oeffnen({
 					typ: "alert",
-					text: `Beim Speichern der Belege ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.message}</p>`,
+					text: `Beim Speichern der Belege ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.name}: ${err.message}</p>`,
 				});
+				throw err;
 			});
 	},
 	// Kopierliste aus Datei importieren
@@ -776,10 +773,6 @@ let kopieren = {
 			});
 			return;
 		} else if (result.canceled) {
-			dialog.oeffnen({
-				typ: "alert",
-				text: "Sie haben keine Datei ausgewählt.",
-			});
 			return;
 		}
 		// Datei einlesen
@@ -792,7 +785,7 @@ let kopieren = {
 				} catch (err_json) {
 					dialog.oeffnen({
 						typ: "alert",
-						text: `Beim Einlesen der Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n${err_json}`,
+						text: `Beim Einlesen der Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n${err_json.name}: ${err_json.message}`,
 					});
 					return;
 				}
@@ -809,8 +802,9 @@ let kopieren = {
 			.catch(err => {
 				dialog.oeffnen({
 					typ: "alert",
-					text: `Beim Öffnen der Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.message}</p>`,
+					text: `Beim Öffnen der Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.name}: ${err.message}</p>`,
 				});
+				throw err;
 			});
 	},
 };

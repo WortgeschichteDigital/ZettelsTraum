@@ -1233,7 +1233,7 @@
 
 					<h2 id="einstellungen-allgemeines">Allgemeines</h2>
 
-					<p class="erklaerung-option">BearbeiterIn auf diesem Rechner</p>
+					<p class="erklaerung-option" id="einstellungen-allgemeinesBearbeiterin">BearbeiterIn auf diesem Rechner</p>
 
 					<div class="info">
 						<p><i>Standard:</i> leer</p>
@@ -1246,7 +1246,7 @@
 
 						<p>Arbeiten Sie in einem <b>Projekt mit mehreren MitarbeiterInnen</b>, könnte es sogar sinnvoll sein, eine Datei mit einer Personenliste zu erstellen, die sich jeder einmalig in sein Programm lädt. So könnte dann an allen Stellen des Programms, wo auf Personennamen der BearbeiterInnen zurückgegriffen wird, ein mit den in der Liste zu findenden Namen gefülltes <a href="#karteikarte-dropdown">Dropdown-Menü</a> aufgebaut werden. Orte, an denen sich solche Menüs befinden, sind dieses Textfeld, das BearbeiterInnen-Feld im <a href="#menueKartei-metadaten">Metadaten-Fenster</a> und die Personenfelder im <a href="#menueKartei-redaktion">Redaktions-Fenster</a>.</p>
 
-						<p>Eine solche <b>Personenliste</b> kann über den Button <i>Personenliste laden</i> ausgewählt und eingelesen werden. Es muss sich dabei um eine Plain-Text-Datei handeln. Zum Erstellen geeignet sind demnach schlichte Textprogramme wie <abbr title="zum Beispiel">z. B.</abbr> der <i>Editor</i> von <i>Windows</i>. Komplexe Dateiformate, wie sie von Office-Programmen erstellt werden, sind hierfür gleichwohl ungeeignet (es sei denn, Sie speichern eine darin erzeugte Personenliste explizit als Textdatei mit der Endung <span class="datei">.txt</span>). Der Zeilenumbruch dient dabei als Trennzeichen. Jede Zeile der Datei darf mithin einen Personennamen enthalten:</p>
+						<p id="einstellungen-allgemeinesPersonenliste">Eine solche <b>Personenliste</b> kann über den Button <i>Personenliste laden</i> ausgewählt und eingelesen werden. Es muss sich dabei um eine Plain-Text-Datei handeln. Zum Erstellen geeignet sind demnach schlichte Textprogramme wie <abbr title="zum Beispiel">z. B.</abbr> der <i>Editor</i> von <i>Windows</i>. Komplexe Dateiformate, wie sie von Office-Programmen erstellt werden, sind hierfür gleichwohl ungeeignet (es sei denn, Sie speichern eine darin erzeugte Personenliste explizit als Textdatei mit der Endung <span class="datei">.txt</span>). Der Zeilenumbruch dient dabei als Trennzeichen. Jede Zeile der Datei darf mithin einen Personennamen enthalten:</p>
 
 						<pre class="quelltext">Müller, Thomas
 Mustermann, Erika
@@ -1498,7 +1498,7 @@ Mustermann, Erika
 						<p>Haben Sie automatisch einen Beleg aus dem <abbr title="Deutsches Textarchiv">DTA</abbr> importiert, wird die App nach dem Import einmalig überprüfen, ob in der importieren Belegstelle das Karteiwort (bei mehrgliedrigen Wortverbindungen: alle Karteiwörter) zu finden ist (sind). Wenn nicht, wird es Sie über dieses Manko informieren.</p>
 
 						<p>Es könnte sein, dass sich das Wort, das Sie interessiert, erst am Anfang der nächsten Textseite befindet. Wiederholen Sie den Import dann einfach in derselben, immer noch geöffneten Karte und <a href="#karteikarte-dtaImport">importieren Sie eine Seite mehr</a>.</p>
-						
+
 						<p>Ansonsten gilt: Der Algorithmus, der nach dem Karteiwort sucht, ist gut, aber gewiss nicht perfekt. Vielleicht ist die Meldung falsch. Sie können sofort nach dem Import in die <a href="#karteikarte-leseansicht">Leseansicht der Karteikarte</a> wechseln, um hier (<abbr title="eventuell">evtl.</abbr> mit Hilfe der <a href="#karteikarte-suchleiste">Suchleiste</a>) zu überprüfen, ob das Wort nicht doch zu finden ist.</p>
 					</div>
 
@@ -1516,9 +1516,9 @@ Mustermann, Erika
 
 							<li>Einfügen durch Klick auf eine Bedeutungsdefinition im <a href="#bedeutungsgeruest-fenster">Bedeutungsgerüst-Fenster</a>.</li>
 						</ul>
-						
+
 						<p>Ist die Einstellung aktiviert, werden Sie nicht mehr gefragt. Der im Feld stehende Text wird am Ende automatisch um den einzufügenden Text ergänzt.</p>
-						
+
 						<p>Bei dieser Einstellung handelt es sich im Prinzip um dieselbe, die Sie in jenem Meldungsfenster sehen, das Sie nach einer der genannten Einfüge-Funktionen fragt, ob Sie das Textfeld überschreiben oder ergänzen möchten. Die Checkbox im Meldungsfenster ist mit dieser verknüpft.</p>
 					</div>
 
@@ -1556,7 +1556,7 @@ Mustermann, Erika
 						<p>Wenn Sie diese Einstellung aktivieren, wird die App jedes Mal, wenn Sie einen Filter anklicken (oder Text im Volltextfeld eingeben), sprich: jedes Mal, wenn Sie das Filtern der <a href="#belegliste">Belegliste</a> anstoßen, Filterblöcke, in denen kein Filter aktiv ist, zuklappen.</p>
 
 						<p>Von dieser Regel gibt es nur zwei Ausnahme:</p>
-						
+
 						<ol>
 							<li>Wenn Sie das Filtern dadurch anstoßen, dass Sie in einem Filterblock den letzten Haken entfernen, bleibt dieser Block geöffnet – obwohl er nun inaktiv ist.</li>
 
@@ -1665,7 +1665,7 @@ Mustermann, Erika
 				<!-- MENÜPUNKT APP -->
 				<section id="sektion-menueApp" class="suche aus">
 					<p>Dieser Menüpunkt fehlt in <b>Nebenfenstern</b>, außer unter <b><i>macOS</i></b>. Er enthält dort allerdings nur diesen Befehl:</p>
-					
+
 					<p class="erklaerung-icon-menues" id="menueApp-fensterSchliessen"><img src="../img/fenster-schliessen.svg" width="24" height="24" alt="">Fenster schließen</p>
 
 					<p class="info">Schließt das aktuelle Fenster.</p>
@@ -1677,12 +1677,12 @@ Mustermann, Erika
 					<div class="info">
 						<figure class="right" title="zum Vergrößern anklicken">
 							<img src="../img/win/hb-menueApp-start.png" alt="">
-							<figcaption>Startseite der App</figcaption>
+							<figcaption>Startansicht der App</figcaption>
 						</figure>
 
 						<p>Öffnet ein leeres Hauptfenster.</p>
 
-						<p>Angezeigt wird die <b>Startseite</b> mit den Buttons <i>Kartei erstellen</i> und <i>Kartei öffnen</i> sowie eine Liste der zuletzt verwendeten Karteien.</p>
+						<p>Angezeigt wird die <b>Startansicht</b> mit den Buttons <i>Kartei erstellen</i> und <i>Kartei öffnen</i> sowie eine Liste der zuletzt verwendeten Karteien.</p>
 
 						<p>Die Liste <b>zuletzt verwendeter Karteien</b> ist auf zehn Einträge begrenzt. Sobald eine gelistete Kartei geöffnet wird, rückt diese an die oberste Stelle der Liste. Wird eine elfte Kartei geöffnet, verschwindet der letzte Listeneintrag. Es verschwindet also der Eintrag der Kartei, die am längsten nicht geöffnet wurde. Auf Wunsch können Sie in dieser Ansicht einzelne Einträge manuell aus der Liste entfernen: <i>Rechtsklick &gt; Aus Liste entfernen</i>.</p>
 
@@ -1699,7 +1699,48 @@ Mustermann, Erika
 					<p class="erklaerung-icon-menues" id="menueApp-karteisuche"><img src="../img/lupe.svg" width="24" height="24" alt="">Karteisuche</p>
 
 					<div class="info">
-						<p><mark>…</mark></p>
+						<p>Sucht und/oder durchsucht alle <abbr title="Wortgeschichte digital">WGD</abbr>-Dateien in einem oder mehreren Ordnern.</p>
+
+						<figure class="right" title="zum Vergrößern anklicken">
+							<img src="../img/win/hb-menueApp-karteisuche.png" alt="">
+							<figcaption>die Karteisuche</figcaption>
+						</figure>
+
+						<p>Um die Karteisuche zu starten, muss zunächst mindestens ein <b>Pfad</b> angegeben werden, von dem aus <abbr title="Wortgeschichte digital">WGD</abbr>-Dateien gesucht werden sollen. Klicken Sie auf <i>Pfad hinzufügen</i>, wird sich ein Dateidialog Ihres Betriebssystems öffnen. Wählen Sie im Dialog einfach einen Ordner aus, denn bei dem Pfad, der hier erforderlich ist, handelt es sich um nichts Anderes als die Angabe, wo der Ordner liegt, von dem die Suche ihren Anfang nehmen soll. Ihren Anfang, denn gesucht wird immer rekursiv, <abbr title="das heißt">d. h.</abbr> Unterordner werden mit einbezogen.</p>
+
+						<p>Allein einen Pfad anzugeben, reicht im Grunde schon aus. Sie können nun auf den <b>Button <i>Suche starten</i></b> klicken: Alle Ordner und Unterordner in dem angegebenen Pfad werden nun durchsucht. Das basale Filterkriterium einer Karteisuche ist, dass eine Datei auf <span class="datei">*.wgd</span> endet. Zusätzlich wird überprüft, ob es sich bei den gefundenen Dateien wirklich um <abbr title="Wortgeschichte digital">WGD</abbr>-Dateien handelt. (Sie werden dafür kurz geöffnet.) Das Ergebnis der Suche wird dann im rechten Teil des Fensters angezeigt: eine Liste mit <abbr title="Wortgeschichte digital">WGD</abbr>-Dateien, die der Liste in der <a href="#menueApp-neuesFenster">Startansicht der App</a> gleicht. Die Dateien lassen sich durch Klick in einem neuen Programmfenster öffnen.</p>
+
+						<p>Falls Sie nicht die Kartei, sondern lieber den <b>Ordner öffnen</b> möchten, in dem sie liegt, führen Sie auf der entsprechenden Listeneintrag einfach <i>Rechtsklick &gt; Ordner öffnen</i> aus.</p>
+
+						<p>Dauert die Suche länger, weil Sie <abbr title="beispielsweise">bspw.</abbr> in einer sehr umfangreichen Ordnerstruktur suchen oder in einem Netzwerk, das gerade lahmt: Die <b>Suche verläuft asynchron</b>, was für Sie nichts anderes heißt, als dass sie das Programm nicht blockiert. Sie können jederzeit in einem anderen Fenster (auf Wunsch sogar im selben) weiterarbeiten und später überprüfen, ob die Suche endlich zu einem Ergebnis gelangt ist. Allerdings: Nichts ist fehlerfrei, auch nicht diese App. Haben Sie irgendwann den Verdacht, dass die Suche abgestürzt ist, schauen Sie doch einmal in den <a href="#" class="link-fehlerlog">Fehlerlog</a>, ob nicht ein Fehler aufgetreten ist.</p>
+
+						<p>Für die Suche können <b>beliebig viele Pfade</b> angegeben werden. Man kann dadurch an mehreren Orten zugleich suchen. Wurde mehr als ein Pfad hinzugefügt, erscheint vor jedem der Pfade eine Checkbox. Mit dieser Checkbox kann die Suche in einem Pfad temporär ausgestellt werden: Abgewählte Pfade werden nicht durchsucht. Die einmal hinzugefügten Pfade werden gespeichert und beim Neustart des Programms wiederhergestellt.</p>
+
+						<p>Vor dem Suchen wird überprüft, ob die Pfade noch existieren. Konnte das Programm einen Pfad nicht wiederfinden, wird dieser durch ein <img src="../img/x-dick-rot.svg" width="20" height="20" alt=""> markiert und bei der aktuellen Suche ignoriert. Dass ein Pfad nicht gefunden wurde, kann ganz banale Gründe haben: Der Netzwerkordner, in den er führt, könnte <abbr title="zum Beispiel">z. B.</abbr> noch nicht gemountet worden sein. Wird ein Pfad als fehlend markiert, kann es somit durchaus sein, dass zu einem späteren Zeitpunkt wieder auf ihn zugegriffen werden kann. Starten Sie die Suche erneut, wird auch für zuvor als fehlend markierte Pfade überprüft, ob sie existieren. Wurden sie wiedergefunden, wird das <img src="../img/x-dick-rot.svg" width="20" height="20" alt=""> entfernt.</p>
+
+						<p>Standardmäßig listet die Suche, wie oben beschrieben, alle <abbr title="Wortgeschichte digital">WGD</abbr>-Dateien auf, die in den angegebenen Pfaden zu finden sind. Allerdings lassen sich die Karteien auch nach verschiedenen Kriterien filtern. Hierzu können durch Klick auf <i>Filter hinzufügen</i> beliebig viele <b>Filter</b> verwendet werden, die mit einem logischen Und miteinander verknüpft sind. Verwenden Sie mehrere Filter gleichzeitig, müssen für eine Kartei somit <em>alle</em> Filterkriterien erfüllt sein, damit sie in der Ergebnisliste erscheint. Je mehr Filter definiert werden, umso spezifischer ist die Karteisuche. Erzielt man keine Treffer, bietet es sich also <abbr title="gegebenenfalls">ggf.</abbr> an, die Anzahl der verwendeten Filter zu reduzieren.</p>
+
+						<p>Die <b>Filter</b> werden in den Einstellungen <b>gespeichert</b> und nach dem Neustart des Programms wiederhergestellt. Gespeichert wird die Konfiguration der Filter so, wie sie bei der letzten durchgeführten Suche war.</p>
+
+						<p>Folgende Filter stehen zur Verfügung:</p>
+
+						<p><b><i>Volltext:</i></b> Der Volltextfilter durchsucht in allen Karteikarten dieselben Felder wie die <a href="#filter-volltext">Suchfunktion in der Filterleiste</a>. Darüber hinaus werden das Karteiwort und die <a href="#menueKartei-notizen">Karteinotizen</a> in die Suche mit einbezogen. Haken Sie die Einstellung <i>genaue Schreibung</i> ab, wird zwischen Groß- und Kleinschreibung unterschieden.</p>
+
+						<p><b><i>Tag:</i></b> Mithilfe dieses Filters lassen sich die Tags in den Bedeutungsgerüsten der Dateien durchsuchen. So kann man <abbr title="beispielsweise">bspw.</abbr> Karteien finden, in denen Bedeutungsdefinitionen dem Sachgebiet <i>Politik</i> zugeordnet wurden.</p>
+
+						<p>Es kann nur nach Tags gesucht werden, die in den aktuellen Tag-Dateien wirklich vorhanden sind. Sie können zwar im dritten Textfeld des Tag-Filters beliebigen Text eingeben. Diese Möglichkeit wurde aber nur eingeräumt, um in einer <abbr title="eventuell">evtl.</abbr> umfangreichen Tag-Liste rasch den gesuchten Begriff zu finden. (Beim Tippen öffnet sich ein entsprechend gefiltertes <a href="#karteikarte-dropdown">Dropdown-Menü</a>.) Geben Sie hier einen Tag ein, den es nicht gibt, wird der Filter einfach ignoriert. Die App wirft dabei <strong class="obacht">keine Fehlermeldung</strong> aus! Die Suche verläuft vielmehr so, als hätten Sie überhaupt keinen Filter angegeben: Ist der Tag-Filter der einzige Filter, werden alle gefundenen <abbr title="Wortgeschichte digital">WGD</abbr>-Dateien gelistet. Dieses Verhalten zeigt sich in derselben Weise in den anderen Filtern: Das Programm erkennt, wenn ein <b>Filter falsch</b> oder gar nicht gefüllt wurde – und ignoriert ihn in solchen Fällen.</p>
+
+						<p><b><i>Karteidatum:</i></b> Der Filter dient dazu, Karteien zu finden, die vor (kleiner gleich, &lt;=) oder nach (größer gleich, &gt;=) einem bestimmten Zeitpunkt (der immer ein bestimmter Tag ist) erstellt oder geändert wurden.</p>
+
+						<p>Tipp: Kombinieren Sie mehrere Karteidatumsfilter geschickt miteinander, können Sie Karteien finden, die innerhalb eines bestimmten Zeitraums erstellt oder geändert wurden. Allerdings gibt es keinen Algorithmus, der überprüft, ob die Logik von kombinierten Datumsfiltern stimmig ist. Wenn sie verquer sein sollte (Enddatum liegt vor Startdatum), werden schlicht und ergreifend keine Karteien gefunden.</p>
+
+						<p id="menueApp-karteisucheBearbeiterin"><b><i>BearbeiterIn:</i></b> Mit diesem Filter lassen sich Karteien finden, in denen die genannte Person als BearbeiterIn registriert ist. Durchsucht wird das Datenfeld, das über die <a href="#menueKartei-metadaten">Metadaten</a> gefüllt und eingesehen werden kann.</p>
+
+						<p>Wichtig: Es wird <strong class="obacht">nicht trunkiert</strong> gesucht. Namen werden also nur dann gefunden, wenn die eingegebene Namensform exakt mit der in der Kartei übereinstimmt. Groß- und Kleinschreibung werden dabei ebenfalls beachtet. Ist in einer Kartei <q>Mustermann, Erika</q> als BearbeiterIn registriert, finden Sie diese Kartei nicht, wenn Sie <q>Erika Mustermann</q>, <q>Mustermann</q>, <q>Erika</q> oder <q>mustermann, erika</q> eintippen. Auch aus diesem Grund ist es empfehlenswert, in größeren Projekten eine Liste der MitarbeiterInnen anzulegen und diese <a href="#einstellungen-allgemeinesPersonenliste">Personenliste zu importieren</a>. Außerdem: Hat man sich einmal <a href="#einstellungen-allgemeinesBearbeiterin">als NutzerIn der App registriert</a>, wird das Datenfeld in den Metadaten beim Erstellen und/oder Speichern von Karteien automatisch gefüllt.</p>
+
+						<p><b><i>Redaktion:</i></b> Über diesen Filter lassen sich Redaktionsereignisse und/oder mit solchen Ereignissen verknüpfte Personen finden. Für die Suche ist es nicht unbedingt nötig, sowohl ein Ereignis als auch eine Person anzugeben. Man kann genauso gut allein nach einer Person suchen, die für ein beliebiges Redaktionsereignis registriert wurde, oder Karteien finden, die ein spezifisches Redaktionsereignis wie <q>Artikel erstellt</q> aufweisen, und zwar personenunabhängig. Werden sowohl eine Person als auch ein Redaktionsereignis angegeben, werden nur Karteien aufgelistet, in denen das angegebene Ereignis mit der angegebenen Person verknüpft ist. Wie im Falle der <a href="#menueApp-karteisucheBearbeiterin">BearbeiterInnen</a> wird auch hier <strong class="obacht">nicht trunkiert</strong> gesucht. Es ist zwar möglich beliebige Redaktionsereignisse in einer Kartei zu erstellen. Sie werden diese mit der Karteisuche aber nur finden, wenn Sie sie in diesem Filter buchstabengetreu eingeben.</p>
+
+						<p>Tipp: Eine Suche kann nicht nur über den Button <i>Suche starten</i>, sondern auch durch <kbd>⏎</kbd> in einem der Filterfelder angestoßen werden.</p>
 					</div>
 
 					<p class="erklaerung-icon-menues" id="menueApp-einstellungen"><img src="../img/zahnrad.svg" width="24" height="24" alt="">Einstellungen</p>
@@ -1747,7 +1788,7 @@ Mustermann, Erika
 						<p>Es gibt <b>weitere Wege</b>, eine bestehende Kartei zu öffnen:</p>
 
 						<ul>
-							<li>Haben Sie die Kartei erst jüngst genutzt, befindet sie sich <abbr title="eventuell">evtl.</abbr> noch in der Liste zuletzt verwendeter Karteien, die sie über die Funktion <a href="#menueKartei-zuletztVerwendet"><i>Kartei &gt; Zuletzt verwendet</i></a> oder die Startseite des Programms (<abbr title="vergleiche">vgl.</abbr> <a href="#menueApp-neuesFenster"><i><span class="app-name"></span> &gt; Neues Fenster</i></a>) erreichen.</li>
+							<li>Haben Sie die Kartei erst jüngst genutzt, befindet sie sich <abbr title="eventuell">evtl.</abbr> noch in der Liste zuletzt verwendeter Karteien, die sie über die Funktion <a href="#menueKartei-zuletztVerwendet"><i>Kartei &gt; Zuletzt verwendet</i></a> oder die Startansicht des Programms (<abbr title="vergleiche">vgl.</abbr> <a href="#menueApp-neuesFenster"><i><span class="app-name"></span> &gt; Neues Fenster</i></a>) erreichen.</li>
 
 							<li>Wenn Sie das Programm in ihrem Betriebssystem installiert haben, also keine portable, paketierte Version verwenden, wird eine Dateiverknüpfung mit <abbr title="Wortgeschichte digital">WGD</abbr>-Dateien erzeugt. Sie können dann in Ihrem Dateimanager (<abbr title="zum Beispiel">z. B.</abbr> dem <i>Windows Explorer</i>) einfach auf eine Datei mit der Endung <span class="datei">*.wgd</span> klicken und das Programm öffnet diese in einem neuen oder bestehenden Fenster.</li>
 
@@ -1764,7 +1805,7 @@ Mustermann, Erika
 
 						<p>Der Menüpunkt steht <strong class="obacht">in <i>macOS</i> nicht</strong> zur Verfügung!</p>
 
-						<p>Über den Menüpunkt kann man sich eine <b>Liste</b> der zuletzt verwendeten Karteien anzeigen lassen. Die Liste ist auf zehn Einträge begrenzt und kann durch den Befehl <i>Liste löschen</i> (hinter dem letzten Eintrag) komplett geleert werden. Auf der Startseite der App findet sich dieselbe Liste. Dort können Sie gezielt einzelne Einträge aus ihr entfernen. <abbr title="Siehe">S.</abbr> die Anmerkungen zum Menüpunkt <a href="#menueApp-neuesFenster"><i><span class="app-name"></span> &gt; Neues Fenster</i></a>, wo auch genauer erklärt wird, wie das Programm die Liste pflegt.</p>
+						<p>Über den Menüpunkt kann man sich eine <b>Liste</b> der zuletzt verwendeten Karteien anzeigen lassen. Die Liste ist auf zehn Einträge begrenzt und kann durch den Befehl <i>Liste löschen</i> (hinter dem letzten Eintrag) komplett geleert werden. In der Startansicht der App findet sich dieselbe Liste. Dort können Sie gezielt einzelne Einträge aus ihr entfernen. <abbr title="Siehe">S.</abbr> die Anmerkungen zum Menüpunkt <a href="#menueApp-neuesFenster"><i><span class="app-name"></span> &gt; Neues Fenster</i></a>, wo auch genauer erklärt wird, wie das Programm die Liste pflegt.</p>
 					</div>
 
 					<p class="erklaerung-icon-menues" id="menueKartei-speichern"><img src="../img/speichern.svg" width="24" height="24" alt="">Speichern</p>
@@ -1796,7 +1837,7 @@ Mustermann, Erika
 
 						<p>Ist noch ein zu der Kartei gehöhrendes <b>Bedeutungsgerüst-Fenster</b> offen, wird dieses <a href="#bedeutungsgeruest-fenster">Bedeutungsgerüst-Fenster</a> automatisch mit geschlossen.</p>
 
-						<p>Da Sie in <i class="app-name"></i> mit mehreren Wortkarteien parallel arbeiten können: Gibt es noch <b>andere Hauptfenster</b>, in denen Wortkarteien aktiv sind, verschwindet das Fenster, in dem Sie den <i>Schließen</i>-Befehl ausführen, komplett. Handelt es sich um das letzte verbliebene Hauptfenster, wird das Programm nicht verlassen, sondern die <b>Startseite</b> der App angzeigt (<abbr title="siehe">s.</abbr> dazu die Funktion <a href="#menueApp-neuesFenster"><i><span class="app-name"></span> &gt; Neues Fenster</i></a>).</p>
+						<p>Da Sie in <i class="app-name"></i> mit mehreren Wortkarteien parallel arbeiten können: Gibt es noch <b>andere Hauptfenster</b>, in denen Wortkarteien aktiv sind, verschwindet das Fenster, in dem Sie den <i>Schließen</i>-Befehl ausführen, komplett. Handelt es sich um das letzte verbliebene Hauptfenster, wird das Programm nicht verlassen, sondern die <b>Startansicht</b> der App angzeigt (<abbr title="siehe">s.</abbr> dazu die Funktion <a href="#menueApp-neuesFenster"><i><span class="app-name"></span> &gt; Neues Fenster</i></a>).</p>
 
 						<p>Zum endgültigen <b>Verlassen des Programms</b> ist der Befehle <a href="#menueApp-beenden"><i><span class="app-name"></span> &gt; Beenden</i></a> besser geeignet.</p>
 					</div>
@@ -1822,19 +1863,60 @@ Mustermann, Erika
 					<p class="erklaerung-icon-menues" id="menueKartei-lexika"><img src="../img/buecher.svg" width="24" height="24" alt="">Überprüfte Lexika</p>
 
 					<div class="info">
-						<p><mark>…</mark></p>
+						<p>Checkliste für überprüfte Lexika.</p>
+
+						<p>Das Fenster zeigt eine Checkliste für Lexika, die im Rahmen der Arbeit an einem Wortartikel überprüft worden sind. Es gibt eine Liste von einigen vordefinierten, <b>häufig verwendeten Wörterbüchern</b>; die Liste kann aber um beliebige Wörterbücher (oder auch andere Titel) ergänzt werden – mit dem unter ihr stehenden Formular.</p>
+
+						<p>Die <b>ergänzten Nachschlagewerke</b> werden immer an das Ende der Liste gestellt und in sich alphabetisch sortiert. Ein nachgestelltes Plus (+) zeigt an, dass sie nicht Teil der vordefinierten Liste sind. Entfernt man den Haken vor einem ergänzten Buch bleibt es so lange sichtbar (und kann wieder abgehakt werden), bis man das Fenster schließt oder ein weiteres Lexikon ergänzt.</p>
+
+						<p>Wurde mindestens ein Lexikon abgehakt, erscheint im <b>Kopf des Hauptfensters</b> das Icon <img src="../img/buecher.svg" width="20" height="20" alt="">. Es weist nur darauf hin, dass Lexika in der Liste abgehakt wurden. Durch Klick auf das Icon kann man das Lexika-Fenster öffnen.</p>
 					</div>
 
 					<p class="erklaerung-icon-menues" id="menueKartei-metadaten"><img src="../img/zeilen-4,0.svg" width="24" height="24" alt="">Metadaten</p>
 
 					<div class="info">
-						<p><mark>…</mark></p>
+						<p>Zeigt Informationen zur aktuellen Kartei an.</p>
+
+						<p>Das Dialogfenster <i>Metadaten</i> hat <abbr title="vor allem">v. a.</abbr> informativen Charakter. In ihm werden einige <b>Datenfelder</b> der Kartei angezeigt, die von der App eigenständig gefüllt werden, die Sie aber nicht ohne Weiteres ändern können. (Es steht ihnen natürlich jederzeit frei, den leicht einzusehenden Quelltext einer <abbr title="Wortgeschichte digital">WGD</abbr>-Datei zu manipulieren; das <a href="#wgd-wgd" class="link-dokumentation">Format ist gut dokumentiert</a>.)</p>
+
+						<p><b><i>Erstellt:</i></b> Der Zeitpunkt, an dem die Kartei angelegt wurde. Es wird just der Zeitpunkt gespeichert, an dem Sie die Kartei durch die Eingabe eines Karteiworts erstellt haben. Der Zeitpunkt liegt mithin noch vor dem ersten Speichern.</p>
+
+						<p><b><i>Geändert:</i></b> Der Zeitpunkt, an dem die Kartei zuletzt gespeichert wurde.</p>
+
+						<p><b><i>Speicherort:</i></b> Die vollständige Pfadangabe der Datei. Durch Klick auf das Icon <img src="../img/ordner.svg" width="20" height="20" alt=""> können Sie den Dateimanager Ihres Betriebssystems in dem Ordner öffnen, in dem sich die Kartei befindet. Falls ein Teil der Pfadangabe verschluckt wird, weil das Fenster zu schmal oder der Pfad zu lang ist: In einem Tooltip, der beim Herüberfahren mit der Maus erscheint, können Sie den komplette Pfad sehen.</p>
+
+						<p><b><i>Dateiformat:</i></b> Das <a href="#wgd-wgd" class="link-dokumentation"><abbr title="Wortgeschichte digital">WGD</abbr>-Dateiformat</a> muss hin und wieder angepasst werden, wenn Features ergänzt oder geändert wurden. In solchen Fällen wird die Versionsnummer hochgezählt. Wurde das Dateiformat in einer Version von <i class="app-name"></i> angepasst, werden ältere <abbr title="Wortgeschichte digital">WGD</abbr>-Dateien beim Öffnen ohne Ihr Zutun in das derzeit aktuelle Format konvertiert. Sie werden hier also <em>immer</em> die aktuelle Versionsnummer des Dateiformats sehen.</p>
+
+						<p><b><i>Revision:</i></b> Die Revisionsnummer wird mit jedem Speichervorgang um 1 hochgezählt.</p>
+
+						<p><b><i>BearbeiterInnen:</i></b> Eine Liste der Personen, die die Kartei zu irgendeinem Zeitpunkt gespeichert haben. Am weitesten oben in der Liste steht die Person, die die Kartei zuletzt gespeichert hat. Fügen Sie über das Formular unter der Liste eine Person hinzu, wird diese an den Anfang der Liste gesetzt. Sie werden als BearbeiterIn automatisch in dieses Feld eingetragen, wenn Sie sich <a href="#einstellungen-allgemeinesBearbeiterin">in den Einstellungen registriert</a> haben. Dann brauchen Sie sich, um dieses Datenfeld nicht weiter bemühen; das Programm wird Sie beim Speichern einer Kartei automatisch im Datensatz <i>BearbeiterInnen</i> an erster Stelle vermerken. Ein hinter dem Namen erscheinendes Plus (+) signalisiert, dass die Person nicht in der <a href="#einstellungen-allgemeinesPersonenliste">importierten Personenliste</a> zu finden ist. Haben Sie keine Personenliste importiert, wird jede Person durch ein + gekennzeichnet.</p>
 					</div>
 
 					<p class="erklaerung-icon-menues" id="menueKartei-redaktion"><img src="../img/personen.svg" width="24" height="24" alt="">Redaktion</p>
 
 					<div class="info">
-						<p><mark>…</mark></p>
+						<p>Registriert Redaktionsereignisse beim Verfassen eines Wortartikels.</p>
+
+						<p>Die Idee des Redaktionsfensters ist simpel: Es soll nachvollziebar machen, wann wer was auf dem Weg hin zu einem Wortartikel getan hat, um <abbr title="zum Beispiel">z. B.</abbr> bei Nachfragen die richtige Person ansprechen zu können oder auf einem Blick zu sehen, welche Arbeitsschritte noch ausstehen.</p>
+
+						<p>Beim Erstellen einer neuen Wortkartei wird in dieser automatisch das <b>Redaktionsereignis</b> <i>Kartei erstellt</i> mit dem aktuellen Tagesdatum angelegt. Im Gegensatz zu allen anderen Redaktionsereignissen kann dieses weder umdatiert oder umbenannt noch gelöscht werden. Allein die Person, der das Ereignis zugeordnet wird, lässt sich nachträglich ergänzen oder ändern. Es gibt zwar eine kleinere Anzahl vordefinierter Redaktionsereignisse, die Sie sich über das <a href="#karteikarte-dropdown">Dropdown-Menü</a> im Textfeld <i>Ereignis</i> anzeigen lassen können. (Verwenden sie eines von diesen, wird automatisch ein zu ihm passendes Icon angezeigt.) Bei der Eingabe kann man jedoch beliebige Ereignisse definieren; hier gibt es keine Beschränkungen. Ereignisse können sogar doppelt oder dreifach auftauchen – falls entsprechender Bedarf besteht.</p>
+
+						<p>Ganz ähnlich verhält es sich mit der <b>Person</b>, die mit einem bestimmten Ereignis verknüpft werden kann. Sie können in das Textfeld einen beliebigen Namen eintragen. In größeren Projekten ist es jedoch ratsam, eine <a href="#einstellungen-allgemeinesPersonenliste">Personenliste</a> zu importieren und die jeweilige Person aus dem Dropdown-Menü zu wählen. Stringenz bei der Eingabe bringt immer Vorteile mit sich, <abbr title="besonders">bes.</abbr> wenn Sie ein Feature wie die <a href="#menueApp-karteisuche">Karteisuche</a> verwenden. Aber grundsätzlich gilt: Sie können Redaktionsereignisse anlegen, ohne sie mit einer Person zu verknüpfen, was umgekehrt wiederum nicht geht. Eine Person einzutragen, ohne sie mit einem Ereignis zu verbinden, ist nicht möglich.</p>
+
+						<p>Zum <b>Ändern</b> eines einmal angelegten Ereignisses klicken Sie auf den jeweiligen Text. Anstelle des Texts erscheint ein Text- <abbr title="beziehungsweise">bzw.</abbr> Datumsfeld, in dem Sie die gewünschten Änderungen vornehmen können. Speichern geht via <kbd>⏎</kbd>. Möchten Sie eine Änderung verwerfen oder das Feld wieder verlassen, drücken Sie <kbd>Esc</kbd>.</p>
+
+						<figure class="right" title="zum Vergrößern anklicken">
+							<img src="../img/win/hb-menueKartei-redaktion-datum.png" alt="">
+							<figcaption>der Date-Picker im Redaktionsfenster</figcaption>
+						</figure>
+
+						<p>Tipp: Schwebt die Maus über einem Datumsfeld wird ein Pfeil nach unten angezeigt, über den Sie einen kleinen Kalender öffnen können.</p>
+
+						<p>Außerdem gibt es noch zwei Icons, die erscheinen, sobald Sie mehr als ein <abbr title="beziehungsweise">bzw.</abbr> zwei Redaktionsereignisse angelegt haben:</p>
+
+						<p class="erklaerung-icon"><img src="../img/pfeil-gerade-hoch.svg" width="20" height="20" alt=""><i>Redaktionsereignis um eine Position nach oben schieben.</i></p>
+
+						<p class="erklaerung-icon"><img src="../img/muelleimer.svg" width="20" height="20" alt=""><i>Redaktionsereignis löschen.</i> Die Löschung kann nicht rückgängig gemacht werden; sie werden aber zuvor gefragt, ob Sie das Ereignis wirklich entfernen möchten.</p>
 					</div>
 
 					<p class="erklaerung-icon-menues" id="menueKartei-bedeutungsgeruest"><img src="../img/geruest.svg" width="24" height="24" alt="">Bedeutungsgerüst</p>
@@ -1868,7 +1950,7 @@ Mustermann, Erika
 						<p>Öffnet das <a href="#bedeutungsgeruest-fenster">Bedeutungsgerüst-Fenster</a>.</p>
 
 						<p>Der Befehl öffnet das <b>Gerüst zur aktuellen Kartei</b> in einem Nebenfenster, das wiederum an die im aktuellen Hauptfenster geladene Kartei gebunden ist. <a href="#menueKartei-schliessen">Schließen</a> Sie die Kartei, schließt sich auch das zugehörige Bedeutungsgerüst-Fenster.</p>
-						
+
 						<p>Da es möglich ist, in <i class="app-name"></i> mit mehreren Wortkarteien gleichzeitig zu arbeiten, können auch <b>mehrere Bedeutungsgerüst-Fenster</b> gleichzeitig geöffnet sein. Diese sind aber immer an die zugehörige Kartei und das Hauptfenster, in dem diese geöffnet ist, gebunden. Es kann also nicht passieren, dass Sie versehentlich eine Bedeutung aus einem der geöffneten Bedeutungsgerüst-Fenster in eine <a href="#karteikarte">Karteikarte</a> eintragen, die sich in einem Fenster mit einem ganze anderen Karteiwort befindet.</p>
 					</div>
 

@@ -1,8 +1,6 @@
 "use strict";
 
 let karteisuche = {
-	// Zwischenspeicher für diese Session, welche Pfade bereits gefunden wurden
-	pfadGefunden: [],
 	// Suche-Fenster öffnen
 	oeffnen () {
 		let fenster = document.getElementById("karteisuche");
@@ -22,7 +20,7 @@ let karteisuche = {
 		}
 	},
 	// Liste der ausgewählten Pfade aufbauen
-	async pfadeAuflisten () {
+	pfadeAuflisten () {
 		// Check-Status sichern
 		let status = Array(optionen.data.karteisuche.pfade.length).fill(true),
 			inputs = document.querySelectorAll("#karteisuche-pfade input");
@@ -59,6 +57,7 @@ let karteisuche = {
 			// Pfad
 			let span = document.createElement("span");
 			p.appendChild(span);
+			span.dataset.pfad = pfad; // wegen des Rechtsklickmenüs
 			span.title = pfad;
 			// ggf. Checkbox einblenden
 			if (len > 1) {
@@ -74,21 +73,6 @@ let karteisuche = {
 				label.textContent = pfad;
 			} else {
 				span.textContent = pfad;
-			}
-			// Existiert der Pfad noch?
-			if (karteisuche.pfadGefunden.includes(pfad)) {
-				continue;
-			}
-			const exists = await helfer.exists(pfad);
-			if (exists) {
-				karteisuche.pfadGefunden.push(pfad);
-			} else {
-				let img = document.createElement("img");
-				span.insertBefore(img, span.lastChild);
-				img.src = "img/x-dick-rot.svg";
-				img.width = "24";
-				img.height = "24";
-				karteisuche.pfadFehler(img);
 			}
 		}
 	},
@@ -129,10 +113,6 @@ let karteisuche = {
 			});
 			return;
 		} else if (result.canceled) { // keine Datei ausgewählt
-			dialog.oeffnen({
-				typ: "alert",
-				text: "Sie haben keinen Pfad ausgewählt.",
-			});
 			return;
 		}
 		// Ist der Pfad schon in der Liste?
@@ -144,7 +124,6 @@ let karteisuche = {
 			return;
 		}
 		// Pfad hinzufügen
-		karteisuche.pfadGefunden.push(result.filePaths[0]);
 		optionen.data.karteisuche.pfade.push(result.filePaths[0]);
 		optionen.speichern();
 		// Liste auffrischen
@@ -158,76 +137,87 @@ let karteisuche = {
 			evt.preventDefault();
 			// Pfad entfernen
 			const pfad = this.dataset.pfad;
-			karteisuche.pfadGefunden.splice(karteisuche.pfadGefunden.indexOf(pfad), 1);
 			optionen.data.karteisuche.pfade.splice(optionen.data.karteisuche.pfade.indexOf(pfad), 1);
 			optionen.speichern();
 			// Liste auffrischen
 			karteisuche.pfadeAuflisten();
 		});
 	},
-	// Reaktion auf Klick auf dem Fehler-Icon
-	//   img = Element
-	//     (das Fehler-Icon)
-	pfadFehler (img) {
-		img.addEventListener("click", function() {
-			dialog.oeffnen({
-				typ: "alert",
-				text: "Der Pfad konnte nicht gefunden werden.",
-			});
-		});
-	},
 	// speichert das Input-Element, das vor dem Start der Suche den Fokus hatte
 	suchenFokus: null,
 	// Suche vorbereiten
-	suchenPrep () {
-		// Erst Pfad hinzufügen!
+	async suchenPrep () {
+		// Fehler: kein Pfad hinzugefügt
 		if (!optionen.data.karteisuche.pfade.length) {
 			dialog.oeffnen({
 				typ: "alert",
-				text: "Sie müssen zunächst einen Pfad hinzufügen.\nIn diesem Pfad wird dann rekursiv gesucht.",
+				text: "Sie müssen zunächst einen Pfad hinzufügen.",
 				callback: () => {
 					karteisuche.pfadHinzufuegen();
 				},
 			});
-			document.getElementById("karteisuche-suche-laeuft").classList.add("aus");
+			karteisuche.animation(false);
 			return;
 		}
-		// Keiner der Pfade wurde gefunden!
-		if (!karteisuche.pfadGefunden.length) {
-			let text = "Der Pfad in der Liste konnte nicht gefunden werden.";
-			if (optionen.data.karteisuche.pfade.length > 1) {
-				text = "Die Pfade in der Liste konnten nicht gefunden werden.";
+		// Pfade ermitteln, in denen gesucht werden soll und kann
+		let pfade = [],
+			inputs = document.querySelectorAll("#karteisuche-pfade input"),
+			nichtGefunden = 0,
+			abgehakt = 0;
+		if (inputs.length) {
+			for (let i of inputs) {
+				if (!i.checked) {
+					continue;
+				}
+				abgehakt++;
+				const exists = await helfer.exists(i.value);
+				if (exists) {
+					pfade.push(i.value);
+					karteisuche.markierungPfad(i.value, false);
+				} else {
+					nichtGefunden++;
+					karteisuche.markierungPfad(i.value, true);
+				}
+			}
+		} else {
+			abgehakt++;
+			const pfad = optionen.data.karteisuche.pfade[0],
+				exists = await helfer.exists(pfad);
+			if (exists) {
+				pfade.push(pfad);
+				karteisuche.markierungPfad(pfad, false);
+			} else {
+				nichtGefunden++;
+				karteisuche.markierungPfad(pfad, true);
+			}
+		}
+		// Fehler: kein Pfad ausgewählt
+		if (!abgehakt) {
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Sie müssen zunächst einen Pfad auswählen.",
+			});
+			karteisuche.animation(false);
+			return;
+		}
+		// Fehler: keiner der (ausgewählten) Pfade wurde wiedergefunden
+		if (nichtGefunden === abgehakt) {
+			let ausgewaehlt = "";
+			if (abgehakt < optionen.data.karteisuche.pfade.length) {
+				ausgewaehlt = " ausgewählte";
+				if (abgehakt > 1) {
+					ausgewaehlt = " ausgewählten";
+				}
+			}
+			let text = `Der${ausgewaehlt} Pfad wurde nicht wiedergefunden.`;
+			if (abgehakt > 1) {
+				text = `Keiner der${ausgewaehlt} Pfade wurde wiedergefunden.`;
 			}
 			dialog.oeffnen({
 				typ: "alert",
 				text: text,
 			});
-			document.getElementById("karteisuche-suche-laeuft").classList.add("aus");
-			return;
-		}
-		// Pfade ermitteln, in denen gesucht werden soll
-		let pfade = [],
-			inputs = document.querySelectorAll("#karteisuche-pfade input");
-		if (inputs.length) {
-			for (let i of inputs) {
-				if (i.checked && karteisuche.pfadGefunden.includes(i.value)) {
-					pfade.push(i.value);
-				}
-			}
-		} else {
-			pfade = [...karteisuche.pfadGefunden];
-		}
-		// Wurden Pfade gefunden? Wenn nein => alle Checkboxes abgewählt
-		if (!pfade.length) {
-			let text = "Pfad";
-			if (optionen.data.karteisuche.pfade.length !== karteisuche.pfadGefunden.length) {
-				text = "der existierenden Pfade";
-			}
-			dialog.oeffnen({
-				typ: "alert",
-				text: `Sie müssen mindestens einen ${text} auswählen.`,
-			});
-			document.getElementById("karteisuche-suche-laeuft").classList.add("aus");
+			karteisuche.animation(false);
 			return;
 		}
 		// Element mit Fokus speichern
@@ -238,10 +228,49 @@ let karteisuche = {
 			karteisuche.suchenFokus = null;
 		}
 		// Okay, die Suche kann starten
-		document.getElementById("karteisuche-suche-laeuft").classList.remove("aus");
+		karteisuche.animation(true);
 		setTimeout(function() {
 			karteisuche.suchen(pfade);
 		}, 500);
+	},
+	// markiert einen Pfad, wenn er nicht gefunden wurde, und demarkiert ihn,
+	// wenn er gefunden wurde
+	//   pfad = String
+	//     (der Pfad)
+	//   verschwunden = Boolean
+	//     (der Pfad ist verschwunden)
+	markierungPfad (pfad, verschwunden) {
+		// betreffenden Span finden
+		let span = document.querySelector(`#karteisuche-pfade [title="${pfad}"]`),
+			img = span.querySelector("img");
+		// Bild ggf. entfernen
+		if (!verschwunden) {
+			if (img) {
+				img.parentNode.removeChild(img);
+			}
+			return;
+		}
+		// Bild ggf. hinzufügen
+		if (img) {
+			return;
+		}
+		let x = document.createElement("img");
+		span.insertBefore(x, span.lastChild);
+		x.src = "img/x-dick-rot.svg";
+		x.width = "24";
+		x.height = "24";
+		karteisuche.markierungFehler(x);
+	},
+	// Reaktion auf Klick auf dem Fehler-Icon
+	//   img = Element
+	//     (das Fehler-Icon)
+	markierungFehler (img) {
+		img.addEventListener("click", function() {
+			dialog.oeffnen({
+				typ: "alert",
+				text: `Der Pfad\n<p class="force-wrap"><i>${this.parentNode.title}</i></p>\nkonnte nicht gefunden werden.`,
+			});
+		});
 	},
 	// Suche starten
 	//   pfade = Array
@@ -280,7 +309,7 @@ let karteisuche = {
 		// passende Karteien auflisten
 		karteisuche.wgdAuflisten();
 		// Sperrbild weg und das zuletzt fokussierte Element wieder fokussieren
-		document.getElementById("karteisuche-suche-laeuft").classList.add("aus");
+		karteisuche.animation(false);
 		if (karteisuche.suchenFokus) {
 			karteisuche.suchenFokus.focus();
 		}
@@ -701,7 +730,7 @@ let karteisuche = {
 		datei: ["no", "wo"],
 		karten: ["au", "bl", "bs", "da", "kr", "no", "qu", "sy", "ts"],
 	},
-	// Werte der aktuellen Filter sammeln
+	// überprüfen, ob eine Kartei zu den übergebenen Filtern passt
 	//   datei = Object
 	//     (die WGD-Datei, die gefiltert werden soll; also alle Karteidaten, in der üblichen Form)
 	filtern (datei) {
@@ -836,6 +865,39 @@ let karteisuche = {
 					inputs[j].value = werte[j];
 				}
 			}
+		}
+	},
+	// Animation, dass die Karteisuche läuft
+	//   anschalten = Boolean
+	//     (die Animation soll angeschaltet werden)
+	animation (anschalten) {
+		let sperrbild = document.getElementById("karteisuche-suche-laeuft");
+		// Animation soll ausgeschaltet werden
+		if (!anschalten) {
+			clearInterval(karteisuche.animationStatus.interval);
+			sperrbild.classList.add("aus");
+			return;
+		}
+		// Animation soll angeschaltet werden
+		karteisuche.animationStatus.punkte = 3;
+		karteisuche.animationStatus.interval = setInterval(() => karteisuche.animationRefresh(), 500);
+		karteisuche.animationRefresh();
+		sperrbild.classList.remove("aus");
+	},
+	// Status-Informationen für die Animation
+	animationStatus: {
+		punkte: 3,
+		interval: null,
+	},
+	// Text in der Animation auffrischen
+	animationRefresh() {
+		let span = document.querySelector("#karteisuche-suche-laeuft span"),
+			status = karteisuche.animationStatus;
+		span.textContent = ".".repeat(status.punkte);
+		if (status.punkte === 3) {
+			status.punkte = 1;
+		} else {
+			status.punkte++;
 		}
 	},
 };

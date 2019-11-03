@@ -545,7 +545,10 @@ let optionen = {
 					optionen.data["tags-autoload-done"] = true;
 				});
 			})
-			.catch(() => optionen.anwendenTags());
+			.catch(err => {
+				optionen.anwendenTags();
+				throw err;
+			});
 	},
 	// übergebene Tag-Datei überprüfen, Inhalte ggf. laden
 	//   datei = String
@@ -634,8 +637,9 @@ let optionen = {
 				})
 				.catch(err => {
 					// Fehlermeldung (wahrscheinlich existiert die Datei nicht mehr)
-					optionen.tagsFehlerMeldungen[typ] = err.message;
+					optionen.tagsFehlerMeldungen[typ] = `${err.name}: ${err.message}`;
 					resolve(false);
+					throw err;
 				});
 		});
 	},
@@ -692,10 +696,6 @@ let optionen = {
 			});
 			return;
 		} else if (result.canceled) {
-			dialog.oeffnen({
-				typ: "alert",
-				text: "Sie haben keine Datei ausgewählt.",
-			});
 			return;
 		}
 		// Datei laden
@@ -737,8 +737,9 @@ let optionen = {
 			.catch(err => {
 				dialog.oeffnen({
 					typ: "alert",
-					text: `Beim Laden der Tag-Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.message}</p>`,
+					text: `Beim Laden der Tag-Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.name}: ${err.message}</p>`,
 				});
+				throw err;
 			});
 	},
 	// Content der geladenen Tag-Datei parsen und auf Fehler überprüfen
@@ -1004,10 +1005,6 @@ let optionen = {
 			});
 			return;
 		} else if (result.canceled) {
-			dialog.oeffnen({
-				typ: "alert",
-				text: "Sie haben keine Datei ausgewählt.",
-			});
 			return;
 		}
 		// Datei laden
@@ -1048,8 +1045,9 @@ let optionen = {
 			.catch(err => {
 				dialog.oeffnen({
 					typ: "alert",
-					text: `Beim Öffnen der Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.message}</p>`,
+					text: `Beim Öffnen der Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.name}: ${err.message}</p>`,
 				});
+				throw err;
 			});
 	},
 	// auf Änderung der Einstellungen achten

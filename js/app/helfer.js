@@ -594,7 +594,14 @@ let helfer = {
 	//   pfad = String
 	//     (Pfad zu einer Datei)
 	ordnerOeffnen (pfad) {
-		let {shell} = require("electron");
+		const {shell} = require("electron"),
+			path = require("path");
+		if (!/\.wgd$/.test(pfad)) { // Ordner öffnen
+			if (!/\/$/.test(pfad)) {
+				pfad += path.sep;
+			}
+			pfad += `.${path.sep}`; // sonst wird nicht der Ordner, sondern der übergeordnete Ordner geöffnet
+		}
 		shell.showItemInFolder(pfad);
 	},
 	// prüft, ob eine Datei existiert
@@ -663,8 +670,9 @@ let helfer = {
 			.catch(err => {
 				dialog.oeffnen({
 					typ: "alert",
-					text: `Beim Kopieren der Demonstrationsdatei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.message}</p>`,
+					text: `Beim Kopieren der Demonstrationsdatei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.name}: ${err.message}</p>`,
 				});
+				throw err;
 			});
 	},
 	// Handbuch an einer bestimmten Stelle aufschlagen
@@ -687,6 +695,54 @@ let helfer = {
 			const {ipcRenderer} = require("electron");
 			ipcRenderer.send("hilfe-handbuch", abschnitt);
 		});
+	},
+	// Fehler an den Main-Prozess melden
+	//   evt = Object
+	//     (Fehler-Objekt)
+	onError (evt) {
+		let fileJs = evt.filename, // gewöhnliche Fehler
+			message = evt.message,
+			line = evt.lineno,
+			column = evt.colno;
+		if (evt.stack) { // weitergeleitete Fehler
+			if (!/file:.+?\.js/.test(evt.stack)) {
+				noDetails();
+			} else {
+				fileJs = evt.stack.match(/file:.+?\.js/)[0];
+				message = `${evt.name}: ${evt.message}`;
+				line = parseInt(evt.stack.match(/\.js:([0-9]+):/)[1], 10);
+				column = parseInt(evt.stack.match(/\.js:[0-9]+:([0-9]+)/)[1], 10);
+			}
+		} else if (evt.reason) { // in promise-Fehler
+			if (!/file:.+?\.js/.test(evt.reason.stack)) {
+				noDetails();
+			} else {
+				fileJs = evt.reason.stack.match(/file:.+?\.js/)[0];
+				message = evt.reason.stack.match(/(.+?)\n/)[1];
+				line = parseInt(evt.reason.stack.match(/\.js:([0-9]+):/)[1], 10);
+				column = parseInt(evt.reason.stack.match(/\.js:[0-9]+:([0-9]+)/)[1], 10);
+			}
+		}
+		// Fehler-Objekt erzeugen
+		let err = {
+			time: new Date().toISOString(),
+			word: typeof kartei === "undefined" ? winInfo.typ : kartei.wort,
+			fileWgd: typeof kartei === "undefined" ? "Nebenfenster" : kartei.pfad,
+			fileJs: fileJs,
+			message: message,
+			line: line,
+			column: column,
+		};
+		// Fehler-Objekt an Renderer schicken
+		const {ipcRenderer} = require("electron");
+		ipcRenderer.send("fehler", err);
+		// keine Details bekannt
+		function noDetails () {
+			fileJs = "";
+			message = evt.reason.stack;
+			line = 0;
+			column = 0;
+		}
 	},
 	// führt mitunter asynchrone Operationen aus, die nach und nach
 	// vor dem Schließen eines Hauptfensters abgearbeitet werden müssen;

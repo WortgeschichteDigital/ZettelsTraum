@@ -84,7 +84,7 @@ let redaktion = {
 				redaktion.wertAendern(tr.lastChild, "ereignis");
 			}
 			// Person
-			redaktion.zelleErzeugen(tr, i.pr ? i.pr : "?", false);
+			redaktion.zelleErzeugen(tr, i.pr ? i.pr : "keine Person", false);
 			redaktion.wertAendern(tr.lastChild, "person");
 			// Lösch-Icon
 			if (n === 0) {
@@ -139,6 +139,8 @@ let redaktion = {
 	//     (Tabellenzeile [oder Fragment], an die die Zelle angehängt werden soll)
 	//   wert = String/null
 	//     (Text, der in die Zelle eingetragen werden soll)
+	//   icon = Boolean
+	//     (zum Redaktionsereignis passendes Icon anzeigen)
 	zelleErzeugen (parent, wert, icon) {
 		let td = document.createElement("td");
 		parent.appendChild(td);
@@ -154,6 +156,11 @@ let redaktion = {
 			td.appendChild(img);
 			td.appendChild(document.createTextNode(wert));
 		} else if (wert) {
+			if (wert === "keine Person") {
+				td.classList.add("leer");
+			} else {
+				td.classList.remove("leer");
+			}
 			td.textContent = wert;
 		}
 	},
@@ -281,7 +288,7 @@ let redaktion = {
 		if (feldtyp === "datum") {
 			redaktion.zelleErzeugen(frag, redaktion.formatDatum(val), false);
 		} else if (feldtyp === "person") {
-			redaktion.zelleErzeugen(frag, val ? val : "?", false);
+			redaktion.zelleErzeugen(frag, val ? val : "keine Person", false);
 		} else {
 			redaktion.zelleErzeugen(frag, val, true);
 		}

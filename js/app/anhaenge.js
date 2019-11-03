@@ -416,10 +416,6 @@ let anhaenge = {
 				});
 				return;
 			} else if (result.canceled) {
-				dialog.oeffnen({
-					typ: "alert",
-					text: "Sie haben keine Datei ausgewählt.",
-				});
 				return;
 			}
 			// Datei ausgewählt

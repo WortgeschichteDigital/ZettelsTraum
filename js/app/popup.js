@@ -124,11 +124,16 @@ let popup = {
 					popup.overlayID === "geruestwechseln") {
 				items.push("sep", "bedeutungenConf");
 			}
-			items.push("sep", "belegHinzufuegen");
-			popup.belegeAuflisten(items);
+			if (kartei.wort) {
+				items.push("sep", "belegHinzufuegen");
+				popup.belegeAuflisten(items);
+			}
 		} else if (target === "kartei-pfad") {
-			items = ["ordnerKartei", "sep", "schliessen", "sep", "belegHinzufuegen"];
-			popup.belegeAuflisten(items);
+			items = ["ordnerKartei", "sep", "schliessen"];
+			if (kartei.wort) {
+				items.push("sep", "belegHinzufuegen");
+				popup.belegeAuflisten(items);
+			}
 		} else if (target === "beleg-conf") {
 			items = ["karteikarteConf", "sep", "belegHinzufuegen"];
 			popup.belegeAuflisten(items);

@@ -1,6 +1,6 @@
 "use strict";
 
-// Initialisierung der App
+// INITIALISIERUNG DER APP
 window.addEventListener("load", async () => {
 	// VARIABLEN ANLEGEN
 	// Infos zu App und Fenster erfragen
@@ -318,17 +318,6 @@ window.addEventListener("load", async () => {
 	helfer.fensterGeladen();
 });
 
-// Fehler an den Main-Prozess melden
-window.addEventListener("error", evt => {
-	let err = {
-		time: new Date().toISOString(),
-		word: kartei.wort,
-		fileWgd: kartei.pfad,
-		fileJs: evt.filename,
-		message: evt.message,
-		line: evt.lineno,
-		column: evt.colno,
-	};
-	const {ipcRenderer} = require("electron");
-	ipcRenderer.send("fehler", err);
-});
+// FEHLER AN MAIN SCHICKEN
+window.addEventListener("error", evt => helfer.onError(evt));
+window.addEventListener("unhandledrejection", evt => helfer.onError(evt));

@@ -1358,6 +1358,7 @@ let bedeutungen = {
 			{
 				cl: "icon-tools-bold",
 				title: `Fetten (${tastatur.shortcutsTextAktuell("Strg")} + B)`,
+				blockStart: true,
 			},
 			{
 				cl: "icon-tools-italic",
@@ -1371,6 +1372,9 @@ let bedeutungen = {
 		for (let i = 0, len = tools.length; i < len; i++) {
 			let a = document.createElement("a");
 			a.classList.add("icon-link", tools[i].cl);
+			if (tools[i].blockStart) {
+				a.classList.add("block-start");
+			}
 			a.href = "#";
 			a.title = tools[i].title;
 			bedeutungen.editToolsExec(a);
