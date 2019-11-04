@@ -284,6 +284,10 @@ let kartei = {
 					helfer.animation("gespeichert");
 					const {ipcRenderer} = require("electron");
 					ipcRenderer.send("kartei-geoeffnet", winInfo.winId, pfad);
+					// ggf. Liste der BearbeiterInnen im Metadaten-Fenster auffrischen
+					if (!document.getElementById("meta").classList.contains("aus")) {
+						meta.bearbAuflisten();
+					}
 					// das Speichern hat fehlerfrei funktioniert
 					resolve(true);
 				})

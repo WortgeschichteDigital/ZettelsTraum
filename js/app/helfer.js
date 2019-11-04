@@ -580,6 +580,9 @@ let helfer = {
 		a.title = a.getAttribute("href");
 		a.addEventListener("click", function(evt) {
 			evt.preventDefault();
+			if (evt.detail > 1) { // Doppelklicks abfangen
+				return;
+			}
 			let url = this.getAttribute("href");
 			// URL ggf. aufbereiten
 			if (!/^http/.test(url)) {

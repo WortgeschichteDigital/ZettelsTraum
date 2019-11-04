@@ -124,6 +124,7 @@ layoutMenu = [
 				icon: path.join(__dirname, "img", "menu", "ausgang.png"),
 				click: () => appMenu.befehl("app-beenden"),
 				accelerator: "CommandOrControl+Q",
+				id: "app-beenden",
 			},
 		],
 	},
@@ -598,6 +599,7 @@ appMenu = {
 	//   id = Number
 	//     (ID des Fensters)
 	erzeugen (id) {
+		appMenu.ei();
 		let menu = Menu.buildFromTemplate(layoutMenu);
 		BrowserWindow.fromId(id).setMenu(menu);
 	},
@@ -616,6 +618,7 @@ appMenu = {
 	},
 	// erzeugt die Menüleiste in macOS
 	erzeugenMac (vorlage) {
+		appMenu.ei();
 		let menu = Menu.buildFromTemplate(vorlage);
 		Menu.setApplicationMenu(menu);
 	},
@@ -649,6 +652,21 @@ appMenu = {
 			w.webContents.send(befehl, parameter);
 		} else {
 			w.webContents.send(befehl);
+		}
+	},
+	// ein Ei
+	ei () {
+		let l = "Beenden",
+			d = new Date();
+		if (d.getHours() >= 23 || d.getHours() < 6) {
+			l = "Ausgeträumt";
+		}
+		let s = layoutMenu[0].submenu;
+		for (let i = 0, len = s.length; i < len; i++) {
+			if (s[i].id === "app-beenden") {
+				s[i].label = l;
+				break;
+			}
 		}
 	},
 };

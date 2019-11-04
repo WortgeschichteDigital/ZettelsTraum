@@ -107,16 +107,17 @@
 					<p>Ein paar mögliche Einstiegspunkte, um die App kennenzulernen:</p>
 
 					<p>Sie haben noch nie mit der App gearbeitet?<br
-						><img src="../img/pfeil-gerade-rechts.svg" width="24" height="24" alt=""> <a href="#" class="hilfe-demo">Demonstrationskartei</a><br
-						><img src="../img/pfeil-gerade-rechts.svg" width="24" height="24" alt=""> <a href="#kurzanleitung">Kurzanleitung</a></p>
+						><img src="../img/pfeil-gerade-rechts.svg" width="24" height="24" alt=""> <a href="#kurzanleitung">Kurzanleitung</a><br
+						><img src="../img/pfeil-gerade-rechts.svg" width="24" height="24" alt=""> <a href="#" class="hilfe-demo">Demonstrationskartei</a></p>
 
-					<p>Sie möchten Details zur Bedienung der zentralen Funktionen erfahren?<br
+					<p>Sie möchten Details zur Bedienung einer der Hauptfunktionen erfahren?<br
 						><img src="../img/pfeil-gerade-rechts.svg" width="24" height="24" alt=""> <a href="#karteikarte">Karteikarte</a><br
 						><img src="../img/pfeil-gerade-rechts.svg" width="24" height="24" alt=""> <a href="#bedeutungsgeruest">Bedeutungsgerüst</a><br
 						><img src="../img/pfeil-gerade-rechts.svg" width="24" height="24" alt=""> <a href="#belegliste">Belegliste</a></p>
 
 					<p>Sie finden eine Funktion nicht wieder?<br
-						><img src="../img/pfeil-gerade-rechts.svg" width="24" height="24" alt=""> <a href="#" class="link-suche">Suchfunktion</a> (<kbd>Strg</kbd> + <kbd>F</kbd>)</p>
+						><img src="../img/pfeil-gerade-rechts.svg" width="24" height="24" alt=""> <a href="#" class="link-suche">Suchfunktion</a>: <kbd>Strg</kbd> + <kbd>F</kbd><br
+						><img src="../img/pfeil-gerade-rechts.svg" width="24" height="24" alt=""> <a href="#" class="link-suchleiste">Suchleiste</a>: <kbd>F3</kbd></p>
 
 					<p>Sie möchten den Quellcode bearbeiten oder die App paketieren?<br
 						><img src="../img/pfeil-gerade-rechts.svg" width="24" height="24" alt=""> <a href="#framework-electron" class="link-dokumentation">technische Dokumentation</a></p>
@@ -164,9 +165,111 @@
 
 				<!-- KURZANLEIGUNG -->
 				<section id="sektion-kurzanleitung" class="suche aus">
-					<p>[<mark>Kurzanleitung</mark>]</p>
+					<h2 id="kurzanleitung-programmfenster">Programmfenster und Bedienung</h2>
 
-					<p>Demonstrationskartei</p>
+					<p><i class="app-name"></i> kennt drei verschiedene Typen von Programmfenstern:</p>
+
+					<ul class="senza-stile">
+						<li>
+							<p id="kurzanleitung-programmfensterHauptfenster"><b>1. Hautpfenster:</b> Erscheint nach dem Start des Programms; hier können <a href="#menueKartei-oeffnen">Karteien geöffnet</a> und bearbeitet werden; man kann mit beliebig vielen Hauptfenstern <a href="#menueApp-neuesFenster">parallel arbeiten</a>.</p>
+						</li>
+
+						<li>
+							<p><b>2 a. Nebenfenster:</b> Programmfenster, in denen keine Karteien geöffnet werden können; sie haben fast ausschließlich informativen Charakter; dazu zählen: dieses Handbuch, die <a href="#" class="link-dokumentation">technische Dokumentation</a>, der <a href="#" class="link-changelog">Changelog</a>, der <a href="#" class="link-fehlerlog">Fehlerlog</a> sowie <a href="#" class="ueber-app">Über <span class="app-name"></span></a> und <a href="#" class="ueber-electron">Über Electron</a></p>
+
+							<p>Alle diese Nebenfenster werden vom Betriebssystem erkannt und verwaltet, genauso wie die Hauptfenster: Jedes hat eine Fensterleiste mit Buttons zum Schließen, Maximieren <abbr title="und so weiter">usw.</abbr> Alle können über den Punkt <i>Hilfe</i> in der Menüleiste aufgerufen werden, jedoch keines doppelt. Im Unterschied zu den Hauptfenstern haben sie keine <a href="#kurzanleitung-menueleiste">Menüleiste</a> (unter <i>macOS</i> existiert eine extrem reduzierte Menüleiste).</p>
+						</li>
+
+						<li>
+							<p><b>2 b. Bedeutungsgerüst-Fenster:</b> Das <a href="#bedeutungsgeruest-fenster">Bedeutungsgerüst-Fenster</a> ist zwar auch ein Nebenfenster. Es unterscheidet sich aber in mehreren Punkten, von den anderen Nebenfenstern:</p>
+
+							<ul>
+								<li>Es kann mehr als ein Bedeutungsgerüst-Fenster geben: pro Hauptfenster eins. Ein Bedeutungsgerüst-Fenster ist dabei immer fest mit dem Hauptfenster verknüpft, aus dem heraus es geöffnet wurde.</li>
+
+								<li>Aus einem Bedeutungsgerüst-Fenster können Operationen im Hauptfenster angestoßen werden.</li>
+
+								<li>Bei Änderungen im Hauptfenster kann es sein, dass der Inhalt des zugehörigen Bedeutungsgerüst-Fensters automatisch angepasst wird.</li>
+							</ul>
+						</li>
+
+						<li>
+							<p><b>3. Dialogfenster:</b> Solche Fenster erscheinen nur im Hauptfenster. Sie verdecken den Inhalt des Hauptfensters und werden nicht vom Betriebssystem verwaltet. Mehrere Dialogfenster können übereinanderliegen, also zugleich geöffnet sein, ohne dass man sie gleichzeitig sieht. Dialogfenster können Meldungen anzeigen, in ihnen befinden sich darüber hinaus viele Nebenfunktionen wie die <a href="#menueKartei-notizen">Notizen-Funktion</a>, die <a href="#menueKartei-redaktion">Redaktions-Funktion</a> oder die <a href="#menueApp-karteisuche">Karteisuche</a>.</p>
+						</li>
+					</ul>
+
+					<p id="kurzanleitung-menueleiste"><b>Menüleiste:</b> Die Hauptfenster haben am oberen Fensterrand eine Menüleiste (unter <i>macOS</i> werden die Menüpunkte in die Menüleiste des Betriebssystems eingebunden, wie es dort üblich ist). Über die einzelnen Menüpunkte lässt sich ein Großteil der Programmfunktionen aufrufen. Jeder der dort zu findenden Befehle wird hier im Handbuch in den Abschnitten <a href="#menueApp">Menüpunkt <i class="app-name"></i></a>, <a href="#menueKartei">Menüpunkt <i>Kartei</i></a> <abbr title="und so weiter">usw.</abbr> ausführlich beschrieben.</p>
+
+					<p>In allen Programmfenstern, <abbr title="besonders">bes.</abbr> aber im Hauptfenster gibt es zahlreiche <b>klicksensitive Elemente</b>. Dazu zählen fast alle Icons, Leisten, Listen, Textteile, die man so sieht. Es genügt <em>überall</em> ein einfacher Klick. Doppelklicks sind <em>niemals</em> nötig (Doppelklicks haben in der Vergangenheit unter speziellen Bedingungen sogar merkwürdige Fehler im Programm ausgelöst). Am besten lernt man die vielen anklickbaren Elemente kennen, wenn man ein bisschen mit einer Kartei herumspielt. Dazu gibt es die:</p>
+
+					<p><b>Demonstrationskartei:</b> Die <a href="#" class="hilfe-demo">Demonstrationskartei können Sie durch Klick auf diesen Text</a> oder den Menüpunkt <a href="#menueHilfe-demonstrationskartei"><i>Hilfe &gt; Demonstrationskartei</i></a> laden. Es handelt sich um eine kleine Wortkartei mit relativ wenigen Belegen, die bei der Programminstallation mitgeliefert wird. Sie können sie nach belieben verändern und speichern. Nach dem erneuten Aufruf über den Menüpunkt <i>Hilfe &gt; Demonstrationskartei</i> hat sie wieder ihre ursprüngliche Form.</p>
+
+					<p><b>Rechtsklicks:</b> Es gibt eine Vielzahl kontextabhängiger Rechtsklickmenüs. Mit ihrer Hilfe können mitunter sogar Funktionen aufgerufen werden, für die es in der Menüleiste keinen Befehl gibt, <abbr title="zum Beispiel">z. B.</abbr> die <a href="#belegliste-annotierenBeleg">Annotierungs-Funktion</a>. Da die verschiedenen Menüformen so immens zahlreich sind, werden sie hier im Handbuch nicht alle beschrieben. Darum gilt auch hier: Lernen Sie sie durch Ausprobieren kennen!</p>
+
+					<p><b>Tastaturkürzel:</b> Die App lässt sich nicht nur über Links- oder Rechtsklicks steuern. Daneben gibt es natürlich eine Vielzahl an <a href="#tastaturkuerzel">Tastaturkürzeln</a>, mit denen Programmfunktionen aufgerufen oder Operationen in Programmfunktionen ausgelöst werden können.</p>
+
+					<p><b>Einstellungen:</b> Verhaltensweise und Ansicht der Programmoberfläche lassen sich über <a href="#einstellungen">Einstellungen</a> an Ihre Bedürfnisse und Arbeitsweise anpassen. Mitunter geht das <span lang="la">ad hoc</span> über den Klick auf ein Icon. Viele der Konfigurationsmöglichkeiten finden Sie allerdings gebündelt im Dialogfenster <a href="#menueApp-einstellungen"><i><span class="app-name"></span> &gt; Einstellungen</i></a>.</p>
+
+					<h2 id="kurzanleitung-ersteSchritte">Erste Schritte</h2>
+
+					<ol>
+						<li><b>Registrieren</b> Sie sich! Am besten bevor Sie mit der Arbeit beginnen. <abbr title="Das heißt">D. h.</abbr> nichts anders als: Tragen Sie ihren Namen in das Feld <a href="#einstellungen-allgemeinesBearbeiterin"><i>BearbeiterIn auf diesem Rechner</i></a> ein (zu finden über <a href="#einstellungen-allgemeines"><i><span class="app-name"></span> &gt; Einstellungen &gt; Allgemeines</i></a>). Das ist besonders in größeren Projekten wichtig, damit man später leicht nachvollziehen kann, wer eine Wortkartei bearbeitet hat.</li>
+
+						<li><a href="#menueKartei-erstellen">Erstellen</a> Sie eine <b>Wortkartei</b>, indem Sie nach dem Programmstart in der <a href="#menueApp-neuesFenster">Startansicht</a> auf den großen Button <i>Kartei erstellen</i> klicken. Sie werden nach einem Wort gefragt. Geben sie in dem Dialog ein Wort (Substantiv, Adjektiv oder <abbr title="dergleichen">dgl.</abbr>) oder eine Wortverbindung (Syntagma, Redewendung oder <abbr title="dergleichen">dgl.</abbr>) ein. Eingaben, die an den Beginn eines klassischen Lexikonartikels erinnern (<abbr title="zum Beispiel">z. B.</abbr> <q>Auto, das</q>), sind <a href="#menueKartei-erstellenForm">eher dysfunktional</a>.</li>
+
+						<li>
+							<p><a href="#karteikarte">Füllen</a> Sie die neue Kartei mit <b>Karteikarten</b>. Nach dem Erstellen einer neuen Kartei wird umgehend ein leeres <a href="#karteikarte-formularansicht">Karteikartenformular</a> geöffnet. Die Datenfelder <i>Datum, Beleg</i> und <i>Quelle</i> müssen ausgefüllt werden, ansonsten lässt sich die Karte nicht speichern. Alle anderen Felder sind optional.</p>
+
+							<p>Speichern Sie die Karte mit dem Button <i>Speichern</i> (am oberen Fensterrand) und schließen Sie sie mit dem Button <i>Schließen</i>.</p>
+						</li>
+
+						<li>Jetzt sehen Sie die <a href="#belegliste">Standardansicht der Kartei</a>: die <b>Belegliste</b>. Legen Sie weitere Karteikarten an, um die Liste allmählich zu füllen. Das geht mit dem Tastaturkürzel <kbd>Strg</kbd> + <kbd>N</kbd> oder auch über den Menüpunkt <a href="#menueBelege-hinzufuegen"><i>Belege &gt; Hinzufügen</i></a>.</li>
+
+						<li>Haben Sie eine gewisse Anzahl an Belegen angelegt, können Sie die <b>Belegliste filtern</b>. Die <a href="#filter">Filterleiste</a> öffnet man über das Icon <img src="../img/filter.svg" width="24" height="24" alt=""> (ganz links, direkt über der Belegliste).</li>
+
+						<li>Haben Sie während der Eingabe der Belege immer oder zumindest manchmal auch das Datenfeld <i>Bedeutung</i> gefüllt, hat die App für Sie aus Eigenintiative bereits ein <b>Bedeutungsgerüst</b> erzeugt. Ihre Bedeutungsdefinitionen können Sie bearbeiten, indem Sie die <a href="#bedeutungsgeruest">Bedeutungsgerüst-Funktion</a> öffnen. Das geht über das Tastaturkürzel <kbd>Strg</kbd> + <kbd>B</kbd> oder den Menüpunkt <a href="#menueKartei-bedeutungsgeruest"><i>Kartei &gt; Bedeutungsgerüst</i></a>.</li>
+
+						<li>Vergessen Sie nicht die Kartei zu <b>Speichern</b>! Das geht via <kbd>Strg</kbd> + <kbd>S</kbd> oder über den Menüpunkt <a href="#menueKartei-speichern"><i>Kartei &gt; Speichern</i></a>. Das Programm bietet Ihnen an, die Kartei unter dem Namen des Karteiworts zu speichern. Sie können den Dateinamen aber natürlich frei wählen. Nur die Dateiendung <span class="datei">*.wgd</span> sollte unbedingt erhalten bleiben.</li>
+
+						<li><b>Beenden</b> Sie das Programm, indem Sie alle Fenster schließen oder in einem der Hauptfenster den Befehl <a href="#menueApp-beenden"><i><span class="app-name"></span> &gt; Beenden</i></a> ausführen. Haben Sie vor lauter Fenstern den Überblick verloren und Änderungen noch nicht gespeichert? Die App checkt das für Sie und wird Sie vor dem Schließen der Fenster <abbr title="gegebenenfalls">ggf.</abbr> darauf aufmerksam machen.</li>
+					</ol>
+
+					<h2 id="kurzanleitung-hauptfunktionen">Hauptfunktionen</h2>
+
+					<p><i class="app-name"></i> hat gegenwärtig drei Hauptfunktionen. Sie werden alle im <a href="#kurzanleitung-programmfensterHauptfenster">Hauptfenster</a> aufgerufen und ausgeführt. Zu jeder dieser Funktionen gibt es ausführliche Erläuterungen hier im Handbuch. An dieser Stelle sollen die zentralen Aufgaben und Operationsweisen der Funktionen in Spiegelstrichlisten kurz angerissen werden.</p>
+
+					<p><b><i>Karteikarte</i></b> <img src="../img/pfeil-gerade-rechts.svg" width="24" height="24" alt=""> <a href="#karteikarte">Handbuch-Kapitel</a></p>
+
+					<ul>
+						<li>…</li>
+					</ul>
+
+					<p><b><i>Bedeutungsgerüst</i></b> <img src="../img/pfeil-gerade-rechts.svg" width="24" height="24" alt=""> <a href="#bedeutungsgeruest">Handbuch-Kapitel</a></p>
+
+					<ul>
+						<li>…</li>
+					</ul>
+
+					<p><b><i>Belegliste</i></b> <img src="../img/pfeil-gerade-rechts.svg" width="24" height="24" alt=""> <a href="#belegliste">Handbuch-Kapitel</a></p>
+
+					<ul>
+						<li>Die Belegliste ist die Standardansicht, zu der nach dem Schließen aller anderen Funktionen und Dialoge immer wieder zurückgekehrt wird.</li>
+
+						<li>Hat man sich in den vielen Dialogfenstern und Funktionen des Hauptfensters verloren, kann man jederzeit mit <kbd>Strg</kbd> + <kbd>L</kbd> oder über den Menüpunkt <a href="#menueBelege-auflisten"><i>Belege &gt; Auflisten</i></a> zur Belegliste zurückkehren.</li>
+
+						<li>Die Belegliste listet standardmäßig alle Belege auf, die sich in der Kartei befinden.</li>
+						
+						<li>Klickt man auf eine grau hinterlegten <a href="#belegliste-kopfleisteBelege">Kopfleiste mit Belegvorschau</a>, wird eine <a href="#belegliste-detailansicht">Detailansicht</a> geöffnet.</li>
+
+						<li>In der Detailansicht können alle Daten angezeigt werden, die man im <a href="#karteikarte-formularansicht">Karteikarten-Formular</a> eingegeben hat. In der <a href="#belegliste-kopfleiste">Kopfleiste der Belegliste</a> kann man festlegen, <a href="#belegliste-platzhalter">welche Felder angezeigt</a> werden sollen. Standardmäßig sieht man nur den Belegtext.</li>
+
+						<li>In der Detailansicht kann man Text markieren und dann <a href="#belegliste-kopierenAuswahl">kopieren</a>, auf Wunsch sogar <a href="#belegliste-annotierenBeleg">annotieren</a> (wenn es sich um Belegtext handelt). Die Funktionen lassen sich via <a href="#belegliste-rechtsklickmenues">Rechtsklick</a> und/oder über das <a href="#belegliste-kopierenIcon">Kopier-Icon</a> <img src="../img/kopieren.svg" width="24" height="24" alt=""> aufrufen.</li>
+
+						<li>Der Kontext des Belegtextes in der Detailansicht lässt sich <a href="#belegliste-kuerzung">kürzen</a>. Das geht mit dem Icon <img src="../img/kuerzung.svg" width="24" height="24" alt=""> in der <a href="#belegliste-kopfleiste">Kopfleiste</a>.</li>
+
+						<li>Außerdem kann man sich im Belegtext das <a href="#belegliste-karteiwortHervorheben">Karteiwort hervorheben</a> lassen. Das geht wiederum mit dem Icon <img src="../img/text-fett.svg" width="24" height="24" alt=""> in der Kopfleiste.</li>
+
+						<li>Die Belege in der Liste können mithilfe einer Vielzahl an <a href="#filter">Filtern</a> gesiebt werden, zum passgenauen Auflisten solcher Belege, die man gerade benötigt. Die meisten Filter sind dynamisch, passen sich also an die Inhalte an, mit der eine Kartei gefüttert wurde.</li>
+					</ul>
 				</section>
 
 				<!-- KARTEIKARTE -->
@@ -341,9 +444,35 @@
 
 						<p id="karteikarte-sonderzeichen">Über das Icon <img src="../img/pi.svg" width="20" height="20" alt=""> können einige <b>Sonderzeichen</b> an der Stelle des Belegs eingefügt werden, an der sich der Cursor gerade befindet, darunter auch die maskierten Spitzklammern.</p>
 
-						<p>Um Text zu formatieren, müssen sie ihn einfach nur markieren und auf eines der <b>Text-Tool-Icons</b> über dem Belegfeld klicken. Mit <img src="../img/text-kursiv.svg" width="20" height="20" alt=""> lässt sich der markierte Text <abbr title="beispielsweise">bspw.</abbr> kursivieren. Welche Formatierungsfunktion die einzelnen Icons haben, steht in einem Tooltip, der angezeigt wird, wenn die Maus über dem Icon schwebt.</p>
+						<p>Um Text zu formatieren, müssen Sie ihn einfach nur markieren und auf eines der <b>Text-Tool-Icons</b> über dem Belegfeld klicken. Welche Formatierungsfunktion die einzelnen Icons haben, steht in einem Tooltip, der angezeigt wird, wenn die Maus über dem Icon schwebt. Damit man die einzelnen Funktionen bei einer Suche hier im Handbuch wiederfindet, eine komplette Liste aller Text-Tools in der Karteikarte:</p>
 
-						<p>Diese Formatierungen können mit der Fehlermeldung <q>illegale Verschachtelung</q> scheitern. In diesem Fall müssen sie die Textauswahl ändern. Eine <a href="#belegliste-nesting">Erläuterung zu Verschachtelungsregeln in <abbr title="Hypertext Markup Language" lang="en">HTML</abbr></a> finden Sie im <abbr title="Abschnitt">Abschn.</abbr> <i>Belegliste</i>.</p>
+						<div class="info">
+							<p class="erklaerung-icon"><img src="../img/text-fett.svg" width="20" height="20" alt="">Fetten</p>
+
+							<p class="erklaerung-icon"><img src="../img/text-kursiv.svg" width="20" height="20" alt="">Kursivieren</p>
+
+							<p class="erklaerung-icon"><img src="../img/text-unterstrichen.svg" width="20" height="20" alt="">Unterstreichen</p>
+
+							<p class="erklaerung-icon"><img src="../img/text-durchgestrichen.svg" width="20" height="20" alt="">Durchstreichen</p>
+
+							<p class="erklaerung-icon"><img src="../img/text-gesperrt.svg" width="20" height="20" alt="">Sperren</p>
+
+							<p class="erklaerung-icon"><img src="../img/text-antiqua.svg" width="20" height="20" alt="">Antiqua</p>
+
+							<p class="erklaerung-icon"><img src="../img/text-gross.svg" width="20" height="20" alt="">Vergrößern</p>
+
+							<p class="erklaerung-icon"><img src="../img/text-kapitaelchen.svg" width="20" height="20" alt="">Kapitälchen</p>
+
+							<p class="erklaerung-icon"><img src="../img/text-hochgestellt.svg" width="20" height="20" alt="">Hochstellen</p>
+
+							<p class="erklaerung-icon"><img src="../img/text-tiefgestellt.svg" width="20" height="20" alt="">Tiefstellen</p>
+
+							<p class="erklaerung-icon"><img src="../img/text-markiert.svg" width="20" height="20" alt="">Markierung</p>
+						</div>
+
+						<p>Alle Textformatierungen sind Inline-Formatierungen. <abbr title="Das heißt">D. h.</abbr>, dass sie sich auf einzelne Wörter oder Buchstaben, aber nicht auf Absätze beziehen.</p>
+
+						<p>Das Vornehmen einer Formatierung kann mit der Fehlermeldung <q>illegale Verschachtelung</q> scheitern. In diesem Fall müssen Sie die Textauswahl ändern. Eine <a href="#belegliste-nesting">Erläuterung zu Verschachtelungsregeln in <abbr title="Hypertext Markup Language" lang="en">HTML</abbr></a> finden Sie im <abbr title="Abschnitt">Abschn.</abbr> <i>Belegliste</i>.</p>
 
 						<p>Etwas Besonderes stellt das Text-Tool <img src="../img/text-markiert.svg" width="20" height="20" alt=""> dar. Mit ihm können Sie Textteile markieren, um sie später leichter wiederzufinden. So <b>markierte Texte</b> werden standardmäßig gelb hinterlegt und werden explizit als Nutzermarkierung klassifiziert (durch <code class="quelltext">class="user"</code>). Die so markierten Textteile sind in der Detailansicht der Belegliste und der Leseansicht der Karteikarte klicksensitiv. In einem Popup-Fensterchen können Sie die Farbe der Markierung ändern und/oder die markierte Stelle um eine Notiz ergänzen. Die Funktion wird genauer in der <a href="#belegliste-karteiwortHervorheben">Belegliste im Zusammenhang mit der Annotierung von Karteiwörtern erläutert</a>.</p>
 
@@ -394,11 +523,11 @@
 
 					<p class="info">Für das Textsortenfeld gilt mutatis mutandis das gleiche wie für das Wortbildungsfeld.</p>
 
-					<p><b>Notizen:</b> Freitextfeld für Notizen zu der Karteikarte</p>
+					<p id="karteikarte-notizen"><b>Notizen:</b> Freitextfeld für Notizen zu der Karteikarte</p>
 
 					<p class="info">Für die Eingabe und Umsetzung von Internetlinks gilt dasselbe wie für das <a href="#karteikarte-quelle">Quellen-Feld</a>.</p>
 
-					<p><b>Anhänge:</b> Dateianhänge zu der Karteikarte</p>
+					<p id="karteikarte-anhaenge"><b>Anhänge:</b> Dateianhänge zu der Karteikarte</p>
 
 					<p class="info">Durch Klick auf einen Anhang lässt sich dieser in dem Standardprogramm des Betriebssystems öffnen. Die Anhänge in dieser Liste sind an die aktuelle Karteikarte gebunden. Anhänge, die nicht zu einer einzelnen Karteikarte, sondern zur Wortkartei selbst gehören, können über den Menüpunkt <a href="#menueKartei-anhaenge"><i>Kartei &gt; Anhänge</i></a> hinzugefügt werden.</p>
 
@@ -908,7 +1037,7 @@
 						<p>Das Kopieren via Rechtsklick funktioniert nicht nur im Belegtext, sondern in allen Elementen, die in der Detailansicht angezeigt werden. Für die <a href="#karteikarte-leseansicht">Leseansicht der Karteikarte</a> gilt in Sachen Kopieren übrigens dasselbe wie für die Detailansicht der Belegliste: Auch hier sollten Sie zum Kopieren das Kopier-Icon oder das Rechtsklickmenü verwenden.</p>
 					</div>
 
-					<p>Die <b>Rechtsklickmenüs</b> der App sind kontextabhängig. Im Falle der Belegliste können sie recht umfangreich sein:</p>
+					<p id="belegliste-rechtsklickmenues">Die <b>Rechtsklickmenüs</b> der App sind kontextabhängig. Im Falle der Belegliste können sie recht umfangreich sein:</p>
 
 					<div class="bilder">
 						<figure title="zum Vergrößern anklicken">
@@ -1092,7 +1221,7 @@
 						<p>Durch das Aktivieren eines Zeitschnittfilters werden alle Belege gefunden, die vom Beginn dieses Zeitschnitts bis zum Beginn des nächsten Zeitschnitts datiert wurden, das letzte Jahr exklusive. Sind 100er-Schritte eingestellt steht der Filter <i>1800</i> somit für alle Belege, die vom Jahr 1800 bis <abbr title="inklusive">inkl.</abbr> 1899 datieren.</p>
 					</div>
 
-					<p><b>Kartendatum:</b> zu einem bestimmen Zeitraum angelegte oder geänderte Belege herausfiltern</p>
+					<p id="filter-kartendatum"><b>Kartendatum:</b> zu einem bestimmen Zeitraum angelegte oder geänderte Belege herausfiltern</p>
 
 					<div class="info">
 						<p>Dieser Filter weicht insofern von den anderen Filtern ab, als es bei ihm nicht um inhaltliche Kriterien der Belege, sondern rein formale der Belegsammlung geht. Legen Sie eine <a href="#karteikarte">Karteikarte</a> an oder ändern Sie in einer bestehenden Karteikarte ein Datenfeld, werden beim Speichern in zwei versteckten, sprich: auf der Programmoberfläche nicht sichtbaren, Datenfeldern die genauen Daten der jeweiligen Aktion vermerkt. Nur diese beiden Datenfelder werden vom <i>Kartendatum</i>-Filter angesprochen. Es geht hier also <em>nicht</em> um das <a href="#karteikarte-datum">Datumsfeld in der Karteikarte</a>!</p>
@@ -1267,7 +1396,7 @@ Mustermann, Erika
 						<p>In beiden Fällen sendet die App intern eine Anfrage an die <abbr title="Deutsche Textarchiv">DTA</abbr>-Webseite. Erhält es nach der hier eingegebenen Zeitspanne keine Antwort, wird die Anfrage mit einem Timeout-Fehler abgebrochen und ein Dialogfenster geöffnet, das über diesen Fehler informiert. Arbeiten Sie in einer Umgebung mit schlechter Internetverbindung (<abbr title="zum Beispiel">z. B.</abbr> im Zug), könnte es hilfreich sein, diesen Wert ein bisschen anzuheben. Die App wartet dann entsprechend länger, ehe sie die Anfrage als gescheitert bewertet.</p>
 					</div>
 
-					<p class="erklaerung-option">Einfügen-Fenster nach dem Einfügen schließen</p>
+					<p class="erklaerung-option" id="einstellungen-allgemeinesEinfuegenFenster">Einfügen-Fenster nach dem Einfügen schließen</p>
 
 					<div class="info">
 						<p><i>Standard:</i> aktiviert</p>
@@ -1773,7 +1902,7 @@ Mustermann, Erika
 
 						<p>Ist im aktuellen Fenster bereits eine Kartei geöffnet, wird ein <b>neues Programmfenster</b> aufgebaut. In diesem Fenster wiederum poppt eine Dialogfenster auf, in dem Sie das gewünschte Wort, Sprichwort, Syntagma eingeben können. Danach haben Sie eine initiale Kartei, in der sich umgehend eine leere Karteikarte öffnet, in der Sie Ihren ersten Beleg einpflegen können.</p>
 
-						<p>Zur <b>Form der Eingabe</b>: Es ist nicht sinnvoll, in dem Dialogfenster, das Sie nach dem Wort fragt, etwas einzugeben, was in irgendeiner Weise an den Beginn eines klassischen Wörterbucheintrags erinnert. Schon eine Eingabe wie <q>Auto, das</q> wäre an dieser Stelle eher problematisch. Denn das Programm versucht, zu dem Wort oder den Wörtern, die Sie eingegeben haben, Formvarianten zu finden, um diese im Belegtext hervorzuheben. Möchten Sie einen Wörterbuchartikel zum Substantiv <i>Auto</i> schreiben, interessiert Sie der Artikel <i>das</i> wahrscheinlich eher nicht. Geben Sie in einem solchen Fall lieber nur <q>Auto</q> ein.</p>
+						<p id="menueKartei-erstellenForm">Zur <b>Form der Eingabe</b>: Es ist nicht sinnvoll, in dem Dialogfenster, das Sie nach dem Wort fragt, etwas einzugeben, was in irgendeiner Weise an den Beginn eines klassischen Wörterbucheintrags erinnert. Schon eine Eingabe wie <q>Auto, das</q> wäre an dieser Stelle eher problematisch. Denn das Programm versucht, zu dem Wort oder den Wörtern, die Sie eingegeben haben, Formvarianten zu finden, um diese im Belegtext hervorzuheben. Möchten Sie einen Wörterbuchartikel zum Substantiv <i>Auto</i> schreiben, interessiert Sie der Artikel <i>das</i> wahrscheinlich eher nicht. Geben Sie in einem solchen Fall lieber nur <q>Auto</q> ein.</p>
 
 						<p>Andererseits ist es vollkommen unproblematisch, <b>Wortverbindungen</b> wie <q>politisch korrekt</q> oder Redewendungen wie <q>Kopf an Kopf</q> einzugeben. Im letzten Fall wollen Sie wahrscheinlich nicht, dass die Präposition <i>an</i> im Belegtext hervorgehoben wird, zumal eine trunkierte Hervorhebung zahlreiche falschpositive Markierungen produzieren wird. Die Hervorhebung einzelner Wörter kann man in der Funktion <a href="#menueKartei-formvarianten"><i>Kartei &gt; Formvarianten</i></a> abstellen.</p>
 					</div>
@@ -1851,13 +1980,69 @@ Mustermann, Erika
 					<p class="erklaerung-icon-menues" id="menueKartei-notizen"><img src="../img/stift.svg" width="24" height="24" alt="">Notizen</p>
 
 					<div class="info">
-						<p><mark>…</mark></p>
+						<p>Notizen verfassen, die die Kartei betreffen.</p>
+
+						<p>Im Gegensatz zum <a href="#karteikarte-notizen">Notizen-Feld in der Karteikarte</a> lassen sich in diesem Dialogfenster Notizen anlegen, die sich auf die Kartei als Ganzes beziehen. Anders als das simple Plain-Text-Feld der Karteikartennotizen handelt es sich bei diesem Notizenfeld jedoch um ein <b><abbr title="What You See Is What You Get" lang="en">WYSIWYG</abbr>-Feld</b>: Wie in einem Textverarbeitungsprogramm können Sie eine Anzahl einfacher Formatierungen vornehmen und das Ergebnis sofort bestaunen. Hierzu gibt es über dem Textfeld eine Leiste mit Icons, die die jeweilige Formatierung triggern.</p>
+
+						<p>Folgende <b>Absatzformatierungen</b> stehen zur Verfügung:</p>
+
+						<div class="info">
+							<p class="erklaerung-icon"><img src="../img/text-antiqua.svg" width="20" height="20" alt=""><i>Überschrift.</i> Um einen Absatz in eine Überschrift umzuwandeln, genügt es, wenn der Cursor sich an einer beliebigen Stelle im betreffenden Absatz befindet. Ein Klick auf das Icon verwandelt ihn in eine Überschrift. Das Rückverwandeln einer Überschrift in einen gewöhnlichen Absatz, geht genauso: Cursor in den Text, dann auf das Icon klicken. Dieses Verwandeln von Absätzen funktioniert in derselben Weise auch für alle anderen Formatierungen, die sich auf ganze Textblöcke beziehen.</p>
+
+							<p class="erklaerung-icon"><img src="../img/liste-bullets-gross.svg" width="20" height="20" alt=""><i>Liste ungeordnet</i>; eine Schlagwortliste mit Bullet-Points</p>
+
+							<p class="erklaerung-icon"><img src="../img/liste-zahlen-gross.svg" width="20" height="20" alt=""><i>Liste geordnet</i>; eine nummerierte Aufzählung</p>
+						</div>
+
+						<p>Folgende <b>Textformatierungen</b> stehen zur Verfügung:</p>
+
+						<div class="info">
+							<p class="erklaerung-icon"><img src="../img/text-fett.svg" width="20" height="20" alt=""><i>Fetten</i>; Tastaturkürzel <kbd>Strg</kbd> + <kbd>B</kbd>. Eine Fettung kann jederzeit rückgängig gemacht werden, indem Sie gefetteten Text markieren und erneut auf das Icon klicken. Die Funktionsweise der folgenden Text-Tools ist identisch.</p>
+
+							<p class="erklaerung-icon"><img src="../img/text-kursiv.svg" width="20" height="20" alt=""><i>Kursivieren</i>; Tastaturkürzel <kbd>Strg</kbd> + <kbd>I</kbd></p>
+
+							<p class="erklaerung-icon"><img src="../img/text-unterstrichen.svg" width="20" height="20" alt=""><i>Unterstreichen</i>; Tastaturkürzel <kbd>Strg</kbd> + <kbd>U</kbd></p>
+
+							<p class="erklaerung-icon"><img src="../img/text-durchgestrichen.svg" width="20" height="20" alt=""><i>Durchstreichen</i></p>
+
+							<p class="erklaerung-icon"><img src="../img/text-hochgestellt.svg" width="20" height="20" alt=""><i>Hochstellen</i></p>
+
+							<p class="erklaerung-icon"><img src="../img/text-tiefgestellt.svg" width="20" height="20" alt=""><i>Tiefstellen</i></p>
+
+							<p class="erklaerung-icon"><img src="../img/text-markiert.svg" width="20" height="20" alt=""><i>Markierung</i></p>
+						</div>
+
+						<p>Das Icon <img src="../img/pinsel.svg" width="20" height="20" alt=""> schließlich dient zum <b>Löschen von Formatierungen</b>. Es funktioniert allerdings nur bei Inline-Formatierungen, also solchen Formaten, die sich auf Textteile und nicht auf Textblöcke wie Überschriften oder Listen beziehen. Die <i>Textmarkierung</i> ist hier eine Ausnahme. Sie kann nur durch das Markierungs-Tool selbst rückgängig gemacht werden.</p>
+
+						<p>Änderungen in den Notizen werden erst in die Kartei übertragen, wenn Sie den <b>Button</b> <i>Speichern</i> drücken. (Das Notizenfeld ist übrigens Teil der <a href="#einstellungen-allgemeinesSpeichern">Speicherkaskade</a>, die der Tastaturbefehl <kbd>Strg</kbd> + <kbd>S</kbd> standardmäßig anstößt.) Möchten Sie eine Änderung verwerfen, klicken Sie auf <i>Schließen</i> und verneinen die Frage, ob Sie die Änderungen nicht erst einmal speichern möchten. Das komplette Löschen der Notizen geht am leichtesten über den Button <i>Löschen</i>.</p>
+
+						<p>Haben Sie sich in diesem Textfeld etwas notiert und die Notizen gespeichert, erscheint im <b>Kopf des Hauptfensters</b> ein kleines Stift-Icon: <img src="../img/stift.svg" width="20" height="20" alt="">. Durch Klick auf das Icon, öffnet sich das Notizen-Fenster.</p>
+
+						<p>Sie können sich die Notizen auf Wunsch in der <b>Filterleiste</b> anzeigen lassen. Hierzu müssen Sie eine <a href="#einstellungen-notizenFilterleiste">Einstellung</a> aktivieren. Details dazu im entsprechenden <a href="#filter-notizen">Kapitel im <abbr title="Abschnitt">Abschn.</abbr> <i>Filter</i></a>.</p>
 					</div>
 
 					<p class="erklaerung-icon-menues" id="menueKartei-anhaenge"><img src="../img/bueroklammer.svg" width="24" height="24" alt="">Anhänge</p>
 
 					<div class="info">
-						<p><mark>…</mark></p>
+						<p>Listet alle Anhänge der Kartei auf und bietet die Möglichkeit weitere Anhänge zu ergänzen.</p>
+
+						<p>Die im Fenster gelisteten Anhänge umfassen nicht allein die Anhänge, die mit der Kartei verknüpft wurden. Auch solche, die <a href="#karteikarte-anhaenge">an eine Karteikarte gehängt</a> worden sind, werden an dieser Stelle aufgeführt. Sie finden hier somit <b>alle Anhänge</b>, die an irgendeiner Stelle mit der Kartei verknüpft worden sind.</p>
+
+						<p>Die einzelnen Anhänge lassen sich auf Klick <b>öffnen</b>. Möchten Sie nicht den Anhang, sondern den Ordner öffnen, in dem ein Anhang liegt, führen Sie einen Rechtsklick aus und wählen den Befehl <i>Ordner öffnen</i>.</p>
+
+						<p>Der <b>Button <i>Ergänzen</i></b> öffnet einen Dateidialog Ihres Betriebssystems, mit dem Sie die Anhängeliste ergänzen können. Auf Wunsch können Sie mehrere Anhänge in einem Rutsch auswählen und hinzufügen. Das Ergänzen von Anhängen zu den einzelnen Belegen ist in diesem Fenster nicht möglich. Dazu müssen Sie die jeweilige <a href="#karteikarte">Karteikarte</a> öffnen.</p>
+
+						<p>Die App erkennt, ob sich eine Datei, die Sie anhängen möchten, relativ zum Speicherort der Kartei gesehen in derselben Ordnerstrukur wie diese oder in einem anderen Zweig befindet. Kann der Speicherort des Anhangs relativ zum Speicherort der Kartei beschrieben werden, ohne dass auf eine höhere Ebene gewechselt werden müsste, wird die Pfadangabe entsprechend gekürzt: Der Anhang wird dann nicht mit einer absoluten, sondern mit einer <b>relativen Pfadangabe</b> gespeichert.</p>
+
+						<p>Ein konkretes Beispiel: Ihre aktuelle Kartei liegt in <span class="datei">C:\WGD-Karteien\Beispiel.wgd</span>. In demselben Ordner befindet sich ein Unterordner namens <span class="datei">Anhänge</span> mit der Datei <span class="datei">Text.pdf</span>. Ergänzen Sie die Liste der Anhänge um diese <abbr title="Portable Document Format" lang="en">PDF</abbr>-Datei, wird der absolute Pfad <span class="datei">C:\WGD-Karteien\Anhänge\Text.pdf</span> zu <span class="datei">Anhänge\Text.pdf</span> gekürzt und auch so in der Kartei gespeichert. Würden Sie hingegen die Datei <span class="datei">C:\eBooks\Text.pdf</span> anhängen, würde der Pfad nicht gekürzt, also zusammen mit dem Laufwerksbuchstaben gespeichert werden, da er sich nicht in derselben Ordnerstruktur wie die Kartei befindet.</p>
+
+						<p>Sinn dieser Maßname ist, dass Sie Ihre Karteienordner frei verschieben, auf andere Partitionen, in andere Ordnerstrukturen und sogar auf andere Computer kopieren können, ohne dass die Verlinkung zu den Anhängen dabei Schaden nähme. Voraussetzung ist nur, dass sich alle Anhänge im selben oder in einem Unterordner der Kartei befinden. Anhänge mit relativer Pfadangabe, also Anhäge, die in der Ordnerstruktur der Kartei liegen, werden dann nämlich immer wiedergefunden. Um das Beispiel von oben aufzugreifen: Kopieren Sie <span class="datei">C:\WGD-Karteien\</span> mit der Kartei <span class="datei">Beispiel.wgd</span> auf einen anderen Computer in den Ordner <span class="datei">D:\Meine Dateien\Forschung\WGD-Karteien\</span>, könnte der Anhang <span class="datei">Text.pdf</span> auch weiterhin problemlos aus der Kartei heraus geöffnet werden – weil die Pfadangabe relativ zum Ort der Kartei gespeichert wurde.</p>
+
+						<p>Falls Anhänge zu Karteikarten gelistet werden: Die <b>Überschriften der Karteikarten</b> sind klicksensitiv. Mit ihnen können Sie die zugehörige Karteikarte öffnen, womit das Anhänge-Fenster zugleich geschlossen wird.</p>
+
+						<p>Mit dem Icon <img src="../img/pfeil-gerade-hoch.svg" width="20" height="20" alt=""> können Sie einen Anhang in der Liste weiter nach oben schieben, mit <img src="../img/muelleimer.svg" width="20" height="20" alt=""> aus der Liste entfernen (nach dem Beantworten einer Sicherheitsfrage). Manipulieren Sie mit einem dieser Icons die Anhängeliste einer gerade geöffneten Karteikarte, werden die Änderungen dort umgehend übernommen. Sie müssen die Karte nach dem Schließen des Anhänge-Fensters dann allerdings noch einmal speichern.</p>
+
+						<p>Anhänge, die mit der Kartei (und nicht mit einer Karteikarte) verknüpft wurden, werden im <b>Kopf des Hauptfensters</b> als Icon angezeigt. Diese Icons sind klicksensitiv: Der Anhang kann mit ihnen geöffnet werden. Ihr Betriebssystem entscheidet selbst, welches Programm es dafür benutzt. Auch bei diesen Icons besteht übrigens die Möglichkeit, nicht den Anhang, sondern den Ordner, in dem der Anhang liegt, zu öffnen: <i>Rechtsklick &gt; Ordner öffnen</i>.</p>
 					</div>
 
 					<p class="erklaerung-icon-menues" id="menueKartei-lexika"><img src="../img/buecher.svg" width="24" height="24" alt="">Überprüfte Lexika</p>
@@ -1916,7 +2101,7 @@ Mustermann, Erika
 
 						<p class="erklaerung-icon"><img src="../img/pfeil-gerade-hoch.svg" width="20" height="20" alt=""><i>Redaktionsereignis um eine Position nach oben schieben.</i></p>
 
-						<p class="erklaerung-icon"><img src="../img/muelleimer.svg" width="20" height="20" alt=""><i>Redaktionsereignis löschen.</i> Die Löschung kann nicht rückgängig gemacht werden; sie werden aber zuvor gefragt, ob Sie das Ereignis wirklich entfernen möchten.</p>
+						<p class="erklaerung-icon"><img src="../img/muelleimer.svg" width="20" height="20" alt=""><i>Redaktionsereignis löschen.</i> Die Löschung kann nicht rückgängig gemacht werden; Sie werden aber zuvor gefragt, ob Sie das Ereignis wirklich entfernen möchten.</p>
 					</div>
 
 					<p class="erklaerung-icon-menues" id="menueKartei-bedeutungsgeruest"><img src="../img/geruest.svg" width="24" height="24" alt="">Bedeutungsgerüst</p>
@@ -1996,13 +2181,112 @@ Mustermann, Erika
 					<p class="erklaerung-icon-menues" id="menueBelege-kopieren"><img src="../img/kopieren.svg" width="24" height="24" alt="">Kopieren</p>
 
 					<div class="info">
-						<p><mark>…</mark></p>
+						<p>Belege für das Kopieren in eine andere Kartei vormerken und/oder Belegsammlungen exportieren.</p>
+
+						<p>Im Kern handelt es sich bei diese Kopierfunktion um eine bequeme Möglichkeit, größere Belegmengen zwischen Karteien, die auf demselben Computer gleichzeitig geöffnet sind, <b>hin- und herzukopieren</b>. Darüber hinaus bietet die Funktion die Möglichkeit, Belege in ein Austauschformat <b>zu exportieren</b> (das <a href="#wgd-bwgd" class="link-dokumentation"><abbr title="Belege Wortgeschichte digital">BWGD</abbr>-Format</a>), mit dem eine Belegsammlung unkompliziert <abbr title="zum Beispiel">z. B.</abbr> auf einem anderen Rechner in eine <i class="app-name"></i>-Kartei importiert werden kann.</p>
+
+						<figure class="right" title="zum Vergrößern anklicken">
+							<img src="../img/win/hb-menueBelege-kopieren.png" alt="">
+							<figcaption>das Kopieren-Fenster mit fünf vorgemerkten Belegen</figcaption>
+						</figure>
+
+						<p><b><i>Kopieren einer Belegsammlung</i></b></p>
+
+						<p>Will man einen oder mehrere Belege von einem Quell- in ein Ziel-Fenster am selben Rechner kopieren, muss die Liste zu kopierender Belege zunächst einmal zusammengestellt werden. Dafür dient diese Funktion. Indem Sie auf den Menüpunkt <i>Belege &gt; Kopieren</i> klicken, wird die Kopierfunktion aktiviert. Es öffnet sich zwar kein Dialogfenster, aber die Programmoberfläche wird an mehreren Stellen modifiziert:</p>
+
+						<ol id="menueBelege-kopierenIcons">
+							<li>Neben dem Programm-Icon im Kopf des Hauptfensters erscheint ein großes, blaues, unübersehbares Kopier-Icon: <img src="../img/kopieren.svg" width="20" height="20" alt="">;</li>
+
+							<li>in den <a href="#belegliste-kopfleisteBelege">Kopfleisten der Belege</a>, die gerade in der <a href="#belegliste">Belegliste</a> sichtbar sind, erscheint am linken Rand ein kleineres Kopier-Icon;</li>
+
+							<li>neben dem Icon zum Öffnen der <a href="#belegliste-suchleiste">Suchleiste</a> in der <a href="#belegliste-kopfleiste">Kopfleiste der Belegliste</a> erscheint ein weiteres Kopier-Icon;</li>
+
+							<li>und schließlich taucht nun auch in der <a href="#karteikarte-kopfleiste">Kopfleiste der Karteikarte</a> ein solches Icon auf.</li>
+						</ol>
+
+						<p>Durch Klick auf eines der <b>Kopier-Icons</b> 2. – 4. können Belege der Kopierliste hinzugefügt werden. Wie viele Belege zum Kopieren bereits vorgemerkt sind, wird über dem Icon im Programmkopf und in einer kurzen, nach dem Kopiervorgang erscheinenden Animation in der Mitte des Hauptfensters angezeigt. Die Kopier-Icons 2. und 4. dienen dazu, einen einzelnen Beleg in die Kopierliste aufzunehmen. Wohingegen das Kopier-Icon im Kopf der Belegliste neben dem Drucker-Icon (3.) dazu dient, <em>alle</em> in der aktuellen Belegliste sichtbaren Belege in die Kopierliste zu verschieben. Wohlgemerkt: Dass die Kopierfunktion aktiviert wurde, bedeutet nicht, dass man die Belegliste nicht mehr <a href="#filter">filtern</a> könnte. Darum ist es durchaus möglich, dass in der aktuellen Belegliste nicht alle in der Kartei vorhandenen Belege angezeigt werden. In einem solchen Fall würden mit Icon Nummer 3 dementsprechend nur die gerade sichtbaren Belege in die Kopierliste aufgenommen.</p>
+
+						<p>Belege werden niemals in die Kopierliste geschoben, wenn sie sich bereits in ihr befinden. Das Programm kümmert sich darum, dass es hier nicht etwa zu einer Dopplung kommt.</p>
+
+						<p>Die Kopierfunktion interferriert übrigens mit keiner anderen Funktion des Programms. Es können auch bei aktivierter Kopierfunktion <a href="#karteikarte">Karteikarten erstellt</a>, die <a href="#bedeutungsgeruest">Bedeutungsgerüste</a> bearbeitet, die <a href="#einstellungen">Einstellungen</a> verändert oder die <a href="#filter">Belegliste gefiltert</a> werden – all dies hat keine Auswirkungen auf die Kopierfunktion. Wird ein Beleg aus der Kartei gelöscht, der zuvor der Kopierliste hinzugefügt worden ist, entfernt das Programm diesen automatisch aus der Liste.</p>
+
+						<p>Welche Belege genau Sie sich zum Kopieren vorgemerkt haben, können Sie sich in einem <b>Dialogfenster</b> anzeigen lassen. Dieses lässt sich öffnen, indem Sie die Kopierfunktion über den Menüpunkt <i>Belege &gt; Kopieren</i> erneut aufrufen oder indem Sie auf das große blaue Kopier-Icon <img src="../img/kopieren.svg" width="20" height="20" alt=""> im Kopf des Hauptfensters klicken. In dem Fenster sehen Sie die Liste der Belege, die Sie bisher zum Kopieren zusammengetragen haben. Um einen Beleg aus der Liste zu entfernen, klicken sie auf das vor dem Kurztitel stehende Icon <img src="../img/x-dick.svg" width="20" height="20" alt="">. Über den großen Button <i>Leeren</i> mit dem <img src="../img/muelleimer.svg" width="20" height="20" alt=""> im Fensterkopf kann man die Liste komplett löschen. Ein Klick auf den Kurztitel des Belegs öffnet übrigens die zugehörige Karteikarte – und schließt das Dialogfenster der Kopierfunktion.</p>
+
+						<p>Haben Sie alle Belege zum Kopieren vorgemerkt, die Sie in eine andere Kartei übertragen möchten, können Sie mit dem <b>Einfügen</b> beginnen. Öffnen Sie dazu die <a href="#menueBelege-einfuegen">Einfügen-Funktion</a> in dem gewünschten Ziel-Fenster. Wie genau das Einfügen der vorgemerkten Belege funktioniert und was dabei alles zu beachten ist, wird im Abschnitt zur Einfügen-Funktion beschrieben. Eins nur vorweg: Das Karteifenster, aus dem heraus Belege kopiert werden sollen (also das Quell-Fenster), darf vor dem Einfügen der Belege in eine Kartei, die in einem anderen Fenster (dem Ziel-Fenster) geöffnet ist, <em>nicht</em> geschlossen werden! Mit dem Schließen des Fensters verschwindet zugleich die von Ihnen erstellte Belegsammlung.</p>
+
+						<p>Beenden lässt sich die Kopierfunktion über den Button <i>Beenden</i> mit dem Icon <img src="../img/ausgang.svg" width="20" height="20" alt=""> im Kopf des Fensters oder über das Kopier-Icon im Kopf des Hauptfensters: <i>Rechtsklick &gt; Kopierfunktion beenden</i>. Beim <b>Beenden</b> wird die Kopierliste geleert, sodass Sie beim erneuten Aktivieren der Funktion wieder mit einer leeren Liste starten. Außerdem verschwinden beim Beenden die <a href="#menueBelege-kopierenIcons">Icons 1. – 4.</a>, von denen oben die Rede war.</p>
+
+						<p id="menueBelege-kopierenZwischenablage"><b><i>Spontanes Kopieren eines einzigen Belegs</i></b></p>
+
+						<p>Die Kopierfunktion ist wie gesagt im Kern dafür gedacht, größere Belegmengen zwischen Karteien auf demselben Rechner auszutauschen. Es ist aber auch möglich, nur einen einzigen Beleg auf die Schnelle zu kopieren. Hierzu gibt es im Kopf der Karteikarte das immer sichtbare Icon <img src="../img/einfuegen-pfeil.svg" width="20" height="20" alt="">. Klickt man auf das Icon wird die aktuelle <a href="#karteikarte-zwischenablage">Karteikarte in die Zwischenablage</a> des Computers geschoben. Die <a href="#menueBelege-einfuegen">Einfügen-Funktion</a> erkennt ohne Ihr Zutun, dass in der Zwischenablage ein Beleg von <i class="app-name"></i> liegt. Ruft man die Funktion nach dem Kopieren eines singulären Belegs im Quell-Fenster im Ziel-Fenster auf, erscheint dort als erste Belegquelle in der Liste die automatisch ausgewählte <i>Zwischenablage</i>. Der Beleg lässt sich mit der Einfügen-Funktion dann genauso einfügen, als handle es sich um eine aus Dutzenden Belegen bestehende Kopierliste in einem anderen Fenster von <i class="app-name"></i>. Um das Kopieren eines Belegs in die Zwischenablage zu nutzen, muss die Kopier-Funktion im Quell-Fenster nicht eigens aktiviert werden; das Quell-Fenster könnte man nach dem Kopieren sogar umgehend schließen. Die Einfügen-Funktion im Zielfenster findet den Beleg trotzdem. Ein Nachteil dieser Funktion ist freilich, dass man auf diese Weise immer nur einen Beleg kopieren kann.</p>
+
+						<p>Das Kopieren eines Belegs in die Zwischenablage ist auch aus der <a href="#belegliste">Belegliste</a> heraus möglich. Sie müssen dafür einfach nur im entsprechenden Belegkopf oder in der Detailansicht des Belegs <a href="#belegliste-rechtsklickmenues">rechtsklicken</a> und den Befehl <i>Beleg in Zwischenablage kopieren</i> wählen. Der Befehl ist wie das erwähnte Kopier-Icon in der Karteikarte ebenfalls immer vorhanden; die Kopierfunktion muss nicht eigens aktiviert werden, um ihn zu nutzen.</p>
+
+						<p>Wundern Sie sich bitte nicht, dass ein in die Zwischenablage kopierter Beleg in der Einfügen-Funktion des Quell-Fensters nicht erscheint. Dem wurde ein Riegel vorgeschoben, damit Sie am Ende nicht versehentlich zweimal denselben Beleg in ein und derselben Kartei haben. Für das <a href="#karteikarte-duplizieren">Duplizieren von Belegen</a> gibt es eine eigene Funktion.</p>
+
+						<p id="menueBelege-kopierenExportieren"><b><i>Exportieren einer Belegsammlung</i></b></p>
+
+						<p>Einen in die Zwischenablage kopierten Beleg kann man prinzipiell natürlich in einer Datei speichern oder via E-Mail an andere NutzerInnen von <i class="app-name"></i> verschicken, indem man ihn einfach an der entsprechenden Stelle mit der üblichen Operation einfügt. Der Quelltext ist für ungeübte Augen freilich arg verwirrend, aber grundsätzlich könnte er durch andere NutzerInnen wieder markiert, kopiert und über die <a href="#menueBelege-einfuegen">Einfügen-Funktion</a> in eine Kartei importiert werden.</p>
+
+						<p>Auf diese Weise könnte man natürlich nur einen einzigen Beleg auf einmal kopieren, austauschen und einfügen. Machte man das Ganze mit mehreren Belegen würde es sich rasch als mühsames und lästiges Verfahren erweisen. Für den Austausch einer größeren Belegsammlung gibt es darum im Kopieren-Fenster die Funktionen <i>Export</i> mit dem Icon <img src="../img/dokument-export-48.svg" width="20" height="20" alt="">. Hat man sich mit der Kopieren-Funktion einmal eine Belegsammlung erstellt, kann man diese durch einen einfachen Klick auf den erwähnten Button in einer <a href="#wgd-bwgd" class="link-dokumentation"><abbr title="Belege Wortgeschichte digital">BWGD</abbr>-Datei</a> speichern. Diese Datei mit der Endung <span class="datei">*.bwgd</span> ist nicht mit einer gewöhnlichen <span class="datei">*.wgd</span>-Datei zu verwechseln. Sie enthält nämlich keine vollständige Kartei mit <a href="#bedeutungsgeruest">Bedeutungsgerüst</a>, <a href="#menueKartei-notizen">Notizen</a>, <a href="#menueKartei-anhaenge">Dateianhängen</a> <abbr title="und so weiter">usw.</abbr>, sondern nur eine Liste an Belegen. Sie kann auch nicht via Doppelklick geöffnet werden (es gibt keine Datei-Assoziierung mit <i class="app-name"></i>). Wie sie importiert werden kann, lesen Sie im nächsten Abschnitt.</p>
 					</div>
 
 					<p class="erklaerung-icon-menues" id="menueBelege-einfuegen"><img src="../img/einfuegen.svg" width="24" height="24" alt="">Einfügen</p>
 
 					<div class="info">
-						<p><mark>…</mark></p>
+						<p>Vorgemerkte Belege aus einer anderen Kartei einfügen und/oder Belegsammlungen importieren.</p>
+
+						<figure class="right" title="zum Vergrößern anklicken">
+							<img src="../img/win/hb-menueBelege-einfuegen.png" alt="">
+							<figcaption>das Einfügen-Fenster mit zwei Belegquellen</figcaption>
+						</figure>
+
+						<p>Sobald Sie in einem Quell-Fenster eine <a href="#menueBelege-kopieren">Belegsammlung angelegt</a> haben, können Sie die dort vorgemerkten Belege mit dieser Funktion in eine Kartei einfügen. Rufen Sie den Menüpunkt <i>Belege &gt; Einfügen</i> im Ziel-Fenster auf. Hier muss die Kartei geöffnet sein, in die Sie die vorgemerkten Belege einfügen möchten. Dies kann durchaus eine <a href="#menueKartei-erstellen">neue Kartei</a> sein, in der sich noch keine Belege befinden. Nach dem Aufruf des Menüpunkts öffnet sich ein Dialogfenster. Oben links finden Sie den großen Button <i>Einfügen</i> mit dem Icon <img src="../img/einfuegen.svg" width="20" height="20" alt="">. Ein Klick und das war es dann auch schon: Die Belege wurden eingefügt. (Das Einfügen lässt sich auch durch das Tastaturkürzel <kbd>⏎</kbd> anstoßen; der Button muss dafür nicht fokussiert sein.) Einige Punkte gibt es bei diesem Einfügevorgang jedoch zu beachten:</p>
+
+						<p>In dem Einfügen-Fenster wird unter der Überschrift <b>Belegquellen</b> aufgelistet, in welchen gerade geöffneten Karteien Kopierlisten erstellt wurden, denn prinzipiell können in mehreren Karteien (also mehreren Programmfenstern) gleichzeitig Belegsammlungen zusammengetragen werden, die sich dann in einer Ziel-Kartei alle nacheinander eingefügen lassen. An dieser Stelle werden alle zur Verfügung stehenden Belegquellen aufgeführt. Sie müssen nun nur noch die gewünschte Belegquelle auswählen (standardmäßig ist immer die erste Quelle in der Liste markiert) und dann auf <i>Einfügen</i> klicken: Das Fenster schließt sich, die Belegliste und die Filter werden neu aufgebaut, die gewünschten Belege wurden in die Kartei kopiert. (Das <a href="#einstellungen-allgemeinesEinfuegenFenster">automatische Schließen des Fensters lässt sich abstellen</a>.)</p>
+
+						<p>Es gibt drei verschiedene <b>Typen von Belegquellen</b>:</p>
+
+						<ul>
+							<li>Zum ersten wären die bereits erwähnten Belegsammlungen in parallel geöffneten Karteifenstern zu nennen: In diesem Fall wird in der Quellenliste immer der kursivierte Name der Quell-Kartei gedruckt, also <abbr title="zum Beispiel">z. B.</abbr> <i>Team</i>.</li>
+
+							<li>Der zweite Typ ist ein in die <a href="#menueBelege-kopierenZwischenablage">Zwischenablage kopierter Beleg</a>: In diesem Fall steht in der Liste <q>Zwischenablage</q> (nicht kursiviert) und dahinter immer die Angabe <q>1 Beleg</q>, da auf diese Weise immer nur ein Beleg kopiert und eingefügt werden kann.</li>
+
+							<li>Der dritte und letzte Typ ist die <q>Belegedatei</q>, eine <a href="#menueBelege-einfuegenImportieren">Belegsammlung, die genauso importiert werden kann</a>, wie man Belege aus einem parallel geöffneten Fenster einfügt.</li>
+						</ul>
+
+						<p>Die Funktion <b>Reload</b> im Kopf des Einfügen-Fensters dient dazu, die Belegquellen aufzufrischen. Denn Sie können während dieses Dialogfenster geöffnet ist, durchaus Änderungen an den Kopierlisten in den Quell-Fenstern vornehmen oder gar neue Listen in weiteren Fenstern anlegen. Mit dem Reload-Button können Sie die Änderungen angezeigt bekommen, ohne den Umweg gehen zu müssen, das Einfügen-Fenster zu schließen und neu zu öffnen. (Ein Reload lässt sich auch über das Tastaturkürzel <kbd>F5</kbd> triggern.)</p>
+
+						<p>Beim Kopieren von Belegen müssen nicht notwendigerweise alle <b>Datenfelder</b> kopiert werden. Im unteren Teil des Einfügen-Fensters werden die Datenfelder aufgelistet, die prinzipiell kopiert werden könnten. Sind die Datenfelder in einer Karteikarte leer, wird ein leerer Wert kopiert; wird der Haken vor einem Datenfeld entfernt, wird es gar nicht kopiert, egal ob es im Original Daten enthält oder nicht. <i class="app-name"></i> merkt sich, welche Datenfelder hier ausgewählt wurden, und stellt die Auswahl nach dem Programmstart wieder her.</p>
+
+						<p>Da das <b>Datenfeld Bedeutung</b> komplizierter aufgebaut ist als alle anderen Datenfelder, gibt es für das Importieren dieses Feldes im Einfügen-Fenster ein eigenes Formular. In ihm werden alle <a href="#bedeutungsgeruest">Bedeutungsgerüste</a> aufgelistet, die in der ausgewählten Quelle gefunden wurden. (Eine Kartei kann <a href="#bedeutungsgeruest-konfigurationsfenster">beliebig viele Bedeutungsgerüste</a> enthalten.) Jedem der für die ausgewählte Quelle aufgelisteten Bedeutungsgerüste kann ein Bedeutungsgerüst in der Kartei des Ziel-Fensters (also der Kartei, in der das Einfügen-Fenster gerade geöffnet ist) zugewiesen werden. Daneben besteht die Möglichkeit, Gerüste auf <i>kein Import</i> zu stellen. Dann werden beim Einfügen der Belege alle Bedeutungen aus diesem Gerüst übergangen. Stellen Sie alle Gerüste auf <i>kein Import</i> ist die Konsequenz übrigens dieselbe wie das Entfernen des Hakens vor <i>Bedeutung</i> in der Liste der Datenfelder: Aus der Quelle werden keine Bedeutungen übernommen.</p>
+
+						<p>Wohlgemerkt: Es geht bei dem Mapping von Bedeutungsgerüsten der Quell- und der Ziel-Kartei nicht darum, Bedeutungsgerüste zu kopieren. Kopiert werden nur die Bedeutungen <em>aus</em> Bedeutungsgerüsten, die in den zum Kopieren vorgesehenen Belegen zu finden sind. Die Bedeutungsgerüste der Ziel-Kartei werden beim Importieren anhand der Bedeutungen in den zu importierenden Belegen zwar automatisch gefüllt; die Nummerierung der Bedeutungen wird danach von der der Quell-Kartei aber höchstwahrscheinlich abweichen.</p>
+
+						<p>Zur Verdeutlichung ein konstruiertes, aber konkretes Beispiel: Ein Beleg hat in der Quell-Kartei die Bedeutung <q class="bedeutung">Tier</q> in Bedeutungsgerüst 1 und <q class="bedeutung">Lebewesen</q> in Gerüst 2. Öffnen Sie das Einfügen-Fenster, finden Sie folgende Voreinstellung:</p>
+
+						<pre class="quelltext kein-hintergrund">Gerüst 1 &gt; Gerüst 1
+Gerüst 2 &gt; kein Import</pre>
+
+						<p>Klickte man jetzt auf <i>Einfügen</i>, würde <q class="bedeutung">Tier</q> importiert und Gerüst 1 in der Ziel-Kartei zugewiesen werden. Die Bedeutung <q class="bedeutung">Lebewesen</q> würde das Programm verwerfen, weil sie Gerüst 2 zugeordnet ist, das nicht importiert werden soll (denn es steht auf <i>kein Import</i>). Man kann diese Voreinstellung natürlich ändern in:</p>
+
+						<pre class="quelltext kein-hintergrund">Gerüst 1 &gt; Gerüst 1
+Gerüst 2 &gt; Gerüst 1</pre>
+
+						<p>Jetzt werden beide Bedeutungen des Belegs importiert und beide Gerüst 1 zugewiesen. Das Programm achtet darauf, dass in solchen Fällen keine Karteikarten mit doppelten Bedeutungen entstehen. Hätte der Beleg in beiden Bedeutungsgerüsten die Bedeutung <q class="bedeutung">Tier</q>, stünde die Bedeutung im importierten Beleg dennoch nur einmal.</p>
+
+						<p>Ferner ist wichtig zu verstehen, dass während des Einfügens <em>keine neuen</em> Bedeutungsgerüste erzeugt werden (können). Möchte man die in den Belegen zu findenden und über mehrere Bedeutungsgerüste verteilten Bedeutungen verschiedenen Gerüsten in der Ziel-Kartei zuweisen, müssen in dieser zunächst <a href="#bedeutungsgeruest-konfigurationsfenster">mehrere Gerüste erzeugt</a> werden. Dann kann man im Einfügen-Fenster vor dem Einfügen die entsprechenden Einstellungen vornehmen und die Bedeutungen werden den gewünschten Gerüsten zugewiesen. Dies könnte dann durchaus auch so aussehen, dass Sie die ursprüngliche Zuordnung umkehren:</p>
+
+						<pre class="quelltext kein-hintergrund">Gerüst 1 &gt; Gerüst 2
+Gerüst 2 &gt; Gerüst 1</pre>
+
+						<p>Es gibt keinen Algorithmus, der überprüft, ob ein zum Kopieren ausgewählter Beleg in der Ziel-Kartei bereits vorhanden ist oder nicht. Beim Einfügen kann es somit durchaus zur <b>Dopplung von Belegen</b> kommen. Sie müssen mithin selbst achtgeben, dass sich unter den einzufügenden Belegen keine finden, die in der Ziel-Kartei bereits vorhanden sind. Sollte es zu einer Dopplung kommen, wäre das natürlich kein Beinbruch: Man kann doppelte Belege jederzeit <a href="#belegliste-belegLoeschen">manuell löschen</a>.</p>
+
+						<p><b>Tipp</b>: Wenn Sie mit dieser Funktion zu einer bestehenden Kartei Belege hinzugefügt haben, möchten Sie diese vielleicht gesondert nachbearbeiten. Es kann sich natürlich schwierig gestalten, die neuen Belege in der Belegliste aufzuspüren, wenn die Kartei schon zuvor zahlreiche Belege umfasste. Denn in der Liste werden die neuen Belege in die Chronologie eingeordnet, müssen also nicht mehr unbedingt nebeneinander stehen. Da beim Einfügen eines Belegs in diesem immer das Erstellungs- und Änderungsdatum des Zeitpunkts der Einfügeoperation gespeichert wird, können Sie die gerade hinzugefügten Belege mit dem <a href="#filter-kartendatum">Filter <i>Kartendatum</i></a> leicht finden. Der Filter lässt sich minutengenau einstellen.</p>
+
+						<p id="menueBelege-einfuegenImportieren"><b><i>Importieren einer Belegsammlung</i></b></p>
+
+						<p>Das Importieren von Belegen aus einer <a href="#wgd-bwgd" class="link-dokumentation"><abbr title="Belege Wortgeschichte digital">BWGD</abbr></a>-Datei, in der sich eine zuvor <a href="#menueBelege-kopierenExportieren">exportierte Belegsammlung</a> findet, funktioniert im Grunde genauso wie das Einfügen von Belegen aus einem parallel geöffneten Karteifenster: Klicken Sie auf den Button <i>Import</i> mit dem Icon <img src="../img/dokument-import-48.svg" width="20" height="20" alt=""> und wählen Sie die <abbr title="Belege Wortgeschichte digital">BWGD</abbr>-Datei aus. Danach erscheint in der Liste mit <i>Belegquellen</i> als erstes der Punkt <i>Belegedatei</i> mit der Anzahl der in der Datei enthaltenen Belege. Der Punkt sollte bereits ausgewählt sein. Wählen Sie die Datenfelder aus, die Sie importieren möchten, konfigurieren Sie <abbr title="gegebenenfalls">ggf.</abbr> das Mapping der <a href="#bedeutungsgeruest">Bedeutungsgerüste</a> und drücken Sie auf den Button <i>Einfügen</i>. Das war’s: Die in der Belegedatei zu findenden Belege wurden alle importiert.</p>
 					</div>
 				</section>
 
@@ -2147,7 +2431,7 @@ Mustermann, Erika
 						<p>Ist das Fenster noch nicht geöffnet, wird der <a href="#einfuehrung"><abbr title="Abschnitt">Abschn.</abbr> Einführung</a> aufgeschlagen. Ist es bereits geöffnet, wird es einfach nur in den Vordergrund geholt.</p>
 					</div>
 
-					<p class="erklaerung-icon-menues"><img src="../img/kreis-leer.svg" width="24" height="24" alt="">Demonstrationskartei</p>
+					<p class="erklaerung-icon-menues" id="menueHilfe-demonstrationskartei"><img src="../img/kreis-leer.svg" width="24" height="24" alt="">Demonstrationskartei</p>
 
 					<div class="info">
 						<p>Lädt eine <a href="#" class="hilfe-demo">Demonstrationskartei</a>.</p>

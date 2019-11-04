@@ -223,6 +223,14 @@ let quick = {
 		} else {
 			bar.classList.remove("an");
 		}
+		// Icons in der Leiste von der Tab-Navigation ausschließen od. in sie einbeziehen
+		bar.querySelectorAll("a").forEach(a => {
+			if (optionen.data.einstellungen.quick) {
+				a.removeAttribute("tabindex");
+			} else {
+				a.setAttribute("tabindex", "-1");
+			}
+		});
 		// affizierte Elemente anpassen
 		document.querySelectorAll("body > header, body > section").forEach(i => {
 			if (optionen.data.einstellungen.quick) {

@@ -16,7 +16,7 @@ let fehlerlog = {
 			let p = document.createElement("p");
 			div.appendChild(p);
 			p.classList.add("keine");
-			if (fehlerlog.ei.count >= 10) {
+			if (fehlerlog.ei.count >= 5) {
 				p.classList.add("ei");
 			}
 			p.innerHTML = fehlerlog.eiText();
@@ -155,10 +155,10 @@ let fehlerlog = {
 	},
 	eiText () {
 		let ei = fehlerlog.ei;
-		if (ei.count - 10 >= ei.texte.length) {
+		if (ei.count - 5 >= ei.texte.length) {
 			return " ";
-		} else if (ei.count >= 10) {
-			return ei.texte[ei.count - 10];
+		} else if (ei.count >= 5) {
+			return ei.texte[ei.count - 5];
 		}
 		return "<i>keine Fehler</i>";
 	},

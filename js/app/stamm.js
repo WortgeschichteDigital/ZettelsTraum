@@ -130,6 +130,9 @@ let stamm = {
 		a.addEventListener("click", function(evt) {
 			evt.stopPropagation();
 			evt.preventDefault();
+			if (evt.detail > 1) { // Doppelklicks abfangen
+				return;
+			}
 			const url = `https://www.deutschestextarchiv.de/demo/cab/query?a=expand.eqlemma&fmt=text&clean=1&pretty=1&raw=1&q=${encodeURIComponent(this.dataset.wort)}`,
 				{shell} = require("electron");
 			shell.openExternal(url);

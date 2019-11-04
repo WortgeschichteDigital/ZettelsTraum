@@ -260,9 +260,9 @@ let optionen = {
 	// nach dem Laden müssen manche Optionen direkt angewendet werden
 	anwenden () {
 		// Quick-Access-Bar auffrischen
-		quick.toggle();
 		quick.fill();
 		quick.fillConfig();
+		quick.toggle();
 		// Tag-Dateien überprüfen => Anzeige auffrischen
 		optionen.anwendenTagsInit();
 		// Zeitfilter in der Filterleiste anpassen
@@ -307,9 +307,9 @@ let optionen = {
 	// die in einem anderen Hauptfenster geändert wurden
 	anwendenEmpfangen () {
 		// Quick-Access-Bar auffrischen
-		quick.toggle();
 		quick.fill();
 		quick.fillConfig();
+		quick.toggle();
 		// Liste der Tag-Dateien auffrischen
 		optionen.anwendenTags();
 		// Icons für die Detailanzeige immer sichtbar?

@@ -99,6 +99,12 @@ let initWin = {
 				document.getElementById("suchfeld").select();
 			});
 		});
+		document.querySelectorAll(".link-suchleiste").forEach(a => {
+			a.addEventListener("click", evt => {
+				evt.preventDefault();
+				suchleiste.f3(evt);
+			});
+		});
 	},
 	// Events initialisieren: Rechtsklickmenü
 	eventsPopup () {

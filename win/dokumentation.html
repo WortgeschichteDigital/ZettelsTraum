@@ -1103,13 +1103,13 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
 
 					<p><b>register:</b> Der (im Rahmen der allgemeinen <abbr title="Extensible Markup Language">XML</abbr>-Regeln) beliebig wählbare Name des Wurzelelements wird im <abbr title="user interface" lang="en">UI</abbr> des Programms genutzt, um die Tag-Kategorie anzuzeigen. Dabei wird der erste Buchstabe in eine Versalie umgewandelt.</p>
 
-					<p><b>item:</b> <i>verpflichtend.</i> Enthält die Angaben zu einem Tag.</p>
+					<p><b>item:</b> Container-Element für einen Tag.</p>
 
-					<p><b>id:</b> <i>verpflichtend.</i> Identifier des Tags. Ändert man den <code class="quelltext">&lt;name&gt;</code>-Tag kann die App über ihn erkennen, welcher Tag geändert wurde hat. In den Bedeutungsgerüstdaten werden ausschließlich Tag-Kategorie und Identifier gespeichert. Die Tag-Bezeichnung ist somit flexibel.</p>
+					<p><b>id:</b> <i>verpflichtend.</i> Identifier des Tags. Ändert man den <code class="quelltext">&lt;name&gt;</code>-Tag kann die App via <code class="quelltext">&lt;id&gt;</code> erkennen, welcher Tag geändert wurde. In den Bedeutungsgerüstdaten werden ausschließlich Tag-Kategorie (hier <i>register</i>) und Identifier gespeichert. Die Tag-Bezeichnung wird auf diese Weise flexibel anpassbar.</p>
 
-					<p><b>name:</b> <i>verpflichtend.</i> Der eigentliche Tag.</p>
+					<p><b>name:</b> <i>verpflichtend.</i> Der eigentliche Tag, ausgeschrieben.</p>
 
-					<p><b>abbr:</b> <i>fakultativ.</i> Abkürzung des Tags.</p>
+					<p><b>abbr:</b> <i>fakultativ.</i> Der eigentliche Tag, abgekürzt.</p>
 
 					<!-- Sperrdatei -->
 					<h2 id="verschiedenes-sperrdatei">Lockfile</h2>

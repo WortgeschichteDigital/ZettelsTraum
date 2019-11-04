@@ -158,7 +158,7 @@ let beleg = {
 		// Bewertung eintragen
 		beleg.bewertungAnzeigen();
 		// Anhänge auflisten
-		anhaenge.auflisten(document.getElementById("beleg-an"), true, "beleg|data|an");
+		anhaenge.auflisten(document.getElementById("beleg-an"), "beleg|data|an");
 		// Änderungsmarkierung ausblenden
 		beleg.belegGeaendert(false);
 		// Formular einblenden

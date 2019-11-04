@@ -241,6 +241,7 @@ let karteisuche = {
 	//     (der Pfad ist verschwunden)
 	markierungPfad (pfad, verschwunden) {
 		// betreffenden Span finden
+		pfad = pfad.replace(/\\/g, "\\\\"); // Backslash in Windows-Pfaden maskieren!
 		let span = document.querySelector(`#karteisuche-pfade [title="${pfad}"]`),
 			img = span.querySelector("img");
 		// Bild ggf. entfernen
@@ -390,27 +391,36 @@ let karteisuche = {
 		let cont = document.getElementById("karteisuche-karteien");
 		helfer.keineKinder(cont);
 		for (let wort of woerter) {
+			// Absatz
 			let p = document.createElement("p");
 			cont.appendChild(p);
+			// Link
+			let a = document.createElement("a");
+			p.appendChild(a);
+			a.href = "#";
 			let pfad = karteisuche.wgd[wort.i].pfad;
-			p.dataset.pfad = pfad;
-			karteisuche.wgdOeffnen(p);
+			a.dataset.pfad = pfad;
+			karteisuche.wgdOeffnen(a);
 			// Wort
 			let span = document.createElement("span");
-			p.appendChild(span);
+			a.appendChild(span);
 			span.textContent = wort.wort;
 			// Pfad
 			span = document.createElement("span");
-			p.appendChild(span);
+			a.appendChild(span);
 			span.textContent = pfad;
 			span.title = pfad;
 		}
 	},
 	// WGD-Datei in neuem Fenster öffnen
-	//   p = Element
-	//     (Absatz, der auf eine WGD-Datei verweist)
-	wgdOeffnen (p) {
-		p.addEventListener("click", function() {
+	//   a = Element
+	//     (Link, mit dem eine WGD-Datei geöffnet werden kann)
+	wgdOeffnen (a) {
+		a.addEventListener("click", function(evt) {
+			evt.preventDefault();
+			if (evt.detail > 1) { // Doppelklicks abfangen
+				return;
+			}
 			// die Kartei könnte bereits in diesem Fenster offen sein
 			if (kartei.pfad === this.dataset.pfad) {
 				return;

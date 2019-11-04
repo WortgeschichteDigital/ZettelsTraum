@@ -191,7 +191,7 @@ textarea#beleg-bs {
 }
 
 #beleg-an .anhaenge-item:hover {
-	background-color: #fff;
+	background-color: var(--hintergrund);
 }
 
 /* Text-Tools ----------------------------------- */

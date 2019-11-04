@@ -56,7 +56,7 @@
 					<li>
 						<p><i class="app-name"></i> läuft nun auch auf <i>macOS</i>.</p>
 
-						<p>Es gibt nur minimale Unterschiede zu den <i>Windows-</i> und <i>Linux</i>-Versionen, alle liegen darin begründet, dass das Menüsystem unter <i>macOS</i> anders funktioniert:</p>
+						<p>Es gibt nur minimale Unterschiede zu den <i>Windows-</i> und <i>Linux</i>-Versionen, die meisten liegen darin begründet, dass das Menüsystem unter <i>macOS</i> anders funktioniert:</p>
 
 						<p>1.) Den Menüpunkt <a href="#menueKartei-zuletztVerwendet" class="link-handbuch"><i>Kartei &gt; Zuletzt verwendet</i></a> gibt es unter <i>macOS</i> nicht. Um eine Liste der zuletzt verwendeten Karteien zu sehen, kann man ein <a href="#menueApp-neuesFenster" class="link-handbuch">neues, leeres Fenster</a> öffnen.</p>
 
@@ -94,7 +94,7 @@
 					<li>
 						<p>Für Entwickler: Die Installer-Scripts wurden reorganisiert, verbessert und erweitert.</p>
 
-						<p>Zum einen wurden die Scripts alle aus dem Wurzelverzeichnis der App in den Ordner <span class="datei">./installer/</span> geschoben, was die Dateistruktur deutlich überischtlicher macht. Die Installer-Scripts müssen zwar weiterhin, aus dem Wurzelverzeichnis heraus aufgerufen werden (ansonsten werden die Node-Module nicht gefunden), alle Installer-Resourcen befinden sich nun jedoch gebündelt in einem einzigen Verzeichnis.</p>
+						<p>Zum einen wurden die Scripts alle aus dem Wurzelverzeichnis der App in den Ordner <span class="datei">./installer/</span> geschoben, was die Dateistruktur deutlich überischtlicher macht. Die Installer-Scripts müssen zwar weiterhin aus dem Wurzelverzeichnis heraus aufgerufen werden (ansonsten werden die Node-Module nicht gefunden), alle Installer-Resourcen befinden sich nun jedoch gebündelt in einem einzigen Verzeichnis.</p>
 
 						<p>Zum anderen wird fortan beim Aufrufen des <code class="quelltext">fs</code>-Moduls in den Node-Scripts in allen Fällen auf <code class="quelltext">fsPromises</code>-Varianten zurückgegriffen. Dabei wurden <span class="fr">en passant</span> ein paar Fehler behoben.</p>
 
@@ -157,19 +157,23 @@
 
 					<li><span class="obacht">Sicherheit:</span> Auch in der <a href="#menueKartei-notizen" class="link-handbuch">Notizen-Funktion</a> wird das Einfügen von Text via <kbd>Strg</kbd> + <kbd>V</kbd> oder die Programmmenüs nun abgefangen. Der Text wird vor dem Einfügen radikal von allen <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>-Tags befreit, keine Formatierung bleibt erhalten, allein Absätze werden ermittelt und durch Leerzeilen voneinander getrennt. Unkontrollierte <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>-Formatierungen wären in diesem Textfeld ebenso bedenklich wie im Textfeld <i>Beleg</i> der Karteikarte (<abbr title="siehe oben">s. o.</abbr>).</li>
 
+					<li><a href="#menueKartei-anhaenge" class="link-handbuch">Anhänge</a>: Der Button zum Hinzufügen von Anhängen ist nun immer sichtbar; selbst dann, wenn die Anhängeliste sehr lang ist und nach unten gescrollt wurde. Außerdem ist er jetzt wirklich und nicht nur scheinbar zentriert.</li>
+
 					<li>
 						<p>An verschiedenen Stellen des Programms wurden Platzhaltertexte für leere Textfelder ergänzt, sodass nun alle Textfelder einen solchen Platzhalter haben sollten. Er erscheint, wenn in dem Feld noch keine Eingabe getätigt wurde. Die <a href="#karteikarte" class="link-handbuch">Karteikarte</a> wurde davon ausgenommen, um das Formular nicht noch unruhiger zu machen.</p>
 
 						<p>Als Nebeneffekt dieser Änderung konnte die erklärende Kopfzeile im <a href="#menueKartei-redaktion" class="link-handbuch">Redaktions-Fenster</a> entfernt werden. Die Platzhalter übernehmen ihre Funktion.</p>
 					</li>
 
-					<li><a href="#menueKartei-redaktion" class="link-handbuch">Redaktionsfenster</a>: Wurde für ein Redaktionsereignis keine Person registriert, wird nun nicht mehr ein <q>?</q>, sondern der ausgegraute, kursive Text <q>keine Person</q> gedruckt. Das ist nicht nur schicker, sondern auch konsistenter mit der <abbr title="User Interface" lang="en">UI</abbr> der anderen Programmteile.</li>
+					<li><a href="#menueKartei-redaktion" class="link-handbuch">Redaktion</a>: Wurde für ein Redaktionsereignis keine Person registriert, wird nun nicht mehr ein <q>?</q>, sondern der ausgegraute, kursive Text <q>keine Person</q> gedruckt. Das ist nicht nur schicker, sondern auch konsistenter mit der <abbr title="User Interface" lang="en">UI</abbr> der anderen Programmteile.</li>
 
-					<li><a href="#menueKartei-metadaten" class="link-handbuch">Metadatenfenster</a>: Die Person, die die Kartei zuletzt gespeichert hat, wird nun immer an den Anfang der Liste der BearbeterInnen gesetzt. Zuvor war es so, dass die Liste nicht angerührt wurde, wenn derjenige, der eine Kartei gespeichert hat, bereits in der Liste stand.</li>
+					<li><a href="#menueKartei-metadaten" class="link-handbuch">Metadaten</a>: Die Person, die die Kartei zuletzt gespeichert hat, wird nun immer an den Anfang der Liste der BearbeterInnen gesetzt. Zuvor war es so, dass die Liste nicht angerührt wurde, wenn derjenige, der eine Kartei gespeichert hat, bereits in der Liste stand.</li>
 
 					<li><a href="#bedeutungsgeruest" class="link-handbuch">Bedeutungsgerüst</a>: Die Toolbar, die erscheint, wenn man eine neue Bedeutung erstellen oder eine bestehende ändern möchte, hat nun ein Speichern-Icon: <img src="../img/speichern.svg" width="24" height="24" alt="">.</li>
 
 					<li>Bedeutungsgerüst: Wird eine Bedeutung via Drag-and-Drop verschoben, zeigt nun nicht nur die Markierungslinie, sondern auch der Maus-Cursor an, ob die Bedeutung an die aktuelle Stelle geschoben werden darf oder nicht.</li>
+
+					<li>Die <a href="#menueApp-neuesFenster" class="link-handbuch">Startansicht</a> wurde technisch so verändert, dass die einzelnen Elemente (Buttons und Karteienliste) bei einer Navigation mit <kbd>Tab</kbd> nun fokussiert werden. (Dabei wurde im Vorübergehen ein kleinerer visueller Fehler behoben.)</li>
 
 					<li>In den Erinnerungen, die im Kopf des Hauptfensters erscheinen, wenn eine Formalie übersehen wurde (Icon <img src="../img/kreis-ausrufezeichen.svg" width="24" height="24" alt="">), sind die Funktionen, in denen noch etwas nachgetragen werden sollte, nun verlinkt. Man kann sie also via Klick direkt aus dem Meldungsfenster öffnen.</li>
 
@@ -199,12 +203,12 @@
 
 					<li>Das Auf- und Zuklappen des Inhaltsverzeichnisses im Handbuch und der technischen Dokumentation wird nun animiert.</li>
 
-					<li><a href="#menueApp-karteisuche" class="link-handbuch">Karteisuche</a>: Der Sperrbildschirm, der anzeigt, dass eine Suche läuft, hat eine kleine Textanimation erhalten.</li>
+					<li><a href="#menueApp-karteisuche" class="link-handbuch">Karteisuche</a>: Die Karteienliste, die nach einer erfolgreichen Suche aufgebaut wird, wurde technisch so überarbeitet, dass die Listenelemente bei einer Navigation mit <kbd>Tab</kbd> fokussiert und dann via <kbd>⏎</kbd> geöffnet werden können. Außerdem hat der Sperrbildschirm, der anzeigt, dass eine Suche läuft, eine kleine Textanimation erhalten.</li>
 
 					<li>
 						<p>Das Öffnen der Programmfenster ist mit dem Anwachsen des Quellcodes immer langsamer geworden. Die Art und Weise, wie Programmfenster geöffnet werden, wurde darum neu geregelt. Sie öffnen sich zwar nun deutlich rascher, zeigen nach dem Aufruf aber zunächst eine Art Sperrbild, das verschwindet, sobald der Content verfügbar ist.</p>
 
-						<p>Diese Korrektur behebt zugleich ein unruhiges Flackern, das beim Öffnen des <a href="#" class="link-handbuch">Handbuchs</a> und der <a href="#" class="link-dokumentation">technischen Dokumentaiton</a> zu sehen war.</p>
+						<p>Diese Korrektur behebt zugleich ein unruhiges Flackern, das beim Öffnen des <a href="#" class="link-handbuch">Handbuchs</a> und der <a href="#" class="link-dokumentation">technischen Dokumentation</a> zu sehen war.</p>
 					</li>
 
 					<li>Hier im Changelog und in den Über-Fenstern gibt es nun auch ein kontextualisiertes Rechtsklickmenü, <abbr title="zum Beispiel">z. B.</abbr> zum Kopieren von Internet- und Mailadressen.</li>
@@ -229,7 +233,7 @@
 
 					<li>Für Entwickler: Zum Paketieren der App werden nun keine Kommandozeilenbefehle mehr genutzt, sondern ein moderneres Node-Script. <abbr title="Vergleiche">Vgl.</abbr> den <abbr title="Abschnitt">Abschn.</abbr> zum <a href="#framework-paketieren" class="link-dokumentation">Paketieren der App</a> in der <a href="#" class="link-dokumentation">technischen Dokumentation</a>.</li>
 
-					<li>Für Entwickler: Die Scripts zum nachträglichen Registrieren oder Deregistrieren des <abbr title="Wortgeschichte digital">WGD</abbr>-Dateityps unter <i>Linux</i> (<span class="datei">./resources/filetype/linux/[de]register.sh</span>) wurden verbessert: Sie sollten Sich nun aus allen Ordner heraus aufrufen lassen.</li>
+					<li>Für Entwickler: Die Scripts zum nachträglichen Registrieren oder Deregistrieren des <abbr title="Wortgeschichte digital">WGD</abbr>-Dateityps unter <i>Linux</i> (<span class="datei">./resources/filetype/linux/[de]register.sh</span>) wurden verbessert: Sie sollten Sich nun aus allen Ordnern heraus aufrufen lassen.</li>
 
 					<li><a href="#" class="ueber-electron"><i>Electron</i></a>-Update auf Version 7.0.1.</li>
 				</ul>
@@ -237,6 +241,8 @@
 				<h3>Behobene Fehler</h3>
 
 				<ul>
+					<li>Es gibt keine Funktion und keinen Befehl in der App, der einen Doppelklick erforderte. Da ein Doppelklick in der Liste zuletzt verwendeter Karteien der <a href="#menueApp-neuesFenster" class="link-handbuch">Startansicht</a> einen Fehler beim Anlegen der Sperrdatei hervorrufen konnte (unter <i>Windows</i>), werden Doppelklicks nun in gewissen Funktionen abgefangen. Das sind im Einzelnen: die erwähnte Liste zuletzt verwendeter Karteien, die Trefferliste in der <a href="#menueApp-karteisuche" class="link-handbuch">Karteisuche</a>, die <a href="#menueKartei-anhaenge" class="link-handbuch">Anhänge</a> (im Fenster, in der <a href="#karteikarte" class="link-handbuch">Karteikarte</a>, in Icon-Listen) und alle Internetlinks, egal in welcher Ansicht sie sich befinden.</li>
+
 					<li><a href="#belegliste-karteiwortHervorheben" class="link-handbuch">Annotierungsfunktion</a>: Wurden über die Belegliste Annotierungen vorgenommen, wurde das Änderungsdatum der betreffenden Karteikarte nicht angepasst.</li>
 
 					<li>Annotierungsfunktion: Nach der Suche mit der Suchleiste konnte die Annotierungsfunktion mitunter nicht mehr genutzt werden.</li>
@@ -287,6 +293,10 @@
 
 					<li>Notizen-Fenster: Waren bereits Notizen gespeichert und löschte man danach alle Eingaben im Textfeld, wurde die Notizen-Funktion trotz der nicht gespeicherten Änderungen umgehend geschlossen, wenn man den <i>Schließen</i>-Button oder <kbd>Esc</kbd> drückte. Die zuvor gespeicherten Notizen blieben also erhalten, obwohl sie aus dem Feld gelöscht worden waren. Tritt dieser Fall ein, fragt das Programm nun nach, ob die gespeicherten Notizen in der Kartei gelöscht werden sollen. Lehnt man das ab, wird das Fenster einfach nur geschlossen. Die Notizen bleiben erhalten.</li>
 
+					<li><a href="#menueKartei-anhaenge" class="link-handbuch">Anhänge</a>: Wurde die Liste der Anhänge einer Karteikarte im Anhängefenster manipuliert (Anhang löschen oder umsortieren) und war die betreffende Karteikarte gerade geöffnet, wurden die Änderungen des Anhänge-Fensters in der Karteikarte nicht übernommen – unter Umständen wurden sie sogar wieder überschrieben (falls Änderungen an der Karteikarte vorgenommen worden waren, die danach gespeichert wurden). In solchen Fällen werden Änderungen im Anhänge-Fenster nun umgehend in der geöffneten Karteikarte wirksam. Außerdem wird in der Karte eine Änderungsmarkierung gesetzt, damit sie nicht einfach geschlossen, sondern gespeichert wird. Andernfalls gingen die Änderungen unter Umständen erneut verloren.</li>
+
+					<li><a href="#menueKartei-metadaten" class="link-handbuch">Metdaten</a>: War beim Speichern der Kartei das Metadaten-Fenster geöffnet, wurde die Liste der BearbeiterInnen nicht aufgefrischt, wenn sie beim Speichern automatisch ergänzt wurde.</li>
+					
 					<li><a href="#menueBelege-kopieren" class="link-handbuch">Belege kopieren</a>: Beim Vormerken von Belegen zum Kopieren kam es in der Animation, die zeigt, dass ein Beleg in die Kopierliste geschoben wurde und wie viele Belege sich jetzt in der Liste befinden, mitunter zu einem unschönen Flackern.</li>
 
 					<li>
@@ -302,6 +312,8 @@
 					<li><a href="#einstellungen" class="link-handbuch">Einstellungen</a>: Das Datum des Abgleichs und Updates von <a href="#einstellungen-tagDateien" class="link-handbuch">Tag-Dateien</a> war nicht immer vollständig sichtbar. Von nun an wird ein kürzeres Datumsformat genutzt.</li>
 
 					<li>Einstellungen: Eigentlich sollte der Abgleich der mit dem Programm verknüpften Tag-Dateien nur einmal pro Programmsession durchgeführt werden. Tatsächlich geschah dies jedes Mal, wenn ein neues oder leeres Programmfenster geöffnet wurde. Fortan wird der Abgleich nur noch einmal pro Programmsession angestoßen.</li>
+
+					<li><a href="#einstellungen-quick" class="link-handbuch">Quick-Access-Bar</a>: Bei der Navigation durch die Elemente des Programms mit <kbd>Tab</kbd> wurden die Icons in der Quick-Access-Bar auch dann fokussiert, wenn die Leiste nicht sichtbar war.</li>
 
 					<li>Mitunter erschienen im Rechtsklickmenü die Befehle <i>Beleg hinzufügen</i> und <i>Belege auflisten</i>, obwohl gar keine Kartei geöffnet war. Betroffen waren die Meldungsfenster, die Karteisuche und der Einstellungendialog.</li>
 

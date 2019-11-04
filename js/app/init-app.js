@@ -241,6 +241,8 @@ window.addEventListener("load", async () => {
 		}
 	});
 	document.getElementById("notizen-feld").addEventListener("paste", evt => notizen.paste(evt));
+	// Anhänge (Fenster und Karteikartei)
+	document.querySelectorAll(".anhaenge-add input").forEach(i => anhaenge.add(i));
 	// Lexika-Fenster
 	document.querySelectorAll("#lexika input").forEach(i => {
 		if (i.type === "button") {

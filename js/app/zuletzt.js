@@ -17,24 +17,27 @@ let zuletzt = {
 		for (let i = 0, len = optionen.data.zuletzt.length; i < len; i++) {
 			let datei = optionen.data.zuletzt[i],
 				name = datei.match(/([^\/\\]+)\.[a-z]+$/)[1],
-				li = document.createElement("li");
-			li.classList.add("start-datei"); // dient zur Identifizierung für Rechtsklicks
-			li.dataset.datei = datei;
+				li = document.createElement("li"),
+				a = document.createElement("a");
+			a.href = "#";
+			a.classList.add("start-datei"); // dient zur Identifizierung für Rechtsklicks
+			a.dataset.datei = datei;
 			// Name und Link
 			let span = document.createElement("span");
 			span.href = "#";
 			span.textContent = name;
-			li.appendChild(span);
+			a.appendChild(span);
 			// Dateiname
 			span = document.createElement("span");
 			span.textContent = datei;
-			li.appendChild(span);
+			a.appendChild(span);
 			// Markierung, dass die Datei verschwunden ist
 			if (zuletzt.verschwunden.includes(datei)) {
-				li.appendChild(zuletzt.verschwundenImg());
+				a.appendChild(zuletzt.verschwundenImg());
 			}
 			// Listenpunkt einhängen
-			zuletzt.karteiOeffnen(li);
+			zuletzt.karteiOeffnen(a);
+			li.appendChild(a);
 			liste.appendChild(li);
 		}
 	},
@@ -53,6 +56,9 @@ let zuletzt = {
 	karteiOeffnen (a) {
 		a.addEventListener("click", function(evt) {
 			evt.preventDefault();
+			if (evt.detail > 1) { // Doppelklicks abfangen
+				return;
+			}
 			kartei.oeffnenEinlesen(this.dataset.datei);
 		});
 	},
@@ -88,7 +94,7 @@ let zuletzt = {
 	//     (Liste der Karteien, die nicht mehr gefunden wurden)
 	verschwundenUpdate (verschwunden) {
 		zuletzt.verschwunden = verschwunden;
-		document.querySelectorAll("#start-liste li").forEach(i => {
+		document.querySelectorAll("#start-liste a").forEach(i => {
 			let datei = i.dataset.datei;
 			if (verschwunden.includes(datei)) {
 				i.appendChild(zuletzt.verschwundenImg());

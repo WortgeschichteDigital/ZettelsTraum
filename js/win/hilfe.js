@@ -532,6 +532,7 @@ let hilfe = {
 			let span = document.createElement("span");
 			a.appendChild(span);
 			let text = e.treffer[i].text;
+			text = text.replace(/</g, "&lt;").replace(/>/g, "&gt;"); // für ursprünglich maskierte Code-Beispiele
 			if (e.regPhrase) {
 				text = text.replace(e.regPhrase, function(m) {
 					return `<mark class="suche">${m}</mark>`;

@@ -272,7 +272,7 @@ let suchleiste = {
 				ipcRenderer.send("ueber-electron");
 			});
 		});
-		// Demonstrationskartei öffnen (Handbuch)
+		// Demonstrationskartei öffnen (Dokumentation, Handbuch)
 		ele.querySelectorAll(".hilfe-demo").forEach(function(i) {
 			i.addEventListener("click", function(evt) {
 				evt.preventDefault();
@@ -280,7 +280,7 @@ let suchleiste = {
 				ipcRenderer.send("hilfe-demo");
 			});
 		});
-		// Handbuch und Dokumentation öffnen (Changelog, Dokumentation, Handbuch)
+		// Changelog, Dokumentation, Handbuch öffnen (Changelog, Dokumentation, Handbuch)
 		ele.querySelectorAll(".link-handbuch, .link-dokumentation").forEach(a => helferWin.oeffne(a));
 		// Changelog öffnen (Dokumentation und Handbuch)
 		ele.querySelectorAll(".link-changelog").forEach(a => helferWin.oeffneChangelog(a));
@@ -292,6 +292,19 @@ let suchleiste = {
 					/^#[a-z]/.test(a.getAttribute("href"))) {
 				hilfe.naviSprung(a);
 			}
+		});
+		// Links zu den Suchfunktionen (Handbuch)
+		ele.querySelectorAll(".link-suche").forEach(a => {
+			a.addEventListener("click", evt => {
+				evt.preventDefault();
+				document.getElementById("suchfeld").select();
+			});
+		});
+		ele.querySelectorAll(".link-suchleiste").forEach(a => {
+			a.addEventListener("click", evt => {
+				evt.preventDefault();
+				suchleiste.f3(evt);
+			});
 		});
 		// externe Links
 		ele.querySelectorAll(`a[href^="http"]`).forEach(a => helfer.externeLinks(a));

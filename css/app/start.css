@@ -7,12 +7,11 @@
 }
 
 /* Buttons -------------------------------------- */
-#start > span {
-	display: inline-block;
+#start input {
 	margin: 65px 25px 0 0;
 	border-radius: 3px;
 	padding: 2px 0 2px 40px;
-	width: 165px;
+	width: 205px;
 	background: var(--farbeB) url(../../img/dokument-plus-weiss-32.svg) no-repeat 4px center;
 	color: #fff;
 	font-size: 20px;
@@ -20,9 +19,13 @@
 	text-align: left;
 }
 
-#start > span + span {
+#start input + input {
 	margin-right: 0;
 	background-image: url(../../img/oeffnen-weiss-32.svg);
+}
+
+#start input:focus {
+	background-color: var(--farbe);
 }
 
 /* List der zuletzt verwendeten Karteien -------- */
@@ -43,26 +46,32 @@
 }
 
 #start-liste li {
-	position: relative;
 	border-bottom: 1px solid var(--linie);
+}
+
+#start-liste a {
+	position: relative;
+	display: block;
 	padding: 0 10px;
+	height: 40px;
 	overflow: hidden;
-	line-height: 36px;
+	line-height: 40px;
 	text-overflow: ellipsis;
 	white-space: nowrap;
 }
 
-#start-liste li:hover {
+#start-liste a:focus,
+#start-liste a:hover {
 	background-color: var(--hover);
 }
 
 #start-liste span:first-child {
-	color: var(--textFarbe);
 	font-size: 20px;
 }
 
 #start-liste span + span {
 	margin-left: 15px;
+	color: var(--text);
 	font-size: 12px;
 }
 

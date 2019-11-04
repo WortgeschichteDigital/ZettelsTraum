@@ -150,7 +150,7 @@ h2:first-child {
 }
 
 img {
-	vertical-align: text-bottom;
+	vertical-align: top;
 }
 
 img.klein {
@@ -198,6 +198,11 @@ pre.quelltext {
 	color: var(--text);
 }
 
+pre.kein-hintergrund {
+	padding: 0;
+	background-color: transparent;
+}
+
 q::before {
 	content: "„";
 }
@@ -235,6 +240,14 @@ section ol {
 
 section li {
 	margin-bottom: 10px;
+}
+
+section ul.senza-stile {
+	list-style-type: none;
+}
+
+section ul.senza-stile p:first-child {
+	text-indent: -30px;
 }
 
 /* Navigation ----------------------------------- */
@@ -664,4 +677,8 @@ h2 + .erklaerung-option {
 	margin-left: 40px;
 	font-size: 14px;
 	line-height: 20px;
+}
+
+.info .info p:not(:last-child) {
+	margin-bottom: 5px;
 }

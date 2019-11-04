@@ -304,7 +304,7 @@ p#quick-config-presets a {
 }
 
 #quick-config a:focus {
-	background-color: var(--highlight);
+	background-color: var(--hover);
 	text-decoration: none !important;
 }
 
@@ -632,32 +632,35 @@ p#quick-config-presets a {
 }
 
 #karteisuche-karteien {
-	max-height: 371px;
+	max-height: 361px;
 	overflow-x: hidden;
 }
 
 #karteisuche-karteien p {
 	margin: 0;
 	border-bottom: 1px solid var(--linie);
-	padding: 5px 10px;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	white-space: nowrap;
 }
 
 #karteisuche-karteien p:first-child {
 	border-top: 1px solid var(--linie);
 }
 
-#karteisuche-karteien p:hover {
-	background-color: var(--hintergrund);
+#karteisuche-karteien a {
+	display: block;
+	padding: 5px 10px;
+	height: 25px;
+	overflow: hidden;
+	line-height: 25px;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }
 
-#karteisuche-karteien p span {
-	color: var(--textFarbe);
+#karteisuche-karteien a:focus,
+#karteisuche-karteien a:hover {
+	background-color: var(--hover);
 }
 
-#karteisuche-karteien p span:last-child {
+#karteisuche-karteien span:last-child {
 	margin-left: 10px;
 	color: var(--text);
 	font-size: 12px;
@@ -902,7 +905,7 @@ p#quick-config-presets a {
 }
 
 #anhaenge-cont {
-	max-height: 385px;
+	max-height: 351px;
 	overflow-y: auto;
 }
 
@@ -918,14 +921,18 @@ p#quick-config-presets a {
 	text-align: center;
 }
 
+.anhaenge-add input {
+	margin-left: 0;
+}
+
 .anhaenge-item {
 	border-top: 1px solid var(--linie);
 	padding: 5px 10px;
 	height: 24px;
+	background-color: #fff;
 }
 
 .anhaenge-item:last-child {
-	margin-bottom: 5px;
 	border-bottom: 1px solid var(--linie);
 }
 
@@ -1534,7 +1541,7 @@ input[id^="redaktion-person"] {
 
 #drucken-cont mark.wort {
 	padding: 0;
-	background-color: var(--hintergrundDunkel);
+	background-color: var(--hover);
 	font-weight: bold;
 }
 
@@ -1671,7 +1678,7 @@ input[id^="redaktion-person"] {
 }
 
 #kopieren-einfuegen-daten p:not(.keine):hover {
-	background-color: var(--hintergrund);
+	background-color: var(--hover);
 }
 
 #kopieren-einfuegen-bedeutungen table {

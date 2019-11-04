@@ -141,29 +141,24 @@ let anhaenge = {
 		}
 		// Anhänge der Kartei auflisten
 		let cont = document.getElementById("anhaenge-cont");
-		await anhaenge.auflisten(cont, true, "data|an");
+		await anhaenge.auflisten(cont, "data|an");
 		// Anhänge der Belege auflisten
 		anhaenge.auflistenBelege(cont);
 	},
 	// Anhänge auflisten
 	//   cont = Element
 	//     (Container, in dem die Liste erzeugt werden soll)
-	//   add = Boolean
-	//     (Add-Button soll erzeugt werden, oder auch nicht)
 	//   obj = String
 	//     (verweist auf das Objekt, in dem die Anhänge gespeichert werden;
 	//     Werte durch Haarstrich getrennt)
-	auflisten (cont, add, obj) {
+	//   leeren = false || undefined
+	//     (der Content soll geleert werden)
+	auflisten (cont, obj, leeren = true) {
 		return new Promise(async resolve => {
 			// Content leeren
-			// (soll kein Button hinzugefügt werden, soll der Containert auch nicht geleert werden;
-			// das dürfte nur das Anhänge-Fenster betreffen; darum geht das so)
-			if (add) {
+			// (im Anhänge-Fenster darf dies nur beim kompletten Neuaufbau der Liste geschehen)
+			if (leeren) {
 				helfer.keineKinder(cont);
-			}
-			// ggf. Hinzufüge-Button einfügen
-			if (add) {
-				anhaenge.addButton(cont, obj);
 			}
 			// abbrechen, wenn keine Anhänge vorhanden sind
 			let arr = anhaenge.getArr(obj);
@@ -220,7 +215,7 @@ let anhaenge = {
 			resolve(true);
 		});
 	},
-	// Anhänge der Belege im Kartei-Fenster auflisten
+	// Anhänge der Belege im Anhänge-Fenster auflisten
 	async auflistenBelege (cont) {
 		for (let id in data.ka) {
 			if (!data.ka.hasOwnProperty(id)) {
@@ -236,14 +231,17 @@ let anhaenge = {
 			h3.dataset.id = id;
 			anhaenge.belegOeffnen(h3);
 			cont.appendChild(h3);
-			await anhaenge.auflisten(cont, false, `data|ka|${id}|an`);
+			await anhaenge.auflisten(cont, `data|ka|${id}|an`, false);
 		}
 	},
 	// Öffnet einen Anhang
 	//   item = Element
 	//     (der <div> oder <img>, auf den/das geklickt wurde)
 	oeffnenListener (item) {
-		item.addEventListener("click", function() {
+		item.addEventListener("click", function(evt) {
+			if (evt.detail > 1) { // Doppelklicks abfangen
+				return;
+			}
 			anhaenge.oeffnen(this.dataset.datei);
 		});
 	},
@@ -299,16 +297,23 @@ let anhaenge = {
 			arr.splice(idx - 1, 0, datei);
 			// Änderungsmarkierung
 			anhaenge.geaendert(cont);
-			// ggf. Änderungsdatum der Karteikarte auffrischen
+			// ggf. Änderungsdatum und Anhängeliste der Karteikarte auffrischen
 			if (/^data\|ka/.test(obj)) {
 				const id = obj.split("|")[2];
-				data.ka[id].dm = new Date().toISOString();
+				if (beleg.id_karte === parseInt(id, 10) &&
+						!document.getElementById("beleg").classList.contains("aus")) {
+					beleg.data.an = [...arr];
+					anhaenge.auflisten(document.getElementById("beleg-an"), "beleg|data|an");
+					beleg.belegGeaendert(true);
+				} else {
+					data.ka[id].dm = new Date().toISOString();
+				}
 			}
 			// Liste der Anhänge neu aufbauen
 			if (cont.dataset.anhaenge === "kartei") { // sonst erscheinen die Anhänge des Belegs an der Stelle, an der die Anhänge der Kartei sein sollten
 				obj = "data|an";
 			}
-			await anhaenge.auflisten(cont, true, obj);
+			await anhaenge.auflisten(cont, obj);
 			// ggf. Liste der Anhänge in den Belegen neu aufbauen
 			if (cont.dataset.anhaenge === "kartei") {
 				anhaenge.auflistenBelege(cont);
@@ -333,7 +338,7 @@ let anhaenge = {
 				arr = anhaenge.getArr(obj);
 			dialog.oeffnen({
 				typ: "confirm",
-				text: `Soll die folgende Datei wirklich aus der Liste entfernt werden?\n<p class="force-wrap">${datei}</p>`,
+				text: `Soll die folgende Datei wirklich aus der Liste entfernt werden?\n<p class="force-wrap">• ${datei}</p>`,
 				callback: async () => {
 					if (!dialog.antwort) {
 						return;
@@ -341,16 +346,23 @@ let anhaenge = {
 					arr.splice(arr.indexOf(datei), 1);
 					// Änderungsmarkierung
 					anhaenge.geaendert(cont);
-					// ggf. Änderungsdatum der Karteikarte auffrischen
+					// ggf. Änderungsdatum und Anhängeliste der Karteikarte auffrischen
 					if (/^data\|ka/.test(obj)) {
 						const id = obj.split("|")[2];
-						data.ka[id].dm = new Date().toISOString();
+						if (beleg.id_karte === parseInt(id, 10) &&
+								!document.getElementById("beleg").classList.contains("aus")) {
+							beleg.data.an = [...arr];
+							anhaenge.auflisten(document.getElementById("beleg-an"), "beleg|data|an");
+							beleg.belegGeaendert(true);
+						} else {
+							data.ka[id].dm = new Date().toISOString();
+						}
 					}
 					// Liste der Anhänge neu aufbauen
 					if (cont.dataset.anhaenge === "kartei") { // sonst erscheinen die Anhänge des Belegs an der Stelle, an der die Anhänge der Kartei sein sollten
 						obj = "data|an";
 					}
-					await anhaenge.auflisten(cont, true, obj);
+					await anhaenge.auflisten(cont, obj);
 					// ggf. Liste der Anhänge in den Belegen neu aufbauen
 					if (cont.dataset.anhaenge === "kartei") {
 						anhaenge.auflistenBelege(cont);
@@ -358,24 +370,6 @@ let anhaenge = {
 				},
 			});
 		});
-	},
-	// Add-Button erzeugen, der über einer Anhängeliste steht
-	//   cont = Element
-	//     (Container, an den der Button gehängt werden soll)
-	//   obj = String
-	//     (verweist auf das Objekt, in dem die Anhänge gespeichert werden sollen;
-	//     Werte durch Haarstrich getrennt)
-	addButton (cont, obj) {
-		let p = document.createElement("p");
-		p.classList.add("anhaenge-add");
-		let input = document.createElement("input");
-		input.dataset.obj = obj;
-		input.setAttribute("tabindex", "0");
-		input.type = "button";
-		input.value = "Ergänzen";
-		anhaenge.add(input);
-		p.appendChild(input);
-		cont.appendChild(p);
 	},
 	// Anhang hinzufügen
 	//   input = Element
@@ -420,7 +414,7 @@ let anhaenge = {
 			}
 			// Datei ausgewählt
 			const obj = this.dataset.obj;
-			let cont = this.parentNode.parentNode;
+			let cont = this.parentNode.parentNode.querySelector("div");
 			anhaenge.addFiles(result.filePaths, cont, obj);
 		});
 	},
@@ -441,7 +435,7 @@ let anhaenge = {
 		for (let i of dateien) {
 			const datei = i.replace(reg_pfad, "");
 			if (arr.includes(datei)) {
-				schon.push(`• ${datei}`);
+				schon.push(`• ${datei}`);
 				continue;
 			}
 			await anhaenge.scan(datei);
@@ -465,7 +459,7 @@ let anhaenge = {
 		// Änderungsmarkierung
 		anhaenge.geaendert(cont);
 		// Liste der Anhänge neu aufbauen
-		await anhaenge.auflisten(cont, true, obj);
+		await anhaenge.auflisten(cont, obj);
 		// ggf. Liste der Anhänge in den Belegen neu aufbauen
 		if (cont.dataset.anhaenge === "kartei") {
 			anhaenge.auflistenBelege(cont);
