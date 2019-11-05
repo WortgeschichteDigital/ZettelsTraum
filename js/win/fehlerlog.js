@@ -16,13 +16,13 @@ let fehlerlog = {
 			let p = document.createElement("p");
 			div.appendChild(p);
 			p.classList.add("keine");
-			if (fehlerlog.ei.count >= 5) {
-				p.classList.add("ei");
+			if (fehlerlog.uovo.count >= 5) {
+				p.classList.add("uovo");
 			}
-			p.innerHTML = fehlerlog.eiText();
+			p.innerHTML = fehlerlog.uovoTesto();
 			reload.classList.add("last");
 			copy.classList.add("aus");
-			if (fehlerlog.ei.count > 0) {
+			if (fehlerlog.uovo.count > 0) {
 				p.classList.add("updated");
 				p.addEventListener("animationend", function() {
 					this.classList.remove("updated");
@@ -108,8 +108,8 @@ let fehlerlog = {
 		let d = new Date(datum);
 		return `${wochentage[d.getDay()]}, ${d.getDate()}. ${monate[d.getMonth()]} ${d.getFullYear()}, ${d.getHours()}:${d.getMinutes() < 10 ? `0${d.getMinutes()}` : d.getMinutes()}:${d.getSeconds() < 10 ? `0${d.getSeconds()}` : d.getSeconds()} Uhr`;
 	},
-	// ein Ei
-	ei: {
+	// uovo di Pasqua
+	uovo: {
 		count: -1,
 		texte: [
 			"Nein, <i>keine Fehler.</i>",
@@ -153,20 +153,20 @@ let fehlerlog = {
 				Geht in Ordnung! Bin schon</q>`,
 		],
 	},
-	eiText () {
-		let ei = fehlerlog.ei;
-		if (ei.count - 5 >= ei.texte.length) {
+	uovoTesto () {
+		let uovo = fehlerlog.uovo;
+		if (uovo.count - 5 >= uovo.texte.length) {
 			return " ";
-		} else if (ei.count >= 5) {
-			return ei.texte[ei.count - 5];
+		} else if (uovo.count >= 5) {
+			return uovo.texte[uovo.count - 5];
 		}
 		return "<i>keine Fehler</i>";
 	},
 	async reload () {
 		const {ipcRenderer} = require("electron");
 		let fehler = await ipcRenderer.invoke("fehler-senden");
-		// Ei
-		fehlerlog.ei.count = fehler.length ? -1 : fehlerlog.ei.count + 1;
+		// uovo di Pasqua
+		fehlerlog.uovo.count = fehler.length ? -1 : fehlerlog.uovo.count + 1;
 		// Anzeige auffrischen
 		fehlerlog.fuellen(fehler);
 	},

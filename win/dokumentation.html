@@ -20,6 +20,9 @@
 		<script src="../js/win/popup.js"></script>
 	</head>
 	<body>
+		<!-- FENSTERLADEN -->
+		<div id="fensterladen"><img src="../img/icon-app-weiss-48.svg" width="96" height="96" alt=""></div>
+
 		<!-- KOPF -->
 		<header>
 			<h1>Technische Dokumentation</h1
@@ -587,7 +590,7 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
 
 					<p>Alle Dateien sind gleich aufgebaut (<span class="obacht">Datenformat Version 9</span>):</p>
 
-					<table>
+					<table class="wgd">
 						<tr>
 							<th>Schlüssel</th>
 							<th>Datentyp</th>
@@ -985,7 +988,7 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
 
 					<p>Für die Kopierfunktionen (<i>Belege &gt; Kopieren</i> und <i>Belege &gt; Einfügen</i>) gibt es für den Import <abbr title="beziehungsweise">bzw.</abbr> Export von Beleglisten ein eigenes Austauschformat. Der Inhalt dieser <abbr title="Belege Wortgeschichte digital">BWGD</abbr>-Dateien ist ebenfalls im <abbr title="JavaScript Object Notation">JSON</abbr>-Format. Ihr Aufbau (<span class="obacht">Datenformat Version 1</span>):</p>
 
-					<table>
+					<table class="wgd">
 						<tr>
 							<th>Schlüssel</th>
 							<th>Datentyp</th>
@@ -1131,8 +1134,5 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
 				</section>
 			</div>
 		</main>
-
-		<!-- FENSTERLADEN -->
-		<div id="fensterladen"><img src="../img/icon-app-weiss-48.svg" width="96" height="96" alt=""></div>
 	</body>
 </html>

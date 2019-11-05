@@ -53,6 +53,8 @@ let notizen = {
 		notizen.notizenGeaendert(false);
 		kartei.karteiGeaendert(true);
 		direktSchliessen();
+		// Notizen-Icon updaten
+		notizen.icon();
 		// ggf. Notizen in der Filterleiste updaten
 		notizen.filterleiste();
 		// erfolgreich gespeichert
@@ -135,6 +137,7 @@ let notizen = {
 		// Löschfunktion
 		function loesche () {
 			data.no = "";
+			notizen.icon();
 			notizen.filterleisteEntfernen();
 			kartei.karteiGeaendert(true);
 			notizen.schliessen();
@@ -161,7 +164,6 @@ let notizen = {
 	// Funktionen, die beim Schließen aufgerufen werden sollten
 	schliessen () {
 		notizen.notizenGeaendert(false);
-		notizen.icon();
 		overlay.ausblenden(document.getElementById("notizen"));
 	},
 	// überprüft, ob überhaupt Notizen vorhanden sind

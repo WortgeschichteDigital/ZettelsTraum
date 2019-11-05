@@ -599,7 +599,7 @@ appMenu = {
 	//   id = Number
 	//     (ID des Fensters)
 	erzeugen (id) {
-		appMenu.ei();
+		appMenu.uovo();
 		let menu = Menu.buildFromTemplate(layoutMenu);
 		BrowserWindow.fromId(id).setMenu(menu);
 	},
@@ -618,7 +618,7 @@ appMenu = {
 	},
 	// erzeugt die Menüleiste in macOS
 	erzeugenMac (vorlage) {
-		appMenu.ei();
+		appMenu.uovo();
 		let menu = Menu.buildFromTemplate(vorlage);
 		Menu.setApplicationMenu(menu);
 	},
@@ -654,20 +654,15 @@ appMenu = {
 			w.webContents.send(befehl);
 		}
 	},
-	// ein Ei
-	ei () {
+	// uovo di Pasqua
+	uovo () {
 		let l = "Beenden",
-			d = new Date();
-		if (d.getHours() >= 23 || d.getHours() < 6) {
+			h = new Date().getHours();
+		if (h >= 23 || h < 6) {
 			l = "Ausgeträumt";
 		}
-		let s = layoutMenu[0].submenu;
-		for (let i = 0, len = s.length; i < len; i++) {
-			if (s[i].id === "app-beenden") {
-				s[i].label = l;
-				break;
-			}
-		}
+		let m = layoutMenu[0].submenu.find(i => i.id === "app-beenden");
+		m.label = l;
 	},
 };
 
@@ -962,15 +957,8 @@ fenster = {
 		bw.webContents.once("did-finish-load", function() {
 			// ggf. Abschnitt öffnen
 			if (abschnitt) {
-				let timeout = 25;
-				if (process.platform === "darwin") {
-					// macOS lahmt offenbar ein wenig mit dem Aufbau des Fensters;
-					// gibt es kein Timeout, springt er niemals zum Abschnitt;
-					// Timeout muss ziemlich hoch sein
-					timeout = 500;
-				}
 				// die IPC-Listener im Renderer-Prozess müssen erst initialisiert werden
-				setTimeout(() => this.send("oeffne-abschnitt", abschnitt), timeout);
+				setTimeout(() => this.send("oeffne-abschnitt", abschnitt), 25);
 			}
 			// ggf. Daten an das Bedeutungsgerüst schicken
 			if (bdCaller) {

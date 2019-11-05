@@ -379,43 +379,43 @@ table {
 	border-spacing: 0;
 }
 
-th,
-td {
+.wgd th,
+.wgd td {
 	padding: 5px 10px;
 	vertical-align: top;
 	text-align: left;
 }
 
-th:first-child,
-td:first-child {
+.wgd th:first-child,
+.wgd td:first-child {
 	padding-left: 0;
 }
 
-th:last-child,
-td:last-child {
+.wgd th:last-child,
+.wgd td:last-child {
 	padding-right: 0;
 }
 
-td:nth-child(3),
-td:last-child {
+.wgd td:nth-child(3),
+.wgd td:last-child {
 	font-size: 14px;
 	line-height: 20px;
 }
 
-td:nth-child(3) {
+.wgd td:nth-child(3) {
 	white-space: nowrap;
 }
 
-th {
+.wgd th {
 	font-style: italic;
 	font-weight: normal;
 }
 
-td[colspan] {
+.wgd td[colspan] {
 	font-style: italic;
 }
 
-td[colspan] code {
+.wgd td[colspan] code {
 	font-style: normal;
 }
 
@@ -469,6 +469,41 @@ tr.wgd-alt td code {
 
 tr.wgd-alt td p {
 	border-color: var(--textExtremHell);
+}
+
+.tastatur td {
+	padding: 5px;
+	border-top: 1px solid var(--linie);
+}
+
+.tastatur tr:last-child td {
+	border-bottom: 1px solid var(--linie);
+}
+
+.tastatur td:nth-child(2n) {
+	padding: 5px 0;
+}
+
+.tastatur td:nth-child(7) {
+	white-space: nowrap;
+}
+
+.tastatur td:last-child {
+	padding: 5px;
+}
+
+.tastatur td p {
+	margin-bottom: 5px;
+	padding-left: 25px;
+	text-indent: -25px;
+}
+
+.tastatur td p:last-child {
+	margin-bottom: 0;
+}
+
+.tastatur tr:hover td {
+	background-color: var(--hover);
 }
 
 /* Suche ---------------------------------------- */

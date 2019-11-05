@@ -20,6 +20,9 @@
 		<script src="../js/win/popup.js"></script>
 	</head>
 	<body>
+		<!-- FENSTERLADEN -->
+		<div id="fensterladen"><img src="../img/icon-app-weiss-48.svg" width="96" height="96" alt=""></div>
+
 		<!-- KOPF -->
 		<header>
 			<h1>Handbuch</h1
@@ -169,12 +172,30 @@
 
 					<p><i class="app-name"></i> kennt drei verschiedene Typen von Programmfenstern:</p>
 
+					
+					<div class="bilder">
+						<figure title="zum Vergrößern anklicken">
+							<img src="../img/win/hb-kurzanleitung-hauptfenster.png" alt="">
+							<figcaption>Hauptfenster: nach dem ersten Start der App</figcaption>
+						</figure>
+
+						<figure title="zum Vergrößern anklicken">
+							<img src="../img/win/hb-bedeutungsgeruest-fenster.png" alt="">
+							<figcaption>Nebenfenster: das Bedeutungsgerüst-Fenster</figcaption>
+						</figure>
+
+						<figure title="zum Vergrößern anklicken">
+							<img src="../img/win/hb-kurzanleitung-dialogfenster.png" alt="">
+							<figcaption>Dialogfenster: Eingabeaufforderung für ein Karteiwort</figcaption>
+						</figure>
+					</div>
+
 					<ul class="senza-stile">
 						<li>
 							<p id="kurzanleitung-programmfensterHauptfenster"><b>1. Hautpfenster:</b> Erscheint nach dem Start des Programms; hier können <a href="#menueKartei-oeffnen">Karteien geöffnet</a> und bearbeitet werden; man kann mit beliebig vielen Hauptfenstern <a href="#menueApp-neuesFenster">parallel arbeiten</a>.</p>
 						</li>
 
-						<li>
+						<li id="kurzanleitung-programmfensterNebenfenster">
 							<p><b>2 a. Nebenfenster:</b> Programmfenster, in denen keine Karteien geöffnet werden können; sie haben fast ausschließlich informativen Charakter; dazu zählen: dieses Handbuch, die <a href="#" class="link-dokumentation">technische Dokumentation</a>, der <a href="#" class="link-changelog">Changelog</a>, der <a href="#" class="link-fehlerlog">Fehlerlog</a> sowie <a href="#" class="ueber-app">Über <span class="app-name"></span></a> und <a href="#" class="ueber-electron">Über Electron</a></p>
 
 							<p>Alle diese Nebenfenster werden vom Betriebssystem erkannt und verwaltet, genauso wie die Hauptfenster: Jedes hat eine Fensterleiste mit Buttons zum Schließen, Maximieren <abbr title="und so weiter">usw.</abbr> Alle können über den Punkt <i>Hilfe</i> in der Menüleiste aufgerufen werden, jedoch keines doppelt. Im Unterschied zu den Hauptfenstern haben sie keine <a href="#kurzanleitung-menueleiste">Menüleiste</a> (unter <i>macOS</i> existiert eine extrem reduzierte Menüleiste).</p>
@@ -235,21 +256,58 @@
 
 					<h2 id="kurzanleitung-hauptfunktionen">Hauptfunktionen</h2>
 
-					<p><i class="app-name"></i> hat gegenwärtig drei Hauptfunktionen. Sie werden alle im <a href="#kurzanleitung-programmfensterHauptfenster">Hauptfenster</a> aufgerufen und ausgeführt. Zu jeder dieser Funktionen gibt es ausführliche Erläuterungen hier im Handbuch. An dieser Stelle sollen die zentralen Aufgaben und Operationsweisen der Funktionen in Spiegelstrichlisten kurz angerissen werden.</p>
+					<p><i class="app-name"></i> hat gegenwärtig drei Hauptfunktionen. Sie werden alle im <a href="#kurzanleitung-programmfensterHauptfenster">Hauptfenster</a> aufgerufen und ausgeführt. Zu jeder dieser Funktionen gibt es ausführliche Erläuterungen hier im Handbuch. An dieser Stelle sollen die zentralen Aufgaben und Operationsweisen der Funktionen kurz angerissen werden.</p>
 
 					<p><b><i>Karteikarte</i></b> <img src="../img/pfeil-gerade-rechts.svg" width="24" height="24" alt=""> <a href="#karteikarte">Handbuch-Kapitel</a></p>
 
+					<figure class="right" title="zum Vergrößern anklicken">
+						<img src="../img/win/hb-start-karteikarte.png" alt="">
+						<figcaption>leere Karteikarte in der Formularansicht</figcaption>
+					</figure>
+
 					<ul>
-						<li>…</li>
+						<li>Eine neue Karteikarte kann man mit <kbd>Strg</kbd> + <kbd>N</kbd> oder über den Menüpunkt <a href="#menueBelege-hinzufügen"><i>Belege &gt; Hinzufügen</i></a> erstellen.</li>
+
+						<li>Neue und somit leere Karteikarten werden immer in der <a href="#karteikarte-formularansicht">Formularansicht</a> geöffnet. Karteikarten haben darüber hinaus eine <a href="karteikarte-leseansicht">Leseansicht</a>. Zwischen den Ansichten wechselt man mit dem Icon <img src="../img/auge.svg" width="24" height="24" alt="">, das man in der <a href="#karteikarte-kopfleiste">Kopfleiste der Karteikarte</a> findet.</li>
+
+						<li>Öffnet man eine bestehende Karteikarte aus der <a href="#belegliste">Belegliste</a> heraus, <abbr title="zum Beispiel">z. B.</abbr> indem man auf das Icon <img src="../img/karteikarte.svg" width="24" height="24" alt=""> in der <a href="#belegliste-kopfleisteBelege">Vorschauleiste eines Belegs</a> klickt, sieht man standardmäßig die Leseansicht. Dies kann man ändern, sodass man <a href="#einstellungen-karteikarteLeseansicht">immer direkt die Formularansicht</a> zu sehen bekommt.</li>
+
+						<li>Beim Ausfüllen einer Karteikarte dürfen die Pflichtfelder <i>Datum, Beleg</i> und <i>Quelle</i> niemals leer sein. Ansonsten weigert sich die App, die Karte zu speichern.</li>
+
+						<li>Im Datenfeld <i>Datum</i> muss an irgendeiner Stelle entweder eine vierstellige Jahreszahl (also <abbr title="zum Beispiel">z. B.</abbr> <q>1789</q>) oder zumindest eine Jahrhundertangabe (also <abbr title="zum Beispiel">z. B.</abbr> <q>18. Jh.</q>) stehen. Zusätzlich darf in dem Feld beliebiger weiterer Text eingetragen werden.</li>
+
+						<li>Je mehr Felder in den Karteikarten gefüllt sind, umso mehr <a href="#filter">Filter</a> stehen Ihnen zum späteren Filtern der Belege zur Verfügung. Denn die Filter werden dynamisch daran ausgerichtet, was sich in einem Karteikasten für Karteikarten befinden, und daran, wie diese Karteikarten ausgefüllt wurden.</li>
+
+						<li>Sie können die Textfelder der Karteikarte mit beliebigem Text füllen – im Prinzip. Von der <a href="#karteikarte-datum">Anforderung des Datenfelds <i>Datum</i></a> war bereits die Rede. Darüber hinaus ist es so, dass in den Datenfeldern <i>Beleg</i> und <i>Bedeutung</i> Spitzklammern problematisch sind. <a href="#karteikarte-maskieren">Spitzklammern müssen dort maskiert</a> werden.</li>
+
+						<li>In einer leeren Karteikarte sind alle Datenfelder einzeilig. In leeren Datenfeldern mit dem Hintergrund-Icon <img src="../img/zeilen-2,5.svg" width="24" height="24" alt=""> kann jedoch mehr als eine Textzeile stehen. Die Felder passen ihre Größe automatisch an: Je mehr Text Sie eingeben, umso höher werden sie.</li>
+
+						<li>Zeilenumbrüche können eine besondere Bedeutung haben. In den Feldern <i>Bedeutung, Wortbildung, Synonym</i> und <i>Textsorte</i> dienen sie als Trennzeichen für einzelne Bedeutungen, Wortbildungen, Synoyme und Textsorten.</li>
+
+						<li>In den Feldern, in denen Zeilenumbrüche eine besondere Bedeutung haben und nicht einfach nur einen neuen Absatz markieren, gibt es ein weiteres Trennzeichen <code class="quelltext">: </code> (Doppelpunkt, gefolgt von einem Leerzeichen). Mit ihm wird eine neue Ebene geöffnet, also <abbr title="zum Beispiel">z. B.</abbr> der Beginn einer Unterbedeutung angezeigt. Dieses Trennzeichen funktioniert auch in dem einzeiligen Textfeld <i>Korpus</i>.</li>
+
+						<li>Die Texteingabe in den Feldern <i>Beleg, Quelle</i> und <i>Notizen</i> können Sie sich ruhig übersichtlicher gestalten, indem Sie zwischen Absätzen eine Leerzeile einfügen. Bei der Darstellung des Textes (<abbr title="zum Beispiel">z. B.</abbr> in der <a href="#belegliste">Belegliste</a>) wird das Programm dies erkennen und den Text korrekt in Absätze gliedern, ohne dass überflüssige Leerzeilen angezeigt werden.</li>
+
+						<li>Fußt ihre Belegsammlung auf Texten aus dem <a href="http://www.deutschestextarchiv.de/"><i>Deutschen Textarchiv</i></a>, können Karteikarten halbautomatisch gefüllt werden. Geben Sie dazu in das Textfeld <a href="#dtaImport">DTA-Import</a> eine <abbr title="Uniform Resource Locator" lang="en">URL</abbr> aus dem <abbr title="Deutschen Textarchiv">DTA</abbr> ein und klicken Sie auf den Button <i>Importieren</i>.</li>
 					</ul>
 
 					<p><b><i>Bedeutungsgerüst</i></b> <img src="../img/pfeil-gerade-rechts.svg" width="24" height="24" alt=""> <a href="#bedeutungsgeruest">Handbuch-Kapitel</a></p>
 
+					<figure class="right" title="zum Vergrößern anklicken">
+						<img src="../img/win/hb-kurzanleitung-bedeutungsgeruest.png" alt="">
+						<figcaption>Bedeutungsgerüst mit einer markierten Bedeutung</figcaption>
+					</figure>
+
 					<ul>
-						<li>…</li>
+						<li><mark>…</mark></li>
 					</ul>
 
 					<p><b><i>Belegliste</i></b> <img src="../img/pfeil-gerade-rechts.svg" width="24" height="24" alt=""> <a href="#belegliste">Handbuch-Kapitel</a></p>
+
+					<figure class="right" title="zum Vergrößern anklicken">
+						<img src="../img/win/hb-start-belegliste.png" alt="">
+						<figcaption>eine Belegliste</figcaption>
+					</figure>
 
 					<ul>
 						<li>Die Belegliste ist die Standardansicht, zu der nach dem Schließen aller anderen Funktionen und Dialoge immer wieder zurückgekehrt wird.</li>
@@ -1762,21 +1820,282 @@ Mustermann, Erika
 
 				<!-- TASTATURKÜRZEL -->
 				<section id="sektion-tastaturkuerzel" class="suche aus">
-					<p><mark>Einleitendes: viele Kürzel, alle Programmteile; Grundsätzlich: im Maschinenraum der App arbeitet ein Internet-Browser => manches funktioniert wie in einem Browser z.B. das Wandern via Tab oder das Drücken von Enter auf einem fokussierten Element</mark></p>
+					<p>Viele Funktionen von <i class="app-name"></i> lassen sich mit Tastaturkürzeln aufrufen, viele Operationen in diesen Funktionen wiederum lassen sich mit Tastaturkürzeln ausführen. Kurzum: Es gibt zahlreiche Kürzel, die über das gesamte Programm verstreut sind. In diesem Kapitel werden sie <em>alle</em> aufgelistet.</p>
 
-					<h2 id="tastaturkuerzel-alle">Alle Shortcuts</h2>
+					<p>Die <a href="#karteikarte">Karteikarte</a>, das <a href="#bedeutungsgeruest">Bedeutungsgerüst</a> und die <a href="#belegliste-suchleiste">Suchleiste</a> sind in besonderer Weise darauf ausgelegt mit der Tastatur bedient zu werden. Darum werden die Tastaturkürzel in ihnen noch einmal in eigenen Abschnitten weiter unten aufgeführt.</p>
 
-					<p><mark>…</mark></p>
+					<p>Läuft die App bei Ihnen gerade unter <b><i>macOS</i></b>, werden Sie an vielen Stellen das Command-Symbol <kbd>⌘</kbd> sehen. Die Anpassung des Handbuchs und aller anderen Programmteile, in denen Tastaturkürzel stehen, erfolgt automatisch. Das ist nicht weiter schwer, denn die mit <kbd>⌘</kbd> + Trigger beschriebenen Aufrufe funktionieren unter <i>Linux</i> und <i>Windows</i> immer mit <kbd class="nochange">Strg</kbd> + Trigger. Da die Anpassung für <i>macOS</i> technisch durch ein Mapping von <kbd>⌘</kbd> auf <kbd class="nochange">Strg</kbd> umgesetzt wurde, können Sie unter <i>macOS</i> in den meisten Fällen sowohl <kbd>⌘</kbd> + Trigger als auch <kbd>Ctrl</kbd> + Trigger drücken – mit demselben Effekt. Dies gilt für alle Tastaturkürzel, außer für die in der Menüleiste. Diese lassen sich wirklich nur mit <kbd>⌘</kbd> + Trigger aufrufen.</p>
 
-					<p><mark>Tab, Enter nicht vergessen</mark></p>
+					<p>Noch etwas Grundsätzliches: Im Maschinenraum der App arbeiten mehrere Dienstleister kollegial zusammen, darunter ein <b>Internetbrowser</b>, der sich unermüdlich darum kümmert, dass die Programmoberfläche so aussieht, wie sie aussieht, und so funktioniert, wie sie funktioniert. Manche Bedienkonzepte, <abbr title="zum Beispiel">z. B.</abbr> die Navigation durch einzelne Elemente mit <kbd>Tab</kbd> und das Auslösen der Funktion hinter dem aktiven Element mit <kbd>⏎</kbd> funktionieren darum genauso, als befände man sich in einem Browser.</p>
 
-					<p><mark>Alt + Menü-Shortcut nicht vergessen</mark></p>
+					<h2 id="tastaturkuerzel-alle">Alle Kürzel</h2>
 
-					<p><mark>macOS: Wiederherstellen ist wie unter Linux Umsch + Command + Z</mark></p>
+					<p><mark>Tab nicht vergessen</mark></p>
 
-					<p><mark>macOS: Vollbild = Ctrl + Command + F</mark></p>
-
-					<p><mark>Anmerken, dass unter macOS die Beschreibung der Tastaturkürzel überall automatisch angepasst wird (in &lt;kbd&gt; und title="")</mark></p>
+					<table class="tastatur"><tr>
+						<td> </td><td> </td>
+						<td><kbd>Strg</kbd></td><td>+</td>
+						<td> </td><td> </td>
+						<td><kbd>+</kbd></td>
+						<td>
+							<p><i>Linux/Windows</i>: <a href="#menueAnsicht-anzeigeVergroessern">Anzeige vergrößern</a></td>
+					</tr><tr>
+						<td> </td><td> </td>
+						<td><kbd>Strg</kbd></td><td>+</td>
+						<td> </td><td> </td>
+						<td><kbd>-</kbd></td>
+						<td>
+							<p><a href="#menueAnsicht-anzeigeVerkleinern">Anzeige verkleinern</a></p>
+						</td>
+					</tr><tr>
+						<td> </td><td> </td>
+						<td><kbd>⌘</kbd></td><td>+</td>
+						<td> </td><td> </td>
+						<td><kbd>=</kbd></td>
+						<td>
+							<p><i>macOS</i>: <a href="#menueAnsicht-anzeigeVergroessern">Anzeige vergrößern</a></p>
+						</td>
+					</tr><tr>
+						<td> </td><td> </td>
+						<td> </td><td> </td>
+						<td> </td><td> </td>
+						<td><kbd>F1</kbd></td>
+						<td>
+							<p>Handbuch öffnen</td>
+					</tr><tr>
+						<td> </td><td> </td>
+						<td> </td><td> </td>
+						<td> </td><td> </td>
+						<td><kbd>F11</kbd></td>
+						<td>
+							<p><i>Linux/Windows</i>: in den <a href="#menueAnsicht-vollbild">Vollbild-Modus</a> wechseln</p>
+						</td>
+					</tr><tr>
+						<td> </td><td> </td>
+						<td><kbd>Strg</kbd></td><td>+</td>
+						<td> </td><td> </td>
+						<td><kbd>0</kbd></td>
+						<td>
+							<p><a href="#menueAnsicht-standardgroesse">Standardgröße</a> wiederherstellen</p>
+						</td>
+					</tr><tr>
+						<td> </td><td> </td>
+						<td><kbd>Strg</kbd></td><td>+</td>
+						<td> </td><td> </td>
+						<td><kbd>1–9</kbd></td>
+						<td>
+							<p><i>Linux/Windows</i>: <a href="#menueKartei-zuletztVerwendet">zuletzt verwendete Kartei</a> <abbr title="Nummer">Nr.</abbr> n öffnen</p>
+						</td>
+					</tr><tr>
+						<td><kbd>Alt</kbd></td><td>+</td>
+						<td> </td><td> </td>
+						<td> </td><td> </td>
+						<td><kbd>A</kbd></td>
+						<td>
+							<p><i>Linux/Windows</i>: <a href="#menueAnsicht">Menüpunkt <i>Ansicht</i></a> aufklappen</p>
+						</td>
+					</tr><tr>
+						<td> </td><td> </td>
+						<td><kbd>Strg</kbd></td><td>+</td>
+						<td> </td><td> </td>
+						<td><kbd>A</kbd></td>
+						<td>
+							<p><a href="#menueBearbeiten-allesAuswaehlen">alles auswählen</a></p>
+						</td>
+					</tr><tr>
+						<td><kbd>Alt</kbd></td><td>+</td>
+						<td> </td><td> </td>
+						<td> </td><td> </td>
+						<td><kbd>B</kbd></td>
+						<td>
+							<p><i>Linux/Windows</i>: <a href="#menueBelege">Menüpunkt <i>Belege</i></a> aufklappen</p>
+						</td>
+					</tr><tr>
+						<td> </td><td> </td>
+						<td><kbd>Strg</kbd></td><td>+</td>
+						<td> </td><td> </td>
+						<td><kbd>B</kbd></td>
+						<td>
+							<p><a href="#bedeutungsgeruest">Bedeutungsgerüst-Funktion</a> öffnen</p>
+						</td>
+					</tr><tr>
+						<td><kbd>Alt</kbd></td><td>+</td>
+						<td><kbd>Strg</kbd></td><td>+</td>
+						<td> </td><td> </td>
+						<td><kbd>B</kbd></td>
+						<td>
+							<p><a href="#menueKartei-bedeutungsgeruestWechseln">Bedeutungsgerüst wechseln</a></p>
+						</td>
+					</tr><tr>
+						<td> </td><td> </td>
+						<td><kbd>Strg</kbd></td><td>+</td>
+						<td><kbd>Umsch</kbd></td><td>+</td>
+						<td><kbd>B</kbd></td>
+						<td>
+							<p><a href="#bedeutungsgeruest-fenster">Bedeutungsgerüst-Fenster</a> öffnen</p>
+						</td>
+					</tr><tr>
+						<td> </td><td> </td>
+						<td><kbd>Strg</kbd></td><td>+</td>
+						<td> </td><td> </td>
+						<td><kbd>C</kbd></td>
+						<td>
+							<p><a href="#menueBearbeiten-kopieren">Text kopieren</a></p>
+						</td>
+					</tr><tr>
+						<td><kbd>Alt</kbd></td><td>+</td>
+						<td> </td><td> </td>
+						<td> </td><td> </td>
+						<td><kbd>E</kbd></td>
+						<td>
+							<p><i>Linux/Windows</i>: <a href="#menueKartei">Menüpunkt <i>Bearbeiten</i></a> aufklappen</p>
+						</td>
+					</tr><tr>
+						<td> </td><td> </td>
+						<td><kbd>Strg</kbd></td><td>+</td>
+						<td> </td><td> </td>
+						<td><kbd>E</kbd></td>
+						<td>
+							<p><a href="#menueKartei-erstellen">Kartei erstellen</a></p>
+						</td>
+					</tr><tr>
+						<td> </td><td> </td>
+						<td><kbd>Strg</kbd></td><td>+</td>
+						<td> </td><td> </td>
+						<td><kbd>F</kbd></td>
+						<td>
+							<p><a href="#filter-volltext">Volltextfilter</a> öffnen und <a href="#menueKartei-suche">Kartei durchsuchen</a></p>
+						</td>
+					</tr><tr>
+						<td> </td><td> </td>
+						<td><kbd>⌘</kbd></td><td>+</td>
+						<td><kbd>Ctrl</kbd></td><td>+</td>
+						<td><kbd>F</kbd></td>
+						<td>
+							<p><i>macOS</i>: in den <a href="#menueAnsicht-vollbild">Vollbild-Modus</a> wechseln</p>
+						</td>
+					</tr><tr>
+						<td><kbd>Alt</kbd></td><td>+</td>
+						<td> </td><td> </td>
+						<td> </td><td> </td>
+						<td><kbd>H</kbd></td>
+						<td>
+							<p><i>Linux/Windows</i>: <a href="#menueHilfe">Menüpunkt <i>Hilfe</i></a> aufklappen</p>
+						</td>
+					</tr><tr>
+						<td><kbd>Alt</kbd></td><td>+</td>
+						<td> </td><td> </td>
+						<td> </td><td> </td>
+						<td><kbd>K</kbd></td>
+						<td>
+							<p><i>Linux/Windows</i>: <a href="#menueKartei">Menüpunkt <i>Kartei</i></a> aufklappen</p>
+						</td>
+					</tr><tr>
+						<td> </td><td> </td>
+						<td><kbd>Strg</kbd></td><td>+</td>
+						<td> </td><td> </td>
+						<td><kbd>L</kbd></td>
+						<td>
+							<p><a href="#belegliste">Belegliste</a> anzeigen</p>
+						</td>
+					</tr><tr>
+						<td> </td><td> </td>
+						<td><kbd>Strg</kbd></td><td>+</td>
+						<td> </td><td> </td>
+						<td><kbd>N</kbd></td>
+						<td>
+							<p>neue <a href="#karteikarte">Karteikarte</a> erstellen</p>
+						</td>
+					</tr><tr>
+						<td> </td><td> </td>
+						<td><kbd>Strg</kbd></td><td>+</td>
+						<td> </td><td> </td>
+						<td><kbd>O</kbd></td>
+						<td>
+							<p><a href="#menueKartei-oeffnen">Kartei öffnen</a></p>
+						</td>
+					</tr><tr>
+						<td> </td><td> </td>
+						<td><kbd>Strg</kbd></td><td>+</td>
+						<td> </td><td> </td>
+						<td><kbd>Q</kbd></td>
+						<td>
+							<p><a href="#menueApp-beenden"><i class="app-name"></i> beenden</a></p>
+						</td>
+					</tr><tr>
+						<td> </td><td> </td>
+						<td><kbd>Strg</kbd></td><td>+</td>
+						<td> </td><td> </td>
+						<td><kbd>S</kbd></td>
+						<td>
+							<p><a href="#menueKartei-speichern">Kartei speichern</a></p>
+						</td>
+					</tr><tr>
+						<td> </td><td> </td>
+						<td><kbd>Strg</kbd></td><td>+</td>
+						<td><kbd>Umsch</kbd></td><td>+</td>
+						<td><kbd>S</kbd></td>
+						<td>
+							<p><a href="#menueKartei-speichernUnter">Kartei speichern unter</a></p>
+						</td>
+					</tr><tr>
+						<td> </td><td> </td>
+						<td><kbd>Strg</kbd></td><td>+</td>
+						<td> </td><td> </td>
+						<td><kbd>V</kbd></td>
+						<td>
+							<p><a href="#menueBearbeiten-einfuegen">Text einfügen</a></p>
+						</td>
+					</tr><tr>
+						<td> </td><td> </td>
+						<td><kbd>Strg</kbd></td><td>+</td>
+						<td> </td><td> </td>
+						<td><kbd>W</kbd></td>
+						<td>
+							<p><a href="#menueKartei-schliessen">Kartei schließen</a></p>
+							<p><i>macOS</i> in <a href="#kurzanleitung-programmfensterNebenfenster">Nebenfenstern</a>: Fenster schließen</p>
+						</td>
+					</tr><tr>
+						<td> </td><td> </td>
+						<td><kbd>Strg</kbd></td><td>+</td>
+						<td> </td><td> </td>
+						<td><kbd>X</kbd></td>
+						<td>
+							<p><a href="#menueBearbeiten-ausschneiden">Text ausschneiden</a></p>
+						</td>
+					</tr><tr>
+						<td> </td><td> </td>
+						<td><kbd>Strg</kbd></td><td>+</td>
+						<td> </td><td> </td>
+						<td><kbd>Y</kbd></td>
+						<td>
+							<p><i>Windows</i>: <a href="#menueBearbeiten-wiederherstellen">Texteingabe wiederherstellen</a></p>
+						</td>
+					</tr><tr>
+						<td><kbd>Alt</kbd></td><td>+</td>
+						<td> </td><td> </td>
+						<td> </td><td> </td>
+						<td><kbd>Z</kbd></td>
+						<td>
+							<p><i>Linux/Windows</i>: <a href="#menueApp">Menüpunkt <i class="app-name"></i></a> aufklappen</p>
+						</td>
+					</tr><tr>
+						<td> </td><td> </td>
+						<td><kbd>Strg</kbd></td><td>+</td>
+						<td> </td><td> </td>
+						<td><kbd>Z</kbd></td>
+						<td>
+							<p><a href="#menueBearbeiten-rueckgaengig">Texteingabe rückgängig machen</a></p>
+						</td>
+					</tr><tr>
+						<td> </td><td> </td>
+						<td><kbd>Strg</kbd></td><td>+</td>
+						<td><kbd>Umsch</kbd></td><td>+</td>
+						<td><kbd>Z</kbd></td>
+						<td>
+							<p><i>Linux/macOS</i>: <a href="#menueBearbeiten-wiederherstellen">Texteingabe wiederherstellen</a></p>
+						</td>
+					</tr></table>
 
 					<h2 id="tastaturkuerzel-karteikarte">Karteikarte</h2>
 
@@ -2313,7 +2632,7 @@ Gerüst 2 &gt; Gerüst 1</pre>
 						<p><b>Hintergrund</b> ist, dass diese Funktion vom <a href="#framework" class="link-dokumentation"><i>Electron</i>-Framework</a> verwaltet wird, auf dem die App aufsetzt. Die Möglichkeit, alle Operationen rückgängig zu machen und sie <abbr title="gegebenenfalls">ggf.</abbr> wiederherzustellen, wäre mit enormem Programmieraufwand verbunden, weswegen sie in <i class="app-name"></i> höchstwahrscheinlich niemals implementiert wird.</p>
 					</div>
 
-					<p class="erklaerung-icon-menues"><img src="../img/pfeil-rund-rechts.svg" width="24" height="24" alt="">Wiederherstellen</p>
+					<p class="erklaerung-icon-menues" id="menueBearbeiten-wiederherstellen"><img src="../img/pfeil-rund-rechts.svg" width="24" height="24" alt="">Wiederherstellen</p>
 
 					<div class="info">
 						<p>Stellt eine rückgängig gemachte Texteingabe wieder her.</p>
@@ -2323,7 +2642,7 @@ Gerüst 2 &gt; Gerüst 1</pre>
 						<p>Ansonsten gilt dasselbe, was oben zur Funktion <a href="#menueBearbeiten-rueckgaengig"><i>Rückgängig</i></a> geschrieben wurde.</p>
 					</div>
 
-					<p class="erklaerung-icon-menues"><img src="../img/schere.svg" width="24" height="24" alt="">Ausschneiden</p>
+					<p class="erklaerung-icon-menues" id="menueBearbeiten-ausschneiden"><img src="../img/schere.svg" width="24" height="24" alt="">Ausschneiden</p>
 
 					<div class="info">
 						<p>Schneidet markierten Text aus.</p>
@@ -2333,7 +2652,7 @@ Gerüst 2 &gt; Gerüst 1</pre>
 						<p>Sie können <abbr title="beispielsweise">bspw.</abbr> nicht einfach Teile eines Belegs ausschneiden, dessen Text Sie zuvor in der <a href="#belegliste">Belegliste</a> markiert haben. Dazu müssen Sie zunächst in die <a href="#karteikarte-formularansicht">Formularansicht der Karteikarte</a> wechseln.</p>
 					</div>
 
-					<p class="erklaerung-icon-menues"><img src="../img/kopieren.svg" width="24" height="24" alt="">Kopieren</p>
+					<p class="erklaerung-icon-menues" id="menueBearbeiten-kopieren"><img src="../img/kopieren.svg" width="24" height="24" alt="">Kopieren</p>
 
 					<div class="info">
 						<p>Kopiert markierten Text.</p>
@@ -2359,7 +2678,7 @@ Gerüst 2 &gt; Gerüst 1</pre>
 						<p>Für das <b>Einfügen von in <abbr title="Hypertext Markup Language" lang="en">HTML</abbr> formatiertem Text</b> in das <a href="#karteikarte-beleg">Belegfeld der Karteikarte</a> ist es hingegen sinnvoll, nicht diese Einfügen-Funktion oder <kbd>Strg</kbd> + <kbd>V</kbd> zu nutzen. (Solchen Text haben Sie <abbr title="zum Beispiel">z. B.</abbr> dann in der Zwischenablage, wenn Sie im Browser Text von einer Webseite kopieren.) Denn beim Klick auf das über dem Feld stehende Icon <img src="../img/einfuegen.svg" width="20" height="20" alt=""> überprüft die App, ob sich in der Zwischenablage Text mit Formatierungsangaben befindet, bereinigt ihn und <a href="#karteikarte-belegEinfuegen">erhält einen guten Teil der Formatierungen</a>. Nutzen Sie diese vom <a href="#framework" class="link-dokumentation">Framework</a> verwaltete Einfügen-Funktion, wird immer nur Plain-Text (also Text ohne Formatierungsinformationen wie fett, kursiv oder unterstrichen) in das Belegfeld hineinkopiert.</p>
 					</div>
 
-					<p class="erklaerung-icon-menues"><img src="../img/auswaehlen.svg" width="24" height="24" alt="">Alles auswählen</p>
+					<p class="erklaerung-icon-menues" id="menueBearbeiten-allesAuswaehlen"><img src="../img/auswaehlen.svg" width="24" height="24" alt="">Alles auswählen</p>
 
 					<div class="info">
 						<p>Wählt den gesamten Text im fokussierten Bereich aus.</p>
@@ -2406,7 +2725,7 @@ Gerüst 2 &gt; Gerüst 1</pre>
 						<p>Ansonsten gilt <span lang="la">mutatis mutandis</span> dasselbe wie für die <a href="#menueAnsicht-anzeigeVergroessern">Vergrößerung der Anzeige</a>. In Nebenfenstern ohne Menüleiste kann die Standardgröße durch das Tastaturkürzel <kbd>Strg</kbd> + <kbd>0</kbd> wiederhergestellt werden.</p>
 					</div>
 
-					<p class="erklaerung-icon-menues"><img src="../img/fenster-vollbild.svg" width="24" height="24" alt="">Vollbild</p>
+					<p class="erklaerung-icon-menues" id="menueAnsicht-vollbild"><img src="../img/fenster-vollbild.svg" width="24" height="24" alt="">Vollbild</p>
 
 					<div class="info">
 						<p>Wechselt in die Vollbild-Anzeige.</p>
@@ -2494,8 +2813,5 @@ Gerüst 2 &gt; Gerüst 1</pre>
 				</section>
 			</div>
 		</main>
-
-		<!-- FENSTERLADEN -->
-		<div id="fensterladen"><img src="../img/icon-app-weiss-48.svg" width="96" height="96" alt=""></div>
 	</body>
 </html>
