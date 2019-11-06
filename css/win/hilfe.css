@@ -471,7 +471,12 @@ tr.wgd-alt td p {
 	border-color: var(--textExtremHell);
 }
 
+.tastatur.last {
+	margin-bottom: 10px;
+}
+
 .tastatur td {
+	position: relative;
 	padding: 5px;
 	border-top: 1px solid var(--linie);
 }
@@ -504,6 +509,12 @@ tr.wgd-alt td p {
 
 .tastatur tr:hover td {
 	background-color: var(--hover);
+}
+
+.tastatur kbd.extra {
+	position: absolute;
+	top: 5px;
+	left: 5px;
 }
 
 /* Suche ---------------------------------------- */

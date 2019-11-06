@@ -8,6 +8,7 @@ window.addEventListener("load", async () => {
 	initWin.events();
 	initWin.eventsSuche();
 	initWin.eventsPopup();
+	initWin.eventsHilfeKopf();
 
 	// ANZEIGE TASTATURKÜRZEL ANPASSEN
 	tastatur.shortcutsText();

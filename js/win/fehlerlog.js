@@ -22,12 +22,6 @@ let fehlerlog = {
 			p.innerHTML = fehlerlog.uovoTesto();
 			reload.classList.add("last");
 			copy.classList.add("aus");
-			if (fehlerlog.uovo.count > 0) {
-				p.classList.add("updated");
-				p.addEventListener("animationend", function() {
-					this.classList.remove("updated");
-				});
-			}
 			return;
 		}
 		// Fehler
@@ -165,10 +159,19 @@ let fehlerlog = {
 	async reload () {
 		const {ipcRenderer} = require("electron");
 		let fehler = await ipcRenderer.invoke("fehler-senden");
+		// Animation
+		let reload = document.getElementById("reload");
+		reload.classList.add("rotieren-bitte");
+		reload.addEventListener("animationend", rotiert);
 		// uovo di Pasqua
 		fehlerlog.uovo.count = fehler.length ? -1 : fehlerlog.uovo.count + 1;
 		// Anzeige auffrischen
 		fehlerlog.fuellen(fehler);
+		// Animationsfunktion
+		function rotiert () {
+			reload.classList.remove("rotieren-bitte");
+			reload.removeEventListener("animationend", rotiert);
+		}
 	},
 	// Fehler aus dem Fenster kopieren
 	//   a = Element

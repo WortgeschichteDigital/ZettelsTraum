@@ -7,6 +7,7 @@
 		<title> </title>
 
 		<link rel="stylesheet" href="../css/win/hilfe.css">
+		<link rel="stylesheet" href="../css/win/hilfe-drucken.css" media="print">
 
 		<script src="../js/suchleiste.js"></script>
 		<script src="../js/tastatur.js"></script>
@@ -27,8 +28,11 @@
 		<header>
 			<h1>Handbuch</h1
 			><span id="kopf-icons"
-				><a href="#" id="suchleiste-link" title="Suchleiste öffnen (F3)"
+				><a href="#" id="hilfe-suchleiste" title="Suchleiste öffnen (F3)"
 					><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="m10.5 5a5.5 5.5 0 0 0-5.5 5.5 5.5 5.5 0 0 0 5.5 5.5 5.5 5.5 0 0 0 3.1172-0.96875l3.6621 3.6621a1 1 0 0 0 0.7207 0.30664 1 1 0 0 0 1-1 1 1 0 0 0-0.30273-0.7168l-3.6699-3.6699a5.5 5.5 0 0 0 0.97266-3.1133 5.5 5.5 0 0 0-5.5-5.5zm0 2a3.5 3.5 0 0 1 3.5 3.5 3.5 3.5 0 0 1-3.5 3.5 3.5 3.5 0 0 1-3.5-3.5 3.5 3.5 0 0 1 3.5-3.5zm-7.5 10v4h2 7.4316 8.5684v-4h-1.3379c0.44598 0.76574 0.34692 1.7566-0.31055 2.4141-0.78347 0.78348-2.0447 0.78348-2.8281 0l-2.1211-2.1211c-0.091249-0.091249-0.17024-0.19026-0.24024-0.29297h-1.7305-7.4316-2zm2 1h7.4316v2h-7.4316v-2z"/></svg
+				></a
+				><a href="#" id="hilfe-drucken" title="Kapitel drucken (Strg + P)"
+					><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m4 1v2h8v-2h-8zm-2 3c-0.5 0-1 0.5-1 1v4c0 0.5 0.5 1 1 1h1v-2h10v2h1c0.5 0 1-0.5 1-1v-4c0-0.5-0.5-1-1-1h-12zm2 5v5h8v-5h-8z"/></svg
 				></a
 			></span
 			><img src="../img/icon-app-weiss-48.svg" width="48" height="48" alt="" id="icon">
@@ -191,8 +195,8 @@
 					</div>
 
 					<ul class="senza-stile">
-						<li>
-							<p id="kurzanleitung-programmfensterHauptfenster"><b>1. Hautpfenster:</b> Erscheint nach dem Start des Programms; hier können <a href="#menueKartei-oeffnen">Karteien geöffnet</a> und bearbeitet werden; man kann mit beliebig vielen Hauptfenstern <a href="#menueApp-neuesFenster">parallel arbeiten</a>.</p>
+						<li id="kurzanleitung-programmfensterHauptfenster">
+							<p><b>1. Hautpfenster:</b> Erscheint nach dem Start des Programms; hier können <a href="#menueKartei-oeffnen">Karteien geöffnet</a> und bearbeitet werden; man kann mit beliebig vielen Hauptfenstern <a href="#menueApp-neuesFenster">parallel arbeiten</a>.</p>
 						</li>
 
 						<li id="kurzanleitung-programmfensterNebenfenster">
@@ -213,7 +217,7 @@
 							</ul>
 						</li>
 
-						<li>
+						<li id="kurzanleitung-programmfensterDialogfenster">
 							<p><b>3. Dialogfenster:</b> Solche Fenster erscheinen nur im Hauptfenster. Sie verdecken den Inhalt des Hauptfensters und werden nicht vom Betriebssystem verwaltet. Mehrere Dialogfenster können übereinanderliegen, also zugleich geöffnet sein, ohne dass man sie gleichzeitig sieht. Dialogfenster können Meldungen anzeigen, in ihnen befinden sich darüber hinaus viele Nebenfunktionen wie die <a href="#menueKartei-notizen">Notizen-Funktion</a>, die <a href="#menueKartei-redaktion">Redaktions-Funktion</a> oder die <a href="#menueApp-karteisuche">Karteisuche</a>.</p>
 						</li>
 					</ul>
@@ -826,7 +830,7 @@
 
 					<p class="info">Befinden Sie sich in einem Textfeld, dient <kbd>Entf</kbd> natürlich ganz normal zum Löschen von Buchstaben. Liegt der Fokus auf der Tags-Spalte, hat die Taste keine Funktion.</p>
 
-					<p>Mit <kbd>Tab</kbd> (der Tabulatortaste links über der Feststelltaste) können Sie durch die einzelnen Funktionen navigieren. Dabei werden die Funktionen der Reihe nach durchgegangen, und zwar in dieser Reihenfolge:</p>
+					<p id="bedeutungsgeruest-tab">Mit <kbd>Tab</kbd> (der Tabulatortaste links über der Feststelltaste) können Sie durch die einzelnen Funktionen navigieren. Dabei werden die Funktionen der Reihe nach durchgegangen, und zwar in dieser Reihenfolge:</p>
 
 					<ul>
 						<li>Bedeutung ist markiert (blau hinterlegt) <img src="../img/pfeil-gerade-rechts.svg" width="24" height="24" alt=""> Bedeutungstext wird ausgewählt;</li>
@@ -1820,7 +1824,7 @@ Mustermann, Erika
 
 				<!-- TASTATURKÜRZEL -->
 				<section id="sektion-tastaturkuerzel" class="suche aus">
-					<p>Viele Funktionen von <i class="app-name"></i> lassen sich mit Tastaturkürzeln aufrufen, viele Operationen in diesen Funktionen wiederum lassen sich mit Tastaturkürzeln ausführen. Kurzum: Es gibt zahlreiche Kürzel, die über das gesamte Programm verstreut sind. In diesem Kapitel werden sie <em>alle</em> aufgelistet.</p>
+					<p>Viele Funktionen von <i class="app-name"></i> lassen sich mit Tastaturkürzeln aufrufen, viele Operationen in diesen Funktionen wiederum lassen sich mit Tastaturkürzeln ausführen. Kurzum: Es gibt zahlreiche Kürzel, die über das gesamte Programm verstreut sind. In diesem Kapitel werden sie <em>alle</em> aufgelistet (die üblichen Navigationskürzel in Textfeldern einmal ausgenommen).</p>
 
 					<p>Die <a href="#karteikarte">Karteikarte</a>, das <a href="#bedeutungsgeruest">Bedeutungsgerüst</a> und die <a href="#belegliste-suchleiste">Suchleiste</a> sind in besonderer Weise darauf ausgelegt mit der Tastatur bedient zu werden. Darum werden die Tastaturkürzel in ihnen noch einmal in eigenen Abschnitten weiter unten aufgeführt.</p>
 
@@ -1828,17 +1832,192 @@ Mustermann, Erika
 
 					<p>Noch etwas Grundsätzliches: Im Maschinenraum der App arbeiten mehrere Dienstleister kollegial zusammen, darunter ein <b>Internetbrowser</b>, der sich unermüdlich darum kümmert, dass die Programmoberfläche so aussieht, wie sie aussieht, und so funktioniert, wie sie funktioniert. Manche Bedienkonzepte, <abbr title="zum Beispiel">z. B.</abbr> die Navigation durch einzelne Elemente mit <kbd>Tab</kbd> und das Auslösen der Funktion hinter dem aktiven Element mit <kbd>⏎</kbd> funktionieren darum genauso, als befände man sich in einem Browser.</p>
 
-					<h2 id="tastaturkuerzel-alle">Alle Kürzel</h2>
+					<p>Sind Tastaturkürzel in ein und derselben Funktion <b>doppelt belegt</b>, hängt es vom Kontext ab, was genau sie auslösen. Der Kontext wird dabei in der Reihenfolge überprüft, in der die Kürzel in der folgenden Tabelle aufgeführt sind: zuerst das weiter oben, dann das weiter unten angeführte. <abbr title="Vergleiche">Vgl.</abbr> die Beschreibung von <kbd>Strg</kbd> + <kbd>B</kbd>.</p>
 
-					<p><mark>Tab nicht vergessen</mark></p>
+					<h2 id="tastaturkuerzel-alle">Alle Tastaturkürzel</h2>
 
 					<table class="tastatur"><tr>
+						<td> </td><td> </td>
+						<td> </td><td> </td>
+						<td> </td><td> </td>
+						<td><kbd class="extra">⏎</kbd><kbd>⏎</kbd></td>
+						<td>
+							<p>Fokus im Textfeld des <a href="#belegliste-annotierenBeleg">Annotierungs-Popups</a>: Änderungen speichern und Textfeld schließen</p>
+
+							<p><a href="#karteikarte-dropdown">Dropdown-Menü</a> offen: ausgewählten Textvorschlag einfügen</p>
+
+							<p>Fokus im Textfeld der <a href="#belegliste-suchleiste">Suchleiste</a>: zum nächsten Treffer springen</p>
+
+							<p>Fokus in einem Filterfeld der <a href="#menueApp-karteisuche">Karteisuche</a>: Suche starten</p>
+
+							<p>Fokus im Textfeld des <a href="#menueKartei-lexika">Lexikon-Fensters</a>: Lexikon in die Liste aufnehmen</p>
+
+							<p>Fokus im Textfeld des <a href="#menueKartei-metadaten">Metadaten-Fensters</a>: Person in die Liste aufnehmen</p>
+
+							<p>Fokus in einem Textfeld des <a href="#menueKartei-redaktion">Redaktions-Fensters</a> (neuer Eintrag): Eintrag hinzufügen</p>
+
+							<p>Fokus in einem Textfeld des Redaktions-Fensters (bestehender Eintrag): Änderungen speichern und Textfeld schließen</p>
+
+							<p>Fokus in einem Textfeld des <a href="#bedeutungsgeruest-tagFenster">Tag-Fensters</a>: Tags speichern</p>
+
+							<p>Fokus im Textfeld des <a href="#kurzanleitung-programmfensterDialogfenster">Dialogfensters</a> mit Eingabeaufforderung: Eingabe übernehmen und Dialog schließen</p>
+
+							<p><a href="#menueBelege-einfuegen">Einfügen-Fenster</a> offen: Belege einfügen</p>
+
+							<p>Fokus in einem der Textfelder der <a href="#karteikarte">Karteikarte</a> für den <a href="#karteikarte-dtaImport"><abbr title="Deutschen Textarchiv">DTA</abbr>-Import</a>: Import starten</p>
+
+							<p>Textfeld im <a href="#bedeutungsgeruest">Bedeutungsgerüst</a> fokussiert: Änderungen speichern</p>
+
+							<p>Textfeld für den Namen eines neuen Gerüsts im <a href="#bedeutungsgeruest-konfigurationsfenster">Konfigurationsfenster für Bedeutungsgerüste</a> fokussiert: neues Gerüst erstellen</p>
+
+							<p>Textfeld für den Namen eines Gerüsts im Konfigurationsfenster für Bedeutungsgerüste fokussiert: Eingabe speichern und Textfeld schließen</p>
+
+							<p>Fokus im Suchfeld des <a href="#filter-volltext">Volltextfilters</a>: Suche und/oder Filtern starten</p>
+
+							<p>Funktion ausführen, für die das fokussierte Element steht</p>
+
+							<p>Suchfeld in Handbuch oder <a href="#" class="link-dokumentation">technischer Dokumentation</a> fokussiert: Suche anstoßen und den ersten Treffer fokussieren</p>
+						</td>
+					</tr><tr>
+						<td> </td><td> </td>
+						<td><kbd>Strg</kbd></td><td>+</td>
+						<td> </td><td> </td>
+						<td><kbd>⏎</kbd></td>
+						<td>
+							<p>Fokus in einem Textfeld der <a href="#karteikarte">Karteikarte</a>: Karte speichern</p>
+						</td>
+					</tr><tr>
+						<td> </td><td> </td>
+						<td> </td><td> </td>
+						<td> </td><td> </td>
+						<td><kbd>⇦</kbd></td>
+						<td>
+							<p>Bedeutung im <a href="#bedeutungsgeruest">Bedeutungsgerüst</a> aktiviert: Bedeutung in die nächsthöhere Ebene schieben</p>
+
+							<p>Fokus auf einem Element, das Teil einer Elemente-Gruppe ist (Buttons, Icons <abbr title="und so weiter">usw.</abbr>): vorheriges Element fokussieren</p>
+
+							<p>maximierte Bildanzeige einer Bilderserie im Handbuch geöffnet: vorheriges Bild anzeigen</p>
+						</td>
+					</tr><tr>
+						<td><kbd>Alt</kbd></td><td>+</td>
+						<td> </td><td> </td>
+						<td> </td><td> </td>
+						<td><kbd>⇦</kbd></td>
+						<td>
+							<p>Handbuch und <a href="#" class="link-dokumentation">technische Dokumentation</a>: rückwärts navigieren</p>
+						</td>
+					</tr><tr>
+						<td> </td><td> </td>
+						<td><kbd>Strg</kbd></td><td>+</td>
+						<td> </td><td> </td>
+						<td><kbd>⇦</kbd></td>
+						<td>
+							<p>Element in der Konfiguration der <a href="#einstellungen-quick">Quick-Access-Bar</a> im <a href="#menueApp-einstellungen">Einstellungen-Dialog</a> aktiviert: Element zur Leiste hinzufügen</p>
+						</td>
+					</tr><tr>
+						<td> </td><td> </td>
+						<td> </td><td> </td>
+						<td> </td><td> </td>
+						<td><kbd>⇨</kbd></td>
+						<td>
+							<p>Bedeutung im <a href="#bedeutungsgeruest">Bedeutungsgerüst</a> aktiviert: Bedeutung in die nächsttiefere Ebene schieben</p>
+
+							<p>Fokus auf einem Element, das Teil einer Elemente-Gruppe ist (Buttons, Icons <abbr title="und so weiter">usw.</abbr>): nächstes Element fokussieren</p>
+
+							<p>maximierte Bildanzeige einer Bilderserie im Handbuch geöffnet: nächstes Bild anzeigen</p>
+						</td>
+					</tr><tr>
+						<td><kbd>Alt</kbd></td><td>+</td>
+						<td> </td><td> </td>
+						<td> </td><td> </td>
+						<td><kbd>⇨</kbd></td>
+						<td>
+							<p>Handbuch und <a href="#" class="link-dokumentation">technische Dokumentation</a>: vorwärts navigieren</p>
+						</td>
+					</tr><tr>
+						<td> </td><td> </td>
+						<td><kbd>Strg</kbd></td><td>+</td>
+						<td> </td><td> </td>
+						<td><kbd>⇨</kbd></td>
+						<td>
+							<p>Element in der Konfiguration der <a href="#einstellungen-quick">Quick-Access-Bar</a> im <a href="#menueApp-einstellungen">Einstellungen-Dialog</a> aktiviert: Element aus der Leiste entfernen</p>
+						</td>
+					</tr><tr>
+						<td> </td><td> </td>
+						<td> </td><td> </td>
+						<td> </td><td> </td>
+						<td><kbd>⇩</kbd></td>
+						<td>
+							<p><a href="#karteikarte-dropdown">Dropdown-Menü</a> zum fokussierten Textfeld öffnen (<strong class="obacht">nicht</strong> in der <a href="#karteikarte">Karteikarte</a>!)</p>
+							
+							<p>Dropdown-Menü offen: nächsten Textvorschlag auswählen</p>
+
+							<p>Bedeutung im <a href="#bedeutungsgeruest">Bedeutungsgerüst</a> aktiviert: Bedeutung um eine Position nach unten schieben</p>
+
+							<p>Anzeige weiter nach unten scrollen</p>
+						</td>
+					</tr><tr>
+						<td> </td><td> </td>
+						<td><kbd>Strg</kbd></td><td>+</td>
+						<td> </td><td> </td>
+						<td><kbd>⇩</kbd></td>
+						<td>
+							<p><a href="#karteikarte-dropdown">Dropdown-Menü</a> zum fokussierten Textfeld öffnen</p>
+
+							<p><a href="#karteikarte-leseansicht">Leseansicht der Karteikarte</a> offen: zur nächsten Markierung springen</p>
+
+							<p><a href="#karteikarte-formularansicht">Formularansicht der Karteikarte</a> offen: zum Karteiwort im Beleg-Feld springen</p>
+
+							<p>Bedeutung im <a href="#bedeutungsgeruest">Bedeutungsgerüst</a> aktiviert: nächste Bedeutung aktivieren</p>
+
+							<p>Bedeutungsgerüst offen: erste Bedeutung aktivieren</p>
+
+							<p>Element in der Konfiguration der <a href="#einstellungen-quick">Quick-Access-Bar</a> im <a href="#menueApp-einstellungen">Einstellungen-Dialog</a> aktiviert: Element nach unten schieben</p>
+
+							<p>Einstellungen-Dialog offen: nächste Seite anzeigen</p>
+
+							<p>Handbuch und <a href="#" class="link-dokumentation">technische Dokumentation</a>: nächstes Kapitel anzeigen</p>
+						</td>
+					</tr><tr>
+						<td> </td><td> </td>
+						<td> </td><td> </td>
+						<td> </td><td> </td>
+						<td><kbd>⇧</kbd></td>
+						<td>
+							<p><a href="#karteikarte-dropdown">Dropdown-Menü</a> zum fokussierten Textfeld öffnen (<strong class="obacht">nicht</strong> in der <a href="#karteikarte">Karteikarte</a>!)</p>
+							
+							<p>Dropdown-Menü offen: vorherigen Textvorschlag auswählen</p>
+
+							<p>Bedeutung im <a href="#bedeutungsgeruest">Bedeutungsgerüst</a> aktiviert: Bedeutung um eine Position nach oben schieben</p>
+
+							<p>Anzeige weiter nach oben scrollen</p>
+						</td>
+					</tr><tr>
+						<td> </td><td> </td>
+						<td><kbd>Strg</kbd></td><td>+</td>
+						<td> </td><td> </td>
+						<td><kbd>⇧</kbd></td>
+						<td>
+							<p><a href="#karteikarte-dropdown">Dropdown-Menü</a> zum fokussierten Textfeld öffnen</p>
+
+							<p>Bedeutung im <a href="#bedeutungsgeruest">Bedeutungsgerüst</a> aktiviert: vorherige Bedeutung aktivieren</p>
+
+							<p>Bedeutungsgerüst offen: erste Bedeutung aktivieren</p>
+
+							<p>Element in der Konfiguration der <a href="#einstellungen-quick">Quick-Access-Bar</a> im <a href="#menueApp-einstellungen">Einstellungen-Dialog</a> aktiviert: Element nach oben schieben</p>
+
+							<p>Einstellungen-Dialog offen: vorherige Seite anzeigen</p>
+
+							<p>Handbuch und <a href="#" class="link-dokumentation">technische Dokumentation</a>: vorheriges Kapitel anzeigen</p>
+						</td>
+					</tr><tr>
 						<td> </td><td> </td>
 						<td><kbd>Strg</kbd></td><td>+</td>
 						<td> </td><td> </td>
 						<td><kbd>+</kbd></td>
 						<td>
-							<p><i>Linux/Windows</i>: <a href="#menueAnsicht-anzeigeVergroessern">Anzeige vergrößern</a></td>
+							<p><i>Linux/Windows</i>: <a href="#menueAnsicht-anzeigeVergroessern">Anzeige vergrößern</a></p>
+						</td>
 					</tr><tr>
 						<td> </td><td> </td>
 						<td><kbd>Strg</kbd></td><td>+</td>
@@ -1859,9 +2038,124 @@ Mustermann, Erika
 						<td> </td><td> </td>
 						<td> </td><td> </td>
 						<td> </td><td> </td>
+						<td><kbd>Bild ⇩</kbd></td>
+						<td>
+							<p>Anzeige weiter nach unten scrollen (seitenweise)</p>
+						</td>
+					</tr><tr>
+						<td> </td><td> </td>
+						<td><kbd>Strg</kbd></td><td>+</td>
+						<td> </td><td> </td>
+						<td><kbd>Bild ⇩</kbd></td>
+						<td>
+							<p><a href="#karteikarte">Karteikarte</a> offen: nächste Karte öffnen</p>
+						</td>
+					</tr><tr>
+						<td> </td><td> </td>
+						<td> </td><td> </td>
+						<td> </td><td> </td>
+						<td><kbd>Bild ⇧</kbd></td>
+						<td>
+							<p>Anzeige weiter nach oben scrollen (seitenweise)</p>
+						</td>
+					</tr><tr>
+						<td> </td><td> </td>
+						<td><kbd>Strg</kbd></td><td>+</td>
+						<td> </td><td> </td>
+						<td><kbd>Bild ⇧</kbd></td>
+						<td>
+							<p><a href="#karteikarte">Karteikarte</a> offen: vorherige Karte öffnen</p>
+						</td>
+					</tr><tr>
+						<td> </td><td> </td>
+						<td> </td><td> </td>
+						<td> </td><td> </td>
+						<td><kbd>Ende</kbd></td>
+						<td>
+							<p>zum Ende einer Ansicht scrollen</p>
+						</td>
+					</tr><tr>
+						<td> </td><td> </td>
+						<td> </td><td> </td>
+						<td> </td><td> </td>
+						<td><kbd>Entf</kbd></td>
+						<td>
+							<p>Bedeutung im <a href="#bedeutungsgeruest">Bedeutungsgerüst</a> aktiviert: Bedeutung löschen</p>
+						</td>
+					</tr><tr>
+						<td> </td><td> </td>
+						<td> </td><td> </td>
+						<td> </td><td> </td>
+						<td><kbd class="extra">Esc</kbd><kbd>Esc</kbd></td>
+						<td>
+							<p>Fokus im Textfeld des <a href="#belegliste-annotierenBeleg">Annotierungs-Popups</a>: letzte Änderung verwerfen und/oder Textfeld verlassen</p>
+
+							<p>Annotierungs-Popup offen: Popup schließen</p>
+
+							<p><a href="#karteikarte-dropdown">Dropdown-Menü</a> offen: Menü schließen</p>
+
+							<p>Fokus in der <a href="#belegliste-suchleiste">Suchleiste</a>: Suchleiste schließen</p>
+
+							<p>Fokus in einem Textfeld des <a href="#menueKartei-redaktion">Redaktions-Fensters</a> (bestehender Eintrag): Änderungen verwerfen und/oder Textfeld schließen</p>
+
+							<p>oberstes <a href="#kurzanleitung-programmfensterDialogfenster">Dialogfenster</a> schließen</p>
+
+							<p><a href="#karteikarte">Karteikarte</a> offen: Karte schließen</p>
+
+							<p>Bedeutung im <a href="#bedeutungsgeruest">Bedeutungsgerüst</a> aktiviert: Bedeutung deaktivieren</p>
+
+							<p>Textfeld im Bedeutungsgerüst fokussiert: letzte Änderung verwerfen und/oder Textfeld schließen</p>
+
+							<p>Bedeutungsgerüst offen: Funktion beenden</p>
+
+							<p>Textfeld für den Namen eines Gerüsts im <a href="#bedeutungsgeruest-konfigurationsfenster">Konfigurationsfenster für Bedeutungsgerüste</a> fokussiert: Eingabe verwerfen und/oder Textfeld schließen</p>
+
+							<p><i>Linux/Windows</i>: Menüleistenpunkt zuklappen</p>
+
+							<p>maximierte Bildanzeige im Handbuch geöffnet: Anzeige schließen</p>
+
+							<p><a href="#" class="ueber-app">Über <span class="app-name"></span>-Fenster</a>: Fenster schließen</p>
+
+							<p><a href="#" class="ueber-electron">Über Electron-Fenster</a>: Fenster schließen</p>
+						</td>
+					</tr><tr>
+						<td> </td><td> </td>
+						<td> </td><td> </td>
+						<td> </td><td> </td>
 						<td><kbd>F1</kbd></td>
 						<td>
-							<p>Handbuch öffnen</td>
+							<p>Handbuch öffnen</p>
+						</td>
+					</tr><tr>
+						<td> </td><td> </td>
+						<td> </td><td> </td>
+						<td> </td><td> </td>
+						<td><kbd>F3</kbd></td>
+						<td>
+							<p><a href="#belegliste-suchleiste">Suchleiste</a> öffnen</p>
+
+							<p>Suchleiste offen: Suchfeld fokussieren und zum nächsten Treffer springen</p>
+						</td>
+					</tr><tr>
+						<td> </td><td> </td>
+						<td> </td><td> </td>
+						<td><kbd>Umsch</kbd></td><td>+</td>
+						<td><kbd>F3</kbd></td>
+						<td>
+							<p><a href="#belegliste-suchleiste">Suchleiste</a> öffnen</p>
+
+							<p>Suchleiste offen: Suchfeld fokussieren und zum vorherigen Treffer springen</p>
+						</td>
+					</tr><tr>
+						<td> </td><td> </td>
+						<td> </td><td> </td>
+						<td> </td><td> </td>
+						<td><kbd>F5</kbd></td>
+						<td>
+							<p><a href="#menueBelege-einfuegen">Einfügen-Fenster</a> offen: Belegquellen auffrischen</p>
+
+							<p><a href="#" class="link-fehlerlog">Fehlerlog</a>: Anzeige auffrischen</p>
+						</td>
 					</tr><tr>
 						<td> </td><td> </td>
 						<td> </td><td> </td>
@@ -1872,11 +2166,49 @@ Mustermann, Erika
 						</td>
 					</tr><tr>
 						<td> </td><td> </td>
+						<td> </td><td> </td>
+						<td> </td><td> </td>
+						<td><kbd>Leer</kbd></td>
+						<td>
+							<p>Fokus auf einer Checkbox: Aktivierung umschalten</p>
+
+							<p>Anzeige weiter nach unten scrollen (seitenweise)</p>
+						</td>
+					</tr><tr>
+						<td> </td><td> </td>
+						<td> </td><td> </td>
+						<td> </td><td> </td>
+						<td><kbd>Pos1</kbd></td>
+						<td>
+							<p>zum Anfang einer Ansicht scrollen</p>
+						</td>
+					</tr><tr>
+						<td> </td><td> </td>
+						<td> </td><td> </td>
+						<td> </td><td> </td>
+						<td><kbd>Tab</kbd></td>
+						<td>
+							<p>Bedeutung im <a href="#bedeutungsgeruest">Bedeutungsgerüst</a> aktiviert: horizontal <a href="#bedeutungsgeruest-tab">durch die Elemente springen</a> (vorwärts)</p>
+
+							<p>das nächste Element der Programmoberfläche fokussieren</p>
+						</td>
+					</tr><tr>
+						<td> </td><td> </td>
+						<td> </td><td> </td>
+						<td><kbd>Umsch</kbd></td><td>+</td>
+						<td><kbd>Tab</kbd></td>
+						<td>
+							<p>Bedeutung im <a href="#bedeutungsgeruest">Bedeutungsgerüst</a> aktiviert: horizontal <a href="#bedeutungsgeruest-tab">durch die Elemente springen</a> (rückwärts)</p>
+
+							<p>das vorherige Element der Programmoberfläche fokussieren</p>
+						</td>
+					</tr><tr>
+						<td> </td><td> </td>
 						<td><kbd>Strg</kbd></td><td>+</td>
 						<td> </td><td> </td>
 						<td><kbd>0</kbd></td>
 						<td>
-							<p><a href="#menueAnsicht-standardgroesse">Standardgröße</a> wiederherstellen</p>
+							<p><a href="#menueAnsicht-standardgroesse">Standardgröße</a> der Anzeige wiederherstellen</p>
 						</td>
 					</tr><tr>
 						<td> </td><td> </td>
@@ -1900,7 +2232,7 @@ Mustermann, Erika
 						<td> </td><td> </td>
 						<td><kbd>A</kbd></td>
 						<td>
-							<p><a href="#menueBearbeiten-allesAuswaehlen">alles auswählen</a></p>
+							<p><a href="#menueBearbeiten-allesAuswaehlen">Text komplett auswählen</a></p>
 						</td>
 					</tr><tr>
 						<td><kbd>Alt</kbd></td><td>+</td>
@@ -1916,7 +2248,11 @@ Mustermann, Erika
 						<td> </td><td> </td>
 						<td><kbd>B</kbd></td>
 						<td>
-							<p><a href="#bedeutungsgeruest">Bedeutungsgerüst-Funktion</a> öffnen</p>
+							<p><a href="#bedeutungsgeruest">Bedeutungsgerüst</a> öffnen</p>
+
+							<p>Textfeld einer Bedeutungsdefinition im Bedeutungsgerüst oder Textfeld der <a href="#menueKartei-notizen">Notizen-Funktion</a> fokussiert: Text fetten</p>
+
+							<p>Bedeutungsgerüst offen: Textfeld <i>neue Bedeutung</i> fokussieren</p>
 						</td>
 					</tr><tr>
 						<td><kbd>Alt</kbd></td><td>+</td>
@@ -1948,7 +2284,7 @@ Mustermann, Erika
 						<td> </td><td> </td>
 						<td><kbd>E</kbd></td>
 						<td>
-							<p><i>Linux/Windows</i>: <a href="#menueKartei">Menüpunkt <i>Bearbeiten</i></a> aufklappen</p>
+							<p><i>Linux/Windows</i>: <a href="#menueBearbeiten">Menüpunkt <i>Bearbeiten</i></a> aufklappen</p>
 						</td>
 					</tr><tr>
 						<td> </td><td> </td>
@@ -1965,6 +2301,10 @@ Mustermann, Erika
 						<td><kbd>F</kbd></td>
 						<td>
 							<p><a href="#filter-volltext">Volltextfilter</a> öffnen und <a href="#menueKartei-suche">Kartei durchsuchen</a></p>
+
+							<p><a href="#" class="link-changelog">Changelog</a>: <a href="#belegliste-suchleiste">Suchleiste</a> öffnen</p>
+
+							<p>Handbuch und <a href="#" class="link-dokumentation">technische Dokumentation</a>: Suchfeld fokussieren</p>
 						</td>
 					</tr><tr>
 						<td> </td><td> </td>
@@ -1983,12 +2323,32 @@ Mustermann, Erika
 							<p><i>Linux/Windows</i>: <a href="#menueHilfe">Menüpunkt <i>Hilfe</i></a> aufklappen</p>
 						</td>
 					</tr><tr>
+						<td> </td><td> </td>
+						<td><kbd>Strg</kbd></td><td>+</td>
+						<td> </td><td> </td>
+						<td><kbd>I</kbd></td>
+						<td>
+							<p><a href="#karteikarte">Karteikarte</a> offen und <a href="#menueBelege-kopieren">Kopierfunktion</a> aktiv: Karte zur Kopierliste hinzufügen</p>
+
+							<p>Karteikarte offen: Karte in die <a href="#karteikarte-zwischenablage">Zwischenablage</a> kopieren</p>
+
+							<p>Textfeld einer Bedeutungsdefinition im <a href="#bedeutungsgeruest">Bedeutungsgerüst</a> oder Textfeld der <a href="#menueKartei-notizen">Notizen-Funktion</a> fokussiert: Text kursivieren</p>
+						</td>
+					</tr><tr>
 						<td><kbd>Alt</kbd></td><td>+</td>
 						<td> </td><td> </td>
 						<td> </td><td> </td>
 						<td><kbd>K</kbd></td>
 						<td>
 							<p><i>Linux/Windows</i>: <a href="#menueKartei">Menüpunkt <i>Kartei</i></a> aufklappen</p>
+						</td>
+					</tr><tr>
+						<td> </td><td> </td>
+						<td><kbd>Strg</kbd></td><td>+</td>
+						<td> </td><td> </td>
+						<td><kbd>K</kbd></td>
+						<td>
+							<p><a href="#karteikarte-formularansicht">Formularansicht der Karteikarte</a> offen: Kürzung des Belegkontexts umschalten</p>
 						</td>
 					</tr><tr>
 						<td> </td><td> </td>
@@ -2018,6 +2378,28 @@ Mustermann, Erika
 						<td> </td><td> </td>
 						<td><kbd>Strg</kbd></td><td>+</td>
 						<td> </td><td> </td>
+						<td><kbd>P</kbd></td>
+						<td>
+							<p><a href="#karteikarte">Karteikarte</a> offen: <a href="#bedeutungsgeruest-druckvorschau">Druckvorschau</a> der Karteikarte anzeigen</p>
+							
+							<p><a href="#bedeutungsgeruest">Bedeutungsgerüst</a> offen: Druckvorschau des Bedeutungsgerüsts anzeigen</p>
+							
+							<p><a href="#belegliste">Belegliste</a> offen: Druckvorschau der Belege in der Liste anzeigen</p>
+							
+							<p>Druckvorschau offen: drucken</p>
+
+							<p><a href="#bedeutungsgeruest-fenster">Bedeutungsgerüst-Fenster</a>: Druckvorschau des Bedeutungsgerüsts im zugehörigen <a href="#kurzanleitung-programmfensterHauptfenster">Hauptfenster</a> anzeigen</p>
+
+							<p>Handbuch: aktuelles Kapitel drucken</p>
+
+							<p><a href="#" class="link-dokumentation">technische Dokumentation</a>: aktuelles Kapitel drucken</p>
+
+							<p><a href="#" class="link-changelog">Changelog</a>: drucken</p>
+						</td>
+					</tr><tr>
+						<td> </td><td> </td>
+						<td><kbd>Strg</kbd></td><td>+</td>
+						<td> </td><td> </td>
 						<td><kbd>Q</kbd></td>
 						<td>
 							<p><a href="#menueApp-beenden"><i class="app-name"></i> beenden</a></p>
@@ -2042,6 +2424,24 @@ Mustermann, Erika
 						<td> </td><td> </td>
 						<td><kbd>Strg</kbd></td><td>+</td>
 						<td> </td><td> </td>
+						<td><kbd>T</kbd></td>
+						<td>
+							<p><a href="#karteikarte-formularansicht">Formularansicht der Karteikarte</a> offen: Anzeige der Trennzeichen umschalten</p>
+						</td>
+					</tr><tr>
+						<td> </td><td> </td>
+						<td><kbd>Strg</kbd></td><td>+</td>
+						<td> </td><td> </td>
+						<td><kbd>U</kbd></td>
+						<td>
+							<p><a href="#karteikarte">Karteikarte</a> offen: zwischen <a href="#karteikarte-leseansicht">Lese-</a> und <a href="#karteikarte-formularansicht">Formularansicht</a> wechseln</p>
+
+							<p>Textfeld einer Bedeutungsdefinition im <a href="#bedeutungsgeruest">Bedeutungsgerüst</a> oder Textfeld der <a href="#menueKartei-notizen">Notizen-Funktion</a> fokussiert: Text unterstreichen</p>
+						</td>
+					</tr><tr>
+						<td> </td><td> </td>
+						<td><kbd>Strg</kbd></td><td>+</td>
+						<td> </td><td> </td>
 						<td><kbd>V</kbd></td>
 						<td>
 							<p><a href="#menueBearbeiten-einfuegen">Text einfügen</a></p>
@@ -2053,6 +2453,7 @@ Mustermann, Erika
 						<td><kbd>W</kbd></td>
 						<td>
 							<p><a href="#menueKartei-schliessen">Kartei schließen</a></p>
+
 							<p><i>macOS</i> in <a href="#kurzanleitung-programmfensterNebenfenster">Nebenfenstern</a>: Fenster schließen</p>
 						</td>
 					</tr><tr>
@@ -2097,17 +2498,357 @@ Mustermann, Erika
 						</td>
 					</tr></table>
 
+					<h2 id="tastaturkuerzel-suchleiste">Suchleiste</h2>
+
+					<table class="tastatur"><tr>
+						<td> </td><td> </td>
+						<td> </td><td> </td>
+						<td> </td><td> </td>
+						<td><kbd>⏎</kbd></td>
+						<td>
+							<p>Fokus im Textfeld der <a href="#belegliste-suchleiste">Suchleiste</a>: zum nächsten Treffer springen</p>
+						</td>
+					</tr><tr>
+						<td> </td><td> </td>
+						<td> </td><td> </td>
+						<td> </td><td> </td>
+						<td><kbd>Esc</kbd></td>
+						<td>
+							<p>Fokus in der Suchleiste: Suchleiste schließen</p>
+						</td>
+					</tr><tr>
+						<td> </td><td> </td>
+						<td> </td><td> </td>
+						<td> </td><td> </td>
+						<td><kbd>F3</kbd></td>
+						<td>
+							<p>Suchleiste öffnen</p>
+
+							<p>Suchleiste offen: Suchfeld fokussieren und zum nächsten Treffer springen</p>
+						</td>
+					</tr><tr>
+						<td> </td><td> </td>
+						<td> </td><td> </td>
+						<td><kbd>Umsch</kbd></td><td>+</td>
+						<td><kbd>F3</kbd></td>
+						<td>
+							<p>Suchleiste öffnen</p>
+
+							<p>Suchleiste offen: Suchfeld fokussieren und zum vorherigen Treffer springen</p>
+						</td>
+					</tr><tr>
+						<td> </td><td> </td>
+						<td><kbd>Strg</kbd></td><td>+</td>
+						<td> </td><td> </td>
+						<td><kbd>F</kbd></td>
+						<td>
+							<p><a href="#" class="link-changelog">Changelog</a>: Suchleiste öffnen</p>
+						</td>
+					</tr></table>
+
 					<h2 id="tastaturkuerzel-karteikarte">Karteikarte</h2>
 
-					<p><mark>…</mark></p>
+					<table class="tastatur"><tr>
+						<td> </td><td> </td>
+						<td> </td><td> </td>
+						<td> </td><td> </td>
+						<td><kbd>⏎</kbd></td>
+						<td>
+							<p><a href="#karteikarte-dropdown">Dropdown-Menü</a> offen: ausgewählten Textvorschlag einfügen</p>
+
+							<p>Fokus in einem der Textfelder für den <a href="#karteikarte-dtaImport"><abbr title="Deutschen Textarchiv">DTA</abbr>-Import</a>: Import starten</p>
+						</td>
+					</tr><tr>
+						<td> </td><td> </td>
+						<td><kbd>Strg</kbd></td><td>+</td>
+						<td> </td><td> </td>
+						<td><kbd>⏎</kbd></td>
+						<td>
+							<p>Fokus in einem Textfeld der <a href="#karteikarte">Karteikarte</a>: Karte speichern</p>
+						</td>
+					</tr><tr>
+						<td> </td><td> </td>
+						<td> </td><td> </td>
+						<td> </td><td> </td>
+						<td><kbd>⇩</kbd></td>
+						<td>							
+							<p>Dropdown-Menü offen: nächsten Textvorschlag auswählen</p>
+						</td>
+					</tr><tr>
+						<td> </td><td> </td>
+						<td><kbd>Strg</kbd></td><td>+</td>
+						<td> </td><td> </td>
+						<td><kbd>⇩</kbd></td>
+						<td>
+							<p>Dropdown-Menü zum fokussierten Textfeld öffnen</p>
+
+							<p><a href="#karteikarte-leseansicht">Leseansicht</a>: zur nächsten Markierung springen</p>
+
+							<p><a href="#karteikarte-formularansicht">Formularansicht</a>: zum Karteiwort im Beleg-Feld springen</p>
+						</td>
+					</tr><tr>
+						<td> </td><td> </td>
+						<td> </td><td> </td>
+						<td> </td><td> </td>
+						<td><kbd>⇧</kbd></td>
+						<td>
+							<p>Dropdown-Menü offen: vorherigen Textvorschlag auswählen</p>
+						</td>
+					</tr><tr>
+						<td> </td><td> </td>
+						<td><kbd>Strg</kbd></td><td>+</td>
+						<td> </td><td> </td>
+						<td><kbd>⇧</kbd></td>
+						<td>
+							<p>Dropdown-Menü zum fokussierten Textfeld öffnen</p>
+						</td>
+					</tr><tr>
+						<td> </td><td> </td>
+						<td><kbd>Strg</kbd></td><td>+</td>
+						<td> </td><td> </td>
+						<td><kbd>Bild ⇩</kbd></td>
+						<td>
+							<p>nächste Karteikarte öffnen</p>
+						</td>
+					</tr><tr>
+						<td> </td><td> </td>
+						<td><kbd>Strg</kbd></td><td>+</td>
+						<td> </td><td> </td>
+						<td><kbd>Bild ⇧</kbd></td>
+						<td>
+							<p>vorherige Karteikarte öffnen</p>
+						</td>
+					</tr><tr>
+						<td> </td><td> </td>
+						<td> </td><td> </td>
+						<td> </td><td> </td>
+						<td><kbd>Esc</kbd></td>
+						<td>
+							<p>Dropdown-Menü offen: Menü schließen</p>
+
+							<p>Karteikarte schließen</p>
+						</td>
+					</tr><tr>
+						<td> </td><td> </td>
+						<td> </td><td> </td>
+						<td> </td><td> </td>
+						<td><kbd>F3</kbd></td>
+						<td>
+							<p>Formularansicht: <a href="#belegliste-suchleiste">Suchleiste</a> öffnen</p>
+						</td>
+					</tr><tr>
+						<td> </td><td> </td>
+						<td> </td><td> </td>
+						<td><kbd>Umsch</kbd></td><td>+</td>
+						<td><kbd>F3</kbd></td>
+						<td>
+							<p>Formularansicht: Suchleiste öffnen</p>
+						</td>
+					</tr><tr>
+						<td> </td><td> </td>
+						<td><kbd>Strg</kbd></td><td>+</td>
+						<td> </td><td> </td>
+						<td><kbd>I</kbd></td>
+						<td>
+							<p><a href="#menueBelege-kopieren">Kopierfunktion</a> aktiv: Karteikarte zur Kopierliste hinzufügen</p>
+
+							<p>Karteikarte in die <a href="#karteikarte-zwischenablage">Zwischenablage</a> kopieren</p>
+						</td>
+					</tr><tr>
+						<td> </td><td> </td>
+						<td><kbd>Strg</kbd></td><td>+</td>
+						<td> </td><td> </td>
+						<td><kbd>K</kbd></td>
+						<td>
+							<p>Formularansicht: Kürzung des Belegkontexts umschalten</p>
+						</td>
+					</tr><tr>
+						<td> </td><td> </td>
+						<td><kbd>Strg</kbd></td><td>+</td>
+						<td> </td><td> </td>
+						<td><kbd>N</kbd></td>
+						<td>
+							<p>neue Karteikarte erstellen</p>
+						</td>
+					</tr><tr>
+						<td> </td><td> </td>
+						<td><kbd>Strg</kbd></td><td>+</td>
+						<td> </td><td> </td>
+						<td><kbd>P</kbd></td>
+						<td>
+							<p><a href="#bedeutungsgeruest-druckvorschau">Druckvorschau</a> der Karteikarte anzeigen</p>
+						</td>
+					</tr><tr>
+						<td> </td><td> </td>
+						<td><kbd>Strg</kbd></td><td>+</td>
+						<td> </td><td> </td>
+						<td><kbd>T</kbd></td>
+						<td>
+							<p>Formularansicht: Anzeige der Trennzeichen umschalten</p>
+						</td>
+					</tr><tr>
+						<td> </td><td> </td>
+						<td><kbd>Strg</kbd></td><td>+</td>
+						<td> </td><td> </td>
+						<td><kbd>U</kbd></td>
+						<td>
+							<p>zwischen Lese- und Formularansicht wechseln</p>
+						</td>
+					</tr></table>
 
 					<h2 id="tastaturkuerzel-bedeutungsgeruest">Bedeutungsgerüst</h2>
 
-					<p><mark>…</mark></p>
+					<table class="tastatur last"><tr>
+						<td> </td><td> </td>
+						<td> </td><td> </td>
+						<td> </td><td> </td>
+						<td><kbd>⏎</kbd></td>
+						<td>
+							<p>Textfeld im <a href="#bedeutungsgeruest">Bedeutungsgerüst</a> fokussiert: Änderungen speichern</p>
+						</td>
+					</tr><tr>
+						<td> </td><td> </td>
+						<td> </td><td> </td>
+						<td> </td><td> </td>
+						<td><kbd>⇦</kbd></td>
+						<td>
+							<p>Bedeutung aktiviert: Bedeutung in die nächsthöhere Ebene schieben</p>
+						</td>
+					</tr><tr>
+						<td> </td><td> </td>
+						<td> </td><td> </td>
+						<td> </td><td> </td>
+						<td><kbd>⇨</kbd></td>
+						<td>
+							<p>Bedeutung aktiviert: Bedeutung in die nächsttiefere Ebene schieben</p>
+						</td>
+					</tr><tr>
+						<td> </td><td> </td>
+						<td> </td><td> </td>
+						<td> </td><td> </td>
+						<td><kbd>⇩</kbd></td>
+						<td>
+							<p>Bedeutung aktiviert: Bedeutung um eine Position nach unten schieben</p>
+						</td>
+					</tr><tr>
+						<td> </td><td> </td>
+						<td><kbd>Strg</kbd></td><td>+</td>
+						<td> </td><td> </td>
+						<td><kbd>⇩</kbd></td>
+						<td>
+							<p>Bedeutung aktiviert: nächste Bedeutung aktivieren</p>
 
-					<h2 id="tastaturkuerzel-suchleiste">Suchleiste</h2>
+							<p>erste Bedeutung aktivieren</p>
+						</td>
+					</tr><tr>
+						<td> </td><td> </td>
+						<td> </td><td> </td>
+						<td> </td><td> </td>
+						<td><kbd>⇧</kbd></td>
+						<td>
+							<p>Bedeutung aktiviert: Bedeutung um eine Position nach oben schieben</p>
+						</td>
+					</tr><tr>
+						<td> </td><td> </td>
+						<td><kbd>Strg</kbd></td><td>+</td>
+						<td> </td><td> </td>
+						<td><kbd>⇧</kbd></td>
+						<td>
+							<p>Bedeutung aktiviert: vorherige Bedeutung aktivieren</p>
 
-					<p><mark>…</mark></p>
+							<p>erste Bedeutung aktivieren</p>
+						</td>
+					</tr><tr>
+						<td> </td><td> </td>
+						<td> </td><td> </td>
+						<td> </td><td> </td>
+						<td><kbd>Entf</kbd></td>
+						<td>
+							<p>Bedeutung aktiviert: Bedeutung löschen</p>
+						</td>
+					</tr><tr>
+						<td> </td><td> </td>
+						<td> </td><td> </td>
+						<td> </td><td> </td>
+						<td><kbd>Esc</kbd></td>
+						<td>
+							<p>Bedeutung aktiviert: Bedeutung deaktivieren</p>
+
+							<p>Textfeld fokussiert: letzte Änderung verwerfen und/oder Textfeld schließen</p>
+
+							<p>Bedeutungsgerüst schließen</p>
+						</td>
+					</tr><tr>
+						<td> </td><td> </td>
+						<td> </td><td> </td>
+						<td> </td><td> </td>
+						<td><kbd>Tab</kbd></td>
+						<td>
+							<p>Bedeutung aktiviert: horizontal <a href="#bedeutungsgeruest-tab">durch die Elemente springen</a> (vorwärts)</p>
+						</td>
+					</tr><tr>
+						<td> </td><td> </td>
+						<td> </td><td> </td>
+						<td><kbd>Umsch</kbd></td><td>+</td>
+						<td><kbd>Tab</kbd></td>
+						<td>
+							<p>Bedeutung aktiviert: horizontal durch die Elemente springen (rückwärts)</p>
+						</td>
+					</tr><tr>
+						<td> </td><td> </td>
+						<td><kbd>Strg</kbd></td><td>+</td>
+						<td> </td><td> </td>
+						<td><kbd>B</kbd></td>
+						<td>
+							<p>Bedeutungsgerüst öffnen</p>
+
+							<p>Textfeld einer Bedeutungsdefinition fokussiert: Text fetten</p>
+
+							<p>Textfeld <i>neue Bedeutung</i> fokussieren</p>
+						</td>
+					</tr><tr>
+						<td><kbd>Alt</kbd></td><td>+</td>
+						<td><kbd>Strg</kbd></td><td>+</td>
+						<td> </td><td> </td>
+						<td><kbd>B</kbd></td>
+						<td>
+							<p><a href="#menueKartei-bedeutungsgeruestWechseln">Bedeutungsgerüst wechseln</a></p>
+						</td>
+					</tr><tr>
+						<td> </td><td> </td>
+						<td><kbd>Strg</kbd></td><td>+</td>
+						<td><kbd>Umsch</kbd></td><td>+</td>
+						<td><kbd>B</kbd></td>
+						<td>
+							<p><a href="#bedeutungsgeruest-fenster">Bedeutungsgerüst-Fenster</a> öffnen</p>
+						</td>
+					</tr><tr>
+						<td> </td><td> </td>
+						<td><kbd>Strg</kbd></td><td>+</td>
+						<td> </td><td> </td>
+						<td><kbd>I</kbd></td>
+						<td>
+							<p>Textfeld einer Bedeutungsdefinition fokussiert: Text kursivieren</p>
+						</td>
+					</tr><tr>
+						<td> </td><td> </td>
+						<td><kbd>Strg</kbd></td><td>+</td>
+						<td> </td><td> </td>
+						<td><kbd>P</kbd></td>
+						<td>
+							<p><a href="#bedeutungsgeruest-druckvorschau">Druckvorschau</a> des Bedeutungsgerüsts anzeigen</p>
+
+							<p><a href="#bedeutungsgeruest-fenster">Bedeutungsgerüst-Fenster</a>: Druckvorschau des Bedeutungsgerüsts im zugehörigen <a href="#kurzanleitung-programmfensterHauptfenster">Hauptfenster</a> anzeigen</p>
+						</td>
+					</tr><tr>
+						<td> </td><td> </td>
+						<td><kbd>Strg</kbd></td><td>+</td>
+						<td> </td><td> </td>
+						<td><kbd>U</kbd></td>
+						<td>
+							<p>Textfeld einer Bedeutungsdefinition fokussiert: Text unterstreichen</p>
+						</td>
+					</tr></table>
 				</section>
 
 				<!-- MENÜPUNKT APP -->

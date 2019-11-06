@@ -81,10 +81,6 @@ let initWin = {
 			evt.preventDefault();
 			hilfe.sucheWechseln();
 		});
-		document.getElementById("suchleiste-link").addEventListener("click", evt => {
-			evt.preventDefault();
-			suchleiste.einblenden();
-		});
 		document.getElementById("navi-back").addEventListener("click", evt => {
 			evt.preventDefault();
 			hilfe.historyNavi(false);
@@ -111,6 +107,19 @@ let initWin = {
 		window.addEventListener("contextmenu", evt => {
 			evt.preventDefault();
 			popup.oeffnen(evt);
+		});
+	},
+	// Events initialisieren: Kopf-Icons (Changelog, Dokumentation, Handbuch)
+	eventsHilfeKopf () {
+		document.querySelectorAll("#kopf-icons a").forEach(a => {
+			a.addEventListener("click", function(evt) {
+				evt.preventDefault();
+				if (/suchleiste$/.test(this.id)) {
+					suchleiste.einblenden();
+				} else if (/drucken$/.test(this.id)) {
+					print();
+				}
+			});
 		});
 	},
 };

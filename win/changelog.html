@@ -208,6 +208,8 @@
 
 					<li><a href="#menueApp-karteisuche" class="link-handbuch">Karteisuche</a>: Die Karteienliste, die nach einer erfolgreichen Suche aufgebaut wird, wurde technisch so überarbeitet, dass die Listenelemente bei einer Navigation mit <kbd>Tab</kbd> fokussiert und dann via <kbd>⏎</kbd> geöffnet werden können. Außerdem hat der Sperrbildschirm, der anzeigt, dass eine Suche läuft, eine kleine Textanimation erhalten.</li>
 
+					<li><a href="#menueBelege-einfuegen" class="link-handbuch">Einfügen-Fenster</a>: Der Abschluss der Kopierfunktion hat nun auch ein Animations-Icon erhalten, um zu verdeutlichen, dass die Einfüge-Operation ausgeführt wurde: <img src="../img/einfuegen.svg" width="24" height="24" alt="">. Und die Animation des Reloads der Belegquellen ist nun schicker: Das Reload-Icon dreht sich einmal um sich selbst.</li>
+
 					<li>
 						<p>Das Öffnen der Programmfenster ist mit dem Anwachsen des Quellcodes immer langsamer geworden. Die Art und Weise, wie Programmfenster geöffnet werden, wurde darum neu geregelt. Sie öffnen sich zwar nun deutlich rascher, zeigen nach dem Aufruf aber zunächst eine Art Sperrbild, das verschwindet, sobald der Content verfügbar ist.</p>
 
@@ -219,6 +221,8 @@
 					<li>Reorganisation der Programm-Icons: Das Chaos im Icon-Ordner, das sich mit der Zeit entwickelt hatte, wurde behoben. Dabei wurden <abbr title="unter anderem">u. a.</abbr> gut 50 doppelte und daher unnötige Icons entfernt.</li>
 
 					<li>Programmfenster werden jetzt mit einem zum Betriebssystem passenden Icon geöffnet.</li>
+
+					<li>Der Einheitlichkeit halber haben auch das <a href="#" class="link-handbuch">Handbuch</a> und die <a href="#" class="link-dokumentation">technische Dokumentation</a> eine Druckfunktion mit zugehörigem Icon bekommen. Gedruckt wird das sichtbare Kapitel, <span lang="it">per quel che vale</span>.</li>
 
 					<li>
 						<p>Es hat sich viel <span lang="en">under the hood</span> getan: Der Quelltext wurde an zahlreichen Stellen stark restrukturiert, was ihn nicht nur klarer und moderner machte, sondern auch hunderte Zeilen doppelten oder überflüssig komplizierten Codes einsparte.</p>
@@ -329,6 +333,8 @@
 					<li>Die Navigation in Icon- oder Button-Gruppen, in denen der Fokus liegt, funktionierte mit den Navigationspfeilen <kbd>⇦</kbd> <abbr title="beziehungsweise">bzw.</abbr> <kbd>⇨</kbd> mitunter nicht mehr korrekt.</li>
 
 					<li>Das Icon im Programmmenü für die Funktion <a href="#menueKartei-formvarianten" class="link-handbuch"><i>Kartei &gt; Formvarianten</i></a> war veraltet.</li>
+
+					<li>Das Icon, das in der Animation erscheint, sobald Text kopiert wurde, war verwirrend, weil es sich dabei eigentlich um das Einfügen-Icon handelt. Fortan wird dieses Icon genutzt: <img src="../img/einfuegen-pfeil.svg" width="24" height="24" alt="">.</li>
 
 					<li>Das Installieren und Deinstallieren von DEB-Paketen war reichlich langsam, was an einer unnötigen Dopplung von Kommandos zur Registrierung des <abbr title="Wortgeschichte digital">WGD</abbr>-Dateityps lag. Diese funktioniert seit einiger Zeit zwar prinzipiell <span lang="en">out of the box</span>, aber nur unvollständig (Dateityp-Icons wurden nicht registriert). Der Vorgang wird für Linux-Pakete darum nun wieder vollkommen von selbst geschriebenen Scripts übernommen.</li>
 				</ul>

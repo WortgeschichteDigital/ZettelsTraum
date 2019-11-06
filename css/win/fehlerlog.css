@@ -54,20 +54,6 @@ main {
 	padding: 0 10px 10px 10px;
 }
 
-/* Animation ------------------------------------*/
-@keyframes updated {
-	50% {
-		color: var(--farbe);
-	}
-}
-
-.updated {
-	animation-name: updated;
-	animation-duration: .5s;
-	animation-timing-function: ease;
-	animation-iteration-count: 2;
-}
-
 /* Elemente ------------------------------------- */
 main div {
 	margin-top: 25px;

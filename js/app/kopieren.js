@@ -242,12 +242,15 @@ let kopieren = {
 	einfuegenBasisdaten (animation) {
 		const {ipcRenderer} = require("electron");
 		ipcRenderer.send("kopieren-basisdaten", winInfo.winId);
+		let button = document.getElementById("kopieren-einfuegen-reload");
 		if (animation) {
-			const button = document.getElementById("kopieren-einfuegen-reload");
-			button.classList.add("animation");
-			setTimeout(function() {
-				button.classList.remove("animation");
-			}, 1000);
+			button.classList.add("rotieren-bitte");
+			button.addEventListener("animationend", rotiert);
+		}
+		// Animationsfunktion
+		function rotiert () {
+			button.classList.remove("rotieren-bitte");
+			button.removeEventListener("animationend", rotiert);
 		}
 	},
 	// Zwischenspeicher für die Basisdaten der einfügbaren Belege
@@ -591,6 +594,7 @@ let kopieren = {
 		// die folgenden Operationen sind fast alle unnötig, wenn ein Beleg dupliziert wurde
 		if (duplikat) {
 			liste.status(true); // Liste und Filter neu aufbauen
+			helfer.animation("duplikat");
 			return id_karte_duplikat;
 		}
 		// BedeutungsgerüstFenster auffrischen
@@ -602,6 +606,8 @@ let kopieren = {
 		if (optionen.data.einstellungen["einfuegen-schliessen"]) {
 			overlay.schliessen(document.getElementById("kopieren-einfuegen"));
 		}
+		// Feedback anzeigen
+		helfer.animation("einfuegen");
 		// Gab es Fehler beim Importieren der Bedeutungen?
 		if (fehler_bedeutungen.size) {
 			let fehler_belege = [];

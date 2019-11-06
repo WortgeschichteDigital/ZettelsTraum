@@ -1,5 +1,6 @@
 @charset "utf-8";
 
+/* Overlay-Animation ---------------------------- */
 #animation {
 	position: fixed;
 	top: calc(100vh / 2 - 50px);
@@ -29,4 +30,26 @@
 	font-size: 36px;
 	line-height: 100px;
 	text-shadow: -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff, 1px 1px 0 #fff;
+}
+
+/* Rotations-Animation -------------------------- */
+@keyframes rotieren {
+	25% {
+		transform: rotate(90deg);
+	}
+	50% {
+		transform: rotate(180deg);
+	}
+	75% {
+		transform: rotate(270deg);
+	}
+	100% {
+		transform: rotate(360deg);
+	}
+}
+
+.rotieren-bitte svg {
+	animation-name: rotieren;
+	animation-duration: .5s;
+	animation-timing-function: linear;
 }

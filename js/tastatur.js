@@ -43,7 +43,7 @@ let tastatur = {
 				overlay.schliessen(link);
 				return;
 			}
-			// Bedeutungsgerüst-Formular schließen
+			// Bedeutung deaktivieren oder Bedeutungsgerüst-Formular schließen
 			if (helfer.bedeutungenOffen()) {
 				if (bedeutungen.moveAktiv) {
 					bedeutungen.moveAus();
@@ -315,11 +315,11 @@ let tastatur = {
 			}
 			return;
 		}
-		// Key "p" (Bedeutungsgerüst, Changelog)
+		// Key "p" (Bedeutungsgerüst, Changelog, Dokumentation, Handbuch)
 		if (m === "Ctrl" && evt.key === "p") {
 			if (winInfo.typ === "bedeutungen") {
 				bedeutungen.drucken();
-			} else if (winInfo.typ === "changelog") {
+			} else if (/changelog|dokumentation|handbuch/.test(winInfo.typ)) {
 				print();
 			}
 			return;

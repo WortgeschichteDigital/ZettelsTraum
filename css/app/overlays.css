@@ -1740,15 +1740,3 @@ input[id^="redaktion-person"] {
 #kopieren-einfuegen-formular input:checked + label {
 	color: var(--textFarbe);
 }
-
-#kopieren-einfuegen-reload {
-	transition: color .5s ease;
-}
-
-#kopieren-einfuegen-reload.animation {
-	color: var(--farbe);
-}
-
-#kopieren-einfuegen-reload svg path {
-	fill: currentcolor;
-}
