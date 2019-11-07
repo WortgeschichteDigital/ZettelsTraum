@@ -10,9 +10,13 @@ window.addEventListener("load", async () => {
 	tastatur.shortcutsText();
 
 	// ICONS
-	document.getElementById("reload").addEventListener("click", evt => {
+	let reload = document.getElementById("reload");
+	reload.addEventListener("click", evt => {
 		evt.preventDefault();
 		fehlerlog.reload();
+	});
+	reload.addEventListener("animationend", function() {
+		this.classList.remove("rotieren-bitte");
 	});
 	fehlerlog.kopieren(document.getElementById("kopieren"));
 

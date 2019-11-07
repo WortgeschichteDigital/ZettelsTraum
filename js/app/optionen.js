@@ -412,7 +412,11 @@ let optionen = {
 		}
 	},
 	// Informationen zu den Tag-Dateien im Einstellungen-Fenster auffrischen
-	anwendenTags () {
+	//   check = true || undefined
+	//     (eine der Tag-Dateien wurde manuell überprüft)
+	//   checkTyp = String || undefined
+	//     (der Typ der Tag-Datei, der manuell überprüft wurde)
+	anwendenTags (check = false, checkTyp = "") {
 		let cont = document.getElementById("tags-cont");
 		helfer.keineKinder(cont);
 		// Tabelle erstellen
@@ -443,6 +447,9 @@ let optionen = {
 			td.appendChild(a);
 			a.href = "#";
 			a.classList.add("icon-link", "icon-reload");
+			if (check && checkTyp === typ) {
+				optionen.anwendenTagsAnimation(a);
+			}
 			a.dataset.typ = typ;
 			optionen.tagsManuCheck(a);
 			// Datei-Pfad
@@ -513,6 +520,15 @@ let optionen = {
 			td.classList.add("tags-leer");
 			td.textContent = "keine Tag-Dateien";
 		}
+	},
+	// Animation des Reload-Links nach der manuellen Überprüfung einer Tag-Datei
+	//   a = Element
+	//     (Reload-Icon)
+	anwendenTagsAnimation (a) {
+		a.addEventListener("animationend", function() {
+			this.classList.remove("rotieren-bitte");
+		});
+		setTimeout(() => a.classList.add("rotieren-bitte"), 250);
 	},
 	// Tag-Dateien aus app/resources laden
 	tagsAutoLaden () {
@@ -658,7 +674,7 @@ let optionen = {
 					if (result === true) { // Datei wurde normal überprüft
 						optionen.speichern();
 					}
-					optionen.anwendenTags();
+					optionen.anwendenTags(true, typ);
 				});
 		});
 	},

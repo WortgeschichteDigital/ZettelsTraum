@@ -48,8 +48,16 @@
 	}
 }
 
-.rotieren-bitte svg {
+.rotieren-bitte svg,
+.rotieren-bitte.icon-link {
 	animation-name: rotieren;
 	animation-duration: .5s;
 	animation-timing-function: linear;
+}
+
+#stamm-popup-sperre.rotieren-bitte img {
+	animation-name: rotieren;
+	animation-duration: 1s;
+	animation-timing-function: linear;
+	animation-iteration-count: infinite;
 }

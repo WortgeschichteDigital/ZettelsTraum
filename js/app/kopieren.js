@@ -242,15 +242,8 @@ let kopieren = {
 	einfuegenBasisdaten (animation) {
 		const {ipcRenderer} = require("electron");
 		ipcRenderer.send("kopieren-basisdaten", winInfo.winId);
-		let button = document.getElementById("kopieren-einfuegen-reload");
 		if (animation) {
-			button.classList.add("rotieren-bitte");
-			button.addEventListener("animationend", rotiert);
-		}
-		// Animationsfunktion
-		function rotiert () {
-			button.classList.remove("rotieren-bitte");
-			button.removeEventListener("animationend", rotiert);
+			document.getElementById("kopieren-einfuegen-reload").classList.add("rotieren-bitte");
 		}
 	},
 	// Zwischenspeicher für die Basisdaten der einfügbaren Belege

@@ -592,7 +592,7 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
 
 					<p>Nach dem Laden einer <abbr title="Wortgeschichte digital">WGD</abbr>-Datei in <i class="app-name"></i> befinden sich die Daten im globalen Objekt <code class="quelltext">data</code>. Ihre Werte lassen sich dann in allen Funktionen des Hauptfensters durch einfache Statements wie <code class="quelltext">data.dc</code> lesen oder schreiben.</p>
 
-					<p>Alle Dateien sind gleich aufgebaut (<span class="obacht">Datenformat Version 9</span>):</p>
+					<p>Alle Dateien sind gleich aufgebaut (<span class="obacht">Datenformat Version 10</span>):</p>
 
 					<table class="wgd">
 						<tr>
@@ -762,6 +762,18 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
 							<td class="datentyp">String</td>
 							<td> </td>
 							<td>Formvariante</td>
+						</tr>
+						<tr class="wgd-ebene3">
+							<td><p><code class="quelltext">ps</code></p></td>
+							<td class="datentyp">String</td>
+							<td>Part-of-speech-Tag</td>
+							<td>Wortart, genauer: ein <a href="http://kaskade.dwds.de/~moocow/mirror/projects/moot/">Part-of-speech-Tag</a>;<br><span class="obacht">mit Version 10 ergänzt</span></td>
+						</tr>
+						<tr class="wgd-ebene3">
+							<td><p><code class="quelltext">tr</code></p></td>
+							<td class="datentyp">Boolean</td>
+							<td> </td>
+							<td>Wort trunkiert markieren, sprich: links und rechts erweitern;<br><span class="obacht">mit Version 10 ergänzt</span></td>
 						</tr>
 						<tr class="wgd-alt">
 							<td><code class="quelltext">ha</code></td>

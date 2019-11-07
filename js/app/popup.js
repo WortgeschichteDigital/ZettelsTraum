@@ -86,7 +86,9 @@ let popup = {
 		} else if (target === "start-datei") {
 			items = ["karteiEntfernen", "sep", "ordner", "sep", "karteiErstellen"];
 		} else if (target === "link") {
-			if (!document.getElementById("beleg").classList.contains("aus")) {
+			if (overlay.oben() === "stamm") {
+				items.push("link", "sep", "schliessen");
+			} else if (!document.getElementById("beleg").classList.contains("aus")) {
 				items.push("link", "sep", "karteikarteConf");
 			} else if (!document.getElementById("liste").classList.contains("aus")) {
 				items.push("link", "sep", "belegBearbeiten", "belegLoeschen", "belegZwischenablage", "belegDuplizieren", "sep", "beleglisteConf");

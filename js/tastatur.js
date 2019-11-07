@@ -37,6 +37,11 @@ let tastatur = {
 				dropdown.schliessen();
 				return;
 			}
+			// Konfigurationsdialog in Formvarianten schließen
+			if (document.getElementById("stamm-popup")) {
+				stamm.kopfKonfigSchliessen();
+				return;
+			}
 			// Overlay-Fenster schließen
 			if (overlayId) {
 				let link = document.querySelector(`#${overlayId} h2 .icon-schliessen`);

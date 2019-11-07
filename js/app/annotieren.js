@@ -136,6 +136,7 @@ let annotieren = {
 		img.src = "img/x.svg";
 		img.width = "24";
 		img.height = "24";
+		img.title = "Popup schließen (Esc)";
 		// Farben
 		for (let i = 0; i < 5; i++) {
 			let farbe = document.createElement("span");

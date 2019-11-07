@@ -4,7 +4,7 @@ let konversion = {
 	// aktuelle Version des Dateiformats
 	// *** WICHTIG! *** WICHTIG! *** WICHTIG! ***
 	// Bei Änderungen anpassen!
-	version: 9,
+	version: 10,
 	// Verteilerfunktion
 	start () {
 		konversion.von1nach2();
@@ -15,6 +15,7 @@ let konversion = {
 		konversion.von6nach7();
 		konversion.von7nach8();
 		konversion.von8nach9();
+		konversion.von9nach10();
 	},
 	// Konversion des Dateiformats von Version 1 nach Version 2
 	von1nach2 () {
@@ -184,6 +185,24 @@ let konversion = {
 					fo: fo,
 				},
 			};
+		}
+		// Versionsnummer hochzählen
+		data.ve++;
+		// Änderungsmarkierung setzen
+		kartei.karteiGeaendert(true);
+	},
+	// Konversion des Dateiformats von Version 9 nach Version 10
+	von9nach10 () {
+		if (data.ve > 9) {
+			return;
+		}
+		// Datenfelder "ps" und "tr" in allen Wörtern der Formvarianten ergänzen
+		for (let wort in data.fv) {
+			if (!data.fv.hasOwnProperty(wort)) {
+				continue;
+			}
+			data.fv[wort].ps = "";
+			data.fv[wort].tr = true;
 		}
 		// Versionsnummer hochzählen
 		data.ve++;

@@ -288,6 +288,12 @@ window.addEventListener("load", async () => {
 	document.querySelectorAll(".overlay-schliessen").forEach(a => overlay.initSchliessen(a));
 	// Handbuch-Links von Overlays
 	document.querySelectorAll(".icon-handbuch").forEach(a => helfer.handbuchLink(a));
+	// Rotationsanimationen
+	document.querySelectorAll("#kopieren-einfuegen-reload").forEach(i => {
+		i.addEventListener("animationend", function() {
+			this.classList.remove("rotieren-bitte");
+		});
+	});
 
 	// VISUELLE ANPASSUNGEN
 	// App-Namen eintragen
