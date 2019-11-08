@@ -4,23 +4,7 @@
 @import url(../bedeutungenbaum.css);
 
 /* Alle Overlay-Fenster ------------------------- */
-#anhaenge,
-#dialog,
-#drucken,
-#einstellungen,
-#gerueste,
-#geruestwechseln,
-#karteisuche,
-#kopieren-einfuegen,
-#kopieren-liste,
-#lexika,
-#meta,
-#notizen,
-#redaktion,
-#sonderzeichen,
-#stamm,
-#tagger,
-#zeitraumgrafik {
+.overlay {
 	position: fixed;
 	top: 0;
 	left: 0;
@@ -32,23 +16,7 @@
 	backdrop-filter: blur(3px);
 }
 
-#anhaenge > div,
-#dialog > div,
-#drucken > div,
-#einstellungen > div,
-#gerueste > div,
-#geruestwechseln > div,
-#karteisuche > div,
-#kopieren-einfuegen > div,
-#kopieren-liste > div,
-#lexika > div,
-#meta > div,
-#notizen > div,
-#redaktion > div,
-#sonderzeichen > div,
-#stamm > div,
-#tagger > div,
-#zeitraumgrafik > div {
+.overlay > div {
 	margin: 80px auto 0 auto;
 	border-bottom-right-radius: 10px;
 	border-bottom-left-radius: 10px;
@@ -56,47 +24,19 @@
 	background-color: #fff;
 }
 
-#anhaenge h2,
-#dialog h2,
-#drucken h2,
-#einstellungen h2,
-#gerueste h2,
-#geruestwechseln h2,
-#karteisuche h2,
-#kopieren-einfuegen h2,
-#kopieren-liste h2,
-#lexika h2,
-#meta h2,
-#notizen h2,
-#redaktion h2,
-#sonderzeichen h2,
-#stamm h2,
-#tagger h2,
-#zeitraumgrafik h2 {
+.overlay h2 {
 	position: relative;
 }
 
-#anhaenge h2 a,
-#dialog h2 a,
-#drucken h2 a,
-#einstellungen h2 a,
-#gerueste h2 a,
-#geruestwechseln h2 a,
-#karteisuche h2 a,
-#kopieren-einfuegen h2 a,
-#kopieren-liste h2 a,
-#lexika h2 a,
-#meta h2 a,
-#notizen h2 a,
-#redaktion h2 a,
-#sonderzeichen h2 a,
-#stamm h2 a,
-#tagger h2 a,
-#zeitraumgrafik h2 a {
+.overlay h2 a {
 	position: absolute;
 	top: 2px;
 	right: 5px;
 	background-color: #fff;
+}
+
+.overlay h2 a:focus {
+	background-color: var(--highlight);
 }
 
 .icon-schliessen {
@@ -702,8 +642,8 @@ p#quick-config-presets a {
 	vertical-align: bottom;
 }
 
-#stamm-kopf img.last {
-	margin-right: 5px;
+#stamm-kopf .wort {
+	margin-left: 5px;
 }
 
 #stamm-kopf .konfig {
@@ -724,7 +664,7 @@ p#quick-config-presets a {
 #stamm-popup {
 	position: absolute;
 	top: 32px;
-	z-index: 1;
+	z-index: 2;
 	box-shadow: var(--boxShadow);
 	border: 1px solid var(--linie);
 	border-radius: 5px;
@@ -797,7 +737,7 @@ p#quick-config-presets a {
 	margin-right: 15px;
 }
 
-#stamm-popup-sperre {
+#stamm-sperre {
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -805,7 +745,7 @@ p#quick-config-presets a {
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	border-radius: 5px;
+	border-radius: 10px; /* für #stamm-cont müssen es 10px sein, für #stamm-popup würden 5px reichen */
 	width: 100%;
 	height: 100%;
 	background-color: rgba(255, 255, 255, .7);
@@ -813,12 +753,26 @@ p#quick-config-presets a {
 }
 
 #stamm-cont {
+	position: relative;
 	padding: 10px;
 }
 
-#stamm-cont p.dta {
+#stamm-cont p.form {
+	position: relative;
 	margin-bottom: 5px;
-	text-align: right;
+}
+
+#stamm-cont p.form input[type="button"] {
+	position: absolute;
+	right: 0;
+}
+
+#stamm-cont input[type="radio"] {
+	margin-left: 15px;
+}
+
+#stamm-cont input[type="radio"]:first-child {
+	margin-left: 6px;
 }
 
 #stamm-cont input[type="button"] {
@@ -843,6 +797,10 @@ p#quick-config-presets a {
 
 #meta-cont input[type="text"] {
 	width: calc(100% - 121px - 31px); /* Button 121px, 31px padding und border */
+}
+
+#stamm-cont label {
+	color: var(--textFarbe);
 }
 
 #stamm-liste,
@@ -1459,17 +1417,19 @@ input[id^="redaktion-person"] {
 	padding: 10px 0 0 10px;
 }
 
-#sonderzeichen-cont span {
+#sonderzeichen-cont a {
 	display: inline-block;
 	margin: 0 10px 10px 0;
 	border: 1px solid var(--linie);
 	width: 24px;
 	height: 24px;
+	color: var(--text);
 	text-align: center;
 }
 
-#sonderzeichen-cont span:hover {
-	background-color: var(--hintergrund);
+#sonderzeichen-cont a:focus,
+#sonderzeichen-cont a:hover {
+	background-color: var(--hover);
 }
 
 /* Zeitraumgrafik ------------------------------- */

@@ -175,7 +175,7 @@ window.addEventListener("load", async () => {
 		beleg.ctrlLinks(a);
 	});
 	// Sonderzeichen
-	document.querySelectorAll("#sonderzeichen-cont span").forEach(i => sonderzeichen.eintragen(i));
+	document.querySelectorAll("#sonderzeichen-cont a").forEach(i => sonderzeichen.eintragen(i));
 	// Kopierfunktion
 	kopieren.addListeAlle(document.getElementById("liste-link-kopieren"));
 	document.getElementById("kopieren").addEventListener("click", () => kopieren.liste());
@@ -227,6 +227,8 @@ window.addEventListener("load", async () => {
 	document.querySelectorAll("#stamm input").forEach(i => {
 		if (i.type === "button") {
 			stamm.aktionButton(i);
+		} else if (i.type === "radio") {
+			stamm.aktionRadio(i);
 		} else { // Text-Input
 			stamm.aktionText(i);
 		}

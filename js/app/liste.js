@@ -787,10 +787,27 @@ let liste = {
 		schnitt = schnitt.replace(/<.+?>/g, ""); // HTML-Formatierungen vorher löschen!
 		schnitt = liste.belegTrennungWeg(schnitt, true); // Trennzeichen und Seitenumbrüche weg
 		// 1. Treffer des Worts im Text ermitteln, Beleg am Anfang ggf. kürzen
-		let reg = new RegExp(helfer.formVariRegExpRegs[0], "gi");
-		if (reg.test(schnitt) &&
-				reg.lastIndex - kartei.wort.length > 35) {
-			schnitt = `…${schnitt.substring(reg.lastIndex - kartei.wort.length - 25)}`;
+		// (da Wörter auf "nur markieren" gesetzt sein können:
+		//   - RegExp eines Worts suchen, dass nicht nur markiert werden soll
+		//   - kein RegExp gefunden? => keine Stelle aus dem Schnitt suchen)
+		let formVari;
+		for (let i of helfer.formVariRegExpRegs) {
+			if (!data.fv[i.wort].ma) {
+				formVari = i;
+				break;
+			}
+		}
+		if (formVari) {
+			let reg;
+			if (!data.fv[formVari.wort].tr) {
+				reg = new RegExp(`(^|[${helfer.ganzesWortRegExp.links}])(${formVari.reg})($|[${helfer.ganzesWortRegExp.rechts}])`, "gi");
+			} else {
+				reg = new RegExp(formVari.reg, "gi");
+			}
+			if (reg.test(schnitt) &&
+					reg.lastIndex - formVari.wort.length > 35) {
+				schnitt = `…${schnitt.substring(reg.lastIndex - formVari.wort.length - 25)}`;
+			}
 		}
 		// Performance-Schub: Vorschautext kürzen
 		if (schnitt.length > 280) {
@@ -871,13 +888,26 @@ let liste = {
 		if (!optionen.data.belegliste.wort_hervorheben && !immer) {
 			return schnitt;
 		}
+		let regNoG;
 		for (let i of helfer.formVariRegExpRegs) {
-			let reg = new RegExp(`[^${helfer.ganzesWortRegExp.linksWort}]*(${i})[^${helfer.ganzesWortRegExp.rechtsWort}]*`, "gi");
+			let reg;
+			if (!data.fv[i.wort].tr) {
+				reg = new RegExp(`(?<vorWort>^|[${helfer.ganzesWortRegExp.links}])(?<wort>${i.reg})(?<nachWort>$|[${helfer.ganzesWortRegExp.rechts}])`, "gi");
+				regNoG = new RegExp(`(?<vorWort>^|[${helfer.ganzesWortRegExp.links}])(?<wort>${i.reg})(?<nachWort>$|[${helfer.ganzesWortRegExp.rechts}])`, "i"); // wegen lastIndex
+			} else {
+				reg = new RegExp(`[^${helfer.ganzesWortRegExp.linksWort}]*(${i.reg})[^${helfer.ganzesWortRegExp.rechtsWort}]*`, "gi");
+				regNoG = null;
+			}
 			schnitt = helfer.suchtrefferBereinigen(schnitt.replace(reg, setzenMark), "wort");
 		}
 		return schnitt;
 		// Ersetzungsfunktion; vgl. suchleiste.suchen()
 		function setzenMark (m) {
+			let r;
+			if (regNoG) {
+				r = regNoG.exec(m);
+				m = r.groups.wort;
+			}
 			if (/<.+?>/.test(m)) {
 				m = m.replace(/<.+?>/g, function(m) {
 					return `</mark>${m}<mark class="wort">`;
@@ -903,6 +933,9 @@ let liste = {
 						m += splitted[i];
 					}
 				}
+			}
+			if (r) {
+				return `${r.groups.vorWort}${m}${r.groups.nachWort}`;
 			}
 			// aufbereiteten Match auswerfen
 			return m;
@@ -931,13 +964,27 @@ let liste = {
 		if (marks.length === transparent) {
 			return false;
 		}
-		// Test 3: Ist das Karteiwort mehrgliedrig? Wenn nein => alles okay (das Wort taucht auf)
+		// Test 3: Ist das Karteiwort mehrgliedrig? Wenn nein => 
 		if (helfer.formVariRegExpRegs.length === 1) {
-			return true;
+			if (data.fv[helfer.formVariRegExpRegs[0].wort].ma) {
+				return false; // nicht okay (das Wort soll nur markiert, aber nicht berücksichtigt werden)
+			}
+			return true; // alles okay (das Wort taucht auf und soll berücksichtigt werden)
 		}
-		// Test 4: Tauchen alle Wörter eines mehrgliedrigen Karteiworts auf?
-		let woerter = Array(helfer.formVariRegExpRegs.length).fill(false),
-			alleMarks = div.querySelectorAll(".wort");
+		// Test 4: Sollen hier überhaupt Wörter berücksichtigt werden?
+		let woerter = [];
+		for (let i of helfer.formVariRegExpRegs) {
+			if (data.fv[i.wort].ma) {
+				woerter.push(true);
+			} else {
+				woerter.push(false);
+			}
+		}
+		if (woerter.every(i => i === true)) {
+			return false; // keine Wörter zu berücksichtigen
+		}
+		// Test 5: Tauchen alle Wörter eines mehrgliedrigen Karteiworts auf?
+		let alleMarks = div.querySelectorAll(".wort");
 		for (let i = 0, len = alleMarks.length; i < len; i++) {
 			let treffer = alleMarks[i].textContent;
 			if (alleMarks[i].classList.contains("wort-kein-ende")) {
@@ -947,7 +994,16 @@ let liste = {
 				} while (i < len - 1 && alleMarks[i].classList.contains("wort-kein-ende"));
 			}
 			for (let j = 0, len = helfer.formVariRegExpRegs.length; j < len; j++) {
-				let reg = new RegExp(helfer.formVariRegExpRegs[j], "i");
+				let formVari = helfer.formVariRegExpRegs[j],
+					reg;
+				if (data.fv[formVari.wort].ma) { // Wort nur markieren, sonst nicht berücksichtigen
+					continue;
+				}
+				if (!data.fv[formVari.wort].tr) { // nicht trunkiert
+					reg = new RegExp(`(^|[${helfer.ganzesWortRegExp.links}])(${formVari.reg})($|[${helfer.ganzesWortRegExp.rechts}])`, "i");
+				} else { // trunkiert
+					reg = new RegExp(formVari.reg, "i");
+				}
 				if (reg.test(treffer)) {
 					woerter[j] = true;
 				}

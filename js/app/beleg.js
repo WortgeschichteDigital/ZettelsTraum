@@ -1496,7 +1496,15 @@ let beleg = {
 	},
 	// regulären Ausdruck für den Sprung im Beleg-Formular zurücksetzen
 	ctrlSpringenFormReset () {
-		beleg.ctrlSpringenFormReg.reg = new RegExp(`[^${helfer.ganzesWortRegExp.links}]*(${helfer.formVariRegExpRegs.join("|")})[^${helfer.ganzesWortRegExp.rechts}]*`, "gi");
+		let regs = [];
+		for (let i of helfer.formVariRegExpRegs) {
+			if (!data.fv[i.wort].tr) {
+				regs.push(`(^|[${helfer.ganzesWortRegExp.links}])(${i.reg})($|[${helfer.ganzesWortRegExp.rechts}])`);
+			} else {
+				regs.push(`[^${helfer.ganzesWortRegExp.links}]*(${i.reg})[^${helfer.ganzesWortRegExp.rechts}]*`);
+			}
+		}
+		beleg.ctrlSpringenFormReg.reg = new RegExp(regs.join("|"), "gi");
 	},
 	// <textarea> mit dem Belegtext zum Wort scrollen
 	ctrlSpringenForm (evt) {

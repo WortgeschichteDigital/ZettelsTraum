@@ -38,7 +38,8 @@ let tastatur = {
 				return;
 			}
 			// Konfigurationsdialog in Formvarianten schließen
-			if (document.getElementById("stamm-popup")) {
+			if (overlayId === "stamm" &&
+					document.getElementById("stamm-popup")) {
 				stamm.kopfKonfigSchliessen();
 				return;
 			}

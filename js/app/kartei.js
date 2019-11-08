@@ -40,7 +40,7 @@ let kartei = {
 			wo: kartei.wort, // Wort
 		};
 		// Formvarianten aus dem DTA importieren
-		stamm.dtaGet(false);
+		stamm.dtaGet(kartei.wort, false);
 		// ggf. für diesen Rechner registrierte BearbeiterIn eintragen
 		if (optionen.data.einstellungen.bearbeiterin) {
 			data.be.push(optionen.data.einstellungen.bearbeiterin);
@@ -459,7 +459,7 @@ let kartei = {
 					kartei.wort = wort;
 					data.wo = wort;
 					data.fv = {};
-					stamm.dtaGet(false);
+					stamm.dtaGet(kartei.wort, false);
 					kartei.wortEintragen();
 					bedeutungenWin.daten();
 				} else if (dialog.antwort && !wort) {

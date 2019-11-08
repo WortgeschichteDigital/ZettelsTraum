@@ -698,8 +698,16 @@ let belegImport = {
 			return;
 		}
 		for (let i of helfer.formVariRegExpRegs) {
-			let form_reg = new RegExp(i, "i");
-			if (!form_reg.test(beleg.data.bs)) {
+			if (data.fv[i.wort].ma) { // diese Variante nur markieren => hier nicht berücksichtigen
+				continue;
+			}
+			let reg;
+			if (!data.fv[i.wort].tr) { // nicht trunkiert
+				reg = new RegExp(`(^|[${helfer.ganzesWortRegExp.links}])(${i.reg})($|[${helfer.ganzesWortRegExp.rechts}])`, "i");
+			} else { // trunkiert
+				reg = new RegExp(i.reg, "i");
+			}
+			if (!reg.test(beleg.data.bs)) {
 				dialog.oeffnen({
 					typ: "alert",
 					text: "Das Karteiwort wurde im gerade importierten Belegtext nicht gefunden.",

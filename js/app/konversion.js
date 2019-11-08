@@ -201,6 +201,7 @@ let konversion = {
 			if (!data.fv.hasOwnProperty(wort)) {
 				continue;
 			}
+			data.fv[wort].ma = false;
 			data.fv[wort].ps = "";
 			data.fv[wort].tr = true;
 		}

@@ -10,12 +10,14 @@ let sonderzeichen = {
 		sonderzeichen.caller = caller;
 		let fenster = document.getElementById("sonderzeichen");
 		overlay.oeffnen(fenster);
+		document.querySelector("#sonderzeichen-cont a").focus();
 	},
 	// Sonderzeichen eintragen
 	//   ele = Element
 	//     (Element, in dem das Sonderzeichen steht)
 	eintragen (ele) {
-		ele.addEventListener("click", function() {
+		ele.addEventListener("click", function(evt) {
+			evt.preventDefault();
 			// Fenster schließen
 			overlay.schliessen(document.getElementById("sonderzeichen"));
 			// Feld fokussieren

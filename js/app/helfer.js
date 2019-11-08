@@ -419,7 +419,10 @@ let helfer = {
 	ganzesWortRegExp: {
 		links: `\\s/\\\\([\\\]{<>`,
 		rechts: `\\s"/\\\\)\\\]!?.:,;<>`,
-		linksWort: `\\s/\\{<>`, // für Hervorhebung Karteiwort gewisse Klammern ignorieren: [] ()
+		// für Hervorhebung Karteiwort gewisse Klammern ignorieren: [] ()
+		// (das ist deswegen, damit ich Komposita, in denen ein Glied geklammert ist,
+		// auch hervorheben kann; z.B.: "(Handels-)Kolonie")
+		linksWort: `\\s/\\{<>`,
 		rechtsWort: `\\s"/\\!?.:,;<>`,
 	},
 	// Tokens mit spezieller Bedeutung für reguläre Ausdrücke escapen
@@ -457,7 +460,10 @@ let helfer = {
 		}
 		return string;
 	},
-	// Sammlung der regulären Ausdrücke aller Formvarianten
+	// Sammlung der regulären Ausdrücke aller Formvarianten;
+	// in jedem Slot ein Objekt mit den Eigenschaften
+	//   wort = das Wort, für den der reguläre Ausdruck erstellt wurde
+	//   reg = der reguläre Ausdruck
 	formVariRegExpRegs: [],
 	// regulären Ausdruck mit allen Formvarianten erstellen
 	formVariRegExp () {
@@ -475,13 +481,17 @@ let helfer = {
 			for (let form of data.fv[wort].fo) {
 				let text = helfer.escapeRegExp(form.va.charAt(0));
 				for (let i = 1, len = form.va.length; i < len; i++) {
-					text += "(<[^>]+>|\\[¬\\]| \\[:.+?:\\] )*";
+					text += "(?:<[^>]+>|\\[¬\\]| \\[:.+?:\\] )*";
 					text += helfer.escapeRegExp(form.va.charAt(i));
 				}
 				text = helfer.formVariSonderzeichen(text);
 				varianten.push(text);
 			}
-			helfer.formVariRegExpRegs.push(varianten.join("|"));
+			helfer.formVariRegExpRegs.push({
+				wort: wort,
+				reg: varianten.join("|"),
+			});
+			console.log(varianten.join("|"));
 		}
 	},
 	// spezielle Buchstaben für einen regulären Suchausdruck um Sonderzeichen ergänzen
@@ -491,21 +501,21 @@ let helfer = {
 		return wort.replace(/en|e|nn|n|s|ä|ö|ü/g, function(m) {
 			switch (m) {
 				case "en":
-					return "(ẽ|en)";
+					return "(?:ẽ|en)";
 				case "e":
-					return "(ẽ|e)";
+					return "(?:ẽ|e)";
 				case "nn":
-					return "(ñ|nn)";
+					return "(?:ñ|nn)";
 				case "n":
-					return "(ñ|n)";
+					return "(?:ñ|n)";
 				case "s":
-					return "(ſ|s)";
+					return "(?:ſ|s)";
 				case "ä":
-					return "(aͤ|ä)";
+					return "(?:aͤ|ä)";
 				case "ö":
-					return "(oͤ|ö)";
+					return "(?:oͤ|ö)";
 				case "ü":
-					return "(uͤ|ü)";
+					return "(?:uͤ|ü)";
 			}
 		});
 	},
