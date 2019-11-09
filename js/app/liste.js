@@ -888,8 +888,10 @@ let liste = {
 		if (!optionen.data.belegliste.wort_hervorheben && !immer) {
 			return schnitt;
 		}
-		let regNoG;
+		let farbe = 0,
+			regNoG = null;
 		for (let i of helfer.formVariRegExpRegs) {
+			farbe = data.fv[i.wort].fa;
 			let reg;
 			if (!data.fv[i.wort].tr) {
 				reg = new RegExp(`(?<vorWort>^|[${helfer.ganzesWortRegExp.links}])(?<wort>${i.reg})(?<nachWort>$|[${helfer.ganzesWortRegExp.rechts}])`, "gi");
@@ -903,7 +905,7 @@ let liste = {
 		return schnitt;
 		// Ersetzungsfunktion; vgl. suchleiste.suchen()
 		function setzenMark (m) {
-			let r;
+			let r = null;
 			if (regNoG) {
 				r = regNoG.exec(m);
 				m = r.groups.wort;
@@ -934,6 +936,11 @@ let liste = {
 					}
 				}
 			}
+			// ggf. die Farbe eintragen
+			if (farbe) {
+				m = m.replace(/class="wort/g, `class="wort wortFarbe${farbe}`);
+			}
+			// bei nicht trunkierter Markierung Zeichen links und rechts der Markierung ergänzen
 			if (r) {
 				return `${r.groups.vorWort}${m}${r.groups.nachWort}`;
 			}

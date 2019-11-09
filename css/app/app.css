@@ -110,6 +110,92 @@ mark.wort-kein-ende {
 	border-bottom-right-radius: 0;
 }
 
+.wortFarbe0 {
+	background-color: var(--palette0) !important;
+}
+
+.wortFarbe1 {
+	background-color: var(--palette1) !important;
+	color: #fff;
+}
+
+.wortFarbe2 {
+	background-color: var(--palette2) !important;
+	color: #fff;
+}
+
+.wortFarbe3 {
+	background-color: var(--palette3) !important;
+	color: #fff;
+}
+
+.wortFarbe4 {
+	background-color: var(--palette4) !important;
+	color: #fff;
+}
+
+.wortFarbe5 {
+	background-color: var(--palette5) !important;
+}
+
+.wortFarbe6 {
+	background-color: var(--palette6) !important;
+	color: #fff;
+}
+
+.wortFarbe7 {
+	background-color: var(--palette7) !important;
+	color: #fff;
+}
+
+.wortFarbe8 {
+	background-color: var(--palette8) !important;
+	color: #fff;
+}
+
+.wortFarbe9 {
+	background-color: var(--palette9) !important;
+	color: #fff;
+}
+
+.wortFarbe10 {
+	background-color: var(--palette10) !important;
+}
+
+.wortFarbe11 {
+	background-color: var(--palette11) !important;
+	color: #fff;
+}
+
+.wortFarbe12 {
+	background-color: var(--palette12) !important;
+	color: #fff;
+}
+
+.wortFarbe13 {
+	background-color: var(--palette13) !important;
+	color: #fff;
+}
+
+.wortFarbe14 {
+	background-color: var(--palette14) !important;
+	color: #fff;
+}
+
+.wortFarbe15 {
+	background-color: var(--palette15) !important;
+}
+
+.wortFarbe16 {
+	background-color: var(--palette16) !important;
+	color: #fff;
+}
+
+.wortFarbe17 {
+	background-color: var(--palette17) !important;
+	color: #fff;
+}
+
 mark.mark {
 	background-color: var(--farbeGruen) !important;
 	color: #fff !important;
@@ -392,8 +478,8 @@ textarea:focus {
 #annotierung-wort .farbe {
 	display: inline-block;
 	margin-right: 10px;
-	width: 12px;
-	height: 12px;
+	width: 13px;
+	height: 13px;
 	border: 1px solid var(--linie);
 }
 
@@ -405,34 +491,36 @@ textarea:focus {
 .farbe0 mark.wort,
 .farbe0 mark.user {
 	padding: 0;
-	background-color: transparent;
+	background-color: transparent !important;
+	color: var(--text); /* Textfarbe könnte über Formvarianten auf weiß gesetzt worden sein */
 	font-weight: normal;
 }
 
 .farbe.farbe1,
 .farbe1 mark.wort,
 .farbe1 mark.user {
-	background-color: var(--farbeGelb);
+	background-color: var(--farbeGelb) !important;
+	color: var(--text); /* Textfarbe könnte über Formvarianten auf weiß gesetzt worden sein */
 }
 
 .farbe.farbe2,
 .farbe2 mark.wort,
 .farbe2 mark.user {
-	background-color: var(--hintergrundGruen);
+	background-color: var(--hintergrundGruen) !important;
 	color: #fff;
 }
 
 .farbe.farbe3,
 .farbe3 mark.wort,
 .farbe3 mark.user {
-	background-color: var(--farbeRot);
+	background-color: var(--farbeRot) !important;
 	color: #fff;
 }
 
 .farbe.farbe4,
 .farbe4 mark.wort,
 .farbe4 mark.user {
-	background-color: var(--hintergrundBlau);
+	background-color: var(--hintergrundBlau) !important;
 	color: #fff;
 }
 

@@ -310,11 +310,15 @@ let annotieren = {
 			for (let i of data.childNodes) {
 				let klon = i.cloneNode(true);
 				frag.appendChild(klon);
-				if (i.classList.contains(cl)) {
+				let mark = klon;
+				if (!mark.classList.contains(cl)) { // falls der <mark> verschachtelt ist in einem Formatierungstag
+					mark = mark.querySelector(`.${cl}`);
+				}
+				if (mark) {
 					if (!annotieren.data.start) {
-						annotieren.data.start = klon;
+						annotieren.data.start = mark;
 					} else {
-						annotieren.data.ende = klon;
+						annotieren.data.ende = mark;
 					}
 				}
 			}

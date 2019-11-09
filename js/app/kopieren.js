@@ -728,15 +728,15 @@ let kopieren = {
 			return;
 		}
 		// Datei schreiben
-		const fsP = require("fs").promises;
-		fsP.writeFile(result.filePath, JSON.stringify(daten))
-			.catch(err => {
-				dialog.oeffnen({
-					typ: "alert",
-					text: `Beim Speichern der Belege ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.name}: ${err.message}</p>`,
-				});
-				throw err;
+		let ergebnis = await wgd.schreiben(result.filePath, JSON.stringify(daten));
+		// beim Speichern ist ein Fehler aufgetreten
+		if (ergebnis !== true) {
+			dialog.oeffnen({
+				typ: "alert",
+				text: `Beim Speichern der Belege ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${ergebnis.name}: ${ergebnis.message}</p>`,
 			});
+			throw ergebnis;
+		}
 	},
 	// Kopierliste aus Datei importieren
 	async importieren () {
@@ -775,35 +775,33 @@ let kopieren = {
 			return;
 		}
 		// Datei einlesen
-		const fsP = require("fs").promises;
-		fsP.readFile(result.filePaths[0], {encoding: "utf-8"})
-			.then(content => {
-				let belegedatei_tmp = {};
-				try {
-					belegedatei_tmp = JSON.parse(content);
-				} catch (err_json) {
-					dialog.oeffnen({
-						typ: "alert",
-						text: `Beim Einlesen der Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n${err_json.name}: ${err_json.message}`,
-					});
-					return;
-				}
-				if (belegedatei_tmp.ty !== "bwgd") {
-					dialog.oeffnen({
-						typ: "alert",
-						text: `Beim Einlesen der Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\nkeine Belege-Datei von <i>Wortgeschichte digital</i>`,
-					});
-					return;
-				}
-				kopieren.belegedatei = belegedatei_tmp.bl;
-				kopieren.einfuegenBasisdaten(true);
-			})
-			.catch(err => {
-				dialog.oeffnen({
-					typ: "alert",
-					text: `Beim Öffnen der Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.name}: ${err.message}</p>`,
-				});
-				throw err;
+		const content = await wgd.lesen(result.filePaths[0]);
+		if (!helfer.checkType("String", content)) {
+			dialog.oeffnen({
+				typ: "alert",
+				text: `Beim Öffnen der Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${content.name}: ${content.message}</p>`,
 			});
+			throw content;
+		}
+		// Daten sind in Ordnung => Einleseoperationen durchführen
+		let belegedatei_tmp = {};
+		try {
+			belegedatei_tmp = JSON.parse(content);
+		} catch (err_json) {
+			dialog.oeffnen({
+				typ: "alert",
+				text: `Beim Einlesen der Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n${err_json.name}: ${err_json.message}`,
+			});
+			return;
+		}
+		if (belegedatei_tmp.ty !== "bwgd") {
+			dialog.oeffnen({
+				typ: "alert",
+				text: `Beim Einlesen der Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\nkeine Belege-Datei von <i>Wortgeschichte digital</i>`,
+			});
+			return;
+		}
+		kopieren.belegedatei = belegedatei_tmp.bl;
+		kopieren.einfuegenBasisdaten(true);
 	},
 };

@@ -196,11 +196,12 @@ let konversion = {
 		if (data.ve > 9) {
 			return;
 		}
-		// Datenfelder "ps" und "tr" in allen Wörtern der Formvarianten ergänzen
+		// Datenfelder "fa", "ma", "ps" und "tr" in allen Wörtern der Formvarianten ergänzen
 		for (let wort in data.fv) {
 			if (!data.fv.hasOwnProperty(wort)) {
 				continue;
 			}
+			data.fv[wort].fa = 0;
 			data.fv[wort].ma = false;
 			data.fv[wort].ps = "";
 			data.fv[wort].tr = true;

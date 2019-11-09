@@ -124,7 +124,7 @@ let tastatur = {
 			drucken.tastatur();
 			return;
 		}
-		// KARTEIKARTE: Key "i" || "k" || "t" || "u"
+		// KARTEIKARTE: Key "i" || "k" || "m" || "t" || "u"
 		if (m === "Ctrl" && helfer.belegOffen()) {
 			if (evt.key === "i") {
 				if (kopieren.an) {
@@ -134,6 +134,12 @@ let tastatur = {
 				}
 			} else if (evt.key === "k") {
 				beleg.ctrlKuerzen();
+			} else if (evt.key === "m") {
+				let id = document.activeElement.id;
+				if (/^beleg-(bd|bs)$/.test(id)) {
+					let a = document.getElementById(id).closest("tr").previousSibling.querySelector(".icon-tools-sonderzeichen");
+					a.dispatchEvent(new MouseEvent("click"));
+				}
 			} else if (evt.key === "t") {
 				beleg.ctrlTrennung();
 			} else if (evt.key === "u") {

@@ -406,7 +406,7 @@ let helfer = {
 		return `${wochentage[d.getDay()]}, ${d.getDate()}. ${monate[d.getMonth()]} ${d.getFullYear()}, ${d.getHours()}:${d.getMinutes() < 10 ? `0${d.getMinutes()}` : d.getMinutes()} Uhr`;
 	},
 	// überprüft den Typ des übergebenen Objekts zuverlässig
-	// mögliche Rückgabewerte: Arguments, Array, Boolean, Date, Element, Error, Function, JSON, Math, NodeList, Number, Object, RegExp, String
+	// mögliche Rückgabewerte u.a.: Arguments, Array, Boolean, Date, Element, Error, Function, JSON, Math, NodeList, Number, Object, RegExp, String
 	//   typ = String
 	//     (Typ, auf den das übergebene Objekt überprüft werden soll)
 	//   obj = Object
@@ -491,7 +491,6 @@ let helfer = {
 				wort: wort,
 				reg: varianten.join("|"),
 			});
-			console.log(varianten.join("|"));
 		}
 	},
 	// spezielle Buchstaben für einen regulären Suchausdruck um Sonderzeichen ergänzen

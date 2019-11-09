@@ -28,6 +28,25 @@
 	--farbeStern: #fd0;
 	--aktiv: #32af79;
 	--linie: #c3d9f1;
+	/* Farbpalette */
+	--palette0: #ff0;
+	--palette1: #ccbe00; /* gelb, dunkel */
+	--palette2: #6b6400; /* braun */
+	--palette3: #f60; /* orange */
+	--palette4: #d00; /* rot */
+	--palette5: #fcd4d1; /* rosa */
+	--palette6: #aa55a1; /* lila */
+	--palette7: #512480; /* lila, dunkel */
+	--palette8: #0d1f63; /* blau, dunkel */
+	--palette9: #00f; /* blau */
+	--palette10: #adc5e7; /* blau, hell */
+	--palette11: #59c5c7; /* türkis */
+	--palette12: #00888a; /* türkis, dunkel */
+	--palette13: #006c3b; /* grün, dunkel */
+	--palette14: #0b0; /* grün */
+	--palette15: #c2e0ae; /* grün, hell */
+	--palette16: #999999; /* grau-silber */
+	--palette17: #000; /* schwarz */
 	/* Schatten */
 	--boxShadow: 3px 3px 6px 0 #d1d1d1;
 }

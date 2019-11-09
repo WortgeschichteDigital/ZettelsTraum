@@ -279,7 +279,6 @@ let karteisuche = {
 	async suchen (pfade) {
 		// Suche starten
 		karteisuche.wgd = [];
-		const fsP = require("fs").promises;
 		for (let ordner of pfade) {
 			const exists = await helfer.exists(ordner);
 			if (exists) {
@@ -290,7 +289,7 @@ let karteisuche = {
 		karteisuche.filterWerteSammeln();
 		// Karteien analysieren
 		for (let kartei of karteisuche.wgd) {
-			const content = await fsP.readFile(kartei.pfad, {encoding: "utf-8"});
+			const content = await wgd.lesen(kartei.pfad);
 			// Kartei einlesen
 			let datei = {};
 			try {

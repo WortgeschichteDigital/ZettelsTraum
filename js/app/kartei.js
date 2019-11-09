@@ -141,82 +141,79 @@ let kartei = {
 			return;
 		}
 		// Datei einlesen
-		const fsP = require("fs").promises;
-		fsP.readFile(datei, {encoding: "utf-8"})
-			.then(content => {
-				// Daten einlesen
-				let data_tmp = {};
-				// Folgt die Datei einer wohlgeformten JSON?
-				try {
-					data_tmp = JSON.parse(content);
-				} catch (err_json) {
-					dialog.oeffnen({
-						typ: "alert",
-						text: `Beim Einlesen der Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n${err_json.name}: ${err_json.message}`,
-					});
-					return;
-				}
-				// Wirklich eine wgd-Datei?
-				if (data_tmp.ty !== "wgd") {
-					dialog.oeffnen({
-						typ: "alert",
-						text: "Die Datei wurde nicht eingelesen.\nEs handelt sich nicht um eine Karteikasten-Datei von <i>Wortgeschichte digital</i>.",
-					});
-					return;
-				}
-				// War die Datei evtl. verschwunden?
-				zuletzt.verschwundenCheck(datei);
-				// Datei sperren
-				kartei.lock(datei, "lock");
-				// Main melden, dass die Kartei in diesem Fenster geöffnet wurde
-				ipcRenderer.send("kartei-geoeffnet", winInfo.winId, datei);
-				// alle Overlays schließen
-				overlay.alleSchliessen();
-				// alle Filter zurücksetzen (wichtig für Text- und Zeitraumfilter)
-				filter.ctrlReset(false);
-				// Okay! Content kann eingelesen werden
-				data = JSON.parse(content);
-				// Karteiwort eintragen
-				// (muss wegen konversion.von8nach9() vor der Konersion geschehen)
-				kartei.wort = data.wo;
-				// Konversion des Dateiformats anstoßen
-				konversion.start();
-				// Einleseoperationen
-				helfer.formVariRegExp();
-				kartei.wortEintragen();
-				kartei.pfad = datei;
-				optionen.aendereLetzterPfad();
-				zuletzt.aendern();
-				notizen.icon();
-				lexika.icon();
-				anhaenge.makeIconList(data.an, document.getElementById("kartei-anhaenge"), true);
-				filter.kartendatumInit();
-				liste.statusOffen = {}; // sonst werden unter Umständen Belege aufgeklappt, selbst wenn alle geschlossen sein sollten; s. Changelog zu Version 0.23.0
-				liste.aufbauen(true);
-				liste.wechseln();
-				window.scrollTo({
-					left: 0,
-					top: 0,
-					behavior: "auto",
-				}); // war in dem Fenster schon eine Kartei offen, bleibt sonst die Scrollposition der vorherigen Kartei erhalten
-				kartei.menusDeaktivieren(false);
-				erinnerungen.check();
-				helfer.geaendert(); // trägt das Wort in die Titelleiste ein
-				// inaktive Filter schließen
-				// (wurde zwar schon über filter.ctrlReset() ausgeführt,
-				// muss hier aber noch einmal gemacht werden, um die dynamisch
-				// aufgebauten Filter auch zu schließen)
-				filter.inaktiveSchliessen(true);
-				// Bedeutungsgerüst auf Korruption überprüfen
-				bedeutungen.korruptionCheck();
-			})
-			.catch(err => {
-				dialog.oeffnen({
-					typ: "alert",
-					text: `Beim Öffnen der Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.name}: ${err.message}</p>`,
-				});
-				throw err;
+		let content = await wgd.lesen(datei);
+		if (!helfer.checkType("String", content)) {
+			dialog.oeffnen({
+				typ: "alert",
+				text: `Beim Öffnen der Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${content.name}: ${content.message}</p>`,
 			});
+			throw content;
+		}
+		// Daten sind in Ordnung => Einleseoperationen durchführen
+		let data_tmp = {};
+		// Folgt die Datei einer wohlgeformten JSON?
+		try {
+			data_tmp = JSON.parse(content);
+		} catch (err_json) {
+			dialog.oeffnen({
+				typ: "alert",
+				text: `Beim Einlesen der Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n${err_json.name}: ${err_json.message}`,
+			});
+			return;
+		}
+		// Wirklich eine wgd-Datei?
+		if (data_tmp.ty !== "wgd") {
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Die Datei wurde nicht eingelesen.\nEs handelt sich nicht um eine Karteikasten-Datei von <i>Wortgeschichte digital</i>.",
+			});
+			return;
+		}
+		// War die Datei evtl. verschwunden?
+		zuletzt.verschwundenCheck(datei);
+		// Datei sperren
+		kartei.lock(datei, "lock");
+		// Main melden, dass die Kartei in diesem Fenster geöffnet wurde
+		ipcRenderer.send("kartei-geoeffnet", winInfo.winId, datei);
+		// alle Overlays schließen
+		overlay.alleSchliessen();
+		// alle Filter zurücksetzen (wichtig für Text- und Zeitraumfilter)
+		filter.ctrlReset(false);
+		// Okay! Content kann eingelesen werden
+		data = JSON.parse(content);
+		// Karteiwort eintragen
+		// (muss wegen konversion.von8nach9() vor der Konersion geschehen)
+		kartei.wort = data.wo;
+		// Konversion des Dateiformats anstoßen
+		konversion.start();
+		// Einleseoperationen
+		helfer.formVariRegExp();
+		kartei.wortEintragen();
+		kartei.pfad = datei;
+		optionen.aendereLetzterPfad();
+		zuletzt.aendern();
+		notizen.icon();
+		lexika.icon();
+		anhaenge.makeIconList(data.an, document.getElementById("kartei-anhaenge"), true);
+		filter.kartendatumInit();
+		liste.statusOffen = {}; // sonst werden unter Umständen Belege aufgeklappt, selbst wenn alle geschlossen sein sollten; s. Changelog zu Version 0.23.0
+		liste.aufbauen(true);
+		liste.wechseln();
+		window.scrollTo({
+			left: 0,
+			top: 0,
+			behavior: "auto",
+		}); // war in dem Fenster schon eine Kartei offen, bleibt sonst die Scrollposition der vorherigen Kartei erhalten
+		kartei.menusDeaktivieren(false);
+		erinnerungen.check();
+		helfer.geaendert(); // trägt das Wort in die Titelleiste ein
+		// inaktive Filter schließen
+		// (wurde zwar schon über filter.ctrlReset() ausgeführt,
+		// muss hier aber noch einmal gemacht werden, um die dynamisch
+		// aufgebauten Filter auch zu schließen)
+		filter.inaktiveSchliessen(true);
+		// Bedeutungsgerüst auf Korruption überprüfen
+		bedeutungen.korruptionCheck();
 	},
 	// Speichern: Verteilerfunktion
 	// (Rückgabewerte:
@@ -251,7 +248,7 @@ let kartei = {
 	//   pfad = String
 	//     (Zielpfad der Kartei)
 	speichernSchreiben (pfad) {
-		return new Promise(resolve => {
+		return new Promise(async resolve => {
 			// ggf. BearbeiterIn hinzufügen oder an die Spitze der Liste holen
 			const bearb = optionen.data.einstellungen.bearbeiterin;
 			let beAlt = [...data.be];
@@ -266,44 +263,43 @@ let kartei = {
 				re_alt = data.re;
 			data.dm = new Date().toISOString();
 			data.re++;
-			// Dateisystemzugriff
-			const fsP = require("fs").promises;
-			fsP.writeFile(pfad, JSON.stringify(data))
-				.then(() => {
-					zuletzt.verschwundenCheck(pfad);
-					if (!kartei.pfad) {
-						kartei.lock(pfad, "lock");
-					} else if (pfad !== kartei.pfad) {
-						kartei.lock(kartei.pfad, "unlock");
-						kartei.lock(pfad, "lock");
-					}
-					kartei.pfad = pfad;
-					optionen.aendereLetzterPfad();
-					zuletzt.aendern();
-					kartei.karteiGeaendert(false);
-					helfer.animation("gespeichert");
-					const {ipcRenderer} = require("electron");
-					ipcRenderer.send("kartei-geoeffnet", winInfo.winId, pfad);
-					// ggf. Liste der BearbeiterInnen im Metadaten-Fenster auffrischen
-					if (!document.getElementById("meta").classList.contains("aus")) {
-						meta.bearbAuflisten();
-					}
-					// das Speichern hat fehlerfrei funktioniert
-					resolve(true);
-				})
-				.catch(err => {
-					dialog.oeffnen({
-						typ: "alert",
-						text: `Beim Speichern der Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.name}: ${err.message}</p>`,
-					});
-					// passiert ein Fehler, müssen manche Werte zurückgesetzt werden
-					data.be = [...beAlt];
-					data.dm = dm_alt;
-					data.re = re_alt;
-					// beim Speichern ist ein Fehler aufgetreten
-					resolve(false);
-					throw err;
+			// Datei speichern
+			let result = await wgd.schreiben(pfad, JSON.stringify(data));
+			// beim Speichern ist ein Fehler aufgetreten
+			if (result !== true) {
+				dialog.oeffnen({
+					typ: "alert",
+					text: `Beim Speichern der Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${result.name}: ${result.message}</p>`,
 				});
+				// passiert ein Fehler, müssen manche Werte zurückgesetzt werden
+				data.be = [...beAlt];
+				data.dm = dm_alt;
+				data.re = re_alt;
+				// Promise auflösen
+				resolve(false);
+				throw result;
+			}
+			// das Speichern war erfolgreich
+			zuletzt.verschwundenCheck(pfad);
+			if (!kartei.pfad) {
+				kartei.lock(pfad, "lock");
+			} else if (pfad !== kartei.pfad) {
+				kartei.lock(kartei.pfad, "unlock");
+				kartei.lock(pfad, "lock");
+			}
+			kartei.pfad = pfad;
+			optionen.aendereLetzterPfad();
+			zuletzt.aendern();
+			kartei.karteiGeaendert(false);
+			helfer.animation("gespeichert");
+			const {ipcRenderer} = require("electron");
+			ipcRenderer.send("kartei-geoeffnet", winInfo.winId, pfad);
+			// ggf. Liste der BearbeiterInnen im Metadaten-Fenster auffrischen
+			if (!document.getElementById("meta").classList.contains("aus")) {
+				meta.bearbAuflisten();
+			}
+			// Promise auflösen
+			resolve(true);
 		});
 	},
 	// Speichern: Pfad ermitteln

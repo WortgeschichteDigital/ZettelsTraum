@@ -724,6 +724,22 @@ p#quick-config-presets a {
 	color: var(--textFarbe);
 }
 
+#stamm-popup .farben {
+	margin-left: 5px;
+}
+
+#stamm-popup .farbe {
+	display: inline-block;
+	margin-right: 10px;
+	width: 13px;
+	height: 13px;
+	border: 1px solid var(--linie);
+}
+
+#stamm-popup .farbe.aktiv {
+	outline: 2px solid var(--farbe);
+}
+
 #stamm-popup .stamm-popup-buttons {
 	margin-top: 20px;
 }

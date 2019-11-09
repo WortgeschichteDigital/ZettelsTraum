@@ -99,6 +99,7 @@ let stamm = {
 		document.getElementById("stamm-text").focus();
 	},
 	// speichert den Bestandteil des/eines mehrgliedrigen Karteiworts, dessen Liste gerade zu sehen ist;
+	// in der Regel sollte das somit *das* Karteiwort sein
 	// (beim Öffnen des Fensters steht hier der Name des ersten Objects in data.fv)
 	wortAkt: "",
 	// Kopf aufbauen
@@ -138,13 +139,14 @@ let stamm = {
 	},
 	// Wort auswählen, dessen Formvarianten aufgelistet werden sollen
 	//   span = Element
-	//     (der Inhaltsblock für das Wort))
+	//     (der Kopfblock mit den Icons und dem Wort)
 	kopfAktiv (span) {
 		span.addEventListener("click", function() {
+			// ist der angeklickte Block bereits aktiv?
 			if (this.classList.contains("aktiv")) {
 				return;
 			}
-			// altes Konfigurationsfenster ggf. schließen
+			// ggf. Konfigurations-Popup schließen
 			stamm.kopfKonfigSchliessen();
 			// Anzeige im Kopf ändern
 			let aktiv = document.querySelector("#stamm-kopf .aktiv");
@@ -155,24 +157,24 @@ let stamm = {
 			stamm.auflisten();
 		});
 	},
-	// Konfigurationsfenster (Listener)
+	// Konfigurations-Popup (Listener)
 	//   a = Element
-	//     (der Icon-Link zum Öffnen des Konfigurationsfensters)
+	//     (der Icon-Link zum Öffnen des Konfigurations-Popups)
 	kopfKonfigListener (a) {
 		a.addEventListener("click", function(evt) {
 			evt.preventDefault();
-			// da zugleich stamm.kopfAktiv() gefeuert wird (was es auch soll),
+			// da zugleich stamm.kopfAktiv() depatched wird (was es auch soll),
 			// würde das Fenster ohne Timeout nicht aufgebaut werden
 			setTimeout(() => stamm.kopfKonfig(this), 25);
 		});
 	},
-	// Konfigurationsfenster
+	// Konfigurations-Popup
 	//   a = Element
-	//     (der Icon-Link zum Öffnen des Konfigurationsfensters)
+	//     (der Icon-Link zum Öffnen des Konfigurations-Popups)
 	kopfKonfig (a) {
 		let cont = a.parentNode;
 		const wort = cont.dataset.wort;
-		// altes Konfigurationsfenster ggf. schließen
+		// altes Konfigurations-Popup ggf. schließen
 		stamm.kopfKonfigSchliessen();
 		// Popup
 		let popup = document.createElement("span");
@@ -183,7 +185,7 @@ let stamm = {
 		} else {
 			popup.classList.add("links");
 		}
-		popup.addEventListener("click", evt => evt.stopPropagation()); // damit stamm.kopfAktiv() nicht dispatched wird
+		popup.addEventListener("click", evt => evt.stopPropagation()); // damit stamm.kopfAktiv() nicht dispatched wird, wenn irgendwo im Konfigurations-Popup geklickt wird
 		// Schließen-Icon
 		let img = document.createElement("img");
 		popup.appendChild(img);
@@ -225,7 +227,7 @@ let stamm = {
 		// Checkbox: aktivieren
 		let an = 0;
 		for (let w in data.fv) {
-			// mindestens ein Wort muss aktiviert sein;
+			// mindestens ein Wort muss aktiviert sein; sonst darf dieses Wort nicht deaktiviert werden;
 			// ist derzeit mehr als ein Wort aktiviert?
 			if (!data.fv.hasOwnProperty(w)) {
 				continue;
@@ -256,6 +258,21 @@ let stamm = {
 			text: "nur markieren",
 		});
 		popup.appendChild(check);
+		// Farbpalette
+		p = document.createElement("p");
+		popup.appendChild(p);
+		p.classList.add("farben");
+		for (let i = 0; i < 18; i++) {
+			if (i > 0 && i % 6 === 0) {
+				p.appendChild(document.createElement("br"));
+			}
+			let span = document.createElement("span");
+			p.appendChild(span);
+			span.classList.add("farbe", `wortFarbe${i}`);
+			span.dataset.farbe = i;
+		}
+		p.querySelector(`.wortFarbe${data.fv[wort].fa}`).classList.add("aktiv");
+		p.querySelectorAll(".farbe").forEach(i => stamm.kopfKonfigFarbe(i));
 		// Button: neu laden
 		p = document.createElement("p");
 		popup.appendChild(p);
@@ -274,14 +291,20 @@ let stamm = {
 			stamm.kopfKonfigLoeschen(button);
 		}
 	},
-	// entfernt das Konfigurationsfenster
+	// Konfigurations-Popup entfernen, wenn es existiert
 	kopfKonfigSchliessen () {
 		let popup = document.getElementById("stamm-popup");
 		if (popup) {
 			popup.parentNode.removeChild(popup);
 		}
 	},
-	// Checkbox für das Konfigurationsfenster erzeugen
+	// Checkbox für das Konfigurations-Popup erzeugen
+	//   wort = String
+	//     (das Wort, um das es geht)
+	//   ds = String
+	//     (der Datensatz, der betroffen ist)
+	//   text = String
+	//     (der Text für das Label)
 	kopfKonfigMakeCheckbox ({wort, ds, text}) {
 		let p = document.createElement("p");
 		// Checkbox erzeugen
@@ -293,7 +316,7 @@ let stamm = {
 		if (data.fv[wort][ds]) {
 			input.checked = true;
 		}
-		stamm.kopfKonfigInput(input);
+		stamm.kopfKonfigCheckbox(input);
 		// Label erzeugen
 		let label = document.createElement("label");
 		p.appendChild(label);
@@ -302,7 +325,30 @@ let stamm = {
 		// Absatz zurückgeben
 		return p;
 	},
-	kopfKonfigInput (input) {
+	// Änderung der Markierungsfarbe
+	//   span = Element
+	//     (das Quadrat, mit dem die Farbe ausgewählt wird)
+	kopfKonfigFarbe (span) {
+		span.addEventListener("click", function() {
+			let aktiv = this.parentNode.querySelector(".aktiv");
+			// Ist das Element schon aktiviert?
+			if (aktiv === this) {
+				return;
+			}
+			// Änderung der Farbe übernehmen
+			const wort = this.closest("[data-wort]").dataset.wort;
+			data.fv[wort].fa = parseInt(this.dataset.farbe, 10);
+			// Aktivierung umstellen
+			aktiv.classList.remove("aktiv");
+			this.classList.add("aktiv");
+			// Änderungsmarkierung setzen
+			kartei.karteiGeaendert(true);
+		});
+	},
+	// Änderung der Checkboxes im Konfigurations-Popup übernehmen
+	//   input = Element
+	//     (die Checkbox im Konfigurations-Popup, die angeklickt wurde)
+	kopfKonfigCheckbox (input) {
 		input.addEventListener("click", function() {
 			// Eintrag in Datenobjekt auffrischen
 			const ds = this.dataset.ds,
@@ -316,17 +362,15 @@ let stamm = {
 			helfer.formVariRegExp();
 		});
 	},
-	// Icons in dem übergebenen Kopf auffrischen
+	// Icons in dem übergebenen Kopfblock auffrischen
 	//   span = Element
-	//     (das Kopf-Element, in dem die Icons erzeugt/aufgefrischt werden sollen)
+	//     (der Kopfblock, in dem die Icons erzeugt/aufgefrischt werden sollen)
 	kopfIcons (span) {
 		// alle bisherigen Icons entfernen
-		span.querySelectorAll(".stamm-kopf-icon").forEach(i => {
-			i.parentNode.removeChild(i);
-		});
+		span.querySelectorAll(".stamm-kopf-icon").forEach(i => i.parentNode.removeChild(i));
 		// Wort ermitteln
 		const wort = span.dataset.wort;
-		// Textelement, vor dem die Images kommen, zwischenspeichern
+		// Textelement, vor dem die Images stehen sollen, zwischenspeichern
 		let text = span.firstChild;
 		// aktivieren
 		if (data.fv[wort].an) {
@@ -354,9 +398,9 @@ let stamm = {
 		img.height = "24";
 		return img;
 	},
-	// Formvarianten zu diesem einen Wort erneut importieren
+	// Formvarianten zu dem Wort, dessen Konfigurations-Popup gerade offen ist, erneut importieren
 	//   input = Element
-	//     (der DTA-Import-Button im Konfigurationsfenster);
+	//     (der DTA-Import-Button im Konfigurations-Popup)
 	kopfKonfigImport (input) {
 		input.addEventListener("click", () => {
 			dialog.oeffnen({
@@ -387,9 +431,9 @@ let stamm = {
 			});
 		});
 	},
-	// Wort mit allen Formvarianten löschen
+	// Wort, dessen Konfigurations-Popup gerade offen ist, mit allen Formvarianten löschen
 	//   input = Element
-	//     (der Lösch-Button);
+	//     (der Lösch-Button)
 	kopfKonfigLoeschen (input) {
 		input.addEventListener("click", () => {
 			dialog.oeffnen({
@@ -427,7 +471,7 @@ let stamm = {
 			});
 		});
 	},
-	// Liste des aktuellen Worts aufbauen
+	// Liste der Formvarianten des aktuellen Worts aufbauen
 	auflisten () {
 		let cont = document.getElementById("stamm-liste");
 		helfer.keineKinder(cont);
@@ -435,7 +479,7 @@ let stamm = {
 		let fo = data.fv[stamm.wortAkt].fo;
 		for (let i = 1, len = fo.length; i < len; i++) {
 			// der erste Eintrag ist immer das Wort, wie es eingetragen wurde (allerdings lower case)
-			// => diesen Eintrag nicht anzeigen, nicht löschen
+			// => diesen Eintrag nicht anzeigen, damit er nicht gelöscht wird
 			let p = document.createElement("p");
 			cont.appendChild(p);
 			// Lösch-Link
@@ -464,7 +508,7 @@ let stamm = {
 			p.textContent = "keine Formvarianten";
 		}
 	},
-	// Verteilerfunktion
+	// Verteilerfunktion für den Ergänzungs-Button
 	ergaenzen () {
 		const variante = document.getElementById("stamm-ergaenzen-variante").checked,
 			text = variante ? "keine Variante" : "kein Wort";
@@ -487,19 +531,20 @@ let stamm = {
 		}
 		stamm.ergaenzenWort(va);
 	},
-	// Variante hinzufügen
+	// Variante in der aktuellen Variantenliste ergänzen
 	//   va = String
 	//     (der bereits getrimmte Text im Textfeld)
 	ergaenzenVariante (va) {
-		// Varianten ergänzen, schon registriert übergehen
+		// Varianten ergänzen, schon vorhandene übergehen
 		let fo = data.fv[stamm.wortAkt].fo,
 			varianten = va.split(/\s/),
 			schon = [];
 		varianten.forEach(v => {
-			const vLower = v.toLowerCase();
-			if (!v) {
+			if (!v) { // zur Sicherheit
 				return;
-			} else if (fo.find(i => i.va === vLower)) {
+			}
+			const vLower = v.toLowerCase();
+			if (fo.find(i => i.va === vLower)) {
 				schon.push(v);
 				return;
 			}
@@ -531,7 +576,7 @@ let stamm = {
 		// Abschluss
 		stamm.ergaenzenAbschluss();
 	},
-	// Wort ergänzen
+	// Wort ergänzen, dabei die Formvarianten aus dem DTA ziehen
 	//   va = String
 	//     (der bereits getrimmte Text im Textfeld)
 	async ergaenzenWort (va) {
@@ -548,7 +593,7 @@ let stamm = {
 			}
 			importieren.push(w);
 		});
-		// Import anstoßen
+		// Import anstoßen, wenn es Wörter zum Importieren gibt
 		let sperre;
 		if (importieren.length) {
 			// ggf. Sperrbildschirm anzeigen und kurz warten
@@ -560,6 +605,7 @@ let stamm = {
 			importieren.forEach(w => {
 				data.fv[w] = {
 					an: true,
+					fa: 0,
 					fo: [{
 						qu: "zt",
 						va: w.toLowerCase(),
@@ -612,13 +658,13 @@ let stamm = {
 		// regulären Ausdruck mit allen Formvarianten neu erstellen
 		helfer.formVariRegExp();
 	},
-	// Liste der Formvarianten sortieren
+	// übergebene Liste der Formvarianten sortieren
 	//   arr = Array
-	//     (Array mit den Varianten, das sortiert werden soll)
+	//     (Array mit den Varianten, die sortiert werden sollen)
 	//   wort = String
-	//     (das Wort, für das die Formvarianten-Liste steht)
+	//     (das Wort, für das die Formvarianten-Liste steht, und zwar lower case)
 	sortieren (arr, wort) {
-		arr.sort(function(a, b) {
+		arr.sort((a, b) => {
 			// das betreffende Wort immer ganz nach oben schieben
 			if (a.va === wort) {
 				return -1;
@@ -642,7 +688,7 @@ let stamm = {
 			return 1;
 		});
 	},
-	// Eintrag aus der Liste entfernen
+	// Eintrag aus der Formvariantenliste entfernen
 	//   a = Element
 	//     (der Entfernen-Link vor der betreffenden Formvariante)
 	entfernen (a) {
@@ -662,7 +708,8 @@ let stamm = {
 			helfer.formVariRegExp();
 		});
 	},
-	// Klick auf Button
+	// Klick auf einen Button im Formvarianten-Fenster
+	// (nicht im Konfigurations-Popup!)
 	//   button = Element
 	//     (Button im Formvarianten-Fenster)
 	aktionButton (button) {
@@ -696,7 +743,7 @@ let stamm = {
 			}
 		});
 	},
-	// Änderung der Radio-Buttons
+	// Änderung der Radio-Buttons im Formvarianten-Fenster
 	//   input = Element
 	//     (der Radio-Button, der geändert wurde)
 	aktionRadio (input) {
@@ -706,9 +753,9 @@ let stamm = {
 			st.select();
 		});
 	},
-	// Tastatureingaben im Textfeld abfangen
+	// Tastatureingaben im Textfeld des Formvarianten-Fensters abfangen
 	//   input = Element
-	//     (Textfeld zum Ergänzen einer Formvariante)
+	//     (Textfeld zum Ergänzen einer Formvariante bzw. eines Worts)
 	aktionText (input) {
 		input.addEventListener("keydown", function(evt) {
 			tastatur.detectModifiers(evt);
@@ -718,7 +765,7 @@ let stamm = {
 			}
 		});
 	},
-	// Formvarianten aller Karteiwörter noch einmal laden
+	// Formvarianten aller Karteiwörter initialisieren oder noch einmal laden
 	//   str = String
 	//     (enthält das Wort oder die Wörter)
 	//   aktiv = Boolean
@@ -738,11 +785,12 @@ let stamm = {
 			if (data.fv[wort]) {
 				// die Objekte sollten nicht überschrieben werden,
 				// wenn alle Varianten auf Wunsch des Users noch einmal geladen werden;
-				// manuell ergänzte Varianten und Konfiguration erhalten
+				// manuell ergänzte Varianten und Konfiguration bleiben so erhalten
 				continue;
 			}
 			data.fv[wort] = {
 				an: true,
+				fa: 0,
 				fo: [{
 					qu: "zt",
 					va: wort.toLowerCase(),
@@ -759,6 +807,7 @@ let stamm = {
 			// aber das Wort ist eingetragen => einfach abschließen
 			stamm.dtaAbschluss(aktiv);
 		}
+		// regulären Ausdruck mit allen Formvarianten neu erstellen
 		helfer.formVariRegExp();
 		// Ladevorgang abschließen
 		if (sperre) {
@@ -767,7 +816,7 @@ let stamm = {
 		stamm.ladevorgang = false;
 	},
 	// Karteiwörter vorbereiten
-	// (Bereinigung um Satzzeichen, doppelte ausschließen)
+	// (Bereinigung um Satzzeichen, doppelte Wörter ausschließen)
 	//   str = String
 	//     (enthält das Wort oder die Wörter)
 	dtaPrepParole (str) {
@@ -819,10 +868,10 @@ let stamm = {
 	// Fehler beim Laden der Formvarianten des DTA
 	//   fehlertyp = String
 	//     (der allgemeine Fehlertyp)
-	//   detail = String/null
+	//   detail = String || null
 	//     (falls Details zum Fehler vorhanden sind)
 	//   aktiv = Boolean
-	//     (das Laden der Lemmaliste wurde von der Benutzerin angestoßen)
+	//     (das Laden der Lemmaliste wurde von der NutzerIn angestoßen)
 	dtaFehler (fehlertyp, detail, aktiv) {
 		// Fehlermeldung
 		if (aktiv) {
@@ -840,7 +889,7 @@ let stamm = {
 	//   json = Object
 	//     (die Daten, die vom DTA zurückgekommen sind)
 	//   aktiv = Boolean
-	//     (das Laden der Lemmaliste wurde von der Benutzerin angestoßen)
+	//     (das Laden der Lemmaliste wurde von der NutzerIn angestoßen)
 	dtaPush (json, aktiv) {
 		let fehler = [];
 		for (let token of json.body[0].tokens) {
@@ -880,22 +929,30 @@ let stamm = {
 				varianten.push(wortLower);
 			}
 			// Varianten ermitteln, die kürzere Varianten enthalten
+			// (diesen Reduktionsschritt nur durchführen, wenn das Wort trunkiert wird)
 			let ex = new Set();
-			for (let i = 0, len = varianten.length; i < len; i++) {
-				let variante = varianten[i];
-				for (let j = 0; j < len; j++) {
-					if (j === i) {
-						continue;
-					}
-					if (varianten[j].includes(variante)) {
-						ex.add(j);
+			if (data.fv[wort].tr) {
+				for (let i = 0, len = varianten.length; i < len; i++) {
+					let variante = varianten[i];
+					for (let j = 0; j < len; j++) {
+						if (j === i ||
+								varianten[j] === wortLower) {
+							// der zweite Test wegen der Variantenlisten alter Dateien,
+							// die das Wort selbst nicht unbedingt enthalten mussten
+							continue;
+						}
+						if (varianten[j].includes(variante)) {
+							ex.add(j);
+						}
 					}
 				}
 			}
 			// das Wort, um das es geht, ebenfalls zum Übergehen vormerken
 			// (es wurde bereits eingetragen und wird immer an Position 0 des Arrays stehen,
 			// dabei aber nie gedruckt werden)
-			if (varianten.includes(wortLower)) {
+			if (varianten.includes(wortLower) &&
+					data.fv[wort].fo[0].va === wortLower) {
+				// da das System geändert wurde: din alten Dateien könnte die erste Variante anders lauten
 				ex.add(varianten.indexOf(wortLower));
 			}
 			// alte, manuell hinzugefügte Varianten ermitteln, die nicht im DTA sind
@@ -931,11 +988,11 @@ let stamm = {
 		}
 		// ggf. Fehlermeldung auswerfen
 		if (fehler.length) {
-			let num = "in der Lemmaliste";
+			let num = "in der Variantenliste";
 			if (fehler.length > 1) {
-				num = "in den Lemmalisten";
+				num = "in den Variantenlisten";
 			}
-			stamm.dtaFehler(`Fehler ${num} von ${fehler.join(", ")}`, null, aktiv);
+			stamm.dtaFehler(`Fehler ${num} von <i>${fehler.join(", ")}</i>`, null, aktiv);
 		}
 		// Abschluss
 		stamm.dtaAbschluss(aktiv);
