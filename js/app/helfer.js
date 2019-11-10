@@ -1,6 +1,9 @@
 "use strict";
 
 let helfer = {
+	// speichert, welche der Hauptfunktionen gerade geöffnet ist;
+	// mögliche Werte: "liste" (= Belegliste), "gerüst" (= Bedeutungsgerüst), "karte" (= Karteikarte)
+	hauptfunktion: "liste",
 	// das Fensterladen-Overlay ausblenden
 	fensterGeladen () {
 		setTimeout(function() {
@@ -652,7 +655,7 @@ let helfer = {
 	// überprüft, ob das Bedeutungsgerüst offen ist und nicht durch irgendein
 	// anderes Fenster verdeckt wird
 	bedeutungenOffen () {
-		if (!overlay.oben() && !document.getElementById("bedeutungen").classList.contains("aus")) {
+		if (!overlay.oben() && helfer.hauptfunktion === "geruest") {
 			return true;
 		}
 		return false;
@@ -660,7 +663,7 @@ let helfer = {
 	// überprüft, ob die Karteikarte offen ist und nicht durch irgendein
 	// anderes Fenster verdeckt wird
 	belegOffen () {
-		if (!overlay.oben() && !document.getElementById("beleg").classList.contains("aus")) {
+		if (!overlay.oben() && helfer.hauptfunktion === "karte") {
 			return true;
 		}
 		return false;

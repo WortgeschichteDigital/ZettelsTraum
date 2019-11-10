@@ -253,7 +253,7 @@ let dropdown = {
 		} else if (feld_id === "bedeutungen-gerueste-kopieren") {
 			dropdown.data = dropdown.dataGerueste(bedeutungen.data.gr, true);
 		} else if (feld_id === "geruestwechseln-dropdown") {
-			if (!document.getElementById("bedeutungen").classList.contains("aus")) {
+			if (helfer.hauptfunktion === "geruest") {
 				dropdown.data = dropdown.dataGerueste(bedeutungen.data.gr);
 			} else {
 				dropdown.data = dropdown.dataGerueste(data.bd.gr);
@@ -567,7 +567,7 @@ let dropdown = {
 					bd.value = helfer.textTrim(bd.value, true);
 					// es ist möglich, dass die Leseansicht aktiv ist
 					// (beim Einfügen aus dem Bedeutungsgerüst-Fenster)
-					if (document.getElementById("beleg-link-leseansicht").classList.contains("aktiv")) {
+					if (beleg.leseansicht) {
 						beleg.leseFill();
 					}
 				} else {

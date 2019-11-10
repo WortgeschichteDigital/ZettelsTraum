@@ -63,7 +63,7 @@ let tastatur = {
 				return;
 			}
 			// Karteikarte schließen
-			if (!document.getElementById("beleg").classList.contains("aus")) {
+			if (helfer.hauptfunktion === "karte") {
 				helfer.inputBlur();
 				beleg.aktionAbbrechen();
 				return;
@@ -98,8 +98,8 @@ let tastatur = {
 		// Key "F3"
 		if ((!m || m === "Shift") && evt.key === "F3") {
 			if (!overlayId &&
-					(!document.getElementById("liste").classList.contains("aus") ||
-					helfer.belegOffen() && document.getElementById("beleg-link-leseansicht").classList.contains("aktiv"))) {
+					(helfer.hauptfunktion === "liste" ||
+					helfer.belegOffen() && beleg.leseansicht)) {
 				suchleiste.f3(evt);
 			}
 			return;

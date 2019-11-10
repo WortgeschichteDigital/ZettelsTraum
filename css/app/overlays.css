@@ -725,7 +725,7 @@ p#quick-config-presets a {
 }
 
 #stamm-popup .farben {
-	margin-left: 5px;
+	margin: 15px 0 0 5px;
 }
 
 #stamm-popup .farbe {
@@ -741,7 +741,7 @@ p#quick-config-presets a {
 }
 
 #stamm-popup .stamm-popup-buttons {
-	margin-top: 20px;
+	margin-top: 15px;
 }
 
 #stamm-popup .stamm-popup-buttons input[type="button"] {

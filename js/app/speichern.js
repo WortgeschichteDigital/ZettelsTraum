@@ -182,7 +182,7 @@ let speichern = {
 			} else if (!oben && bedeutungen.geaendert) {
 				bedeutungen.speichern();
 			} else if (!oben && kartei.geaendert &&
-					!document.getElementById("liste").classList.contains("aus")) {
+					helfer.hauptfunktion === "liste") {
 				kartei.speichern(false);
 			}
 			return;

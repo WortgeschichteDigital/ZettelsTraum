@@ -51,12 +51,15 @@ let overlay = {
 		while (!fenster.classList.contains("overlay")) {
 			fenster = fenster.parentNode;
 		}
-		// Sonderbehandlung für das Notizen-Fenster
+		// Sonderbehandlung für einige Fenster
 		if (fenster.id === "tagger") {
 			tagger.schliessen();
 			return;
 		} else if (fenster.id === "notizen") {
 			notizen.abbrechen();
+			return;
+		} else if (fenster.id === "stamm") {
+			stamm.schliessen();
 			return;
 		}
 		// Fenster schließen
@@ -76,8 +79,8 @@ let overlay = {
 				dialog.callback();
 			}
 		} else if (fenster.id === "geruestwechseln" &&
-				!document.getElementById("beleg").classList.contains("aus") &&
-				!document.getElementById("beleg-link-leseansicht").classList.contains("aktiv")) {
+				helfer.hauptfunktion === "karte" &&
+				!beleg.leseansicht) {
 			document.getElementById("beleg-bd").focus();
 		}
 	},

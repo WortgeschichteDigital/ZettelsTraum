@@ -13,7 +13,7 @@ let bedeutungenGeruest = {
 		}
 		// Fenster wirklich öffnen?
 		let obj = data.bd;
-		if (!document.getElementById("bedeutungen").classList.contains("aus")) {
+		if (helfer.hauptfunktion === "geruest") {
 			obj = bedeutungen.data;
 		}
 		if (Object.keys(obj.gr).length === 1) {
@@ -49,8 +49,8 @@ let bedeutungenGeruest = {
 	},
 	// Bedeutungsfeld der Karteikarte ggf. fokussieren
 	bedeutungsfeldFokus () {
-		if (!document.getElementById("beleg").classList.contains("aus") &&
-				!document.getElementById("beleg-link-leseansicht").classList.contains("aktiv")) {
+		if (helfer.hauptfunktion === "karte" &&
+				!beleg.leseansicht) {
 			document.getElementById("beleg-bd").focus();
 		}
 	},
@@ -59,7 +59,7 @@ let bedeutungenGeruest = {
 	//     (Gerüstnummer, auf die gewechselt werden soll)
 	wechseln (gn) {
 		// Bedeutungen sind offen
-		if (!document.getElementById("bedeutungen").classList.contains("aus")) {
+		if (helfer.hauptfunktion === "geruest") {
 			if (gn === bedeutungen.data.gn) {
 				return;
 			}
@@ -86,15 +86,15 @@ let bedeutungenGeruest = {
 		overlay.ausblenden(document.getElementById("geruestwechseln"));
 		data.bd.gn = gn;
 		// Konsequenzen des Wechsels
-		if (!document.getElementById("beleg").classList.contains("aus")) {
+		if (helfer.hauptfunktion === "karte") {
 			beleg.formularBedeutungLabel();
 			beleg.formularBedeutung();
-			if (document.getElementById("beleg-link-leseansicht").classList.contains("aktiv")) {
+			if (beleg.leseansicht) {
 				beleg.leseFillBedeutung();
 			}
 			beleg.listeGeaendert = true; // damit nach dem Schließen die Liste in jedem Fall aufgefrischt wird – auch wenn das Formular nicht gespeichert wird
 			document.getElementById("beleg-bd").focus();
-		} else if (!document.getElementById("liste").classList.contains("aus")) {
+		} else if (helfer.hauptfunktion === "liste") {
 			liste.status(true);
 		}
 		kartei.karteiGeaendert(true);

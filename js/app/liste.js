@@ -3,6 +3,7 @@
 let liste = {
 	// zur Belegliste wechseln (von wo auch immer)
 	wechseln () {
+		helfer.hauptfunktion = "liste";
 		overlay.alleSchliessen();
 		document.getElementById("liste").classList.add("preload");
 		helfer.sektionWechseln("liste");

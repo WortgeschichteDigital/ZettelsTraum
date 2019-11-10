@@ -1,6 +1,8 @@
 "use strict";
 
 let stamm = {
+	// speichert, ob im Formvarianten-Fenster Änderungen vorgenommen wurden
+	geaendert: false,
 	// Part-of-speech-Tags
 	partOfSpeech: {
 		ADJA: "attributives Adjektiv",
@@ -81,8 +83,25 @@ let stamm = {
 		if (overlay.oeffnen(fenster)) { // Fenster ist schon offen
 			return;
 		}
+		// Änderungsmarkierung nach dem Öffnen zurücksetzen
+		stamm.geaendert = false;
 		// Kopf und Liste initial aufbauen
 		stamm.aufbauen();
+	},
+	// Formvarianten-Fenster schließen
+	schliessen () {
+		if (stamm.geaendert &&
+				helfer.hauptfunktion === "liste") {
+			liste.status(false);
+		} else if (stamm.geaendert &&
+				helfer.hauptfunktion === "karte" &&
+				beleg.leseansicht) {
+			beleg.leseFill();
+			if (suchleiste.aktiv) {
+				suchleiste.suchen(true);
+			}
+		}
+		overlay.ausblenden(document.getElementById("stamm"));
 	},
 	// Kopf und Liste aufbauen
 	//   wortAkt = false || undefined
@@ -335,6 +354,8 @@ let stamm = {
 			if (aktiv === this) {
 				return;
 			}
+			// Änderungsmarkierung setzen
+			stamm.geaendert = true;
 			// Änderung der Farbe übernehmen
 			const wort = this.closest("[data-wort]").dataset.wort;
 			data.fv[wort].fa = parseInt(this.dataset.farbe, 10);
@@ -350,6 +371,8 @@ let stamm = {
 	//     (die Checkbox im Konfigurations-Popup, die angeklickt wurde)
 	kopfKonfigCheckbox (input) {
 		input.addEventListener("click", function() {
+			// Änderungsmarkierung setzen
+			stamm.geaendert = true;
 			// Eintrag in Datenobjekt auffrischen
 			const ds = this.dataset.ds,
 				span = this.closest("[data-wort]");
@@ -421,6 +444,8 @@ let stamm = {
 						sperre.parentNode.removeChild(sperre);
 						return;
 					}
+					// Änderungsmarkierung setzen
+					stamm.geaendert = true;
 					// Kopf und Liste neu aufbauen
 					stamm.aufbauen(false);
 					// Änderungsmarkierung setzen
@@ -443,6 +468,8 @@ let stamm = {
 					if (!dialog.antwort) {
 						return;
 					}
+					// Änderungsmarkierung setzen
+					stamm.geaendert = true;
 					// Wort löschen
 					delete data.fv[stamm.wortAkt];
 					// ist kein Wort mehr aktiv => erstes Wort aktivieren
@@ -649,6 +676,8 @@ let stamm = {
 	},
 	// Abschluss des Ergänzen einer Variante oder eines Worts
 	ergaenzenAbschluss () {
+		// Änderungsmarkierung setzen
+		stamm.geaendert = true;
 		// Liste neu aufbauen
 		stamm.auflisten();
 		// Testfeld zurücksetzen
@@ -694,6 +723,8 @@ let stamm = {
 	entfernen (a) {
 		a.addEventListener("click", function(evt) {
 			evt.preventDefault();
+			// Änderungsmarkierung setzen
+			stamm.geaendert = true;
 			// Index ermitteln
 			let fo = data.fv[stamm.wortAkt].fo;
 			const fv = this.dataset.fv,
@@ -807,6 +838,8 @@ let stamm = {
 			// aber das Wort ist eingetragen => einfach abschließen
 			stamm.dtaAbschluss(aktiv);
 		}
+		// Änderungsmarkierung setzen
+		stamm.geaendert = true;
 		// regulären Ausdruck mit allen Formvarianten neu erstellen
 		helfer.formVariRegExp();
 		// Ladevorgang abschließen

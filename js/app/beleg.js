@@ -1,6 +1,9 @@
 "use strict";
 
 let beleg = {
+	// speichert, ob die Leseansicht gerade angezeigt wird
+	// (ansonsten sieht man die Formularansicht)
+	leseansicht: false,
 	// ID der aktuell angezeigten Karte
 	id_karte: -1,
 	// Kopie der Daten der aktuell angezeigten Karte
@@ -35,7 +38,7 @@ let beleg = {
 		// neues Karten-Objekt anlegen
 		beleg.data = beleg.karteErstellen();
 		// ggf. die Leseansicht verlassen
-		if (document.getElementById("beleg-link-leseansicht").classList.contains("aktiv")) {
+		if (beleg.leseansicht) {
 			beleg.leseToggle(false);
 		}
 		// Karte anzeigen
@@ -82,6 +85,8 @@ let beleg = {
 	//   id = Number
 	//     (ID der Karte, die geöffnet werden soll)
 	oeffnen (id) {
+		// registrieren, dass die Hauptfunktion "Karteikarte" offen ist
+		helfer.hauptfunktion = "karte";
 		// ggf. Annotierungs-Popup in der Belegliste schließen
 		annotieren.modSchliessen();
 		// ID zwischenspeichern
@@ -106,16 +111,15 @@ let beleg = {
 			}
 		}
 		// in Lese- oder in Formularansicht öffnen?
-		let leseansicht = document.getElementById("beleg-link-leseansicht");
 		if (optionen.data.einstellungen.leseansicht) {
 			beleg.formular(false); // wegen der Bedeutungen *vor* dem Füllen der Leseansicht
-			if (!leseansicht.classList.contains("aktiv")) {
+			if (!beleg.leseansicht) {
 				beleg.leseToggle(false);
 			} else {
 				beleg.leseFill();
 			}
 		} else {
-			if (leseansicht.classList.contains("aktiv")) {
+			if (beleg.leseansicht) {
 				beleg.leseToggle(false);
 			}
 			beleg.formular(false); // wegen der Textarea-Größe *nach* dem Umschalten der Leseansicht
@@ -169,10 +173,9 @@ let beleg = {
 			helfer.textareaGrow(textarea);
 		});
 		// Fokus setzen
-		const leseansicht_aktiv = document.getElementById("beleg-link-leseansicht").classList.contains("aktiv");
-		if (neu && !leseansicht_aktiv) {
+		if (neu && !beleg.leseansicht) {
 			document.getElementById("beleg-dta").focus();
-		} else if (!leseansicht_aktiv) {
+		} else if (!beleg.leseansicht) {
 			document.getElementById("beleg-da").focus();
 		}
 	},
@@ -1138,14 +1141,14 @@ let beleg = {
 		}
 		// Ansicht umstellen
 		let button = document.getElementById("beleg-link-leseansicht"),
-			tab = document.querySelector("#beleg table"),
-			an = true;
-		if (button.classList.contains("aktiv")) {
-			an = false;
+			tab = document.querySelector("#beleg table");
+		if (beleg.leseansicht) {
+			beleg.leseansicht = false;
 			button.classList.add("beleg-opt-anzeige-letztes");
 			button.title = `zur Leseansicht wechseln (${tastatur.shortcutsTextAktuell("Strg")} + U)`;
 			tab.classList.remove("leseansicht");
 		} else {
+			beleg.leseansicht = true;
 			button.classList.remove("beleg-opt-anzeige-letztes");
 			button.title = `zur Formularansicht wechseln (${tastatur.shortcutsTextAktuell("Strg")} + U)`;
 			tab.classList.add("leseansicht");
@@ -1153,21 +1156,21 @@ let beleg = {
 		button.classList.toggle("aktiv");
 		// Header-Icons ein- oder ausblenden
 		document.querySelectorAll("#beleg .icon-leseansicht").forEach(function(i) {
-			if (an) {
+			if (beleg.leseansicht) {
 				i.classList.remove("aus");
 			} else {
 				i.classList.add("aus");
 			}
 		});
 		// Title des Sprung-Icons anpassen
-		if (an) {
+		if (beleg.leseansicht) {
 			document.getElementById("beleg-link-springen").title = `zur nächsten Markierung springen (${tastatur.shortcutsTextAktuell("Strg")} + ↓)`;
 		} else {
 			document.getElementById("beleg-link-springen").title = `zum Wort im Belegtext springen (${tastatur.shortcutsTextAktuell("Strg")} + ↓)`;
 		}
 		// Einfüge-Icons ein- oder ausblenden
 		document.querySelectorAll("#beleg .icon-tools-einfuegen").forEach(function(i) {
-			if (an) {
+			if (beleg.leseansicht) {
 				i.classList.add("aus");
 			} else {
 				i.classList.remove("aus");
@@ -1176,14 +1179,14 @@ let beleg = {
 		// Text-Tools für Beleg und Bedeutung ein- oder ausblenden
 		let tools_beleg = document.querySelectorAll(".text-tools-beleg, .text-tools-bedeutung");
 		for (let tools of tools_beleg) {
-			if (an) {
+			if (beleg.leseansicht) {
 				tools.classList.add("aus");
 			} else {
 				tools.classList.remove("aus");
 			}
 		}
 		// Textwerte eintragen
-		if (an) {
+		if (beleg.leseansicht) {
 			beleg.leseFill();
 		} else if (user) {
 			document.querySelectorAll("#beleg textarea").forEach((textarea) => helfer.textareaGrow(textarea));
@@ -1373,7 +1376,7 @@ let beleg = {
 		// Link anpassen
 		beleg.ctrlKuerzenAnzeige();
 		// Belegtext in der Leseansicht ggf. neu aufbauen
-		if (document.getElementById("beleg-link-leseansicht").classList.contains("aktiv")) {
+		if (beleg.leseansicht) {
 			beleg.leseFill();
 		}
 		// ggf. Suche der Suchleiste erneut anstoßen (nur Neuaufbau)
@@ -1400,7 +1403,7 @@ let beleg = {
 		// Link anpassen
 		beleg.ctrlTrennungAnzeige();
 		// Belegtext in der Leseansicht ggf. neu aufbauen
-		if (document.getElementById("beleg-link-leseansicht").classList.contains("aktiv")) {
+		if (beleg.leseansicht) {
 			beleg.leseFill();
 		}
 		// ggf. Suche der Suchleiste erneut anstoßen (nur Neuaufbau)
@@ -1427,7 +1430,7 @@ let beleg = {
 		if (evt && document.activeElement.classList.contains("dropdown-feld")) {
 			return;
 		}
-		if (document.getElementById("beleg-link-leseansicht").classList.contains("aktiv")) {
+		if (beleg.leseansicht) {
 			beleg.ctrlSpringenLese();
 		} else {
 			beleg.ctrlSpringenForm(evt);
@@ -1567,10 +1570,9 @@ let beleg = {
 		const daten = [kopieren.datenBeleg(beleg.data)],
 			id_karte = kopieren.einfuegenEinlesen(daten, true);
 		// Duplikat öffnen (in derselben Ansicht)
-		let leseansicht = document.getElementById("beleg-link-leseansicht");
-		const leseansicht_status = leseansicht.classList.contains("aktiv");
+		const leseansicht_status = beleg.leseansicht;
 		beleg.oeffnen(id_karte);
-		if (leseansicht.classList.contains("aktiv") !== leseansicht_status) {
+		if (beleg.leseansicht !== leseansicht_status) {
 			beleg.leseToggle(true);
 		}
 		// Animation anzeigen
@@ -1615,11 +1617,10 @@ let beleg = {
 		//   1. in derselben Ansicht
 		//   2. mit demselben Icon fokussiert
 		//   3. mit derselben Scroll-Position
-		let leseansicht = document.getElementById("beleg-link-leseansicht");
-		const leseansicht_status = leseansicht.classList.contains("aktiv"),
+		const leseansicht_status = beleg.leseansicht,
 			scroll = window.scrollY;
 		beleg.oeffnen(parseInt(belege[pos], 10));
-		if (leseansicht.classList.contains("aktiv") !== leseansicht_status) {
+		if (beleg.leseansicht !== leseansicht_status) {
 			beleg.leseToggle(true);
 		}
 		fokus();
@@ -1779,14 +1780,14 @@ let beleg = {
 			return;
 		}
 		// Ziel ermitteln
-		if (!document.getElementById("beleg").classList.contains("aus")) {
+		if (helfer.hauptfunktion === "karte") {
 			if (eintragen) {
 				beleg.bedeutungEintragenKarte(bd);
 			} else {
 				beleg.bedeutungAustragenKarte(bd);
 			}
 			return;
-		} else if (!document.getElementById("liste").classList.contains("aus")) {
+		} else if (helfer.hauptfunktion === "liste") {
 			if (eintragen) {
 				beleg.bedeutungEintragenListe(bd);
 			} else {
@@ -1878,7 +1879,7 @@ let beleg = {
 			return;
 		}
 		beleg.belegGeaendert(true);
-		if (document.getElementById("beleg-link-leseansicht").classList.contains("aktiv")) {
+		if (beleg.leseansicht) {
 			beleg.leseFillBedeutung();
 		}
 	},

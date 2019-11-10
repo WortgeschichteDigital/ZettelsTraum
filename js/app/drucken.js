@@ -18,9 +18,9 @@ let drucken = {
 		}
 		if (oben === "drucken") {
 			drucken.start();
-		} else if (!document.getElementById("bedeutungen").classList.contains("aus")) {
+		} else if (helfer.hauptfunktion === "geruest") {
 			drucken.init("bedeutungen-");
-		} else if (!document.getElementById("beleg").classList.contains("aus")) {
+		} else if (helfer.hauptfunktion === "karte") {
 			drucken.init("beleg-");
 		} else {
 			drucken.init("liste-");
@@ -231,7 +231,7 @@ let drucken = {
 	//     (die ID des Gerüsts, das gedruckt werden soll)
 	initBedeutungen (gn) {
 		let qu = data.bd;
-		if (!document.getElementById("bedeutungen").classList.contains("aus")) {
+		if (helfer.hauptfunktion === "geruest") {
 			qu = bedeutungen.data;
 		}
 		// Sind überhaupt Bedeutungen vorhanden

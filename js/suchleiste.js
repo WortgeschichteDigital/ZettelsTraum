@@ -1,12 +1,16 @@
 "use strict";
 
 let suchleiste = {
+	// speichert, ob die Suchleiste gerade sichtbar ist oder nicht
+	aktiv: false,
 	// Leiste einblenden
 	einblenden () {
 		// Leiste ggf. erzeugen
 		if (!document.getElementById("suchleiste")) {
 			suchleiste.make();
 		}
+		// zwischenspeichern, dass die Leiste aktiv ist
+		suchleiste.aktiv = true;
 		// Leiste einblenden und fokussieren
 		setTimeout(function() {
 			// ohne Timeout kommt nach dem Erzeugen der Leiste keine Animation
@@ -18,7 +22,7 @@ let suchleiste = {
 			} else if (/dokumentation|handbuch/.test(winInfo.typ)) {
 				document.querySelector("section:not(.aus)").classList.add("padding-suchleiste");
 			} else if (winInfo.typ === "index") {
-				if (helfer.belegOffen()) { // Karteikarte
+				if (helfer.hauptfunktion === "karte") { // Karteikarte
 					document.getElementById("beleg").classList.add("padding-suchleiste");
 				} else { // Belegliste
 					document.getElementById("liste-belege-cont").classList.add("padding-suchleiste");
@@ -37,6 +41,7 @@ let suchleiste = {
 	},
 	// Leiste ausblenden
 	ausblenden () {
+		suchleiste.aktiv = false;
 		suchleiste.suchenReset();
 		let leiste = document.getElementById("suchleiste");
 		leiste.firstChild.blur();
@@ -161,7 +166,7 @@ let suchleiste = {
 		} else if (/dokumentation|handbuch/.test(winInfo.typ)) {
 			e = document.querySelectorAll("section:not(.aus) > h2, section:not(.aus) > p, section:not(.aus) #suchergebnisse > p, section:not(.aus) > div p, section:not(.aus) > pre, section:not(.aus) li, section:not(.aus) td, section:not(.aus) th");
 		} else if (winInfo.typ === "index") {
-			if (helfer.belegOffen()) { // Karteikarte (Leseansicht)
+			if (helfer.hauptfunktion === "karte") { // Karteikarte (Leseansicht)
 				e = document.querySelectorAll("#beleg th, .beleg-lese td");
 			} else { // Belegliste
 				e = document.querySelectorAll(".liste-kopf > span, .liste-details");
@@ -315,7 +320,7 @@ let suchleiste = {
 		// Einblenden-Funktion gekürzter Absätze (Hauptfenster)
 		ele.querySelectorAll(".gekuerzt").forEach(p => liste.abelegAbsatzEinblenden(p));
 		// Icon-Tools in der Karteikarte (Hauptfenster)
-		if (winInfo.typ === "index" && helfer.belegOffen() && ele.nodeName === "TH") {
+		if (winInfo.typ === "index" && helfer.hauptfunktion === "karte" && ele.nodeName === "TH") {
 			ele.querySelectorAll(`[class*="icon-tools-"]`).forEach(a => beleg.toolsKlick(a));
 		}
 		// Bedeutungsgerüst wechseln aus der Karteikarte (Hauptfenster)
@@ -408,7 +413,7 @@ let suchleiste = {
 				if (quick.classList.contains("an")) {
 					headerHeight += quick.offsetHeight;
 				}
-				if (!document.getElementById("beleg").classList.contains("aus")) { // in der Karteikarte
+				if (helfer.hauptfunktion === "karte") { // in der Karteikarte
 					headerHeight += document.querySelector("#beleg > header").offsetHeight;
 				} else { // in der Belegliste
 					headerHeight += document.querySelector("#liste-belege > header").offsetHeight;
@@ -461,7 +466,7 @@ let suchleiste = {
 			suchleisteHeight = document.getElementById("suchleiste").offsetHeight;
 		let rect = marks[pos].getBoundingClientRect();
 		if (winInfo.typ === "index") {
-			if (helfer.belegOffen()) { // Karteikarte
+			if (helfer.hauptfunktion === "karte") { // Karteikarte
 				const kopf = document.getElementById("beleg").offsetTop,
 					header = document.querySelector("#beleg header").offsetHeight;
 				if (rect.top < kopf + header ||
@@ -524,7 +529,7 @@ let suchleiste = {
 			if (quick.classList.contains("an")) {
 				indexPlus = quick.offsetHeight;
 			}
-			if (!document.getElementById("liste").classList.contains("aus")) { // Belegliste
+			if (helfer.hauptfunktion === "liste") { // Belegliste
 				indexPlus += document.querySelector("#liste-belege header").offsetHeight;
 			} else { // Karteikarte
 				indexPlus += document.querySelector("#beleg header").offsetHeight;

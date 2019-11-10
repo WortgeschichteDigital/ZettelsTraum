@@ -306,7 +306,7 @@ let bedeutungen = {
 		// Gerüst neu aufbauen
 		bedeutungen.aufbauen();
 	},
-	// Bedeutungen öffnen
+	// Bedeutungsgerüst öffnen
 	oeffnen () {
 		// Sperre für macOS (Menüpunkte können nicht deaktiviert werden)
 		if (!kartei.wort) {
@@ -316,8 +316,8 @@ let bedeutungen = {
 			});
 			return;
 		}
-		// Bedeutungen sind schon offen
-		if (!document.getElementById("bedeutungen").classList.contains("aus")) {
+		// Bedeutungsgerüst ist schon offen
+		if (helfer.hauptfunktion === "geruest") {
 			if (!overlay.oben()) {
 				let neu = document.getElementById("bedeutungen-neu");
 				helfer.auswahl(neu);
@@ -334,6 +334,7 @@ let bedeutungen = {
 		}
 		// Bedeutungenformular anzeigen und initialisieren
 		speichern.checkInit(() => {
+			helfer.hauptfunktion = "geruest";
 			overlay.alleSchliessen();
 			bedeutungen.data = {};
 			bedeutungen.copyData(data.bd, bedeutungen.data);

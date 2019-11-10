@@ -39,10 +39,10 @@ let popup = {
 			if (overlay.oben() === "drucken") {
 				items.push("sep", "schliessen", "sep", "belegHinzufuegen");
 				popup.belegeAuflisten(items);
-			} else if (!document.getElementById("beleg").classList.contains("aus")) {
+			} else if (helfer.hauptfunktion === "karte") {
 				items.push("sep", "karteikarteConf", "sep", "belegHinzufuegen");
 				popup.belegeAuflisten(items);
-			} else if (!document.getElementById("liste").classList.contains("aus")) {
+			} else if (helfer.hauptfunktion === "liste") {
 				items.push("sep", "belegBearbeiten", "belegLoeschen", "belegZwischenablage", "belegDuplizieren", "sep", "beleglisteConf", "sep", "belegHinzufuegen");
 				popup.belegeAuflisten(items);
 			} else {
@@ -88,9 +88,9 @@ let popup = {
 		} else if (target === "link") {
 			if (overlay.oben() === "stamm") {
 				items.push("link", "sep", "schliessen");
-			} else if (!document.getElementById("beleg").classList.contains("aus")) {
+			} else if (helfer.hauptfunktion === "karte") {
 				items.push("link", "sep", "karteikarteConf");
-			} else if (!document.getElementById("liste").classList.contains("aus")) {
+			} else if (helfer.hauptfunktion === "liste") {
 				items.push("link", "sep", "belegBearbeiten", "belegLoeschen", "belegZwischenablage", "belegDuplizieren", "sep", "beleglisteConf");
 			} else {
 				items.push("link");
@@ -108,7 +108,7 @@ let popup = {
 			popup.belegeAuflisten(items);
 		} else if (target === "anhang") {
 			items = ["anhang", "ordnerAnhang"];
-			if (!document.getElementById("beleg").classList.contains("aus")) {
+			if (helfer.hauptfunktion === "karte") {
 				items.push("sep", "karteikarteConf");
 			} else if (popup.anhangDateiBeleg) {
 				items.push("sep", "belegBearbeiten", "belegLoeschen", "belegZwischenablage", "belegDuplizieren", "sep", "beleglisteConf");
@@ -371,7 +371,7 @@ let popup = {
 	// Befehl "Belege auflisten" ggf. zu den Items hinzufügen
 	belegeAuflisten (items) {
 		if (overlay.oben() ||
-				document.getElementById("liste").classList.contains("aus")) {
+				helfer.hauptfunktion !== "liste") {
 			items.push("belegeAuflisten");
 		}
 	},

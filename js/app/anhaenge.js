@@ -301,7 +301,7 @@ let anhaenge = {
 			if (/^data\|ka/.test(obj)) {
 				const id = obj.split("|")[2];
 				if (beleg.id_karte === parseInt(id, 10) &&
-						!document.getElementById("beleg").classList.contains("aus")) {
+						helfer.hauptfunktion === "karte") {
 					beleg.data.an = [...arr];
 					anhaenge.auflisten(document.getElementById("beleg-an"), "beleg|data|an");
 					beleg.belegGeaendert(true);
@@ -350,7 +350,7 @@ let anhaenge = {
 					if (/^data\|ka/.test(obj)) {
 						const id = obj.split("|")[2];
 						if (beleg.id_karte === parseInt(id, 10) &&
-								!document.getElementById("beleg").classList.contains("aus")) {
+								helfer.hauptfunktion === "karte") {
 							beleg.data.an = [...arr];
 							anhaenge.auflisten(document.getElementById("beleg-an"), "beleg|data|an");
 							beleg.belegGeaendert(true);
