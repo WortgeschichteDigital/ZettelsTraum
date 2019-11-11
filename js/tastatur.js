@@ -50,7 +50,7 @@ let tastatur = {
 				return;
 			}
 			// Bedeutung deaktivieren oder Bedeutungsgerüst-Formular schließen
-			if (helfer.bedeutungenOffen()) {
+			if (helfer.hauptfunktion === "geruest") {
 				if (bedeutungen.moveAktiv) {
 					bedeutungen.moveAus();
 				} else {

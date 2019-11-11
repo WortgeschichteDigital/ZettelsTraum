@@ -743,10 +743,12 @@ let liste = {
 			p.style.height = "24px"; // initial Höhe Standardzeile, damit es nicht so springt
 			setTimeout(function() {
 				p.style.height = `${height}px`;
-				p.addEventListener("transitionend", function() {
-					this.classList.remove("einblenden");
-					this.style.removeProperty("height");
-				});
+				setTimeout(() => {
+					// muss mit Timeout gemacht werden; denn "transitionend" wird nicht dispatched,
+					// wenn der eingeblendete Text nur eine Zeile hoch ist
+					p.classList.remove("einblenden");
+					p.style.removeProperty("height");
+				}, 300);
 			}, 0);
 			// gekürzten Absatz entfernen oder auffrischen
 			k = kontext(this);
@@ -783,40 +785,48 @@ let liste = {
 	//   id = String
 	//     (ID des aktuellen Belegs)
 	belegVorschau (beleg_akt, id) {
-		// Beleg aufbereiten
+		// Textausschnitt ermitteln
+		// 1. Text basal aufbereiten
 		let schnitt = beleg_akt.bs.replace(/\n+/g, " "); // Absätze könnten mit Leerzeile eingegeben sein
-		schnitt = schnitt.replace(/<.+?>/g, ""); // HTML-Formatierungen vorher löschen!
 		schnitt = liste.belegTrennungWeg(schnitt, true); // Trennzeichen und Seitenumbrüche weg
-		// 1. Treffer des Worts im Text ermitteln, Beleg am Anfang ggf. kürzen
-		// (da Wörter auf "nur markieren" gesetzt sein können:
-		//   - RegExp eines Worts suchen, dass nicht nur markiert werden soll
-		//   - kein RegExp gefunden? => keine Stelle aus dem Schnitt suchen)
-		let formVari;
-		for (let i of helfer.formVariRegExpRegs) {
-			if (!data.fv[i.wort].ma) {
-				formVari = i;
-				break;
-			}
+		schnitt = liste.belegWortHervorheben(schnitt, true, true); // Wörter hervorheben (Nur-Markieren-Wörter ausschließen);
+		// 2. alle Knoten durchgehen und allein die <mark> erhalten;
+		// diese aber nur, wenn sie nicht transparent gesetzt wurden
+		let div = document.createElement("div");
+		div.innerHTML = schnitt;
+		let snippet = "";
+		for (let k of div.childNodes) {
+			getText(k);
 		}
-		if (formVari) {
-			let reg;
-			if (!data.fv[formVari.wort].tr) {
-				reg = new RegExp(`(^|[${helfer.ganzesWortRegExp.links}])(${formVari.reg})($|[${helfer.ganzesWortRegExp.rechts}])`, "gi");
+		function getText (k) {
+			if (k.nodeType === 1) {
+				if (k.classList.contains("wort") && !k.closest(".farbe0")) {
+					snippet += `<mark class="wort">${k.textContent}</mark>`;
+					return;
+				}
+				for (let i of k.childNodes) {
+					getText(i);
+				}
 			} else {
-				reg = new RegExp(formVari.reg, "gi");
-			}
-			if (reg.test(schnitt) &&
-					reg.lastIndex - formVari.wort.length > 35) {
-				schnitt = `…${schnitt.substring(reg.lastIndex - formVari.wort.length - 25)}`;
+				snippet += k.textContent;
 			}
 		}
-		// Performance-Schub: Vorschautext kürzen
-		if (schnitt.length > 280) {
-			schnitt = `${schnitt.substring(0, 250)}…`;
+		// 3. Snippet vorne kürzen, wenn vor dem ersten <mark> viel Text kommt
+		let reg = new RegExp("<mark", "g");
+		if (reg.test(snippet) && reg.lastIndex - 5 > 35) {
+			snippet = `…${snippet.substring(reg.lastIndex - 5 - 25)}`;
 		}
-		// Wort hervorheben
-		schnitt = liste.belegWortHervorheben(schnitt, false);
-		// ggf. Autor angeben
+		// 4. Text nach hinten heraus kürzen (deutlicher Performance-Schub!)
+		if (snippet.length > 280) {
+			snippet = `${snippet.substring(0, 250)}…`;
+			// sollte der letzte <mark> beim Kürzen korrumpiert werden: Das ist kein
+			// Problem, die Rendering-Engine fängt das ab (wurde getestet)
+		}
+		// 5. ggf. die Hervorhebungen alle entfernen
+		if (!optionen.data.belegliste.wort_hervorheben) {
+			snippet = snippet.replace(/<.+?>/g, "");
+		}
+		// Autor und Textsorte
 		let frag = document.createDocumentFragment();
 		if (beleg_akt.au) {
 			let autor = helfer.escapeHtml(beleg_akt.au).split(/,(.+)/),
@@ -836,7 +846,7 @@ let liste = {
 		}
 		// Textschnitt in Anführungsstriche
 		let q = document.createElement("q");
-		q.innerHTML = schnitt;
+		q.innerHTML = snippet;
 		frag.appendChild(q);
 		// Fragment zurückgeben
 		return frag;
@@ -884,7 +894,9 @@ let liste = {
 	//     (Text, in dem der Beleg hervorgehoben werden soll)
 	//   immer = Boolean
 	//     (das Wort soll immer hervorgehoben werden, egal was in der Option steht)
-	belegWortHervorheben (schnitt, immer) {
+	//   keinNurMarkieren = true || undefined
+	//     (Wörter, die nur markiert werden sollen, von der Hervorhebung ausschließen) 
+	belegWortHervorheben (schnitt, immer, keinNurMarkieren = false) {
 		// Wort soll nicht hervorgehoben werden
 		if (!optionen.data.belegliste.wort_hervorheben && !immer) {
 			return schnitt;
@@ -892,6 +904,9 @@ let liste = {
 		let farbe = 0,
 			regNoG = null;
 		for (let i of helfer.formVariRegExpRegs) {
+			if (keinNurMarkieren && data.fv[i.wort].ma) {
+				continue;
+			}
 			farbe = data.fv[i.wort].fa;
 			let reg;
 			if (!data.fv[i.wort].tr) {

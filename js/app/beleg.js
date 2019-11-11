@@ -31,6 +31,8 @@ let beleg = {
 	],
 	// neue Karteikarte erstellen
 	erstellen () {
+		// registrieren, dass die Hauptfunktion "Karteikarte" offen ist
+		helfer.hauptfunktion = "karte";
 		// alle Overlay-Fenster schließen
 		overlay.alleSchliessen();
 		// nächste ID ermitteln

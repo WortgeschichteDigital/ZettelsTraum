@@ -286,9 +286,13 @@
 
 					<li>Annotierungsfunktion: Änderte man bei einem Karteiwort, das teilweise durch <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>-Tags formatiert war und somit aus mehreren Knoten bestand, die Farbe, entfernte die Farbmarkierung dann umgehend wieder, ohne das Annotierungs-Popup zu schließen, und nahm die Markierung direkt danach erneut vor (wieder ohne das Annotierungs-Popup zuvor zu schließen), bezog sich die Annotierung plötzlich nur noch auf den ersten Teil des durch verschachtelte Tags aus mehreren Knoten bestehenden Karteiworts.</li>
 
+					<li>Annotierungsfunktion: War eine Annotierung in einem Absatz, der nur eine Zeile hoch war, und war dieser Absatz ein zuvor gekürzter Absatz, der durch einen Klick auf das Kürzungszeichen <q>[…]</q> eingeblendet worden war, konnte die Annotierung nicht mehr geändert werden.</li>
+
 					<li>Annotierungsfunktion: Das Schließen-Icon hatte keinen erklärenden Tooltip.</li>
 
 					<li><a href="#belegliste" class="link-handbuch">Belegliste</a>: Führte das Filtern der Belegliste mit dem <a href="#filter-volltext" class="link-handbuch">Volltextfilter</a> dazu, dass in einem der angezeigten Belege alle Absätze gekürzt wurden (<q>[…]</q>), weil in ihnen das Suchwort nicht gefunden wurde, konnte die Kürzung des Textes nicht mehr durch Klick auf den Absatz rückgängig gemacht werden.</li>
+
+					<li>Belegliste: Wurde ein Wort mit der Annotierungsfunktion auf transparent gesetzt und damit als falschpositiver Treffer markiert, wurde dieses Wort dennoch zum Ermitteln des Vorschautexts im Belegkopf herangezogen und dort dann auch fett hervorgehoben (wenn das Icon <img src="../img/text-fett.svg" width="24" height="24" alt=""> aktiviert war). Die Reparatur hat den positiven Nebeneffekt, dass das Ermitteln des Vorschautextes ein wenige performanter geworden ist.</li>
 
 					<li>Belegliste: Die <a href="#einstellungen-filterleisteBelegGefiltert" class="link-handbuch">Meldung, dass ein Beleg angelegt, wegen der aktiven Filter in der Belegliste jedoch gerade nicht sichtbar</a> sei, wurde sofort wieder geschlossen, sodass man keine Zeit hatte, sie zu lesen.</li>
 
