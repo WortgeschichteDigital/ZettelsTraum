@@ -707,7 +707,9 @@ fenster = {
 	// Hauptfenster erstellen
 	//   kartei = String
 	//     (Pfad zur Kartei, die geöffnet werden soll)
-	erstellen (kartei) {
+	//   neuesWort = true || undefined
+	//     (im Fenster soll ein neues Wort erstellt werden)
+	erstellen (kartei, neuesWort = false) {
 		// Position und Größe des Fensters ermitteln;
 		const Bildschirm = require("electron").screen.getPrimaryDisplay();
 		let x = optionen.data.fenster ? optionen.data.fenster.x : null,
@@ -780,13 +782,21 @@ fenster = {
 				// die IPC-Listener im Renderer-Prozess müssen erst initialisiert werden
 				setTimeout(() => this.send("optionen-zuletzt-verschwunden", appMenu.zuletztVerschwunden), 25);
 			}
-			if (/\.wgd$/.test(process.argv[1]) || kartei) {
+			const wgd = fenster.argvWgd(process.argv);
+			if (wgd || kartei) {
 				let datei = kartei;
 				if (!datei) {
-					datei = process.argv[1];
+					datei = wgd;
 				}
 				// die IPC-Listener im Renderer-Prozess müssen erst initialisiert werden
 				setTimeout(() => this.send("kartei-oeffnen", datei), 25);
+			} else if (neuesWort) {
+				// 500ms warten, damit der Ladebildschirm Zeit hat zu verschwinden
+				setTimeout(() => {
+					if (!this.isDestroyed()) {
+						this.send("kartei-erstellen");
+					}
+				}, 500);
 			}
 		});
 		// Aktionen vor dem Schließen des Fensters
@@ -999,7 +1009,6 @@ fenster = {
 			backgroundColor: "#386ea6",
 			width: 650,
 			height: 334,
-			useContentSize: true, // Nur in Über-Fenstern nutzen! In einer nicht paketierten Version von Linux ist das Fenster dann zu hoch; in einer paketierten ist hingegen alles in Ordnung.
 			center: true,
 			resizable: false,
 			minimizable: false,
@@ -1103,6 +1112,19 @@ fenster = {
 			w.close();
 		}
 	},
+	// ermittelt den Pfad der übergebenen WGD-Datei
+	// (unter Windows steht die übergebene Datei nicht unbedingt in argv[1];
+	// davor können verschiedene Schalter sein)
+	//   argv = Array
+	//     (Array mit den Startargumenten)
+	argvWgd (argv) {
+		for (let i of argv) {
+			if (/\.wgd$/.test(i)) {
+				return i;
+			}
+		}
+		return "";
+	},
 };
 
 
@@ -1146,7 +1168,8 @@ app.on("activate", () => {
 // zweite Instanz wird gestartet
 app.on("second-instance", (evt, argv) => {
 	// Kartei öffnen?
-	if (!/\.wgd$/.test(argv[1])) {
+	const wgd = fenster.argvWgd(argv);
+	if (!wgd) {
 		return;
 	}
 	// Kartei schon offen => Fenster fokussieren
@@ -1155,7 +1178,7 @@ app.on("second-instance", (evt, argv) => {
 		if (!win.hasOwnProperty(id)) {
 			continue;
 		}
-		if (win[id].kartei === argv[1]) {
+		if (win[id].kartei === wgd) {
 			fenster.fokus(BrowserWindow.fromId(parseInt(id, 10)));
 			return;
 		} else if (win[id].typ === "index" && !win[id].kartei) {
@@ -1165,10 +1188,10 @@ app.on("second-instance", (evt, argv) => {
 	// Kartei noch nicht offen => Kartei öffnen
 	if (leereFenster.length) {
 		let w = BrowserWindow.fromId(leereFenster[0]);
-		w.webContents.send("kartei-oeffnen", argv[1]);
+		w.webContents.send("kartei-oeffnen", wgd);
 		fenster.fokus(w);
 	} else {
-		fenster.erstellen(argv[1]);
+		fenster.erstellen(wgd);
 	}
 });
 
@@ -1368,29 +1391,20 @@ ipcMain.handle("bedeutungen-fokussieren", (evt, contentsId) => {
 
 // neue Kartei zu einem neuen Wort anlegen
 ipcMain.on("neues-wort", () => {
-	// neues Fenster öffnen oder ein bestehendes nutzen?
-	let neuesFenster = true,
-		timeout = 1500,
-		winId = 0;
+	// bestehendes Fenster nutzen?
 	for (let id in win) {
 		if (!win.hasOwnProperty(id)) {
 			continue;
 		}
 		if (win[id].typ === "index" && !win[id].kartei) {
-			winId = parseInt(id, 10);
-			timeout = 0;
-			neuesFenster = false;
-			break;
+			let w = BrowserWindow.fromId(parseInt(id, 10));
+			fenster.fokus(w);
+			w.webContents.send("kartei-erstellen");
+			return;
 		}
 	}
-	if (neuesFenster) {
-		winId = fenster.erstellen("");
-	}
-	// das Fenster fokussieren
-	let w = BrowserWindow.fromId(winId);
-	fenster.fokus(w);
-	// nach dem Wort fragen
-	setTimeout(() => w.webContents.send("kartei-erstellen"), timeout);
+	// neues Fenster öffnen
+	fenster.erstellen("", true);
 });
 
 // überprüft, ob die übergebene Kartei schon offen ist

@@ -431,11 +431,9 @@ let annotieren = {
 			kartei.karteiGeaendert(true);
 		}
 		// Filterleiste neu aufbauen
-		let belege = [];
-		document.querySelectorAll(".liste-kopf").forEach(function(i) {
-			belege.push(i.dataset.id);
-		});
-		filter.aufbauen(belege);
+		// (es wäre performanter filter.aufbauen(belege) zu benutzen; dann gibt es aber
+		// Probleme, wenn nach Annotierungen gefiltert wird und die letzte Annotierung entfernt wurde)
+		liste.status(true);
 		// Events auffrischen
 		function events () {
 			let marks = annotieren.data.p.querySelectorAll(`mark.${annotieren.data.cl}`);

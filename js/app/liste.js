@@ -817,8 +817,8 @@ let liste = {
 			snippet = `…${snippet.substring(reg.lastIndex - 5 - 25)}`;
 		}
 		// 4. Text nach hinten heraus kürzen (deutlicher Performance-Schub!)
-		if (snippet.length > 280) {
-			snippet = `${snippet.substring(0, 250)}…`;
+		if (snippet.length > 300) {
+			snippet = `${snippet.substring(0, 280)}…`;
 			// sollte der letzte <mark> beim Kürzen korrumpiert werden: Das ist kein
 			// Problem, die Rendering-Engine fängt das ab (wurde getestet)
 		}

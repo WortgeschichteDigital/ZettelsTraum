@@ -1109,7 +1109,7 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
 
 					<p>Die Trennstriche am Ende einer Textzeile (das sind <q>-</q> oder <q>¬</q>) werden zu <q>[¬]</q> normalisiert, sodass sie für die Leseansicht der Belege automatisch ausgeblendet werden können.</p>
 
-					<p>Werden mehrere Seiten importiert, wird jeder Seitenumbruch nach diesem Muster markiert: <q>[:35:]</q>. Dabei steht hier die <q>35</q> für die Seitenangabe, die aus dem n-Attribute des <code class="quelltext">&lt;pb&gt;</code> ausgelesen wurde.</p>
+					<p>Werden mehrere Seiten importiert, wird jeder Seitenumbruch nach diesem Muster markiert: <code class="quelltext">␣[:35:]␣</code>. Dabei steht hier die <q>35</q> für die Seitenangabe, die aus dem n-Attribute des <code class="quelltext">&lt;pb&gt;</code> ausgelesen wurde.</p>
 
 					<p>Wird der den Import begrenzende <code class="quelltext">&lt;pb&gt;</code> nicht gefunden (weil man sich auf der letzten Seite des Texts befindet oder die NutzerIn bei der Eingabe einen Fehler gemacht hat), wird versucht, den Text des Buchs ab dem Start-<code class="quelltext">&lt;pb&gt;</code> komplett zu importieren.</p>
 
@@ -1161,6 +1161,41 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
 					<p>Im Inneren der Lock-Datei steht im Plaintext der auf die Millisekunde genaue Zeitpunkt der Anlage der Datei, der Name des sperrenden Rechners und der seiner NutzerIn. Die einzelnen Werte werden durch <code class="quelltext">;;</code> voneinander getrennt. Das Ganze sieht dann in etwa so aus:</p>
 
 					<pre class="quelltext">2019-04-24T17:36:47.681Z;;nico-sein-rechner;;Nico</pre>
+
+					<h2 id="verschiedenes-bekannteFehler">Bekannte Fehler</h2>
+
+					<ul>
+						<li>
+							<p>Die Locale der App kann nicht mehr auf <code class="quelltext">de</code> gesetzt werden.<br><a href="https://github.com/electron/electron/issues/17995">Electron-Bug #17995</a></p>
+
+							<div class="info">
+								<p><i>Konsequenzen:</i> In Betriebssystemen, deren Sprache nicht deutsch ist, gibt es Darstellungsprobleme der Datumsfelder im <a href="#filter-kartendatum" class="link-handbuch">Kartendatum-Filter</a> und im <a href="#menueKartei-redaktion" class="link-handbuch">Redaktions-Fenster</a>.</p>
+
+								<p><i>Workaround:</i> Die App explizit mit der deutschen Locale starten:</p>
+
+								<pre>LANG=de; zettelstraum</pre>
+							</div>
+						</li>
+
+						<li>
+							<p>Für die Funktion <a href="#menueAnsicht-anzeigeVergroessern" class="link-handbuch"><i>Ansicht &gt; Anzeige vergrößern</i></a> wurde das Tastaturkürzel <kbd class="nochange">Strg</kbd> + <kbd>+</kbd> registriert, angezeigt wird im Menü aber <kbd class="nochange">Strg</kbd> + <kbd>=</kbd>.<br><a href="https://github.com/electron/electron/issues/5256">Electron-Bugs #5256</a>, <a href="https://github.com/electron/electron/issues/14742">#14742</a>, <a href="https://github.com/electron/electron/issues/15496">#15496</a></p>
+
+							<p class="info"><i>Konsequenzen:</i> Die Bedienung funktioniert je nach Betriebssystem anders. Während unter <i>Linux</i> und <i>Windows</i> trotz der falschen Anzeige <kbd class="nochange">Strg</kbd> + <kbd>+</kbd> gedrückt werden kann, muss unter <i>macOS</i> tatsächlich <kbd>⌘</kbd> + <kbd>=</kbd> gedrückt werden.</p>
+						</li>
+
+						<li>
+							<p>Mitunter werden unter <i>Windows</i> beim Öffnen eines Internetlinks gleich zwei Browserinstanzen erzeugt, wenn der Standardbrowser der Betriebssystems noch nicht gestartet wurde.</p>
+
+							<p class="info"><b>Kein Fehler von <i class="app-name"></i>.</b> Der Befehl zum Öffnen des Links wird von der App auch unter <i>Windows</i> definitiv nur einmal abgesetzt. Tritt das Phänomen auf, dürfte ein Konfigurationsproblem des Betriebssystems vorliegen.</p>
+						</li>
+
+
+						<li>
+							<p>Unter <i>Windows</i> wird bei Umlauten, die durch a, o, u mit darübergestelltem e dargestellt werden, das e verzerrt.</p>
+
+							<p class="info"><b>Kein Fehler von <i class="app-name"></i>.</b> Es handelt sich offenbar um ein Problem mit der Rendering-Engine, die unter <i>Windows</i> anders agiert als unter <i>Linux</i> und <i>macOS</i> und an dieser Stelle mit der Schriftart <i>Noto Sans</i> ein Problem hat.</p>
+						</li>
+					</ul>
 				</section>
 			</div>
 		</main>

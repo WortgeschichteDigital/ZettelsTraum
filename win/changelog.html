@@ -43,7 +43,7 @@
 			<div class="version">0.24.0</div>
 
 			<div>
-				<h2><span>Version 0.24.0-beta</span><time datetime="2019-10-25T19:52:10">25. Oktober 2019</time></h2>
+				<h2><span>Version 0.24.0</span><time datetime="2019-11-13T20:20:39">13. November 2019</time></h2>
 
 				<p><span class="obacht">Das Dateiformat hat sich geändert!</span> Ältere <abbr title="Wortgeschichte digital">WGD</abbr>-Dateien werden automatisch konvertiert; dabei wird eine Änderungsmarkierung gesetzt.</p>
 
@@ -240,7 +240,11 @@
 
 					<li>Das Auf- und Zuklappen des Inhaltsverzeichnisses im Handbuch und der technischen Dokumentation wird nun animiert.</li>
 
-					<li>Die technische Dokumentation wurde wegen der vielen Änderungen und Ergänzungen auf der technischen Ebene in den Abschnitten <a href="#framework" class="link-dokumentation">Framework</a> sowie <a href="#ordner" class="link-dokumentation">Ordner und Dateien</a> überarbeitet. Außerdem wurden eine Beschreibung des <a href="#verschiedenes-tagDateien" class="link-dokumentation">Formats der Tag-Dateien</a> ergänzt und natürlich alle Änderungen des <a href="#wgd-wgd" class="link-dokumentation"><abbr title="Wortgeschichte digital">WGD</abbr>-Dateiformats</a> in die Tabelle eingetragen.</li>
+					<li>
+						<p>Die technische Dokumentation wurde wegen der vielen Änderungen und Ergänzungen auf der technischen Ebene in den Abschnitten <a href="#framework" class="link-dokumentation">Framework</a> sowie <a href="#ordner" class="link-dokumentation">Ordner und Dateien</a> überarbeitet. Außerdem wurden eine Beschreibung des <a href="#verschiedenes-tagDateien" class="link-dokumentation">Formats der Tag-Dateien</a> ergänzt und natürlich alle Änderungen des <a href="#wgd-wgd" class="link-dokumentation"><abbr title="Wortgeschichte digital">WGD</abbr>-Dateiformats</a> in die Tabelle eingetragen.</p>
+
+						<p>Ferner gibt es nun einen neuen Abschnitt im <abbr title="Kapitel">Kap.</abbr> <i>Verschiedenes</i>: <a href="#verschiedenes-bekannteFehler" class="link-dokumentation">Bekannte Fehler</a>. Hier werden nur Fehler aufgelistet, die aus irgendeinem Grund nicht behoben werden konnten oder werden, <abbr title="zum Beispiel">z. B.</abbr> weil es sich um Electron-Bugs handelt.</p>
+					</li>
 
 					<li>
 						<p>Es hat sich viel <span lang="en">under the hood</span> getan: Der Quelltext wurde an zahlreichen Stellen stark restrukturiert, was ihn nicht nur klarer und moderner machte, sondern auch hunderte Zeilen doppelten oder überflüssig komplizierten Codes einsparte.</p>
@@ -269,6 +273,10 @@
 
 				<ul>
 					<li>Es gibt keine Funktion und keinen Befehl in der App, der einen Doppelklick erforderte. Da ein Doppelklick in der Liste zuletzt verwendeter Karteien der <a href="#menueApp-neuesFenster" class="link-handbuch">Startansicht</a> einen Fehler beim Anlegen der Sperrdatei hervorrufen konnte (unter <i>Windows</i>), werden Doppelklicks nun in gewissen Funktionen abgefangen. Das sind im Einzelnen: die erwähnte Liste zuletzt verwendeter Karteien, die Trefferliste in der <a href="#menueApp-karteisuche" class="link-handbuch">Karteisuche</a>, die <a href="#menueKartei-anhaenge" class="link-handbuch">Anhänge</a> (im Fenster, in der <a href="#karteikarte" class="link-handbuch">Karteikarte</a>, in Icon-Listen) und alle Internetlinks, egal in welcher Ansicht sie sich befinden.</li>
+
+					<li>War die App bereits geöffnet, wurden Dateien, die via Doppelklick im <i>Windows Explorer</i> ausgewählt wurden, nicht geladen. Der Fehler betraf nur Installationen auf <i>Windows</i>-Rechnern.</li>
+
+					<li>Wurde aus einem Hauptfenster, in dem bereits eine Kartei geöffnet war, der Befehl <a href="#menueKartei-erstellen" class="link-handbuch"><i>Kartei &gt; Erstellen</i></a> aufgerufen und das sich neu öffnende Fenster sehr rasch wieder geschlossen, löste dies einen Fehler im Main-Prozess aus.</li>
 
 					<li><a href="#belegliste-karteiwortHervorheben" class="link-handbuch">Annotierungsfunktion</a>: Wurden über die Belegliste Annotierungen vorgenommen, wurde das Änderungsdatum der betreffenden Karteikarte nicht angepasst.</li>
 
@@ -302,7 +310,9 @@
 
 					<li>Belegliste und <a href="#karteikarte" class="link-handbuch">Karteikarte</a>: Beim Kopieren einer Textauswahl mit den Kopierfunktionen <i>Rechtsklick &gt; Textauswahl kopieren</i> oder <img src="../img/kopieren.svg" width="24" height="24" alt="">, die den Belegtext vor dem Kopieren bereinigen, konnte es dazu kommen, dass Hervorhebungen von Suchtreffern (des Volltextfilters und der Suchleiste) und Karteiwörtern sowie Annotierungen gar nicht oder nicht korrekt entfernt wurden. Dies konnte wiederum zur Folge haben, dass Teile des kopierten Textes nach dem Einfügen in ein Textverarbeitungsprogramm verschluckt wurden.</li>
 
-					<li>Filterleiste: Formatierungen in Bedeutungsdefinitionen sind in Filternamen als <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>-Tags dargestellt worden, also <abbr title="zum Beispiel">z. B.</abbr>: <q>Mannschaft im &lt;i&gt;Sport&lt;/i&gt;</q>. Jetzt werden die Formatierungen korrekt visualisiert: <q>Mannschaft im <i>Sport</i></q>.</li>
+					<li><a href="#filter">Filterleiste</a>: Formatierungen in Bedeutungsdefinitionen sind in Filternamen als <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>-Tags dargestellt worden, also <abbr title="zum Beispiel">z. B.</abbr>: <q>Mannschaft im &lt;i&gt;Sport&lt;/i&gt;</q>. Jetzt werden die Formatierungen korrekt visualisiert: <q>Mannschaft im <i>Sport</i></q>.</li>
+
+					<li>Filterleiste: War der Filter <i>Annotierung</i> aktiv (Filterblock <i>Verschiedenes</i>) und wurde die letzte Annotierung entfernt, wurden die Filter im Block <i>Verschiedens</i> nicht mehr korrekt aufgebaut, keine Belege in der Liste angezeigt, aber gemeldet, dass noch ein Belege sichtbar sei.</li>
 
 					<li>Karteikarte: Wurde eines der <a href="#karteikarte-pflichtfelder" class="link-handbuch">Pflichtfelder der Karteikarte</a> nicht oder nicht korrekt ausgefüllt, kam schon bisher eine Fehlermeldung und das entsprechende Feld wurde nach dem Schließen der Meldung fokussiert. War das Feld allerdings nicht im sichtbaren Bereich, wurde es auch nicht in den sichtbaren Bereich des Fensters gescrollt. Ein mangelhaftes Verhalten, das nun korrigiert wurde.</li>
 
