@@ -1000,6 +1000,12 @@ fenster = {
 			title = "Über Electron";
 			html = "ueberElectron";
 		}
+		// festlegen, wie die Höhe der Über-Fenster berechnet werden soll
+		// (Linux agiert hier offenbar anders als Windows und macOS)
+		let contentSize = false;
+		if (/darwin|win32/.test(process.platform)) {
+			contentSize = true;
+		}
 		// Fenster öffnen
 		let bw = new BrowserWindow({
 			parent: BrowserWindow.getFocusedWindow(),
@@ -1009,6 +1015,7 @@ fenster = {
 			backgroundColor: "#386ea6",
 			width: 650,
 			height: 334,
+			useContentSize: contentSize,
 			center: true,
 			resizable: false,
 			minimizable: false,
