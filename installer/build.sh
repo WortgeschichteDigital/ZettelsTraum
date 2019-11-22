@@ -2,7 +2,6 @@
 
 presets=(
 	"GitHub"
-	"Arbeitsgruppe"
 	"Test (Linux)"
 	"Test (alle)"
 )
@@ -14,14 +13,9 @@ preset1=(
 	"type=packager|os=win|arch=zip|clean=j"
 )
 preset2=(
-	"type=installer|os=linux|pkg=deb|clean=j"
-	"type=installer|os=win|pkg=nsis|clean=j"
-	"type=packager|os=mac|arch=gz|clean=j"
-)
-preset3=(
 	"type=packager|os=linux|arch=-|clean=j"
 )
-preset4=(
+preset3=(
 	"type=packager|os=linux|arch=-|clean=j"
 	"type=packager|os=win|arch=-|clean=j"
 	"type=packager|os=mac|arch=gz|clean=j"
