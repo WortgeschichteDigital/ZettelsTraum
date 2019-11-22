@@ -14,6 +14,12 @@ window.addEventListener("load", async () => {
 	// PROGRAMM-VERSION EINTRAGEN
 	document.getElementById("version").textContent = appInfo.version;
 
+	// MAIL-ADRESSE EINTRAGEN
+	const dekodiert = helfer.mailEntschluesseln("xbwfiehdhwrerzkpn{mbgutfpogspeqspAixfh0eg");
+	let mail = document.getElementById("mail");
+	mail.href = `mailto:${dekodiert}`;
+	mail.textContent = dekodiert;
+
 	// FENSTER FREISCHALTEN
 	helfer.fensterGeladen();
 });
