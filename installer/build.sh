@@ -7,14 +7,14 @@ presets=(
 	"Test (alle)"
 )
 preset1=(
-	"type=installer|os=linux|pkg=deb|main=Nico_Dorn|update=j|clean=j"
+	"type=installer|os=linux|pkg=deb|update=j|clean=j"
 	"type=installer|os=win|pkg=nsis|update=n|clean=j"
 	"type=packager|os=linux|arch=gz|update=n|clean=j"
 	"type=packager|os=mac|arch=gz|update=n|clean=j"
 	"type=packager|os=win|arch=zip|update=n|clean=j"
 )
 preset2=(
-	"type=installer|os=linux|pkg=deb|main=Nico_Dorn|update=j|clean=j"
+	"type=installer|os=linux|pkg=deb|update=j|clean=j"
 	"type=installer|os=win|pkg=nsis|update=n|clean=j"
 	"type=packager|os=mac|arch=gz|update=n|clean=j"
 )
@@ -113,7 +113,6 @@ konfiguration() {
 	done
 
 	pkg=""
-	main=""
 	# Installer
 	if [ "$type" = "installer" ]; then
 		# Installer-Format
@@ -142,19 +141,6 @@ konfiguration() {
 					zeilenWeg 1
 					continue
 				fi
-				break
-			done
-		fi
-
-		# Maintainer
-		if [ "$os" = "linux" ] && echo "$pkg" | egrep -q "^(deb|rpm)$"; then
-			while : ; do
-				read -ep "Maintainer: " main
-				if test -z "$main"; then
-					zeilenWeg 1
-					continue
-				fi
-				main=${main// /_}
 				break
 			done
 		fi
@@ -198,9 +184,6 @@ konfiguration() {
 	job="type=${type}|os=${os}"
 	if ! test -z "$pkg"; then
 		job+="|pkg=${pkg}"
-	fi
-	if ! test -z "$main"; then
-		job+="|main=${main}"
 	fi
 	if ! test -z "$arch"; then
 		job+="|arch=${arch}"
@@ -363,27 +346,6 @@ makeChangelog() {
 	echo "$output"
 }
 
-# Maintainer eintragen
-setMaintainer() {
-	# App-Version ermitteln
-	version=$(appVersion)
-
-	# Maintainer nicht für Beta-Versionen
-	if echo "$version" | grep -q "beta"; then
-		return
-	fi
-
-	# Maintainer eingetragen
-	echo -e "  \033[1;32m*\033[0m Maintainer eintragen"
-	maintainer="${dir}/build-changelog-maintainer.json"
-	if [ "$(cat "$maintainer"  | jq -r ".[\"${version}\"]")" = "null" ]; then
-		json=$(cat "$maintainer" | jq -c ".[\"${version}\"] = \"${main//_/ }\"")
-	else
-		json=$(cat "$maintainer" | jq -c ". + { \"${version}\": \"${main//_/ }\" }")
-	fi
-	echo $json > "$maintainer"
-}
-
 makeArchive() {
 	echo -e "  \033[1;32m*\033[0m Archiv erstellen"
 	cd "${dir}/../../build"
@@ -427,7 +389,6 @@ execJob() {
 	type=""
 	os=""
 	pkg=""
-	main=""
 	arch=""
 	update=""
 	clean=""
@@ -437,10 +398,7 @@ execJob() {
 	done
 
 	# Checks
-	if echo "$pkg" | egrep -q "^(deb|rpm)$" && ! command -v jq >/dev/null 2>&1; then
-		echo -e "\033[1;31mFehler!\033[0m\n  \033[1;31m*\033[0m \"jq\" nicht installiert"
-		return
-	elif echo "$pkg" | egrep -q "^(deb|rpm)$" && ! command -v php >/dev/null 2>&1; then
+	if echo "$pkg" | egrep -q "^(deb|rpm)$" && ! command -v php >/dev/null 2>&1; then
 		echo -e "\033[1;31mFehler!\033[0m\n  \033[1;31m*\033[0m \"php\" nicht installiert"
 		return
 	elif [ "$arch" = "zip" ] && ! command -v zip >/dev/null 2>&1; then
@@ -463,14 +421,10 @@ execJob() {
 		updateHtml
 	fi
 
-	# Maintainer und Changelog
-	if ! test -z "$main"; then
-		setMaintainer
+	# Changelog für DEB bzw. RPM erstellen
+	if echo "$pkg" | egrep -q "^(deb|rpm)$" ; then
 		echo -e "  \033[1;32m*\033[0m Changelog erstellen"
-		php "${dir}/build-changelog.php" $pkg "$dir"
-		if (( $? > 0 )); then
-			return
-		fi
+		echo -en "$(makeChangelog $pkg)" > "${dir}/../../build/changelog"
 	fi
 
 	# Installer
