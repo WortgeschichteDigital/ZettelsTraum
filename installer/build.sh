@@ -186,11 +186,6 @@ updateHtml() {
 	# App-Version ermitteln
 	version=$(appVersion)
 
-	# HTML-Update nicht für Beta-Versionen
-	if echo "$version" | grep -q "beta"; then
-		return
-	fi
-
 	# Copyright-Jahr in "Über App" updaten
 	htmlUeber="${dir}/../win/ueberApp.html"
 	copyrightJahr="2019"
