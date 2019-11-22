@@ -381,10 +381,7 @@ execJob() {
 	done
 
 	# Checks
-	if echo "$pkg" | egrep -q "^(deb|rpm)$" && ! command -v php >/dev/null 2>&1; then
-		echo -e "\033[1;31mFehler!\033[0m\n  \033[1;31m*\033[0m \"php\" nicht installiert"
-		return
-	elif [ "$arch" = "zip" ] && ! command -v zip >/dev/null 2>&1; then
+	if [ "$arch" = "zip" ] && ! command -v zip >/dev/null 2>&1; then
 		echo -e "\033[1;31mFehler!\033[0m\n  \033[1;31m*\033[0m \"zip\" nicht installiert"
 		return
 	fi
