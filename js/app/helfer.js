@@ -587,6 +587,22 @@ let helfer = {
 			}, 500);
 		}, 1000);
 	},
+	// entschüsselt die "verschlüsselte" E-Mail-Adresse
+	//   kodiert = String
+	//     (die "verschlüsselte" Mail-Adresse)
+	mailEntschluesseln (kodiert) {
+		let dekodiert = "";
+		for (let i = 0, len = kodiert.length; i < len; i++) {
+			let charCode = kodiert.charCodeAt(i);
+			if (i % 2 === 0) {
+				charCode -= 2;
+			} else {
+				charCode--;
+			}
+			dekodiert += String.fromCharCode(charCode);
+		}
+		return dekodiert.split("trenner")[1];
+	},
 	// öffnet externe Links in einem Browser-Fenster
 	//   a = Element
 	//     (Link, auf dem geklickt wurde)
