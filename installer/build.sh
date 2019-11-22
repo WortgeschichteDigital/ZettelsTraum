@@ -7,24 +7,24 @@ presets=(
 	"Test (alle)"
 )
 preset1=(
-	"type=installer|os=linux|pkg=deb|update=j|clean=j"
-	"type=installer|os=win|pkg=nsis|update=n|clean=j"
-	"type=packager|os=linux|arch=gz|update=n|clean=j"
-	"type=packager|os=mac|arch=gz|update=n|clean=j"
-	"type=packager|os=win|arch=zip|update=n|clean=j"
+	"type=installer|os=linux|pkg=deb|clean=j"
+	"type=installer|os=win|pkg=nsis|clean=j"
+	"type=packager|os=linux|arch=gz|clean=j"
+	"type=packager|os=mac|arch=gz|clean=j"
+	"type=packager|os=win|arch=zip|clean=j"
 )
 preset2=(
-	"type=installer|os=linux|pkg=deb|update=j|clean=j"
-	"type=installer|os=win|pkg=nsis|update=n|clean=j"
-	"type=packager|os=mac|arch=gz|update=n|clean=j"
+	"type=installer|os=linux|pkg=deb|clean=j"
+	"type=installer|os=win|pkg=nsis|clean=j"
+	"type=packager|os=mac|arch=gz|clean=j"
 )
 preset3=(
-	"type=packager|os=linux|arch=-|update=n|clean=j"
+	"type=packager|os=linux|arch=-|clean=j"
 )
 preset4=(
-	"type=packager|os=linux|arch=-|update=n|clean=j"
-	"type=packager|os=win|arch=-|update=n|clean=j"
-	"type=packager|os=mac|arch=gz|update=n|clean=j"
+	"type=packager|os=linux|arch=-|clean=j"
+	"type=packager|os=win|arch=-|clean=j"
+	"type=packager|os=mac|arch=gz|clean=j"
 )
 
 cat <<- EOF
@@ -159,16 +159,6 @@ konfiguration() {
 			break
 		done
 	fi
-	
-	# HTML-Update
-	while : ; do
-		read -ep "HTML-Update (j/n): " update
-		if ! echo "$update" | egrep -q "^(j|n)$"; then
-			zeilenWeg 1
-			continue
-		fi
-		break
-	done
 
 	# Bereinigen
 	while : ; do
@@ -188,7 +178,6 @@ konfiguration() {
 	if ! test -z "$arch"; then
 		job+="|arch=${arch}"
 	fi
-	job+="|update=${update}"
 	job+="|clean=${clean}"
 }
 
@@ -390,7 +379,6 @@ execJob() {
 	os=""
 	pkg=""
 	arch=""
-	update=""
 	clean=""
 	vars=$(echo "$1" | tr "|" "\n")
 	for var in $vars; do
@@ -414,11 +402,6 @@ execJob() {
 			echo -e "\033[1;31mFehler!\033[0m\n  \033[1;31m*\033[0m \"../../build\" erstellen gescheitert"
 			return
 		fi
-	fi
-
-	# changelog.html und ueberApp.html auffrischen
-	if [ "$update" = "j" ]; then
-		updateHtml
 	fi
 
 	# Changelog für DEB bzw. RPM erstellen
