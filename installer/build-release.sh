@@ -65,13 +65,20 @@ zeilenWeg() {
 	done
 }
 
+# aktuelle App-Version ermitteln
+appVersion() {
+	packageJson="${dir}/../package.json"
+	echo $(grep '"version":' "$packageJson" | perl -pe 's/.+: "(.+?)",/\1/')
+}
+
 # Release vorbereiten
 vorbereiten() {
 	echo -e "  \033[1;32m*\033[0m Release vorbereiten\n"
 
+	# Module updaten
 	read -p "  Nächste Aufgabe \"Module updaten\" (Enter) . . ."
 	echo ""
-	bash "${dir}/build-modules.sh" inc
+# 	bash "${dir}/build-modules.sh" inc TODO anstellen
 	cd "${dir}/../"
 	echo ""
 	while : ; do
@@ -93,7 +100,28 @@ vorbereiten() {
 			zeilenWeg 1
 		fi
 	done
-	
+
+	# Version festlegen
+	read -p "  Nächste Aufgabe \"Version festlegen\" (Enter) . . ."
+	echo -e "\n  \033[1;32m*\033[0m Version festlegen\n"
+	while : ; do
+		read -ep "Version: " -i "$(appVersion)" version
+		if ! echo "$version" | egrep -q "^[0-9]+\.[0-9]+\.[0-9]+$"; then
+			echo -e "\n\033[1;31mFehler!\033[0m\n  \033[1;31m*\033[0m Versionsformat falsch"
+			sleep 2
+			zeilenWeg 4
+			continue
+		else
+			zeilenWeg 1
+			echo -e "Version: \033[1;33m${version}\033[0m"
+			# Version in package.json eintragen
+			local zeile="\t\"version\": \"${version}\","
+# 			sed -i "s/\t\"version\".*/${zeile}/" "package.json" TODO anstellen
+			echo ""
+			break
+		fi
+	done
+
 	cd "$dir"
 }
 
