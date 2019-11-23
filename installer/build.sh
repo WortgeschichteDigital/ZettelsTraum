@@ -45,6 +45,7 @@ cat <<- EOF
 
       $(echo -e "\033[48;5;254;38;5;63m          Build         \033[0m")
 EOF
+echo -e "\n"
 
 # Script Directory ermitteln
 dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
@@ -454,12 +455,10 @@ presetsExec() {
 
 # Starter
 while : ; do
-	echo -e "\n"
-
 	# Auswahl treffern
 	read -ep "Ausführen (job/preset/config/modules/exit): " action
 	if ! echo "$action" | egrep -q "^(job|preset|config|modules|exit)$"; then
-		zeilenWeg 3
+		zeilenWeg 1
 		continue
 	fi
 
