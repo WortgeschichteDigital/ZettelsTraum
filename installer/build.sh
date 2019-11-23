@@ -515,6 +515,24 @@ execJob() {
 	fi
 }
 
+# Datei mit SHA-Summen erstellen
+shaSummen() {
+	local build="${dir}/../../build/"
+
+	# Prüfen, ob "build" vorhanden ist
+	if ! test -d "$build"; then
+		echo -e "\033[1;31mFehler!\033[0m\n  \033[1;31m*\033[0m \"../../build\" nicht gefunden"
+		return
+	fi
+
+	# Summen-Datei erstellen
+	echo -e "  \033[1;32m*\033[0m Datei mit sha256-Summen erstellen"
+	cd "$build"
+	sha256sum * > sha256sums.txt
+
+	cd "$dir"
+}
+
 # Liste der Presets ausdrucken
 presetsPrint() {
 	echo -e "\n"
@@ -553,8 +571,8 @@ while : ; do
 	echo -e "\n"
 
 	# Auswahl treffern
-	read -ep "Ausführen (job/preset/config/modules/exit): " action
-	if ! echo "$action" | egrep -q "^(job|preset|config|modules|exit)$"; then
+	read -ep "Ausführen (job/sha/preset/config/modules/exit): " action
+	if ! echo "$action" | egrep -q "^(job|sha|preset|config|modules|exit)$"; then
 		zeilenWeg 3
 		continue
 	fi
@@ -565,6 +583,9 @@ while : ; do
 		konfiguration
 		echo -e "\n"
 		execJob "$job"
+	# Datei mit SHA-Summen erstellen
+	elif [ "$action" = "sha" ]; then
+		shaSummen
 	# Konfiguration anzeigen
 	elif [ "$action" = "config" ]; then
 		echo -e "\n"
