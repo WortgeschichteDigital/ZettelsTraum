@@ -25,6 +25,7 @@ if [ "$1" != "inc" ]; then
 
       $(echo -e "\033[48;5;254;38;5;63m         Modules        \033[0m")
 	EOF
+	echo -e "\n"
 fi
 
 # Script Directory ermitteln
@@ -100,7 +101,6 @@ if [ "$1" = "inc" ]; then
 	installModules
 else
 	while : ; do
-		echo -e "\n"
 
 		read -ep "Module installieren oder updaten (j/n): " install
 
@@ -111,7 +111,7 @@ else
 		elif [ "$install" = "n" ]; then
 			exit 0
 		else
-			zeilenWeg 3
+			zeilenWeg 1
 		fi
 	done
 fi
