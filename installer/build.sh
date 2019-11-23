@@ -81,6 +81,7 @@ appVersion() {
 	echo $(grep '"version":' "$packageJson" | perl -pe 's/.+: "(.+?)",/\1/')
 }
 
+# Systembezeichnung für Node
 sysName() {
 	declare -A sys
 	sys[linux]="linux"
