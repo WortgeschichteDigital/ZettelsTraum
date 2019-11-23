@@ -493,7 +493,9 @@ presetsPrint() {
 	echo " [x] Abbruch"
 	while : ; do
 		read -ep "  " preset
-		if [ "$preset" = "x" ] || echo "$preset" | egrep -q "^[1-9]{1}$" && (( preset  <= ${#presets[@]} )); then
+		if [ "$preset" = "x" ]; then
+			return
+		elif echo "$preset" | egrep -q "^[1-9]{1}$" && (( preset  <= ${#presets[@]} )); then
 			presetsExec $preset
 			break
 		else
