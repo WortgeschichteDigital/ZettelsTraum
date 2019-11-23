@@ -112,20 +112,20 @@
 
 					<p>Zunächst muss <i>Node.js</i> mit seinem Paketmanager <code>npm</code> installiert werden (für <i>Windows</i> und <i>macOS</i> gibt es <a href="https://nodejs.org/en/download/">eigene Installer</a>):</p>
 
-					<pre>sudo apt-get install nodejs</pre>
+					<pre>$ sudo apt-get install nodejs</pre>
 
 					<p>Über die Eingaben <code>node -v</code> und <code>npm -v</code> bekommt man die Versionsnummern von <i>Node.js</i> <abbr title="beziehungsweise">bzw.</abbr> dessen Paketmanager angezeigt – ein einfacher Test, ob die Installation geklappt hat. Im Falle des Paketmanagers könnte ein Update ratsam sein:</p>
 
-					<pre>sudo npm install -g npm@latest</pre>
+					<pre>$ sudo npm install -g npm@latest</pre>
 
 					<p>Global lassen sich Programme aus dem <i>Node.js</i>-Respository (wie <abbr title="zum Beispiel">z. B.</abbr> das überaus hilfreiche <a href="https://jshint.com/">JSHint</a>) mithilfe des Schalters <code>-g</code> und Rootrechten (hier erlangt via <code>sudo</code>) installieren:</p>
 
-					<pre>sudo npm install -g [PROGRAMM]</pre>
+					<pre>$ sudo npm install -g [PROGRAMM]</pre>
 
 					<p><i>Electron</i> sollte allerdings nicht global, sondern lokal, <abbr title="das heißt">d. h.</abbr> im App-Ordern, installiert werden, sonst gibt es bei der späteren Paketierung mitunter Probleme – so zumindest meine Erfahrung. Das Zeichen für den aktuellen Pfad (<span class="datei">./</span>) steht hier und im Folgenden für das Wurzelverzeichnis der App, in dem <abbr title="unter anderem">u. a.</abbr> die Datei <span class="datei">./package.json</span> liegt. Die Installation ist simpel:</p>
 
-					<pre>cd ./
-npm install --save-dev electron</pre>
+					<pre>$ cd ./
+$ npm install --save-dev electron</pre>
 
 					<p>Während der Installation werden der Ordner <span class="datei">./node_modules/</span> und die Datei <span class="datei">./package-lock.json</span> erzeugt. Der Ordner <span class="datei">./node_modules/</span> kann mehrere Hundert Megabyte groß sein!</p>
 
@@ -136,7 +136,7 @@ npm install --save-dev electron</pre>
 
 					<p>Da im Herzen von <i>Electron</i> ein Browser schlägt und Browser fortwährend mit Sicherheitsupdates versorgt werden wollen, gibt es sehr häufig (<abbr title="in der Regel">i. d. R.</abbr> alle ein bis zwei Wochen) <a href="https://electronjs.org/releases/stable"><i>Electron</i>-Updates</a>. Das Update funktioniert genauso wie die Erstinstallation:</p>
 
-					<pre>npm install --save-dev electron</pre>
+					<pre>$ npm install --save-dev electron</pre>
 
 					<p>Welche <i>Electron</i>-Version im App-Ordner installiert ist, kann man dem Fenster <a href="#" class="ueber-electron"><i>Über Electron</i></a> (auch aufzurufen über das Menü <i>Hilfe</i> im Hauptfenster von <i class="app-name"></i>) oder der <span class="datei">./package.json</span> entnehmen:</p>
 
@@ -147,21 +147,21 @@ npm install --save-dev electron</pre>
 
 					<p>Über die aktuelle Version im <i>Node.js</i>-Respository gibt der Paketmanager Auskunft:</p>
 
-					<pre>npm show electron version</pre>
+					<pre>$ npm show electron version</pre>
 
 					<p>Der jüngste stabile Versionszweig von <i>Electron</i> liefert zum Zeitpunkt der Veröffentlichung immer die aktuelle Ausgabe von <i>Chromium</i> mit, hebt die <i>Chromium</i>-Version mit den folgenden Minor-Releases aber nicht mehr an. Technisch ist der im Framework arbeitende Browser somit zwar meist leicht veraltet, um die notwendigen Sicherheitsupdates kümmert sich das <i>Electron</i>-Team aber <a href="https://electronjs.org/docs/tutorial/support#supported-versions">für 36 Wochen</a>, <abbr title="das heißt">d. h.</abbr> über drei Major-Release-Zyklen hinweg. Danach erreicht ein Release-Zweig <abbr title="End-of-life" lang="en">EOL</abbr>.</p>
 
 					<p>Möchte man nicht gleich mit dem ersten Release eines neuen Zweiges auf diesen wechseln, muss man den Releasezweig angeben, von dem man Updates beziehen will. Um es <abbr title="beispielsweise">bspw.</abbr> zu vermeiden, die Version 5.0.x zu benutzen, muss man den Update-Befehl etwas anpassen, um weiterhin Updates des Release-Zweigs 4.1.x zu bekommen:</p>
 
-					<pre>npm install --save-dev electron@4-1-x</pre>
+					<pre>$ npm install --save-dev electron@4-1-x</pre>
 
 					<p>Darüber, welche Zweige alle zur Verfügung stehen, gibt diese Eingabe Auskunft:</p>
 
-					<pre>npm view electron</pre>
+					<pre>$ npm view electron</pre>
 
 					<p>All das, was hier erklärt wurde, brauchen Sie nicht unbedingt händisch ausführen. Es genügt im Grunde, wenn Sie <i>Node.js</i> installieren. Danach können Sie es sich leicht machen und ein mitgeliefertes Script aufrufen, das den Rest für Sie übernimmt – zumindest wenn Ihre Entwicklungsumgebung unter <i>Linux</i> läuft:</p>
 
-					<pre>bash ./installer/build-modules.sh</pre>
+					<pre>$ bash ./installer/build-modules.sh</pre>
 
 					<p>Installiert werden dabei die nötigen Module zum Ausführen und Bauen von <i class="app-name"></i>. Sind diese bereits installiert, wird ein Update angestoßen – falls noch eins aussteht. Das Ausführen des Scripts erzeugt den Ordner <span class="datei">node_modules</span> und die Datei <span class="datei">package-lock.json</span> im App-Verzeichnis. In der <span class="datei">package.json</span> werden die Werte in <code class="quelltext">"devDependencies"</code> aufgefrischt.</p>
 
@@ -182,7 +182,7 @@ npm install --save-dev electron</pre>
 
 					<p>Für den Start der App ist bereits alles eingerichtet. Nach der Installation von <i>Electron</i> muss man im Programmordner nur noch den folgenden Befehl ausführen:</p>
 
-					<pre>npm start</pre>
+					<pre>$ npm start</pre>
 
 					<p>Nun sollte <i class="app-name"></i> im Entwickler-Modus gestartet werden. <abbr title="Das heißt">D. h.</abbr> konkret, dass sich über das Tastaturkürzel <kbd class="nochange">Strg</kbd> + <kbd>⇧</kbd> + <kbd>I</kbd> die <i lang="en">Developer Tools</i> von <i>Chromium</i> öffnen lassen, die in der paketierten Version nicht mehr aufgerufen werden können. Außerdem erscheint in der Menüleiste des Hauptfensters der Menüpunkt <i>Dev</i>, der beim Paketieren eliminiert wird.</p>
 
@@ -191,12 +191,12 @@ npm install --save-dev electron</pre>
 
 					<p>Das Paketieren von <i class="app-name"></i> ist denkbar einfach. Zunächst muss der <a href="https://github.com/electron-userland/electron-packager/">Packager von <i>Electron</i></a> installiert werden (haben sie das Script <span class="datei">build-modules.sh</span> ausgeführt, ist dies bereits geschehen):</p>
 
-					<pre>cd ./
-npm install --save-dev electron-packager</pre>
+					<pre>$ cd ./
+$ npm install --save-dev electron-packager</pre>
 
 					<p>Den Packager könnte man durchaus über die Kommandozeile bedienen:</p>
 
-					<pre>electron-packager . zettelstraum [OPTIONEN]</pre>
+					<pre>$ electron-packager . zettelstraum [OPTIONEN]</pre>
 
 					<p>Der <code>.</code> steht für das Quellverzeichnis und <code>zettelstraum</code> für den App-Namen.</p>
 
@@ -208,19 +208,19 @@ npm install --save-dev electron-packager</pre>
 						<li>
 							<p>Für <i>Linux</i>:</p>
 
-							<pre>node installer/packager.js linux</pre>
+							<pre>$ node installer/packager.js linux</pre>
 						</li>
 
 						<li>
 							<p>Für <i>Windows</i>:</p>
 
-							<pre>node installer/packager.js win32</pre>
+							<pre>$ node installer/packager.js win32</pre>
 						</li>
 
 						<li>
 							<p>Für <i>macOS</i>:</p>
 
-							<pre>node installer/packager.js darwin</pre>
+							<pre>$ node installer/packager.js darwin</pre>
 						</li>
 					</ul>
 
@@ -251,8 +251,8 @@ npm install --save-dev electron-packager</pre>
 
 					<p>Zunächst einmal muss der Builder via <code>npm</code> installiert werden:</p>
 
-					<pre>cd ./
-npm install --save-dev electron-builder</pre>
+					<pre>$ cd ./
+$ npm install --save-dev electron-builder</pre>
 
 					<p>Die richtige Konfiguration des Builders zu finden, ist nicht so leicht, denn er kennt eine Vielzahl an <a href="https://www.electron.build/configuration/configuration">Konfigurationsmöglichkeiten</a>. Für das Erstellen von <abbr title="Nullsoft Scriptable Install System" lang="en">NSIS</abbr>-Installern, von <abbr title="Apple Disk Image" lang="en">DMG</abbr>-, DEB- und RPM-Paketen sowie von AppImages gibt es bereits fertige Node-Scripts, die sich der <a href="https://www.electron.build/api/electron-builder" lang="en">Programmatic API</a> des Builders bedienen und einem die Konfigurationsarbeit bereits abgenommen haben: <span class="datei">./installer/installer-(linux|mac|win).js</span>. Alle Scripts erstellen Installer für eine 64-Bit-Architektur. Gemeinsam genutzte Funktionen der Installer-Scripts stehen im Modul <span class="datei">./installer/installer.js</span>.</p>
 
@@ -262,19 +262,19 @@ npm install --save-dev electron-builder</pre>
 						<li>
 							<p><i>Linux</i>:</p>
 
-							<pre>node installer/installer-linux.js [appImage|deb|rpm]</pre>
+							<pre>$ node installer/installer-linux.js [appImage|deb|rpm]</pre>
 						</li>
 
 						<li>
 							<p><i>Windows</i>:</p>
 
-							<pre>node installer/installer-win.js [nsis]</pre>
+							<pre>$ node installer/installer-win.js [nsis]</pre>
 						</li>
 
 						<li>
 							<p><i>macOS</i>:</p>
 
-							<pre>node installer/installer-mac.js [dmg]</pre>
+							<pre>$ node installer/installer-mac.js [dmg]</pre>
 						</li>
 					</ul>
 
@@ -296,15 +296,15 @@ npm install --save-dev electron-builder</pre>
 
 					<p>Die DEB-Datei kann mit <span lang="en">Debian Package</span> installiert werden:</p>
 
-					<pre>sudo dpkg -i zettelstraum*.deb</pre>
+					<pre>$ sudo dpkg -i zettelstraum*.deb</pre>
 
 					<p>Die Abhängigkeiten des RPM-Pakets kann man sich so anzeigen lassen:</p>
 
-					<pre>rpm -qp --requires zettelstraum*.rpm</pre>
+					<pre>$ rpm -qp --requires zettelstraum*.rpm</pre>
 
 					<p>Der <abbr title="Wortgeschichte digital">WGD</abbr>-Dateityp sollte während der Installation automatisch registriert werden – und zwar sowohl durch den <i>Windows-</i> als auch durch die <i>Linux</i>-Installer. (Der <i>macOS</i>-Installer wurde wie gesagt nicht getestet.) Für den Fall, dass Probleme auftreten, finden sich im Programmordner Scripts, mit denen die Registrierung des Dateityps unter <i>Linux</i> manuell vor- oder zurückgenommen werden kann. Die Scripts liegen in <span class="datei">/opt/zettelstraum/resources/filetype/linux/</span> und können mit <code>bash</code> ausgeführt werden.</p>
 
-					<pre>bash [de]register.sh</pre>
+					<pre>$ bash [de]register.sh</pre>
 
 					<p>Für diesen Vorgang werden <abbr title="eventuell">evtl.</abbr> Root-Rechte benötigt.</p>
 
@@ -314,7 +314,7 @@ npm install --save-dev electron-builder</pre>
 
 					<p>Die Installer und auch die <a href="#framework-paketieren"><span class="datei">packager.js</span></a> lassen sich über ein mitgeliefertes Build-Script steuern:</p>
 
-					<pre>bash installer/build.sh</pre>
+					<pre>$ bash installer/build.sh</pre>
 
 					<p>Nach dem Aufruf kann man das Script über Texteingaben steuern. Das Ergebnis eines Bauvorgangs wird im erwähnten Ordner <span class="datei">../build/</span> abgelegt. Die Optionen und Fragen im Script sind reichlich knapp gehalten, vielleicht sogar kryptisch. Darum hier ein paar kurze Erläuterungen.</p>
 
@@ -363,7 +363,7 @@ npm install --save-dev electron-builder</pre>
 
 					<p>Das DEB-Paket kann mit dem Paketmanager deinstalliert werden:</p>
 
-					<pre>sudo apt-get purge zettelstraum</pre>
+					<pre>$ sudo apt-get purge zettelstraum</pre>
 
 					<p>Die Registrierung des <abbr title="Wortgeschichte digital">WGD</abbr>-Dateityps sollte dabei automatisch rückgängig gemacht werden (<abbr title="vergleiche">vgl.</abbr> dazu den Abschnitt <a href="#framework-installer">Installer bauen</a>).</p>
 
@@ -408,7 +408,7 @@ npm install --save-dev electron-builder</pre>
 
 					<p>Entpacken lässt es sich via:</p>
 
-					<pre>npx asar extract app.asar [ZIELORDNER]</pre>
+					<pre>$ npx asar extract app.asar [ZIELORDNER]</pre>
 
 					<p>Das Archiv enthält den vollständigen Quelltext von <i class="app-name"></i>. Allerdings fehlen in der installierten App die Dateien aus dem Ordner <span class="datei">./resources/*</span>. Sie liegen bereits entpackt im selben Ordner wie die <span class="datei">app.asar</span>.</p>
 				</section>
@@ -484,8 +484,8 @@ npm install --save-dev electron-builder</pre>
 
 							<p>Dieses und die folgenden Installer-Scripts (auch die <span class="datei">packager.js</span>) müssen aus dem App-Ordner heraus aufgerufen werden. Andernfalls finden sie die Node-Module nicht:</p>
 
-							<pre>cd ./
-node installer/installer-linux.js deb</pre>
+							<pre>$ cd ./
+$ node installer/installer-linux.js deb</pre>
 						</li>
 
 						<li><span class="datei">./installer/installer-mac.js</span>: Node-Script, das einen <abbr title="Apple Disk Image" lang="en">DMG</abbr>-Paket erzeugt, mit dem <i class="app-name"></i> auf <i>macOS</i> installiert werden kann. <abbr title="Apple Disk Image" lang="en">DMG</abbr>-Pakete können nur in <i>macOS</i> gebaut werden, darum wurde <span class="obacht">nicht getestet</span>, ob das Paket, das das Script erzeugen können sollte, wirklich funktioniert.</li>
@@ -1175,7 +1175,7 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
 
 								<p><i>Workaround:</i> Die App explizit mit der deutschen Locale starten:</p>
 
-								<pre>LANG=de; zettelstraum</pre>
+								<pre>$ LANG=de; zettelstraum</pre>
 							</div>
 						</li>
 
