@@ -490,8 +490,8 @@ execJob() {
 			echo -e "\033[1;31mFehler!\033[0m\n  \033[1;31m*\033[0m Packen abgebrochen"
 			return
 		fi
-		version=$(git describe --abbrev=0)
-		git archive --format=tar --prefix=zettelstraum-${version}/ HEAD | gzip > "${dir}/../../build/zettelstraum-${version}.tar.gz"
+		version=$(appVersion)
+		git archive --format=tar --prefix=zettelstraum_${version}/ HEAD | gzip > "${dir}/../../build/zettelstraum_${version}.tar.gz"
 	fi
 
 	cd "$dir"
