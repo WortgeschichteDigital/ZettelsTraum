@@ -44,17 +44,17 @@ if (( $? > 0 )); then
 	exit 1
 fi
 
-# nicht in Branch 'master' TODO Test einschalten
-# if [ "$(git branch --show-current)" != "master" ]; then
-# 	echo -e "\033[1;31mFehler!\033[0m\n  \033[1;31m*\033[0m nicht in Branch 'master'"
-# 	exit 1
-# fi
+# nicht in Branch 'master'
+if [ "$(git branch --show-current)" != "master" ]; then
+	echo -e "\033[1;31mFehler!\033[0m\n  \033[1;31m*\033[0m nicht in Branch 'master'"
+	exit 1
+fi
 
-# Working Tree nicht clean TODO Test einschalten
-# if [ "$(git diff --stat)" != "" ]; then
-# 	echo -e "\033[1;31mFehler!\033[0m\n  \033[1;31m*\033[0m Working Tree nicht clean"
-# 	exit 1
-# fi
+# Working Tree nicht clean
+if [ "$(git diff --stat)" != "" ]; then
+	echo -e "\033[1;31mFehler!\033[0m\n  \033[1;31m*\033[0m Working Tree nicht clean"
+	exit 1
+fi
 
 # Zeilen entfernen
 #   $1 = Number, die angibt, wie viele Zeilen entfernt werden sollen
@@ -155,7 +155,7 @@ vorbereiten() {
 	# Module updaten
 	read -p "  Nächste Aufgabe \"Module updaten\" (Enter) . . ."
 	echo ""
-# 	bash "${dir}/build-modules.sh" inc TODO anstellen
+	bash "${dir}/build-modules.sh" inc
 	echo ""
 	cd "${dir}/../"
 	while : ; do
@@ -194,7 +194,7 @@ vorbereiten() {
 			echo -e "Version: \033[1;33m${version}\033[0m"
 			# Version in package.json eintragen
 			local zeile="\t\"version\": \"${version}\","
-# 			sed -i "s/\t\"version\".*/${zeile}/" "package.json" TODO anstellen
+			sed -i "s/\t\"version\".*/${zeile}/" "package.json"
 			echo ""
 			break
 		fi
@@ -203,7 +203,7 @@ vorbereiten() {
 	# HTML-Update
 	read -p "  Nächste Aufgabe \"HTML-Update\" (Enter) . . ."
 	echo ""
-# 	updateHtml $version TODO anstellen
+	updateHtml $version
 	echo ""
 
 	# Release-Commit erstellen
@@ -211,7 +211,7 @@ vorbereiten() {
 	echo -e "\n  \033[1;32m*\033[0m Release-Commit erstellen\n"
 	git status
 	echo ""
-# 	git commit -am "Release vorbereitet"
+	git commit -am "Release vorbereitet"
 	echo ""
 	git status
 	echo ""
@@ -219,7 +219,7 @@ vorbereiten() {
 	# Release-Notes erstellen
 	read -p "  Nächste Aufgabe \"Release-Notes erstellen\" (Enter) . . ."
 	echo -e "\n  \033[1;32m*\033[0m Release-Notes erstellen"
-# 	makeReleaseNotes $version TODO anstellen
+	makeReleaseNotes $version
 	echo ""
 
 	# Release taggen
@@ -241,7 +241,7 @@ vorbereiten() {
 		fi
 	done
 	echo ""
-# 	git tag -a v${version} -m "${typen[$releaseTyp]}" TODO anstellen
+	git tag -a v${version} -m "${typen[$releaseTyp]}"
 	echo ""
 	git log HEAD^..HEAD
 	echo ""
@@ -250,7 +250,7 @@ vorbereiten() {
 	read -p "  Nächste Aufgabe \"Repository aufräumen\" (Enter) . . ."
 	echo -e "\n  \033[1;32m*\033[0m Repository aufräumen"
 	echo -e "\nGröße: $(du -sh .git | cut -d $'\t' -f 1)\n"
-# 	git gc TODO anstellen
+	git gc
 	echo -e "\nGröße: $(du -sh .git | cut -d $'\t' -f 1)\n"
 
 	# Fertig!
