@@ -302,7 +302,7 @@ makeChangelog() {
 					clMail=${adressen[$clName]/ /@}
 					clMail=${clMail/ /.}
 				else
-					clMail="no-reply@adress.com"
+					clMail="no-reply@address.com"
 				fi
 			elif echo "$z" | egrep -q "^Date:"; then
 				datum=($(echo "$z" | perl -pe 's/.+?:\s+(.+)/$1/'))
