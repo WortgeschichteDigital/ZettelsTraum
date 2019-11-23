@@ -84,6 +84,41 @@ sysName() {
 	echo ${sys[$os]}
 }
 
+# Mail-Adresse des Maintainers ermitteln
+getMail() {
+	local mail=""
+
+	# Maintainer im Repository suchen
+	local gitOkay=0
+	if command -v git >/dev/null 2>&1; then # git installiert?
+		git status &> /dev/null # Repository vorhanden?
+		if (( $? == 0 )); then
+			git describe --abbrev=0 &> /dev/null # Tags vorhanden?
+			if (( $? == 0 )); then
+				gitOkay=1
+			fi
+		fi
+	fi
+	if (( gitOkay > 0 )); then
+		local tagger=$(git show $(git describe --abbrev=0) | head -n 2 | tail -n 1)
+		local name=$(echo "$tagger" | perl -pe 's/.+?:\s+(.+?)\s<.+/$1/')
+		if [ ${adressen[$name]+isset} ]; then
+			mail=${adressen[$name]/ /@}
+			mail=${mail/ /.}
+		else
+			mail="no-reply@address.com"
+		fi
+	fi
+
+	# keine Adresse gefunden
+	if test -z "$mail"; then
+		mail="no-replay@address.com"
+	fi
+
+	# Adresse zurückgeben
+	echo "$mail"
+}
+
 # Script konfigurieren
 konfiguration() {
 	# Script-Typ
