@@ -135,8 +135,8 @@ getMail() {
 konfiguration() {
 	# Script-Typ
 	while : ; do
-		read -ep "Typ (installer/packager): " type
-		if ! echo "$type" | egrep -q "^(installer|packager)$"; then
+		read -ep "Typ (installer/packager/tarball): " type
+		if ! echo "$type" | egrep -q "^(installer|packager|tarball)$"; then
 			zeilenWeg 1
 			continue
 		fi
@@ -144,17 +144,20 @@ konfiguration() {
 	done
 
 	# Betriebssystem
-	while : ; do
-		read -ep "OS (linux/mac/win): " os
-		if ! echo "$os" | egrep -q "^(linux|win|mac)$"; then
-			zeilenWeg 1
-			continue
-		fi
-		break
-	done
+	os=""
+	if [ "$type" != "tarball" ]; then
+		while : ; do
+			read -ep "OS (linux/mac/win): " os
+			if ! echo "$os" | egrep -q "^(linux|win|mac)$"; then
+				zeilenWeg 1
+				continue
+			fi
+			break
+		done
+	fi
 
-	pkg=""
 	# Installer
+	pkg=""
 	if [ "$type" = "installer" ]; then
 		# Installer-Format
 		if [ "$os" = "linux" ]; then
@@ -212,7 +215,10 @@ konfiguration() {
 	done
 
 	# Ergebnis
-	job="type=${type}|os=${os}"
+	job="type=${type}"
+	if ! test -z "$os"; then
+		job+="|os=${os}"
+	fi
 	if ! test -z "$pkg"; then
 		job+="|pkg=${pkg}"
 	fi
@@ -474,6 +480,17 @@ execJob() {
 			cd "$dir"
 			return
 		fi
+	fi
+
+	# Tarball
+	if [ "$type" = "tarball" ]; then
+		echo -e "  \033[1;32m*\033[0m Tarball erstellen"
+		if (( $(gitOkay) == 0 )); then
+			echo -e "\033[1;31mFehler!\033[0m\n  \033[1;31m*\033[0m Packen abgebrochen"
+			return
+		fi
+		version=$(git describe --abbrev=0)
+		git archive --format=tar --prefix=zettelstraum-${version}/ HEAD | gzip > "${dir}/../../build/zettelstraum-${version}.tar.gz"
 	fi
 
 	cd "$dir"
