@@ -163,7 +163,7 @@ vorbereiten() {
 	while : ; do
 		read -ep "Commit erstellen (j/n): " commit
 		if [ "$commit" = "j" ]; then
-			zeilenWeg 1
+			echo ""
 			git status
 			echo ""
 			read -p "  Nächste Aufgabe \"Commit erstellen\" (Enter) . . ."
@@ -173,7 +173,7 @@ vorbereiten() {
 			git status
 			break
 		elif [ "$commit" = "n" ]; then
-			zeilenWeg 1
+			echo ""
 			break
 		else
 			zeilenWeg 1
@@ -219,8 +219,32 @@ vorbereiten() {
 
 	# Release-Notes erstellen
 	read -p "  Nächste Aufgabe \"Release-Notes erstellen\" (Enter) . . ."
-	echo -e "\n  \033[1;32m*\033[0m Release-Notes erstellen\n"
+	echo -e "\n  \033[1;32m*\033[0m Release-Notes erstellen"
 # 	makeReleaseNotes $version TODO anstellen
+	echo ""
+
+	# Release taggen
+	read -p "  Nächste Aufgabe \"Release taggen\" (Enter) . . ."
+	echo -e "\n  \033[1;32m*\033[0m Release taggen\n"
+	declare -A typen
+	typen[1]="Feature-Release v${version}"
+	typen[2]="Release v${version}, Electron-Update und Fixes"
+	typen[3]="Release v${version}, Electron-Update"
+	echo " [1] ${typen[1]}"
+	echo " [2] ${typen[2]}"
+	echo " [3] ${typen[3]}"
+	while : ; do
+		read -ep "  " releaseTyp
+		if echo "$releaseTyp" | egrep -q "^[1-3]$"; then
+			break
+		else
+			zeilenWeg 1
+		fi
+	done
+	echo ""
+# 	git tag -a v${version} -m "${typen[$releaseTyp]}" TODO anstellen
+	echo ""
+	git log HEAD^..HEAD
 	echo ""
 
 	cd "$dir"
