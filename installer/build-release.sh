@@ -247,6 +247,13 @@ vorbereiten() {
 	git log HEAD^..HEAD
 	echo ""
 
+	# Repository aufräumen
+	read -p "  Nächste Aufgabe \"Repository aufräumen\" (Enter) . . ."
+	echo -e "\n  \033[1;32m*\033[0m Repository aufräumen"
+	echo -e "\nGröße: $(du -sh .git | cut -d $'\t' -f 1)\n"
+# 	git gc TODO anstellen
+	echo -e "\nGröße: $(du -sh .git | cut -d $'\t' -f 1)\n"
+
 	cd "$dir"
 }
 
