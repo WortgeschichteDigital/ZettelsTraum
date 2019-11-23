@@ -92,6 +92,19 @@
 
 					<p>Die <abbr title="Application Programming Interface" lang="en">API</abbr> von <i>Electron</i> ist sehr gut <a href="https://electronjs.org/docs">dokumentiert</a>; das Framework-Motto <q lang="en">It’s easier than you think</q>, somit gar nicht falsch. Für einen raschen Einstieg empfiehlt sich das zweiteilige, sehr übersichtliche <a href="https://electronjs.org/docs/tutorial/quick-start">Quick-Start-Tutorial</a>.</p>
 
+					<!-- Download Quelltext -->
+					<h2 id="framework-download">Download des Quelltexts</h2>
+
+					<p>Mit jedem <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/releases">Release</a> von <i class="app-name"></i> wird ein Tarball veröffentlicht, in dem sich ein Snapshot des Quellcodes befindet, wie er zum Zeitpunkt des Releases im Branch <code class="quelltext">master</code> aussah. Möchte man den Quelltext bearbeiten, kann man auf der Basis der archivierten Ordner und Dateien arbeiten.</p>
+
+					<p>Bequemer ist es natürlich das GitHub-Repository einfach zu klonen:</p>
+
+					<pre>$ git clone https://github.com/WortgeschichteDigital/ZettelsTraum.git zettelstraum</pre>
+
+					<p>Im Repository findet sich ausschließlich der Branch <code class="quelltext">master</code>, der gegenwärtig immer auf dem Stand des letzten Releases gehalten wird.</p>
+
+					<p>Eine weitere Möglichkeit, um an den Quelltext zu gelangen: Er ist auch in den <a href="#framework-quelltext">paketierten Versionen der App</a> enthalten und dort in einem speziellen Archiv im Programmordner zu finden.</p>
+
 					<!-- Installation -->
 					<h2 id="framework-installation">Installation von <i>Electron</i></h2>
 
@@ -115,6 +128,11 @@
 npm install --save-dev electron</pre>
 
 					<p>Während der Installation werden der Ordner <span class="datei">./node_modules/</span> und die Datei <span class="datei">./package-lock.json</span> erzeugt. Der Ordner <span class="datei">./node_modules/</span> kann mehrere Hundert Megabyte groß sein!</p>
+
+					<p>Entwickeln Sie mit <a href="https://git-scm.com/">Git</a>, bietet es sich an, diese zu <i>Electron</i> und nicht zur App gehörenden Pfade in die <span class="datei">.gitignore</span> einzutragen:</p>
+
+					<pre class="quelltext">/node_modules/
+/package-lock.json</pre>
 
 					<p>Da im Herzen von <i>Electron</i> ein Browser schlägt und Browser fortwährend mit Sicherheitsupdates versorgt werden wollen, gibt es sehr häufig (<abbr title="in der Regel">i. d. R.</abbr> alle ein bis zwei Wochen) <a href="https://electronjs.org/releases/stable"><i>Electron</i>-Updates</a>. Das Update funktioniert genauso wie die Erstinstallation:</p>
 
@@ -268,11 +286,7 @@ npm install --save-dev electron-builder</pre>
 
 					<p>Vor dem Start des eigentlichen Bauvorgangs wird überprüft, ob eine Ebene oberhalb des App-Verzeichnisses ein Ordner namens <span class="datei">build</span> existiert. Er wird <abbr title="gegebenenfalls">ggf.</abbr> automatisch erzeugt.</p>
 
-					<p>Der Linux-Installer erwartet für DEB- und RPM-Pakete, dass in <span class="datei">../build</span> eine Plain-Text-Datei mit dem Namen <span class="datei">changelog</span> liegt. Ist kein Changelog vorhanden, wird automatisch eine leere Datei erzeugt. Im Ordner <span class="datei">./installer/</span> gibt es ein PHP-Script, das mithilfe der <a href="#" class="link-changelog">Changelog</a>-Datei der App (<span class="datei">./win/changelog.html</span>) und der Datei <span class="datei">./installer/build-changelog-maintainer.json</span> einen DEB- <abbr title="beziehungsweise">bzw.</abbr> RPM-Changelog automatisch erstellen kann (zum Ausführen wird eine Command-line-Version von PHP benötigt):</p>
-
-					<pre>php build-changelog.php [FORMAT] [PFAD]</pre>
-
-					<p>Eigentlich ist nicht vorgesehen, dieses PHP-Script direkt auszuführen. Man sollte sich lieber der <a href="#framework-buildScript"><span class="datei">./installer/build.sh</span></a> bedienen, die das Changelog-Script bei Bedarf korrekt aufruft.</p>
+					<p>Der Linux-Installer erwartet für DEB- und RPM-Pakete, dass in <span class="datei">../build</span> eine Plain-Text-Datei mit dem Namen <span class="datei">changelog</span> liegt. Ist kein Changelog vorhanden, wird automatisch eine leere Datei erzeugt. Werden die Linux-Pakete mit der <a href="#framework-buildScript"><span class="datei">./installer/build.sh</span></a> gebaut, wird automatisch versucht, mit den Daten im lokalen Git-Repository einen Changelog zu erstellen. Ist kein Repository vorhanden, wird auch in diesem Fall allein eine leere Datei namens <span class="datei">changelog</span> erzeugt.</p>
 
 					<p>Nach <abbr title="circa">ca.</abbr> ein, zwei Minuten (die genaue Zeit hängt natürlich vom Rechner, aber auch vom gewählten Installer ab), sollte eine Meldung wie <code>Linux-Installer erstellt!</code> erscheinen. Kommt diese Meldung, kann es eigentlich nicht zu größeren Fehlern gekommen sein. Im Verzeichnis <span class="datei">../build</span> befinden sich nun ein Ordner und mehrere Dateien. Interessant ist natürlich nur die Installer-Datei:</p>
 
@@ -309,7 +323,11 @@ npm install --save-dev electron-builder</pre>
 					<ul>
 						<li><i>job:</i> Startet die Konfiguration eines einzelnen Build-Jobs. Das Script fragt nach und nach ab, was genau getan werden soll und führt den Job dann aus.</li>
 
+						<li><i>release:</i> Führt <code>bash installer/build-release.sh</code> aus. Das Script bereitet verschiedene Dateien und das lokale Git-Repository nach und nach für ein Release vor, führt das Release selbst aber nicht durch.</li>
+
 						<li><i>preset:</i> Startet ein in den ersten Zeilen des Scripts definiertes Preset, das durchaus auch aus mehreren Jobs bestehen kann. Die Presets können natürlich nach Belieben ergänzt oder geändert werden.</li>
+
+						<li><i>sha:</i> Erstellt die Datei <span class="datei">../build/sha256sums.txt</span>, in der SHA256-Summen aller zum Zeitpunkt der Erstellung im Ordner <span class="datei">../build/</span> liegenden Ordner und Dateien gespeichert werden.</li>
 
 						<li><i>config:</i> Startet die Konfigurationsabfrage, aber keinen Job. Stattdessen wird nur der Konfigurationsstring ausgeworfen. Hilfreich, wenn man sich einen Preset anlegen möchte.</li>
 
@@ -321,27 +339,13 @@ npm install --save-dev electron-builder</pre>
 					<p>Zu den Abfragen, die beim Konfigurieren eines Jobs gestellt werden:</p>
 
 					<ul>
-						<li><i>Typ:</i> Hier geht es darum, ob Installer erstellt werden sollen oder portable Pakete. Für die Installer werden die Dateien <span class="datei">installer-(linux|mac|win).js</span> ausgeführt, für die Pakete die <span class="datei">packager.js</span>.</li>
+						<li><i>Typ:</i> Hier geht es darum, ob Installer erstellt werden sollen oder portable Pakete. Für die Installer werden die Dateien <span class="datei">installer-(linux|mac|win).js</span> ausgeführt, für die Pakete die <span class="datei">packager.js</span>. Außerdem kann ein Tarball mit dem Quellcode erzeugt werden. Hierfür muss jedoch <a href="https://git-scm.com/">Git</a> eingerichtet sein.</li>
 
-						<li><i>OS:</i> Das Betriebssystem, auf dem Paket oder Installer laufen sollen.</li>
+						<li><i>OS:</i> Das Betriebssystem, auf dem Paket oder Installer laufen soll.</li>
 
 						<li><i>Format:</i> Das Format des Installers, das natürlich nur abgefragt wird, wenn ein Installer erstellt werden soll. Das Format der Paketierungen hängt allein vom gewählten Betriebssystem ab.</li>
 
-						<li>
-							<p><i>Maintainer:</i> Hier kann der Name des Maintainers für die Version der App angegeben werden, die man gerade baut. Der Maintainer muss in die Changelogs eingetragen werden, die in DEB- und RPM-Pakete integriert werden; deswegen braucht das Script diese Information.</p>
-
-							<p>Der Maintainer wird allerdings nur dann eingetragen, wenn es sich bei der gebauten Fassung <em>nicht</em> um eine Beta-Version handelt, will sagen: Steht im Versionstring irgendwo <code class="quelltext">beta</code>, wird die Eingabe ignoriert. Ansonsten wird sie in der Datei <span class="datei">./installer/build-changelog-maintainer.json</span> gespeichert.</p>
-
-							<p>Die Mail-Adresse des Maintainers wird wiederum über eine Angabe oben in der <span class="datei">./installer/build-changelog.php</span> aufgelöst.</p>
-						</li>
-
-						<li><i>Archiv:</i> Pakete liegen nach dem Bauen, anders als Installer, nur als Ordnerstruktur vor. Auf Wunsch kann man sie in einem Archiv komprimieren.</li>
-
-						<li>
-							<p><i><abbr title="Hyptertext Markup Language">HTML</abbr>-Update:</i> Das Build-Datum und die Versionsnummer können automatisch in die Datei <span class="datei">./win/changelog.html</span> eingetragen werden. Angesprochen wird dabei immer der oberste Versionsblock mit dem <code class="quelltext">&lt;h2&gt;</code>-, dem dazugehörenden <code class="quelltext">&lt;div class="version"&gt;</code>-Tag und Kommentar. Außerdem wird <abbr title="gegebenenfalls">ggf.</abbr> das Copyright-Jahr in der <span class="datei">./win/ueberApp.html</span> aufgefrischt.</p>
-
-							<p>Wird eine Beta-Version gebaut, werden die <abbr title="Hyptertext Markup Language">HTML</abbr>-Updates in keinem Fall ausgeführt.</p>
-						</li>
+						<li><i>Archiv:</i> Pakete liegen nach dem Bauen, anders als Installer, nur als Ordnerstruktur vor. Auf Wunsch kann man sie in einem Archiv komprimieren. Tarballs werden immer mit <abbr title="GNU zip">gzip</abbr> komprimiert, weswegen für diese keine Abfrage des Archivformats erfolgt.</li>
 
 						<li><i>Aufräumen:</i> Der Ordner <span class="datei">../build/</span> kann nach dem Erledigen eines Build-Jobs automatisch bereinigt werden. Temporäre Dateien werden gelöscht, es bleiben nur Installer, Archive und nicht archivierte Paketordner erhalten.</li>
 					</ul>
@@ -466,14 +470,12 @@ npm install --save-dev electron-builder</pre>
 						<li>
 							<p><span class="datei">./installer/build.sh</span>: Build-Script, mit dem die App komfortabel paketiert werden kann. Das Script kann unter <i>Linux</i> via <code>bash build.sh</code> ausgeführt werden. Die Parameter werden über Texteingaben abgefragt.</p>
 
-							<p>Im Script können auch Presets angelegt werden, um mehrere Pakete verschiedener Natur mit einem Befehl zu bauen. Die Presets können in den ersten Zeilen der Datei angelegt werden; Muster sind bereits enthalten.</p>
+							<p>Im Script können auch Presets angelegt werden, um mehrere Pakete verschiedener Natur mit einem Befehl zu bauen. Die Presets kann man in die ersten Zeilen der Datei schreiben; Muster sind bereits enthalten.</p>
 						</li>
 
 						<li><span class="datei">./installer/build-modules.sh</span>: Der Aufruf des Scripts installiert die nötigen <i>Electron</i>-Module im App-Ordner. Sind sie bereits installiert, führt es ein Update aus. Das Script kann auch aus der Datei <span class="datei">build.sh</span> heraus aufgerufen werden.</li>
 
-						<li><span class="datei">./installer/build-changelog.php</span>: Das Script erzeugt einen Changelog für DEB- <abbr title="beziehungsweise">bzw.</abbr> RPM-Pakete. Es wird, wenn nötig, von der <span class="datei">build.sh</span> aus aufgerufen.</li>
-
-						<li><span class="datei">./installer/build-changlog-maintainer.json</span>: Enthält Angaben zum Maintainer der einzelnen Versionen von <i class="app-name"></i>. Die Datei wird <abbr title="gegebenenfalls">ggf.</abbr> von der <span class="datei">build.sh</span> ergänzt und von der <span class="datei">build-changelog.php</span> genutzt, um die Maintainer-Infos in die DEB- und RPM-Changelogs zu schreiben.</li>
+						<li><span class="datei">./installer/build-release.sh</span>: Das Script bereitet verschiedene Dateien und das lokale Git-Repository für ein Release vor. Dafür muss natürlich <a href="https://git-scm.com/">Git</a> installiert und ein Repository vorhanden sein. Das Script kann auch aus der Datei <span class="datei">build.sh</span> heraus aufgerufen werden.</li>
 
 						<li><span class="datei">./installer/installer.js</span>: ein gemeinsam genutztes Modul für die Node-Scripts, die Installer erzeugen sowie für die <a href="#ordner-packager">packager.js</a></li>
 

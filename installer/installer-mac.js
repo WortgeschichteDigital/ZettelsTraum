@@ -3,6 +3,12 @@
 // Pakettyp
 let typ = "dmg";
 
+// Maintainer-Mail
+let email = process.argv[3];
+if (!email || !/^.+@.+\..+$/.test(email)) {
+	email = "no-reply@adress.com";
+}
+
 // Vorbereitung
 const builder = require("electron-builder"),
 	Arch = builder.Arch,
@@ -26,6 +32,11 @@ function makeConfig () {
 	config = {
 		targets: Platform.MAC.createTarget(null, Arch.x64),
 		config: {
+			extraMetadata: {
+				author: {
+					email: email,
+				},
+			},
 			appId: "zdl.wgd.zettelstraum",
 			productName: "zettelstraum",
 			copyright: `© ${jahr}, Akademie der Wissenschaften zu Göttingen`,

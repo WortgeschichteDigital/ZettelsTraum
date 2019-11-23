@@ -13,12 +13,16 @@
 	],
 	"author": {
 		"name": "Nico Dorn",
-		"email": "ndorn@gwdg.de"
+		"url": "https://adw-goe.de/forschung/weitere-forschungsprojekte/wortgeschichte-digital-teilprojekt-im-zdl/mitarbeiterinnen-und-mitarbeiter/nico-dorn/"
 	},
 	"license": "GPL-3.0-only",
 	"homepage": "https://adw-goe.de/forschung/weitere-forschungsprojekte/wortgeschichte-digital-teilprojekt-im-zdl/",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/WortgeschichteDigital/ZettelsTraum.git"
+	},
 	"bugs": {
-		"email": "ndorn@gwdg.de"
+		"url": "https://github.com/WortgeschichteDigital/ZettelsTraum/issues"
 	},
 	"main": "main.js",
 	"scripts": {

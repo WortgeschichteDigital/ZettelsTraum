@@ -6,6 +6,12 @@ if (!typ || !/^(appImage|deb|rpm)$/.test(typ)) {
 	typ = "deb";
 }
 
+// Maintainer-Mail
+let email = process.argv[3];
+if (!email || !/^.+@.+\..+$/.test(email)) {
+	email = "no-reply@adress.com";
+}
+
 // Vorbereitung
 const builder = require("electron-builder"),
 	Arch = builder.Arch,
@@ -44,6 +50,11 @@ function makeConfig () {
 	config = {
 		targets: Platform.LINUX.createTarget(null, Arch.x64),
 		config: {
+			extraMetadata: {
+				author: {
+					email: email,
+				},
+			},
 			appId: "zdl.wgd.zettelstraum",
 			productName: "zettelstraum",
 			copyright: `© ${jahr}, Akademie der Wissenschaften zu Göttingen`,
