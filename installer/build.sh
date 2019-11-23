@@ -12,6 +12,7 @@ preset1=(
 	"type=packager|os=linux|arch=gz|clean=j"
 	"type=packager|os=mac|arch=gz|clean=j"
 	"type=packager|os=win|arch=zip|clean=j"
+	"type=tarball|clean=n"
 )
 preset2=(
 	"type=packager|os=linux|arch=-|clean=j"
