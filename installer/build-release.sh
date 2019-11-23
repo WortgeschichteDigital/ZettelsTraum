@@ -72,10 +72,8 @@ appVersion() {
 }
 
 # HTML-Update
+#   $1 = Versionsnummer
 updateHtml() {
-	# App-Version ermitteln
-	local version=$(appVersion)
-
 	# Copyright-Jahr in "Über App" updaten
 	local htmlUeber="${dir}/../win/ueberApp.html"
 	local copyrightJahr="2019"
@@ -93,10 +91,10 @@ updateHtml() {
 
 	local htmlChangelog="${dir}/../win/changelog.html"
 
-	local zeileKommentar="<!-- Start Versionsblock ${version} -->"
+	local zeileKommentar="<!-- Start Versionsblock ${1} -->"
 	sed -i "0,/<!-- Start Versionsblock .* -->/s/<!-- Start Versionsblock .* -->/${zeileKommentar}/" "$htmlChangelog"
 
-	local zeileVersion="<div class=\"version\">${version}<\/div>"
+	local zeileVersion="<div class=\"version\">${1}<\/div>"
 	sed -i "0,/<div class=\"version\">.*<\/div>/s/<div class=\"version\">.*<\/div>/${zeileVersion}/" "$htmlChangelog"
 
 	local monate=(
@@ -117,12 +115,12 @@ updateHtml() {
 	local monat=$(date +%-m)
 	monat=${monate[$[$monat - 1]]}
 	local heute=$(date +%Y-%m-%d)
-	local zeileH2="<h2><span>Version ${version}<\/span><time datetime=\"${heute}\">${tag}. ${monat} $(date +%Y)<\/time><\/h2>"
+	local zeileH2="<h2><span>Version ${1}<\/span><time datetime=\"${heute}\">${tag}. ${monat} $(date +%Y)<\/time><\/h2>"
 	sed -i "0,/<h2>.*<\/h2>/s/<h2>.*<\/h2>/${zeileH2}/" "$htmlChangelog"
 }
 
 # Release-Notes erstellen
-# 	$1 = Versionsnummer
+#   $1 = Versionsnummer
 makeReleaseNotes() {
 	local output="# Release Notes v$1\n\n"
 
@@ -158,8 +156,8 @@ vorbereiten() {
 	read -p "  Nächste Aufgabe \"Module updaten\" (Enter) . . ."
 	echo ""
 # 	bash "${dir}/build-modules.sh" inc TODO anstellen
-	cd "${dir}/../"
 	echo ""
+	cd "${dir}/../"
 	while : ; do
 		read -ep "Commit erstellen (j/n): " commit
 		if [ "$commit" = "j" ]; then
@@ -171,6 +169,7 @@ vorbereiten() {
 			git commit -a
 			echo ""
 			git status
+			echo ""
 			break
 		elif [ "$commit" = "n" ]; then
 			echo ""
@@ -187,7 +186,7 @@ vorbereiten() {
 		read -ep "Version: " -i "$(appVersion)" version
 		if ! echo "$version" | egrep -q "^[0-9]+\.[0-9]+\.[0-9]+$"; then
 			echo -e "\n\033[1;31mFehler!\033[0m\n  \033[1;31m*\033[0m Versionsformat falsch"
-			sleep 2
+			sleep 1
 			zeilenWeg 4
 			continue
 		else
@@ -204,7 +203,7 @@ vorbereiten() {
 	# HTML-Update
 	read -p "  Nächste Aufgabe \"HTML-Update\" (Enter) . . ."
 	echo ""
-# 	updateHtml TODO anstellen
+# 	updateHtml $version TODO anstellen
 	echo ""
 
 	# Release-Commit erstellen
@@ -230,9 +229,9 @@ vorbereiten() {
 	typen[1]="Feature-Release v${version}"
 	typen[2]="Release v${version}, Electron-Update und Fixes"
 	typen[3]="Release v${version}, Electron-Update"
-	echo " [1] ${typen[1]}"
-	echo " [2] ${typen[2]}"
-	echo " [3] ${typen[3]}"
+	for j in ${!typen[@]}; do
+		echo " [${j}] ${typen[$j]}"
+	done
 	while : ; do
 		read -ep "  " releaseTyp
 		if echo "$releaseTyp" | egrep -q "^[1-3]$"; then
