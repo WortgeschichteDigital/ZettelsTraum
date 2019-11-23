@@ -521,8 +521,8 @@ while : ; do
 	echo -e "\n"
 
 	# Auswahl treffern
-	read -ep "Ausführen (job/sha/preset/config/modules/exit): " action
-	if ! echo "$action" | egrep -q "^(job|sha|preset|config|modules|exit)$"; then
+	read -ep "Ausführen (job/release/preset/sha/config/modules/exit): " action
+	if ! echo "$action" | egrep -q "^(job|release|preset|sha|config|modules|exit)$"; then
 		zeilenWeg 3
 		continue
 	fi
@@ -533,6 +533,13 @@ while : ; do
 		konfiguration
 		echo -e "\n"
 		execJob "$job"
+	# Release vorbereiten
+	elif [ "$action" = "release" ]; then
+		echo -e "\n"
+		bash "${dir}/build-release.sh" inc
+	# Preset auswählen
+	elif [ "$action" = "preset" ]; then
+		presetsPrint
 	# Datei mit SHA-Summen erstellen
 	elif [ "$action" = "sha" ]; then
 		shaSummen
@@ -541,9 +548,6 @@ while : ; do
 		echo -e "\n"
 		konfiguration
 		echo -e "\n\nJob-Konfiguration:\n  \033[1;32m*\033[0m $job"
-	# Preset auswählen
-	elif [ "$action" = "preset" ]; then
-		presetsPrint
 	# Module auffrischen
 	elif [ "$action" = "modules" ]; then
 		echo -e "\n"
