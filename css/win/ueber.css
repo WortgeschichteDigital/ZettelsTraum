@@ -59,6 +59,10 @@ footer a:focus {
 	text-decoration: none;
 }
 
+abbr {
+	text-decoration: none;
+}
+
 h1 {
 	margin: 10px 0;
 	color: var(--textFarbe);
