@@ -121,6 +121,35 @@ updateHtml() {
 	sed -i "0,/<h2>.*<\/h2>/s/<h2>.*<\/h2>/${zeileH2}/" "$htmlChangelog"
 }
 
+# Release-Notes erstellen
+# 	$1 = Versionsnummer
+makeReleaseNotes() {
+	local output="# Release Notes v$1\n\n"
+
+	# Commits zusammentragen
+	declare -A clCommits
+	j=0
+	while read z; do
+		IFS=" " read -r sha1 message <<< "$z"
+		clCommits[$j]="$message"
+		(( j++ ))
+	done < <(git log -E --grep="^(Removal|Feature|Change|Update|Fix): " --oneline $(git describe --abbrev=0)..HEAD)
+
+	# Commits sortieren
+	local commitTypen=(Removal Feature Change Update Fix)
+	for typ in ${!commitTypen[@]}; do
+		for commit in ${!clCommits[@]}; do
+			local message=${clCommits[$commit]}
+			if echo "$message" | egrep -q "^${commitTypen[$typ]}"; then
+				output+="* $message\n"
+			fi
+		done
+	done
+
+	# Release Note schreiben
+	echo -en "$output" > "../releases/v${1}.md"
+}
+
 # Release vorbereiten
 vorbereiten() {
 	echo -e "  \033[1;32m*\033[0m Release vorbereiten\n"
@@ -186,6 +215,13 @@ vorbereiten() {
 # 	git commit -am "Release vorbereitet"
 	echo ""
 	git status
+	echo ""
+
+	# Release-Notes erstellen
+	read -p "  Nächste Aufgabe \"Release-Notes erstellen\" (Enter) . . ."
+	echo -e "\n  \033[1;32m*\033[0m Release-Notes erstellen\n"
+# 	makeReleaseNotes $version TODO anstellen
+	echo ""
 
 	cd "$dir"
 }
