@@ -178,6 +178,15 @@ vorbereiten() {
 # 	updateHtml TODO anstellen
 	echo ""
 
+	# Release-Commit erstellen
+	read -p "  Nächste Aufgabe \"Release-Commit erstellen\" (Enter) . . ."
+	echo -e "\n  \033[1;32m*\033[0m Release-Commit erstellen\n"
+	git status
+	echo ""
+# 	git commit -am "Release vorbereitet"
+	echo ""
+	git status
+
 	cd "$dir"
 }
 
