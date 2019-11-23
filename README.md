@@ -124,7 +124,7 @@ $ sudo apt-get install nodejs
 Electron installieren:
 
 ```
-$ cd zettelstraum
+$ cd zettelstraum_1.0.0
 $ npm install --save-dev electron
 ```
 
@@ -152,7 +152,7 @@ Alle Eigenentwicklungen von *Zettel’s Traum* stehen unter der [GNU General Pub
 
 Die Icons stammen zum größten Teil aus dem *[Papirus Icon Theme](https://github.com/PapirusDevelopmentTeam/papirus-icon-theme)*, das ebenfals mit [GNU General Public License v3.0](https://www.gnu.org/licenses/gpl-3.0.en.html) lizenziert wurde. Die Original-Icons wurden alle leicht verändert. Daneben gibt es eigens für *Zettel’s Traum* erstellte Icons, die unter derselben Lizenz stehen. Welche der Grafiken aus dem *Papirus Theme* stammen und welche neu erstellt wurden, lässt sich im Einzelnen den Metadaten der SVG-Dateien entnehmen. Einige neu erstellte Grafiken basieren mitunter auf Teilen von *Papirus*-Icons.
 
-Die mitgelieferten *[Noto Fonts](https://www.google.com/get/noto/)* stehen unter einer [SIL Open Font License 1.1](https://scripts.sil.org/cms/scripts/page.php?id=OFL).
+Die mitgelieferten *[Noto Fonts](https://www.google.com/get/noto/)* stehen unter einer [SIL Open Font License v1.1](https://scripts.sil.org/cms/scripts/page.php?id=OFL).
 
 ## Kontakt
 
