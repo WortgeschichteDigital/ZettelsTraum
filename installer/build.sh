@@ -22,6 +22,10 @@ preset3=(
 	"type=packager|os=mac|arch=gz|clean=j"
 )
 
+# Mail-Adressen der Maintainer
+declare -A adressen
+adressen["Nico Dorn"]="ndorn gwdg de"
+
 cat <<- EOF
 
 
@@ -276,10 +280,6 @@ makeChangelog() {
 		return
 	fi
 
-	# Mail-Adressen der Maintainer
-	declare -A adressen
-	adressen["Nico Dorn"]="ndorn gwdg de"
-
 	# alle Tags ermitteln
 	tags=($(git tag --sort=-creatordate))
 
@@ -449,7 +449,7 @@ execJob() {
 	if [ "$type" = "installer" ]; then
 		echo -e "  \033[1;32m*\033[0m Installer ausführen"
 		cd "${dir}/../"
-		node ./installer/installer-${os}.js $pkg
+		node ./installer/installer-${os}.js $pkg $(getMail)
 		if (( $? > 0 )); then
 			echo -e "\033[1;31mFehler!\033[0m\n  \033[1;31m*\033[0m Installer-Script abgebrochen"
 			cd "$dir"
@@ -461,7 +461,7 @@ execJob() {
 	if [ "$type" = "packager" ]; then
 		echo -e "  \033[1;32m*\033[0m Packager ausführen"
 		cd "${dir}/../"
-		node ./installer/packager.js $(sysName)
+		node ./installer/packager.js $(sysName) $(getMail)
 		if (( $? > 0 )); then
 			echo -e "\033[1;31mFehler!\033[0m\n  \033[1;31m*\033[0m Installer-Script abgebrochen"
 			cd "$dir"
