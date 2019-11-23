@@ -254,6 +254,9 @@ vorbereiten() {
 # 	git gc TODO anstellen
 	echo -e "\nGröße: $(du -sh .git | cut -d $'\t' -f 1)\n"
 
+	# Fertig!
+	echo -e "Release \033[1;32mv${version}\033[0m vorbereitet!"
+
 	cd "$dir"
 }
 
