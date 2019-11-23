@@ -44,17 +44,17 @@ if (( $? > 0 )); then
 	exit 1
 fi
 
-# nicht in Branch 'master'
-if [ "$(git branch --show-current)" != "master" ]; then
-	echo -e "\033[1;31mFehler!\033[0m\n  \033[1;31m*\033[0m nicht in Branch 'master'"
-	exit 1
-fi
+# nicht in Branch 'master' TODO Test einschalten
+# if [ "$(git branch --show-current)" != "master" ]; then
+# 	echo -e "\033[1;31mFehler!\033[0m\n  \033[1;31m*\033[0m nicht in Branch 'master'"
+# 	exit 1
+# fi
 
-# Working Tree nicht clean
-if [ "$(git diff --stat)" != "" ]; then
-	echo -e "\033[1;31mFehler!\033[0m\n  \033[1;31m*\033[0m Working Tree nicht clean"
-	exit 1
-fi
+# Working Tree nicht clean TODO Test einschalten
+# if [ "$(git diff --stat)" != "" ]; then
+# 	echo -e "\033[1;31mFehler!\033[0m\n  \033[1;31m*\033[0m Working Tree nicht clean"
+# 	exit 1
+# fi
 
 # Zeilen entfernen
 #   $1 = Number, die angibt, wie viele Zeilen entfernt werden sollen
@@ -67,10 +67,33 @@ zeilenWeg() {
 
 # Release vorbereiten
 vorbereiten() {
-	echo -e "  \033[1;32m*\033[0m Release vorbereiten"
+	echo -e "  \033[1;32m*\033[0m Release vorbereiten\n"
 
+	read -p "  Nächste Aufgabe \"Module updaten\" (Enter) . . ."
+	echo ""
+	bash "${dir}/build-modules.sh" inc
 	cd "${dir}/../"
-
+	echo ""
+	while : ; do
+		read -ep "Commit erstellen (j/n): " commit
+		if [ "$commit" = "j" ]; then
+			zeilenWeg 1
+			git status
+			echo ""
+			read -p "  Nächste Aufgabe \"Commit erstellen\" (Enter) . . ."
+			echo ""
+			git commit -a
+			echo ""
+			git status
+			break
+		elif [ "$commit" = "n" ]; then
+			zeilenWeg 1
+			break
+		else
+			zeilenWeg 1
+		fi
+	done
+	
 	cd "$dir"
 }
 
@@ -79,9 +102,7 @@ if [ "$1" = "inc" ]; then
 	vorbereiten
 else
 	while : ; do
-
 		read -ep "Release vorbereiten (j/n): " install
-
 		if [ "$install" = "j" ]; then
 			echo -e "\n"
 			vorbereiten
