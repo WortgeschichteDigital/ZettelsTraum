@@ -71,6 +71,56 @@ appVersion() {
 	echo $(grep '"version":' "$packageJson" | perl -pe 's/.+: "(.+?)",/\1/')
 }
 
+# HTML-Update
+updateHtml() {
+	# App-Version ermitteln
+	local version=$(appVersion)
+
+	# Copyright-Jahr in "Über App" updaten
+	local htmlUeber="${dir}/../win/ueberApp.html"
+	local copyrightJahr="2019"
+	if [ "$(date +%Y)" != "$copyrightJahr" ]; then
+		copyrightJahr+="–$(date +%Y)"
+	fi
+	local copyrightJahrUeber=$(grep "copyright-jahr" "$htmlUeber" | perl -pe 's/.+"copyright-jahr">(.+?)<.+/\1/')
+	if [ "$copyrightJahrUeber" != "$copyrightJahr" ]; then
+		echo -e "  \033[1;32m*\033[0m Copyright-Jahr auffrischen"
+		sed -i "s/copyright-jahr\">.*<\/span>/copyright-jahr\">${copyrightJahr}<\/span>/" "$htmlUeber"
+	fi
+
+	# Changelog auffrischen
+	echo -e "  \033[1;32m*\033[0m Changelog auffrischen"
+
+	local htmlChangelog="${dir}/../win/changelog.html"
+
+	local zeileKommentar="<!-- Start Versionsblock ${version} -->"
+	sed -i "0,/<!-- Start Versionsblock .* -->/s/<!-- Start Versionsblock .* -->/${zeileKommentar}/" "$htmlChangelog"
+
+	local zeileVersion="<div class=\"version\">${version}<\/div>"
+	sed -i "0,/<div class=\"version\">.*<\/div>/s/<div class=\"version\">.*<\/div>/${zeileVersion}/" "$htmlChangelog"
+
+	local monate=(
+		"Januar"
+		"Februar"
+		"März"
+		"April"
+		"Mai"
+		"Juni"
+		"Juli"
+		"August"
+		"September"
+		"Oktober"
+		"November"
+		"Dezember"
+	)
+	local tag=$(date +%-d)
+	local monat=$(date +%-m)
+	monat=${monate[$[$monat - 1]]}
+	local heute=$(date +%Y-%m-%d)
+	local zeileH2="<h2><span>Version ${version}<\/span><time datetime=\"${heute}\">${tag}. ${monat} $(date +%Y)<\/time><\/h2>"
+	sed -i "0,/<h2>.*<\/h2>/s/<h2>.*<\/h2>/${zeileH2}/" "$htmlChangelog"
+}
+
 # Release vorbereiten
 vorbereiten() {
 	echo -e "  \033[1;32m*\033[0m Release vorbereiten\n"

@@ -229,56 +229,6 @@ konfiguration() {
 	job+="|clean=${clean}"
 }
 
-# HTML-Update
-updateHtml() {
-	# App-Version ermitteln
-	version=$(appVersion)
-
-	# Copyright-Jahr in "Über App" updaten
-	htmlUeber="${dir}/../win/ueberApp.html"
-	copyrightJahr="2019"
-	if [ "$(date +%Y)" != "$copyrightJahr" ]; then
-		copyrightJahr+="–$(date +%Y)"
-	fi
-	copyrightJahrUeber=$(grep "copyright-jahr" "$htmlUeber" | perl -pe 's/.+"copyright-jahr">(.+?)<.+/\1/')
-	if [ "$copyrightJahrUeber" != "$copyrightJahr" ]; then
-		echo -e "  \033[1;32m*\033[0m Copyright-Jahr auffrischen"
-		sed -i "s/copyright-jahr\">.*<\/span>/copyright-jahr\">${copyrightJahr}<\/span>/" "$htmlUeber"
-	fi
-
-	# Changelog auffrischen
-	echo -e "  \033[1;32m*\033[0m Changelog auffrischen"
-
-	htmlChangelog="${dir}/../win/changelog.html"
-
-	zeileKommentar="<!-- Start Versionsblock ${version} -->"
-	sed -i "0,/<!-- Start Versionsblock .* -->/s/<!-- Start Versionsblock .* -->/${zeileKommentar}/" "$htmlChangelog"
-
-	zeileVersion="<div class=\"version\">${version}<\/div>"
-	sed -i "0,/<div class=\"version\">.*<\/div>/s/<div class=\"version\">.*<\/div>/${zeileVersion}/" "$htmlChangelog"
-
-	monate=(
-		"Januar"
-		"Februar"
-		"März"
-		"April"
-		"Mai"
-		"Juni"
-		"Juli"
-		"August"
-		"September"
-		"Oktober"
-		"November"
-		"Dezember"
-	)
-	tag=$(date +%-d)
-	monat=$(date +%-m)
-	monat=${monate[$[$monat - 1]]}
-	jetzt=$(date +%Y-%m-%dT%H:%M:%S)
-	zeileH2="<h2><span>Version ${version}<\/span><time datetime=\"${jetzt}\">${tag}. ${monat} $(date +%Y)<\/time><\/h2>"
-	sed -i "0,/<h2>.*<\/h2>/s/<h2>.*<\/h2>/${zeileH2}/" "$htmlChangelog"
-}
-
 # Changelog für DEB- oder RPM-Pakete erzeugen
 makeChangelog() {
 	# git nicht installiert
