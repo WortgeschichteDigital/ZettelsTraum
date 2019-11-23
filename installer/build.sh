@@ -227,6 +227,19 @@ updateHtml() {
 
 # Changelog für DEB- oder RPM-Pakete erzeugen
 makeChangelog() {
+	# git nicht installiert
+	if ! command -v git >/dev/null 2>&1; then
+		echo "" # leeren Changelog erzeugen
+		return
+	fi
+
+	# kein Repository gefunden
+	git status &> /dev/null
+	if (( $? > 0 )); then
+		echo "" # leeren Changelog erzeugen
+		return
+	fi
+
 	# Mail-Adressen der Maintainer
 	declare -A adressen
 	adressen["Nico Dorn"]="ndorn gwdg de"
