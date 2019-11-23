@@ -438,7 +438,7 @@ execJob() {
 	if [ "$type" = "tarball" ]; then
 		echo -e "  \033[1;32m*\033[0m Tarball erstellen"
 		if (( $(gitOkay) == 0 )); then
-			echo -e "\033[1;31mFehler!\033[0m\n  \033[1;31m*\033[0m Packen abgebrochen"
+			echo -e "\n\033[1;31mFehler!\033[0m\n  \033[1;31m*\033[0m Packen abgebrochen"
 			return
 		fi
 		version=$(appVersion)
@@ -532,25 +532,30 @@ while : ; do
 		konfiguration
 		echo -e "\n"
 		execJob "$job"
+		echo -e "\n"
 	# Release vorbereiten
 	elif [ "$action" = "release" ]; then
 		echo -e "\n"
 		bash "${dir}/build-release.sh" inc
+		echo -e "\n"
 	# Preset auswählen
 	elif [ "$action" = "preset" ]; then
 		presetsPrint
+		echo -e "\n"
 	# Datei mit SHA-Summen erstellen
 	elif [ "$action" = "sha" ]; then
 		shaSummen
+		echo -e "\n"
 	# Konfiguration anzeigen
 	elif [ "$action" = "config" ]; then
 		echo -e "\n"
 		konfiguration
-		echo -e "\n\nJob-Konfiguration:\n  \033[1;32m*\033[0m $job"
+		echo -e "\n\nJob-Konfiguration:\n  \033[1;32m*\033[0m $job\n\n"
 	# Module auffrischen
 	elif [ "$action" = "modules" ]; then
 		echo -e "\n"
 		bash "${dir}/build-modules.sh" inc
+		echo -e "\n"
 	# Script verlassen
 	elif [ "$action" = "exit" ]; then
 		exit 0
