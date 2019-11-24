@@ -65,7 +65,7 @@ let kartei = {
 			defaultPath: appInfo.documents,
 			filters: [
 				{
-					name: "Wortgeschichte digital-Datei",
+					name: `${appInfo.name} JSON`,
 					extensions: ["ztj"],
 				},
 				{
@@ -165,7 +165,7 @@ let kartei = {
 		if (!/^(wgd|ztj)$/.test(data_tmp.ty)) { // bis Version 0.24.0 stand in dem Feld "wgd"
 			dialog.oeffnen({
 				typ: "alert",
-				text: "Die Datei wurde nicht eingelesen.\nEs handelt sich nicht um eine Karteikasten-Datei von <i>Wortgeschichte digital</i>.",
+				text: `Die Datei wurde nicht eingelesen.\nEs handelt sich nicht um eine <i>${appInfo.name} JSON</i>-Datei.`,
 			});
 			return;
 		}
@@ -310,7 +310,7 @@ let kartei = {
 			defaultPath: path.join(appInfo.documents, `${kartei.wort}.ztj`),
 			filters: [
 				{
-					name: "Wortgeschichte digital-Datei",
+					name: `${appInfo.name} JSON`,
 					extensions: ["ztj"],
 				},
 				{

@@ -701,7 +701,7 @@ let kopieren = {
 			defaultPath: path.join(appInfo.documents, `${kartei.wort}, ${kopieren.belege.length} ${num}.ztb`),
 			filters: [
 				{
-					name: "Wortgeschichte digital-Belege",
+					name: `${appInfo.name} Belege`,
 					extensions: ["ztb"],
 				},
 				{
@@ -745,7 +745,7 @@ let kopieren = {
 			defaultPath: appInfo.documents,
 			filters: [
 				{
-					name: "Wortgeschichte digital-Belege",
+					name: `${appInfo.name} Belege`,
 					extensions: ["ztb"],
 				},
 				{
@@ -797,7 +797,7 @@ let kopieren = {
 		if (belegedatei_tmp.ty !== "ztb") {
 			dialog.oeffnen({
 				typ: "alert",
-				text: `Beim Einlesen der Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\nkeine Belege-Datei von <i>Wortgeschichte digital</i>`,
+				text: `Beim Einlesen der Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\nkeine <i>${appInfo.name} Belege</i>-Datei`,
 			});
 			return;
 		}
