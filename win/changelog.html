@@ -100,7 +100,7 @@
 					<li>
 						<p><a href="#filter" class="link-handbuch">Filterleiste</a>: Im <a href="#filter-verschiedenes" class="link-handbuch">Filterblock <i>Verschiedenes</i></a> gibt es einen neuen Filter: <i>Annotierung</i>. Weil es ein dynamischer Filter ist, erscheint er nur, wenn in der Kartei Belege zu finden sind, in denen Karteiwörter oder Textteile annotiert wurden.</p>
 
-						<p>Wurde beim Annotieren die Hintergrundfarbe auf transparent gesetzt, wird der Beleg mit dem <i>Annotierung</i>-Filter standardmäßig nicht gefunden. Unter <a href="#einstellungen-filterleiste" class="link-handbuch"><i><span class="app-name"></span> &gt; Einstellungen &gt; Filterleiste</i></a> gibt es jedoch <a href="#einstellungen-filterleisteTransparente" class="link-handbuch">eine Checkbox</a>, die man aktivieren kann, um beim Filtern auch Annotierungen mit einzubeziehen, die eine tranparente Hintergrundfarbe haben.</p>
+						<p>Wurde beim Annotieren die Hintergrundfarbe auf transparent gesetzt, wird der Beleg mit dem <i>Annotierung</i>-Filter standardmäßig nicht gefunden. Unter <a href="#einstellungen-filterleiste" class="link-handbuch"><i><span class="app-name"></span> &gt; Einstellungen &gt; Filterleiste</i></a> gibt es jedoch <a href="#einstellungen-filterleisteTransparente" class="link-handbuch">eine Checkbox</a>, die man aktivieren kann, um beim Filtern auch Annotierungen mit einzubeziehen, die eine transparente Hintergrundfarbe haben.</p>
 					</li>
 
 					<li>
@@ -118,7 +118,7 @@
 					<li>
 						<p>Für Entwickler: Die Installer-Scripts wurden reorganisiert, verbessert und erweitert.</p>
 
-						<p>Zum einen wurden die Scripts alle aus dem Wurzelverzeichnis der App in den Ordner <span class="datei">./installer/</span> geschoben, was die Dateistruktur deutlich überischtlicher macht. Die Installer-Scripts müssen zwar weiterhin aus dem Wurzelverzeichnis heraus aufgerufen werden (ansonsten werden die Node-Module nicht gefunden), alle Installer-Resourcen befinden sich nun jedoch gebündelt in einem einzigen Verzeichnis.</p>
+						<p>Zum einen wurden die Scripts alle aus dem Wurzelverzeichnis der App in den Ordner <span class="datei">./installer/</span> geschoben, was die Dateistruktur deutlich übersichtlicher macht. Die Installer-Scripts müssen zwar weiterhin aus dem Wurzelverzeichnis heraus aufgerufen werden (ansonsten werden die Node-Module nicht gefunden), alle Installer-Resourcen befinden sich nun jedoch gebündelt in einem einzigen Verzeichnis.</p>
 
 						<p>Zum anderen wird fortan beim Aufrufen des <code class="quelltext">fs</code>-Moduls in den Node-Scripts in allen Fällen auf <code class="quelltext">fsPromises</code>-Varianten zurückgegriffen. Dabei wurden <span class="fr">en passant</span> ein paar Fehler behoben.</p>
 
@@ -170,7 +170,7 @@
 
 						<p>Dies funktioniert nun auch, wenn man das Tastaturkürzel <kbd>Strg</kbd> + <kbd>V</kbd>, die entsprechende Funktion im <a href="#menueBearbeiten" class="link-handbuch">Menü <i>Bearbeiten</i></a> oder das Rechtsklickmenü nutzt – mit dem wesentlichen Unterschied, dass der bereinigte Text an der Stelle eingefügt wird, an der sich der Cursor gerade befindet. Mithilfe des Icons kann man das Feld nur überschreiben oder am Ende ergänzen.</p>
 
-						<p>Selbst dann, wenn sich kein formatierter Text in der Zwischenablage befindet, sondern nur Plain-Text, wird nun beim Einfügen von Text in das <i>Beleg</i>-Feld eine Bereinigen vorgenommen, um unerwünschte <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>-Tags zu eliminieren. Dies gilt auch für das Einfügen mithilfe des Icons <img src="../img/einfuegen.svg" width="24" height="24" alt="">. Tippen darf man hingegen prinzipiell, was man will – und dies wird dann auch so gespeichert.</p>
+						<p>Selbst dann, wenn sich kein formatierter Text in der Zwischenablage befindet, sondern nur Plain-Text, wird nun beim Einfügen von Text in das <i>Beleg</i>-Feld eine Bereinigung vorgenommen, um unerwünschte <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>-Tags zu eliminieren. Dies gilt auch für das Einfügen mithilfe des Icons <img src="../img/einfuegen.svg" width="24" height="24" alt="">. Tippen darf man hingegen prinzipiell, was man will – und dies wird dann auch so gespeichert.</p>
 
 						<p><span class="obacht">Sicherheit:</span> Das automatische Bereinigen des Originaltextes ist zugleich eine Sicherheitsmaßnahme. Da das Textfeld <i>Beleg</i> prinzipiell jeden <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>-Tag enthalten darf und dieser bei der Darstellung in der <a href="#belegliste" class="link-handbuch">Belegliste</a> und in der <a href="#karteikarte-leseansicht" class="link-handbuch">Leseansicht der Karteikarte</a> auch interpretiert wird, könnte man auf diese Weise ungewollt Schadcode in die App laden. Das Sicherheitsrisiko ist zur Zeit allerdings überschaubar, da die strikte <span lang="en">Content Security Policy</span> des Programms das Laden verhindern würde.</p>
 					</li>
@@ -197,7 +197,7 @@
 
 					<li><a href="#menueKartei-anhaenge" class="link-handbuch">Anhänge</a>: Der Button zum Hinzufügen von Anhängen ist nun immer sichtbar; selbst dann, wenn die Anhängeliste sehr lang ist und nach unten gescrollt wurde. Außerdem ist er jetzt wirklich und nicht nur scheinbar zentriert.</li>
 
-					<li><a href="#menueKartei-metadaten" class="link-handbuch">Metadaten</a>: Die Person, die die Kartei zuletzt gespeichert hat, wird nun immer an den Anfang der Liste der BearbeterInnen gesetzt. Zuvor war es so, dass die Liste nicht angerührt wurde, wenn derjenige, der eine Kartei gespeichert hat, bereits in der Liste stand.</li>
+					<li><a href="#menueKartei-metadaten" class="link-handbuch">Metadaten</a>: Die Person, die die Kartei zuletzt gespeichert hat, wird nun immer an den Anfang der Liste der BearbeiterInnen gesetzt. Zuvor war es so, dass die Liste nicht angerührt wurde, wenn derjenige, der eine Kartei gespeichert hat, bereits in der Liste stand.</li>
 
 					<li><a href="#menueKartei-redaktion" class="link-handbuch">Redaktion</a>: Wurde für ein Redaktionsereignis keine Person registriert, wird nun nicht mehr ein <q>?</q>, sondern der ausgegraute, kursive Text <q>keine Person</q> gedruckt. Das ist nicht nur schicker, sondern auch konsistenter mit der <abbr title="User Interface" lang="en">UI</abbr> der anderen Programmteile.</li>
 
@@ -227,7 +227,7 @@
 
 					<li>Die Verarbeitung derjenigen Tastaturkürzel, die nicht vom Main-Prozess getriggert werden, wurde auf eine solidere Basis gestellt: Der Wert <code class="quelltext">which</code> wird nicht mehr abgefragt (weil <a href="https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/which"><span lang="en">deprecated</span></a>); Kürzel werden nur noch akzeptiert, wenn sie mit genau den Modifiern gedrückt werden, die vorgesehen sind (Modifiertasten sind <abbr title="unter anderem">u. a.</abbr> <kbd>Strg</kbd>, <kbd>Alt</kbd> und <kbd>Umsch</kbd>); nicht zuletzt wurde bei der Aktion die Codebasis verschlankt und vereinheitlicht.</li>
 
-					<li>Brach man den beim Öffnen oder Speichern einer Datei oder eines Pfades erscheinenden Dateidialog ab, ohne eine Datei oder eine Pfad auszuwählen, wurde bisher ein <a href="#kurzanleitung-programmfensterDialogfenster" class="link-handbuch">Dialogfenster</a> angezeigt, das einem widersinngerweise mitteilte, was man gerade getan hat. Dieses Dialogfenster wird nun nicht mehr angezeigt.</li>
+					<li>Brach man den beim Öffnen oder Speichern einer Datei oder eines Pfades erscheinenden Dateidialog ab, ohne Datei oder Pfad auszuwählen, wurde bisher ein <a href="#kurzanleitung-programmfensterDialogfenster" class="link-handbuch">Dialogfenster</a> angezeigt, das einem widersinngerweise mitteilte, was man gerade getan hat. Dieses Dialogfenster wird nun nicht mehr angezeigt.</li>
 
 					<li>
 						<p>Das Öffnen der Programmfenster ist mit dem Anwachsen des Quellcodes immer langsamer geworden. Die Art und Weise, wie Programmfenster geöffnet werden, wurde darum neu geregelt. Sie öffnen sich zwar nun deutlich rascher, zeigen nach dem Aufruf aber zunächst eine Art Sperrbild, das verschwindet, sobald der Content verfügbar ist.</p>
@@ -277,7 +277,7 @@
 
 					<li>Für Entwickler: Zum Paketieren der App werden nun keine Kommandozeilenbefehle mehr genutzt, sondern ein moderneres Node-Script. <abbr title="Vergleiche">Vgl.</abbr> den <abbr title="Abschnitt">Abschn.</abbr> zum <a href="#framework-paketieren" class="link-dokumentation">Paketieren der App</a> in der <a href="#" class="link-dokumentation">technischen Dokumentation</a>.</li>
 
-					<li>Für Entwickler: Die Scripts zum nachträglichen Registrieren oder Deregistrieren des <abbr title="Wortgeschichte digital">WGD</abbr>-Dateityps unter <i>Linux</i> (<span class="datei">./resources/filetype/linux/[de]register.sh</span>) wurden verbessert: Sie sollten Sich nun aus allen Ordnern heraus aufrufen lassen.</li>
+					<li>Für Entwickler: Die Scripts zum nachträglichen Registrieren oder Deregistrieren des <abbr title="Wortgeschichte digital">WGD</abbr>-Dateityps unter <i>Linux</i> (<span class="datei">./resources/filetype/linux/[de]register.sh</span>) wurden verbessert: Sie sollten sich nun aus allen Ordnern heraus aufrufen lassen.</li>
 
 					<li><a href="#" class="ueber-electron"><i>Electron</i></a>-Update auf Version 7.1.1.</li>
 				</ul>
@@ -313,7 +313,7 @@
 
 					<li><a href="#belegliste" class="link-handbuch">Belegliste</a>: Führte das Filtern der Belegliste mit dem <a href="#filter-volltext" class="link-handbuch">Volltextfilter</a> dazu, dass in einem der angezeigten Belege alle Absätze gekürzt wurden (<q>[…]</q>), weil in ihnen das Suchwort nicht gefunden wurde, konnte die Kürzung des Textes nicht mehr durch Klick auf den Absatz rückgängig gemacht werden.</li>
 
-					<li>Belegliste: Wurde ein Wort mit der Annotierungsfunktion auf transparent gesetzt und damit als falschpositiver Treffer markiert, wurde dieses Wort dennoch zum Ermitteln des Vorschautexts im Belegkopf herangezogen und dort dann auch fett hervorgehoben (wenn das Icon <img src="../img/text-fett.svg" width="24" height="24" alt=""> aktiviert war). Die Reparatur hat den positiven Nebeneffekt, dass das Ermitteln des Vorschautextes ein wenige performanter geworden ist.</li>
+					<li>Belegliste: Wurde ein Wort mit der Annotierungsfunktion auf transparent gesetzt und damit als falschpositiver Treffer markiert, wurde dieses Wort dennoch zum Ermitteln des Vorschautexts im Belegkopf herangezogen und dort dann auch fett hervorgehoben (wenn das Icon <img src="../img/text-fett.svg" width="24" height="24" alt=""> aktiviert war). Die Reparatur hat den positiven Nebeneffekt, dass das Ermitteln des Vorschautextes ein wenig performanter geworden ist.</li>
 
 					<li>Belegliste: Die <a href="#einstellungen-filterleisteBelegGefiltert" class="link-handbuch">Meldung, dass ein Beleg angelegt, wegen der aktiven Filter in der Belegliste jedoch gerade nicht sichtbar</a> sei, wurde sofort wieder geschlossen, sodass man keine Zeit hatte, sie zu lesen.</li>
 
@@ -325,7 +325,7 @@
 
 					<li><a href="#filter">Filterleiste</a>: Formatierungen in Bedeutungsdefinitionen sind in Filternamen als <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>-Tags dargestellt worden, also <abbr title="zum Beispiel">z. B.</abbr>: <q>Mannschaft im &lt;i&gt;Sport&lt;/i&gt;</q>. Jetzt werden die Formatierungen korrekt visualisiert: <q>Mannschaft im <i>Sport</i></q>.</li>
 
-					<li>Filterleiste: War der Filter <i>Annotierung</i> aktiv (Filterblock <i>Verschiedenes</i>) und wurde die letzte Annotierung entfernt, wurden die Filter im Block <i>Verschiedens</i> nicht mehr korrekt aufgebaut, keine Belege in der Liste angezeigt, aber gemeldet, dass noch ein Belege sichtbar sei.</li>
+					<li>Filterleiste: War der Filter <i>Annotierung</i> aktiv (Filterblock <i>Verschiedenes</i>) und wurde die letzte Annotierung entfernt, wurden die Filter im Block <i>Verschiedenes</i> nicht mehr korrekt aufgebaut, keine Belege in der Liste angezeigt, aber gemeldet, dass noch ein Beleg sichtbar sei.</li>
 
 					<li>Karteikarte: Wurde eines der <a href="#karteikarte-pflichtfelder" class="link-handbuch">Pflichtfelder der Karteikarte</a> nicht oder nicht korrekt ausgefüllt, kam schon bisher eine Fehlermeldung und das entsprechende Feld wurde nach dem Schließen der Meldung fokussiert. War das Feld allerdings nicht im sichtbaren Bereich, wurde es auch nicht in den sichtbaren Bereich des Fensters gescrollt. Ein mangelhaftes Verhalten, das nun korrigiert wurde.</li>
 
