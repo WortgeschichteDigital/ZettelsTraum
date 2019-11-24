@@ -56,7 +56,7 @@ Die **Paketierung** enthält einen Ordner namens `zettelstraum-win32-x64`. Entpa
 
 Für ein Update laden Sie sich einfach die neue Version herunter und ersetzen den Ordner `zettelstraum-win32-x64`. Verpassen Sie ein Update, können Sie immer direkt die neueste Version nehmen.
 
-Der **Installer** legt ein Icon im Windows-Startmenü an, über das das Programm aufgerufen werden kann. Außerdem werden während der Installation automatisch Dateien mit der Endung `.wgd` mit *Zettel’s Traum* verknüpft, sodass sie durch Doppelklick im *Windows-Explorer* geöffnet werden können.
+Der **Installer** legt ein Icon im Windows-Startmenü an, über das das Programm aufgerufen werden kann. Außerdem werden während der Installation automatisch Dateien mit der Endung `.ztj` mit *Zettel’s Traum* verknüpft, sodass sie durch Doppelklick im *Windows-Explorer* geöffnet werden können.
 
 **Unterstützung:** Windows 7 und später mit 64-Bit-Architektur. Das Bauen von 32-Bit-Versionen wäre prinzipiell möglich, dafür müssten Sie aber [selbst aktiv werden](#bauanleitung).
 
@@ -83,7 +83,7 @@ Installieren des **DEB-Pakets**:
 $ sudo dpkg -i zettelstraum_1.0.0_amd64.deb
 ```
 
-Die App wird in `/opt/zettelstraum/` abgelegt. Bei der Installation wird die Datei `/usr/share/applications/zettelstraum.desktop` erzeugt, das Programm sollte sich also über das Startmenü Ihrer Distribution aufrufen lassen. Es wird automatisch eine Verknüpfung zwischen der Dateiendung `.wgd` und *Zettel’s Traum* angelegt, sodass Wortkarteien durch Doppelklick im Dateimanager Ihrer Wahl geöffnet werden können.
+Die App wird in `/opt/zettelstraum/` abgelegt. Bei der Installation wird die Datei `/usr/share/applications/zettelstraum.desktop` erzeugt, das Programm sollte sich also über das Startmenü Ihrer Distribution aufrufen lassen. Es wird automatisch eine Verknüpfung zwischen der Dateiendung `.ztj` und *Zettel’s Traum* angelegt, sodass Wortkarteien durch Doppelklick im Dateimanager Ihrer Wahl geöffnet werden können.
 
 **Unterstützung:** Distributionen ab Ubuntu 12.04, Febora 21, Debian 8 mit 64-Bit-Architektur. Kurz getestet wurde openSUSE 15.1. Die Paketierung erfolgt in einer Distribution, die auf Ubuntu 18.04 basiert. Das Bauen von 32-Bit-Versionen wäre prinzipiell möglich, dafür müssten Sie aber [selbst aktiv werden](#bauanleitung).
 
