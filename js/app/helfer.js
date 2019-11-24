@@ -694,8 +694,8 @@ let helfer = {
 		}
 		const fsP = require("fs").promises,
 			path = require("path"),
-			quelle = path.join(resources, "Demonstrationskartei Team.wgd"),
-			ziel = path.join(appInfo.temp, "Demonstrationskartei Team.wgd");
+			quelle = path.join(resources, "Demonstrationskartei Team.ztj"),
+			ziel = path.join(appInfo.temp, "Demonstrationskartei Team.ztj");
 		fsP.copyFile(quelle, ziel)
 			.then(() => {
 				kartei.oeffnenEinlesen(ziel);
