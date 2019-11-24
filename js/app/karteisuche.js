@@ -289,7 +289,7 @@ let karteisuche = {
 		karteisuche.filterWerteSammeln();
 		// Karteien analysieren
 		for (let kartei of karteisuche.wgd) {
-			const content = await wgd.lesen(kartei.pfad);
+			const content = await io.lesen(kartei.pfad);
 			// Kartei einlesen
 			let datei = {};
 			try {

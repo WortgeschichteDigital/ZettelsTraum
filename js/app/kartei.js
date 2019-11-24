@@ -141,7 +141,7 @@ let kartei = {
 			return;
 		}
 		// Datei einlesen
-		let content = await wgd.lesen(datei);
+		let content = await io.lesen(datei);
 		if (!helfer.checkType("String", content)) {
 			dialog.oeffnen({
 				typ: "alert",
@@ -264,7 +264,7 @@ let kartei = {
 			data.dm = new Date().toISOString();
 			data.re++;
 			// Datei speichern
-			let result = await wgd.schreiben(pfad, JSON.stringify(data));
+			let result = await io.schreiben(pfad, JSON.stringify(data));
 			// beim Speichern ist ein Fehler aufgetreten
 			if (result !== true) {
 				dialog.oeffnen({

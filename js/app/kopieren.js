@@ -728,7 +728,7 @@ let kopieren = {
 			return;
 		}
 		// Datei schreiben
-		let ergebnis = await wgd.schreiben(result.filePath, JSON.stringify(daten));
+		let ergebnis = await io.schreiben(result.filePath, JSON.stringify(daten));
 		// beim Speichern ist ein Fehler aufgetreten
 		if (ergebnis !== true) {
 			dialog.oeffnen({
@@ -775,7 +775,7 @@ let kopieren = {
 			return;
 		}
 		// Datei einlesen
-		const content = await wgd.lesen(result.filePaths[0]);
+		const content = await io.lesen(result.filePaths[0]);
 		if (!helfer.checkType("String", content)) {
 			dialog.oeffnen({
 				typ: "alert",
