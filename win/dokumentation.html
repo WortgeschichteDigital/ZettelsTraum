@@ -600,7 +600,7 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
 
 					<p>Nach dem Laden einer <abbr title="Wortgeschichte digital">WGD</abbr>-Datei in <i class="app-name"></i> befinden sich die <abbr title="JavaScript Object Notation">JSON</abbr>-Daten im globalen Objekt <code class="quelltext">data</code>. Ihre Werte lassen sich dann in allen Funktionen des Hauptfensters durch einfache Statements wie <code class="quelltext">data.dc</code> lesen oder schreiben.</p>
 
-					<p>Alle Dateien sind gleich aufgebaut (<span class="obacht">Datenformat Version 10</span>):</p>
+					<p>Alle Dateien sind gleich aufgebaut (<span class="obacht">Datenformat Version 11</span>):</p>
 
 					<table class="wgd">
 						<tr>
@@ -1002,8 +1002,8 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
 						<tr>
 							<td><p><code class="quelltext">ty</code></p></td>
 							<td class="datentyp">String</td>
-							<td>immer <code class="quelltext">"wgd"</code></td>
-							<td>Dateityp; für Tests beim Öffnen einer Kartei, damit nicht beliebige <abbr title="JavaScript Object Notation">JSON</abbr>-Daten in einem anderen Dateiformat geladen werden</td>
+							<td>immer <code class="quelltext">"ztj"</code></td>
+							<td>Dateityp; für Tests beim Öffnen einer Kartei, damit nicht beliebige <abbr title="JavaScript Object Notation">JSON</abbr>-Daten in einem anderen Dateiformat geladen werden;<br><span class="obacht">ab Version 11, davor immer <code class="quelltext">"wgd"</code></span></td>
 						</tr>
 						<tr>
 							<td><p><code class="quelltext">ve</code></p></td>
