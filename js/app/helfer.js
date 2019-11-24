@@ -760,7 +760,7 @@ let helfer = {
 		let err = {
 			time: new Date().toISOString(),
 			word: typeof kartei === "undefined" ? winInfo.typ : kartei.wort,
-			fileWgd: typeof kartei === "undefined" ? "Nebenfenster" : kartei.pfad,
+			fileZtj: typeof kartei === "undefined" ? "Nebenfenster" : kartei.pfad,
 			fileJs: fileJs,
 			message: message,
 			line: line,
