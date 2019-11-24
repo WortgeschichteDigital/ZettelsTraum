@@ -56,7 +56,7 @@
 					<li><a href="#framework" class="kopf">Framework</a></li>
 					<li><a href="#ordner" class="kopf">Ordner und Dateien</a></li>
 					<li><a href="#js" class="kopf">JavaScript</a></li>
-					<li><a href="#wgd" class="kopf"><abbr title="Wortgeschichte digital">WGD</abbr>-Dateiformat</a></li>
+					<li><a href="#ztj" class="kopf"><abbr title="Zettel’s Traum JSON">ZTJ</abbr>-Dateiformat</a></li>
 					<li><a href="#verschiedenes" class="kopf">Verschiedenes</a></li>
 				</ul>
 			</nav>
@@ -302,13 +302,13 @@ $ npm install --save-dev electron-builder</pre>
 
 					<pre>$ rpm -qp --requires zettelstraum*.rpm</pre>
 
-					<p>Der <abbr title="Wortgeschichte digital">WGD</abbr>-Dateityp sollte während der Installation automatisch registriert werden – und zwar sowohl durch den <i>Windows-</i> als auch durch die <i>Linux</i>-Installer. (Der <i>macOS</i>-Installer wurde wie gesagt nicht getestet.) Für den Fall, dass Probleme auftreten, finden sich im Programmordner Scripts, mit denen die Registrierung des Dateityps unter <i>Linux</i> manuell vor- oder zurückgenommen werden kann. Die Scripts liegen in <span class="datei">/opt/zettelstraum/resources/filetype/linux/</span> und können mit <code>bash</code> ausgeführt werden.</p>
+					<p>Der <abbr title="Zettel’s Traum JSON">ZTJ</abbr>-Dateityp sollte während der Installation automatisch registriert werden – und zwar sowohl durch den <i>Windows-</i> als auch durch die <i>Linux</i>-Installer. (Der <i>macOS</i>-Installer wurde wie gesagt nicht getestet.) Für den Fall, dass Probleme auftreten, finden sich im Programmordner Scripts, mit denen die Registrierung des Dateityps unter <i>Linux</i> manuell vor- oder zurückgenommen werden kann. Die Scripts liegen in <span class="datei">/opt/zettelstraum/resources/filetype/linux/</span> und können mit <code>bash</code> ausgeführt werden.</p>
 
 					<pre>$ bash [de]register.sh</pre>
 
 					<p>Für diesen Vorgang werden <abbr title="eventuell">evtl.</abbr> Root-Rechte benötigt.</p>
 
-					<p>Bei der Installation unter <i>Linux</i> werden übrigens auch Dateityp-Icons abgelegt: <span class="datei">/usr/share/icons/hicolor/*/mimetypes/application-x-wgd.png</span>, und zwar jeweils in den Unterordnern <span class="datei">16x16</span>, <span class="datei">22x22</span>, <span class="datei">32x32</span>, <span class="datei">48x48</span>, <span class="datei">64x64</span> und <span class="datei">128x128</span>.</p>
+					<p>Bei der Installation unter <i>Linux</i> werden übrigens auch Dateityp-Icons abgelegt: <span class="datei">/usr/share/icons/hicolor/*/mimetypes/application-x-ztj.png</span>, und zwar jeweils in den Unterordnern <span class="datei">16x16</span>, <span class="datei">22x22</span>, <span class="datei">32x32</span>, <span class="datei">48x48</span>, <span class="datei">64x64</span> und <span class="datei">128x128</span>.</p>
 
 					<h2 id="framework-buildScript">Build-Script</h2>
 
@@ -365,7 +365,7 @@ $ npm install --save-dev electron-builder</pre>
 
 					<pre>$ sudo apt-get purge zettelstraum</pre>
 
-					<p>Die Registrierung des <abbr title="Wortgeschichte digital">WGD</abbr>-Dateityps sollte dabei automatisch rückgängig gemacht werden (<abbr title="vergleiche">vgl.</abbr> dazu den Abschnitt <a href="#framework-installer">Installer bauen</a>).</p>
+					<p>Die Registrierung des <abbr title="Zettel’s Traum JSON">ZTJ</abbr>-Dateityps sollte dabei automatisch rückgängig gemacht werden (<abbr title="vergleiche">vgl.</abbr> dazu den Abschnitt <a href="#framework-installer">Installer bauen</a>).</p>
 
 					<p>Für <strong>macOS</strong> konnte das Ganze mangels System mit einer entsprechenden Entwicklungsumgebung <span class="obacht">nicht getestet</span> werden.</p>
 
@@ -533,7 +533,7 @@ $ node installer/installer-linux.js deb</pre>
 
 						<li><span class="datei">./js/app/kartei.js</span>: regelt das Öffnen und Speichern der Wort-Kartei</li>
 
-						<li><span class="datei">./js/app/konversion.js</span>: konvertiert <abbr title="Wortgeschichte digital">WGD</abbr>-Dateien, sodass sie dem aktuellen <a href="#wgd"><abbr title="Wortgeschichte digital">WGD</abbr>-Format</a> entsprechen</li>
+						<li><span class="datei">./js/app/konversion.js</span>: konvertiert <abbr title="Zettel’s Traum JSON">ZTJ</abbr>-Dateien, sodass sie dem aktuellen <a href="#ztj"><abbr title="Zettel’s Traum JSON">ZTJ</abbr>-Format</a> entsprechen</li>
 
 						<li><span class="datei">./js/app/liste.js</span>: regelt den Aufbau und die Funktionen der Belegliste; die Filterleiste links neben den Belegen wird allerdings via <span class="datei">./js/app/filter.js</span> gesteuert</li>
 
@@ -549,7 +549,7 @@ $ node installer/installer-linux.js deb</pre>
 
 						<li><span class="datei">./js/app/tagger.js</span>: Overlay-Fenster, über das das Bedeutungsgerüst mit Tags versehen werden kann</li>
 
-						<li><span class="datei">./js/app/wgd.js</span>: Helfer-Funktionen zum Speichern, Öffnen, Komprimieren und Dekomprimieren von <a href="#wgd-wgd"><abbr title="Wortgeschichte digital">WGD</abbr>-</a> und <a href="#wgd-bwgd"><abbr title="Belege Wortgeschichte digital">BWGD</abbr></a>-Dateien</li>
+						<li><span class="datei">./js/app/io.js</span>: Helfer-Funktionen zum Speichern, Öffnen, Komprimieren und Dekomprimieren von <a href="#ztj-ztj"><abbr title="Zettel’s Traum JSON">ZTJ</abbr>-</a> und <a href="#ztj-ztb"><abbr title="Zettel’s Traum Belege">ZTB</abbr></a>-Dateien</li>
 
 						<li><span class="datei">./js/win/hilfe.js</span>: Funktionen für das <a href="#" class="link-handbuch"><i>Handbuch</i></a> und die <i>technische Dokumentation</i> (also dieses Fenster)</li>
 					</ul>
@@ -557,7 +557,7 @@ $ node installer/installer-linux.js deb</pre>
 					<!-- File type -->
 					<h2 class="datei" id="ordner-resources">./resources/</h2>
 
-					<p>Der Unterordner <span class="datei">./resources/filetype/</span> enthält Icons für den <abbr title="Wortgeschichte digital">WGD</abbr>-Dateityp und Shell-Scripts, mit denen auf <i>Linux</i>-Systemen der Dateityp registriert oder entfernt werden kann. (Es gibt auch eine <abbr title="Scalable Vector Graphics">SVG</abbr>-Version des Dateityp-Icons: <span class="datei">./img/datei-wgd.svg</span>.)</p>
+					<p>Der Unterordner <span class="datei">./resources/filetype/</span> enthält Icons für den <abbr title="Zettel’s Traum JSON">ZTJ</abbr>-Dateityp und Shell-Scripts, mit denen auf <i>Linux</i>-Systemen der Dateityp registriert oder entfernt werden kann. (Es gibt auch eine <abbr title="Scalable Vector Graphics">SVG</abbr>-Version des Dateityp-Icons: <span class="datei">./img/datei-ztj.svg</span>.)</p>
 
 					<p>Außerdem finden sich in dem Ordner <abbr title="Extensible Markup Language">XML</abbr>-Dateien mit Tag-Listen und eine <a href="#" class="hilfe-demo">Demonstrationskartei</a>, die im Programm für die Bedeutungsgerüst-Funktion genutzt werden können.</p>
 
@@ -591,18 +591,18 @@ $ node installer/installer-linux.js deb</pre>
 child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
 				</section>
 
-				<!-- WGD-DATEIFORMAT -->
-				<section id="sektion-wgd" class="suche aus">
-					<!-- WGD-Format -->
-					<h2 id="wgd-wgd"><abbr title="Wortgeschichte digital">WGD</abbr>-Format</h2>
+				<!-- ZTJ-DATEIFORMAT -->
+				<section id="sektion-ztj" class="suche aus">
+					<!-- ZTJ-Format -->
+					<h2 id="ztj-ztj"><abbr title="Zettel’s Traum JSON">ZTJ</abbr>-Format</h2>
 
-					<p>Die <abbr title="Wortgeschichte digital">WGD</abbr>-Dateien sind <abbr title="GNU zip">gzip</abbr>-komprimierter Plain-Text im <abbr title="JavaScript Object Notation">JSON</abbr>-Format.</p>
+					<p>Die <abbr title="Zettel’s Traum JSON">ZTJ</abbr>-Dateien sind <abbr title="GNU zip">gzip</abbr>-komprimierter Plain-Text im <abbr title="JavaScript Object Notation">JSON</abbr>-Format.</p>
 
-					<p>Nach dem Laden einer <abbr title="Wortgeschichte digital">WGD</abbr>-Datei in <i class="app-name"></i> befinden sich die <abbr title="JavaScript Object Notation">JSON</abbr>-Daten im globalen Objekt <code class="quelltext">data</code>. Ihre Werte lassen sich dann in allen Funktionen des Hauptfensters durch einfache Statements wie <code class="quelltext">data.dc</code> lesen oder schreiben.</p>
+					<p>Nach dem Laden einer <abbr title="Zettel’s Traum JSON">ZTJ</abbr>-Datei in <i class="app-name"></i> befinden sich die <abbr title="JavaScript Object Notation">JSON</abbr>-Daten im globalen Objekt <code class="quelltext">data</code>. Ihre Werte lassen sich dann in allen Funktionen des Hauptfensters durch einfache Statements wie <code class="quelltext">data.dc</code> lesen oder schreiben.</p>
 
 					<p>Alle Dateien sind gleich aufgebaut (<span class="obacht">Datenformat Version 11</span>):</p>
 
-					<table class="wgd">
+					<table class="ztj">
 						<tr>
 							<th>Schlüssel</th>
 							<th>Datentyp</th>
@@ -621,88 +621,88 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
 							<td> </td>
 							<td>Bedeutungsgerüste;<br><span class="obacht">ab Version 5 gefüllt</span></td>
 						</tr>
-						<tr class="wgd-ebene1">
+						<tr class="ztj-ebene1">
 							<td><p><code class="quelltext">gn</code></p></td>
 							<td class="datentyp">String</td>
 							<td><code class="quelltext">/[0-9]+/</code>,<br>Start mit <code class="quelltext">1</code></td>
 							<td>ID des aktiven Gerüsts</td>
 						</tr>
-						<tr class="wgd-ebene1">
+						<tr class="ztj-ebene1">
 							<td><p><code class="quelltext">gr</code></p></td>
 							<td class="datentyp">Object</td>
 							<td> </td>
 							<td>Speicherobjekt für alle Gerüste</td>
 						</tr>
-						<tr class="wgd-ebene2">
+						<tr class="ztj-ebene2">
 							<td colspan="4"><p>Es folgen beliebig viele <span class="datentyp">Objects</span> mit einmaligen Schlüsseln:</p></td>
 						</tr>
-						<tr class="wgd-ebene2">
+						<tr class="ztj-ebene2">
 							<td><p>(ID)</p></td>
 							<td class="datentyp">Object</td>
 							<td><code class="quelltext">/[0-9]+/</code>,<br>Start mit <code class="quelltext">1</code></td>
 							<td>Bedeutungsgerüst</td>
 						</tr>
-						<tr class="wgd-ebene3">
+						<tr class="ztj-ebene3">
 							<td><p><code class="quelltext">bd</code></p></td>
 							<td class="datentyp">Array</td>
 							<td>eindimensional,<br>mit <span class="datentyp">Objects</span> gefüllt</td>
 							<td>Bedeutungen</td>
 						</tr>
-						<tr class="wgd-ebene4">
+						<tr class="ztj-ebene4">
 							<td colspan="4"><p>Die <span class="datentyp">Objects</span> in den Slots haben die folgenden Schlüssel und Werte:</p></td>
 						</tr>
-						<tr class="wgd-ebene4">
+						<tr class="ztj-ebene4">
 							<td><p><code class="quelltext">al</code></p></td>
 							<td class="datentyp">String</td>
 							<td> </td>
 							<td>Alias der Bedeutung</td>
 						</tr>
-						<tr class="wgd-ebene4">
+						<tr class="ztj-ebene4">
 							<td><p><code class="quelltext">bd</code></p></td>
 							<td class="datentyp">Array</td>
 							<td>eindimensional,<br>mit <span class="datentyp">Strings</span> gefüllt,<br><code class="quelltext">&lt;b&gt;</code>, <code class="quelltext">&lt;i&gt;</code>, <code class="quelltext">&lt;u&gt;</code> möglich</td>
 							<td>Bedeutung mit dem kompletten Bedeutungspfad; im letzten Slot steht die Bedeutung dieses Eintrags, darüber die vererbten, übergeordneten Bedeutungen</td>
 						</tr>
-						<tr class="wgd-ebene4">
+						<tr class="ztj-ebene4">
 							<td><p><code class="quelltext">id</code></p></td>
 							<td class="datentyp">Number</td>
 							<td><code class="quelltext">1 – ∞</code></td>
 							<td>ID der Bedeutung</td>
 						</tr>
-						<tr class="wgd-ebene4">
+						<tr class="ztj-ebene4">
 							<td><p><code class="quelltext">ta</code></p></td>
 							<td class="datentyp">Array</td>
 							<td>eindimensional,<br>mit <span class="datentyp">Objects</span> gefüllt</td>
 							<td>Tags</td>
 						</tr>
-						<tr class="wgd-ebene5">
+						<tr class="ztj-ebene5">
 							<td colspan="4"><p>Die <span class="datentyp">Objects</span> in den Slots haben die folgenden Schlüssel und Werte:</p></td>
 						</tr>
-						<tr class="wgd-ebene5">
+						<tr class="ztj-ebene5">
 							<td><p><code class="quelltext">id</code></p></td>
 							<td class="datentyp">String</td>
 							<td> </td>
 							<td>ID des Tags; zeigt auf <code class="quelltext">optionen.data.tags[ty].data[id]</code></td>
 						</tr>
-						<tr class="wgd-ebene5">
+						<tr class="ztj-ebene5">
 							<td><p><code class="quelltext">ty</code></p></td>
 							<td class="datentyp">String</td>
 							<td> </td>
 							<td>Typ des Tags; zeigt auf <code class="quelltext">optionen.data.tags[ty]</code></td>
 						</tr>
-						<tr class="wgd-ebene4">
+						<tr class="ztj-ebene4">
 							<td><p><code class="quelltext">za</code></p></td>
 							<td class="datentyp">String</td>
 							<td> </td>
 							<td>Zählzeichen der Bedeutung; also z. B. <code class="quelltext">"1"</code> oder <code class="quelltext">"a"</code></td>
 						</tr>
-						<tr class="wgd-ebene3">
+						<tr class="ztj-ebene3">
 							<td><p><code class="quelltext">na</code></p></td>
 							<td class="datentyp">String</td>
 							<td> </td>
 							<td>Name des Gerüsts</td>
 						</tr>
-						<tr class="wgd-ebene3">
+						<tr class="ztj-ebene3">
 							<td><p><code class="quelltext">sl</code></p></td>
 							<td class="datentyp">Number</td>
 							<td><code class="quelltext">0–2</code></td>
@@ -732,70 +732,70 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
 							<td> </td>
 							<td>Formvarianten zum Wort der Kartei, die aus dem <abbr title="Deutschen Textarchiv">DTA</abbr> geladen und/oder manuell eingegeben wurden;<br><span class="obacht">mit Version 9 von einem <span class="datentyp">Array</span> in ein <span class="datentyp">Object</span> konvertiert</span></td>
 						</tr>
-						<tr class="wgd-ebene1">
+						<tr class="ztj-ebene1">
 							<td colspan="4"><p>Es folgen beliebig viele <span class="datentyp">Objects</span> mit einmaligen Schlüsseln:</p></td>
 						</tr>
-						<tr class="wgd-ebene1">
+						<tr class="ztj-ebene1">
 							<td><p>(WORT)</p></td>
 							<td class="datentyp">Object</td>
 							<td> </td>
 							<td>eines der Wörter, aus denen das Karteiwort besteht</td>
 						</tr>
-						<tr class="wgd-ebene2">
+						<tr class="ztj-ebene2">
 							<td colspan="4"><p>In jedem <span class="datentyp">Object</span> die folgenden Schlüssel und Werte:</p></td>
 						</tr>
-						<tr class="wgd-ebene3">
+						<tr class="ztj-ebene3">
 							<td><p><code class="quelltext">an</code></p></td>
 							<td class="datentyp">Boolean</td>
 							<td> </td>
 							<td><code class="quelltext">true</code> = Wort wird für die <a href="#menueKartei-formvariantenFunktionen" class="link-handbuch">verschiedensten Funktionen</a> berücksichtigt;<br><code class="quelltext">false</code> = Wort wird überhaupt nicht berücksichtigt</td>
 						</tr>
-						<tr class="wgd-ebene3">
+						<tr class="ztj-ebene3">
 							<td><p><code class="quelltext">fa</code></p></td>
 							<td class="datentyp">Number</td>
 							<td><code class="quelltext">0–17</code></td>
 							<td>Markierungsfarbe;<br><span class="obacht">mit Version 10 ergänzt</span></td>
 						</tr>
-						<tr class="wgd-ebene3">
+						<tr class="ztj-ebene3">
 							<td><p><code class="quelltext">fo</code></p></td>
 							<td class="datentyp">Array</td>
 							<td>eindimensional,<br>mit <span class="datentyp">Objects</span> gefüllt</td>
 							<td>Formvarianten;<br><span class="obacht">bis Version 8 war dieses <span class="datentyp">Array</span> identisch mit <code class="quelltext">data.fv</code></span></td>
 						</tr>
-						<tr class="wgd-ebene4">
+						<tr class="ztj-ebene4">
 							<td colspan="4"><p>Die <span class="datentyp">Objects</span> in den Slots haben die folgenden Schlüssel und Werte:</p></td>
 						</tr>
-						<tr class="wgd-ebene4">
+						<tr class="ztj-ebene4">
 							<td><p><code class="quelltext">qu</code></p></td>
 							<td class="datentyp">String</td>
 							<td><code class="quelltext">"dta"</code> oder <code class="quelltext">"zt"</code></td>
 							<td>Quelle der Formvariante; mit <code class="quelltext">"zt"</code> markierte Varianten wurden manuell ergänzt</td>
 						</tr>
-						<tr class="wgd-ebene4">
+						<tr class="ztj-ebene4">
 							<td><p><code class="quelltext">va</code></p></td>
 							<td class="datentyp">String</td>
 							<td> </td>
 							<td>Formvariante</td>
 						</tr>
-						<tr class="wgd-ebene3">
+						<tr class="ztj-ebene3">
 							<td><p><code class="quelltext">ma</code></p></td>
 							<td class="datentyp">Boolean</td>
 							<td> </td>
 							<td>Wort nur markieren, <a href="#menueKartei-formvariantenNurMarkieren" class="link-handbuch">für gewisse Funktionen</a> jedoch ignorieren;<br><span class="obacht">mit Version 10 ergänzt</span></td>
 						</tr>
-						<tr class="wgd-ebene3">
+						<tr class="ztj-ebene3">
 							<td><p><code class="quelltext">ps</code></p></td>
 							<td class="datentyp">String</td>
 							<td>Part-of-speech-Tag</td>
 							<td>Wortart, genauer: ein <a href="http://kaskade.dwds.de/~moocow/mirror/projects/moot/">Part-of-speech-Tag</a>;<br><span class="obacht">mit Version 10 ergänzt</span></td>
 						</tr>
-						<tr class="wgd-ebene3">
+						<tr class="ztj-ebene3">
 							<td><p><code class="quelltext">tr</code></p></td>
 							<td class="datentyp">Boolean</td>
 							<td> </td>
 							<td>Wort trunkiert markieren, sprich: links und rechts erweitern;<br><span class="obacht">mit Version 10 ergänzt</span></td>
 						</tr>
-						<tr class="wgd-alt">
+						<tr class="ztj-alt">
 							<td><code class="quelltext">ha</code></td>
 							<td class="datentyp">Object</td>
 							<td> </td>
@@ -807,148 +807,148 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
 							<td> </td>
 							<td>Karteikarten</td>
 						</tr>
-						<tr class="wgd-ebene1">
+						<tr class="ztj-ebene1">
 							<td colspan="4"><p>Es folgen beliebig viele <span class="datentyp">Objects</span> mit einmaligen Schlüsseln:</p></td>
 						</tr>
-						<tr class="wgd-ebene1">
+						<tr class="ztj-ebene1">
 							<td><p>(ID)</p></td>
 							<td class="datentyp">Object</td>
 							<td><code class="quelltext">/[0-9]+/</code></td>
 							<td>Karteikarte</td>
 						</tr>
-						<tr class="wgd-ebene2">
+						<tr class="ztj-ebene2">
 							<td colspan="4"><p>In jedem <span class="datentyp">Object</span> die folgenden Schlüssel und Werte:</p></td>
 						</tr>
-						<tr class="wgd-ebene2">
+						<tr class="ztj-ebene2">
 							<td><p><code class="quelltext">an</code></p></td>
 							<td class="datentyp">Array</td>
 							<td>eindimensional,<br>mit <span class="datentyp">Strings</span> gefüllt</td>
 							<td>Anhänge; Pfade zu Dateien, die an die Karteikarte angehängt wurden; die Pfade können absolut oder relativ zum Speicherort der Kartei sein</td>
 						</tr>
-						<tr class="wgd-ebene2">
+						<tr class="ztj-ebene2">
 							<td><p><code class="quelltext">au</code></p></td>
 							<td class="datentyp">String</td>
 							<td> </td>
 							<td>Autor des Belegs</td>
 						</tr>
-						<tr class="wgd-ebene2">
+						<tr class="ztj-ebene2">
 							<td><p><code class="quelltext">bc</code></p></td>
 							<td class="datentyp">Boolean</td>
 							<td> </td>
 							<td>Buchung (Beleg wurde im Artikel zitiert)</td>
 						</tr>
-						<tr class="wgd-ebene2 wgd-alt">
+						<tr class="ztj-ebene2 ztj-alt">
 							<td><p><code class="quelltext">bd</code></p></td>
 							<td class="datentyp">String</td>
 							<td><code class="quelltext">\n</code> möglich</td>
 							<td>Bedeutung; mehrere Bedeutungen durch <code class="quelltext">\n</code> voneinander getrennt; neue Hierarchie beginnt mit <code class="quelltext">": "</code>;<br><span class="obacht">Version 1–4</span></td>
 						</tr>
-						<tr class="wgd-ebene2">
+						<tr class="ztj-ebene2">
 							<td><p><code class="quelltext">bd</code></p></td>
 							<td class="datentyp">Array</td>
 							<td>eindimensional,<br>mit <span class="datentyp">Objects</span> gefüllt</td>
 							<td>Bedeutungen;<br><span class="obacht">ab Version 5</span></td>
 						</tr>
-						<tr class="wgd-ebene3">
+						<tr class="ztj-ebene3">
 							<td colspan="4"><p>Die <span class="datentyp">Objects</span> in den Slots haben die folgenden Schlüssel und Werte:</p></td>
 						</tr>
-						<tr class="wgd-ebene3">
+						<tr class="ztj-ebene3">
 							<td><p><code class="quelltext">gr</code></p></td>
 							<td class="datentyp">String</td>
 							<td><code class="quelltext">/[0-9]+/</code>,<br>Start mit <code class="quelltext">1</code></td>
 							<td>ID des Bedeutungsgerüsts</td>
 						</tr>
-						<tr class="wgd-ebene3">
+						<tr class="ztj-ebene3">
 							<td><p><code class="quelltext">id</code></p></td>
 							<td class="datentyp">Number</td>
 							<td><code class="quelltext">1 – ∞</code></td>
 							<td>ID der Bedeutung</td>
 						</tr>
-						<tr class="wgd-ebene2">
+						<tr class="ztj-ebene2">
 							<td><p><code class="quelltext">be</code></p></td>
 							<td class="datentyp">Number</td>
 							<td><code class="quelltext">0–5</code></td>
 							<td>Markierung mit Sternen; <code class="quelltext">0</code> = unmarkiert, <code class="quelltext">5</code> = 5 Sterne</td>
 						</tr>
-						<tr class="wgd-ebene2">
+						<tr class="ztj-ebene2">
 							<td><p><code class="quelltext">bl</code></p></td>
 							<td class="datentyp">String</td>
 							<td><code class="quelltext">\n</code> möglich</td>
 							<td>Wortbildung; mehrere Wortbildungen durch <code class="quelltext">\n</code> voneinander getrennt; neue Hierarchie beginnt mit <code class="quelltext">": "</code>;<br><span class="obacht">mit Version 3 ergänzt</span></td>
 						</tr>
-						<tr class="wgd-ebene2">
+						<tr class="ztj-ebene2">
 							<td><p><code class="quelltext">bs</code></p></td>
 							<td class="datentyp">String</td>
 							<td><code class="quelltext">\n</code> möglich</td>
 							<td>Belegtext; kann <abbr title="Hyptertext Markup Language">HTML</abbr>-Tags enthalten</td>
 						</tr>
-						<tr class="wgd-ebene2">
+						<tr class="ztj-ebene2">
 							<td><p><code class="quelltext">bu</code></p></td>
 							<td class="datentyp">Boolean</td>
 							<td> </td>
 							<td>Bücherdienst (Beleg muss am Original überprüft werden)</td>
 						</tr>
-						<tr class="wgd-ebene2">
+						<tr class="ztj-ebene2">
 							<td><p><code class="quelltext">da</code></p></td>
 							<td class="datentyp">String</td>
 							<td> </td>
 							<td>Belegdatum; Freitext, enthalten sein muss aber zwingend <code class="quelltext">/[0-9]{4}/</code> und/oder <code class="quelltext">/[0-9]{2}\. Jh\./</code></td>
 						</tr>
-						<tr class="wgd-ebene2">
+						<tr class="ztj-ebene2">
 							<td><p><code class="quelltext">dc</code></p></td>
 							<td class="datentyp">String</td>
 							<td>ISO 8601-Datum:<br><code class="quelltext">"2001-11-01<br>T11:22:33.444Z"</code></td>
 							<td>Zeitpunkt, zu dem die Karteikarte erstellt wurde</td>
 						</tr>
-						<tr class="wgd-ebene2">
+						<tr class="ztj-ebene2">
 							<td><p><code class="quelltext">dm</code></p></td>
 							<td class="datentyp">String</td>
 							<td>ISO 8601-Datum:<br><code class="quelltext">"2001-11-01<br>T11:22:33.444Z"</code></td>
 							<td>Zeitpunkt, zu dem die Karteikarte zuletzt gespeichert wurde</td>
 						</tr>
-						<tr class="wgd-ebene2">
+						<tr class="ztj-ebene2">
 							<td><p><code class="quelltext">ko</code></p></td>
 							<td class="datentyp">Boolean</td>
 							<td> </td>
 							<td>Kontext (der Kontext des Belegs ist zu dürftig und muss am Original begutachtet werden)</td>
 						</tr>
-						<tr class="wgd-ebene2">
+						<tr class="ztj-ebene2">
 							<td><p><code class="quelltext">kr</code></p></td>
 							<td class="datentyp">String</td>
 							<td> </td>
 							<td>Korpus, aus dem der Beleg stammt;<br><span class="obacht">mit Version 2 ergänzt</span></td>
 						</tr>
-						<tr class="wgd-ebene2">
+						<tr class="ztj-ebene2">
 							<td><p><code class="quelltext">mt</code></p></td>
 							<td class="datentyp">Boolean</td>
 							<td> </td>
 							<td>Metatext (Beleg ist mit einer analytischen Haltung gegenüber dem Karteiwort verfasst);<br><span class="obacht">mit Version 8 ergänzt</span></td>
 						</tr>
-						<tr class="wgd-ebene2">
+						<tr class="ztj-ebene2">
 							<td><p><code class="quelltext">no</code></p></td>
 							<td class="datentyp">String</td>
 							<td><code class="quelltext">\n</code> möglich</td>
 							<td>Notizen zur Karteikarte</td>
 						</tr>
-						<tr class="wgd-ebene2">
+						<tr class="ztj-ebene2">
 							<td><p><code class="quelltext">qu</code></p></td>
 							<td class="datentyp">String</td>
 							<td><code class="quelltext">\n</code> möglich</td>
 							<td>Quellenangabe</td>
 						</tr>
-						<tr class="wgd-ebene2">
+						<tr class="ztj-ebene2">
 							<td><p><code class="quelltext">sy</code></p></td>
 							<td class="datentyp">String</td>
 							<td><code class="quelltext">\n</code> möglich</td>
 							<td>Synonym; mehrere Synonyme durch <code class="quelltext">\n</code> voneinander getrennt; neue Hierarchie beginnt mit <code class="quelltext">": "</code><br><span class="obacht">mit Version 4 ergänzt</span></td>
 						</tr>
-						<tr class="wgd-ebene2">
+						<tr class="ztj-ebene2">
 							<td><p><code class="quelltext">ts</code></p></td>
 							<td class="datentyp">String</td>
 							<td><code class="quelltext">\n</code> möglich</td>
 							<td>Textsorte; mehrere Textsorten durch <code class="quelltext">\n</code> voneinander getrennt; neue Hierarchie beginnt mit <code class="quelltext">": "</code></td>
 						</tr>
-						<tr class="wgd-ebene2">
+						<tr class="ztj-ebene2">
 							<td><p><code class="quelltext">un</code></p></td>
 							<td class="datentyp">Boolean</td>
 							<td> </td>
@@ -972,22 +972,22 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
 							<td>eindimensional,<br>mit <span class="datentyp">Objects</span> gefüllt</td>
 							<td>Redaktionsereignisse</td>
 						</tr>
-						<tr class="wgd-ebene1">
+						<tr class="ztj-ebene1">
 							<td colspan="4"><p>Die <span class="datentyp">Objects</span> in den Slots haben die folgenden Schlüssel und Werte:</p></td>
 						</tr>
-						<tr class="wgd-ebene1">
+						<tr class="ztj-ebene1">
 							<td><p><code class="quelltext">da</code></p></td>
 							<td class="datentyp">String</td>
 							<td>ISO 8601-Datum:<br><code class="quelltext">"2019-12-01"</code></td>
 							<td>Tagesdatum des Ereignisses</td>
 						</tr>
-						<tr class="wgd-ebene1">
+						<tr class="ztj-ebene1">
 							<td><p><code class="quelltext">er</code></p></td>
 							<td class="datentyp">String</td>
 							<td> </td>
 							<td>Redaktionsereignis</td>
 						</tr>
-						<tr class="wgd-ebene1">
+						<tr class="ztj-ebene1">
 							<td><p><code class="quelltext">pr</code></p></td>
 							<td class="datentyp">String</td>
 							<td> </td>
@@ -1009,7 +1009,7 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
 							<td><p><code class="quelltext">ve</code></p></td>
 							<td class="datentyp">Number</td>
 							<td><code class="quelltext">/[0-9]+/</code></td>
-							<td>Versionsnummer des <abbr title="Wortgeschichte digital">WGD</abbr>-Dateiformats</td>
+							<td>Versionsnummer des <abbr title="Zettel’s Traum JSON">ZTJ</abbr>-Dateiformats</td>
 						</tr>
 						<tr>
 							<td><p><code class="quelltext">wo</code></p></td>
@@ -1019,12 +1019,12 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
 						</tr>
 					</table>
 
-					<!-- BWGD-Format -->
-					<h2 id="wgd-bwgd"><abbr title="Belege Wortgeschichte digital">BWGD</abbr>-Format</h2>
+					<!-- ZTB-Format -->
+					<h2 id="ztj-ztb"><abbr title="Zettel’s Traum Belege">ZTB</abbr>-Format</h2>
 
-					<p>Für die Kopierfunktionen (<a href="#menueBelege-kopieren" class="link-handbuch"><i>Belege &gt; Kopieren</i></a> und <a href="#menueBelege-einfuegen" class="link-handbuch"><i>Belege &gt; Einfügen</i></a>) gibt es für den Import <abbr title="beziehungsweise">bzw.</abbr> Export von Beleglisten ein eigenes Austauschformat. Der Inhalt dieser <abbr title="Belege Wortgeschichte digital">BWGD</abbr>-Dateien ist ebenfalls <abbr title="GNU zip">gzip</abbr>-komprimierter Plain-Text im <abbr title="JavaScript Object Notation">JSON</abbr>-Format. Der Aufbau (<span class="obacht">Datenformat Version 1</span>):</p>
+					<p>Für die Kopierfunktionen (<a href="#menueBelege-kopieren" class="link-handbuch"><i>Belege &gt; Kopieren</i></a> und <a href="#menueBelege-einfuegen" class="link-handbuch"><i>Belege &gt; Einfügen</i></a>) gibt es für den Import <abbr title="beziehungsweise">bzw.</abbr> Export von Beleglisten ein eigenes Austauschformat. Der Inhalt dieser <abbr title="Zettel’s Traum Belege">ZTB</abbr>-Dateien ist ebenfalls <abbr title="GNU zip">gzip</abbr>-komprimierter Plain-Text im <abbr title="JavaScript Object Notation">JSON</abbr>-Format. Der Aufbau (<span class="obacht">Datenformat Version 1</span>):</p>
 
-					<table class="wgd">
+					<table class="ztj">
 						<tr>
 							<th>Schlüssel</th>
 							<th>Datentyp</th>
@@ -1037,43 +1037,43 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
 							<td> </td>
 							<td>Belegliste</td>
 						</tr>
-						<tr class="wgd-ebene1">
-							<td colspan="4"><p>In jedem Slot steht ein <span class="datentyp">Object</span>, das fast völlig identisch mit dem einer Karteikarte in <code class="quelltext">data.ka</code> ist, wie man es in gewöhnlichen <abbr title="Wortgeschichte digital">WGD</abbr>-Dateien findet. Dies sind die <strong>Differenzen:</strong></p></td>
+						<tr class="ztj-ebene1">
+							<td colspan="4"><p>In jedem Slot steht ein <span class="datentyp">Object</span>, das fast völlig identisch mit dem einer Karteikarte in <code class="quelltext">data.ka</code> ist, wie man es in gewöhnlichen <abbr title="Zettel’s Traum JSON">ZTJ</abbr>-Dateien findet. Dies sind die <strong>Differenzen:</strong></p></td>
 						</tr>
-						<tr class="wgd-ebene1">
+						<tr class="ztj-ebene1">
 							<td><p><code class="quelltext">bd</code></p></td>
 							<td class="datentyp">Array</td>
 							<td>eindimensional,<br>mit <span class="datentyp">Objects</span> gefüllt</td>
 							<td>Bedeutungen</td>
 						</tr>
-						<tr class="wgd-ebene2">
+						<tr class="ztj-ebene2">
 							<td colspan="4"><p>Die <span class="datentyp">Objects</span> in den Slots haben die folgenden Schlüssel und Werte:</p></td>
 						</tr>
-						<tr class="wgd-ebene2">
+						<tr class="ztj-ebene2">
 							<td><p><code class="quelltext">bd</code></p></td>
 							<td class="datentyp">String</td>
 							<td><code class="quelltext">\n</code> möglich</td>
 							<td>Bedeutung; mehrere Bedeutungen durch <code class="quelltext">\n</code> voneinander getrennt; neue Hierarchie beginnt mit <code class="quelltext">": "</code>;<br><span class="obacht">der String enthält keine <abbr title="Hyptertext Markup Language" lang="en">HTML</abbr>-Tags</span></td>
 						</tr>
-						<tr class="wgd-ebene2">
+						<tr class="ztj-ebene2">
 							<td><p><code class="quelltext">gr</code></p></td>
 							<td class="datentyp">String</td>
 							<td><code class="quelltext">/[0-9]+/</code>,<br>Start mit <code class="quelltext">1</code></td>
 							<td>ID des Bedeutungsgerüsts;<br><span class="obacht">identisch mit dem Wert der Originaldatei</span></td>
 						</tr>
-						<tr class="wgd-ebene2 wgd-alt">
+						<tr class="ztj-ebene2 ztj-alt">
 							<td><p><code class="quelltext">id</code></p></td>
 							<td class="datentyp">Number</td>
 							<td><code class="quelltext">1 – ∞</code></td>
 							<td>ID der Bedeutung;<br><span class="obacht">fehlt</span></td>
 						</tr>
-						<tr class="wgd-ebene1 wgd-alt">
+						<tr class="ztj-ebene1 ztj-alt">
 							<td><p><code class="quelltext">dc</code></p></td>
 							<td class="datentyp">String</td>
 							<td>ISO 8601-Datum:<br><code class="quelltext">"2001-11-01<br>T11:22:33.444Z"</code></td>
 							<td>Zeitpunkt, zu dem die Karteikarte erstellt wurde;<br><span class="obacht">fehlt</span></td>
 						</tr>
-						<tr class="wgd-ebene1 wgd-alt">
+						<tr class="ztj-ebene1 ztj-alt">
 							<td><p><code class="quelltext">dm</code></p></td>
 							<td class="datentyp">String</td>
 							<td>ISO 8601-Datum:<br><code class="quelltext">"2001-11-01<br>T11:22:33.444Z"</code></td>
@@ -1082,14 +1082,14 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
 						<tr>
 							<td><p><code class="quelltext">ty</code></p></td>
 							<td class="datentyp">String</td>
-							<td>immer <code class="quelltext">"bwgd"</code></td>
+							<td>immer <code class="quelltext">"ztb"</code></td>
 							<td>Dateityp; für Tests beim Importieren der Datei, damit nicht beliebige <abbr title="JavaScript Object Notation">JSON</abbr>-Daten in einem anderen Dateiformat geladen werden</td>
 						</tr>
 						<tr>
 							<td><p><code class="quelltext">ve</code></p></td>
 							<td class="datentyp">Number</td>
 							<td><code class="quelltext">/[0-9]+/</code></td>
-							<td>Versionsnummer des <abbr title="Belege Wortgeschichte digital">BWGD</abbr>-Dateiformats</td>
+							<td>Versionsnummer des <abbr title="Zettel’s Traum Belege">ZTB</abbr>-Dateiformats</td>
 						</tr>
 					</table>
 				</section>
@@ -1153,7 +1153,7 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
 					<!-- Sperrdatei -->
 					<h2 id="verschiedenes-sperrdatei">Lockfile</h2>
 
-					<p>Wird mit <i class="app-name"></i> eine <abbr title="Wortgeschichte digital">WGD</abbr>-Datei geöffnet, wird im Quellordner der Datei automatisch eine Sperrdatei angelegt. Mithilfe dieser Lock-Datei wird das Öffnen der Kartei für andere NutzerInnen temporär unterbunden, sodass ein kollaboratives Arbeiten in einem Netzwerkordner möglich ist, ohne dass sich die NutzerInnen gegenseitig die Arbeit überschreiben. Beim Schließen der Kartei oder der App wird die Sperrdatei automatisch entfernt.</p>
+					<p>Wird mit <i class="app-name"></i> eine <abbr title="Zettel’s Traum JSON">ZTJ</abbr>-Datei geöffnet, wird im Quellordner der Datei automatisch eine Sperrdatei angelegt. Mithilfe dieser Lock-Datei wird das Öffnen der Kartei für andere NutzerInnen temporär unterbunden, sodass ein kollaboratives Arbeiten in einem Netzwerkordner möglich ist, ohne dass sich die NutzerInnen gegenseitig die Arbeit überschreiben. Beim Schließen der Kartei oder der App wird die Sperrdatei automatisch entfernt.</p>
 
 					<p>Das Schreiben, Überprüfen und Löschen dieser Lock-Datei wird in <code class="quelltext">kartei.lock()</code> geregelt. Ist eine solche Sperrdatei vorhanden, wird das Öffnen der zugehörigen Kartei grundsätzlich unterbunden. Es gibt zwei Ausnahmen:</p>
 
