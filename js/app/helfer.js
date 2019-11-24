@@ -629,7 +629,7 @@ let helfer = {
 	ordnerOeffnen (pfad) {
 		const {shell} = require("electron"),
 			path = require("path");
-		if (!/\.wgd$/.test(pfad)) { // Ordner öffnen
+		if (!/\.ztj$/.test(pfad)) { // Ordner öffnen
 			if (!/\/$/.test(pfad)) {
 				pfad += path.sep;
 			}

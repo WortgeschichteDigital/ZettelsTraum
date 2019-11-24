@@ -278,7 +278,7 @@ let karteisuche = {
 	//     (Pfade, in denen gesucht werden soll)
 	async suchen (pfade) {
 		// Suche starten
-		karteisuche.wgd = [];
+		karteisuche.ztj = [];
 		for (let ordner of pfade) {
 			const exists = await helfer.exists(ordner);
 			if (exists) {
@@ -288,7 +288,7 @@ let karteisuche = {
 		// Filterwerte sammeln
 		karteisuche.filterWerteSammeln();
 		// Karteien analysieren
-		for (let kartei of karteisuche.wgd) {
+		for (let kartei of karteisuche.ztj) {
 			const content = await io.lesen(kartei.pfad);
 			// Kartei einlesen
 			let datei = {};
@@ -297,8 +297,9 @@ let karteisuche = {
 			} catch (err) {
 				continue;
 			}
-			// keine WGD-Datei
-			if (datei.ty !== "wgd") {
+			// keine ZTJ-Datei
+			// (bis Version 0.24.0 stand in dem Feld "wgd")
+			if (!/^(wgd|ztj)$/.test(datei.ty)) {
 				continue;
 			}
 			// Wort merken
@@ -307,7 +308,7 @@ let karteisuche = {
 			kartei.passt = karteisuche.filtern(datei);
 		}
 		// passende Karteien auflisten
-		karteisuche.wgdAuflisten();
+		karteisuche.ztjAuflisten();
 		// Sperrbild weg und das zuletzt fokussierte Element wieder fokussieren
 		karteisuche.animation(false);
 		if (karteisuche.suchenFokus) {
@@ -316,12 +317,12 @@ let karteisuche = {
 		// Filter speichern
 		karteisuche.filterSpeichern();
 	},
-	// WGD-Dateien, die gefunden wurden;
+	// ZTJ-Dateien, die gefunden wurden;
 	// Array enthält Objekte:
 	//   pfad (String; Pfad zur Kartei)
 	//   wort (String; Wort der Kartei)
 	//   passt (Boolean; passt zu den Suchfiltern)
-	wgd: [],
+	ztj: [],
 	// findet alle Pfade in einem übergebenen Ordner
 	//   ordner = String
 	//     (Ordner, von dem aus die Suche beginnen soll)
@@ -336,7 +337,7 @@ let karteisuche = {
 			}
 		} catch (err) {} // Auslesen des Ordners fehlgeschlagen
 	},
-	// überprüft einen übergebenen Pfad: Ordner oder WGD-Datei?
+	// überprüft einen übergebenen Pfad: Ordner oder ZTJ-Datei?
 	//   pfad = String
 	//     (Ordner, von dem aus die Suche beginnen soll)
 	async pfadPruefen (pfad) {
@@ -347,8 +348,8 @@ let karteisuche = {
 			let stats = await fsP.lstat(pfad); // Natur des Pfades?
 			if (stats.isDirectory()) { // Ordner => parsen
 				karteisuche.ordnerParsen(pfad);
-			} else if (/\.wgd$/.test(pfad)) { // WGD-Datei => merken
-				karteisuche.wgd.push({
+			} else if (/\.ztj$/.test(pfad)) { // ZTJ-Datei => merken
+				karteisuche.ztj.push({
 					pfad: pfad,
 					wort: "",
 					passt: false,
@@ -356,17 +357,17 @@ let karteisuche = {
 			}
 		} catch (err) {} // wahrscheinlich besteht kein Zugriff auf den Pfad
 	},
-	// WGD-Dateien auflisten
-	wgdAuflisten () {
+	// ZTJ-Dateien auflisten
+	ztjAuflisten () {
 		let treffer = 0,
 			woerter = [];
-		for (let i = 0, len = karteisuche.wgd.length; i < len; i++) {
-			if (!karteisuche.wgd[i].passt) {
+		for (let i = 0, len = karteisuche.ztj.length; i < len; i++) {
+			if (!karteisuche.ztj[i].passt) {
 				continue;
 			}
 			treffer++;
 			woerter.push({
-				wort: karteisuche.wgd[i].wort,
+				wort: karteisuche.ztj[i].wort,
 				i: i,
 			});
 		}
@@ -397,9 +398,9 @@ let karteisuche = {
 			let a = document.createElement("a");
 			p.appendChild(a);
 			a.href = "#";
-			let pfad = karteisuche.wgd[wort.i].pfad;
+			let pfad = karteisuche.ztj[wort.i].pfad;
 			a.dataset.pfad = pfad;
-			karteisuche.wgdOeffnen(a);
+			karteisuche.ztjOeffnen(a);
 			// Wort
 			let span = document.createElement("span");
 			a.appendChild(span);
@@ -411,10 +412,10 @@ let karteisuche = {
 			span.title = pfad;
 		}
 	},
-	// WGD-Datei in neuem Fenster öffnen
+	// ZTJ-Datei in neuem Fenster öffnen
 	//   a = Element
-	//     (Link, mit dem eine WGD-Datei geöffnet werden kann)
-	wgdOeffnen (a) {
+	//     (Link, mit dem eine ZTJ-Datei geöffnet werden kann)
+	ztjOeffnen (a) {
 		a.addEventListener("click", function(evt) {
 			evt.preventDefault();
 			if (evt.detail > 1) { // Doppelklicks abfangen
@@ -741,7 +742,7 @@ let karteisuche = {
 	},
 	// überprüfen, ob eine Kartei zu den übergebenen Filtern passt
 	//   datei = Object
-	//     (die WGD-Datei, die gefiltert werden soll; also alle Karteidaten, in der üblichen Form)
+	//     (die ZTJ-Datei, die gefiltert werden soll; also alle Karteidaten, in der üblichen Form)
 	filtern (datei) {
 		forX: for (let filter of karteisuche.filterWerte) {
 			// Volltext
