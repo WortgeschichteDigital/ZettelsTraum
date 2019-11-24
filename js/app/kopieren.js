@@ -685,7 +685,7 @@ let kopieren = {
 		let daten = {
 			bl: [],
 			ty: "ztb",
-			ve: 1,
+			ve: 2,
 		};
 		for (let id of kopieren.belege) {
 			daten.bl.push(kopieren.datenBeleg(data.ka[id]));

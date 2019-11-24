@@ -1022,7 +1022,7 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
 					<!-- ZTB-Format -->
 					<h2 id="ztj-ztb"><abbr title="Zettel’s Traum Belege">ZTB</abbr>-Format</h2>
 
-					<p>Für die Kopierfunktionen (<a href="#menueBelege-kopieren" class="link-handbuch"><i>Belege &gt; Kopieren</i></a> und <a href="#menueBelege-einfuegen" class="link-handbuch"><i>Belege &gt; Einfügen</i></a>) gibt es für den Import <abbr title="beziehungsweise">bzw.</abbr> Export von Beleglisten ein eigenes Austauschformat. Der Inhalt dieser <abbr title="Zettel’s Traum Belege">ZTB</abbr>-Dateien ist ebenfalls <abbr title="GNU zip">gzip</abbr>-komprimierter Plain-Text im <abbr title="JavaScript Object Notation">JSON</abbr>-Format. Der Aufbau (<span class="obacht">Datenformat Version 1</span>):</p>
+					<p>Für die Kopierfunktionen (<a href="#menueBelege-kopieren" class="link-handbuch"><i>Belege &gt; Kopieren</i></a> und <a href="#menueBelege-einfuegen" class="link-handbuch"><i>Belege &gt; Einfügen</i></a>) gibt es für den Import <abbr title="beziehungsweise">bzw.</abbr> Export von Beleglisten ein eigenes Austauschformat. Der Inhalt dieser <abbr title="Zettel’s Traum Belege">ZTB</abbr>-Dateien ist ebenfalls <abbr title="GNU zip">gzip</abbr>-komprimierter Plain-Text im <abbr title="JavaScript Object Notation">JSON</abbr>-Format. Der Aufbau (<span class="obacht">Datenformat Version 2</span>):</p>
 
 					<table class="ztj">
 						<tr>
@@ -1083,7 +1083,7 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
 							<td><p><code class="quelltext">ty</code></p></td>
 							<td class="datentyp">String</td>
 							<td>immer <code class="quelltext">"ztb"</code></td>
-							<td>Dateityp; für Tests beim Importieren der Datei, damit nicht beliebige <abbr title="JavaScript Object Notation">JSON</abbr>-Daten in einem anderen Dateiformat geladen werden</td>
+							<td>Dateityp; für Tests beim Importieren der Datei, damit nicht beliebige <abbr title="JavaScript Object Notation">JSON</abbr>-Daten in einem anderen Dateiformat geladen werden;<br><span class="obacht">ab Version 2, davor immer <code class="quelltext">"bwgd"</code></span></td>
 						</tr>
 						<tr>
 							<td><p><code class="quelltext">ve</code></p></td>
