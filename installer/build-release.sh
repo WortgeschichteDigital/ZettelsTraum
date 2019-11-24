@@ -38,6 +38,7 @@ if ! command -v git >/dev/null 2>&1; then
 fi
 
 # kein Repository gefunden
+cd "$dir"
 git status &> /dev/null
 if (( $? > 0 )); then
 	echo -e "\033[1;31mFehler!\033[0m\n  \033[1;31m*\033[0m kein Repository gefunden"
