@@ -49,6 +49,43 @@ if ! command -v npm >/dev/null 2>&1; then
 	exit 1
 fi
 
+# Git-Repository vorhanden?
+cd "$dir"
+repository=0
+if command -v git >/dev/null 2>&1; then
+	git status &> /dev/null
+	if (( $? == 0 )); then
+		repository=1
+	fi
+fi
+
+# Git-Repository vorhanden, aber nicht in Branch 'master'
+if (( repository > 0 )) && [ "$(git branch --show-current)" != "master" ]; then
+	echo -e "\033[1;31mFehler!\033[0m\n  \033[1;31m*\033[0m nicht in Branch 'master'\n"
+	while : ; do
+		read -ep "checkout 'master' (j/n): " checkout
+		if [ "$checkout" = "j" ]; then
+			echo ""
+			# Working Tree nicht clean
+			if [ "$(git diff --stat)" != "" ]; then
+				echo -e "\033[1;31mFehler!\033[0m\n  \033[1;31m*\033[0m Working Tree nicht clean"
+				exit 1
+			fi
+			# checkout 'master'
+			git checkout master
+			if (( $? > 0 )); then
+				echo -e "\n\033[1;31mFehler!\033[0m\n  \033[1;31m*\033[0m checkout 'master' misslungen"
+				exit 1
+			fi
+			break
+		elif [ "$checkout" = "n" ]; then
+			exit 1
+		else
+			zeilenWeg 1
+		fi
+	done
+fi
+
 # Zeilen entfernen
 #   $1 = Number, die angibt, wie viele Zeilen entfernt werden sollen
 zeilenWeg() {
@@ -101,9 +138,7 @@ if [ "$1" = "inc" ]; then
 	installModules
 else
 	while : ; do
-
 		read -ep "Module installieren oder updaten (j/n): " install
-
 		if [ "$install" = "j" ]; then
 			echo -e "\n"
 			installModules
