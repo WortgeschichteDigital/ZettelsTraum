@@ -1554,8 +1554,8 @@ let beleg = {
 	ctrlZwischenablage (dt) {
 		const {clipboard} = require("electron"),
 			daten = kopieren.datenBeleg(dt);
-		daten.typ = "bwgd";
-		daten.version = 1;
+		daten.typ = "ztb";
+		daten.version = 2;
 		daten.winId = winInfo.winId;
 		daten.wort = kartei.wort;
 		clipboard.writeText(JSON.stringify(daten));

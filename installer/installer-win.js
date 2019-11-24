@@ -54,17 +54,17 @@ function makeConfig () {
 			},
 			fileAssociations: [
 				{
-					ext: "wgd",
-					name: "wgd",
+					ext: "ztj",
+					name: "ztj",
 					description: "Wortgeschichte digital-Datei",
-					icon: "./resources/filetype/win/wgd.ico",
+					icon: "./resources/filetype/win/ztj.ico",
 				},
 			],
 			extraResources: [
 				{
 					from: "./resources",
 					to: "./",
-					filter: ["*.wgd", "*.xml", "filetype"],
+					filter: ["*.ztj", "*.xml", "filetype"],
 				},
 			],
 		},

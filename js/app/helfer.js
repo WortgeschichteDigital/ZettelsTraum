@@ -629,7 +629,7 @@ let helfer = {
 	ordnerOeffnen (pfad) {
 		const {shell} = require("electron"),
 			path = require("path");
-		if (!/\.wgd$/.test(pfad)) { // Ordner öffnen
+		if (!/\.ztj$/.test(pfad)) { // Ordner öffnen
 			if (!/\/$/.test(pfad)) {
 				pfad += path.sep;
 			}
@@ -694,8 +694,8 @@ let helfer = {
 		}
 		const fsP = require("fs").promises,
 			path = require("path"),
-			quelle = path.join(resources, "Demonstrationskartei Team.wgd"),
-			ziel = path.join(appInfo.temp, "Demonstrationskartei Team.wgd");
+			quelle = path.join(resources, "Demonstrationskartei Team.ztj"),
+			ziel = path.join(appInfo.temp, "Demonstrationskartei Team.ztj");
 		fsP.copyFile(quelle, ziel)
 			.then(() => {
 				kartei.oeffnenEinlesen(ziel);
@@ -760,7 +760,7 @@ let helfer = {
 		let err = {
 			time: new Date().toISOString(),
 			word: typeof kartei === "undefined" ? winInfo.typ : kartei.wort,
-			fileWgd: typeof kartei === "undefined" ? "Nebenfenster" : kartei.pfad,
+			fileZtj: typeof kartei === "undefined" ? "Nebenfenster" : kartei.pfad,
 			fileJs: fileJs,
 			message: message,
 			line: line,

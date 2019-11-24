@@ -1,6 +1,6 @@
 "use strict";
 
-let wgd = {
+let io = {
 	// Daten komprimieren
 	//   daten = String
 	//     (ein JSON-String, der komprimiert werden soll)
@@ -37,7 +37,7 @@ let wgd = {
 			});
 		});
 	},
-	// (B)WGD-Datei lesen
+	// ZTJ/ZTB-Datei lesen
 	//   datei = String
 	//     (Pfad zur Datei, die eingelesen werden soll)
 	lesen (datei) {
@@ -46,7 +46,7 @@ let wgd = {
 			fsP.readFile(datei)
 				.then(async buffer => {
 					// Daten dekomprimieren
-					let content = await wgd.unzipData(buffer);
+					let content = await io.unzipData(buffer);
 					// Daten sind nicht String => Fehlermeldung => Daten im Buffer wohl gar nicht komprimiert
 					// (Dateien wurden erst mit Version 0.24.0 komprimiert)
 					if (!helfer.checkType("String", content)) {
@@ -67,7 +67,7 @@ let wgd = {
 				.catch(err => resolve(err));
 		});
 	},
-	// (B)WGD-Datei schreiben
+	// ZTJ/ZTB-Datei schreiben
 	//   datei = String
 	//     (Pfad zur Datei, in der die komprimierten Daten gespeichert werden sollen)
 	//   daten = String
@@ -75,7 +75,7 @@ let wgd = {
 	schreiben (datei, daten) {
 		return new Promise(async resolve => {
 			// Daten packen
-			let buffer = await wgd.gzipData(daten);
+			let buffer = await io.gzipData(daten);
 			// Fehlerbehandlung => beim Komprimieren ist etwas schiefgelaufen
 			if (buffer.message) {
 				resolve(buffer);

@@ -380,95 +380,95 @@ table {
 	border-spacing: 0;
 }
 
-.wgd th,
-.wgd td {
+.ztj th,
+.ztj td {
 	padding: 5px 10px;
 	vertical-align: top;
 	text-align: left;
 }
 
-.wgd th:first-child,
-.wgd td:first-child {
+.ztj th:first-child,
+.ztj td:first-child {
 	padding-left: 0;
 }
 
-.wgd th:last-child,
-.wgd td:last-child {
+.ztj th:last-child,
+.ztj td:last-child {
 	padding-right: 0;
 }
 
-.wgd td:nth-child(3),
-.wgd td:last-child {
+.ztj td:nth-child(3),
+.ztj td:last-child {
 	font-size: 14px;
 	line-height: 20px;
 }
 
-.wgd td:nth-child(3) {
+.ztj td:nth-child(3) {
 	white-space: nowrap;
 }
 
-.wgd th {
+.ztj th {
 	font-style: italic;
 	font-weight: normal;
 }
 
-.wgd td[colspan] {
+.ztj td[colspan] {
 	font-style: italic;
 }
 
-.wgd td[colspan] code {
+.ztj td[colspan] code {
 	font-style: normal;
 }
 
-tr.wgd-ebene1 td[colspan] p,
-tr.wgd-ebene1 p,
-tr.wgd-ebene2 td[colspan] p,
-tr.wgd-ebene2 p,
-tr.wgd-ebene3 td[colspan] p,
-tr.wgd-ebene3 p,
-tr.wgd-ebene4 td[colspan] p,
-tr.wgd-ebene4 p,
-tr.wgd-ebene5 td[colspan] p,
-tr.wgd-ebene5 p {
+tr.ztj-ebene1 td[colspan] p,
+tr.ztj-ebene1 p,
+tr.ztj-ebene2 td[colspan] p,
+tr.ztj-ebene2 p,
+tr.ztj-ebene3 td[colspan] p,
+tr.ztj-ebene3 p,
+tr.ztj-ebene4 td[colspan] p,
+tr.ztj-ebene4 p,
+tr.ztj-ebene5 td[colspan] p,
+tr.ztj-ebene5 p {
 	margin: 0 0 0 15px;
 	border-left: 3px solid var(--farbeB);
 	padding-left: 15px;
 }
 
-tr.wgd-ebene1 td[colspan] p,
-tr.wgd-ebene2 td[colspan] p,
-tr.wgd-ebene3 td[colspan] p,
-tr.wgd-ebene4 td[colspan] p,
-tr.wgd-ebene5 td[colspan] p {
+tr.ztj-ebene1 td[colspan] p,
+tr.ztj-ebene2 td[colspan] p,
+tr.ztj-ebene3 td[colspan] p,
+tr.ztj-ebene4 td[colspan] p,
+tr.ztj-ebene5 td[colspan] p {
 	border-color: transparent;
 }
 
-tr.wgd-ebene2 td[colspan] p,
-tr.wgd-ebene2 p {
+tr.ztj-ebene2 td[colspan] p,
+tr.ztj-ebene2 p {
 	margin-left: 43px;
 }
 
-tr.wgd-ebene3 td[colspan] p,
-tr.wgd-ebene3 p {
+tr.ztj-ebene3 td[colspan] p,
+tr.ztj-ebene3 p {
 	margin-left: 86px;
 }
 
-tr.wgd-ebene4 td[colspan] p,
-tr.wgd-ebene4 p {
+tr.ztj-ebene4 td[colspan] p,
+tr.ztj-ebene4 p {
 	margin-left: 129px;
 }
 
-tr.wgd-ebene5 td[colspan] p,
-tr.wgd-ebene5 p {
+tr.ztj-ebene5 td[colspan] p,
+tr.ztj-ebene5 p {
 	margin-left: 172px;
 }
 
-tr.wgd-alt td,
-tr.wgd-alt td code {
+tr.ztj-alt td,
+tr.ztj-alt td code {
 	color: var(--textSehrHell);
 }
 
-tr.wgd-alt td p {
+tr.ztj-alt td p {
 	border-color: var(--textExtremHell);
 }
 

@@ -45,9 +45,17 @@
 			<div>
 				<h2><span>Version 0.25.0-beta</span><time datetime="2019-11-13">13. November 2019</time></h2>
 
+				<p><span class="obacht">Das Dateiformat hat sich geändert!</span> Ältere <abbr title="Wortgeschichte digital">WGD</abbr>-Dateien werden automatisch in <abbr title="Zettel’s Traum JSON">ZTJ</abbr>-Dateien konvertiert; dabei wird eine Änderungsmarkierung gesetzt.</p>
+
 				<h3>Verbesserungen</h3>
 
 				<ul>
+					<li>
+						<p>Die Dateiendung wurde von <span class="datei">.wgd</span> zu <span class="datei">.ztj</span> geändert (ZTJ steht für <i><span class="app-name"></span> <abbr title="JavaScript Object Notation" lang="en">JSON</abbr></i>). Das Dateiformat ist dabei fast vollständig gleich geblieben, allein Kontrollfelder wurden angepasst.</p>
+
+						<p>Außerdem haben die für den Datenaustausch gedachten Belegedateien, die bisher die Dateiendung <span class="datei">.bwgd</span> hatten, nun die Endung <span class="datei">.ztb</span> (ZTB steht für <i><span class="app-name"></span> Belege</i>). Auch in diesem Fall wurden jenseits der Endung allein Kontrollfelder angepasst.</p>
+					</li>
+
 					<li><a href="#" class="ueber-electron"><i>Electron</i></a>-Update auf Version 7.1.2.</li>
 				</ul>
 			</div>
@@ -153,7 +161,7 @@
 						<p>Durch den Umbau wurde der Quellcode <span lang="fr">en passant</span> deutlich verschlankt und modernisiert. Außerdem ist er nun leichter zu warten.</p>
 					</li>
 
-					<li><a href="#wgd" class="link-dokumentation"><abbr title="Wortgeschichte digital">WGD</abbr>- und <abbr title="Belege Wortgeschichte digital">BWGD</abbr>-Dateien</a> werden fortan komprimiert gespeichert, nehmen auf der Festplatte also weniger Platz weg: Dateien können dabei durchaus auf 35 % der ursprünglichen Dateigröße reduziert werden. Alte, nicht komprimierte Dateien können weiterhin problemlos geöffnet werden. Beim nächsten Speichern werden sie komprimiert.</li>
+					<li><a href="#ztj" class="link-dokumentation"><abbr title="Wortgeschichte digital">WGD</abbr>- und <abbr title="Belege Wortgeschichte digital">BWGD</abbr>-Dateien</a> werden fortan komprimiert gespeichert, nehmen auf der Festplatte also weniger Platz weg: Dateien können dabei durchaus auf 35 % der ursprünglichen Dateigröße reduziert werden. Alte, nicht komprimierte Dateien können weiterhin problemlos geöffnet werden. Beim nächsten Speichern werden sie komprimiert.</li>
 
 					<li>
 						<p>Die <a href="#menueKartei-zuletztVerwendet" class="link-handbuch">Liste zuletzt verwendeter Karteien</a> wird nun nicht mehr automatisch bereinigt. Es wird zwar immer noch beim Programmstart überprüft, ob Karteien gefunden wurden, nicht gefundene werden jedoch nur noch als fehlend markiert (<img src="../img/x-dick-rot.svg" width="24" height="24" alt="">), aber nicht mehr aus der Liste entfernt. <a href="#menueApp-neuesFenster" class="link-handbuch">Details dazu im Handbuch.</a> Dieses neue Verhalten dürfte den Start der App nebenbei ein wenig beschleunigen, da die Überprüfung nun zeitversetzt und asynchron stattfindet.</p>
@@ -254,7 +262,7 @@
 					<li>Das Auf- und Zuklappen des Inhaltsverzeichnisses im Handbuch und der technischen Dokumentation wird nun animiert.</li>
 
 					<li>
-						<p>Die technische Dokumentation wurde wegen der vielen Änderungen und Ergänzungen auf der technischen Ebene in den Abschnitten <a href="#framework" class="link-dokumentation">Framework</a> sowie <a href="#ordner" class="link-dokumentation">Ordner und Dateien</a> überarbeitet. Außerdem wurden eine Beschreibung des <a href="#verschiedenes-tagDateien" class="link-dokumentation">Formats der Tag-Dateien</a> ergänzt und natürlich alle Änderungen des <a href="#wgd-wgd" class="link-dokumentation"><abbr title="Wortgeschichte digital">WGD</abbr>-Dateiformats</a> in die Tabelle eingetragen.</p>
+						<p>Die technische Dokumentation wurde wegen der vielen Änderungen und Ergänzungen auf der technischen Ebene in den Abschnitten <a href="#framework" class="link-dokumentation">Framework</a> sowie <a href="#ordner" class="link-dokumentation">Ordner und Dateien</a> überarbeitet. Außerdem wurden eine Beschreibung des <a href="#verschiedenes-tagDateien" class="link-dokumentation">Formats der Tag-Dateien</a> ergänzt und natürlich alle Änderungen des <a href="#ztj-ztj" class="link-dokumentation"><abbr title="Wortgeschichte digital">WGD</abbr>-Dateiformats</a> in die Tabelle eingetragen.</p>
 
 						<p>Ferner gibt es nun einen neuen Abschnitt im <abbr title="Kapitel">Kap.</abbr> <i>Verschiedenes</i>: <a href="#verschiedenes-bekannteFehler" class="link-dokumentation">Bekannte Fehler</a>. Hier werden nur Fehler aufgelistet, die aus irgendeinem Grund nicht behoben werden konnten oder werden, <abbr title="zum Beispiel">z. B.</abbr> weil es sich um Electron-Bugs handelt.</p>
 					</li>
@@ -1001,7 +1009,7 @@ Gerüst 2 &gt; Gerüst 1</pre>
 
 						<p>Klickt man auf <i>Import</i> und wählt eine <abbr title="Belege Wortgeschichte digital">BWGD</abbr>-Datei aus, erscheint diese als erster Punkt in der Liste der Belegquellen. Durch einen Klick auf <i>Einfügen</i> werden alle Belege aus der Datei in die aktuelle Kartei kopiert.</p>
 
-						<p>Die <a href="#" class="link-dokumentation">technische Dokumentation</a> wurde im Kapitel <i><abbr title="Wortgeschichte digital">WGD</abbr>-Dateiformat</i> um das <a href="#wgd-bwgd" class="link-dokumentation"><abbr title="Belege Wortgeschichte digital">BWGD</abbr>-Format</a> ergänzt.</p>
+						<p>Die <a href="#" class="link-dokumentation">technische Dokumentation</a> wurde im Kapitel <i><abbr title="Wortgeschichte digital">WGD</abbr>-Dateiformat</i> um das <a href="#ztj-ztb" class="link-dokumentation"><abbr title="Belege Wortgeschichte digital">BWGD</abbr>-Format</a> ergänzt.</p>
 					</li>
 
 					<li>

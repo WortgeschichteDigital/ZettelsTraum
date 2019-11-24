@@ -81,20 +81,20 @@ function makeConfig () {
 					`--${typ}-changelog=../build/changelog`,
 				],
 			},
-			// "fileAssociations" funktioniert zwar gut, ordnet den WGD-Dateien aber
+			// "fileAssociations" funktioniert zwar gut, ordnet den ZTJ-Dateien aber
 			// kein Datei-Icon zu; ich übernehme das lieber selbst in "linux-after-install.sh"
 // 			fileAssociations: [
 // 				{
-// 					ext: "wgd",
-// 					name: "x-wgd",
-// 					mimeType: "application/x-wgd",
+// 					ext: "ztj",
+// 					name: "x-ztj",
+// 					mimeType: "application/x-ztj",
 // 				},
 // 			],
 			extraResources: [
 				{
 					from: "./resources",
 					to: "./",
-					filter: ["*.wgd", "*.xml", "filetype"],
+					filter: ["*.ztj", "*.xml", "filetype"],
 				},
 			],
 		},

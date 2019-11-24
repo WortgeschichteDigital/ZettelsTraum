@@ -78,7 +78,7 @@ let anhaenge = {
 		".pptx": "datei-praes.svg",
 		".rar": "datei-archiv.svg",
 		".txt": "datei-txt.svg",
-		".wgd": "datei-wgd.svg",
+		".ztj": "datei-ztj.svg",
 		".xml": "datei-xml.svg",
 		".zip": "datei-archiv.svg",
 	},

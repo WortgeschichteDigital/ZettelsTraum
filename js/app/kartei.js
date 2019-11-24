@@ -35,7 +35,7 @@ let kartei = {
 				pr: "",
 			}],
 			re: 0, // Revision
-			ty: "wgd", // Datei ist eine WGD-Datei (immer dieser Wert!)
+			ty: "ztj", // Datei ist eine ZTJ-Datei (immer dieser Wert! Bis Version 0.24.0 stand in dem Feld "wgd")
 			ve: konversion.version, // Version des Dateiformats
 			wo: kartei.wort, // Wort
 		};
@@ -65,8 +65,8 @@ let kartei = {
 			defaultPath: appInfo.documents,
 			filters: [
 				{
-					name: "Wortgeschichte digital-Datei",
-					extensions: ["wgd"],
+					name: `${appInfo.name} JSON`,
+					extensions: ["ztj"],
 				},
 				{
 					name: "Alle Dateien",
@@ -141,7 +141,7 @@ let kartei = {
 			return;
 		}
 		// Datei einlesen
-		let content = await wgd.lesen(datei);
+		let content = await io.lesen(datei);
 		if (!helfer.checkType("String", content)) {
 			dialog.oeffnen({
 				typ: "alert",
@@ -161,11 +161,11 @@ let kartei = {
 			});
 			return;
 		}
-		// Wirklich eine wgd-Datei?
-		if (data_tmp.ty !== "wgd") {
+		// Wirklich eine ZTJ-Datei?
+		if (!/^(wgd|ztj)$/.test(data_tmp.ty)) { // bis Version 0.24.0 stand in dem Feld "wgd"
 			dialog.oeffnen({
 				typ: "alert",
-				text: "Die Datei wurde nicht eingelesen.\nEs handelt sich nicht um eine Karteikasten-Datei von <i>Wortgeschichte digital</i>.",
+				text: `Die Datei wurde nicht eingelesen.\nEs handelt sich nicht um eine <i>${appInfo.name} JSON</i>-Datei.`,
 			});
 			return;
 		}
@@ -264,7 +264,7 @@ let kartei = {
 			data.dm = new Date().toISOString();
 			data.re++;
 			// Datei speichern
-			let result = await wgd.schreiben(pfad, JSON.stringify(data));
+			let result = await io.schreiben(pfad, JSON.stringify(data));
 			// beim Speichern ist ein Fehler aufgetreten
 			if (result !== true) {
 				dialog.oeffnen({
@@ -307,11 +307,11 @@ let kartei = {
 		const path = require("path");
 		let opt = {
 			title: "Kartei speichern",
-			defaultPath: path.join(appInfo.documents, `${kartei.wort}.wgd`),
+			defaultPath: path.join(appInfo.documents, `${kartei.wort}.ztj`),
 			filters: [
 				{
-					name: "Wortgeschichte digital-Datei",
-					extensions: ["wgd"],
+					name: `${appInfo.name} JSON`,
+					extensions: ["ztj"],
 				},
 				{
 					name: "Alle Dateien",
@@ -321,7 +321,7 @@ let kartei = {
 		};
 		// Wo wurde zuletzt eine Datei gespeichert oder geöffnet?
 		if (optionen.data.letzter_pfad) {
-			opt.defaultPath = path.join(optionen.data.letzter_pfad, `${kartei.wort}.wgd`);
+			opt.defaultPath = path.join(optionen.data.letzter_pfad, `${kartei.wort}.ztj`);
 		}
 		// Dialog anzeigen
 		const {ipcRenderer} = require("electron");
