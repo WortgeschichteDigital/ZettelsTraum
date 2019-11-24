@@ -55,16 +55,16 @@ function makeConfig () {
 			},
 			fileAssociations: [
 				{
-					ext: "wgd",
-					name: "x-wgd",
-					icon: "./resources/filetype/mac/wgd.icns",
+					ext: "ztj",
+					name: "x-ztj",
+					icon: "./resources/filetype/mac/ztj.icns",
 				},
 			],
 			extraResources: [
 				{
 					from: "./resources",
 					to: "./",
-					filter: ["*.wgd", "*.xml", "filetype"],
+					filter: ["*.ztj", "*.xml", "filetype"],
 				},
 			],
 		},
