@@ -377,8 +377,8 @@ let kopieren = {
 		} catch (err) {
 			return;
 		}
-		// der Text konnte offenbar geparst werden => WGD-Beleg-Daten?
-		if (daten.typ !== "bwgd") {
+		// der Text konnte offenbar geparst werden => ZTB-Daten?
+		if (daten.typ !== "ztb") {
 			return;
 		}
 		// Stammen die Daten aus diesem Fenster?
@@ -684,7 +684,7 @@ let kopieren = {
 		// Daten zusammentragen
 		let daten = {
 			bl: [],
-			ty: "bwgd",
+			ty: "ztb",
 			ve: 1,
 		};
 		for (let id of kopieren.belege) {
@@ -698,11 +698,11 @@ let kopieren = {
 		const path = require("path");
 		let opt = {
 			title: "Belege exportieren",
-			defaultPath: path.join(appInfo.documents, `${kartei.wort}, ${kopieren.belege.length} ${num}.bwgd`),
+			defaultPath: path.join(appInfo.documents, `${kartei.wort}, ${kopieren.belege.length} ${num}.ztb`),
 			filters: [
 				{
 					name: "Wortgeschichte digital-Belege",
-					extensions: ["bwgd"],
+					extensions: ["ztb"],
 				},
 				{
 					name: "Alle Dateien",
@@ -746,7 +746,7 @@ let kopieren = {
 			filters: [
 				{
 					name: "Wortgeschichte digital-Belege",
-					extensions: ["bwgd"],
+					extensions: ["ztb"],
 				},
 				{
 					name: "Alle Dateien",
@@ -794,7 +794,7 @@ let kopieren = {
 			});
 			return;
 		}
-		if (belegedatei_tmp.ty !== "bwgd") {
+		if (belegedatei_tmp.ty !== "ztb") {
 			dialog.oeffnen({
 				typ: "alert",
 				text: `Beim Einlesen der Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\nkeine Belege-Datei von <i>Wortgeschichte digital</i>`,
