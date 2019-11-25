@@ -339,7 +339,13 @@ let popup = {
 			text = text.replace(/<.+?>/g, "");
 			text = text.replace(/\n/g, "\n\n");
 			// HTML aufbereiten
-			let html = container.innerHTML;
+			let html = "";
+			if (container.firstChild.nodeType === 1 &&
+					container.firstChild.nodeName === "P") {
+				html = container.innerHTML;
+			} else {
+				html = `<p>${container.innerHTML}</p>`;
+			}
 			if (optionen.data.einstellungen["textkopie-wort"] &&
 					!container.querySelector(".wort")) {
 				html = liste.belegWortHervorheben(html, true);
