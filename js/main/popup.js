@@ -73,7 +73,7 @@ let punkte = {
 		click: "beleg.aktionLoeschenFrage(popup.belegID)",
 	},
 	belegZwischenablage: {
-		label: "Beleg in Zwischenablage kopieren",
+		label: "Beleg in Zwischenablage",
 		icon: "einfuegen-pfeil.png",
 		click: "beleg.ctrlZwischenablage(data.ka[popup.belegID])",
 	},
