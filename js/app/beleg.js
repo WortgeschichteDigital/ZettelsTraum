@@ -11,6 +11,7 @@ let beleg = {
 	// Liste häufig verwendeter Korpora für das Dropdown-Menü
 	korpora: [
 		"DTA",
+		"IDS-Archiv",
 		"DWDS: Kernkorpus",
 		"DWDS: Kernkorpus 21",
 		"DWDS: Zeitungskorpus",
