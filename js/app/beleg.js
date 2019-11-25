@@ -705,7 +705,11 @@ let beleg = {
 		if (html) {
 			text += "<hr>";
 			let quelle = obj.qu.split("\n");
-			quelle.forEach(function(i) {
+			quelle.forEach(i => {
+				i = helfer.textTrim(i, true);
+				if (!i) {
+					return;
+				}
 				text += `<p>${helfer.escapeHtml(i)}</p>`;
 			});
 		} else {
