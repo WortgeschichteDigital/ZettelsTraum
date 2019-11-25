@@ -526,7 +526,7 @@ let helfer = {
 	// Overlay-Animation, die anzeigt, was gerade geschehen ist
 	// (Kopier-Aktion oder Wrap der Suchleiste)
 	//   ziel = String
-	//     ("liste" || "zwischenablage" || "wrap" || "duplikat" || "gespeichert", "einfuegen")
+	//     ("liste" || "zwischenablage" || "wrap" || "duplikat" || "gespeichert" || "einfuegen")
 	animation (ziel) {
 		// ggf. Timeout clearen
 		clearTimeout(helfer.animationTimeout);
