@@ -239,6 +239,7 @@ let popup = {
 					return "beleg-moddel";
 				} else if (pfad[i].classList.contains("anhaenge-item")) {
 					popup.anhangDatei = pfad[i].dataset.datei;
+					popup.anhangDateiBeleg = false;
 					return "anhang";
 				} else if (pfad[i].classList.contains("overlay")) {
 					popup.overlayID = pfad[i].id;
