@@ -10,6 +10,8 @@ let popup = {
 	belegID: "",
 	// speichert die ID des Overlay-Fenster, das betroffen ist
 	overlayID: "",
+	// für XML-Kopie: Referenz, aus der heraus kopiert werden soll (data.ka[ID] oder beleg.data)
+	referenz: {},
 	// speichert den Anhang, der geöffnet werden soll
 	anhangDatei: "",
 	// das angeklickte Anhang-Icon steht in der Detailansicht eines Belegs
@@ -34,7 +36,9 @@ let popup = {
 		if (target === "kopieren") {
 			items = ["kopieren"];
 			if (popup.selInBeleg()) {
-				items.push("markieren");
+				items.push("markieren", {name: "xml", sub: ["xmlBeleg", "xmlReferenz"]});
+			} else if (/^(karte|liste)$/.test(helfer.hauptfunktion)) {
+				items.push({name: "xml", sub: ["xmlReferenz"]});
 			}
 			if (overlay.oben() === "drucken") {
 				items.push("sep", "schliessen", "sep", "belegHinzufuegen");
@@ -89,9 +93,9 @@ let popup = {
 			if (overlay.oben() === "stamm") {
 				items.push("link", "sep", "schliessen");
 			} else if (helfer.hauptfunktion === "karte") {
-				items.push("link", "sep", "karteikarteConf");
+				items.push("link", "sep", {name: "xml", sub: ["xmlReferenz"]}, "sep", "karteikarteConf");
 			} else if (helfer.hauptfunktion === "liste") {
-				items.push("link", "sep", "belegBearbeiten", "belegLoeschen", "belegZwischenablage", "belegDuplizieren", "sep", "beleglisteConf");
+				items.push("link", "sep", {name: "xml", sub: ["xmlReferenz"]}, "sep", "belegBearbeiten", "belegLoeschen", "belegZwischenablage", "belegDuplizieren", "sep", "beleglisteConf");
 			} else {
 				items.push("link");
 			}
@@ -104,14 +108,14 @@ let popup = {
 			items = ["beleglisteConf", "sep", "belegHinzufuegen"];
 			popup.belegeAuflisten(items);
 		} else if (target === "beleg-moddel") {
-			items = ["belegBearbeiten", "belegLoeschen", "belegZwischenablage", "belegDuplizieren", "sep", "beleglisteConf", "sep", "belegHinzufuegen"];
+			items = [{name: "xml", sub: ["xmlReferenz"]}, "sep", "belegBearbeiten", "belegLoeschen", "belegZwischenablage", "belegDuplizieren", "sep", "beleglisteConf", "sep", "belegHinzufuegen"];
 			popup.belegeAuflisten(items);
 		} else if (target === "anhang") {
 			items = ["anhang", "ordnerAnhang"];
 			if (helfer.hauptfunktion === "karte") {
-				items.push("sep", "karteikarteConf");
+				items.push("sep", {name: "xml", sub: ["xmlReferenz"]}, "sep", "karteikarteConf");
 			} else if (popup.anhangDateiBeleg) {
-				items.push("sep", "belegBearbeiten", "belegLoeschen", "belegZwischenablage", "belegDuplizieren", "sep", "beleglisteConf");
+				items.push("sep", {name: "xml", sub: ["xmlReferenz"]}, "sep", "belegBearbeiten", "belegLoeschen", "belegZwischenablage", "belegDuplizieren", "sep", "beleglisteConf");
 			} else if (overlay.oben() === "anhaenge") {
 				items.push("sep", "schliessen");
 			}
@@ -137,7 +141,8 @@ let popup = {
 				popup.belegeAuflisten(items);
 			}
 		} else if (target === "beleg-conf") {
-			items = ["karteikarteConf", "sep", "belegHinzufuegen"];
+			popup.referenz = beleg.data;
+			items = [{name: "xml", sub: ["xmlReferenz"]}, "sep", "karteikarteConf", "sep", "belegHinzufuegen"];
 			popup.belegeAuflisten(items);
 		} else if (target === "bedeutungen-conf") {
 			items = ["bedeutungenConf", "sep", "belegHinzufuegen"];
@@ -194,8 +199,13 @@ let popup = {
 				popup.anhangDatei = pfad[i].dataset.datei;
 				if (pfad[i].closest(".liste-meta")) {
 					popup.anhangDateiBeleg = true;
+					const id = pfad[i].closest(".liste-details").previousSibling.dataset.id;
+					popup.referenz = data.ka[id];
 				} else {
 					popup.anhangDateiBeleg = false;
+					if (helfer.hauptfunktion === "karte") {
+						popup.referenz = beleg.data;
+					}
 				}
 				return "anhang";
 			}
@@ -230,12 +240,20 @@ let popup = {
 					return "start-datei";
 				} else if (pfad[i].classList.contains("link")) {
 					popup.element = pfad[i];
+					if (helfer.hauptfunktion === "karte") {
+						popup.referenz = beleg.data;
+					} else if (helfer.hauptfunktion === "liste") {
+						const id = pfad[i].closest(".liste-details").previousSibling.dataset.id;
+						popup.referenz = data.ka[id];
+					}
 					return "link";
 				} else if (pfad[i].classList.contains("liste-kopf")) {
 					popup.belegID = pfad[i].dataset.id;
+					popup.referenz = data.ka[popup.belegID];
 					return "beleg-moddel";
 				} else if (pfad[i].classList.contains("liste-details")) {
 					popup.belegID = pfad[i].previousSibling.dataset.id;
+					popup.referenz = data.ka[popup.belegID];
 					return "beleg-moddel";
 				} else if (pfad[i].classList.contains("anhaenge-item")) {
 					popup.anhangDatei = pfad[i].dataset.datei;
@@ -300,6 +318,7 @@ let popup = {
 				}
 				const id = div.parentNode.previousSibling.dataset.id;
 				obj = data.ka[id];
+				popup.referenz = data.ka[id]; // für xml.referenz();
 				break;
 			} else if (ele.classList.contains("beleg-lese")) {
 				container.umfeld = "TD";
@@ -309,6 +328,7 @@ let popup = {
 					bs = true;
 					obj = beleg.data;
 				}
+				popup.referenz = beleg.data; // für xml.referenz();
 				break;
 			} else if (ele.id === "drucken-cont-rahmen") {
 				container.umfeld = "DIV";
