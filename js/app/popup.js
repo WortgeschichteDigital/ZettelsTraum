@@ -192,7 +192,7 @@ let popup = {
 			} else if (pfad[i].nodeName === "IMG" &&
 					pfad[i].dataset.datei) {
 				popup.anhangDatei = pfad[i].dataset.datei;
-				if (pfad[i].parentNode.parentNode.classList.contains("liste-meta")) {
+				if (pfad[i].closest(".liste-meta")) {
 					popup.anhangDateiBeleg = true;
 				} else {
 					popup.anhangDateiBeleg = false;
