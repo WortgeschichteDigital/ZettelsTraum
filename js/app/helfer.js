@@ -420,12 +420,12 @@ let helfer = {
 	},
 	// Variablen um Wortgrenzen zu bestimmen
 	ganzesWortRegExp: {
-		links: `\\s„“”‚‘»«›‹/\\\\([\\\]{<>`,
+		links: `\\s"„“”‚‘»«›‹/\\\\([\\\]{<>`,
 		rechts: `\\s"„“”‚‘»«›‹/\\\\)\\\]!?.:,;<>`,
 		// für Hervorhebung Karteiwort gewisse Klammern ignorieren: [] ()
 		// (das ist deswegen, damit ich Komposita, in denen ein Glied geklammert ist,
 		// auch hervorheben kann; z.B.: "(Handels-)Kolonie")
-		linksWort: `\\s„“”‚‘»«›‹/\\{<>`,
+		linksWort: `\\s"„“”‚‘»«›‹/\\{<>`,
 		rechtsWort: `\\s"„“”‚‘»«›‹/\\!?.:,;<>`,
 	},
 	// Tokens mit spezieller Bedeutung für reguläre Ausdrücke escapen
