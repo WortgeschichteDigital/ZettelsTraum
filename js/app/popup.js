@@ -35,9 +35,13 @@ let popup = {
 		// Menü entwerfen
 		let items = [];
 		if (target === "kopieren") {
-			items = ["kopieren"];
-			if (popup.selInBeleg()) {
-				items.push("markieren", {name: "xml", sub: ["xmlBeleg", "xmlReferenz"]});
+			let selInBeleg = popup.selInBeleg();
+			if (selInBeleg) {
+				items.push("markieren");
+			}
+			items.push({name: "text", sub: ["kopieren", "textReferenz"]});
+			if (selInBeleg) {
+				items.push({name: "xml", sub: ["xmlBeleg", "xmlReferenz"]});
 			} else if (/^(karte|liste)$/.test(helfer.hauptfunktion)) {
 				items.push({name: "xml", sub: ["xmlReferenz"]});
 			}
@@ -94,9 +98,9 @@ let popup = {
 			if (overlay.oben() === "stamm") {
 				items.push("link", "sep", "schliessen");
 			} else if (helfer.hauptfunktion === "karte") {
-				items.push("link", "sep", {name: "xml", sub: ["xmlReferenz"]}, "sep", "karteikarteConf");
+				items.push("link", "sep", {name: "text", sub: ["textReferenz"]}, {name: "xml", sub: ["xmlReferenz"]}, "sep", "karteikarteConf");
 			} else if (helfer.hauptfunktion === "liste") {
-				items.push("link", "sep", {name: "xml", sub: ["xmlReferenz"]}, "sep", "belegBearbeiten", "belegLoeschen", "belegZwischenablage", "belegDuplizieren", "sep", "beleglisteConf");
+				items.push("link", "sep", {name: "text", sub: ["textReferenz"]}, {name: "xml", sub: ["xmlReferenz"]}, "sep", "belegBearbeiten", "belegLoeschen", "belegZwischenablage", "belegDuplizieren", "sep", "beleglisteConf");
 			} else {
 				items.push("link");
 			}
@@ -109,14 +113,14 @@ let popup = {
 			items = ["beleglisteConf", "sep", "belegHinzufuegen"];
 			popup.belegeAuflisten(items);
 		} else if (target === "beleg-moddel") {
-			items = [{name: "xml", sub: ["xmlReferenz"]}, "sep", "belegBearbeiten", "belegLoeschen", "belegZwischenablage", "belegDuplizieren", "sep", "beleglisteConf", "sep", "belegHinzufuegen"];
+			items = [{name: "text", sub: ["textReferenz"]}, {name: "xml", sub: ["xmlReferenz"]}, "sep", "belegBearbeiten", "belegLoeschen", "belegZwischenablage", "belegDuplizieren", "sep", "beleglisteConf", "sep", "belegHinzufuegen"];
 			popup.belegeAuflisten(items);
 		} else if (target === "anhang") {
 			items = ["anhang", "ordnerAnhang"];
 			if (helfer.hauptfunktion === "karte") {
-				items.push("sep", {name: "xml", sub: ["xmlReferenz"]}, "sep", "karteikarteConf");
+				items.push("sep", {name: "text", sub: ["textReferenz"]}, {name: "xml", sub: ["xmlReferenz"]}, "sep", "karteikarteConf");
 			} else if (popup.anhangDateiBeleg) {
-				items.push("sep", {name: "xml", sub: ["xmlReferenz"]}, "sep", "belegBearbeiten", "belegLoeschen", "belegZwischenablage", "belegDuplizieren", "sep", "beleglisteConf");
+				items.push("sep", {name: "text", sub: ["textReferenz"]}, {name: "xml", sub: ["xmlReferenz"]}, "sep", "belegBearbeiten", "belegLoeschen", "belegZwischenablage", "belegDuplizieren", "sep", "beleglisteConf");
 			} else if (overlay.oben() === "anhaenge") {
 				items.push("sep", "schliessen");
 			}
@@ -143,7 +147,7 @@ let popup = {
 			}
 		} else if (target === "beleg-conf") {
 			popup.referenz = beleg.data;
-			items = [{name: "xml", sub: ["xmlReferenz"]}, "sep", "karteikarteConf", "sep", "belegHinzufuegen"];
+			items = [{name: "text", sub: ["textReferenz"]}, {name: "xml", sub: ["xmlReferenz"]}, "sep", "karteikarteConf", "sep", "belegHinzufuegen"];
 			popup.belegeAuflisten(items);
 		} else if (target === "bedeutungen-conf") {
 			items = ["bedeutungenConf", "sep", "belegHinzufuegen"];

@@ -129,8 +129,8 @@ let punkte = {
 		`,
 	},
 	kopieren: {
-		label: "Textauswahl kopieren",
-		icon: "kopieren.png",
+		label: "Textauswahl",
+		icon: "text-markiert.png",
 		click: `
 			helfer.toClipboard({
 				text: popup.textauswahl.text,
@@ -231,6 +231,19 @@ let punkte = {
 		icon: "x-dick.png",
 		click: "overlay.schliessen(document.getElementById(overlay.oben()))",
 		accelerator: "Esc",
+	},
+	text: {
+		label: "Text in Zwischenablage",
+		icon: "kopieren.png",
+	},
+	textReferenz: {
+		label: "Referenz",
+		icon: "link-pfeil-runter.png",
+		click: `
+			helfer.toClipboard({
+				text: xml.belegId(),
+			});
+		`,
 	},
 	wort: {
 		label: "Wort ändern",
