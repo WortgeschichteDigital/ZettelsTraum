@@ -173,7 +173,7 @@ let xml = {
 			autor = "n-n";
 		} else {
 			autor = autor.split(",")[0];
-			autor = autor.replace(/[;.:'"„“”‚‘»«›‹+*!?(){}[\]]/g, "");
+			autor = autor.replace(/[;.:'"„“”‚‘»«›‹+*!?(){}[\]<>&]/g, "");
 			autor = helfer.textTrim(autor, true);
 			autor = autor.toLowerCase();
 			autor = autor.replace(/\s/g, "-");
