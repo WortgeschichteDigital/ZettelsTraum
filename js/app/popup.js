@@ -5,6 +5,7 @@ let popup = {
 	textauswahl: {
 		text: "",
 		html: "",
+		xml: "",
 	},
 	// speichert die ID des Belegs, der bearbeitet werden soll
 	belegID: "",
@@ -359,24 +360,31 @@ let popup = {
 			text = text.replace(/<.+?>/g, "");
 			text = text.replace(/\n/g, "\n\n");
 			// HTML aufbereiten
-			let html = "";
+			let html = "",
+				xml = "";
 			if (container.firstChild.nodeType === 1 &&
 					container.firstChild.nodeName === "P") {
 				html = container.innerHTML;
 			} else {
 				html = `<p>${container.innerHTML}</p>`;
 			}
+			xml = html;
 			if (optionen.data.einstellungen["textkopie-wort"] &&
 					!container.querySelector(".wort")) {
 				html = liste.belegWortHervorheben(html, true);
 			}
 			html = helfer.clipboardHtml(html);
+			if (!container.querySelector(".wort")) {
+				xml = liste.belegWortHervorheben(xml, true);
+			}
+			xml = helfer.clipboardXml(xml);
 			if (bs) {
 				text = beleg.toolsKopierenAddQuelle(text, false, obj);
 				html = beleg.toolsKopierenAddQuelle(html, true, obj);
 			}
 			popup.textauswahl.text = helfer.escapeHtml(text, true);
 			popup.textauswahl.html = html;
+			popup.textauswahl.xml = xml;
 			return true;
 		}
 		// keine Kopieranweisung geben
