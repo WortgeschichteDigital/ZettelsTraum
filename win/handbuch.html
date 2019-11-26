@@ -1168,7 +1168,7 @@
 
 					<p id="belegliste-kopierenIcon">Am linken Rand neben Belegtext und Quellenangabe stehen <b>Kopier-Icons</b>: <img src="../img/kopieren.svg" width="24" height="24" alt="">. Über sie kann man mit nur einem Klick den Belegtext <abbr title="beziehungsweise">bzw.</abbr> die Quellenangabe in die Zwischenablage des Rechners schieben, um diese in ein anderes (Textverarbeitungs-)Programm einzufügen. Beim Kopieren des Belegtextes wird automatisch die Quellenangabe mitkopiert. Dabei wird immer der komplette Belegtext kopiert, und zwar auch, wenn der Kontext gekürzt wurde (Funktion <img src="../img/kuerzung.svg" width="24" height="24" alt="">). <abbr title="Eventuell">Evtl.</abbr> im Text vorhandene Trennzeichen und Seitenumbrüche sind in der Kopie sichtbar, selbst wenn Sie in der aktuellen Anzeige ausgeschaltet wurden (Funktion <img src="../img/trennzeichen.svg" width="24" height="24" alt="">).</p>
 
-					<p id="belegliste-kopierenAuswahl">Wenn Sie möchten, können Sie nur einen <b>Teil des Belegtextes kopieren</b>: den gewünschten Text mit der Maus markieren, Rechtsklick, <i>Textauswahl kopieren</i>. Haben Sie Text markiert und klicken auf das nebenstehende Icon <img src="../img/kopieren.svg" width="24" height="24" alt="">, wird ebenfalls nur die markierte Passage in die Zwischenablage geschoben. In beiden Fällen wird die Quellenangabe automatisch ergänzt; in beiden Fällen wird der Text so kopiert, wie er in der Anzeige sichtbar ist. Wurden <a href="#belegliste-trennzeichen">Trennzeichen und Seitenumbrüche</a> ausgeblendet, fehlen sie auch im kopierten Text.</p>
+					<p id="belegliste-kopierenAuswahl">Wenn Sie möchten, können Sie nur einen <b>Teil des Belegtextes kopieren</b>: den gewünschten Text mit der Maus markieren, Rechtsklick, <i>Text in Zwischenablage &gt; Textauswahl</i>. Haben Sie Text markiert und klicken auf das nebenstehende Icon <img src="../img/kopieren.svg" width="24" height="24" alt="">, wird ebenfalls nur die markierte Passage in die Zwischenablage geschoben. In beiden Fällen wird die Quellenangabe automatisch ergänzt; in beiden Fällen wird der Text so kopiert, wie er in der Anzeige sichtbar ist. Wurden <a href="#belegliste-trennzeichen">Trennzeichen und Seitenumbrüche</a> ausgeblendet, fehlen sie auch im kopierten Text.</p>
 
 					<p>Überhaupt sollten Sie in der Belegliste Textteile mit einer der genannten Methoden kopieren. Die vom Framework der App verwaltete Kopierfunktion <kbd>Strg</kbd> + <kbd>C</kbd> ergänzt die Quellenangabe nicht und sorgt auch nicht für eine Bereinigung der Formatierung.</p>
 
@@ -1240,13 +1240,33 @@
 
 					<p class="info">Öffnet eine neue leere <a href="#karteikarte-formularansicht">Karteikarte in der Formularansicht</a>.</p>
 
-					<p class="erklaerung-icon"><img src="../img/kopieren.svg" width="24" height="24" alt="">Textauswahl kopieren</p>
-
-					<p class="info">Erscheint nur beim Rechtsklick auf markiertem Text. <a href="#belegliste-kopierenAuswahl">Details dazu, wie das Kopieren abläuft</a>, finden Sie weiter oben.</p>
-
 					<p class="erklaerung-icon"><img src="../img/text-markiert.svg" width="24" height="24" alt="">Textauswahl markieren</p>
 
 					<p class="info">Erscheint nur beim Rechtsklick auf markiertem Belegtext. <a href="#belegliste-karteiwortHervorheben">Details zur Annotierungsfunktion</a> finden Sie weiter oben.</p>
+
+					<p class="erklaerung-icon"><img src="../img/kopieren.svg" width="24" height="24" alt="">Text in Zwischenablage</p>
+
+					<p class="info">Der Menüpunkt erscheint bei Klick auf der <a href="#belegliste-kopfleiste">Kopfleiste</a> oder in der <a href="#belegliste-detailansicht">Detailansicht der Belegliste</a> sowie in der <a href="#karteikarte">Karteikarte</a>.</p>
+
+					<p class="erklaerung-icon"><img src="../img/text-markiert.svg" width="24" height="24" alt="">Text in Zwischenablage &gt; Textauswahl</p>
+
+					<p class="info">Erscheint nur beim Rechtsklick auf markiertem Text. <a href="#belegliste-kopierenAuswahl">Details dazu, wie das Kopieren der Textauswahl abläuft</a>, finden Sie weiter oben.</p>
+
+					<p class="erklaerung-icon" id="belegliste-textZwischenablageReferenz"><img src="../img/link-pfeil-runter.svg" width="24" height="24" alt="">Text in Zwischenablage &gt; Referenz</p>
+
+					<p class="info">Kopiert eine ID in die Zwischenablage. Die ID wird aus den Datenfeldern <i>Datum</i> und <i>Autor</i> desjenigen Belegs abgeleitet, auf dem geklickt wurde. Sie ist nicht weiter formatiert, es handelt sich bei ihr nur um eine Zeichenkette, die ausschließlich aus Kleinbuchstaben, Zahlen und Bindestrichen besteht. Sie enthält niemals Leerzeichen.</p>
+
+					<p class="erklaerung-icon"><img src="../img/xml.svg" width="24" height="24" alt=""><abbr title="Extensible Markup Language" lang="en">XML</abbr> in Zwischenablage</p>
+
+					<p class="info">Der Menüpunkt erscheint bei Klick auf der <a href="#belegliste-kopfleiste">Kopfleiste</a> oder in der <a href="#belegliste-detailansicht">Detailansicht der Belegliste</a> sowie in der <a href="#karteikarte">Karteikarte</a>.</p>
+
+					<p class="erklaerung-icon"><img src="../img/beleg.svg" width="24" height="24" alt=""><abbr title="Extensible Markup Language" lang="en">XML</abbr> in Zwischenablage &gt; Belegschnitt</p>
+
+					<p class="info">Erscheint nur beim Rechtsklick auf markiertem Text. Der Befehl erzeugt auf der Grundlage des markierten Texts ein <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippet, das nicht nur den Text, sondern auch einige Metainformationen zum Beleg enthält. <a href="#xml-belegschnitt" class="link-dokumentation">Details zum Format des Snippets in der technischen Dokumentation</a>.</p>
+
+					<p class="erklaerung-icon"><img src="../img/link-pfeil-runter.svg" width="24" height="24" alt=""><abbr title="Extensible Markup Language" lang="en">XML</abbr> in Zwischenablage &gt; Referenz</p>
+
+					<p class="info">Analog zum Befehl <a href="#belegliste-textZwischenablageReferenz"><i>Text in Zwischenablage &gt; Referenz</i></a> wird auch in diesem Fall eine ID des Belegs erzeugt und kopiert. Der Unterschied ist, dass sie in einem leeren <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Element steht, das als Anker für einen zuvor kopierten Belegschnitt dienen kann.</p>
 
 					<p class="erklaerung-icon"><img src="../img/link.svg" width="24" height="24" alt="">Link kopieren</p>
 
@@ -3595,7 +3615,7 @@ Gerüst 2 &gt; Gerüst 1</pre>
 
 						<p>Bedenken müssen Sie nur, dass diese Kopierfunktion vom <a href="#framework" class="link-dokumentation">Framework</a> verwaltet wird, was in dem Moment relevant wird, wenn sie aus der Belegliste oder Leseansicht der Karteikarte markierten Text kopieren möchten. Das Framework versucht beim Kopieren nämlich so viele <b>Formatierungsinformationen</b> wie nur irgend möglich zu erhalten. Das klingt zunächst einmal positiv, kann aber durchaus problematisch werden. So wird für die Textanzeige in <i class="app-name"></i> <abbr title="beispielsweise">bspw.</abbr> die mitgelieferte Schriftart <i>Noto Sans</i> verwendet – eine Information, die beim Kopieren mit dieser Funktion erhalten bleibt. Fügen Sie den so kopierten Text in ein Office-Programm ein, wird dieses versuchen, ihn ebenfalls mit <i>Noto Sans</i> darzustellen und die von Ihnen eingestellte Schriftart ignorieren. Außerdem kann gerade der Belegtext in der <a href="#belegliste-detailansicht">Detailansicht der Belegliste</a> mit Informationen angereichert sein, die <span lang="la">ad hoc</span> hinzugefügt wurden, mithin gar nicht zum Beleg an sich gehören. Dies sind <a href="#belegliste-karteiwortHervorheben">Hervorhebungen des Karteiworts</a>, Markierungen von Suchergebnissen des <a href="#filter-volltext">Volltextfilters</a> und/oder der <a href="#belegliste-suchleiste">Suchleiste</a> und nicht zuletzt persönliche <a href="#belegliste-annotierenBeleg">Annotierungen</a>.</p>
 
-						<p>Kurzum: Für solche Fälle ist es durchaus sinnvoll, dass vor dem Kopieren der <b>Text bereinigt</b> wird. <i class="app-name"></i> übernimmt dies für Sie, jedoch müssen Sie dafür auf die entsprechenden Funktionen zurückgreifen und diese Kopierfunktion und das Tastaturkürzel <kbd>Strg</kbd> + <kbd>C</kbd> ignorieren. Wollen Sie in der <a href="#belegliste">Belegliste</a> oder der <a href="#karteikarte-leseansicht">Leseansicht der Karteikarte</a> markierten Text kopieren, machen Sie dies am besten via <i>Rechtsklick &gt; Textauswahl kopieren</i> und/oder nutzen Sie eines der nebenstehenden Kopier-Icons (<img src="../img/kopieren.svg" width="20" height="20" alt="">). Ist Text markiert, kopieren diese Icons übrigens nur die Textauswahl und nicht den Text des gesamten Feldes. Beim Kopieren wird der Text dann in jedem Fall bereinigt. Im <a href="#belegliste"><abbr title="Kapitel">Kap.</abbr> <i>Belegliste</i></a> gibt es einige <a href="#belegliste-bereinigen">Hinweise, was bei der Bereinigung geschieht</a>. Man kann das Programm so konfigurieren, dass die <a href="#einstellungen-allgemeinesHervorhebung">Hervorhebung des Karteiworts beim Kopieren erhalten</a> bleibt.</p>
+						<p>Kurzum: Für solche Fälle ist es durchaus sinnvoll, dass vor dem Kopieren der <b>Text bereinigt</b> wird. <i class="app-name"></i> übernimmt dies für Sie, jedoch müssen Sie dafür auf die entsprechenden Funktionen zurückgreifen und diese Kopierfunktion und das Tastaturkürzel <kbd>Strg</kbd> + <kbd>C</kbd> ignorieren. Wollen Sie in der <a href="#belegliste">Belegliste</a> oder der <a href="#karteikarte-leseansicht">Leseansicht der Karteikarte</a> markierten Text kopieren, machen Sie dies am besten via <i>Rechtsklick &gt; Text in Zwischenablage &gt; Textauswahl</i> und/oder nutzen Sie eines der nebenstehenden Kopier-Icons (<img src="../img/kopieren.svg" width="20" height="20" alt="">). Ist Text markiert, kopieren diese Icons übrigens nur die Textauswahl und nicht den Text des gesamten Feldes. Beim Kopieren wird der Text dann in jedem Fall bereinigt. Im <a href="#belegliste"><abbr title="Kapitel">Kap.</abbr> <i>Belegliste</i></a> gibt es einige <a href="#belegliste-bereinigen">Hinweise, was bei der Bereinigung geschieht</a>. Man kann das Programm so konfigurieren, dass die <a href="#einstellungen-allgemeinesHervorhebung">Hervorhebung des Karteiworts beim Kopieren erhalten</a> bleibt.</p>
 
 						<p>Geht es nur darum Plain-Text (also nicht formatierten Text) aus Textfeldern herauszukopieren, ist diese vom Framework verwaltete Kopierfunktion freilich gut geeignet. In <b><abbr title="What You See Is What You Get" lang="en">WYSIWYG</abbr>-Textfeldern</b>, wie dem der <a href="#menueKartei-notizen">Notizen-Funktion</a> oder denen für die Bedeutungen im <a href="#bedeutungsgeruest">Bedeutungsgerüst</a>, gilt freilich dasselbe wie für Text, der in der Belegliste markiert wurde. Da davon auszugehen ist, dass man Texte aus diesen Feldern eher nicht herauskopiert, um sie in Textverarbeitungsprogramme einzufügen, gibt es hierfür bisher keine Funktion, die den markierten Text vor dem Kopieren bereinigt.</p>
 					</div>
