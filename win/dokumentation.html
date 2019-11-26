@@ -57,6 +57,7 @@
 					<li><a href="#ordner" class="kopf">Ordner und Dateien</a></li>
 					<li><a href="#js" class="kopf">JavaScript</a></li>
 					<li><a href="#ztj" class="kopf"><abbr title="Zettel’s Traum JSON">ZTJ</abbr>-Dateiformat</a></li>
+					<li><a href="#xml" class="kopf"><abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippets</a></li>
 					<li><a href="#verschiedenes" class="kopf">Verschiedenes</a></li>
 				</ul>
 			</nav>
@@ -1092,6 +1093,69 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
 							<td>Versionsnummer des <abbr title="Zettel’s Traum Belege">ZTB</abbr>-Dateiformats</td>
 						</tr>
 					</table>
+				</section>
+
+				<!-- XML-SNIPPETS -->
+				<section id="sektion-xml" class="suche aus">
+					<!-- Belegschnitt -->
+					<h2 id="xml-belegschnitt">Belegschnitt</h2>
+
+					<p>Ein typisches <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippet, das mit den entsprechenden <a href="#belegliste-xmlZwischenablage" class="link-handbuch">Kopierfunktionen</a> erstellt wurde, könnte so aussehen:</p>
+
+					<pre class="quelltext">&lt;Beleg xml:id="n-n-1859"&gt;
+	&lt;Belegtext&gt;Eine Wache von zehn Mann ward ausgestellt, der Rest der Mannschaft konnte nun thun, was ihm beliebte. Zelte hatten wir keine; unser &lt;Stichwort&gt;Team&lt;/Stichwort&gt; enthielt nichts als unsere Lebensmittel, Kochgeschirr und Teppiche und Munition. Jeder holte sich seine Teppiche aus dem &lt;Stichwort&gt;Team&lt;/Stichwort&gt;, Köche wurden ausgelesen zum Kaffeekochen für die Kompagnieen, große Feuer gebildet, und um jedes Feuer lagen, standen und saßen Gruppen von Soldaten, eingewickelt in Teppiche von allen Farben.&lt;/Belegtext&gt;
+	&lt;Fundstelle Fundort="gbooks"&gt;
+		&lt;Datum&gt;1859&lt;/Datum&gt;
+		&lt;Autor&gt;N. N.&lt;/Autor&gt;
+		&lt;URL&gt;https://books.google.de/books?id=e2dPAQAAMAAJ&amp;amp;pg=PA305&lt;/URL&gt;
+		&lt;unstrukturiert&gt;N. N.: Briefe aus Californien. Von einem Deutschen, in: Hausblätter 5 (1859), Bd. 4, S. 143–149, 301–308, 384–388, hier 305f.&lt;/unstrukturiert&gt;
+	&lt;/Fundstelle&gt;
+&lt;/Beleg&gt;</pre>
+
+					<p><b>&lt;Beleg&gt;:</b> <i>verpflichtend</i>.</p>
+
+					<div class="eingerueckt">
+						<p id="xml-belegschnittId"><b>@xml:id:</b> <i>verpflichtend</i>. Die ID wird aus den <a href="#ztj-ztj">Datenfeldern</a> <code class="quelltext">data.ka[ID].au</code> und <code class="quelltext">data.ka[ID].da</code> abgeleitet. Ist der Nachname des Autors vorangestellt und durch ein Komma vom Vornamen getrennt, wird nur der Nachname genutzt. Findet sich im Datenfeld <i>Autor</i> kein Komma, wird das gesamte Datenfeld ausgewertet. Klammern, Satz- und in <abbr title="Extensible Markup Language" lang="en">XML</abbr> problematische Zeichen (&quot; &apos; &lt; &gt; &amp;) werden ersetzt, Leerzeichen durch <code class="quelltext">-</code> ausgetauscht. Aus dem Datumsfeld wird eine vierstellige Jahreszahl extrahiert, die an den Autor angehängt wird.</p>
+
+						<p><b>&lt;Belegtext&gt;:</b> <i>verpflichtend</i>. Der mit der Kopierfunktion ausgewählte Belegschnitt.</p>
+
+						<div class="eingerueckt">
+							<p><b>&lt;Autorenzusatz&gt;:</b> <i>fakultativ</i>. Text in eckigen Klammern, der von der BearbeiterIn ergänzt wurde.</p>
+
+							<p><b>&lt;Hervorhebung&gt;:</b> <i>fakultativ</i>. Markierung rein typographischer Textauszeichnungen.</p>
+
+							<p class="eingerueckt"><b>@Stil:</b> <i>fakultativ</i>. Das Attribut kann eine Liste von Werten enthalten, die <a href="http://www.deutschestextarchiv.de/doku/basisformat/typogrAllg.html">im <abbr title="Deutsches Textarchiv-Basisformat">DTABf</abbr> verwendet</a> werden. Beim <a href="#verschiedenes-dta">Import von Texten aus dem <abbr title="Deutschen Textarchiv">DTA</abbr></a> werden nicht alle Textmerkmale übernommen; grob gesagt nur die Inline-Formate. Diese können jedoch prinzipiell alle in @Stil auftauchen. Welche Formate <i class="app-name"></i> importiert, kann man der Datei <span class="datei">./js/app/belegImport.js</span> entnehmen. <abbr title="Siehe">S.</abbr> <code class="quelltext">const rend</code> in <code class="quelltext">belegImport.DTAText()</code>.</p>
+
+							<p><b>&lt;Stichwort&gt;:</b> <i>verpflichtend</i>. Markierung des Karteiworts, um das es geht.</p>
+
+							<p><b>&lt;Zeilenumbruch&gt;:</b> <i>fakultativ</i>.</p>
+						</div>
+
+						<p><b>&lt;Fundstelle&gt;:</b> <i>verpflichtend</i>.</p>
+
+						<div class="eingerueckt">
+							<p><b>@Fundort:</b> <i>fakultativ</i>. Abstrakte Angabe zur Quelle, aus der der Beleg sprudelte. Werte können sein <code class="quelltext">dta | dwds | gbooks | IDS-Archiv | online | Bibliothek</code>.</p>
+
+							<p><b>&lt;Aufrufdatum&gt;:</b> <i>fakultativ</i>; Format: <code class="quelltext">([0-9]{2}\.[0-9]{2}\.)?[0-9]{4}</code>. Das Datum des Zugriffs auf eine Webseite wird aus <code class="quelltext">data.ka[ID].qu</code> ausgelesen. Übernommen wird das erste Datum, das hinter der URL steht. Die regulären Ausdrücke, mit denen gesucht wird, finden sich in <code class="quelltext">xml.datum()</code>.</p>
+
+							<p><b>&lt;Autor&gt;:</b> <i>fakultativ</i>. Der Inhalt von <code class="quelltext">data.ka[ID].au</code>, bereinigt um Zeichen, die in <abbr title="Extensible Markup Language" lang="en">XML</abbr> problematisch sind.</p>
+
+							<p><b>&lt;Datum&gt;:</b> <i>fakultativ</i>; Format: <code class="quelltext">([0-9]{2}\.[0-9]{2}\.)?[0-9]{4}</code>. Das Datum wird aus <code class="quelltext">data.ka[ID].da</code> extrahiert. <abbr title="Vergleiche">Vgl.</abbr> <code class="quelltext">xml.datum()</code>.</p>
+
+							<p><b>&lt;unstrukturiert&gt;:</b> <i>fakultativ</i>. Eine klassisch formatierte Literaturangabe.</p>
+
+							<p><b>&lt;URL&gt;:</b> <i>fakultativ</i>. Webseite, von der der Beleg stammt. Die URL wird aus <code class="quelltext">data.ka[ID].qu</code> extrahiert.</p>
+						</div>
+					</div>
+
+					<!-- Referenz -->
+					<h2 id="xml-referenz">Referenz</h2>
+
+					<p>Der Referenz-Tag kann genutzt werden, um auf einen in <abbr title="Extensible Markup Language" lang="en">XML</abbr> exportierten Belegschnitt zu verweisen (zur <a href="#xml-belegschnittId">Form der ID</a> <abbr title="siehe oben">s. o.</abbr>).</p>
+
+					<p>Ein Beispiel:</p>
+
+					<pre class="quelltext">&lt;Belegreferenz Ziel="n-n-1859"/&gt;</pre>
 				</section>
 
 				<!-- VERSCHIEDENES -->

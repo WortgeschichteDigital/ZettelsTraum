@@ -734,3 +734,7 @@ h2 + .erklaerung-option {
 .info .info p:not(:last-child) {
 	margin-bottom: 5px;
 }
+
+.eingerueckt {
+	margin-left: 40px;
+}
