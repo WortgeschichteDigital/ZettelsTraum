@@ -455,7 +455,7 @@ $ npm install --save-dev electron-builder</pre>
 					<h2 class="datei" id="ordner-img">./img/</h2>
 
 					<ul>
-						<li><span class="datei">./img/*.svg</span>: Vektorgrafiken, die sowohl für das Hauptfenster der App als auch für deren Nebenfenster genutzt werden; nicht alle Grafiken werden aus diesem Ordner geladen, mitunter sind sie als <abbr title="Extensible Markup Language">XML</abbr> direkt in den Quelltext der <abbr title="Hyptertext Markup Language">HTML</abbr>-Dateien eingefügt worden</li>
+						<li><span class="datei">./img/*.svg</span>: Vektorgrafiken, die sowohl für das Hauptfenster der App als auch für deren Nebenfenster genutzt werden; nicht alle Grafiken werden aus diesem Ordner geladen, mitunter sind sie als <abbr title="Extensible Markup Language" lang="en">XML</abbr> direkt in den Quelltext der <abbr title="Hyptertext Markup Language" lang="en">HTML</abbr>-Dateien eingefügt worden</li>
 
 						<li><span class="datei">./img/icon/</span>: Bilddateien mit dem Programm-Icon in verschiedenen Größen für unterschiedliche Betriebssysteme; für <i>Windows</i> gibt es eine <span class="datei">icon.ico</span>, für <i>macOS</i> eine <span class="datei">icon.icns</span> und für <i>Linux</i> einen Ordner mit <abbr title="Portable Network Graphics" lang="en">PNG</abbr>-Dateien</li>
 
@@ -1204,15 +1204,15 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
 ...
 &lt;/register&gt;</pre>
 
-					<p><b>register:</b> Der (im Rahmen der allgemeinen <abbr title="Extensible Markup Language">XML</abbr>-Regeln) beliebig wählbare Name des Wurzelelements wird im <abbr title="user interface" lang="en">UI</abbr> des Programms genutzt, um die Tag-Kategorie anzuzeigen. Dabei wird der erste Buchstabe in eine Versalie umgewandelt.</p>
+					<p><b>&lt;register&gt;:</b> <i>verpflichtend.</i> Der (im Rahmen der allgemeinen <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Regeln) beliebig wählbare Name des Wurzelelements wird im <abbr title="user interface" lang="en">UI</abbr> des Programms genutzt, um die Tag-Kategorie anzuzeigen. Dabei wird der erste Buchstabe in eine Versalie umgewandelt.</p>
 
-					<p><b>item:</b> Container-Element für einen Tag.</p>
+					<p><b>&lt;item&gt;:</b> <i>verpflichtend.</i> Container-Element für einen Tag.</p>
 
-					<p><b>id:</b> <i>verpflichtend.</i> Identifier des Tags. Ändert man den <code class="quelltext">&lt;name&gt;</code>-Tag kann die App via <code class="quelltext">&lt;id&gt;</code> erkennen, welcher Tag geändert wurde. In den Bedeutungsgerüstdaten werden ausschließlich Tag-Kategorie (hier <i>register</i>) und Identifier gespeichert. Die Tag-Bezeichnung wird auf diese Weise flexibel anpassbar.</p>
+					<p><b>&lt;id&gt;:</b> <i>verpflichtend.</i> Identifier des Tags. Ändert man den <code class="quelltext">&lt;name&gt;</code>-Tag kann die App via <code class="quelltext">&lt;id&gt;</code> erkennen, welcher Tag geändert wurde. In den Bedeutungsgerüstdaten werden ausschließlich Tag-Kategorie (hier <i>register</i>) und Identifier gespeichert. Die Tag-Bezeichnung wird auf diese Weise flexibel anpassbar.</p>
 
-					<p><b>name:</b> <i>verpflichtend.</i> Der eigentliche Tag, ausgeschrieben.</p>
+					<p><b>&lt;name&gt;:</b> <i>verpflichtend.</i> Der eigentliche Tag, ausgeschrieben.</p>
 
-					<p><b>abbr:</b> <i>fakultativ.</i> Der eigentliche Tag, abgekürzt.</p>
+					<p><b>&lt;abbr&gt;:</b> <i>fakultativ.</i> Der eigentliche Tag, abgekürzt.</p>
 
 					<!-- Sperrdatei -->
 					<h2 id="verschiedenes-sperrdatei">Lockfile</h2>
