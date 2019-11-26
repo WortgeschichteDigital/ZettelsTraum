@@ -340,13 +340,28 @@ let helfer = {
 			});
 		}
 	},
+	// bereitet einen in HTMl formatierten String für eine XML-Kopie auf
+	//   html = String
+	//     (der Quelltext, in dem die Ersetzungen vorgenommen werden sollen)
+	clipboardXml (html) {
+		// temporären Container erstellen
+		let cont = document.createElement("div");
+		cont.innerHTML = html;
+		// Hervorhebungen, die standardmäßig gelöscht gehören
+		let marks = [".suche", ".suchleiste", ".user", ".farbe0 .wort"];
+		helfer.clipboardHtmlErsetzen(cont, marks.join(", "));
+		// Ergebnis der Aufbereitung zurückggeben
+		return cont.innerHTML;
+	},
 	// Ersetzungsfunktion für zu löschende bzw. umzuwandelnde Element-Container
+	//   cont = Element
+	//     (in diesem Element sollen die Ersetzungen stattfinden)
 	//   selectors = String
 	//     (Liste der Selektoren)
-	//   container = String || undefined
-	//     (steuert die Art des Ersatz-Containers)
+	//   typ = String || undefined
+	//     (Tag-Name des Ersatz-Containers)
 	//   style = String || undefined
-	//     (steuert die Art des Layouts im Ersatz-Container)
+	//     (Style des Ersatz-Containers)
 	clipboardHtmlErsetzen (cont, selectors, typ = "frag", style = "") {
 		let quelle = cont.querySelector(selectors);
 		while (quelle) { // die Elemente könnten verschachtelt sein
