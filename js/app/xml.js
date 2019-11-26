@@ -8,9 +8,9 @@ let xml = {
 		// <Beleg>
 		let parser = new DOMParser(),
 			schnitt = parser.parseFromString("<Beleg></Beleg>", "text/xml");
-		// Attribut: xml:id
+		// @xml:id
 		schnitt.firstChild.setAttribute("xml:id", xml.belegId());
-		// Attribut: Fundort
+		// @Fundort
 		// (wird schon hier benötigt, um die Absätze in DWDS-Belgen in Leerzeichen zu verwandeln)
 		let fundort = "";
 		if (/^DTA/i.test(data.kr) ||
@@ -40,15 +40,33 @@ let xml = {
 					// um den Kontext besser zu erkennen.
 					text += " ";
 				} else {
-					text += "<lb/>";
+					text += "<Zeilenumbruch/>";
 				}
 			}
 			getText(knoten[i]);
 		}
 		// Belegtext aufbereiten
 		//   - Trennzeichen automatisch ersetzen
+		//   - Verschachtelte Hervorhebungen zusammenführen
 		text = text.replace(/<Autorenzusatz>\[¬\]<\/Autorenzusatz>([A-ZÄÖÜ])/g, (m, p1) => `-${p1}`);
 		text = text.replace(/<Autorenzusatz>\[¬\]<\/Autorenzusatz>/g, "");
+		let reg = new RegExp(`(?<start>(<Hervorhebung( Stil="#[^>]+")?>){2,})(?<text>[^<]+)(<\/Hervorhebung>)+`, "g"),
+			h = reg.exec(text);
+		if (h) {
+			// das Folgende funktioniert natürlich nur gut, wenn die Tags direkt
+			// ineinander verschachtelt sind; ansonsten produziert es illegales XML
+			let stile = [];
+			for (let i of [...h.groups.start.matchAll(/Stil="(#.+?)"/g)]) {
+				stile.push(i[1]);
+			}
+			let ersatz = `<Hervorhebung`;
+			if (stile.length) {
+				ersatz += ` Stil="${stile.join(" ")}"`;
+			}
+			ersatz += `>${h.groups.text}</Hervorhebung>`;
+			let reg = new RegExp(helfer.escapeRegExp(h[0]));
+			text = text.replace(reg, ersatz);
+		}
 		// Belegtext einhängen
 		let belegtext = parser.parseFromString(`<Belegtext>${text}</Belegtext>`, "text/xml");
 		schnitt.firstChild.appendChild(belegtext.firstChild);
@@ -63,7 +81,7 @@ let xml = {
 							c.nodeName === "MARK") {
 						if (/wortFarbe[0-9]+/.test(c.getAttribute("class"))) {
 							// das ist für Kollokationen gedacht
-							// TODO da muss man wohl einen speziellen Tag verwenden
+							// TODO da muss wohl ein spezieller Tag her
 							text += `<erwaehntes_Zeichen Sprache="dt">`;
 							close = "</erwaehntes_Zeichen>";
 						} else {
@@ -73,8 +91,13 @@ let xml = {
 					} else if (c.nodeType === 1 &&
 							!c.classList.contains("annotierung-wort")) {
 						// visuelle Textauszeichnung
-						// TODO Natur der Auszeichnung markieren (fett, kursiv, unterstrichen usw.)
-						text += "<Hervorhebung>";
+						// @Stil: hier können alle @rendition des DTA rein
+						let stil = xml.stil(c);
+						if (stil) {
+							text += `<Hervorhebung Stil="${stil}">`;
+						} else {
+							text += "<Hervorhebung>";
+						}
 						close = "</Hervorhebung>";
 					}
 					getText(c);
@@ -226,6 +249,51 @@ let xml = {
 			return `${tag < 10 ? "0" : ""}${tag}.${monat < 10 ? "0" : ""}${monat}.${jahr}`;
 		}
 		return "";
+	},
+	// Typ der Hervorhebung ermitteln
+	//   n = Element
+	//     (ein Knoten, der Textauszeichnungen enthältO)
+	stil (n) {
+		switch (n.nodeName) {
+			case "B":
+				return "#b";
+			case "I":
+				return "#i";
+			case "S":
+				return "#s";
+			case "SMALL":
+				return "#smaller";
+			case "SUB":
+				return "#sub";
+			case "SUP":
+				return "#sup";
+			case "U":
+				return "#u";
+		}
+		if (n.nodeName !== "SPAN" ||
+				!n.getAttribute("class")) {
+			return "";
+		}
+		switch (n.getAttribute("class")) {
+			case "dta-antiqua":
+				return "#aq";
+			case "dta-blau":
+				return "#blue";
+			case "dta-groesser":
+				return "#fr";
+			case "dta-gesperrt":
+				return "#g";
+			case "dta-initiale":
+				return "#in";
+			case "dta-kapitaelchen":
+				return "#k";
+			case "dta-groesser":
+				return "#larger";
+			case "dta-rot":
+				return "#red";
+			case "dta-doppelt":
+				return "#uu";
+		}
 	},
 	// geschützte Zeichen escapen
 	//   text = String
