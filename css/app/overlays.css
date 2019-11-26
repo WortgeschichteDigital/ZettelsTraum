@@ -1558,6 +1558,38 @@ input[id^="redaktion-person"] {
 	display: inline-block;
 }
 
+/* Kopierfenster -------------------------------- */
+#ctrlC > div {
+	width: 375px;
+}
+
+#ctrlC-cont {
+	padding: 10px;
+}
+
+#ctrlC-cont p {
+	margin-bottom: 5px;
+}
+
+#ctrlC-cont label {
+	display: inline-block;
+	width: 150px;
+	color: var(--textFarbe);
+}
+
+#ctrlC-cont input:disabled {
+	background-color: var(--hintergrundDunkel);
+}
+
+#ctrlC-cont input:disabled + label {
+	color: var(--textSehrHell);
+}
+
+#ctrlC-cont p:last-child {
+	margin: 10px 0 0 0;
+	text-align: right;
+}
+
 /* Drucken -------------------------------------- */
 #drucken > div {
 	margin-top: 40px;
