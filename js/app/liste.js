@@ -1711,4 +1711,91 @@ let liste = {
 			beleg.toolsKopierenExec(ds[1], data.ka[ds[0]], text, this);
 		});
 	},
+	// Tastaturkürzel Strg + C abfangen und das Kopieren von markiertem Text ggf. selbst regeln
+	//   evt = Object
+	//     (das Event-Objekt, das beim Kopieren erzeugt wird)
+	textKopieren (evt) {
+		let sel = window.getSelection(),
+			anker = sel.anchorNode;
+		// Text ausgewählt?
+		if (!anker) {
+			return;
+		}
+		// Text in Detailansicht Belegliste oder Formularansicht Karteikarte?
+		anker = anker.parentNode; // andernfalls funktioniert closest() nicht
+		if (!anker.closest(".liste-details") &&
+				!anker.closest(".beleg-lese")) {
+			return;
+		}
+		// Kopieren wird vom Programm erledigt
+		evt.preventDefault();
+		// Text auslesen
+		popup.getTargetSelection(evt.path);
+		// Fenster öffnen
+		let fenster = document.getElementById("ctrlC");
+		overlay.oeffnen(fenster);
+		// Radio-Buttons vorbereiten
+		let auswahl = parseInt(optionen.data.einstellungen["ctrlC-vor"], 10),
+			radios = fenster.querySelectorAll(`input[type="radio"]`);
+		// kein Belegtext ausgewählt
+		if (!popup.selInBeleg()) {
+			radios[2].disabled = true;
+			if (auswahl === 3) {
+				auswahl = 4;
+			}
+		} else {
+			radios[2].disabled = false;
+		}
+		for (let i = 0, len = radios.length; i < len; i++) {
+			if (i + 1 === auswahl) {
+				radios[i].checked = true;
+				radios[i].focus();
+			} else {
+				radios[i].checked = false;
+			}
+		}
+	},
+	// Listener für die Input-Element im Kopierfenster
+	//   input = Element
+	//     (Radio-Button oder Button)
+	textKopierenInputs (input) {
+		if (input.type === "radio") {
+			input.addEventListener("keydown", function(evt) {
+				tastatur.detectModifiers(evt);
+				if (!tastatur.modifiers && evt.key === "Enter") {
+					liste.textKopierenExec();
+				}
+			});
+		} else { // Button
+			input.addEventListener("click", () => liste.textKopierenExec());
+		}
+	},
+	// Kopieren von markiertem Text ausführen
+	textKopierenExec () {
+		let fenster = document.getElementById("ctrlC"),
+			radio = fenster.querySelector("input:checked"),
+			aktion = radio.id.replace(/.+-/, "");
+		switch (aktion) {
+			case "html":
+				helfer.toClipboard({
+					text: popup.textauswahl.text,
+					html: popup.textauswahl.html,
+				});
+				helfer.animation("zwischenablage");
+				break;
+			case "htmlReferenz":
+				helfer.toClipboard({
+					text: xml.belegId(),
+				});
+				helfer.animation("zwischenablage");
+				break;
+			case "xml":
+				xml.schnitt();
+				break;
+			case "xmlReferenz":
+				xml.referenz();
+				break;
+		}
+		overlay.schliessen(fenster);
+	},
 };
