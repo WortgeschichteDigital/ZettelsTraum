@@ -1256,13 +1256,17 @@
 
 					<p class="info">Kopiert eine ID in die Zwischenablage. Die ID wird aus den Datenfeldern <i>Datum</i> und <i>Autor</i> desjenigen Belegs abgeleitet, auf dem geklickt wurde. Sie ist nicht weiter formatiert, es handelt sich bei ihr nur um eine Zeichenkette, die ausschließlich aus Kleinbuchstaben, Zahlen und Bindestrichen besteht. Sie enthält niemals Leerzeichen.</p>
 
-					<p class="erklaerung-icon"><img src="../img/xml.svg" width="24" height="24" alt=""><abbr title="Extensible Markup Language" lang="en">XML</abbr> in Zwischenablage</p>
+					<p class="erklaerung-icon" id="belegliste-xmlZwischenablage"><img src="../img/xml.svg" width="24" height="24" alt=""><abbr title="Extensible Markup Language" lang="en">XML</abbr> in Zwischenablage</p>
 
 					<p class="info">Der Menüpunkt erscheint bei Klick auf der <a href="#belegliste-kopfleiste">Kopfleiste</a> oder in der <a href="#belegliste-detailansicht">Detailansicht der Belegliste</a> sowie in der <a href="#karteikarte">Karteikarte</a>.</p>
 
 					<p class="erklaerung-icon"><img src="../img/beleg.svg" width="24" height="24" alt=""><abbr title="Extensible Markup Language" lang="en">XML</abbr> in Zwischenablage &gt; Belegschnitt</p>
 
-					<p class="info">Erscheint nur beim Rechtsklick auf markiertem Text. Der Befehl erzeugt auf der Grundlage des markierten Texts ein <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippet, das nicht nur den Text, sondern auch einige Metainformationen zum Beleg enthält. <a href="#xml-belegschnitt" class="link-dokumentation">Details zum Format des Snippets in der technischen Dokumentation</a>.</p>
+					<div class="info">
+						<p>Erscheint nur beim Rechtsklick auf markiertem Text. Der Befehl erzeugt auf der Grundlage des markierten Texts ein <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippet, das nicht nur diesen Text, sondern auch einige Metainformationen zum Beleg enthält. <a href="#xml-belegschnitt" class="link-dokumentation">Details zum Format des Snippets in der technischen Dokumentation</a>.</p>
+
+						<p>Kopiert wird dabei prinzipiell alles, was angezeigt wird. Die <a href="#belegliste-trennzeichen">Trennzeichen</a> werden jedoch immer entfernt. Man sollte darum wachsam sein und überprüfen, ob der Algorithmus des Programms sie korrekt ersetzt: durch nichts oder einen Bindestrich. Treffer des Karteiworts werden im kopierten Belegschnitt immer markiert. Wurde einer der automatisch ermittelten Treffer <a href="#belegliste-annotierenBelegTransparent">als falschpositiv markiert</a> wird dies registriert und das so markierte Wort nicht ausgezeichnet. Andere <a href="#belegliste-annotierenBeleg">annotierte Passagen</a> werden ignoriert und im <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Schnitt nicht eigens hervorgehoben.</p>
+					</div>
 
 					<p class="erklaerung-icon"><img src="../img/link-pfeil-runter.svg" width="24" height="24" alt=""><abbr title="Extensible Markup Language" lang="en">XML</abbr> in Zwischenablage &gt; Referenz</p>
 
