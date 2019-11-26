@@ -199,6 +199,42 @@ let helfer = {
 		}
 		return text;
 	},
+	// einen Text typographisch aufhübschen
+	//   text = String
+	//     (Text, in dem die Anpassungen vorgenommen werden sollen)
+	typographie (text) {
+		text = text.replace(/="(.+?)"/g, (m, p1) => `=__${p1}__`); // Attribute in Tags maskieren
+		text = text.replace(/"(.+?)"/g, (m, p1) => `„${p1}“`); // doppelte Anführungszeichen
+		text = text.replace(/([a-z])'([a-z])/g, (m, p1, p2) => `${p1}’${p2}`); // offenkundiges Apostroph
+		text = text.replace(/'(.+?)'/g, (m, p1) => `‚${p1}‘`); // einfache Anführungszeichen
+		text = text.replace(/=__(.+?)__/g, (m, p1) => `="${p1}"`); // Attribute in Tags demaskieren
+		text = text.replace(/\.{3}/g, "…"); // horizontale Ellipse
+		// geschützte Leerzeichen
+		let abk = new Set([
+			/[0-9]{1,2}\. [0-9]{1,2}\. [0-9]{4}/g, // Datumsangabe (nur 1. Leerzeichen wird ersetzt!)
+			/[0-9]{1,2}\. (Jan|Feb|März|Apr|Mai|Juni|Juli|Aug|Sep|Okt|Nov|Dez)/g, // Datumsangabe mit Monat
+			/[0-9]{2}\. Jh\./g, // Jahrhundertangaben
+			/a\. M\./g, // am Main
+			/Bd\. [0-9]+/g, // Band
+			/d\. h\./ig,
+			/d\. i\./ig,
+			/H\. [0-9]+/g, // Heft
+			/N\. N\./g, // nomen nescio
+			/Nr\. [0-9]+/g, // Nummer
+			/s\. d\./ig,
+			/S\. [0-9]+/g, // Seitenangaben
+			/Sp\. [0-9]+/g, // Spaltenangaben
+			/u\. a\./ig,
+			/u\. ä\./ig,
+			/s\. v\./ig,
+			/z\. B\./ig,
+		]);
+		for (let i of abk) {
+			text = text.replace(i, m => m.replace(/\s/, " "));
+		}
+		// Text zurückgeben
+		return text;
+	},
 	// Treffer innerhalb von Tags löschen
 	//   text = String
 	//     (Text mit Suchmarkierungen)
