@@ -154,6 +154,12 @@
 	margin-left: 10px;
 }
 
+#einstellungen-cont input[name="einstellung-ctrlC-vor"] + label {
+	display: inline-block;
+	width: 150px;
+	text-indent: 0;
+}
+
 #einstellungen-cont p {
 	padding-left: 24px; /* für alignment mit Überschrift */
 	text-indent: -24px; /* so sind mehrzeilige Texte im Block (hängt von checkbox ab) */
