@@ -1115,16 +1115,16 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
 					<p><b>&lt;Beleg&gt;:</b> <i>verpflichtend</i>.</p>
 
 					<div class="eingerueckt">
-						<p id="xml-belegschnittId"><b>@xml:id:</b> <i>verpflichtend</i>. Die ID wird aus den <a href="#ztj-ztj">Datenfeldern</a> <code class="quelltext">data.ka[ID].au</code> und <code class="quelltext">data.ka[ID].da</code> abgeleitet. Ist der Nachname des Autors vorangestellt und durch ein Komma vom Vornamen getrennt, wird nur der Nachname genutzt. Findet sich im Datenfeld <i>Autor</i> kein Komma, wird das gesamte Datenfeld ausgewertet. Klammern, Satz- und in <abbr title="Extensible Markup Language" lang="en">XML</abbr> problematische Zeichen (&quot; &apos; &lt; &gt; &amp;) werden ersetzt, Leerzeichen durch <code class="quelltext">-</code> ausgetauscht. Aus dem Datumsfeld wird eine vierstellige Jahreszahl extrahiert, die an den Autor angehängt wird.</p>
+						<p id="xml-belegschnittId"><b>@xml:id:</b> <i>verpflichtend</i>. Die ID wird aus den <a href="#ztj-ztj">Datenfeldern</a> <code class="quelltext">data.ka[ID].au</code> und <code class="quelltext">data.ka[ID].da</code> abgeleitet. Ist der Nachname des Autors vorangestellt und durch ein Komma vom Vornamen getrennt, wird nur der Nachname genutzt. Findet sich im Datenfeld <i>Autor</i> kein Komma, wird das gesamte Datenfeld ausgewertet. Klammern, Satz- und in <abbr title="Extensible Markup Language" lang="en">XML</abbr> problematische Zeichen (&quot; &apos; &lt; &gt; &amp;) werden ersetzt, Leerzeichen durch <code class="quelltext">-</code> ausgetauscht. Aus dem Datumsfeld wird eine vierstellige Jahreszahl extrahiert, mit der die ID endet.</p>
 
-						<p><b>&lt;Belegtext&gt;:</b> <i>verpflichtend</i>. Der mit der Kopierfunktion ausgewählte Belegschnitt.</p>
+						<p><b>&lt;Belegtext&gt;:</b> <i>verpflichtend</i>. Der mit der <a href="#belegliste-xmlZwischenablage" class="link-handbuch">Kopierfunktion</a> ausgewählte Belegschnitt.</p>
 
 						<div class="eingerueckt">
 							<p><b>&lt;Autorenzusatz&gt;:</b> <i>fakultativ</i>. Text in eckigen Klammern, der von der BearbeiterIn ergänzt wurde.</p>
 
 							<p><b>&lt;Hervorhebung&gt;:</b> <i>fakultativ</i>. Markierung rein typographischer Textauszeichnungen.</p>
 
-							<p class="eingerueckt"><b>@Stil:</b> <i>fakultativ</i>. Das Attribut kann eine Liste von Werten enthalten, die <a href="http://www.deutschestextarchiv.de/doku/basisformat/typogrAllg.html">im <abbr title="Deutsches Textarchiv-Basisformat">DTABf</abbr> verwendet</a> werden. Beim <a href="#verschiedenes-dta">Import von Texten aus dem <abbr title="Deutschen Textarchiv">DTA</abbr></a> werden nicht alle Textmerkmale übernommen; grob gesagt nur die Inline-Formate. Diese können jedoch prinzipiell alle in @Stil auftauchen. Welche Formate <i class="app-name"></i> importiert, kann man der Datei <span class="datei">./js/app/belegImport.js</span> entnehmen. <abbr title="Siehe">S.</abbr> <code class="quelltext">const rend</code> in <code class="quelltext">belegImport.DTAText()</code>.</p>
+							<p class="eingerueckt"><b>@Stil:</b> <i>fakultativ</i>. Das Attribut kann eine Liste von Werten enthalten, die <a href="http://www.deutschestextarchiv.de/doku/basisformat/typogrAllg.html">im <abbr title="Deutsches Textarchiv-Basisformat">DTABf</abbr> verwendet</a> werden. Beim <a href="#verschiedenes-dta">Import von Texten aus dem <abbr title="Deutschen Textarchiv">DTA</abbr></a> werden nicht alle Textmerkmale übernommen; grob gesagt nur die Inline-Formate. Diese können jedoch prinzipiell alle im @Stil auftauchen. Welche Formate <i class="app-name"></i> importiert, kann man der Datei <span class="datei">./js/app/belegImport.js</span> entnehmen. <abbr title="Siehe">S.</abbr> <code class="quelltext">const rend</code> in <code class="quelltext">belegImport.DTAText()</code>.</p>
 
 							<p><b>&lt;Stichwort&gt;:</b> <i>verpflichtend</i>. Markierung des Karteiworts, um das es geht.</p>
 
@@ -1134,15 +1134,15 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
 						<p><b>&lt;Fundstelle&gt;:</b> <i>verpflichtend</i>.</p>
 
 						<div class="eingerueckt">
-							<p><b>@Fundort:</b> <i>fakultativ</i>. Abstrakte Angabe zur Quelle, aus der der Beleg sprudelte. Werte können sein <code class="quelltext">dta | dwds | gbooks | IDS-Archiv | online | Bibliothek</code>.</p>
+							<p><b>@Fundort:</b> <i>verpflichtend</i>. Abstrakte Angabe zur Quelle, aus der der Beleg sprudelte. Werte können sein <code class="quelltext">dta | dwds | gbooks | IDS-Archiv | online | Bibliothek</code>.</p>
 
 							<p><b>&lt;Aufrufdatum&gt;:</b> <i>fakultativ</i>; Format: <code class="quelltext">([0-9]{2}\.[0-9]{2}\.)?[0-9]{4}</code>. Das Datum des Zugriffs auf eine Webseite wird aus <code class="quelltext">data.ka[ID].qu</code> ausgelesen. Übernommen wird das erste Datum, das hinter der URL steht. Die regulären Ausdrücke, mit denen gesucht wird, finden sich in <code class="quelltext">xml.datum()</code>.</p>
 
-							<p><b>&lt;Autor&gt;:</b> <i>fakultativ</i>. Der Inhalt von <code class="quelltext">data.ka[ID].au</code>, bereinigt um Zeichen, die in <abbr title="Extensible Markup Language" lang="en">XML</abbr> problematisch sind.</p>
+							<p><b>&lt;Autor&gt;:</b> <i>verpflichtend</i>. Der Inhalt von <code class="quelltext">data.ka[ID].au</code>. Zeichen, die in <abbr title="Extensible Markup Language" lang="en">XML</abbr> problematisch sind, werden maskiert.</p>
 
-							<p><b>&lt;Datum&gt;:</b> <i>fakultativ</i>; Format: <code class="quelltext">([0-9]{2}\.[0-9]{2}\.)?[0-9]{4}</code>. Das Datum wird aus <code class="quelltext">data.ka[ID].da</code> extrahiert. <abbr title="Vergleiche">Vgl.</abbr> <code class="quelltext">xml.datum()</code>.</p>
+							<p><b>&lt;Datum&gt;:</b> <i>verpflichtend</i>; Format: <code class="quelltext">([0-9]{2}\.[0-9]{2}\.)?[0-9]{4}</code>. Das Datum wird aus <code class="quelltext">data.ka[ID].da</code> extrahiert. <abbr title="Vergleiche">Vgl.</abbr> <code class="quelltext">xml.datum()</code>.</p>
 
-							<p><b>&lt;unstrukturiert&gt;:</b> <i>fakultativ</i>. Eine klassisch formatierte Literaturangabe.</p>
+							<p><b>&lt;unstrukturiert&gt;:</b> <i>verpflichtend</i>. Eine klassisch formatierte Literaturangabe.</p>
 
 							<p><b>&lt;URL&gt;:</b> <i>fakultativ</i>. Webseite, von der der Beleg stammt. Die URL wird aus <code class="quelltext">data.ka[ID].qu</code> extrahiert.</p>
 						</div>
@@ -1151,9 +1151,7 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
 					<!-- Referenz -->
 					<h2 id="xml-referenz">Referenz</h2>
 
-					<p>Der Referenz-Tag kann genutzt werden, um auf einen in <abbr title="Extensible Markup Language" lang="en">XML</abbr> exportierten Belegschnitt zu verweisen (zur <a href="#xml-belegschnittId">Form der ID</a> <abbr title="siehe oben">s. o.</abbr>).</p>
-
-					<p>Ein Beispiel:</p>
+					<p>Der Referenz-Tag kann genutzt werden, um auf einen in <abbr title="Extensible Markup Language" lang="en">XML</abbr> exportierten Belegschnitt zu verweisen (zur <a href="#xml-belegschnittId">Form der ID</a> <abbr title="siehe oben">s. o.</abbr>). Ein Beispiel:</p>
 
 					<pre class="quelltext">&lt;Belegreferenz Ziel="n-n-1859"/&gt;</pre>
 				</section>
