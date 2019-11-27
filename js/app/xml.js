@@ -108,7 +108,7 @@ let xml = {
 			} else if (n.nodeType === 3) {
 				let textEsc = xml.escape(n.nodeValue);
 				textEsc = textEsc.replace(/&/g, "&amp;"); // sonst macht der Parser die &quot; usw. wieder weg
-				text += textEsc.replace(/\[.+?\]/g, m => `<Autorenzusatz>${m}</Autorenzusatz>`);
+				text += textEsc.replace(/\[.*?\]/g, m => `<Autorenzusatz>${m}</Autorenzusatz>`);
 			}
 		}
 		// <Fundstelle>
@@ -125,6 +125,9 @@ let xml = {
 		// <Autor>
 		let au = helfer.textTrim(data.au, true);
 		if (au) {
+			// Korrekturen
+			au = au.replace(/N\.N\./g, "N. N.");
+			// Element erzeugen
 			let autor = document.createElementNS(ns, "Autor");
 			fundstelle.appendChild(autor);
 			autor.appendChild( document.createTextNode( xml.escape( helfer.typographie(au) ) ) );
@@ -155,6 +158,7 @@ let xml = {
 			qu = qu.split(reg)[0];
 		}
 		qu = helfer.textTrim(qu, true);
+		qu = qu.replace(/N\.N\./g, "N. N.");
 		let unstrukturiert = document.createElementNS(ns, "unstrukturiert");
 		fundstelle.appendChild(unstrukturiert);
 		unstrukturiert.appendChild( document.createTextNode( xml.escape( helfer.typographie(qu) ) ) );
