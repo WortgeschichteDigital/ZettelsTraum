@@ -115,6 +115,11 @@ window.addEventListener("load", async () => {
 		kartei.oeffnenEinlesen(pfad);
 	});
 
+	// EVENTS: COPY
+	document.addEventListener("copy", evt => liste.textKopieren(evt));
+	// Kopier-Overlay
+	document.querySelectorAll("#ctrlC input").forEach(i => liste.textKopierenInputs(i));
+
 	// EVENTS: ELEMENTE
 	// alle <textarea>
 	document.querySelectorAll("textarea").forEach(textarea => {

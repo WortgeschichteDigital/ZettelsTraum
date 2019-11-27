@@ -139,6 +139,14 @@ let punkte = {
 			helfer.animation("zwischenablage");
 		`,
 	},
+	kopierenConf: {
+		label: "Kopieren-Einstellungen",
+		icon: "zahnrad.png",
+		click: `
+			optionen.oeffnen();
+			optionen.sektionWechseln(document.getElementById("einstellungen-link-kopieren"));
+		`,
+	},
 	kopierenNebenfenster: {
 		label: "Textauswahl kopieren",
 		icon: "kopieren.png",
