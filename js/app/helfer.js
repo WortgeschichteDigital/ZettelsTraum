@@ -222,6 +222,7 @@ let helfer = {
 			/N\. N\./g, // nomen nescio
 			/Nr\. [0-9]+/g, // Nummer
 			/s\. d\./ig,
+			/s\. l\./ig,
 			/S\. [0-9]+/g, // Seitenangaben
 			/Sp\. [0-9]+/g, // Spaltenangaben
 			/u\. a\./ig,
