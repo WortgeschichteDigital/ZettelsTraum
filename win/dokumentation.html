@@ -1102,7 +1102,7 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
 
 					<p>Ein typisches <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippet, das mit den entsprechenden <a href="#belegliste-xmlZwischenablage" class="link-handbuch">Kopierfunktionen</a> erstellt wurde, könnte so aussehen:</p>
 
-					<pre class="quelltext">&lt;Beleg xml:id="n-n-1859"&gt;
+					<pre class="quelltext">&lt;Beleg xml:id="n-n-1859-19"&gt;
 	&lt;Belegtext&gt;Eine Wache von zehn Mann ward ausgestellt, der Rest der Mannschaft konnte nun thun, was ihm beliebte. Zelte hatten wir keine; unser &lt;Stichwort&gt;Team&lt;/Stichwort&gt; enthielt nichts als unsere Lebensmittel, Kochgeschirr und Teppiche und Munition. Jeder holte sich seine Teppiche aus dem &lt;Stichwort&gt;Team&lt;/Stichwort&gt;, Köche wurden ausgelesen zum Kaffeekochen für die Kompagnieen, große Feuer gebildet, und um jedes Feuer lagen, standen und saßen Gruppen von Soldaten, eingewickelt in Teppiche von allen Farben.&lt;/Belegtext&gt;
 	&lt;Fundstelle Fundort="gbooks"&gt;
 		&lt;Datum&gt;1859&lt;/Datum&gt;
@@ -1115,7 +1115,7 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
 					<p><b>&lt;Beleg&gt;:</b> <i>verpflichtend</i>.</p>
 
 					<div class="eingerueckt">
-						<p id="xml-belegschnittId"><b>@xml:id:</b> <i>verpflichtend</i>. Die ID wird aus den <a href="#ztj-ztj">Datenfeldern</a> <code class="quelltext">data.ka[ID].au</code> und <code class="quelltext">data.ka[ID].da</code> abgeleitet. Ist der Nachname des Autors vorangestellt und durch ein Komma vom Vornamen getrennt, wird nur der Nachname genutzt. Findet sich im Datenfeld <i>Autor</i> kein Komma, wird das gesamte Datenfeld ausgewertet. Klammern, Satz- und in <abbr title="Extensible Markup Language" lang="en">XML</abbr> problematische Zeichen (&quot; &apos; &lt; &gt; &amp;) werden ersetzt, Leerzeichen durch <code class="quelltext">-</code> ausgetauscht. Aus dem Datumsfeld wird eine vierstellige Jahreszahl extrahiert, mit der die ID endet.</p>
+						<p id="xml-belegschnittId"><b>@xml:id:</b> <i>verpflichtend</i>. Die ID wird aus den <a href="#ztj-ztj">Datenfeldern</a> <code class="quelltext">data.ka[ID].au</code> und <code class="quelltext">data.ka[ID].da</code> abgeleitet. Ist der Nachname des Autors vorangestellt und durch ein Komma vom Vornamen getrennt, wird nur der Nachname genutzt. Findet sich im Datenfeld <i>Autor</i> kein Komma, wird das gesamte Datenfeld ausgewertet. Klammern, Satz- und in <abbr title="Extensible Markup Language" lang="en">XML</abbr> problematische Zeichen (&quot; &apos; &lt; &gt; &amp;) werden ersetzt, Leerzeichen durch <code class="quelltext">-</code> ausgetauscht. Anghängt wird eine vierstellige Jahreszahl, die aus dem Datumsfeld extrahiert wird. Die ID endet mit der ID der Karteikarte, wodurch sie für den Karteikasten in jedem Fall eindeutig wird.</p>
 
 						<p><b>&lt;Belegtext&gt;:</b> <i>verpflichtend</i>. Der mit der <a href="#belegliste-xmlZwischenablage" class="link-handbuch">Kopierfunktion</a> ausgewählte Belegschnitt.</p>
 
@@ -1153,7 +1153,7 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
 
 					<p>Der Referenz-Tag kann genutzt werden, um auf einen in <abbr title="Extensible Markup Language" lang="en">XML</abbr> exportierten Belegschnitt zu verweisen (zur <a href="#xml-belegschnittId">Form der ID</a> <abbr title="siehe oben">s. o.</abbr>). Ein Beispiel:</p>
 
-					<pre class="quelltext">&lt;Belegreferenz Ziel="n-n-1859"/&gt;</pre>
+					<pre class="quelltext">&lt;Belegreferenz Ziel="n-n-1859-19"/&gt;</pre>
 				</section>
 
 				<!-- VERSCHIEDENES -->

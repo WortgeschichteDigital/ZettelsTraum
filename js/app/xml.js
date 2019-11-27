@@ -3,7 +3,7 @@
 let xml = {
 	// markierten Belegschnitt in die Zwischenablage kopieren
 	schnitt () {
-		let data = popup.referenz,
+		let data = popup.referenz.data,
 			ns = "http://www.w3.org/1999/xhtml";
 		// <Beleg>
 		let parser = new DOMParser(),
@@ -189,7 +189,7 @@ let xml = {
 	},
 	// Beleg-ID ermitteln
 	belegId () {
-		let data = popup.referenz;
+		let data = popup.referenz.data;
 		// Autor
 		let autor = helfer.textTrim(data.au, true);
 		if (!autor) {
@@ -208,7 +208,7 @@ let xml = {
 			jahr = datum[0];
 		}
 		// ID zurückgeben
-		return `${autor}-${jahr}`;
+		return `${autor}-${jahr}-${popup.referenz.id}`;
 	},
 	// Datum extrahieren
 	//   text = String

@@ -11,8 +11,11 @@ let popup = {
 	belegID: "",
 	// speichert die ID des Overlay-Fenster, das betroffen ist
 	overlayID: "",
-	// für XML-Kopie: Referenz, aus der heraus kopiert werden soll (data.ka[ID] oder beleg.data)
-	referenz: {},
+	// für XML-Kopie: Referenz für das Kopieren eines Belegs
+	referenz: {
+		obj: {}, // Objekt, in dem die Karteikarte liegt, d.i. beleg.data || data.ka[ID]
+		id: "", // die ID der Karteikarte
+	},
 	// speichert den Anhang, der geöffnet werden soll
 	anhangDatei: "",
 	// das angeklickte Anhang-Icon steht in der Detailansicht eines Belegs
@@ -148,7 +151,8 @@ let popup = {
 				popup.belegeAuflisten(items);
 			}
 		} else if (target === "beleg-conf") {
-			popup.referenz = beleg.data;
+			popup.referenz.data = beleg.data;
+			popup.referenz.id = "" + beleg.id_karte;
 			items = [{name: "text", sub: ["textReferenz"]}, {name: "xml", sub: ["xmlReferenz"]}, "sep", "karteikarteConf", "sep", "belegHinzufuegen"];
 			popup.belegeAuflisten(items);
 		} else if (target === "bedeutungen-conf") {
@@ -207,11 +211,13 @@ let popup = {
 				if (pfad[i].closest(".liste-meta")) {
 					popup.anhangDateiBeleg = true;
 					const id = pfad[i].closest(".liste-details").previousSibling.dataset.id;
-					popup.referenz = data.ka[id];
+					popup.referenz.data = data.ka[id];
+					popup.referenz.id = id;
 				} else {
 					popup.anhangDateiBeleg = false;
 					if (helfer.hauptfunktion === "karte") {
-						popup.referenz = beleg.data;
+						popup.referenz.data = beleg.data;
+						popup.referenz.id = "" + beleg.id_karte;
 					}
 				}
 				return "anhang";
@@ -248,19 +254,23 @@ let popup = {
 				} else if (pfad[i].classList.contains("link")) {
 					popup.element = pfad[i];
 					if (helfer.hauptfunktion === "karte") {
-						popup.referenz = beleg.data;
+						popup.referenz.data = beleg.data;
+						popup.referenz.id = "" + beleg.id_karte;
 					} else if (helfer.hauptfunktion === "liste") {
 						const id = pfad[i].closest(".liste-details").previousSibling.dataset.id;
-						popup.referenz = data.ka[id];
+						popup.referenz.data = data.ka[id];
+						popup.referenz.id = id;
 					}
 					return "link";
 				} else if (pfad[i].classList.contains("liste-kopf")) {
 					popup.belegID = pfad[i].dataset.id;
-					popup.referenz = data.ka[popup.belegID];
+					popup.referenz.data = data.ka[popup.belegID];
+					popup.referenz.id = popup.belegID;
 					return "beleg-moddel";
 				} else if (pfad[i].classList.contains("liste-details")) {
 					popup.belegID = pfad[i].previousSibling.dataset.id;
-					popup.referenz = data.ka[popup.belegID];
+					popup.referenz.data = data.ka[popup.belegID];
+					popup.referenz.id = popup.belegID;
 					return "beleg-moddel";
 				} else if (pfad[i].classList.contains("anhaenge-item")) {
 					popup.anhangDatei = pfad[i].dataset.datei;
@@ -325,7 +335,8 @@ let popup = {
 				}
 				const id = div.parentNode.previousSibling.dataset.id;
 				obj = data.ka[id];
-				popup.referenz = data.ka[id]; // für xml.referenz();
+				popup.referenz.data = data.ka[id]; // für xml.referenz();
+				popup.referenz.id = id;
 				break;
 			} else if (ele.classList.contains("beleg-lese")) {
 				container.umfeld = "TD";
@@ -335,7 +346,8 @@ let popup = {
 					bs = true;
 					obj = beleg.data;
 				}
-				popup.referenz = beleg.data; // für xml.referenz();
+				popup.referenz.data = beleg.data; // für xml.referenz();
+				popup.referenz.id = "" + beleg.id_karte;
 				break;
 			} else if (ele.id === "drucken-cont-rahmen") {
 				container.umfeld = "DIV";
