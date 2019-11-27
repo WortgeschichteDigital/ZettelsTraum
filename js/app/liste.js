@@ -1731,9 +1731,16 @@ let liste = {
 		evt.preventDefault();
 		// Text auslesen
 		popup.getTargetSelection(evt.path);
+		// Aktion ohne Nachfrage ausführen
+		if (optionen.data.einstellungen["ctrlC-auto"]) {
+			liste.textKopierenExec();
+			return;
+		}
 		// Fenster öffnen
 		let fenster = document.getElementById("ctrlC");
 		overlay.oeffnen(fenster);
+		// Checkbox zurücksetzen
+		document.getElementById("ctrlC-auto").checked = false;
 		// Radio-Buttons vorbereiten
 		let auswahl = parseInt(optionen.data.einstellungen["ctrlC-vor"], 10),
 			radios = fenster.querySelectorAll(`input[type="radio"]`);
@@ -1759,43 +1766,71 @@ let liste = {
 	//   input = Element
 	//     (Radio-Button oder Button)
 	textKopierenInputs (input) {
-		if (input.type === "radio") {
+		if (/checkbox|radio/.test(input.type)) {
 			input.addEventListener("keydown", function(evt) {
 				tastatur.detectModifiers(evt);
 				if (!tastatur.modifiers && evt.key === "Enter") {
 					liste.textKopierenExec();
 				}
 			});
-		} else { // Button
+		} else if (input.type === "button") {
 			input.addEventListener("click", () => liste.textKopierenExec());
 		}
 	},
 	// Kopieren von markiertem Text ausführen
 	textKopierenExec () {
 		let fenster = document.getElementById("ctrlC"),
-			radio = fenster.querySelector("input:checked"),
-			aktion = radio.id.replace(/.+-/, "");
-		switch (aktion) {
-			case "html":
+			auswahl = optionen.data.einstellungen["ctrlC-vor"];
+		if (overlay.oben() === "ctrlC") { // Overlay-Fenster geöffnet
+			let radio = fenster.querySelector("input:checked"),
+				aktion = radio.id.replace(/.+-/, "");
+			switch (aktion) {
+				case "html":
+					auswahl = "1";
+					break;
+				case "htmlReferenz":
+					auswahl = "2";
+					break;
+				case "xml":
+					auswahl = "3";
+					break;
+				case "xmlReferenz":
+					auswahl = "4";
+					break;
+			}
+			// Aktion künftig ohne Nachfrage ausführen
+			if (document.getElementById("ctrlC-auto").checked) {
+				optionen.data.einstellungen["ctrlC-auto"] = true;
+				optionen.data.einstellungen["ctrlC-vor"] = auswahl;
+				optionen.anwendenEinstellungen();
+				optionen.speichern();
+			}
+			// Fenster schließen
+			overlay.schliessen(fenster);
+		} else if (!popup.selInBeleg() && auswahl === "3") { // Overlay-Fenster nicht geöffnet
+			auswahl = "4"; // Vorauswahl XML-Belgschnitt anpassen, wenn Auswahl nicht im Belegtext
+		}
+		// Kopieraktion ausführen
+		switch (auswahl) {
+			case "1":
 				helfer.toClipboard({
 					text: popup.textauswahl.text,
 					html: popup.textauswahl.html,
 				});
 				helfer.animation("zwischenablage");
 				break;
-			case "htmlReferenz":
+			case "2":
 				helfer.toClipboard({
 					text: xml.belegId(),
 				});
 				helfer.animation("zwischenablage");
 				break;
-			case "xml":
+			case "3":
 				xml.schnitt();
 				break;
-			case "xmlReferenz":
+			case "4":
 				xml.referenz();
 				break;
 		}
-		overlay.schliessen(fenster);
 	},
 };

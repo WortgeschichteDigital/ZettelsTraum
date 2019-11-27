@@ -98,7 +98,9 @@ let optionen = {
 			"textkopie-wort": false,
 			// beim Kopieren ist das Karteiworts grau hinterlegt
 			"textkopie-wort-hinterlegt": false,
-			// Vorauswahl Kopierfenster
+			// Vorauswahl für Kopierfenster ohne Nachfrage ausführen
+			"ctrlC-auto": false,
+			// Vorauswahl für Kopierfenster
 			//   1 = HTML und Plain
 			//   2 = Plain-Referenz
 			//   3 = XML-Belegschnitt
