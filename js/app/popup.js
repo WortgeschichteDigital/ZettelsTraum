@@ -134,6 +134,8 @@ let popup = {
 					popup.overlayID === "gerueste" ||
 					popup.overlayID === "geruestwechseln") {
 				items.push("sep", "bedeutungenConf");
+			} else if (popup.overlayID === "ctrlC") {
+				items.push("sep", "kopierenConf");
 			}
 			if (kartei.wort) {
 				items.push("sep", "belegHinzufuegen");
