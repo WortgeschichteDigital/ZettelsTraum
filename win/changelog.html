@@ -55,9 +55,11 @@
 
 						<p>Zum Kopieren muss im Belegfeld eine Textauswahl vorgenommen werden. Danach kann man via <i>Rechtsklick &gt; XML in Zwischenablage &gt; Belegschnitt</i> die Textauswahl zusammen mit allen zur Verfügung stehenden Metadaten in ein <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippet umwandeln und in die Zwischenablage schieben.</p>
 
-						<p>Daneben gibt es die Möglichkeit, ein leeres <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Element in die Zwischenablage zu kopieren, in dem allein eine ID des aktuellen Belegs hinterlegt ist: <i>Rechtsklick &gt; XML in Zwischenablage &gt; Referenz</i>. Dieses leere Element kann als verweisender Anker für einen zuvor kopierten Belegschnitt dienen. Zum Kopieren eines solchen Ankers muss nicht eigens Text markiert werden. Der Befehl steht sowohl in der <a href="#belegliste-kopfleiste" class="link-handbuch">Kopfleiste</a> und der <a href="#belegliste-detailansicht" class="link-handbuch">Detailansicht der Belegliste</a> als auch in der Leseansicht der Karteikarte immer zur Verfügung.</p>
+						<p>Daneben gibt es die Möglichkeit, ein leeres <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Element in die Zwischenablage zu kopieren, in dem allein eine ID des aktuellen Belegs hinterlegt ist: <i>Rechtsklick &gt; XML in Zwischenablage &gt; Referenz</i>. Dieses leere Element kann als verweisender Anker für einen zuvor kopierten Belegschnitt dienen. Zum Kopieren eines solchen Ankers muss nicht eigens Text markiert werden. Der Befehl steht sowohl in der <a href="#belegliste-kopfleiste" class="link-handbuch">Kopfleiste</a> und der <a href="#belegliste-detailansicht" class="link-handbuch">Detailansicht der Belegliste</a> als auch in der Karteikarte (Lese- und Formularansicht) immer zur Verfügung.</p>
+					</li>
 
-						<p>All diese Funktionen können auch über ein neues Kopierfenster aufgerufen werden. Es öffnet sich automatisch, wenn das Tastaturkürzel <kbd>Strg</kbd> + <kbd>C</kbd> oder der Menüpunkt <a href="#menueBearbeiten-kopieren" class="link-handbuch"><i>Bearbeiten &gt; Kopieren</i></a> aufgerufen wird. Es muss nur zugleich Text in der Belegliste oder in der Leseansicht der Karteikarte markiert sein.</p>
+					<li>
+						<p>Die Funktionen zum Kopieren des Belegschnitts können auch über ein neues Kopierfenster aufgerufen werden. Es öffnet sich automatisch, wenn das Tastaturkürzel <kbd>Strg</kbd> + <kbd>C</kbd> oder der Menüpunkt <a href="#menueBearbeiten-kopieren" class="link-handbuch"><i>Bearbeiten &gt; Kopieren</i></a> aufgerufen wird. Voraussetzung ist nur, dass Text in der Belegliste oder in der Leseansicht der Karteikarte markiert ist.</p>
 
 						<p>Um für dieses Kopierfenster eine Voreinstellung festlegen zu können, wurden die Einstellungen leicht reorganisiert. Alle Funktionen, die das Kopieren in irgendeiner Weise betreffen, befinden sich nun im neuen Abschnitt <a href="#einstellungen-kopieren" class="link-handbuch">Kopieren</a>.</p>
 					</li>
@@ -70,11 +72,37 @@
 						<p>Die Dateiendung wurde von <span class="datei">.wgd</span> zu <span class="datei">.ztj</span> geändert (ZTJ steht für <i><span class="app-name"></span> <abbr title="JavaScript Object Notation" lang="en">JSON</abbr></i>). Das Dateiformat ist dabei fast vollständig gleich geblieben, allein Kontrollfelder wurden angepasst.</p>
 
 						<p>Außerdem haben die für den Datenaustausch gedachten Belegedateien, die bisher die Dateiendung <span class="datei">.bwgd</span> hatten, nun die Endung <span class="datei">.ztb</span> (ZTB steht für <i><span class="app-name"></span> Belege</i>). Auch in diesem Fall wurden jenseits der Endung allein Kontrollfelder angepasst.</p>
+
+						<p>Alte Dateien mit der Endung <span class="datei">.wgd</span> können zwar weiterhin problemlos geöffnet und unter demselben Namen gespeichert werden. Für manche Funktionen (wie <abbr title="zum Beispiel">z. B.</abbr> die <a href="#menueApp-karteisuche" class="link-handbuch">Karteisuche</a>) ist es allerdings nötig, die Dateiendung in bestehenden Dateien in <span class="datei">.ztj</span> zu ändern.</p>
 					</li>
 
 					<li><a href="#belegliste-karteiwortHervorheben" class="link-handbuch">Hervorhebung des Karteiworts</a>: Typographische An- und Ausführungszeichen werden nun ebenfalls als Marker für Wortgrenzen herangezogen, sodass sie beim Markieren außen vor bleiben. Dies sind im Einzelnen: „ “ ” ‚ ‘ » « › ‹.</li>
 
+					<li>Die Bezeichnungen in der integrierten Korporaliste wurden so geändert, dass <abbr title="Digitales Wörterbuch der deutschen Sprache">DWDS</abbr>-Korpora nun in jedem Fall als solche zu erkennen sind. Außerdem wurde das Korpus <i>IDS-Archiv</i> ergänzt.</li>
+
 					<li><a href="#" class="ueber-electron"><i>Electron</i></a>-Update auf Version 7.1.2.</li>
+				</ul>
+
+				<h3>Behobene Fehler</h3>
+
+				<p>Es wurden insgesamt <i>8 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/master">Commit-Messages</a>.</p>
+				
+				<ul>
+					<li>beim Einfügen von <abbr title="Hypertext Markup Language" lang="en">HTML</abbr> ins Belegfeld verschwanden mitunter Leerzeichen</li>
+
+					<li>diverse Menübefehle bei Rechtsklick auf Textmarkierung nicht ausführbar</li>
+
+					<li>Anführungszeichen &quot; vor einem Wort wurde nicht als Wortgrenze erkannt</li>
+
+					<li>leere Absätze beim Kopieren der Quellenangabe vermeiden</li>
+
+					<li>Seitenangaben beim <a href="#karteikarte-dtaImport" class="link-handbuch"><abbr title="Deutschen Textarchiv">DTA</abbr>-Import</a> waren mitunter falsch</li>
+
+					<li>falsches Rechtsklickmenü bei Klick auf Anhang in <a href="#menueKartei-anhaenge" class="link-handbuch"><i>Kartei &gt; Anhänge</i></a></li>
+
+					<li>Abbruch der Auswahl eines Presets in der <a href="#ordner-installer" class="link-dokumentation datei">build.sh</a> korrigiert</li>
+
+					<li>Über-Fenster waren unter Windows und macOS zu flach</li>
 				</ul>
 			</div>
 
