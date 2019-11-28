@@ -355,6 +355,15 @@ let popup = {
 				bereich = true;
 			}
 		}
+		// Beleg-ID ermitteln, wenn in Belegliste
+		// (auch wenn Text markiert ist, stehen verschiedene andere Funktion zur
+		// Verfügung, die die ID unbedingt brauchen)
+		if (helfer.hauptfunktion === "liste") {
+			let details = ele.closest(".liste-details");
+			if (details) {
+				popup.belegID = details.previousSibling.dataset.id;
+			}
+		}
 		// ermitteln, ob sich der Rechtsklick im unmittelbaren Umfeld
 		// des ausgewählten Textes ereignete
 		let umfeld = false;
