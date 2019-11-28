@@ -109,7 +109,7 @@
 					<!-- Installation -->
 					<h2 id="framework-installation">Installation von <i>Electron</i></h2>
 
-					<p>Im Folgenden wird die Einrichtung von <i>Electron</i> auf einer <i>Linux</i>-Distribution beschrieben, die auf <a href="https://www.ubuntu.com/"><i>Ubuntu</i></a> basiert. Die Anweisungen dürften aber für alle Betriebssystem ähnlich sein, denn auch unter <i>Windows</i> wird <i>Node.js</i> <abbr title="beispielsweise">bspw.</abbr> über die Eingabeaufforderung gesteuert.</p>
+					<p>Im Folgenden wird die Einrichtung von <i>Electron</i> auf einer <i>Linux</i>-Distribution beschrieben, die auf <a href="https://www.ubuntu.com/"><i>Ubuntu</i></a> basiert. Die Anweisungen dürften aber für alle Betriebssysteme ähnlich sein, denn auch unter <i>Windows</i> wird <i>Node.js</i> <abbr title="beispielsweise">bspw.</abbr> über die Eingabeaufforderung gesteuert.</p>
 
 					<p>Zunächst muss <i>Node.js</i> mit seinem Paketmanager <code>npm</code> installiert werden (für <i>Windows</i> und <i>macOS</i> gibt es <a href="https://nodejs.org/en/download/">eigene Installer</a>):</p>
 
@@ -190,7 +190,7 @@ $ npm install --save-dev electron</pre>
 					<!-- Paketieren -->
 					<h2 id="framework-paketieren">Paketieren der App</h2>
 
-					<p>Das Paketieren von <i class="app-name"></i> ist denkbar einfach. Zunächst muss der <a href="https://github.com/electron-userland/electron-packager/">Packager von <i>Electron</i></a> installiert werden (haben sie das Script <span class="datei">build-modules.sh</span> ausgeführt, ist dies bereits geschehen):</p>
+					<p>Das Paketieren von <i class="app-name"></i> ist denkbar einfach. Zunächst muss der <a href="https://github.com/electron-userland/electron-packager/">Packager von <i>Electron</i></a> installiert werden (haben Sie das Script <span class="datei">build-modules.sh</span> ausgeführt, ist dies bereits geschehen):</p>
 
 					<pre>$ cd ./
 $ npm install --save-dev electron-packager</pre>
@@ -487,7 +487,7 @@ $ npm install --save-dev electron-builder</pre>
 						<li>
 							<p><span class="datei">./installer/installer-linux.js</span>: Node-Script, das ein DEB- oder RPM-Paket erzeugt, mit dem <i class="app-name"></i> auf <i>Debian</i>/<i>Ubuntu</i> <abbr title="beziehungsweise">bzw.</abbr> Distributionen, die auf RPM setzen, installiert werden kann.</p>
 
-							<p>Dieses und die folgenden Installer-Scripts (auch die <span class="datei">packager.js</span>) müssen aus dem App-Ordner heraus aufgerufen werden. Andernfalls finden sie die Node-Module nicht:</p>
+							<p>Dieses und die folgenden Installer-Scripts (auch die <span class="datei">packager.js</span>) müssen aus dem App-Ordner heraus aufgerufen werden. Andernfalls finden Sie die Node-Module nicht:</p>
 
 							<pre>$ cd ./
 $ node installer/installer-linux.js deb</pre>
@@ -1186,7 +1186,7 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
 					<!-- Tag-Dateien -->
 					<h2 id="verschiedenes-tagDateien">Format Tag-Dateien</h2>
 
-					<p><i class="app-name"></i> kann <a href="#einstellungen-tagDateien">mit Tag-Dateien verknüpft</a> werden, um <a href="#bedeutungsgeruest-tagFenster">Bedeutungen zu taggen</a>. Die Funktion ist so abstrakt programmiert, dass man problemlos die Inhalte selbst erstellter Tag-Dateien importieren kann. Das folgende Beispiel enthält alle verpflichtenden und möglichen Tags:</p>
+					<p><i class="app-name"></i> kann <a href="#einstellungen-tagDateien" class="link-handbuch">mit Tag-Dateien verknüpft</a> werden, um <a href="#bedeutungsgeruest-tagFenster" class="link-handbuch">Bedeutungen zu taggen</a>. Die Funktion ist so abstrakt programmiert, dass man problemlos die Inhalte selbst erstellter Tag-Dateien importieren kann. Das folgende Beispiel enthält alle verpflichtenden und möglichen Tags:</p>
 
 					<pre class="quelltext">&lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;
 &lt;register&gt;
@@ -1252,7 +1252,7 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
 						</li>
 
 						<li>
-							<p>Mitunter werden unter <i>Windows</i> beim Öffnen eines Internetlinks gleich zwei Browserinstanzen erzeugt, wenn der Standardbrowser der Betriebssystems noch nicht gestartet wurde.</p>
+							<p>Mitunter werden unter <i>Windows</i> beim Öffnen eines Internetlinks gleich zwei Browserinstanzen erzeugt, wenn der Standardbrowser des Betriebssystems noch nicht gestartet wurde.</p>
 
 							<div class="info">
 								<p><b>Kein Fehler von <i class="app-name"></i>.</b> Der Befehl zum Öffnen des Links wird von der App auch unter <i>Windows</i> definitiv nur einmal abgesetzt. Tritt das Phänomen auf, dürfte ein Konfigurationsproblem des Betriebssystems vorliegen.</p>
