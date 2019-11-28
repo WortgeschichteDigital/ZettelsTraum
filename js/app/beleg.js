@@ -569,15 +569,15 @@ let beleg = {
 		}
 		// Text bereinigen und pasten
 		evt.preventDefault();
-		const {clipboard} = require("electron");
 		let text = "";
 		if (clipHtml) {
-			text = clipboard.readHTML();
+			text = clipHtml;
 		} else {
-			text = clipboard.readText();
+			text = clipText;
 		}
 		text = beleg.toolsEinfuegenHtml(text);
 		if (pasten) {
+			const {clipboard} = require("electron");
 			clipboard.writeText(text);
 			beleg.pasteBsBlock = true;
 			document.execCommand("paste");
@@ -784,8 +784,14 @@ let beleg = {
 	//   html = String
 	//     (Text mit HTML-Tags, der aufbereitet und dann eingefügt werden soll)
 	toolsEinfuegenHtml (html) {
-		// Style-Block entfernen
-		html = html.replace(/<style.*?>(.|\n)+?<\/style>/, "");
+		// wenn <body> => splitten
+		let body = html.split(/<body.*?>/);
+		if (body.length > 1) {
+			html = body[1];
+		}
+		// Style-Block(s) und Kommentare entfernen
+		html = html.replace(/<style.*?>(.|\n)+?<\/style>/g, "");
+		html = html.replace(/<!--(.|\n)+?-->/g, "");
 		// Inline-Styles löschen (widerspricht sonst der Content-Security-Policy)
 		html = html.replace(/<([a-zA-Z0-9]+) .+?>/g, function(m, p1) {
 			return `<${p1}>`;
@@ -879,7 +885,7 @@ let beleg = {
 		//     (Knoten im XML-Baum)
 		function ana (ele) {
 			if (ele.nodeType === 3) { // Text
-				text += ele.nodeValue.replace(/\n/g, "");
+				text += ele.nodeValue.replace(/\n/g, " ");
 			} else if (ele.nodeType === 1) { // Element
 				// Inline-Elemente ggf. gesondert behandeln
 				if (inline_keep.includes(ele.nodeName) || speziell[ele.nodeName]) {
