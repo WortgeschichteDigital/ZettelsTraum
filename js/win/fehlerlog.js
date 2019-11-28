@@ -43,7 +43,7 @@ let fehlerlog = {
 				if (!i.word) {
 					p.textContent = "[leeres Hauptfenster]";
 				} else {
-					p.textContent = `${i.word} (${i.fileWgd})`;
+					p.textContent = `${i.word} (${i.fileZtj})`;
 				}
 			}
 			// Fehlermeldung

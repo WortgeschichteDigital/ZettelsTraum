@@ -11,23 +11,24 @@ let beleg = {
 	// Liste häufig verwendeter Korpora für das Dropdown-Menü
 	korpora: [
 		"DTA",
-		"DWDS-Kernkorpus",
-		"DWDS-Kernkorpus 21",
-		"DWDS-Zeitungskorpus",
-		"Berliner Zeitung",
-		"Berliner Wendecorpus",
-		"Blogs",
-		"DDR",
-		"Dortmunder Chat-Korpus",
-		"Filmuntertitel",
-		"Gesprochene Sprache",
-		"neues deutschland",
-		"Polytechnisches Journal",
-		"Referenz- und Zeitungskorpora",
-		"Tagesspiegel",
-		"Text+Berg",
-		"Webkorpus 2016c",
-		"Die ZEIT",
+		"IDS-Archiv",
+		"DWDS: Kernkorpus",
+		"DWDS: Kernkorpus 21",
+		"DWDS: Zeitungskorpus",
+		"DWDS: Berliner Zeitung",
+		"DWDS: Berliner Wendecorpus",
+		"DWDS: Blogs",
+		"DWDS: DDR",
+		"DWDS: Dortmunder Chat-Korpus",
+		"DWDS: Filmuntertitel",
+		"DWDS: Gesprochene Sprache",
+		"DWDS: neues deutschland",
+		"DWDS: Polytechnisches Journal",
+		"DWDS: Referenz- und Zeitungskorpora",
+		"DWDS: Tagesspiegel",
+		"DWDS: Text+Berg",
+		"DWDS: Webkorpus 2016c",
+		"DWDS: Die ZEIT",
 	],
 	// neue Karteikarte erstellen
 	erstellen () {
@@ -568,15 +569,15 @@ let beleg = {
 		}
 		// Text bereinigen und pasten
 		evt.preventDefault();
-		const {clipboard} = require("electron");
 		let text = "";
 		if (clipHtml) {
-			text = clipboard.readHTML();
+			text = clipHtml;
 		} else {
-			text = clipboard.readText();
+			text = clipText;
 		}
 		text = beleg.toolsEinfuegenHtml(text);
 		if (pasten) {
+			const {clipboard} = require("electron");
 			clipboard.writeText(text);
 			beleg.pasteBsBlock = true;
 			document.execCommand("paste");
@@ -704,7 +705,11 @@ let beleg = {
 		if (html) {
 			text += "<hr>";
 			let quelle = obj.qu.split("\n");
-			quelle.forEach(function(i) {
+			quelle.forEach(i => {
+				i = helfer.textTrim(i, true);
+				if (!i) {
+					return;
+				}
 				text += `<p>${helfer.escapeHtml(i)}</p>`;
 			});
 		} else {
@@ -779,8 +784,14 @@ let beleg = {
 	//   html = String
 	//     (Text mit HTML-Tags, der aufbereitet und dann eingefügt werden soll)
 	toolsEinfuegenHtml (html) {
-		// Style-Block entfernen
-		html = html.replace(/<style.*?>(.|\n)+?<\/style>/, "");
+		// wenn <body> => splitten
+		let body = html.split(/<body.*?>/);
+		if (body.length > 1) {
+			html = body[1];
+		}
+		// Style-Block(s) und Kommentare entfernen
+		html = html.replace(/<style.*?>(.|\n)+?<\/style>/g, "");
+		html = html.replace(/<!--(.|\n)+?-->/g, "");
 		// Inline-Styles löschen (widerspricht sonst der Content-Security-Policy)
 		html = html.replace(/<([a-zA-Z0-9]+) .+?>/g, function(m, p1) {
 			return `<${p1}>`;
@@ -874,7 +885,7 @@ let beleg = {
 		//     (Knoten im XML-Baum)
 		function ana (ele) {
 			if (ele.nodeType === 3) { // Text
-				text += ele.nodeValue.replace(/\n/g, "");
+				text += ele.nodeValue.replace(/\n/g, " ");
 			} else if (ele.nodeType === 1) { // Element
 				// Inline-Elemente ggf. gesondert behandeln
 				if (inline_keep.includes(ele.nodeName) || speziell[ele.nodeName]) {
@@ -1554,8 +1565,8 @@ let beleg = {
 	ctrlZwischenablage (dt) {
 		const {clipboard} = require("electron"),
 			daten = kopieren.datenBeleg(dt);
-		daten.typ = "bwgd";
-		daten.version = 1;
+		daten.typ = "ztb";
+		daten.version = 2;
 		daten.winId = winInfo.winId;
 		daten.wort = kartei.wort;
 		clipboard.writeText(JSON.stringify(daten));

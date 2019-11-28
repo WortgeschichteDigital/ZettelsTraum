@@ -93,12 +93,21 @@ let optionen = {
 			//   2 = nur aktive Funktion speichern
 			//   3 = nur Kartei speichern
 			speichern: "1",
-			// Einfügen-Fenster (Kopierfunktion) nach dem Einfügen direkt schließen
-			"einfuegen-schliessen": true,
+			// KOPIEREN
 			// Hervorhebung des Karteiworts beim Kopieren von Text mitkopieren
 			"textkopie-wort": false,
 			// beim Kopieren ist das Karteiworts grau hinterlegt
 			"textkopie-wort-hinterlegt": false,
+			// Vorauswahl für Kopierfenster ohne Nachfrage ausführen
+			"ctrlC-auto": false,
+			// Vorauswahl für Kopierfenster
+			//   1 = HTML und Plain
+			//   2 = Plain-Referenz
+			//   3 = XML-Belegschnitt
+			//   4 = XML-Referenz
+			"ctrlC-vor": "1",
+			// Einfügen-Fenster (Kopierfunktion) nach dem Einfügen direkt schließen
+			"einfuegen-schliessen": true,
 			// MENÜ
 			// Menü-Leiste ausblenden (einblenden, wenn Alt gedruckt)
 			autoHideMenuBar: false,
@@ -331,6 +340,14 @@ let optionen = {
 		// Kartei > Speichern anwenden
 		document.getElementsByName("einstellung-speichern").forEach(i => {
 			if (i.value === optionen.data.einstellungen.speichern) {
+				i.checked = true;
+			} else {
+				i.checked = false;
+			}
+		});
+		// Vorauswahl Kopierfenster anwenden
+		document.getElementsByName("einstellung-ctrlC-vor").forEach(i => {
+			if (i.value === optionen.data.einstellungen["ctrlC-vor"]) {
 				i.checked = true;
 			} else {
 				i.checked = false;
@@ -1091,6 +1108,10 @@ let optionen = {
 		// Kartei > Speichern
 		if (ele.name === "einstellung-speichern") {
 			optionen.data.einstellungen.speichern = ele.value;
+		}
+		// Vorauswahl Kopierfenster
+		if (ele.name === "einstellung-ctrlC-vor") {
+			optionen.data.einstellungen["ctrlC-vor"] = ele.value;
 		}
 		// ggf. Konsequenzen on-the-fly
 		if (e === "quick") { // Quick-Access-Bar umgestellt

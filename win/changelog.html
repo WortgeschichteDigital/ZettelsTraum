@@ -39,11 +39,78 @@
 
 		<!-- CHANGELOG -->
 		<main>
+			<!-- Start Versionsblock 0.25.0 -->
+			<div class="version">0.25.0</div>
+
+			<div>
+				<h2><span>Version 0.25.0-beta</span><time datetime="2019-11-13">13. November 2019</time></h2>
+
+				<p><span class="obacht">Das Dateiformat hat sich geändert!</span> Ältere <abbr title="Wortgeschichte digital">WGD</abbr>-Dateien werden automatisch in <abbr title="Zettel’s Traum JSON">ZTJ</abbr>-Dateien konvertiert; dabei wird eine Änderungsmarkierung gesetzt.</p>
+
+				<h3>Neue Funktionen</h3>
+
+				<ul>
+					<li>
+						<p>Belegschnitt als <abbr title="Extensible Markup Language" lang="en">XML</abbr> kopieren: Sowohl in der <a href="#belegliste" class="link-handbuch">Belegliste</a> als auch in der <a href="#karteikarte-leseansicht" class="link-handbuch">Leseansicht der Karteikarte</a> kann nun Text markiert und in der Form eines <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippets kopiert werden.</p>
+
+						<p>Zum Kopieren muss im Belegfeld eine Textauswahl vorgenommen werden. Danach kann man via <i>Rechtsklick &gt; XML in Zwischenablage &gt; Belegschnitt</i> die Textauswahl zusammen mit allen zur Verfügung stehenden Metadaten in ein <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippet umwandeln und in die Zwischenablage schieben.</p>
+
+						<p>Daneben gibt es die Möglichkeit, ein leeres <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Element in die Zwischenablage zu kopieren, in dem allein eine ID des aktuellen Belegs hinterlegt ist: <i>Rechtsklick &gt; XML in Zwischenablage &gt; Referenz</i>. Dieses leere Element kann als verweisender Anker für einen zuvor kopierten Belegschnitt dienen. Zum Kopieren eines solchen Ankers muss nicht eigens Text markiert werden. Der Befehl steht sowohl in der <a href="#belegliste-kopfleiste" class="link-handbuch">Kopfleiste</a> und der <a href="#belegliste-detailansicht" class="link-handbuch">Detailansicht der Belegliste</a> als auch in der Karteikarte (Lese- und Formularansicht) immer zur Verfügung.</p>
+					</li>
+
+					<li>
+						<p>Die Funktionen zum Kopieren des Belegschnitts können auch über ein neues Kopierfenster aufgerufen werden. Es öffnet sich automatisch, wenn das Tastaturkürzel <kbd>Strg</kbd> + <kbd>C</kbd> oder der Menüpunkt <a href="#menueBearbeiten-kopieren" class="link-handbuch"><i>Bearbeiten &gt; Kopieren</i></a> aufgerufen wird. Voraussetzung ist nur, dass Text in der Belegliste oder in der Leseansicht der Karteikarte markiert ist.</p>
+
+						<p>Um für dieses Kopierfenster eine Voreinstellung festlegen zu können, wurden die Einstellungen leicht reorganisiert. Alle Funktionen, die das Kopieren in irgendeiner Weise betreffen, befinden sich nun im neuen Abschnitt <a href="#einstellungen-kopieren" class="link-handbuch">Kopieren</a>.</p>
+					</li>
+				</ul>
+
+				<h3>Verbesserungen</h3>
+
+				<ul>
+					<li>
+						<p>Die Dateiendung wurde von <span class="datei">.wgd</span> zu <span class="datei">.ztj</span> geändert (ZTJ steht für <i><span class="app-name"></span> <abbr title="JavaScript Object Notation" lang="en">JSON</abbr></i>). Das Dateiformat ist dabei fast vollständig gleich geblieben, allein Kontrollfelder wurden angepasst.</p>
+
+						<p>Außerdem haben die für den Datenaustausch gedachten Belegedateien, die bisher die Dateiendung <span class="datei">.bwgd</span> hatten, nun die Endung <span class="datei">.ztb</span> (ZTB steht für <i><span class="app-name"></span> Belege</i>). Auch in diesem Fall wurden jenseits der Endung allein Kontrollfelder angepasst.</p>
+
+						<p>Alte Dateien mit der Endung <span class="datei">.wgd</span> können zwar weiterhin problemlos geöffnet und unter demselben Namen gespeichert werden. Für manche Funktionen (wie <abbr title="zum Beispiel">z. B.</abbr> die <a href="#menueApp-karteisuche" class="link-handbuch">Karteisuche</a>) ist es allerdings nötig, die Dateiendung in bestehenden Dateien in <span class="datei">.ztj</span> zu ändern.</p>
+					</li>
+
+					<li><a href="#belegliste-karteiwortHervorheben" class="link-handbuch">Hervorhebung des Karteiworts</a>: Typographische An- und Ausführungszeichen werden nun ebenfalls als Marker für Wortgrenzen herangezogen, sodass sie beim Markieren außen vor bleiben. Dies sind im Einzelnen: „ “ ” ‚ ‘ » « › ‹.</li>
+
+					<li>Die Bezeichnungen in der integrierten Korporaliste wurden so geändert, dass <abbr title="Digitales Wörterbuch der deutschen Sprache">DWDS</abbr>-Korpora nun in jedem Fall als solche zu erkennen sind. Außerdem wurde das Korpus <i>IDS-Archiv</i> ergänzt.</li>
+
+					<li><a href="#" class="ueber-electron"><i>Electron</i></a>-Update auf Version 7.1.2.</li>
+				</ul>
+
+				<h3>Behobene Fehler</h3>
+
+				<p>Es wurden insgesamt <i>8 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/master">Commit-Messages</a>.</p>
+				
+				<ul>
+					<li>beim Einfügen von <abbr title="Hypertext Markup Language" lang="en">HTML</abbr> ins Belegfeld verschwanden mitunter Leerzeichen</li>
+
+					<li>diverse Menübefehle bei Rechtsklick auf Textmarkierung nicht ausführbar</li>
+
+					<li>Anführungszeichen &quot; vor einem Wort wurde nicht als Wortgrenze erkannt</li>
+
+					<li>leere Absätze beim Kopieren der Quellenangabe vermeiden</li>
+
+					<li>Seitenangaben beim <a href="#karteikarte-dtaImport" class="link-handbuch"><abbr title="Deutschen Textarchiv">DTA</abbr>-Import</a> waren mitunter falsch</li>
+
+					<li>falsches Rechtsklickmenü bei Klick auf Anhang in <a href="#menueKartei-anhaenge" class="link-handbuch"><i>Kartei &gt; Anhänge</i></a></li>
+
+					<li>Abbruch der Auswahl eines Presets in der <a href="#ordner-installer" class="link-dokumentation datei">build.sh</a> korrigiert</li>
+
+					<li>Über-Fenster waren unter Windows und macOS zu flach</li>
+				</ul>
+			</div>
+
 			<!-- Start Versionsblock 0.24.0 -->
 			<div class="version">0.24.0</div>
 
 			<div>
-				<h2><span>Version 0.24.0</span><time datetime="2019-11-13T20:20:39">13. November 2019</time></h2>
+				<h2><span>Version 0.24.0</span><time datetime="2019-11-13">13. November 2019</time></h2>
 
 				<p><span class="obacht">Das Dateiformat hat sich geändert!</span> Ältere <abbr title="Wortgeschichte digital">WGD</abbr>-Dateien werden automatisch konvertiert; dabei wird eine Änderungsmarkierung gesetzt.</p>
 
@@ -87,7 +154,7 @@
 					<li>
 						<p><a href="#filter" class="link-handbuch">Filterleiste</a>: Im <a href="#filter-verschiedenes" class="link-handbuch">Filterblock <i>Verschiedenes</i></a> gibt es einen neuen Filter: <i>Annotierung</i>. Weil es ein dynamischer Filter ist, erscheint er nur, wenn in der Kartei Belege zu finden sind, in denen Karteiwörter oder Textteile annotiert wurden.</p>
 
-						<p>Wurde beim Annotieren die Hintergrundfarbe auf transparent gesetzt, wird der Beleg mit dem <i>Annotierung</i>-Filter standardmäßig nicht gefunden. Unter <a href="#einstellungen-filterleiste" class="link-handbuch"><i><span class="app-name"></span> &gt; Einstellungen &gt; Filterleiste</i></a> gibt es jedoch <a href="#einstellungen-filterleisteTransparente" class="link-handbuch">eine Checkbox</a>, die man aktivieren kann, um beim Filtern auch Annotierungen mit einzubeziehen, die eine tranparente Hintergrundfarbe haben.</p>
+						<p>Wurde beim Annotieren die Hintergrundfarbe auf transparent gesetzt, wird der Beleg mit dem <i>Annotierung</i>-Filter standardmäßig nicht gefunden. Unter <a href="#einstellungen-filterleiste" class="link-handbuch"><i><span class="app-name"></span> &gt; Einstellungen &gt; Filterleiste</i></a> gibt es jedoch <a href="#einstellungen-filterleisteTransparente" class="link-handbuch">eine Checkbox</a>, die man aktivieren kann, um beim Filtern auch Annotierungen mit einzubeziehen, die eine transparente Hintergrundfarbe haben.</p>
 					</li>
 
 					<li>
@@ -105,7 +172,7 @@
 					<li>
 						<p>Für Entwickler: Die Installer-Scripts wurden reorganisiert, verbessert und erweitert.</p>
 
-						<p>Zum einen wurden die Scripts alle aus dem Wurzelverzeichnis der App in den Ordner <span class="datei">./installer/</span> geschoben, was die Dateistruktur deutlich überischtlicher macht. Die Installer-Scripts müssen zwar weiterhin aus dem Wurzelverzeichnis heraus aufgerufen werden (ansonsten werden die Node-Module nicht gefunden), alle Installer-Resourcen befinden sich nun jedoch gebündelt in einem einzigen Verzeichnis.</p>
+						<p>Zum einen wurden die Scripts alle aus dem Wurzelverzeichnis der App in den Ordner <span class="datei">./installer/</span> geschoben, was die Dateistruktur deutlich übersichtlicher macht. Die Installer-Scripts müssen zwar weiterhin aus dem Wurzelverzeichnis heraus aufgerufen werden (ansonsten werden die Node-Module nicht gefunden), alle Installer-Resourcen befinden sich nun jedoch gebündelt in einem einzigen Verzeichnis.</p>
 
 						<p>Zum anderen wird fortan beim Aufrufen des <code class="quelltext">fs</code>-Moduls in den Node-Scripts in allen Fällen auf <code class="quelltext">fsPromises</code>-Varianten zurückgegriffen. Dabei wurden <span class="fr">en passant</span> ein paar Fehler behoben.</p>
 
@@ -140,7 +207,7 @@
 						<p>Durch den Umbau wurde der Quellcode <span lang="fr">en passant</span> deutlich verschlankt und modernisiert. Außerdem ist er nun leichter zu warten.</p>
 					</li>
 
-					<li><a href="#wgd" class="link-dokumentation"><abbr title="Wortgeschichte digital">WGD</abbr>- und <abbr title="Belege Wortgeschichte digital">BWGD</abbr>-Dateien</a> werden fortan komprimiert gespeichert, nehmen auf der Festplatte also weniger Platz weg: Dateien können dabei durchaus auf 35 % der ursprünglichen Dateigröße reduziert werden. Alte, nicht komprimierte Dateien können weiterhin problemlos geöffnet werden. Beim nächsten Speichern werden sie komprimiert.</li>
+					<li><a href="#ztj" class="link-dokumentation"><abbr title="Wortgeschichte digital">WGD</abbr>- und <abbr title="Belege Wortgeschichte digital">BWGD</abbr>-Dateien</a> werden fortan komprimiert gespeichert, nehmen auf der Festplatte also weniger Platz weg: Dateien können dabei durchaus auf 35 % der ursprünglichen Dateigröße reduziert werden. Alte, nicht komprimierte Dateien können weiterhin problemlos geöffnet werden. Beim nächsten Speichern werden sie komprimiert.</li>
 
 					<li>
 						<p>Die <a href="#menueKartei-zuletztVerwendet" class="link-handbuch">Liste zuletzt verwendeter Karteien</a> wird nun nicht mehr automatisch bereinigt. Es wird zwar immer noch beim Programmstart überprüft, ob Karteien gefunden wurden, nicht gefundene werden jedoch nur noch als fehlend markiert (<img src="../img/x-dick-rot.svg" width="24" height="24" alt="">), aber nicht mehr aus der Liste entfernt. <a href="#menueApp-neuesFenster" class="link-handbuch">Details dazu im Handbuch.</a> Dieses neue Verhalten dürfte den Start der App nebenbei ein wenig beschleunigen, da die Überprüfung nun zeitversetzt und asynchron stattfindet.</p>
@@ -157,7 +224,7 @@
 
 						<p>Dies funktioniert nun auch, wenn man das Tastaturkürzel <kbd>Strg</kbd> + <kbd>V</kbd>, die entsprechende Funktion im <a href="#menueBearbeiten" class="link-handbuch">Menü <i>Bearbeiten</i></a> oder das Rechtsklickmenü nutzt – mit dem wesentlichen Unterschied, dass der bereinigte Text an der Stelle eingefügt wird, an der sich der Cursor gerade befindet. Mithilfe des Icons kann man das Feld nur überschreiben oder am Ende ergänzen.</p>
 
-						<p>Selbst dann, wenn sich kein formatierter Text in der Zwischenablage befindet, sondern nur Plain-Text, wird nun beim Einfügen von Text in das <i>Beleg</i>-Feld eine Bereinigen vorgenommen, um unerwünschte <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>-Tags zu eliminieren. Dies gilt auch für das Einfügen mithilfe des Icons <img src="../img/einfuegen.svg" width="24" height="24" alt="">. Tippen darf man hingegen prinzipiell, was man will – und dies wird dann auch so gespeichert.</p>
+						<p>Selbst dann, wenn sich kein formatierter Text in der Zwischenablage befindet, sondern nur Plain-Text, wird nun beim Einfügen von Text in das <i>Beleg</i>-Feld eine Bereinigung vorgenommen, um unerwünschte <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>-Tags zu eliminieren. Dies gilt auch für das Einfügen mithilfe des Icons <img src="../img/einfuegen.svg" width="24" height="24" alt="">. Tippen darf man hingegen prinzipiell, was man will – und dies wird dann auch so gespeichert.</p>
 
 						<p><span class="obacht">Sicherheit:</span> Das automatische Bereinigen des Originaltextes ist zugleich eine Sicherheitsmaßnahme. Da das Textfeld <i>Beleg</i> prinzipiell jeden <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>-Tag enthalten darf und dieser bei der Darstellung in der <a href="#belegliste" class="link-handbuch">Belegliste</a> und in der <a href="#karteikarte-leseansicht" class="link-handbuch">Leseansicht der Karteikarte</a> auch interpretiert wird, könnte man auf diese Weise ungewollt Schadcode in die App laden. Das Sicherheitsrisiko ist zur Zeit allerdings überschaubar, da die strikte <span lang="en">Content Security Policy</span> des Programms das Laden verhindern würde.</p>
 					</li>
@@ -184,7 +251,7 @@
 
 					<li><a href="#menueKartei-anhaenge" class="link-handbuch">Anhänge</a>: Der Button zum Hinzufügen von Anhängen ist nun immer sichtbar; selbst dann, wenn die Anhängeliste sehr lang ist und nach unten gescrollt wurde. Außerdem ist er jetzt wirklich und nicht nur scheinbar zentriert.</li>
 
-					<li><a href="#menueKartei-metadaten" class="link-handbuch">Metadaten</a>: Die Person, die die Kartei zuletzt gespeichert hat, wird nun immer an den Anfang der Liste der BearbeterInnen gesetzt. Zuvor war es so, dass die Liste nicht angerührt wurde, wenn derjenige, der eine Kartei gespeichert hat, bereits in der Liste stand.</li>
+					<li><a href="#menueKartei-metadaten" class="link-handbuch">Metadaten</a>: Die Person, die die Kartei zuletzt gespeichert hat, wird nun immer an den Anfang der Liste der BearbeiterInnen gesetzt. Zuvor war es so, dass die Liste nicht angerührt wurde, wenn derjenige, der eine Kartei gespeichert hat, bereits in der Liste stand.</li>
 
 					<li><a href="#menueKartei-redaktion" class="link-handbuch">Redaktion</a>: Wurde für ein Redaktionsereignis keine Person registriert, wird nun nicht mehr ein <q>?</q>, sondern der ausgegraute, kursive Text <q>keine Person</q> gedruckt. Das ist nicht nur schicker, sondern auch konsistenter mit der <abbr title="User Interface" lang="en">UI</abbr> der anderen Programmteile.</li>
 
@@ -214,7 +281,7 @@
 
 					<li>Die Verarbeitung derjenigen Tastaturkürzel, die nicht vom Main-Prozess getriggert werden, wurde auf eine solidere Basis gestellt: Der Wert <code class="quelltext">which</code> wird nicht mehr abgefragt (weil <a href="https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/which"><span lang="en">deprecated</span></a>); Kürzel werden nur noch akzeptiert, wenn sie mit genau den Modifiern gedrückt werden, die vorgesehen sind (Modifiertasten sind <abbr title="unter anderem">u. a.</abbr> <kbd>Strg</kbd>, <kbd>Alt</kbd> und <kbd>Umsch</kbd>); nicht zuletzt wurde bei der Aktion die Codebasis verschlankt und vereinheitlicht.</li>
 
-					<li>Brach man den beim Öffnen oder Speichern einer Datei oder eines Pfades erscheinenden Dateidialog ab, ohne eine Datei oder eine Pfad auszuwählen, wurde bisher ein <a href="#kurzanleitung-programmfensterDialogfenster" class="link-handbuch">Dialogfenster</a> angezeigt, das einem widersinngerweise mitteilte, was man gerade getan hat. Dieses Dialogfenster wird nun nicht mehr angezeigt.</li>
+					<li>Brach man den beim Öffnen oder Speichern einer Datei oder eines Pfades erscheinenden Dateidialog ab, ohne Datei oder Pfad auszuwählen, wurde bisher ein <a href="#kurzanleitung-programmfensterDialogfenster" class="link-handbuch">Dialogfenster</a> angezeigt, das einem widersinngerweise mitteilte, was man gerade getan hat. Dieses Dialogfenster wird nun nicht mehr angezeigt.</li>
 
 					<li>
 						<p>Das Öffnen der Programmfenster ist mit dem Anwachsen des Quellcodes immer langsamer geworden. Die Art und Weise, wie Programmfenster geöffnet werden, wurde darum neu geregelt. Sie öffnen sich zwar nun deutlich rascher, zeigen nach dem Aufruf aber zunächst eine Art Sperrbild, das verschwindet, sobald der Content verfügbar ist.</p>
@@ -241,7 +308,7 @@
 					<li>Das Auf- und Zuklappen des Inhaltsverzeichnisses im Handbuch und der technischen Dokumentation wird nun animiert.</li>
 
 					<li>
-						<p>Die technische Dokumentation wurde wegen der vielen Änderungen und Ergänzungen auf der technischen Ebene in den Abschnitten <a href="#framework" class="link-dokumentation">Framework</a> sowie <a href="#ordner" class="link-dokumentation">Ordner und Dateien</a> überarbeitet. Außerdem wurden eine Beschreibung des <a href="#verschiedenes-tagDateien" class="link-dokumentation">Formats der Tag-Dateien</a> ergänzt und natürlich alle Änderungen des <a href="#wgd-wgd" class="link-dokumentation"><abbr title="Wortgeschichte digital">WGD</abbr>-Dateiformats</a> in die Tabelle eingetragen.</p>
+						<p>Die technische Dokumentation wurde wegen der vielen Änderungen und Ergänzungen auf der technischen Ebene in den Abschnitten <a href="#framework" class="link-dokumentation">Framework</a> sowie <a href="#ordner" class="link-dokumentation">Ordner und Dateien</a> überarbeitet. Außerdem wurden eine Beschreibung des <a href="#verschiedenes-tagDateien" class="link-dokumentation">Formats der Tag-Dateien</a> ergänzt und natürlich alle Änderungen des <a href="#ztj-ztj" class="link-dokumentation"><abbr title="Wortgeschichte digital">WGD</abbr>-Dateiformats</a> in die Tabelle eingetragen.</p>
 
 						<p>Ferner gibt es nun einen neuen Abschnitt im <abbr title="Kapitel">Kap.</abbr> <i>Verschiedenes</i>: <a href="#verschiedenes-bekannteFehler" class="link-dokumentation">Bekannte Fehler</a>. Hier werden nur Fehler aufgelistet, die aus irgendeinem Grund nicht behoben werden konnten oder werden, <abbr title="zum Beispiel">z. B.</abbr> weil es sich um Electron-Bugs handelt.</p>
 					</li>
@@ -264,7 +331,7 @@
 
 					<li>Für Entwickler: Zum Paketieren der App werden nun keine Kommandozeilenbefehle mehr genutzt, sondern ein moderneres Node-Script. <abbr title="Vergleiche">Vgl.</abbr> den <abbr title="Abschnitt">Abschn.</abbr> zum <a href="#framework-paketieren" class="link-dokumentation">Paketieren der App</a> in der <a href="#" class="link-dokumentation">technischen Dokumentation</a>.</li>
 
-					<li>Für Entwickler: Die Scripts zum nachträglichen Registrieren oder Deregistrieren des <abbr title="Wortgeschichte digital">WGD</abbr>-Dateityps unter <i>Linux</i> (<span class="datei">./resources/filetype/linux/[de]register.sh</span>) wurden verbessert: Sie sollten Sich nun aus allen Ordnern heraus aufrufen lassen.</li>
+					<li>Für Entwickler: Die Scripts zum nachträglichen Registrieren oder Deregistrieren des <abbr title="Wortgeschichte digital">WGD</abbr>-Dateityps unter <i>Linux</i> (<span class="datei">./resources/filetype/linux/[de]register.sh</span>) wurden verbessert: Sie sollten sich nun aus allen Ordnern heraus aufrufen lassen.</li>
 
 					<li><a href="#" class="ueber-electron"><i>Electron</i></a>-Update auf Version 7.1.1.</li>
 				</ul>
@@ -286,7 +353,7 @@
 
 					<li>Annotierungsfunktion: In einer Detailansicht, die sehr flach war, weil der Beleg nur wenige Zeilen umfasste und keine weiteren Details eingeblendet wurden, konnte es geschehen, dass das Annotierungspopup hinter dem in der Liste folgenden Belegkopf verschwand.</li>
 
-					<li>Annotierungsfunktion: Karteiwörter, deren Farbe auf transparent gesetzt wurde und die somit als falschpositive Treffer markiert waren, wurden beim Kopieren von Belegtext mit den Kopierfunktionen <i>Rechtsklick &gt; Textauswahl kopieren</i> oder <img src="../img/kopieren.svg" width="24" height="24" alt=""> im kopierten Text trotzdem hervorgehoben, wenn die <a href="#einstellungen-allgemeinesHervorhebung" class="link-handbuch">entsprechende Einstellung</a> aktiviert war.</li>
+					<li>Annotierungsfunktion: Karteiwörter, deren Farbe auf transparent gesetzt wurde und die somit als falschpositive Treffer markiert waren, wurden beim Kopieren von Belegtext mit den Kopierfunktionen <i>Rechtsklick &gt; Textauswahl kopieren</i> oder <img src="../img/kopieren.svg" width="24" height="24" alt=""> im kopierten Text trotzdem hervorgehoben, wenn die <a href="#einstellungen-kopierenHervorhebung" class="link-handbuch">entsprechende Einstellung</a> aktiviert war.</li>
 
 					<li>Annotierungsfunktion: Öffnete man das Annotierungspopup zum Annotieren eines noch nicht annotierten Karteiworts und klickte man dann auf das Textfeld und danach sofort wieder auf <kbd>Esc</kbd> oder klickte man auf das gelbe Quadrat, kam es zu einem Fehler. Das Annotierungspopup musste erst wieder geschlossen und neu geöffnet werden, ansonsten funktionierte es nicht mehr.</li>
 
@@ -300,7 +367,7 @@
 
 					<li><a href="#belegliste" class="link-handbuch">Belegliste</a>: Führte das Filtern der Belegliste mit dem <a href="#filter-volltext" class="link-handbuch">Volltextfilter</a> dazu, dass in einem der angezeigten Belege alle Absätze gekürzt wurden (<q>[…]</q>), weil in ihnen das Suchwort nicht gefunden wurde, konnte die Kürzung des Textes nicht mehr durch Klick auf den Absatz rückgängig gemacht werden.</li>
 
-					<li>Belegliste: Wurde ein Wort mit der Annotierungsfunktion auf transparent gesetzt und damit als falschpositiver Treffer markiert, wurde dieses Wort dennoch zum Ermitteln des Vorschautexts im Belegkopf herangezogen und dort dann auch fett hervorgehoben (wenn das Icon <img src="../img/text-fett.svg" width="24" height="24" alt=""> aktiviert war). Die Reparatur hat den positiven Nebeneffekt, dass das Ermitteln des Vorschautextes ein wenige performanter geworden ist.</li>
+					<li>Belegliste: Wurde ein Wort mit der Annotierungsfunktion auf transparent gesetzt und damit als falschpositiver Treffer markiert, wurde dieses Wort dennoch zum Ermitteln des Vorschautexts im Belegkopf herangezogen und dort dann auch fett hervorgehoben (wenn das Icon <img src="../img/text-fett.svg" width="24" height="24" alt=""> aktiviert war). Die Reparatur hat den positiven Nebeneffekt, dass das Ermitteln des Vorschautextes ein wenig performanter geworden ist.</li>
 
 					<li>Belegliste: Die <a href="#einstellungen-filterleisteBelegGefiltert" class="link-handbuch">Meldung, dass ein Beleg angelegt, wegen der aktiven Filter in der Belegliste jedoch gerade nicht sichtbar</a> sei, wurde sofort wieder geschlossen, sodass man keine Zeit hatte, sie zu lesen.</li>
 
@@ -312,7 +379,7 @@
 
 					<li><a href="#filter">Filterleiste</a>: Formatierungen in Bedeutungsdefinitionen sind in Filternamen als <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>-Tags dargestellt worden, also <abbr title="zum Beispiel">z. B.</abbr>: <q>Mannschaft im &lt;i&gt;Sport&lt;/i&gt;</q>. Jetzt werden die Formatierungen korrekt visualisiert: <q>Mannschaft im <i>Sport</i></q>.</li>
 
-					<li>Filterleiste: War der Filter <i>Annotierung</i> aktiv (Filterblock <i>Verschiedenes</i>) und wurde die letzte Annotierung entfernt, wurden die Filter im Block <i>Verschiedens</i> nicht mehr korrekt aufgebaut, keine Belege in der Liste angezeigt, aber gemeldet, dass noch ein Belege sichtbar sei.</li>
+					<li>Filterleiste: War der Filter <i>Annotierung</i> aktiv (Filterblock <i>Verschiedenes</i>) und wurde die letzte Annotierung entfernt, wurden die Filter im Block <i>Verschiedenes</i> nicht mehr korrekt aufgebaut, keine Belege in der Liste angezeigt, aber gemeldet, dass noch ein Beleg sichtbar sei.</li>
 
 					<li>Karteikarte: Wurde eines der <a href="#karteikarte-pflichtfelder" class="link-handbuch">Pflichtfelder der Karteikarte</a> nicht oder nicht korrekt ausgefüllt, kam schon bisher eine Fehlermeldung und das entsprechende Feld wurde nach dem Schließen der Meldung fokussiert. War das Feld allerdings nicht im sichtbaren Bereich, wurde es auch nicht in den sichtbaren Bereich des Fensters gescrollt. Ein mangelhaftes Verhalten, das nun korrigiert wurde.</li>
 
@@ -386,7 +453,7 @@
 			<div class="version">0.23.0</div>
 
 			<div>
-				<h2><span>Version 0.23.0</span><time datetime="2019-10-13T17:13:35">13. Oktober 2019</time></h2>
+				<h2><span>Version 0.23.0</span><time datetime="2019-10-13">13. Oktober 2019</time></h2>
 
 				<h3>Verbesserungen</h3>
 
@@ -431,7 +498,7 @@
 			<div class="version">0.22.0</div>
 
 			<div>
-				<h2><span>Version 0.22.0</span><time datetime="2019-10-07T13:07:55">7. Oktober 2019</time></h2>
+				<h2><span>Version 0.22.0</span><time datetime="2019-10-07">7. Oktober 2019</time></h2>
 
 				<h3>Neue Funktionen</h3>
 
@@ -474,7 +541,7 @@
 			<div class="version">0.21.0</div>
 
 			<div>
-				<h2><span>Version 0.21.0</span><time datetime="2019-10-03T20:05:15">3. Oktober 2019</time></h2>
+				<h2><span>Version 0.21.0</span><time datetime="2019-10-03">3. Oktober 2019</time></h2>
 
 				<h3>Neue Funktionen</h3>
 
@@ -538,7 +605,7 @@
 			<div class="version">0.20.0</div>
 
 			<div>
-				<h2><span>Version 0.20.0</span><time datetime="2019-10-02T14:22:34">2. Oktober 2019</time></h2>
+				<h2><span>Version 0.20.0</span><time datetime="2019-10-02">2. Oktober 2019</time></h2>
 
 				<h3>Entfernte Funktionen</h3>
 
@@ -597,7 +664,7 @@
 			<div class="version">0.19.1</div>
 
 			<div>
-				<h2><span>Version 0.19.1</span><time datetime="2019-09-19T21:02:19">19. September 2019</time></h2>
+				<h2><span>Version 0.19.1</span><time datetime="2019-09-19">19. September 2019</time></h2>
 
 				<h3>Verbesserungen</h3>
 
@@ -620,7 +687,7 @@
 			<div class="version">0.19.0</div>
 
 			<div>
-				<h2><span>Version 0.19.0</span><time datetime="2019-09-18T08:38:34">18. September 2019</time></h2>
+				<h2><span>Version 0.19.0</span><time datetime="2019-09-18">18. September 2019</time></h2>
 
 				<p><span class="obacht">Das Dateiformat hat sich geändert!</span> Ältere <abbr title="Wortgeschichte digital">WGD</abbr>-Dateien werden automatisch konvertiert; dabei wird eine Änderungsmarkierung gesetzt.</p>
 
@@ -649,7 +716,7 @@
 			<div class="version">0.18.0</div>
 
 			<div>
-				<h2><span>Version 0.18.0</span><time datetime="2019-08-31T14:12:31">31. August 2019</time></h2>
+				<h2><span>Version 0.18.0</span><time datetime="2019-08-31">31. August 2019</time></h2>
 
 				<p><span class="obacht">Das Dateiformat hat sich geändert!</span> Ältere <abbr title="Wortgeschichte digital">WGD</abbr>-Dateien werden automatisch konvertiert; dabei wird eine Änderungsmarkierung gesetzt.</p>
 
@@ -734,7 +801,7 @@
 			<div class="version">0.17.0</div>
 
 			<div>
-				<h2><span>Version 0.17.0</span><time datetime="2019-08-20T13:47:05">20. August 2019</time></h2>
+				<h2><span>Version 0.17.0</span><time datetime="2019-08-20">20. August 2019</time></h2>
 
 				<p><span class="obacht">Das Dateiformat hat sich geändert!</span> Ältere <abbr title="Wortgeschichte digital">WGD</abbr>-Dateien werden automatisch konvertiert; dabei wird eine Änderungsmarkierung gesetzt.</p>
 
@@ -773,7 +840,7 @@
 			<div class="version">0.16.0</div>
 
 			<div>
-				<h2><span>Version 0.16.0</span><time datetime="2019-08-15T19:51:02">15. August 2019</time></h2>
+				<h2><span>Version 0.16.0</span><time datetime="2019-08-15">15. August 2019</time></h2>
 
 				<h3>Neue Funktionen</h3>
 
@@ -842,7 +909,7 @@
 			<div class="version">0.15.0</div>
 
 			<div>
-				<h2><span>Version 0.15.0</span><time datetime="2019-08-14T07:51:48">14. August 2019</time></h2>
+				<h2><span>Version 0.15.0</span><time datetime="2019-08-14">14. August 2019</time></h2>
 
 				<p><span class="obacht">Das Dateiformat hat sich geändert!</span> Ältere <abbr title="Wortgeschichte digital">WGD</abbr>-Dateien werden automatisch konvertiert; dabei wird eine Änderungsmarkierung gesetzt.</p>
 
@@ -916,7 +983,7 @@
 			<div class="version">0.14.0</div>
 
 			<div>
-				<h2><span>Version 0.14.0</span><time datetime="2019-08-08T15:17:32">8. August 2019</time></h2>
+				<h2><span>Version 0.14.0</span><time datetime="2019-08-08">8. August 2019</time></h2>
 
 				<h3>Neue Funktionen</h3>
 
@@ -988,7 +1055,7 @@ Gerüst 2 &gt; Gerüst 1</pre>
 
 						<p>Klickt man auf <i>Import</i> und wählt eine <abbr title="Belege Wortgeschichte digital">BWGD</abbr>-Datei aus, erscheint diese als erster Punkt in der Liste der Belegquellen. Durch einen Klick auf <i>Einfügen</i> werden alle Belege aus der Datei in die aktuelle Kartei kopiert.</p>
 
-						<p>Die <a href="#" class="link-dokumentation">technische Dokumentation</a> wurde im Kapitel <i><abbr title="Wortgeschichte digital">WGD</abbr>-Dateiformat</i> um das <a href="#wgd-bwgd" class="link-dokumentation"><abbr title="Belege Wortgeschichte digital">BWGD</abbr>-Format</a> ergänzt.</p>
+						<p>Die <a href="#" class="link-dokumentation">technische Dokumentation</a> wurde im Kapitel <i><abbr title="Wortgeschichte digital">WGD</abbr>-Dateiformat</i> um das <a href="#ztj-ztb" class="link-dokumentation"><abbr title="Belege Wortgeschichte digital">BWGD</abbr>-Format</a> ergänzt.</p>
 					</li>
 
 					<li>
@@ -1101,7 +1168,7 @@ Gerüst 2 &gt; Gerüst 1</pre>
 			<div class="version">0.13.3</div>
 
 			<div>
-				<h2><span>Version 0.13.3</span><time datetime="2019-07-30T18:39:02">30. Juli 2019</time></h2>
+				<h2><span>Version 0.13.3</span><time datetime="2019-07-30">30. Juli 2019</time></h2>
 
 				<h3>Verbesserungen</h3>
 
@@ -1142,7 +1209,7 @@ Gerüst 2 &gt; Gerüst 1</pre>
 			<div class="version">0.13.2</div>
 
 			<div>
-				<h2><span>Version 0.13.2</span><time datetime="2019-07-30T11:03:30">30. Juli 2019</time></h2>
+				<h2><span>Version 0.13.2</span><time datetime="2019-07-30">30. Juli 2019</time></h2>
 
 				<h3>Behobene Fehler</h3>
 
@@ -1159,7 +1226,7 @@ Gerüst 2 &gt; Gerüst 1</pre>
 			<div class="version">0.13.1</div>
 
 			<div>
-				<h2><span>Version 0.13.1</span><time datetime="2019-07-29T15:11:33">29. Juli 2019</time></h2>
+				<h2><span>Version 0.13.1</span><time datetime="2019-07-29">29. Juli 2019</time></h2>
 
 				<h3>Behobene Fehler</h3>
 
@@ -1178,7 +1245,7 @@ Gerüst 2 &gt; Gerüst 1</pre>
 			<div class="version">0.13.0</div>
 
 			<div>
-				<h2><span>Version 0.13.0</span><time datetime="2019-07-24T09:10:50">24. Juli 2019</time></h2>
+				<h2><span>Version 0.13.0</span><time datetime="2019-07-24">24. Juli 2019</time></h2>
 
 				<h3>Neue Funktionen</h3>
 
@@ -1211,7 +1278,7 @@ Gerüst 2 &gt; Gerüst 1</pre>
 			<div class="version">0.12.0</div>
 
 			<div>
-				<h2><span>Version 0.12.0</span><time datetime="2019-07-17T19:51:32">17. Juli 2019</time></h2>
+				<h2><span>Version 0.12.0</span><time datetime="2019-07-17">17. Juli 2019</time></h2>
 
 				<h3>Neue Funktionen</h3>
 
@@ -1268,7 +1335,7 @@ Gerüst 2 &gt; Gerüst 1</pre>
 			<div class="version">0.11.0</div>
 
 			<div>
-				<h2><span>Version 0.11.0</span><time datetime="2019-07-04T15:51:41">4. Juli 2019</time></h2>
+				<h2><span>Version 0.11.0</span><time datetime="2019-07-04">4. Juli 2019</time></h2>
 
 				<h3>Neue Funktionen</h3>
 
@@ -1308,7 +1375,7 @@ Gerüst 2 &gt; Gerüst 1</pre>
 			<div class="version">0.10.0</div>
 
 			<div>
-				<h2><span>Version 0.10.0</span><time datetime="2019-07-02T14:50:13">2. Juli 2019</time></h2>
+				<h2><span>Version 0.10.0</span><time datetime="2019-07-02">2. Juli 2019</time></h2>
 
 				<p><span class="obacht">Das Dateiformat hat sich geändert!</span> Ältere <abbr title="Wortgeschichte digital">WGD</abbr>-Dateien werden automatisch konvertiert; dabei wird eine Änderungsmarkierung gesetzt.</p>
 
@@ -1383,7 +1450,7 @@ Gerüst 2 &gt; Gerüst 1</pre>
 			<div class="version">0.9.2</div>
 
 			<div>
-				<h2><span>Version 0.9.2</span><time datetime="2019-06-19T09:15:08">19. Juni 2019</time></h2>
+				<h2><span>Version 0.9.2</span><time datetime="2019-06-19">19. Juni 2019</time></h2>
 
 				<h3>Verbesserungen</h3>
 
@@ -1398,7 +1465,7 @@ Gerüst 2 &gt; Gerüst 1</pre>
 			<div class="version">0.9.1</div>
 
 			<div>
-				<h2><span>Version 0.9.1</span><time datetime="2019-05-27T09:07:47">27. Mai 2019</time></h2>
+				<h2><span>Version 0.9.1</span><time datetime="2019-05-27">27. Mai 2019</time></h2>
 
 				<h3>Behobene Fehler</h3>
 
@@ -1411,7 +1478,7 @@ Gerüst 2 &gt; Gerüst 1</pre>
 			<div class="version">0.9.0</div>
 
 			<div>
-				<h2><span>Version 0.9.0</span><time datetime="2019-05-21T13:02:07">21. Mai 2019</time></h2>
+				<h2><span>Version 0.9.0</span><time datetime="2019-05-21">21. Mai 2019</time></h2>
 
 				<p><span class="obacht">Das Dateiformat hat sich geändert!</span> Ältere <abbr title="Wortgeschichte digital">WGD</abbr>-Dateien werden automatisch konvertiert; dabei wird eine Änderungsmarkierung gesetzt.</p>
 
@@ -1504,7 +1571,7 @@ Gerüst 2 &gt; Gerüst 1</pre>
 			<div class="version">0.8.0</div>
 
 			<div>
-				<h2><span>Version 0.8.0</span><time datetime="2019-05-15T17:46:31">15. Mai 2019</time></h2>
+				<h2><span>Version 0.8.0</span><time datetime="2019-05-15">15. Mai 2019</time></h2>
 
 				<p><span class="obacht">Das Dateiformat hat sich geändert!</span> Ältere <abbr title="Wortgeschichte digital">WGD</abbr>-Dateien werden automatisch konvertiert; dabei wird eine Änderungsmarkierung gesetzt.</p>
 
@@ -1666,7 +1733,7 @@ Gerüst 2 &gt; Gerüst 1</pre>
 			<div class="version">0.7.0</div>
 
 			<div>
-				<h2><span>Version 0.7.0</span><time datetime="2019-05-06T14:26:09">6. Mai 2019</time></h2>
+				<h2><span>Version 0.7.0</span><time datetime="2019-05-06">6. Mai 2019</time></h2>
 
 				<h3>Neue Funktionen</h3>
 
@@ -1721,7 +1788,7 @@ Mustermann, Erika
 			<div class="version">0.6.0</div>
 
 			<div>
-				<h2><span>Version 0.6.0</span><time datetime="2019-04-28T08:54:46">28. April 2019</time></h2>
+				<h2><span>Version 0.6.0</span><time datetime="2019-04-28">28. April 2019</time></h2>
 
 				<h3>Neue Funktionen</h3>
 
@@ -1772,7 +1839,7 @@ Mustermann, Erika
 			<div class="version">0.5.0</div>
 
 			<div>
-				<h2><span>Version 0.5.0</span><time datetime="2019-04-23T13:02:11">23. April 2019</time></h2>
+				<h2><span>Version 0.5.0</span><time datetime="2019-04-23">23. April 2019</time></h2>
 
 				<p><span class="obacht">Achtung!</span> Mit der Installation dieser Version gehen alle bisherigen Einstellungen verloren. (Sie können allerdings manuell wiederhergestellt werden.)</p>
 

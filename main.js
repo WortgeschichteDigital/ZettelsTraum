@@ -68,7 +68,7 @@ function onError (err) {
 	fehler.push({
 		time: new Date().toISOString(),
 		word: "",
-		fileWgd: "",
+		fileZtj: "",
 		fileJs: "main.js",
 		message: err.stack,
 		line: 0,
@@ -486,7 +486,7 @@ appMenu = {
 	//     (Index-Punkt, an dem sich die Datei befindet)
 	zuletztItem (layoutZuletzt, datei, i) {
 		let item = {
-			label: path.basename(datei, ".wgd"),
+			label: path.basename(datei, ".ztj"),
 			sublabel: datei,
 			click: () => appMenu.befehl("kartei-oeffnen", datei),
 		};
@@ -782,11 +782,11 @@ fenster = {
 				// die IPC-Listener im Renderer-Prozess müssen erst initialisiert werden
 				setTimeout(() => this.send("optionen-zuletzt-verschwunden", appMenu.zuletztVerschwunden), 25);
 			}
-			const wgd = fenster.argvWgd(process.argv);
-			if (wgd || kartei) {
+			const ztj = fenster.argvZtj(process.argv);
+			if (ztj || kartei) {
 				let datei = kartei;
 				if (!datei) {
-					datei = wgd;
+					datei = ztj;
 				}
 				// die IPC-Listener im Renderer-Prozess müssen erst initialisiert werden
 				setTimeout(() => this.send("kartei-oeffnen", datei), 25);
@@ -1000,6 +1000,12 @@ fenster = {
 			title = "Über Electron";
 			html = "ueberElectron";
 		}
+		// festlegen, wie die Höhe der Über-Fenster berechnet werden soll
+		// (Linux agiert hier offenbar anders als Windows und macOS)
+		let contentSize = false;
+		if (/darwin|win32/.test(process.platform)) {
+			contentSize = true;
+		}
 		// Fenster öffnen
 		let bw = new BrowserWindow({
 			parent: BrowserWindow.getFocusedWindow(),
@@ -1009,6 +1015,7 @@ fenster = {
 			backgroundColor: "#386ea6",
 			width: 650,
 			height: 334,
+			useContentSize: contentSize,
 			center: true,
 			resizable: false,
 			minimizable: false,
@@ -1112,14 +1119,14 @@ fenster = {
 			w.close();
 		}
 	},
-	// ermittelt den Pfad der übergebenen WGD-Datei
+	// ermittelt den Pfad der übergebenen ZTJ-Datei
 	// (unter Windows steht die übergebene Datei nicht unbedingt in argv[1];
 	// davor können verschiedene Schalter sein)
 	//   argv = Array
 	//     (Array mit den Startargumenten)
-	argvWgd (argv) {
+	argvZtj (argv) {
 		for (let i of argv) {
-			if (/\.wgd$/.test(i)) {
+			if (/\.ztj$/.test(i)) {
 				return i;
 			}
 		}
@@ -1168,8 +1175,8 @@ app.on("activate", () => {
 // zweite Instanz wird gestartet
 app.on("second-instance", (evt, argv) => {
 	// Kartei öffnen?
-	const wgd = fenster.argvWgd(argv);
-	if (!wgd) {
+	const ztj = fenster.argvZtj(argv);
+	if (!ztj) {
 		return;
 	}
 	// Kartei schon offen => Fenster fokussieren
@@ -1178,7 +1185,7 @@ app.on("second-instance", (evt, argv) => {
 		if (!win.hasOwnProperty(id)) {
 			continue;
 		}
-		if (win[id].kartei === wgd) {
+		if (win[id].kartei === ztj) {
 			fenster.fokus(BrowserWindow.fromId(parseInt(id, 10)));
 			return;
 		} else if (win[id].typ === "index" && !win[id].kartei) {
@@ -1188,10 +1195,10 @@ app.on("second-instance", (evt, argv) => {
 	// Kartei noch nicht offen => Kartei öffnen
 	if (leereFenster.length) {
 		let w = BrowserWindow.fromId(leereFenster[0]);
-		w.webContents.send("kartei-oeffnen", wgd);
+		w.webContents.send("kartei-oeffnen", ztj);
 		fenster.fokus(w);
 	} else {
-		fenster.erstellen(wgd);
+		fenster.erstellen(ztj);
 	}
 });
 

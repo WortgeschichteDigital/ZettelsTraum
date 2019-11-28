@@ -494,8 +494,8 @@ let belegImport = {
 						}
 						if (start) { // Ja, das kann passieren! Unbedingt stehenlassen!
 							text += `[:${n}:]`;
+							belegImport.DTAData.seite_zuletzt = n;
 						}
-						belegImport.DTAData.seite_zuletzt = n;
 						return;
 					} else if (ele.nodeName === "cb") { // Spaltenumbruch
 						const n = ele.getAttribute("n");

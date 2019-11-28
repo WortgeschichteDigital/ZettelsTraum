@@ -5,11 +5,17 @@ let popup = {
 	textauswahl: {
 		text: "",
 		html: "",
+		xml: "",
 	},
 	// speichert die ID des Belegs, der bearbeitet werden soll
 	belegID: "",
 	// speichert die ID des Overlay-Fenster, das betroffen ist
 	overlayID: "",
+	// für XML-Kopie: Referenz für das Kopieren eines Belegs
+	referenz: {
+		obj: {}, // Objekt, in dem die Karteikarte liegt, d.i. beleg.data || data.ka[ID]
+		id: "", // die ID der Karteikarte
+	},
 	// speichert den Anhang, der geöffnet werden soll
 	anhangDatei: "",
 	// das angeklickte Anhang-Icon steht in der Detailansicht eines Belegs
@@ -32,9 +38,15 @@ let popup = {
 		// Menü entwerfen
 		let items = [];
 		if (target === "kopieren") {
-			items = ["kopieren"];
-			if (popup.selInBeleg()) {
+			let selInBeleg = popup.selInBeleg();
+			if (selInBeleg) {
 				items.push("markieren");
+			}
+			items.push({name: "text", sub: ["kopieren", "textReferenz"]});
+			if (selInBeleg) {
+				items.push({name: "xml", sub: ["xmlBeleg", "xmlReferenz"]});
+			} else if (/^(karte|liste)$/.test(helfer.hauptfunktion)) {
+				items.push({name: "xml", sub: ["xmlReferenz"]});
 			}
 			if (overlay.oben() === "drucken") {
 				items.push("sep", "schliessen", "sep", "belegHinzufuegen");
@@ -89,9 +101,9 @@ let popup = {
 			if (overlay.oben() === "stamm") {
 				items.push("link", "sep", "schliessen");
 			} else if (helfer.hauptfunktion === "karte") {
-				items.push("link", "sep", "karteikarteConf");
+				items.push("link", "sep", {name: "text", sub: ["textReferenz"]}, {name: "xml", sub: ["xmlReferenz"]}, "sep", "karteikarteConf");
 			} else if (helfer.hauptfunktion === "liste") {
-				items.push("link", "sep", "belegBearbeiten", "belegLoeschen", "belegZwischenablage", "belegDuplizieren", "sep", "beleglisteConf");
+				items.push("link", "sep", {name: "text", sub: ["textReferenz"]}, {name: "xml", sub: ["xmlReferenz"]}, "sep", "belegBearbeiten", "belegLoeschen", "belegZwischenablage", "belegDuplizieren", "sep", "beleglisteConf");
 			} else {
 				items.push("link");
 			}
@@ -104,14 +116,14 @@ let popup = {
 			items = ["beleglisteConf", "sep", "belegHinzufuegen"];
 			popup.belegeAuflisten(items);
 		} else if (target === "beleg-moddel") {
-			items = ["belegBearbeiten", "belegLoeschen", "belegZwischenablage", "belegDuplizieren", "sep", "beleglisteConf", "sep", "belegHinzufuegen"];
+			items = [{name: "text", sub: ["textReferenz"]}, {name: "xml", sub: ["xmlReferenz"]}, "sep", "belegBearbeiten", "belegLoeschen", "belegZwischenablage", "belegDuplizieren", "sep", "beleglisteConf", "sep", "belegHinzufuegen"];
 			popup.belegeAuflisten(items);
 		} else if (target === "anhang") {
 			items = ["anhang", "ordnerAnhang"];
 			if (helfer.hauptfunktion === "karte") {
-				items.push("sep", "karteikarteConf");
+				items.push("sep", {name: "text", sub: ["textReferenz"]}, {name: "xml", sub: ["xmlReferenz"]}, "sep", "karteikarteConf");
 			} else if (popup.anhangDateiBeleg) {
-				items.push("sep", "belegBearbeiten", "belegLoeschen", "belegZwischenablage", "belegDuplizieren", "sep", "beleglisteConf");
+				items.push("sep", {name: "text", sub: ["textReferenz"]}, {name: "xml", sub: ["xmlReferenz"]}, "sep", "belegBearbeiten", "belegLoeschen", "belegZwischenablage", "belegDuplizieren", "sep", "beleglisteConf");
 			} else if (overlay.oben() === "anhaenge") {
 				items.push("sep", "schliessen");
 			}
@@ -125,6 +137,8 @@ let popup = {
 					popup.overlayID === "gerueste" ||
 					popup.overlayID === "geruestwechseln") {
 				items.push("sep", "bedeutungenConf");
+			} else if (popup.overlayID === "ctrlC") {
+				items.push("sep", "kopierenConf");
 			}
 			if (kartei.wort) {
 				items.push("sep", "belegHinzufuegen");
@@ -137,7 +151,9 @@ let popup = {
 				popup.belegeAuflisten(items);
 			}
 		} else if (target === "beleg-conf") {
-			items = ["karteikarteConf", "sep", "belegHinzufuegen"];
+			popup.referenz.data = beleg.data;
+			popup.referenz.id = "" + beleg.id_karte;
+			items = [{name: "text", sub: ["textReferenz"]}, {name: "xml", sub: ["xmlReferenz"]}, "sep", "karteikarteConf", "sep", "belegHinzufuegen"];
 			popup.belegeAuflisten(items);
 		} else if (target === "bedeutungen-conf") {
 			items = ["bedeutungenConf", "sep", "belegHinzufuegen"];
@@ -192,10 +208,17 @@ let popup = {
 			} else if (pfad[i].nodeName === "IMG" &&
 					pfad[i].dataset.datei) {
 				popup.anhangDatei = pfad[i].dataset.datei;
-				if (pfad[i].parentNode.parentNode.classList.contains("liste-meta")) {
+				if (pfad[i].closest(".liste-meta")) {
 					popup.anhangDateiBeleg = true;
+					const id = pfad[i].closest(".liste-details").previousSibling.dataset.id;
+					popup.referenz.data = data.ka[id];
+					popup.referenz.id = id;
 				} else {
 					popup.anhangDateiBeleg = false;
+					if (helfer.hauptfunktion === "karte") {
+						popup.referenz.data = beleg.data;
+						popup.referenz.id = "" + beleg.id_karte;
+					}
 				}
 				return "anhang";
 			}
@@ -230,15 +253,28 @@ let popup = {
 					return "start-datei";
 				} else if (pfad[i].classList.contains("link")) {
 					popup.element = pfad[i];
+					if (helfer.hauptfunktion === "karte") {
+						popup.referenz.data = beleg.data;
+						popup.referenz.id = "" + beleg.id_karte;
+					} else if (helfer.hauptfunktion === "liste") {
+						const id = pfad[i].closest(".liste-details").previousSibling.dataset.id;
+						popup.referenz.data = data.ka[id];
+						popup.referenz.id = id;
+					}
 					return "link";
 				} else if (pfad[i].classList.contains("liste-kopf")) {
 					popup.belegID = pfad[i].dataset.id;
+					popup.referenz.data = data.ka[popup.belegID];
+					popup.referenz.id = popup.belegID;
 					return "beleg-moddel";
 				} else if (pfad[i].classList.contains("liste-details")) {
 					popup.belegID = pfad[i].previousSibling.dataset.id;
+					popup.referenz.data = data.ka[popup.belegID];
+					popup.referenz.id = popup.belegID;
 					return "beleg-moddel";
 				} else if (pfad[i].classList.contains("anhaenge-item")) {
 					popup.anhangDatei = pfad[i].dataset.datei;
+					popup.anhangDateiBeleg = false;
 					return "anhang";
 				} else if (pfad[i].classList.contains("overlay")) {
 					popup.overlayID = pfad[i].id;
@@ -299,6 +335,8 @@ let popup = {
 				}
 				const id = div.parentNode.previousSibling.dataset.id;
 				obj = data.ka[id];
+				popup.referenz.data = data.ka[id]; // für xml.referenz();
+				popup.referenz.id = id;
 				break;
 			} else if (ele.classList.contains("beleg-lese")) {
 				container.umfeld = "TD";
@@ -308,11 +346,22 @@ let popup = {
 					bs = true;
 					obj = beleg.data;
 				}
+				popup.referenz.data = beleg.data; // für xml.referenz();
+				popup.referenz.id = "" + beleg.id_karte;
 				break;
 			} else if (ele.id === "drucken-cont-rahmen") {
 				container.umfeld = "DIV";
 				container.id = "drucken-cont-rahmen";
 				bereich = true;
+			}
+		}
+		// Beleg-ID ermitteln, wenn in Belegliste
+		// (auch wenn Text markiert ist, stehen verschiedene andere Funktion zur
+		// Verfügung, die die ID unbedingt brauchen)
+		if (helfer.hauptfunktion === "liste") {
+			let details = ele.closest(".liste-details");
+			if (details) {
+				popup.belegID = details.previousSibling.dataset.id;
 			}
 		}
 		// ermitteln, ob sich der Rechtsklick im unmittelbaren Umfeld
@@ -338,18 +387,31 @@ let popup = {
 			text = text.replace(/<.+?>/g, "");
 			text = text.replace(/\n/g, "\n\n");
 			// HTML aufbereiten
-			let html = container.innerHTML;
+			let html = "",
+				xml = "";
+			if (container.firstChild.nodeType === 1 &&
+					container.firstChild.nodeName === "P") {
+				html = container.innerHTML;
+			} else {
+				html = `<p>${container.innerHTML}</p>`;
+			}
+			xml = html;
 			if (optionen.data.einstellungen["textkopie-wort"] &&
 					!container.querySelector(".wort")) {
 				html = liste.belegWortHervorheben(html, true);
 			}
 			html = helfer.clipboardHtml(html);
+			if (!container.querySelector(".wort")) {
+				xml = liste.belegWortHervorheben(xml, true);
+			}
+			xml = helfer.clipboardXml(xml);
 			if (bs) {
 				text = beleg.toolsKopierenAddQuelle(text, false, obj);
 				html = beleg.toolsKopierenAddQuelle(html, true, obj);
 			}
 			popup.textauswahl.text = helfer.escapeHtml(text, true);
 			popup.textauswahl.html = html;
+			popup.textauswahl.xml = xml;
 			return true;
 		}
 		// keine Kopieranweisung geben

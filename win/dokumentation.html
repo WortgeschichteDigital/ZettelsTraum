@@ -56,7 +56,8 @@
 					<li><a href="#framework" class="kopf">Framework</a></li>
 					<li><a href="#ordner" class="kopf">Ordner und Dateien</a></li>
 					<li><a href="#js" class="kopf">JavaScript</a></li>
-					<li><a href="#wgd" class="kopf"><abbr title="Wortgeschichte digital">WGD</abbr>-Dateiformat</a></li>
+					<li><a href="#ztj" class="kopf"><abbr title="Zettel’s Traum JSON">ZTJ</abbr>-Dateiformat</a></li>
+					<li><a href="#xml" class="kopf"><abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippets</a></li>
 					<li><a href="#verschiedenes" class="kopf">Verschiedenes</a></li>
 				</ul>
 			</nav>
@@ -92,33 +93,51 @@
 
 					<p>Die <abbr title="Application Programming Interface" lang="en">API</abbr> von <i>Electron</i> ist sehr gut <a href="https://electronjs.org/docs">dokumentiert</a>; das Framework-Motto <q lang="en">It’s easier than you think</q>, somit gar nicht falsch. Für einen raschen Einstieg empfiehlt sich das zweiteilige, sehr übersichtliche <a href="https://electronjs.org/docs/tutorial/quick-start">Quick-Start-Tutorial</a>.</p>
 
+					<!-- Download Quelltext -->
+					<h2 id="framework-download">Download des Quelltexts</h2>
+
+					<p>Mit jedem <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/releases">Release</a> von <i class="app-name"></i> wird ein Tarball veröffentlicht, in dem sich ein Snapshot des Quellcodes befindet, wie er zum Zeitpunkt des Releases im Branch <code class="quelltext">master</code> aussah. Möchte man den Quelltext bearbeiten, kann man auf der Basis der archivierten Ordner und Dateien arbeiten.</p>
+
+					<p>Bequemer ist es natürlich das GitHub-Repository einfach zu klonen:</p>
+
+					<pre>$ git clone https://github.com/WortgeschichteDigital/ZettelsTraum.git zettelstraum</pre>
+
+					<p>Im Repository findet sich ausschließlich der Branch <code class="quelltext">master</code>, der gegenwärtig immer auf dem Stand des letzten Releases gehalten wird.</p>
+
+					<p>Eine weitere Möglichkeit, um an den Quelltext zu gelangen: Er ist auch in den <a href="#framework-quelltext">paketierten Versionen der App</a> enthalten und dort in einem speziellen Archiv im Programmordner zu finden.</p>
+
 					<!-- Installation -->
 					<h2 id="framework-installation">Installation von <i>Electron</i></h2>
 
-					<p>Im Folgenden wird die Einrichtung von <i>Electron</i> auf einer <i>Linux</i>-Distribution beschrieben, die auf <a href="https://www.ubuntu.com/"><i>Ubuntu</i></a> basiert. Die Anweisungen dürften aber für alle Betriebssystem ähnlich sein, denn auch unter <i>Windows</i> wird <i>Node.js</i> <abbr title="beispielsweise">bspw.</abbr> über die Eingabeaufforderung gesteuert.</p>
+					<p>Im Folgenden wird die Einrichtung von <i>Electron</i> auf einer <i>Linux</i>-Distribution beschrieben, die auf <a href="https://www.ubuntu.com/"><i>Ubuntu</i></a> basiert. Die Anweisungen dürften aber für alle Betriebssysteme ähnlich sein, denn auch unter <i>Windows</i> wird <i>Node.js</i> <abbr title="beispielsweise">bspw.</abbr> über die Eingabeaufforderung gesteuert.</p>
 
 					<p>Zunächst muss <i>Node.js</i> mit seinem Paketmanager <code>npm</code> installiert werden (für <i>Windows</i> und <i>macOS</i> gibt es <a href="https://nodejs.org/en/download/">eigene Installer</a>):</p>
 
-					<pre>sudo apt-get install nodejs</pre>
+					<pre>$ sudo apt-get install nodejs</pre>
 
 					<p>Über die Eingaben <code>node -v</code> und <code>npm -v</code> bekommt man die Versionsnummern von <i>Node.js</i> <abbr title="beziehungsweise">bzw.</abbr> dessen Paketmanager angezeigt – ein einfacher Test, ob die Installation geklappt hat. Im Falle des Paketmanagers könnte ein Update ratsam sein:</p>
 
-					<pre>sudo npm install -g npm@latest</pre>
+					<pre>$ sudo npm install -g npm@latest</pre>
 
 					<p>Global lassen sich Programme aus dem <i>Node.js</i>-Respository (wie <abbr title="zum Beispiel">z. B.</abbr> das überaus hilfreiche <a href="https://jshint.com/">JSHint</a>) mithilfe des Schalters <code>-g</code> und Rootrechten (hier erlangt via <code>sudo</code>) installieren:</p>
 
-					<pre>sudo npm install -g [PROGRAMM]</pre>
+					<pre>$ sudo npm install -g [PROGRAMM]</pre>
 
 					<p><i>Electron</i> sollte allerdings nicht global, sondern lokal, <abbr title="das heißt">d. h.</abbr> im App-Ordern, installiert werden, sonst gibt es bei der späteren Paketierung mitunter Probleme – so zumindest meine Erfahrung. Das Zeichen für den aktuellen Pfad (<span class="datei">./</span>) steht hier und im Folgenden für das Wurzelverzeichnis der App, in dem <abbr title="unter anderem">u. a.</abbr> die Datei <span class="datei">./package.json</span> liegt. Die Installation ist simpel:</p>
 
-					<pre>cd ./
-npm install --save-dev electron</pre>
+					<pre>$ cd ./
+$ npm install --save-dev electron</pre>
 
 					<p>Während der Installation werden der Ordner <span class="datei">./node_modules/</span> und die Datei <span class="datei">./package-lock.json</span> erzeugt. Der Ordner <span class="datei">./node_modules/</span> kann mehrere Hundert Megabyte groß sein!</p>
 
+					<p>Entwickeln Sie mit <a href="https://git-scm.com/">Git</a>, bietet es sich an, diese zu <i>Electron</i> und nicht zur App gehörenden Pfade in die <span class="datei">.gitignore</span> einzutragen:</p>
+
+					<pre class="quelltext">/node_modules/
+/package-lock.json</pre>
+
 					<p>Da im Herzen von <i>Electron</i> ein Browser schlägt und Browser fortwährend mit Sicherheitsupdates versorgt werden wollen, gibt es sehr häufig (<abbr title="in der Regel">i. d. R.</abbr> alle ein bis zwei Wochen) <a href="https://electronjs.org/releases/stable"><i>Electron</i>-Updates</a>. Das Update funktioniert genauso wie die Erstinstallation:</p>
 
-					<pre>npm install --save-dev electron</pre>
+					<pre>$ npm install --save-dev electron</pre>
 
 					<p>Welche <i>Electron</i>-Version im App-Ordner installiert ist, kann man dem Fenster <a href="#" class="ueber-electron"><i>Über Electron</i></a> (auch aufzurufen über das Menü <i>Hilfe</i> im Hauptfenster von <i class="app-name"></i>) oder der <span class="datei">./package.json</span> entnehmen:</p>
 
@@ -129,21 +148,21 @@ npm install --save-dev electron</pre>
 
 					<p>Über die aktuelle Version im <i>Node.js</i>-Respository gibt der Paketmanager Auskunft:</p>
 
-					<pre>npm show electron version</pre>
+					<pre>$ npm show electron version</pre>
 
 					<p>Der jüngste stabile Versionszweig von <i>Electron</i> liefert zum Zeitpunkt der Veröffentlichung immer die aktuelle Ausgabe von <i>Chromium</i> mit, hebt die <i>Chromium</i>-Version mit den folgenden Minor-Releases aber nicht mehr an. Technisch ist der im Framework arbeitende Browser somit zwar meist leicht veraltet, um die notwendigen Sicherheitsupdates kümmert sich das <i>Electron</i>-Team aber <a href="https://electronjs.org/docs/tutorial/support#supported-versions">für 36 Wochen</a>, <abbr title="das heißt">d. h.</abbr> über drei Major-Release-Zyklen hinweg. Danach erreicht ein Release-Zweig <abbr title="End-of-life" lang="en">EOL</abbr>.</p>
 
 					<p>Möchte man nicht gleich mit dem ersten Release eines neuen Zweiges auf diesen wechseln, muss man den Releasezweig angeben, von dem man Updates beziehen will. Um es <abbr title="beispielsweise">bspw.</abbr> zu vermeiden, die Version 5.0.x zu benutzen, muss man den Update-Befehl etwas anpassen, um weiterhin Updates des Release-Zweigs 4.1.x zu bekommen:</p>
 
-					<pre>npm install --save-dev electron@4-1-x</pre>
+					<pre>$ npm install --save-dev electron@4-1-x</pre>
 
 					<p>Darüber, welche Zweige alle zur Verfügung stehen, gibt diese Eingabe Auskunft:</p>
 
-					<pre>npm view electron</pre>
+					<pre>$ npm view electron</pre>
 
 					<p>All das, was hier erklärt wurde, brauchen Sie nicht unbedingt händisch ausführen. Es genügt im Grunde, wenn Sie <i>Node.js</i> installieren. Danach können Sie es sich leicht machen und ein mitgeliefertes Script aufrufen, das den Rest für Sie übernimmt – zumindest wenn Ihre Entwicklungsumgebung unter <i>Linux</i> läuft:</p>
 
-					<pre>bash ./installer/build-modules.sh</pre>
+					<pre>$ bash ./installer/build-modules.sh</pre>
 
 					<p>Installiert werden dabei die nötigen Module zum Ausführen und Bauen von <i class="app-name"></i>. Sind diese bereits installiert, wird ein Update angestoßen – falls noch eins aussteht. Das Ausführen des Scripts erzeugt den Ordner <span class="datei">node_modules</span> und die Datei <span class="datei">package-lock.json</span> im App-Verzeichnis. In der <span class="datei">package.json</span> werden die Werte in <code class="quelltext">"devDependencies"</code> aufgefrischt.</p>
 
@@ -164,21 +183,21 @@ npm install --save-dev electron</pre>
 
 					<p>Für den Start der App ist bereits alles eingerichtet. Nach der Installation von <i>Electron</i> muss man im Programmordner nur noch den folgenden Befehl ausführen:</p>
 
-					<pre>npm start</pre>
+					<pre>$ npm start</pre>
 
 					<p>Nun sollte <i class="app-name"></i> im Entwickler-Modus gestartet werden. <abbr title="Das heißt">D. h.</abbr> konkret, dass sich über das Tastaturkürzel <kbd class="nochange">Strg</kbd> + <kbd>⇧</kbd> + <kbd>I</kbd> die <i lang="en">Developer Tools</i> von <i>Chromium</i> öffnen lassen, die in der paketierten Version nicht mehr aufgerufen werden können. Außerdem erscheint in der Menüleiste des Hauptfensters der Menüpunkt <i>Dev</i>, der beim Paketieren eliminiert wird.</p>
 
 					<!-- Paketieren -->
 					<h2 id="framework-paketieren">Paketieren der App</h2>
 
-					<p>Das Paketieren von <i class="app-name"></i> ist denkbar einfach. Zunächst muss der <a href="https://github.com/electron-userland/electron-packager/">Packager von <i>Electron</i></a> installiert werden (haben sie das Script <span class="datei">build-modules.sh</span> ausgeführt, ist dies bereits geschehen):</p>
+					<p>Das Paketieren von <i class="app-name"></i> ist denkbar einfach. Zunächst muss der <a href="https://github.com/electron-userland/electron-packager/">Packager von <i>Electron</i></a> installiert werden (haben Sie das Script <span class="datei">build-modules.sh</span> ausgeführt, ist dies bereits geschehen):</p>
 
-					<pre>cd ./
-npm install --save-dev electron-packager</pre>
+					<pre>$ cd ./
+$ npm install --save-dev electron-packager</pre>
 
 					<p>Den Packager könnte man durchaus über die Kommandozeile bedienen:</p>
 
-					<pre>electron-packager . zettelstraum [OPTIONEN]</pre>
+					<pre>$ electron-packager . zettelstraum [OPTIONEN]</pre>
 
 					<p>Der <code>.</code> steht für das Quellverzeichnis und <code>zettelstraum</code> für den App-Namen.</p>
 
@@ -190,19 +209,19 @@ npm install --save-dev electron-packager</pre>
 						<li>
 							<p>Für <i>Linux</i>:</p>
 
-							<pre>node installer/packager.js linux</pre>
+							<pre>$ node installer/packager.js linux</pre>
 						</li>
 
 						<li>
 							<p>Für <i>Windows</i>:</p>
 
-							<pre>node installer/packager.js win32</pre>
+							<pre>$ node installer/packager.js win32</pre>
 						</li>
 
 						<li>
 							<p>Für <i>macOS</i>:</p>
 
-							<pre>node installer/packager.js darwin</pre>
+							<pre>$ node installer/packager.js darwin</pre>
 						</li>
 					</ul>
 
@@ -233,8 +252,8 @@ npm install --save-dev electron-packager</pre>
 
 					<p>Zunächst einmal muss der Builder via <code>npm</code> installiert werden:</p>
 
-					<pre>cd ./
-npm install --save-dev electron-builder</pre>
+					<pre>$ cd ./
+$ npm install --save-dev electron-builder</pre>
 
 					<p>Die richtige Konfiguration des Builders zu finden, ist nicht so leicht, denn er kennt eine Vielzahl an <a href="https://www.electron.build/configuration/configuration">Konfigurationsmöglichkeiten</a>. Für das Erstellen von <abbr title="Nullsoft Scriptable Install System" lang="en">NSIS</abbr>-Installern, von <abbr title="Apple Disk Image" lang="en">DMG</abbr>-, DEB- und RPM-Paketen sowie von AppImages gibt es bereits fertige Node-Scripts, die sich der <a href="https://www.electron.build/api/electron-builder" lang="en">Programmatic API</a> des Builders bedienen und einem die Konfigurationsarbeit bereits abgenommen haben: <span class="datei">./installer/installer-(linux|mac|win).js</span>. Alle Scripts erstellen Installer für eine 64-Bit-Architektur. Gemeinsam genutzte Funktionen der Installer-Scripts stehen im Modul <span class="datei">./installer/installer.js</span>.</p>
 
@@ -244,19 +263,19 @@ npm install --save-dev electron-builder</pre>
 						<li>
 							<p><i>Linux</i>:</p>
 
-							<pre>node installer/installer-linux.js [appImage|deb|rpm]</pre>
+							<pre>$ node installer/installer-linux.js [appImage|deb|rpm]</pre>
 						</li>
 
 						<li>
 							<p><i>Windows</i>:</p>
 
-							<pre>node installer/installer-win.js [nsis]</pre>
+							<pre>$ node installer/installer-win.js [nsis]</pre>
 						</li>
 
 						<li>
 							<p><i>macOS</i>:</p>
 
-							<pre>node installer/installer-mac.js [dmg]</pre>
+							<pre>$ node installer/installer-mac.js [dmg]</pre>
 						</li>
 					</ul>
 
@@ -268,11 +287,7 @@ npm install --save-dev electron-builder</pre>
 
 					<p>Vor dem Start des eigentlichen Bauvorgangs wird überprüft, ob eine Ebene oberhalb des App-Verzeichnisses ein Ordner namens <span class="datei">build</span> existiert. Er wird <abbr title="gegebenenfalls">ggf.</abbr> automatisch erzeugt.</p>
 
-					<p>Der Linux-Installer erwartet für DEB- und RPM-Pakete, dass in <span class="datei">../build</span> eine Plain-Text-Datei mit dem Namen <span class="datei">changelog</span> liegt. Ist kein Changelog vorhanden, wird automatisch eine leere Datei erzeugt. Im Ordner <span class="datei">./installer/</span> gibt es ein PHP-Script, das mithilfe der <a href="#" class="link-changelog">Changelog</a>-Datei der App (<span class="datei">./win/changelog.html</span>) und der Datei <span class="datei">./installer/build-changelog-maintainer.json</span> einen DEB- <abbr title="beziehungsweise">bzw.</abbr> RPM-Changelog automatisch erstellen kann (zum Ausführen wird eine Command-line-Version von PHP benötigt):</p>
-
-					<pre>php build-changelog.php [FORMAT] [PFAD]</pre>
-
-					<p>Eigentlich ist nicht vorgesehen, dieses PHP-Script direkt auszuführen. Man sollte sich lieber der <a href="#framework-buildScript"><span class="datei">./installer/build.sh</span></a> bedienen, die das Changelog-Script bei Bedarf korrekt aufruft.</p>
+					<p>Der Linux-Installer erwartet für DEB- und RPM-Pakete, dass in <span class="datei">../build</span> eine Plain-Text-Datei mit dem Namen <span class="datei">changelog</span> liegt. Ist kein Changelog vorhanden, wird automatisch eine leere Datei erzeugt. Werden die Linux-Pakete mit der <a href="#framework-buildScript"><span class="datei">./installer/build.sh</span></a> gebaut, wird automatisch versucht, mit den Daten im lokalen Git-Repository einen Changelog zu erstellen. Ist kein Repository vorhanden, wird auch in diesem Fall allein eine leere Datei namens <span class="datei">changelog</span> erzeugt.</p>
 
 					<p>Nach <abbr title="circa">ca.</abbr> ein, zwei Minuten (die genaue Zeit hängt natürlich vom Rechner, aber auch vom gewählten Installer ab), sollte eine Meldung wie <code>Linux-Installer erstellt!</code> erscheinen. Kommt diese Meldung, kann es eigentlich nicht zu größeren Fehlern gekommen sein. Im Verzeichnis <span class="datei">../build</span> befinden sich nun ein Ordner und mehrere Dateien. Interessant ist natürlich nur die Installer-Datei:</p>
 
@@ -282,25 +297,25 @@ npm install --save-dev electron-builder</pre>
 
 					<p>Die DEB-Datei kann mit <span lang="en">Debian Package</span> installiert werden:</p>
 
-					<pre>sudo dpkg -i zettelstraum*.deb</pre>
+					<pre>$ sudo dpkg -i zettelstraum*.deb</pre>
 
 					<p>Die Abhängigkeiten des RPM-Pakets kann man sich so anzeigen lassen:</p>
 
-					<pre>rpm -qp --requires zettelstraum*.rpm</pre>
+					<pre>$ rpm -qp --requires zettelstraum*.rpm</pre>
 
-					<p>Der <abbr title="Wortgeschichte digital">WGD</abbr>-Dateityp sollte während der Installation automatisch registriert werden – und zwar sowohl durch den <i>Windows-</i> als auch durch die <i>Linux</i>-Installer. (Der <i>macOS</i>-Installer wurde wie gesagt nicht getestet.) Für den Fall, dass Probleme auftreten, finden sich im Programmordner Scripts, mit denen die Registrierung des Dateityps unter <i>Linux</i> manuell vor- oder zurückgenommen werden kann. Die Scripts liegen in <span class="datei">/opt/zettelstraum/resources/filetype/linux/</span> und können mit <code>bash</code> ausgeführt werden.</p>
+					<p>Der <abbr title="Zettel’s Traum JSON">ZTJ</abbr>-Dateityp sollte während der Installation automatisch registriert werden – und zwar sowohl durch den <i>Windows-</i> als auch durch die <i>Linux</i>-Installer. (Der <i>macOS</i>-Installer wurde wie gesagt nicht getestet.) Für den Fall, dass Probleme auftreten, finden sich im Programmordner Scripts, mit denen die Registrierung des Dateityps unter <i>Linux</i> manuell vor- oder zurückgenommen werden kann. Die Scripts liegen in <span class="datei">/opt/zettelstraum/resources/filetype/linux/</span> und können mit <code>bash</code> ausgeführt werden.</p>
 
-					<pre>bash [de]register.sh</pre>
+					<pre>$ bash [de]register.sh</pre>
 
 					<p>Für diesen Vorgang werden <abbr title="eventuell">evtl.</abbr> Root-Rechte benötigt.</p>
 
-					<p>Bei der Installation unter <i>Linux</i> werden übrigens auch Dateityp-Icons abgelegt: <span class="datei">/usr/share/icons/hicolor/*/mimetypes/application-x-wgd.png</span>, und zwar jeweils in den Unterordnern <span class="datei">16x16</span>, <span class="datei">22x22</span>, <span class="datei">32x32</span>, <span class="datei">48x48</span>, <span class="datei">64x64</span> und <span class="datei">128x128</span>.</p>
+					<p>Bei der Installation unter <i>Linux</i> werden übrigens auch Dateityp-Icons abgelegt: <span class="datei">/usr/share/icons/hicolor/*/mimetypes/application-x-ztj.png</span>, und zwar jeweils in den Unterordnern <span class="datei">16x16</span>, <span class="datei">22x22</span>, <span class="datei">32x32</span>, <span class="datei">48x48</span>, <span class="datei">64x64</span> und <span class="datei">128x128</span>.</p>
 
 					<h2 id="framework-buildScript">Build-Script</h2>
 
 					<p>Die Installer und auch die <a href="#framework-paketieren"><span class="datei">packager.js</span></a> lassen sich über ein mitgeliefertes Build-Script steuern:</p>
 
-					<pre>bash installer/build.sh</pre>
+					<pre>$ bash installer/build.sh</pre>
 
 					<p>Nach dem Aufruf kann man das Script über Texteingaben steuern. Das Ergebnis eines Bauvorgangs wird im erwähnten Ordner <span class="datei">../build/</span> abgelegt. Die Optionen und Fragen im Script sind reichlich knapp gehalten, vielleicht sogar kryptisch. Darum hier ein paar kurze Erläuterungen.</p>
 
@@ -309,7 +324,11 @@ npm install --save-dev electron-builder</pre>
 					<ul>
 						<li><i>job:</i> Startet die Konfiguration eines einzelnen Build-Jobs. Das Script fragt nach und nach ab, was genau getan werden soll und führt den Job dann aus.</li>
 
+						<li><i>release:</i> Führt <code>bash installer/build-release.sh</code> aus. Das Script bereitet verschiedene Dateien und das lokale Git-Repository nach und nach für ein Release vor, führt das Release selbst aber nicht durch.</li>
+
 						<li><i>preset:</i> Startet ein in den ersten Zeilen des Scripts definiertes Preset, das durchaus auch aus mehreren Jobs bestehen kann. Die Presets können natürlich nach Belieben ergänzt oder geändert werden.</li>
+
+						<li><i>sha:</i> Erstellt die Datei <span class="datei">../build/sha256sums.txt</span>, in der SHA256-Summen aller zum Zeitpunkt der Erstellung im Ordner <span class="datei">../build/</span> liegenden Ordner und Dateien gespeichert werden.</li>
 
 						<li><i>config:</i> Startet die Konfigurationsabfrage, aber keinen Job. Stattdessen wird nur der Konfigurationsstring ausgeworfen. Hilfreich, wenn man sich einen Preset anlegen möchte.</li>
 
@@ -321,27 +340,13 @@ npm install --save-dev electron-builder</pre>
 					<p>Zu den Abfragen, die beim Konfigurieren eines Jobs gestellt werden:</p>
 
 					<ul>
-						<li><i>Typ:</i> Hier geht es darum, ob Installer erstellt werden sollen oder portable Pakete. Für die Installer werden die Dateien <span class="datei">installer-(linux|mac|win).js</span> ausgeführt, für die Pakete die <span class="datei">packager.js</span>.</li>
+						<li><i>Typ:</i> Hier geht es darum, ob Installer erstellt werden sollen oder portable Pakete. Für die Installer werden die Dateien <span class="datei">installer-(linux|mac|win).js</span> ausgeführt, für die Pakete die <span class="datei">packager.js</span>. Außerdem kann ein Tarball mit dem Quellcode erzeugt werden. Hierfür muss jedoch <a href="https://git-scm.com/">Git</a> eingerichtet sein.</li>
 
-						<li><i>OS:</i> Das Betriebssystem, auf dem Paket oder Installer laufen sollen.</li>
+						<li><i>OS:</i> Das Betriebssystem, auf dem Paket oder Installer laufen soll.</li>
 
 						<li><i>Format:</i> Das Format des Installers, das natürlich nur abgefragt wird, wenn ein Installer erstellt werden soll. Das Format der Paketierungen hängt allein vom gewählten Betriebssystem ab.</li>
 
-						<li>
-							<p><i>Maintainer:</i> Hier kann der Name des Maintainers für die Version der App angegeben werden, die man gerade baut. Der Maintainer muss in die Changelogs eingetragen werden, die in DEB- und RPM-Pakete integriert werden; deswegen braucht das Script diese Information.</p>
-
-							<p>Der Maintainer wird allerdings nur dann eingetragen, wenn es sich bei der gebauten Fassung <em>nicht</em> um eine Beta-Version handelt, will sagen: Steht im Versionstring irgendwo <code class="quelltext">beta</code>, wird die Eingabe ignoriert. Ansonsten wird sie in der Datei <span class="datei">./installer/build-changelog-maintainer.json</span> gespeichert.</p>
-
-							<p>Die Mail-Adresse des Maintainers wird wiederum über eine Angabe oben in der <span class="datei">./installer/build-changelog.php</span> aufgelöst.</p>
-						</li>
-
-						<li><i>Archiv:</i> Pakete liegen nach dem Bauen, anders als Installer, nur als Ordnerstruktur vor. Auf Wunsch kann man sie in einem Archiv komprimieren.</li>
-
-						<li>
-							<p><i><abbr title="Hyptertext Markup Language">HTML</abbr>-Update:</i> Das Build-Datum und die Versionsnummer können automatisch in die Datei <span class="datei">./win/changelog.html</span> eingetragen werden. Angesprochen wird dabei immer der oberste Versionsblock mit dem <code class="quelltext">&lt;h2&gt;</code>-, dem dazugehörenden <code class="quelltext">&lt;div class="version"&gt;</code>-Tag und Kommentar. Außerdem wird <abbr title="gegebenenfalls">ggf.</abbr> das Copyright-Jahr in der <span class="datei">./win/ueberApp.html</span> aufgefrischt.</p>
-
-							<p>Wird eine Beta-Version gebaut, werden die <abbr title="Hyptertext Markup Language">HTML</abbr>-Updates in keinem Fall ausgeführt.</p>
-						</li>
+						<li><i>Archiv:</i> Pakete liegen nach dem Bauen, anders als Installer, nur als Ordnerstruktur vor. Auf Wunsch kann man sie in einem Archiv komprimieren. Tarballs werden immer mit <abbr title="GNU zip">gzip</abbr> komprimiert, weswegen für diese keine Abfrage des Archivformats erfolgt.</li>
 
 						<li><i>Aufräumen:</i> Der Ordner <span class="datei">../build/</span> kann nach dem Erledigen eines Build-Jobs automatisch bereinigt werden. Temporäre Dateien werden gelöscht, es bleiben nur Installer, Archive und nicht archivierte Paketordner erhalten.</li>
 					</ul>
@@ -359,9 +364,9 @@ npm install --save-dev electron-builder</pre>
 
 					<p>Das DEB-Paket kann mit dem Paketmanager deinstalliert werden:</p>
 
-					<pre>sudo apt-get purge zettelstraum</pre>
+					<pre>$ sudo apt-get purge zettelstraum</pre>
 
-					<p>Die Registrierung des <abbr title="Wortgeschichte digital">WGD</abbr>-Dateityps sollte dabei automatisch rückgängig gemacht werden (<abbr title="vergleiche">vgl.</abbr> dazu den Abschnitt <a href="#framework-installer">Installer bauen</a>).</p>
+					<p>Die Registrierung des <abbr title="Zettel’s Traum JSON">ZTJ</abbr>-Dateityps sollte dabei automatisch rückgängig gemacht werden (<abbr title="vergleiche">vgl.</abbr> dazu den Abschnitt <a href="#framework-installer">Installer bauen</a>).</p>
 
 					<p>Für <strong>macOS</strong> konnte das Ganze mangels System mit einer entsprechenden Entwicklungsumgebung <span class="obacht">nicht getestet</span> werden.</p>
 
@@ -404,7 +409,7 @@ npm install --save-dev electron-builder</pre>
 
 					<p>Entpacken lässt es sich via:</p>
 
-					<pre>npx asar extract app.asar [ZIELORDNER]</pre>
+					<pre>$ npx asar extract app.asar [ZIELORDNER]</pre>
 
 					<p>Das Archiv enthält den vollständigen Quelltext von <i class="app-name"></i>. Allerdings fehlen in der installierten App die Dateien aus dem Ordner <span class="datei">./resources/*</span>. Sie liegen bereits entpackt im selben Ordner wie die <span class="datei">app.asar</span>.</p>
 				</section>
@@ -424,6 +429,8 @@ npm install --save-dev electron-builder</pre>
 						<li><span class="datei">./main.js</span>: Node-Script, das die App initialisiert, die Programmfenster öffnet, lädt, verwaltet und für viele andere Dinge zuständig ist, was das Betriebssystem, auf dem <i class="app-name"></i> läuft, direkt betrifft</li>
 
 						<li><span class="datei">./package.json</span>: <abbr title="JavaScript Object Notation" lang="en">JSON</abbr>-Datei mit Meta-Informationen zu Programm, Autor und Lizenz sowie Angaben darüber, wie die App gestartet wird; <abbr title="vergleiche">vgl.</abbr> den Abschnitt <a href="#framework-starten">Starten der App</a></li>
+
+						<li><span class="datei">./README.md</span>: Markdown-Datei mit den wichtigsten Infos zu <i class="app-name"></i>. Sie wurde für die Anzeige im <a href="https://github.com/WortgeschichteDigital/ZettelsTraum">GitHub-Repository</a> erstellt.</li>
 					</ul>
 
 					<!-- CSS -->
@@ -448,11 +455,13 @@ npm install --save-dev electron-builder</pre>
 					<h2 class="datei" id="ordner-img">./img/</h2>
 
 					<ul>
-						<li><span class="datei">./img/*.svg</span>: Vektorgrafiken, die sowohl für das Hauptfenster der App als auch für deren Nebenfenster genutzt werden; nicht alle Grafiken werden aus diesem Ordner geladen, mitunter sind sie als <abbr title="Extensible Markup Language">XML</abbr> direkt in den Quelltext der <abbr title="Hyptertext Markup Language">HTML</abbr>-Dateien eingefügt worden</li>
+						<li><span class="datei">./img/*.svg</span>: Vektorgrafiken, die sowohl für das Hauptfenster der App als auch für deren Nebenfenster genutzt werden; nicht alle Grafiken werden aus diesem Ordner geladen, mitunter sind sie als <abbr title="Extensible Markup Language" lang="en">XML</abbr> direkt in den Quelltext der <abbr title="Hyptertext Markup Language" lang="en">HTML</abbr>-Dateien eingefügt worden</li>
 
 						<li><span class="datei">./img/icon/</span>: Bilddateien mit dem Programm-Icon in verschiedenen Größen für unterschiedliche Betriebssysteme; für <i>Windows</i> gibt es eine <span class="datei">icon.ico</span>, für <i>macOS</i> eine <span class="datei">icon.icns</span> und für <i>Linux</i> einen Ordner mit <abbr title="Portable Network Graphics" lang="en">PNG</abbr>-Dateien</li>
 
 						<li><span class="datei">./img/menu/*.png</span>: Bilddateien, die nur von den Menüs verwendet werden, die das Framework verwaltet; dazu zählen das App-Menü am oberen Rand des Hauptfensters und die Kontextmenüs, die auf Rechtsklick erscheinen</li>
+
+						<li><span class="datei">./img/readme/*.png</span>: Bilddateien, die in der <span class="datei">./README.md</span> angezeigt werden</li>
 
 						<li><span class="datei">./img/win/*.png</span>: Bilddateien, die nur von Nebenfenstern (<a href="#" class="link-handbuch">Handbuch</a>, diese Dokumentation <abbr title="und so weiter">usw.</abbr>) geladen werden</li>
 					</ul>
@@ -466,24 +475,22 @@ npm install --save-dev electron-builder</pre>
 						<li>
 							<p><span class="datei">./installer/build.sh</span>: Build-Script, mit dem die App komfortabel paketiert werden kann. Das Script kann unter <i>Linux</i> via <code>bash build.sh</code> ausgeführt werden. Die Parameter werden über Texteingaben abgefragt.</p>
 
-							<p>Im Script können auch Presets angelegt werden, um mehrere Pakete verschiedener Natur mit einem Befehl zu bauen. Die Presets können in den ersten Zeilen der Datei angelegt werden; Muster sind bereits enthalten.</p>
+							<p>Im Script können auch Presets angelegt werden, um mehrere Pakete verschiedener Natur mit einem Befehl zu bauen. Die Presets kann man in die ersten Zeilen der Datei schreiben; Muster sind bereits enthalten.</p>
 						</li>
 
 						<li><span class="datei">./installer/build-modules.sh</span>: Der Aufruf des Scripts installiert die nötigen <i>Electron</i>-Module im App-Ordner. Sind sie bereits installiert, führt es ein Update aus. Das Script kann auch aus der Datei <span class="datei">build.sh</span> heraus aufgerufen werden.</li>
 
-						<li><span class="datei">./installer/build-changelog.php</span>: Das Script erzeugt einen Changelog für DEB- <abbr title="beziehungsweise">bzw.</abbr> RPM-Pakete. Es wird, wenn nötig, von der <span class="datei">build.sh</span> aus aufgerufen.</li>
-
-						<li><span class="datei">./installer/build-changlog-maintainer.json</span>: Enthält Angaben zum Maintainer der einzelnen Versionen von <i class="app-name"></i>. Die Datei wird <abbr title="gegebenenfalls">ggf.</abbr> von der <span class="datei">build.sh</span> ergänzt und von der <span class="datei">build-changelog.php</span> genutzt, um die Maintainer-Infos in die DEB- und RPM-Changelogs zu schreiben.</li>
+						<li><span class="datei">./installer/build-release.sh</span>: Das Script bereitet verschiedene Dateien und das lokale Git-Repository für ein Release vor. Dafür muss natürlich <a href="https://git-scm.com/">Git</a> installiert und ein Repository vorhanden sein. Das Script kann auch aus der Datei <span class="datei">build.sh</span> heraus aufgerufen werden.</li>
 
 						<li><span class="datei">./installer/installer.js</span>: ein gemeinsam genutztes Modul für die Node-Scripts, die Installer erzeugen sowie für die <a href="#ordner-packager">packager.js</a></li>
 
 						<li>
 							<p><span class="datei">./installer/installer-linux.js</span>: Node-Script, das ein DEB- oder RPM-Paket erzeugt, mit dem <i class="app-name"></i> auf <i>Debian</i>/<i>Ubuntu</i> <abbr title="beziehungsweise">bzw.</abbr> Distributionen, die auf RPM setzen, installiert werden kann.</p>
 
-							<p>Dieses und die folgenden Installer-Scripts (auch die <span class="datei">packager.js</span>) müssen aus dem App-Ordner heraus aufgerufen werden. Andernfalls finden sie die Node-Module nicht:</p>
+							<p>Dieses und die folgenden Installer-Scripts (auch die <span class="datei">packager.js</span>) müssen aus dem App-Ordner heraus aufgerufen werden. Andernfalls finden Sie die Node-Module nicht:</p>
 
-							<pre>cd ./
-node installer/installer-linux.js deb</pre>
+							<pre>$ cd ./
+$ node installer/installer-linux.js deb</pre>
 						</li>
 
 						<li><span class="datei">./installer/installer-mac.js</span>: Node-Script, das einen <abbr title="Apple Disk Image" lang="en">DMG</abbr>-Paket erzeugt, mit dem <i class="app-name"></i> auf <i>macOS</i> installiert werden kann. <abbr title="Apple Disk Image" lang="en">DMG</abbr>-Pakete können nur in <i>macOS</i> gebaut werden, darum wurde <span class="obacht">nicht getestet</span>, ob das Paket, das das Script erzeugen können sollte, wirklich funktioniert.</li>
@@ -527,7 +534,7 @@ node installer/installer-linux.js deb</pre>
 
 						<li><span class="datei">./js/app/kartei.js</span>: regelt das Öffnen und Speichern der Wort-Kartei</li>
 
-						<li><span class="datei">./js/app/konversion.js</span>: konvertiert <abbr title="Wortgeschichte digital">WGD</abbr>-Dateien, sodass sie dem aktuellen <a href="#wgd"><abbr title="Wortgeschichte digital">WGD</abbr>-Format</a> entsprechen</li>
+						<li><span class="datei">./js/app/konversion.js</span>: konvertiert <abbr title="Zettel’s Traum JSON">ZTJ</abbr>-Dateien, sodass sie dem aktuellen <a href="#ztj"><abbr title="Zettel’s Traum JSON">ZTJ</abbr>-Format</a> entsprechen</li>
 
 						<li><span class="datei">./js/app/liste.js</span>: regelt den Aufbau und die Funktionen der Belegliste; die Filterleiste links neben den Belegen wird allerdings via <span class="datei">./js/app/filter.js</span> gesteuert</li>
 
@@ -543,7 +550,7 @@ node installer/installer-linux.js deb</pre>
 
 						<li><span class="datei">./js/app/tagger.js</span>: Overlay-Fenster, über das das Bedeutungsgerüst mit Tags versehen werden kann</li>
 
-						<li><span class="datei">./js/app/wgd.js</span>: Helfer-Funktionen zum Speichern, Öffnen, Komprimieren und Dekomprimieren von <a href="#wgd-wgd"><abbr title="Wortgeschichte digital">WGD</abbr>-</a> und <a href="#wgd-bwgd"><abbr title="Belege Wortgeschichte digital">BWGD</abbr></a>-Dateien</li>
+						<li><span class="datei">./js/app/io.js</span>: Helfer-Funktionen zum Speichern, Öffnen, Komprimieren und Dekomprimieren von <a href="#ztj-ztj"><abbr title="Zettel’s Traum JSON">ZTJ</abbr>-</a> und <a href="#ztj-ztb"><abbr title="Zettel’s Traum Belege">ZTB</abbr></a>-Dateien</li>
 
 						<li><span class="datei">./js/win/hilfe.js</span>: Funktionen für das <a href="#" class="link-handbuch"><i>Handbuch</i></a> und die <i>technische Dokumentation</i> (also dieses Fenster)</li>
 					</ul>
@@ -551,7 +558,7 @@ node installer/installer-linux.js deb</pre>
 					<!-- File type -->
 					<h2 class="datei" id="ordner-resources">./resources/</h2>
 
-					<p>Der Unterordner <span class="datei">./resources/filetype/</span> enthält Icons für den <abbr title="Wortgeschichte digital">WGD</abbr>-Dateityp und Shell-Scripts, mit denen auf <i>Linux</i>-Systemen der Dateityp registriert oder entfernt werden kann. (Es gibt auch eine <abbr title="Scalable Vector Graphics">SVG</abbr>-Version des Dateityp-Icons: <span class="datei">./img/datei-wgd.svg</span>.)</p>
+					<p>Der Unterordner <span class="datei">./resources/filetype/</span> enthält Icons für den <abbr title="Zettel’s Traum JSON">ZTJ</abbr>-Dateityp und Shell-Scripts, mit denen auf <i>Linux</i>-Systemen der Dateityp registriert oder entfernt werden kann. (Es gibt auch eine <abbr title="Scalable Vector Graphics">SVG</abbr>-Version des Dateityp-Icons: <span class="datei">./img/datei-ztj.svg</span>.)</p>
 
 					<p>Außerdem finden sich in dem Ordner <abbr title="Extensible Markup Language">XML</abbr>-Dateien mit Tag-Listen und eine <a href="#" class="hilfe-demo">Demonstrationskartei</a>, die im Programm für die Bedeutungsgerüst-Funktion genutzt werden können.</p>
 
@@ -585,18 +592,18 @@ node installer/installer-linux.js deb</pre>
 child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
 				</section>
 
-				<!-- WGD-DATEIFORMAT -->
-				<section id="sektion-wgd" class="suche aus">
-					<!-- WGD-Format -->
-					<h2 id="wgd-wgd"><abbr title="Wortgeschichte digital">WGD</abbr>-Format</h2>
+				<!-- ZTJ-DATEIFORMAT -->
+				<section id="sektion-ztj" class="suche aus">
+					<!-- ZTJ-Format -->
+					<h2 id="ztj-ztj"><abbr title="Zettel’s Traum JSON">ZTJ</abbr>-Format</h2>
 
-					<p>Die <abbr title="Wortgeschichte digital">WGD</abbr>-Dateien sind <abbr title="GNU zip">gzip</abbr>-komprimierter Plain-Text im <abbr title="JavaScript Object Notation">JSON</abbr>-Format.</p>
+					<p>Die <abbr title="Zettel’s Traum JSON">ZTJ</abbr>-Dateien sind <abbr title="GNU zip">gzip</abbr>-komprimierter Plain-Text im <abbr title="JavaScript Object Notation">JSON</abbr>-Format.</p>
 
-					<p>Nach dem Laden einer <abbr title="Wortgeschichte digital">WGD</abbr>-Datei in <i class="app-name"></i> befinden sich die <abbr title="JavaScript Object Notation">JSON</abbr>-Daten im globalen Objekt <code class="quelltext">data</code>. Ihre Werte lassen sich dann in allen Funktionen des Hauptfensters durch einfache Statements wie <code class="quelltext">data.dc</code> lesen oder schreiben.</p>
+					<p>Nach dem Laden einer <abbr title="Zettel’s Traum JSON">ZTJ</abbr>-Datei in <i class="app-name"></i> befinden sich die <abbr title="JavaScript Object Notation">JSON</abbr>-Daten im globalen Objekt <code class="quelltext">data</code>. Ihre Werte lassen sich dann in allen Funktionen des Hauptfensters durch einfache Statements wie <code class="quelltext">data.dc</code> lesen oder schreiben.</p>
 
-					<p>Alle Dateien sind gleich aufgebaut (<span class="obacht">Datenformat Version 10</span>):</p>
+					<p>Alle Dateien sind gleich aufgebaut (<span class="obacht">Datenformat Version 11</span>):</p>
 
-					<table class="wgd">
+					<table class="ztj">
 						<tr>
 							<th>Schlüssel</th>
 							<th>Datentyp</th>
@@ -615,88 +622,88 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
 							<td> </td>
 							<td>Bedeutungsgerüste;<br><span class="obacht">ab Version 5 gefüllt</span></td>
 						</tr>
-						<tr class="wgd-ebene1">
+						<tr class="ztj-ebene1">
 							<td><p><code class="quelltext">gn</code></p></td>
 							<td class="datentyp">String</td>
 							<td><code class="quelltext">/[0-9]+/</code>,<br>Start mit <code class="quelltext">1</code></td>
 							<td>ID des aktiven Gerüsts</td>
 						</tr>
-						<tr class="wgd-ebene1">
+						<tr class="ztj-ebene1">
 							<td><p><code class="quelltext">gr</code></p></td>
 							<td class="datentyp">Object</td>
 							<td> </td>
 							<td>Speicherobjekt für alle Gerüste</td>
 						</tr>
-						<tr class="wgd-ebene2">
+						<tr class="ztj-ebene2">
 							<td colspan="4"><p>Es folgen beliebig viele <span class="datentyp">Objects</span> mit einmaligen Schlüsseln:</p></td>
 						</tr>
-						<tr class="wgd-ebene2">
+						<tr class="ztj-ebene2">
 							<td><p>(ID)</p></td>
 							<td class="datentyp">Object</td>
 							<td><code class="quelltext">/[0-9]+/</code>,<br>Start mit <code class="quelltext">1</code></td>
 							<td>Bedeutungsgerüst</td>
 						</tr>
-						<tr class="wgd-ebene3">
+						<tr class="ztj-ebene3">
 							<td><p><code class="quelltext">bd</code></p></td>
 							<td class="datentyp">Array</td>
 							<td>eindimensional,<br>mit <span class="datentyp">Objects</span> gefüllt</td>
 							<td>Bedeutungen</td>
 						</tr>
-						<tr class="wgd-ebene4">
+						<tr class="ztj-ebene4">
 							<td colspan="4"><p>Die <span class="datentyp">Objects</span> in den Slots haben die folgenden Schlüssel und Werte:</p></td>
 						</tr>
-						<tr class="wgd-ebene4">
+						<tr class="ztj-ebene4">
 							<td><p><code class="quelltext">al</code></p></td>
 							<td class="datentyp">String</td>
 							<td> </td>
 							<td>Alias der Bedeutung</td>
 						</tr>
-						<tr class="wgd-ebene4">
+						<tr class="ztj-ebene4">
 							<td><p><code class="quelltext">bd</code></p></td>
 							<td class="datentyp">Array</td>
 							<td>eindimensional,<br>mit <span class="datentyp">Strings</span> gefüllt,<br><code class="quelltext">&lt;b&gt;</code>, <code class="quelltext">&lt;i&gt;</code>, <code class="quelltext">&lt;u&gt;</code> möglich</td>
 							<td>Bedeutung mit dem kompletten Bedeutungspfad; im letzten Slot steht die Bedeutung dieses Eintrags, darüber die vererbten, übergeordneten Bedeutungen</td>
 						</tr>
-						<tr class="wgd-ebene4">
+						<tr class="ztj-ebene4">
 							<td><p><code class="quelltext">id</code></p></td>
 							<td class="datentyp">Number</td>
 							<td><code class="quelltext">1 – ∞</code></td>
 							<td>ID der Bedeutung</td>
 						</tr>
-						<tr class="wgd-ebene4">
+						<tr class="ztj-ebene4">
 							<td><p><code class="quelltext">ta</code></p></td>
 							<td class="datentyp">Array</td>
 							<td>eindimensional,<br>mit <span class="datentyp">Objects</span> gefüllt</td>
 							<td>Tags</td>
 						</tr>
-						<tr class="wgd-ebene5">
+						<tr class="ztj-ebene5">
 							<td colspan="4"><p>Die <span class="datentyp">Objects</span> in den Slots haben die folgenden Schlüssel und Werte:</p></td>
 						</tr>
-						<tr class="wgd-ebene5">
+						<tr class="ztj-ebene5">
 							<td><p><code class="quelltext">id</code></p></td>
 							<td class="datentyp">String</td>
 							<td> </td>
 							<td>ID des Tags; zeigt auf <code class="quelltext">optionen.data.tags[ty].data[id]</code></td>
 						</tr>
-						<tr class="wgd-ebene5">
+						<tr class="ztj-ebene5">
 							<td><p><code class="quelltext">ty</code></p></td>
 							<td class="datentyp">String</td>
 							<td> </td>
 							<td>Typ des Tags; zeigt auf <code class="quelltext">optionen.data.tags[ty]</code></td>
 						</tr>
-						<tr class="wgd-ebene4">
+						<tr class="ztj-ebene4">
 							<td><p><code class="quelltext">za</code></p></td>
 							<td class="datentyp">String</td>
 							<td> </td>
 							<td>Zählzeichen der Bedeutung; also z. B. <code class="quelltext">"1"</code> oder <code class="quelltext">"a"</code></td>
 						</tr>
-						<tr class="wgd-ebene3">
+						<tr class="ztj-ebene3">
 							<td><p><code class="quelltext">na</code></p></td>
 							<td class="datentyp">String</td>
 							<td> </td>
 							<td>Name des Gerüsts</td>
 						</tr>
-						<tr class="wgd-ebene3">
+						<tr class="ztj-ebene3">
 							<td><p><code class="quelltext">sl</code></p></td>
 							<td class="datentyp">Number</td>
 							<td><code class="quelltext">0–2</code></td>
@@ -726,70 +733,70 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
 							<td> </td>
 							<td>Formvarianten zum Wort der Kartei, die aus dem <abbr title="Deutschen Textarchiv">DTA</abbr> geladen und/oder manuell eingegeben wurden;<br><span class="obacht">mit Version 9 von einem <span class="datentyp">Array</span> in ein <span class="datentyp">Object</span> konvertiert</span></td>
 						</tr>
-						<tr class="wgd-ebene1">
+						<tr class="ztj-ebene1">
 							<td colspan="4"><p>Es folgen beliebig viele <span class="datentyp">Objects</span> mit einmaligen Schlüsseln:</p></td>
 						</tr>
-						<tr class="wgd-ebene1">
+						<tr class="ztj-ebene1">
 							<td><p>(WORT)</p></td>
 							<td class="datentyp">Object</td>
 							<td> </td>
 							<td>eines der Wörter, aus denen das Karteiwort besteht</td>
 						</tr>
-						<tr class="wgd-ebene2">
+						<tr class="ztj-ebene2">
 							<td colspan="4"><p>In jedem <span class="datentyp">Object</span> die folgenden Schlüssel und Werte:</p></td>
 						</tr>
-						<tr class="wgd-ebene3">
+						<tr class="ztj-ebene3">
 							<td><p><code class="quelltext">an</code></p></td>
 							<td class="datentyp">Boolean</td>
 							<td> </td>
 							<td><code class="quelltext">true</code> = Wort wird für die <a href="#menueKartei-formvariantenFunktionen" class="link-handbuch">verschiedensten Funktionen</a> berücksichtigt;<br><code class="quelltext">false</code> = Wort wird überhaupt nicht berücksichtigt</td>
 						</tr>
-						<tr class="wgd-ebene3">
+						<tr class="ztj-ebene3">
 							<td><p><code class="quelltext">fa</code></p></td>
 							<td class="datentyp">Number</td>
 							<td><code class="quelltext">0–17</code></td>
 							<td>Markierungsfarbe;<br><span class="obacht">mit Version 10 ergänzt</span></td>
 						</tr>
-						<tr class="wgd-ebene3">
+						<tr class="ztj-ebene3">
 							<td><p><code class="quelltext">fo</code></p></td>
 							<td class="datentyp">Array</td>
 							<td>eindimensional,<br>mit <span class="datentyp">Objects</span> gefüllt</td>
 							<td>Formvarianten;<br><span class="obacht">bis Version 8 war dieses <span class="datentyp">Array</span> identisch mit <code class="quelltext">data.fv</code></span></td>
 						</tr>
-						<tr class="wgd-ebene4">
+						<tr class="ztj-ebene4">
 							<td colspan="4"><p>Die <span class="datentyp">Objects</span> in den Slots haben die folgenden Schlüssel und Werte:</p></td>
 						</tr>
-						<tr class="wgd-ebene4">
+						<tr class="ztj-ebene4">
 							<td><p><code class="quelltext">qu</code></p></td>
 							<td class="datentyp">String</td>
 							<td><code class="quelltext">"dta"</code> oder <code class="quelltext">"zt"</code></td>
 							<td>Quelle der Formvariante; mit <code class="quelltext">"zt"</code> markierte Varianten wurden manuell ergänzt</td>
 						</tr>
-						<tr class="wgd-ebene4">
+						<tr class="ztj-ebene4">
 							<td><p><code class="quelltext">va</code></p></td>
 							<td class="datentyp">String</td>
 							<td> </td>
 							<td>Formvariante</td>
 						</tr>
-						<tr class="wgd-ebene3">
+						<tr class="ztj-ebene3">
 							<td><p><code class="quelltext">ma</code></p></td>
 							<td class="datentyp">Boolean</td>
 							<td> </td>
 							<td>Wort nur markieren, <a href="#menueKartei-formvariantenNurMarkieren" class="link-handbuch">für gewisse Funktionen</a> jedoch ignorieren;<br><span class="obacht">mit Version 10 ergänzt</span></td>
 						</tr>
-						<tr class="wgd-ebene3">
+						<tr class="ztj-ebene3">
 							<td><p><code class="quelltext">ps</code></p></td>
 							<td class="datentyp">String</td>
 							<td>Part-of-speech-Tag</td>
 							<td>Wortart, genauer: ein <a href="http://kaskade.dwds.de/~moocow/mirror/projects/moot/">Part-of-speech-Tag</a>;<br><span class="obacht">mit Version 10 ergänzt</span></td>
 						</tr>
-						<tr class="wgd-ebene3">
+						<tr class="ztj-ebene3">
 							<td><p><code class="quelltext">tr</code></p></td>
 							<td class="datentyp">Boolean</td>
 							<td> </td>
 							<td>Wort trunkiert markieren, sprich: links und rechts erweitern;<br><span class="obacht">mit Version 10 ergänzt</span></td>
 						</tr>
-						<tr class="wgd-alt">
+						<tr class="ztj-alt">
 							<td><code class="quelltext">ha</code></td>
 							<td class="datentyp">Object</td>
 							<td> </td>
@@ -801,148 +808,148 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
 							<td> </td>
 							<td>Karteikarten</td>
 						</tr>
-						<tr class="wgd-ebene1">
+						<tr class="ztj-ebene1">
 							<td colspan="4"><p>Es folgen beliebig viele <span class="datentyp">Objects</span> mit einmaligen Schlüsseln:</p></td>
 						</tr>
-						<tr class="wgd-ebene1">
+						<tr class="ztj-ebene1">
 							<td><p>(ID)</p></td>
 							<td class="datentyp">Object</td>
 							<td><code class="quelltext">/[0-9]+/</code></td>
 							<td>Karteikarte</td>
 						</tr>
-						<tr class="wgd-ebene2">
+						<tr class="ztj-ebene2">
 							<td colspan="4"><p>In jedem <span class="datentyp">Object</span> die folgenden Schlüssel und Werte:</p></td>
 						</tr>
-						<tr class="wgd-ebene2">
+						<tr class="ztj-ebene2">
 							<td><p><code class="quelltext">an</code></p></td>
 							<td class="datentyp">Array</td>
 							<td>eindimensional,<br>mit <span class="datentyp">Strings</span> gefüllt</td>
 							<td>Anhänge; Pfade zu Dateien, die an die Karteikarte angehängt wurden; die Pfade können absolut oder relativ zum Speicherort der Kartei sein</td>
 						</tr>
-						<tr class="wgd-ebene2">
+						<tr class="ztj-ebene2">
 							<td><p><code class="quelltext">au</code></p></td>
 							<td class="datentyp">String</td>
 							<td> </td>
 							<td>Autor des Belegs</td>
 						</tr>
-						<tr class="wgd-ebene2">
+						<tr class="ztj-ebene2">
 							<td><p><code class="quelltext">bc</code></p></td>
 							<td class="datentyp">Boolean</td>
 							<td> </td>
 							<td>Buchung (Beleg wurde im Artikel zitiert)</td>
 						</tr>
-						<tr class="wgd-ebene2 wgd-alt">
+						<tr class="ztj-ebene2 ztj-alt">
 							<td><p><code class="quelltext">bd</code></p></td>
 							<td class="datentyp">String</td>
 							<td><code class="quelltext">\n</code> möglich</td>
 							<td>Bedeutung; mehrere Bedeutungen durch <code class="quelltext">\n</code> voneinander getrennt; neue Hierarchie beginnt mit <code class="quelltext">": "</code>;<br><span class="obacht">Version 1–4</span></td>
 						</tr>
-						<tr class="wgd-ebene2">
+						<tr class="ztj-ebene2">
 							<td><p><code class="quelltext">bd</code></p></td>
 							<td class="datentyp">Array</td>
 							<td>eindimensional,<br>mit <span class="datentyp">Objects</span> gefüllt</td>
 							<td>Bedeutungen;<br><span class="obacht">ab Version 5</span></td>
 						</tr>
-						<tr class="wgd-ebene3">
+						<tr class="ztj-ebene3">
 							<td colspan="4"><p>Die <span class="datentyp">Objects</span> in den Slots haben die folgenden Schlüssel und Werte:</p></td>
 						</tr>
-						<tr class="wgd-ebene3">
+						<tr class="ztj-ebene3">
 							<td><p><code class="quelltext">gr</code></p></td>
 							<td class="datentyp">String</td>
 							<td><code class="quelltext">/[0-9]+/</code>,<br>Start mit <code class="quelltext">1</code></td>
 							<td>ID des Bedeutungsgerüsts</td>
 						</tr>
-						<tr class="wgd-ebene3">
+						<tr class="ztj-ebene3">
 							<td><p><code class="quelltext">id</code></p></td>
 							<td class="datentyp">Number</td>
 							<td><code class="quelltext">1 – ∞</code></td>
 							<td>ID der Bedeutung</td>
 						</tr>
-						<tr class="wgd-ebene2">
+						<tr class="ztj-ebene2">
 							<td><p><code class="quelltext">be</code></p></td>
 							<td class="datentyp">Number</td>
 							<td><code class="quelltext">0–5</code></td>
 							<td>Markierung mit Sternen; <code class="quelltext">0</code> = unmarkiert, <code class="quelltext">5</code> = 5 Sterne</td>
 						</tr>
-						<tr class="wgd-ebene2">
+						<tr class="ztj-ebene2">
 							<td><p><code class="quelltext">bl</code></p></td>
 							<td class="datentyp">String</td>
 							<td><code class="quelltext">\n</code> möglich</td>
 							<td>Wortbildung; mehrere Wortbildungen durch <code class="quelltext">\n</code> voneinander getrennt; neue Hierarchie beginnt mit <code class="quelltext">": "</code>;<br><span class="obacht">mit Version 3 ergänzt</span></td>
 						</tr>
-						<tr class="wgd-ebene2">
+						<tr class="ztj-ebene2">
 							<td><p><code class="quelltext">bs</code></p></td>
 							<td class="datentyp">String</td>
 							<td><code class="quelltext">\n</code> möglich</td>
 							<td>Belegtext; kann <abbr title="Hyptertext Markup Language">HTML</abbr>-Tags enthalten</td>
 						</tr>
-						<tr class="wgd-ebene2">
+						<tr class="ztj-ebene2">
 							<td><p><code class="quelltext">bu</code></p></td>
 							<td class="datentyp">Boolean</td>
 							<td> </td>
 							<td>Bücherdienst (Beleg muss am Original überprüft werden)</td>
 						</tr>
-						<tr class="wgd-ebene2">
+						<tr class="ztj-ebene2">
 							<td><p><code class="quelltext">da</code></p></td>
 							<td class="datentyp">String</td>
 							<td> </td>
 							<td>Belegdatum; Freitext, enthalten sein muss aber zwingend <code class="quelltext">/[0-9]{4}/</code> und/oder <code class="quelltext">/[0-9]{2}\. Jh\./</code></td>
 						</tr>
-						<tr class="wgd-ebene2">
+						<tr class="ztj-ebene2">
 							<td><p><code class="quelltext">dc</code></p></td>
 							<td class="datentyp">String</td>
 							<td>ISO 8601-Datum:<br><code class="quelltext">"2001-11-01<br>T11:22:33.444Z"</code></td>
 							<td>Zeitpunkt, zu dem die Karteikarte erstellt wurde</td>
 						</tr>
-						<tr class="wgd-ebene2">
+						<tr class="ztj-ebene2">
 							<td><p><code class="quelltext">dm</code></p></td>
 							<td class="datentyp">String</td>
 							<td>ISO 8601-Datum:<br><code class="quelltext">"2001-11-01<br>T11:22:33.444Z"</code></td>
 							<td>Zeitpunkt, zu dem die Karteikarte zuletzt gespeichert wurde</td>
 						</tr>
-						<tr class="wgd-ebene2">
+						<tr class="ztj-ebene2">
 							<td><p><code class="quelltext">ko</code></p></td>
 							<td class="datentyp">Boolean</td>
 							<td> </td>
 							<td>Kontext (der Kontext des Belegs ist zu dürftig und muss am Original begutachtet werden)</td>
 						</tr>
-						<tr class="wgd-ebene2">
+						<tr class="ztj-ebene2">
 							<td><p><code class="quelltext">kr</code></p></td>
 							<td class="datentyp">String</td>
 							<td> </td>
 							<td>Korpus, aus dem der Beleg stammt;<br><span class="obacht">mit Version 2 ergänzt</span></td>
 						</tr>
-						<tr class="wgd-ebene2">
+						<tr class="ztj-ebene2">
 							<td><p><code class="quelltext">mt</code></p></td>
 							<td class="datentyp">Boolean</td>
 							<td> </td>
 							<td>Metatext (Beleg ist mit einer analytischen Haltung gegenüber dem Karteiwort verfasst);<br><span class="obacht">mit Version 8 ergänzt</span></td>
 						</tr>
-						<tr class="wgd-ebene2">
+						<tr class="ztj-ebene2">
 							<td><p><code class="quelltext">no</code></p></td>
 							<td class="datentyp">String</td>
 							<td><code class="quelltext">\n</code> möglich</td>
 							<td>Notizen zur Karteikarte</td>
 						</tr>
-						<tr class="wgd-ebene2">
+						<tr class="ztj-ebene2">
 							<td><p><code class="quelltext">qu</code></p></td>
 							<td class="datentyp">String</td>
 							<td><code class="quelltext">\n</code> möglich</td>
 							<td>Quellenangabe</td>
 						</tr>
-						<tr class="wgd-ebene2">
+						<tr class="ztj-ebene2">
 							<td><p><code class="quelltext">sy</code></p></td>
 							<td class="datentyp">String</td>
 							<td><code class="quelltext">\n</code> möglich</td>
 							<td>Synonym; mehrere Synonyme durch <code class="quelltext">\n</code> voneinander getrennt; neue Hierarchie beginnt mit <code class="quelltext">": "</code><br><span class="obacht">mit Version 4 ergänzt</span></td>
 						</tr>
-						<tr class="wgd-ebene2">
+						<tr class="ztj-ebene2">
 							<td><p><code class="quelltext">ts</code></p></td>
 							<td class="datentyp">String</td>
 							<td><code class="quelltext">\n</code> möglich</td>
 							<td>Textsorte; mehrere Textsorten durch <code class="quelltext">\n</code> voneinander getrennt; neue Hierarchie beginnt mit <code class="quelltext">": "</code></td>
 						</tr>
-						<tr class="wgd-ebene2">
+						<tr class="ztj-ebene2">
 							<td><p><code class="quelltext">un</code></p></td>
 							<td class="datentyp">Boolean</td>
 							<td> </td>
@@ -966,22 +973,22 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
 							<td>eindimensional,<br>mit <span class="datentyp">Objects</span> gefüllt</td>
 							<td>Redaktionsereignisse</td>
 						</tr>
-						<tr class="wgd-ebene1">
+						<tr class="ztj-ebene1">
 							<td colspan="4"><p>Die <span class="datentyp">Objects</span> in den Slots haben die folgenden Schlüssel und Werte:</p></td>
 						</tr>
-						<tr class="wgd-ebene1">
+						<tr class="ztj-ebene1">
 							<td><p><code class="quelltext">da</code></p></td>
 							<td class="datentyp">String</td>
 							<td>ISO 8601-Datum:<br><code class="quelltext">"2019-12-01"</code></td>
 							<td>Tagesdatum des Ereignisses</td>
 						</tr>
-						<tr class="wgd-ebene1">
+						<tr class="ztj-ebene1">
 							<td><p><code class="quelltext">er</code></p></td>
 							<td class="datentyp">String</td>
 							<td> </td>
 							<td>Redaktionsereignis</td>
 						</tr>
-						<tr class="wgd-ebene1">
+						<tr class="ztj-ebene1">
 							<td><p><code class="quelltext">pr</code></p></td>
 							<td class="datentyp">String</td>
 							<td> </td>
@@ -996,14 +1003,14 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
 						<tr>
 							<td><p><code class="quelltext">ty</code></p></td>
 							<td class="datentyp">String</td>
-							<td>immer <code class="quelltext">"wgd"</code></td>
-							<td>Dateityp; für Tests beim Öffnen einer Kartei, damit nicht beliebige <abbr title="JavaScript Object Notation">JSON</abbr>-Daten in einem anderen Dateiformat geladen werden</td>
+							<td>immer <code class="quelltext">"ztj"</code></td>
+							<td>Dateityp; für Tests beim Öffnen einer Kartei, damit nicht beliebige <abbr title="JavaScript Object Notation">JSON</abbr>-Daten in einem anderen Dateiformat geladen werden;<br><span class="obacht">ab Version 11, davor immer <code class="quelltext">"wgd"</code></span></td>
 						</tr>
 						<tr>
 							<td><p><code class="quelltext">ve</code></p></td>
 							<td class="datentyp">Number</td>
 							<td><code class="quelltext">/[0-9]+/</code></td>
-							<td>Versionsnummer des <abbr title="Wortgeschichte digital">WGD</abbr>-Dateiformats</td>
+							<td>Versionsnummer des <abbr title="Zettel’s Traum JSON">ZTJ</abbr>-Dateiformats</td>
 						</tr>
 						<tr>
 							<td><p><code class="quelltext">wo</code></p></td>
@@ -1013,12 +1020,12 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
 						</tr>
 					</table>
 
-					<!-- BWGD-Format -->
-					<h2 id="wgd-bwgd"><abbr title="Belege Wortgeschichte digital">BWGD</abbr>-Format</h2>
+					<!-- ZTB-Format -->
+					<h2 id="ztj-ztb"><abbr title="Zettel’s Traum Belege">ZTB</abbr>-Format</h2>
 
-					<p>Für die Kopierfunktionen (<a href="#menueBelege-kopieren" class="link-handbuch"><i>Belege &gt; Kopieren</i></a> und <a href="#menueBelege-einfuegen" class="link-handbuch"><i>Belege &gt; Einfügen</i></a>) gibt es für den Import <abbr title="beziehungsweise">bzw.</abbr> Export von Beleglisten ein eigenes Austauschformat. Der Inhalt dieser <abbr title="Belege Wortgeschichte digital">BWGD</abbr>-Dateien ist ebenfalls <abbr title="GNU zip">gzip</abbr>-komprimierter Plain-Text im <abbr title="JavaScript Object Notation">JSON</abbr>-Format. Der Aufbau (<span class="obacht">Datenformat Version 1</span>):</p>
+					<p>Für die Kopierfunktionen (<a href="#menueBelege-kopieren" class="link-handbuch"><i>Belege &gt; Kopieren</i></a> und <a href="#menueBelege-einfuegen" class="link-handbuch"><i>Belege &gt; Einfügen</i></a>) gibt es für den Import <abbr title="beziehungsweise">bzw.</abbr> Export von Beleglisten ein eigenes Austauschformat. Der Inhalt dieser <abbr title="Zettel’s Traum Belege">ZTB</abbr>-Dateien ist ebenfalls <abbr title="GNU zip">gzip</abbr>-komprimierter Plain-Text im <abbr title="JavaScript Object Notation">JSON</abbr>-Format. Der Aufbau (<span class="obacht">Datenformat Version 2</span>):</p>
 
-					<table class="wgd">
+					<table class="ztj">
 						<tr>
 							<th>Schlüssel</th>
 							<th>Datentyp</th>
@@ -1031,43 +1038,43 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
 							<td> </td>
 							<td>Belegliste</td>
 						</tr>
-						<tr class="wgd-ebene1">
-							<td colspan="4"><p>In jedem Slot steht ein <span class="datentyp">Object</span>, das fast völlig identisch mit dem einer Karteikarte in <code class="quelltext">data.ka</code> ist, wie man es in gewöhnlichen <abbr title="Wortgeschichte digital">WGD</abbr>-Dateien findet. Dies sind die <strong>Differenzen:</strong></p></td>
+						<tr class="ztj-ebene1">
+							<td colspan="4"><p>In jedem Slot steht ein <span class="datentyp">Object</span>, das fast völlig identisch mit dem einer Karteikarte in <code class="quelltext">data.ka</code> ist, wie man es in gewöhnlichen <abbr title="Zettel’s Traum JSON">ZTJ</abbr>-Dateien findet. Dies sind die <strong>Differenzen:</strong></p></td>
 						</tr>
-						<tr class="wgd-ebene1">
+						<tr class="ztj-ebene1">
 							<td><p><code class="quelltext">bd</code></p></td>
 							<td class="datentyp">Array</td>
 							<td>eindimensional,<br>mit <span class="datentyp">Objects</span> gefüllt</td>
 							<td>Bedeutungen</td>
 						</tr>
-						<tr class="wgd-ebene2">
+						<tr class="ztj-ebene2">
 							<td colspan="4"><p>Die <span class="datentyp">Objects</span> in den Slots haben die folgenden Schlüssel und Werte:</p></td>
 						</tr>
-						<tr class="wgd-ebene2">
+						<tr class="ztj-ebene2">
 							<td><p><code class="quelltext">bd</code></p></td>
 							<td class="datentyp">String</td>
 							<td><code class="quelltext">\n</code> möglich</td>
 							<td>Bedeutung; mehrere Bedeutungen durch <code class="quelltext">\n</code> voneinander getrennt; neue Hierarchie beginnt mit <code class="quelltext">": "</code>;<br><span class="obacht">der String enthält keine <abbr title="Hyptertext Markup Language" lang="en">HTML</abbr>-Tags</span></td>
 						</tr>
-						<tr class="wgd-ebene2">
+						<tr class="ztj-ebene2">
 							<td><p><code class="quelltext">gr</code></p></td>
 							<td class="datentyp">String</td>
 							<td><code class="quelltext">/[0-9]+/</code>,<br>Start mit <code class="quelltext">1</code></td>
 							<td>ID des Bedeutungsgerüsts;<br><span class="obacht">identisch mit dem Wert der Originaldatei</span></td>
 						</tr>
-						<tr class="wgd-ebene2 wgd-alt">
+						<tr class="ztj-ebene2 ztj-alt">
 							<td><p><code class="quelltext">id</code></p></td>
 							<td class="datentyp">Number</td>
 							<td><code class="quelltext">1 – ∞</code></td>
 							<td>ID der Bedeutung;<br><span class="obacht">fehlt</span></td>
 						</tr>
-						<tr class="wgd-ebene1 wgd-alt">
+						<tr class="ztj-ebene1 ztj-alt">
 							<td><p><code class="quelltext">dc</code></p></td>
 							<td class="datentyp">String</td>
 							<td>ISO 8601-Datum:<br><code class="quelltext">"2001-11-01<br>T11:22:33.444Z"</code></td>
 							<td>Zeitpunkt, zu dem die Karteikarte erstellt wurde;<br><span class="obacht">fehlt</span></td>
 						</tr>
-						<tr class="wgd-ebene1 wgd-alt">
+						<tr class="ztj-ebene1 ztj-alt">
 							<td><p><code class="quelltext">dm</code></p></td>
 							<td class="datentyp">String</td>
 							<td>ISO 8601-Datum:<br><code class="quelltext">"2001-11-01<br>T11:22:33.444Z"</code></td>
@@ -1076,16 +1083,77 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
 						<tr>
 							<td><p><code class="quelltext">ty</code></p></td>
 							<td class="datentyp">String</td>
-							<td>immer <code class="quelltext">"bwgd"</code></td>
-							<td>Dateityp; für Tests beim Importieren der Datei, damit nicht beliebige <abbr title="JavaScript Object Notation">JSON</abbr>-Daten in einem anderen Dateiformat geladen werden</td>
+							<td>immer <code class="quelltext">"ztb"</code></td>
+							<td>Dateityp; für Tests beim Importieren der Datei, damit nicht beliebige <abbr title="JavaScript Object Notation">JSON</abbr>-Daten in einem anderen Dateiformat geladen werden;<br><span class="obacht">ab Version 2, davor immer <code class="quelltext">"bwgd"</code></span></td>
 						</tr>
 						<tr>
 							<td><p><code class="quelltext">ve</code></p></td>
 							<td class="datentyp">Number</td>
 							<td><code class="quelltext">/[0-9]+/</code></td>
-							<td>Versionsnummer des <abbr title="Belege Wortgeschichte digital">BWGD</abbr>-Dateiformats</td>
+							<td>Versionsnummer des <abbr title="Zettel’s Traum Belege">ZTB</abbr>-Dateiformats</td>
 						</tr>
 					</table>
+				</section>
+
+				<!-- XML-SNIPPETS -->
+				<section id="sektion-xml" class="suche aus">
+					<!-- Belegschnitt -->
+					<h2 id="xml-belegschnitt">Belegschnitt</h2>
+
+					<p>Ein typisches <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippet, das mit den entsprechenden <a href="#belegliste-xmlZwischenablage" class="link-handbuch">Kopierfunktionen</a> erstellt wurde, könnte so aussehen:</p>
+
+					<pre class="quelltext">&lt;Beleg xml:id="n-n-1859-19"&gt;
+	&lt;Belegtext&gt;Eine Wache von zehn Mann ward ausgestellt, der Rest der Mannschaft konnte nun thun, was ihm beliebte. Zelte hatten wir keine; unser &lt;Stichwort&gt;Team&lt;/Stichwort&gt; enthielt nichts als unsere Lebensmittel, Kochgeschirr und Teppiche und Munition. Jeder holte sich seine Teppiche aus dem &lt;Stichwort&gt;Team&lt;/Stichwort&gt;, Köche wurden ausgelesen zum Kaffeekochen für die Kompagnieen, große Feuer gebildet, und um jedes Feuer lagen, standen und saßen Gruppen von Soldaten, eingewickelt in Teppiche von allen Farben.&lt;/Belegtext&gt;
+	&lt;Fundstelle Fundort="gbooks"&gt;
+		&lt;Datum&gt;1859&lt;/Datum&gt;
+		&lt;Autor&gt;N. N.&lt;/Autor&gt;
+		&lt;URL&gt;https://books.google.de/books?id=e2dPAQAAMAAJ&amp;amp;pg=PA305&lt;/URL&gt;
+		&lt;unstrukturiert&gt;N. N.: Briefe aus Californien. Von einem Deutschen, in: Hausblätter 5 (1859), Bd. 4, S. 143–149, 301–308, 384–388, hier 305f.&lt;/unstrukturiert&gt;
+	&lt;/Fundstelle&gt;
+&lt;/Beleg&gt;</pre>
+
+					<p><b>&lt;Beleg&gt;:</b> <i>verpflichtend</i>.</p>
+
+					<div class="eingerueckt">
+						<p id="xml-belegschnittId"><b>@xml:id:</b> <i>verpflichtend</i>. Die ID wird aus den <a href="#ztj-ztj">Datenfeldern</a> <code class="quelltext">data.ka[ID].au</code> und <code class="quelltext">data.ka[ID].da</code> abgeleitet. Ist der Nachname des Autors vorangestellt und durch ein Komma vom Vornamen getrennt, wird nur der Nachname genutzt. Findet sich im Datenfeld <i>Autor</i> kein Komma, wird das gesamte Datenfeld ausgewertet. Klammern, Satz- und in <abbr title="Extensible Markup Language" lang="en">XML</abbr> problematische Zeichen (&quot; &apos; &lt; &gt; &amp;) werden ersetzt, Leerzeichen durch <code class="quelltext">-</code> ausgetauscht. Anghängt wird eine vierstellige Jahreszahl, die aus dem Datumsfeld extrahiert wird. Die ID endet mit der ID der Karteikarte, wodurch sie für den Karteikasten in jedem Fall eindeutig wird.</p>
+
+						<p><b>&lt;Belegtext&gt;:</b> <i>verpflichtend</i>. Der mit der <a href="#belegliste-xmlZwischenablage" class="link-handbuch">Kopierfunktion</a> ausgewählte Belegschnitt.</p>
+
+						<div class="eingerueckt">
+							<p><b>&lt;Autorenzusatz&gt;:</b> <i>fakultativ</i>. Text in eckigen Klammern, der von der BearbeiterIn ergänzt wurde.</p>
+
+							<p><b>&lt;Hervorhebung&gt;:</b> <i>fakultativ</i>. Markierung rein typographischer Textauszeichnungen.</p>
+
+							<p class="eingerueckt"><b>@Stil:</b> <i>fakultativ</i>. Das Attribut kann eine Liste von Werten enthalten, die <a href="http://www.deutschestextarchiv.de/doku/basisformat/typogrAllg.html">im <abbr title="Deutsches Textarchiv-Basisformat">DTABf</abbr> verwendet</a> werden. Beim <a href="#verschiedenes-dta">Import von Texten aus dem <abbr title="Deutschen Textarchiv">DTA</abbr></a> werden nicht alle Textmerkmale übernommen; grob gesagt nur die Inline-Formate. Diese können jedoch prinzipiell alle im @Stil auftauchen. Welche Formate <i class="app-name"></i> importiert, kann man der Datei <span class="datei">./js/app/belegImport.js</span> entnehmen. <abbr title="Siehe">S.</abbr> <code class="quelltext">const rend</code> in <code class="quelltext">belegImport.DTAText()</code>.</p>
+
+							<p><b>&lt;Stichwort&gt;:</b> <i>verpflichtend</i>. Markierung des Karteiworts, um das es geht.</p>
+
+							<p><b>&lt;Zeilenumbruch&gt;:</b> <i>fakultativ</i>.</p>
+						</div>
+
+						<p><b>&lt;Fundstelle&gt;:</b> <i>verpflichtend</i>.</p>
+
+						<div class="eingerueckt">
+							<p><b>@Fundort:</b> <i>verpflichtend</i>. Abstrakte Angabe zur Quelle, aus der der Beleg sprudelte. Werte können sein <code class="quelltext">dta | dwds | gbooks | IDS-Archiv | online | Bibliothek</code>.</p>
+
+							<p><b>&lt;Aufrufdatum&gt;:</b> <i>fakultativ</i>; Format: <code class="quelltext">([0-9]{2}\.[0-9]{2}\.)?[0-9]{4}</code>. Das Datum des Zugriffs auf eine Webseite wird aus <code class="quelltext">data.ka[ID].qu</code> ausgelesen. Übernommen wird das erste Datum, das hinter der URL steht. Die regulären Ausdrücke, mit denen gesucht wird, finden sich in <code class="quelltext">xml.datum()</code>.</p>
+
+							<p><b>&lt;Autor&gt;:</b> <i>verpflichtend</i>. Der Inhalt von <code class="quelltext">data.ka[ID].au</code>. Zeichen, die in <abbr title="Extensible Markup Language" lang="en">XML</abbr> problematisch sind, werden maskiert.</p>
+
+							<p><b>&lt;Datum&gt;:</b> <i>verpflichtend</i>; Format: <code class="quelltext">([0-9]{2}\.[0-9]{2}\.)?[0-9]{4}</code>. Das Datum wird aus <code class="quelltext">data.ka[ID].da</code> extrahiert. <abbr title="Vergleiche">Vgl.</abbr> <code class="quelltext">xml.datum()</code>.</p>
+
+							<p><b>&lt;unstrukturiert&gt;:</b> <i>verpflichtend</i>. Eine klassisch formatierte Literaturangabe.</p>
+
+							<p><b>&lt;URL&gt;:</b> <i>fakultativ</i>. Webseite, von der der Beleg stammt. Die URL wird aus <code class="quelltext">data.ka[ID].qu</code> extrahiert.</p>
+						</div>
+					</div>
+
+					<!-- Referenz -->
+					<h2 id="xml-referenz">Referenz</h2>
+
+					<p>Der Referenz-Tag kann genutzt werden, um auf einen in <abbr title="Extensible Markup Language" lang="en">XML</abbr> exportierten Belegschnitt zu verweisen (zur <a href="#xml-belegschnittId">Form der ID</a> <abbr title="siehe oben">s. o.</abbr>). Ein Beispiel:</p>
+
+					<pre class="quelltext">&lt;Belegreferenz Ziel="n-n-1859-19"/&gt;</pre>
 				</section>
 
 				<!-- VERSCHIEDENES -->
@@ -1118,7 +1186,7 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
 					<!-- Tag-Dateien -->
 					<h2 id="verschiedenes-tagDateien">Format Tag-Dateien</h2>
 
-					<p><i class="app-name"></i> kann <a href="#einstellungen-tagDateien">mit Tag-Dateien verknüpft</a> werden, um <a href="#bedeutungsgeruest-tagFenster">Bedeutungen zu taggen</a>. Die Funktion ist so abstrakt programmiert, dass man problemlos die Inhalte selbst erstellter Tag-Dateien importieren kann. Das folgende Beispiel enthält alle verpflichtenden und möglichen Tags:</p>
+					<p><i class="app-name"></i> kann <a href="#einstellungen-tagDateien" class="link-handbuch">mit Tag-Dateien verknüpft</a> werden, um <a href="#bedeutungsgeruest-tagFenster" class="link-handbuch">Bedeutungen zu taggen</a>. Die Funktion ist so abstrakt programmiert, dass man problemlos die Inhalte selbst erstellter Tag-Dateien importieren kann. Das folgende Beispiel enthält alle verpflichtenden und möglichen Tags:</p>
 
 					<pre class="quelltext">&lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;
 &lt;register&gt;
@@ -1134,20 +1202,20 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
 ...
 &lt;/register&gt;</pre>
 
-					<p><b>register:</b> Der (im Rahmen der allgemeinen <abbr title="Extensible Markup Language">XML</abbr>-Regeln) beliebig wählbare Name des Wurzelelements wird im <abbr title="user interface" lang="en">UI</abbr> des Programms genutzt, um die Tag-Kategorie anzuzeigen. Dabei wird der erste Buchstabe in eine Versalie umgewandelt.</p>
+					<p><b>&lt;register&gt;:</b> <i>verpflichtend.</i> Der (im Rahmen der allgemeinen <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Regeln) beliebig wählbare Name des Wurzelelements wird im <abbr title="user interface" lang="en">UI</abbr> des Programms genutzt, um die Tag-Kategorie anzuzeigen. Dabei wird der erste Buchstabe in eine Versalie umgewandelt.</p>
 
-					<p><b>item:</b> Container-Element für einen Tag.</p>
+					<p><b>&lt;item&gt;:</b> <i>verpflichtend.</i> Container-Element für einen Tag.</p>
 
-					<p><b>id:</b> <i>verpflichtend.</i> Identifier des Tags. Ändert man den <code class="quelltext">&lt;name&gt;</code>-Tag kann die App via <code class="quelltext">&lt;id&gt;</code> erkennen, welcher Tag geändert wurde. In den Bedeutungsgerüstdaten werden ausschließlich Tag-Kategorie (hier <i>register</i>) und Identifier gespeichert. Die Tag-Bezeichnung wird auf diese Weise flexibel anpassbar.</p>
+					<p><b>&lt;id&gt;:</b> <i>verpflichtend.</i> Identifier des Tags. Ändert man den <code class="quelltext">&lt;name&gt;</code>-Tag kann die App via <code class="quelltext">&lt;id&gt;</code> erkennen, welcher Tag geändert wurde. In den Bedeutungsgerüstdaten werden ausschließlich Tag-Kategorie (hier <i>register</i>) und Identifier gespeichert. Die Tag-Bezeichnung wird auf diese Weise flexibel anpassbar.</p>
 
-					<p><b>name:</b> <i>verpflichtend.</i> Der eigentliche Tag, ausgeschrieben.</p>
+					<p><b>&lt;name&gt;:</b> <i>verpflichtend.</i> Der eigentliche Tag, ausgeschrieben.</p>
 
-					<p><b>abbr:</b> <i>fakultativ.</i> Der eigentliche Tag, abgekürzt.</p>
+					<p><b>&lt;abbr&gt;:</b> <i>fakultativ.</i> Der eigentliche Tag, abgekürzt.</p>
 
 					<!-- Sperrdatei -->
 					<h2 id="verschiedenes-sperrdatei">Lockfile</h2>
 
-					<p>Wird mit <i class="app-name"></i> eine <abbr title="Wortgeschichte digital">WGD</abbr>-Datei geöffnet, wird im Quellordner der Datei automatisch eine Sperrdatei angelegt. Mithilfe dieser Lock-Datei wird das Öffnen der Kartei für andere NutzerInnen temporär unterbunden, sodass ein kollaboratives Arbeiten in einem Netzwerkordner möglich ist, ohne dass sich die NutzerInnen gegenseitig die Arbeit überschreiben. Beim Schließen der Kartei oder der App wird die Sperrdatei automatisch entfernt.</p>
+					<p>Wird mit <i class="app-name"></i> eine <abbr title="Zettel’s Traum JSON">ZTJ</abbr>-Datei geöffnet, wird im Quellordner der Datei automatisch eine Sperrdatei angelegt. Mithilfe dieser Lock-Datei wird das Öffnen der Kartei für andere NutzerInnen temporär unterbunden, sodass ein kollaboratives Arbeiten in einem Netzwerkordner möglich ist, ohne dass sich die NutzerInnen gegenseitig die Arbeit überschreiben. Beim Schließen der Kartei oder der App wird die Sperrdatei automatisch entfernt.</p>
 
 					<p>Das Schreiben, Überprüfen und Löschen dieser Lock-Datei wird in <code class="quelltext">kartei.lock()</code> geregelt. Ist eine solche Sperrdatei vorhanden, wird das Öffnen der zugehörigen Kartei grundsätzlich unterbunden. Es gibt zwei Ausnahmen:</p>
 
@@ -1173,7 +1241,7 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
 
 								<p><i>Workaround:</i> Die App explizit mit der deutschen Locale starten:</p>
 
-								<pre>LANG=de; zettelstraum</pre>
+								<pre>$ LANG=de; zettelstraum</pre>
 							</div>
 						</li>
 
@@ -1184,9 +1252,13 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
 						</li>
 
 						<li>
-							<p>Mitunter werden unter <i>Windows</i> beim Öffnen eines Internetlinks gleich zwei Browserinstanzen erzeugt, wenn der Standardbrowser der Betriebssystems noch nicht gestartet wurde.</p>
+							<p>Mitunter werden unter <i>Windows</i> beim Öffnen eines Internetlinks gleich zwei Browserinstanzen erzeugt, wenn der Standardbrowser des Betriebssystems noch nicht gestartet wurde.</p>
 
-							<p class="info"><b>Kein Fehler von <i class="app-name"></i>.</b> Der Befehl zum Öffnen des Links wird von der App auch unter <i>Windows</i> definitiv nur einmal abgesetzt. Tritt das Phänomen auf, dürfte ein Konfigurationsproblem des Betriebssystems vorliegen.</p>
+							<div class="info">
+								<p><b>Kein Fehler von <i class="app-name"></i>.</b> Der Befehl zum Öffnen des Links wird von der App auch unter <i>Windows</i> definitiv nur einmal abgesetzt. Tritt das Phänomen auf, dürfte ein Konfigurationsproblem des Betriebssystems vorliegen.</p>
+
+								<p><i>Workaround:</i> Öffnen Sie zunächst den Browser über das Programmmenü des Betriebssystems. Die Links öffnen sich dann immer in dieser Instanz.</p>
+							</div>
 						</li>
 
 

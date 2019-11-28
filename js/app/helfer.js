@@ -199,6 +199,43 @@ let helfer = {
 		}
 		return text;
 	},
+	// einen Text typographisch aufhübschen
+	//   text = String
+	//     (Text, in dem die Anpassungen vorgenommen werden sollen)
+	typographie (text) {
+		text = text.replace(/="(.+?)"/g, (m, p1) => `=__${p1}__`); // Attribute in Tags maskieren
+		text = text.replace(/"(.+?)"/g, (m, p1) => `„${p1}“`); // doppelte Anführungszeichen
+		text = text.replace(/([a-z])'([a-z])/g, (m, p1, p2) => `${p1}’${p2}`); // offenkundiges Apostroph
+		text = text.replace(/'(.+?)'/g, (m, p1) => `‚${p1}‘`); // einfache Anführungszeichen
+		text = text.replace(/=__(.+?)__/g, (m, p1) => `="${p1}"`); // Attribute in Tags demaskieren
+		text = text.replace(/\.{3}/g, "…"); // horizontale Ellipse
+		// geschützte Leerzeichen
+		let abk = new Set([
+			/[0-9]{1,2}\. [0-9]{1,2}\. [0-9]{4}/g, // Datumsangabe (nur 1. Leerzeichen wird ersetzt!)
+			/[0-9]{1,2}\. (Jan|Feb|März|Apr|Mai|Juni|Juli|Aug|Sep|Okt|Nov|Dez)/g, // Datumsangabe mit Monat
+			/[0-9]{2}\. Jh\./g, // Jahrhundertangaben
+			/a\. M\./g, // am Main
+			/Bd\. [0-9]+/g, // Band
+			/d\. h\./ig,
+			/d\. i\./ig,
+			/H\. [0-9]+/g, // Heft
+			/N\. N\./g, // nomen nescio
+			/Nr\. [0-9]+/g, // Nummer
+			/s\. d\./ig,
+			/s\. l\./ig,
+			/S\. [0-9]+/g, // Seitenangaben
+			/Sp\. [0-9]+/g, // Spaltenangaben
+			/u\. a\./ig,
+			/u\. ä\./ig,
+			/s\. v\./ig,
+			/z\. B\./ig,
+		]);
+		for (let i of abk) {
+			text = text.replace(i, m => m.replace(/\s/, " "));
+		}
+		// Text zurückgeben
+		return text;
+	},
 	// Treffer innerhalb von Tags löschen
 	//   text = String
 	//     (Text mit Suchmarkierungen)
@@ -304,13 +341,28 @@ let helfer = {
 			});
 		}
 	},
+	// bereitet einen in HTMl formatierten String für eine XML-Kopie auf
+	//   html = String
+	//     (der Quelltext, in dem die Ersetzungen vorgenommen werden sollen)
+	clipboardXml (html) {
+		// temporären Container erstellen
+		let cont = document.createElement("div");
+		cont.innerHTML = html;
+		// Hervorhebungen, die standardmäßig gelöscht gehören
+		let marks = [".suche", ".suchleiste", ".user", ".farbe0 .wort"];
+		helfer.clipboardHtmlErsetzen(cont, marks.join(", "));
+		// Ergebnis der Aufbereitung zurückggeben
+		return cont.innerHTML;
+	},
 	// Ersetzungsfunktion für zu löschende bzw. umzuwandelnde Element-Container
+	//   cont = Element
+	//     (in diesem Element sollen die Ersetzungen stattfinden)
 	//   selectors = String
 	//     (Liste der Selektoren)
-	//   container = String || undefined
-	//     (steuert die Art des Ersatz-Containers)
+	//   typ = String || undefined
+	//     (Tag-Name des Ersatz-Containers)
 	//   style = String || undefined
-	//     (steuert die Art des Layouts im Ersatz-Container)
+	//     (Style des Ersatz-Containers)
 	clipboardHtmlErsetzen (cont, selectors, typ = "frag", style = "") {
 		let quelle = cont.querySelector(selectors);
 		while (quelle) { // die Elemente könnten verschachtelt sein
@@ -420,13 +472,13 @@ let helfer = {
 	},
 	// Variablen um Wortgrenzen zu bestimmen
 	ganzesWortRegExp: {
-		links: `\\s/\\\\([\\\]{<>`,
-		rechts: `\\s"/\\\\)\\\]!?.:,;<>`,
+		links: `\\s"„“”‚‘»«›‹/\\\\([\\\]{<>`,
+		rechts: `\\s"„“”‚‘»«›‹/\\\\)\\\]!?.:,;<>`,
 		// für Hervorhebung Karteiwort gewisse Klammern ignorieren: [] ()
 		// (das ist deswegen, damit ich Komposita, in denen ein Glied geklammert ist,
 		// auch hervorheben kann; z.B.: "(Handels-)Kolonie")
-		linksWort: `\\s/\\{<>`,
-		rechtsWort: `\\s"/\\!?.:,;<>`,
+		linksWort: `\\s"„“”‚‘»«›‹/\\{<>`,
+		rechtsWort: `\\s"„“”‚‘»«›‹/\\!?.:,;<>`,
 	},
 	// Tokens mit spezieller Bedeutung für reguläre Ausdrücke escapen
 	//   string = String
@@ -526,7 +578,7 @@ let helfer = {
 	// Overlay-Animation, die anzeigt, was gerade geschehen ist
 	// (Kopier-Aktion oder Wrap der Suchleiste)
 	//   ziel = String
-	//     ("liste" || "zwischenablage" || "wrap" || "duplikat" || "gespeichert", "einfuegen")
+	//     ("liste" || "zwischenablage" || "wrap" || "duplikat" || "gespeichert" || "einfuegen")
 	animation (ziel) {
 		// ggf. Timeout clearen
 		clearTimeout(helfer.animationTimeout);
@@ -587,6 +639,22 @@ let helfer = {
 			}, 500);
 		}, 1000);
 	},
+	// entschüsselt die "verschlüsselte" E-Mail-Adresse
+	//   kodiert = String
+	//     (die "verschlüsselte" Mail-Adresse)
+	mailEntschluesseln (kodiert) {
+		let dekodiert = "";
+		for (let i = 0, len = kodiert.length; i < len; i++) {
+			let charCode = kodiert.charCodeAt(i);
+			if (i % 2 === 0) {
+				charCode -= 2;
+			} else {
+				charCode--;
+			}
+			dekodiert += String.fromCharCode(charCode);
+		}
+		return dekodiert.split("trenner")[1];
+	},
 	// öffnet externe Links in einem Browser-Fenster
 	//   a = Element
 	//     (Link, auf dem geklickt wurde)
@@ -613,7 +681,7 @@ let helfer = {
 	ordnerOeffnen (pfad) {
 		const {shell} = require("electron"),
 			path = require("path");
-		if (!/\.wgd$/.test(pfad)) { // Ordner öffnen
+		if (!/\.ztj$/.test(pfad)) { // Ordner öffnen
 			if (!/\/$/.test(pfad)) {
 				pfad += path.sep;
 			}
@@ -678,8 +746,8 @@ let helfer = {
 		}
 		const fsP = require("fs").promises,
 			path = require("path"),
-			quelle = path.join(resources, "Demonstrationskartei Team.wgd"),
-			ziel = path.join(appInfo.temp, "Demonstrationskartei Team.wgd");
+			quelle = path.join(resources, "Demonstrationskartei Team.ztj"),
+			ziel = path.join(appInfo.temp, "Demonstrationskartei Team.ztj");
 		fsP.copyFile(quelle, ziel)
 			.then(() => {
 				kartei.oeffnenEinlesen(ziel);
@@ -744,7 +812,7 @@ let helfer = {
 		let err = {
 			time: new Date().toISOString(),
 			word: typeof kartei === "undefined" ? winInfo.typ : kartei.wort,
-			fileWgd: typeof kartei === "undefined" ? "Nebenfenster" : kartei.pfad,
+			fileZtj: typeof kartei === "undefined" ? "Nebenfenster" : kartei.pfad,
 			fileJs: fileJs,
 			message: message,
 			line: line,

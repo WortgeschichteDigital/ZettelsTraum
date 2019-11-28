@@ -73,7 +73,7 @@ let punkte = {
 		click: "beleg.aktionLoeschenFrage(popup.belegID)",
 	},
 	belegZwischenablage: {
-		label: "Beleg in Zwischenablage kopieren",
+		label: "Beleg in Zwischenablage",
 		icon: "einfuegen-pfeil.png",
 		click: "beleg.ctrlZwischenablage(data.ka[popup.belegID])",
 	},
@@ -129,14 +129,22 @@ let punkte = {
 		`,
 	},
 	kopieren: {
-		label: "Textauswahl kopieren",
-		icon: "kopieren.png",
+		label: "Textauswahl",
+		icon: "text-markiert.png",
 		click: `
 			helfer.toClipboard({
 				text: popup.textauswahl.text,
 				html: popup.textauswahl.html,
 			});
 			helfer.animation("zwischenablage");
+		`,
+	},
+	kopierenConf: {
+		label: "Kopieren-Einstellungen",
+		icon: "zahnrad.png",
+		click: `
+			optionen.oeffnen();
+			optionen.sektionWechseln(document.getElementById("einstellungen-link-kopieren"));
 		`,
 	},
 	kopierenNebenfenster: {
@@ -232,15 +240,46 @@ let punkte = {
 		click: "overlay.schliessen(document.getElementById(overlay.oben()))",
 		accelerator: "Esc",
 	},
+	text: {
+		label: "Text in Zwischenablage",
+		icon: "kopieren.png",
+	},
+	textReferenz: {
+		label: "Referenz",
+		icon: "link-pfeil-runter.png",
+		click: `
+			helfer.toClipboard({
+				text: xml.belegId(),
+			});
+		`,
+	},
 	wort: {
 		label: "Wort ändern",
 		icon: "text-pfeil-kreis.png",
 		click: "kartei.wortAendern()",
 	},
+	xml: {
+		label: "XML in Zwischenablage",
+		icon: "xml.png",
+	},
+	xmlBeleg: {
+		label: "Belegschnitt",
+		icon: "beleg.png",
+		click: "xml.schnitt()",
+	},
+	xmlReferenz: {
+		label: "Referenz",
+		icon: "link-pfeil-runter.png",
+		click: "xml.referenz()",
+	},
 };
 
 module.exports = {
 	// Rechtsklickmenü erzeugen
+	//   contents = Object
+	//     (Referenz auf den aufrufenden WebContents)
+	//   items = Array
+	//     (die Menüpunkte)
 	make (contents, items) {
 		// Menü erzeugen
 		let menu = new Menu();
@@ -248,6 +287,21 @@ module.exports = {
 			// Separator
 			if (i === "sep") {
 				menu.append(module.exports.makeSep());
+				continue;
+			}
+			// Submenü
+			if (typeof i !== "string") {
+				let args = {...punkte[i.name]};
+				args.sub = true;
+				args.obj = true;
+				let opt = module.exports.makeItem(args);
+				for (let j of i.sub) {
+					let args = {...punkte[j]};
+					args.contents = contents;
+					args.obj = true;
+					opt.submenu.push(module.exports.makeItem(args));
+				}
+				menu.append(new MenuItem(opt));
 				continue;
 			}
 			// Menüpunkt
@@ -271,7 +325,19 @@ module.exports = {
 	//     (Funktionen, die auf Klick ausgeführt werden sollen)
 	//   accelerator = String || undefined
 	//     (Tastaturkürzel, das eine informative Funktion hat)
-	makeItem ({contents, label, icon, click = "", accelerator = "", role = ""}) {
+	//   sub = true || undefined
+	//     (Item ist ein Submenü)
+	//   obj = true || undefined
+	//     (die Funktion soll ein Konfigurationsobjekt und kein MenuItem() zurückgeben)
+	makeItem ({
+		contents, label, icon,
+		click = "",
+		accelerator = "",
+		role = "",
+		sub = false,
+		obj = false,
+	}) {
+		// Optionen zusammenbauen
 		let opt = {
 			label: label,
 			icon: path.join(__dirname, "../", "../", "img", "menu", icon),
@@ -284,6 +350,13 @@ module.exports = {
 		}
 		if (role) {
 			opt.role = role;
+		}
+		if (sub) {
+			opt.submenu = [];
+		}
+		// Rückgabe des Ergebnisses
+		if (obj) {
+			return opt;
 		}
 		return new MenuItem(opt);
 	},

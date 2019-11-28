@@ -4,7 +4,7 @@ let konversion = {
 	// aktuelle Version des Dateiformats
 	// *** WICHTIG! *** WICHTIG! *** WICHTIG! ***
 	// Bei Änderungen anpassen!
-	version: 10,
+	version: 11,
 	// Verteilerfunktion
 	start () {
 		konversion.von1nach2();
@@ -16,6 +16,7 @@ let konversion = {
 		konversion.von7nach8();
 		konversion.von8nach9();
 		konversion.von9nach10();
+		konversion.von10nach11();
 	},
 	// Konversion des Dateiformats von Version 1 nach Version 2
 	von1nach2 () {
@@ -206,6 +207,18 @@ let konversion = {
 			data.fv[wort].ps = "";
 			data.fv[wort].tr = true;
 		}
+		// Versionsnummer hochzählen
+		data.ve++;
+		// Änderungsmarkierung setzen
+		kartei.karteiGeaendert(true);
+	},
+	// Konversion des Dateiformats von Version 10 nach Version 11
+	von10nach11 () {
+		if (data.ve > 10) {
+			return;
+		}
+		// Datenfeld "ty" ändern: "wgd" -> "ztj"
+		data.ty = "ztj";
 		// Versionsnummer hochzählen
 		data.ve++;
 		// Änderungsmarkierung setzen

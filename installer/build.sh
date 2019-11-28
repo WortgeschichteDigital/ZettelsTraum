@@ -1,31 +1,31 @@
 #!/bin/bash
 
+# Presets
 presets=(
 	"GitHub"
-	"Arbeitsgruppe"
 	"Test (Linux)"
 	"Test (alle)"
 )
 preset1=(
-	"type=installer|os=linux|pkg=deb|main=Nico_Dorn|update=j|clean=j"
-	"type=installer|os=win|pkg=nsis|update=n|clean=j"
-	"type=packager|os=linux|arch=gz|update=n|clean=j"
-	"type=packager|os=mac|arch=gz|update=n|clean=j"
-	"type=packager|os=win|arch=zip|update=n|clean=j"
+	"type=installer|os=linux|pkg=deb|clean=j"
+	"type=installer|os=win|pkg=nsis|clean=j"
+	"type=packager|os=linux|arch=gz|clean=j"
+	"type=packager|os=mac|arch=gz|clean=j"
+	"type=packager|os=win|arch=zip|clean=j"
+	"type=tarball|clean=n"
 )
 preset2=(
-	"type=installer|os=linux|pkg=deb|main=Nico_Dorn|update=j|clean=j"
-	"type=installer|os=win|pkg=nsis|update=n|clean=j"
-	"type=packager|os=mac|arch=gz|update=n|clean=j"
+	"type=packager|os=linux|arch=-|clean=j"
 )
 preset3=(
-	"type=packager|os=linux|arch=-|update=n|clean=j"
+	"type=packager|os=linux|arch=-|clean=j"
+	"type=packager|os=win|arch=-|clean=j"
+	"type=packager|os=mac|arch=gz|clean=j"
 )
-preset4=(
-	"type=packager|os=linux|arch=-|update=n|clean=j"
-	"type=packager|os=win|arch=-|update=n|clean=j"
-	"type=packager|os=mac|arch=gz|update=n|clean=j"
-)
+
+# Mail-Adressen der Maintainer
+declare -A adressen
+adressen["Nico Dorn"]="ndorn gwdg de"
 
 cat <<- EOF
 
@@ -45,6 +45,7 @@ cat <<- EOF
 
       $(echo -e "\033[48;5;254;38;5;63m          Build         \033[0m")
 EOF
+echo -e "\n"
 
 # Script Directory ermitteln
 dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
@@ -82,6 +83,7 @@ appVersion() {
 	echo $(grep '"version":' "$packageJson" | perl -pe 's/.+: "(.+?)",/\1/')
 }
 
+# Systembezeichnung für Node
 sysName() {
 	declare -A sys
 	sys[linux]="linux"
@@ -90,12 +92,53 @@ sysName() {
 	echo ${sys[$os]}
 }
 
+# testen, ob auf Daten aus einem Repository zurückgegriffen werden kann
+gitOkay() {
+	local okay=0
+	if command -v git >/dev/null 2>&1; then # git installiert?
+		git status &> /dev/null # Repository vorhanden?
+		if (( $? == 0 )); then
+			git describe --abbrev=0 &> /dev/null # Tags vorhanden?
+			if (( $? == 0 )); then
+				okay=1
+			fi
+		fi
+	fi
+	echo $okay
+}
+
+# Mail-Adresse des Maintainers ermitteln
+getMail() {
+	local mail=""
+
+	# Maintainer im Repository suchen
+	local okay=$(gitOkay)
+	if (( okay > 0 )); then
+		local tagger=$(git show $(git describe --abbrev=0) | head -n 2 | tail -n 1)
+		local name=$(echo "$tagger" | perl -pe 's/.+?:\s+(.+?)\s<.+/$1/')
+		if [ ${adressen[$name]+isset} ]; then
+			mail=${adressen[$name]/ /@}
+			mail=${mail/ /.}
+		else
+			mail="no-reply@address.com"
+		fi
+	fi
+
+	# keine Adresse gefunden
+	if test -z "$mail"; then
+		mail="no-replay@address.com"
+	fi
+
+	# Adresse zurückgeben
+	echo "$mail"
+}
+
 # Script konfigurieren
 konfiguration() {
 	# Script-Typ
 	while : ; do
-		read -ep "Typ (installer/packager): " type
-		if ! echo "$type" | egrep -q "^(installer|packager)$"; then
+		read -ep "Typ (installer/packager/tarball): " type
+		if ! echo "$type" | egrep -q "^(installer|packager|tarball)$"; then
 			zeilenWeg 1
 			continue
 		fi
@@ -103,18 +146,20 @@ konfiguration() {
 	done
 
 	# Betriebssystem
-	while : ; do
-		read -ep "OS (linux/mac/win): " os
-		if ! echo "$os" | egrep -q "^(linux|win|mac)$"; then
-			zeilenWeg 1
-			continue
-		fi
-		break
-	done
+	os=""
+	if [ "$type" != "tarball" ]; then
+		while : ; do
+			read -ep "OS (linux/mac/win): " os
+			if ! echo "$os" | egrep -q "^(linux|win|mac)$"; then
+				zeilenWeg 1
+				continue
+			fi
+			break
+		done
+	fi
 
-	pkg=""
-	main=""
 	# Installer
+	pkg=""
 	if [ "$type" = "installer" ]; then
 		# Installer-Format
 		if [ "$os" = "linux" ]; then
@@ -145,19 +190,6 @@ konfiguration() {
 				break
 			done
 		fi
-
-		# Maintainer
-		if [ "$os" = "linux" ] && echo "$pkg" | egrep -q "^(deb|rpm)$"; then
-			while : ; do
-				read -ep "Maintainer: " main
-				if test -z "$main"; then
-					zeilenWeg 1
-					continue
-				fi
-				main=${main// /_}
-				break
-			done
-		fi
 	fi
 
 	# Packager
@@ -173,16 +205,6 @@ konfiguration() {
 			break
 		done
 	fi
-	
-	# HTML-Update
-	while : ; do
-		read -ep "HTML-Update (j/n): " update
-		if ! echo "$update" | egrep -q "^(j|n)$"; then
-			zeilenWeg 1
-			continue
-		fi
-		break
-	done
 
 	# Bereinigen
 	while : ; do
@@ -195,94 +217,125 @@ konfiguration() {
 	done
 
 	# Ergebnis
-	job="type=${type}|os=${os}"
+	job="type=${type}"
+	if ! test -z "$os"; then
+		job+="|os=${os}"
+	fi
 	if ! test -z "$pkg"; then
 		job+="|pkg=${pkg}"
-	fi
-	if ! test -z "$main"; then
-		job+="|main=${main}"
 	fi
 	if ! test -z "$arch"; then
 		job+="|arch=${arch}"
 	fi
-	job+="|update=${update}"
 	job+="|clean=${clean}"
 }
 
-# HTML-Update
-updateHtml() {
-	# App-Version ermitteln
-	version=$(appVersion)
-
-	# HTML-Update nicht für Beta-Versionen
-	if echo "$version" | grep -q "beta"; then
+# Changelog für DEB- oder RPM-Pakete erzeugen
+makeChangelog() {
+	# git nicht installiert
+	if ! command -v git >/dev/null 2>&1; then
+		echo "" # leeren Changelog erzeugen
 		return
 	fi
 
-	# Copyright-Jahr in "Über App" updaten
-	htmlUeber="${dir}/../win/ueberApp.html"
-	copyrightJahr="2019"
-	if [ "$(date +%Y)" != "$copyrightJahr" ]; then
-		copyrightJahr+="–$(date +%Y)"
-	fi
-	copyrightJahrUeber=$(grep "copyright-jahr" "$htmlUeber" | perl -pe 's/.+"copyright-jahr">(.+?)<.+/\1/')
-	if [ "$copyrightJahrUeber" != "$copyrightJahr" ]; then
-		echo -e "  \033[1;32m*\033[0m Copyright-Jahr auffrischen"
-		sed -i "s/copyright-jahr\">.*<\/span>/copyright-jahr\">${copyrightJahr}<\/span>/" "$htmlUeber"
-	fi
-
-	# Changelog auffrischen
-	echo -e "  \033[1;32m*\033[0m Changelog auffrischen"
-
-	htmlChangelog="${dir}/../win/changelog.html"
-
-	zeileKommentar="<!-- Start Versionsblock ${version} -->"
-	sed -i "0,/<!-- Start Versionsblock .* -->/s/<!-- Start Versionsblock .* -->/${zeileKommentar}/" "$htmlChangelog"
-
-	zeileVersion="<div class=\"version\">${version}<\/div>"
-	sed -i "0,/<div class=\"version\">.*<\/div>/s/<div class=\"version\">.*<\/div>/${zeileVersion}/" "$htmlChangelog"
-
-	monate=(
-		"Januar"
-		"Februar"
-		"März"
-		"April"
-		"Mai"
-		"Juni"
-		"Juli"
-		"August"
-		"September"
-		"Oktober"
-		"November"
-		"Dezember"
-	)
-	tag=$(date +%-d)
-	monat=$(date +%-m)
-	monat=${monate[$[$monat - 1]]}
-	jetzt=$(date +%Y-%m-%dT%H:%M:%S)
-	zeileH2="<h2><span>Version ${version}<\/span><time datetime=\"${jetzt}\">${tag}. ${monat} $(date +%Y)<\/time><\/h2>"
-	sed -i "0,/<h2>.*<\/h2>/s/<h2>.*<\/h2>/${zeileH2}/" "$htmlChangelog"
-}
-
-# Maintainer eintragen
-setMaintainer() {
-	# App-Version ermitteln
-	version=$(appVersion)
-
-	# Maintainer nicht für Beta-Versionen
-	if echo "$version" | grep -q "beta"; then
+	# kein Repository gefunden
+	git status &> /dev/null
+	if (( $? > 0 )); then
+		echo "" # leeren Changelog erzeugen
 		return
 	fi
 
-	# Maintainer eingetragen
-	echo -e "  \033[1;32m*\033[0m Maintainer eintragen"
-	maintainer="${dir}/build-changelog-maintainer.json"
-	if [ "$(cat "$maintainer"  | jq -r ".[\"${version}\"]")" = "null" ]; then
-		json=$(cat "$maintainer" | jq -c ".[\"${version}\"] = \"${main//_/ }\"")
-	else
-		json=$(cat "$maintainer" | jq -c ". + { \"${version}\": \"${main//_/ }\" }")
-	fi
-	echo $json > "$maintainer"
+	# alle Tags ermitteln
+	tags=($(git tag --sort=-creatordate))
+
+	# Variable für den Changelog
+	output=""
+
+	# für jeden Tag einen Release-Block erzeugen
+	for (( i=0; i<${#tags[@]}; i++ )); do
+		# Version, Name, Mail, Datum, Release-Typ ermitteln
+		clVersion=${tags[$i]}
+		clName=""
+		clMail=""
+		clDate=""
+		clRelease="" # wird als Fallback genutzt, wenn keine Liste mit wichtigen Commits vorhanden ist
+		while read z; do
+			if test -z "$z"; then
+				continue
+			elif echo "$z" | egrep -q "^Tagger:"; then
+				clName=$(echo "$z" | perl -pe 's/.+?:\s+(.+?)\s<.+/$1/')
+				if [ ${adressen[$clName]+isset} ]; then
+					clMail=${adressen[$clName]/ /@}
+					clMail=${clMail/ /.}
+				else
+					clMail="no-reply@address.com"
+				fi
+			elif echo "$z" | egrep -q "^Date:"; then
+				datum=($(echo "$z" | perl -pe 's/.+?:\s+(.+)/$1/'))
+				if [ "$1" = "deb" ]; then
+					clDate="${datum[0]}, ${datum[2]} ${datum[1]} ${datum[4]} ${datum[3]} ${datum[5]}"
+				elif [ "$1" = "rpm" ]; then
+					clDate="${datum[0]} ${datum[1]} ${datum[2]} ${datum[4]}"
+				fi
+			else
+				clRelease=$(echo "$z" | perl -pe 's/\sv[0-9]+\.[0-9]+\.[0-9]+//')
+			fi
+		done < <(git show "${tags[$i]}" | head -n 5 | tail -n 4)
+
+		# Commits ermitteln
+		clCommits=() # das Array muss nach jedem Durchlauf geleert werden
+		declare -A clCommits
+		next=$[i + 1]
+		j=0
+		while read z; do
+			IFS=" " read -r sha1 message <<< "$z"
+			clCommits[$j]="$message"
+			(( j++ ))
+		done < <(git log -E --grep="^(Removal|Feature|Change|Update|Fix): " --oneline ${tags[$next]}..${tags[$i]})
+
+		# Changelog-Block bauen
+		commitTypen=(Removal Feature Change Update Fix)
+		if [ "$1" = "deb" ]; then
+			output+="zettelstraum (${clVersion}) whatever; urgency=medium\n"
+			output+="\n"
+			if (( ${#clCommits[@]} > 0 )); then
+				for typ in ${!commitTypen[@]}; do
+					for commit in ${!clCommits[@]}; do
+						message=${clCommits[$commit]}
+						if echo "$message" | egrep -q "^${commitTypen[$typ]}"; then
+							output+="  * $message\n"
+						fi
+					done
+				done
+			else
+				output+="  * ${clRelease}\n"
+			fi
+			output+="\n"
+			output+=" -- ${clName} <${clMail}> ${clDate}\n"
+			if (( i < ${#tags[@]} - 1 )); then
+				output+="\n"
+			fi
+		elif [ "$1" = "rpm" ]; then
+			output+="* ${clDate} ${clName} <${clMail}> - ${clVersion}\n"
+			if (( ${#clCommits[@]} > 0 )); then
+				for typ in ${!commitTypen[@]}; do
+					for commit in ${!clCommits[@]}; do
+						message=${clCommits[$commit]}
+						if echo "$message" | egrep -q "^${commitTypen[$typ]}"; then
+							output+="- $message\n"
+						fi
+					done
+				done
+			else
+				output+="- ${clRelease}\n"
+			fi
+			if (( i < ${#tags[@]} - 1 )); then
+				output+="\n"
+			fi
+		fi
+	done
+	
+	echo "$output"
 }
 
 makeArchive() {
@@ -328,9 +381,7 @@ execJob() {
 	type=""
 	os=""
 	pkg=""
-	main=""
 	arch=""
-	update=""
 	clean=""
 	vars=$(echo "$1" | tr "|" "\n")
 	for var in $vars; do
@@ -338,13 +389,7 @@ execJob() {
 	done
 
 	# Checks
-	if echo "$pkg" | egrep -q "^(deb|rpm)$" && ! command -v jq >/dev/null 2>&1; then
-		echo -e "\033[1;31mFehler!\033[0m\n  \033[1;31m*\033[0m \"jq\" nicht installiert"
-		return
-	elif echo "$pkg" | egrep -q "^(deb|rpm)$" && ! command -v php >/dev/null 2>&1; then
-		echo -e "\033[1;31mFehler!\033[0m\n  \033[1;31m*\033[0m \"php\" nicht installiert"
-		return
-	elif [ "$arch" = "zip" ] && ! command -v zip >/dev/null 2>&1; then
+	if [ "$arch" = "zip" ] && ! command -v zip >/dev/null 2>&1; then
 		echo -e "\033[1;31mFehler!\033[0m\n  \033[1;31m*\033[0m \"zip\" nicht installiert"
 		return
 	fi
@@ -359,26 +404,17 @@ execJob() {
 		fi
 	fi
 
-	# changelog.html und ueberApp.html auffrischen
-	if [ "$update" = "j" ]; then
-		updateHtml
-	fi
-
-	# Maintainer und Changelog
-	if ! test -z "$main"; then
-		setMaintainer
+	# Changelog für DEB bzw. RPM erstellen
+	if echo "$pkg" | egrep -q "^(deb|rpm)$" ; then
 		echo -e "  \033[1;32m*\033[0m Changelog erstellen"
-		php "${dir}/build-changelog.php" $pkg "$dir"
-		if (( $? > 0 )); then
-			return
-		fi
+		echo -en "$(makeChangelog $pkg)" > "${dir}/../../build/changelog"
 	fi
 
 	# Installer
 	if [ "$type" = "installer" ]; then
 		echo -e "  \033[1;32m*\033[0m Installer ausführen"
 		cd "${dir}/../"
-		node ./installer/installer-${os}.js $pkg
+		node ./installer/installer-${os}.js $pkg $(getMail)
 		if (( $? > 0 )); then
 			echo -e "\033[1;31mFehler!\033[0m\n  \033[1;31m*\033[0m Installer-Script abgebrochen"
 			cd "$dir"
@@ -390,12 +426,23 @@ execJob() {
 	if [ "$type" = "packager" ]; then
 		echo -e "  \033[1;32m*\033[0m Packager ausführen"
 		cd "${dir}/../"
-		node ./installer/packager.js $(sysName)
+		node ./installer/packager.js $(sysName) $(getMail)
 		if (( $? > 0 )); then
 			echo -e "\033[1;31mFehler!\033[0m\n  \033[1;31m*\033[0m Installer-Script abgebrochen"
 			cd "$dir"
 			return
 		fi
+	fi
+
+	# Tarball
+	if [ "$type" = "tarball" ]; then
+		echo -e "  \033[1;32m*\033[0m Tarball erstellen"
+		if (( $(gitOkay) == 0 )); then
+			echo -e "\n\033[1;31mFehler!\033[0m\n  \033[1;31m*\033[0m Packen abgebrochen"
+			return
+		fi
+		version=$(appVersion)
+		git archive --format=tar --prefix=zettelstraum_${version}/ HEAD | gzip > "${dir}/../../build/zettelstraum_${version}.tar.gz"
 	fi
 
 	cd "$dir"
@@ -419,6 +466,24 @@ execJob() {
 	fi
 }
 
+# Datei mit SHA-Summen erstellen
+shaSummen() {
+	local build="${dir}/../../build/"
+
+	# Prüfen, ob "build" vorhanden ist
+	if ! test -d "$build"; then
+		echo -e "\033[1;31mFehler!\033[0m\n  \033[1;31m*\033[0m \"../../build\" nicht gefunden"
+		return
+	fi
+
+	# Summen-Datei erstellen
+	echo -e "  \033[1;32m*\033[0m Datei mit sha256-Summen erstellen"
+	cd "$build"
+	sha256sum * > sha256sums.txt
+
+	cd "$dir"
+}
+
 # Liste der Presets ausdrucken
 presetsPrint() {
 	echo -e "\n"
@@ -428,7 +493,9 @@ presetsPrint() {
 	echo " [x] Abbruch"
 	while : ; do
 		read -ep "  " preset
-		if [ "$preset" = "x" ] || echo "$preset" | egrep -q "^[1-9]{1}$" && (( preset  <= ${#presets[@]} )); then
+		if [ "$preset" = "x" ]; then
+			return
+		elif echo "$preset" | egrep -q "^[1-9]{1}$" && (( preset  <= ${#presets[@]} )); then
 			presetsExec $preset
 			break
 		else
@@ -454,12 +521,10 @@ presetsExec() {
 
 # Starter
 while : ; do
-	echo -e "\n"
-
-	# Auswahl treffern
-	read -ep "Ausführen (job/preset/config/modules/exit): " action
-	if ! echo "$action" | egrep -q "^(job|preset|config|modules|exit)$"; then
-		zeilenWeg 3
+	# Auswahl treffen
+	read -ep "Ausführen (job/release/preset/sha/config/modules/exit): " action
+	if ! echo "$action" | egrep -q "^(job|release|preset|sha|config|modules|exit)$"; then
+		zeilenWeg 1
 		continue
 	fi
 
@@ -469,18 +534,30 @@ while : ; do
 		konfiguration
 		echo -e "\n"
 		execJob "$job"
+		echo -e "\n"
+	# Release vorbereiten
+	elif [ "$action" = "release" ]; then
+		echo -e "\n"
+		bash "${dir}/build-release.sh" inc
+		echo -e "\n"
+	# Preset auswählen
+	elif [ "$action" = "preset" ]; then
+		presetsPrint
+		echo -e "\n"
+	# Datei mit SHA-Summen erstellen
+	elif [ "$action" = "sha" ]; then
+		shaSummen
+		echo -e "\n"
 	# Konfiguration anzeigen
 	elif [ "$action" = "config" ]; then
 		echo -e "\n"
 		konfiguration
-		echo -e "\n\nJob-Konfiguration:\n  \033[1;32m*\033[0m $job"
-	# Preset auswählen
-	elif [ "$action" = "preset" ]; then
-		presetsPrint
+		echo -e "\n\nJob-Konfiguration:\n  \033[1;32m*\033[0m $job\n\n"
 	# Module auffrischen
 	elif [ "$action" = "modules" ]; then
 		echo -e "\n"
 		bash "${dir}/build-modules.sh" inc
+		echo -e "\n"
 	# Script verlassen
 	elif [ "$action" = "exit" ]; then
 		exit 0
