@@ -13,7 +13,7 @@ let popup = {
 	overlayID: "",
 	// für XML-Kopie: Referenz für das Kopieren eines Belegs
 	referenz: {
-		obj: {}, // Objekt, in dem die Karteikarte liegt, d.i. beleg.data || data.ka[ID]
+		data: {}, // Objekt, in dem die Karteikarte liegt, d.i. beleg.data || data.ka[ID]
 		id: "", // die ID der Karteikarte
 	},
 	// speichert den Anhang, der geöffnet werden soll
