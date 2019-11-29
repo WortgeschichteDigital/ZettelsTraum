@@ -582,6 +582,40 @@ $ node installer/installer-linux.js deb</pre>
 
 					<p><abbr title="Vergleiche">Vgl.</abbr> zu den JavaScript-Dateien die ausführlicheren Anmerkungen im Kapitel <a href="#ordner-js">Ordner und Dateien</a>.</p>
 
+					<p>Drei wichtige Objekte im globalen Namensraum sind:</p>
+
+					<ul>
+						<li><code class="quelltext">data</code>: In diesem <span class="datentyp">Object</span> liegen die Daten der eingelesenen Kartei, also der Inhalt der geöffneten <a href="#ztj-ztj">ZTJ-Datei</a>.</li>
+
+						<li>
+							<p><code class="quelltext">appInfo</code>: In diesem <span class="datentyp">Object</span> werden einige Eigenschaften gespeichert, die nur vom Main-Prozess unmittelbar abgefragt werden können. So stehen sie in allen <a href="#kurzanleitung-programmfensterHauptfenster" class="link-handbuch">Haupt-</a> und <a href="#kurzanleitung-programmfensterNebenfenster" class="link-handbuch">Nebenfenstern</a> zur Verfügung. Es handelt sich im Einzelnen um:</p>
+
+							<ul>
+								<li><code class="quelltext">appInfo.documents</code> (<span class="datentyp">String</span>): Pfad zum Dokumente-Ordner des Rechners;</li>
+
+								<li><code class="quelltext">appInfo.name</code> (<span class="datentyp">String</span>): der Name der App, also <code class="quelltext">"<span class="app-name"></span>"</code>;</li>
+
+								<li><code class="quelltext">appInfo.packaged</code> (<span class="datentyp">Boolean</span>): die App wurde paketiert;</li>
+
+								<li><code class="quelltext">appInfo.temp</code> (<span class="datentyp">String</span>): Pfad zum temporären Ordner des Rechners;</li>
+
+								<li><code class="quelltext">appInfo.version</code> (<span class="datentyp">String</span>): die Versionsnummer der App.</li>
+							</ul>
+						</li>
+
+						<li>
+							<p><code class="quelltext">winInfo</code>: Analog zu <code class="quelltext">appInfo</code> stellt das <span class="datentyp">Object</span> allen Programmfenstern Eigenschaften bereit, die sonst nur im Main-Prozess unmittelbar zugänglich sind. Es handelt sich im Einzelnen um:</p>
+
+							<ul>
+								<li><code class="quelltext">winInfo.winId</code> (<span class="datentyp">Number</span>): ID des aktuellen Fensters;</li>
+
+								<li><code class="quelltext">winInfo.contentsId</code> (<span class="datentyp">Number</span>): ID des WebContents des aktuellen Fensters;</li>
+
+								<li><code class="quelltext">winInfo.typ</code> (<span class="datentyp">String</span>): Typ des Fensters; mögliche Werte: <code class="quelltext">index | bedeutungen | changelog | dokumentation | handbuch | fehlerlog | app | electron</code> (vgl. den Kommentar in den ersten Zeilen der <span class="datei">./main.js</span>).</li>
+							</ul>
+						</li>
+					</ul>
+
 					<h2 id="js-integration">Integration von <i>Electron</i> und <i>Node.js</i></h2>
 
 					<p>Eine Besonderheit des JavaScript-Codes ist, dass auf Objekte, Methoden und Eigenschaften von <i>Electron</i> und <i>Node.js</i> auch in den Renderer-Prozessen zurückgegriffen wird. Hierzu wird die in JavaScript für gewöhnlich nicht vorhandene Methode <code class="quelltext">require()</code> zum Importieren von Modulen benutzt.</p>
