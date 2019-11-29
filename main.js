@@ -23,7 +23,7 @@ const dienste = require("./js/main/dienste"),
 //       "handbuch"      = Nebenfenster "Handbuch"
 //       "fehlerlog"     = Nebenfenster "Fehlerlog"
 //       "app"           = modales Nebenfenster "Über App"
-//       "electron       = modales Nebenfenster "Über Electron")
+//       "electron"      = modales Nebenfenster "Über Electron")
 //     kartei:      String (Pfad zur Kartei, die gerade in dem Fenster geladen ist;
 //       immer leer in Fenstern, die nicht typ === "index" sind;
 //       kann in Fenstern vom typ === "index" leer sein, dann ist keine Kartei geladen;
