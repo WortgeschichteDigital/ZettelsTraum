@@ -138,10 +138,11 @@ let dropdown = {
 				}
 				// erst jetzt darf die Enter-Taste blockiert werden
 				evt.preventDefault();
-				// noch kein Element ausgewählt => 1. Element auswählen
+				// kein Element ausgewählt
+				// (dysfunktional, wenn in solchen Fällen einfach das 1. Element ausgewählt würde)
 				let aktiv = drop.querySelector(".aktiv");
 				if (!aktiv) {
-					aktiv = drop.firstChild;
+					return;
 				}
 				// Text des aktivien Elements eintragen
 				let feld = drop.parentNode.querySelector(".dropdown-feld");
