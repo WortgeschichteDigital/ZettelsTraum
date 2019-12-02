@@ -162,6 +162,8 @@ let xml = {
 		let unstrukturiert = document.createElementNS(ns, "unstrukturiert");
 		fundstelle.appendChild(unstrukturiert);
 		unstrukturiert.appendChild( document.createTextNode( xml.escape( helfer.typographie(qu) ) ) );
+		// Einzüge hinzufügen
+		schnitt = xml.indent(schnitt);
 		// Text in String umwandeln und aufbereiten
 		let XMLString = new XMLSerializer().serializeToString(schnitt);
 		XMLString = XMLString.replace(/\sxmlns="http:\/\/www\.w3\.org\/1999\/xhtml"/g, "");
@@ -315,5 +317,24 @@ let xml = {
 			text = text.replace(reg, v);
 		}
 		return text;
+	},
+	// XML-Snippet mit Einzügen versehen
+	// (s. https://stackoverflow.com/a/47317538)
+	//   xml = Document
+	//     (das XML-Snippet)
+	indent (xml) {
+		let xslt = new DOMParser().parseFromString(`<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+	<xsl:strip-space elements="*"/>
+	<xsl:template match="para[content-style][not(text())]">
+		<xsl:value-of select="normalize-space(.)"/>
+	</xsl:template>
+	<xsl:template match="node()|@*">
+		<xsl:copy><xsl:apply-templates select="node()|@*"/></xsl:copy>
+	</xsl:template>
+	<xsl:output indent="yes"/>
+</xsl:stylesheet>`, "application/xml");
+		let processor = new XSLTProcessor();
+		processor.importStylesheet(xslt);
+		return processor.transformToDocument(xml);
 	},
 };
