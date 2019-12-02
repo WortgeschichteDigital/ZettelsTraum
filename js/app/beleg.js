@@ -180,10 +180,23 @@ let beleg = {
 			helfer.textareaGrow(textarea);
 		});
 		// Fokus setzen
+		let feldDa = document.getElementById("beleg-da");
 		if (neu && !beleg.leseansicht) {
-			document.getElementById("beleg-dta").focus();
+			// Was ist in der Zwischenablage?
+			const {clipboard} = require("electron"),
+				cp = clipboard.readText();
+			if (/^https?:\/\/www\.deutschestextarchiv\.de\//.test(cp)) { // DTA-URL
+				beleg.formularImport("dta");
+			} else {
+				let dwds = belegImport.DWDSXMLCheck(cp);
+				if (helfer.checkType("Number", dwds)) { // kein oder fehlerhaftes DWDS-Snippet
+					feldDa.focus();
+				} else { // DWDS-Snippet
+					beleg.formularImport("dwds");
+				}
+			}
 		} else if (!beleg.leseansicht) {
-			document.getElementById("beleg-da").focus();
+			feldDa.focus();
 		}
 	},
 	// Bedeutung in das Formular eintragen
@@ -245,6 +258,33 @@ let beleg = {
 			beleg.belegGeaendert(true);
 		});
 	},
+	// zwischen den Import-Formularen hin- und herschalten (Listener)
+	//   radio = Element
+	//     (Radio-Button zum Umschalten des Import-Formulars)
+	formularImportListener (radio) {
+		radio.addEventListener("change", function() {
+			const src = this.id.replace(/.+-/, "");
+			beleg.formularImport(src);
+		});
+	},
+	// zwischen den Import-Formularen hin- und herschalten
+	//   src = String
+	//     (ID der Quelle, aus der importiert werden soll: dta || dwds)
+	formularImport (src) {
+		let forms = ["beleg-form-dta", "beleg-form-dwds"];
+		for (let f of forms) {
+			let ele = document.getElementById(f),
+				radio = document.getElementById(`beleg-import-${f.replace(/.+-/, "")}`);
+			if (f.includes(src)) {
+				ele.classList.remove("aus");
+				radio.checked = true; // weil Wechsel nicht nur auf Klick, sondern auch automatisch
+			} else {
+				ele.classList.add("aus");
+				radio.checked = false;
+			}
+			ele.querySelector("input").focus();
+		}
+	},
 	// Aktionen beim Klick auf einen Formular-Button
 	//   button = Element
 	//     (der Button, auf den geklickt wurde)
@@ -259,6 +299,8 @@ let beleg = {
 				beleg.aktionLoeschen();
 			} else if (aktion === "dta-button") {
 				belegImport.DTA();
+			} else if (aktion === "dwds-button") {
+				belegImport.DWDS();
 			}
 		});
 	},
@@ -537,7 +579,7 @@ let beleg = {
 				}
 				const {clipboard} = require("electron"),
 					cp = clipboard.readText();
-				if (/^https*:\/\/www\.deutschestextarchiv\.de\//.test(cp)) {
+				if (/^https?:\/\/www\.deutschestextarchiv\.de\//.test(cp)) {
 					setTimeout(function() {
 						// der Fokus könnte noch in einem anderen Feld sein, das dann gefüllt werden würde;
 						// man muss dem Fokus-Wechsel ein bisschen Zeit geben
