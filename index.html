@@ -192,11 +192,16 @@
 				</tr><tr class="beleg-lese">
 					<td colspan="2" id="beleg-lese-meta"></td>
 				</tr><tr class="beleg-form">
-					<th colspan="2">DTA-Import</th>
-				</tr><tr class="beleg-form">
+					<th colspan="2">Import<input type="radio" name="beleg-import" id="beleg-import-dta" checked
+						><label for="beleg-import-dta">DTA</label
+						><input type="radio" name="beleg-import" id="beleg-import-dwds"
+						><label for="beleg-import-dwds">DWDS</label></th>
+				</tr><tr class="beleg-form" id="beleg-form-dta">
 					<td colspan="2"><input type="text" value="" id="beleg-dta" tabindex="0"
 						><input type="number" value="2" min="0" max="9999" id="beleg-dta-bis" tabindex="0"
 						><input type="button" value="Importieren" id="beleg-dta-button" tabindex="0"></td>
+				</tr><tr class="beleg-form aus" id="beleg-form-dwds">
+					<td colspan="2"><input type="button" value="Importieren" id="beleg-dwds-button" tabindex="0"></td>
 				</tr><tr class="beleg-form">
 					<td colspan="2"><hr></td>
 				</tr><tr>
