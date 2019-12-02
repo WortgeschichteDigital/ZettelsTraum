@@ -520,7 +520,7 @@ let kopieren = {
 			});
 		}
 		// Datenfelder ermitteln, die importiert werden sollen
-		let ds = [];
+		let ds = ["bx"]; // "bs" (Beleg) wird immer importiert => Beleg-XML auch immer importieren
 		document.querySelectorAll("#kopieren-einfuegen-formular input").forEach(function(i) {
 			if (!i.checked && !duplikat) {
 				return;
@@ -542,6 +542,10 @@ let kopieren = {
 			data.ka[id_karte] = beleg.karteErstellen();
 			// die Karte mit den gewünschten Datensätzen füllen
 			for (let j = 0, len = ds.length; j < len; j++) {
+				if (typeof daten[i][ds[j]] === "undefined") {
+					// falls ein Datensatz, der importiert werden soll, nicht vorhanden ist
+					continue;
+				}
 				if (ds[j] === "bd") { // Bedeutungen
 					for (let k of daten[i].bd) { // sind keine Bedeutungen eingetragen, wird diese Schleife einfach nicht ausgeführt
 						// Sollen Bedeutungen aus diesem Gerüst überhaupt importiert werden?

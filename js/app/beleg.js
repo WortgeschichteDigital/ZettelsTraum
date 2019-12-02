@@ -71,6 +71,7 @@ let beleg = {
 			bl: "", // Wortbildung
 			bs: "", // Beleg
 			bu: false, // Bücherdienstauftrag
+			bx: "", // Beleg-XML
 			da: "", // Belegdatum
 			dc: new Date().toISOString(), // Datum Karteikarten-Erstellung
 			dm: "", // Datum Karteikarten-Änderung
@@ -1231,7 +1232,7 @@ let beleg = {
 			}
 			// Container leeren
 			let cont = document.getElementById(`beleg-lese-${wert}`);
-			if (!cont) { // die Datumsdatensätze dc und dm werden nicht angezeigt
+			if (!cont) { // manche Datumsdatensätze (dc, dm, bx) werden nicht angezeigt
 				continue;
 			}
 			helfer.keineKinder(cont);
