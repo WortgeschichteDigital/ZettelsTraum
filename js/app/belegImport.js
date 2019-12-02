@@ -678,6 +678,11 @@ let belegImport = {
 		// URL
 		quelle += ".\n\n";
 		quelle += dta.url;
+		// Aufrufdatum
+		let heute = new Date(),
+			tag = heute.getDate(),
+			monat = heute.getMonth() + 1;
+		quelle += ` (Aufrufdatum: ${tag < 10 ? `0${tag}` : tag}.${monat < 10 ? `0${monat}` : monat}.${heute.getFullYear()})`;
 		// und fertig...
 		beleg.data.qu = quelle;
 		// Formular füllen
