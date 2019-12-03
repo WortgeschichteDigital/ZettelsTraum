@@ -453,7 +453,15 @@ appMenu = {
 		};
 		// Dateiliste ggf. ergänzen
 		if (optionen.data.zuletzt) {
-			optionen.data.zuletzt.forEach((i, n) => appMenu.zuletztItem(layoutZuletzt, i, n));
+			let len = optionen.data.zuletzt.length;
+			if (len > 10) {
+				// Liste auf 10 Einträge begrenzen
+				// (in der Startansicht sind max. 20 Einträge sichtbar)
+				len = 10;
+			}
+			for (let i = 0; i < len; i++) {
+				appMenu.zuletztItem(layoutZuletzt, optionen.data.zuletzt[i], i);
+			}
 		}
 		// ggf. Löschmenü hinzufügen
 		if (layoutZuletzt.submenu.length) {
