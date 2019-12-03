@@ -218,6 +218,7 @@ let helfer = {
 			/Bd\. [0-9]+/g, // Band
 			/d\. h\./ig,
 			/d\. i\./ig,
+			/hrsg\. v\./ig,
 			/H\. [0-9]+/g, // Heft
 			/N\. N\./g, // nomen nescio
 			/Nr\. [0-9]+/g, // Nummer
