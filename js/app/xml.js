@@ -145,11 +145,15 @@ let xml = {
 			// <Aufrufdatum>
 			let reg = new RegExp(helfer.escapeRegExp(href[0])),
 				zugriff = xml.datum(data.qu.split(reg)[1]);
-			if (zugriff) {
-				let aufrufdatum = document.createElementNS(ns, "Aufrufdatum");
-				fundstelle.appendChild(aufrufdatum);
-				aufrufdatum.appendChild(document.createTextNode(zugriff));
+			if (!zugriff) {
+				// alternativ Erstellungsdatum Karteikarte nutzen
+				// (ist immer vorhanden, auch wenn Kartei noch nicht gespeichert)
+				let datum = data.dc.match(/^(?<jahr>[0-9]{4})-(?<monat>[0-9]{2})-(?<tag>[0-9]{2})/);
+				zugriff = `${datum.groups.tag}.${datum.groups.monat}.${datum.groups.jahr}`;
 			}
+			let aufrufdatum = document.createElementNS(ns, "Aufrufdatum");
+			fundstelle.appendChild(aufrufdatum);
+			aufrufdatum.appendChild(document.createTextNode(zugriff));
 		}
 		// <unstrukturiert>
 		let qu = data.qu;
