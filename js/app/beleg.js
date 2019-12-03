@@ -253,7 +253,13 @@ let beleg = {
 				// nach dem Speichern gewechselt werden, sonst gehen die Änderungen verloren.
 				beleg.geaendertBd = true;
 			} else {
-				beleg.data[feld] = helfer.textTrim(this.value, true);
+				let noLeer = "";
+				if (feld === "no" && /^\n/.test(this.value)) {
+					// am Anfang der Notizen müssen Leerzeilen erlaubt sein,
+					// weil die erste Zeile in der Belegliste angezeigt werden kann
+					noLeer = this.value.match(/^\n+/)[0];
+				}
+				beleg.data[feld] = noLeer + helfer.textTrim(this.value, true);
 			}
 			beleg.belegGeaendert(true);
 		});
