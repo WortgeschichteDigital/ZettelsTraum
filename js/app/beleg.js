@@ -1016,6 +1016,8 @@ let beleg = {
 		ta.setSelectionRange(start, ende, "forward");
 		// neuen Text in data
 		beleg.data.bs = ta.value;
+		// Höhe des Textfelds anpassen
+		helfer.textareaGrow(ta);
 		// Änderungsmarkierung setzen
 		beleg.belegGeaendert(true);
 	},
