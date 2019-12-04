@@ -839,10 +839,10 @@ let liste = {
 				span.innerHTML = liste.suchtreffer(`,${autor[1]}`, "au", id);
 				autor_span.appendChild(span);
 			}
-			liste.belegVorschauTs(autor_span, beleg_akt, " ", "");
+			liste.belegVorschauFelder(autor_span, beleg_akt, " ", "");
 			autor_span.appendChild(document.createTextNode(": "));
 		} else {
-			liste.belegVorschauTs(frag, beleg_akt, "", " ");
+			liste.belegVorschauFelder(frag, beleg_akt, "", " ");
 		}
 		// Textschnitt in Anführungsstriche
 		let q = document.createElement("q");
@@ -851,7 +851,7 @@ let liste = {
 		// Fragment zurückgeben
 		return frag;
 	},
-	// Textsorte hinter Jahr bzw. Autorname in Vorschaukopf des Belegs einhängen
+	// Textsorte/Notiz hinter Jahr bzw. Autorname in Vorschaukopf des Belegs einhängen
 	//   ele = Element
 	//     (hier wird die Textsorte angehängt)
 	//   beleg_akt = Object
@@ -860,15 +860,42 @@ let liste = {
 	//     (Text vor der Textsorte)
 	//   nach = String
 	//     (Text nach der Textsorte)
-	belegVorschauTs (ele, beleg_akt, vor, nach) {
-		if (!beleg_akt.ts || !optionen.data.einstellungen.textsorte) {
+	belegVorschauFelder (ele, beleg_akt, vor, nach) {
+		// Gibt es überhaupt etwas einzutragen?
+		let eintragen = {
+			ts: false,
+			no: false,
+		};
+		if (beleg_akt.ts && optionen.data.einstellungen.textsorte) {
+			eintragen.ts = true;
+		}
+		let notiz = beleg_akt.no.split(/\n/)[0];
+		if (notiz && optionen.data.einstellungen["belegliste-notizen"]) {
+			eintragen.no = true;
+		}
+		if (!eintragen.ts && !eintragen.no) {
 			return;
 		}
+		// Vorsatz
 		ele.appendChild(document.createTextNode(`${vor}(`));
-		let span = document.createElement("span");
-		span.classList.add("liste-textsorte");
-		span.textContent = beleg_akt.ts.split(":")[0];
-		ele.appendChild(span);
+		// Textsorte
+		if (eintragen.ts) {
+			let span = document.createElement("span");
+			span.classList.add("liste-textsorte");
+			span.textContent = beleg_akt.ts.split(":")[0];
+			ele.appendChild(span);
+		}
+		// Notiz
+		if (eintragen.no) {
+			let span = document.createElement("span");
+			span.classList.add("liste-notiz");
+			if (notiz.length > 35) {
+				notiz = `${notiz.substring(0, 30)}…`;
+			}
+			span.textContent = notiz;
+			ele.appendChild(span);
+		}
+		// Nachsatz
 		ele.appendChild(document.createTextNode(`)${nach}`));
 	},
 	// Trennungszeichen entfernen

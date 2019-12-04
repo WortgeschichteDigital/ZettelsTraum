@@ -173,6 +173,8 @@ let optionen = {
 			"anzeige-icons-immer-an": false,
 			// Textsorte in den Kopf der Belegliste eintragen
 			textsorte: false,
+			// Notiz in den Kopf der Belegliste eintragen
+			"belegliste-notizen": false,
 		},
 		// Einstellungen für die Karteisuche
 		karteisuche: {
@@ -1122,7 +1124,7 @@ let optionen = {
 			quick.toggle();
 		} else if (e === "filter-unterbedeutungen") { // Verhalten Bedeutungen-Filter umgestellt
 			liste.status(true);
-		} else if (e === "textsorte") { // Textsorten-Anzeige im Belegkopf der Belegliste umgestellt
+		} else if (e === "textsorte" || e === "belegliste-notizen") { // Textsorte und/oder Notiz für Belegkopf der Belegliste umgestellt
 			liste.status(false);
 		}
 		// Optionen speichern
