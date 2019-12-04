@@ -93,6 +93,9 @@ window.addEventListener("load", async () => {
 	// Before-Unload
 	ipcRenderer.on("before-unload", () => helfer.beforeUnload());
 
+	// EVENTS: RESIZE
+	window.addEventListener("resize", () => notizen.maxHeight());
+
 	// EVENTS: TASTATUREINGABEN
 	document.addEventListener("keydown", tastatur.init);
 
