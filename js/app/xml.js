@@ -223,7 +223,9 @@ let xml = {
 	// Datum extrahieren
 	//   text = String
 	//     (Text, aus dem heraus das Datum extrahiert werden soll)
-	datum (text) {
+	//   normJh = false || undefined
+	//     (die Jahrhundertangabe soll in eine Jahreszahl umgewandelt werden)
+	datum (text, normJh = true) {
 		let formate = [
 			/(?<tag>[0-9]{1,2})\.\s*(?<monat>[0-9]{1,2})\.\s*(?<jahr>[0-9]{4})/,
 			/(?<jahr>[0-9]{4})-(?<monat>[0-9]{2})-(?<tag>[0-9]{2})/,
@@ -237,7 +239,11 @@ let xml = {
 			let m = text.match(reg);
 			if (m) {
 				if (m.groups.jahrhundert) {
-					jahr = `${parseInt(m.groups.jahrhundert, 10) - 1}00`; // sehr unschön
+					if (normJh) {
+						jahr = `${parseInt(m.groups.jahrhundert, 10) - 1}00`; // sehr unschön
+					} else {
+						jahr = `${m.groups.jahrhundert}. Jh.`;
+					}
 				} else {
 					// steht vor diesem Datum ein anderes Datum, das Vorrang hat?
 					let before = text.substring(0, m.index);

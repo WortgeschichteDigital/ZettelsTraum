@@ -98,6 +98,10 @@ let optionen = {
 			"textkopie-wort": false,
 			// beim Kopieren ist das Karteiworts grau hinterlegt
 			"textkopie-wort-hinterlegt": false,
+			// beim Kopieren das Jahr als Überschrift ergänzen
+			"textkopie-h-jahr": true,
+			// beim Kopieren die ID als Überschrift ergänzen
+			"textkopie-h-id": false,
 			// Vorauswahl für Kopierfenster ohne Nachfrage ausführen
 			"ctrlC-auto": false,
 			// Vorauswahl für Kopierfenster

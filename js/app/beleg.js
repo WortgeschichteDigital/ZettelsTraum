@@ -652,10 +652,23 @@ let beleg = {
 				}
 				html += `<p>${text}</p>`;
 			});
+			// Referenz vorbereiten
+			popup.referenz.data = obj;
+			let eleListe = ele.closest(".liste-details"),
+				eleKarte = ele.closest("tr");
+			if (eleListe) {
+				popup.referenz.id = eleListe.previousSibling.dataset.id;
+			} else if (eleKarte) {
+				popup.referenz.id = "" + beleg.id_karte;
+			}
+			// Texte aufbereiten
 			html = helfer.clipboardHtml(html);
 			html = beleg.toolsKopierenAddQuelle(html, true, obj);
+			html = beleg.toolsKopierenAddJahr(html, true);
 			text = text.replace(/<.+?>/g, "");
 			text = beleg.toolsKopierenAddQuelle(text, false, obj);
+			text = beleg.toolsKopierenAddJahr(text, false);
+			// Text in Zwischenablage
 			clipboard.write({
 				text: text,
 				html: html,
@@ -697,6 +710,44 @@ let beleg = {
 		}
 		// Animation, die anzeigt, dass die Zwischenablage gefüllt wurde
 		helfer.animation("zwischenablage");
+	},
+	// Jahreszahl und/oder ID des Belegs als eine Art Überschrift hinzufügen
+	//   text = String
+	//     (Text, der ergänzt werden soll)
+	//   html = Boolean
+	//     (Text soll um eine in html-formatierte Angabe ergänzt werden)
+	toolsKopierenAddJahr (text, html) {
+		// ID und Jahr ermitteln
+		let id = xml.belegId(),
+			jahr = xml.datum(popup.referenz.data.da, false), // könnte auch Jh. sein
+			jahreszahl = jahr.match(/[0-9]{4}/);
+		if (jahreszahl) {
+			jahr = jahreszahl[0];
+		}
+		// Elemente für Überschrift ermitteln
+		let h = [];
+		if (optionen.data.einstellungen["textkopie-h-jahr"]) {
+			h.push(jahr);
+		}
+		if (optionen.data.einstellungen["textkopie-h-id"]) {
+			h.push(id);
+		}
+		// keine Überschrift
+		if (!h.length) {
+			return text;
+		}
+		// Überschrift vorbereiten
+		let hText = "";
+		if (h.length > 1) {
+			hText = `${h[0]} (${h[1]})`;
+		} else {
+			hText = h[0];
+		}
+		// Rückgabe mit Überschrift
+		if (html) {
+			return `<p><b>${hText}</b></p>${text}`;
+		}
+		return `${hText}\n\n${text}`;
 	},
 	// Quellenangabe zum Belegtext hinzufügen
 	//   text = String
