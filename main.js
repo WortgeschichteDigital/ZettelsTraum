@@ -700,11 +700,19 @@ optionen = {
 	schreibenTimeout: null,
 	// überschreibt die Optionen-Datei
 	schreiben () {
-		fsP.writeFile(optionen.pfad, JSON.stringify(optionen.data))
-			.catch(err => {
-				fenster.befehlAnHauptfenster("dialog-anzeigen", `Die Optionen-Datei konnte nicht gespeichert werden.\n<h3>Fehlermeldung</h3>\n${err.name}: ${err.message}`);
-				throw err;
-			});
+		return new Promise(resolve => {
+			if (!Object.keys(optionen.data).length) {
+				resolve(false);
+				return;
+			}
+			fsP.writeFile(optionen.pfad, JSON.stringify(optionen.data))
+				.then(() => resolve(true))
+				.catch(err => {
+					fenster.befehlAnHauptfenster("dialog-anzeigen", `Die Optionen-Datei konnte nicht gespeichert werden.\n<h3>Fehlermeldung</h3>\n${err.name}: ${err.message}`);
+					resolve(false);
+					throw err;
+				});
+		});
 	},
 };
 
@@ -1166,10 +1174,10 @@ app.on("ready", async () => {
 });
 
 // App beenden, wenn alle Fenster geschlossen worden sind
-app.on("window-all-closed", () => {
+app.on("window-all-closed", async () => {
 	// Optionen schreiben
 	clearTimeout(optionen.schreibenTimeout);
-	optionen.schreiben();
+	await optionen.schreiben();
 	// auf macOS bleibt das Programm üblicherweise aktiv,
 	// bis die BenutzerIn es explizit beendet
 	if (process.platform !== "darwin") {
