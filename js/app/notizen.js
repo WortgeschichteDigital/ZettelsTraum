@@ -337,6 +337,12 @@ let notizen = {
 			} else if (funktion[1] === "list-ordered") {
 				// LISTE (geordnet)
 				document.execCommand("insertOrderedList");
+			} else if (funktion[1] === "einzug") {
+				// EINZUG
+				document.execCommand("indent");
+			} else if (funktion[1] === "auszug") {
+				// AUSZUG
+				document.execCommand("outdent");
 			} else if (funktion[1] === "strike") {
 				// DURCHSTREICHEN
 				document.execCommand("strikeThrough");
