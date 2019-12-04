@@ -1237,7 +1237,7 @@ let beleg = {
 			}
 			// Container leeren
 			let cont = document.getElementById(`beleg-lese-${wert}`);
-			if (!cont) { // manche Datumsdatensätze (dc, dm, bx) werden nicht angezeigt
+			if (!cont) { // manche Datensätze (dc, dm, bx) werden nicht angezeigt
 				continue;
 			}
 			helfer.keineKinder(cont);
