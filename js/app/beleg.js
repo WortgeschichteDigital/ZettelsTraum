@@ -1344,11 +1344,16 @@ let beleg = {
 			const p = v.replace(/\n\s*\n/g, "\n").split("\n");
 			let zuletzt_gekuerzt = false; // true, wenn der vorherige Absatz gekürzt wurde
 			for (let i = 0, len = p.length; i < len; i++) {
+				let text = p[i];
+				if (!text && wert === "no" && i === 0) {
+					// der erste Absatz im Notizenfeld kann leer sein, soll aber nicht gedruckt
+					// werden, wenn er leer ist
+					continue;
+				}
 				let nP = document.createElement("p");
 				cont.appendChild(nP);
 				nP.dataset.pnumber = i;
 				nP.dataset.id = "";
-				let text = p[i];
 				if (!text) {
 					text = " ";
 				} else {
