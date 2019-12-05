@@ -143,6 +143,8 @@ let optionen = {
 			"immer-ergaenzen": false,
 			// beim Fokussieren des DTA-Import-Feldes automatisch die URL aus dem Clipboard eintragen
 			"url-eintragen": true,
+			// bei Zeitungskorpora Namen in die erste Zeile der Notizen schreiben
+			"notizen-zeitung": false,
 			// nach DTA-Import überprüft, ob das Karteiwort im Belegtext gefunden werden kann
 			"wort-check": true,
 			// bestehende Karteikarten in der Leseansicht öffnen
