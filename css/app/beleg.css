@@ -123,6 +123,7 @@
 #beleg-form-dwds td {
 	padding-top: 3px;
 	padding-bottom: 3px;
+	text-align: right;
 }
 
 #beleg hr {
@@ -156,7 +157,7 @@
 }
 
 #beleg-dwds-button {
-	margin-left: 74px;
+	width: 135px;
 }
 
 #beleg textarea {
