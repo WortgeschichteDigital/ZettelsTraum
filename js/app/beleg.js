@@ -1345,9 +1345,9 @@ let beleg = {
 			let zuletzt_gekuerzt = false; // true, wenn der vorherige Absatz gekürzt wurde
 			for (let i = 0, len = p.length; i < len; i++) {
 				let text = p[i];
-				if (!text && wert === "no" && i === 0) {
+				if (!text && wert === "no" && i === 0 && len > 1) {
 					// der erste Absatz im Notizenfeld kann leer sein, soll aber nicht gedruckt
-					// werden, wenn er leer ist
+					// werden, wenn er leer ist; dies gilt allerdings nur, wenn darauf noch ein Absatz folgt
 					continue;
 				}
 				let nP = document.createElement("p");
