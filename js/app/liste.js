@@ -863,26 +863,36 @@ let liste = {
 	belegVorschauFelder (ele, beleg_akt, vor, nach) {
 		// Gibt es überhaupt etwas einzutragen?
 		let eintragen = {
-			ts: false,
+			be: false,
 			no: false,
+			ts: false,
 		};
-		if (beleg_akt.ts && optionen.data.einstellungen.textsorte) {
-			eintragen.ts = true;
+		if (beleg_akt.be && optionen.data.einstellungen["belegliste-mark"]) {
+			eintragen.be = true;
 		}
 		let notiz = beleg_akt.no.split(/\n/)[0];
 		if (notiz && optionen.data.einstellungen["belegliste-notizen"]) {
 			eintragen.no = true;
 		}
-		if (!eintragen.ts && !eintragen.no) {
+		if (beleg_akt.ts && optionen.data.einstellungen.textsorte) {
+			eintragen.ts = true;
+		}
+		if (!eintragen.be && !eintragen.no && !eintragen.ts) {
 			return;
 		}
 		// Vorsatz
 		ele.appendChild(document.createTextNode(`${vor}(`));
-		// Textsorte
-		if (eintragen.ts) {
+		// Markierung
+		if (eintragen.be) {
 			let span = document.createElement("span");
-			span.classList.add("liste-textsorte");
-			span.textContent = beleg_akt.ts.split(":")[0];
+			span.classList.add("liste-mark");
+			for (let i = 0; i < beleg_akt.be; i++) {
+				let img = document.createElement("img");
+				span.appendChild(img);
+				img.src = "img/stern-gelb.svg";
+				img.width = "24";
+				img.height = "24";
+			}
 			ele.appendChild(span);
 		}
 		// Notiz
@@ -893,6 +903,13 @@ let liste = {
 				notiz = `${notiz.substring(0, 30)}…`;
 			}
 			span.textContent = notiz;
+			ele.appendChild(span);
+		}
+		// Textsorte
+		if (eintragen.ts) {
+			let span = document.createElement("span");
+			span.classList.add("liste-textsorte");
+			span.textContent = beleg_akt.ts.split(":")[0];
 			ele.appendChild(span);
 		}
 		// Nachsatz

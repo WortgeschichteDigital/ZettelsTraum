@@ -173,10 +173,12 @@ let optionen = {
 			// BELEGLISTE
 			// die Icons, die die Anzeige der Datenfelder in der Belegliste steuern, sollen immer an sein
 			"anzeige-icons-immer-an": false,
-			// Textsorte in den Kopf der Belegliste eintragen
-			textsorte: false,
+			// Markierung (Sterne) in den Kopf der Belegliste eintragen
+			"belegliste-mark": true,
 			// Notiz in den Kopf der Belegliste eintragen
 			"belegliste-notizen": false,
+			// Textsorte in den Kopf der Belegliste eintragen
+			textsorte: false,
 		},
 		// Einstellungen für die Karteisuche
 		karteisuche: {
@@ -1126,7 +1128,7 @@ let optionen = {
 			quick.toggle();
 		} else if (e === "filter-unterbedeutungen") { // Verhalten Bedeutungen-Filter umgestellt
 			liste.status(true);
-		} else if (e === "textsorte" || e === "belegliste-notizen") { // Textsorte und/oder Notiz für Belegkopf der Belegliste umgestellt
+		} else if (/^belegliste-(mark|notizen)|textsorte$/.test(e)) { // Textsorte und/oder Notiz für Belegkopf der Belegliste umgestellt
 			liste.status(false);
 		}
 		// Optionen speichern
