@@ -163,6 +163,8 @@ window.addEventListener("load", async () => {
 	document.querySelectorAll("#beleg input, #beleg textarea").forEach(i => {
 		if (i.type === "button") {
 			beleg.aktionButton(i);
+		} else if (i.type === "radio") {
+			beleg.formularImportListener(i);
 		} else {
 			beleg.formularGeaendert(i);
 			beleg.belegSpeichern(i);

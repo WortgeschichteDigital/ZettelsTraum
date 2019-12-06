@@ -1234,6 +1234,11 @@ let liste = {
 		}
 		// Absätze erzeugen
 		for (let absatz of text.split("\n")) {
+			if (!absatz) {
+				// die erste Zeile der Notizen könnte leer sein;
+				// hierfür keinen Absatz erzeugen
+				continue;
+			}
 			let p = document.createElement("p");
 			div.appendChild(p);
 			p.innerHTML = liste.suchtreffer(absatz, ds, id);

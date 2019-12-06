@@ -138,13 +138,15 @@ let optionen = {
 			"karteikarte-schliessen": false,
 			// neue Karteikarten als unvollständig markieren
 			unvollstaendig: false,
-			// beim Fokussieren des DTA-Import-Feldes automatisch die URL aus dem Clipboard eintragen
-			"url-eintragen": true,
-			// nach DTA-Import überprüft, ob das Karteiwort im Belegtext gefunden werden kann
-			"wort-check": true,
 			// Textfeld immer ergänzen, wenn aus einem Dropdown-Menü ein Wert
 			// ausgewählt wurde (betrifft Bedeutung und Textsorte)
 			"immer-ergaenzen": false,
+			// beim Fokussieren des DTA-Import-Feldes automatisch die URL aus dem Clipboard eintragen
+			"url-eintragen": true,
+			// bei Zeitungskorpora Namen in die erste Zeile der Notizen schreiben
+			"notizen-zeitung": false,
+			// nach DTA-Import überprüft, ob das Karteiwort im Belegtext gefunden werden kann
+			"wort-check": true,
 			// bestehende Karteikarten in der Leseansicht öffnen
 			leseansicht: true,
 			// FILTERLEISTE

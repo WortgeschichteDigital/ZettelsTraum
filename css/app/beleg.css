@@ -120,6 +120,12 @@
 	padding-right: 0;
 }
 
+#beleg-form-dwds td {
+	padding-top: 3px;
+	padding-bottom: 3px;
+	text-align: right;
+}
+
 #beleg hr {
 	margin: 30px 0 10px 0;
 	border: none;
@@ -150,6 +156,10 @@
 	width: 135px;
 }
 
+#beleg-dwds-button {
+	width: 135px;
+}
+
 #beleg textarea {
 	margin: 0 auto;
 	min-height: 24px;
@@ -167,6 +177,10 @@
 textarea#beleg-bs {
 	min-height: 24px;
 	max-height: 288px;
+}
+
+#beleg input[type="radio"] {
+	margin-left: 25px;
 }
 
 #beleg label {

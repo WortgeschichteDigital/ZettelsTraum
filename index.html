@@ -192,11 +192,18 @@
 				</tr><tr class="beleg-lese">
 					<td colspan="2" id="beleg-lese-meta"></td>
 				</tr><tr class="beleg-form">
-					<th colspan="2">DTA-Import</th>
+					<td colspan="2"><hr></td>
 				</tr><tr class="beleg-form">
+					<th colspan="2">Import<input type="radio" name="beleg-import" id="beleg-import-dta" checked
+						><label for="beleg-import-dta">DTA</label
+						><input type="radio" name="beleg-import" id="beleg-import-dwds"
+						><label for="beleg-import-dwds">DWDS</label></th>
+				</tr><tr class="beleg-form" id="beleg-form-dta">
 					<td colspan="2"><input type="text" value="" id="beleg-dta" tabindex="0"
 						><input type="number" value="2" min="0" max="9999" id="beleg-dta-bis" tabindex="0"
 						><input type="button" value="Importieren" id="beleg-dta-button" tabindex="0"></td>
+				</tr><tr class="beleg-form aus" id="beleg-form-dwds">
+					<td colspan="2"><input type="button" value="Importieren" id="beleg-dwds-button" tabindex="0"></td>
 				</tr><tr class="beleg-form">
 					<td colspan="2"><hr></td>
 				</tr><tr>
@@ -592,12 +599,15 @@
 						<h3>Formularansicht</h3>
 						<p><input type="checkbox" id="einstellung-unvollstaendig"
 							><label for="einstellung-unvollstaendig">neue Karteikarte als unvollständig markieren</label></p>
-						<p><input type="checkbox" id="einstellung-url-eintragen"
-							><label for="einstellung-url-eintragen"><abbr title="Uniform Resource Locator" lang="en">URL</abbr> aus der Zwischenablage automatisch in das <abbr title="Deutsches Textarchiv">DTA</abbr>-Import-Feld eintragen</label></p>
-						<p><input type="checkbox" id="einstellung-wort-check"
-							><label for="einstellung-wort-check">nach dem <abbr title="Deutsches Textarchiv">DTA</abbr>-Import überprüfen, ob der Belegtext das Karteiwort enthält</label></p>
 						<p><input type="checkbox" id="einstellung-immer-ergaenzen"
 							><label for="einstellung-immer-ergaenzen">Textfelder beim Einfügen von Text via Icon, Menüeintrag oder Bedeutungsdefinition ohne Nachfrage ergänzen</label></p>
+						<h3>Import</h3>
+						<p><input type="checkbox" id="einstellung-url-eintragen"
+							><label for="einstellung-url-eintragen"><abbr title="Uniform Resource Locator" lang="en">URL</abbr> aus der Zwischenablage automatisch in das <abbr title="Deutsches Textarchiv">DTA</abbr>-Import-Feld eintragen</label></p>
+						<p><input type="checkbox" id="einstellung-notizen-zeitung"
+							><label for="einstellung-notizen-zeitung">bei Zeitungskorpora den Zeitungsnamen in die erste Zeile der Notizen schreiben</label></p>
+						<p><input type="checkbox" id="einstellung-wort-check"
+							><label for="einstellung-wort-check">nach dem Import überprüfen, ob der Belegtext das Karteiwort enthält</label></p>
 						<h3>Leseansicht</h3>
 						<p><input type="checkbox" id="einstellung-leseansicht"
 							><label for="einstellung-leseansicht">bestehende Karteikarte in der Leseansicht öffnen</label></p>
