@@ -99,6 +99,8 @@ Für ein Update laden Sie sich einfach die neue Version herunter und ersetzen de
 
 **Unterstützung:** Version 10.10 (Yosemite) und später mit 64-Bit-Architektur. 32-Bit-Versionen können nicht gebaut werden.
 
+Da die App bisher nicht zertifiziert ist, wird macOS vermutlich das reibungslose Starten der Paketierung auf Ihrem Rechner unterbinden. Erhalten Sie die Meldung, dass *Zettel’s Traum* nicht gestartet werden könne, „da es von einem nicht verifizierten Entwickler stammt“, können Sie die Sicherheitseinstellungen anpassen, um die App dennoch auszuführen. Unter *Systemeinstellungen > Sicherheit > Allgemein* finden Sie den Punkt „App-Download erlauben von“ und darunter den Button „Dennoch öffnen“. Starten Sie die App, nachdem Sie auf „Dennoch öffnen“ geklickt haben, werden Sie zwar noch einmal gefragt, ob Sie das Programm wirklich öffnen möchten, können es mit dem Button „Öffnen“ aber problemlos starten.
+
 ## Bauanleitung
 
 Bei *Zettel’s Traum* handelt es sich um eine [Electron](https://electronjs.org/)-App. Die Funktionsweise des Frameworks wird in einer technischen Dokumentation zusammenfassend erläutert. Das Dokument können Sie nach dem Start der App über das Programmmenü aufrufen: Hilfe > Technische Dokumentation. Im Kapitel *Framework* finden Sie (hoffentlich) alles Wissenswerte zum Starten und Paketieren.
