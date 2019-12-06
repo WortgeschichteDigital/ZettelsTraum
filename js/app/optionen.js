@@ -98,6 +98,10 @@ let optionen = {
 			"textkopie-wort": false,
 			// beim Kopieren ist das Karteiworts grau hinterlegt
 			"textkopie-wort-hinterlegt": false,
+			// beim Kopieren das Jahr als Überschrift ergänzen
+			"textkopie-h-jahr": true,
+			// beim Kopieren die ID als Überschrift ergänzen
+			"textkopie-h-id": false,
 			// Vorauswahl für Kopierfenster ohne Nachfrage ausführen
 			"ctrlC-auto": false,
 			// Vorauswahl für Kopierfenster
@@ -134,13 +138,15 @@ let optionen = {
 			"karteikarte-schliessen": false,
 			// neue Karteikarten als unvollständig markieren
 			unvollstaendig: false,
-			// beim Fokussieren des DTA-Import-Feldes automatisch die URL aus dem Clipboard eintragen
-			"url-eintragen": true,
-			// nach DTA-Import überprüft, ob das Karteiwort im Belegtext gefunden werden kann
-			"wort-check": true,
 			// Textfeld immer ergänzen, wenn aus einem Dropdown-Menü ein Wert
 			// ausgewählt wurde (betrifft Bedeutung und Textsorte)
 			"immer-ergaenzen": false,
+			// beim Fokussieren des DTA-Import-Feldes automatisch die URL aus dem Clipboard eintragen
+			"url-eintragen": true,
+			// bei Zeitungskorpora Namen in die erste Zeile der Notizen schreiben
+			"notizen-zeitung": false,
+			// nach DTA-Import überprüft, ob das Karteiwort im Belegtext gefunden werden kann
+			"wort-check": true,
 			// bestehende Karteikarten in der Leseansicht öffnen
 			leseansicht: true,
 			// FILTERLEISTE
@@ -167,6 +173,10 @@ let optionen = {
 			// BELEGLISTE
 			// die Icons, die die Anzeige der Datenfelder in der Belegliste steuern, sollen immer an sein
 			"anzeige-icons-immer-an": false,
+			// Markierung (Sterne) in den Kopf der Belegliste eintragen
+			"belegliste-mark": true,
+			// Notiz in den Kopf der Belegliste eintragen
+			"belegliste-notizen": false,
 			// Textsorte in den Kopf der Belegliste eintragen
 			textsorte: false,
 		},
@@ -1118,7 +1128,7 @@ let optionen = {
 			quick.toggle();
 		} else if (e === "filter-unterbedeutungen") { // Verhalten Bedeutungen-Filter umgestellt
 			liste.status(true);
-		} else if (e === "textsorte") { // Textsorten-Anzeige im Belegkopf der Belegliste umgestellt
+		} else if (/^belegliste-(mark|notizen)|textsorte$/.test(e)) { // Textsorte und/oder Notiz für Belegkopf der Belegliste umgestellt
 			liste.status(false);
 		}
 		// Optionen speichern

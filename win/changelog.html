@@ -45,9 +45,45 @@
 			<div>
 				<h2><span>Version 0.26.0-beta</span><time datetime="2019-12-24">24. Dezember 2019</time></h2>
 
+				<p><span class="obacht">Das Dateiformat hat sich geändert!</span> Ältere <abbr title="Zettel’s Traum JSON">ZTJ</abbr>-Dateien werden automatisch konvertiert; dabei wird eine Änderungsmarkierung gesetzt.</p>
+
 				<h3>Neue Funktionen</h3>
 
 				<ul>
+					<li>Der <a href="#karteikarte-dwdsImport" class="link-handbuch"><abbr title="Digitales Wörterbuch der deutschen Sprache">DWDS</abbr>-Import</a> wurde eingerichtet. Alles Wissenswerte dazu im verlinkten Handbuchabschnitt.</li>
+
+					<li>
+						<p><a href="#belegliste" class="link-handbuch">Belegliste</a>: Die erste Zeile der <a href="#karteikarte-notizen" class="link-handbuch">Notizen einer Karteikarte</a> kann auf Wunsch in der <a href="#belegliste-kopfleisteBelege" class="link-handbuch">Kopfleiste der Belege</a> eingeblendet werden. Hierzu muss <a href="#einstellungen-beleglisteNotizen" class="link-handbuch">eine Einstellung aktiviert</a> werden.</p>
+
+						<p>In diesem Zusammenhang wurde <a href="#einstellungen-karteikarteZeitungsname" class="link-handbuch">eine weitere Einstellung</a> angelegt. Ist sie aktiviert, wird beim Import eines <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippets aus dem <abbr title="Digitalen Wörterbuchs der deutschen Sprache">DWDS</abbr> der Zeitungsname automatisch in die erste Zeile eingetragen. Dazu muss der Beleg allerdings aus einem <abbr title="Digitalen Wörterbuchs der deutschen Sprache">DWDS</abbr>-Zeitungskorpus stammen.</p>
+					</li>
+
+					<li>Belegliste: Die <a href="#karteikarte-markierung" class="link-handbuch">Karteikarten-Markierung</a> (durch Sterne) wird nun standardmäßig in der Kopfleiste der Belege eingeblendet. Es gibt <a href="#einstellungen-beleglisteMark" class="link-handbuch">eine Einstellung</a>, um dieses Verhalten zu unterbinden.</li>
+
+					<li>
+						<p>Beim Kopieren des Belegtexts (via Rechtsklick oder mithilfe eines Kopier-Icons <img src="../img/kopieren.svg" width="24" height="24" alt="">) wird nun standardmäßig das Entstehungsjahr des Texts in einer eigenen Zeile vor dem Beleg mitkopiert. Auf Wunsch kann auch/oder die Beleg-ID kopiert werden. Für beide, frei kombinierbare Möglichkeiten wurden entsprechende <a href="#einstellungen-kopierenJahr" class="link-handbuch">Einstellungen</a> eingerichtet.</p>
+
+						<p>Das Feature betrifft nur gemischte <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>-/Plain-Text-Kopien. Bei der <a href="#belegliste-xmlZwischenablageBelegschnitt" class="link-handbuch">Kopie als <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippet</a> wird das Entstehungsjahr immer in ein entsprechendes Element eingetragen.</p>
+					</li>
+
+					<li><a href="#menueKartei-notizen" class="link-handbuch">Notizen-Funktion</a>: Mithilfe der Icons <img src="../img/pfeil-doppelt-rechts.svg" width="24" height="24" alt=""> <abbr title="beziehungsweise">bzw.</abbr> <img src="../img/pfeil-doppelt-links.svg" width="24" height="24" alt=""> können Listenpunkte und auch normale Absätze ein- oder ausgerückt werden. <abbr title="Vergleiche">Vgl.</abbr> die <a href="#menueKartei-notizenEinzug" class="link-handbuch">Beschreibung im Handbuch</a>.</li>
+				</ul>
+
+				<h3>Verbesserungen</h3>
+
+				<ul>
+					<li><a href="#menueKartei-notizen" class="link-handbuch">Notizen-Funktion</a>: Die Maximalhöhe des Notizenfeldes passt sich nun an den im Hauptfenster zur Verfügung stehenden Platz an, der (fast) maximal ausgereizt wird. Außerdem wurde die Maximalbreite des Feldes um 150 Pixel vergrößert.</li>
+
+					<li><a href="#karteikarte-dropdown" class="link-handbuch">Dropdown-Menü</a>: Ist in einem geöffneten Dropdown-Menü noch kein Eintrag ausgewählt, wird fortan beim Drücken von Enter auch kein Eintrag in das zugehörige Textfeld mehr übernommen. Das vorherige Verhalten (der erste Eintrag in der angebotenen Liste wurde übernommen) war zwar kein Fehler, hat sich aber als dysfunktional herausgestellt.</li>
+
+					<li><a href="#karteikarte-dtaImport" class="link-handbuch"><abbr title="Deutschen Textarchiv">DTA</abbr>-Import</a>: Das Aufrufdatum, also das aktuelle Tagesdatum, wird nun automatisch hinter der <abbr title="Deutschen Textarchiv">DTA</abbr>-<abbr title="Uniform Resource Locator" lang="en">URL</abbr> notiert, und zwar in einem Format, das direkt für den Export von <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippets verwendet werden kann.</li>
+
+					<li>Für den <a href="#belegliste-xmlZwischenablageBelegschnitt" class="link-handbuch">Export eines XML-Snippets</a> wird fortan als Fallback das Erstellungsdatum der Karteikarte genutzt, sollte eine Online-Quelle vorliegen, aber kein Aufrufdatum gefunden werden.</li>
+
+					<li>Die <a href="#menueApp-neuesFenster" class="link-handbuch">Liste zuletzt verwendeter Karteien</a> kann nun 20 Einträge umfassen. Im Menüpunkt <a href="#menueKartei-zuletztVerwendet" class="link-handbuch"><i>Kartei &gt; Zuletzt verwendet</i></a> werden aus Platzgründen jedoch nach wie vor <abbr title="maximal">max.</abbr> zehn Einträge angezeigt.</li>
+
+					<li>Die hartcodierte Liste der <abbr title="Digitales Wörterbuch der deutschen Sprache">DWDS</abbr>-Korpora wurde ergänzt um <q>Politische Reden</q>, <q>Mode- und Beauty-Blogs</q> und <q>IT-Blogs</q>.</li>
+
 					<li><a href="#" class="ueber-electron"><i>Electron</i></a>-Update auf Version 7.1.3.</li>
 				</ul>
 			</div>

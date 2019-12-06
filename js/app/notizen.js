@@ -18,6 +18,7 @@ let notizen = {
 			feld.focus();
 			return;
 		}
+		notizen.maxHeight();
 		// Notizen-Feld mit den gespeicherten Daten füllen
 		notizen.eintragen = true;
 		feld.innerHTML = data.no; // data.no kann leer sein
@@ -337,6 +338,12 @@ let notizen = {
 			} else if (funktion[1] === "list-ordered") {
 				// LISTE (geordnet)
 				document.execCommand("insertOrderedList");
+			} else if (funktion[1] === "einzug") {
+				// EINZUG
+				document.execCommand("indent");
+			} else if (funktion[1] === "auszug") {
+				// AUSZUG
+				document.execCommand("outdent");
 			} else if (funktion[1] === "strike") {
 				// DURCHSTREICHEN
 				document.execCommand("strikeThrough");
@@ -438,5 +445,14 @@ let notizen = {
 		let parent = filterkopf.parentNode;
 		parent.removeChild(filterkopf.nextSibling);
 		parent.removeChild(filterkopf);
+	},
+	// legt die Maximalhöhe des Notizenfeldes fest
+	maxHeight () {
+		// Sind die Notizen offen?
+		if (overlay.oben() !== "notizen") {
+			return;
+		}
+		let max = window.innerHeight - 200;
+		document.getElementById("notizen-feld").style.maxHeight = `${max}px`;
 	},
 };

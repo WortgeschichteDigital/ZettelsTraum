@@ -839,10 +839,10 @@ let liste = {
 				span.innerHTML = liste.suchtreffer(`,${autor[1]}`, "au", id);
 				autor_span.appendChild(span);
 			}
-			liste.belegVorschauTs(autor_span, beleg_akt, " ", "");
+			liste.belegVorschauFelder(autor_span, beleg_akt, " ", "");
 			autor_span.appendChild(document.createTextNode(": "));
 		} else {
-			liste.belegVorschauTs(frag, beleg_akt, "", " ");
+			liste.belegVorschauFelder(frag, beleg_akt, "", " ");
 		}
 		// Textschnitt in Anführungsstriche
 		let q = document.createElement("q");
@@ -851,7 +851,7 @@ let liste = {
 		// Fragment zurückgeben
 		return frag;
 	},
-	// Textsorte hinter Jahr bzw. Autorname in Vorschaukopf des Belegs einhängen
+	// Textsorte/Notiz hinter Jahr bzw. Autorname in Vorschaukopf des Belegs einhängen
 	//   ele = Element
 	//     (hier wird die Textsorte angehängt)
 	//   beleg_akt = Object
@@ -860,15 +860,59 @@ let liste = {
 	//     (Text vor der Textsorte)
 	//   nach = String
 	//     (Text nach der Textsorte)
-	belegVorschauTs (ele, beleg_akt, vor, nach) {
-		if (!beleg_akt.ts || !optionen.data.einstellungen.textsorte) {
+	belegVorschauFelder (ele, beleg_akt, vor, nach) {
+		// Gibt es überhaupt etwas einzutragen?
+		let eintragen = {
+			be: false,
+			no: false,
+			ts: false,
+		};
+		if (beleg_akt.be && optionen.data.einstellungen["belegliste-mark"]) {
+			eintragen.be = true;
+		}
+		let notiz = beleg_akt.no.split(/\n/)[0];
+		if (notiz && optionen.data.einstellungen["belegliste-notizen"]) {
+			eintragen.no = true;
+		}
+		if (beleg_akt.ts && optionen.data.einstellungen.textsorte) {
+			eintragen.ts = true;
+		}
+		if (!eintragen.be && !eintragen.no && !eintragen.ts) {
 			return;
 		}
+		// Vorsatz
 		ele.appendChild(document.createTextNode(`${vor}(`));
-		let span = document.createElement("span");
-		span.classList.add("liste-textsorte");
-		span.textContent = beleg_akt.ts.split(":")[0];
-		ele.appendChild(span);
+		// Markierung
+		if (eintragen.be) {
+			let span = document.createElement("span");
+			span.classList.add("liste-mark");
+			for (let i = 0; i < beleg_akt.be; i++) {
+				let img = document.createElement("img");
+				span.appendChild(img);
+				img.src = "img/stern-gelb.svg";
+				img.width = "24";
+				img.height = "24";
+			}
+			ele.appendChild(span);
+		}
+		// Notiz
+		if (eintragen.no) {
+			let span = document.createElement("span");
+			span.classList.add("liste-notiz");
+			if (notiz.length > 35) {
+				notiz = `${notiz.substring(0, 30)}…`;
+			}
+			span.textContent = notiz;
+			ele.appendChild(span);
+		}
+		// Textsorte
+		if (eintragen.ts) {
+			let span = document.createElement("span");
+			span.classList.add("liste-textsorte");
+			span.textContent = beleg_akt.ts.split(":")[0];
+			ele.appendChild(span);
+		}
+		// Nachsatz
 		ele.appendChild(document.createTextNode(`)${nach}`));
 	},
 	// Trennungszeichen entfernen
@@ -1207,6 +1251,11 @@ let liste = {
 		}
 		// Absätze erzeugen
 		for (let absatz of text.split("\n")) {
+			if (!absatz) {
+				// die erste Zeile der Notizen könnte leer sein;
+				// hierfür keinen Absatz erzeugen
+				continue;
+			}
 			let p = document.createElement("p");
 			div.appendChild(p);
 			p.innerHTML = liste.suchtreffer(absatz, ds, id);

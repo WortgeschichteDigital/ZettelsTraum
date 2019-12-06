@@ -65,10 +65,10 @@ let belegImport = {
 			return;
 		}
 		// Ist die Kartei schon ausgefüllt?
-		if (beleg.data.da || beleg.data.au || beleg.data.bs || beleg.data.kr || beleg.data.ts || beleg.data.qu) {
+		if (beleg.data.da || beleg.data.au || beleg.data.bs || beleg.data.qu || beleg.data.kr || beleg.data.ts) {
 			dialog.oeffnen({
 				typ: "confirm",
-				text: "Die Karteikarte ist teilweise schon gefüllt.\nDie Felder <i>Datum, Autor, Beleg, Korpus, Textsorte</i> und <i>Quelle</i> werden beim Importieren der Textdaten aus dem DTA überschrieben.\nMöchten Sie den DTA-Import wirklich starten?",
+				text: "Die Karteikarte ist teilweise schon gefüllt.\nDie Felder <i>Datum, Autor, Beleg, Quelle, Korpus</i> und <i>Textsorte</i> werden beim Importieren der Textdaten aus dem DTA überschrieben.\nMöchten Sie den DTA-Import wirklich starten?",
 				callback: () => {
 					if (dialog.antwort) {
 						startImport();
@@ -678,6 +678,11 @@ let belegImport = {
 		// URL
 		quelle += ".\n\n";
 		quelle += dta.url;
+		// Aufrufdatum
+		let heute = new Date(),
+			tag = heute.getDate(),
+			monat = heute.getMonth() + 1;
+		quelle += ` (Aufrufdatum: ${tag < 10 ? `0${tag}` : tag}.${monat < 10 ? `0${monat}` : monat}.${heute.getFullYear()})`;
 		// und fertig...
 		beleg.data.qu = quelle;
 		// Formular füllen
@@ -690,10 +695,398 @@ let belegImport = {
 			}
 		}
 		// Wort gefunden?
-		belegImport.DTACheck();
+		belegImport.checkWort();
 	},
-	// DTA-Import: überprüft, ob das Wort im importierten Text gefunden wurde
-	DTACheck () {
+	// DWDS-Import: Liste der Korpora des DWDS
+	DWDSKorpora: {
+		blogs: {
+			kr: "DWDS: Blogs",
+			ts: "Blog",
+		},
+		bz: {
+			kr: "DWDS: Berliner Zeitung",
+			ts: "Zeitung",
+		},
+		bz_pp: {
+			kr: "DWDS: Berliner Zeitung",
+			ts: "Zeitung",
+		},
+		ddr: {
+			kr: "DWDS: DDR",
+			ts: "",
+		},
+		dingler: {
+			kr: "DWDS: Polytechnisches Journal",
+			ts: "",
+		},
+		dta: {
+			kr: "DTA",
+			ts: "",
+		},
+		ibk_dchat: {
+			kr: "DWDS: Dortmunder Chat-Korpus",
+			ts: "Chat",
+		},
+		ibk_web_2016c: {
+			kr: "DWDS: Webkorpus 2016c",
+			ts: "",
+		},
+		it_blogs: {
+			kr: "DWDS: IT-Blogs",
+			ts: "Blog",
+		},
+		kern: {
+			kr: "DWDS: Kernkorpus",
+			ts: "",
+		},
+		korpus21: {
+			kr: "DWDS: Kernkorpus 21",
+			ts: "",
+		},
+		modeblogs: {
+			kr: "DWDS: Mode- und Beauty-Blogs",
+			ts: "",
+		},
+		nd: {
+			kr: "DWDS: neues deutschland",
+			ts: "Zeitung",
+		},
+		politische_reden: {
+			kr: "DWDS: Politische Reden",
+			ts: "Rede",
+		},
+		public: {
+			kr: "DWDS: Referenz- und Zeitungskorpora",
+			ts: "",
+		},
+		spk: {
+			kr: "DWDS: Gesprochene Sprache",
+			ts: "",
+		},
+		tagesspiegel: {
+			kr: "DWDS: Tagesspiegel",
+			ts: "Zeitung",
+		},
+		textberg: {
+			kr: "DWDS: Text+Berg",
+			ts: "",
+		},
+		untertitel: {
+			kr: "DWDS: Filmuntertitel",
+			ts: "",
+		},
+		wende: {
+			kr: "DWDS: Berliner Wendecorpus",
+			ts: "",
+		},
+		zeit: {
+			kr: "DWDS: Die ZEIT",
+			ts: "Zeitung",
+		},
+	},
+	// DWDS-Import: starten
+	DWDS () {
+		let doc = belegImport.DWDSXMLCheck();
+		// bei Fehlern => Meldung anzeigen
+		if (helfer.checkType("Number", doc)) {
+			belegImport.DWDSFehler(doc);
+			return;
+		}
+		// Ist die Kartei schon ausgefüllt?
+		if (beleg.data.da || beleg.data.au || beleg.data.bs || beleg.data.qu || beleg.data.kr || beleg.data.ts || beleg.data.no) {
+			dialog.oeffnen({
+				typ: "confirm",
+				text: "Die Karteikarte ist teilweise schon gefüllt.\nDie Felder <i>Datum, Autor, Beleg, Quelle, Korpus, Textsorte</i> und <i>Notizen</i> werden beim Importieren der Textdaten aus dem DWDS überschrieben.\nMöchten Sie den DWDS-Import wirklich starten?",
+				callback: () => {
+					if (dialog.antwort) {
+						startImport();
+					} else {
+						document.getElementById("beleg-dwds-button").focus();
+					}
+				},
+			});
+			return;
+		}
+		// Dann mal los...
+		startImport();
+		// Startfunktion
+		function startImport () {
+			// Datensatz: Datum
+			let nDa = doc.xml.querySelector("Fundstelle Datum");
+			if (nDa && nDa.firstChild) {
+				beleg.data.da = nDa.firstChild.nodeValue;
+			}
+			// Datensatz: Autor
+			let nAu = doc.xml.querySelector("Fundstelle Autor");
+			if (nAu && nAu.firstChild) {
+				let autor = nAu.firstChild.nodeValue;
+				// Autorname besteht nur aus Großbuchstaben, Leerzeichen und Kommata =>
+				// wenigstens versuchen ein paar Kleinbuchstaben unterzubringen
+				if (/^[A-ZÄÖÜ,\s]+$/.test(autor)) {
+					let autorKlein = "";
+					autor.split(/\s/).forEach((i, n) => {
+						if (n > 0) {
+							autorKlein += " ";
+						}
+						autorKlein += i.substring(0, 1) + i.substring(1).toLowerCase();
+					});
+					autor = autorKlein;
+				}
+				// verschiedene Verbesserungen
+				autor = autor.replace(/^[!?.,;: ]+/, ""); // Satz- und Leerzeichen am Anfang entfernen (kommt wirklich vor!)
+				autor = autor.replace(/\s\/\s/g, "/"); // Leerzeichen um Slashes entfernen
+				autor = autor.replace(/^Von /, ""); // häufig wird die Autorangabe "Von Karl Mustermann" fälschlicherweise als kompletter Autor angegeben
+				// Autorname eintragen
+				if (/^(Name|o\.\s?A\.|unknown)$/.test(autor)) { // merkwürdige Platzhalter für "Autor unbekannt"
+					beleg.data.au = "N. N.";
+				} else if (!/[A-ZÄÖÜ]/.test(autor)) { // Autorname ist nur ein Kürzel
+					beleg.data.au = `N. N. [${autor}]`;
+				} else {
+					let leerzeichen = autor.match(/\s/g);
+					if (!/,\s/.test(autor) && leerzeichen && leerzeichen.length === 1) {
+						let autorSp = autor.split(/\s/);
+						beleg.data.au = `${autorSp[1]}, ${autorSp[0]}`;
+					} else {
+						beleg.data.au = autor;
+					}
+				}
+			} else {
+				beleg.data.au = "N. N.";
+			}
+			// Datensatz: Beleg
+			let nBs = doc.xml.querySelector("Belegtext");
+			if (nBs && nBs.firstChild) {
+				let bs = [],
+					bsContent = nBs.textContent.replace(/<Stichwort>(.+?)<\/Stichwort>/g, (m, p1) => p1);
+				bsContent = bsContent.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+				for (let p of bsContent.split(/[\r\n]/)) {
+					p = helfer.textTrim(p, true);
+					if (!p) {
+						continue;
+					}
+					bs.push(p);
+				}
+				beleg.data.bs = bs.join("\n\n");
+			}
+			// Datensatz: Beleg-XML
+			beleg.data.bx = doc.clipboard;
+			// Datensatz: Quelle
+			let nQu = doc.xml.querySelector("Fundstelle Bibl");
+			if (nQu && nQu.firstChild) {
+				beleg.data.qu = nQu.firstChild.nodeValue;
+				// eine Verenkung wegen der häufig merkwürdigen Zitierweise
+				beleg.data.qu = beleg.data.qu.replace(/ Zitiert nach:.+/, "");
+				let jahrDatierung = beleg.data.da.match(/[0-9]{4}/),
+					jahrQuelle = beleg.data.qu.matchAll(/(?<!S. )(?<![0-9])([0-9]{4})/g),
+					jahrQuelleStr = "";
+				for (let i of jahrQuelle) {
+					jahrQuelleStr = i[1];
+				}
+				if (jahrDatierung && jahrQuelle &&
+						jahrDatierung[0] !== jahrQuelleStr) {
+					let datierung = parseInt(jahrDatierung[0], 10),
+						quelle = parseInt(jahrQuelleStr, 10),
+						publikation = `${quelle} [${datierung}]`;
+					if (quelle > datierung) {
+						publikation = `${quelle} [zuerst ${datierung}]`;
+					}
+					const idx = beleg.data.qu.lastIndexOf("" + quelle);
+					beleg.data.qu = beleg.data.qu.substring(0, idx) + publikation + beleg.data.qu.substring(idx + 4);
+				}
+				// ggf. Autor + Titel ergänzen
+				let nTitel = doc.xml.querySelector("Fundstelle Titel");
+				if (nTitel && nTitel.firstChild) {
+					let titel = nTitel.firstChild.nodeValue;
+					if (/^o\.\s?T\.$|^Jahrbuch des Schweizer Alpen-Clubs/.test(titel)) {
+						titel = "";
+					}
+					if (titel && !beleg.data.qu.includes(titel)) {
+						let qu = beleg.data.qu;
+						beleg.data.qu = `${beleg.data.au}: ${titel}`;
+						if (!/\.$/.test(beleg.data.qu)) {
+							beleg.data.qu += ".";
+						}
+						beleg.data.qu += ` In: ${qu}`;
+					}
+				}
+				// ggf. "o. A." am Anfang der Quellenangabe ersetzen
+				if (/^o\.\s?A\./.test(beleg.data.qu)) {
+					beleg.data.qu = beleg.data.qu.replace(/^o\.\s?A\./, "N. N.");
+				}
+				// ggf. Seite ergänzen
+				let nSeite = doc.xml.querySelector("Fundstelle Seite");
+				if (nSeite && nSeite.firstChild) {
+					let seite = nSeite.firstChild.nodeValue;
+					if (!beleg.data.qu.includes(`S. ${seite}`)) {
+						if (/\.$/.test(beleg.data.qu)) {
+							beleg.data.qu = beleg.data.qu.substring(0, beleg.data.qu.length - 1);
+						}
+						beleg.data.qu += `, S. ${seite}`;
+					}
+				}
+				// ggf. Punkt am Ende der Quellenangabe ergänzen
+				if (!/\.$/.test(beleg.data.qu)) {
+					beleg.data.qu += ".";
+				}
+				// Tagesdaten ggf. aufhübschen
+				let datum = beleg.data.qu.match(/(?<tag>[0-9]{2})\.(?<monat>[0-9]{2})\.(?<jahr>[0-9]{4})/);
+				if (datum) {
+					let reg = new RegExp(helfer.escapeRegExp(datum[0]));
+					beleg.data.qu = beleg.data.qu.replace(reg, `${datum.groups.tag.replace(/^0/, "")}. ${datum.groups.monat.replace(/^0/, "")}. ${datum.groups.jahr}`);
+				}
+				// typographische Verbesserungen
+				let von_bis = beleg.data.qu.match(/[0-9]+\s?-\s?[0-9]+/g);
+				if (von_bis) {
+					for (let i of von_bis) {
+						let huebsch = i.replace(/\s?-\s?/, "–");
+						beleg.data.qu = beleg.data.qu.replace(i, huebsch);
+					}
+				}
+				// ggf. URL ergänzen
+				let nURL = doc.xml.querySelector("Fundstelle URL");
+				if (nURL && nURL.firstChild) {
+					beleg.data.qu += `\n\n${nURL.firstChild.nodeValue}`;
+					// ggf. Aufrufdatum ergänzen
+					let nAuf = doc.xml.querySelector("Fundstelle Aufrufdatum");
+					if (nAuf && nAuf.firstChild) {
+						beleg.data.qu += ` (Aufrufdatum: ${nAuf.firstChild.nodeValue})`;
+					}
+				}
+				// Steht in der Quellenangabe der Autor in der Form "Nachname, Vorname",
+				// im Autor-Feld aber nicht?
+				let auQu = beleg.data.qu.split(": ");
+				if (/, /.test(auQu[0]) && !/, /.test(beleg.data.au)) {
+					let autorQu = auQu[0].replace(/,/g, "").split(/\s/),
+						autorAu = beleg.data.au.split(/\s/);
+					if (auQu[0] !== beleg.data.au &&
+							autorQu.length === autorAu.length) {
+						let autorAendern = true;
+						for (let i of autorAu) {
+							if (!autorQu.includes(i)) {
+								autorAendern = false;
+								break;
+							}
+						}
+						if (autorAendern) {
+							beleg.data.au = auQu[0];
+						}
+					}
+				}
+				// Steht im Autor-Feld kein Name, in der Quelle scheint aber einer zu sein?
+				if ((!beleg.data.au || beleg.data.au === "N. N.") && auQu.length > 1) {
+					beleg.data.au = auQu[0];
+				}
+			}
+			// Datensatz: Korpus
+			let korpus = "",
+				nKr = doc.xml.querySelector("Fundstelle Korpus");
+			if (nKr && nKr.firstChild) {
+				korpus = nKr.firstChild.nodeValue;
+				if (belegImport.DWDSKorpora[korpus]) { // Korpus könnte noch nicht in der Liste sein
+					beleg.data.kr = belegImport.DWDSKorpora[korpus].kr;
+				}
+			}
+			// Datensatz: Textsorte
+			let nTs = doc.xml.querySelector("Fundstelle Textklasse");
+			if (korpus && belegImport.DWDSKorpora[korpus] && belegImport.DWDSKorpora[korpus].ts) {
+				beleg.data.ts = belegImport.DWDSKorpora[korpus].ts;
+			} else if (nTs && nTs.firstChild) {
+				const ts = nTs.firstChild.nodeValue;
+				if (!/::/.test(ts)) {
+					beleg.data.ts = ts.split(":")[0];
+				} else {
+					let tsSp = ts.split("::");
+					beleg.data.ts = "";
+					for (let i = 0, len = tsSp.length; i < len; i++) {
+						let tsClean = helfer.textTrim(tsSp[i], true);
+						if (!tsClean || /^[A-ZÄÖÜ]{2,}/.test(tsClean)) {
+							continue;
+						}
+						if (i > 0) {
+							beleg.data.ts += ": ";
+						}
+						beleg.data.ts += tsClean;
+					}
+				}
+			}
+			// Datensatz: Notizen
+			let nDok = doc.xml.querySelector("Fundstelle Dokument");
+			if (nDok && nDok.firstChild) {
+				let dok = nDok.firstChild.nodeValue;
+				if (korpus) {
+					let wort = kartei.wort.replace(/\s/g, " && "),
+						query = encodeURIComponent(`${wort} #HAS[basename,'${dok}']`),
+						ersteZeile = "\n";
+					if (optionen.data.einstellungen["notizen-zeitung"] &&
+							belegImport.DWDSKorpora[korpus] &&
+							belegImport.DWDSKorpora[korpus].ts === "Zeitung") {
+						ersteZeile = `${belegImport.DWDSKorpora[korpus].kr.split(": ")[1]}\n\n`;
+					}
+					beleg.data.no = `${ersteZeile}Beleg im DWDS: https://www.dwds.de/r?format=max&q=${query}&corpus=${korpus}`;
+					// 1. Zeile frei lassen; hier werden mitunter Notizen der BearbeiterIn eingetragen,
+					// die in der Belegliste angezeigt werden sollen
+				} else {
+					beleg.data.no = `\n${dok}`;
+					// 1. Zeile dito
+				}
+			}
+			// Formular füllen
+			beleg.formular(false);
+			beleg.belegGeaendert(true);
+			// Wort gefunden?
+			belegImport.checkWort();
+		}
+	},
+	// DWDS-Import: Fehlermeldung
+	//   id = Number
+	//     (die Fehlernummer)
+	DWDSFehler (id) {
+		let fehler = [
+			"kein XML-Snippet in der Zwischenablage",
+			"XML-Snippet stammt nicht aus dem DWDS",
+			"XML-Daten sind nicht wohlgeformt",
+		];
+		dialog.oeffnen({
+			typ: "alert",
+			text: `Der DWDS-Import ist fehlgeschlagen.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${fehler[id - 1]}</p>`,
+			callback: () => {
+				document.getElementById("beleg-dwds-button").focus();
+			},
+		});
+	},
+	// DWDS-Import: überprüft, ob Daten in Zwischenablage DWDS-Snippet sind
+	//   cp = String || undefined
+	//     (Text-Inhalt des Clipboards)
+	DWDSXMLCheck (cp) {
+		if (!cp) {
+			const {clipboard} = require("electron");
+			cp = clipboard.readText();
+		}
+		if (!/^<[a-zA-Z]/.test(cp)) {
+			return 1;
+		}
+		// Daten beginnen nicht mit <Beleg>
+		if (!/^<Beleg>/.test(cp)) {
+			return 2;
+		}
+		// XML nicht wohlgeformt
+		let parser = new DOMParser(),
+			xmlDoc = parser.parseFromString(cp, "text/xml");
+		if (xmlDoc.querySelector("parsererror")) {
+			return 3;
+		}
+		// kein <Korpus>
+		if (!xmlDoc.querySelector("Fundstelle Korpus")) {
+			return 2;
+		}
+		// korrektes XML-Dokument
+		return {
+			clipboard: cp,
+			xml: xmlDoc
+		};
+	},
+	// überprüft, ob das Wort im importierten Text gefunden wurde
+	checkWort () {
 		if (!beleg.data.bs || !optionen.data.einstellungen["wort-check"]) {
 			return;
 		}

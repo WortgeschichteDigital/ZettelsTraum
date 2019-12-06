@@ -71,8 +71,8 @@ let zuletzt = {
 		}
 		// Datei vorne anhängen
 		karteien.unshift(kartei.pfad);
-		// Liste auf 10 Einträge begrenzen
-		if (karteien.length > 10) {
+		// Liste auf 20 Einträge begrenzen
+		if (karteien.length > 20) {
 			karteien.pop();
 		}
 		// Optionen speichern

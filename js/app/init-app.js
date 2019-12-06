@@ -93,6 +93,9 @@ window.addEventListener("load", async () => {
 	// Before-Unload
 	ipcRenderer.on("before-unload", () => helfer.beforeUnload());
 
+	// EVENTS: RESIZE
+	window.addEventListener("resize", () => notizen.maxHeight());
+
 	// EVENTS: TASTATUREINGABEN
 	document.addEventListener("keydown", tastatur.init);
 
@@ -160,6 +163,8 @@ window.addEventListener("load", async () => {
 	document.querySelectorAll("#beleg input, #beleg textarea").forEach(i => {
 		if (i.type === "button") {
 			beleg.aktionButton(i);
+		} else if (i.type === "radio") {
+			beleg.formularImportListener(i);
 		} else {
 			beleg.formularGeaendert(i);
 			beleg.belegSpeichern(i);

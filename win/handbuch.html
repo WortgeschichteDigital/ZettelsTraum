@@ -97,7 +97,7 @@
 
 					<p>Die auf virtuellen Karteikarten gesammelten Belege lassen sich <a href="#belegliste">auflisten</a> und in vielfältiger Weise <a href="#filter">filtern</a>, <a href="#menueKartei-suche">durchsuchen</a>, <a href="#belegliste-annotieren">markieren</a>, <a href="#menueBelege-kopieren">kopieren</a>, <a href="#karteikarte-duplizieren">duplizieren</a>, auf Wunsch sogar <a href="#karteikarte-drucken">ausdrucken</a>. Die Wortkarteidaten werden dafür in einem ausführlich dokumentieren Klartextformat gespeichert (dem <a href="#ztj-ztj" class="link-dokumentation"><abbr title="Zettel’s Traum JSON">ZTJ</abbr>-Dateiformat</a>), das auf einen Notationsstandard aufsetzt, der auch in der ferneren Zukunft problemlos von Computerprogrammen zu lesen sein sollte.</p>
 
-					<p>Die App ist agnostisch, was die Verwendung eines bestimmten Textkorpus angeht. Sie können Belege aus beliebigen Korpora einpflegen. Allerdings enthält sie spezielle Importfunktionen, die das Erstellen von Karteikarten mit Belegen aus dem <a href="http://www.deutschestextarchiv.de/"><i>Deutschen Textarchiv</i></a> (DTA) und den Korpora des <a href="https://www.dwds.de/r"><i>Digitalen Wörterbuchs der deutschen Sprache</i></a> (DWDS) erheblich erleichtern und beschleunigen. Mit nur einem Klick kann die Karteikarte sowohl mit dem Belegtext als auch mit den zugehörigen Metadaten gefüllt werden. (Der <abbr title="Digitales Wörterbuch der deutschen Sprache">DWDS</abbr>-Import wird demnächst in das Programm integriert.)</p>
+					<p>Die App ist agnostisch, was die Verwendung eines bestimmten Textkorpus angeht. Sie können Belege aus beliebigen Korpora einpflegen. Allerdings enthält sie spezielle <a href="#karteikarte-import">Importfunktionen</a>, die das Erstellen von Karteikarten mit Belegen aus dem <a href="http://www.deutschestextarchiv.de/"><i>Deutschen Textarchiv</i></a> (DTA) und den <a href="https://www.dwds.de/r">Korpora</a> des <a href="https://www.dwds.de/"><i>Digitalen Wörterbuchs der deutschen Sprache</i></a> (DWDS) erheblich erleichtern und beschleunigen. Mit nur einem Klick kann die Karteikarte sowohl mit dem Belegtext als auch mit den zugehörigen Metadaten gefüllt werden.</p>
 
 					<p>Nicht zuletzt verfügt die App über leicht zu handhabende Funktionen zum Erstellen von <a href="#belegliste-xmlZwischenablage"><abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippets</a>. Diese wurden so designt, dass der Export von Bedeutungsgerüsten und frei gewählten Belegschnitten rasch und unkompliziert vonstatten geht. (Die Exportfunktion für Bedeutungsgerüste wird demnächst in das Programm integriert.)</p>
 
@@ -296,7 +296,7 @@
 
 						<li>Die Texteingabe in den Feldern <i>Beleg, Quelle</i> und <i>Notizen</i> können Sie sich ruhig übersichtlicher gestalten, indem Sie zwischen Absätzen eine Leerzeile einfügen. Bei der Darstellung des Textes (<abbr title="zum Beispiel">z. B.</abbr> in der <a href="#belegliste">Belegliste</a>) wird das Programm dies erkennen und den Text korrekt in Absätze gliedern, ohne dass überflüssige Leerzeilen angezeigt werden.</li>
 
-						<li>Fußt ihre Belegsammlung auf Texten aus dem <a href="http://www.deutschestextarchiv.de/"><i>Deutschen Textarchiv</i></a>, können Karteikarten halbautomatisch gefüllt werden. Geben Sie dazu in das Textfeld <a href="#verschiedenes-dtaImport" class="link-dokumentation">DTA-Import</a> eine <abbr title="Uniform Resource Locator" lang="en">URL</abbr> aus dem <abbr title="Deutschen Textarchiv">DTA</abbr> ein und klicken Sie auf den Button <i>Importieren</i>.</li>
+						<li>Fußt ihre Belegsammlung auf Texten aus dem <a href="http://www.deutschestextarchiv.de/"><i>Deutschen Textarchiv</i></a> oder dem <a href="https://www.dwds.de/"><i>Digitalen Wörterbuch der deutschen Sprache</i></a>, können Karteikarten halbautomatisch gefüllt werden. <a href="#karteikarte-import">Wie genau der Import funktioniert</a>, wird im <a href="#karteikarte"><abbr title="Kapitel">Kap.</abbr> <i>Karteikarte</i></a> in einem eigenen <abbr title="Abschnitt">Abschn.</abbr> beschrieben.</li>
 					</ul>
 
 					<p><b><i>Bedeutungsgerüst</i></b> <img src="../img/pfeil-gerade-rechts.svg" width="24" height="24" alt=""> <a href="#bedeutungsgeruest">Handbuch-Kapitel</a></p>
@@ -468,9 +468,17 @@
 
 					<p>In vielen Textfeldern findet sich das Hintergrund-Icon <img src="../img/zeilen-2,5.svg" width="24" height="24" alt="">, das nur sichtbar ist, wenn in dem Feld noch kein Text steht. In diese Felder können <b>Zeilenumbrüche</b>, <abbr title="das heißt">d. h.</abbr> mehr als eine Textzeile, eingegeben werden.</p>
 
-					<p id="karteikarte-dtaImport">Die beiden Textfelder unter dem Titel <b><abbr title="Deutschen Textarchiv">DTA</abbr>-Import</b> sind keine Datenfelder. Sie dienen, wie es der Titel schon sagt, dazu, Textseiten aus dem <abbr title="Deutschen Textarchiv">DTA</abbr> zu importieren. Dazu muss in das erste, lange Textfeld eine <abbr title="Uniform Resource Locator" lang="en">URL</abbr> eingefügt werden, die eine Seite im <abbr title="Deutschen Textarchiv">DTA</abbr> referenziert. Nun kann man <kbd>⏎</kbd> drücken oder auf den Button <i>Importieren</i> klicken und die Textfelder <i>Datum, Autor, Beleg, Quelle, Korpus, Textsorte</i> werden automatisch ausgefüllt.</p>
+					<p id="karteikarte-import">Belege können automatisch aus dem <abbr title="Deutschen Textarchiv">DTA</abbr> oder dem <abbr title="Digitalen Wörterbuch der deutschen Sprache">DWDS</abbr> importiert werden. Hierzu gibt es unter dem Titel <b>Import</b> entsprechende Formulare. Der Inhalt der Textfelder, die hier zu sehen sind <abbr title="beziehungsweise">bzw.</abbr> sein können, sind keine Datenfelder, werden also nicht in der Karteikarte gespeichert. Befindet sich in der Zwischenablage eine <abbr title="Uniform Resource Locator" lang="en">URL</abbr> des <abbr title="Deutschen Textarchivs">DTA</abbr> oder ein <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippet aus den Korpora des <abbr title="Digitalen Wörterbuchs der deutschen Sprache">DWDS</abbr>, wird das Formular beim Öffnen einer neuen, leeren Karteikarte automatisch umgeschaltet, und entweder das <abbr title="Uniform Resource Locator" lang="en">URL</abbr>-Feld oder der <i>Importieren</i>-Button fokussiert.</p>
+
+					<p id="karteikarte-dtaImport"><b><abbr title="Deutsches Textarchiv">DTA</abbr>-Import:</b> In das erste, längere Textfeld muss eine <abbr title="Uniform Resource Locator" lang="en">URL</abbr> eingefügt werden, die eine Seite im <abbr title="Deutschen Textarchiv">DTA</abbr> referenziert. Anstoßen lässt sich der Import, indem man <kbd>⏎</kbd> drückt oder den Button <i>Importieren</i> anklickt. Danach werden die Textfelder <i>Datum, Autor, Beleg, Quelle, Korpus</i> und <i>Textsorte</i> automatisch ausgefüllt.</p>
 
 					<p>Über das nebenstehende, zweite Datenfeld, in dem eine Ziffer steht, kann gesteuert werden, wie viel Text importiert werden soll. Die Ziffer steht für die Seitengrenze, bis zu der der Belegtext importiert wird. Ein Beispiel: Gibt man eine <abbr title="Uniform Resource Locator" lang="en">URL</abbr> ein, die auf Image <abbr title="Nummer">Nr.</abbr> 35 eines Textes verweist und steht im Ziffernfeld <q>36</q>, wird nur die zu Image <abbr title="Nummer">Nr.</abbr> 35 gehörende Seite importiert. Denn <q>36</q> markiert die Seitengrenze, bis zu der importiert werden soll. Sollen sowohl die auf Image 35 als auch auf 36 zu findenden Seiten importiert werden, muss im Ziffernfeld <q>37</q> stehen. Beim Einfügen der <abbr title="Uniform Resource Locator" lang="en">URL</abbr> wird automatisch die Zahl des folgenden Images in das Ziffernfeld eingetragen. Standardmäßig wird also eine Seite importiert. (Image- und Seitennummer weichen <abbr title="in der Regel">i. d. R.</abbr> voneinander ab; die in der <abbr title="Uniform Resource Locator" lang="en">URL</abbr> stehende Ziffer ist die Image-Nummer.)</p>
+
+					<p id="karteikarte-dwdsImport"><b><abbr title="Digitales Wörterbuch der deutschen Sprache">DWDS</abbr>-Import:</b> Hierfür muss allein auf den Button <i>Importieren</i> geklickt werden, da die in den Korpora des <abbr title="Digitalen Wörterbuchs der deutschen Sprache">DWDS</abbr> zu findenden <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippets nicht durch eine <abbr title="Uniform Resource Locator" lang="en">URL</abbr> direkt referenziert werden können. Liegt in der Zwischenablage ein passendes Snippet, das man zuvor von der <abbr title="Digitales Wörterbuch der deutschen Sprache">DWDS</abbr>-Seite kopiert hat, wird <i class="app-name"></i> dies erkennen und die Karteikarte mit den in ihm zu findenden Daten füllen. Dies betrifft, je nach Datenlage, die Felder <i>Datum, Autor, Beleg, Quelle, Korpus, Textsorte</i> und <i>Notizen</i>.</p>
+
+					<p>In das <i>Notizen</i>-Feld wird eine <abbr title="Uniform Resource Locator" lang="en">URL</abbr> eingetragen, mit der sich der Beleg auf der Seite des <abbr title="Digitalen Wörterbuchs der deutschen Sprache">DWDS</abbr> wiederfinden lässt. Stammt der Beleg aus einem Zeitungskorpus, kann in die erste Zeile des Notizenfeldes darüber hinaus der Name der Zeitung automatisch eingetragen werden. Hierzu muss eine <a href="#einstellungen-karteikarteZeitungsname">Einstellung</a> aktiviert werden. Es kann sinnvoll sein, dass der Zeitungsname an dieser Stelle steht, wenn man in der <a href="#belegliste">Belegliste</a> immer im Blick haben möchte, aus welcher Zeitung der Beleg stammt. In der <a href="#belegliste-kopfleisteBelege">Kopfleiste der Belege</a> kann man sich nämlich <a href="#einstellungen-beleglisteNotizen">die erste Zeile des Notizen-Feldes anzeigen</a> lassen.</p>
+
+					<p>Es gibt einige <b>Icons</b>, die in der Karteikarte mehrfach zu finden sind:</p>
 
 					<p class="erklaerung-icon" id="karteikarte-kopieren"><img src="../img/kopieren.svg" width="24" height="24" alt="">Text des zugehörigen Feldes kopieren</p>
 
@@ -525,9 +533,13 @@
 
 					<p class="info">Denkbare Texttypen für eine solche Markierung wären (historische) Wörterbücher, Artikel in einer Enzyklopädie, philosophische Abhandlungen <abbr title="und so weiter">usw.</abbr></p>
 
-					<p class="erklaerung-icon"><img src="../img/stern.svg" width="24" height="24" alt="">Möglichkeit für eine nicht an eine bestimmte Semantik gebundene Markierung der Karteikarte</p>
+					<p class="erklaerung-icon" id="karteikarte-markierung"><img src="../img/stern.svg" width="24" height="24" alt="">Möglichkeit für eine nicht an eine bestimmte Semantik gebundene Markierung der Karteikarte</p>
 
-					<p class="info">Zur Markierung muss einfach auf einen der Sterne geklickt werden. Markiert wird immer der angeklickte Stern und alle links von ihm stehenden Sterne, woraus sich fünf mögliche Markierungsschritte ergeben: eins, zwei, drei, vier, fünf Sterne. Zur Aufhebung einer Markierung genügt es, auf den letzten markierten Stern zu klicken.</p>
+					<div class="info">
+						<p>Zur Markierung muss einfach auf einen der Sterne geklickt werden. Markiert wird immer der angeklickte Stern und alle links von ihm stehenden Sterne, woraus sich fünf mögliche Markierungsschritte ergeben: eins, zwei, drei, vier, fünf Sterne. Zur Aufhebung einer Markierung genügt es, auf den letzten markierten Stern zu klicken.</p>
+
+						<p>Die Markierung wird standardmäßig in der <a href="#belegliste-kopfleisteBelege">Kopfleiste der Belege</a> eingblendet. Dieses Verhalten lässt sich durch das <a href="#einstellungen-beleglisteMark">Deaktivieren einer Einstellung</a> unterbinden.</p>
+					</div>
 
 					<p id="karteikarte-datum"><b>Datum:</b> <i>Pflichtfeld</i>; Entstehungs- oder Publikationsdatum des Belegs</p>
 
@@ -629,11 +641,19 @@
 
 					<p id="karteikarte-textsorte"><b>Textsorte:</b> Textklasse oder -sorte, aus der der Belegtext stammt</p>
 
-					<p class="info">Für das Textsortenfeld gilt mutatis mutandis das gleiche wie für das Wortbildungsfeld.</p>
+					<div class="info">
+						<p>Für das Textsortenfeld gilt mutatis mutandis das gleiche wie für das Wortbildungsfeld.</p>
+
+						<p>Die Textsorte kann man sich auf Wunsch in der <a href="#belegliste-kopfleisteBelege">Kopfleiste der Belege</a> einblenden lassen. Dazu muss eine <a href="#einstellungen-beleglisteTextsorte">Einstellung aktiviert</a> werden.</p>
+					</div>
 
 					<p id="karteikarte-notizen"><b>Notizen:</b> Freitextfeld für Notizen zu der Karteikarte</p>
 
-					<p class="info">Für die Eingabe und Umsetzung von Internetlinks gilt dasselbe wie für das <a href="#karteikarte-quelle">Quellen-Feld</a>. Im Gegensatz zum Textfeld der <a href="#menueKartei-notizen">Funktion für Notizen zur Kartei</a> handelt es sich bei diesem um ein Plain-Text-Feld, in dem keine <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>-Formatierungen vorgenommen werden können.</p>
+					<div class="info">
+						<p>Für die Eingabe und Umsetzung von Internetlinks gilt dasselbe wie für das <a href="#karteikarte-quelle">Quellen-Feld</a>. Im Gegensatz zum Textfeld der <a href="#menueKartei-notizen">Funktion für Notizen zur Kartei</a> handelt es sich bei diesem um ein Plain-Text-Feld, in dem keine <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>-Formatierungen vorgenommen werden können.</p>
+
+						<p>Die erste Zeile der Notizen kann man sich auf Wunsch in der <a href="#belegliste-kopfleisteBelege">Kopfleiste der Belege</a> einblenden lassen. Dazu muss eine <a href="#einstellungen-beleglisteNotizen">Einstellung aktiviert</a> werden.</p>
+					</div>
 
 					<p id="karteikarte-anhaenge"><b>Anhänge:</b> Dateianhänge zur Karteikarte</p>
 
@@ -1002,7 +1022,7 @@
 
 					<p class="erklaerung-icon" id="belegliste-trennzeichen"><img src="../img/trennzeichen.svg" width="24" height="24" alt="">Silbentrennung im Belegtext ein- oder ausblenden</p>
 
-					<p class="info">Die Funktion dient zum Ein- oder Ausblenden von Silbentrennungen, die beim automatischen Import des Belegs nicht aufgehoben, sondern durch eine standardisierte Markierung ersetzt wurden (<q>[¬]</q>). Betroffen sind von der Funktion darüber hinaus Angaben zum Seitenumbruch: <q>␣[:SEITENZAHL:]␣</q>. Mehr dazu im <a href="#karteikarte"><abbr title="Kapitel">Kap.</abbr> <i>Karteikarte</i></a>, wo <a href="#karteikarte-trennung">detaillierte Erläuterungen zur Funktion</a> zu finden sind.</p>
+					<p class="info">Die Funktion dient zum Ein- oder Ausblenden von Silbentrennungen, die beim <a href="#karteikarte-dtaImport"><abbr title="Deutschen Textarchiv">DTA</abbr>-Import</a> des Belegs nicht aufgehoben, sondern durch eine standardisierte Markierung ersetzt wurden (<q>[¬]</q>). Betroffen sind von der Funktion darüber hinaus Angaben zum Seitenumbruch: <q>␣[:SEITENZAHL:]␣</q>. Mehr dazu im <a href="#karteikarte"><abbr title="Kapitel">Kap.</abbr> <i>Karteikarte</i></a>, wo <a href="#karteikarte-trennung">detaillierte Erläuterungen zur Funktion</a> zu finden sind.</p>
 
 					<p class="erklaerung-icon" id="belegliste-karteiwortHervorheben"><img src="../img/text-fett.svg" width="24" height="24" alt="">Karteiwort im Belegtext hervorheben</p>
 
@@ -1141,9 +1161,17 @@
 
 					<p class="info">Ist die Detailansicht geschlossen, wird versucht, den Autornamen zu kürzen. Dazu wird nach dem ersten Komma gesucht und nur der Namensteil vor dem Komma eingeblendet. Klickt man auf die Kopfleiste, um die Detailansicht zu öffnen, erscheint der vollständige Name. Es bietet sich also an, Autornamen im Format <q>Nachname, Vorname</q> in der <a href="#karteikarte">Karteikarte</a> zu notieren – auch weil der Autorname als Fallback für die <a href="#belegliste-sortierung">Sortierung von Belegen</a> aus demselben Jahr herangezogen wird.</p>
 
+					<p><b>Markierung</b> des Belegs</p>
+
+					<p class="info">Wurde eine <a href="#karteikarte-markierung">Karteikarte markiert</a>, wird die Markierung standardmäßig an dieser Stelle eingeblendet. Man kann dieses Verhalten jedoch durch die <a href="#einstellungen-beleglisteMark">Deaktivierung einer entsprechenden Einstellung</a> unterbinden.</p>
+
+					<p><b>Notiz</b> zum Beleg</p>
+
+					<p class="info">Es wird <abbr title="maximal">max.</abbr> die erste Zeile der Notiz zu einer Karteikarte angezeigt. Dafür muss aber zunächst <a href="#einstellungen-beleglisteNotizen">die entsprechende Einstellung</a> aktiviert werden.</p>
+
 					<p><b>Textsorte</b> des Belegs</p>
 
-					<p class="info">Die Textsorte wird an dieser Stelle nur angezeigt, wenn <a href="#einstellungen-beleglisteTextsorte">die entsprechende Einstellung</a> aktiviert wurde.</p>
+					<p class="info">Die Textsorte wird, ebenso wie die Notiz, an dieser Stelle nur angezeigt, wenn <a href="#einstellungen-beleglisteTextsorte">die entsprechende Einstellung</a> aktiviert wurde.</p>
 
 					<p><b>Vorschau</b> des Belegtextes</p>
 
@@ -1627,6 +1655,26 @@ Mustermann, Erika
 						<p>Diese Einstellung wirkt nur im Zusammenhang mit der vorherigen, die das <a href="#einstellungen-kopierenHervorhebung">Löschen oder Erhalten der Hervorhebung des Karteiworts beim Kopieren</a> steuert. Ist diese Einstellung aktiviert, wird das Karteiwort nach dem Einfügen des Belegtextes in einem Textverarbeitungsprogramm zusätzlich zur Fettung grau hinterlegt.</p>
 					</div>
 
+					<p class="erklaerung-option" id="einstellungen-kopierenJahr">Jahr als Überschrift bei <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>-Kopie</p>
+
+					<div class="info">
+						<p><i>Standard:</i> aktiviert</p>
+
+						<p>Wird Belegtext in einem gemischten <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>- und Plain-Text-Format kopiert, wird bei aktivierter Einstellung über der Textkopie das Entstehungsjahr <abbr title="beziehungsweise">bzw.</abbr> -jahrhundert des Belegs in einer eigenen Zeile halbfett gedruckt.</p>
+
+						<p>Wenn zugleich die folgende Einstellung aktiviert wurde, erscheint die ID in Klammern hinter dem Jahr.</p>
+					</div>
+
+					<p class="erklaerung-option">ID als Überschrift bei <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>-Kopie</p>
+
+					<div class="info">
+						<p><i>Standard:</i> nicht aktiviert</p>
+
+						<p>Wird Belegtext in einem gemischten <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>- und Plain-Text-Format kopiert, wird bei aktivierter Einstellung über der Textkopie die ID des Belegs in einer eigenen Zeile halbfett gedruckt. Die ID wird aus dem Beleg abgeleitet. <a href="#belegliste-textZwischenablageReferenz">Genaueres dazu</a> im <a href="#belegliste"><abbr title="Kapitel">Kap.</abbr> <i>Belegliste</i></a>.</p>
+
+						<p>Wenn zugleich die vorherige Einstellung aktiviert wurde, erscheint die ID in Klammern hinter dem Jahr.</p>
+					</div>
+
 					<p class="erklaerung-option">Vorauswahl ohne Nachfrage ausführen</p>
 
 					<div class="info">
@@ -1800,30 +1848,6 @@ Mustermann, Erika
 						<p>Die Einstellung eignet sich für eine Arbeitsweise, bei der Sie Ihren Karteikasten in rascher Folge mit neuen Karten füllen wollen, die einzelnen Karten dabei aber nicht sofort auf Vollständigkeit (und Richtigkeit) aller Angaben überprüfen möchten. Mithilfe eines Filters im <a href="#filter-verschiedenes">Filterblock <i>Verschiedenes</i></a> können Sie die als unvollständig markierten Karten dann schnell wiederfinden (und <abbr title="gegebenenfalls">ggf.</abbr> ergänzen, korrigieren <abbr title="und so weiter">usw.</abbr>).</p>
 					</div>
 
-					<p class="erklaerung-option"><abbr title="Uniform Resource Locator" lang="en">URL</abbr> aus der Zwischenablage automatisch in das <abbr title="Deutsches Textarchiv">DTA</abbr>-Import-Feld eintragen</p>
-
-					<div class="info">
-						<p><i>Standard:</i> aktiviert</p>
-
-						<p>Ist die Einstellung aktiviert, überprüft die App in dem Moment, in dem Sie das Textfeld <i><abbr title="Deutsches Textarchiv">DTA</abbr>-Import</i> in der <a href="#karteikarte-formularansicht">Formularansicht der Karteikarte</a> fokussieren, ob sich in der Zwischenablage ihres Betriebssystems eine <abbr title="Uniform Resource Locator" lang="en">URL</abbr> aus dem <abbr title="Deutsches Textarchiv">DTA</abbr> befindet. Ist dem der Fall, wird diese umgehend in das Textfeld eingetragen. Sie brauchen im Anschluss also nur noch <kbd>⏎</kbd> zu drücken, um die Seite, die referenziert wird, zu importieren.</p>
-
-						<p>Beim <a href="#karteikarte">Erstellen einer neuen Karteikarte</a> wird automatisch das <abbr title="Deutsches Textarchiv">DTA</abbr>-Feld fokussiert. Ist die Einstellung aktiviert, sparen Sie sich somit den Schritt des manuellen Einfügens der <abbr title="Uniform Resource Locator" lang="en">URL</abbr>.</p>
-					</div>
-
-					<p class="erklaerung-option" id="einstellungen-karteikarteUeberpruefen">nach dem <abbr title="Deutsches Textarchiv">DTA</abbr>-Import überprüfen, ob der Belegtext das Karteiwort enthält</p>
-
-					<div class="info">
-						<p><i>Standard:</i> aktiviert</p>
-
-						<p>Haben Sie automatisch einen Beleg aus dem <abbr title="Deutsches Textarchiv">DTA</abbr> importiert, wird die App nach dem Import einmalig überprüfen, ob in der importieren Belegstelle das Karteiwort (bei mehrgliedrigen Wortverbindungen: alle Karteiwörter) zu finden ist (sind). Wenn nicht, wird es Sie über dieses Manko informieren.</p>
-
-						<p>Es könnte sein, dass sich das Wort, das Sie interessiert, erst am Anfang der nächsten Textseite befindet. Wiederholen Sie den Import dann einfach in derselben, immer noch geöffneten Karte und <a href="#karteikarte-dtaImport">importieren Sie eine Seite mehr</a>.</p>
-
-						<p>Ansonsten gilt: Der Algorithmus, der nach dem Karteiwort sucht, ist gut, aber gewiss nicht perfekt. Vielleicht ist die Meldung falsch. Sie können sofort nach dem Import in die <a href="#karteikarte-leseansicht">Leseansicht der Karteikarte</a> wechseln, um hier (<abbr title="eventuell">evtl.</abbr> mit Hilfe der <a href="#karteikarte-suchleiste">Suchleiste</a>) zu überprüfen, ob das Wort nicht doch zu finden ist.</p>
-
-						<p>Der Kontrollalgorithmus bedient sich übrigens der <a href="#menueKartei-formvarianten">Formvarianten</a>, die beim Erstellen einer Kartei automatisch importiert werden. Sollte es wiederholt passieren, dass Sie auf ein Fehlen des Karteiworts aufmerksam gemacht werden, es aber eigentlich im Text zu finden ist, wurden die Formvarianten vielleicht noch nicht importiert oder Sie müssen sie manuell um dem <abbr title="Deutschen Textarchiv">DTA</abbr> unbekannte Formen ergänzen.</p>
-					</div>
-
 					<p class="erklaerung-option">Textfelder beim Einfügen von Text via Icon, Menüeintrag oder Bedeutungsdefinition ohne Nachfrage ergänzen</p>
 
 					<div class="info">
@@ -1842,6 +1866,40 @@ Mustermann, Erika
 						<p>Ist die Einstellung aktiviert, werden Sie nicht mehr gefragt. Der im Feld stehende Text wird am Ende automatisch um den einzufügenden Text ergänzt.</p>
 
 						<p>Bei dieser Einstellung handelt es sich im Prinzip um dieselbe, die Sie in jenem Meldungsfenster sehen, das Sie nach einer der genannten Einfüge-Funktionen fragt, ob Sie das Textfeld überschreiben oder ergänzen möchten. Die Checkbox im Meldungsfenster ist mit dieser verknüpft.</p>
+					</div>
+
+					<p class="erklaerung-option"><abbr title="Uniform Resource Locator" lang="en">URL</abbr> aus der Zwischenablage automatisch in das <abbr title="Deutsches Textarchiv">DTA</abbr>-Import-Feld eintragen</p>
+
+					<div class="info">
+						<p><i>Standard:</i> aktiviert</p>
+
+						<p>Ist die Einstellung aktiviert, überprüft die App in dem Moment, in dem Sie das Textfeld <i><abbr title="Deutsches Textarchiv">DTA</abbr>-Import</i> in der <a href="#karteikarte-formularansicht">Formularansicht der Karteikarte</a> fokussieren, ob sich in der Zwischenablage ihres Betriebssystems eine <abbr title="Uniform Resource Locator" lang="en">URL</abbr> aus dem <abbr title="Deutsches Textarchiv">DTA</abbr> befindet. Ist dem der Fall, wird diese umgehend in das Textfeld eingetragen. Sie brauchen im Anschluss also nur noch <kbd>⏎</kbd> zu drücken, um die Seite, die referenziert wird, zu importieren.</p>
+
+						<p>Beim <a href="#karteikarte">Erstellen einer neuen Karteikarte</a> wird automatisch das <abbr title="Deutsches Textarchiv">DTA</abbr>-Feld fokussiert. Ist die Einstellung aktiviert, sparen Sie sich somit den Schritt des manuellen Einfügens der <abbr title="Uniform Resource Locator" lang="en">URL</abbr>.</p>
+					</div>
+
+					<p class="erklaerung-option" id="einstellungen-karteikarteZeitungsname">bei Zeitungskorpora den Zeitungsnamen in die erste Zeile der Notizen schreiben</p>
+
+					<div class="info">
+						<p><i>Standard:</i> nicht aktiviert</p>
+
+						<p>Wird ein <a href="#karteikarte-dwdsImport"><abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippet aus dem <abbr title="Digitalen Wörterbuch der deutschen Sprache">DWDS</abbr> importiert</a> und ist von dem Quellkorpus bekannt, dass es sich um ein Zeitungskorpus handelt, wird der Zeitungsname in die erste Zeile der Notizen geschrieben. Diese Option kann sinnvoll sein, wenn man den Zeitungsnamen in der <a href="#belegliste-kopfleisteBelege">Kopfleiste der Belege</a> sehen möchte.</p>
+
+						<p>Für die <a href="#einstellungen-beleglisteNotizen">Anzeige der ersten Zeile des Notizenfeldes muss eine Einstellung aktiviert</a> werden.</p>
+					</div>
+
+					<p class="erklaerung-option" id="einstellungen-karteikarteUeberpruefen">nach dem Import überprüfen, ob der Belegtext das Karteiwort enthält</p>
+
+					<div class="info">
+						<p><i>Standard:</i> aktiviert</p>
+
+						<p>Haben Sie automatisch einen Beleg aus dem <abbr title="Deutsches Textarchiv">DTA</abbr> oder dem <abbr title="Digitalen Wörterbuch der deutschen Sprache">DWDS</abbr> <a href="#karteikarte-import">importiert</a>, wird die App nach dem Import einmalig überprüfen, ob in der importieren Belegstelle das Karteiwort (bei mehrgliedrigen Wortverbindungen: alle Karteiwörter) zu finden ist (sind). Wenn nicht, wird es Sie über dieses Manko informieren.</p>
+
+						<p>Beim <abbr title="Deutsches Textarchiv">DTA</abbr>-Import könnte es vorkommen, dass sich das Wort, das Sie interessiert, erst am Anfang der nächsten Textseite befindet. Wiederholen Sie den Import dann einfach in derselben, immer noch geöffneten Karte und <a href="#karteikarte-dtaImport">importieren Sie eine Seite mehr</a>.</p>
+
+						<p>Ansonsten gilt: Der Algorithmus, der nach dem Karteiwort sucht, ist gut, aber gewiss nicht perfekt. Vielleicht ist die Meldung falsch. Sie können sofort nach dem Import in die <a href="#karteikarte-leseansicht">Leseansicht der Karteikarte</a> wechseln, um hier (<abbr title="eventuell">evtl.</abbr> mit Hilfe der <a href="#karteikarte-suchleiste">Suchleiste</a>) zu überprüfen, ob das Wort nicht doch zu finden ist.</p>
+
+						<p>Der Kontrollalgorithmus bedient sich übrigens der <a href="#menueKartei-formvarianten">Formvarianten</a>, die beim Erstellen einer Kartei automatisch importiert werden. Sollte es wiederholt passieren, dass Sie auf ein Fehlen des Karteiworts aufmerksam gemacht werden, es aber eigentlich im Text zu finden ist, wurden die Formvarianten vielleicht noch nicht importiert oder Sie müssen sie manuell um dem <abbr title="Deutschen Textarchiv">DTA</abbr> unbekannte Formen ergänzen.</p>
 					</div>
 
 					<p class="erklaerung-option" id="einstellungen-karteikarteLeseansicht">bestehende Karteikarte in der Leseansicht öffnen</p>
@@ -1944,12 +2002,28 @@ Mustermann, Erika
 						<p>Aktivieren Sie diese Einstellung, werden immer alle Icons zur Steuerung der Anzeige der Belegliste angezeigt, ganz egal, ob sie aktiviert sind oder nicht. Wenn Ihr Bildschirm nicht breit genug oder das Programmfenster zu klein ist, kann dies freilich zur Folge haben, dass Icons aus der Kopfleiste der Belegliste nicht mehr sicht- oder erreichbar sind – <abbr title="besonders">bes.</abbr> bei geöffneter Filterleiste.</p>
 					</div>
 
-					<p class="erklaerung-option" id="einstellungen-beleglisteTextsorte">Textsorte in den Belegkopf eintragen</p>
+					<p class="erklaerung-option" id="einstellungen-beleglisteMark">Datenfelder im Belegkopf: Markierung</p>
+
+					<div class="info">
+						<p><i>Standard:</i> aktiviert</p>
+
+						<p>In der Belegliste kann man sich auf Wunsch in der <a href="#belegliste-kopfleisteBelege">Kopfleiste der Belege</a> die semantisch nicht festgelegte Markierung der Karteikarte (sprich: die Sterne) anzeigen lassen. Bei aktivierter Einstellung erscheinen die Sterne in Klammern hinter dem Autor.</p>
+					</div>
+
+					<p class="erklaerung-option" id="einstellungen-beleglisteNotizen">Datenfelder im Belegkopf: Notiz</p>
 
 					<div class="info">
 						<p><i>Standard:</i> nicht aktiviert</p>
 
-						<p>In der Belegliste kann man sich auf Wunsch in der <a href="#belegliste-kopfleisteBelege">Kopfleiste der Belege</a> die Textsorte einblenden lassen. Bei aktivierter Einstellung erscheint sie in Klammern und Kapitälchen hinter dem Autor, so denn in der zugehörigen Karteikarte das <a href="#karteikarte-textsorte">Textsorten-Feld</a> gefüllt wurde. Für die Eingabe von Textsorten besteht die Möglichkeit, Hierarchieebenen zu öffnen, <abbr title="zum Beispiel">z. B.</abbr> durch die Eingabe <q>Wissenschaft: Philosophie</q> oder <q>Wissenschaft: Chemie</q>. Im Belegkopf wird allerdings immer nur die oberste Ebene eingetragen, was hier in beiden Fällen <q>Wissenschaft</q> wäre.</p>
+						<p>In der Belegliste kann man sich auf Wunsch in der <a href="#belegliste-kopfleisteBelege">Kopfleiste der Belege</a> eine Vorschau des Notizen-Feldes einblenden lassen. Bei aktivierter Einstellung erscheint die Notiz in Klammern hinter dem Autor <abbr title="beziehungsweise">bzw.</abbr> hinter den <a href="#einstellungen-beleglisteMark">Sternen</a>. Dabei wird nie die gesamte Notiz gedruckt, sondern immer nur die erste Zeile und von dieser ersten Zeile <abbr title="maximal">max.</abbr> 35 Zeichen. Sollte der Inhalt der Zeile länger sein, wird er gekürzt, was durch ein Kürzungszeichen angezeigt wird.</p>
+					</div>
+
+					<p class="erklaerung-option" id="einstellungen-beleglisteTextsorte">Datenfelder im Belegkopf: Textsorte</p>
+
+					<div class="info">
+						<p><i>Standard:</i> nicht aktiviert</p>
+
+						<p>In der Belegliste kann man sich auf Wunsch in der <a href="#belegliste-kopfleisteBelege">Kopfleiste der Belege</a> die Textsorte einblenden lassen. Bei aktivierter Einstellung erscheint sie in Klammern und Kapitälchen hinter Autor, Sternen oder Notiz – je nachdem, wie die Karteikarte gefüllt und die Anzeige der anderen Datenfelder konfiguriert ist. Dazu muss das <a href="#karteikarte-textsorte">Textsorten-Feld</a> der zugehörigen Karteikarte natürlich gefüllt sein. Bei der Eingabe von Textsorten besteht die Möglichkeit, Hierarchieebenen zu öffnen, <abbr title="zum Beispiel">z. B.</abbr> <q>Wissenschaft: Philosophie</q> oder <q>Wissenschaft: Chemie</q>. Im Belegkopf wird allerdings immer nur die oberste Ebene eingetragen, was hier in beiden Fällen <q>Wissenschaft</q> wäre.</p>
 					</div>
 				</section>
 
@@ -3024,7 +3098,7 @@ Mustermann, Erika
 
 						<p>Nach dem Öffnen wird die <b>Startansicht</b> angezeigt mit den Buttons <i>Kartei erstellen</i> und <i>Kartei öffnen</i> sowie eine Liste der zuletzt verwendeten Karteien.</p>
 
-						<p>Die Liste <b>zuletzt verwendeter Karteien</b> ist auf zehn Einträge begrenzt. Sobald eine gelistete Kartei geöffnet wird, rückt diese an die oberste Stelle der Liste. Wird eine elfte Kartei geöffnet, verschwindet der letzte Listeneintrag. Es verschwindet also der Eintrag der Kartei, die am längsten nicht geöffnet wurde. Auf Wunsch können Sie in dieser Ansicht einzelne Einträge manuell aus der Liste entfernen: <i>Rechtsklick &gt; Aus Liste entfernen</i>.</p>
+						<p>Die Liste <b>zuletzt verwendeter Karteien</b> ist auf 20 Einträge begrenzt. Sobald eine gelistete Kartei geöffnet wird, rückt diese an die oberste Stelle der Liste. Wird die 21. Kartei geöffnet, verschwindet der letzte Listeneintrag. Es verschwindet also der Eintrag der Kartei, die am längsten nicht geöffnet wurde. Auf Wunsch können Sie in dieser Ansicht einzelne Einträge manuell aus der Liste entfernen: <i>Rechtsklick &gt; Aus Liste entfernen</i>.</p>
 
 						<p>Einige Sekunden nach dem Start der App wird einmalig überprüft, ob die Karteien in der Liste noch auf dem Rechner zu finden sind. Ist dem nicht der Fall werden alle geöffneten Hauptfenster darüber informiert, welche Karteien verschwunden sind. In der Liste zuletzt verwendeter Karteien werden diejenigen, die nicht gefunden wurden, dann mit dem Icon <img src="../img/x-dick-rot.svg" width="20" height="20" alt=""> markiert. Dass eine Kartei nicht gefunden wurde, kann natürlich auch den Grund haben, dass sie in einem Netzwerkordner liegt, der nicht oder noch nicht gemountet ist. Darum werden die Karteien nicht automatisch aus der Liste gelöscht. Steht der Pfad einer Kartei erst nach dem Start der App wieder zur Verfügung, können Sie Karteien, die als verschwunden markiert sind, problemlos über diese Liste öffnen. Wurde eine als verschwunden markierte Kartei fehlerfrei geöffnet, wird allen offenen Programmfenstern mitgeteilt, dass sie wiedergefunden wurde.</p>
 
@@ -3145,7 +3219,7 @@ Mustermann, Erika
 
 						<p>Der Menüpunkt steht <strong class="obacht">in <i>macOS</i> nicht</strong> zur Verfügung!</p>
 
-						<p>Über den Menüpunkt kann man sich eine <b>Liste</b> der zuletzt verwendeten Karteien anzeigen lassen. Die Liste ist auf zehn Einträge begrenzt und kann durch den Befehl <i>Liste löschen</i> (hinter dem letzten Eintrag) komplett geleert werden. In der Startansicht der App findet sich dieselbe Liste. Dort können Sie gezielt einzelne Einträge aus ihr entfernen. <abbr title="Siehe">S.</abbr> die Anmerkungen zum Menüpunkt <a href="#menueApp-neuesFenster"><i><span class="app-name"></span> &gt; Neues Fenster</i></a>, wo auch genauer erklärt wird, wie das Programm die Liste pflegt.</p>
+						<p>Über den Menüpunkt kann man sich eine <b>Liste</b> der zuletzt verwendeten Karteien anzeigen lassen. Die Liste ist auf zehn Einträge begrenzt und kann durch den Befehl <i>Liste löschen</i> (hinter dem letzten Eintrag) komplett geleert werden. Doch Vorsicht! In der Startansicht der App findet sich dieselbe Liste, in der allerdings bis zu 20 Einträge angezeigt werden. Durch den Befehl <i>Liste löschen</i>  entfernen Sie auch die in diesem Menü aus Platzgründen nicht zu sehenden Karteien. In der Startansicht können Sie übrigens gezielt einzelne Einträge aus der Liste entfernen. <abbr title="Siehe">S.</abbr> die Anmerkungen zum Menüpunkt <a href="#menueApp-neuesFenster"><i><span class="app-name"></span> &gt; Neues Fenster</i></a>, wo auch genauer erklärt wird, wie das Programm die Liste pflegt.</p>
 					</div>
 
 					<p class="erklaerung-icon-menues" id="menueKartei-speichern"><img src="../img/speichern.svg" width="24" height="24" alt="">Speichern</p>
@@ -3295,6 +3369,14 @@ Mustermann, Erika
 							<p class="erklaerung-icon"><img src="../img/liste-bullets-gross.svg" width="20" height="20" alt=""><i>Liste ungeordnet</i>; eine Schlagwortliste mit Bullet-Points</p>
 
 							<p class="erklaerung-icon"><img src="../img/liste-zahlen-gross.svg" width="20" height="20" alt=""><i>Liste geordnet</i>; eine nummerierte Aufzählung</p>
+						</div>
+
+						<p id="menueKartei-notizenEinzug">Absätze können <b>eingezogen</b> werden:</p>
+
+						<div class="info">
+							<p class="erklaerung-icon"><img src="../img/pfeil-doppelt-rechts.svg" width="20" height="20" alt=""><i>Einzug.</i> Innerhalb von Listenpunkten angewendet, wird die Verschachtelung um eine Ebene erhöht. Normale Absätze bekommen sowohl einen Einzug als auch einen größeren Durchschuss vor und nach dem Text.</p>
+
+							<p class="erklaerung-icon"><img src="../img/pfeil-doppelt-links.svg" width="20" height="20" alt=""><i>Auszug.</i> Listenpunkte werden um eine Verschachtelungstiefe nach links verschoben oder in normale Absätze verwandelt, falls sie bereits auf der ersten Verschachtelungsebene sind. Eingezogene Absätze werden um eine Ebene ausgezogen. <abbr title="Gegebenenfalls">Ggf.</abbr> wird der Durchschuss vor und nach dem Absatz entfernt.</p>
 						</div>
 
 						<p>Folgende <b>Textformatierungen</b> stehen zur Verfügung:</p>
@@ -3648,9 +3730,9 @@ Gerüst 2 &gt; Gerüst 1</pre>
 						<ul>
 							<li><i><abbr title="Hypertext Markup Language" lang="en">HTML</abbr> und Plain:</i> Die markierte Passage wird zugleich als <abbr title="Hypertext Markup Language" lang="en">HTML</abbr> und als unformatierter Klartext kopiert. Welches der beiden Textformate für das Einfügen verwendet wird, hängt von dem Programm ab, in das Sie den Text übertragen möchten. Office-Programme haben in aller Regel kompliziertere Einfügeoptionen, über die man das eine oder das andere Format auswählen kann, greifen standardmäßig aber auf <abbr title="Hypertext Markup Language" lang="en">HTML</abbr> zurück. Ein simples Programm wie der <i>Editor</i> von <i>Windows</i> wird automatisch die Plain-Text-Variante benutzen.</li>
 
-							<li><i>Plain-Referenz:</i> Kopiert eine ID, die sich aus dem betreffenden Beleg ergibt. <a href="#belegliste-textZwischenablageReferenz">Genaueres dazu</a> im <a href="#belegliste"><abbr title="Kapitel">Kap.</abbr> Belegliste</a> und in der <a href="#xml-belegschnittId" class="link-dokumentation">technischen Dokumentation</a>.</li>
+							<li><i>Plain-Referenz:</i> Kopiert eine ID, die sich aus dem betreffenden Beleg ergibt. <a href="#belegliste-textZwischenablageReferenz">Genaueres dazu</a> im <a href="#belegliste"><abbr title="Kapitel">Kap.</abbr> <i>Belegliste</i></a> und in der <a href="#xml-belegschnittId" class="link-dokumentation">technischen Dokumentation</a>.</li>
 
-							<li><i><abbr title="Extensible Markup Language" lang="en">XML</abbr>-Belegschnitt:</i> Erstellt ein <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippet des gewählten Belegschnitts und kopiert es in die Zwischenablage. Entsprechend ihrer Funktion ist diese Option deaktiviert, wenn die Auswahl nicht im Belegtext, sondern in einem anderen Datenfeld gemacht wurde. <a href="#belegliste-xmlZwischenablageBelegschnitt">Genaueres dazu</a> im <abbr title="Kapitel">Kap.</abbr> Belegliste und in der <a href="#xml-belegschnitt" class="link-dokumentation">technischen Dokumentation</a>.</li>
+							<li><i><abbr title="Extensible Markup Language" lang="en">XML</abbr>-Belegschnitt:</i> Erstellt ein <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippet des gewählten Belegschnitts und kopiert es in die Zwischenablage. Entsprechend ihrer Funktion ist diese Option deaktiviert, wenn die Auswahl nicht im Belegtext, sondern in einem anderen Datenfeld gemacht wurde. <a href="#belegliste-xmlZwischenablageBelegschnitt">Genaueres dazu</a> im <abbr title="Kapitel">Kap.</abbr> <i>Belegliste</i> und in der <a href="#xml-belegschnitt" class="link-dokumentation">technischen Dokumentation</a>.</li>
 
 							<li><i><abbr title="Extensible Markup Language" lang="en">XML</abbr>-Referenz:</i> Kopiert eine ID, die sich aus dem betreffenden Beleg ergibt, zusammen mit einem leeren <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Tag. <abbr title="Vergleiche">Vgl.</abbr> die <a href="#xml-referenz" class="link-dokumentation">technische Dokumentation</a>.</li>
 						</ul>

@@ -4,7 +4,7 @@ let konversion = {
 	// aktuelle Version des Dateiformats
 	// *** WICHTIG! *** WICHTIG! *** WICHTIG! ***
 	// Bei Änderungen anpassen!
-	version: 11,
+	version: 12,
 	// Verteilerfunktion
 	start () {
 		konversion.von1nach2();
@@ -17,6 +17,7 @@ let konversion = {
 		konversion.von8nach9();
 		konversion.von9nach10();
 		konversion.von10nach11();
+		konversion.von11nach12();
 	},
 	// Konversion des Dateiformats von Version 1 nach Version 2
 	von1nach2 () {
@@ -219,6 +220,23 @@ let konversion = {
 		}
 		// Datenfeld "ty" ändern: "wgd" -> "ztj"
 		data.ty = "ztj";
+		// Versionsnummer hochzählen
+		data.ve++;
+		// Änderungsmarkierung setzen
+		kartei.karteiGeaendert(true);
+	},
+	// Konversion des Dateiformats von Version 11 nach Version 12
+	von11nach12 () {
+		if (data.ve > 11) {
+			return;
+		}
+		// Datenfeld "bx" (Beleg-XML) in allen Karteikarten ergänzen
+		for (let id in data.ka) {
+			if (!data.ka.hasOwnProperty(id)) {
+				continue;
+			}
+			data.ka[id].bx = "";
+		}
 		// Versionsnummer hochzählen
 		data.ve++;
 		// Änderungsmarkierung setzen

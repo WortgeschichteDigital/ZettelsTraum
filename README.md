@@ -29,7 +29,7 @@ Mit *Zettel’s Traum* können Sie Textbelege zu einem Wort (oder einer Wortverb
 
 Die auf virtuellen Karteikarten gesammelten Belege lassen sich auflisten und in vielfältiger Weise filtern, durchsuchen, markieren, kopieren, duplizieren, auf Wunsch sogar ausdrucken. Die Wortkarteidaten werden dafür in einem ausführlich dokumentierten Klartextformat gespeichert, das auf einem Notationsstandard aufsetzt, der auch in der ferneren Zukunft problemlos von Computerprogrammen zu lesen sein sollte.
 
-Die App ist agnostisch, was die Verwendung eines bestimmten Textkorpus angeht. Sie können Belege aus beliebigen Korpora einpflegen. Allerdings enthält sie spezielle Importfunktionen, die das Erstellen von Karteikarten mit Belegen aus dem *[Deutschen Textarchiv](http://www.deutschestextarchiv.de/)* (DTA) und den [Korpora](https://www.dwds.de/r) des *[Digitalen Wörterbuchs der deutschen Sprache](https://www.dwds.de/)* (DWDS) erheblich erleichtern und beschleunigen. Mit nur einem Klick kann die Karteikarte sowohl mit dem Belegtext als auch mit den zugehörigen Metadaten gefüllt werden. (Der DWDS-Import wird demnächst in das Programm integriert.)
+Die App ist agnostisch, was die Verwendung eines bestimmten Textkorpus angeht. Sie können Belege aus beliebigen Korpora einpflegen. Allerdings enthält sie spezielle Importfunktionen, die das Erstellen von Karteikarten mit Belegen aus dem *[Deutschen Textarchiv](http://www.deutschestextarchiv.de/)* (DTA) und den [Korpora](https://www.dwds.de/r) des *[Digitalen Wörterbuchs der deutschen Sprache](https://www.dwds.de/)* (DWDS) erheblich erleichtern und beschleunigen. Mit nur einem Klick kann die Karteikarte sowohl mit dem Belegtext als auch mit den zugehörigen Metadaten gefüllt werden.
 
 Nicht zuletzt verfügt die App über leicht zu handhabende Funktionen zum Erstellen von XML-Snippets. Diese wurden so designt, dass der Export von Bedeutungsgerüsten und frei gewählten Belegschnitten rasch und unkompliziert vonstatten geht. (Die Exportfunktion für Bedeutungsgerüste wird demnächst in das Programm integriert.)
 
@@ -100,6 +100,8 @@ Entpacken Sie die Datei durch Doppelklick. Zum Starten wechseln Sie in den Ordne
 Für ein Update laden Sie sich einfach die neue Version herunter und ersetzen den Ordner `zettelstraum-darwin-x64`. Verpassen Sie ein Update, können Sie immer direkt die neueste Version nehmen.
 
 **Unterstützung:** Version 10.10 (Yosemite) und später mit 64-Bit-Architektur. 32-Bit-Versionen können nicht gebaut werden.
+
+Da die App bisher nicht zertifiziert ist, wird macOS vermutlich das reibungslose Starten der Paketierung auf Ihrem Rechner unterbinden. Erhalten Sie die Meldung, dass *Zettel’s Traum* nicht gestartet werden könne, „da es von einem nicht verifizierten Entwickler stammt“, können Sie die Sicherheitseinstellungen anpassen, um die App dennoch auszuführen. Unter *Systemeinstellungen > Sicherheit > Allgemein* finden Sie den Punkt „App-Download erlauben von“ und darunter den Button „Dennoch öffnen“. Starten Sie die App, nachdem Sie auf „Dennoch öffnen“ geklickt haben, werden Sie zwar noch einmal gefragt, ob Sie das Programm wirklich öffnen möchten, können es mit dem Button „Öffnen“ aber problemlos starten.
 
 ## Bauanleitung
 

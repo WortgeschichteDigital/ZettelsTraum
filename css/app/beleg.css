@@ -120,6 +120,12 @@
 	padding-right: 0;
 }
 
+#beleg-form-dwds td {
+	padding-top: 3px;
+	padding-bottom: 3px;
+	text-align: right;
+}
+
 #beleg hr {
 	margin: 30px 0 10px 0;
 	border: none;
@@ -150,6 +156,10 @@
 	width: 135px;
 }
 
+#beleg-dwds-button {
+	width: 135px;
+}
+
 #beleg textarea {
 	margin: 0 auto;
 	min-height: 24px;
@@ -167,6 +177,10 @@
 textarea#beleg-bs {
 	min-height: 24px;
 	max-height: 288px;
+}
+
+#beleg input[type="radio"] {
+	margin-left: 25px;
 }
 
 #beleg label {
@@ -223,9 +237,19 @@ textarea#beleg-bs {
 	margin-right: 24px;
 }
 
+.icon-tools-auszug {
+	-webkit-mask-image: url(../../img/pfeil-doppelt-links.svg);
+	mask-image: url(../../img/pfeil-doppelt-links.svg);
+}
+
 .icon-tools-einfuegen {
 	-webkit-mask-image: url(../../img/einfuegen.svg);
 	mask-image: url(../../img/einfuegen.svg);
+}
+
+.icon-tools-einzug {
+	-webkit-mask-image: url(../../img/pfeil-doppelt-rechts.svg);
+	mask-image: url(../../img/pfeil-doppelt-rechts.svg);
 }
 
 .icon-tools-kopieren {

@@ -145,11 +145,15 @@ let xml = {
 			// <Aufrufdatum>
 			let reg = new RegExp(helfer.escapeRegExp(href[0])),
 				zugriff = xml.datum(data.qu.split(reg)[1]);
-			if (zugriff) {
-				let aufrufdatum = document.createElementNS(ns, "Aufrufdatum");
-				fundstelle.appendChild(aufrufdatum);
-				aufrufdatum.appendChild(document.createTextNode(zugriff));
+			if (!zugriff) {
+				// alternativ Erstellungsdatum Karteikarte nutzen
+				// (ist immer vorhanden, auch wenn Kartei noch nicht gespeichert)
+				let datum = data.dc.match(/^(?<jahr>[0-9]{4})-(?<monat>[0-9]{2})-(?<tag>[0-9]{2})/);
+				zugriff = `${datum.groups.tag}.${datum.groups.monat}.${datum.groups.jahr}`;
 			}
+			let aufrufdatum = document.createElementNS(ns, "Aufrufdatum");
+			fundstelle.appendChild(aufrufdatum);
+			aufrufdatum.appendChild(document.createTextNode(zugriff));
 		}
 		// <unstrukturiert>
 		let qu = data.qu;
@@ -162,6 +166,8 @@ let xml = {
 		let unstrukturiert = document.createElementNS(ns, "unstrukturiert");
 		fundstelle.appendChild(unstrukturiert);
 		unstrukturiert.appendChild( document.createTextNode( xml.escape( helfer.typographie(qu) ) ) );
+		// Einzüge hinzufügen
+		schnitt = xml.indent(schnitt);
 		// Text in String umwandeln und aufbereiten
 		let XMLString = new XMLSerializer().serializeToString(schnitt);
 		XMLString = XMLString.replace(/\sxmlns="http:\/\/www\.w3\.org\/1999\/xhtml"/g, "");
@@ -217,7 +223,9 @@ let xml = {
 	// Datum extrahieren
 	//   text = String
 	//     (Text, aus dem heraus das Datum extrahiert werden soll)
-	datum (text) {
+	//   normJh = false || undefined
+	//     (die Jahrhundertangabe soll in eine Jahreszahl umgewandelt werden)
+	datum (text, normJh = true) {
 		let formate = [
 			/(?<tag>[0-9]{1,2})\.\s*(?<monat>[0-9]{1,2})\.\s*(?<jahr>[0-9]{4})/,
 			/(?<jahr>[0-9]{4})-(?<monat>[0-9]{2})-(?<tag>[0-9]{2})/,
@@ -231,7 +239,11 @@ let xml = {
 			let m = text.match(reg);
 			if (m) {
 				if (m.groups.jahrhundert) {
-					jahr = `${parseInt(m.groups.jahrhundert, 10) - 1}00`; // sehr unschön
+					if (normJh) {
+						jahr = `${parseInt(m.groups.jahrhundert, 10) - 1}00`; // sehr unschön
+					} else {
+						jahr = `${m.groups.jahrhundert}. Jh.`;
+					}
 				} else {
 					// steht vor diesem Datum ein anderes Datum, das Vorrang hat?
 					let before = text.substring(0, m.index);
@@ -315,5 +327,24 @@ let xml = {
 			text = text.replace(reg, v);
 		}
 		return text;
+	},
+	// XML-Snippet mit Einzügen versehen
+	// (s. https://stackoverflow.com/a/47317538)
+	//   xml = Document
+	//     (das XML-Snippet)
+	indent (xml) {
+		let xslt = new DOMParser().parseFromString(`<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+	<xsl:strip-space elements="*"/>
+	<xsl:template match="para[content-style][not(text())]">
+		<xsl:value-of select="normalize-space(.)"/>
+	</xsl:template>
+	<xsl:template match="node()|@*">
+		<xsl:copy><xsl:apply-templates select="node()|@*"/></xsl:copy>
+	</xsl:template>
+	<xsl:output indent="yes"/>
+</xsl:stylesheet>`, "application/xml");
+		let processor = new XSLTProcessor();
+		processor.importStylesheet(xslt);
+		return processor.transformToDocument(xml);
 	},
 };

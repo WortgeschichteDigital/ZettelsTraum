@@ -23,7 +23,7 @@ const dienste = require("./js/main/dienste"),
 //       "handbuch"      = Nebenfenster "Handbuch"
 //       "fehlerlog"     = Nebenfenster "Fehlerlog"
 //       "app"           = modales Nebenfenster "Über App"
-//       "electron       = modales Nebenfenster "Über Electron")
+//       "electron"      = modales Nebenfenster "Über Electron")
 //     kartei:      String (Pfad zur Kartei, die gerade in dem Fenster geladen ist;
 //       immer leer in Fenstern, die nicht typ === "index" sind;
 //       kann in Fenstern vom typ === "index" leer sein, dann ist keine Kartei geladen;
@@ -453,7 +453,15 @@ appMenu = {
 		};
 		// Dateiliste ggf. ergänzen
 		if (optionen.data.zuletzt) {
-			optionen.data.zuletzt.forEach((i, n) => appMenu.zuletztItem(layoutZuletzt, i, n));
+			let len = optionen.data.zuletzt.length;
+			if (len > 10) {
+				// Liste auf 10 Einträge begrenzen
+				// (in der Startansicht sind max. 20 Einträge sichtbar)
+				len = 10;
+			}
+			for (let i = 0; i < len; i++) {
+				appMenu.zuletztItem(layoutZuletzt, optionen.data.zuletzt[i], i);
+			}
 		}
 		// ggf. Löschmenü hinzufügen
 		if (layoutZuletzt.submenu.length) {
@@ -692,11 +700,19 @@ optionen = {
 	schreibenTimeout: null,
 	// überschreibt die Optionen-Datei
 	schreiben () {
-		fsP.writeFile(optionen.pfad, JSON.stringify(optionen.data))
-			.catch(err => {
-				fenster.befehlAnHauptfenster("dialog-anzeigen", `Die Optionen-Datei konnte nicht gespeichert werden.\n<h3>Fehlermeldung</h3>\n${err.name}: ${err.message}`);
-				throw err;
-			});
+		return new Promise(resolve => {
+			if (!Object.keys(optionen.data).length) {
+				resolve(false);
+				return;
+			}
+			fsP.writeFile(optionen.pfad, JSON.stringify(optionen.data))
+				.then(() => resolve(true))
+				.catch(err => {
+					fenster.befehlAnHauptfenster("dialog-anzeigen", `Die Optionen-Datei konnte nicht gespeichert werden.\n<h3>Fehlermeldung</h3>\n${err.name}: ${err.message}`);
+					resolve(false);
+					throw err;
+				});
+		});
 	},
 };
 
@@ -868,8 +884,14 @@ fenster = {
 			bounds.minHeight = 400;
 		} else if (typ === "dokumentation") {
 			title = "Technische Dokumentation";
+			if (bounds.height > 750) {
+				bounds.height = 750;
+			}
 		} else if (typ === "handbuch") {
 			title = "Handbuch";
+			if (bounds.height > 750) {
+				bounds.height = 750;
+			}
 		}
 		let opt = {
 			title: title,
@@ -1152,10 +1174,10 @@ app.on("ready", async () => {
 });
 
 // App beenden, wenn alle Fenster geschlossen worden sind
-app.on("window-all-closed", () => {
+app.on("window-all-closed", async () => {
 	// Optionen schreiben
 	clearTimeout(optionen.schreibenTimeout);
-	optionen.schreiben();
+	await optionen.schreiben();
 	// auf macOS bleibt das Programm üblicherweise aktiv,
 	// bis die BenutzerIn es explizit beendet
 	if (process.platform !== "darwin") {

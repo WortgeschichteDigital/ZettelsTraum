@@ -437,6 +437,7 @@ execJob() {
 	# Tarball
 	if [ "$type" = "tarball" ]; then
 		echo -e "  \033[1;32m*\033[0m Tarball erstellen"
+		cd "${dir}/../"
 		if (( $(gitOkay) == 0 )); then
 			echo -e "\n\033[1;31mFehler!\033[0m\n  \033[1;31m*\033[0m Packen abgebrochen"
 			return

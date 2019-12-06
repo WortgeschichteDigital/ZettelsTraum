@@ -22,7 +22,10 @@ let beleg = {
 		"DWDS: Dortmunder Chat-Korpus",
 		"DWDS: Filmuntertitel",
 		"DWDS: Gesprochene Sprache",
+		"DWDS: IT-Blogs",
+		"DWDS: Mode- und Beauty-Blogs",
 		"DWDS: neues deutschland",
+		"DWDS: Politische Reden",
 		"DWDS: Polytechnisches Journal",
 		"DWDS: Referenz- und Zeitungskorpora",
 		"DWDS: Tagesspiegel",
@@ -71,6 +74,7 @@ let beleg = {
 			bl: "", // Wortbildung
 			bs: "", // Beleg
 			bu: false, // Bücherdienstauftrag
+			bx: "", // Beleg-XML
 			da: "", // Belegdatum
 			dc: new Date().toISOString(), // Datum Karteikarten-Erstellung
 			dm: "", // Datum Karteikarten-Änderung
@@ -176,10 +180,23 @@ let beleg = {
 			helfer.textareaGrow(textarea);
 		});
 		// Fokus setzen
+		let feldDa = document.getElementById("beleg-da");
 		if (neu && !beleg.leseansicht) {
-			document.getElementById("beleg-dta").focus();
+			// Was ist in der Zwischenablage?
+			const {clipboard} = require("electron"),
+				cp = clipboard.readText();
+			if (/^https?:\/\/www\.deutschestextarchiv\.de\//.test(cp)) { // DTA-URL
+				beleg.formularImport("dta");
+			} else {
+				let dwds = belegImport.DWDSXMLCheck(cp);
+				if (helfer.checkType("Number", dwds)) { // kein oder fehlerhaftes DWDS-Snippet
+					feldDa.focus();
+				} else { // DWDS-Snippet
+					beleg.formularImport("dwds");
+				}
+			}
 		} else if (!beleg.leseansicht) {
-			document.getElementById("beleg-da").focus();
+			feldDa.focus();
 		}
 	},
 	// Bedeutung in das Formular eintragen
@@ -236,10 +253,43 @@ let beleg = {
 				// nach dem Speichern gewechselt werden, sonst gehen die Änderungen verloren.
 				beleg.geaendertBd = true;
 			} else {
-				beleg.data[feld] = helfer.textTrim(this.value, true);
+				let noLeer = "";
+				if (feld === "no" && /^\n/.test(this.value)) {
+					// am Anfang der Notizen müssen Leerzeilen erlaubt sein,
+					// weil die erste Zeile in der Belegliste angezeigt werden kann
+					noLeer = this.value.match(/^\n+/)[0];
+				}
+				beleg.data[feld] = noLeer + helfer.textTrim(this.value, true);
 			}
 			beleg.belegGeaendert(true);
 		});
+	},
+	// zwischen den Import-Formularen hin- und herschalten (Listener)
+	//   radio = Element
+	//     (Radio-Button zum Umschalten des Import-Formulars)
+	formularImportListener (radio) {
+		radio.addEventListener("change", function() {
+			const src = this.id.replace(/.+-/, "");
+			beleg.formularImport(src);
+		});
+	},
+	// zwischen den Import-Formularen hin- und herschalten
+	//   src = String
+	//     (ID der Quelle, aus der importiert werden soll: dta || dwds)
+	formularImport (src) {
+		let forms = ["beleg-form-dta", "beleg-form-dwds"];
+		for (let f of forms) {
+			let ele = document.getElementById(f),
+				radio = document.getElementById(`beleg-import-${f.replace(/.+-/, "")}`);
+			if (f.includes(src)) {
+				ele.classList.remove("aus");
+				radio.checked = true; // weil Wechsel nicht nur auf Klick, sondern auch automatisch
+			} else {
+				ele.classList.add("aus");
+				radio.checked = false;
+			}
+			ele.querySelector("input").focus();
+		}
 	},
 	// Aktionen beim Klick auf einen Formular-Button
 	//   button = Element
@@ -255,6 +305,8 @@ let beleg = {
 				beleg.aktionLoeschen();
 			} else if (aktion === "dta-button") {
 				belegImport.DTA();
+			} else if (aktion === "dwds-button") {
+				belegImport.DWDS();
 			}
 		});
 	},
@@ -533,7 +585,7 @@ let beleg = {
 				}
 				const {clipboard} = require("electron"),
 					cp = clipboard.readText();
-				if (/^https*:\/\/www\.deutschestextarchiv\.de\//.test(cp)) {
+				if (/^https?:\/\/www\.deutschestextarchiv\.de\//.test(cp)) {
 					setTimeout(function() {
 						// der Fokus könnte noch in einem anderen Feld sein, das dann gefüllt werden würde;
 						// man muss dem Fokus-Wechsel ein bisschen Zeit geben
@@ -648,10 +700,23 @@ let beleg = {
 				}
 				html += `<p>${text}</p>`;
 			});
+			// Referenz vorbereiten
+			popup.referenz.data = obj;
+			let eleListe = ele.closest(".liste-details"),
+				eleKarte = ele.closest("tr");
+			if (eleListe) {
+				popup.referenz.id = eleListe.previousSibling.dataset.id;
+			} else if (eleKarte) {
+				popup.referenz.id = "" + beleg.id_karte;
+			}
+			// Texte aufbereiten
 			html = helfer.clipboardHtml(html);
 			html = beleg.toolsKopierenAddQuelle(html, true, obj);
+			html = beleg.toolsKopierenAddJahr(html, true);
 			text = text.replace(/<.+?>/g, "");
 			text = beleg.toolsKopierenAddQuelle(text, false, obj);
+			text = beleg.toolsKopierenAddJahr(text, false);
+			// Text in Zwischenablage
 			clipboard.write({
 				text: text,
 				html: html,
@@ -693,6 +758,44 @@ let beleg = {
 		}
 		// Animation, die anzeigt, dass die Zwischenablage gefüllt wurde
 		helfer.animation("zwischenablage");
+	},
+	// Jahreszahl und/oder ID des Belegs als eine Art Überschrift hinzufügen
+	//   text = String
+	//     (Text, der ergänzt werden soll)
+	//   html = Boolean
+	//     (Text soll um eine in html-formatierte Angabe ergänzt werden)
+	toolsKopierenAddJahr (text, html) {
+		// ID und Jahr ermitteln
+		let id = xml.belegId(),
+			jahr = xml.datum(popup.referenz.data.da, false), // könnte auch Jh. sein
+			jahreszahl = jahr.match(/[0-9]{4}/);
+		if (jahreszahl) {
+			jahr = jahreszahl[0];
+		}
+		// Elemente für Überschrift ermitteln
+		let h = [];
+		if (optionen.data.einstellungen["textkopie-h-jahr"]) {
+			h.push(jahr);
+		}
+		if (optionen.data.einstellungen["textkopie-h-id"]) {
+			h.push(id);
+		}
+		// keine Überschrift
+		if (!h.length) {
+			return text;
+		}
+		// Überschrift vorbereiten
+		let hText = "";
+		if (h.length > 1) {
+			hText = `${h[0]} (${h[1]})`;
+		} else {
+			hText = h[0];
+		}
+		// Rückgabe mit Überschrift
+		if (html) {
+			return `<p><b>${hText}</b></p>${text}`;
+		}
+		return `${hText}\n\n${text}`;
 	},
 	// Quellenangabe zum Belegtext hinzufügen
 	//   text = String
@@ -1012,6 +1115,8 @@ let beleg = {
 		ta.setSelectionRange(start, ende, "forward");
 		// neuen Text in data
 		beleg.data.bs = ta.value;
+		// Höhe des Textfelds anpassen
+		helfer.textareaGrow(ta);
 		// Änderungsmarkierung setzen
 		beleg.belegGeaendert(true);
 	},
@@ -1231,7 +1336,7 @@ let beleg = {
 			}
 			// Container leeren
 			let cont = document.getElementById(`beleg-lese-${wert}`);
-			if (!cont) { // die Datumsdatensätze dc und dm werden nicht angezeigt
+			if (!cont) { // manche Datensätze (dc, dm, bx) werden nicht angezeigt
 				continue;
 			}
 			helfer.keineKinder(cont);
@@ -1239,11 +1344,16 @@ let beleg = {
 			const p = v.replace(/\n\s*\n/g, "\n").split("\n");
 			let zuletzt_gekuerzt = false; // true, wenn der vorherige Absatz gekürzt wurde
 			for (let i = 0, len = p.length; i < len; i++) {
+				let text = p[i];
+				if (!text && wert === "no" && i === 0 && len > 1) {
+					// der erste Absatz im Notizenfeld kann leer sein, soll aber nicht gedruckt
+					// werden, wenn er leer ist; dies gilt allerdings nur, wenn darauf noch ein Absatz folgt
+					continue;
+				}
 				let nP = document.createElement("p");
 				cont.appendChild(nP);
 				nP.dataset.pnumber = i;
 				nP.dataset.id = "";
-				let text = p[i];
 				if (!text) {
 					text = " ";
 				} else {

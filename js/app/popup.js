@@ -13,7 +13,7 @@ let popup = {
 	overlayID: "",
 	// für XML-Kopie: Referenz für das Kopieren eines Belegs
 	referenz: {
-		obj: {}, // Objekt, in dem die Karteikarte liegt, d.i. beleg.data || data.ka[ID]
+		data: {}, // Objekt, in dem die Karteikarte liegt, d.i. beleg.data || data.ka[ID]
 		id: "", // die ID der Karteikarte
 	},
 	// speichert den Anhang, der geöffnet werden soll
@@ -407,7 +407,9 @@ let popup = {
 			xml = helfer.clipboardXml(xml);
 			if (bs) {
 				text = beleg.toolsKopierenAddQuelle(text, false, obj);
+				text = beleg.toolsKopierenAddJahr(text, false);
 				html = beleg.toolsKopierenAddQuelle(html, true, obj);
+				html = beleg.toolsKopierenAddJahr(html, true);
 			}
 			popup.textauswahl.text = helfer.escapeHtml(text, true);
 			popup.textauswahl.html = html;

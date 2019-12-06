@@ -889,7 +889,7 @@ p#quick-config-presets a {
 /* Notizen -------------------------------------- */
 #notizen > div {
 	margin-top: 40px;
-	max-width: 650px;
+	max-width: 800px;
 }
 
 .icon-h-notizen {
@@ -941,7 +941,6 @@ p#quick-config-presets a {
 	padding: 2px 5px;
 	width: calc(100% - 12px);
 	min-height: 192px;
-	max-height: 384px;
 	overflow-x: hidden;
 	overflow-y: auto;
 }

@@ -528,6 +528,20 @@ p.no-indent + .filter-baum, /* betrifft Verschiedenes > Filterlogik */
 	background-color: var(--hintergrund);
 }
 
+.liste-kopf .liste-mark img {
+	vertical-align: top;
+}
+
+.liste-kopf .liste-mark + .liste-notiz,
+.liste-kopf .liste-mark + .liste-textsorte,
+.liste-kopf .liste-notiz + .liste-textsorte {
+	margin-left: 15px;
+}
+
+.liste-kopf .liste-notiz {
+	color: var(--farbeB);
+}
+
 .liste-kopf .liste-textsorte {
 	font-variant: small-caps;
 }
