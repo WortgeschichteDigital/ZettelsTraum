@@ -62,7 +62,7 @@ Der **Installer** legt ein Icon im Windows-Startmenü an, über das das Programm
 
 **Unterstützung:** Windows 7 und später mit 64-Bit-Architektur. Das Bauen von 32-Bit-Versionen wäre prinzipiell möglich, dafür müssten Sie aber [selbst aktiv werden](#bauanleitung).
 
-Da die App bisher nicht zertifiziert ist, wird Windows vermutlich das reibungslose Starten des Installers oder Pakets auf ihrem Rechner unterbinden. Unter Windows 10 könnte die Meldung „Der Computer wurde durch Windows geschützt“ erscheinen. Klicken Sie in der Meldung auf den Link „Weitere Informationen“, erscheint im Meldungsfenster der Button „Trotzdem ausführen", mit dem Sie die Software installieren bzw. starten können – natürlich nur, wenn Sie uns vertrauen.
+Da die App bisher nicht zertifiziert ist, wird Windows vermutlich das reibungslose Starten des Installers oder Pakets auf Ihrem Rechner unterbinden. Unter Windows 10 könnte die Meldung: „Der Computer wurde durch Windows geschützt“, erscheinen. Klicken Sie in der Meldung auf den Link „Weitere Informationen“, erscheint im Meldungsfenster der Button „Trotzdem ausführen", mit dem Sie die Software installieren bzw. starten können – natürlich nur, wenn Sie uns vertrauen.
 
 ### Linux
 
