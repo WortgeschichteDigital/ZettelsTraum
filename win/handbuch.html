@@ -533,9 +533,13 @@
 
 					<p class="info">Denkbare Texttypen für eine solche Markierung wären (historische) Wörterbücher, Artikel in einer Enzyklopädie, philosophische Abhandlungen <abbr title="und so weiter">usw.</abbr></p>
 
-					<p class="erklaerung-icon"><img src="../img/stern.svg" width="24" height="24" alt="">Möglichkeit für eine nicht an eine bestimmte Semantik gebundene Markierung der Karteikarte</p>
+					<p class="erklaerung-icon" id="karteikarte-markierung"><img src="../img/stern.svg" width="24" height="24" alt="">Möglichkeit für eine nicht an eine bestimmte Semantik gebundene Markierung der Karteikarte</p>
 
-					<p class="info">Zur Markierung muss einfach auf einen der Sterne geklickt werden. Markiert wird immer der angeklickte Stern und alle links von ihm stehenden Sterne, woraus sich fünf mögliche Markierungsschritte ergeben: eins, zwei, drei, vier, fünf Sterne. Zur Aufhebung einer Markierung genügt es, auf den letzten markierten Stern zu klicken.</p>
+					<div class="info">
+						<p>Zur Markierung muss einfach auf einen der Sterne geklickt werden. Markiert wird immer der angeklickte Stern und alle links von ihm stehenden Sterne, woraus sich fünf mögliche Markierungsschritte ergeben: eins, zwei, drei, vier, fünf Sterne. Zur Aufhebung einer Markierung genügt es, auf den letzten markierten Stern zu klicken.</p>
+
+						<p>Die Markierung wird standardmäßig in der <a href="#belegliste-kopfleisteBelege">Kopfleiste der Belege</a> eingblendet. Dieses Verhalten lässt sich durch das <a href="#einstellungen-beleglisteMark">Deaktivieren einer Einstellung</a> unterbinden.</p>
+					</div>
 
 					<p id="karteikarte-datum"><b>Datum:</b> <i>Pflichtfeld</i>; Entstehungs- oder Publikationsdatum des Belegs</p>
 
@@ -637,11 +641,19 @@
 
 					<p id="karteikarte-textsorte"><b>Textsorte:</b> Textklasse oder -sorte, aus der der Belegtext stammt</p>
 
-					<p class="info">Für das Textsortenfeld gilt mutatis mutandis das gleiche wie für das Wortbildungsfeld.</p>
+					<div class="info">
+						<p>Für das Textsortenfeld gilt mutatis mutandis das gleiche wie für das Wortbildungsfeld.</p>
+
+						<p>Die Textsorte kann man sich auf Wunsch in der <a href="#belegliste-kopfleisteBelege">Kopfleiste der Belege</a> einblenden lassen. Dazu muss eine <a href="#einstellungen-beleglisteTextsorte">Einstellung aktiviert</a> werden.</p>
+					</div>
 
 					<p id="karteikarte-notizen"><b>Notizen:</b> Freitextfeld für Notizen zu der Karteikarte</p>
 
-					<p class="info">Für die Eingabe und Umsetzung von Internetlinks gilt dasselbe wie für das <a href="#karteikarte-quelle">Quellen-Feld</a>. Im Gegensatz zum Textfeld der <a href="#menueKartei-notizen">Funktion für Notizen zur Kartei</a> handelt es sich bei diesem um ein Plain-Text-Feld, in dem keine <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>-Formatierungen vorgenommen werden können.</p>
+					<div class="info">
+						<p>Für die Eingabe und Umsetzung von Internetlinks gilt dasselbe wie für das <a href="#karteikarte-quelle">Quellen-Feld</a>. Im Gegensatz zum Textfeld der <a href="#menueKartei-notizen">Funktion für Notizen zur Kartei</a> handelt es sich bei diesem um ein Plain-Text-Feld, in dem keine <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>-Formatierungen vorgenommen werden können.</p>
+
+						<p>Die erste Zeile der Notizen kann man sich auf Wunsch in der <a href="#belegliste-kopfleisteBelege">Kopfleiste der Belege</a> einblenden lassen. Dazu muss eine <a href="#einstellungen-beleglisteNotizen">Einstellung aktiviert</a> werden.</p>
+					</div>
 
 					<p id="karteikarte-anhaenge"><b>Anhänge:</b> Dateianhänge zur Karteikarte</p>
 
@@ -1149,9 +1161,17 @@
 
 					<p class="info">Ist die Detailansicht geschlossen, wird versucht, den Autornamen zu kürzen. Dazu wird nach dem ersten Komma gesucht und nur der Namensteil vor dem Komma eingeblendet. Klickt man auf die Kopfleiste, um die Detailansicht zu öffnen, erscheint der vollständige Name. Es bietet sich also an, Autornamen im Format <q>Nachname, Vorname</q> in der <a href="#karteikarte">Karteikarte</a> zu notieren – auch weil der Autorname als Fallback für die <a href="#belegliste-sortierung">Sortierung von Belegen</a> aus demselben Jahr herangezogen wird.</p>
 
+					<p><b>Markierung</b> des Belegs</p>
+
+					<p class="info">Wurde eine <a href="#karteikarte-markierung">Karteikarte markiert</a>, wird die Markierung standardmäßig an dieser Stelle eingeblendet. Man kann dieses Verhalten jedoch durch die <a href="#einstellungen-beleglisteMark">Deaktivierung einer entsprechenden Einstellung</a> unterbinden.</p>
+
+					<p><b>Notiz</b> zum Beleg</p>
+
+					<p class="info">Es wird <abbr title="maximal">max.</abbr> die erste Zeile der Notiz zu einer Karteikarte angezeigt. Dafür muss aber zunächst <a href="#einstellungen-beleglisteNotizen">die entsprechende Einstellung</a> aktiviert werden.</p>
+
 					<p><b>Textsorte</b> des Belegs</p>
 
-					<p class="info">Die Textsorte wird an dieser Stelle nur angezeigt, wenn <a href="#einstellungen-beleglisteTextsorte">die entsprechende Einstellung</a> aktiviert wurde.</p>
+					<p class="info">Die Textsorte wird, ebenso wie die Notiz, an dieser Stelle nur angezeigt, wenn <a href="#einstellungen-beleglisteTextsorte">die entsprechende Einstellung</a> aktiviert wurde.</p>
 
 					<p><b>Vorschau</b> des Belegtextes</p>
 
@@ -1982,20 +2002,28 @@ Mustermann, Erika
 						<p>Aktivieren Sie diese Einstellung, werden immer alle Icons zur Steuerung der Anzeige der Belegliste angezeigt, ganz egal, ob sie aktiviert sind oder nicht. Wenn Ihr Bildschirm nicht breit genug oder das Programmfenster zu klein ist, kann dies freilich zur Folge haben, dass Icons aus der Kopfleiste der Belegliste nicht mehr sicht- oder erreichbar sind – <abbr title="besonders">bes.</abbr> bei geöffneter Filterleiste.</p>
 					</div>
 
-					<p class="erklaerung-option" id="einstellungen-beleglisteTextsorte">Textsorte in den Belegkopf eintragen</p>
+					<p class="erklaerung-option" id="einstellungen-beleglisteMark">Datenfelder im Belegkopf: Markierung</p>
 
 					<div class="info">
-						<p><i>Standard:</i> nicht aktiviert</p>
+						<p><i>Standard:</i> aktiviert</p>
 
-						<p>In der Belegliste kann man sich auf Wunsch in der <a href="#belegliste-kopfleisteBelege">Kopfleiste der Belege</a> die Textsorte einblenden lassen. Bei aktivierter Einstellung erscheint sie in Klammern und Kapitälchen hinter dem Autor, so denn in der zugehörigen Karteikarte das <a href="#karteikarte-textsorte">Textsorten-Feld</a> gefüllt wurde. Für die Eingabe von Textsorten besteht die Möglichkeit, Hierarchieebenen zu öffnen, <abbr title="zum Beispiel">z. B.</abbr> durch die Eingabe <q>Wissenschaft: Philosophie</q> oder <q>Wissenschaft: Chemie</q>. Im Belegkopf wird allerdings immer nur die oberste Ebene eingetragen, was hier in beiden Fällen <q>Wissenschaft</q> wäre.</p>
+						<p>In der Belegliste kann man sich auf Wunsch in der <a href="#belegliste-kopfleisteBelege">Kopfleiste der Belege</a> die semantisch nicht festgelegte Markierung der Karteikarte (sprich: die Sterne) anzeigen lassen. Bei aktivierter Einstellung erscheinen die Sterne in Klammern hinter dem Autor.</p>
 					</div>
 
-					<p class="erklaerung-option" id="einstellungen-beleglisteNotizen">Notizen in den Belegkopf eintragen</p>
+					<p class="erklaerung-option" id="einstellungen-beleglisteNotizen">Datenfelder im Belegkopf: Notiz</p>
 
 					<div class="info">
 						<p><i>Standard:</i> nicht aktiviert</p>
 
-						<p>In der Belegliste kann man sich auf Wunsch in der <a href="#belegliste-kopfleisteBelege">Kopfleiste der Belege</a> eine Vorschau des Notizen-Feldes einblenden lassen. Bei aktivierter Einstellung erscheint die Notiz in Klammern hinter dem Autor <abbr title="beziehungsweise">bzw.</abbr> hinter der Textsorte (falls diese ebenfalls <a href="#einstellungen-beleglisteTextsorte">eingeblendet</a> wurde). Dabei wird nie die gesamte Notiz gedruckt, sondern immer nur die erste Zeile und von dieser ersten Zeilen <abbr title="maximal">max.</abbr> 35 Zeichen. Sollte der Inhalt der Zeile länger sein, wird er gekürzt, was durch ein Kürzungszeichen angezeigt wird.</p>
+						<p>In der Belegliste kann man sich auf Wunsch in der <a href="#belegliste-kopfleisteBelege">Kopfleiste der Belege</a> eine Vorschau des Notizen-Feldes einblenden lassen. Bei aktivierter Einstellung erscheint die Notiz in Klammern hinter dem Autor <abbr title="beziehungsweise">bzw.</abbr> hinter den <a href="#einstellungen-beleglisteMark">Sternen</a>. Dabei wird nie die gesamte Notiz gedruckt, sondern immer nur die erste Zeile und von dieser ersten Zeile <abbr title="maximal">max.</abbr> 35 Zeichen. Sollte der Inhalt der Zeile länger sein, wird er gekürzt, was durch ein Kürzungszeichen angezeigt wird.</p>
+					</div>
+
+					<p class="erklaerung-option" id="einstellungen-beleglisteTextsorte">Datenfelder im Belegkopf: Textsorte</p>
+
+					<div class="info">
+						<p><i>Standard:</i> nicht aktiviert</p>
+
+						<p>In der Belegliste kann man sich auf Wunsch in der <a href="#belegliste-kopfleisteBelege">Kopfleiste der Belege</a> die Textsorte einblenden lassen. Bei aktivierter Einstellung erscheint sie in Klammern und Kapitälchen hinter Autor, Sternen oder Notiz – je nachdem, wie die Karteikarte gefüllt und die Anzeige der anderen Datenfelder konfiguriert ist. Dazu muss das <a href="#karteikarte-textsorte">Textsorten-Feld</a> der zugehörigen Karteikarte natürlich gefüllt sein. Bei der Eingabe von Textsorten besteht die Möglichkeit, Hierarchieebenen zu öffnen, <abbr title="zum Beispiel">z. B.</abbr> <q>Wissenschaft: Philosophie</q> oder <q>Wissenschaft: Chemie</q>. Im Belegkopf wird allerdings immer nur die oberste Ebene eingetragen, was hier in beiden Fällen <q>Wissenschaft</q> wäre.</p>
 					</div>
 				</section>
 
