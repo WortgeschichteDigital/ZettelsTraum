@@ -103,7 +103,7 @@ function makeConfig () {
 	if (typ === "appImage") {
 		delete config.config.appImage;
 		config.config.appImage = {
-			license: "./LICENSE.ZettelsTraum.txt",
+			license: "./LICENSE",
 		};
 	} else if (typ === "deb") {
 		config.config[typ].priority = "optional";

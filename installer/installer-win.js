@@ -49,7 +49,7 @@ function makeConfig () {
 			},
 			[typ]: {
 				artifactName: "zettelstraum_${version}_x64.${ext}",
-				license: "./LICENSE.ZettelsTraum.txt",
+				license: "./LICENSE",
 				shortcutName: "Zettel’s Traum",
 			},
 			fileAssociations: [
