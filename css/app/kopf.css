@@ -266,21 +266,27 @@ body > header span {
 	margin-right: 5px;
 }
 
-/* Kopier-UI ------------------------------------ */
-#kopieren-aussen {
+/* Kopf-Icons rechts ---------------------------- */
+#kopf-icons-rechts {
 	position: absolute;
 	top: 6px;
-	right: 68px;
-	z-index: 1;
+	right: 0;
 	padding-left: 50px;
-	width: 48px;
 	height: 48px;
 	background-image: linear-gradient(to right, rgba(114, 160, 207, 0), rgba(114, 160, 207, 1) 25px);
 }
 
+#kopf-icons-rechts > span {
+	position: relative;
+	display: inline-block;
+	vertical-align: top;
+	padding-right: 10px;
+	width: 48px;
+	height: 48px;
+}
+
 #kopieren {
-	position: absolute;
-	right: 0;
+	vertical-align: top;
 	border-radius: 10px;
 	width: 48px;
 	height: 48px;
@@ -291,15 +297,4 @@ body > header span {
 	line-height: 48px;
 	text-align: center;
 	text-shadow: -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff, 1px 1px 0 #fff;
-}
-
-/* App-Icon ------------------------------------- */
-#icon {
-	position: absolute;
-	top: 6px;
-	right: 0;
-	width: 48px;
-	height: 48px;
-	padding: 0 10px 0 50px;
-	background-image: linear-gradient(to right, rgba(114, 160, 207, 0), rgba(114, 160, 207, 1) 25px);
 }
