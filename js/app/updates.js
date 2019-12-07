@@ -1,7 +1,6 @@
 "use strict";
 
 let updates = {
-	releaseNotes: "",
 	// wertet den RSS-Feed auf GitHub aus
 	async check () {
 		let response = await fetch("https://github.com/WortgeschichteDigital/ZettelsTraum/releases.atom");
@@ -18,8 +17,8 @@ let updates = {
 			return;
 		}
 		// RSS-Feed auswerten
-		updates.releaseNotes = "";
-		let entries = rss.querySelectorAll("entry");
+		let releaseNotes = "",
+			entries = rss.querySelectorAll("entry");
 		for (let i = 0, len = entries.length; i < len; i++) {
 			let entry = entries[i],
 				version = entry.querySelector("id").firstChild.nodeValue.match(/[0-9]+\.[0-9]+\.[0-9]+$/);
@@ -32,8 +31,11 @@ let updates = {
 			if (version[0] === appInfo.version) {
 				break;
 			}
-			updates.releaseNotes += entry.querySelector("content").firstChild.nodeValue;
+			releaseNotes += entry.querySelector("content").firstChild.nodeValue;
 		}
+		// Release Notes an Main schicken
+		const {ipcRenderer} = require("electron");
+		ipcRenderer.invoke("updates-release-notes", releaseNotes);
 		// Check erfolgreich ausgeführt
 		optionen.data.updates.checked = new Date().toISOString();
 		optionen.speichern();

@@ -51,6 +51,10 @@ let kopieren = {
 	winIdAnfrage: -1,
 };
 
+// Variable mit Release Notes
+// (ist gefüllt, wenn Updates zur Verfügung stehen)
+let releaseNotes = "";
+
 // Variable für Abgleich der Tag-Dateien
 // (soll nur einmal pro Session stattfinden)
 let tagDateienAbgleich = true;
@@ -1515,6 +1519,10 @@ ipcMain.handle("fenster-hauptfenster", (evt, idFrage) => {
 	}
 	return false;
 });
+
+
+// ***** UPDATES ******
+ipcMain.handle("updates-release-notes", (evt, notes) => releaseNotes = notes);
 
 
 // ***** KOPIEREN *****
