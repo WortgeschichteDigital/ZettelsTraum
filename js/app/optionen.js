@@ -342,6 +342,8 @@ let optionen = {
 		optionen.anwendenIconsDetails();
 		// Optionen im Optionen-Fenster eintragen
 		optionen.anwendenEinstellungen();
+		// ggf. Update-Hinweis einblenden
+		updates.hinweis();
 	},
 	// die Einstellungen im Einstellungen-Fenster nach dem Empfangen von Optionen anpassen
 	anwendenEinstellungen () {

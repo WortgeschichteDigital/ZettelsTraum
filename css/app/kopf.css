@@ -280,9 +280,14 @@ body > header span {
 	position: relative;
 	display: inline-block;
 	vertical-align: top;
-	padding-right: 10px;
+	margin-right: 10px;
 	width: 48px;
 	height: 48px;
+}
+
+#updates {
+	border-radius: 10px;
+	background: #fff url(../../img/pfeil-kreis-rot-48.svg) no-repeat;
 }
 
 #kopieren {

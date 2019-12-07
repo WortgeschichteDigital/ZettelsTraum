@@ -37,5 +37,18 @@ let updates = {
 		// Check erfolgreich ausgeführt
 		optionen.data.updates.checked = new Date().toISOString();
 		optionen.speichern();
+		// Update-Hinweis ein- bzw. ausblenden
+		updates.hinweis();
+	},
+	// Hinweis, dass Updates verfügbar sind, ein- bzw. ausblenden
+	hinweis () {
+		let icon = document.getElementById("updates");
+		// die neuste Version ist bereits installiert
+		if (optionen.data.updates.online === appInfo.version) {
+			icon.classList.add("aus");
+			return;
+		}
+		// online gibt es eine neuere Version
+		icon.classList.remove("aus");
 	},
 };
