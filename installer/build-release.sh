@@ -123,23 +123,35 @@ updateHtml() {
 # Release-Notes erstellen
 #   $1 = Versionsnummer
 makeReleaseNotes() {
-	local output="# Release Notes v$1\n\n"
+	local output="# Release Notes v$1\n"
 
 	# Commits zusammentragen
 	declare -A clCommits
 	j=0
 	while read z; do
-		IFS=" " read -r sha1 message <<< "$z"
-		clCommits[$j]="$message"
+		clCommits[$j]="$z"
 		(( j++ ))
-	done < <(git log -E --grep="^(Removal|Feature|Change|Update|Fix): " --oneline $(git describe --abbrev=0)..HEAD)
+	done < <(git log -E --grep="^(Removal|Feature|Change|Update|Fix): " --format="%s" $(git describe --abbrev=0)..HEAD)
 
 	# Commits sortieren
+	declare -A clH
+	clH[Removal]="Entfernte Funktionen"
+	clH[Feature]="Neue Funktionen"
+	clH[Change]="Verbesserungen"
+	clH[Update]="Updates"
+	clH[Fix]="Behobene Fehler"
 	local commitTypen=(Removal Feature Change Update Fix)
 	for typ in ${!commitTypen[@]}; do
+		local neuerTyp=1
 		for commit in ${!clCommits[@]}; do
 			local message=${clCommits[$commit]}
-			if echo "$message" | egrep -q "^${commitTypen[$typ]}"; then
+			local aktuellerTyp=${commitTypen[$typ]}
+			if echo "$message" | egrep -q "^${aktuellerTyp}"; then
+				if (( neuerTyp > 0 )); then
+					neuerTyp=0;
+					output+="\n## ${clH[${commitTypen[$typ]}]}\n\n"
+				fi
+				message=$(echo "$message" | perl -pe 's/^.+?:\s//')
 				output+="* $message\n"
 			fi
 		done
