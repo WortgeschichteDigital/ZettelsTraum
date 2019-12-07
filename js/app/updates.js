@@ -28,19 +28,25 @@ let updates = {
 			if (i === 0) { // jüngste Version, die online ist
 				optionen.data.updates.online = version[0];
 			}
-			if (version[0] === appInfo.version) {
+			if (version[0] === appInfo.version) { // diese Version ist installiert
 				break;
 			}
-			releaseNotes += entry.querySelector("content").firstChild.nodeValue;
+			const content = entry.querySelector("content").firstChild.nodeValue;
+			if (!/<h1>/.test(content)) { // keine Version mit Release-Notes
+				continue;
+			}
+			releaseNotes += content;
 		}
-		// Release Notes an Main schicken
+		// Release-Notes an Main schicken
 		const {ipcRenderer} = require("electron");
-		ipcRenderer.invoke("updates-release-notes", releaseNotes);
+		ipcRenderer.invoke("updates-save-data", releaseNotes);
 		// Check erfolgreich ausgeführt
 		optionen.data.updates.checked = new Date().toISOString();
 		optionen.speichern();
 		// Update-Hinweis ein- bzw. ausblenden
 		updates.hinweis();
+		// Release-Notes ins Update-Fenster eintragen
+		updates.fensterFill();
 	},
 	// Hinweis, dass Updates verfügbar sind, ein- bzw. ausblenden
 	hinweis () {
@@ -52,5 +58,40 @@ let updates = {
 		}
 		// online gibt es eine neuere Version
 		icon.classList.remove("aus");
+	},
+	// Update-Fenster
+	fenster () {
+		// Fenster öffnen oder in den Vordergrund holen
+		let fenster = document.getElementById("updatesWin");
+		if (overlay.oeffnen(fenster)) { // Fenster ist schon offen
+			return;
+		}
+		// Release-Notes eintragen
+		updates.fensterFill();
+	},
+	// Update-Fenster mit Release-Notes füllen
+	async fensterFill () {
+		// Release-Notes eintragen
+		const {ipcRenderer} = require("electron");
+		let data = await ipcRenderer.invoke("updates-get-data"),
+			notes = "";
+		if (!data.gesucht) {
+			notes = `<p class="keine">noch nicht nach Updates gesucht</p>`;
+		} else if (!data.notes) {
+			notes = `<p class="keine">keine Updates gefunden</p>`;
+		} else {
+			notes = data.notes;
+		}
+		document.getElementById("updatesWin-notes").innerHTML = notes;
+	},
+	// Suche nach Updates manuell anstoßen
+	//   a = Element
+	//     (Link, der die Suche nach Updates triggern soll)
+	suchen (a) {
+		a.addEventListener("click", function(evt) {
+			evt.preventDefault();
+			this.classList.add("rotieren-bitte");
+			updates.check(false);
+		});
 	},
 };

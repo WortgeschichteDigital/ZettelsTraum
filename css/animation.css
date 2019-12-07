@@ -48,6 +48,7 @@
 	}
 }
 
+.rotieren-bitte img,
 .rotieren-bitte svg,
 .rotieren-bitte.icon-link {
 	animation-name: rotieren;

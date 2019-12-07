@@ -53,7 +53,10 @@ let kopieren = {
 
 // Variable mit Release Notes
 // (ist gefüllt, wenn Updates zur Verfügung stehen)
-let releaseNotes = "";
+let updates = {
+	notes: "",
+	gesucht: false,
+};
 
 // Variable für Abgleich der Tag-Dateien
 // (soll nur einmal pro Session stattfinden)
@@ -334,6 +337,12 @@ layoutMenu = [
 			{
 				label: "Fehlerlog",
 				click: () => fenster.erstellenNeben({typ: "fehlerlog"}),
+			},
+			{ type: "separator" },
+			{
+				label: "Updates",
+				icon: path.join(__dirname, "img", "menu", "pfeil-kreis.png"),
+				click: () => appMenu.befehl("hilfe-updates"),
 			},
 			{ type: "separator" },
 			{
@@ -1522,7 +1531,12 @@ ipcMain.handle("fenster-hauptfenster", (evt, idFrage) => {
 
 
 // ***** UPDATES ******
-ipcMain.handle("updates-release-notes", (evt, notes) => releaseNotes = notes);
+ipcMain.handle("updates-save-data", (evt, notes) => {
+	updates.gesucht = true;
+	updates.notes = notes;
+});
+
+ipcMain.handle("updates-get-data", () => updates);
 
 
 // ***** KOPIEREN *****

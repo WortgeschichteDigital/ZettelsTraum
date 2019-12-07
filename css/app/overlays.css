@@ -1563,6 +1563,77 @@ input[id^="redaktion-person"] {
 	display: inline-block;
 }
 
+/* Updates-Fenster ------------------------------ */
+#updatesWin > div {
+	max-width: 600px;
+}
+
+.icon-h-updates {
+	-webkit-mask-image: url(../../img/pfeil-kreis.svg);
+	mask-image: url(../../img/pfeil-kreis.svg);
+}
+
+#updatesWin-cont {
+	padding: 10px;
+}
+
+#updatesWin-header {
+	position: relative;
+	margin-bottom: 25px;
+}
+
+#updatesWin-header a:last-child { /* GitHub-Link */
+	position: absolute;
+	right: 0;
+	cursor: pointer;
+}
+
+#updatesWin-header img {
+	margin-right: 5px;
+	vertical-align: top;
+}
+
+#updatesWin-notes {
+	max-height: 500px;
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+
+#updatesWin-notes p.keine {
+	color: var(--textSehrHell);
+	font-style: italic;
+	text-align: center;
+}
+
+#updatesWin-notes h1 {
+	margin: 25px 10px 10px 0;
+	border-bottom: 1px solid var(--linie);
+	padding-bottom: 5px;
+	font-size: 20px;
+	font-weight: bold;
+	line-height: 30px;
+}
+
+#updatesWin-notes h1:first-child {
+	margin-top: 0;
+}
+
+#updatesWin-notes h2 {
+	margin: 10px 0 5px 0;
+	padding: 0;
+	color: var(--farbeB);
+	background-color: transparent;
+	font-size: 16px;
+	font-weight: bold;
+	line-height: 24px;
+}
+
+#updatesWin-notes ul {
+	margin: 0;
+	padding: 0 0 0 35px;
+	list-style-type: disc;
+}
+
 /* Kopierfenster -------------------------------- */
 #ctrlC > div {
 	width: 375px;

@@ -98,7 +98,7 @@ let popup = {
 		} else if (target === "start-datei") {
 			items = ["karteiEntfernen", "sep", "ordner", "sep", "karteiErstellen"];
 		} else if (target === "link") {
-			if (overlay.oben() === "stamm") {
+			if ( /^(stamm|updatesWin)$/.test( overlay.oben() ) ) {
 				items.push("link", "sep", "schliessen");
 			} else if (helfer.hauptfunktion === "karte") {
 				items.push("link", "sep", {name: "text", sub: ["textReferenz"]}, {name: "xml", sub: ["xmlReferenz"]}, "sep", "karteikarteConf");
@@ -107,8 +107,10 @@ let popup = {
 			} else {
 				items.push("link");
 			}
-			items.push("sep", "belegHinzufuegen");
-			popup.belegeAuflisten(items);
+			if (kartei.wort) {
+				items.push("sep", "belegHinzufuegen");
+				popup.belegeAuflisten(items);
+			}
 		} else if (target === "beleg") {
 			items = ["belegBearbeiten", "sep", "schliessen", "sep", "belegHinzufuegen"];
 			popup.belegeAuflisten(items);
@@ -253,10 +255,11 @@ let popup = {
 					return "start-datei";
 				} else if (pfad[i].classList.contains("link")) {
 					popup.element = pfad[i];
-					if (helfer.hauptfunktion === "karte") {
+					const ol = pfad[i].closest(".overlay"); // Link könnte in einem Overlay-Fenster sein
+					if (!ol && helfer.hauptfunktion === "karte") {
 						popup.referenz.data = beleg.data;
 						popup.referenz.id = "" + beleg.id_karte;
-					} else if (helfer.hauptfunktion === "liste") {
+					} else if (!ol && helfer.hauptfunktion === "liste") {
 						const id = pfad[i].closest(".liste-details").previousSibling.dataset.id;
 						popup.referenz.data = data.ka[id];
 						popup.referenz.id = id;
