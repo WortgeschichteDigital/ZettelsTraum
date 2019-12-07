@@ -1171,6 +1171,29 @@ app.on("ready", async () => {
 	setTimeout(() => {
 		appMenu.zuletztCheck();
 	}, 5000);
+	// ggf. auf Updates prüfen
+	if (!optionen.data.updates) {
+		return;
+	}
+	let updatesChecked = optionen.data.updates.checked.split("T")[0],
+		heute = new Date().toISOString().split("T")[0];
+	if (updatesChecked === heute ||
+			!optionen.data.einstellungen["updates-suche"]) {
+		return;
+	}
+	setTimeout(() => {
+		for (let id in win) {
+			if (!win.hasOwnProperty(id)) {
+				continue;
+			}
+			if (win[id].typ !== "index") {
+				continue;
+			}
+			let w = BrowserWindow.fromId(parseInt(id, 10));
+			w.webContents.send("updates-check");
+			break;
+		}
+	}, 3e4);
 });
 
 // App beenden, wenn alle Fenster geschlossen worden sind
@@ -1285,7 +1308,7 @@ ipcMain.handle("optionen-speichern", (evt, opt, winId) => {
 	} else {
 		optionen.data = opt;
 	}
-	// Optionen an alle Hauptfenster schicken, mit Ausnahme dem der übergebenen id
+	// Optionen an alle Hauptfenster schicken, mit Ausnahme dem der übergebenen ID
 	for (let id in win) {
 		if (!win.hasOwnProperty(id)) {
 			continue;

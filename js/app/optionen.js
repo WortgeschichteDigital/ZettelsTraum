@@ -224,6 +224,11 @@ let optionen = {
 		personen: [],
 		// letzter Pfad, der beim Speichern oder Öffnen einer Datei benutzt wurde
 		letzter_pfad: "",
+		// Variablen für das Suchen nach Updates
+		updates: {
+			checked: "", // ISO-String: Datum, an dem zuletzt nach Updates gesucht wurde
+			online: "", // Versionsnummer der App, die online steht
+		},
 		// zuletzt verwendete Karteien
 		zuletzt: [],
 	},
