@@ -169,6 +169,27 @@ let kartei = {
 			});
 			return;
 		}
+		// das Format der ZTJ-Datei wird von der installierten Programmversion nicht verstanden =>
+		// Update bitte!
+		if (data_tmp.ve > konversion.version) {
+			dialog.oeffnen({
+				typ: "alert",
+				text: `Die Datei ist nicht kompatibel mit der installierten Version von <i>${appInfo.name}</i>.\nSie sollten ein <a href="#">Programm-Update</a> durchführen.`,
+			});
+			document.querySelector("#dialog-text a").addEventListener("click", evt => {
+				evt.preventDefault();
+				updates.fenster();
+				overlay.schliessen(document.getElementById("dialog"));
+				setTimeout(async () => {
+					const {ipcRenderer} = require("electron");
+					let data = await ipcRenderer.invoke("updates-get-data");
+					if (!data.gesucht) {
+						updates.check(false);
+					}
+				}, 500);
+			});
+			return;
+		}
 		// War die Datei evtl. verschwunden?
 		zuletzt.verschwundenCheck(datei);
 		// Datei sperren
