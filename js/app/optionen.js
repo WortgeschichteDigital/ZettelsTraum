@@ -88,6 +88,8 @@ let optionen = {
 			// Timeout für Anfrage an das DTA in Sekunden
 			// (einfacher als String, wird bei Bedarf in Number konvertiert)
 			timeout: "10",
+			// automatisch nach Software-Update suchen
+			"updates-suche": true,
 			// legt das Verhalten von Kartei > Speichern fest
 			//   1 = Speicherkaskade
 			//   2 = nur aktive Funktion speichern
