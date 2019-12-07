@@ -92,7 +92,7 @@ window.addEventListener("load", async () => {
 		});
 	});
 	// Updates suchen
-	ipcRenderer.on("updates-check", () => updates.check());
+	ipcRenderer.on("updates-check", () => updates.check(true));
 	// Before-Unload
 	ipcRenderer.on("before-unload", () => helfer.beforeUnload());
 

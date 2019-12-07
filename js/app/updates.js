@@ -2,7 +2,14 @@
 
 let updates = {
 	// wertet den RSS-Feed auf GitHub aus
-	async check () {
+	//   auto = Boolean
+	//     (Suche wurde automatisch angestoßen)
+	async check (auto) {
+		// beim Enwickeln nicht automatisch suchen
+		if (auto && !appInfo.packaged) {
+			return;
+		}
+		// RSS-Feed laden
 		let response = await fetch("https://github.com/WortgeschichteDigital/ZettelsTraum/releases.atom");
 		// RSS-Feed konnte nicht abgerufen werden
 		if (!response.ok) {
