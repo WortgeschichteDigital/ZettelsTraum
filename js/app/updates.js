@@ -59,7 +59,8 @@ let updates = {
 	hinweis () {
 		let icon = document.getElementById("updates");
 		// die neuste Version ist bereits installiert
-		if (optionen.data.updates.online === appInfo.version) {
+		if (!optionen.data.updates.online ||
+				optionen.data.updates.online === appInfo.version) {
 			icon.classList.add("aus");
 			return;
 		}
