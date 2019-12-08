@@ -62,6 +62,7 @@ window.addEventListener("load", async () => {
 	ipcRenderer.on("belege-kopieren", () => kopieren.init());
 	ipcRenderer.on("belege-einfuegen", () => kopieren.einfuegen());
 	ipcRenderer.on("hilfe-demo", () => helfer.demoOeffnen());
+	ipcRenderer.on("hilfe-updates", () => updates.fenster());
 	// Kopierfunktion
 	ipcRenderer.on("kopieren-basisdaten", () => kopieren.basisdatenSenden());
 	ipcRenderer.on("kopieren-basisdaten-empfangen", (evt, daten) => kopieren.einfuegenBasisdatenEintragen(daten));
@@ -90,6 +91,8 @@ window.addEventListener("load", async () => {
 			text: text,
 		});
 	});
+	// Updates suchen
+	ipcRenderer.on("updates-check", () => updates.check(true));
 	// Before-Unload
 	ipcRenderer.on("before-unload", () => helfer.beforeUnload());
 
@@ -151,6 +154,8 @@ window.addEventListener("load", async () => {
 	document.getElementById("notizen-icon").addEventListener("click", () => notizen.oeffnen());
 	// Lexika-Icon
 	document.getElementById("lexika-icon").addEventListener("click", () => lexika.oeffnen());
+	// Updates-Icon
+	document.getElementById("updates").addEventListener("click", () => updates.fenster());
 	// Programm-Icon
 	document.getElementById("icon").addEventListener("click", () => {
 		const {ipcRenderer} = require("electron");
@@ -296,12 +301,15 @@ window.addEventListener("load", async () => {
 	document.querySelectorAll(".druck-icon").forEach(a => drucken.listener(a));
 	// Druck-Fenster
 	document.querySelectorAll("#drucken-head span").forEach(span => drucken.buttons(span));
+	// Updates-Fenster
+	updates.suchen(document.getElementById("updatesWin-suchen"));
+	helfer.externeLinks(document.getElementById("updatesWin-github"));
 	// Schließen-Links von Overlays
 	document.querySelectorAll(".overlay-schliessen").forEach(a => overlay.initSchliessen(a));
 	// Handbuch-Links von Overlays
 	document.querySelectorAll(".icon-handbuch").forEach(a => helfer.handbuchLink(a));
 	// Rotationsanimationen
-	document.querySelectorAll("#kopieren-einfuegen-reload").forEach(i => {
+	document.querySelectorAll("#kopieren-einfuegen-reload, #updatesWin-suchen").forEach(i => {
 		i.addEventListener("animationend", function() {
 			this.classList.remove("rotieren-bitte");
 		});

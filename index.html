@@ -2,7 +2,7 @@
 <html lang="de">
 	<head>
 		<meta charset="utf-8">
-		<meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src http://www.deutschestextarchiv.de https://www.deutschestextarchiv.de">
+		<meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src http://www.deutschestextarchiv.de https://www.deutschestextarchiv.de https://github.com/WortgeschichteDigital/ZettelsTraum/">
 
 		<title> </title>
 
@@ -53,6 +53,7 @@
 		<script src="js/app/speichern.js"></script>
 		<script src="js/app/stamm.js"></script>
 		<script src="js/app/tagger.js"></script>
+		<script src="js/app/updates.js"></script>
 		<script src="js/app/xml.js"></script>
 		<script src="js/app/zuletzt.js"></script>
 	</head>
@@ -79,8 +80,11 @@
 				></a
 				><span class="aus" id="kartei-anhaenge"></span
 			></span
-			><span id="kopieren-aussen" class="aus"><span id="kopieren"></span></span
-			><span id="icon"><img src="img/icon-app-weiss-48.svg" width="48" height="48" alt=""></span>
+			><span id="kopf-icons-rechts"
+				><span id="updates" class="aus"></span
+				><span id="kopieren-aussen" class="aus"><span id="kopieren"></span></span
+				><span id="icon"><img src="img/icon-app-weiss-48.svg" width="48" height="48" alt=""></span
+			></span>
 		</header>
 
 		<!-- STARTSEKTION -->
@@ -505,6 +509,8 @@
 						<p class="button"><input type="button" value="Personenliste laden" id="einstellung-personenliste"></p>
 						<p class="input-text"><input type="number" value="10" min="5" max="180" id="einstellung-timeout"
 							><label for="einstellung-timeout">Sekunden Timeout bei Anfragen an das <abbr title="Deutsche Textarchiv">DTA</abbr></label></p>
+						<p><input type="checkbox" id="einstellung-updates-suche"
+							><label for="einstellung-updates-suche">automatisch nach Updates suchen</label></p>
 						<h3>Speichern-Befehl</h3>
 						<p><input type="radio" value="1" name="einstellung-speichern" id="einstellung-speichern-1"
 							><label for="einstellung-speichern-1">Speicherkaskade anstoßen</label></p>
@@ -870,6 +876,20 @@
 			<div id="dialog-confirm">
 				<p class="button"><input type="button" value="Ja" id="dialog-ja-button"
 					><input type="button" value="Nein" id="dialog-nein-button"></p>
+			</div>
+		</div></div>
+
+		<!-- OVERLAY: Updates-Fenster -->
+		<div id="updatesWin" class="overlay aus"><div>
+			<h2><span class="icon-h icon-h-updates"> </span
+				>Updates<a href="#" class="icon-link icon-handbuch" title="Abschnitt im Handbuch öffnen" data-handbuch="menueHilfe-updates"> </a><a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"
+				> </a></h2>
+			<div id="updatesWin-cont">
+				<div id="updatesWin-header"
+					><a href="#" id="updatesWin-suchen"><img src="img/pfeil-kreis.svg" width="24" height="24" alt="">Updates suchen</a
+					><a href="https://github.com/WortgeschichteDigital/ZettelsTraum/releases" id="updatesWin-github" class="link"><img src="img/github.svg" width="24" height="24" alt="">Downloads auf GitHub</a
+				></div>
+				<div id="updatesWin-notes"></div>
 			</div>
 		</div></div>
 
