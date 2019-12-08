@@ -1582,6 +1582,10 @@ input[id^="redaktion-person"] {
 	margin-bottom: 25px;
 }
 
+#updatesWin-header a:focus {
+	text-decoration: underline;
+}
+
 #updatesWin-header a:last-child { /* GitHub-Link */
 	position: absolute;
 	right: 0;
