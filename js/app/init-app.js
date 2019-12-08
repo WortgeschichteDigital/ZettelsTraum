@@ -342,6 +342,7 @@ window.addEventListener("load", async () => {
 	optionen.anwenden();
 
 	// FENSTER FREISCHALTEN
+	updates.hinweis();
 	zuletzt.aufbauen();
 	helfer.fensterGeladen();
 });
