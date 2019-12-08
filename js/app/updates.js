@@ -83,9 +83,9 @@ let updates = {
 		let data = await ipcRenderer.invoke("updates-get-data"),
 			notes = "";
 		if (!data.gesucht) {
-			notes = `<p class="keine">noch nicht nach Updates gesucht</p>`;
+			notes = `<p class="keine">noch nicht nach Updates gesucht<br>(überprüft: ${helfer.datumFormat(optionen.data.updates.checked)})</p>`;
 		} else if (!data.notes) {
-			notes = `<p class="keine">keine Updates gefunden</p>`;
+			notes = `<p class="keine">keine Updates gefunden<br>(überprüft: ${helfer.datumFormat(optionen.data.updates.checked)})</p>`;
 		} else {
 			notes = data.notes;
 		}
