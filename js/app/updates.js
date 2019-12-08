@@ -51,7 +51,7 @@ let updates = {
 			if (i === 0) { // jüngste Version, die online ist
 				optionen.data.updates.online = version[0];
 			}
-			if (version[0] === appInfo.version) { // diese Version ist installiert
+			if (updates.verToInt(appInfo.version) >= updates.verToInt(version[0])) { // installierte Version ist höher oder gleich
 				break;
 			}
 			const content = entry.querySelector("content").firstChild.nodeValue;
@@ -85,12 +85,22 @@ let updates = {
 			text: `Beim Laden der Release-Notes ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err}</p>`,
 		});
 	},
+	// konvertiert eine Semver-Versionsnummer in eine Ziffer
+	// (um sie leichter vergleichbar zu machen)
+	//   version = String
+	//     (die Versionsnummer)
+	verToInt (version) {
+		version = version.split("-")[0];
+		version = version.replace(/[0-9]+/g, m => m.padStart(3, "0"));
+		version = version.replace(/\./g, "");
+		return parseInt(version, 10);
+	},
 	// Hinweis, dass Updates verfügbar sind, ein- bzw. ausblenden
 	hinweis () {
 		let icon = document.getElementById("updates");
 		// die neuste Version ist bereits installiert
 		if (!optionen.data.updates.online ||
-				optionen.data.updates.online === appInfo.version) {
+				updates.verToInt(appInfo.version) >= updates.verToInt(optionen.data.updates.online)) {
 			icon.classList.add("aus");
 			return;
 		}
@@ -120,7 +130,7 @@ let updates = {
 		if (!optionen.data.updates.online) {
 			td[0].firstChild.src = "img/fragezeichen.svg";
 			td[0].appendChild(document.createTextNode("noch nie nach Updates gesucht"));
-		} else if (optionen.data.updates.online !== appInfo.version) {
+		} else if (updates.verToInt(appInfo.version) < updates.verToInt(optionen.data.updates.online)) {
 			td[0].firstChild.src = "img/pfeil-kreis-rot-48.svg";
 			td[0].appendChild(document.createTextNode("Updates verfügbar"));
 			// ggf. Link zum Laden der Release-Notes anzeigen
