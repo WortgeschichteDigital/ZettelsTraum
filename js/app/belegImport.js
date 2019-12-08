@@ -874,7 +874,7 @@ let belegImport = {
 			let nQu = doc.xml.querySelector("Fundstelle Bibl");
 			if (nQu && nQu.firstChild) {
 				beleg.data.qu = nQu.firstChild.nodeValue;
-				// eine Verenkung wegen der häufig merkwürdigen Zitierweise
+				// eine Verrenkung wegen der häufig merkwürdigen Zitierweise
 				beleg.data.qu = beleg.data.qu.replace(/ Zitiert nach:.+/, "");
 				let jahrDatierung = beleg.data.da.match(/[0-9]{4}/),
 					jahrQuelle = beleg.data.qu.matchAll(/(?<!S. )(?<![0-9])([0-9]{4})/g),
