@@ -1577,13 +1577,13 @@ input[id^="redaktion-person"] {
 	padding: 10px;
 }
 
+#updatesWin-cont a:focus {
+	text-decoration: underline;
+}
+
 #updatesWin-header {
 	position: relative;
 	margin-bottom: 25px;
-}
-
-#updatesWin-header a:focus {
-	text-decoration: underline;
 }
 
 #updatesWin-header a:last-child { /* GitHub-Link */
@@ -1598,7 +1598,7 @@ input[id^="redaktion-person"] {
 }
 
 #updatesWin-notes {
-	max-height: 500px;
+	max-height: 400px;
 	overflow-x: hidden;
 	overflow-y: auto;
 }
@@ -1606,7 +1606,13 @@ input[id^="redaktion-person"] {
 #updatesWin-notes p.keine {
 	color: var(--textSehrHell);
 	font-style: italic;
+	line-height: 30px;
 	text-align: center;
+}
+
+#updatesWin-notes p.keine span {
+	color: var(--textWarnung);
+	font-style: italic;
 }
 
 #updatesWin-notes h1 {

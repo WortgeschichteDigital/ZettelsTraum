@@ -112,19 +112,26 @@ let updates = {
 		// Release-Notes eintragen
 		const {ipcRenderer} = require("electron");
 		let data = await ipcRenderer.invoke("updates-get-data"),
-			notes = "",
+			notes = document.getElementById("updatesWin-notes"),
 			ueberprueft = "";
 		if (optionen.data.updates.checked) {
 			ueberprueft = `<br>(überprüft: ${helfer.datumFormat(optionen.data.updates.checked)})`;
 		}
-		if (!data.gesucht) {
-			notes = `<p class="keine">noch nicht nach Updates gesucht${ueberprueft}</p>`;
+		if (!data.notes &&
+				optionen.data.updates.online &&
+				optionen.data.updates.online !== appInfo.version) {
+			notes.innerHTML = `<p class="keine"><span>Updates verfügbar!</span><br>(<a href="#">Release-Notes laden</a>)</p>`;
+			notes.querySelector("a").addEventListener("click", evt => {
+				evt.preventDefault();
+				updates.check(false);
+			});
+		} else if (!data.gesucht) {
+			notes.innerHTML = `<p class="keine">noch nicht nach Updates gesucht${ueberprueft}</p>`;
 		} else if (!data.notes) {
-			notes = `<p class="keine">keine Updates gefunden${ueberprueft}</p>`;
+			notes.innerHTML = `<p class="keine">keine Updates gefunden${ueberprueft}</p>`;
 		} else {
-			notes = data.notes;
+			notes.innerHTML = data.notes;
 		}
-		document.getElementById("updatesWin-notes").innerHTML = notes;
 	},
 	// Suche nach Updates manuell anstoßen
 	//   a = Element
