@@ -81,11 +81,15 @@ let updates = {
 		// Release-Notes eintragen
 		const {ipcRenderer} = require("electron");
 		let data = await ipcRenderer.invoke("updates-get-data"),
-			notes = "";
+			notes = "",
+			ueberprueft = "";
+		if (optionen.data.updates.checked) {
+			ueberprueft = `<br>(überprüft: ${helfer.datumFormat(optionen.data.updates.checked)})`;
+		}
 		if (!data.gesucht) {
-			notes = `<p class="keine">noch nicht nach Updates gesucht<br>(überprüft: ${helfer.datumFormat(optionen.data.updates.checked)})</p>`;
+			notes = `<p class="keine">noch nicht nach Updates gesucht${ueberprueft}</p>`;
 		} else if (!data.notes) {
-			notes = `<p class="keine">keine Updates gefunden<br>(überprüft: ${helfer.datumFormat(optionen.data.updates.checked)})</p>`;
+			notes = `<p class="keine">keine Updates gefunden${ueberprueft}</p>`;
 		} else {
 			notes = data.notes;
 		}
