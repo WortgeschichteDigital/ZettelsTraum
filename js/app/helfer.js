@@ -824,8 +824,12 @@ let helfer = {
 		ipcRenderer.send("fehler", err);
 		// keine Details bekannt
 		function noDetails () {
+			let stack = evt.reason.stack ? evt.reason.stack : "";
+			if (!stack && evt.reason.name) {
+				stack = `${evt.reason.name}: ${evt.reason.message}`;
+			}
 			fileJs = "";
-			message = evt.reason.stack;
+			message = stack;
 			line = 0;
 			column = 0;
 		}
