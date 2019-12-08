@@ -10,9 +10,24 @@ let updates = {
 			return;
 		}
 		// RSS-Feed laden
-		let response = await fetch("https://github.com/WortgeschichteDigital/ZettelsTraum/releases.atom");
+		let controller = new AbortController();
+		setTimeout(() => controller.abort(), parseInt(optionen.data.einstellungen.timeout, 10) * 1000);
+		let response;
+		try {
+			response = await fetch("https://github.com/WortgeschichteDigital/ZettelsTraum/releases.atom", {
+				signal: controller.signal,
+			});
+		} catch (err) {
+			if (err.name === "AbortError") {
+				updates.fehler(auto, "Timeout-Fehler");
+			} else {
+				updates.fehler(auto, `${err.name}: ${err.message}`);
+			}
+			throw err;
+		}
 		// RSS-Feed konnte nicht abgerufen werden
 		if (!response.ok) {
+			updates.fehler(auto, `HTTP-Status-Code ${response.status}`);
 			return;
 		}
 		// RSS-Feed auswerten
@@ -21,6 +36,7 @@ let updates = {
 			rss = parser.parseFromString(text, "text/xml");
 		// RSS-Feed war nicht wohlgeformt
 		if (rss.querySelector("parsererror")) {
+			updates.fehler(auto, "RSS-Feed nicht wohlgeformt");
 			return;
 		}
 		// RSS-Feed auswerten
@@ -54,6 +70,20 @@ let updates = {
 		updates.hinweis();
 		// Release-Notes ins Update-Fenster eintragen
 		updates.fensterFill();
+	},
+	// Fehlermeldung ausgeben
+	//   auto = Boolean
+	//     (Suche wurde automatisch angestoßen)
+	//   err = String
+	//     (Fehlermeldung)
+	fehler (auto, err) {
+		if (auto) {
+			return;
+		}
+		dialog.oeffnen({
+			typ: "alert",
+			text: `Beim Laden der Release-Notes ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err}</p>`,
+		});
 	},
 	// Hinweis, dass Updates verfügbar sind, ein- bzw. ausblenden
 	hinweis () {
