@@ -1577,19 +1577,41 @@ input[id^="redaktion-person"] {
 	padding: 10px;
 }
 
-#updatesWin-cont a:focus {
+#updatesWin-header p {
+	text-align: center;
+}
+
+#updatesWin-header input {
+	margin: 0;
+	width: 100px;
+}
+
+#updatesWin-header input:last-child {
+	margin-left: 25px;
+}
+
+#updatesWin-header a:focus {
 	text-decoration: underline;
 }
 
-#updatesWin-header {
-	position: relative;
-	margin-bottom: 25px;
+#updatesWin-header table {
+	margin-top: 25px;
+	border-spacing: 0;
 }
 
-#updatesWin-header a:last-child { /* GitHub-Link */
-	position: absolute;
-	right: 0;
-	cursor: pointer;
+#updatesWin-header td {
+	padding: 0;
+	color: var(--textHell);
+	font-size: 14px;
+}
+
+#updatesWin-header tr:first-child td:first-child {
+	color: var(--text);
+}
+
+#updatesWin-header tr:first-child td:last-child,
+#updatesWin-header tr:last-child td:last-child {
+	color: var(--farbeB);
 }
 
 #updatesWin-header img {
@@ -1597,22 +1619,24 @@ input[id^="redaktion-person"] {
 	vertical-align: top;
 }
 
+#updatesWin-header td span {
+	display: inline-block;
+	margin: 0 5px 0 29px;
+	width: 65px;
+	color: var(--textHell);
+	font-style: italic;
+	text-align: right;
+}
+
+#updatesWin-header td span.auto-width {
+	width: auto;
+}
+
 #updatesWin-notes {
-	max-height: 400px;
+	margin-top: 25px;
+	max-height: 350px;
 	overflow-x: hidden;
 	overflow-y: auto;
-}
-
-#updatesWin-notes p.keine {
-	color: var(--textSehrHell);
-	font-style: italic;
-	line-height: 30px;
-	text-align: center;
-}
-
-#updatesWin-notes p.keine span {
-	color: var(--textWarnung);
-	font-style: italic;
 }
 
 #updatesWin-notes h1 {

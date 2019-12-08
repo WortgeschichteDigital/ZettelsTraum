@@ -302,8 +302,7 @@ window.addEventListener("load", async () => {
 	// Druck-Fenster
 	document.querySelectorAll("#drucken-head span").forEach(span => drucken.buttons(span));
 	// Updates-Fenster
-	updates.suchen(document.getElementById("updatesWin-suchen"));
-	helfer.externeLinks(document.getElementById("updatesWin-github"));
+	document.querySelectorAll("#updatesWin-header input").forEach(i => updates.buttons(i));
 	// Schließen-Links von Overlays
 	document.querySelectorAll(".overlay-schliessen").forEach(a => overlay.initSchliessen(a));
 	// Handbuch-Links von Overlays

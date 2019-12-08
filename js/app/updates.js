@@ -109,38 +109,71 @@ let updates = {
 	},
 	// Update-Fenster mit Release-Notes füllen
 	async fensterFill () {
-		// Release-Notes eintragen
+		// Daten holen
 		const {ipcRenderer} = require("electron");
 		let data = await ipcRenderer.invoke("updates-get-data"),
-			notes = document.getElementById("updatesWin-notes"),
-			ueberprueft = "";
-		if (optionen.data.updates.checked) {
-			ueberprueft = `<br>(überprüft: ${helfer.datumFormat(optionen.data.updates.checked)})`;
+			td = document.querySelectorAll("#updatesWin-header td");
+		// Icon und Notiz
+		while (td[0].childNodes.length > 1) {
+			td[0].removeChild(td[0].lastChild);
 		}
-		if (!data.notes &&
-				optionen.data.updates.online &&
-				optionen.data.updates.online !== appInfo.version) {
-			notes.innerHTML = `<p class="keine"><span>Updates verfügbar!</span><br>(<a href="#">Release-Notes laden</a>)</p>`;
-			notes.querySelector("a").addEventListener("click", evt => {
-				evt.preventDefault();
-				updates.check(false);
-			});
-		} else if (!data.gesucht) {
-			notes.innerHTML = `<p class="keine">noch nicht nach Updates gesucht${ueberprueft}</p>`;
-		} else if (!data.notes) {
-			notes.innerHTML = `<p class="keine">keine Updates gefunden${ueberprueft}</p>`;
+		if (!optionen.data.updates.online) {
+			td[0].firstChild.src = "img/fragezeichen.svg";
+			td[0].appendChild(document.createTextNode("noch nie nach Updates gesucht"));
+		} else if (optionen.data.updates.online !== appInfo.version) {
+			td[0].firstChild.src = "img/pfeil-kreis-rot-48.svg";
+			td[0].appendChild(document.createTextNode("Updates verfügbar"));
+			// ggf. Link zum Laden der Release-Notes anzeigen
+			if (!data.notes) {
+				td[0].appendChild(document.createTextNode(" ("));
+				let a = document.createElement("a");
+				a.href = "#";
+				a.textContent = "Release-Notes";
+				td[0].appendChild(a);
+				td[0].appendChild(document.createTextNode(")"));
+				a.addEventListener("click", evt => {
+					evt.preventDefault();
+					updates.check(false);
+				});
+			}
 		} else {
+			td[0].firstChild.src = "img/check-gruen.svg";
+			td[0].appendChild(document.createTextNode("keine Updates verfügbar"));
+		}
+		// überprüft
+		let ueberprueft = " ";
+		if (optionen.data.updates.checked) {
+			ueberprueft = helfer.datumFormat(optionen.data.updates.checked, true);
+		}
+		td[2].replaceChild(document.createTextNode(ueberprueft), td[2].lastChild);
+		// installiert
+		td[1].replaceChild(document.createTextNode(`v${appInfo.version}`), td[1].lastChild);
+		// online
+		let online = " ";
+		if (optionen.data.updates.online) {
+			online = `v${optionen.data.updates.online}`;
+		}
+		td[3].replaceChild(document.createTextNode(online), td[3].lastChild);
+		// Release-Notes
+		let notes = document.getElementById("updatesWin-notes");
+		if (data.notes) {
 			notes.innerHTML = data.notes;
+			notes.classList.remove("aus");
+		} else {
+			notes.classList.add("aus");
 		}
 	},
-	// Suche nach Updates manuell anstoßen
-	//   a = Element
-	//     (Link, der die Suche nach Updates triggern soll)
-	suchen (a) {
-		a.addEventListener("click", function(evt) {
-			evt.preventDefault();
-			this.classList.add("rotieren-bitte");
-			updates.check(false);
+	// Aktion für die Buttons im Update-Fenster
+	//   input = Element
+	//     (Button im Update-Fenster)
+	buttons (input) {
+		input.addEventListener("click", function() {
+			if (/suchen$/.test(this.id)) {
+				updates.check(false);
+			} else if (/github$/.test(this.id)) {
+				const {shell} = require("electron");
+				shell.openExternal("https://github.com/WortgeschichteDigital/ZettelsTraum/releases");
+			}
 		});
 	},
 };
