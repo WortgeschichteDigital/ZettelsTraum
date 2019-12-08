@@ -308,7 +308,7 @@ window.addEventListener("load", async () => {
 	// Handbuch-Links von Overlays
 	document.querySelectorAll(".icon-handbuch").forEach(a => helfer.handbuchLink(a));
 	// Rotationsanimationen
-	document.querySelectorAll("#kopieren-einfuegen-reload, #updatesWin-suchen").forEach(i => {
+	document.querySelectorAll("#kopieren-einfuegen-reload").forEach(i => {
 		i.addEventListener("animationend", function() {
 			this.classList.remove("rotieren-bitte");
 		});
