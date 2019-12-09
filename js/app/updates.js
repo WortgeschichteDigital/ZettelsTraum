@@ -9,6 +9,8 @@ let updates = {
 		if (auto && !appInfo.packaged) {
 			return;
 		}
+		// ggf. Such-Animation starten
+		updates.animation(auto, true);
 		// RSS-Feed laden
 		let controller = new AbortController();
 		setTimeout(() => controller.abort(), parseInt(optionen.data.einstellungen.timeout, 10) * 1000);
@@ -23,11 +25,13 @@ let updates = {
 			} else {
 				updates.fehler(auto, `${err.name}: ${err.message}`);
 			}
+			updates.animation(auto, false);
 			throw err;
 		}
 		// RSS-Feed konnte nicht abgerufen werden
 		if (!response.ok) {
 			updates.fehler(auto, `HTTP-Status-Code ${response.status}`);
+			updates.animation(auto, false);
 			return;
 		}
 		// RSS-Feed auswerten
@@ -37,6 +41,7 @@ let updates = {
 		// RSS-Feed war nicht wohlgeformt
 		if (rss.querySelector("parsererror")) {
 			updates.fehler(auto, "RSS-Feed nicht wohlgeformt");
+			updates.animation(auto, false);
 			return;
 		}
 		// RSS-Feed auswerten
@@ -70,6 +75,42 @@ let updates = {
 		updates.hinweis();
 		// Release-Notes ins Update-Fenster eintragen
 		updates.fensterFill();
+	},
+	// speichert Bild und Text des Update-Status, um sie ggf. zurücksetzen zu können
+	animationStatus: {
+		img: "",
+		text: "",
+	},
+	// Such-Animation
+	//   auto = Boolean
+	//     (Suche wurde automatisch angestoßen)
+	//   start = Boolean
+	//     (die Animation soll starten)
+	animation (auto, start) {
+		if (auto) {
+			return;
+		}
+		let feld = document.querySelector("#updatesWin-header td");
+		if (start) {
+			// gegenwärtige Anzeige zwischenspeichern
+			updates.animationStatus.img = feld.firstChild.src;
+			updates.animationStatus.text = feld.childNodes[1].nodeValue;
+			// Animation starten
+			while (feld.childNodes.length > 1) {
+				feld.removeChild(feld.lastChild);
+			}
+			feld.firstChild.src = "img/pfeil-kreis.svg";
+			feld.appendChild(document.createTextNode("suche Updates"));
+			feld.classList.add("rotieren-bitte");
+		} else if (updates.animationStatus.img) {
+			// Bild und Text zurücksetzen
+			while (feld.childNodes.length > 1) {
+				feld.removeChild(feld.lastChild);
+			}
+			feld.firstChild.src = updates.animationStatus.img;
+			feld.appendChild(document.createTextNode(updates.animationStatus.text));
+			feld.classList.remove("rotieren-bitte");
+		}
 	},
 	// Fehlermeldung ausgeben
 	//   auto = Boolean
@@ -124,6 +165,7 @@ let updates = {
 		let data = await ipcRenderer.invoke("updates-get-data"),
 			td = document.querySelectorAll("#updatesWin-header td");
 		// Icon und Notiz
+		td[0].classList.remove("rotieren-bitte"); // ggf. Animation ausschalten
 		while (td[0].childNodes.length > 1) {
 			td[0].removeChild(td[0].lastChild);
 		}

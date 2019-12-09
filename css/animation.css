@@ -55,7 +55,8 @@
 	animation-timing-function: linear;
 }
 
-#stamm-sperre.rotieren-bitte img {
+#stamm-sperre.rotieren-bitte img,
+#updatesWin-header .rotieren-bitte img {
 	animation-name: rotieren;
 	animation-duration: 1s;
 	animation-timing-function: linear;
