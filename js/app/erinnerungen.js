@@ -4,15 +4,23 @@ let erinnerungen = {
 	data: {
 		bearbeiterin: {
 			okay: false,
-			text: `Sie haben sich <a href="#" class="link-erinnerung" data-funktion="einstellungen-allgemeines">noch nicht registriert</a> (⇨ <i>APP &gt; Einstellungen &gt; Allgemeines &gt; BearbeiterIn</i>).`,
+			text: `Sie haben sich noch nicht registriert (<a href="#" class="link-erinnerung" data-funktion="einstellungen-allgemeines">⇨ <i>APP &gt; Einstellungen &gt; Allgemeines &gt; BearbeiterIn</i></a>).`,
 		},
 		metadaten: {
 			okay: false,
-			text: `In den <a href="#" class="link-erinnerung" data-funktion="metadaten">Metadaten der Kartei</a> ist keine BearbeiterIn registriert (⇨ <i>Kartei &gt; Metadaten</i>).`,
+			text: `In den Metadaten der Kartei ist keine BearbeiterIn registriert (<a href="#" class="link-erinnerung" data-funktion="metadaten">⇨ <i>Kartei &gt; Metadaten</i></a>).`,
 		},
 		redaktion: {
 			okay: false,
-			text: `Im <a href="#" class="link-erinnerung" data-funktion="redaktion">Redaktionsfenster</a> fehlen Angaben zu den BearbeiterInnen (⇨ <i>Kartei &gt; Redaktion</i>).`,
+			text: `Im Redaktionsfenster fehlen Angaben zu den BearbeiterInnen (<a href="#" class="link-erinnerung" data-funktion="redaktion">⇨ <i>Kartei &gt; Redaktion</i></a>).`,
+		},
+		artikelDatei: {
+			okay: false,
+			text: `Sie haben den Artikel erstellt, die Datei mit dem Artikel aber noch nicht mit dieser Kartei verknüpft (<a href="#" class="link-erinnerung" data-funktion="anhaenge">⇨ <i>Kartei &gt; Anhänge</i></a>).`,
+		},
+		xmlDatei: {
+			okay: false,
+			text: `Sie haben eine XML-Datei erstellt, aber noch nicht mit dieser Kartei verknüpft (<a href="#" class="link-erinnerung" data-funktion="anhaenge">⇨ <i>Kartei &gt; Anhänge</i></a>).`,
 		},
 	},
 	// überprüfen, ob auf etwas hingewiesen werden muss
@@ -50,6 +58,44 @@ let erinnerungen = {
 		} else {
 			alles_okay = false;
 			erinnerungen.data.redaktion.okay = false;
+		}
+		// Artikel erstellt, aber nicht verknüpft?
+		for (let i of data.rd) {
+			if (i.er === "Artikel erstellt") {
+				let okay = false;
+				for (let f of data.an) {
+					if (/\.(doc|docx|odt)$/.test(f)) {
+						okay = true;
+						break;
+					}
+				}
+				erinnerungen.data.artikelDatei.okay = okay;
+				if (!okay) {
+					alles_okay = false;
+				}
+				break;
+			} else {
+				erinnerungen.data.artikelDatei.okay = true;
+			}
+		}
+		// XML-Datei erstellt, aber nicht verknüpft?
+		for (let i of data.rd) {
+			if (i.er === "XML-Auszeichnung") {
+				let okay = false;
+				for (let f of data.an) {
+					if (/\.xml$/.test(f)) {
+						okay = true;
+						break;
+					}
+				}
+				erinnerungen.data.xmlDatei.okay = okay;
+				if (!okay) {
+					alles_okay = false;
+				}
+				break;
+			} else {
+				erinnerungen.data.xmlDatei.okay = true;
+			}
 		}
 		// Icon umschalten
 		erinnerungen.icon(!alles_okay);
@@ -93,8 +139,10 @@ let erinnerungen = {
 	listener (a) {
 		a.addEventListener("click", function(evt) {
 			evt.preventDefault();
-			let funktion = this.dataset.funktion;
-			switch (funktion) {
+			switch (this.dataset.funktion) {
+				case "anhaenge":
+					anhaenge.fenster();
+					break;
 				case "einstellungen-allgemeines":
 					optionen.oeffnen();
 					optionen.sektionWechseln(document.querySelector("#einstellungen ul a"));
@@ -106,6 +154,7 @@ let erinnerungen = {
 					redaktion.oeffnen();
 					break;
 			}
+			setTimeout(() => overlay.schliessen(document.getElementById("dialog")), 200);
 		});
 	},
 };
