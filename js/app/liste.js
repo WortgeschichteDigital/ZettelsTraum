@@ -657,7 +657,11 @@ let liste = {
 					continue;
 				}
 			} else if (optionen.data.belegliste.beleg_kuerzen &&
-					!liste.wortVorhanden(p_prep[i])) { // ggf. kürzen, wenn Wort nicht enthalten
+					!liste.wortVorhanden(p_prep[i]) &&
+					!(filter.aktiveFilter["verschiedenes-annotierung"] && /annotierung-wort/.test(p_prep[i]) ) ) {
+				// ggf. kürzen, wenn
+				//   - Wort nicht enthalten
+				//   - Annotierungsfilter aktiv und Annotierung nicht vorhanden
 				if (zuletzt_gekuerzt) {
 					div.removeChild(div.lastChild);
 				} else {

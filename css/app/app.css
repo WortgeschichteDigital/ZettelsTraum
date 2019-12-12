@@ -321,6 +321,10 @@ input[type="button"][value="Ergänzen"] {
 	background-image: url(../../img/plus-weiss.svg);
 }
 
+input[type="button"][value="GitHub"] {
+	background-image: url(../../img/github-weiss.svg);
+}
+
 input[type="button"][value="Kopieren"] {
 	background-image: url(../../img/kopieren-weiss.svg);
 }
@@ -339,6 +343,10 @@ input[type="button"][value="Speichern"] {
 
 input[type="button"][value^="Suche"] {
 	background-image: url(../../img/lupe-weiss.svg);
+}
+
+input[type="button"]#updatesWin-suchen {
+	background-image: url(../../img/pfeil-kreis-weiss.svg);
 }
 
 input[type="button"][value^="Zurücksetzen"] {

@@ -88,6 +88,8 @@ let optionen = {
 			// Timeout für Anfrage an das DTA in Sekunden
 			// (einfacher als String, wird bei Bedarf in Number konvertiert)
 			timeout: "10",
+			// automatisch nach Software-Update suchen
+			"updates-suche": true,
 			// legt das Verhalten von Kartei > Speichern fest
 			//   1 = Speicherkaskade
 			//   2 = nur aktive Funktion speichern
@@ -222,6 +224,11 @@ let optionen = {
 		personen: [],
 		// letzter Pfad, der beim Speichern oder Öffnen einer Datei benutzt wurde
 		letzter_pfad: "",
+		// Variablen für das Suchen nach Updates
+		updates: {
+			checked: "", // ISO-String: Datum, an dem zuletzt nach Updates gesucht wurde
+			online: "", // Versionsnummer der App, die online steht
+		},
 		// zuletzt verwendete Karteien
 		zuletzt: [],
 	},
@@ -335,6 +342,8 @@ let optionen = {
 		optionen.anwendenIconsDetails();
 		// Optionen im Optionen-Fenster eintragen
 		optionen.anwendenEinstellungen();
+		// ggf. Update-Hinweis einblenden
+		updates.hinweis();
 	},
 	// die Einstellungen im Einstellungen-Fenster nach dem Empfangen von Optionen anpassen
 	anwendenEinstellungen () {

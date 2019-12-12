@@ -1589,14 +1589,24 @@ Mustermann, Erika
 						<p>Registrieren Sie sich nicht, nervt Sie das Programm durch das Icon <img src="../img/kreis-ausrufezeichen.svg" width="20" height="20" alt="">, das im Kopf des Hauptfensters rechts neben dem Karteiwort erscheint, sobald eine Kartei geöffnet ist.</p>
 					</div>
 
-					<p class="erklaerung-option">Sekunden Timeout bei Anfragen an das <abbr title="Deutsche Textarchiv">DTA</abbr></p>
+					<p class="erklaerung-option">Sekunden Timeout bei Internet-Anfragen</p>
 
 					<div class="info">
 						<p><i>Standard:</i> 10</p>
 
-						<p><a href="#karteikarte">Karteikarten</a> können mit Texten aus dem <abbr title="Deutsche Textarchiv">DTA</abbr> automatisch gefüllt werden, wenn man eine entsprechende <abbr title="Uniform Resource Locator" lang="en">URL</abbr> angibt. Und die Funktion <a href="#menueKartei-formvarianten"><i>Kartei &gt; Formvarianten</i></a> lädt beim Erstellen einer Kartei automatisch eine Liste an Formvarianten – ebenfalls aus dem <abbr title="Deutsche Textarchiv">DTA</abbr>.</p>
+						<p><a href="#karteikarte">Karteikarten</a> können mit Texten aus dem <abbr title="Deutsche Textarchiv">DTA</abbr> automatisch gefüllt werden, wenn man eine entsprechende <abbr title="Uniform Resource Locator" lang="en">URL</abbr> angibt. Die Funktion <a href="#menueKartei-formvarianten"><i>Kartei &gt; Formvarianten</i></a> lädt beim Erstellen einer Kartei automatisch eine Liste an Formvarianten – ebenfalls aus dem <abbr title="Deutsche Textarchiv">DTA</abbr>. Und im <a href="#menueHilfe-updates">Update-Fenster</a> kann auf GitHub nach neuen Releases von <i class="app-name"></i> gesucht werden.</p>
 
-						<p>In beiden Fällen sendet die App intern eine Anfrage an die <abbr title="Deutsche Textarchiv">DTA</abbr>-Webseite. Erhält sie nach der hier eingegebenen Zeitspanne keine Antwort, wird die Anfrage mit einem Timeout-Fehler abgebrochen und ein Dialogfenster geöffnet, das über diesen Fehler informiert. Arbeiten Sie in einer Umgebung mit schlechter Internetverbindung (<abbr title="zum Beispiel">z. B.</abbr> im Zug), könnte es hilfreich sein, diesen Wert ein bisschen anzuheben. Die App wartet dann entsprechend länger, ehe sie die Anfrage als gescheitert bewertet.</p>
+						<p>In allen Fällen sendet die App intern eine Anfrage an die entsprechende Internet-Ressource. Erhält sie nach der hier eingegebenen Zeitspanne keine Antwort, wird die Anfrage mit einem Timeout-Fehler abgebrochen und ein Dialogfenster geöffnet, das über diesen Fehler informiert. Arbeiten Sie in einer Umgebung mit schlechter Internetverbindung (<abbr title="zum Beispiel">z. B.</abbr> im Zug), könnte es hilfreich sein, diesen Wert ein bisschen anzuheben. Die App wartet dann entsprechend länger, ehe sie die Anfrage als gescheitert bewertet.</p>
+					</div>
+
+					<p class="erklaerung-option" id="einstellungen-allgemeinesUpdates">automatisch nach Updates suchen</p>
+
+					<div class="info">
+						<p><i>Standard:</i> aktiviert</p>
+
+						<p>Ist die Einstellung aktiviert, überprüft die App einmal am Tag, ob auf <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/releases">GitHub</a> ein neues Release von <i class="app-name"></i> eingestellt wurde.</p>
+
+						<p>Gibt es ein neues Release, erscheint im Kopf des Hauptfenstes das rote Icon <img src="../img/pfeil-kreis-rot-48.svg" width="20" height="20" alt="">. Durch Klick auf dieses Icon oder über den <a href="#menueHilfe-updates">Menüpunkt <i>Hilfe &gt; Updates</i></a> kann man ein Dialogfenster öffnen, in dem sich ein Link zur Download-Seite und <abbr title="gegebenenfalls">ggf.</abbr> auch die Release-Notes der aktuellen Version finden.</p>
 					</div>
 
 					<p class="erklaerung-option" id="einstellungen-allgemeinesSpeichern">Speichern-Befehl</p>
@@ -3869,6 +3879,20 @@ Gerüst 2 &gt; Gerüst 1</pre>
 						<p>Dass im Fehlerlog kein Fehler angezeigt wird, heißt natürlich noch lange nicht, dass das Verhalten der App fehlerfrei war. Fehler, die so schwer waren, dass die Ausführung des Programmcodes abgebrochen werden musste, erscheinen hier jedoch immer. Am besten kontaktieren Sie in so einem Fall den Entwickler. Eine E-Mail-Adresse finden Sie im <a href="#" class="ueber-app">Informationsfenster zur App</a>.</p>
 
 						<p>Zeigt der Fehlerlog ein Problem, sollten Sie den Loginhalt mitschicken. Sie können den Inhalt durch Klick auf das Icon <img src="../img/kopieren.svg" width="20" height="20" alt=""> (im Fensterkopf) in die Zwischenablage ihres Systems kopieren. Das Icon ist nur sichtbar, wenn ein Fehler registriert wurde.</p>
+					</div>
+
+					<p class="erklaerung-icon-menues" id="menueHilfe-updates"><img src="../img/pfeil-kreis.svg" width="24" height="24" alt="">Updates</p>
+
+					<div class="info">
+						<p>Öffnet ein Dialogfenster, in dem <abbr title="gegebenenfalls">ggf.</abbr> Updates angezeigt werden.</p>
+
+						<p>Die App überprüft standardmäßig einmal am Tag, ob auf <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/releases">GitHub</a> ein neues Release von <i class="app-name"></i> eingestellt wurde. Ist die aktuelle Programmversion nicht die neuste, wird dies in diesem Fenster angezeigt. Wurde die Überprüfung in der aktuellen Programmsession durchgeführt, werden alle <b>Release-Notes</b> der neueren Programmversionen angezeigt. Andernfalls kann man sie über den in solchen Fällen eingeblendeten Link <i>Release-Notes</i> nachladen.</p>
+
+						<p>Die <b>automatische Überprüfung</b> kann durch das Deaktivieren einer <a href="#einstellungen-allgemeinesUpdates">Einstellung</a> abgeschaltet werden.</p>
+
+						<p>Gibt es ein <b>neues Release</b>, erreicht man die GitHub-Seite über den Button <i>GitHub</i>. Auf der Webseite kann man sich das gewünschte Programmpaket herunterladen.</p>
+
+						<p>Möchte man die <b>Überprüfung manuell anstoßen</b> (weil man <abbr title="zum Beispiel">z. B.</abbr> ein neues Release demnächst erwartet), kann man auf den Button <i>Suchen</i> klicken. Ist ein Update verfügbar, werden die Release-Notes eingeblendet.</p>
 					</div>
 
 					<p class="erklaerung-icon-menues" id="menueHilfe-ueberApp"><img src="../img/kreis-leer.svg" width="24" height="24" alt="">Über <span class="app-name"></span></p>

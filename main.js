@@ -51,6 +51,13 @@ let kopieren = {
 	winIdAnfrage: -1,
 };
 
+// Variable mit Release Notes
+// (ist gefüllt, wenn Updates zur Verfügung stehen)
+let updates = {
+	notes: "",
+	gesucht: false,
+};
+
 // Variable für Abgleich der Tag-Dateien
 // (soll nur einmal pro Session stattfinden)
 let tagDateienAbgleich = true;
@@ -330,6 +337,12 @@ layoutMenu = [
 			{
 				label: "Fehlerlog",
 				click: () => fenster.erstellenNeben({typ: "fehlerlog"}),
+			},
+			{ type: "separator" },
+			{
+				label: "Updates",
+				icon: path.join(__dirname, "img", "menu", "pfeil-kreis.png"),
+				click: () => appMenu.befehl("hilfe-updates"),
 			},
 			{ type: "separator" },
 			{
@@ -1171,6 +1184,29 @@ app.on("ready", async () => {
 	setTimeout(() => {
 		appMenu.zuletztCheck();
 	}, 5000);
+	// ggf. auf Updates prüfen
+	if (!optionen.data.updates) {
+		return;
+	}
+	let updatesChecked = optionen.data.updates.checked.split("T")[0],
+		heute = new Date().toISOString().split("T")[0];
+	if (updatesChecked === heute ||
+			!optionen.data.einstellungen["updates-suche"]) {
+		return;
+	}
+	setTimeout(() => {
+		for (let id in win) {
+			if (!win.hasOwnProperty(id)) {
+				continue;
+			}
+			if (win[id].typ !== "index") {
+				continue;
+			}
+			let w = BrowserWindow.fromId(parseInt(id, 10));
+			w.webContents.send("updates-check");
+			break;
+		}
+	}, 3e4);
 });
 
 // App beenden, wenn alle Fenster geschlossen worden sind
@@ -1285,7 +1321,7 @@ ipcMain.handle("optionen-speichern", (evt, opt, winId) => {
 	} else {
 		optionen.data = opt;
 	}
-	// Optionen an alle Hauptfenster schicken, mit Ausnahme dem der übergebenen id
+	// Optionen an alle Hauptfenster schicken, mit Ausnahme dem der übergebenen ID
 	for (let id in win) {
 		if (!win.hasOwnProperty(id)) {
 			continue;
@@ -1492,6 +1528,15 @@ ipcMain.handle("fenster-hauptfenster", (evt, idFrage) => {
 	}
 	return false;
 });
+
+
+// ***** UPDATES ******
+ipcMain.handle("updates-save-data", (evt, notes) => {
+	updates.gesucht = true;
+	updates.notes = notes;
+});
+
+ipcMain.handle("updates-get-data", () => updates);
 
 
 // ***** KOPIEREN *****

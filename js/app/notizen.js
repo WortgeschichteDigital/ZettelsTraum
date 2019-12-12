@@ -449,7 +449,7 @@ let notizen = {
 	// legt die Maximalhöhe des Notizenfeldes fest
 	maxHeight () {
 		// Sind die Notizen offen?
-		if (overlay.oben() !== "notizen") {
+		if (document.getElementById("notizen").classList.contains("aus")) {
 			return;
 		}
 		let max = window.innerHeight - 200;

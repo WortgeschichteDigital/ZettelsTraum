@@ -367,6 +367,8 @@ let anhaenge = {
 					if (cont.dataset.anhaenge === "kartei") {
 						anhaenge.auflistenBelege(cont);
 					}
+					// Erinnerungen auffrischen
+					erinnerungen.check();
 				},
 			});
 		});
@@ -464,6 +466,8 @@ let anhaenge = {
 		if (cont.dataset.anhaenge === "kartei") {
 			anhaenge.auflistenBelege(cont);
 		}
+		// Erinnerungen auffrischen
+		erinnerungen.check();
 	},
 	// Änderungsmarkierung setzen
 	//   cont = Element

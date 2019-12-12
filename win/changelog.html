@@ -45,9 +45,21 @@
 			<div>
 				<h2><span>Version 0.27.0-beta</span><time datetime="2019-12-24">24. Dezember 2019</time></h2>
 
+				<h3>Neue Funktionen</h3>
+
+				<ul>
+					<li><i class="app-name"></i> sucht nun einmal täglich, ob auf GitHub Updates zur Verfügung stehen. Gibt es Updates, wird im Kopf des Hauptfensters das rote Icon <img src="../img/pfeil-kreis-rot-48.svg" width="24" height="24" alt=""> angezeigt. Klickt man auf das Icon, öffnet sich ein <a href="#menueHilfe-updates" class="link-handbuch">Dialogfenster</a>. Die automatische <a href="#einstellungen-allgemeinesUpdates" class="link-handbuch">Suche nach Updates lässt sich ausstellen</a>.</li>
+				</ul>
+
 				<h3>Verbesserungen</h3>
 
 				<ul>
+					<li><a href="#belegliste" class="link-handbuch">Belegliste</a>: Sind sowohl der Annotierungsfilter (im Filterblock <a href="#filter-verschiedenes" class="link-handbuch">Verschiedenes</a>) als auch die <a href="#belegliste-kuerzung" class="link-handbuch">Kürzungsfunktion</a> aktiv, werden Absätze, die Annotierungen enthalten, fortan nicht mehr gekürzt. Dieses neue Verhalten betrifft auch Absätze mit transparenten Annotierungen, und zwar unabhängig davon, ob die <a href="#einstellungen-filterleisteTransparente" class="link-handbuch">Einstellung zum Einbeziehen transparenter Annotierungen</a> aktiviert ist oder nicht.</li>
+
+					<li>Erinnerungen: Wurden gewisse Formalien nicht eingehalten, erscheint schon seit Längerem im Kopf des Hauptfensters das Icon <img src="../img/kreis-ausrufezeichen.svg" width="24" height="24" alt="">. Fortan wird die NutzerIn auch darüber informiert, dass die Artikel- oder XML-Datei nicht <a href="#menueKartei-anhaenge" class="link-handbuch">an die Kartei angehängt</a> wurde, wenn die entsprechenden <a href="#menueKartei-redaktion" class="link-handbuch">Redaktionsereignisse</a> <i>Artikel erstellt</i> <abbr title="beziehungsweise">bzw.</abbr> <i>XML-Auszeichnung</i> vorhanden sind.</li>
+
+					<li>Wortkarteien werden nicht mehr geöffnet, wenn die installierte Version von <i class="app-name"></i> veraltet ist und darum nicht mehr zur Version des Dateiformats der zu öffnenden Datei passt. Wurde das <abbr title="Zettel’s Traum JSON">ZTJ</abbr>-Format geändert, kann es beim Einlesen einer Datei neueren Formats durch eine veraltete Installation zu unvorhersehbaren Fehlern kommen. Die NutzerIn wird in einem solchen Fall aufgefordert, ein Update zu installieren.</li>
+
 					<li>Die Release Notes für die Download-Seite auf <i>GitHub</i> werden nun besser strukturiert und sind dadurch übersichtlicher. Die internen Kategorien <i>Feature, Change, Fix</i> <abbr title="und so weiter">usw.</abbr> vor den einzelnen Punkten wurden durch die gleichen Überschriften ersetzt, die auch hier im Changelog verwendet werden.</li>
 				</ul>
 
@@ -304,7 +316,7 @@
 
 						<p>Selbst dann, wenn sich kein formatierter Text in der Zwischenablage befindet, sondern nur Plain-Text, wird nun beim Einfügen von Text in das <i>Beleg</i>-Feld eine Bereinigung vorgenommen, um unerwünschte <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>-Tags zu eliminieren. Dies gilt auch für das Einfügen mithilfe des Icons <img src="../img/einfuegen.svg" width="24" height="24" alt="">. Tippen darf man hingegen prinzipiell, was man will – und dies wird dann auch so gespeichert.</p>
 
-						<p><span class="obacht">Sicherheit:</span> Das automatische Bereinigen des Originaltextes ist zugleich eine Sicherheitsmaßnahme. Da das Textfeld <i>Beleg</i> prinzipiell jeden <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>-Tag enthalten darf und dieser bei der Darstellung in der <a href="#belegliste" class="link-handbuch">Belegliste</a> und in der <a href="#karteikarte-leseansicht" class="link-handbuch">Leseansicht der Karteikarte</a> auch interpretiert wird, könnte man auf diese Weise ungewollt Schadcode in die App laden. Das Sicherheitsrisiko ist zur Zeit allerdings überschaubar, da die strikte <span lang="en">Content Security Policy</span> des Programms das Laden verhindern würde.</p>
+						<p><span class="obacht">Sicherheit:</span> Das automatische Bereinigen des Originaltextes ist zugleich eine Sicherheitsmaßnahme. Da das Textfeld <i>Beleg</i> prinzipiell jeden <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>-Tag enthalten darf und dieser bei der Darstellung in der <a href="#belegliste" class="link-handbuch">Belegliste</a> und in der <a href="#karteikarte-leseansicht" class="link-handbuch">Leseansicht der Karteikarte</a> auch interpretiert wird, könnte man auf diese Weise ungewollt Schadcode in die App laden. Das Sicherheitsrisiko ist zur Zeit allerdings überschaubar, da die strikte <span lang="en">Content-Security-Policy</span> des Programms das Laden verhindern würde.</p>
 					</li>
 
 					<li>
