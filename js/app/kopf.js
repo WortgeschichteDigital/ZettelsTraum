@@ -3,9 +3,16 @@
 let kopf = {
 	// Anzeige der Icon-Leiste im Kopf des Hauptfensters anpassen
 	icons () {
-		let kopfLeiste = document.getElementById("kopf-icons");
+		// Ordner-Icon ein-/ausblenden
+		let iconOrdner = document.getElementById("ordner-icon");
+		if (kartei.pfad) {
+			iconOrdner.classList.remove("aus");
+		} else {
+			iconOrdner.classList.add("aus");
+		}
 		// letzten sichtbaren Icon-Link markieren
-		let last = kopfLeiste.querySelector(".last");
+		let kopfLeiste = document.getElementById("kopf-icons"),
+			last = kopfLeiste.querySelector(".last");
 		if (last) {
 			last.classList.remove("last");
 		}

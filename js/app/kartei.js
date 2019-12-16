@@ -319,6 +319,9 @@ let kartei = {
 			if (!document.getElementById("meta").classList.contains("aus")) {
 				meta.bearbAuflisten();
 			}
+			// ggf. Icons im Kopf des Hauptfensters auffrischen
+			// (wichtig für das Ordner-Icon, das nach dem Speichern einer neuen Kartei erscheinen soll)
+			kopf.icons();
 			// Promise auflösen
 			resolve(true);
 		});

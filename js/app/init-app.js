@@ -150,6 +150,8 @@ window.addEventListener("load", async () => {
 	document.getElementById("wort").addEventListener("click", () => kartei.wortAendern());
 	// Erinnerungen-Icon
 	document.getElementById("erinnerungen-icon").addEventListener("click", () => erinnerungen.show());
+	// Ordner-Icon
+	document.getElementById("ordner-icon").addEventListener("click", () => helfer.ordnerOeffnen(kartei.pfad));
 	// Notizen-Icon
 	document.getElementById("notizen-icon").addEventListener("click", () => notizen.oeffnen());
 	// Lexika-Icon
