@@ -2,27 +2,39 @@
 
 let redaktion = {
 	// vordefinierte Redaktionsereignisse
-	ereignisse: [
-		"Artikel erstellt",
-		"Redaktion 1 (Leitung)",
-		"Revision",
-		"Redaktion 2 (Kollegium)",
-		"Redaktion 3 (Projektleitung)",
-		"XML-Auszeichnung",
-		"Artikel online",
-	],
-	// den Ereignisse zugeordnete Icons
-	// (das muss in einem getrennten Objekt sein, weil die Ereignisse
-	// für das Dropdown-Menü einfach zu kopieren sein müssen)
-	ereignisseIcons: {
-		"Kartei erstellt": "dokument-plus.svg",
-		"Artikel erstellt": "dokument.svg",
-		"Redaktion 1 (Leitung)": "auge.svg",
-		"Revision": "stift-quadrat.svg",
-		"Redaktion 2 (Kollegium)": "auge.svg",
-		"Redaktion 3 (Projektleitung)": "auge.svg",
-		"XML-Auszeichnung": "xml.svg",
-		"Artikel online": "kreis-welt.svg",
+	ereignisse: {
+		"Kartei erstellt": {
+			icon: "dokument-plus.svg",
+			textNaechstes: "",
+		},
+		"Artikel erstellt": {
+			icon: "dokument.svg",
+			textNaechstes: "Artikel erstellen",
+		},
+		"Redaktion 1 (Leitung)": {
+			icon: "auge.svg",
+			textNaechstes: "Redaktion 1 (durch Leitung)",
+		},
+		"Revision": {
+			icon: "stift-quadrat.svg",
+			textNaechstes: "Artikel revidieren",
+		},
+		"Redaktion 2 (Kollegium)": {
+			icon: "auge.svg",
+			textNaechstes: "Redaktion 2 (durch Kollegium)",
+		},
+		"Redaktion 3 (Projektleitung)": {
+			icon: "auge.svg",
+			textNaechstes: "Redaktion 3 (durch Projektleitung)",
+		},
+		"XML-Auszeichnung": {
+			icon: "xml.svg",
+			textNaechstes: "XML auszeichnen",
+		},
+		"Artikel online": {
+			icon: "kreis-welt.svg",
+			textNaechstes: "Artikel online stellen",
+		},
 	},
 	// Schlüssel der Feldtypen ermitteln, die in jedem Eintrag vorhanden sind
 	feldtypen: {
@@ -149,8 +161,8 @@ let redaktion = {
 			img.width = "24";
 			img.height = "24";
 			let src = "img/platzhalter.svg";
-			if (redaktion.ereignisseIcons[wert]) {
-				src = `img/${redaktion.ereignisseIcons[wert]}`;
+			if (redaktion.ereignisse[wert]) {
+				src = `img/${redaktion.ereignisse[wert].icon}`;
 			}
 			img.src = src;
 			td.appendChild(img);

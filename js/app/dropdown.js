@@ -233,9 +233,9 @@ let dropdown = {
 			dropdown.data = [...optionen.data.personen];
 		} else if (/^redaktion-ereignis/.test(feld_id) ||
 				/^karteisuche-redaktion-ereignis-/.test(feld_id)) {
-			dropdown.data = [...redaktion.ereignisse];
-			if (/^karteisuche-redaktion-ereignis-/.test(feld_id)) {
-				dropdown.data.unshift("Kartei erstellt");
+			dropdown.data = [...Object.keys(redaktion.ereignisse)];
+			if (/^redaktion-ereignis-/.test(feld_id)) {
+				dropdown.data.shift();
 			}
 		} else if (feld_id === "beleg-bd") {
 			dropdown.dataBedeutungen();
