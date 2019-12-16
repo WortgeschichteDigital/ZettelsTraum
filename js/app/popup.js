@@ -74,11 +74,14 @@ let popup = {
 		} else if (target === "wort") {
 			items = ["wort", "sep", "belegHinzufuegen"];
 			popup.belegeAuflisten(items);
+		} else if (target === "erinnerungen") {
+			items = ["erinnerungen", "sep", "belegHinzufuegen"];
+			popup.belegeAuflisten(items);
 		} else if (target === "karteiordner") {
 			items = ["ordnerKartei", "sep", "belegHinzufuegen"];
 			popup.belegeAuflisten(items);
-		} else if (target === "erinnerungen") {
-			items = ["erinnerungen", "sep", "belegHinzufuegen"];
+		} else if (target === "redaktion") {
+			items = ["redaktion", "sep", "belegHinzufuegen"];
 			popup.belegeAuflisten(items);
 		} else if (target === "notizen") {
 			items = ["notizen", "sep", "belegHinzufuegen"];
@@ -233,11 +236,13 @@ let popup = {
 				return "quick";
 			} else if (id === "wort" && kartei.wort) {
 				return "wort";
+			} else if (id === "erinnerungen-icon") {
+				return "erinnerungen";
 			} else if (id === "ordner-icon") {
 				popup.karteiPfad = kartei.pfad;
 				return "karteiordner";
-			} else if (id === "erinnerungen-icon") {
-				return "erinnerungen";
+			} else if (id === "redaktion-icon") {
+				return "redaktion";
 			} else if (id === "notizen-icon") {
 				return "notizen";
 			} else if (id === "lexika-icon") {

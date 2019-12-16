@@ -152,6 +152,8 @@ window.addEventListener("load", async () => {
 	document.getElementById("erinnerungen-icon").addEventListener("click", () => erinnerungen.show());
 	// Ordner-Icon
 	document.getElementById("ordner-icon").addEventListener("click", () => helfer.ordnerOeffnen(kartei.pfad));
+	// Redaktion-Icon
+	document.getElementById("redaktion-icon").addEventListener("click", () => redaktion.kopfIcon(true));
 	// Notizen-Icon
 	document.getElementById("notizen-icon").addEventListener("click", () => notizen.oeffnen());
 	// Lexika-Icon

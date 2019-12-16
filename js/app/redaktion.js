@@ -399,6 +399,8 @@ let redaktion = {
 						data.rd.splice(slot, 1);
 						kartei.karteiGeaendert(true);
 						redaktion.tabelle();
+						// Redaktions-Icon auffrischen
+						kopf.icons();
 					}
 				},
 			});
@@ -417,5 +419,47 @@ let redaktion = {
 				feld.focus();
 			},
 		});
+	},
+	// Meldungsfenster für das Redaktions-Icon im Kopf
+	//   meldung = Boolean
+	//     (Meldung anzeigen; sonst nur den Text zurückgeben)
+	kopfIcon (meldung) {
+		// keine Kartei geöffnet
+		if (!kartei.wort) {
+			return null;
+		}
+		// höchstrangiges Ereignis ermitteln
+		let letztesEreignis = -1,
+			ereignisse = Object.keys(redaktion.ereignisse);
+		for (let i of data.rd) {
+			const idx = ereignisse.indexOf(i.er);
+			if (idx > letztesEreignis) {
+				letztesEreignis = idx;
+			}
+		}
+		// Text vorbereiten
+		let abgeschlossen = false,
+			text = ["<h3>Nächstes Redaktionsereignis</h3>"];
+		if (letztesEreignis === -1) {
+			text.push(`${redaktion.ereignisse[ereignisse[0]].textNaechstes}`);
+		} else if (letztesEreignis === ereignisse.length - 1) {
+			abgeschlossen = true;
+			text = ["<h3>Redaktion abgeschlossen</h3>"];
+		} else {
+			const ereignis = ereignisse[letztesEreignis + 1];
+			text.push(redaktion.ereignisse[ereignis].textNaechstes);
+		}
+		// Meldung anzeigen
+		if (meldung) {
+			dialog.oeffnen({
+				typ: "alert",
+				text: text.join("\n"),
+			});
+		}
+		// nächstes Ereignis zurückgeben
+		return {
+			title: text,
+			abgeschlossen: abgeschlossen,
+		};
 	},
 };

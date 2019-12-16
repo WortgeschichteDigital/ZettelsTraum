@@ -234,6 +234,11 @@ let punkte = {
 			optionen.sektionWechseln(document.getElementById("einstellungen-link-menue"));
 		`,
 	},
+	redaktion: {
+		label: "Redaktions-Fenster",
+		icon: "personen.png",
+		click: "redaktion.oeffnen()",
+	},
 	schliessen: {
 		label: "Fenster schließen",
 		icon: "x-dick.png",
