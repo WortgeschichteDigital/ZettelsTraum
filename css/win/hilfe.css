@@ -686,6 +686,10 @@ mark.wort {
 	text-indent: -36px;
 }
 
+.info-option .erklaerung-icon {
+	padding-left: 40px;
+}
+
 .erklaerung-icon * {
 	text-indent: 0;
 }
