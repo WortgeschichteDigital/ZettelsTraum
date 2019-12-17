@@ -23,6 +23,8 @@ let erinnerungen = {
 			text: `Sie haben eine XML-Datei erstellt, aber noch nicht mit dieser Kartei verknüpft (<a href="#" class="link-erinnerung" data-funktion="anhaenge">⇨ <i>Kartei &gt; Anhänge</i></a>).`,
 		},
 	},
+	// speichert, ob alle Tests bestanden wurden
+	allesOkay: false,
 	// überprüfen, ob auf etwas hingewiesen werden muss
 	check () {
 		// nicht testen, wenn keine Kartei offen ist
@@ -30,19 +32,19 @@ let erinnerungen = {
 			return;
 		}
 		// Tests durchführen
-		let alles_okay = true;
+		erinnerungen.allesOkay = true;
 		// BearbeiterIn registriert?
 		if (optionen.data.einstellungen.bearbeiterin) {
 			erinnerungen.data.bearbeiterin.okay = true;
 		} else {
-			alles_okay = false;
+			erinnerungen.allesOkay = false;
 			erinnerungen.data.bearbeiterin.okay = false;
 		}
 		// BearbeiterIn in Metadaten?
 		if (data.be.length) {
 			erinnerungen.data.metadaten.okay = true;
 		} else {
-			alles_okay = false;
+			erinnerungen.allesOkay = false;
 			erinnerungen.data.metadaten.okay = false;
 		}
 		// BearbeiterIn in allen Redaktionsereignissen?
@@ -56,7 +58,7 @@ let erinnerungen = {
 		if (redaktion) {
 			erinnerungen.data.redaktion.okay = true;
 		} else {
-			alles_okay = false;
+			erinnerungen.allesOkay = false;
 			erinnerungen.data.redaktion.okay = false;
 		}
 		// Artikel erstellt, aber nicht verknüpft?
@@ -71,7 +73,7 @@ let erinnerungen = {
 				}
 				erinnerungen.data.artikelDatei.okay = okay;
 				if (!okay) {
-					alles_okay = false;
+					erinnerungen.allesOkay = false;
 				}
 				break;
 			} else {
@@ -90,7 +92,7 @@ let erinnerungen = {
 				}
 				erinnerungen.data.xmlDatei.okay = okay;
 				if (!okay) {
-					alles_okay = false;
+					erinnerungen.allesOkay = false;
 				}
 				break;
 			} else {
@@ -98,17 +100,6 @@ let erinnerungen = {
 			}
 		}
 		// Icon umschalten
-		erinnerungen.icon(!alles_okay);
-	},
-	// Anzeige des Icons umschalten
-	//   an = Boolean
-	icon (an) {
-		let icon = document.getElementById("erinnerungen-icon");
-		if (an) {
-			icon.classList.remove("aus");
-		} else {
-			icon.classList.add("aus");
-		}
 		kopf.icons();
 	},
 	// Erinnerungen auf Klick anzeigen

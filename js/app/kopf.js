@@ -1,29 +1,18 @@
 "use strict";
 
 let kopf = {
-	// Anzeige der Icon-Leiste im Kopf des Hauptfensters anpassen
+	// Anzeige der Icon-Leiste im Kopf des Hauptfensters regeln
 	icons () {
-		// Ordner-Icon ein-/ausblenden
-		let iconOrdner = document.getElementById("ordner-icon");
-		if (kartei.pfad) {
-			iconOrdner.classList.remove("aus");
-		} else {
-			iconOrdner.classList.add("aus");
-		}
-		// Redaktion-Icon ein-/ausblenden
-		let redaktionEreignis = redaktion.kopfIcon(false),
-			redaktionIcon = document.getElementById("redaktion-icon");
-		if (kartei.wort) {
-			if (redaktionEreignis.abgeschlossen) {
-				redaktionIcon.title = redaktionEreignis.title[0].replace(/<.+?>/g, "");
-			} else {
-				redaktionIcon.title = `Nächstes Redaktionsereignis: ${redaktionEreignis.title[1]}`;
-			}
-			kopf.redaktionIcon(redaktionEreignis.abgeschlossen);
-			redaktionIcon.classList.remove("aus");
-		} else {
-			redaktionIcon.classList.add("aus");
-		}
+		// Erinnerungen
+		kopf.iconErinnerungen();
+		// Karteiordner
+		kopf.iconOrdner();
+		// Redaktion
+		kopf.iconRedaktion();
+		// Notizen
+		kopf.iconNotizen();
+		// Lexika
+		kopf.iconLexika();
 		// letzten sichtbaren Icon-Link markieren
 		let kopfLeiste = document.getElementById("kopf-icons"),
 			last = kopfLeiste.querySelector(".last");
@@ -36,7 +25,8 @@ let kopf = {
 		}
 		// ggf. die Anhänge-Icons anzeigen
 		let anhaenge = document.getElementById("kartei-anhaenge");
-		if (anhaenge.hasChildNodes()) {
+		if (optionen.data.einstellungen["kopf-icon-anhaenge"] &&
+				anhaenge.hasChildNodes()) {
 			anhaenge.classList.remove("aus");
 			if (aAn.length) {
 				anhaenge.classList.add("not-first");
@@ -53,10 +43,47 @@ let kopf = {
 			kopfLeiste.classList.remove("aus");
 		}
 	},
+	// Erinnerungen-Icon
+	iconErinnerungen () {
+		let icon = document.getElementById("erinnerungen-icon");
+		if (optionen.data.einstellungen["kopf-icon-erinnerungen"] &&
+				!erinnerungen.allesOkay) {
+			icon.classList.remove("aus");
+		} else {
+			icon.classList.add("aus");
+		}
+	},
+	// Karteiordner-Icon
+	iconOrdner () {
+		let iconOrdner = document.getElementById("ordner-icon");
+		if (optionen.data.einstellungen["kopf-icon-ordner"] &&
+				kartei.pfad) {
+			iconOrdner.classList.remove("aus");
+		} else {
+			iconOrdner.classList.add("aus");
+		}
+	},
+	// Redaktion-Icon
+	iconRedaktion () {
+		let iconRedaktion = document.getElementById("redaktion-icon"),
+			er = redaktion.kopfIcon(false);
+		if (optionen.data.einstellungen["kopf-icon-redaktion"] &&
+				kartei.wort) {
+			if (er.abgeschlossen) {
+				iconRedaktion.title = er.title[0].replace(/<.+?>/g, "");
+			} else {
+				iconRedaktion.title = `Nächstes Redaktionsereignis: ${er.title[1]}`;
+			}
+			kopf.iconRedaktionSvg(er.abgeschlossen);
+			iconRedaktion.classList.remove("aus");
+		} else {
+			iconRedaktion.classList.add("aus");
+		}
+	},
 	// Redaktion-Icon ändern
 	//   abgeschlossen = Boolean
 	//     (die Redaktion ist abgeschlossen)
-	redaktionIcon (abgeschlossen) {
+	iconRedaktionSvg (abgeschlossen) {
 		let svg = document.querySelector("#redaktion-icon svg");
 		while (svg.hasChildNodes()) {
 			svg.removeChild(svg.lastChild);
@@ -74,6 +101,27 @@ let kopf = {
 			svg.appendChild(path);
 			path.setAttribute("transform", "translate(4 4)");
 			path.setAttribute("d", "m6 2c-1.6569 0-3 1.3432-3 3s1.3431 3 3 3 3-1.3432 3-3-1.3431-3-3-3zm4.9961 1.9453 0.003906 0.0039063c-0.38828 0-0.75329 0.089301-1.084 0.23828 0.0546 0.26205 0.083984 0.53309 0.083984 0.81055 0 1.1021-0.45421 2.1042-1.1836 2.8301 0.46 0.7 1.2597 1.1699 2.1797 1.1699 1.4327 0 2.5938-1.1303 2.5938-2.5254 0-1.3951-1.161-2.5273-2.5938-2.5273zm-4.9961 6.0508c-6.0002 0.0034-6 4.0039-6 4.0039v1h12v-1s0-4.01-6-4v-0.0039062zm5 0.0019531v0.0019531c-0.1961 0-0.37171 0.012584-0.55273 0.021484 0.69756 0.39966 1.2291 0.87707 1.6035 1.377 0.94 1.26 0.94922 2.5996 0.94922 2.5996h3v-1s0-3-5-3z");
+		}
+	},
+	// Notizen-Icon
+	iconNotizen () {
+		let icon = document.getElementById("notizen-icon");
+		if (optionen.data.einstellungen["kopf-icon-notizen"] &&
+				data.no) {
+			icon.classList.remove("aus");
+		} else {
+			icon.classList.add("aus");
+		}
+	},
+	// Lexika-Icon
+	iconLexika () {
+		let icon = document.getElementById("lexika-icon");
+		if (optionen.data.einstellungen["kopf-icon-lexika"] &&
+				data.le &&
+				data.le.length) {
+			icon.classList.remove("aus");
+		} else {
+			icon.classList.add("aus");
 		}
 	},
 };

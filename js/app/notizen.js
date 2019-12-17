@@ -55,7 +55,7 @@ let notizen = {
 		kartei.karteiGeaendert(true);
 		direktSchliessen();
 		// Notizen-Icon updaten
-		notizen.icon();
+		kopf.icons();
 		// ggf. Notizen in der Filterleiste updaten
 		notizen.filterleiste();
 		// erfolgreich gespeichert
@@ -138,7 +138,7 @@ let notizen = {
 		// Löschfunktion
 		function loesche () {
 			data.no = "";
-			notizen.icon();
+			kopf.icons();
 			notizen.filterleisteEntfernen();
 			kartei.karteiGeaendert(true);
 			notizen.schliessen();
@@ -206,16 +206,6 @@ let notizen = {
 				notizen.loeschen(false);
 			}
 		});
-	},
-	// ändert den Status des Icons, je nachdem ob eine Notiz vorhanden ist oder nicht
-	icon () {
-		let icon = document.getElementById("notizen-icon");
-		if (data.no) {
-			icon.classList.remove("aus");
-		} else {
-			icon.classList.add("aus");
-		}
-		kopf.icons();
 	},
 	// der gespeichert Wert wird gerade in das Notizenfeld eingetragen
 	eintragen: false,
