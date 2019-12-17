@@ -189,7 +189,11 @@
 	flex-direction: column;
 	flex-wrap: wrap;
 	padding-left: 24px;
-	height: 145px;
+	height: 145px; /* 5 Items pro Spalte */
+}
+
+#einstellungen-cont .einstellungen-spalten-flach {
+	height: 87px; /* 3 Items pro Spalte */
 }
 
 #einstellungen-cont .einstellungen-spalten p {

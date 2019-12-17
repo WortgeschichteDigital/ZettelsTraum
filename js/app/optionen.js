@@ -95,6 +95,13 @@ let optionen = {
 			//   2 = nur aktive Funktion speichern
 			//   3 = nur Kartei speichern
 			speichern: "1",
+			// Icons im Fensterkopf
+			"kopf-icon-erinnerungen": true,
+			"kopf-icon-ordner": true,
+			"kopf-icon-redaktion": true,
+			"kopf-icon-notizen": true,
+			"kopf-icon-lexika": true,
+			"kopf-icon-anhaenge": true,
 			// KOPIEREN
 			// Hervorhebung des Karteiworts beim Kopieren von Text mitkopieren
 			"textkopie-wort": false,
@@ -1133,7 +1140,9 @@ let optionen = {
 			optionen.data.einstellungen["ctrlC-vor"] = ele.value;
 		}
 		// ggf. Konsequenzen on-the-fly
-		if (e === "quick") { // Quick-Access-Bar umgestellt
+		if (/^kopf-icon-/.test(e)) { // Icons im Fensterkopf
+			kopf.icons();
+		} else if (e === "quick") { // Quick-Access-Bar umgestellt
 			quick.toggle();
 		} else if (e === "filter-unterbedeutungen") { // Verhalten Bedeutungen-Filter umgestellt
 			liste.status(true);
