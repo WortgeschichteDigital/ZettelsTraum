@@ -128,6 +128,14 @@ let punkte = {
 			optionen.sektionWechseln(document.getElementById("einstellungen-link-karteikarte"));
 		`,
 	},
+	kopfIconsConf: {
+		label: "Icon-Einstellungen",
+		icon: "zahnrad.png",
+		click: `
+			optionen.oeffnen();
+			optionen.sektionWechseln(document.getElementById("einstellungen-link-allgemeines"));
+		`,
+	},
 	kopieren: {
 		label: "Textauswahl",
 		icon: "text-markiert.png",

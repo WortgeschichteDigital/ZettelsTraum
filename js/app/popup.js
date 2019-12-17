@@ -75,19 +75,19 @@ let popup = {
 			items = ["wort", "sep", "belegHinzufuegen"];
 			popup.belegeAuflisten(items);
 		} else if (target === "erinnerungen") {
-			items = ["erinnerungen", "sep", "belegHinzufuegen"];
+			items = ["erinnerungen", "sep", "kopfIconsConf", "sep", "belegHinzufuegen"];
 			popup.belegeAuflisten(items);
 		} else if (target === "karteiordner") {
-			items = ["ordnerKartei", "sep", "belegHinzufuegen"];
+			items = ["ordnerKartei", "sep", "kopfIconsConf", "sep", "belegHinzufuegen"];
 			popup.belegeAuflisten(items);
 		} else if (target === "redaktion") {
-			items = ["redaktion", "sep", "belegHinzufuegen"];
+			items = ["redaktion", "sep", "kopfIconsConf", "sep", "belegHinzufuegen"];
 			popup.belegeAuflisten(items);
 		} else if (target === "notizen") {
-			items = ["notizen", "sep", "belegHinzufuegen"];
+			items = ["notizen", "sep", "kopfIconsConf", "sep", "belegHinzufuegen"];
 			popup.belegeAuflisten(items);
 		} else if (target === "lexika") {
-			items = ["lexika", "sep", "belegHinzufuegen"];
+			items = ["lexika", "sep", "kopfIconsConf", "sep", "belegHinzufuegen"];
 			popup.belegeAuflisten(items);
 		} else if (target === "kopierfunktion") {
 			items = ["kopierfunktion", "sep", "belegHinzufuegen"];
@@ -132,6 +132,8 @@ let popup = {
 				items.push("sep", {name: "text", sub: ["textReferenz"]}, {name: "xml", sub: ["xmlReferenz"]}, "sep", "belegBearbeiten", "belegLoeschen", "belegZwischenablage", "belegDuplizieren", "sep", "beleglisteConf");
 			} else if (overlay.oben() === "anhaenge") {
 				items.push("sep", "schliessen");
+			} else {
+				items.push("sep", "kopfIconsConf");
 			}
 			items.push("sep", "belegHinzufuegen");
 			popup.belegeAuflisten(items);
