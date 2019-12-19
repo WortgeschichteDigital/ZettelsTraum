@@ -121,7 +121,7 @@ let anhaenge = {
 			ziel.appendChild(img);
 		});
 		if (ziel.id === "kartei-anhaenge") {
-			helfer.kopfIcons();
+			kopf.icons();
 		}
 	},
 	// Anhänge-Fenster einblenden

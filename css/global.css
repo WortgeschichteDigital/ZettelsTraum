@@ -96,7 +96,7 @@ input::-webkit-datetime-edit-minute-field:focus {
 	border-right: 0;
 }
 
-#kopf-icons a svg path {
+#kopf-icons a svg path:not([fill]) {
 	fill: currentcolor;
 }
 

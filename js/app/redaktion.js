@@ -2,27 +2,39 @@
 
 let redaktion = {
 	// vordefinierte Redaktionsereignisse
-	ereignisse: [
-		"Artikel erstellt",
-		"Redaktion 1 (Leitung)",
-		"Revision",
-		"Redaktion 2 (Kollegium)",
-		"Redaktion 3 (Projektleitung)",
-		"XML-Auszeichnung",
-		"Artikel online",
-	],
-	// den Ereignisse zugeordnete Icons
-	// (das muss in einem getrennten Objekt sein, weil die Ereignisse
-	// für das Dropdown-Menü einfach zu kopieren sein müssen)
-	ereignisseIcons: {
-		"Kartei erstellt": "dokument-plus.svg",
-		"Artikel erstellt": "dokument.svg",
-		"Redaktion 1 (Leitung)": "auge.svg",
-		"Revision": "stift-quadrat.svg",
-		"Redaktion 2 (Kollegium)": "auge.svg",
-		"Redaktion 3 (Projektleitung)": "auge.svg",
-		"XML-Auszeichnung": "xml.svg",
-		"Artikel online": "kreis-welt.svg",
+	ereignisse: {
+		"Kartei erstellt": {
+			icon: "dokument-plus.svg",
+			textNaechstes: "",
+		},
+		"Artikel erstellt": {
+			icon: "dokument.svg",
+			textNaechstes: "Artikel erstellen",
+		},
+		"Redaktion 1 (Leitung)": {
+			icon: "auge.svg",
+			textNaechstes: "Redaktion 1 (durch Leitung)",
+		},
+		"Revision": {
+			icon: "stift-quadrat.svg",
+			textNaechstes: "Artikel revidieren",
+		},
+		"Redaktion 2 (Kollegium)": {
+			icon: "auge.svg",
+			textNaechstes: "Redaktion 2 (durch Kollegium)",
+		},
+		"Redaktion 3 (Projektleitung)": {
+			icon: "auge.svg",
+			textNaechstes: "Redaktion 3 (durch Projektleitung)",
+		},
+		"XML-Auszeichnung": {
+			icon: "xml.svg",
+			textNaechstes: "XML auszeichnen",
+		},
+		"Artikel online": {
+			icon: "kreis-welt.svg",
+			textNaechstes: "Artikel online stellen",
+		},
 	},
 	// Schlüssel der Feldtypen ermitteln, die in jedem Eintrag vorhanden sind
 	feldtypen: {
@@ -149,8 +161,8 @@ let redaktion = {
 			img.width = "24";
 			img.height = "24";
 			let src = "img/platzhalter.svg";
-			if (redaktion.ereignisseIcons[wert]) {
-				src = `img/${redaktion.ereignisseIcons[wert]}`;
+			if (redaktion.ereignisse[wert]) {
+				src = `img/${redaktion.ereignisse[wert].icon}`;
 			}
 			img.src = src;
 			td.appendChild(img);
@@ -387,6 +399,8 @@ let redaktion = {
 						data.rd.splice(slot, 1);
 						kartei.karteiGeaendert(true);
 						redaktion.tabelle();
+						// Redaktions-Icon auffrischen
+						kopf.icons();
 					}
 				},
 			});
@@ -405,5 +419,47 @@ let redaktion = {
 				feld.focus();
 			},
 		});
+	},
+	// Meldungsfenster für das Redaktions-Icon im Kopf
+	//   meldung = Boolean
+	//     (Meldung anzeigen; sonst nur den Text zurückgeben)
+	kopfIcon (meldung) {
+		// keine Kartei geöffnet
+		if (!kartei.wort) {
+			return null;
+		}
+		// höchstrangiges Ereignis ermitteln
+		let letztesEreignis = -1,
+			ereignisse = Object.keys(redaktion.ereignisse);
+		for (let i of data.rd) {
+			const idx = ereignisse.indexOf(i.er);
+			if (idx > letztesEreignis) {
+				letztesEreignis = idx;
+			}
+		}
+		// Text vorbereiten
+		let abgeschlossen = false,
+			text = ["<h3>Nächstes Redaktionsereignis</h3>"];
+		if (letztesEreignis === -1) {
+			text.push(`${redaktion.ereignisse[ereignisse[0]].textNaechstes}`);
+		} else if (letztesEreignis === ereignisse.length - 1) {
+			abgeschlossen = true;
+			text = ["<h3>Redaktion abgeschlossen</h3>"];
+		} else {
+			const ereignis = ereignisse[letztesEreignis + 1];
+			text.push(redaktion.ereignisse[ereignis].textNaechstes);
+		}
+		// Meldung anzeigen
+		if (meldung) {
+			dialog.oeffnen({
+				typ: "alert",
+				text: text.join("\n"),
+			});
+		}
+		// nächstes Ereignis zurückgeben
+		return {
+			title: text,
+			abgeschlossen: abgeschlossen,
+		};
 	},
 };

@@ -128,6 +128,14 @@ let punkte = {
 			optionen.sektionWechseln(document.getElementById("einstellungen-link-karteikarte"));
 		`,
 	},
+	kopfIconsConf: {
+		label: "Icon-Einstellungen",
+		icon: "zahnrad.png",
+		click: `
+			optionen.oeffnen();
+			optionen.sektionWechseln(document.getElementById("einstellungen-link-allgemeines"));
+		`,
+	},
 	kopieren: {
 		label: "Textauswahl",
 		icon: "text-markiert.png",
@@ -233,6 +241,11 @@ let punkte = {
 			optionen.oeffnen();
 			optionen.sektionWechseln(document.getElementById("einstellungen-link-menue"));
 		`,
+	},
+	redaktion: {
+		label: "Redaktions-Fenster",
+		icon: "personen.png",
+		click: "redaktion.oeffnen()",
 	},
 	schliessen: {
 		label: "Fenster schließen",

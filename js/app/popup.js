@@ -18,8 +18,10 @@ let popup = {
 	},
 	// speichert den Anhang, der geöffnet werden soll
 	anhangDatei: "",
+	// das angeklickte Anhang-Icon steht im Kopf des Hauptfensters
+	anhangDateiKopf: false,
 	// das angeklickte Anhang-Icon steht in der Detailansicht eines Belegs
-	anhangDateiBeleg: false,
+	anhangDateiListe: false,
 	// speichert die Datei aus der Liste zu verwendeter Dateien, der gelöscht werden soll
 	startDatei: "",
 	// speichert den Pfad aus einer Karteiliste (zur Zeit, 2019-10-26, nur Karteisuche)
@@ -75,13 +77,19 @@ let popup = {
 			items = ["wort", "sep", "belegHinzufuegen"];
 			popup.belegeAuflisten(items);
 		} else if (target === "erinnerungen") {
-			items = ["erinnerungen", "sep", "belegHinzufuegen"];
+			items = ["erinnerungen", "sep", "kopfIconsConf", "sep", "belegHinzufuegen"];
+			popup.belegeAuflisten(items);
+		} else if (target === "karteiordner") {
+			items = ["ordnerKartei", "sep", "kopfIconsConf", "sep", "belegHinzufuegen"];
+			popup.belegeAuflisten(items);
+		} else if (target === "redaktion") {
+			items = ["redaktion", "sep", "kopfIconsConf", "sep", "belegHinzufuegen"];
 			popup.belegeAuflisten(items);
 		} else if (target === "notizen") {
-			items = ["notizen", "sep", "belegHinzufuegen"];
+			items = ["notizen", "sep", "kopfIconsConf", "sep", "belegHinzufuegen"];
 			popup.belegeAuflisten(items);
 		} else if (target === "lexika") {
-			items = ["lexika", "sep", "belegHinzufuegen"];
+			items = ["lexika", "sep", "kopfIconsConf", "sep", "belegHinzufuegen"];
 			popup.belegeAuflisten(items);
 		} else if (target === "kopierfunktion") {
 			items = ["kopierfunktion", "sep", "belegHinzufuegen"];
@@ -120,12 +128,14 @@ let popup = {
 			popup.belegeAuflisten(items);
 		} else if (target === "anhang") {
 			items = ["anhang", "ordnerAnhang"];
-			if (helfer.hauptfunktion === "karte") {
-				items.push("sep", {name: "text", sub: ["textReferenz"]}, {name: "xml", sub: ["xmlReferenz"]}, "sep", "karteikarteConf");
-			} else if (popup.anhangDateiBeleg) {
+			 if (popup.anhangDateiKopf) {
+				items.push("sep", "kopfIconsConf");
+			} else if (popup.anhangDateiListe) {
 				items.push("sep", {name: "text", sub: ["textReferenz"]}, {name: "xml", sub: ["xmlReferenz"]}, "sep", "belegBearbeiten", "belegLoeschen", "belegZwischenablage", "belegDuplizieren", "sep", "beleglisteConf");
 			} else if (overlay.oben() === "anhaenge") {
 				items.push("sep", "schliessen");
+			} else if (helfer.hauptfunktion === "karte") {
+				items.push("sep", {name: "text", sub: ["textReferenz"]}, {name: "xml", sub: ["xmlReferenz"]}, "sep", "karteikarteConf");
 			}
 			items.push("sep", "belegHinzufuegen");
 			popup.belegeAuflisten(items);
@@ -208,17 +218,15 @@ let popup = {
 			} else if (pfad[i].nodeName === "IMG" &&
 					pfad[i].dataset.datei) {
 				popup.anhangDatei = pfad[i].dataset.datei;
-				if (pfad[i].closest(".liste-meta")) {
-					popup.anhangDateiBeleg = true;
+				if (pfad[i].closest("#kartei-anhaenge")) {
+					popup.anhangDateiKopf = true;
+					popup.anhangDateiListe = false;
+				} else if (pfad[i].closest(".liste-meta")) {
+					popup.anhangDateiKopf = false;
+					popup.anhangDateiListe = true;
 					const id = pfad[i].closest(".liste-details").previousSibling.dataset.id;
 					popup.referenz.data = data.ka[id];
 					popup.referenz.id = id;
-				} else {
-					popup.anhangDateiBeleg = false;
-					if (helfer.hauptfunktion === "karte") {
-						popup.referenz.data = beleg.data;
-						popup.referenz.id = "" + beleg.id_karte;
-					}
 				}
 				return "anhang";
 			}
@@ -232,6 +240,11 @@ let popup = {
 				return "wort";
 			} else if (id === "erinnerungen-icon") {
 				return "erinnerungen";
+			} else if (id === "ordner-icon") {
+				popup.karteiPfad = kartei.pfad;
+				return "karteiordner";
+			} else if (id === "redaktion-icon") {
+				return "redaktion";
 			} else if (id === "notizen-icon") {
 				return "notizen";
 			} else if (id === "lexika-icon") {
@@ -274,7 +287,12 @@ let popup = {
 					return "beleg-moddel";
 				} else if (pfad[i].classList.contains("anhaenge-item")) {
 					popup.anhangDatei = pfad[i].dataset.datei;
-					popup.anhangDateiBeleg = false;
+					popup.anhangDateiKopf = false;
+					popup.anhangDateiListe = false;
+					if (!overlay.oben() && helfer.hauptfunktion === "karte") {
+						popup.referenz.data = beleg.data;
+						popup.referenz.id = "" + beleg.id_karte;
+					}
 					return "anhang";
 				} else if (pfad[i].classList.contains("overlay")) {
 					popup.overlayID = pfad[i].id;

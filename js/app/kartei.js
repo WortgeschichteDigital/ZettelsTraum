@@ -213,9 +213,7 @@ let kartei = {
 		kartei.pfad = datei;
 		optionen.aendereLetzterPfad();
 		zuletzt.aendern();
-		notizen.icon();
-		lexika.icon();
-		anhaenge.makeIconList(data.an, document.getElementById("kartei-anhaenge"), true);
+		anhaenge.makeIconList(data.an, document.getElementById("kartei-anhaenge"), true); // impliziert kopf.icons()
 		filter.kartendatumInit();
 		liste.statusOffen = {}; // sonst werden unter Umständen Belege aufgeklappt, selbst wenn alle geschlossen sein sollten; s. Changelog zu Version 0.23.0
 		liste.aufbauen(true);
@@ -319,6 +317,9 @@ let kartei = {
 			if (!document.getElementById("meta").classList.contains("aus")) {
 				meta.bearbAuflisten();
 			}
+			// ggf. Icons im Kopf des Hauptfensters auffrischen
+			// (wichtig für das Ordner-Icon, das nach dem Speichern einer neuen Kartei erscheinen soll)
+			kopf.icons();
 			// Promise auflösen
 			resolve(true);
 		});
@@ -407,14 +408,13 @@ let kartei = {
 		wort.classList.add("keine-kartei");
 		wort.textContent = "keine Kartei geöffnet";
 		helfer.geaendert(); // trägt das Wort aus der Titelleiste aus
-		notizen.icon();
-		lexika.icon();
+		erinnerungen.allesOkay = true;
 		anhaenge.makeIconList(null, document.getElementById("kartei-anhaenge"));
+		kopf.icons();
 		kopieren.uiOff(false);
 		zuletzt.aufbauen();
 		helfer.sektionWechseln("start");
 		kartei.menusDeaktivieren(true);
-		erinnerungen.icon(false);
 	},
 	// Benutzer nach dem Wort fragen, für das eine Kartei angelegt werden soll
 	wortErfragen () {
