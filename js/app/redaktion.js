@@ -11,21 +11,33 @@ let redaktion = {
 			icon: "dokument.svg",
 			textNaechstes: "Artikel erstellen",
 		},
-		"Redaktion 1 (Leitung)": {
+		"Redaktion 1 (Kollegium)": {
 			icon: "auge.svg",
-			textNaechstes: "Redaktion 1 (durch Leitung)",
+			textNaechstes: "Redaktion 1 (durch Kollegium)",
 		},
-		"Revision": {
+		"Revision 1": {
 			icon: "stift-quadrat.svg",
 			textNaechstes: "Artikel revidieren",
 		},
-		"Redaktion 2 (Kollegium)": {
+		"Redaktion 2 (Leitung)": {
 			icon: "auge.svg",
-			textNaechstes: "Redaktion 2 (durch Kollegium)",
+			textNaechstes: "Redaktion 2 (durch Leitung)",
+		},
+		"Revision 2": {
+			icon: "stift-quadrat.svg",
+			textNaechstes: "Artikel revidieren",
 		},
 		"Redaktion 3 (Projektleitung)": {
 			icon: "auge.svg",
 			textNaechstes: "Redaktion 3 (durch Projektleitung)",
+		},
+		"Revision 3": {
+			icon: "stift-quadrat.svg",
+			textNaechstes: "Artikel revidieren",
+		},
+		"Artikel fertig": {
+			icon: "check.svg",
+			textNaechstes: "Artikel fertigstellen",
 		},
 		"XML-Auszeichnung": {
 			icon: "xml.svg",
@@ -34,6 +46,10 @@ let redaktion = {
 		"Artikel online": {
 			icon: "kreis-welt.svg",
 			textNaechstes: "Artikel online stellen",
+		},
+		"Artikel überarbeitet": {
+			icon: "pfeil-kreis.svg",
+			textNaechstes: "",
 		},
 	},
 	// Schlüssel der Feldtypen ermitteln, die in jedem Eintrag vorhanden sind
@@ -451,7 +467,7 @@ let redaktion = {
 			text = ["<h3>Nächstes Redaktionsereignis</h3>"];
 		if (letztesEreignis === -1) {
 			text.push(`${redaktion.ereignisse[ereignisse[0]].textNaechstes}`);
-		} else if (letztesEreignis === ereignisse.length - 1) {
+		} else if (letztesEreignis >= ereignisse.length - 2) {
 			abgeschlossen = true;
 			text = ["<h3>Redaktion abgeschlossen</h3>"];
 		} else {
