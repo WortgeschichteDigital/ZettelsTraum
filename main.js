@@ -897,13 +897,13 @@ fenster = {
 			bounds.minHeight = 400;
 		} else if (typ === "dokumentation") {
 			title = "Technische Dokumentation";
-			if (bounds.height > 750) {
-				bounds.height = 750;
+			if (bounds.height > 825) {
+				bounds.height = 825;
 			}
 		} else if (typ === "handbuch") {
 			title = "Handbuch";
-			if (bounds.height > 750) {
-				bounds.height = 750;
+			if (bounds.height > 825) {
+				bounds.height = 825;
 			}
 		}
 		let opt = {
