@@ -1178,6 +1178,11 @@ p#quick-config-presets a {
 	mask-image: url(../../img/pfeil-gerade-hoch.svg);
 }
 
+.icon-redaktion-hinzufuegen {
+	-webkit-mask-image: url(../../img/plus-dick.svg);
+	mask-image: url(../../img/plus-dick.svg);
+}
+
 .icon-redaktion-loeschen {
 	-webkit-mask-image: url(../../img/muelleimer.svg);
 	mask-image: url(../../img/muelleimer.svg);

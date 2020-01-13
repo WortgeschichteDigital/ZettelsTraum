@@ -137,7 +137,16 @@ let redaktion = {
 		redaktion.inputText(tr.lastChild, "", "person", "neu");
 		redaktion.inputSubmit(tr.lastChild.firstChild.id);
 		// Leerzelle (Lösch-Icon)
-		redaktion.zelleErzeugen(tr, " ", false);
+		redaktion.zelleErzeugen(tr, null, false);
+		let a = document.createElement("a");
+		tr.lastChild.appendChild(a);
+		a.classList.add("icon-link", "icon-redaktion-hinzufuegen");
+		a.href = "#";
+		a.textContent = " ";
+		a.addEventListener("click", evt => {
+			evt.preventDefault();
+			redaktion.eintragErgaenzen();
+		});
 	},
 	// ISO 8601-Datum umwandeln
 	//   datum = String
