@@ -440,6 +440,11 @@ let helfer = {
 		const cl = Object.prototype.toString.call(obj).slice(8, -1);
     return obj !== undefined && obj !== null && cl === typ;
 	},
+	// Sprache der Nutzerumgebung ermitteln
+	checkLang () {
+		let env = process.env;
+		return env.LC_ALL || env.LC_MESSAGES || env.LANG || env.LANGUAGE;
+	},
 	// Variablen um Wortgrenzen zu bestimmen
 	ganzesWortRegExp: {
 		links: `\\s"„“”‚‘»«›‹/\\\\([\\\]{<>`,

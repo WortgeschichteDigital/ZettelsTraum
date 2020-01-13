@@ -321,6 +321,13 @@ window.addEventListener("load", async () => {
 	// VISUELLE ANPASSUNGEN
 	// App-Namen eintragen
 	document.querySelectorAll(".app-name").forEach(i => i.textContent = appInfo.name);
+	// Breite Datumsfelder anpassen
+	const lang = helfer.checkLang();
+	if (!/^de/i.test(lang)) {
+		document.querySelectorAll(`[type="datetime-local"]`).forEach(i => {
+			i.classList.add("lang-en");
+		});
+	}
 	// macOS
 	if (process.platform === "darwin") {
 		// Option zum Ausblenden der Menüleiste verstecken

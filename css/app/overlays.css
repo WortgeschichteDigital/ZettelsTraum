@@ -1252,7 +1252,7 @@ p#quick-config-presets a {
 }
 
 input[id^="redaktion-datum"] {
-	width: 127px;
+	width: 130px;
 }
 
 input[id^="redaktion-ereignis"],

@@ -53,11 +53,11 @@
 }
 
 :root {
-	--filter: 300px;
-	--filterKeyframe: -305px;
+	--filter: 315px;
+	--filterKeyframe: -320px;
 }
 
-@media (min-width: 750px) {
+@media (min-width: 780px) {
 	:root {
 		--filter: 40vw;
 		--filterKeyframe: calc(-40vw - 5px);
