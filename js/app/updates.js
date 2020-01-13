@@ -21,17 +21,18 @@ let updates = {
 			});
 		} catch (err) {
 			if (err.name === "AbortError") {
-				updates.fehler(auto, "Timeout-Fehler");
+				updates.fehler(auto, "Timeout-Fehler", false);
 			} else {
-				updates.fehler(auto, `${err.name}: ${err.message}`);
+				updates.fehler(auto, `${err.name}: ${err.message}`, false);
 			}
 			updates.animation(auto, false);
+			updates.fensterFehler();
 			throw err;
 		}
 		// RSS-Feed konnte nicht abgerufen werden
 		if (!response.ok) {
-			updates.fehler(auto, `HTTP-Status-Code ${response.status}`);
 			updates.animation(auto, false);
+			updates.fehler(auto, `HTTP-Status-Code ${response.status}`, true);
 			return;
 		}
 		// RSS-Feed auswerten
@@ -44,8 +45,8 @@ let updates = {
 		// aber dennoch korrekte Entries vorhanden)
 		let entries = rss.querySelectorAll("entry");
 		if (!entries.length) {
-			updates.fehler(auto, "RSS-Feed nicht wohlgeformt");
 			updates.animation(auto, false);
+			updates.fehler(auto, "RSS-Feed nicht wohlgeformt", true);
 			return;
 		}
 		// RSS-Feed auswerten
@@ -120,7 +121,14 @@ let updates = {
 	//     (Suche wurde automatisch angestoßen)
 	//   err = String
 	//     (Fehlermeldung)
-	fehler (auto, err) {
+	//   log = Boolean
+	//     (der Fehler soll protokolliert werden)
+	fehler (auto, err, log) {
+		if (log) {
+			let e = new Error(err);
+			helfer.onError(e);
+			updates.fensterFehler();
+		}
 		if (auto) {
 			return;
 		}
@@ -217,6 +225,15 @@ let updates = {
 		} else {
 			notes.classList.add("aus");
 		}
+	},
+	// Benachrichtigung einblenden, dass das Suchen nach Updates misslungen ist
+	fensterFehler () {
+		let td = document.querySelectorAll("#updatesWin-header td");
+		while (td[0].childNodes.length > 1) {
+			td[0].removeChild(td[0].lastChild);
+		}
+		td[0].firstChild.src = "img/fragezeichen.svg";
+		td[0].appendChild(document.createTextNode("Laden der Release-Notes misslungen"));
 	},
 	// Aktion für die Buttons im Update-Fenster
 	//   input = Element
