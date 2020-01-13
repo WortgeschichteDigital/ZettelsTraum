@@ -38,15 +38,18 @@ let updates = {
 		let text = await response.text(),
 			parser = new DOMParser(),
 			rss = parser.parseFromString(text, "text/xml");
-		// RSS-Feed war nicht wohlgeformt
-		if (rss.querySelector("parsererror")) {
+		// RSS-Feed war offenbar nicht wohlgeformt;
+		// (nach rss.querySelector("parsererror") kann nicht geschaut werden, weil
+		// GitHub mitunter nicht wohlgeformtes XML ausliefert; in solchen Fällen sind
+		// aber dennoch korrekte Entries vorhanden)
+		let entries = rss.querySelectorAll("entry");
+		if (!entries.length) {
 			updates.fehler(auto, "RSS-Feed nicht wohlgeformt");
 			updates.animation(auto, false);
 			return;
 		}
 		// RSS-Feed auswerten
-		let releaseNotes = "",
-			entries = rss.querySelectorAll("entry");
+		let releaseNotes = "";
 		for (let i = 0, len = entries.length; i < len; i++) {
 			let entry = entries[i],
 				version = entry.querySelector("id").firstChild.nodeValue.match(/[0-9]+\.[0-9]+\.[0-9]+$/);
