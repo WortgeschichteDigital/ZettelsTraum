@@ -88,11 +88,6 @@ function onError (err) {
 }
 
 
-/* LOCALE SETZEN ********************************/
-
-app.commandLine.appendSwitch("lang", "de"); // BUG funktioniert seit Electron 5.0.x nicht mehr: https://github.com/electron/electron/issues/17995
-
-
 /* SINGLE-INSTANCE ******************************/
 
 if (!app.requestSingleInstanceLock()) {

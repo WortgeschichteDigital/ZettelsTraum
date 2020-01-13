@@ -1274,18 +1274,6 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
 
 					<ul>
 						<li>
-							<p>Die Locale der App kann nicht mehr auf <code class="quelltext">de</code> gesetzt werden.<br><a href="https://github.com/electron/electron/issues/17995">Electron-Bug #17995</a></p>
-
-							<div class="info">
-								<p><i>Konsequenzen:</i> In Betriebssystemen, deren Sprache nicht deutsch ist, gibt es Darstellungsprobleme der Datumsfelder im <a href="#filter-kartendatum" class="link-handbuch">Kartendatum-Filter</a> und im <a href="#menueKartei-redaktion" class="link-handbuch">Redaktions-Fenster</a>.</p>
-
-								<p><i>Workaround:</i> Die App explizit mit der deutschen Locale starten:</p>
-
-								<pre>$ LANG=de; zettelstraum</pre>
-							</div>
-						</li>
-
-						<li>
 							<p>Für die Funktion <a href="#menueAnsicht-anzeigeVergroessern" class="link-handbuch"><i>Ansicht &gt; Anzeige vergrößern</i></a> wurde das Tastaturkürzel <kbd class="nochange">Strg</kbd> + <kbd>+</kbd> registriert, angezeigt wird im Menü aber <kbd class="nochange">Strg</kbd> + <kbd>=</kbd>.<br><a href="https://github.com/electron/electron/issues/5256">Electron-Bugs #5256</a>, <a href="https://github.com/electron/electron/issues/14742">#14742</a>, <a href="https://github.com/electron/electron/issues/15496">#15496</a></p>
 
 							<p class="info"><i>Konsequenzen:</i> Die Bedienung funktioniert je nach Betriebssystem anders. Während unter <i>Linux</i> und <i>Windows</i> trotz der falschen Anzeige <kbd class="nochange">Strg</kbd> + <kbd>+</kbd> gedrückt werden kann, muss unter <i>macOS</i> tatsächlich <kbd>⌘</kbd> + <kbd>=</kbd> gedrückt werden.</p>
