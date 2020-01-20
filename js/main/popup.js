@@ -243,7 +243,7 @@ let punkte = {
 		`,
 	},
 	redaktion: {
-		label: "Redaktions-Fenster",
+		label: "Redaktions-Ereignisse",
 		icon: "personen.png",
 		click: "redaktion.oeffnen()",
 	},

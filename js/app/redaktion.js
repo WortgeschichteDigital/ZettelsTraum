@@ -64,7 +64,7 @@ let redaktion = {
 		if (!kartei.wort) {
 			dialog.oeffnen({
 				typ: "alert",
-				text: "Um die Funktion <i>Kartei &gt; Redaktion</i> zu nutzen, muss eine Kartei geöffnet sein.",
+				text: "Um die Funktion <i>Redaktion &gt; Ereignisse</i> zu nutzen, muss eine Kartei geöffnet sein.",
 			});
 			return;
 		}

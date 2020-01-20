@@ -73,11 +73,6 @@ let quick = {
 			short: "",
 			img: "zeilen-4,0.svg",
 		},
-		"kartei-redaktion": {
-			title: "Kartei > Redaktion",
-			short: "",
-			img: "personen.svg",
-		},
 		"kartei-bedeutungen": {
 			title: "Kartei > Bedeutungsgerüst",
 			short: `${tastatur.shortcutsTextAktuell("Strg")} + B`,
@@ -97,6 +92,11 @@ let quick = {
 			title: "Kartei > Suche",
 			short: `${tastatur.shortcutsTextAktuell("Strg")} + F`,
 			img: "lupe.svg",
+		},
+		"redaktion-ereignisse": {
+			title: "Redaktion > Ereignisse",
+			short: "",
+			img: "personen.svg",
 		},
 		"belege-hinzufuegen": {
 			title: "Belege > Hinzufügen",
@@ -181,6 +181,8 @@ let quick = {
 		// Leiste leeren
 		let bar = document.getElementById("quick");
 		helfer.keineKinder(bar);
+		// ggf. veraltete Einträge in der Konfiguration umbenennen
+		quick.amendItems();
 		// Leiste füllen
 		let icons = optionen.data.einstellungen["quick-icons"];
 		for (let i of icons) {
@@ -328,9 +330,6 @@ let quick = {
 				case "kartei-metadaten":
 					meta.oeffnen();
 					break;
-				case "kartei-redaktion":
-					redaktion.oeffnen();
-					break;
 				case "kartei-bedeutungen":
 					bedeutungen.oeffnen();
 					break;
@@ -342,6 +341,9 @@ let quick = {
 					break;
 				case "kartei-suche":
 					filter.suche();
+					break;
+				case "redaktion-ereignisse":
+					redaktion.oeffnen();
 					break;
 				case "belege-hinzufuegen":
 					speichern.checkInit(() => beleg.erstellen());
@@ -560,5 +562,19 @@ let quick = {
 			const dir = this.src.match(/.+-(.+)\./)[1];
 			quick.moveConfig(dir);
 		});
+	},
+	// veraltete Einträge in den Einstellungen ändern
+	amendItems () {
+		let umbenannt = {
+			"kartei-redaktion": "redaktion-ereignisse",
+		};
+		for (let i of Object.keys(umbenannt)) {
+			const idx = optionen.data.einstellungen["quick-icons"].indexOf(i);
+			if (idx < 0) {
+				continue;
+			}
+			optionen.data.einstellungen["quick-icons"][idx] = umbenannt[i];
+			optionen.speichern();
+		}
 	},
 };
