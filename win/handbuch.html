@@ -64,6 +64,7 @@
 					<li><a href="#menueApp" class="kopf intern">Menüpunkt <i class="app-name"></i></a></li>
 					<li><a href="#menueKartei" class="kopf intern">Menüpunkt <i>Kartei</i></a></li>
 					<li><a href="#menueBelege" class="kopf intern">Menüpunkt <i>Belege</i></a></li>
+					<li><a href="#menueRedaktion" class="kopf intern">Menüpunkt <i>Redaktion</i></a></li>
 					<li><a href="#menueBearbeiten" class="kopf intern">Menüpunkt <i>Bearbeiten</i></a></li>
 					<li><a href="#menueAnsicht" class="kopf intern">Menüpunkt <i>Ansicht</i></a></li>
 					<li><a href="#menueHilfe" class="kopf intern">Menüpunkt <i>Hilfe</i></a></li>
@@ -220,7 +221,7 @@
 						</li>
 
 						<li id="kurzanleitung-programmfensterDialogfenster">
-							<p><b>3. Dialogfenster:</b> Solche Fenster erscheinen nur im Hauptfenster. Sie verdecken den Inhalt des Hauptfensters und werden nicht vom Betriebssystem verwaltet. Mehrere Dialogfenster können übereinanderliegen, also zugleich geöffnet sein, ohne dass man sie gleichzeitig sieht. Dialogfenster können Meldungen anzeigen, in ihnen befinden sich darüber hinaus viele Nebenfunktionen wie die <a href="#menueKartei-notizen">Notizen-Funktion</a>, die <a href="#menueKartei-redaktion">Redaktions-Funktion</a> oder die <a href="#menueApp-karteisuche">Karteisuche</a>.</p>
+							<p><b>3. Dialogfenster:</b> Solche Fenster erscheinen nur im Hauptfenster. Sie verdecken den Inhalt des Hauptfensters und werden nicht vom Betriebssystem verwaltet. Mehrere Dialogfenster können übereinanderliegen, also zugleich geöffnet sein, ohne dass man sie gleichzeitig sieht. Dialogfenster können Meldungen anzeigen, in ihnen befinden sich darüber hinaus viele Nebenfunktionen wie die <a href="#menueKartei-notizen">Notizen-Funktion</a>, das Fenster für <a href="#menueRedaktion-ereignisse">Redaktions-Ereignisse</a> oder die <a href="#menueApp-karteisuche">Karteisuche</a>.</p>
 						</li>
 					</ul>
 
@@ -1574,9 +1575,9 @@
 
 						<p>Immer dann, wenn eine Kartei gespeichert wird, registriert die App, welche Person <b>für das Speichern verantwortlich</b> war, und schreibt diese in eine Liste der BearbeiterInnen. Diese Liste wird in der Kartei gespeichert. Dabei greift die App auf den in diesem Feld eingetragenen Namen zurück. Dem Fenster <a href="#menueKartei-metadaten"><i>Kartei &gt; Metadaten</i></a> lässt sich entnehmen, wer alles in dieser Liste steht. Dort können Personen manuell ergänzt oder wieder entfernt werden.</p>
 
-						<p>Auch beim <b>Erstellen einer neuen Wortkartei</b> wird auf den hier eingetragenen Namen zurückgegriffen. In diesem Fall wird nämlich automatisch das Redaktionsereignis <i>Kartei erstellt</i> angelegt und mit dem Namen der registrierten BearbeterIn verknüpft. Die Redaktionsereignisse können Sie im Fenster <a href="#menueKartei-redaktion"><i>Kartei &gt; Redaktion</i></a> einsehen und bearbeiten.</p>
+						<p>Auch beim <b>Erstellen einer neuen Wortkartei</b> wird auf den hier eingetragenen Namen zurückgegriffen. In diesem Fall wird nämlich automatisch das Redaktionsereignis <i>Kartei erstellt</i> angelegt und mit dem Namen der registrierten BearbeterIn verknüpft. Die Redaktionsereignisse können Sie im Fenster <a href="#menueRedaktion-ereignisse"><i>Redaktion &gt; Ereignisse</i></a> einsehen und bearbeiten.</p>
 
-						<p>Arbeiten Sie in einem <b>Projekt mit mehreren MitarbeiterInnen</b>, könnte es sogar sinnvoll sein, eine Datei mit einer Personenliste zu erstellen, die sich jeder einmalig in sein Programm lädt. So könnte dann an allen Stellen des Programms, wo auf Personennamen der BearbeiterInnen zurückgegriffen wird, ein mit den in der Liste zu findenden Namen gefülltes <a href="#karteikarte-dropdown">Dropdown-Menü</a> aufgebaut werden. Orte, an denen sich solche Menüs befinden, sind dieses Textfeld, das BearbeiterInnen-Feld im <a href="#menueKartei-metadaten">Metadaten-Fenster</a> und die Personenfelder im <a href="#menueKartei-redaktion">Redaktions-Fenster</a>.</p>
+						<p>Arbeiten Sie in einem <b>Projekt mit mehreren MitarbeiterInnen</b>, könnte es sogar sinnvoll sein, eine Datei mit einer Personenliste zu erstellen, die sich jeder einmalig in sein Programm lädt. So könnte dann an allen Stellen des Programms, wo auf Personennamen der BearbeiterInnen zurückgegriffen wird, ein mit den in der Liste zu findenden Namen gefülltes <a href="#karteikarte-dropdown">Dropdown-Menü</a> aufgebaut werden. Orte, an denen sich solche Menüs befinden, sind dieses Textfeld, das BearbeiterInnen-Feld im <a href="#menueKartei-metadaten">Metadaten-Fenster</a> und die Personenfelder im Fenster für <a href="#menueRedaktion-ereignisse">Redaktions-Ereignisse</a>.</p>
 
 						<p id="einstellungen-allgemeinesPersonenliste">Eine solche <b>Personenliste</b> kann über den Button <i>Personenliste laden</i> ausgewählt und eingelesen werden. Es muss sich dabei um eine Plain-Text-Datei handeln. Zum Erstellen geeignet sind demnach schlichte Textprogramme wie <abbr title="zum Beispiel">z. B.</abbr> der <i>Editor</i> von <i>Windows</i>. Komplexe Dateiformate, wie sie von Office-Programmen erstellt werden, sind hierfür gleichwohl ungeeignet (es sei denn, Sie speichern eine darin erzeugte Personenliste explizit als Textdatei mit der Endung <span class="datei">.txt</span>). Der Zeilenumbruch dient dabei als Trennzeichen. Jede Zeile der Datei darf mithin einen Personennamen enthalten:</p>
 
@@ -2103,9 +2104,9 @@ Mustermann, Erika
 
 							<p>Fokus im Textfeld des <a href="#menueKartei-metadaten">Metadaten-Fensters</a>: Person in die Liste aufnehmen</p>
 
-							<p>Fokus in einem Textfeld des <a href="#menueKartei-redaktion">Redaktions-Fensters</a> (neuer Eintrag): Eintrag hinzufügen</p>
+							<p>Fokus in einem Textfeld des Fensters für <a href="#menueRedaktion-ereignisse">Redaktions-Ereignisse</a> (neuer Eintrag): Eintrag hinzufügen</p>
 
-							<p>Fokus in einem Textfeld des Redaktions-Fensters (bestehender Eintrag): Änderungen speichern und Textfeld schließen</p>
+							<p>Fokus in einem Textfeld des Fensters für Redaktions-Ereignisse (bestehender Eintrag): Änderungen speichern und Textfeld schließen</p>
 
 							<p>Fokus in einem Textfeld des <a href="#bedeutungsgeruest-tagFenster">Tag-Fensters</a>: Tags speichern</p>
 
@@ -2347,7 +2348,7 @@ Mustermann, Erika
 
 							<p>Fokus in der <a href="#belegliste-suchleiste">Suchleiste</a>: Suchleiste schließen</p>
 
-							<p>Fokus in einem Textfeld des <a href="#menueKartei-redaktion">Redaktions-Fensters</a> (bestehender Eintrag): Änderungen verwerfen und/oder Textfeld schließen</p>
+							<p>Fokus in einem Textfeld des Fensters für <a href="#menueRedaktion-ereignisse">Redaktions-Ereignisse</a> (bestehender Eintrag): Änderungen verwerfen und/oder Textfeld schließen</p>
 
 							<p>oberstes <a href="#kurzanleitung-programmfensterDialogfenster">Dialogfenster</a> schließen</p>
 
@@ -2662,6 +2663,14 @@ Mustermann, Erika
 						<td><kbd>Q</kbd></td>
 						<td>
 							<p><a href="#menueApp-beenden"><i class="app-name"></i> beenden</a></p>
+						</td>
+					</tr><tr>
+						<td><kbd>Alt</kbd></td><td>+</td>
+						<td> </td><td> </td>
+						<td> </td><td> </td>
+						<td><kbd>R</kbd></td>
+						<td>
+							<p><i>Linux/Windows</i>: <a href="#menueRedaktion">Menüpunkt <i>Redaktion</i></a> aufklappen</p>
 						</td>
 					</tr><tr>
 						<td> </td><td> </td>
@@ -3504,33 +3513,6 @@ Mustermann, Erika
 						<p><b><i>BearbeiterInnen:</i></b> Eine Liste der Personen, die die Kartei zu irgendeinem Zeitpunkt gespeichert haben. Am weitesten oben in der Liste steht die Person, die die Kartei zuletzt gespeichert hat. Fügen Sie über das Formular unter der Liste eine Person hinzu, wird diese an den Anfang der Liste gesetzt. Sie werden als BearbeiterIn automatisch in dieses Feld eingetragen, wenn Sie sich <a href="#einstellungen-allgemeinesBearbeiterin">in den Einstellungen registriert</a> haben. Dann brauchen Sie sich um dieses Datenfeld nicht weiter bemühen; das Programm wird Sie beim Speichern einer Kartei automatisch im Datensatz <i>BearbeiterInnen</i> an erster Stelle vermerken. Ein hinter dem Namen erscheinendes Plus (+) signalisiert, dass die Person nicht in der <a href="#einstellungen-allgemeinesPersonenliste">importierten Personenliste</a> zu finden ist. Haben Sie keine Personenliste importiert, wird jede Person durch ein + gekennzeichnet.</p>
 					</div>
 
-					<p class="erklaerung-icon-menues" id="menueKartei-redaktion"><img src="../img/personen.svg" width="24" height="24" alt="">Redaktion</p>
-
-					<div class="info">
-						<p>Registriert Redaktionsereignisse beim Verfassen eines Wortartikels.</p>
-
-						<p>Die Idee des Redaktionsfensters ist simpel: Es soll nachvollziebar machen, wann wer was auf dem Weg hin zu einem Wortartikel getan hat, um <abbr title="zum Beispiel">z. B.</abbr> bei Nachfragen die richtige Person ansprechen zu können oder auf einem Blick zu sehen, welche Arbeitsschritte noch ausstehen.</p>
-
-						<p>Beim Erstellen einer neuen Wortkartei wird in dieser automatisch das <b>Redaktionsereignis</b> <i>Kartei erstellt</i> mit dem aktuellen Tagesdatum angelegt. Im Gegensatz zu allen anderen Redaktionsereignissen kann dieses weder umdatiert oder umbenannt noch gelöscht werden. Allein die Person, der das Ereignis zugeordnet wird, lässt sich nachträglich ergänzen oder ändern. Es gibt zwar eine kleinere Anzahl vordefinierter Redaktionsereignisse, die Sie sich über das <a href="#karteikarte-dropdown">Dropdown-Menü</a> im Textfeld <i>Ereignis</i> anzeigen lassen können. (Verwenden Sie eines von diesen, wird automatisch ein zu ihm passendes Icon angezeigt.) Bei der Eingabe kann man jedoch beliebige Ereignisse definieren; hier gibt es keine Beschränkungen. Ereignisse können sogar doppelt oder dreifach auftauchen – falls entsprechender Bedarf besteht.</p>
-
-						<p>Ganz ähnlich verhält es sich mit der <b>Person</b>, die mit einem bestimmten Ereignis verknüpft werden kann. Sie können in das Textfeld einen beliebigen Namen eintragen. In größeren Projekten ist es jedoch ratsam, eine <a href="#einstellungen-allgemeinesPersonenliste">Personenliste</a> zu importieren und die jeweilige Person aus dem Dropdown-Menü zu wählen. Stringenz bei der Eingabe bringt immer Vorteile mit sich, <abbr title="besonders">bes.</abbr> wenn Sie ein Feature wie die <a href="#menueApp-karteisuche">Karteisuche</a> verwenden. Aber grundsätzlich gilt: Sie können Redaktionsereignisse anlegen, ohne sie mit einer Person zu verknüpfen, was umgekehrt wiederum nicht geht. Eine Person einzutragen, ohne sie mit einem Ereignis zu verbinden, ist nicht möglich.</p>
-
-						<p>Zum <b>Ändern</b> eines einmal angelegten Ereignisses klicken Sie auf den jeweiligen Text. Anstelle des Texts erscheint ein Text- <abbr title="beziehungsweise">bzw.</abbr> Datumsfeld, in dem Sie die gewünschten Änderungen vornehmen können. Speichern geht via <kbd>⏎</kbd>. Möchten Sie eine Änderung verwerfen oder das Feld wieder verlassen, drücken Sie <kbd>Esc</kbd>.</p>
-
-						<figure class="right" title="zum Vergrößern anklicken">
-							<img src="../img/win/hb-menueKartei-redaktion-datum.png" alt="">
-							<figcaption>der Date-Picker im Redaktionsfenster</figcaption>
-						</figure>
-
-						<p>Tipp: Schwebt die Maus über einem Datumsfeld wird ein Pfeil nach unten angezeigt, über den Sie einen kleinen Kalender öffnen können. In ihm können Sie das gewünschte Datum mit ein paar Klicks in das Feld eintragen.</p>
-
-						<p>Außerdem gibt es noch zwei Icons, die erscheinen, sobald Sie mehr als ein <abbr title="beziehungsweise">bzw.</abbr> zwei Redaktionsereignisse angelegt haben:</p>
-
-						<p class="erklaerung-icon"><img src="../img/pfeil-gerade-hoch.svg" width="20" height="20" alt=""><i>Redaktionsereignis um eine Position nach oben schieben.</i></p>
-
-						<p class="erklaerung-icon"><img src="../img/muelleimer.svg" width="20" height="20" alt=""><i>Redaktionsereignis löschen.</i> Die Löschung kann nicht rückgängig gemacht werden; Sie werden aber zuvor gefragt, ob Sie das Ereignis wirklich entfernen möchten.</p>
-					</div>
-
 					<p class="erklaerung-icon-menues" id="menueKartei-bedeutungsgeruest"><img src="../img/geruest.svg" width="24" height="24" alt="">Bedeutungsgerüst</p>
 
 					<div class="info">
@@ -3714,6 +3696,38 @@ Gerüst 2 &gt; Gerüst 1</pre>
 						<p id="menueBelege-einfuegenImportieren"><b><i>Importieren einer Belegsammlung</i></b></p>
 
 						<p>Das Importieren von Belegen aus einer <a href="#ztj-ztb" class="link-dokumentation"><abbr title="Zettel’s Traum Belege">ZTB</abbr></a>-Datei, in der sich eine zuvor <a href="#menueBelege-kopierenExportieren">exportierte Belegsammlung</a> findet, funktioniert im Grunde genauso wie das Einfügen von Belegen aus einem parallel geöffneten Karteifenster: Klicken Sie auf den Button <i>Import</i> mit dem Icon <img src="../img/dokument-import-48.svg" width="20" height="20" alt=""> und wählen Sie die <abbr title="Zettel’s Traum Belege">ZTB</abbr>-Datei aus. Danach erscheint in der Liste mit <i>Belegquellen</i> als erstes der Punkt <i>Belegedatei</i> mit der Anzahl der in der Datei enthaltenen Belege. Der Punkt sollte bereits ausgewählt sein. Wählen Sie die Datenfelder aus, die Sie importieren möchten, konfigurieren Sie <abbr title="gegebenenfalls">ggf.</abbr> das Mapping der <a href="#bedeutungsgeruest">Bedeutungsgerüste</a> und drücken Sie auf den Button <i>Einfügen</i>. Das war’s: Die in der Belegedatei zu findenden Belege wurden alle importiert.</p>
+					</div>
+				</section>
+
+				<!-- MENÜPUNKT REDAKTION -->
+				<section id="sektion-menueRedaktion" class="suche aus">
+					<p>Dieser Menüpunkt steht nur in <b>Hauptfenstern</b> zur Verfügung.</p>
+
+					<p class="erklaerung-icon-menues" id="menueRedaktion-ereignisse"><img src="../img/personen.svg" width="24" height="24" alt="">Ereignisse</p>
+
+					<div class="info">
+						<p>Registriert Redaktionsereignisse beim Verfassen eines Wortartikels.</p>
+
+						<p>Die Idee dieses Fensters ist simpel: Es soll nachvollziebar machen, wann wer was auf dem Weg hin zu einem Wortartikel getan hat, um <abbr title="zum Beispiel">z. B.</abbr> bei Nachfragen die richtige Person ansprechen zu können oder auf einem Blick zu sehen, welche Arbeitsschritte noch ausstehen.</p>
+
+						<p>Beim Erstellen einer neuen Wortkartei wird in dieser automatisch das <b>Redaktionsereignis</b> <i>Kartei erstellt</i> mit dem aktuellen Tagesdatum angelegt. Im Gegensatz zu allen anderen Redaktionsereignissen kann dieses weder umdatiert oder umbenannt noch gelöscht werden. Allein die Person, der das Ereignis zugeordnet wird, lässt sich nachträglich ergänzen oder ändern. Es gibt zwar eine kleinere Anzahl vordefinierter Redaktionsereignisse, die Sie sich über das <a href="#karteikarte-dropdown">Dropdown-Menü</a> im Textfeld <i>Ereignis</i> anzeigen lassen können. (Verwenden Sie eines von diesen, wird automatisch ein zu ihm passendes Icon angezeigt.) Bei der Eingabe kann man jedoch beliebige Ereignisse definieren; hier gibt es keine Beschränkungen. Ereignisse können sogar doppelt oder dreifach auftauchen – falls entsprechender Bedarf besteht.</p>
+
+						<p>Ganz ähnlich verhält es sich mit der <b>Person</b>, die mit einem bestimmten Ereignis verknüpft werden kann. Sie können in das Textfeld einen beliebigen Namen eintragen. In größeren Projekten ist es jedoch ratsam, eine <a href="#einstellungen-allgemeinesPersonenliste">Personenliste</a> zu importieren und die jeweilige Person aus dem Dropdown-Menü zu wählen. Stringenz bei der Eingabe bringt immer Vorteile mit sich, <abbr title="besonders">bes.</abbr> wenn Sie ein Feature wie die <a href="#menueApp-karteisuche">Karteisuche</a> verwenden. Aber grundsätzlich gilt: Sie können Redaktionsereignisse anlegen, ohne sie mit einer Person zu verknüpfen, was umgekehrt wiederum nicht geht. Eine Person einzutragen, ohne sie mit einem Ereignis zu verbinden, ist nicht möglich.</p>
+
+						<p>Zum <b>Ändern</b> eines einmal angelegten Ereignisses klicken Sie auf den jeweiligen Text. Anstelle des Texts erscheint ein Text- <abbr title="beziehungsweise">bzw.</abbr> Datumsfeld, in dem Sie die gewünschten Änderungen vornehmen können. Speichern geht via <kbd>⏎</kbd>. Möchten Sie eine Änderung verwerfen oder das Feld wieder verlassen, drücken Sie <kbd>Esc</kbd>.</p>
+
+						<figure class="right" title="zum Vergrößern anklicken">
+							<img src="../img/win/hb-menueKartei-redaktion-datum.png" alt="">
+							<figcaption>der Date-Picker im Redaktionsfenster</figcaption>
+						</figure>
+
+						<p>Tipp: Schwebt die Maus über einem Datumsfeld wird ein Pfeil nach unten angezeigt, über den Sie einen kleinen Kalender öffnen können. In ihm können Sie das gewünschte Datum mit ein paar Klicks in das Feld eintragen.</p>
+
+						<p>Außerdem gibt es noch zwei Icons, die erscheinen, sobald Sie mehr als ein <abbr title="beziehungsweise">bzw.</abbr> zwei Redaktionsereignisse angelegt haben:</p>
+
+						<p class="erklaerung-icon"><img src="../img/pfeil-gerade-hoch.svg" width="20" height="20" alt=""><i>Redaktionsereignis um eine Position nach oben schieben.</i></p>
+
+						<p class="erklaerung-icon"><img src="../img/muelleimer.svg" width="20" height="20" alt=""><i>Redaktionsereignis löschen.</i> Die Löschung kann nicht rückgängig gemacht werden; Sie werden aber zuvor gefragt, ob Sie das Ereignis wirklich entfernen möchten.</p>
 					</div>
 				</section>
 
