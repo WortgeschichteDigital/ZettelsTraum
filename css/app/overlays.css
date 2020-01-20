@@ -1193,6 +1193,7 @@ p#quick-config-presets a {
 }
 
 #redaktion-cont .icon-link {
+	vertical-align: text-bottom;
 	background-color: var(--textExtremHell);
 }
 
