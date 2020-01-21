@@ -48,7 +48,7 @@
 				<h3>Entfernte Funktionen</h3>
 
 				<ul>
-					<li></li>
+					<li>Seit Version 0.15.0 wurde beim Starten der App die <span lang="en">Locale</span> (der Gebietsschemaparameter) <i>de</i> übergeben. Diese Anweisung wurde <strong>entfernt</strong>. Das Format der Datumsfelder folgt nun der Locale des Betriebssystems, auf dem <i class="app-name"></i> läuft.</li>
 				</ul>
 
 				<h3>Neue Funktionen</h3>
@@ -60,7 +60,15 @@
 				<h3>Verbesserungen</h3>
 
 				<ul>
-					<li></li>
+					<li>Im Hauptmenü der App gibt es nun ein neues <a href="#menueRedaktion" class="link-handbuch">Redaktionsmenü</a>. Es enthält vorerst nur den Punkt <i>Ereignisse</i>, hinter dem sich das seit langem vorhandene <a href="#menueRedaktion-ereignisse" class="link-handbuch">Fenster zum Eintragen von Redaktionsereignissen</a> verbirgt.</li>
+
+					<li><a href="#menueRedaktion-ereignisse" class="link-handbuch">Redaktionsereignisse</a>: Die Liste mit vordefinierten Ereignissen wurde überarbeitet und ergänzt.</li>
+
+					<li>Redaktionsereignisse: Neue Ereignisse können nun auch via Klick auf das Icon <img src="../img/plus-dick.svg" width="24" height="24" alt=""> hinzugefügt werden.</li>
+
+					<li>Die Nebenfenster <a href="#" class="link-handbuch">Handbuch</a> und <a href="#" class="link-dokumentation">technische Dokumentation</a> sind nun beim Öffnen ein bisschen höher als zuvor, damit alle Punkte des Navigationsmenüs sichtbar sind.</li>
+
+					<li><a href="#menueHilfe-updates" class="link-handbuch">Updates</a>: Scheitert der Download der Release-Notes wird dies im Update-Fenster angezeigt – wenn man die Suche manuell angestoßen hat. Außerdem werden nun im Fehlerlog mehr Fehler, die bei der Suche nach Updates auftreten können, als zuvor protokolliert.</li>
 				</ul>
 
 				<h3>Updates</h3>
@@ -152,7 +160,7 @@
 				<ul>
 					<li><a href="#belegliste" class="link-handbuch">Belegliste</a>: Sind sowohl der Annotierungsfilter (im Filterblock <a href="#filter-verschiedenes" class="link-handbuch">Verschiedenes</a>) als auch die <a href="#belegliste-kuerzung" class="link-handbuch">Kürzungsfunktion</a> aktiv, werden Absätze, die Annotierungen enthalten, fortan nicht mehr gekürzt. Dieses neue Verhalten betrifft auch Absätze mit transparenten Annotierungen, und zwar unabhängig davon, ob die <a href="#einstellungen-filterleisteTransparente" class="link-handbuch">Einstellung zum Einbeziehen transparenter Annotierungen</a> aktiviert ist oder nicht.</li>
 
-					<li>Erinnerungen: Wurden gewisse Formalien nicht eingehalten, erscheint schon seit Längerem im Kopf des Hauptfensters das Icon <img src="../img/kreis-ausrufezeichen.svg" width="24" height="24" alt="">. Fortan wird die NutzerIn auch darüber informiert, dass die Artikel- oder XML-Datei nicht <a href="#menueKartei-anhaenge" class="link-handbuch">an die Kartei angehängt</a> wurde, wenn die entsprechenden <a href="#menueKartei-redaktion" class="link-handbuch">Redaktionsereignisse</a> <i>Artikel erstellt</i> <abbr title="beziehungsweise">bzw.</abbr> <i>XML-Auszeichnung</i> vorhanden sind.</li>
+					<li>Erinnerungen: Wurden gewisse Formalien nicht eingehalten, erscheint schon seit Längerem im Kopf des Hauptfensters das Icon <img src="../img/kreis-ausrufezeichen.svg" width="24" height="24" alt="">. Fortan wird die NutzerIn auch darüber informiert, dass die Artikel- oder XML-Datei nicht <a href="#menueKartei-anhaenge" class="link-handbuch">an die Kartei angehängt</a> wurde, wenn die entsprechenden <a href="#menueRedaktion-ereignisse" class="link-handbuch">Redaktionsereignisse</a> <i>Artikel erstellt</i> <abbr title="beziehungsweise">bzw.</abbr> <i>XML-Auszeichnung</i> vorhanden sind.</li>
 
 					<li>Wortkarteien werden nicht mehr geöffnet, wenn die installierte Version von <i class="app-name"></i> veraltet ist und darum nicht mehr zur Version des Dateiformats der zu öffnenden Datei passt. Wurde das <abbr title="Zettel’s Traum JSON">ZTJ</abbr>-Format geändert, kann es beim Einlesen einer Datei neueren Formats durch eine veraltete Installation zu unvorhersehbaren Fehlern kommen. Die NutzerIn wird in einem solchen Fall aufgefordert, ein Update zu installieren.</li>
 
@@ -448,7 +456,7 @@
 
 					<li><a href="#menueKartei-metadaten" class="link-handbuch">Metadaten</a>: Die Person, die die Kartei zuletzt gespeichert hat, wird nun immer an den Anfang der Liste der BearbeiterInnen gesetzt. Zuvor war es so, dass die Liste nicht angerührt wurde, wenn derjenige, der eine Kartei gespeichert hat, bereits in der Liste stand.</li>
 
-					<li><a href="#menueKartei-redaktion" class="link-handbuch">Redaktion</a>: Wurde für ein Redaktionsereignis keine Person registriert, wird nun nicht mehr ein <q>?</q>, sondern der ausgegraute, kursive Text <q>keine Person</q> gedruckt. Das ist nicht nur schicker, sondern auch konsistenter mit der <abbr title="User Interface" lang="en">UI</abbr> der anderen Programmteile.</li>
+					<li><a href="#menueRedaktion-ereignisse" class="link-handbuch">Redaktion</a>: Wurde für ein Redaktionsereignis keine Person registriert, wird nun nicht mehr ein <q>?</q>, sondern der ausgegraute, kursive Text <q>keine Person</q> gedruckt. Das ist nicht nur schicker, sondern auch konsistenter mit der <abbr title="User Interface" lang="en">UI</abbr> der anderen Programmteile.</li>
 
 					<li><a href="#menueBelege-einfuegen" class="link-handbuch">Einfügen-Fenster</a>: Der Abschluss der Kopierfunktion hat nun auch ein Animations-Icon erhalten, um zu verdeutlichen, dass die Einfüge-Operation ausgeführt wurde: <img src="../img/einfuegen.svg" width="24" height="24" alt="">. Und die Animation des Reloads der Belegquellen ist nun schicker: Das Reload-Icon dreht sich einmal um sich selbst.</li>
 
@@ -465,7 +473,7 @@
 					<li>
 						<p>An verschiedenen Stellen des Programms wurden Platzhaltertexte für leere Textfelder ergänzt, sodass nun alle Textfelder einen solchen Platzhalter haben sollten. Er erscheint, wenn in dem Feld noch keine Eingabe getätigt wurde. Die <a href="#karteikarte" class="link-handbuch">Karteikarte</a> wurde davon ausgenommen, um das Formular nicht noch unruhiger zu machen.</p>
 
-						<p>Als Nebeneffekt dieser Änderung konnte die erklärende Kopfzeile im <a href="#menueKartei-redaktion" class="link-handbuch">Redaktions-Fenster</a> entfernt werden. Die Platzhalter übernehmen ihre Funktion.</p>
+						<p>Als Nebeneffekt dieser Änderung konnte die erklärende Kopfzeile im <a href="#menueRedaktion-ereignisse" class="link-handbuch">Redaktions-Fenster</a> entfernt werden. Die Platzhalter übernehmen ihre Funktion.</p>
 					</li>
 
 					<li>Die <a href="#menueApp-neuesFenster" class="link-handbuch">Startansicht</a> wurde technisch so verändert, dass die einzelnen Elemente (Buttons und Karteienliste) bei einer Navigation mit <kbd>Tab</kbd> nun fokussiert werden. (Dabei wurde im Vorübergehen ein kleinerer visueller Fehler behoben.)</li>

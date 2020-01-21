@@ -1178,6 +1178,11 @@ p#quick-config-presets a {
 	mask-image: url(../../img/pfeil-gerade-hoch.svg);
 }
 
+.icon-redaktion-hinzufuegen {
+	-webkit-mask-image: url(../../img/plus-dick.svg);
+	mask-image: url(../../img/plus-dick.svg);
+}
+
 .icon-redaktion-loeschen {
 	-webkit-mask-image: url(../../img/muelleimer.svg);
 	mask-image: url(../../img/muelleimer.svg);
@@ -1188,6 +1193,7 @@ p#quick-config-presets a {
 }
 
 #redaktion-cont .icon-link {
+	vertical-align: text-bottom;
 	background-color: var(--textExtremHell);
 }
 
@@ -1252,7 +1258,7 @@ p#quick-config-presets a {
 }
 
 input[id^="redaktion-datum"] {
-	width: 127px;
+	width: 130px;
 }
 
 input[id^="redaktion-ereignis"],

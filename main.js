@@ -88,11 +88,6 @@ function onError (err) {
 }
 
 
-/* LOCALE SETZEN ********************************/
-
-app.commandLine.appendSwitch("lang", "de"); // BUG funktioniert seit Electron 5.0.x nicht mehr: https://github.com/electron/electron/issues/17995
-
-
 /* SINGLE-INSTANCE ******************************/
 
 if (!app.requestSingleInstanceLock()) {
@@ -209,12 +204,6 @@ layoutMenu = [
 				click: () => appMenu.befehl("kartei-metadaten"),
 				id: "kartei-metadaten",
 			},
-			{
-				label: "Redaktion",
-				icon: path.join(__dirname, "img", "menu", "personen.png"),
-				click: () => appMenu.befehl("kartei-redaktion"),
-				id: "kartei-redaktion",
-			},
 			{ type: "separator" },
 			{
 				label: "Bedeutungsgerüst",
@@ -273,6 +262,17 @@ layoutMenu = [
 				label: "Einfügen",
 				icon: path.join(__dirname, "img", "menu", "einfuegen.png"),
 				click: () => appMenu.befehl("belege-einfuegen"),
+			},
+		],
+	},
+	{
+		label: "&Redaktion",
+		submenu: [
+			{
+				label: "Ereignisse",
+				icon: path.join(__dirname, "img", "menu", "personen.png"),
+				click: () => appMenu.befehl("redaktion-ereignisse"),
+				id: "redaktion-ereignisse",
 			},
 		],
 	},
@@ -584,7 +584,7 @@ appMenu = {
 			return;
 		}
 		// zu deaktivierende Menüpunkte durchgehen
-		let elemente = ["kartei-speichern", "kartei-speichern-unter", "kartei-formvarianten", "kartei-notizen", "kartei-anhaenge", "kartei-lexika", "kartei-metadaten", "kartei-redaktion", "kartei-bedeutungen", "kartei-bedeutungen-wechseln", "kartei-bedeutungen-fenster", "kartei-suche", "kartei-schliessen", "belege"];
+		let elemente = ["kartei-speichern", "kartei-speichern-unter", "kartei-formvarianten", "kartei-notizen", "kartei-anhaenge", "kartei-lexika", "kartei-metadaten", "kartei-bedeutungen", "kartei-bedeutungen-wechseln", "kartei-bedeutungen-fenster", "kartei-suche", "kartei-schliessen", "redaktion-ereignisse", "belege"];
 		for (let j = 0, len = layoutMenu.length; j < len; j++) {
 			// sollen vielleicht alle Menüpunkte deaktiviert werden?
 			let alle = false;
@@ -897,13 +897,13 @@ fenster = {
 			bounds.minHeight = 400;
 		} else if (typ === "dokumentation") {
 			title = "Technische Dokumentation";
-			if (bounds.height > 750) {
-				bounds.height = 750;
+			if (bounds.height > 825) {
+				bounds.height = 825;
 			}
 		} else if (typ === "handbuch") {
 			title = "Handbuch";
-			if (bounds.height > 750) {
-				bounds.height = 750;
+			if (bounds.height > 825) {
+				bounds.height = 825;
 			}
 		}
 		let opt = {

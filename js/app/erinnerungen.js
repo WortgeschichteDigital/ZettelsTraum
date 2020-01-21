@@ -12,7 +12,7 @@ let erinnerungen = {
 		},
 		redaktion: {
 			okay: false,
-			text: `Im Redaktionsfenster fehlen Angaben zu den BearbeiterInnen (<a href="#" class="link-erinnerung" data-funktion="redaktion">⇨ <i>Kartei &gt; Redaktion</i></a>).`,
+			text: `Im Redaktionsfenster fehlen Angaben zu den BearbeiterInnen (<a href="#" class="link-erinnerung" data-funktion="redaktion">⇨ <i>Redaktion &gt; Ereignisse</i></a>).`,
 		},
 		artikelDatei: {
 			okay: false,

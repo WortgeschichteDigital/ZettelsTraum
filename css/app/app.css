@@ -291,6 +291,10 @@ input[type="datetime-local"] {
 	width: 180px;
 }
 
+input[type="datetime-local"].lang-en {
+	width: 215px;
+}
+
 input[type="button"] {
 	outline: none;
 	margin: 0 0 0 15px;

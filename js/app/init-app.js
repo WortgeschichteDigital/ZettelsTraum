@@ -32,11 +32,11 @@ window.addEventListener("load", async () => {
 	ipcRenderer.on("kartei-anhaenge", () => anhaenge.fenster());
 	ipcRenderer.on("kartei-lexika", () => lexika.oeffnen());
 	ipcRenderer.on("kartei-metadaten", () => meta.oeffnen());
-	ipcRenderer.on("kartei-redaktion", () => redaktion.oeffnen());
 	ipcRenderer.on("kartei-bedeutungen", () => bedeutungen.oeffnen());
 	ipcRenderer.on("kartei-bedeutungen-wechseln", () => bedeutungenGeruest.oeffnen());
 	ipcRenderer.on("kartei-bedeutungen-fenster", () => bedeutungenWin.oeffnen());
 	ipcRenderer.on("kartei-suche", () => filter.suche());
+	ipcRenderer.on("redaktion-ereignisse", () => redaktion.oeffnen());
 	ipcRenderer.on("belege-hinzufuegen", () => {
 		// Sperre für macOS (Menüpunkte können nicht deaktiviert werden)
 		if (!kartei.wort) {
@@ -321,6 +321,13 @@ window.addEventListener("load", async () => {
 	// VISUELLE ANPASSUNGEN
 	// App-Namen eintragen
 	document.querySelectorAll(".app-name").forEach(i => i.textContent = appInfo.name);
+	// Breite Datumsfelder anpassen
+	const lang = helfer.checkLang();
+	if (!/^de/i.test(lang)) {
+		document.querySelectorAll(`[type="datetime-local"]`).forEach(i => {
+			i.classList.add("lang-en");
+		});
+	}
 	// macOS
 	if (process.platform === "darwin") {
 		// Option zum Ausblenden der Menüleiste verstecken
