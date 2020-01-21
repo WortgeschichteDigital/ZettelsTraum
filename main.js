@@ -204,12 +204,6 @@ layoutMenu = [
 				click: () => appMenu.befehl("kartei-metadaten"),
 				id: "kartei-metadaten",
 			},
-			{
-				label: "Redaktion",
-				icon: path.join(__dirname, "img", "menu", "personen.png"),
-				click: () => appMenu.befehl("kartei-redaktion"),
-				id: "kartei-redaktion",
-			},
 			{ type: "separator" },
 			{
 				label: "Bedeutungsgerüst",
@@ -268,6 +262,17 @@ layoutMenu = [
 				label: "Einfügen",
 				icon: path.join(__dirname, "img", "menu", "einfuegen.png"),
 				click: () => appMenu.befehl("belege-einfuegen"),
+			},
+		],
+	},
+	{
+		label: "&Redaktion",
+		submenu: [
+			{
+				label: "Ereignisse",
+				icon: path.join(__dirname, "img", "menu", "personen.png"),
+				click: () => appMenu.befehl("redaktion-ereignisse"),
+				id: "redaktion-ereignisse",
 			},
 		],
 	},
@@ -579,7 +584,7 @@ appMenu = {
 			return;
 		}
 		// zu deaktivierende Menüpunkte durchgehen
-		let elemente = ["kartei-speichern", "kartei-speichern-unter", "kartei-formvarianten", "kartei-notizen", "kartei-anhaenge", "kartei-lexika", "kartei-metadaten", "kartei-redaktion", "kartei-bedeutungen", "kartei-bedeutungen-wechseln", "kartei-bedeutungen-fenster", "kartei-suche", "kartei-schliessen", "belege"];
+		let elemente = ["kartei-speichern", "kartei-speichern-unter", "kartei-formvarianten", "kartei-notizen", "kartei-anhaenge", "kartei-lexika", "kartei-metadaten", "kartei-bedeutungen", "kartei-bedeutungen-wechseln", "kartei-bedeutungen-fenster", "kartei-suche", "kartei-schliessen", "redaktion-ereignisse", "belege"];
 		for (let j = 0, len = layoutMenu.length; j < len; j++) {
 			// sollen vielleicht alle Menüpunkte deaktiviert werden?
 			let alle = false;
