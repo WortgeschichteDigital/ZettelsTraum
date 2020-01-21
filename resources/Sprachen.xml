@@ -15,12 +15,12 @@
 	<item>
 		<id>2</id>
 		<name>altdänisch</name>
-		<abbr>adän.</abbr>
+		<abbr>adaen.</abbr>
 	</item>
 	<item>
 		<id>3</id>
 		<name>altenglisch</name>
-		<abbr>ae.</abbr>
+		<abbr>aengl.</abbr>
 	</item>
 	<item>
 		<id>4</id>
@@ -30,7 +30,7 @@
 	<item>
 		<id>5</id>
 		<name>altfriesisch</name>
-		<abbr>afrs.</abbr>
+		<abbr>afries.</abbr>
 	</item>
 	<item>
 		<id>6</id>
@@ -85,12 +85,12 @@
 	<item>
 		<id>16</id>
 		<name>altpreußisch</name>
-		<abbr>apreuß.</abbr>
+		<abbr>apreuss.</abbr>
 	</item>
 	<item>
 		<id>17</id>
 		<name>altsächsisch</name>
-		<abbr>as.</abbr>
+		<abbr>asaechs.</abbr>
 	</item>
 	<item>
 		<id>18</id>
@@ -115,7 +115,7 @@
 	<item>
 		<id>22</id>
 		<name>bretonisch</name>
-		<abbr>breton.</abbr>
+		<abbr>bret.</abbr>
 	</item>
 	<item>
 		<id>23</id>
@@ -134,13 +134,13 @@
 	</item>
 	<item>
 		<id>26</id>
-		<name>cornisch</name>
-		<abbr>corn.</abbr>
+		<name>kornisch</name>
+		<abbr>korn.</abbr>
 	</item>
 	<item>
 		<id>27</id>
 		<name>dänisch</name>
-		<abbr>dän.</abbr>
+		<abbr>daen.</abbr>
 	</item>
 	<item>
 		<id>28</id>
@@ -170,17 +170,17 @@
 	<item>
 		<id>33</id>
 		<name>frühmittelhochdeutsch</name>
-		<abbr>frmhd.</abbr>
+		<abbr>fruehmhd.</abbr>
 	</item>
 	<item>
 		<id>34</id>
 		<name>frühneuhochdeutsch</name>
-		<abbr>frnhd.</abbr>
+		<abbr>fruehnhd.</abbr>
 	</item>
 	<item>
 		<id>35</id>
 		<name>gälisch</name>
-		<abbr>gäl.</abbr>
+		<abbr>gael.</abbr>
 	</item>
 	<item>
 		<id>36</id>
@@ -195,7 +195,7 @@
 	<item>
 		<id>38</id>
 		<name>griechisch</name>
-		<abbr>gr.</abbr>
+		<abbr>griech.</abbr>
 	</item>
 	<item>
 		<id>39</id>
@@ -235,12 +235,11 @@
 	<item>
 		<id>46</id>
 		<name>italienisch</name>
-		<abbr>it.</abbr>
+		<abbr>ital.</abbr>
 	</item>
 	<item>
 		<id>47</id>
 		<name>italisch</name>
-		<abbr>ital.</abbr>
 	</item>
 	<item>
 		<id>48</id>
@@ -260,7 +259,7 @@
 	<item>
 		<id>51</id>
 		<name>langobardisch</name>
-		<abbr>langob.</abbr>
+		<abbr>langobard.</abbr>
 	</item>
 	<item>
 		<id>52</id>
@@ -295,7 +294,7 @@
 	<item>
 		<id>58</id>
 		<name>mittelenglisch</name>
-		<abbr>me.</abbr>
+		<abbr>mengl.</abbr>
 	</item>
 	<item>
 		<id>59</id>
@@ -320,7 +319,7 @@
 	<item>
 		<id>63</id>
 		<name>neugriechisch</name>
-		<abbr>ngr.</abbr>
+		<abbr>ngriech.</abbr>
 	</item>
 	<item>
 		<id>64</id>
@@ -350,7 +349,7 @@
 	<item>
 		<id>69</id>
 		<name>ostfriesisch</name>
-		<abbr>ofrs.</abbr>
+		<abbr>ostfries.</abbr>
 	</item>
 	<item>
 		<id>70</id>
@@ -375,7 +374,7 @@
 	<item>
 		<id>74</id>
 		<name>portugiesisch</name>
-		<abbr>portugies.</abbr>
+		<abbr>port.</abbr>
 	</item>
 	<item>
 		<id>75</id>
@@ -385,17 +384,17 @@
 	<item>
 		<id>76</id>
 		<name>rätoromanisch</name>
-		<abbr>rätoroman.</abbr>
+		<abbr>raetoroman.</abbr>
 	</item>
 	<item>
 		<id>77</id>
 		<name>romanisch</name>
-		<abbr>rom.</abbr>
+		<abbr>roman.</abbr>
 	</item>
 	<item>
 		<id>78</id>
 		<name>rumänisch</name>
-		<abbr>rumän.</abbr>
+		<abbr>rumaen.</abbr>
 	</item>
 	<item>
 		<id>79</id>
@@ -405,7 +404,7 @@
 	<item>
 		<id>80</id>
 		<name>Sanskrit</name>
-		<abbr>sanskr.</abbr>
+		<abbr>sanskrit</abbr>
 	</item>
 	<item>
 		<id>81</id>
@@ -420,7 +419,7 @@
 	<item>
 		<id>83</id>
 		<name>serbokroatisch</name>
-		<abbr>serbokroat.</abbr>
+		<abbr>serbokr.</abbr>
 	</item>
 	<item>
 		<id>84</id>
