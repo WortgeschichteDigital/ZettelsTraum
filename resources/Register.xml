@@ -104,4 +104,57 @@
 		<name>verhüllend</name>
 		<abbr>verhüll.</abbr>
 	</item>
+	<item>
+		<id>21</id>
+		<name>abwertend</name>
+		<abbr>abwert.</abbr>
+	</item>
+	<item>
+		<id>22</id>
+		<name>altertümelnd</name>
+		<abbr>altertüm.</abbr>
+	</item>
+	<item>
+		<id>23</id>
+		<name>anerkennend</name>
+		<abbr>anerk.</abbr>
+	</item>
+	<item>
+		<id>24</id>
+		<name>emphatisch</name>
+		<abbr>emphat.</abbr>
+	</item>
+	<item>
+		<id>25</id>
+		<name>familiär</name>
+		<abbr>famil.</abbr>
+	</item>
+	<item>
+		<id>26</id>
+		<name>höflich</name>
+		<abbr>höfl.</abbr>
+	</item>
+	<item>
+		<id>27</id>
+		<name>salopp</name>
+	</item>
+	<item>
+		<id>28</id>
+		<name>Schimpfwort</name>
+	</item>
+	<item>
+		<id>29</id>
+		<name>verstärkend</name>
+		<abbr>verstärk.</abbr>
+	</item>
+	<item>
+		<id>30</id>
+		<name>vertraulich</name>
+		<abbr>vertraul.</abbr>
+	</item>
+	<item>
+		<id>31</id>
+		<name>vulgär</name>
+		<abbr>vulg.</abbr>
+	</item>
 </register>
