@@ -145,6 +145,8 @@ let optionen = {
 			// KARTEIKARTE
 			// Karteikarte nach dem Speichern direkt schließen
 			"karteikarte-schliessen": false,
+			// keine Fehlermeldung anzeigen, wenn die Karteikarte nicht gespeichert werden konnte
+			"karteikarte-keine-fehlermeldung": false,
 			// neue Karteikarten als unvollständig markieren
 			unvollstaendig: false,
 			// Textfeld immer ergänzen, wenn aus einem Dropdown-Menü ein Wert
