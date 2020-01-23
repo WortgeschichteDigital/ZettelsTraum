@@ -330,6 +330,7 @@ let beleg = {
 				});
 			} else {
 				beleg.selectFormEle(da);
+				beleg.fehlerFormEle(da);
 			}
 			return false;
 		}
@@ -345,6 +346,7 @@ let beleg = {
 				});
 			} else {
 				beleg.selectFormEle(da);
+				beleg.fehlerFormEle(da);
 			}
 			return false;
 		}
@@ -361,6 +363,7 @@ let beleg = {
 				});
 			} else {
 				beleg.selectFormEle(bs);
+				beleg.fehlerFormEle(bs);
 			}
 			return false;
 		}
@@ -377,6 +380,7 @@ let beleg = {
 				});
 			} else {
 				beleg.selectFormEle(qu);
+				beleg.fehlerFormEle(qu);
 			}
 			return false;
 		}
@@ -500,6 +504,20 @@ let beleg = {
 			});
 		}
 		ele.select();
+	},
+	// visualisiert, dass in einem Elementfeld ein Fehler aufgetreten ist
+	// (wird nur aufgerufen, wenn Fehlermeldungen abgestellt wurden)
+	//   ele = Element
+	//     (das Element, das selektiert wird)
+	fehlerFormEle (ele) {
+		ele.classList.add("fehler");
+		ele.addEventListener("input", fehlerEntfernen);
+		ele.addEventListener("blur", fehlerEntfernen);
+		function fehlerEntfernen() {
+			ele.classList.remove("fehler");
+			ele.removeEventListener("input", fehlerEntfernen);
+			ele.removeEventListener("blur", fehlerEntfernen);
+		}
 	},
 	// Bearbeiten des Belegs beenden, Beleg also schließen
 	// (Der Button hieß früher "Abbrechen", darum heißt die Funktion noch so)
