@@ -320,48 +320,64 @@ let beleg = {
 		let da = document.getElementById("beleg-da"),
 			dav = helfer.textTrim(da.value, true);
 		if (!dav) {
-			dialog.oeffnen({
-				typ: "alert",
-				text: "Sie müssen ein Datum angeben.",
-				callback: () => {
-					beleg.selectFormEle(da);
-				},
-			});
+			if (!optionen.data.einstellungen["karteikarte-keine-fehlermeldung"]) {
+				dialog.oeffnen({
+					typ: "alert",
+					text: "Sie müssen ein Datum angeben.",
+					callback: () => {
+						beleg.selectFormEle(da);
+					},
+				});
+			} else {
+				beleg.selectFormEle(da);
+			}
 			return false;
 		}
 		// Test: Datum mit vierstelliger Jahreszahl oder Jahrhundertangabe?
 		if (!/[0-9]{4}|[0-9]{2}\.\sJh\./.test(dav)) {
-			dialog.oeffnen({
-				typ: "alert",
-				text: "Das Datum muss eine vierstellige Jahreszahl (z. B. „1813“) oder eine Jahrhundertangabe (z. B. „17. Jh.“) enthalten.\nZusätzlich können auch andere Angaben gemacht werden (z. B. „ca. 1815“, „1610, vielleicht 1611“).",
-				callback: () => {
-					beleg.selectFormEle(da);
-				},
-			});
+			if (!optionen.data.einstellungen["karteikarte-keine-fehlermeldung"]) {
+				dialog.oeffnen({
+					typ: "alert",
+					text: "Das Datum muss eine vierstellige Jahreszahl (z. B. „1813“) oder eine Jahrhundertangabe (z. B. „17. Jh.“) enthalten.\nZusätzlich können auch andere Angaben gemacht werden (z. B. „ca. 1815“, „1610, vielleicht 1611“).",
+					callback: () => {
+						beleg.selectFormEle(da);
+					},
+				});
+			} else {
+				beleg.selectFormEle(da);
+			}
 			return false;
 		}
 		// Test: Beleg angegeben?
 		let bs = document.getElementById("beleg-bs");
 		if (!helfer.textTrim(bs.value, true)) {
-			dialog.oeffnen({
-				typ: "alert",
-				text: "Sie müssen einen Beleg eingeben.",
-				callback: () => {
-					beleg.selectFormEle(bs);
-				},
-			});
+			if (!optionen.data.einstellungen["karteikarte-keine-fehlermeldung"]) {
+				dialog.oeffnen({
+					typ: "alert",
+					text: "Sie müssen einen Beleg eingeben.",
+					callback: () => {
+						beleg.selectFormEle(bs);
+					},
+				});
+			} else {
+				beleg.selectFormEle(bs);
+			}
 			return false;
 		}
 		// Test: Quelle angegeben?
 		let qu = document.getElementById("beleg-qu");
 		if (!helfer.textTrim(qu.value, true)) {
-			dialog.oeffnen({
-				typ: "alert",
-				text: "Sie müssen eine Quelle angeben.",
-				callback: () => {
-					beleg.selectFormEle(qu);
-				},
-			});
+			if (!optionen.data.einstellungen["karteikarte-keine-fehlermeldung"]) {
+				dialog.oeffnen({
+					typ: "alert",
+					text: "Sie müssen eine Quelle angeben.",
+					callback: () => {
+						beleg.selectFormEle(qu);
+					},
+				});
+			} else {
+				beleg.selectFormEle(qu);
+			}
 			return false;
 		}
 		// Beleg wurde nicht geändert
