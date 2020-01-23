@@ -23,16 +23,19 @@
 		<id>4</id>
 		<name>Gewerbesprache</name>
 	</item>
+<!--
 	<item>
 		<id>5</id>
 		<name>in der Sprache der DDR</name>
 		<abbr>DDR</abbr>
 	</item>
+-->
 	<item>
 		<id>6</id>
 		<name>in der Sprache der Kirche</name>
 		<abbr>Kirchensp.</abbr>
 	</item>
+<!--
 	<item>
 		<id>7</id>
 		<name>in der Sprache des Nationalsozialismus</name>
@@ -43,6 +46,7 @@
 		<name>in der Sprache des Sozialismus</name>
 		<abbr>Sozialis.</abbr>
 	</item>
+-->
 	<item>
 		<id>9</id>
 		<name>Jiddisch</name>

@@ -142,6 +142,10 @@
 	width: calc(100% - 31px);
 }
 
+#beleg input[type="text"].fehler {
+	outline-color: var(--textWarnung);
+}
+
 #beleg input[type="number"] {
 	margin-left: 10px;
 	width: 57px;

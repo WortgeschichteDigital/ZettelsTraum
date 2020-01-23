@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!DOCTYPE gebrauchszeitraum [
+	<!ELEMENT gebrauchszeitraum (item)+>
+	<!ELEMENT item (id, name, abbr?)>
+	<!ELEMENT id (#PCDATA)>
+	<!ELEMENT name (#PCDATA)>
+	<!ELEMENT abbr (#PCDATA)>
+]>
+<gebrauchszeitraum>
+	<item>
+		<id>1</id>
+		<name>in der Sprache der DDR</name>
+		<abbr>DDR</abbr>
+	</item>
+	<item>
+		<id>2</id>
+		<name>historisch</name>
+		<abbr>histor.</abbr>
+	</item>
+	<item>
+		<id>3</id>
+		<name>in der Sprache des Nationalsozialismus</name>
+		<abbr>Nationalsoz.</abbr>
+	</item>
+	<item>
+		<id>4</id>
+		<name>in der Sprache des Sozialismus</name>
+		<abbr>Sozialis.</abbr>
+	</item>
+</gebrauchszeitraum>
