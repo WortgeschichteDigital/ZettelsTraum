@@ -314,6 +314,10 @@ input[type="button"][value="Schließen"] {
 	background-image: url(../../img/x-dick-weiss.svg);
 }
 
+input[type="button"][value="Datei"] {
+	background-image: url(../../img/oeffnen-weiss.svg);
+}
+
 input[type="button"][value="DTA-Import"],
 input[type="button"][value="Importieren"],
 input[type="button"][value^="Personenliste"],

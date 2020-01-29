@@ -160,8 +160,47 @@
 	width: 135px;
 }
 
-#beleg-dwds-button {
+#beleg-dwds-button,
+#beleg-datei-importieren {
 	width: 135px;
+}
+
+#beleg-datei-oeffnen {
+	width: 85px;
+}
+
+#beleg-form-datei {
+	line-height: 30px;
+	text-align: right;
+}
+
+#beleg-datei-name {
+	display: inline-block;
+	vertical-align: bottom;
+	overflow: hidden;
+	width: calc(100% - 25px - 22px - 52px - 95px - 145px); /* margin, checkbox, label, button1, button2 */
+	max-width: calc(850px - 25px - 22px - 52px - 95px - 145px);
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+#beleg-datei-name.leer {
+	color: var(--textHell);
+	font-style: italic;
+}
+
+#beleg-form-datei label {
+	display: inline-block;
+	width: 52px;
+	text-align: left;
+}
+
+#beleg-form-datei input {
+	margin-left: 10px;
+}
+
+#beleg-form-datei input[type="checkbox"] {
+	margin-left: 25px;
 }
 
 #beleg textarea {

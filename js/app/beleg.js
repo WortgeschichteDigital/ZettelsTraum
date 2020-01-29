@@ -275,20 +275,45 @@ let beleg = {
 	},
 	// zwischen den Import-Formularen hin- und herschalten
 	//   src = String
-	//     (ID der Quelle, aus der importiert werden soll: dta || dwds)
+	//     (ID der Quelle, aus der importiert werden soll: dta || dwds || dereko || bibtex)
 	formularImport (src) {
-		let forms = ["beleg-form-dta", "beleg-form-dwds"];
-		for (let f of forms) {
-			let ele = document.getElementById(f),
-				radio = document.getElementById(`beleg-import-${f.replace(/.+-/, "")}`);
-			if (f.includes(src)) {
-				ele.classList.remove("aus");
-				radio.checked = true; // weil Wechsel nicht nur auf Klick, sondern auch automatisch
+		// Checkbox für ISO 8859-15 umstellen
+		let latin1 = document.getElementById("beleg-datei-latin1");
+		if (src === "dereko") {
+			latin1.checked = true;
+		} else {
+			latin1.checked = false;
+		}
+		// Radio-Buttons umstellen
+		// (weil Wechsel nicht nur auf Klick, sondern auch automatisch geschieht)
+		let radios = ["beleg-import-dta", "beleg-import-dwds", "beleg-import-dereko", "beleg-import-bibtex"];
+		for (let r of radios) {
+			let radio = document.getElementById(r);
+			if (r.includes(src)) {
+				radio.checked = true;
 			} else {
-				ele.classList.add("aus");
 				radio.checked = false;
 			}
-			ele.querySelector("input").focus();
+		}
+		// Formular umstellen
+		let forms = ["beleg-form-dta", "beleg-form-dwds", "beleg-form-datei"],
+			formsZiel = src;
+		if (/^(dereko|bibtex)/.test(src)) {
+			formsZiel = "datei";
+		}
+		for (let f of forms) {
+			let ele = document.getElementById(f);
+			if (f.includes(formsZiel)) {
+				ele.classList.remove("aus");
+			} else {
+				ele.classList.add("aus");
+			}
+			if (/^(dereko|bibtex)/.test(src)) {
+				let inputs = ele.querySelectorAll("input");
+				inputs[inputs.length - 1].focus();
+			} else {
+				ele.querySelector("input").focus();
+			}
 		}
 	},
 	// Aktionen beim Klick auf einen Formular-Button
