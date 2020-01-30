@@ -1086,7 +1086,11 @@ let belegImport = {
 		};
 	},
 	// Datei-Import: speichert die Daten der geladenen Datei zwischen
-	DateiData: [],
+	Datei: {
+		pfad: "", // Pfad zur Datei
+		typ: "", // Typ der Datei (dereko || bibtex)
+		data: [], // Daten der Datei
+	},
 	// Datei-Import: öffnet eine Datei und liest sie ein
 	async DateiOeffnen () {
 		// Optionen
