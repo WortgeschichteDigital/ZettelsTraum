@@ -301,19 +301,28 @@ let beleg = {
 		if (/^(dereko|bibtex)/.test(src)) {
 			formsZiel = "datei";
 		}
+		let eleAktiv = null;
 		for (let f of forms) {
 			let ele = document.getElementById(f);
 			if (f.includes(formsZiel)) {
 				ele.classList.remove("aus");
+				eleAktiv = ele;
 			} else {
 				ele.classList.add("aus");
 			}
-			if (/^(dereko|bibtex)/.test(src)) {
-				let inputs = ele.querySelectorAll("input");
+		}
+		// Fokus setzen
+		if (/^(dereko|bibtex)$/.test(src)) {
+			let inputs = eleAktiv.querySelectorAll("input");
+			if (belegImport.Datei.data.length) {
 				inputs[inputs.length - 1].focus();
 			} else {
-				ele.querySelector("input").focus();
+				inputs[inputs.length - 2].focus();
 			}
+			// ggf. Dateiname eintragen
+			beleg.formularImportDatei(src);
+		} else {
+			eleAktiv.querySelector("input").focus();
 		}
 	},
 	// Aktionen beim Klick auf einen Formular-Button
