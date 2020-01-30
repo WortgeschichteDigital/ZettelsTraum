@@ -625,7 +625,7 @@ let kartei = {
 	lockRead (lockfile) {
 		return new Promise(resolve => {
 			const fsP = require("fs").promises;
-			fsP.readFile(lockfile, {encoding: "utf-8"})
+			fsP.readFile(lockfile, {encoding: "utf8"})
 				.then(content => resolve(content))
 				.catch(err => {
 					dialog.oeffnen({

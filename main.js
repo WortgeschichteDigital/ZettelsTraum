@@ -701,7 +701,7 @@ optionen = {
 		if (!exists) {
 			return;
 		}
-		let content = await fsP.readFile(optionen.pfad, {encoding: "utf-8"});
+		let content = await fsP.readFile(optionen.pfad, {encoding: "utf8"});
 		try {
 			optionen.data = JSON.parse(content);
 		} catch (err) {

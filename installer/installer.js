@@ -40,7 +40,7 @@ module.exports = {
 	getKeywords () {
 		return new Promise(resolve => {
 			fsPromises.readFile("./package.json", {
-				encoding: "utf-8",
+				encoding: "utf8",
 			})
 				.then(result => {
 					resolve(JSON.parse(result).keywords.join(";"));
