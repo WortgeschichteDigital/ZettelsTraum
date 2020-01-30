@@ -1164,6 +1164,14 @@ let belegImport = {
 	//   pfad = String
 	//     (Pfad zur Datei)
 	DeReKo (content, pfad) {
+		// DeReKo-Datei?
+		if (!/^© Leibniz-Institut für Deutsche Sprache, Mannheim/.test(content)) {
+			dialog.oeffnen({
+				typ: "alert",
+				text: `Beim Lesen der Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">Datei stammt nicht aus COSMAS II</p>`,
+			});
+			return;
+		}
 		// TODO Daten einlesen
 		// Metadaten zur geladenen Datei auffrischen
 		// (je nachdem, ob Daten gefunden wurden oder nicht)
