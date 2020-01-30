@@ -1145,9 +1145,9 @@ let belegImport = {
 		fsP.readFile(result.filePaths[0], {encoding: encoding})
 			.then(content => {
 				if (document.getElementById("beleg-import-dereko").checked) {
-					belegImport.DeReKo(content);
+					belegImport.DeReKo(content, result.filePaths[0]);
 				} else if (document.getElementById("beleg-import-bibtex").checked) {
-					belegImport.BibTeX(content);
+					belegImport.BibTeX(content, result.filePaths[0]);
 				}
 			})
 			.catch(err => {
@@ -1159,8 +1159,25 @@ let belegImport = {
 			});
 	},
 	// DeReKo-Import: Datei parsen
-	DeReKo (content) {
-		
+	//   content = String
+	//     (Inhalt der Datei)
+	//   pfad = String
+	//     (Pfad zur Datei)
+	DeReKo (content, pfad) {
+		// TODO Daten einlesen
+		// Metadaten zur geladenen Datei auffrischen
+		// (je nachdem, ob Daten gefunden wurden oder nicht)
+		let dataPfad = "",
+			dataTyp = "";
+		if (belegImport.Datei.data.length) {
+			dataPfad = pfad;
+			dataTyp = "dereko";
+		}
+		belegImport.Datei.pfad = dataPfad;
+		belegImport.Datei.typ = dataTyp;
+		// Anzeige im Karteikartenformular auffrischen
+		beleg.formularImportDatei("dereko");
+		// TODO Import-Fenster öffnen oder Daten direkt importieren
 	},
 	// BibTeX-Import: Datei parsen
 	BibTeX (content) {
