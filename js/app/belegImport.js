@@ -1153,7 +1153,7 @@ let belegImport = {
 			.catch(err => {
 				dialog.oeffnen({
 					typ: "alert",
-					text: `Beim Lesen der Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.name}: ${err.message}</p>`
+					text: `Beim Lesen der Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.name}: ${err.message}</p>`,
 				});
 				throw err;
 			});
