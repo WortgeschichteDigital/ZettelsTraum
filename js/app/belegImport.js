@@ -1085,6 +1085,83 @@ let belegImport = {
 			xml: xmlDoc
 		};
 	},
+	// Datei-Import: speichert die Daten der geladenen Datei zwischen
+	DateiData: [],
+	// Datei-Import: öffnet eine Datei und liest sie ein
+	async DateiOeffnen () {
+		// Optionen
+		let opt = {
+			title: "Datei öffnen",
+			defaultPath: appInfo.documents,
+			filters: [
+				{
+					name: "Alle Dateien",
+					extensions: ["*"],
+				},
+			],
+			properties: [
+				"openFile",
+			],
+		};
+		if (document.getElementById("beleg-import-dereko").checked) {
+			opt.filters.push({
+				name: `Text-Datei`,
+				extensions: ["txt"],
+			});
+		} else if (document.getElementById("beleg-import-bibtex").checked) {
+			opt.filters.push({
+				name: `BibTeX-Datei`,
+				extensions: ["bib", "bibtex"],
+			});
+		}
+		// Dialog anzeigen
+		const {ipcRenderer} = require("electron");
+		let result = await ipcRenderer.invoke("datei-dialog", {
+			open: true,
+			winId: winInfo.winId,
+			opt: opt,
+		});
+		// Fehler oder keine Datei ausgewählt
+		if (result.message || !Object.keys(result).length) {
+			dialog.oeffnen({
+				typ: "alert",
+				text: `Beim Öffnen des Dateidialogs ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${result.message}</p>`,
+			});
+			return;
+		} else if (result.canceled) {
+			return;
+		}
+		// Encoding ermitteln
+		let encoding = "utf8";
+		if (document.getElementById("beleg-datei-latin1").checked) {
+			encoding = "latin1";
+		}
+		// Datei einlesen
+		const fsP = require("fs").promises;
+		fsP.readFile(result.filePaths[0], {encoding: encoding})
+			.then(content => {
+				if (document.getElementById("beleg-import-dereko").checked) {
+					belegImport.DeReKo(content);
+				} else if (document.getElementById("beleg-import-bibtex").checked) {
+					belegImport.BibTeX(content);
+				}
+			})
+			.catch(err => {
+				dialog.oeffnen({
+					typ: "alert",
+					text: `Beim Lesen der Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.name}: ${err.message}</p>`
+				});
+				throw err;
+			});
+	},
+	// DeReKo-Import: Datei parsen
+	DeReKo (content) {
+		
+	},
+	// BibTeX-Import: Datei parsen
+	BibTeX (content) {
+		
+	},
 	// überprüft, ob das Wort im importierten Text gefunden wurde
 	checkWort () {
 		if (!beleg.data.bs || !optionen.data.einstellungen["wort-check"]) {

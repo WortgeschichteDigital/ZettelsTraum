@@ -332,6 +332,8 @@ let beleg = {
 				belegImport.DTA();
 			} else if (aktion === "dwds-button") {
 				belegImport.DWDS();
+			} else if (aktion === "datei-oeffnen") {
+				belegImport.DateiOeffnen();
 			}
 		});
 	},
