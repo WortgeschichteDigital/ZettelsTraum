@@ -325,6 +325,20 @@ let beleg = {
 			eleAktiv.querySelector("input").focus();
 		}
 	},
+	// ggf. Dateiname eintragen
+	//   src = String
+	//     (ID der Quelle, aus der importiert werden soll: dereko || bibtex)
+	formularImportDatei (src) {
+		let name = document.getElementById("beleg-datei-name");
+		if (src === "dereko" && belegImport.Datei.typ === "dereko" ||
+				src === "bibtex" && belegImport.Datei.typ === "bibtex") {
+			name.textContent = `\u200E${belegImport.Datei.pfad}\u200E`; // vgl. meta.oeffnen()
+			name.classList.remove("leer");
+		} else {
+			name.textContent = "keine Datei geladen";
+			name.classList.add("leer");
+		}
+	},
 	// Aktionen beim Klick auf einen Formular-Button
 	//   button = Element
 	//     (der Button, auf den geklickt wurde)
