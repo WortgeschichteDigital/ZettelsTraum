@@ -1158,7 +1158,7 @@ let belegImport = {
 				throw err;
 			});
 	},
-	// Metadaten auffrischen
+	// Datei-Import: Metadaten auffrischen
 	//   pfad = String
 	//     (Pfad zur geladenen Datei)
 	//   typ = String
@@ -1187,14 +1187,29 @@ let belegImport = {
 			});
 			return;
 		}
-		// TODO Daten einlesen
+		// Daten einlesen
+		belegImport.DeReKoLesen(content);
 		// Metadaten auffrischen
 		belegImport.DateiMeta(pfad, "dereko");
 		// Anzeige im Karteikartenformular auffrischen
 		beleg.formularImportDatei("dereko");
 		// TODO Import-Fenster öffnen oder Daten direkt importieren
 	},
+	// DeReKo-Import: Belege einlesen
+	//   content = String
+	//     (Inhalt der Datei)
+	DeReKoLesen (content) {
+		// Zwischenspeicher zurücksetzen
+		belegImport.Datei.data = [];
+		// Daten extrahieren
+		let meta = content.match(/Datum\s+:.+?\n\n/s),
+			belege = content.match(/Belege \(.+?_{5,}\n\n(.+)/s);
+		// TODO Daten analysieren
+		// meta[0], belege[1]
+	},
 	// BibTeX-Import: Datei parsen
+	//   content = String
+	//     (Inhalt der Datei)
 	BibTeX (content) {
 		
 	},
