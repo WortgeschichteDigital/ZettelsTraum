@@ -1090,7 +1090,7 @@ let belegImport = {
 		pfad: "", // Pfad zur Datei
 		typ: "", // Typ der Datei (dereko || bibtex)
 		meta: "", // Metadaten für alle Belege in belegImport.Datei.data
-		data: [], // Daten der Datei
+		data: [], // Daten der Datei; s. pushBeleg()
 	},
 	// Datei-Import: öffnet eine Datei und liest sie ein
 	async DateiOeffnen () {
@@ -1200,8 +1200,6 @@ let belegImport = {
 	//   content = String
 	//     (Inhalt der Datei)
 	DeReKoLesen (content) {
-		// Zwischenspeicher zurücksetzen
-		belegImport.Datei.data = [];
 		// Daten extrahieren
 		let meta = content.match(/\nDatum\s+:.+?\n\n/s),
 			belege = content.match(/\nBelege \(.+?_{5,}\n\n(.+)/s);
@@ -1219,9 +1217,9 @@ let belegImport = {
 			});
 			return;
 		}
-		// TODO Daten analysieren
+		// Daten analysieren
 		belegImport.DeReKoLesenMeta(meta[0]);
-		// belege[1]
+		belegImport.DeReKoLesenBelege(belege[1].trim());
 	},
 	// DeReKo-Import: Metadaten parsen
 	//   meta = String
@@ -1235,6 +1233,77 @@ let belegImport = {
 			if (treffer && treffer.length === 3) {
 				belegImport.Datei.meta += `\n${treffer[1]}:${treffer[2]}`;
 			}
+		}
+	},
+	// DeReKo-Import: Belege parsen
+	//   belege = String
+	//     (die exportierte Belegreihe)
+	DeReKoLesenBelege (belege) {
+		// Zwischenspeicher zurücksetzen
+		belegImport.Datei.data = [];
+		// Zeilen analysieren
+		let regId = "[a-zA-Z0-9]+?\\/[a-zA-Z0-9]+?\\.[0-9]+?\\s",
+			regQuVor = new RegExp(`^(${regId})(.+)`),
+			regQuNach = new RegExp(`\\s\\((${regId})(.+)\\)$`),
+			regQuNachId = new RegExp(`\\s\\(${regId}`),
+			id = "",
+			quelle = "",
+			beleg = [];
+		for (let zeile of belege.split("\n")) {
+			if (!zeile) { // Leerzeile
+				pushBeleg();
+				continue;
+			}
+			// vorangestellte Quelle
+			if (regQuVor.test(zeile)) {
+				let match = zeile.match(regQuVor);
+				id = match[1];
+				quelle = match[2];
+				continue;
+			}
+			// nachgestellte Quelle
+			if (regQuNach.test(zeile)) {
+				let match = zeile.match(regQuNach);
+				id = match[1];
+				quelle = match[2];
+				zeile = zeile.split(regQuNachId)[0];
+			}
+			beleg.push(zeile.replace(/<B>|<\/B*>/g, "").trim());
+		}
+		pushBeleg();
+		// Beleg pushen
+		function pushBeleg () {
+			if (!quelle || !beleg.length) {
+				return;
+			}
+			// Datensatz füllen
+			let data = {
+				importiert: false,
+				ds: {
+					au: "", // Autor
+					bs: beleg.join("\n\n"), // Beleg
+					bx: `${id}${quelle}\n\n${beleg.join("\n")}`, // Original
+					da: "", // Belegdatum
+					kr: "IDS-Archiv", // Korpus
+					no: belegImport.Datei.meta, // Notizen
+					qu: quelle, // Quellenangabe
+					ts: "", // Textsorte
+				},
+			};
+			let autor = quelle.split(":");
+			if (/[^\s]+|^[^,]+,\s[^,]+$/.test(autor[0])) {
+				data.ds.au = autor[0];
+			}
+			data.ds.da = xml.datum(quelle);
+			if (/\[Tageszeitung\]/.test(quelle)) {
+				data.ds.ts = "Zeitung: Tageszeitung";
+				data.ds.qu = quelle.replace(/,*\s*\[Tageszeitung\]/g, "");
+			}
+			belegImport.Datei.data.push(data);
+			// Beleg-Daten zurücksetzen
+			id = "";
+			quelle = "";
+			beleg = [];
 		}
 	},
 	// BibTeX-Import: Datei parsen
