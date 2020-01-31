@@ -1183,7 +1183,7 @@ let belegImport = {
 		if (!/^© Leibniz-Institut für Deutsche Sprache, Mannheim/.test(content)) {
 			dialog.oeffnen({
 				typ: "alert",
-				text: `Beim Lesen der Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">Datei stammt nicht aus COSMAS II</p>`,
+				text: `Beim Einlesen des Dateiinhalts ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">Datei stammt nicht aus COSMAS II</p>`,
 			});
 			return;
 		}
