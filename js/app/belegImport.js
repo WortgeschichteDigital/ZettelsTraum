@@ -1158,6 +1158,21 @@ let belegImport = {
 				throw err;
 			});
 	},
+	// Metadaten auffrischen
+	//   pfad = String
+	//     (Pfad zur geladenen Datei)
+	//   typ = String
+	//     (Typ der Datei, also dereko || bibtex)
+	DateiMeta (pfad, typ) {
+		let dataPfad = "",
+		dataTyp = "";
+		if (belegImport.Datei.data.length) {
+			dataPfad = pfad;
+			dataTyp = typ;
+		}
+		belegImport.Datei.pfad = dataPfad;
+		belegImport.Datei.typ = dataTyp;
+	},
 	// DeReKo-Import: Datei parsen
 	//   content = String
 	//     (Inhalt der Datei)
@@ -1173,16 +1188,8 @@ let belegImport = {
 			return;
 		}
 		// TODO Daten einlesen
-		// Metadaten zur geladenen Datei auffrischen
-		// (je nachdem, ob Daten gefunden wurden oder nicht)
-		let dataPfad = "",
-			dataTyp = "";
-		if (belegImport.Datei.data.length) {
-			dataPfad = pfad;
-			dataTyp = "dereko";
-		}
-		belegImport.Datei.pfad = dataPfad;
-		belegImport.Datei.typ = dataTyp;
+		// Metadaten auffrischen
+		belegImport.DateiMeta(pfad, "dereko");
 		// Anzeige im Karteikartenformular auffrischen
 		beleg.formularImportDatei("dereko");
 		// TODO Import-Fenster öffnen oder Daten direkt importieren
