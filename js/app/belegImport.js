@@ -1089,6 +1089,7 @@ let belegImport = {
 	Datei: {
 		pfad: "", // Pfad zur Datei
 		typ: "", // Typ der Datei (dereko || bibtex)
+		meta: "", // Metadaten für alle Belege in belegImport.Datei.data
 		data: [], // Daten der Datei
 	},
 	// Datei-Import: öffnet eine Datei und liest sie ein
@@ -1219,7 +1220,22 @@ let belegImport = {
 			return;
 		}
 		// TODO Daten analysieren
-		// meta[0], belege[1]
+		belegImport.DeReKoLesenMeta(meta[0]);
+		// belege[1]
+	},
+	// DeReKo-Import: Metadaten parsen
+	//   meta = String
+	//     (Metadaten zum Export, die für alle Belege gelten)
+	DeReKoLesenMeta (meta) {
+		belegImport.Datei.meta = "";
+		let daten = ["Datum", "Archiv", "Korpus", "Suchanfrage"];
+		for (let d of daten) {
+			let reg = new RegExp(`(${d})\\s*:(.+)`),
+				treffer = meta.match(reg);
+			if (treffer && treffer.length === 3) {
+				belegImport.Datei.meta += `\n${treffer[1]}:${treffer[2]}`;
+			}
+		}
 	},
 	// BibTeX-Import: Datei parsen
 	//   content = String
