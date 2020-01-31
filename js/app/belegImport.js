@@ -1202,8 +1202,22 @@ let belegImport = {
 		// Zwischenspeicher zurücksetzen
 		belegImport.Datei.data = [];
 		// Daten extrahieren
-		let meta = content.match(/Datum\s+:.+?\n\n/s),
-			belege = content.match(/Belege \(.+?_{5,}\n\n(.+)/s);
+		let meta = content.match(/\nDatum\s+:.+?\n\n/s),
+			belege = content.match(/\nBelege \(.+?_{5,}\n\n(.+)/s);
+		// wichtige Daten nicht gefunden?
+		let fehler = "";
+		if (!meta || !meta[0]) {
+			fehler = "Metadaten nicht gefunden";
+		} else if (!belege || !belege[1]) {
+			fehler = "Belege nicht gefunden";
+		}
+		if (fehler) {
+			dialog.oeffnen({
+				typ: "alert",
+				text: `Beim Einlesen des Dateiinhalts ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${fehler}</p>`,
+			});
+			return;
+		}
 		// TODO Daten analysieren
 		// meta[0], belege[1]
 	},
