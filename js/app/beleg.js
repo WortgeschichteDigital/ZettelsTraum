@@ -184,16 +184,16 @@ let beleg = {
 		if (neu && !beleg.leseansicht) {
 			// Was ist in der Zwischenablage?
 			const {clipboard} = require("electron"),
-				cp = clipboard.readText();
+				cp = clipboard.readText(),
+				dwds = belegImport.DWDSXMLCheck(cp);
 			if (/^https?:\/\/www\.deutschestextarchiv\.de\//.test(cp)) { // DTA-URL
 				beleg.formularImport("dta");
+			} else if (!helfer.checkType("Number", dwds)) { // DWDS-Snippet
+				beleg.formularImport("dwds");
+			} else if (belegImport.Datei.data.length) {
+				beleg.formularImport(belegImport.Datei.typ);
 			} else {
-				let dwds = belegImport.DWDSXMLCheck(cp);
-				if (helfer.checkType("Number", dwds)) { // kein oder fehlerhaftes DWDS-Snippet
-					feldDa.focus();
-				} else { // DWDS-Snippet
-					beleg.formularImport("dwds");
-				}
+				feldDa.focus();
 			}
 		} else if (!beleg.leseansicht) {
 			feldDa.focus();
