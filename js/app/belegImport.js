@@ -1183,12 +1183,7 @@ let belegImport = {
 	},
 	// Datei-Import: Verteilerfunktion für das Importieren eingelesener Datensätze
 	DateiImport () {
-		// nur ein Datensatz vorhanden => direkt importieren
-		if (belegImport.Datei.data.length === 1) {
-			belegImport.DateiImportAusfuehren(0);
-			return;
-		}
-		// ggf. Fenster zum Auswahl des zu importierenden Datensatzes öffnen
+		// Kann überhaupt etwas importiert werden?
 		let importTypAktiv = "dereko";
 		if (document.getElementById("beleg-import-bibtex").checked) {
 			importTypAktiv = "bibtex";
@@ -1204,7 +1199,14 @@ let belegImport = {
 			});
 			return;
 		}
-		belegImport.DateiImportFenster();
+		// direkt importieren oder Importfenster öffnen
+		if (belegImport.Datei.data.length === 1) {
+			// nur ein Datensatz vorhanden => direkt importieren
+			belegImport.DateiImportAusfuehren(0);
+		} else {
+			// mehrere Datensätze vorhanden => Importfenster öffnen
+			belegImport.DateiImportFenster();
+		}
 	},
 	// Datei-Import: Overlay-Fenster mit der Liste der eingelesenen Belege öffnen
 	DateiImportFenster () {
