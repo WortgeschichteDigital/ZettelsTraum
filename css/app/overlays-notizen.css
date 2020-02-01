@@ -1,0 +1,87 @@
+@charset "utf-8";
+
+/* Notizen -------------------------------------- */
+#notizen > div {
+	margin-top: 40px;
+	max-width: 800px;
+}
+
+.icon-h-notizen {
+	-webkit-mask-image: url(../../img/stift.svg);
+	mask-image: url(../../img/stift.svg);
+}
+
+/* Content -------------------------------------- */
+#notizen-cont {
+	padding: 10px;
+}
+
+#notizen-cont > p span:not(:first-child) {
+	margin-left: 24px;
+}
+
+#notizen-cont .icon-link {
+	background-color: var(--textExtremHell);
+}
+
+#notizen-cont .icon-link:hover {
+	background-color: var(--text);
+}
+
+#notizen-cont .icon-link:focus {
+	background-color: var(--farbe);
+}
+
+#notizen-cont > p:last-child {
+	position: relative;
+	margin: 10px 0 0 0;
+}
+
+#notizen-cont > p:last-child input:first-child {
+	margin-left: 0;
+}
+
+#notizen-cont > p:last-child input:last-child {
+	position: absolute;
+	right: 0;
+}
+
+#notizen-geaendert {
+	display: inline-block;
+	margin-left: 5px;
+}
+
+/* Notizenfeld ---------------------------------- */
+#notizen-feld {
+	border: 1px solid var(--linie);
+	padding: 2px 5px;
+	width: calc(100% - 12px);
+	min-height: 192px;
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+
+#notizen-feld:focus {
+	outline: 1px solid var(--farbe);
+	border-color: var(--farbe);
+}
+
+#notizen-feld h3,
+#filter-notizen-content h3 {
+	margin: 25px 0 10px 0;
+	font-size: 18px;
+	line-height: 28px;
+}
+
+#notizen-feld h3:first-child,
+#filter-notizen-content h3:first-child {
+	margin-top: 0;
+}
+
+#notizen-feld ul,
+#filter-notizen-content ul,
+#notizen-feld ol,
+#filter-notizen-content ol {
+	margin: 0;
+	padding: 0 0 0 25px;
+}

@@ -1,0 +1,102 @@
+@charset "utf-8";
+
+/* Anhänge -------------------------------------- */
+#anhaenge > div {
+	margin-top: 40px;
+	max-width: 550px;
+}
+
+.icon-h-anhaenge {
+	-webkit-mask-image: url(../../img/bueroklammer.svg);
+	mask-image: url(../../img/bueroklammer.svg);
+}
+
+#anhaenge-rahmen {
+	padding: 10px;
+}
+
+#anhaenge-cont {
+	max-height: 351px;
+	overflow-y: auto;
+}
+
+#anhaenge-cont h3 {
+	margin-bottom: 5px;
+}
+
+#anhaenge-cont p:last-child {
+	margin-bottom: 0;
+}
+
+.anhaenge-add {
+	text-align: center;
+}
+
+.anhaenge-add input {
+	margin-left: 0;
+}
+
+.anhaenge-item {
+	border-top: 1px solid var(--linie);
+	padding: 5px 10px;
+	height: 24px;
+	background-color: #fff;
+}
+
+.anhaenge-item:last-child {
+	border-bottom: 1px solid var(--linie);
+}
+
+.anhaenge-item ~ h3 {
+	margin-top: 0;
+	border-top: 1px solid var(--linie);
+	padding-top: 20px;
+}
+
+.anhaenge-item:hover {
+	background-color: var(--hover);
+}
+
+.anhaenge-item img {
+	margin-right: 10px;
+}
+
+.anhaenge-datei {
+	display: inline-block;
+	vertical-align: top;
+	width: calc(100% - 34px * 3); /* 24px Image, 10px Margin */
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.anhaenge-item a {
+	margin-left: 10px;
+	vertical-align: top;
+	background-color: var(--textExtremHell);
+}
+
+.anhaenge-item a:focus {
+	background-color: var(--farbe);
+}
+
+.anhaenge-item a:hover {
+	background-color: var(--text);
+}
+
+.anhaenge-aufwaerts {
+	-webkit-mask-image: url(../../img/pfeil-gerade-hoch.svg);
+	mask-image: url(../../img/pfeil-gerade-hoch.svg);
+}
+
+.anhaenge-loeschen {
+	-webkit-mask-image: url(../../img/muelleimer.svg);
+	mask-image: url(../../img/muelleimer.svg);
+}
+
+.anhaenge-platzhalter {
+	display: inline-block;
+	margin-left: 10px;
+	width: 24px;
+	height: 24px;
+}

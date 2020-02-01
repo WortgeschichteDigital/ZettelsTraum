@@ -1,0 +1,221 @@
+@charset "utf-8";
+
+/* Karteisuche ---------------------------------- */
+#karteisuche > div {
+	position: relative;
+	margin-top: 40px;
+	max-width: 1200px;
+}
+
+.icon-h-karteisuche {
+	-webkit-mask-image: url(../../img/lupe.svg);
+	mask-image: url(../../img/lupe.svg);
+}
+
+/* Suche läuft ---------------------------------- */
+#karteisuche-suche-laeuft {
+	position: absolute;
+	top: 28px;
+	left: 0;
+	z-index: 1;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	border-bottom-right-radius: 10px;
+	border-bottom-left-radius: 10px;
+	width: 100%;
+	height: calc(100% - 28px); /* 28px Kopfleiste */
+	background-color: rgba(255, 255, 255, .7);
+	color: var(--farbe);
+	font-size: 30px;
+	font-style: italic;
+	font-weight: bold;
+	backdrop-filter: blur(2px);
+}
+
+#karteisuche-suche-laeuft span {
+	display: inline-block;
+	width: 25px;
+}
+
+/* Content -------------------------------------- */
+#karteisuche-cont {
+	display: grid;
+	grid-template-columns: repeat(2, 50%);
+	padding: 10px;
+}
+
+#karteisuche-cont > div:last-child {
+	/* Trick, horizontal überlaufende Filter-Inputs zu verbergen,
+			die Dropdown-Menüs aber vertikal ausbrechen zu lassen */
+	position: relative;
+	padding-left: 30px;
+	background-color: #fff;
+}
+
+#karteisuche-cont input[type="button"] {
+	margin-left: 0;
+}
+
+/* Filter --------------------------------------- */
+#karteisuche-pfade p {
+	height: 24px;
+}
+
+#karteisuche-pfade a,
+#karteisuche-add-filter a {
+	margin-right: 10px;
+	vertical-align: top;
+	background-color: var(--textExtremHell);
+}
+
+#karteisuche-pfade a:focus,
+#karteisuche-add-filter a:focus {
+	background-color: var(--farbe);
+}
+
+#karteisuche-pfade a:hover,
+#karteisuche-add-filter a:hover {
+	background-color: var(--text);
+}
+
+#karteisuche-pfade .add,
+#karteisuche-add-filter {
+	margin-bottom: 10px;
+	width: fit-content;
+	color: var(--textHell);
+	font-style: italic;
+}
+
+#karteisuche-pfade .add:hover,
+#karteisuche-add-filter:hover {
+	color: var(--text);
+}
+
+#karteisuche-pfade .add:hover a,
+#karteisuche-add-filter:hover a {
+	background-color: var(--text);
+}
+
+#karteisuche-pfade span {
+	display: inline-block;
+	width: calc(100% - 34px);
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+#karteisuche-pfade input {
+	margin-left: 1px; /* damit beim Fokus das Outline links nicht abgeschnitten wird */
+}
+
+#karteisuche-pfade img {
+	vertical-align: top;
+}
+
+#karteisuche-add-filter {
+	margin: 0;
+}
+
+#karteisuche-filter p {
+	margin: 10px 0 0 0;
+	white-space: nowrap;
+}
+
+#karteisuche-filter p > a {
+	vertical-align: text-bottom;
+	background-color: var(--textExtremHell);
+}
+
+#karteisuche-filter p > a:hover {
+	background-color: var(--text);
+}
+
+#karteisuche-filter p > a:focus {
+	background-color: var(--farbe);
+}
+
+#karteisuche-filter p > span {
+	display: inline-block;
+	margin-left: 10px;
+	height: 30px;
+}
+
+#karteisuche-filter span input[type="text"] {
+	vertical-align: top;
+	width: 100px;
+}
+
+#karteisuche-filter span input.karteisuche-volltext {
+	width: 119px;
+}
+
+#karteisuche-filter span input.karteisuche-datum-typ {
+	width: 75px;
+}
+
+#karteisuche-filter span input.karteisuche-datum-dir {
+	width: 25px;
+}
+
+#karteisuche-filter input:read-only {
+	cursor: default;
+}
+
+#karteisuche-filter input[type="date"] {
+	width: 127px;
+}
+
+#karteisuche-filter input[type="checkbox"] {
+	z-index: 0;
+}
+
+#karteisuche-filter label {
+	color: var(--textFarbe);
+}
+
+#karteisuche-filter .dropdown-link-td {
+	top: 3px;
+	right: 2px;
+}
+
+/* Trefferanzeige ------------------------------- */
+#karteisuche-treffer {
+	color: var(--textHell);
+	font-style: italic;
+}
+
+#karteisuche-karteien {
+	max-height: 361px;
+	overflow-x: hidden;
+}
+
+#karteisuche-karteien p {
+	margin: 0;
+	border-bottom: 1px solid var(--linie);
+}
+
+#karteisuche-karteien p:first-child {
+	border-top: 1px solid var(--linie);
+}
+
+#karteisuche-karteien a {
+	display: block;
+	padding: 5px 10px;
+	height: 25px;
+	overflow: hidden;
+	line-height: 25px;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+#karteisuche-karteien a:focus,
+#karteisuche-karteien a:hover {
+	background-color: var(--hover);
+}
+
+#karteisuche-karteien span:last-child {
+	margin-left: 10px;
+	color: var(--text);
+	font-size: 12px;
+}

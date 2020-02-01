@@ -1,0 +1,106 @@
+@charset "utf-8";
+
+/* Drucken -------------------------------------- */
+#drucken > div {
+	margin-top: 40px;
+	max-width: 720px;
+}
+
+.icon-h-drucken {
+	-webkit-mask-image: url(../../img/drucker.svg);
+	mask-image: url(../../img/drucker.svg);
+}
+
+#drucken-head {
+	position: relative;
+	margin: 10px 0;
+	text-align: center;
+}
+
+#drucken-head span {
+	display: inline-block;
+	border: 1px solid var(--linie);
+	border-radius: 10px;
+	padding: 5px;
+	width: 78px;
+}
+
+#drucken-head span:first-child {
+	margin-right: 25px;
+}
+
+#drucken-head span:hover {
+	background-color: var(--hover);
+}
+
+#drucken-cont-rahmen {
+	padding: 10px;
+}
+
+#drucken-cont {
+	max-height: 400px;
+	overflow-y: auto;
+	color: #000;
+	font-family: "Noto Serif", serif;
+	user-select: text;
+}
+
+#drucken-cont h3 {
+	border-top: 7px double #000;
+	padding-top: 30px;
+	color: #000;
+	font-size: 20px;
+	font-style: normal;
+	font-weight: bold;
+}
+
+#drucken-cont h3:first-child {
+	border-top: none;
+	padding-top: 0;
+}
+
+#drucken-cont mark.wort {
+	padding: 0;
+	background-color: var(--hover);
+	font-weight: bold;
+}
+
+#drucken-cont table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+#drucken-cont th {
+	border-bottom: 1px solid #000;
+	padding: 10px 0 0 10px;
+	width: calc(50% - 10px);
+	font-style: italic;
+	font-weight: normal;
+	text-align: left;
+}
+
+#drucken-cont td {
+	padding: 10px 0 0 10px;
+	width: calc(50% - 10px);
+	vertical-align: top;
+}
+
+#drucken-cont th:first-child,
+#drucken-cont td:first-child {
+	padding-left: 0;
+	width: 50%;
+}
+
+#drucken-cont th[colspan="2"],
+#drucken-cont td[colspan="2"] {
+	width: 100%;
+}
+
+#drucken-cont .dta-antiqua {
+	font-family: "Noto Sans", "Noto Sans Symbols2", sans-serif;
+	font-size: 100%;
+}
+
+#drucken-cont .bd-win-baum {
+	border-color: transparent;
+}
