@@ -1375,7 +1375,9 @@ let belegImport = {
 			return;
 		}
 		// Daten einlesen
-		belegImport.DeReKoLesen(content);
+		if (!belegImport.DeReKoLesen(content)) {
+			return;
+		}
 		// Metadaten auffrischen
 		belegImport.DateiMeta(pfad, "dereko");
 		// Anzeige im Karteikartenformular auffrischen
@@ -1402,11 +1404,12 @@ let belegImport = {
 				typ: "alert",
 				text: `Beim Einlesen des Dateiinhalts ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${fehler}</p>`,
 			});
-			return;
+			return false; // Einlesen fehlgeschlagen
 		}
 		// Daten analysieren
 		belegImport.DeReKoLesenMeta(meta[0]);
 		belegImport.DeReKoLesenBelege(belege[1].trim());
+		return true; // Einlesen erfolgreich
 	},
 	// DeReKo-Import: Metadaten parsen
 	//   meta = String
