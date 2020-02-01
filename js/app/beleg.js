@@ -155,10 +155,10 @@ let beleg = {
 			} else if (feld === "dta-bis") {
 				felder[i].value = "0";
 				continue;
+			} else if (/^(bd|datei-latin1)$/.test(feld)) {
+				continue;
 			} else if (felder[i].type === "checkbox") {
 				felder[i].checked = beleg.data[feld];
-			} else if (feld === "bd") {
-				continue;
 			} else { // Text-Input und Textarea
 				felder[i].value = beleg.data[feld];
 			}
