@@ -1205,12 +1205,19 @@ let belegImport = {
 		let fenster = document.getElementById("import");
 		overlay.oeffnen(fenster);
 		document.getElementById("import-abbrechen-button").focus();
+		// längstes Wort ermitteln (wird für die Auswahl des Textausschnitts gebraucht)
+		let laengstesWort = 0;
+		for (let wort of Object.keys(data.fv)) {
+			if (wort.length > laengstesWort) {
+				laengstesWort = wort.length;
+			}
+		}
 		// Belegliste aufbauen
 		let cont = document.getElementById("import-cont"),
-			data = belegImport.Datei.data,
+			daten = belegImport.Datei.data,
 			table = document.createElement("table");
 		cont.replaceChild(table, cont.firstChild);
-		data.forEach((i, n) => {
+		daten.forEach((i, n) => {
 			let tr = document.createElement("tr");
 			table.appendChild(tr);
 			tr.dataset.idx = n;
@@ -1244,16 +1251,29 @@ let belegImport = {
 			// Beleganriss
 			td = document.createElement("td");
 			tr.appendChild(td);
-			td.textContent = i.ds.bs.replace(/\n/g, " ").substring(0, 150);
+			let bs = i.ds.bs.replace(/\n/g, " "),
+				pos = belegImport.checkWort(bs, true);
+			pos.sort((a, b) => {
+				return a - b;
+			});
+			if (!pos.length) {
+				td.textContent = bs.substring(0, 150);
+			} else {
+				let vor = laengstesWort + 20,
+					start = pos[0] - vor < 0 ? 0 : pos[0] - vor;
+				if (start === 0) {
+					vor = 0;
+				}
+				td.textContent = `${start > 0 ? "…" : ""}${bs.substring(start, start + 150 - vor)}`;
+			}
 		});
 		// Import-Markierung entfernen
 		function markierung (img) {
 			img.addEventListener("click", function(evt) {
 				evt.stopPropagation();
-				let idx = parseInt(this.closest("tr").dataset.idx, 10),
-					ds = belegImport.Datei.data[idx];
-				ds.importiert = !ds.importiert;
-				if (ds.importiert) {
+				let idx = parseInt(this.closest("tr").dataset.idx, 10);
+				daten[idx].importiert = !daten[idx].importiert;
+				if (daten[idx].importiert) {
 					this.src = "img/check-gruen.svg";
 					this.title = "demarkieren";
 				} else {
@@ -1467,22 +1487,30 @@ let belegImport = {
 	BibTeX (content) {
 		
 	},
-	// überprüft, ob das Wort im importierten Text gefunden wurde
-	checkWort () {
-		if (!beleg.data.bs || !optionen.data.einstellungen["wort-check"]) {
+	// überprüft, ob das Wort im importierten Text gefunden wurde;
+	// außerdem gibt es die Möglichkeit, sich die Textposition der Wörter
+	// zurückgeben zu lassen (wird für das Datei-Import-Fenster gebraucht)
+	//   bs = String || undefined
+	//     (Belegtext, der überprüft werden soll)
+	//   pos = true || undefined
+	//     (Position der Treffer soll zurückgegeben werden)
+	checkWort (bs = beleg.data.bs, pos = false) {
+		if ( !pos && (!bs || !optionen.data.einstellungen["wort-check"]) ) {
 			return;
 		}
+		let positionen = []; // sammelt die Trefferpositionen (wenn gewünscht)
 		for (let i of helfer.formVariRegExpRegs) {
 			if (data.fv[i.wort].ma) { // diese Variante nur markieren => hier nicht berücksichtigen
 				continue;
 			}
 			let reg;
 			if (!data.fv[i.wort].tr) { // nicht trunkiert
-				reg = new RegExp(`(^|[${helfer.ganzesWortRegExp.links}])(${i.reg})($|[${helfer.ganzesWortRegExp.rechts}])`, "i");
+				reg = new RegExp(`(^|[${helfer.ganzesWortRegExp.links}])(${i.reg})($|[${helfer.ganzesWortRegExp.rechts}])`, "gi");
 			} else { // trunkiert
-				reg = new RegExp(i.reg, "i");
+				reg = new RegExp(i.reg, "gi");
 			}
-			if (!reg.test(beleg.data.bs)) {
+			let check = reg.test(bs);
+			if (!pos && !check) {
 				dialog.oeffnen({
 					typ: "alert",
 					text: "Das Karteiwort wurde im gerade importierten Belegtext nicht gefunden.",
@@ -1491,7 +1519,13 @@ let belegImport = {
 					},
 				});
 				break;
+			} else if (pos && check) {
+				positionen.push(reg.lastIndex);
 			}
+		}
+		// Trefferpositionen zurückgeben (wenn gewünscht)
+		if (pos) {
+			return positionen;
 		}
 	},
 };
