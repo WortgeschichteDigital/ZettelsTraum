@@ -1464,24 +1464,29 @@ let belegImport = {
 			let data = {
 				importiert: false,
 				ds: {
-					au: "", // Autor
+					au: "N. N.", // Autor
 					bs: beleg.join("\n\n"), // Beleg
 					bx: `${id}${quelle}\n\n${beleg.join("\n")}`, // Original
 					da: "", // Belegdatum
 					kr: "IDS-Archiv", // Korpus
 					no: belegImport.Datei.meta, // Notizen
-					qu: quelle, // Quellenangabe
+					qu: quelle.replace(/\s\[Ausführliche Zitierung nicht verfügbar\]/, ""), // Quellenangabe
 					ts: "", // Textsorte
 				},
 			};
-			let autor = quelle.split(":");
-			if (/[^\s]+|^[^,]+,\s[^,]+$/.test(autor[0])) {
+			let autor = quelle.split(":"),
+				kommata = autor[0].match(/,/g),
+				illegal = /[0-9.;!?]/.test(autor[0]);
+			if (!illegal && (/[^\s]+/.test(autor[0]) || kommata <= 1)) {
 				data.ds.au = autor[0];
 			}
 			data.ds.da = xml.datum(quelle);
 			if (/\[Tageszeitung\]/.test(quelle)) {
 				data.ds.ts = "Zeitung: Tageszeitung";
 				data.ds.qu = quelle.replace(/,*\s*\[Tageszeitung\]/g, "");
+			}
+			if (!/\.$/.test(data.ds.qu)) {
+				data.ds.qu += ".";
 			}
 			belegImport.Datei.data.push(data);
 			// Beleg-Daten zurücksetzen
