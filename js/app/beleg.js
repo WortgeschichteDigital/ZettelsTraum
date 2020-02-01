@@ -357,6 +357,8 @@ let beleg = {
 				belegImport.DWDS();
 			} else if (aktion === "datei-oeffnen") {
 				belegImport.DateiOeffnen();
+			} else if (aktion === "datei-importieren") {
+				belegImport.DateiImport();
 			}
 		});
 	},

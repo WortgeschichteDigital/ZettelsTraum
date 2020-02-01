@@ -1174,6 +1174,75 @@ let belegImport = {
 		belegImport.Datei.pfad = dataPfad;
 		belegImport.Datei.typ = dataTyp;
 	},
+	// Datei-Import: Verteilerfunktion für das Importieren eingelesener Datensätze
+	DateiImport () {
+		// nur ein Datensatz vorhanden => direkt importieren
+		if (belegImport.Datei.data.length === 1) {
+			belegImport.DateiImportAusfuehren(0);
+			return;
+		}
+		// Fenster zum Auswahl des zu importierenden Datensatzes öffnen
+		belegImport.DateiImportFenster();
+	},
+	// Datei-Import: Overlay-Fenster mit der Liste der eingelesenen Belege
+	DateiImportFenster () {
+		
+	},
+	// Datei-Import: Import ausführen
+	//   idx = Number
+	//     (der Index in belegImport.Datei.data, der importiert werden soll)
+	DateiImportAusfuehren (idx) {
+		// Ist die Kartei schon ausgefüllt?
+		if (beleg.data.da || beleg.data.au || beleg.data.bs || beleg.data.qu || beleg.data.kr || beleg.data.ts || beleg.data.no) {
+			dialog.oeffnen({
+				typ: "confirm",
+				text: "Die Karteikarte ist teilweise schon gefüllt.\nDie Felder <i>Datum, Autor, Beleg, Quelle, Korpus, Textsorte</i> und <i>Notizen</i> werden beim Importieren der geladenen Daten überschrieben.\nMöchten Sie den Import wirklich starten?",
+				callback: () => {
+					if (dialog.antwort) {
+						startImport();
+					} else {
+						document.getElementById("beleg-datei-importieren").focus();
+					}
+				},
+			});
+			return;
+		}
+		// Wurde der Datensatz schon einmal importiert?
+		if (belegImport.Datei.data[idx].importiert) {
+			dialog.oeffnen({
+				typ: "confirm",
+				text: "Der ausgewählte Datensatz wurde schon einmal importiert.\nMöchten Sie ihn erneut importieren?",
+				callback: () => {
+					if (dialog.antwort) {
+						startImport();
+					} else {
+						document.getElementById("beleg-datei-importieren").focus();
+					}
+				},
+			});
+			return;
+		}
+		// Dann mal los...
+		startImport();
+		// Import-Funktion
+		function startImport () {
+			let data = belegImport.Datei.data[idx];
+			// Datenfelder importieren
+			for (let feld of Object.keys(data.ds)) {
+				if (!data.ds[feld]) { // Datensatz ist leer
+					continue;
+				}
+				beleg.data[feld] = data.ds[feld];
+			}
+			// Datensatz als importiert markieren
+			data.importiert = true;
+			// Formular füllen
+			beleg.formular(false);
+			beleg.belegGeaendert(true);
+			// Wort gefunden?
+			belegImport.checkWort();
+		}
+	},
 	// DeReKo-Import: Datei parsen
 	//   content = String
 	//     (Inhalt der Datei)
@@ -1194,7 +1263,8 @@ let belegImport = {
 		belegImport.DateiMeta(pfad, "dereko");
 		// Anzeige im Karteikartenformular auffrischen
 		beleg.formularImportDatei("dereko");
-		// TODO Import-Fenster öffnen oder Daten direkt importieren
+		// Import-Fenster öffnen oder Daten direkt importieren
+		belegImport.DateiImport();
 	},
 	// DeReKo-Import: Belege einlesen
 	//   content = String
