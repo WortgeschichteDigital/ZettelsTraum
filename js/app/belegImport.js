@@ -1504,8 +1504,331 @@ let belegImport = {
 	// BibTeX-Import: Datei parsen
 	//   content = String
 	//     (Inhalt der Datei)
-	BibTeX (content) {
-		
+	//   pfad = String
+	//     (Pfad zur Datei)
+	BibTeX (content, pfad) {
+		// Daten einlesen
+		if (!belegImport.BibTeXLesen(content)) {
+			return;
+		}
+		// Metadaten auffrischen
+		belegImport.DateiMeta(pfad, "bibtex");
+		// Anzeige im Karteikartenformular auffrischen
+		beleg.formularImportDatei("bibtex");
+		// Import-Fenster öffnen oder Daten direkt importieren
+		belegImport.DateiImport();
+	},
+	// BibTeX-Import: Content einer BibTeX-Datei fixen und normieren
+	//   content = String
+	//     (Inhalt der Datei)
+	BibTeXFix (content) {
+		let zeilen = [];
+		for (let zeile of content.split(/\n/)) {
+			if (/^(@|\t|\s|\})/.test(zeile)) {
+				zeile = zeile.replace(/^\s+/, "\t");
+				if (zeile.trim()) {
+					zeilen.push(zeile.trimEnd()); // da könnte noch ein \r drin sein
+				}
+				continue;
+			}
+			zeile = zeile.trim();
+			if (!zeile) {
+				continue; // Leerzeile
+			}
+			zeilen[zeilen.length - 1] += ` ${zeile}`;
+		}
+		return zeilen.join("\n");
+	},
+	// BibTeX-Import: Daten einlesen
+	//   content = String
+	//     (Inhalt der Datei)
+	BibTeXLesen (content) {
+		// Content fixen
+		content = belegImport.BibTeXFix(content);
+		// Zwischenspeicher der Titel
+		let titel = [];
+		// Daten parsen
+		let item = {};
+		for (let zeile of content.split(/\n/)) {
+			// Ende des Datensatzes
+			if (/^\}/.test(zeile)) {
+				pushTitle();
+				item = {};
+				continue;
+			}
+			// Leerzeilen
+			zeile = zeile.trim();
+			if (!zeile) {
+				continue;
+			}
+			// Startzeile
+			if (/^@/.test(zeile)) {
+				item.startzeile = zeile;
+				continue;
+			}
+			// Zeile analysieren
+			let kv = zeile.match(/^([a-z]+)\s*=\s*\{(.+)\},*$/);
+			if (!kv || !kv[1] || !kv[2]) {
+				// da ist wohl was schiefgelaufen
+				continue;
+			}
+			let key = kv[1];
+			if (!item[key]) {
+				item[key] = [];
+			}
+			item[key].push(belegImport.BibTeXSymbols( kv[2] ));
+		}
+		// Daten in den Zwischenspeicher eintragen
+		// (nur wenn welche vorhanden sind)
+		if (titel.length) {
+			belegImport.Datei.meta = "";
+			belegImport.Datei.data = titel;
+			return true;
+		}
+		return false;
+		// Titeldaten übertragen
+		function pushTitle () {
+			// Datensatz füllen
+			let data = {
+				importiert: false,
+				ds: {
+					au: "", // Autor
+					bs: "", // Beleg (immer leer, aber wichtig für die Anzeige)
+					bx: "", // Original
+					da: "", // Belegdatum
+					kr: "", // Korpus
+					qu: "", // Quellenangabe
+				},
+			};
+			// Autor(en) ermitteln
+			if (item.author) {
+				data.ds.au = item.author.join("/").replace(/\sand\s/g, "/");
+			} else if (item.editor) {
+				data.ds.au = `${item.editor.join("/").replace(/\sand\s/g, "/")} (Hrsg.)`;
+			} else {
+				data.ds.au = "N. N.";
+			}
+			// Originaltitel rekonstruieren
+			data.ds.bx = `${item.startzeile}\n`;
+			for (let [k, v] of Object.entries(item)) {
+				if (k === "startzeile") {
+					continue;
+				}
+				for (let i of v) {
+					data.ds.bx += `\t${k} = \{${i}\},\n`;
+				}
+			}
+			data.ds.bx = data.ds.bx.substring(0, data.ds.bx.length - 2);
+			data.ds.bx += `\n}`;
+			// Datum
+			if (item.year) {
+				data.ds.da = item.year.join("/");
+			} else if (item.date) {
+				data.ds.da = item.date.join("/");
+			}
+			// Datensatz von GoogleBooks?
+			if (item.url) {
+				let gb = item.url.some(i => /books\.google/.test(i));
+				if (gb) {
+					data.ds.kr = "GoogleBooks";
+				}
+			}
+			// Quellenangabe: Autor
+			let quelle = `${data.ds.au}: `;
+			// Quellenangabe: Titel
+			if (item.title) {
+				quelle += item.title.join(". ");
+			} else if (item.booktitle) {
+				quelle += item.booktitle.join(". ");
+			} else if (item.shorttitle) {
+				quelle += item.shorttitle.join(". ");
+			} else {
+				quelle += "[ohne Titel]";
+			}
+			// Quellenangabe: in Buch/Zeitschrift
+			let zeitschrift = false,
+				istAbschnitt = false;
+			if (item.title && item.booktitle) {
+				quelle += `. In: ${item.booktitle.join(". ")}`;
+				istAbschnitt = true;
+			} else if (item.title && (item.journal || item.journaltitle)) {
+				let journal;
+				if (item.journal) {
+					journal = item.journal.join(". ");
+				} else if (item.journaltitle) {
+					journal = item.journaltitle.join(". ");
+				}
+				quelle += `. In: ${journal}`;
+				zeitschrift = true;
+				istAbschnitt = true;
+			}
+			// Quellenangabe: Hrsg. Sammelband
+			if (!zeitschrift && item.author && item.editor) {
+				quelle += `. Hrsg. v. ${item.editor.join("/").replace(/\sand\s/g, "/")}`;
+			}
+			// Quellenangabe: Band oder Jahrgang
+			if (item.volume) {
+				if (zeitschrift) {
+					quelle += ` ${item.volume.join("/")}`;
+				} else {
+					quelle += `, Bd. ${item.volume.join("/")}`;
+				}
+			}
+			// Quellenangabe: Auflage
+			if (item.edition && !zeitschrift) {
+				quelle += `, ${item.edition.join("/")}`;
+			}
+			// Quellenangabe: Ort
+			if (!zeitschrift && (item.location || item.address)) {
+				let ort;
+				if (item.location) {
+					ort = item.location.join("/");
+				} else if (item.address) {
+					ort = item.address.join("/");
+				}
+				if (!/\.$/.test(quelle)) {
+					quelle += ".";
+				}
+				quelle += ` ${ort}`;
+			}
+			// Quellenangabe: Jahr
+			if (item.year) {
+				quelle += ` (${item.year.join("/")})`;
+			} else if (item.date) {
+				quelle += ` (${item.date.join("/")})`;
+			}
+			// Quellenangabe: Seiten
+			if (istAbschnitt && item.pages) {
+				let seiten = item.pages.join(", ");
+				if (!/^(Seite|Sp*)/.test(seiten)) {
+					seiten = `S. ${seiten}`;
+				}
+				seiten = seiten.replace(/^Seite\s/, "S. ");
+				seiten = seiten.replace(/^(Sp*\.) /, (m, p1) => `${p1} `);
+				seiten = seiten.replace(/--/g, "–");
+				seiten = seiten.replace(/-/g, "–");
+				quelle += `, ${seiten}`;
+			}
+			// Quellenangabe: Punkt
+			quelle += ".";
+			// Quellenangabe: URL
+			if (item.url) {
+				let heute = helfer.datumFormat(new Date().toISOString(), true).split(",")[0];
+				for (let i of item.url) {
+					quelle += `\n\n${i} (Aufrufdatum: ${heute})`;
+				}
+			}
+			// Quelleanangabe übernehmen
+			data.ds.qu = quelle;
+			// Datensatz pushen
+			titel.push(data);
+		}
+	},
+	// BibTeX-Import: Helferfunktion zum Auflösen von BibTeX-Symbolen
+	// (die tauchen noch in den Dateien von GoogleBooks auf)
+	//   text = String
+	//     (Textzeile, in der die Symbole aufgelöst werden sollen)
+	BibTeXSymbols (text) {
+		// das scheint der Standard zu sein: \‘{a}
+		// Google verwendet i.d.R. diese Form {\‘a}
+		let symbols = new Map();
+		symbols.set("\\‘{a}", "à");
+		symbols.set("{\\‘a}", "à");
+		symbols.set("\\‘{e}", "è");
+		symbols.set("{\\‘e}", "è");
+		symbols.set("\\‘{i}", "ì");
+		symbols.set("{\\‘i}", "ì");
+		symbols.set("\\‘{o}", "ò");
+		symbols.set("{\\‘o}", "ò");
+		symbols.set("\\‘{u}", "ù");
+		symbols.set("{\\‘u}", "ù");
+		symbols.set("\\’{a}", "á");
+		symbols.set("{\\’a}", "á");
+		symbols.set("\\’{e}", "é");
+		symbols.set("{\\’e}", "é");
+		symbols.set("\\’{i}", "í");
+		symbols.set("{\\’i}", "í");
+		symbols.set("\\’{o}", "ó");
+		symbols.set("{\\’o}", "ó");
+		symbols.set("\\’{u}", "ú");
+		symbols.set("{\\’u}", "ú");
+		symbols.set("\\'{a}", "á");
+		symbols.set("{\\'a}", "á");
+		symbols.set("\\'{e}", "é");
+		symbols.set("{\\'e}", "é");
+		symbols.set("\\'{i}", "í");
+		symbols.set("{\\'i}", "í");
+		symbols.set("\\'{o}", "ó");
+		symbols.set("{\\'o}", "ó");
+		symbols.set("\\'{u}", "ú");
+		symbols.set("{\\'u}", "ú");
+		symbols.set("\\^{a}", "â");
+		symbols.set("{\\^a}", "â");
+		symbols.set("\\^{e}", "ê");
+		symbols.set("{\\^e}", "ê");
+		symbols.set("\\^{i}", "î");
+		symbols.set("{\\^i}", "î");
+		symbols.set("\\^{o}", "ô");
+		symbols.set("{\\^o}", "ô");
+		symbols.set("\\^{u}", "û");
+		symbols.set("{\\^u}", "û");
+		symbols.set("\\”{a}", "ä");
+		symbols.set("{\\”a}", "ä");
+		symbols.set("\\”{e}", "ë");
+		symbols.set("{\\”e}", "ë");
+		symbols.set("\\”{o}", "ö");
+		symbols.set("{\\”o}", "ö");
+		symbols.set("\\”{u}", "ü");
+		symbols.set("{\\”u}", "ü");
+		symbols.set('\\"{a}', "ä");
+		symbols.set('{\\"a}', "ä");
+		symbols.set('\\"{e}', "ë");
+		symbols.set('{\\"e}', "ë");
+		symbols.set('\\"{o}', "ö");
+		symbols.set('{\\"o}', "ö");
+		symbols.set('\\"{u}', "ü");
+		symbols.set('{\\"u}', "ü");
+		symbols.set("\\~{a}", "ã");
+		symbols.set("{\\~a}", "ã");
+		symbols.set("\\~{e}", "ẽ");
+		symbols.set("{\\~e}", "ẽ");
+		symbols.set("\\~{i}", "ĩ");
+		symbols.set("{\\~i}", "ĩ");
+		symbols.set("\\~{n}", "ñ");
+		symbols.set("{\\~n}", "ñ");
+		symbols.set("\\~{o}", "õ");
+		symbols.set("{\\~o}", "õ");
+		symbols.set("\\~{u}", "ũ");
+		symbols.set("{\\~u}", "ũ");
+		symbols.set("\\v{a}", "ǎ");
+		symbols.set("{\\va}", "ǎ");
+		symbols.set("\\v{e}", "ě");
+		symbols.set("{\\ve}", "ě");
+		symbols.set("\\v{i}", "ǐ");
+		symbols.set("{\\vi}", "ǐ");
+		symbols.set("\\v{o}", "ǒ");
+		symbols.set("{\\vo}", "ǒ");
+		symbols.set("\\v{u}", "ǔ");
+		symbols.set("{\\vu}", "ǔ");
+		symbols.set("\\c{c}", "ç");
+		symbols.set("{\\cc}", "ç");
+		symbols.set("\\aa", "å");
+		symbols.set("\\ae", "æ");
+		symbols.set("\\oe", "œ");
+		symbols.set("\\l", "ł");
+		symbols.set("\\o", "ø");
+		symbols.set("\\ss", "ß");
+		// Symbole ersetzen
+		for (let [k, v] of symbols) {
+			let regLC = new RegExp(helfer.escapeRegExp(k), "g"),
+				regUC = new RegExp(helfer.escapeRegExp( k ), "gi");
+			text = text.replace(regLC, v);
+			text = text.replace(regUC, v.toUpperCase());
+		}
+		// Bereinigungen vornehmen
+		text = text.replace(/[{}\\]/g, "");
+		// Text zurückgeben
+		return text;
 	},
 	// überprüft, ob das Wort im importierten Text gefunden wurde;
 	// außerdem gibt es die Möglichkeit, sich die Textposition der Wörter
