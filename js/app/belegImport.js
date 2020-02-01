@@ -1237,10 +1237,13 @@ let belegImport = {
 				img.title = "markieren";
 			}
 			markierung(img);
-			// Jahr
+			// Datum
 			td = document.createElement("td");
 			tr.appendChild(td);
 			td.textContent = i.ds.da ? i.ds.da : "o. J.";
+			if (i.ds.da.length > 4) {
+				table.classList.add("datum-breit");
+			}
 			// Autor
 			td = document.createElement("td");
 			tr.appendChild(td);

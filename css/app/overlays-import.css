@@ -15,7 +15,7 @@
 	padding: 10px;
 	overflow-x: hidden;
 	overflow-y: auto;
-	max-height: 500px;
+	max-height: 300px;
 }
 
 #import-cont table {
@@ -48,8 +48,12 @@
 	text-align: center;
 }
 
+#import-cont table.datum-breit td:nth-child(2) {
+	width: 85px;
+}
+
 #import-cont td:last-child {
-	width: 60%;
+	width: 70%;
 	font-size: 14px;
 }
 
