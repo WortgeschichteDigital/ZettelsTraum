@@ -1211,7 +1211,7 @@ let belegImport = {
 		if (belegImport.Datei.data[idx].importiert) {
 			dialog.oeffnen({
 				typ: "confirm",
-				text: "Der ausgewählte Datensatz wurde schon einmal importiert.\nMöchten Sie ihn erneut importieren?",
+				text: "Der ausgewählte Datensatz wurde offenbar schon einmal importiert.\nMöchten Sie ihn trotzdem importieren?",
 				callback: () => {
 					if (dialog.antwort) {
 						startImport();
