@@ -318,7 +318,8 @@ let beleg = {
 		// Fokus setzen
 		if (/^(dereko|bibtex)$/.test(src)) {
 			let inputs = eleAktiv.querySelectorAll("input");
-			if (belegImport.Datei.data.length) {
+			if (src === belegImport.Datei.typ &&
+					belegImport.Datei.data.length) {
 				inputs[inputs.length - 1].focus();
 			} else {
 				inputs[inputs.length - 2].focus();
