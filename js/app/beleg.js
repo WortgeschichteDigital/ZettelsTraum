@@ -185,11 +185,15 @@ let beleg = {
 			// Was ist in der Zwischenablage?
 			const {clipboard} = require("electron"),
 				cp = clipboard.readText(),
-				dwds = belegImport.DWDSXMLCheck(cp);
+				dwds = belegImport.DWDSXMLCheck(cp),
+				bibtexCp = belegImport.BibTeXCheck(cp);
 			if (/^https?:\/\/www\.deutschestextarchiv\.de\//.test(cp)) { // DTA-URL
 				beleg.formularImport("dta");
 			} else if (!helfer.checkType("Number", dwds)) { // DWDS-Snippet
 				beleg.formularImport("dwds");
+			} else if (bibtexCp) {
+				belegImport.BibTeX(cp, "Zwischenablage", false);
+				beleg.formularImport("bibtex");
 			} else if (belegImport.Datei.data.length) {
 				beleg.formularImport(belegImport.Datei.typ);
 			} else {

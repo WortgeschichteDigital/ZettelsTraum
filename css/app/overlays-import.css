@@ -57,6 +57,10 @@
 	font-size: 14px;
 }
 
+#import-cont table.keine-belege td:last-child {
+	width: 40%;
+}
+
 #import-cont td.kein-wert {
 	color: var(--textSehrHell);
 	font-style: italic;

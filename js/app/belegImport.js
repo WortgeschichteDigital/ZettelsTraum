@@ -1145,6 +1145,13 @@ let belegImport = {
 		const fsP = require("fs").promises;
 		fsP.readFile(result.filePaths[0], {encoding: encoding})
 			.then(content => {
+				// sollten BibTeX-Daten in der Zwischenablage sein => löschen
+				const {clipboard} = require("electron"),
+					cp = clipboard.readText();
+				if (belegImport.BibTeXCheck(cp)) {
+					clipboard.clear();
+				}
+				// Datei-Inhalt importieren
 				if (document.getElementById("beleg-import-dereko").checked) {
 					belegImport.DeReKo(content, result.filePaths[0]);
 				} else if (document.getElementById("beleg-import-bibtex").checked) {
@@ -1215,6 +1222,7 @@ let belegImport = {
 		// Belegliste aufbauen
 		let cont = document.getElementById("import-cont"),
 			daten = belegImport.Datei.data,
+			belegeVorhanden = false,
 			table = document.createElement("table");
 		cont.replaceChild(table, cont.firstChild);
 		daten.forEach((i, n) => {
@@ -1260,6 +1268,7 @@ let belegImport = {
 				td.textContent = "kein Beleg";
 				return;
 			}
+			belegeVorhanden = true;
 			let pos = belegImport.checkWort(bs, true);
 			pos.sort((a, b) => {
 				return a - b;
@@ -1275,6 +1284,9 @@ let belegImport = {
 				td.textContent = `${start > 0 ? "…" : ""}${bs.substring(start, start + 150 - vor)}`;
 			}
 		});
+		if (!belegeVorhanden) {
+			table.classList.add("keine-belege");
+		}
 		// Import-Markierung entfernen
 		function markierung (img) {
 			img.addEventListener("click", function(evt) {
@@ -1506,7 +1518,9 @@ let belegImport = {
 	//     (Inhalt der Datei)
 	//   pfad = String
 	//     (Pfad zur Datei)
-	BibTeX (content, pfad) {
+	//   autoImport = false || undefined
+	//     (nach dem Parsen soll ein automatischer Import angestoßen werden)
+	BibTeX (content, pfad, autoImport = true) {
 		// Daten einlesen
 		if (!belegImport.BibTeXLesen(content)) {
 			return;
@@ -1516,7 +1530,9 @@ let belegImport = {
 		// Anzeige im Karteikartenformular auffrischen
 		beleg.formularImportDatei("bibtex");
 		// Import-Fenster öffnen oder Daten direkt importieren
-		belegImport.DateiImport();
+		if (autoImport) {
+			belegImport.DateiImport();
+		}
 	},
 	// BibTeX-Import: Content einer BibTeX-Datei fixen und normieren
 	//   content = String
@@ -1829,6 +1845,16 @@ let belegImport = {
 		text = text.replace(/[{}\\]/g, "");
 		// Text zurückgeben
 		return text;
+	},
+	// BibTeX-Import: prüft, ob ein BibTex-Datensatz im Clipboard liegt
+	//   cp = String
+	//     (Text-Inhalt des Clipboards)
+	BibTeXCheck (cp) {
+		cp = cp.trim();
+		if (!/^@[a-zA-Z]+\{.+?,/.test(cp) || !/\}/.test(cp)) {
+			return false;
+		}
+		return true;
 	},
 	// überprüft, ob das Wort im importierten Text gefunden wurde;
 	// außerdem gibt es die Möglichkeit, sich die Textposition der Wörter
