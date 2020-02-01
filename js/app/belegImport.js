@@ -1305,13 +1305,18 @@ let belegImport = {
 		// Import-Fenster schließen ausgewählten Datensatz übernehmen
 		function auswahl (tr) {
 			tr.addEventListener("click", function() {
-				overlay.schliessen(document.getElementById("import"));
+				belegImport.DateiImportFensterSchliessen();
 				setTimeout(() => {
 					let idx = parseInt(this.dataset.idx, 10);
 					belegImport.DateiImportAusfuehren(idx);
 				}, 200); // 200ms Zeit lassen, um das Overlay-Fenster zu schließen
 			});
 		}
+	},
+	// Datei-Import: schließt das Importfenster und fokussiert den Import-Button
+	DateiImportFensterSchliessen () {
+		overlay.ausblenden(document.getElementById("import"));
+		document.getElementById("beleg-datei-importieren").focus();
 	},
 	// Datei-Import: Import ausführen
 	//   idx = Number
