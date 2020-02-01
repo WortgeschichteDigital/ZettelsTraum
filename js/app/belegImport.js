@@ -1251,8 +1251,13 @@ let belegImport = {
 			// Beleganriss
 			td = document.createElement("td");
 			tr.appendChild(td);
-			let bs = i.ds.bs.replace(/\n/g, " "),
-				pos = belegImport.checkWort(bs, true);
+			let bs = i.ds.bs.replace(/\n/g, " ");
+			if (!bs) { // wird bei BibTeX immer so sein
+				td.classList.add("kein-wert");
+				td.textContent = "kein Beleg";
+				return;
+			}
+			let pos = belegImport.checkWort(bs, true);
 			pos.sort((a, b) => {
 				return a - b;
 			});
@@ -1345,7 +1350,11 @@ let belegImport = {
 			beleg.formular(false);
 			beleg.belegGeaendert(true);
 			// Wort gefunden?
-			belegImport.checkWort();
+			// (nur überprüfen, wenn Belegtext importiert wurde;
+			// bei BibTeX ist das nicht der Fall)
+			if (beleg.data.bs) {
+				belegImport.checkWort();
+			}
 		}
 	},
 	// DeReKo-Import: Datei parsen

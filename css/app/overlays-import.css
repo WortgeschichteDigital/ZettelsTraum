@@ -53,6 +53,11 @@
 	font-size: 14px;
 }
 
+#import-cont td.kein-wert {
+	color: var(--textSehrHell);
+	font-style: italic;
+}
+
 #import-cont img {
 	/* Aus irgendeinem nicht nachvollziehbaren Grund ist die Zellenhöhe 30px,
 	obwohl Padding-Top und -Bottom auf 0 gesetzt wurden und line-height 24px ist.
