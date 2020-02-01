@@ -1181,12 +1181,97 @@ let belegImport = {
 			belegImport.DateiImportAusfuehren(0);
 			return;
 		}
-		// Fenster zum Auswahl des zu importierenden Datensatzes öffnen
+		// ggf. Fenster zum Auswahl des zu importierenden Datensatzes öffnen
+		let importTypAktiv = "dereko";
+		if (document.getElementById("beleg-import-bibtex").checked) {
+			importTypAktiv = "bibtex";
+		}
+		if (!belegImport.Datei.data.length ||
+				belegImport.Datei.typ !== importTypAktiv) {
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Es wurden noch keine Datensätze geladen, die importiert werden könnten!",
+				callback: () => {
+					document.getElementById("beleg-datei-oeffnen").focus();
+				},
+			});
+			return;
+		}
 		belegImport.DateiImportFenster();
 	},
-	// Datei-Import: Overlay-Fenster mit der Liste der eingelesenen Belege
+	// Datei-Import: Overlay-Fenster mit der Liste der eingelesenen Belege öffnen
 	DateiImportFenster () {
-		
+		// Fenster öffnen
+		let fenster = document.getElementById("import");
+		overlay.oeffnen(fenster);
+		document.getElementById("import-abbrechen-button").focus();
+		// Belegliste aufbauen
+		let cont = document.getElementById("import-cont"),
+			data = belegImport.Datei.data,
+			table = document.createElement("table");
+		cont.replaceChild(table, cont.firstChild);
+		data.forEach((i, n) => {
+			let tr = document.createElement("tr");
+			table.appendChild(tr);
+			tr.dataset.idx = n;
+			auswahl(tr);
+			// Haken
+			let td = document.createElement("td");
+			tr.appendChild(td);
+			let img = document.createElement("img");
+			td.appendChild(img);
+			img.width = "24";
+			img.height= "24";
+			if (i.importiert) {
+				img.src = "img/check-gruen.svg";
+				img.title = "demarkieren";
+			} else {
+				img.src = "img/platzhalter.svg";
+				img.title = "markieren";
+			}
+			markierung(img);
+			// Jahr
+			td = document.createElement("td");
+			tr.appendChild(td);
+			td.textContent = i.ds.da ? i.ds.da : "o. J.";
+			// Autor
+			td = document.createElement("td");
+			tr.appendChild(td);
+			td.textContent = i.ds.au;
+			if (i.ds.au === "N. N.") {
+				td.classList.add("kein-wert");
+			}
+			// Beleganriss
+			td = document.createElement("td");
+			tr.appendChild(td);
+			td.textContent = i.ds.bs.replace(/\n/g, " ").substring(0, 150);
+		});
+		// Import-Markierung entfernen
+		function markierung (img) {
+			img.addEventListener("click", function(evt) {
+				evt.stopPropagation();
+				let idx = parseInt(this.closest("tr").dataset.idx, 10),
+					ds = belegImport.Datei.data[idx];
+				ds.importiert = !ds.importiert;
+				if (ds.importiert) {
+					this.src = "img/check-gruen.svg";
+					this.title = "demarkieren";
+				} else {
+					this.src = "img/platzhalter.svg";
+					this.title = "markieren";
+				}
+			});
+		}
+		// Import-Fenster schließen ausgewählten Datensatz übernehmen
+		function auswahl (tr) {
+			tr.addEventListener("click", function() {
+				overlay.schliessen(document.getElementById("import"));
+				setTimeout(() => {
+					let idx = parseInt(this.dataset.idx, 10);
+					belegImport.DateiImportAusfuehren(idx);
+				}, 200); // 200ms Zeit lassen, um das Overlay-Fenster zu schließen
+			});
+		}
 	},
 	// Datei-Import: Import ausführen
 	//   idx = Number
