@@ -1325,10 +1325,40 @@ let belegImport = {
 	//     (der Index in belegImport.Datei.data, der importiert werden soll)
 	DateiImportAusfuehren (idx) {
 		// Ist die Kartei schon ausgefüllt?
-		if (beleg.data.da || beleg.data.au || beleg.data.bs || beleg.data.qu || beleg.data.kr || beleg.data.ts || beleg.data.no) {
+		let feldnamen = {
+			da: "Datum",
+			au: "Autor",
+			bs: "Beleg",
+			qu: "Quelle",
+			kr: "Korpus",
+			ts: "Textsorte",
+			no: "Notizen",
+		};
+		let karteGefuellt = false,
+			felderGefuellt = new Set();
+		for (let [k, v] of Object.entries(belegImport.Datei.data[idx].ds)) {
+			if (k === "bx") {
+				continue;
+			}
+			if (v && beleg.data[k]) {
+				felderGefuellt.add(feldnamen[k]);
+				karteGefuellt = true;
+			}
+		}
+		if (karteGefuellt) {
+			// Feldnamen für die Anzeige vorbereiten
+			let felder = [...felderGefuellt],
+				felderFolge = Object.values(feldnamen);
+			felder.sort((a, b) => felderFolge.indexOf(a) - felderFolge.indexOf(b));
+			let felderTxt= felder.join(", ").replace(/, ([a-zA-Z]+)$/, (m, p1) => `</i> und <i>${p1}`),
+				numerus = ["Die Felder", "werden"];
+			if (felder.length === 1) {
+				numerus = ["Das Feld", "wird"];
+			}
+			// Meldung anzeigen
 			dialog.oeffnen({
 				typ: "confirm",
-				text: "Die Karteikarte ist teilweise schon gefüllt.\nDie Felder <i>Datum, Autor, Beleg, Quelle, Korpus, Textsorte</i> und <i>Notizen</i> werden beim Importieren der geladenen Daten überschrieben.\nMöchten Sie den Import wirklich starten?",
+				text: `Die Karteikarte ist teilweise schon gefüllt.\n${numerus[0]} <i>${felderTxt}</i> ${numerus[1]} beim Importieren der geladenen Daten überschrieben.\nMöchten Sie den Import wirklich starten?`,
 				callback: () => {
 					if (dialog.antwort) {
 						startImport();
