@@ -1235,6 +1235,7 @@ let belegImport = {
 		// Belegliste aufbauen
 		let cont = document.getElementById("import-cont"),
 			daten = belegImport.Datei.data,
+			autorenVorhanden = false,
 			belegeVorhanden = false,
 			table = document.createElement("table");
 		cont.replaceChild(table, cont.firstChild);
@@ -1271,6 +1272,8 @@ let belegImport = {
 			td.textContent = i.ds.au;
 			if (i.ds.au === "N. N.") {
 				td.classList.add("kein-wert");
+			} else {
+				autorenVorhanden = true;
 			}
 			// Beleganriss
 			td = document.createElement("td");
@@ -1297,6 +1300,9 @@ let belegImport = {
 				td.textContent = `${start > 0 ? "…" : ""}${bs.substring(start, start + 150 - vor)}`;
 			}
 		});
+		if (!autorenVorhanden) {
+			table.classList.add("keine-autoren");
+		}
 		if (!belegeVorhanden) {
 			table.classList.add("keine-belege");
 		}

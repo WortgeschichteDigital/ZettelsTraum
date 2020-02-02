@@ -49,12 +49,20 @@
 }
 
 #import-cont table.datum-breit td:nth-child(2) {
-	width: 85px;
+	width: 95px;
 }
 
 #import-cont td:last-child {
 	width: 70%;
 	font-size: 14px;
+}
+
+#import-cont table.datum-breit td:last-child {
+	width: 55%;
+}
+
+#import-cont table.keine-autoren td:last-child {
+	width: 70%;
 }
 
 #import-cont table.keine-belege td:last-child {
