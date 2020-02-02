@@ -225,7 +225,32 @@ let xml = {
 	//     (Text, aus dem heraus das Datum extrahiert werden soll)
 	//   normJh = false || undefined
 	//     (die Jahrhundertangabe soll in eine Jahreszahl umgewandelt werden)
-	datum (text, normJh = true) {
+	//   sonder = true || undefined
+	//     (die übergebene Textstelle soll auf spezielle Formate überprüft werden)
+	datum (text, normJh = true, sonder = false) {
+		// Sonderformate
+		// (übliche Jahresangaben in DeReKo-Quellen suchen)
+		let sonderformate = [];
+		if (sonder) {
+			let formate = [
+				/(([0-9]{4})\/[0-9]{2})(?![0-9])/,
+				/(?<!Sp*\. )(([0-9]{4})[\-–][0-9]{4})/,
+				/zwischen (([0-9]{4}) und [0-9]{4})/,
+			];
+			for (let reg of formate) {
+				let m = text.match(reg);
+				if (m) {
+					let f = {
+						format: "",
+						jahr: "",
+					};
+					f.format = m[1].replace(/ und |-/, "–");
+					f.jahr = m[2];
+					sonderformate.push(f);
+				}
+			}
+		}
+		// Normformate
 		let formate = [
 			/(?<tag>[0-9]{1,2})\.\s*(?<monat>[0-9]{1,2})\.\s*(?<jahr>[0-9]{4})/,
 			/(?<jahr>[0-9]{4})-(?<monat>[0-9]{2})-(?<tag>[0-9]{2})/,
@@ -256,6 +281,14 @@ let xml = {
 					tag = parseInt(m.groups.tag, 10);
 				}
 				break;
+			}
+		}
+		// Ergebnis der Analyse
+		if (sonderformate.length && !monat) {
+			for (let i of sonderformate) {
+				if (i.jahr === jahr) {
+					return i.format;
+				}
 			}
 		}
 		if (jahr) {

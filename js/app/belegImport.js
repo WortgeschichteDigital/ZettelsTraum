@@ -1546,7 +1546,7 @@ let belegImport = {
 			if (!illegal && (/[^\s]+/.test(autor[0]) || kommata <= 1)) {
 				data.ds.au = autor[0];
 			}
-			data.ds.da = xml.datum(quelle);
+			data.ds.da = xml.datum(quelle, false, true);
 			if (/\[Tageszeitung\]/.test(quelle)) {
 				data.ds.ts = "Zeitung: Tageszeitung";
 				data.ds.qu = quelle.replace(/,*\s*\[Tageszeitung\]/g, "");
