@@ -1202,7 +1202,7 @@ let belegImport = {
 			if (!bibtexOk) {
 				dialog.oeffnen({
 					typ: "alert",
-					text: "Es wurden noch keine Datensätze geladen, die importiert werden könnten!",
+					text: "Es wurden noch keine Datensätze geladen, die importiert werden könnten.",
 					callback: () => {
 						document.getElementById("beleg-datei-oeffnen").focus();
 					},
