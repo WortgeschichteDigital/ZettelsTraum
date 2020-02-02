@@ -32,8 +32,8 @@
 		"start": "electron ."
 	},
 	"devDependencies": {
-		"electron": "^7.1.10",
-		"electron-builder": "^22.2.0",
+		"electron": "^7.1.11",
+		"electron-builder": "^22.3.2",
 		"electron-packager": "^14.2.0"
 	}
 }
