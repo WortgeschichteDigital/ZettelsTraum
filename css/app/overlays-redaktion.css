@@ -26,8 +26,17 @@
 	mask-image: url(../../img/muelleimer.svg);
 }
 
+#redaktion-next {
+	padding: 10px 10px 25px 10px;
+}
+
+#redaktion-next strong {
+	margin: 0 10px 0 34px;
+	color: var(--farbe);
+}
+
 #redaktion-cont {
-	padding: 10px;
+	padding: 0 10px 10px 10px;
 }
 
 #redaktion-cont .icon-link {
