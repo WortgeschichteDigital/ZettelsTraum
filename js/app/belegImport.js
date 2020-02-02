@@ -1190,14 +1190,25 @@ let belegImport = {
 		}
 		if (!belegImport.Datei.data.length ||
 				belegImport.Datei.typ !== importTypAktiv) {
-			dialog.oeffnen({
-				typ: "alert",
-				text: "Es wurden noch keine Datensätze geladen, die importiert werden könnten!",
-				callback: () => {
-					document.getElementById("beleg-datei-oeffnen").focus();
-				},
-			});
-			return;
+			// BibTeX in Zwischenablage?
+			let bibtexOk = false;
+			const {clipboard} = require("electron"),
+				cp = clipboard.readText();
+			if (importTypAktiv === "bibtex" &&
+					belegImport.BibTeXCheck(cp)) {
+				bibtexOk = belegImport.BibTeX(cp, "Zwischenablage", false);
+			}
+			// Wenn keine BibTeX-Daten aus der Zwischenablage geladen wurden => Meldung + Abbruch
+			if (!bibtexOk) {
+				dialog.oeffnen({
+					typ: "alert",
+					text: "Es wurden noch keine Datensätze geladen, die importiert werden könnten!",
+					callback: () => {
+						document.getElementById("beleg-datei-oeffnen").focus();
+					},
+				});
+				return;
+			}
 		}
 		// direkt importieren oder Importfenster öffnen
 		if (belegImport.Datei.data.length === 1) {
@@ -1560,7 +1571,7 @@ let belegImport = {
 	BibTeX (content, pfad, autoImport = true) {
 		// Daten einlesen
 		if (!belegImport.BibTeXLesen(content)) {
-			return;
+			return false;
 		}
 		// Metadaten auffrischen
 		belegImport.DateiMeta(pfad, "bibtex");
@@ -1570,6 +1581,7 @@ let belegImport = {
 		if (autoImport) {
 			belegImport.DateiImport();
 		}
+		return true;
 	},
 	// BibTeX-Import: Content einer BibTeX-Datei fixen und normieren
 	//   content = String
