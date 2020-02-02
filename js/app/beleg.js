@@ -155,10 +155,10 @@ let beleg = {
 			} else if (feld === "dta-bis") {
 				felder[i].value = "0";
 				continue;
+			} else if (/^(bd|datei-latin1)$/.test(feld)) {
+				continue;
 			} else if (felder[i].type === "checkbox") {
 				felder[i].checked = beleg.data[feld];
-			} else if (feld === "bd") {
-				continue;
 			} else { // Text-Input und Textarea
 				felder[i].value = beleg.data[feld];
 			}
@@ -184,16 +184,20 @@ let beleg = {
 		if (neu && !beleg.leseansicht) {
 			// Was ist in der Zwischenablage?
 			const {clipboard} = require("electron"),
-				cp = clipboard.readText();
+				cp = clipboard.readText(),
+				dwds = belegImport.DWDSXMLCheck(cp),
+				bibtexCp = belegImport.BibTeXCheck(cp);
 			if (/^https?:\/\/www\.deutschestextarchiv\.de\//.test(cp)) { // DTA-URL
 				beleg.formularImport("dta");
+			} else if (!helfer.checkType("Number", dwds)) { // DWDS-Snippet
+				beleg.formularImport("dwds");
+			} else if (bibtexCp) {
+				belegImport.BibTeX(cp, "– Zwischenablage –", false);
+				beleg.formularImport("bibtex");
+			} else if (belegImport.Datei.data.length) {
+				beleg.formularImport(belegImport.Datei.typ);
 			} else {
-				let dwds = belegImport.DWDSXMLCheck(cp);
-				if (helfer.checkType("Number", dwds)) { // kein oder fehlerhaftes DWDS-Snippet
-					feldDa.focus();
-				} else { // DWDS-Snippet
-					beleg.formularImport("dwds");
-				}
+				feldDa.focus();
 			}
 		} else if (!beleg.leseansicht) {
 			feldDa.focus();
@@ -275,20 +279,69 @@ let beleg = {
 	},
 	// zwischen den Import-Formularen hin- und herschalten
 	//   src = String
-	//     (ID der Quelle, aus der importiert werden soll: dta || dwds)
+	//     (ID der Quelle, aus der importiert werden soll: dta || dwds || dereko || bibtex)
 	formularImport (src) {
-		let forms = ["beleg-form-dta", "beleg-form-dwds"];
-		for (let f of forms) {
-			let ele = document.getElementById(f),
-				radio = document.getElementById(`beleg-import-${f.replace(/.+-/, "")}`);
-			if (f.includes(src)) {
-				ele.classList.remove("aus");
-				radio.checked = true; // weil Wechsel nicht nur auf Klick, sondern auch automatisch
+		// Checkbox für ISO 8859-15 umstellen
+		let latin1 = document.getElementById("beleg-datei-latin1");
+		if (src === "dereko") {
+			latin1.checked = true;
+		} else {
+			latin1.checked = false;
+		}
+		// Radio-Buttons umstellen
+		// (weil Wechsel nicht nur auf Klick, sondern auch automatisch geschieht)
+		let radios = ["beleg-import-dta", "beleg-import-dwds", "beleg-import-dereko", "beleg-import-bibtex"];
+		for (let r of radios) {
+			let radio = document.getElementById(r);
+			if (r.includes(src)) {
+				radio.checked = true;
 			} else {
-				ele.classList.add("aus");
 				radio.checked = false;
 			}
-			ele.querySelector("input").focus();
+		}
+		// Formular umstellen
+		let forms = ["beleg-form-dta", "beleg-form-dwds", "beleg-form-datei"],
+			formsZiel = src;
+		if (/^(dereko|bibtex)/.test(src)) {
+			formsZiel = "datei";
+		}
+		let eleAktiv = null;
+		for (let f of forms) {
+			let ele = document.getElementById(f);
+			if (f.includes(formsZiel)) {
+				ele.classList.remove("aus");
+				eleAktiv = ele;
+			} else {
+				ele.classList.add("aus");
+			}
+		}
+		// Fokus setzen
+		if (/^(dereko|bibtex)$/.test(src)) {
+			let inputs = eleAktiv.querySelectorAll("input");
+			if (src === belegImport.Datei.typ &&
+					belegImport.Datei.data.length) {
+				inputs[inputs.length - 1].focus();
+			} else {
+				inputs[inputs.length - 2].focus();
+			}
+			// ggf. Dateiname eintragen
+			beleg.formularImportDatei(src);
+		} else {
+			eleAktiv.querySelector("input").focus();
+		}
+	},
+	// ggf. Dateiname eintragen
+	//   src = String
+	//     (ID der Quelle, aus der importiert werden soll: dereko || bibtex)
+	formularImportDatei (src) {
+		let name = document.getElementById("beleg-datei-name");
+		if (src === "dereko" && belegImport.Datei.typ === "dereko" ||
+				src === "bibtex" && belegImport.Datei.typ === "bibtex") {
+			name.textContent = `\u200E${belegImport.Datei.pfad}\u200E`; // vgl. meta.oeffnen()
+			name.classList.remove("leer");
+		} else {
+			name.textContent = "keine Datei geladen";
+			name.classList.add("leer");
 		}
 	},
 	// Aktionen beim Klick auf einen Formular-Button
@@ -307,6 +360,10 @@ let beleg = {
 				belegImport.DTA();
 			} else if (aktion === "dwds-button") {
 				belegImport.DWDS();
+			} else if (aktion === "datei-oeffnen") {
+				belegImport.DateiOeffnen();
+			} else if (aktion === "datei-importieren") {
+				belegImport.DateiImport();
 			}
 		});
 	},

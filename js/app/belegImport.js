@@ -1085,22 +1085,858 @@ let belegImport = {
 			xml: xmlDoc
 		};
 	},
-	// überprüft, ob das Wort im importierten Text gefunden wurde
-	checkWort () {
-		if (!beleg.data.bs || !optionen.data.einstellungen["wort-check"]) {
+	// Datei-Import: speichert die Daten der geladenen Datei zwischen
+	Datei: {
+		pfad: "", // Pfad zur Datei
+		typ: "", // Typ der Datei (dereko || bibtex)
+		meta: "", // Metadaten für alle Belege in belegImport.Datei.data
+		data: [], // Daten der Datei; s. pushBeleg()
+	},
+	// Datei-Import: öffnet eine Datei und liest sie ein
+	async DateiOeffnen () {
+		// Optionen
+		let opt = {
+			title: "Datei öffnen",
+			defaultPath: appInfo.documents,
+			filters: [
+				{
+					name: "Alle Dateien",
+					extensions: ["*"],
+				},
+			],
+			properties: [
+				"openFile",
+			],
+		};
+		if (document.getElementById("beleg-import-dereko").checked) {
+			opt.filters.push({
+				name: `Text-Datei`,
+				extensions: ["txt"],
+			});
+		} else if (document.getElementById("beleg-import-bibtex").checked) {
+			opt.filters.push({
+				name: `BibTeX-Datei`,
+				extensions: ["bib", "bibtex"],
+			});
+		}
+		// Dialog anzeigen
+		const {ipcRenderer} = require("electron");
+		let result = await ipcRenderer.invoke("datei-dialog", {
+			open: true,
+			winId: winInfo.winId,
+			opt: opt,
+		});
+		// Fehler oder keine Datei ausgewählt
+		if (result.message || !Object.keys(result).length) {
+			dialog.oeffnen({
+				typ: "alert",
+				text: `Beim Öffnen des Dateidialogs ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${result.message}</p>`,
+			});
+			return;
+		} else if (result.canceled) {
 			return;
 		}
+		// Encoding ermitteln
+		let encoding = "utf8";
+		if (document.getElementById("beleg-datei-latin1").checked) {
+			encoding = "latin1";
+		}
+		// Datei einlesen
+		const fsP = require("fs").promises;
+		fsP.readFile(result.filePaths[0], {encoding: encoding})
+			.then(content => {
+				// sollten BibTeX-Daten in der Zwischenablage sein => löschen
+				const {clipboard} = require("electron"),
+					cp = clipboard.readText();
+				if (belegImport.BibTeXCheck(cp)) {
+					clipboard.clear();
+				}
+				// Datei-Inhalt importieren
+				if (document.getElementById("beleg-import-dereko").checked) {
+					belegImport.DeReKo(content, result.filePaths[0]);
+				} else if (document.getElementById("beleg-import-bibtex").checked) {
+					belegImport.BibTeX(content, result.filePaths[0]);
+				}
+			})
+			.catch(err => {
+				dialog.oeffnen({
+					typ: "alert",
+					text: `Beim Lesen der Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.name}: ${err.message}</p>`,
+				});
+				throw err;
+			});
+	},
+	// Datei-Import: Metadaten auffrischen
+	//   pfad = String
+	//     (Pfad zur geladenen Datei)
+	//   typ = String
+	//     (Typ der Datei, also dereko || bibtex)
+	DateiMeta (pfad, typ) {
+		let dataPfad = "",
+		dataTyp = "";
+		if (belegImport.Datei.data.length) {
+			dataPfad = pfad;
+			dataTyp = typ;
+		}
+		belegImport.Datei.pfad = dataPfad;
+		belegImport.Datei.typ = dataTyp;
+	},
+	// Datei-Import: Verteilerfunktion für das Importieren eingelesener Datensätze
+	DateiImport () {
+		// Kann überhaupt etwas importiert werden?
+		let importTypAktiv = "dereko";
+		if (document.getElementById("beleg-import-bibtex").checked) {
+			importTypAktiv = "bibtex";
+		}
+		if (!belegImport.Datei.data.length ||
+				belegImport.Datei.typ !== importTypAktiv) {
+			// BibTeX in Zwischenablage?
+			let bibtexOk = false;
+			const {clipboard} = require("electron"),
+				cp = clipboard.readText();
+			if (importTypAktiv === "bibtex" &&
+					belegImport.BibTeXCheck(cp)) {
+				bibtexOk = belegImport.BibTeX(cp, "– Zwischenablage –", false);
+			}
+			// Wenn keine BibTeX-Daten aus der Zwischenablage geladen wurden => Meldung + Abbruch
+			if (!bibtexOk) {
+				dialog.oeffnen({
+					typ: "alert",
+					text: "Es wurden noch keine Datensätze geladen, die importiert werden könnten!",
+					callback: () => {
+						document.getElementById("beleg-datei-oeffnen").focus();
+					},
+				});
+				return;
+			}
+		}
+		// direkt importieren oder Importfenster öffnen
+		if (belegImport.Datei.data.length === 1) {
+			// nur ein Datensatz vorhanden => direkt importieren
+			belegImport.DateiImportAusfuehren(0);
+		} else {
+			// mehrere Datensätze vorhanden => Importfenster öffnen
+			belegImport.DateiImportFenster();
+		}
+	},
+	// Datei-Import: Overlay-Fenster mit der Liste der eingelesenen Belege öffnen
+	DateiImportFenster () {
+		// Fenster öffnen
+		let fenster = document.getElementById("import");
+		overlay.oeffnen(fenster);
+		document.getElementById("import-abbrechen-button").focus();
+		// längstes Wort ermitteln (wird für die Auswahl des Textausschnitts gebraucht)
+		let laengstesWort = 0;
+		for (let wort of Object.keys(data.fv)) {
+			if (wort.length > laengstesWort) {
+				laengstesWort = wort.length;
+			}
+		}
+		// Belegliste aufbauen
+		let cont = document.getElementById("import-cont"),
+			daten = belegImport.Datei.data,
+			autorenVorhanden = false,
+			belegeVorhanden = false,
+			table = document.createElement("table");
+		cont.replaceChild(table, cont.firstChild);
+		daten.forEach((i, n) => {
+			let tr = document.createElement("tr");
+			table.appendChild(tr);
+			tr.dataset.idx = n;
+			auswahl(tr);
+			// Haken
+			let td = document.createElement("td");
+			tr.appendChild(td);
+			let img = document.createElement("img");
+			td.appendChild(img);
+			img.width = "24";
+			img.height= "24";
+			if (i.importiert) {
+				img.src = "img/check-gruen.svg";
+				img.title = "demarkieren";
+			} else {
+				img.src = "img/platzhalter.svg";
+				img.title = "markieren";
+			}
+			markierung(img);
+			// Datum
+			td = document.createElement("td");
+			tr.appendChild(td);
+			td.textContent = i.ds.da ? i.ds.da : "o. J.";
+			if (i.ds.da.length > 4) {
+				table.classList.add("datum-breit");
+			}
+			// Autor
+			td = document.createElement("td");
+			tr.appendChild(td);
+			td.textContent = i.ds.au;
+			if (i.ds.au === "N. N.") {
+				td.classList.add("kein-wert");
+			} else {
+				autorenVorhanden = true;
+			}
+			// Beleganriss
+			td = document.createElement("td");
+			tr.appendChild(td);
+			let bs = i.ds.bs.replace(/\n/g, " ");
+			if (!bs) { // wird bei BibTeX immer so sein
+				td.classList.add("kein-wert");
+				td.textContent = "kein Beleg";
+				return;
+			}
+			belegeVorhanden = true;
+			let pos = belegImport.checkWort(bs, true);
+			pos.sort((a, b) => {
+				return a - b;
+			});
+			if (!pos.length) {
+				td.textContent = bs.substring(0, 150);
+			} else {
+				let vor = laengstesWort + 20,
+					start = pos[0] - vor < 0 ? 0 : pos[0] - vor;
+				if (start === 0) {
+					vor = 0;
+				}
+				td.textContent = `${start > 0 ? "…" : ""}${bs.substring(start, start + 150 - vor)}`;
+			}
+		});
+		if (!autorenVorhanden) {
+			table.classList.add("keine-autoren");
+		}
+		if (!belegeVorhanden) {
+			table.classList.add("keine-belege");
+		}
+		// Import-Markierung entfernen
+		function markierung (img) {
+			img.addEventListener("click", function(evt) {
+				evt.stopPropagation();
+				let idx = parseInt(this.closest("tr").dataset.idx, 10);
+				daten[idx].importiert = !daten[idx].importiert;
+				if (daten[idx].importiert) {
+					this.src = "img/check-gruen.svg";
+					this.title = "demarkieren";
+				} else {
+					this.src = "img/platzhalter.svg";
+					this.title = "markieren";
+				}
+			});
+		}
+		// Import-Fenster schließen ausgewählten Datensatz übernehmen
+		function auswahl (tr) {
+			tr.addEventListener("click", function() {
+				belegImport.DateiImportFensterSchliessen();
+				setTimeout(() => {
+					let idx = parseInt(this.dataset.idx, 10);
+					belegImport.DateiImportAusfuehren(idx);
+				}, 200); // 200ms Zeit lassen, um das Overlay-Fenster zu schließen
+			});
+		}
+	},
+	// Datei-Import: schließt das Importfenster und fokussiert den Import-Button
+	DateiImportFensterSchliessen () {
+		overlay.ausblenden(document.getElementById("import"));
+		document.getElementById("beleg-datei-importieren").focus();
+	},
+	// Datei-Import: Import ausführen
+	//   idx = Number
+	//     (der Index in belegImport.Datei.data, der importiert werden soll)
+	DateiImportAusfuehren (idx) {
+		// Ist die Kartei schon ausgefüllt?
+		let feldnamen = {
+			da: "Datum",
+			au: "Autor",
+			bs: "Beleg",
+			qu: "Quelle",
+			kr: "Korpus",
+			ts: "Textsorte",
+			no: "Notizen",
+		};
+		let karteGefuellt = false,
+			felderGefuellt = new Set();
+		for (let [k, v] of Object.entries(belegImport.Datei.data[idx].ds)) {
+			if (k === "bx") {
+				continue;
+			}
+			if (v && beleg.data[k]) {
+				felderGefuellt.add(feldnamen[k]);
+				karteGefuellt = true;
+			}
+		}
+		if (karteGefuellt) {
+			// Feldnamen für die Anzeige vorbereiten
+			let felder = [...felderGefuellt],
+				felderFolge = Object.values(feldnamen);
+			felder.sort((a, b) => felderFolge.indexOf(a) - felderFolge.indexOf(b));
+			let felderTxt= felder.join(", ").replace(/, ([a-zA-Z]+)$/, (m, p1) => `</i> und <i>${p1}`),
+				numerus = ["Die Felder", "werden"];
+			if (felder.length === 1) {
+				numerus = ["Das Feld", "wird"];
+			}
+			// Meldung anzeigen
+			dialog.oeffnen({
+				typ: "confirm",
+				text: `Die Karteikarte ist teilweise schon gefüllt.\n${numerus[0]} <i>${felderTxt}</i> ${numerus[1]} beim Importieren der geladenen Daten überschrieben.\nMöchten Sie den Import wirklich starten?`,
+				callback: () => {
+					if (dialog.antwort) {
+						startImport();
+					} else {
+						document.getElementById("beleg-datei-importieren").focus();
+					}
+				},
+			});
+			return;
+		}
+		// Wurde der Datensatz schon einmal importiert?
+		if (belegImport.Datei.data[idx].importiert) {
+			dialog.oeffnen({
+				typ: "confirm",
+				text: "Der ausgewählte Datensatz wurde offenbar schon einmal importiert.\nMöchten Sie ihn trotzdem importieren?",
+				callback: () => {
+					if (dialog.antwort) {
+						startImport();
+					} else {
+						document.getElementById("beleg-datei-importieren").focus();
+					}
+				},
+			});
+			return;
+		}
+		// Dann mal los...
+		startImport();
+		// Import-Funktion
+		function startImport () {
+			let data = belegImport.Datei.data[idx];
+			// Datenfelder importieren
+			for (let feld of Object.keys(data.ds)) {
+				if (!data.ds[feld]) { // Datensatz ist leer
+					continue;
+				}
+				beleg.data[feld] = data.ds[feld];
+			}
+			// Datensatz als importiert markieren
+			data.importiert = true;
+			// Formular füllen
+			beleg.formular(false);
+			beleg.belegGeaendert(true);
+			// Wort gefunden?
+			// (nur überprüfen, wenn Belegtext importiert wurde;
+			// bei BibTeX ist das nicht der Fall)
+			if (beleg.data.bs) {
+				belegImport.checkWort();
+			}
+		}
+	},
+	// DeReKo-Import: Datei parsen
+	//   content = String
+	//     (Inhalt der Datei)
+	//   pfad = String
+	//     (Pfad zur Datei)
+	DeReKo (content, pfad) {
+		// DeReKo-Datei?
+		if (!/^© Leibniz-Institut für Deutsche Sprache, Mannheim/.test(content)) {
+			dialog.oeffnen({
+				typ: "alert",
+				text: `Beim Einlesen des Dateiinhalts ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">Datei stammt nicht aus COSMAS II</p>`,
+			});
+			return;
+		}
+		// Daten einlesen
+		if (!belegImport.DeReKoLesen(content)) {
+			return;
+		}
+		// Metadaten auffrischen
+		belegImport.DateiMeta(pfad, "dereko");
+		// Anzeige im Karteikartenformular auffrischen
+		beleg.formularImportDatei("dereko");
+		// Import-Fenster öffnen oder Daten direkt importieren
+		belegImport.DateiImport();
+	},
+	// DeReKo-Import: Belege einlesen
+	//   content = String
+	//     (Inhalt der Datei)
+	DeReKoLesen (content) {
+		// Daten extrahieren
+		let meta = content.match(/\nDatum\s+:.+?\n\n/s),
+			belege = content.match(/\nBelege \(.+?_{5,}\n\n(.+)/s);
+		// wichtige Daten nicht gefunden?
+		let fehler = "";
+		if (!meta || !meta[0]) {
+			fehler = "Metadaten nicht gefunden";
+		} else if (!belege || !belege[1]) {
+			fehler = "Belege nicht gefunden";
+		}
+		if (fehler) {
+			dialog.oeffnen({
+				typ: "alert",
+				text: `Beim Einlesen des Dateiinhalts ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${fehler}</p>`,
+			});
+			return false; // Einlesen fehlgeschlagen
+		}
+		// Daten analysieren
+		belegImport.DeReKoLesenMeta(meta[0]);
+		belegImport.DeReKoLesenBelege(belege[1].trim());
+		return true; // Einlesen erfolgreich
+	},
+	// DeReKo-Import: Metadaten parsen
+	//   meta = String
+	//     (Metadaten zum Export, die für alle Belege gelten)
+	DeReKoLesenMeta (meta) {
+		belegImport.Datei.meta = "";
+		let daten = ["Datum", "Archiv", "Korpus", "Suchanfrage"];
+		for (let d of daten) {
+			let reg = new RegExp(`(${d})\\s*:(.+)`),
+				treffer = meta.match(reg);
+			if (treffer && treffer.length === 3) {
+				belegImport.Datei.meta += `\n${treffer[1]}:${treffer[2]}`;
+			}
+		}
+	},
+	// DeReKo-Import: Belege parsen
+	//   belege = String
+	//     (die exportierte Belegreihe)
+	DeReKoLesenBelege (belege) {
+		// Zwischenspeicher zurücksetzen
+		belegImport.Datei.data = [];
+		// Zeilen analysieren
+		let regId = "[a-zA-Z0-9]+?\\/[a-zA-Z0-9]+?\\.[0-9]+?\\s",
+			regQuVor = new RegExp(`^(${regId})(.+)`),
+			regQuNach = new RegExp(`\\s\\((${regId})(.+)\\)$`),
+			regQuNachId = new RegExp(`\\s\\(${regId}`),
+			id = "",
+			quelle = "",
+			beleg = [];
+		for (let zeile of belege.split("\n")) {
+			if (!zeile) { // Leerzeile
+				pushBeleg();
+				continue;
+			}
+			// Enteties auflösen
+			zeile = zeile.replace(/&#(.+?);/g, (m, p1) => String.fromCharCode(p1));
+			// vorangestellte Quelle
+			if (regQuVor.test(zeile)) {
+				let match = zeile.match(regQuVor);
+				id = match[1];
+				quelle = match[2];
+				continue;
+			}
+			// nachgestellte Quelle
+			if (regQuNach.test(zeile)) {
+				let match = zeile.match(regQuNach);
+				id = match[1];
+				quelle = match[2];
+				zeile = zeile.split(regQuNachId)[0];
+			}
+			beleg.push(zeile.replace(/<B>|<\/B*>/g, "").trim());
+		}
+		pushBeleg();
+		// Beleg pushen
+		function pushBeleg () {
+			if (!quelle || !beleg.length) {
+				return;
+			}
+			// Datensatz füllen
+			let data = {
+				importiert: false,
+				ds: {
+					au: "N. N.", // Autor
+					bs: beleg.join("\n\n"), // Beleg
+					bx: `${id}${quelle}\n\n${beleg.join("\n")}`, // Original
+					da: "", // Belegdatum
+					kr: "IDS-Archiv", // Korpus
+					no: belegImport.Datei.meta, // Notizen
+					qu: quelle.replace(/\s\[Ausführliche Zitierung nicht verfügbar\]/, ""), // Quellenangabe
+					ts: "", // Textsorte
+				},
+			};
+			let autor = quelle.split(":"),
+				kommata = autor[0].match(/,/g),
+				illegal = /[0-9.;!?]/.test(autor[0]);
+			if (!illegal && (/[^\s]+/.test(autor[0]) || kommata <= 1)) {
+				data.ds.au = autor[0];
+			}
+			data.ds.da = xml.datum(quelle, false, true);
+			if (/\[Tageszeitung\]/.test(quelle)) {
+				data.ds.ts = "Zeitung: Tageszeitung";
+				data.ds.qu = quelle.replace(/,*\s*\[Tageszeitung\]/g, "");
+			}
+			if (!/\.$/.test(data.ds.qu)) {
+				data.ds.qu += ".";
+			}
+			belegImport.Datei.data.push(data);
+			// Beleg-Daten zurücksetzen
+			id = "";
+			quelle = "";
+			beleg = [];
+		}
+	},
+	// BibTeX-Import: Datei parsen
+	//   content = String
+	//     (Inhalt der Datei)
+	//   pfad = String
+	//     (Pfad zur Datei)
+	//   autoImport = false || undefined
+	//     (nach dem Parsen soll ein automatischer Import angestoßen werden)
+	BibTeX (content, pfad, autoImport = true) {
+		// Daten einlesen
+		if (!belegImport.BibTeXLesen(content)) {
+			return false;
+		}
+		// Metadaten auffrischen
+		belegImport.DateiMeta(pfad, "bibtex");
+		// Anzeige im Karteikartenformular auffrischen
+		beleg.formularImportDatei("bibtex");
+		// Import-Fenster öffnen oder Daten direkt importieren
+		if (autoImport) {
+			belegImport.DateiImport();
+		}
+		return true;
+	},
+	// BibTeX-Import: Content einer BibTeX-Datei fixen und normieren
+	//   content = String
+	//     (Inhalt der Datei)
+	BibTeXFix (content) {
+		let zeilen = [];
+		for (let zeile of content.split(/\n/)) {
+			if (/^(@|\t|\s|\})/.test(zeile)) {
+				zeile = zeile.replace(/^\s+/, "\t");
+				if (zeile.trim()) {
+					zeilen.push(zeile.trimEnd()); // da könnte noch ein \r drin sein
+				}
+				continue;
+			}
+			zeile = zeile.trim();
+			if (!zeile) {
+				continue; // Leerzeile
+			}
+			zeilen[zeilen.length - 1] += ` ${zeile}`;
+		}
+		return zeilen.join("\n");
+	},
+	// BibTeX-Import: Daten einlesen
+	//   content = String
+	//     (Inhalt der Datei)
+	BibTeXLesen (content) {
+		// Content fixen
+		content = belegImport.BibTeXFix(content);
+		// Zwischenspeicher der Titel
+		let titel = [];
+		// Daten parsen
+		let item = {};
+		for (let zeile of content.split(/\n/)) {
+			// Ende des Datensatzes
+			if (/^\}/.test(zeile)) {
+				pushTitle();
+				item = {};
+				continue;
+			}
+			// Leerzeilen
+			zeile = zeile.trim();
+			if (!zeile) {
+				continue;
+			}
+			// Startzeile
+			if (/^@/.test(zeile)) {
+				item.startzeile = zeile;
+				continue;
+			}
+			// Zeile analysieren
+			let kv = zeile.match(/^([a-z]+)\s*=\s*\{(.+)\},*$/);
+			if (!kv || !kv[1] || !kv[2]) {
+				// da ist wohl was schiefgelaufen
+				continue;
+			}
+			let key = kv[1];
+			if (!item[key]) {
+				item[key] = [];
+			}
+			item[key].push(belegImport.BibTeXSymbols( kv[2] ));
+		}
+		// Daten in den Zwischenspeicher eintragen
+		// (nur wenn welche vorhanden sind)
+		if (titel.length) {
+			belegImport.Datei.meta = "";
+			belegImport.Datei.data = titel;
+			return true;
+		}
+		return false;
+		// Titeldaten übertragen
+		function pushTitle () {
+			// Datensatz füllen
+			let data = {
+				importiert: false,
+				ds: {
+					au: "", // Autor
+					bs: "", // Beleg (immer leer, aber wichtig für die Anzeige)
+					bx: "", // Original
+					da: "", // Belegdatum
+					kr: "", // Korpus
+					qu: "", // Quellenangabe
+				},
+			};
+			// Autor(en) ermitteln
+			if (item.author) {
+				data.ds.au = item.author.join("/").replace(/\sand\s/g, "/");
+			} else if (item.editor) {
+				data.ds.au = `${item.editor.join("/").replace(/\sand\s/g, "/")} (Hrsg.)`;
+			} else {
+				data.ds.au = "N. N.";
+			}
+			// Originaltitel rekonstruieren
+			data.ds.bx = `${item.startzeile}\n`;
+			for (let [k, v] of Object.entries(item)) {
+				if (k === "startzeile") {
+					continue;
+				}
+				for (let i of v) {
+					data.ds.bx += `\t${k} = \{${i}\},\n`;
+				}
+			}
+			data.ds.bx = data.ds.bx.substring(0, data.ds.bx.length - 2);
+			data.ds.bx += `\n}`;
+			// Datum
+			if (item.year) {
+				data.ds.da = item.year.join("/");
+			} else if (item.date) {
+				data.ds.da = item.date.join("/");
+			}
+			// Datensatz von GoogleBooks?
+			if (item.url) {
+				let gb = item.url.some(i => /books\.google/.test(i));
+				if (gb) {
+					data.ds.kr = "GoogleBooks";
+				}
+			}
+			// Quellenangabe: Autor
+			let quelle = `${data.ds.au}: `;
+			// Quellenangabe: Titel
+			if (item.title) {
+				quelle += item.title.join(". ");
+			} else if (item.booktitle) {
+				quelle += item.booktitle.join(". ");
+			} else if (item.shorttitle) {
+				quelle += item.shorttitle.join(". ");
+			} else {
+				quelle += "[ohne Titel]";
+			}
+			// Quellenangabe: in Buch/Zeitschrift
+			let zeitschrift = false,
+				istAbschnitt = false;
+			if (item.title && item.booktitle) {
+				quelle += `. In: ${item.booktitle.join(". ")}`;
+				istAbschnitt = true;
+			} else if (item.title && (item.journal || item.journaltitle)) {
+				let journal;
+				if (item.journal) {
+					journal = item.journal.join(". ");
+				} else if (item.journaltitle) {
+					journal = item.journaltitle.join(". ");
+				}
+				quelle += `. In: ${journal}`;
+				zeitschrift = true;
+				istAbschnitt = true;
+			}
+			// Quellenangabe: Hrsg. Sammelband
+			if (!zeitschrift && item.author && item.editor) {
+				quelle += `. Hrsg. v. ${item.editor.join("/").replace(/\sand\s/g, "/")}`;
+			}
+			// Quellenangabe: Band oder Jahrgang
+			if (item.volume) {
+				if (zeitschrift) {
+					quelle += ` ${item.volume.join("/")}`;
+				} else {
+					quelle += `, Bd. ${item.volume.join("/")}`;
+				}
+			}
+			// Quellenangabe: Auflage
+			if (item.edition && !zeitschrift) {
+				quelle += `, ${item.edition.join("/")}`;
+			}
+			// Quellenangabe: Ort
+			if (!zeitschrift && (item.location || item.address)) {
+				let ort;
+				if (item.location) {
+					ort = item.location.join("/");
+				} else if (item.address) {
+					ort = item.address.join("/");
+				}
+				if (!/\.$/.test(quelle)) {
+					quelle += ".";
+				}
+				quelle += ` ${ort}`;
+			}
+			// Quellenangabe: Jahr
+			if (item.year) {
+				quelle += ` (${item.year.join("/")})`;
+			} else if (item.date) {
+				quelle += ` (${item.date.join("/")})`;
+			}
+			// Quellenangabe: Seiten
+			if (istAbschnitt && item.pages) {
+				let seiten = item.pages.join(", ");
+				if (!/^(Seite|Sp*)/.test(seiten)) {
+					seiten = `S. ${seiten}`;
+				}
+				seiten = seiten.replace(/^Seite\s/, "S. ");
+				seiten = seiten.replace(/^(Sp*\.) /, (m, p1) => `${p1} `);
+				seiten = seiten.replace(/--/g, "–");
+				seiten = seiten.replace(/-/g, "–");
+				quelle += `, ${seiten}`;
+			}
+			// Quellenangabe: Punkt
+			quelle += ".";
+			// Quellenangabe: URL
+			if (item.url) {
+				let heute = helfer.datumFormat(new Date().toISOString(), true).split(",")[0];
+				for (let i of item.url) {
+					quelle += `\n\n${i} (Aufrufdatum: ${heute})`;
+				}
+			}
+			// Quelleanangabe übernehmen
+			data.ds.qu = quelle;
+			// Datensatz pushen
+			titel.push(data);
+		}
+	},
+	// BibTeX-Import: Helferfunktion zum Auflösen von BibTeX-Symbolen
+	// (die tauchen noch in den Dateien von GoogleBooks auf)
+	//   text = String
+	//     (Textzeile, in der die Symbole aufgelöst werden sollen)
+	BibTeXSymbols (text) {
+		// das scheint der Standard zu sein: \‘{a}
+		// Google verwendet i.d.R. diese Form {\‘a}
+		let symbols = new Map();
+		symbols.set("\\‘{a}", "à");
+		symbols.set("{\\‘a}", "à");
+		symbols.set("\\‘{e}", "è");
+		symbols.set("{\\‘e}", "è");
+		symbols.set("\\‘{i}", "ì");
+		symbols.set("{\\‘i}", "ì");
+		symbols.set("\\‘{o}", "ò");
+		symbols.set("{\\‘o}", "ò");
+		symbols.set("\\‘{u}", "ù");
+		symbols.set("{\\‘u}", "ù");
+		symbols.set("\\’{a}", "á");
+		symbols.set("{\\’a}", "á");
+		symbols.set("\\’{e}", "é");
+		symbols.set("{\\’e}", "é");
+		symbols.set("\\’{i}", "í");
+		symbols.set("{\\’i}", "í");
+		symbols.set("\\’{o}", "ó");
+		symbols.set("{\\’o}", "ó");
+		symbols.set("\\’{u}", "ú");
+		symbols.set("{\\’u}", "ú");
+		symbols.set("\\'{a}", "á");
+		symbols.set("{\\'a}", "á");
+		symbols.set("\\'{e}", "é");
+		symbols.set("{\\'e}", "é");
+		symbols.set("\\'{i}", "í");
+		symbols.set("{\\'i}", "í");
+		symbols.set("\\'{o}", "ó");
+		symbols.set("{\\'o}", "ó");
+		symbols.set("\\'{u}", "ú");
+		symbols.set("{\\'u}", "ú");
+		symbols.set("\\^{a}", "â");
+		symbols.set("{\\^a}", "â");
+		symbols.set("\\^{e}", "ê");
+		symbols.set("{\\^e}", "ê");
+		symbols.set("\\^{i}", "î");
+		symbols.set("{\\^i}", "î");
+		symbols.set("\\^{o}", "ô");
+		symbols.set("{\\^o}", "ô");
+		symbols.set("\\^{u}", "û");
+		symbols.set("{\\^u}", "û");
+		symbols.set("\\”{a}", "ä");
+		symbols.set("{\\”a}", "ä");
+		symbols.set("\\”{e}", "ë");
+		symbols.set("{\\”e}", "ë");
+		symbols.set("\\”{o}", "ö");
+		symbols.set("{\\”o}", "ö");
+		symbols.set("\\”{u}", "ü");
+		symbols.set("{\\”u}", "ü");
+		symbols.set('\\"{a}', "ä");
+		symbols.set('{\\"a}', "ä");
+		symbols.set('\\"{e}', "ë");
+		symbols.set('{\\"e}', "ë");
+		symbols.set('\\"{o}', "ö");
+		symbols.set('{\\"o}', "ö");
+		symbols.set('\\"{u}', "ü");
+		symbols.set('{\\"u}', "ü");
+		symbols.set("\\~{a}", "ã");
+		symbols.set("{\\~a}", "ã");
+		symbols.set("\\~{e}", "ẽ");
+		symbols.set("{\\~e}", "ẽ");
+		symbols.set("\\~{i}", "ĩ");
+		symbols.set("{\\~i}", "ĩ");
+		symbols.set("\\~{n}", "ñ");
+		symbols.set("{\\~n}", "ñ");
+		symbols.set("\\~{o}", "õ");
+		symbols.set("{\\~o}", "õ");
+		symbols.set("\\~{u}", "ũ");
+		symbols.set("{\\~u}", "ũ");
+		symbols.set("\\v{a}", "ǎ");
+		symbols.set("{\\va}", "ǎ");
+		symbols.set("\\v{e}", "ě");
+		symbols.set("{\\ve}", "ě");
+		symbols.set("\\v{i}", "ǐ");
+		symbols.set("{\\vi}", "ǐ");
+		symbols.set("\\v{o}", "ǒ");
+		symbols.set("{\\vo}", "ǒ");
+		symbols.set("\\v{u}", "ǔ");
+		symbols.set("{\\vu}", "ǔ");
+		symbols.set("\\c{c}", "ç");
+		symbols.set("{\\cc}", "ç");
+		symbols.set("\\aa", "å");
+		symbols.set("\\ae", "æ");
+		symbols.set("\\oe", "œ");
+		symbols.set("\\l", "ł");
+		symbols.set("\\o", "ø");
+		symbols.set("\\ss", "ß");
+		// Symbole ersetzen
+		for (let [k, v] of symbols) {
+			let regLC = new RegExp(helfer.escapeRegExp(k), "g"),
+				regUC = new RegExp(helfer.escapeRegExp( k ), "gi");
+			text = text.replace(regLC, v);
+			text = text.replace(regUC, v.toUpperCase());
+		}
+		// Bereinigungen vornehmen
+		text = text.replace(/[{}\\]/g, "");
+		// Text zurückgeben
+		return text;
+	},
+	// BibTeX-Import: prüft, ob ein BibTex-Datensatz im Clipboard liegt
+	//   cp = String
+	//     (Text-Inhalt des Clipboards)
+	BibTeXCheck (cp) {
+		cp = cp.trim();
+		if (!/^@[a-zA-Z]+\{.+?,/.test(cp) || !/\}/.test(cp)) {
+			return false;
+		}
+		return true;
+	},
+	// überprüft, ob das Wort im importierten Text gefunden wurde;
+	// außerdem gibt es die Möglichkeit, sich die Textposition der Wörter
+	// zurückgeben zu lassen (wird für das Datei-Import-Fenster gebraucht)
+	//   bs = String || undefined
+	//     (Belegtext, der überprüft werden soll)
+	//   pos = true || undefined
+	//     (Position der Treffer soll zurückgegeben werden)
+	checkWort (bs = beleg.data.bs, pos = false) {
+		if ( !pos && (!bs || !optionen.data.einstellungen["wort-check"]) ) {
+			return;
+		}
+		let positionen = []; // sammelt die Trefferpositionen (wenn gewünscht)
 		for (let i of helfer.formVariRegExpRegs) {
 			if (data.fv[i.wort].ma) { // diese Variante nur markieren => hier nicht berücksichtigen
 				continue;
 			}
 			let reg;
 			if (!data.fv[i.wort].tr) { // nicht trunkiert
-				reg = new RegExp(`(^|[${helfer.ganzesWortRegExp.links}])(${i.reg})($|[${helfer.ganzesWortRegExp.rechts}])`, "i");
+				reg = new RegExp(`(^|[${helfer.ganzesWortRegExp.links}])(${i.reg})($|[${helfer.ganzesWortRegExp.rechts}])`, "gi");
 			} else { // trunkiert
-				reg = new RegExp(i.reg, "i");
+				reg = new RegExp(i.reg, "gi");
 			}
-			if (!reg.test(beleg.data.bs)) {
+			let check = reg.test(bs);
+			if (!pos && !check) {
 				dialog.oeffnen({
 					typ: "alert",
 					text: "Das Karteiwort wurde im gerade importierten Belegtext nicht gefunden.",
@@ -1109,7 +1945,13 @@ let belegImport = {
 					},
 				});
 				break;
+			} else if (pos && check) {
+				positionen.push(reg.lastIndex);
 			}
+		}
+		// Trefferpositionen zurückgeben (wenn gewünscht)
+		if (pos) {
+			return positionen;
 		}
 	},
 };

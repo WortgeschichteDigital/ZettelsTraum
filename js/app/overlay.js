@@ -61,6 +61,9 @@ let overlay = {
 		} else if (fenster.id === "stamm") {
 			stamm.schliessen();
 			return;
+		} else if (fenster.id === "import") {
+			belegImport.DateiImportFensterSchliessen();
+			return;
 		}
 		// Fenster schließen
 		overlay.ausblenden(fenster);
