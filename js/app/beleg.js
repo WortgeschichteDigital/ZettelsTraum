@@ -192,7 +192,7 @@ let beleg = {
 			} else if (!helfer.checkType("Number", dwds)) { // DWDS-Snippet
 				beleg.formularImport("dwds");
 			} else if (bibtexCp) {
-				belegImport.BibTeX(cp, "Zwischenablage", false);
+				belegImport.BibTeX(cp, "– Zwischenablage –", false);
 				beleg.formularImport("bibtex");
 			} else if (belegImport.Datei.data.length) {
 				beleg.formularImport(belegImport.Datei.typ);

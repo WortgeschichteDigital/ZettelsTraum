@@ -1196,7 +1196,7 @@ let belegImport = {
 				cp = clipboard.readText();
 			if (importTypAktiv === "bibtex" &&
 					belegImport.BibTeXCheck(cp)) {
-				bibtexOk = belegImport.BibTeX(cp, "Zwischenablage", false);
+				bibtexOk = belegImport.BibTeX(cp, "– Zwischenablage –", false);
 			}
 			// Wenn keine BibTeX-Daten aus der Zwischenablage geladen wurden => Meldung + Abbruch
 			if (!bibtexOk) {
