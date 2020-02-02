@@ -1,0 +1,92 @@
+@charset "utf-8";
+
+/* Dialog --------------------------------------- */
+#dialog > div {
+	max-width: 450px;
+}
+
+#dialog-h-prompt,
+#dialog-h-confirm,
+#dialog-h-alert {
+	display: none;
+}
+
+.prompt #dialog-h-prompt,
+.confirm #dialog-h-confirm,
+.alert #dialog-h-alert {
+	display: inline-block;
+}
+
+.prompt .icon-h {
+	-webkit-mask-image: url(../../img/kreis-info.svg);
+	mask-image: url(../../img/kreis-info.svg);
+}
+
+.confirm .icon-h {
+	-webkit-mask-image: url(../../img/kreis-fragezeichen.svg);
+	mask-image: url(../../img/kreis-fragezeichen.svg);
+}
+
+.alert .icon-h {
+	-webkit-mask-image: url(../../img/kreis-ausrufezeichen.svg);
+	mask-image: url(../../img/kreis-ausrufezeichen.svg);
+}
+
+#dialog-rahmen {
+	padding: 10px;
+}
+
+#dialog-text {
+	max-height: 400px;
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+
+#dialog-text img {
+	vertical-align: bottom;
+}
+
+#dialog-text *:last-child {
+	margin-bottom: 0;
+}
+
+#dialog input[type="text"] {
+	width: calc(100% - 10px - 2px); /* 10px = padding, 2px = border */
+}
+
+#dialog p.button {
+	margin-bottom: 0;
+	text-align: right;
+}
+
+#dialog-confirm,
+#dialog-ok,
+#dialog-prompt {
+	display: none;
+	padding: 0 10px 10px 10px;
+}
+
+#dialog-prompt {
+	padding-bottom: 0;
+}
+
+.alert #dialog-ok {
+	display: block;
+}
+
+.alert #dialog-abbrechen-button {
+	display: none;
+}
+
+.confirm #dialog-confirm {
+	display: block;
+}
+
+.prompt #dialog-ok,
+.prompt #dialog-prompt {
+	display: block;
+}
+
+.prompt #dialog-abbrechen-button {
+	display: inline-block;
+}

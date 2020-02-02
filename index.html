@@ -12,6 +12,25 @@
 		<link rel="stylesheet" href="css/app/kopf.css">
 		<link rel="stylesheet" href="css/app/liste.css">
 		<link rel="stylesheet" href="css/app/overlays.css">
+		<link rel="stylesheet" href="css/app/overlays-anhaenge.css">
+		<link rel="stylesheet" href="css/app/overlays-ctrlC.css">
+		<link rel="stylesheet" href="css/app/overlays-dialog.css">
+		<link rel="stylesheet" href="css/app/overlays-drucken.css">
+		<link rel="stylesheet" href="css/app/overlays-einstellungen.css">
+		<link rel="stylesheet" href="css/app/overlays-gerueste.css">
+		<link rel="stylesheet" href="css/app/overlays-geruestwechseln.css">
+		<link rel="stylesheet" href="css/app/overlays-import.css">
+		<link rel="stylesheet" href="css/app/overlays-karteisuche.css">
+		<link rel="stylesheet" href="css/app/overlays-kopieren.css">
+		<link rel="stylesheet" href="css/app/overlays-lexika.css">
+		<link rel="stylesheet" href="css/app/overlays-meta.css">
+		<link rel="stylesheet" href="css/app/overlays-notizen.css">
+		<link rel="stylesheet" href="css/app/overlays-redaktion.css">
+		<link rel="stylesheet" href="css/app/overlays-sonderzeichen.css">
+		<link rel="stylesheet" href="css/app/overlays-stamm.css">
+		<link rel="stylesheet" href="css/app/overlays-tagger.css">
+		<link rel="stylesheet" href="css/app/overlays-updatesWin.css">
+		<link rel="stylesheet" href="css/app/overlays-zeitraumgrafik.css">
 		<link rel="stylesheet" href="css/app/dropdown.css">
 		<link rel="stylesheet" href="css/app/start.css">
 		<link rel="stylesheet" href="css/app/drucken.css" media="print">
@@ -208,13 +227,25 @@
 					<th colspan="2">Import<input type="radio" name="beleg-import" id="beleg-import-dta" checked
 						><label for="beleg-import-dta">DTA</label
 						><input type="radio" name="beleg-import" id="beleg-import-dwds"
-						><label for="beleg-import-dwds">DWDS</label></th>
+						><label for="beleg-import-dwds">DWDS</label
+						><input type="radio" name="beleg-import" id="beleg-import-dereko"
+						><label for="beleg-import-dereko">DeReKo</label
+						><input type="radio" name="beleg-import" id="beleg-import-bibtex"
+						><label for="beleg-import-bibtex">BibTeX</label
+					></th>
 				</tr><tr class="beleg-form" id="beleg-form-dta">
 					<td colspan="2"><input type="text" value="" id="beleg-dta" tabindex="0"
 						><input type="number" value="2" min="0" max="9999" id="beleg-dta-bis" tabindex="0"
 						><input type="button" value="Importieren" id="beleg-dta-button" tabindex="0"></td>
 				</tr><tr class="beleg-form aus" id="beleg-form-dwds">
 					<td colspan="2"><input type="button" value="Importieren" id="beleg-dwds-button" tabindex="0"></td>
+				</tr><tr class="beleg-form aus" id="beleg-form-datei">
+					<td colspan="2"
+						><span id="beleg-datei-name" dir="rtl" class="leer">keine Datei geladen</span
+						><input type="checkbox" id="beleg-datei-latin1" tabindex="0"><label for="beleg-datei-latin1">Latin-1</label
+						><input type="button" value="Datei" id="beleg-datei-oeffnen" tabindex="0"
+						><input type="button" value="Importieren" id="beleg-datei-importieren" tabindex="0"
+						></td>
 				</tr><tr class="beleg-form">
 					<td colspan="2"><hr></td>
 				</tr><tr>
@@ -818,6 +849,7 @@
 		<div id="redaktion" class="overlay aus"><div>
 			<h2><span class="icon-h icon-h-redaktion"> </span
 				>Redaktionsereignisse<a href="#" class="icon-link icon-handbuch" title="Abschnitt im Handbuch öffnen" data-handbuch="menueKartei-redaktion"> </a><a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"> </a></h2>
+			<div id="redaktion-next"></div>
 			<div id="redaktion-cont"></div>
 		</div></div>
 
@@ -851,6 +883,16 @@
 					><a href="#" class="dropdown-link-element" title="Bedeutungsgerüst auswählen"
 						><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m7 2v8l-3.5-3.5-1.5 1.5 6 6 6-6-1.5-1.5-3.5 3.5v-8z"/></svg></a
 				></span
+			></div>
+		</div></div>
+
+		<!-- OVERLAY: Datei-Import -->
+		<div id="import" class="overlay aus"><div>
+			<h2><span class="icon-h icon-h-import"> </span
+				>Datensatz importieren<a href="#" class="icon-link icon-handbuch" title="Abschnitt im Handbuch öffnen" data-handbuch="karteikarte-importfunktion"> </a><a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"> </a></h2>
+			<div id="import-cont"> </div>
+			<div id="import-abbrechen"
+				><input type="button" value="Abbrechen" id="import-abbrechen-button"
 			></div>
 		</div></div>
 

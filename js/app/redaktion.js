@@ -73,8 +73,28 @@ let redaktion = {
 		if (overlay.oeffnen(fenster)) { // Fenster ist schon offen
 			return;
 		}
+		// nächstes Ereignis eintragen
+		redaktion.next();
 		// Tabelle aufbauen
 		redaktion.tabelle();
+	},
+	// nächstes Redaktionsereignis im Kopf des Ereignisfenster anzeigen
+	next () {
+		// Element leeren
+		let next = document.getElementById("redaktion-next");
+		helfer.keineKinder(next);
+		// nächstes Ereignis ermitteln
+		let ereignis = redaktion.kopfIcon(false).title;
+		// Anzeige auffrischen
+		let strong = document.createElement("strong");
+		next.appendChild(strong);
+		strong.textContent = ereignis[0].match(/<h3>(.+?)<\/h3>/)[1];
+		if (ereignis[1]) {
+			strong.appendChild(document.createTextNode(":"));
+			next.appendChild(document.createTextNode(ereignis[1]));
+		} else {
+			strong.appendChild(document.createTextNode("!"));
+		}
 	},
 	// erstellt die Tabelle im Redaktionsfenster
 	tabelle () {
@@ -384,6 +404,8 @@ let redaktion = {
 		data.rd.push(obj);
 		kartei.karteiGeaendert(true);
 		redaktion.tabelle();
+		// Anzeige nächstes Ereignis auffrischen
+		redaktion.next();
 		// Erinnerungen-Icon auffrischen
 		erinnerungen.check();
 	},
@@ -424,6 +446,8 @@ let redaktion = {
 						data.rd.splice(slot, 1);
 						kartei.karteiGeaendert(true);
 						redaktion.tabelle();
+						// Anzeige nächstes Ereignis auffrischen
+						redaktion.next();
 						// Redaktions-Icon auffrischen
 						kopf.icons();
 					}
@@ -446,6 +470,8 @@ let redaktion = {
 		});
 	},
 	// Meldungsfenster für das Redaktions-Icon im Kopf
+	// (wird auch für die Anzeige des nächsten Ereignisses im Kopf des
+	// Ereignisfensters genutzt)
 	//   meldung = Boolean
 	//     (Meldung anzeigen; sonst nur den Text zurückgeben)
 	kopfIcon (meldung) {

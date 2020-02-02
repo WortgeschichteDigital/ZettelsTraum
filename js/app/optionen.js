@@ -619,7 +619,7 @@ let optionen = {
 	tagsCheckLaden ({datei, typ = "-"}) {
 		return new Promise((resolve) => {
 			const fsP = require("fs").promises;
-			fsP.readFile(datei, {encoding: "utf-8"})
+			fsP.readFile(datei, {encoding: "utf8"})
 				.then(content => {
 					// Datei parsen
 					let parsed = optionen.tagsParsen(content),
@@ -761,7 +761,7 @@ let optionen = {
 		}
 		// Datei laden
 		const fsP = require("fs").promises;
-		fsP.readFile(result.filePaths[0], {encoding: "utf-8"})
+		fsP.readFile(result.filePaths[0], {encoding: "utf8"})
 			.then(content => {
 				// Tag-Datei parsen
 				let parsed = optionen.tagsParsen(content),
@@ -1070,7 +1070,7 @@ let optionen = {
 		}
 		// Datei laden
 		const fsP = require("fs").promises;
-		fsP.readFile(result.filePaths[0], {encoding: "utf-8"})
+		fsP.readFile(result.filePaths[0], {encoding: "utf8"})
 			.then(content => {
 				// Inhalt einlesen und speichern
 				optionen.data.personen = [];

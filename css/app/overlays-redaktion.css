@@ -1,0 +1,114 @@
+@charset "utf-8";
+
+/* Redaktion ------------------------------------ */
+#redaktion > div {
+	margin-top: 40px;
+	max-width: 800px;
+}
+
+.icon-h-redaktion {
+	-webkit-mask-image: url(../../img/personen.svg);
+	mask-image: url(../../img/personen.svg);
+}
+
+.icon-redaktion-aufwaerts {
+	-webkit-mask-image: url(../../img/pfeil-gerade-hoch.svg);
+	mask-image: url(../../img/pfeil-gerade-hoch.svg);
+}
+
+.icon-redaktion-hinzufuegen {
+	-webkit-mask-image: url(../../img/plus-dick.svg);
+	mask-image: url(../../img/plus-dick.svg);
+}
+
+.icon-redaktion-loeschen {
+	-webkit-mask-image: url(../../img/muelleimer.svg);
+	mask-image: url(../../img/muelleimer.svg);
+}
+
+#redaktion-next {
+	padding: 10px 10px 25px 10px;
+}
+
+#redaktion-next strong {
+	margin: 0 10px 0 34px;
+	color: var(--farbe);
+}
+
+#redaktion-cont {
+	padding: 0 10px 10px 10px;
+}
+
+#redaktion-cont .icon-link {
+	vertical-align: text-bottom;
+	background-color: var(--textExtremHell);
+}
+
+#redaktion-cont .icon-link:focus {
+	background-color: var(--farbe);
+}
+
+#redaktion-cont .icon-link:hover {
+	background-color: var(--text);
+}
+
+#redaktion-cont table {
+	border-collapse: collapse;
+	border-spacing: 0;
+	margin: 0 auto;
+}
+
+#redaktion-cont td {
+	padding: 0 5px 5px 5px;
+	vertical-align: top;
+	line-height: 30px;
+	white-space: nowrap;
+}
+
+#redaktion-cont td.leer {
+	color: var(--textSehrHell);
+	font-style: italic;
+}
+
+#redaktion-cont td:first-child {
+	padding-left: 0;
+	min-width: 24px;
+	max-width: 24px;
+}
+
+#redaktion-cont td:nth-child(3) {
+	white-space: normal;
+	padding-left: 29px;
+	text-indent: -29px;
+}
+
+#redaktion-cont td:nth-child(3).kein-einzug {
+	padding-left: 5px;
+	text-indent: 0;
+}
+
+#redaktion-cont td:nth-child(4) {
+	white-space: normal;
+}
+
+#redaktion-cont td:last-child {
+	padding-right: 0;
+	min-width: 24px;
+	max-width: 24px;
+}
+
+#redaktion-cont img {
+	position: relative;
+	top: 2px;
+	margin-right: 5px;
+	vertical-align: top;
+}
+
+input[id^="redaktion-datum"] {
+	width: 130px;
+}
+
+input[id^="redaktion-ereignis"],
+input[id^="redaktion-person"] {
+	width: calc(100% - 31px);
+}

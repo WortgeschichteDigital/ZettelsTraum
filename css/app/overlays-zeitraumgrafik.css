@@ -1,0 +1,20 @@
+@charset "utf-8";
+
+/* Zeitraumgrafik ------------------------------- */
+#zeitraumgrafik > div {
+	margin-top: 40px;
+	max-width: 720px;
+}
+
+.icon-h-zeitraumgrafik {
+	-webkit-mask-image: url(../../img/diagramm.svg);
+	mask-image: url(../../img/diagramm.svg);
+}
+
+#zeitraumgrafik-cont {
+	padding: 10px;
+}
+
+#zeitraumgrafik-cont div {
+	overflow-x: auto;
+}

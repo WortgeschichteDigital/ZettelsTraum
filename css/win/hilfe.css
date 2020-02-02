@@ -94,6 +94,10 @@ code.quelltext {
 	color: var(--text);
 }
 
+code.quelltext.long {
+	word-break: break-all;
+}
+
 figure {
 	clear: left;
 	clear: right;
@@ -237,6 +241,10 @@ section ol {
 
 section ol {
 	list-style-type: decimal;
+}
+
+section ol ul {
+	margin-top: 10px;
 }
 
 section li {

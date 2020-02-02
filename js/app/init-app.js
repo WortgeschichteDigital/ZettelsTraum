@@ -193,6 +193,8 @@ window.addEventListener("load", async () => {
 		}
 		beleg.ctrlLinks(a);
 	});
+	// Datei-Import
+	document.getElementById("import-abbrechen-button").addEventListener("click", () => belegImport.DateiImportFensterSchliessen());
 	// Sonderzeichen
 	document.querySelectorAll("#sonderzeichen-cont a").forEach(i => sonderzeichen.eintragen(i));
 	// Kopierfunktion

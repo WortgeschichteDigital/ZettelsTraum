@@ -1,0 +1,63 @@
+@charset "utf-8";
+
+/* Gerüste -------------------------------------- */
+#gerueste > div {
+	margin-top: 40px;
+	max-width: 360px;
+}
+
+.icon-h-gerueste {
+	-webkit-mask-image: url(../../img/geruest.svg);
+	mask-image: url(../../img/geruest.svg);
+}
+
+#gerueste-cont {
+	padding: 10px;
+}
+
+.icon-add {
+	-webkit-mask-image: url(../../img/plus-dick.svg);
+	mask-image: url(../../img/plus-dick.svg);
+}
+
+#gerueste-cont table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+#gerueste-cont td {
+	padding: 5px 10px;
+	line-height: 30px;
+}
+
+#gerueste-cont td:first-child {
+	padding-left: 0;
+	vertical-align: top;
+}
+
+#gerueste-cont td:last-child {
+	padding-right: 0;
+	vertical-align: top;
+}
+
+#gerueste-cont td.leer {
+	color: var(--textSehrHell);
+	font-style: italic;
+}
+
+#gerueste-cont input {
+	width: 200px;
+}
+
+#gerueste-cont .icon-link {
+	vertical-align: text-bottom;
+	background-color: var(--textExtremHell);
+}
+
+#gerueste-cont .icon-link:hover {
+	background-color: var(--text);
+}
+
+#gerueste-cont .icon-link:focus {
+	background-color: var(--farbe);
+}

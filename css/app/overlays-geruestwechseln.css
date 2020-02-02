@@ -1,0 +1,21 @@
+@charset "utf-8";
+
+/* Gerüst wechseln ------------------------------ */
+#geruestwechseln > div {
+	margin-top: 40px;
+	max-width: 325px;
+}
+
+.icon-h-geruestwechseln {
+	-webkit-mask-image: url(../../img/geruest-zahnrad.svg);
+	mask-image: url(../../img/geruest-zahnrad.svg);
+}
+
+#geruestwechseln-cont {
+	padding: 10px 10px 10px 34px;
+	text-align: center;
+}
+
+#geruestwechseln-cont span {
+	display: inline-block;
+}

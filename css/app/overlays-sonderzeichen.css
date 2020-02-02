@@ -1,0 +1,31 @@
+@charset "utf-8";
+
+/* Sonderzeichen -------------------------------- */
+#sonderzeichen > div {
+	margin-top: 40px;
+	max-width: 370px;
+}
+
+.icon-h-sonderzeichen {
+	-webkit-mask-image: url(../../img/pi.svg);
+	mask-image: url(../../img/pi.svg);
+}
+
+#sonderzeichen-cont {
+	padding: 10px 0 0 10px;
+}
+
+#sonderzeichen-cont a {
+	display: inline-block;
+	margin: 0 10px 10px 0;
+	border: 1px solid var(--linie);
+	width: 24px;
+	height: 24px;
+	color: var(--text);
+	text-align: center;
+}
+
+#sonderzeichen-cont a:focus,
+#sonderzeichen-cont a:hover {
+	background-color: var(--hover);
+}
