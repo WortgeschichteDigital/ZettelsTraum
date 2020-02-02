@@ -1510,6 +1510,8 @@ let belegImport = {
 				pushBeleg();
 				continue;
 			}
+			// Enteties auflösen
+			zeile = zeile.replace(/&#(.+?);/g, (m, p1) => String.fromCharCode(p1));
 			// vorangestellte Quelle
 			if (regQuVor.test(zeile)) {
 				let match = zeile.match(regQuVor);
