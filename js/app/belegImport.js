@@ -1765,10 +1765,16 @@ let belegImport = {
 				quelle += ` ${ort}`;
 			}
 			// Quellenangabe: Jahr
+			let jahr;
 			if (item.year) {
-				quelle += ` (${item.year.join("/")})`;
+				jahr = item.year.join("/");
 			} else if (item.date) {
-				quelle += ` (${item.date.join("/")})`;
+				jahr = item.date.join("/");
+			}
+			if (jahr && zeitschrift) {
+				quelle += ` (${jahr})`;
+			} else if (jahr) {
+				quelle += ` ${jahr}`;
 			}
 			// Quellenangabe: Seiten
 			if (istAbschnitt && item.pages) {
