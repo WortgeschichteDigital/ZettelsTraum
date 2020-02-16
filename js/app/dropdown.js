@@ -286,6 +286,8 @@ let dropdown = {
 			dropdown.data = ["erstellt", "geändert"];
 		} else if (/^karteisuche-datum-dir/.test(feld_id)) {
 			dropdown.data = ["<=", ">="];
+		} else if (/^karteisuche-redaktion-logik/.test(feld_id)) {
+			dropdown.data = ["=", "≠"];
 		}
 		// Dropdown erzeugen und einhängen
 		let span = document.createElement("span");

@@ -492,7 +492,7 @@ let karteisuche = {
 		wrap.appendChild(erg);
 		erg.classList.add("karteisuche-hoechst");
 		erg.textContent = ereignisse[hoechst];
-		// Personen und Daten: Wer hat wan was erstellt?
+		// Personen und Daten: Wer hat wann was erstellt?
 		let erstellt = [
 			{
 				arr: ds.redaktion.filter(v => v.er === "Kartei erstellt"),
@@ -715,6 +715,13 @@ let karteisuche = {
 			},
 		],
 		"Redaktion": [
+			{
+				type: "dropdown",
+				ro: false,
+				cl: "karteisuche-redaktion-logik",
+				ph: "Logik",
+				pre: "=",
+			},
 			{
 				type: "dropdown",
 				ro: false,
@@ -973,6 +980,7 @@ let karteisuche = {
 				if (textPr) {
 					obj.pr = new RegExp(helfer.formVariSonderzeichen(helfer.escapeRegExp(textPr)), "i");
 				}
+				obj.logik = document.getElementById(`karteisuche-redaktion-logik-${id}`).value;
 				karteisuche.filterWerte.push(obj);
 			}
 			karteisuche.filterIgnorieren(filter, false);
@@ -1090,11 +1098,17 @@ let karteisuche = {
 						er: filter.er && filter.er.test(i.er) ? true : false,
 						pr: filter.pr && filter.pr.test(i.pr) ? true : false,
 					};
-					if (filter.er && filter.pr && gefunden.er && gefunden.pr ||
+					let treffer = filter.er && filter.pr && gefunden.er && gefunden.pr ||
 							filter.er && !filter.pr && gefunden.er ||
-							!filter.er && filter.pr && gefunden.pr) {
+							!filter.er && filter.pr && gefunden.pr;
+					if (treffer && filter.logik === "=") {
 						continue forX;
+					} else if (treffer && filter.logik !== "=") {
+						return false;
 					}
+				}
+				if (filter.logik !== "=") {
+					continue forX;
 				}
 				return false;
 			}
@@ -1131,6 +1145,11 @@ let karteisuche = {
 	filterWiederherstellen () {
 		for (let i = optionen.data.karteisuche.filter.length - 1; i >= 0; i--) {
 			let werte = optionen.data.karteisuche.filter[i];
+			// Korrektur Redaktionsfilter
+			// (ab Version 0.32.0 gibt es ein Logikfeld: = || !=)
+			if (werte[0] === "Redaktion" && werte.length === 3) {
+				werte.splice(1, 0, "=");
+			}
 			// neuen Absatz erzeugen
 			karteisuche.filterHinzufuegen(false);
 			let typ = document.querySelector("#karteisuche-filter input");
@@ -1157,7 +1176,7 @@ let karteisuche = {
 		if (ks.classList.contains("aus")) {
 			return;
 		}
-		if (ks.querySelector("div").offsetWidth < 670) {
+		if (ks.querySelector("div").offsetWidth < 730) {
 			ks.classList.add("karteisuche-schmal");
 		} else {
 			ks.classList.remove("karteisuche-schmal");

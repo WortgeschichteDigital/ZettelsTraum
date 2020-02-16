@@ -238,6 +238,10 @@
 	width: 25px;
 }
 
+#karteisuche-filter span input[type="text"].karteisuche-redaktion-logik {
+	width: 20px;
+}
+
 #karteisuche-filter input:read-only {
 	cursor: default;
 }
