@@ -292,6 +292,7 @@ let karteisuche = {
 		// Filterwerte sammeln
 		karteisuche.filterWerteSammeln();
 		// Karteien analysieren
+		let ztjAdd = [];
 		for (let kartei of karteisuche.ztj) {
 			const content = await io.lesen(kartei.pfad);
 			// Kartei einlesen
@@ -306,11 +307,40 @@ let karteisuche = {
 			if (!/^(wgd|ztj)$/.test(datei.ty)) {
 				continue;
 			}
-			// Wort merken
-			kartei.wort = datei.wo;
-			// mit Suchfiltern abgleichen
-			kartei.passt = karteisuche.filtern(datei);
+			// Werden in der Kartei mehrere Wörter behandelt?
+			let woerter = [datei.wo];
+			if (/, (?!der|die|das)/.test(datei.wo)) {
+				woerter = datei.wo.split(", ");
+			}
+			for (let i = 0, len = woerter.length; i < len; i++) {
+				let ziel = kartei;
+				if (i > 0) {
+					ztjAdd.push({
+						pfad: kartei.pfad,
+						wort: "",
+						redaktion: [],
+						passt: false,
+					});
+					ziel = ztjAdd[ztjAdd.length - 1];
+				}
+				// Wort merken
+				ziel.wort = woerter[i];
+				// mit Suchfiltern abgleichen
+				if (i > 0) {
+					ziel.passt = kartei.passt;
+				} else {
+					ziel.passt = karteisuche.filtern(datei);
+				}
+				// Redaktionsereignisse klonen
+				if (ziel.passt) {
+					for (let erg of datei.rd) {
+						ziel.redaktion.push({...erg});
+					}
+				}
+			}
 		}
+		// Karteiliste ggf. ergänzen
+		karteisuche.ztj = karteisuche.ztj.concat(ztjAdd);
 		// passende Karteien auflisten
 		karteisuche.ztjAuflisten();
 		// Sperrbild weg und das zuletzt fokussierte Element wieder fokussieren
