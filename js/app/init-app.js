@@ -293,6 +293,7 @@ window.addEventListener("load", async () => {
 	});
 	// Karteisuche
 	document.getElementById("karteisuche-suchen").addEventListener("click", () => karteisuche.suchenPrep());
+	document.querySelector("#karteisuche-cont h3").addEventListener("click", () => karteisuche.filterUmschalten());
 	document.getElementById("karteisuche-add-filter").addEventListener("click", () => karteisuche.filterHinzufuegen());
 	// Prompt-Textfeld
 	document.getElementById("dialog-prompt-text").addEventListener("keydown", function(evt) {

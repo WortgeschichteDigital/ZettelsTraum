@@ -65,7 +65,7 @@
 
 #karteisuche-cont h3 {
 	position: relative;
-	margin: 10px 0 0 0;
+	margin: 20px 0 0 0;
 	overflow: hidden;
 	padding: 0 0 0 4px;
 	background-color: var(--farbeH);
@@ -95,8 +95,13 @@
 	margin-top: 20px;
 }
 
-#karteisuche-cont h3 + div:not(#karteisuche-karteien) {
-	padding: 10px 0;
+#karteisuche-filterblock {
+	padding: 10px 0 0 0;
+	transition: height .3s ease, padding-top .3s ease;
+}
+
+#karteisuche-filterblock.blenden {
+	overflow: hidden;
 }
 
 /* Pfade & Filter ------------------------------- */

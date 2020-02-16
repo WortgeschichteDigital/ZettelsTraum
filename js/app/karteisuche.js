@@ -547,7 +547,7 @@ let karteisuche = {
 		}
 		// Maximalhöhe berechnen
 		let liste = document.getElementById("karteisuche-karteien"),
-			max = window.innerHeight - 40 - 28 - 20 - 40 - 20; // 40px Abstand oben, 28px Fensterkopf, 20px Paddings, 40px Margins, 20px Abstand unten
+			max = window.innerHeight - 40 - 28 - 20 - 50 - 20; // 40px Abstand oben, 28px Fensterkopf, 20px Paddings, 50px Margins, 20px Abstand unten
 		for (let i of document.getElementById("karteisuche-cont").childNodes) {
 			if (i === liste || i.nodeType !== 1) {
 				continue;
@@ -1161,6 +1161,41 @@ let karteisuche = {
 			ks.classList.add("karteisuche-schmal");
 		} else {
 			ks.classList.remove("karteisuche-schmal");
+		}
+	},
+	// Ansicht der Filter umschalten
+	filterUmschalten () {
+		let filter = document.getElementById("karteisuche-filterblock"),
+			hoehe = 0;
+		if (filter.classList.contains("aus")) {
+			filter.classList.remove("aus");
+			hoehe = filter.scrollHeight;
+			karteisuche.hoeheTrefferliste();
+			filter.classList.add("blenden");
+			filter.style.height = "0px";
+			filter.style.paddingTop = "0px";
+			setTimeout(() => {
+				filter.style.height = `${hoehe}px`;
+				filter.style.paddingTop = "10px";
+			}, 0);
+			setTimeout(() => {
+				filter.classList.remove("blenden");
+				filter.removeAttribute("style");
+			}, 300);
+		} else {
+			filter.classList.add("blenden");
+			filter.style.height = `${filter.scrollHeight}px`;
+			filter.style.paddingTop = "10px";
+			setTimeout(() => {
+				filter.style.height = "0px";
+				filter.style.paddingTop = "0px";
+			}, 0);
+			setTimeout(() => {
+				filter.classList.add("aus");
+				filter.classList.remove("blenden");
+				filter.removeAttribute("style");
+				karteisuche.hoeheTrefferliste();
+			}, 300);
 		}
 	},
 	// Animation, dass die Karteisuche läuft
