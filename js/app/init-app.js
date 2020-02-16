@@ -97,7 +97,10 @@ window.addEventListener("load", async () => {
 	ipcRenderer.on("before-unload", () => helfer.beforeUnload());
 
 	// EVENTS: RESIZE
-	window.addEventListener("resize", () => notizen.maxHeight());
+	window.addEventListener("resize", () => {
+		karteisuche.hoeheTrefferliste(true);
+		notizen.maxHeight();
+	});
 
 	// EVENTS: TASTATUREINGABEN
 	document.addEventListener("keydown", tastatur.init);

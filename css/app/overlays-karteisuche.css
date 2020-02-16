@@ -5,7 +5,7 @@
 	position: relative;
 	margin-top: 40px;
 	max-width: 900px;
-	max-height: calc(100vh - 80px);
+	max-height: calc(100vh - 60px);
 }
 
 .icon-h-karteisuche {

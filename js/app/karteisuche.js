@@ -128,6 +128,8 @@ let karteisuche = {
 		optionen.speichern();
 		// Liste auffrischen
 		karteisuche.pfadeAuflisten();
+		// Maximalhöhe Trefferliste setzen
+		karteisuche.hoeheTrefferliste();
 	},
 	// Pfad aus der Liste entfernen
 	//   a = Element
@@ -141,6 +143,8 @@ let karteisuche = {
 			optionen.speichern();
 			// Liste auffrischen
 			karteisuche.pfadeAuflisten();
+			// Maximalhöhe Trefferliste setzen
+			karteisuche.hoeheTrefferliste();
 		});
 	},
 	// speichert das Input-Element, das vor dem Start der Suche den Fokus hatte
@@ -411,6 +415,8 @@ let karteisuche = {
 			span.textContent = pfad;
 			span.title = pfad;
 		}
+		// Maximalhöhe Trefferliste setzen
+		karteisuche.hoeheTrefferliste();
 	},
 	// ZTJ-Datei in neuem Fenster öffnen
 	//   a = Element
@@ -429,6 +435,25 @@ let karteisuche = {
 			const {ipcRenderer} = require("electron");
 			ipcRenderer.send("kartei-laden", this.dataset.pfad, false);
 		});
+	},
+	// maximal Höhe der Trefferliste berechnen
+	//   resize = true || undefined
+	//     (die Berechnung wurde durch die Größenänderung des Fenster angestoßen)
+	hoeheTrefferliste (resize = false) {
+		// Ist die Karteisuche überhaupt offen?
+		if (resize && document.getElementById("karteisuche").classList.contains("aus")) {
+			return;
+		}
+		// Maximalhöhe berechnen
+		let liste = document.getElementById("karteisuche-karteien"),
+			max = window.innerHeight - 40 - 28 - 20 - 40 - 20; // 40px Abstand oben, 28px Fensterkopf, 20px Paddings, 40px Margins, 20px Abstand unten
+		for (let i of document.getElementById("karteisuche-cont").childNodes) {
+			if (i === liste || i.nodeType !== 1) {
+				continue;
+			}
+			max -= i.offsetHeight;
+		}
+		liste.style.maxHeight = `${max}px`;
 	},
 	// Generator zur Erzeugung der nächsten Filter-ID
 	makeId: null,
@@ -554,6 +579,8 @@ let karteisuche = {
 		if (manuell) {
 			input.focus();
 		}
+		// Maximalhöhe Trefferliste setzen
+		karteisuche.hoeheTrefferliste();
 	},
 	// baut die zu einem Filter gehörigen Formularelemente auf
 	//   filterId = String
@@ -658,6 +685,8 @@ let karteisuche = {
 		a.addEventListener("click", function(evt) {
 			evt.preventDefault();
 			a.parentNode.parentNode.removeChild(a.parentNode);
+			// Maximalhöhe Trefferliste setzen
+			karteisuche.hoeheTrefferliste();
 		});
 	},
 	// Zwischenspeicher für die Filterwerte
