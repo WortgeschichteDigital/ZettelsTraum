@@ -944,18 +944,30 @@ let karteisuche = {
 			}
 			// BearbeiterIn
 			else if (typ === "BearbeiterIn") {
-				obj.wert = document.getElementById(`karteisuche-person-${id}`).value;
-				if (obj.wert) {
-					karteisuche.filterWerte.push(obj);
+				let text = document.getElementById(`karteisuche-person-${id}`).value;
+				text = helfer.textTrim(text, true);
+				if (!text) {
+					continue;
 				}
+				obj.reg = new RegExp(helfer.formVariSonderzeichen(helfer.escapeRegExp(text)), "i");
+				karteisuche.filterWerte.push(obj);
 			}
 			// Redaktion
 			else if (typ === "Redaktion") {
-				obj.er = document.getElementById(`karteisuche-redaktion-ereignis-${id}`).value;
-				obj.pr = document.getElementById(`karteisuche-redaktion-person-${id}`).value;
-				if (obj.er || obj.pr) {
-					karteisuche.filterWerte.push(obj);
+				let textEr = document.getElementById(`karteisuche-redaktion-ereignis-${id}`).value,
+					textPr = document.getElementById(`karteisuche-redaktion-person-${id}`).value;
+				textEr = helfer.textTrim(textEr, true);
+				textPr = helfer.textTrim(textPr, true);
+				if (!textEr && !textPr) {
+					continue;
 				}
+				if (textEr) {
+					obj.er = new RegExp(helfer.formVariSonderzeichen(helfer.escapeRegExp(textEr)), "i");
+				}
+				if (textPr) {
+					obj.pr = new RegExp(helfer.formVariSonderzeichen(helfer.escapeRegExp(textPr)), "i");
+				}
+				karteisuche.filterWerte.push(obj);
 			}
 		}
 	},
@@ -1048,15 +1060,15 @@ let karteisuche = {
 			}
 			// BearbeiterIn
 			else if (filter.typ === "BearbeiterIn" &&
-					!datei.be.includes(filter.wert)) {
+					!hasSome(datei.be, filter.reg)) {
 				return false;
 			}
 			// Redaktion
 			else if (filter.typ === "Redaktion") {
 				for (let i of datei.rd) {
 					let gefunden = {
-						er: filter.er && i.er === filter.er ? true : false,
-						pr: filter.pr && i.pr === filter.pr ? true : false,
+						er: filter.er && filter.er.test(i.er) ? true : false,
+						pr: filter.pr && filter.pr.test(i.pr) ? true : false,
 					};
 					if (filter.er && filter.pr && gefunden.er && gefunden.pr ||
 							filter.er && !filter.pr && gefunden.er ||
@@ -1068,6 +1080,15 @@ let karteisuche = {
 			}
 		}
 		return true;
+		// testet, ob die Bedingungen zutreffen
+		// (ausgelagert, damit die Funktionen nicht in der Schleife sind)
+		//   arr = Array
+		//     (hier wird gesucht)
+		//   reg = RegExp
+		//     (regulärer Ausdruck, mit dem gesucht wird)
+		function hasSome (arr, reg) {
+			return arr.some(v => reg.test(v));
+		}
 	},
 	// aktuelle Filterkonfiguration in den Optionen speichern
 	filterSpeichern () {
