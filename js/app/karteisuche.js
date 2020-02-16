@@ -885,6 +885,7 @@ let karteisuche = {
 				typ = filter.value;
 			// Filter ausgewählt?
 			if (!typ) {
+				karteisuche.filterIgnorieren(filter, true);
 				continue;
 			}
 			// Objekt für die Filterwerte
@@ -896,6 +897,7 @@ let karteisuche = {
 				let text = document.getElementById(`karteisuche-karteiwort-${id}`).value;
 				text = helfer.textTrim(text, true);
 				if (!text) {
+					karteisuche.filterIgnorieren(filter, true);
 					continue;
 				}
 				obj.reg = new RegExp(helfer.formVariSonderzeichen(helfer.escapeRegExp(text)), "i");
@@ -906,6 +908,7 @@ let karteisuche = {
 				let text = document.getElementById(`karteisuche-volltext-${id}`).value;
 				text = helfer.textTrim(text.replace(/[<>]+/g, ""), true);
 				if (!text) {
+					karteisuche.filterIgnorieren(filter, true);
 					continue;
 				}
 				const i = document.getElementById(`karteisuche-volltext-genau-${id}`).checked ? "" : "i";
@@ -918,6 +921,7 @@ let karteisuche = {
 				obj.tagId = "";
 				const tag = document.getElementById(`karteisuche-tag-${id}`).value;
 				if (!obj.tagTyp || !tag) {
+					karteisuche.filterIgnorieren(filter, true);
 					continue;
 				}
 				for (let id in optionen.data.tags[obj.tagTyp].data) {
@@ -947,6 +951,7 @@ let karteisuche = {
 				let text = document.getElementById(`karteisuche-person-${id}`).value;
 				text = helfer.textTrim(text, true);
 				if (!text) {
+					karteisuche.filterIgnorieren(filter, true);
 					continue;
 				}
 				obj.reg = new RegExp(helfer.formVariSonderzeichen(helfer.escapeRegExp(text)), "i");
@@ -959,6 +964,7 @@ let karteisuche = {
 				textEr = helfer.textTrim(textEr, true);
 				textPr = helfer.textTrim(textPr, true);
 				if (!textEr && !textPr) {
+					karteisuche.filterIgnorieren(filter, true);
 					continue;
 				}
 				if (textEr) {
@@ -969,6 +975,20 @@ let karteisuche = {
 				}
 				karteisuche.filterWerte.push(obj);
 			}
+			karteisuche.filterIgnorieren(filter, false);
+		}
+	},
+	// markiert/demarkiert Filter, die ignoriert werden/wurden
+	//   filter = Element
+	//     (Input-Feld mit der Bezeichnung des Filtertyps)
+	//   ignorieren = Boolean
+	//     (Filter wird ignoriert bzw. nicht mehr ignoriert)
+	filterIgnorieren (filter, ignorieren) {
+		let p = filter.closest("p");
+		if (ignorieren) {
+			p.classList.add("karteisuche-ignoriert");
+		} else {
+			p.classList.remove("karteisuche-ignoriert");
 		}
 	},
 	// String-Datensätze, die der Volltextfilter berücksichtigt

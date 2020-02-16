@@ -178,6 +178,20 @@
 	background-color: var(--farbe);
 }
 
+#karteisuche-filter p.karteisuche-ignoriert > a {
+	background-color: var(--farbeRot);
+	-webkit-mask-image: url(../../img/x-dick-rot.svg);
+	mask-image: url(../../img/x-dick-rot.svg);
+}
+
+#karteisuche-filter p.karteisuche-ignoriert > a:hover {
+	background-color: var(--text);
+}
+
+#karteisuche-filter p.karteisuche-ignoriert > a:focus {
+	background-color: var(--farbe);
+}
+
 #karteisuche-filter p > span {
 	display: inline-block;
 	margin-left: 10px;
