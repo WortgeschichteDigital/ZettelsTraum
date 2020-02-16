@@ -355,6 +355,7 @@ let karteisuche = {
 	// Array enthält Objekte:
 	//   pfad (String; Pfad zur Kartei)
 	//   wort (String; Wort der Kartei)
+	//   redaktion (Array; Klon von data.rd)
 	//   passt (Boolean; passt zu den Suchfiltern)
 	ztj: [],
 	// findet alle Pfade in einem übergebenen Ordner
@@ -386,6 +387,7 @@ let karteisuche = {
 				karteisuche.ztj.push({
 					pfad: pfad,
 					wort: "",
+					redaktion: [],
 					passt: false,
 				});
 			}
@@ -416,19 +418,20 @@ let karteisuche = {
 		// Treffer anzeigen
 		document.getElementById("karteisuche-treffer").textContent = `(${treffer})`;
 		// Karteiliste füllen
-		let cont = document.getElementById("karteisuche-karteien");
+		let cont = document.getElementById("karteisuche-karteien"),
+			redaktion = karteisuche.filterWerte.some(i => i.typ === "Redaktion"),
+			alphabet = new Set();
 		helfer.keineKinder(cont);
-		let alphabet = new Set();
 		for (let wort of woerter) {
 			// Absatz
-			let p = document.createElement("p");
-			cont.appendChild(p);
+			let div = document.createElement("div");
+			cont.appendChild(div);
 			let alpha = karteisuche.wortAlpha(wort.wort);
 			alphabet.add(alpha);
-			p.dataset.buchstabe = alpha;
+			div.dataset.buchstabe = alpha;
 			// Link
 			let a = document.createElement("a");
-			p.appendChild(a);
+			div.appendChild(a);
 			a.href = "#";
 			let pfad = karteisuche.ztj[wort.i].pfad;
 			a.dataset.pfad = pfad;
@@ -442,11 +445,77 @@ let karteisuche = {
 			a.appendChild(span);
 			span.textContent = pfad;
 			span.title = pfad;
+			// Redaktionsereignisse
+			if (redaktion) {
+				karteisuche.ztjAuflistenRedaktion(div, wort.i);
+			}
 		}
 		// Maximalhöhe Trefferliste setzen
 		karteisuche.hoeheTrefferliste();
 		// Alphabet drucken
 		karteisuche.alphabet(alphabet);
+	},
+	// Redaktionsstatus und -ereignisse in der Trefferliste anzeigen
+	//   div = Element
+	//     (der Container, in dem die Ereignisse angezeigt werden sollen)
+	//   i = Number
+	//     (Index, der auf die Daten in karteisuche.ztj zeigt)
+	ztjAuflistenRedaktion (div, i) {
+		// Wrapper erzeugen
+		let wrap = document.createElement("div");
+		div.appendChild(wrap);
+		// Redaktionssatus
+		let ds = karteisuche.ztj[i],
+			ereignisse = Object.keys(redaktion.ereignisse),
+			status2 = ereignisse.indexOf("Artikel erstellt"),
+			status3 = ereignisse.indexOf("Artikel online"),
+			hoechst = -1;
+		for (let i of ds.redaktion) {
+			let idx = ereignisse.indexOf(i.er);
+			hoechst = idx > hoechst ? idx : hoechst;
+		}
+		// Status drucken
+		let status = document.createElement("span");
+		wrap.appendChild(status);
+		status.classList.add("karteisuche-status");
+		if (hoechst >= status3) {
+			status.classList.add("karteisuche-status3");
+		} else if (hoechst >= status2) {
+			status.classList.add("karteisuche-status2");
+		} else {
+			status.classList.add("karteisuche-status1");
+		}
+		// höchstes Redaktionsereignis drucken
+		let erg = document.createElement("span");
+		wrap.appendChild(erg);
+		erg.classList.add("karteisuche-hoechst");
+		erg.textContent = ereignisse[hoechst];
+		// Personen und Daten: Wer hat wan was erstellt?
+		let erstellt = [
+			{
+				arr: ds.redaktion.filter(v => v.er === "Kartei erstellt"),
+				txt: "Kartei",
+			},
+			{
+				arr: ds.redaktion.filter(v => v.er === "Artikel erstellt"),
+				txt: "Artikel",
+			},
+		];
+		let br = false;
+		for (let e of erstellt) {
+			for (let i of e.arr) {
+				if (br) {
+					wrap.appendChild(document.createElement("br"));
+				}
+				let da = helfer.datumFormat(i.da, true).split(", ")[0],
+					pr = i.pr ? i.pr : "N. N.";
+				let typ = document.createElement("i");
+				wrap.appendChild(typ);
+				typ.textContent = `${e.txt}:`;
+				wrap.appendChild(document.createTextNode(` ${pr} (${da})`));
+				br = true;
+			}
+		}
 	},
 	// ZTJ-Datei in neuem Fenster öffnen
 	//   a = Element
