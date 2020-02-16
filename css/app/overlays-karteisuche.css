@@ -4,7 +4,7 @@
 #karteisuche > div {
 	position: relative;
 	margin-top: 40px;
-	max-width: 900px;
+	max-width: 800px;
 	max-height: calc(100vh - 60px);
 }
 
@@ -276,7 +276,6 @@
 
 #karteisuche-alphabet a {
 	display: inline-block;
-	margin-left: 5px;
 	width: 20px;
 	color: #fff;
 	text-align: center;
@@ -287,7 +286,7 @@
 }
 
 #karteisuche-alphabet a:first-child {
-	margin: 0 10px 0 0;
+	margin: 0 5px 0 0;
 	width: auto;
 }
 
@@ -333,10 +332,11 @@
 
 /* Karteien: Redaktionsstatus ------------------- */
 #karteisuche-karteien div > div {
-	padding: 0 10px 5px 267px; /* 200px = Redaktionsereignis, 17px Color-Code */
+	border-top: 1px dotted var(--linie);
+	padding: 5px 10px 5px 252px; /* 175px = Redaktionsereignis, 17px Color-Code, der Rest ist padding-left */
 	font-size: 12px;
 	line-height: 20px;
-	text-indent: -217px;
+	text-indent: -182px;
 }
 
 .karteisuche-status {
@@ -363,7 +363,7 @@
 
 .karteisuche-hoechst {
 	display: inline-block;
-	width: 200px;
+	width: 165px;
 	font-style: italic;
 	text-indent: 0;
 }
