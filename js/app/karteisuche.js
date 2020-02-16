@@ -5,6 +5,8 @@ let karteisuche = {
 	oeffnen () {
 		let fenster = document.getElementById("karteisuche");
 		overlay.oeffnen(fenster);
+		// schmale Anzeige?
+		karteisuche.filterBreite();
 		// Suchbutton fokussieren
 		fenster.querySelector("input").focus();
 		// Pfade auflisten
@@ -1079,6 +1081,21 @@ let karteisuche = {
 					inputs[j].value = werte[j];
 				}
 			}
+		}
+	},
+	// feststellen, ob die Textfelder in den Filtern verkleiner werden müssen
+	// (blöder Hack, geht aber nicht mit overflow, da die Dropdown-Menüs ausbrechen
+	// müssen; setzt man overflow-x auf "hidden", wird overflow-y automatisch zu "auto",
+	// ganz egal, was man deklariert)
+	filterBreite () {
+		let ks = document.getElementById("karteisuche");
+		if (ks.classList.contains("aus")) {
+			return;
+		}
+		if (ks.querySelector("div").offsetWidth < 670) {
+			ks.classList.add("karteisuche-schmal");
+		} else {
+			ks.classList.remove("karteisuche-schmal");
 		}
 	},
 	// Animation, dass die Karteisuche läuft

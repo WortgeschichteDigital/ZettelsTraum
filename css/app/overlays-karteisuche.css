@@ -190,18 +190,30 @@
 
 #karteisuche-filter span input[type="text"] {
 	vertical-align: top;
+	width: 200px;
+}
+
+.karteisuche-schmal #karteisuche-filter span input[type="text"] {
+	width: 100px;
+}
+
+#karteisuche-filter span input[type="text"].karteisuche-filter {
 	width: 100px;
 }
 
 #karteisuche-filter span input.karteisuche-volltext {
+	width: 219px;
+}
+
+.karteisuche-schmal #karteisuche-filter span input.karteisuche-volltext {
 	width: 119px;
 }
 
-#karteisuche-filter span input.karteisuche-datum-typ {
+#karteisuche-filter span input[type="text"].karteisuche-datum-typ {
 	width: 75px;
 }
 
-#karteisuche-filter span input.karteisuche-datum-dir {
+#karteisuche-filter span input[type="text"].karteisuche-datum-dir {
 	width: 25px;
 }
 
