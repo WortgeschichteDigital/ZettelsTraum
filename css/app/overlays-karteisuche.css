@@ -201,10 +201,12 @@
 	width: 100px;
 }
 
+#karteisuche-filter span input.karteisuche-karteiwort,
 #karteisuche-filter span input.karteisuche-volltext {
 	width: 219px;
 }
 
+.karteisuche-schmal #karteisuche-filter span input.karteisuche-karteiwort,
 .karteisuche-schmal #karteisuche-filter span input.karteisuche-volltext {
 	width: 119px;
 }

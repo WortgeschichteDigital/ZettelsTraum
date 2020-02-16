@@ -641,6 +641,15 @@ let karteisuche = {
 	},
 	// zur Verfügung stehende Filter-Typen
 	filterTypen: {
+		"Karteiwort": [
+			{
+				type: "text",
+				ro: false,
+				cl: "karteisuche-karteiwort",
+				ph: "Suchtext",
+				pre: "",
+			},
+		],
 		"Volltext": [
 			{
 				type: "text",
@@ -882,8 +891,18 @@ let karteisuche = {
 			let obj = {
 				typ: typ,
 			};
+			// Karteiwort
+			if (typ === "Karteiwort") {
+				let text = document.getElementById(`karteisuche-karteiwort-${id}`).value;
+				text = helfer.textTrim(text, true);
+				if (!text) {
+					continue;
+				}
+				obj.reg = new RegExp(helfer.formVariSonderzeichen(helfer.escapeRegExp(text)), "i");
+				karteisuche.filterWerte.push(obj);
+			}
 			// Volltext
-			if (typ === "Volltext") {
+			else if (typ === "Volltext") {
 				let text = document.getElementById(`karteisuche-volltext-${id}`).value;
 				text = helfer.textTrim(text.replace(/[<>]+/g, ""), true);
 				if (!text) {
@@ -951,8 +970,13 @@ let karteisuche = {
 	//     (die ZTJ-Datei, die gefiltert werden soll; also alle Karteidaten, in der üblichen Form)
 	filtern (datei) {
 		forX: for (let filter of karteisuche.filterWerte) {
+			// Karteiwort
+			if (filter.typ === "Karteiwort" &&
+					!filter.reg.test(datei.wo)) {
+				return false;
+			}
 			// Volltext
-			if (filter.typ === "Volltext") {
+			else if (filter.typ === "Volltext") {
 				// Datenfelder Kartei
 				for (let ds of karteisuche.filterVolltext.datei) {
 					if (filter.reg.test(datei[ds])) {
