@@ -233,6 +233,13 @@ body > header span {
 }
 
 /* Wort ----------------------------------------- */
+#wort {
+	vertical-align: top;
+	overflow: hidden;
+	max-width: 50%;
+	text-overflow: ellipsis;
+}
+
 #wort.keine-kartei {
 	font-size: 20px;
 	font-style: italic;
