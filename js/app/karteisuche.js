@@ -384,13 +384,7 @@ let karteisuche = {
 			return 1;
 		});
 		// Treffer anzeigen
-		let text = "keine Karteien gefunden";
-		if (treffer === 1) {
-			text = "1 Kartei gefunden";
-		} else if (treffer > 1) {
-			text = `${treffer} Karteien gefunden`;
-		}
-		document.getElementById("karteisuche-treffer").textContent = text;
+		document.getElementById("karteisuche-treffer").textContent = `(${treffer})`;
 		// Karteiliste füllen
 		let cont = document.getElementById("karteisuche-karteien");
 		helfer.keineKinder(cont);
