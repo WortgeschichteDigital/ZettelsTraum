@@ -227,6 +227,33 @@
 }
 
 /* Karteien ------------------------------------- */
+#karteisuche-alphabet {
+	display: inline-block;
+	vertical-align: top;
+	margin-left: 25px;
+	overflow: hidden;
+	background-color: var(--farbeH);
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+#karteisuche-alphabet a {
+	display: inline-block;
+	margin-left: 5px;
+	width: 20px;
+	color: #fff;
+	text-align: center;
+}
+
+#karteisuche-alphabet a:focus {
+	color: var(--highlight);
+}
+
+#karteisuche-alphabet a:first-child {
+	margin: 0 10px 0 0;
+	width: auto;
+}
+
 #karteisuche-treffer {
 	margin-left: 5px;
 }
@@ -239,10 +266,6 @@
 
 #karteisuche-karteien p {
 	margin: 0;
-	border-bottom: 1px solid var(--linie);
-}
-
-#karteisuche-karteien p:first-child {
 	border-top: 1px solid var(--linie);
 }
 

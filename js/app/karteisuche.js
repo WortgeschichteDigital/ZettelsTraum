@@ -388,10 +388,14 @@ let karteisuche = {
 		// Karteiliste füllen
 		let cont = document.getElementById("karteisuche-karteien");
 		helfer.keineKinder(cont);
+		let alphabet = new Set();
 		for (let wort of woerter) {
 			// Absatz
 			let p = document.createElement("p");
 			cont.appendChild(p);
+			let alpha = karteisuche.wortAlpha(wort.wort);
+			alphabet.add(alpha);
+			p.dataset.buchstabe = alpha;
 			// Link
 			let a = document.createElement("a");
 			p.appendChild(a);
@@ -411,6 +415,8 @@ let karteisuche = {
 		}
 		// Maximalhöhe Trefferliste setzen
 		karteisuche.hoeheTrefferliste();
+		// Alphabet drucken
+		karteisuche.alphabet(alphabet);
 	},
 	// ZTJ-Datei in neuem Fenster öffnen
 	//   a = Element
@@ -448,6 +454,82 @@ let karteisuche = {
 			max -= i.offsetHeight;
 		}
 		liste.style.maxHeight = `${max}px`;
+	},
+	// Buchstabe des Alphabets aus dem übergebenen Karteiwort ableiten
+	//   wort = String
+	//     (das Wort, um das es geht)
+	wortAlpha (wort) {
+		let erster = wort.substring(0, 1).toUpperCase();
+		switch (erster) {
+			case "Ä":
+				erster = "A";
+				break;
+			case "Ö":
+				erster = "O";
+				break;
+			case "Ü":
+				erster = "U";
+				break;
+		}
+		return erster;
+	},
+	// Alphabet drucken
+	//   alpha = Set
+	//     (Buchstaben des Alphabets, die auftauchen)
+	alphabet (alpha) {
+		// Liste löschen
+		let cont = document.getElementById("karteisuche-alphabet");
+		helfer.keineKinder(cont);
+		// keine Treffer
+		if (!alpha.size) {
+			return;
+		}
+		// Liste aufbauen
+		let alphabet = [...alpha].sort();
+		alphabet.unshift("alle");
+		for (let i = 0, len = alphabet.length; i < len; i++) {
+			let a = document.createElement("a");
+			cont.appendChild(a);
+			a.dataset.buchstabe = alphabet[i];
+			a.href = "#";
+			a.textContent = alphabet[i];
+			if (i === 0) {
+				cont.appendChild(document.createTextNode("|"));
+			}
+		}
+		// Maximalbreite berechnen
+		let h = cont.parentNode,
+			treffer = document.getElementById("karteisuche-treffer"),
+			belegt = treffer.offsetLeft + treffer.offsetWidth + h.lastChild.offsetWidth + 4 + 2 * 25; // 4px Abstand rechts, 2 * 25px Margins zum Alphabet
+		cont.style.maxWidth = `calc(100% - ${belegt}px`;
+		// Klickevents anhängen
+		cont.querySelectorAll("a").forEach(a => karteisuche.alphabetFilter(a));
+	},
+	// Trefferliste nach Buchstaben filtern
+	//   a = Element
+	//     (Link für einen oder alle Buchstaben)
+	alphabetFilter (a) {
+		a.addEventListener("click", function(evt) {
+			evt.preventDefault();
+			let b = this.dataset.buchstabe,
+				liste = document.getElementById("karteisuche-karteien"),
+				treffer = 0;
+			// filtern
+			for (let i of liste.childNodes) {
+				let anzeigen = false;
+				if (b === "alle" || b === i.dataset.buchstabe) {
+					anzeigen = true;
+				}
+				if (anzeigen) {
+					i.classList.remove("aus");
+					treffer++;
+				} else {
+					i.classList.add("aus");
+				}
+			}
+			// Trefferzahl auffrischen
+			document.getElementById("karteisuche-treffer").textContent = `(${treffer})`;
+		});
 	},
 	// Generator zur Erzeugung der nächsten Filter-ID
 	makeId: null,
