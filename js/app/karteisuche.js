@@ -595,6 +595,7 @@ let karteisuche = {
 			a.href = "#";
 			a.textContent = alphabet[i];
 			if (i === 0) {
+				a.classList.add("aktiv");
 				cont.appendChild(document.createTextNode("|"));
 			}
 		}
@@ -628,6 +629,10 @@ let karteisuche = {
 					i.classList.add("aus");
 				}
 			}
+			// aktiven Filter markieren
+			let alpha = document.getElementById("karteisuche-alphabet");
+			alpha.querySelector(".aktiv").classList.remove("aktiv");
+			this.classList.add("aktiv");
 			// Trefferzahl auffrischen
 			document.getElementById("karteisuche-treffer").textContent = `(${treffer})`;
 		});

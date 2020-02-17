@@ -270,6 +270,7 @@
 	margin-left: 25px;
 	overflow: hidden;
 	background-color: var(--farbeH);
+	font-weight: normal;
 	text-overflow: ellipsis;
 	white-space: nowrap;
 }
@@ -288,6 +289,10 @@
 #karteisuche-alphabet a:first-child {
 	margin: 0 5px 0 0;
 	width: auto;
+}
+
+#karteisuche-alphabet a.aktiv {
+	font-weight: bold;
 }
 
 #karteisuche-treffer {
