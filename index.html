@@ -21,6 +21,7 @@
 		<link rel="stylesheet" href="css/app/overlays-geruestwechseln.css">
 		<link rel="stylesheet" href="css/app/overlays-import.css">
 		<link rel="stylesheet" href="css/app/overlays-karteisuche.css">
+		<link rel="stylesheet" href="css/app/overlays-karteisucheExport.css">
 		<link rel="stylesheet" href="css/app/overlays-kopieren.css">
 		<link rel="stylesheet" href="css/app/overlays-lexika.css">
 		<link rel="stylesheet" href="css/app/overlays-meta.css">
@@ -737,10 +738,31 @@
 					<p id="karteisuche-add-filter"><a href="#" class="icon-link icon-add"> </a>Filter hinzufügen</p>
 					<div id="karteisuche-filter"></div>
 				</div>
-				<h3><span class="icon-h icon-kartei"> </span>Karteien<span id="karteisuche-treffer"></span><span id="karteisuche-alphabet"></span><a href="#" class="icon-link icon-karteisuche-speichern" id="karteisuche-speichern" title="Karteiliste speichern"> </a></h3>
+				<h3><span class="icon-h icon-kartei"> </span>Karteien<span id="karteisuche-treffer"></span><span id="karteisuche-alphabet"></span><a href="#" class="icon-link icon-karteisuche-speichern" id="karteisuche-speichern" title="Karteiliste exportieren"> </a></h3>
 				<div id="karteisuche-karteien"></div>
 			</div>
 			<div id="karteisuche-suche-laeuft" class="aus"><div>Suche läuft <span></span></div></div>
+		</div></div>
+
+		<!-- OVERLAY: Karteisuche: Export -->
+		<div id="karteisuche-export" class="overlay aus"><div>
+			<h2><span class="icon-h icon-h-kopieren"> </span
+				>Karteiliste exportieren<a href="#" class="icon-link icon-handbuch" title="Abschnitt im Handbuch öffnen" data-handbuch="menueApp-karteisuche"> </a><a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"
+				> </a></h2>
+			<div id="karteisuche-export-cont">
+				<p
+					><input type="radio" name="karteisuche-export-format" id="karteisuche-export-format-md" checked><label for="karteisuche-export-format-md">Markdown</label
+					><input type="radio" name="karteisuche-export-format" id="karteisuche-export-format-html"><label for="karteisuche-export-format-html">HTML</label
+				></p>
+				<p
+					><input type="radio" name="karteisuche-export-typ" id="karteisuche-export-typ-knapp" checked><label for="karteisuche-export-typ-knapp">Format <i>knapp</i></label
+					><input type="radio" name="karteisuche-export-typ" id="karteisuche-export-typ-ausfuehrlich"><label for="karteisuche-export-typ-ausfuehrlich">Format <i>ausführlich</i></label
+				></p>
+				<p class="button"
+					><input type="button" value="Exportieren" id="karteisuche-export-exportieren"
+					><input type="button" value="Abbrechen" id="karteisuche-export-abbrechen"
+				></p>
+			</div>
 		</div></div>
 
 		<!-- OVERLAY: Formvarianten -->

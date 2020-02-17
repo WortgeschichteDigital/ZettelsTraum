@@ -295,6 +295,21 @@ window.addEventListener("load", async () => {
 	document.getElementById("karteisuche-suchen").addEventListener("click", () => karteisuche.suchenPrep());
 	document.querySelector("#karteisuche-cont h3").addEventListener("click", () => karteisuche.filterUmschalten());
 	document.getElementById("karteisuche-add-filter").addEventListener("click", () => karteisuche.filterHinzufuegen());
+	document.getElementById("karteisuche-speichern").addEventListener("click", evt => {
+		evt.preventDefault();
+		karteisuche.trefferlisteExportieren();
+	});
+	// Karteisuche: Export
+	document.querySelectorAll(`#karteisuche-export-cont input[type="radio"]`).forEach(i => {
+		i.addEventListener("keydown", evt => {
+			tastatur.detectModifiers(evt);
+			if (!tastatur.modifiers && evt.key === "Enter") {
+				karteisuche.trefferlisteExportierenDo();
+			}
+		});
+	});
+	document.getElementById("karteisuche-export-exportieren").addEventListener("click", () => karteisuche.trefferlisteExportierenDo());
+	document.getElementById("karteisuche-export-abbrechen").addEventListener("click", () => overlay.schliessen(document.getElementById("karteisuche-export") ) );
 	// Prompt-Textfeld
 	document.getElementById("dialog-prompt-text").addEventListener("keydown", function(evt) {
 		tastatur.detectModifiers(evt);

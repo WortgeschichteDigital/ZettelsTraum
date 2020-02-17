@@ -431,6 +431,7 @@ let karteisuche = {
 			let alpha = karteisuche.wortAlpha(wort.wort);
 			alphabet.add(alpha);
 			div.dataset.buchstabe = alpha;
+			div.dataset.idx = wort.i;
 			// Link
 			let a = document.createElement("a");
 			div.appendChild(a);
@@ -466,40 +467,24 @@ let karteisuche = {
 		// Wrapper erzeugen
 		let wrap = document.createElement("div");
 		div.appendChild(wrap);
-		// Redaktionssatus
-		let ds = karteisuche.ztj[i],
-			ereignisse = Object.keys(redaktion.ereignisse),
-			status2 = ereignisse.indexOf("Artikel erstellt"),
-			status3 = ereignisse.indexOf("Artikel online"),
-			hoechst = -1;
-		for (let i of ds.redaktion) {
-			let idx = ereignisse.indexOf(i.er);
-			hoechst = idx > hoechst ? idx : hoechst;
-		}
-		// Status drucken
-		let status = document.createElement("span");
-		wrap.appendChild(status);
-		status.classList.add("karteisuche-status");
-		if (hoechst >= status3) {
-			status.classList.add("karteisuche-status3");
-		} else if (hoechst >= status2) {
-			status.classList.add("karteisuche-status2");
-		} else {
-			status.classList.add("karteisuche-status1");
-		}
+		// Redaktionsstatus drucken
+		let status = karteisuche.ztjAuflistenRedaktionStatus(i),
+			stat = document.createElement("span");
+		wrap.appendChild(stat);
+		stat.classList.add("karteisuche-status", `karteisuche-status${status.status}`);
 		// höchstes Redaktionsereignis drucken
 		let erg = document.createElement("span");
 		wrap.appendChild(erg);
 		erg.classList.add("karteisuche-hoechst");
-		erg.textContent = ereignisse[hoechst];
+		erg.textContent = status.ereignis;
 		// Personen und Daten: Wer hat wann was erstellt?
 		let erstellt = [
 			{
-				arr: ds.redaktion.filter(v => v.er === "Kartei erstellt"),
+				arr: karteisuche.ztj[i].redaktion.filter(v => v.er === "Kartei erstellt"),
 				txt: "Kartei",
 			},
 			{
-				arr: ds.redaktion.filter(v => v.er === "Artikel erstellt"),
+				arr: karteisuche.ztj[i].redaktion.filter(v => v.er === "Artikel erstellt"),
 				txt: "Artikel",
 			},
 		];
@@ -518,6 +503,34 @@ let karteisuche = {
 				br = true;
 			}
 		}
+	},
+	// Status der Redaktion ermitteln
+	//   idx = Number
+	//     (auf karteisuche.ztj zeigender Index)
+	ztjAuflistenRedaktionStatus (idx) {
+		let ds = karteisuche.ztj[idx],
+			ereignisse = Object.keys(redaktion.ereignisse),
+			status = 1,
+			status2 = ereignisse.indexOf("Artikel erstellt"),
+			status3 = ereignisse.indexOf("Artikel online"),
+			hoechst = -1;
+		for (let i of ds.redaktion) {
+			let idx = ereignisse.indexOf(i.er);
+			hoechst = idx > hoechst ? idx : hoechst;
+		}
+		// Status ermitteln
+		if (hoechst >= status3) {
+			status = 3;
+		} else if (hoechst >= status2) {
+			status = 2;
+		}
+		return {
+			hoechst,
+			status,
+			status2,
+			status3,
+			ereignis: ereignisse[hoechst],
+		};
 	},
 	// ZTJ-Datei in neuem Fenster öffnen
 	//   a = Element
@@ -636,6 +649,189 @@ let karteisuche = {
 			// Trefferzahl auffrischen
 			document.getElementById("karteisuche-treffer").textContent = `(${treffer})`;
 		});
+	},
+	// Trefferlistenexport: sichtbare Treffer, die exportiert werden können
+	// (Indizes, die auf karteisuche.ztj verweisen)
+	trefferlisteItems: [],
+	// Trefferlistenexport
+	trefferlisteExportieren () {
+		// keine Treffer in der Liste
+		let items = document.querySelectorAll("#karteisuche-karteien > div");
+		if (!items.length) {
+			let text = "Es wurden keine Karteien gefunden.";
+			if (!document.getElementById("karteisuche-treffer").textContent) {
+				text = "Sie müssen zuerst eine Suche anstoßen.";
+			}
+			dialog.oeffnen({
+				typ: "alert",
+				text,
+				callback: () => document.getElementById("karteisuche-suchen").focus(),
+			});
+			return;
+		}
+		// Treffer sammeln
+		karteisuche.trefferlisteItems = [];
+		for (let i = 0, len = items.length; i < len; i++) {
+			if (items[i].classList.contains("aus")) {
+				continue;
+			}
+			karteisuche.trefferlisteItems.push(i);
+		}
+		// Exportformat erfragen
+		let fenster = document.getElementById("karteisuche-export");
+		overlay.oeffnen(fenster);
+		fenster.querySelector("input").focus();
+	},
+	// Trefferlistenexport durchführen
+	trefferlisteExportierenDo () {
+		// Auswahlfenster schließen
+		overlay.schliessen(document.getElementById("karteisuche-export"));
+		// Ausgabe erzeugen
+		let md = document.getElementById("karteisuche-export-format-md").checked,
+			knapp = document.getElementById("karteisuche-export-typ-knapp").checked,
+			items = document.querySelectorAll("#karteisuche-karteien > div"),
+			content = "",
+			alpha = "";
+		if (!md) {
+			content = `<!doctype html>\n<html lang="de"><head>\n<meta charset="utf-8">\n<title>Karteiliste</title>\n</head><body>`;
+		}
+		for (let i of karteisuche.trefferlisteItems) {
+			// Überschrift und Kopfzeile
+			let item = items[i],
+				buchstabe = item.dataset.buchstabe;
+			if (buchstabe !== alpha) {
+				alpha = buchstabe;
+				if (md) {
+					content += `\n# ${buchstabe}\n\n`;
+					if (!knapp) {
+						content += "| Wort |   | Status | Kartei | Datum | Artikel | Datum |\n";
+						content += "| --- | --- | --- | --- | --- | --- | --- |\n";
+					}
+				} else {
+					if (/<\/li>$/.test(content)) {
+						content += "\n</ul>";
+					} else if (/<\/tr>$/.test(content)) {
+						content += "\n</table>";
+					}
+					content += `\n<h1>${buchstabe}</h1>`;
+					if (knapp) {
+						content += "\n<ul>";
+					} else {
+						content += "\n<table>\n<tr><th>Wort</th><th> </th><th>Status</th><th>Kartei</th><th>Datum</th><th>Artikel</th><th>Datum</th></tr>";
+					}
+				}
+			}
+			// Artikelzeile
+			let idx = parseInt(item.dataset.idx, 10),
+				status = karteisuche.ztjAuflistenRedaktionStatus(idx),
+				statusTxt = "abgeschlossen",
+				kartei = karteisuche.ztj[idx].redaktion.filter(v => v.er === "Kartei erstellt"),
+				karteiDa = helfer.datumFormat(kartei[0].da, true).split(", ")[0],
+				karteiPr = kartei[0].pr ? kartei[0].pr : "N. N.",
+				artikel = karteisuche.ztj[idx].redaktion.filter(v => v.er === "Artikel erstellt"),
+				artikelDa = "",
+				artikelPr = "",
+				check = "✓";
+			if (status.status === 1) {
+				statusTxt = "in Arbeit";
+			}
+			if (artikel.length) {
+				artikelDa = helfer.datumFormat(artikel[0].da, true).split(", ")[0];
+				artikelPr = artikel[0].pr ? artikel[0].pr : "N. N.";
+			}
+			if (status.hoechst < status.status3) {
+				check = " ";
+			}
+			if (md) {
+				if (knapp) {
+					content += `* ${karteisuche.ztj[idx].wort} (${statusTxt})\n`;
+				} else {
+					content += `| ${karteisuche.ztj[idx].wort} | ${check} | ${status.ereignis} | ${karteiPr} | ${karteiDa}`;
+					if (artikelPr) {
+						content += ` | ${artikelPr} | ${artikelDa} |\n`;
+					} else {
+						content += " | – | – |\n";
+					}
+				}
+			} else {
+				if (knapp) {
+					content += `\n<li>${karteisuche.ztj[idx].wort} (${statusTxt})</li>`;
+				} else {
+					content += `\n<tr><td>${karteisuche.ztj[idx].wort}</td><td>${check}</td><td>${status.ereignis}</td><td>${karteiPr}</td><td>${karteiDa}</td>`;
+					if (artikelPr) {
+						content += `<td>${artikelPr}</td><td>${artikelDa}</td></tr>`;
+					} else {
+						content += "<td>–</td><td>–</td></tr>";
+					}
+				}
+			}
+		}
+		if (!md) {
+			if (/<\/li>$/.test(content)) {
+				content += "\n</ul>";
+			} else if (/<\/tr>$/.test(content)) {
+				content += "\n</table>";
+			}
+			content += "\n</body></html>\n";
+		}
+		// Daten zum Speichern anbieten
+		let format = {
+			name: "Markdown",
+			ext: "md",
+		};
+		if (!md) {
+			format.name = "HTML";
+			format.ext = "html";
+		}
+		karteisuche.trefferlisteExportierenDialog(content, format);
+	},
+	// Trefferlistenexport: Daten zum Speichern anbieten
+	//   content = String
+	//     (die Daten)
+	//   format = Object
+	//     (Angaben zum Format)
+	async trefferlisteExportierenDialog (content, format) {
+		const path = require("path");
+		let opt = {
+			title: `${format.name} speichern`,
+			defaultPath: path.join(appInfo.documents, `Karteiliste.${format.ext}`),
+			filters: [
+				{
+					name: format.name,
+					extensions: [format.ext],
+				},
+				{
+					name: "Alle Dateien",
+					extensions: ["*"],
+				},
+			],
+		};
+		// Dialog anzeigen
+		const {ipcRenderer} = require("electron");
+		let result = await ipcRenderer.invoke("datei-dialog", {
+			open: false,
+			winId: winInfo.winId,
+			opt: opt,
+		});
+		// Fehler oder keine Datei ausgewählt
+		if (result.message || !Object.keys(result).length) {
+			dialog.oeffnen({
+				typ: "alert",
+				text: `Beim Öffnen des Dateidialogs ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${result.message}</p>`,
+			});
+			return;
+		} else if (result.canceled) {
+			return;
+		}
+		// Kartei speichern
+		const fsP = require("fs").promises;
+		fsP.writeFile(result.filePath, content)
+			.catch(err => {
+				dialog.oeffnen({
+					typ: "alert",
+					text: `Beim Speichern der Karteiliste ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.message}</p>`,
+				});
+			});
 	},
 	// Generator zur Erzeugung der nächsten Filter-ID
 	makeId: null,
