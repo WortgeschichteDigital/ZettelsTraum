@@ -64,6 +64,12 @@ let erinnerungen = {
 		// Artikel erstellt, aber nicht verknüpft?
 		for (let i of data.rd.er) {
 			if (i.er === "Artikel erstellt") {
+				if (data.rd.bh) {
+					// Wort wird in einer anderen Datei mit behandelt;
+					// dort ist die Artikeldatei
+					erinnerungen.data.artikelDatei.okay = true;
+					break;
+				}
 				let okay = false;
 				for (let f of data.an) {
 					if (/\.(doc|docx|odt)$/.test(f)) {
@@ -83,6 +89,12 @@ let erinnerungen = {
 		// XML-Datei erstellt, aber nicht verknüpft?
 		for (let i of data.rd.er) {
 			if (i.er === "XML-Auszeichnung") {
+				if (data.rd.bh) {
+					// Wort wird in einer anderen Datei mit behandelt;
+					// dort ist die XML-Datei
+					erinnerungen.data.xmlDatei.okay = true;
+					break;
+				}
 				let okay = false;
 				for (let f of data.an) {
 					if (/\.xml$/.test(f)) {
