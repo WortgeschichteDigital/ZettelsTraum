@@ -320,6 +320,7 @@ let karteisuche = {
 					ztjAdd.push({
 						pfad: kartei.pfad,
 						wort: "",
+						wortSort: "",
 						redaktion: [],
 						passt: false,
 					});
@@ -327,6 +328,7 @@ let karteisuche = {
 				}
 				// Wort merken
 				ziel.wort = woerter[i];
+				ziel.wortSort = karteisuche.wortSort(woerter[i]);
 				// mit Suchfiltern abgleichen
 				if (i > 0) {
 					ziel.passt = kartei.passt;
@@ -389,6 +391,7 @@ let karteisuche = {
 				karteisuche.ztj.push({
 					pfad: pfad,
 					wort: "",
+					wortSort: "",
 					redaktion: [],
 					passt: false,
 				});
@@ -406,13 +409,14 @@ let karteisuche = {
 			treffer++;
 			woerter.push({
 				wort: karteisuche.ztj[i].wort,
+				wortSort: karteisuche.ztj[i].wortSort,
 				i: i,
 			});
 		}
 		woerter.sort(function(a, b) {
-			let arr = [a.wort, b.wort];
+			let arr = [a.wortSort, b.wortSort];
 			arr.sort(helfer.sortAlpha);
-			if (a.wort === arr[0]) {
+			if (a.wortSort === arr[0]) {
 				return -1;
 			}
 			return 1;
@@ -428,7 +432,7 @@ let karteisuche = {
 			// Absatz
 			let div = document.createElement("div");
 			cont.appendChild(div);
-			let alpha = karteisuche.wortAlpha(wort.wort);
+			let alpha = karteisuche.wortAlpha(wort.wortSort);
 			alphabet.add(alpha);
 			div.dataset.buchstabe = alpha;
 			div.dataset.idx = wort.i;
@@ -572,6 +576,35 @@ let karteisuche = {
 			max -= i.offsetHeight;
 		}
 		liste.style.maxHeight = `${max}px`;
+	},
+	// Sortierwort aus dem übergebenen Wort/Ausdruck ableiten
+	// (denn das Wort könnte mehrgliedrig sein, Beispiele:
+	// politisch korrekt => Rückgabe: politisch;
+	// der kleine Mann => Rückgabe: Mann)
+	//   wort = String
+	//     (Wort oder Ausdruck)
+	wortSort (wort) {
+		let sortform = "";
+		for (let i of wort.split(/\s/)) {
+			// Artikel ignorieren
+			if (/^der|die|das$/.test(i)) {
+				continue;
+			}
+			// erstes Wort, das kein Artikel ist
+			if (!sortform) {
+				sortform = i;
+			}
+			// erstes Wort, das mit einem Großbuchstaben beginnt, bevorzugen
+			if (/^[A-ZÄÖÜ]/.test(i)) {
+				sortform = i;
+				break;
+			}
+		}
+		if (!sortform) {
+			// das Wort war offenbar ein Artikel
+			return wort;
+		}
+		return sortform;
 	},
 	// Buchstabe des Alphabets aus dem übergebenen Karteiwort ableiten
 	//   wort = String
