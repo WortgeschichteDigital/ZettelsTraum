@@ -820,8 +820,8 @@ let karteisuche = {
 				if (md) {
 					content += `\n# ${buchstabe}\n\n`;
 					if (!knapp) {
-						content += "| Wort |   | Status | Kartei | Datum | Artikel | Datum |\n";
-						content += "| --- | --- | --- | --- | --- | --- | --- |\n";
+						content += "| Wort |   | Status | in/mit | Kartei | Datum | Artikel | Datum |\n";
+						content += "| --- | --- | --- | --- | --- | --- | --- | --- |\n";
 					}
 				} else {
 					if (/<\/li>$/.test(content)) {
@@ -833,7 +833,7 @@ let karteisuche = {
 					if (knapp) {
 						content += "\n<ul>";
 					} else {
-						content += "\n<table>\n<tr><th>Wort</th><th> </th><th>Status</th><th>Kartei</th><th>Datum</th><th>Artikel</th><th>Datum</th></tr>";
+						content += "\n<table>\n<tr><th>Wort</th><th> </th><th>Status</th><th>in/mit</th><th>Kartei</th><th>Datum</th><th>Artikel</th><th>Datum</th></tr>";
 					}
 				}
 			}
@@ -847,6 +847,9 @@ let karteisuche = {
 				artikel = karteisuche.ztj[idx].redaktion.filter(v => v.er === "Artikel erstellt"),
 				artikelDa = "",
 				artikelPr = "",
+				behandeltIn = karteisuche.ztj[idx].behandeltIn,
+				behandeltMit = [...new Set(karteisuche.ztj[idx].behandeltMit)],
+				inMit = [],
 				check = "✓";
 			if (status.status === 1) {
 				statusTxt = "in Arbeit";
@@ -855,6 +858,16 @@ let karteisuche = {
 				artikelDa = helfer.datumFormat(artikel[0].da, true).split(", ")[0];
 				artikelPr = artikel[0].pr ? artikel[0].pr : "N. N.";
 			}
+			if (behandeltIn || behandeltMit.length) {
+				inMit = [...behandeltMit];
+				inMit.sort(helfer.sortAlpha);
+				for (let j = 0, len = inMit.length; j < len; j++) {
+					inMit[j] = `+ ${inMit[j]}`;
+				}
+				if (behandeltIn) {
+					inMit.unshift(`→ ${behandeltIn}`);
+				}
+			}
 			if (status.hoechst < status.status3) {
 				check = " ";
 			}
@@ -862,7 +875,13 @@ let karteisuche = {
 				if (knapp) {
 					content += `* ${karteisuche.ztj[idx].wort} (${statusTxt})\n`;
 				} else {
-					content += `| ${karteisuche.ztj[idx].wort} | ${check} | ${status.ereignis} | ${karteiPr} | ${karteiDa}`;
+					content += `| ${karteisuche.ztj[idx].wort} | ${check} | ${status.ereignis} | `;
+					if (inMit.length) {
+						content += inMit.join(", ");
+					} else {
+						content += " ";
+					}
+					content += ` | ${karteiPr} | ${karteiDa}`;
 					if (artikelPr) {
 						content += ` | ${artikelPr} | ${artikelDa} |\n`;
 					} else {
@@ -873,7 +892,13 @@ let karteisuche = {
 				if (knapp) {
 					content += `\n<li>${karteisuche.ztj[idx].wort} (${statusTxt})</li>`;
 				} else {
-					content += `\n<tr><td>${karteisuche.ztj[idx].wort}</td><td>${check}</td><td>${status.ereignis}</td><td>${karteiPr}</td><td>${karteiDa}</td>`;
+					content += `\n<tr><td>${karteisuche.ztj[idx].wort}</td><td>${check}</td><td>${status.ereignis}</td>`;
+					if (inMit.length) {
+						content += `<td>${inMit.join(", ")}</td>`;
+					} else {
+						content += "<td> </td>";
+					}
+					content += `<td>${karteiPr}</td><td>${karteiDa}</td>`;
 					if (artikelPr) {
 						content += `<td>${artikelPr}</td><td>${artikelDa}</td></tr>`;
 					} else {
