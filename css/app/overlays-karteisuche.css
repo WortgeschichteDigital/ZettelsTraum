@@ -24,8 +24,8 @@
 }
 
 .icon-karteisuche-speichern {
-	-webkit-mask-image: url(../../img/speichern.svg);
-	mask-image: url(../../img/speichern.svg);
+	-webkit-mask-image: url(../../img/dokument-export.svg);
+	mask-image: url(../../img/dokument-export.svg);
 }
 
 /* Suche läuft ---------------------------------- */
@@ -337,8 +337,8 @@
 
 /* Karteien: Redaktionsstatus ------------------- */
 #karteisuche-karteien div > div {
-	border-top: 1px dotted var(--linie);
-	padding: 5px 10px 5px 252px; /* 175px = Redaktionsereignis, 17px Color-Code, der Rest ist padding-left */
+	margin-left: 50px;
+	padding: 0 10px 5px 182px; /* 165px = Redaktionsereignis, 17px Color-Code */
 	font-size: 12px;
 	line-height: 20px;
 	text-indent: -182px;
