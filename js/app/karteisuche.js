@@ -5,6 +5,8 @@ let karteisuche = {
 	oeffnen () {
 		let fenster = document.getElementById("karteisuche");
 		overlay.oeffnen(fenster);
+		// schmale Anzeige?
+		karteisuche.filterBreite();
 		// Suchbutton fokussieren
 		fenster.querySelector("input").focus();
 		// Pfade auflisten
@@ -128,6 +130,8 @@ let karteisuche = {
 		optionen.speichern();
 		// Liste auffrischen
 		karteisuche.pfadeAuflisten();
+		// Maximalhöhe Trefferliste setzen
+		karteisuche.hoeheTrefferliste();
 	},
 	// Pfad aus der Liste entfernen
 	//   a = Element
@@ -141,6 +145,8 @@ let karteisuche = {
 			optionen.speichern();
 			// Liste auffrischen
 			karteisuche.pfadeAuflisten();
+			// Maximalhöhe Trefferliste setzen
+			karteisuche.hoeheTrefferliste();
 		});
 	},
 	// speichert das Input-Element, das vor dem Start der Suche den Fokus hatte
@@ -288,6 +294,7 @@ let karteisuche = {
 		// Filterwerte sammeln
 		karteisuche.filterWerteSammeln();
 		// Karteien analysieren
+		let ztjAdd = [];
 		for (let kartei of karteisuche.ztj) {
 			const content = await io.lesen(kartei.pfad);
 			// Kartei einlesen
@@ -302,11 +309,42 @@ let karteisuche = {
 			if (!/^(wgd|ztj)$/.test(datei.ty)) {
 				continue;
 			}
-			// Wort merken
-			kartei.wort = datei.wo;
-			// mit Suchfiltern abgleichen
-			kartei.passt = karteisuche.filtern(datei);
+			// Werden in der Kartei mehrere Wörter behandelt?
+			let woerter = [datei.wo];
+			if (/, (?!der|die|das)/.test(datei.wo)) {
+				woerter = datei.wo.split(", ");
+			}
+			for (let i = 0, len = woerter.length; i < len; i++) {
+				let ziel = kartei;
+				if (i > 0) {
+					ztjAdd.push({
+						pfad: kartei.pfad,
+						wort: "",
+						wortSort: "",
+						redaktion: [],
+						passt: false,
+					});
+					ziel = ztjAdd[ztjAdd.length - 1];
+				}
+				// Wort merken
+				ziel.wort = woerter[i];
+				ziel.wortSort = karteisuche.wortSort(woerter[i]);
+				// mit Suchfiltern abgleichen
+				if (i > 0) {
+					ziel.passt = kartei.passt;
+				} else {
+					ziel.passt = karteisuche.filtern(datei);
+				}
+				// Redaktionsereignisse klonen
+				if (ziel.passt) {
+					for (let erg of datei.rd) {
+						ziel.redaktion.push({...erg});
+					}
+				}
+			}
 		}
+		// Karteiliste ggf. ergänzen
+		karteisuche.ztj = karteisuche.ztj.concat(ztjAdd);
 		// passende Karteien auflisten
 		karteisuche.ztjAuflisten();
 		// Sperrbild weg und das zuletzt fokussierte Element wieder fokussieren
@@ -321,6 +359,7 @@ let karteisuche = {
 	// Array enthält Objekte:
 	//   pfad (String; Pfad zur Kartei)
 	//   wort (String; Wort der Kartei)
+	//   redaktion (Array; Klon von data.rd)
 	//   passt (Boolean; passt zu den Suchfiltern)
 	ztj: [],
 	// findet alle Pfade in einem übergebenen Ordner
@@ -352,6 +391,8 @@ let karteisuche = {
 				karteisuche.ztj.push({
 					pfad: pfad,
 					wort: "",
+					wortSort: "",
+					redaktion: [],
 					passt: false,
 				});
 			}
@@ -368,35 +409,36 @@ let karteisuche = {
 			treffer++;
 			woerter.push({
 				wort: karteisuche.ztj[i].wort,
+				wortSort: karteisuche.ztj[i].wortSort,
 				i: i,
 			});
 		}
 		woerter.sort(function(a, b) {
-			let arr = [a.wort, b.wort];
+			let arr = [a.wortSort, b.wortSort];
 			arr.sort(helfer.sortAlpha);
-			if (a.wort === arr[0]) {
+			if (a.wortSort === arr[0]) {
 				return -1;
 			}
 			return 1;
 		});
 		// Treffer anzeigen
-		let text = "keine Karteien gefunden";
-		if (treffer === 1) {
-			text = "1 Kartei gefunden";
-		} else if (treffer > 1) {
-			text = `${treffer} Karteien gefunden`;
-		}
-		document.getElementById("karteisuche-treffer").textContent = text;
+		document.getElementById("karteisuche-treffer").textContent = `(${treffer})`;
 		// Karteiliste füllen
-		let cont = document.getElementById("karteisuche-karteien");
+		let cont = document.getElementById("karteisuche-karteien"),
+			redaktion = karteisuche.filterWerte.some(i => i.typ === "Redaktion"),
+			alphabet = new Set();
 		helfer.keineKinder(cont);
 		for (let wort of woerter) {
 			// Absatz
-			let p = document.createElement("p");
-			cont.appendChild(p);
+			let div = document.createElement("div");
+			cont.appendChild(div);
+			let alpha = karteisuche.wortAlpha(wort.wortSort);
+			alphabet.add(alpha);
+			div.dataset.buchstabe = alpha;
+			div.dataset.idx = wort.i;
 			// Link
 			let a = document.createElement("a");
-			p.appendChild(a);
+			div.appendChild(a);
 			a.href = "#";
 			let pfad = karteisuche.ztj[wort.i].pfad;
 			a.dataset.pfad = pfad;
@@ -410,7 +452,93 @@ let karteisuche = {
 			a.appendChild(span);
 			span.textContent = pfad;
 			span.title = pfad;
+			// Redaktionsereignisse
+			if (redaktion) {
+				karteisuche.ztjAuflistenRedaktion(div, wort.i);
+			}
 		}
+		// Maximalhöhe Trefferliste setzen
+		karteisuche.hoeheTrefferliste();
+		// Alphabet drucken
+		karteisuche.alphabet(alphabet);
+	},
+	// Redaktionsstatus und -ereignisse in der Trefferliste anzeigen
+	//   div = Element
+	//     (der Container, in dem die Ereignisse angezeigt werden sollen)
+	//   i = Number
+	//     (Index, der auf die Daten in karteisuche.ztj zeigt)
+	ztjAuflistenRedaktion (div, i) {
+		// Wrapper erzeugen
+		let wrap = document.createElement("div");
+		div.appendChild(wrap);
+		// Redaktionsstatus drucken
+		let status = karteisuche.ztjAuflistenRedaktionStatus(i),
+			stat = document.createElement("span");
+		wrap.appendChild(stat);
+		stat.classList.add("karteisuche-status", `karteisuche-status${status.status}`);
+		// höchstes Redaktionsereignis drucken
+		let erg = document.createElement("span");
+		wrap.appendChild(erg);
+		erg.classList.add("karteisuche-hoechst");
+		erg.textContent = status.ereignis;
+		// Personen und Daten: Wer hat wann was erstellt?
+		let erstellt = [
+			{
+				arr: karteisuche.ztj[i].redaktion.filter(v => v.er === "Kartei erstellt"),
+				txt: "Kartei",
+			},
+			{
+				arr: karteisuche.ztj[i].redaktion.filter(v => v.er === "Artikel erstellt"),
+				txt: "Artikel",
+			},
+		];
+		let br = false;
+		for (let e of erstellt) {
+			for (let i of e.arr) {
+				if (br) {
+					wrap.appendChild(document.createElement("br"));
+				}
+				let da = helfer.datumFormat(i.da, true).split(", ")[0],
+					pr = i.pr ? i.pr : "N. N.";
+				let typ = document.createElement("i");
+				wrap.appendChild(typ);
+				typ.textContent = `${e.txt}:`;
+				wrap.appendChild(document.createTextNode(` ${pr} (${da})`));
+				br = true;
+			}
+		}
+	},
+	// Status der Redaktion ermitteln
+	//   idx = Number
+	//     (auf karteisuche.ztj zeigender Index)
+	ztjAuflistenRedaktionStatus (idx) {
+		let ds = karteisuche.ztj[idx],
+			ereignisse = Object.keys(redaktion.ereignisse),
+			status = 1,
+			status2 = ereignisse.indexOf("Artikel erstellt"),
+			status3 = ereignisse.indexOf("Artikel fertig"),
+			status4 = ereignisse.indexOf("Artikel online"),
+			hoechst = -1;
+		for (let i of ds.redaktion) {
+			let idx = ereignisse.indexOf(i.er);
+			hoechst = idx > hoechst ? idx : hoechst;
+		}
+		// Status ermitteln
+		if (hoechst >= status4) {
+			status = 4;
+		} else if (hoechst >= status3) {
+			status = 3;
+		} else if (hoechst >= status2) {
+			status = 2;
+		}
+		return {
+			hoechst,
+			status,
+			status2,
+			status3,
+			status4,
+			ereignis: ereignisse[hoechst],
+		};
 	},
 	// ZTJ-Datei in neuem Fenster öffnen
 	//   a = Element
@@ -430,6 +558,318 @@ let karteisuche = {
 			ipcRenderer.send("kartei-laden", this.dataset.pfad, false);
 		});
 	},
+	// maximal Höhe der Trefferliste berechnen
+	//   resize = true || undefined
+	//     (die Berechnung wurde durch die Größenänderung des Fenster angestoßen)
+	hoeheTrefferliste (resize = false) {
+		// Ist die Karteisuche überhaupt offen?
+		if (resize && document.getElementById("karteisuche").classList.contains("aus")) {
+			return;
+		}
+		// Maximalhöhe berechnen
+		let liste = document.getElementById("karteisuche-karteien"),
+			max = window.innerHeight - 40 - 28 - 20 - 50 - 20; // 40px Abstand oben, 28px Fensterkopf, 20px Paddings, 50px Margins, 20px Abstand unten
+		for (let i of document.getElementById("karteisuche-cont").childNodes) {
+			if (i === liste || i.nodeType !== 1) {
+				continue;
+			}
+			max -= i.offsetHeight;
+		}
+		liste.style.maxHeight = `${max}px`;
+	},
+	// Sortierwort aus dem übergebenen Wort/Ausdruck ableiten
+	// (denn das Wort könnte mehrgliedrig sein, Beispiele:
+	// politisch korrekt => Rückgabe: politisch;
+	// der kleine Mann => Rückgabe: Mann)
+	//   wort = String
+	//     (Wort oder Ausdruck)
+	wortSort (wort) {
+		let sortform = "";
+		for (let i of wort.split(/\s/)) {
+			// Artikel ignorieren
+			if (/^der|die|das$/.test(i)) {
+				continue;
+			}
+			// erstes Wort, das kein Artikel ist
+			if (!sortform) {
+				sortform = i;
+			}
+			// erstes Wort, das mit einem Großbuchstaben beginnt, bevorzugen
+			if (/^[A-ZÄÖÜ]/.test(i)) {
+				sortform = i;
+				break;
+			}
+		}
+		if (!sortform) {
+			// das Wort war offenbar ein Artikel
+			return wort;
+		}
+		return sortform;
+	},
+	// Buchstabe des Alphabets aus dem übergebenen Karteiwort ableiten
+	//   wort = String
+	//     (das Wort, um das es geht)
+	wortAlpha (wort) {
+		let erster = wort.substring(0, 1).toUpperCase();
+		switch (erster) {
+			case "Ä":
+				erster = "A";
+				break;
+			case "Ö":
+				erster = "O";
+				break;
+			case "Ü":
+				erster = "U";
+				break;
+		}
+		return erster;
+	},
+	// Alphabet drucken
+	//   alpha = Set
+	//     (Buchstaben des Alphabets, die auftauchen)
+	alphabet (alpha) {
+		// Liste löschen
+		let cont = document.getElementById("karteisuche-alphabet");
+		helfer.keineKinder(cont);
+		// keine Treffer
+		if (!alpha.size) {
+			return;
+		}
+		// Liste aufbauen
+		let alphabet = [...alpha].sort();
+		alphabet.unshift("alle");
+		for (let i = 0, len = alphabet.length; i < len; i++) {
+			let a = document.createElement("a");
+			cont.appendChild(a);
+			a.dataset.buchstabe = alphabet[i];
+			a.href = "#";
+			a.textContent = alphabet[i];
+			if (i === 0) {
+				a.classList.add("aktiv");
+				cont.appendChild(document.createTextNode("|"));
+			}
+		}
+		// Maximalbreite berechnen
+		let h = cont.parentNode,
+			treffer = document.getElementById("karteisuche-treffer"),
+			belegt = treffer.offsetLeft + treffer.offsetWidth + h.lastChild.offsetWidth + 4 + 2 * 25; // 4px Abstand rechts, 2 * 25px Margins zum Alphabet
+		cont.style.maxWidth = `calc(100% - ${belegt}px`;
+		// Klickevents anhängen
+		cont.querySelectorAll("a").forEach(a => karteisuche.alphabetFilter(a));
+	},
+	// Trefferliste nach Buchstaben filtern
+	//   a = Element
+	//     (Link für einen oder alle Buchstaben)
+	alphabetFilter (a) {
+		a.addEventListener("click", function(evt) {
+			evt.preventDefault();
+			let b = this.dataset.buchstabe,
+				liste = document.getElementById("karteisuche-karteien"),
+				treffer = 0;
+			// filtern
+			for (let i of liste.childNodes) {
+				let anzeigen = false;
+				if (b === "alle" || b === i.dataset.buchstabe) {
+					anzeigen = true;
+				}
+				if (anzeigen) {
+					i.classList.remove("aus");
+					treffer++;
+				} else {
+					i.classList.add("aus");
+				}
+			}
+			// aktiven Filter markieren
+			let alpha = document.getElementById("karteisuche-alphabet");
+			alpha.querySelector(".aktiv").classList.remove("aktiv");
+			this.classList.add("aktiv");
+			// Trefferzahl auffrischen
+			document.getElementById("karteisuche-treffer").textContent = `(${treffer})`;
+		});
+	},
+	// Trefferlistenexport: sichtbare Treffer, die exportiert werden können
+	// (Indizes, die auf karteisuche.ztj verweisen)
+	trefferlisteItems: [],
+	// Trefferlistenexport
+	trefferlisteExportieren () {
+		// keine Treffer in der Liste
+		let items = document.querySelectorAll("#karteisuche-karteien > div");
+		if (!items.length) {
+			let text = "Es wurden keine Karteien gefunden.";
+			if (!document.getElementById("karteisuche-treffer").textContent) {
+				text = "Sie müssen zuerst eine Suche anstoßen.";
+			}
+			dialog.oeffnen({
+				typ: "alert",
+				text,
+				callback: () => document.getElementById("karteisuche-suchen").focus(),
+			});
+			return;
+		}
+		// Treffer sammeln
+		karteisuche.trefferlisteItems = [];
+		for (let i = 0, len = items.length; i < len; i++) {
+			if (items[i].classList.contains("aus")) {
+				continue;
+			}
+			karteisuche.trefferlisteItems.push(i);
+		}
+		// Exportformat erfragen
+		let fenster = document.getElementById("karteisuche-export");
+		overlay.oeffnen(fenster);
+		fenster.querySelector("input").focus();
+	},
+	// Trefferlistenexport durchführen
+	trefferlisteExportierenDo () {
+		// Auswahlfenster schließen
+		overlay.schliessen(document.getElementById("karteisuche-export"));
+		// Ausgabe erzeugen
+		let md = document.getElementById("karteisuche-export-format-md").checked,
+			knapp = document.getElementById("karteisuche-export-typ-knapp").checked,
+			items = document.querySelectorAll("#karteisuche-karteien > div"),
+			content = "",
+			alpha = "";
+		if (!md) {
+			content = `<!doctype html>\n<html lang="de"><head>\n<meta charset="utf-8">\n<title>Karteiliste</title>\n</head><body>`;
+		}
+		for (let i of karteisuche.trefferlisteItems) {
+			// Überschrift und Kopfzeile
+			let item = items[i],
+				buchstabe = item.dataset.buchstabe;
+			if (buchstabe !== alpha) {
+				alpha = buchstabe;
+				if (md) {
+					content += `\n# ${buchstabe}\n\n`;
+					if (!knapp) {
+						content += "| Wort |   | Status | Kartei | Datum | Artikel | Datum |\n";
+						content += "| --- | --- | --- | --- | --- | --- | --- |\n";
+					}
+				} else {
+					if (/<\/li>$/.test(content)) {
+						content += "\n</ul>";
+					} else if (/<\/tr>$/.test(content)) {
+						content += "\n</table>";
+					}
+					content += `\n<h1>${buchstabe}</h1>`;
+					if (knapp) {
+						content += "\n<ul>";
+					} else {
+						content += "\n<table>\n<tr><th>Wort</th><th> </th><th>Status</th><th>Kartei</th><th>Datum</th><th>Artikel</th><th>Datum</th></tr>";
+					}
+				}
+			}
+			// Artikelzeile
+			let idx = parseInt(item.dataset.idx, 10),
+				status = karteisuche.ztjAuflistenRedaktionStatus(idx),
+				statusTxt = "abgeschlossen",
+				kartei = karteisuche.ztj[idx].redaktion.filter(v => v.er === "Kartei erstellt"),
+				karteiDa = helfer.datumFormat(kartei[0].da, true).split(", ")[0],
+				karteiPr = kartei[0].pr ? kartei[0].pr : "N. N.",
+				artikel = karteisuche.ztj[idx].redaktion.filter(v => v.er === "Artikel erstellt"),
+				artikelDa = "",
+				artikelPr = "",
+				check = "✓";
+			if (status.status === 1) {
+				statusTxt = "in Arbeit";
+			}
+			if (artikel.length) {
+				artikelDa = helfer.datumFormat(artikel[0].da, true).split(", ")[0];
+				artikelPr = artikel[0].pr ? artikel[0].pr : "N. N.";
+			}
+			if (status.hoechst < status.status3) {
+				check = " ";
+			}
+			if (md) {
+				if (knapp) {
+					content += `* ${karteisuche.ztj[idx].wort} (${statusTxt})\n`;
+				} else {
+					content += `| ${karteisuche.ztj[idx].wort} | ${check} | ${status.ereignis} | ${karteiPr} | ${karteiDa}`;
+					if (artikelPr) {
+						content += ` | ${artikelPr} | ${artikelDa} |\n`;
+					} else {
+						content += " | – | – |\n";
+					}
+				}
+			} else {
+				if (knapp) {
+					content += `\n<li>${karteisuche.ztj[idx].wort} (${statusTxt})</li>`;
+				} else {
+					content += `\n<tr><td>${karteisuche.ztj[idx].wort}</td><td>${check}</td><td>${status.ereignis}</td><td>${karteiPr}</td><td>${karteiDa}</td>`;
+					if (artikelPr) {
+						content += `<td>${artikelPr}</td><td>${artikelDa}</td></tr>`;
+					} else {
+						content += "<td>–</td><td>–</td></tr>";
+					}
+				}
+			}
+		}
+		if (!md) {
+			if (/<\/li>$/.test(content)) {
+				content += "\n</ul>";
+			} else if (/<\/tr>$/.test(content)) {
+				content += "\n</table>";
+			}
+			content += "\n</body></html>\n";
+		}
+		// Daten zum Speichern anbieten
+		let format = {
+			name: "Markdown",
+			ext: "md",
+		};
+		if (!md) {
+			format.name = "HTML";
+			format.ext = "html";
+		}
+		karteisuche.trefferlisteExportierenDialog(content, format);
+	},
+	// Trefferlistenexport: Daten zum Speichern anbieten
+	//   content = String
+	//     (die Daten)
+	//   format = Object
+	//     (Angaben zum Format)
+	async trefferlisteExportierenDialog (content, format) {
+		const path = require("path");
+		let opt = {
+			title: `${format.name} speichern`,
+			defaultPath: path.join(appInfo.documents, `Karteiliste.${format.ext}`),
+			filters: [
+				{
+					name: format.name,
+					extensions: [format.ext],
+				},
+				{
+					name: "Alle Dateien",
+					extensions: ["*"],
+				},
+			],
+		};
+		// Dialog anzeigen
+		const {ipcRenderer} = require("electron");
+		let result = await ipcRenderer.invoke("datei-dialog", {
+			open: false,
+			winId: winInfo.winId,
+			opt: opt,
+		});
+		// Fehler oder keine Datei ausgewählt
+		if (result.message || !Object.keys(result).length) {
+			dialog.oeffnen({
+				typ: "alert",
+				text: `Beim Öffnen des Dateidialogs ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${result.message}</p>`,
+			});
+			return;
+		} else if (result.canceled) {
+			return;
+		}
+		// Kartei speichern
+		const fsP = require("fs").promises;
+		fsP.writeFile(result.filePath, content)
+			.catch(err => {
+				dialog.oeffnen({
+					typ: "alert",
+					text: `Beim Speichern der Karteiliste ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.message}</p>`,
+				});
+			});
+	},
 	// Generator zur Erzeugung der nächsten Filter-ID
 	makeId: null,
 	*idGenerator (id) {
@@ -439,6 +879,15 @@ let karteisuche = {
 	},
 	// zur Verfügung stehende Filter-Typen
 	filterTypen: {
+		"Karteiwort": [
+			{
+				type: "text",
+				ro: false,
+				cl: "karteisuche-karteiwort",
+				ph: "Suchtext",
+				pre: "",
+			},
+		],
 		"Volltext": [
 			{
 				type: "text",
@@ -507,6 +956,13 @@ let karteisuche = {
 			{
 				type: "dropdown",
 				ro: false,
+				cl: "karteisuche-redaktion-logik",
+				ph: "Logik",
+				pre: "=",
+			},
+			{
+				type: "dropdown",
+				ro: false,
 				cl: "karteisuche-redaktion-ereignis",
 				ph: "Ereignis",
 				pre: "",
@@ -554,6 +1010,8 @@ let karteisuche = {
 		if (manuell) {
 			input.focus();
 		}
+		// Maximalhöhe Trefferliste setzen
+		karteisuche.hoeheTrefferliste();
 	},
 	// baut die zu einem Filter gehörigen Formularelemente auf
 	//   filterId = String
@@ -658,6 +1116,8 @@ let karteisuche = {
 		a.addEventListener("click", function(evt) {
 			evt.preventDefault();
 			a.parentNode.parentNode.removeChild(a.parentNode);
+			// Maximalhöhe Trefferliste setzen
+			karteisuche.hoeheTrefferliste();
 		});
 	},
 	// Zwischenspeicher für die Filterwerte
@@ -670,17 +1130,30 @@ let karteisuche = {
 				typ = filter.value;
 			// Filter ausgewählt?
 			if (!typ) {
+				karteisuche.filterIgnorieren(filter, true);
 				continue;
 			}
 			// Objekt für die Filterwerte
 			let obj = {
 				typ: typ,
 			};
+			// Karteiwort
+			if (typ === "Karteiwort") {
+				let text = document.getElementById(`karteisuche-karteiwort-${id}`).value;
+				text = helfer.textTrim(text, true);
+				if (!text) {
+					karteisuche.filterIgnorieren(filter, true);
+					continue;
+				}
+				obj.reg = new RegExp(helfer.formVariSonderzeichen(helfer.escapeRegExp(text)), "i");
+				karteisuche.filterWerte.push(obj);
+			}
 			// Volltext
-			if (typ === "Volltext") {
+			else if (typ === "Volltext") {
 				let text = document.getElementById(`karteisuche-volltext-${id}`).value;
 				text = helfer.textTrim(text.replace(/[<>]+/g, ""), true);
 				if (!text) {
+					karteisuche.filterIgnorieren(filter, true);
 					continue;
 				}
 				const i = document.getElementById(`karteisuche-volltext-genau-${id}`).checked ? "" : "i";
@@ -693,6 +1166,7 @@ let karteisuche = {
 				obj.tagId = "";
 				const tag = document.getElementById(`karteisuche-tag-${id}`).value;
 				if (!obj.tagTyp || !tag) {
+					karteisuche.filterIgnorieren(filter, true);
 					continue;
 				}
 				for (let id in optionen.data.tags[obj.tagTyp].data) {
@@ -719,19 +1193,48 @@ let karteisuche = {
 			}
 			// BearbeiterIn
 			else if (typ === "BearbeiterIn") {
-				obj.wert = document.getElementById(`karteisuche-person-${id}`).value;
-				if (obj.wert) {
-					karteisuche.filterWerte.push(obj);
+				let text = document.getElementById(`karteisuche-person-${id}`).value;
+				text = helfer.textTrim(text, true);
+				if (!text) {
+					karteisuche.filterIgnorieren(filter, true);
+					continue;
 				}
+				obj.reg = new RegExp(helfer.formVariSonderzeichen(helfer.escapeRegExp(text)), "i");
+				karteisuche.filterWerte.push(obj);
 			}
 			// Redaktion
 			else if (typ === "Redaktion") {
-				obj.er = document.getElementById(`karteisuche-redaktion-ereignis-${id}`).value;
-				obj.pr = document.getElementById(`karteisuche-redaktion-person-${id}`).value;
-				if (obj.er || obj.pr) {
-					karteisuche.filterWerte.push(obj);
+				let textEr = document.getElementById(`karteisuche-redaktion-ereignis-${id}`).value,
+					textPr = document.getElementById(`karteisuche-redaktion-person-${id}`).value;
+				textEr = helfer.textTrim(textEr, true);
+				textPr = helfer.textTrim(textPr, true);
+				if (!textEr && !textPr) {
+					karteisuche.filterIgnorieren(filter, true);
+					continue;
 				}
+				if (textEr) {
+					obj.er = new RegExp(helfer.formVariSonderzeichen(helfer.escapeRegExp(textEr)), "i");
+				}
+				if (textPr) {
+					obj.pr = new RegExp(helfer.formVariSonderzeichen(helfer.escapeRegExp(textPr)), "i");
+				}
+				obj.logik = document.getElementById(`karteisuche-redaktion-logik-${id}`).value;
+				karteisuche.filterWerte.push(obj);
 			}
+			karteisuche.filterIgnorieren(filter, false);
+		}
+	},
+	// markiert/demarkiert Filter, die ignoriert werden/wurden
+	//   filter = Element
+	//     (Input-Feld mit der Bezeichnung des Filtertyps)
+	//   ignorieren = Boolean
+	//     (Filter wird ignoriert bzw. nicht mehr ignoriert)
+	filterIgnorieren (filter, ignorieren) {
+		let p = filter.closest("p");
+		if (ignorieren) {
+			p.classList.add("karteisuche-ignoriert");
+		} else {
+			p.classList.remove("karteisuche-ignoriert");
 		}
 	},
 	// String-Datensätze, die der Volltextfilter berücksichtigt
@@ -745,8 +1248,13 @@ let karteisuche = {
 	//     (die ZTJ-Datei, die gefiltert werden soll; also alle Karteidaten, in der üblichen Form)
 	filtern (datei) {
 		forX: for (let filter of karteisuche.filterWerte) {
+			// Karteiwort
+			if (filter.typ === "Karteiwort" &&
+					!filter.reg.test(datei.wo)) {
+				return false;
+			}
 			// Volltext
-			if (filter.typ === "Volltext") {
+			else if (filter.typ === "Volltext") {
 				// Datenfelder Kartei
 				for (let ds of karteisuche.filterVolltext.datei) {
 					if (filter.reg.test(datei[ds])) {
@@ -818,26 +1326,41 @@ let karteisuche = {
 			}
 			// BearbeiterIn
 			else if (filter.typ === "BearbeiterIn" &&
-					!datei.be.includes(filter.wert)) {
+					!hasSome(datei.be, filter.reg)) {
 				return false;
 			}
 			// Redaktion
 			else if (filter.typ === "Redaktion") {
 				for (let i of datei.rd) {
 					let gefunden = {
-						er: filter.er && i.er === filter.er ? true : false,
-						pr: filter.pr && i.pr === filter.pr ? true : false,
+						er: filter.er && filter.er.test(i.er) ? true : false,
+						pr: filter.pr && filter.pr.test(i.pr) ? true : false,
 					};
-					if (filter.er && filter.pr && gefunden.er && gefunden.pr ||
+					let treffer = filter.er && filter.pr && gefunden.er && gefunden.pr ||
 							filter.er && !filter.pr && gefunden.er ||
-							!filter.er && filter.pr && gefunden.pr) {
+							!filter.er && filter.pr && gefunden.pr;
+					if (treffer && filter.logik === "=") {
 						continue forX;
+					} else if (treffer && filter.logik !== "=") {
+						return false;
 					}
+				}
+				if (filter.logik !== "=") {
+					continue forX;
 				}
 				return false;
 			}
 		}
 		return true;
+		// testet, ob die Bedingungen zutreffen
+		// (ausgelagert, damit die Funktionen nicht in der Schleife sind)
+		//   arr = Array
+		//     (hier wird gesucht)
+		//   reg = RegExp
+		//     (regulärer Ausdruck, mit dem gesucht wird)
+		function hasSome (arr, reg) {
+			return arr.some(v => reg.test(v));
+		}
 	},
 	// aktuelle Filterkonfiguration in den Optionen speichern
 	filterSpeichern () {
@@ -860,6 +1383,11 @@ let karteisuche = {
 	filterWiederherstellen () {
 		for (let i = optionen.data.karteisuche.filter.length - 1; i >= 0; i--) {
 			let werte = optionen.data.karteisuche.filter[i];
+			// Korrektur Redaktionsfilter
+			// (ab Version 0.32.0 gibt es ein Logikfeld: = || !=)
+			if (werte[0] === "Redaktion" && werte.length === 3) {
+				werte.splice(1, 0, "=");
+			}
 			// neuen Absatz erzeugen
 			karteisuche.filterHinzufuegen(false);
 			let typ = document.querySelector("#karteisuche-filter input");
@@ -875,6 +1403,56 @@ let karteisuche = {
 					inputs[j].value = werte[j];
 				}
 			}
+		}
+	},
+	// feststellen, ob die Textfelder in den Filtern verkleiner werden müssen
+	// (blöder Hack, geht aber nicht mit overflow, da die Dropdown-Menüs ausbrechen
+	// müssen; setzt man overflow-x auf "hidden", wird overflow-y automatisch zu "auto",
+	// ganz egal, was man deklariert)
+	filterBreite () {
+		let ks = document.getElementById("karteisuche");
+		if (ks.classList.contains("aus")) {
+			return;
+		}
+		if (ks.querySelector("div").offsetWidth < 730) {
+			ks.classList.add("karteisuche-schmal");
+		} else {
+			ks.classList.remove("karteisuche-schmal");
+		}
+	},
+	// Ansicht der Filter umschalten
+	filterUmschalten () {
+		let filter = document.getElementById("karteisuche-filterblock"),
+			hoehe = 0;
+		if (filter.classList.contains("aus")) {
+			filter.classList.remove("aus");
+			hoehe = filter.scrollHeight;
+			karteisuche.hoeheTrefferliste();
+			filter.classList.add("blenden");
+			filter.style.height = "0px";
+			filter.style.paddingTop = "0px";
+			setTimeout(() => {
+				filter.style.height = `${hoehe}px`;
+				filter.style.paddingTop = "10px";
+			}, 0);
+			setTimeout(() => {
+				filter.classList.remove("blenden");
+				filter.removeAttribute("style");
+			}, 300);
+		} else {
+			filter.classList.add("blenden");
+			filter.style.height = `${filter.scrollHeight}px`;
+			filter.style.paddingTop = "10px";
+			setTimeout(() => {
+				filter.style.height = "0px";
+				filter.style.paddingTop = "0px";
+			}, 0);
+			setTimeout(() => {
+				filter.classList.add("aus");
+				filter.classList.remove("blenden");
+				filter.removeAttribute("style");
+				karteisuche.hoeheTrefferliste();
+			}, 300);
 		}
 	},
 	// Animation, dass die Karteisuche läuft

@@ -329,6 +329,10 @@ input[type="button"][value="Ergänzen"] {
 	background-image: url(../../img/plus-weiss.svg);
 }
 
+input[type="button"][value="Exportieren"] {
+	background-image: url(../../img/dokument-export-weiss.svg);
+}
+
 input[type="button"][value="GitHub"] {
 	background-image: url(../../img/github-weiss.svg);
 }
