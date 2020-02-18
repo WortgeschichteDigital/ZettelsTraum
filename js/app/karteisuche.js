@@ -512,14 +512,17 @@ let karteisuche = {
 			ereignisse = Object.keys(redaktion.ereignisse),
 			status = 1,
 			status2 = ereignisse.indexOf("Artikel erstellt"),
-			status3 = ereignisse.indexOf("Artikel online"),
+			status3 = ereignisse.indexOf("Artikel fertig"),
+			status4 = ereignisse.indexOf("Artikel online"),
 			hoechst = -1;
 		for (let i of ds.redaktion) {
 			let idx = ereignisse.indexOf(i.er);
 			hoechst = idx > hoechst ? idx : hoechst;
 		}
 		// Status ermitteln
-		if (hoechst >= status3) {
+		if (hoechst >= status4) {
+			status = 4;
+		} else if (hoechst >= status3) {
 			status = 3;
 		} else if (hoechst >= status2) {
 			status = 2;
@@ -529,6 +532,7 @@ let karteisuche = {
 			status,
 			status2,
 			status3,
+			status4,
 			ereignis: ereignisse[hoechst],
 		};
 	},

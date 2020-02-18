@@ -363,7 +363,11 @@
 }
 
 .karteisuche-status3 {
-	background-color: var(--hintergrundGruen);
+	background-color: var(--farbeGruenDunkel);
+}
+
+.karteisuche-status4 {
+	background-color: var(--farbeGruenHell);
 }
 
 .karteisuche-hoechst {
