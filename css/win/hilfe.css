@@ -476,6 +476,10 @@ tr.ztj-alt td code {
 	color: var(--textSehrHell);
 }
 
+tr.ztj-alt td .obacht code {
+	color: var(--text);
+}
+
 tr.ztj-alt td p {
 	border-color: var(--textExtremHell);
 }

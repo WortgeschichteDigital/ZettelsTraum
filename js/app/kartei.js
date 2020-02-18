@@ -22,18 +22,22 @@ let kartei = {
 					},
 				},
 			},
-			be: [], // BearbeiterIn
 			dc: new Date().toISOString(), // Datum Kartei-Erstellung
 			dm: "", // Datum Kartei-Änderung
 			fv: {}, // Formvarianten
 			ka: {}, // Karteikarten
 			le: [], // überprüfte Lexika usw.
 			no: "", // Notizen
-			rd: [{ // Redaktion
-				da: new Date().toISOString().split("T")[0],
-				er: "Kartei erstellt",
-				pr: "",
-			}],
+			rd: { // Redaktion
+				be: [], // BearbeiterInnen
+				bh: "", // behandelt in
+				er: [{ // Ereignisse
+					da: new Date().toISOString().split("T")[0],
+					er: "Kartei erstellt",
+					pr: "",
+				}],
+				sg: [], // Sachgebiete
+			},
 			re: 0, // Revision
 			ty: "ztj", // Datei ist eine ZTJ-Datei (immer dieser Wert! Bis Version 0.24.0 stand in dem Feld "wgd")
 			ve: konversion.version, // Version des Dateiformats
@@ -43,8 +47,8 @@ let kartei = {
 		stamm.dtaGet(kartei.wort, false);
 		// ggf. für diesen Rechner registrierte BearbeiterIn eintragen
 		if (optionen.data.einstellungen.bearbeiterin) {
-			data.be.push(optionen.data.einstellungen.bearbeiterin);
-			data.rd[0].pr = optionen.data.einstellungen.bearbeiterin;
+			data.rd.be.push(optionen.data.einstellungen.bearbeiterin);
+			data.rd.er[0].pr = optionen.data.einstellungen.bearbeiterin;
 		}
 		// Kartendatum-Filter initialisieren
 		filter.kartendatumInit();
@@ -270,12 +274,12 @@ let kartei = {
 		return new Promise(async resolve => {
 			// ggf. BearbeiterIn hinzufügen oder an die Spitze der Liste holen
 			const bearb = optionen.data.einstellungen.bearbeiterin;
-			let beAlt = [...data.be];
+			let beAlt = [...data.rd.be];
 			if (bearb) {
-				if (data.be.includes(bearb)) {
-					data.be.splice(data.be.indexOf(bearb), 1);
+				if (data.rd.be.includes(bearb)) {
+					data.rd.be.splice(data.rd.be.indexOf(bearb), 1);
 				}
-				data.be.unshift(bearb);
+				data.rd.be.unshift(bearb);
 			}
 			// einige Werte müssen vor dem Speichern angepasst werden
 			const dm_alt = data.dm,
@@ -291,7 +295,7 @@ let kartei = {
 					text: `Beim Speichern der Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${result.name}: ${result.message}</p>`,
 				});
 				// passiert ein Fehler, müssen manche Werte zurückgesetzt werden
-				data.be = [...beAlt];
+				data.rd.be = [...beAlt];
 				data.dm = dm_alt;
 				data.re = re_alt;
 				// Promise auflösen

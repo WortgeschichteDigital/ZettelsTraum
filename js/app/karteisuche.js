@@ -337,7 +337,13 @@ let karteisuche = {
 				}
 				// Redaktionsereignisse klonen
 				if (ziel.passt) {
-					for (let erg of datei.rd) {
+					let er = datei.rd.er;
+					if (!er) {
+						// bis Dateiformat Version 12 standen die Redaktionsereignisse in data.rd;
+						// erst danach in data.rd.er
+						er = datei.rd;
+					}
+					for (let erg of er) {
 						ziel.redaktion.push({...erg});
 					}
 				}
@@ -359,7 +365,7 @@ let karteisuche = {
 	// Array enthält Objekte:
 	//   pfad (String; Pfad zur Kartei)
 	//   wort (String; Wort der Kartei)
-	//   redaktion (Array; Klon von data.rd)
+	//   redaktion (Array; Klon von data.rd.er)
 	//   passt (Boolean; passt zu den Suchfiltern)
 	ztj: [],
 	// findet alle Pfade in einem übergebenen Ordner
@@ -1247,6 +1253,18 @@ let karteisuche = {
 	//   datei = Object
 	//     (die ZTJ-Datei, die gefiltert werden soll; also alle Karteidaten, in der üblichen Form)
 	filtern (datei) {
+		let be = datei.rd.be;
+		if (!be) {
+			// bis Dateiformat Version 12 standen die Bearbeiterinnen in data.be;
+			// erst danach in data.rd.be
+			be = datei.be;
+		}
+		let er = datei.rd.er;
+		if (!er) {
+			// bis Dateiformat Version 12 standen die Redaktionsereignisse in data.rd;
+			// erst danach in data.rd.er
+			er = datei.rd;
+		}
 		forX: for (let filter of karteisuche.filterWerte) {
 			// Karteiwort
 			if (filter.typ === "Karteiwort" &&
@@ -1326,12 +1344,12 @@ let karteisuche = {
 			}
 			// BearbeiterIn
 			else if (filter.typ === "BearbeiterIn" &&
-					!hasSome(datei.be, filter.reg)) {
+					!hasSome(be, filter.reg)) {
 				return false;
 			}
 			// Redaktion
 			else if (filter.typ === "Redaktion") {
-				for (let i of datei.rd) {
+				for (let i of er) {
 					let gefunden = {
 						er: filter.er && filter.er.test(i.er) ? true : false,
 						pr: filter.pr && filter.pr.test(i.pr) ? true : false,

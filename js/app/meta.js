@@ -57,7 +57,7 @@ let meta = {
 		let cont = document.getElementById("meta-be-liste");
 		helfer.keineKinder(cont);
 		// keine Bearbeiter eingetragen
-		if (!data.be.length) {
+		if (!data.rd.be.length) {
 			let p = document.createElement("p");
 			cont.appendChild(p);
 			p.classList.add("kein-wert");
@@ -65,18 +65,18 @@ let meta = {
 			return;
 		}
 		// BearbeiterInnen auflisten
-		for (let i = 0, len = data.be.length; i < len; i++) {
+		for (let i = 0, len = data.rd.be.length; i < len; i++) {
 			let p = document.createElement("p");
 			cont.appendChild(p);
 			// Lösch-Link
 			let a = document.createElement("a");
 			a.href = "#";
 			a.classList.add("icon-link", "icon-entfernen");
-			a.dataset.bearb = data.be[i];
+			a.dataset.bearb = data.rd.be[i];
 			meta.bearbEntfernen(a);
 			p.appendChild(a);
 			// BearbeiterIn
-			let bearb = data.be[i];
+			let bearb = data.rd.be[i];
 			if (!optionen.data.personen.includes(bearb)) {
 				bearb += " +";
 				p.title = "BearbeiterIn nicht in der Personenliste";
@@ -100,7 +100,7 @@ let meta = {
 			return;
 		}
 		// BearbeiterIn schon registriert
-		if (data.be.includes(va)) {
+		if (data.rd.be.includes(va)) {
 			dialog.oeffnen({
 				typ: "alert",
 				text: "Die BearbeiterIn ist schon in der Liste.",
@@ -112,7 +112,7 @@ let meta = {
 		}
 		// BearbeiterIn ergänzen und sortieren
 		be.value = "";
-		data.be.unshift(va);
+		data.rd.be.unshift(va);
 		// Liste neu aufbauen
 		meta.bearbAuflisten();
 		// Änderungsmarkierung setzen
@@ -133,7 +133,7 @@ let meta = {
 				callback: () => {
 					if (dialog.antwort) {
 						// Löschen
-						data.be.splice(data.be.indexOf(bearb), 1);
+						data.rd.be.splice(data.rd.be.indexOf(bearb), 1);
 						// neu auflisten
 						meta.bearbAuflisten();
 						// Änderungsmarkierung setzen

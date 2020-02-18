@@ -105,7 +105,7 @@ let redaktion = {
 		let table = document.createElement("table");
 		cont.appendChild(table);
 		// Tabellenzellen
-		data.rd.forEach(function(i, n) {
+		data.rd.er.forEach(function(i, n) {
 			let tr = document.createElement("tr");
 			table.appendChild(tr);
 			tr.dataset.slot = n;
@@ -307,8 +307,8 @@ let redaktion = {
 			}
 			slot = parseInt(slot, 10);
 			// Wurde der Wert wirklich geändert?
-			if (data.rd[slot][redaktion.feldtypen[feldtyp]] !== val) {
-				data.rd[slot][redaktion.feldtypen[feldtyp]] = val;
+			if (data.rd.er[slot][redaktion.feldtypen[feldtyp]] !== val) {
+				data.rd.er[slot][redaktion.feldtypen[feldtyp]] = val;
 				kartei.karteiGeaendert(true);
 				// Erinnerungen-Icon auffrischen
 				erinnerungen.check();
@@ -330,7 +330,7 @@ let redaktion = {
 			// Feld zurücksetzen
 			const slot = parseInt(this.parentNode.parentNode.dataset.slot, 10),
 				feldtyp = this.id.match(/^.+?-(.+?)-/)[1];
-			redaktion.zelleErsetzen(feldtyp, data.rd[slot][redaktion.feldtypen[feldtyp]], this);
+			redaktion.zelleErsetzen(feldtyp, data.rd.er[slot][redaktion.feldtypen[feldtyp]], this);
 		});
 	},
 	// Tabellenzelle mit einem Input-Element durch eine Textzelle ersetzen
@@ -365,7 +365,7 @@ let redaktion = {
 			frag.lastChild.classList.add("kein-einzug");
 			const slot = parseInt(this.parentNode.dataset.slot, 10),
 				feldtyp = this.dataset.feldtyp,
-				val = data.rd[slot][redaktion.feldtypen[feldtyp]];
+				val = data.rd.er[slot][redaktion.feldtypen[feldtyp]];
 			if (feldtyp === "datum") {
 				redaktion.inputDate(frag.lastChild, val, slot);
 			} else if (feldtyp === "ereignis" || feldtyp === "person") {
@@ -401,7 +401,7 @@ let redaktion = {
 			// Der Wert des Inputfelds ist okay.
 			obj[redaktion.feldtypen[feldtyp]] = val;
 		}
-		data.rd.push(obj);
+		data.rd.er.push(obj);
 		kartei.karteiGeaendert(true);
 		redaktion.tabelle();
 		// Anzeige nächstes Ereignis auffrischen
@@ -417,12 +417,12 @@ let redaktion = {
 			evt.preventDefault();
 			const slot = parseInt(this.parentNode.parentNode.dataset.slot, 10);
 			let obj = {
-				da: data.rd[slot].da,
-				er: data.rd[slot].er,
-				pr: data.rd[slot].pr,
+				da: data.rd.er[slot].da,
+				er: data.rd.er[slot].er,
+				pr: data.rd.er[slot].pr,
 			};
-			data.rd.splice(slot, 1);
-			data.rd.splice(slot - 1, 0, obj);
+			data.rd.er.splice(slot, 1);
+			data.rd.er.splice(slot - 1, 0, obj);
 			kartei.karteiGeaendert(true);
 			redaktion.tabelle();
 			// ggf. das Verschiebe-Icon fokussieren
@@ -440,10 +440,10 @@ let redaktion = {
 			const slot = parseInt(this.parentNode.parentNode.dataset.slot, 10);
 			dialog.oeffnen({
 				typ: "confirm",
-				text: `Soll der Eintrag <i>${data.rd[slot].er}</i> mit dem Datum <i>${data.rd[slot].da}</i> wirklich gelöscht werden?`,
+				text: `Soll der Eintrag <i>${data.rd.er[slot].er}</i> mit dem Datum <i>${data.rd.er[slot].da}</i> wirklich gelöscht werden?`,
 				callback: () => {
 					if (dialog.antwort) {
-						data.rd.splice(slot, 1);
+						data.rd.er.splice(slot, 1);
 						kartei.karteiGeaendert(true);
 						redaktion.tabelle();
 						// Anzeige nächstes Ereignis auffrischen
@@ -482,7 +482,7 @@ let redaktion = {
 		// höchstrangiges Ereignis ermitteln
 		let letztesEreignis = -1,
 			ereignisse = Object.keys(redaktion.ereignisse);
-		for (let i of data.rd) {
+		for (let i of data.rd.er) {
 			const idx = ereignisse.indexOf(i.er);
 			if (idx > letztesEreignis) {
 				letztesEreignis = idx;

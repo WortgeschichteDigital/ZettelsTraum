@@ -41,7 +41,7 @@ let erinnerungen = {
 			erinnerungen.data.bearbeiterin.okay = false;
 		}
 		// BearbeiterIn in Metadaten?
-		if (data.be.length) {
+		if (data.rd.be.length) {
 			erinnerungen.data.metadaten.okay = true;
 		} else {
 			erinnerungen.allesOkay = false;
@@ -49,8 +49,8 @@ let erinnerungen = {
 		}
 		// BearbeiterIn in allen Redaktionsereignissen?
 		let redaktion = true;
-		for (let i = 0, len = data.rd.length; i < len; i++) {
-			if (!data.rd[i].pr) {
+		for (let i = 0, len = data.rd.er.length; i < len; i++) {
+			if (!data.rd.er[i].pr) {
 				redaktion = false;
 				break;
 			}
@@ -62,7 +62,7 @@ let erinnerungen = {
 			erinnerungen.data.redaktion.okay = false;
 		}
 		// Artikel erstellt, aber nicht verknüpft?
-		for (let i of data.rd) {
+		for (let i of data.rd.er) {
 			if (i.er === "Artikel erstellt") {
 				let okay = false;
 				for (let f of data.an) {
@@ -81,7 +81,7 @@ let erinnerungen = {
 			}
 		}
 		// XML-Datei erstellt, aber nicht verknüpft?
-		for (let i of data.rd) {
+		for (let i of data.rd.er) {
 			if (i.er === "XML-Auszeichnung") {
 				let okay = false;
 				for (let f of data.an) {
