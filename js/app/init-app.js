@@ -37,6 +37,7 @@ window.addEventListener("load", async () => {
 	ipcRenderer.on("kartei-bedeutungen-fenster", () => bedeutungenWin.oeffnen());
 	ipcRenderer.on("kartei-suche", () => filter.suche());
 	ipcRenderer.on("redaktion-ereignisse", () => redaktion.oeffnen());
+	ipcRenderer.on("redaktion-metadaten", () => redMeta.oeffnen());
 	ipcRenderer.on("belege-hinzufuegen", () => {
 		// Sperre für macOS (Menüpunkte können nicht deaktiviert werden)
 		if (!kartei.wort) {

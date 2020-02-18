@@ -1,0 +1,28 @@
+@charset "utf-8";
+
+/* Redaktion: Metadaten ------------------------- */
+#red-meta > div {
+	margin-top: 40px;
+	max-width: 400px;
+}
+
+#red-meta-cont {
+	padding: 10px;
+}
+
+#red-meta p {
+	padding-left: 110px;
+	text-indent: -110px;
+}
+
+#red-meta label,
+#red-meta span.label {
+	display: inline-block;
+	width: 110px;
+	font-style: italic;
+	text-indent: 0;
+}
+
+#red-meta-behandelt-in {
+	width: 250px;
+}

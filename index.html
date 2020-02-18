@@ -27,6 +27,7 @@
 		<link rel="stylesheet" href="css/app/overlays-meta.css">
 		<link rel="stylesheet" href="css/app/overlays-notizen.css">
 		<link rel="stylesheet" href="css/app/overlays-redaktion.css">
+		<link rel="stylesheet" href="css/app/overlays-redMeta.css">
 		<link rel="stylesheet" href="css/app/overlays-sonderzeichen.css">
 		<link rel="stylesheet" href="css/app/overlays-stamm.css">
 		<link rel="stylesheet" href="css/app/overlays-tagger.css">
@@ -70,6 +71,7 @@
 		<script src="js/app/dropdown.js"></script>
 		<script src="js/app/popup.js"></script>
 		<script src="js/app/redaktion.js"></script>
+		<script src="js/app/redMeta.js"></script>
 		<script src="js/app/sonderzeichen.js"></script>
 		<script src="js/app/speichern.js"></script>
 		<script src="js/app/stamm.js"></script>
@@ -864,6 +866,24 @@
 						><a href="#" class="dropdown-link-element" title="BearbeiterInnen auflisten"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m7 2v8l-3.5-3.5-1.5 1.5 6 6 6-6-1.5-1.5-3.5 3.5v-8z"/></svg></a
 						><input type="button" value="Ergänzen" id="meta-be-ergaenzen"></p>
 				</div>
+			</div>
+		</div></div>
+
+		<!-- OVERLAY: Metadaten (Redaktion) -->
+		<div id="red-meta" class="overlay aus"><div>
+			<h2><span class="icon-h icon-h-meta"> </span
+				>Redaktionsmetadaten<a href="#" class="icon-link icon-handbuch" title="Abschnitt im Handbuch öffnen" data-handbuch="menueRedaktion-metadaten"> </a><a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"> </a></h2>
+			<div id="red-meta-cont">
+				<h3>Karteiwort</h3>
+				<p class="input-text"
+					><label for="red-meta-behandelt-in">behandelt in:</label
+					><input type="text" value="" placeholder="Artikel" id="red-meta-behandelt-in"
+				></p>
+				<p
+					><span class="label">Sachgebiete:</span
+					><span id="red-meta-sachgebiete"></span
+				></p>
+				<h3>BearbeiterInnen</h3>
 			</div>
 		</div></div>
 
