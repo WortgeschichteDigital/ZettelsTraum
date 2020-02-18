@@ -17,6 +17,26 @@ let redMeta = {
 			return;
 		}
 		fenster.querySelector("input").focus();
-		// TODO Sachgebiete aufbauen?
+		// Behandelt-in-Feld füllen
+		document.getElementById("red-meta-behandelt-in").value = data.rd.bh;
+		// Sachgebiete aufbauen TODO
+	},
+	// Timeout, damit gewisse Funktionen nicht zu häufig getriggert werden
+	behandeltInTimeout: null,
+	// Änderungen im Behandelt-in-Feld übernehmen
+	//   input = Element
+	//     (das Behandelt-in-Feld)
+	behandeltIn (input) {
+		input.addEventListener("input", function() {
+			data.rd.bh = this.value;
+			// die folgende Funktionen nicht zu häufig aufrufen
+			clearTimeout(redMeta.behandeltInTimeout);
+			redMeta.behandeltInTimeout = setTimeout(() => {
+				// Änderungsmarkierung setzen
+				kartei.karteiGeaendert(true);
+				// Erinnerungen-Icon auffrischen
+				erinnerungen.check();
+			}, 250);
+		});
 	},
 };

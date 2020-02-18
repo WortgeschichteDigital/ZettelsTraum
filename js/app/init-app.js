@@ -292,6 +292,8 @@ window.addEventListener("load", async () => {
 			meta.aktionText(i);
 		}
 	});
+	// Metadaten-Fenster (Redaktion)
+	redMeta.behandeltIn(document.getElementById("red-meta-behandelt-in"));
 	// Karteisuche
 	document.getElementById("karteisuche-suchen").addEventListener("click", () => karteisuche.suchenPrep());
 	document.querySelector("#karteisuche-cont h3").addEventListener("click", () => karteisuche.filterUmschalten());
