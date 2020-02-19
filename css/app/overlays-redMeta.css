@@ -26,3 +26,38 @@
 #red-meta-behandelt-in {
 	width: 250px;
 }
+
+/* BearbeiterInnen ------------------------------ */
+/* vgl. zur Liste auch overlays-stamm.css */
+#red-meta-be-liste {
+	margin-bottom: 5px;
+	max-height: 145px;
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+
+#red-meta-be-liste p {
+	margin-bottom: 5px;
+	padding-left: 0;
+	text-indent: 0;
+}
+
+#red-meta .kein-wert {
+	color: var(--textSehrHell);
+	font-style: italic;
+}
+
+#red-meta .dropdown-cont {
+	margin-bottom: 0;
+	padding-left: 0;
+	text-indent: 0;
+}
+
+#red-meta-be {
+	width: calc(100% - 121px - 31px); /* Button 121px, 31px padding und border */
+}
+
+#red-meta-be-ergaenzen {
+	position: static;
+	margin-left: -19px;
+}

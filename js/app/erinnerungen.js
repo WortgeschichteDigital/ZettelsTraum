@@ -8,11 +8,11 @@ let erinnerungen = {
 		},
 		metadaten: {
 			okay: false,
-			text: `In den Metadaten der Kartei ist keine BearbeiterIn registriert (<a href="#" class="link-erinnerung" data-funktion="metadaten">⇨ <i>Kartei &gt; Metadaten</i></a>).`,
+			text: `In den redaktionellen Metadaten ist keine BearbeiterIn registriert (<a href="#" class="link-erinnerung" data-funktion="metadaten">⇨ <i>Redaktion &gt; Metadaten</i></a>).`,
 		},
 		redaktion: {
 			okay: false,
-			text: `Im Redaktionsfenster fehlen Angaben zu den BearbeiterInnen (<a href="#" class="link-erinnerung" data-funktion="redaktion">⇨ <i>Redaktion &gt; Ereignisse</i></a>).`,
+			text: `In den Redaktionsereignissen fehlen Angaben zu den BearbeiterInnen (<a href="#" class="link-erinnerung" data-funktion="redaktion">⇨ <i>Redaktion &gt; Ereignisse</i></a>).`,
 		},
 		artikelDatei: {
 			okay: false,
@@ -151,7 +151,7 @@ let erinnerungen = {
 					optionen.sektionWechseln(document.querySelector("#einstellungen ul a"));
 					break;
 				case "metadaten":
-					meta.oeffnen();
+					redMeta.oeffnen();
 					break;
 				case "redaktion":
 					redaktion.oeffnen();

@@ -227,7 +227,7 @@ let dropdown = {
 		// Daten sammeln
 		dropdown.data = [];
 		if (feld_id === "einstellung-bearbeiterin" ||
-				feld_id === "meta-be" ||
+				feld_id === "red-meta-be" ||
 				/^redaktion-person/.test(feld_id) ||
 				/^karteisuche-(redaktion-)*person-/.test(feld_id)) {
 			dropdown.data = [...optionen.data.personen];

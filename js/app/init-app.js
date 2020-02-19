@@ -285,15 +285,14 @@ window.addEventListener("load", async () => {
 			helfer.ordnerOeffnen(kartei.pfad);
 		}
 	});
-	document.querySelectorAll("#meta input").forEach(i => {
+	// Metadaten-Fenster (Redaktion)
+	document.querySelectorAll("#red-meta input").forEach(i => {
 		if (i.type === "button") {
-			meta.aktionButton(i);
+			redMeta.aktionButton(i);
 		} else { // Text-Input
-			meta.aktionText(i);
+			redMeta.aktionText(i);
 		}
 	});
-	// Metadaten-Fenster (Redaktion)
-	redMeta.behandeltIn(document.getElementById("red-meta-behandelt-in"));
 	// Karteisuche
 	document.getElementById("karteisuche-suchen").addEventListener("click", () => karteisuche.suchenPrep());
 	document.querySelector("#karteisuche-cont h3").addEventListener("click", () => karteisuche.filterUmschalten());

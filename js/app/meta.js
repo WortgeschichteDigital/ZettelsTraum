@@ -16,7 +16,7 @@ let meta = {
 		if (overlay.oeffnen(fenster)) { // Fenster ist schon offen
 			return;
 		}
-		// Felder füllen, die nicht geändert werden können
+		// Fenster füllen
 		document.getElementById("meta-dc").textContent = helfer.datumFormat(data.dc);
 		let dm = document.getElementById("meta-dm");
 		if (data.dm) {
@@ -45,125 +45,5 @@ let meta = {
 		speicherort.innerHTML = pfad;
 		document.getElementById("meta-ve").textContent = `Version ${data.ve}`;
 		document.getElementById("meta-re").textContent = data.re;
-		// Liste der BearbeterInnen erstellen
-		meta.bearbAuflisten();
-		// BearbeiterInnen-Feld leeren und fokussieren
-		let be = document.getElementById("meta-be");
-		be.value = "";
-		be.focus();
-	},
-	// BearbeiterInnen des Zettels auflisten
-	bearbAuflisten () {
-		let cont = document.getElementById("meta-be-liste");
-		helfer.keineKinder(cont);
-		// keine Bearbeiter eingetragen
-		if (!data.rd.be.length) {
-			let p = document.createElement("p");
-			cont.appendChild(p);
-			p.classList.add("kein-wert");
-			p.textContent = "keine BearbeiterIn registriert";
-			return;
-		}
-		// BearbeiterInnen auflisten
-		for (let i = 0, len = data.rd.be.length; i < len; i++) {
-			let p = document.createElement("p");
-			cont.appendChild(p);
-			// Lösch-Link
-			let a = document.createElement("a");
-			a.href = "#";
-			a.classList.add("icon-link", "icon-entfernen");
-			a.dataset.bearb = data.rd.be[i];
-			meta.bearbEntfernen(a);
-			p.appendChild(a);
-			// BearbeiterIn
-			let bearb = data.rd.be[i];
-			if (!optionen.data.personen.includes(bearb)) {
-				bearb += " +";
-				p.title = "BearbeiterIn nicht in der Personenliste";
-			}
-			p.appendChild(document.createTextNode(bearb));
-		}
-	},
-	// BearbeiterIn ergänzen
-	bearbErgaenzen () {
-		let be = document.getElementById("meta-be"),
-			va = helfer.textTrim(be.value);
-		// Uppala! Keine BearbeiterIn angegeben!
-		if (!va) {
-			dialog.oeffnen({
-				typ: "alert",
-				text: "Sie haben keinen Namen eingegeben.",
-				callback: () => {
-					be.select();
-				},
-			});
-			return;
-		}
-		// BearbeiterIn schon registriert
-		if (data.rd.be.includes(va)) {
-			dialog.oeffnen({
-				typ: "alert",
-				text: "Die BearbeiterIn ist schon in der Liste.",
-				callback: () => {
-					be.select();
-				},
-			});
-			return;
-		}
-		// BearbeiterIn ergänzen und sortieren
-		be.value = "";
-		data.rd.be.unshift(va);
-		// Liste neu aufbauen
-		meta.bearbAuflisten();
-		// Änderungsmarkierung setzen
-		kartei.karteiGeaendert(true);
-		// Erinnerungen-Icon auffrischen
-		erinnerungen.check();
-	},
-	// BearbeiterIn aus der Liste entfernen
-	//   a = Element
-	//     (Link vor der Bearbeiterin)
-	bearbEntfernen (a) {
-		a.addEventListener("click", function(evt) {
-			evt.preventDefault();
-			let bearb = this.dataset.bearb;
-			dialog.oeffnen({
-				typ: "confirm",
-				text: `Soll <i>${bearb}</i> wirklich aus der Liste entfernt werden?`,
-				callback: () => {
-					if (dialog.antwort) {
-						// Löschen
-						data.rd.be.splice(data.rd.be.indexOf(bearb), 1);
-						// neu auflisten
-						meta.bearbAuflisten();
-						// Änderungsmarkierung setzen
-						kartei.karteiGeaendert(true);
-						// Erinnerungen-Icon auffrischen
-						erinnerungen.check();
-					} else {
-						document.getElementById("meta-be").focus();
-					}
-				},
-			});
-		});
-	},
-	// Klick auf Button
-	aktionButton (button) {
-		button.addEventListener("click", function() {
-			meta.bearbErgaenzen();
-		});
-	},
-	// Tastatureingaben im Textfeld
-	aktionText (input) {
-		input.addEventListener("keydown", function(evt) {
-			tastatur.detectModifiers(evt);
-			if (!tastatur.modifiers && evt.key === "Enter") {
-				evt.preventDefault();
-				if (document.getElementById("dropdown")) {
-					return;
-				}
-				meta.bearbErgaenzen();
-			}
-		});
 	},
 };
