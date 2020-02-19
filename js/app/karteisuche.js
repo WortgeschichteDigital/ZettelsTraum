@@ -1317,6 +1317,9 @@ let karteisuche = {
 				}
 				if (obj.tagId) {
 					karteisuche.filterWerte.push(obj);
+				} else {
+					karteisuche.filterIgnorieren(filter, true);
+					continue;
 				}
 			}
 			// Karteidatum
@@ -1326,6 +1329,9 @@ let karteisuche = {
 				obj.datumVal = document.getElementById(`karteisuche-datum-${id}`).value;
 				if (obj.datumVal) { // falls kein korrektes Datum eingegeben wurde, ist der Wert leer
 					karteisuche.filterWerte.push(obj);
+				} else {
+					karteisuche.filterIgnorieren(filter, true);
+					continue;
 				}
 			}
 			// BearbeiterIn
