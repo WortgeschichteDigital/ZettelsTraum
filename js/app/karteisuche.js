@@ -992,6 +992,15 @@ let karteisuche = {
 				pre: "",
 			},
 		],
+		"Sachgebiet": [
+			{
+				type: "dropdown",
+				ro: false,
+				cl: "karteisuche-sachgebiet",
+				ph: "Sachgebiet",
+				pre: "",
+			},
+		],
 		"Volltext": [
 			{
 				type: "text",
@@ -1252,6 +1261,30 @@ let karteisuche = {
 				obj.reg = new RegExp(helfer.formVariSonderzeichen(helfer.escapeRegExp(text)), "i");
 				karteisuche.filterWerte.push(obj);
 			}
+			// Sachgebiet
+			else if (typ === "Sachgebiet") {
+				obj.id = "";
+				const tag = document.getElementById(`karteisuche-sachgebiet-${id}`).value;
+				if (!tag || !optionen.data.tags.sachgebiete) {
+					karteisuche.filterIgnorieren(filter, true);
+					continue;
+				}
+				for (let id in optionen.data.tags.sachgebiete.data) {
+					if (!optionen.data.tags.sachgebiete.data.hasOwnProperty(id)) {
+						continue;
+					}
+					if (optionen.data.tags.sachgebiete.data[id].name === tag) {
+						obj.id = id;
+						break;
+					}
+				}
+				if (obj.id) {
+					karteisuche.filterWerte.push(obj);
+				} else {
+					karteisuche.filterIgnorieren(filter, true);
+					continue;
+				}
+			}
 			// Volltext
 			else if (typ === "Volltext") {
 				let text = document.getElementById(`karteisuche-volltext-${id}`).value;
@@ -1368,6 +1401,23 @@ let karteisuche = {
 			if (filter.typ === "Karteiwort" &&
 					!filter.reg.test(datei.wo)) {
 				return false;
+			}
+			// Sachgebiet
+			else if (filter.typ === "Sachgebiet") {
+				let gefunden = false;
+				if (datei.rd.sg) {
+					// dieser Datensatz wurde erst mit Dateiformat Version 13 eingeführt;
+					// davor existierte er nicht
+					for (let i of datei.rd.sg) {
+						if (i.id === filter.id) {
+							gefunden = true;
+							break;
+						}
+					}
+				}
+				if (!gefunden) {
+					return false;
+				}
 			}
 			// Volltext
 			else if (filter.typ === "Volltext") {
