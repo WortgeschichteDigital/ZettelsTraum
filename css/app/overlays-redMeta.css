@@ -11,19 +11,19 @@
 }
 
 #red-meta p {
-	padding-left: 110px;
-	text-indent: -110px;
+	padding-left: 115px;
+	text-indent: -115px;
 }
 
 #red-meta label,
 #red-meta span.label {
 	display: inline-block;
-	width: 110px;
+	width: 115px;
 	font-style: italic;
 	text-indent: 0;
 }
 
-#red-meta-behandelt-in {
+#red-meta-behandelt-mit {
 	width: 250px;
 }
 

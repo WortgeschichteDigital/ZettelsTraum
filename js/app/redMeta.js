@@ -17,8 +17,8 @@ let redMeta = {
 			return;
 		}
 		fenster.querySelector("input").focus();
-		// Behandelt-in-Feld füllen
-		document.getElementById("red-meta-behandelt-in").value = data.rd.bh;
+		// Behandelt-mit-Feld füllen
+		document.getElementById("red-meta-behandelt-mit").value = data.rd.bh;
 		// Sachgebiete aufbauen
 		redMeta.sachgebiete();
 		// Liste der BearbeterInnen erstellen und das Textfeld leeren
@@ -59,7 +59,7 @@ let redMeta = {
 			dialog.oeffnen({
 				typ: "alert",
 				text: `Das Programm muss zunächst mit einer Sachgebiete-Datei verknüpft werden.\nTag-Dateien können via <i>${appInfo.name} &gt; Einstellungen &gt; Bedeutungsgerüst</i> geladen werden.`,
-				callback: () => document.getElementById("red-meta-behandelt-in").focus(),
+				callback: () => document.getElementById("red-meta-behandelt-mit").focus(),
 			});
 			return;
 		}
@@ -162,14 +162,14 @@ let redMeta = {
 			redMeta.bearbErgaenzen();
 		});
 	},
-	// Timeout, damit bei Tastureingabe im Behandelt-in-Feld
+	// Timeout, damit bei Tastureingabe im Behandelt-mit-Feld
 	// gewisse Funktionen nicht zu häufig getriggert werden
 	behandeltInTimeout: null,
 	// Tastatureingaben in einem der Textfelder
 	//   input = Element
 	//     (das Textfeld)
 	aktionText (input) {
-		if (input.id === "red-meta-behandelt-in") {
+		if (input.id === "red-meta-behandelt-mit") {
 			input.addEventListener("input", function() {
 				data.rd.bh = this.value;
 				// die folgenden Funktionen nicht zu häufig aufrufen
