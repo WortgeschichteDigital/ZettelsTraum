@@ -266,10 +266,11 @@ let popup = {
 					return "start-datei";
 				} else if (pfad[i].classList.contains("link")) {
 					popup.element = pfad[i];
-					if (helfer.hauptfunktion === "karte") {
+					let oben = overlay.oben();
+					if (oben !== "stamm" && helfer.hauptfunktion === "karte") {
 						popup.referenz.data = beleg.data;
 						popup.referenz.id = "" + beleg.id_karte;
-					} else if (helfer.hauptfunktion === "liste") {
+					} else if (oben !== "stamm" && helfer.hauptfunktion === "liste") {
 						const id = pfad[i].closest(".liste-details").previousSibling.dataset.id;
 						popup.referenz.data = data.ka[id];
 						popup.referenz.id = id;

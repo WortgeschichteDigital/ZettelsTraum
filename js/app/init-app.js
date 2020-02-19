@@ -37,6 +37,7 @@ window.addEventListener("load", async () => {
 	ipcRenderer.on("kartei-bedeutungen-fenster", () => bedeutungenWin.oeffnen());
 	ipcRenderer.on("kartei-suche", () => filter.suche());
 	ipcRenderer.on("redaktion-ereignisse", () => redaktion.oeffnen());
+	ipcRenderer.on("redaktion-metadaten", () => redMeta.oeffnen());
 	ipcRenderer.on("belege-hinzufuegen", () => {
 		// Sperre für macOS (Menüpunkte können nicht deaktiviert werden)
 		if (!kartei.wort) {
@@ -97,7 +98,11 @@ window.addEventListener("load", async () => {
 	ipcRenderer.on("before-unload", () => helfer.beforeUnload());
 
 	// EVENTS: RESIZE
-	window.addEventListener("resize", () => notizen.maxHeight());
+	window.addEventListener("resize", () => {
+		karteisuche.hoeheTrefferliste(true);
+		karteisuche.filterBreite();
+		notizen.maxHeight();
+	});
 
 	// EVENTS: TASTATUREINGABEN
 	document.addEventListener("keydown", tastatur.init);
@@ -274,22 +279,43 @@ window.addEventListener("load", async () => {
 			lexika.aktionText(i);
 		}
 	});
-	// Metadaten-Fenster
+	// Karteimetadaten-Fenster
 	document.getElementById("meta-ordner").addEventListener("click", () => {
 		if (kartei.pfad) {
 			helfer.ordnerOeffnen(kartei.pfad);
 		}
 	});
-	document.querySelectorAll("#meta input").forEach(i => {
+	// Redaktionsmetadaten-Fenster
+	document.getElementById("red-meta-sachgebiete").addEventListener("click", evt => {
+		evt.preventDefault();
+		redMeta.sachgebieteAdd();
+	});
+	document.querySelectorAll("#red-meta input").forEach(i => {
 		if (i.type === "button") {
-			meta.aktionButton(i);
+			redMeta.aktionButton(i);
 		} else { // Text-Input
-			meta.aktionText(i);
+			redMeta.aktionText(i);
 		}
 	});
 	// Karteisuche
 	document.getElementById("karteisuche-suchen").addEventListener("click", () => karteisuche.suchenPrep());
+	document.querySelector("#karteisuche-cont h3").addEventListener("click", () => karteisuche.filterUmschalten());
 	document.getElementById("karteisuche-add-filter").addEventListener("click", () => karteisuche.filterHinzufuegen());
+	document.getElementById("karteisuche-speichern").addEventListener("click", evt => {
+		evt.preventDefault();
+		karteisuche.trefferlisteExportieren();
+	});
+	// Karteisuche: Export
+	document.querySelectorAll(`#karteisuche-export-cont input[type="radio"]`).forEach(i => {
+		i.addEventListener("keydown", evt => {
+			tastatur.detectModifiers(evt);
+			if (!tastatur.modifiers && evt.key === "Enter") {
+				karteisuche.trefferlisteExportierenDo();
+			}
+		});
+	});
+	document.getElementById("karteisuche-export-exportieren").addEventListener("click", () => karteisuche.trefferlisteExportierenDo());
+	document.getElementById("karteisuche-export-abbrechen").addEventListener("click", () => overlay.schliessen(document.getElementById("karteisuche-export") ) );
 	// Prompt-Textfeld
 	document.getElementById("dialog-prompt-text").addEventListener("keydown", function(evt) {
 		tastatur.detectModifiers(evt);

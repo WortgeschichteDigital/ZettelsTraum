@@ -3,7 +3,7 @@
 /* Metadaten ------------------------------------ */
 #meta > div {
 	margin-top: 40px;
-	max-width: 800px;
+	max-width: 400px;
 }
 
 .icon-h-meta {
@@ -12,14 +12,15 @@
 }
 
 #meta-cont {
-	display: grid;
-	grid-template-columns: repeat(2, calc(50% - 15px));
-	column-gap: 30px;
 	padding: 10px 10px 5px 10px;
 }
 
 #meta-cont h3 {
 	margin: 10px 0 5px 0;
+}
+
+#meta-cont h3:first-child {
+	margin-top: 0;
 }
 
 #meta-cont h3 img {
@@ -34,19 +35,6 @@
 	white-space: nowrap;
 }
 
-#meta-cont p.input-text {
-	overflow: visible;
-}
-
-#meta-cont .kein-wert {
-	color: var(--textSehrHell);
-	font-style: italic;
-}
-
 #meta-speicherort {
 	text-align: left; /* das Feld ist rtl, bei kurzem Inhalt wäre der Text sonst rechtsbündig */
-}
-
-#meta-be-liste {
-	margin-bottom: 5px;
 }

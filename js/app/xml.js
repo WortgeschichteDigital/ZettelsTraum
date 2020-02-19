@@ -306,18 +306,28 @@ let xml = {
 		switch (n.nodeName) {
 			case "B":
 				return "#b";
+			case "DEL":
+				return "#s";
+			case "DFN":
+				return "#i";
+			case "EM":
+				return "#i";
 			case "I":
 				return "#i";
 			case "S":
 				return "#s";
 			case "SMALL":
 				return "#smaller";
+			case "STRONG":
+				return "#b";
 			case "SUB":
 				return "#sub";
 			case "SUP":
 				return "#sup";
 			case "U":
 				return "#u";
+			case "VAR":
+				return "#i";
 		}
 		if (n.nodeName !== "SPAN" ||
 				!n.getAttribute("class")) {

@@ -118,6 +118,11 @@
 	mask-image: url(../../img/lupe.svg);
 }
 
+#quick-redaktion-metadaten {
+	-webkit-mask-image: url(../../img/zeilen-4,0.svg);
+	mask-image: url(../../img/zeilen-4,0.svg);
+}
+
 #quick-redaktion-ereignisse {
 	-webkit-mask-image: url(../../img/personen.svg);
 	mask-image: url(../../img/personen.svg);
@@ -233,6 +238,13 @@ body > header span {
 }
 
 /* Wort ----------------------------------------- */
+#wort {
+	vertical-align: top;
+	overflow: hidden;
+	max-width: 50%;
+	text-overflow: ellipsis;
+}
+
 #wort.keine-kartei {
 	font-size: 20px;
 	font-style: italic;

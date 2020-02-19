@@ -1015,10 +1015,6 @@ let beleg = {
 				ele: "span",
 				class: "dta-groesser",
 			},
-			"DD": {
-				ele: "b",
-				class: "",
-			},
 			"H1": {
 				ele: "span",
 				class: "dta-groesser",
@@ -1092,7 +1088,7 @@ let beleg = {
 					ele.insertBefore(document.createTextNode("– "), ele.firstChild);
 				}
 				// Block-Level-Elemente (und andere), die eine Sonderbehandlung benötigen
-				if (/^(BR|DD|DT|FIGCAPTION|HR|LI|TR)$/.test(ele.nodeName)) { // Zeilenumbruch
+				if (/^(BR|DT|FIGCAPTION|HR|LI|TR)$/.test(ele.nodeName)) { // Zeilenumbruch
 					text += "\n";
 				} else if (/^(ADDRESS|ARTICLE|ASIDE|BLOCKQUOTE|DETAILS|DIALOG|DIV|DL|FIELDSET|FIGURE|FOOTER|FORM|H([1-6]{1})|HEADER|MAIN|NAV|OL|P|PRE|SECTION|TABLE|UL)$/.test(ele.nodeName)) { // Absätze
 					text = helfer.textTrim(text, false);

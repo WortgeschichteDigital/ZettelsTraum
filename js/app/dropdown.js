@@ -227,7 +227,7 @@ let dropdown = {
 		// Daten sammeln
 		dropdown.data = [];
 		if (feld_id === "einstellung-bearbeiterin" ||
-				feld_id === "meta-be" ||
+				feld_id === "red-meta-be" ||
 				/^redaktion-person/.test(feld_id) ||
 				/^karteisuche-(redaktion-)*person-/.test(feld_id)) {
 			dropdown.data = [...optionen.data.personen];
@@ -267,6 +267,8 @@ let dropdown = {
 			dropdown.data = dropdown.dataKopierenGerueste();
 		} else if (/^karteisuche-filter-/.test(feld_id)) {
 			dropdown.data = Object.keys(karteisuche.filterTypen);
+		} else if (/^karteisuche-sachgebiet-/.test(feld_id)) {
+			dropdown.data = dropdown.dataTags("tagger-sachgebiete");
 		} else if (/^karteisuche-tag-typ-/.test(feld_id)) {
 			let typen = Object.keys(optionen.data.tags);
 			for (let i = 0, len = typen.length; i < len; i++) {
@@ -286,6 +288,8 @@ let dropdown = {
 			dropdown.data = ["erstellt", "geändert"];
 		} else if (/^karteisuche-datum-dir/.test(feld_id)) {
 			dropdown.data = ["<=", ">="];
+		} else if (/^karteisuche-redaktion-logik/.test(feld_id)) {
+			dropdown.data = ["=", "≠"];
 		}
 		// Dropdown erzeugen und einhängen
 		let span = document.createElement("span");
