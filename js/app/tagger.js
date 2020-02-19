@@ -1,14 +1,23 @@
 "use strict";
 
 let tagger = {
+	// Anzeige der Kategorien auf die hier genannten limitieren
+	// (das ist zugleich ein Zeichen, dass das Fenster nicht aus dem
+	// Bedeutungsgerüst heraus geöffnet wurde)
+	limit: [],
 	// Tagger-Fenster öffnen
 	//   idx = String
-	//     (Index-Nummer im aktuellen Bedeutungsgerüst, zu der die Tags hinzugefügt werden sollen)
+	//     (Index-Nummer im aktuellen Bedeutungsgerüst, zu der die Tags hinzugefügt werden sollen;
+	//     oder ein String, aus dem ersichtlich wird, welche Funktion das Tagger-Fenster aufgerufen hat)
 	oeffnen (idx) {
 		let fenster = document.getElementById("tagger");
 		overlay.oeffnen(fenster);
 		fenster.dataset.idx = idx;
-		tagger.aufbauenBedeutung(idx);
+		if (tagger.limit.length) {
+			document.getElementById("tagger-bedeutung").classList.add("aus");
+		} else {
+			tagger.aufbauenBedeutung(idx);
+		}
 		tagger.aufbauen();
 	},
 	// Bedeutung eintragen, die hier getaggt wird
@@ -17,6 +26,7 @@ let tagger = {
 	aufbauenBedeutung (idx) {
 		let cont = document.getElementById("tagger-bedeutung");
 		helfer.keineKinder(cont);
+		cont.classList.remove("aus");
 		// Daten ermitteln
 		const i = parseInt(idx, 10);
 		bedeutungen.zaehlungTief(i).forEach(function(b) {
@@ -37,6 +47,10 @@ let tagger = {
 		let typen = [];
 		for (let typ in optionen.data.tags) {
 			if (!optionen.data.tags.hasOwnProperty(typ)) {
+				continue;
+			}
+			if (tagger.limit.length &&
+					!tagger.limit.includes(typ)) {
 				continue;
 			}
 			typen.push(typ);
@@ -108,9 +122,17 @@ let tagger = {
 	filled: false,
 	// Tags eintragen
 	fill () {
-		const idx = parseInt(document.getElementById("tagger").dataset.idx, 10);
-		let ta = bedeutungen.akt.bd[idx].ta,
-			tags = {};
+		const dataIdx = document.getElementById("tagger").dataset.idx,
+			idx = parseInt(dataIdx, 10);
+		let ta;
+		if (isNaN(idx)) {
+			if (dataIdx === "red-meta") {
+				ta = data.rd.sg;
+			}
+		} else {
+			ta = bedeutungen.akt.bd[idx].ta;
+		}
+		let tags = {};
 		for (let i of ta) {
 			if (!optionen.data.tags[i.ty]) { // Tag-Datei wurde entfernt
 				continue;
@@ -241,14 +263,23 @@ let tagger = {
 			});
 		}
 		// korrekte Tags speichern
-		const idx = parseInt(document.getElementById("tagger").dataset.idx, 10);
-		bedeutungen.akt.bd[idx].ta = save;
-		// Tags in die Tabelle eintragen
-		let zelle = document.querySelector(`#bedeutungen-cont tr[data-idx="${idx}"] td[data-feld="ta"]`);
-		helfer.keineKinder(zelle);
-		bedeutungen.aufbauenTags(save, zelle);
-		// Änderungsmarkierung Bedeutungsgerüst setzen
-		bedeutungen.bedeutungenGeaendert(true);
+		const dataIdx = document.getElementById("tagger").dataset.idx,
+			idx = parseInt(dataIdx, 10);
+		if (isNaN(idx)) {
+			if (dataIdx === "red-meta") {
+				data.rd.sg = save;
+				redMeta.sachgebiete();
+				kartei.karteiGeaendert(true);
+			}
+		} else {
+			bedeutungen.akt.bd[idx].ta = save;
+			// Tags in die Tabelle eintragen
+			let zelle = document.querySelector(`#bedeutungen-cont tr[data-idx="${idx}"] td[data-feld="ta"]`);
+			helfer.keineKinder(zelle);
+			bedeutungen.aufbauenTags(save, zelle);
+			// Änderungsmarkierung Bedeutungsgerüst setzen
+			bedeutungen.bedeutungenGeaendert(true);
+		}
 		// Änderungsmarkierungen im Tagger entfernen
 		document.querySelectorAll("#tagger-typen .changed").forEach(function(i) {
 			i.classList.remove("changed");
@@ -257,6 +288,7 @@ let tagger = {
 				i.classList.remove("saved");
 			}, 500);
 		});
+		// Änderungsmarkierung im Tagger entfernen
 		tagger.taggerGeaendert(false);
 		// Fenster ggf. schließen
 		schliessen();
@@ -286,7 +318,14 @@ let tagger = {
 	},
 	// Tabellenzelle mit den Tags fokussieren (nach dem Schließen)
 	fokusTagzelle () {
-		const idx = parseInt(document.getElementById("tagger").dataset.idx, 10);
+		const dataIdx = document.getElementById("tagger").dataset.idx;
+		if (tagger.limit.length) {
+			if (dataIdx === "red-meta") {
+				document.getElementById("red-meta-sachgebiete").focus();
+			}
+			return;
+		}
+		const idx = parseInt(dataIdx, 10);
 		let zelle = document.querySelector(`#bedeutungen-cont tr[data-idx="${idx}"] td[data-feld="ta"]`);
 		bedeutungen.editZeile(zelle, true);
 		bedeutungen.linkTagger(zelle);

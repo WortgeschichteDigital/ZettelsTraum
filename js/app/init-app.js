@@ -279,13 +279,17 @@ window.addEventListener("load", async () => {
 			lexika.aktionText(i);
 		}
 	});
-	// Metadaten-Fenster
+	// Karteimetadaten-Fenster
 	document.getElementById("meta-ordner").addEventListener("click", () => {
 		if (kartei.pfad) {
 			helfer.ordnerOeffnen(kartei.pfad);
 		}
 	});
-	// Metadaten-Fenster (Redaktion)
+	// Redaktionsmetadaten-Fenster
+	document.getElementById("red-meta-sachgebiete").addEventListener("click", evt => {
+		evt.preventDefault();
+		redMeta.sachgebieteAdd();
+	});
 	document.querySelectorAll("#red-meta input").forEach(i => {
 		if (i.type === "button") {
 			redMeta.aktionButton(i);

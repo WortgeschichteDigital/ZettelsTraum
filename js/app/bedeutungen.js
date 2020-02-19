@@ -1239,6 +1239,7 @@ let bedeutungen = {
 			bedeutungen.moveAus();
 			bedeutungen.editZeile(null);
 			// Tagger öffnen
+			tagger.limit = [];
 			const idx = this.parentNode.dataset.idx;
 			tagger.oeffnen(idx);
 		});
@@ -1269,6 +1270,7 @@ let bedeutungen = {
 		a.addEventListener("click", function(evt) {
 			evt.preventDefault();
 			evt.stopPropagation();
+			tagger.limit = [];
 			const idx = this.parentNode.parentNode.dataset.idx;
 			tagger.oeffnen(idx);
 		});

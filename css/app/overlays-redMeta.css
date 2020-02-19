@@ -27,6 +27,20 @@
 	width: 250px;
 }
 
+#red-meta-sachgebiete {
+	color: var(--text);
+}
+
+#red-meta .kein-wert {
+	color: var(--textSehrHell);
+	font-style: italic;
+}
+
+#red-meta-sachgebiete:hover,
+#red-meta-sachgebiete:focus {
+	color: var(--farbe);
+}
+
 /* BearbeiterInnen ------------------------------ */
 /* vgl. zur Liste auch overlays-stamm.css */
 #red-meta-be-liste {
@@ -40,11 +54,6 @@
 	margin-bottom: 5px;
 	padding-left: 0;
 	text-indent: 0;
-}
-
-#red-meta .kein-wert {
-	color: var(--textSehrHell);
-	font-style: italic;
 }
 
 #red-meta .dropdown-cont {

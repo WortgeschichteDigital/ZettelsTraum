@@ -19,11 +19,53 @@ let redMeta = {
 		fenster.querySelector("input").focus();
 		// Behandelt-in-Feld füllen
 		document.getElementById("red-meta-behandelt-in").value = data.rd.bh;
-		// Sachgebiete aufbauen TODO
+		// Sachgebiete aufbauen
+		redMeta.sachgebiete();
 		// Liste der BearbeterInnen erstellen und das Textfeld leeren
 		redMeta.bearbAuflisten();
 		let be = document.getElementById("red-meta-be");
 		be.value = "";
+	},
+	// Sachgebiete auflisten
+	sachgebiete () {
+		let sg = document.getElementById("red-meta-sachgebiete"),
+			sachgebiete = [],
+			tags = optionen.data.tags.sachgebiete;
+		if (tags) {
+			// Sachgebiete-Tags vorhanden
+			for (let i of data.rd.sg) {
+				sachgebiete.push(tags.data[i.id].name);
+			}
+		} else {
+			// Sachgebiete-Tags fehlen
+			sg.textContent = "Tag-Datei mit Sachgebieten fehlt";
+			sg.classList.add("kein-wert", "keine-tags");
+			return;
+		}
+		// Tags anzeigen
+		if (sachgebiete.length) {
+			sg.classList.remove("kein-wert");
+			sg.textContent = sachgebiete.join(", ");
+		} else {
+			sg.classList.add("kein-wert");
+			sg.textContent = "keine Sachgebiete ausgewählt";
+		}
+	},
+	// Sachgebiete hinzufügen
+	sachgebieteAdd () {
+		let tags = optionen.data.tags.sachgebiete;
+		// keine Tag-Datei vorhanden
+		if (!tags) {
+			dialog.oeffnen({
+				typ: "alert",
+				text: `Das Programm muss zunächst mit einer Sachgebiete-Datei verknüpft werden.\nTag-Dateien können via <i>${appInfo.name} &gt; Einstellungen &gt; Bedeutungsgerüst</i> geladen werden.`,
+				callback: () => document.getElementById("red-meta-behandelt-in").focus(),
+			});
+			return;
+		}
+		// Tagger öffnen
+		tagger.limit = ["sachgebiete"];
+		tagger.oeffnen("red-meta");
 	},
 	// BearbeiterInnen des Zettels auflisten
 	bearbAuflisten () {
