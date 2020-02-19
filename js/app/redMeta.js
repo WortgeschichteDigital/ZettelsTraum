@@ -38,8 +38,8 @@ let redMeta = {
 			}
 		} else {
 			// Sachgebiete-Tags fehlen
-			sg.textContent = "Tag-Datei mit Sachgebieten fehlt";
-			sg.classList.add("kein-wert", "keine-tags");
+			sg.textContent = "Sachgebiete-Datei fehlt";
+			sg.classList.add("kein-wert");
 			return;
 		}
 		// Tags anzeigen
@@ -48,7 +48,7 @@ let redMeta = {
 			sg.textContent = sachgebiete.join(", ");
 		} else {
 			sg.classList.add("kein-wert");
-			sg.textContent = "keine Sachgebiete ausgewählt";
+			sg.textContent = "keine Sachgebiete zugeordnet";
 		}
 	},
 	// Sachgebiete hinzufügen
@@ -71,7 +71,7 @@ let redMeta = {
 	bearbAuflisten () {
 		let cont = document.getElementById("red-meta-be-liste");
 		helfer.keineKinder(cont);
-		// keine Bearbeiter eingetragen
+		// keine BearbeiterInnen eingetragen
 		if (!data.rd.be.length) {
 			let p = document.createElement("p");
 			cont.appendChild(p);
@@ -116,7 +116,7 @@ let redMeta = {
 			});
 			return;
 		}
-		// BearbeiterIn ergänzen und sortieren
+		// BearbeiterIn ergänzen und Liste sortieren
 		be.value = "";
 		data.rd.be.unshift(va);
 		// Liste neu aufbauen
@@ -172,7 +172,7 @@ let redMeta = {
 		if (input.id === "red-meta-behandelt-in") {
 			input.addEventListener("input", function() {
 				data.rd.bh = this.value;
-				// die folgende Funktionen nicht zu häufig aufrufen
+				// die folgenden Funktionen nicht zu häufig aufrufen
 				clearTimeout(redMeta.behandeltInTimeout);
 				redMeta.behandeltInTimeout = setTimeout(() => {
 					// Änderungsmarkierung setzen
