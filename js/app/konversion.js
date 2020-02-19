@@ -4,7 +4,7 @@ let konversion = {
 	// aktuelle Version des Dateiformats
 	// *** WICHTIG! *** WICHTIG! *** WICHTIG! ***
 	// Bei Änderungen anpassen!
-	version: 12,
+	version: 13,
 	// Verteilerfunktion
 	start () {
 		konversion.von1nach2();
@@ -18,6 +18,7 @@ let konversion = {
 		konversion.von9nach10();
 		konversion.von10nach11();
 		konversion.von11nach12();
+		konversion.von12nach13();
 	},
 	// Konversion des Dateiformats von Version 1 nach Version 2
 	von1nach2 () {
@@ -237,6 +238,28 @@ let konversion = {
 			}
 			data.ka[id].bx = "";
 		}
+		// Versionsnummer hochzählen
+		data.ve++;
+		// Änderungsmarkierung setzen
+		kartei.karteiGeaendert(true);
+	},
+	// Konversion des Dateiformats von Version 12 nach Version 13
+	von12nach13 () {
+		if (data.ve > 12) {
+			return;
+		}
+		// Datenfeld "rd" konvertieren
+		let rdKlon = [];
+		for (let er of data.rd) {
+			rdKlon.push({...er});
+		}
+		data.rd = {
+			be: [...data.be],
+			bh: "",
+			er: rdKlon,
+			sg: [],
+		};
+		delete data.be;
 		// Versionsnummer hochzählen
 		data.ve++;
 		// Änderungsmarkierung setzen

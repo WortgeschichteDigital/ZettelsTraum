@@ -27,6 +27,7 @@
 		<link rel="stylesheet" href="css/app/overlays-meta.css">
 		<link rel="stylesheet" href="css/app/overlays-notizen.css">
 		<link rel="stylesheet" href="css/app/overlays-redaktion.css">
+		<link rel="stylesheet" href="css/app/overlays-redMeta.css">
 		<link rel="stylesheet" href="css/app/overlays-sonderzeichen.css">
 		<link rel="stylesheet" href="css/app/overlays-stamm.css">
 		<link rel="stylesheet" href="css/app/overlays-tagger.css">
@@ -70,6 +71,7 @@
 		<script src="js/app/dropdown.js"></script>
 		<script src="js/app/popup.js"></script>
 		<script src="js/app/redaktion.js"></script>
+		<script src="js/app/redMeta.js"></script>
 		<script src="js/app/sonderzeichen.js"></script>
 		<script src="js/app/speichern.js"></script>
 		<script src="js/app/stamm.js"></script>
@@ -840,30 +842,44 @@
 			</div>
 		</div></div>
 
-		<!-- OVERLAY: Metadaten -->
+		<!-- OVERLAY: Karteimetadaten -->
 		<div id="meta" class="overlay aus"><div>
 			<h2><span class="icon-h icon-h-meta"> </span
-				>Metadaten<a href="#" class="icon-link icon-handbuch" title="Abschnitt im Handbuch öffnen" data-handbuch="menueKartei-metadaten"> </a><a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"> </a></h2>
+				>Karteimetadaten<a href="#" class="icon-link icon-handbuch" title="Abschnitt im Handbuch öffnen" data-handbuch="menueKartei-metadaten"> </a><a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"> </a></h2>
 			<div id="meta-cont">
-				<div>
-					<h3>Erstellt</h3>
-					<p id="meta-dc"></p>
-					<h3>Geändert</h3>
-					<p id="meta-dm"></p>
-					<h3>Speicherort<img src="img/ordner.svg" width="24" height="24" alt="" id="meta-ordner"></h3>
-					<p dir="rtl" id="meta-speicherort"></p>
-					<h3>Dateiformat</h3>
-					<p id="meta-ve"></p>
-					<h3>Revision</h3>
-					<p id="meta-re"></p>
-				</div><div>
-					<h3>BearbeiterInnen</h3>
-					<div id="meta-be-liste"></div>
-					<p class="input-text dropdown-cont"
-						><input type="text" value="" placeholder="Person" class="dropdown-feld" id="meta-be"
-						><a href="#" class="dropdown-link-element" title="BearbeiterInnen auflisten"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m7 2v8l-3.5-3.5-1.5 1.5 6 6 6-6-1.5-1.5-3.5 3.5v-8z"/></svg></a
-						><input type="button" value="Ergänzen" id="meta-be-ergaenzen"></p>
-				</div>
+				<h3>Erstellt</h3>
+				<p id="meta-dc"></p>
+				<h3>Geändert</h3>
+				<p id="meta-dm"></p>
+				<h3>Speicherort<img src="img/ordner.svg" width="24" height="24" alt="" id="meta-ordner"></h3>
+				<p dir="rtl" id="meta-speicherort"></p>
+				<h3>Dateiformat</h3>
+				<p id="meta-ve"></p>
+				<h3>Revision</h3>
+				<p id="meta-re"></p>
+			</div>
+		</div></div>
+
+		<!-- OVERLAY: Redaktionsmetadaten -->
+		<div id="red-meta" class="overlay aus"><div>
+			<h2><span class="icon-h icon-h-meta"> </span
+				>Redaktionsmetadaten<a href="#" class="icon-link icon-handbuch" title="Abschnitt im Handbuch öffnen" data-handbuch="menueRedaktion-metadaten"> </a><a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"> </a></h2>
+			<div id="red-meta-cont">
+				<h3>Karteiwort</h3>
+				<p class="input-text"
+					><label for="red-meta-behandelt-mit">behandelt mit:</label
+					><input type="text" value="" placeholder="Wort" id="red-meta-behandelt-mit"
+				></p>
+				<p
+					><span class="label">Sachgebiete:</span
+					><a href="#" id="red-meta-sachgebiete"></a
+				></p>
+				<h3>BearbeiterInnen</h3>
+				<div id="red-meta-be-liste"></div>
+				<p class="input-text dropdown-cont"
+					><input type="text" value="" placeholder="Person" class="dropdown-feld" id="red-meta-be"
+					><a href="#" class="dropdown-link-element" title="BearbeiterInnen auflisten"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m7 2v8l-3.5-3.5-1.5 1.5 6 6 6-6-1.5-1.5-3.5 3.5v-8z"/></svg></a
+					><input type="button" value="Ergänzen" id="red-meta-be-ergaenzen"></p>
 			</div>
 		</div></div>
 

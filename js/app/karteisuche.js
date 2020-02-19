@@ -294,7 +294,8 @@ let karteisuche = {
 		// Filterwerte sammeln
 		karteisuche.filterWerteSammeln();
 		// Karteien analysieren
-		let ztjAdd = [];
+		let ztjAdd = [],
+			ztjMit = {};
 		for (let kartei of karteisuche.ztj) {
 			const content = await io.lesen(kartei.pfad);
 			// Kartei einlesen
@@ -322,6 +323,8 @@ let karteisuche = {
 						wort: "",
 						wortSort: "",
 						redaktion: [],
+						behandeltIn: "",
+						behandeltMit: [],
 						passt: false,
 					});
 					ziel = ztjAdd[ztjAdd.length - 1];
@@ -329,6 +332,19 @@ let karteisuche = {
 				// Wort merken
 				ziel.wort = woerter[i];
 				ziel.wortSort = karteisuche.wortSort(woerter[i]);
+				// Behandelt-Datensätze
+				if (woerter.length > 1) {
+					let mit = [...woerter];
+					mit.splice(i, 1);
+					ziel.behandeltMit = [...mit];
+				}
+				if (datei.rd.bh) {
+					ziel.behandeltIn = datei.rd.bh;
+					if (!ztjMit[datei.rd.bh]) {
+						ztjMit[datei.rd.bh] = [];
+					}
+					ztjMit[datei.rd.bh].push(woerter[i]);
+				}
 				// mit Suchfiltern abgleichen
 				if (i > 0) {
 					ziel.passt = kartei.passt;
@@ -337,7 +353,13 @@ let karteisuche = {
 				}
 				// Redaktionsereignisse klonen
 				if (ziel.passt) {
-					for (let erg of datei.rd) {
+					let er = datei.rd.er;
+					if (!er) {
+						// bis Dateiformat Version 12 standen die Redaktionsereignisse in data.rd;
+						// erst danach in data.rd.er
+						er = datei.rd;
+					}
+					for (let erg of er) {
 						ziel.redaktion.push({...erg});
 					}
 				}
@@ -345,6 +367,11 @@ let karteisuche = {
 		}
 		// Karteiliste ggf. ergänzen
 		karteisuche.ztj = karteisuche.ztj.concat(ztjAdd);
+		for (let i of karteisuche.ztj) {
+			if (ztjMit[i.wort]) {
+				i.behandeltMit = i.behandeltMit.concat(ztjMit[i.wort]);
+			}
+		}
 		// passende Karteien auflisten
 		karteisuche.ztjAuflisten();
 		// Sperrbild weg und das zuletzt fokussierte Element wieder fokussieren
@@ -359,7 +386,7 @@ let karteisuche = {
 	// Array enthält Objekte:
 	//   pfad (String; Pfad zur Kartei)
 	//   wort (String; Wort der Kartei)
-	//   redaktion (Array; Klon von data.rd)
+	//   redaktion (Array; Klon von data.rd.er)
 	//   passt (Boolean; passt zu den Suchfiltern)
 	ztj: [],
 	// findet alle Pfade in einem übergebenen Ordner
@@ -393,6 +420,8 @@ let karteisuche = {
 					wort: "",
 					wortSort: "",
 					redaktion: [],
+					behandeltIn: "",
+					behandeltMit: [],
 					passt: false,
 				});
 			}
@@ -425,7 +454,6 @@ let karteisuche = {
 		document.getElementById("karteisuche-treffer").textContent = `(${treffer})`;
 		// Karteiliste füllen
 		let cont = document.getElementById("karteisuche-karteien"),
-			redaktion = karteisuche.filterWerte.some(i => i.typ === "Redaktion"),
 			alphabet = new Set();
 		helfer.keineKinder(cont);
 		for (let wort of woerter) {
@@ -452,66 +480,78 @@ let karteisuche = {
 			a.appendChild(span);
 			span.textContent = pfad;
 			span.title = pfad;
-			// Redaktionsereignisse
-			if (redaktion) {
-				karteisuche.ztjAuflistenRedaktion(div, wort.i);
-			}
+			// ggf. Infos ergänzen
+			karteisuche.ztjAuflistenInfos(div, wort.i);
 		}
 		// Maximalhöhe Trefferliste setzen
 		karteisuche.hoeheTrefferliste();
 		// Alphabet drucken
 		karteisuche.alphabet(alphabet);
 	},
-	// Redaktionsstatus und -ereignisse in der Trefferliste anzeigen
+	// Infos ergänzen (Redaktionsstatus und -ereignisse und Verweise)
 	//   div = Element
 	//     (der Container, in dem die Ereignisse angezeigt werden sollen)
 	//   i = Number
 	//     (Index, der auf die Daten in karteisuche.ztj zeigt)
-	ztjAuflistenRedaktion (div, i) {
+	ztjAuflistenInfos (div, i) {
 		// Wrapper erzeugen
 		let wrap = document.createElement("div");
-		div.appendChild(wrap);
-		// Redaktionsstatus drucken
-		let status = karteisuche.ztjAuflistenRedaktionStatus(i),
-			stat = document.createElement("span");
-		wrap.appendChild(stat);
-		stat.classList.add("karteisuche-status", `karteisuche-status${status.status}`);
-		// höchstes Redaktionsereignis drucken
-		let erg = document.createElement("span");
-		wrap.appendChild(erg);
-		erg.classList.add("karteisuche-hoechst");
-		erg.textContent = status.ereignis;
-		// Personen und Daten: Wer hat wann was erstellt?
-		let erstellt = [
-			{
-				arr: karteisuche.ztj[i].redaktion.filter(v => v.er === "Kartei erstellt"),
-				txt: "Kartei",
-			},
-			{
-				arr: karteisuche.ztj[i].redaktion.filter(v => v.er === "Artikel erstellt"),
-				txt: "Artikel",
-			},
-		];
-		let br = false;
-		for (let e of erstellt) {
-			for (let i of e.arr) {
-				if (br) {
-					wrap.appendChild(document.createElement("br"));
+		// Redaktionsinfos
+		if (karteisuche.filterWerte.some(i => i.typ === "Redaktion")) {
+			// Redaktionsstatus drucken
+			let status = karteisuche.ztjAuflistenRedaktion(i),
+				stat = document.createElement("span");
+			wrap.appendChild(stat);
+			stat.classList.add("karteisuche-status", `karteisuche-status${status.status}`);
+			// höchstes Redaktionsereignis drucken
+			let erg = document.createElement("span");
+			wrap.appendChild(erg);
+			erg.classList.add("karteisuche-hoechst");
+			erg.textContent = status.ereignis;
+			// Personen und Daten: Wer hat wann was erstellt?
+			let erstellt = [
+				{
+					arr: karteisuche.ztj[i].redaktion.filter(v => v.er === "Kartei erstellt"),
+					txt: "Kartei",
+				},
+				{
+					arr: karteisuche.ztj[i].redaktion.filter(v => v.er === "Artikel erstellt"),
+					txt: "Artikel",
+				},
+			];
+			let br = false;
+			for (let e of erstellt) {
+				for (let i of e.arr) {
+					if (br) {
+						wrap.appendChild(document.createElement("br"));
+					}
+					let typ = document.createElement("i");
+					wrap.appendChild(typ);
+					typ.textContent = `${e.txt}:`;
+					let da = helfer.datumFormat(i.da, true).split(", ")[0],
+						pr = i.pr ? i.pr : "N. N.";
+					wrap.appendChild(document.createTextNode(` ${pr} (${da})`));
+					br = true;
 				}
-				let da = helfer.datumFormat(i.da, true).split(", ")[0],
-					pr = i.pr ? i.pr : "N. N.";
-				let typ = document.createElement("i");
-				wrap.appendChild(typ);
-				typ.textContent = `${e.txt}:`;
-				wrap.appendChild(document.createTextNode(` ${pr} (${da})`));
-				br = true;
 			}
 		}
+		// Verweisinfos
+		let verweise = karteisuche.ztjAuflistenVerweise(i);
+		if (verweise) {
+			if (wrap.hasChildNodes()) {
+				wrap.appendChild(document.createElement("br"));
+			}
+			wrap.appendChild(verweise);
+		}
+		// Wrapper einhängen, wenn er denn gefüllt wurde
+		if (wrap.hasChildNodes()) {
+			div.appendChild(wrap);
+		}
 	},
-	// Status der Redaktion ermitteln
+	// Redaktionsstatus ermitteln
 	//   idx = Number
 	//     (auf karteisuche.ztj zeigender Index)
-	ztjAuflistenRedaktionStatus (idx) {
+	ztjAuflistenRedaktion (idx) {
 		let ds = karteisuche.ztj[idx],
 			ereignisse = Object.keys(redaktion.ereignisse),
 			status = 1,
@@ -539,6 +579,45 @@ let karteisuche = {
 			status4,
 			ereignis: ereignisse[hoechst],
 		};
+	},
+	// Verweise ermitteln
+	//   i = Number
+	//     (Index, der auf die Daten in karteisuche.ztj zeigt)
+	ztjAuflistenVerweise (i) {
+		// Verweise ermitteln
+		let verweise = [...new Set(karteisuche.ztj[i].behandeltMit)];
+		verweise.sort(helfer.sortAlpha);
+		verweise.forEach((i, n) => {
+			verweise[n] = `+ ${i}`;
+		});
+		let bhIn = karteisuche.ztj[i].behandeltIn;
+		if (bhIn) {
+			verweise.unshift(`→ ${bhIn}`);
+		}
+		// keine Verweise vorhanden
+		if (!verweise.length) {
+			return null;
+		}
+		// Verweise vorhanden
+		let span = document.createElement("span");
+		span.classList.add("verweise");
+		for (let i = 0, len = verweise.length; i < len; i++) {
+			if (i > 0) {
+				span.appendChild(document.createTextNode(", "));
+			}
+			let v = verweise[i],
+				wrap = document.createElement("span");
+			if (/^→/.test(v)) {
+				wrap.textContent = "→ ";
+				wrap.title = "behandelt in";
+			} else {
+				wrap.textContent = "+ ";
+				wrap.title = "behandelt mit";
+			}
+			span.appendChild(wrap);
+			span.appendChild(document.createTextNode(v.substring(2)));
+		}
+		return span;
 	},
 	// ZTJ-Datei in neuem Fenster öffnen
 	//   a = Element
@@ -741,8 +820,8 @@ let karteisuche = {
 				if (md) {
 					content += `\n# ${buchstabe}\n\n`;
 					if (!knapp) {
-						content += "| Wort |   | Status | Kartei | Datum | Artikel | Datum |\n";
-						content += "| --- | --- | --- | --- | --- | --- | --- |\n";
+						content += "| Wort |   | Status | in/mit | Kartei | Datum | Artikel | Datum |\n";
+						content += "| --- | --- | --- | --- | --- | --- | --- | --- |\n";
 					}
 				} else {
 					if (/<\/li>$/.test(content)) {
@@ -754,13 +833,13 @@ let karteisuche = {
 					if (knapp) {
 						content += "\n<ul>";
 					} else {
-						content += "\n<table>\n<tr><th>Wort</th><th> </th><th>Status</th><th>Kartei</th><th>Datum</th><th>Artikel</th><th>Datum</th></tr>";
+						content += "\n<table>\n<tr><th>Wort</th><th> </th><th>Status</th><th>in/mit</th><th>Kartei</th><th>Datum</th><th>Artikel</th><th>Datum</th></tr>";
 					}
 				}
 			}
 			// Artikelzeile
 			let idx = parseInt(item.dataset.idx, 10),
-				status = karteisuche.ztjAuflistenRedaktionStatus(idx),
+				status = karteisuche.ztjAuflistenRedaktion(idx),
 				statusTxt = "abgeschlossen",
 				kartei = karteisuche.ztj[idx].redaktion.filter(v => v.er === "Kartei erstellt"),
 				karteiDa = helfer.datumFormat(kartei[0].da, true).split(", ")[0],
@@ -768,6 +847,9 @@ let karteisuche = {
 				artikel = karteisuche.ztj[idx].redaktion.filter(v => v.er === "Artikel erstellt"),
 				artikelDa = "",
 				artikelPr = "",
+				behandeltIn = karteisuche.ztj[idx].behandeltIn,
+				behandeltMit = [...new Set(karteisuche.ztj[idx].behandeltMit)],
+				inMit = [],
 				check = "✓";
 			if (status.status === 1) {
 				statusTxt = "in Arbeit";
@@ -776,6 +858,16 @@ let karteisuche = {
 				artikelDa = helfer.datumFormat(artikel[0].da, true).split(", ")[0];
 				artikelPr = artikel[0].pr ? artikel[0].pr : "N. N.";
 			}
+			if (behandeltIn || behandeltMit.length) {
+				inMit = [...behandeltMit];
+				inMit.sort(helfer.sortAlpha);
+				for (let j = 0, len = inMit.length; j < len; j++) {
+					inMit[j] = `+ ${inMit[j]}`;
+				}
+				if (behandeltIn) {
+					inMit.unshift(`→ ${behandeltIn}`);
+				}
+			}
 			if (status.hoechst < status.status3) {
 				check = " ";
 			}
@@ -783,7 +875,13 @@ let karteisuche = {
 				if (knapp) {
 					content += `* ${karteisuche.ztj[idx].wort} (${statusTxt})\n`;
 				} else {
-					content += `| ${karteisuche.ztj[idx].wort} | ${check} | ${status.ereignis} | ${karteiPr} | ${karteiDa}`;
+					content += `| ${karteisuche.ztj[idx].wort} | ${check} | ${status.ereignis} | `;
+					if (inMit.length) {
+						content += inMit.join(", ");
+					} else {
+						content += " ";
+					}
+					content += ` | ${karteiPr} | ${karteiDa}`;
 					if (artikelPr) {
 						content += ` | ${artikelPr} | ${artikelDa} |\n`;
 					} else {
@@ -794,7 +892,13 @@ let karteisuche = {
 				if (knapp) {
 					content += `\n<li>${karteisuche.ztj[idx].wort} (${statusTxt})</li>`;
 				} else {
-					content += `\n<tr><td>${karteisuche.ztj[idx].wort}</td><td>${check}</td><td>${status.ereignis}</td><td>${karteiPr}</td><td>${karteiDa}</td>`;
+					content += `\n<tr><td>${karteisuche.ztj[idx].wort}</td><td>${check}</td><td>${status.ereignis}</td>`;
+					if (inMit.length) {
+						content += `<td>${inMit.join(", ")}</td>`;
+					} else {
+						content += "<td> </td>";
+					}
+					content += `<td>${karteiPr}</td><td>${karteiDa}</td>`;
 					if (artikelPr) {
 						content += `<td>${artikelPr}</td><td>${artikelDa}</td></tr>`;
 					} else {
@@ -885,6 +989,15 @@ let karteisuche = {
 				ro: false,
 				cl: "karteisuche-karteiwort",
 				ph: "Suchtext",
+				pre: "",
+			},
+		],
+		"Sachgebiet": [
+			{
+				type: "dropdown",
+				ro: false,
+				cl: "karteisuche-sachgebiet",
+				ph: "Sachgebiet",
 				pre: "",
 			},
 		],
@@ -1148,6 +1261,30 @@ let karteisuche = {
 				obj.reg = new RegExp(helfer.formVariSonderzeichen(helfer.escapeRegExp(text)), "i");
 				karteisuche.filterWerte.push(obj);
 			}
+			// Sachgebiet
+			else if (typ === "Sachgebiet") {
+				obj.id = "";
+				const tag = document.getElementById(`karteisuche-sachgebiet-${id}`).value;
+				if (!tag || !optionen.data.tags.sachgebiete) {
+					karteisuche.filterIgnorieren(filter, true);
+					continue;
+				}
+				for (let id in optionen.data.tags.sachgebiete.data) {
+					if (!optionen.data.tags.sachgebiete.data.hasOwnProperty(id)) {
+						continue;
+					}
+					if (optionen.data.tags.sachgebiete.data[id].name === tag) {
+						obj.id = id;
+						break;
+					}
+				}
+				if (obj.id) {
+					karteisuche.filterWerte.push(obj);
+				} else {
+					karteisuche.filterIgnorieren(filter, true);
+					continue;
+				}
+			}
 			// Volltext
 			else if (typ === "Volltext") {
 				let text = document.getElementById(`karteisuche-volltext-${id}`).value;
@@ -1180,6 +1317,9 @@ let karteisuche = {
 				}
 				if (obj.tagId) {
 					karteisuche.filterWerte.push(obj);
+				} else {
+					karteisuche.filterIgnorieren(filter, true);
+					continue;
 				}
 			}
 			// Karteidatum
@@ -1189,6 +1329,9 @@ let karteisuche = {
 				obj.datumVal = document.getElementById(`karteisuche-datum-${id}`).value;
 				if (obj.datumVal) { // falls kein korrektes Datum eingegeben wurde, ist der Wert leer
 					karteisuche.filterWerte.push(obj);
+				} else {
+					karteisuche.filterIgnorieren(filter, true);
+					continue;
 				}
 			}
 			// BearbeiterIn
@@ -1247,11 +1390,40 @@ let karteisuche = {
 	//   datei = Object
 	//     (die ZTJ-Datei, die gefiltert werden soll; also alle Karteidaten, in der üblichen Form)
 	filtern (datei) {
+		let be = datei.rd.be;
+		if (!be) {
+			// bis Dateiformat Version 12 standen die Bearbeiterinnen in data.be;
+			// erst danach in data.rd.be
+			be = datei.be;
+		}
+		let er = datei.rd.er;
+		if (!er) {
+			// bis Dateiformat Version 12 standen die Redaktionsereignisse in data.rd;
+			// erst danach in data.rd.er
+			er = datei.rd;
+		}
 		forX: for (let filter of karteisuche.filterWerte) {
 			// Karteiwort
 			if (filter.typ === "Karteiwort" &&
 					!filter.reg.test(datei.wo)) {
 				return false;
+			}
+			// Sachgebiet
+			else if (filter.typ === "Sachgebiet") {
+				let gefunden = false;
+				if (datei.rd.sg) {
+					// dieser Datensatz wurde erst mit Dateiformat Version 13 eingeführt;
+					// davor existierte er nicht
+					for (let i of datei.rd.sg) {
+						if (i.id === filter.id) {
+							gefunden = true;
+							break;
+						}
+					}
+				}
+				if (!gefunden) {
+					return false;
+				}
 			}
 			// Volltext
 			else if (filter.typ === "Volltext") {
@@ -1326,12 +1498,12 @@ let karteisuche = {
 			}
 			// BearbeiterIn
 			else if (filter.typ === "BearbeiterIn" &&
-					!hasSome(datei.be, filter.reg)) {
+					!hasSome(be, filter.reg)) {
 				return false;
 			}
 			// Redaktion
 			else if (filter.typ === "Redaktion") {
-				for (let i of datei.rd) {
+				for (let i of er) {
 					let gefunden = {
 						er: filter.er && filter.er.test(i.er) ? true : false,
 						pr: filter.pr && filter.pr.test(i.pr) ? true : false,

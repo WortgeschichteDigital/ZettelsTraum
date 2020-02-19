@@ -8,11 +8,11 @@ let erinnerungen = {
 		},
 		metadaten: {
 			okay: false,
-			text: `In den Metadaten der Kartei ist keine BearbeiterIn registriert (<a href="#" class="link-erinnerung" data-funktion="metadaten">⇨ <i>Kartei &gt; Metadaten</i></a>).`,
+			text: `In den redaktionellen Metadaten ist keine BearbeiterIn registriert (<a href="#" class="link-erinnerung" data-funktion="metadaten">⇨ <i>Redaktion &gt; Metadaten</i></a>).`,
 		},
 		redaktion: {
 			okay: false,
-			text: `Im Redaktionsfenster fehlen Angaben zu den BearbeiterInnen (<a href="#" class="link-erinnerung" data-funktion="redaktion">⇨ <i>Redaktion &gt; Ereignisse</i></a>).`,
+			text: `In den Redaktionsereignissen fehlen Angaben zu den BearbeiterInnen (<a href="#" class="link-erinnerung" data-funktion="redaktion">⇨ <i>Redaktion &gt; Ereignisse</i></a>).`,
 		},
 		artikelDatei: {
 			okay: false,
@@ -41,7 +41,7 @@ let erinnerungen = {
 			erinnerungen.data.bearbeiterin.okay = false;
 		}
 		// BearbeiterIn in Metadaten?
-		if (data.be.length) {
+		if (data.rd.be.length) {
 			erinnerungen.data.metadaten.okay = true;
 		} else {
 			erinnerungen.allesOkay = false;
@@ -49,8 +49,8 @@ let erinnerungen = {
 		}
 		// BearbeiterIn in allen Redaktionsereignissen?
 		let redaktion = true;
-		for (let i = 0, len = data.rd.length; i < len; i++) {
-			if (!data.rd[i].pr) {
+		for (let i = 0, len = data.rd.er.length; i < len; i++) {
+			if (!data.rd.er[i].pr) {
 				redaktion = false;
 				break;
 			}
@@ -62,8 +62,14 @@ let erinnerungen = {
 			erinnerungen.data.redaktion.okay = false;
 		}
 		// Artikel erstellt, aber nicht verknüpft?
-		for (let i of data.rd) {
+		for (let i of data.rd.er) {
 			if (i.er === "Artikel erstellt") {
+				if (data.rd.bh) {
+					// Wort wird in einer anderen Datei mit behandelt;
+					// dort ist die Artikeldatei
+					erinnerungen.data.artikelDatei.okay = true;
+					break;
+				}
 				let okay = false;
 				for (let f of data.an) {
 					if (/\.(doc|docx|odt)$/.test(f)) {
@@ -81,8 +87,14 @@ let erinnerungen = {
 			}
 		}
 		// XML-Datei erstellt, aber nicht verknüpft?
-		for (let i of data.rd) {
+		for (let i of data.rd.er) {
 			if (i.er === "XML-Auszeichnung") {
+				if (data.rd.bh) {
+					// Wort wird in einer anderen Datei mit behandelt;
+					// dort ist die XML-Datei
+					erinnerungen.data.xmlDatei.okay = true;
+					break;
+				}
 				let okay = false;
 				for (let f of data.an) {
 					if (/\.xml$/.test(f)) {
@@ -139,7 +151,7 @@ let erinnerungen = {
 					optionen.sektionWechseln(document.querySelector("#einstellungen ul a"));
 					break;
 				case "metadaten":
-					meta.oeffnen();
+					redMeta.oeffnen();
 					break;
 				case "redaktion":
 					redaktion.oeffnen();

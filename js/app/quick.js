@@ -93,6 +93,11 @@ let quick = {
 			short: `${tastatur.shortcutsTextAktuell("Strg")} + F`,
 			img: "lupe.svg",
 		},
+		"redaktion-metadaten": {
+			title: "Redaktion > Metadaten",
+			short: "",
+			img: "zeilen-4,0.svg",
+		},
 		"redaktion-ereignisse": {
 			title: "Redaktion > Ereignisse",
 			short: "",
@@ -341,6 +346,9 @@ let quick = {
 					break;
 				case "kartei-suche":
 					filter.suche();
+					break;
+				case "redaktion-metadaten":
+					redMeta.oeffnen();
 					break;
 				case "redaktion-ereignisse":
 					redaktion.oeffnen();

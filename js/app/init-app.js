@@ -37,6 +37,7 @@ window.addEventListener("load", async () => {
 	ipcRenderer.on("kartei-bedeutungen-fenster", () => bedeutungenWin.oeffnen());
 	ipcRenderer.on("kartei-suche", () => filter.suche());
 	ipcRenderer.on("redaktion-ereignisse", () => redaktion.oeffnen());
+	ipcRenderer.on("redaktion-metadaten", () => redMeta.oeffnen());
 	ipcRenderer.on("belege-hinzufuegen", () => {
 		// Sperre für macOS (Menüpunkte können nicht deaktiviert werden)
 		if (!kartei.wort) {
@@ -278,17 +279,22 @@ window.addEventListener("load", async () => {
 			lexika.aktionText(i);
 		}
 	});
-	// Metadaten-Fenster
+	// Karteimetadaten-Fenster
 	document.getElementById("meta-ordner").addEventListener("click", () => {
 		if (kartei.pfad) {
 			helfer.ordnerOeffnen(kartei.pfad);
 		}
 	});
-	document.querySelectorAll("#meta input").forEach(i => {
+	// Redaktionsmetadaten-Fenster
+	document.getElementById("red-meta-sachgebiete").addEventListener("click", evt => {
+		evt.preventDefault();
+		redMeta.sachgebieteAdd();
+	});
+	document.querySelectorAll("#red-meta input").forEach(i => {
 		if (i.type === "button") {
-			meta.aktionButton(i);
+			redMeta.aktionButton(i);
 		} else { // Text-Input
-			meta.aktionText(i);
+			redMeta.aktionText(i);
 		}
 	});
 	// Karteisuche

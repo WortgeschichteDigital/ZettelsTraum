@@ -195,8 +195,7 @@
 	text-align: left;
 }
 
-#lexika-cont input[type="button"],
-#meta-cont input[type="button"] {
+#lexika-cont input[type="button"] {
 	margin-left: 5px;
 	width: 116px;
 }
@@ -209,16 +208,11 @@
 	width: calc(100% - 121px - 12px); /* Button 121px, 12px padding und border */
 }
 
-#meta-cont input[type="text"] {
-	width: calc(100% - 121px - 31px); /* Button 121px, 31px padding und border */
-}
-
 #stamm-cont label {
 	color: var(--textFarbe);
 }
 
-#stamm-liste,
-#meta-be-liste {
+#stamm-liste {
 	margin-bottom: 10px;
 	max-height: 290px;
 	overflow-x: hidden;
@@ -226,10 +220,10 @@
 }
 
 #stamm-liste .icon-link,
-#meta-be-liste .icon-link,
+#red-meta-be-liste .icon-link,
 #kopieren-liste-cont .icon-link {
 	position: relative;
-	top: -1px;
+	top: 1px;
 	margin-right: 10px;
 	vertical-align: bottom;
 	background-color: var(--textExtremHell);
@@ -240,13 +234,13 @@
 }
 
 #stamm-liste .icon-link:focus,
-#meta-be-liste .icon-link:focus,
+#red-meta-be-liste .icon-link:focus,
 #kopieren-liste-cont .icon-link:focus {
 	background-color: var(--farbe);
 }
 
 #stamm-liste .icon-link:hover,
-#meta-be-liste .icon-link:hover,
+#red-meta-be-liste .icon-link:hover,
 #kopieren-liste-cont .icon-link:hover {
 	background-color: var(--text);
 }

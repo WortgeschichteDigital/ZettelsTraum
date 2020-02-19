@@ -635,7 +635,7 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
 
 					<p>Nach dem Laden einer <abbr title="Zettel’s Traum JSON">ZTJ</abbr>-Datei in <i class="app-name"></i> befinden sich die <abbr title="JavaScript Object Notation">JSON</abbr>-Daten im globalen Objekt <code class="quelltext">data</code>. Ihre Werte lassen sich dann in allen Funktionen des Hauptfensters durch einfache Statements wie <code class="quelltext">data.dc</code> lesen oder schreiben.</p>
 
-					<p>Alle Dateien sind gleich aufgebaut (<span class="obacht">Datenformat Version 12</span>):</p>
+					<p>Alle Dateien sind gleich aufgebaut (<span class="obacht">Datenformat Version 13</span>):</p>
 
 					<table class="ztj">
 						<tr>
@@ -743,11 +743,11 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
 							<td><code class="quelltext">0–2</code></td>
 							<td>Start-Level der Zählung; <code class="quelltext">0</code> = A, <code class="quelltext">1</code> = I, <code class="quelltext">2</code> = 1</td>
 						</tr>
-						<tr>
+						<tr class="ztj-alt">
 							<td><code class="quelltext">be</code></td>
 							<td class="datentyp">Array</td>
 							<td>eindimensional,<br>mit <span class="datentyp">Strings</span> gefüllt</td>
-							<td>BearbeiterInnen, die die Kartei geändert haben</td>
+							<td>BearbeiterInnen, die die Kartei geändert haben;<br><span class="obacht">mit Version 13 nach <code class="quelltext">data.rd.be</code> verschoben</span></td>
 						</tr>
 						<tr>
 							<td><code class="quelltext">dc</code></td>
@@ -1009,30 +1009,66 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
 						</tr>
 						<tr>
 							<td><p><code class="quelltext">rd</code></p></td>
+							<td class="datentyp">Object</td>
+							<td> </td>
+							<td>Redaktionsdaten</td>
+						</tr>
+						<tr class="ztj-ebene1">
+							<td><p><code class="quelltext">be</code></p></td>
+							<td class="datentyp">Array</td>
+							<td>eindimensional,<br>mit <span class="datentyp">Strings</span> gefüllt</td>
+							<td>BearbeiterInnen, die die Kartei geändert haben;<br><span class="obacht">bis Version 12 befand sich dieses <span class="datentyp">Array</span> in <code class="quelltext">data.be</code></span></td>
+						</tr>
+						<tr class="ztj-ebene1">
+							<td><p><code class="quelltext">bh</code></p></td>
+							<td class="datentyp">String</td>
+							<td> </td>
+							<td>Wort mit dem zusammen das aktuelle Karteiwort behandelt wird;<br><span class="obacht">ab Version 13</span></td>
+						</tr>
+						<tr class="ztj-ebene1">
+							<td><p><code class="quelltext">er</code></p></td>
 							<td class="datentyp">Array</td>
 							<td>eindimensional,<br>mit <span class="datentyp">Objects</span> gefüllt</td>
-							<td>Redaktionsereignisse</td>
+							<td>Redaktionsereignisse;<br><span class="obacht">bis Version 12 war dieses <span class="datentyp">Array</span> identisch mit <code class="quelltext">data.rd</code></span></td>
 						</tr>
-						<tr class="ztj-ebene1">
+						<tr class="ztj-ebene2">
 							<td colspan="4"><p>Die <span class="datentyp">Objects</span> in den Slots haben die folgenden Schlüssel und Werte:</p></td>
 						</tr>
-						<tr class="ztj-ebene1">
+						<tr class="ztj-ebene2">
 							<td><p><code class="quelltext">da</code></p></td>
 							<td class="datentyp">String</td>
 							<td>ISO 8601-Datum:<br><code class="quelltext">"2019-12-01"</code></td>
 							<td>Tagesdatum des Ereignisses</td>
 						</tr>
-						<tr class="ztj-ebene1">
+						<tr class="ztj-ebene2">
 							<td><p><code class="quelltext">er</code></p></td>
 							<td class="datentyp">String</td>
 							<td> </td>
 							<td>Redaktionsereignis</td>
 						</tr>
-						<tr class="ztj-ebene1">
+						<tr class="ztj-ebene2">
 							<td><p><code class="quelltext">pr</code></p></td>
 							<td class="datentyp">String</td>
 							<td> </td>
 							<td>BearbeiterIn</td>
+						</tr>
+						<tr class="ztj-ebene1">
+							<td><p><code class="quelltext">sg</code></p></td>
+							<td class="datentyp">Array</td>
+							<td> </td>
+							<td>Sachgebiete, zu denen das Karteiwort gehört;<br><span class="obacht">ab Version 13</span></td>
+						</tr>
+						<tr class="ztj-ebene2">
+							<td><p><code class="quelltext">id</code></p></td>
+							<td class="datentyp">String</td>
+							<td> </td>
+							<td>ID des Sachgebiete-Tags; zeigt auf <code class="quelltext">optionen.data.tags.sachgebiete.data[id]</code></td>
+						</tr>
+						<tr class="ztj-ebene2">
+							<td><p><code class="quelltext">ty</code></p></td>
+							<td class="datentyp">String</td>
+							<td>immer <code class="quelltext">"sachgebiete"</code></td>
+							<td>Tag-Typ, der in diesem Fall immer derselbe ist; <abbr title="vergleiche">vgl.</abbr> <code class="quelltext">data.bd.gr[ID].bd.ta</code></td>
 						</tr>
 						<tr>
 							<td><p><code class="quelltext">re</code></p></td>
