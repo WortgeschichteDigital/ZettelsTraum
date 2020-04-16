@@ -1283,7 +1283,7 @@ let karteisuche = {
 			tastatur.detectModifiers(evt);
 			if (!tastatur.modifiers &&
 					evt.key === "Enter" &&
-					!document.getElementById("dropdown")) {
+					!document.querySelector("#dropdown .aktiv")) {
 				evt.preventDefault();
 				if (Object.keys(karteisuche.ztjCache).length) {
 					karteisuche.suchenPrepZtj([]);
