@@ -1201,6 +1201,7 @@ let karteisuche = {
 		input.value = "";
 		span.appendChild(dropdown.makeLink("dropdown-link-td", "Filtertyp", true));
 		dropdown.feld(input);
+		karteisuche.filterFelderListener(input);
 		// Filter fokussieren, wenn er manuell hinzugefügt wurde
 		if (manuell) {
 			input.focus();
