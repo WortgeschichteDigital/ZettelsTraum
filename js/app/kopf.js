@@ -66,11 +66,11 @@ let kopf = {
 	// Redaktion-Icon
 	iconRedaktion () {
 		let iconRedaktion = document.getElementById("redaktion-icon"),
-			er = redaktion.kopfIcon(false);
+			er = redaktion.naechstesEreignis(false);
 		if (optionen.data.einstellungen["kopf-icon-redaktion"] &&
 				kartei.wort) {
 			if (er.abgeschlossen) {
-				iconRedaktion.title = er.title[0].replace(/<.+?>/g, "");
+				iconRedaktion.title = er.title[0];
 			} else {
 				iconRedaktion.title = `Nächstes Redaktionsereignis: ${er.title[1]}`;
 			}
