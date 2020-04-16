@@ -58,6 +58,12 @@ let updates = {
 	gesucht: false,
 };
 
+// Variable mit gecachten Daten der Karteisuche
+//   [ID] (Object; ID = Pfad zur gecachten Kartei)
+//     ctime (String; Änderungsdatum der Kartei)
+//     data (Object; die kompletten Karteidaten)
+let ztjCache = {};
+
 // Variable für Abgleich der Tag-Dateien
 // (soll nur einmal pro Session stattfinden)
 let tagDateienAbgleich = true;
@@ -1613,6 +1619,17 @@ ipcMain.on("kopieren-daten-lieferung", (evt, daten) => {
 	let w = BrowserWindow.fromId(kopieren.winIdAnfrage);
 	w.webContents.send("kopieren-daten-empfangen", daten);
 });
+
+
+// ***** ZTJ-CACHE ******
+ipcMain.handle("ztj-cache-save", (evt, kartei) => {
+	ztjCache[kartei.pfad] = {
+		ctime: kartei.ctime,
+		data: kartei.data,
+	};
+});
+
+ipcMain.handle("ztj-cache-get", () => ztjCache);
 
 
 // ***** QUODLIBETICA *****

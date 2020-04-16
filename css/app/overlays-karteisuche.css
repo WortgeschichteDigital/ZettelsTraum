@@ -59,7 +59,7 @@
 	padding: 10px;
 }
 
-#karteisuche-cont input[type="button"] {
+#karteisuche-cont input[type="button"]:first-child {
 	margin-left: 0;
 }
 

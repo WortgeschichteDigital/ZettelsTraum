@@ -2,13 +2,22 @@
 
 let karteisuche = {
 	// Suche-Fenster öffnen
-	oeffnen () {
+	async oeffnen () {
 		let fenster = document.getElementById("karteisuche");
 		overlay.oeffnen(fenster);
 		// schmale Anzeige?
 		karteisuche.filterBreite();
+		// Cache holen
+		const {ipcRenderer} = require("electron");
+		karteisuche.ztjCache = await ipcRenderer.invoke("ztj-cache-get");
 		// Suchbutton fokussieren
-		fenster.querySelector("input").focus();
+		let buttons = fenster.querySelectorAll(`input[type="button"]`);
+		if (Object.keys(karteisuche.ztjCache).length) {
+			buttons[1].classList.remove("aus");
+			buttons[1].focus();
+		} else {
+			buttons[0].focus();
+		}
 		// Pfade auflisten
 		karteisuche.pfadeAuflisten();
 		// ggf. eine ID für die Filter erzeugen
@@ -226,18 +235,8 @@ let karteisuche = {
 			karteisuche.animation(false);
 			return;
 		}
-		// Element mit Fokus speichern
-		karteisuche.suchenFokus = document.querySelector("#karteisuche input:focus");
-		if (karteisuche.suchenFokus) {
-			karteisuche.suchenFokus.blur();
-		} else {
-			karteisuche.suchenFokus = null;
-		}
-		// Okay, die Suche kann starten
-		karteisuche.animation(true);
-		setTimeout(function() {
-			karteisuche.suchen(pfade);
-		}, 500);
+		// Suche starten
+		karteisuche.suchenPrepZtj(pfade);
 	},
 	// markiert einen Pfad, wenn er nicht gefunden wurde, und demarkiert ihn,
 	// wenn er gefunden wurde
@@ -279,36 +278,90 @@ let karteisuche = {
 			});
 		});
 	},
-	// Suche starten
+	// ZTJ-Dateien zusammentragen
 	//   pfade = Array
-	//     (Pfade, in denen gesucht werden soll)
-	async suchen (pfade) {
-		// Suche starten
-		karteisuche.ztj = [];
-		for (let ordner of pfade) {
-			const exists = await helfer.exists(ordner);
-			if (exists) {
-				await karteisuche.ordnerParsen(ordner);
-			}
+	//     (Pfade, in denen gesucht werden soll;
+	//     das Array ist leer, wenn im Cache gesucht werden soll)
+	async suchenPrepZtj (pfade) {
+		// Cache-Daten aus Main holen
+		const {ipcRenderer} = require("electron");
+		karteisuche.ztjCache = await ipcRenderer.invoke("ztj-cache-get");
+		// Element mit Fokus speichern
+		karteisuche.suchenFokus = document.querySelector("#karteisuche input:focus");
+		if (karteisuche.suchenFokus) {
+			karteisuche.suchenFokus.blur();
+		} else {
+			karteisuche.suchenFokus = null;
 		}
+		// Animation einblenden
+		karteisuche.animation(true);
+		// Dateien suchen
+		setTimeout(async () => {
+			karteisuche.ztj = [];
+			if (pfade.length) {
+				// Dateien auf Speichermedium suchen
+				for (let ordner of pfade) {
+					const exists = await helfer.exists(ordner);
+					if (exists) {
+						await karteisuche.ordnerParsen(ordner);
+					}
+				}
+			} else {
+				// Dateidaten aus dem Cache zusammentragen
+				for (let pfad of Object.keys(karteisuche.ztjCache)) {
+					karteisuche.ztj.push({
+						pfad: pfad,
+						ctime: karteisuche.ztjCache[pfad].ctime,
+						wort: "",
+						wortSort: "",
+						redaktion: [],
+						behandeltIn: "",
+						behandeltMit: [],
+						passt: false,
+					});
+				}
+			}
+			karteisuche.suchen();
+		}, 500);
+	},
+	// Suche starten
+	async suchen () {
 		// Filterwerte sammeln
 		karteisuche.filterWerteSammeln();
 		// Karteien analysieren
+		const {ipcRenderer} = require("electron");
 		let ztjAdd = [],
 			ztjMit = {};
 		for (let kartei of karteisuche.ztj) {
-			const content = await io.lesen(kartei.pfad);
 			// Kartei einlesen
 			let datei = {};
-			try {
-				datei = JSON.parse(content);
-			} catch (err) {
-				continue;
-			}
-			// keine ZTJ-Datei
-			// (bis Version 0.24.0 stand in dem Feld "wgd")
-			if (!/^(wgd|ztj)$/.test(datei.ty)) {
-				continue;
+			if (karteisuche.ztjCache[kartei.pfad] &&
+					kartei.ctime === karteisuche.ztjCache[kartei.pfad].ctime) {
+				// aus Cache holen
+				datei = karteisuche.ztjCache[kartei.pfad].data;
+			} else {
+				// vom Speichermedium holen
+				const content = await io.lesen(kartei.pfad);
+				try {
+					datei = JSON.parse(content);
+				} catch (err) {
+					continue;
+				}
+				// keine ZTJ-Datei
+				// (bis Version 0.24.0 stand in dem Feld "wgd")
+				if (!/^(wgd|ztj)$/.test(datei.ty)) {
+					continue;
+				}
+				// Kartei cachen
+				ipcRenderer.invoke("ztj-cache-save", {
+					pfad: kartei.pfad,
+					ctime: kartei.ctime,
+					data: datei,
+				});
+				karteisuche.ztjCache[kartei.pfad] = { // Arbeitskopie im Fenster up-to-date halten
+					ctime: kartei.ctime,
+					data: datei,
+				};
 			}
 			// Werden in der Kartei mehrere Wörter behandelt?
 			let woerter = [datei.wo];
@@ -320,6 +373,7 @@ let karteisuche = {
 				if (i > 0) {
 					ztjAdd.push({
 						pfad: kartei.pfad,
+						ctime: kartei.ctime,
 						wort: "",
 						wortSort: "",
 						redaktion: [],
@@ -374,6 +428,14 @@ let karteisuche = {
 		}
 		// passende Karteien auflisten
 		karteisuche.ztjAuflisten();
+		// ggf. Cache-Button ein- oder ausblenden
+		let button = document.querySelectorAll(`#karteisuche input[type="button"]`)[1];
+		if (karteisuche.ztj.length ||
+				Object.keys(karteisuche.ztjCache).length) {
+			button.classList.remove("aus");
+		} else {
+			button.classList.add("aus");
+		}
 		// Sperrbild weg und das zuletzt fokussierte Element wieder fokussieren
 		karteisuche.animation(false);
 		if (karteisuche.suchenFokus) {
@@ -385,47 +447,67 @@ let karteisuche = {
 	// ZTJ-Dateien, die gefunden wurden;
 	// Array enthält Objekte:
 	//   pfad (String; Pfad zur Kartei)
+	//   ctime (String; Änderungsdatum der Kartei)
 	//   wort (String; Wort der Kartei)
+	//   wortSort (String; Sortierform des Worts der Kartei)
 	//   redaktion (Array; Klon von data.rd.er)
+	//   behandeltIn (String; Wort, in dem das aktuelle Wort behandelt wird)
+	//   behandeltMit (String; Array, mit denen das aktuelle Wort behandelt wird)
 	//   passt (Boolean; passt zu den Suchfiltern)
 	ztj: [],
+	// Cache für ZTJ-Dateien
+	// (wird beim Öffnen des Fensters und Start einer Suche aus Main geholt)
+	//   ctime (String; Änderungsdatum der Kartei)
+	//   data (Object; die kompletten Karteidaten)
+	ztjCache: {},
 	// findet alle Pfade in einem übergebenen Ordner
 	//   ordner = String
 	//     (Ordner, von dem aus die Suche beginnen soll)
-	async ordnerParsen (ordner) {
-		const fsP = require("fs").promises;
-		try {
-			let files = await fsP.readdir(ordner);
-			for (let i of files) {
-				const path = require("path"),
-					pfad = path.join(ordner, i);
-				await karteisuche.pfadPruefen(pfad);
+	ordnerParsen (ordner) {
+		return new Promise(async resolve => {
+			const fsP = require("fs").promises;
+			try {
+				let files = await fsP.readdir(ordner);
+				for (let i of files) {
+					const path = require("path"),
+						pfad = path.join(ordner, i);
+					await karteisuche.pfadPruefen(pfad);
+				}
+				resolve(true);
+			} catch (err) { // Auslesen des Ordners fehlgeschlagen
+				resolve(false);
 			}
-		} catch (err) {} // Auslesen des Ordners fehlgeschlagen
+		});
 	},
 	// überprüft einen übergebenen Pfad: Ordner oder ZTJ-Datei?
 	//   pfad = String
 	//     (Ordner, von dem aus die Suche beginnen soll)
-	async pfadPruefen (pfad) {
-		const fs = require("fs"),
-			fsP = fs.promises;
-		try {
-			await fsP.access(pfad, fs.constants.R_OK); // Lesezugriff auf Pfad? Wenn kein Zugriff => throw
-			let stats = await fsP.lstat(pfad); // Natur des Pfades?
-			if (stats.isDirectory()) { // Ordner => parsen
-				karteisuche.ordnerParsen(pfad);
-			} else if (/\.ztj$/.test(pfad)) { // ZTJ-Datei => merken
-				karteisuche.ztj.push({
-					pfad: pfad,
-					wort: "",
-					wortSort: "",
-					redaktion: [],
-					behandeltIn: "",
-					behandeltMit: [],
-					passt: false,
-				});
+	pfadPruefen (pfad) {
+		return new Promise(async resolve => {
+			const fs = require("fs"),
+				fsP = fs.promises;
+			try {
+				await fsP.access(pfad, fs.constants.R_OK); // Lesezugriff auf Pfad? Wenn kein Zugriff => throw
+				let stats = await fsP.lstat(pfad); // Natur des Pfades?
+				if (stats.isDirectory()) { // Ordner => parsen
+					await karteisuche.ordnerParsen(pfad);
+				} else if (/\.ztj$/.test(pfad)) { // ZTJ-Datei => merken
+					karteisuche.ztj.push({
+						pfad: pfad,
+						ctime: stats.ctime.toString(),
+						wort: "",
+						wortSort: "",
+						redaktion: [],
+						behandeltIn: "",
+						behandeltMit: [],
+						passt: false,
+					});
+				}
+				resolve(true);
+			} catch (err) { // wahrscheinlich besteht kein Zugriff auf den Pfad
+				resolve(false);
 			}
-		} catch (err) {} // wahrscheinlich besteht kein Zugriff auf den Pfad
+		});
 	},
 	// ZTJ-Dateien auflisten
 	ztjAuflisten () {
@@ -1203,7 +1285,11 @@ let karteisuche = {
 					evt.key === "Enter" &&
 					!document.getElementById("dropdown")) {
 				evt.preventDefault();
-				karteisuche.suchenPrep();
+				if (Object.keys(karteisuche.ztjCache).length) {
+					karteisuche.suchenPrepZtj([]);
+				} else {
+					karteisuche.suchenPrep();
+				}
 			}
 		});
 	},
