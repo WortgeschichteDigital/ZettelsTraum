@@ -32,6 +32,7 @@ let beleg = {
 		"DWDS: Text+Berg",
 		"DWDS: Webkorpus 2016c",
 		"DWDS: Die ZEIT",
+		"DWDS: ZDL-Regionalkorpus",
 	],
 	// neue Karteikarte erstellen
 	erstellen () {

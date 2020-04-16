@@ -759,6 +759,10 @@ let belegImport = {
 			kr: "DWDS: Referenz- und Zeitungskorpora",
 			ts: "",
 		},
+		regional: {
+			kr: "DWDS: ZDL-Regionalkorpus",
+			ts: "Zeitung",
+		},
 		spk: {
 			kr: "DWDS: Gesprochene Sprache",
 			ts: "",
