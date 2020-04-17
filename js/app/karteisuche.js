@@ -7,7 +7,11 @@ let karteisuche = {
 		overlay.oeffnen(fenster);
 		// schmale Anzeige?
 		karteisuche.filterBreite();
-		// Cache holen
+		// Läuft im aktuellen Fenster gerade eine Suche?
+		if (!document.getElementById("karteisuche-suche-laeuft").classList.contains("aus")) {
+			return;
+		}
+		// Cache laden
 		const {ipcRenderer} = require("electron");
 		karteisuche.ztjCache = await ipcRenderer.invoke("ztj-cache-get");
 		// Suchbutton fokussieren
@@ -283,8 +287,19 @@ let karteisuche = {
 	//     (Pfade, in denen gesucht werden soll;
 	//     das Array ist leer, wenn im Cache gesucht werden soll)
 	async suchenPrepZtj (pfade) {
+		const {ipcRenderer} = require("electron"),
+			status = await ipcRenderer.invoke("ztj-cache-status-get");
+		// Abbruch, falls bereits eine Suche läuft
+		if (status) {
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Es läuft bereits eine Karteisuche.\nSie müssen warten, bis diese beendet ist.",
+			});
+			return;
+		}
+		// speichern, dass die Suche läuft
+		ipcRenderer.invoke("ztj-cache-status-set", true);
 		// Cache-Daten aus Main holen
-		const {ipcRenderer} = require("electron");
 		karteisuche.ztjCache = await ipcRenderer.invoke("ztj-cache-get");
 		// Element mit Fokus speichern
 		karteisuche.suchenFokus = document.querySelector("#karteisuche input:focus");
@@ -443,6 +458,8 @@ let karteisuche = {
 		}
 		// Filter speichern
 		karteisuche.filterSpeichern();
+		// Status der Karteisuche zurücksetzen
+		ipcRenderer.invoke("ztj-cache-status-set", false);
 	},
 	// ZTJ-Dateien, die gefunden wurden;
 	// Array enthält Objekte:

@@ -64,6 +64,9 @@ let updates = {
 //     data (Object; die kompletten Karteidaten)
 let ztjCache = {};
 
+// Variable, die speichert, ob gerade eine Karteisuche läuft
+let ztjCacheStatus = false;
+
 // Variable für Abgleich der Tag-Dateien
 // (soll nur einmal pro Session stattfinden)
 let tagDateienAbgleich = true;
@@ -1630,6 +1633,10 @@ ipcMain.handle("ztj-cache-save", (evt, kartei) => {
 });
 
 ipcMain.handle("ztj-cache-get", () => ztjCache);
+
+ipcMain.handle("ztj-cache-status-set", (evt, status) => ztjCacheStatus = status);
+
+ipcMain.handle("ztj-cache-status-get", () => ztjCacheStatus);
 
 
 // ***** QUODLIBETICA *****
