@@ -190,7 +190,8 @@ let beleg = {
 				bibtexCp = belegImport.BibTeXCheck(cp);
 			if (/^https?:\/\/www\.deutschestextarchiv\.de\//.test(cp)) { // DTA-URL
 				beleg.formularImport("dta");
-			} else if (!helfer.checkType("Number", dwds)) { // DWDS-Snippet
+			} else if (dwds) { // DWDS-Snippet
+				belegImport.DWDS(dwds, "– Zwischenablage –", false);
 				beleg.formularImport("dwds");
 			} else if (bibtexCp) {
 				belegImport.BibTeX(cp, "– Zwischenablage –", false);
@@ -301,9 +302,9 @@ let beleg = {
 			}
 		}
 		// Formular umstellen
-		let forms = ["beleg-form-dta", "beleg-form-dwds", "beleg-form-datei"],
+		let forms = ["beleg-form-dta", "beleg-form-datei"],
 			formsZiel = src;
-		if (/^(dereko|bibtex)/.test(src)) {
+		if (/^(dwds|dereko|bibtex)/.test(src)) {
 			formsZiel = "datei";
 		}
 		let eleAktiv = null;
@@ -317,7 +318,7 @@ let beleg = {
 			}
 		}
 		// Fokus setzen
-		if (/^(dereko|bibtex)$/.test(src)) {
+		if (/^(dwds|dereko|bibtex)$/.test(src)) {
 			let inputs = eleAktiv.querySelectorAll("input");
 			if (src === belegImport.Datei.typ &&
 					belegImport.Datei.data.length) {
@@ -333,10 +334,11 @@ let beleg = {
 	},
 	// ggf. Dateiname eintragen
 	//   src = String
-	//     (ID der Quelle, aus der importiert werden soll: dereko || bibtex)
+	//     (ID der Quelle, aus der importiert werden soll: dwds || dereko || bibtex)
 	formularImportDatei (src) {
 		let name = document.getElementById("beleg-datei-name");
-		if (src === "dereko" && belegImport.Datei.typ === "dereko" ||
+		if (src === "dwds" && belegImport.Datei.typ === "dwds" ||
+				src === "dereko" && belegImport.Datei.typ === "dereko" ||
 				src === "bibtex" && belegImport.Datei.typ === "bibtex") {
 			name.textContent = `\u200E${belegImport.Datei.pfad}\u200E`; // vgl. meta.oeffnen()
 			name.classList.remove("leer");
@@ -359,8 +361,6 @@ let beleg = {
 				beleg.aktionLoeschen();
 			} else if (aktion === "dta-button") {
 				belegImport.DTA();
-			} else if (aktion === "dwds-button") {
-				belegImport.DWDS();
 			} else if (aktion === "datei-oeffnen") {
 				belegImport.DateiOeffnen();
 			} else if (aktion === "datei-importieren") {
