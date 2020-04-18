@@ -1574,7 +1574,11 @@ let belegImport = {
 	// Datei-Import: Import ausführen
 	//   idx = Number
 	//     (der Index in belegImport.Datei.data, der importiert werden soll)
-	DateiImportAusfuehren (idx) {
+	async DateiImportAusfuehren (idx) {
+		// Kann und soll der Beleg direkt aus dem DTA importiert werden?
+		if (await belegImport.DateiImportDTA(idx)) {
+			return;
+		}
 		// Ist die Kartei schon ausgefüllt?
 		let feldnamen = {
 			da: "Datum",
@@ -1659,6 +1663,42 @@ let belegImport = {
 				belegImport.checkWort();
 			}
 		}
+	},
+	// DTA-Import bevorzugen?
+	//   idx = Number
+	//     (der Index in belegImport.Datei.data, der importiert werden soll)
+	DateiImportDTA (idx) {
+		return new Promise(resolve => {
+			let ds = belegImport.Datei.data[idx].ds;
+			// Beleg wohl nicht aus DTA
+			if (!/https?:\/\/www\.deutschestextarchiv\.de\//.test(ds.qu)) {
+				resolve(false);
+				return;
+			}
+			// Beleg wohl aus DTA
+			dialog.oeffnen({
+				typ: "confirm",
+				text: "Der Beleg stammt offenbar aus dem DTA.\nMöchten Sie ihn nicht lieber direkt aus dem DTA importieren?",
+				callback: () => {
+					if (dialog.antwort) {
+						// DTA-Import anstoßen => Import des DWDS-Snippets unterbinden
+						let url = liste.linksErkennen(ds.qu).match(/href="([^"]+\.deutschestextarchiv\.de\/.+?)"/)[1],
+							dtaFeld = document.getElementById("beleg-dta");
+						dtaFeld.value = url;
+						const fak = belegImport.DTAGetFak(url, "");
+						if (fak) {
+							dtaFeld.nextSibling.value = parseInt(fak, 10) + 1;
+						}
+						beleg.formularImport("dta");
+						belegImport.DTA();
+						resolve(true);
+					} else {
+						// DWDS-Snippet importieren
+						resolve(false);
+					}
+				},
+			});
+		});
 	},
 	// DeReKo-Import: Datei parsen
 	//   content = String
