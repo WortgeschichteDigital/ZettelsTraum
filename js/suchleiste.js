@@ -361,11 +361,7 @@ let suchleiste = {
 			return;
 		}
 		leiste.firstChild.select();
-		let next = true;
-		if (evt.shiftKey) {
-			next = false;
-		}
-		suchleiste.navi(next);
+		suchleiste.navi(!evt.shiftKey);
 	},
 	// Listener für die Navigationslinks
 	//   a = Element

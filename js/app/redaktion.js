@@ -84,11 +84,11 @@ let redaktion = {
 		let next = document.getElementById("redaktion-next");
 		helfer.keineKinder(next);
 		// nächstes Ereignis ermitteln
-		let ereignis = redaktion.kopfIcon(false).title;
+		let ereignis = redaktion.naechstesEreignis(false).title;
 		// Anzeige auffrischen
 		let strong = document.createElement("strong");
 		next.appendChild(strong);
-		strong.textContent = ereignis[0].match(/<h3>(.+?)<\/h3>/)[1];
+		strong.textContent = ereignis[0];
 		if (ereignis[1]) {
 			strong.appendChild(document.createTextNode(":"));
 			next.appendChild(document.createTextNode(ereignis[1]));
@@ -469,12 +469,8 @@ let redaktion = {
 			},
 		});
 	},
-	// Meldungsfenster für das Redaktions-Icon im Kopf
-	// (wird auch für die Anzeige des nächsten Ereignisses im Kopf des
-	// Ereignisfensters genutzt)
-	//   meldung = Boolean
-	//     (Meldung anzeigen; sonst nur den Text zurückgeben)
-	kopfIcon (meldung) {
+	// nächstes Redaktionsereignis ermitteln und in Worte fassen
+	naechstesEreignis () {
 		// keine Kartei geöffnet
 		if (!kartei.wort) {
 			return null;
@@ -488,24 +484,17 @@ let redaktion = {
 				letztesEreignis = idx;
 			}
 		}
-		// Text vorbereiten
+		// Text ermitteln
 		let abgeschlossen = false,
-			text = ["<h3>Nächstes Redaktionsereignis</h3>"];
+			text = ["Nächstes Redaktionsereignis"];
 		if (letztesEreignis === -1) {
 			text.push(`${redaktion.ereignisse[ereignisse[0]].textNaechstes}`);
 		} else if (letztesEreignis >= ereignisse.length - 2) {
 			abgeschlossen = true;
-			text = ["<h3>Redaktion abgeschlossen</h3>"];
+			text = ["Redaktion abgeschlossen"];
 		} else {
 			const ereignis = ereignisse[letztesEreignis + 1];
 			text.push(redaktion.ereignisse[ereignis].textNaechstes);
-		}
-		// Meldung anzeigen
-		if (meldung) {
-			dialog.oeffnen({
-				typ: "alert",
-				text: text.join("\n"),
-			});
 		}
 		// nächstes Ereignis zurückgeben
 		return {

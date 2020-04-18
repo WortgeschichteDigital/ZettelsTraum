@@ -240,8 +240,6 @@
 					<td colspan="2"><input type="text" value="" id="beleg-dta" tabindex="0"
 						><input type="number" value="2" min="0" max="9999" id="beleg-dta-bis" tabindex="0"
 						><input type="button" value="Importieren" id="beleg-dta-button" tabindex="0"></td>
-				</tr><tr class="beleg-form aus" id="beleg-form-dwds">
-					<td colspan="2"><input type="button" value="Importieren" id="beleg-dwds-button" tabindex="0"></td>
 				</tr><tr class="beleg-form aus" id="beleg-form-datei">
 					<td colspan="2"
 						><span id="beleg-datei-name" dir="rtl" class="leer">keine Datei geladen</span
@@ -668,6 +666,8 @@
 						<h3>Import</h3>
 						<p><input type="checkbox" id="einstellung-url-eintragen"
 							><label for="einstellung-url-eintragen"><abbr title="Uniform Resource Locator" lang="en">URL</abbr> aus der Zwischenablage automatisch in das <abbr title="Deutsches Textarchiv">DTA</abbr>-Import-Feld eintragen</label></p>
+						<p><input type="checkbox" id="einstellung-dta-bevorzugen"
+							><label for="einstellung-dta-bevorzugen">aus dem <abbr title="Deutschen Textarchiv">DTA</abbr> stammende <abbr title="Digitales Wörterbuch der deutschen Sprache">DWDS</abbr>-Snippets ohne Nachfrage aus dem <abbr title="Deutschen Textarchiv">DTA</abbr> importieren</label></p>
 						<p><input type="checkbox" id="einstellung-notizen-zeitung"
 							><label for="einstellung-notizen-zeitung">bei Zeitungskorpora den Zeitungsnamen in die erste Zeile der Notizen schreiben</label></p>
 						<p><input type="checkbox" id="einstellung-wort-check"
@@ -733,7 +733,8 @@
 			<h2><span class="icon-h icon-h-karteisuche"> </span
 				>Karteisuche<a href="#" class="icon-link icon-handbuch" title="Abschnitt im Handbuch öffnen" data-handbuch="menueApp-karteisuche"> </a><a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"> </a></h2>
 			<div id="karteisuche-cont">
-				<p><input type="button" value="Suche starten" id="karteisuche-suchen"></p>
+				<p><input type="button" value="Suchen" id="karteisuche-suchen"
+					><input type="button" value="Suchen im Cache" id="karteisuche-suchenCache" class="aus"></p>
 				<h3><span class="icon-h icon-filter"> </span>Pfade &amp; Filter</h3>
 				<div id="karteisuche-filterblock">
 					<div id="karteisuche-pfade"></div>
