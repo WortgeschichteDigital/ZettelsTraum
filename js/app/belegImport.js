@@ -906,6 +906,9 @@ let belegImport = {
 			nKr = doc.xml.querySelector("Fundstelle Korpus");
 		if (nKr && nKr.firstChild) {
 			korpus = nKr.firstChild.nodeValue;
+			if (/^dta/.test(korpus)) {
+				korpus = "dta";
+			}
 			if (belegImport.DWDSKorpora[korpus]) { // Korpus könnte noch nicht in der Liste sein
 				data.kr = belegImport.DWDSKorpora[korpus].kr;
 			}
