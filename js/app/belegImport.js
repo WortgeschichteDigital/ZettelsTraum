@@ -802,8 +802,10 @@ let belegImport = {
 			xml = content;
 		} else {
 			try {
-				// TODO Formcheck der JSON-Daten
 				json = JSON.parse(content);
+				if (!belegImport.DWDSJSONCheck(json)) {
+					return false;
+				}
 			} catch {}
 		}
 		// keine korrekten Daten gefunden
@@ -934,7 +936,154 @@ let belegImport = {
 	//   json = Object
 	//     (die JSON-Daten der Belege)
 	DWDSLesenJSON (json) {
-		
+		// Zwischenspeicher zurücksetzen
+		belegImport.Datei.meta = "";
+		belegImport.Datei.data = [];
+		// Datensätze parsen
+		for (let i of json) {
+			// Datensatz vorbereiten
+			let data = {
+				importiert: false,
+				ds: {
+					au: "N. N.", // Autor
+					bs: "", // Beleg
+					bx: "", // Original
+					da: "", // Belegdatum
+					kr: "DWDS", // Korpus
+					no: "", // Notizen
+					qu: "", // Quellenangabe
+					ts: "", // Textsorte
+				},
+			};
+			belegImport.Datei.data.push(data);
+			// Datensatz: Datum
+			if (i.meta_.date_) {
+				data.ds.da = i.meta_.date_;
+				if (/-12-31$/.test(data.ds.da) && i.meta_.pageRange) {
+					data.ds.da = data.ds.da.replace(/-.+/, "");
+				}
+			}
+			// Datensatz: Autor
+			if (i.meta_.author) {
+				data.ds.au = belegImport.DWDSKorrekturen({
+					typ: "au",
+					txt: i.meta_.author,
+				});
+			}
+			// Datensatz: Beleg
+			let bs = [];
+			for (let s of i.ctx_) {
+				let satz = "";
+				if (helfer.checkType("String", s)) {
+					satz = s;
+				} else {
+					for (let w of s) {
+						if (w.ws === "1") {
+							satz += " ";
+						}
+						satz += w.w;
+					}
+				}
+				satz = helfer.textTrim(satz, true);
+				satz = belegImport.DWDSKorrekturen({
+					typ: "bs",
+					txt: satz,
+				});
+				bs.push(satz);
+			}
+			data.ds.bs = bs.join("\n\n");
+			// Datensatz: Quelle
+			if (i.meta_.bibl) {
+				let titeldaten = {
+					titel: i.meta_.title ? i.meta_.title : "",
+					seite: i.meta_.page_ ? i.meta_.page_ : "",
+					url: i.meta_.url ? i.meta_.url : "",
+					auf: i.meta_.urlDate ? i.meta_.urlDate : "",
+				};
+				if (/^dta/.test(i.collection) &&
+						!titeldaten.url &&
+						i.meta_.basename &&
+						i.matches[0] &&
+						i.matches[0].page) {
+					titeldaten.url = `http://www.deutschestextarchiv.de/${i.meta_.basename}/${i.matches[0].page}`;
+				}
+				belegImport.DWDSKorrekturen({
+					typ: "qu",
+					txt: i.meta_.bibl,
+					data: data.ds,
+					titeldaten,
+				});
+			}
+			// Datensatz: Korpus
+			let korpus = "";
+			if (i.collection) {
+				korpus = i.collection;
+				if (/^dta/.test(i.collection)) {
+					korpus = "dta";
+				}
+				if (belegImport.DWDSKorpora[korpus]) { // Korpus könnte noch nicht in der Liste sein
+					data.ds.kr = belegImport.DWDSKorpora[korpus].kr;
+				}
+			}
+			// Datensatz: Textsorte
+			if (korpus &&
+					belegImport.DWDSKorpora[korpus] &&
+					belegImport.DWDSKorpora[korpus].ts) {
+				data.ds.ts = belegImport.DWDSKorpora[korpus].ts;
+			} else if (i.textclass) {
+				data.ds.ts = belegImport.DWDSKorrekturen({
+					typ: "ts",
+					txt: i.textclass,
+				});
+			}
+			// Datensatz: Notizen
+			if (i.meta_.basename) {
+				data.ds.no = belegImport.DWDSKorrekturen({
+					typ: "no",
+					txt: i.meta_.basename,
+					korpus
+				});
+			}
+			// Datensatz: Beleg-XML
+			let xmlTxt = "<Beleg>";
+			xmlTxt += `<Belegtext>${data.ds.bs}</Belegtext>`;
+			xmlTxt += "<Fundstelle>";
+			if (i.meta_.urlDate) {
+				xmlTxt += `<Aufrufdatum>${i.meta_.urlDate}</Aufrufdatum>`;
+			}
+			if (i.meta_.author) {
+				xmlTxt += `<Autor>${i.meta_.author}</Autor>`;
+			}
+			if (i.meta_.bibl) {
+				xmlTxt += `<Bibl>${i.meta_.bibl}</Bibl>`;
+			}
+			if (data.ds.da) {
+				xmlTxt += `<Datum>${data.ds.da}</Datum>`;
+			}
+			if (i.meta_.basename) {
+				xmlTxt += `<Dokument>${i.meta_.basename}</Dokument>`;
+			}
+			if (i.collection) {
+				xmlTxt += `<Korpus>${i.collection}</Korpus>`;
+			}
+			if (i.meta_.page_) {
+				xmlTxt += `<Seite>${i.meta_.page_}</Seite>`;
+			}
+			if (i.textclass) {
+				xmlTxt += `<Textklasse>${i.textclass}</Textklasse>`;
+			}
+			if (i.meta_.title) {
+				xmlTxt += `<Titel>${i.meta_.title}</Titel>`;
+			}
+			if (i.meta_.url) {
+				xmlTxt += `<URL>${i.meta_.url}</URL>`;
+			}
+			xmlTxt += "</Fundstelle></Beleg>";
+			let parser = new DOMParser(),
+				xmlDoc = parser.parseFromString(xmlTxt, "text/xml"),
+				xmlDocIndent = xml.indent(xmlDoc);
+			data.ds.bx = new XMLSerializer().serializeToString(xmlDocIndent);
+		}
 	},
 	// DWDS-Import: Korrekturen
 	//   typ = String
@@ -1149,6 +1298,15 @@ let belegImport = {
 			xml: xmlDoc,
 		};
 	},
+	// DWDS-Import: überprüft, ob die geladen Datei ein DWDS-JSON-Export ist
+	//   json = Object || Array
+	//     (JSON-Daten)
+	DWDSJSONCheck (json) {
+		if (!json[0] || !json[0].ctx_ || !json[0].meta_) {
+			return false;
+		}
+		return true;
+	},
 	// Datei-Import: speichert die Daten der geladenen Datei zwischen
 	Datei: {
 		pfad: "", // Pfad zur Datei
@@ -1172,7 +1330,12 @@ let belegImport = {
 				"openFile",
 			],
 		};
-		if (document.getElementById("beleg-import-dereko").checked) {
+		if (document.getElementById("beleg-import-dwds").checked) {
+			opt.filters.push({
+				name: `JSON-Datei`,
+				extensions: ["json"],
+			});
+		} else if (document.getElementById("beleg-import-dereko").checked) {
 			opt.filters.push({
 				name: `Text-Datei`,
 				extensions: ["txt"],
@@ -1217,7 +1380,9 @@ let belegImport = {
 					clipboard.clear();
 				}
 				// Datei-Inhalt importieren
-				if (document.getElementById("beleg-import-dereko").checked) {
+				if (document.getElementById("beleg-import-dwds").checked) {
+					belegImport.DWDS(content, result.filePaths[0]);
+				} else if (document.getElementById("beleg-import-dereko").checked) {
 					belegImport.DeReKo(content, result.filePaths[0]);
 				} else if (document.getElementById("beleg-import-bibtex").checked) {
 					belegImport.BibTeX(content, result.filePaths[0]);
