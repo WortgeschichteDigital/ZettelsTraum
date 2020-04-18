@@ -1676,21 +1676,18 @@ let belegImport = {
 				return;
 			}
 			// Beleg wohl aus DTA
+			if (optionen.data.einstellungen["dta-bevorzugen"]) {
+				dtaImport();
+				resolve(true);
+				return;
+			}
 			dialog.oeffnen({
 				typ: "confirm",
 				text: "Der Beleg stammt offenbar aus dem DTA.\nMöchten Sie ihn nicht lieber direkt aus dem DTA importieren?",
 				callback: () => {
 					if (dialog.antwort) {
 						// DTA-Import anstoßen => Import des DWDS-Snippets unterbinden
-						let url = liste.linksErkennen(ds.qu).match(/href="([^"]+\.deutschestextarchiv\.de\/.+?)"/)[1],
-							dtaFeld = document.getElementById("beleg-dta");
-						dtaFeld.value = url;
-						const fak = belegImport.DTAGetFak(url, "");
-						if (fak) {
-							dtaFeld.nextSibling.value = parseInt(fak, 10) + 1;
-						}
-						beleg.formularImport("dta");
-						belegImport.DTA();
+						dtaImport();
 						resolve(true);
 					} else {
 						// DWDS-Snippet importieren
@@ -1698,6 +1695,19 @@ let belegImport = {
 					}
 				},
 			});
+			document.getElementById("dialog-text").appendChild(optionen.shortcut("DTA-Import künftig ohne Nachfrage anstoßen", "dta-bevorzugen"));
+			// DTA-Import anstoßen
+			function dtaImport () {
+				let url = liste.linksErkennen(ds.qu).match(/href="([^"]+\.deutschestextarchiv\.de\/.+?)"/)[1],
+					dtaFeld = document.getElementById("beleg-dta");
+				dtaFeld.value = url;
+				const fak = belegImport.DTAGetFak(url, "");
+				if (fak) {
+					dtaFeld.nextSibling.value = parseInt(fak, 10) + 1;
+				}
+				beleg.formularImport("dta");
+				belegImport.DTA();
+			}
 		});
 	},
 	// DeReKo-Import: Datei parsen

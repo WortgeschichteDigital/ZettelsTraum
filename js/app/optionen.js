@@ -154,6 +154,8 @@ let optionen = {
 			"immer-ergaenzen": false,
 			// beim Fokussieren des DTA-Import-Feldes automatisch die URL aus dem Clipboard eintragen
 			"url-eintragen": true,
+			// DWDS-Snippets, die aus dem DTA stammen, ohne Nachfrage direkt aus dem DTA importieren
+			"dta-bevorzugen": false,
 			// bei Zeitungskorpora Namen in die erste Zeile der Notizen schreiben
 			"notizen-zeitung": false,
 			// nach DTA-Import überprüft, ob das Karteiwort im Belegtext gefunden werden kann
