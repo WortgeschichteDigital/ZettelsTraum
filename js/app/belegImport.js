@@ -1209,10 +1209,11 @@ let belegImport = {
 		const fsP = require("fs").promises;
 		fsP.readFile(result.filePaths[0], {encoding: encoding})
 			.then(content => {
-				// sollten BibTeX-Daten in der Zwischenablage sein => löschen
+				// sollten DWDS- oder BibTeX-Daten in der Zwischenablage sein => Zwischenablage leeren
 				const {clipboard} = require("electron"),
 					cp = clipboard.readText();
-				if (belegImport.BibTeXCheck(cp)) {
+				if (belegImport.DWDSXMLCheck(cp) ||
+						belegImport.BibTeXCheck(cp)) {
 					clipboard.clear();
 				}
 				// Datei-Inhalt importieren
@@ -1247,40 +1248,33 @@ let belegImport = {
 	},
 	// Datei-Import: Verteilerfunktion für das Importieren eingelesener Datensätze
 	DateiImport () {
-		// Kann überhaupt etwas importiert werden?
-		let importTypAktiv = "dwds";
-		if (document.getElementById("beleg-import-dereko").checked) {
-			importTypAktiv = "dereko";
+		// Clipboard-Content schlägt Datei-Content
+		const {clipboard} = require("electron"),
+			cp = clipboard.readText();
+		let importTypAktiv = "dereko";
+		if (document.getElementById("beleg-import-dwds").checked) {
+			importTypAktiv = "dwds";
+			let xml = belegImport.DWDSXMLCheck(cp);
+			if (xml) {
+				belegImport.DWDS(xml, "– Zwischenablage –", false);
+			}
 		} else if (document.getElementById("beleg-import-bibtex").checked) {
 			importTypAktiv = "bibtex";
+			if (belegImport.BibTeXCheck(cp)) {
+				belegImport.BibTeX(cp, "– Zwischenablage –", false);
+			}
 		}
+		// keine Daten vorhanden => Meldung + Abbruch
 		if (!belegImport.Datei.data.length ||
 				belegImport.Datei.typ !== importTypAktiv) {
-			// Zwischenablage überprüfen
-			const {clipboard} = require("electron"),
-				cp = clipboard.readText();
-			let ok = false;
-			if (importTypAktiv === "dwds") { // DWDS-Snippet in Zwischenablage?
-				let xml = belegImport.DWDSXMLCheck(cp);
-				if (xml) {
-					ok = belegImport.DWDS(xml, "– Zwischenablage –", false);
-				}
-			} else if (importTypAktiv === "bibtex") { // BibTeX in Zwischenablage?
-				if (belegImport.BibTeXCheck(cp)) {
-					ok = belegImport.BibTeX(cp, "– Zwischenablage –", false);
-				}
-			}
-			// Wenn keine Daten aus der Zwischenablage geladen wurden => Meldung + Abbruch
-			if (!ok) {
-				dialog.oeffnen({
-					typ: "alert",
-					text: "Es wurden noch keine Datensätze geladen, die importiert werden könnten.",
-					callback: () => {
-						document.getElementById("beleg-datei-oeffnen").focus();
-					},
-				});
-				return;
-			}
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Es wurden noch keine Datensätze geladen, die importiert werden könnten.",
+				callback: () => {
+					document.getElementById("beleg-datei-oeffnen").focus();
+				},
+			});
+			return;
 		}
 		// direkt importieren oder Importfenster öffnen
 		if (belegImport.Datei.data.length === 1) {
