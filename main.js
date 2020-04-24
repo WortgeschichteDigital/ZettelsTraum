@@ -711,18 +711,23 @@ optionen = {
 	// Objekt mit den gespeicherten Optionen
 	data: {},
 	// liest die Optionen-Datei aus
-	async lesen () {
-		const exists = await dienste.exists(optionen.pfad);
-		if (!exists) {
-			return;
-		}
-		let content = await fsP.readFile(optionen.pfad, {encoding: "utf8"});
-		try {
-			optionen.data = JSON.parse(content);
-		} catch (err) {
-			// kann die Optionen-Datei nicht eingelesen werden, ist sie wohl korrupt => löschen
-			fsP.unlink(optionen.pfad);
-		}
+	lesen () {
+		return new Promise(async resolve => {
+			const exists = await dienste.exists(optionen.pfad);
+			if (!exists) {
+				resolve(false);
+				return;
+			}
+			let content = await fsP.readFile(optionen.pfad, {encoding: "utf8"});
+			try {
+				optionen.data = JSON.parse(content);
+				resolve(true);
+			} catch (err) {
+				// kann die Optionen-Datei nicht eingelesen werden, ist sie wohl korrupt => löschen
+				fsP.unlink(optionen.pfad);
+				resolve(false);
+			}
+		});
 	},
 	// Optionen werden nicht sofort geschrieben, sondern erst nach einem Timeout
 	schreibenTimeout: null,
@@ -822,10 +827,14 @@ fenster = {
 		});
 		// ggf. übergebene Kartei öffnen
 		bw.webContents.once("did-finish-load", function() {
+			// Optionen-Daten an Renderer schicken
+			this.send("optionen-init", optionen.data);
+			// War die Kartei verschwunden?
 			if (appMenu.zuletztVerschwunden.length) {
 				// die IPC-Listener im Renderer-Prozess müssen erst initialisiert werden
 				setTimeout(() => this.send("optionen-zuletzt-verschwunden", appMenu.zuletztVerschwunden), 25);
 			}
+			// Soll eine Kartei geöffnet oder eine neue Kartei erstellt werden?
 			const ztj = fenster.argvZtj(process.argv);
 			if (ztj || kartei) {
 				let datei = kartei;
@@ -1322,9 +1331,6 @@ ipcMain.handle("popup", (evt, items) => popup.make(evt.sender, items));
 
 
 // ***** OPTIONEN *****
-// Optionen-Daten an Renderer schicken
-ipcMain.handle("optionen-senden", () => optionen.data);
-
 // Optionen empfangen und speichern
 ipcMain.handle("optionen-speichern", (evt, opt, winId) => {
 	// Optionen übernehmen

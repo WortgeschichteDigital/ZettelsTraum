@@ -70,6 +70,10 @@ window.addEventListener("load", async () => {
 	ipcRenderer.on("kopieren-daten", () => kopieren.datenSenden());
 	ipcRenderer.on("kopieren-daten-empfangen", (evt, daten) => kopieren.einfuegenEinlesen(daten));
 	// Einstellungen
+	ipcRenderer.on("optionen-init", (evt, opt) => {
+		optionen.einlesen(optionen.data, opt);
+		optionen.anwenden();
+	});
 	ipcRenderer.on("optionen-empfangen", (evt, data) => optionen.empfangen(data));
 	ipcRenderer.on("optionen-zuletzt", (evt, karteien) => zuletzt.update(karteien));
 	ipcRenderer.on("optionen-zuletzt-verschwunden", (evt, verschwunden) => zuletzt.verschwundenUpdate(verschwunden));
@@ -378,10 +382,6 @@ window.addEventListener("load", async () => {
 		img.src = `img/${b}`;
 		bilderPreload.push(img);
 	}
-	// Optionen laden
-	let opt = await ipcRenderer.invoke("optionen-senden");
-	optionen.einlesen(optionen.data, opt);
-	optionen.anwenden();
 
 	// FENSTER FREISCHALTEN
 	updates.hinweis();
