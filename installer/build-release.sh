@@ -240,14 +240,15 @@ vorbereiten() {
 	echo -e "\n  \033[1;32m*\033[0m Release taggen\n"
 	declare -A typen
 	typen[1]="Feature-Release v${version}"
-	typen[2]="Release v${version}, Electron-Update und Fixes"
+	typen[2]="Release v${version}, Fixes"
 	typen[3]="Release v${version}, Electron-Update"
+	typen[4]="Release v${version}, Electron-Update und Fixes"
 	for j in ${!typen[@]}; do
 		echo " [${j}] ${typen[$j]}"
 	done
 	while : ; do
 		read -ep "  " releaseTyp
-		if echo "$releaseTyp" | egrep -q "^[1-3]$"; then
+		if echo "$releaseTyp" | egrep -q "^[1-4]$"; then
 			break
 		else
 			zeilenWeg 1
