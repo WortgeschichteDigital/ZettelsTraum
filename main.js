@@ -826,13 +826,15 @@ fenster = {
 			fenster.objekt(bw.id, this.id, "index");
 		});
 		// ggf. übergebene Kartei öffnen
-		bw.webContents.once("did-finish-load", function() {
-			// Optionen-Daten an Renderer schicken
+		bw.webContents.once("did-finish-load", async function() {
+			// die IPC-Listener im Renderer-Prozess müssen erst initialisiert werden
+			await new Promise(resolve => setTimeout(() => resolve(true), 25));
+			// Optionen-Daten an Renderer schicken (auf Verarbeitung warten)
 			this.send("optionen-init", optionen.data);
+			await new Promise(resolve => setTimeout(() => resolve(true), 25));
 			// War die Kartei verschwunden?
 			if (appMenu.zuletztVerschwunden.length) {
-				// die IPC-Listener im Renderer-Prozess müssen erst initialisiert werden
-				setTimeout(() => this.send("optionen-zuletzt-verschwunden", appMenu.zuletztVerschwunden), 25);
+				this.send("optionen-zuletzt-verschwunden", appMenu.zuletztVerschwunden);
 			}
 			// Soll eine Kartei geöffnet oder eine neue Kartei erstellt werden?
 			const ztj = fenster.argvZtj(process.argv);
@@ -841,8 +843,7 @@ fenster = {
 				if (!datei) {
 					datei = ztj;
 				}
-				// die IPC-Listener im Renderer-Prozess müssen erst initialisiert werden
-				setTimeout(() => this.send("kartei-oeffnen", datei), 25);
+				this.send("kartei-oeffnen", datei);
 			} else if (neuesWort) {
 				// 500ms warten, damit der Ladebildschirm Zeit hat zu verschwinden
 				setTimeout(() => {
