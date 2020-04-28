@@ -1152,7 +1152,7 @@ let optionen = {
 			quick.toggle();
 		} else if (e === "filter-unterbedeutungen") { // Verhalten Bedeutungen-Filter umgestellt
 			liste.status(true);
-		} else if (/^belegliste-(mark|notizen)|textsorte$/.test(e)) { // Textsorte und/oder Notiz für Belegkopf der Belegliste umgestellt
+		} else if (/^belegliste-(referenz|mark|notizen)|textsorte$/.test(e)) { // Details für Belegkopf der Belegliste umgestellt
 			liste.status(false);
 		}
 		// Optionen speichern
