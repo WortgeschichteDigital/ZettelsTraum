@@ -837,12 +837,13 @@ let liste = {
 		if (!optionen.data.belegliste.wort_hervorheben) {
 			snippet = snippet.replace(/<.+?>/g, "");
 		}
-		// Autor und Textsorte
+		// Autor und weitere Details
 		let frag = document.createDocumentFragment();
 		if (beleg_akt.au) {
 			let autor = helfer.escapeHtml(beleg_akt.au).split(/,(.+)/),
 				autor_span = document.createElement("span");
 			frag.appendChild(autor_span);
+			autor_span.classList.add("liste-autor-details-block");
 			autor_span.innerHTML = liste.suchtreffer(autor[0], "au", id);
 			if (autor.length > 1) {
 				let span = document.createElement("span");
