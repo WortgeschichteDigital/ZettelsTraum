@@ -73,6 +73,7 @@ window.addEventListener("load", async () => {
 	ipcRenderer.on("optionen-init", (evt, opt) => {
 		optionen.einlesen(optionen.data, opt);
 		optionen.anwenden();
+		zuletzt.aufbauen();
 	});
 	ipcRenderer.on("optionen-empfangen", (evt, data) => optionen.empfangen(data));
 	ipcRenderer.on("optionen-zuletzt", (evt, karteien) => zuletzt.update(karteien));
@@ -385,7 +386,6 @@ window.addEventListener("load", async () => {
 
 	// FENSTER FREISCHALTEN
 	updates.hinweis();
-	zuletzt.aufbauen();
 	helfer.fensterGeladen();
 });
 

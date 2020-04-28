@@ -826,7 +826,7 @@ fenster = {
 			fenster.objekt(bw.id, this.id, "index");
 		});
 		// ggf. übergebene Kartei öffnen
-		bw.webContents.once("did-finish-load", async function() {
+		bw.webContents.on("did-finish-load", async function() {
 			// die IPC-Listener im Renderer-Prozess müssen erst initialisiert werden
 			await new Promise(resolve => setTimeout(() => resolve(true), 25));
 			// Optionen-Daten an Renderer schicken (auf Verarbeitung warten)
