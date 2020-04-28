@@ -186,6 +186,13 @@ let liste = {
 						liste.formularOeffnen(a);
 					}
 				}
+				// Belegreferenz
+				if (optionen.data.einstellungen["belegliste-referenz"]) {
+					let span = document.createElement("span");
+					span.classList.add("liste-referenz");
+					span.textContent = xml.belegId({data: data.ka[id], id});
+					div.appendChild(span);
+				}
 				// Jahr
 				let span = document.createElement("span");
 				span.classList.add("liste-jahr");
@@ -830,12 +837,13 @@ let liste = {
 		if (!optionen.data.belegliste.wort_hervorheben) {
 			snippet = snippet.replace(/<.+?>/g, "");
 		}
-		// Autor und Textsorte
+		// Autor und weitere Details
 		let frag = document.createDocumentFragment();
 		if (beleg_akt.au) {
 			let autor = helfer.escapeHtml(beleg_akt.au).split(/,(.+)/),
 				autor_span = document.createElement("span");
 			frag.appendChild(autor_span);
+			autor_span.classList.add("liste-autor-details-block");
 			autor_span.innerHTML = liste.suchtreffer(autor[0], "au", id);
 			if (autor.length > 1) {
 				let span = document.createElement("span");
@@ -1874,7 +1882,7 @@ let liste = {
 				break;
 			case "2":
 				helfer.toClipboard({
-					text: xml.belegId(),
+					text: xml.belegId({}),
 				});
 				helfer.animation("zwischenablage");
 				break;
