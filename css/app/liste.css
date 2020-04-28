@@ -586,6 +586,12 @@ p.no-indent + .filter-baum, /* betrifft Verschiedenes > Filterlogik */
 	background-color: var(--text);
 }
 
+.liste-referenz {
+	margin-right: 15px;
+	color: var(--farbeGruenDunkel);
+	font-size: 14px;
+}
+
 .liste-jahr {
 	margin-right: 15px;
 	font-style: italic;

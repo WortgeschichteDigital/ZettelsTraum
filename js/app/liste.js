@@ -186,6 +186,13 @@ let liste = {
 						liste.formularOeffnen(a);
 					}
 				}
+				// Belegreferenz
+				if (optionen.data.einstellungen["belegliste-referenz"]) {
+					let span = document.createElement("span");
+					span.classList.add("liste-referenz");
+					span.textContent = xml.belegId({data: data.ka[id], id});
+					div.appendChild(span);
+				}
 				// Jahr
 				let span = document.createElement("span");
 				span.classList.add("liste-jahr");
