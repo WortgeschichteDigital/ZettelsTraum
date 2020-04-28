@@ -262,7 +262,7 @@ let punkte = {
 		icon: "link-pfeil-runter.png",
 		click: `
 			helfer.toClipboard({
-				text: xml.belegId(),
+				text: xml.belegId({}),
 			});
 		`,
 	},

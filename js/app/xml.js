@@ -191,15 +191,18 @@ let xml = {
 	},
 	// Referenztag des Belegs in die Zwischenablage kopieren
 	referenz () {
-		const id = xml.belegId();
+		const id = xml.belegId({});
 		helfer.toClipboard({
 			text: `<Belegreferenz Ziel="${id}"/>`,
 		});
 		helfer.animation("zwischenablage");
 	},
 	// Beleg-ID ermitteln
-	belegId () {
-		let data = popup.referenz.data;
+	//   data = Object || undefined
+	//     (das Datenobjekt der betreffenden Karteikarte)
+	//   id = String || undefined
+	//     (ID der betreffenden Karteikarte)
+	belegId ({data = popup.referenz.data, id = popup.referenz.id}) {
 		// Autor
 		let autor = helfer.textTrim(data.au, true);
 		if (!autor) {
@@ -218,7 +221,7 @@ let xml = {
 			jahr = datum[0];
 		}
 		// ID zurückgeben
-		return `${autor}-${jahr}-${popup.referenz.id}`;
+		return `${autor}-${jahr}-${id}`;
 	},
 	// Datum extrahieren
 	//   text = String

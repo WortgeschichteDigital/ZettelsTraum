@@ -1874,7 +1874,7 @@ let liste = {
 				break;
 			case "2":
 				helfer.toClipboard({
-					text: xml.belegId(),
+					text: xml.belegId({}),
 				});
 				helfer.animation("zwischenablage");
 				break;
