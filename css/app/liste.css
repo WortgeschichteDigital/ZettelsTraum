@@ -512,6 +512,10 @@ p.no-indent + .filter-baum, /* betrifft Verschiedenes > Filterlogik */
 	display: inline-block;
 }
 
+#liste-belege-cont span.liste-autor-details-block {
+	display: inline;
+}
+
 #liste-belege-cont p span {
 	display: inline;
 }
@@ -584,6 +588,12 @@ p.no-indent + .filter-baum, /* betrifft Verschiedenes > Filterlogik */
 
 .liste-kopficon:hover {
 	background-color: var(--text);
+}
+
+.liste-referenz {
+	margin-right: 15px;
+	color: var(--farbeGruenDunkel);
+	font-size: 14px;
 }
 
 .liste-jahr {

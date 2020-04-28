@@ -1311,6 +1311,14 @@
 
 					<p class="info">Standardmäßig öffnet sich die <a href="#karteikarte-leseansicht">Karteikarte in der Leseansicht</a>. Allerdings gibt es auch eine <a href="#einstellungen-karteikarte">Einstellung</a>, um die Karteikarte immer in der <a href="#karteikarte-formularansicht">Formularansicht</a> zu öffnen.</p>
 
+					<p><b>Belegreferenz:</b> eine Zeichenkette zum eindeutigen Identifizieren des Belegs</p>
+
+					<div class="info">
+						<p>Die Belegreferenz setzt sich aus Autor, Datum und der Beleg-ID zusammen. Mit ihr kann ein Beleg im Karteikasten eindeutig referenziert werden, <abbr title="zum Beispiel">z. B.</abbr> um sich in einem <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Dokument auf ihn zu beziehen. Die Referenz lässt sich über das <a href="#belegliste-textZwischenablageReferenz">Rechtsklickmenü der Belegliste</a> (oder das der <a href="#karteikarte">Karteikarte</a>) kopieren.</p>
+
+						<p>Die Belegreferenz wird standardmäßig nicht angezeigt. Es muss zunächst <a href="#einstellungen-beleglisteReferenz">eine Einstellung</a> aktiviert werden.</p>
+					</div>
+
 					<p><b>Datum:</b> entweder eine vierstellige Jahreszahl oder eine Jahrhundertangabe</p>
 
 					<div class="info">
@@ -2224,6 +2232,14 @@ Mustermann, Erika
 						<p>Welche Elemente in der <a href="#belegliste-detailansicht">Detailansicht der Belegliste</a> angezeigt werden sollen, lässt sich durch Icons in der <a href="#belegliste-kopfleiste">Kopfleiste der Belegliste</a> steuern. Da in dieser Kopfleiste sehr viele Icons zu finden sind, werden die nicht aktiven Icons zum Einblenden von Elementen in der Detailansicht (die Quellenangabe, die Notizen <abbr title="und so weiter">usw.</abbr>) standardmäßig ausgeblendet und erscheinen erst, wenn man mit der Maus über das Platzhalter-Icon für den Belegtext (<img src="../img/beleg.svg" width="20" height="20" alt="">) fährt. <abbr title="Vergleiche">Vgl.</abbr> die <a href="#belegliste-platzhalter">Anmerkungen zum Platzhalter-Icon im <abbr title="Kapitel">Kap.</abbr> <i>Belegliste</i></a>.</p>
 
 						<p>Aktivieren Sie diese Einstellung, werden immer alle Icons zur Steuerung der Anzeige der Belegliste angezeigt, ganz egal, ob sie aktiviert sind oder nicht. Wenn Ihr Bildschirm nicht breit genug oder das Programmfenster zu klein ist, kann dies freilich zur Folge haben, dass Icons aus der Kopfleiste der Belegliste nicht mehr sicht- oder erreichbar sind – <abbr title="besonders">bes.</abbr> bei geöffneter Filterleiste.</p>
+					</div>
+
+					<p class="erklaerung-option" id="einstellungen-beleglisteReferenz">Datenfelder im Belegkopf: Belegreferenz</p>
+
+					<div class="info">
+						<p><i>Standard:</i> nicht aktiviert</p>
+
+						<p>In der Belegliste kann man sich auf Wunsch in der <a href="#belegliste-kopfleisteBelege">Kopfleiste der Belege</a> vor dem Belegdatum die Belegreferenz anzeigen lassen. Die Belegreferenz ist eine ID, über die der jeweilige Beleg eindeutig angesprochen werden kann. Sie lässt sich über das <a href="#belegliste-textZwischenablageReferenz">Rechtsklickmenü</a> in die Zwischenablage kopieren.</p>
 					</div>
 
 					<p class="erklaerung-option" id="einstellungen-beleglisteMark">Datenfelder im Belegkopf: Markierung</p>

@@ -186,6 +186,8 @@ let optionen = {
 			// BELEGLISTE
 			// die Icons, die die Anzeige der Datenfelder in der Belegliste steuern, sollen immer an sein
 			"anzeige-icons-immer-an": false,
+			// Belegreferenz (ID des Belegs) in den Kopf der Belegliste eintragen
+			"belegliste-referenz": false,
 			// Markierung (Sterne) in den Kopf der Belegliste eintragen
 			"belegliste-mark": true,
 			// Notiz in den Kopf der Belegliste eintragen
@@ -1150,7 +1152,7 @@ let optionen = {
 			quick.toggle();
 		} else if (e === "filter-unterbedeutungen") { // Verhalten Bedeutungen-Filter umgestellt
 			liste.status(true);
-		} else if (/^belegliste-(mark|notizen)|textsorte$/.test(e)) { // Textsorte und/oder Notiz für Belegkopf der Belegliste umgestellt
+		} else if (/^belegliste-(referenz|mark|notizen)|textsorte$/.test(e)) { // Details für Belegkopf der Belegliste umgestellt
 			liste.status(false);
 		}
 		// Optionen speichern
