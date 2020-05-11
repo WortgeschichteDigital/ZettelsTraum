@@ -244,6 +244,8 @@ let optionen = {
 		},
 		// zuletzt verwendete Karteien
 		zuletzt: [],
+		// Pfad zur Literaturdatenbank
+		"literatur-db": "",
 	},
 	// Optionen on-the-fly empfangen
 	// (wird aufgerufen, wenn in einem anderen Hauptfenster Optionen geändert wurden)
