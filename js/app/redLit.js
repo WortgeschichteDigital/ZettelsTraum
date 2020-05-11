@@ -1,6 +1,8 @@
 "use strict";
 
 let redLit = {
+	// die aktuelle Literaturdatenbank
+	data: {},
 	// Literaturdatenbank öffnen
 	oeffnen () {
 		// Fenster öffnen oder in den Vordergrund holen
