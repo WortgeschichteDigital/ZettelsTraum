@@ -11,6 +11,12 @@ let redLit = {
 		// Formular umstellen
 		document.getElementById("red-lit-nav-eingabe").checked = true;
 		redLit.nav("eingabe");
+		// Formularstatus anzeigen
+		redLit.eingabeStatus("add");
+		// Formular leeren
+		redLit.eingabeLoeschen();
+		// Formular fokussieren
+		document.getElementById("red-lit-eingabe-si").focus();
 	},
 	// Listener für das Umschalten der Navigation
 	//   input = Element
@@ -33,6 +39,28 @@ let redLit = {
 			} else {
 				block.classList.add("aus");
 			}
+		}
+	},
+	// Titelaufnahme hinzufügen
+	//   status = String
+	eingabeStatus (status) {
+		let text = {
+			"add": "Titelaufnahme hinzufügen",
+			"change": "Titelaufnahme ändern",
+			"old": "Titelaufnahme veraltet",
+		};
+		let p = document.getElementById("red-lit-eingabe-meldung");
+		p.textContent = text[status];
+		p.setAttribute("class", status);
+	},
+	// Eingabeformular löschen
+	eingabeLoeschen () {
+		let inputs = document.querySelectorAll("#red-lit-eingabe input, #red-lit-eingabe textarea");
+		for (let i of inputs) {
+			if (i.type === "button") {
+				continue;
+			}
+			i.value = "";
 		}
 	},
 };

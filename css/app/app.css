@@ -325,7 +325,8 @@ input[type="button"][value="Tag-Datei laden"] {
 	background-image: url(../../img/dokument-import-weiss.svg);
 }
 
-input[type="button"][value="Ergänzen"] {
+input[type="button"][value="Ergänzen"],
+input[type="button"][value="Hinzufügen"] {
 	background-image: url(../../img/plus-weiss.svg);
 }
 

@@ -290,6 +290,8 @@ let dropdown = {
 			dropdown.data = ["<=", ">="];
 		} else if (/^karteisuche-redaktion-logik/.test(feld_id)) {
 			dropdown.data = ["=", "≠"];
+		} else if (feld_id === "red-lit-eingabe-fo") {
+			dropdown.data = ["Bibliothek", "DTA", "DWDS", "GBooks", "IDS", "online"];
 		}
 		// Dropdown erzeugen und einhängen
 		let span = document.createElement("span");

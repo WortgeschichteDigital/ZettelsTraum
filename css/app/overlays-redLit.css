@@ -3,7 +3,7 @@
 /* Redaktion: Literaturdatenbank ---------------- */
 #red-lit > div {
 	margin-top: 40px;
-	max-width: 500px;
+	max-width: 600px;
 }
 
 #red-lit > div > div {
@@ -18,4 +18,111 @@
 #red-lit label {
 	color: var(--textFarbe);
 	font-style: italic;
+}
+
+/* Eingabeformular ------------------------------ */
+#red-lit-eingabe-meldung {
+	margin-bottom: 20px;
+	border-width: 2px;
+	border-radius: 5px;
+	border-style: solid;
+	padding: 2px 5px;
+	background-color: var(--hintergrund);
+	font-size: 14px;
+	line-height: 20px;
+	text-align: center;
+}
+
+#red-lit-eingabe-meldung.add {
+	border-color: var(--grenzeGruen);
+}
+
+#red-lit-eingabe-meldung.change {
+	border-color: var(--grenzeBlau);
+}
+
+#red-lit-eingabe-meldung.old {
+	border-color: var(--grenzeRot);
+}
+
+#red-lit-eingabe p.button {
+	margin-bottom: 0;
+	text-align: center;
+}
+
+#red-lit-eingabe input[type="button"] {
+	margin-left: 0;
+	width: 130px;
+}
+
+#red-lit-eingabe input[type="button"]:last-child {
+	margin-left: 10px;
+}
+
+#red-lit-eingabe table {
+	table-layout: fixed;
+	width: 100%;
+	border-spacing: 0;
+}
+
+#red-lit-eingabe th {
+	padding: 10px 35px 0 11px;
+	font-size: 14px;
+	font-weight: normal;
+	text-align: left;
+}
+
+#red-lit-eingabe th:first-child {
+	padding-left: 6px;
+}
+
+#red-lit-eingabe td {
+	padding: 0 5px;
+	width: calc(50% - 5px);
+}
+
+#red-lit-eingabe td:first-child {
+	padding-left: 0;
+}
+
+#red-lit-eingabe td:last-child {
+	padding-right: 0;
+}
+
+#red-lit-eingabe td[colspan] {
+	width: 100%;
+}
+
+#red-lit-eingabe input[type="text"],
+#red-lit-eingabe input[type="date"] {
+	width: calc(100% - 12px);
+}
+
+#red-lit-eingabe input[type="date"]:invalid {
+	color: var(--textSehrHell);
+}
+
+#red-lit-eingabe input[type="text"].dropdown-feld {
+	width: calc(100% - 31px);
+}
+
+#red-lit-eingabe textarea {
+	margin: 0 auto;
+	min-height: 24px;
+	max-height: 120px;
+}
+
+#red-lit-eingabe textarea:invalid {
+	background: #fff url(../../img/zeilen-2,5-grau.svg) no-repeat left 2px;
+}
+
+#red-lit-eingabe textarea#red-lit-eingabe-no {
+	min-height: 20px;
+	max-height: 60px;
+	font-size: 14px;
+	line-height: 20px;
+}
+
+#red-lit-eingabe textarea#red-lit-eingabe-no:invalid {
+	background: #fff url(../../img/zeilen-2,5-grau.svg) no-repeat left top;
 }

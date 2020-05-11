@@ -907,7 +907,51 @@
 				><input type="radio" name="red-lit-nav" id="red-lit-nav-suche"
 					><label for="red-lit-nav-suche">Suche</label
 			></div>
-			<div id="red-lit-eingabe">[Eingabe]</div>
+			<div id="red-lit-eingabe">
+				<p id="red-lit-eingabe-meldung"></p>
+				<p class="button"><input type="button" value="Speichern" id="red-lit-eingabe-save"
+					><input type="button" value="Hinzufügen" id="red-lit-eingabe-add"></p>
+				<table>
+					<tr>
+						<th><label for="red-lit-eingabe-si">Sigle</label></th>
+						<th><label for="red-lit-eingabe-id">ID</label></th>
+					</tr>
+					<tr>
+						<td><input type="text" value="" id="red-lit-eingabe-si"></td>
+						<td><input type="text" value="" id="red-lit-eingabe-id"></td>
+					</tr>
+					<tr>
+						<th colspan="2"><label for="red-lit-eingabe-ti">Titel</label></th>
+					</tr>
+					<tr>
+						<td colspan="2"><textarea rows="1" id="red-lit-eingabe-ti" required></textarea></td>
+					</tr>
+					<tr>
+						<th><label for="red-lit-eingabe-ul">URL</label></th>
+						<th><label for="red-lit-eingabe-ad">Aufrufdatum</label></th>
+					</tr>
+					<tr>
+						<td><input type="text" value="" id="red-lit-eingabe-ul"></td>
+						<td><input type="date" value="" id="red-lit-eingabe-ad" required></td>
+					</tr>
+					<tr>
+						<th><label for="red-lit-eingabe-fo">Fundort</label></th>
+						<th><label for="red-lit-eingabe-pn"><abbr title="Pica-Produktionsnummer">PPN</abbr></label></th>
+					</tr>
+					<tr>
+						<td class="dropdown-cont"><input type="text" value="" class="dropdown-feld" id="red-lit-eingabe-fo"
+							><a href="#" class="dropdown-link-td" title="Fundorte auflisten" tabindex="-1"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m7 2v8l-3.5-3.5-1.5 1.5 6 6 6-6-1.5-1.5-3.5 3.5v-8z"/></svg></a
+						></td>
+						<td><input type="text" value="" id="red-lit-eingabe-pn"></td>
+					</tr>
+					<tr>
+						<th colspan="2"><label for="red-lit-eingabe-no">Notizen</label></th>
+					</tr>
+					<tr>
+						<td colspan="2"><textarea rows="1" id="red-lit-eingabe-no" required></textarea></td>
+					</tr>
+				</table>
+			</div>
 			<div id="red-lit-suche">[Suche]</div>
 		</div></div>
 
