@@ -289,6 +289,11 @@ layoutMenu = [
 				click: () => appMenu.befehl("redaktion-ereignisse"),
 				id: "redaktion-ereignisse",
 			},
+			{
+				label: "Literatur",
+				icon: path.join(__dirname, "img", "menu", "buecher.png"),
+				click: () => appMenu.befehl("redaktion-literatur"),
+			},
 		],
 	},
 	{

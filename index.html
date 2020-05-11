@@ -27,6 +27,7 @@
 		<link rel="stylesheet" href="css/app/overlays-meta.css">
 		<link rel="stylesheet" href="css/app/overlays-notizen.css">
 		<link rel="stylesheet" href="css/app/overlays-redaktion.css">
+		<link rel="stylesheet" href="css/app/overlays-redLit.css">
 		<link rel="stylesheet" href="css/app/overlays-redMeta.css">
 		<link rel="stylesheet" href="css/app/overlays-sonderzeichen.css">
 		<link rel="stylesheet" href="css/app/overlays-stamm.css">
@@ -71,6 +72,7 @@
 		<script src="js/app/dropdown.js"></script>
 		<script src="js/app/popup.js"></script>
 		<script src="js/app/redaktion.js"></script>
+		<script src="js/app/redLit.js"></script>
 		<script src="js/app/redMeta.js"></script>
 		<script src="js/app/sonderzeichen.js"></script>
 		<script src="js/app/speichern.js"></script>
@@ -892,6 +894,21 @@
 				>Redaktionsereignisse<a href="#" class="icon-link icon-handbuch" title="Abschnitt im Handbuch öffnen" data-handbuch="menueRedaktion-ereignisse"> </a><a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"> </a></h2>
 			<div id="redaktion-next"></div>
 			<div id="redaktion-cont"></div>
+		</div></div>
+
+		<!-- OVERLAY: Literaturdatenbank -->
+		<div id="red-lit" class="overlay aus"><div>
+			<h2><span class="icon-h icon-h-lexika"> </span
+				>Literaturdatenbank<a href="#" class="icon-link icon-handbuch" title="Abschnitt im Handbuch öffnen" data-handbuch="menueRedaktion-literatur"> </a><a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"> </a></h2>
+			<div id="red-lit-pfad"></div>
+			<div id="red-lit-nav"
+				><input type="radio" name="red-lit-nav" id="red-lit-nav-eingabe"
+					><label for="red-lit-nav-eingabe">Eingabe</label
+				><input type="radio" name="red-lit-nav" id="red-lit-nav-suche"
+					><label for="red-lit-nav-suche">Suche</label
+			></div>
+			<div id="red-lit-eingabe">[Eingabe]</div>
+			<div id="red-lit-suche">[Suche]</div>
 		</div></div>
 
 		<!-- OVERLAY: Tags -->

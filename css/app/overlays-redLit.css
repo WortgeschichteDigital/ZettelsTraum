@@ -1,0 +1,21 @@
+@charset "utf-8";
+
+/* Redaktion: Literaturdatenbank ---------------- */
+#red-lit > div {
+	margin-top: 40px;
+	max-width: 500px;
+}
+
+#red-lit > div > div {
+	padding: 10px;
+}
+
+/* Navigation ----------------------------------- */
+#red-lit input[type="radio"]:not(:first-child) {
+	margin-left: 25px;
+}
+
+#red-lit label {
+	color: var(--textFarbe);
+	font-style: italic;
+}
