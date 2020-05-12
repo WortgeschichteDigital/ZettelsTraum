@@ -10,15 +10,8 @@ let redLit = {
 		if (overlay.oeffnen(fenster)) { // Fenster ist schon offen
 			return;
 		}
-		// Formular umstellen
-		document.getElementById("red-lit-nav-eingabe").checked = true;
-		redLit.nav("eingabe");
-		// Formularstatus anzeigen
-		redLit.eingabeStatus("add");
-		// Formular leeren
-		redLit.eingabeLoeschen();
-		// Formular fokussieren
-		document.getElementById("red-lit-eingabe-si").focus();
+		// Datensatz hinzufügen
+		redLit.eingabeHinzufuegen();
 	},
 	// Listener für das Umschalten der Navigation
 	//   input = Element
@@ -74,6 +67,9 @@ let redLit = {
 				continue;
 			}
 			i.value = "";
+			if (i.nodeName === "TEXTAREA") {
+				helfer.textareaGrow(i);
+			}
 		}
 	},
 	// ID automatisch aus der Sigle ermitteln
@@ -388,5 +384,17 @@ let redLit = {
 			break;
 		}
 		return id;
+	},
+	// neue Titelaufnahme hinzufügen
+	eingabeHinzufuegen () {
+		// Formular anzeigen
+		document.getElementById("red-lit-nav-eingabe").checked = true;
+		redLit.nav("eingabe");
+		// Formularstatus ändern
+		redLit.eingabeStatus("add");
+		// Formular leeren
+		redLit.eingabeLoeschen();
+		// Formular fokussieren
+		document.getElementById("red-lit-eingabe-si").focus();
 	},
 };

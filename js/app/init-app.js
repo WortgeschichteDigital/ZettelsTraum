@@ -309,6 +309,7 @@ window.addEventListener("load", async () => {
 	// Literaturdatenbank
 	document.querySelectorAll(`#red-lit input[type="radio"]`).forEach(i => redLit.navListener(i));
 	document.getElementById("red-lit-eingabe-save").addEventListener("click", () => redLit.eingabeSpeichern());
+	document.getElementById("red-lit-eingabe-add").addEventListener("click", () => redLit.eingabeHinzufuegen());
 	redLit.eingabeAutoID(document.getElementById("red-lit-eingabe-si"));
 	redLit.eingabeAutoURL(document.getElementById("red-lit-eingabe-ul"));
 	// Karteisuche
