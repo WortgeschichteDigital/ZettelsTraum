@@ -248,6 +248,31 @@ a {
 	background-color: var(--farbe);
 }
 
+.icon-entkoppeln {
+	-webkit-mask-image: url(../../img/x-dick.svg);
+	mask-image: url(../../img/x-dick.svg);
+}
+
+.icon-exportieren {
+	-webkit-mask-image: url(../../img/dokument-export.svg);
+	mask-image: url(../../img/dokument-export.svg);
+}
+
+.icon-oeffnen {
+	-webkit-mask-image: url(../../img/oeffnen.svg);
+	mask-image: url(../../img/oeffnen.svg);
+}
+
+.icon-speichern {
+	-webkit-mask-image: url(../../img/speichern.svg);
+	mask-image: url(../../img/speichern.svg);
+}
+
+.icon-speichern-unter {
+	-webkit-mask-image: url(../../img/speichern-unter.svg);
+	mask-image: url(../../img/speichern-unter.svg);
+}
+
 .icon-stern {
 	-webkit-mask-image: url(../../img/stern.svg);
 	mask-image: url(../../img/stern.svg);

@@ -1,8 +1,6 @@
 "use strict";
 
 let redLit = {
-	// aktuelle Literaturdatenbank
-	data: {},
 	// Literaturdatenbank öffnen
 	oeffnen () {
 		// Fenster öffnen oder in den Vordergrund holen
@@ -10,9 +8,43 @@ let redLit = {
 		if (overlay.oeffnen(fenster)) { // Fenster ist schon offen
 			return;
 		}
+		// Datenbank laden
+		redLit.dbLaden();
 		// Datensatz hinzufügen
 		redLit.eingabe.changed = false;
 		redLit.eingabeHinzufuegen();
+	},
+	// Datenbank: Speicher für Variablen
+	db: {
+		data: {}, // Daten der (geladenen) Literaturdatenbank
+		changed: false, // Inhalt der Datenbank wurde geändert und noch nicht gespeichert
+	},
+	// Datenbank: Datei laden
+	dbLaden () {
+		redLit.db.changed = false;
+		let pfad = document.getElementById("red-lit-pfad-db");
+		// keine DB mit dem Programm verknüpft
+		if (!optionen.data["literatur-db"]) {
+			pfad.classList.add("keine-db");
+			pfad.textContent = "keine Datenbank geladen";
+			return;
+		}
+		// DB mit dem Programm verknüpft
+		pfad.classList.remove("keine-db");
+		pfad.textContent = `\u200E${optionen.data["literatur-db"]}\u200E`;
+		// Datenbank einlesen TODO
+	},
+	// Datenbank: Inhalt wurde geändert
+	//   geaendert = Boolean
+	//     (DB wurde geändert)
+	dbGeaendert (geaendert) {
+		redLit.db.changed = geaendert;
+		let changed = document.getElementById("red-lit-pfad-changed");
+		if (geaendert) {
+			changed.classList.add("changed");
+		} else {
+			changed.classList.remove("changed");
+		}
 	},
 	// Navigation: Listener für das Umschalten
 	//   input = Element
@@ -202,9 +234,8 @@ let redLit = {
 		// ggf. neuen Datensatz erstellen
 		const id = document.getElementById("red-lit-eingabe-id").value;
 		if (redLit.eingabe.status === "add") {
-			redLit.data[id] = [];
+			redLit.db.data[id] = [];
 		}
-		
 		// Daten zusammentragen
 		let ds = {
 			be: optionen.data.einstellungen.bearbeiterin,
@@ -240,8 +271,8 @@ let redLit = {
 			redLit.eingabeSpeichernIDAendern(redLit.eingabe.id, id);
 		}
 		// Abbruch, wenn identisch mit vorherigem Datensatz
-		if (redLit.data[id].length && !idGeaendert) {
-			let dsAlt = redLit.data[id][0],
+		if (redLit.db.data[id].length && !idGeaendert) {
+			let dsAlt = redLit.db.data[id][0],
 				diff = false;
 			for (let [k, v] of Object.entries(dsAlt.td)) {
 				let alt = v,
@@ -268,9 +299,11 @@ let redLit = {
 			}
 		}
 		// Datensatz schreiben
-		redLit.data[id].unshift(ds);
-		// Status auffrischen
+		redLit.db.data[id].unshift(ds);
+		// Status Eingabeformular auffrischen
 		redLit.eingabeStatus("change");
+		// Status Datenbank auffrischen
+		redLit.dbGeaendert(true);
 	},
 	// Eingabeformular: Formular validieren
 	eingabeSpeichernValid () {
@@ -311,7 +344,7 @@ let redLit = {
 		// ID schon vergeben?
 		if ((redLit.eingabe.status === "add" ||
 				redLit.eingabe.status !== "add" && redLit.eingabe.id !== id.value) &&
-				redLit.data[id.value]) {
+				redLit.db.data[id.value]) {
 			fehler({
 				text: "Die ID ist schon vergeben.",
 				fokus: id,
@@ -433,17 +466,17 @@ let redLit = {
 	//     (die neue ID)
 	eingabeSpeichernIDAendern (alt, neu) {
 		// neuen Datensatz anlegen
-		redLit.data[neu] = [];
+		redLit.db.data[neu] = [];
 		// alten Datensatz klonen
-		let quelle = redLit.data[alt],
-			ziel = redLit.data[neu];
+		let quelle = redLit.db.data[alt],
+			ziel = redLit.db.data[neu];
 		for (let i = 0, len = quelle.length; i < len; i++) {
 			let ds = {};
 			klon(quelle[i], ds);
 			ziel.push(ds);
 		}
 		// alten Datensatz entfernen
-		delete redLit.data[alt];
+		delete redLit.db.data[alt];
 		// Klon-Funktion
 		function klon (quelle, ziel) {
 			for (let [k, v] of Object.entries(quelle)) {
@@ -469,7 +502,7 @@ let redLit = {
 				id += hex[helfer.zufall(0, 15)];
 			}
 			// ID überprüfen
-			for (let v of Object.values(redLit.data)) {
+			for (let v of Object.values(redLit.db.data)) {
 				for (let i = 0, len = v.length; i < len; i++) {
 					if (v[i].id === id) {
 						continue x;

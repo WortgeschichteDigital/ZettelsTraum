@@ -10,6 +10,52 @@
 	padding: 10px;
 }
 
+#red-lit > div > div .icon-link {
+	vertical-align: text-bottom;
+	background-color: var(--textExtremHell);
+}
+
+#red-lit > div > div .icon-link:focus {
+	background-color: var(--farbe);
+}
+
+#red-lit > div > div .icon-link:hover {
+	background-color: var(--text);
+}
+
+/* Datenkbankpfad ------------------------------- */
+#red-lit-pfad-changed {
+	display: inline-block;
+	width: 12px;
+	color: var(--textSehrHell);
+}
+
+#red-lit-pfad-changed.changed {
+	color: var(--textWarnung);
+}
+
+#red-lit-pfad-db {
+	display: inline-block;
+	vertical-align: text-bottom;
+	padding: 0 6px;
+	overflow: hidden;
+	width: calc(100% - 168px); /* 12px Asterisk, 5 * 24px Icons, 2 * 12px Margin, 12px Padding */
+	direction: rtl;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+#red-lit-pfad-db.keine-db {
+	color: var(--textSehrHell);
+	direction: ltr;
+	font-style: italic;
+}
+
+#red-lit-pfad a:nth-child(5),
+#red-lit-pfad a:nth-child(6) {
+	margin-left: 12px;
+}
+
 /* Navigation ----------------------------------- */
 #red-lit input[type="radio"]:not(:first-child) {
 	margin-left: 25px;
