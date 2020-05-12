@@ -11,6 +11,7 @@ let redLit = {
 			return;
 		}
 		// Datensatz hinzufügen
+		redLit.eingabe.changed = false;
 		redLit.eingabeHinzufuegen();
 	},
 	// Navigation: Listener für das Umschalten
@@ -427,14 +428,34 @@ let redLit = {
 	},
 	// Eingabeformular: neue Titelaufnahme hinzufügen
 	eingabeHinzufuegen () {
-		// Formular anzeigen
-		document.getElementById("red-lit-nav-eingabe").checked = true;
-		redLit.nav("eingabe");
-		// Formularstatus ändern
-		redLit.eingabeStatus("add");
-		// Formular leeren
-		redLit.eingabeLeeren();
-		// Formular fokussieren
-		document.getElementById("red-lit-eingabe-si").focus();
+		if (redLit.eingabe.changed) {
+			dialog.oeffnen({
+				typ: "confirm",
+				text: "Sie haben offenbar Änderungen vorgenommen.\nSoll die Titelaufnahme nicht erst einmal gespeichert werden?",
+				callback: () => {
+					if (dialog.antwort) {
+						redLit.eingabeSpeichern();
+					} else if (dialog.antwort === false) {
+						hinzufuegen();
+					} else {
+						document.getElementById("red-lit-eingabe-si").select();
+					}
+				},
+			});
+			return;
+		}
+		hinzufuegen();
+		// Hinzufügen ausführen
+		function hinzufuegen () {
+			// Formular anzeigen
+			document.getElementById("red-lit-nav-eingabe").checked = true;
+			redLit.nav("eingabe");
+			// Formularstatus ändern
+			redLit.eingabeStatus("add");
+			// Formular leeren
+			redLit.eingabeLeeren();
+			// Formular fokussieren
+			document.getElementById("red-lit-eingabe-si").focus();
+		}
 	},
 };
