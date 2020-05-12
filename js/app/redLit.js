@@ -45,10 +45,18 @@ let redLit = {
 	},
 	// speichert den Status des Formulars
 	eingabeStatusAkt: "",
+	// speichert die ID des aktuellen Datensatzes
+	// (leer, wenn neuer Datensatz)
+	eingabeIDAkt: "",
 	// Titelaufnahme hinzufügen
 	//   status = String
 	eingabeStatus (status) {
 		redLit.eingabeStatusAkt = status;
+		if (status === "add") {
+			redLit.eingabeIDAkt = "";
+		} else {
+			redLit.eingabeIDAkt = document.getElementById("red-lit-eingabe-id").value;
+		}
 		let text = {
 			"add": "Titelaufnahme hinzufügen",
 			"change": "Titelaufnahme ändern",
@@ -126,6 +134,77 @@ let redLit = {
 		if (!redLit.eingabeSpeichernCheck()) {
 			return;
 		}
+		// ggf. neuen Datensatz erstellen
+		const id = document.getElementById("red-lit-eingabe-id").value;
+		if (redLit.eingabeStatusAkt === "add") {
+			redLit.data[id] = [];
+		}
+		
+		// Daten zusammentragen
+		let ds = {
+			be: optionen.data.einstellungen.bearbeiterin,
+			da: new Date().toISOString(),
+			id: redLit.eingabeSpeichernMakeID(),
+			td: {},
+		};
+		let felder = document.getElementById("red-lit-eingabe").querySelectorAll("input, textarea");
+		for (let i of felder) {
+			let k = i.id.replace(/.+-/, "");
+			if (i.type === "button" ||
+					k === "id") {
+				continue;
+			}
+			if (k === "pn") {
+				let val = i.value.split(/[,\s]/),
+					arr = [];
+				for (let ppn of val) {
+					if (ppn) {
+						arr.push(ppn);
+					}
+				}
+				ds.td.pn = arr;
+			} else {
+				ds.td[k] = i.value;
+			}
+		}
+		// ID wurde geändert => Datensatz umbenennen
+		let idGeaendert = false;
+		if (redLit.eingabeStatusAkt !== "add" &&
+				redLit.eingabeIDAkt !== id) {
+			idGeaendert = true;
+			redLit.eingabeSpeichernIDAendern(redLit.eingabeIDAkt, id);
+		}
+		// Abbruch, wenn identisch mit vorherigem Datensatz
+		if (redLit.data[id].length && !idGeaendert) {
+			let dsAlt = redLit.data[id][0],
+				diff = false;
+			for (let [k, v] of Object.entries(dsAlt.td)) {
+				let alt = v,
+					neu = ds.td[k];
+				if (Array.isArray(alt)) {
+					alt = alt.join(",");
+					neu = neu.join(",");
+				}
+				if (alt !== neu) {
+					diff = true;
+					break;
+				}
+			}
+			if (!diff) {
+				dialog.oeffnen({
+					typ: "alert",
+					text: "Sie haben keine Änderungen vorgenommen.",
+					callback: () => {
+						document.getElementById("red-lit-eingabe-si").select();
+					},
+				});
+				return;
+			}
+		}
+		// Datensatz schreiben
+		redLit.data[id].unshift(ds);
+		// Status auffrischen
+		redLit.eingabeStatus("change");
 	},
 	// Formular überprüfen
 	eingabeSpeichernCheck () {
@@ -164,7 +243,8 @@ let redLit = {
 			return false;
 		}
 		// ID schon vergeben?
-		if (redLit.eingabeStatusAkt === "add" &&
+		if ((redLit.eingabeStatusAkt === "add" ||
+				redLit.eingabeStatusAkt !== "add" && redLit.eingabeIDAkt !== id.value) &&
 				redLit.data[id.value]) {
 			fehler({
 				text: "Die ID ist schon vergeben.",
@@ -253,5 +333,60 @@ let redLit = {
 				});
 			});
 		}
+	},
+	// ID eines bestehenden Datensatzes ändern
+	// (Titelaufnahme klonen)
+	//   alt = String
+	//     (die alte ID)
+	//   neu = String
+	//     (die neue ID)
+	eingabeSpeichernIDAendern (alt, neu) {
+		// neuen Datensatz anlegen
+		redLit.data[neu] = [];
+		// alten Datensatz klonen
+		let quelle = redLit.data[alt],
+			ziel = redLit.data[neu];
+		for (let i = 0, len = quelle.length; i < len; i++) {
+			let ds = {};
+			klon(quelle[i], ds);
+			ziel.push(ds);
+		}
+		// alten Datensatz entfernen
+		delete redLit.data[alt];
+		// Klon-Funktion
+		function klon (quelle, ziel) {
+			for (let [k, v] of Object.entries(quelle)) {
+				if (helfer.checkType("Object", v)) { // Objects
+					ziel[k] = {};
+					klon(v, ziel[k]);
+				} else if (Array.isArray(v)) { // Arrays
+					ziel[k] = [...v];
+				} else { // Primitiven
+					ziel[k] = v;
+				}
+			}
+		}
+	},
+	// ID für einen Datensatz erstellen
+	eingabeSpeichernMakeID () {
+		const hex = "0123456789abcdef";
+		let id = "";
+		x: while (true) {
+			// ID erstellen
+			id = "";
+			while (id.length < 10) {
+				id += hex[helfer.zufall(0, 15)];
+			}
+			// ID überprüfen
+			for (let v of Object.values(redLit.data)) {
+				for (let i = 0, len = v.length; i < len; i++) {
+					if (v[i].id === id) {
+						continue x;
+					}
+				}
+			}
+			break;
+		}
+		return id;
 	},
 };
