@@ -1314,6 +1314,7 @@ ipcMain.handle("infos-senden", evt => {
 			name: app.name,
 			packaged: !devtools,
 			temp: app.getPath("temp"),
+			userData: app.getPath("userData"),
 			version: app.getVersion(),
 		},
 		winInfo: {
