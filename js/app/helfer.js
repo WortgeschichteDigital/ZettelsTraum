@@ -110,6 +110,14 @@ let helfer = {
 			obj.removeChild(obj.lastChild);
 		}
 	},
+	// Zufallsgenerator
+	//   min = Number
+	//     (Minimalwert)
+	//   max = Number
+	//     (Maximalwert)
+	zufall (min, max) {
+		return Math.floor(Math.random() * (max - min + 1)) + min;
+	},
 	// wählt den Text innerhalb des übergebenen Objekts aus
 	//   obj = Element
 	//     (das Element, in dem der Text komplett markiert werden soll)
