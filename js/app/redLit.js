@@ -106,6 +106,9 @@ let redLit = {
 			}
 			// Datei kann eingelesen werden
 			redLit.db.data = data_tmp;
+			// Datenbank für Offline-Nutzung verfügbar halten
+			redLit.dbOfflineKopie(pfad);
+			// Promise auflösen
 			resolve(true);
 		});
 	},
@@ -139,9 +142,15 @@ let redLit = {
 		if (optionen.data["literatur-db"] &&
 				redLit.db.gefunden &&
 				!speichernUnter) {
-			const erfolgreich = await redLit.dbSpeichernSchreiben(optionen.data["literatur-db"]);
-			if (erfolgreich) {
+			const ergebnis = await redLit.dbSpeichernSchreiben(optionen.data["literatur-db"]);
+			if (ergebnis === true) {
 				redLit.dbAnzeige();
+				redLit.dbOfflineKopie(optionen.data["literatur-db"]);
+			} else {
+				dialog.oeffnen({
+					typ: "alert",
+					text: ergebnis,
+				});
 			}
 			return;
 		}
@@ -187,8 +196,8 @@ let redLit = {
 			return;
 		}
 		// Datenbankdatei schreiben
-		const erfolgreich = await redLit.dbSpeichernSchreiben(result.filePath);
-		if (erfolgreich) {
+		const ergebnis = await redLit.dbSpeichernSchreiben(result.filePath);
+		if (ergebnis === true) {
 			// ggf. Pfad zur Datenbankdatei speichern
 			if (optionen.data["literatur-db"] !== result.filePath) {
 				optionen.data["literatur-db"] = result.filePath;
@@ -196,6 +205,13 @@ let redLit = {
 			}
 			// Anzeige auffrischen
 			redLit.dbAnzeige();
+			// Offline-Kopie speichern
+			redLit.dbOfflineKopie(result.filePath);
+		} else {
+			dialog.oeffnen({
+				typ: "alert",
+				text: ergebnis,
+			});
 		}
 	},
 	// Datenbank: Datei schreiben
@@ -207,16 +223,21 @@ let redLit = {
 				result = await io.schreiben(pfad, JSON.stringify(data));
 			// beim Schreiben ist ein Fehler aufgetreten
 			if (result !== true) {
-				dialog.oeffnen({
-					typ: "alert",
-					text: `Beim Speichern der Literaturdatenbank ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${result.name}: ${result.message}</p>`,
-				});
-				resolve(false);
+				resolve(`Beim Speichern der Literaturdatenbank ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${result.name}: ${result.message}</p>`);
 				throw result;
 			}
 			// Schreiben war erfolgreich
 			resolve(true);
 		});
+	},
+	// Datenbank: Offline-Kopie im Einstellungenordner anlegen
+	//   pfad = String
+	//     (Pfad zur Datenkbank)
+	dbOfflineKopie (pfad) {
+		const path = require("path");
+		let reg = new RegExp(`.+${helfer.escapeRegExp(path.sep)}(.+)`),
+			dateiname = pfad.match(reg);
+		redLit.dbSpeichernSchreiben(path.join(appInfo.userData, dateiname[1]));
 	},
 	// Navigation: Listener für das Umschalten
 	//   input = Element
