@@ -21,10 +21,35 @@ let redLit = {
 		changed: false, // Inhalt der Datenbank wurde geändert und noch nicht gespeichert
 	},
 	// Datenbank: Datei laden
-	dbLaden () {
+	async dbLaden () {
 		// Anzeige auffrischen
 		redLit.dbAnzeige();
-		// Datenbank einlesen TODO
+		// ggf. Datenbank einlesen
+		if (!optionen.data["literatur-db"]) {
+			return;
+		}
+		const existiert = await helfer.exists(optionen.data["literatur-db"]);
+		// Datenkbank wurde wiedergefunden
+		if (existiert) {
+			redLit.db.gefunden = true;
+			let result = await redLit.dbOeffnenEinlesen(optionen.data["literatur-db"]);
+			if (result !== true) {
+				dialog.oeffnen({
+					typ: "alert",
+					text: result,
+				});
+			}
+			return;
+		}
+		// Datenbank wurde nicht wiedergefunden
+		// (kann temporär verschwunden sein, weil sie im Netzwerk liegt)
+		redLit.db.gefunden = false;
+		// TODO versuchen die Offline-Version zu laden
+		// TODO wenn das scheitert => anzeigen, dass keine DB geladen wurde
+		// Laden der Offline-Version war erfolgreich
+		let span = document.createElement("span");
+		span.textContent = "[offline]";
+		document.getElementById("red-lit-pfad-db").appendChild(span);
 	},
 	// Datenbank: Anzeige auffrischen
 	dbAnzeige () {
@@ -53,6 +78,37 @@ let redLit = {
 			changed.classList.remove("changed");
 		}
 	},
+	// Datenbank: Datei einlesen
+	//   pfad = String
+	//     (Pfad zur Datei)
+	dbOeffnenEinlesen (pfad) {
+		return new Promise(async resolve => {
+			let content = await io.lesen(pfad);
+			if (!helfer.checkType("String", content)) {
+				resolve(`Beim Öffnen der Literaturdatenbank ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${content.name}: ${content.message}</p>`);
+				throw content;
+			}
+			// Daten sind in Ordnung => Einleseoperationen durchführen
+			let data_tmp = {};
+			// Folgt die Datei einer wohlgeformten JSON?
+			try {
+				data_tmp = JSON.parse(content);
+			} catch (err_json) {
+				resolve(`Beim Einlesen der Literaturdatenbank ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n${err_json.name}: ${err_json.message}`);
+				return;
+			}
+			// Wirklich eine ZTL-Datei?
+			let schluessel = Object.keys(data_tmp),
+				aufnahme = data_tmp[schluessel[0]];
+			if (!aufnahme[0].td || !aufnahme[0].td.ti) {
+				resolve(`Die Datei wurde nicht eingelesen.\nEs handelt sich nicht um eine <i>${appInfo.name} Literaturdatenbank</i>.`);
+				return;
+			}
+			// Datei kann eingelesen werden
+			redLit.db.data = data_tmp;
+			resolve(true);
+		});
+	},
 	// Datenbank: Listener für die Icon-Links
 	//   a = Element
 	//     (ein Icon-Link zum Speichern, Öffnen usw.)
@@ -69,7 +125,7 @@ let redLit = {
 	// Datenbank: Datei speichern
 	//   speichernUnter = true || undefined
 	//     (Dateidialog in jedem Fall anzeigen)
-	dbSpeichern (speichernUnter = false) {
+	async dbSpeichern (speichernUnter = false) {
 		// Wurden überhaupt Änderungen vorgenommen?
 		if (!redLit.db.changed &&
 				!speichernUnter) {
@@ -83,7 +139,10 @@ let redLit = {
 		if (optionen.data["literatur-db"] &&
 				redLit.db.gefunden &&
 				!speichernUnter) {
-			redLit.dbSpeichernSchreiben(optionen.data["literatur-db"]);
+			const erfolgreich = await redLit.dbSpeichernSchreiben(optionen.data["literatur-db"]);
+			if (erfolgreich) {
+				redLit.dbAnzeige();
+			}
 			return;
 		}
 		// Datei soll/muss angelegt werden
@@ -129,10 +188,13 @@ let redLit = {
 		}
 		// Datenbankdatei schreiben
 		const erfolgreich = await redLit.dbSpeichernSchreiben(result.filePath);
-		// Pfad zur Datenbankdatei speichern
-		if (erfolgreich && optionen.data["literatur-db"] !== result.filePath) {
-			optionen.data["literatur-db"] = result.filePath;
-			optionen.speichern();
+		if (erfolgreich) {
+			// ggf. Pfad zur Datenbankdatei speichern
+			if (optionen.data["literatur-db"] !== result.filePath) {
+				optionen.data["literatur-db"] = result.filePath;
+				optionen.speichern();
+			}
+			// Anzeige auffrischen
 			redLit.dbAnzeige();
 		}
 	},

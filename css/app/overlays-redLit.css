@@ -55,6 +55,11 @@
 	font-style: italic;
 }
 
+#red-lit-pfad-db span {
+	margin-left: 6px;
+	color: var(--textWarnung);
+}
+
 #red-lit-pfad-icons {
 	position: absolute;
 	right: 10px;
