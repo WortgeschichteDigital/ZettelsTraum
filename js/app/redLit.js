@@ -37,8 +37,9 @@ let redLit = {
 			}
 		}
 	},
-	// Eingabeformular: Zwischenspeicher für Variablen
+	// Eingabeformular: Speicher für Variablen
 	eingabe: {
+		fundorte: ["Bibliothek", "DTA", "DWDS", "GoogleBooks", "IDS", "online"], // gültige Werte im Feld "Fundorte"
 		status: "", // aktueller Status des Formulars
 		id: "", // ID des aktuellen Datensatzes (leer, wenn neuer Datensatz)
 		changed: false, // es wurden Eingaben vorgenommen
@@ -323,7 +324,7 @@ let redLit = {
 		let fo = document.getElementById("red-lit-eingabe-fo");
 		if (url.value && fo.value !== "online") {
 			fehler({
-				text: "Geben Sie eine URL an, muss der Fundort „online“ lauten.",
+				text: "Geben Sie eine URL an, muss der Fundort „online“ sein.",
 				fokus: fo,
 			});
 			return false;
@@ -333,6 +334,31 @@ let redLit = {
 		if (ad.value && !url.value) {
 			fehler({
 				text: "Geben Sie ein Aufrufdatum an, müssen Sie auch eine URL angeben.",
+				fokus: url,
+			});
+			return false;
+		}
+		// Aufrufdatum in der Zukunft?
+		if (ad.value && new Date(ad.value) > new Date()) {
+			fehler({
+				text: "Das Aufrufdatum liegt in der Zukunft.",
+				fokus: ad,
+			});
+			return false;
+		}
+		// Fundort mit gültigem Wert?
+		if (fo.value && !redLit.eingabe.fundorte.includes(fo.value)) {
+			let fundorte = redLit.eingabe.fundorte.join(", ").match(/(.+), (.+)/);
+			fehler({
+				text: `Der Fundort ist ungültig. Erlaubt sind nur die Werte:\n${fundorte[1]} oder ${fundorte[2]}`,
+				fokus: fo,
+			});
+			return false;
+		}
+		// wenn Fundort "online" => URL eingeben
+		if (fo.value === "online" && !url.value) {
+			fehler({
+				text: "Ist der Fundort „online“, müssen Sie eine URL angeben.",
 				fokus: url,
 			});
 			return false;
