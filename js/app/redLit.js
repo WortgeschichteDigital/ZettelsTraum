@@ -1,7 +1,7 @@
 "use strict";
 
 let redLit = {
-	// die aktuelle Literaturdatenbank
+	// aktuelle Literaturdatenbank
 	data: {},
 	// Literaturdatenbank öffnen
 	oeffnen () {
@@ -13,7 +13,7 @@ let redLit = {
 		// Datensatz hinzufügen
 		redLit.eingabeHinzufuegen();
 	},
-	// Listener für das Umschalten der Navigation
+	// Navigation: Listener für das Umschalten
 	//   input = Element
 	//     (der Radiobutton zum Umschalten der Formulare)
 	navListener (input) {
@@ -22,7 +22,7 @@ let redLit = {
 			redLit.nav(form);
 		});
 	},
-	// Navigation zwischen Eingabe- und Suchformular
+	// Navigation: Umschalten zwischen Eingabe- und Suchformular
 	//   form = String
 	//     ("eingabe" od. "suche")
 	nav (form) {
@@ -36,19 +36,20 @@ let redLit = {
 			}
 		}
 	},
-	// speichert den Status des Formulars
-	eingabeStatusAkt: "",
-	// speichert die ID des aktuellen Datensatzes
-	// (leer, wenn neuer Datensatz)
-	eingabeIDAkt: "",
-	// Titelaufnahme hinzufügen
+	// Eingabeformular: Zwischenspeicher für Variablen
+	eingabe: {
+		status: "", // aktueller Status des Formulars
+		id: "", // ID des aktuellen Datensatzes (leer, wenn neuer Datensatz)
+	},
+	// Eingabeformular: Status anzeigen
 	//   status = String
+	//     (der Status, in dem sich das Formular befindet)
 	eingabeStatus (status) {
-		redLit.eingabeStatusAkt = status;
+		redLit.eingabe.status = status;
 		if (status === "add") {
-			redLit.eingabeIDAkt = "";
+			redLit.eingabe.id = "";
 		} else {
-			redLit.eingabeIDAkt = document.getElementById("red-lit-eingabe-id").value;
+			redLit.eingabe.id = document.getElementById("red-lit-eingabe-id").value;
 		}
 		let text = {
 			"add": "Titelaufnahme hinzufügen",
@@ -59,8 +60,8 @@ let redLit = {
 		p.textContent = text[status];
 		p.setAttribute("class", status);
 	},
-	// Eingabeformular löschen
-	eingabeLoeschen () {
+	// Eingabeformular: Formular leeren
+	eingabeLeeren () {
 		let inputs = document.querySelectorAll("#red-lit-eingabe input, #red-lit-eingabe textarea");
 		for (let i of inputs) {
 			if (i.type === "button") {
@@ -72,12 +73,12 @@ let redLit = {
 			}
 		}
 	},
-	// ID automatisch aus der Sigle ermitteln
+	// Eingabeformular: ID automatisch aus der Sigle ermitteln
 	//   input = Element
 	//     (das Sigle-Feld)
 	eingabeAutoID (input) {
 		input.addEventListener("input", function() {
-			if (redLit.eingabeStatusAkt !== "add") {
+			if (redLit.eingabe.status !== "add") {
 				return;
 			}
 			let val = this.value;
@@ -87,7 +88,7 @@ let redLit = {
 			document.getElementById("red-lit-eingabe-id").value = val;
 		});
 	},
-	// Automatismen bei Eingabe einer URL
+	// Eingabeformular: Automatismen bei Eingabe einer URL
 	//   input = Element
 	//     (das URL-Feld)
 	eingabeAutoURL (input) {
@@ -105,7 +106,7 @@ let redLit = {
 			}
 		});
 	},
-	// Formular speichern
+	// Eingabeformular: Titelaufnahme speichern
 	eingabeSpeichern () {
 		// Textfelder trimmen und ggf. typographisch aufhübschen
 		let textfelder = document.getElementById("red-lit-eingabe").querySelectorAll(`input[type="text"], textarea`);
@@ -127,12 +128,12 @@ let redLit = {
 			}
 		}
 		// Validierung des Formulars
-		if (!redLit.eingabeSpeichernCheck()) {
+		if (!redLit.eingabeSpeichernValid()) {
 			return;
 		}
 		// ggf. neuen Datensatz erstellen
 		const id = document.getElementById("red-lit-eingabe-id").value;
-		if (redLit.eingabeStatusAkt === "add") {
+		if (redLit.eingabe.status === "add") {
 			redLit.data[id] = [];
 		}
 		
@@ -165,10 +166,10 @@ let redLit = {
 		}
 		// ID wurde geändert => Datensatz umbenennen
 		let idGeaendert = false;
-		if (redLit.eingabeStatusAkt !== "add" &&
-				redLit.eingabeIDAkt !== id) {
+		if (redLit.eingabe.status !== "add" &&
+				redLit.eingabe.id !== id) {
 			idGeaendert = true;
-			redLit.eingabeSpeichernIDAendern(redLit.eingabeIDAkt, id);
+			redLit.eingabeSpeichernIDAendern(redLit.eingabe.id, id);
 		}
 		// Abbruch, wenn identisch mit vorherigem Datensatz
 		if (redLit.data[id].length && !idGeaendert) {
@@ -202,12 +203,12 @@ let redLit = {
 		// Status auffrischen
 		redLit.eingabeStatus("change");
 	},
-	// Formular überprüfen
-	eingabeSpeichernCheck () {
+	// Eingabeformular: Formular validieren
+	eingabeSpeichernValid () {
 		// BenutzerIn registriert?
 		if (!optionen.data.einstellungen.bearbeiterin) {
 			fehler({
-				text: `Sie können Titelaufnahmen erst ${redLit.eingabeStatusAkt === "add" ? "erstellen" : "ändern"}, nachdem Sie sich <a href="#" data-funktion="einstellungen-allgemeines">registriert</a> haben.`,
+				text: `Sie können Titelaufnahmen erst ${redLit.eingabe.status === "add" ? "erstellen" : "ändern"}, nachdem Sie sich <a href="#" data-funktion="einstellungen-allgemeines">registriert</a> haben.`,
 			});
 			return false;
 		}
@@ -239,8 +240,8 @@ let redLit = {
 			return false;
 		}
 		// ID schon vergeben?
-		if ((redLit.eingabeStatusAkt === "add" ||
-				redLit.eingabeStatusAkt !== "add" && redLit.eingabeIDAkt !== id.value) &&
+		if ((redLit.eingabe.status === "add" ||
+				redLit.eingabe.status !== "add" && redLit.eingabe.id !== id.value) &&
 				redLit.data[id.value]) {
 			fehler({
 				text: "Die ID ist schon vergeben.",
@@ -330,7 +331,7 @@ let redLit = {
 			});
 		}
 	},
-	// ID eines bestehenden Datensatzes ändern
+	// Eingabeformular: ID einer Titelaufnahme ändern
 	// (Titelaufnahme klonen)
 	//   alt = String
 	//     (die alte ID)
@@ -363,7 +364,7 @@ let redLit = {
 			}
 		}
 	},
-	// ID für einen Datensatz erstellen
+	// Eingabeformular: ID für einen Datensatz erstellen
 	eingabeSpeichernMakeID () {
 		const hex = "0123456789abcdef";
 		let id = "";
@@ -385,7 +386,7 @@ let redLit = {
 		}
 		return id;
 	},
-	// neue Titelaufnahme hinzufügen
+	// Eingabeformular: neue Titelaufnahme hinzufügen
 	eingabeHinzufuegen () {
 		// Formular anzeigen
 		document.getElementById("red-lit-nav-eingabe").checked = true;
@@ -393,7 +394,7 @@ let redLit = {
 		// Formularstatus ändern
 		redLit.eingabeStatus("add");
 		// Formular leeren
-		redLit.eingabeLoeschen();
+		redLit.eingabeLeeren();
 		// Formular fokussieren
 		document.getElementById("red-lit-eingabe-si").focus();
 	},
