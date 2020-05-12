@@ -62,7 +62,7 @@ let redLit = {
 		}
 		// ID
 		if (input.id === "red-lit-eingabe-id") {
-			// TODO
+			redLit.eingabeWarnungID(input);
 		}
 		// URL
 		if (input.id === "red-lit-eingabe-ul") {
@@ -143,6 +143,27 @@ let redLit = {
 			if (!fo.value) {
 				fo.value = "online";
 			}
+		});
+	},
+	// Eingabeformular: vor Ändern der ID warnen
+	//   input = Element
+	//     (das ID-Feld)
+	eingabeWarnungID (input) {
+		input.addEventListener("change", () => {
+			if (redLit.eingabe.status === "add") {
+				return;
+			}
+			dialog.oeffnen({
+				typ: "confirm",
+				text: "Die ID nachträglich zu ändern, kann gravierende Konsequenzen haben.\nMöchten Sie die ID wirklich ändern?",
+				callback: () => {
+					let id = document.getElementById("red-lit-eingabe-id");
+					if (!dialog.antwort) {
+						id.value = redLit.eingabe.id;
+					}
+					id.select();
+				},
+			});
 		});
 	},
 	// Eingabeformular: Titelaufnahme speichern
