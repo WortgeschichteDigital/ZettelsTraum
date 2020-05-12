@@ -147,6 +147,13 @@ let tastatur = {
 			}
 			return;
 		}
+		// LITERATURDATENBANK: Key "h"
+		if (m === "Ctrl" && overlayId === "red-lit") {
+			if (evt.key === "h") {
+				redLit.eingabeHinzufuegen();
+			}
+			return;
+		}
 	},
 	// alle Events, die mit den Navigationspfeilen zusammenhängen
 	//   evt = Object

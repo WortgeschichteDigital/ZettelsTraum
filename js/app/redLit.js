@@ -69,7 +69,7 @@ let redLit = {
 		if (input.id === "red-lit-eingabe-ul") {
 			redLit.eingabeAutoURL(input);
 		}
-		// alle Textfelder
+		// alle Textfelder (Change-Listener)
 		input.addEventListener("input", () => {
 			if (redLit.eingabe.changed) {
 				return;
@@ -78,6 +78,13 @@ let redLit = {
 			let span = document.createElement("span");
 			span.textContent = "*";
 			document.getElementById("red-lit-eingabe-meldung").appendChild(span);
+		});
+		// alle Textfelder (Enter-Listener)
+		input.addEventListener("keydown", function(evt) {
+			tastatur.detectModifiers(evt);
+			if (tastatur.modifiers === "Ctrl" && evt.key === "Enter") {
+				redLit.eingabeSpeichern();
+			}
 		});
 	},
 	// Eingabeformular: Status anzeigen
