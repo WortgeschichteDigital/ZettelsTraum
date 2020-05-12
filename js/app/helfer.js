@@ -176,6 +176,8 @@ let helfer = {
 		text = text.replace(/"(.+?)"/g, (m, p1) => `„${p1}“`); // doppelte Anführungszeichen
 		text = text.replace(/([a-z])'([a-z])/g, (m, p1, p2) => `${p1}’${p2}`); // offenkundiges Apostroph
 		text = text.replace(/'(.+?)'/g, (m, p1) => `‚${p1}‘`); // einfache Anführungszeichen
+		text = text.replace(/'/g, "’"); // wahrscheinliches Apostroph
+		text = text.replace(/\s-\s/g, " – "); // Halbgeviertstriche
 		text = text.replace(/=__(.+?)__/g, (m, p1) => `="${p1}"`); // Attribute in Tags demaskieren
 		text = text.replace(/\.{3}/g, "…"); // horizontale Ellipse
 		// geschützte Leerzeichen
