@@ -101,4 +101,157 @@ let redLit = {
 			}
 		});
 	},
+	// Formular speichern
+	eingabeSpeichern () {
+		// Textfelder trimmen und ggf. typographisch aufhübschen
+		let textfelder = document.getElementById("red-lit-eingabe").querySelectorAll(`input[type="text"], textarea`);
+		for (let i of textfelder) {
+			let val = i.value;
+			if (i.id === "red-lit-eingabe-ti") { // Titelaufnahme typographisch aufhübschen
+				val = val.replace(/[\r\n]/g, " ");
+				val = helfer.textTrim(val, true);
+				val = helfer.typographie(val);
+				if (val && !/\.$/.test(val)) { // Titelaufnahmen enden immer mit einem Punkt
+					val += ".";
+				}
+			} else {
+				val = helfer.textTrim(val, true);
+			}
+			i.value = val;
+			if (i.nodeName === "TEXTAREA") {
+				helfer.textareaGrow(i);
+			}
+		}
+		// Validierung des Formulars
+		if (!redLit.eingabeSpeichernCheck()) {
+			return;
+		}
+	},
+	// Formular überprüfen
+	eingabeSpeichernCheck () {
+		// BenutzerIn registriert?
+		if (!optionen.data.einstellungen.bearbeiterin) {
+			fehler({
+				text: `Sie können Titelaufnahmen erst ${redLit.eingabeStatusAkt === "add" ? "erstellen" : "ändern"}, nachdem Sie sich <a href="#" data-funktion="einstellungen-allgemeines">registriert</a> haben.`,
+			});
+			return false;
+		}
+		// Pflichtfelder ausgefüllt?
+		let pflicht = {
+			si: "keine Sigle",
+			id: "keine ID",
+			ti: "keinen Titel",
+			fo: "keinen Fundort",
+		};
+		for (let [k, v] of Object.entries(pflicht)) {
+			let feld = document.getElementById(`red-lit-eingabe-${k}`);
+			if (!feld.value) {
+				fehler({
+					text: `Sie haben ${v} eingegeben.`,
+					fokus: feld,
+				});
+				return false;
+			}
+		}
+		// ID korrekt formatiert?
+		let id = document.getElementById("red-lit-eingabe-id");
+		if (/[^a-z0-9ßäöü-]/.test(id.value) ||
+				/^[0-9]/.test(id.value)) {
+			fehler({
+				text: "Die ID hat ein fehlerhaftes Format.\n<b>Erlaubt:</b><br>• Kleinbuchstaben a-z, ß und Umlaute<br>• Ziffern<br>• Bindestriche\n<b>Nicht Erlaubt:</b><br>• Großbuchstaben<br>• Ziffern am Anfang<br>• Sonderzeichen<br>• Leerzeichen",
+				fokus: id,
+			});
+			return false;
+		}
+		// ID schon vergeben?
+		if (redLit.eingabeStatusAkt === "add" &&
+				redLit.data[id.value]) {
+			fehler({
+				text: "Die ID ist schon vergeben.",
+				fokus: id,
+			});
+			return false;
+		}
+		// URL korrekt formatiert?
+		let url = document.getElementById("red-lit-eingabe-ul");
+		if (url.value && !/^https?:\/\//.test(url.value)) {
+			fehler({
+				text: "Die URL muss mit einem Protokoll beginnen (http[s]://).",
+				fokus: url,
+			});
+			return false;
+		}
+		// wenn URL => Fundort "online"
+		let fo = document.getElementById("red-lit-eingabe-fo");
+		if (url.value && fo.value !== "online") {
+			fehler({
+				text: "Geben Sie eine URL an, muss der Fundort „online“ lauten.",
+				fokus: fo,
+			});
+			return false;
+		}
+		// wenn Aufrufdatum => URL eingeben
+		let ad = document.getElementById("red-lit-eingabe-ad");
+		if (ad.value && !url.value) {
+			fehler({
+				text: "Geben Sie ein Aufrufdatum an, müssen Sie auch eine URL angeben.",
+				fokus: url,
+			});
+			return false;
+		}
+		// PPN(s) okay?
+		let ppn = document.getElementById("red-lit-eingabe-pn");
+		if (ppn.value) {
+			let ppns = ppn.value.split(/[,\s]/),
+				korrekt = [],
+				fehlerhaft = [];
+			for (let i of ppns) {
+				if (i && !/^[0-9]{9,10}X?$/.test(i)) {
+					fehlerhaft.push(i);
+				} else if (i) {
+					korrekt.push(i);
+				}
+			}
+			if (fehlerhaft.length) {
+				let numerus = `<abbr title="Pica-Produktionsnummern">PPN</abbr> sind`;
+				if (fehlerhaft.length === 1) {
+					numerus = `<abbr title="Pica-Produktionsnummer">PPN</abbr> ist`;
+				}
+				fehler({
+					text: `Diese ${numerus} fehlerhaft:\n${fehlerhaft.join(", ")}`,
+					fokus: ppn,
+				});
+				return false;
+			} else {
+				ppn.value = korrekt.join(", ");
+			}
+		}
+		// alles okay
+		return true;
+		// Fehlermeldung
+		function fehler ({text, fokus = false}) {
+			let opt = {
+				typ: "alert",
+				text,
+			};
+			if (fokus) {
+				opt.callback = () => {
+					fokus.select();
+				};
+			}
+			dialog.oeffnen(opt);
+			document.querySelectorAll("#dialog-text a").forEach(a => {
+				a.addEventListener("click", function(evt) {
+					evt.preventDefault();
+					switch (this.dataset.funktion) {
+						case "einstellungen-allgemeines":
+							optionen.oeffnen();
+							optionen.sektionWechseln(document.querySelector("#einstellungen ul a"));
+							break;
+					}
+					setTimeout(() => overlay.schliessen(document.getElementById("dialog")), 200);
+				});
+			});
+		}
+	},
 };

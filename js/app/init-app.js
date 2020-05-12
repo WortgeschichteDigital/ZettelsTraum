@@ -308,6 +308,7 @@ window.addEventListener("load", async () => {
 	});
 	// Literaturdatenbank
 	document.querySelectorAll(`#red-lit input[type="radio"]`).forEach(i => redLit.navListener(i));
+	document.getElementById("red-lit-eingabe-save").addEventListener("click", () => redLit.eingabeSpeichern());
 	redLit.eingabeAutoID(document.getElementById("red-lit-eingabe-si"));
 	redLit.eingabeAutoURL(document.getElementById("red-lit-eingabe-ul"));
 	// Karteisuche
