@@ -307,7 +307,8 @@ window.addEventListener("load", async () => {
 		}
 	});
 	// Literaturdatenbank
-	document.querySelectorAll(`#red-lit input[type="radio"]`).forEach(i => redLit.navListener(i));
+	document.querySelectorAll(`#red-lit-pfad a`).forEach(a => redLit.dbListener(a));
+	document.querySelectorAll(`#red-lit-nav input`).forEach(i => redLit.navListener(i));
 	document.querySelectorAll("#red-lit-eingabe input, #red-lit-eingabe textarea").forEach(i => redLit.eingabeListener(i));
 	// Karteisuche
 	document.getElementById("karteisuche-suchen").addEventListener("click", () => karteisuche.suchenPrep());

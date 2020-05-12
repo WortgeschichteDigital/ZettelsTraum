@@ -17,11 +17,17 @@ let redLit = {
 	// Datenbank: Speicher für Variablen
 	db: {
 		data: {}, // Daten der (geladenen) Literaturdatenbank
+		gefunden: false, // Datenbankdatei gefunden (könnte im Netzwerk temporär verschwunden sein)
 		changed: false, // Inhalt der Datenbank wurde geändert und noch nicht gespeichert
 	},
 	// Datenbank: Datei laden
 	dbLaden () {
-		redLit.db.changed = false;
+		// Anzeige auffrischen
+		redLit.dbAnzeige();
+		// Datenbank einlesen TODO
+	},
+	// Datenbank: Anzeige auffrischen
+	dbAnzeige () {
 		let pfad = document.getElementById("red-lit-pfad-db");
 		// keine DB mit dem Programm verknüpft
 		if (!optionen.data["literatur-db"]) {
@@ -32,7 +38,8 @@ let redLit = {
 		// DB mit dem Programm verknüpft
 		pfad.classList.remove("keine-db");
 		pfad.textContent = `\u200E${optionen.data["literatur-db"]}\u200E`;
-		// Datenbank einlesen TODO
+		// Änderungsmarkierung zurücksetzen
+		redLit.dbGeaendert(false);
 	},
 	// Datenbank: Inhalt wurde geändert
 	//   geaendert = Boolean
@@ -45,6 +52,109 @@ let redLit = {
 		} else {
 			changed.classList.remove("changed");
 		}
+	},
+	// Datenbank: Listener für die Icon-Links
+	//   a = Element
+	//     (ein Icon-Link zum Speichern, Öffnen usw.)
+	dbListener (a) {
+		a.addEventListener("click", function(evt) {
+			evt.preventDefault();
+			if (/-speichern$/.test(this.id)) {
+				redLit.dbSpeichern();
+			} else if (/-speichern-unter$/.test(this.id)) {
+				redLit.dbSpeichern(true);
+			}
+		});
+	},
+	// Datenbank: Datei speichern
+	//   speichernUnter = true || undefined
+	//     (Dateidialog in jedem Fall anzeigen)
+	dbSpeichern (speichernUnter = false) {
+		// Wurden überhaupt Änderungen vorgenommen?
+		if (!redLit.db.changed &&
+				!speichernUnter) {
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Sie haben keine Änderungen vorgenommen.",
+			});
+			return;
+		}
+		// Dateipfad ist bekannt und wurde wiedergefunden => direkt schreiben
+		if (optionen.data["literatur-db"] &&
+				redLit.db.gefunden &&
+				!speichernUnter) {
+			redLit.dbSpeichernSchreiben(optionen.data["literatur-db"]);
+			return;
+		}
+		// Datei soll/muss angelegt werden
+		redLit.dbSpeichernUnter();
+	},
+	// Datenkbank: Datei speichern unter
+	async dbSpeichernUnter () {
+		const path = require("path");
+		let opt = {
+			title: "Literaturdatenbank speichern",
+			defaultPath: path.join(appInfo.documents, "Literatur.ztl"),
+			filters: [
+				{
+					name: `${appInfo.name} Literaturdatenbank`,
+					extensions: ["ztl"],
+				},
+				{
+					name: "Alle Dateien",
+					extensions: ["*"],
+				},
+			],
+		};
+		// Wo wurde zuletzt eine Datei gespeichert oder geöffnet?
+		if (optionen.data.letzter_pfad) {
+			opt.defaultPath = path.join(optionen.data.letzter_pfad, "Literatur.ztl");
+		}
+		// Dialog anzeigen
+		const {ipcRenderer} = require("electron");
+		let result = await ipcRenderer.invoke("datei-dialog", {
+			open: false,
+			winId: winInfo.winId,
+			opt: opt,
+		});
+		// Fehler oder keine Datei ausgewählt
+		if (result.message || !Object.keys(result).length) {
+			dialog.oeffnen({
+				typ: "alert",
+				text: `Beim Öffnen des Dateidialogs ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${result.message}</p>`,
+			});
+			return;
+		} else if (result.canceled) {
+			return;
+		}
+		// Datenbankdatei schreiben
+		const erfolgreich = await redLit.dbSpeichernSchreiben(result.filePath);
+		// Pfad zur Datenbankdatei speichern
+		if (erfolgreich && optionen.data["literatur-db"] !== result.filePath) {
+			optionen.data["literatur-db"] = result.filePath;
+			optionen.speichern();
+			redLit.dbAnzeige();
+		}
+	},
+	// Datenbank: Datei schreiben
+	//   pfad = String
+	//     (Pfad zur Datei)
+	dbSpeichernSchreiben (pfad) {
+		return new Promise(async resolve => {
+			let data = redLit.db.data,
+				result = await io.schreiben(pfad, JSON.stringify(data));
+			// beim Schreiben ist ein Fehler aufgetreten
+			if (result !== true) {
+				dialog.oeffnen({
+					typ: "alert",
+					text: `Beim Speichern der Literaturdatenbank ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${result.name}: ${result.message}</p>`,
+				});
+				resolve(false);
+				throw result;
+			}
+			// Schreiben war erfolgreich
+			resolve(true);
+		});
 	},
 	// Navigation: Listener für das Umschalten
 	//   input = Element

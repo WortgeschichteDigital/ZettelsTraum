@@ -24,6 +24,10 @@
 }
 
 /* Datenkbankpfad ------------------------------- */
+#red-lit-pfad {
+	position: relative;
+}
+
 #red-lit-pfad-changed {
 	display: inline-block;
 	width: 12px;
@@ -39,7 +43,7 @@
 	vertical-align: text-bottom;
 	padding: 0 6px;
 	overflow: hidden;
-	width: calc(100% - 168px); /* 12px Asterisk, 5 * 24px Icons, 2 * 12px Margin, 12px Padding */
+	max-width: calc(100% - 168px); /* 12px Asterisk, 5 * 24px Icons, 2 * 12px Margin, 12px Padding */
 	direction: rtl;
 	text-overflow: ellipsis;
 	white-space: nowrap;
@@ -51,8 +55,13 @@
 	font-style: italic;
 }
 
-#red-lit-pfad a:nth-child(5),
-#red-lit-pfad a:nth-child(6) {
+#red-lit-pfad-icons {
+	position: absolute;
+	right: 10px;
+}
+
+#red-lit-pfad-icons a:nth-child(3),
+#red-lit-pfad-icons a:nth-child(4) {
 	margin-left: 12px;
 }
 
