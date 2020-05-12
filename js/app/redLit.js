@@ -40,6 +40,43 @@ let redLit = {
 	eingabe: {
 		status: "", // aktueller Status des Formulars
 		id: "", // ID des aktuellen Datensatzes (leer, wenn neuer Datensatz)
+		changed: false, // es wurden Eingaben vorgenommen
+	},
+	// Eingabeformular: Listener für alle Inputs
+	//   input = Element
+	//     (Button oder Textfeld)
+	eingabeListener (input) {
+		// Buttons
+		if (input.type === "button") {
+			if (/-save$/.test(input.id)) {
+				input.addEventListener("click", () => redLit.eingabeSpeichern());
+			} else if (/-add$/.test(input.id)) {
+				input.addEventListener("click", () => redLit.eingabeHinzufuegen());
+			}
+			return;
+		}
+		// Sigle
+		if (input.id === "red-lit-eingabe-si") {
+			redLit.eingabeAutoID(input);
+		}
+		// ID
+		if (input.id === "red-lit-eingabe-id") {
+			// TODO
+		}
+		// URL
+		if (input.id === "red-lit-eingabe-ul") {
+			redLit.eingabeAutoURL(input);
+		}
+		// alle Textfelder
+		input.addEventListener("input", () => {
+			if (redLit.eingabe.changed) {
+				return;
+			}
+			redLit.eingabe.changed = true;
+			let span = document.createElement("span");
+			span.textContent = "*";
+			document.getElementById("red-lit-eingabe-meldung").appendChild(span);
+		});
 	},
 	// Eingabeformular: Status anzeigen
 	//   status = String
@@ -51,6 +88,7 @@ let redLit = {
 		} else {
 			redLit.eingabe.id = document.getElementById("red-lit-eingabe-id").value;
 		}
+		redLit.eingabe.changed = false;
 		let text = {
 			"add": "Titelaufnahme hinzufügen",
 			"change": "Titelaufnahme ändern",
@@ -195,6 +233,7 @@ let redLit = {
 						document.getElementById("red-lit-eingabe-si").select();
 					},
 				});
+				redLit.eingabeStatus(redLit.eingabe.status); // Änderungsmarkierung zurücksetzen
 				return;
 			}
 		}

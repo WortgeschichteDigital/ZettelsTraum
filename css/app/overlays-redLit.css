@@ -45,6 +45,11 @@
 	border-color: var(--grenzeRot);
 }
 
+#red-lit-eingabe-meldung span {
+	padding-left: 3px;
+	color: var(--textWarnung);
+}
+
 #red-lit-eingabe p.button {
 	margin-bottom: 0;
 	text-align: center;
