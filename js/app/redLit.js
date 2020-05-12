@@ -225,6 +225,14 @@ let redLit = {
 			});
 			return;
 		}
+		// Dateifpad ist bekannt, wurde aber nicht wiedergefunden => prüfen, ob er jetzt da ist
+		if (optionen.data["literatur-db"] &&
+				!redLit.db.gefunden) {
+			let gefunden = await helfer.exists(optionen.data["literatur-db"]);
+			if (gefunden) {
+				redLit.db.gefunden = true;
+			}
+		}
 		// Dateipfad ist bekannt und wurde wiedergefunden => direkt schreiben
 		if (optionen.data["literatur-db"] &&
 				redLit.db.gefunden &&
