@@ -44,12 +44,34 @@ let redLit = {
 		// Datenbank wurde nicht wiedergefunden
 		// (kann temporär verschwunden sein, weil sie im Netzwerk liegt)
 		redLit.db.gefunden = false;
-		// TODO versuchen die Offline-Version zu laden
-		// TODO wenn das scheitert => anzeigen, dass keine DB geladen wurde
-		// Laden der Offline-Version war erfolgreich
-		let span = document.createElement("span");
-		span.textContent = "[offline]";
-		document.getElementById("red-lit-pfad-db").appendChild(span);
+		// versuchen, die Offline-Version zu laden
+		let ergebnis = await redLit.dbLadenOffline();
+		if (ergebnis) {
+			return;
+		}
+		// Laden ist endgültig gescheitert => Datenbank entkoppeln
+		redLit.dbEntkoppeln();
+	},
+	// Datenkbank: versuchen, die Offline-Version zu laden
+	dbLadenOffline () {
+		return new Promise(async resolve => {
+			const path = require("path");
+			let reg = new RegExp(`.+${helfer.escapeRegExp(path.sep)}(.+)`),
+				dateiname = optionen.data["literatur-db"].match(reg),
+				offlinePfad = path.join(appInfo.userData, dateiname[1]);
+			const offlineVersion = await helfer.exists(offlinePfad);
+			if (offlineVersion) {
+				let result = await redLit.dbOeffnenEinlesen(offlinePfad);
+				if (result === true) { // Laden der Offline-Version war erfolgreich
+					let span = document.createElement("span");
+					span.textContent = "[offline]";
+					document.getElementById("red-lit-pfad-db").appendChild(span);
+					resolve(true);
+					return;
+				}
+			}
+			resolve(false);
+		});
 	},
 	// Datenbank: Anzeige auffrischen
 	dbAnzeige () {
@@ -76,6 +98,70 @@ let redLit = {
 			changed.classList.add("changed");
 		} else {
 			changed.classList.remove("changed");
+		}
+	},
+	// Datenbank: Listener für die Icon-Links
+	//   a = Element
+	//     (ein Icon-Link zum Speichern, Öffnen usw.)
+	dbListener (a) {
+		a.addEventListener("click", function(evt) {
+			evt.preventDefault();
+			if (/-entkoppeln/.test(this.id)) {
+				redLit.dbEntkoppeln();
+			} else if (/-speichern$/.test(this.id)) {
+				redLit.dbSpeichern();
+			} else if (/-speichern-unter$/.test(this.id)) {
+				redLit.dbSpeichern(true);
+			}
+		});
+	},
+	// Datenbank: Verknüpfung mit der Datenbank auflösen
+	dbEntkoppeln () {
+		// Änderungen im Formular noch nicht gespeichert?
+		if (redLit.eingabe.changed) {
+			redLit.nav("eingabe");
+			dialog.oeffnen({
+				typ: "confirm",
+				text: "Die Titelaufnahme im Eingabeformular wurde geändert, aber noch nicht gespeichert.\nMöchten Sie die Titelaufnahme nicht erst einmal speichern?",
+				callback: () => {
+					if (dialog.antwort) {
+						redLit.eingabeSpeichern();
+					} else if (dialog.antwort === false) {
+						entkoppeln();
+					}
+				},
+			});
+			return;
+		}
+		// Änderungen in der DB noch nicht gespeichert?
+		if (redLit.db.changed) {
+			dialog.oeffnen({
+				typ: "confirm",
+				text: "Die Datenbank wurde geändert, aber noch nicht gespeichert.\nMöchten Sie die Datenbank nicht erst einmal speichern?",
+				callback: () => {
+					if (dialog.antwort) {
+						redLit.dbSpeichern();
+					} else if (dialog.antwort === false) {
+						entkoppeln();
+					}
+				},
+			});
+			return;
+		}
+		// Datenbank direkt entkoppeln
+		entkoppeln();
+		// Entkoppeln durchführen
+		function entkoppeln () {
+			redLit.db.data = {};
+			redLit.db.gefunden = false;
+			redLit.db.changed = false;
+			if (optionen.data["literatur-db"]) {
+				optionen.data["literatur-db"] = "";
+				optionen.speichern();
+			}
+			redLit.dbAnzeige();
+			redLit.eingabeStatus("add");
+			redLit.eingabeLeeren();
 		}
 	},
 	// Datenbank: Datei einlesen
@@ -110,19 +196,6 @@ let redLit = {
 			redLit.dbOfflineKopie(pfad);
 			// Promise auflösen
 			resolve(true);
-		});
-	},
-	// Datenbank: Listener für die Icon-Links
-	//   a = Element
-	//     (ein Icon-Link zum Speichern, Öffnen usw.)
-	dbListener (a) {
-		a.addEventListener("click", function(evt) {
-			evt.preventDefault();
-			if (/-speichern$/.test(this.id)) {
-				redLit.dbSpeichern();
-			} else if (/-speichern-unter$/.test(this.id)) {
-				redLit.dbSpeichern(true);
-			}
 		});
 	},
 	// Datenbank: Datei speichern
@@ -245,13 +318,29 @@ let redLit = {
 	navListener (input) {
 		input.addEventListener("change", function() {
 			const form = this.id.replace(/.+-/, "");
-			redLit.nav(form);
+			redLit.nav(form, true);
 		});
 	},
 	// Navigation: Umschalten zwischen Eingabe- und Suchformular
 	//   form = String
 	//     ("eingabe" od. "suche")
-	nav (form) {
+	//   nav = true || undefined
+	//     (Funktion wurde über das Navigationsformular aufgerufen)
+	nav (form, nav = false) {
+		// schon in der richtigen Sektion
+		if (!nav && document.getElementById(`red-lit-nav-${form}`).checked) {
+			return;
+		}
+		// Radio-Buttons umstellen
+		let radio = document.querySelectorAll("#red-lit-nav input");
+		for (let i of radio) {
+			if (i.id === `red-lit-nav-${form}`) {
+				i.checked = true;
+			} else {
+				i.checked = false;
+			}
+		}
+		// Block umstellen
 		let formulare = ["red-lit-eingabe", "red-lit-suche"];
 		for (let i of formulare) {
 			let block = document.getElementById(i);
@@ -708,6 +797,7 @@ let redLit = {
 	},
 	// Eingabeformular: neue Titelaufnahme hinzufügen
 	eingabeHinzufuegen () {
+		redLit.nav("eingabe");
 		if (redLit.eingabe.changed) {
 			dialog.oeffnen({
 				typ: "confirm",
@@ -727,9 +817,6 @@ let redLit = {
 		hinzufuegen();
 		// Hinzufügen ausführen
 		function hinzufuegen () {
-			// Formular anzeigen
-			document.getElementById("red-lit-nav-eingabe").checked = true;
-			redLit.nav("eingabe");
 			// Formularstatus ändern
 			redLit.eingabeStatus("add");
 			// Formular leeren
