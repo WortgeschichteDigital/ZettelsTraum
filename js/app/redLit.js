@@ -2,17 +2,23 @@
 
 let redLit = {
 	// Literaturdatenbank öffnen
-	oeffnen () {
+	async oeffnen () {
 		// Fenster öffnen oder in den Vordergrund holen
 		let fenster = document.getElementById("red-lit");
 		if (overlay.oeffnen(fenster)) { // Fenster ist schon offen
 			return;
 		}
 		// Datenbank laden
-		redLit.dbLaden();
+		let dbGeladen = await redLit.dbLaden();
 		// Datensatz hinzufügen
-		redLit.eingabe.changed = false;
-		redLit.eingabeHinzufuegen();
+		if (dbGeladen) {
+			redLit.eingabeStatus("add");
+			redLit.eingabeLeeren();
+			redLit.nav("suche");
+		} else {
+			redLit.eingabe.changed = false;
+			redLit.eingabeHinzufuegen();
+		}
 	},
 	// Datenbank: Speicher für Variablen
 	db: {
@@ -21,36 +27,44 @@ let redLit = {
 		changed: false, // Inhalt der Datenbank wurde geändert und noch nicht gespeichert
 	},
 	// Datenbank: Datei laden
-	async dbLaden () {
-		// Anzeige auffrischen
-		redLit.dbAnzeige();
-		// ggf. Datenbank einlesen
-		if (!optionen.data["literatur-db"]) {
-			return;
-		}
-		const existiert = await helfer.exists(optionen.data["literatur-db"]);
-		// Datenkbank wurde wiedergefunden
-		if (existiert) {
-			redLit.db.gefunden = true;
-			let result = await redLit.dbOeffnenEinlesen(optionen.data["literatur-db"]);
-			if (result !== true) {
-				dialog.oeffnen({
-					typ: "alert",
-					text: result,
-				});
+	dbLaden () {
+		return new Promise(async resolve => {
+			// Anzeige auffrischen
+			redLit.dbAnzeige();
+			// ggf. Datenbank einlesen
+			if (!optionen.data["literatur-db"]) {
+				resolve(false);
+				return;
 			}
-			return;
-		}
-		// Datenbank wurde nicht wiedergefunden
-		// (kann temporär verschwunden sein, weil sie im Netzwerk liegt)
-		redLit.db.gefunden = false;
-		// versuchen, die Offline-Version zu laden
-		let ergebnis = await redLit.dbLadenOffline();
-		if (ergebnis) {
-			return;
-		}
-		// Laden ist endgültig gescheitert => Datenbank entkoppeln
-		redLit.dbEntkoppeln();
+			const existiert = await helfer.exists(optionen.data["literatur-db"]);
+			// Datenkbank wurde wiedergefunden
+			if (existiert) {
+				redLit.db.gefunden = true;
+				let result = await redLit.dbOeffnenEinlesen(optionen.data["literatur-db"]);
+				if (result !== true) {
+					dialog.oeffnen({
+						typ: "alert",
+						text: result,
+					});
+					resolve(false);
+					return;
+				}
+				resolve(true);
+				return;
+			}
+			// Datenbank wurde nicht wiedergefunden
+			// (kann temporär verschwunden sein, weil sie im Netzwerk liegt)
+			redLit.db.gefunden = false;
+			// versuchen, die Offline-Version zu laden
+			let ergebnis = await redLit.dbLadenOffline();
+			if (ergebnis) {
+				resolve(true);
+				return;
+			}
+			// Laden ist endgültig gescheitert => Datenbank entkoppeln
+			redLit.dbEntkoppeln();
+			resolve(false);
+		});
 	},
 	// Datenkbank: versuchen, die Offline-Version zu laden
 	dbLadenOffline () {
@@ -341,7 +355,7 @@ let redLit = {
 			}
 		}
 		// Block umstellen
-		let formulare = ["red-lit-eingabe", "red-lit-suche"];
+		let formulare = ["red-lit-suche", "red-lit-eingabe"];
 		for (let i of formulare) {
 			let block = document.getElementById(i);
 			if (i.includes(`-${form}`)) {
