@@ -43,9 +43,12 @@ let redLit = {
 			}
 		}
 	},
+	// speichert den Status des Formulars
+	eingabeStatusAkt: "",
 	// Titelaufnahme hinzufügen
 	//   status = String
 	eingabeStatus (status) {
+		redLit.eingabeStatusAkt = status;
 		let text = {
 			"add": "Titelaufnahme hinzufügen",
 			"change": "Titelaufnahme ändern",
@@ -64,5 +67,38 @@ let redLit = {
 			}
 			i.value = "";
 		}
+	},
+	// ID automatisch aus der Sigle ermitteln
+	//   input = Element
+	//     (das Sigle-Feld)
+	eingabeAutoID (input) {
+		input.addEventListener("input", function() {
+			if (redLit.eingabeStatusAkt !== "add") {
+				return;
+			}
+			let val = this.value;
+			val = val.toLowerCase();
+			val = val.replace(/\s/g, "-");
+			val = val.replace(/^[0-9]+|[^a-z0-9ßäöü-]/g, "");
+			document.getElementById("red-lit-eingabe-id").value = val;
+		});
+	},
+	// Automatismen bei Eingabe einer URL
+	//   input = Element
+	//     (das URL-Feld)
+	eingabeAutoURL (input) {
+		input.addEventListener("input", function() {
+			if (!this.value) {
+				return;
+			}
+			let ad = document.getElementById("red-lit-eingabe-ad"),
+				fo = document.getElementById("red-lit-eingabe-fo");
+			if (!ad.value) {
+				ad.value = new Date().toISOString().split("T")[0];
+			}
+			if (!fo.value) {
+				fo.value = "online";
+			}
+		});
 	},
 };
