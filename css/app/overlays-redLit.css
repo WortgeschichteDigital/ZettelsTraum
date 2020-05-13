@@ -109,6 +109,12 @@
 	width: 20px;
 }
 
+#red-lit-suche-sonder {
+	margin: 5px 0 0 0;
+	font-size: 12px;
+	line-height: 18px;
+}
+
 #red-lit-suche-titel {
 	margin-top: 10px;
 	max-height: 500px;
@@ -122,6 +128,15 @@
 
 #red-lit-suche-titel .red-lit-snippet:last-child {
 	border-bottom: none;
+}
+
+#red-lit-suche-titel a:not(.icon-link) {
+	cursor: pointer;
+}
+
+#red-lit-suche-sonder a:focus,
+#red-lit-suche-titel a:not(.icon-link):focus {
+	text-decoration: underline;
 }
 
 /* Eingabeformular ------------------------------ */
@@ -284,14 +299,6 @@
 
 .red-lit-snippet p.meta span {
 	margin-left: 15px;
-}
-
-.red-lit-snippet a:not(.icon-link) {
-	cursor: pointer;
-}
-
-.red-lit-snippet a:not(.icon-link):focus {
-	text-decoration: underline;
 }
 
 .red-lit-snippet i {

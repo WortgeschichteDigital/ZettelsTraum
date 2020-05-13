@@ -507,6 +507,7 @@ let redLit = {
 	suche: {
 		treffer: [],
 		highlight: null,
+		sonder: "",
 	},
 	// Suche: zum Formular wechseln
 	sucheWechseln () {
@@ -546,6 +547,17 @@ let redLit = {
 			}
 		});
 	},
+	// Suche: Sondersuche starten
+	//   a = Element
+	//     (Link für eine Sondersuche)
+	sucheSonder (a) {
+		a.addEventListener("click", function(evt) {
+			evt.preventDefault();
+			redLit.suche.sonder = this.dataset.sonder;
+			redLit.sucheStarten();
+			redLit.suche.sonder = "";
+		});
+	},
 	// Suche: starten
 	sucheStarten () {
 		// Filterkriterien auslesen/Variablen vorbereiten
@@ -573,10 +585,42 @@ let redLit = {
 			["td", "ti"],
 			["td", "ul"],
 		];
+		let siglen_doppelt = new Set();
+		if (redLit.suche.sonder === "siglen_doppelt") {
+			let siglen = [];
+			for (let arr of Object.values(redLit.db.data)) {
+				siglen.push(arr[0].td.si);
+			}
+			siglen.forEach(i => {
+				let treffer = siglen.filter(j => j === i);
+				if (treffer.length > 1) {
+					siglen_doppelt.add(i);
+				}
+			});
+		}
 		let treffer = redLit.suche.treffer;
 		for (let [id, arr] of Object.entries(redLit.db.data)) {
+			// Sondersuchen
+			if (redLit.suche.sonder === "aufnahmen" &&
+					arr.length === 1) { // mehrere Titelaufnahmen
+				continue;
+			}
+			// Suche nach Text und Datum
 			for (let i = 0, len = arr.length; i < len; i++) {
 				let aufnahme = arr[i];
+				// Sondersuchen
+				if (redLit.suche.sonder === "ppn_ohne" &&
+					aufnahme.td.pn.length) { // ohne PPN
+					continue;
+				} else if (redLit.suche.sonder === "ppn_mit" &&
+					!aufnahme.td.pn.length) { // mit PPN
+					continue;
+				} else if (redLit.suche.sonder === "siglen_doppelt" && i > 0) { // doppelte Siglen (nur aktuellsten Eintrag berücksichtigen)
+					break;
+				} else if (redLit.suche.sonder === "siglen_doppelt" &&
+						!siglen_doppelt.has(aufnahme.td.si)) { // doppelte Siglen
+					continue;
+				}
 				// Datum
 				let daOk = !da ? true : false;
 				if (da) {
