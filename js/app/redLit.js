@@ -1374,34 +1374,40 @@ let redLit = {
 			no.appendChild(noFrag);
 			noFrag.innerHTML = redLit.anzeigeSnippetHighlight(ds.td.no);
 		}
-		// BearbeiterIn + Datum
-		let meta = document.createElement("p");
-		div.appendChild(meta);
-		meta.classList.add("meta");
-		meta.innerHTML = redLit.anzeigeSnippetHighlight(ds.be);
-		let zeit = document.createElement("span");
-		meta.appendChild(zeit);
-		let datum = new Date(ds.da),
-			d = datum.getDate().toString().replace(/^0/, ""),
-			m = (datum.getMonth() + 1).toString().replace(/^0/, ""),
-			y = datum.getFullYear(),
-			hh = datum.getHours(),
-			mm = datum.getMinutes().toString(),
-			ss = datum.getSeconds().toString();
-		if (mm.length < 2) {
-			mm = "0" + mm;
+		// Metadaten: BearbeiterIn + Datum + Titelaufnahmen
+		// (nur im Suchkontext anzeigen)
+		if (redLit.anzeige.snippetKontext === "suche") {
+			let meta = document.createElement("p");
+			div.appendChild(meta);
+			meta.classList.add("meta");
+			// Bearbeiterin
+			meta.innerHTML = redLit.anzeigeSnippetHighlight(ds.be);
+			// Zeitpunkt
+			let zeit = document.createElement("span");
+			meta.appendChild(zeit);
+			let datum = new Date(ds.da),
+				d = datum.getDate().toString().replace(/^0/, ""),
+				m = (datum.getMonth() + 1).toString().replace(/^0/, ""),
+				y = datum.getFullYear(),
+				hh = datum.getHours(),
+				mm = datum.getMinutes().toString(),
+				ss = datum.getSeconds().toString();
+			if (mm.length < 2) {
+				mm = "0" + mm;
+			}
+			if (ss.length < 2) {
+				ss = "0" + ss;
+			}
+			zeit.textContent = `${d}. ${m}. ${y}, ${hh}:${mm}:${ss} Uhr`;
+			// Anzahl Titelaufnahmen
+			let aufnahmen = document.createElement("span");
+			meta.appendChild(aufnahmen);
+			let numerus = "Titelaufnahme";
+			if (redLit.db.data[id].length > 1) {
+				numerus = "Titelaufnahmen";
+			}
+			aufnahmen.textContent = `${redLit.db.data[id].length} ${numerus}`;
 		}
-		if (ss.length < 2) {
-			ss = "0" + ss;
-		}
-		zeit.textContent = `${d}. ${m}. ${y}, ${hh}:${mm}:${ss} Uhr`;
-		let aufnahmen = document.createElement("span");
-		meta.appendChild(aufnahmen);
-		let numerus = "Titelaufnahme";
-		if (redLit.db.data[id].length > 1) {
-			numerus = "Titelaufnahmen";
-		}
-		aufnahmen.textContent = `${redLit.db.data[id].length} ${numerus}`;
 		// Snippet zurückgeben
 		return div;
 	},

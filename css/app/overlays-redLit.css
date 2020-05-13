@@ -279,6 +279,7 @@
 	display: inline-block;
 	margin-left: 15px;
 	color: var(--textWarnung);
+	font-size: 14px;
 	font-weight: normal;
 }
 
@@ -299,6 +300,11 @@
 
 .red-lit-snippet p.meta span {
 	margin-left: 15px;
+}
+
+.red-lit-snippet p.meta span.veraltet {
+	margin-left: 0;
+	color: var(--textWarnung);
 }
 
 .red-lit-snippet i {
