@@ -1274,9 +1274,17 @@ let redLit = {
 			let i = document.createElement("i");
 			pn.appendChild(i);
 			i.textContent = "PPN:";
-			let pnFrag = document.createElement("span");
-			pn.appendChild(pnFrag);
-			pnFrag.innerHTML = redLit.anzeigeSnippetHighlight(ds.td.pn.join(", "));
+			for (let i = 0, len = ds.td.pn.length; i < len; i++) {
+				if (i > 0) {
+					pn.appendChild(document.createTextNode(", "));
+				}
+				let a = document.createElement("a");
+				pn.appendChild(a);
+				a.classList.add("link");
+				a.href = `https://kxp.k10plus.de/DB=2.1/PPNSET?PPN=${ds.td.pn[i]}`;
+				a.innerHTML = redLit.anzeigeSnippetHighlight(ds.td.pn[i]);
+				helfer.externeLinks(a);
+			}
 		}
 		// Notizen
 		if (ds.td.no) {
