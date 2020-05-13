@@ -869,7 +869,7 @@ let redLit = {
 				korrekt = [],
 				fehlerhaft = [];
 			for (let i of ppns) {
-				if (i && !/^[0-9]{9,10}X?$/.test(i)) {
+				if (i && !/^[0-9]{8,10}X?$/.test(i)) {
 					fehlerhaft.push(i);
 				} else if (i) {
 					korrekt.push(i);
