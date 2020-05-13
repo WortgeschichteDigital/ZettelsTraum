@@ -1,7 +1,7 @@
 "use strict";
 
 let redLit = {
-	// Literaturdatenbank öffnen
+	// Fenster öffnen
 	async oeffnen () {
 		// Fenster öffnen oder in den Vordergrund holen
 		let fenster = document.getElementById("red-lit");
@@ -19,6 +19,15 @@ let redLit = {
 			redLit.eingabe.changed = false;
 			redLit.eingabeHinzufuegen();
 		}
+	},
+	// Fenster schließen
+	schliessen () {
+		redLit.dbCheck(() => {
+			if (!optionen.data["literatur-db"]) {
+				redLit.dbEntkoppeln();
+			}
+			overlay.ausblenden(document.getElementById("red-lit"));
+		});
 	},
 	// Datenbank: Speicher für Variablen
 	db: {
