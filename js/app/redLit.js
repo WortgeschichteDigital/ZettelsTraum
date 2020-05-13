@@ -744,6 +744,10 @@ let redLit = {
 		if (input.id === "red-lit-eingabe-id") {
 			redLit.eingabeWarnungID(input);
 		}
+		// Titel
+		if (input.id === "red-lit-eingabe-ti") {
+			redLit.eingabeAutoTitel(input);
+		}
 		// URL
 		if (input.id === "red-lit-eingabe-ul") {
 			redLit.eingabeAutoURL(input);
@@ -814,6 +818,35 @@ let redLit = {
 			document.getElementById("red-lit-eingabe-id").value = val;
 		});
 	},
+	// Eingabeformular: Automatismen bei Eingabe des Titels
+	//   input = Element
+	//     (das Titel-Feld)
+	eingabeAutoTitel (input) {
+		input.addEventListener("input", function() {
+			// Sigle ermitteln
+			let si = document.getElementById("red-lit-eingabe-si");
+			if (!si.value) {
+				let name = this.value.split(/[\s,:]/),
+					jahr = this.value.match(/[0-9]{4}/g),
+					sigle = [];
+				if (name[0]) {
+					sigle.push(name[0]);
+				}
+				if (jahr && jahr.length) {
+					sigle.push(jahr[jahr.length - 1]);
+				}
+				if (sigle.length > 1) {
+					si.value = sigle.join(" ");
+					si.dispatchEvent(new KeyboardEvent("input"));
+				}
+			}
+			// Fundort ausfüllen
+			let fo = document.getElementById("red-lit-eingabe-fo");
+			if (this.value && !fo.value) {
+				fo.value = "Bibliothek";
+			}
+		});
+	},
 	// Eingabeformular: Automatismen bei Eingabe einer URL
 	//   input = Element
 	//     (das URL-Feld)
@@ -827,9 +860,7 @@ let redLit = {
 			if (!ad.value) {
 				ad.value = new Date().toISOString().split("T")[0];
 			}
-			if (!fo.value) {
-				fo.value = "online";
-			}
+			fo.value = /books\.google\.[a-z]+\//.test(this.value) ? "GoogleBooks" : "online";
 		});
 	},
 	// Eingabeformular: vor Ändern der ID warnen
@@ -1009,11 +1040,11 @@ let redLit = {
 			});
 			return false;
 		}
-		// wenn URL => Fundort "online"
+		// wenn URL => Fundort "GoogleBooks" || "online"
 		let fo = document.getElementById("red-lit-eingabe-fo");
-		if (url.value && fo.value !== "online") {
+		if (url.value && !/^(GoogleBooks|online)$/.test(fo.value)) {
 			fehler({
-				text: "Geben Sie eine URL an, muss der Fundort „online“ sein.",
+				text: "Geben Sie eine URL an, muss der Fundort „online“ oder „GoogleBooks“ sein.",
 				fokus: fo,
 			});
 			return false;
@@ -1044,10 +1075,10 @@ let redLit = {
 			});
 			return false;
 		}
-		// wenn Fundort "online" => URL eingeben
-		if (fo.value === "online" && !url.value) {
+		// wenn Fundort "GoogleBooks" || "online" => URL eingeben
+		if (/^(GoogleBooks|online)$/.test(fo.value) && !url.value) {
 			fehler({
-				text: "Ist der Fundort „online“, müssen Sie eine URL angeben.",
+				text: "Ist der Fundort „online“ oder „GoogleBooks“, müssen Sie eine URL angeben.",
 				fokus: url,
 			});
 			return false;
