@@ -273,6 +273,11 @@ a {
 	mask-image: url(../../img/speichern-unter.svg);
 }
 
+.icon-stift {
+	-webkit-mask-image: url(../../img/stift.svg);
+	mask-image: url(../../img/stift.svg);
+}
+
 .icon-stern {
 	-webkit-mask-image: url(../../img/stern.svg);
 	mask-image: url(../../img/stern.svg);

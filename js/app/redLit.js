@@ -162,6 +162,8 @@ let redLit = {
 		}
 		// DB-Anzeige auffrischen
 		redLit.dbAnzeige();
+		// Suche zurücksetzen
+		redLit.sucheReset();
 		// Eingabeformular zurücksetzen
 		// (setzt zugleich die Eingabe-Datensätze zurück)
 		redLit.eingabeStatus("add");
@@ -501,10 +503,15 @@ let redLit = {
 			}
 		}
 	},
+	// Suche: Speicher für Variablen
+	suche: {
+		treffer: [],
+		highlight: null,
+	},
 	// Suche: zum Formular wechseln
 	sucheWechseln () {
 		redLit.nav("suche");
-		document.getElementById("red-lit-suche-text").focus();
+		document.getElementById("red-lit-suche-text").select();
 	},
 	// Suche: Formular zurücksetzen
 	sucheReset () {
@@ -512,9 +519,20 @@ let redLit = {
 		for (let i of inputs) {
 			i.value = "";
 		}
+		redLit.sucheResetBloecke(true);
+	},
+	// Suche: Formular zurücksetzen (Blöcke)
+	//   aus = Boolean
+	//     (Blöcke ausstellen)
+	sucheResetBloecke (aus) {
 		let bloecke = ["titel", "treffer"];
 		for (let i of bloecke) {
-			document.getElementById(`red-lit-suche-${i}`).classList.add("aus");
+			let block = document.getElementById(`red-lit-suche-${i}`);
+			if (aus) {
+				block.classList.add("aus");
+			} else {
+				block.classList.remove("aus");
+			}
 		}
 	},
 	// Suche: Listener für die Formularfelder
@@ -526,6 +544,132 @@ let redLit = {
 			if (!tastatur.modifiers && evt.key === "Enter") {
 				redLit.sucheStarten();
 			}
+		});
+	},
+	// Suche: starten
+	sucheStarten () {
+		// Filterkriterien auslesen/Variablen vorbereiten
+		let text = helfer.textTrim(document.getElementById("red-lit-suche-text").value, true),
+			ab = document.getElementById("red-lit-suche-ab").value,
+			st = null,
+			da = null;
+		redLit.suche.treffer = [];
+		redLit.suche.highlight = null;
+		if (text) {
+			st = new RegExp(helfer.escapeRegExp(text), "gi");
+			redLit.suche.highlight = st;
+		}
+		if (ab) {
+			da = new Date(ab);
+		}
+		// Einträge durchsuchen
+		let datensaetze = [
+			["be"],
+			["td", "ad"],
+			["td", "fo"],
+			["td", "no"],
+			["td", "pn"],
+			["td", "si"],
+			["td", "ti"],
+			["td", "ul"],
+		];
+		let treffer = redLit.suche.treffer;
+		for (let [id, arr] of Object.entries(redLit.db.data)) {
+			for (let i = 0, len = arr.length; i < len; i++) {
+				let aufnahme = arr[i];
+				// Datum
+				let daOk = !da ? true : false;
+				if (da) {
+					let daA = new Date(aufnahme.da);
+					if (daA >= da) {
+						daOk = true;
+					}
+				}
+				// Text
+				let stOk = !st ? true : false;
+				if (st) {
+					for (let j of datensaetze) {
+						let ds = aufnahme[j[0]];
+						if (j[1]) {
+							ds = ds[j[1]];
+						}
+						const txt = Array.isArray(ds) ? ds.join(", ") : ds;
+						if (txt.match(st)) {
+							stOk = true;
+							break;
+						}
+					}
+				}
+				// Treffer aufhnehmen?
+				if (daOk && stOk) {
+					treffer.push({id, slot: i});
+					break;
+				}
+			}
+		}
+		// Treffer sortieren (nach Sigle)
+		treffer.sort((a, b) => {
+			const siA = helfer.sortAlphaPrep(redLit.db.data[a.id][a.slot].td.si),
+				siB = helfer.sortAlphaPrep(redLit.db.data[b.id][b.slot].td.si);
+			let arr = [siA, siB];
+			arr.sort();
+			if (arr[0] === siA) {
+				return -1;
+			}
+			return 1;
+		});
+		// Suchtreffer anzeigen
+		redLit.sucheAnzeigen(0);
+	},
+	// Suche: Treffer anzeigen
+	//   start = Number
+	//     (Index, von dem aus die Ergebnisse angezeigt werden sollen)
+	sucheAnzeigen (start) {
+		let treffer = redLit.suche.treffer;
+		// keine Treffer => keine Anzeige
+		if (!treffer.length) {
+			let st = document.getElementById("red-lit-suche-text");
+			st.classList.add("keine-treffer");
+			setTimeout(() => st.classList.remove("keine-treffer"), 1500);
+			redLit.sucheResetBloecke(true);
+			return;
+		}
+		// ggf. Anzeige vorbereiten
+		if (start === 0) {
+			redLit.sucheResetBloecke(false);
+		}
+		// 100 Treffer drucken (max.)
+		redLit.anzeige.snippetKontext = "suche";
+		let titel = document.getElementById("red-lit-suche-titel");
+		titel.scrollTop = 0;
+		helfer.keineKinder(titel);
+		for (let i = start, len = start + 100; i < len; i++) {
+			// letzter Treffer erreicht
+			if (!treffer[i]) {
+				break;
+			}
+			let snippet = redLit.anzeigeSnippet(treffer[i]);
+			redLit.sucheSnippetAktiv(snippet);
+			titel.appendChild(snippet);
+		}
+	},
+	// Suche: Snippet aktivieren
+	//   div = Element
+	//     (Snippet mit einer Titelaufnahme)
+	sucheSnippetAktiv (div) {
+		div.addEventListener("click", function() {
+			// Snippet ist aktiv => deaktivieren
+			if (this.classList.contains("aktiv")) {
+				this.classList.remove("aktiv");
+				return;
+			}
+			// aktive Snippet deaktivieren
+			let aktiv = document.querySelector("#red-lit-suche-titel .aktiv");
+			if (aktiv) {
+				aktiv.classList.remove("aktiv");
+			}
+			// angeklicktes Snippet aktivieren
+			this.classList.add("aktiv");
 		});
 	},
 	// Eingabeformular: Speicher für Variablen
@@ -761,6 +905,8 @@ let redLit = {
 		redLit.db.data[id].unshift(ds);
 		// Status Eingabeformular auffrischen
 		redLit.eingabeStatus("change");
+		// Suche zurücksetzen
+		redLit.sucheReset();
 		// Status Datenbank auffrischen
 		redLit.dbGeaendert(true);
 	},
@@ -1001,5 +1147,189 @@ let redLit = {
 			// Formular fokussieren
 			document.getElementById("red-lit-eingabe-si").focus();
 		}
+	},
+	// Eingabeformular: Listener für Bearbeitenlinks
+	//   a = Element
+	//     (Icon-Link zum Bearbeiten eines Eintrags)
+	eingabeBearbeitenListener (a) {
+		a.addEventListener("click", function(evt) {
+			evt.preventDefault();
+			let json = JSON.parse(this.dataset.ds);
+			redLit.eingabeBearbeiten(json);
+		});
+	},
+	// Eingabeformular: Eintrag bearbeiten
+	//   id = String
+	//     (ID der Titelaufnahme)
+	//   slot = Number
+	//     (Slot der Titelaufnahme)
+	eingabeBearbeiten ({id, slot}) {
+		// zum Formular wechseln
+		redLit.nav("eingabe");
+		// Formular leeren
+		redLit.eingabeLeeren();
+		// Formular füllen
+		let ds = redLit.db.data[id][slot].td,
+			inputs = document.querySelectorAll("#red-lit-eingabe input, #red-lit-eingabe textarea");
+		for (let i of inputs) {
+			if (i.type === "button") {
+				continue;
+			}
+			let key = i.id.replace(/.+-/, "");
+			if (key === "id") {
+				i.value = id;
+			} else {
+				i.value = Array.isArray(ds[key]) ? ds[key].join(", ") : ds[key];
+				if (i.nodeName === "TEXTAREA") {
+					helfer.textareaGrow(i);
+				}
+			}
+		}
+		// Formularstatus auffrischen
+		let status = "change";
+		if (slot > 0) {
+			status = "old";
+		}
+		redLit.eingabeStatus(status);
+		// Sigle-Feld fokussieren
+		document.getElementById("red-lit-eingabe-si").select();
+	},
+	// Anzeige: Speicher für Variablen
+	anzeige: {
+		snippetKontext: "suche", // "suche" || "popup"
+	},
+	// Anzeige: Snippet einer Titelaufnahme erstellen
+	//   id = String
+	//     (ID der Titelaufnahme)
+	//   slot = Number
+	//     (Slot der Titelaufnahme)
+	anzeigeSnippet ({id, slot}) {
+		let ds = redLit.db.data[id][slot];
+		// Snippet füllen
+		let div = document.createElement("div");
+		div.classList.add("red-lit-snippet");
+		// Sigle
+		let si = document.createElement("p");
+		div.appendChild(si);
+		si.classList.add("sigle");
+		si.innerHTML = redLit.anzeigeSnippetHighlight(ds.td.si);
+		// alte Aufnahme
+		if (slot > 0 && redLit.anzeige.snippetKontext === "suche") {
+			let alt = document.createElement("span");
+			si.appendChild(alt);
+			alt.classList.add("veraltet");
+			alt.textContent = "[veraltete Titelaufnahme]";
+		}
+		// Icon: Bearbeiten
+		let icons = document.createElement("span");
+		si.appendChild(icons);
+		icons.classList.add("icons");
+		let bearb = document.createElement("a");
+		icons.appendChild(bearb);
+		bearb.href = "#";
+		bearb.classList.add("icon-link", "icon-stift");
+		bearb.dataset.ds = `{"id":"${id}","slot":${slot}}`;
+		redLit.eingabeBearbeitenListener(bearb);
+		// Titelaufnahme
+		let ti = document.createElement("p");
+		div.appendChild(ti);
+		ti.classList.add("aufnahme");
+		ti.innerHTML = redLit.anzeigeSnippetHighlight(ds.td.ti);
+		// URL + Aufrufdatum
+		if (ds.td.ul) {
+			let ul = document.createElement("p");
+			div.appendChild(ul);
+			let a = document.createElement("a");
+			ul.appendChild(a);
+			a.classList.add("link");
+			a.href = ds.td.ul;
+			a.innerHTML = redLit.anzeigeSnippetHighlight(ds.td.ul);
+			helfer.externeLinks(a);
+			if (ds.td.ad) {
+				let datum = ds.td.ad.split("-");
+				datum[1] = datum[1].replace(/^0/, "");
+				datum[2] = datum[2].replace(/^0/, "");
+				let i = document.createElement("i");
+				ul.appendChild(i);
+				i.textContent = "Aufrufdatum:";
+				ul.appendChild(i);
+				let adFrag = document.createElement("span");
+				ul.appendChild(adFrag);
+				adFrag.innerHTML = redLit.anzeigeSnippetHighlight(` ${datum[2]}. ${datum[1]}. ${datum[0]}`);
+			}
+		}
+		// Fundort
+		let fo = document.createElement("p");
+		div.appendChild(fo);
+		let i = document.createElement("i");
+		fo.appendChild(i);
+		i.textContent = "Fundort:";
+		let foFrag = document.createElement("span");
+		fo.appendChild(foFrag);
+		foFrag.innerHTML = redLit.anzeigeSnippetHighlight(ds.td.fo);
+		// PPN
+		if (ds.td.pn.length) {
+			let pn = document.createElement("p");
+			div.appendChild(pn);
+			let i = document.createElement("i");
+			pn.appendChild(i);
+			i.textContent = "PPN:";
+			let pnFrag = document.createElement("span");
+			pn.appendChild(pnFrag);
+			pnFrag.innerHTML = redLit.anzeigeSnippetHighlight(ds.td.pn.join(", "));
+		}
+		// Notizen
+		if (ds.td.no) {
+			let no = document.createElement("p");
+			div.appendChild(no);
+			let i = document.createElement("i");
+			no.appendChild(i);
+			i.textContent = "Notizen:";
+			let noFrag = document.createElement("span");
+			no.appendChild(noFrag);
+			noFrag.innerHTML = redLit.anzeigeSnippetHighlight(ds.td.no);
+		}
+		// BearbeiterIn + Datum
+		let meta = document.createElement("p");
+		div.appendChild(meta);
+		meta.classList.add("meta");
+		meta.innerHTML = redLit.anzeigeSnippetHighlight(ds.be);
+		let zeit = document.createElement("span");
+		meta.appendChild(zeit);
+		let datum = new Date(ds.da),
+			d = datum.getDate().toString().replace(/^0/, ""),
+			m = (datum.getMonth() + 1).toString().replace(/^0/, ""),
+			y = datum.getFullYear(),
+			hh = datum.getHours(),
+			mm = datum.getMinutes().toString(),
+			ss = datum.getSeconds().toString();
+		if (mm.length < 2) {
+			mm = "0" + mm;
+		}
+		if (ss.length < 2) {
+			ss = "0" + ss;
+		}
+		zeit.textContent = `${d}. ${m}. ${y}, ${hh}:${mm}:${ss} Uhr`;
+		let aufnahmen = document.createElement("span");
+		meta.appendChild(aufnahmen);
+		let numerus = "Titelaufnahme";
+		if (redLit.db.data[id].length > 1) {
+			numerus = "Titelaufnahmen";
+		}
+		aufnahmen.textContent = `${redLit.db.data[id].length} ${numerus}`;
+		// Snippet zurückgeben
+		return div;
+	},
+	// Anzeige: Suchtreffer im Snippet highlighten
+	//   text = String
+	//     (Text, der gedruckt werden soll)
+	anzeigeSnippetHighlight (text) {
+		// Muss/kann Text hervorgehoben werden?
+		if (redLit.anzeige.snippetKontext !== "suche" ||
+				!redLit.suche.highlight) {
+			return text;
+		}
+		// Suchtext hervorheben
+		return text.replace(redLit.suche.highlight, m => `<mark class="suche">${m}</mark>`);
 	},
 };

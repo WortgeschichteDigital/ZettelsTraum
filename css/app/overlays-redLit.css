@@ -3,7 +3,7 @@
 /* Redaktion: Literaturdatenbank ---------------- */
 #red-lit > div {
 	margin-top: 40px;
-	max-width: 600px;
+	max-width: 700px;
 }
 
 #red-lit > div > div {
@@ -87,21 +87,41 @@
 
 #red-lit-suche-text {
 	margin-right: 15px;
-	width: calc(100% - 214px); /* 12px Padding und Border, 15px Margin, 40px Label, 147px Datumsfeld */
+	width: calc(100% - 194px); /* 12px Padding und Border, 15px Margin, 20px Label, 147px Datumsfeld */
+	transition: background-color .5s linear;
 }
 
-#red-lit-suche-nach {
+#red-lit-suche-text.keine-treffer {
+	background-color: var(--hintergrundRot);
+}
+
+#red-lit-suche-ab {
 	margin-left: 5px;
 	width: 130px;
 }
 
-#red-lit-suche-nach:invalid {
+#red-lit-suche-ab:invalid {
 	color: var(--textSehrHell);
 }
 
 #red-lit-suche-form label {
 	display: inline-block;
-	width: 40px;
+	width: 20px;
+}
+
+#red-lit-suche-titel {
+	margin-top: 10px;
+	max-height: 500px;
+	overflow: auto;
+}
+
+#red-lit-suche-titel .red-lit-snippet {
+	border-bottom: 1px dotted var(--linie);
+	padding: 10px;
+}
+
+#red-lit-suche-titel .red-lit-snippet:last-child {
+	border-bottom: none;
 }
 
 /* Eingabeformular ------------------------------ */
@@ -214,4 +234,73 @@
 
 #red-lit-eingabe textarea#red-lit-eingabe-no:invalid {
 	background: #fff url(../../img/zeilen-2,5-grau.svg) no-repeat left top;
+}
+
+/* Titelsnippet --------------------------------- */
+.red-lit-snippet.aktiv {
+	background-color: var(--hintergrund);
+}
+
+.red-lit-snippet p {
+	margin: 0 0 0 25px;
+	padding-left: 25px;
+	font-size: 14px;
+	line-height: 20px;
+	text-indent: -25px;
+}
+
+.red-lit-snippet p.sigle,
+.red-lit-snippet p.aufnahme {
+	position: relative;
+	margin: 0;
+	padding-left: 0;
+	font-weight: bold;
+	font-size: 16px;
+	line-height: 24px;
+	text-indent: 0;
+}
+
+.red-lit-snippet p.sigle .veraltet {
+	display: inline-block;
+	margin-left: 15px;
+	color: var(--textWarnung);
+	font-weight: normal;
+}
+
+.red-lit-snippet p.sigle .icons {
+	position: absolute;
+	right: 0;
+}
+
+.red-lit-snippet p.aufnahme {
+	margin: 0 0 5px 0;
+	font-weight: normal;
+}
+
+.red-lit-snippet p.meta {
+	margin: 5px 0 0 0;
+	color: var(--textHell);
+}
+
+.red-lit-snippet p.meta span {
+	margin-left: 15px;
+}
+
+.red-lit-snippet a:not(.icon-link) {
+	cursor: pointer;
+}
+
+.red-lit-snippet a:not(.icon-link):focus {
+	text-decoration: underline;
+}
+
+.red-lit-snippet i {
+	margin-left: 15px;
+	display: inline-block;
+	text-indent: 0;
+}
+
+.red-lit-snippet i:first-child {
+	margin-left: 0;
+	width: 60px;
 }
