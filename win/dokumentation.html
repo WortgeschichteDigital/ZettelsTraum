@@ -1171,6 +1171,134 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
 							<td>Versionsnummer des <abbr title="Zettel’s Traum Belege">ZTB</abbr>-Dateiformats</td>
 						</tr>
 					</table>
+
+					<!-- ZTL-Format -->
+					<h2 id="ztj-ztl"><abbr title="Zettel’s Traum Literaturdatenbank">ZTL</abbr>-Format</h2>
+
+					<p>Mithilfe der Funktion <a href="#menueRedaktion-literatur" class="link-handbuch"><i>Redaktion &gt; Literatur</i></a> kann eine Literaturdatenbank angelegt, geladen und bearbeitet werden. Hierfür gibt es ein eigenes Dateiformat. Der Inhalt dieser <abbr title="Zettel’s Traum Literaturdatenbank">ZTL</abbr>-Dateien ist ebenfalls <abbr title="GNU zip">gzip</abbr>-komprimierter Plain-Text im <abbr title="JavaScript Object Notation">JSON</abbr>-Format. Der Aufbau (<span class="obacht">Datenformat Version 1</span>):</p>
+
+					<table class="ztj">
+						<tr>
+							<th>Schlüssel</th>
+							<th>Datentyp</th>
+							<th>Format</th>
+							<th>Funktion</th>
+						</tr>
+						<tr>
+							<td><code class="quelltext">dc</code></td>
+							<td class="datentyp">String</td>
+							<td>ISO 8601-Datum:<br><code class="quelltext">"2001-11-01<br>T11:22:33.444Z"</code></td>
+							<td>Zeitpunkt, zu dem die Datenbank erstellt wurde</td>
+						</tr>
+						<tr>
+							<td><code class="quelltext">dm</code></td>
+							<td class="datentyp">String</td>
+							<td>ISO 8601-Datum:<br><code class="quelltext">"2001-11-01<br>T11:22:33.444Z"</code></td>
+							<td>Zeitpunkt, zu dem die Datenbank zuletzt geändert wurde</td>
+						</tr>
+						<tr>
+							<td><p><code class="quelltext">re</code></p></td>
+							<td class="datentyp">Number</td>
+							<td><code class="quelltext">/[0-9]+/</code></td>
+							<td>Revisionsnummer; wird bei jedem Speichern der Datenbank um <code class="quelltext">1</code> hochgezählt</td>
+						</tr>
+						<tr>
+							<td><code class="quelltext">ti</code></td>
+							<td class="datentyp">Object</td>
+							<td> </td>
+							<td>Titelaufnahmen</td>
+						</tr>
+						<tr class="ztj-ebene1">
+							<td colspan="4"><p>Es folgen beliebig viele <span class="datentyp">Objects</span> mit einmaligen Schlüsseln:</p></td>
+						</tr>
+						<tr class="ztj-ebene1">
+							<td><p>(ID)</p></td>
+							<td class="datentyp">Array</td>
+							<td><code class="quelltext">/[a-z0-9ßäöü-]+/</code></td>
+							<td>Titelaufnahme; die neuste Version steht in Slot <code class="quelltext">[0]</code>; <code class="quelltext">/^[0-9]/</code> ist verboten</td>
+						</tr>
+						<tr class="ztj-ebene2">
+							<td colspan="4"><p>In jedem Slot <span class="datentyp">Objects</span> mit den folgenden Schlüsseln und Werten:</p></td>
+						</tr>
+						<tr class="ztj-ebene2">
+							<td><p><code class="quelltext">be</code></p></td>
+							<td class="datentyp">String</td>
+							<td> </td>
+							<td>BearbeiterIn, die diesen Datensatz erstellt hat</td>
+						</tr>
+						<tr class="ztj-ebene2">
+							<td><p><code class="quelltext">da</code></p></td>
+							<td class="datentyp">String</td>
+							<td>ISO 8601-Datum:<br><code class="quelltext">"2001-11-01<br>T11:22:33.444Z"</code></td>
+							<td>Datum, an dem der Datensatz erstellt wurde</td>
+						</tr>
+						<tr class="ztj-ebene2">
+							<td><p><code class="quelltext">id</code></p></td>
+							<td class="datentyp">String</td>
+							<td>10 Hexadezimalziffern</td>
+							<td>ID des Datensatzes</td>
+						</tr>
+						<tr class="ztj-ebene2">
+							<td><p><code class="quelltext">td</code></p></td>
+							<td class="datentyp">Object</td>
+							<td> </td>
+							<td>Titeldaten</td>
+						</tr>
+						<tr class="ztj-ebene3">
+							<td><p><code class="quelltext">ad</code></p></td>
+							<td class="datentyp">String</td>
+							<td>ISO 8601-Datum:<br><code class="quelltext">"2019-12-01"</code></td>
+							<td>Aufrufdatum der URL</td>
+						</tr>
+						<tr class="ztj-ebene3">
+							<td><p><code class="quelltext">fo</code></p></td>
+							<td class="datentyp">String</td>
+							<td> </td>
+							<td>Fundort</td>
+						</tr>
+						<tr class="ztj-ebene3">
+							<td><p><code class="quelltext">no</code></p></td>
+							<td class="datentyp">String</td>
+							<td> </td>
+							<td>Notizen</td>
+						</tr>
+						<tr class="ztj-ebene3">
+							<td><p><code class="quelltext">pn</code></p></td>
+							<td class="datentyp">Array</td>
+							<td><code class="quelltext">/[0-9]{9,10}X?/</code></td>
+							<td>in jedem Slot eine <abbr title="Pica-Produktionsnummer">PPN</abbr></td>
+						</tr>
+						<tr class="ztj-ebene3">
+							<td><p><code class="quelltext">si</code></p></td>
+							<td class="datentyp">String</td>
+							<td> </td>
+							<td>Sigle</td>
+						</tr>
+						<tr class="ztj-ebene3">
+							<td><p><code class="quelltext">ti</code></p></td>
+							<td class="datentyp">String</td>
+							<td> </td>
+							<td>Titelaufnahme</td>
+						</tr>
+						<tr class="ztj-ebene3">
+							<td><p><code class="quelltext">ul</code></p></td>
+							<td class="datentyp">String</td>
+							<td> </td>
+							<td>URL</td>
+						</tr>
+						<tr>
+							<td><p><code class="quelltext">ty</code></p></td>
+							<td class="datentyp">String</td>
+							<td>immer <code class="quelltext">"ztl"</code></td>
+							<td>Dateityp; für Tests beim Öffnen einer Datenbank, damit nicht beliebige <abbr title="JavaScript Object Notation">JSON</abbr>-Daten in einem anderen Dateiformat geladen werden</td>
+						</tr>
+						<tr>
+							<td><p><code class="quelltext">ve</code></p></td>
+							<td class="datentyp">Number</td>
+							<td><code class="quelltext">/[0-9]+/</code></td>
+							<td>Versionsnummer des <abbr title="Zettel’s Traum Literaturdatenbank">ZTL</abbr>-Dateiformats</td>
+						</tr>
+					</table>
 				</section>
 
 				<!-- XML-SNIPPETS -->
