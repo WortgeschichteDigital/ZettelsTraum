@@ -221,6 +221,8 @@ let redLit = {
 			}
 			// DB-Anzeige auffrischen
 			redLit.dbAnzeige();
+			// Suche zurücksetzen
+			redLit.sucheReset();
 			// Eingabeformular zurücksetzen
 			redLit.eingabeStatus("add");
 			redLit.eingabeLeeren();
