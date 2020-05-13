@@ -9,7 +9,7 @@ let redLit = {
 			return;
 		}
 		// Datenbank laden
-		let dbGeladen = await redLit.dbLaden();
+		const dbGeladen = await redLit.dbLaden();
 		// Datensatz hinzufügen
 		if (dbGeladen) {
 			redLit.eingabeStatus("add");
@@ -22,7 +22,13 @@ let redLit = {
 	},
 	// Datenbank: Speicher für Variablen
 	db: {
-		data: {}, // Daten der (geladenen) Literaturdatenbank
+		data: {}, // Titeldaten der Literaturdatenbank (wenn DB geladen => Inhalt von DB.ti)
+		dataMeta: { // Metadaten der Literaturdatenbank
+			dc: "", // Erstellungszeitpunkt (DB.dc)
+			dm: "", // Änderungszeitpunkt (DB.dm)
+			re: 0, // Revisionsnummer (DB.re)
+		},
+		ve: 1, // Versionsnummer des aktuellen Datenbankformats
 		gefunden: false, // Datenbankdatei gefunden (könnte im Netzwerk temporär verschwunden sein)
 		changed: false, // Inhalt der Datenbank wurde geändert und noch nicht gespeichert
 	},
@@ -36,11 +42,11 @@ let redLit = {
 				resolve(false);
 				return;
 			}
-			const existiert = await helfer.exists(optionen.data["literatur-db"]);
+			const dbExistiert = await helfer.exists(optionen.data["literatur-db"]);
 			// Datenkbank wurde wiedergefunden
-			if (existiert) {
+			if (dbExistiert) {
 				redLit.db.gefunden = true;
-				let result = await redLit.dbOeffnenEinlesen(optionen.data["literatur-db"]);
+				const result = await redLit.dbOeffnenEinlesen(optionen.data["literatur-db"]);
 				if (result !== true) {
 					dialog.oeffnen({
 						typ: "alert",
@@ -56,8 +62,8 @@ let redLit = {
 			// (kann temporär verschwunden sein, weil sie im Netzwerk liegt)
 			redLit.db.gefunden = false;
 			// versuchen, die Offline-Version zu laden
-			let ergebnis = await redLit.dbLadenOffline();
-			if (ergebnis) {
+			const dbOffline = await redLit.dbLadenOffline();
+			if (dbOffline) {
 				resolve(true);
 				return;
 			}
@@ -73,8 +79,8 @@ let redLit = {
 			let reg = new RegExp(`.+${helfer.escapeRegExp(path.sep)}(.+)`),
 				dateiname = optionen.data["literatur-db"].match(reg),
 				offlinePfad = path.join(appInfo.userData, dateiname[1]);
-			const offlineVersion = await helfer.exists(offlinePfad);
-			if (offlineVersion) {
+			const dbOffline = await helfer.exists(offlinePfad);
+			if (dbOffline) {
 				let result = await redLit.dbOeffnenEinlesen(offlinePfad);
 				if (result === true) { // Laden der Offline-Version war erfolgreich
 					let span = document.createElement("span");
@@ -90,15 +96,13 @@ let redLit = {
 	// Datenbank: Anzeige auffrischen
 	dbAnzeige () {
 		let pfad = document.getElementById("red-lit-pfad-db");
-		// keine DB mit dem Programm verknüpft
-		if (!optionen.data["literatur-db"]) {
+		if (!optionen.data["literatur-db"]) { // keine DB mit dem Programm verknüpft
 			pfad.classList.add("keine-db");
 			pfad.textContent = "keine Datenbank geladen";
-			return;
+		} else { // DB mit dem Programm verknüpft
+			pfad.classList.remove("keine-db");
+			pfad.textContent = `\u200E${optionen.data["literatur-db"]}\u200E`;
 		}
-		// DB mit dem Programm verknüpft
-		pfad.classList.remove("keine-db");
-		pfad.textContent = `\u200E${optionen.data["literatur-db"]}\u200E`;
 		// Änderungsmarkierung zurücksetzen
 		redLit.dbGeaendert(false);
 	},
@@ -141,7 +145,8 @@ let redLit = {
 					if (dialog.antwort) {
 						redLit.eingabeSpeichern();
 					} else if (dialog.antwort === false) {
-						entkoppeln();
+						redLit.eingabe.changed = false;
+						redLit.dbEntkoppeln();
 					}
 				},
 			});
@@ -149,9 +154,13 @@ let redLit = {
 		}
 		// Änderungen in der DB noch nicht gespeichert?
 		if (redLit.db.changed) {
+			let text = "Die Datenbank wurde geändert, aber noch nicht gespeichert.\nMöchten Sie die Datenbank nicht erst einmal speichern?";
+			if (!optionen.data["literatur-db"]) {
+				text = "Sie haben Titelaufnahmen angelegt, aber noch nicht gespeichert.\nMöchten Sie die Änderungen nicht erst einmal in einer Datenbank speichern?";
+			}
 			dialog.oeffnen({
 				typ: "confirm",
-				text: "Die Datenbank wurde geändert, aber noch nicht gespeichert.\nMöchten Sie die Datenbank nicht erst einmal speichern?",
+				text,
 				callback: () => {
 					if (dialog.antwort) {
 						redLit.dbSpeichern();
@@ -166,14 +175,23 @@ let redLit = {
 		entkoppeln();
 		// Entkoppeln durchführen
 		function entkoppeln () {
+			// DB-Datensätze zurücksetzen
 			redLit.db.data = {};
+			redLit.db.dataMeta = {
+				dc: "",
+				dm: "",
+				re: 0,
+			};
 			redLit.db.gefunden = false;
 			redLit.db.changed = false;
 			if (optionen.data["literatur-db"]) {
 				optionen.data["literatur-db"] = "";
 				optionen.speichern();
 			}
+			// DB-Anzeige auffrischen
 			redLit.dbAnzeige();
+			// Eingabeformular zurücksetzen
+			// (setzt zugleich die Eingabe-Datensätze zurück)
 			redLit.eingabeStatus("add");
 			redLit.eingabeLeeren();
 		}
@@ -198,14 +216,16 @@ let redLit = {
 				return;
 			}
 			// Wirklich eine ZTL-Datei?
-			let schluessel = Object.keys(data_tmp),
-				aufnahme = data_tmp[schluessel[0]];
-			if (!aufnahme[0].td || !aufnahme[0].td.ti) {
-				resolve(`Die Datei wurde nicht eingelesen.\nEs handelt sich nicht um eine <i>${appInfo.name} Literaturdatenbank</i>.`);
+			if (data_tmp.ty !== "ztl") {
+				resolve(`Die Literaturdatenbank konnte nicht eingelesen werden.\nEs handelt sich nicht um eine <i>${appInfo.name} Literaturdatenbank</i>.`);
+				redLit.dbEntkoppeln();
 				return;
 			}
 			// Datei kann eingelesen werden
-			redLit.db.data = data_tmp;
+			redLit.db.data = data_tmp.ti;
+			redLit.db.dataMeta.dc = data_tmp.dc;
+			redLit.db.dataMeta.dm = data_tmp.dm;
+			redLit.db.dataMeta.re = data_tmp.re;
 			// Datenbank für Offline-Nutzung verfügbar halten
 			redLit.dbOfflineKopie(pfad);
 			// Promise auflösen
@@ -228,8 +248,8 @@ let redLit = {
 		// Dateifpad ist bekannt, wurde aber nicht wiedergefunden => prüfen, ob er jetzt da ist
 		if (optionen.data["literatur-db"] &&
 				!redLit.db.gefunden) {
-			let gefunden = await helfer.exists(optionen.data["literatur-db"]);
-			if (gefunden) {
+			const dbGefunden = await helfer.exists(optionen.data["literatur-db"]);
+			if (dbGefunden) {
 				redLit.db.gefunden = true;
 			}
 		}
@@ -249,7 +269,7 @@ let redLit = {
 			}
 			return;
 		}
-		// Datei soll/muss angelegt werden
+		// Datei soll/muss neu angelegt werden
 		redLit.dbSpeichernUnter();
 	},
 	// Datenkbank: Datei speichern unter
@@ -312,13 +332,43 @@ let redLit = {
 	// Datenbank: Datei schreiben
 	//   pfad = String
 	//     (Pfad zur Datei)
-	dbSpeichernSchreiben (pfad) {
+	//   offline = true || undefined
+	//     (Datei wird für Offline-Nutzung gespeichert => Metadaten nicht auffrischen)
+	dbSpeichernSchreiben (pfad, offline = false) {
 		return new Promise(async resolve => {
-			let data = redLit.db.data,
-				result = await io.schreiben(pfad, JSON.stringify(data));
+			// alte Metadaten merken für den Fall, dass das Speichern scheitert
+			let meta = {
+				dc: redLit.db.dataMeta.dc,
+				dm: redLit.db.dataMeta.dm,
+				re: redLit.db.dataMeta.re,
+			};
+			// Metadaten auffrischen
+			// (nur wenn kein Speichern für Offline-Nutzung)
+			if (!offline) {
+				if (!redLit.db.dataMeta.dc) {
+					redLit.db.dataMeta.dc = new Date().toISOString();
+				}
+				redLit.db.dataMeta.dm = new Date().toISOString();
+				redLit.db.dataMeta.re++;
+			}
+			// Daten zusammentragen
+			let db = {
+				dc: redLit.db.dataMeta.dc,
+				dm: redLit.db.dataMeta.dm,
+				re: redLit.db.dataMeta.re,
+				ti: redLit.db.data,
+				ty: "ztl",
+				ve: redLit.db.ve,
+			};
+			let result = await io.schreiben(pfad, JSON.stringify(db));
 			// beim Schreiben ist ein Fehler aufgetreten
 			if (result !== true) {
 				resolve(`Beim Speichern der Literaturdatenbank ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${result.name}: ${result.message}</p>`);
+				// Metdaten zurücksetzen
+				redLit.db.dataMeta.dc = meta.dc;
+				redLit.db.dataMeta.dm = meta.dm;
+				redLit.db.dataMeta.re = meta.re;
+				// Fehler auswerfen
 				throw result;
 			}
 			// Schreiben war erfolgreich
@@ -332,7 +382,7 @@ let redLit = {
 		const path = require("path");
 		let reg = new RegExp(`.+${helfer.escapeRegExp(path.sep)}(.+)`),
 			dateiname = pfad.match(reg);
-		redLit.dbSpeichernSchreiben(path.join(appInfo.userData, dateiname[1]));
+		redLit.dbSpeichernSchreiben(path.join(appInfo.userData, dateiname[1]), true);
 	},
 	// Navigation: Listener für das Umschalten
 	//   input = Element
@@ -347,7 +397,7 @@ let redLit = {
 	//   form = String
 	//     ("eingabe" od. "suche")
 	//   nav = true || undefined
-	//     (Funktion wurde über das Navigationsformular aufgerufen)
+	//     (Funktion wurde über das Navigationsformular aufgerufen => nie abbrechen)
 	nav (form, nav = false) {
 		// schon in der richtigen Sektion
 		if (!nav && document.getElementById(`red-lit-nav-${form}`).checked) {
