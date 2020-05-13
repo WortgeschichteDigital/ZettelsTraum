@@ -125,7 +125,9 @@ let redLit = {
 		a.addEventListener("click", function(evt) {
 			evt.preventDefault();
 			if (/-entkoppeln/.test(this.id)) {
-				redLit.dbEntkoppeln();
+				redLit.dbCheck(() => redLit.dbEntkoppeln());
+			} else if (/-oeffnen/.test(this.id)) {
+				redLit.dbCheck(() => redLit.dbOeffnen());
 			} else if (/-speichern$/.test(this.id)) {
 				redLit.dbSpeichern();
 			} else if (/-speichern-unter$/.test(this.id)) {
@@ -135,65 +137,87 @@ let redLit = {
 	},
 	// Datenbank: Verknüpfung mit der Datenbank auflösen
 	dbEntkoppeln () {
-		// Änderungen im Formular noch nicht gespeichert?
-		if (redLit.eingabe.changed) {
-			redLit.nav("eingabe");
-			dialog.oeffnen({
-				typ: "confirm",
-				text: "Die Titelaufnahme im Eingabeformular wurde geändert, aber noch nicht gespeichert.\nMöchten Sie die Titelaufnahme nicht erst einmal speichern?",
-				callback: () => {
-					if (dialog.antwort) {
-						redLit.eingabeSpeichern();
-					} else if (dialog.antwort === false) {
-						redLit.eingabe.changed = false;
-						redLit.dbEntkoppeln();
-					}
+		// DB-Datensätze zurücksetzen
+		redLit.db.data = {};
+		redLit.db.dataMeta = {
+			dc: "",
+			dm: "",
+			re: 0,
+		};
+		redLit.db.gefunden = false;
+		redLit.db.changed = false;
+		if (optionen.data["literatur-db"]) {
+			optionen.data["literatur-db"] = "";
+			optionen.speichern();
+		}
+		// DB-Anzeige auffrischen
+		redLit.dbAnzeige();
+		// Eingabeformular zurücksetzen
+		// (setzt zugleich die Eingabe-Datensätze zurück)
+		redLit.eingabeStatus("add");
+		redLit.eingabeLeeren();
+	},
+	// Datenbank: Datei öffnen
+	async dbOeffnen () {
+		let opt = {
+			title: "Literaturdatenbank öffnen",
+			defaultPath: appInfo.documents,
+			filters: [
+				{
+					name: `${appInfo.name} Literaturdatenbank`,
+					extensions: ["ztl"],
 				},
+				{
+					name: "Alle Dateien",
+					extensions: ["*"],
+				},
+			],
+			properties: [
+				"openFile",
+			],
+		};
+		// Wo wurde zuletzt eine Datei gespeichert oder geöffnet?
+		if (optionen.data.letzter_pfad) {
+			opt.defaultPath = optionen.data.letzter_pfad;
+		}
+		// Dialog anzeigen
+		const {ipcRenderer} = require("electron");
+		let result = await ipcRenderer.invoke("datei-dialog", {
+			open: true,
+			winId: winInfo.winId,
+			opt: opt,
+		});
+		// Fehler oder keine Datei ausgewählt
+		if (result.message || !Object.keys(result).length) {
+			dialog.oeffnen({
+				typ: "alert",
+				text: `Beim Öffnen des Dateidialogs ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${result.message}</p>`,
 			});
 			return;
-		}
-		// Änderungen in der DB noch nicht gespeichert?
-		if (redLit.db.changed) {
-			let text = "Die Datenbank wurde geändert, aber noch nicht gespeichert.\nMöchten Sie die Datenbank nicht erst einmal speichern?";
-			if (!optionen.data["literatur-db"]) {
-				text = "Sie haben Titelaufnahmen angelegt, aber noch nicht gespeichert.\nMöchten Sie die Änderungen nicht erst einmal in einer Datenbank speichern?";
-			}
-			dialog.oeffnen({
-				typ: "confirm",
-				text,
-				callback: () => {
-					if (dialog.antwort) {
-						redLit.dbSpeichern();
-					} else if (dialog.antwort === false) {
-						entkoppeln();
-					}
-				},
-			});
+		} else if (result.canceled) {
 			return;
 		}
-		// Datenbank direkt entkoppeln
-		entkoppeln();
-		// Entkoppeln durchführen
-		function entkoppeln () {
-			// DB-Datensätze zurücksetzen
-			redLit.db.data = {};
-			redLit.db.dataMeta = {
-				dc: "",
-				dm: "",
-				re: 0,
-			};
-			redLit.db.gefunden = false;
+		// Datei einlesen
+		const ergebnis = await redLit.dbOeffnenEinlesen(result.filePaths[0]);
+		if (ergebnis === true) {
+			// Datensätze auffrischen
+			redLit.db.gefunden = true;
 			redLit.db.changed = false;
-			if (optionen.data["literatur-db"]) {
-				optionen.data["literatur-db"] = "";
+			if (optionen.data["literatur-db"] !== result.filePaths[0]) {
+				optionen.data["literatur-db"] = result.filePaths[0];
 				optionen.speichern();
 			}
 			// DB-Anzeige auffrischen
 			redLit.dbAnzeige();
 			// Eingabeformular zurücksetzen
-			// (setzt zugleich die Eingabe-Datensätze zurück)
 			redLit.eingabeStatus("add");
 			redLit.eingabeLeeren();
+		} else {
+			// Einlesen ist gescheitert
+			dialog.oeffnen({
+				typ: "altert",
+				text: ergebnis,
+			});
 		}
 	},
 	// Datenbank: Datei einlesen
@@ -383,6 +407,50 @@ let redLit = {
 		let reg = new RegExp(`.+${helfer.escapeRegExp(path.sep)}(.+)`),
 			dateiname = pfad.match(reg);
 		redLit.dbSpeichernSchreiben(path.join(appInfo.userData, dateiname[1]), true);
+	},
+	// Datenbank: prüft, ob noch ein Speichervorgang aussteht
+	//   fun = Function
+	//     (Callback-Funktion)
+	dbCheck (fun) {
+		// Änderungen im Formular noch nicht gespeichert?
+		if (redLit.eingabe.changed) {
+			redLit.nav("eingabe");
+			dialog.oeffnen({
+				typ: "confirm",
+				text: "Die Titelaufnahme im Eingabeformular wurde geändert, aber noch nicht gespeichert.\nMöchten Sie die Titelaufnahme nicht erst einmal speichern?",
+				callback: () => {
+					if (dialog.antwort) {
+						redLit.eingabeSpeichern();
+					} else if (dialog.antwort === false) {
+						redLit.eingabe.changed = false;
+						redLit.dbCheck(fun);
+					}
+				},
+			});
+			return;
+		}
+		// Änderungen in der DB noch nicht gespeichert?
+		if (redLit.db.changed) {
+			let text = "Die Datenbank wurde geändert, aber noch nicht gespeichert.\nMöchten Sie die Datenbank nicht erst einmal speichern?";
+			if (!optionen.data["literatur-db"]) {
+				text = "Sie haben Titelaufnahmen angelegt, aber noch nicht gespeichert.\nMöchten Sie die Änderungen nicht erst einmal in einer Datenbank speichern?";
+			}
+			dialog.oeffnen({
+				typ: "confirm",
+				text,
+				callback: () => {
+					if (dialog.antwort) {
+						redLit.dbSpeichern();
+					} else if (dialog.antwort === false) {
+						redLit.db.changed = false;
+						fun();
+					}
+				},
+			});
+			return;
+		}
+		// es steht nichts mehr aus => Funktion direkt ausführen
+		fun();
 	},
 	// Navigation: Listener für das Umschalten
 	//   input = Element
