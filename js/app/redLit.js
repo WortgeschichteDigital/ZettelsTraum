@@ -10,11 +10,13 @@ let redLit = {
 		}
 		// Datenbank laden
 		const dbGeladen = await redLit.dbLaden();
-		// Datensatz hinzufügen
+		// passendes Formular öffnen
+		redLit.sucheReset();
 		if (dbGeladen) {
 			redLit.eingabeStatus("add");
 			redLit.eingabeLeeren();
 			redLit.nav("suche");
+			document.getElementById("red-lit-suche-text").focus();
 		} else {
 			redLit.eingabe.changed = false;
 			redLit.eingabeHinzufuegen();
@@ -498,6 +500,17 @@ let redLit = {
 			} else {
 				block.classList.add("aus");
 			}
+		}
+	},
+	// Suchformular zurücksetzen
+	sucheReset () {
+		let inputs = document.querySelectorAll("#red-lit-suche p:first-child input");
+		for (let i of inputs) {
+			i.value = "";
+		}
+		let bloecke = ["titel", "treffer"];
+		for (let i of bloecke) {
+			document.getElementById(`red-lit-suche-${i}`).classList.add("aus");
 		}
 	},
 	// Eingabeformular: Speicher für Variablen

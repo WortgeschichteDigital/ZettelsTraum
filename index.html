@@ -917,7 +917,15 @@
 				><input type="radio" name="red-lit-nav" id="red-lit-nav-eingabe"
 					><label for="red-lit-nav-eingabe">Titelaufnahme</label
 			></div>
-			<div id="red-lit-suche">[Suche]</div>
+			<div id="red-lit-suche">
+				<p
+					><input type="text" value="" placeholder="Suchtext" id="red-lit-suche-text"
+					><label for="red-lit-suche-nach">nach</label
+					><input type="date" value="" id="red-lit-suche-nach" required
+				></p>
+				<div id="red-lit-suche-titel"></div>
+				<div id="red-lit-suche-treffer"></div>
+			</div>
 			<div id="red-lit-eingabe">
 				<p id="red-lit-eingabe-meldung"></p>
 				<p class="button"><input type="button" value="Speichern" id="red-lit-eingabe-save"

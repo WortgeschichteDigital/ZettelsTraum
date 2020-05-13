@@ -80,6 +80,30 @@
 	font-style: italic;
 }
 
+/* Suche ---------------------------------------- */
+#red-lit-suche-form {
+	margin: 0;
+}
+
+#red-lit-suche-text {
+	margin-right: 15px;
+	width: calc(100% - 214px); /* 12px Padding und Border, 15px Margin, 40px Label, 147px Datumsfeld */
+}
+
+#red-lit-suche label {
+	display: inline-block;
+	width: 40px;
+}
+
+#red-lit-suche-nach {
+	margin-left: 5px;
+	width: 130px;
+}
+
+#red-lit-suche-nach:invalid {
+	color: var(--textSehrHell);
+}
+
 /* Eingabeformular ------------------------------ */
 #red-lit-eingabe-meldung {
 	margin-bottom: 20px;
