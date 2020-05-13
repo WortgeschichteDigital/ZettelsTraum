@@ -108,6 +108,8 @@ let popup = {
 		} else if (target === "link") {
 			if (overlay.oben() === "stamm") {
 				items.push("link", "sep", "schliessen");
+			} else if (overlay.oben() === "red-lit") {
+				items.push("link", "sep", "schliessen");
 			} else if (helfer.hauptfunktion === "karte") {
 				items.push("link", "sep", {name: "text", sub: ["textReferenz"]}, {name: "xml", sub: ["xmlReferenz"]}, "sep", "karteikarteConf");
 			} else if (helfer.hauptfunktion === "liste") {
@@ -115,8 +117,10 @@ let popup = {
 			} else {
 				items.push("link");
 			}
-			items.push("sep", "belegHinzufuegen");
-			popup.belegeAuflisten(items);
+			if (kartei.wort) {
+				items.push("sep", "belegHinzufuegen");
+				popup.belegeAuflisten(items);
+			}
 		} else if (target === "beleg") {
 			items = ["belegBearbeiten", "sep", "schliessen", "sep", "belegHinzufuegen"];
 			popup.belegeAuflisten(items);
@@ -267,10 +271,10 @@ let popup = {
 				} else if (pfad[i].classList.contains("link")) {
 					popup.element = pfad[i];
 					let oben = overlay.oben();
-					if (oben !== "stamm" && helfer.hauptfunktion === "karte") {
+					if (!/^(stamm|red-lit)$/.test(oben) && helfer.hauptfunktion === "karte") {
 						popup.referenz.data = beleg.data;
 						popup.referenz.id = "" + beleg.id_karte;
-					} else if (oben !== "stamm" && helfer.hauptfunktion === "liste") {
+					} else if (!/^(stamm|red-lit)$/.test(oben) && helfer.hauptfunktion === "liste") {
 						const id = pfad[i].closest(".liste-details").previousSibling.dataset.id;
 						popup.referenz.data = data.ka[id];
 						popup.referenz.id = id;
