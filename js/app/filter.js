@@ -1645,7 +1645,6 @@ let filter = {
 		filter.anzeigeUmschaltenAktiv.add(block);
 		// zuklappen
 		if (!auf) {
-			
 			block.style.height = `${block.offsetHeight}px`;
 			setTimeout(() => {
 				block.classList.add("blenden");
@@ -1680,6 +1679,11 @@ let filter = {
 	},
 	// die Suche wird aufgerufen
 	suche () {
+		// ggf. das Suchformular in der Literaturdatenbank fokussieren
+		if (overlay.oben() === "red-lit") {
+			redLit.sucheWechseln();
+			return;
+		}
 		// Sperre für macOS (Menüpunkte können nicht deaktiviert werden)
 		if (!kartei.wort) {
 			dialog.oeffnen({
@@ -1688,6 +1692,7 @@ let filter = {
 			});
 			return;
 		}
+		// Suchfilter öffnen
 		speichern.checkInit(() => {
 			// Bedeutungen schließen
 			bedeutungen.schliessen();

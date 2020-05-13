@@ -147,9 +147,11 @@ let tastatur = {
 			}
 			return;
 		}
-		// LITERATURDATENBANK: Key "h"
+		// LITERATURDATENBANK: Key "f" || "h"
 		if (m === "Ctrl" && overlayId === "red-lit") {
-			if (evt.key === "h") {
+			if (evt.key === "f" && !kartei.wort) {
+				redLit.sucheWechseln();
+			} else if (evt.key === "h") {
 				redLit.eingabeHinzufuegen();
 			}
 			return;

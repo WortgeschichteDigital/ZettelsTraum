@@ -15,8 +15,7 @@ let redLit = {
 		if (dbGeladen) {
 			redLit.eingabeStatus("add");
 			redLit.eingabeLeeren();
-			redLit.nav("suche");
-			document.getElementById("red-lit-suche-text").focus();
+			redLit.sucheWechseln();
 		} else {
 			redLit.eingabe.changed = false;
 			redLit.eingabeHinzufuegen();
@@ -502,7 +501,12 @@ let redLit = {
 			}
 		}
 	},
-	// Suchformular zurücksetzen
+	// Suche: zum Formular wechseln
+	sucheWechseln () {
+		redLit.nav("suche");
+		document.getElementById("red-lit-suche-text").focus();
+	},
+	// Suche: Formular zurücksetzen
 	sucheReset () {
 		let inputs = document.querySelectorAll("#red-lit-suche p:first-child input");
 		for (let i of inputs) {
@@ -512,6 +516,17 @@ let redLit = {
 		for (let i of bloecke) {
 			document.getElementById(`red-lit-suche-${i}`).classList.add("aus");
 		}
+	},
+	// Suche: Listener für die Formularfelder
+	//   input = Element
+	//     (Formularfeld)
+	sucheListener (input) {
+		input.addEventListener("keydown", function(evt) {
+			tastatur.detectModifiers(evt);
+			if (!tastatur.modifiers && evt.key === "Enter") {
+				redLit.sucheStarten();
+			}
+		});
 	},
 	// Eingabeformular: Speicher für Variablen
 	eingabe: {
