@@ -2,6 +2,7 @@
 
 /* Redaktion: Literaturdatenbank ---------------- */
 #red-lit > div {
+	position: relative;
 	margin-top: 40px;
 	max-width: 700px;
 }
@@ -130,12 +131,14 @@
 	border-bottom: none;
 }
 
-#red-lit-suche-titel a:not(.icon-link) {
+#red-lit-suche-titel a:not(.icon-link),
+#red-lit-popup a:not(.icon-link) {
 	cursor: pointer;
 }
 
 #red-lit-suche-sonder a:focus,
-#red-lit-suche-titel a:not(.icon-link):focus {
+#red-lit-suche-titel a:not(.icon-link):focus,
+#red-lit-popup a:not(.icon-link):focus {
 	text-decoration: underline;
 }
 
@@ -274,6 +277,60 @@
 
 #red-lit-eingabe textarea#red-lit-eingabe-no:invalid {
 	background: #fff url(../../img/zeilen-2,5-grau.svg) no-repeat left top;
+}
+
+
+/* Versionen-Popup ------------------------------ */
+#red-lit-popup {
+	position: absolute;
+	top: 70px;
+	left: calc(10% - 11px);
+	z-index: 1;
+	box-shadow: var(--boxShadow);
+	border: 1px solid var(--linie);
+	border-radius: 5px;
+	width: 80%;
+	background-color: #fff;
+}
+
+#red-lit-popup > img {
+	position: absolute;
+	top: 0;
+	right: 0;
+}
+
+#red-lit-popup-versionen {
+	margin: 0 0 10px 0;
+	border-bottom: 1px dotted var(--linie);
+	padding-bottom: 10px;
+	font-size: 14px;
+	line-height: 20px;
+}
+
+#red-lit-popup-versionen div {
+	margin: 0 auto;
+	border-radius: 5px;
+	padding: 5px 10px;
+	overflow: hidden;
+	width: 85%;
+	white-space: nowrap;
+}
+
+#red-lit-popup-versionen div:not(.aktiv) {
+	cursor: pointer;
+}
+
+#red-lit-popup-versionen div.aktiv {
+	background-color: var(--hover);
+}
+
+#red-lit-popup-versionen span {
+	display: inline-block;
+	margin-left: 15px;
+}
+
+#red-lit-popup-versionen span:first-child {
+	margin-left: 0;
 }
 
 /* Titelsnippet --------------------------------- */

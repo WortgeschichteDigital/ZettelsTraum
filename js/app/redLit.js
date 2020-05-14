@@ -8,6 +8,8 @@ let redLit = {
 		if (overlay.oeffnen(fenster)) { // Fenster ist schon offen
 			return;
 		}
+		// ggf. Popup schließen
+		redLit.anzeigePopupSchliessen();
 		// Datenbank laden
 		const dbGeladen = await redLit.dbLaden();
 		// passendes Formular öffnen
@@ -147,6 +149,8 @@ let redLit = {
 	},
 	// Datenbank: Verknüpfung mit der Datenbank auflösen
 	dbEntkoppeln () {
+		// ggf. Popup schließen
+		redLit.anzeigePopupSchliessen();
 		// DB-Datensätze zurücksetzen
 		redLit.db.data = {};
 		redLit.db.dataMeta = {
@@ -209,6 +213,8 @@ let redLit = {
 		} else if (result.canceled) {
 			return;
 		}
+		// ggf. Popup schließen
+		redLit.anzeigePopupSchliessen();
 		// Datei einlesen
 		const ergebnis = await redLit.dbOeffnenEinlesen(result.filePaths[0]);
 		if (ergebnis === true) {
@@ -485,6 +491,8 @@ let redLit = {
 		if (!nav && document.getElementById(`red-lit-nav-${form}`).checked) {
 			return;
 		}
+		// ggf. Popup schließen
+		redLit.anzeigePopupSchliessen();
 		// Radio-Buttons umstellen
 		let radio = document.querySelectorAll("#red-lit-nav input");
 		for (let i of radio) {
@@ -671,8 +679,10 @@ let redLit = {
 	//   start = Number
 	//     (Index, von dem aus die Ergebnisse angezeigt werden sollen)
 	sucheAnzeigen (start) {
-		let treffer = redLit.suche.treffer;
+		// ggf. Popup schließen
+		redLit.anzeigePopupSchliessen();
 		// keine Treffer => keine Anzeige
+		let treffer = redLit.suche.treffer;
 		if (!treffer.length) {
 			let st = document.getElementById("red-lit-suche-text");
 			st.classList.add("keine-treffer");
@@ -1267,6 +1277,7 @@ let redLit = {
 	eingabeBearbeitenListener (a) {
 		a.addEventListener("click", function(evt) {
 			evt.preventDefault();
+			evt.stopPropagation();
 			let json = JSON.parse(this.dataset.ds);
 			redLit.eingabeBearbeiten(json);
 		});
@@ -1277,6 +1288,8 @@ let redLit = {
 	//   slot = Number
 	//     (Slot der Titelaufnahme)
 	eingabeBearbeiten ({id, slot}) {
+		// ggf. Popup schließen
+		redLit.anzeigePopupSchliessen();
 		// zum Formular wechseln
 		redLit.nav("eingabe");
 		// Formular leeren
@@ -1310,6 +1323,7 @@ let redLit = {
 	// Anzeige: Speicher für Variablen
 	anzeige: {
 		snippetKontext: "suche", // "suche" || "popup"
+		id: "", // ID des im Popup angezeigten Titels
 	},
 	// Anzeige: Snippet einer Titelaufnahme erstellen
 	//   id = String
@@ -1344,7 +1358,7 @@ let redLit = {
 			vers.href = "#";
 			vers.classList.add("icon-link", "icon-kreis-info");
 			vers.dataset.id = id;
-			redLit.anzeigeVersionenListener(vers);
+			redLit.anzeigePopupListener(vers);
 		}
 		// Icon: Bearbeiten
 		let bearb = document.createElement("a");
@@ -1459,17 +1473,95 @@ let redLit = {
 	// Anzeige: Listener zum Öffnen des Versionen-Popups
 	//   a = Element
 	//     (Element, über das das Popup geöffnet werden soll)
-	anzeigeVersionenListener (a) {
+	anzeigePopupListener (a) {
 		a.addEventListener("click", function(evt) {
 			evt.preventDefault();
 			evt.stopPropagation();
-			redLit.anzeigeVersionen(this.dataset.id);
+			redLit.anzeigePopup(this.dataset.id);
 		});
 	},
-	// Anzeige: Versionen-Popup der Titelaufnahmen
+	// Anzeige: Versionen-Popup für Titelaufnahmen
 	//   id = String
 	//     (ID der Titelaufnahme)
-	anzeigeVersionen (id) {
-		
+	anzeigePopup (id) {
+		redLit.anzeige.snippetKontext = "popup";
+		redLit.anzeige.id = id;
+		// aktuelles Popup ggf. entfernen
+		redLit.anzeigePopupSchliessen();
+		// Fenster erzeugen
+		let win = document.createElement("div");
+		document.querySelector("#red-lit > div").appendChild(win);
+		win.id = "red-lit-popup";
+		// Schließen-Icon
+		let img = document.createElement("img");
+		win.appendChild(img);
+		img.src = "img/x.svg";
+		img.width = "24";
+		img.height = "24";
+		img.title = "Popup schließen (Esc)";
+		img.addEventListener("click", () => redLit.anzeigePopupSchliessen());
+		// Versionen-Feld
+		let vers = document.createElement("div");
+		win.appendChild(vers);
+		vers.id = "red-lit-popup-versionen";
+		redLit.anzeigePopupVersionen();
+		// Titel-Feld
+		let titel = document.createElement("div");
+		win.appendChild(titel);
+		titel.id = "red-lit-popup-titel";
+		titel.appendChild(redLit.anzeigeSnippet({id, slot: 0}));
+	},
+	// Anzeige: vorhandene Titelaufnahmen im Versionen-Popup auflisten
+	anzeigePopupVersionen () {
+		let vers = document.getElementById("red-lit-popup-versionen"),
+			aufnahme = redLit.db.data[redLit.anzeige.id];
+		helfer.keineKinder(vers);
+		for (let i = 0, len = aufnahme.length; i < len; i++) {
+			let div = document.createElement("div");
+			vers.appendChild(div);
+			if (i === 0) {
+				div.classList.add("aktiv");
+			}
+			div.dataset.slot = i;
+			let infos = [
+				`v${len - i}`, // Version
+				helfer.datumFormat(aufnahme[i].da, "technisch"), // Datum
+				aufnahme[i].be, // BearbeiterIn
+			];
+			for (let i of infos) {
+				let span = document.createElement("span");
+				div.appendChild(span);
+				span.textContent = i;
+			}
+			redLit.anzeigePopupWechseln(div);
+		}
+	},
+	// Anzeige: Titelaufnahme aus der Liste auswählen und anzeigen
+	//   div = Element
+	//     (die angeklickte Titelaufnahme)
+	anzeigePopupWechseln (div) {
+		div.addEventListener("click", function() {
+			if (this.classList.contains("aktiv")) {
+				return;
+			}
+			// ausgewählte Titelaufnahme aktivieren
+			document.querySelector("#red-lit-popup-versionen .aktiv").classList.remove("aktiv");
+			this.classList.add("aktiv");
+			// Titelaufnahme anzeigen
+			let snippet = redLit.anzeigeSnippet({
+				id: redLit.anzeige.id,
+				slot: parseInt(this.dataset.slot, 10),
+			});
+			let titel = document.getElementById("red-lit-popup-titel");
+			titel.replaceChild(snippet, titel.firstChild);
+		});
+	},
+	// Anzeige: Versionen-Popup schließen
+	anzeigePopupSchliessen () {
+		let win = document.getElementById("red-lit-popup");
+		if (!win) {
+			return;
+		}
+		win.parentNode.removeChild(win);
 	},
 };

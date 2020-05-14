@@ -464,7 +464,7 @@ let helfer = {
 			if (stunde.length < 2) {
 				stunde = "0" + stunde;
 			}
-			return `${tag}. ${monat}. ${d.getFullYear()}, ${stunde}:${m}:${s}`;
+			return `${tag}. ${monat}. ${d.getFullYear()}, ${stunde}:${m}:${s} Uhr`;
 		}
 		// Standardformat
 		let wochentage = ["Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"],
