@@ -768,19 +768,40 @@ let redLit = {
 	// Suche: Titelaufnahme auffrischen, falls sie geändert wurde (bearbeitet, gelöscht)
 	//   id = String
 	//     (ID der Titelaufnahme)
-	sucheTrefferAuffrischen (id) {
+	//   delSlot = Number || undefined
+	//     (Slot dessen Titelaufnahme gelöscht wurde)
+	sucheTrefferAuffrischen (id, delSlot = -1) {
 		let treffer = redLit.suche.treffer.find(i => i.id === id);
 		// Titelaufnahme derzeit nicht im Suchergebnis
 		if (!treffer) {
 			return;
 		}
-		// Slot hochzählen, wenn eine veraltete Titelaufnahme angezeigt wird
-		if (treffer.slot > 0) {
+		// nach Speichern: Slot hochzählen, wenn eine veraltete Titelaufnahme angezeigt wird
+		if (delSlot === -1 && treffer.slot > 0) {
 			treffer.slot++;
 		}
-		// ggf. angezeigte Titelaufnahme auffrischen
+		// nach Löschen: Slotnummer ggf. anpassen
 		let titel = document.querySelector(`#red-lit-suche-titel .red-lit-snippet[data-ds*='"${id}"']`);
+		if (delSlot >= 0) {
+			if (treffer.slot === delSlot) {
+				// Treffer komplett entfernen, wenn genau diese Titelaufnahme gelöscht wurde
+				let idx = redLit.suche.treffer.findIndex(i => i.id === id);
+				redLit.suche.treffer.splice(idx, 1);
+				if (!redLit.suche.treffer.length) {
+					redLit.sucheReset();
+				} else if (titel) {
+					titel.parentNode.removeChild(titel);
+				}
+				return;
+			} else if (treffer.slot > delSlot) {
+				// Slot runterzählen, wenn ein Slot vor der angezeigten Aufnahme gelöscht wurde
+				treffer.slot--;
+			}
+			// ist treffer.slot < delSlot muss die Titelaufnahme nur aufgefrischt werden
+		}
+		// ggf. angezeigte Titelaufnahme auffrischen
 		if (titel) {
+			redLit.anzeige.snippetKontext = "suche";
 			titel.parentNode.replaceChild(redLit.anzeigeSnippet(treffer), titel);
 		}
 	},
@@ -1401,6 +1422,15 @@ let redLit = {
 		let icons = document.createElement("span");
 		si.appendChild(icons);
 		icons.classList.add("icons");
+		// Icon: Löschen
+		if (redLit.anzeige.snippetKontext === "popup") {
+			let del = document.createElement("a");
+			icons.appendChild(del);
+			del.href = "#";
+			del.classList.add("icon-link", "icon-muelleimer");
+			del.title = "Titelaufnahme löschen";
+			redLit.titelLoeschenFrage(del);
+		}
 		// Icon: Versionen
 		if (redLit.anzeige.snippetKontext === "suche") {
 			let vers = document.createElement("a");
@@ -1610,6 +1640,7 @@ let redLit = {
 			document.querySelector("#red-lit-popup-versionen .aktiv").classList.remove("aktiv");
 			this.classList.add("aktiv");
 			// Titelaufnahme anzeigen
+			redLit.anzeige.snippetKontext = "popup";
 			let snippet = redLit.anzeigeSnippet({
 				id: redLit.anzeige.id,
 				slot: parseInt(this.dataset.slot, 10),
@@ -1625,5 +1656,60 @@ let redLit = {
 			return;
 		}
 		win.parentNode.removeChild(win);
+	},
+	// Titelaufnahme löschen (Sicherheitsfrage)
+	//   a = Element
+	//     (Icon-Link zum Löschen)
+	titelLoeschenFrage (a) {
+		a.addEventListener("click", function(evt) {
+			evt.preventDefault();
+			let json = JSON.parse(this.closest(".red-lit-snippet").dataset.ds),
+				aufnahme = redLit.db.data[json.id],
+				text = `Soll Version #${aufnahme.length - json.slot} der Titelaufnahme wirklich gelöscht werden?`;
+			if (aufnahme.length === 1) {
+				text = "Soll die Titelaufnahme wirklich komplett gelöscht werden?";
+			}
+			dialog.oeffnen({
+				typ: "confirm",
+				text,
+				callback: () => {
+					if (dialog.antwort) {
+						redLit.titelLoeschen(json);
+					}
+				},
+			});
+		});
+	},
+	// Titelaufnahme löschen
+	//   id = String
+	//     (ID der Titelaufnahme)
+	//   slot = Number
+	//     (Slot der Titelaufnahme)
+	titelLoeschen ({id, slot}) {
+		redLit.db.data[id].splice(slot, 1);
+		// ggf. Suche auffrischen
+		redLit.sucheTrefferAuffrischen(id, slot);
+		// ggf. Eingabeformular auffrischen
+		if (redLit.eingabe.id === id) {
+			if (!redLit.db.data[id].length) { // Titelaufnahme existiert nicht mehr
+				redLit.eingabeMetaFuellen({id: "", slot: -1});
+				redLit.eingabeStatus("add");
+			} else { // Titelaufnahme existiert noch
+				redLit.eingabeMetaFuellen({id, slot: 0});
+			}
+			document.getElementById("red-lit-eingabe-si").dispatchEvent(new KeyboardEvent("input"));
+		}
+		// Datensatz ggf. komplett löschen/Popup auffrischen
+		if (!redLit.db.data[id].length) {
+			delete redLit.db.data[id];
+			redLit.anzeigePopupSchliessen();
+		} else {
+			redLit.anzeigePopupVersionen();
+			let titel = document.getElementById("red-lit-popup-titel");
+			redLit.anzeige.snippetKontext = "popup";
+			titel.replaceChild(redLit.anzeigeSnippet({id, slot: 0}), titel.firstChild);
+		}
+		// Status Datenbank auffrischen
+		redLit.dbGeaendert(true);
 	},
 };

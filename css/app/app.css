@@ -263,6 +263,11 @@ a {
 	mask-image: url(../../img/kreis-info.svg);
 }
 
+.icon-muelleimer {
+	-webkit-mask-image: url(../../img/muelleimer.svg);
+	mask-image: url(../../img/muelleimer.svg);
+}
+
 .icon-oeffnen {
 	-webkit-mask-image: url(../../img/oeffnen.svg);
 	mask-image: url(../../img/oeffnen.svg);
