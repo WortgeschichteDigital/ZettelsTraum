@@ -698,6 +698,42 @@ let redLit = {
 			redLit.sucheSnippetAktiv(snippet);
 			titel.appendChild(snippet);
 		}
+		// Trefferanzeige auffrischen
+		let range = `${start + 1}–${treffer.length > start + 100 ? start + 100 : treffer.length}`;
+		if (treffer.length === 1) {
+			range = "1";
+		}
+		document.getElementById("red-lit-suche-trefferzahl").textContent = `${range} / ${treffer.length}`;
+		document.querySelectorAll("#red-lit-suche-treffer a").forEach((a, n) => {
+			if (n === 0) { // zurückblättern
+				a.dataset.start = `${start - 100}`;
+				if (start > 0) {
+					a.classList.remove("inaktiv");
+				} else {
+					a.classList.add("inaktiv");
+				}
+			} else { // vorblättern
+				a.dataset.start = `${start + 100}`;
+				if (treffer.length > start + 100) {
+					a.classList.remove("inaktiv");
+				} else {
+					a.classList.add("inaktiv");
+				}
+			}
+		});
+	},
+	// Suche: in den Treffern blättern
+	//   a = Element
+	//     (Icon-Link zum Vor- oder Rückwärtsblättern)
+	sucheNav (a) {
+		a.addEventListener("click", function(evt) {
+			evt.preventDefault();
+			if (this.classList.contains("inaktiv")) {
+				return;
+			}
+			let start = parseInt(this.dataset.start, 10);
+			redLit.sucheAnzeigen(start);
+		});
 	},
 	// Suche: Snippet aktivieren
 	//   div = Element

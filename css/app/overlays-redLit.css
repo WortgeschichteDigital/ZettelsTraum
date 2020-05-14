@@ -139,6 +139,31 @@
 	text-decoration: underline;
 }
 
+#red-lit #red-lit-suche-treffer {
+	margin-top: 10px;
+	text-align: center;
+}
+
+#red-lit #red-lit-suche-treffer a {
+	background-color: var(--text);
+}
+
+#red-lit #red-lit-suche-treffer a.inaktiv {
+	background-color: var(--textSehrHell);
+}
+
+#red-lit #red-lit-suche-treffer a:focus,
+#red-lit #red-lit-suche-treffer a:hover,
+#red-lit #red-lit-suche-treffer a.inaktiv:focus,
+#red-lit #red-lit-suche-treffer a.inaktiv:hover {
+	background-color: var(--farbe);
+}
+
+#red-lit-suche-trefferzahl {
+	display: inline-block;
+	width: 150px;
+}
+
 /* Eingabeformular ------------------------------ */
 #red-lit-eingabe-meldung {
 	margin-bottom: 20px;
@@ -253,7 +278,7 @@
 
 /* Titelsnippet --------------------------------- */
 .red-lit-snippet.aktiv {
-	background-color: var(--hintergrund);
+	background-color: var(--hover);
 }
 
 .red-lit-snippet p {
