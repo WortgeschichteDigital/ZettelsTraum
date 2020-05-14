@@ -158,7 +158,7 @@ let tastatur = {
 			if (evt.key === "f" && !kartei.wort) {
 				redLit.sucheWechseln();
 			} else if (evt.key === "h") {
-				redLit.eingabeHinzufuegen();
+				redLit.dbCheck(() => redLit.eingabeHinzufuegen(), false);
 			}
 			return;
 		}

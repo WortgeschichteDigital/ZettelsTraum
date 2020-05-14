@@ -432,7 +432,9 @@ let redLit = {
 	// Datenbank: prüft, ob noch ein Speichervorgang aussteht
 	//   fun = Function
 	//     (Callback-Funktion)
-	dbCheck (fun) {
+	//   db = false || undefined
+	//     (überprüfen, ob die Datenbank gespeichert wurde)
+	dbCheck (fun, db = true) {
 		// Änderungen im Formular noch nicht gespeichert?
 		if (redLit.eingabe.changed) {
 			redLit.nav("eingabe");
@@ -444,14 +446,14 @@ let redLit = {
 						redLit.eingabeSpeichern();
 					} else if (dialog.antwort === false) {
 						redLit.eingabe.changed = false;
-						redLit.dbCheck(fun);
+						redLit.dbCheck(fun, db);
 					}
 				},
 			});
 			return;
 		}
 		// Änderungen in der DB noch nicht gespeichert?
-		if (redLit.db.changed) {
+		if (db && redLit.db.changed) {
 			let text = "Die Datenbank wurde geändert, aber noch nicht gespeichert.\nMöchten Sie die Datenbank nicht erst einmal speichern?";
 			if (!optionen.data["literatur-db"]) {
 				text = "Sie haben Titelaufnahmen angelegt, aber noch nicht gespeichert.\nMöchten Sie die Änderungen nicht erst einmal in einer Datenbank speichern?";
@@ -798,7 +800,9 @@ let redLit = {
 			if (/-save$/.test(input.id)) {
 				input.addEventListener("click", () => redLit.eingabeSpeichern());
 			} else if (/-add$/.test(input.id)) {
-				input.addEventListener("click", () => redLit.eingabeHinzufuegen());
+				input.addEventListener("click", () => {
+					redLit.dbCheck(() => redLit.eingabeHinzufuegen(), false);
+				});
 			}
 			return;
 		}
@@ -1265,33 +1269,14 @@ let redLit = {
 	},
 	// Eingabeformular: neue Titelaufnahme hinzufügen
 	eingabeHinzufuegen () {
+		// ggf. zum Formular wechseln
 		redLit.nav("eingabe");
-		if (redLit.eingabe.changed) {
-			dialog.oeffnen({
-				typ: "confirm",
-				text: "Sie haben offenbar Änderungen vorgenommen.\nSoll die Titelaufnahme nicht erst einmal gespeichert werden?",
-				callback: () => {
-					if (dialog.antwort) {
-						redLit.eingabeSpeichern();
-					} else if (dialog.antwort === false) {
-						hinzufuegen();
-					} else {
-						document.getElementById("red-lit-eingabe-si").select();
-					}
-				},
-			});
-			return;
-		}
-		hinzufuegen();
-		// Hinzufügen ausführen
-		function hinzufuegen () {
-			// Formular leeren
-			redLit.eingabeLeeren();
-			// Formularstatus ändern
-			redLit.eingabeStatus("add");
-			// Formular fokussieren
-			document.getElementById("red-lit-eingabe-si").focus();
-		}
+		// Formular leeren
+		redLit.eingabeLeeren();
+		// Formularstatus ändern
+		redLit.eingabeStatus("add");
+		// Formular fokussieren
+		document.getElementById("red-lit-eingabe-si").focus();
 	},
 	// Eingabeformular: Listener für Bearbeitenlinks
 	//   a = Element
@@ -1300,8 +1285,9 @@ let redLit = {
 		a.addEventListener("click", function(evt) {
 			evt.preventDefault();
 			evt.stopPropagation();
+			redLit.anzeigePopupSchliessen();
 			let json = JSON.parse(this.closest(".red-lit-snippet").dataset.ds);
-			redLit.eingabeBearbeiten(json);
+			redLit.dbCheck(() => redLit.eingabeBearbeiten(json), false);
 		});
 	},
 	// Eingabeformular: Eintrag bearbeiten
