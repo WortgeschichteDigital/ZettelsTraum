@@ -1449,11 +1449,13 @@ let redLit = {
 			// Anzahl Titelaufnahmen
 			let aufnahmen = document.createElement("span");
 			meta.appendChild(aufnahmen);
+			aufnahmen.dataset.id = id;
 			let numerus = "Titelaufnahme";
 			if (redLit.db.data[id].length > 1) {
 				numerus = "Titelaufnahmen";
 			}
 			aufnahmen.textContent = `${redLit.db.data[id].length} ${numerus}`;
+			redLit.anzeigePopupListener(aufnahmen);
 		}
 		// Snippet zurückgeben
 		return div;
@@ -1471,10 +1473,10 @@ let redLit = {
 		return text.replace(redLit.suche.highlight, m => `<mark class="suche">${m}</mark>`);
 	},
 	// Anzeige: Listener zum Öffnen des Versionen-Popups
-	//   a = Element
+	//   ele = Element
 	//     (Element, über das das Popup geöffnet werden soll)
-	anzeigePopupListener (a) {
-		a.addEventListener("click", function(evt) {
+	anzeigePopupListener (ele) {
+		ele.addEventListener("click", function(evt) {
 			evt.preventDefault();
 			evt.stopPropagation();
 			redLit.anzeigePopup(this.dataset.id);

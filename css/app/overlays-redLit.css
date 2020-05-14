@@ -393,6 +393,10 @@
 	color: var(--textWarnung);
 }
 
+.red-lit-snippet p.meta span[data-id]:hover {
+	color: var(--text);
+}
+
 .red-lit-snippet i {
 	margin-left: 15px;
 	display: inline-block;
