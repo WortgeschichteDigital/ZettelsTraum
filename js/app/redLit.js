@@ -704,9 +704,7 @@ let redLit = {
 			if (!treffer[i]) {
 				break;
 			}
-			let snippet = redLit.anzeigeSnippet(treffer[i]);
-			redLit.sucheSnippetAktiv(snippet);
-			titel.appendChild(snippet);
+			titel.appendChild(redLit.anzeigeSnippet(treffer[i]));
 		}
 		// Trefferanzeige auffrischen
 		let range = `${start + 1}–${treffer.length > start + 100 ? start + 100 : treffer.length}`;
@@ -763,6 +761,25 @@ let redLit = {
 			// angeklicktes Snippet aktivieren
 			this.classList.add("aktiv");
 		});
+	},
+	// Suche: Titelaufnahme auffrischen, falls sie geändert wurde (bearbeitet, gelöscht)
+	//   id = String
+	//     (ID der Titelaufnahme)
+	sucheTrefferAuffrischen (id) {
+		let treffer = redLit.suche.treffer.find(i => i.id === id);
+		// Titelaufnahme derzeit nicht im Suchergebnis
+		if (!treffer) {
+			return;
+		}
+		// Slot hochzählen, wenn eine veraltete Titelaufnahme angezeigt wird
+		if (treffer.slot > 0) {
+			treffer.slot++;
+		}
+		// ggf. angezeigte Titelaufnahme auffrischen
+		let titel = document.querySelector(`#red-lit-suche-titel .red-lit-snippet[data-ds*='"${id}"']`);
+		if (titel) {
+			titel.parentNode.replaceChild(redLit.anzeigeSnippet(treffer), titel);
+		}
 	},
 	// Eingabeformular: Speicher für Variablen
 	eingabe: {
@@ -1028,8 +1045,8 @@ let redLit = {
 		redLit.db.data[id].unshift(ds);
 		// Status Eingabeformular auffrischen
 		redLit.eingabeStatus("change");
-		// Suche zurücksetzen
-		redLit.sucheReset();
+		// ggf. Titelaufnahme in der Suche auffrischen
+		redLit.sucheTrefferAuffrischen(id);
 		// Status Datenbank auffrischen
 		redLit.dbGeaendert(true);
 	},
@@ -1456,6 +1473,10 @@ let redLit = {
 			}
 			aufnahmen.textContent = `${redLit.db.data[id].length} ${numerus}`;
 			redLit.anzeigePopupListener(aufnahmen);
+		}
+		// ggf. Klick-Event an das Snippet hängen
+		if (redLit.anzeige.snippetKontext === "suche") {
+			redLit.sucheSnippetAktiv(div);
 		}
 		// Snippet zurückgeben
 		return div;
