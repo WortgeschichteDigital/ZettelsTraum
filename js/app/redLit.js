@@ -586,6 +586,10 @@ let redLit = {
 		}
 		if (ab) {
 			da = new Date(ab);
+			// Die folgende Verrenkung ist nötig, um die Uhrzeit auf 0 Uhr zu stellen.
+			// Sonst wird der Offset zur GMT hinzugerechnet, weswegen Titelaufnahme, die
+			// um 0 Uhr erstellt wurden, nicht korrekt gefunden werden.
+			da = new Date(da.getFullYear(), da.getMonth(), da.getDate());
 		}
 		// Einträge durchsuchen
 		let datensaetze = [
