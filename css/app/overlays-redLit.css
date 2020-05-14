@@ -279,6 +279,33 @@
 	background: #fff url(../../img/zeilen-2,5-grau.svg) no-repeat left top;
 }
 
+#red-lit-eingabe td#red-lit-eingabe-meta {
+	padding-top: 10px;
+}
+
+#red-lit-eingabe-meta > span {
+	display: inline-block;
+	overflow: hidden;
+	font-size: 14px;
+	line-height: 20px;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+#red-lit-eingabe-meta > span:first-child,
+#red-lit-eingabe-meta > span:last-child {
+	width: 30%;
+}
+
+#red-lit-eingabe-meta > span:nth-child(2) {
+	padding: 0 10px;
+	width: calc(40% - 20px);
+}
+
+#red-lit-eingabe-meta span span {
+	color: var(--textFarbe);
+	font-style: italic;
+}
 
 /* Versionen-Popup ------------------------------ */
 #red-lit-popup {

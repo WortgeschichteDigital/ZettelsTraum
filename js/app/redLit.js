@@ -868,6 +868,8 @@ let redLit = {
 				helfer.textareaGrow(i);
 			}
 		}
+		// Metadaten leeren
+		redLit.eingabeMetaFuellen({id: "", slot: -1});
 	},
 	// Eingabeformular: ID automatisch aus der Sigle ermitteln
 	//   input = Element
@@ -1044,6 +1046,8 @@ let redLit = {
 		}
 		// Datensatz schreiben
 		redLit.db.data[id].unshift(ds);
+		// Metadaten auffrischen
+		redLit.eingabeMetaFuellen({id, slot: 0});
 		// Status Eingabeformular auffrischen
 		redLit.eingabeStatus("change");
 		// ggf. Titelaufnahme in der Suche auffrischen
@@ -1329,6 +1333,8 @@ let redLit = {
 				}
 			}
 		}
+		// Metadaten füllen
+		redLit.eingabeMetaFuellen({id, slot});
 		// Formularstatus auffrischen
 		let status = "change";
 		if (slot > 0) {
@@ -1337,6 +1343,45 @@ let redLit = {
 		redLit.eingabeStatus(status);
 		// Sigle-Feld fokussieren
 		document.getElementById("red-lit-eingabe-si").select();
+	},
+	// Eingabe: Metadaten eintragen
+	//   id = String
+	//     (ID der Titelaufnahme)
+	//   slot = Number
+	//     (Slot der Titelaufnahme)
+	eingabeMetaFuellen ({id, slot}) {
+		// Werte vorbereiten
+		let werte = {
+			BearbeiterIn: optionen.data.einstellungen.bearbeiterin,
+			Datum: " ",
+			Aufnahme: " ",
+		};
+		if (!werte.BearbeiterIn) {
+			werte.BearbeiterIn = "N. N.";
+		}
+		if (id) {
+			let ds = redLit.db.data[id][slot];
+			werte.BearbeiterIn = ds.be;
+			werte.Datum = helfer.datumFormat(ds.da, "sekunden");
+			let aufnahmen = redLit.db.data[id].length;
+			werte.Aufnahme = `v${aufnahmen - slot} von ${aufnahmen}`;
+		}
+		// Werte drucken
+		let td = document.getElementById("red-lit-eingabe-meta");
+		helfer.keineKinder(td);
+		for (let [k, v] of Object.entries(werte)) {
+			let cont = document.createElement("span");
+			td.appendChild(cont);
+			let label = document.createElement("span");
+			cont.appendChild(label);
+			label.textContent = `${k}:`;
+			cont.appendChild(document.createTextNode(` ${v}`));
+			// ggf. ermöglichen, Versionen-Popup zu öffnen
+			if (id && k === "Aufnahme") {
+				cont.dataset.ds = `{"id":"${id}","slot":${slot}}`;
+				redLit.anzeigePopupListener(cont);
+			}
+		}
 	},
 	// Anzeige: Speicher für Variablen
 	anzeige: {
@@ -1500,7 +1545,8 @@ let redLit = {
 		ele.addEventListener("click", function(evt) {
 			evt.preventDefault();
 			evt.stopPropagation();
-			let json = JSON.parse(this.closest(".red-lit-snippet").dataset.ds);
+			const ds = this.dataset.ds ? this.dataset.ds : this.closest(".red-lit-snippet").dataset.ds;
+			let json = JSON.parse(ds);
 			redLit.anzeigePopup(json);
 		});
 	},
