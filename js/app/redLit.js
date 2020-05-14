@@ -10,16 +10,17 @@ let redLit = {
 		}
 		// ggf. Popup schließen
 		redLit.anzeigePopupSchliessen();
+		// Suche zurücksetzen
+		redLit.sucheReset();
+		// Eingabeformular zurücksetzen
+		redLit.eingabeLeeren();
+		redLit.eingabeStatus("add");
 		// Datenbank laden
 		const dbGeladen = await redLit.dbLaden();
 		// passendes Formular öffnen
-		redLit.sucheReset();
 		if (dbGeladen) {
-			redLit.eingabeStatus("add");
-			redLit.eingabeLeeren();
 			redLit.sucheWechseln();
 		} else {
-			redLit.eingabe.changed = false;
 			redLit.eingabeHinzufuegen();
 		}
 	},
