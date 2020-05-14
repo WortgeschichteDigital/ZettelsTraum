@@ -2076,7 +2076,7 @@ let belegImport = {
 			quelle += ".";
 			// Quellenangabe: URL
 			if (item.url) {
-				let heute = helfer.datumFormat(new Date().toISOString(), true).split(",")[0];
+				let heute = helfer.datumFormat(new Date().toISOString(), "minuten").split(",")[0];
 				for (let i of item.url) {
 					quelle += `\n\n${i} (Aufrufdatum: ${heute})`;
 				}

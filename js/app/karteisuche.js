@@ -627,7 +627,7 @@ let karteisuche = {
 					let typ = document.createElement("i");
 					wrap.appendChild(typ);
 					typ.textContent = `${e.txt}:`;
-					let da = helfer.datumFormat(i.da, true).split(", ")[0],
+					let da = helfer.datumFormat(i.da, "minuten").split(", ")[0],
 						pr = i.pr ? i.pr : "N. N.";
 					wrap.appendChild(document.createTextNode(` ${pr} (${da})`));
 					br = true;
@@ -941,7 +941,7 @@ let karteisuche = {
 				status = karteisuche.ztjAuflistenRedaktion(idx),
 				statusTxt = "abgeschlossen",
 				kartei = karteisuche.ztj[idx].redaktion.filter(v => v.er === "Kartei erstellt"),
-				karteiDa = helfer.datumFormat(kartei[0].da, true).split(", ")[0],
+				karteiDa = helfer.datumFormat(kartei[0].da, "minuten").split(", ")[0],
 				karteiPr = kartei[0].pr ? kartei[0].pr : "N. N.",
 				artikel = karteisuche.ztj[idx].redaktion.filter(v => v.er === "Artikel erstellt"),
 				artikelDa = "",
@@ -954,7 +954,7 @@ let karteisuche = {
 				statusTxt = "in Arbeit";
 			}
 			if (artikel.length) {
-				artikelDa = helfer.datumFormat(artikel[0].da, true).split(", ")[0];
+				artikelDa = helfer.datumFormat(artikel[0].da, "minuten").split(", ")[0];
 				artikelPr = artikel[0].pr ? artikel[0].pr : "N. N.";
 			}
 			if (behandeltIn || behandeltMit.length) {

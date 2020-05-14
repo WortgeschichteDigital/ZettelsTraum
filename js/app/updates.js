@@ -206,7 +206,7 @@ let updates = {
 		// überprüft
 		let ueberprueft = " ";
 		if (optionen.data.updates.checked) {
-			ueberprueft = helfer.datumFormat(optionen.data.updates.checked, true);
+			ueberprueft = helfer.datumFormat(optionen.data.updates.checked, "minuten");
 		}
 		td[2].replaceChild(document.createTextNode(ueberprueft), td[2].lastChild);
 		// installiert

@@ -429,16 +429,47 @@ let helfer = {
 	// ein übergebenes Datum formatiert ausgeben
 	//   datum = String
 	//     (im ISO 8601-Format)
-	//   knapp = true || undefined
-	//     (eine knappere Version des Datums wird zurückgegeben)
-	datumFormat (datum, knapp = false) {
+	//   format = String || undefined
+	//     (steuert die verschiedenen Formatierungstypen)
+	datumFormat (datum, format = "") {
+		// Minuten und Sekunden formatieren
+		let d = new Date(datum),
+			m = d.getMinutes().toString(),
+			s = d.getSeconds().toString();
+		if (m.length < 2) {
+			m = "0" + m;
+		}
+		if (s.length < 2) {
+			s = "0" + s;
+		}
+		// Format "minuten"
+		if (format === "minuten") {
+			return `${d.getDate()}. ${d.getMonth() + 1}. ${d.getFullYear()}, ${d.getHours()}:${m} Uhr`;
+		}
+		// Format "sekunden"
+		if (format === "sekunden") {
+			return `${d.getDate()}. ${d.getMonth() + 1}. ${d.getFullYear()}, ${d.getHours()}:${m}:${s} Uhr`;
+		}
+		// Format "technisch"
+		if (format === "technisch") {
+			let tag = d.getDate().toString(),
+				monat = (d.getMonth() + 1).toString(),
+				stunde = d.getHours().toString();
+			if (tag.length < 2) {
+				tag = "0" + tag;
+			}
+			if (monat.length < 2) {
+				monat = "0" + monat;
+			}
+			if (stunde.length < 2) {
+				stunde = "0" + stunde;
+			}
+			return `${tag}. ${monat}. ${d.getFullYear()}, ${stunde}:${m}:${s}`;
+		}
+		// Standardformat
 		let wochentage = ["Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"],
 			monate = ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"];
-		let d = new Date(datum);
-		if (knapp) {
-			return `${d.getDate()}. ${d.getMonth() + 1}. ${d.getFullYear()}, ${d.getHours()}:${d.getMinutes() < 10 ? `0${d.getMinutes()}` : d.getMinutes()} Uhr`;
-		}
-		return `${wochentage[d.getDay()]}, ${d.getDate()}. ${monate[d.getMonth()]} ${d.getFullYear()}, ${d.getHours()}:${d.getMinutes() < 10 ? `0${d.getMinutes()}` : d.getMinutes()} Uhr`;
+		return `${wochentage[d.getDay()]}, ${d.getDate()}. ${monate[d.getMonth()]} ${d.getFullYear()}, ${d.getHours()}:${m} Uhr`;
 	},
 	// überprüft den Typ des übergebenen Objekts zuverlässig
 	// mögliche Rückgabewerte u.a.: Arguments, Array, Boolean, Date, Element, Error, Function, JSON, Math, NodeList, Number, Object, RegExp, String

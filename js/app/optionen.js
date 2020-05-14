@@ -553,13 +553,13 @@ let optionen = {
 			let i = document.createElement("i");
 			tdSub.appendChild(i);
 			i.textContent = "Abgleich:";
-			let datum = helfer.datumFormat(optionen.data.tags[typ].abgleich, true);
+			let datum = helfer.datumFormat(optionen.data.tags[typ].abgleich, "minuten");
 			tdSub.appendChild(document.createTextNode(datum));
 			tdSub.appendChild(document.createElement("br"));
 			i = document.createElement("i");
 			tdSub.appendChild(i);
 			i.textContent = "Update:";
-			datum = helfer.datumFormat(optionen.data.tags[typ].update, true);
+			datum = helfer.datumFormat(optionen.data.tags[typ].update, "minuten");
 			tdSub.appendChild(document.createTextNode(datum));
 		}
 		// keine Tag-Dateien vorhanden

@@ -1431,20 +1431,7 @@ let redLit = {
 			// Zeitpunkt
 			let zeit = document.createElement("span");
 			meta.appendChild(zeit);
-			let datum = new Date(ds.da),
-				d = datum.getDate().toString().replace(/^0/, ""),
-				m = (datum.getMonth() + 1).toString().replace(/^0/, ""),
-				y = datum.getFullYear(),
-				hh = datum.getHours(),
-				mm = datum.getMinutes().toString(),
-				ss = datum.getSeconds().toString();
-			if (mm.length < 2) {
-				mm = "0" + mm;
-			}
-			if (ss.length < 2) {
-				ss = "0" + ss;
-			}
-			zeit.textContent = `${d}. ${m}. ${y}, ${hh}:${mm}:${ss} Uhr`;
+			zeit.textContent = helfer.datumFormat(ds.da, "sekunden");
 			// Anzahl Titelaufnahmen
 			let aufnahmen = document.createElement("span");
 			meta.appendChild(aufnahmen);
