@@ -43,6 +43,12 @@ let tastatur = {
 				stamm.kopfKonfigSchliessen();
 				return;
 			}
+			// Versionen-Popup in der Literaturdatenbank schließen
+			if (overlayId === "red-lit" &&
+					document.getElementById("red-lit-popup")) {
+				redLit.anzeigePopupSchliessen();
+				return;
+			}
 			// Overlay-Fenster schließen
 			if (overlayId) {
 				let link = document.querySelector(`#${overlayId} h2 .icon-schliessen`);
