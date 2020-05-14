@@ -258,6 +258,11 @@ a {
 	mask-image: url(../../img/dokument-export.svg);
 }
 
+.icon-kreis-info {
+	-webkit-mask-image: url(../../img/kreis-info.svg);
+	mask-image: url(../../img/kreis-info.svg);
+}
+
 .icon-oeffnen {
 	-webkit-mask-image: url(../../img/oeffnen.svg);
 	mask-image: url(../../img/oeffnen.svg);

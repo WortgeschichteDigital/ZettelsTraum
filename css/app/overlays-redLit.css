@@ -313,6 +313,10 @@
 	right: 0;
 }
 
+.red-lit-snippet p.sigle .icons a {
+	margin-left: 6px;
+}
+
 .red-lit-snippet p.aufnahme {
 	margin: 0 0 5px 0;
 	font-weight: normal;

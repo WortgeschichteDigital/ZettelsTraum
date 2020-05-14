@@ -1333,10 +1333,20 @@ let redLit = {
 			alt.classList.add("veraltet");
 			alt.textContent = "[veraltete Titelaufnahme]";
 		}
-		// Icon: Bearbeiten
+		// Icons
 		let icons = document.createElement("span");
 		si.appendChild(icons);
 		icons.classList.add("icons");
+		// Icon: Versionen
+		if (redLit.anzeige.snippetKontext === "suche") {
+			let vers = document.createElement("a");
+			icons.appendChild(vers);
+			vers.href = "#";
+			vers.classList.add("icon-link", "icon-kreis-info");
+			vers.dataset.id = id;
+			redLit.anzeigeVersionenListener(vers);
+		}
+		// Icon: Bearbeiten
 		let bearb = document.createElement("a");
 		icons.appendChild(bearb);
 		bearb.href = "#";
@@ -1458,5 +1468,21 @@ let redLit = {
 		}
 		// Suchtext hervorheben
 		return text.replace(redLit.suche.highlight, m => `<mark class="suche">${m}</mark>`);
+	},
+	// Anzeige: Listener zum Öffnen des Versionen-Popups
+	//   a = Element
+	//     (Element, über das das Popup geöffnet werden soll)
+	anzeigeVersionenListener (a) {
+		a.addEventListener("click", function(evt) {
+			evt.preventDefault();
+			evt.stopPropagation();
+			redLit.anzeigeVersionen(this.dataset.id);
+		});
+	},
+	// Anzeige: Versionen-Popup der Titelaufnahmen
+	//   id = String
+	//     (ID der Titelaufnahme)
+	anzeigeVersionen (id) {
+		
 	},
 };
