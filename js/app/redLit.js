@@ -1407,6 +1407,7 @@ let redLit = {
 			icons.appendChild(vers);
 			vers.href = "#";
 			vers.classList.add("icon-link", "icon-kreis-info");
+			vers.title = "alle Titelaufnahme einsehen";
 			redLit.anzeigePopupListener(vers);
 		}
 		// Icon: Bearbeiten
@@ -1414,6 +1415,7 @@ let redLit = {
 		icons.appendChild(bearb);
 		bearb.href = "#";
 		bearb.classList.add("icon-link", "icon-stift");
+		bearb.title = "Titelaufnahme bearbeiten";
 		redLit.eingabeBearbeitenListener(bearb);
 		// Titelaufnahme
 		let ti = document.createElement("p");
