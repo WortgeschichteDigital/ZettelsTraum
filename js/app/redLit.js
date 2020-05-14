@@ -171,8 +171,8 @@ let redLit = {
 		redLit.sucheReset();
 		// Eingabeformular zurücksetzen
 		// (setzt zugleich die Eingabe-Datensätze zurück)
-		redLit.eingabeStatus("add");
 		redLit.eingabeLeeren();
+		redLit.eingabeStatus("add");
 	},
 	// Datenbank: Datei öffnen
 	async dbOeffnen () {
@@ -231,8 +231,8 @@ let redLit = {
 			// Suche zurücksetzen
 			redLit.sucheReset();
 			// Eingabeformular zurücksetzen
-			redLit.eingabeStatus("add");
 			redLit.eingabeLeeren();
+			redLit.eingabeStatus("add");
 		} else {
 			// Einlesen ist gescheitert
 			dialog.oeffnen({
@@ -1281,10 +1281,10 @@ let redLit = {
 		hinzufuegen();
 		// Hinzufügen ausführen
 		function hinzufuegen () {
-			// Formularstatus ändern
-			redLit.eingabeStatus("add");
 			// Formular leeren
 			redLit.eingabeLeeren();
+			// Formularstatus ändern
+			redLit.eingabeStatus("add");
 			// Formular fokussieren
 			document.getElementById("red-lit-eingabe-si").focus();
 		}
