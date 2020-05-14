@@ -393,7 +393,7 @@
 	color: var(--textWarnung);
 }
 
-.red-lit-snippet p.meta span[data-id]:hover {
+.red-lit-snippet p.meta span.titelaufnahmen:hover {
 	color: var(--text);
 }
 

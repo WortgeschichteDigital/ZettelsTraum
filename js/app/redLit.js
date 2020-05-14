@@ -1295,7 +1295,7 @@ let redLit = {
 		a.addEventListener("click", function(evt) {
 			evt.preventDefault();
 			evt.stopPropagation();
-			let json = JSON.parse(this.dataset.ds);
+			let json = JSON.parse(this.closest(".red-lit-snippet").dataset.ds);
 			redLit.eingabeBearbeiten(json);
 		});
 	},
@@ -1352,6 +1352,7 @@ let redLit = {
 		// Snippet füllen
 		let div = document.createElement("div");
 		div.classList.add("red-lit-snippet");
+		div.dataset.ds = `{"id":"${id}","slot":${slot}}`;
 		// Sigle
 		let si = document.createElement("p");
 		div.appendChild(si);
@@ -1362,7 +1363,7 @@ let redLit = {
 			let alt = document.createElement("span");
 			si.appendChild(alt);
 			alt.classList.add("veraltet");
-			alt.textContent = "[veraltete Titelaufnahme]";
+			alt.textContent = "[Titelaufnahme veraltet]";
 		}
 		// Icons
 		let icons = document.createElement("span");
@@ -1374,7 +1375,6 @@ let redLit = {
 			icons.appendChild(vers);
 			vers.href = "#";
 			vers.classList.add("icon-link", "icon-kreis-info");
-			vers.dataset.id = id;
 			redLit.anzeigePopupListener(vers);
 		}
 		// Icon: Bearbeiten
@@ -1382,7 +1382,6 @@ let redLit = {
 		icons.appendChild(bearb);
 		bearb.href = "#";
 		bearb.classList.add("icon-link", "icon-stift");
-		bearb.dataset.ds = `{"id":"${id}","slot":${slot}}`;
 		redLit.eingabeBearbeitenListener(bearb);
 		// Titelaufnahme
 		let ti = document.createElement("p");
@@ -1466,7 +1465,7 @@ let redLit = {
 			// Anzahl Titelaufnahmen
 			let aufnahmen = document.createElement("span");
 			meta.appendChild(aufnahmen);
-			aufnahmen.dataset.id = id;
+			aufnahmen.classList.add("titelaufnahmen");
 			let numerus = "Titelaufnahme";
 			if (redLit.db.data[id].length > 1) {
 				numerus = "Titelaufnahmen";
@@ -1500,13 +1499,16 @@ let redLit = {
 		ele.addEventListener("click", function(evt) {
 			evt.preventDefault();
 			evt.stopPropagation();
-			redLit.anzeigePopup(this.dataset.id);
+			let json = JSON.parse(this.closest(".red-lit-snippet").dataset.ds);
+			redLit.anzeigePopup(json);
 		});
 	},
 	// Anzeige: Versionen-Popup für Titelaufnahmen
 	//   id = String
 	//     (ID der Titelaufnahme)
-	anzeigePopup (id) {
+	//   slot = Number
+	//     (Slot der Titelaufnahme)
+	anzeigePopup ({id, slot}) {
 		redLit.anzeige.snippetKontext = "popup";
 		redLit.anzeige.id = id;
 		// aktuelles Popup ggf. entfernen
@@ -1527,22 +1529,24 @@ let redLit = {
 		let vers = document.createElement("div");
 		win.appendChild(vers);
 		vers.id = "red-lit-popup-versionen";
-		redLit.anzeigePopupVersionen();
+		redLit.anzeigePopupVersionen(slot);
 		// Titel-Feld
 		let titel = document.createElement("div");
 		win.appendChild(titel);
 		titel.id = "red-lit-popup-titel";
-		titel.appendChild(redLit.anzeigeSnippet({id, slot: 0}));
+		titel.appendChild(redLit.anzeigeSnippet({id, slot}));
 	},
 	// Anzeige: vorhandene Titelaufnahmen im Versionen-Popup auflisten
-	anzeigePopupVersionen () {
+	//   slot = Number || undefined
+	//     (Titelaufnahme, die angezeigt werden soll)
+	anzeigePopupVersionen (slot = 0) {
 		let vers = document.getElementById("red-lit-popup-versionen"),
 			aufnahme = redLit.db.data[redLit.anzeige.id];
 		helfer.keineKinder(vers);
 		for (let i = 0, len = aufnahme.length; i < len; i++) {
 			let div = document.createElement("div");
 			vers.appendChild(div);
-			if (i === 0) {
+			if (i === slot) {
 				div.classList.add("aktiv");
 			}
 			div.dataset.slot = i;
