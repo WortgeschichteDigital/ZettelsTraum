@@ -361,7 +361,7 @@
 }
 
 /* Titelsnippet --------------------------------- */
-.red-lit-snippet.aktiv {
+.red-lit-snippet.markiert {
 	background-color: var(--hover);
 }
 

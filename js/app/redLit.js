@@ -753,20 +753,20 @@ let redLit = {
 	// Suche: Snippet aktivieren
 	//   div = Element
 	//     (Snippet mit einer Titelaufnahme)
-	sucheSnippetAktiv (div) {
+	sucheSnippetMarkieren (div) {
 		div.addEventListener("click", function() {
-			// Snippet ist aktiv => deaktivieren
-			if (this.classList.contains("aktiv")) {
-				this.classList.remove("aktiv");
+			// Snippet ist markiert => demarkieren
+			if (this.classList.contains("markiert")) {
+				this.classList.remove("markiert");
 				return;
 			}
-			// aktive Snippet deaktivieren
-			let aktiv = document.querySelector("#red-lit-suche-titel .aktiv");
-			if (aktiv) {
-				aktiv.classList.remove("aktiv");
+			// markiertes Snippet demarkieren
+			let markiert = document.querySelector("#red-lit-suche-titel .markiert");
+			if (markiert) {
+				markiert.classList.remove("markiert");
 			}
-			// angeklicktes Snippet aktivieren
-			this.classList.add("aktiv");
+			// angeklicktes Snippet markieren
+			this.classList.add("markiert");
 		});
 	},
 	// Suche: Titelaufnahme auffrischen, falls sie geändert wurde (bearbeitet, gelöscht)
@@ -1543,7 +1543,7 @@ let redLit = {
 		}
 		// ggf. Klick-Event an das Snippet hängen
 		if (redLit.anzeige.snippetKontext === "suche") {
-			redLit.sucheSnippetAktiv(div);
+			redLit.sucheSnippetMarkieren(div);
 		}
 		// Snippet zurückgeben
 		return div;
