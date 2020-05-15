@@ -765,8 +765,8 @@ let redLit = {
 			if (redLit.suche.sonder === "duplikate" &&
 					!duplikate.has(id)) { // Duplikate
 				continue;
-			} else if (redLit.suche.sonder === "aufnahmen" &&
-					arr.length === 1) { // mehrere Titelaufnahmen
+			} else if (redLit.suche.sonder === "versionen" &&
+					arr.length === 1) { // mehrere Versionen
 				continue;
 			}
 			// Suche nach Text und Datum
@@ -1626,7 +1626,7 @@ let redLit = {
 			icons.appendChild(vers);
 			vers.href = "#";
 			vers.classList.add("icon-link", "icon-kreis-info");
-			vers.title = "alle Titelaufnahme einsehen";
+			vers.title = "Versionen anzeigen";
 			redLit.anzeigePopupListener(vers);
 		}
 		// Icon: Bearbeiten
@@ -1715,13 +1715,13 @@ let redLit = {
 			let zeit = document.createElement("span");
 			meta.appendChild(zeit);
 			zeit.textContent = helfer.datumFormat(ds.da, "sekunden");
-			// Anzahl Titelaufnahmen
+			// Anzahl Versionen
 			let aufnahmen = document.createElement("span");
 			meta.appendChild(aufnahmen);
 			aufnahmen.classList.add("titelaufnahmen");
-			let numerus = "Titelaufnahme";
+			let numerus = "Version";
 			if (redLit.db.data[id].length > 1) {
-				numerus = "Titelaufnahmen";
+				numerus = "Versionen";
 			}
 			aufnahmen.textContent = `${redLit.db.data[id].length} ${numerus}`;
 			redLit.anzeigePopupListener(aufnahmen);
