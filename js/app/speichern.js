@@ -24,6 +24,7 @@ let speichern = {
 		speichern.checkCallback = fun;
 		speichern.checkScope = {
 			notizen: true,
+			literatur: true,
 			tagger: true,
 			bedeutungen: true,
 			beleg: true,
@@ -64,6 +65,18 @@ let speichern = {
 					}
 				},
 			});
+			return;
+		} else if (speichern.checkScope.literatur &&
+				(redLit.eingabe.changed || redLit.db.changed)) {
+			// Da die Literaturdatenbank nicht in der Kartei gespeichert wird, muss
+			// die gewünschte Aktion in diesem Fall komplett abgebrochen werden.
+			speichern.checkAktiv = false;
+			setTimeout(() => {
+				// Fenster nach oben holen
+				overlay.oeffnen(document.getElementById("red-lit"));
+				// Sicherheitsfrage triggern
+				redLit.dbCheck(() => {});
+			}, 200); // die Zeit braucht der Dialog, um ausgeblendet zu werden
 			return;
 		} else if (speichern.checkScope.tagger && tagger.geaendert) {
 			dialog.oeffnen({

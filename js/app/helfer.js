@@ -856,6 +856,8 @@ let helfer = {
 	async beforeUnload () {
 		// Schließen unterbrechen, wenn ungespeicherte Änderungen
 		if (notizen.geaendert ||
+				redLit.eingabe.changed ||
+				redLit.db.changed ||
 				tagger.geaendert ||
 				bedeutungen.geaendert ||
 				beleg.geaendert ||
