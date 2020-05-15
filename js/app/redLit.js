@@ -1901,4 +1901,26 @@ let redLit = {
 		// Status Datenbank auffrischen
 		redLit.dbGeaendert(true);
 	},
+	// Titelaufnahme in die Zwischenablage
+	//   typ = String
+	//     (Texttyp, der in die Zwischenablage kopiert werden soll)
+	titelZwischenablage (typ) {
+		const {clipboard} = require("electron");
+		let text = "";
+		if (typ === "plainReferenz") {
+			text = popup.titelaufnahme.ds.id;
+		} else if (typ === "xmlReferenz") {
+			text = `<Literaturreferenz Ziel="${popup.titelaufnahme.ds.id}"></Literaturreferenz>`;
+		} else if (typ === "plain") {
+			text = redLit.dbExportierenSnippetPlain(popup.titelaufnahme.ds);
+		} else if (typ === "xml") {
+			let parser = new DOMParser(),
+				snippet = redLit.dbExportierenSnippetXML(popup.titelaufnahme.ds),
+				xmlDoc = parser.parseFromString(snippet, "text/xml");
+			xmlDoc = xml.indent(xmlDoc);
+			text = new XMLSerializer().serializeToString(xmlDoc);
+		}
+		clipboard.writeText(text);
+		helfer.animation("zwischenablage");
+	},
 };

@@ -16,6 +16,14 @@ let popup = {
 		data: {}, // Objekt, in dem die Karteikarte liegt, d.i. beleg.data || data.ka[ID]
 		id: "", // die ID der Karteikarte
 	},
+	// für Kopie einer Titelaufnahme (verweist auf redLit.db.data[id][slot])
+	titelaufnahme: {
+		ds: { // Datensatz, der betroffen ist
+			id: "",
+			slot: -1,
+		},
+		popup: false, // Rechtsklickmenü wird innerhalb des Versionen-Popups aufgerufen
+	},
 	// speichert den Anhang, der geöffnet werden soll
 	anhangDatei: "",
 	// das angeklickte Anhang-Icon steht im Kopf des Hauptfensters
@@ -106,10 +114,14 @@ let popup = {
 		} else if (target === "start-datei") {
 			items = ["karteiEntfernen", "sep", "ordner", "sep", "karteiErstellen"];
 		} else if (target === "link") {
-			if (overlay.oben() === "stamm") {
+			let oben = overlay.oben();
+			if (oben === "stamm") {
 				items.push("link", "sep", "schliessen");
-			} else if (overlay.oben() === "red-lit") {
-				items.push("link", "sep", "schliessen");
+			} else if (oben === "red-lit") {
+				items.push("link", "sep", "titelBearbeiten", "titelAufnahmen", {name: "titelAufnahmeCp", sub: ["titelAufnahmeXml", "titelAufnahmePlain"]}, {name: "titelReferenzCp", sub: ["titelReferenzXml", "titelReferenzPlain"]}, "sep", "schliessen");
+				if (popup.titelaufnahme.popup) {
+					items.splice(items.indexOf("titelAufnahmen"), 1, "titelLoeschen");
+				}
 			} else if (helfer.hauptfunktion === "karte") {
 				items.push("link", "sep", {name: "text", sub: ["textReferenz"]}, {name: "xml", sub: ["xmlReferenz"]}, "sep", "karteikarteConf");
 			} else if (helfer.hauptfunktion === "liste") {
@@ -143,6 +155,15 @@ let popup = {
 			}
 			items.push("sep", "belegHinzufuegen");
 			popup.belegeAuflisten(items);
+		} else if (target === "titelaufnahme") {
+			items.push("titelBearbeiten", "titelAufnahmen", {name: "titelAufnahmeCp", sub: ["titelAufnahmeXml", "titelAufnahmePlain"]}, {name: "titelReferenzCp", sub: ["titelReferenzXml", "titelReferenzPlain"]}, "sep", "schliessen");
+			if (popup.titelaufnahme.popup) {
+				items.splice(items.indexOf("titelAufnahmen"), 1, "titelLoeschen");
+			}
+			if (kartei.wort) {
+				items.push("sep", "belegHinzufuegen");
+				popup.belegeAuflisten(items);
+			}
 		} else if (target === "schliessen") {
 			items = ["schliessen"];
 			if (popup.overlayID === "notizen") {
@@ -271,10 +292,13 @@ let popup = {
 				} else if (pfad[i].classList.contains("link")) {
 					popup.element = pfad[i];
 					let oben = overlay.oben();
-					if (!/^(stamm|red-lit)$/.test(oben) && helfer.hauptfunktion === "karte") {
+					if (oben === "red-lit") {
+						popup.titelaufnahme.ds = JSON.parse(pfad[i].closest(".red-lit-snippet").dataset.ds);
+						popup.titelaufnahme.popup = pfad[i].closest("#red-lit-popup");
+					} else if (oben !== "stamm" && helfer.hauptfunktion === "karte") {
 						popup.referenz.data = beleg.data;
 						popup.referenz.id = "" + beleg.id_karte;
-					} else if (!/^(stamm|red-lit)$/.test(oben) && helfer.hauptfunktion === "liste") {
+					} else if (oben !== "stamm" && helfer.hauptfunktion === "liste") {
 						const id = pfad[i].closest(".liste-details").previousSibling.dataset.id;
 						popup.referenz.data = data.ka[id];
 						popup.referenz.id = id;
@@ -299,6 +323,10 @@ let popup = {
 						popup.referenz.id = "" + beleg.id_karte;
 					}
 					return "anhang";
+				} else if (pfad[i].classList.contains("red-lit-snippet")) {
+					popup.titelaufnahme.ds = JSON.parse(pfad[i].dataset.ds);
+					popup.titelaufnahme.popup = pfad[i].closest("#red-lit-popup");
+					return "titelaufnahme";
 				} else if (pfad[i].classList.contains("overlay")) {
 					popup.overlayID = pfad[i].id;
 					return "schliessen";

@@ -266,6 +266,49 @@ let punkte = {
 			});
 		`,
 	},
+	titelAufnahmeCp: {
+		label: "Titelaufnahme in Zwischenablage",
+		icon: "kopieren.png",
+	},
+	titelAufnahmePlain: {
+		label: "Plain text",
+		icon: "dokument.png",
+		click: "redLit.titelZwischenablage('plain')",
+	},
+	titelAufnahmeXml: {
+		label: "XML",
+		icon: "xml.png",
+		click: "redLit.titelZwischenablage('xml')",
+	},
+	titelAufnahmen: {
+		label: "Versionen anzeigen",
+		icon: "kreis-info.png",
+		click: "redLit.anzeigePopup(popup.titelaufnahme.ds)",
+	},
+	titelBearbeiten: {
+		label: "Titelaufnahme bearbeiten",
+		icon: "stift.png",
+		click: "redLit.dbCheck(() => redLit.eingabeBearbeiten(popup.titelaufnahme.ds), false)",
+	},
+	titelLoeschen: {
+		label: "Titelaufnahme löschen",
+		icon: "muelleimer.png",
+		click: `document.querySelector("#red-lit-popup .icon-muelleimer").dispatchEvent(new MouseEvent("click"))`,
+	},
+	titelReferenzCp: {
+		label: "Referenz in Zwischenablage",
+		icon: "kopieren.png",
+	},
+	titelReferenzPlain: {
+		label: "Plain text",
+		icon: "dokument.png",
+		click: "redLit.titelZwischenablage('plainReferenz')",
+	},
+	titelReferenzXml: {
+		label: "XML",
+		icon: "xml.png",
+		click: "redLit.titelZwischenablage('xmlReferenz')",
+	},
 	wort: {
 		label: "Wort ändern",
 		icon: "text-pfeil-kreis.png",
