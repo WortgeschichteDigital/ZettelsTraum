@@ -722,8 +722,32 @@ let redLit = {
 			["td", "ti"],
 			["td", "ul"],
 		];
-		let siglen_doppelt = new Set();
-		if (redLit.suche.sonder === "siglen_doppelt") {
+		let duplikate = new Set(),
+			siglen_doppelt = new Set();
+		if (redLit.suche.sonder === "duplikate") {
+			for (let [k, v] of Object.entries(redLit.db.data)) {
+				if (duplikate.has(k)) {
+					continue;
+				}
+				x: for (let [l, w] of Object.entries(redLit.db.data)) {
+					if (l === k) {
+						continue;
+					}
+					if (w[0].td.ti === v[0].td.ti) {
+						duplikate.add(k);
+						duplikate.add(l);
+						break;
+					}
+					for (let p of v[0].td.pn) {
+						if (w[0].td.pn.includes(p)) {
+							duplikate.add(k);
+							duplikate.add(l);
+							break x;
+						}
+					}
+				}
+			}
+		} else if (redLit.suche.sonder === "siglen_doppelt") {
 			let siglen = [];
 			for (let arr of Object.values(redLit.db.data)) {
 				siglen.push(arr[0].td.si);
@@ -738,7 +762,10 @@ let redLit = {
 		let treffer = redLit.suche.treffer;
 		for (let [id, arr] of Object.entries(redLit.db.data)) {
 			// Sondersuchen
-			if (redLit.suche.sonder === "aufnahmen" &&
+			if (redLit.suche.sonder === "duplikate" &&
+					!duplikate.has(id)) { // Duplikate
+				continue;
+			} else if (redLit.suche.sonder === "aufnahmen" &&
 					arr.length === 1) { // mehrere Titelaufnahmen
 				continue;
 			}
@@ -746,16 +773,16 @@ let redLit = {
 			for (let i = 0, len = arr.length; i < len; i++) {
 				let aufnahme = arr[i];
 				// Sondersuchen
-				if (redLit.suche.sonder === "ppn_ohne" &&
-					aufnahme.td.pn.length) { // ohne PPN
+				if (/^(duplikate|siglen_doppelt)$/.test(redLit.suche.sonder) && i > 0) { // nur aktuellsten Eintrag berücksichtigen
+					break;
+				} else if (redLit.suche.sonder === "siglen_doppelt" &&
+						!siglen_doppelt.has(aufnahme.td.si)) { // doppelte Siglen
 					continue;
 				} else if (redLit.suche.sonder === "ppn_mit" &&
 					!aufnahme.td.pn.length) { // mit PPN
 					continue;
-				} else if (redLit.suche.sonder === "siglen_doppelt" && i > 0) { // doppelte Siglen (nur aktuellsten Eintrag berücksichtigen)
-					break;
-				} else if (redLit.suche.sonder === "siglen_doppelt" &&
-						!siglen_doppelt.has(aufnahme.td.si)) { // doppelte Siglen
+				} else if (redLit.suche.sonder === "ppn_ohne" &&
+					aufnahme.td.pn.length) { // ohne PPN
 					continue;
 				}
 				// Datum
