@@ -186,13 +186,14 @@ let helfer = {
 		text = text.replace(/'(.+?)'/g, (m, p1) => `‚${p1}‘`); // einfache Anführungszeichen
 		text = text.replace(/'/g, "’"); // wahrscheinliches Apostroph
 		text = text.replace(/\s-\s/g, " – "); // Halbgeviertstriche
+		text = text.replace(/\s:\s/g, ": "); // nicht planken
 		text = text.replace(/=__(.+?)__/g, (m, p1) => `="${p1}"`); // Attribute in Tags demaskieren
 		text = text.replace(/\.{3}/g, "…"); // horizontale Ellipse
 		// geschützte Leerzeichen
 		let abk = new Set([
 			/[0-9]{1,2}\. [0-9]{1,2}\. [0-9]{4}/g, // Datumsangabe (nur 1. Leerzeichen wird ersetzt!)
 			/[0-9]{1,2}\. (Jan|Feb|März|Apr|Mai|Juni|Juli|Aug|Sep|Okt|Nov|Dez)/g, // Datumsangabe mit Monat
-			/[0-9]{2}\. Jh\./g, // Jahrhundertangaben
+			/[0-9]{2}\. (Jh\.|Jahrhundert)/g, // Jahrhundertangaben
 			/a\. M\./g, // am Main
 			/Bd\. [0-9]+/g, // Band
 			/d\. h\./ig,
