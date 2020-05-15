@@ -153,12 +153,14 @@ let tastatur = {
 			}
 			return;
 		}
-		// LITERATURDATENBANK: Key "f" || "h"
+		// LITERATURDATENBANK: Key "f" || "h" || "s"
 		if (m === "Ctrl" && overlayId === "red-lit") {
 			if (evt.key === "f" && !kartei.wort) {
-				redLit.sucheWechseln();
+				filter.suche();
 			} else if (evt.key === "h") {
 				redLit.dbCheck(() => redLit.eingabeHinzufuegen(), false);
+			} else if (evt.key === "s" && !kartei.wort) {
+				speichern.kaskade();
 			}
 			return;
 		}

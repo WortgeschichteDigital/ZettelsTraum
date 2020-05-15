@@ -166,6 +166,11 @@ let speichern = {
 	// Verteilerfunktion für "Kartei > Speichern" bzw. den Tastaturbefehl Strg + S
 	// (es gibt drei verschiedene Verhaltensweisen des Befehls)
 	kaskade () {
+		// ggf. das Speichern in der Literaturdatenbank anstoßen
+		if (overlay.oben() === "red-lit") {
+			redLit.speichern();
+			return;
+		}
 		// Sperre für macOS (Menüpunkte können nicht deaktiviert werden)
 		if (!kartei.wort) {
 			dialog.oeffnen({

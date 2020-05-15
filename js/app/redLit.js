@@ -33,6 +33,31 @@ let redLit = {
 			overlay.ausblenden(document.getElementById("red-lit"));
 		});
 	},
+	// Speichern wurde via Tastaturkürzel (Strg + S) angestoßen
+	speichern () {
+		// Einstellungen des Speichern-Befehls für die Kartei adaptieren
+		let kaskade = {
+			eingabe: true,
+			db: true,
+		};
+		if (optionen.data.einstellungen.speichern === "2" && redLit.eingabe.changed) {
+			// entweder Eingabeformular oder DB speichern
+			kaskade.db = false;
+		} else if (optionen.data.einstellungen.speichern === "3") {
+			// nur DB speichern
+			kaskade.eingabe = false;
+		}
+		// Speichern
+		if (kaskade.eingabe &&
+				redLit.eingabe.changed &&
+				!redLit.eingabeSpeichern()) {
+			return;
+		}
+		if (kaskade.db &&
+				redLit.db.changed) {
+			redLit.dbSpeichern();
+		}
+	},
 	// Datenbank: Speicher für Variablen
 	db: {
 		data: {}, // Titeldaten der Literaturdatenbank (wenn DB geladen => Inhalt von DB.ti)
@@ -1189,7 +1214,7 @@ let redLit = {
 		}
 		// Validierung des Formulars
 		if (!redLit.eingabeSpeichernValid()) {
-			return;
+			return false;
 		}
 		// ggf. neuen Datensatz erstellen
 		const id = document.getElementById("red-lit-eingabe-id").value;
@@ -1255,7 +1280,7 @@ let redLit = {
 					},
 				});
 				redLit.eingabeStatus(redLit.eingabe.status); // Änderungsmarkierung zurücksetzen
-				return;
+				return false;
 			}
 		}
 		// Datensatz schreiben
@@ -1268,6 +1293,7 @@ let redLit = {
 		redLit.sucheTrefferAuffrischen(id);
 		// Status Datenbank auffrischen
 		redLit.dbGeaendert(true);
+		return true;
 	},
 	// Eingabeformular: Formular validieren
 	eingabeSpeichernValid () {
