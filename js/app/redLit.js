@@ -610,12 +610,12 @@ let redLit = {
 	//   nav = true || undefined
 	//     (Funktion wurde über das Navigationsformular aufgerufen => nie abbrechen)
 	nav (form, nav = false) {
+		// ggf. Popup schließen
+		redLit.anzeigePopupSchliessen();
 		// schon in der richtigen Sektion
 		if (!nav && document.getElementById(`red-lit-nav-${form}`).checked) {
 			return;
 		}
-		// ggf. Popup schließen
-		redLit.anzeigePopupSchliessen();
 		// Radio-Buttons umstellen
 		let radio = document.querySelectorAll("#red-lit-nav input");
 		for (let i of radio) {
