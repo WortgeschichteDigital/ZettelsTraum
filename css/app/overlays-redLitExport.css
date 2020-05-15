@@ -1,0 +1,24 @@
+@charset "utf-8";
+
+/* Literaturdatenbank: Export ------------------- */
+#red-lit-export > div {
+	width: 375px;
+}
+
+#red-lit-export-cont {
+	padding: 10px;
+}
+
+#red-lit-export-cont p {
+	margin: 0 0 5px 31px;
+}
+
+#red-lit-export-cont label {
+	display: inline-block;
+	width: 100px;
+}
+
+#red-lit-export-cont p:last-child {
+	margin: 15px 0 0 0;
+	text-align: right;
+}

@@ -28,6 +28,7 @@
 		<link rel="stylesheet" href="css/app/overlays-notizen.css">
 		<link rel="stylesheet" href="css/app/overlays-redaktion.css">
 		<link rel="stylesheet" href="css/app/overlays-redLit.css">
+		<link rel="stylesheet" href="css/app/overlays-redLitExport.css">
 		<link rel="stylesheet" href="css/app/overlays-redMeta.css">
 		<link rel="stylesheet" href="css/app/overlays-sonderzeichen.css">
 		<link rel="stylesheet" href="css/app/overlays-stamm.css">
@@ -983,6 +984,23 @@
 						<td colspan="2" id="red-lit-eingabe-meta"></td>
 					</tr>
 				</table>
+			</div>
+		</div></div>
+
+		<!-- OVERLAY: Literaturdatenbank: Export -->
+		<div id="red-lit-export" class="overlay aus"><div>
+			<h2><span class="icon-h icon-h-kopieren"> </span
+				>Literaturdatenbank exportieren<a href="#" class="icon-link icon-handbuch" title="Abschnitt im Handbuch öffnen" data-handbuch="menueRedaktion-literatur"> </a><a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"
+				> </a></h2>
+			<div id="red-lit-export-cont">
+				<p
+					><input type="radio" name="red-lit-export-format" id="red-lit-export-format-xml" checked><label for="red-lit-export-format-xml">XML</label
+					><input type="radio" name="red-lit-export-format" id="red-lit-export-format-plain"><label for="red-lit-export-format-plain">Plain text</label
+				></p>
+				<p class="button"
+					><input type="button" value="Exportieren" id="red-lit-export-exportieren"
+					><input type="button" value="Abbrechen" id="red-lit-export-abbrechen"
+				></p>
 			</div>
 		</div></div>
 

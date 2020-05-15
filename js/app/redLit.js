@@ -141,6 +141,8 @@ let redLit = {
 				redLit.dbCheck(() => redLit.dbEntkoppeln());
 			} else if (/-oeffnen/.test(this.id)) {
 				redLit.dbCheck(() => redLit.dbOeffnen());
+			} else if (/-exportieren/.test(this.id)) {
+				redLit.dbExportierenFormat();
 			} else if (/-speichern$/.test(this.id)) {
 				redLit.dbSpeichern();
 			} else if (/-speichern-unter$/.test(this.id)) {
@@ -276,6 +278,124 @@ let redLit = {
 			// Promise auflösen
 			resolve(true);
 		});
+	},
+	// Datenbank: Exportformat erfragen
+	dbExportierenFormat () {
+		let fenster = document.getElementById("red-lit-export");
+		overlay.oeffnen(fenster);
+		fenster.querySelector("input:checked").focus();
+	},
+	// Datenbank: Export starten
+	dbExportieren () {
+		// Format ermitteln
+		let format = {
+			name: "XML",
+			ext: "xml",
+			content: "Literaturliste",
+		};
+		if (document.getElementById("red-lit-export-format-plain").checked) {
+			format.name = "Plain text";
+			format.ext = "txt";
+		}
+		// Fenster schließen
+		overlay.schliessen(document.getElementById("red-lit-export"));
+		document.getElementById("red-lit-pfad-exportieren").focus();
+		// Titelaufnahmen zusammentragen und sortieren
+		let aufnahmen = [];
+		for (let id of Object.keys(redLit.db.data)) {
+			aufnahmen.push({id, slot: 0});
+		}
+		aufnahmen.sort(redLit.dbSortAufnahmen);
+		// Dateidaten erstellen
+		let content = "";
+		if (format.ext === "xml") {
+			content = `<?xml-model href="rnc/Literaturliste.rnc" type="application/relax-ng-compact-syntax"?><WGD xmlns="http://www.zdl.org/ns/1.0"><Literaturliste>`;
+			for (let i of aufnahmen) {
+				content += redLit.dbExportierenSnippetXML(i);
+			}
+			content += `</Literaturliste></WGD>`;
+			let parser = new DOMParser(),
+				xmlDoc = parser.parseFromString(content, "text/xml");
+			xmlDoc = xml.indent(xmlDoc);
+			content = new XMLSerializer().serializeToString(xmlDoc);
+			// Fixes
+			content = content.replace(/\?>/, "?>\n");
+			content += "\n";
+		} else if (format.ext === "txt") {
+			for (let i = 0, len = aufnahmen.length; i < len; i++) {
+				if (i > 0) {
+					content += "\n\n------------------------------\n\n";
+				}
+				content += redLit.dbExportierenSnippetPlain(aufnahmen[i]);
+			}
+			content += "\n";
+		}
+		// Datei schreiben
+		karteisuche.trefferlisteExportierenDialog(content, format);
+	},
+	// Datenbank: Titelaufnahme-Snippet in XML erstellen
+	//   id = String
+	//     (ID der Titelaufnahme)
+	//   slot = Number
+	//     (Slot der Titelaufnahme)
+	dbExportierenSnippetXML ({id, slot}) {
+		let ds = redLit.db.data[id][slot].td,
+			snippet = `<Fundstelle xml:id="${id}">`;
+		snippet += `<Sigle>${ds.si}</Sigle>`;
+		snippet += `<unstrukturiert>${ds.ti}</unstrukturiert>`;
+		if (ds.ul) {
+			snippet += `<URL>${ds.ul}</URL>`;
+		}
+		if (ds.ad) {
+			let ad = ds.ad.split("-");
+			snippet += `<Aufrufdatum>${ad[2]}.${ad[1]}.${ad[0]}</Aufrufdatum>`;
+		}
+		snippet += `<Fundort>${ds.fo}</Fundort>`;
+		for (let i of ds.pn) {
+			snippet += `<PPN>${i}</PPN>`;
+		}
+		snippet += "</Fundstelle>";
+		return snippet;
+	},
+	// Datenbank: Titelaufnahme-Snippet in Plain-Text erstellen
+	//   id = String
+	//     (ID der Titelaufnahme)
+	//   slot = Number
+	//     (Slot der Titelaufnahme)
+	dbExportierenSnippetPlain ({id, slot}) {
+		let ds = redLit.db.data[id][slot].td,
+			snippet = `${ds.si}\n`;
+		snippet += `${ds.ti}\n`;
+		if (ds.ul) {
+			snippet += `\t${ds.ul}`;
+			if (ds.ad) {
+				let ad = ds.ad.split("-");
+				snippet += ` (Aufrufdatum: ${ad[2].replace(/^0/, "")}. ${ad[1].replace(/^0/, "")}. ${ad[0]})`;
+			}
+			snippet += "\n";
+		}
+		snippet += `\tFundort: ${ds.fo}`;
+		if (ds.pn.length) {
+			snippet += `\n\tPPN: ${ds.pn.join(", ")}`;
+		}
+		return snippet;
+	},
+	// Datenbank: Helferfunktion zum Sortieren der Titelaufnahmen
+	//   a = Object
+	//   b = Object
+	//     (die Objekte enthalten die Schlüssel "id" [String] und "slot" [Number])
+	dbSortAufnahmen (a, b) {
+		const siA = helfer.sortAlphaPrep( ex(redLit.db.data[a.id][a.slot].td.si ) ),
+			siB = helfer.sortAlphaPrep( ex( redLit.db.data[b.id][b.slot].td.si ) );
+		let arr = [siA, siB];
+		arr.sort();
+		if (arr[0] === siA) {
+			return -1;
+		}
+		return 1;
+		function ex (sigle) {
+			return sigle.replace(/^[⁰¹²³⁴⁵⁶⁷⁸⁹]+/, "");
+		}
 	},
 	// Datenbank: Datei speichern
 	//   speichernUnter = true || undefined
@@ -669,16 +789,7 @@ let redLit = {
 			}
 		}
 		// Treffer sortieren (nach Sigle)
-		treffer.sort((a, b) => {
-			const siA = helfer.sortAlphaPrep(redLit.db.data[a.id][a.slot].td.si),
-				siB = helfer.sortAlphaPrep(redLit.db.data[b.id][b.slot].td.si);
-			let arr = [siA, siB];
-			arr.sort();
-			if (arr[0] === siA) {
-				return -1;
-			}
-			return 1;
-		});
+		treffer.sort(redLit.dbSortAufnahmen);
 		// Suchtreffer anzeigen
 		redLit.sucheAnzeigen(0);
 	},

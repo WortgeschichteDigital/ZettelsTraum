@@ -317,6 +317,17 @@ window.addEventListener("load", async () => {
 		evt.preventDefault();
 		redLit.eingabeBibTeX();
 	});
+	// Literaturdatenbank: Export
+	document.querySelectorAll(`#red-lit-export-cont input[type="radio"]`).forEach(i => {
+		i.addEventListener("keydown", evt => {
+			tastatur.detectModifiers(evt);
+			if (!tastatur.modifiers && evt.key === "Enter") {
+				redLit.dbExportieren();
+			}
+		});
+	});
+	document.getElementById("red-lit-export-exportieren").addEventListener("click", () => redLit.dbExportieren());
+	document.getElementById("red-lit-export-abbrechen").addEventListener("click", () => overlay.schliessen(document.getElementById("red-lit-export") ) );
 	// Karteisuche
 	document.getElementById("karteisuche-suchen").addEventListener("click", () => karteisuche.suchenPrep());
 	document.getElementById("karteisuche-suchenCache").addEventListener("click", () => karteisuche.suchenPrepZtj([]));

@@ -1018,6 +1018,7 @@ let karteisuche = {
 		let format = {
 			name: "Markdown",
 			ext: "md",
+			content: "Karteiliste",
 		};
 		if (!md) {
 			format.name = "HTML";
@@ -1026,18 +1027,19 @@ let karteisuche = {
 		karteisuche.trefferlisteExportierenDialog(content, format);
 	},
 	// Trefferlistenexport: Daten zum Speichern anbieten
+	// (Funktion wird auch für das Speichern der Literaturdatenbank genutzt)
 	//   content = String
 	//     (die Daten)
 	//   format = Object
-	//     (Angaben zum Format)
+	//     (Angaben zum Format und Inhalt der Daten)
 	async trefferlisteExportierenDialog (content, format) {
 		const path = require("path");
 		let opt = {
 			title: `${format.name} speichern`,
-			defaultPath: path.join(appInfo.documents, `Karteiliste.${format.ext}`),
+			defaultPath: path.join(appInfo.documents, `${format.content}.${format.ext}`),
 			filters: [
 				{
-					name: format.name,
+					name: `${format.name}-Dateien`,
 					extensions: [format.ext],
 				},
 				{
@@ -1069,7 +1071,7 @@ let karteisuche = {
 			.catch(err => {
 				dialog.oeffnen({
 					typ: "alert",
-					text: `Beim Speichern der Karteiliste ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.message}</p>`,
+					text: `Beim Speichern der ${format.content} ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.message}</p>`,
 				});
 			});
 	},
