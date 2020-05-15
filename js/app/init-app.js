@@ -310,6 +310,10 @@ window.addEventListener("load", async () => {
 	document.querySelectorAll(`#red-lit-pfad a`).forEach(a => redLit.dbListener(a));
 	document.querySelectorAll(`#red-lit-nav input`).forEach(i => redLit.navListener(i));
 	document.querySelectorAll("#red-lit-suche-form input").forEach(i => redLit.sucheListener(i));
+	document.getElementById("red-lit-suche-start").addEventListener("click", evt => {
+		evt.preventDefault();
+		redLit.sucheStarten();
+	});
 	document.querySelectorAll("#red-lit-suche-sonder a").forEach(a => redLit.sucheSonder(a));
 	document.querySelectorAll("#red-lit-suche-treffer a").forEach(a => redLit.sucheNav(a));
 	document.querySelectorAll("#red-lit-eingabe input, #red-lit-eingabe textarea").forEach(i => redLit.eingabeListener(i));

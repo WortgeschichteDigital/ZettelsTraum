@@ -83,12 +83,14 @@
 
 /* Suche ---------------------------------------- */
 #red-lit-suche-form {
+	position: relative;
 	margin: 0;
 }
 
 #red-lit-suche-text {
 	margin-right: 15px;
-	width: calc(100% - 194px); /* 12px Padding und Border, 15px Margin, 20px Label, 147px Datumsfeld */
+	padding-right: 29px;
+	width: calc(100% - 218px); /* 36px Padding und Border, 15px Margin, 20px Label, 147px Datumsfeld */
 	transition: background-color .5s linear;
 }
 
@@ -108,6 +110,12 @@
 #red-lit-suche-form label {
 	display: inline-block;
 	width: 20px;
+}
+
+#red-lit-suche-start {
+	position: absolute;
+	left: calc(100% - 218px + 6px); /* vgl. #red-lit-suche-text */
+	top: 3px;
 }
 
 #red-lit-suche-sonder {
