@@ -350,9 +350,9 @@
 }
 
 #red-lit-popup-versionen {
-	margin: 0 0 10px 0;
-	border-bottom: 1px dotted var(--linie);
-	padding-bottom: 10px;
+	direction: rtl;
+	overflow: auto;
+	max-height: 150px;
 	font-size: 14px;
 	line-height: 20px;
 }
@@ -361,6 +361,7 @@
 	margin: 0 auto;
 	border-radius: 5px;
 	padding: 5px 10px;
+	direction: ltr;
 	overflow: hidden;
 	width: 85%;
 	white-space: nowrap;
@@ -381,6 +382,12 @@
 
 #red-lit-popup-versionen span:first-child {
 	margin-left: 0;
+}
+
+#red-lit-popup-titel {
+	margin-top: 10px;
+	border-top: 1px dotted var(--linie);
+	padding-top: 10px;
 }
 
 /* Titelsnippet --------------------------------- */

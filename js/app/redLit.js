@@ -1822,6 +1822,7 @@ let redLit = {
 	anzeigePopupVersionen (slot = 0) {
 		let vers = document.getElementById("red-lit-popup-versionen"),
 			aufnahme = redLit.db.data[redLit.anzeige.id];
+		vers.scrollTop = 0;
 		helfer.keineKinder(vers);
 		for (let i = 0, len = aufnahme.length; i < len; i++) {
 			let div = document.createElement("div");
@@ -1841,6 +1842,11 @@ let redLit = {
 				span.textContent = i;
 			}
 			redLit.anzeigePopupWechseln(div);
+		}
+		// ggf. aktives Element in den Blick scrollen
+		let aktiv = vers.querySelector(".aktiv");
+		if (aktiv.offsetTop + aktiv.offsetHeight > vers.offsetHeight) {
+			vers.scrollTop = aktiv.offsetTop;
 		}
 	},
 	// Anzeige: Titelaufnahme aus der Liste auswählen und anzeigen
