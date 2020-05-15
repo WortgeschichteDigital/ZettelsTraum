@@ -981,6 +981,53 @@ let redLit = {
 			});
 		});
 	},
+	// Eingabeformular: BibTeX-Import aus der Zwischenablage
+	eingabeBibTeX () {
+		const {clipboard} = require("electron"),
+			cp = clipboard.readText(),
+			bibtexCp = belegImport.BibTeXCheck(cp);
+		// kein BibTeX-Datensatz in Zwischenablage
+		if (!bibtexCp) {
+			dialog.oeffnen({
+				typ: "alert",
+				text: `In der Zwischenablage befindet sich kein <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Datensatz.`
+			});
+			return;
+		}
+		// BibTeX-Datensatz einlesen
+		let titel = belegImport.BibTeXLesen(cp, "literatur-db");
+		// Einlesen ist fehlgeschlagen
+		if (!titel) {
+			dialog.oeffnen({
+				typ: "alert",
+				text: `Das Einlesen des <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Datensatzes ist fehlgeschlagen.`
+			});
+			return;
+		}
+		// Datensatz übernehmen
+		let titelSp = titel[0].ds.qu.split(/https?:\/\//);
+		if (titelSp[1]) {
+			// URL + Aufrufdatum
+			let protokoll = titel[0].ds.qu.match(/https?:\/\//)[0],
+				url = titelSp[1].match(/(.+?) /)[1],
+				ad = titelSp[1].match(/([0-9]{1,2})\.\s([0-9]{1,2})\.\s([0-9]{4})/);
+			if (ad[1].length < 2) {
+				ad[1] = "0" + ad[1];
+			}
+			if (ad[2].length < 2) {
+				ad[2] = "0" + ad[2];
+			}
+			document.getElementById("red-lit-eingabe-ad").value = `${ad[3]}-${ad[2]}-${ad[1]}`;
+			let ul = document.getElementById("red-lit-eingabe-ul");
+			ul.value = protokoll + url;
+			ul.dispatchEvent(new KeyboardEvent("input"));
+		}
+		// Titel
+		let ti = document.getElementById("red-lit-eingabe-ti");
+		const quelle = helfer.textTrim(titelSp[0], true);
+		ti.value = quelle;
+		ti.dispatchEvent(new KeyboardEvent("input"));
+	},
 	// Eingabeformular: Titelaufnahme speichern
 	eingabeSpeichern () {
 		// Textfelder trimmen und ggf. typographisch aufhübschen

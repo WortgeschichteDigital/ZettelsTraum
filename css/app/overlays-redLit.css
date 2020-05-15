@@ -218,6 +218,7 @@
 }
 
 #red-lit-eingabe th {
+	position: relative;
 	padding: 10px 35px 0 11px;
 	font-size: 14px;
 	font-weight: normal;
@@ -226,6 +227,20 @@
 
 #red-lit-eingabe th:first-child {
 	padding-left: 6px;
+}
+
+#red-lit-eingabe-ti-bibtex {
+	position: absolute;
+	right: 0;
+	color: var(--textSehrHell);
+}
+
+#red-lit-eingabe-ti-bibtex:focus {
+	color: var(--farbe);
+}
+
+#red-lit-eingabe-ti-bibtex:hover {
+	color: var(--text);
 }
 
 #red-lit-eingabe td {

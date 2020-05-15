@@ -313,6 +313,10 @@ window.addEventListener("load", async () => {
 	document.querySelectorAll("#red-lit-suche-sonder a").forEach(a => redLit.sucheSonder(a));
 	document.querySelectorAll("#red-lit-suche-treffer a").forEach(a => redLit.sucheNav(a));
 	document.querySelectorAll("#red-lit-eingabe input, #red-lit-eingabe textarea").forEach(i => redLit.eingabeListener(i));
+	document.getElementById("red-lit-eingabe-ti-bibtex").addEventListener("click", evt => {
+		evt.preventDefault();
+		redLit.eingabeBibTeX();
+	});
 	// Karteisuche
 	document.getElementById("karteisuche-suchen").addEventListener("click", () => karteisuche.suchenPrep());
 	document.getElementById("karteisuche-suchenCache").addEventListener("click", () => karteisuche.suchenPrepZtj([]));

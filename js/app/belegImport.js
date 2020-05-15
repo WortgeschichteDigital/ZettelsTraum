@@ -1899,7 +1899,9 @@ let belegImport = {
 	// BibTeX-Import: Daten einlesen
 	//   content = String
 	//     (Inhalt der Datei)
-	BibTeXLesen (content) {
+	//   ziel = String || undefined
+	//     ("literatur-db", wenn aus Eingabeformular der Literaturdatenbank aufgerufen)
+	BibTeXLesen (content, ziel = "karteikarte") {
 		// Content fixen
 		content = belegImport.BibTeXFix(content);
 		// Zwischenspeicher der Titel
@@ -1938,6 +1940,9 @@ let belegImport = {
 		// Daten in den Zwischenspeicher eintragen
 		// (nur wenn welche vorhanden sind)
 		if (titel.length) {
+			if (ziel === "literatur-db") {
+				return titel;
+			}
 			belegImport.Datei.meta = "";
 			belegImport.Datei.data = titel;
 			return true;
@@ -2082,7 +2087,7 @@ let belegImport = {
 				}
 			}
 			// Quelleanangabe übernehmen
-			data.ds.qu = quelle;
+			data.ds.qu = helfer.typographie(quelle);
 			// Datensatz pushen
 			titel.push(data);
 		}
