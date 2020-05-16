@@ -1009,6 +1009,12 @@ let redLit = {
 		// Titel
 		if (input.id === "red-lit-eingabe-ti") {
 			redLit.eingabeAutoTitel(input);
+			input.addEventListener("paste", function() {
+				// das muss zeitverzögert stattfinden, sonst ist das Feld noch leer
+				setTimeout(() => {
+					this.value = redLit.eingabeFormatTitel(this.value);
+				}, 25);
+			});
 		}
 		// URL
 		if (input.id === "red-lit-eingabe-ul") {
@@ -1148,6 +1154,18 @@ let redLit = {
 			});
 		});
 	},
+	// Eingabe im Titelfeld formatieren
+	//   titel = String
+	//     (der Text im Titel-Feld)
+	eingabeFormatTitel (titel) {
+		titel = titel.replace(/[\r\n]/g, " ");
+		titel = helfer.textTrim(titel, true);
+		titel = helfer.typographie(titel);
+		if (titel && !/\.$/.test(titel)) { // Titelaufnahmen enden immer mit einem Punkt
+			titel += ".";
+		}
+		return titel;
+	},
 	// Eingabeformular: BibTeX-Import aus der Zwischenablage
 	eingabeBibTeX () {
 		const {clipboard} = require("electron"),
@@ -1202,12 +1220,7 @@ let redLit = {
 		for (let i of textfelder) {
 			let val = i.value;
 			if (i.id === "red-lit-eingabe-ti") { // Titelaufnahme typographisch aufhübschen
-				val = val.replace(/[\r\n]/g, " ");
-				val = helfer.textTrim(val, true);
-				val = helfer.typographie(val);
-				if (val && !/\.$/.test(val)) { // Titelaufnahmen enden immer mit einem Punkt
-					val += ".";
-				}
+				val = redLit.eingabeFormatTitel(val);
 			} else {
 				val = helfer.textTrim(val, true);
 			}
@@ -1280,7 +1293,7 @@ let redLit = {
 					typ: "alert",
 					text: "Sie haben keine Änderungen vorgenommen.",
 					callback: () => {
-						document.getElementById("red-lit-eingabe-si").select();
+						document.getElementById("red-lit-eingabe-ti").focus();
 					},
 				});
 				redLit.eingabeStatus(redLit.eingabe.status); // Änderungsmarkierung zurücksetzen
@@ -1516,7 +1529,7 @@ let redLit = {
 		// Formularstatus ändern
 		redLit.eingabeStatus("add");
 		// Formular fokussieren
-		document.getElementById("red-lit-eingabe-si").focus();
+		document.getElementById("red-lit-eingabe-ti").focus();
 	},
 	// Eingabeformular: Listener für Bearbeitenlinks
 	//   a = Element
@@ -1567,8 +1580,8 @@ let redLit = {
 			status = "old";
 		}
 		redLit.eingabeStatus(status);
-		// Sigle-Feld fokussieren
-		document.getElementById("red-lit-eingabe-si").select();
+		// Formular fokussieren
+		document.getElementById("red-lit-eingabe-ti").focus();
 	},
 	// Eingabe: Metadaten eintragen
 	//   id = String
@@ -1922,7 +1935,7 @@ let redLit = {
 			} else { // Titelaufnahme existiert noch
 				redLit.eingabeMetaFuellen({id, slot: 0});
 			}
-			document.getElementById("red-lit-eingabe-si").dispatchEvent(new KeyboardEvent("input"));
+			document.getElementById("red-lit-eingabe-ti").dispatchEvent(new KeyboardEvent("input"));
 		}
 		// Datensatz ggf. komplett löschen/Popup auffrischen
 		if (!redLit.db.data[id].length) {
