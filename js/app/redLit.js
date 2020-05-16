@@ -926,7 +926,8 @@ let redLit = {
 			for (let i = 0, len = arr.length; i < len; i++) {
 				let aufnahme = arr[i];
 				// Sondersuchen
-				if (/^(duplikate|siglen_doppelt)$/.test(redLit.suche.sonder) && i > 0) { // nur aktuellsten Eintrag berücksichtigen
+				if (/^(duplikate|siglen_doppelt|notizen)$/.test(redLit.suche.sonder) && i > 0) {
+					// nur den aktuellsten Eintrag berücksichtigen
 					break;
 				} else if (redLit.suche.sonder === "siglen_doppelt" &&
 						!siglen_doppelt.has(aufnahme.td.si)) { // doppelte Siglen
@@ -936,6 +937,9 @@ let redLit = {
 					continue;
 				} else if (redLit.suche.sonder === "ppn_ohne" &&
 					aufnahme.td.pn.length) { // ohne PPN
+					continue;
+				} else if (redLit.suche.sonder === "notizen" &&
+					!aufnahme.td.no) { // mit Notizen
 					continue;
 				}
 				// Datum
