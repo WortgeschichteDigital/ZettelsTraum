@@ -726,7 +726,11 @@ let redLit = {
 		redLit.suche.treffer = [];
 		redLit.suche.highlight = null;
 		if (text) {
-			st = new RegExp(helfer.escapeRegExp(text), "gi");
+			let insensitive = "i";
+			if (/[A-ZÄÖÜ]/.test(text)) {
+				insensitive = "";
+			}
+			st = new RegExp(helfer.escapeRegExp(text), "g" + insensitive);
 			redLit.suche.highlight = st;
 		}
 		if (ab) {
