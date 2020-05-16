@@ -1130,7 +1130,13 @@ let redLit = {
 			if (!ad.value) {
 				ad.value = new Date().toISOString().split("T")[0];
 			}
-			fo.value = /books\.google\.[a-z]+\//.test(this.value) ? "GoogleBooks" : "online";
+			let fundort = "online";
+			if (/books\.google/.test(this.value)) {
+				fundort = "GoogleBooks";
+			} else if (/^https?:\/\/www\.deutschestextarchiv\.de\//.test(this.value)) {
+				fundort = "DTA";
+			}
+			fo.value = fundort;
 		});
 	},
 	// Eingabeformular: vor Ändern der ID warnen
@@ -1367,11 +1373,11 @@ let redLit = {
 			});
 			return false;
 		}
-		// wenn URL => Fundort "GoogleBooks" || "online"
+		// wenn URL => Fundort "DTA" || "GoogleBooks" || "online"
 		let fo = document.getElementById("red-lit-eingabe-fo");
-		if (url.value && !/^(GoogleBooks|online)$/.test(fo.value)) {
+		if (url.value && !/^(DTA|GoogleBooks|online)$/.test(fo.value)) {
 			fehler({
-				text: "Geben Sie eine URL an, muss der Fundort „online“ oder „GoogleBooks“ sein.",
+				text: "Geben Sie eine URL an, muss der Fundort „online“, „DTA“ oder „GoogleBooks“ sein.",
 				fokus: fo,
 			});
 			return false;
@@ -1402,10 +1408,10 @@ let redLit = {
 			});
 			return false;
 		}
-		// wenn Fundort "GoogleBooks" || "online" => URL eingeben
-		if (/^(GoogleBooks|online)$/.test(fo.value) && !url.value) {
+		// wenn Fundort "DTA" || "GoogleBooks" || "online" => URL eingeben
+		if (/^(DTA|GoogleBooks|online)$/.test(fo.value) && !url.value) {
 			fehler({
-				text: "Ist der Fundort „online“ oder „GoogleBooks“, müssen Sie eine URL angeben.",
+				text: "Ist der Fundort „online“, „DTA“ oder „GoogleBooks“, müssen Sie eine URL angeben.",
 				fokus: url,
 			});
 			return false;
