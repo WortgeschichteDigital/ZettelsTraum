@@ -257,7 +257,7 @@ let optionen = {
 			if (!data.hasOwnProperty(block)) {
 				continue;
 			}
-			if (!/^(fenster|fenster-bedeutungen|einstellungen|kopieren|tags|personen|letzter_pfad)$/.test(block)) {
+			if (!/^(fenster|fenster-bedeutungen|einstellungen|kopieren|tags|personen|letzter_pfad|literatur-db)$/.test(block)) {
 				delete data[block];
 				// diese Einstellungen werden nicht aus einem anderen Fenster übernommen
 				// (das führt nur zu einem unschönen Springen):

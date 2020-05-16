@@ -15,8 +15,99 @@ let redLit = {
 		// Eingabeformular zurücksetzen
 		redLit.eingabeLeeren();
 		redLit.eingabeStatus("add");
-		// Datenbank laden
-		const dbGeladen = await redLit.dbLaden();
+		// Pfad zur Datenbank ermitteln
+		if (!redLit.db.path) {
+			// noch keine Pfad geladen => in den Einstellungen gespeicherten Pfad übernehmen
+			// (der kann natürlich ebenfalls leer sein)
+			redLit.db.path = optionen.data["literatur-db"];
+			redLit.db.mtime = "";
+		} else if (optionen.data["literatur-db"] &&
+				 optionen.data["literatur-db"] !== redLit.db.path) {
+			// Pfad wurde in einem anderen Fenster geändert => übernehmen?
+			await new Promise(resolve => setTimeout(() => resolve(true), 200)); // sonst wird DB-Fenster nicht sichtbar
+			await new Promise(resolve => {
+				dialog.oeffnen({
+					typ: "confirm",
+					text: `Der Datenbankpfad\n<p class="force-wrap"><i>${redLit.db.path}</i></p>\nwurde in einem anderen Programmfenster geändert in:\n<p class="force-wrap"><i>${optionen.data["literatur-db"]}</i></p>\nSoll die neue Datenbank auch in diesem Fenster geladen werden?`,
+					callback: () => {
+						if (dialog.antwort) {
+							redLit.db.path = optionen.data["literatur-db"];
+							redLit.db.mtime = "";
+						} else {
+							optionen.data["literatur-db"] = redLit.db.path;
+							optionen.speichern();
+						}
+						resolve(true);
+					},
+				});
+			});
+		} else if (!optionen.data["literatur-db"]) {
+			// in einem anderen Fenster wurde die DB entkoppelt =>
+			// Pfad aus diesem Fenster an alle Fenster übertragen
+			optionen.data["literatur-db"] = redLit.db.path;
+			optionen.speichern();
+		}
+		// Pfadanzeige auffrischen
+		redLit.dbAnzeige();
+		// wenn Pfad bekannt =>
+		//   1. Kann die DB geladen werden?
+		//				wenn nicht => versuchen die Offline-Version zu laden
+		//   2. Wurde die DB-Datei seit dem letzten Laden geändert?
+		//        wenn ja => DB neu laden
+		let dbGeladen = false;
+		if (redLit.db.path) {
+			const fs = require("fs"),
+				fsP = fs.promises;
+			let stats;
+			try {
+				stats = await fsP.lstat(redLit.db.path);
+			} catch {
+				// Datenbank kann nicht geladen werden
+				// (kann temporär verschwunden sein, weil sie im Netzwerk liegt)
+				redLit.db.gefunden = false;
+				redLit.db.mtime = "";
+				// versuchen, die Offline-Version zu laden
+				const dbOffline = await redLit.dbLadenOffline();
+				if (!dbOffline) {
+					// Laden ist endgültig gescheitert => Datenbank entkoppeln
+					redLit.dbEntkoppeln();
+				} else {
+					dbGeladen = true;
+				}
+			}
+			// Datenbank kann geladen werden,
+			// aber muss sie auch geladen werden?
+			if (stats) {
+				redLit.db.gefunden = true;
+				const mtime = stats.mtime.toISOString();
+				if (mtime !== redLit.db.mtime) {
+					// Datenkbank laden
+					redLit.db.mtime = mtime;
+					dbGeladen = await new Promise(async resolve => {
+						const result = await redLit.dbOeffnenEinlesen(redLit.db.path);
+						if (result !== true) {
+							dialog.oeffnen({
+								typ: "alert",
+								text: result,
+							});
+							resolve(false);
+							return;
+						}
+						resolve(true);
+					});
+				} else {
+					// Offline-Kopie erstellen, falls noch keine vorhanden ist
+					// (die Offline-Kopie könnte beim Entkoppeln in einem anderen Hauptfenster
+					// gelöscht worden sein)
+					const offlinePfad = redLit.dbOfflineKopiePfad(redLit.db.path),
+						offlineVorhanden = await helfer.exists(offlinePfad);
+					if (!offlineVorhanden) {
+						redLit.dbOfflineKopie(redLit.db.path);
+					}
+					dbGeladen = true;
+				}
+			}
+		}
 		// passendes Formular öffnen
 		if (dbGeladen) {
 			redLit.sucheWechseln();
@@ -27,7 +118,7 @@ let redLit = {
 	// Fenster schließen
 	schliessen () {
 		redLit.dbCheck(() => {
-			if (!optionen.data["literatur-db"]) {
+			if (!redLit.db.path) {
 				redLit.dbEntkoppeln();
 			}
 			overlay.ausblenden(document.getElementById("red-lit"));
@@ -60,66 +151,25 @@ let redLit = {
 	},
 	// Datenbank: Speicher für Variablen
 	db: {
+		ve: 1, // Versionsnummer des aktuellen Datenbankformats
 		data: {}, // Titeldaten der Literaturdatenbank (wenn DB geladen => Inhalt von DB.ti)
 		dataMeta: { // Metadaten der Literaturdatenbank
 			dc: "", // Erstellungszeitpunkt (DB.dc)
 			dm: "", // Änderungszeitpunkt (DB.dm)
 			re: 0, // Revisionsnummer (DB.re)
 		},
-		ve: 1, // Versionsnummer des aktuellen Datenbankformats
+		path: "", // Pfad zur geladenen Datenbank
+		mtime: "", // Änderungsdatum der DB-Datei beim Laden (ISO-String)
 		gefunden: false, // Datenbankdatei gefunden (könnte im Netzwerk temporär verschwunden sein)
 		changed: false, // Inhalt der Datenbank wurde geändert und noch nicht gespeichert
-	},
-	// Datenbank: Datei laden
-	dbLaden () {
-		return new Promise(async resolve => {
-			// Anzeige auffrischen
-			redLit.dbAnzeige();
-			// ggf. Datenbank einlesen
-			if (!optionen.data["literatur-db"]) {
-				resolve(false);
-				return;
-			}
-			const dbExistiert = await helfer.exists(optionen.data["literatur-db"]);
-			// Datenkbank wurde wiedergefunden
-			if (dbExistiert) {
-				redLit.db.gefunden = true;
-				const result = await redLit.dbOeffnenEinlesen(optionen.data["literatur-db"]);
-				if (result !== true) {
-					dialog.oeffnen({
-						typ: "alert",
-						text: result,
-					});
-					resolve(false);
-					return;
-				}
-				resolve(true);
-				return;
-			}
-			// Datenbank wurde nicht wiedergefunden
-			// (kann temporär verschwunden sein, weil sie im Netzwerk liegt)
-			redLit.db.gefunden = false;
-			// versuchen, die Offline-Version zu laden
-			const dbOffline = await redLit.dbLadenOffline();
-			if (dbOffline) {
-				resolve(true);
-				return;
-			}
-			// Laden ist endgültig gescheitert => Datenbank entkoppeln
-			redLit.dbEntkoppeln();
-			resolve(false);
-		});
 	},
 	// Datenkbank: versuchen, die Offline-Version zu laden
 	dbLadenOffline () {
 		return new Promise(async resolve => {
-			const path = require("path");
-			let reg = new RegExp(`.+${helfer.escapeRegExp(path.sep)}(.+)`),
-				dateiname = optionen.data["literatur-db"].match(reg),
-				offlinePfad = path.join(appInfo.userData, dateiname[1]);
-			const dbOffline = await helfer.exists(offlinePfad);
+			const offlinePfad = redLit.dbOfflineKopiePfad(redLit.db.path),
+				dbOffline = await helfer.exists(offlinePfad);
 			if (dbOffline) {
-				let result = await redLit.dbOeffnenEinlesen(offlinePfad);
+				const result = await redLit.dbOeffnenEinlesen(offlinePfad, true);
 				if (result === true) { // Laden der Offline-Version war erfolgreich
 					let span = document.createElement("span");
 					span.textContent = "[offline]";
@@ -134,12 +184,12 @@ let redLit = {
 	// Datenbank: Anzeige auffrischen
 	dbAnzeige () {
 		let pfad = document.getElementById("red-lit-pfad-db");
-		if (!optionen.data["literatur-db"]) { // keine DB mit dem Programm verknüpft
+		if (!redLit.db.path) { // keine DB mit dem Programm verknüpft
 			pfad.classList.add("keine-db");
 			pfad.textContent = "keine Datenbank geladen";
 		} else { // DB mit dem Programm verknüpft
 			pfad.classList.remove("keine-db");
-			pfad.textContent = `\u200E${optionen.data["literatur-db"]}\u200E`;
+			pfad.textContent = `\u200E${redLit.db.path}\u200E`;
 		}
 		// Änderungsmarkierung zurücksetzen
 		redLit.dbGeaendert(false);
@@ -176,7 +226,7 @@ let redLit = {
 		});
 	},
 	// Datenbank: Verknüpfung mit der Datenbank auflösen
-	dbEntkoppeln () {
+	async dbEntkoppeln () {
 		// ggf. Popup schließen
 		redLit.anzeigePopupSchliessen();
 		// DB-Datensätze zurücksetzen
@@ -186,12 +236,20 @@ let redLit = {
 			dm: "",
 			re: 0,
 		};
-		redLit.db.gefunden = false;
-		redLit.db.changed = false;
-		if (optionen.data["literatur-db"]) {
+		if (redLit.db.path) {
+			// redLit.db.path überprüfen! Grund:
+			// Wird die DB entkoppelt, das DB-Overlay-Fenster aber nicht geschlossen
+			// und dann aus einem anderen Hauptfenster heraus ein neuer DB-Pfad übertragen,
+			// würde der Pfad in diesem Hauptfenster beim Schließen des DB-Overlay-Fensters
+			// nach einer Überprüfung von optionen.data["literatur-db"] erneut gelöscht.
+			redLit.dbOfflineKopieUnlink(redLit.db.path);
+			redLit.db.path = "";
 			optionen.data["literatur-db"] = "";
 			optionen.speichern();
 		}
+		redLit.db.mtime = "";
+		redLit.db.gefunden = false;
+		redLit.db.changed = false;
 		// DB-Anzeige auffrischen
 		redLit.dbAnzeige();
 		// Suche zurücksetzen
@@ -247,12 +305,18 @@ let redLit = {
 		const ergebnis = await redLit.dbOeffnenEinlesen(result.filePaths[0]);
 		if (ergebnis === true) {
 			// Datensätze auffrischen
-			redLit.db.gefunden = true;
-			redLit.db.changed = false;
-			if (optionen.data["literatur-db"] !== result.filePaths[0]) {
+			if (redLit.db.path !== result.filePaths[0]) {
+				redLit.dbOfflineKopieUnlink(redLit.db.path);
+				redLit.db.path = result.filePaths[0];
 				optionen.data["literatur-db"] = result.filePaths[0];
 				optionen.speichern();
 			}
+			const fs = require("fs"),
+				fsP = fs.promises;
+			let stats = await fsP.lstat(redLit.db.path);
+			redLit.db.mtime = stats.mtime.toISOString();
+			redLit.db.gefunden = true;
+			redLit.db.changed = false;
 			// DB-Anzeige auffrischen
 			redLit.dbAnzeige();
 			// Suche zurücksetzen
@@ -271,7 +335,9 @@ let redLit = {
 	// Datenbank: Datei einlesen
 	//   pfad = String
 	//     (Pfad zur Datei)
-	dbOeffnenEinlesen (pfad) {
+	//   offline = true || undefined
+	//     (die Offlinedatei wird geöffnet => keine Offline-Kopie anlegen)
+	dbOeffnenEinlesen (pfad, offline = false) {
 		return new Promise(async resolve => {
 			let content = await io.lesen(pfad);
 			if (!helfer.checkType("String", content)) {
@@ -299,7 +365,9 @@ let redLit = {
 			redLit.db.dataMeta.dm = data_tmp.dm;
 			redLit.db.dataMeta.re = data_tmp.re;
 			// Datenbank für Offline-Nutzung verfügbar halten
-			redLit.dbOfflineKopie(pfad);
+			if (!offline) {
+				redLit.dbOfflineKopie(pfad);
+			}
 			// Promise auflösen
 			resolve(true);
 		});
@@ -436,21 +504,18 @@ let redLit = {
 			return;
 		}
 		// Dateifpad ist bekannt, wurde aber nicht wiedergefunden => prüfen, ob er jetzt da ist
-		if (optionen.data["literatur-db"] &&
+		if (redLit.db.path &&
 				!redLit.db.gefunden) {
-			const dbGefunden = await helfer.exists(optionen.data["literatur-db"]);
-			if (dbGefunden) {
-				redLit.db.gefunden = true;
-			}
+			redLit.db.gefunden = await helfer.exists(redLit.db.path);
 		}
 		// Dateipfad ist bekannt und wurde wiedergefunden => direkt schreiben
-		if (optionen.data["literatur-db"] &&
+		if (redLit.db.path &&
 				redLit.db.gefunden &&
 				!speichernUnter) {
-			const ergebnis = await redLit.dbSpeichernSchreiben(optionen.data["literatur-db"]);
+			const ergebnis = await redLit.dbSpeichernSchreiben(redLit.db.path);
 			if (ergebnis === true) {
 				redLit.dbAnzeige();
-				redLit.dbOfflineKopie(optionen.data["literatur-db"]);
+				redLit.dbOfflineKopie(redLit.db.path);
 			} else {
 				dialog.oeffnen({
 					typ: "alert",
@@ -504,7 +569,9 @@ let redLit = {
 		const ergebnis = await redLit.dbSpeichernSchreiben(result.filePath);
 		if (ergebnis === true) {
 			// ggf. Pfad zur Datenbankdatei speichern
-			if (optionen.data["literatur-db"] !== result.filePath) {
+			if (redLit.db.path !== result.filePath) {
+				redLit.dbOfflineKopieUnlink(redLit.db.path);
+				redLit.db.path = result.filePath;
 				optionen.data["literatur-db"] = result.filePath;
 				optionen.speichern();
 			}
@@ -526,6 +593,7 @@ let redLit = {
 	//     (Datei wird für Offline-Nutzung gespeichert => Metadaten nicht auffrischen)
 	dbSpeichernSchreiben (pfad, offline = false) {
 		return new Promise(async resolve => {
+			// TODO Ist die Datenkbank gesperrt? Wenn ja => Abbruch + Meldung
 			// alte Metadaten merken für den Fall, dass das Speichern scheitert
 			let meta = {
 				dc: redLit.db.dataMeta.dc,
@@ -540,6 +608,19 @@ let redLit = {
 				}
 				redLit.db.dataMeta.dm = new Date().toISOString();
 				redLit.db.dataMeta.re++;
+			}
+			// Datenbanken zusammenführen?
+			if (!offline) {
+				try {
+					// TODO Datenbank sperren
+					const fs = require("fs"),
+						fsP = fs.promises;
+					let stats = await fsP.lstat(pfad);
+					if (stats.mtime.toISOString() !== redLit.db.mtime) {
+						// TODO Datenbanken in redLit.db.data zusammenführen
+						// TODO (das muss eine Promise sein, weil hier gewartet werden muss)
+					}
+				} catch {} // Datei existiert noch nicht, muss also auch nicht gesperrt werden
 			}
 			// Daten zusammentragen
 			let db = {
@@ -558,10 +639,19 @@ let redLit = {
 				redLit.db.dataMeta.dc = meta.dc;
 				redLit.db.dataMeta.dm = meta.dm;
 				redLit.db.dataMeta.re = meta.re;
+				// TODO Datenbank ggf. entsperren
 				// Fehler auswerfen
 				throw result;
 			}
-			// Schreiben war erfolgreich
+			// ggf. Änderungsdatum auffrischen
+			if (!offline) {
+				const fs = require("fs"),
+					fsP = fs.promises;
+				let stats = await fsP.lstat(pfad);
+				redLit.db.mtime = stats.mtime.toISOString();
+			}
+			// TODO Datenbank ggf. entsperren
+			// Promise auflösen
 			resolve(true);
 		});
 	},
@@ -569,10 +659,43 @@ let redLit = {
 	//   pfad = String
 	//     (Pfad zur Datenkbank)
 	dbOfflineKopie (pfad) {
+		const offlinePfad = redLit.dbOfflineKopiePfad(pfad);
+		redLit.dbSpeichernSchreiben(offlinePfad, true);
+	},
+	// Datenbank: Pfad zur Offline-Kopie ermitteln
+	//   pfad = String
+	//     (Pfad zur Datenkbank)
+	dbOfflineKopiePfad (pfad) {
+		// Laufwerksbuchstabe entfernen (Windows)
+		pfad = pfad.replace(/^[a-zA-Z]:/, "");
+		// Pfad splitten
 		const path = require("path");
-		let reg = new RegExp(`.+${helfer.escapeRegExp(path.sep)}(.+)`),
-			dateiname = pfad.match(reg);
-		redLit.dbSpeichernSchreiben(path.join(appInfo.userData, dateiname[1]), true);
+		let reg = new RegExp(`${helfer.escapeRegExp(path.sep)}`),
+			pfadSplit = pfad.split(reg);
+		// Splits kürzen
+		//   (damit der Dateiname nicht zu lang wird, aber noch eindeutig ist)
+		// leere Slots am Anfang entfernen
+		//   (kann sein, wenn die Datei z.B. in /Datei.ztl oder C:\Datei.ztl liegt)
+		while (pfadSplit.length > 3 ||
+				!pfadSplit[0]) {
+			pfadSplit.shift();
+		}
+		return path.join(appInfo.userData, pfadSplit.join("_"));
+	},
+	// Datenbank: Offline-Kopie im Einstellungenordner löschen
+	//   pfad = String
+	//     (Pfad zur Datenkbank)
+	async dbOfflineKopieUnlink (pfad) {
+		if (!pfad) {
+			return;
+		}
+		const offlinePfad = redLit.dbOfflineKopiePfad(pfad),
+			offlineVorhanden = await helfer.exists(offlinePfad);
+		if (offlineVorhanden) {
+			const fs = require("fs"),
+				fsP = fs.promises;
+			fsP.unlink(offlinePfad);
+		}
 	},
 	// Datenbank: prüft, ob noch ein Speichervorgang aussteht
 	//   fun = Function
@@ -600,7 +723,7 @@ let redLit = {
 		// Änderungen in der DB noch nicht gespeichert?
 		if (db && redLit.db.changed) {
 			let text = "Die Datenbank wurde geändert, aber noch nicht gespeichert.\nMöchten Sie die Datenbank nicht erst einmal speichern?";
-			if (!optionen.data["literatur-db"]) {
+			if (!redLit.db.path) {
 				text = "Sie haben Titelaufnahmen angelegt, aber noch nicht gespeichert.\nMöchten Sie die Änderungen nicht erst einmal in einer Datenbank speichern?";
 			}
 			dialog.oeffnen({
@@ -610,6 +733,7 @@ let redLit = {
 					if (dialog.antwort) {
 						redLit.dbSpeichern();
 					} else if (dialog.antwort === false) {
+						redLit.db.mtime = ""; // damit die DB beim erneuten Öffnen des Fenster neu geladen wird
 						redLit.db.changed = false;
 						fun();
 					}
