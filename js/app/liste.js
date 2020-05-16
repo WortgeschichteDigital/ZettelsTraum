@@ -1380,10 +1380,10 @@ let liste = {
 	//   text = String
 	//     (Plain-Text, in dem die Links umgewandelt werden sollen)
 	linksErkennen (text) {
-		text = text.replace(/http(s)*:[^\s]+|www\.[^\s]+/g, function(m) {
+		text = text.replace(/https?:[^\s]+|www\.[^\s]+/g, function(m) {
 			let reg = /(&gt;|[.:,;!?)\]}>]+)$/g,
 				url = m.replace(reg, ""),
-				basis = m.match(/(https*:\/\/)*([^\/]+)/)[2].replace(reg, ""),
+				basis = m.match(/(https?:\/\/)*([^\/]+)/)[2].replace(reg, ""),
 				schluss = "";
 			if (m.match(reg)) {
 				schluss = m.replace(/.+?(&gt;|[.:,;!?)\]}>]+)$/g, function(m, p) {

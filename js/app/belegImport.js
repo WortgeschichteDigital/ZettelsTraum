@@ -19,7 +19,7 @@ let belegImport = {
 			return;
 		}
 		// Ist das überhaupt eine URL?
-		if (!/^https*:\/\//.test(url)) {
+		if (!/^https?:\/\//.test(url)) {
 			dialog.oeffnen({
 				typ: "alert",
 				text: "Das scheint keine URL zu sein.",
@@ -30,7 +30,7 @@ let belegImport = {
 			return;
 		}
 		// URL nicht vom DTA
-		if (!/^https*:\/\/www\.deutschestextarchiv\.de\//.test(url)) {
+		if (!/^https?:\/\/www\.deutschestextarchiv\.de\//.test(url)) {
 			dialog.oeffnen({
 				typ: "alert",
 				text: "Die URL stammt nicht vom DTA.",

@@ -242,7 +242,7 @@ let beleg = {
 			let feld = this.id.replace(/^beleg-/, "");
 			if (/^dta(-bis)*$/.test(feld)) { // #beleg-dta + #beleg-dta-bis gehören nicht zur Kartei, dienen nur zum DTA-Import
 				if (feld === "dta" &&
-						/^https*:\/\/www\.deutschestextarchiv\.de\//.test(this.value)) { // Bis-Seite ermitteln und eintragen
+						/^https?:\/\/www\.deutschestextarchiv\.de\//.test(this.value)) { // Bis-Seite ermitteln und eintragen
 					const fak = belegImport.DTAGetFak(this.value, "");
 					if (fak) {
 						this.nextSibling.value = parseInt(fak, 10) + 1;
