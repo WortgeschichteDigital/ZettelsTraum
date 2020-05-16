@@ -467,7 +467,7 @@ let redLit = {
 		const path = require("path");
 		let opt = {
 			title: "Literaturdatenbank speichern",
-			defaultPath: path.join(appInfo.documents, "Literatur.ztl"),
+			defaultPath: path.join(appInfo.documents, "Literaturdatenbank.ztl"),
 			filters: [
 				{
 					name: `${appInfo.name} Literaturdatenbank`,
@@ -481,7 +481,7 @@ let redLit = {
 		};
 		// Wo wurde zuletzt eine Datei gespeichert oder geöffnet?
 		if (optionen.data.letzter_pfad) {
-			opt.defaultPath = path.join(optionen.data.letzter_pfad, "Literatur.ztl");
+			opt.defaultPath = path.join(optionen.data.letzter_pfad, "Literaturdatenbank.ztl");
 		}
 		// Dialog anzeigen
 		const {ipcRenderer} = require("electron");
