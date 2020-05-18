@@ -1447,32 +1447,7 @@ let redLit = {
 			redLit.db.data[id] = [];
 		}
 		// Daten zusammentragen
-		let ds = {
-			be: optionen.data.einstellungen.bearbeiterin,
-			da: new Date().toISOString(),
-			id: redLit.eingabeSpeichernMakeID(),
-			td: {},
-		};
-		let felder = document.getElementById("red-lit-eingabe").querySelectorAll("input, textarea");
-		for (let i of felder) {
-			let k = i.id.replace(/.+-/, "");
-			if (i.type === "button" ||
-					k === "id") {
-				continue;
-			}
-			if (k === "pn") {
-				let val = i.value.split(/[,\s]/),
-					arr = [];
-				for (let ppn of val) {
-					if (ppn) {
-						arr.push(ppn);
-					}
-				}
-				ds.td.pn = arr;
-			} else {
-				ds.td[k] = i.value;
-			}
-		}
+		let ds = redLit.eingabeSpeichernMakeDs();
 		// ID wurde geändert => Datensatz umbenennen
 		let idGeaendert = false;
 		if (redLit.eingabe.status !== "add" &&
@@ -1482,20 +1457,7 @@ let redLit = {
 		}
 		// Abbruch, wenn identisch mit vorherigem Datensatz
 		if (redLit.db.data[id].length && !idGeaendert) {
-			let dsAlt = redLit.db.data[id][0],
-				diff = false;
-			for (let [k, v] of Object.entries(dsAlt.td)) {
-				let alt = v,
-					neu = ds.td[k];
-				if (Array.isArray(alt)) {
-					alt = alt.join(",");
-					neu = neu.join(",");
-				}
-				if (alt !== neu) {
-					diff = true;
-					break;
-				}
-			}
+			const diff = redLit.eingabeSpeichernDiff(redLit.db.data[id][0].td, ds.td);
 			if (!diff) {
 				dialog.oeffnen({
 					typ: "alert",
@@ -1706,6 +1668,36 @@ let redLit = {
 			}
 		}
 	},
+	// Eingabeformular: einen neuen Datensatz auf Grundlage des Formulars erstellen
+	eingabeSpeichernMakeDs () {
+		let ds = {
+			be: optionen.data.einstellungen.bearbeiterin,
+			da: new Date().toISOString(),
+			id: redLit.eingabeSpeichernMakeID(),
+			td: {},
+		};
+		let felder = document.querySelectorAll("#red-lit-eingabe input, #red-lit-eingabe textarea");
+		for (let i of felder) {
+			let k = i.id.replace(/.+-/, "");
+			if (i.type === "button" ||
+					k === "id") {
+				continue;
+			}
+			if (k === "pn") {
+				let val = i.value.split(/[,\s]/),
+					arr = [];
+				for (let ppn of val) {
+					if (ppn) {
+						arr.push(ppn);
+					}
+				}
+				ds.td.pn = arr;
+			} else {
+				ds.td[k] = i.value;
+			}
+		}
+		return ds;
+	},
 	// Eingabeformular: ID für einen Datensatz erstellen
 	eingabeSpeichernMakeID () {
 		const hex = "0123456789abcdef";
@@ -1727,6 +1719,26 @@ let redLit = {
 			break;
 		}
 		return id;
+	},
+	// Eingabeformular: ermittelt, ob zwei Titeldatensätze voneinander abweichen
+	//   alt = Object
+	//     (alter Datensatz mit Titeldaten)
+	//   neu = Object
+	//     (neuer Datensatz mit Titeldaten)
+	eingabeSpeichernDiff (alt, neu) {
+		let diff = false;
+		for (let [k, v] of Object.entries(alt)) {
+			let n = neu[k];
+			if (Array.isArray(v)) {
+				v = v.join(",");
+				n = n.join(",");
+			}
+			if (v !== n) {
+				diff = true;
+				break;
+			}
+		}
+		return diff;
 	},
 	// Eingabeformular: neue Titelaufnahme hinzufügen
 	eingabeHinzufuegen () {
@@ -2140,10 +2152,15 @@ let redLit = {
 			if (!redLit.db.data[id].length) { // Titelaufnahme existiert nicht mehr
 				redLit.eingabeMetaFuellen({id: "", slot: -1});
 				redLit.eingabeStatus("add");
+				document.getElementById("red-lit-eingabe-ti").dispatchEvent(new KeyboardEvent("input"));
 			} else { // Titelaufnahme existiert noch
 				redLit.eingabeMetaFuellen({id, slot: 0});
+				let ds = redLit.eingabeSpeichernMakeDs();
+				const diff = redLit.eingabeSpeichernDiff(redLit.db.data[id][0].td, ds.td);
+				if (diff) {
+					document.getElementById("red-lit-eingabe-ti").dispatchEvent(new KeyboardEvent("input"));
+				}
 			}
-			document.getElementById("red-lit-eingabe-ti").dispatchEvent(new KeyboardEvent("input"));
 		}
 		// Datensatz ggf. komplett löschen/Popup auffrischen
 		if (!redLit.db.data[id].length) {
