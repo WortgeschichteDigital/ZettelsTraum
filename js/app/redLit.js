@@ -1855,7 +1855,11 @@ let redLit = {
 				return;
 			}
 			// Aufrufdatum in der Zukunft?
-			if (ad.value && new Date(ad.value) > new Date()) {
+			let da = ad.value ? new Date(ad.value) : null;
+			if (da) { // vgl. redLit.sucheStarten()
+				da = new Date(da.getFullYear(), da.getMonth(), da.getDate());
+			}
+			if (da && da >= new Date()) {
 				fehler({
 					text: "Das Aufrufdatum liegt in der Zukunft.",
 					fokus: ad,
