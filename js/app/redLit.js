@@ -134,7 +134,7 @@ let redLit = {
 		});
 	},
 	// Speichern wurde via Tastaturkürzel (Strg + S) angestoßen
-	speichern () {
+	async speichern () {
 		if (redLit.db.locked) {
 			return;
 		}
@@ -152,9 +152,11 @@ let redLit = {
 		}
 		// Speichern
 		if (kaskade.eingabe &&
-				redLit.eingabe.changed &&
-				!redLit.eingabeSpeichern()) {
-			return;
+				redLit.eingabe.changed) {
+			const eingabeSpeichern = await redLit.eingabeSpeichern();
+			if (!eingabeSpeichern) {
+				return;
+			}
 		}
 		if (kaskade.db &&
 				redLit.db.changed) {
@@ -1465,10 +1467,6 @@ let redLit = {
 		if (input.id === "red-lit-eingabe-si") {
 			redLit.eingabeAutoID(input);
 		}
-		// ID
-		if (input.id === "red-lit-eingabe-id") {
-			redLit.eingabeWarnungID(input);
-		}
 		// Titel
 		if (input.id === "red-lit-eingabe-ti") {
 			redLit.eingabeAutoTitel(input);
@@ -1497,7 +1495,8 @@ let redLit = {
 		input.addEventListener("keydown", function(evt) {
 			tastatur.detectModifiers(evt);
 			if (tastatur.modifiers === "Ctrl" && evt.key === "Enter") {
-				redLit.eingabeSpeichern();
+				// ohne Timeout würden Warnfenster sofort wieder verschwinden
+				setTimeout(() => redLit.eingabeSpeichern(), 200);
 			}
 		});
 	},
@@ -1602,27 +1601,6 @@ let redLit = {
 			fo.value = fundort;
 		});
 	},
-	// Eingabeformular: vor Ändern der ID warnen
-	//   input = Element
-	//     (das ID-Feld)
-	eingabeWarnungID (input) {
-		input.addEventListener("change", () => {
-			if (redLit.eingabe.status === "add") {
-				return;
-			}
-			dialog.oeffnen({
-				typ: "confirm",
-				text: "Die ID nachträglich zu ändern, kann gravierende Konsequenzen haben.\nMöchten Sie die ID wirklich ändern?",
-				callback: () => {
-					let id = document.getElementById("red-lit-eingabe-id");
-					if (!dialog.antwort) {
-						id.value = redLit.eingabe.id;
-					}
-					id.select();
-				},
-			});
-		});
-	},
 	// Eingabe im Titelfeld formatieren
 	//   titel = String
 	//     (der Text im Titel-Feld)
@@ -1685,229 +1663,271 @@ let redLit = {
 	},
 	// Eingabeformular: Titelaufnahme speichern
 	eingabeSpeichern () {
-		// Textfelder trimmen und ggf. typographisch aufhübschen
-		let textfelder = document.getElementById("red-lit-eingabe").querySelectorAll(`input[type="text"], textarea`);
-		for (let i of textfelder) {
-			let val = i.value;
-			if (i.id === "red-lit-eingabe-ti") { // Titelaufnahme typographisch aufhübschen
-				val = redLit.eingabeFormatTitel(val);
-			} else {
-				val = helfer.textTrim(val, true);
+		return new Promise(async resolve => {
+			// Textfelder trimmen und ggf. typographisch aufhübschen
+			let textfelder = document.getElementById("red-lit-eingabe").querySelectorAll(`input[type="text"], textarea`);
+			for (let i of textfelder) {
+				let val = i.value;
+				if (i.id === "red-lit-eingabe-ti") { // Titelaufnahme typographisch aufhübschen
+					val = redLit.eingabeFormatTitel(val);
+				} else {
+					val = helfer.textTrim(val, true);
+				}
+				i.value = val;
+				if (i.nodeName === "TEXTAREA") {
+					helfer.textareaGrow(i);
+				}
 			}
-			i.value = val;
-			if (i.nodeName === "TEXTAREA") {
-				helfer.textareaGrow(i);
+			// Validierung des Formulars
+			const valid = await redLit.eingabeSpeichernValid();
+			if (!valid) {
+				resolve(false);
+				return;
 			}
-		}
-		// Validierung des Formulars
-		if (!redLit.eingabeSpeichernValid()) {
-			return false;
-		}
-		// ggf. neuen Datensatz erstellen
-		const id = document.getElementById("red-lit-eingabe-id").value;
-		if (redLit.eingabe.status === "add") {
-			redLit.db.data[id] = [];
-		}
-		// Daten zusammentragen
-		let ds = redLit.eingabeSpeichernMakeDs();
-		// ID wurde geändert => Datensatz umbenennen
-		let idGeaendert = false;
-		if (redLit.eingabe.status !== "add" &&
-				redLit.eingabe.id !== id) {
-			idGeaendert = true;
-			redLit.db.data[id] = [];
-			redLit.dbTitelKlonen(redLit.db.data[redLit.eingabe.id], redLit.db.data[id]);
-			delete redLit.db.data[redLit.eingabe.id];
-			redLit.db.dataOpts.push({
-				aktion: "changeId",
-				id,
-				idAlt: redLit.eingabe.id,
-			});
-		}
-		// Abbruch, wenn identisch mit vorherigem Datensatz
-		if (redLit.db.data[id].length && !idGeaendert) {
-			const diff = redLit.eingabeSpeichernDiff(redLit.db.data[id][0].td, ds.td);
-			if (!diff) {
-				dialog.oeffnen({
-					typ: "alert",
-					text: "Sie haben keine Änderungen vorgenommen.",
-					callback: () => {
-						document.getElementById("red-lit-eingabe-ti").focus();
-					},
+			// ggf. neuen Datensatz erstellen
+			const id = document.getElementById("red-lit-eingabe-id").value;
+			if (redLit.eingabe.status === "add") {
+				redLit.db.data[id] = [];
+			}
+			// Daten zusammentragen
+			let ds = redLit.eingabeSpeichernMakeDs();
+			// ID wurde geändert => Datensatz umbenennen
+			let idGeaendert = false;
+			if (redLit.eingabe.status !== "add" &&
+					redLit.eingabe.id !== id) {
+				idGeaendert = true;
+				redLit.db.data[id] = [];
+				redLit.dbTitelKlonen(redLit.db.data[redLit.eingabe.id], redLit.db.data[id]);
+				delete redLit.db.data[redLit.eingabe.id];
+				redLit.db.dataOpts.push({
+					aktion: "changeId",
+					id,
+					idAlt: redLit.eingabe.id,
 				});
-				redLit.eingabeStatus(redLit.eingabe.status); // Änderungsmarkierung zurücksetzen
-				return false;
 			}
-		}
-		// Datensatz schreiben
-		redLit.db.data[id].unshift(ds);
-		redLit.db.dataOpts.push({
-			aktion: "add",
-			id,
-			idSlot: ds.id,
+			// Abbruch, wenn identisch mit vorherigem Datensatz
+			if (redLit.db.data[id].length && !idGeaendert) {
+				const diff = redLit.eingabeSpeichernDiff(redLit.db.data[id][0].td, ds.td);
+				if (!diff) {
+					dialog.oeffnen({
+						typ: "alert",
+						text: "Sie haben keine Änderungen vorgenommen.",
+						callback: () => {
+							document.getElementById("red-lit-eingabe-ti").focus();
+						},
+					});
+					redLit.eingabeStatus(redLit.eingabe.status); // Änderungsmarkierung zurücksetzen
+					resolve(false);
+					return;
+				}
+			}
+			// Datensatz schreiben
+			redLit.db.data[id].unshift(ds);
+			redLit.db.dataOpts.push({
+				aktion: "add",
+				id,
+				idSlot: ds.id,
+			});
+			// Metadaten auffrischen
+			redLit.eingabeMetaFuellen({id, slot: 0});
+			// Status Eingabeformular auffrischen
+			redLit.eingabeStatus("change");
+			// ggf. Titelaufnahme in der Suche auffrischen
+			redLit.sucheTrefferAuffrischen(id);
+			// Status Datenbank auffrischen
+			redLit.dbGeaendert(true);
+			resolve(true);
+			return;
 		});
-		// Metadaten auffrischen
-		redLit.eingabeMetaFuellen({id, slot: 0});
-		// Status Eingabeformular auffrischen
-		redLit.eingabeStatus("change");
-		// ggf. Titelaufnahme in der Suche auffrischen
-		redLit.sucheTrefferAuffrischen(id);
-		// Status Datenbank auffrischen
-		redLit.dbGeaendert(true);
-		return true;
 	},
 	// Eingabeformular: Formular validieren
 	eingabeSpeichernValid () {
-		// BenutzerIn registriert?
-		if (!optionen.data.einstellungen.bearbeiterin) {
-			fehler({
-				text: `Sie können Titelaufnahmen erst ${redLit.eingabe.status === "add" ? "erstellen" : "ändern"}, nachdem Sie sich <a href="#" data-funktion="einstellungen-allgemeines">registriert</a> haben.`,
-			});
-			return false;
-		}
-		// Pflichtfelder ausgefüllt?
-		let pflicht = {
-			si: "keine Sigle",
-			id: "keine ID",
-			ti: "keinen Titel",
-			fo: "keinen Fundort",
-		};
-		for (let [k, v] of Object.entries(pflicht)) {
-			let feld = document.getElementById(`red-lit-eingabe-${k}`);
-			if (!feld.value) {
+		return new Promise(async resolve => {
+			// BenutzerIn registriert?
+			if (!optionen.data.einstellungen.bearbeiterin) {
 				fehler({
-					text: `Sie haben ${v} eingegeben.`,
-					fokus: feld,
+					text: `Sie können Titelaufnahmen erst ${redLit.eingabe.status === "add" ? "erstellen" : "ändern"}, nachdem Sie sich <a href="#" data-funktion="einstellungen-allgemeines">registriert</a> haben.`,
 				});
-				return false;
+				resolve(false);
+				return;
 			}
-		}
-		// ID korrekt formatiert?
-		let id = document.getElementById("red-lit-eingabe-id");
-		if (/[^a-z0-9ßäöü-]/.test(id.value) ||
-				/^[0-9]/.test(id.value)) {
-			fehler({
-				text: "Die ID hat ein fehlerhaftes Format.\n<b>Erlaubt:</b><br>• Kleinbuchstaben a-z, ß und Umlaute<br>• Ziffern<br>• Bindestriche\n<b>Nicht Erlaubt:</b><br>• Großbuchstaben<br>• Ziffern am Anfang<br>• Sonderzeichen<br>• Leerzeichen",
-				fokus: id,
-			});
-			return false;
-		}
-		// ID schon vergeben?
-		if ((redLit.eingabe.status === "add" ||
-				redLit.eingabe.status !== "add" && redLit.eingabe.id !== id.value) &&
-				redLit.db.data[id.value]) {
-			fehler({
-				text: "Die ID ist schon vergeben.",
-				fokus: id,
-			});
-			return false;
-		}
-		// URL korrekt formatiert?
-		let url = document.getElementById("red-lit-eingabe-ul");
-		if (url.value && !/^https?:\/\//.test(url.value)) {
-			fehler({
-				text: "Die URL muss mit einem Protokoll beginnen (http[s]://).",
-				fokus: url,
-			});
-			return false;
-		}
-		// wenn URL => Fundort "DTA" || "GoogleBooks" || "online"
-		let fo = document.getElementById("red-lit-eingabe-fo");
-		if (url.value && !/^(DTA|GoogleBooks|online)$/.test(fo.value)) {
-			fehler({
-				text: "Geben Sie eine URL an, muss der Fundort „online“, „DTA“ oder „GoogleBooks“ sein.",
-				fokus: fo,
-			});
-			return false;
-		}
-		// wenn Aufrufdatum => URL eingeben
-		let ad = document.getElementById("red-lit-eingabe-ad");
-		if (ad.value && !url.value) {
-			fehler({
-				text: "Geben Sie ein Aufrufdatum an, müssen Sie auch eine URL angeben.",
-				fokus: url,
-			});
-			return false;
-		}
-		// Aufrufdatum in der Zukunft?
-		if (ad.value && new Date(ad.value) > new Date()) {
-			fehler({
-				text: "Das Aufrufdatum liegt in der Zukunft.",
-				fokus: ad,
-			});
-			return false;
-		}
-		// Fundort mit gültigem Wert?
-		if (fo.value && !redLit.eingabe.fundorte.includes(fo.value)) {
-			let fundorte = redLit.eingabe.fundorte.join(", ").match(/(.+), (.+)/);
-			fehler({
-				text: `Der Fundort ist ungültig. Erlaubt sind nur die Werte:\n${fundorte[1]} oder ${fundorte[2]}`,
-				fokus: fo,
-			});
-			return false;
-		}
-		// wenn Fundort "DTA" || "GoogleBooks" || "online" => URL eingeben
-		if (/^(DTA|GoogleBooks|online)$/.test(fo.value) && !url.value) {
-			fehler({
-				text: "Ist der Fundort „online“, „DTA“ oder „GoogleBooks“, müssen Sie eine URL angeben.",
-				fokus: url,
-			});
-			return false;
-		}
-		// PPN(s) okay?
-		let ppn = document.getElementById("red-lit-eingabe-pn");
-		if (ppn.value) {
-			let ppns = ppn.value.split(/[,\s]/),
-				korrekt = [],
-				fehlerhaft = [];
-			for (let i of ppns) {
-				if (i && !/^[0-9]{8,10}X?$/.test(i)) {
-					fehlerhaft.push(i);
-				} else if (i) {
-					korrekt.push(i);
+			// Warnung vor dem Ändern der ID
+			let id = document.getElementById("red-lit-eingabe-id");
+			if (redLit.eingabe.status !== "add" && redLit.eingabe.id !== id.value) {
+				const aendern = await new Promise(antwort => {
+					dialog.oeffnen({
+						typ: "confirm",
+						text: "Die ID nachträglich zu ändern, kann gravierende Konsequenzen haben.\nMöchten Sie die ID wirklich ändern?",
+						callback: () => {
+							if (!dialog.antwort) {
+								id.value = redLit.eingabe.id;
+								antwort(false);
+							} else {
+								antwort(true);
+							}
+						},
+					});
+				});
+				if (!aendern) {
+					id.focus();
+					resolve(false);
+					return;
 				}
 			}
-			if (fehlerhaft.length) {
-				let numerus = `<abbr title="Pica-Produktionsnummern">PPN</abbr> sind`;
-				if (fehlerhaft.length === 1) {
-					numerus = `<abbr title="Pica-Produktionsnummer">PPN</abbr> ist`;
-				}
-				fehler({
-					text: `Diese ${numerus} fehlerhaft:\n${fehlerhaft.join(", ")}`,
-					fokus: ppn,
-				});
-				return false;
-			} else {
-				ppn.value = korrekt.join(", ");
-			}
-		}
-		// alles okay
-		return true;
-		// Fehlermeldung
-		function fehler ({text, fokus = false}) {
-			let opt = {
-				typ: "alert",
-				text,
+			// Pflichtfelder ausgefüllt?
+			let pflicht = {
+				si: "keine Sigle",
+				id: "keine ID",
+				ti: "keinen Titel",
+				fo: "keinen Fundort",
 			};
-			if (fokus) {
-				opt.callback = () => {
-					fokus.select();
-				};
+			for (let [k, v] of Object.entries(pflicht)) {
+				let feld = document.getElementById(`red-lit-eingabe-${k}`);
+				if (!feld.value) {
+					fehler({
+						text: `Sie haben ${v} eingegeben.`,
+						fokus: feld,
+					});
+					resolve(false);
+					return;
+				}
 			}
-			dialog.oeffnen(opt);
-			document.querySelectorAll("#dialog-text a").forEach(a => {
-				a.addEventListener("click", function(evt) {
-					evt.preventDefault();
-					switch (this.dataset.funktion) {
-						case "einstellungen-allgemeines":
-							optionen.oeffnen();
-							optionen.sektionWechseln(document.querySelector("#einstellungen ul a"));
-							break;
-					}
-					setTimeout(() => overlay.schliessen(document.getElementById("dialog")), 200);
+			// ID korrekt formatiert?
+			if (/[^a-z0-9ßäöü-]/.test(id.value) ||
+					/^[0-9]/.test(id.value)) {
+				fehler({
+					text: "Die ID hat ein fehlerhaftes Format.\n<b>Erlaubt:</b><br>• Kleinbuchstaben a-z, ß und Umlaute<br>• Ziffern<br>• Bindestriche\n<b>Nicht Erlaubt:</b><br>• Großbuchstaben<br>• Ziffern am Anfang<br>• Sonderzeichen<br>• Leerzeichen",
+					fokus: id,
 				});
-			});
-		}
+				resolve(false);
+				return;
+			}
+			// ID schon vergeben?
+			if ((redLit.eingabe.status === "add" ||
+					redLit.eingabe.status !== "add" && redLit.eingabe.id !== id.value) &&
+					redLit.db.data[id.value]) {
+				fehler({
+					text: "Die ID ist schon vergeben.",
+					fokus: id,
+				});
+				resolve(false);
+				return;
+			}
+			// URL korrekt formatiert?
+			let url = document.getElementById("red-lit-eingabe-ul");
+			if (url.value && !/^https?:\/\//.test(url.value)) {
+				fehler({
+					text: "Die URL muss mit einem Protokoll beginnen (http[s]://).",
+					fokus: url,
+				});
+				resolve(false);
+				return;
+			}
+			// wenn URL => Fundort "DTA" || "GoogleBooks" || "online"
+			let fo = document.getElementById("red-lit-eingabe-fo");
+			if (url.value && !/^(DTA|GoogleBooks|online)$/.test(fo.value)) {
+				fehler({
+					text: "Geben Sie eine URL an, muss der Fundort „online“, „DTA“ oder „GoogleBooks“ sein.",
+					fokus: fo,
+				});
+				resolve(false);
+				return;
+			}
+			// wenn Aufrufdatum => URL eingeben
+			let ad = document.getElementById("red-lit-eingabe-ad");
+			if (ad.value && !url.value) {
+				fehler({
+					text: "Geben Sie ein Aufrufdatum an, müssen Sie auch eine URL angeben.",
+					fokus: url,
+				});
+				resolve(false);
+				return;
+			}
+			// Aufrufdatum in der Zukunft?
+			if (ad.value && new Date(ad.value) > new Date()) {
+				fehler({
+					text: "Das Aufrufdatum liegt in der Zukunft.",
+					fokus: ad,
+				});
+				resolve(false);
+				return;
+			}
+			// Fundort mit gültigem Wert?
+			if (fo.value && !redLit.eingabe.fundorte.includes(fo.value)) {
+				let fundorte = redLit.eingabe.fundorte.join(", ").match(/(.+), (.+)/);
+				fehler({
+					text: `Der Fundort ist ungültig. Erlaubt sind nur die Werte:\n${fundorte[1]} oder ${fundorte[2]}`,
+					fokus: fo,
+				});
+				resolve(false);
+				return;
+			}
+			// wenn Fundort "DTA" || "GoogleBooks" || "online" => URL eingeben
+			if (/^(DTA|GoogleBooks|online)$/.test(fo.value) && !url.value) {
+				fehler({
+					text: "Ist der Fundort „online“, „DTA“ oder „GoogleBooks“, müssen Sie eine URL angeben.",
+					fokus: url,
+				});
+				resolve(false);
+				return;
+			}
+			// PPN(s) okay?
+			let ppn = document.getElementById("red-lit-eingabe-pn");
+			if (ppn.value) {
+				let ppns = ppn.value.split(/[,\s]/),
+					korrekt = [],
+					fehlerhaft = [];
+				for (let i of ppns) {
+					if (i && !/^[0-9]{8,10}X?$/.test(i)) {
+						fehlerhaft.push(i);
+					} else if (i) {
+						korrekt.push(i);
+					}
+				}
+				if (fehlerhaft.length) {
+					let numerus = `<abbr title="Pica-Produktionsnummern">PPN</abbr> sind`;
+					if (fehlerhaft.length === 1) {
+						numerus = `<abbr title="Pica-Produktionsnummer">PPN</abbr> ist`;
+					}
+					fehler({
+						text: `Diese ${numerus} fehlerhaft:\n${fehlerhaft.join(", ")}`,
+						fokus: ppn,
+					});
+					resolve(false);
+					return;
+				} else {
+					ppn.value = korrekt.join(", ");
+				}
+			}
+			// alles okay
+			resolve(true);
+			return;
+			// Fehlermeldung
+			function fehler ({text, fokus = false}) {
+				let opt = {
+					typ: "alert",
+					text,
+				};
+				if (fokus) {
+					opt.callback = () => {
+						fokus.select();
+					};
+				}
+				dialog.oeffnen(opt);
+				document.querySelectorAll("#dialog-text a").forEach(a => {
+					a.addEventListener("click", function(evt) {
+						evt.preventDefault();
+						switch (this.dataset.funktion) {
+							case "einstellungen-allgemeines":
+								optionen.oeffnen();
+								optionen.sektionWechseln(document.querySelector("#einstellungen ul a"));
+								break;
+						}
+						setTimeout(() => overlay.schliessen(document.getElementById("dialog")), 200);
+					});
+				});
+			}
+		});
 	},
 	// Eingabeformular: einen neuen Datensatz auf Grundlage des Formulars erstellen
 	eingabeSpeichernMakeDs () {
