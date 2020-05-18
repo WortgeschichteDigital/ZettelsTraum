@@ -1338,7 +1338,14 @@ let redLit = {
 			titel.appendChild(redLit.anzeigeSnippet(treffer[i]));
 		}
 		// Trefferanzeige auffrischen
-		let range = `${start + 1}–${treffer.length > start + 100 ? start + 100 : treffer.length}`;
+		redLit.sucheAnzeigenNav(start);
+	},
+	// Suche: Anzeige der Navigationsleiste auffrischen
+	//   start = Number
+	//     (Nummer, ab der die Treffer angezeigt werden; nullbasiert)
+	sucheAnzeigenNav (start) {
+		let treffer = redLit.suche.treffer,
+			range = `${start + 1}–${treffer.length > start + 100 ? start + 100 : treffer.length}`;
 		if (treffer.length === 1) {
 			range = "1";
 		}
@@ -1418,7 +1425,11 @@ let redLit = {
 				if (!redLit.suche.treffer.length) {
 					redLit.sucheReset();
 				} else if (titel) {
+					// Titelanzeige entfernen
 					titel.parentNode.removeChild(titel);
+					// Navigation auffrischen
+					const start = parseInt(document.querySelector("#red-lit-suche-treffer a").dataset.start, 10) + 100;
+					redLit.sucheAnzeigenNav(start);
 				}
 				return;
 			} else if (treffer.slot > delSlot) {
