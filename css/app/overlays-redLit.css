@@ -464,3 +464,13 @@
 	margin-left: 0;
 	width: 60px;
 }
+
+/* Sperrbildschirm ------------------------------ */
+/* Styles von #red-lit-sperre > #karteisuche-suche-laeuft */
+#red-lit #red-lit-sperre {
+	padding: 0;
+}
+
+#red-lit-sperre div {
+	width: 250px;
+}

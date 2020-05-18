@@ -158,6 +158,9 @@ let tastatur = {
 			if (evt.key === "f" && !kartei.wort) {
 				filter.suche();
 			} else if (evt.key === "h") {
+				if (redLit.db.locked) {
+					return;
+				}
 				redLit.dbCheck(() => redLit.eingabeHinzufuegen(), false);
 			} else if (evt.key === "s" && !kartei.wort) {
 				speichern.kaskade();

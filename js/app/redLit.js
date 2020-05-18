@@ -117,6 +117,13 @@ let redLit = {
 	},
 	// Fenster schließen
 	schliessen () {
+		if (redLit.db.locked) {
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Der Speichervorgang muss erst abgeschlossen werden.\nDanach können Sie das Fenster schließen.",
+			});
+			return;
+		}
 		redLit.dbCheck(() => {
 			if (!redLit.db.path) {
 				redLit.dbEntkoppeln();
@@ -126,6 +133,9 @@ let redLit = {
 	},
 	// Speichern wurde via Tastaturkürzel (Strg + S) angestoßen
 	speichern () {
+		if (redLit.db.locked) {
+			return;
+		}
 		// Einstellungen des Speichern-Befehls für die Kartei adaptieren
 		let kaskade = {
 			eingabe: true,
@@ -162,6 +172,8 @@ let redLit = {
 		mtime: "", // Änderungsdatum der DB-Datei beim Laden (ISO-String)
 		gefunden: false, // Datenbankdatei gefunden (könnte im Netzwerk temporär verschwunden sein)
 		changed: false, // Inhalt der Datenbank wurde geändert und noch nicht gespeichert
+		locked: false, // Datenbank wird gerade geschrieben, ist also für die Bearbeitung gesperrt
+		lockedInterval: null, // Intervall für den Lockbildschirm
 	},
 	// Datenkbank: versuchen, die Offline-Version zu laden
 	dbLadenOffline () {
@@ -589,11 +601,35 @@ let redLit = {
 	// Datenbank: Datei schreiben
 	//   pfad = String
 	//     (Pfad zur Datei)
-	//   offline = true || undefined
-	//     (Datei wird für Offline-Nutzung gespeichert => Metadaten nicht auffrischen)
-	dbSpeichernSchreiben (pfad, offline = false) {
+	dbSpeichernSchreiben (pfad) {
 		return new Promise(async resolve => {
-			// TODO Ist die Datenkbank gesperrt? Wenn ja => Abbruch + Meldung
+			// Ist die Datenkbank gesperrt?
+			let locked = await lock.actions({
+				datei: pfad,
+				aktion: "check",
+				maxLockTime: 3e5,
+			});
+			if (locked) {
+				lock.locked({info: locked, typ: "Literaturdatenbank"});
+				return;
+			}
+			// Bearbeitung sperren
+			await redLit.dbSperre(true);
+			// Datenbank sperren
+			locked = await lock.actions({datei: pfad, aktion: "lock"});
+			if (!locked) { // Fehler beim Locken der Datei
+				return;
+			}
+			// Datenbanken zusammenführen?
+			try {
+				const fs = require("fs"),
+					fsP = fs.promises;
+				let stats = await fsP.lstat(pfad);
+				if (stats.mtime.toISOString() !== redLit.db.mtime) {
+					// TODO Datenbanken in redLit.db.data zusammenführen
+					// TODO (das muss eine Promise sein, weil hier gewartet werden muss)
+				}
+			} catch {} // Datei existiert noch nicht, muss also auch nicht gesperrt werden
 			// alte Metadaten merken für den Fall, dass das Speichern scheitert
 			let meta = {
 				dc: redLit.db.dataMeta.dc,
@@ -601,57 +637,94 @@ let redLit = {
 				re: redLit.db.dataMeta.re,
 			};
 			// Metadaten auffrischen
-			// (nur wenn kein Speichern für Offline-Nutzung)
-			if (!offline) {
-				if (!redLit.db.dataMeta.dc) {
-					redLit.db.dataMeta.dc = new Date().toISOString();
-				}
-				redLit.db.dataMeta.dm = new Date().toISOString();
-				redLit.db.dataMeta.re++;
+			if (!redLit.db.dataMeta.dc) {
+				redLit.db.dataMeta.dc = new Date().toISOString();
 			}
-			// Datenbanken zusammenführen?
-			if (!offline) {
-				try {
-					// TODO Datenbank sperren
-					const fs = require("fs"),
-						fsP = fs.promises;
-					let stats = await fsP.lstat(pfad);
-					if (stats.mtime.toISOString() !== redLit.db.mtime) {
-						// TODO Datenbanken in redLit.db.data zusammenführen
-						// TODO (das muss eine Promise sein, weil hier gewartet werden muss)
-					}
-				} catch {} // Datei existiert noch nicht, muss also auch nicht gesperrt werden
-			}
-			// Daten zusammentragen
-			let db = {
-				dc: redLit.db.dataMeta.dc,
-				dm: redLit.db.dataMeta.dm,
-				re: redLit.db.dataMeta.re,
-				ti: redLit.db.data,
-				ty: "ztl",
-				ve: redLit.db.ve,
-			};
-			let result = await io.schreiben(pfad, JSON.stringify(db));
+			redLit.db.dataMeta.dm = new Date().toISOString();
+			redLit.db.dataMeta.re++;
+			// Daten schreiben
+			let daten = redLit.dbSpeichernSchreibenDaten(),
+				result = await io.schreiben(pfad, JSON.stringify(daten));
 			// beim Schreiben ist ein Fehler aufgetreten
 			if (result !== true) {
-				resolve(`Beim Speichern der Literaturdatenbank ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${result.name}: ${result.message}</p>`);
 				// Metdaten zurücksetzen
 				redLit.db.dataMeta.dc = meta.dc;
 				redLit.db.dataMeta.dm = meta.dm;
 				redLit.db.dataMeta.re = meta.re;
-				// TODO Datenbank ggf. entsperren
+				// Datenbank entsperren
+				await redLit.dbSperre(false);
+				lock.actions({datei: pfad, aktion: "unlock"});
+				// Fehlermeldung zurückgeben
+				resolve(`Beim Speichern der Literaturdatenbank ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${result.name}: ${result.message}</p>`);
 				// Fehler auswerfen
 				throw result;
 			}
-			// ggf. Änderungsdatum auffrischen
-			if (!offline) {
-				const fs = require("fs"),
-					fsP = fs.promises;
-				let stats = await fsP.lstat(pfad);
-				redLit.db.mtime = stats.mtime.toISOString();
-			}
-			// TODO Datenbank ggf. entsperren
+			// Änderungsdatum auffrischen
+			const fs = require("fs"),
+				fsP = fs.promises;
+			let stats = await fsP.lstat(pfad);
+			redLit.db.mtime = stats.mtime.toISOString();
+			// Datenbank entsperren
+			await redLit.dbSperre(false);
+			lock.actions({datei: pfad, aktion: "unlock"});
 			// Promise auflösen
+			resolve(true);
+		});
+	},
+	// Datenbank: Daten zuammentragen, die geschrieben werden sollen
+	dbSpeichernSchreibenDaten () {
+		return {
+			dc: redLit.db.dataMeta.dc,
+			dm: redLit.db.dataMeta.dm,
+			re: redLit.db.dataMeta.re,
+			ti: redLit.db.data,
+			ty: "ztl",
+			ve: redLit.db.ve,
+		};
+	},
+	// Datenbank: Eingabefenster für Bearbeitung sperren
+	//   sperren = Boolean
+	//     (DB soll gesperrt werden)
+	dbSperre (sperren) {
+		return new Promise(async resolve => {
+			// sperren
+			if (sperren) {
+				redLit.db.locked = true;
+				document.activeElement.blur();
+				// ggf. auf Schließen des Dropdownmenüs warten
+				if (document.getElementById("dropdown")) {
+					await new Promise(warten => setTimeout(() => warten(true), 500));
+				}
+				// Sperre erzeugen
+				let sperre = document.createElement("div");
+				document.querySelector("#red-lit > div").appendChild(sperre);
+				sperre.id = "red-lit-sperre";
+				let text = document.createElement("div");
+				sperre.appendChild(text);
+				text.textContent = "Speichern läuft ...";
+				// Animation starten
+				redLit.db.lockedInterval = setInterval(() => {
+					let punkte = text.textContent.match(/\.+$/);
+					if (punkte[0].length === 3) {
+						text.textContent = "Speichern läuft .";
+					} else {
+						text.textContent += ".";
+					}
+				}, 1e3);
+				resolve(true);
+				return;
+			}
+			// entsperren
+			await new Promise(warten => setTimeout(() => warten(true), 3e3));
+			clearInterval(redLit.db.lockedInterval);
+			let sperre = document.getElementById("red-lit-sperre");
+			sperre.parentNode.removeChild(sperre);
+			if (!document.getElementById("red-lit-suche").classList.contains("aus")) {
+				document.getElementById("red-lit-suche-text").select();
+			} else {
+				document.getElementById("red-lit-eingabe-ti").focus();
+			}
+			redLit.db.locked = false;
 			resolve(true);
 		});
 	},
@@ -660,7 +733,8 @@ let redLit = {
 	//     (Pfad zur Datenkbank)
 	dbOfflineKopie (pfad) {
 		const offlinePfad = redLit.dbOfflineKopiePfad(pfad);
-		redLit.dbSpeichernSchreiben(offlinePfad, true);
+		let daten = redLit.dbSpeichernSchreibenDaten();
+		io.schreiben(offlinePfad, JSON.stringify(daten));
 	},
 	// Datenbank: Pfad zur Offline-Kopie ermitteln
 	//   pfad = String

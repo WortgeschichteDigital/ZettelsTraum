@@ -873,7 +873,7 @@ let helfer = {
 		// Bedeutungen-Fenster ggf. schließen
 		await bedeutungenWin.schliessen();
 		// Kartei entsperren
-		await kartei.lock(kartei.pfad, "unlock");
+		await lock.actions({datei: kartei.pfad, aktion: "unlock"});
 		// Status des Fensters speichern
 		const {ipcRenderer} = require("electron");
 		optionen.data.fenster = await ipcRenderer.invoke("fenster-status", winInfo.winId, "fenster");
