@@ -84,7 +84,7 @@ let redLit = {
 					// Datenkbank laden
 					redLit.db.mtime = mtime;
 					dbGeladen = await new Promise(async resolve => {
-						const result = await redLit.dbOeffnenEinlesen(redLit.db.path);
+						const result = await redLit.dbOeffnenEinlesen({pfad: redLit.db.path});
 						if (result !== true) {
 							dialog.oeffnen({
 								typ: "alert",
@@ -108,6 +108,8 @@ let redLit = {
 				}
 			}
 		}
+		// Operationenspeicher leeren
+		redLit.db.dataOpts = [];
 		// passendes Formular öffnen
 		if (dbGeladen) {
 			redLit.sucheWechseln();
@@ -163,6 +165,8 @@ let redLit = {
 	db: {
 		ve: 1, // Versionsnummer des aktuellen Datenbankformats
 		data: {}, // Titeldaten der Literaturdatenbank (wenn DB geladen => Inhalt von DB.ti)
+		dataTmp: {}, // temporäre Titeldaten der Literaturdatenbank (Kopie von redLit.db.data)
+		dataOpts: [], // Operationenspeicher für alle Änderungen in redLit.db.data
 		dataMeta: { // Metadaten der Literaturdatenbank
 			dc: "", // Erstellungszeitpunkt (DB.dc)
 			dm: "", // Änderungszeitpunkt (DB.dm)
@@ -181,7 +185,7 @@ let redLit = {
 			const offlinePfad = redLit.dbOfflineKopiePfad(redLit.db.path),
 				dbOffline = await helfer.exists(offlinePfad);
 			if (dbOffline) {
-				const result = await redLit.dbOeffnenEinlesen(offlinePfad, true);
+				const result = await redLit.dbOeffnenEinlesen({pfad: offlinePfad, offline: true});
 				if (result === true) { // Laden der Offline-Version war erfolgreich
 					let span = document.createElement("span");
 					span.textContent = "[offline]";
@@ -243,6 +247,8 @@ let redLit = {
 		redLit.anzeigePopupSchliessen();
 		// DB-Datensätze zurücksetzen
 		redLit.db.data = {};
+		redLit.db.dataTmp = {};
+		redLit.db.dataOpts = [];
 		redLit.db.dataMeta = {
 			dc: "",
 			dm: "",
@@ -314,42 +320,45 @@ let redLit = {
 		// ggf. Popup schließen
 		redLit.anzeigePopupSchliessen();
 		// Datei einlesen
-		const ergebnis = await redLit.dbOeffnenEinlesen(result.filePaths[0]);
-		if (ergebnis === true) {
-			// Datensätze auffrischen
-			if (redLit.db.path !== result.filePaths[0]) {
-				redLit.dbOfflineKopieUnlink(redLit.db.path);
-				redLit.db.path = result.filePaths[0];
-				optionen.data["literatur-db"] = result.filePaths[0];
-				optionen.speichern();
-			}
-			const fs = require("fs"),
-				fsP = fs.promises;
-			let stats = await fsP.lstat(redLit.db.path);
-			redLit.db.mtime = stats.mtime.toISOString();
-			redLit.db.gefunden = true;
-			redLit.db.changed = false;
-			// DB-Anzeige auffrischen
-			redLit.dbAnzeige();
-			// Suche zurücksetzen
-			redLit.sucheReset();
-			// Eingabeformular zurücksetzen
-			redLit.eingabeLeeren();
-			redLit.eingabeStatus("add");
-		} else {
+		const ergebnis = await redLit.dbOeffnenEinlesen({pfad: result.filePaths[0]});
+		if (ergebnis !== true) {
 			// Einlesen ist gescheitert
 			dialog.oeffnen({
 				typ: "altert",
 				text: ergebnis,
 			});
+			return;
 		}
+		// Datensätze auffrischen
+		redLit.db.dataOpts = [];
+		if (redLit.db.path !== result.filePaths[0]) {
+			redLit.dbOfflineKopieUnlink(redLit.db.path);
+			redLit.db.path = result.filePaths[0];
+			optionen.data["literatur-db"] = result.filePaths[0];
+			optionen.speichern();
+		}
+		const fs = require("fs"),
+			fsP = fs.promises;
+		let stats = await fsP.lstat(redLit.db.path);
+		redLit.db.mtime = stats.mtime.toISOString();
+		redLit.db.gefunden = true;
+		redLit.db.changed = false;
+		// DB-Anzeige auffrischen
+		redLit.dbAnzeige();
+		// Suche zurücksetzen
+		redLit.sucheReset();
+		// Eingabeformular zurücksetzen
+		redLit.eingabeLeeren();
+		redLit.eingabeStatus("add");
 	},
 	// Datenbank: Datei einlesen
 	//   pfad = String
 	//     (Pfad zur Datei)
 	//   offline = true || undefined
 	//     (die Offlinedatei wird geöffnet => keine Offline-Kopie anlegen)
-	dbOeffnenEinlesen (pfad, offline = false) {
+	//   zusammenfuehren = true || undefined
+	//     (die Literaturdatenbank wird geladen, um sie mit den aktuellen Daten zusammenzuführen)
+	dbOeffnenEinlesen ({pfad, offline = false, zusammenfuehren = false}) {
 		return new Promise(async resolve => {
 			let content = await io.lesen(pfad);
 			if (!helfer.checkType("String", content)) {
@@ -363,12 +372,14 @@ let redLit = {
 				data_tmp = JSON.parse(content);
 			} catch (err_json) {
 				resolve(`Beim Einlesen der Literaturdatenbank ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n${err_json.name}: ${err_json.message}`);
-				return;
+				throw err_json;
 			}
 			// Wirklich eine ZTL-Datei?
 			if (data_tmp.ty !== "ztl") {
 				resolve(`Die Literaturdatenbank konnte nicht eingelesen werden.\nEs handelt sich nicht um eine <i>${appInfo.name} Literaturdatenbank</i>.`);
-				redLit.dbEntkoppeln();
+				if (!zusammenfuehren) {
+					redLit.dbEntkoppeln();
+				}
 				return;
 			}
 			// Datei kann eingelesen werden
@@ -377,7 +388,7 @@ let redLit = {
 			redLit.db.dataMeta.dm = data_tmp.dm;
 			redLit.db.dataMeta.re = data_tmp.re;
 			// Datenbank für Offline-Nutzung verfügbar halten
-			if (!offline) {
+			if (!offline && !zusammenfuehren) {
 				redLit.dbOfflineKopie(pfad);
 			}
 			// Promise auflösen
@@ -524,11 +535,11 @@ let redLit = {
 		if (redLit.db.path &&
 				redLit.db.gefunden &&
 				!speichernUnter) {
-			const ergebnis = await redLit.dbSpeichernSchreiben(redLit.db.path);
+			const ergebnis = await redLit.dbSpeichernSchreiben({pfad: redLit.db.path});
 			if (ergebnis === true) {
 				redLit.dbAnzeige();
 				redLit.dbOfflineKopie(redLit.db.path);
-			} else {
+			} else if (ergebnis) {
 				dialog.oeffnen({
 					typ: "alert",
 					text: ergebnis,
@@ -578,30 +589,40 @@ let redLit = {
 			return;
 		}
 		// Datenbankdatei schreiben
-		const ergebnis = await redLit.dbSpeichernSchreiben(result.filePath);
-		if (ergebnis === true) {
-			// ggf. Pfad zur Datenbankdatei speichern
-			if (redLit.db.path !== result.filePath) {
-				redLit.dbOfflineKopieUnlink(redLit.db.path);
-				redLit.db.path = result.filePath;
-				optionen.data["literatur-db"] = result.filePath;
-				optionen.speichern();
-			}
-			// Anzeige auffrischen
-			redLit.dbAnzeige();
-			// Offline-Kopie speichern
-			redLit.dbOfflineKopie(result.filePath);
-		} else {
-			dialog.oeffnen({
-				typ: "alert",
-				text: ergebnis,
-			});
+		let merge = false;
+		const zielExists = await helfer.exists(result.filePath);
+		if (zielExists && redLit.db.path && redLit.db.path !== result.filePath) {
+			merge = true;
 		}
+		const ergebnis = await redLit.dbSpeichernSchreiben({pfad: result.filePath, merge});
+		if (ergebnis !== true) {
+			// Schreiben gescheitert
+			if (ergebnis) {
+				dialog.oeffnen({
+					typ: "alert",
+					text: ergebnis,
+				});
+			}
+			return;
+		}
+		// ggf. Pfad zur Datenbankdatei speichern
+		if (redLit.db.path !== result.filePath) {
+			redLit.dbOfflineKopieUnlink(redLit.db.path);
+			redLit.db.path = result.filePath;
+			optionen.data["literatur-db"] = result.filePath;
+			optionen.speichern();
+		}
+		// Anzeige auffrischen
+		redLit.dbAnzeige();
+		// Offline-Kopie speichern
+		redLit.dbOfflineKopie(result.filePath);
 	},
 	// Datenbank: Datei schreiben
 	//   pfad = String
 	//     (Pfad zur Datei)
-	dbSpeichernSchreiben (pfad) {
+	//   merge = true || undefined
+	//     (Datenbanken sollen verschmolzen werden)
+	dbSpeichernSchreiben ({pfad, merge = false}) {
 		return new Promise(async resolve => {
 			// Ist die Datenkbank gesperrt?
 			let locked = await lock.actions({
@@ -611,25 +632,138 @@ let redLit = {
 			});
 			if (locked) {
 				lock.locked({info: locked, typ: "Literaturdatenbank"});
+				resolve("");
 				return;
 			}
-			// Bearbeitung sperren
-			await redLit.dbSperre(true);
 			// Datenbank sperren
+			await redLit.dbSperre(true);
 			locked = await lock.actions({datei: pfad, aktion: "lock"});
-			if (!locked) { // Fehler beim Locken der Datei
+			if (!locked) { // Fehler beim Sperren der Datei
+				redLit.dbSperre(false);
+				resolve("");
 				return;
 			}
 			// Datenbanken zusammenführen?
+			let mergeOpts = {
+				angelegt: new Set(), // Titelaufnahme neu angelegt
+				entfernt: new Set(), // Titelaufnahme komplett entfernt
+				ergänzt: new Set(), // Titelaufnahme um Datensätze ergänzt
+				geändert: new Set(), // ID einer Titelaufnahme geändert
+			};
+			let stats,
+				merged = false;
 			try {
 				const fs = require("fs"),
 					fsP = fs.promises;
-				let stats = await fsP.lstat(pfad);
-				if (stats.mtime.toISOString() !== redLit.db.mtime) {
-					// TODO Datenbanken in redLit.db.data zusammenführen
-					// TODO (das muss eine Promise sein, weil hier gewartet werden muss)
+				stats = await fsP.lstat(pfad);
+			} catch {
+				// Datei existiert wohl noch nicht => merge muss eigentlich === false sein;
+				// aber sicher ist sicher; da kann so allerlei schiefgehen
+				if (merge) {
+					// Datenbank entsperren
+					await redLit.dbSperre(false);
+					lock.actions({datei: pfad, aktion: "unlock"});
+					// Fehlermeldung
+					resolve("Zusammenführen der Literaturdatenbanken gescheitert!\n<h3>Fehlermeldung</h3>\nkein Zugriff auf Zieldatei");
+					return;
 				}
-			} catch {} // Datei existiert noch nicht, muss also auch nicht gesperrt werden
+			}
+			// alte Metadaten merken für den Fall, dass das Speichern scheitert
+			let metaPreMerge = {
+				dc: redLit.db.dataMeta.dc,
+				dm: redLit.db.dataMeta.dm,
+				re: redLit.db.dataMeta.re,
+			};
+			// Ja, Datenbanken zusammenführen!
+			if (stats && (merge || stats.mtime.toISOString() !== redLit.db.mtime)) {
+				// Kopie der Titeldaten anlegen
+				redLit.db.dataTmp = {};
+				for (let [k, v] of Object.entries(redLit.db.data)) {
+					redLit.db.dataTmp[k] = [];
+					redLit.dbTitelKlonen(v, redLit.db.dataTmp[k]);
+				}
+				// geänderte Datenbank herunterladen
+				const result = await redLit.dbOeffnenEinlesen({pfad, zusammenfuehren: true});
+				if (result !== true) {
+					// Titeldaten wiederherstellen
+					redLit.dbTitelReset();
+					// Metdaten zurücksetzen
+					redLit.db.dataMeta.dc = metaPreMerge.dc;
+					redLit.db.dataMeta.dm = metaPreMerge.dm;
+					redLit.db.dataMeta.re = metaPreMerge.re;
+					// Datenbank entsperren
+					await redLit.dbSperre(false);
+					lock.actions({datei: pfad, aktion: "unlock"});
+					// Fehlermeldung
+					resolve(`Zusammenführen der Literaturdatenbanken gescheitert!\n${result}`);
+					return;
+				}
+				// ggf. Popup schließen
+				redLit.anzeigePopupSchliessen();
+				// Operationen seit dem letzten Speichern anwenden
+				redLit.db.dataOpts.forEach(i => {
+					if (i.aktion === "add") { // Datensatz hinzufügen
+						let aktion = "ergänzt";
+						if (!redLit.db.data[i.id]) {
+							aktion = "angelegt";
+							redLit.db.data[i.id] = [];
+						}
+						let slot = redLit.db.dataTmp[i.id].findIndex(j => j.id === i.idSlot),
+							ds = {};
+						redLit.dbTitelKlonenAufnahme(redLit.db.dataTmp[i.id][slot], ds);
+						if (redLit.db.data[i.id].some(j => j.id === i.idSlot)) {
+							// sehr, sehr, sehr, sehr, sehr, sehr unwahrscheinlich,
+							// könnte aber theoretisch sein, dass die ID schon vergeben ist
+							ds.id += "0";
+						}
+						redLit.db.data[i.id].unshift(ds);
+						mergeOpts[aktion].add(ds.td.si);
+						merged = true;
+					} else if (i.aktion === "del") {
+						if (!redLit.db.data[i.id]) {
+							return;
+						}
+						let slot = redLit.db.data[i.id].findIndex(j => j.id === i.idSlot);
+						if (slot === -1) {
+							return;
+						}
+						mergeOpts.entfernt.add(redLit.db.data[i.id][slot].td.si);
+						merged = true;
+						redLit.db.data[i.id].splice(slot, 1);
+						if (!redLit.db.data[i.id].length) {
+							delete redLit.db.data[i.id];
+						}
+					} else if (i.aktion === "changeId") {
+						if (redLit.db.data[i.id] || !redLit.db.data[i.idAlt]) {
+							return;
+						}
+						redLit.db.data[i.id] = [];
+						redLit.dbTitelKlonen(redLit.db.data[i.idAlt], redLit.db.data[i.id]);
+						delete redLit.db.data[i.idAlt];
+						mergeOpts.geändert.add(redLit.db.data[i.id][0].td.si);
+						merged = true;
+					}
+				});
+			}
+			// ggf. Datenbanken mergen
+			if (merge) {
+				for (let [k, v] of Object.entries(redLit.db.dataTmp)) {
+					// Titelaufnahme mit allen Versionen klonen
+					if (!redLit.db.data[k]) {
+						redLit.db.data[k] = [];
+						redLit.dbTitelKlonen(v, redLit.db.data[k]);
+						mergeOpts.angelegt.add(redLit.db.data[k][0].td.si);
+						merged = true;
+						continue;
+					}
+					// einzelne Versionen einer Titelaufnahme klonen
+					const ergaenzt = redLit.dbTitelMergeAufnahmen(v, redLit.db.data[k]);
+					if (ergaenzt) {
+						mergeOpts.ergänzt.add(redLit.db.data[k][0].td.si);
+						merged = true;
+					}
+				}
+			}
 			// alte Metadaten merken für den Fall, dass das Speichern scheitert
 			let meta = {
 				dc: redLit.db.dataMeta.dc,
@@ -647,10 +781,19 @@ let redLit = {
 				result = await io.schreiben(pfad, JSON.stringify(daten));
 			// beim Schreiben ist ein Fehler aufgetreten
 			if (result !== true) {
-				// Metdaten zurücksetzen
-				redLit.db.dataMeta.dc = meta.dc;
-				redLit.db.dataMeta.dm = meta.dm;
-				redLit.db.dataMeta.re = meta.re;
+				if (merged) {
+					// Titeldaten wiederherstellen
+					redLit.dbTitelReset();
+					// Metdaten zurücksetzen
+					redLit.db.dataMeta.dc = metaPreMerge.dc;
+					redLit.db.dataMeta.dm = metaPreMerge.dm;
+					redLit.db.dataMeta.re = metaPreMerge.re;
+				} else {
+					// Metdaten zurücksetzen
+					redLit.db.dataMeta.dc = meta.dc;
+					redLit.db.dataMeta.dm = meta.dm;
+					redLit.db.dataMeta.re = meta.re;
+				}
 				// Datenbank entsperren
 				await redLit.dbSperre(false);
 				lock.actions({datei: pfad, aktion: "unlock"});
@@ -659,15 +802,58 @@ let redLit = {
 				// Fehler auswerfen
 				throw result;
 			}
+			// Operationenspeicher leeren
+			redLit.db.dataOpts = [];
 			// Änderungsdatum auffrischen
 			const fs = require("fs"),
 				fsP = fs.promises;
-			let stats = await fsP.lstat(pfad);
+			stats = await fsP.lstat(pfad);
 			redLit.db.mtime = stats.mtime.toISOString();
 			// Datenbank entsperren
 			await redLit.dbSperre(false);
 			lock.actions({datei: pfad, aktion: "unlock"});
-			// Promise auflösen
+			// Datenbank wurde normal gespeichert => alles klar
+			if (!merged) {
+				resolve(true);
+				return;
+			}
+			// Suchergebnisse auffrischen
+			redLit.sucheTrefferAlleAuffrischen();
+			// Rückmeldung, was beim Mergen getan wurde
+			let text = "Ihre Änderungen wurden in eine neuere Version der Literaturdatenbank übertragen.";
+			if (merge) {
+				text = `Ihre Literaturdatenbank wurde mit\n<p class="force-wrap"><i>${pfad}</i></p>\nverschmolzen.`;
+			} else if (!redLit.db.path) {
+				text = "Ihre Änderungen wurden in die Literaturdatenbank integriert.";
+			}
+			text += "\nDabei wurden folgende Operationen ausgeführt:";
+			for (let [k, v] of Object.entries(mergeOpts)) {
+				if (v.size) {
+					let ziffer = "" + v.size;
+					if (v.size === 1) {
+						ziffer = "eine";
+					}
+					let numerus = "Titelaufnahme wurde";
+					if (v.size > 1) {
+						numerus = "Titelaufnahmen wurden";
+					}
+					let praep = "";
+					if (k === "geändert") {
+						praep = "von ";
+						if (v.size === 1) {
+							ziffer = "einer";
+						} else {
+							numerus = "Titelaufnahmen wurde";
+						}
+						k = "die ID geändert";
+					}
+					text += `\n<p class="dialog-liste">• ${praep}${ziffer} ${numerus} ${k} (<i>${[...v].join(", ")}</i>)</p>`;
+				}
+			}
+			dialog.oeffnen({
+				typ: "alert",
+				text,
+			});
 			resolve(true);
 		});
 	},
@@ -817,6 +1003,73 @@ let redLit = {
 		}
 		// es steht nichts mehr aus => Funktion direkt ausführen
 		fun();
+	},
+	// Datenbank: kompletten Datensatz einer Titelaufnahme klonen
+	//   quelle = Object
+	//     (der Quell-Datensatz)
+	//   ziel = Object
+	//     (der Ziel-Datensatz)
+	dbTitelKlonen (quelle, ziel) {
+		for (let i = 0, len = quelle.length; i < len; i++) {
+			let ds = {};
+			redLit.dbTitelKlonenAufnahme(quelle[i], ds);
+			ziel.push(ds);
+		}
+	},
+	// Datenbank: einzelnen Datensatz einer Titelaufnahme klonen
+	//   quelle = Object
+	//     (der Quell-Datensatz)
+	//   ziel = Object
+	//     (der Ziel-Datensatz)
+	dbTitelKlonenAufnahme (quelle, ziel) {
+		for (let [k, v] of Object.entries(quelle)) {
+			if (helfer.checkType("Object", v)) { // Objects
+				ziel[k] = {};
+				redLit.dbTitelKlonenAufnahme(v, ziel[k]);
+			} else if (Array.isArray(v)) { // Arrays
+				ziel[k] = [...v];
+			} else { // Primitiven
+				ziel[k] = v;
+			}
+		}
+	},
+	// Datenbank: alle in einer Titelaufnahme nicht vorhandenen Datensätze kopieren
+	//   quelle = Array
+	//     (der Quell-Titelaufnahme)
+	//   ziel = Array
+	//     (der Ziel-Titelaufnahme)
+	dbTitelMergeAufnahmen (quelle, ziel) {
+		let ergaenzt = false;
+		quelle.forEach(aq => {
+			if (!ziel.some(i => i.id === aq.id)) {
+				let ds = {};
+				redLit.dbTitelKlonenAufnahme(aq, ds);
+				let dsDatum = new Date(ds.da),
+					slot = -1;
+				for (let i = 0, len = ziel.length; i < len; i++) {
+					let zielDatum = new Date(ziel[i].da);
+					if (dsDatum > zielDatum) {
+						slot = i;
+						break;
+					}
+				}
+				if (slot === -1) {
+					ziel.push(ds);
+				} else {
+					ziel.splice(slot, 0, ds);
+				}
+				ergaenzt = true;
+			}
+		});
+		return ergaenzt;
+	},
+	// Datenbank: Klon der Titeldaten wiederherstellen
+	dbTitelReset () {
+		redLit.db.data = {};
+		for (let [k, v] of Object.entries(redLit.db.dataTmp)) {
+			redLit.db.data[k] = [];
+			redLit.dbTitelKlonen(v, redLit.db.data[k]);
+		}
 	},
 	// Navigation: Listener für das Umschalten
 	//   input = Element
@@ -1178,6 +1431,14 @@ let redLit = {
 			titel.parentNode.replaceChild(redLit.anzeigeSnippet(treffer), titel);
 		}
 	},
+	// Suche: alle Treffer in den Suchergebnissen auffrischen
+	sucheTrefferAlleAuffrischen () {
+		document.querySelectorAll("#red-lit-suche-titel:not(.aus) .red-lit-snippet").forEach(i => {
+			let ds = JSON.parse(i.dataset.ds);
+			redLit.anzeige.snippetKontext = "suche";
+			i.parentNode.replaceChild(redLit.anzeigeSnippet(ds), i);
+		});
+	},
 	// Eingabeformular: Speicher für Variablen
 	eingabe: {
 		fundorte: ["Bibliothek", "DTA", "DWDS", "GoogleBooks", "IDS", "online"], // gültige Werte im Feld "Fundorte"
@@ -1453,7 +1714,14 @@ let redLit = {
 		if (redLit.eingabe.status !== "add" &&
 				redLit.eingabe.id !== id) {
 			idGeaendert = true;
-			redLit.eingabeSpeichernIDAendern(redLit.eingabe.id, id);
+			redLit.db.data[id] = [];
+			redLit.dbTitelKlonen(redLit.db.data[redLit.eingabe.id], redLit.db.data[id]);
+			delete redLit.db.data[redLit.eingabe.id];
+			redLit.db.dataOpts.push({
+				aktion: "changeId",
+				id,
+				idAlt: redLit.eingabe.id,
+			});
 		}
 		// Abbruch, wenn identisch mit vorherigem Datensatz
 		if (redLit.db.data[id].length && !idGeaendert) {
@@ -1472,6 +1740,11 @@ let redLit = {
 		}
 		// Datensatz schreiben
 		redLit.db.data[id].unshift(ds);
+		redLit.db.dataOpts.push({
+			aktion: "add",
+			id,
+			idSlot: ds.id,
+		});
 		// Metadaten auffrischen
 		redLit.eingabeMetaFuellen({id, slot: 0});
 		// Status Eingabeformular auffrischen
@@ -1633,39 +1906,6 @@ let redLit = {
 					setTimeout(() => overlay.schliessen(document.getElementById("dialog")), 200);
 				});
 			});
-		}
-	},
-	// Eingabeformular: ID einer Titelaufnahme ändern
-	// (Titelaufnahme klonen)
-	//   alt = String
-	//     (die alte ID)
-	//   neu = String
-	//     (die neue ID)
-	eingabeSpeichernIDAendern (alt, neu) {
-		// neuen Datensatz anlegen
-		redLit.db.data[neu] = [];
-		// alten Datensatz klonen
-		let quelle = redLit.db.data[alt],
-			ziel = redLit.db.data[neu];
-		for (let i = 0, len = quelle.length; i < len; i++) {
-			let ds = {};
-			klon(quelle[i], ds);
-			ziel.push(ds);
-		}
-		// alten Datensatz entfernen
-		delete redLit.db.data[alt];
-		// Klon-Funktion
-		function klon (quelle, ziel) {
-			for (let [k, v] of Object.entries(quelle)) {
-				if (helfer.checkType("Object", v)) { // Objects
-					ziel[k] = {};
-					klon(v, ziel[k]);
-				} else if (Array.isArray(v)) { // Arrays
-					ziel[k] = [...v];
-				} else { // Primitiven
-					ziel[k] = v;
-				}
-			}
 		}
 	},
 	// Eingabeformular: einen neuen Datensatz auf Grundlage des Formulars erstellen
@@ -2144,6 +2384,11 @@ let redLit = {
 	//   slot = Number
 	//     (Slot der Titelaufnahme)
 	titelLoeschen ({id, slot}) {
+		redLit.db.dataOpts.push({
+			aktion: "del",
+			id,
+			idSlot: redLit.db.data[id][slot].id,
+		});
 		redLit.db.data[id].splice(slot, 1);
 		// ggf. Suche auffrischen
 		redLit.sucheTrefferAuffrischen(id, slot);
