@@ -1681,6 +1681,7 @@ let redLit = {
 		const quelle = helfer.textTrim(titelSp[0], true);
 		ti.value = quelle;
 		ti.dispatchEvent(new KeyboardEvent("input"));
+		ti.focus();
 	},
 	// Eingabeformular: Titelaufnahme speichern
 	eingabeSpeichern () {
