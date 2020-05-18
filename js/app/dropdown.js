@@ -607,6 +607,8 @@ let dropdown = {
 				karteisuche.filterFelder(caller);
 				// das erste Input-Feld hinter dem Caller fokussieren
 				document.getElementById(caller).parentNode.nextSibling.firstChild.focus();
+			} else if (/^red-lit-eingabe-/.test(caller)) {
+				feld.dispatchEvent(new KeyboardEvent("input"));
 			}
 			// Dropdown schließen
 			dropdown.schliessen();
