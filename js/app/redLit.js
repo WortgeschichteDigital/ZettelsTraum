@@ -1809,6 +1809,31 @@ let redLit = {
 					helfer.textareaGrow(i);
 				}
 			}
+			// ID schon vergeben => bestehende Titelaufnahme ergänzen?
+			const id = document.getElementById("red-lit-eingabe-id").value;
+			if (redLit.eingabe.status === "add" && redLit.db.data[id]) {
+				const verschmelzen = await new Promise(verschmelzen => {
+					dialog.oeffnen({
+						typ: "confirm",
+						text: "Die ID ist schon vergeben.\nSoll die bestehende Titelaufnahme ergänzt werden?",
+						callback: () => {
+							if (dialog.antwort) {
+								verschmelzen(true);
+							} else {
+								verschmelzen(false);
+							}
+						},
+					});
+				});
+				if (verschmelzen) {
+					redLit.eingabe.status = "change";
+					redLit.eingabe.id = id;
+				} else {
+					document.getElementById("red-lit-eingabe-ti").focus();
+					resolve(false);
+					return;
+				}
+			}
 			// Validierung des Formulars
 			const valid = await redLit.eingabeSpeichernValid();
 			if (!valid) {
@@ -1816,7 +1841,6 @@ let redLit = {
 				return;
 			}
 			// ggf. neuen Datensatz erstellen
-			const id = document.getElementById("red-lit-eingabe-id").value;
 			if (redLit.eingabe.status === "add") {
 				redLit.db.data[id] = [];
 			}
@@ -1934,9 +1958,12 @@ let redLit = {
 				return;
 			}
 			// ID schon vergeben?
-			if ((redLit.eingabe.status === "add" ||
-					redLit.eingabe.status !== "add" && redLit.eingabe.id !== id.value) &&
+			if (redLit.eingabe.status !== "add" &&
+					redLit.eingabe.id !== id.value &&
 					redLit.db.data[id.value]) {
+				// wenn beim Hinzufügen eines Datensatzes die ID schon vergeben ist,
+				// wird oben das Zusammenführen angeboten; hier geht es also nur um
+				// das Ändern der ID, was nicht möglich ist, wenn sie schon vergeben wurde
 				fehler({
 					text: "Die ID ist schon vergeben.",
 					fokus: id,
