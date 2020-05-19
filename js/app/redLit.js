@@ -1802,6 +1802,7 @@ let redLit = {
 				if (i.id === "red-lit-eingabe-ti") { // Titelaufnahme typographisch aufhübschen
 					val = redLit.eingabeFormatTitel(val);
 				} else {
+					val = val.replace(/[\r\n]+/g, "\n");
 					val = helfer.textTrim(val, true);
 				}
 				i.value = val;
@@ -2387,7 +2388,8 @@ let redLit = {
 			i.textContent = "Notizen:";
 			let noFrag = document.createElement("span");
 			no.appendChild(noFrag);
-			noFrag.innerHTML = redLit.anzeigeSnippetHighlight(ds.td.no);
+			const notiz = redLit.anzeigeSnippetHighlight(ds.td.no);
+			noFrag.innerHTML = notiz.replace(/[\r\n]+/g, "<br>");
 		}
 		// Metadaten: BearbeiterIn + Datum + Titelaufnahmen
 		// (nur im Suchkontext anzeigen)
