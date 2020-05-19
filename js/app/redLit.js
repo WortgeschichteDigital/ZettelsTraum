@@ -680,15 +680,13 @@ let redLit = {
 			if (stats && (merge || stats.mtime.toISOString() !== redLit.db.mtime)) {
 				// Kopie der Titeldaten anlegen
 				redLit.db.dataTmp = {};
-				for (let [k, v] of Object.entries(redLit.db.data)) {
-					redLit.db.dataTmp[k] = [];
-					redLit.dbTitelKlonen(v, redLit.db.dataTmp[k]);
-				}
+				redLit.dbKlonen({quelle: redLit.db.data, ziel: redLit.db.dataTmp});
 				// geänderte Datenbank herunterladen
 				const result = await redLit.dbOeffnenEinlesen({pfad, zusammenfuehren: true});
 				if (result !== true) {
 					// Titeldaten wiederherstellen
-					redLit.dbTitelReset();
+					redLit.db.data = {};
+					redLit.dbKlonen({quelle: redLit.db.dataTmp, ziel: redLit.db.data});
 					// Metdaten zurücksetzen
 					redLit.db.dataMeta.dc = metaPreMerge.dc;
 					redLit.db.dataMeta.dm = metaPreMerge.dm;
@@ -785,7 +783,8 @@ let redLit = {
 			if (result !== true) {
 				if (merged) {
 					// Titeldaten wiederherstellen
-					redLit.dbTitelReset();
+					redLit.db.data = {};
+					redLit.dbKlonen({quelle: redLit.db.dataTmp, ziel: redLit.db.data});
 					// Metdaten zurücksetzen
 					redLit.db.dataMeta.dc = metaPreMerge.dc;
 					redLit.db.dataMeta.dm = metaPreMerge.dm;
@@ -1006,6 +1005,17 @@ let redLit = {
 		// es steht nichts mehr aus => Funktion direkt ausführen
 		fun();
 	},
+	// Datenbank: alle Titeldaten klonen
+	//   quelle = Object
+	//     (Quelle der Titeldaten)
+	//   ziel = Object
+	//     (Ziel der Titeldaten, also der Klon)
+	dbKlonen ({quelle, ziel}) {
+		for (let [k, v] of Object.entries(quelle)) {
+			ziel[k] = [];
+			redLit.dbTitelKlonen(v, ziel[k]);
+		}
+	},
 	// Datenbank: kompletten Datensatz einer Titelaufnahme klonen
 	//   quelle = Object
 	//     (der Quell-Datensatz)
@@ -1064,14 +1074,6 @@ let redLit = {
 			}
 		});
 		return ergaenzt;
-	},
-	// Datenbank: Klon der Titeldaten wiederherstellen
-	dbTitelReset () {
-		redLit.db.data = {};
-		for (let [k, v] of Object.entries(redLit.db.dataTmp)) {
-			redLit.db.data[k] = [];
-			redLit.dbTitelKlonen(v, redLit.db.data[k]);
-		}
 	},
 	// Navigation: Listener für das Umschalten
 	//   input = Element
