@@ -90,7 +90,7 @@
 #red-lit-suche-text {
 	margin-right: 15px;
 	padding-right: 29px;
-	width: calc(100% - 218px); /* 36px Padding und Border, 15px Margin, 20px Label, 147px Datumsfeld */
+	width: calc(100% - 228px); /* 36px Padding und Border, 15px Margin, 20px Label, 157px Datumsfeld */
 	transition: background-color .5s linear;
 }
 
@@ -100,7 +100,7 @@
 
 #red-lit-suche-ab {
 	margin-left: 5px;
-	width: 130px;
+	width: 140px;
 }
 
 #red-lit-suche-ab:invalid {
@@ -114,7 +114,7 @@
 
 #red-lit-suche-start {
 	position: absolute;
-	left: calc(100% - 218px + 6px); /* vgl. #red-lit-suche-text */
+	left: calc(100% - 228px + 6px); /* vgl. #red-lit-suche-text */
 	top: 3px;
 }
 
