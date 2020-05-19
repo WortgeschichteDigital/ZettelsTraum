@@ -9,7 +9,7 @@ let xml = {
 		let parser = new DOMParser(),
 			schnitt = parser.parseFromString("<Beleg></Beleg>", "text/xml");
 		// @xml:id
-		schnitt.firstChild.setAttribute("xml:id", xml.belegId());
+		schnitt.firstChild.setAttribute("xml:id", xml.belegId({}));
 		// @Fundort
 		// (wird schon hier benötigt, um die Absätze in DWDS-Belgen in Leerzeichen zu verwandeln)
 		let fundort = "";
