@@ -800,6 +800,7 @@ fenster = {
 				enableRemoteModule: false,
 				devTools: devtools,
 				defaultEncoding: "utf-8",
+				spellcheck: false,
 			},
 		});
 		// ggf. maximieren
@@ -944,6 +945,7 @@ fenster = {
 				enableRemoteModule: false,
 				devTools: devtools,
 				defaultEncoding: "utf-8",
+				spellcheck: false,
 			},
 		};
 		if (typ === "bedeutungen") {
@@ -1085,6 +1087,7 @@ fenster = {
 				enableRemoteModule: false,
 				devTools: devtools,
 				defaultEncoding: "utf-8",
+				spellcheck: false,
 			},
 		});
 		// Windows/Linux: Menü nur erzeugen, wenn Dev-Tools zugänglich sein sollen; sonst haben die Fenster kein Menü
