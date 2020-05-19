@@ -1736,6 +1736,10 @@ let redLit = {
 	},
 	// Eingabeformular: BibTeX-Import aus der Zwischenablage
 	eingabeBibTeX () {
+		// Formular leeren
+		redLit.eingabeLeeren();
+		redLit.eingabeStatus("add");
+		// Zwischenablage einlesen
 		const {clipboard} = require("electron"),
 			cp = clipboard.readText(),
 			bibtexCp = belegImport.BibTeXCheck(cp);
@@ -1743,7 +1747,10 @@ let redLit = {
 		if (!bibtexCp) {
 			dialog.oeffnen({
 				typ: "alert",
-				text: `In der Zwischenablage befindet sich kein <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Datensatz.`
+				text: `In der Zwischenablage befindet sich kein <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Datensatz.`,
+				callback: () => {
+					document.getElementById("red-lit-eingabe-ti-bibtex").focus();
+				},
 			});
 			return;
 		}
@@ -1753,7 +1760,10 @@ let redLit = {
 		if (!titel) {
 			dialog.oeffnen({
 				typ: "alert",
-				text: `Das Einlesen des <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Datensatzes ist fehlgeschlagen.`
+				text: `Das Einlesen des <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Datensatzes ist fehlgeschlagen.`,
+				callback: () => {
+					document.getElementById("red-lit-eingabe-ti-bibtex").focus();
+				},
 			});
 			return;
 		}

@@ -323,7 +323,7 @@ window.addEventListener("load", async () => {
 	});
 	document.getElementById("red-lit-eingabe-ti-bibtex").addEventListener("click", evt => {
 		evt.preventDefault();
-		redLit.eingabeBibTeX();
+		redLit.dbCheck(() => redLit.eingabeBibTeX(), false);
 	});
 	// Literaturdatenbank: Export
 	document.querySelectorAll(`#red-lit-export-cont input[type="radio"]`).forEach(i => {
