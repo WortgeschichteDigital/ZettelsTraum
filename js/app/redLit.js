@@ -1430,7 +1430,7 @@ let redLit = {
 		if (delSlot >= 0) {
 			if (treffer.slot === delSlot) {
 				// Treffer komplett entfernen, wenn genau diese Titelaufnahme gelöscht wurde
-				let idx = redLit.suche.treffer.findIndex(i => i.id === id);
+				const idx = redLit.suche.treffer.findIndex(i => i.id === id);
 				redLit.suche.treffer.splice(idx, 1);
 				if (!redLit.suche.treffer.length) {
 					redLit.sucheReset();
@@ -1458,6 +1458,24 @@ let redLit = {
 	sucheTrefferAlleAuffrischen () {
 		document.querySelectorAll("#red-lit-suche-titel:not(.aus) .red-lit-snippet").forEach(i => {
 			let ds = JSON.parse(i.dataset.ds);
+			// Titelaufnahme existiert nicht mehr in der DB
+			if (!redLit.db.data[ds.id] || !redLit.db.data[ds.id][ds.slot]) {
+				// Titelaufnahme aus Trefferliste entfernen
+				const idx = redLit.suche.treffer.findIndex(j => j.id === ds.id);
+				redLit.suche.treffer.splice(idx, 1);
+				// sind noch Treffer in der Trefferliste?
+				if (!redLit.suche.treffer.length) {
+					redLit.sucheReset();
+					return;
+				}
+				// Titelaufnahme aus der Suchanzeige löschen
+				i.parentNode.removeChild(i);
+				// Navigation auffrischen
+				const start = parseInt(document.querySelector("#red-lit-suche-treffer a").dataset.start, 10) + 100;
+				redLit.sucheAnzeigenNav(start);
+				return;
+			}
+			// Titelaufnahme auffrischen
 			redLit.anzeige.snippetKontext = "suche";
 			i.parentNode.replaceChild(redLit.anzeigeSnippet(ds), i);
 		});
