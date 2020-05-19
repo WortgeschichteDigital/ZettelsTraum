@@ -288,11 +288,11 @@ input[type="datetime-local"]::-webkit-clear-button {
 }
 
 input[type="datetime-local"] {
-	width: 180px;
+	width: 190px;
 }
 
 input[type="datetime-local"].lang-en {
-	width: 215px;
+	width: 222px;
 }
 
 input[type="button"] {
