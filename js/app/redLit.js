@@ -754,7 +754,7 @@ let redLit = {
 			// ggf. Datenbanken mergen
 			if (merge) {
 				for (let [k, v] of Object.entries(redLit.db.dataTmp)) {
-					// Titelaufnahme mit allen Versionen klonen
+					// Titelaufnahme nicht vorhanden => Aufnahme mit allen Versionen klonen
 					if (!redLit.db.data[k]) {
 						redLit.db.data[k] = [];
 						redLit.dbTitelKlonen(v, redLit.db.data[k]);
@@ -835,27 +835,28 @@ let redLit = {
 			}
 			text += "\nDabei wurden folgende Operationen ausgeführt:";
 			for (let [k, v] of Object.entries(mergeOpts)) {
-				if (v.size) {
-					let ziffer = "" + v.size;
-					if (v.size === 1) {
-						ziffer = "eine";
-					}
-					let numerus = "Titelaufnahme wurde";
-					if (v.size > 1) {
-						numerus = "Titelaufnahmen wurden";
-					}
-					let praep = "";
-					if (k === "geändert") {
-						praep = "von ";
-						if (v.size === 1) {
-							ziffer = "einer";
-						} else {
-							numerus = "Titelaufnahmen wurde";
-						}
-						k = "die ID geändert";
-					}
-					text += `\n<p class="dialog-liste">• ${praep}${ziffer} ${numerus} ${k} (<i>${[...v].join(", ")}</i>)</p>`;
+				if (!v.size) {
+					continue;
 				}
+				let ziffer = "" + v.size;
+				if (v.size === 1) {
+					ziffer = "eine";
+				}
+				let numerus = "Titelaufnahme wurde";
+				if (v.size > 1) {
+					numerus = "Titelaufnahmen wurden";
+				}
+				let praep = "";
+				if (k === "geändert") {
+					praep = "von ";
+					if (v.size === 1) {
+						ziffer = "einer";
+					} else {
+						numerus = "Titelaufnahmen wurde";
+					}
+					k = "die ID geändert";
+				}
+				text += `\n<p class="dialog-liste">• ${praep}${ziffer} ${numerus} ${k} (<i>${[...v].join(", ")}</i>)</p>`;
 			}
 			dialog.oeffnen({
 				typ: "alert",
@@ -1059,25 +1060,26 @@ let redLit = {
 	dbTitelMergeAufnahmen (quelle, ziel) {
 		let ergaenzt = false;
 		quelle.forEach(aq => {
-			if (!ziel.some(i => i.id === aq.id)) {
-				let ds = {};
-				redLit.dbTitelKlonenAufnahme(aq, ds);
-				let dsDatum = new Date(ds.da),
-					slot = -1;
-				for (let i = 0, len = ziel.length; i < len; i++) {
-					let zielDatum = new Date(ziel[i].da);
-					if (dsDatum > zielDatum) {
-						slot = i;
-						break;
-					}
-				}
-				if (slot === -1) {
-					ziel.push(ds);
-				} else {
-					ziel.splice(slot, 0, ds);
-				}
-				ergaenzt = true;
+			if (ziel.some(i => i.id === aq.id)) {
+				return;
 			}
+			let ds = {};
+			redLit.dbTitelKlonenAufnahme(aq, ds);
+			let dsDatum = new Date(ds.da),
+				slot = -1;
+			for (let i = 0, len = ziel.length; i < len; i++) {
+				let zielDatum = new Date(ziel[i].da);
+				if (dsDatum > zielDatum) {
+					slot = i;
+					break;
+				}
+			}
+			if (slot === -1) {
+				ziel.push(ds);
+			} else {
+				ziel.splice(slot, 0, ds);
+			}
+			ergaenzt = true;
 		});
 		return ergaenzt;
 	},
