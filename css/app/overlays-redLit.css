@@ -237,17 +237,21 @@
 	padding-left: 6px;
 }
 
-#red-lit-eingabe-ti-bibtex {
+#red-lit-eingabe-ti-import {
 	position: absolute;
 	right: 0;
 	color: var(--textSehrHell);
 }
 
-#red-lit-eingabe-ti-bibtex:focus {
+#red-lit-eingabe-ti-import a {
+	color: var(--textSehrHell);
+}
+
+#red-lit-eingabe-ti-import a:focus {
 	color: var(--farbe);
 }
 
-#red-lit-eingabe-ti-bibtex:hover {
+#red-lit-eingabe-ti-import a:hover {
 	color: var(--text);
 }
 

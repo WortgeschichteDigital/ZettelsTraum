@@ -1652,6 +1652,88 @@ let redLit = {
 		}
 		return titel;
 	},
+	// Eingabeformular: XML-Import aus der Zwischenablage
+	eingabeXML () {
+		// Formular leeren
+		redLit.eingabeLeeren();
+		redLit.eingabeStatus("add");
+		// Zwischenablage einlesen
+		const {clipboard} = require("electron"),
+			cp = clipboard.readText(),
+			xmlDoc = redLit.eingabeXMLCheck(cp);
+		// kein Fundstellen-Snippet in der Zwischenablage
+		if (!xmlDoc) {
+			dialog.oeffnen({
+				typ: "alert",
+				text: "In der Zwischenablage befindet sich kein XML-Snippet, aus dem eine Titelaufnahme importiert werden könnte.",
+				callback: () => {
+					document.getElementById("red-lit-eingabe-ti-xml").focus();
+				},
+			});
+			return;
+		}
+		// Titelaufnahme übernehmen
+		let ti = xmlDoc.querySelector("unstrukturiert");
+		if (ti) {
+			let feld = document.getElementById("red-lit-eingabe-ti");
+			feld.value = redLit.eingabeFormatTitel(ti.firstChild.nodeValue);
+			feld.dispatchEvent(new KeyboardEvent("input"));
+		}
+		let si = xmlDoc.querySelector("Sigle");
+		if (si) {
+			document.getElementById("red-lit-eingabe-si").value = si.firstChild.nodeValue;
+		}
+		let id = xmlDoc.querySelector("Fundstelle").getAttribute("xml:id");
+		if (id) {
+			document.getElementById("red-lit-eingabe-id").value = id;
+		}
+		let ul = xmlDoc.querySelector("URL");
+		if (ul) {
+			let feld = document.getElementById("red-lit-eingabe-ul");
+			feld.value = ul.firstChild.nodeValue;
+			feld.dispatchEvent(new KeyboardEvent("input"));
+		}
+		let ad = xmlDoc.querySelector("Aufrufdatum");
+		if (ad) {
+			let da = ad.firstChild.nodeValue.split(".");
+			document.getElementById("red-lit-eingabe-ad").value = `${da[2]}-${da[1]}-${da[0]}`;
+		}
+		let fo = xmlDoc.querySelector("Fundort");
+		if (fo) {
+			document.getElementById("red-lit-eingabe-fo").value = fo.firstChild.nodeValue;
+		}
+		let pn = xmlDoc.querySelectorAll("PPN");
+		if (pn) {
+			let ppn = [];
+			for (let i of pn) {
+				ppn.push(i.firstChild.nodeValue);
+			}
+			document.getElementById("red-lit-eingabe-pn").value = ppn.join(", ");
+		}
+		// Titelfeld fokussieren
+		document.getElementById("red-lit-eingabe-ti").focus();
+	},
+	// Eingabeformular: überprüft, ob in der Zwischenablage wirklich ein Fundstellen-Snippet liegt
+	//   cp = String || undefined
+	//     (Text-Inhalt des Clipboards)
+	eingabeXMLCheck (cp) {
+		// Daten beginnen nicht mit <Fundstelle>
+		if (!/^<Fundstelle/.test(cp)) {
+			return false;
+		}
+		// XML nicht wohlgeformt
+		let parser = new DOMParser(),
+			xmlDoc = parser.parseFromString(cp, "text/xml");
+		if (xmlDoc.querySelector("parsererror")) {
+			return false;
+		}
+		// kein <unstrukturiert>
+		if (!xmlDoc.querySelector("Fundstelle unstrukturiert")) {
+			return false;
+		}
+		// korrektes XML-Dokument
+		return xmlDoc;
+	},
 	// Eingabeformular: BibTeX-Import aus der Zwischenablage
 	eingabeBibTeX () {
 		const {clipboard} = require("electron"),
