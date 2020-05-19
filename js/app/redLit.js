@@ -150,6 +150,12 @@ let redLit = {
 			// nur DB speichern
 			kaskade.eingabe = false;
 		}
+		// Eingabeformular nur speichern, wenn es auch sichtbar ist
+		// (dort können vollständig ausgefüllte, gerade erst gelöschte Titelaufnahmen
+		// lungern, die dann automatisch wieder hinzugefügt werden)
+		if (document.getElementById("red-lit-eingabe").classList.contains("aus")) {
+			kaskade.eingabe = false;
+		}
 		// Speichern
 		if (kaskade.eingabe &&
 				redLit.eingabe.changed) {
