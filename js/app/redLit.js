@@ -1240,7 +1240,7 @@ let redLit = {
 			if (/[A-ZÄÖÜ]/.test(text)) {
 				insensitive = "";
 			}
-			st = new RegExp(helfer.escapeRegExp(text), "g" + insensitive);
+			st = new RegExp(helfer.escapeRegExp(text).replace(/ /g, "\\s"), "g" + insensitive);
 			redLit.suche.highlight = st;
 		}
 		if (ab) {
