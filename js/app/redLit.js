@@ -1800,9 +1800,7 @@ let redLit = {
 			dialog.oeffnen({
 				typ: "alert",
 				text: "In der Zwischenablage befindet sich kein XML-Snippet, aus dem eine Titelaufnahme importiert werden könnte.",
-				callback: () => {
-					document.getElementById("red-lit-eingabe-ti-xml").focus();
-				},
+				callback: () => document.getElementById("red-lit-eingabe-ti-xml").focus(),
 			});
 			return;
 		}
@@ -1882,9 +1880,7 @@ let redLit = {
 			dialog.oeffnen({
 				typ: "alert",
 				text: `In der Zwischenablage befindet sich kein <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Datensatz.`,
-				callback: () => {
-					document.getElementById("red-lit-eingabe-ti-bibtex").focus();
-				},
+				callback: () => document.getElementById("red-lit-eingabe-ti-bibtex").focus(),
 			});
 			return;
 		}
@@ -1895,9 +1891,7 @@ let redLit = {
 			dialog.oeffnen({
 				typ: "alert",
 				text: `Das Einlesen des <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Datensatzes ist fehlgeschlagen.`,
-				callback: () => {
-					document.getElementById("red-lit-eingabe-ti-bibtex").focus();
-				},
+				callback: () => document.getElementById("red-lit-eingabe-ti-bibtex").focus(),
 			});
 			return;
 		}
