@@ -3,6 +3,32 @@
 let belegImport = {
 	// DTA-Import: Daten, die importiert wurden
 	DTAData: {},
+	// DTA-Import: Datenobjekt zurücksetzen
+	DTAResetData () {
+		belegImport.DTAData = {
+			autor: [],
+			hrsg: [],
+			titel: "",
+			untertitel: [],
+			band: "",
+			auflage: "",
+			ort: "",
+			verlag: "",
+			datum: {
+				druck: "",
+				entstehung: "",
+			},
+			seite: "",
+			seite_zuletzt: "",
+			spalte: false,
+			serie: "",
+			serie_seite: "",
+			beleg: "",
+			textsorte: [],
+			textsorte_sub: [],
+			url: "",
+		};
+	},
 	// DTA-Import: Daten aus dem DTA importieren
 	DTA () {
 		let dta = document.getElementById("beleg-dta");
@@ -83,29 +109,8 @@ let belegImport = {
 		startImport();
 		// Startfunktion
 		function startImport () {
-			belegImport.DTAData = {
-				autor: [],
-				hrsg: [],
-				titel: "",
-				untertitel: [],
-				band: "",
-				auflage: "",
-				ort: "",
-				verlag: "",
-				datum: {
-					druck: "",
-					entstehung: "",
-				},
-				seite: "",
-				seite_zuletzt: "",
-				spalte: false,
-				serie: "",
-				serie_seite: "",
-				beleg: "",
-				textsorte: [],
-				textsorte_sub: [],
-				url: `http://www.deutschestextarchiv.de/${titel_id}/${fak}`,
-			};
+			belegImport.DTAResetData();
+			belegImport.DTAData.url = `http://www.deutschestextarchiv.de/${titel_id}/${fak}`;
 			const url_xml = `http://www.deutschestextarchiv.de/book/download_xml/${titel_id}`;
 			document.activeElement.blur();
 			belegImport.DTARequest(url_xml, fak);
@@ -116,13 +121,13 @@ let belegImport = {
 	//     (DTA-URL)
 	DTAGetTitelId (url) {
 		let m, titel_id = "";
-		if (/\/view\//.test(url)) {
-			m = url.match(/\/view\/([^/?]+)/);
+		if (/\/(show|view)\//.test(url)) {
+			m = /\/(show|view)\/(?<titel_id>[^/?]+)/.exec(url);
 		} else {
-			m = url.match(/deutschestextarchiv\.de\/([^/?]+)/);
+			m = /deutschestextarchiv\.de\/(?<titel_id>[^/?]+)/.exec(url);
 		}
-		if (m) {
-			titel_id = m[1];
+		if (m && m.groups.titel_id) {
+			titel_id = m.groups.titel_id;
 		}
 		return titel_id;
 	},
@@ -197,8 +202,9 @@ let belegImport = {
 	},
 	// DTA-Import: Meta-Daten des Titels importieren
 	//   xml = Document
-	//     (das komplette Buch, aus dem eine Seite importiert werden soll;
-	//     enthält auch den TEI-Header)
+	//     (entweder das komplette Buch, aus dem eine Seite importiert
+	//     werden soll [enthält auch den TEI-Header], oder ein XML-Dokument,
+	//     das allein die TEI-Header des Buchs umfasst)
 	DTAMeta (xml) {
 		// normale Werte
 		let bibl = xml.querySelector("teiHeader fileDesc sourceDesc biblFull"),
@@ -560,9 +566,8 @@ let belegImport = {
 	},
 	// DTA-Import: Daten in das Formular eintragen
 	DTAFill () {
-		// Werte eintragen
-		let dta = belegImport.DTAData;
-		let datum_feld = dta.datum.entstehung;
+		let dta = belegImport.DTAData,
+			datum_feld = dta.datum.entstehung;
 		if (!datum_feld && dta.datum.druck) {
 			datum_feld = dta.datum.druck;
 		} else if (dta.datum.druck) {
@@ -596,8 +601,23 @@ let belegImport = {
 			beleg.data.ts = Array.from(textsorteUnique).join("\n");
 		}
 		beleg.data.kr = "DTA";
-		// QUELLENANGABE ZUSAMMENSETZEN
+		beleg.data.qu = belegImport.DTAQuelle(true);
+		// Formular füllen
+		beleg.formular(false);
+		beleg.belegGeaendert(true);
+		// Wort gefunden?
+		belegImport.checkWort();
+	},
+	// DTA-Import: Quelle zusammensetzen
+	//   mitURL = Boolean
+	//     (URL + Aufrufdatum sollen der Quellenangabe hinzugefügt werden)
+	DTAQuelle (mitURL) {
+		let dta = belegImport.DTAData;
 		// Autor und Titel
+		let autor = dta.autor.join("/");
+		if (!autor) {
+			autor = "N. N.";
+		}
 		let quelle = `${autor}: ${dta.titel}`;
 		// Untertitel
 		if (dta.untertitel.length) {
@@ -675,27 +695,23 @@ let belegImport = {
 		if (dta.serie) {
 			quelle += ` (= ${dta.serie})`;
 		}
-		// URL
-		quelle += ".\n\n";
-		quelle += dta.url;
-		// Aufrufdatum
-		let heute = new Date(),
-			tag = heute.getDate(),
-			monat = heute.getMonth() + 1;
-		quelle += ` (Aufrufdatum: ${tag < 10 ? `0${tag}` : tag}.${monat < 10 ? `0${monat}` : monat}.${heute.getFullYear()})`;
-		// und fertig...
-		beleg.data.qu = quelle;
-		// Formular füllen
-		beleg.formular(false);
-		beleg.belegGeaendert(true);
+		// URL und Aufrufdatum
+		if (mitURL) {
+			quelle += `.\n\n${dta.url}`;
+			let heute = new Date(),
+				tag = heute.getDate(),
+				monat = heute.getMonth() + 1;
+			quelle += ` (Aufrufdatum: ${tag < 10 ? `0${tag}` : tag}.${monat < 10 ? `0${monat}` : monat}.${heute.getFullYear()})`;
+		} else {
+			quellePunkt();
+		}
+		return quelle;
 		// ggf. Punkt einfügen
 		function quellePunkt () {
 			if (!/\.$/.test(quelle)) {
 				quelle += ".";
 			}
 		}
-		// Wort gefunden?
-		belegImport.checkWort();
 	},
 	// DWDS-Import: Liste der Korpora des DWDS
 	DWDSKorpora: {
