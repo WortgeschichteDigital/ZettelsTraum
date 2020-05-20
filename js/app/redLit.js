@@ -1123,6 +1123,12 @@ let redLit = {
 				block.classList.add("aus");
 			}
 		}
+		// ggf. Fous setzen
+		if (nav && form === "suche") {
+			document.getElementById("red-lit-suche-text").select();
+		} else if (nav) {
+			document.getElementById("red-lit-eingabe-ti").focus();
+		}
 	},
 	// Suche: Speicher für Variablen
 	suche: {
