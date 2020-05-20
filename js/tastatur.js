@@ -218,6 +218,9 @@ let tastatur = {
 			if (m === "Ctrl" && overlayId === "einstellungen") {
 				evt.preventDefault();
 				optionen.naviMenue(evt);
+			} else if (m === "Ctrl" && overlayId === "red-lit" && document.getElementById("red-lit-popup")) {
+				evt.preventDefault();
+				redLit.anzeigePopupNav(evt);
 			}
 			return;
 		}

@@ -2547,6 +2547,22 @@ let redLit = {
 			titel.replaceChild(snippet, titel.firstChild);
 		});
 	},
+	// Anzeige: Titelaufnahme im Popup wechseln (Strg + ↑/↓)
+	//   evt = Object
+	//     (Event-Object des keydown)
+	anzeigePopupNav (evt) {
+		let slot = parseInt(document.querySelector("#red-lit-popup-versionen .aktiv").dataset.slot, 10);
+		if (evt.key === "ArrowDown") {
+			slot++;
+		} else {
+			slot--;
+		}
+		if (slot < 0 || slot === redLit.db.data[redLit.anzeige.id].length) {
+			return;
+		}
+		let div = document.querySelector(`#red-lit-popup-versionen [data-slot="${slot}"]`);
+		div.dispatchEvent(new MouseEvent("click"));
+	},
 	// Anzeige: Versionen-Popup schließen
 	anzeigePopupSchliessen () {
 		let win = document.getElementById("red-lit-popup");
