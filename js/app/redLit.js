@@ -2100,11 +2100,20 @@ let redLit = {
 				resolve(false);
 				return;
 			}
-			// URL korrekt formatiert?
+			// Beginnt die URL mit einem Protokoll?
 			let url = document.getElementById("red-lit-eingabe-ul");
 			if (url.value && !/^https?:\/\//.test(url.value)) {
 				fehler({
 					text: "Die URL muss mit einem Protokoll beginnen (http[s]://).",
+					fokus: url,
+				});
+				resolve(false);
+				return;
+			}
+			// Enthält die URL Whitespace?
+			if (url.value && /\s/.test(url.value)) {
+				fehler({
+					text: "Die URL darf keine Whitespace-Zeichen (Leerzeichen, Tabs, Zeilenumbrüche) enthalten.",
 					fokus: url,
 				});
 				resolve(false);
