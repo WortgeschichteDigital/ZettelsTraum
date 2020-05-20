@@ -1265,8 +1265,8 @@ let redLit = {
 			for (let i = 0, len = arr.length; i < len; i++) {
 				let aufnahme = arr[i];
 				// Sondersuchen
-				if (/^(duplikate|siglen_doppelt|notizen)$/.test(redLit.suche.sonder) && i > 0) {
-					// nur den aktuellsten Eintrag berücksichtigen
+				if (/^(duplikate|notizen|ppn_|siglen_doppelt)/.test(redLit.suche.sonder) && i > 0) {
+					// Sondersuchen, für die nur der erste Eintrag berücksichtigt wird
 					break;
 				} else if (redLit.suche.sonder === "siglen_doppelt" &&
 						!siglen_doppelt.has(aufnahme.td.si)) { // doppelte Siglen
