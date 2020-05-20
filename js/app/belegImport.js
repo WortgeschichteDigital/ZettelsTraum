@@ -1897,7 +1897,7 @@ let belegImport = {
 	BibTeXFix (content) {
 		let zeilen = [];
 		for (let zeile of content.split(/\n/)) {
-			if (/^(@|\t|\s|\})/.test(zeile)) {
+			if (/^[@\s}]/.test(zeile)) {
 				zeile = zeile.replace(/^\s+/, "\t");
 				if (zeile.trim()) {
 					zeilen.push(zeile.trimEnd()); // da könnte noch ein \r drin sein
@@ -1942,16 +1942,16 @@ let belegImport = {
 				continue;
 			}
 			// Zeile analysieren
-			let kv = zeile.match(/^([a-z]+)\s*=\s*\{(.+)\},*$/);
-			if (!kv || !kv[1] || !kv[2]) {
+			let kv = /^(?<key>[a-z]+)\s*=\s*[{"](?<value>.+)[}"],?$/.exec(zeile);
+			if (!kv || !kv.groups.key || !kv.groups.value) {
 				// da ist wohl was schiefgelaufen
 				continue;
 			}
-			let key = kv[1];
+			let key = kv.groups.key;
 			if (!item[key]) {
 				item[key] = [];
 			}
-			item[key].push(belegImport.BibTeXSymbols( kv[2] ));
+			item[key].push(belegImport.BibTeXSymbols(kv.groups.value));
 		}
 		// Daten in den Zwischenspeicher eintragen
 		// (nur wenn welche vorhanden sind)
@@ -2000,8 +2000,10 @@ let belegImport = {
 			data.ds.bx += `\n}`;
 			// Datum
 			if (item.year) {
+				item.year.forEach((i, n) => item.year[n] = i.replace(/^\[|\]$/g, ""));
 				data.ds.da = item.year.join("/");
 			} else if (item.date) {
+				item.date.forEach((i, n) => item.date[n] = i.replace(/^\[|\]$/g, ""));
 				data.ds.da = item.date.join("/");
 			}
 			// Datensatz von GoogleBooks?
@@ -2098,8 +2100,21 @@ let belegImport = {
 			// Quellenangabe: URL
 			if (item.url) {
 				let heute = helfer.datumFormat(new Date().toISOString(), "minuten").split(",")[0];
+				quelle += "\n";
+				item.url.sort((a, b) => {
+					if (/books\.google/.test(a)) {
+						return -1;
+					} else if (/books\.google/.test(b)) {
+						return 1;
+					} else if (/doi\.org/.test(a)) {
+						return -1;
+					} else if (/doi\.org/.test(b)) {
+						return 1;
+					}
+					return 0;
+				});
 				for (let i of item.url) {
-					quelle += `\n\n${i} (Aufrufdatum: ${heute})`;
+					quelle += `\n${i} (Aufrufdatum: ${heute})`;
 				}
 			}
 			// Quelleanangabe übernehmen
@@ -2114,8 +2129,12 @@ let belegImport = {
 	//     (Textzeile, in der die Symbole aufgelöst werden sollen)
 	BibTeXSymbols (text) {
 		// das scheint der Standard zu sein: \‘{a}
-		// Google verwendet i.d.R. diese Form {\‘a}
+		// Google und die GVK-API verwenden i.d.R. diese Form {\‘a}
 		let symbols = new Map();
+		symbols.set("``", "„"); // GVK
+		symbols.set("''", "“"); // GVK
+		symbols.set("`", "‚"); // GVK
+		symbols.set("'", "‘"); // GVK
 		symbols.set("\\‘{a}", "à");
 		symbols.set("{\\‘a}", "à");
 		symbols.set("\\‘{e}", "è");
