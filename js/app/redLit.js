@@ -1265,12 +1265,20 @@ let redLit = {
 					if (l === k) {
 						continue;
 					}
-					if (w[0].td.ti === v[0].td.ti) {
+					if (w[0].td.si === v[0].td.si) { // Sigle identisch
+						duplikate.add(k);
+						duplikate.add(l);
+						break;
+					} else if (w[0].td.ti === v[0].td.ti) { // Titel identisch
+						duplikate.add(k);
+						duplikate.add(l);
+						break;
+					} else if (v[0].td.ul && w[0].td.ul === v[0].td.ul) { // URL identisch
 						duplikate.add(k);
 						duplikate.add(l);
 						break;
 					}
-					for (let p of v[0].td.pn) {
+					for (let p of v[0].td.pn) { // PPN identisch
 						if (w[0].td.pn.includes(p)) {
 							duplikate.add(k);
 							duplikate.add(l);
