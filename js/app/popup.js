@@ -295,6 +295,9 @@ let popup = {
 					if (oben === "red-lit") {
 						popup.titelaufnahme.ds = JSON.parse(pfad[i].closest(".red-lit-snippet").dataset.ds);
 						popup.titelaufnahme.popup = pfad[i].closest("#red-lit-popup");
+						if (!popup.titelaufnahme.popup) {
+							redLit.sucheSnippetMarkieren(pfad[i].closest(".red-lit-snippet"));
+						}
 					} else if (oben !== "stamm" && helfer.hauptfunktion === "karte") {
 						popup.referenz.data = beleg.data;
 						popup.referenz.id = "" + beleg.id_karte;
@@ -326,6 +329,9 @@ let popup = {
 				} else if (pfad[i].classList.contains("red-lit-snippet")) {
 					popup.titelaufnahme.ds = JSON.parse(pfad[i].dataset.ds);
 					popup.titelaufnahme.popup = pfad[i].closest("#red-lit-popup");
+					if (!popup.titelaufnahme.popup) {
+						redLit.sucheSnippetMarkieren(pfad[i]);
+					}
 					return "titelaufnahme";
 				} else if (pfad[i].classList.contains("overlay")) {
 					popup.overlayID = pfad[i].id;

@@ -1431,24 +1431,27 @@ let redLit = {
 			redLit.sucheAnzeigen(start);
 		});
 	},
-	// Suche: Snippet aktivieren
+	// Suche: Snippet markieren (Listener)
 	//   div = Element
 	//     (Snippet mit einer Titelaufnahme)
-	sucheSnippetMarkieren (div) {
+	sucheSnippetMarkierenListener (div) {
 		div.addEventListener("click", function() {
-			// Snippet ist markiert => demarkieren
-			if (this.classList.contains("markiert")) {
+			if (this.classList.contains("markiert")) { // Snippet ist markiert => demarkieren
 				this.classList.remove("markiert");
 				return;
 			}
-			// markiertes Snippet demarkieren
-			let markiert = document.querySelector("#red-lit-suche-titel .markiert");
-			if (markiert) {
-				markiert.classList.remove("markiert");
-			}
-			// angeklicktes Snippet markieren
-			this.classList.add("markiert");
+			redLit.sucheSnippetMarkieren(this);
 		});
+	},
+	// Suche: Snippet markieren
+	//   div = Element
+	//     (Snippet mit einer Titelaufnahme)
+	sucheSnippetMarkieren (div) {
+		let markiert = document.querySelector("#red-lit-suche-titel .markiert");
+		if (markiert) {
+			markiert.classList.remove("markiert");
+		}
+		div.classList.add("markiert");
 	},
 	// Suche: Titelaufnahme auffrischen, falls sie geändert wurde (bearbeitet, gelöscht)
 	//   id = String
@@ -2471,7 +2474,7 @@ let redLit = {
 		}
 		// ggf. Klick-Event an das Snippet hängen
 		if (redLit.anzeige.snippetKontext === "suche") {
-			redLit.sucheSnippetMarkieren(div);
+			redLit.sucheSnippetMarkierenListener(div);
 		}
 		// Snippet zurückgeben
 		return div;
