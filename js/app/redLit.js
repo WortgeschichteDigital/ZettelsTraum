@@ -1867,25 +1867,66 @@ let redLit = {
 		return xmlDoc;
 	},
 	// Eingabeformular: BibTeX-Import aus der Zwischenablage
-	eingabeBibTeX () {
+	async eingabeBibTeX () {
+		// PPN-Feld auslesen
+		let pn = document.getElementById("red-lit-eingabe-pn"),
+			ppn = pn.value.split(/[,\s]/)[0];
+		if (!/^[0-9]{8,10}X?$/.test(ppn)) {
+			ppn = "";
+		}
 		// Formular leeren
 		redLit.eingabeLeeren();
 		redLit.eingabeStatus("add");
-		// Zwischenablage einlesen
+		// BibTeX-Daten suchen
 		const {clipboard} = require("electron"),
-			cp = clipboard.readText(),
-			bibtexCp = belegImport.BibTeXCheck(cp);
+			cp = clipboard.readText();
+		let bibtexDaten = "";
+		if (/^[0-9]{8,10}X?$/.test(cp)) {
+			ppn = cp;
+		} else if (belegImport.BibTeXCheck(cp)) {
+			ppn = "";
+			bibtexDaten = cp;
+		}
+		if (ppn) {
+			// BibTeX-Daten herunterladen
+			let feedback = await helfer.fetchURL(`https://unapi.k10plus.de/?id=gvk:ppn:${ppn}&format=bibtex`);
+			// Fehler-Handling
+			if (feedback.fehler) {
+				dialog.oeffnen({
+					typ: "alert",
+					text: `Der Download des GVK-<span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Datensatzes ist gescheitert.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${feedback.fehler}</p>`,
+					callback: () => document.getElementById("red-lit-eingabe-ti-bibtex").focus(),
+				});
+				return;
+			}
+			if (!belegImport.BibTeXCheck(feedback.text)) {
+				dialog.oeffnen({
+					typ: "alert",
+					text: `Bei den aus dem GVK heruntergeladenen Daten handelt es sich nicht um einen validen <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Datensatz.`,
+					callback: () => document.getElementById("red-lit-eingabe-ti-bibtex").focus(),
+				});
+				return;
+			}
+			// BibTeX-Daten aufbereiten
+			let daten = feedback.text.split("\n");
+			for (let i = 0, len = daten.length; i < len; i++) {
+				if (/^[a-z]+="/.test(daten[i])) {
+					daten[i] = "\t" + daten[i];
+				}
+			}
+			bibtexDaten = daten.join("\n");
+		}
 		// kein BibTeX-Datensatz in Zwischenablage
-		if (!bibtexCp) {
+		if (!bibtexDaten) {
 			dialog.oeffnen({
 				typ: "alert",
-				text: `In der Zwischenablage befindet sich kein <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Datensatz.`,
+				text: `Weder im PPN-Feld noch in der Zwischenablage wurden <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Daten oder eine PPN gefunden.`,
 				callback: () => document.getElementById("red-lit-eingabe-ti-bibtex").focus(),
 			});
 			return;
 		}
 		// BibTeX-Datensatz einlesen
-		let titel = belegImport.BibTeXLesen(cp, "literatur-db");
+		let titel = belegImport.BibTeXLesen(bibtexDaten, "literatur-db");
 		// Einlesen ist fehlgeschlagen
 		if (!titel) {
 			dialog.oeffnen({
@@ -1918,6 +1959,17 @@ let redLit = {
 		const quelle = helfer.textTrim(titelSp[0], true);
 		ti.value = quelle;
 		ti.dispatchEvent(new KeyboardEvent("input"));
+		// PPN
+		if (!ppn) {
+			let m = /^@[a-zA-Z]+\{(GBV-)?(?<ppn>.+?),/.exec(bibtexDaten);
+			if (m && /^[0-9]{8,10}X?$/.test(m.groups.ppn)) {
+				ppn = m.groups.ppn;
+			}
+		}
+		if (!pn.value) {
+			pn.value = ppn;
+		}
+		// Titel fokussieren
 		ti.focus();
 	},
 	// Eingabeformular: Titelaufnahme speichern
