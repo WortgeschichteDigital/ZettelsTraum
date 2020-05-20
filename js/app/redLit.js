@@ -1228,7 +1228,8 @@ let redLit = {
 	// Suche: starten
 	sucheStarten () {
 		// Filterkriterien auslesen/Variablen vorbereiten
-		let text = helfer.textTrim(document.getElementById("red-lit-suche-text").value, true),
+		let input = document.getElementById("red-lit-suche-text"),
+			text = helfer.textTrim(input.value, true),
 			ab = document.getElementById("red-lit-suche-ab").value,
 			st = null,
 			da = null;
@@ -1369,6 +1370,8 @@ let redLit = {
 		treffer.sort(redLit.dbSortAufnahmen);
 		// Suchtreffer anzeigen
 		redLit.sucheAnzeigen(0);
+		// Suchtext selektieren
+		input.select();
 	},
 	// Suche: Treffer anzeigen
 	//   start = Number
