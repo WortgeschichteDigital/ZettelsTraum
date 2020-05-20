@@ -1165,6 +1165,46 @@ let redLit = {
 			tastatur.detectModifiers(evt);
 			if (!tastatur.modifiers && evt.key === "Enter") {
 				redLit.sucheStarten();
+			} else if (this.id === "red-lit-suche-text") {
+				if (tastatur.modifiers === "Ctrl" && /^(ArrowLeft|ArrowRight)$/.test(evt.key)) {
+					evt.preventDefault();
+					if (evt.repeat) { // Repeats unterbinden
+						return;
+					}
+					let a = document.querySelectorAll("#red-lit-suche-treffer a");
+					if (evt.key === "ArrowLeft") {
+						a[0].dispatchEvent(new MouseEvent("click"));
+					} else {
+						a[1].dispatchEvent(new MouseEvent("click"));
+					}
+				} else if (!tastatur.modifiers && /^(ArrowDown|ArrowUp|PageDown|PageUp)$/.test(evt.key)) {
+					evt.preventDefault();
+					if (evt.repeat) { // Repeats unterbinden
+						return;
+					}
+					let titel = document.getElementById("red-lit-suche-titel"),
+						prozent = titel.offsetHeight / 100 * 88,
+						move = 0;
+					switch (evt.key) {
+						case "ArrowDown":
+							move = 40;
+							break;
+						case "ArrowUp":
+							move = -40;
+							break;
+						case "PageDown":
+							move = prozent;
+							break;
+						case "PageUp":
+							move = -prozent;
+							break;
+					}
+					titel.scrollTo({
+						top: titel.scrollTop + move,
+						left: 0,
+						behavior: "smooth",
+					});
+				}
 			}
 		});
 	},
