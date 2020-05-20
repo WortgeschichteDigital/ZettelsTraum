@@ -1584,7 +1584,7 @@ let redLit = {
 			}
 			let val = this.value;
 			val = val.toLowerCase();
-			val = val.replace(/\s/g, "-");
+			val = val.replace(/[\s/]/g, "-");
 			val = val.replace(/^[0-9]+|[^a-z0-9ßäöü-]/g, "");
 			document.getElementById("red-lit-eingabe-id").value = val;
 		});
@@ -1601,7 +1601,21 @@ let redLit = {
 					jahr = this.value.match(/[0-9]{4}/g),
 					sigle = [];
 				if (name[0]) {
-					sigle.push(name[0]);
+					let namen = this.value.split(":")[0].split("/");
+					if (namen.length > 3) {
+						sigle.push(`${name[0]} u. a.`);
+					} else if (namen.length > 1) {
+						let autoren = [];
+						for (let i of namen) {
+							let name = i.split(/[\s,]/);
+							if (name[0]) {
+								autoren.push(name[0]);
+							}
+						}
+						sigle.push(autoren.join("/"));
+					} else {
+						sigle.push(name[0]);
+					}
 				}
 				if (jahr && jahr.length) {
 					sigle.push(jahr[jahr.length - 1]);
