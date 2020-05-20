@@ -691,6 +691,48 @@ let helfer = {
 			shell.openExternal(url);
 		});
 	},
+	// lädt den Inhalt der übergebenen URL herunter
+	//   url = String
+	//     (URL, deren Inhalt heruntergeladen werden soll)
+	fetchURL (url) {
+		return new Promise(async resolve => {
+			// Abort-Controller initialisieren
+			let controller = new AbortController();
+			setTimeout(() => controller.abort(), parseInt(optionen.data.einstellungen.timeout, 10) * 1000);
+			// Feedback vorbereiten
+			let feedback = {
+				fetchOk: true,
+				fehler: "",
+				text: "",
+			};
+			// Fetch durchführen
+			let response;
+			try {
+				response = await fetch(url, {
+					signal: controller.signal,
+				});
+			} catch (err) {
+				feedback.fetchOk = false;
+				if (err.name === "AbortError") {
+					feedback.fehler = "Timeout-Fehler";
+				} else {
+					feedback.fehler = `${err.name}: ${err.message}`;
+				}
+				resolve(feedback);
+				throw err;
+			}
+			// Antwort des Servers fehlerhaft
+			if (!response.ok) {
+				feedback.fehler = `HTTP-Status-Code ${response.status}`;
+				resolve(feedback);
+				return;
+			}
+			// Antworttext auslesen
+			feedback.text = await response.text();
+			// Promise auflösen
+			resolve(feedback);
+		});
+	},
 	// öffnet den Dateimanager im Ordner der übergebenen Datei
 	//   pfad = String
 	//     (Pfad zu einer Datei)
