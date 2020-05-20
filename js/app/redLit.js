@@ -1513,6 +1513,7 @@ let redLit = {
 				// das muss zeitverzögert stattfinden, sonst ist das Feld noch leer
 				setTimeout(() => {
 					this.value = redLit.eingabeFormatTitel(this.value);
+					helfer.textareaGrow(this);
 				}, 25);
 			});
 		}
