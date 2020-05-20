@@ -1718,6 +1718,74 @@ let redLit = {
 		}
 		return titel;
 	},
+	// Eingabeformular: DTA-Import
+	async eingabeDTA () {
+		// URL-Feld auslesen
+		let url = document.getElementById("red-lit-eingabe-ul").value;
+		// Formular leeren
+		redLit.eingabeLeeren();
+		redLit.eingabeStatus("add");
+		// DTA-URL suchen
+		const {clipboard} = require("electron"),
+			cp = clipboard.readText();
+		if (/^https?:\/\/www\.deutschestextarchiv\.de\//.test(cp)) {
+			url = cp;
+		} else if (!/^https?:\/\/www\.deutschestextarchiv\.de\//.test(url)) {
+			url = "";
+		}
+		// kein DTA-Link gefunden
+		if (!url) {
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Weder in der Zwischenablage noch im URL-Feld wurde ein DTA-Link gefunden.",
+				callback: () => document.getElementById("red-lit-eingabe-ti-dta").focus(),
+			});
+			return;
+		}
+		// Titel-ID ermitteln
+		let titelId = belegImport.DTAGetTitelId(url);
+		if (!titelId) {
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Aus dem DTA-Link konnte keine Titel-ID extrahiert werden.",
+				callback: () => document.getElementById("red-lit-eingabe-ti-dta").focus(),
+			});
+			return;
+		}
+		// TEI-Header herunterladen
+		let feedback = await helfer.fetchURL(`http://www.deutschestextarchiv.de/api/tei_header/${titelId}`);
+		if (feedback.fehler) {
+			dialog.oeffnen({
+				typ: "alert",
+				text: `Der Download der Titeldaten des DTA ist gescheitert.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${feedback.fehler}</p>`,
+				callback: () => document.getElementById("red-lit-eingabe-ti-dta").focus(),
+			});
+			return;
+		}
+		// Titeldaten ermitteln
+		let parser = new DOMParser(),
+			xmlDoc = parser.parseFromString(feedback.text, "text/xml");
+		if (xmlDoc.querySelector("parsererror")) {
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Die XML-Daten des DTA sind nicht wohlgeformt.",
+				callback: () => document.getElementById("red-lit-eingabe-ti-dta").focus(),
+			});
+			return;
+		}
+		belegImport.DTAResetData();
+		belegImport.DTAMeta(xmlDoc);
+		// Titel-Feld ausfüllen
+		let ti = document.getElementById("red-lit-eingabe-ti");
+		ti.value = belegImport.DTAQuelle(false);
+		ti.dispatchEvent(new KeyboardEvent("input"));
+		// URL-Feld ausfüllen
+		let ul = document.getElementById("red-lit-eingabe-ul");
+		ul.value = `http://www.deutschestextarchiv.de/${titelId}`;
+		ul.dispatchEvent(new KeyboardEvent("input"));
+		// Titelfeld fokussieren
+		ti.focus();
+	},
 	// Eingabeformular: XML-Import aus der Zwischenablage
 	eingabeXML () {
 		// Formular leeren

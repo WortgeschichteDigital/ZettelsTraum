@@ -317,6 +317,10 @@ window.addEventListener("load", async () => {
 	document.querySelectorAll("#red-lit-suche-sonder a").forEach(a => redLit.sucheSonder(a));
 	document.querySelectorAll("#red-lit-suche-treffer a").forEach(a => redLit.sucheNav(a));
 	document.querySelectorAll("#red-lit-eingabe input, #red-lit-eingabe textarea").forEach(i => redLit.eingabeListener(i));
+	document.getElementById("red-lit-eingabe-ti-dta").addEventListener("click", evt => {
+		evt.preventDefault();
+		redLit.dbCheck(() => redLit.eingabeDTA(), false);
+	});
 	document.getElementById("red-lit-eingabe-ti-xml").addEventListener("click", evt => {
 		evt.preventDefault();
 		redLit.dbCheck(() => redLit.eingabeXML(), false);
