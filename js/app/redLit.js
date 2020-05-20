@@ -1172,7 +1172,19 @@ let redLit = {
 			if (!tastatur.modifiers && evt.key === "Enter") {
 				redLit.sucheStarten();
 			} else if (this.id === "red-lit-suche-text") {
-				if (tastatur.modifiers === "Ctrl" && /^(ArrowLeft|ArrowRight)$/.test(evt.key)) {
+				if (tastatur.modifiers === "Ctrl" && evt.key === "Enter") {
+					let titel = document.getElementById("red-lit-suche-titel");
+					if (titel.classList.contains("aus")) {
+						return;
+					}
+					for (let i of titel.querySelectorAll(".red-lit-snippet")) {
+						if (i.offsetTop >= titel.scrollTop - 10) { // 10px padding-top
+							let ds = JSON.parse(i.dataset.ds);
+							redLit.anzeigePopup(ds);
+							break;
+						}
+					}
+				} else if (tastatur.modifiers === "Ctrl" && /^(ArrowLeft|ArrowRight)$/.test(evt.key)) {
 					evt.preventDefault();
 					if (evt.repeat) { // Repeats unterbinden
 						return;
