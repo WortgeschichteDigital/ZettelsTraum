@@ -764,11 +764,12 @@ let beleg = {
 	//     (Bezeichner des Datensatzes)
 	//   obj = Object
 	//     (verweist auf das Datenobjekt, in dem der zu kopierende Text steht;
-	//     wichtig, um die Literaturangabe beim Kopieren von Belegtext zu finden
+	//     wichtig, um die Literaturangabe beim Kopieren von Belegtext zu finden)
 	//   text = String
 	//     (der komplette Feldtext, wie er in der DB steht)
-	//   ele = Element
-	//     (ein Element auf der 1. Ebene im Kopierbereich)
+	//   ele = Element || null
+	//     (ein Element auf der 1. Ebene im Kopierbereich; "ele" kann "null" sein,
+	//     wenn die Leseansicht noch nie aufgebaut wurde)
 	toolsKopierenExec (ds, obj, text, ele) {
 		// clipboard initialisieren
 		const {clipboard} = require("electron");
@@ -794,8 +795,16 @@ let beleg = {
 			});
 			// Referenz vorbereiten
 			popup.referenz.data = obj;
-			let eleListe = ele.closest(".liste-details"),
+			let eleListe, eleKarte;
+			if (!ele) {
+				// wenn die Leseansicht noch nie aufgebaut wurde,
+				// kann ele === null sein; dann erfolgt das Kopieren immer
+				// aus dem Karteikartenformular heraus
+				eleKarte = true;
+			} else if (ele) {
+				eleListe = ele.closest(".liste-details");
 				eleKarte = ele.closest("tr");
+			}
 			if (eleListe) {
 				popup.referenz.id = eleListe.previousSibling.dataset.id;
 			} else if (eleKarte) {
