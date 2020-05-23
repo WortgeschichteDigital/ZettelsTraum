@@ -50,6 +50,12 @@ let beleg = {
 		}
 		// Karte anzeigen
 		beleg.formular(true);
+		// Fenster nach oben scrollen
+		window.scrollTo({
+			left: 0,
+			top: 0,
+			behavior: "smooth",
+		});
 	},
 	// ermittelt die nächste ID, die in der aktuellen Kartei vergeben werden sollte
 	idErmitteln () {
