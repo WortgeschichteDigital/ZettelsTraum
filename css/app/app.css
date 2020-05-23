@@ -288,6 +288,11 @@ a {
 	mask-image: url(../../img/pfeil-gerade-rechts.svg);
 }
 
+.icon-pfeil-kreis {
+	-webkit-mask-image: url(../../img/pfeil-kreis.svg);
+	mask-image: url(../../img/pfeil-kreis.svg);
+}
+
 .icon-speichern {
 	-webkit-mask-image: url(../../img/speichern.svg);
 	mask-image: url(../../img/speichern.svg);

@@ -743,6 +743,8 @@ let beleg = {
 			} else if (this.parentNode.classList.contains("text-tools-beleg") ||
 				this.parentNode.classList.contains("text-tools-bedeutung")) {
 				beleg.toolsText(this);
+			} else if (this.parentNode.classList.contains("text-tools-quelle")) {
+				beleg.toolsQuelleLaden();
 			}
 		});
 	},
@@ -1262,6 +1264,130 @@ let beleg = {
 			}
 		}
 		return false; // offenbar kein illegales Nesting
+	},
+	// Inhalt des Quelle-Felds neu laden
+	async toolsQuelleLaden () {
+		// Titelinfos aus bx laden
+		let bx = beleg.bxTyp({bx: beleg.data.bx});
+		if (bx.typ) {
+			let titel = "";
+			if (bx.typ === "bibtex") {
+				let bibtex = belegImport.BibTeXLesen(bx.daten, true);
+				if (bibtex.length) {
+					titel = bibtex[0].ds.qu;
+				}
+			} else if (bx.typ === "dereko") {
+				let reg = new RegExp(`^(${belegImport.DeReKoId})(.+)`);
+				titel = bx.daten.match(reg)[2];
+			} else if (bx.typ === "xml-dwds") {
+				let dwds = belegImport.DWDSLesenXML({
+					clipboard: "",
+					xml: bx.daten,
+					returnResult: true,
+				});
+				if (dwds.qu) {
+					titel = dwds.qu;
+				}
+			}
+			if (titel) {
+				quelleFuellen(titel);
+			} else {
+				dialog.oeffnen({
+					typ: "alert",
+					text: "Beim Einlesen der Titeldaten ist etwas schiefgelaufen.",
+				});
+			}
+			return;
+		}
+		// Titelinfos herunterladen
+		let url = liste.linksErkennen(beleg.data.qu);
+		if (/href="/.test(url)) {
+			url = url.match(/href="(.+?)"/)[1];
+		}
+		if (/^https?:\/\/www\.deutschestextarchiv\.de\//.test(url)) {
+			const fetchOk = await redLit.eingabeDTAFetch({
+				url,
+				fokusId: "beleg-qu",
+			});
+			if (fetchOk) {
+				quelleFuellen(belegImport.DTAQuelle(true));
+			}
+			return;
+		}
+		// keine Quelle gefunden
+		dialog.oeffnen({
+			typ: "alert",
+			text: "Es wurde keine Quelle gefunden, aus der die Titeldaten automatisch neu geladen werden könnten.",
+		});
+		// Quellenfeld ausfüllen
+		function quelleFuellen (titel) {
+			let quelle = document.getElementById("beleg-qu");
+			if (quelle.value !== titel) {
+				quelle.value = titel;
+				helfer.textareaGrow(quelle);
+				beleg.belegGeaendert(true);
+				let icon = document.querySelector(".text-tools-quelle .icon-pfeil-kreis");
+				icon.classList.add("rotieren-bitte");
+				setTimeout(() => icon.classList.remove("rotieren-bitte"), 500);
+			}
+			quelle.focus();
+		}
+	},
+	// Typ der Daten im bx-Datensatz ermitteln
+	//   bx = String
+	//     (Datensatz, der überprüft werden soll)
+	bxTyp ({bx}) {
+		// keine Daten vorhanden
+		if (!bx) {
+			return {
+				typ: "",
+				daten: "",
+			};
+		}
+		// BibTeX-Daten
+		if (belegImport.BibTeXCheck(bx)) {
+			return {
+				typ: "bibtex",
+				daten: bx,
+			};
+		}
+		// DeReKo-Daten
+		let reg = new RegExp(`^${belegImport.DeReKoId}`);
+		if (reg.test(bx)) {
+			return {
+				typ: "dereko",
+				daten: bx,
+			};
+		}
+		// XML-Daten
+		let parser = new DOMParser(),
+			xmlDoc = parser.parseFromString(bx, "text/xml");
+		if (!xmlDoc.querySelector("parsererror")) {
+			let evaluator = (xpath) => {
+				return xmlDoc.evaluate(xpath, xmlDoc, null, XPathResult.ANY_TYPE, null).iterateNext();
+			};
+			let typ = "";
+			if (evaluator("//teiHeader/sourceDesc/biblFull")) {
+				typ = "xml-dta";
+			} else if (evaluator("/Beleg/Fundstelle")) {
+				typ = "xml-dwds";
+			} else if (evaluator("/Fundstelle")) {
+				typ = "xml-fundstelle";
+			} else if (evaluator("/mods/titleInfo")) {
+				typ = "xml-mods";
+			} else {
+				typ = "";
+			}
+			return {
+				typ,
+				daten: xmlDoc,
+			};
+		}
+		// Datenformat unbekannt
+		return {
+			typ: "",
+			daten: "",
+		};
 	},
 	// Bewertung des Belegs vor- od. zurücknehmen
 	//   stern = Element

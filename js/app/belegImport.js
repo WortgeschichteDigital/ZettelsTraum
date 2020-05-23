@@ -844,13 +844,9 @@ let belegImport = {
 		}
 		return true;
 	},
-	// DWDS-Import: XML-Daten einlesen
-	//   doc = Object
-	//     (Clipboard-Content [doc.clipboard] und geparstes XML-Dokument [doc.xml])
-	DWDSLesenXML (doc) {
-		// Zwischenspeicher zurücksetzen
-		belegImport.Datei.meta = "";
-		belegImport.Datei.data = [{
+	// DWDS-Import: einen leeren Datensatz erzeugen
+	DWDSDatensatz () {
+		return {
 			importiert: false,
 			ds: {
 				au: "N. N.", // Autor
@@ -862,15 +858,33 @@ let belegImport = {
 				qu: "", // Quellenangabe
 				ts: "", // Textsorte
 			},
-		}];
-		let data = belegImport.Datei.data[0].ds;
+		};
+	},
+	// DWDS-Import: XML-Daten einlesen
+	//   clipboard = String
+	//     (Clipboard-Content)
+	//   xml = Document
+	//     (das geparste XML-Dokument)
+	//   returnResult = true || undefined
+	//     (das Ergebnis der Analyse soll nciht in den Datei-Zwischenspeicher
+	//     geschrieben, sondern direkt zurückgegeben werden)
+	DWDSLesenXML ({clipboard, xml, returnResult = false}) {
+		// Datenobjekt erzeugen
+		let data;
+		if (returnResult) {
+			data = belegImport.DWDSDatensatz().ds;
+		} else {
+			belegImport.Datei.meta = "";
+			belegImport.Datei.data = [belegImport.DWDSDatensatz()];
+			data = belegImport.Datei.data[0].ds;
+		}
 		// Datensatz: Datum
-		let nDa = doc.xml.querySelector("Fundstelle Datum");
+		let nDa = xml.querySelector("Fundstelle Datum");
 		if (nDa && nDa.firstChild) {
 			data.da = nDa.firstChild.nodeValue;
 		}
 		// Datensatz: Autor
-		let nAu = doc.xml.querySelector("Fundstelle Autor");
+		let nAu = xml.querySelector("Fundstelle Autor");
 		if (nAu && nAu.firstChild) {
 			data.au = belegImport.DWDSKorrekturen({
 				typ: "au",
@@ -878,7 +892,7 @@ let belegImport = {
 			});
 		}
 		// Datensatz: Beleg
-		let nBs = doc.xml.querySelector("Belegtext");
+		let nBs = xml.querySelector("Belegtext");
 		if (nBs && nBs.firstChild) {
 			let bs = [],
 				bsContent = nBs.textContent.replace(/<Stichwort>(.+?)<\/Stichwort>/g, (m, p1) => p1);
@@ -896,14 +910,14 @@ let belegImport = {
 			data.bs = bs.join("\n\n");
 		}
 		// Datensatz: Beleg-XML
-		data.bx = doc.clipboard;
+		data.bx = clipboard;
 		// Datensatz: Quelle
-		let nQu = doc.xml.querySelector("Fundstelle Bibl");
+		let nQu = xml.querySelector("Fundstelle Bibl");
 		if (nQu && nQu.firstChild) {
-			let nTitel = doc.xml.querySelector("Fundstelle Titel"),
-				nSeite = doc.xml.querySelector("Fundstelle Seite"),
-				nURL = doc.xml.querySelector("Fundstelle URL"),
-				nAuf = doc.xml.querySelector("Fundstelle Aufrufdatum");
+			let nTitel = xml.querySelector("Fundstelle Titel"),
+				nSeite = xml.querySelector("Fundstelle Seite"),
+				nURL = xml.querySelector("Fundstelle URL"),
+				nAuf = xml.querySelector("Fundstelle Aufrufdatum");
 			let titeldaten = {
 				titel: nTitel && nTitel.firstChild ? nTitel.firstChild.nodeValue : "",
 				seite: nSeite && nSeite.firstChild ? nSeite.firstChild.nodeValue : "",
@@ -919,7 +933,7 @@ let belegImport = {
 		}
 		// Datensatz: Korpus
 		let korpus = "",
-			nKr = doc.xml.querySelector("Fundstelle Korpus");
+			nKr = xml.querySelector("Fundstelle Korpus");
 		if (nKr && nKr.firstChild) {
 			korpus = nKr.firstChild.nodeValue;
 			if (/^dta/.test(korpus)) {
@@ -930,7 +944,7 @@ let belegImport = {
 			}
 		}
 		// Datensatz: Textsorte
-		let nTs = doc.xml.querySelector("Fundstelle Textklasse");
+		let nTs = xml.querySelector("Fundstelle Textklasse");
 		if (korpus &&
 				belegImport.DWDSKorpora[korpus] &&
 				belegImport.DWDSKorpora[korpus].ts) {
@@ -942,13 +956,17 @@ let belegImport = {
 			});
 		}
 		// Datensatz: Notizen
-		let nDok = doc.xml.querySelector("Fundstelle Dokument");
+		let nDok = xml.querySelector("Fundstelle Dokument");
 		if (nDok && nDok.firstChild) {
 			data.no = belegImport.DWDSKorrekturen({
 				typ: "no",
 				txt: nDok.firstChild.nodeValue,
 				korpus
 			});
+		}
+		// ggf. Datensatz direkt zurückgeben
+		if (returnResult) {
+			return data;
 		}
 	},
 	// DWDS-Import: JSON-Daten einlesen
@@ -961,19 +979,7 @@ let belegImport = {
 		// Datensätze parsen
 		for (let i of json) {
 			// Datensatz vorbereiten
-			let data = {
-				importiert: false,
-				ds: {
-					au: "N. N.", // Autor
-					bs: "", // Beleg
-					bx: "", // Original
-					da: "", // Belegdatum
-					kr: "DWDS", // Korpus
-					no: "", // Notizen
-					qu: "", // Quellenangabe
-					ts: "", // Textsorte
-				},
-			};
+			let data = belegImport.DWDSDatensatz();
 			belegImport.Datei.data.push(data);
 			// Datensatz: Datum
 			if (i.meta_.date_) {
@@ -1791,6 +1797,8 @@ let belegImport = {
 			}
 		}
 	},
+	// Form der ID eines DeReKo-Belegs
+	DeReKoId: "[a-zA-Z0-9]+?\\/[a-zA-Z0-9]+?\\.[0-9]+?\\s",
 	// DeReKo-Import: Belege parsen
 	//   belege = String
 	//     (die exportierte Belegreihe)
@@ -1798,10 +1806,9 @@ let belegImport = {
 		// Zwischenspeicher zurücksetzen
 		belegImport.Datei.data = [];
 		// Zeilen analysieren
-		let regId = "[a-zA-Z0-9]+?\\/[a-zA-Z0-9]+?\\.[0-9]+?\\s",
-			regQuVor = new RegExp(`^(${regId})(.+)`),
-			regQuNach = new RegExp(`\\s\\((${regId})(.+)\\)$`),
-			regQuNachId = new RegExp(`\\s\\(${regId}`),
+		let regQuVor = new RegExp(`^(${belegImport.DeReKoId})(.+)`),
+			regQuNach = new RegExp(`\\s\\((${belegImport.DeReKoId})(.+)\\)$`),
+			regQuNachId = new RegExp(`\\s\\(${belegImport.DeReKoId}`),
 			id = "",
 			quelle = "",
 			beleg = [];
@@ -1915,9 +1922,9 @@ let belegImport = {
 	// BibTeX-Import: Daten einlesen
 	//   content = String
 	//     (Inhalt der Datei)
-	//   ziel = String || undefined
-	//     ("literatur-db", wenn aus Eingabeformular der Literaturdatenbank aufgerufen)
-	BibTeXLesen (content, ziel = "karteikarte") {
+	//   returnResult = true || undefined
+	//     (es soll ein String zurückgegeben werden)
+	BibTeXLesen (content, returnResult = false) {
 		// Content fixen
 		content = belegImport.BibTeXFix(content);
 		// Zwischenspeicher der Titel
@@ -1956,7 +1963,7 @@ let belegImport = {
 		// Daten in den Zwischenspeicher eintragen
 		// (nur wenn welche vorhanden sind)
 		if (titel.length) {
-			if (ziel === "literatur-db") {
+			if (returnResult) {
 				return titel;
 			}
 			belegImport.Datei.meta = "";

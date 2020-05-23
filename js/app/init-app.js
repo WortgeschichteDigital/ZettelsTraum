@@ -197,7 +197,7 @@ window.addEventListener("load", async () => {
 	document.querySelectorAll("#beleg .icon-link").forEach(a => {
 		if (a.classList.contains("icon-stern")) { // Bewertung
 			beleg.bewertungEvents(a);
-		} else if (/icon-tools-/.test(a.getAttribute("class"))) { // Text-Tools
+		} else if (/icon-tools/.test(a.getAttribute("class"))) { // Text-Tools
 			beleg.toolsKlick(a);
 		}
 	});

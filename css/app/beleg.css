@@ -257,21 +257,24 @@ textarea#beleg-bs {
 }
 
 .text-tools-beleg,
-.text-tools-bedeutung {
+.text-tools-bedeutung,
+.text-tools-quelle {
 	position: absolute;
 	right: 78px;
 }
 
 .text-tools a,
 .text-tools-beleg a,
-.text-tools-bedeutung a {
+.text-tools-bedeutung a,
+.text-tools-quelle a {
 	display: inline-block;
 	background-color: var(--textExtremHell);
 }
 
 .text-tools a:hover,
 .text-tools-beleg a:hover,
-.text-tools-bedeutung a:hover {
+.text-tools-bedeutung a:hover,
+.text-tools-quelle a:hover {
 	background-color: var(--text);
 }
 
