@@ -1868,84 +1868,192 @@ let redLit = {
 		});
 	},
 	// Eingabeformular: XML-Import aus der Zwischenablage
-	eingabeXML () {
+	async eingabeXML () {
+		// PPN-Feld auslesen
+		let pn = document.getElementById("red-lit-eingabe-pn"),
+			ppn = pn.value.split(/[,\s]/)[0];
+		if (!/^[0-9]{8,10}X?$/.test(ppn)) {
+			ppn = "";
+		}
 		// Formular leeren
 		redLit.eingabeLeeren();
 		redLit.eingabeStatus("add");
-		// Zwischenablage einlesen
+		// XML-Daten suchen
 		const {clipboard} = require("electron"),
-			cp = clipboard.readText(),
-			xmlDoc = redLit.eingabeXMLCheck(cp);
-		// kein Fundstellen-Snippet in der Zwischenablage
-		if (!xmlDoc) {
+			cp = clipboard.readText();
+		let xmlDaten = redLit.eingabeXMLCheck({xmlStr: cp});
+		if (/^[0-9]{8,10}X?$/.test(cp)) {
+			ppn = cp;
+		} else if (xmlDaten) {
+			ppn = "";
+		}
+		if (ppn) {
+			// MODS-Dokument herunterladen
+			let feedback = await helfer.fetchURL(`https://unapi.k10plus.de/?id=gvk:ppn:${ppn}&format=mods`);
+			// Fehler-Handling
+			if (feedback.fehler) {
+				dialog.oeffnen({
+					typ: "alert",
+					text: `Der Download des XML-Dokuments mit den Titeldaten ist gescheitert.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${feedback.fehler}</p>`,
+					callback: () => document.getElementById("red-lit-eingabe-ti-xml").focus(),
+				});
+				return;
+			}
+			xmlDaten = redLit.eingabeXMLCheck({xmlStr: feedback.text});
+			if (!xmlDaten) {
+				dialog.oeffnen({
+					typ: "alert",
+					text: `Bei den aus dem GVK heruntergeladenen Daten handelt es sich nicht um ein XML-Dokument, dessen Titeldaten ausgelesen werden könnten.`,
+					callback: () => document.getElementById("red-lit-eingabe-ti-xml").focus(),
+				});
+				return;
+			}
+		}
+		// keine XML-Daten in der Zwischenablage
+		if (!xmlDaten) {
 			dialog.oeffnen({
 				typ: "alert",
-				text: "In der Zwischenablage befindet sich kein XML-Snippet, aus dem eine Titelaufnahme importiert werden könnte.",
+				text: "In der Zwischenablage befindet sich kein XML-Dokument, aus dem eine Titelaufnahme importiert werden könnte.",
 				callback: () => document.getElementById("red-lit-eingabe-ti-xml").focus(),
 			});
 			return;
 		}
-		// Titelaufnahme übernehmen
+		// XML-Daten gefunden => Titelaufnahme übernehmen
+		if (xmlDaten.td.ti) {
+			let feld = document.getElementById("red-lit-eingabe-ti");
+			feld.value = redLit.eingabeFormatTitel(xmlDaten.td.ti);
+			feld.dispatchEvent(new KeyboardEvent("input"));
+		}
+		if (xmlDaten.td.si) {
+			document.getElementById("red-lit-eingabe-si").value = xmlDaten.td.si;
+		}
+		if (xmlDaten.td.id) {
+			document.getElementById("red-lit-eingabe-id").value = xmlDaten.td.id;
+		}
+		if (xmlDaten.td.ul) {
+			let feld = document.getElementById("red-lit-eingabe-ul");
+			feld.value = xmlDaten.td.ul;
+			feld.dispatchEvent(new KeyboardEvent("input"));
+		}
+		if (xmlDaten.td.ad) {
+			document.getElementById("red-lit-eingabe-ad").value = xmlDaten.td.ad;
+		}
+		if (xmlDaten.td.fo) {
+			document.getElementById("red-lit-eingabe-fo").value = xmlDaten.td.fo;
+		}
+		if (xmlDaten.td.pn) {
+			document.getElementById("red-lit-eingabe-pn").value = xmlDaten.td.pn;
+		}
+		// Titelfeld fokussieren
+		document.getElementById("red-lit-eingabe-ti").focus();
+	},
+	// Eingabeformular: überprüft, ob sich hinter einem String ein passendes XML-Dokument verbirgt
+	//   xmlStr = String
+	//     (String, der überprüft werden soll)
+	eingabeXMLCheck ({xmlStr}) {
+		// Daten beginnen nicht mit <Fundstelle>, <mods> oder XML-Deklaration
+		if (!/^<(Fundstelle|mods|\?xml)/.test(xmlStr)) {
+			return false;
+		}
+		// XML nicht wohlgeformt
+		let parser = new DOMParser(),
+			xmlDoc = parser.parseFromString(xmlStr, "text/xml");
+		if (xmlDoc.querySelector("parsererror")) {
+			return false;
+		}
+		// Fundstellen-Snippet
+		if (xmlDoc.querySelector("Fundstelle unstrukturiert")) {
+			return redLit.eingabeXMLFundstelle({xmlDoc, xmlStr});
+		}
+		// MODS-Dokument
+		if (xmlDoc.querySelector("mods titleInfo")) {
+			return redLit.eingabeXMLMODS(xmlDoc, xmlStr);
+		}
+		// kein passendes XML-Dokument
+		return false;
+	},
+	// Eingabeformular: einen leeren Datensatz zur Verfügung stellen
+	// (der Datensatz muss so strukturiert sein, dass man ihn auch zum
+	// Import in eine Karteikarte nutzen kann)
+	eingabeXMLDatensatz () {
+		let data = belegImport.DateiDatensatz();
+		data.td = {
+			si: "", // Sigle
+			id: "", // ID
+			ti: "", // Titel
+			ul: "", // URL
+			ad: "", // Aufrufdatum
+			fo: "", // Fundort
+			pn: "", // PPN
+		};
+		return data;
+	},
+	// Eingabeformular: Fundstellen-Snippet auslesen
+	//   xmlDoc = Document
+	//     (das geparste XML-Snippet)
+	//   xmlStr = String
+	//     (das nicht geparste Originaldokument)
+	eingabeXMLFundstelle ({xmlDoc, xmlStr}) {
+		let data = redLit.eingabeXMLDatensatz();
+		// Daten für Titelaufnahme in der Literaturdatenbank
 		let ti = xmlDoc.querySelector("unstrukturiert");
 		if (ti) {
-			let feld = document.getElementById("red-lit-eingabe-ti");
-			feld.value = redLit.eingabeFormatTitel(ti.firstChild.nodeValue);
-			feld.dispatchEvent(new KeyboardEvent("input"));
+			data.td.ti = ti.textContent;
 		}
 		let si = xmlDoc.querySelector("Sigle");
 		if (si) {
-			document.getElementById("red-lit-eingabe-si").value = si.firstChild.nodeValue;
+			data.td.si = si.textContent;
 		}
 		let id = xmlDoc.querySelector("Fundstelle").getAttribute("xml:id");
 		if (id) {
-			document.getElementById("red-lit-eingabe-id").value = id;
+			data.td.id = id;
 		}
 		let ul = xmlDoc.querySelector("URL");
 		if (ul) {
-			let feld = document.getElementById("red-lit-eingabe-ul");
-			feld.value = ul.firstChild.nodeValue;
-			feld.dispatchEvent(new KeyboardEvent("input"));
+			data.td.ul = ul.textContent;
 		}
 		let ad = xmlDoc.querySelector("Aufrufdatum");
 		if (ad) {
-			let da = ad.firstChild.nodeValue.split(".");
-			document.getElementById("red-lit-eingabe-ad").value = `${da[2]}-${da[1]}-${da[0]}`;
+			let da = ad.textContent.split(".");
+			data.td.ad = `${da[2]}-${da[1]}-${da[0]}`;
 		}
 		let fo = xmlDoc.querySelector("Fundort");
 		if (fo) {
-			document.getElementById("red-lit-eingabe-fo").value = fo.firstChild.nodeValue;
+			data.td.fo = fo.textContent;
 		}
 		let pn = xmlDoc.querySelectorAll("PPN");
 		if (pn) {
 			let ppn = [];
 			for (let i of pn) {
-				ppn.push(i.firstChild.nodeValue);
+				ppn.push(i.textContent);
 			}
-			document.getElementById("red-lit-eingabe-pn").value = ppn.join(", ");
+			data.td.pn = ppn.join(", ");
 		}
-		// Titelfeld fokussieren
-		document.getElementById("red-lit-eingabe-ti").focus();
-	},
-	// Eingabeformular: überprüft, ob in der Zwischenablage wirklich ein Fundstellen-Snippet liegt
-	//   cp = String || undefined
-	//     (Text-Inhalt des Clipboards)
-	eingabeXMLCheck (cp) {
-		// Daten beginnen nicht mit <Fundstelle>
-		if (!/^<Fundstelle/.test(cp)) {
-			return false;
+		// Daten für die Karteikarte
+		data.ds.au = "N. N.";
+		let autor = data.td.ti.split(": ")[0].split(", ");
+		if (autor.length === 2) {
+			data.ds.au = autor.join(", ");
 		}
-		// XML nicht wohlgeformt
-		let parser = new DOMParser(),
-			xmlDoc = parser.parseFromString(cp, "text/xml");
-		if (xmlDoc.querySelector("parsererror")) {
-			return false;
+		data.ds.bx = xmlStr;
+		let jahr = data.td.ti.match(/[0-9]{4}/g);
+		if (jahr) {
+			data.ds.da = jahr[jahr.length - 1];
 		}
-		// kein <unstrukturiert>
-		if (!xmlDoc.querySelector("Fundstelle unstrukturiert")) {
-			return false;
+		data.ds.qu = data.td.ti;
+		if (data.td.ul) {
+			data.ds.qu += `\n\n${data.td.ul}`;
+			if (data.td.ad) {
+				data.ds.qu += ` (Aufrufdatum: ${ad.textContent})`;
+			}
+			if (/books\.google/.test(data.td.ul)) {
+				data.td.kr = "GoogleBooks";
+			} else if (/^https?:\/\/www\.deutschestextarchiv\.de\//.test(data.td.ul)) {
+				data.td.kr = "DTA";
+			}
 		}
-		// korrektes XML-Dokument
-		return xmlDoc;
+		// Datensatz zurückgeben
+		return data;
 	},
 	// Eingabeformular: BibTeX-Import aus der Zwischenablage
 	async eingabeBibTeX () {
