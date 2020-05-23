@@ -1360,7 +1360,11 @@ let beleg = {
 				// visuelles Feedback
 				let icon = document.querySelector(".text-tools-quelle .icon-pfeil-kreis");
 				icon.classList.add("rotieren-bitte");
-				setTimeout(() => icon.classList.remove("rotieren-bitte"), 500);
+				quelle.classList.add("neu-geladen");
+				setTimeout(() => {
+					icon.classList.remove("rotieren-bitte");
+					quelle.classList.remove("neu-geladen");
+				}, 1e3);
 			}
 			quelle.focus();
 		}
