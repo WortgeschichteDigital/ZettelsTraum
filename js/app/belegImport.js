@@ -1769,7 +1769,7 @@ let belegImport = {
 				quelle = match[2];
 				zeile = zeile.split(regQuNachId)[0];
 			}
-			beleg.push(zeile.replace(/<B>|<\/B*>/g, "").trim());
+			beleg.push(zeile.replace(/<B>|<\/B?>/g, "").trim());
 		}
 		pushBeleg();
 		// Beleg pushen
