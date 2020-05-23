@@ -404,6 +404,21 @@ let helfer = {
 		}
 		return 1;
 	},
+	// URLs nach Domain sortieren
+	//   a = String
+	//   b = String
+	sortURL (a, b) {
+		if (/books\.google/.test(a)) {
+			return -1;
+		} else if (/books\.google/.test(b)) {
+			return 1;
+		} else if (/doi\.org/.test(a)) {
+			return -1;
+		} else if (/doi\.org/.test(b)) {
+			return 1;
+		}
+		return 0;
+	},
 	// Strings nach Länge sortieren (kürzeste zuletzt), Fallback: alphanumerische Sortierung
 	//   a = String
 	//   b = String
