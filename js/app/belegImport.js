@@ -1248,7 +1248,7 @@ let belegImport = {
 				}
 			}
 			// Steht im Autor-Feld kein Name, in der Quelle scheint aber einer zu sein?
-			if ((!data.au || data.au === "N. N.") && auQu.length > 1) {
+			if ((!data.au || /^N.\sN./.test(data.au)) && auQu.length > 1) {
 				data.au = auQu[0];
 			}
 		} else if (typ === "ts") { // TEXTSORTE
