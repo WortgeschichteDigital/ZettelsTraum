@@ -8,21 +8,23 @@ let belegImport = {
 		belegImport.DTAData = {
 			autor: [],
 			hrsg: [],
-			titel: "",
+			titel: [],
 			untertitel: [],
 			band: "",
 			auflage: "",
-			ort: "",
+			ort: [],
 			verlag: "",
-			datum: {
-				druck: "",
-				entstehung: "",
-			},
+			datum_druck: "",
+			datum_entstehung: "",
+			spalte: false,
+			seiten: "",
 			seite: "",
 			seite_zuletzt: "",
-			spalte: false,
+			zeitschrift: "",
+			zeitschrift_jg: "",
+			zeitschrift_h: "",
 			serie: "",
-			serie_seite: "",
+			serie_bd: "",
 			beleg: "",
 			textsorte: [],
 			textsorte_sub: [],
@@ -172,8 +174,11 @@ let belegImport = {
 					}
 					return;
 				}
-				belegImport.DTAMeta(ajax.responseXML);
-				belegImport.DTAText(ajax.responseXML, fak);
+				let text = ajax.responseText.replace(/ xmlns=".+?"/, ""); // da habe ich sonst Probleme mit evaluate() in belegImport.DTAMeta()
+				let parser = new DOMParser(),
+					xmlDoc = parser.parseFromString(text, "text/xml");
+				belegImport.DTAMeta(xmlDoc);
+				belegImport.DTAText(xmlDoc, fak);
 				belegImport.DTAFill();
 			} else {
 				belegImport.DTAFehler("XMLHttpRequest: falscher Status-Code");
@@ -193,7 +198,7 @@ let belegImport = {
 	DTAFehler (fehlertyp) {
 		dialog.oeffnen({
 			typ: "alert",
-			text: `Beim Download der Textdaten aus dem DTA ist ein <strong>Fehler</strong> aufgetreten.\n<h3>Fehlertyp</h3>\n${fehlertyp}`,
+			text: `Beim Download der Textdaten aus dem DTA ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n${fehlertyp}`,
 			callback: () => {
 				let dta = document.getElementById("beleg-dta");
 				dta.select();
@@ -201,130 +206,119 @@ let belegImport = {
 		});
 	},
 	// DTA-Import: Meta-Daten des Titels importieren
-	//   xml = Document
+	//   xmlDoc = Document
 	//     (entweder das komplette Buch, aus dem eine Seite importiert
 	//     werden soll [enthält auch den TEI-Header], oder ein XML-Dokument,
 	//     das allein die TEI-Header des Buchs umfasst)
-	DTAMeta (xml) {
-		// normale Werte
-		let bibl = xml.querySelector("teiHeader fileDesc sourceDesc biblFull"),
-			sorte = xml.querySelector("teiHeader profileDesc textClass");
-		let werte = {
-			titel: bibl.querySelector(`titleStmt title[type="main"]`),
-			untertitel: bibl.querySelectorAll(`titleStmt title[type="sub"]`),
-			band: bibl.querySelector(`titleStmt title[type="volume"]`),
-			auflage: bibl.querySelector("editionStmt edition"),
-			ort: bibl.querySelector("publicationStmt pubPlace"),
-			verlag: bibl.querySelector("publicationStmt publisher name"),
-			textsorte: sorte.querySelectorAll(`classCode[scheme$="dtamain"], classCode[scheme$="dwds1main"]`),
-			textsorte_sub: sorte.querySelectorAll(`classCode[scheme$="dtasub"], classCode[scheme$="dwds1sub"]`),
+	DTAMeta (xmlDoc) {
+		let evaluator = xpath => {
+			return xmlDoc.evaluate(xpath, xmlDoc, null, XPathResult.ANY_TYPE, null);
 		};
-		for (let wert in werte) {
-			if (!werte.hasOwnProperty(wert)) {
-				continue;
-			}
-			if (!werte[wert]) {
-				continue;
-			}
-			const text = getValue(werte[wert]);
-			if (!text) { // Tags können leer sein
-				continue;
-			}
-			belegImport.DTAData[wert] = text;
-		}
-		function getValue (v) {
-			if (helfer.checkType("Element", v)) {
-				if (!v.firstChild) {
-					return "";
-				}
-				return trimmer(v.firstChild.nodeValue);
-			}
-			let out = [];
-			v.forEach(function(i) {
-				if (!i.firstChild) {
-					return;
-				}
-				out.push(trimmer(i.firstChild.nodeValue));
-			});
-			return out;
-		}
-		// Datum
-		let datum = bibl.querySelectorAll("publicationStmt date");
-		if (datum) {
-			for (let i = 0, len = datum.length; i < len; i++) {
-				const typ = datum[i].getAttribute("type");
-				if (typ === "creation") {
-					belegImport.DTAData.datum.entstehung = trimmer(datum[i].firstChild.nodeValue);
-				} else {
-					belegImport.DTAData.datum.druck = trimmer(datum[i].firstChild.nodeValue);
-				}
-			}
-		}
-		// Serie
-		let serie_titel = bibl.querySelectorAll("seriesStmt title"),
-			serie_bd = bibl.querySelector("seriesStmt biblScope");
-		if (serie_titel) {
-			serie_titel.forEach(function(i, n) {
-				if (n > 0) {
-					if (!/\.$/.test(belegImport.DTAData.serie)) {
-						belegImport.DTAData.serie += ".";
-					}
-					belegImport.DTAData.serie += " ";
-				}
-				belegImport.DTAData.serie += trimmer(i.firstChild.nodeValue);
-			});
-			if (serie_bd) {
-				let unit = serie_bd.getAttribute("unit");
-				if (unit === "volume") {
-					belegImport.DTAData.serie += `, ${trimmer(serie_bd.firstChild.nodeValue)}`;
-				} else if (unit === "pages") {
-					belegImport.DTAData.serie_seite = trimmer(serie_bd.firstChild.nodeValue);
-				}
-			}
-			if (belegImport.DTAData.textsorte[0] === "Zeitung") {
-				belegImport.DTAData.titel = `${belegImport.DTAData.serie}, ${belegImport.DTAData.titel}`;
-				belegImport.DTAData.serie = "";
-			}
-		}
+		let dta = belegImport.DTAData;
 		// Personen
 		let personen = {
-			autor: bibl.querySelectorAll("titleStmt author"),
-			hrsg: bibl.querySelectorAll("titleStmt editor"),
+			autor: evaluator("//biblFull/titleStmt/author/persName"),
+			hrsg: evaluator("//biblFull/titleStmt/editor/persName"),
 		};
-		for (let wert in personen) {
-			if (!personen.hasOwnProperty(wert)) {
-				continue;
-			}
-			if (!personen[wert]) {
-				continue;
-			}
-			for (let i = 0, len = personen[wert].length; i < len; i++) {
-				let person_name = personen[wert][i].querySelector("persName surname, persName addName"),
-					person_vorname = personen[wert][i].querySelector("persName forename"),
-					name = "";
-				if (person_name) {
-					if (wert === "autor") {
-						name = trimmer(person_name.firstChild.nodeValue);
-						if (person_vorname) {
-							name += `, ${trimmer(person_vorname.firstChild.nodeValue)}`;
-						}
-					} else {
-						if (person_vorname) {
-							name = `${trimmer(person_vorname.firstChild.nodeValue)} ${trimmer(person_name.firstChild.nodeValue)}`;
-						} else {
-							name = trimmer(person_name.firstChild.nodeValue);
-						}
+		for (let [k, v] of Object.entries(personen)) {
+			let item = v.iterateNext();
+			while (item) {
+				let vorname = item.querySelector("forename"),
+					nachname = item.querySelector("surname"),
+					addName = item.querySelector("addName"); // in <addName> steht häufig der ganze Name nach dem Muster "Vorname Nachname"; dafür fehlen <forname> und <surname>
+				if (nachname) {
+					let name = [trimmer(nachname.textContent)];
+					if (vorname) {
+						name.push(trimmer(vorname.textContent));
 					}
+					dta[k].push(name.join(", "));
+				} else if (addName) {
+					dta[k].push(trimmer(addName.textContent));
 				}
-				if (name) {
-					belegImport.DTAData[wert].push(name);
-				}
+				item = v.iterateNext();
 			}
+		}
+		// normale Werte
+		let werte = {
+			titel: evaluator("//biblFull/titleStmt/title[@type='main']"),
+			untertitel: evaluator("//biblFull/titleStmt/title[@type='sub']"),
+			band: evaluator("//biblFull/titleStmt/title[@type='volume']"),
+			auflage: evaluator("//biblFull/editionStmt/edition"),
+			ort: evaluator("//biblFull/publicationStmt/pubPlace"),
+			verlag: evaluator("//biblFull/publicationStmt/publisher/name"),
+			datum_druck: evaluator("//biblFull/publicationStmt/date[@type='publication']"),
+			datum_entstehung: evaluator("//biblFull/publicationStmt/date[@type='creation']"),
+		};
+		for (let [k, v] of Object.entries(werte)) {
+			let item = v.iterateNext();
+			while (item) {
+				if (Array.isArray(dta[k])) {
+					dta[k].push(trimmer(item.textContent));
+				} else {
+					dta[k] = trimmer(item.textContent);
+				}
+				item = v.iterateNext();
+			}
+		}
+		// Zeitschrift/Serie
+		let istZeitschrift = false,
+			zeitschriftEval = evaluator("//sourceDesc/bibl").iterateNext();
+		if (/^JA?/.test(zeitschriftEval.getAttribute("type"))) {
+			istZeitschrift = true;
+		}
+		let series = {
+			titel: evaluator("//biblFull/seriesStmt/title"),
+			bd_jg: evaluator("//biblFull/seriesStmt/biblScope[@unit='volume']"),
+			heft: evaluator("//biblFull/seriesStmt/biblScope[@unit='issue']"),
+			seiten: evaluator("//biblFull/seriesStmt/biblScope[@unit='pages']"),
+		};
+		let seriesTitel = [],
+			item = series.titel.iterateNext();
+		while (item) {
+			seriesTitel.push(trimmer(item.textContent));
+			item = series.titel.iterateNext();
+		}
+		if (istZeitschrift) { // Zeitschrift
+			dta.zeitschrift = seriesTitel.join(". ");
+			item = series.bd_jg.iterateNext();
+			if (item) {
+				dta.zeitschrift_jg = trimmer(item.textContent);
+			}
+			item = series.heft.iterateNext();
+			if (item) {
+				dta.zeitschrift_h = trimmer(item.textContent);
+			}
+			item = series.seiten.iterateNext();
+			if (item) {
+				dta.seiten = trimmer(item.textContent);
+			}
+		} else { // Serie
+			dta.serie = seriesTitel.join(". ");
+			item = series.bd_jg.iterateNext();
+			if (item) {
+				dta.serie_bd = trimmer(item.textContent);
+			}
+		}
+		// Textsorte
+		let textsorte = evaluator("//profileDesc//textClass/classCode");
+		item = textsorte.iterateNext();
+		while (item) {
+			let scheme = item.getAttribute("scheme"),
+				key = "";
+			if (/main$/.test(scheme)) {
+				key = "textsorte";
+			} else if (/sub$/.test(scheme)) {
+				key = "textsorte_sub";
+			}
+			if (key) {
+				dta[key].push(trimmer(item.textContent));
+			}
+			item = textsorte.iterateNext();
 		}
 		// spezielle Trim-Funktion
 		function trimmer (v) {
-			v = helfer.textTrim(v, true);
 			v = v.replace(/\n/g, " "); // kommt mitunter mitten im Untertitel vor
+			v = helfer.textTrim(v, true);
 			return v;
 		}
 	},
@@ -567,11 +561,11 @@ let belegImport = {
 	// DTA-Import: Daten in das Formular eintragen
 	DTAFill () {
 		let dta = belegImport.DTAData,
-			datum_feld = dta.datum.entstehung;
-		if (!datum_feld && dta.datum.druck) {
-			datum_feld = dta.datum.druck;
-		} else if (dta.datum.druck) {
-			datum_feld += ` (Publikation von ${dta.datum.druck})`;
+			datum_feld = dta.datum_entstehung;
+		if (!datum_feld && dta.datum_druck) {
+			datum_feld = dta.datum_druck;
+		} else if (dta.datum_druck) {
+			datum_feld += ` (Publikation von ${dta.datum_druck})`;
 		}
 		beleg.data.da = datum_feld;
 		let autor = dta.autor.join("/");
@@ -610,108 +604,50 @@ let belegImport = {
 	},
 	// DTA-Import: Quelle zusammensetzen
 	//   mitURL = Boolean
-	//     (URL + Aufrufdatum sollen der Quellenangabe hinzugefügt werden)
+	//     (URL + Aufrufdatum sollen der Titelaufnahme angehängt werden)
 	DTAQuelle (mitURL) {
-		let dta = belegImport.DTAData;
-		// Autor und Titel
-		let autor = dta.autor.join("/");
-		if (!autor) {
-			autor = "N. N.";
+		let dta = belegImport.DTAData,
+			td = belegImport.makeTitleDataObject();
+		td.autor = [...dta.autor];
+		td.hrsg = [...dta.hrsg];
+		td.titel = [...dta.titel];
+		td.untertitel = [...dta.untertitel];
+		if (dta.zeitschrift) {
+			td.inTitel.push(dta.zeitschrift);
 		}
-		let quelle = `${autor}: ${dta.titel}`;
-		// Untertitel
-		if (dta.untertitel.length) {
-			dta.untertitel.forEach(function(i) {
-				if (/^[a-zäöü]/.test(i)) {
-					quelle += ",";
-				} else if (!/\.$/.test(quelle)) {
-					quelle += ".";
-				}
-				quelle += ` ${i}`;
-			});
+		let regBand = new RegExp(helfer.escapeRegExp(dta.band));
+		if (dta.band &&
+				!dta.titel.some(i => regBand.test(i)) &&
+				!dta.untertitel.some(i => regBand.test(i))) {
+			td.band = dta.band;
 		}
-		// Serie + Seitenangabe => Titel ist IN einem Werk
-		if (dta.serie_seite) {
-			quellePunkt();
-			quelle += ` In: ${dta.serie}`;
-			dta.serie = "";
-		}
-		// Band
-		let reg_band = new RegExp(helfer.escapeRegExp(dta.band));
-		if (dta.band && !reg_band.test(quelle)) {
-			quellePunkt();
-			quelle += ` ${dta.band}`;
-		}
-		// Herausgeber
-		if (dta.hrsg.length) {
-			let hrsg = "";
-			for (let i = 0, len = dta.hrsg.length; i < len; i++) {
-				if (i > 0 && i === len - 1) {
-					hrsg += " und ";
-				} else if (i > 0) {
-					hrsg += ", ";
-				}
-				hrsg += dta.hrsg[i];
-			}
-			quellePunkt();
-			quelle += ` Hrsg. v. ${hrsg}`;
-		}
-		// Auflage
-		if (dta.auflage) {
-			quellePunkt();
-			quelle += ` ${dta.auflage}. Auflage`;
-		}
-		quellePunkt();
-		// Ort
-		if (dta.ort) {
-			quelle += ` ${dta.ort}`;
-			if (dta.verlag && dta.verlag !== "s. e.") {
-				quelle += `: ${dta.verlag}`;
-			}
-		}
-		// Datum
-		let datum = dta.datum.druck;
-		if (!datum) {
-			datum = dta.datum.entstehung;
-		}
-		quelle += ` ${datum}`;
-		// Seite
-		const seite_spalte = dta.spalte ? "Sp" : "S";
-		if (dta.serie_seite) {
-			quelle += `, ${seite_spalte}. ${dta.serie_seite}`;
-			if (dta.seite) {
-				quelle += `, hier ${dta.seite}`;
-				if (dta.seite_zuletzt !== dta.seite) {
-					quelle += `–${dta.seite_zuletzt}`;
-				}
-			}
-		} else if (dta.seite) {
-			quelle += `, ${seite_spalte}. ${dta.seite}`;
-			if (dta.seite_zuletzt !== dta.seite) {
-				quelle += `–${dta.seite_zuletzt}`;
-			}
-		}
-		// Serie
-		if (dta.serie) {
-			quelle += ` (= ${dta.serie})`;
-		}
-		// URL und Aufrufdatum
-		if (mitURL) {
-			quelle += `.\n\n${dta.url}`;
-			let heute = new Date(),
-				tag = heute.getDate(),
-				monat = heute.getMonth() + 1;
-			quelle += ` (Aufrufdatum: ${tag < 10 ? `0${tag}` : tag}.${monat < 10 ? `0${monat}` : monat}.${heute.getFullYear()})`;
+		td.auflage = dta.auflage;
+		td.ort = [...dta.ort];
+		td.verlag = dta.verlag !== "s. e." ? dta.verlag : "";
+		td.jahrgang = dta.zeitschrift_jg;
+		td.jahr = dta.datum_druck;
+		if (!dta.datum_druck) {
+			td.jahr = dta.datum_entstehung;
 		} else {
-			quellePunkt();
+			td.jahrZuerst = dta.datum_entstehung;
 		}
-		return quelle;
-		// ggf. Punkt einfügen
-		function quellePunkt () {
-			if (!/\.$/.test(quelle)) {
-				quelle += ".";
+		if (dta.zeitschrift_h && !dta.zeitschrift_jg) {
+			td.jahrgang = dta.zeitschrift_h;
+		} else if (dta.zeitschrift_h) {
+			td.heft = dta.zeitschrift_h;
+		}
+		td.spalte = dta.spalte;
+		td.seiten = dta.seiten;
+		if (dta.seite) {
+			td.seite = dta.seite.replace(/^0+/, ""); // ja, das gibt es
+			if (dta.seite_zuletzt && dta.seite_zuletzt !== dta.seite) {
+				td.seite += `–${dta.seite_zuletzt.replace(/^0+/, "")}`;
 			}
 		}
+		td.serie = dta.serie;
+		td.serieBd = dta.serie_bd;
+		td.url.push(dta.url);
+		return belegImport.makeTitle({td, mitURL});
 	},
 	// DWDS-Import: Liste der Korpora des DWDS
 	DWDSKorpora: {
@@ -2249,6 +2185,160 @@ let belegImport = {
 			return false;
 		}
 		return true;
+	},
+	// eine Titelaufnahme aus den übergebenen Daten zusammensetzen
+	//   td = Object
+	//     (Datensatz mit den Titeldaten)
+	//   mitURL = Boolean
+	//     (URL + Aufrufdatum sollen der Titelaufnahme angehängt werden)
+	makeTitle ({td, mitURL}) {
+		let titel = "";
+		// Autor
+		if (td.autor.length) {
+			titel = `${td.autor.join("/")}: `;
+		} else if (td.hrsg.length) {
+			titel = `${td.hrsg.join("/")} (Hrsg.): `;
+		} else {
+			titel = "N. N.: ";
+		}
+		// Titel
+		titel += td.titel.join(". ");
+		// Untertitel
+		if (td.untertitel.length) {
+			td.untertitel.forEach(function(i) {
+				if (/^[a-zäöü]/.test(i)) {
+					titel += ",";
+				} else if (!/^[(\[{]/.test(i)) {
+					punkt();
+				}
+				titel += ` ${i}`;
+			});
+		}
+		// In
+		if (td.inTitel.length) {
+			punkt();
+			titel += " In: ";
+			if (td.autor.length && td.hrsg.length && !td.jahrgang) {
+				titel += `${td.hrsg.join("/")} (Hrsg.): `;
+			}
+			titel += td.inTitel.join(". ");
+		}
+		// Band
+		if (td.band && !td.jahrgang) {
+			punkt();
+			titel += ` ${td.band}`;
+			if (td.bandtitel.length) {
+				titel += `: ${td.bandtitel.join(". ")}`;
+			}
+		}
+		// ggf. Herausgeber ergänzen
+		if (!td.inTitel.length && td.hrsg.length && td.autor.length) {
+			punkt();
+			titel += " Hrsg. von ";
+			for (let i = 0, len = td.hrsg.length; i < len; i++) {
+				if (i > 0 && i === len - 1) {
+					titel += " und ";
+				} else if (i > 0) {
+					titel += ", "
+				}
+				let hrsg = td.hrsg[i].split(", ");
+				if (hrsg.length > 1) {
+					hrsg.reverse();
+					titel += hrsg.join(" ");
+				} else {
+					titel += hrsg[0];
+				}
+			}
+		}
+		// Auflage
+		if (td.auflage && !td.jahrgang && !/^1(\.|$)/.test(td.auflage)) {
+			if (/\s(Aufl(\.|age)|Ausgabe)$/.test(td.auflage)) {
+				titel += `, ${td.auflage}`;
+			} else {
+				titel += `, ${td.auflage}. Aufl.`;
+			}
+		}
+		// Ort
+		if (td.ort.length && !td.jahrgang) {
+			punkt();
+			titel += ` ${td.ort.join("/")}`;
+		}
+		// Jahrgang + Jahr
+		if (td.jahrgang) {
+			titel += ` ${td.jahrgang}`;
+			if (td.jahr) {
+				titel += ` (${td.jahr})`;
+			}
+		} else if (td.jahr) {
+			titel += ` ${td.jahr}`;
+			if (td.jahrZuerst) {
+				titel += ` [${td.jahrZuerst}]`;
+			}
+		}
+		// Heft
+		if (td.heft) {
+			titel += `, H. ${td.heft}`;
+		}
+		// Seiten/Spalten
+		const seite_spalte = td.spalte ? "Sp. " : "S. ";
+		if (td.seiten) {
+			titel += `, ${/Sp?\. /.test(td.seiten) ? "" : seite_spalte}${td.seiten}`;
+		}
+		if (td.seite) {
+			if (td.seiten) {
+				titel += `, hier ${td.seite}`;
+			} else {
+				titel += `, ${seite_spalte}${td.seite}`;
+			}
+		}
+		// Serie
+		if (td.serie) {
+			titel += ` (${td.serie}${td.serieBd ? " " + td.serieBd : ""})`;
+		}
+		punkt();
+		// URL und Aufrufdatum
+		if (mitURL && td.url.length) {
+			let heute = helfer.datumFormat(new Date().toISOString(), "minuten").split(",")[0];
+			titel += "\n";
+			for (let url of td.url) {
+				titel += `\n${url} (Aufrufdatum: ${heute})`;
+			}
+		}
+		// Titel typographisch verbessern und zurückgeben
+		titel = helfer.textTrim(titel, true);
+		titel = helfer.typographie(titel);
+		return titel;
+		// ggf. Punkt ergänzen
+		function punkt () {
+			if (!/[,;\.:!?]$/.test(titel)) {
+				titel += ".";
+			}
+		}
+	},
+	// leeren Datensatz für eine Titelaufnahme erstellen
+	makeTitleDataObject () {
+		return {
+			autor: [],
+			hrsg: [],
+			titel: [],
+			untertitel: [],
+			inTitel: [],
+			band: "",
+			bandtitel: [],
+			auflage: "",
+			ort: [],
+			verlag: "",
+			jahrgang: "",
+			jahr: "",
+			jahrZuerst: "",
+			heft: "",
+			spalte: false,
+			seiten: "",
+			seite: "",
+			serie: "",
+			serieBd: "",
+			url: [],
+		};
 	},
 	// überprüft, ob das Wort im importierten Text gefunden wurde;
 	// außerdem gibt es die Möglichkeit, sich die Textposition der Wörter
