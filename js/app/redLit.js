@@ -1763,39 +1763,14 @@ let redLit = {
 			});
 			return;
 		}
-		// Titel-ID ermitteln
-		let titelId = belegImport.DTAGetTitelId(url);
+		// Titeldaten laden
+		const titelId = await redLit.eingabeDTAFetch({
+			url,
+			fokusId: "red-lit-eingabe-ti-dta",
+		});
 		if (!titelId) {
-			dialog.oeffnen({
-				typ: "alert",
-				text: "Aus dem DTA-Link konnte keine Titel-ID extrahiert werden.",
-				callback: () => document.getElementById("red-lit-eingabe-ti-dta").focus(),
-			});
 			return;
 		}
-		// TEI-Header herunterladen
-		let feedback = await helfer.fetchURL(`http://www.deutschestextarchiv.de/api/tei_header/${titelId}`);
-		if (feedback.fehler) {
-			dialog.oeffnen({
-				typ: "alert",
-				text: `Der Download der Titeldaten des DTA ist gescheitert.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${feedback.fehler}</p>`,
-				callback: () => document.getElementById("red-lit-eingabe-ti-dta").focus(),
-			});
-			return;
-		}
-		// Titeldaten ermitteln
-		let parser = new DOMParser(),
-			xmlDoc = parser.parseFromString(feedback.text, "text/xml");
-		if (xmlDoc.querySelector("parsererror")) {
-			dialog.oeffnen({
-				typ: "alert",
-				text: "Die XML-Daten des DTA sind nicht wohlgeformt.",
-				callback: () => document.getElementById("red-lit-eingabe-ti-dta").focus(),
-			});
-			return;
-		}
-		belegImport.DTAResetData();
-		belegImport.DTAMeta(xmlDoc);
 		// Titel-Feld ausfüllen
 		let ti = document.getElementById("red-lit-eingabe-ti");
 		ti.value = belegImport.DTAQuelle(false);
@@ -1806,6 +1781,53 @@ let redLit = {
 		ul.dispatchEvent(new KeyboardEvent("input"));
 		// Titelfeld fokussieren
 		ti.focus();
+	},
+	// Eingabeformular: Titeldaten des DTA herunterladen
+	//   url = String
+	//     (Link zu einer Ressource des DTA)
+	//   fokusId = String
+	//     (ID des Elements, das beim Scheitern fokussiert werden soll)
+	eingabeDTAFetch ({url, fokusId}) {
+		return new Promise(async resolve => {
+			// Titel-ID ermitteln
+			let titelId = belegImport.DTAGetTitelId(url);
+			if (!titelId) {
+				dialog.oeffnen({
+					typ: "alert",
+					text: "Aus dem DTA-Link konnte keine Titel-ID extrahiert werden.",
+					callback: () => document.getElementById(fokusId).focus(),
+				});
+				resolve("");
+				return;
+			}
+			// TEI-Header herunterladen
+			let feedback = await helfer.fetchURL(`http://www.deutschestextarchiv.de/api/tei_header/${titelId}`);
+			if (feedback.fehler) {
+				dialog.oeffnen({
+					typ: "alert",
+					text: `Der Download der Titeldaten des DTA ist gescheitert.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${feedback.fehler}</p>`,
+					callback: () => document.getElementById(fokusId).focus(),
+				});
+				resolve("");
+				return;
+			}
+			// Titeldaten ermitteln
+			let parser = new DOMParser(),
+				xmlDoc = parser.parseFromString(feedback.text, "text/xml");
+			if (xmlDoc.querySelector("parsererror")) {
+				dialog.oeffnen({
+					typ: "alert",
+					text: "Die XML-Daten des DTA sind nicht wohlgeformt.",
+					callback: () => document.getElementById(fokusId).focus(),
+				});
+				resolve("");
+				return;
+			}
+			belegImport.DTAResetData();
+			belegImport.DTAData.url = url;
+			belegImport.DTAMeta(xmlDoc);
+			resolve(titelId);
+		});
 	},
 	// Eingabeformular: XML-Import aus der Zwischenablage
 	eingabeXML () {
@@ -1947,7 +1969,7 @@ let redLit = {
 			return;
 		}
 		// BibTeX-Datensatz einlesen
-		let titel = belegImport.BibTeXLesen(bibtexDaten, "literatur-db");
+		let titel = belegImport.BibTeXLesen(bibtexDaten, true);
 		// Einlesen ist fehlgeschlagen
 		if (!titel) {
 			dialog.oeffnen({
