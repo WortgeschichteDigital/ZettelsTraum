@@ -1787,15 +1787,23 @@ let redLit = {
 	//     (Link zu einer Ressource des DTA)
 	//   fokusId = String
 	//     (ID des Elements, das beim Scheitern fokussiert werden soll)
-	eingabeDTAFetch ({url, fokusId}) {
+	//   seitenData = Object || undefined
+	//     (enthält Informationen zur Seite des DTA-Titels; die Daten sind gefüllt, wenn
+	//     die Quellenangabe der Karteikarte neu geladen werden soll)
+	eingabeDTAFetch ({url, fokusId, seitenData = {}}) {
 		return new Promise(async resolve => {
 			// Titel-ID ermitteln
 			let titelId = belegImport.DTAGetTitelId(url);
 			if (!titelId) {
-				dialog.oeffnen({
-					typ: "alert",
-					text: "Aus dem DTA-Link konnte keine Titel-ID extrahiert werden.",
-					callback: () => document.getElementById(fokusId).focus(),
+				await new Promise(meldung => {
+					dialog.oeffnen({
+						typ: "alert",
+						text: "Aus dem DTA-Link konnte keine Titel-ID extrahiert werden.",
+						callback: () => {
+							document.getElementById(fokusId).focus();
+							meldung(true);
+						},
+					});
 				});
 				resolve("");
 				return;
@@ -1803,10 +1811,30 @@ let redLit = {
 			// TEI-Header herunterladen
 			let feedback = await helfer.fetchURL(`http://www.deutschestextarchiv.de/api/tei_header/${titelId}`);
 			if (feedback.fehler) {
-				dialog.oeffnen({
-					typ: "alert",
-					text: `Der Download der Titeldaten des DTA ist gescheitert.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${feedback.fehler}</p>`,
-					callback: () => document.getElementById(fokusId).focus(),
+				await new Promise(meldung => {
+					dialog.oeffnen({
+						typ: "alert",
+						text: `Der Download der Titeldaten des DTA ist gescheitert.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${feedback.fehler}</p>`,
+						callback: () => {
+							document.getElementById(fokusId).focus();
+							meldung(true);
+						},
+					});
+				});
+				resolve("");
+				return;
+			}
+			// Titel noch nicht freigeschaltet? (DTAQ)
+			if (/<title>DTA Qualitätssicherung<\/title>/.test(feedback.text)) {
+				await new Promise(meldung => {
+					dialog.oeffnen({
+						typ: "alert",
+						text: `Der Download der Titeldaten des DTA ist gescheitert.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">DTAQ: Titel noch nicht freigeschaltet</p>`,
+						callback: () => {
+							document.getElementById(fokusId).focus();
+							meldung(true);
+						},
+					});
 				});
 				resolve("");
 				return;
@@ -1815,15 +1843,25 @@ let redLit = {
 			let parser = new DOMParser(),
 				xmlDoc = parser.parseFromString(feedback.text, "text/xml");
 			if (xmlDoc.querySelector("parsererror")) {
-				dialog.oeffnen({
-					typ: "alert",
-					text: "Die XML-Daten des DTA sind nicht wohlgeformt.",
-					callback: () => document.getElementById(fokusId).focus(),
+				await new Promise(meldung => {
+					dialog.oeffnen({
+						typ: "alert",
+						text: "Die XML-Daten des DTA sind nicht wohlgeformt.",
+						callback: () => {
+							document.getElementById(fokusId).focus();
+							meldung(true);
+						},
+					});
 				});
 				resolve("");
 				return;
 			}
 			belegImport.DTAResetData();
+			if (seitenData.seite) {
+				belegImport.DTAData.seite = seitenData.seite;
+				belegImport.DTAData.seite_zuletzt = seitenData.seite_zuletzt;
+				belegImport.DTAData.spalte = seitenData.spalte;
+			}
 			belegImport.DTAData.url = url;
 			belegImport.DTAMeta(xmlDoc);
 			resolve(titelId);

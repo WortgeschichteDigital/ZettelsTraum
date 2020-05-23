@@ -1267,7 +1267,6 @@ let beleg = {
 	},
 	// Inhalt des Quelle-Felds neu laden
 	async toolsQuelleLaden () {
-		let quelle = document.getElementById("beleg-qu");
 		// Titelinfos aus bx laden
 		let bx = beleg.bxTyp({bx: beleg.data.bx});
 		if (bx.typ) {
@@ -1286,17 +1285,38 @@ let beleg = {
 					xml: bx.daten,
 					returnResult: true,
 				});
-				if (dwds.qu) {
+				let url = liste.linksErkennen(dwds.qu);
+				if (/href="/.test(url)) {
+					url = url.match(/href="(.+?)"/)[1];
+				}
+				let direktAusDTA = false;
+				if (/^https?:\/\/www\.deutschestextarchiv\.de\//.test(url)) {
+					direktAusDTA = await new Promise(resolve => {
+						dialog.oeffnen({
+							typ: "confirm",
+							text: "Die Karteikarte wurde aus einem DWDS-Snippet gefüllt, der Beleg stammt allerdings aus dem DTA.\nSoll der Zitiertitel direkt aus dem DTA geladen werden?",
+							callback: () => {
+								if (dialog.antwort) {
+									resolve(true);
+								} else {
+									resolve(false);
+								}
+							},
+						});
+					});
+				}
+				if (direktAusDTA) {
+					titel = await beleg.toolsQuelleLadenDTA({url});
+				} else if (dwds.qu) {
 					titel = dwds.qu;
 				}
 			}
 			if (titel) {
 				quelleFuellen(titel);
-			} else {
-				dialog.oeffnen({
-					typ: "alert",
-					text: "Beim Einlesen der Titeldaten ist etwas schiefgelaufen.",
-				});
+			} else if (titel === "") {
+				// "titel" könnte "false" sein, wenn die Anfrage an das DTA gescheitert ist;
+				// in diesem Fall kommt eine Fehlermeldung von der Fetch-Funktion
+				lesefehler();
 			}
 			return;
 		}
@@ -1306,6 +1326,55 @@ let beleg = {
 			url = url.match(/href="(.+?)"/)[1];
 		}
 		if (/^https?:\/\/www\.deutschestextarchiv\.de\//.test(url)) {
+			const titel = await beleg.toolsQuelleLadenDTA({url});
+			if (titel) {
+				quelleFuellen(titel);
+			} else if (titel === "") {
+				lesefehler();
+			}
+			return;
+		}
+		// keine Quelle gefunden
+		dialog.oeffnen({
+			typ: "alert",
+			text: "Es wurde keine Quelle gefunden, aus der die Titeldaten automatisch neu geladen werden könnten.",
+		});
+		// Quellenfeld ausfüllen
+		function quelleFuellen (titel) {
+			let quelle = document.getElementById("beleg-qu");
+			let alt = quelle.value.split(/\n\nhttps?:\/\/www\.deutschestextarchiv\.de/)[0],
+				neu = titel.split(/\n\nhttps?:\/\/www\.deutschestextarchiv\.de/)[0];
+			if (alt !== neu) {
+				quelle.value = titel;
+				helfer.textareaGrow(quelle);
+				beleg.belegGeaendert(true);
+				// visuelles Feedback
+				let icon = document.querySelector(".text-tools-quelle .icon-pfeil-kreis");
+				icon.classList.add("rotieren-bitte");
+				quelle.classList.add("neu-geladen");
+				setTimeout(() => {
+					icon.classList.remove("rotieren-bitte");
+					quelle.classList.remove("neu-geladen");
+					quelle.focus();
+				}, 1e3);
+			} else {
+				quelle.focus();
+			}
+		}
+		// generische Fehlermeldung
+		function lesefehler () {
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Beim Einlesen der Titeldaten ist etwas schiefgelaufen.",
+			});
+		}
+	},
+	// Zitiertitelanfrage an das DTA
+	//   url = String
+	//     (DTA-Link)
+	toolsQuelleLadenDTA ({url}) {
+		return new Promise(async resolve => {
+			let quelle = document.getElementById("beleg-qu");
 			// Seitenangabe auslesen
 			let mHier = /, hier (?<seiten>[^\s]+)( |\.\n\n)/.exec(quelle.value),
 				mSeiten = /(?<typ>, Sp?\.)\s(?<seiten>[^\s]+)( |\.\n\n)/.exec(quelle.value);
@@ -1336,38 +1405,13 @@ let beleg = {
 				fokusId: "beleg-qu",
 				seitenData,
 			});
+			// Rückgabewerte
 			if (fetchOk) {
-				// Titel ermitteln
-				let titel = belegImport.DTAQuelle(true);
-				// Formular ggf. ausfüllen
-				quelleFuellen(titel);
+				resolve(belegImport.DTAQuelle(true));
+			} else {
+				resolve(false);
 			}
-			return;
-		}
-		// keine Quelle gefunden
-		dialog.oeffnen({
-			typ: "alert",
-			text: "Es wurde keine Quelle gefunden, aus der die Titeldaten automatisch neu geladen werden könnten.",
 		});
-		// Quellenfeld ausfüllen
-		function quelleFuellen (titel) {
-			let alt = quelle.value.split(/\n\nhttps?:\/\/www\.deutschestextarchiv\.de/)[0],
-				neu = titel.split(/\n\nhttps?:\/\/www\.deutschestextarchiv\.de/)[0];
-			if (alt !== neu) {
-				quelle.value = titel;
-				helfer.textareaGrow(quelle);
-				beleg.belegGeaendert(true);
-				// visuelles Feedback
-				let icon = document.querySelector(".text-tools-quelle .icon-pfeil-kreis");
-				icon.classList.add("rotieren-bitte");
-				quelle.classList.add("neu-geladen");
-				setTimeout(() => {
-					icon.classList.remove("rotieren-bitte");
-					quelle.classList.remove("neu-geladen");
-				}, 1e3);
-			}
-			quelle.focus();
-		}
 	},
 	// Typ der Daten im bx-Datensatz ermitteln
 	//   bx = String
