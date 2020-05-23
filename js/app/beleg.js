@@ -1279,7 +1279,7 @@ let beleg = {
 				}
 			} else if (bx.typ === "dereko") {
 				let reg = new RegExp(`^(${belegImport.DeReKoId})(.+)`);
-				titel = bx.daten.match(reg)[2];
+				titel = bx.daten.match(reg)[2] + ".";
 			} else if (bx.typ === "xml-dwds") {
 				let dwds = belegImport.DWDSLesenXML({
 					clipboard: "",
