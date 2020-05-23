@@ -1267,6 +1267,7 @@ let beleg = {
 	},
 	// Inhalt des Quelle-Felds neu laden
 	async toolsQuelleLaden () {
+		let quelle = document.getElementById("beleg-qu");
 		// Titelinfos aus bx laden
 		let bx = beleg.bxTyp({bx: beleg.data.bx});
 		if (bx.typ) {
@@ -1305,12 +1306,41 @@ let beleg = {
 			url = url.match(/href="(.+?)"/)[1];
 		}
 		if (/^https?:\/\/www\.deutschestextarchiv\.de\//.test(url)) {
+			// Seitenangabe auslesen
+			let mHier = /, hier (?<seiten>[^\s]+)( |\.\n\n)/.exec(quelle.value),
+				mSeiten = /(?<typ>, Sp?\.)\s(?<seiten>[^\s]+)( |\.\n\n)/.exec(quelle.value);
+			let seitenData = {
+				seite: "",
+				seite_zuletzt: "",
+				spalte: false,
+			};
+			let seiten;
+			if (mHier) {
+				seiten = mHier.groups.seiten;
+			} else if (mSeiten) {
+				seiten = mSeiten.groups.seiten;
+				if (mSeiten.groups.typ === ", Sp.") {
+					seitenData.spalte = true;
+				}
+			}
+			if (seiten) {
+				let seitenSp = seiten.split(/[-–]/);
+				seitenData.seite = seitenSp[0];
+				if (seitenSp[1]) {
+					seitenData.seite_zuletzt = seitenSp[1];
+				}
+			}
+			// TEI-Header herunterladen
 			const fetchOk = await redLit.eingabeDTAFetch({
 				url,
 				fokusId: "beleg-qu",
+				seitenData,
 			});
 			if (fetchOk) {
-				quelleFuellen(belegImport.DTAQuelle(true));
+				// Titel ermitteln
+				let titel = belegImport.DTAQuelle(true);
+				// Formular ggf. ausfüllen
+				quelleFuellen(titel);
 			}
 			return;
 		}
@@ -1321,11 +1351,13 @@ let beleg = {
 		});
 		// Quellenfeld ausfüllen
 		function quelleFuellen (titel) {
-			let quelle = document.getElementById("beleg-qu");
-			if (quelle.value !== titel) {
+			let alt = quelle.value.split(/\n\nhttps?:\/\/www\.deutschestextarchiv\.de/)[0],
+				neu = titel.split(/\n\nhttps?:\/\/www\.deutschestextarchiv\.de/)[0];
+			if (alt !== neu) {
 				quelle.value = titel;
 				helfer.textareaGrow(quelle);
 				beleg.belegGeaendert(true);
+				// visuelles Feedback
 				let icon = document.querySelector(".text-tools-quelle .icon-pfeil-kreis");
 				icon.classList.add("rotieren-bitte");
 				setTimeout(() => icon.classList.remove("rotieren-bitte"), 500);
