@@ -142,7 +142,7 @@ let beleg = {
 	// Formular füllen und anzeigen
 	//   neu = Boolean
 	//     (neue Karteikarte erstellen)
-	formular (neu) {
+	async formular (neu) {
 		// regulären Ausdruck für Sprung zum Wort zurücksetzen
 		beleg.ctrlSpringenFormReg.again = false;
 		beleg.ctrlSpringenFormReset();
@@ -187,6 +187,10 @@ let beleg = {
 			helfer.textareaGrow(textarea);
 		});
 		// Fokus setzen
+		// (hier braucht es eine Verzögerung: Wird die Karte z.B. direkt nach dem
+		// Erstellen einer neuen Wortkartei aufgerufen, wird der fokussierte Button
+		// automatisch ausgeführt, wenn man Enter gedrückt hat)
+		await new Promise(resolve => setTimeout(() => resolve(true), 25));
 		let feldDa = document.getElementById("beleg-da");
 		if (neu && !beleg.leseansicht) {
 			// Was ist in der Zwischenablage?
