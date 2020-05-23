@@ -1890,11 +1890,18 @@ let belegImport = {
 				// da ist wohl was schiefgelaufen
 				continue;
 			}
-			let key = kv.groups.key;
+			const key = kv.groups.key;
 			if (!item[key]) {
 				item[key] = [];
 			}
-			item[key].push(belegImport.BibTeXSymbols(kv.groups.value));
+			const val = kv.groups.value;
+			if (/^(author|editor)$/.test(key)) {
+				for (let i of val.split(/\sand\s/)) {
+					item[key].push(belegImport.BibTeXSymbols(i));
+				}
+			} else {
+				item[key].push(belegImport.BibTeXSymbols(val));
+			}
 		}
 		// Daten in den Zwischenspeicher eintragen
 		// (nur wenn welche vorhanden sind)
@@ -1923,9 +1930,9 @@ let belegImport = {
 			};
 			// Autor(en) ermitteln
 			if (item.author) {
-				data.ds.au = item.author.join("/").replace(/\sand\s/g, "/");
+				data.ds.au = item.author.join("/");
 			} else if (item.editor) {
-				data.ds.au = `${item.editor.join("/").replace(/\sand\s/g, "/")} (Hrsg.)`;
+				data.ds.au = `${item.editor.join("/")} (Hrsg.)`;
 			} else {
 				data.ds.au = "N. N.";
 			}
@@ -1951,117 +1958,87 @@ let belegImport = {
 			}
 			// Datensatz von GoogleBooks?
 			if (item.url) {
-				let gb = item.url.some(i => /books\.google/.test(i));
-				if (gb) {
+				if (item.url.some(i => /books\.google/.test(i))) {
 					data.ds.kr = "GoogleBooks";
 				}
 			}
-			// Quellenangabe: Autor
-			let quelle = `${data.ds.au}: `;
-			// Quellenangabe: Titel
-			if (item.title) {
-				quelle += item.title.join(". ");
-			} else if (item.booktitle) {
-				quelle += item.booktitle.join(". ");
-			} else if (item.shorttitle) {
-				quelle += item.shorttitle.join(". ");
-			} else {
-				quelle += "[ohne Titel]";
+			// Quellenangabe ermitteln
+			let td = belegImport.makeTitleDataObject();
+			if (item.author) {
+				td.autor = [...item.author];
 			}
-			// Quellenangabe: in Buch/Zeitschrift
-			let zeitschrift = false,
+			if (item.editor) {
+				td.hrsg = [...item.editor];
+			}
+			if (item.title) {
+				td.titel = [...item.title];
+			} else if (item.booktitle) {
+				td.titel = [...item.booktitle];
+			} else if (item.shorttitle) {
+				td.titel = [...item.shorttitle];
+			} else {
+				td.titel = ["[ohne Titel]"];
+			}
+			let istZeitschrift = false,
 				istAbschnitt = false;
 			if (item.title && item.booktitle) {
-				quelle += `. In: ${item.booktitle.join(". ")}`;
+				td.inTitel = [...item.booktitle];
 				istAbschnitt = true;
 			} else if (item.title && (item.journal || item.journaltitle)) {
-				let journal;
 				if (item.journal) {
-					journal = item.journal.join(". ");
+					td.inTitel = [...item.journal];
 				} else if (item.journaltitle) {
-					journal = item.journaltitle.join(". ");
+					td.inTitel = [...item.journaltitle];
 				}
-				quelle += `. In: ${journal}`;
-				zeitschrift = true;
+				istZeitschrift = true;
 				istAbschnitt = true;
 			}
-			// Quellenangabe: Hrsg. Sammelband
-			if (!zeitschrift && item.author && item.editor) {
-				quelle += `. Hrsg. v. ${item.editor.join("/").replace(/\sand\s/g, "/")}`;
-			}
-			// Quellenangabe: Band oder Jahrgang
 			if (item.volume) {
-				if (zeitschrift) {
-					quelle += ` ${item.volume.join("/")}`;
+				if (istZeitschrift) {
+					td.jahrgang = item.volume.join("/");
 				} else {
-					quelle += `, Bd. ${item.volume.join("/")}`;
+					td.band = item.volume.join("/");
 				}
 			}
-			// Quellenangabe: Auflage
-			if (item.edition && !zeitschrift) {
-				quelle += `, ${item.edition.join("/")}`;
+			if (item.edition) {
+				td.auflage = item.edition.join("/");
 			}
-			// Quellenangabe: Ort
-			if (!zeitschrift && (item.location || item.address)) {
-				let ort;
-				if (item.location) {
-					ort = item.location.join("/");
-				} else if (item.address) {
-					ort = item.address.join("/");
+			if (item.school) {
+				td.quali = item.school.join(", ");
+			}
+			if (item.location) {
+				td.ort = [...item.location];
+			} else if (item.address) {
+				td.ort = [...item.address];
+			}
+			if (item.publisher) {
+				td.verlag = item.publisher.join("/");
+			}
+			td.jahr = data.ds.da;
+			if (item.number) {
+				const heft = item.number.join("/"),
+					bdStart = /^Bd\./.test(item.number); // BibTeX von GoogleBooks hat mitunter diesen Fehler
+				if (bdStart && !istZeitschrift) {
+					td.band = heft;
+				} else if (!bdStart) {
+					td.heft = heft;
 				}
-				if (!/\.$/.test(quelle)) {
-					quelle += ".";
-				}
-				quelle += ` ${ort}`;
 			}
-			// Quellenangabe: Jahr
-			let jahr;
-			if (item.year) {
-				jahr = item.year.join("/");
-			} else if (item.date) {
-				jahr = item.date.join("/");
-			}
-			if (jahr && zeitschrift) {
-				quelle += ` (${jahr})`;
-			} else if (jahr) {
-				quelle += ` ${jahr}`;
-			}
-			// Quellenangabe: Seiten
 			if (istAbschnitt && item.pages) {
-				let seiten = item.pages.join(", ");
-				if (!/^(Seite|Sp*)/.test(seiten)) {
-					seiten = `S. ${seiten}`;
-				}
-				seiten = seiten.replace(/^Seite\s/, "S. ");
-				seiten = seiten.replace(/^(Sp*\.) /, (m, p1) => `${p1} `);
-				seiten = seiten.replace(/--/g, "–");
-				seiten = seiten.replace(/-/g, "–");
-				quelle += `, ${seiten}`;
+				td.seiten = item.pages.join(", ");
 			}
-			// Quellenangabe: Punkt
-			quelle += ".";
-			// Quellenangabe: URL
+			if (item.series && item.series.join() !== td.titel.join()) {
+				// BibTeX von GoogleBooks trägt mitunter den Romantitel in "series" ein
+				td.serie = item.series.join(". ");
+			}
 			if (item.url) {
-				let heute = helfer.datumFormat(new Date().toISOString(), "minuten").split(",")[0];
-				quelle += "\n";
-				item.url.sort((a, b) => {
-					if (/books\.google/.test(a)) {
-						return -1;
-					} else if (/books\.google/.test(b)) {
-						return 1;
-					} else if (/doi\.org/.test(a)) {
-						return -1;
-					} else if (/doi\.org/.test(b)) {
-						return 1;
-					}
-					return 0;
-				});
-				for (let i of item.url) {
-					quelle += `\n${i} (Aufrufdatum: ${heute})`;
-				}
+				td.url = [...item.url];
+				td.url.sort(helfer.sortURL);
 			}
-			// Quelleanangabe übernehmen
-			data.ds.qu = helfer.typographie(quelle);
+			data.ds.qu = belegImport.makeTitle({
+				td,
+				mitURL: true,
+			});
 			// Datensatz pushen
 			titel.push(data);
 		}
@@ -2074,10 +2051,10 @@ let belegImport = {
 		// das scheint der Standard zu sein: \‘{a}
 		// Google und die GVK-API verwenden i.d.R. diese Form {\‘a}
 		let symbols = new Map();
-		symbols.set("``", "„"); // GVK
-		symbols.set("''", "“"); // GVK
-		symbols.set("`", "‚"); // GVK
-		symbols.set("'", "‘"); // GVK
+		symbols.set("``", '"'); // GVK
+		symbols.set("''", '"'); // GVK
+		symbols.set("`", "'"); // GVK
+		symbols.set("'", "'"); // GVK
 		symbols.set("\\‘{a}", "à");
 		symbols.set("{\\‘a}", "à");
 		symbols.set("\\‘{e}", "è");
@@ -2193,6 +2170,9 @@ let belegImport = {
 	//     (URL + Aufrufdatum sollen der Titelaufnahme angehängt werden)
 	makeTitle ({td, mitURL}) {
 		let titel = "";
+		// Liste der Autoren/Herausgeber ggf. kürzen
+		td.autor = ua(td.autor);
+		td.hrsg = ua(td.hrsg);
 		// Autor
 		if (td.autor.length) {
 			titel = `${td.autor.join("/")}: `;
@@ -2239,7 +2219,7 @@ let belegImport = {
 				if (i > 0 && i === len - 1) {
 					titel += " und ";
 				} else if (i > 0) {
-					titel += ", "
+					titel += ", ";
 				}
 				let hrsg = td.hrsg[i].split(", ");
 				if (hrsg.length > 1) {
@@ -2252,16 +2232,23 @@ let belegImport = {
 		}
 		// Auflage
 		if (td.auflage && !td.jahrgang && !/^1(\.|$)/.test(td.auflage)) {
-			if (/\s(Aufl(\.|age)|Ausgabe)$/.test(td.auflage)) {
+			if (/\s(Aufl(\.|age)?|Ausgabe)$/.test(td.auflage)) {
 				titel += `, ${td.auflage}`;
 			} else {
 				titel += `, ${td.auflage}. Aufl.`;
 			}
 		}
+		// Qualifikationsschrift
+		if (td.quali) {
+			punkt();
+			titel += ` ${td.quali}`;
+		}
 		// Ort
 		if (td.ort.length && !td.jahrgang) {
 			punkt();
 			titel += ` ${td.ort.join("/")}`;
+		} else if (!td.ort.length && !td.jahrgang) {
+			punkt();
 		}
 		// Jahrgang + Jahr
 		if (td.jahrgang) {
@@ -2314,6 +2301,13 @@ let belegImport = {
 				titel += ".";
 			}
 		}
+		// ggf. Namenslisten kürzen
+		function ua (liste) {
+			if (liste.length > 3) {
+				return [`${liste[0]} u. a.`];
+			}
+			return liste;
+		}
 	},
 	// leeren Datensatz für eine Titelaufnahme erstellen
 	makeTitleDataObject () {
@@ -2326,6 +2320,7 @@ let belegImport = {
 			band: "",
 			bandtitel: [],
 			auflage: "",
+			quali: "",
 			ort: [],
 			verlag: "",
 			jahrgang: "",
