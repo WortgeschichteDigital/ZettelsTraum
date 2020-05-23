@@ -1142,7 +1142,7 @@ let belegImport = {
 			txt = txt.replace(/\s\/\s/g, "/"); // Leerzeichen um Slashes entfernen
 			txt = txt.replace(/^Von /, ""); // häufig wird die Autorangabe "Von Karl Mustermann" fälschlicherweise als kompletter Autor angegeben
 			// Autorname eintragen
-			if (/^(Name|o\.\s?A\.|unknown)$/.test(txt)) { // merkwürdige Platzhalter für "Autor unbekannt"
+			if (/^(Name|Nn|o\.\s?A\.|unknown)$/.test(txt)) { // merkwürdige Platzhalter für "Autor unbekannt"
 				return "N. N.";
 			} else if (!/[A-ZÄÖÜ]/.test(txt)) { // Autorname ist nur ein Kürzel
 				return `N. N. [${txt}]`;
