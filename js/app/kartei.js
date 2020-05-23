@@ -408,6 +408,7 @@ let kartei = {
 		data = {};
 		kartei.wort = "";
 		kartei.pfad = "";
+		belegImport.DateiReset();
 		let wort = document.getElementById("wort");
 		wort.classList.add("keine-kartei");
 		wort.textContent = "keine Kartei geöffnet";

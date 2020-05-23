@@ -1317,6 +1317,21 @@ let belegImport = {
 		meta: "", // Metadaten für alle Belege in belegImport.Datei.data
 		data: [], // Daten der Datei; s. pushBeleg()
 	},
+	// Datei-Import: Zwischenspeicher und Importformular zurücksetzen
+	DateiReset () {
+		let datei = belegImport.Datei,
+			typ = datei.typ;
+		// Zwischenspeicher zurücksetzen
+		for (let k of Object.keys(datei)) {
+			if (Array.isArray(datei[k])) {
+				datei[k] = [];
+			} else {
+				datei[k] = "";
+			}
+		}
+		// Formular zurücksetzen
+		beleg.formularImport(typ);
+	},
 	// Datei-Import: öffnet eine Datei und liest sie ein
 	async DateiOeffnen () {
 		// Optionen
