@@ -782,19 +782,10 @@ let belegImport = {
 	},
 	// DWDS-Import: einen leeren Datensatz erzeugen
 	DWDSDatensatz () {
-		return {
-			importiert: false,
-			ds: {
-				au: "N. N.", // Autor
-				bs: "", // Beleg
-				bx: "", // Original
-				da: "", // Belegdatum
-				kr: "DWDS", // Korpus
-				no: "", // Notizen
-				qu: "", // Quellenangabe
-				ts: "", // Textsorte
-			},
-		};
+		let data = belegImport.DateiDatensatz();
+		data.ds.au = "N. N.";
+		data.ds.kr = "DWDS";
+		return data;
 	},
 	// DWDS-Import: XML-Daten einlesen
 	//   clipboard = String
@@ -1274,6 +1265,22 @@ let belegImport = {
 		typ: "", // Typ der Datei (dwds || dereko || bibtex)
 		meta: "", // Metadaten für alle Belege in belegImport.Datei.data
 		data: [], // Daten der Datei; s. pushBeleg()
+	},
+	// Datei-Import: einen leeren Datensatz erzeugen
+	DateiDatensatz () {
+		return {
+			importiert: false,
+			ds: {
+				au: "", // Autor
+				bs: "", // Beleg
+				bx: "", // Original
+				da: "", // Belegdatum
+				kr: "", // Korpus
+				no: "", // Notizen
+				qu: "", // Quellenangabe
+				ts: "", // Textsorte
+			},
+		};
 	},
 	// Datei-Import: öffnet eine Datei und liest sie ein
 	async DateiOeffnen () {
@@ -1778,19 +1785,13 @@ let belegImport = {
 				return;
 			}
 			// Datensatz füllen
-			let data = {
-				importiert: false,
-				ds: {
-					au: "N. N.", // Autor
-					bs: beleg.join("\n\n"), // Beleg
-					bx: `${id}${quelle}\n\n${beleg.join("\n")}`, // Original
-					da: "", // Belegdatum
-					kr: "IDS-Archiv", // Korpus
-					no: belegImport.Datei.meta, // Notizen
-					qu: quelle.replace(/\s\[Ausführliche Zitierung nicht verfügbar\]/, ""), // Quellenangabe
-					ts: "", // Textsorte
-				},
-			};
+			let data = belegImport.DateiDatensatz();
+			data.ds.au = "N. N."; // Autor
+			data.ds.bs = beleg.join("\n\n"); // Beleg
+			data.ds.bx = `${id}${quelle}\n\n${beleg.join("\n")}`; // Original
+			data.ds.kr = "IDS-Archiv"; // Korpus
+			data.ds.no = belegImport.Datei.meta; // Notizen
+			data.ds.qu = quelle.replace(/\s\[Ausführliche Zitierung nicht verfügbar\]/, ""); // Quellenangabe
 			let autor = quelle.split(":"),
 				kommata = autor[0].match(/,/g),
 				illegal = /[0-9.;!?]/.test(autor[0]);
@@ -1917,17 +1918,7 @@ let belegImport = {
 		// Titeldaten übertragen
 		function pushTitle () {
 			// Datensatz füllen
-			let data = {
-				importiert: false,
-				ds: {
-					au: "", // Autor
-					bs: "", // Beleg (immer leer, aber wichtig für die Anzeige)
-					bx: "", // Original
-					da: "", // Belegdatum
-					kr: "", // Korpus
-					qu: "", // Quellenangabe
-				},
-			};
+			let data = belegImport.DateiDatensatz();
 			// Autor(en) ermitteln
 			if (item.author) {
 				data.ds.au = item.author.join("/");
