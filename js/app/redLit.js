@@ -2664,7 +2664,7 @@ let redLit = {
 		let si = document.createElement("p");
 		div.appendChild(si);
 		si.classList.add("sigle");
-		si.innerHTML = redLit.anzeigeSnippetHighlight(ds.td.si);
+		si.innerHTML = maskieren(redLit.anzeigeSnippetHighlight(ds.td.si));
 		// alte Aufnahme
 		if (slot > 0 && redLit.anzeige.snippetKontext === "suche") {
 			let alt = document.createElement("span");
@@ -2705,7 +2705,7 @@ let redLit = {
 		let ti = document.createElement("p");
 		div.appendChild(ti);
 		ti.classList.add("aufnahme");
-		ti.innerHTML = redLit.anzeigeSnippetHighlight(ds.td.ti);
+		ti.innerHTML = maskieren(redLit.anzeigeSnippetHighlight(ds.td.ti));
 		// URL + Aufrufdatum
 		if (ds.td.ul) {
 			let ul = document.createElement("p");
@@ -2766,7 +2766,7 @@ let redLit = {
 			i.textContent = "Notizen:";
 			let noFrag = document.createElement("span");
 			no.appendChild(noFrag);
-			const notiz = redLit.anzeigeSnippetHighlight(ds.td.no);
+			const notiz = maskieren(redLit.anzeigeSnippetHighlight(ds.td.no));
 			noFrag.innerHTML = notiz.replace(/[\r\n]+/g, "<br>");
 		}
 		// Metadaten: BearbeiterIn + Datum + Titelaufnahmen
@@ -2798,6 +2798,14 @@ let redLit = {
 		}
 		// Snippet zurückgeben
 		return div;
+		// Funktion zum Maskieren von Spitzklammern
+		function maskieren (text) {
+			text = text.replace(/</g, "&lt;");
+			text = text.replace(/>/g, "&gt;");
+			text = text.replace(/&lt;mark class="suche"&gt;/g, `<mark class="suche">`);
+			text = text.replace(/&lt;\/mark&gt;/g, `</mark>`);
+			return text;
+		}
 	},
 	// Anzeige: Suchtreffer im Snippet highlighten
 	//   text = String
