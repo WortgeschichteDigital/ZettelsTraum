@@ -1955,6 +1955,8 @@ let redLit = {
 		if (!/^<(Fundstelle|mods|\?xml)/.test(xmlStr)) {
 			return false;
 		}
+		// Namespae-Attribut entfernen; das macht nur Problem mit evaluate()
+		xmlStr = xmlStr.replace(/xmlns=".+?"/, "");
 		// XML nicht wohlgeformt
 		let parser = new DOMParser(),
 			xmlDoc = parser.parseFromString(xmlStr, "text/xml");
@@ -2054,6 +2056,175 @@ let redLit = {
 		}
 		// Datensatz zurückgeben
 		return data;
+	},
+	// Eingabeformular: MODS-Dokument auslesen
+	//   xmlDoc = Document
+	//     (das geparste XML-Snippet)
+	//   xmlStr = String
+	//     (das nicht geparste Originaldokument)
+	eingabeXMLMODS ({xmlDoc, xmlStr}) {
+		// Daten zusammentragen
+		let data = redLit.eingabeXMLDatensatz(),
+			td = redLit.eingabeXMLModsTd({xmlDoc});
+		// Datensatz für Karteikarte ausfüllen
+		if (td.autor.length) {
+			data.ds.au = td.autor.join("/");
+		} else if (td.hrsg.length) {
+			data.ds.au = `${td.hrsg.join("/")} (Hrsg.)`;
+		}
+		data.ds.bx = xmlStr;
+		data.ds.da = td.jahr;
+		if (td.url.some(i => /^https?:\/\/www\.deutschestextarchiv\.de\//.test(i))) {
+			data.ds.kr = "DTA";
+		} else if (td.url.some(i => /books\.google/.test(i))) {
+			data.ds.kr = "GoogleBooks";
+		}
+		data.ds.qu = belegImport.makeTitle({td, mitURL: true});
+		// Datensatz für Literaturdatenbank ausfüllen
+		data.td.ti = belegImport.makeTitle({td, mitURL: false});
+		if (td.url.length) {
+			data.td.ul = td.url[0];
+		}
+		data.td.pn = td.ppn.join(", ");
+		// Datensatz zurückgeben
+		return data;
+	},
+	// Eingabeformular: MODS-Dokument auslesen (Titeldaten)
+	//   xmlDoc = Document
+	//     (das geparste XML-Snippet)
+	eingabeXMLModsTd ({xmlDoc}) {
+		let td = belegImport.makeTitleDataObject();
+		// Helfer-Funktionen
+		let evaluator = xpath => {
+			return xmlDoc.evaluate(xpath, xmlDoc, null, XPathResult.ANY_TYPE, null);
+		};
+		let pusher = (result, key) => {
+			let item = result.iterateNext();
+			if (Array.isArray(td[key])) {
+				while (item) {
+					const val = helfer.textTrim(item.textContent, true);
+					if (val) {
+						td[key].push(val);
+					}
+					item = result.iterateNext();
+				}
+			} else if (item) {
+				td[key] = helfer.textTrim(item.textContent, true);
+			}
+		};
+		// Autor
+		let autor = evaluator("//name[@type='personal']/namePart[not(@*)][contains(following-sibling::role/roleTerm[@type='code'],'aut')]");
+		pusher(autor, "autor");
+		// Herausgeber
+		let hrsg = evaluator("//name[@type='personal']/namePart[not(@*)][contains(following-sibling::role/roleTerm[@type='code'],'edt')]");
+		pusher(hrsg, "hrsg");
+		// Titel
+		let titel = evaluator("/mods/titleInfo[not(@*)]/title");
+		pusher(titel, "titel");
+		// Korrektur: Großschreibung
+		gross({
+			ds: td.titel,
+			start: 1,
+		});
+		// Titel-Vorsatz
+		let titelVorsatz = evaluator("/mods/titleInfo[not(@*)]/nonSort"),
+			item = titelVorsatz.iterateNext();
+		if (item) {
+			td.titel[0] = helfer.textTrim(item.textContent + td.titel[0], true);
+		}
+		// Untertitel
+		let untertitel = evaluator("/mods/titleInfo[not(@*)]/subTitle");
+		pusher(untertitel, "untertitel");
+		// Korrektur: Großschreibung
+		gross({
+			ds: td.untertitel,
+			start: 0,
+		});
+		// Zeitschrift/Sammelband
+		let inTitel = evaluator("//relatedItem[@type='host']//title");
+		pusher(inTitel, "inTitel");
+		// Korrektur: Großschreibung
+		gross({
+			ds: td.inTitel,
+			start: 0,
+		});
+		// Band
+		let band = evaluator("/mods/titleInfo[not(@*)]/partNumber");
+		pusher(band, "band");
+		// Bandtitel
+		let bandtitel = evaluator("/mods/titleInfo[not(@*)]/partName");
+		pusher(bandtitel, "bandtitel");
+		// Auflage
+		let auflage = evaluator("/mods/originInfo[not(@*)]//edition");
+		pusher(auflage, "auflage");
+		// Qualifikationsschrift
+		let quali = evaluator("/mods/note[@type='thesis']");
+		pusher(quali, "quali");
+		// Ort
+		let ort = evaluator("/mods/originInfo[@eventType='publication']//placeTerm");
+		pusher(ort, "ort");
+		// Verlag
+		let verlag;
+		if (td.inTitel.length) {
+			verlag = evaluator("//relatedItem[@type='host']/originInfo/publisher");
+		} else {
+			verlag = evaluator("/mods/originInfo[@eventType='publication']/publisher");
+		}
+		pusher(verlag, "verlag");
+		// Jahr
+		let jahr = evaluator("/mods/originInfo[@eventType='publication']/dateIssued");
+		pusher(jahr, "jahr");
+		// Jahrgang, Jahr, Heft, Seiten, Spalten
+		let inDetails = evaluator("//relatedItem[@type='host']/part/text");
+		item = inDetails.iterateNext();
+		if (item) {
+			let jahrgang = /(?<val>[0-9]+)\s?\(/.exec(item.textContent);
+			if (jahrgang) {
+				td.jahrgang = jahrgang.groups.val;
+			}
+			let jahr = /\((?<val>.+?)\)/.exec(item.textContent);
+			if (jahr) {
+				td.jahr = jahr.groups.val;
+			}
+			let heft = /\), (?<val>.+?),/.exec(item.textContent);
+			if (heft) {
+				td.heft = heft.groups.val;
+			}
+			let seiten = /(?<typ>Seite|Spalte)\s(?<val>.+)/.exec(item.textContent);
+			if (seiten) {
+				if (seiten.groups.typ === "Spalte") {
+					td.spalte = true;
+				}
+				td.seiten = seiten.groups.val;
+			}
+		}
+		// Serie
+		let serie = evaluator("//relatedItem[@type='series']/titleInfo/title");
+		pusher(serie, "serie");
+		// URL
+		let url = evaluator("//url[@displayLabel='Volltext']");
+		pusher(url, "url");
+		td.url.sort(helfer.sortURL);
+		// PPN
+		let ppn = evaluator("//recordIdentifier[@source='DE-627']");
+		pusher(ppn, "ppn");
+		// Korrektur: Ort ggf. aus Verlagsangabe ermitteln
+		if (!td.ort.length && /:/.test(td.verlag)) {
+			let ort = td.verlag.split(":");
+			td.ort.push(ort[0].trim());
+		}
+		// Korrektur: "[u.a.]" in Ort aufhübschen
+		td.ort.forEach((i, n) => td.ort[n] = i.replace(/\[u\.a\.\]/, "u. a."));
+		// Korrektur: Jahr ohne eckige Klammern
+		td.jahr = td.jahr.replace(/^\[|\]$/g, "");
+		// Datensatz zurückgeben
+		return td;
+		// Großschreibung am Titelanfang
+		function gross ({ds, start}) {
+			for (let i = start, len = ds.length; i < len; i++) {
+				ds[i] = ds[i].substring(0, 1).toUpperCase() + ds[i].substring(1);
+			}
+		}
 	},
 	// Eingabeformular: BibTeX-Import aus der Zwischenablage
 	async eingabeBibTeX () {

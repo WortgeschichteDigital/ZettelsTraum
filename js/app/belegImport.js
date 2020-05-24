@@ -2324,6 +2324,7 @@ let belegImport = {
 			serie: "",
 			serieBd: "",
 			url: [],
+			ppn: [],
 		};
 	},
 	// überprüft, ob das Wort im importierten Text gefunden wurde;
