@@ -465,10 +465,10 @@ let redLit = {
 	dbExportierenSnippetXML ({id, slot}) {
 		let ds = redLit.db.data[id][slot].td,
 			snippet = `<Fundstelle xml:id="${id}">`;
-		snippet += `<Sigle>${ds.si}</Sigle>`;
-		snippet += `<unstrukturiert>${ds.ti}</unstrukturiert>`;
+		snippet += `<Sigle>${xml.escape({text: ds.si})}</Sigle>`;
+		snippet += `<unstrukturiert>${xml.escape({text: ds.ti})}</unstrukturiert>`;
 		if (ds.ul) {
-			snippet += `<URL>${ds.ul}</URL>`;
+			snippet += `<URL>${xml.escape({text: ds.ul})}</URL>`;
 		}
 		if (ds.ad) {
 			let ad = ds.ad.split("-");
@@ -1967,7 +1967,7 @@ let redLit = {
 		}
 		// MODS-Dokument
 		if (xmlDoc.querySelector("mods titleInfo")) {
-			return redLit.eingabeXMLMODS(xmlDoc, xmlStr);
+			return redLit.eingabeXMLMODS({xmlDoc, xmlStr});
 		}
 		// kein passendes XML-Dokument
 		return false;

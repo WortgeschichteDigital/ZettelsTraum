@@ -793,7 +793,7 @@ let belegImport = {
 	//   xml = Document
 	//     (das geparste XML-Dokument)
 	//   returnResult = true || undefined
-	//     (das Ergebnis der Analyse soll nciht in den Datei-Zwischenspeicher
+	//     (das Ergebnis der Analyse soll nicht in den Datei-Zwischenspeicher
 	//     geschrieben, sondern direkt zurückgegeben werden)
 	DWDSLesenXML ({clipboard, xml, returnResult = false}) {
 		// Datenobjekt erzeugen
