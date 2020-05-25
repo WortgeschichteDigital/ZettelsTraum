@@ -1354,8 +1354,38 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
 						</div>
 					</div>
 
-					<!-- Referenz -->
-					<h2 id="xml-referenz">Referenz</h2>
+					<!-- Fundstelle -->
+					<h2 id="xml-fundstelle">Fundstelle</h2>
+
+					<p>Ein typisches Fundstellen-Snippet, wie es für den Export von Titelaufnahmen aus der <a href="#menueRedaktion-literaturExportieren" class="link-handbuch">Literaturdatenbank</a> verwendet wird, könnte so aussehen:</p>
+
+					<pre class="quelltext">&lt;Fundstelle xml:id="dwb2"&gt;
+	&lt;Sigle&gt;²DWB&lt;/Sigle&gt;
+	&lt;unstrukturiert&gt;Deutsches Wörterbuch von Jacob Grimm und Wilhelm Grimm. Neubearbeitung. Hrsg. von der Berlin-Brandenburgischen Akademie der Wissenschaften (vormals Deutsche Akademie der Wissenschaften) und der Akademie der Wissenschaften zu Göttingen. Bd. 1–9. Stuttgart 1983–2018.&lt;/unstrukturiert&gt;
+	&lt;Fundort&gt;Bibliothek&lt;/Fundort&gt;
+	&lt;PPN&gt;029986761&lt;/PPN&gt;
+&lt;/Fundstelle&gt;</pre>
+
+					<p><b>&lt;Fundstelle&gt;:</b> <i>verpflichtend</i>.</p>
+
+					<div class="eingerueckt">
+						<p><b>@xml:id:</b> <i>verpflichtend</i>; Format: <code class="quelltext">/[a-z0-9ßäöü-]+/</code>. Die ID der Titelaufnahme.</p>
+
+						<p><b>&lt;Aufrufdatum&gt;:</b> <i>fakultativ</i>; Format: <code class="quelltext">([0-9]{2}\.[0-9]{2}\.)?[0-9]{4}</code>. Das Datum des Zugriffs auf die angegebene URL. Nur vorhanden, wenn <code class="quelltext">&lt;URL&gt;</code> nicht leer ist.</p>
+
+						<p><b>&lt;Fundort&gt;:</b> <i>verpflichtend</i>. Abstrakte Angabe zur Quelle des Literaturtitels. Werte können sein <code class="quelltext">DTA | DWDS | GoogleBooks | IDS | online | Bibliothek</code>.</p>
+
+						<p><b>&lt;PPN&gt;:</b> <i>fakultativ, Mehrfachverwendung möglich</i>; Format: <code class="quelltext">/[0-9]{8,10}X?/</code>. Eine Pica-Produktionsnummer des Literaturtitels.</p>
+
+						<p><b>&lt;Sigle&gt;:</b> <i>verpflichtend</i>. Die Sigle des Literaturtitels.</p>
+
+						<p><b>&lt;unstrukturiert&gt;:</b> <i>verpflichtend</i>. Der Literaturtitel.</p>
+
+						<p><b>&lt;URL&gt;:</b> <i>fakultativ</i>. Eine Webadresse.</p>
+					</div>
+
+					<!-- Referenz Beleg -->
+					<h2 id="xml-referenzBeleg">Referenz eines Belegs</h2>
 
 					<p>Der Referenz-Tag kann genutzt werden, um auf einen in <abbr title="Extensible Markup Language" lang="en">XML</abbr> exportierten Belegschnitt zu verweisen (zur <a href="#xml-belegschnittId">Form der ID</a> <abbr title="siehe oben">s. o.</abbr>). Ein Beispiel:</p>
 
