@@ -1841,7 +1841,7 @@ let belegImport = {
 					bs: beleg.join("\n\n"), // Beleg
 					bx: `${id}${quelle}\n\n${beleg.join("\n")}`, // Original
 					da: "", // Belegdatum
-					kr: "IDS-Archiv", // Korpus
+					kr: "IDS", // Korpus
 					no: belegImport.Datei.meta, // Notizen
 					qu: quelle.replace(/\s\[Ausführliche Zitierung nicht verfügbar\]/, ""), // Quellenangabe
 					ts: "", // Textsorte
