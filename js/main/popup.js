@@ -270,8 +270,8 @@ let punkte = {
 		label: "Titelaufnahme in Zwischenablage",
 		icon: "kopieren.png",
 	},
-	titelAufnahmePlain: {
-		label: "Plain text",
+	titelAufnahmeText: {
+		label: "Text",
 		icon: "dokument.png",
 		click: "redLit.titelZwischenablage('plain')",
 	},
@@ -299,8 +299,8 @@ let punkte = {
 		label: "Referenz in Zwischenablage",
 		icon: "kopieren.png",
 	},
-	titelReferenzPlain: {
-		label: "Plain text",
+	titelReferenzText: {
+		label: "Text",
 		icon: "dokument.png",
 		click: "redLit.titelZwischenablage('plainReferenz')",
 	},

@@ -118,7 +118,7 @@ let popup = {
 			if (oben === "stamm") {
 				items.push("link", "sep", "schliessen");
 			} else if (oben === "red-lit") {
-				items.push("link", "sep", "titelBearbeiten", "titelAufnahmen", {name: "titelAufnahmeCp", sub: ["titelAufnahmeXml", "titelAufnahmePlain"]}, {name: "titelReferenzCp", sub: ["titelReferenzXml", "titelReferenzPlain"]}, "sep", "schliessen");
+				items.push("link", "sep", "titelBearbeiten", "titelAufnahmen", {name: "titelAufnahmeCp", sub: ["titelAufnahmeXml", "titelAufnahmeText"]}, {name: "titelReferenzCp", sub: ["titelReferenzXml", "titelReferenzText"]}, "sep", "schliessen");
 				if (popup.titelaufnahme.popup) {
 					items.splice(items.indexOf("titelAufnahmen"), 1, "titelLoeschen");
 				}
@@ -156,7 +156,7 @@ let popup = {
 			items.push("sep", "belegHinzufuegen");
 			popup.belegeAuflisten(items);
 		} else if (target === "titelaufnahme") {
-			items.push("titelBearbeiten", "titelAufnahmen", {name: "titelAufnahmeCp", sub: ["titelAufnahmeXml", "titelAufnahmePlain"]}, {name: "titelReferenzCp", sub: ["titelReferenzXml", "titelReferenzPlain"]}, "sep", "schliessen");
+			items.push("titelBearbeiten", "titelAufnahmen", {name: "titelAufnahmeCp", sub: ["titelAufnahmeXml", "titelAufnahmeText"]}, {name: "titelReferenzCp", sub: ["titelReferenzXml", "titelReferenzText"]}, "sep", "schliessen");
 			if (popup.titelaufnahme.popup) {
 				items.splice(items.indexOf("titelAufnahmen"), 1, "titelLoeschen");
 			}
