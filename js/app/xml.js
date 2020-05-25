@@ -15,14 +15,14 @@ let xml = {
 		let fundort = "";
 		if (/^DTA/i.test(data.kr) ||
 				/deutschestextarchiv\.de\//.test(data.qu)) {
-			fundort = "dta";
+			fundort = "DTA";
 		} else if (/^DWDS/i.test(data.kr)) {
-			fundort = "dwds";
+			fundort = "DWDS";
 		} else if (/^Google\s?Books$/i.test(data.kr) ||
 			/books\.google\.[a-z]+\//.test(data.qu)) {
-			fundort = "gbooks";
-		} else if (/^(DeReKo|IDS-Archiv)/i.test(data.kr)) {
-			fundort = "IDS-Archiv";
+			fundort = "GoogleBooks";
+		} else if (/^(DeReKo|IDS)/i.test(data.kr)) {
+			fundort = "IDS";
 		} else if (/https?:\/\/|www\.[a-z-]+\.[a-z]+/.test(data.qu)) {
 			fundort = "online";
 		} else {
@@ -35,9 +35,9 @@ let xml = {
 			knoten = cont.childNodes;
 		for (let i = 0, len = knoten.length; i < len; i++) {
 			if (i > 0) {
-				if (fundort === "dwds") {
-					// Absätze wurden in DWDS-Belegen intern getilgt; die erscheinen online nur,
-					// um den Kontext besser zu erkennen.
+				if (fundort === "DWDS") {
+					// Absätze wurden in DWDS-Belegen intern getilgt; die erscheinen
+					// online nur, um den Kontext besser zu erkennen.
 					text += " ";
 				} else {
 					text += "<Zeilenumbruch/>";
@@ -114,23 +114,16 @@ let xml = {
 		// <Fundstelle>
 		let fundstelle = document.createElementNS(ns, "Fundstelle");
 		schnitt.firstChild.appendChild(fundstelle);
-		fundstelle.setAttribute("Fundort", fundort);
+		// <Fundort>
+		let fo = document.createElementNS(ns, "Fundort");
+		fundstelle.appendChild(fo);
+		fo.appendChild(document.createTextNode(fundort));
 		// <Datum>
 		let da = xml.datum(data.da);
 		if (da) {
 			let datum = document.createElementNS(ns, "Datum");
 			fundstelle.appendChild(datum);
 			datum.appendChild(document.createTextNode(da));
-		}
-		// <Autor>
-		let au = helfer.textTrim(data.au, true);
-		if (au) {
-			// Korrekturen
-			au = au.replace(/N\.N\./g, "N. N.");
-			// Element erzeugen
-			let autor = document.createElementNS(ns, "Autor");
-			fundstelle.appendChild(autor);
-			autor.appendChild( document.createTextNode( xml.escape( helfer.typographie(au) ) ) );
 		}
 		// <URL>
 		let href = data.qu.match(/https?:[^\s]+|www\.[^\s]+/);
@@ -162,7 +155,7 @@ let xml = {
 			qu = qu.split(reg)[0];
 		}
 		qu = helfer.textTrim(qu, true);
-		qu = qu.replace(/N\.N\./g, "N. N.");
+		qu = qu.replace(/N\. ?N\./g, "N. N.");
 		let unstrukturiert = document.createElementNS(ns, "unstrukturiert");
 		fundstelle.appendChild(unstrukturiert);
 		unstrukturiert.appendChild( document.createTextNode( xml.escape( helfer.typographie(qu) ) ) );
@@ -172,9 +165,9 @@ let xml = {
 		let XMLString = new XMLSerializer().serializeToString(schnitt);
 		XMLString = XMLString.replace(/\sxmlns="http:\/\/www\.w3\.org\/1999\/xhtml"/g, "");
 		let zeichen = new Map([
+			["&amp;amp;", "&amp;"],
 			["&amp;lt;", "&lt;"],
 			["&amp;gt;", "&gt;"],
-			["&amp;amp;", "&amp;"],
 			["&amp;quot;", "&quot;"],
 			["&amp;apos;", "&apos;"],
 		]);
@@ -237,7 +230,7 @@ let xml = {
 		if (sonder) {
 			let formate = [
 				/(([0-9]{4})\/[0-9]{2})(?![0-9])/,
-				/(?<!Sp*\. )(([0-9]{4})[\-–][0-9]{4})/,
+				/(?<!Sp?\. )(([0-9]{4})[\-–][0-9]{4})/,
 				/zwischen (([0-9]{4}) und [0-9]{4})/,
 			];
 			for (let reg of formate) {
