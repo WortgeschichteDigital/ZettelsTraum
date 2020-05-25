@@ -715,8 +715,14 @@ mark.wort {
 	margin-top: 22px;
 }
 
-.erklaerung-icon img,
-.erklaerung-icon-menues img {
+.erklaerung-icon-text {
+	display: inline-block;
+	width: 20px;
+}
+
+.erklaerung-icon img:first-child,
+.erklaerung-icon-menues img:first-child,
+.erklaerung-icon .erklaerung-icon-text {
 	margin-right: 16px;
 }
 
@@ -752,5 +758,5 @@ h2 + .erklaerung-option {
 }
 
 .eingerueckt {
-	margin-left: 40px;
+	margin-left: 36px;
 }

@@ -370,7 +370,7 @@ $ npm install --save-dev electron-builder</pre>
 
 					<p>Für <strong>macOS</strong> konnte das Ganze mangels System mit einer entsprechenden Entwicklungsumgebung <span class="obacht">nicht getestet</span> werden.</p>
 
-					<p>Ob die App nun paketiert und installiert ist oder einfach via <code>npm start</code> aufgerufen wurde, das <i>Electron</i>-Framework erstellt automatisch einen Konfigurationsordner im Standard-Konfigurationsverzeichnis des Betriebssystems:</p>
+					<p id="framework-konfigurationsverzeichnis">Ob die App nun paketiert und installiert ist oder einfach via <code>npm start</code> aufgerufen wurde, das <i>Electron</i>-Framework erstellt automatisch einen Konfigurationsordner im Standard-Konfigurationsverzeichnis des Betriebssystems:</p>
 
 					<ul>
 						<li><i>Linux</i>: <span class="datei">~/.config/<span class="app-name"></span>/</span></li>
@@ -1390,6 +1390,13 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
 					<p>Der Referenz-Tag kann genutzt werden, um auf einen in <abbr title="Extensible Markup Language" lang="en">XML</abbr> exportierten Belegschnitt zu verweisen (zur <a href="#xml-belegschnittId">Form der ID</a> <abbr title="siehe oben">s. o.</abbr>). Ein Beispiel:</p>
 
 					<pre class="quelltext">&lt;Belegreferenz Ziel="n-n-1859-19"/&gt;</pre>
+
+					<!-- Referenz Literaturtitel -->
+					<h2 id="xml-referenzLiteratur">Referenz eines Literaturtitels</h2>
+
+					<p>Der Referenz-Tag kann genutzt werden, um auf eine in <abbr title="Extensible Markup Language" lang="en">XML</abbr> exportierte Titelaufnahme zu verweisen. Ein Beispiel:</p>
+
+					<pre class="quelltext">&lt;Literaturreferenz Ziel="dwb2"&gt;&lt;/Literaturreferenz&gt;</pre>
 				</section>
 
 				<!-- VERSCHIEDENES -->

@@ -98,7 +98,7 @@
 
 					<p>Die auf virtuellen Karteikarten gesammelten Belege lassen sich <a href="#belegliste">auflisten</a> und in vielfältiger Weise <a href="#filter">filtern</a>, <a href="#menueKartei-suche">durchsuchen</a>, <a href="#belegliste-annotieren">markieren</a>, <a href="#menueBelege-kopieren">kopieren</a>, <a href="#karteikarte-duplizieren">duplizieren</a>, auf Wunsch sogar <a href="#karteikarte-drucken">ausdrucken</a>. Die Wortkarteidaten werden dafür in einem ausführlich dokumentieren Klartextformat gespeichert (dem <a href="#ztj-ztj" class="link-dokumentation"><abbr title="Zettel’s Traum JSON">ZTJ</abbr>-Dateiformat</a>), das auf einen Notationsstandard aufsetzt, der auch in der ferneren Zukunft problemlos von Computerprogrammen zu lesen sein sollte.</p>
 
-					<p>Die App ist agnostisch, was die Verwendung eines bestimmten Textkorpus angeht. Sie können Belege aus beliebigen Korpora einpflegen. Allerdings enthält sie spezielle <a href="#karteikarte-importfunktion">Importfunktionen</a>, die das Erstellen von Karteikarten mit Belegen aus dem <a href="http://www.deutschestextarchiv.de/"><i>Deutschen Textarchiv</i></a> (DTA), den <a href="https://www.dwds.de/r">Korpora</a> des <a href="https://www.dwds.de/"><i>Digitalen Wörterbuchs der deutschen Sprache</i></a> (DWDS) und dem <a href="https://cosmas2.ids-mannheim.de/cosmas2-web/"><i>Deutschen Referenzkorpus</i></a> (DeReKo) erheblich erleichtern und beschleunigen. Mit nur einem Klick kann die Karteikarte sowohl mit dem Belegtext als auch mit den zugehörigen Metadaten gefüllt werden. Daneben besteht die Möglichkeit, Titeldaten im BibTeX-Format zu importieren, die von <a href="https://books.google.com/"><i>GoogleBooks</i></a> oder Bibliothekskatalogen wie dem <a href="https://kxp.k10plus.de/DB=2.1/SET=2/TTL=1/"><i>Gemeinsamen Verbundkatalog</i></a> (GVK) zum Download angeboten werden.</p>
+					<p>Die App ist agnostisch, was die Verwendung eines bestimmten Textkorpus angeht. Sie können Belege aus beliebigen Korpora einpflegen. Allerdings enthält sie spezielle <a href="#karteikarte-importfunktion">Importfunktionen</a>, die das Erstellen von Karteikarten mit Belegen aus dem <a href="http://www.deutschestextarchiv.de/"><i>Deutschen Textarchiv</i></a> (DTA), den <a href="https://www.dwds.de/r">Korpora</a> des <a href="https://www.dwds.de/"><i>Digitalen Wörterbuchs der deutschen Sprache</i></a> (DWDS) und dem <a href="https://cosmas2.ids-mannheim.de/cosmas2-web/"><i>Deutschen Referenzkorpus</i></a> (DeReKo) erheblich erleichtern und beschleunigen. Mit nur einem Klick kann die Karteikarte sowohl mit dem Belegtext als auch mit den zugehörigen Metadaten gefüllt werden. Daneben besteht die Möglichkeit, Titeldaten im <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Format zu importieren, die von <a href="https://books.google.com/"><i>GoogleBooks</i></a> oder Bibliothekskatalogen wie dem <a href="https://kxp.k10plus.de/DB=2.1/SET=2/TTL=1/"><i>Gemeinsamen Verbundkatalog</i></a> (GVK) zum Download angeboten werden.</p>
 
 					<p>Nicht zuletzt verfügt die App über leicht zu handhabende Funktionen zum Erstellen von <a href="#belegliste-xmlZwischenablage"><abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippets</a>. Diese wurden so designt, dass der Export von Bedeutungsgerüsten und frei gewählten Belegschnitten rasch und unkompliziert vonstatten geht. (Die Exportfunktion für Bedeutungsgerüste wird demnächst in das Programm integriert.)</p>
 
@@ -359,7 +359,7 @@
 						<li>Hat man sich in den vielen Dialogfenstern und Funktionen des Hauptfensters verloren, kann man die Belegliste jederzeit mit <kbd>Strg</kbd> + <kbd>L</kbd> oder über den Menüpunkt <a href="#menueBelege-auflisten"><i>Belege &gt; Auflisten</i></a> wieder sichtbar machen.</li>
 
 						<li>Die Belegliste listet standardmäßig alle Belege auf, die sich in der Kartei befinden.</li>
-						
+
 						<li>Klickt man auf eine grau hinterlegte <a href="#belegliste-kopfleisteBelege">Kopfleiste mit Belegvorschau</a>, wird eine <a href="#belegliste-detailansicht">Detailansicht</a> geöffnet.</li>
 
 						<li>In der Detailansicht können alle Daten angezeigt werden, die man im <a href="#karteikarte-formularansicht">Karteikarten-Formular</a> eingegeben hat. In der <a href="#belegliste-kopfleiste">Kopfleiste der Belegliste</a> kann man festlegen, <a href="#belegliste-platzhalter">welche Felder angezeigt</a> werden sollen. Standardmäßig sieht man nur den Belegtext.</li>
@@ -657,14 +657,14 @@
 
 					<h2 id="karteikarte-importfunktion">Importfunktion</h2>
 
-					<p>Belege können automatisch aus dem <a href="#karteikarte-dtaImport"><abbr title="Deutschen Textarchiv">DTA</abbr></a>, dem <a href="#karteikarte-dwdsImport"><abbr title="Digitalen Wörterbuch der deutschen Sprache">DWDS</abbr></a> oder dem <a href="#karteikarte-derekoImport"><abbr title="Deutschen Referenzkorpus">DeReKo</abbr></a> importiert werden. Ferner besteht die Möglichkeit Titeldaten im <a href="#karteikarte-bibtexImport">BibTeX</a>-Format in eine Karteikarte zu laden. Für all diese Funktionen gibt es in der <a href="#karteikarte-formularansicht">Formularansicht der Karteikarte</a> unter dem Titel <i>Import</i> entsprechende Formulare. Bei den Textfeldern und Checkboxes in diesen Formularen handelt es sich <em>nicht</em> um Datenfelder. Sie werden beim Speichern der Karteikarte somit nicht berücksichtigt.</p>
+					<p>Belege können automatisch aus dem <a href="#karteikarte-dtaImport"><abbr title="Deutschen Textarchiv">DTA</abbr></a>, dem <a href="#karteikarte-dwdsImport"><abbr title="Digitalen Wörterbuch der deutschen Sprache">DWDS</abbr></a> oder dem <a href="#karteikarte-derekoImport"><abbr title="Deutschen Referenzkorpus">DeReKo</abbr></a> importiert werden. Ferner besteht die Möglichkeit Titeldaten im <a href="#karteikarte-bibtexImport" class="bibtex"><span>Bib</span>T<span>E</span>X</a>-Format in eine Karteikarte zu laden. Für all diese Funktionen gibt es in der <a href="#karteikarte-formularansicht">Formularansicht der Karteikarte</a> unter dem Titel <i>Import</i> entsprechende Formulare. Bei den Textfeldern und Checkboxes in diesen Formularen handelt es sich <em>nicht</em> um Datenfelder. Sie werden beim Speichern der Karteikarte somit nicht berücksichtigt.</p>
 
 					<p>Beim Öffnen der Karteikarte werden die Importformulare automatisch umgeschaltete:</p>
 
 					<ul>
-						<li>Befindet sich in der <b>Zwischenablage</b> Ihres Computers eine <abbr title="Uniform Resource Locator" lang="en">URL</abbr> des <abbr title="Deutschen Textarchivs">DTA</abbr>, ein <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippet aus den Korpora des <abbr title="Digitalen Wörterbuchs der deutschen Sprache">DWDS</abbr> oder ein BibTeX-Datensatz, wird das Importformular beim Öffnen einer neuen, leeren Karteikarte automatisch umgeschaltet und ein passendes Formularelement fokussiert, sodass Sie nur noch <kbd>⏎</kbd> drücken müssen, um den Import zu starten.</li>
+						<li>Befindet sich in der <b>Zwischenablage</b> Ihres Computers eine <abbr title="Uniform Resource Locator" lang="en">URL</abbr> des <abbr title="Deutschen Textarchivs">DTA</abbr>, ein <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippet aus den Korpora des <abbr title="Digitalen Wörterbuchs der deutschen Sprache">DWDS</abbr> oder ein <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Datensatz, wird das Importformular beim Öffnen einer neuen, leeren Karteikarte automatisch umgeschaltet und ein passendes Formularelement fokussiert, sodass Sie nur noch <kbd>⏎</kbd> drücken müssen, um den Import zu starten.</li>
 
-						<li>Wurde eine <b><abbr title="Digitales Wörterbuch der deutschen Sprache">DWDS</abbr>-, <abbr title="Deutsches Referenzkorpus">DeReKo</abbr>- oder BibTeX-Datei</b> geladen, bleibt diese mit dem Programm verknüpft. Befindet sich in der Zwischenablage kein Datensatz, der importiert werden könnte, wird beim Öffnen einer neuen Karteikarte <em>die</em> Importfunktion angezeigt, die zu der mit <i class="app-name"></i> verknüpften Datei passt. Dieses Verhalten ist besonders dann hilfreich, wenn Sie eine Datei mit mehreren Datensätzen geladen haben, die Sie nach und nach in verschiedene Karteikarten schreiben möchten.</li>
+						<li>Wurde eine <b><abbr title="Digitales Wörterbuch der deutschen Sprache">DWDS</abbr>-, <abbr title="Deutsches Referenzkorpus">DeReKo</abbr>- oder <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Datei</b> geladen, bleibt diese mit dem Programm verknüpft. Befindet sich in der Zwischenablage kein Datensatz, der importiert werden könnte, wird beim Öffnen einer neuen Karteikarte <em>die</em> Importfunktion angezeigt, die zu der mit <i class="app-name"></i> verknüpften Datei passt. Dieses Verhalten ist besonders dann hilfreich, wenn Sie eine Datei mit mehreren Datensätzen geladen haben, die Sie nach und nach in verschiedene Karteikarten schreiben möchten.</li>
 					</ul>
 
 					<p id="karteikarte-dtaImport"><b><abbr title="Deutsches Textarchiv">DTA</abbr>-Import:</b> In das erste, längere Textfeld muss eine <abbr title="Uniform Resource Locator" lang="en">URL</abbr> eingefügt werden, die eine Seite im <abbr title="Deutschen Textarchiv">DTA</abbr> referenziert, also <abbr title="zum Beispiel">z. B.</abbr> <code class="quelltext long">http://www.deutschestextarchiv.de/book/view/gutzkow_wally_1835?p=35</code>. Anstoßen lässt sich der Import, indem man <kbd>⏎</kbd> drückt oder den Button <i>Importieren</i> anklickt. Danach werden die Textfelder <i>Datum, Autor, Beleg, Quelle, Korpus</i> und <i>Textsorte</i> automatisch ausgefüllt.</p>
@@ -698,7 +698,7 @@
 					<p>Besonders bei sehr umfangreichen Ergebnislisten oder dann, wenn Sie nur wenige Belege aus den Ergebnissen importieren möchten, könnte es komfortabler sein, nicht erst eine umfangreiche Belegreihe herunterzuladen, sondern nur ausgewählte Belege zu exportieren. Für solche Fälle steht für jeden der angezeigten Belege auf der Ergebnisseite des <abbr title="Digitalen Wörterbuchs der deutschen Sprache">DWDS</abbr> ein <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippet zur Verfügung, das durch Klick auf ein Kopier-Icon in die Zwischenablage Ihres Rechners geschoben werden kann. Liegt in der Zwischenablage ein passendes Snippet, wird <i class="app-name"></i> dies erkennen und die Karteikarte nach dem Klick auf den Button <i>Importieren</i> mit den in ihm zu findenden Daten füllen.</p>
 
 					<p>Beim Importieren eines Belegs aus dem <abbr title="Digitalen Wörterbuch der deutschen Sprache">DWDS</abbr> wird in das <i>Notizen</i>-Feld eine <abbr title="Uniform Resource Locator" lang="en">URL</abbr> eingetragen, mit der sich der Beleg auf der Seite des <abbr title="Digitalen Wörterbuchs der deutschen Sprache">DWDS</abbr> leichter wiederfinden, wenn auch nicht exakt referenzieren lässt. Stammt der Beleg aus einem Zeitungskorpus, kann in die erste Zeile des Notizenfeldes darüber hinaus der Name der Zeitung automatisch eingetragen werden. Hierzu muss eine <a href="#einstellungen-karteikarteZeitungsname">Einstellung</a> aktiviert werden. Es kann sinnvoll sein, dass der Zeitungsname an dieser Stelle steht, wenn man in der <a href="#belegliste">Belegliste</a> immer im Blick haben möchte, aus welcher Zeitung ein Beleg stammt. In der <a href="#belegliste-kopfleisteBelege">Kopfleiste der Belege</a> kann man sich nämlich <a href="#einstellungen-beleglisteNotizen">die erste Zeile des Notizen-Feldes anzeigen</a> lassen.</p>
-					
+
 					<p id="karteikarte-derekoImport"><b><abbr title="Deutsches Referenzkorpus">DeReKo</abbr>-Import:</b> Aus der vom <i><abbr title="Leibniz-Institut für deutsche Sprache">IDS</abbr> Mannheim</i> zur Verfügung gestellten Webanwendung <a href="https://cosmas2.ids-mannheim.de/cosmas2-web/"><abbr title="Corpus Search, Management, and Analysis System" lang="en">COSMAS</abbr> II</a> können ausgewählte Belege in eine Textdatei <b>exportiert</b> werden:</p>
 
 					<div class="bilder">
@@ -772,9 +772,9 @@
 
 					<p id="karteikarte-dateikodierung">Die Checkbox <b>Latin-1</b> vor dem Button <i>Datei</i> wird beim Aktivieren des <abbr title="Deutsches Referenzkorpus">DeReKo</abbr>-Formulars automatisch abgehakt. Die in den Exportdateien von <abbr title="Corpus Search, Management, and Analysis System" lang="en">COSMAS</abbr> II zu findenden Belegtexte sind leider nicht als UTF-8 kodiert, was immer dann zum Problem werden könnte, wenn ein Text <abbr title="zum Beispiel">z. B.</abbr> Umlaute enthält. Darum muss dem Programm vor dem Öffnen der Datei mitgeteilt werden, dass es beim Einlesen die Zeichenkodierung <a href="https://de.wikipedia.org/wiki/ISO_8859-1">ISO 8859-1</a> (auch Latin-1 genannt) verwenden soll. Latin-1 ist eine Kodierung, die für westeuropäische Sprachen typische Buchstaben umfasst.</p>
 
-					<p id="karteikarte-bibtexImport"><b>BibTeX-Import:</b> Die Datenfelder in der Karteikarte können auch mit Titeldatensätzen gefüllt werden, die im <a href="https://en.wikipedia.org/wiki/BibTeX">BibTeX-Format</a> vorliegen. BibTeX-Daten enthalten zwar niemals Belegtext, die Datenfelder <i>Datum, Autor</i> und <i>Quelle</i> können jedoch gefüllt werden, womit das Format besonders dafür geeignet ist, wenn Sie manuell Belege einpflegen (müssen).</p>
+					<p id="karteikarte-bibtexImport"><b><span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Import:</b> Die Datenfelder in der Karteikarte können auch mit Titeldatensätzen gefüllt werden, die im <a href="https://en.wikipedia.org/wiki/BibTeX"><span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Format</a> vorliegen. <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Daten enthalten zwar niemals Belegtext, die Datenfelder <i>Datum, Autor</i> und <i>Quelle</i> können jedoch gefüllt werden, womit das Format besonders dafür geeignet ist, wenn Sie manuell Belege einpflegen (müssen).</p>
 
-					<p>BibTeX-Dateien werden <abbr title="unter anderem">u. a.</abbr> von <b><i>GoogleBooks</i></b> bereitgestellt. Ein Download-Link findet sich auf der Übersichtsseite des Digitalisats. Befinden Sie sich in der Ansicht eines Volldigitalisats, klicken Sie in der Seitenleiste auf den (sehr kleinen) Link <i>Über dieses Buch</i>. Im unteren Teil der sich öffnenden Übersichtsseite, finden Sie dann die Titelinformationen und eine Möglichkeit, diese als BibTeX zu exportieren. Beim Importieren eines BibTeX-Datensatzes von <i>GoogleBooks</i> wird in der Literaturangabe die <abbr title="Uniform Resource Locator" lang="en">URL</abbr> zum Digitalsat übernommen und das Datenfeld <i>Korpus</i> mit <q>GoogleBooks</q> gefüllt.</p>
+					<p><span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Dateien werden <abbr title="unter anderem">u. a.</abbr> von <b><i>GoogleBooks</i></b> bereitgestellt. Ein Download-Link findet sich auf der Übersichtsseite des Digitalisats. Befinden Sie sich in der Ansicht eines Volldigitalisats, klicken Sie in der Seitenleiste auf den (sehr kleinen) Link <i>Über dieses Buch</i>. Im unteren Teil der sich öffnenden Übersichtsseite, finden Sie dann die Titelinformationen und eine Möglichkeit, diese als <span class="bibtex"><span>Bib</span>T<span>E</span>X</span> zu exportieren. Beim Importieren eines <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Datensatzes von <i>GoogleBooks</i> wird in der Literaturangabe die <abbr title="Uniform Resource Locator" lang="en">URL</abbr> zum Digitalsat übernommen und das Datenfeld <i>Korpus</i> mit <q>GoogleBooks</q> gefüllt.</p>
 
 					<div class="bilder">
 						<figure title="zum Vergrößern anklicken">
@@ -788,7 +788,7 @@
 						</figure>
 					</div>
 
-					<p>Die Titeldatensätze von <i>GoogleBooks</i> sind gelinde gesagt verbesserungsbedürftig. Glücklicherweise wird ein BibTeX-Download auch von größeren <b>Bibliothekskatalogen</b> wie dem <a href="https://kxp.k10plus.de/DB=2.1/SET=5/TTL=1/">GVK</a> oder dem <a href="https://kxp.k10plus.de/DB=1.28/SET=1/TTL=1/">VD17</a> angeboten, in denen sich qualitativ ausgesprochen gute Datensätze finden. Diese lassen sich über die Funktion <i>Speichern/Drucken</i> in der Kopfzeile der Titelaufnahmen aufrufen. Auf der sich daraufhin öffnenden Seite wählen Sie als <i>Format</i> <q>Literaturverwaltung: BibTeX</q>. Nun können Sie den Datensatz speichern oder eine Druckansicht öffnen, um ihn von dort in die Zwischenablage zu kopieren. (Die Funktion hinter dem Button <i>Zwischenablage</i> tut ihren Dienst leider nicht unter allen Umständen.) Außerdem ist es prinzipiell möglich, gleich mehrere Datensätze in einem Zug zu exportieren. <i class="app-name"></i> wird für den Import dann dasselbe <a href="#karteikarte-importfenster">Importfenster</a> anzeigen, das auch für den <a href="#karteikarte-derekoImport"><abbr title="Deutsches Referenzkorpus">DeReKo</abbr>-Import</a> verwendet wird.</p>
+					<p>Die Titeldatensätze von <i>GoogleBooks</i> sind gelinde gesagt verbesserungsbedürftig. Glücklicherweise wird ein <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Download auch von größeren <b>Bibliothekskatalogen</b> wie dem <a href="https://kxp.k10plus.de/DB=2.1/SET=5/TTL=1/">GVK</a> oder dem <a href="https://kxp.k10plus.de/DB=1.28/SET=1/TTL=1/">VD17</a> angeboten, in denen sich qualitativ ausgesprochen gute Datensätze finden. Diese lassen sich über die Funktion <i>Speichern/Drucken</i> in der Kopfzeile der Titelaufnahmen aufrufen. Auf der sich daraufhin öffnenden Seite wählen Sie als <i>Format</i> <q>Literaturverwaltung: <span class="bibtex"><span>Bib</span>T<span>E</span>X</span></q>. Nun können Sie den Datensatz speichern oder eine Druckansicht öffnen, um ihn von dort in die Zwischenablage zu kopieren. (Die Funktion hinter dem Button <i>Zwischenablage</i> tut ihren Dienst leider nicht unter allen Umständen.) Außerdem ist es prinzipiell möglich, gleich mehrere Datensätze in einem Zug zu exportieren. <i class="app-name"></i> wird für den Import dann dasselbe <a href="#karteikarte-importfenster">Importfenster</a> anzeigen, das auch für den <a href="#karteikarte-derekoImport"><abbr title="Deutsches Referenzkorpus">DeReKo</abbr>-Import</a> verwendet wird.</p>
 
 					<div class="bilder">
 						<figure title="zum Vergrößern anklicken">
@@ -802,28 +802,28 @@
 						</figure>
 					</div>
 
-					<p>Der <b>Import</b> von BibTeX-Datensätzen geht prinzipiell genauso, wie der Import von <abbr title="Deutschen Referenzkorpus">DeReKo</abbr>-Dateien:</p>
+					<p>Der <b>Import</b> von <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Datensätzen geht prinzipiell genauso, wie der Import von <abbr title="Deutschen Referenzkorpus">DeReKo</abbr>-Dateien:</p>
 
 					<ol>
 						<li>Öffnen Sie eine neue Karteikarte (<kbd>Strg</kbd> + <kbd>N</kbd>).</li>
 
-						<li>Wählen Sie <i>Import &gt; BibTeX</i>.</li>
+						<li>Wählen Sie <i>Import &gt; <span class="bibtex"><span>Bib</span>T<span>E</span>X</span></i>.</li>
 
-						<li>Klicken Sie auf den Button <i>Datei</i> und suchen Sie die zuvor heruntergeladene BibTeX-Datei.</li>
+						<li>Klicken Sie auf den Button <i>Datei</i> und suchen Sie die zuvor heruntergeladene <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Datei.</li>
 					</ol>
 
 					<p>Die Checkbox <b>Latin-1</b> müssen Sie nur aktivieren, wenn Sie den Datensatz aus einer Quelle bezogen haben, die diese im Prinzip defiziente Kodierung verwendet. <abbr title="Vergleiche">Vgl.</abbr> das oben Gesagte <a href="#karteikarte-dateikodierung">zum Thema Dateikodierung</a>.</p>
 
 					<figure class="right" title="zum Vergrößern anklicken">
 						<img src="../img/win/hb-karteikarte-importfunktion-bibtex-zwischenablage.png" alt="">
-						<figcaption>BibTeX: Import aus der Zwischenablage</figcaption>
+						<figcaption><span class="bibtex"><span>Bib</span>T<span>E</span>X</span>: Import aus der Zwischenablage</figcaption>
 					</figure>
 
-					<p>BibTeX-Daten können auch aus der <b>Zwischenablage</b> Ihres Computers importiert werden. Öffnen Sie eine neue Karteikarte überprüft die App, ob sie von dort einen BibTeX-Datensatz beziehen könnte. Ist dem der Fall, schaltet sie das Importformular automatisch auf <i>BibTeX</i> um. An der Stelle, wo sonst der Dateiname erscheint, steht nun <q>– Zwischenablage –</q>.</p>
+					<p><span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Daten können auch aus der <b>Zwischenablage</b> Ihres Computers importiert werden. Öffnen Sie eine neue Karteikarte überprüft die App, ob sie von dort einen <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Datensatz beziehen könnte. Ist dem der Fall, schaltet sie das Importformular automatisch auf <i class="bibtex"><span>Bib</span>T<span>E</span>X</i> um. An der Stelle, wo sonst der Dateiname erscheint, steht nun <q>– Zwischenablage –</q>.</p>
 
-					<p>Sollten Sie die Karteikarte bereits geöffnet haben, bevor Sie einen BibTeX-Datensatz in die Zwischenablage kopiert haben, wird die Anzeige zwar nicht automatisch umgestellt. Klicken Sie auf den Button <i>Importieren</i>, überprüft die App allerdings, ob sie in der Zwischenablage fündig wird.</p>
+					<p>Sollten Sie die Karteikarte bereits geöffnet haben, bevor Sie einen <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Datensatz in die Zwischenablage kopiert haben, wird die Anzeige zwar nicht automatisch umgestellt. Klicken Sie auf den Button <i>Importieren</i>, überprüft die App allerdings, ob sie in der Zwischenablage fündig wird.</p>
 
-					<p>Da BibTeX-Datensätze <em>niemals</em> einen <b>Belegtext</b> enthalten können, wird dieses Datenfeld auch <em>niemals</em> überschrieben. Ist Ihr Workflow so, dass Sie zunächst einen Beleg einpflegen (<abbr title="zum Beispiel">z. B.</abbr> indem Sie eine Passage aus einem Volldigitalisat von <i>GoogleBooks</i> abtippen), können Sie die Titeldaten problemlos im Nachhinein aus einer BibTeX-Datei importieren – und zwar ohne befürchten zu müssen, dass der Belegtext verlorengeht.</p>
+					<p>Da <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Datensätze <em>niemals</em> einen <b>Belegtext</b> enthalten können, wird dieses Datenfeld auch <em>niemals</em> überschrieben. Ist Ihr Workflow so, dass Sie zunächst einen Beleg einpflegen (<abbr title="zum Beispiel">z. B.</abbr> indem Sie eine Passage aus einem Volldigitalisat von <i>GoogleBooks</i> abtippen), können Sie die Titeldaten problemlos im Nachhinein aus einer <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Datei importieren – und zwar ohne befürchten zu müssen, dass der Belegtext verlorengeht.</p>
 
 					<h2 id="karteikarte-leseansicht">Leseansicht</h2>
 
@@ -2412,7 +2412,7 @@ Mustermann, Erika
 						<td><kbd>⇩</kbd></td>
 						<td>
 							<p><a href="#karteikarte-dropdown">Dropdown-Menü</a> zum fokussierten Textfeld öffnen (<strong class="obacht">nicht</strong> in der <a href="#karteikarte">Karteikarte</a>!)</p>
-							
+
 							<p>Dropdown-Menü offen: nächsten Textvorschlag auswählen</p>
 
 							<p>Bedeutung im <a href="#bedeutungsgeruest">Bedeutungsgerüst</a> aktiviert: Bedeutung um eine Position nach unten schieben</p>
@@ -2452,7 +2452,7 @@ Mustermann, Erika
 						<td><kbd>⇧</kbd></td>
 						<td>
 							<p><a href="#karteikarte-dropdown">Dropdown-Menü</a> zum fokussierten Textfeld öffnen (<strong class="obacht">nicht</strong> in der <a href="#karteikarte">Karteikarte</a>!)</p>
-							
+
 							<p>Dropdown-Menü offen: vorherigen Textvorschlag auswählen</p>
 
 							<p>Bedeutung im <a href="#bedeutungsgeruest">Bedeutungsgerüst</a> aktiviert: Bedeutung um eine Position nach oben schieben</p>
@@ -2878,11 +2878,11 @@ Mustermann, Erika
 						<td><kbd>P</kbd></td>
 						<td>
 							<p><a href="#karteikarte">Karteikarte</a> offen: <a href="#bedeutungsgeruest-druckvorschau">Druckvorschau</a> der Karteikarte anzeigen</p>
-							
+
 							<p><a href="#bedeutungsgeruest">Bedeutungsgerüst</a> offen: Druckvorschau des Bedeutungsgerüsts anzeigen</p>
-							
+
 							<p><a href="#belegliste">Belegliste</a> offen: Druckvorschau der Belege in der Liste anzeigen</p>
-							
+
 							<p>Druckvorschau offen: drucken</p>
 
 							<p><a href="#bedeutungsgeruest-fenster">Bedeutungsgerüst-Fenster</a>: Druckvorschau des Bedeutungsgerüsts im zugehörigen <a href="#kurzanleitung-programmfensterHauptfenster">Hauptfenster</a> anzeigen</p>
@@ -3555,7 +3555,7 @@ Mustermann, Erika
 
 						<p>Der Menüpunkt steht <strong class="obacht">in <i>macOS</i> nicht</strong> zur Verfügung!</p>
 
-						<p>Über den Menüpunkt kann man sich eine <b>Liste</b> der zuletzt verwendeten Karteien anzeigen lassen. Die Liste ist auf zehn Einträge begrenzt und kann durch den Befehl <i>Liste löschen</i> (hinter dem letzten Eintrag) komplett geleert werden. Doch Vorsicht! In der Startansicht der App findet sich dieselbe Liste, in der allerdings bis zu 20 Einträge angezeigt werden. Durch den Befehl <i>Liste löschen</i>  entfernen Sie auch die in diesem Menü aus Platzgründen nicht zu sehenden Karteien. In der Startansicht können Sie übrigens gezielt einzelne Einträge aus der Liste entfernen. <abbr title="Siehe">S.</abbr> die Anmerkungen zum Menüpunkt <a href="#menueApp-neuesFenster"><i><span class="app-name"></span> &gt; Neues Fenster</i></a>, wo auch genauer erklärt wird, wie das Programm die Liste pflegt.</p>
+						<p>Über den Menüpunkt kann man sich eine <b>Liste</b> der zuletzt verwendeten Karteien anzeigen lassen. Die Liste ist auf zehn Einträge begrenzt und kann durch den Befehl <i>Liste löschen</i> (hinter dem letzten Eintrag) komplett geleert werden. Doch Vorsicht! In der Startansicht der App findet sich dieselbe Liste, in der allerdings bis zu 20 Einträge angezeigt werden. Durch den Befehl <i>Liste löschen</i> entfernen Sie auch die in diesem Menü aus Platzgründen nicht zu sehenden Karteien. In der Startansicht können Sie übrigens gezielt einzelne Einträge aus der Liste entfernen. <abbr title="Siehe">S.</abbr> die Anmerkungen zum Menüpunkt <a href="#menueApp-neuesFenster"><i><span class="app-name"></span> &gt; Neues Fenster</i></a>, wo auch genauer erklärt wird, wie das Programm die Liste pflegt.</p>
 					</div>
 
 					<p class="erklaerung-icon-menues" id="menueKartei-speichern"><img src="../img/speichern.svg" width="24" height="24" alt="">Speichern</p>
@@ -3993,7 +3993,7 @@ Gerüst 2 &gt; Gerüst 1</pre>
 
 						<p id="menueRedaktion-metadatenBehandeltMit"><b><i>Karteiwort &gt; behandelt mit:</i></b> Wird zum aktuellen Karteiwort kein eigener Artikel erstellt, es aber in einem Artikel zu einem anderen Wort mit behandelt, kann das Bezugswort hier vermerkt werden.</p>
 
-						<p>Ist das Feld <i>Wort</i> gefüllt, erscheint keine <a href="#einstellungen-allgemeinesIconsErinnerungen">Erinnerung</a>, dass Sie die Artikel- oder XML-Datei noch anhängen sollten, wenn die entsprechenden <a href="#menueRedaktion-ereignisse">Redaktionsereignisse</a> angelegt wurden, weil davon ausgegangen wird, dass diese Dateien der Kartei zu dem vermerkten Wort zugeordnet werden. Außerdem erscheinen in der <a href="#menueApp-karteisuche">Karteisuche</a> automatisch entsprechende <a href="#menueApp-karteisucheVerweise">Verweise</a>, wenn Karteien gefunden wurden, die von der Eingabe in diesem Textfeld betroffen sind (das sind die aktuelle und die Wortkartei, auf die verwiesen wurde).</p>
+						<p>Ist das Feld <i>Wort</i> gefüllt, erscheint keine <a href="#einstellungen-allgemeinesIconsErinnerungen">Erinnerung</a>, dass Sie die Artikel- oder <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Datei noch anhängen sollten, wenn die entsprechenden <a href="#menueRedaktion-ereignisse">Redaktionsereignisse</a> angelegt wurden, weil davon ausgegangen wird, dass diese Dateien der Kartei zu dem vermerkten Wort zugeordnet werden. Außerdem erscheinen in der <a href="#menueApp-karteisuche">Karteisuche</a> automatisch entsprechende <a href="#menueApp-karteisucheVerweise">Verweise</a>, wenn Karteien gefunden wurden, die von der Eingabe in diesem Textfeld betroffen sind (das sind die aktuelle und die Wortkartei, auf die verwiesen wurde).</p>
 
 						<p id="menueRedaktion-metadatenSachgebiete"><b><i>Karteiwort &gt; Sachgebiete:</i></b> Um der Kartei ein Sachgebiet zuzuordnen, klicken Sie auf den Text <q>keine Sachgebiete zugeordnet</q>; um Sachgebiete zu ändern auf die aufgelisteten Sachgebiete. Zum Taggen wird dasselbe <a href="#bedeutungsgeruest-tagFenster">Tag-Fenster</a> wie für das Bedeutungsgerüst genutzt. Im oberen Teil erscheint jedoch keine Bedeutung (weil es hier nicht um das Taggen von Bedeutungen geht) und es steht allein die Kategorie <i>Sachgebiete</i> zur Verfügung.</p>
 
@@ -4031,6 +4031,253 @@ Gerüst 2 &gt; Gerüst 1</pre>
 						<p class="erklaerung-icon"><img src="../img/plus-dick.svg" width="20" height="20" alt=""><i>Neues Redaktionsereignis hinzufügen.</i></p>
 
 						<p class="erklaerung-icon"><img src="../img/muelleimer.svg" width="20" height="20" alt=""><i>Redaktionsereignis löschen.</i> Die Löschung kann nicht rückgängig gemacht werden; Sie werden aber zuvor gefragt, ob Sie das Ereignis wirklich entfernen möchten.</p>
+					</div>
+
+					<p class="erklaerung-icon-menues" id="menueRedaktion-literatur"><img src="../img/buecher.svg" width="24" height="24" alt="">Literatur</p>
+
+					<div class="info">
+						<p>Öffnet ein Fenster, in dem einfach gehaltene Literaturdatenbanken erstellt und bearbeitet werden können.</p>
+
+						<p><b><i>Grundsätzliches</i></b></p>
+
+						<p>Die Funktion zum Erstellen und Bearbeiten von Literaturdatenbanken ist <b>nicht an eine einzelne Kartei gebunden</b>. Sie wurde darum auch nur rudimentär in das <a href="#menueKartei-speichern">Speichersystem</a> von <i class="app-name"></i> integriert: Das Tastaturkürzel <kbd>Strg</kbd> + <kbd>S</kbd> funktioniert zwar auch in diesem Dialogfenster. In die <a href="#einstellungen-allgemeinesSpeichern">Speicherkaskade</a> ist die Funktion jedoch nicht eingebunden, weil eine Literaturdatenbank niemals in einer gerade geöffneten Wortkartei, sondern immer in einer separaten Datei gespeichert wird. Das heißt aber auch, dass Sie zum Öffnen der Literaturdatenbank nicht erst eine Kartei öffnen müssen. Die Funktion lässt sich auch in einem leeren Hauptfenster aufrufen und vollumfänglich verwenden.</p>
+
+						<p>Von <i class="app-name"></i> verwaltete Literaturdatenbanken haben ein <b>eigenes Dateiformat</b> (<a href="#ztj-ztl" class="link-dokumentation">ausführlich beschrieben</a> in der technischen Dokumentation), weswegen diese Dateien auch nicht mit der Funktion <a href="#menueKartei-oeffnen">Kartei &gt; Öffnen</a> eingelesen werden können. Das Öffnen von Datenbankdateien funktioniert allein über dieses Dialogfenster (Icon <img src="../img/oeffnen.svg" width="20" height="20" alt="">).</p>
+
+						<p id="menueRedaktion-literaturKollaborativ">Die Literaturdatenbank-Funktion ist für das <b>kollaborative Arbeiten</b> einer ganzen Gruppe von MitarbeiterInnen ausgelegt. <abbr title="Das heißt">D. h.</abbr> konkret, dass – anders als im Falle von Wortkarteien – beliebig viele Personen gleichzeitig in derselben Datenbankdatei, die <abbr title="zum Beispiel">z. B.</abbr> auf einem Netzwerkserver liegt, Operationen ausführen können, ohne dass dadurch die (lesende) Benutzung durch andere jemals gesperrt werden müsste. Allein für den Moment des Speicherns wird die Datenbankdatei für schreibende Zugriffe einige Sekunden abgeriegelt. Führen andere BenutzerInnen danach selbst eine Speicheroperation aus oder öffnen sie das Dialogfenster erneut, werden automatisch die neusten Daten heruntergeladen. Dieses System geht so weit, dass Sie einmal angelegte Literaturdatenbanken aus dem Datenbankfenster heraus <em>nicht</em> überschreiben können. Nutzen Sie die Funktion <i>Speichern unter</i> (Icon <img src="../img/speichern-unter.svg" width="20" height="20" alt="">) und wählen Sie als Ziel eine bereits bestehende Literaturdatenbank, wird diese nicht etwa durch eine Datenbank ersetzt, die allein die von Ihnen angelegten Datensätze enthält, sondern mit Ihrer aktuellen Datenbank <a href="#menueRedaktion-literaturSpeichernUnter">verschmolzen</a>. Dabei geht keine Titelaufnahme verloren.</p>
+
+						<p>Schließlich liegt dem Datenbanksystem die Idee zugrunde, dass <b>alle Änderungen nachvollziehbar</b> sein sollen. Darum lassen sich einmal erstellte Titelaufnahmen, wenn man so will, eigentlich gar nicht bearbeiten. Es können nur immer wieder neue Versionen ein und derselben Titelaufnahme angelegt werden, sodass jederzeit nachvollziehbar bleibt, was wann wie von wem geändert wurde. Deswegen weigert sich das System auch, wenn Sie Titelaufnahmen anlegen oder überarbeiten möchten, die jeweilige Operation auszuführen, wenn Sie sich noch nicht als <a href="#einstellungen-allgemeinesBearbeiterin">Bearbeiterin in den Einstellungen namentlich registriert</a> haben. Denn alle Aktionen in einer Datenbank werden mit einem Namen verknüpft. Die Funktionen zum Hinzufügen und Bearbeiten von Titelaufnahmen sind leicht zugänglich; die durchaus vorhandene <a href="#menueRedaktion-literaturLoeschen">Löschfunktion</a> wurde absichtlich ein wenig versteckt.</p>
+
+						<p><b><i>Kurzanleitung</i></b></p>
+
+						<p>Selbst wenn in der <a href="#menueRedaktion-literaturKopfzeile">Kopfzeile des Datenkbankfenster</a> noch der Hinweis <q>keine Datenbank geladen</q> zu sehen sein sollte, steht Ihnen intern bereits eine Literaturdatenbank zur Verfügung. Sie können also schon vor dem ersten Speichern der Datenbank Titelaufnahmen anlegen.</p>
+
+						<figure class="right" title="zum Vergrößern anklicken">
+							<img src="../img/win/hb-menueRedaktion-literatur-formular.png" alt="">
+							<figcaption>Eingabeformular der Literaturdatenbank</figcaption>
+						</figure>
+
+						<p><b><i>Titelaufnahmen anlegen und ändern:</i></b> Klicken Sie als erstes auf den Radio-Button <i>Titelaufnahme</i>. Sollten Sie über dem Formular noch nicht den grün umrandeten Hinweis <q>Titelaufnahme hinzufügen</q> sehen, klicken Sie auf den Button <i>Hinzufügen</i>. Füllen Sie das Formular aus. Es bietet sich an, mit dem Titel-Feld zu beginnen, denn die App versucht im Falle einer neuen Titelaufnahme die Felder <i>Sigle, ID</i> und <i>Fundort</i> automatisch zu befüllen, je nachdem wie das Titel-Feld gefüllt wurde. Klicken Sie auf den Button <i>Speichern</i>. Die Titelaufnahme ist nun angelegt; über dem Formular steht der blau umrandete Hinweis <q>Titelaufnahme ändern</q>. Wenn Sie möchten, können Sie die Aufnahme nun weiterbearbeiten und erneut speichern. Hierbei wird eine neue Version angelegt, die alte also nicht einfach überschrieben.</p>
+
+						<figure class="right" title="zum Vergrößern anklicken">
+							<img src="../img/win/hb-menueRedaktion-literatur-suche.png" alt="">
+							<figcaption>Suchformular der Literaturdatenbank</figcaption>
+						</figure>
+
+						<p><b><i>Titelaufnahmen suchen und bearbeiten:</i></b> Klicken Sie auf den Radio-Button <i>Titelsuche</i>, bekommen Sie ein sehr schlicht gehaltenes Suchformular zu sehen. Geben Sie keinen Suchtext ein, werden alle in der Datenbank zu findenden Titel aufgelistet (maximal hundert pro Seite). Mit dem Datumsfeld <i>ab</i> können Sie die Suche auf einen bestimmten Zeitraum eingrenzen (Suchen von Titelaufnahmen, die ab dem angegebenen Tagesdatum bearbeitet wurden). Jede Titelaufnahme in den Suchergebnissen hat in der rechten oberen Ecke das Icon <img src="../img/stift.svg" width="20" height="20" alt="">. Klicken Sie auf dieses Icon, wird die Titelaufnahme in das Formular geladen, wo sie Änderungen vornehmen und eine neue Version der Aufnahme anlegen können.</p>
+
+						<p><b><i>Literaturdatenbank speichern:</i></b> Das Speichern-Icon <img src="../img/speichern.svg" width="20" height="20" alt=""> befindet sich oben rechts im Dialogfenster. Die App schlägt Ihnen zwar einen Dateinamen vor, Sie können diesen aber natürlich nach Belieben ändern. Dies gilt auch für die Dateiendung. Haben Sie eine Literaturdatenbank einmal gespeichert, merkt sich die App den Pfad zur Datenbankdatei und liest die Datenbank beim nächsten Öffnen des Dialogfensters automatisch neu ein. Zum Entkoppeln (vulgo: Schließen) der Datenbank klicken Sie auf das Icon <img src="../img/x-dick.svg" width="20" height="20" alt="">. Da Sie die Datebankdatei durch das Öffnen nicht für andere sperren, ist das Entkoppeln prinzipiell nicht unbedingt nötig.</p>
+
+						<p><b><i>Titelaufnahmen kopieren:</i></b> Nutzen Sie die <i>Titelsuche</i>, um die gewünschte Titelaufnahme zu finden. Klicken Sie mit der rechten Maustaste auf einer Titelaufnahme, sehen Sie im Rechtsklickmenü den Punkt <i>Titelaufnahme in Zwischenablage</i>. Die Titelaufnahmen können in der Form eines <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippets (zum maschinellen Weiterverarbeiten) oder in einem unstrukturierten Textformat (<abbr title="zum Beispiel">z. B.</abbr> zum Einfügen in ein Office-Dokument) kopiert werden.</p>
+
+						<p id="menueRedaktion-literaturKopfzeile"><b><i>Kopfzeile</i></b></p>
+
+						<p>Die Kopfzeile enthält von links nach rechts die folgenden Elemente:</p>
+
+						<p class="erklaerung-icon"><span class="erklaerung-icon-text">*</span><i><b>Änderungsmarkierung</b>.</i> Sie verfärbt sich rot, wenn in der aktuellen Datenbank Einträge geändert und noch nicht gespeichert wurden.</p>
+
+						<p class="eingerueckt">Neben dem Asterisk steht die (<abbr title="gegenbenenfalls">ggf.</abbr> gekürzte) <b>Pfadangabe</b> zur geöffneten Literaturdatenbank oder der Hinweis <q>keine Datenbank geladen</q>. Auch wenn keine Datenbank geladen ist, liegt intern eine Datenbank vor, sodass auch in diesem Fall Hinzufüge-, Änderungs- und Löschoperationen ausgeführt werden können. Das Ergebnis dieser Arbeiten kann im Nachhinein <a href="#menueRedaktion-literaturSpeichern">gespeichert</a> oder mit einer bereits bestehenden Datenbank <a href="#menueRedaktion-literaturSpeichernUnter">verschmolzen</a> werden.</p>
+
+
+						<p class="eingerueckt" id="menueRedaktion-literaturOffline"><i class="app-name"></i> legt beim Öffnen einer Datenbank im Hintergrund eine lokale Kopie der Datei an. (Sie wird im <a href="#framework-konfigurationsverzeichnis" class="link-dokumentation">Konfigurationsverzeichnis</a> gespeichert.) Sollte beim Öffnen des Literaturdatenbank-Fensters kein Zugriff auf die angezeigte Datenbankdatei bestehen, wird die Pfadangabe um das Wort <q><span class="obacht">[offline]</span></q> ergänzt. Dieser Fall kann eintreten, wenn Ihre Datenbank in einem Netzwerkordner liegt, der (noch) nicht gemountet ist. Sie können mit der Offline-Kopie der Datenbank wie gehabt arbeiten. Klicken Sie auf das Speichern-Icon <img src="../img/speichern.svg" width="20" height="20" alt="">, wird zunächst überprüft, ob wieder Zugriff auf die Datei besteht. Ist dem der Fall, läuft der unten beschriebene <a href="#menueRedaktion-literaturSpeichern">Speicherprozess</a> ganz normal ab; der Hinweis <q><span class="obacht">[offline]</span></q> verschwindet. Besteht auch weiterhin kein Zugriff, bietet Ihnen das Programm an, die Daten in einer anderen Datei zu speichern. Sie können die neu angelegt Datenbank nachträglich mit einer anderen <a href="#menueRedaktion-literaturSpeichernUnter">verschmelzen</a>. Schließen Sie das Fenster, ohne Ihre Änderungen zu speichern, gehen sie unwiederbringlich verloren. Denn Änderungen an einer Datenbank können nicht in der Offline-Kopie gespeichert werden.</p>
+
+						<p class="erklaerung-icon"><img src="../img/x-dick.svg" width="20" height="20" alt=""><i>Datenbank <b>schließen</b>.</i> Klicken Sie auf das Icon, wird die Datenbank geschlossen. <abbr title="Das heißt">D. h.</abbr> im Einzelnen: Der Zwischenspeicher mit den Datenbankinhalten wird geleert, die Pfadangabe wird aus den Einstellungen und die <a href="#menueRedaktion-literaturOffline">Offline-Kopie</a> aus dem Konfigurationsverzeichnis gelöscht. Öffnen Sie das Literaturdatenbank-Fenster erneut, wird darum auch keine Datenbank mehr geladen. Wurden Änderungen an der Datenbank nicht gespeichert, gehen sie durch das Schließen unwiderruflich verloren.</p>
+
+						<p class="eingerueckt">Das Icon erfüllt seine Funktion auch, wenn Sie noch keine Datenbank geladen, aber bereits Titelaufnahmen angelegt haben. Klicken Sie es an, gehen alle Daten im Zwischenspeicher verloren.</p>
+
+						<p class="erklaerung-icon"><img src="../img/oeffnen.svg" width="20" height="20" alt=""><i>Datenbank <b>öffnen</b>.</i> Öffnen Sie eine Datenbank, gehen alle noch nicht gespeicherten Änderungen der aktuellen Datenbank verloren. Haben Sie Titelaufnahmen angelegt, aber noch keine Datenbank geöffnet, können Sie diese mit der Funktion <a href="#menueRedaktion-literaturSpeichernUnter"><i>Speichern unter</i></a> in eine bestehende Datenbank integrieren.</p>
+
+						<p class="eingerueckt">Die App merkt sich den Pfad zu der Datenbankdatei, sodass diese beim nächsten Öffnen automatisch geladen werden kann.</p>
+
+						<p class="erklaerung-icon" id="menueRedaktion-literaturExportieren"><img src="../img/dokument-export.svg" width="20" height="20" alt=""><i>Datenbank <b>exportieren</b>.</i> Die aktuelle Datenbank kann in zwei verschiedene Formate exportiert werden: in ein maschinenlesbares <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Format und in ein unstrukturiertes Text-Format. Vor dem Export erscheint ein Fenster, in dem Sie das Format auswählen können.</p>
+
+						<p class="eingerueckt">Die Funktion hinter diesem Icon exportiert immer die komplette Datenbank. Um einzelne Titel zu exportieren, müssen Sie die <a href="#menueRedaktion-literaturTitelsuche">Suchfunktion</a> und das Rechtsklickmenü verwenden.</p>
+
+						<p class="eingerueckt">Außerdem wird immer nur die jüngste <a href="#menueRedaktion-literaturVersionen">Version einer Titelaufnahme</a> exportiert.</p>
+
+						<p class="erklaerung-icon" id="menueRedaktion-literaturSpeichernUnter"><img src="../img/speichern-unter.svg" width="20" height="20" alt=""><i>Datenbank unter einem anderen Dateinamen <b>speichern</b> oder mit einer anderen <abbr title="Zettel’s Traum Literaturdatenbank">ZTL</abbr>-Datenbank <b>verschmelzen</b>.</i> Das Icon führt dieselbe Funktion aus wie das nachfolgende <a href="#menueRedaktion-literaturSpeichern">Speichern-Icon</a>, mit der Ausnahme, dass immer ein Dateidialogfenster Ihres Betriebssystems erscheint.</p>
+
+						<p class="eingerueckt">Wählen Sie als Speicherziel allerdings eine bereits bestehende Datenbankdatei im <a href="#ztj-ztl" class="link-dokumentation"><abbr title="Zettel’s Traum Literaturdatenbank">ZTL</abbr>-Format</a>, wird diese nicht überschrieben, sondern mit ihrer aktuellen Datenbank verschmolzen. Dabei werden alle Titelaufnahmen, die sich in Ihrer Datebank befinden, in der Zieldatenbank aber noch nicht vorhanden sind, in diese übertragen. Es können also keine Daten verloren gehen.</p>
+
+						<p class="eingerueckt">Vorsicht ist allein geboten, wenn Sie in der aktuellen Datenbank Löschoperationen ausgeführt, diese aber noch nicht gespeichert haben. Es stellt zwar prinzipiell kein Problem dar, eine Datenbank, in der Änderungen noch nicht gespeichert wurden, noch vor dem Speichern mit einer anderen Datenbank zu verschmelzen. Intern wird in einem solchen Fall dem Abgleich der Titeldaten allerdings das Abarbeiten der noch ausstehenden Änderungsoperationen vorgeschaltet. Auf diese Weise kann es zur Löschung von Titelaufnahmen in der Zieldatenbank kommen.</p>
+
+						<p class="eingerueckt">Ein konkretes Beispiel: Sie haben die Datenbank <span class="datei">X.ztl</span> geöffnet und fügen eine neue Titelaufnahme mit der ID <q>hildebrand-1848</q> hinzu. Außerdem löschen Sie eine Version in der bereits bestehenden Titelaufnahme mit der ID <q>marx-engels-1848</q>. Diese beiden Operationen merkt sich <i class="app-name"></i>, um sie <abbr title="gegebenenfalls">ggf.</abbr> in eine neuere Version der Datenbank <span class="datei">X.ztl</span> zu integrieren. Diese Verfahrensweise ist ein wichtiger Baustein, um das <a href="#menueRedaktion-literaturKollaborativ">kollaborative Arbeiten</a> zu ermöglichen. Denn während Sie diese Operationen ausführen, könnte theoretisch eine andere Person ganz andere Änderungen an der Datenbank <span class="datei">X.ztl</span> vorgenommen haben. Wenn Sie die Datenbank normal <a href="#menueRedaktion-literaturSpeichern">speichern</a>, wird – wenn nötig – die aktuelle Version der Datenbank <span class="datei">X.ztl</span> heruntergeladen, um in dieser Datenbankversion die beiden Operationen abzuarbeiten. Im Anschluss wird der Zwischenspeicher für die ausstehenden Operationen gelöscht. Klicken Sie allerdings auf das Icon <img src="../img/speichern-unter.svg" width="20" height="20" alt=""> und wählen als Zieldatenbank die Datei <span class="datei">Y.ztl</span>, werden zunächst die in <span class="datei">X.ztl</span> noch ausstehenden Operationen in der Datenbank <span class="datei">Y.ztl</span> abgearbeitet: Die neue Titelaufnahme <q>hildebrand-1848</q> wird hinzugefügt; die gelöschte Version der Titelaufnahme <q>marx-engels-1848</q> wird entfernt. Erst in einem zweiten Schritt werden Titelaufnahmen, die sich nur in <span class="datei">X.ztl</span> befinden, nach <span class="datei">Y.ztl</span> übertragen. Gibt es in der <span class="datei">Y.ztl</span> keine Titelaufnahme mit der ID <q>marx-engels-1848</q> hat die Löschoperation keinen Effekt. Findet sich in der Datei allerdings eine Titelaufnahme mit eben dieser ID und gibt es zu dieser Titelaufnahme eine Version, die die identische ID der von Ihnen gelöschten Titelaufnahme in der <span class="datei">X.ztl</span> hat, wird eben diese Version der Titelaufnahme auch aus <span class="datei">Y.ztl</span> entfernt. (Nicht nur ganze Titelaufnahmen, sondern auch einzelne Versionen einer Titelaufnahme haben eine je eigene ID, die zwar nicht sonderlich leserfreundlich ist, aber auch nirgends in der Programmoberfläche angezeigt wird. Die IDs der Versionen einer Titelaufnahme bestehen aus zehn zufällig erzeugten Hexadezimalziffern. Bei 1 099 511 627 776 möglichen Kombinationen ist es extrem unwahrscheinlich, dass sich in einer anderen Datei zufälligerweise die Version einer Titelaufnahme befindet, die exakt dieselbe ID hat, bei der es sich aber <em>nicht</em> um dieselbe Version jener Titelaufnahme handelt, die Sie gelöscht haben.)</p>
+
+						<p class="erklaerung-icon" id="menueRedaktion-literaturSpeichern"><img src="../img/speichern.svg" width="20" height="20" alt=""><i>Datenbank <b>speichern</b>.</i> Speichert alle Änderungen, die Sie in der aktuellen Datenbank vorgenommen haben.</p>
+
+						<p class="eingerueckt">Für den Fall, dass Sie kollaborativ mit mehreren MitarbeiterInnen an ein und derselben Datenbankdatei arbeiten, die <abbr title="beispielsweise">bspw.</abbr> in einem Netzwerkordner liegt: Haben Sie einmal eine Datenbankdatei geladen, wird diese bei jedem Öffnen des Literaturdatenbank-Fensters erneut heruntergeladen, sodass Sie immer die neuste Version haben. Nehmen Sie Änderungen in dieser heruntergeladenen Version vor (fügen Sie neue Titelaufnahmen oder neue Versionen einer Titelaufnahme hinzu, entfernen Sie ganze Titelaufnahmen oder einzelne Versionen einer Titelaufnahme), werden diese zunächst nur lokal im Arbeitsspeichers Ihres Rechners zwischengespeichert. Dabei wird eine Liste an Änderungsoperationen angelegt. Klicken Sie auf <img src="../img/speichern.svg" width="20" height="20" alt="">, überprüft <i class="app-name"></i> vor allem anderen, ob Ihre lokale Datenbankversion identisch mit der aktuellen Datenbankversion ist, denn zwischenzeitlich könnte eine andere BenutzerIn dort ihrerseits Änderungen vorgenommen haben. Sind die Versionen nicht identisch, wird die neue Version intern heruntergeladen. In dieser neuen Version der Datenbankdatei wird die Liste der noch nicht gespeicherten Änderungen abgearbeitet und Ihre bisherige Version durch die geänderte Datenbank ersetzt. Danach haben Sie in Ihrem Programmfenster die aktuelle Datenbankversion.</p>
+
+						<figure class="right" title="zum Vergrößern anklicken">
+							<img src="../img/win/hb-menueRedaktion-literatur-aenderungsmeldung.png" alt="">
+							<figcaption>Meldung nach dem Übernehmen von Änderungsoperationen</figcaption>
+						</figure>
+
+						<p class="eingerueckt">Sollte der Fall eintreten, dass die Datenbank seit dem letzten Speichern von jemand anderem geändert wurde, wird nach dem Abschluss des Speichervorgangs eine Mitteilung eingeblendet, was getan wurde (<abbr title="siehe">s.</abbr> den nebenstehenden Screenshot). Wurde die Datenbank direkt gespeichert, weil Sie bereits die aktuelle Version haben, erscheint keine Meldung.</p>
+
+						<p class="eingerueckt">Der Speichervorgang selbst wirkt ein wenig träge: Er dauert, selbst wenn Sie mit einer lokalen Datei arbeiten, immer mehrere Sekunden, zumindest scheint es so. Dies hängt damit zusammen, dass der Abschluss des Speichervorgangs künstlich um einige Sekunden verzögert wird, damit es nicht zu parallel ablaufenden Schreibvorgängen von mehreren Benutzern kommt. Denn für den Moment des Speicherns wird die Datenbankdatei für den <em>schreibenden</em> (aber nicht für den lesenden) Zugriff durch andere gesperrt. Dabei wird eine Sperrdatei angelegt, die unmittelbar nach dem Abschluss des Speicherns wieder entfernt wird. Das Entfernen dieser Sperrdatei könnte natürlich aus irgendeinem Grund scheitern. Denkbar wäre <abbr title="beispielsweise">bspw.</abbr>, dass eine ungeduldige BenutzerIn das Ende des Speichervorgangs nicht abwartet und ihre Netzwerkverbindung trennt. In einem solchen Fall bleibt die Datenbank gesperrt, obwohl eigentlich keine Schreiboperationen mehr ausgeführt werden. Sollten Sie sich wundern, dass N. N. andauernd in der Literaturdatenbank schreibt, weswegen Sie selbst nicht zum Speichern kommen: Warten Sie einfach 5 Minuten ab. Ist eine Sperrdatei älter als 5 Minuten wird sie einfach ignoriert. Das Speichern ist dann wieder möglich. (Im Falle der <a href="#verschiedenes-sperrdatei" class="link-dokumentation">Sperrdateien</a> von Wortkarteien beträgt diese Frist übrigens 12 Stunden.)</p>
+
+						<p class="eingerueckt">Das Tastaturkürzel <kbd>Strg</kbd> + <kbd>S</kbd> triggert – wie in anderen Teilen des Programms – auch in der Literaturdatenbank einen Speichervorgang. Was genau gespeichert wird, hängt allerdings davon ab, welche Ansicht im Literaturdatenbank-Fenster gerade geöffnet ist. Sehen Sie das Formular zum Überarbeiten und Hinzufügen von Titelaufnahmen und sind in ihm Änderungen vorgenommen worden, wird das Formular gespeichert. Befinden Sie sich hingegen in der <i>Titelsuche</i>, stößt das Tastaturkürzel nur das Speichern der Datenbank an.</p>
+
+						<p class="eingerueckt">Ferner berücksichtigt <kbd>Strg</kbd> + <kbd>S</kbd> die <a href="#einstellungen-allgemeinesSpeichern">Einstellungen des globalen Speicherbefehls</a>. Diese werden wie folgt adaptiert.</p>
+
+						<ul class="eingerueckt">
+							<li><i>Speicherkaskade anstoßen:</i> Ist das Eingabeformular sichtbar und stehen hier noch Änderungen aus, wird zunächst das Formular gespeichert. Funktioniert dies fehlerfrei, wird im Anschluss sofort die Datenbank gespeichert.</li>
+
+							<li><i>nur aktive Funktion speichern:</i> Ist das Eingabeformular sichtbar und stehen hier noch Änderungen aus, wird nur das Formular gespeichert. In allen anderen Fällen wird die Datenbank gespeichert.</li>
+
+							<li><i>nur Kartei speichern:</i> Es wird nur die Datebank gespeichert, auch wenn das Eingabeformular sichtbar ist und Änderungen in ihm noch nicht übernommen wurden.</li>
+						</ul>
+
+						<p id="menueRedaktion-literaturTitelsuche"><b><i>Titelsuche</i></b></p>
+
+						<figure class="right" title="zum Vergrößern anklicken">
+							<img src="../img/win/hb-menueRedaktion-literatur-suchergebnisse.png" alt="">
+							<figcaption>Suchergebnisse in der Literaturdatenbank</figcaption>
+						</figure>
+
+						<p>Mit der Suchfunktion können Sie alle Titelaufnahmen der aktuellen Literaturdatenbank durchsuchen. Durchsucht werden die <b>Datenfelder</b> <i>Sigle, Titel, URL, Aufrufdatum, Fundort, PPN</i> und <i>Notizen</i>. Dabei ist allein zu beachten, dass das Datum des Datenfelds <i>Aufrufdatum</i> intern als ISO 8601 formatiert ist, also diese Form hat: JJJJ–MM-DD (Jahr-Monat-Tag). Suchen Sie nach einer Literaturaufnahme, die das Aufrufdatum <q>8. 5. 2020</q> hat, müssen Sie in den Suchschlitz also <q>2020-05-08</q> eingeben.</p>
+
+						<p>Die Suche kann via <kbd>⏎</kbd> oder durch Klick auf das Icon <img src="../img/lupe.svg" width="20" height="20" alt=""> <b>gestartet</b> werden.</p>
+
+						<p>Geben Sie <b>kein Suchwort</b> ein, werden alle Titelaufnahmen in der Datenbank aufgelistet. Dabei werden pro Seite maximal 100 Treffer ausgeworfen. Im unteren Teil des Popus sehen Sie, wie viele Treffer angezeigt werden und ob es noch weitere gibt. Passen die Treffer nicht alle auf eine Seite, können Sie mithilfe der Pfeile vor- oder zurückblättern.</p>
+
+						<p>Die Suchergebnisse werden immer <b>alphanumerisch</b> nach Sigle sortiert.</p>
+
+						<p>Es wird <b>trunkiert</b> gesucht: Auch Wortteile produzieren Treffer. Mit einer Suche nach <q>Wörterbuch</q> finden Sie darum Titel wie <i>Deutsches Wörterbuch</i> aber auch <i>Deutsches Fremdwörterbuch</i>.</p>
+
+						<p>Bei der Suche wird <b>Groß- und Kleinschreibung</b> ignoriert. Es sei denn, in Ihrem Suchwort findet sich ein Großbuchstabe. In diesem Fall wird nämlich auf eine Suche umgeschaltet, bei der die von Ihnen eingegebene Schreibung exakt beachtet wird. Ein Beispiel: Geben Sie <q>der</q> ein, wird sowohl die Titelaufnahme mit der Phrase <q><i>Der</i> Einfluß des Englischen</q> als auch die mit <q>Geschichte <i>der</i> deutschen Sprache</q> gefunden. Geben Sie hingegen <q>Der</q> ein, proudziert nur die erste Zeichenkette einen Treffer.</p>
+
+						<p>Die Suche kann nach <b>Erstellungsdatum</b> einer Titelaufnahme eingegrenzt werden. Wählen Sie im Datumsfeld <i>ab</i> ein Tagesdatum aus, bekommen Sie nur Titelaufnahmen angezeigt, die ab diesem Datum angelegt wurden.</p>
+
+						<p>In der Ergebnisliste bekommen Sie alle Daten derjenigen <b>Titelaufnahmen</b> angezeigt, die zu Ihren Suchkriterien passen. In der Fußzeile einer jeden Titelaufnahme finden Sie einige Metadaten: Name der BearbeiterIn; das Datum, an dem die Aufnahme erstellt wurde; die Anzahl der vorliegenden Versionen der Titelaufnahme.</p>
+
+						<p>Zum <b>Bearbeiten</b> klicken Sie einfach auf das Stift-Icon <img src="../img/stift.svg" width="20" height="20" alt=""> oben rechts in der Ecke der jeweiligen Titelaufnahme. Die Aufnahme wird dann in das <a href="#menueRedaktion-literaturTitelaufnahme">Eingabeformular</a> geladen, kann geändert und gespeichert werden. Dabei wird eine neue Version der Titelaufnahme angelegt, die alte also nicht einfach überschrieben. Wichtig zu verstehen ist, dass in das Formular nicht unbedingt die jüngste, sondern die angezeigte Version geladen wird. Denn:</p>
+
+						<p id="menueRedaktion-literaturVersionen">Wie schon mehrfach geschrieben, können Titelaufnahmen in mehreren <b>Versionen</b> vorliegen. In den Suchergebnissen wird immer nur eine Version einer Titelaufnahme angezeigt. Dabei wird die jüngste Version grundsätzlich bevorzugt. Sind Ihre Suchkriterien allerdings so, dass sie nur auf eine ältere Version zutreffen, wird diese zwar angezeigt, aber mit dem Hinweis <q><span class="obacht">[Titelaufnahme veraltet]</span></q> versehen. Um alle Versionen einzusehen, müssen Sie entweder den Versionen-Text in der Metadatenzeile oder das Icon <img src="../img/kreis-info.svg" width="20" height="20" alt=""> anklicken. Ein kleines Popup-Fenster öffnet sich: das Versionen-Popup.</p>
+
+						<figure class="right" title="zum Vergrößern anklicken">
+							<img src="../img/win/hb-menueRedaktion-literatur-versionen.png" alt="">
+							<figcaption>das Versionen-Popup</figcaption>
+						</figure>
+
+						<p>Im oberen Teil des <b>Versionen-Popups</b> sehen Sie, wie viele verschiedene Versionen der Titelaufnahme vorliegen, wann und von wem sie erstellt wurden. Die grau hinterlegte Version wird im unteren Teil des Fensters gerade angezeigt. Wählen Sie mit der Maus eine andere Version, bekommen Sie diese zu sehen. Zum raschen Hin- und Herschalten zwischen den Versionen können übrigens auch die Tastaturkürzel <kbd>Strg</kbd> + <kbd>⇧</kbd> <abbr title="beziehungsweise">bzw.</abbr> <kbd>⇩</kbd> verwendet werden.</p>
+
+						<p id="menueRedaktion-literaturLoeschen">Das <b>Löschen</b> von Titelaufnahmen geht nur über dieses Versionen-Popup. Dazu dient das allein hier angezeigte Icon <img src="../img/muelleimer.svg" width="20" height="20" alt="">. Gelöscht werden können immer nur einzelne Versionen einer Titelaufnahme. Erst wenn Sie die letzte Version einer Titelaufnahme entfernen, wird die Titelaufnahme komplett gelöscht.</p>
+
+						<p id="menueRedaktion-literaturSondersuchen">Unter dem Suchschlitz finden Sie Links, mit denen Sie <b>Sondersuchen</b> starten können. Bei Sondersuchen werden keine veralteten Datensätze durchsucht; sie beziehen sich also immer auf die jüngste Version einer Titelaufnahme. Im Suchschlitz oder im Datumsfeld eingetragene Werte werden auch bei einer Sondersuche berücksichtigt. Die Sondersuchen können Ihnen jedoch Ergebnisse liefern, für die es ein bisschen komplizierterer Suchalgorithmen bedarf. Gefunden werden dabei im Einzelnen:</p>
+
+						<ul>
+							<li><i>Duplikate:</i> Ja, mit dieser Sondersuchen kann die Datenbank nach Duplikaten durchsucht werden. Als Duplikate gelten Titelaufnahmen, die mindestens eines der folgenden Kriterien erfüllen: identischer Titel, identische Sigle, identische URL, identische PPN.</li>
+
+							<li><i>doppelte Siglen:</i> Eine auf identische Siglen reduzierte Suche nach Duplikaten.</li>
+
+							<li><i>mit/ohne PPN:</i> Findet Titelaufnahmen, denen mindestens eine <abbr title="respektive">resp.</abbr> keine PPN zugewiesen wurde.</li>
+
+							<li><i>mehrere Versionen:</i> Zeigt nur Titelaufnahmen an, die mehr als eine Version haben.</li>
+
+							<li><i>mit Notizen:</i> Zeigt nur Titelaufnahmen mit Notizen an. Wie bei allen Sondersuchen wird auch bei dieser immer nur die jüngste Titelaufnahme durchsucht. Finden sich in einer veralteten Version einer Titelaufnahme Notizen in der jüngsten aber nicht, kann diese Aufnahme so nicht gefunden werden.</li>
+						</ul>
+
+						<figure class="right" title="zum Vergrößern anklicken">
+							<img src="../img/win/hb-menueRedaktion-literatur-rechtsklick.png" alt="">
+							<figcaption>Rechtsklickmenü für eine Titelaufnahme</figcaption>
+						</figure>
+
+						<p>Via <b>Rechtsklick</b> auf einer Titelaufnahme können Sie auf einige erweiterte Funktionen zugreifen.</p>
+
+						<ul>
+							<li>
+								<p><i>Titelaufnahme in Zwischenablage:</i> Mit der <a href="#menueRedaktion-literaturExportieren">Exportieren-Funktion</a> kann die komplette Literaturdatenbank in einer Datei gespeichert werden. Dieses Rechtsklickmenü bietet Ihnen dieselbe Funktionalität mit dem kleinen Unterschied, dass sie nur die ausgewählte Literaturangabe betrifft.</p>
+
+								<p id="menueRedaktion-literaturFundstellenSnippet">Mit dem Menüpunkt <i>XML</i> wird Ihnen ein Fundstellen-Snippet im <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Format in die Zwischenablage geschoben (<abbr title="vergleiche">vgl.</abbr> das entsprechende <a href="#xml-fundstelle" class="link-dokumentation">Kapitel in der technischen Dokumentation</a>). Ein solches Fundstellen-Snippet kann übrigens automatisch in die Eingabemaske der <i>Titelaufnahme</i> <a href="#menueRedaktion-literaturTitelaufnahmeImport">importiert</a> werden.</p>
+
+								<p>Via <i>Text</i> bekommen Sie ein unstrukturiertes Format, das <abbr title="zum Beispiel">z. B.</abbr> in ein Office-Programm eingefügt werden kann.</p>
+							</li>
+
+							<li><i>Referenz in Zwischenablage:</i> Eine einfache Möglichkeit, die ID der Titelaufnahme in die Zwischenablage zu kopieren (<abbr title="vergleiche">vgl.</abbr> auch hier den <a href="#xml-referenzLiteratur" class="link-dokumentation">Abschnitt in der technischen Dokumentation</a>).</li>
+						</ul>
+
+						<p>Für die reibungslose Bedienung des Literaturdatenbank-Fensters wurden einige <b>Tastaturkürzel</b> eingerichtet. Diese können Sie alle in der Übersicht des <a href="#tastaturkuerzel"><abbr title="Kapitels">Kap.</abbr> <i>Tastaturkürzel</i></a> finden. Suchen Sie mit der Suchleiste (<kbd>F3</kbd>) einfach nach <q>Literaturdatenbank</q>.</p>
+
+						<p>Eigens hingewiesen sei nur auf die Möglichkeit, in der Ergebnisliste zu navigieren, ohne das Suchfeld zu verlassen. Befinden Sie sich im Suchschlitz können Sie mit den Tasten <kbd>⇧</kbd>/<kbd>⇩</kbd> <abbr title="beziehungsweise">bzw.</abbr> <kbd>Bild ⇧</kbd>/<kbd>Bild ⇩</kbd> in der Trefferliste scrollen und mit <kbd>Strg</kbd> + <kbd>⇦</kbd>/<kbd>⇨</kbd> vor- oder zurückblättern.</p>
+
+						<p id="menueRedaktion-literaturTitelaufnahme"><b><i>Titelaufnahme</i></b></p>
+
+						<p>Das <b>Eingabeformular</b> dient sowohl zum Erstellen neuer als auch zum Überarbeiten bestehender Titelaufnahmen. Darum kann es sich, sozusagen, in drei verschiedenen Zuständen befinden: <i>Titelaufnahme hinzufügen</i>, <i>Titelaufnahme ändern</i> und <i>Titelaufnahme veraltet</i>. Der aktuelle Status des Eingabeformulars wird immer in einer Meldung über dem Formular angezeigt:</p>
+
+						<figure class="right" title="zum Vergrößern anklicken">
+							<img src="../img/win/hb-menueRedaktion-literatur-formular-veraltet.png" alt="">
+							<figcaption>Eingabeformular mit einer veralteten Titelaufnahme</figcaption>
+						</figure>
+
+						<ul>
+							<li><i>Titelaufnahme hinzufügen:</i> Hat das Formular diesen Status und wird gespeichert, wird eine komplett neue Titelaufnahme angelegt. Diese Titelaufnahme hat dann nur eine <a href="#menueRedaktion-literaturVersionen">Version</a> mit den Daten, die im Formular gerade zu sehen sind. Wurde die gewählte ID der Titelaufnahme schon vergeben, fragt die App vor dem Speichern nach, ob Sie die bestehende Aufnahme ergänzen wollen, denn zwei Titelaufnahmen mit derselben ID können – natürlich – nicht angelegt werden. Nach dem Speichern wechselt das Formular umgehend in einen anderen Status, nämlich:</li>
+
+							<li><i>Titelaufnahme ändern:</i> Bei diesem Status sehen Sie im Formular die jüngste Version einer bereits bestehenden Titelaufnahme. Sie können die Aufnahme nach Belieben korrigieren und ergänzen. Beim Speichern wird sie allerdings nicht überschrieben, sondern um eine neue <a href="#menueRedaktion-literaturVersionen">Version</a> ergänzt. So können Sie im Nachhinein immer nachvollziehen, was geändert wurde und diese Änderungen leicht rückgängig machen. Hat das Formular den Status <i>Titelaufnahme ändern</i>, sehen Sie, wie gesagt, in ihm immer die jüngste Version einer Titelaufnahme. Wurde eine ältere Version geladen, steht über dem Formular:</li>
+
+							<li><i>Titelaufnahme veraltet:</i> Dieser Status erscheint immer dann, wenn eine bestehende Titelaufnahme in das Formular geladen wurde, es sich aber nicht um die jüngste Version handelt. Welche Version angezeigt wird, können Sie der Fußzeile unter dem Formular entnehmen. Das Bearbeiten und Speichern dieser Version führt genauso wie im Falle von <i>Titelaufnahme ändern</i> dazu, dass eine neue Version der bestehenden Titelaufnahme hinzugefügt wird. Hatte die Titelaufnahme wie im Screenshot zu sehen zwei Versionen und bearbeiten Sie die älteste Version Nr. 1, hat sie nach dem Speichern drei Versionen. Die im Formular zu sehenden Daten werden dann als Version Nr. 3 geführt. Außerdem ändert sich nach dem Speichern der Status des Formulars: Weil Sie nun wieder die jüngste Version sehen, wechselt er zu <i>Titelaufnahme ändern</i>.</li>
+						</ul>
+
+						<p>Zu den einzelnen <b>Datenfeldern</b> des Eingabeformulars:</p>
+
+						<ul>
+							<li><i>Sigle</i> (verpflichtend): Die Sigle ist frei wählbar. Wenn Sie beim Erstellen einer Titelaufnahme mit dem Ausfüllen des Datenfelds <i>Titel</i> beginnen, wird <i class="app-name"></i> versuchen, den Inhalt des Feldes <i>Sigle</i> aus dem Titel abzuleiten. Konkret versucht das Programm den Autor oder die Autoren eines Titels zu ermitteln (Nachnamen vor dem ersten Doppelpunkt) und sucht nach der letzten vierstelligen Jahreszahl. Sobald diese beiden Werte gefunden wurden, wird das Feld Sigle automatisch gefüllt, aber nur, wenn es zu diesem Zeitpunkt noch leer ist. Die Funktion zum automatischen Befüllen des Sigle-Felds wird nur bei neuen Titelaufnahmen aufgerufen, also nur dann, wenn das Formular den Status <i>Titelaufnahme hinzufügen</i> hat.</li>
+
+							<li>
+								<p><i>ID</i> (verpflichtend): Die ID wird automatisch aus dem abgeleitet, was im Feld Sigle eingegeben wird, wenn das Formular den Status <i>Titelaufnahme hinzufügen</i> hat. Sie können die ID aber natürlich auch frei wählen. Im ID-Feld sind allerdings nicht alle Zeichen erlaubt, sondern nur Kleinbuchstaben (<abbr title="inklusive">inkl.</abbr> der Umlaute), Ziffern, Bindestriche und das Eszett (auch nur als Kleinbuchstabe; das große Eszett U+1E9E ist nicht zulässig). Die App würde Sie vor dem Speichern der Titelaufnahme auf eine illegale ID aufmerksam machen und den Vorgang abbrechen.</p>
+
+								<p>Eine ID sollte so gewählt werden, dass sie möglichst nie mehr geändert werden muss. Denn: Es wird dringend davon abgeraten, eine einmal vergebene ID nachträglich zu modifizieren. Dies kann unter Umständen gravierende Konsequenzen haben, wenn Sie mehrere <a href="#menueRedaktion-literaturSpeichernUnter">Datenbanken zusammenführen</a> oder die Datenbank regelmäßig <a href="#menueRedaktion-literaturExportieren">in ein maschinenlesbares Format exportieren</a>, das automatisiert weiterverarbeitet werden soll. Für diese Anwendungsfälle ist die Stabilität der ID besonders wichtig.</p>
+							</li>
+
+							<li>
+								<p><i>Titel</i> (verpflichtend): Für das Ausfüllen des Titelfeldes gibt es fast keine Regeln. Allein Zeilenumbrüche sind nicht erlaubt und werden vor dem Speichern automatisch eliminiert. Sie können dieses Feld (und damit das ganze Eingabeformular) mithilfe der <a href="#menueRedaktion-literaturTitelaufnahmeImport">Importfunktionen</a> automatisch befüllen lassen.</p>
+
+								<p>Beim Pasten von Titelaufnahmen und dann noch einmal bei Speichern werden Algorithmen auf den Titel angewandt, die das Ergebnis typographisch ein wenig aufhübschen. So werden <abbr title="zum Beispiel">z. B.</abbr> nicht-typographische Anführungszeichen automatisch in typographische umgewandelt (&quot; zu „ oder “), drei Punkte werden zu einer horizontalen Ellipse und es werden geschützte Leerzeichen an Stellen gesetzt, wo ein Zeilenumbruch im Allgemeinen unerwünscht ist (<abbr title="zum Beispiel">z. B.</abbr> nach Seitenangaben, die mit einem abgkürzten <abbr title="Seite">S.</abbr> eingeleitet werden).</p>
+							</li>
+
+							<li><i>URL</i> (fakultativ): Die Internetadresse, unter der der Titel zu finden ist. Geben Sie die Internetadresse ein, wird das Datenfeld <i>Aufrufdatum</i> automatisch mit dem aktuellen Tagesdatum befüllt (so es denn leer ist) und <i>Fundort</i> auf <q>online</q>, <q>DTA</q> oder <q>GoogleBooks</q> gestellt.</li>
+
+							<li><i>Aufrufdatum</i> (fakultativ, auch wenn <i>URL</i> gefüllt ist): Aufrufdatum der im Datenfeld <i>URL</i> hinterlegten Internetadresse.</li>
+
+							<li><i>Fundort</i> (verpflichtend): Eine abstrakte Angabe zum Fundort des Literaturtitels. Erlaubt sind nur die vordefinierten Werte, die man über das Dropdown-Menü einsehen kann.</li>
+
+							<li><i>PPN</i> (fakultativ): Eine oder mehrere Pica-Produktionsnummern. Möchten Sie mehrere PPN eingeben, müssen Sie diese durch Kommata und/oder Leerzeichen voneinander trennen. Werden PPN angegeben, wird in der Trefferliste der <a href="#menueRedaktion-literaturTitelsuche">Titelsuche</a> ein Link zur Titelaufnahme des <a href="https://kxp.k10plus.de/DB=2.1/">Gemeinsamen Verbundkatalogs</a> gesetzt.</li>
+
+							<li><i>Notizen</i> (fakultativ): Ein Freitextfeld für Notizen zu der Titelaufnahme. Zeilenumbrüche sind erlaubt und werden in der Titelanzeige der <a href="#menueRedaktion-literaturTitelsuche">Titelsuche</a> auch dargestellt. Diese Notizen sind allein für die Arbeit in der Literaturdatenbank gedacht. Darum werden sie von den <a href="#menueRedaktion-literaturExportieren">Exportfunktionen</a> ignoriert. Titelaufnahmen mit Notizen lassen sich mit der entsprechenden <a href="#menueRedaktion-literaturSondersuchen">Sondersuche</a> finden.</li>
+
+							<li><i>Metadaten:</i> Die Metadaten unterhalb des Formulars (<i>BearbeiterIn, Datum, Aufnahme</i>) werden von der App eigenständig befüllt und können nicht manuell geändert werden. Das Feld <i>Aufnahme</i> ist klicksensitiv: Man kann mit ihm das <a href="#menueRedaktion-literaturVersionen">Versionen-Popup</a> öffnen.</li>
+						</ul>
+
+						<p id="menueRedaktion-literaturTitelaufnahmeImport">Sie können Titelaufnahmen mithilfe der Funktionen <i>DTA</i>, <i>XML</i> und <i class="bibtex"><span>Bib</span>T<span>E</span>X</i> (rechts über dem Titelfeld) automatisch aus der Zwischenablage <b>importieren</b>. Dabei haben Sie folgende Möglichkeiten:</p>
+
+						<figure class="right" title="zum Vergrößern anklicken">
+							<img src="../img/win/hb-menueRedaktion-literatur-ppn.png" alt="">
+							<figcaption><abbr title="Pica-Produktionsnummer">PPN</abbr> auf einer Trefferansicht des <abbr title="Gemeinsamen Verbundkatalogs">GVK</abbr></figcaption>
+						</figure>
+
+						<ul>
+							<li><i><abbr title="Deutsches Textarchiv">DTA</abbr>:</i> Liegt in der Zwischenablage eine Internetadresse des <a href="http://www.deutschestextarchiv.de/" title="Deutsches Textarchiv">DTA</a>, in der sich eine Titel-ID befindet, können die dort im TEI-Header hinterlegten Titeldaten importiert werden. Ob die URL auf die Überblicksseite oder die Textseite eines Werks zeigt, ist dabei unerheblich.</li>
+
+							<li>
+								<p><i><abbr title="Extensible Markup Language" lang="en">XML</abbr>:</i> Ein in <abbr title="Extensible Markup Language" lang="en">XML</abbr> kodierter Datensatz kann immer dann importiert werden, wenn in der Zwischenablage eines der folgenden Dinge zu finden ist:</p>
+
+								<ol>
+									<li>ein <a href="#menueRedaktion-literaturFundstellenSnippet">Fundstellen-Snippet</a> (diese Snippets können aus den Suchtreffern einer Literaturdatenbank via Rechtsklick in die Zwischenablage geschoben werden),</li>
+
+									<li>ein <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Dokument im <a href="https://en.wikipedia.org/wiki/Metadata_Object_Description_Schema">MODS-Format</a>,</li>
+
+									<li>eine <abbr title="Pica-Produktionsnummer">PPN</abbr>.</li>
+								</ol>
+
+								<p>Liegt in der Zwischenablage eine <abbr title="Pica-Produktionsnummer">PPN</abbr>, wird über die <a href="https://verbundwiki.gbv.de/display/VZG/unAPI">unAPI</a> im Hintergrund ein MODS-Dokument aus dem <a href="https://kxp.k10plus.de/DB=2.1/">GVK</a> heruntergeladen und analysiert. Das Formular wird dann mit den ermittelten Titeldaten befüllt. Dieser Weg ist dem <abbr title="Pica-Produktionsnummer">PPN</abbr>-Import via <span class="bibtex"><span>Bib</span>T<span>E</span>X</span> vorzuziehen.</p>
+							</li>
+
+							<li>
+								<p><i><span class="bibtex"><span>Bib</span>T<span>E</span>X</span>:</i> Liegt ein <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Datensatz in der Zwischenablage, wird dieser direkt für den Import genutzt. Findet sich dort eine <abbr title="Pica-Produktionsnummer">PPN</abbr> wird ein entsprechender Datensatz über die unAPI geladen. Der Import via <abbr title="Pica-Produktionsnummer">PPN</abbr> sollte allerdings besser über die Funktion <i title="Extensible Markup Language" lang="en">XML</i> erfolgen.</p>
+							</li>
+						</ul>
+
+						<p>Wird von der Importfunktion in der Zwischenablage kein passender Datensatz gefunden, sucht die App in den Datenfeldern <i>URL</i> und <i title="Pica-Produktionsnummer">PPN</i> nach einer alternativen Datenquelle. Findet sich dort eine passende URL (des <abbr title="Deutschen Textarchivs">DTA</abbr>) oder eine <abbr title="Pica-Produktionsnummer">PPN</abbr>, wird diese für den Import genutzt.</p>
 					</div>
 				</section>
 
@@ -4093,7 +4340,7 @@ Gerüst 2 &gt; Gerüst 1</pre>
 
 							<li><i><abbr title="Extensible Markup Language" lang="en">XML</abbr>-Belegschnitt:</i> Erstellt ein <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippet des gewählten Belegschnitts und kopiert es in die Zwischenablage. Entsprechend ihrer Funktion ist diese Option deaktiviert, wenn die Auswahl nicht im Belegtext, sondern in einem anderen Datenfeld gemacht wurde. <a href="#belegliste-xmlZwischenablageBelegschnitt">Genaueres dazu</a> im <abbr title="Kapitel">Kap.</abbr> <i>Belegliste</i> und in der <a href="#xml-belegschnitt" class="link-dokumentation">technischen Dokumentation</a>.</li>
 
-							<li><i><abbr title="Extensible Markup Language" lang="en">XML</abbr>-Referenz:</i> Kopiert eine ID, die sich aus dem betreffenden Beleg ergibt, zusammen mit einem leeren <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Tag. <abbr title="Vergleiche">Vgl.</abbr> die <a href="#xml-referenz" class="link-dokumentation">technische Dokumentation</a>.</li>
+							<li><i><abbr title="Extensible Markup Language" lang="en">XML</abbr>-Referenz:</i> Kopiert eine ID, die sich aus dem betreffenden Beleg ergibt, zusammen mit einem leeren <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Tag. <abbr title="Vergleiche">Vgl.</abbr> die <a href="#xml-referenzBeleg" class="link-dokumentation">technische Dokumentation</a>.</li>
 						</ul>
 
 						<p>Vor dem eigentlichen Kopiervorgang wird der <b>Text bereinigt</b>, genauso als hätten Sie eines der Kopier-Icons <img src="../img/kopieren.svg" width="20" height="20" alt=""> genutzt, die das Kopierfenster nicht öffnen, sondern immer eine gemischte HTML- und Plain-Text-Kopie erzeugen. (Ist Text markiert, kopieren diese Icons übrigens nur die Textauswahl und nicht den Text des gesamten Feldes, zu dem sie gehören.) Im <a href="#belegliste"><abbr title="Kapitel">Kap.</abbr> <i>Belegliste</i></a> gibt es einige <a href="#belegliste-bereinigen">Hinweise, was bei der Bereinigung geschieht</a>. Man kann das Programm so konfigurieren, dass die <a href="#einstellungen-kopierenHervorhebung">Hervorhebung des Karteiworts beim Kopieren von HTML-Text erhalten</a> bleibt. Wird ein <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippet erstellt, wird das Karteiwort in jedem Fall hervorgehoben.</p>
