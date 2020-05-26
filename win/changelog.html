@@ -45,22 +45,16 @@
 			<div>
 				<h2><span>Version 1.0.0-beta</span><time datetime="2019-12-24">24. Dezember 2019</time></h2>
 
-				<h3>Entfernte Funktionen</h3>
-
-				<ul>
-					<li></li>
-				</ul>
-
 				<h3>Neue Funktionen</h3>
 
 				<ul>
-					<li>Die App verfügt nun über eine einfach gehaltene <a href="#menueRedaktion-literatur" class="link-handbuch">Literaturdatenbank</a>, die speziell für kollaboratives Arbeiten und schnelles Befüllen eingerichtet wurde. Titelaufnahmen lassen sich nicht nur händisch, sondern auch via <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippet, <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Datensatz, einen <abbr title="Deutsches Textarchiv">DTA</abbr>-Link oder über eine <abbr title="Pica-Produktionsnummer">PPN</abbr> anlegen, mit deren Hilfe ein Datensatz des <abbr title="Gemeinsamen Verbundkatalogs">GVK</abbr> importiert wird (MODS oder <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>). Die komplette Datenbank kann in ein <abbr title="Extensible Markup Language" lang="en">XML</abbr>-, auf Wunsch auch in ein unstrukturiertes Textformat exportiert werden. Beides geht auch mit einzelnen Titelaufnahmen. <abbr title="Vergleiche">Vgl.</abbr> zu Details den entsprechenden <a href="#menueRedaktion-literatur" class="link-handbuch">Handbuchabschnitt</a>.</li>
+					<li>Die App verfügt nun über eine einfach gehaltene <a href="#menueRedaktion-literatur" class="link-handbuch">Literaturdatenbank</a>, die speziell für kollaboratives Arbeiten und schnelles Befüllen eingerichtet wurde. Titelaufnahmen lassen sich nicht nur händisch, sondern auch via <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippet, <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Datensatz, einen <abbr title="Deutsches Textarchiv">DTA</abbr>-Link oder über eine <abbr title="Pica-Produktionsnummer">PPN</abbr> anlegen, mit deren Hilfe ein Datensatz des <abbr title="Gemeinsamen Verbundkatalogs">GVK</abbr> importiert wird (im MODS- oder <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Format). Die komplette Datenbank kann in ein <abbr title="Extensible Markup Language" lang="en">XML</abbr>-, auf Wunsch auch in ein unstrukturiertes Textformat exportiert werden. Beide Funktionen stehen auch für das Kopieren einzelner Titelaufnahmen zur Verfügung. <abbr title="Vergleiche">Vgl.</abbr> zu Details den entsprechenden <a href="#menueRedaktion-literatur" class="link-handbuch">Handbuchabschnitt</a>.</li>
 
 					<li><a href="#karteikarte-xmlImport" class="link-handbuch"><abbr title="Extensible Markup Language" lang="en">XML</abbr>-Import</a>: Die Karteikarte wurde um die Funktion ergänzt, bibliographische <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Datensätze auszulesen. Die Datensätze können aus Dateien geladen oder auch direkt aus der Zwischenablage eingelesen werden. Ferner besteht die Möglichkeit, sie via <abbr title="Pica-Produktionsnummer">PPN</abbr> zu ermitteln. Befindet sich in der Zwischenablage eine <abbr title="Pica-Produktionsnummer">PPN</abbr>, werden die Titeldaten aus dem <abbr title="Gemeinsamen Verbundkatalogs">GVK</abbr> heruntergeladen. <abbr title="Vergleiche">Vgl.</abbr> zu Details den entsprechenden <a href="#karteikarte-xmlImport" class="link-handbuch">Handbuchabschnitt</a>.</li>
 
 					<li><a href="#karteikarte-bibtexImport" class="link-handbuch"><span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Import</a>: Die Karteikarte kann nun auch mit <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Datensätzen gefüllt werden, die via <abbr title="Pica-Produktionsnummer">PPN</abbr> ermittelt werden. Befindet sich in der Zwischenablage eine <abbr title="Pica-Produktionsnummer">PPN</abbr>, werden die Titeldaten aus dem <abbr title="Gemeinsamen Verbundkatalogs">GVK</abbr> heruntergeladen.</li>
 
-					<li><a href="#karteikarte" class="link-handbuch">Karteikarte</a>: Der Zitiertitel im Datenfeld <i>Quelle</i> kann mithilfe des Icons <img src="../img/pfeil-kreis.svg" width="24" height="24" alt=""> automatisch neu ermittelt werden. Die <a href="#karteikarte-quelleLaden" class="link-handbuch">Funktion</a> dient dazu, das Format der Quellenangabe in älteren Karteikarten auf den neusten Stand zu bringen, da die Funktionen zum Ermitteln der Titeldaten jüngst stark verbessert/korrigiert wurden.</li>
+					<li><a href="#karteikarte" class="link-handbuch">Karteikarte</a>: Der Zitiertitel im Datenfeld <i>Quelle</i> kann mithilfe des Icons <img src="../img/pfeil-kreis.svg" width="24" height="24" alt=""> automatisch neu ermittelt werden. Die <a href="#karteikarte-quelleLaden" class="link-handbuch">Funktion</a> dient dazu, das Format der Quellenangabe in älteren Karteikarten auf den neusten Stand zu bringen, da die Funktionen zum Ermitteln der Titeldaten mit dieser Programmversion stark verbessert/korrigiert wurden.</li>
 				</ul>
 
 				<h3>Verbesserungen</h3>
@@ -81,10 +75,24 @@
 
 				<h3>Behobene Fehler</h3>
 
-				<p>Es wurden <i>2 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/master">Commit-Messages</a>.</p>
+				<p>Es wurden <i>8 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/master">Commit-Messages</a>.</p>
 
 				<ul>
-					<li></li>
+					<li>das Kopieren eines <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Belegschnitts funktionierte nicht mehr</li>
+
+					<li>das Kopieren des Belegtextes über das Kopier-Icon der Karteikarte funktionierte nicht unter allen Umständen</li>
+
+					<li>beim Import eines <abbr title="Digitales Wörterbuch der deutschen Sprache">DWDS</abbr>-Snippets wurde in das Autor-Feld der Karteikarte der Autorname mitunter nicht eingetragen, obwohl er aus der Literaturangabe leicht zu ermitteln war</li>
+
+					<li>nach dem Schließen einer Kartei blieb eine Datei mit <abbr title="Digitalen Wörterbuch der deutschen Sprache">DWDS</abbr>-, DeReKo- oder <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Datensätzen auch weiterhin mit dem Programmfenster verknüpft</li>
+
+					<li>unter gewissen Umständen wurde die Karteikarte nach dem Erstellen einer neuen Wortkartei ohne Nachfrage mit einem in der Zwischenablage zu findenden <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippet oder <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Datensatz gefüllt</li>
+
+					<li>beim Erstellen einer neuen Karteikarte wurde das Fenster nicht nach oben gescrollt</li>
+
+					<li>Spitzklammern und einige andere Sonderzeichen wurden beim Export einer Karteiliste nach <abbr title="Hypertext Markup Language" lang="en">HTML</abbr> nicht maskiert</li>
+
+					<li>ein Sprungziel, das auf einen Absatz in der technischen Dokumentation zeigte, wurde nicht korrekt getroffen, wenn das Fenster dabei zugleich geöffnet wurde</li>
 				</ul>
 			</div>
 
