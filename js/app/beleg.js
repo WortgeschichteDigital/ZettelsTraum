@@ -11,7 +11,7 @@ let beleg = {
 	// Liste häufig verwendeter Korpora für das Dropdown-Menü
 	korpora: [
 		"DTA",
-		"IDS-Archiv",
+		"IDS",
 		"DWDS: Kernkorpus",
 		"DWDS: Kernkorpus 21",
 		"DWDS: Zeitungskorpus",
@@ -50,6 +50,12 @@ let beleg = {
 		}
 		// Karte anzeigen
 		beleg.formular(true);
+		// Fenster nach oben scrollen
+		window.scrollTo({
+			left: 0,
+			top: 0,
+			behavior: "smooth",
+		});
 	},
 	// ermittelt die nächste ID, die in der aktuellen Kartei vergeben werden sollte
 	idErmitteln () {
@@ -136,7 +142,7 @@ let beleg = {
 	// Formular füllen und anzeigen
 	//   neu = Boolean
 	//     (neue Karteikarte erstellen)
-	formular (neu) {
+	async formular (neu) {
 		// regulären Ausdruck für Sprung zum Wort zurücksetzen
 		beleg.ctrlSpringenFormReg.again = false;
 		beleg.ctrlSpringenFormReset();
@@ -181,21 +187,32 @@ let beleg = {
 			helfer.textareaGrow(textarea);
 		});
 		// Fokus setzen
+		// (hier braucht es eine Verzögerung: Wird die Karte z.B. direkt nach dem
+		// Erstellen einer neuen Wortkartei aufgerufen, wird der fokussierte Button
+		// automatisch ausgeführt, wenn man Enter gedrückt hat)
+		await new Promise(resolve => setTimeout(() => resolve(true), 25));
 		let feldDa = document.getElementById("beleg-da");
 		if (neu && !beleg.leseansicht) {
 			// Was ist in der Zwischenablage?
 			const {clipboard} = require("electron"),
 				cp = clipboard.readText(),
+				ppnCp = /^[0-9]{8,10}X?$/.test(cp) ? true : false,
 				dwds = belegImport.DWDSXMLCheck(cp),
+				xml = belegImport.XMLCheck({xmlStr: cp}),
 				bibtexCp = belegImport.BibTeXCheck(cp);
 			if (/^https?:\/\/www\.deutschestextarchiv\.de\//.test(cp)) { // DTA-URL
 				beleg.formularImport("dta");
 			} else if (dwds) { // DWDS-Snippet
 				belegImport.DWDS(dwds, "– Zwischenablage –", false);
 				beleg.formularImport("dwds");
+			} else if (xml) {
+				belegImport.XML(cp, "– Zwischenablage –", false);
+				beleg.formularImport("xml");
 			} else if (bibtexCp) {
 				belegImport.BibTeX(cp, "– Zwischenablage –", false);
 				beleg.formularImport("bibtex");
+			} else if (ppnCp) {
+				belegImport.PPNAnzeigeKarteikarte({typ: "xml"});
 			} else if (belegImport.Datei.data.length) {
 				beleg.formularImport(belegImport.Datei.typ);
 			} else {
@@ -242,7 +259,7 @@ let beleg = {
 			let feld = this.id.replace(/^beleg-/, "");
 			if (/^dta(-bis)*$/.test(feld)) { // #beleg-dta + #beleg-dta-bis gehören nicht zur Kartei, dienen nur zum DTA-Import
 				if (feld === "dta" &&
-						/^https*:\/\/www\.deutschestextarchiv\.de\//.test(this.value)) { // Bis-Seite ermitteln und eintragen
+						/^https?:\/\/www\.deutschestextarchiv\.de\//.test(this.value)) { // Bis-Seite ermitteln und eintragen
 					const fak = belegImport.DTAGetFak(this.value, "");
 					if (fak) {
 						this.nextSibling.value = parseInt(fak, 10) + 1;
@@ -281,8 +298,10 @@ let beleg = {
 	},
 	// zwischen den Import-Formularen hin- und herschalten
 	//   src = String
-	//     (ID der Quelle, aus der importiert werden soll: dta || dwds || dereko || bibtex)
+	//     (ID der Quelle, aus der importiert werden soll: dta || dwds || dereko || xml || bibtex)
 	formularImport (src) {
+		// ggf. src umstellen
+		src = src === "ppn" ? "xml" : src;
 		// Checkbox für ISO 8859-15 umstellen
 		let latin1 = document.getElementById("beleg-datei-latin1");
 		if (src === "dereko") {
@@ -292,7 +311,7 @@ let beleg = {
 		}
 		// Radio-Buttons umstellen
 		// (weil Wechsel nicht nur auf Klick, sondern auch automatisch geschieht)
-		let radios = ["beleg-import-dta", "beleg-import-dwds", "beleg-import-dereko", "beleg-import-bibtex"];
+		let radios = ["beleg-import-dta", "beleg-import-dwds", "beleg-import-dereko", "beleg-import-xml", "beleg-import-bibtex"];
 		for (let r of radios) {
 			let radio = document.getElementById(r);
 			if (r.includes(src)) {
@@ -304,7 +323,7 @@ let beleg = {
 		// Formular umstellen
 		let forms = ["beleg-form-dta", "beleg-form-datei"],
 			formsZiel = src;
-		if (/^(dwds|dereko|bibtex)/.test(src)) {
+		if (/^(dwds|dereko|xml|bibtex)/.test(src)) {
 			formsZiel = "datei";
 		}
 		let eleAktiv = null;
@@ -318,10 +337,11 @@ let beleg = {
 			}
 		}
 		// Fokus setzen
-		if (/^(dwds|dereko|bibtex)$/.test(src)) {
+		if (/^(dwds|dereko|xml|bibtex)$/.test(src)) {
 			let inputs = eleAktiv.querySelectorAll("input");
 			if (src === belegImport.Datei.typ &&
-					belegImport.Datei.data.length) {
+					belegImport.Datei.data.length ||
+				 belegImport.Datei.typ === "ppn") {
 				inputs[inputs.length - 1].focus();
 			} else {
 				inputs[inputs.length - 2].focus();
@@ -334,12 +354,14 @@ let beleg = {
 	},
 	// ggf. Dateiname eintragen
 	//   src = String
-	//     (ID der Quelle, aus der importiert werden soll: dwds || dereko || bibtex)
+	//     (ID der Quelle, aus der importiert werden soll: dwds || dereko || xml || bibtex)
 	formularImportDatei (src) {
 		let name = document.getElementById("beleg-datei-name");
 		if (src === "dwds" && belegImport.Datei.typ === "dwds" ||
 				src === "dereko" && belegImport.Datei.typ === "dereko" ||
-				src === "bibtex" && belegImport.Datei.typ === "bibtex") {
+				src === "xml" && belegImport.Datei.typ === "xml" ||
+				src === "bibtex" && belegImport.Datei.typ === "bibtex" ||
+				/^(xml|bibtex)$/.test(src) && belegImport.Datei.typ === "ppn") {
 			name.textContent = `\u200E${belegImport.Datei.pfad}\u200E`; // vgl. meta.oeffnen()
 			name.classList.remove("leer");
 		} else {
@@ -743,6 +765,8 @@ let beleg = {
 			} else if (this.parentNode.classList.contains("text-tools-beleg") ||
 				this.parentNode.classList.contains("text-tools-bedeutung")) {
 				beleg.toolsText(this);
+			} else if (this.parentNode.classList.contains("text-tools-quelle")) {
+				beleg.toolsQuelleLaden();
 			}
 		});
 	},
@@ -764,11 +788,12 @@ let beleg = {
 	//     (Bezeichner des Datensatzes)
 	//   obj = Object
 	//     (verweist auf das Datenobjekt, in dem der zu kopierende Text steht;
-	//     wichtig, um die Literaturangabe beim Kopieren von Belegtext zu finden
+	//     wichtig, um die Literaturangabe beim Kopieren von Belegtext zu finden)
 	//   text = String
 	//     (der komplette Feldtext, wie er in der DB steht)
-	//   ele = Element
-	//     (ein Element auf der 1. Ebene im Kopierbereich)
+	//   ele = Element || null
+	//     (ein Element auf der 1. Ebene im Kopierbereich; "ele" kann "null" sein,
+	//     wenn die Leseansicht noch nie aufgebaut wurde)
 	toolsKopierenExec (ds, obj, text, ele) {
 		// clipboard initialisieren
 		const {clipboard} = require("electron");
@@ -794,8 +819,16 @@ let beleg = {
 			});
 			// Referenz vorbereiten
 			popup.referenz.data = obj;
-			let eleListe = ele.closest(".liste-details"),
+			let eleListe, eleKarte;
+			if (!ele) {
+				// wenn die Leseansicht noch nie aufgebaut wurde,
+				// kann ele === null sein; dann erfolgt das Kopieren immer
+				// aus dem Karteikartenformular heraus
+				eleKarte = true;
+			} else if (ele) {
+				eleListe = ele.closest(".liste-details");
 				eleKarte = ele.closest("tr");
+			}
 			if (eleListe) {
 				popup.referenz.id = eleListe.previousSibling.dataset.id;
 			} else if (eleKarte) {
@@ -1262,6 +1295,216 @@ let beleg = {
 			}
 		}
 		return false; // offenbar kein illegales Nesting
+	},
+	// Inhalt des Quelle-Felds neu laden
+	async toolsQuelleLaden () {
+		// Titelinfos aus bx laden
+		let bx = beleg.bxTyp({bx: beleg.data.bx});
+		if (bx.typ) {
+			let titel = "";
+			if (bx.typ === "bibtex") {
+				let bibtex = belegImport.BibTeXLesen(bx.daten, true);
+				if (bibtex.length) {
+					titel = bibtex[0].ds.qu;
+				}
+			} else if (bx.typ === "dereko") {
+				let reg = new RegExp(`^(${belegImport.DeReKoId})(.+)`);
+				titel = bx.daten.match(reg)[2] + ".";
+			} else if (bx.typ === "xml-dwds") {
+				let dwds = belegImport.DWDSLesenXML({
+					clipboard: "",
+					xml: bx.daten,
+					returnResult: true,
+				});
+				let url = liste.linksErkennen(dwds.qu);
+				if (/href="/.test(url)) {
+					url = url.match(/href="(.+?)"/)[1];
+				}
+				let direktAusDTA = false;
+				if (/^https?:\/\/www\.deutschestextarchiv\.de\//.test(url)) {
+					direktAusDTA = await new Promise(resolve => {
+						dialog.oeffnen({
+							typ: "confirm",
+							text: "Die Karteikarte wurde aus einem DWDS-Snippet gefüllt, der Beleg stammt allerdings aus dem DTA.\nSoll der Zitiertitel direkt aus dem DTA geladen werden?",
+							callback: () => {
+								if (dialog.antwort) {
+									resolve(true);
+								} else {
+									resolve(false);
+								}
+							},
+						});
+					});
+				}
+				if (direktAusDTA) {
+					titel = await beleg.toolsQuelleLadenDTA({url});
+				} else if (dwds.qu) {
+					titel = dwds.qu;
+				}
+			} else if (bx.typ === "xml-fundstelle") {
+				let daten = redLit.eingabeXMLFundstelle({xmlDoc: bx.daten, xmlStr: ""});
+				titel = daten.ds.qu;
+			} else if (bx.typ === "xml-mods") {
+				let daten = redLit.eingabeXMLMODS({xmlDoc: bx.daten, xmlStr: ""});
+				titel = daten.ds.qu;
+			}
+			if (titel) {
+				quelleFuellen(titel);
+			} else if (titel === "") {
+				// "titel" könnte "false" sein, wenn die Anfrage an das DTA gescheitert ist;
+				// in diesem Fall kommt eine Fehlermeldung von der Fetch-Funktion
+				lesefehler();
+			}
+			return;
+		}
+		// Titelinfos herunterladen
+		let url = liste.linksErkennen(beleg.data.qu);
+		if (/href="/.test(url)) {
+			url = url.match(/href="(.+?)"/)[1];
+		}
+		if (/^https?:\/\/www\.deutschestextarchiv\.de\//.test(url)) {
+			const titel = await beleg.toolsQuelleLadenDTA({url});
+			if (titel) {
+				quelleFuellen(titel);
+			} else if (titel === "") {
+				lesefehler();
+			}
+			return;
+		}
+		// keine Quelle gefunden
+		dialog.oeffnen({
+			typ: "alert",
+			text: "Es wurde keine Quelle gefunden, aus der die Titeldaten automatisch neu geladen werden könnten.",
+		});
+		// Quellenfeld ausfüllen
+		function quelleFuellen (titel) {
+			let quelle = document.getElementById("beleg-qu");
+			let alt = quelle.value.split(/\n\nhttps?:\/\/www\.deutschestextarchiv\.de/)[0],
+				neu = titel.split(/\n\nhttps?:\/\/www\.deutschestextarchiv\.de/)[0];
+			if (alt !== neu) {
+				quelle.value = titel;
+				helfer.textareaGrow(quelle);
+				beleg.belegGeaendert(true);
+				// visuelles Feedback
+				let icon = document.querySelector(".text-tools-quelle .icon-pfeil-kreis");
+				icon.classList.add("rotieren-bitte");
+				quelle.classList.add("neu-geladen");
+				setTimeout(() => {
+					icon.classList.remove("rotieren-bitte");
+					quelle.classList.remove("neu-geladen");
+					quelle.focus();
+				}, 1e3);
+			} else {
+				quelle.focus();
+			}
+		}
+		// generische Fehlermeldung
+		function lesefehler () {
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Beim Einlesen der Titeldaten ist etwas schiefgelaufen.",
+			});
+		}
+	},
+	// Zitiertitelanfrage an das DTA
+	//   url = String
+	//     (DTA-Link)
+	toolsQuelleLadenDTA ({url}) {
+		return new Promise(async resolve => {
+			let quelle = document.getElementById("beleg-qu");
+			// Seitenangabe auslesen
+			let mHier = /, hier (?<seiten>[^\s]+)( |\.\n\n)/.exec(quelle.value),
+				mSeiten = /(?<typ>, Sp?\.)\s(?<seiten>[^\s]+)( |\.\n\n)/.exec(quelle.value);
+			let seitenData = {
+				seite: "",
+				seite_zuletzt: "",
+				spalte: false,
+			};
+			let seiten;
+			if (mHier) {
+				seiten = mHier.groups.seiten;
+			} else if (mSeiten) {
+				seiten = mSeiten.groups.seiten;
+				if (mSeiten.groups.typ === ", Sp.") {
+					seitenData.spalte = true;
+				}
+			}
+			if (seiten) {
+				let seitenSp = seiten.split(/[-–]/);
+				seitenData.seite = seitenSp[0];
+				if (seitenSp[1]) {
+					seitenData.seite_zuletzt = seitenSp[1];
+				}
+			}
+			// TEI-Header herunterladen
+			const fetchOk = await redLit.eingabeDTAFetch({
+				url,
+				fokusId: "beleg-qu",
+				seitenData,
+			});
+			// Rückgabewerte
+			if (fetchOk) {
+				resolve(belegImport.DTAQuelle(true));
+			} else {
+				resolve(false);
+			}
+		});
+	},
+	// Typ der Daten im bx-Datensatz ermitteln
+	//   bx = String
+	//     (Datensatz, der überprüft werden soll)
+	bxTyp ({bx}) {
+		// keine Daten vorhanden
+		if (!bx) {
+			return {
+				typ: "",
+				daten: "",
+			};
+		}
+		// BibTeX-Daten
+		if (belegImport.BibTeXCheck(bx)) {
+			return {
+				typ: "bibtex",
+				daten: bx,
+			};
+		}
+		// DeReKo-Daten
+		let reg = new RegExp(`^${belegImport.DeReKoId}`);
+		if (reg.test(bx)) {
+			return {
+				typ: "dereko",
+				daten: bx,
+			};
+		}
+		// XML-Daten
+		let parser = new DOMParser(),
+			xmlDoc = parser.parseFromString(bx.replace(/ xmlns=".+?"/, ""), "text/xml");
+		if (!xmlDoc.querySelector("parsererror")) {
+			let evaluator = (xpath) => {
+				return xmlDoc.evaluate(xpath, xmlDoc, null, XPathResult.ANY_TYPE, null).iterateNext();
+			};
+			let typ = "";
+			if (evaluator("//teiHeader/sourceDesc/biblFull")) {
+				typ = "xml-dta";
+			} else if (evaluator("/Beleg/Fundstelle")) {
+				typ = "xml-dwds";
+			} else if (evaluator("/Fundstelle")) {
+				typ = "xml-fundstelle";
+			} else if (evaluator("/mods/titleInfo")) {
+				typ = "xml-mods";
+			} else {
+				typ = "";
+			}
+			return {
+				typ,
+				daten: xmlDoc,
+			};
+		}
+		// Datenformat unbekannt
+		return {
+			typ: "",
+			daten: "",
+		};
 	},
 	// Bewertung des Belegs vor- od. zurücknehmen
 	//   stern = Element

@@ -2,7 +2,7 @@
 <html lang="de">
 	<head>
 		<meta charset="utf-8">
-		<meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src http://www.deutschestextarchiv.de https://www.deutschestextarchiv.de https://github.com/WortgeschichteDigital/ZettelsTraum/">
+		<meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src http://www.deutschestextarchiv.de https://www.deutschestextarchiv.de https://github.com/WortgeschichteDigital/ZettelsTraum/ https://unapi.k10plus.de/">
 
 		<title> </title>
 
@@ -27,6 +27,8 @@
 		<link rel="stylesheet" href="css/app/overlays-meta.css">
 		<link rel="stylesheet" href="css/app/overlays-notizen.css">
 		<link rel="stylesheet" href="css/app/overlays-redaktion.css">
+		<link rel="stylesheet" href="css/app/overlays-redLit.css">
+		<link rel="stylesheet" href="css/app/overlays-redLitExport.css">
 		<link rel="stylesheet" href="css/app/overlays-redMeta.css">
 		<link rel="stylesheet" href="css/app/overlays-sonderzeichen.css">
 		<link rel="stylesheet" href="css/app/overlays-stamm.css">
@@ -63,6 +65,7 @@
 		<script src="js/app/kopieren.js"></script>
 		<script src="js/app/lexika.js"></script>
 		<script src="js/app/liste.js"></script>
+		<script src="js/app/lock.js"></script>
 		<script src="js/app/meta.js"></script>
 		<script src="js/app/notizen.js"></script>
 		<script defer src="js/app/optionen.js"></script> <!-- defer! -->
@@ -71,6 +74,7 @@
 		<script src="js/app/dropdown.js"></script>
 		<script src="js/app/popup.js"></script>
 		<script src="js/app/redaktion.js"></script>
+		<script src="js/app/redLit.js"></script>
 		<script src="js/app/redMeta.js"></script>
 		<script src="js/app/sonderzeichen.js"></script>
 		<script src="js/app/speichern.js"></script>
@@ -233,8 +237,10 @@
 						><label for="beleg-import-dwds">DWDS</label
 						><input type="radio" name="beleg-import" id="beleg-import-dereko"
 						><label for="beleg-import-dereko">DeReKo</label
+						><input type="radio" name="beleg-import" id="beleg-import-xml"
+						><label for="beleg-import-xml">XML</label
 						><input type="radio" name="beleg-import" id="beleg-import-bibtex"
-						><label for="beleg-import-bibtex">BibTeX</label
+						><label for="beleg-import-bibtex" class="bibtex"><span>Bib</span>T<span>E</span>X</label
 					></th>
 				</tr><tr class="beleg-form" id="beleg-form-dta">
 					<td colspan="2"><input type="text" value="" id="beleg-dta" tabindex="0"
@@ -326,6 +332,9 @@
 					<td colspan="2"><hr></td>
 				</tr><tr>
 					<th colspan="2"><label for="beleg-qu">Quelle</label
+						><span class="text-tools-quelle"
+							><a href="#" class="icon-link icon-pfeil-kreis icon-tools" title="Quellenangabe neu einlesen" tabindex="-1"> </a
+						></span
 						><span class="text-tools"
 							><a href="#" class="icon-link icon-tools-kopieren" title="Text kopieren" tabindex="-1"> </a
 							><a href="#" class="icon-link icon-tools-einfuegen" title="Text einfügen" tabindex="-1"> </a></span></th>
@@ -892,6 +901,118 @@
 				>Redaktionsereignisse<a href="#" class="icon-link icon-handbuch" title="Abschnitt im Handbuch öffnen" data-handbuch="menueRedaktion-ereignisse"> </a><a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"> </a></h2>
 			<div id="redaktion-next"></div>
 			<div id="redaktion-cont"></div>
+		</div></div>
+
+		<!-- OVERLAY: Literaturdatenbank -->
+		<div id="red-lit" class="overlay aus"><div>
+			<h2><span class="icon-h icon-h-lexika"> </span
+				>Literaturdatenbank<a href="#" class="icon-link icon-handbuch" title="Abschnitt im Handbuch öffnen" data-handbuch="menueRedaktion-literatur"> </a><a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"> </a></h2>
+			<div id="red-lit-pfad"
+				><span id="red-lit-pfad-changed">*</span
+				><span id="red-lit-pfad-db"></span
+				><span id="red-lit-pfad-icons"
+					><a href="#" id="red-lit-pfad-entkoppeln" class="icon-link icon-entkoppeln" title="Datenbank schließen"> </a
+					><a href="#" id="red-lit-pfad-oeffnen" class="icon-link icon-oeffnen" title="Datenbank öffnen"> </a
+					><a href="#" id="red-lit-pfad-exportieren" class="icon-link icon-exportieren" title="Datenbank exportieren"> </a
+					><a href="#" id="red-lit-pfad-speichern-unter" class="icon-link icon-speichern-unter" title="Datenbank speichern unter"> </a
+					><a href="#" id="red-lit-pfad-speichern" class="icon-link icon-speichern" title="Datenbank speichern (Strg + S)"> </a
+				></span
+			></div>
+			<div id="red-lit-nav"
+				><input type="radio" name="red-lit-nav" id="red-lit-nav-suche"
+					><label for="red-lit-nav-suche">Titelsuche</label
+				><input type="radio" name="red-lit-nav" id="red-lit-nav-eingabe"
+					><label for="red-lit-nav-eingabe">Titelaufnahme</label
+			></div>
+			<div id="red-lit-suche" class="aus">
+				<p id="red-lit-suche-form"
+					><input type="text" value="" placeholder="Suchtext" id="red-lit-suche-text"
+					><label for="red-lit-suche-ab">ab</label
+					><input type="date" value="" id="red-lit-suche-ab" required
+					><a href="#" class="icon-link icon-lupe" id="red-lit-suche-start" tabindex="-1" title="Suche starten"> </a
+				></p>
+				<p id="red-lit-suche-sonder"
+					><i>Sondersuchen:</i> <a href="#" data-sonder="duplikate">Duplikate</a> · <a href="#" data-sonder="siglen_doppelt">doppelte Siglen</a> · <a href="#" data-sonder="ppn_mit">mit</a> / <a href="#" data-sonder="ppn_ohne">ohne</a> PPN · <a href="#" data-sonder="versionen">mehrere Versionen</a> · <a href="#" data-sonder="notizen">mit Notizen</a
+				></p>
+				<div id="red-lit-suche-titel"></div>
+				<div id="red-lit-suche-treffer"
+					><a href="#" class="icon-link icon-pfeil-gerade-links" title="zurückblättern"> </a
+					><span id="red-lit-suche-trefferzahl"></span
+					><a href="#" class="icon-link icon-pfeil-gerade-rechts" title="vorblättern"> </a
+				></div>
+			</div>
+			<div id="red-lit-eingabe" class="aus">
+				<p id="red-lit-eingabe-meldung"></p>
+				<p class="button"><input type="button" value="Speichern" id="red-lit-eingabe-save"
+					><input type="button" value="Hinzufügen" id="red-lit-eingabe-add"></p>
+				<table>
+					<tr>
+						<th><label for="red-lit-eingabe-si">Sigle</label></th>
+						<th><label for="red-lit-eingabe-id">ID</label></th>
+					</tr>
+					<tr>
+						<td><input type="text" value="" id="red-lit-eingabe-si"></td>
+						<td><input type="text" value="" id="red-lit-eingabe-id"></td>
+					</tr>
+					<tr>
+						<th colspan="2"
+							><label for="red-lit-eingabe-ti">Titel</label
+							><span id="red-lit-eingabe-ti-import"
+								><a href="#" title="DTA-Import" id="red-lit-eingabe-ti-dta">DTA</a
+								> · <a href="#" title="XML-Import" id="red-lit-eingabe-ti-xml">XML</a
+								> · <a href="#" title="BibTeX-Import" class="bibtex" id="red-lit-eingabe-ti-bibtex"><span>Bib</span>T<span>E</span>X</a
+							></span
+						></th>
+					</tr>
+					<tr>
+						<td colspan="2"><textarea rows="1" id="red-lit-eingabe-ti" required></textarea></td>
+					</tr>
+					<tr>
+						<th><label for="red-lit-eingabe-ul">URL</label></th>
+						<th><label for="red-lit-eingabe-ad">Aufrufdatum</label></th>
+					</tr>
+					<tr>
+						<td><input type="text" value="" id="red-lit-eingabe-ul"></td>
+						<td><input type="date" value="" id="red-lit-eingabe-ad" required></td>
+					</tr>
+					<tr>
+						<th><label for="red-lit-eingabe-fo">Fundort</label></th>
+						<th><label for="red-lit-eingabe-pn"><abbr title="Pica-Produktionsnummer">PPN</abbr></label></th>
+					</tr>
+					<tr>
+						<td class="dropdown-cont"><input type="text" value="" class="dropdown-feld" id="red-lit-eingabe-fo"
+							><a href="#" class="dropdown-link-td" title="Fundorte auflisten" tabindex="-1"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m7 2v8l-3.5-3.5-1.5 1.5 6 6 6-6-1.5-1.5-3.5 3.5v-8z"/></svg></a
+						></td>
+						<td><input type="text" value="" id="red-lit-eingabe-pn"></td>
+					</tr>
+					<tr>
+						<th colspan="2"><label for="red-lit-eingabe-no">Notizen</label></th>
+					</tr>
+					<tr>
+						<td colspan="2"><textarea rows="1" id="red-lit-eingabe-no" required></textarea></td>
+					</tr>
+					<tr>
+						<td colspan="2" id="red-lit-eingabe-meta"></td>
+					</tr>
+				</table>
+			</div>
+		</div></div>
+
+		<!-- OVERLAY: Literaturdatenbank: Export -->
+		<div id="red-lit-export" class="overlay aus"><div>
+			<h2><span class="icon-h icon-h-kopieren"> </span
+				>Literaturdatenbank exportieren<a href="#" class="icon-link icon-handbuch" title="Abschnitt im Handbuch öffnen" data-handbuch="menueRedaktion-literaturExportieren"> </a><a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"
+				> </a></h2>
+			<div id="red-lit-export-cont">
+				<p
+					><input type="radio" name="red-lit-export-format" id="red-lit-export-format-xml" checked><label for="red-lit-export-format-xml">XML</label
+					><input type="radio" name="red-lit-export-format" id="red-lit-export-format-plain"><label for="red-lit-export-format-plain">Text</label
+				></p>
+				<p class="button"
+					><input type="button" value="Exportieren" id="red-lit-export-exportieren"
+					><input type="button" value="Abbrechen" id="red-lit-export-abbrechen"
+				></p>
+			</div>
 		</div></div>
 
 		<!-- OVERLAY: Tags -->

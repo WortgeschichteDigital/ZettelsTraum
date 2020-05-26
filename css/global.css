@@ -5,6 +5,23 @@
 	display: none !important;
 }
 
+/* BibTeX typographisch ------------------------- */
+.bibtex {
+	display: inline-block;
+	overflow: hidden;
+	vertical-align: bottom;
+	font-family: "Noto Serif", serif;
+}
+
+.bibtex span:first-child {
+	font-variant: small-caps;
+}
+
+.bibtex span:nth-child(2) {
+	position: relative;
+	top: .2em;
+}
+
 /* Ziehen von Elementen ------------------------- */
 *, *::after, *::before {
 	-webkit-app-region: no-drag;

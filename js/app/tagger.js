@@ -312,6 +312,7 @@ let tagger = {
 			tagger.fokusTagzelle();
 		}, {
 			notizen: false,
+			literaur: false,
 			bedeutungen: false,
 			beleg: false,
 		});

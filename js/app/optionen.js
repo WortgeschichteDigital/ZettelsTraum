@@ -244,6 +244,8 @@ let optionen = {
 		},
 		// zuletzt verwendete Karteien
 		zuletzt: [],
+		// Pfad zur Literaturdatenbank
+		"literatur-db": "",
 	},
 	// Optionen on-the-fly empfangen
 	// (wird aufgerufen, wenn in einem anderen Hauptfenster Optionen geändert wurden)
@@ -255,7 +257,7 @@ let optionen = {
 			if (!data.hasOwnProperty(block)) {
 				continue;
 			}
-			if (!/^(fenster|fenster-bedeutungen|einstellungen|kopieren|tags|personen|letzter_pfad)$/.test(block)) {
+			if (!/^(fenster|fenster-bedeutungen|einstellungen|kopieren|tags|personen|letzter_pfad|literatur-db)$/.test(block)) {
 				delete data[block];
 				// diese Einstellungen werden nicht aus einem anderen Fenster übernommen
 				// (das führt nur zu einem unschönen Springen):
@@ -551,13 +553,13 @@ let optionen = {
 			let i = document.createElement("i");
 			tdSub.appendChild(i);
 			i.textContent = "Abgleich:";
-			let datum = helfer.datumFormat(optionen.data.tags[typ].abgleich, true);
+			let datum = helfer.datumFormat(optionen.data.tags[typ].abgleich, "minuten");
 			tdSub.appendChild(document.createTextNode(datum));
 			tdSub.appendChild(document.createElement("br"));
 			i = document.createElement("i");
 			tdSub.appendChild(i);
 			i.textContent = "Update:";
-			datum = helfer.datumFormat(optionen.data.tags[typ].update, true);
+			datum = helfer.datumFormat(optionen.data.tags[typ].update, "minuten");
 			tdSub.appendChild(document.createTextNode(datum));
 		}
 		// keine Tag-Dateien vorhanden

@@ -117,23 +117,9 @@ let kartei = {
 			return;
 		}
 		// Ist die Datei gesperrt?
-		let lockcheck = await kartei.lock(datei, "check");
-		if (lockcheck) {
-			let durch = "";
-			if (Array.isArray(lockcheck)) {
-				switch (lockcheck[0]) {
-					case "computer":
-						durch = ` durch Computer <i>${lockcheck[1]}</i>`;
-						break;
-					case "user":
-						durch = ` durch BenutzerIn <i>${lockcheck[1]}</i>`;
-						break;
-				}
-			}
-			dialog.oeffnen({
-				typ: "alert",
-				text: `Beim Öffnen der Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\nDatei ist gesperrt${durch}`,
-			});
+		let locked = await lock.actions({datei, aktion: "check"});
+		if (locked) {
+			lock.locked({info: locked});
 			return;
 		}
 		// im aktuellen Fenster könnte eine Kartei geöffnet sein (kartei.pfad = true)
@@ -197,7 +183,7 @@ let kartei = {
 		// War die Datei evtl. verschwunden?
 		zuletzt.verschwundenCheck(datei);
 		// Datei sperren
-		kartei.lock(datei, "lock");
+		lock.actions({datei, aktion: "lock"});
 		// Main melden, dass die Kartei in diesem Fenster geöffnet wurde
 		ipcRenderer.send("kartei-geoeffnet", winInfo.winId, datei);
 		// alle Overlays schließen
@@ -305,10 +291,10 @@ let kartei = {
 			// das Speichern war erfolgreich
 			zuletzt.verschwundenCheck(pfad);
 			if (!kartei.pfad) {
-				kartei.lock(pfad, "lock");
+				lock.actions({datei: pfad, aktion: "lock"});
 			} else if (pfad !== kartei.pfad) {
-				kartei.lock(kartei.pfad, "unlock");
-				kartei.lock(pfad, "lock");
+				lock.actions({datei: kartei.pfad, aktion: "unlock"});
+				lock.actions({datei: pfad, aktion: "lock"});
 			}
 			kartei.pfad = pfad;
 			optionen.aendereLetzterPfad();
@@ -397,7 +383,7 @@ let kartei = {
 	schliessenDurchfuehren () {
 		const {ipcRenderer} = require("electron");
 		ipcRenderer.send("kartei-geschlossen", winInfo.winId);
-		kartei.lock(kartei.pfad, "unlock");
+		lock.actions({datei: kartei.pfad, aktion: "unlock"});
 		notizen.notizenGeaendert(false);
 		tagger.taggerGeaendert(false);
 		beleg.belegGeaendert(false);
@@ -408,6 +394,7 @@ let kartei = {
 		data = {};
 		kartei.wort = "";
 		kartei.pfad = "";
+		belegImport.DateiReset();
 		let wort = document.getElementById("wort");
 		wort.classList.add("keine-kartei");
 		wort.textContent = "keine Kartei geöffnet";
@@ -441,7 +428,7 @@ let kartei = {
 						text: "Sie müssen ein Wort eingeben, sonst kann keine Kartei angelegt werden.",
 					});
 				} else if (dialog.antwort && wort) {
-					kartei.lock(kartei.pfad, "unlock");
+					lock.actions({datei: kartei.pfad, aktion: "unlock"});
 					const {ipcRenderer} = require("electron");
 					ipcRenderer.send("kartei-geoeffnet", winInfo.winId, "neu");
 					kartei.karteiGeaendert(true);
@@ -523,122 +510,5 @@ let kartei = {
 	menusDeaktivieren (disable) {
 		const {ipcRenderer} = require("electron");
 		ipcRenderer.send("menus-deaktivieren", disable, winInfo.winId);
-	},
-	// Lock-Datei-Funktionen
-	//   datei = String
-	//     (Dateipfad)
-	//   aktion = String
-	//     (lock, unlock, check)
-	lock (datei, aktion) {
-		return new Promise(async resolve => {
-			if (!datei) { // für just erstellte, aber noch nicht gespeicherte Dateien
-				resolve(true);
-				return;
-			}
-			let pfad = datei.match(/^(.+[/\\]{1})(.+)$/);
-			const fsP = require("fs").promises,
-				lockfile = `${pfad[1]}.~lock.${pfad[2]}#`;
-			if (aktion === "lock") {
-				// alte Datei ggf. löschen
-				// (Unter Windows gibt es Probleme, wenn die Datei direkt überschrieben werden soll.
-				// Ist das vielleicht ein Node-BUG? Eigentlich sollte das nämlich gehen.)
-				const exists = await helfer.exists(lockfile);
-				if (exists) {
-					const erfolg = await kartei.lockUnlink(lockfile);
-					if (!erfolg) {
-						resolve(false);
-						return;
-					}
-				}
-				// Lock-Datei erstellen
-				const os = require("os"),
-					host = os.hostname(),
-					user = os.userInfo().username,
-					datum = new Date().toISOString(),
-					lockcontent = `${datum};;${host};;${user}`;
-				fsP.writeFile(lockfile, lockcontent)
-					.then(() => {
-						// Datei unter Windows verstecken
-						if (process.platform === "win32") {
-							const child_process = require("child_process");
-							child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);
-						}
-						resolve(true);
-					})
-					.catch(err => {
-						dialog.oeffnen({
-							typ: "alert",
-							text: `Beim Erstellen der Sperrdatei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.name}: ${err.message}</p>`,
-						});
-						resolve(false);
-						throw err;
-					});
-			} else if (aktion === "unlock") {
-				const erfolg = await kartei.lockUnlink(lockfile);
-				resolve(erfolg);
-			} else if (aktion === "check") {
-				const exists = await helfer.exists(lockfile);
-				if (!exists) {
-					resolve(false); // keine Kartei => nicht gesperrt
-					return;
-				}
-				const lockcontent = await kartei.lockRead(lockfile);
-				if (!lockcontent) {
-					resolve(true); // gesperrt (zur Sicherheit, weil unklarer Status oder Fehler)
-					return;
-				}
-				let datum_host_user = lockcontent.split(";;");
-				const os = require("os"),
-					host = os.hostname(),
-					user = os.userInfo().username;
-				// nicht sperren, wenn:
-				//   derselbe Computer + dieselbe BenutzerIn
-				//   vor mehr als 12 Stunden gesperrt
-				if (host === datum_host_user[1] && user === datum_host_user[2] ||
-						new Date() - new Date(datum_host_user[0]) > 432e5) {
-					resolve(false); // nicht gesperrt
-				} else if (datum_host_user[2]) {
-					resolve(["user", datum_host_user[2]]); // gesperrt
-				} else {
-					resolve(["computer", datum_host_user[1]]); // gesperrt
-				}
-			}
-		});
-	},
-	// Lock-Datei löschen
-	//   lockfile = String
-	//     (Pfad zur Lock-Datei)
-	lockUnlink (lockfile) {
-		return new Promise(resolve => {
-			const fsP = require("fs").promises;
-			fsP.unlink(lockfile)
-				.then(() => resolve(true))
-				.catch(err => {
-					dialog.oeffnen({
-						typ: "alert",
-						text: `Beim Löschen der Sperrdatei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.name}: ${err.message}</p>`
-					});
-					resolve(false);
-					throw err;
-				});
-		});
-	},
-	// Lock-Datei einlesen
-	//   lockfile = String
-	//     (Pfad zur Lock-Datei)
-	lockRead (lockfile) {
-		return new Promise(resolve => {
-			const fsP = require("fs").promises;
-			fsP.readFile(lockfile, {encoding: "utf8"})
-				.then(content => resolve(content))
-				.catch(err => {
-					dialog.oeffnen({
-						typ: "alert",
-						text: `Beim Lesen der Sperrdatei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.name}: ${err.message}</p>`
-					});
-					resolve("");
-					throw err;
-				});
-		});
 	},
 };

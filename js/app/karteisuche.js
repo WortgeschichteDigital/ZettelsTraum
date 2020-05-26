@@ -627,7 +627,7 @@ let karteisuche = {
 					let typ = document.createElement("i");
 					wrap.appendChild(typ);
 					typ.textContent = `${e.txt}:`;
-					let da = helfer.datumFormat(i.da, true).split(", ")[0],
+					let da = helfer.datumFormat(i.da, "minuten").split(", ")[0],
 						pr = i.pr ? i.pr : "N. N.";
 					wrap.appendChild(document.createTextNode(` ${pr} (${da})`));
 					br = true;
@@ -941,7 +941,7 @@ let karteisuche = {
 				status = karteisuche.ztjAuflistenRedaktion(idx),
 				statusTxt = "abgeschlossen",
 				kartei = karteisuche.ztj[idx].redaktion.filter(v => v.er === "Kartei erstellt"),
-				karteiDa = helfer.datumFormat(kartei[0].da, true).split(", ")[0],
+				karteiDa = helfer.datumFormat(kartei[0].da, "minuten").split(", ")[0],
 				karteiPr = kartei[0].pr ? kartei[0].pr : "N. N.",
 				artikel = karteisuche.ztj[idx].redaktion.filter(v => v.er === "Artikel erstellt"),
 				artikelDa = "",
@@ -954,7 +954,7 @@ let karteisuche = {
 				statusTxt = "in Arbeit";
 			}
 			if (artikel.length) {
-				artikelDa = helfer.datumFormat(artikel[0].da, true).split(", ")[0];
+				artikelDa = helfer.datumFormat(artikel[0].da, "minuten").split(", ")[0];
 				artikelPr = artikel[0].pr ? artikel[0].pr : "N. N.";
 			}
 			if (behandeltIn || behandeltMit.length) {
@@ -989,17 +989,17 @@ let karteisuche = {
 				}
 			} else {
 				if (knapp) {
-					content += `\n<li>${karteisuche.ztj[idx].wort} (${statusTxt})</li>`;
+					content += `\n<li>${xml.escape({text: karteisuche.ztj[idx].wort})} (${statusTxt})</li>`;
 				} else {
-					content += `\n<tr><td>${karteisuche.ztj[idx].wort}</td><td>${check}</td><td>${status.ereignis}</td>`;
+					content += `\n<tr><td>${xml.escape({text: karteisuche.ztj[idx].wort})}</td><td>${check}</td><td>${xml.escape({text: status.ereignis})}</td>`;
 					if (inMit.length) {
-						content += `<td>${inMit.join(", ")}</td>`;
+						content += `<td>${xml.escape({text: inMit.join(", ")})}</td>`;
 					} else {
 						content += "<td> </td>";
 					}
-					content += `<td>${karteiPr}</td><td>${karteiDa}</td>`;
+					content += `<td>${xml.escape({text: karteiPr})}</td><td>${karteiDa}</td>`;
 					if (artikelPr) {
-						content += `<td>${artikelPr}</td><td>${artikelDa}</td></tr>`;
+						content += `<td>${xml.escape({text: artikelPr})}</td><td>${artikelDa}</td></tr>`;
 					} else {
 						content += "<td>–</td><td>–</td></tr>";
 					}
@@ -1018,6 +1018,7 @@ let karteisuche = {
 		let format = {
 			name: "Markdown",
 			ext: "md",
+			content: "Karteiliste",
 		};
 		if (!md) {
 			format.name = "HTML";
@@ -1026,18 +1027,19 @@ let karteisuche = {
 		karteisuche.trefferlisteExportierenDialog(content, format);
 	},
 	// Trefferlistenexport: Daten zum Speichern anbieten
+	// (Funktion wird auch für das Speichern der Literaturdatenbank genutzt)
 	//   content = String
 	//     (die Daten)
 	//   format = Object
-	//     (Angaben zum Format)
+	//     (Angaben zum Format und Inhalt der Daten)
 	async trefferlisteExportierenDialog (content, format) {
 		const path = require("path");
 		let opt = {
 			title: `${format.name} speichern`,
-			defaultPath: path.join(appInfo.documents, `Karteiliste.${format.ext}`),
+			defaultPath: path.join(appInfo.documents, `${format.content}.${format.ext}`),
 			filters: [
 				{
-					name: format.name,
+					name: `${format.name}-Dateien`,
 					extensions: [format.ext],
 				},
 				{
@@ -1069,7 +1071,7 @@ let karteisuche = {
 			.catch(err => {
 				dialog.oeffnen({
 					typ: "alert",
-					text: `Beim Speichern der Karteiliste ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.message}</p>`,
+					text: `Beim Speichern der ${format.content} ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.message}</p>`,
 				});
 			});
 	},

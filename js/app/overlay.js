@@ -10,17 +10,11 @@ let overlay = {
 	//     (Overlay-Fenster, das geöffnet werden soll)
 	oeffnen (fenster) {
 		// Ist das Fenster schon offen?
-		let schon_offen = false;
-		if (!fenster.classList.contains("aus")) {
-			schon_offen = true;
-		}
+		const schon_offen = !fenster.classList.contains("aus");
 		// Fenster in den Vordergrund holen
-		overlay.zIndex++;
-		fenster.style.zIndex = overlay.zIndex;
+		fenster.style.zIndex = ++overlay.zIndex;
 		// Fenster einblenden
-		if (overlay.timeout) {
-			clearTimeout(overlay.timeout);
-		}
+		clearTimeout(overlay.timeout);
 		if (schon_offen) {
 			// das ist wichtig für direkt aufeinanderfolgende Dialog-Fenster
 			fenster.classList.add("einblenden");
@@ -63,6 +57,9 @@ let overlay = {
 			return;
 		} else if (fenster.id === "import") {
 			belegImport.DateiImportFensterSchliessen();
+			return;
+		} else if (fenster.id === "red-lit") {
+			redLit.schliessen();
 			return;
 		}
 		// Fenster schließen

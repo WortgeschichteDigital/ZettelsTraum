@@ -250,7 +250,7 @@ let anhaenge = {
 	//     (Datei, die geöffnet werden soll)
 	//   ordner = true || undefined
 	//     (Dateiordner im Filemanager öffnen)
-	oeffnen (datei, ordner = false) {
+	async oeffnen (datei, ordner = false) {
 		if (!anhaenge.data[datei].exists) {
 			dialog.oeffnen({
 				typ: "alert",
@@ -263,7 +263,13 @@ let anhaenge = {
 		if (ordner) {
 			shell.showItemInFolder(pfad);
 		} else {
-			shell.openItem(pfad);
+			const err = await shell.openPath(pfad);
+			if (err) {
+				dialog.oeffnen({
+					typ: "alert",
+					text: `Beim Öffnen der Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err}</p>`,
+				});
+			}
 		}
 	},
 	// Öffnen der Karteikarte durch Klick auf eine Überschrift im Anhänge-Fenster (Listener)

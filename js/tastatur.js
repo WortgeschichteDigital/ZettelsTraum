@@ -43,6 +43,12 @@ let tastatur = {
 				stamm.kopfKonfigSchliessen();
 				return;
 			}
+			// Versionen-Popup in der Literaturdatenbank schließen
+			if (overlayId === "red-lit" &&
+					document.getElementById("red-lit-popup")) {
+				redLit.anzeigePopupSchliessen();
+				return;
+			}
 			// Overlay-Fenster schließen
 			if (overlayId) {
 				let link = document.querySelector(`#${overlayId} h2 .icon-schliessen`);
@@ -147,6 +153,20 @@ let tastatur = {
 			}
 			return;
 		}
+		// LITERATURDATENBANK: Key "f" || "h" || "s"
+		if (m === "Ctrl" && overlayId === "red-lit") {
+			if (evt.key === "f" && !kartei.wort) {
+				filter.suche();
+			} else if (evt.key === "h") {
+				if (redLit.db.locked) {
+					return;
+				}
+				redLit.dbCheck(() => redLit.eingabeHinzufuegen(), false);
+			} else if (evt.key === "s" && !kartei.wort) {
+				speichern.kaskade();
+			}
+			return;
+		}
 	},
 	// alle Events, die mit den Navigationspfeilen zusammenhängen
 	//   evt = Object
@@ -198,6 +218,9 @@ let tastatur = {
 			if (m === "Ctrl" && overlayId === "einstellungen") {
 				evt.preventDefault();
 				optionen.naviMenue(evt);
+			} else if (m === "Ctrl" && overlayId === "red-lit" && document.getElementById("red-lit-popup")) {
+				evt.preventDefault();
+				redLit.anzeigePopupNav(evt);
 			}
 			return;
 		}

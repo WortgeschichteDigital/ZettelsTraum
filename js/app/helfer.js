@@ -110,6 +110,14 @@ let helfer = {
 			obj.removeChild(obj.lastChild);
 		}
 	},
+	// Zufallsgenerator
+	//   min = Number
+	//     (Minimalwert)
+	//   max = Number
+	//     (Maximalwert)
+	zufall (min, max) {
+		return Math.floor(Math.random() * (max - min + 1)) + min;
+	},
 	// wählt den Text innerhalb des übergebenen Objekts aus
 	//   obj = Element
 	//     (das Element, in dem der Text komplett markiert werden soll)
@@ -176,28 +184,30 @@ let helfer = {
 		text = text.replace(/"(.+?)"/g, (m, p1) => `„${p1}“`); // doppelte Anführungszeichen
 		text = text.replace(/([a-z])'([a-z])/g, (m, p1, p2) => `${p1}’${p2}`); // offenkundiges Apostroph
 		text = text.replace(/'(.+?)'/g, (m, p1) => `‚${p1}‘`); // einfache Anführungszeichen
+		text = text.replace(/'/g, "’"); // wahrscheinliches Apostroph
+		text = text.replace(/(\s|[0-9]+)-(\s|[0-9]+)/g, (m, p1, p2) => `${p1}–${p2}`); // Halbgeviertstriche
+		text = text.replace(/--/g, "–"); // Halbgeviertstriche
+		text = text.replace(/\s([:;])\s/g, (m, p1) => `${p1} `); // nicht planken
 		text = text.replace(/=__(.+?)__/g, (m, p1) => `="${p1}"`); // Attribute in Tags demaskieren
 		text = text.replace(/\.{3}/g, "…"); // horizontale Ellipse
+		text = text.replace(/([a-z]) ([0-9]+ \([0-9]{4}\))/, (m, p1, p2) => `${p1} ${p2}`); // geschütztes Leerzeichen vor Jahrgang einer Zeitschrift
 		// geschützte Leerzeichen
 		let abk = new Set([
 			/[0-9]{1,2}\. [0-9]{1,2}\. [0-9]{4}/g, // Datumsangabe (nur 1. Leerzeichen wird ersetzt!)
 			/[0-9]{1,2}\. (Jan|Feb|März|Apr|Mai|Juni|Juli|Aug|Sep|Okt|Nov|Dez)/g, // Datumsangabe mit Monat
-			/[0-9]{2}\. Jh\./g, // Jahrhundertangaben
+			/[0-9]\. Aufl/g, // Auflage
+			/[0-9]{2}\. (Jh\.|Jahrhundert)/g, // Jahrhundertangaben
 			/a\. M\./g, // am Main
 			/Bd\. [0-9]+/g, // Band
-			/d\. h\./ig,
-			/d\. i\./ig,
+			/d\. (h|i)\./ig,
+			/e\. V\./g, // eingetragener Verein
 			/hrsg\. v\./ig,
 			/H\. [0-9]+/g, // Heft
 			/N\. N\./g, // nomen nescio
 			/Nr\. [0-9]+/g, // Nummer
-			/s\. d\./ig,
-			/s\. l\./ig,
-			/S\. [0-9]+/g, // Seitenangaben
-			/Sp\. [0-9]+/g, // Spaltenangaben
-			/u\. a\./ig,
-			/u\. ä\./ig,
-			/s\. v\./ig,
+			/s\. (d|l|v)\./ig,
+			/Sp?\. [0-9]+/g, // Seiten-/Spaltenangaben
+			/u\. (a|ä)\./ig,
 			/z\. B\./ig,
 		]);
 		for (let i of abk) {
@@ -394,6 +404,21 @@ let helfer = {
 		}
 		return 1;
 	},
+	// URLs nach Domain sortieren
+	//   a = String
+	//   b = String
+	sortURL (a, b) {
+		if (/books\.google/.test(a)) {
+			return -1;
+		} else if (/books\.google/.test(b)) {
+			return 1;
+		} else if (/doi\.org/.test(a)) {
+			return -1;
+		} else if (/doi\.org/.test(b)) {
+			return 1;
+		}
+		return 0;
+	},
 	// Strings nach Länge sortieren (kürzeste zuletzt), Fallback: alphanumerische Sortierung
 	//   a = String
 	//   b = String
@@ -419,16 +444,47 @@ let helfer = {
 	// ein übergebenes Datum formatiert ausgeben
 	//   datum = String
 	//     (im ISO 8601-Format)
-	//   knapp = true || undefined
-	//     (eine knappere Version des Datums wird zurückgegeben)
-	datumFormat (datum, knapp = false) {
+	//   format = String || undefined
+	//     (steuert die verschiedenen Formatierungstypen)
+	datumFormat (datum, format = "") {
+		// Minuten und Sekunden formatieren
+		let d = new Date(datum),
+			m = d.getMinutes().toString(),
+			s = d.getSeconds().toString();
+		if (m.length < 2) {
+			m = "0" + m;
+		}
+		if (s.length < 2) {
+			s = "0" + s;
+		}
+		// Format "minuten"
+		if (format === "minuten") {
+			return `${d.getDate()}. ${d.getMonth() + 1}. ${d.getFullYear()}, ${d.getHours()}:${m} Uhr`;
+		}
+		// Format "sekunden"
+		if (format === "sekunden") {
+			return `${d.getDate()}. ${d.getMonth() + 1}. ${d.getFullYear()}, ${d.getHours()}:${m}:${s} Uhr`;
+		}
+		// Format "technisch"
+		if (format === "technisch") {
+			let tag = d.getDate().toString(),
+				monat = (d.getMonth() + 1).toString(),
+				stunde = d.getHours().toString();
+			if (tag.length < 2) {
+				tag = "0" + tag;
+			}
+			if (monat.length < 2) {
+				monat = "0" + monat;
+			}
+			if (stunde.length < 2) {
+				stunde = "0" + stunde;
+			}
+			return `${tag}. ${monat}. ${d.getFullYear()}, ${stunde}:${m}:${s} Uhr`;
+		}
+		// Standardformat
 		let wochentage = ["Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"],
 			monate = ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"];
-		let d = new Date(datum);
-		if (knapp) {
-			return `${d.getDate()}. ${d.getMonth() + 1}. ${d.getFullYear()}, ${d.getHours()}:${d.getMinutes() < 10 ? `0${d.getMinutes()}` : d.getMinutes()} Uhr`;
-		}
-		return `${wochentage[d.getDay()]}, ${d.getDate()}. ${monate[d.getMonth()]} ${d.getFullYear()}, ${d.getHours()}:${d.getMinutes() < 10 ? `0${d.getMinutes()}` : d.getMinutes()} Uhr`;
+		return `${wochentage[d.getDay()]}, ${d.getDate()}. ${monate[d.getMonth()]} ${d.getFullYear()}, ${d.getHours()}:${m} Uhr`;
 	},
 	// überprüft den Typ des übergebenen Objekts zuverlässig
 	// mögliche Rückgabewerte u.a.: Arguments, Array, Boolean, Date, Element, Error, Function, JSON, Math, NodeList, Number, Object, RegExp, String
@@ -650,6 +706,48 @@ let helfer = {
 			shell.openExternal(url);
 		});
 	},
+	// lädt den Inhalt der übergebenen URL herunter
+	//   url = String
+	//     (URL, deren Inhalt heruntergeladen werden soll)
+	fetchURL (url) {
+		return new Promise(async resolve => {
+			// Abort-Controller initialisieren
+			let controller = new AbortController();
+			setTimeout(() => controller.abort(), parseInt(optionen.data.einstellungen.timeout, 10) * 1000);
+			// Feedback vorbereiten
+			let feedback = {
+				fetchOk: true,
+				fehler: "",
+				text: "",
+			};
+			// Fetch durchführen
+			let response;
+			try {
+				response = await fetch(url, {
+					signal: controller.signal,
+				});
+			} catch (err) {
+				feedback.fetchOk = false;
+				if (err.name === "AbortError") {
+					feedback.fehler = "Timeout-Fehler";
+				} else {
+					feedback.fehler = `${err.name}: ${err.message}`;
+				}
+				resolve(feedback);
+				throw err;
+			}
+			// Antwort des Servers fehlerhaft
+			if (!response.ok) {
+				feedback.fehler = `HTTP-Status-Code ${response.status}`;
+				resolve(feedback);
+				return;
+			}
+			// Antworttext auslesen
+			feedback.text = await response.text();
+			// Promise auflösen
+			resolve(feedback);
+		});
+	},
 	// öffnet den Dateimanager im Ordner der übergebenen Datei
 	//   pfad = String
 	//     (Pfad zu einer Datei)
@@ -814,6 +912,8 @@ let helfer = {
 	async beforeUnload () {
 		// Schließen unterbrechen, wenn ungespeicherte Änderungen
 		if (notizen.geaendert ||
+				redLit.eingabe.changed ||
+				redLit.db.changed ||
 				tagger.geaendert ||
 				bedeutungen.geaendert ||
 				beleg.geaendert ||
@@ -829,7 +929,7 @@ let helfer = {
 		// Bedeutungen-Fenster ggf. schließen
 		await bedeutungenWin.schliessen();
 		// Kartei entsperren
-		await kartei.lock(kartei.pfad, "unlock");
+		await lock.actions({datei: kartei.pfad, aktion: "unlock"});
 		// Status des Fensters speichern
 		const {ipcRenderer} = require("electron");
 		optionen.data.fenster = await ipcRenderer.invoke("fenster-status", winInfo.winId, "fenster");

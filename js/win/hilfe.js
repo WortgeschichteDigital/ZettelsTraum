@@ -46,7 +46,7 @@ let hilfe = {
 	// Sprung zu dem übergebenen Ziel ausführen
 	//   id = String
 	//     (Zielangabe, also ID, zu der hin der Sprung ausgeführt werden soll)
-	naviSprungAusfuehren (id) {
+	async naviSprungAusfuehren (id) {
 		// ggf. die Sektion wechseln
 		const sek_aktiv = hilfe.sektionAktiv();
 		if (!new RegExp(`^${sek_aktiv}`).test(id)) {
@@ -57,6 +57,11 @@ let hilfe = {
 			hilfe.history(sek_aktiv);
 		}
 		// ggf. Fenster an die korrekte Position scrollen
+		if (sek_aktiv === "start") {
+			// befindet man sich in der Startsektion wird an die falsche Position gescrollt,
+			// wenn das Ziel ein Absatz ist => kurz warten
+			await new Promise(resolve => setTimeout(() => resolve(true), 25));
+		}
 		if (/-/.test(id)) {
 			window.scrollTo({
 				left: 0,
