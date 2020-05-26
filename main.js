@@ -289,6 +289,11 @@ layoutMenu = [
 				click: () => appMenu.befehl("redaktion-ereignisse"),
 				id: "redaktion-ereignisse",
 			},
+			{
+				label: "Literatur",
+				icon: path.join(__dirname, "img", "menu", "buecher.png"),
+				click: () => appMenu.befehl("redaktion-literatur"),
+			},
 		],
 	},
 	{
@@ -1309,6 +1314,7 @@ ipcMain.handle("infos-senden", evt => {
 			name: app.name,
 			packaged: !devtools,
 			temp: app.getPath("temp"),
+			userData: app.getPath("userData"),
 			version: app.getVersion(),
 		},
 		winInfo: {

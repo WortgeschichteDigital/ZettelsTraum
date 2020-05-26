@@ -37,6 +37,7 @@ window.addEventListener("load", async () => {
 	ipcRenderer.on("kartei-bedeutungen-fenster", () => bedeutungenWin.oeffnen());
 	ipcRenderer.on("kartei-suche", () => filter.suche());
 	ipcRenderer.on("redaktion-ereignisse", () => redaktion.oeffnen());
+	ipcRenderer.on("redaktion-literatur", () => redLit.oeffnen());
 	ipcRenderer.on("redaktion-metadaten", () => redMeta.oeffnen());
 	ipcRenderer.on("belege-hinzufuegen", () => {
 		// Sperre für macOS (Menüpunkte können nicht deaktiviert werden)
@@ -196,7 +197,7 @@ window.addEventListener("load", async () => {
 	document.querySelectorAll("#beleg .icon-link").forEach(a => {
 		if (a.classList.contains("icon-stern")) { // Bewertung
 			beleg.bewertungEvents(a);
-		} else if (/icon-tools-/.test(a.getAttribute("class"))) { // Text-Tools
+		} else if (/icon-tools/.test(a.getAttribute("class"))) { // Text-Tools
 			beleg.toolsKlick(a);
 		}
 	});
@@ -305,6 +306,40 @@ window.addEventListener("load", async () => {
 			redMeta.aktionText(i);
 		}
 	});
+	// Literaturdatenbank
+	document.querySelectorAll(`#red-lit-pfad a`).forEach(a => redLit.dbListener(a));
+	document.querySelectorAll(`#red-lit-nav input`).forEach(i => redLit.navListener(i));
+	document.querySelectorAll("#red-lit-suche-form input").forEach(i => redLit.sucheListener(i));
+	document.getElementById("red-lit-suche-start").addEventListener("click", evt => {
+		evt.preventDefault();
+		redLit.sucheStarten();
+	});
+	document.querySelectorAll("#red-lit-suche-sonder a").forEach(a => redLit.sucheSonder(a));
+	document.querySelectorAll("#red-lit-suche-treffer a").forEach(a => redLit.sucheNav(a));
+	document.querySelectorAll("#red-lit-eingabe input, #red-lit-eingabe textarea").forEach(i => redLit.eingabeListener(i));
+	document.getElementById("red-lit-eingabe-ti-dta").addEventListener("click", evt => {
+		evt.preventDefault();
+		redLit.dbCheck(() => redLit.eingabeDTA(), false);
+	});
+	document.getElementById("red-lit-eingabe-ti-xml").addEventListener("click", evt => {
+		evt.preventDefault();
+		redLit.dbCheck(() => redLit.eingabeXML(), false);
+	});
+	document.getElementById("red-lit-eingabe-ti-bibtex").addEventListener("click", evt => {
+		evt.preventDefault();
+		redLit.dbCheck(() => redLit.eingabeBibTeX(), false);
+	});
+	// Literaturdatenbank: Export
+	document.querySelectorAll(`#red-lit-export-cont input[type="radio"]`).forEach(i => {
+		i.addEventListener("keydown", evt => {
+			tastatur.detectModifiers(evt);
+			if (!tastatur.modifiers && evt.key === "Enter") {
+				redLit.dbExportieren();
+			}
+		});
+	});
+	document.getElementById("red-lit-export-exportieren").addEventListener("click", () => redLit.dbExportieren());
+	document.getElementById("red-lit-export-abbrechen").addEventListener("click", () => overlay.schliessen(document.getElementById("red-lit-export") ) );
 	// Karteisuche
 	document.getElementById("karteisuche-suchen").addEventListener("click", () => karteisuche.suchenPrep());
 	document.getElementById("karteisuche-suchenCache").addEventListener("click", () => karteisuche.suchenPrepZtj([]));

@@ -248,6 +248,66 @@ a {
 	background-color: var(--farbe);
 }
 
+.icon-entkoppeln {
+	-webkit-mask-image: url(../../img/x-dick.svg);
+	mask-image: url(../../img/x-dick.svg);
+}
+
+.icon-exportieren {
+	-webkit-mask-image: url(../../img/dokument-export.svg);
+	mask-image: url(../../img/dokument-export.svg);
+}
+
+.icon-kreis-info {
+	-webkit-mask-image: url(../../img/kreis-info.svg);
+	mask-image: url(../../img/kreis-info.svg);
+}
+
+.icon-lupe {
+	-webkit-mask-image: url(../../img/lupe.svg);
+	mask-image: url(../../img/lup.svg);
+}
+
+.icon-muelleimer {
+	-webkit-mask-image: url(../../img/muelleimer.svg);
+	mask-image: url(../../img/muelleimer.svg);
+}
+
+.icon-oeffnen {
+	-webkit-mask-image: url(../../img/oeffnen.svg);
+	mask-image: url(../../img/oeffnen.svg);
+}
+
+.icon-pfeil-gerade-links {
+	-webkit-mask-image: url(../../img/pfeil-gerade-links.svg);
+	mask-image: url(../../img/pfeil-gerade-links.svg);
+}
+
+.icon-pfeil-gerade-rechts {
+	-webkit-mask-image: url(../../img/pfeil-gerade-rechts.svg);
+	mask-image: url(../../img/pfeil-gerade-rechts.svg);
+}
+
+.icon-pfeil-kreis {
+	-webkit-mask-image: url(../../img/pfeil-kreis.svg);
+	mask-image: url(../../img/pfeil-kreis.svg);
+}
+
+.icon-speichern {
+	-webkit-mask-image: url(../../img/speichern.svg);
+	mask-image: url(../../img/speichern.svg);
+}
+
+.icon-speichern-unter {
+	-webkit-mask-image: url(../../img/speichern-unter.svg);
+	mask-image: url(../../img/speichern-unter.svg);
+}
+
+.icon-stift {
+	-webkit-mask-image: url(../../img/stift.svg);
+	mask-image: url(../../img/stift.svg);
+}
+
 .icon-stern {
 	-webkit-mask-image: url(../../img/stern.svg);
 	mask-image: url(../../img/stern.svg);
@@ -325,7 +385,8 @@ input[type="button"][value="Tag-Datei laden"] {
 	background-image: url(../../img/dokument-import-weiss.svg);
 }
 
-input[type="button"][value="Ergänzen"] {
+input[type="button"][value="Ergänzen"],
+input[type="button"][value="Hinzufügen"] {
 	background-image: url(../../img/plus-weiss.svg);
 }
 

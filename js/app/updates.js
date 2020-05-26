@@ -12,33 +12,19 @@ let updates = {
 		// ggf. Such-Animation starten
 		updates.animation(auto, true);
 		// RSS-Feed laden
-		let controller = new AbortController();
-		setTimeout(() => controller.abort(), parseInt(optionen.data.einstellungen.timeout, 10) * 1000);
-		let response;
-		try {
-			response = await fetch("https://github.com/WortgeschichteDigital/ZettelsTraum/releases.atom", {
-				signal: controller.signal,
-			});
-		} catch (err) {
-			if (err.name === "AbortError") {
-				updates.fehler(auto, "Timeout-Fehler", false);
-			} else {
-				updates.fehler(auto, `${err.name}: ${err.message}`, false);
-			}
-			updates.animation(auto, false);
-			updates.fensterFehler();
-			throw err;
-		}
+		let feedback = await helfer.fetchURL("https://github.com/WortgeschichteDigital/ZettelsTraum/releases.atom");
 		// RSS-Feed konnte nicht abgerufen werden
-		if (!response.ok) {
+		if (feedback.fehler) {
 			updates.animation(auto, false);
-			updates.fehler(auto, `HTTP-Status-Code ${response.status}`, true);
+			updates.fehler(auto, feedback.fehler, false);
+			if (!auto) {
+				updates.fensterFehler();
+			}
 			return;
 		}
 		// RSS-Feed auswerten
-		let text = await response.text(),
-			parser = new DOMParser(),
-			rss = parser.parseFromString(text, "text/xml");
+		let parser = new DOMParser(),
+			rss = parser.parseFromString(feedback.text, "text/xml");
 		// RSS-Feed war offenbar nicht wohlgeformt;
 		// (nach rss.querySelector("parsererror") kann nicht geschaut werden, weil
 		// GitHub mitunter nicht wohlgeformtes XML ausliefert; in solchen Fällen sind
@@ -206,7 +192,7 @@ let updates = {
 		// überprüft
 		let ueberprueft = " ";
 		if (optionen.data.updates.checked) {
-			ueberprueft = helfer.datumFormat(optionen.data.updates.checked, true);
+			ueberprueft = helfer.datumFormat(optionen.data.updates.checked, "minuten");
 		}
 		td[2].replaceChild(document.createTextNode(ueberprueft), td[2].lastChild);
 		// installiert

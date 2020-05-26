@@ -106,7 +106,7 @@ let xml = {
 					}
 				}
 			} else if (n.nodeType === 3) {
-				let textEsc = xml.escape(n.nodeValue);
+				let textEsc = xml.escape({text: n.nodeValue});
 				textEsc = textEsc.replace(/&/g, "&amp;"); // sonst macht der Parser die &quot; usw. wieder weg
 				text += textEsc.replace(/\[.*?\]/g, m => `<Autorenzusatz>${m}</Autorenzusatz>`);
 			}
@@ -134,7 +134,7 @@ let xml = {
 			}
 			let url = document.createElementNS(ns, "URL");
 			fundstelle.appendChild(url);
-			url.appendChild( document.createTextNode( xml.escape(href[0]) ) );
+			url.appendChild( document.createTextNode( xml.escape( {text: href[0]} ) ) );
 			// <Aufrufdatum>
 			let reg = new RegExp(helfer.escapeRegExp(href[0])),
 				zugriff = xml.datum(data.qu.split(reg)[1]);
@@ -158,7 +158,7 @@ let xml = {
 		qu = qu.replace(/N\. ?N\./g, "N. N.");
 		let unstrukturiert = document.createElementNS(ns, "unstrukturiert");
 		fundstelle.appendChild(unstrukturiert);
-		unstrukturiert.appendChild( document.createTextNode( xml.escape( helfer.typographie(qu) ) ) );
+		unstrukturiert.appendChild( document.createTextNode( xml.escape( {text: helfer.typographie(qu)} ) ) );
 		// Einzüge hinzufügen
 		schnitt = xml.indent(schnitt);
 		// Text in String umwandeln und aufbereiten
@@ -353,11 +353,11 @@ let xml = {
 	// geschützte Zeichen escapen
 	//   text = String
 	//     (String, der escaped werden soll)
-	escape (text) {
+	escape ({text}) {
 		let zeichen = new Map([
+			["&", "&amp;"],
 			["<", "&lt;"],
 			[">", "&gt;"],
-			["&", "&amp;"],
 			['"', "&quot;"],
 			["'", "&apos;"],
 		]);

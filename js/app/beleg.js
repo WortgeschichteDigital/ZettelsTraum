@@ -753,6 +753,8 @@ let beleg = {
 			} else if (this.parentNode.classList.contains("text-tools-beleg") ||
 				this.parentNode.classList.contains("text-tools-bedeutung")) {
 				beleg.toolsText(this);
+			} else if (this.parentNode.classList.contains("text-tools-quelle")) {
+				beleg.toolsQuelleLaden();
 			}
 		});
 	},
@@ -1281,6 +1283,210 @@ let beleg = {
 			}
 		}
 		return false; // offenbar kein illegales Nesting
+	},
+	// Inhalt des Quelle-Felds neu laden
+	async toolsQuelleLaden () {
+		// Titelinfos aus bx laden
+		let bx = beleg.bxTyp({bx: beleg.data.bx});
+		if (bx.typ) {
+			let titel = "";
+			if (bx.typ === "bibtex") {
+				let bibtex = belegImport.BibTeXLesen(bx.daten, true);
+				if (bibtex.length) {
+					titel = bibtex[0].ds.qu;
+				}
+			} else if (bx.typ === "dereko") {
+				let reg = new RegExp(`^(${belegImport.DeReKoId})(.+)`);
+				titel = bx.daten.match(reg)[2] + ".";
+			} else if (bx.typ === "xml-dwds") {
+				let dwds = belegImport.DWDSLesenXML({
+					clipboard: "",
+					xml: bx.daten,
+					returnResult: true,
+				});
+				let url = liste.linksErkennen(dwds.qu);
+				if (/href="/.test(url)) {
+					url = url.match(/href="(.+?)"/)[1];
+				}
+				let direktAusDTA = false;
+				if (/^https?:\/\/www\.deutschestextarchiv\.de\//.test(url)) {
+					direktAusDTA = await new Promise(resolve => {
+						dialog.oeffnen({
+							typ: "confirm",
+							text: "Die Karteikarte wurde aus einem DWDS-Snippet gefüllt, der Beleg stammt allerdings aus dem DTA.\nSoll der Zitiertitel direkt aus dem DTA geladen werden?",
+							callback: () => {
+								if (dialog.antwort) {
+									resolve(true);
+								} else {
+									resolve(false);
+								}
+							},
+						});
+					});
+				}
+				if (direktAusDTA) {
+					titel = await beleg.toolsQuelleLadenDTA({url});
+				} else if (dwds.qu) {
+					titel = dwds.qu;
+				}
+			}
+			if (titel) {
+				quelleFuellen(titel);
+			} else if (titel === "") {
+				// "titel" könnte "false" sein, wenn die Anfrage an das DTA gescheitert ist;
+				// in diesem Fall kommt eine Fehlermeldung von der Fetch-Funktion
+				lesefehler();
+			}
+			return;
+		}
+		// Titelinfos herunterladen
+		let url = liste.linksErkennen(beleg.data.qu);
+		if (/href="/.test(url)) {
+			url = url.match(/href="(.+?)"/)[1];
+		}
+		if (/^https?:\/\/www\.deutschestextarchiv\.de\//.test(url)) {
+			const titel = await beleg.toolsQuelleLadenDTA({url});
+			if (titel) {
+				quelleFuellen(titel);
+			} else if (titel === "") {
+				lesefehler();
+			}
+			return;
+		}
+		// keine Quelle gefunden
+		dialog.oeffnen({
+			typ: "alert",
+			text: "Es wurde keine Quelle gefunden, aus der die Titeldaten automatisch neu geladen werden könnten.",
+		});
+		// Quellenfeld ausfüllen
+		function quelleFuellen (titel) {
+			let quelle = document.getElementById("beleg-qu");
+			let alt = quelle.value.split(/\n\nhttps?:\/\/www\.deutschestextarchiv\.de/)[0],
+				neu = titel.split(/\n\nhttps?:\/\/www\.deutschestextarchiv\.de/)[0];
+			if (alt !== neu) {
+				quelle.value = titel;
+				helfer.textareaGrow(quelle);
+				beleg.belegGeaendert(true);
+				// visuelles Feedback
+				let icon = document.querySelector(".text-tools-quelle .icon-pfeil-kreis");
+				icon.classList.add("rotieren-bitte");
+				quelle.classList.add("neu-geladen");
+				setTimeout(() => {
+					icon.classList.remove("rotieren-bitte");
+					quelle.classList.remove("neu-geladen");
+					quelle.focus();
+				}, 1e3);
+			} else {
+				quelle.focus();
+			}
+		}
+		// generische Fehlermeldung
+		function lesefehler () {
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Beim Einlesen der Titeldaten ist etwas schiefgelaufen.",
+			});
+		}
+	},
+	// Zitiertitelanfrage an das DTA
+	//   url = String
+	//     (DTA-Link)
+	toolsQuelleLadenDTA ({url}) {
+		return new Promise(async resolve => {
+			let quelle = document.getElementById("beleg-qu");
+			// Seitenangabe auslesen
+			let mHier = /, hier (?<seiten>[^\s]+)( |\.\n\n)/.exec(quelle.value),
+				mSeiten = /(?<typ>, Sp?\.)\s(?<seiten>[^\s]+)( |\.\n\n)/.exec(quelle.value);
+			let seitenData = {
+				seite: "",
+				seite_zuletzt: "",
+				spalte: false,
+			};
+			let seiten;
+			if (mHier) {
+				seiten = mHier.groups.seiten;
+			} else if (mSeiten) {
+				seiten = mSeiten.groups.seiten;
+				if (mSeiten.groups.typ === ", Sp.") {
+					seitenData.spalte = true;
+				}
+			}
+			if (seiten) {
+				let seitenSp = seiten.split(/[-–]/);
+				seitenData.seite = seitenSp[0];
+				if (seitenSp[1]) {
+					seitenData.seite_zuletzt = seitenSp[1];
+				}
+			}
+			// TEI-Header herunterladen
+			const fetchOk = await redLit.eingabeDTAFetch({
+				url,
+				fokusId: "beleg-qu",
+				seitenData,
+			});
+			// Rückgabewerte
+			if (fetchOk) {
+				resolve(belegImport.DTAQuelle(true));
+			} else {
+				resolve(false);
+			}
+		});
+	},
+	// Typ der Daten im bx-Datensatz ermitteln
+	//   bx = String
+	//     (Datensatz, der überprüft werden soll)
+	bxTyp ({bx}) {
+		// keine Daten vorhanden
+		if (!bx) {
+			return {
+				typ: "",
+				daten: "",
+			};
+		}
+		// BibTeX-Daten
+		if (belegImport.BibTeXCheck(bx)) {
+			return {
+				typ: "bibtex",
+				daten: bx,
+			};
+		}
+		// DeReKo-Daten
+		let reg = new RegExp(`^${belegImport.DeReKoId}`);
+		if (reg.test(bx)) {
+			return {
+				typ: "dereko",
+				daten: bx,
+			};
+		}
+		// XML-Daten
+		let parser = new DOMParser(),
+			xmlDoc = parser.parseFromString(bx, "text/xml");
+		if (!xmlDoc.querySelector("parsererror")) {
+			let evaluator = (xpath) => {
+				return xmlDoc.evaluate(xpath, xmlDoc, null, XPathResult.ANY_TYPE, null).iterateNext();
+			};
+			let typ = "";
+			if (evaluator("//teiHeader/sourceDesc/biblFull")) {
+				typ = "xml-dta";
+			} else if (evaluator("/Beleg/Fundstelle")) {
+				typ = "xml-dwds";
+			} else if (evaluator("/Fundstelle")) {
+				typ = "xml-fundstelle";
+			} else if (evaluator("/mods/titleInfo")) {
+				typ = "xml-mods";
+			} else {
+				typ = "";
+			}
+			return {
+				typ,
+				daten: xmlDoc,
+			};
+		}
+		// Datenformat unbekannt
+		return {
+			typ: "",
+			daten: "",
+		};
 	},
 	// Bewertung des Belegs vor- od. zurücknehmen
 	//   stern = Element

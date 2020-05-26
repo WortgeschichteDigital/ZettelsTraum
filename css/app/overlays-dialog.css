@@ -90,3 +90,9 @@
 .prompt #dialog-abbrechen-button {
 	display: inline-block;
 }
+
+p.dialog-liste {
+	margin-bottom: 0;
+	padding-left: 25px;
+	text-indent: -25px;
+}

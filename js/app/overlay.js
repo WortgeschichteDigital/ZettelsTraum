@@ -58,6 +58,9 @@ let overlay = {
 		} else if (fenster.id === "import") {
 			belegImport.DateiImportFensterSchliessen();
 			return;
+		} else if (fenster.id === "red-lit") {
+			redLit.schliessen();
+			return;
 		}
 		// Fenster schließen
 		overlay.ausblenden(fenster);

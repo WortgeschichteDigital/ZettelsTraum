@@ -3,6 +3,34 @@
 let belegImport = {
 	// DTA-Import: Daten, die importiert wurden
 	DTAData: {},
+	// DTA-Import: Datenobjekt zurücksetzen
+	DTAResetData () {
+		belegImport.DTAData = {
+			autor: [],
+			hrsg: [],
+			titel: [],
+			untertitel: [],
+			band: "",
+			auflage: "",
+			ort: [],
+			verlag: "",
+			datum_druck: "",
+			datum_entstehung: "",
+			spalte: false,
+			seiten: "",
+			seite: "",
+			seite_zuletzt: "",
+			zeitschrift: "",
+			zeitschrift_jg: "",
+			zeitschrift_h: "",
+			serie: "",
+			serie_bd: "",
+			beleg: "",
+			textsorte: [],
+			textsorte_sub: [],
+			url: "",
+		};
+	},
 	// DTA-Import: Daten aus dem DTA importieren
 	DTA () {
 		let dta = document.getElementById("beleg-dta");
@@ -83,29 +111,8 @@ let belegImport = {
 		startImport();
 		// Startfunktion
 		function startImport () {
-			belegImport.DTAData = {
-				autor: [],
-				hrsg: [],
-				titel: "",
-				untertitel: [],
-				band: "",
-				auflage: "",
-				ort: "",
-				verlag: "",
-				datum: {
-					druck: "",
-					entstehung: "",
-				},
-				seite: "",
-				seite_zuletzt: "",
-				spalte: false,
-				serie: "",
-				serie_seite: "",
-				beleg: "",
-				textsorte: [],
-				textsorte_sub: [],
-				url: `http://www.deutschestextarchiv.de/${titel_id}/${fak}`,
-			};
+			belegImport.DTAResetData();
+			belegImport.DTAData.url = `http://www.deutschestextarchiv.de/${titel_id}/${fak}`;
 			const url_xml = `http://www.deutschestextarchiv.de/book/download_xml/${titel_id}`;
 			document.activeElement.blur();
 			belegImport.DTARequest(url_xml, fak);
@@ -116,13 +123,13 @@ let belegImport = {
 	//     (DTA-URL)
 	DTAGetTitelId (url) {
 		let m, titel_id = "";
-		if (/\/view\//.test(url)) {
-			m = url.match(/\/view\/([^/?]+)/);
+		if (/\/(show|view)\//.test(url)) {
+			m = /\/(show|view)\/(?<titel_id>[^/?]+)/.exec(url);
 		} else {
-			m = url.match(/deutschestextarchiv\.de\/([^/?]+)/);
+			m = /deutschestextarchiv\.de\/(?<titel_id>[^/?]+)/.exec(url);
 		}
-		if (m) {
-			titel_id = m[1];
+		if (m && m.groups.titel_id) {
+			titel_id = m.groups.titel_id;
 		}
 		return titel_id;
 	},
@@ -167,8 +174,11 @@ let belegImport = {
 					}
 					return;
 				}
-				belegImport.DTAMeta(ajax.responseXML);
-				belegImport.DTAText(ajax.responseXML, fak);
+				let text = ajax.responseText.replace(/ xmlns=".+?"/, ""); // da habe ich sonst Probleme mit evaluate() in belegImport.DTAMeta()
+				let parser = new DOMParser(),
+					xmlDoc = parser.parseFromString(text, "text/xml");
+				belegImport.DTAMeta(xmlDoc);
+				belegImport.DTAText(xmlDoc, fak);
 				belegImport.DTAFill();
 			} else {
 				belegImport.DTAFehler("XMLHttpRequest: falscher Status-Code");
@@ -188,7 +198,7 @@ let belegImport = {
 	DTAFehler (fehlertyp) {
 		dialog.oeffnen({
 			typ: "alert",
-			text: `Beim Download der Textdaten aus dem DTA ist ein <strong>Fehler</strong> aufgetreten.\n<h3>Fehlertyp</h3>\n${fehlertyp}`,
+			text: `Beim Download der Textdaten aus dem DTA ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n${fehlertyp}`,
 			callback: () => {
 				let dta = document.getElementById("beleg-dta");
 				dta.select();
@@ -196,129 +206,119 @@ let belegImport = {
 		});
 	},
 	// DTA-Import: Meta-Daten des Titels importieren
-	//   xml = Document
-	//     (das komplette Buch, aus dem eine Seite importiert werden soll;
-	//     enthält auch den TEI-Header)
-	DTAMeta (xml) {
-		// normale Werte
-		let bibl = xml.querySelector("teiHeader fileDesc sourceDesc biblFull"),
-			sorte = xml.querySelector("teiHeader profileDesc textClass");
-		let werte = {
-			titel: bibl.querySelector(`titleStmt title[type="main"]`),
-			untertitel: bibl.querySelectorAll(`titleStmt title[type="sub"]`),
-			band: bibl.querySelector(`titleStmt title[type="volume"]`),
-			auflage: bibl.querySelector("editionStmt edition"),
-			ort: bibl.querySelector("publicationStmt pubPlace"),
-			verlag: bibl.querySelector("publicationStmt publisher name"),
-			textsorte: sorte.querySelectorAll(`classCode[scheme$="dtamain"], classCode[scheme$="dwds1main"]`),
-			textsorte_sub: sorte.querySelectorAll(`classCode[scheme$="dtasub"], classCode[scheme$="dwds1sub"]`),
+	//   xmlDoc = Document
+	//     (entweder das komplette Buch, aus dem eine Seite importiert
+	//     werden soll [enthält auch den TEI-Header], oder ein XML-Dokument,
+	//     das allein die TEI-Header des Buchs umfasst)
+	DTAMeta (xmlDoc) {
+		let evaluator = xpath => {
+			return xmlDoc.evaluate(xpath, xmlDoc, null, XPathResult.ANY_TYPE, null);
 		};
-		for (let wert in werte) {
-			if (!werte.hasOwnProperty(wert)) {
-				continue;
-			}
-			if (!werte[wert]) {
-				continue;
-			}
-			const text = getValue(werte[wert]);
-			if (!text) { // Tags können leer sein
-				continue;
-			}
-			belegImport.DTAData[wert] = text;
-		}
-		function getValue (v) {
-			if (helfer.checkType("Element", v)) {
-				if (!v.firstChild) {
-					return "";
-				}
-				return trimmer(v.firstChild.nodeValue);
-			}
-			let out = [];
-			v.forEach(function(i) {
-				if (!i.firstChild) {
-					return;
-				}
-				out.push(trimmer(i.firstChild.nodeValue));
-			});
-			return out;
-		}
-		// Datum
-		let datum = bibl.querySelectorAll("publicationStmt date");
-		if (datum) {
-			for (let i = 0, len = datum.length; i < len; i++) {
-				const typ = datum[i].getAttribute("type");
-				if (typ === "creation") {
-					belegImport.DTAData.datum.entstehung = trimmer(datum[i].firstChild.nodeValue);
-				} else {
-					belegImport.DTAData.datum.druck = trimmer(datum[i].firstChild.nodeValue);
-				}
-			}
-		}
-		// Serie
-		let serie_titel = bibl.querySelectorAll("seriesStmt title"),
-			serie_bd = bibl.querySelector("seriesStmt biblScope");
-		if (serie_titel) {
-			serie_titel.forEach(function(i, n) {
-				if (n > 0) {
-					if (!/\.$/.test(belegImport.DTAData.serie)) {
-						belegImport.DTAData.serie += ".";
-					}
-					belegImport.DTAData.serie += " ";
-				}
-				belegImport.DTAData.serie += trimmer(i.firstChild.nodeValue);
-			});
-			if (serie_bd) {
-				let unit = serie_bd.getAttribute("unit");
-				if (unit === "volume") {
-					belegImport.DTAData.serie += `, ${trimmer(serie_bd.firstChild.nodeValue)}`;
-				} else if (unit === "pages") {
-					belegImport.DTAData.serie_seite = trimmer(serie_bd.firstChild.nodeValue);
-				}
-			}
-			if (belegImport.DTAData.textsorte[0] === "Zeitung") {
-				belegImport.DTAData.titel = `${belegImport.DTAData.serie}, ${belegImport.DTAData.titel}`;
-				belegImport.DTAData.serie = "";
-			}
-		}
+		let dta = belegImport.DTAData;
 		// Personen
 		let personen = {
-			autor: bibl.querySelectorAll("titleStmt author"),
-			hrsg: bibl.querySelectorAll("titleStmt editor"),
+			autor: evaluator("//biblFull/titleStmt/author/persName"),
+			hrsg: evaluator("//biblFull/titleStmt/editor/persName"),
 		};
-		for (let wert in personen) {
-			if (!personen.hasOwnProperty(wert)) {
-				continue;
-			}
-			if (!personen[wert]) {
-				continue;
-			}
-			for (let i = 0, len = personen[wert].length; i < len; i++) {
-				let person_name = personen[wert][i].querySelector("persName surname, persName addName"),
-					person_vorname = personen[wert][i].querySelector("persName forename"),
-					name = "";
-				if (person_name) {
-					if (wert === "autor") {
-						name = trimmer(person_name.firstChild.nodeValue);
-						if (person_vorname) {
-							name += `, ${trimmer(person_vorname.firstChild.nodeValue)}`;
-						}
-					} else {
-						if (person_vorname) {
-							name = `${trimmer(person_vorname.firstChild.nodeValue)} ${trimmer(person_name.firstChild.nodeValue)}`;
-						} else {
-							name = trimmer(person_name.firstChild.nodeValue);
-						}
+		for (let [k, v] of Object.entries(personen)) {
+			let item = v.iterateNext();
+			while (item) {
+				let vorname = item.querySelector("forename"),
+					nachname = item.querySelector("surname"),
+					addName = item.querySelector("addName"); // in <addName> steht häufig der ganze Name nach dem Muster "Vorname Nachname"; dafür fehlen <forname> und <surname>
+				if (nachname) {
+					let name = [trimmer(nachname.textContent)];
+					if (vorname) {
+						name.push(trimmer(vorname.textContent));
 					}
+					dta[k].push(name.join(", "));
+				} else if (addName) {
+					dta[k].push(trimmer(addName.textContent));
 				}
-				if (name) {
-					belegImport.DTAData[wert].push(name);
-				}
+				item = v.iterateNext();
 			}
+		}
+		// normale Werte
+		let werte = {
+			titel: evaluator("//biblFull/titleStmt/title[@type='main']"),
+			untertitel: evaluator("//biblFull/titleStmt/title[@type='sub']"),
+			band: evaluator("//biblFull/titleStmt/title[@type='volume']"),
+			auflage: evaluator("//biblFull/editionStmt/edition"),
+			ort: evaluator("//biblFull/publicationStmt/pubPlace"),
+			verlag: evaluator("//biblFull/publicationStmt/publisher/name"),
+			datum_druck: evaluator("//biblFull/publicationStmt/date[@type='publication']"),
+			datum_entstehung: evaluator("//biblFull/publicationStmt/date[@type='creation']"),
+		};
+		for (let [k, v] of Object.entries(werte)) {
+			let item = v.iterateNext();
+			while (item) {
+				if (Array.isArray(dta[k])) {
+					dta[k].push(trimmer(item.textContent));
+				} else {
+					dta[k] = trimmer(item.textContent);
+				}
+				item = v.iterateNext();
+			}
+		}
+		// Zeitschrift/Serie
+		let istZeitschrift = false,
+			zeitschriftEval = evaluator("//sourceDesc/bibl").iterateNext();
+		if (/^JA?/.test(zeitschriftEval.getAttribute("type"))) {
+			istZeitschrift = true;
+		}
+		let series = {
+			titel: evaluator("//biblFull/seriesStmt/title"),
+			bd_jg: evaluator("//biblFull/seriesStmt/biblScope[@unit='volume']"),
+			heft: evaluator("//biblFull/seriesStmt/biblScope[@unit='issue']"),
+			seiten: evaluator("//biblFull/seriesStmt/biblScope[@unit='pages']"),
+		};
+		let seriesTitel = [],
+			item = series.titel.iterateNext();
+		while (item) {
+			seriesTitel.push(trimmer(item.textContent));
+			item = series.titel.iterateNext();
+		}
+		if (istZeitschrift) { // Zeitschrift
+			dta.zeitschrift = seriesTitel.join(". ");
+			item = series.bd_jg.iterateNext();
+			if (item) {
+				dta.zeitschrift_jg = trimmer(item.textContent);
+			}
+			item = series.heft.iterateNext();
+			if (item) {
+				dta.zeitschrift_h = trimmer(item.textContent);
+			}
+			item = series.seiten.iterateNext();
+			if (item) {
+				dta.seiten = trimmer(item.textContent);
+			}
+		} else { // Serie
+			dta.serie = seriesTitel.join(". ");
+			item = series.bd_jg.iterateNext();
+			if (item) {
+				dta.serie_bd = trimmer(item.textContent);
+			}
+		}
+		// Textsorte
+		let textsorte = evaluator("//profileDesc//textClass/classCode");
+		item = textsorte.iterateNext();
+		while (item) {
+			let scheme = item.getAttribute("scheme"),
+				key = "";
+			if (/main$/.test(scheme)) {
+				key = "textsorte";
+			} else if (/sub$/.test(scheme)) {
+				key = "textsorte_sub";
+			}
+			if (key) {
+				dta[key].push(trimmer(item.textContent));
+			}
+			item = textsorte.iterateNext();
 		}
 		// spezielle Trim-Funktion
 		function trimmer (v) {
-			v = helfer.textTrim(v, true);
 			v = v.replace(/\n/g, " "); // kommt mitunter mitten im Untertitel vor
+			v = helfer.textTrim(v, true);
 			return v;
 		}
 	},
@@ -560,13 +560,12 @@ let belegImport = {
 	},
 	// DTA-Import: Daten in das Formular eintragen
 	DTAFill () {
-		// Werte eintragen
-		let dta = belegImport.DTAData;
-		let datum_feld = dta.datum.entstehung;
-		if (!datum_feld && dta.datum.druck) {
-			datum_feld = dta.datum.druck;
-		} else if (dta.datum.druck) {
-			datum_feld += ` (Publikation von ${dta.datum.druck})`;
+		let dta = belegImport.DTAData,
+			datum_feld = dta.datum_entstehung;
+		if (!datum_feld && dta.datum_druck) {
+			datum_feld = dta.datum_druck;
+		} else if (dta.datum_druck) {
+			datum_feld += ` (Publikation von ${dta.datum_druck})`;
 		}
 		beleg.data.da = datum_feld;
 		let autor = dta.autor.join("/");
@@ -596,106 +595,59 @@ let belegImport = {
 			beleg.data.ts = Array.from(textsorteUnique).join("\n");
 		}
 		beleg.data.kr = "DTA";
-		// QUELLENANGABE ZUSAMMENSETZEN
-		// Autor und Titel
-		let quelle = `${autor}: ${dta.titel}`;
-		// Untertitel
-		if (dta.untertitel.length) {
-			dta.untertitel.forEach(function(i) {
-				if (/^[a-zäöü]/.test(i)) {
-					quelle += ",";
-				} else if (!/\.$/.test(quelle)) {
-					quelle += ".";
-				}
-				quelle += ` ${i}`;
-			});
-		}
-		// Serie + Seitenangabe => Titel ist IN einem Werk
-		if (dta.serie_seite) {
-			quellePunkt();
-			quelle += ` In: ${dta.serie}`;
-			dta.serie = "";
-		}
-		// Band
-		let reg_band = new RegExp(helfer.escapeRegExp(dta.band));
-		if (dta.band && !reg_band.test(quelle)) {
-			quellePunkt();
-			quelle += ` ${dta.band}`;
-		}
-		// Herausgeber
-		if (dta.hrsg.length) {
-			let hrsg = "";
-			for (let i = 0, len = dta.hrsg.length; i < len; i++) {
-				if (i > 0 && i === len - 1) {
-					hrsg += " und ";
-				} else if (i > 0) {
-					hrsg += ", ";
-				}
-				hrsg += dta.hrsg[i];
-			}
-			quellePunkt();
-			quelle += ` Hrsg. v. ${hrsg}`;
-		}
-		// Auflage
-		if (dta.auflage) {
-			quellePunkt();
-			quelle += ` ${dta.auflage}. Auflage`;
-		}
-		quellePunkt();
-		// Ort
-		if (dta.ort) {
-			quelle += ` ${dta.ort}`;
-			if (dta.verlag && dta.verlag !== "s. e.") {
-				quelle += `: ${dta.verlag}`;
-			}
-		}
-		// Datum
-		let datum = dta.datum.druck;
-		if (!datum) {
-			datum = dta.datum.entstehung;
-		}
-		quelle += ` ${datum}`;
-		// Seite
-		const seite_spalte = dta.spalte ? "Sp" : "S";
-		if (dta.serie_seite) {
-			quelle += `, ${seite_spalte}. ${dta.serie_seite}`;
-			if (dta.seite) {
-				quelle += `, hier ${dta.seite}`;
-				if (dta.seite_zuletzt !== dta.seite) {
-					quelle += `–${dta.seite_zuletzt}`;
-				}
-			}
-		} else if (dta.seite) {
-			quelle += `, ${seite_spalte}. ${dta.seite}`;
-			if (dta.seite_zuletzt !== dta.seite) {
-				quelle += `–${dta.seite_zuletzt}`;
-			}
-		}
-		// Serie
-		if (dta.serie) {
-			quelle += ` (= ${dta.serie})`;
-		}
-		// URL
-		quelle += ".\n\n";
-		quelle += dta.url;
-		// Aufrufdatum
-		let heute = new Date(),
-			tag = heute.getDate(),
-			monat = heute.getMonth() + 1;
-		quelle += ` (Aufrufdatum: ${tag < 10 ? `0${tag}` : tag}.${monat < 10 ? `0${monat}` : monat}.${heute.getFullYear()})`;
-		// und fertig...
-		beleg.data.qu = quelle;
+		beleg.data.qu = belegImport.DTAQuelle(true);
 		// Formular füllen
 		beleg.formular(false);
 		beleg.belegGeaendert(true);
-		// ggf. Punkt einfügen
-		function quellePunkt () {
-			if (!/\.$/.test(quelle)) {
-				quelle += ".";
-			}
-		}
 		// Wort gefunden?
 		belegImport.checkWort();
+	},
+	// DTA-Import: Quelle zusammensetzen
+	//   mitURL = Boolean
+	//     (URL + Aufrufdatum sollen der Titelaufnahme angehängt werden)
+	DTAQuelle (mitURL) {
+		let dta = belegImport.DTAData,
+			td = belegImport.makeTitleDataObject();
+		td.autor = [...dta.autor];
+		td.hrsg = [...dta.hrsg];
+		td.titel = [...dta.titel];
+		td.untertitel = [...dta.untertitel];
+		if (dta.zeitschrift) {
+			td.inTitel.push(dta.zeitschrift);
+		}
+		let regBand = new RegExp(helfer.escapeRegExp(dta.band));
+		if (dta.band &&
+				!dta.titel.some(i => regBand.test(i)) &&
+				!dta.untertitel.some(i => regBand.test(i))) {
+			td.band = dta.band;
+		}
+		td.auflage = dta.auflage;
+		td.ort = [...dta.ort];
+		td.verlag = dta.verlag !== "s. e." ? dta.verlag : "";
+		td.jahrgang = dta.zeitschrift_jg;
+		td.jahr = dta.datum_druck;
+		if (!dta.datum_druck) {
+			td.jahr = dta.datum_entstehung;
+		} else {
+			td.jahrZuerst = dta.datum_entstehung;
+		}
+		if (dta.zeitschrift_h && !dta.zeitschrift_jg) {
+			td.jahrgang = dta.zeitschrift_h;
+		} else if (dta.zeitschrift_h) {
+			td.heft = dta.zeitschrift_h;
+		}
+		td.spalte = dta.spalte;
+		td.seiten = dta.seiten;
+		if (dta.seite) {
+			td.seite = dta.seite.replace(/^0+/, ""); // ja, das gibt es
+			if (dta.seite_zuletzt && dta.seite_zuletzt !== dta.seite) {
+				td.seite += `–${dta.seite_zuletzt.replace(/^0+/, "")}`;
+			}
+		}
+		td.serie = dta.serie;
+		td.serieBd = dta.serie_bd;
+		td.url.push(dta.url);
+		return belegImport.makeTitle({td, mitURL});
 	},
 	// DWDS-Import: Liste der Korpora des DWDS
 	DWDSKorpora: {
@@ -828,33 +780,38 @@ let belegImport = {
 		}
 		return true;
 	},
+	// DWDS-Import: einen leeren Datensatz erzeugen
+	DWDSDatensatz () {
+		let data = belegImport.DateiDatensatz();
+		data.ds.au = "N. N.";
+		data.ds.kr = "DWDS";
+		return data;
+	},
 	// DWDS-Import: XML-Daten einlesen
-	//   doc = Object
-	//     (Clipboard-Content [doc.clipboard] und geparstes XML-Dokument [doc.xml])
-	DWDSLesenXML (doc) {
-		// Zwischenspeicher zurücksetzen
-		belegImport.Datei.meta = "";
-		belegImport.Datei.data = [{
-			importiert: false,
-			ds: {
-				au: "N. N.", // Autor
-				bs: "", // Beleg
-				bx: "", // Original
-				da: "", // Belegdatum
-				kr: "DWDS", // Korpus
-				no: "", // Notizen
-				qu: "", // Quellenangabe
-				ts: "", // Textsorte
-			},
-		}];
-		let data = belegImport.Datei.data[0].ds;
+	//   clipboard = String
+	//     (Clipboard-Content)
+	//   xml = Document
+	//     (das geparste XML-Dokument)
+	//   returnResult = true || undefined
+	//     (das Ergebnis der Analyse soll nicht in den Datei-Zwischenspeicher
+	//     geschrieben, sondern direkt zurückgegeben werden)
+	DWDSLesenXML ({clipboard, xml, returnResult = false}) {
+		// Datenobjekt erzeugen
+		let data;
+		if (returnResult) {
+			data = belegImport.DWDSDatensatz().ds;
+		} else {
+			belegImport.Datei.meta = "";
+			belegImport.Datei.data = [belegImport.DWDSDatensatz()];
+			data = belegImport.Datei.data[0].ds;
+		}
 		// Datensatz: Datum
-		let nDa = doc.xml.querySelector("Fundstelle Datum");
+		let nDa = xml.querySelector("Fundstelle Datum");
 		if (nDa && nDa.firstChild) {
 			data.da = nDa.firstChild.nodeValue;
 		}
 		// Datensatz: Autor
-		let nAu = doc.xml.querySelector("Fundstelle Autor");
+		let nAu = xml.querySelector("Fundstelle Autor");
 		if (nAu && nAu.firstChild) {
 			data.au = belegImport.DWDSKorrekturen({
 				typ: "au",
@@ -862,7 +819,7 @@ let belegImport = {
 			});
 		}
 		// Datensatz: Beleg
-		let nBs = doc.xml.querySelector("Belegtext");
+		let nBs = xml.querySelector("Belegtext");
 		if (nBs && nBs.firstChild) {
 			let bs = [],
 				bsContent = nBs.textContent.replace(/<Stichwort>(.+?)<\/Stichwort>/g, (m, p1) => p1);
@@ -880,14 +837,14 @@ let belegImport = {
 			data.bs = bs.join("\n\n");
 		}
 		// Datensatz: Beleg-XML
-		data.bx = doc.clipboard;
+		data.bx = clipboard;
 		// Datensatz: Quelle
-		let nQu = doc.xml.querySelector("Fundstelle Bibl");
+		let nQu = xml.querySelector("Fundstelle Bibl");
 		if (nQu && nQu.firstChild) {
-			let nTitel = doc.xml.querySelector("Fundstelle Titel"),
-				nSeite = doc.xml.querySelector("Fundstelle Seite"),
-				nURL = doc.xml.querySelector("Fundstelle URL"),
-				nAuf = doc.xml.querySelector("Fundstelle Aufrufdatum");
+			let nTitel = xml.querySelector("Fundstelle Titel"),
+				nSeite = xml.querySelector("Fundstelle Seite"),
+				nURL = xml.querySelector("Fundstelle URL"),
+				nAuf = xml.querySelector("Fundstelle Aufrufdatum");
 			let titeldaten = {
 				titel: nTitel && nTitel.firstChild ? nTitel.firstChild.nodeValue : "",
 				seite: nSeite && nSeite.firstChild ? nSeite.firstChild.nodeValue : "",
@@ -903,7 +860,7 @@ let belegImport = {
 		}
 		// Datensatz: Korpus
 		let korpus = "",
-			nKr = doc.xml.querySelector("Fundstelle Korpus");
+			nKr = xml.querySelector("Fundstelle Korpus");
 		if (nKr && nKr.firstChild) {
 			korpus = nKr.firstChild.nodeValue;
 			if (/^dta/.test(korpus)) {
@@ -914,7 +871,7 @@ let belegImport = {
 			}
 		}
 		// Datensatz: Textsorte
-		let nTs = doc.xml.querySelector("Fundstelle Textklasse");
+		let nTs = xml.querySelector("Fundstelle Textklasse");
 		if (korpus &&
 				belegImport.DWDSKorpora[korpus] &&
 				belegImport.DWDSKorpora[korpus].ts) {
@@ -926,13 +883,17 @@ let belegImport = {
 			});
 		}
 		// Datensatz: Notizen
-		let nDok = doc.xml.querySelector("Fundstelle Dokument");
+		let nDok = xml.querySelector("Fundstelle Dokument");
 		if (nDok && nDok.firstChild) {
 			data.no = belegImport.DWDSKorrekturen({
 				typ: "no",
 				txt: nDok.firstChild.nodeValue,
 				korpus
 			});
+		}
+		// ggf. Datensatz direkt zurückgeben
+		if (returnResult) {
+			return data;
 		}
 	},
 	// DWDS-Import: JSON-Daten einlesen
@@ -945,19 +906,7 @@ let belegImport = {
 		// Datensätze parsen
 		for (let i of json) {
 			// Datensatz vorbereiten
-			let data = {
-				importiert: false,
-				ds: {
-					au: "N. N.", // Autor
-					bs: "", // Beleg
-					bx: "", // Original
-					da: "", // Belegdatum
-					kr: "DWDS", // Korpus
-					no: "", // Notizen
-					qu: "", // Quellenangabe
-					ts: "", // Textsorte
-				},
-			};
+			let data = belegImport.DWDSDatensatz();
 			belegImport.Datei.data.push(data);
 			// Datensatz: Datum
 			if (i.meta_.date_) {
@@ -1120,7 +1069,7 @@ let belegImport = {
 			txt = txt.replace(/\s\/\s/g, "/"); // Leerzeichen um Slashes entfernen
 			txt = txt.replace(/^Von /, ""); // häufig wird die Autorangabe "Von Karl Mustermann" fälschlicherweise als kompletter Autor angegeben
 			// Autorname eintragen
-			if (/^(Name|o\.\s?A\.|unknown)$/.test(txt)) { // merkwürdige Platzhalter für "Autor unbekannt"
+			if (/^(Name|Nn|o\.\s?A\.|unknown)$/.test(txt)) { // merkwürdige Platzhalter für "Autor unbekannt"
 				return "N. N.";
 			} else if (!/[A-ZÄÖÜ]/.test(txt)) { // Autorname ist nur ein Kürzel
 				return `N. N. [${txt}]`;
@@ -1232,7 +1181,7 @@ let belegImport = {
 				}
 			}
 			// Steht im Autor-Feld kein Name, in der Quelle scheint aber einer zu sein?
-			if ((!data.au || data.au === "N. N.") && auQu.length > 1) {
+			if ((!data.au || /^N.\sN./.test(data.au)) && auQu.length > 1) {
 				data.au = auQu[0];
 			}
 		} else if (typ === "ts") { // TEXTSORTE
@@ -1331,6 +1280,22 @@ let belegImport = {
 		}
 		// Formular zurücksetzen
 		beleg.formularImport(typ);
+	},
+	// Datei-Import: einen leeren Datensatz erzeugen
+	DateiDatensatz () {
+		return {
+			importiert: false,
+			ds: {
+				au: "", // Autor
+				bs: "", // Beleg
+				bx: "", // Original
+				da: "", // Belegdatum
+				kr: "", // Korpus
+				no: "", // Notizen
+				qu: "", // Quellenangabe
+				ts: "", // Textsorte
+			},
+		};
 	},
 	// Datei-Import: öffnet eine Datei und liest sie ein
 	async DateiOeffnen () {
@@ -1790,6 +1755,8 @@ let belegImport = {
 			}
 		}
 	},
+	// Form der ID eines DeReKo-Belegs
+	DeReKoId: "[a-zA-Z0-9]+?\\/[a-zA-Z0-9]+?\\.[0-9]+?\\s",
 	// DeReKo-Import: Belege parsen
 	//   belege = String
 	//     (die exportierte Belegreihe)
@@ -1797,10 +1764,9 @@ let belegImport = {
 		// Zwischenspeicher zurücksetzen
 		belegImport.Datei.data = [];
 		// Zeilen analysieren
-		let regId = "[a-zA-Z0-9]+?\\/[a-zA-Z0-9]+?\\.[0-9]+?\\s",
-			regQuVor = new RegExp(`^(${regId})(.+)`),
-			regQuNach = new RegExp(`\\s\\((${regId})(.+)\\)$`),
-			regQuNachId = new RegExp(`\\s\\(${regId}`),
+		let regQuVor = new RegExp(`^(${belegImport.DeReKoId})(.+)`),
+			regQuNach = new RegExp(`\\s\\((${belegImport.DeReKoId})(.+)\\)$`),
+			regQuNachId = new RegExp(`\\s\\(${belegImport.DeReKoId}`),
 			id = "",
 			quelle = "",
 			beleg = [];
@@ -1825,7 +1791,7 @@ let belegImport = {
 				quelle = match[2];
 				zeile = zeile.split(regQuNachId)[0];
 			}
-			beleg.push(zeile.replace(/<B>|<\/B*>/g, "").trim());
+			beleg.push(zeile.replace(/<B>|<\/B?>/g, "").trim());
 		}
 		pushBeleg();
 		// Beleg pushen
@@ -1834,19 +1800,13 @@ let belegImport = {
 				return;
 			}
 			// Datensatz füllen
-			let data = {
-				importiert: false,
-				ds: {
-					au: "N. N.", // Autor
-					bs: beleg.join("\n\n"), // Beleg
-					bx: `${id}${quelle}\n\n${beleg.join("\n")}`, // Original
-					da: "", // Belegdatum
-					kr: "IDS", // Korpus
-					no: belegImport.Datei.meta, // Notizen
-					qu: quelle.replace(/\s\[Ausführliche Zitierung nicht verfügbar\]/, ""), // Quellenangabe
-					ts: "", // Textsorte
-				},
-			};
+			let data = belegImport.DateiDatensatz();
+			data.ds.au = "N. N."; // Autor
+			data.ds.bs = beleg.join("\n\n"); // Beleg
+			data.ds.bx = `${id}${quelle}\n\n${beleg.join("\n")}`; // Original
+			data.ds.kr = "IDS-Archiv"; // Korpus
+			data.ds.no = belegImport.Datei.meta; // Notizen
+			data.ds.qu = quelle.replace(/\s\[Ausführliche Zitierung nicht verfügbar\]/, ""); // Quellenangabe
 			let autor = quelle.split(":"),
 				kommata = autor[0].match(/,/g),
 				illegal = /[0-9.;!?]/.test(autor[0]);
@@ -1896,7 +1856,7 @@ let belegImport = {
 	BibTeXFix (content) {
 		let zeilen = [];
 		for (let zeile of content.split(/\n/)) {
-			if (/^(@|\t|\s|\})/.test(zeile)) {
+			if (/^[@\s}]/.test(zeile)) {
 				zeile = zeile.replace(/^\s+/, "\t");
 				if (zeile.trim()) {
 					zeilen.push(zeile.trimEnd()); // da könnte noch ein \r drin sein
@@ -1914,7 +1874,9 @@ let belegImport = {
 	// BibTeX-Import: Daten einlesen
 	//   content = String
 	//     (Inhalt der Datei)
-	BibTeXLesen (content) {
+	//   returnResult = true || undefined
+	//     (es soll ein String zurückgegeben werden)
+	BibTeXLesen (content, returnResult = false) {
 		// Content fixen
 		content = belegImport.BibTeXFix(content);
 		// Zwischenspeicher der Titel
@@ -1939,20 +1901,30 @@ let belegImport = {
 				continue;
 			}
 			// Zeile analysieren
-			let kv = zeile.match(/^([a-z]+)\s*=\s*\{(.+)\},*$/);
-			if (!kv || !kv[1] || !kv[2]) {
+			let kv = /^(?<key>[a-z]+)\s*=\s*[{"](?<value>.+)[}"],?$/.exec(zeile);
+			if (!kv || !kv.groups.key || !kv.groups.value) {
 				// da ist wohl was schiefgelaufen
 				continue;
 			}
-			let key = kv[1];
+			const key = kv.groups.key;
 			if (!item[key]) {
 				item[key] = [];
 			}
-			item[key].push(belegImport.BibTeXSymbols( kv[2] ));
+			const val = kv.groups.value;
+			if (/^(author|editor)$/.test(key)) {
+				for (let i of val.split(/\sand\s/)) {
+					item[key].push(belegImport.BibTeXSymbols(i));
+				}
+			} else {
+				item[key].push(belegImport.BibTeXSymbols(val));
+			}
 		}
 		// Daten in den Zwischenspeicher eintragen
 		// (nur wenn welche vorhanden sind)
 		if (titel.length) {
+			if (returnResult) {
+				return titel;
+			}
 			belegImport.Datei.meta = "";
 			belegImport.Datei.data = titel;
 			return true;
@@ -1961,22 +1933,12 @@ let belegImport = {
 		// Titeldaten übertragen
 		function pushTitle () {
 			// Datensatz füllen
-			let data = {
-				importiert: false,
-				ds: {
-					au: "", // Autor
-					bs: "", // Beleg (immer leer, aber wichtig für die Anzeige)
-					bx: "", // Original
-					da: "", // Belegdatum
-					kr: "", // Korpus
-					qu: "", // Quellenangabe
-				},
-			};
+			let data = belegImport.DateiDatensatz();
 			// Autor(en) ermitteln
 			if (item.author) {
-				data.ds.au = item.author.join("/").replace(/\sand\s/g, "/");
+				data.ds.au = item.author.join("/");
 			} else if (item.editor) {
-				data.ds.au = `${item.editor.join("/").replace(/\sand\s/g, "/")} (Hrsg.)`;
+				data.ds.au = `${item.editor.join("/")} (Hrsg.)`;
 			} else {
 				data.ds.au = "N. N.";
 			}
@@ -1994,110 +1956,95 @@ let belegImport = {
 			data.ds.bx += `\n}`;
 			// Datum
 			if (item.year) {
+				item.year.forEach((i, n) => item.year[n] = i.replace(/^\[|\]$/g, ""));
 				data.ds.da = item.year.join("/");
 			} else if (item.date) {
+				item.date.forEach((i, n) => item.date[n] = i.replace(/^\[|\]$/g, ""));
 				data.ds.da = item.date.join("/");
 			}
 			// Datensatz von GoogleBooks?
 			if (item.url) {
-				let gb = item.url.some(i => /books\.google/.test(i));
-				if (gb) {
+				if (item.url.some(i => /books\.google/.test(i))) {
 					data.ds.kr = "GoogleBooks";
 				}
 			}
-			// Quellenangabe: Autor
-			let quelle = `${data.ds.au}: `;
-			// Quellenangabe: Titel
-			if (item.title) {
-				quelle += item.title.join(". ");
-			} else if (item.booktitle) {
-				quelle += item.booktitle.join(". ");
-			} else if (item.shorttitle) {
-				quelle += item.shorttitle.join(". ");
-			} else {
-				quelle += "[ohne Titel]";
+			// Quellenangabe ermitteln
+			let td = belegImport.makeTitleDataObject();
+			if (item.author) {
+				td.autor = [...item.author];
 			}
-			// Quellenangabe: in Buch/Zeitschrift
-			let zeitschrift = false,
+			if (item.editor) {
+				td.hrsg = [...item.editor];
+			}
+			if (item.title) {
+				td.titel = [...item.title];
+			} else if (item.booktitle) {
+				td.titel = [...item.booktitle];
+			} else if (item.shorttitle) {
+				td.titel = [...item.shorttitle];
+			} else {
+				td.titel = ["[ohne Titel]"];
+			}
+			let istZeitschrift = false,
 				istAbschnitt = false;
 			if (item.title && item.booktitle) {
-				quelle += `. In: ${item.booktitle.join(". ")}`;
+				td.inTitel = [...item.booktitle];
 				istAbschnitt = true;
 			} else if (item.title && (item.journal || item.journaltitle)) {
-				let journal;
 				if (item.journal) {
-					journal = item.journal.join(". ");
+					td.inTitel = [...item.journal];
 				} else if (item.journaltitle) {
-					journal = item.journaltitle.join(". ");
+					td.inTitel = [...item.journaltitle];
 				}
-				quelle += `. In: ${journal}`;
-				zeitschrift = true;
+				istZeitschrift = true;
 				istAbschnitt = true;
 			}
-			// Quellenangabe: Hrsg. Sammelband
-			if (!zeitschrift && item.author && item.editor) {
-				quelle += `. Hrsg. v. ${item.editor.join("/").replace(/\sand\s/g, "/")}`;
-			}
-			// Quellenangabe: Band oder Jahrgang
 			if (item.volume) {
-				if (zeitschrift) {
-					quelle += ` ${item.volume.join("/")}`;
+				if (istZeitschrift) {
+					td.jahrgang = item.volume.join("/");
 				} else {
-					quelle += `, Bd. ${item.volume.join("/")}`;
+					td.band = item.volume.join("/");
 				}
 			}
-			// Quellenangabe: Auflage
-			if (item.edition && !zeitschrift) {
-				quelle += `, ${item.edition.join("/")}`;
+			if (item.edition) {
+				td.auflage = item.edition.join("/");
 			}
-			// Quellenangabe: Ort
-			if (!zeitschrift && (item.location || item.address)) {
-				let ort;
-				if (item.location) {
-					ort = item.location.join("/");
-				} else if (item.address) {
-					ort = item.address.join("/");
+			if (item.school) {
+				td.quali = item.school.join(", ");
+			}
+			if (item.location) {
+				td.ort = [...item.location];
+			} else if (item.address) {
+				td.ort = [...item.address];
+			}
+			if (item.publisher) {
+				td.verlag = item.publisher.join("/");
+			}
+			td.jahr = data.ds.da;
+			if (item.number) {
+				const heft = item.number.join("/"),
+					bdStart = /^Bd\./.test(item.number); // BibTeX von GoogleBooks hat mitunter diesen Fehler
+				if (bdStart && !istZeitschrift) {
+					td.band = heft;
+				} else if (!bdStart) {
+					td.heft = heft;
 				}
-				if (!/\.$/.test(quelle)) {
-					quelle += ".";
-				}
-				quelle += ` ${ort}`;
 			}
-			// Quellenangabe: Jahr
-			let jahr;
-			if (item.year) {
-				jahr = item.year.join("/");
-			} else if (item.date) {
-				jahr = item.date.join("/");
-			}
-			if (jahr && zeitschrift) {
-				quelle += ` (${jahr})`;
-			} else if (jahr) {
-				quelle += ` ${jahr}`;
-			}
-			// Quellenangabe: Seiten
 			if (istAbschnitt && item.pages) {
-				let seiten = item.pages.join(", ");
-				if (!/^(Seite|Sp*)/.test(seiten)) {
-					seiten = `S. ${seiten}`;
-				}
-				seiten = seiten.replace(/^Seite\s/, "S. ");
-				seiten = seiten.replace(/^(Sp*\.) /, (m, p1) => `${p1} `);
-				seiten = seiten.replace(/--/g, "–");
-				seiten = seiten.replace(/-/g, "–");
-				quelle += `, ${seiten}`;
+				td.seiten = item.pages.join(", ");
 			}
-			// Quellenangabe: Punkt
-			quelle += ".";
-			// Quellenangabe: URL
+			if (item.series && item.series.join() !== td.titel.join()) {
+				// BibTeX von GoogleBooks trägt mitunter den Romantitel in "series" ein
+				td.serie = item.series.join(". ");
+			}
 			if (item.url) {
-				let heute = helfer.datumFormat(new Date().toISOString(), true).split(",")[0];
-				for (let i of item.url) {
-					quelle += `\n\n${i} (Aufrufdatum: ${heute})`;
-				}
+				td.url = [...item.url];
+				td.url.sort(helfer.sortURL);
 			}
-			// Quelleanangabe übernehmen
-			data.ds.qu = quelle;
+			data.ds.qu = belegImport.makeTitle({
+				td,
+				mitURL: true,
+			});
 			// Datensatz pushen
 			titel.push(data);
 		}
@@ -2108,8 +2055,12 @@ let belegImport = {
 	//     (Textzeile, in der die Symbole aufgelöst werden sollen)
 	BibTeXSymbols (text) {
 		// das scheint der Standard zu sein: \‘{a}
-		// Google verwendet i.d.R. diese Form {\‘a}
+		// Google und die GVK-API verwenden i.d.R. diese Form {\‘a}
 		let symbols = new Map();
+		symbols.set("``", '"'); // GVK
+		symbols.set("''", '"'); // GVK
+		symbols.set("`", "'"); // GVK
+		symbols.set("'", "'"); // GVK
 		symbols.set("\\‘{a}", "à");
 		symbols.set("{\\‘a}", "à");
 		symbols.set("\\‘{e}", "è");
@@ -2217,6 +2168,179 @@ let belegImport = {
 			return false;
 		}
 		return true;
+	},
+	// eine Titelaufnahme aus den übergebenen Daten zusammensetzen
+	//   td = Object
+	//     (Datensatz mit den Titeldaten)
+	//   mitURL = Boolean
+	//     (URL + Aufrufdatum sollen der Titelaufnahme angehängt werden)
+	makeTitle ({td, mitURL}) {
+		let titel = "";
+		// Liste der Autoren/Herausgeber ggf. kürzen
+		td.autor = ua(td.autor);
+		td.hrsg = ua(td.hrsg);
+		// Autor
+		if (td.autor.length) {
+			titel = `${td.autor.join("/")}: `;
+		} else if (td.hrsg.length) {
+			titel = `${td.hrsg.join("/")} (Hrsg.): `;
+		} else {
+			titel = "N. N.: ";
+		}
+		// Titel
+		titel += td.titel.join(". ");
+		// Untertitel
+		if (td.untertitel.length) {
+			td.untertitel.forEach(function(i) {
+				if (/^[a-zäöü]/.test(i)) {
+					titel += ",";
+				} else if (!/^[(\[{]/.test(i)) {
+					punkt();
+				}
+				titel += ` ${i}`;
+			});
+		}
+		// In
+		if (td.inTitel.length) {
+			punkt();
+			titel += " In: ";
+			if (td.autor.length && td.hrsg.length && !td.jahrgang) {
+				titel += `${td.hrsg.join("/")} (Hrsg.): `;
+			}
+			titel += td.inTitel.join(". ");
+		}
+		// Band
+		if (td.band && !td.jahrgang) {
+			punkt();
+			titel += ` ${td.band}`;
+			if (td.bandtitel.length) {
+				titel += `: ${td.bandtitel.join(". ")}`;
+			}
+		}
+		// ggf. Herausgeber ergänzen
+		if (!td.inTitel.length && td.hrsg.length && td.autor.length) {
+			punkt();
+			titel += " Hrsg. von ";
+			for (let i = 0, len = td.hrsg.length; i < len; i++) {
+				if (i > 0 && i === len - 1) {
+					titel += " und ";
+				} else if (i > 0) {
+					titel += ", ";
+				}
+				let hrsg = td.hrsg[i].split(", ");
+				if (hrsg.length > 1) {
+					hrsg.reverse();
+					titel += hrsg.join(" ");
+				} else {
+					titel += hrsg[0];
+				}
+			}
+		}
+		// Auflage
+		if (td.auflage && !td.jahrgang && !/^1(\.|$)/.test(td.auflage)) {
+			if (/\s(Aufl(\.|age)?|Ausgabe)$/.test(td.auflage)) {
+				titel += `, ${td.auflage}`;
+			} else {
+				titel += `, ${td.auflage}. Aufl.`;
+			}
+		}
+		// Qualifikationsschrift
+		if (td.quali) {
+			punkt();
+			titel += ` ${td.quali}`;
+		}
+		// Ort
+		if (td.ort.length && !td.jahrgang) {
+			punkt();
+			titel += ` ${td.ort.join("/")}`;
+		} else if (!td.ort.length && !td.jahrgang) {
+			punkt();
+		}
+		// Jahrgang + Jahr
+		if (td.jahrgang) {
+			titel += ` ${td.jahrgang}`;
+			if (td.jahr) {
+				titel += ` (${td.jahr})`;
+			}
+		} else if (td.jahr) {
+			titel += ` ${td.jahr}`;
+			if (td.jahrZuerst) {
+				titel += ` [${td.jahrZuerst}]`;
+			}
+		}
+		// Heft
+		if (td.heft) {
+			titel += `, H. ${td.heft}`;
+		}
+		// Seiten/Spalten
+		const seite_spalte = td.spalte ? "Sp. " : "S. ";
+		if (td.seiten) {
+			titel += `, ${/Sp?\. /.test(td.seiten) ? "" : seite_spalte}${td.seiten}`;
+		}
+		if (td.seite) {
+			if (td.seiten) {
+				titel += `, hier ${td.seite}`;
+			} else {
+				titel += `, ${seite_spalte}${td.seite}`;
+			}
+		}
+		// Serie
+		if (td.serie) {
+			titel += ` (${td.serie}${td.serieBd ? " " + td.serieBd : ""})`;
+		}
+		punkt();
+		// URL und Aufrufdatum
+		if (mitURL && td.url.length) {
+			let heute = helfer.datumFormat(new Date().toISOString(), "minuten").split(",")[0];
+			titel += "\n";
+			for (let url of td.url) {
+				titel += `\n${url} (Aufrufdatum: ${heute})`;
+			}
+		}
+		// Titel typographisch verbessern und zurückgeben
+		titel = helfer.textTrim(titel, true);
+		titel = helfer.typographie(titel);
+		return titel;
+		// ggf. Punkt ergänzen
+		function punkt () {
+			if (!/[,;\.:!?]$/.test(titel)) {
+				titel += ".";
+			}
+		}
+		// ggf. Namenslisten kürzen
+		function ua (liste) {
+			if (liste.length > 3) {
+				return [`${liste[0]} u. a.`];
+			}
+			return liste;
+		}
+	},
+	// leeren Datensatz für eine Titelaufnahme erstellen
+	makeTitleDataObject () {
+		return {
+			autor: [],
+			hrsg: [],
+			titel: [],
+			untertitel: [],
+			inTitel: [],
+			band: "",
+			bandtitel: [],
+			auflage: "",
+			quali: "",
+			ort: [],
+			verlag: "",
+			jahrgang: "",
+			jahr: "",
+			jahrZuerst: "",
+			heft: "",
+			spalte: false,
+			seiten: "",
+			seite: "",
+			serie: "",
+			serieBd: "",
+			url: [],
+			ppn: [],
+		};
 	},
 	// überprüft, ob das Wort im importierten Text gefunden wurde;
 	// außerdem gibt es die Möglichkeit, sich die Textposition der Wörter
