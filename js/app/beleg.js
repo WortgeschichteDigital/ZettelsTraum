@@ -198,17 +198,21 @@ let beleg = {
 				cp = clipboard.readText(),
 				ppnCp = /^[0-9]{8,10}X?$/.test(cp) ? true : false,
 				dwds = belegImport.DWDSXMLCheck(cp),
+				xml = belegImport.XMLCheck({xmlStr: cp}),
 				bibtexCp = belegImport.BibTeXCheck(cp);
 			if (/^https?:\/\/www\.deutschestextarchiv\.de\//.test(cp)) { // DTA-URL
 				beleg.formularImport("dta");
 			} else if (dwds) { // DWDS-Snippet
 				belegImport.DWDS(dwds, "– Zwischenablage –", false);
 				beleg.formularImport("dwds");
+			} else if (xml) {
+				belegImport.XML(cp, "– Zwischenablage –", false);
+				beleg.formularImport("xml");
 			} else if (bibtexCp) {
 				belegImport.BibTeX(cp, "– Zwischenablage –", false);
 				beleg.formularImport("bibtex");
 			} else if (ppnCp) {
-				belegImport.PPNAnzeigeKarteikarte({typ: "bibtex"});
+				belegImport.PPNAnzeigeKarteikarte({typ: "xml"});
 			} else if (belegImport.Datei.data.length) {
 				beleg.formularImport(belegImport.Datei.typ);
 			} else {
@@ -294,10 +298,10 @@ let beleg = {
 	},
 	// zwischen den Import-Formularen hin- und herschalten
 	//   src = String
-	//     (ID der Quelle, aus der importiert werden soll: dta || dwds || dereko || bibtex)
+	//     (ID der Quelle, aus der importiert werden soll: dta || dwds || dereko || xml || bibtex)
 	formularImport (src) {
 		// ggf. src umstellen
-		src = src === "ppn" ? "bibtex" : src;
+		src = src === "ppn" ? "xml" : src;
 		// Checkbox für ISO 8859-15 umstellen
 		let latin1 = document.getElementById("beleg-datei-latin1");
 		if (src === "dereko") {
@@ -307,7 +311,7 @@ let beleg = {
 		}
 		// Radio-Buttons umstellen
 		// (weil Wechsel nicht nur auf Klick, sondern auch automatisch geschieht)
-		let radios = ["beleg-import-dta", "beleg-import-dwds", "beleg-import-dereko", "beleg-import-bibtex"];
+		let radios = ["beleg-import-dta", "beleg-import-dwds", "beleg-import-dereko", "beleg-import-xml", "beleg-import-bibtex"];
 		for (let r of radios) {
 			let radio = document.getElementById(r);
 			if (r.includes(src)) {
@@ -319,7 +323,7 @@ let beleg = {
 		// Formular umstellen
 		let forms = ["beleg-form-dta", "beleg-form-datei"],
 			formsZiel = src;
-		if (/^(dwds|dereko|bibtex)/.test(src)) {
+		if (/^(dwds|dereko|xml|bibtex)/.test(src)) {
 			formsZiel = "datei";
 		}
 		let eleAktiv = null;
@@ -333,7 +337,7 @@ let beleg = {
 			}
 		}
 		// Fokus setzen
-		if (/^(dwds|dereko|bibtex)$/.test(src)) {
+		if (/^(dwds|dereko|xml|bibtex)$/.test(src)) {
 			let inputs = eleAktiv.querySelectorAll("input");
 			if (src === belegImport.Datei.typ &&
 					belegImport.Datei.data.length ||
@@ -350,13 +354,14 @@ let beleg = {
 	},
 	// ggf. Dateiname eintragen
 	//   src = String
-	//     (ID der Quelle, aus der importiert werden soll: dwds || dereko || bibtex)
+	//     (ID der Quelle, aus der importiert werden soll: dwds || dereko || xml || bibtex)
 	formularImportDatei (src) {
 		let name = document.getElementById("beleg-datei-name");
 		if (src === "dwds" && belegImport.Datei.typ === "dwds" ||
 				src === "dereko" && belegImport.Datei.typ === "dereko" ||
+				src === "xml" && belegImport.Datei.typ === "xml" ||
 				src === "bibtex" && belegImport.Datei.typ === "bibtex" ||
-				/^(bibtex)$/.test(src) && belegImport.Datei.typ === "ppn") {
+				/^(xml|bibtex)$/.test(src) && belegImport.Datei.typ === "ppn") {
 			name.textContent = `\u200E${belegImport.Datei.pfad}\u200E`; // vgl. meta.oeffnen()
 			name.classList.remove("leer");
 		} else {
@@ -1336,6 +1341,12 @@ let beleg = {
 				} else if (dwds.qu) {
 					titel = dwds.qu;
 				}
+			} else if (bx.typ === "xml-fundstelle") {
+				let daten = redLit.eingabeXMLFundstelle({xmlDoc: bx.daten, xmlStr: ""});
+				titel = daten.ds.qu;
+			} else if (bx.typ === "xml-mods") {
+				let daten = redLit.eingabeXMLMODS({xmlDoc: bx.daten, xmlStr: ""});
+				titel = daten.ds.qu;
 			}
 			if (titel) {
 				quelleFuellen(titel);
@@ -1467,7 +1478,7 @@ let beleg = {
 		}
 		// XML-Daten
 		let parser = new DOMParser(),
-			xmlDoc = parser.parseFromString(bx, "text/xml");
+			xmlDoc = parser.parseFromString(bx.replace(/ xmlns=".+?"/, ""), "text/xml");
 		if (!xmlDoc.querySelector("parsererror")) {
 			let evaluator = (xpath) => {
 				return xmlDoc.evaluate(xpath, xmlDoc, null, XPathResult.ANY_TYPE, null).iterateNext();

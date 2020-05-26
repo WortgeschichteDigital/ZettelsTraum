@@ -1888,24 +1888,11 @@ let redLit = {
 			ppn = "";
 		}
 		if (ppn) {
-			// MODS-Dokument herunterladen
-			let feedback = await helfer.fetchURL(`https://unapi.k10plus.de/?id=gvk:ppn:${ppn}&format=mods`);
-			// Fehler-Handling
-			if (feedback.fehler) {
-				dialog.oeffnen({
-					typ: "alert",
-					text: `Der Download des XML-Dokuments mit den Titeldaten ist gescheitert.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${feedback.fehler}</p>`,
-					callback: () => document.getElementById("red-lit-eingabe-ti-xml").focus(),
-				});
-				return;
-			}
-			xmlDaten = redLit.eingabeXMLCheck({xmlStr: feedback.text});
+			xmlDaten = await belegImport.PPNXML({
+				ppn,
+				fokus: "red-lit-eingabe-ti-xml",
+			});
 			if (!xmlDaten) {
-				dialog.oeffnen({
-					typ: "alert",
-					text: `Bei den aus dem GVK heruntergeladenen Daten handelt es sich nicht um ein XML-Dokument, dessen Titeldaten ausgelesen werden könnten.`,
-					callback: () => document.getElementById("red-lit-eingabe-ti-xml").focus(),
-				});
 				return;
 			}
 		}
@@ -1955,7 +1942,7 @@ let redLit = {
 		if (!/^<(Fundstelle|mods|\?xml)/.test(xmlStr)) {
 			return false;
 		}
-		// Namespae-Attribut entfernen; das macht nur Problem mit evaluate()
+		// Namespace-Attribut entfernen; das macht nur Problem mit evaluate()
 		xmlStr = xmlStr.replace(/xmlns=".+?"/, "");
 		// XML nicht wohlgeformt
 		let parser = new DOMParser(),
@@ -2006,7 +1993,8 @@ let redLit = {
 		if (si) {
 			data.td.si = si.textContent;
 		}
-		let id = xmlDoc.querySelector("Fundstelle").getAttribute("xml:id");
+		let fundstelle = xmlDoc.querySelector("Fundstelle") ? xmlDoc.querySelector("Fundstelle") : xmlDoc,
+			id = fundstelle.getAttribute("xml:id");
 		if (id) {
 			data.td.id = id;
 		}

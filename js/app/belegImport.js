@@ -1262,7 +1262,7 @@ let belegImport = {
 	// Datei-Import: speichert die Daten der geladenen Datei zwischen
 	Datei: {
 		pfad: "", // Pfad zur Datei
-		typ: "", // Typ der Datei (dwds || dereko || bibtex)
+		typ: "", // Typ der Datei (dwds || dereko || xml || bibtex)
 		meta: "", // Metadaten für alle Belege in belegImport.Datei.data
 		data: [], // Daten der Datei; s. pushBeleg()
 	},
@@ -1316,17 +1316,22 @@ let belegImport = {
 			],
 		};
 		if (document.getElementById("beleg-import-dwds").checked) {
-			opt.filters.push({
+			opt.filters.unshift({
 				name: `JSON-Datei`,
 				extensions: ["json"],
 			});
 		} else if (document.getElementById("beleg-import-dereko").checked) {
-			opt.filters.push({
+			opt.filters.unshift({
 				name: `Text-Datei`,
 				extensions: ["txt"],
 			});
+		} else if (document.getElementById("beleg-import-xml").checked) {
+			opt.filters.unshift({
+				name: `XML-Datei`,
+				extensions: ["xml"],
+			});
 		} else if (document.getElementById("beleg-import-bibtex").checked) {
-			opt.filters.push({
+			opt.filters.unshift({
 				name: `BibTeX-Datei`,
 				extensions: ["bib", "bibtex"],
 			});
@@ -1357,11 +1362,12 @@ let belegImport = {
 		const fsP = require("fs").promises;
 		fsP.readFile(result.filePaths[0], {encoding: encoding})
 			.then(content => {
-				// sollten DWDS- oder BibTeX-Daten in der Zwischenablage sein => Zwischenablage leeren
+				// sollten DWDS- oder BibTeX-Daten oder eine PPN in der Zwischenablage sein => Zwischenablage leeren
 				const {clipboard} = require("electron"),
 					cp = clipboard.readText();
 				if (belegImport.DWDSXMLCheck(cp) ||
-						belegImport.BibTeXCheck(cp)) {
+						belegImport.BibTeXCheck(cp) ||
+						/^[0-9]{8,10}X?$/.test(cp)) {
 					clipboard.clear();
 				}
 				// Datei-Inhalt importieren
@@ -1369,6 +1375,8 @@ let belegImport = {
 					belegImport.DWDS(content, result.filePaths[0]);
 				} else if (document.getElementById("beleg-import-dereko").checked) {
 					belegImport.DeReKo(content, result.filePaths[0]);
+				} else if (document.getElementById("beleg-import-xml").checked) {
+					belegImport.XML(content, result.filePaths[0]);
 				} else if (document.getElementById("beleg-import-bibtex").checked) {
 					belegImport.BibTeX(content, result.filePaths[0]);
 				}
@@ -1385,7 +1393,7 @@ let belegImport = {
 	//   pfad = String
 	//     (Pfad zur geladenen Datei)
 	//   typ = String
-	//     (Typ der Datei, also dwds || dereko || bibtex)
+	//     (Typ der Datei, also dwds || dereko || xml || bibtex)
 	DateiMeta (pfad, typ) {
 		let dataPfad = "",
 		dataTyp = "";
@@ -1409,6 +1417,28 @@ let belegImport = {
 			if (xml) {
 				belegImport.DWDS(xml, "– Zwischenablage –", false);
 			}
+		} else if (document.getElementById("beleg-import-xml").checked) {
+			// Download der XML-Daten
+			if (ppn) {
+				belegImport.PPNAnzeigeKarteikarte({typ: "xml"});
+				const xmlDaten = await belegImport.PPNXML({
+					ppn: cp,
+					fokus: "beleg-datei-importieren",
+				});
+				if (!xmlDaten) {
+					// Fehlermeldungen werden in belegImport.PPNXML() abgesetzt
+					return;
+				}
+				belegImport.Datei.meta = "";
+				belegImport.Datei.data = [xmlDaten];
+				belegImport.DateiImportAusfuehren(0);
+				return;
+			}
+			// Import aus Zwischenablage
+			importTypAktiv = "xml";
+			if (belegImport.XMLCheck(cp)) {
+				belegImport.XML(cp, "– Zwischenablage –", false);
+			}
 		} else if (document.getElementById("beleg-import-bibtex").checked) {
 			// Download der BibTex-Daten
 			if (ppn) {
@@ -1418,7 +1448,7 @@ let belegImport = {
 					fokus: "beleg-datei-importieren",
 				});
 				if (!bibtexDaten) {
-					// Fehlermeldungen werden in belegImport.PPNAnzeigeKarteikarte() abgesetzt
+					// Fehlermeldungen werden in belegImport.PPNBibTeX() abgesetzt
 					return;
 				}
 				const bibtexCheck = belegImport.BibTeXCheck(bibtexDaten),
@@ -1523,7 +1553,7 @@ let belegImport = {
 			td = document.createElement("td");
 			tr.appendChild(td);
 			let bs = i.ds.bs.replace(/\n/g, " ");
-			if (!bs) { // wird bei BibTeX immer so sein
+			if (!bs) { // wird bei BibTeX und XML immer so sein
 				td.classList.add("kein-wert");
 				td.textContent = "kein Beleg";
 				return;
@@ -1668,7 +1698,7 @@ let belegImport = {
 			beleg.belegGeaendert(true);
 			// Wort gefunden?
 			// (nur überprüfen, wenn Belegtext importiert wurde;
-			// bei BibTeX ist das nicht der Fall)
+			// bei BibTeX und XML ist das nicht der Fall)
 			if (beleg.data.bs) {
 				belegImport.checkWort();
 			}
@@ -1905,7 +1935,7 @@ let belegImport = {
 	//   content = String
 	//     (Inhalt der Datei)
 	//   returnResult = true || undefined
-	//     (es soll ein String zurückgegeben werden)
+	//     (die Titeldaten sollen zurückgegeben werden)
 	BibTeXLesen (content, returnResult = false) {
 		// Content fixen
 		content = belegImport.BibTeXFix(content);
@@ -2199,6 +2229,98 @@ let belegImport = {
 		}
 		return true;
 	},
+	// XML-Import: Datei parsen
+	//   content = String
+	//     (Inhalt der Datei)
+	//   pfad = String
+	//     (Pfad zur Datei)
+	//   autoImport = false || undefined
+	//     (nach dem Parsen soll ein automatischer Import angestoßen werden)
+	XML (content, pfad, autoImport = true) {
+		// Liegen passende XML-Daten vor?
+		let xmlDoc = belegImport.XMLCheck({xmlStr: content});
+		if (!xmlDoc) {
+			dialog.oeffnen({
+				typ: "alert",
+				text: `Beim Einlesen des Dateiinhalts ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">Datei enthält keine verwertbaren XML-Daten</p>`,
+			});
+			return false;
+		}
+		// Daten einlesen
+		if (!belegImport.XMLLesen({xmlDoc, xmlStr: content})) {
+			return false;
+		}
+		// Metadaten auffrischen
+		belegImport.DateiMeta(pfad, "xml");
+		// Anzeige im Karteikartenformular auffrischen
+		beleg.formularImportDatei("xml");
+		// Import-Fenster öffnen oder Daten direkt importieren
+		if (autoImport) {
+			belegImport.DateiImport();
+		}
+		return true;
+	},
+	// XML-Import: Daten einlesen
+	//   content = String
+	//     (Inhalt der Datei)
+	//   returnResult = true || undefined
+	//     (die Titeldaten sollen zurückgegeben werden)
+	XMLLesen ({xmlDoc, xmlStr, returnResult = false}) {
+		// Zwischenspeicher der Titel
+		let titel = [];
+		// Dokumente parsen
+		if (xmlDoc.querySelector("mods titleInfo")) {
+			// MODS-Dokument
+			titel.push(redLit.eingabeXMLMODS({xmlDoc, xmlStr}));
+		} else if (xmlDoc.querySelector("Fundstelle unstrukturiert")) {
+			// Fundstellen-Dokument
+			let fundstellen = xmlDoc.evaluate("//Fundstelle", xmlDoc, null, XPathResult.ANY_TYPE, null),
+				item = fundstellen.iterateNext();
+			while (item) {
+				titel.push(redLit.eingabeXMLFundstelle({
+					xmlDoc: item,
+					xmlStr: item.outerHTML,
+				}));
+				item = fundstellen.iterateNext();
+			}
+		}
+		// Daten in den Zwischenspeicher eintragen
+		// (nur wenn welche vorhanden sind)
+		if (titel.length) {
+			if (returnResult) {
+				return titel;
+			}
+			belegImport.Datei.meta = "";
+			belegImport.Datei.data = titel;
+			return true;
+		}
+		return false;
+	},
+	// XML-Import: überprüft, ob sich hinter einem String ein passendes XML-Dokument verbirgt
+	//   xmlStr = String
+	//     (String, der überprüft werden soll)
+	XMLCheck ({xmlStr}) {
+		// Daten beginnen nicht mit <Fundstelle>, <mods> oder XML-Deklaration
+		if (!/^<(Fundstelle|mods|\?xml)/.test(xmlStr)) {
+			return false;
+		}
+		// Namespace-Attribut entfernen; das macht nur Problem mit evaluate()
+		xmlStr = xmlStr.replace(/xmlns=".+?"/, "");
+		// XML nicht wohlgeformt
+		let parser = new DOMParser(),
+			xmlDoc = parser.parseFromString(xmlStr, "text/xml");
+		if (xmlDoc.querySelector("parsererror")) {
+			return false;
+		}
+		// keine Fundstellen-Snippet(s)/kein MODS-Dokument
+		let fundstellen = xmlDoc.querySelector("Fundstelle unstrukturiert"),
+			mods = xmlDoc.querySelector("mods titleInfo");
+		if (!fundstellen && !mods) {
+			return false;
+		}
+		// XML-Dokument scheint okay zu sein
+		return xmlDoc;
+	},
 	// PPN-Download: Anzeige der Karteikarte für einen PPN-Download auffrischen
 	//   typ = String
 	//     (Datensatztyp, dessen Formular angezeigt werden soll)
@@ -2248,6 +2370,42 @@ let belegImport = {
 				}
 			}
 			resolve(daten.join("\n"));
+		});
+	},
+	// PPN-Download: XML-Datensatz herunterladen
+	//   ppn = String
+	//     (die PPN, deren Datensatz heruntergeladen werden soll)
+	//   fokus = String
+	//     (ID des Elements, das ggf. fokussiert werden soll)
+	PPNXML ({ppn, fokus}) {
+		return new Promise(async resolve => {
+			// MODS-Dokument herunterladen
+			let feedback = await helfer.fetchURL(`https://unapi.k10plus.de/?id=gvk:ppn:${ppn}&format=mods`);
+			// Fehler-Handling
+			if (feedback.fehler) {
+				dialog.oeffnen({
+					typ: "alert",
+					text: `Der Download des XML-Dokuments mit den Titeldaten ist gescheitert.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${feedback.fehler}</p>`,
+					callback: () => {
+						document.getElementById(fokus).focus();
+						resolve("");
+					},
+				});
+				return;
+			}
+			let xmlDaten = redLit.eingabeXMLCheck({xmlStr: feedback.text});
+			if (!xmlDaten) {
+				dialog.oeffnen({
+					typ: "alert",
+					text: `Bei den aus dem GVK heruntergeladenen Daten handelt es sich nicht um ein XML-Dokument, dessen Titeldaten ausgelesen werden könnten.`,
+					callback: () => {
+						document.getElementById(fokus).focus();
+						resolve("");
+					},
+				});
+				return;
+			}
+			resolve(xmlDaten);
 		});
 	},
 	// eine Titelaufnahme aus den übergebenen Daten zusammensetzen
