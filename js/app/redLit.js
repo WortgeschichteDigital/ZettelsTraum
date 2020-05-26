@@ -418,7 +418,7 @@ let redLit = {
 			content: "Literaturliste",
 		};
 		if (document.getElementById("red-lit-export-format-plain").checked) {
-			format.name = "Plain text";
+			format.name = "Text";
 			format.ext = "txt";
 		}
 		// Fenster schließen
