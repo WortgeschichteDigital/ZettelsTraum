@@ -196,6 +196,7 @@ let beleg = {
 			// Was ist in der Zwischenablage?
 			const {clipboard} = require("electron"),
 				cp = clipboard.readText(),
+				ppnCp = /^[0-9]{8,10}X?$/.test(cp) ? true : false,
 				dwds = belegImport.DWDSXMLCheck(cp),
 				bibtexCp = belegImport.BibTeXCheck(cp);
 			if (/^https?:\/\/www\.deutschestextarchiv\.de\//.test(cp)) { // DTA-URL
@@ -206,6 +207,8 @@ let beleg = {
 			} else if (bibtexCp) {
 				belegImport.BibTeX(cp, "– Zwischenablage –", false);
 				beleg.formularImport("bibtex");
+			} else if (ppnCp) {
+				belegImport.PPNAnzeigeKarteikarte({typ: "bibtex"});
 			} else if (belegImport.Datei.data.length) {
 				beleg.formularImport(belegImport.Datei.typ);
 			} else {
@@ -293,6 +296,8 @@ let beleg = {
 	//   src = String
 	//     (ID der Quelle, aus der importiert werden soll: dta || dwds || dereko || bibtex)
 	formularImport (src) {
+		// ggf. src umstellen
+		src = src === "ppn" ? "bibtex" : src;
 		// Checkbox für ISO 8859-15 umstellen
 		let latin1 = document.getElementById("beleg-datei-latin1");
 		if (src === "dereko") {
@@ -331,7 +336,8 @@ let beleg = {
 		if (/^(dwds|dereko|bibtex)$/.test(src)) {
 			let inputs = eleAktiv.querySelectorAll("input");
 			if (src === belegImport.Datei.typ &&
-					belegImport.Datei.data.length) {
+					belegImport.Datei.data.length ||
+				 belegImport.Datei.typ === "ppn") {
 				inputs[inputs.length - 1].focus();
 			} else {
 				inputs[inputs.length - 2].focus();
@@ -349,7 +355,8 @@ let beleg = {
 		let name = document.getElementById("beleg-datei-name");
 		if (src === "dwds" && belegImport.Datei.typ === "dwds" ||
 				src === "dereko" && belegImport.Datei.typ === "dereko" ||
-				src === "bibtex" && belegImport.Datei.typ === "bibtex") {
+				src === "bibtex" && belegImport.Datei.typ === "bibtex" ||
+				/^(bibtex)$/.test(src) && belegImport.Datei.typ === "ppn") {
 			name.textContent = `\u200E${belegImport.Datei.pfad}\u200E`; // vgl. meta.oeffnen()
 			name.classList.remove("leer");
 		} else {

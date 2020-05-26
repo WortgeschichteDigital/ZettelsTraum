@@ -2248,33 +2248,13 @@ let redLit = {
 			bibtexDaten = cp;
 		}
 		if (ppn) {
-			// BibTeX-Daten herunterladen
-			let feedback = await helfer.fetchURL(`https://unapi.k10plus.de/?id=gvk:ppn:${ppn}&format=bibtex`);
-			// Fehler-Handling
-			if (feedback.fehler) {
-				dialog.oeffnen({
-					typ: "alert",
-					text: `Der Download des GVK-<span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Datensatzes ist gescheitert.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${feedback.fehler}</p>`,
-					callback: () => document.getElementById("red-lit-eingabe-ti-bibtex").focus(),
-				});
+			bibtexDaten = await belegImport.PPNBibTeX({
+				ppn,
+				fokus: "red-lit-eingabe-ti-bibtex",
+			});
+			if (!bibtexDaten) {
 				return;
 			}
-			if (!belegImport.BibTeXCheck(feedback.text)) {
-				dialog.oeffnen({
-					typ: "alert",
-					text: `Bei den aus dem GVK heruntergeladenen Daten handelt es sich nicht um einen validen <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Datensatz.`,
-					callback: () => document.getElementById("red-lit-eingabe-ti-bibtex").focus(),
-				});
-				return;
-			}
-			// BibTeX-Daten aufbereiten
-			let daten = feedback.text.split("\n");
-			for (let i = 0, len = daten.length; i < len; i++) {
-				if (/^[a-z]+="/.test(daten[i])) {
-					daten[i] = "\t" + daten[i];
-				}
-			}
-			bibtexDaten = daten.join("\n");
 		}
 		// kein BibTeX-Datensatz in Zwischenablage
 		if (!bibtexDaten) {

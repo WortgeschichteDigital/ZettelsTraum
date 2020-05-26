@@ -662,7 +662,7 @@
 					<p>Beim Öffnen der Karteikarte werden die Importformulare automatisch umgeschaltete:</p>
 
 					<ul>
-						<li>Befindet sich in der <b>Zwischenablage</b> Ihres Computers eine <abbr title="Uniform Resource Locator" lang="en">URL</abbr> des <abbr title="Deutschen Textarchivs">DTA</abbr>, ein <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippet aus den Korpora des <abbr title="Digitalen Wörterbuchs der deutschen Sprache">DWDS</abbr> oder ein <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Datensatz, wird das Importformular beim Öffnen einer neuen, leeren Karteikarte automatisch umgeschaltet und ein passendes Formularelement fokussiert, sodass Sie nur noch <kbd>⏎</kbd> drücken müssen, um den Import zu starten.</li>
+						<li>Befindet sich in der <b>Zwischenablage</b> Ihres Computers eine <abbr title="Uniform Resource Locator" lang="en">URL</abbr> des <abbr title="Deutschen Textarchivs">DTA</abbr>, ein <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippet aus den Korpora des <abbr title="Digitalen Wörterbuchs der deutschen Sprache">DWDS</abbr>, ein <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Datensatz oder eine <abbr title="Pica-Produktionsnummer">PPN</abbr>, wird das Importformular beim Öffnen einer neuen, leeren Karteikarte automatisch umgeschaltet und ein passendes Formularelement fokussiert, sodass Sie nur noch <kbd>⏎</kbd> drücken müssen, um den Import zu starten.</li>
 
 						<li>Wurde eine <b><abbr title="Digitales Wörterbuch der deutschen Sprache">DWDS</abbr>-, <abbr title="Deutsches Referenzkorpus">DeReKo</abbr>- oder <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Datei</b> geladen, bleibt diese mit dem Programm verknüpft. Befindet sich in der Zwischenablage kein Datensatz, der importiert werden könnte, wird beim Öffnen einer neuen Karteikarte <em>die</em> Importfunktion angezeigt, die zu der mit <i class="app-name"></i> verknüpften Datei passt. Dieses Verhalten ist besonders dann hilfreich, wenn Sie eine Datei mit mehreren Datensätzen geladen haben, die Sie nach und nach in verschiedene Karteikarten schreiben möchten.</li>
 					</ul>
@@ -822,6 +822,13 @@
 					<p><span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Daten können auch aus der <b>Zwischenablage</b> Ihres Computers importiert werden. Öffnen Sie eine neue Karteikarte überprüft die App, ob sie von dort einen <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Datensatz beziehen könnte. Ist dem der Fall, schaltet sie das Importformular automatisch auf <i class="bibtex"><span>Bib</span>T<span>E</span>X</i> um. An der Stelle, wo sonst der Dateiname erscheint, steht nun <q>– Zwischenablage –</q>.</p>
 
 					<p>Sollten Sie die Karteikarte bereits geöffnet haben, bevor Sie einen <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Datensatz in die Zwischenablage kopiert haben, wird die Anzeige zwar nicht automatisch umgestellt. Klicken Sie auf den Button <i>Importieren</i>, überprüft die App allerdings, ob sie in der Zwischenablage fündig wird.</p>
+
+					<figure class="right" title="zum Vergrößern anklicken">
+						<img src="../img/win/hb-menueRedaktion-literatur-ppn.png" alt="">
+						<figcaption><abbr title="Pica-Produktionsnummer">PPN</abbr> in einer Titelanzeige des <abbr title="Gemeinsamen Verbundkatalogs">GVK</abbr></figcaption>
+					</figure>
+
+					<p>Die bequemste Möglichkeit, einzelne Titeldaten zu importieren, geht freilich via <b><abbr title="Pica-Produktionsnummer">PPN</abbr></b>. Befindet sich in der Zwischenablage eine <abbr title="Pica-Produktionsnummer">PPN</abbr> zeigt das <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Formular <q>– PPN in Zwischenablage –</q> an. Klicken Sie auf <i>Importieren</i> wird im Hintergrund ein Datensatz aus dem <abbr title="Gemeinsamen Verbundkatalog">GVK</abbr> heruntergeladen und analysiert. Danach wird die Karteikarte mit den Titeldaten gefüllt. Die <abbr title="Pica-Produktionsnummern">PPN</abbr> werden in der Titelanzeige des <abbr title="Gemeinsamen Verbundkatalog">GVK</abbr> direkt in der obersten Zeile angezeigt (<abbr title="siehe">s.</abbr> Screenshot).</p>
 
 					<p>Da <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Datensätze <em>niemals</em> einen <b>Belegtext</b> enthalten können, wird dieses Datenfeld auch <em>niemals</em> überschrieben. Ist Ihr Workflow so, dass Sie zunächst einen Beleg einpflegen (<abbr title="zum Beispiel">z. B.</abbr> indem Sie eine Passage aus einem Volldigitalisat von <i>GoogleBooks</i> abtippen), können Sie die Titeldaten problemlos im Nachhinein aus einer <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Datei importieren – und zwar ohne befürchten zu müssen, dass der Belegtext verlorengeht.</p>
 
@@ -4252,7 +4259,7 @@ Gerüst 2 &gt; Gerüst 1</pre>
 
 						<figure class="right" title="zum Vergrößern anklicken">
 							<img src="../img/win/hb-menueRedaktion-literatur-ppn.png" alt="">
-							<figcaption><abbr title="Pica-Produktionsnummer">PPN</abbr> auf einer Trefferansicht des <abbr title="Gemeinsamen Verbundkatalogs">GVK</abbr></figcaption>
+							<figcaption><abbr title="Pica-Produktionsnummer">PPN</abbr> in einer Titelanzeige des <abbr title="Gemeinsamen Verbundkatalogs">GVK</abbr></figcaption>
 						</figure>
 
 						<ul>

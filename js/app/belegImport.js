@@ -1279,7 +1279,9 @@ let belegImport = {
 			}
 		}
 		// Formular zurücksetzen
-		beleg.formularImport(typ);
+		if (typ !== "ppn") {
+			beleg.formularImport(typ);
+		}
 	},
 	// Datei-Import: einen leeren Datensatz erzeugen
 	DateiDatensatz () {
@@ -1395,10 +1397,11 @@ let belegImport = {
 		belegImport.Datei.typ = dataTyp;
 	},
 	// Datei-Import: Verteilerfunktion für das Importieren eingelesener Datensätze
-	DateiImport () {
+	async DateiImport () {
 		// Clipboard-Content schlägt Datei-Content
 		const {clipboard} = require("electron"),
-			cp = clipboard.readText();
+			cp = clipboard.readText(),
+			ppn = /^[0-9]{8,10}X?$/.test(cp) ? true : false;
 		let importTypAktiv = "dereko";
 		if (document.getElementById("beleg-import-dwds").checked) {
 			importTypAktiv = "dwds";
@@ -1407,6 +1410,31 @@ let belegImport = {
 				belegImport.DWDS(xml, "– Zwischenablage –", false);
 			}
 		} else if (document.getElementById("beleg-import-bibtex").checked) {
+			// Download der BibTex-Daten
+			if (ppn) {
+				belegImport.PPNAnzeigeKarteikarte({typ: "bibtex"});
+				const bibtexDaten = await belegImport.PPNBibTeX({
+					ppn: cp,
+					fokus: "beleg-datei-importieren",
+				});
+				if (!bibtexDaten) {
+					// Fehlermeldungen werden in belegImport.PPNAnzeigeKarteikarte() abgesetzt
+					return;
+				}
+				const bibtexCheck = belegImport.BibTeXCheck(bibtexDaten),
+					bibtexLesen = bibtexCheck ? belegImport.BibTeXLesen(bibtexDaten) : false;
+				if (!bibtexCheck || !bibtexLesen) {
+					dialog.oeffnen({
+						typ: "alert",
+						text: `Das Einlesen der heruntergeladenen <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Daten ist gescheitert.`,
+						callback: () => document.getElementById("beleg-datei-importieren").focus(),
+					});
+					return;
+				}
+				belegImport.DateiImportAusfuehren(0);
+				return;
+			}
+			// Import aus Zwischenablage
 			importTypAktiv = "bibtex";
 			if (belegImport.BibTeXCheck(cp)) {
 				belegImport.BibTeX(cp, "– Zwischenablage –", false);
@@ -1422,6 +1450,8 @@ let belegImport = {
 					document.getElementById("beleg-datei-oeffnen").focus();
 				},
 			});
+			belegImport.Datei.typ = importTypAktiv;
+			belegImport.DateiReset();
 			return;
 		}
 		// direkt importieren oder Importfenster öffnen
@@ -2168,6 +2198,57 @@ let belegImport = {
 			return false;
 		}
 		return true;
+	},
+	// PPN-Download: Anzeige der Karteikarte für einen PPN-Download auffrischen
+	//   typ = String
+	//     (Datensatztyp, dessen Formular angezeigt werden soll)
+	PPNAnzeigeKarteikarte ({typ}) {
+		belegImport.DateiReset();
+		belegImport.Datei.pfad = "– PPN in Zwischenablage –";
+		belegImport.Datei.typ = "ppn";
+		beleg.formularImport(typ);
+	},
+	// PPN-Download: BibTeX-Datensatz herunterladen
+	//   ppn = String
+	//     (die PPN, deren Datensatz heruntergeladen werden soll)
+	//   fokus = String
+	//     (ID des Elements, das ggf. fokussiert werden soll)
+	PPNBibTeX ({ppn, fokus}) {
+		return new Promise(async resolve => {
+			// BibTeX-Daten herunterladen
+			let feedback = await helfer.fetchURL(`https://unapi.k10plus.de/?id=gvk:ppn:${ppn}&format=bibtex`);
+			// Fehler-Handling
+			if (feedback.fehler) {
+				dialog.oeffnen({
+					typ: "alert",
+					text: `Der Download des GVK-<span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Datensatzes ist gescheitert.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${feedback.fehler}</p>`,
+					callback: () => {
+						document.getElementById(fokus).focus();
+						resolve("");
+					},
+				});
+				return;
+			}
+			if (!belegImport.BibTeXCheck(feedback.text)) {
+				dialog.oeffnen({
+					typ: "alert",
+					text: `Bei den aus dem GVK heruntergeladenen Daten handelt es sich nicht um einen validen <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Datensatz.`,
+					callback: () => {
+						document.getElementById(fokus).focus();
+						resolve("");
+					},
+				});
+				return;
+			}
+			// BibTeX-Daten aufbereiten
+			let daten = feedback.text.split("\n");
+			for (let i = 0, len = daten.length; i < len; i++) {
+				if (/^[a-z]+="/.test(daten[i])) {
+					daten[i] = "\t" + daten[i];
+				}
+			}
+			resolve(daten.join("\n"));
+		});
 	},
 	// eine Titelaufnahme aus den übergebenen Daten zusammensetzen
 	//   td = Object
