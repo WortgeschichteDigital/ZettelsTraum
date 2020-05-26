@@ -54,6 +54,8 @@
 				<h3>Neue Funktionen</h3>
 
 				<ul>
+					<li>Die App verfügt nun über eine einfach gehaltene <a href="#menueRedaktion-literatur" class="link-handbuch">Literaturdatenbank</a>, die speziell für kollaboratives Arbeiten und schnelles Befüllen eingerichtet wurde. Titelaufnahmen lassen sich nicht nur händisch, sondern auch via <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippet, <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Datensatz, einen <abbr title="Deutsches Textarchiv">DTA</abbr>-Link oder über eine <abbr title="Pica-Produktionsnummer">PPN</abbr> anlegen, mit deren Hilfe ein Datensatz des <abbr title="Gemeinsamen Verbundkatalogs">GVK</abbr> importiert wird (MODS oder <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>). Die komplette Datenbank kann in ein <abbr title="Extensible Markup Language" lang="en">XML</abbr>-, auf Wunsch auch in ein unstrukturiertes Textformat exportiert werden. Beides geht auch mit einzelnen Titelaufnahmen. <abbr title="Vergleiche">Vgl.</abbr> <a href="#menueRedaktion-literatur" class="link-handbuch">zu Details den entsprechenden Handbuchabschnitt</a>.</li>
+
 					<li>Das Auslesen der Zitiertitel von Belegen <abbr title="beziehungsweise">bzw.</abbr> Literaturtiteln aus dem <abbr title="Deutschen Textarchiv">DTA</abbr>, aus <abbr title="Digitales Wörterbuch der deutschen Sprache">DWDS</abbr>-Snippets oder <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Datensätzen wurde stark verbessert.</li>
 
 					<li><a href="#karteikarte" class="link-handbuch">Karteikarte</a>: Der Zitiertitel im Datenfeld <i>Quelle</i> kann mithilfe des Icons <img src="../img/pfeil-kreis.svg" width="24" height="24" alt=""> automatisch neu ermittelt werden. Die <a href="#karteikarte-quelleLaden" class="link-handbuch">Funktion</a> dient dazu, das Format der Quellenangabe in älteren Karteikarten auf den neusten Stand zu bringen, da die Funktionen zum Ermitteln der Titeldaten jüngst stark verbessert/korrigiert wurden.</li>
@@ -232,7 +234,7 @@
 				<p>Es wurden <i>5 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/master">Commit-Messages</a>.</p>
 
 				<ul>
-					<li>gewisse Tags wurden beim Erstellen eines XML-Snippets ignoriert</li>
+					<li>gewisse Tags wurden beim Erstellen eines <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippets ignoriert</li>
 
 					<li>Jahresangaben werden beim <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Import fortan nur noch eingeklammert, wenn es sich bei dem Titel um eine Zeitschrift handelt</li>
 
@@ -419,7 +421,7 @@
 				<ul>
 					<li><a href="#belegliste" class="link-handbuch">Belegliste</a>: Sind sowohl der Annotierungsfilter (im Filterblock <a href="#filter-verschiedenes" class="link-handbuch">Verschiedenes</a>) als auch die <a href="#belegliste-kuerzung" class="link-handbuch">Kürzungsfunktion</a> aktiv, werden Absätze, die Annotierungen enthalten, fortan nicht mehr gekürzt. Dieses neue Verhalten betrifft auch Absätze mit transparenten Annotierungen, und zwar unabhängig davon, ob die <a href="#einstellungen-filterleisteTransparente" class="link-handbuch">Einstellung zum Einbeziehen transparenter Annotierungen</a> aktiviert ist oder nicht.</li>
 
-					<li>Erinnerungen: Wurden gewisse Formalien nicht eingehalten, erscheint schon seit Längerem im Kopf des Hauptfensters das Icon <img src="../img/kreis-ausrufezeichen.svg" width="24" height="24" alt="">. Fortan wird die NutzerIn auch darüber informiert, dass die Artikel- oder XML-Datei nicht <a href="#menueKartei-anhaenge" class="link-handbuch">an die Kartei angehängt</a> wurde, wenn die entsprechenden <a href="#menueRedaktion-ereignisse" class="link-handbuch">Redaktionsereignisse</a> <i>Artikel erstellt</i> <abbr title="beziehungsweise">bzw.</abbr> <i>XML-Auszeichnung</i> vorhanden sind.</li>
+					<li>Erinnerungen: Wurden gewisse Formalien nicht eingehalten, erscheint schon seit Längerem im Kopf des Hauptfensters das Icon <img src="../img/kreis-ausrufezeichen.svg" width="24" height="24" alt="">. Fortan wird die NutzerIn auch darüber informiert, dass die Artikel- oder <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Datei nicht <a href="#menueKartei-anhaenge" class="link-handbuch">an die Kartei angehängt</a> wurde, wenn die entsprechenden <a href="#menueRedaktion-ereignisse" class="link-handbuch">Redaktionsereignisse</a> <i>Artikel erstellt</i> <abbr title="beziehungsweise">bzw.</abbr> <i><abbr title="Extensible Markup Language" lang="en">XML</abbr>-Auszeichnung</i> vorhanden sind.</li>
 
 					<li>Wortkarteien werden nicht mehr geöffnet, wenn die installierte Version von <i class="app-name"></i> veraltet ist und darum nicht mehr zur Version des Dateiformats der zu öffnenden Datei passt. Wurde das <abbr title="Zettel’s Traum JSON">ZTJ</abbr>-Format geändert, kann es beim Einlesen einer Datei neueren Formats durch eine veraltete Installation zu unvorhersehbaren Fehlern kommen. Die NutzerIn wird in einem solchen Fall aufgefordert, ein Update zu installieren.</li>
 
