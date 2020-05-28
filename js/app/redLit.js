@@ -2225,6 +2225,8 @@ let redLit = {
 		// PPN
 		let ppn = evaluator("//recordIdentifier[@source='DE-627']");
 		pusher(ppn, "ppn");
+		// Korrektur: Auflage ohne eckige Klammern
+		td.auflage = td.auflage.replace(/^\[|\]$/g, "");
 		// Korrektur: Ort ggf. aus Verlagsangabe ermitteln
 		if (!td.ort.length && /:/.test(td.verlag)) {
 			let ort = td.verlag.split(":");
