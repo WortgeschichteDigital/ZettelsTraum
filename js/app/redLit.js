@@ -709,6 +709,11 @@ let redLit = {
 				// Operationen seit dem letzten Speichern anwenden
 				redLit.db.dataOpts.forEach(i => {
 					if (i.aktion === "add") { // Datensatz hinzufügen
+						if (!redLit.db.dataTmp[i.id]) {
+							// die Titelaufnahme könnte angelegt und kurz danach wieder
+							// komplett gelöscht worden sein
+							return;
+						}
 						let aktion = "ergänzt";
 						if (!redLit.db.data[i.id]) {
 							aktion = "angelegt";
