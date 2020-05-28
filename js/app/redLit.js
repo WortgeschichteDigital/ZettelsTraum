@@ -1127,7 +1127,9 @@ let redLit = {
 		if (nav && form === "suche") {
 			document.getElementById("red-lit-suche-text").select();
 		} else if (nav) {
-			document.getElementById("red-lit-eingabe-ti").focus();
+			let ti = document.getElementById("red-lit-eingabe-ti");
+			helfer.textareaGrow(ti);
+			ti.focus();
 		}
 	},
 	// Suche: Speicher für Variablen
