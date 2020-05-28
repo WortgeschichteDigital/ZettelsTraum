@@ -1367,7 +1367,7 @@ let belegImport = {
 					cp = clipboard.readText();
 				if (belegImport.DWDSXMLCheck(cp) ||
 						belegImport.BibTeXCheck(cp) ||
-						/^[0-9]{8,10}X?$/.test(cp)) {
+						belegImport.PPNCheck({ppn: cp})) {
 					clipboard.clear();
 				}
 				// Datei-Inhalt importieren
@@ -1409,7 +1409,7 @@ let belegImport = {
 		// Clipboard-Content schlägt Datei-Content
 		const {clipboard} = require("electron"),
 			cp = clipboard.readText(),
-			ppn = /^[0-9]{8,10}X?$/.test(cp) ? true : false;
+			ppn = belegImport.PPNCheck({ppn: cp}) ? true : false;
 		let importTypAktiv = "dereko";
 		if (document.getElementById("beleg-import-dwds").checked) {
 			importTypAktiv = "dwds";
@@ -2407,6 +2407,13 @@ let belegImport = {
 			}
 			resolve(xmlDaten);
 		});
+	},
+	// PPN-Download: überprüfen, ob der übergebene Text eine PPN sein könnte
+	PPNCheck ({ppn}) {
+		if (/^([0-9]{9,10}|[0-9]{8,9}X)$/.test(ppn)) {
+			return true;
+		}
+		return false;
 	},
 	// eine Titelaufnahme aus den übergebenen Daten zusammensetzen
 	//   td = Object

@@ -1879,7 +1879,7 @@ let redLit = {
 		// PPN-Feld auslesen
 		let pn = document.getElementById("red-lit-eingabe-pn"),
 			ppn = pn.value.split(/[,\s]/)[0];
-		if (!/^[0-9]{8,10}X?$/.test(ppn)) {
+		if (!belegImport.PPNCheck({ppn})) {
 			ppn = "";
 		}
 		// Formular leeren
@@ -1889,7 +1889,7 @@ let redLit = {
 		const {clipboard} = require("electron"),
 			cp = clipboard.readText();
 		let xmlDaten = redLit.eingabeXMLCheck({xmlStr: cp});
-		if (/^[0-9]{8,10}X?$/.test(cp)) {
+		if (belegImport.PPNCheck({ppn: cp})) {
 			ppn = cp;
 		} else if (xmlDaten) {
 			ppn = "";
@@ -2226,7 +2226,7 @@ let redLit = {
 		// PPN-Feld auslesen
 		let pn = document.getElementById("red-lit-eingabe-pn"),
 			ppn = pn.value.split(/[,\s]/)[0];
-		if (!/^[0-9]{8,10}X?$/.test(ppn)) {
+		if (!belegImport.PPNCheck({ppn})) {
 			ppn = "";
 		}
 		// Formular leeren
@@ -2236,7 +2236,7 @@ let redLit = {
 		const {clipboard} = require("electron"),
 			cp = clipboard.readText();
 		let bibtexDaten = "";
-		if (/^[0-9]{8,10}X?$/.test(cp)) {
+		if (belegImport.PPNCheck({ppn: cp})) {
 			ppn = cp;
 		} else if (belegImport.BibTeXCheck(cp)) {
 			ppn = "";
@@ -2297,7 +2297,7 @@ let redLit = {
 		// PPN
 		if (!ppn) {
 			let m = /^@[a-zA-Z]+\{(GBV-)?(?<ppn>.+?),/.exec(bibtexDaten);
-			if (m && /^[0-9]{8,10}X?$/.test(m.groups.ppn)) {
+			if (m && belegImport.PPNCheck({ppn: m.groups.ppn})) {
 				ppn = m.groups.ppn;
 			}
 		}
@@ -2565,7 +2565,7 @@ let redLit = {
 					korrekt = [],
 					fehlerhaft = [];
 				for (let i of ppns) {
-					if (i && !/^[0-9]{8,10}X?$/.test(i)) {
+					if (i && !belegImport.PPNCheck({ppn: i})) {
 						fehlerhaft.push(i);
 					} else if (i) {
 						korrekt.push(i);

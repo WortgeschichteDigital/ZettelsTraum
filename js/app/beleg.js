@@ -196,7 +196,7 @@ let beleg = {
 			// Was ist in der Zwischenablage?
 			const {clipboard} = require("electron"),
 				cp = clipboard.readText(),
-				ppnCp = /^[0-9]{8,10}X?$/.test(cp) ? true : false,
+				ppnCp = belegImport.PPNCheck({ppn: cp}) ? true : false,
 				dwds = belegImport.DWDSXMLCheck(cp),
 				xml = belegImport.XMLCheck({xmlStr: cp}),
 				bibtexCp = belegImport.BibTeXCheck(cp);
