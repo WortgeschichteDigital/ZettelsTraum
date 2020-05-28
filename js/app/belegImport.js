@@ -1364,7 +1364,7 @@ let belegImport = {
 			.then(content => {
 				// sollten DWDS- oder BibTeX-Daten oder eine PPN in der Zwischenablage sein => Zwischenablage leeren
 				const {clipboard} = require("electron"),
-					cp = clipboard.readText();
+					cp = clipboard.readText().trim();
 				if (belegImport.DWDSXMLCheck(cp) ||
 						belegImport.BibTeXCheck(cp) ||
 						belegImport.PPNCheck({ppn: cp})) {
@@ -1408,7 +1408,7 @@ let belegImport = {
 	async DateiImport () {
 		// Clipboard-Content schlägt Datei-Content
 		const {clipboard} = require("electron"),
-			cp = clipboard.readText(),
+			cp = clipboard.readText().trim(),
 			ppn = belegImport.PPNCheck({ppn: cp}) ? true : false;
 		let importTypAktiv = "dereko";
 		if (document.getElementById("beleg-import-dwds").checked) {

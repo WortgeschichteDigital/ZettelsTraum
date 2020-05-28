@@ -1887,7 +1887,7 @@ let redLit = {
 		redLit.eingabeStatus("add");
 		// XML-Daten suchen
 		const {clipboard} = require("electron"),
-			cp = clipboard.readText();
+			cp = clipboard.readText().trim();
 		let xmlDaten = redLit.eingabeXMLCheck({xmlStr: cp});
 		if (belegImport.PPNCheck({ppn: cp})) {
 			ppn = cp;
@@ -2234,7 +2234,7 @@ let redLit = {
 		redLit.eingabeStatus("add");
 		// BibTeX-Daten suchen
 		const {clipboard} = require("electron"),
-			cp = clipboard.readText();
+			cp = clipboard.readText().trim();
 		let bibtexDaten = "";
 		if (belegImport.PPNCheck({ppn: cp})) {
 			ppn = cp;
