@@ -329,35 +329,8 @@ let redLit = {
 		redLit.anzeigePopupSchliessen();
 		// Datei einlesen
 		const ergebnis = await redLit.dbOeffnenEinlesen({pfad: result.filePaths[0]});
-		if (ergebnis !== true) {
-			// Einlesen ist gescheitert
-			dialog.oeffnen({
-				typ: "altert",
-				text: ergebnis,
-			});
-			return;
-		}
-		// Datensätze auffrischen
-		redLit.db.dataOpts = [];
-		if (redLit.db.path !== result.filePaths[0]) {
-			redLit.dbOfflineKopieUnlink(redLit.db.path);
-			redLit.db.path = result.filePaths[0];
-			optionen.data["literatur-db"] = result.filePaths[0];
-			optionen.speichern();
-		}
-		const fs = require("fs"),
-			fsP = fs.promises;
-		let stats = await fsP.lstat(redLit.db.path);
-		redLit.db.mtime = stats.mtime.toISOString();
-		redLit.db.gefunden = true;
-		redLit.db.changed = false;
-		// DB-Anzeige auffrischen
-		redLit.dbAnzeige();
-		// Suche zurücksetzen
-		redLit.sucheReset();
-		// Eingabeformular zurücksetzen
-		redLit.eingabeLeeren();
-		redLit.eingabeStatus("add");
+		// Öffnen abschließen
+		redLit.dbOeffnenAbschließen({ergebnis, pfad: result.filePaths[0]});
 	},
 	// Datenbank: Datei einlesen
 	//   pfad = String
@@ -402,6 +375,42 @@ let redLit = {
 			// Promise auflösen
 			resolve(true);
 		});
+	},
+	// Datenbank: Öffnen der Datenbank abschließen
+	//   ergebnis = true || String
+	//     (bei Fehlermeldung String)
+	//   pfad = String
+	//     (Pfad zur geöffneten Datenbank)
+	async dbOeffnenAbschließen ({ergebnis, pfad}) {
+		if (ergebnis !== true) {
+			// Einlesen ist gescheitert
+			dialog.oeffnen({
+				typ: "altert",
+				text: ergebnis,
+			});
+			return;
+		}
+		// Datensätze auffrischen
+		redLit.db.dataOpts = [];
+		if (redLit.db.path !== pfad) {
+			redLit.dbOfflineKopieUnlink(redLit.db.path);
+			redLit.db.path = pfad;
+			optionen.data["literatur-db"] = pfad;
+			optionen.speichern();
+		}
+		const fs = require("fs"),
+			fsP = fs.promises;
+		let stats = await fsP.lstat(redLit.db.path);
+		redLit.db.mtime = stats.mtime.toISOString();
+		redLit.db.gefunden = true;
+		redLit.db.changed = false;
+		// DB-Anzeige auffrischen
+		redLit.dbAnzeige();
+		// Suche zurücksetzen
+		redLit.sucheReset();
+		// Eingabeformular zurücksetzen
+		redLit.eingabeLeeren();
+		redLit.eingabeStatus("add");
 	},
 	// Datenbank: Exportformat erfragen
 	dbExportierenFormat () {
@@ -509,17 +518,27 @@ let redLit = {
 	//   b = Object
 	//     (die Objekte enthalten die Schlüssel "id" [String] und "slot" [Number])
 	dbSortAufnahmen (a, b) {
-		const siA = helfer.sortAlphaPrep( ex(redLit.db.data[a.id][a.slot].td.si ) ),
-			siB = helfer.sortAlphaPrep( ex( redLit.db.data[b.id][b.slot].td.si ) );
+		const siA = helfer.sortAlphaPrep( redLit.dbSortAufnahmenPrep(redLit.db.data[a.id][a.slot].td.si ) ),
+			siB = helfer.sortAlphaPrep( redLit.dbSortAufnahmenPrep( redLit.db.data[b.id][b.slot].td.si ) );
 		let arr = [siA, siB];
 		arr.sort();
 		if (arr[0] === siA) {
 			return -1;
 		}
 		return 1;
-		function ex (sigle) {
-			return sigle.replace(/^[⁰¹²³⁴⁵⁶⁷⁸⁹]+/, "");
+	},
+	// Datenbank: Siglen für die Sortierung aufbereiten
+	//   s = String
+	//     (String, der aufbereitet werden soll)
+	dbSortAufnahmenPrepCache: {},
+	dbSortAufnahmenPrep (s) {
+		if (redLit.dbSortAufnahmenPrepCache[s]) {
+			return redLit.dbSortAufnahmenPrepCache[s];
 		}
+		let prep = s.replace(/[()[\]{}<>]/g, "");
+		prep = prep.replace(/^[⁰¹²³⁴⁵⁶⁷⁸⁹]+/, "");
+		redLit.dbSortAufnahmenPrepCache[s] = prep;
+		return prep;
 	},
 	// Datenbank: Datei speichern
 	//   speichernUnter = true || undefined
@@ -709,6 +728,11 @@ let redLit = {
 				// Operationen seit dem letzten Speichern anwenden
 				redLit.db.dataOpts.forEach(i => {
 					if (i.aktion === "add") { // Datensatz hinzufügen
+						if (!redLit.db.dataTmp[i.id]) {
+							// die Titelaufnahme könnte angelegt und kurz danach wieder
+							// komplett gelöscht worden sein
+							return;
+						}
 						let aktion = "ergänzt";
 						if (!redLit.db.data[i.id]) {
 							aktion = "angelegt";
@@ -1127,7 +1151,9 @@ let redLit = {
 		if (nav && form === "suche") {
 			document.getElementById("red-lit-suche-text").select();
 		} else if (nav) {
-			document.getElementById("red-lit-eingabe-ti").focus();
+			let ti = document.getElementById("red-lit-eingabe-ti");
+			helfer.textareaGrow(ti);
+			ti.focus();
 		}
 	},
 	// Suche: Speicher für Variablen
@@ -1691,7 +1717,10 @@ let redLit = {
 					}
 				}
 				if (jahr && jahr.length) {
-					sigle.push(jahr[jahr.length - 1]);
+					let jahrInt = parseInt(jahr[jahr.length - 1], 10);
+					if (jahrInt > 1799 && jahrInt < 2051) {
+						sigle.push(jahr[jahr.length - 1]);
+					}
 				}
 				if (sigle.length > 1) {
 					si.value = sigle.join(" ");
@@ -1872,7 +1901,7 @@ let redLit = {
 		// PPN-Feld auslesen
 		let pn = document.getElementById("red-lit-eingabe-pn"),
 			ppn = pn.value.split(/[,\s]/)[0];
-		if (!/^[0-9]{8,10}X?$/.test(ppn)) {
+		if (!belegImport.PPNCheck({ppn})) {
 			ppn = "";
 		}
 		// Formular leeren
@@ -1880,9 +1909,9 @@ let redLit = {
 		redLit.eingabeStatus("add");
 		// XML-Daten suchen
 		const {clipboard} = require("electron"),
-			cp = clipboard.readText();
+			cp = clipboard.readText().trim();
 		let xmlDaten = redLit.eingabeXMLCheck({xmlStr: cp});
-		if (/^[0-9]{8,10}X?$/.test(cp)) {
+		if (belegImport.PPNCheck({ppn: cp})) {
 			ppn = cp;
 		} else if (xmlDaten) {
 			ppn = "";
@@ -2196,6 +2225,8 @@ let redLit = {
 		// PPN
 		let ppn = evaluator("//recordIdentifier[@source='DE-627']");
 		pusher(ppn, "ppn");
+		// Korrektur: Auflage ohne eckige Klammern
+		td.auflage = td.auflage.replace(/^\[|\]$/g, "");
 		// Korrektur: Ort ggf. aus Verlagsangabe ermitteln
 		if (!td.ort.length && /:/.test(td.verlag)) {
 			let ort = td.verlag.split(":");
@@ -2219,7 +2250,7 @@ let redLit = {
 		// PPN-Feld auslesen
 		let pn = document.getElementById("red-lit-eingabe-pn"),
 			ppn = pn.value.split(/[,\s]/)[0];
-		if (!/^[0-9]{8,10}X?$/.test(ppn)) {
+		if (!belegImport.PPNCheck({ppn})) {
 			ppn = "";
 		}
 		// Formular leeren
@@ -2227,9 +2258,9 @@ let redLit = {
 		redLit.eingabeStatus("add");
 		// BibTeX-Daten suchen
 		const {clipboard} = require("electron"),
-			cp = clipboard.readText();
+			cp = clipboard.readText().trim();
 		let bibtexDaten = "";
-		if (/^[0-9]{8,10}X?$/.test(cp)) {
+		if (belegImport.PPNCheck({ppn: cp})) {
 			ppn = cp;
 		} else if (belegImport.BibTeXCheck(cp)) {
 			ppn = "";
@@ -2290,7 +2321,7 @@ let redLit = {
 		// PPN
 		if (!ppn) {
 			let m = /^@[a-zA-Z]+\{(GBV-)?(?<ppn>.+?),/.exec(bibtexDaten);
-			if (m && /^[0-9]{8,10}X?$/.test(m.groups.ppn)) {
+			if (m && belegImport.PPNCheck({ppn: m.groups.ppn})) {
 				ppn = m.groups.ppn;
 			}
 		}
@@ -2558,7 +2589,7 @@ let redLit = {
 					korrekt = [],
 					fehlerhaft = [];
 				for (let i of ppns) {
-					if (i && !/^[0-9]{8,10}X?$/.test(i)) {
+					if (i && !belegImport.PPNCheck({ppn: i})) {
 						fehlerhaft.push(i);
 					} else if (i) {
 						korrekt.push(i);
@@ -2804,6 +2835,11 @@ let redLit = {
 		div.appendChild(si);
 		si.classList.add("sigle");
 		si.innerHTML = maskieren(redLit.anzeigeSnippetHighlight(ds.td.si));
+		// ID
+		let idPrint = document.createElement("span");
+		si.appendChild(idPrint);
+		idPrint.classList.add("id");
+		idPrint.textContent = id;
 		// alte Aufnahme
 		if (slot > 0 && redLit.anzeige.snippetKontext === "suche") {
 			let alt = document.createElement("span");
