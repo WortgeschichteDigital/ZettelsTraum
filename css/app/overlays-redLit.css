@@ -419,7 +419,12 @@
 	line-height: 24px;
 	text-indent: 0;
 }
+.red-lit-snippet p.sigle {
+	overflow: hidden;
+	white-space: nowrap;
+}
 
+.red-lit-snippet p.sigle .id,
 .red-lit-snippet p.sigle .veraltet {
 	display: inline-block;
 	margin-left: 15px;
@@ -428,9 +433,19 @@
 	font-weight: normal;
 }
 
+.red-lit-snippet p.sigle .id {
+	color: var(--text);
+}
+
 .red-lit-snippet p.sigle .icons {
 	position: absolute;
 	right: 0;
+	padding-left: 40px;
+	background-image: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1) 40px);
+}
+
+.red-lit-snippet.markiert p.sigle .icons {
+	background-image: linear-gradient(to right, rgba(245, 245, 245, 0), rgba(245, 245, 245, 1) 40px);
 }
 
 .red-lit-snippet p.sigle .icons a {

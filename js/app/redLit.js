@@ -2833,6 +2833,11 @@ let redLit = {
 		div.appendChild(si);
 		si.classList.add("sigle");
 		si.innerHTML = maskieren(redLit.anzeigeSnippetHighlight(ds.td.si));
+		// ID
+		let idPrint = document.createElement("span");
+		si.appendChild(idPrint);
+		idPrint.classList.add("id");
+		idPrint.textContent = id;
 		// alte Aufnahme
 		if (slot > 0 && redLit.anzeige.snippetKontext === "suche") {
 			let alt = document.createElement("span");
