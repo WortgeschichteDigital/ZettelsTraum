@@ -403,6 +403,7 @@
 .red-lit-snippet p {
 	margin: 0 0 0 25px;
 	padding-left: 25px;
+	overflow-wrap: break-word;
 	font-size: 14px;
 	line-height: 20px;
 	text-indent: -25px;
