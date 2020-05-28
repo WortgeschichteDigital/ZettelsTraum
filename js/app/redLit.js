@@ -518,17 +518,27 @@ let redLit = {
 	//   b = Object
 	//     (die Objekte enthalten die Schlüssel "id" [String] und "slot" [Number])
 	dbSortAufnahmen (a, b) {
-		const siA = helfer.sortAlphaPrep( ex(redLit.db.data[a.id][a.slot].td.si ) ),
-			siB = helfer.sortAlphaPrep( ex( redLit.db.data[b.id][b.slot].td.si ) );
+		const siA = helfer.sortAlphaPrep( redLit.dbSortAufnahmenPrep(redLit.db.data[a.id][a.slot].td.si ) ),
+			siB = helfer.sortAlphaPrep( redLit.dbSortAufnahmenPrep( redLit.db.data[b.id][b.slot].td.si ) );
 		let arr = [siA, siB];
 		arr.sort();
 		if (arr[0] === siA) {
 			return -1;
 		}
 		return 1;
-		function ex (sigle) {
-			return sigle.replace(/^[⁰¹²³⁴⁵⁶⁷⁸⁹]+/, "");
+	},
+	// Datenbank: Siglen für die Sortierung aufbereiten
+	//   s = String
+	//     (String, der aufbereitet werden soll)
+	dbSortAufnahmenPrepCache: {},
+	dbSortAufnahmenPrep (s) {
+		if (redLit.dbSortAufnahmenPrepCache[s]) {
+			return redLit.dbSortAufnahmenPrepCache[s];
 		}
+		let prep = s.replace(/[()[\]{}<>]/g, "");
+		prep = prep.replace(/^[⁰¹²³⁴⁵⁶⁷⁸⁹]+/, "");
+		redLit.dbSortAufnahmenPrepCache[s] = prep;
+		return prep;
 	},
 	// Datenbank: Datei speichern
 	//   speichernUnter = true || undefined
