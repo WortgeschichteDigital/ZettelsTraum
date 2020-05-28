@@ -329,35 +329,8 @@ let redLit = {
 		redLit.anzeigePopupSchliessen();
 		// Datei einlesen
 		const ergebnis = await redLit.dbOeffnenEinlesen({pfad: result.filePaths[0]});
-		if (ergebnis !== true) {
-			// Einlesen ist gescheitert
-			dialog.oeffnen({
-				typ: "altert",
-				text: ergebnis,
-			});
-			return;
-		}
-		// Datensätze auffrischen
-		redLit.db.dataOpts = [];
-		if (redLit.db.path !== result.filePaths[0]) {
-			redLit.dbOfflineKopieUnlink(redLit.db.path);
-			redLit.db.path = result.filePaths[0];
-			optionen.data["literatur-db"] = result.filePaths[0];
-			optionen.speichern();
-		}
-		const fs = require("fs"),
-			fsP = fs.promises;
-		let stats = await fsP.lstat(redLit.db.path);
-		redLit.db.mtime = stats.mtime.toISOString();
-		redLit.db.gefunden = true;
-		redLit.db.changed = false;
-		// DB-Anzeige auffrischen
-		redLit.dbAnzeige();
-		// Suche zurücksetzen
-		redLit.sucheReset();
-		// Eingabeformular zurücksetzen
-		redLit.eingabeLeeren();
-		redLit.eingabeStatus("add");
+		// Öffnen abschließen
+		redLit.dbOeffnenAbschließen({ergebnis, pfad: result.filePaths[0]});
 	},
 	// Datenbank: Datei einlesen
 	//   pfad = String
@@ -402,6 +375,42 @@ let redLit = {
 			// Promise auflösen
 			resolve(true);
 		});
+	},
+	// Datenbank: Öffnen der Datenbank abschließen
+	//   ergebnis = true || String
+	//     (bei Fehlermeldung String)
+	//   pfad = String
+	//     (Pfad zur geöffneten Datenbank)
+	async dbOeffnenAbschließen ({ergebnis, pfad}) {
+		if (ergebnis !== true) {
+			// Einlesen ist gescheitert
+			dialog.oeffnen({
+				typ: "altert",
+				text: ergebnis,
+			});
+			return;
+		}
+		// Datensätze auffrischen
+		redLit.db.dataOpts = [];
+		if (redLit.db.path !== pfad) {
+			redLit.dbOfflineKopieUnlink(redLit.db.path);
+			redLit.db.path = pfad;
+			optionen.data["literatur-db"] = pfad;
+			optionen.speichern();
+		}
+		const fs = require("fs"),
+			fsP = fs.promises;
+		let stats = await fsP.lstat(redLit.db.path);
+		redLit.db.mtime = stats.mtime.toISOString();
+		redLit.db.gefunden = true;
+		redLit.db.changed = false;
+		// DB-Anzeige auffrischen
+		redLit.dbAnzeige();
+		// Suche zurücksetzen
+		redLit.sucheReset();
+		// Eingabeformular zurücksetzen
+		redLit.eingabeLeeren();
+		redLit.eingabeStatus("add");
 	},
 	// Datenbank: Exportformat erfragen
 	dbExportierenFormat () {

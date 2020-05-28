@@ -129,7 +129,14 @@ window.addEventListener("load", async () => {
 			return;
 		}
 		let pfad = evt.dataTransfer.files[0].path;
-		kartei.oeffnenEinlesen(pfad);
+		if (/\.ztl$/.test(pfad) && overlay.oben() === "red-lit") {
+			redLit.dbCheck(async () => {
+				const ergebnis = await redLit.dbOeffnenEinlesen({pfad});
+				redLit.dbOeffnenAbschließen({ergebnis, pfad});
+			});
+		} else if (!/\.ztl$/.test(pfad)) {
+			kartei.oeffnenEinlesen(pfad);
+		}
 	});
 
 	// EVENTS: COPY
