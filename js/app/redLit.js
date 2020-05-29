@@ -1237,7 +1237,7 @@ let redLit = {
 							break;
 						}
 					}
-				} else if (tastatur.modifiers === "Ctrl" && /^(ArrowLeft|ArrowRight)$/.test(evt.key)) {
+				} else if (tastatur.modifiers === "Alt" && /^(ArrowLeft|ArrowRight)$/.test(evt.key)) {
 					evt.preventDefault();
 					if (evt.repeat) { // Repeats unterbinden
 						return;
