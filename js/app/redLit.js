@@ -1003,46 +1003,65 @@ let redLit = {
 	//   db = false || undefined
 	//     (überprüfen, ob die Datenbank gespeichert wurde)
 	dbCheck (fun, db = true) {
-		// Änderungen im Formular noch nicht gespeichert?
-		if (redLit.eingabe.changed) {
-			redLit.nav("eingabe");
-			dialog.oeffnen({
-				typ: "confirm",
-				text: "Die Titelaufnahme im Eingabeformular wurde geändert, aber noch nicht gespeichert.\nMöchten Sie die Titelaufnahme nicht erst einmal speichern?",
-				callback: () => {
-					if (dialog.antwort) {
-						redLit.eingabeSpeichern();
-					} else if (dialog.antwort === false) {
-						redLit.eingabe.changed = false;
-						redLit.dbCheck(fun, db);
-					}
-				},
-			});
-			return;
-		}
-		// Änderungen in der DB noch nicht gespeichert?
-		if (db && redLit.db.changed) {
-			let text = "Die Datenbank wurde geändert, aber noch nicht gespeichert.\nMöchten Sie die Datenbank nicht erst einmal speichern?";
-			if (!redLit.db.path) {
-				text = "Sie haben Titelaufnahmen angelegt, aber noch nicht gespeichert.\nMöchten Sie die Änderungen nicht erst einmal in einer Datenbank speichern?";
+		return new Promise(async resolve => {
+			// Änderungen im Formular noch nicht gespeichert?
+			if (redLit.eingabe.changed) {
+				if (!document.getElementById("red-lit-nav-eingabe").checked) {
+					redLit.nav("eingabe");
+				}
+				const speichern = await new Promise(antwort => {
+					dialog.oeffnen({
+						typ: "confirm",
+						text: "Die Titelaufnahme im Eingabeformular wurde geändert, aber noch nicht gespeichert.\nMöchten Sie die Titelaufnahme nicht erst einmal speichern?",
+						callback: () => {
+							if (dialog.antwort) {
+								redLit.eingabeSpeichern();
+								antwort(true);
+								return;
+							} else if (dialog.antwort === false) {
+								redLit.eingabe.changed = false;
+							}
+							antwort(false);
+						},
+					});
+				});
+				if (speichern) {
+					resolve(false);
+					return;
+				}
 			}
-			dialog.oeffnen({
-				typ: "confirm",
-				text,
-				callback: () => {
-					if (dialog.antwort) {
-						redLit.dbSpeichern();
-					} else if (dialog.antwort === false) {
-						redLit.db.mtime = ""; // damit die DB beim erneuten Öffnen des Fenster neu geladen wird
-						redLit.db.changed = false;
-						fun();
-					}
-				},
-			});
-			return;
-		}
-		// es steht nichts mehr aus => Funktion direkt ausführen
-		fun();
+			// Änderungen in der DB noch nicht gespeichert?
+			if (db && redLit.db.changed) {
+				let text = "Die Datenbank wurde geändert, aber noch nicht gespeichert.\nMöchten Sie die Datenbank nicht erst einmal speichern?";
+				if (!redLit.db.path) {
+					text = "Sie haben Titelaufnahmen angelegt, aber noch nicht gespeichert.\nMöchten Sie die Änderungen nicht erst einmal in einer Datenbank speichern?";
+				}
+				const speichern = await new Promise(antwort => {
+					dialog.oeffnen({
+						typ: "confirm",
+						text,
+						callback: () => {
+							if (dialog.antwort) {
+								redLit.dbSpeichern();
+								antwort(true);
+								return;
+							} else if (dialog.antwort === false) {
+								redLit.db.mtime = ""; // damit die DB beim erneuten Öffnen des Fenster neu geladen wird
+								redLit.db.changed = false;
+							}
+							antwort(false);
+						},
+					});
+				});
+				if (speichern) {
+					resolve(false);
+					return;
+				}
+			}
+			// es steht nichts mehr aus => Funktion direkt ausführen
+			fun();
+			resolve(true);
+		});
 	},
 	// Datenbank: alle Titeldaten klonen
 	//   quelle = Object
@@ -1591,6 +1610,7 @@ let redLit = {
 		fundorte: ["Bibliothek", "DTA", "DWDS", "GoogleBooks", "IDS", "online"], // gültige Werte im Feld "Fundorte"
 		status: "", // aktueller Status des Formulars
 		id: "", // ID des aktuellen Datensatzes (leer, wenn neuer Datensatz)
+		slot: -1, // Slot des aktuellen Datensatzes
 		changed: false, // es wurden Eingaben vorgenommen
 	},
 	// Eingabeformular: Listener für alle Inputs
@@ -1653,6 +1673,7 @@ let redLit = {
 		redLit.eingabe.status = status;
 		if (status === "add") {
 			redLit.eingabe.id = "";
+			redLit.eingabe.slot = -1;
 		} else {
 			redLit.eingabe.id = document.getElementById("red-lit-eingabe-id").value;
 		}
@@ -2435,6 +2456,7 @@ let redLit = {
 			// Metadaten auffrischen
 			redLit.eingabeMetaFuellen({id, slot: 0});
 			// Status Eingabeformular auffrischen
+			redLit.eingabe.slot = 0;
 			redLit.eingabeStatus("change");
 			// ggf. Titelaufnahme in der Suche auffrischen
 			redLit.sucheTrefferAuffrischen(id);
@@ -2780,6 +2802,7 @@ let redLit = {
 		if (slot > 0) {
 			status = "old";
 		}
+		redLit.eingabe.slot = slot;
 		redLit.eingabeStatus(status);
 		// Formular fokussieren
 		document.getElementById("red-lit-eingabe-ti").focus();
@@ -3154,7 +3177,7 @@ let redLit = {
 	//     (ID der Titelaufnahme)
 	//   slot = Number
 	//     (Slot der Titelaufnahme)
-	titelLoeschen ({id, slot}) {
+	async titelLoeschen ({id, slot}) {
 		redLit.db.dataOpts.push({
 			aktion: "del",
 			id,
@@ -3163,12 +3186,14 @@ let redLit = {
 		redLit.db.data[id].splice(slot, 1);
 		// ggf. Suche auffrischen
 		redLit.sucheTrefferAuffrischen(id, slot);
-		// ggf. Eingabeformular auffrischen
+		// ggf. Eingabeformular auffrischen oder zurücksetzen
 		if (redLit.eingabe.id === id) {
-			if (!redLit.db.data[id].length) { // Titelaufnahme existiert nicht mehr
-				redLit.eingabeMetaFuellen({id: "", slot: -1});
-				redLit.eingabeStatus("add");
-				document.getElementById("red-lit-eingabe-ti").dispatchEvent(new KeyboardEvent("input"));
+			if (!redLit.db.data[id].length || // Titelaufnahme existiert nicht mehr
+					slot === redLit.eingabe.slot) { // der entfernte Slot wird gerade angezeigt
+				await redLit.dbCheck(() => {
+					redLit.eingabeLeeren();
+					redLit.eingabeStatus("add");
+				}, false);
 			} else { // Titelaufnahme existiert noch
 				redLit.eingabeMetaFuellen({id, slot: 0});
 				let ds = redLit.eingabeSpeichernMakeDs();
