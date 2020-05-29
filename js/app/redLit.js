@@ -514,12 +514,19 @@ let redLit = {
 		return snippet;
 	},
 	// Datenbank: Helferfunktion zum Sortieren der Titelaufnahmen
-	//   a = Object
-	//   b = Object
-	//     (die Objekte enthalten die Schlüssel "id" [String] und "slot" [Number])
+	//   a = Object || String
+	//   b = Object || String
+	//     (wenn Objekte: enthalten sind Schlüssel "id" [String] und "slot" [Number];
+	//     wenn String: Sigle)
 	dbSortAufnahmen (a, b) {
-		const siA = helfer.sortAlphaPrep( redLit.dbSortAufnahmenPrep(redLit.db.data[a.id][a.slot].td.si ) ),
-			siB = helfer.sortAlphaPrep( redLit.dbSortAufnahmenPrep( redLit.db.data[b.id][b.slot].td.si ) );
+		let siA, siB;
+		if (helfer.checkType("String", a)) {
+			siA = helfer.sortAlphaPrep(redLit.dbSortAufnahmenPrep(a));
+			siB = helfer.sortAlphaPrep(redLit.dbSortAufnahmenPrep(b));
+		} else {
+			siA = helfer.sortAlphaPrep(redLit.dbSortAufnahmenPrep(redLit.db.data[a.id][a.slot].td.si));
+			siB = helfer.sortAlphaPrep(redLit.dbSortAufnahmenPrep(redLit.db.data[b.id][b.slot].td.si));
+		}
 		let arr = [siA, siB];
 		arr.sort();
 		if (arr[0] === siA) {
@@ -880,7 +887,8 @@ let redLit = {
 					}
 					k = "die ID geändert";
 				}
-				text += `\n<p class="dialog-liste">• ${praep}${ziffer} ${numerus} ${k} (<i>${[...v].join(", ")}</i>)</p>`;
+				let siglen = [...v].sort(redLit.dbSortAufnahmen);
+				text += `\n<p class="dialog-liste">• ${praep}${ziffer} ${numerus} ${k} (<i>${siglen.join(", ")}</i>)</p>`;
 			}
 			dialog.oeffnen({
 				typ: "alert",
