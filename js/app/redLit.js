@@ -1718,7 +1718,7 @@ let redLit = {
 				}
 				if (jahr && jahr.length) {
 					let jahrInt = parseInt(jahr[jahr.length - 1], 10);
-					if (jahrInt > 1799 && jahrInt < 2051) {
+					if (jahrInt > 1599 && jahrInt < 2051) {
 						sigle.push(jahr[jahr.length - 1]);
 					}
 				}
