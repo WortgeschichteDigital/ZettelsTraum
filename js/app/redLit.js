@@ -519,14 +519,28 @@ let redLit = {
 	//     (wenn Objekte: enthalten sind Schlüssel "id" [String] und "slot" [Number];
 	//     wenn String: Sigle)
 	dbSortAufnahmen (a, b) {
-		let siA, siB;
+		let siA, siB, oriA, oriB;
 		if (helfer.checkType("String", a)) {
+			oriA = a;
+			oriB = b;
 			siA = helfer.sortAlphaPrep(redLit.dbSortAufnahmenPrep(a));
 			siB = helfer.sortAlphaPrep(redLit.dbSortAufnahmenPrep(b));
 		} else {
-			siA = helfer.sortAlphaPrep(redLit.dbSortAufnahmenPrep(redLit.db.data[a.id][a.slot].td.si));
-			siB = helfer.sortAlphaPrep(redLit.dbSortAufnahmenPrep(redLit.db.data[b.id][b.slot].td.si));
+			oriA = redLit.db.data[a.id][a.slot].td.si;
+			oriB = redLit.db.data[b.id][b.slot].td.si;
+			siA = helfer.sortAlphaPrep(redLit.dbSortAufnahmenPrep(oriA));
+			siB = helfer.sortAlphaPrep(redLit.dbSortAufnahmenPrep(oriB));
 		}
+		// Siglen sind nach der Normalisierung identisch => Duplikate oder zu starke Normalisierung
+		if (siA === siB) {
+			if (oriA !== oriB) { // z.B. ¹DWB und ²DWB
+				siA = redLit.dbSortAufnahmenPrepSuper(oriA);
+				siB = redLit.dbSortAufnahmenPrepSuper(oriB);
+			} else {
+				return 0;
+			}
+		}
+		// Siglen sind nicht identisch => sortieren
 		let arr = [siA, siB];
 		arr.sort();
 		if (arr[0] === siA) {
@@ -545,6 +559,44 @@ let redLit = {
 		let prep = s.replace(/[()[\]{}<>]/g, "");
 		prep = prep.replace(/^[⁰¹²³⁴⁵⁶⁷⁸⁹]+/, "");
 		redLit.dbSortAufnahmenPrepCache[s] = prep;
+		return prep;
+	},
+	// Datenbank: Superscript-Ziffern in Siglen in arabische umwandeln
+	// (dient für die Sortierung von Siglen, die nach der Elimination der
+	// hochgestellten Ziffern identisch wären; das Problem sind die Codepoints
+	// in Unicode; da herrscht ein ziemliches Durcheinander: ² komtm vor ³, ³ kommt vor ¹)
+	//   s = String
+	//     (String, der aufbereitet werden soll)
+	dbSortAufnahmenPrepSuperCache: {},
+	dbSortAufnahmenPrepSuper (s) {
+		if (redLit.dbSortAufnahmenPrepSuperCache[s]) {
+			return redLit.dbSortAufnahmenPrepSuperCache[s];
+		}
+		let prep = s.replace(/[⁰¹²³⁴⁵⁶⁷⁸⁹]/g, m => {
+			switch (m) {
+				case "⁰":
+					return "0";
+				case "¹":
+					return "1";
+				case "²":
+					return "2";
+				case "³":
+					return "3";
+				case "⁴":
+					return "4";
+				case "⁵":
+					return "5";
+				case "⁶":
+					return "6";
+				case "⁷":
+					return "7";
+				case "⁸":
+					return "8";
+				case "⁹":
+					return "9";
+			}
+		});
+		redLit.dbSortAufnahmenPrepSuperCache[s] = prep;
 		return prep;
 	},
 	// Datenbank: Datei speichern
