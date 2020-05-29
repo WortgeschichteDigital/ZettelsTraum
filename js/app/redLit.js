@@ -1554,7 +1554,8 @@ let redLit = {
 		let titel = document.querySelector(`#red-lit-suche-titel .red-lit-snippet[data-ds*='"${id}"']`);
 		if (delSlot >= 0) {
 			if (treffer.slot === delSlot) {
-				// Treffer komplett entfernen, wenn genau diese Titelaufnahme gelöscht wurde
+				// Treffer komplett entfernen, wenn genau diese Titelaufnahme gelöscht wurde;
+				// dieser Zweig wird auch abgearbeitet, wenn die ID der Titelaufnahme geändert wurde
 				const idx = redLit.suche.treffer.findIndex(i => i.id === id);
 				redLit.suche.treffer.splice(idx, 1);
 				if (!redLit.suche.treffer.length) {
@@ -2421,6 +2422,9 @@ let redLit = {
 			if (redLit.eingabe.status !== "add" &&
 					redLit.eingabe.id !== id) {
 				idGeaendert = true;
+				// ggf. Titelaufnahme aus Suchtrefferliste entfernen
+				redLit.sucheTrefferAuffrischen(redLit.eingabe.id, redLit.eingabe.slot);
+				// ID der Titelaufnahme ändern
 				redLit.db.data[id] = [];
 				redLit.dbTitelKlonen(redLit.db.data[redLit.eingabe.id], redLit.db.data[id]);
 				delete redLit.db.data[redLit.eingabe.id];
