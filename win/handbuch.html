@@ -4159,17 +4159,21 @@ Gerüst 2 &gt; Gerüst 1</pre>
 							<figcaption>Suchergebnisse in der Literaturdatenbank</figcaption>
 						</figure>
 
-						<p>Mit der Suchfunktion können Sie alle Titelaufnahmen der aktuellen Literaturdatenbank durchsuchen. Durchsucht werden die <b>Datenfelder</b> <i>Sigle, Titel, URL, Aufrufdatum, Fundort, PPN</i> und <i>Notizen</i>. Dabei ist allein zu beachten, dass das Datum des Datenfelds <i>Aufrufdatum</i> intern als ISO 8601 formatiert ist, also diese Form hat: JJJJ–MM-DD (Jahr-Monat-Tag). Suchen Sie nach einer Literaturaufnahme, die das Aufrufdatum <q>8. 5. 2020</q> hat, müssen Sie in den Suchschlitz also <q>2020-05-08</q> eingeben.</p>
+						<p>Mit der Suchfunktion können Sie alle Titelaufnahmen der aktuellen Literaturdatenbank durchsuchen. Durchsucht werden die <b>Datenfelder</b> <i>Sigle, Titel, URL, Aufrufdatum, Fundort, PPN</i> und <i>Notizen</i>. Dabei ist allein zu beachten, dass das Datum des Datenfelds <i>Aufrufdatum</i> intern als ISO 8601 formatiert ist, also diese Form hat: JJJJ–MM-DD (Jahr-Monat-Tag). Suchen Sie nach einer Literaturaufnahme, die das Aufrufdatum <q>8. 5. 2020</q> hat, müssen Sie in den Suchschlitz also <code class="quelltext">2020-05-08</code> eingeben.</p>
 
 						<p>Die Suche kann via <kbd>⏎</kbd> oder durch Klick auf das Icon <img src="../img/lupe.svg" width="20" height="20" alt=""> <b>gestartet</b> werden.</p>
 
-						<p>Geben Sie <b>kein Suchwort</b> ein, werden alle Titelaufnahmen in der Datenbank aufgelistet. Dabei werden pro Seite maximal 50 Treffer ausgeworfen. Im unteren Teil des Popus sehen Sie, wie viele Treffer angezeigt werden und ob es noch weitere gibt. Passen die Treffer nicht alle auf eine Seite, können Sie mithilfe der Pfeile vor- oder zurückblättern.</p>
+						<p>Geben Sie <b>kein Suchwort</b> ein, werden alle Titelaufnahmen in der Datenbank aufgelistet. Dabei werden pro Seite maximal 50 Treffer ausgeworfen. Im unteren Teil des Popups sehen Sie, wie viele Treffer angezeigt werden und ob es noch weitere gibt. Passen die Treffer nicht alle auf eine Seite, können Sie mithilfe der Pfeile vor- oder zurückblättern.</p>
 
 						<p>Die Suchergebnisse werden immer <b>alphanumerisch</b> nach Sigle sortiert.</p>
 
-						<p>Es wird <b>trunkiert</b> gesucht: Auch Wortteile produzieren Treffer. Mit einer Suche nach <q>Wörterbuch</q> finden Sie darum Titel wie <i>Deutsches Wörterbuch</i> aber auch <i>Deutsches Fremdwörterbuch</i>.</p>
+						<p>Es wird <b>trunkiert</b> gesucht: Auch Wortteile produzieren Treffer. Mit einer Suche nach <code class="quelltext">Wörterbuch</code> finden Sie darum Titel wie <i>Deutsches Wörterbuch</i> aber auch <i>Deutsches Fremdwörterbuch</i>.</p>
 
-						<p>Bei der Suche wird <b>Groß- und Kleinschreibung</b> ignoriert. Es sei denn, in Ihrem Suchwort findet sich ein Großbuchstabe. In diesem Fall wird nämlich auf eine Suche umgeschaltet, bei der die von Ihnen eingegebene Schreibung exakt beachtet wird. Ein Beispiel: Geben Sie <q>der</q> ein, wird sowohl die Titelaufnahme mit der Phrase <q><i>Der</i> Einfluß des Englischen</q> als auch die mit <q>Geschichte <i>der</i> deutschen Sprache</q> gefunden. Geben Sie hingegen <q>Der</q> ein, proudziert nur die erste Zeichenkette einen Treffer.</p>
+						<p>Bei der Suche wird <b>Groß- und Kleinschreibung</b> ignoriert. Es sei denn, in Ihrem Suchwort findet sich ein Großbuchstabe. In diesem Fall wird nämlich auf eine Suche umgeschaltet, bei der die von Ihnen eingegebene Schreibung exakt beachtet wird. Ein Beispiel: Geben Sie <code class="quelltext">der</code> ein, wird sowohl die Titelaufnahme mit der Phrase <q><i>Der</i> Einfluß des Englischen</q> als auch die mit <q>Geschichte <i>der</i> deutschen Sprache</q> gefunden. Geben Sie hingegen <code class="quelltext">Der</code> ein, produziert nur die erste Zeichenkette einen Treffer.</p>
+
+						<p>Geben Sie <b>mehrere Suchwörter</b> ein, finden Sie nur Titelaufnahmen, die jedes der eingegebenen Wörter in einem oder mehreren Datenfeldern enthalt. Die Wörter müssen nicht direkt aufeinanderfolgen und nicht alle im selben Datenfeld sein.</p>
+
+						<p>Daneben gibt es die Möglichkeit nach <b>Phrasen</b> zu suchen. Schließen Sie mehrere Suchwörter in Anführungsstriche ein, werden diese nur gefunden, wenn sie so wie eingegeben direkt aufeinanderfolgen. Ein Beispiel: Die Eingabe <code class="quelltext">&quot;Jacob Grimm&quot;</code> würde <abbr title="zum Beispiel">z. B.</abbr> das <q>Deutsche Wörterbuch von Jacob Grimm und Wilhelm Grimm</q> finden, die Titelaufnahme <q>Grimm, Jacob: Die drei Federn</q> aber nicht. Lassen Sie die Anführungszeichen weg und suchen Sie nach <code class="quelltext">Jacob Grimm</code>, passt der Suchausdruck auf beide Titel.</p>
 
 						<p>Die Suche kann nach <b>Erstellungsdatum</b> einer Titelaufnahme eingegrenzt werden. Wählen Sie im Datumsfeld <i>ab</i> ein Tagesdatum aus, bekommen Sie nur Titelaufnahmen angezeigt, die ab diesem Datum angelegt wurden.</p>
 

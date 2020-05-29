@@ -1296,16 +1296,28 @@ let redLit = {
 		let input = document.getElementById("red-lit-suche-text"),
 			text = helfer.textTrim(input.value, true),
 			ab = document.getElementById("red-lit-suche-ab").value,
-			st = null,
+			st = [],
 			da = null;
 		redLit.suche.treffer = [];
-		redLit.suche.highlight = null;
+		redLit.suche.highlight = [];
 		if (text) {
 			let insensitive = "i";
 			if (/[A-ZÄÖÜ]/.test(text)) {
 				insensitive = "";
 			}
-			st = new RegExp(helfer.escapeRegExp(text).replace(/ /g, "\\s"), "g" + insensitive);
+			let woerter = []; // Suchwörter und Suchphrasen
+			text = text.replace(/"(.+?)"/g, (m, p1) => { // Phrasen ermitteln
+				woerter.push(p1);
+				return "";
+			});
+			text.split(/\s/).forEach(i => { // Wörter ermitteln
+				if (i) {
+					woerter.push(i);
+				}
+			});
+			for (let wort of woerter) {
+				st.push(new RegExp(helfer.escapeRegExp(wort).replace(/ /g, "\\s"), "g" + insensitive));
+			}
 			redLit.suche.highlight = st;
 		}
 		if (ab) {
@@ -1410,18 +1422,24 @@ let redLit = {
 					}
 				}
 				// Text
-				let stOk = !st ? true : false;
-				if (st) {
-					for (let j of datensaetze) {
-						let ds = aufnahme[j[0]];
-						if (j[1]) {
-							ds = ds[j[1]];
+				let stOk = !st.length ? true : false;
+				if (st.length) {
+					let ok = Array(st.length).fill(false);
+					x: for (let j = 0, len = st.length; j < len; j++) {
+						for (let k of datensaetze) {
+							let ds = aufnahme[k[0]];
+							if (k[1]) {
+								ds = ds[k[1]];
+							}
+							const txt = Array.isArray(ds) ? ds.join(", ") : ds;
+							if (txt.match(st[j])) {
+								ok[j] = true;
+								continue x;
+							}
 						}
-						const txt = Array.isArray(ds) ? ds.join(", ") : ds;
-						if (txt.match(st)) {
-							stOk = true;
-							break;
-						}
+					}
+					if (!ok.includes(false)) {
+						stOk = true;
 					}
 				}
 				// Treffer aufhnehmen?
@@ -3024,11 +3042,15 @@ let redLit = {
 	anzeigeSnippetHighlight (text) {
 		// Muss/kann Text hervorgehoben werden?
 		if (redLit.anzeige.snippetKontext !== "suche" ||
-				!redLit.suche.highlight) {
+				!redLit.suche.highlight.length) {
 			return text;
 		}
 		// Suchtext hervorheben
-		return text.replace(redLit.suche.highlight, m => `<mark class="suche">${m}</mark>`);
+		for (let i of redLit.suche.highlight) {
+			text = text.replace(i, m => `<mark class="suche">${m}</mark>`);
+		}
+		text = helfer.suchtrefferBereinigen(text);
+		return text;
 	},
 	// Anzeige: Listener zum Öffnen des Versionen-Popups
 	//   ele = Element
