@@ -209,6 +209,7 @@ let helfer = {
 			/Sp?\. [0-9]+/g, // Seiten-/Spaltenangaben
 			/u\. (a|ä)\./ig,
 			/z\. B\./ig,
+			/zit\. n\./ig,
 		]);
 		for (let i of abk) {
 			text = text.replace(i, m => m.replace(/\s/, " "));

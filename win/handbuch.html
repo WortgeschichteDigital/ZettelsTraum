@@ -2385,6 +2385,8 @@ Mustermann, Erika
 						<td> </td><td> </td>
 						<td><kbd>⇦</kbd></td>
 						<td>
+							<p>Fokus im Suchfeld der <a href="#menueRedaktion-literatur">Literaturdatenbank</a>: Trefferliste eine Seite zurückblättern</p>
+
 							<p>Handbuch und <a href="#" class="link-dokumentation">technische Dokumentation</a>: rückwärts navigieren</p>
 						</td>
 					</tr><tr>
@@ -2394,8 +2396,6 @@ Mustermann, Erika
 						<td><kbd>⇦</kbd></td>
 						<td>
 							<p>Element in der Konfiguration der <a href="#einstellungen-quick">Quick-Access-Bar</a> im <a href="#menueApp-einstellungen">Einstellungen-Dialog</a> aktiviert: Element zur Leiste hinzufügen</p>
-
-							<p>Fokus im Suchfeld der <a href="#menueRedaktion-literatur">Literaturdatenbank</a>: Trefferliste eine Seite zurückblättern</p>
 						</td>
 					</tr><tr>
 						<td> </td><td> </td>
@@ -2415,6 +2415,8 @@ Mustermann, Erika
 						<td> </td><td> </td>
 						<td><kbd>⇨</kbd></td>
 						<td>
+							<p>Fokus im Suchfeld der <a href="#menueRedaktion-literatur">Literaturdatenbank</a>: Trefferliste eine Seite vorblättern</p>
+
 							<p>Handbuch und <a href="#" class="link-dokumentation">technische Dokumentation</a>: vorwärts navigieren</p>
 						</td>
 					</tr><tr>
@@ -2424,8 +2426,6 @@ Mustermann, Erika
 						<td><kbd>⇨</kbd></td>
 						<td>
 							<p>Element in der Konfiguration der <a href="#einstellungen-quick">Quick-Access-Bar</a> im <a href="#menueApp-einstellungen">Einstellungen-Dialog</a> aktiviert: Element aus der Leiste entfernen</p>
-
-							<p>Fokus im Suchfeld der <a href="#menueRedaktion-literatur">Literaturdatenbank</a>: Trefferliste eine Seite vorblättern</p>
 						</td>
 					</tr><tr>
 						<td> </td><td> </td>
@@ -4086,7 +4086,7 @@ Gerüst 2 &gt; Gerüst 1</pre>
 							<figcaption>Suchformular der Literaturdatenbank</figcaption>
 						</figure>
 
-						<p><b><i>Titelaufnahmen suchen und bearbeiten:</i></b> Klicken Sie auf den Radio-Button <i>Titelsuche</i>, bekommen Sie ein sehr schlicht gehaltenes Suchformular zu sehen. Geben Sie keinen Suchtext ein, werden alle in der Datenbank zu findenden Titel aufgelistet (maximal hundert pro Seite). Mit dem Datumsfeld <i>ab</i> können Sie die Suche auf einen bestimmten Zeitraum eingrenzen (Suchen von Titelaufnahmen, die ab dem angegebenen Tagesdatum bearbeitet wurden). Jede Titelaufnahme in den Suchergebnissen hat in der rechten oberen Ecke das Icon <img src="../img/stift.svg" width="20" height="20" alt="">. Klicken Sie auf dieses Icon, wird die Titelaufnahme in das Formular geladen, wo sie Änderungen vornehmen und eine neue Version der Aufnahme anlegen können.</p>
+						<p><b><i>Titelaufnahmen suchen und bearbeiten:</i></b> Klicken Sie auf den Radio-Button <i>Titelsuche</i>, bekommen Sie ein sehr schlicht gehaltenes Suchformular zu sehen. Geben Sie keinen Suchtext ein, werden alle in der Datenbank zu findenden Titel aufgelistet (maximal 50 pro Seite). Mit dem Datumsfeld <i>ab</i> können Sie die Suche auf einen bestimmten Zeitraum eingrenzen (Suchen von Titelaufnahmen, die ab dem angegebenen Tagesdatum bearbeitet wurden). Jede Titelaufnahme in den Suchergebnissen hat in der rechten oberen Ecke das Icon <img src="../img/stift.svg" width="20" height="20" alt="">. Klicken Sie auf dieses Icon, wird die Titelaufnahme in das Formular geladen, wo sie Änderungen vornehmen und eine neue Version der Aufnahme anlegen können.</p>
 
 						<p><b><i>Literaturdatenbank speichern:</i></b> Das Speichern-Icon <img src="../img/speichern.svg" width="20" height="20" alt=""> befindet sich oben rechts im Dialogfenster. Die App schlägt Ihnen zwar einen Dateinamen vor, Sie können diesen aber natürlich nach Belieben ändern. Dies gilt auch für die Dateiendung. Haben Sie eine Literaturdatenbank einmal gespeichert, merkt sich die App den Pfad zur Datenbankdatei und liest die Datenbank beim nächsten Öffnen des Dialogfensters automatisch neu ein. Zum Entkoppeln (vulgo: Schließen) der Datenbank klicken Sie auf das Icon <img src="../img/x-dick.svg" width="20" height="20" alt="">. Da Sie die Datenbankdatei durch das Öffnen nicht für andere sperren, ist das Entkoppeln prinzipiell nicht unbedingt nötig.</p>
 
@@ -4159,17 +4159,21 @@ Gerüst 2 &gt; Gerüst 1</pre>
 							<figcaption>Suchergebnisse in der Literaturdatenbank</figcaption>
 						</figure>
 
-						<p>Mit der Suchfunktion können Sie alle Titelaufnahmen der aktuellen Literaturdatenbank durchsuchen. Durchsucht werden die <b>Datenfelder</b> <i>Sigle, Titel, URL, Aufrufdatum, Fundort, PPN</i> und <i>Notizen</i>. Dabei ist allein zu beachten, dass das Datum des Datenfelds <i>Aufrufdatum</i> intern als ISO 8601 formatiert ist, also diese Form hat: JJJJ–MM-DD (Jahr-Monat-Tag). Suchen Sie nach einer Literaturaufnahme, die das Aufrufdatum <q>8. 5. 2020</q> hat, müssen Sie in den Suchschlitz also <q>2020-05-08</q> eingeben.</p>
+						<p>Mit der Suchfunktion können Sie alle Titelaufnahmen der aktuellen Literaturdatenbank durchsuchen. Durchsucht werden die <b>Datenfelder</b> <i>Sigle, Titel, URL, Aufrufdatum, Fundort, PPN</i> und <i>Notizen</i>. Dabei ist allein zu beachten, dass das Datum des Datenfelds <i>Aufrufdatum</i> intern als ISO 8601 formatiert ist, also diese Form hat: JJJJ–MM-DD (Jahr-Monat-Tag). Suchen Sie nach einer Literaturaufnahme, die das Aufrufdatum <q>8. 5. 2020</q> hat, müssen Sie in den Suchschlitz also <code class="quelltext">2020-05-08</code> eingeben.</p>
 
 						<p>Die Suche kann via <kbd>⏎</kbd> oder durch Klick auf das Icon <img src="../img/lupe.svg" width="20" height="20" alt=""> <b>gestartet</b> werden.</p>
 
-						<p>Geben Sie <b>kein Suchwort</b> ein, werden alle Titelaufnahmen in der Datenbank aufgelistet. Dabei werden pro Seite maximal 100 Treffer ausgeworfen. Im unteren Teil des Popus sehen Sie, wie viele Treffer angezeigt werden und ob es noch weitere gibt. Passen die Treffer nicht alle auf eine Seite, können Sie mithilfe der Pfeile vor- oder zurückblättern.</p>
+						<p>Geben Sie <b>kein Suchwort</b> ein, werden alle Titelaufnahmen in der Datenbank aufgelistet. Dabei werden pro Seite maximal 50 Treffer ausgeworfen. Im unteren Teil des Popups sehen Sie, wie viele Treffer angezeigt werden und ob es noch weitere gibt. Passen die Treffer nicht alle auf eine Seite, können Sie mithilfe der Pfeile vor- oder zurückblättern.</p>
 
 						<p>Die Suchergebnisse werden immer <b>alphanumerisch</b> nach Sigle sortiert.</p>
 
-						<p>Es wird <b>trunkiert</b> gesucht: Auch Wortteile produzieren Treffer. Mit einer Suche nach <q>Wörterbuch</q> finden Sie darum Titel wie <i>Deutsches Wörterbuch</i> aber auch <i>Deutsches Fremdwörterbuch</i>.</p>
+						<p>Es wird <b>trunkiert</b> gesucht: Auch Wortteile produzieren Treffer. Mit einer Suche nach <code class="quelltext">Wörterbuch</code> finden Sie darum Titel wie <i>Deutsches Wörterbuch</i> aber auch <i>Deutsches Fremdwörterbuch</i>.</p>
 
-						<p>Bei der Suche wird <b>Groß- und Kleinschreibung</b> ignoriert. Es sei denn, in Ihrem Suchwort findet sich ein Großbuchstabe. In diesem Fall wird nämlich auf eine Suche umgeschaltet, bei der die von Ihnen eingegebene Schreibung exakt beachtet wird. Ein Beispiel: Geben Sie <q>der</q> ein, wird sowohl die Titelaufnahme mit der Phrase <q><i>Der</i> Einfluß des Englischen</q> als auch die mit <q>Geschichte <i>der</i> deutschen Sprache</q> gefunden. Geben Sie hingegen <q>Der</q> ein, proudziert nur die erste Zeichenkette einen Treffer.</p>
+						<p>Bei der Suche wird <b>Groß- und Kleinschreibung</b> ignoriert. Es sei denn, in Ihrem Suchwort findet sich ein Großbuchstabe. In diesem Fall wird nämlich auf eine Suche umgeschaltet, bei der die von Ihnen eingegebene Schreibung exakt beachtet wird. Ein Beispiel: Geben Sie <code class="quelltext">der</code> ein, wird sowohl die Titelaufnahme mit der Phrase <q><i>Der</i> Einfluß des Englischen</q> als auch die mit <q>Geschichte <i>der</i> deutschen Sprache</q> gefunden. Geben Sie hingegen <code class="quelltext">Der</code> ein, produziert nur die erste Zeichenkette einen Treffer.</p>
+
+						<p>Geben Sie <b>mehrere Suchwörter</b> ein, finden Sie nur Titelaufnahmen, die jedes der eingegebenen Wörter in einem oder mehreren Datenfeldern enthalt. Die Wörter müssen nicht direkt aufeinanderfolgen und nicht alle im selben Datenfeld sein.</p>
+
+						<p>Daneben gibt es die Möglichkeit nach <b>Phrasen</b> zu suchen. Schließen Sie mehrere Suchwörter in Anführungsstriche ein, werden diese nur gefunden, wenn sie so wie eingegeben direkt aufeinanderfolgen. Ein Beispiel: Die Eingabe <code class="quelltext">&quot;Jacob Grimm&quot;</code> würde <abbr title="zum Beispiel">z. B.</abbr> das <q>Deutsche Wörterbuch von Jacob Grimm und Wilhelm Grimm</q> finden, die Titelaufnahme <q>Grimm, Jacob: Die drei Federn</q> aber nicht. Lassen Sie die Anführungszeichen weg und suchen Sie nach <code class="quelltext">Jacob Grimm</code>, passt der Suchausdruck auf beide Titel.</p>
 
 						<p>Die Suche kann nach <b>Erstellungsdatum</b> einer Titelaufnahme eingegrenzt werden. Wählen Sie im Datumsfeld <i>ab</i> ein Tagesdatum aus, bekommen Sie nur Titelaufnahmen angezeigt, die ab diesem Datum angelegt wurden.</p>
 
@@ -4223,7 +4227,7 @@ Gerüst 2 &gt; Gerüst 1</pre>
 
 						<p>Für die reibungslose Bedienung des Literaturdatenbank-Fensters wurden einige <b>Tastaturkürzel</b> eingerichtet. Diese können Sie alle in der Übersicht des <a href="#tastaturkuerzel"><abbr title="Kapitels">Kap.</abbr> <i>Tastaturkürzel</i></a> finden. Suchen Sie mit der Suchleiste (<kbd>F3</kbd>) einfach nach <q>Literaturdatenbank</q>.</p>
 
-						<p>Eigens hingewiesen sei nur auf die Möglichkeit, in der Ergebnisliste zu navigieren, ohne das Suchfeld zu verlassen. Befinden Sie sich im Suchschlitz können Sie mit den Tasten <kbd>⇧</kbd>/<kbd>⇩</kbd> <abbr title="beziehungsweise">bzw.</abbr> <kbd>Bild ⇧</kbd>/<kbd>Bild ⇩</kbd> in der Trefferliste scrollen und mit <kbd>Strg</kbd> + <kbd>⇦</kbd>/<kbd>⇨</kbd> vor- oder zurückblättern.</p>
+						<p>Eigens hingewiesen sei nur auf die Möglichkeit, in der Ergebnisliste zu navigieren, ohne das Suchfeld zu verlassen. Befinden Sie sich im Suchschlitz können Sie mit den Tasten <kbd>⇧</kbd>/<kbd>⇩</kbd> <abbr title="beziehungsweise">bzw.</abbr> <kbd>Bild ⇧</kbd>/<kbd>Bild ⇩</kbd> in der Trefferliste scrollen und mit <kbd>Alt</kbd> + <kbd>⇦</kbd>/<kbd>⇨</kbd> vor- oder zurückblättern.</p>
 
 						<p id="menueRedaktion-literaturTitelaufnahme"><b><i>Titelaufnahme</i></b></p>
 

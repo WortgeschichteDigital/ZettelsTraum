@@ -514,12 +514,33 @@ let redLit = {
 		return snippet;
 	},
 	// Datenbank: Helferfunktion zum Sortieren der Titelaufnahmen
-	//   a = Object
-	//   b = Object
-	//     (die Objekte enthalten die Schlüssel "id" [String] und "slot" [Number])
+	//   a = Object || String
+	//   b = Object || String
+	//     (wenn Objekte: enthalten sind Schlüssel "id" [String] und "slot" [Number];
+	//     wenn String: Sigle)
 	dbSortAufnahmen (a, b) {
-		const siA = helfer.sortAlphaPrep( redLit.dbSortAufnahmenPrep(redLit.db.data[a.id][a.slot].td.si ) ),
-			siB = helfer.sortAlphaPrep( redLit.dbSortAufnahmenPrep( redLit.db.data[b.id][b.slot].td.si ) );
+		let siA, siB, oriA, oriB;
+		if (helfer.checkType("String", a)) {
+			oriA = a;
+			oriB = b;
+			siA = helfer.sortAlphaPrep(redLit.dbSortAufnahmenPrep(a));
+			siB = helfer.sortAlphaPrep(redLit.dbSortAufnahmenPrep(b));
+		} else {
+			oriA = redLit.db.data[a.id][a.slot].td.si;
+			oriB = redLit.db.data[b.id][b.slot].td.si;
+			siA = helfer.sortAlphaPrep(redLit.dbSortAufnahmenPrep(oriA));
+			siB = helfer.sortAlphaPrep(redLit.dbSortAufnahmenPrep(oriB));
+		}
+		// Siglen sind nach der Normalisierung identisch => Duplikate oder zu starke Normalisierung
+		if (siA === siB) {
+			if (oriA !== oriB) { // z.B. ¹DWB und ²DWB
+				siA = redLit.dbSortAufnahmenPrepSuper(oriA);
+				siB = redLit.dbSortAufnahmenPrepSuper(oriB);
+			} else {
+				return 0;
+			}
+		}
+		// Siglen sind nicht identisch => sortieren
 		let arr = [siA, siB];
 		arr.sort();
 		if (arr[0] === siA) {
@@ -538,6 +559,44 @@ let redLit = {
 		let prep = s.replace(/[()[\]{}<>]/g, "");
 		prep = prep.replace(/^[⁰¹²³⁴⁵⁶⁷⁸⁹]+/, "");
 		redLit.dbSortAufnahmenPrepCache[s] = prep;
+		return prep;
+	},
+	// Datenbank: Superscript-Ziffern in Siglen in arabische umwandeln
+	// (dient für die Sortierung von Siglen, die nach der Elimination der
+	// hochgestellten Ziffern identisch wären; das Problem sind die Codepoints
+	// in Unicode; da herrscht ein ziemliches Durcheinander: ² komtm vor ³, ³ kommt vor ¹)
+	//   s = String
+	//     (String, der aufbereitet werden soll)
+	dbSortAufnahmenPrepSuperCache: {},
+	dbSortAufnahmenPrepSuper (s) {
+		if (redLit.dbSortAufnahmenPrepSuperCache[s]) {
+			return redLit.dbSortAufnahmenPrepSuperCache[s];
+		}
+		let prep = s.replace(/[⁰¹²³⁴⁵⁶⁷⁸⁹]/g, m => {
+			switch (m) {
+				case "⁰":
+					return "0";
+				case "¹":
+					return "1";
+				case "²":
+					return "2";
+				case "³":
+					return "3";
+				case "⁴":
+					return "4";
+				case "⁵":
+					return "5";
+				case "⁶":
+					return "6";
+				case "⁷":
+					return "7";
+				case "⁸":
+					return "8";
+				case "⁹":
+					return "9";
+			}
+		});
+		redLit.dbSortAufnahmenPrepSuperCache[s] = prep;
 		return prep;
 	},
 	// Datenbank: Datei speichern
@@ -880,7 +939,8 @@ let redLit = {
 					}
 					k = "die ID geändert";
 				}
-				text += `\n<p class="dialog-liste">• ${praep}${ziffer} ${numerus} ${k} (<i>${[...v].join(", ")}</i>)</p>`;
+				let siglen = [...v].sort(redLit.dbSortAufnahmen);
+				text += `\n<p class="dialog-liste">• ${praep}${ziffer} ${numerus} ${k} (<i>${siglen.join(", ")}</i>)</p>`;
 			}
 			dialog.oeffnen({
 				typ: "alert",
@@ -995,46 +1055,65 @@ let redLit = {
 	//   db = false || undefined
 	//     (überprüfen, ob die Datenbank gespeichert wurde)
 	dbCheck (fun, db = true) {
-		// Änderungen im Formular noch nicht gespeichert?
-		if (redLit.eingabe.changed) {
-			redLit.nav("eingabe");
-			dialog.oeffnen({
-				typ: "confirm",
-				text: "Die Titelaufnahme im Eingabeformular wurde geändert, aber noch nicht gespeichert.\nMöchten Sie die Titelaufnahme nicht erst einmal speichern?",
-				callback: () => {
-					if (dialog.antwort) {
-						redLit.eingabeSpeichern();
-					} else if (dialog.antwort === false) {
-						redLit.eingabe.changed = false;
-						redLit.dbCheck(fun, db);
-					}
-				},
-			});
-			return;
-		}
-		// Änderungen in der DB noch nicht gespeichert?
-		if (db && redLit.db.changed) {
-			let text = "Die Datenbank wurde geändert, aber noch nicht gespeichert.\nMöchten Sie die Datenbank nicht erst einmal speichern?";
-			if (!redLit.db.path) {
-				text = "Sie haben Titelaufnahmen angelegt, aber noch nicht gespeichert.\nMöchten Sie die Änderungen nicht erst einmal in einer Datenbank speichern?";
+		return new Promise(async resolve => {
+			// Änderungen im Formular noch nicht gespeichert?
+			if (redLit.eingabe.changed) {
+				if (!document.getElementById("red-lit-nav-eingabe").checked) {
+					redLit.nav("eingabe");
+				}
+				const speichern = await new Promise(antwort => {
+					dialog.oeffnen({
+						typ: "confirm",
+						text: "Die Titelaufnahme im Eingabeformular wurde geändert, aber noch nicht gespeichert.\nMöchten Sie die Titelaufnahme nicht erst einmal speichern?",
+						callback: () => {
+							if (dialog.antwort) {
+								redLit.eingabeSpeichern();
+								antwort(true);
+								return;
+							} else if (dialog.antwort === false) {
+								redLit.eingabe.changed = false;
+							}
+							antwort(false);
+						},
+					});
+				});
+				if (speichern) {
+					resolve(false);
+					return;
+				}
 			}
-			dialog.oeffnen({
-				typ: "confirm",
-				text,
-				callback: () => {
-					if (dialog.antwort) {
-						redLit.dbSpeichern();
-					} else if (dialog.antwort === false) {
-						redLit.db.mtime = ""; // damit die DB beim erneuten Öffnen des Fenster neu geladen wird
-						redLit.db.changed = false;
-						fun();
-					}
-				},
-			});
-			return;
-		}
-		// es steht nichts mehr aus => Funktion direkt ausführen
-		fun();
+			// Änderungen in der DB noch nicht gespeichert?
+			if (db && redLit.db.changed) {
+				let text = "Die Datenbank wurde geändert, aber noch nicht gespeichert.\nMöchten Sie die Datenbank nicht erst einmal speichern?";
+				if (!redLit.db.path) {
+					text = "Sie haben Titelaufnahmen angelegt, aber noch nicht gespeichert.\nMöchten Sie die Änderungen nicht erst einmal in einer Datenbank speichern?";
+				}
+				const speichern = await new Promise(antwort => {
+					dialog.oeffnen({
+						typ: "confirm",
+						text,
+						callback: () => {
+							if (dialog.antwort) {
+								redLit.dbSpeichern();
+								antwort(true);
+								return;
+							} else if (dialog.antwort === false) {
+								redLit.db.mtime = ""; // damit die DB beim erneuten Öffnen des Fenster neu geladen wird
+								redLit.db.changed = false;
+							}
+							antwort(false);
+						},
+					});
+				});
+				if (speichern) {
+					resolve(false);
+					return;
+				}
+			}
+			// es steht nichts mehr aus => Funktion direkt ausführen
+			fun();
+			resolve(true);
+		});
 	},
 	// Datenbank: alle Titeldaten klonen
 	//   quelle = Object
@@ -1210,7 +1289,7 @@ let redLit = {
 							break;
 						}
 					}
-				} else if (tastatur.modifiers === "Ctrl" && /^(ArrowLeft|ArrowRight)$/.test(evt.key)) {
+				} else if (tastatur.modifiers === "Alt" && /^(ArrowLeft|ArrowRight)$/.test(evt.key)) {
 					evt.preventDefault();
 					if (evt.repeat) { // Repeats unterbinden
 						return;
@@ -1269,16 +1348,28 @@ let redLit = {
 		let input = document.getElementById("red-lit-suche-text"),
 			text = helfer.textTrim(input.value, true),
 			ab = document.getElementById("red-lit-suche-ab").value,
-			st = null,
+			st = [],
 			da = null;
 		redLit.suche.treffer = [];
-		redLit.suche.highlight = null;
+		redLit.suche.highlight = [];
 		if (text) {
 			let insensitive = "i";
 			if (/[A-ZÄÖÜ]/.test(text)) {
 				insensitive = "";
 			}
-			st = new RegExp(helfer.escapeRegExp(text).replace(/ /g, "\\s"), "g" + insensitive);
+			let woerter = []; // Suchwörter und Suchphrasen
+			text = text.replace(/"(.+?)"/g, (m, p1) => { // Phrasen ermitteln
+				woerter.push(p1);
+				return "";
+			});
+			text.split(/\s/).forEach(i => { // Wörter ermitteln
+				if (i) {
+					woerter.push(i);
+				}
+			});
+			for (let wort of woerter) {
+				st.push(new RegExp(helfer.escapeRegExp(wort).replace(/ /g, "\\s"), "g" + insensitive));
+			}
 			redLit.suche.highlight = st;
 		}
 		if (ab) {
@@ -1383,18 +1474,24 @@ let redLit = {
 					}
 				}
 				// Text
-				let stOk = !st ? true : false;
-				if (st) {
-					for (let j of datensaetze) {
-						let ds = aufnahme[j[0]];
-						if (j[1]) {
-							ds = ds[j[1]];
+				let stOk = !st.length ? true : false;
+				if (st.length) {
+					let ok = Array(st.length).fill(false);
+					x: for (let j = 0, len = st.length; j < len; j++) {
+						for (let k of datensaetze) {
+							let ds = aufnahme[k[0]];
+							if (k[1]) {
+								ds = ds[k[1]];
+							}
+							const txt = Array.isArray(ds) ? ds.join(", ") : ds;
+							if (txt.match(st[j])) {
+								ok[j] = true;
+								continue x;
+							}
 						}
-						const txt = Array.isArray(ds) ? ds.join(", ") : ds;
-						if (txt.match(st)) {
-							stOk = true;
-							break;
-						}
+					}
+					if (!ok.includes(false)) {
+						stOk = true;
 					}
 				}
 				// Treffer aufhnehmen?
@@ -1430,12 +1527,12 @@ let redLit = {
 		if (start === 0) {
 			redLit.sucheResetBloecke(false);
 		}
-		// 100 Treffer drucken (max.)
+		// 50 Treffer drucken (max.)
 		redLit.anzeige.snippetKontext = "suche";
 		let titel = document.getElementById("red-lit-suche-titel");
 		titel.scrollTop = 0;
 		helfer.keineKinder(titel);
-		for (let i = start, len = start + 100; i < len; i++) {
+		for (let i = start, len = start + 50; i < len; i++) {
 			// letzter Treffer erreicht
 			if (!treffer[i]) {
 				break;
@@ -1450,22 +1547,22 @@ let redLit = {
 	//     (Nummer, ab der die Treffer angezeigt werden; nullbasiert)
 	sucheAnzeigenNav (start) {
 		let treffer = redLit.suche.treffer,
-			range = `${start + 1}–${treffer.length > start + 100 ? start + 100 : treffer.length}`;
+			range = `${start + 1}–${treffer.length > start + 50 ? start + 50 : treffer.length}`;
 		if (treffer.length === 1) {
 			range = "1";
 		}
 		document.getElementById("red-lit-suche-trefferzahl").textContent = `${range} / ${treffer.length}`;
 		document.querySelectorAll("#red-lit-suche-treffer a").forEach((a, n) => {
 			if (n === 0) { // zurückblättern
-				a.dataset.start = `${start - 100}`;
+				a.dataset.start = `${start - 50}`;
 				if (start > 0) {
 					a.classList.remove("inaktiv");
 				} else {
 					a.classList.add("inaktiv");
 				}
 			} else { // vorblättern
-				a.dataset.start = `${start + 100}`;
-				if (treffer.length > start + 100) {
+				a.dataset.start = `${start + 50}`;
+				if (treffer.length > start + 50) {
 					a.classList.remove("inaktiv");
 				} else {
 					a.classList.add("inaktiv");
@@ -1527,7 +1624,8 @@ let redLit = {
 		let titel = document.querySelector(`#red-lit-suche-titel .red-lit-snippet[data-ds*='"${id}"']`);
 		if (delSlot >= 0) {
 			if (treffer.slot === delSlot) {
-				// Treffer komplett entfernen, wenn genau diese Titelaufnahme gelöscht wurde
+				// Treffer komplett entfernen, wenn genau diese Titelaufnahme gelöscht wurde;
+				// dieser Zweig wird auch abgearbeitet, wenn die ID der Titelaufnahme geändert wurde
 				const idx = redLit.suche.treffer.findIndex(i => i.id === id);
 				redLit.suche.treffer.splice(idx, 1);
 				if (!redLit.suche.treffer.length) {
@@ -1536,7 +1634,7 @@ let redLit = {
 					// Titelanzeige entfernen
 					titel.parentNode.removeChild(titel);
 					// Navigation auffrischen
-					const start = parseInt(document.querySelector("#red-lit-suche-treffer a").dataset.start, 10) + 100;
+					const start = parseInt(document.querySelector("#red-lit-suche-treffer a").dataset.start, 10) + 50;
 					redLit.sucheAnzeigenNav(start);
 				}
 				return;
@@ -1569,7 +1667,7 @@ let redLit = {
 				// Titelaufnahme aus der Suchanzeige löschen
 				i.parentNode.removeChild(i);
 				// Navigation auffrischen
-				const start = parseInt(document.querySelector("#red-lit-suche-treffer a").dataset.start, 10) + 100;
+				const start = parseInt(document.querySelector("#red-lit-suche-treffer a").dataset.start, 10) + 50;
 				redLit.sucheAnzeigenNav(start);
 				return;
 			}
@@ -1583,6 +1681,7 @@ let redLit = {
 		fundorte: ["Bibliothek", "DTA", "DWDS", "GoogleBooks", "IDS", "online"], // gültige Werte im Feld "Fundorte"
 		status: "", // aktueller Status des Formulars
 		id: "", // ID des aktuellen Datensatzes (leer, wenn neuer Datensatz)
+		slot: -1, // Slot des aktuellen Datensatzes
 		changed: false, // es wurden Eingaben vorgenommen
 	},
 	// Eingabeformular: Listener für alle Inputs
@@ -1645,6 +1744,7 @@ let redLit = {
 		redLit.eingabe.status = status;
 		if (status === "add") {
 			redLit.eingabe.id = "";
+			redLit.eingabe.slot = -1;
 		} else {
 			redLit.eingabe.id = document.getElementById("red-lit-eingabe-id").value;
 		}
@@ -1685,6 +1785,7 @@ let redLit = {
 			val = val.toLowerCase();
 			val = val.replace(/[\s/]/g, "-");
 			val = val.replace(/^[0-9]+|[^a-z0-9ßäöü-]/g, "");
+			val = val.replace(/-{2,}/g, "-");
 			document.getElementById("red-lit-eingabe-id").value = val;
 		});
 	},
@@ -1718,7 +1819,7 @@ let redLit = {
 				}
 				if (jahr && jahr.length) {
 					let jahrInt = parseInt(jahr[jahr.length - 1], 10);
-					if (jahrInt > 1799 && jahrInt < 2051) {
+					if (jahrInt > 1599 && jahrInt < 2051) {
 						sigle.push(jahr[jahr.length - 1]);
 					}
 				}
@@ -2391,6 +2492,9 @@ let redLit = {
 			if (redLit.eingabe.status !== "add" &&
 					redLit.eingabe.id !== id) {
 				idGeaendert = true;
+				// ggf. Titelaufnahme aus Suchtrefferliste entfernen
+				redLit.sucheTrefferAuffrischen(redLit.eingabe.id, redLit.eingabe.slot);
+				// ID der Titelaufnahme ändern
 				redLit.db.data[id] = [];
 				redLit.dbTitelKlonen(redLit.db.data[redLit.eingabe.id], redLit.db.data[id]);
 				delete redLit.db.data[redLit.eingabe.id];
@@ -2426,6 +2530,7 @@ let redLit = {
 			// Metadaten auffrischen
 			redLit.eingabeMetaFuellen({id, slot: 0});
 			// Status Eingabeformular auffrischen
+			redLit.eingabe.slot = 0;
 			redLit.eingabeStatus("change");
 			// ggf. Titelaufnahme in der Suche auffrischen
 			redLit.sucheTrefferAuffrischen(id);
@@ -2771,6 +2876,7 @@ let redLit = {
 		if (slot > 0) {
 			status = "old";
 		}
+		redLit.eingabe.slot = slot;
 		redLit.eingabeStatus(status);
 		// Formular fokussieren
 		document.getElementById("red-lit-eingabe-ti").focus();
@@ -2988,11 +3094,15 @@ let redLit = {
 	anzeigeSnippetHighlight (text) {
 		// Muss/kann Text hervorgehoben werden?
 		if (redLit.anzeige.snippetKontext !== "suche" ||
-				!redLit.suche.highlight) {
+				!redLit.suche.highlight.length) {
 			return text;
 		}
 		// Suchtext hervorheben
-		return text.replace(redLit.suche.highlight, m => `<mark class="suche">${m}</mark>`);
+		for (let i of redLit.suche.highlight) {
+			text = text.replace(i, m => `<mark class="suche">${m}</mark>`);
+		}
+		text = helfer.suchtrefferBereinigen(text);
+		return text;
 	},
 	// Anzeige: Listener zum Öffnen des Versionen-Popups
 	//   ele = Element
@@ -3145,7 +3255,7 @@ let redLit = {
 	//     (ID der Titelaufnahme)
 	//   slot = Number
 	//     (Slot der Titelaufnahme)
-	titelLoeschen ({id, slot}) {
+	async titelLoeschen ({id, slot}) {
 		redLit.db.dataOpts.push({
 			aktion: "del",
 			id,
@@ -3154,12 +3264,14 @@ let redLit = {
 		redLit.db.data[id].splice(slot, 1);
 		// ggf. Suche auffrischen
 		redLit.sucheTrefferAuffrischen(id, slot);
-		// ggf. Eingabeformular auffrischen
+		// ggf. Eingabeformular auffrischen oder zurücksetzen
 		if (redLit.eingabe.id === id) {
-			if (!redLit.db.data[id].length) { // Titelaufnahme existiert nicht mehr
-				redLit.eingabeMetaFuellen({id: "", slot: -1});
-				redLit.eingabeStatus("add");
-				document.getElementById("red-lit-eingabe-ti").dispatchEvent(new KeyboardEvent("input"));
+			if (!redLit.db.data[id].length || // Titelaufnahme existiert nicht mehr
+					slot === redLit.eingabe.slot) { // der entfernte Slot wird gerade angezeigt
+				await redLit.dbCheck(() => {
+					redLit.eingabeLeeren();
+					redLit.eingabeStatus("add");
+				}, false);
 			} else { // Titelaufnahme existiert noch
 				redLit.eingabeMetaFuellen({id, slot: 0});
 				let ds = redLit.eingabeSpeichernMakeDs();
