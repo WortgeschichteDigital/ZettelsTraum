@@ -1430,12 +1430,12 @@ let redLit = {
 		if (start === 0) {
 			redLit.sucheResetBloecke(false);
 		}
-		// 100 Treffer drucken (max.)
+		// 50 Treffer drucken (max.)
 		redLit.anzeige.snippetKontext = "suche";
 		let titel = document.getElementById("red-lit-suche-titel");
 		titel.scrollTop = 0;
 		helfer.keineKinder(titel);
-		for (let i = start, len = start + 100; i < len; i++) {
+		for (let i = start, len = start + 50; i < len; i++) {
 			// letzter Treffer erreicht
 			if (!treffer[i]) {
 				break;
@@ -1450,22 +1450,22 @@ let redLit = {
 	//     (Nummer, ab der die Treffer angezeigt werden; nullbasiert)
 	sucheAnzeigenNav (start) {
 		let treffer = redLit.suche.treffer,
-			range = `${start + 1}–${treffer.length > start + 100 ? start + 100 : treffer.length}`;
+			range = `${start + 1}–${treffer.length > start + 50 ? start + 50 : treffer.length}`;
 		if (treffer.length === 1) {
 			range = "1";
 		}
 		document.getElementById("red-lit-suche-trefferzahl").textContent = `${range} / ${treffer.length}`;
 		document.querySelectorAll("#red-lit-suche-treffer a").forEach((a, n) => {
 			if (n === 0) { // zurückblättern
-				a.dataset.start = `${start - 100}`;
+				a.dataset.start = `${start - 50}`;
 				if (start > 0) {
 					a.classList.remove("inaktiv");
 				} else {
 					a.classList.add("inaktiv");
 				}
 			} else { // vorblättern
-				a.dataset.start = `${start + 100}`;
-				if (treffer.length > start + 100) {
+				a.dataset.start = `${start + 50}`;
+				if (treffer.length > start + 50) {
 					a.classList.remove("inaktiv");
 				} else {
 					a.classList.add("inaktiv");
@@ -1536,7 +1536,7 @@ let redLit = {
 					// Titelanzeige entfernen
 					titel.parentNode.removeChild(titel);
 					// Navigation auffrischen
-					const start = parseInt(document.querySelector("#red-lit-suche-treffer a").dataset.start, 10) + 100;
+					const start = parseInt(document.querySelector("#red-lit-suche-treffer a").dataset.start, 10) + 50;
 					redLit.sucheAnzeigenNav(start);
 				}
 				return;
@@ -1569,7 +1569,7 @@ let redLit = {
 				// Titelaufnahme aus der Suchanzeige löschen
 				i.parentNode.removeChild(i);
 				// Navigation auffrischen
-				const start = parseInt(document.querySelector("#red-lit-suche-treffer a").dataset.start, 10) + 100;
+				const start = parseInt(document.querySelector("#red-lit-suche-treffer a").dataset.start, 10) + 50;
 				redLit.sucheAnzeigenNav(start);
 				return;
 			}
