@@ -1685,6 +1685,7 @@ let redLit = {
 			val = val.toLowerCase();
 			val = val.replace(/[\s/]/g, "-");
 			val = val.replace(/^[0-9]+|[^a-z0-9ßäöü-]/g, "");
+			val = val.replace(/-{2,}/g, "-");
 			document.getElementById("red-lit-eingabe-id").value = val;
 		});
 	},
