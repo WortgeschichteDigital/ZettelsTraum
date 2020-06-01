@@ -1,0 +1,56 @@
+@charset "utf-8";
+
+/* Variablen ------------------------------------ */
+@import url(../variablen.css);
+
+/* Fonts ---------------------------------------- */
+@import url(../fonts.css);
+
+/* Globale Klassen ------------------------------ */
+@import url(../global.css);
+
+
+/* Struktur-Elemente ---------------------------- */
+body {
+	margin: 0;
+	overflow-x: hidden;
+	background-color: #fff;
+	color: var(--text);
+	font: 16px/24px "Noto Sans", "Noto Sans Symbols2", sans-serif;
+	user-select: none;
+}
+
+body > header {
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 3; /* sonst kann die ausgeklappte Dropdown-Liste den Kopf überdecken */
+	border-bottom: 10px solid #fff;
+	padding: 0 10px;
+	width: calc(100% - 20px);
+	height: 60px;
+	background-color: var(--farbe);
+	white-space: nowrap;
+}
+
+body > header h1 {
+	display: inline-block;
+	margin: 0;
+	color: #fff;
+	font-size: 30px;
+	font-weight: normal;
+	line-height: 60px;
+}
+
+#icon {
+	position: absolute;
+	top: 6px;
+	right: 0;
+	padding: 0 10px;
+	background-color: var(--farbe);
+}
+
+main {
+	margin-top: 70px;
+	padding: 0 10px 20px 10px;
+}

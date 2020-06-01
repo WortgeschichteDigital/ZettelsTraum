@@ -43,15 +43,20 @@ let helferWin = {
 			ipcRenderer.send("hilfe-fehlerlog");
 		});
 	},
-	// das Bedeutungsgerüst-Fenster muss zuvor noch die Dimensionen speichern;
-	// das geschieht asynchron, darum muss hier ein wenig gewartet werden;
-	// danach wird ein endgültiger Schließen-Befehl an Main abgesetzt
+	// Bedeutungsgerüst-Fenster: zuvor noch die Dimensionen speichern;
+	//   das geschieht asynchron, darum muss hier ein wenig gewartet werden;
+	//   danach wird ein endgültiger Schließen-Befehl an Main abgesetzt
+	// XML-Fenster: zugehörigem Hauptfenster mitteilen, dass es geschlossen wurde
 	async beforeUnload () {
 		const {ipcRenderer} = require("electron");
 		// Bedeutungsgerüst-Fenster
 		if (winInfo.typ === "bedeutungen") {
 			ipcRenderer.sendTo(bedeutungen.data.contentsId, "bedeutungen-fenster-geschlossen");
 			await ipcRenderer.invoke("fenster-status", winInfo.winId, "fenster-bedeutungen");
+		}
+		// XML-Fenster
+		else if (winInfo.typ === "xml") {
+			ipcRenderer.sendTo(xml.data.contentsId, "red-xml-geschlossen");
 		}
 		// Fenster endgültig schließen
 		ipcRenderer.invoke("fenster-schliessen-endgueltig");

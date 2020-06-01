@@ -61,6 +61,8 @@ let kartei = {
 		overlay.alleSchliessen();
 		// Bedeutungsgerüst-Fenster schließen
 		bedeutungenWin.schliessen();
+		// XML-Fenster schließen
+		redXml.schliessen();
 		// neue Karte erstellen
 		beleg.erstellen();
 	},
@@ -393,6 +395,7 @@ let kartei = {
 		kartei.karteiGeaendert(false);
 		overlay.alleSchliessen();
 		bedeutungenWin.schliessen();
+		redXml.schliessen();
 		data = {};
 		kartei.wort = "";
 		kartei.pfad = "";
@@ -473,6 +476,7 @@ let kartei = {
 					stamm.dtaGet(kartei.wort, false);
 					kartei.wortEintragen();
 					bedeutungenWin.daten();
+					redXml.daten();
 				} else if (dialog.antwort && !wort) {
 					dialog.oeffnen({
 						typ: "alert",

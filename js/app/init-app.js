@@ -40,6 +40,7 @@ window.addEventListener("load", async () => {
 	ipcRenderer.on("redaktion-literatur", () => redLit.oeffnen());
 	ipcRenderer.on("redaktion-metadaten", () => redMeta.oeffnen());
 	ipcRenderer.on("redaktion-wortinformationen", () => redWi.oeffnen());
+	ipcRenderer.on("redaktion-xml", () => redXml.oeffnen());
 	ipcRenderer.on("belege-hinzufuegen", () => {
 		// Sperre für macOS (Menüpunkte können nicht deaktiviert werden)
 		if (!kartei.wort) {
@@ -92,6 +93,9 @@ window.addEventListener("load", async () => {
 		beleg.bedeutungEinAustragen(bd, eintragen);
 		helfer.fensterFokus();
 	});
+	// XML-Fenster
+	ipcRenderer.on("red-xml-daten", () => redXml.daten());
+	ipcRenderer.on("red-xml-geschlossen", () => redXml.contentsId = 0);
 	// Dialog
 	ipcRenderer.on("dialog-anzeigen", (evt, text) => {
 		dialog.oeffnen({

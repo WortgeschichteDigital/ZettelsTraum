@@ -12,6 +12,11 @@ let initWin = {
 			bedeutungen.data = daten;
 			bedeutungen.aufbauen();
 		});
+		// XML-Daten übernehmen (Redaktionsfenster für XML-Dateien)
+		ipcRenderer.on("xml-daten", (evt, xmlDaten) => {
+			xml.data = xmlDaten;
+			xml.aufbauen();
+		});
 		// Before-Unload
 		ipcRenderer.on("before-unload", () => helferWin.beforeUnload());
 	},

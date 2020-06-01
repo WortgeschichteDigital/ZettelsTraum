@@ -113,6 +113,11 @@ let quick = {
 			short: "",
 			img: "kreis-info.svg",
 		},
+		"redaktion-xml": {
+			title: "Redaktion > XML",
+			short: "",
+			img: "xml.svg",
+		},
 		"belege-hinzufuegen": {
 			title: "Belege > Hinzufügen",
 			short: `${tastatur.shortcutsTextAktuell("Strg")} + N`,
@@ -368,6 +373,9 @@ let quick = {
 					break;
 				case "redaktion-wortinformationen":
 					redWi.oeffnen();
+					break;
+				case "redaktion-xml":
+					redXml.oeffnen();
 					break;
 				case "belege-hinzufuegen":
 					speichern.checkInit(() => beleg.erstellen());

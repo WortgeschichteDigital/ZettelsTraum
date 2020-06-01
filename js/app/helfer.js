@@ -1256,6 +1256,8 @@ let helfer = {
 		}
 		// Bedeutungen-Fenster ggf. schließen
 		await bedeutungenWin.schliessen();
+		// XML-Fenster ggf. schließen
+		await redXml.schliessen();
 		// Kartei entsperren
 		await lock.actions({datei: kartei.pfad, aktion: "unlock"});
 		// Status des Fensters speichern
