@@ -116,4 +116,19 @@ let helferXml = {
 		processor.importStylesheet(xslt);
 		return processor.transformToDocument(xml);
 	},
+	// XML-Snippet einfärben
+	//   xmlStr = String
+	//     (das XML-Snippet, das eingefärbt werden soll)
+	prettyPrint ({xmlStr}) {
+		xmlStr = xmlStr.replace(/<.+?>/g, m => {
+			return `<span class="xml-tag">${helferXml.maskieren({text: m})}</span>`;
+		});
+		xmlStr = xmlStr.replace(/<span class="xml-tag">(.+?)<\/span>/g, (m, p1) => {
+			p1 = p1.replace(/ (.+?=)(&quot;.+?&quot;)/g, (m, p1, p2) => {
+				return ` <span class="xml-attr-key">${p1}</span><span class="xml-attr-val">${p2}</span>`;
+			});
+			return `<span class="xml-tag">${p1}</span>`;
+		});
+		return xmlStr;
+	},
 };

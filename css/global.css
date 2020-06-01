@@ -40,6 +40,20 @@
 	color: var(--farbeRot);
 }
 
+/* XML-Pretty-Print ----------------------------- */
+.xml-tag {
+	color: var(--farbeB);
+}
+
+.xml-attr-key {
+	color: var(--farbeGruenDunkel);
+}
+
+.xml-attr-val {
+	color: var(--farbeRot);
+}
+
+
 /* Ziehen von Elementen ------------------------- */
 *, *::after, *::before {
 	-webkit-app-region: no-drag;
