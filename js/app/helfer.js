@@ -405,21 +405,6 @@ let helfer = {
 		}
 		return 1;
 	},
-	// URLs nach Domain sortieren
-	//   a = String
-	//   b = String
-	sortURL (a, b) {
-		if (/books\.google/.test(a)) {
-			return -1;
-		} else if (/books\.google/.test(b)) {
-			return 1;
-		} else if (/doi\.org/.test(a)) {
-			return -1;
-		} else if (/doi\.org/.test(b)) {
-			return 1;
-		}
-		return 0;
-	},
 	// Strings nach Länge sortieren (kürzeste zuletzt), Fallback: alphanumerische Sortierung
 	//   a = String
 	//   b = String
@@ -441,6 +426,107 @@ let helfer = {
 			return a_len - b_len;
 		}
 		return helfer.sortAlpha(a, b);
+	},
+	// Titelaufnahmen nach ihren Siglen sortieren
+	//   a = Object || String
+	//   b = Object || String
+	//     (wenn Objekte: enthalten sind Schlüssel "id" [String] und "slot" [Number];
+	//     wenn String: direkt die Sigle der Titelaufnahme)
+	sortSiglen (a, b) {
+		let siA, siB, oriA, oriB;
+		if (helfer.checkType("String", a)) {
+			oriA = a;
+			oriB = b;
+			siA = helfer.sortAlphaPrep(helfer.sortSiglenPrep(a));
+			siB = helfer.sortAlphaPrep(helfer.sortSiglenPrep(b));
+		} else {
+			oriA = redLit.db.data[a.id][a.slot].td.si;
+			oriB = redLit.db.data[b.id][b.slot].td.si;
+			siA = helfer.sortAlphaPrep(helfer.sortSiglenPrep(oriA));
+			siB = helfer.sortAlphaPrep(helfer.sortSiglenPrep(oriB));
+		}
+		// Siglen sind nach der Normalisierung identisch => Duplikate oder zu starke Normalisierung
+		if (siA === siB) {
+			if (oriA !== oriB) { // z.B. ¹DWB und ²DWB
+				siA = helfer.sortSiglenPrepSuper(oriA);
+				siB = helfer.sortSiglenPrepSuper(oriB);
+			} else {
+				return 0;
+			}
+		}
+		// Siglen sind nicht identisch => sortieren
+		let arr = [siA, siB];
+		arr.sort();
+		if (arr[0] === siA) {
+			return -1;
+		}
+		return 1;
+	},
+	// Titelaufnahmen nach ihren Siglen sortieren (Vorbereitung)
+	//   s = String
+	//     (String, der aufbereitet werden soll)
+	sortSiglenPrepCache: {},
+	sortSiglenPrep (s) {
+		if (helfer.sortSiglenPrepCache[s]) {
+			return helfer.sortSiglenPrepCache[s];
+		}
+		let prep = s.replace(/[()[\]{}<>]/g, "");
+		prep = prep.replace(/^[⁰¹²³⁴⁵⁶⁷⁸⁹]+/, "");
+		helfer.sortSiglenPrepCache[s] = prep;
+		return prep;
+	},
+	// Superscript-Ziffern in Siglen in arabische umwandeln
+	// (dient für die Sortierung von Siglen, die nach der Elimination der
+	// hochgestellten Ziffern identisch wären; das Problem sind die Codepoints
+	// in Unicode; da herrscht ein ziemliches Durcheinander: ² komtm vor ³, ³ kommt vor ¹ usw.)
+	//   s = String
+	//     (String, der aufbereitet werden soll)
+	sortSiglenPrepSuperCache: {},
+	sortSiglenPrepSuper (s) {
+		if (helfer.sortSiglenPrepSuperCache[s]) {
+			return helfer.sortSiglenPrepSuperCache[s];
+		}
+		let prep = s.replace(/[⁰¹²³⁴⁵⁶⁷⁸⁹]/g, m => {
+			switch (m) {
+				case "⁰":
+					return "0";
+				case "¹":
+					return "1";
+				case "²":
+					return "2";
+				case "³":
+					return "3";
+				case "⁴":
+					return "4";
+				case "⁵":
+					return "5";
+				case "⁶":
+					return "6";
+				case "⁷":
+					return "7";
+				case "⁸":
+					return "8";
+				case "⁹":
+					return "9";
+			}
+		});
+		helfer.sortSiglenPrepSuperCache[s] = prep;
+		return prep;
+	},
+	// URLs nach Domain sortieren
+	//   a = String
+	//   b = String
+	sortURL (a, b) {
+		if (/books\.google/.test(a)) {
+			return -1;
+		} else if (/books\.google/.test(b)) {
+			return 1;
+		} else if (/doi\.org/.test(a)) {
+			return -1;
+		} else if (/doi\.org/.test(b)) {
+			return 1;
+		}
+		return 0;
 	},
 	// ein übergebenes Datum formatiert ausgeben
 	//   datum = String
