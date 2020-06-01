@@ -45,9 +45,10 @@ let xml = {
 		let div = document.createElement("div");
 		div.classList.add("kopf");
 		div.dataset.id = xml.data.xl.lt[slot].id;
+		xml.elementPreviewLt({div});
 		// Warn-Icon
 		xml.elementWarn({ele: div});
-		xml.wohlgeformt({
+		xml.xmlCheck({
 			warn: div.firstChild,
 			xml: xml.data.xl.lt[slot].xl,
 		});
@@ -56,7 +57,7 @@ let xml = {
 		div.appendChild(a);
 		a.href = "#";
 		a.classList.add("icon-link", "icon-x-dick");
-		xml.loeschenLt({a});
+		xml.elementLoeschenLt({a});
 		// ID
 		let id = document.createElement("span");
 		div.appendChild(id);
@@ -74,11 +75,46 @@ let xml = {
 		titel.textContent = unstrukturiert[1];
 		return div;
 	},
+	// Element-Vorschau umschalten: Literaturtitel
+	//   div = Element
+	//     (Kopf, zu dem die Vorschau eingeblendet werden soll)
+	elementPreviewLt ({div}) {
+		div.addEventListener("click", function() {
+			// Preview ausblenden
+			let pre = this.nextSibling;
+			if (pre && pre.classList.contains("pre-cont")) {
+				xml.elementPreviewOff({pre});
+				return;
+			}
+			// Preview einblenden
+			const id = this.closest(".kopf").dataset.id,
+				idx = xml.data.xl.lt.findIndex(i => i.id === id);
+			xml.xmlPreview({
+				xmlStr: xml.data.xl.lt[idx].xl,
+				after: this,
+			});
+		});
+	},
+	// Element-Vorschau ausblenden
+	//   pre = Element
+	//     (Vorschau, die ausgeblendet werden soll)
+	elementPreviewOff ({pre}) {
+		return new Promise(resolve => {
+			pre.style.height = `${pre.offsetHeight}px`;
+			setTimeout(() => {
+				pre.style.height = "0px";
+				setTimeout(() => {
+					pre.parentNode.removeChild(pre);
+					resolve(true);
+				}, 300);
+			}, 0);
+		});
+	},
 	// Element entfernen: Literaturtitel
 	//   a = Element
 	//     (der Lösch-Link)
-	loeschenLt ({a}) {
-		a.addEventListener("click", function(evt) {
+	elementLoeschenLt ({a}) {
+		a.addEventListener("click", async function(evt) {
 			evt.stopPropagation();
 			evt.preventDefault();
 			// Datensatz löschen
@@ -86,6 +122,11 @@ let xml = {
 				id = kopf.dataset.id;
 			const idx = xml.data.xl.lt.findIndex(i => i.id === id);
 			xml.data.xl.lt.splice(idx, 1);
+			// ggf. Preview ausblenden
+			let pre = kopf.nextSibling;
+			if (pre && pre.classList.contains("pre-cont")) {
+				await xml.elementPreviewOff({pre});
+			}
 			// Element entfernen
 			kopf.parentNode.removeChild(kopf);
 			// ggf. Leermeldung erzeugen
@@ -112,20 +153,6 @@ let xml = {
 		ele.appendChild(p);
 		p.classList.add("leer");
 		p.textContent = "keine Daten";
-	},
-	// überprüft ein XML-Snippet darauf, ob es wohlgeformt ist
-	//   warn = Element
-	//     (das Warn-Icon, das angepasst werden muss)
-	//   xml = String
-	//     (XML-Snippet, das überprüft werden soll)
-	wohlgeformt ({warn, xml}) {
-		let parser = new DOMParser(),
-			xmlDoc = parser.parseFromString(xml, "text/xml");
-		if (xmlDoc.querySelector("parsererror")) {
-			warn.classList.add("aktiv");
-		} else {
-			warn.classList.remove("aktiv");
-		}
 	},
 	// Empfangen von Datensätzen: Verteilerfunktion
 	//   xmlDatum = Object
@@ -154,6 +181,14 @@ let xml = {
 			let ele = xml.elementLt({slot: idx}),
 				divs = lt.querySelectorAll(".kopf");
 			lt.replaceChild(ele, divs[idx]);
+			// ggf. Vorschau auffrischen
+			let pre = ele.nextSibling;
+			if (pre && pre.classList.contains("pre-cont")) {
+				xml.xmlPreview({
+					xmlStr: xml.data.xl.lt[idx].xl,
+					after: ele,
+				});
+			}
 		} else {
 			// Datensatz hinzufügen
 			xml.data.xl.lt.push(ds);
@@ -175,10 +210,60 @@ let xml = {
 			}
 		}
 		// Ansicht tabellenartig gestalten
-		xml.tabellig({
+		xml.layoutTabellig({
 			id: "lt",
 			ele: [2, 3],
 		});
+	},
+	// XML-Vorschau erzeugen
+	//   xmlStr = String
+	//     (XML-Snippet, das angezeigt werden soll)
+	//   after = Element
+	//     (Elemente, hinter dem das Preview erscheinen soll)
+	//   editable = true || undefined
+	//     (XML-Snippet darf editiert werden)
+	xmlPreview ({xmlStr, after, editable = false}) {
+		// Einzüge hinzufügen (wenn möglich)
+		let parser = new DOMParser(),
+			xmlDoc = parser.parseFromString(xmlStr, "text/xml");
+		if (!xmlDoc.querySelector("parsererror")) {
+			xmlDoc = helferXml.indent(xmlDoc);
+			xmlStr = new XMLSerializer().serializeToString(xmlDoc);
+		}
+		// Element wird schon angezeigt => neu ausfüllen
+		let next = after.nextSibling;
+		if (next && next.classList.contains("pre-cont")) {
+			next.firstChild.innerHTML = helferXml.prettyPrint({xmlStr});
+			return;
+		}
+		// Element erzeugen und einhängen
+		let cont = document.createElement("div");
+		cont.classList.add("pre-cont");
+		let pre = document.createElement("pre");
+		cont.appendChild(pre);
+		pre.innerHTML = helferXml.prettyPrint({xmlStr});
+		after.parentNode.insertBefore(cont, after.nextSibling);
+		// Element einblenden
+		let height = cont.offsetHeight;
+		cont.style.height = "0px";
+		setTimeout(() => {
+			cont.style.height = `${height}px`;
+			setTimeout(() => cont.style.removeProperty("height"), 300);
+		}, 0);
+	},
+	// überprüft ein XML-Snippet darauf, ob es wohlgeformt ist
+	//   warn = Element
+	//     (das Warn-Icon, das angepasst werden muss)
+	//   xml = String
+	//     (XML-Snippet, das überprüft werden soll)
+	xmlCheck ({warn, xml}) {
+		let parser = new DOMParser(),
+			xmlDoc = parser.parseFromString(xml, "text/xml");
+		if (xmlDoc.querySelector("parsererror")) {
+			warn.classList.add("aktiv");
+		} else {
+			warn.classList.remove("aktiv");
+		}
 	},
 	// Breite von Elementen anpassen, sodass Kopfzeilen wie eine Tabelle wirken
 	//   id = String
@@ -186,7 +271,7 @@ let xml = {
 	//   ele = Array
 	//     (in jedem Slot steht eine Nummer, die für das Element steht, dessen Breite
 	//     angepasst werden soll)
-	tabellig ({id, ele}) {
+	layoutTabellig ({id, ele}) {
 		let cont = document.getElementById(id),
 			koepfe = cont.querySelectorAll(".kopf");
 		for (let i of ele) {

@@ -75,12 +75,15 @@ h2:first-child {
 /* Kopfleisten ---------------------------------- */
 
 p.leer {
+	margin: 0;
 	color: var(--textSehrHell);
 	font-style: italic;
+	line-height: 34px;
 }
 
 .kopf {
-	padding: 5px 0;
+	border-radius: 5px;
+	padding: 5px;
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
@@ -88,7 +91,6 @@ p.leer {
 
 .kopf:hover {
 	background-color: var(--hover);
-	cursor: pointer;
 }
 
 .kopf > * {
@@ -135,4 +137,26 @@ p.leer {
 
 .sigle {
 	font-weight: bold;
+}
+
+/* XML-Preview ---------------------------------- */
+
+.pre-cont {
+	overflow: hidden;
+	transition: height .3s ease;
+}
+
+pre {
+	margin: 10px 39px;
+	border-radius: 10px;
+	padding: 10px;
+	overflow: hidden;
+	background-color: var(--hintergrund);
+	color: var(--text);
+	font-family: "Noto Sans Mono", "Noto Sans Symbols2", monospace;
+	font-size: 14px;
+	line-height: 22px;
+	white-space: pre-wrap;
+	user-select: text;
+	tab-size: 2;
 }
