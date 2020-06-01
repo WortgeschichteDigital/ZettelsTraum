@@ -3138,6 +3138,15 @@ let redLit = {
 		let icons = document.createElement("span");
 		si.appendChild(icons);
 		icons.classList.add("icons");
+		// Icon: XML
+		if (kartei.wort) {
+			let xml = document.createElement("a");
+			icons.appendChild(xml);
+			xml.href = "#";
+			xml.classList.add("icon-link", "icon-xml");
+			xml.title = "Titelaufnahme in XML-Datei";
+			redLit.xml({icon: xml});
+		}
 		// Icon: Löschen
 		if (redLit.anzeige.snippetKontext === "popup") {
 			let del = document.createElement("a");
@@ -3539,5 +3548,23 @@ let redLit = {
 		}
 		clipboard.writeText(text);
 		helfer.animation("zwischenablage");
+	},
+	// Titelaufnahme an das Redaktionssystem schicken
+	//   icon = Element
+	//     (das XML-Icon)
+	xml ({icon}) {
+		icon.addEventListener("click", function(evt) {
+			evt.preventDefault();
+			let ds = JSON.parse(this.closest(".red-lit-snippet").dataset.ds);
+			let xmlDatum = {
+				key: "lt",
+				ds: {
+					id: ds.id,
+					si: redLit.db.data[ds.id][0].td.si,
+					xl: redLit.dbExportierenSnippetXML({id: ds.id, slot: 0}),
+				},
+			};
+			redXml.datum({xmlDatum});
+		});
 	},
 };
