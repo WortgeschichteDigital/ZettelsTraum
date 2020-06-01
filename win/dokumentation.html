@@ -9,6 +9,7 @@
 		<link rel="stylesheet" href="../css/win/hilfe.css">
 		<link rel="stylesheet" href="../css/win/hilfe-drucken.css" media="print">
 
+		<script src="../js/helferXml.js"></script>
 		<script src="../js/suchleiste.js"></script>
 		<script src="../js/tastatur.js"></script>
 
@@ -1308,7 +1309,7 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
 
 					<p>Ein typisches <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippet, das mit den entsprechenden <a href="#belegliste-xmlZwischenablage" class="link-handbuch">Kopierfunktionen</a> erstellt wurde, könnte so aussehen:</p>
 
-					<pre class="quelltext">&lt;Beleg xml:id="n-n-1859-19"&gt;
+					<pre class="quelltext xml-pretty-print">&lt;Beleg xml:id="n-n-1859-19"&gt;
 	&lt;Belegtext&gt;Eine Wache von zehn Mann ward ausgestellt, der Rest der Mannschaft konnte nun thun, was ihm beliebte. Zelte hatten wir keine; unser &lt;Stichwort&gt;Team&lt;/Stichwort&gt; enthielt nichts als unsere Lebensmittel, Kochgeschirr und Teppiche und Munition. Jeder holte sich seine Teppiche aus dem &lt;Stichwort&gt;Team&lt;/Stichwort&gt;, Köche wurden ausgelesen zum Kaffeekochen für die Kompagnieen, große Feuer gebildet, und um jedes Feuer lagen, standen und saßen Gruppen von Soldaten, eingewickelt in Teppiche von allen Farben.&lt;/Belegtext&gt;
 	&lt;Fundstelle&gt;
 		&lt;Fundort&gt;GoogleBooks&lt;/Fundort&gt;
@@ -1362,7 +1363,7 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
 
 					<p>Ein typisches Fundstellen-Snippet, wie es für den Export von Titelaufnahmen aus der <a href="#menueRedaktion-literaturExportieren" class="link-handbuch">Literaturdatenbank</a> verwendet wird, könnte so aussehen:</p>
 
-					<pre class="quelltext">&lt;Fundstelle xml:id="dwb2"&gt;
+					<pre class="quelltext xml-pretty-print">&lt;Fundstelle xml:id="dwb2"&gt;
 	&lt;Sigle&gt;²DWB&lt;/Sigle&gt;
 	&lt;unstrukturiert&gt;Deutsches Wörterbuch von Jacob Grimm und Wilhelm Grimm. Neubearbeitung. Hrsg. von der Berlin-Brandenburgischen Akademie der Wissenschaften (vormals Deutsche Akademie der Wissenschaften) und der Akademie der Wissenschaften zu Göttingen. Bd. 1–9. Stuttgart 1983–2018.&lt;/unstrukturiert&gt;
 	&lt;Fundort&gt;Bibliothek&lt;/Fundort&gt;
@@ -1392,14 +1393,14 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
 
 					<p>Der Referenz-Tag kann genutzt werden, um auf einen in <abbr title="Extensible Markup Language" lang="en">XML</abbr> exportierten Belegschnitt zu verweisen (zur <a href="#xml-belegschnittId">Form der ID</a> <abbr title="siehe oben">s. o.</abbr>). Ein Beispiel:</p>
 
-					<pre class="quelltext">&lt;Belegreferenz Ziel="n-n-1859-19"/&gt;</pre>
+					<pre class="quelltext xml-pretty-print">&lt;Belegreferenz Ziel="n-n-1859-19"/&gt;</pre>
 
 					<!-- Referenz Literaturtitel -->
 					<h2 id="xml-referenzLiteratur">Referenz eines Literaturtitels</h2>
 
 					<p>Der Referenz-Tag kann genutzt werden, um auf eine in <abbr title="Extensible Markup Language" lang="en">XML</abbr> exportierte Titelaufnahme zu verweisen. Ein Beispiel:</p>
 
-					<pre class="quelltext">&lt;Literaturreferenz Ziel="dwb2"&gt;&lt;/Literaturreferenz&gt;</pre>
+					<pre class="quelltext xml-pretty-print">&lt;Literaturreferenz Ziel="dwb2"&gt;&lt;/Literaturreferenz&gt;</pre>
 				</section>
 
 				<!-- VERSCHIEDENES -->
@@ -1434,7 +1435,7 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
 
 					<p><i class="app-name"></i> kann <a href="#einstellungen-tagDateien" class="link-handbuch">mit Tag-Dateien verknüpft</a> werden, um <a href="#bedeutungsgeruest-tagFenster" class="link-handbuch">Bedeutungen zu taggen</a>. Die Funktion ist so abstrakt programmiert, dass man problemlos die Inhalte selbst erstellter Tag-Dateien importieren kann. Das folgende Beispiel enthält alle verpflichtenden und möglichen Tags:</p>
 
-					<pre class="quelltext">&lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;
+					<pre class="quelltext xml-pretty-print">&lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;
 &lt;register&gt;
 	&lt;item&gt;
 		&lt;id&gt;1&lt;/id&gt;

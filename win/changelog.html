@@ -9,6 +9,7 @@
 		<link rel="stylesheet" href="../css/win/changelog.css">
 		<link rel="stylesheet" href="../css/win/changelog-drucken.css" media="print">
 
+		<script src="../js/helferXml.js"></script>
 		<script src="../js/suchleiste.js"></script>
 		<script src="../js/tastatur.js"></script>
 
@@ -1208,7 +1209,7 @@
 
 						<p>Die Annotierung wird dauerhaft in der Kartei gespeichert, deswegen bekommt die Kartei <abbr title="beziehungsweise">bzw.</abbr> die Karteikarte eine Änderungsmarkierung, nachdem ein Wort annotiert wurde. Gespeichert wird die Annotierung im Belegtext, sie ist also auch im Formular der Karteikarte sichtbar. Im Quelltext kann das Ganze dann <abbr title="zum Beispiel">z. B.</abbr> so aussehen:</p>
 
-						<pre class="quelltext"><code class="quelltext">&lt;span class="annotierung-wort farbe3" title="hier steht die Textnotiz"&gt;Freiheit&lt;/span&gt;</code></pre>
+						<pre class="quelltext xml-pretty-print">&lt;span class="annotierung-wort farbe3" title="hier steht die Textnotiz"&gt;Freiheit&lt;/span&gt;</pre>
 					</li>
 
 					<li><i class="app-name"></i> liefert ab dieser Version eine Demonstrationskartei mit, an der neue NutzerInnen sehen können, wie eine mit einem Bedeutungsgerüst versehene und mit Belegen gefüllte Wortkartei aussieht. Die Kartei kann via <i>Hilfe &gt; Demonstrationskartei</i> geöffnet werden.</li>
@@ -1406,7 +1407,7 @@
 					<li>
 						<p>Suchleiste: Text, der über mehrfach verschachtelte Tags hinausging, konnte nicht markiert und in der Konsequenz auch nicht gefunden werden. Eine Suche nach dem Text <i>der Beispiel-Satz</i> liefert nun korrekterweise einen Treffer, selbst wenn der Text wie folgt getaggt ist:</p>
 
-						<pre class="quelltext">der &lt;i&gt;&lt;b&gt;&lt;u&gt;Beispiel&lt;/u&gt;&lt;/b&gt;&lt;/i&gt;-Satz</pre>
+						<pre class="quelltext xml-pretty-print">der &lt;i&gt;&lt;b&gt;&lt;u&gt;Beispiel&lt;/u&gt;&lt;/b&gt;&lt;/i&gt;-Satz</pre>
 					</li>
 				</ul>
 			</div>
@@ -2156,7 +2157,7 @@ Gerüst 2 &gt; Gerüst 1</pre>
 					<li>
 						<p>Sachgebiete: In den <i>Programm-Einstellungen</i> unter <i>Bedeutungsgerüst</i> kann nun eine Datei mit einer Liste an Sachgebieten geladen werden. Dabei muss es sich um eine in <abbr title="UCS Transformation Format" lang="en">UTF</abbr>-8 enkodierte <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Datei handeln, die die folgende Struktur hat:</p>
 
-						<pre class="quelltext">&lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;
+						<pre class="quelltext xml-pretty-print">&lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;
 &lt;sachgebiete&gt;
 	&lt;sachgebiet&gt;
 		&lt;id&gt;1&lt;/id&gt;
