@@ -12,10 +12,10 @@ let initWin = {
 			bedeutungen.data = daten;
 			bedeutungen.aufbauen();
 		});
-		// XML-Daten übernehmen (Redaktionsfenster für XML-Dateien)
+		// XML-Redaktionsfenster: alle XML-Daten empfangen
 		ipcRenderer.on("xml-daten", (evt, xmlDaten) => {
 			xml.data = xmlDaten;
-			xml.aufbauen();
+			xml.init();
 		});
 		// XML-Redaktionsfester: einen XML-Datensatz empfangen
 		ipcRenderer.on("xml-datum", (evt, xmlDatum) => xml.empfangen({xmlDatum}));

@@ -9,6 +9,9 @@
 /* Globale Klassen ------------------------------ */
 @import url(../global.css);
 
+/* Icon-Links ----------------------------------- */
+@import url(../icon-links.css);
+
 
 /* Struktur-Elemente ---------------------------- */
 body {
@@ -67,4 +70,69 @@ h2 {
 
 h2:first-child {
 	margin-top: 0;
+}
+
+/* Kopfleisten ---------------------------------- */
+
+p.leer {
+	color: var(--textSehrHell);
+	font-style: italic;
+}
+
+.kopf {
+	padding: 5px 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.kopf:hover {
+	background-color: var(--hover);
+	cursor: pointer;
+}
+
+.kopf > * {
+	display: inline-block;
+	vertical-align: top;
+	margin-left: 10px;
+}
+
+.kopf > *:first-child {
+	margin-left: 0;
+}
+
+.kopf > *:last-child {
+	display: inline;
+}
+
+.warn {
+	display: inline-block;
+	width: 24px;
+	height: 24px;
+	background-color: transparent;
+}
+
+.warn.aktiv {
+	background-color: var(--textWarnung);
+}
+
+.icon-link {
+	background-color: var(--textExtremHell);
+}
+
+.icon-link:focus {
+	background-color: var(--farbe);
+}
+
+.icon-link:hover {
+	background-color: var(--text);
+}
+
+.id {
+	color: var(--farbeGruenDunkel);
+	font-weight: bold;
+}
+
+.sigle {
+	font-weight: bold;
 }
