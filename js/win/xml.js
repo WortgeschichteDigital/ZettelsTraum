@@ -129,10 +129,15 @@ let xml = {
 			}
 			// Element entfernen
 			kopf.parentNode.removeChild(kopf);
-			// ggf. Leermeldung erzeugen
+			// Leermeldung erzeugen oder Ansicht auffrischen
 			if (!xml.data.xl.lt.length) {
 				xml.elementLeer({
 					ele: document.getElementById("lt"),
+				});
+			} else {
+				xml.layoutTabellig({
+					id: "lt",
+					ele: [2, 3],
 				});
 			}
 		});

@@ -142,12 +142,13 @@ p.leer {
 /* XML-Preview ---------------------------------- */
 
 .pre-cont {
+	margin: 0 0 0 39px;
 	overflow: hidden;
 	transition: height .3s ease;
 }
 
 pre {
-	margin: 10px 39px;
+	margin: 10px 0;
 	border-radius: 10px;
 	padding: 10px;
 	overflow: hidden;
