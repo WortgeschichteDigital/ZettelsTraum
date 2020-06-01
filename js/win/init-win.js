@@ -17,6 +17,8 @@ let initWin = {
 			xml.data = xmlDaten;
 			xml.aufbauen();
 		});
+		// XML-Redaktionsfester: einen XML-Datensatz empfangen
+		ipcRenderer.on("xml-datum", (evt, xmlDatum) => xml.empfangen({xmlDatum}));
 		// Before-Unload
 		ipcRenderer.on("before-unload", () => helferWin.beforeUnload());
 	},
