@@ -989,17 +989,17 @@ let karteisuche = {
 				}
 			} else {
 				if (knapp) {
-					content += `\n<li>${xml.escape({text: karteisuche.ztj[idx].wort})} (${statusTxt})</li>`;
+					content += `\n<li>${helferXml.maskieren({text: karteisuche.ztj[idx].wort})} (${statusTxt})</li>`;
 				} else {
-					content += `\n<tr><td>${xml.escape({text: karteisuche.ztj[idx].wort})}</td><td>${check}</td><td>${xml.escape({text: status.ereignis})}</td>`;
+					content += `\n<tr><td>${helferXml.maskieren({text: karteisuche.ztj[idx].wort})}</td><td>${check}</td><td>${helferXml.maskieren({text: status.ereignis})}</td>`;
 					if (inMit.length) {
-						content += `<td>${xml.escape({text: inMit.join(", ")})}</td>`;
+						content += `<td>${helferXml.maskieren({text: inMit.join(", ")})}</td>`;
 					} else {
 						content += "<td> </td>";
 					}
-					content += `<td>${xml.escape({text: karteiPr})}</td><td>${karteiDa}</td>`;
+					content += `<td>${helferXml.maskieren({text: karteiPr})}</td><td>${karteiDa}</td>`;
 					if (artikelPr) {
-						content += `<td>${xml.escape({text: artikelPr})}</td><td>${artikelDa}</td></tr>`;
+						content += `<td>${helferXml.maskieren({text: artikelPr})}</td><td>${artikelDa}</td></tr>`;
 					} else {
 						content += "<td>–</td><td>–</td></tr>";
 					}

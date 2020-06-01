@@ -1033,7 +1033,7 @@ let belegImport = {
 			xmlTxt += "</Fundstelle></Beleg>";
 			let parser = new DOMParser(),
 				xmlDoc = parser.parseFromString(xmlTxt, "text/xml"),
-				xmlDocIndent = xml.indent(xmlDoc);
+				xmlDocIndent = helferXml.indent(xmlDoc);
 			data.ds.bx = new XMLSerializer().serializeToString(xmlDocIndent);
 		}
 	},
@@ -1873,7 +1873,7 @@ let belegImport = {
 			if (!illegal && (/[^\s]+/.test(autor[0]) || kommata <= 1)) {
 				data.ds.au = autor[0];
 			}
-			data.ds.da = xml.datum(quelle, false, true);
+			data.ds.da = helferXml.datum(quelle, false, true);
 			if (/\[Tageszeitung\]/.test(quelle)) {
 				data.ds.ts = "Zeitung: Tageszeitung";
 				data.ds.qu = quelle.replace(/,*\s*\[Tageszeitung\]/g, "");

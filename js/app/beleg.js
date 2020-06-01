@@ -892,7 +892,7 @@ let beleg = {
 	toolsKopierenAddJahr (text, html) {
 		// ID und Jahr ermitteln
 		let id = xml.belegId({}),
-			jahr = xml.datum(popup.referenz.data.da, false), // könnte auch Jh. sein
+			jahr = helferXml.datum(popup.referenz.data.da, false), // könnte auch Jh. sein
 			jahreszahl = jahr.match(/[0-9]{4}/);
 		if (jahreszahl) {
 			jahr = jahreszahl[0];

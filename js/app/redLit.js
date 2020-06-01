@@ -449,7 +449,7 @@ let redLit = {
 			content += `</Literaturliste></WGD>`;
 			let parser = new DOMParser(),
 				xmlDoc = parser.parseFromString(content, "text/xml");
-			xmlDoc = xml.indent(xmlDoc);
+			xmlDoc = helferXml.indent(xmlDoc);
 			content = new XMLSerializer().serializeToString(xmlDoc);
 			// Fixes
 			content = content.replace(/\?>/, "?>\n");
@@ -474,10 +474,10 @@ let redLit = {
 	dbExportierenSnippetXML ({id, slot}) {
 		let ds = redLit.db.data[id][slot].td,
 			snippet = `<Fundstelle xml:id="${id}">`;
-		snippet += `<Sigle>${xml.escape({text: ds.si})}</Sigle>`;
-		snippet += `<unstrukturiert>${xml.escape({text: ds.ti})}</unstrukturiert>`;
+		snippet += `<Sigle>${helferXml.maskieren({text: ds.si})}</Sigle>`;
+		snippet += `<unstrukturiert>${helferXml.maskieren({text: ds.ti})}</unstrukturiert>`;
 		if (ds.ul) {
-			snippet += `<URL>${xml.escape({text: ds.ul})}</URL>`;
+			snippet += `<URL>${helferXml.maskieren({text: ds.ul})}</URL>`;
 		}
 		if (ds.ad) {
 			let ad = ds.ad.split("-");
@@ -3224,7 +3224,7 @@ let redLit = {
 			let parser = new DOMParser(),
 				snippet = redLit.dbExportierenSnippetXML(popup.titelaufnahme.ds),
 				xmlDoc = parser.parseFromString(snippet, "text/xml");
-			xmlDoc = xml.indent(xmlDoc);
+			xmlDoc = helferXml.indent(xmlDoc);
 			text = new XMLSerializer().serializeToString(xmlDoc);
 		}
 		clipboard.writeText(text);
