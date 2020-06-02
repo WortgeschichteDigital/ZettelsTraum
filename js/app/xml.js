@@ -30,7 +30,12 @@ let xml = {
 		}
 		// <Belegtext>
 		let cont = document.createElement("div");
+		// Belegschnitt typographisch aufbereiten
+		// (sollte hier passieren, weil später automatisch XML-Ersetzungen reinkommen)
 		cont.innerHTML = helfer.typographie(popup.textauswahl.xml);
+		// <span> für farbige Hervorhebung der Klammern ersetzen
+		helfer.clipboardHtmlErsetzen(cont, `[class^="klammer-"]`);
+		// Belegschnitt parsen
 		let text = "",
 			knoten = cont.childNodes;
 		for (let i = 0, len = knoten.length; i < len; i++) {
@@ -46,10 +51,9 @@ let xml = {
 			getText(knoten[i]);
 		}
 		// Belegtext aufbereiten
-		//   - Trennzeichen automatisch ersetzen
-		//   - Verschachtelte Hervorhebungen zusammenführen
-		text = text.replace(/<Autorenzusatz>\[¬\]<\/Autorenzusatz>([A-ZÄÖÜ])/g, (m, p1) => `-${p1}`);
-		text = text.replace(/<Autorenzusatz>\[¬\]<\/Autorenzusatz>/g, "");
+		//   - Text trimmen (durch Streichungen können doppelte Leerzeichen entstehen)
+		//   - verschachtelte Hervorhebungen zusammenführen
+		text = helfer.textTrim(text, true);
 		let reg = new RegExp(`(?<start>(<Hervorhebung( Stil="#[^>]+")?>){2,})(?<text>[^<]+)(<\/Hervorhebung>)+`, "g"),
 			h = reg.exec(text);
 		if (h) {
@@ -80,9 +84,7 @@ let xml = {
 					if (c.nodeType === 1 &&
 							c.nodeName === "MARK") {
 						if (/wortFarbe[0-9]+/.test(c.getAttribute("class"))) {
-							// das ist für Kollokationen gedacht
-							// TODO da muss wohl ein spezieller Tag her
-							text += `<erwaehntes_Zeichen Sprache="dt">`;
+							text += `<erwaehntes_Zeichen>`;
 							close = "</erwaehntes_Zeichen>";
 						} else {
 							text += "<Stichwort>";
@@ -108,8 +110,26 @@ let xml = {
 			} else if (n.nodeType === 3) {
 				let textEsc = helferXml.maskieren({text: n.nodeValue});
 				textEsc = textEsc.replace(/&/g, "&amp;"); // sonst macht der Parser die &quot; usw. wieder weg
-				text += textEsc.replace(/\[.*?\]/g, m => `<Autorenzusatz>${m}</Autorenzusatz>`);
+				text += klammernTaggen(textEsc);
 			}
+		}
+		// geklammerte Texttexteile automatisch taggen
+		//   text = String
+		//     (Belegtext, der getaggt werden soll)
+		function klammernTaggen (text) {
+			// DTA-Import Trennstriche auflösen (folgt Großbuchstabe => Trennstrich erhalten)
+			text = text.replace(/\[¬\]([A-ZÄÖÜ])/g, (m, p1) => `-${p1}`);
+			// DTA-Import: technische Klammern entfernen
+			// (Trennstriche, Seiten- und Spaltenwechsel)
+			text = text.replace(/\[(¬|:.+?:)\]/g, "");
+			// Löschung: [[...]]
+			text = text.replace(/\[{2}(.+?)\]{2}/g, (m, p1) => `<Loeschung>${p1}</Loeschung>`);
+			// Streichung: [...]
+			text = text.replace(/\[(.+?)\]/g, (m, p1) => `<Streichung>${p1}</Streichung>`);
+			// Autorenzusatz: {...}
+			text = text.replace(/\{(.+?)\}/g, (m, p1) => `<Autorenzusatz>${p1}</Autorenzusatz>`);
+			// Ergebnis zurückgeben
+			return text;
 		}
 		// <Fundstelle>
 		let fundstelle = document.createElementNS(ns, "Fundstelle");
