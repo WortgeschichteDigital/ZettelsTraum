@@ -30,6 +30,11 @@ let xml = {
 		}
 		if (!xml.data.xl.lt.length) {
 			xml.elementLeer({ele: lt});
+		} else {
+			xml.layoutTabellig({
+				id: "lt",
+				ele: [2, 3],
+			});
 		}
 		// Init: Wortinformationen
 		let wi = document.getElementById("wi");
