@@ -321,7 +321,7 @@ let punkte = {
 	xmlBeleg: {
 		label: "Belegschnitt",
 		icon: "beleg.png",
-		click: "xml.schnitt()",
+		click: "xml.schnittInZwischenablage()",
 	},
 	xmlReferenz: {
 		label: "Referenz",

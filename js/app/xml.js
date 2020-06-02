@@ -1,7 +1,7 @@
 "use strict";
 
 let xml = {
-	// markierten Belegschnitt in die Zwischenablage kopieren
+	// markierten Belegschnitt aufbereiten
 	schnitt () {
 		let data = popup.referenz.data,
 			ns = "http://www.w3.org/1999/xhtml";
@@ -182,8 +182,8 @@ let xml = {
 		// Einzüge hinzufügen
 		schnitt = helferXml.indent(schnitt);
 		// Text in String umwandeln und aufbereiten
-		let XMLString = new XMLSerializer().serializeToString(schnitt);
-		XMLString = XMLString.replace(/\sxmlns="http:\/\/www\.w3\.org\/1999\/xhtml"/g, "");
+		let xmlStr = new XMLSerializer().serializeToString(schnitt);
+		xmlStr = xmlStr.replace(/\sxmlns="http:\/\/www\.w3\.org\/1999\/xhtml"/g, "");
 		let zeichen = new Map([
 			["&amp;amp;", "&amp;"],
 			["&amp;lt;", "&lt;"],
@@ -193,11 +193,17 @@ let xml = {
 		]);
 		for (let [k, v] of zeichen) {
 			let reg = new RegExp(k, "g");
-			XMLString = XMLString.replace(reg, v);
+			xmlStr = xmlStr.replace(reg, v);
 		}
+		// String zurückgeben
+		return xmlStr;
+	},
+	// markierten Belegschnitt in die Zwischenablage kopieren
+	schnittInZwischenablage () {
+		const xmlStr = xml.schnitt();
 		// Text kopieren
 		helfer.toClipboard({
-			text: XMLString,
+			text: xmlStr,
 		});
 		// Animation
 		helfer.animation("zwischenablage");

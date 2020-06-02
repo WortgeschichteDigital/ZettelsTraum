@@ -1924,7 +1924,7 @@ let liste = {
 				helfer.animation("zwischenablage");
 				break;
 			case "3":
-				xml.schnitt();
+				xml.schnittInZwischenablage();
 				break;
 			case "4":
 				xml.referenz();
