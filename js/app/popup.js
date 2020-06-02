@@ -463,8 +463,12 @@ let popup = {
 			}
 			xml = helfer.clipboardXml(xml);
 			if (bs) {
+				text = beleg.toolsKopierenKlammern({text});
+				text = helfer.typographie(text);
 				text = beleg.toolsKopierenAddQuelle(text, false, obj);
 				text = beleg.toolsKopierenAddJahr(text, false);
+				html = beleg.toolsKopierenKlammern({text: html});
+				html = helfer.typographie(html);
 				html = beleg.toolsKopierenAddQuelle(html, true, obj);
 				html = beleg.toolsKopierenAddJahr(html, true);
 			}

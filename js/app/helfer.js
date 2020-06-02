@@ -276,7 +276,7 @@ let helfer = {
 		let cont = document.createElement("div");
 		cont.innerHTML = html;
 		// Hervorhebungen, die standardmäßig gelöscht gehören
-		let marks = [".suche", ".suchleiste", ".user"];
+		let marks = [".suche", ".suchleiste", ".user", `[class^="klammer-"]`];
 		if (!optionen.data.einstellungen["textkopie-wort"]) { // Hervorhebung Karteiwort ebenfalls löschen
 			marks.push(".wort");
 		} else {
