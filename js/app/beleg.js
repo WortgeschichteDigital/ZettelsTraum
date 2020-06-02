@@ -1712,6 +1712,7 @@ let beleg = {
 						text = liste.linksErkennen(text);
 					}
 					if (wert === "bs") {
+						text = liste.belegKlammernHervorheben({text});
 						text = liste.belegWortHervorheben(text, true);
 					}
 				}

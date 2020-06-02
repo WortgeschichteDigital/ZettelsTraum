@@ -680,6 +680,8 @@ let liste = {
 			zuletzt_gekuerzt = false;
 			// ggf. Trennungszeichen entfernen
 			p_prep[i] = liste.belegTrennungWeg(p_prep[i], false);
+			// ggf. Klammerungen markieren
+			p_prep[i] = liste.belegKlammernHervorheben({text: p_prep[i]});
 			// Absatz normal einhängen
 			p.innerHTML = liste.suchtreffer(liste.belegWortHervorheben(p_prep[i], false), "bs", id);
 			annotieren.init(p);
@@ -733,11 +735,13 @@ let liste = {
 			p.dataset.id = id;
 			if (id) {
 				text = liste.belegTrennungWeg(text, false);
+				text = liste.belegKlammernHervorheben({text});
 				p.innerHTML = liste.belegWortHervorheben(text, false);
 			} else {
 				if (!optionen.data.beleg.trennung) {
 					text = liste.belegTrennungWeg(text, true);
 				}
+				text = liste.belegKlammernHervorheben({text});
 				p.innerHTML = liste.belegWortHervorheben(text, true);
 			}
 			annotieren.init(p);
@@ -944,6 +948,39 @@ let liste = {
 			text = text.replace(/\] \[:/g, "][:");
 		}
 		return text.replace(/\[¬\]|\[:.+?:\]\s*/g, "");
+	},
+	// hebt ggf. die unterschiedlich eingeklammerten Textteile hervor,
+	// die im Belegtext zu finden sind
+	//   text = String
+	//     (Belegtext, in dem die Klammern markiert werden sollen)
+	belegKlammernHervorheben ({text}) {
+		// DTA-Import: Anmerkungen werden an der Stelle, an der der Anker ist,
+		// in eckigen Klammern nachgestellt
+		text = text.replace(/\[Anmerkung:(.+?)\]/g, (m, p1) => {
+			return `<span class="klammer-anmerkung">[Anmerkung:</span>${p1}<span class="klammer-anmerkung">]</span>`;
+		});
+		// DTA-Import: Trenn- oder Bindestrich am Ende einer Zeile
+		text = text.replace(/\[¬\]/g, m => {
+			return `<span class="klammer-technisch">${m}</span>`;
+		});
+		// DTA-Import: Spalten- oder Seitenumbruch
+		text = text.replace(/\[:(.+?):\]/g, (m, p1) => {
+			return `<span class="klammer-technisch">[:${p1}:]</span>`;
+		});
+		// Autorenzusatz
+		text = text.replace(/(?<!<span class="klammer-[a-z]+">)\{.+?\}/g, m => {
+			return `<span class="klammer-autorenzusatz">${m}</span>`;
+		});
+		// Löschung
+		text = text.replace(/(?<!<span class="klammer-[a-z]+">)\[{2}.+?\]{2}/g, m => {
+			return `<span class="klammer-loeschung">${m}</span>`;
+		});
+		// Streichung
+		text = text.replace(/(?<!<span class="klammer-[a-z]+">\[?)\[.+?\]/g, m => {
+			return `<span class="klammer-streichung">${m}</span>`;
+		});
+		// Ergebnis zurückgeben
+		return text;
 	},
 	// hebt ggf. das Wort der Kartei im übergebenen Text hervor
 	//   schnitt = String
