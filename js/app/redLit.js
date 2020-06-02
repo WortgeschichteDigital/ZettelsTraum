@@ -3556,7 +3556,7 @@ let redLit = {
 		clipboard.writeText(text);
 		helfer.animation("zwischenablage");
 	},
-	// Titelaufnahme an das Redaktionssystem schicken
+	// Titelaufnahme an das Redaktionssystem schicken (Listener)
 	//   icon = Element
 	//     (das XML-Icon)
 	xml ({icon}) {
@@ -3591,15 +3591,21 @@ let redLit = {
 				}
 				id = redLit.eingabe.id;
 			}
-			let xmlDatensatz = {
-				key: "lt",
-				ds: {
-					id,
-					si: redLit.db.data[id][0].td.si,
-					xl: redLit.dbExportierenSnippetXML({id, slot: 0}),
-				},
-			};
-			redXml.datensatz({xmlDatensatz});
+			redLit.xmlDatensatz({id});
 		});
+	},
+	// Titelaufnahme an das Redaktionssystem schicken
+	//   id = String
+	//     (die ID der Titelaufnahme)
+	xmlDatensatz ({id}) {
+		let xmlDatensatz = {
+			key: "lt",
+			ds: {
+				id,
+				si: redLit.db.data[id][0].td.si,
+				xl: redLit.dbExportierenSnippetXML({id, slot: 0}),
+			},
+		};
+		redXml.datensatz({xmlDatensatz});
 	},
 };

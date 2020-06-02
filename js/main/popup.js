@@ -327,6 +327,11 @@ let punkte = {
 		icon: "xml.png",
 		click: "redLit.titelZwischenablage('xmlReferenz')",
 	},
+	titelXml: {
+		label: "Titelaufnahme in XML-Datei",
+		icon: "xml.png",
+		click: `redLit.xmlDatensatz({id: popup.titelaufnahme.ds.id})`,
+	},
 	wort: {
 		label: "Wort ändern",
 		icon: "text-pfeil-kreis.png",
