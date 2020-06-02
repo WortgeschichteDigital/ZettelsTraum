@@ -34,6 +34,7 @@ let xml = {
 			xml.layoutTabellig({
 				id: "lt",
 				ele: [2, 3],
+				warten: 250,
 			});
 		}
 		// Init: Wortinformationen
@@ -289,28 +290,32 @@ let xml = {
 	//   ele = Array
 	//     (in jedem Slot steht eine Nummer, die für das Element steht, dessen Breite
 	//     angepasst werden soll)
-	layoutTabellig ({id, ele}) {
+	//   warten = Number || undefined
+	//     (Millisekunden, die vor dem Berechnen der Maximalbreite gewartet werden
+	//     soll; beim Initialisieren muss dies deutlich länger sein)
+	async layoutTabellig ({id, ele, warten = 15}) {
 		let cont = document.getElementById(id),
 			koepfe = cont.querySelectorAll(".kopf");
-		for (let i of ele) {
+		// Breitenangaben entfernen
+		for (let k of koepfe) {
+			for (let e of ele) {
+				k.childNodes[e].style = null;
+			}
+		}
+		// kurz warten, um dem Renderer Zeit zum Neuaufbau zu geben
+		await new Promise(resolve => setTimeout(() => resolve(true), warten));
+		// größte Breite ermitteln und für alle Köpfe setzen
+		for (let e of ele) {
 			let max = 0;
-			// Breiten löschen
 			for (let k of koepfe) {
-				k.childNodes[i].style = null;
-				const breite = k.childNodes[i].offsetWidth;
+				const breite = k.childNodes[e].offsetWidth;
 				if (breite > max) {
 					max = breite;
 				}
 			}
-			// Abbruch, wenn nur ein Kopf vorhanden ist
-			// (die Breite wird in diesem Fall falsch berechnet)
-			if (koepfe.length === 1) {
-				continue;
-			}
-			// Breite der Elemente festlegen
 			max = Math.ceil(max);
 			for (let k of koepfe) {
-				k.childNodes[i].style.width = `${max}px`;
+				k.childNodes[e].style.width = `${max}px`;
 			}
 		}
 	},
