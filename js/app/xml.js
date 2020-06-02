@@ -139,11 +139,11 @@ let xml = {
 		fundstelle.appendChild(fo);
 		fo.appendChild(document.createTextNode(fundort));
 		// <Datum>
-		let da = helferXml.datum(data.da);
+		let da = helferXml.datum(data.da, false, true);
 		if (da) {
 			let datum = document.createElementNS(ns, "Datum");
 			fundstelle.appendChild(datum);
-			datum.appendChild(document.createTextNode(da));
+			datum.appendChild(document.createTextNode(da.replace("–", "-"))); // hier lieber keinen Halbgeviertstrich
 		}
 		// <URL>
 		let href = data.qu.match(/https?:[^\s]+|www\.[^\s]+/);

@@ -14,9 +14,9 @@ let helferXml = {
 		let sonderformate = [];
 		if (sonder) {
 			let formate = [
-				/(([0-9]{4})\/[0-9]{2})(?![0-9])/,
-				/(?<!Sp?\. )(([0-9]{4})[\-–][0-9]{4})/,
-				/zwischen (([0-9]{4}) und [0-9]{4})/,
+				/(([0-9]{4})\/[0-9]{2})(?![0-9])/, // 1848/49
+				/(?<!Sp?\. )(([0-9]{4})[\-–][0-9]{4})/, // 1850–1853
+				/zwischen (([0-9]{4}) und [0-9]{4})/, // zwischen 1850 und 1853
 			];
 			for (let reg of formate) {
 				let m = text.match(reg);
