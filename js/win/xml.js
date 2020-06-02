@@ -258,6 +258,11 @@ let xml = {
 			cont.style.height = `${height}px`;
 			setTimeout(() => cont.style.removeProperty("height"), 300);
 		}, 0);
+		// Rechtsklickmenü bereitstellen
+		pre.addEventListener("contextmenu", evt => {
+			evt.preventDefault();
+			popup.oeffnen(evt);
+		});
 	},
 	// überprüft ein XML-Snippet darauf, ob es wohlgeformt ist
 	//   warn = Element
