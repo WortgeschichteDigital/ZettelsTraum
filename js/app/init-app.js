@@ -95,6 +95,7 @@ window.addEventListener("load", async () => {
 	});
 	// XML-Fenster
 	ipcRenderer.on("red-xml-daten", () => redXml.daten());
+	ipcRenderer.on("red-xml-speichern", (evt, daten) => redXml.speichern({daten}));
 	ipcRenderer.on("red-xml-geschlossen", () => redXml.contentsId = 0);
 	// Dialog
 	ipcRenderer.on("dialog-anzeigen", (evt, text) => {

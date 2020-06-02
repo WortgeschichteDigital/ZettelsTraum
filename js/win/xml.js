@@ -140,6 +140,8 @@ let xml = {
 					ele: [2, 3],
 				});
 			}
+			// Daten speichern
+			xml.speichern();
 		});
 	},
 	// Icon, dass darauf aufmerksam macht, dass das XML nicht valide ist
@@ -166,6 +168,7 @@ let xml = {
 		if (xmlDatensatz.key === "lt") {
 			xml.empfangenLt({ds: xmlDatensatz.ds});
 		}
+		xml.speichern();
 	},
 	// Empfangen von Datensätzen: Literaturtitel
 	//   ds = Object
@@ -300,5 +303,10 @@ let xml = {
 				k.childNodes[i].style.width = `${max}px`;
 			}
 		}
+	},
+	// Änderungen in der Kartei speichern
+	speichern () {
+		const {ipcRenderer} = require("electron");
+		ipcRenderer.sendTo(xml.data.contentsId, "red-xml-speichern", xml.data.xl);
 	},
 };

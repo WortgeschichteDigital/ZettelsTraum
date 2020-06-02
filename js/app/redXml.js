@@ -79,4 +79,11 @@ let redXml = {
 		const {ipcRenderer} = require("electron");
 		ipcRenderer.sendTo(redXml.contentsId, "xml-datensatz", xmlDatensatz);
 	},
+	// aus dem XML-Fenster empfangene Daten in die Kartei schreiben
+	//   daten = Object
+	//     (die XML-Datei-Daten)
+	speichern ({daten}) {
+		data.rd.xl = daten;
+		kartei.karteiGeaendert(true);
+	},
 };
