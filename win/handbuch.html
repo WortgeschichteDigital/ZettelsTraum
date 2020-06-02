@@ -412,7 +412,7 @@
 					<p class="erklaerung-icon" id="karteikarte-trennung"><img src="../img/trennzeichen.svg" width="24" height="24" alt="">Tastaturkürzel <kbd>Strg</kbd> + <kbd>T</kbd>; nur <i>Leseansicht</i>; Silbentrennung ein- <abbr title="beziehungsweise">bzw.</abbr> ausblenden</p>
 
 					<div class="info">
-						<p>Beim <a href="#karteikarte-dtaImport">Import von Belegen aus dem <abbr title="Deutschen Textarchiv">DTA</abbr></a> werden Trennstriche am Zeilenende durch die Markierung <q>[¬]</q> ersetzt. Wird die Trennstrichmarkierung ausgeschaltet, erscheint ein Bindestrich, wenn das nächste Wort mit einem Großbuchstaben beginnt. Aus <q>Eisenbahn[¬]Differentialtarife</q> wird darum <q>Eisenbahn-Differentialtarife</q>, aus <q>Groß[¬]industrieller</q> hingegen <q>Großindustrieller</q>. Die Markierungen bleiben beim Import erhalten, weil der Computer dem Lexikographen die Entscheidung, ob ein Trennstrich gesetzt werden muss oder nicht, eigentlich nicht abnehmen kann.</p>
+						<p id="karteikarte-bindestrich">Beim <a href="#karteikarte-dtaImport">Import von Belegen aus dem <abbr title="Deutschen Textarchiv">DTA</abbr></a> werden Trennstriche am Zeilenende durch die Markierung <q>[¬]</q> ersetzt. Wird die Trennstrichmarkierung ausgeschaltet, erscheint ein Bindestrich, wenn das nächste Wort mit einem Großbuchstaben beginnt. Aus <q>Eisenbahn[¬]Differentialtarife</q> wird darum <q>Eisenbahn-Differentialtarife</q>, aus <q>Groß[¬]industrieller</q> hingegen <q>Großindustrieller</q>. Die Markierungen bleiben beim Import erhalten, weil der Computer dem Lexikographen die Entscheidung, ob ein Trennstrich gesetzt werden muss oder nicht, eigentlich nicht abnehmen kann.</p>
 
 						<p>Werden mehrere Seiten importiert, erscheint vor jeder neuen Seite eine Umbruchsmarkierung nach dem Muster <q>␣[:SEITENZAHL:]␣</q> (davor und dahinter ein Leerzeichen). Folgt auf die Markierung Seite 351 des importierten Textes, stünde hier demnach <q>␣[:351:]␣</q>. Diese Umbruchsmarkierungen werden von der Einstellung zusätzlich zu den Trennstrichen erfasst und ein- oder ausgeblendet.</p>
 
@@ -601,6 +601,34 @@
 						<p>Was Sie trotz dieser automatischen Bereinigung, die beim Einfügen von Text angestoßen wird, dennoch jederzeit machen können: <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>-Elemente händisch eintippen. Hier gibt es keine Beschränkungen. Der Text wird so gespeichert, wie Sie ihn eingetippt haben. Bedenken Sie allerdings das oben Gesagte: Möchten Sie nicht <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>-Tags, sondern Text in literalen Spitzklammern eingeben, müssen Sie diese <a href="#karteikarte-maskieren">maskieren</a>.</p>
 
 						<p>Ein letztes noch zu diesem Punkt: Es ist vollkommen gleichgültig, mit welcher Methode Sie Text in das Beleg-Feld einfügen. Die automatische Bereinigung wird angestoßen, wenn Sie das Einfüge-Icon <img src="../img/einfuegen.svg" width="20" height="20" alt=""> verwenden, wenn Sie via <kbd>Strg</kbd> + <kbd>V</kbd> Text einfügen, via <i>Rechtsklick &gt; Einfügen</i> oder über über den Menüpunkt <a href="#menueBearbeiten-einfuegen"><i>Bearbeiten &gt; Einfügen</i></a>.</p>
+
+						<p id="karteikarte-belegKlammern">Im Belegfeld steht Ihnen ein ausdifferenziertes System an <b>Klammern</b> zur Verfügung, mit dem Sie Belegschnitte für einen späteren Export vorbereiten können, ohne dass Sie Belegtext wirklich löschen müssten. Das System dient dazu, Streichungen und Ergänzungen so vorzubereiten, dass Ihnen die App beim Export oder Kopieren des Textes den Belegschnitt in just der Form auswerfen kann, die Sie wünschen.</p>
+
+						<div class="bilder">
+							<figure title="zum Vergrößern anklicken">
+								<img src="../img/win/hb-karteikarte-klammern-beleg.png" alt="">
+								<figcaption>farbig hervorgehobene Klammern in einem Beleg</figcaption>
+							</figure>
+
+							<figure title="zum Vergrößern anklicken">
+								<img src="../img/win/hb-karteikarte-klammern-textprogramm.png" alt="">
+								<figcaption>aufgelöste Klammern nach dem Kopieren eines Belegschnitts</figcaption>
+							</figure>
+						</div>
+
+						<p>Im Folgenden wird beschrieben, wie die Klammerungen beim <a href="#karteikarte-kopieren">Kopieren</a> von Text, der zum Einfügen in ein Textprogramm dient, transformiert werden. Die Klammerungen werden auch beim Erstellen eines XML-Snippets aufgelöst. <abbr title="Vergleiche">Vgl.</abbr> dazu den entsprechenden <a href="#xml-belegschnitt" class="link-dokumentation"><abbr title="Abschnitt">Abschn.</abbr> in der technischen Dokumentation</a>.</p>
+
+						<p><b>{Text}</b> → <b>[Text]</b> = Autorenzusatz. Der markierte Belegtext bleibt beim Export somit erhalten, wird dabei aber in eckige Klammern gesetzt.</p>
+
+						<p><b>[Text]</b> → <b>[…]</b> = Streichung. Der markierte Belegtext wird beim Export gestrichen und durch eine Ellipse ersetzt.</p>
+
+						<p><b>[[Text]]</b> → <b>[…]</b> = Löschung. Der markierte Belegtext wird beim Export gestrichen und durch eine Ellipse ersetzt. Diese Differenzierung ist nur für den <a href="#belegliste-xmlZwischenablageBelegschnitt"><abbr title="Extensible Markup Language" lang="en">XML</abbr>-Export</a> relevant, zumal das Ergebnis hier identisch mit dem einer Streichung ist.</p>
+
+						<p><b>[¬]</b> → <i>wird gelöscht/durch Bindestrich ersetzt</i>. Trennstriche am Zeilenende, die über den <a href="#karteikarte-dtaImport"><abbr title="Deutsches Textarchiv">DTA</abbr>-Import</a> in den Belegtext kommen können. Es wird <a href="#karteikarte-bindestrich">der oben beschriebene Algorithmus</a> angewandt.</p>
+
+						<p><b>[:SEITENZAHL:]</b> → <i>wird gelöscht</i>. Markierung von Seiten- oder Spaltenumbrüchen, die über den <abbr title="Deutsches Textarchiv">DTA</abbr>-Import in den Belegtext kommen können.</p>
+
+						<p><b>[Anmerkung: Text]</b> → <b>[Anmerkung: Text]</b>. Anmerkungen im Originaltext, die über den <abbr title="Deutsches Textarchiv">DTA</abbr>-Import in den Belegtext kommen können.</p>
 					</div>
 
 					<p id="karteikarte-bedeutung"><b>Bedeutung:</b> mit dem Beleg verknüpfte Wortbedeutung(en)</p>
