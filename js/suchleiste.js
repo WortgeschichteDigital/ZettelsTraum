@@ -318,7 +318,7 @@ let suchleiste = {
 			ele.querySelectorAll(".icon-tools-kopieren").forEach(a => liste.kopieren(a));
 		}
 		// Einblenden-Funktion gekürzter Absätze (Hauptfenster)
-		ele.querySelectorAll(".gekuerzt").forEach(p => liste.abelegAbsatzEinblenden(p));
+		ele.querySelectorAll(".gekuerzt").forEach(p => liste.belegAbsatzEinblenden(p));
 		// Icon-Tools in der Karteikarte (Hauptfenster)
 		if (winInfo.typ === "index" && helfer.hauptfunktion === "karte" && ele.nodeName === "TH") {
 			ele.querySelectorAll(`[class*="icon-tools-"]`).forEach(a => beleg.toolsKlick(a));

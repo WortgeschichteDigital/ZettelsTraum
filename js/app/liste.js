@@ -701,12 +701,12 @@ let liste = {
 		span.textContent = "einblenden";
 		p.appendChild(document.createTextNode("…]"));
 		// gekürzten Absatz auf Klick erweitern
-		liste.abelegAbsatzEinblenden(p);
+		liste.belegAbsatzEinblenden(p);
 	},
 	// hebt die Kürzung eines Absatzes auf Klick auf
 	//   p = Element
 	//     (der gekürzte Absatz)
-	abelegAbsatzEinblenden (p) {
+	belegAbsatzEinblenden (p) {
 		p.addEventListener("click", function() {
 			// ermitteln, welcher Absatz eingeblendet werden könnte
 			let k = kontext(this),
