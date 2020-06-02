@@ -3562,13 +3562,41 @@ let redLit = {
 	xml ({icon}) {
 		icon.addEventListener("click", function(evt) {
 			evt.preventDefault();
-			let ds = JSON.parse(this.closest(".red-lit-snippet").dataset.ds);
+			let id = "",
+				snippet = this.closest(".red-lit-snippet");
+			if (snippet) {
+				// Icon im Snippet
+				let ds = JSON.parse(snippet.dataset.ds);
+				id = ds.id;
+			} else {
+				// Icon im Eingabeformular
+				if (!kartei.wort) {
+					dialog.oeffnen({
+						typ: "alert",
+						text: "Um die Funktion <i>Redaktion &gt; XML</i> zu nutzen, muss eine Kartei geöffnet sein.",
+					});
+					return;
+				} else if (redLit.eingabe.status === "add" && !redLit.eingabe.changed) {
+					dialog.oeffnen({
+						typ: "alert",
+						text: "Im Eingabeformular befindet sich keine Titelaufnahme.",
+					});
+					return;
+				} else if (redLit.eingabe.changed) {
+					dialog.oeffnen({
+						typ: "alert",
+						text: "Sie müssen die Titelaufnahme erst speichern.",
+					});
+					return;
+				}
+				id = redLit.eingabe.id;
+			}
 			let xmlDatensatz = {
 				key: "lt",
 				ds: {
-					id: ds.id,
-					si: redLit.db.data[ds.id][0].td.si,
-					xl: redLit.dbExportierenSnippetXML({id: ds.id, slot: 0}),
+					id,
+					si: redLit.db.data[id][0].td.si,
+					xl: redLit.dbExportierenSnippetXML({id, slot: 0}),
 				},
 			};
 			redXml.datensatz({xmlDatensatz});
