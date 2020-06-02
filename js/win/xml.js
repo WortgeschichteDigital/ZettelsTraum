@@ -160,11 +160,11 @@ let xml = {
 		p.textContent = "keine Daten";
 	},
 	// Empfangen von Datensätzen: Verteilerfunktion
-	//   xmlDatum = Object
-	//     (Datensatz)
-	empfangen ({xmlDatum}) {
-		if (xmlDatum.key === "lt") {
-			xml.empfangenLt({ds: xmlDatum.ds});
+	//   xmlDatensatz = Object
+	//     (der Datensatz)
+	empfangen ({xmlDatensatz}) {
+		if (xmlDatensatz.key === "lt") {
+			xml.empfangenLt({ds: xmlDatensatz.ds});
 		}
 	},
 	// Empfangen von Datensätzen: Literaturtitel

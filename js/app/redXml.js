@@ -61,9 +61,9 @@ let redXml = {
 		xml.winInit = true;
 	},
 	// einen Datensatz an das XML-Fenster schicken
-	//   xmlDatum = Object
+	//   xmlDatensatz = Object
 	//     (der Datensatz, der an das Fenster gehen soll)
-	async datum ({xmlDatum}) {
+	async datensatz ({xmlDatensatz}) {
 		// Ist das Fenster schon offen?
 		if (!redXml.contentsId) {
 			// Init-Markierung zurücksetzen
@@ -77,6 +77,6 @@ let redXml = {
 		}
 		// Datensatz an das Fenster schicken
 		const {ipcRenderer} = require("electron");
-		ipcRenderer.sendTo(redXml.contentsId, "xml-datum", xmlDatum);
+		ipcRenderer.sendTo(redXml.contentsId, "xml-datensatz", xmlDatensatz);
 	},
 };

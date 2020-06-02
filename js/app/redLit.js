@@ -3563,7 +3563,7 @@ let redLit = {
 		icon.addEventListener("click", function(evt) {
 			evt.preventDefault();
 			let ds = JSON.parse(this.closest(".red-lit-snippet").dataset.ds);
-			let xmlDatum = {
+			let xmlDatensatz = {
 				key: "lt",
 				ds: {
 					id: ds.id,
@@ -3571,7 +3571,7 @@ let redLit = {
 					xl: redLit.dbExportierenSnippetXML({id: ds.id, slot: 0}),
 				},
 			};
-			redXml.datum({xmlDatum});
+			redXml.datensatz({xmlDatensatz});
 		});
 	},
 };
