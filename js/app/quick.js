@@ -103,6 +103,11 @@ let quick = {
 			short: "",
 			img: "personen.svg",
 		},
+		"redaktion-literatur": {
+			title: "Redaktion > Literatur",
+			short: "",
+			img: "buecher.svg",
+		},
 		"belege-hinzufuegen": {
 			title: "Belege > Hinzufügen",
 			short: `${tastatur.shortcutsTextAktuell("Strg")} + N`,
@@ -296,6 +301,9 @@ let quick = {
 					return;
 				case "kartei-oeffnen":
 					kartei.oeffnen();
+					return;
+				case "redaktion-literatur":
+					redLit.oeffnen();
 					return;
 				case "hilfe-handbuch":
 					ipcRenderer.send("hilfe-handbuch", "");
