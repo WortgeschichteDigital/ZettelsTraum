@@ -5,6 +5,7 @@ window.addEventListener("load", async () => {
 	await initWin.infos();
 	initWin.ipcListener();
 	initWin.events();
+	initWin.eventsPopup();
 
 	// ANZEIGE TASTATURKÜRZEL ANPASSEN
 	tastatur.shortcutsText();

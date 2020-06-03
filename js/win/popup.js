@@ -48,7 +48,8 @@ let popup = {
 				return "";
 			}
 			// Textfeld
-			if (pfad[i].nodeName === "INPUT") {
+			if (pfad[i].nodeName === "INPUT" ||
+					pfad[i].nodeName === "TEXTAREA") {
 				return "textfeld";
 			}
 			// <code> oder <pre>
