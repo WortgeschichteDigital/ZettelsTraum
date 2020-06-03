@@ -2,6 +2,8 @@
 
 let xml = {
 	// enthält die übergebenen Daten
+	//   data.key = String (Schlüssel, der den Datentyp angibt)
+	//   data.ds = Object (der je spezifisch strukturierte Datensatz)
 	data: {},
 	// Anzeige mit den gelieferten Daten aufbereiten
 	init () {
@@ -19,23 +21,23 @@ let xml = {
 		// Init: Text
 		let tx = document.getElementById("tx");
 		xml.elementLeer({ele: tx});
-		// Init: Belege
-		let bl = document.getElementById("bl");
-		xml.elementLeer({ele: bl});
-		// Init: Literatur
-		let lt = document.getElementById("lt");
-		for (let i = 0, len = xml.data.xl.lt.length; i < len; i++) {
-			let ele = xml.elementLt({slot: i});
-			lt.appendChild(ele);
-		}
-		if (!xml.data.xl.lt.length) {
-			xml.elementLeer({ele: lt});
-		} else {
-			xml.layoutTabellig({
-				id: "lt",
-				ele: [2, 3],
-				warten: 250,
-			});
+		// Init: Belege/Literatur (Standard-Arrays)
+		let keys = ["bl", "lt"];
+		for (let key of keys) {
+			let cont = document.getElementById(key);
+			for (let i = 0, len = xml.data.xl[key].length; i < len; i++) {
+				let ele = xml.elementArr({key, slot: i});
+				cont.appendChild(ele);
+			}
+			if (!xml.data.xl[key].length) {
+				xml.elementLeer({ele: cont});
+			} else {
+				xml.layoutTabellig({
+					id: key,
+					ele: [2, 3],
+					warten: 250,
+				});
+			}
 		}
 		// Init: Wortinformationen
 		let wi = document.getElementById("wi");
@@ -48,105 +50,133 @@ let xml = {
 	//   xmlDatensatz = Object
 	//     (der Datensatz)
 	empfangen ({xmlDatensatz}) {
-		if (xmlDatensatz.key === "lt") {
-			xml.empfangenLt({ds: xmlDatensatz.ds});
+		if (/^bl|lt$/.test(xmlDatensatz.key)) {
+			xml.empfangenArr({
+				key: xmlDatensatz.key,
+				ds: xmlDatensatz.ds,
+			});
 		}
 		xml.speichern();
 	},
-	// Empfangen von Datensätzen: Literaturtitel
+	// Empfangen von Datensätzen: Standard-Arrays
+	//   key = String
+	//     (der Schlüssel des Datensatzes)
 	//   ds = Object
-	//     (der Datensatz mit dem Literaturtitel)
-	empfangenLt ({ds}) {
-		let lt = document.getElementById("lt");
+	//     (der Datensatz mit dem Beleg)
+	empfangenArr ({key, ds}) {
+		let cont = document.getElementById(key);
 		// ggf. Leermeldung löschen
-		let leer = lt.querySelector(".leer");
+		let leer = cont.querySelector(".leer");
 		if (leer) {
-			lt.removeChild(leer);
+			cont.removeChild(leer);
 		}
 		// Datensatz ersetzen oder hinzufügen
-		const idx = xml.data.xl.lt.findIndex(i => i.id === ds.id);
+		const idx = xml.data.xl[key].findIndex(i => i.id === ds.id);
 		if (idx >= 0) {
 			// Datensatz ersetzen
-			xml.data.xl.lt[idx] = ds;
+			xml.data.xl[key][idx] = ds;
 			// Element ersetzen
-			let ele = xml.elementLt({slot: idx}),
-				divs = lt.querySelectorAll(".kopf");
-			lt.replaceChild(ele, divs[idx]);
+			let ele = xml.elementArr({key, slot: idx}),
+				divs = cont.querySelectorAll(".kopf");
+			cont.replaceChild(ele, divs[idx]);
 			// ggf. Vorschau auffrischen
 			let pre = ele.nextSibling;
 			if (pre && pre.classList.contains("pre-cont")) {
 				xml.xmlPreview({
-					xmlStr: xml.data.xl.lt[idx].xl,
+					xmlStr: xml.data.xl[key][idx].xl,
 					after: ele,
 				});
 			}
 		} else {
 			// Datensatz hinzufügen
-			xml.data.xl.lt.push(ds);
+			xml.data.xl[key].push(ds);
 			// Datensätze sortieren
-			let siglen = [];
-			for (let i of xml.data.xl.lt){
-				siglen.push(i.si);
+			let sortStr = [];
+			for (let i of xml.data.xl[key]){
+				if (key === "bl") {
+					sortStr.push(i.ds);
+				} else if (key === "lt") {
+					sortStr.push(i.si);
+				}
 			}
-			siglen.sort(helfer.sortSiglen);
-			xml.data.xl.lt.sort((a, b) => siglen.indexOf(a.si) - siglen.indexOf(b.si));
+			if (key === "bl") {
+				sortStr.sort();
+				xml.data.xl.bl.sort((a, b) => sortStr.indexOf(a.ds) - sortStr.indexOf(b.ds));
+			} else if (key === "lt") {
+				sortStr.sort(helfer.sortSiglen);
+				xml.data.xl.lt.sort((a, b) => sortStr.indexOf(a.si) - sortStr.indexOf(b.si));
+			}
 			// neues Element einhängen
-			const idx = xml.data.xl.lt.findIndex(i => i.id === ds.id);
-			let ele = xml.elementLt({slot: idx}),
-				divs = lt.querySelectorAll(".kopf");
-			if (idx === xml.data.xl.lt.length - 1) {
-				lt.appendChild(ele);
+			const idx = xml.data.xl[key].findIndex(i => i.id === ds.id);
+			let ele = xml.elementArr({key, slot: idx}),
+				divs = cont.querySelectorAll(".kopf");
+			if (idx === xml.data.xl[key].length - 1) {
+				cont.appendChild(ele);
 			} else {
-				lt.insertBefore(ele, divs[idx]);
+				cont.insertBefore(ele, divs[idx]);
 			}
 		}
 		// Ansicht tabellenartig gestalten
 		xml.layoutTabellig({
-			id: "lt",
+			id: key,
 			ele: [2, 3],
 		});
 	},
-	// Element erzeugen: Literaturtitel
+	// Element erzeugen: Standard-Arrays
+	//   key = String
+	//     (der Schlüssel des Datensatzes)
 	//   slot = Number
-	//     (Slot, in dem der Literaturtitel steht)
-	elementLt ({slot}) {
+	//     (Slot, in dem der Beleg steht)
+	elementArr ({key, slot}) {
 		let div = document.createElement("div");
 		div.classList.add("kopf");
-		div.dataset.id = xml.data.xl.lt[slot].id;
-		xml.elementPreviewLt({div});
+		div.dataset.key = key;
+		div.dataset.id = xml.data.xl[key][slot].id;
+		xml.elementPreviewArr({div});
 		// Warn-Icon
 		xml.elementWarn({ele: div});
 		xml.xmlCheck({
 			warn: div.firstChild,
-			xml: xml.data.xl.lt[slot].xl,
+			xml: xml.data.xl[key][slot].xl,
 		});
 		// Lösch-Icon
 		let a = document.createElement("a");
 		div.appendChild(a);
 		a.href = "#";
 		a.classList.add("icon-link", "icon-x-dick");
-		xml.elementLoeschenLt({a});
+		xml.elementLoeschenArr({a});
 		// ID
 		let id = document.createElement("span");
 		div.appendChild(id);
 		id.classList.add("id");
-		id.textContent = xml.data.xl.lt[slot].id;
-		// Sigle
-		let sigle = document.createElement("span");
-		div.appendChild(sigle);
-		sigle.classList.add("sigle");
-		sigle.textContent = xml.data.xl.lt[slot].si;
-		// Titel
-		let titel = document.createElement("span");
-		div.appendChild(titel);
-		let unstrukturiert = xml.data.xl.lt[slot].xl.match(/<unstrukturiert>(.+?)<\/unstrukturiert>/);
-		titel.textContent = unstrukturiert[1];
+		id.textContent = xml.data.xl[key][slot].id;
+		// Hinweisfeld
+		let hinweis = document.createElement("span");
+		div.appendChild(hinweis);
+		hinweis.classList.add("hinweis");
+		if (key === "bl") {
+			hinweis.textContent = xml.data.xl.bl[slot].da;
+		} else if (key === "lt") {
+			hinweis.textContent = xml.data.xl.lt[slot].si;
+		}
+		// Vorschau
+		let vorschau = document.createElement("span");
+		div.appendChild(vorschau);
+		if (key === "bl") {
+			let belegtext = xml.data.xl.bl[slot].xl.match(/<Belegtext>(.+?)<\/Belegtext>/);
+			vorschau.textContent = belegtext[1].replace(/<.+?>/g, "");
+		} else {
+			let unstrukturiert = xml.data.xl.lt[slot].xl.match(/<unstrukturiert>(.+?)<\/unstrukturiert>/);
+			vorschau.textContent = unstrukturiert[1];
+		}
 		return div;
 	},
-	// Element-Vorschau umschalten: Literaturtitel
+	// Element-Vorschau umschalten: Standard-Arrays
+	//   key = String
+	//     (der Schlüssel des Datensatzes)
 	//   div = Element
 	//     (Kopf, zu dem die Vorschau eingeblendet werden soll)
-	elementPreviewLt ({div}) {
+	elementPreviewArr ({div}) {
 		div.addEventListener("click", function() {
 			// Preview ausblenden
 			let pre = this.nextSibling;
@@ -155,10 +185,12 @@ let xml = {
 				return;
 			}
 			// Preview einblenden
-			const id = this.closest(".kopf").dataset.id,
-				idx = xml.data.xl.lt.findIndex(i => i.id === id);
+			let kopf = this.closest(".kopf");
+			const key = kopf.dataset.key,
+				id = kopf.dataset.id,
+				idx = xml.data.xl[key].findIndex(i => i.id === id);
 			xml.xmlPreview({
-				xmlStr: xml.data.xl.lt[idx].xl,
+				xmlStr: xml.data.xl[key][idx].xl,
 				after: this,
 			});
 		});
@@ -178,18 +210,19 @@ let xml = {
 			}, 0);
 		});
 	},
-	// Element entfernen: Literaturtitel
+	// Element entfernen: Standard-Arrays
 	//   a = Element
 	//     (der Lösch-Link)
-	elementLoeschenLt ({a}) {
+	elementLoeschenArr ({a}) {
 		a.addEventListener("click", async function(evt) {
 			evt.stopPropagation();
 			evt.preventDefault();
 			// Datensatz löschen
 			let kopf = this.closest(".kopf"),
+				key = kopf.dataset.key,
 				id = kopf.dataset.id;
-			const idx = xml.data.xl.lt.findIndex(i => i.id === id);
-			xml.data.xl.lt.splice(idx, 1);
+			const idx = xml.data.xl[key].findIndex(i => i.id === id);
+			xml.data.xl[key].splice(idx, 1);
 			// ggf. Preview ausblenden
 			let pre = kopf.nextSibling;
 			if (pre && pre.classList.contains("pre-cont")) {
@@ -198,13 +231,13 @@ let xml = {
 			// Element entfernen
 			kopf.parentNode.removeChild(kopf);
 			// Leermeldung erzeugen oder Ansicht auffrischen
-			if (!xml.data.xl.lt.length) {
+			if (!xml.data.xl[key].length) {
 				xml.elementLeer({
-					ele: document.getElementById("lt"),
+					ele: document.getElementById(key),
 				});
 			} else {
 				xml.layoutTabellig({
-					id: "lt",
+					id: key,
 					ele: [2, 3],
 				});
 			}
