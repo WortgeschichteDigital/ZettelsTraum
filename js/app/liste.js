@@ -1942,6 +1942,9 @@ let liste = {
 			case "4":
 				xml.referenz();
 				break;
+			case "5":
+				xml.schnittInXmlFenster();
+				break;
 		}
 	},
 };

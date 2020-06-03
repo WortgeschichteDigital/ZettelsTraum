@@ -3151,7 +3151,7 @@ let redLit = {
 			icons.appendChild(xml);
 			xml.href = "#";
 			xml.classList.add("icon-link", "icon-xml");
-			xml.title = "Titelaufnahme in XML-Datei";
+			xml.title = "Titelaufnahme in XML-Fenster";
 			redLit.xml({icon: xml});
 		}
 		// Icon: Löschen

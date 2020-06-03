@@ -346,6 +346,11 @@ let punkte = {
 		icon: "beleg.png",
 		click: "xml.schnittInZwischenablage()",
 	},
+	xmlFenster: {
+		label: "Belegschnitt in XML-Fenster",
+		icon: "xml.png",
+		click: "xml.schnittInXmlFenster()",
+	},
 	xmlReferenz: {
 		label: "Referenz",
 		icon: "link-pfeil-runter.png",

@@ -224,6 +224,45 @@ let xml = {
 		// Animation
 		helfer.animation("zwischenablage");
 	},
+	// markierten Belegschnitt an das XML-Fenster schicken
+	schnittInXmlFenster () {
+		// Karteikarte noch nicht gespeichert?
+		if (helfer.hauptfunktion === "karte" && !data.ka[popup.referenz.id]) {
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Die Karteikarte muss erst gespeichert werden.",
+			});
+			return;
+		}
+		// Daten zusammentragen
+		const xmlStr = xml.schnitt();
+		let datum = xmlStr.match(/<Datum>(.+?)<\/Datum>/)[1],
+			datumForm1 = /^(?<tag>[0-9]{2})\.(?<monat>[0-9]{2})\.(?<jahr>[0-9]{4})$/.exec(datum),
+			datumForm2 = /^(?<jahrVon>[0-9]{4})-(?<jahrBis>[0-9]{4})$/.exec(datum),
+			datumForm3 = /^(?<jahrVon>[0-9]{4})\/(?<jahrBis>[0-9]{2})$/.exec(datum),
+			datumSort = "";
+		if (datumForm1) {
+			let g = datumForm1.groups;
+			datumSort = `${g.jahr}-${g.monat}-${g.tag}`;
+		} else if (datumForm2) {
+			let g = datumForm2.groups;
+			datumSort = `${g.jahrVon}-xx-xx-${g.jahrBis}`;
+		} else if (datumForm3) {
+			let g = datumForm3.groups;
+			datumSort = `${g.jahrVon}-xx-xx-${g.jahrVon.substring(0, 2)}${g.jahrBis}`;
+		}
+		// Datensatz an XML-Fenster schicken
+		let xmlDatensatz = {
+			key: "bl",
+			ds: {
+				da: datum,
+				ds: datumSort,
+				id: xml.belegId({}),
+				xl: xmlStr,
+			},
+		};
+		redXml.datensatz({xmlDatensatz});
+	},
 	// Referenztag des Belegs in die Zwischenablage kopieren
 	referenz () {
 		const id = xml.belegId({});

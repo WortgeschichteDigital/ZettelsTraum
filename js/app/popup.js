@@ -54,7 +54,7 @@ let popup = {
 			}
 			items.push({name: "text", sub: ["kopieren", "textReferenz"]});
 			if (selInBeleg) {
-				items.push({name: "xml", sub: ["xmlBeleg", "xmlReferenz"]});
+				items.push({name: "xml", sub: ["xmlBeleg", "xmlReferenz"]}, "xmlFenster");
 			} else if (/^(karte|liste)$/.test(helfer.hauptfunktion)) {
 				items.push({name: "xml", sub: ["xmlReferenz"]});
 			}

@@ -118,6 +118,7 @@ let optionen = {
 			//   2 = Plain-Referenz
 			//   3 = XML-Belegschnitt
 			//   4 = XML-Referenz
+			//   5 = XML-Fenster
 			"ctrlC-vor": "1",
 			// Einfügen-Fenster (Kopierfunktion) nach dem Einfügen direkt schließen
 			"einfuegen-schliessen": true,
