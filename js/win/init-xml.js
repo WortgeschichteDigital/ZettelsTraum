@@ -7,6 +7,20 @@ window.addEventListener("load", async () => {
 	initWin.events();
 	initWin.eventsPopup();
 
+	// DIALOG
+	overlay.initSchliessen(document.querySelector("#dialog h2 a"));
+	document.getElementById("dialog-prompt-text").addEventListener("keydown", function(evt) {
+		tastatur.detectModifiers(evt);
+		if (!tastatur.modifiers && evt.key === "Enter") {
+			overlay.schliessen(this);
+		}
+	});
+	["dialog-ok-button", "dialog-abbrechen-button", "dialog-ja-button", "dialog-nein-button"].forEach(button => {
+		document.getElementById(button).addEventListener("click", function() {
+			overlay.schliessen(this);
+		});
+	});
+
 	// ANZEIGE TASTATURKÜRZEL ANPASSEN
 	tastatur.shortcutsText();
 	

@@ -58,7 +58,7 @@ main {
 	padding: 0 10px 20px 10px;
 }
 
-h2 {
+main h2 {
 	margin: 30px 0 15px 0;
 	border-bottom: 1px solid var(--linie);
 	color: var(--textFarbe);
@@ -68,32 +68,56 @@ h2 {
 	line-height: 38px;
 }
 
-h2:first-child {
+main h2:first-child {
 	margin-top: 0;
 }
 
+/* Dialogfenster -------------------------------- */
+#dialog h2 {
+	margin: 0;
+	padding: 0 0 0 10px;
+	background-color: var(--farbeH);
+	color: #fff;
+	font-size: 14px;
+	line-height: 28px;
+}
+
+#dialog h2 span:first-child {
+	margin-right: 5px;
+}
+
+.icon-h {
+	display: inline-block;
+	width: 24px;
+	height: 28px;
+	background-color: #fff;
+	-webkit-mask-position: center;
+	mask-position: center;
+}
+
+#dialog p {
+	margin: 0 0 10px 0;
+}
+
 /* allgemeine Elemente ------------------------- */
+p.input-text {
+	line-height: 30px;
+}
+
 input {
 	margin: 0;
 	color: var(--text);
 	font: 16px/24px "Noto Sans", "Noto Sans Symbols2", sans-serif;
 }
 
-textarea {
-	display: block;
-	margin: 0;
-	border: none;
-	padding: 0;
-	width: 100%;
-	background-color: var(--hintergrund);
-	color: var(--text);
-	font: 14px/22px "Noto Sans Mono", "Noto Sans Symbols2", monospace;
-	resize: none;
+input[type="text"] {
+	border: 1px solid var(--linie);
+	padding: 2px 5px;
 }
 
-textarea:focus {
-	outline: 2px solid var(--farbe);
-	outline-offset: 3px;
+input[type="text"]:focus {
+	outline: 1px solid var(--farbe);
+	border-color: var(--farbe);
 }
 
 input[type="button"] {
@@ -122,8 +146,29 @@ input[type="button"][value="Bearbeiten"] {
 	background-image: url(../../img/stift-weiss.svg);
 }
 
+input[type="button"][value="Nein"] {
+	background-image: url(../../img/stopp-weiss.svg);
+}
+
 input[type="button"][value="Speichern"] {
 	background-image: url(../../img/speichern-weiss.svg);
+}
+
+textarea {
+	display: block;
+	margin: 0;
+	border: none;
+	padding: 0;
+	width: 100%;
+	background-color: var(--hintergrund);
+	color: var(--text);
+	font: 14px/22px "Noto Sans Mono", "Noto Sans Symbols2", monospace;
+	resize: none;
+}
+
+textarea:focus {
+	outline: 2px solid var(--farbe);
+	outline-offset: 3px;
 }
 
 /* Kopfleisten ---------------------------------- */
@@ -179,7 +224,7 @@ p.leer {
 	background-color: var(--farbe);
 }
 
-.icon-link:hover {
+.icon-link:not(.icon-schliessen):hover {
 	background-color: var(--text);
 }
 

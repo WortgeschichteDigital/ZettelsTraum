@@ -6,13 +6,17 @@
 
 		<title> </title>
 
+		<link rel="stylesheet" href="../css/app/overlays.css">
+		<link rel="stylesheet" href="../css/app/overlays-dialog.css">
 		<link rel="stylesheet" href="../css/win/xml.css">
 
 		<script src="../js/helferXml.js"></script>
 		<script src="../js/tastatur.js"></script>
 
+		<script src="../js/app/dialog.js"></script>
 		<script src="../js/app/dropdown.js"></script>
 		<script src="../js/app/helfer.js"></script>
+		<script src="../js/app/overlay.js"></script>
 
 		<script src="../js/win/init-win.js"></script>
 		<script src="../js/win/init-xml.js"></script>
@@ -72,5 +76,28 @@
 
 			<div id="bg"></div>
 		</main>
+
+		<!-- OVERLAY: Dialog-Fenster -->
+		<div id="dialog" class="overlay aus"><div>
+			<h2><span class="icon-h"> </span
+			><span id="dialog-h-prompt">Eingabe</span
+			><span id="dialog-h-confirm">Frage</span
+			><span id="dialog-h-alert">Meldung</span
+			><a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"> </a></h2>
+			<div id="dialog-rahmen">
+				<div id="dialog-text"></div>
+			</div>
+			<div id="dialog-prompt">
+				<p class="input-text"><input type="text" value="" id="dialog-prompt-text"></p>
+			</div>
+			<div id="dialog-ok">
+				<p class="button"><input type="button" value="Okay" id="dialog-ok-button"
+					><input type="button" value="Abbrechen" id="dialog-abbrechen-button"></p>
+			</div>
+			<div id="dialog-confirm">
+				<p class="button"><input type="button" value="Ja" id="dialog-ja-button"
+					><input type="button" value="Nein" id="dialog-nein-button"></p>
+			</div>
+		</div></div>
 	</body>
 </html>

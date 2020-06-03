@@ -285,7 +285,8 @@ let tastatur = {
 	//   evt = Object
 	//     (Event-Object des keydown)
 	neben (evt) {
-		const m = tastatur.modifiers;
+		const m = tastatur.modifiers,
+			overlayId = overlay.oben();
 		// Key "Escape"
 		if (!m && evt.key === "Escape") {
 			// falls die Suchleiste auf ist und den Fokus hat
@@ -297,6 +298,12 @@ let tastatur = {
 			// falls ein Vorschau-Bild angezeigt wird
 			if (document.getElementById("bild")) {
 				hilfe.bildSchliessen();
+				return;
+			}
+			// Overlay-Fenster schließen (Dialog im XML-Fenster)
+			if (overlayId) {
+				let link = document.querySelector(`#${overlayId} h2 .icon-schliessen`);
+				overlay.schliessen(link);
 				return;
 			}
 			// Über-Fenster schließen
@@ -330,6 +337,11 @@ let tastatur = {
 		if (winInfo.typ === "handbuch" &&
 				!m && /^(ArrowLeft|ArrowRight)$/.test(evt.key)) {
 			hilfe.bilderTastatur(evt);
+			return;
+		}
+		// Key "ArrowDown" || "ArrowLeft" || "ArrowRight" || "ArrowUp" (Dialog im XML-Fenster)
+		if (overlayId && !m && /^(ArrowDown|ArrowLeft|ArrowRight|ArrowUp)$/.test(evt.key)) {
+			tastatur.hauptArrows(evt, overlayId);
 			return;
 		}
 		// Key "F3" (Changelog, Dokumentation, Handbuch)
