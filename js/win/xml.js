@@ -44,6 +44,68 @@ let xml = {
 		let bg = document.getElementById("bg");
 		xml.elementLeer({ele: bg});
 	},
+	// Empfangen von Datensätzen: Verteilerfunktion
+	//   xmlDatensatz = Object
+	//     (der Datensatz)
+	empfangen ({xmlDatensatz}) {
+		if (xmlDatensatz.key === "lt") {
+			xml.empfangenLt({ds: xmlDatensatz.ds});
+		}
+		xml.speichern();
+	},
+	// Empfangen von Datensätzen: Literaturtitel
+	//   ds = Object
+	//     (der Datensatz mit dem Literaturtitel)
+	empfangenLt ({ds}) {
+		let lt = document.getElementById("lt");
+		// ggf. Leermeldung löschen
+		let leer = lt.querySelector(".leer");
+		if (leer) {
+			lt.removeChild(leer);
+		}
+		// Datensatz ersetzen oder hinzufügen
+		const idx = xml.data.xl.lt.findIndex(i => i.id === ds.id);
+		if (idx >= 0) {
+			// Datensatz ersetzen
+			xml.data.xl.lt[idx] = ds;
+			// Element ersetzen
+			let ele = xml.elementLt({slot: idx}),
+				divs = lt.querySelectorAll(".kopf");
+			lt.replaceChild(ele, divs[idx]);
+			// ggf. Vorschau auffrischen
+			let pre = ele.nextSibling;
+			if (pre && pre.classList.contains("pre-cont")) {
+				xml.xmlPreview({
+					xmlStr: xml.data.xl.lt[idx].xl,
+					after: ele,
+				});
+			}
+		} else {
+			// Datensatz hinzufügen
+			xml.data.xl.lt.push(ds);
+			// Datensätze sortieren
+			let siglen = [];
+			for (let i of xml.data.xl.lt){
+				siglen.push(i.si);
+			}
+			siglen.sort(helfer.sortSiglen);
+			xml.data.xl.lt.sort((a, b) => siglen.indexOf(a.si) - siglen.indexOf(b.si));
+			// neues Element einhängen
+			const idx = xml.data.xl.lt.findIndex(i => i.id === ds.id);
+			let ele = xml.elementLt({slot: idx}),
+				divs = lt.querySelectorAll(".kopf");
+			if (idx === xml.data.xl.lt.length - 1) {
+				lt.appendChild(ele);
+			} else {
+				lt.insertBefore(ele, divs[idx]);
+			}
+		}
+		// Ansicht tabellenartig gestalten
+		xml.layoutTabellig({
+			id: "lt",
+			ele: [2, 3],
+		});
+	},
 	// Element erzeugen: Literaturtitel
 	//   slot = Number
 	//     (Slot, in dem der Literaturtitel steht)
@@ -166,68 +228,6 @@ let xml = {
 		ele.appendChild(p);
 		p.classList.add("leer");
 		p.textContent = "keine Daten";
-	},
-	// Empfangen von Datensätzen: Verteilerfunktion
-	//   xmlDatensatz = Object
-	//     (der Datensatz)
-	empfangen ({xmlDatensatz}) {
-		if (xmlDatensatz.key === "lt") {
-			xml.empfangenLt({ds: xmlDatensatz.ds});
-		}
-		xml.speichern();
-	},
-	// Empfangen von Datensätzen: Literaturtitel
-	//   ds = Object
-	//     (der Datensatz mit dem Literaturtitel)
-	empfangenLt ({ds}) {
-		let lt = document.getElementById("lt");
-		// ggf. Leermeldung löschen
-		let leer = lt.querySelector(".leer");
-		if (leer) {
-			lt.removeChild(leer);
-		}
-		// Datensatz ersetzen oder hinzufügen
-		const idx = xml.data.xl.lt.findIndex(i => i.id === ds.id);
-		if (idx >= 0) {
-			// Datensatz ersetzen
-			xml.data.xl.lt[idx] = ds;
-			// Element ersetzen
-			let ele = xml.elementLt({slot: idx}),
-				divs = lt.querySelectorAll(".kopf");
-			lt.replaceChild(ele, divs[idx]);
-			// ggf. Vorschau auffrischen
-			let pre = ele.nextSibling;
-			if (pre && pre.classList.contains("pre-cont")) {
-				xml.xmlPreview({
-					xmlStr: xml.data.xl.lt[idx].xl,
-					after: ele,
-				});
-			}
-		} else {
-			// Datensatz hinzufügen
-			xml.data.xl.lt.push(ds);
-			// Datensätze sortieren
-			let siglen = [];
-			for (let i of xml.data.xl.lt){
-				siglen.push(i.si);
-			}
-			siglen.sort(helfer.sortSiglen);
-			xml.data.xl.lt.sort((a, b) => siglen.indexOf(a.si) - siglen.indexOf(b.si));
-			// neues Element einhängen
-			const idx = xml.data.xl.lt.findIndex(i => i.id === ds.id);
-			let ele = xml.elementLt({slot: idx}),
-				divs = lt.querySelectorAll(".kopf");
-			if (idx === xml.data.xl.lt.length - 1) {
-				lt.appendChild(ele);
-			} else {
-				lt.insertBefore(ele, divs[idx]);
-			}
-		}
-		// Ansicht tabellenartig gestalten
-		xml.layoutTabellig({
-			id: "lt",
-			ele: [2, 3],
-		});
 	},
 	// XML-Vorschau erzeugen
 	//   xmlStr = String
