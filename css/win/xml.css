@@ -72,8 +72,61 @@ h2:first-child {
 	margin-top: 0;
 }
 
-/* Kopfleisten ---------------------------------- */
+/* allgemeine Elemente ------------------------- */
+input {
+	margin: 0;
+	color: var(--text);
+	font: 16px/24px "Noto Sans", "Noto Sans Symbols2", sans-serif;
+}
 
+textarea {
+	display: block;
+	margin: 0;
+	border: none;
+	padding: 0;
+	width: 100%;
+	background-color: var(--hintergrund);
+	color: var(--text);
+	font: 14px/22px "Noto Sans Mono", "Noto Sans Symbols2", monospace;
+	resize: none;
+}
+
+textarea:focus {
+	outline: 2px solid var(--farbe);
+	outline-offset: 3px;
+}
+
+input[type="button"] {
+	outline: none;
+	margin: 0 0 0 15px;
+	border: 0;
+	border-radius: 3px;
+	padding: 0 8px 0 33px;
+	background: var(--farbeB) url(../../img/check-weiss.svg) no-repeat 4px center;
+	color: #fff;
+}
+
+input[type="button"]:focus {
+	background-color: var(--farbe);
+}
+
+input[type="button"]:first-child {
+	margin-left: 0;
+}
+
+input[type="button"][value="Abbrechen"] {
+	background-image: url(../../img/x-dick-weiss.svg);
+}
+
+input[type="button"][value="Bearbeiten"] {
+	background-image: url(../../img/stift-weiss.svg);
+}
+
+input[type="button"][value="Speichern"] {
+	background-image: url(../../img/speichern-weiss.svg);
+}
+
+/* Kopfleisten ---------------------------------- */
 p.leer {
 	margin: 0;
 	color: var(--textSehrHell);
@@ -140,7 +193,6 @@ p.leer {
 }
 
 /* XML-Preview ---------------------------------- */
-
 .pre-cont {
 	margin: 0 0 0 39px;
 	overflow: hidden;
@@ -160,4 +212,15 @@ pre {
 	white-space: pre-wrap;
 	user-select: text;
 	tab-size: 2;
+}
+
+.pre-cont .bearbeiten {
+	margin: 10px 0;
+	border-radius: 10px;
+	padding: 10px;
+	background-color: var(--hintergrund);
+}
+
+.pre-cont p {
+	margin: 10px 0;
 }

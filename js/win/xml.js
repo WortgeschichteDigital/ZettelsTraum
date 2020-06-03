@@ -137,7 +137,7 @@ let xml = {
 		xml.elementWarn({ele: div});
 		xml.xmlCheck({
 			warn: div.firstChild,
-			xml: xml.data.xl[key][slot].xl,
+			xmlStr: xml.data.xl[key][slot].xl,
 		});
 		// Lösch-Icon
 		let a = document.createElement("a");
@@ -163,7 +163,7 @@ let xml = {
 		let vorschau = document.createElement("span");
 		div.appendChild(vorschau);
 		if (key === "bl") {
-			let belegtext = xml.data.xl.bl[slot].xl.match(/<Belegtext>(.+?)<\/Belegtext>/);
+			let belegtext = xml.data.xl.bl[slot].xl.match(/<Belegtext>(.+?)<\/Belegtext>/s);
 			vorschau.textContent = belegtext[1].replace(/<.+?>/g, "");
 		} else {
 			let unstrukturiert = xml.data.xl.lt[slot].xl.match(/<unstrukturiert>(.+?)<\/unstrukturiert>/);
@@ -192,6 +192,7 @@ let xml = {
 			xml.xmlPreview({
 				xmlStr: xml.data.xl[key][idx].xl,
 				after: this,
+				editable: key === "bl" ? true : false,
 			});
 		});
 	},
@@ -267,7 +268,7 @@ let xml = {
 	//     (XML-Snippet, das angezeigt werden soll)
 	//   after = Element
 	//     (Elemente, hinter dem das Preview erscheinen soll)
-	//   editable = true || undefined
+	//   editable = true || false || undefined
 	//     (XML-Snippet darf editiert werden)
 	xmlPreview ({xmlStr, after, editable = false}) {
 		// Einzüge hinzufügen (wenn möglich)
@@ -277,20 +278,26 @@ let xml = {
 			xmlDoc = helferXml.indent(xmlDoc);
 			xmlStr = new XMLSerializer().serializeToString(xmlDoc);
 		}
-		// Element wird schon angezeigt => neu ausfüllen
+		// Pre-Container wird schon angezeigt => neu ausfüllen
 		let next = after.nextSibling;
 		if (next && next.classList.contains("pre-cont")) {
 			next.firstChild.innerHTML = helferXml.prettyPrint({xmlStr});
 			return;
 		}
-		// Element erzeugen und einhängen
+		// Pre-Container mit Pre erzeugen und einhängen
 		let cont = document.createElement("div");
 		cont.classList.add("pre-cont");
 		let pre = document.createElement("pre");
 		cont.appendChild(pre);
 		pre.innerHTML = helferXml.prettyPrint({xmlStr});
 		after.parentNode.insertBefore(cont, after.nextSibling);
-		// Element einblenden
+		// ggf. Editier-Button ergänzen
+		if (editable) {
+			let p = document.createElement("p");
+			cont.appendChild(p);
+			xml.xmlEditBearbeiten({p});
+		}
+		// Pre-Container einblenden
 		let height = cont.offsetHeight;
 		cont.style.height = "0px";
 		setTimeout(() => {
@@ -303,14 +310,93 @@ let xml = {
 			popup.oeffnen(evt);
 		});
 	},
+	// XML-Vorschau: Snippet editieren
+	//   button = Element
+	//     (der Bearbeiten-Button)
+	xmlEdit ({button}) {
+		button.addEventListener("click", function() {
+			// Datensatz ermitteln
+			let cont = this.closest(".pre-cont"),
+				kopf = cont.previousSibling;
+			const key = kopf.dataset.key,
+				id = kopf.dataset.id,
+				slot = xml.data.xl[key].findIndex(i => i.id === id);
+			// Bearbeiten-Feld erzeugen
+			let div = document.createElement("div");
+			div.classList.add("bearbeiten");
+			let ta = document.createElement("textarea");
+			div.appendChild(ta);
+			ta.setAttribute("rows", "1");
+			ta.value = xml.data.xl[key][slot].xl;
+			ta.addEventListener("input", function() {
+				helfer.textareaGrow(this, 0);
+			});
+			// Element einhängen
+			cont.replaceChild(div, cont.firstChild);
+			helfer.textareaGrow(ta, 0);
+			ta.setSelectionRange(0, 0);
+			ta.focus();
+			// Leiste auffrischen
+			let p = cont.lastChild;
+			helfer.keineKinder(p);
+			let buttons = ["Speichern", "Abbrechen"];
+			for (let b of buttons) {
+				let button = document.createElement("input");
+				p.appendChild(button);
+				button.type = "button";
+				button.value = b;
+				xml.xmlEditSpeichern({button});
+			}
+		});
+	},
+	// XML-Vorschau: Bearbeiten-Button erzeugen
+	//   p = Element
+	//     (Absatz für den Bearbeiten-Button)
+	xmlEditBearbeiten ({p}) {
+		helfer.keineKinder(p);
+		let bearb = document.createElement("input");
+		p.appendChild(bearb);
+		bearb.type = "button";
+		bearb.value = "Bearbeiten";
+		xml.xmlEdit({button: bearb});
+	},
+	// XML-Vorschau: Speichern-/Abbrechen-Button erzeugen
+	//   button = Element
+	//     (Speichern- oder Abbrechen-Button)
+	xmlEditSpeichern ({button}) {
+		button.addEventListener("click", function() {
+			// Datensatz ermitteln
+			let cont = this.closest(".pre-cont"),
+				kopf = cont.previousSibling;
+			const key = kopf.dataset.key,
+				id = kopf.dataset.id,
+				slot = xml.data.xl[key].findIndex(i => i.id === id);
+			if (this.value === "Speichern") {
+				xml.data.xl[key][slot].xl = cont.querySelector("textarea").value;
+				xml.xmlCheck({
+					warn: kopf.firstChild,
+					xmlStr: xml.data.xl[key][slot].xl,
+				});
+			}
+			// Pre zurücksetzen
+			let pre = document.createElement("pre");
+			cont.replaceChild(pre, cont.firstChild);
+			xml.xmlPreview({
+				xmlStr: xml.data.xl[key][slot].xl,
+				after: kopf,
+			});
+			// Button zurücksetzen
+			xml.xmlEditBearbeiten({p: cont.lastChild});
+		});
+	},
 	// überprüft ein XML-Snippet darauf, ob es wohlgeformt ist
 	//   warn = Element
 	//     (das Warn-Icon, das angepasst werden muss)
-	//   xml = String
+	//   xmlStr = String
 	//     (XML-Snippet, das überprüft werden soll)
-	xmlCheck ({warn, xml}) {
+	xmlCheck ({warn, xmlStr}) {
 		let parser = new DOMParser(),
-			xmlDoc = parser.parseFromString(xml, "text/xml");
+			xmlDoc = parser.parseFromString(xmlStr, "text/xml");
 		if (xmlDoc.querySelector("parsererror")) {
 			warn.classList.add("aktiv");
 		} else {

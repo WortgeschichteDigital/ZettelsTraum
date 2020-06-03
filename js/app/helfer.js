@@ -292,9 +292,11 @@ let helfer = {
 	// (größer als die angegebene max-height werden sie dabei nie)
 	//   textarea = Element
 	//     (Textfeld, dessen Eingaben hier abgefangen werden)
-	textareaGrow (textarea) {
+	//   padding = Number || undefined
+	//     (steuert, ob ein padding abgezogen werden muss)
+	textareaGrow (textarea, padding = 4) {
 		textarea.style.height = "inherit";
-		textarea.style.height = `${textarea.scrollHeight - 4}px`; // 4px padding in scrollHeight enthalten
+		textarea.style.height = `${textarea.scrollHeight - padding}px`; // normalerweise 4px padding in scrollHeight enthalten
 	},
 	// Standardformatierungen in Edit-Feldern abfangen
 	//   edit = Element
