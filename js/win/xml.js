@@ -181,7 +181,10 @@ let xml = {
 			// Preview ausblenden
 			let pre = this.nextSibling;
 			if (pre && pre.classList.contains("pre-cont")) {
-				xml.elementPreviewOff({pre});
+				xml.xmlEditFrage({
+					pre,
+					fun: () => xml.elementPreviewOff({pre}),
+				});
 				return;
 			}
 			// Preview einblenden
@@ -324,6 +327,7 @@ let xml = {
 			ta.setAttribute("rows", "1");
 			ta.value = xml.data.xl[key][slot].xl;
 			ta.addEventListener("input", function() {
+				this.dataset.geaendert = "true";
 				helfer.textareaGrow(this, 0);
 			});
 			// Element einhängen
@@ -359,7 +363,7 @@ let xml = {
 	//   button = Element
 	//     (Speichern- oder Abbrechen-Button)
 	xmlEditSpeichern ({button}) {
-		button.addEventListener("click", function() {
+		button.addEventListener("click", async function() {
 			// Datensatz ermitteln
 			let cont = this.closest(".pre-cont"),
 				kopf = cont.previousSibling;
@@ -372,6 +376,14 @@ let xml = {
 					warn: kopf.firstChild,
 					xmlStr: xml.data.xl[key][slot].xl,
 				});
+			} else {
+				const frage = await xml.xmlEditFrage({
+					pre: cont,
+					fun: () => {},
+				});
+				if (!frage) {
+					return;
+				}
 			}
 			// Pre zurücksetzen
 			let pre = document.createElement("pre");
@@ -382,6 +394,36 @@ let xml = {
 			});
 			// Button zurücksetzen
 			xml.xmlEditBearbeiten({p: cont.lastChild});
+		});
+	},
+	// XML-Vorschau: Frage, ob Änderungen gespeichert werden sollen
+	//   pre = Element
+	//     (.pre-cont)
+	//   fun = Function
+	//     (Function, die eigentlich ausgeführt werden soll)
+	xmlEditFrage ({pre, fun}) {
+		return new Promise(resolve => {
+			let ta = pre.querySelector("textarea");
+			if (ta && ta.dataset.geaendert) {
+				dialog.oeffnen({
+					typ: "confirm",
+					text: "Möchten Sie Ihre Änderungen nicht erst einmal speichern?",
+					callback: () => {
+						if (dialog.antwort !== null) {
+							if (dialog.antwort) {
+								pre.querySelector(`[value="Speichern"]`).dispatchEvent(new MouseEvent("click"));
+							}
+							fun();
+							resolve(true);
+						} else {
+							resolve(false);
+						}
+					},
+				});
+				return;
+			}
+			fun();
+			resolve(true);
 		});
 	},
 	// überprüft ein XML-Snippet darauf, ob es wohlgeformt ist
