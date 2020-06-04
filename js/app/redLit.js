@@ -1292,22 +1292,48 @@ let redLit = {
 		redLit.suche.treffer = [];
 		redLit.suche.highlight = [];
 		if (text) {
-			let insensitive = "i";
-			if (/[A-ZÄÖÜ]/.test(text)) {
-				insensitive = "";
-			}
-			let woerter = []; // Suchwörter und Suchphrasen
-			text = text.replace(/"(.+?)"/g, (m, p1) => { // Phrasen ermitteln
-				woerter.push(p1);
+			let woerter = [];
+			// Feldsuche
+			text = text.replace(/([a-zA-Z]+):"(.+?)"/g, (m, p1, p2) => {
+				const feld = feldCheck(p1);
+				if (!feld) {
+					// angegebenes Suchfeld existiert nicht => diese Suche sollte keine Treffer produzieren
+					return m;
+				}
+				woerter.push({
+					feld,
+					text: p2,
+				});
 				return "";
 			});
-			text.split(/\s/).forEach(i => { // Wörter ermitteln
+			// Phrasensuche
+			text = text.replace(/(?<!:)"(.+?)"/g, (m, p1) => {
+				// (?<!:) damit Suchen mit irregulärer Suchsyntax keine Treffer produzieren
+				woerter.push({
+					feld: "",
+					text: p1,
+				});
+				return "";
+			});
+			// Wortsuche
+			text.split(/\s/).forEach(i => {
 				if (i) {
-					woerter.push(i);
+					woerter.push({
+						feld: "",
+						text: i,
+					});
 				}
 			});
 			for (let wort of woerter) {
-				st.push(new RegExp(helfer.escapeRegExp(wort).replace(/ /g, "\\s"), "g" + insensitive));
+				let insensitive = "i";
+				if (/[A-ZÄÖÜ]/.test(wort.text)) {
+					insensitive = "";
+				}
+				let reg = new RegExp(helfer.escapeRegExp(wort.text).replace(/ /g, "\\s"), "g" + insensitive);
+				st.push({
+					feld: wort.feld,
+					reg,
+				});
 			}
 			redLit.suche.highlight = st;
 		}
@@ -1326,8 +1352,8 @@ let redLit = {
 			["td", "no"],
 			["td", "pn"],
 			["td", "si"],
-			["td", "ti"],
 			["td", "tg"],
+			["td", "ti"],
 			["td", "ul"],
 		];
 		let duplikate = new Set(),
@@ -1419,15 +1445,24 @@ let redLit = {
 					let ok = Array(st.length).fill(false);
 					x: for (let j = 0, len = st.length; j < len; j++) {
 						for (let k of datensaetze) {
+							// dieses Feld durchsuchen?
+							if (st[j].feld && !k.includes(st[j].feld)) {
+								continue;
+							}
+							// Datensatz ermitteln
 							let ds = aufnahme[k[0]];
 							if (k[1]) {
 								ds = ds[k[1]];
 							}
+							// Datensatz durchsuchen
 							const txt = Array.isArray(ds) ? ds.join(", ") : ds;
-							if (txt.match(st[j])) {
+							if (txt.match(st[j].reg)) {
 								ok[j] = true;
 								continue x;
 							}
+						}
+						if (!ok[j]) {
+							break;
 						}
 					}
 					if (!ok.includes(false)) {
@@ -1447,6 +1482,50 @@ let redLit = {
 		redLit.sucheAnzeigen(0);
 		// Suchtext selektieren
 		input.select();
+		// Feld-Schalter ermitteln
+		function feldCheck (text) {
+			let erlaubt = ["be", "ad", "fo", "no", "pn", "si", "tg", "ti", "ul"];
+			text = text.toLowerCase();
+			switch (text) {
+				case "bearb":
+					text = "be";
+					break;
+				case "bearbeiter":
+					text = "be";
+					break;
+				case "bearbeiterin":
+					text = "be";
+					break;
+				case "sigle":
+					text = "si";
+					break;
+				case "titel":
+					text = "ti";
+					break;
+				case "url":
+					text = "ul";
+					break;
+				case "aufrufdatum":
+					text = "ad";
+					break;
+				case "fundort":
+					text = "fo";
+					break;
+				case "ppn":
+					text = "pn";
+					break;
+				case "tags":
+					text = "tg";
+					break;
+				case "notizen":
+					text = "no";
+					break;
+			}
+			if (!erlaubt.includes(text)) {
+				text = "";
+			}
+			return text;
+		}
 	},
 	// Suche: Treffer anzeigen
 	//   start = Number
@@ -3011,7 +3090,10 @@ let redLit = {
 		let si = document.createElement("p");
 		div.appendChild(si);
 		si.classList.add("sigle");
-		si.innerHTML = redLit.anzeigeSnippetHighlight(ds.td.si);
+		si.innerHTML = redLit.anzeigeSnippetHighlight({
+			feld: "si",
+			text: ds.td.si,
+		});
 		// ID
 		let idPrint = document.createElement("span");
 		si.appendChild(idPrint);
@@ -3057,7 +3139,10 @@ let redLit = {
 		let ti = document.createElement("p");
 		div.appendChild(ti);
 		ti.classList.add("aufnahme");
-		ti.innerHTML = redLit.anzeigeSnippetHighlight(ds.td.ti);
+		ti.innerHTML = redLit.anzeigeSnippetHighlight({
+			feld: "ti",
+			text: ds.td.ti,
+		});
 		// URL + Aufrufdatum
 		if (ds.td.ul) {
 			let ul = document.createElement("p");
@@ -3066,7 +3151,10 @@ let redLit = {
 			ul.appendChild(a);
 			a.classList.add("link");
 			a.href = ds.td.ul;
-			a.innerHTML = redLit.anzeigeSnippetHighlight(ds.td.ul);
+			a.innerHTML = redLit.anzeigeSnippetHighlight({
+				feld: "ul",
+				text: ds.td.ul,
+			});
 			helfer.externeLinks(a);
 			if (ds.td.ad) {
 				let datum = ds.td.ad.split("-");
@@ -3078,7 +3166,10 @@ let redLit = {
 				ul.appendChild(i);
 				let adFrag = document.createElement("span");
 				ul.appendChild(adFrag);
-				adFrag.innerHTML = redLit.anzeigeSnippetHighlight(` ${datum[2]}. ${datum[1]}. ${datum[0]}`);
+				adFrag.innerHTML = redLit.anzeigeSnippetHighlight({
+					feld: "ad",
+					text: ` ${datum[2]}. ${datum[1]}. ${datum[0]}`,
+				});
 			}
 		}
 		// Fundort
@@ -3089,7 +3180,10 @@ let redLit = {
 		i.textContent = "Fundort:";
 		let foFrag = document.createElement("span");
 		fo.appendChild(foFrag);
-		foFrag.innerHTML = redLit.anzeigeSnippetHighlight(ds.td.fo);
+		foFrag.innerHTML = redLit.anzeigeSnippetHighlight({
+			feld: "fo",
+			text: ds.td.fo,
+		});
 		// PPN
 		if (ds.td.pn.length) {
 			let pn = document.createElement("p");
@@ -3105,7 +3199,10 @@ let redLit = {
 				pn.appendChild(a);
 				a.classList.add("link");
 				a.href = `https://kxp.k10plus.de/DB=2.1/PPNSET?PPN=${ds.td.pn[i]}`;
-				a.innerHTML = redLit.anzeigeSnippetHighlight(ds.td.pn[i]);
+				a.innerHTML = redLit.anzeigeSnippetHighlight({
+					feld: "pn",
+					text: ds.td.pn[i],
+				});
 				helfer.externeLinks(a);
 			}
 		}
@@ -3118,7 +3215,10 @@ let redLit = {
 			i.textContent = "Notizen:";
 			let noFrag = document.createElement("span");
 			no.appendChild(noFrag);
-			const notiz = redLit.anzeigeSnippetHighlight(ds.td.no);
+			const notiz = redLit.anzeigeSnippetHighlight({
+				feld: "no",
+				text: ds.td.no,
+			});
 			noFrag.innerHTML = notiz.replace(/[\r\n]+/g, "<br>");
 		}
 		// Tags
@@ -3127,7 +3227,10 @@ let redLit = {
 			div.appendChild(p);
 			p.classList.add("tags");
 			for (let tag of ds.td.tg) {
-				tag = redLit.anzeigeSnippetHighlight(tag);
+				tag = redLit.anzeigeSnippetHighlight({
+					feld: "tg",
+					text: tag,
+				});
 				let span = redLit.eingabeTagErzeugen({tag});
 				p.appendChild(span);
 			}
@@ -3139,7 +3242,10 @@ let redLit = {
 			div.appendChild(meta);
 			meta.classList.add("meta");
 			// Bearbeiterin
-			meta.innerHTML = redLit.anzeigeSnippetHighlight(ds.be);
+			meta.innerHTML = redLit.anzeigeSnippetHighlight({
+				feld: "be",
+				text: ds.be,
+			});
 			// Zeitpunkt
 			let zeit = document.createElement("span");
 			meta.appendChild(zeit);
@@ -3163,9 +3269,11 @@ let redLit = {
 		return div;
 	},
 	// Anzeige: Suchtreffer im Snippet highlighten
+	//   feld = String
+	//     (Feld, auf das der String zutrifft)
 	//   text = String
 	//     (Text, der gedruckt werden soll)
-	anzeigeSnippetHighlight (text) {
+	anzeigeSnippetHighlight ({feld, text}) {
 		// Muss/kann Text hervorgehoben werden?
 		if (redLit.anzeige.snippetKontext !== "suche" ||
 				!redLit.suche.highlight.length) {
@@ -3173,7 +3281,10 @@ let redLit = {
 		}
 		// Suchtext hervorheben
 		for (let i of redLit.suche.highlight) {
-			text = text.replace(i, m => `<mark class="suche">${m}</mark>`);
+			if (i.feld && i.feld !== feld) { // wenn i.feld gefüllt => nur betreffendes Feld highlighten
+				continue;
+			}
+			text = text.replace(i.reg, m => `<mark class="suche">${m}</mark>`);
 		}
 		text = redLit.anzeigeSnippetMaskieren(text);
 		text = helfer.suchtrefferBereinigen(text);
