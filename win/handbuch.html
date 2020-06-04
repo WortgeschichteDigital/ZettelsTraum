@@ -4209,7 +4209,7 @@ Gerüst 2 &gt; Gerüst 1</pre>
 							<figcaption>Suchergebnisse in der Literaturdatenbank</figcaption>
 						</figure>
 
-						<p>Mit der Suchfunktion können Sie alle Titelaufnahmen der aktuellen Literaturdatenbank durchsuchen. Durchsucht werden die <b>Datenfelder</b> <i>Sigle, Titel, URL, Aufrufdatum, Fundort, PPN</i> und <i>Notizen</i>. Dabei ist allein zu beachten, dass das Datum des Datenfelds <i>Aufrufdatum</i> intern als ISO 8601 formatiert ist, also diese Form hat: JJJJ–MM-DD (Jahr-Monat-Tag). Suchen Sie nach einer Literaturaufnahme, die das Aufrufdatum <q>8. 5. 2020</q> hat, müssen Sie in den Suchschlitz also <code class="quelltext">2020-05-08</code> eingeben.</p>
+						<p>Mit der Suchfunktion können Sie alle Titelaufnahmen der aktuellen Literaturdatenbank durchsuchen. Durchsucht werden die <b>Datenfelder</b> <i>Sigle, Titel, URL, Aufrufdatum, Fundort, PPN, Tags</i> und <i>Notizen</i>. Dabei ist allein zu beachten, dass das Datum des Datenfelds <i>Aufrufdatum</i> intern als ISO 8601 formatiert ist, also diese Form hat: JJJJ–MM-DD (Jahr-Monat-Tag). Suchen Sie nach einer Literaturaufnahme, die das Aufrufdatum <q>8. 5. 2020</q> hat, müssen Sie in den Suchschlitz also <code class="quelltext">2020-05-08</code> eingeben.</p>
 
 						<p>Die Suche kann via <kbd>⏎</kbd> oder durch Klick auf das Icon <img src="../img/lupe.svg" width="20" height="20" alt=""> <b>gestartet</b> werden.</p>
 
@@ -4320,6 +4320,15 @@ Gerüst 2 &gt; Gerüst 1</pre>
 							<li><i>Fundort</i> (verpflichtend): Eine abstrakte Angabe zum Fundort des Literaturtitels. Erlaubt sind nur die vordefinierten Werte, die man über das Dropdown-Menü einsehen kann.</li>
 
 							<li><i><abbr title="Pica-Produktionsnummer">PPN</abbr></i> (fakultativ): Eine oder mehrere Pica-Produktionsnummern. Möchten Sie mehrere <abbr title="Pica-Produktionsnummern">PPN</abbr> eingeben, müssen Sie diese durch Kommata und/oder Leerzeichen voneinander trennen. Werden <abbr title="Pica-Produktionsnummern">PPN</abbr> angegeben, wird in der Trefferliste der <a href="#menueRedaktion-literaturTitelsuche">Titelsuche</a> ein Link zur Titelaufnahme des <a href="https://kxp.k10plus.de/DB=2.1/">Gemeinsamen Verbundkatalogs</a> gesetzt.</li>
+
+							<li id="menueRedaktion-literaturTags">
+								<figure class="right" title="zum Vergrößern anklicken">
+									<img src="../img/win/hb-menueRedaktion-literatur-formular-tag-loeschen.png" alt="">
+									<figcaption>Löschen eines Tags</figcaption>
+								</figure>
+
+								<p><i>Tags</i> (fakultativ): Sie können Titelaufnahmen mit beliebig vielen Tags versehen. Das Dropdown-Menü bietet Ihnen einige vordefinierte und alle in der aktuell geladenen Literaturdatenbank zu findenden Tags zur Auswahl an. Sie können aber auch jederzeit neue Tags eingeben und ergänzen. Zum Übernehmen eines Tags müssen Sie die Eingabe mit <kbd>⏎</kbd> bestätigen. Zum Löschen eines Tags, klicken Sie den betreffenden Tag rechts neben dem Eingabefeld an.</p>
+							</li>
 
 							<li><i>Notizen</i> (fakultativ): Ein Freitextfeld für Notizen zu der Titelaufnahme. Zeilenumbrüche sind erlaubt und werden in der Titelanzeige der <a href="#menueRedaktion-literaturTitelsuche">Titelsuche</a> auch dargestellt. Diese Notizen sind allein für die Arbeit in der Literaturdatenbank gedacht. Darum werden sie von den <a href="#menueRedaktion-literaturExportieren">Exportfunktionen</a> ignoriert. Titelaufnahmen mit Notizen lassen sich mit der entsprechenden <a href="#menueRedaktion-literaturSondersuchen">Sondersuche</a> finden.</li>
 
