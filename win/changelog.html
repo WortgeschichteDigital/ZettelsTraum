@@ -9,6 +9,7 @@
 		<link rel="stylesheet" href="../css/win/changelog.css">
 		<link rel="stylesheet" href="../css/win/changelog-drucken.css" media="print">
 
+		<script src="../js/helferXml.js"></script>
 		<script src="../js/suchleiste.js"></script>
 		<script src="../js/tastatur.js"></script>
 
@@ -45,6 +46,8 @@
 			<div>
 				<h2><span>Version 1.0.0-beta</span><time datetime="2019-12-24">24. Dezember 2019</time></h2>
 
+				<p><span class="obacht">Das Dateiformat der Literaturdatenbank hat sich geändert!</span> Ältere <abbr title="Zettel’s Traum Literaturdatenbank">ZTL</abbr>-Dateien werden beim Öffnen automatisch konvertiert; dabei wird eine Änderungsmarkierung gesetzt.</p>
+
 				<h3>Entfernte Funktionen</h3>
 
 				<ul>
@@ -54,13 +57,21 @@
 				<h3>Neue Funktionen</h3>
 
 				<ul>
-					<li></li>
+					<li><a href="#karteikarte" class="link-handbuch">Karteikarte</a> und <a href="#belegliste" class="link-handbuch">Belegliste</a>: Es gibt nun ein ausdifferenziertes System von unterschiedlichen Einklammerungen, mit dessen Hilfe der Belegtext zum Schneiden vorbereitet werden kann, ohne Belegtext löschen zu müssen. <abbr title="Vergleiche">Vgl.</abbr> den entsprechenden <a href="#karteikarte-belegKlammern" class="link-handbuch">Abschnitt im Handbuch</a>.</li>
+
+					<li><a href="#menueRedaktion-literatur" class="link-handbuch">Literaturdatenbank</a>: Titelaufnahmen können jetzt mit beliebig vielen Tags versehen werden. <abbr title="Vergleiche">Vgl.</abbr> den <a href="#menueRedaktion-literaturTags" class="link-handbuch">Absatz im Handbuch</a>.</li>
 				</ul>
 
 				<h3>Verbesserungen</h3>
 
 				<ul>
-					<li></li>
+					<li><a href="#menueRedaktion-literatur" class="link-handbuch">Literaturdatenbank</a> und <a href="#karteikarte" class="link-handbuch">Karteikarte</a>: Für den Import von Literaturtiteln lässt sich nun steuern, ob der Verlagsname und/oder die Angaben zur Serie, in der ein Titel erschienen ist, angezeigt werden sollen. <abbr title="Vergleiche">Vgl.</abbr> die <a href="#einstellungen-literatur" class="link-handbuch">Beschreibung der Optionen im Handbuch</a>.</li>
+
+					<li>Literaturdatenbank: Mit einer <a href="#menueRedaktion-literaturSuchsyntax" class="link-handbuch">speziellen, im Handbuch beschriebenen Suchsyntax</a> kann die Suche nach Wörtern oder Phrasen auf ein einzelnes Datenfeld eingegrenzt werden.</li>
+
+					<li>Literaturdatenbank: Das Dialogfenster für die Verwaltung der Literaturdatenbank kann nun auch über ein Icon in der Quick-Access-Bar geöffnet werden.</li>
+
+					<li>Literaturdatenbank: Daneben wurden erneut mehrere Kleinigkeiten verbessert. Beim automatischen Berechnen der ID werden (hochgestellte) Ziffern vom Anfang der Sigle an das Ende der ID geschoben; bei der Eingabe von URLs gibt es weitere Automatismen, die den Fundort betreffen; außerdem wird genauer überprüft, ob URL und Fundort konsistent sind.</li>
 				</ul>
 
 				<h3>Updates</h3>
@@ -91,7 +102,7 @@
 
 					<li>Literaturdatenbank: Aus Performance-Gründen werden fortan nur noch 50 Titelaufnahmen pro Seite in der Suchtrefferliste angezeigt.</li>
 
-					<li>Literaturdatenbank: Daneben wurden erneut mehrere Kleinigkeiten verbessert. Das automatische Ermitteln des Publikationsjahrs für die Sigle wurde noch einmal leicht modifiziert; bei der automatischen Generierung der ID wird vermieden, dass zwei Bindestriche hintereinander stehen; Siglen werden in der Rückmeldung, die nach dem Verschmelzen erscheint, besser sortiert; Siglen mit hochgestellten Ziffern werden im Allgemeinen bessert sortiert.</li>
+					<li>Literaturdatenbank: Daneben wurden erneut mehrere Kleinigkeiten verbessert. Das automatische Ermitteln des Publikationsjahrs für die Sigle wurde noch einmal leicht modifiziert; bei der automatischen Generierung der ID wird vermieden, dass zwei Bindestriche hintereinander stehen; Siglen werden in der Rückmeldung, die nach dem Verschmelzen erscheint, besser sortiert; Siglen mit hochgestellten Ziffern werden im Allgemeinen besser sortiert.</li>
 				</ul>
 
 				<h3>Behobene Fehler</h3>
@@ -1208,7 +1219,7 @@
 
 						<p>Die Annotierung wird dauerhaft in der Kartei gespeichert, deswegen bekommt die Kartei <abbr title="beziehungsweise">bzw.</abbr> die Karteikarte eine Änderungsmarkierung, nachdem ein Wort annotiert wurde. Gespeichert wird die Annotierung im Belegtext, sie ist also auch im Formular der Karteikarte sichtbar. Im Quelltext kann das Ganze dann <abbr title="zum Beispiel">z. B.</abbr> so aussehen:</p>
 
-						<pre class="quelltext"><code class="quelltext">&lt;span class="annotierung-wort farbe3" title="hier steht die Textnotiz"&gt;Freiheit&lt;/span&gt;</code></pre>
+						<pre class="quelltext xml-pretty-print">&lt;span class="annotierung-wort farbe3" title="hier steht die Textnotiz"&gt;Freiheit&lt;/span&gt;</pre>
 					</li>
 
 					<li><i class="app-name"></i> liefert ab dieser Version eine Demonstrationskartei mit, an der neue NutzerInnen sehen können, wie eine mit einem Bedeutungsgerüst versehene und mit Belegen gefüllte Wortkartei aussieht. Die Kartei kann via <i>Hilfe &gt; Demonstrationskartei</i> geöffnet werden.</li>
@@ -1406,7 +1417,7 @@
 					<li>
 						<p>Suchleiste: Text, der über mehrfach verschachtelte Tags hinausging, konnte nicht markiert und in der Konsequenz auch nicht gefunden werden. Eine Suche nach dem Text <i>der Beispiel-Satz</i> liefert nun korrekterweise einen Treffer, selbst wenn der Text wie folgt getaggt ist:</p>
 
-						<pre class="quelltext">der &lt;i&gt;&lt;b&gt;&lt;u&gt;Beispiel&lt;/u&gt;&lt;/b&gt;&lt;/i&gt;-Satz</pre>
+						<pre class="quelltext xml-pretty-print">der &lt;i&gt;&lt;b&gt;&lt;u&gt;Beispiel&lt;/u&gt;&lt;/b&gt;&lt;/i&gt;-Satz</pre>
 					</li>
 				</ul>
 			</div>
@@ -2156,7 +2167,7 @@ Gerüst 2 &gt; Gerüst 1</pre>
 					<li>
 						<p>Sachgebiete: In den <i>Programm-Einstellungen</i> unter <i>Bedeutungsgerüst</i> kann nun eine Datei mit einer Liste an Sachgebieten geladen werden. Dabei muss es sich um eine in <abbr title="UCS Transformation Format" lang="en">UTF</abbr>-8 enkodierte <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Datei handeln, die die folgende Struktur hat:</p>
 
-						<pre class="quelltext">&lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;
+						<pre class="quelltext xml-pretty-print">&lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;
 &lt;sachgebiete&gt;
 	&lt;sachgebiet&gt;
 		&lt;id&gt;1&lt;/id&gt;

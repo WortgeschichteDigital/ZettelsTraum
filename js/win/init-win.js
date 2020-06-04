@@ -26,6 +26,13 @@ let initWin = {
 	appName () {
 		document.querySelectorAll(".app-name").forEach(i => i.textContent = appInfo.name);
 	},
+	// XML-Quelltexte aufhübschen
+	xmlPrettyPrint () {
+		let pretty = document.querySelectorAll(".xml-pretty-print");
+		for (let i of pretty) {
+			i.innerHTML = helferXml.prettyPrint({xmlStr: i.textContent});
+		}
+	},
 	// Events initialisieren
 	events () {
 		// Tastatureingaben abfangen

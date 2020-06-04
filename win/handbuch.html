@@ -412,7 +412,7 @@
 					<p class="erklaerung-icon" id="karteikarte-trennung"><img src="../img/trennzeichen.svg" width="24" height="24" alt="">Tastaturkürzel <kbd>Strg</kbd> + <kbd>T</kbd>; nur <i>Leseansicht</i>; Silbentrennung ein- <abbr title="beziehungsweise">bzw.</abbr> ausblenden</p>
 
 					<div class="info">
-						<p>Beim <a href="#karteikarte-dtaImport">Import von Belegen aus dem <abbr title="Deutschen Textarchiv">DTA</abbr></a> werden Trennstriche am Zeilenende durch die Markierung <q>[¬]</q> ersetzt. Wird die Trennstrichmarkierung ausgeschaltet, erscheint ein Bindestrich, wenn das nächste Wort mit einem Großbuchstaben beginnt. Aus <q>Eisenbahn[¬]Differentialtarife</q> wird darum <q>Eisenbahn-Differentialtarife</q>, aus <q>Groß[¬]industrieller</q> hingegen <q>Großindustrieller</q>. Die Markierungen bleiben beim Import erhalten, weil der Computer dem Lexikographen die Entscheidung, ob ein Trennstrich gesetzt werden muss oder nicht, eigentlich nicht abnehmen kann.</p>
+						<p id="karteikarte-bindestrich">Beim <a href="#karteikarte-dtaImport">Import von Belegen aus dem <abbr title="Deutschen Textarchiv">DTA</abbr></a> werden Trennstriche am Zeilenende durch die Markierung <q>[¬]</q> ersetzt. Wird die Trennstrichmarkierung ausgeschaltet, erscheint ein Bindestrich, wenn das nächste Wort mit einem Großbuchstaben beginnt. Aus <q>Eisenbahn[¬]Differentialtarife</q> wird darum <q>Eisenbahn-Differentialtarife</q>, aus <q>Groß[¬]industrieller</q> hingegen <q>Großindustrieller</q>. Die Markierungen bleiben beim Import erhalten, weil der Computer dem Lexikographen die Entscheidung, ob ein Trennstrich gesetzt werden muss oder nicht, eigentlich nicht abnehmen kann.</p>
 
 						<p>Werden mehrere Seiten importiert, erscheint vor jeder neuen Seite eine Umbruchsmarkierung nach dem Muster <q>␣[:SEITENZAHL:]␣</q> (davor und dahinter ein Leerzeichen). Folgt auf die Markierung Seite 351 des importierten Textes, stünde hier demnach <q>␣[:351:]␣</q>. Diese Umbruchsmarkierungen werden von der Einstellung zusätzlich zu den Trennstrichen erfasst und ein- oder ausgeblendet.</p>
 
@@ -601,6 +601,34 @@
 						<p>Was Sie trotz dieser automatischen Bereinigung, die beim Einfügen von Text angestoßen wird, dennoch jederzeit machen können: <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>-Elemente händisch eintippen. Hier gibt es keine Beschränkungen. Der Text wird so gespeichert, wie Sie ihn eingetippt haben. Bedenken Sie allerdings das oben Gesagte: Möchten Sie nicht <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>-Tags, sondern Text in literalen Spitzklammern eingeben, müssen Sie diese <a href="#karteikarte-maskieren">maskieren</a>.</p>
 
 						<p>Ein letztes noch zu diesem Punkt: Es ist vollkommen gleichgültig, mit welcher Methode Sie Text in das Beleg-Feld einfügen. Die automatische Bereinigung wird angestoßen, wenn Sie das Einfüge-Icon <img src="../img/einfuegen.svg" width="20" height="20" alt=""> verwenden, wenn Sie via <kbd>Strg</kbd> + <kbd>V</kbd> Text einfügen, via <i>Rechtsklick &gt; Einfügen</i> oder über über den Menüpunkt <a href="#menueBearbeiten-einfuegen"><i>Bearbeiten &gt; Einfügen</i></a>.</p>
+
+						<p id="karteikarte-belegKlammern">Im Belegfeld steht Ihnen ein ausdifferenziertes System an <b>Klammern</b> zur Verfügung, mit dem Sie Belegschnitte für einen späteren Export vorbereiten können, ohne dass Sie Belegtext wirklich löschen müssten. Das System dient dazu, Streichungen und Ergänzungen so vorzubereiten, dass Ihnen die App beim Export oder Kopieren des Textes den Belegschnitt in just der Form auswerfen kann, die Sie wünschen.</p>
+
+						<div class="bilder">
+							<figure title="zum Vergrößern anklicken">
+								<img src="../img/win/hb-karteikarte-klammern-beleg.png" alt="">
+								<figcaption>farbig hervorgehobene Klammern in einem Beleg</figcaption>
+							</figure>
+
+							<figure title="zum Vergrößern anklicken">
+								<img src="../img/win/hb-karteikarte-klammern-textprogramm.png" alt="">
+								<figcaption>aufgelöste Klammern nach dem Kopieren eines Belegschnitts</figcaption>
+							</figure>
+						</div>
+
+						<p>Im Folgenden wird beschrieben, wie die Klammerungen beim <a href="#karteikarte-kopieren">Kopieren</a> von Text, der zum Einfügen in ein Textprogramm dient, transformiert werden. Die Klammerungen werden auch beim Erstellen eines XML-Snippets aufgelöst. <abbr title="Vergleiche">Vgl.</abbr> dazu den entsprechenden <a href="#xml-belegschnitt" class="link-dokumentation"><abbr title="Abschnitt">Abschn.</abbr> in der technischen Dokumentation</a>.</p>
+
+						<p><b>{Text}</b> → <b>[Text]</b> = Autorenzusatz. Der markierte Belegtext bleibt beim Export somit erhalten, wird dabei aber in eckige Klammern gesetzt.</p>
+
+						<p><b>[Text]</b> → <b>[…]</b> = Streichung. Der markierte Belegtext wird beim Export gestrichen und durch eine Ellipse ersetzt.</p>
+
+						<p><b>[[Text]]</b> → <b>[…]</b> = Löschung. Der markierte Belegtext wird beim Export gestrichen und durch eine Ellipse ersetzt. Diese Differenzierung ist nur für den <a href="#belegliste-xmlZwischenablageBelegschnitt"><abbr title="Extensible Markup Language" lang="en">XML</abbr>-Export</a> relevant, zumal das Ergebnis hier identisch mit dem einer Streichung ist.</p>
+
+						<p><b>[¬]</b> → <i>wird gelöscht/durch Bindestrich ersetzt</i>. Trennstriche am Zeilenende, die über den <a href="#karteikarte-dtaImport"><abbr title="Deutsches Textarchiv">DTA</abbr>-Import</a> in den Belegtext kommen können. Es wird <a href="#karteikarte-bindestrich">der oben beschriebene Algorithmus</a> angewandt.</p>
+
+						<p><b>[:SEITENZAHL:]</b> → <i>wird gelöscht</i>. Markierung von Seiten- oder Spaltenumbrüchen, die über den <abbr title="Deutsches Textarchiv">DTA</abbr>-Import in den Belegtext kommen können.</p>
+
+						<p><b>[Anmerkung: Text]</b> → <b>[Anmerkung: Text]</b>. Anmerkungen im Originaltext, die über den <abbr title="Deutsches Textarchiv">DTA</abbr>-Import in den Belegtext kommen können.</p>
 					</div>
 
 					<p id="karteikarte-bedeutung"><b>Bedeutung:</b> mit dem Beleg verknüpfte Wortbedeutung(en)</p>
@@ -1937,6 +1965,28 @@ Mustermann, Erika
 						<p>Es geht um das Fenster, das durch die Funktion <a href="#menueBelege-einfuegen"><i>Belege &gt; Einfügen</i></a> geöffnet wird. Die Funktion dient dazu, Belege, die in einer anderen Kartei zum Kopieren vorgemerkt wurden, in die aktuelle Kartei zu kopieren. Ist diese Checkbox aktiviert, wird das Fenster direkt nach dem Einfügen geschlossen.</p>
 
 						<p>Führen Sie wiederholt kleinere Einfügeoperationen aus, könnte es sinnvoll sein, die Checkbox zu deaktivieren. Dann müssten Sie das Einfügen-Fenster nicht immer wieder aufs Neue öffnen.</p>
+					</div>
+
+					<h2 id="einstellungen-literatur">Literatur</h2>
+
+					<p class="erklaerung-option" id="einstellungen-literaturVerlag">Verlag anzeigen</p>
+
+					<div class="info">
+						<p><i>Standard:</i> nicht aktiviert</p>
+
+						<p>Beim automatischen Import von Literaturtiteln in der <a href="#menueRedaktion-literaturTitelaufnahmeImport">Literaturdatenbank</a> oder in der <a href="#karteikarte-importfunktion">Karteikarte</a> wird der Verlagsname angezeigt, wenn diese Einstellung aktiviert wurde.</p>
+
+						<p>Die Importsteuerung des Verlagsnamens ist nur möglich, wenn die Importquelle so strukturiert ist, dass diese Information gezielt ausgelesen werden kann. Dies ist beim Import eines MODS-Dokuments oder via <abbr title="Pica-Produktionsnummer">PPN</abbr> <abbr title="beispielsweise">bspw.</abbr> der Fall.</p>
+					</div>
+
+					<p class="erklaerung-option">Serie anzeigen</p>
+
+					<div class="info">
+						<p><i>Standard:</i> nicht aktiviert</p>
+
+						<p>Beim automatischen Import von Literaturtiteln in der <a href="#menueRedaktion-literaturTitelaufnahmeImport">Literaturdatenbank</a> oder in der <a href="#karteikarte-importfunktion">Karteikarte</a> werden Titel und Band von Serien angezeigt, wenn diese Einstellung aktiviert wurde.</p>
+
+						<p>Ansonsten gilt dasselbe wie für die Einstellung <a href="#einstellungen-literaturVerlag">Verlag anzeigen</a></p>
 					</div>
 
 					<h2 id="einstellungen-menue">Menü</h2>
@@ -4159,7 +4209,7 @@ Gerüst 2 &gt; Gerüst 1</pre>
 							<figcaption>Suchergebnisse in der Literaturdatenbank</figcaption>
 						</figure>
 
-						<p>Mit der Suchfunktion können Sie alle Titelaufnahmen der aktuellen Literaturdatenbank durchsuchen. Durchsucht werden die <b>Datenfelder</b> <i>Sigle, Titel, URL, Aufrufdatum, Fundort, PPN</i> und <i>Notizen</i>. Dabei ist allein zu beachten, dass das Datum des Datenfelds <i>Aufrufdatum</i> intern als ISO 8601 formatiert ist, also diese Form hat: JJJJ–MM-DD (Jahr-Monat-Tag). Suchen Sie nach einer Literaturaufnahme, die das Aufrufdatum <q>8. 5. 2020</q> hat, müssen Sie in den Suchschlitz also <code class="quelltext">2020-05-08</code> eingeben.</p>
+						<p>Mit der Suchfunktion können Sie alle Titelaufnahmen der aktuellen Literaturdatenbank durchsuchen. Durchsucht werden die <b>Datenfelder</b> <i>Sigle, Titel, URL, Aufrufdatum, Fundort, PPN, Tags</i> und <i>Notizen</i>. Dabei ist allein zu beachten, dass das Datum des Datenfelds <i>Aufrufdatum</i> intern als ISO 8601 formatiert ist, also diese Form hat: JJJJ–MM-DD (Jahr-Monat-Tag). Suchen Sie nach einer Literaturaufnahme, die das Aufrufdatum <q>8. 5. 2020</q> hat, müssen Sie in den Suchschlitz also <code class="quelltext">2020-05-08</code> eingeben.</p>
 
 						<p>Die Suche kann via <kbd>⏎</kbd> oder durch Klick auf das Icon <img src="../img/lupe.svg" width="20" height="20" alt=""> <b>gestartet</b> werden.</p>
 
@@ -4171,9 +4221,35 @@ Gerüst 2 &gt; Gerüst 1</pre>
 
 						<p>Bei der Suche wird <b>Groß- und Kleinschreibung</b> ignoriert. Es sei denn, in Ihrem Suchwort findet sich ein Großbuchstabe. In diesem Fall wird nämlich auf eine Suche umgeschaltet, bei der die von Ihnen eingegebene Schreibung exakt beachtet wird. Ein Beispiel: Geben Sie <code class="quelltext">der</code> ein, wird sowohl die Titelaufnahme mit der Phrase <q><i>Der</i> Einfluß des Englischen</q> als auch die mit <q>Geschichte <i>der</i> deutschen Sprache</q> gefunden. Geben Sie hingegen <code class="quelltext">Der</code> ein, produziert nur die erste Zeichenkette einen Treffer.</p>
 
-						<p>Geben Sie <b>mehrere Suchwörter</b> ein, finden Sie nur Titelaufnahmen, die jedes der eingegebenen Wörter in einem oder mehreren Datenfeldern enthalt. Die Wörter müssen nicht direkt aufeinanderfolgen und nicht alle im selben Datenfeld sein.</p>
+						<p>Geben Sie <b>mehrere Suchwörter</b> ein, finden Sie nur Titelaufnahmen, die jedes der eingegebenen Wörter in einem oder mehreren Datenfeldern enthält. Die Wörter müssen nicht direkt aufeinanderfolgen und nicht alle im selben Datenfeld sein. Der Schalter für Groß- und Kleinschreibung wird für jedes Suchwort einzeln und nicht für alle zugleich umgelegt. Enthält nur eines der Suchwörter einen Großbuchstaben, wird auch nur dieses Suchwort mit exakter Schreibung gesucht. Geben Sie als Suchausdruck <code class="quelltext">Wörterbuch sprach</code> ein, wird bei <code class="quelltext">Wörterbuch</code> zwischen Groß- und Kleinschreibung unterschieden (<q>Fremdwörterbuch</q> produziert keinen Treffer), bei <code class="quelltext">sprach</code> jedoch nicht. <abbr title="Das heißt">D. h.</abbr> sowohl <q>Sprache</q> als auch <q>sprachlich</q> produzieren Treffer.</p>
 
 						<p>Daneben gibt es die Möglichkeit nach <b>Phrasen</b> zu suchen. Schließen Sie mehrere Suchwörter in Anführungsstriche ein, werden diese nur gefunden, wenn sie so wie eingegeben direkt aufeinanderfolgen. Ein Beispiel: Die Eingabe <code class="quelltext">&quot;Jacob Grimm&quot;</code> würde <abbr title="zum Beispiel">z. B.</abbr> das <q>Deutsche Wörterbuch von Jacob Grimm und Wilhelm Grimm</q> finden, die Titelaufnahme <q>Grimm, Jacob: Die drei Federn</q> aber nicht. Lassen Sie die Anführungszeichen weg und suchen Sie nach <code class="quelltext">Jacob Grimm</code>, passt der Suchausdruck auf beide Titel.</p>
+
+						<p id="menueRedaktion-literaturSuchsyntax">Mithilfe einer speziellen <b>Suchsyntax</b> können sie die Suche von Suchwörtern oder -phrasen auf nur eines der Datenfelder beschränken. Die Syntax ist so aufgebaut: <code class="quelltext">FELDNAME:&quot;SUCHAUSDRUCK&quot;</code> (vor und hinter dem Doppelpunkt <em>kein</em> Leerzeichen). Mit der Suchanfrage <code class="quelltext">Bearbeiter:&quot;Müller&quot;</code> finden Sie nur Titelaufnahmen, die von einer Person namens <q>Müller</q> bearbeitet wurden. Taucht <q>Müller</q> allein in einer Titelaufnahme, Sigle oder dergleichen auf, produziert die Anfrage keinen Treffer.</p>
+
+						<p>Für das Ansprechen der Datenfelder gibt es immer mehrere Alternativen (in der Liste durch Kommata getrennt); Groß- oder Kleinschreibung spielt bei der Angabe der Feldnamen keine Rolle; <code class="quelltext">bearbeiterin</code> wird genauso behandelt wie <code class="quelltext">BearbeiterIn</code>:</p>
+
+						<ul>
+							<li><i>Sigle, si:</i> nur das Sigle-Feld durchsuchen.</li>
+
+							<li><i>Titel, ti:</i> nur das Titel-Feld durchsuchen.</li>
+
+							<li><i>URL, ul:</i> nur das URL-Feld durchsuchen.</li>
+
+							<li><i>Aufrufdatum, ad:</i> nur das Aufrufdatum-Feld durchsuchen. (Beachten Sie bitte, dass das Aufrufdatum intern im ISO 8601-Format vorliegt. Nach dem <q>8. 5. 2020</q> müssen Sie mit der Anfrage <code class="quelltext">2020-05-08</code> suchen.)</li>
+
+							<li><i>Fundort, fo:</i> nur das Fundort-Feld durchsuchen.</li>
+
+							<li><i>PPN, pn:</i> nur das <abbr title="Pica-Produktionsnummer">PPN</abbr>-Feld durchsuchen.</li>
+
+							<li><i>Tags, tg:</i> nur das Tags-Feld durchsuchen.</li>
+
+							<li><i>Notizen, no:</i> nur das Notizen-Feld durchsuchen.</li>
+
+							<li><i>BearbeiterIn, Bearbeiter, bearb, be:</i> nur das BearbeiterIn-Feld durchsuchen.</li>
+						</ul>
+
+						<p>Verwenden Sie mehr als ein Suchwort und/oder mehr als einen Suchausdruck, werden diese immer durch ein <b>logisches Und</b> miteinander verknüpft. Sie bekommen nur Treffer, wenn alle Suchkriterien in einem Titel erfüllt sind.</p>
 
 						<p>Die Suche kann nach <b>Erstellungsdatum</b> einer Titelaufnahme eingegrenzt werden. Wählen Sie im Datumsfeld <i>ab</i> ein Tagesdatum aus, bekommen Sie nur Titelaufnahmen angezeigt, die ab diesem Datum angelegt wurden.</p>
 
@@ -4195,11 +4271,11 @@ Gerüst 2 &gt; Gerüst 1</pre>
 						<p id="menueRedaktion-literaturSondersuchen">Unter dem Suchschlitz finden Sie Links, mit denen Sie <b>Sondersuchen</b> starten können. Bei Sondersuchen werden keine veralteten Datensätze durchsucht; sie beziehen sich also immer auf die jüngste Version einer Titelaufnahme. Im Suchschlitz oder im Datumsfeld eingetragene Werte werden auch bei einer Sondersuche berücksichtigt. Die Sondersuchen können Ihnen jedoch Ergebnisse liefern, für die es ein bisschen komplizierterer Suchalgorithmen bedarf. Gefunden werden dabei im Einzelnen:</p>
 
 						<ul>
-							<li><i>Duplikate:</i> Ja, mit dieser Sondersuchen kann die Datenbank nach Duplikaten durchsucht werden. Als Duplikate gelten Titelaufnahmen, die mindestens eines der folgenden Kriterien erfüllen: identischer Titel, identische Sigle, identische URL, identische PPN.</li>
+							<li><i>Duplikate:</i> Ja, mit dieser Sondersuchen kann die Datenbank nach Duplikaten durchsucht werden. Als Duplikate gelten Titelaufnahmen, die mindestens eines der folgenden Kriterien erfüllen: identischer Titel, identische Sigle, identische URL, identische <abbr title="Pica-Produktionsnummer">PPN</abbr>.</li>
 
 							<li><i>doppelte Siglen:</i> Eine auf identische Siglen reduzierte Suche nach Duplikaten.</li>
 
-							<li><i>mit/ohne PPN:</i> Findet Titelaufnahmen, denen mindestens eine <abbr title="respektive">resp.</abbr> keine PPN zugewiesen wurde.</li>
+							<li><i>mit/ohne <abbr title="Pica-Produktionsnummer">PPN</abbr>:</i> Findet Titelaufnahmen, denen mindestens eine <abbr title="respektive">resp.</abbr> keine <abbr title="Pica-Produktionsnummer">PPN</abbr> zugewiesen wurde.</li>
 
 							<li><i>mehrere Versionen:</i> Zeigt nur Titelaufnahmen an, die mehr als eine Version haben.</li>
 
@@ -4269,7 +4345,16 @@ Gerüst 2 &gt; Gerüst 1</pre>
 
 							<li><i>Fundort</i> (verpflichtend): Eine abstrakte Angabe zum Fundort des Literaturtitels. Erlaubt sind nur die vordefinierten Werte, die man über das Dropdown-Menü einsehen kann.</li>
 
-							<li><i>PPN</i> (fakultativ): Eine oder mehrere Pica-Produktionsnummern. Möchten Sie mehrere PPN eingeben, müssen Sie diese durch Kommata und/oder Leerzeichen voneinander trennen. Werden PPN angegeben, wird in der Trefferliste der <a href="#menueRedaktion-literaturTitelsuche">Titelsuche</a> ein Link zur Titelaufnahme des <a href="https://kxp.k10plus.de/DB=2.1/">Gemeinsamen Verbundkatalogs</a> gesetzt.</li>
+							<li><i><abbr title="Pica-Produktionsnummer">PPN</abbr></i> (fakultativ): Eine oder mehrere Pica-Produktionsnummern. Möchten Sie mehrere <abbr title="Pica-Produktionsnummern">PPN</abbr> eingeben, müssen Sie diese durch Kommata und/oder Leerzeichen voneinander trennen. Werden <abbr title="Pica-Produktionsnummern">PPN</abbr> angegeben, wird in der Trefferliste der <a href="#menueRedaktion-literaturTitelsuche">Titelsuche</a> ein Link zur Titelaufnahme des <a href="https://kxp.k10plus.de/DB=2.1/">Gemeinsamen Verbundkatalogs</a> gesetzt.</li>
+
+							<li id="menueRedaktion-literaturTags">
+								<figure class="right" title="zum Vergrößern anklicken">
+									<img src="../img/win/hb-menueRedaktion-literatur-formular-tag-loeschen.png" alt="">
+									<figcaption>Löschen eines Tags</figcaption>
+								</figure>
+
+								<p><i>Tags</i> (fakultativ): Sie können Titelaufnahmen mit beliebig vielen Tags versehen. Das Dropdown-Menü bietet Ihnen einige vordefinierte und alle in der aktuell geladenen Literaturdatenbank zu findenden Tags zur Auswahl an. Sie können aber auch jederzeit neue Tags eingeben und ergänzen. Zum Übernehmen eines Tags müssen Sie die Eingabe mit <kbd>⏎</kbd> bestätigen. Zum Löschen eines Tags, klicken Sie den betreffenden Tag rechts neben dem Eingabefeld an.</p>
+							</li>
 
 							<li><i>Notizen</i> (fakultativ): Ein Freitextfeld für Notizen zu der Titelaufnahme. Zeilenumbrüche sind erlaubt und werden in der Titelanzeige der <a href="#menueRedaktion-literaturTitelsuche">Titelsuche</a> auch dargestellt. Diese Notizen sind allein für die Arbeit in der Literaturdatenbank gedacht. Darum werden sie von den <a href="#menueRedaktion-literaturExportieren">Exportfunktionen</a> ignoriert. Titelaufnahmen mit Notizen lassen sich mit der entsprechenden <a href="#menueRedaktion-literaturSondersuchen">Sondersuche</a> finden.</li>
 

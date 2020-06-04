@@ -5,6 +5,7 @@ window.addEventListener("load", async () => {
 	await initWin.infos();
 	initWin.ipcListener();
 	initWin.appName();
+	initWin.xmlPrettyPrint();
 	initWin.events();
 	initWin.eventsPopup();
 	initWin.eventsHilfeKopf();

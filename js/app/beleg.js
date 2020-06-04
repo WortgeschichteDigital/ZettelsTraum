@@ -810,8 +810,8 @@ let beleg = {
 		if (ds === "bs") { // Beleg
 			let p = text.replace(/\n\s*\n/g, "\n").split("\n"),
 				html = "";
-			p.forEach(function(i) {
-				let text = i;
+			p.forEach(text => {
+				text = beleg.toolsKopierenKlammern({text});
 				if (optionen.data.einstellungen["textkopie-wort"]) {
 					text = liste.belegWortHervorheben(text, true);
 				}
@@ -836,9 +836,12 @@ let beleg = {
 			}
 			// Texte aufbereiten
 			html = helfer.clipboardHtml(html);
+			html = helfer.typographie(html);
 			html = beleg.toolsKopierenAddQuelle(html, true, obj);
 			html = beleg.toolsKopierenAddJahr(html, true);
 			text = text.replace(/<.+?>/g, "");
+			text = beleg.toolsKopierenKlammern({text});
+			text = helfer.typographie(text);
 			text = beleg.toolsKopierenAddQuelle(text, false, obj);
 			text = beleg.toolsKopierenAddJahr(text, false);
 			// Text in Zwischenablage
@@ -884,6 +887,28 @@ let beleg = {
 		// Animation, die anzeigt, dass die Zwischenablage gefüllt wurde
 		helfer.animation("zwischenablage");
 	},
+	// Klammern im Belegtext aufbereiten
+	//   text = String
+	//     (Belegtext, in dem die Klammern aufbereitet werden sollen)
+	toolsKopierenKlammern ({text}) {
+		// Bindestriche einfügen
+		text = text.replace(/\[¬\]([A-ZÄÖÜ])/g, (m, p1) => `-${p1}`);
+		// eckige Klammern
+		text = text.replace(/\[{1,2}.+?\]{1,2}/g, m => {
+			if (/^\[Anmerkung:\s/.test(m)) {
+				return m;
+			} else if (/^(\[¬\]|\[:.+?:\])$/.test(m)) {
+				return "";
+			}
+			return "[…]";
+		});
+		// Autorenzusatz
+		text = text.replace(/\{(.+?)\}/g, (m, p1) => {
+			return `[${p1}]`;
+		});
+		// Ergebnis zurückgeben
+		return helfer.textTrim(text, true);
+	},
 	// Jahreszahl und/oder ID des Belegs als eine Art Überschrift hinzufügen
 	//   text = String
 	//     (Text, der ergänzt werden soll)
@@ -892,11 +917,7 @@ let beleg = {
 	toolsKopierenAddJahr (text, html) {
 		// ID und Jahr ermitteln
 		let id = xml.belegId({}),
-			jahr = xml.datum(popup.referenz.data.da, false), // könnte auch Jh. sein
-			jahreszahl = jahr.match(/[0-9]{4}/);
-		if (jahreszahl) {
-			jahr = jahreszahl[0];
-		}
+			jahr = helferXml.datum(popup.referenz.data.da, false, true); // könnte auch Jh. sein
 		// Elemente für Überschrift ermitteln
 		let h = [];
 		if (optionen.data.einstellungen["textkopie-h-jahr"]) {
@@ -1712,6 +1733,7 @@ let beleg = {
 						text = liste.linksErkennen(text);
 					}
 					if (wert === "bs") {
+						text = liste.belegKlammernHervorheben({text});
 						text = liste.belegWortHervorheben(text, true);
 					}
 				}

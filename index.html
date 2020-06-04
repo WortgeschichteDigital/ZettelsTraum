@@ -39,6 +39,7 @@
 		<link rel="stylesheet" href="css/app/start.css">
 		<link rel="stylesheet" href="css/app/drucken.css" media="print">
 
+		<script src="js/helferXml.js"></script>
 		<script src="js/suchleiste.js"></script>
 		<script src="js/tastatur.js"></script>
 
@@ -539,6 +540,7 @@
 					<ul>
 						<li><a href="#" class="aktiv navi-link" id="einstellungen-link-allgemeines">Allgemeines</a></li>
 						<li><a href="#" class="navi-link" id="einstellungen-link-kopieren">Kopieren</a></li>
+						<li><a href="#" class="navi-link" id="einstellungen-link-literatur">Literatur</a></li>
 						<li><a href="#" class="navi-link" id="einstellungen-link-menue">Menü</a></li>
 						<li><a href="#" class="navi-link" id="einstellungen-link-notizen">Notizen</a></li>
 						<li><a href="#" class="navi-link" id="einstellungen-link-bedeutungsgeruest">Bedeutungsgerüst</a></li>
@@ -608,6 +610,15 @@
 						<h3>Kopierfunktion</h3>
 						<p><input type="checkbox" id="einstellung-einfuegen-schliessen"
 							><label for="einstellung-einfuegen-schliessen">Einfügen-Fenster nach dem Einfügen schließen</label></p>
+					</section>
+
+					<!-- Literatur -->
+					<section id="einstellungen-sec-literatur" class="aus">
+						<h3>Import</h3>
+						<p><input type="checkbox" id="einstellung-literatur-verlag"
+							><label for="einstellung-literatur-verlag">Verlag anzeigen</label></p>
+						<p><input type="checkbox" id="einstellung-literatur-serie"
+							><label for="einstellung-literatur-serie">Serie anzeigen</label></p>
 					</section>
 
 					<!-- Menü -->
@@ -984,6 +995,15 @@
 							><a href="#" class="dropdown-link-td" title="Fundorte auflisten" tabindex="-1"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m7 2v8l-3.5-3.5-1.5 1.5 6 6 6-6-1.5-1.5-3.5 3.5v-8z"/></svg></a
 						></td>
 						<td><input type="text" value="" id="red-lit-eingabe-pn"></td>
+					</tr>
+					<tr>
+						<th colspan="2"><label for="red-lit-eingabe-tg">Tags</label></th>
+					</tr>
+					<tr>
+						<td class="dropdown-cont"><input type="text" value="" class="dropdown-feld" id="red-lit-eingabe-tg"
+							><a href="#" class="dropdown-link-td" title="Tags auflisten" tabindex="-1"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m7 2v8l-3.5-3.5-1.5 1.5 6 6 6-6-1.5-1.5-3.5 3.5v-8z"/></svg></a
+						></td>
+						<td id="red-lit-eingabe-tags"></td>
 					</tr>
 					<tr>
 						<th colspan="2"><label for="red-lit-eingabe-no">Notizen</label></th>

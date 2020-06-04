@@ -171,7 +171,7 @@ let redLit = {
 	},
 	// Datenbank: Speicher für Variablen
 	db: {
-		ve: 1, // Versionsnummer des aktuellen Datenbankformats
+		ve: 2, // Versionsnummer des aktuellen Datenbankformats
 		data: {}, // Titeldaten der Literaturdatenbank (wenn DB geladen => Inhalt von DB.ti)
 		dataTmp: {}, // temporäre Titeldaten der Literaturdatenbank (Kopie von redLit.db.data)
 		dataOpts: [], // Operationenspeicher für alle Änderungen in redLit.db.data
@@ -363,6 +363,8 @@ let redLit = {
 				}
 				return;
 			}
+			// Daten ggf. konvertieren
+			redLit.dbKonversion({daten: data_tmp});
 			// Datei kann eingelesen werden
 			redLit.db.data = data_tmp.ti;
 			redLit.db.dataMeta.dc = data_tmp.dc;
@@ -438,7 +440,7 @@ let redLit = {
 		for (let id of Object.keys(redLit.db.data)) {
 			aufnahmen.push({id, slot: 0});
 		}
-		aufnahmen.sort(redLit.dbSortAufnahmen);
+		aufnahmen.sort(helfer.sortSiglen);
 		// Dateidaten erstellen
 		let content = "";
 		if (format.ext === "xml") {
@@ -449,7 +451,7 @@ let redLit = {
 			content += `</Literaturliste></WGD>`;
 			let parser = new DOMParser(),
 				xmlDoc = parser.parseFromString(content, "text/xml");
-			xmlDoc = xml.indent(xmlDoc);
+			xmlDoc = helferXml.indent(xmlDoc);
 			content = new XMLSerializer().serializeToString(xmlDoc);
 			// Fixes
 			content = content.replace(/\?>/, "?>\n");
@@ -474,10 +476,10 @@ let redLit = {
 	dbExportierenSnippetXML ({id, slot}) {
 		let ds = redLit.db.data[id][slot].td,
 			snippet = `<Fundstelle xml:id="${id}">`;
-		snippet += `<Sigle>${xml.escape({text: ds.si})}</Sigle>`;
-		snippet += `<unstrukturiert>${xml.escape({text: ds.ti})}</unstrukturiert>`;
+		snippet += `<Sigle>${helferXml.maskieren({text: ds.si})}</Sigle>`;
+		snippet += `<unstrukturiert>${helferXml.maskieren({text: ds.ti})}</unstrukturiert>`;
 		if (ds.ul) {
-			snippet += `<URL>${xml.escape({text: ds.ul})}</URL>`;
+			snippet += `<URL>${helferXml.maskieren({text: ds.ul})}</URL>`;
 		}
 		if (ds.ad) {
 			let ad = ds.ad.split("-");
@@ -512,92 +514,6 @@ let redLit = {
 			snippet += `\n\tPPN: ${ds.pn.join(", ")}`;
 		}
 		return snippet;
-	},
-	// Datenbank: Helferfunktion zum Sortieren der Titelaufnahmen
-	//   a = Object || String
-	//   b = Object || String
-	//     (wenn Objekte: enthalten sind Schlüssel "id" [String] und "slot" [Number];
-	//     wenn String: Sigle)
-	dbSortAufnahmen (a, b) {
-		let siA, siB, oriA, oriB;
-		if (helfer.checkType("String", a)) {
-			oriA = a;
-			oriB = b;
-			siA = helfer.sortAlphaPrep(redLit.dbSortAufnahmenPrep(a));
-			siB = helfer.sortAlphaPrep(redLit.dbSortAufnahmenPrep(b));
-		} else {
-			oriA = redLit.db.data[a.id][a.slot].td.si;
-			oriB = redLit.db.data[b.id][b.slot].td.si;
-			siA = helfer.sortAlphaPrep(redLit.dbSortAufnahmenPrep(oriA));
-			siB = helfer.sortAlphaPrep(redLit.dbSortAufnahmenPrep(oriB));
-		}
-		// Siglen sind nach der Normalisierung identisch => Duplikate oder zu starke Normalisierung
-		if (siA === siB) {
-			if (oriA !== oriB) { // z.B. ¹DWB und ²DWB
-				siA = redLit.dbSortAufnahmenPrepSuper(oriA);
-				siB = redLit.dbSortAufnahmenPrepSuper(oriB);
-			} else {
-				return 0;
-			}
-		}
-		// Siglen sind nicht identisch => sortieren
-		let arr = [siA, siB];
-		arr.sort();
-		if (arr[0] === siA) {
-			return -1;
-		}
-		return 1;
-	},
-	// Datenbank: Siglen für die Sortierung aufbereiten
-	//   s = String
-	//     (String, der aufbereitet werden soll)
-	dbSortAufnahmenPrepCache: {},
-	dbSortAufnahmenPrep (s) {
-		if (redLit.dbSortAufnahmenPrepCache[s]) {
-			return redLit.dbSortAufnahmenPrepCache[s];
-		}
-		let prep = s.replace(/[()[\]{}<>]/g, "");
-		prep = prep.replace(/^[⁰¹²³⁴⁵⁶⁷⁸⁹]+/, "");
-		redLit.dbSortAufnahmenPrepCache[s] = prep;
-		return prep;
-	},
-	// Datenbank: Superscript-Ziffern in Siglen in arabische umwandeln
-	// (dient für die Sortierung von Siglen, die nach der Elimination der
-	// hochgestellten Ziffern identisch wären; das Problem sind die Codepoints
-	// in Unicode; da herrscht ein ziemliches Durcheinander: ² komtm vor ³, ³ kommt vor ¹)
-	//   s = String
-	//     (String, der aufbereitet werden soll)
-	dbSortAufnahmenPrepSuperCache: {},
-	dbSortAufnahmenPrepSuper (s) {
-		if (redLit.dbSortAufnahmenPrepSuperCache[s]) {
-			return redLit.dbSortAufnahmenPrepSuperCache[s];
-		}
-		let prep = s.replace(/[⁰¹²³⁴⁵⁶⁷⁸⁹]/g, m => {
-			switch (m) {
-				case "⁰":
-					return "0";
-				case "¹":
-					return "1";
-				case "²":
-					return "2";
-				case "³":
-					return "3";
-				case "⁴":
-					return "4";
-				case "⁵":
-					return "5";
-				case "⁶":
-					return "6";
-				case "⁷":
-					return "7";
-				case "⁸":
-					return "8";
-				case "⁹":
-					return "9";
-			}
-		});
-		redLit.dbSortAufnahmenPrepSuperCache[s] = prep;
-		return prep;
 	},
 	// Datenbank: Datei speichern
 	//   speichernUnter = true || undefined
@@ -939,7 +855,7 @@ let redLit = {
 					}
 					k = "die ID geändert";
 				}
-				let siglen = [...v].sort(redLit.dbSortAufnahmen);
+				let siglen = [...v].sort(helfer.sortSiglen);
 				text += `\n<p class="dialog-liste">• ${praep}${ziffer} ${numerus} ${k} (<i>${siglen.join(", ")}</i>)</p>`;
 			}
 			dialog.oeffnen({
@@ -1069,15 +985,16 @@ let redLit = {
 							if (dialog.antwort) {
 								redLit.eingabeSpeichern();
 								antwort(true);
-								return;
 							} else if (dialog.antwort === false) {
 								redLit.eingabe.changed = false;
+								antwort(false);
+							} else {
+								antwort(null);
 							}
-							antwort(false);
 						},
 					});
 				});
-				if (speichern) {
+				if (speichern || speichern === null) {
 					resolve(false);
 					return;
 				}
@@ -1096,16 +1013,17 @@ let redLit = {
 							if (dialog.antwort) {
 								redLit.dbSpeichern();
 								antwort(true);
-								return;
 							} else if (dialog.antwort === false) {
 								redLit.db.mtime = ""; // damit die DB beim erneuten Öffnen des Fenster neu geladen wird
 								redLit.db.changed = false;
+								antwort(false);
+							} else {
+								antwort(null);
 							}
-							antwort(false);
 						},
 					});
 				});
-				if (speichern) {
+				if (speichern || speichern === null) {
 					resolve(false);
 					return;
 				}
@@ -1185,6 +1103,27 @@ let redLit = {
 			ergaenzt = true;
 		});
 		return ergaenzt;
+	},
+	// Datenbank: an neue Formate anpassen
+	// (WICHTIG! Aktuelle Format-Version in redLit.db.ve einstellen!)
+	//   daten = Object
+	//     (die kompletten JSON-Daten einer ZTL-Datei)
+	dbKonversion ({daten}) {
+		// Datenbank hat die aktuelle Version
+		if (daten.ve === redLit.db.ve) {
+			return;
+		}
+		// von v1 > v2
+		if (daten.ve === 1) {
+			// Tag-Array in allen Datensätzen ergänzen
+			for (let ti of Object.values(daten.ti)) {
+				for (let i of ti) {
+					i.td.tg = [];
+				}
+			}
+			daten.ve++;
+			redLit.dbGeaendert(true);
+		}
 	},
 	// Navigation: Listener für das Umschalten
 	//   input = Element
@@ -1353,22 +1292,48 @@ let redLit = {
 		redLit.suche.treffer = [];
 		redLit.suche.highlight = [];
 		if (text) {
-			let insensitive = "i";
-			if (/[A-ZÄÖÜ]/.test(text)) {
-				insensitive = "";
-			}
-			let woerter = []; // Suchwörter und Suchphrasen
-			text = text.replace(/"(.+?)"/g, (m, p1) => { // Phrasen ermitteln
-				woerter.push(p1);
+			let woerter = [];
+			// Feldsuche
+			text = text.replace(/([a-zA-Z]+):"(.+?)"/g, (m, p1, p2) => {
+				const feld = feldCheck(p1);
+				if (!feld) {
+					// angegebenes Suchfeld existiert nicht => diese Suche sollte keine Treffer produzieren
+					return m;
+				}
+				woerter.push({
+					feld,
+					text: p2,
+				});
 				return "";
 			});
-			text.split(/\s/).forEach(i => { // Wörter ermitteln
+			// Phrasensuche
+			text = text.replace(/(?<!:)"(.+?)"/g, (m, p1) => {
+				// (?<!:) damit Suchen mit irregulärer Suchsyntax keine Treffer produzieren
+				woerter.push({
+					feld: "",
+					text: p1,
+				});
+				return "";
+			});
+			// Wortsuche
+			text.split(/\s/).forEach(i => {
 				if (i) {
-					woerter.push(i);
+					woerter.push({
+						feld: "",
+						text: i,
+					});
 				}
 			});
 			for (let wort of woerter) {
-				st.push(new RegExp(helfer.escapeRegExp(wort).replace(/ /g, "\\s"), "g" + insensitive));
+				let insensitive = "i";
+				if (/[A-ZÄÖÜ]/.test(wort.text)) {
+					insensitive = "";
+				}
+				let reg = new RegExp(helfer.escapeRegExp(wort.text).replace(/ /g, "\\s"), "g" + insensitive);
+				st.push({
+					feld: wort.feld,
+					reg,
+				});
 			}
 			redLit.suche.highlight = st;
 		}
@@ -1387,6 +1352,7 @@ let redLit = {
 			["td", "no"],
 			["td", "pn"],
 			["td", "si"],
+			["td", "tg"],
 			["td", "ti"],
 			["td", "ul"],
 		];
@@ -1479,15 +1445,24 @@ let redLit = {
 					let ok = Array(st.length).fill(false);
 					x: for (let j = 0, len = st.length; j < len; j++) {
 						for (let k of datensaetze) {
+							// dieses Feld durchsuchen?
+							if (st[j].feld && !k.includes(st[j].feld)) {
+								continue;
+							}
+							// Datensatz ermitteln
 							let ds = aufnahme[k[0]];
 							if (k[1]) {
 								ds = ds[k[1]];
 							}
+							// Datensatz durchsuchen
 							const txt = Array.isArray(ds) ? ds.join(", ") : ds;
-							if (txt.match(st[j])) {
+							if (txt.match(st[j].reg)) {
 								ok[j] = true;
 								continue x;
 							}
+						}
+						if (!ok[j]) {
+							break;
 						}
 					}
 					if (!ok.includes(false)) {
@@ -1502,11 +1477,55 @@ let redLit = {
 			}
 		}
 		// Treffer sortieren (nach Sigle)
-		treffer.sort(redLit.dbSortAufnahmen);
+		treffer.sort(helfer.sortSiglen);
 		// Suchtreffer anzeigen
 		redLit.sucheAnzeigen(0);
 		// Suchtext selektieren
 		input.select();
+		// Feld-Schalter ermitteln
+		function feldCheck (text) {
+			let erlaubt = ["be", "ad", "fo", "no", "pn", "si", "tg", "ti", "ul"];
+			text = text.toLowerCase();
+			switch (text) {
+				case "bearb":
+					text = "be";
+					break;
+				case "bearbeiter":
+					text = "be";
+					break;
+				case "bearbeiterin":
+					text = "be";
+					break;
+				case "sigle":
+					text = "si";
+					break;
+				case "titel":
+					text = "ti";
+					break;
+				case "url":
+					text = "ul";
+					break;
+				case "aufrufdatum":
+					text = "ad";
+					break;
+				case "fundort":
+					text = "fo";
+					break;
+				case "ppn":
+					text = "pn";
+					break;
+				case "tags":
+					text = "tg";
+					break;
+				case "notizen":
+					text = "no";
+					break;
+			}
+			if (!erlaubt.includes(text)) {
+				text = "";
+			}
+			return text;
+		}
 	},
 	// Suche: Treffer anzeigen
 	//   start = Number
@@ -1679,6 +1698,7 @@ let redLit = {
 	// Eingabeformular: Speicher für Variablen
 	eingabe: {
 		fundorte: ["Bibliothek", "DTA", "DWDS", "GoogleBooks", "IDS", "online"], // gültige Werte im Feld "Fundorte"
+		tags: ["unvollständig", "Wörterbuch"], // vordefinierte Werte im Feld "Tags"
 		status: "", // aktueller Status des Formulars
 		id: "", // ID des aktuellen Datensatzes (leer, wenn neuer Datensatz)
 		slot: -1, // Slot des aktuellen Datensatzes
@@ -1719,14 +1739,11 @@ let redLit = {
 			redLit.eingabeAutoURL(input);
 		}
 		// alle Textfelder (Change-Listener)
-		input.addEventListener("input", () => {
-			if (redLit.eingabe.changed) {
+		input.addEventListener("input", function() {
+			if (/-tg$/.test(this.id)) { // Tippen im Tags-Feld ist nicht unbedingt eine Änderung
 				return;
 			}
-			redLit.eingabe.changed = true;
-			let span = document.createElement("span");
-			span.textContent = "*";
-			document.getElementById("red-lit-eingabe-meldung").appendChild(span);
+			redLit.eingabeGeaendert();
 		});
 		// alle Textfelder (Enter-Listener)
 		input.addEventListener("keydown", function(evt) {
@@ -1734,8 +1751,21 @@ let redLit = {
 			if (tastatur.modifiers === "Ctrl" && evt.key === "Enter") {
 				// ohne Timeout würden Warnfenster sofort wieder verschwinden
 				setTimeout(() => redLit.eingabeSpeichern(), 200);
+			} else if (!tastatur.modifers && evt.key === "Enter" &&
+					/-tg$/.test(this.id) && !document.getElementById("dropdown")) {
+				redLit.eingabeTagHinzufuegen();
 			}
 		});
+	},
+	// Eingabeformular: Formular wurde geändert
+	eingabeGeaendert () {
+		if (redLit.eingabe.changed) {
+			return;
+		}
+		redLit.eingabe.changed = true;
+		let span = document.createElement("span");
+		span.textContent = "*";
+		document.getElementById("red-lit-eingabe-meldung").appendChild(span);
 	},
 	// Eingabeformular: Status anzeigen
 	//   status = String
@@ -1770,6 +1800,8 @@ let redLit = {
 				helfer.textareaGrow(i);
 			}
 		}
+		// Tag-Zelle leeren
+		helfer.keineKinder(document.getElementById("red-lit-eingabe-tags"));
 		// Metadaten leeren
 		redLit.eingabeMetaFuellen({id: "", slot: -1});
 	},
@@ -1782,9 +1814,18 @@ let redLit = {
 				return;
 			}
 			let val = this.value;
+			// hochgestellte Ziffern durch 'normal' gestellte ersetzen
+			val = helfer.sortSiglenPrepSuper(val);
+			// Ziffern vom Anfang an das Ende der ID schieben
+			let ziffern = val.match(/^[0-9]+/);
+			if (ziffern) {
+				val += ziffern[0];
+				val = val.substring(ziffern[0].length);
+			}
+			// weitere Normierungsoperationen
 			val = val.toLowerCase();
 			val = val.replace(/[\s/]/g, "-");
-			val = val.replace(/^[0-9]+|[^a-z0-9ßäöü-]/g, "");
+			val = val.replace(/[^a-z0-9ßäöü-]/g, "");
 			val = val.replace(/-{2,}/g, "-");
 			document.getElementById("red-lit-eingabe-id").value = val;
 		});
@@ -1840,11 +1881,12 @@ let redLit = {
 	//     (das URL-Feld)
 	eingabeAutoURL (input) {
 		input.addEventListener("input", function() {
+			let fo = document.getElementById("red-lit-eingabe-fo");
 			if (!this.value) {
+				fo.value = "Bibliothek";
 				return;
 			}
-			let ad = document.getElementById("red-lit-eingabe-ad"),
-				fo = document.getElementById("red-lit-eingabe-fo");
+			let ad = document.getElementById("red-lit-eingabe-ad");
 			if (!ad.value) {
 				ad.value = new Date().toISOString().split("T")[0];
 			}
@@ -1853,6 +1895,8 @@ let redLit = {
 				fundort = "GoogleBooks";
 			} else if (/^https?:\/\/www\.deutschestextarchiv\.de\//.test(this.value)) {
 				fundort = "DTA";
+			} else if (/owid\.de\//.test(this.value)) {
+				fundort = "IDS";
 			}
 			fo.value = fundort;
 		});
@@ -2635,11 +2679,22 @@ let redLit = {
 				resolve(false);
 				return;
 			}
-			// wenn URL => Fundort "DTA" || "GoogleBooks" || "online"
+			// wenn URL => Fundort "DTA" || "GoogleBooks" || "IDS" || "online"
 			let fo = document.getElementById("red-lit-eingabe-fo");
-			if (url.value && !/^(DTA|GoogleBooks|online)$/.test(fo.value)) {
+			if (url.value && !/^(DTA|GoogleBooks|IDS|online)$/.test(fo.value)) {
 				fehler({
-					text: "Geben Sie eine URL an, muss der Fundort „online“, „DTA“ oder „GoogleBooks“ sein.",
+					text: "Geben Sie eine URL an, muss der Fundort „online“, „DTA“, „GoogleBooks“ oder „IDS“ sein.",
+					fokus: fo,
+				});
+				resolve(false);
+				return;
+			}
+			// wenn URL => genauerer Check, ob die Eingabe konsistent ist
+			if (/^https?:\/\/www\.deutschestextarchiv\.de\//.test(url.value) && fo.value !== "DTA" ||
+					/books\.google/.test(url.value) && fo.value !== "GoogleBooks" ||
+					/owid\.de\//.test(url.value) && fo.value !== "IDS") {
+				fehler({
+					text: `Die URL passt nicht zum Fundort „${fo.value}“.`,
 					fokus: fo,
 				});
 				resolve(false);
@@ -2678,10 +2733,10 @@ let redLit = {
 				resolve(false);
 				return;
 			}
-			// wenn Fundort "DTA" || "GoogleBooks" || "online" => URL eingeben
-			if (/^(DTA|GoogleBooks|online)$/.test(fo.value) && !url.value) {
+			// wenn Fundort "DTA" || "GoogleBooks" || "IDS" || "online" => URL eingeben
+			if (/^(DTA|GoogleBooks|IDS|online)$/.test(fo.value) && !url.value) {
 				fehler({
-					text: "Ist der Fundort „online“, „DTA“ oder „GoogleBooks“, müssen Sie eine URL angeben.",
+					text: "Ist der Fundort „online“, „DTA“, „GoogleBooks“ oder „IDS“, müssen Sie eine URL angeben.",
 					fokus: url,
 				});
 				resolve(false);
@@ -2757,7 +2812,7 @@ let redLit = {
 		for (let i of felder) {
 			let k = i.id.replace(/.+-/, "");
 			if (i.type === "button" ||
-					k === "id") {
+					/^(id|tg)$/.test(k)) {
 				continue;
 			}
 			if (k === "pn") {
@@ -2773,6 +2828,7 @@ let redLit = {
 				ds.td[k] = i.value;
 			}
 		}
+		ds.td.tg = redLit.eingabeTagsZusammentragen();
 		return ds;
 	},
 	// Eingabeformular: ID für einen Datensatz erstellen
@@ -2856,10 +2912,10 @@ let redLit = {
 		let ds = redLit.db.data[id][slot].td,
 			inputs = document.querySelectorAll("#red-lit-eingabe input, #red-lit-eingabe textarea");
 		for (let i of inputs) {
-			if (i.type === "button") {
+			let key = i.id.replace(/.+-/, "");
+			if (i.type === "button" || key === "tg") { // Tags müssen anders angezeigt werden
 				continue;
 			}
-			let key = i.id.replace(/.+-/, "");
 			if (key === "id") {
 				i.value = id;
 			} else {
@@ -2869,6 +2925,8 @@ let redLit = {
 				}
 			}
 		}
+		// Tags anzeigen
+		redLit.eingabeTagsFuellen({tags: ds.tg});
 		// Metadaten füllen
 		redLit.eingabeMetaFuellen({id, slot});
 		// Formularstatus auffrischen
@@ -2880,6 +2938,98 @@ let redLit = {
 		redLit.eingabeStatus(status);
 		// Formular fokussieren
 		document.getElementById("red-lit-eingabe-ti").focus();
+	},
+	// Eingabeformular: Tags im Formular zusammentragen
+	eingabeTagsZusammentragen () {
+		let tags = document.getElementById("red-lit-eingabe-tags").querySelectorAll(".tag"),
+			arr = [];
+		tags.forEach(i => arr.push(i.textContent));
+		return arr;
+	},
+	// Eingabeformular: Tags anzeigen
+	//   tags = Array
+	//     (Array mit den Tags)
+	eingabeTagsFuellen ({tags}) {
+		let cont = document.getElementById("red-lit-eingabe-tags");
+		helfer.keineKinder(cont);
+		for (let tag of tags) {
+			let span = redLit.eingabeTagErzeugen({tag});
+			cont.appendChild(span);
+			span.classList.add("loeschbar");
+			redLit.eingabeTagLoeschen({tag: span});
+		}
+	},
+	// Eingabeformular: Tag-Element erzeugen
+	//   tag = String
+	//     (der Name des Tags)
+	eingabeTagErzeugen ({tag}) {
+		let span = document.createElement("span");
+		span.classList.add("tag");
+		span.innerHTML = redLit.anzeigeSnippetMaskieren(tag);
+		return span;
+	},
+	// Eingabeformular: Tag löschen
+	//   tag = Element
+	//     (Tag, der gelöscht werden soll)
+	eingabeTagLoeschen ({tag}) {
+		tag.addEventListener("click", function() {
+			this.parentNode.removeChild(this);
+			redLit.eingabeGeaendert();
+		});
+	},
+	// Eingabeformular: Tag hinzufügen
+	eingabeTagHinzufuegen () {
+		let tg = document.getElementById("red-lit-eingabe-tg"),
+			val = helfer.textTrim(tg.value, true);
+		// keine Eingae
+		if (!val) {
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Sie haben keinen Tag eingegeben.",
+				callback: () => tg.select(),
+			});
+			return;
+		}
+		// aktuelle Tags sammeln
+		let arr = redLit.eingabeTagsZusammentragen();
+		// Tag schon vorhanden
+		if (arr.includes(val)) {
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Der Tag ist schon vorhanden.",
+				callback: () => tg.select(),
+			});
+			return;
+		}
+		// Tag ergänzen und die Anzeige neu aufbauen
+		arr.push(val);
+		arr.sort(helfer.sortAlpha);
+		redLit.eingabeTagsFuellen({tags: arr});
+		redLit.eingabeGeaendert();
+		tg.value = "";
+	},
+	// Eingabeformular: alle Tags aus der Literaturdatenbank zusammensuchen
+	eingabeTagsAuflisten () {
+		let tags = new Set();
+		for (let titel of Object.values(redLit.db.data)) { // Titel durchgehen
+			for (let aufnahme of titel) { // Aufnahmen durchgehen
+				for (let tag of aufnahme.td.tg) { // Tags durchgehen
+					if (!redLit.eingabe.tags.includes(tag)) {
+						tags.add(tag);
+					}
+				}
+			}
+		}
+		// Tags sortieren
+		let arr = [...tags];
+		arr.sort(helfer.sortAlpha);
+		// vordefinierte Tags an den Anfang schieben
+		let pre = [...redLit.eingabe.tags];
+		pre.reverse();
+		for (let i of pre) {
+			arr.unshift(i);
+		}
+		return arr;
 	},
 	// Eingabe: Metadaten eintragen
 	//   id = String
@@ -2940,7 +3090,10 @@ let redLit = {
 		let si = document.createElement("p");
 		div.appendChild(si);
 		si.classList.add("sigle");
-		si.innerHTML = maskieren(redLit.anzeigeSnippetHighlight(ds.td.si));
+		si.innerHTML = redLit.anzeigeSnippetHighlight({
+			feld: "si",
+			text: ds.td.si,
+		});
 		// ID
 		let idPrint = document.createElement("span");
 		si.appendChild(idPrint);
@@ -2986,7 +3139,10 @@ let redLit = {
 		let ti = document.createElement("p");
 		div.appendChild(ti);
 		ti.classList.add("aufnahme");
-		ti.innerHTML = maskieren(redLit.anzeigeSnippetHighlight(ds.td.ti));
+		ti.innerHTML = redLit.anzeigeSnippetHighlight({
+			feld: "ti",
+			text: ds.td.ti,
+		});
 		// URL + Aufrufdatum
 		if (ds.td.ul) {
 			let ul = document.createElement("p");
@@ -2995,7 +3151,10 @@ let redLit = {
 			ul.appendChild(a);
 			a.classList.add("link");
 			a.href = ds.td.ul;
-			a.innerHTML = redLit.anzeigeSnippetHighlight(ds.td.ul);
+			a.innerHTML = redLit.anzeigeSnippetHighlight({
+				feld: "ul",
+				text: ds.td.ul,
+			});
 			helfer.externeLinks(a);
 			if (ds.td.ad) {
 				let datum = ds.td.ad.split("-");
@@ -3007,7 +3166,10 @@ let redLit = {
 				ul.appendChild(i);
 				let adFrag = document.createElement("span");
 				ul.appendChild(adFrag);
-				adFrag.innerHTML = redLit.anzeigeSnippetHighlight(` ${datum[2]}. ${datum[1]}. ${datum[0]}`);
+				adFrag.innerHTML = redLit.anzeigeSnippetHighlight({
+					feld: "ad",
+					text: ` ${datum[2]}. ${datum[1]}. ${datum[0]}`,
+				});
 			}
 		}
 		// Fundort
@@ -3018,7 +3180,10 @@ let redLit = {
 		i.textContent = "Fundort:";
 		let foFrag = document.createElement("span");
 		fo.appendChild(foFrag);
-		foFrag.innerHTML = redLit.anzeigeSnippetHighlight(ds.td.fo);
+		foFrag.innerHTML = redLit.anzeigeSnippetHighlight({
+			feld: "fo",
+			text: ds.td.fo,
+		});
 		// PPN
 		if (ds.td.pn.length) {
 			let pn = document.createElement("p");
@@ -3034,7 +3199,10 @@ let redLit = {
 				pn.appendChild(a);
 				a.classList.add("link");
 				a.href = `https://kxp.k10plus.de/DB=2.1/PPNSET?PPN=${ds.td.pn[i]}`;
-				a.innerHTML = redLit.anzeigeSnippetHighlight(ds.td.pn[i]);
+				a.innerHTML = redLit.anzeigeSnippetHighlight({
+					feld: "pn",
+					text: ds.td.pn[i],
+				});
 				helfer.externeLinks(a);
 			}
 		}
@@ -3047,8 +3215,25 @@ let redLit = {
 			i.textContent = "Notizen:";
 			let noFrag = document.createElement("span");
 			no.appendChild(noFrag);
-			const notiz = maskieren(redLit.anzeigeSnippetHighlight(ds.td.no));
+			const notiz = redLit.anzeigeSnippetHighlight({
+				feld: "no",
+				text: ds.td.no,
+			});
 			noFrag.innerHTML = notiz.replace(/[\r\n]+/g, "<br>");
+		}
+		// Tags
+		if (ds.td.tg.length) {
+			let p = document.createElement("p");
+			div.appendChild(p);
+			p.classList.add("tags");
+			for (let tag of ds.td.tg) {
+				tag = redLit.anzeigeSnippetHighlight({
+					feld: "tg",
+					text: tag,
+				});
+				let span = redLit.eingabeTagErzeugen({tag});
+				p.appendChild(span);
+			}
 		}
 		// Metadaten: BearbeiterIn + Datum + Titelaufnahmen
 		// (nur im Suchkontext anzeigen)
@@ -3057,7 +3242,10 @@ let redLit = {
 			div.appendChild(meta);
 			meta.classList.add("meta");
 			// Bearbeiterin
-			meta.innerHTML = redLit.anzeigeSnippetHighlight(ds.be);
+			meta.innerHTML = redLit.anzeigeSnippetHighlight({
+				feld: "be",
+				text: ds.be,
+			});
 			// Zeitpunkt
 			let zeit = document.createElement("span");
 			meta.appendChild(zeit);
@@ -3079,19 +3267,13 @@ let redLit = {
 		}
 		// Snippet zurückgeben
 		return div;
-		// Funktion zum Maskieren von Spitzklammern
-		function maskieren (text) {
-			text = text.replace(/</g, "&lt;");
-			text = text.replace(/>/g, "&gt;");
-			text = text.replace(/&lt;mark class="suche"&gt;/g, `<mark class="suche">`);
-			text = text.replace(/&lt;\/mark&gt;/g, `</mark>`);
-			return text;
-		}
 	},
 	// Anzeige: Suchtreffer im Snippet highlighten
+	//   feld = String
+	//     (Feld, auf das der String zutrifft)
 	//   text = String
 	//     (Text, der gedruckt werden soll)
-	anzeigeSnippetHighlight (text) {
+	anzeigeSnippetHighlight ({feld, text}) {
 		// Muss/kann Text hervorgehoben werden?
 		if (redLit.anzeige.snippetKontext !== "suche" ||
 				!redLit.suche.highlight.length) {
@@ -3099,9 +3281,23 @@ let redLit = {
 		}
 		// Suchtext hervorheben
 		for (let i of redLit.suche.highlight) {
-			text = text.replace(i, m => `<mark class="suche">${m}</mark>`);
+			if (i.feld && i.feld !== feld) { // wenn i.feld gefüllt => nur betreffendes Feld highlighten
+				continue;
+			}
+			text = text.replace(i.reg, m => `<mark class="suche">${m}</mark>`);
 		}
+		text = redLit.anzeigeSnippetMaskieren(text);
 		text = helfer.suchtrefferBereinigen(text);
+		return text;
+	},
+	// Anzeige: Maskieren von Spitzklammern
+	//   text = String
+	//     (Text, der gedruckt werden soll)
+	anzeigeSnippetMaskieren (text) {
+		text = text.replace(/</g, "&lt;");
+		text = text.replace(/>/g, "&gt;");
+		text = text.replace(/&lt;mark class="suche"&gt;/g, `<mark class="suche">`);
+		text = text.replace(/&lt;\/mark&gt;/g, `</mark>`);
 		return text;
 	},
 	// Anzeige: Listener zum Öffnen des Versionen-Popups
@@ -3310,7 +3506,7 @@ let redLit = {
 			let parser = new DOMParser(),
 				snippet = redLit.dbExportierenSnippetXML(popup.titelaufnahme.ds),
 				xmlDoc = parser.parseFromString(snippet, "text/xml");
-			xmlDoc = xml.indent(xmlDoc);
+			xmlDoc = helferXml.indent(xmlDoc);
 			text = new XMLSerializer().serializeToString(xmlDoc);
 		}
 		clipboard.writeText(text);

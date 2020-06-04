@@ -1033,7 +1033,7 @@ let belegImport = {
 			xmlTxt += "</Fundstelle></Beleg>";
 			let parser = new DOMParser(),
 				xmlDoc = parser.parseFromString(xmlTxt, "text/xml"),
-				xmlDocIndent = xml.indent(xmlDoc);
+				xmlDocIndent = helferXml.indent(xmlDoc);
 			data.ds.bx = new XMLSerializer().serializeToString(xmlDocIndent);
 		}
 	},
@@ -1864,7 +1864,7 @@ let belegImport = {
 			data.ds.au = "N. N."; // Autor
 			data.ds.bs = beleg.join("\n\n"); // Beleg
 			data.ds.bx = `${id}${quelle}\n\n${beleg.join("\n")}`; // Original
-			data.ds.kr = "IDS-Archiv"; // Korpus
+			data.ds.kr = "IDS"; // Korpus
 			data.ds.no = belegImport.Datei.meta; // Notizen
 			data.ds.qu = quelle.replace(/\s\[Ausführliche Zitierung nicht verfügbar\]/, ""); // Quellenangabe
 			let autor = quelle.split(":"),
@@ -1873,7 +1873,7 @@ let belegImport = {
 			if (!illegal && (/[^\s]+/.test(autor[0]) || kommata <= 1)) {
 				data.ds.au = autor[0];
 			}
-			data.ds.da = xml.datum(quelle, false, true);
+			data.ds.da = helferXml.datum(quelle, false, true);
 			if (/\[Tageszeitung\]/.test(quelle)) {
 				data.ds.ts = "Zeitung: Tageszeitung";
 				data.ds.qu = quelle.replace(/,*\s*\[Tageszeitung\]/g, "");
@@ -2502,6 +2502,15 @@ let belegImport = {
 		} else if (!td.ort.length && !td.jahrgang) {
 			punkt();
 		}
+		// Verlag
+		if (optionen.data.einstellungen["literatur-verlag"] && td.verlag) {
+			if (td.ort.length) {
+				titel += `: ${td.verlag}`;
+			} else {
+				punkt();
+				titel += ` ${td.verlag}`;
+			}
+		}
 		// Jahrgang + Jahr
 		if (td.jahrgang) {
 			titel += ` ${td.jahrgang}`;
@@ -2531,7 +2540,7 @@ let belegImport = {
 			}
 		}
 		// Serie
-		if (td.serie) {
+		if (optionen.data.einstellungen["literatur-serie"] && td.serie) {
 			titel += ` (${td.serie}${td.serieBd ? " " + td.serieBd : ""})`;
 		}
 		punkt();

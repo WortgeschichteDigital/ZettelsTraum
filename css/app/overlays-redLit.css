@@ -24,6 +24,34 @@
 	background-color: var(--text);
 }
 
+/* Tags ----------------------------------------- */
+#red-lit-eingabe-tags {
+	line-height: 20px;
+}
+
+#red-lit .tag {
+	display: inline-block;
+	margin-right: 15px;
+	height: 20px;
+	font-size: 14px;
+	text-indent: 0;
+}
+
+#red-lit .tag::before {
+	content: url(../../img/etikett-20.svg);
+	vertical-align: top;
+	padding-right: 1px;
+}
+
+#red-lit .tag.loeschbar:hover {
+	color: var(--textWarnung);
+	text-decoration: line-through;
+}
+
+#red-lit p.tags {
+ margin: 5px 0 0 25px;
+}
+
 /* Datenkbankpfad ------------------------------- */
 #red-lit-pfad {
 	position: relative;
@@ -257,6 +285,7 @@
 }
 
 #red-lit-eingabe td {
+	vertical-align: top;
 	padding: 0 5px;
 	width: calc(50% - 5px);
 }

@@ -57,7 +57,7 @@ let hilfe = {
 			hilfe.history(sek_aktiv);
 		}
 		// ggf. Fenster an die korrekte Position scrollen
-		if (sek_aktiv === "start") {
+		if (sek_aktiv === "start" || sek_aktiv === "einfuehrung") {
 			// befindet man sich in der Startsektion wird an die falsche Position gescrollt,
 			// wenn das Ziel ein Absatz ist => kurz warten
 			await new Promise(resolve => setTimeout(() => resolve(true), 25));

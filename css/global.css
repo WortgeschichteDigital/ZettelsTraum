@@ -22,6 +22,38 @@
 	top: .2em;
 }
 
+/* eingefärbte Klammerungen im Belegtext -------- */
+.klammer-anmerkung,
+.klammer-autorenzusatz {
+	color: var(--farbeGruenDunkel);
+}
+
+.klammer-technisch {
+	font-weight: bold;
+}
+
+.klammer-streichung {
+	color: var(--farbeB);
+}
+
+.klammer-loeschung {
+	color: var(--farbeRot);
+}
+
+/* XML-Pretty-Print ----------------------------- */
+.xml-tag {
+	color: var(--farbeB);
+}
+
+.xml-attr-key {
+	color: var(--farbeGruenDunkel);
+}
+
+.xml-attr-val {
+	color: var(--farbeRot);
+}
+
+
 /* Ziehen von Elementen ------------------------- */
 *, *::after, *::before {
 	-webkit-app-region: no-drag;

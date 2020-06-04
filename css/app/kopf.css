@@ -128,6 +128,11 @@
 	mask-image: url(../../img/personen.svg);
 }
 
+#quick-redaktion-literatur {
+	-webkit-mask-image: url(../../img/buecher.svg);
+	mask-image: url(../../img/buecher.svg);
+}
+
 #quick-belege-hinzufuegen {
 	-webkit-mask-image: url(../../img/dokument-plus.svg);
 	mask-image: url(../../img/dokument-plus.svg);

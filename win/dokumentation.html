@@ -9,6 +9,7 @@
 		<link rel="stylesheet" href="../css/win/hilfe.css">
 		<link rel="stylesheet" href="../css/win/hilfe-drucken.css" media="print">
 
+		<script src="../js/helferXml.js"></script>
 		<script src="../js/suchleiste.js"></script>
 		<script src="../js/tastatur.js"></script>
 
@@ -1175,7 +1176,7 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
 					<!-- ZTL-Format -->
 					<h2 id="ztj-ztl"><abbr title="Zettel’s Traum Literaturdatenbank">ZTL</abbr>-Format</h2>
 
-					<p>Mithilfe der Funktion <a href="#menueRedaktion-literatur" class="link-handbuch"><i>Redaktion &gt; Literatur</i></a> kann eine Literaturdatenbank angelegt, geladen und bearbeitet werden. Hierfür gibt es ein eigenes Dateiformat. Der Inhalt dieser <abbr title="Zettel’s Traum Literaturdatenbank">ZTL</abbr>-Dateien ist ebenfalls <abbr title="GNU zip">gzip</abbr>-komprimierter Plain-Text im <abbr title="JavaScript Object Notation">JSON</abbr>-Format. Der Aufbau (<span class="obacht">Datenformat Version 1</span>):</p>
+					<p>Mithilfe der Funktion <a href="#menueRedaktion-literatur" class="link-handbuch"><i>Redaktion &gt; Literatur</i></a> kann eine Literaturdatenbank angelegt, geladen und bearbeitet werden. Hierfür gibt es ein eigenes Dateiformat. Der Inhalt dieser <abbr title="Zettel’s Traum Literaturdatenbank">ZTL</abbr>-Dateien ist ebenfalls <abbr title="GNU zip">gzip</abbr>-komprimierter Plain-Text im <abbr title="JavaScript Object Notation">JSON</abbr>-Format. Der Aufbau (<span class="obacht">Datenformat Version 2</span>):</p>
 
 					<table class="ztj">
 						<tr>
@@ -1275,6 +1276,12 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
 							<td>Sigle</td>
 						</tr>
 						<tr class="ztj-ebene3">
+							<td><p><code class="quelltext">tg</code></p></td>
+							<td class="datentyp">Array</td>
+							<td> </td>
+							<td>in jedem Slot ein Tag;<br><span class="obacht">mit Version 2 ergänzt</span></td>
+						</tr>
+						<tr class="ztj-ebene3">
 							<td><p><code class="quelltext">ti</code></p></td>
 							<td class="datentyp">String</td>
 							<td> </td>
@@ -1308,7 +1315,7 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
 
 					<p>Ein typisches <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippet, das mit den entsprechenden <a href="#belegliste-xmlZwischenablage" class="link-handbuch">Kopierfunktionen</a> erstellt wurde, könnte so aussehen:</p>
 
-					<pre class="quelltext">&lt;Beleg xml:id="n-n-1859-19"&gt;
+					<pre class="quelltext xml-pretty-print">&lt;Beleg xml:id="n-n-1859-19"&gt;
 	&lt;Belegtext&gt;Eine Wache von zehn Mann ward ausgestellt, der Rest der Mannschaft konnte nun thun, was ihm beliebte. Zelte hatten wir keine; unser &lt;Stichwort&gt;Team&lt;/Stichwort&gt; enthielt nichts als unsere Lebensmittel, Kochgeschirr und Teppiche und Munition. Jeder holte sich seine Teppiche aus dem &lt;Stichwort&gt;Team&lt;/Stichwort&gt;, Köche wurden ausgelesen zum Kaffeekochen für die Kompagnieen, große Feuer gebildet, und um jedes Feuer lagen, standen und saßen Gruppen von Soldaten, eingewickelt in Teppiche von allen Farben.&lt;/Belegtext&gt;
 	&lt;Fundstelle&gt;
 		&lt;Fundort&gt;GoogleBooks&lt;/Fundort&gt;
@@ -1327,13 +1334,17 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
 						<p><b>&lt;Belegtext&gt;:</b> <i>verpflichtend</i>. Der mit der <a href="#belegliste-xmlZwischenablage" class="link-handbuch">Kopierfunktion</a> ausgewählte Belegschnitt.</p>
 
 						<div class="eingerueckt">
-							<p><b>&lt;Autorenzusatz&gt;:</b> <i>fakultativ</i>. Text in eckigen Klammern, der von der BearbeiterIn ergänzt wurde.</p>
+							<p><b>&lt;Autorenzusatz&gt;:</b> <i>fakultativ</i>. Text, der ursprünglich in geschweiften Klammern stand: {Text}. Es handelt sich um erläuternde Ergänzungen der BearbeiterIn. <abbr title="Vergleiche">Vgl.</abbr> das Handbuch zum <a href="#karteikarte-belegKlammern" class="link-handbuch">System der Klammermarkierungen im Belegtext</a>.</p>
 
 							<p><b>&lt;Hervorhebung&gt;:</b> <i>fakultativ</i>. Markierung rein typographischer Textauszeichnungen.</p>
 
 							<p class="eingerueckt"><b>@Stil:</b> <i>fakultativ</i>. Das Attribut kann eine Liste von Werten enthalten, die <a href="http://www.deutschestextarchiv.de/doku/basisformat/typogrAllg.html">im <abbr title="Deutsches Textarchiv-Basisformat">DTABf</abbr> verwendet</a> werden. Beim <a href="#verschiedenes-dta">Import von Texten aus dem <abbr title="Deutschen Textarchiv">DTA</abbr></a> werden nicht alle Textmerkmale übernommen; grob gesagt nur die Inline-Formate. Diese können jedoch prinzipiell alle im @Stil auftauchen. Welche Formate <i class="app-name"></i> importiert, kann man der Datei <span class="datei">./js/app/belegImport.js</span> entnehmen. <abbr title="Siehe">S.</abbr> <code class="quelltext">const rend</code> in <code class="quelltext">belegImport.DTAText()</code>.</p>
 
+							<p><b>&lt;Loeschung&gt;:</b> <i>fakultativ</i>. Text, der ursprünglich in doppelten eckigen Klammern stand: [[Text]]. Der Text soll im Endprodukt (Webseite) auf keinen Fall mehr erscheinen. Der Tag kann verwendet werden, wenn in einem Belegschnitt aus datenschutzrechtlichen Gründen Text vor der Publikation entfernt werden soll. Der Text soll durch eine Ellipse ersetzt werden: […].</p>
+
 							<p><b>&lt;Stichwort&gt;:</b> <i>verpflichtend</i>. Markierung des Karteiworts, um das es geht.</p>
+
+							<p><b>&lt;Streichung&gt;:</b> <i>fakultativ</i>. Text, der ursprünglich in eckigen Klammern stand: [Text]. Der Text soll durch eine Ellipse ersetzt werden: […], darf aber auch wieder aufgelöst werden.</p>
 
 							<p><b>&lt;Zeilenumbruch&gt;:</b> <i>fakultativ</i>.</p>
 						</div>
@@ -1358,7 +1369,7 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
 
 					<p>Ein typisches Fundstellen-Snippet, wie es für den Export von Titelaufnahmen aus der <a href="#menueRedaktion-literaturExportieren" class="link-handbuch">Literaturdatenbank</a> verwendet wird, könnte so aussehen:</p>
 
-					<pre class="quelltext">&lt;Fundstelle xml:id="dwb2"&gt;
+					<pre class="quelltext xml-pretty-print">&lt;Fundstelle xml:id="dwb2"&gt;
 	&lt;Sigle&gt;²DWB&lt;/Sigle&gt;
 	&lt;unstrukturiert&gt;Deutsches Wörterbuch von Jacob Grimm und Wilhelm Grimm. Neubearbeitung. Hrsg. von der Berlin-Brandenburgischen Akademie der Wissenschaften (vormals Deutsche Akademie der Wissenschaften) und der Akademie der Wissenschaften zu Göttingen. Bd. 1–9. Stuttgart 1983–2018.&lt;/unstrukturiert&gt;
 	&lt;Fundort&gt;Bibliothek&lt;/Fundort&gt;
@@ -1388,14 +1399,14 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
 
 					<p>Der Referenz-Tag kann genutzt werden, um auf einen in <abbr title="Extensible Markup Language" lang="en">XML</abbr> exportierten Belegschnitt zu verweisen (zur <a href="#xml-belegschnittId">Form der ID</a> <abbr title="siehe oben">s. o.</abbr>). Ein Beispiel:</p>
 
-					<pre class="quelltext">&lt;Belegreferenz Ziel="n-n-1859-19"/&gt;</pre>
+					<pre class="quelltext xml-pretty-print">&lt;Belegreferenz Ziel="n-n-1859-19"/&gt;</pre>
 
 					<!-- Referenz Literaturtitel -->
 					<h2 id="xml-referenzLiteratur">Referenz eines Literaturtitels</h2>
 
 					<p>Der Referenz-Tag kann genutzt werden, um auf eine in <abbr title="Extensible Markup Language" lang="en">XML</abbr> exportierte Titelaufnahme zu verweisen. Ein Beispiel:</p>
 
-					<pre class="quelltext">&lt;Literaturreferenz Ziel="dwb2"&gt;&lt;/Literaturreferenz&gt;</pre>
+					<pre class="quelltext xml-pretty-print">&lt;Literaturreferenz Ziel="dwb2"&gt;&lt;/Literaturreferenz&gt;</pre>
 				</section>
 
 				<!-- VERSCHIEDENES -->
@@ -1430,7 +1441,7 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
 
 					<p><i class="app-name"></i> kann <a href="#einstellungen-tagDateien" class="link-handbuch">mit Tag-Dateien verknüpft</a> werden, um <a href="#bedeutungsgeruest-tagFenster" class="link-handbuch">Bedeutungen zu taggen</a>. Die Funktion ist so abstrakt programmiert, dass man problemlos die Inhalte selbst erstellter Tag-Dateien importieren kann. Das folgende Beispiel enthält alle verpflichtenden und möglichen Tags:</p>
 
-					<pre class="quelltext">&lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;
+					<pre class="quelltext xml-pretty-print">&lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;
 &lt;register&gt;
 	&lt;item&gt;
 		&lt;id&gt;1&lt;/id&gt;

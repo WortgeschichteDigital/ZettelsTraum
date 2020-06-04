@@ -9,6 +9,9 @@
 /* Globale Klassen ------------------------------ */
 @import url(../global.css);
 
+/* Icon-Links ----------------------------------- */
+@import url(../icon-links.css);
+
 /* Animation ------------------------------------ */
 @import url(../animation.css);
 
@@ -234,83 +237,6 @@ a {
 	color: var(--textFarbe);
 	text-decoration: none;
 	cursor: default;
-}
-
-.icon-link {
-	display: inline-block;
-	width: 24px;
-	height: 24px;
-	background-color: var(--text);
-	text-decoration: none;
-}
-
-.icon-link:focus {
-	background-color: var(--farbe);
-}
-
-.icon-entkoppeln {
-	-webkit-mask-image: url(../../img/x-dick.svg);
-	mask-image: url(../../img/x-dick.svg);
-}
-
-.icon-exportieren {
-	-webkit-mask-image: url(../../img/dokument-export.svg);
-	mask-image: url(../../img/dokument-export.svg);
-}
-
-.icon-kreis-info {
-	-webkit-mask-image: url(../../img/kreis-info.svg);
-	mask-image: url(../../img/kreis-info.svg);
-}
-
-.icon-lupe {
-	-webkit-mask-image: url(../../img/lupe.svg);
-	mask-image: url(../../img/lup.svg);
-}
-
-.icon-muelleimer {
-	-webkit-mask-image: url(../../img/muelleimer.svg);
-	mask-image: url(../../img/muelleimer.svg);
-}
-
-.icon-oeffnen {
-	-webkit-mask-image: url(../../img/oeffnen.svg);
-	mask-image: url(../../img/oeffnen.svg);
-}
-
-.icon-pfeil-gerade-links {
-	-webkit-mask-image: url(../../img/pfeil-gerade-links.svg);
-	mask-image: url(../../img/pfeil-gerade-links.svg);
-}
-
-.icon-pfeil-gerade-rechts {
-	-webkit-mask-image: url(../../img/pfeil-gerade-rechts.svg);
-	mask-image: url(../../img/pfeil-gerade-rechts.svg);
-}
-
-.icon-pfeil-kreis {
-	-webkit-mask-image: url(../../img/pfeil-kreis.svg);
-	mask-image: url(../../img/pfeil-kreis.svg);
-}
-
-.icon-speichern {
-	-webkit-mask-image: url(../../img/speichern.svg);
-	mask-image: url(../../img/speichern.svg);
-}
-
-.icon-speichern-unter {
-	-webkit-mask-image: url(../../img/speichern-unter.svg);
-	mask-image: url(../../img/speichern-unter.svg);
-}
-
-.icon-stift {
-	-webkit-mask-image: url(../../img/stift.svg);
-	mask-image: url(../../img/stift.svg);
-}
-
-.icon-stern {
-	-webkit-mask-image: url(../../img/stern.svg);
-	mask-image: url(../../img/stern.svg);
 }
 
 /* Formular-Elemente ---------------------------- */

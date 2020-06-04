@@ -121,6 +121,11 @@ let optionen = {
 			"ctrlC-vor": "1",
 			// Einfügen-Fenster (Kopierfunktion) nach dem Einfügen direkt schließen
 			"einfuegen-schliessen": true,
+			// LITERATUR
+			// Verlag importieren
+			"literatur-verlag": false,
+			// Serie importieren
+			"literatur-serie": false,
 			// MENÜ
 			// Menü-Leiste ausblenden (einblenden, wenn Alt gedruckt)
 			autoHideMenuBar: false,
