@@ -171,7 +171,7 @@ let redLit = {
 	},
 	// Datenbank: Speicher für Variablen
 	db: {
-		ve: 1, // Versionsnummer des aktuellen Datenbankformats
+		ve: 2, // Versionsnummer des aktuellen Datenbankformats
 		data: {}, // Titeldaten der Literaturdatenbank (wenn DB geladen => Inhalt von DB.ti)
 		dataTmp: {}, // temporäre Titeldaten der Literaturdatenbank (Kopie von redLit.db.data)
 		dataOpts: [], // Operationenspeicher für alle Änderungen in redLit.db.data
@@ -363,6 +363,8 @@ let redLit = {
 				}
 				return;
 			}
+			// Daten ggf. konvertieren
+			redLit.dbKonversion({daten: data_tmp});
 			// Datei kann eingelesen werden
 			redLit.db.data = data_tmp.ti;
 			redLit.db.dataMeta.dc = data_tmp.dc;
@@ -1100,6 +1102,27 @@ let redLit = {
 		});
 		return ergaenzt;
 	},
+	// Datenbank: an neue Formate anpassen
+	// (WICHTIG! Aktuelle Format-Version in redLit.db.ve einstellen!)
+	//   daten = Object
+	//     (die kompletten JSON-Daten einer ZTL-Datei)
+	dbKonversion ({daten}) {
+		// Datenbank hat die aktuelle Version
+		if (daten.ve === redLit.db.ve) {
+			return;
+		}
+		// von v1 > v2
+		if (daten.ve === 1) {
+			// Tag-Array in allen Datensätzen ergänzen
+			for (let ti of Object.values(daten.ti)) {
+				for (let i of ti) {
+					i.td.tg = [];
+				}
+			}
+			daten.ve++;
+			redLit.dbGeaendert(true);
+		}
+	},
 	// Navigation: Listener für das Umschalten
 	//   input = Element
 	//     (der Radiobutton zum Umschalten der Formulare)
@@ -1302,6 +1325,7 @@ let redLit = {
 			["td", "pn"],
 			["td", "si"],
 			["td", "ti"],
+			["td", "tg"],
 			["td", "ul"],
 		];
 		let duplikate = new Set(),
@@ -1593,6 +1617,7 @@ let redLit = {
 	// Eingabeformular: Speicher für Variablen
 	eingabe: {
 		fundorte: ["Bibliothek", "DTA", "DWDS", "GoogleBooks", "IDS", "online"], // gültige Werte im Feld "Fundorte"
+		tags: ["unvollständig", "Wörterbuch"], // vordefinierte Werte im Feld "Tags"
 		status: "", // aktueller Status des Formulars
 		id: "", // ID des aktuellen Datensatzes (leer, wenn neuer Datensatz)
 		slot: -1, // Slot des aktuellen Datensatzes
@@ -1633,14 +1658,11 @@ let redLit = {
 			redLit.eingabeAutoURL(input);
 		}
 		// alle Textfelder (Change-Listener)
-		input.addEventListener("input", () => {
-			if (redLit.eingabe.changed) {
+		input.addEventListener("input", function() {
+			if (/-tg$/.test(this.id)) { // Tippen im Tags-Feld ist nicht unbedingt eine Änderung
 				return;
 			}
-			redLit.eingabe.changed = true;
-			let span = document.createElement("span");
-			span.textContent = "*";
-			document.getElementById("red-lit-eingabe-meldung").appendChild(span);
+			redLit.eingabeGeaendert();
 		});
 		// alle Textfelder (Enter-Listener)
 		input.addEventListener("keydown", function(evt) {
@@ -1648,8 +1670,21 @@ let redLit = {
 			if (tastatur.modifiers === "Ctrl" && evt.key === "Enter") {
 				// ohne Timeout würden Warnfenster sofort wieder verschwinden
 				setTimeout(() => redLit.eingabeSpeichern(), 200);
+			} else if (!tastatur.modifers && evt.key === "Enter" &&
+					/-tg$/.test(this.id) && !document.getElementById("dropdown")) {
+				redLit.eingabeTagHinzufuegen();
 			}
 		});
+	},
+	// Eingabeformular: Formular wurde geändert
+	eingabeGeaendert () {
+		if (redLit.eingabe.changed) {
+			return;
+		}
+		redLit.eingabe.changed = true;
+		let span = document.createElement("span");
+		span.textContent = "*";
+		document.getElementById("red-lit-eingabe-meldung").appendChild(span);
 	},
 	// Eingabeformular: Status anzeigen
 	//   status = String
@@ -1684,6 +1719,8 @@ let redLit = {
 				helfer.textareaGrow(i);
 			}
 		}
+		// Tag-Zelle leeren
+		helfer.keineKinder(document.getElementById("red-lit-eingabe-tags"));
 		// Metadaten leeren
 		redLit.eingabeMetaFuellen({id: "", slot: -1});
 	},
@@ -2694,7 +2731,7 @@ let redLit = {
 		for (let i of felder) {
 			let k = i.id.replace(/.+-/, "");
 			if (i.type === "button" ||
-					k === "id") {
+					/^(id|tg)$/.test(k)) {
 				continue;
 			}
 			if (k === "pn") {
@@ -2710,6 +2747,7 @@ let redLit = {
 				ds.td[k] = i.value;
 			}
 		}
+		ds.td.tg = redLit.eingabeTagsZusammentragen();
 		return ds;
 	},
 	// Eingabeformular: ID für einen Datensatz erstellen
@@ -2793,10 +2831,10 @@ let redLit = {
 		let ds = redLit.db.data[id][slot].td,
 			inputs = document.querySelectorAll("#red-lit-eingabe input, #red-lit-eingabe textarea");
 		for (let i of inputs) {
-			if (i.type === "button") {
+			let key = i.id.replace(/.+-/, "");
+			if (i.type === "button" || key === "tg") { // Tags müssen anders angezeigt werden
 				continue;
 			}
-			let key = i.id.replace(/.+-/, "");
 			if (key === "id") {
 				i.value = id;
 			} else {
@@ -2806,6 +2844,8 @@ let redLit = {
 				}
 			}
 		}
+		// Tags anzeigen
+		redLit.eingabeTagsFuellen({tags: ds.tg});
 		// Metadaten füllen
 		redLit.eingabeMetaFuellen({id, slot});
 		// Formularstatus auffrischen
@@ -2817,6 +2857,98 @@ let redLit = {
 		redLit.eingabeStatus(status);
 		// Formular fokussieren
 		document.getElementById("red-lit-eingabe-ti").focus();
+	},
+	// Eingabeformular: Tags im Formular zusammentragen
+	eingabeTagsZusammentragen () {
+		let tags = document.getElementById("red-lit-eingabe-tags").querySelectorAll(".tag"),
+			arr = [];
+		tags.forEach(i => arr.push(i.textContent));
+		return arr;
+	},
+	// Eingabeformular: Tags anzeigen
+	//   tags = Array
+	//     (Array mit den Tags)
+	eingabeTagsFuellen ({tags}) {
+		let cont = document.getElementById("red-lit-eingabe-tags");
+		helfer.keineKinder(cont);
+		for (let tag of tags) {
+			let span = redLit.eingabeTagErzeugen({tag});
+			cont.appendChild(span);
+			span.classList.add("loeschbar");
+			redLit.eingabeTagLoeschen({tag: span});
+		}
+	},
+	// Eingabeformular: Tag-Element erzeugen
+	//   tag = String
+	//     (der Name des Tags)
+	eingabeTagErzeugen ({tag}) {
+		let span = document.createElement("span");
+		span.classList.add("tag");
+		span.textContent = tag;
+		return span;
+	},
+	// Eingabeformular: Tag löschen
+	//   tag = Element
+	//     (Tag, der gelöscht werden soll)
+	eingabeTagLoeschen ({tag}) {
+		tag.addEventListener("click", function() {
+			this.parentNode.removeChild(this);
+			redLit.eingabeGeaendert();
+		});
+	},
+	// Eingabeformular: Tag hinzufügen
+	eingabeTagHinzufuegen () {
+		let tg = document.getElementById("red-lit-eingabe-tg"),
+			val = helfer.textTrim(tg.value, true);
+		// keine Eingae
+		if (!val) {
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Sie haben keinen Tag eingegeben.",
+				callback: () => tg.select(),
+			});
+			return;
+		}
+		// aktuelle Tags sammeln
+		let arr = redLit.eingabeTagsZusammentragen();
+		// Tag schon vorhanden
+		if (arr.includes(val)) {
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Der Tag ist schon vorhanden.",
+				callback: () => tg.select(),
+			});
+			return;
+		}
+		// Tag ergänzen und die Anzeige neu aufbauen
+		arr.push(val);
+		arr.sort(helfer.sortAlpha);
+		redLit.eingabeTagsFuellen({tags: arr});
+		redLit.eingabeGeaendert();
+		tg.value = "";
+	},
+	// Eingabeformular: alle Tags aus der Literaturdatenbank zusammensuchen
+	eingabeTagsAuflisten () {
+		let tags = new Set();
+		for (let titel of Object.values(redLit.db.data)) { // Titel durchgehen
+			for (let aufnahme of titel) { // Aufnahmen durchgehen
+				for (let tag of aufnahme.td.tg) { // Tags durchgehen
+					if (!redLit.eingabe.tags.includes(tag)) {
+						tags.add(tag);
+					}
+				}
+			}
+		}
+		// Tags sortieren
+		let arr = [...tags];
+		arr.sort(helfer.sortAlpha);
+		// vordefinierte Tags an den Anfang schieben
+		let pre = [...redLit.eingabe.tags];
+		pre.reverse();
+		for (let i of pre) {
+			arr.unshift(i);
+		}
+		return arr;
 	},
 	// Eingabe: Metadaten eintragen
 	//   id = String
@@ -2986,6 +3118,16 @@ let redLit = {
 			no.appendChild(noFrag);
 			const notiz = maskieren(redLit.anzeigeSnippetHighlight(ds.td.no));
 			noFrag.innerHTML = notiz.replace(/[\r\n]+/g, "<br>");
+		}
+		// Tags
+		if (ds.td.tg.length) {
+			let p = document.createElement("p");
+			div.appendChild(p);
+			p.classList.add("tags");
+			for (let tag of ds.td.tg) {
+				let span = redLit.eingabeTagErzeugen({tag});
+				p.appendChild(span);
+			}
 		}
 		// Metadaten: BearbeiterIn + Datum + Titelaufnahmen
 		// (nur im Suchkontext anzeigen)

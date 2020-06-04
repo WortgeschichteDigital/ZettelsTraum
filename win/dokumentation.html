@@ -1176,7 +1176,7 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
 					<!-- ZTL-Format -->
 					<h2 id="ztj-ztl"><abbr title="Zettel’s Traum Literaturdatenbank">ZTL</abbr>-Format</h2>
 
-					<p>Mithilfe der Funktion <a href="#menueRedaktion-literatur" class="link-handbuch"><i>Redaktion &gt; Literatur</i></a> kann eine Literaturdatenbank angelegt, geladen und bearbeitet werden. Hierfür gibt es ein eigenes Dateiformat. Der Inhalt dieser <abbr title="Zettel’s Traum Literaturdatenbank">ZTL</abbr>-Dateien ist ebenfalls <abbr title="GNU zip">gzip</abbr>-komprimierter Plain-Text im <abbr title="JavaScript Object Notation">JSON</abbr>-Format. Der Aufbau (<span class="obacht">Datenformat Version 1</span>):</p>
+					<p>Mithilfe der Funktion <a href="#menueRedaktion-literatur" class="link-handbuch"><i>Redaktion &gt; Literatur</i></a> kann eine Literaturdatenbank angelegt, geladen und bearbeitet werden. Hierfür gibt es ein eigenes Dateiformat. Der Inhalt dieser <abbr title="Zettel’s Traum Literaturdatenbank">ZTL</abbr>-Dateien ist ebenfalls <abbr title="GNU zip">gzip</abbr>-komprimierter Plain-Text im <abbr title="JavaScript Object Notation">JSON</abbr>-Format. Der Aufbau (<span class="obacht">Datenformat Version 2</span>):</p>
 
 					<table class="ztj">
 						<tr>
@@ -1274,6 +1274,12 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
 							<td class="datentyp">String</td>
 							<td> </td>
 							<td>Sigle</td>
+						</tr>
+						<tr class="ztj-ebene3">
+							<td><p><code class="quelltext">tg</code></p></td>
+							<td class="datentyp">Array</td>
+							<td> </td>
+							<td>in jedem Slot ein Tag;<br><span class="obacht">mit Version 2 ergänzt</span></td>
 						</tr>
 						<tr class="ztj-ebene3">
 							<td><p><code class="quelltext">ti</code></p></td>

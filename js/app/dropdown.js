@@ -292,6 +292,8 @@ let dropdown = {
 			dropdown.data = ["=", "≠"];
 		} else if (feld_id === "red-lit-eingabe-fo") {
 			dropdown.data = [...redLit.eingabe.fundorte];
+		} else if (feld_id === "red-lit-eingabe-tg") {
+			dropdown.data = redLit.eingabeTagsAuflisten();
 		}
 		// Dropdown erzeugen und einhängen
 		let span = document.createElement("span");
