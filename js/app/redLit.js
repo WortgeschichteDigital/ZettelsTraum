@@ -1696,9 +1696,18 @@ let redLit = {
 				return;
 			}
 			let val = this.value;
+			// hochgestellte Ziffern durch 'normal' gestellte ersetzen
+			val = helfer.sortSiglenPrepSuper(val);
+			// Ziffern vom Anfang an das Ende der ID schieben
+			let ziffern = val.match(/^[0-9]+/);
+			if (ziffern) {
+				val += ziffern[0];
+				val = val.substring(ziffern[0].length);
+			}
+			// weitere Normierungsoperationen
 			val = val.toLowerCase();
 			val = val.replace(/[\s/]/g, "-");
-			val = val.replace(/^[0-9]+|[^a-z0-9ßäöü-]/g, "");
+			val = val.replace(/[^a-z0-9ßäöü-]/g, "");
 			val = val.replace(/-{2,}/g, "-");
 			document.getElementById("red-lit-eingabe-id").value = val;
 		});
