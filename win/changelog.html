@@ -48,16 +48,10 @@
 
 				<p><span class="obacht">Das Dateiformat der Literaturdatenbank hat sich geändert!</span> Ältere <abbr title="Zettel’s Traum Literaturdatenbank">ZTL</abbr>-Dateien werden beim Öffnen automatisch konvertiert; dabei wird eine Änderungsmarkierung gesetzt.</p>
 
-				<h3>Entfernte Funktionen</h3>
-
-				<ul>
-					<li></li>
-				</ul>
-
 				<h3>Neue Funktionen</h3>
 
 				<ul>
-					<li><a href="#karteikarte" class="link-handbuch">Karteikarte</a> und <a href="#belegliste" class="link-handbuch">Belegliste</a>: Es gibt nun ein ausdifferenziertes System von unterschiedlichen Einklammerungen, mit dessen Hilfe der Belegtext zum Schneiden vorbereitet werden kann, ohne Belegtext löschen zu müssen. <abbr title="Vergleiche">Vgl.</abbr> den entsprechenden <a href="#karteikarte-belegKlammern" class="link-handbuch">Abschnitt im Handbuch</a>.</li>
+					<li><a href="#karteikarte" class="link-handbuch">Karteikarte</a> und <a href="#belegliste" class="link-handbuch">Belegliste</a>: Es gibt nun ein ausdifferenziertes System von unterschiedlichen Einklammerungen, mit dessen Hilfe der Belegtext zum Schneiden vorbereitet werden kann, ohne ihn löschen zu müssen. <abbr title="Vergleiche">Vgl.</abbr> den entsprechenden <a href="#karteikarte-belegKlammern" class="link-handbuch">Abschnitt im Handbuch</a>.</li>
 
 					<li><a href="#menueRedaktion-literatur" class="link-handbuch">Literaturdatenbank</a>: Titelaufnahmen können jetzt mit beliebig vielen Tags versehen werden. <abbr title="Vergleiche">Vgl.</abbr> den <a href="#menueRedaktion-literaturTags" class="link-handbuch">Absatz im Handbuch</a>.</li>
 				</ul>
@@ -71,7 +65,7 @@
 
 					<li>Literaturdatenbank: Das Dialogfenster für die Verwaltung der Literaturdatenbank kann nun auch über ein Icon in der Quick-Access-Bar geöffnet werden.</li>
 
-					<li>Literaturdatenbank: Daneben wurden erneut mehrere Kleinigkeiten verbessert. Beim automatischen Berechnen der ID werden (hochgestellte) Ziffern vom Anfang der Sigle an das Ende der ID geschoben; bei der Eingabe von URLs gibt es weitere Automatismen, die den Fundort betreffen; außerdem wird genauer überprüft, ob URL und Fundort konsistent sind.</li>
+					<li>Literaturdatenbank: Außerdem wurden erneut mehrere Kleinigkeiten verbessert. Beim automatischen Berechnen der ID werden (hochgestellte) Ziffern vom Anfang der Sigle an das Ende der ID geschoben; bei der Eingabe von URLs gibt es weitere Automatismen, die den Fundort betreffen; außerdem wird genauer überprüft, ob URL und Fundort konsistent sind.</li>
 				</ul>
 
 				<h3>Updates</h3>
@@ -82,10 +76,18 @@
 
 				<h3>Behobene Fehler</h3>
 
-				<p>Es wurden <i>2 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/master">Commit-Messages</a>.</p>
+				<p>Es wurden <i>5 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/master">Commit-Messages</a>.</p>
 
 				<ul>
-					<li></li>
+					<li>wurde in der Literaturdatenbank der Dialog, der warnt, dass Änderungen noch nicht gespeichert wurden, abgebrochen, wurde dieser Abbruch wie ein Nein bewertet; die Änderungen wurden nicht gespeichert</li>
+
+					<li>in der Literaturdatenbank war es selbst dann unmöglich, als Fundort <q>IDS</q> anzugeben, wenn die URL vom IDS stammte</li>
+
+					<li>beim Import von Belegen aus dem DeReKo war die Umbenennung von <q>IDS-Archiv</q> in <q>IDS</q> nicht umgesetzt</li>
+
+					<li>bei der Suche in der Literaturdatenbank wurde Suchtext innerhalb von Spitzklammern nicht markiert</li>
+
+					<li>ein Sprungziel, das auf einen Aufzählungspunkt im Handbuch zeigte, wurde nicht korrekt getroffen, wenn das Fenster dabei zugleich geöffnet wurde</li>
 				</ul>
 			</div>
 
