@@ -4221,9 +4221,35 @@ Gerüst 2 &gt; Gerüst 1</pre>
 
 						<p>Bei der Suche wird <b>Groß- und Kleinschreibung</b> ignoriert. Es sei denn, in Ihrem Suchwort findet sich ein Großbuchstabe. In diesem Fall wird nämlich auf eine Suche umgeschaltet, bei der die von Ihnen eingegebene Schreibung exakt beachtet wird. Ein Beispiel: Geben Sie <code class="quelltext">der</code> ein, wird sowohl die Titelaufnahme mit der Phrase <q><i>Der</i> Einfluß des Englischen</q> als auch die mit <q>Geschichte <i>der</i> deutschen Sprache</q> gefunden. Geben Sie hingegen <code class="quelltext">Der</code> ein, produziert nur die erste Zeichenkette einen Treffer.</p>
 
-						<p>Geben Sie <b>mehrere Suchwörter</b> ein, finden Sie nur Titelaufnahmen, die jedes der eingegebenen Wörter in einem oder mehreren Datenfeldern enthalt. Die Wörter müssen nicht direkt aufeinanderfolgen und nicht alle im selben Datenfeld sein.</p>
+						<p>Geben Sie <b>mehrere Suchwörter</b> ein, finden Sie nur Titelaufnahmen, die jedes der eingegebenen Wörter in einem oder mehreren Datenfeldern enthält. Die Wörter müssen nicht direkt aufeinanderfolgen und nicht alle im selben Datenfeld sein. Der Schalter für Groß- und Kleinschreibung wird für jedes Suchwort einzeln und nicht für alle zugleich umgelegt. Enthält nur eines der Suchwörter einen Großbuchstaben, wird auch nur dieses Suchwort mit exakter Schreibung gesucht. Geben Sie als Suchausdruck <code class="quelltext">Wörterbuch sprach</code> ein, wird bei <code class="quelltext">Wörterbuch</code> zwischen Groß- und Kleinschreibung unterschieden (<q>Fremdwörterbuch</q> produziert keinen Treffer), bei <code class="quelltext">sprach</code> jedoch nicht. <abbr title="Das heißt">D. h.</abbr> sowohl <q>Sprache</q> als auch <q>sprachlich</q> produzieren Treffer.</p>
 
 						<p>Daneben gibt es die Möglichkeit nach <b>Phrasen</b> zu suchen. Schließen Sie mehrere Suchwörter in Anführungsstriche ein, werden diese nur gefunden, wenn sie so wie eingegeben direkt aufeinanderfolgen. Ein Beispiel: Die Eingabe <code class="quelltext">&quot;Jacob Grimm&quot;</code> würde <abbr title="zum Beispiel">z. B.</abbr> das <q>Deutsche Wörterbuch von Jacob Grimm und Wilhelm Grimm</q> finden, die Titelaufnahme <q>Grimm, Jacob: Die drei Federn</q> aber nicht. Lassen Sie die Anführungszeichen weg und suchen Sie nach <code class="quelltext">Jacob Grimm</code>, passt der Suchausdruck auf beide Titel.</p>
+
+						<p id="menueRedaktion-literaturSuchsyntax">Mithilfe einer speziellen <b>Suchsyntax</b> können sie die Suche von Suchwörtern oder -phrasen auf nur eines der Datenfelder beschränken. Die Syntax ist so aufgebaut: <code class="quelltext">FELDNAME:&quot;SUCHAUSDRUCK&quot;</code> (vor und hinter dem Doppelpunkt <em>kein</em> Leerzeichen). Mit der Suchanfrage <code class="quelltext">Bearbeiter:&quot;Müller&quot;</code> finden Sie nur Titelaufnahmen, die von einer Person namens <q>Müller</q> bearbeitet wurden. Taucht <q>Müller</q> allein in einer Titelaufnahme, Sigle oder dergleichen auf, produziert die Anfrage keinen Treffer.</p>
+
+						<p>Für das Ansprechen der Datenfelder gibt es immer mehrere Alternativen (in der Liste durch Kommata getrennt); Groß- oder Kleinschreibung spielt bei der Angabe der Feldnamen keine Rolle; <code class="quelltext">bearbeiterin</code> wird genauso behandelt wie <code class="quelltext">BearbeiterIn</code>:</p>
+
+						<ul>
+							<li><i>Sigle, si:</i> nur das Sigle-Feld durchsuchen.</li>
+
+							<li><i>Titel, ti:</i> nur das Titel-Feld durchsuchen.</li>
+
+							<li><i>URL, ul:</i> nur das URL-Feld durchsuchen.</li>
+
+							<li><i>Aufrufdatum, ad:</i> nur das Aufrufdatum-Feld durchsuchen. (Beachten Sie bitte, dass das Aufrufdatum intern im ISO 8601-Format vorliegt. Nach dem <q>8. 5. 2020</q> müssen Sie mit der Anfrage <code class="quelltext">2020-05-08</code> suchen.)</li>
+
+							<li><i>Fundort, fo:</i> nur das Fundort-Feld durchsuchen.</li>
+
+							<li><i>PPN, pn:</i> nur das <abbr title="Pica-Produktionsnummer">PPN</abbr>-Feld durchsuchen.</li>
+
+							<li><i>Tags, tg:</i> nur das Tags-Feld durchsuchen.</li>
+
+							<li><i>Notizen, no:</i> nur das Notizen-Feld durchsuchen.</li>
+
+							<li><i>BearbeiterIn, Bearbeiter, bearb, be:</i> nur das BearbeiterIn-Feld durchsuchen.</li>
+						</ul>
+
+						<p>Verwenden Sie mehr als ein Suchwort und/oder mehr als einen Suchausdruck, werden diese immer durch ein <b>logisches Und</b> miteinander verknüpft. Sie bekommen nur Treffer, wenn alle Suchkriterien in einem Titel erfüllt sind.</p>
 
 						<p>Die Suche kann nach <b>Erstellungsdatum</b> einer Titelaufnahme eingegrenzt werden. Wählen Sie im Datumsfeld <i>ab</i> ein Tagesdatum aus, bekommen Sie nur Titelaufnahmen angezeigt, die ab diesem Datum angelegt wurden.</p>
 
