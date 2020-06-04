@@ -2502,6 +2502,15 @@ let belegImport = {
 		} else if (!td.ort.length && !td.jahrgang) {
 			punkt();
 		}
+		// Verlag
+		if (optionen.data.einstellungen["literatur-verlag"] && td.verlag) {
+			if (td.ort.length) {
+				titel += `: ${td.verlag}`;
+			} else {
+				punkt();
+				titel += ` ${td.verlag}`;
+			}
+		}
 		// Jahrgang + Jahr
 		if (td.jahrgang) {
 			titel += ` ${td.jahrgang}`;
@@ -2531,7 +2540,7 @@ let belegImport = {
 			}
 		}
 		// Serie
-		if (td.serie) {
+		if (optionen.data.einstellungen["literatur-serie"] && td.serie) {
 			titel += ` (${td.serie}${td.serieBd ? " " + td.serieBd : ""})`;
 		}
 		punkt();

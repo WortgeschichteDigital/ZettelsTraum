@@ -192,6 +192,14 @@ let punkte = {
 			});
 		`,
 	},
+	literaturConf: {
+		label: "Literatur-Einstellungen",
+		icon: "zahnrad.png",
+		click: `
+			optionen.oeffnen();
+			optionen.sektionWechseln(document.getElementById("einstellungen-link-literatur"));
+		`,
+	},
 	mail: {
 		label: "Adresse kopieren",
 		icon: "brief.png",
