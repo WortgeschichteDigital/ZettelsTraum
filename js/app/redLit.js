@@ -985,15 +985,16 @@ let redLit = {
 							if (dialog.antwort) {
 								redLit.eingabeSpeichern();
 								antwort(true);
-								return;
 							} else if (dialog.antwort === false) {
 								redLit.eingabe.changed = false;
+								antwort(false);
+							} else {
+								antwort(null);
 							}
-							antwort(false);
 						},
 					});
 				});
-				if (speichern) {
+				if (speichern || speichern === null) {
 					resolve(false);
 					return;
 				}
@@ -1012,16 +1013,17 @@ let redLit = {
 							if (dialog.antwort) {
 								redLit.dbSpeichern();
 								antwort(true);
-								return;
 							} else if (dialog.antwort === false) {
 								redLit.db.mtime = ""; // damit die DB beim erneuten Öffnen des Fenster neu geladen wird
 								redLit.db.changed = false;
+								antwort(false);
+							} else {
+								antwort(null);
 							}
-							antwort(false);
 						},
 					});
 				});
-				if (speichern) {
+				if (speichern || speichern === null) {
 					resolve(false);
 					return;
 				}
