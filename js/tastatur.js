@@ -286,7 +286,7 @@ let tastatur = {
 	//     (Event-Object des keydown)
 	neben (evt) {
 		const m = tastatur.modifiers,
-			overlayId = overlay.oben();
+			overlayId = typeof overlay !== "undefined" ? overlay.oben() : "";
 		// Key "Escape"
 		if (!m && evt.key === "Escape") {
 			// falls die Suchleiste auf ist und den Fokus hat
