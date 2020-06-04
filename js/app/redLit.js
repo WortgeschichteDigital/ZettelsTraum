@@ -2886,7 +2886,7 @@ let redLit = {
 	eingabeTagErzeugen ({tag}) {
 		let span = document.createElement("span");
 		span.classList.add("tag");
-		span.textContent = tag;
+		span.innerHTML = redLit.anzeigeSnippetMaskieren(tag);
 		return span;
 	},
 	// Eingabeformular: Tag löschen
@@ -3011,7 +3011,7 @@ let redLit = {
 		let si = document.createElement("p");
 		div.appendChild(si);
 		si.classList.add("sigle");
-		si.innerHTML = maskieren(redLit.anzeigeSnippetHighlight(ds.td.si));
+		si.innerHTML = redLit.anzeigeSnippetHighlight(ds.td.si);
 		// ID
 		let idPrint = document.createElement("span");
 		si.appendChild(idPrint);
@@ -3057,7 +3057,7 @@ let redLit = {
 		let ti = document.createElement("p");
 		div.appendChild(ti);
 		ti.classList.add("aufnahme");
-		ti.innerHTML = maskieren(redLit.anzeigeSnippetHighlight(ds.td.ti));
+		ti.innerHTML = redLit.anzeigeSnippetHighlight(ds.td.ti);
 		// URL + Aufrufdatum
 		if (ds.td.ul) {
 			let ul = document.createElement("p");
@@ -3118,7 +3118,7 @@ let redLit = {
 			i.textContent = "Notizen:";
 			let noFrag = document.createElement("span");
 			no.appendChild(noFrag);
-			const notiz = maskieren(redLit.anzeigeSnippetHighlight(ds.td.no));
+			const notiz = redLit.anzeigeSnippetHighlight(ds.td.no);
 			noFrag.innerHTML = notiz.replace(/[\r\n]+/g, "<br>");
 		}
 		// Tags
@@ -3127,6 +3127,7 @@ let redLit = {
 			div.appendChild(p);
 			p.classList.add("tags");
 			for (let tag of ds.td.tg) {
+				tag = redLit.anzeigeSnippetHighlight(tag);
 				let span = redLit.eingabeTagErzeugen({tag});
 				p.appendChild(span);
 			}
@@ -3160,14 +3161,6 @@ let redLit = {
 		}
 		// Snippet zurückgeben
 		return div;
-		// Funktion zum Maskieren von Spitzklammern
-		function maskieren (text) {
-			text = text.replace(/</g, "&lt;");
-			text = text.replace(/>/g, "&gt;");
-			text = text.replace(/&lt;mark class="suche"&gt;/g, `<mark class="suche">`);
-			text = text.replace(/&lt;\/mark&gt;/g, `</mark>`);
-			return text;
-		}
 	},
 	// Anzeige: Suchtreffer im Snippet highlighten
 	//   text = String
@@ -3182,7 +3175,18 @@ let redLit = {
 		for (let i of redLit.suche.highlight) {
 			text = text.replace(i, m => `<mark class="suche">${m}</mark>`);
 		}
+		text = redLit.anzeigeSnippetMaskieren(text);
 		text = helfer.suchtrefferBereinigen(text);
+		return text;
+	},
+	// Anzeige: Maskieren von Spitzklammern
+	//   text = String
+	//     (Text, der gedruckt werden soll)
+	anzeigeSnippetMaskieren (text) {
+		text = text.replace(/</g, "&lt;");
+		text = text.replace(/>/g, "&gt;");
+		text = text.replace(/&lt;mark class="suche"&gt;/g, `<mark class="suche">`);
+		text = text.replace(/&lt;\/mark&gt;/g, `</mark>`);
 		return text;
 	},
 	// Anzeige: Listener zum Öffnen des Versionen-Popups
