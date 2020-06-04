@@ -1754,11 +1754,12 @@ let redLit = {
 	//     (das URL-Feld)
 	eingabeAutoURL (input) {
 		input.addEventListener("input", function() {
+			let fo = document.getElementById("red-lit-eingabe-fo");
 			if (!this.value) {
+				fo.value = "Bibliothek";
 				return;
 			}
-			let ad = document.getElementById("red-lit-eingabe-ad"),
-				fo = document.getElementById("red-lit-eingabe-fo");
+			let ad = document.getElementById("red-lit-eingabe-ad");
 			if (!ad.value) {
 				ad.value = new Date().toISOString().split("T")[0];
 			}
@@ -1767,6 +1768,8 @@ let redLit = {
 				fundort = "GoogleBooks";
 			} else if (/^https?:\/\/www\.deutschestextarchiv\.de\//.test(this.value)) {
 				fundort = "DTA";
+			} else if (/owid\.de\//.test(this.value)) {
+				fundort = "IDS";
 			}
 			fo.value = fundort;
 		});
@@ -2559,6 +2562,17 @@ let redLit = {
 				resolve(false);
 				return;
 			}
+			// wenn URL => genauerer Check, ob die Eingabe konsistent ist
+			if (/^https?:\/\/www\.deutschestextarchiv\.de\//.test(url.value) && fo.value !== "DTA" ||
+					/books\.google/.test(url.value) && fo.value !== "GoogleBooks" ||
+					/owid\.de\//.test(url.value) && fo.value !== "IDS") {
+				fehler({
+					text: `Die URL passt nicht zum Fundort „${fo.value}“.`,
+					fokus: fo,
+				});
+				resolve(false);
+				return;
+			}
 			// wenn Aufrufdatum => URL eingeben
 			let ad = document.getElementById("red-lit-eingabe-ad");
 			if (ad.value && !url.value) {
@@ -2592,10 +2606,10 @@ let redLit = {
 				resolve(false);
 				return;
 			}
-			// wenn Fundort "DTA" || "GoogleBooks" || "online" => URL eingeben
-			if (/^(DTA|GoogleBooks|online)$/.test(fo.value) && !url.value) {
+			// wenn Fundort "DTA" || "GoogleBooks" || "IDS" || "online" => URL eingeben
+			if (/^(DTA|GoogleBooks|IDS|online)$/.test(fo.value) && !url.value) {
 				fehler({
-					text: "Ist der Fundort „online“, „DTA“ oder „GoogleBooks“, müssen Sie eine URL angeben.",
+					text: "Ist der Fundort „online“, „DTA“, „GoogleBooks“ oder „IDS“, müssen Sie eine URL angeben.",
 					fokus: url,
 				});
 				resolve(false);
