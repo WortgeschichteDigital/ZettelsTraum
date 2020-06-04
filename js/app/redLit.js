@@ -2549,11 +2549,11 @@ let redLit = {
 				resolve(false);
 				return;
 			}
-			// wenn URL => Fundort "DTA" || "GoogleBooks" || "online"
+			// wenn URL => Fundort "DTA" || "GoogleBooks" || "IDS" || "online"
 			let fo = document.getElementById("red-lit-eingabe-fo");
-			if (url.value && !/^(DTA|GoogleBooks|online)$/.test(fo.value)) {
+			if (url.value && !/^(DTA|GoogleBooks|IDS|online)$/.test(fo.value)) {
 				fehler({
-					text: "Geben Sie eine URL an, muss der Fundort „online“, „DTA“ oder „GoogleBooks“ sein.",
+					text: "Geben Sie eine URL an, muss der Fundort „online“, „DTA“, „GoogleBooks“ oder „IDS“ sein.",
 					fokus: fo,
 				});
 				resolve(false);
