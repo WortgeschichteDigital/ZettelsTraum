@@ -1967,6 +1967,28 @@ Mustermann, Erika
 						<p>Führen Sie wiederholt kleinere Einfügeoperationen aus, könnte es sinnvoll sein, die Checkbox zu deaktivieren. Dann müssten Sie das Einfügen-Fenster nicht immer wieder aufs Neue öffnen.</p>
 					</div>
 
+					<h2 id="einstellungen-literatur">Literatur</h2>
+
+					<p class="erklaerung-option" id="einstellungen-literaturVerlag">Verlag anzeigen</p>
+
+					<div class="info">
+						<p><i>Standard:</i> nicht aktiviert</p>
+
+						<p>Beim automatischen Import von Literaturtiteln in der <a href="#menueRedaktion-literaturTitelaufnahmeImport">Literaturdatenbank</a> oder in der <a href="#karteikarte-importfunktion">Karteikarte</a> wird der Verlagsname angezeigt, wenn diese Einstellung aktiviert wurde.</p>
+
+						<p>Die Importsteuerung des Verlagsnamens ist nur möglich, wenn die Importquelle so strukturiert ist, dass diese Information gezielt ausgelesen werden kann. Dies ist beim Import eines MODS-Dokuments oder via <abbr title="Pica-Produktionsnummer">PPN</abbr> <abbr title="beispielsweise">bspw.</abbr> der Fall.</p>
+					</div>
+
+					<p class="erklaerung-option">Serie anzeigen</p>
+
+					<div class="info">
+						<p><i>Standard:</i> nicht aktiviert</p>
+
+						<p>Beim automatischen Import von Literaturtiteln in der <a href="#menueRedaktion-literaturTitelaufnahmeImport">Literaturdatenbank</a> oder in der <a href="#karteikarte-importfunktion">Karteikarte</a> werden Titel und Band von Serien angezeigt, wenn diese Einstellung aktiviert wurde.</p>
+
+						<p>Ansonsten gilt dasselbe wie für die Einstellung <a href="#einstellungen-literaturVerlag">Verlag anzeigen</a></p>
+					</div>
+
 					<h2 id="einstellungen-menue">Menü</h2>
 
 					<p class="erklaerung-option" id="einstellungen-menueleisteAusblenden">Menüleiste des Programms erst einblenden, wenn die Alt-Taste gedrückt wird</p>
@@ -4223,11 +4245,11 @@ Gerüst 2 &gt; Gerüst 1</pre>
 						<p id="menueRedaktion-literaturSondersuchen">Unter dem Suchschlitz finden Sie Links, mit denen Sie <b>Sondersuchen</b> starten können. Bei Sondersuchen werden keine veralteten Datensätze durchsucht; sie beziehen sich also immer auf die jüngste Version einer Titelaufnahme. Im Suchschlitz oder im Datumsfeld eingetragene Werte werden auch bei einer Sondersuche berücksichtigt. Die Sondersuchen können Ihnen jedoch Ergebnisse liefern, für die es ein bisschen komplizierterer Suchalgorithmen bedarf. Gefunden werden dabei im Einzelnen:</p>
 
 						<ul>
-							<li><i>Duplikate:</i> Ja, mit dieser Sondersuchen kann die Datenbank nach Duplikaten durchsucht werden. Als Duplikate gelten Titelaufnahmen, die mindestens eines der folgenden Kriterien erfüllen: identischer Titel, identische Sigle, identische URL, identische PPN.</li>
+							<li><i>Duplikate:</i> Ja, mit dieser Sondersuchen kann die Datenbank nach Duplikaten durchsucht werden. Als Duplikate gelten Titelaufnahmen, die mindestens eines der folgenden Kriterien erfüllen: identischer Titel, identische Sigle, identische URL, identische <abbr title="Pica-Produktionsnummer">PPN</abbr>.</li>
 
 							<li><i>doppelte Siglen:</i> Eine auf identische Siglen reduzierte Suche nach Duplikaten.</li>
 
-							<li><i>mit/ohne PPN:</i> Findet Titelaufnahmen, denen mindestens eine <abbr title="respektive">resp.</abbr> keine PPN zugewiesen wurde.</li>
+							<li><i>mit/ohne <abbr title="Pica-Produktionsnummer">PPN</abbr>:</i> Findet Titelaufnahmen, denen mindestens eine <abbr title="respektive">resp.</abbr> keine <abbr title="Pica-Produktionsnummer">PPN</abbr> zugewiesen wurde.</li>
 
 							<li><i>mehrere Versionen:</i> Zeigt nur Titelaufnahmen an, die mehr als eine Version haben.</li>
 
@@ -4297,7 +4319,7 @@ Gerüst 2 &gt; Gerüst 1</pre>
 
 							<li><i>Fundort</i> (verpflichtend): Eine abstrakte Angabe zum Fundort des Literaturtitels. Erlaubt sind nur die vordefinierten Werte, die man über das Dropdown-Menü einsehen kann.</li>
 
-							<li><i>PPN</i> (fakultativ): Eine oder mehrere Pica-Produktionsnummern. Möchten Sie mehrere PPN eingeben, müssen Sie diese durch Kommata und/oder Leerzeichen voneinander trennen. Werden PPN angegeben, wird in der Trefferliste der <a href="#menueRedaktion-literaturTitelsuche">Titelsuche</a> ein Link zur Titelaufnahme des <a href="https://kxp.k10plus.de/DB=2.1/">Gemeinsamen Verbundkatalogs</a> gesetzt.</li>
+							<li><i><abbr title="Pica-Produktionsnummer">PPN</abbr></i> (fakultativ): Eine oder mehrere Pica-Produktionsnummern. Möchten Sie mehrere <abbr title="Pica-Produktionsnummern">PPN</abbr> eingeben, müssen Sie diese durch Kommata und/oder Leerzeichen voneinander trennen. Werden <abbr title="Pica-Produktionsnummern">PPN</abbr> angegeben, wird in der Trefferliste der <a href="#menueRedaktion-literaturTitelsuche">Titelsuche</a> ein Link zur Titelaufnahme des <a href="https://kxp.k10plus.de/DB=2.1/">Gemeinsamen Verbundkatalogs</a> gesetzt.</li>
 
 							<li><i>Notizen</i> (fakultativ): Ein Freitextfeld für Notizen zu der Titelaufnahme. Zeilenumbrüche sind erlaubt und werden in der Titelanzeige der <a href="#menueRedaktion-literaturTitelsuche">Titelsuche</a> auch dargestellt. Diese Notizen sind allein für die Arbeit in der Literaturdatenbank gedacht. Darum werden sie von den <a href="#menueRedaktion-literaturExportieren">Exportfunktionen</a> ignoriert. Titelaufnahmen mit Notizen lassen sich mit der entsprechenden <a href="#menueRedaktion-literaturSondersuchen">Sondersuche</a> finden.</li>
 
