@@ -234,6 +234,32 @@ let xml = {
 			});
 			return;
 		}
+		// Sind Stichwort und Trennzeichen sichtbar?
+		if (helfer.hauptfunktion === "karte" && !optionen.data.beleg.trennung) {
+			dialog.oeffnen({
+				typ: "alert",
+				text: `Um diese Aktion auszuführen, müssen Sie die Anzeige der Trennzeichen im Kopf der Karteikarte aktivieren:\n• Icon <img src="img/trennzeichen.svg" width="24" height="24" alt="">`,
+			});
+			return;
+		}
+		if (helfer.hauptfunktion === "liste" &&
+				(!optionen.data.belegliste.trennung || !optionen.data.belegliste.wort_hervorheben)) {
+			let funktionen = [],
+				icons = [];
+			if (!optionen.data.belegliste.trennung) {
+				funktionen.push("die Anzeige der Trennzeichen");
+				icons.push(`• Icon <img src="img/trennzeichen.svg" width="24" height="24" alt="">`);
+			}
+			if (!optionen.data.belegliste.wort_hervorheben) {
+				funktionen.push("die Hervorhebung des Karteiworts");
+				icons.push(`• Icon <img src="img/text-fett.svg" width="24" height="24" alt="">`);
+			}
+			dialog.oeffnen({
+				typ: "alert",
+				text: `Um diese Aktion auszuführen, müssen Sie ${funktionen.join(" und ")} im Kopf der Karteikarte aktivieren:\n${icons.join("<br>")}`,
+			});
+			return;
+		}
 		// Daten zusammentragen
 		const xmlStr = xml.schnitt();
 		let datum = xmlStr.match(/<Datum>(.+?)<\/Datum>/)[1],
