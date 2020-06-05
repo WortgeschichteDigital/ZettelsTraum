@@ -256,6 +256,16 @@ let xml = {
 		let warn = document.createElement("span");
 		ele.appendChild(warn);
 		warn.classList.add("warn", "icon-kreis-info");
+		warn.addEventListener("click", function(evt) {
+			if (!this.classList.contains("aktiv")) {
+				return;
+			}
+			evt.stopPropagation();
+			dialog.oeffnen({
+				typ: "alert",
+				text: `Beim Parsen des XML-Snippets ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n${this.dataset.err}`,
+			});
+		});
 	},
 	// Meldung anzeigen, dass in einer Datenstruktur noch keine Daten zu finden sind
 	//   ele = Element
