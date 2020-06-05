@@ -314,6 +314,15 @@ let tastatur = {
 			ipcRenderer.invoke("fenster-schliessen");
 			return;
 		}
+		// Key "Enter"
+		if (winInfo.typ === "xml" &&
+				m === "Ctrl" && evt.key === "Enter" &&
+				document.activeElement.nodeName === "TEXTAREA") {
+			evt.preventDefault();
+			let button = document.activeElement.closest(".pre-cont").querySelector(`[value="Speichern"]`);
+			button.dispatchEvent(new MouseEvent("click"));
+			return;
+		}
 		// Key " " || "PageUp" || "PageDown" (Changelog, Dokumentation, Handbuch)
 		if (/changelog|dokumentation|handbuch/.test(winInfo.typ) &&
 				!m && /^( |PageDown|PageUp)$/.test(evt.key)) {
