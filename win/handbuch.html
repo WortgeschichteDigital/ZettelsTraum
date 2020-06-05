@@ -618,7 +618,7 @@
 							</figure>
 						</div>
 
-						<p>Im Folgenden wird beschrieben, wie die Klammerungen beim <a href="#karteikarte-kopieren">Kopieren</a> von Text, der zum Einfügen in ein Textprogramm dient, transformiert werden. Die Klammerungen werden auch beim Erstellen eines XML-Snippets aufgelöst. <abbr title="Vergleiche">Vgl.</abbr> dazu den entsprechenden <a href="#xml-belegschnitt" class="link-dokumentation"><abbr title="Abschnitt">Abschn.</abbr> in der technischen Dokumentation</a>.</p>
+						<p>Im Folgenden wird beschrieben, wie die Klammerungen beim <a href="#karteikarte-kopieren">Kopieren</a> von Text, der zum Einfügen in ein Textprogramm dient, transformiert werden. Die Klammerungen werden auch beim Erstellen eines <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippets aufgelöst. <abbr title="Vergleiche">Vgl.</abbr> dazu den entsprechenden <a href="#xml-belegschnitt" class="link-dokumentation"><abbr title="Abschnitt">Abschn.</abbr> in der technischen Dokumentation</a>.</p>
 
 						<p><b>{Text}</b> → <b>[Text]</b> = Autorenzusatz. Der markierte Belegtext bleibt beim Export somit erhalten, wird dabei aber in eckige Klammern gesetzt.</p>
 
@@ -654,7 +654,21 @@
 					<p id="karteikarte-quelle"><b>Quelle:</b> Quellenangabe zum Beleg</p>
 
 					<div class="info">
-						<p>Enthält das Feld Internetlinks, werden diese in der Leseansicht der Karteikarte und in der Belegliste als klickbare Links dargestellt, über die sich der Standardbrowser des Betriebssystems öffnet. Für den Linktext werden nur Subdomain, Domain und Top-Level-Domain genutzt. Ein Beispiel: http://www.deutschestextarchiv.de/<wbr>book/<wbr>view/<wbr>gutzkow_wally_1835?p=12 wird automatisch zu <a href="http://www.deutschestextarchiv.de/book/view/gutzkow_wally_1835?p=12">www.deutschestextarchiv.de</a>.</p>
+						<p>Enthält das Feld <b>Internetlinks</b>, werden diese in der Leseansicht der Karteikarte und in der Belegliste als klickbare Links dargestellt, über die sich der Standardbrowser des Betriebssystems öffnet. Für den Linktext werden nur Subdomain, Domain und Top-Level-Domain genutzt. Ein Beispiel: http://www.deutschestextarchiv.de/<wbr>book/<wbr>view/<wbr>gutzkow_wally_1835?p=12 wird automatisch zu <a href="http://www.deutschestextarchiv.de/book/view/gutzkow_wally_1835?p=12">www.deutschestextarchiv.de</a>.</p>
+
+						<p>Ist ein Internetlink vorhanden, wird dieser beim Erstellen eines <a href="#belegliste-xmlZwischenablageBelegschnitt"><abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippets</a> erkannt und entsprechend getaggt. In solchen Fällen wird hinter dem Link nach einem <b>Aufrufdatum</b> gesucht. Als Aufrufdatum wird das erste Datum betrachtet, das hinter dem Link zu finden ist. Es ist ganz egal, ob Sie davor noch eine Notiz wie <q>Aufrufdatum:</q> setzen, das Datum einklammern oder ungeklammert stehenlassen. Ausgelesen wird immer nur das Datum, der restliche Text wird ignoriert.</p>
+
+						<p>Es gibt mehrere mögliche Datumsformate: Sie können das Datum im ISO 8601-Format angeben (<q>2019-12-24</q>) oder im Format Tag/Monat/Jahr: <q>24. 12. 2019</q>. Ob Sie zwischen den einzelnen Datumsteilen Spatien lassen, ob Sie Monate oder Tage &lt; zehn mit führender Null verwenden, ob Sie einen Mix aus all diesen Möglichkeiten produzieren, ist dabei egal. Daten in diesem Format werden immer erkannt.</p>
+
+						<p>Wurde zwar eine URL, aber kein Datum gefunden wird für das <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippet das Erstellungsdatum der Karteikarte genutzt.</p>
+
+						<p>Auch wenn Sie keine URL angeben, können Sie ein Aufrufdatum notieren (<abbr title="zum Beispiel">z. B.</abbr> um sich zu merken, wann Sie einen Beleg, der nicht durch einen Internetlink referenziert werden kann, aus einem Korpus importiert haben). Exportieren Sie einen Belegschnitt in ein <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippet, wird das Aufrufdatum auch in diesem Fall ausgelesen und getaggt. Wichtig ist allein, dass Sie hinter der Quellenangabe einen (oder mehrere) Zeilenumbrüche machen. Ein Beispiel:</p>
+
+						<pre class="quelltext">Peters, Carl: Im Goldland des Altertums, München: Lehmann 1902, S. 166.
+
+Aufrufdatum: 24. 12. 2019</pre>
+
+						<p>Auch in diesem Fall ist es nicht relevant, wie Sie das Datum markieren. Wurde ein Datum erkannt, wird es automatisch in das <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippet übernommen. Allerdings wird bei Abwesenheit einer URL niemals auf das Erstellungsdatum der Kartei als Fallback zurückgegriffen.</p>
 
 						<figure class="right" title="zum Vergrößern anklicken">
 							<img src="../img/win/hb-karteikarte-quelle-laden.png" alt="">
