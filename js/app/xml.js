@@ -183,6 +183,22 @@ let xml = {
 			let aufrufdatum = document.createElementNS(ns, "Aufrufdatum");
 			fundstelle.appendChild(aufrufdatum);
 			aufrufdatum.appendChild(document.createTextNode(zugriff));
+		} else {
+			// <Aufrufdatum>
+			// (auch wenn keine URL da ist, z.B. nach Import eines DWDS-Belegs manuell eingefügt)
+			let quZeilen = data.qu.split("\n");
+			if (quZeilen.length > 1) {
+				data.qu = quZeilen[0];
+				for (let i = 1, len = quZeilen.length; i < len; i++) {
+					let zugriff = helferXml.datum(quZeilen[i]);
+					if (zugriff) {
+						let aufrufdatum = document.createElementNS(ns, "Aufrufdatum");
+						fundstelle.appendChild(aufrufdatum);
+						aufrufdatum.appendChild(document.createTextNode(zugriff));
+						break;
+					}
+				}
+			}
 		}
 		// <unstrukturiert>
 		let qu = data.qu;
