@@ -41,6 +41,10 @@
 }
 
 /* XML-Pretty-Print ----------------------------- */
+.xml-err {
+	text-decoration: var(--textWarnung) wavy underline;
+}
+
 .xml-tag {
 	color: var(--farbeB);
 }

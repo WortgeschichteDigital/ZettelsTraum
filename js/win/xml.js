@@ -281,10 +281,23 @@ let xml = {
 			xmlDoc = helferXml.indent(xmlDoc);
 			xmlStr = new XMLSerializer().serializeToString(xmlDoc);
 		}
+		// Fehler auslesen (falls vorhanden)
+		let warn = after.querySelector(".warn"),
+			xmlErr = null;
+		if (warn?.dataset?.err) { // jshint ignore:line
+			let err = warn.dataset.err.match(/on line ([0-9]+) at column ([0-9]+)/);
+			if (err) {
+				xmlErr = {
+					line: parseInt(err[1], 10),
+					column: parseInt(err[2], 10),
+					entity: /Entity/.test(warn.dataset.err),
+				};
+			}
+		}
 		// Pre-Container wird schon angezeigt => neu ausfüllen
 		let next = after.nextSibling;
 		if (next && next.classList.contains("pre-cont")) {
-			next.firstChild.innerHTML = helferXml.prettyPrint({xmlStr});
+			next.firstChild.innerHTML = helferXml.prettyPrint({xmlStr, xmlErr});
 			return;
 		}
 		// Pre-Container mit Pre erzeugen und einhängen
@@ -292,7 +305,7 @@ let xml = {
 		cont.classList.add("pre-cont");
 		let pre = document.createElement("pre");
 		cont.appendChild(pre);
-		pre.innerHTML = helferXml.prettyPrint({xmlStr});
+		pre.innerHTML = helferXml.prettyPrint({xmlStr, xmlErr});
 		after.parentNode.insertBefore(cont, after.nextSibling);
 		// ggf. Editier-Button ergänzen
 		if (editable) {
@@ -436,8 +449,12 @@ let xml = {
 			xmlDoc = parser.parseFromString(xmlStr, "text/xml");
 		if (xmlDoc.querySelector("parsererror")) {
 			warn.classList.add("aktiv");
+			warn.dataset.err = xmlDoc.querySelector("parsererror div").textContent;
 		} else {
 			warn.classList.remove("aktiv");
+			if (warn.dataset) {
+				delete warn.dataset.err;
+			}
 		}
 	},
 	// Breite von Elementen anpassen, sodass Kopfzeilen wie eine Tabelle wirken

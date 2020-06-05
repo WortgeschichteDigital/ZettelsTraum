@@ -135,9 +135,53 @@ let helferXml = {
 	// XML-Snippet einfärben
 	//   xmlStr = String
 	//     (das XML-Snippet, das eingefärbt werden soll)
-	prettyPrint ({xmlStr}) {
-		xmlStr = xmlStr.replace(/<.+?>/g, m => {
-			return `<span class="xml-tag">${helferXml.maskieren({text: m})}</span>`;
+	//   xmlErr = Object || null || undefined
+	prettyPrint ({xmlStr, xmlErr = null}) {
+		// ggf. Fehler markieren
+		if (xmlErr) {
+			let xmlStrLines = xmlStr.split("\n"),
+				errLine = xmlStrLines[xmlErr.line - 1],
+				start = errLine.slice(0, xmlErr.column - 1),
+				end = errLine.slice(xmlErr.column - 1);
+			if (!/</.test(start) || !/>/.test(start)) {
+				// ganze Zeile markieren
+				xmlStrLines[xmlErr.line - 1] = `<span class="xml-err">${errLine}</span>`;
+			} else {
+				if (xmlErr.entity) {
+					// Text zwischen Tags markieren (Entity-Fehler)
+					let idx = start.lastIndexOf(">"),
+						start1 = start.slice(0, idx),
+						start2 = start.slice(idx);
+					start = `${start1}><span class="xml-err">${start2.substring(1)}`;
+					end = end.replace(/</, "</span><");
+					xmlStrLines[xmlErr.line - 1] = start + end;
+				} else {
+					// Tag markieren
+					let idx = start.lastIndexOf("<"),
+						start1 = start.slice(0, idx),
+						start2 = start.slice(idx);
+					if (/>/.test(start2)) {
+						start2 = start2.replace(/<.+?>/, m => `<span class="xml-err">${m}</span>`);
+					} else {
+						start2 = start2.replace(/</, `<span class="xml-err"><`);
+						end = end.replace(/>/, "></span>");
+					}
+					xmlStrLines[xmlErr.line - 1] = start1 + start2 + end;
+				}
+			}
+			// Zeilen zusammenfügen, Zeichen maskieren, Fehlermarkierung demaskieren
+			xmlStr = xmlStrLines.join("\n");
+			xmlStr = helferXml.maskieren({text: xmlStr});
+			xmlStr = xmlStr.replace(/&lt;span class=&quot;xml-err&quot;&gt;(.+?)&lt;\/span&gt;/, (m, p1) => {
+				return `<span class="xml-err">${p1}</span>`;
+			});
+		} else {
+			// Zeichen maskieren
+			xmlStr = helferXml.maskieren({text: xmlStr});
+		}
+		// farbliche Hervorhebungen
+		xmlStr = xmlStr.replace(/&lt;.+?&gt;/g, m => {
+			return `<span class="xml-tag">${m}</span>`;
 		});
 		xmlStr = xmlStr.replace(/<span class="xml-tag">(.+?)<\/span>/g, (m, p1) => {
 			p1 = p1.replace(/ (.+?=)(&quot;.+?&quot;)/g, (m, p1, p2) => {
@@ -145,6 +189,7 @@ let helferXml = {
 			});
 			return `<span class="xml-tag">${p1}</span>`;
 		});
+		// Ergebnis zurückgeben
 		return xmlStr;
 	},
 };
