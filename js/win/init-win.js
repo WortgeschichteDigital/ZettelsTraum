@@ -136,6 +136,22 @@ let initWin = {
 			});
 		});
 	},
+	// Events initialisieren: Elemente im XML-Fenster
+	eventsXml () {
+		document.querySelectorAll(".add-abschnitt").forEach(p => {
+			p.querySelector("input").addEventListener("keydown", function(evt) {
+				tastatur.detectModifiers(evt);
+				if (!tastatur.modifiers && evt.key === "Enter" && !document.getElementById("dropdown")) {
+					xml.makeAbschnitt({input: this});
+				}
+			});
+			p.querySelector(".icon-plus-dick").addEventListener("click", function(evt) {
+				evt.preventDefault();
+				let input = this.closest("p").querySelector("input");
+				xml.makeAbschnitt({input});
+			});
+		});
+	},
 };
 
 // FEHLER AN MAIN SCHICKEN

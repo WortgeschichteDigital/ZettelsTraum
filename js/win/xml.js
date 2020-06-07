@@ -5,6 +5,12 @@ let xml = {
 	//   data.key = String (Schlüssel, der den Datentyp angibt)
 	//   data.ds = Object (der je spezifisch strukturierte Datensatz)
 	data: {},
+	// enthält Auswahlmöglichkeiten für Dropdown-Felder
+	dropdown: {
+		abschnittTyp: ["Exkurs"],
+		abschnittTypen: ["Überschrift", "Textblock", "Illustration"],
+		textblock: ["Blockzitat"],
+	},
 	// Anzeige mit den gelieferten Daten aufbereiten
 	init () {
 		// Wort eintragen
@@ -15,12 +21,12 @@ let xml = {
 		// Init: Lemmata
 		let le = document.getElementById("le");
 		xml.elementLeer({ele: le});
-		// Init: Abstract
+		// Init: Abstract TODO
 		let ab = document.getElementById("ab");
-		xml.elementLeer({ele: ab});
-		// Init: Text
+// 		xml.elementLeer({ele: ab});
+		// Init: Text TODO
 		let tx = document.getElementById("tx");
-		xml.elementLeer({ele: tx});
+// 		xml.elementLeer({ele: tx});
 		// Init: Belege/Literatur (Standard-Arrays)
 		let keys = ["bl", "lt"];
 		for (let key of keys) {
@@ -276,6 +282,22 @@ let xml = {
 		ele.appendChild(p);
 		p.classList.add("leer");
 		p.textContent = "keine Daten";
+	},
+	// Abschnitt erstellen
+	//   input = Element
+	//     (das Textfeld mit dem Abschnitttyp)
+	makeAbschnitt ({input}) {
+		const typ = helfer.textTrim(input.value, true);
+		// korrekter Typ?
+		if (typ && !xml.dropdown.abschnittTyp.includes(typ)) {
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Als Abschnitt-Typ steht nur „Exkurs“ zur Verfügung.\nUm einen Standard-Abschnitt zu erzeugen, lassen Sie das Textfeld leer.",
+				callback: () => input.select(),
+			});
+			return;
+		}
+		// Abschnitt erzeugen TODO
 	},
 	// XML-Vorschau erzeugen
 	//   xmlStr = String

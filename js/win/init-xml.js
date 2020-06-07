@@ -6,6 +6,7 @@ window.addEventListener("load", async () => {
 	initWin.ipcListener();
 	initWin.events();
 	initWin.eventsPopup();
+	initWin.eventsXml();
 
 	// DIALOG
 	overlay.initSchliessen(document.querySelector("#dialog h2 a"));

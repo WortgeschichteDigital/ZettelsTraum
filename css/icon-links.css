@@ -63,6 +63,11 @@
 	mask-image: url(../img/pfeil-kreis.svg);
 }
 
+.icon-plus-dick {
+	-webkit-mask-image: url(../img/plus-dick.svg);
+	mask-image: url(../img/plus-dick.svg);
+}
+
 .icon-speichern {
 	-webkit-mask-image: url(../img/speichern.svg);
 	mask-image: url(../img/speichern.svg);

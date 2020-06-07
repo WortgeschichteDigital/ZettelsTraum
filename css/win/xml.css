@@ -107,7 +107,7 @@ main h2:first-child {
 	margin: 0 0 10px 0;
 }
 
-/* allgemeine Elemente ------------------------- */
+/* allgemeine Elemente und Styles --------------- */
 p.input-text {
 	line-height: 30px;
 }
@@ -177,6 +177,26 @@ textarea {
 textarea:focus {
 	outline: 2px solid var(--farbe);
 	outline-offset: 3px;
+}
+
+label {
+	display: inline-block;
+	margin-right: 10px;
+	color: var(--textFarbe);
+	font-style: italic;
+}
+
+.dropdown-link-element:focus {
+	outline: none;
+}
+
+.add-abschnitt input {
+	width: 125px;
+}
+
+.add-abschnitt a:last-child {
+	vertical-align: text-bottom;
+	margin-left: 7px;
 }
 
 /* Kopfleisten ---------------------------------- */

@@ -302,6 +302,8 @@ let dropdown = {
 			dropdown.data = [...redWi.dropdown.lt];
 		} else if (/^red-wi-.+-tx$/.test(feld_id)) {
 			dropdown.data = redWi.dropdownVerweistexte();
+		} else if (/^add-abschnitt-(ab|tx)$/.test(feld_id)) {
+			dropdown.data = [...xml.dropdown.abschnittTyp];
 		}
 		// Dropdown erzeugen und einhängen
 		let span = document.createElement("span");
