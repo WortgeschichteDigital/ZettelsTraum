@@ -502,7 +502,7 @@ let xml = {
 			}
 			max = Math.ceil(max);
 			for (let k of koepfe) {
-				k.childNodes[e].style.width = `${max}px`;
+				k.childNodes[e].style.width = `${max + 1}px`; // +1, sonst ist die Textellipse immer sichtbar
 			}
 		}
 	},

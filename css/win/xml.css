@@ -240,13 +240,17 @@ p.leer {
 	background-color: var(--text);
 }
 
-.id {
+.id,
+.hinweis {
+	max-width: 200px;
+	overflow: hidden;
 	color: var(--farbeGruenDunkel);
 	font-weight: bold;
+	text-overflow: ellipsis;
 }
 
 .hinweis {
-	font-weight: bold;
+	color: var(--text);
 }
 
 /* XML-Preview ---------------------------------- */
