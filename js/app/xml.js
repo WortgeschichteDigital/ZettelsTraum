@@ -19,7 +19,7 @@ let xml = {
 		} else if (/^DWDS/i.test(data.kr)) {
 			fundort = "DWDS";
 		} else if (/^Google\s?Books$/i.test(data.kr) ||
-			/books\.google\.[a-z]+\//.test(data.qu)) {
+				/books\.google\.[a-z]+\//.test(data.qu)) {
 			fundort = "GoogleBooks";
 		} else if (/^(DeReKo|IDS)/i.test(data.kr)) {
 			fundort = "IDS";
