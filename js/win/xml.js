@@ -144,6 +144,7 @@ let xml = {
 		div.appendChild(a);
 		a.href = "#";
 		a.classList.add("icon-link", "icon-x-dick");
+		a.title = "Löeschen";
 		xml.elementLoeschenArr({a});
 		// ID
 		let id = document.createElement("span");
@@ -459,11 +460,14 @@ let xml = {
 			xmlDoc = parser.parseFromString(xmlStr, "text/xml");
 		if (xmlDoc.querySelector("parsererror")) {
 			warn.classList.add("aktiv");
-			warn.dataset.err = xmlDoc.querySelector("parsererror div").textContent;
+			const err = xmlDoc.querySelector("parsererror div").textContent;
+			warn.dataset.err = err;
+			warn.title = `Parser-Fehler: ${err}`;
 		} else {
 			warn.classList.remove("aktiv");
 			if (warn.dataset) {
 				delete warn.dataset.err;
+				delete warn.title;
 			}
 		}
 	},
