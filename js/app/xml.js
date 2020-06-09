@@ -38,6 +38,9 @@ let xml = {
 		// Belegschnitt parsen
 		let text = "",
 			knoten = cont.childNodes;
+		if (knoten.length > 1) {
+			knoten = cont.querySelectorAll(`[data-pnumber]`);
+		}
 		for (let i = 0, len = knoten.length; i < len; i++) {
 			if (i > 0) {
 				if (fundort === "DWDS") {
@@ -51,8 +54,10 @@ let xml = {
 			getText(knoten[i]);
 		}
 		// Belegtext aufbereiten
+		//   - Zeilenumbrüche am Ende ersetzen (kann bei wilder Auswahl passieren)
 		//   - Text trimmen (durch Streichungen können doppelte Leerzeichen entstehen)
 		//   - verschachtelte Hervorhebungen zusammenführen
+		text = text.replace(/(<Zeilenumbruch\/>\s?)+$/, "");
 		text = helfer.textTrim(text, true);
 		let reg = new RegExp(`(?<start>(<Hervorhebung( Stil="#[^>]+")?>){2,})(?<text>[^<]+)(<\/Hervorhebung>)+`, "g"),
 			h = reg.exec(text);

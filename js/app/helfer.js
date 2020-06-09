@@ -180,7 +180,7 @@ let helfer = {
 	//   text = String
 	//     (Text, in dem die Anpassungen vorgenommen werden sollen)
 	typographie (text) {
-		text = text.replace(/="(.+?)"/g, (m, p1) => `=__${p1}__`); // Attribute in Tags maskieren
+		text = text.replace(/="(.*?)"/g, (m, p1) => `=__${p1}__`); // Attribute in Tags maskieren
 		text = text.replace(/"(.+?)"/g, (m, p1) => `„${p1}“`); // doppelte Anführungszeichen
 		text = text.replace(/([a-z])'([a-z])/g, (m, p1, p2) => `${p1}’${p2}`); // offenkundiges Apostroph
 		text = text.replace(/'(.+?)'/g, (m, p1) => `‚${p1}‘`); // einfache Anführungszeichen
@@ -189,7 +189,7 @@ let helfer = {
 		text = text.replace(/([0-9])\s[-–]\s([0-9])/g, (m, p1, p2) => `${p1}–${p2}`); // Halbgeviertstriche
 		text = text.replace(/--/g, "–"); // Halbgeviertstriche
 		text = text.replace(/\s([:;])\s/g, (m, p1) => `${p1} `); // nicht planken
-		text = text.replace(/=__(.+?)__/g, (m, p1) => `="${p1}"`); // Attribute in Tags demaskieren
+		text = text.replace(/=__(.*?)__/g, (m, p1) => `="${p1}"`); // Attribute in Tags demaskieren
 		text = text.replace(/\.{3}/g, "…"); // horizontale Ellipse
 		text = text.replace(/([a-z]) ([0-9]+ \([0-9]{4}\))/, (m, p1, p2) => `${p1} ${p2}`); // geschütztes Leerzeichen vor Jahrgang einer Zeitschrift
 		// Korrekturen
