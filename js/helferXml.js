@@ -114,19 +114,18 @@ let helferXml = {
 		return text;
 	},
 	// XML-Dokument mit Einzügen versehen
-	// (s. https://stackoverflow.com/a/47317538)
+	// (s. https://stackoverflow.com/a/376503)
 	//   xml = Document
 	//     (das XML-Snippet)
 	indent (xml) {
-		let xslt = new DOMParser().parseFromString(`<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-	<xsl:strip-space elements="*"/>
-	<xsl:template match="para[content-style][not(text())]">
-		<xsl:value-of select="normalize-space(.)"/>
-	</xsl:template>
-	<xsl:template match="node()|@*">
-		<xsl:copy><xsl:apply-templates select="node()|@*"/></xsl:copy>
-	</xsl:template>
-	<xsl:output indent="yes"/>
+		let xslt = new DOMParser().parseFromString(`<xsl:stylesheet version="1.0"
+ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+	<xsl:output omit-xml-declaration="yes" indent="yes"/>
+		<xsl:template match="node()|@*">
+			<xsl:copy>
+				<xsl:apply-templates select="node()|@*"/>
+			</xsl:copy>
+		</xsl:template>
 </xsl:stylesheet>`, "application/xml");
 		let processor = new XSLTProcessor();
 		processor.importStylesheet(xslt);
