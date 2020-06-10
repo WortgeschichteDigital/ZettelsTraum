@@ -295,6 +295,11 @@ let tastatur = {
 				suchleiste.ausblenden();
 				return;
 			}
+			// Dropdown schließen
+			if (document.getElementById("dropdown")) {
+				dropdown.schliessen();
+				return;
+			}
 			// falls ein Vorschau-Bild angezeigt wird
 			if (document.getElementById("bild")) {
 				hilfe.bildSchliessen();
@@ -380,6 +385,11 @@ let tastatur = {
 			} else if (/changelog|dokumentation|handbuch/.test(winInfo.typ)) {
 				print();
 			}
+			return;
+		}
+		// Key "n" (XML-Fenster)
+		if (winInfo.typ === "xml" && m === "Ctrl" && evt.key === "n") {
+			xml.abschnittAddShortcut();
 			return;
 		}
 	},

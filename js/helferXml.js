@@ -96,6 +96,30 @@ let helferXml = {
 		}
 		return "";
 	},
+	// Datum ermitteln und als solches und in einem Sortierformat zurückgeben
+	//   xmlStr = String
+	//     (String mit XML-Tags)
+	datumFormat ({xmlStr}) {
+		let datum = xmlStr.match(/<Datum>(.+?)<\/Datum>/)[1],
+			datumForm1 = /^(?<tag>[0-9]{2})\.(?<monat>[0-9]{2})\.(?<jahr>[0-9]{4})$/.exec(datum),
+			datumForm2 = /^(?<jahrVon>[0-9]{4})-(?<jahrBis>[0-9]{4})$/.exec(datum),
+			datumForm3 = /^(?<jahrVon>[0-9]{4})\/(?<jahrBis>[0-9]{2})$/.exec(datum),
+			datumSort = "";
+		if (datumForm1) {
+			let g = datumForm1.groups;
+			datumSort = `${g.jahr}-${g.monat}-${g.tag}`;
+		} else if (datumForm2) {
+			let g = datumForm2.groups;
+			datumSort = `${g.jahrVon}-xx-xx-${g.jahrBis}`;
+		} else if (datumForm3) {
+			let g = datumForm3.groups;
+			datumSort = `${g.jahrVon}-xx-xx-${g.jahrVon.substring(0, 2)}${g.jahrBis}`;
+		}
+		return {
+			anzeige: datum,
+			sortier: datumSort,
+		};
+	},
 	// geschützte Zeichen maskieren
 	//   text = String
 	//     (String, der maskiert werden soll)

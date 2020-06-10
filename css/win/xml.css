@@ -108,6 +108,10 @@ main h2:first-child {
 }
 
 /* allgemeine Elemente und Styles --------------- */
+p {
+	margin: 10px 0;
+}
+
 p.input-text {
 	line-height: 30px;
 }
@@ -190,11 +194,28 @@ label {
 	outline: none;
 }
 
-.add-abschnitt input {
-	width: 125px;
+.abschnitt-add {
+	margin-bottom: 10px;
+	width: fit-content;
+	color: var(--textHell);
+	font-style: italic;
 }
 
-.add-abschnitt a:last-child {
+.abschnitt-add a.icon-plus-dick {
+	margin: 0 5px;
+	vertical-align: top;
+}
+
+.abschnitt-add:hover {
+	color: var(--text);
+}
+
+.abschnitt-add:hover a {
+	background-color: var(--text);
+}
+
+a.icon-plus-dick,
+a.icon-plus-dick {
 	vertical-align: text-bottom;
 	margin-left: 7px;
 }
@@ -233,15 +254,24 @@ p.leer {
 	display: inline;
 }
 
+#ab > .kopf,
+#tx > .kopf {
+	margin-top: 15px;
+}
+
 .warn {
 	display: inline-block;
 	width: 24px;
 	height: 24px;
-	background-color: transparent;
+	background-color: var(--textExtremHell);
+	-webkit-mask-image: url(../../img/check.svg);
+	mask-image: url(../../img/check.svg);
 }
 
 .warn.aktiv {
 	background-color: var(--textWarnung);
+	-webkit-mask-image: url(../../img/kreis-info.svg);
+	mask-image: url(../../img/kreis-info.svg);
 }
 
 .warn.aktiv:hover {
@@ -260,6 +290,26 @@ p.leer {
 	background-color: var(--text);
 }
 
+.pfeile {
+	margin-left: 0;
+	overflow: hidden;
+	width: 0;
+	transition: width .3s ease .5s;
+}
+
+.kopf:hover .pfeile {
+	width: 136px;
+}
+
+.abschnitt-cont .kopf:hover .pfeile {
+	width: 68px;
+}
+
+.pfeile a {
+	vertical-align: top;
+	margin-left: 10px;
+}
+
 .id,
 .hinweis {
 	max-width: 200px;
@@ -271,6 +321,55 @@ p.leer {
 
 .hinweis {
 	color: var(--text);
+}
+
+.keine-id {
+	color: var(--textHell);
+	font-style: italic;
+	font-weight: normal;
+}
+
+.ueberschrift {
+	font-weight: bold;
+}
+
+/* Abschnitt-Container -------------------------- */
+.abschnitt-cont {
+	margin: 0 0 0 34px;
+}
+
+.abschnitt-cont,
+.textblock-cont {
+	transition: height .3s ease;
+}
+
+.abschnitt-cont [id$="-id"],
+.textblock-cont [id$="-id"] {
+	margin-right: 10px;
+	width: 300px;
+}
+
+.textblock-cont [id$="-id"] {
+	margin-left: 39px;
+	width: 261px;
+}
+
+.abschnitt-cont .dropdown-feld,
+.textblock-cont .dropdown-feld {
+	width: 120px;
+}
+
+.abschnitt-cont > *:last-child,
+.textblock-cont > *:last-child {
+	margin-bottom: 0;
+}
+
+.abschnitt-cont > p > span {
+	display: inline-block;
+}
+
+.abschnitt-cont > p > span input {
+	margin-left: 10px;
 }
 
 /* XML-Preview ---------------------------------- */
@@ -300,8 +399,4 @@ pre {
 	border-radius: 10px;
 	padding: 10px;
 	background-color: var(--hintergrund);
-}
-
-.pre-cont p {
-	margin: 10px 0;
 }

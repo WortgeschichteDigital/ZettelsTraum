@@ -138,17 +138,15 @@ let initWin = {
 	},
 	// Events initialisieren: Elemente im XML-Fenster
 	eventsXml () {
-		document.querySelectorAll(".add-abschnitt").forEach(p => {
-			p.querySelector("input").addEventListener("keydown", function(evt) {
-				tastatur.detectModifiers(evt);
-				if (!tastatur.modifiers && evt.key === "Enter" && !document.getElementById("dropdown")) {
-					xml.makeAbschnitt({input: this});
-				}
+		document.querySelectorAll(".abschnitt-add").forEach(i => {
+			i.addEventListener("click", function() {
+				xml.abschnittAdd({element: this});
 			});
-			p.querySelector(".icon-plus-dick").addEventListener("click", function(evt) {
-				evt.preventDefault();
-				let input = this.closest("p").querySelector("input");
-				xml.makeAbschnitt({input});
+		});
+		document.querySelectorAll(".abschnitt-add a").forEach(i => {
+			i.addEventListener("click", function(evt) {
+				evt.stopPropagation();
+				xml.abschnittAdd({element: this});
 			});
 		});
 	},

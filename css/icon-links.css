@@ -48,6 +48,11 @@
 	mask-image: url(../img/oeffnen.svg);
 }
 
+.icon-pfeil-gerade-hoch {
+	-webkit-mask-image: url(../img/pfeil-gerade-hoch.svg);
+	mask-image: url(../img/pfeil-gerade-hoch.svg);
+}
+
 .icon-pfeil-gerade-links {
 	-webkit-mask-image: url(../img/pfeil-gerade-links.svg);
 	mask-image: url(../img/pfeil-gerade-links.svg);
@@ -56,6 +61,11 @@
 .icon-pfeil-gerade-rechts {
 	-webkit-mask-image: url(../img/pfeil-gerade-rechts.svg);
 	mask-image: url(../img/pfeil-gerade-rechts.svg);
+}
+
+.icon-pfeil-gerade-runter {
+	-webkit-mask-image: url(../img/pfeil-gerade-runter.svg);
+	mask-image: url(../img/pfeil-gerade-runter.svg);
 }
 
 .icon-pfeil-kreis {

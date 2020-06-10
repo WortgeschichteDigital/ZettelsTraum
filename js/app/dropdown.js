@@ -302,8 +302,12 @@ let dropdown = {
 			dropdown.data = [...redWi.dropdown.lt];
 		} else if (/^red-wi-.+-tx$/.test(feld_id)) {
 			dropdown.data = redWi.dropdownVerweistexte();
-		} else if (/^add-abschnitt-(ab|tx)$/.test(feld_id)) {
+		} else if (/^abschnitt-/.test(feld_id)) {
 			dropdown.data = [...xml.dropdown.abschnittTyp];
+		} else if (/^textblock-add/.test(feld_id)) {
+			dropdown.data = [...xml.dropdown.abschnittTypen];
+		} else if (/^textblock-/.test(feld_id)) {
+			dropdown.data = [...xml.dropdown.textblock];
 		}
 		// Dropdown erzeugen und einhängen
 		let span = document.createElement("span");
@@ -619,7 +623,7 @@ let dropdown = {
 				karteisuche.filterFelder(caller);
 				// das erste Input-Feld hinter dem Caller fokussieren
 				document.getElementById(caller).parentNode.nextSibling.firstChild.focus();
-			} else if (/^red-lit-eingabe-/.test(caller)) {
+			} else if (/^(red-lit-eingabe-|abschnitt-|textblock-)/.test(caller)) {
 				feld.dispatchEvent(new KeyboardEvent("input"));
 			} else if (caller === "red-wi-lt") {
 				feld.dispatchEvent(new Event("input"));
