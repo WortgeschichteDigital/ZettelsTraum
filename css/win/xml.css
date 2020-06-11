@@ -323,6 +323,10 @@ p.leer {
 	color: var(--text);
 }
 
+.text-cont > .kopf .hinweis {
+	font-weight: normal;
+}
+
 .keine-id {
 	color: var(--textHell);
 	font-style: italic;
