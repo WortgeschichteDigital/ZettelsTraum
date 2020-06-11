@@ -138,6 +138,22 @@ let initWin = {
 	},
 	// Events initialisieren: Elemente im XML-Fenster
 	eventsXml () {
+		// Lemma hinzufügen
+		document.querySelectorAll("#le input").forEach(i => {
+			i.addEventListener("keydown", evt => {
+				tastatur.detectModifiers(evt);
+				if (!tastatur.modifiers &&
+						evt.key === "Enter" &&
+						!document.getElementById("dropdown")) {
+					xml.lemmaAdd();
+				}
+			});
+		});
+		document.querySelector("#le .icon-plus-dick").addEventListener("click", evt => {
+			evt.preventDefault();
+			xml.lemmaAdd();
+		});
+		// Abschnitt hinzufügen
 		document.querySelectorAll(".abschnitt-add").forEach(i => {
 			i.addEventListener("click", function() {
 				xml.abschnittAdd({element: this});
@@ -149,6 +165,7 @@ let initWin = {
 				xml.abschnittAdd({element: this});
 			});
 		});
+		// Abschnitt umschalten
 		document.querySelectorAll(".abschnitt-toggle").forEach(abschnitt => {
 			abschnitt.querySelectorAll("a").forEach(i => {
 				i.addEventListener("click", function(evt) {

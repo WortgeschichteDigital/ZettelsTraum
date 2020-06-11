@@ -195,6 +195,9 @@ label {
 }
 
 /* Spezifika der Abschnitte --------------------- */
+#le > p {
+	margin-bottom: 15px;
+}
 #le > p > span {
 	display: inline-block;
 }
@@ -341,6 +344,7 @@ p.leer {
 	width: 136px;
 }
 
+#le .kopf:hover .pfeile,
 .abschnitt-cont .kopf:hover .pfeile {
 	width: 68px;
 }

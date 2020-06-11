@@ -60,8 +60,13 @@ let xml = {
 		// Init: Metadaten
 		let md = document.getElementById("md");
 		xml.elementLeer({ele: md});
-		// Init: Lemmata TODO
-		let le = document.getElementById("le");
+		// Init: Lemmata
+		for (let i = 0, len = xml.data.xl.le.length; i < len; i++) {
+			xml.lemmaMake({
+				slot: i,
+				restore: true,
+			});
+		}
 		// Init: Abstract/Text
 		let bloecke = ["ab", "tx"];
 		for (let block of bloecke) {
@@ -114,6 +119,116 @@ let xml = {
 		// Init: Bedeutungsgerüst
 		let bg = document.getElementById("bg");
 		xml.elementLeer({ele: bg});
+	},
+	// Lemma: neues Lemma erstellen
+	lemmaAdd () {
+		let le = document.getElementById("le-le"),
+			ty = document.getElementById("le-ty"),
+			re = document.getElementById("le-re"),
+			leVal = le.value ? le.value.split(/[,/]/) : [],
+			tyVal = ty.value.trim(),
+			reVal = re.value.trim();
+		for (let i = 0, len = leVal.length; i < len; i++) {
+			leVal[i] = helfer.textTrim(leVal[i], true);
+		}
+		// Überprüfungen
+		if (!leVal.length) {
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Sie haben kein Lemma angegeben.",
+				callback: () => le.select(),
+			});
+			return;
+		}
+		let schon = "";
+		x: for (let i of xml.data.xl.le) {
+			for (let j of leVal) {
+				if (i.le.includes(j)) {
+					schon = j;
+					break x;
+				}
+			}
+		}
+		if (schon) {
+			dialog.oeffnen({
+				typ: "alert",
+				text: `Das Lemma „${schon}“ wurde schon angelegt.`,
+				callback: () => le.select(),
+			});
+			return;
+		}
+		if (!tyVal) {
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Sie haben keinen Typ angegeben.",
+				callback: () => ty.select(),
+			});
+			return;
+		}
+		if (!xml.dropdown.lemmaTypen.includes(tyVal)) {
+			const typen = xml.typen({key: "lemmaTypen"});
+			dialog.oeffnen({
+				typ: "alert",
+				text: `Als Typen sind nur ${typen} vorgesehen.`,
+				callback: () => ty.select(),
+			});
+			return;
+		}
+		if (tyVal === "Nebenlemma" && !reVal) {
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Nebenlemmata müssen immer an eine bestimmte Textposition gebunden werden.\nTextpositionen werden über IDs identifiziert.",
+				callback: () => re.select(),
+			});
+			return;
+		}
+		if (tyVal === "Hauptlemma" && reVal) {
+			reVal = "";
+		}
+		// XML erzeugen
+		let xmlStr = `<Lemma Typ="${tyVal}">`;
+		for (let i of leVal) {
+			xmlStr += `<Schreibung>${i}</Schreibung>`;
+		}
+		xmlStr += `<Textreferenz Ziel="${reVal}"/>`;
+		xmlStr += `</Lemma>`;
+		// Datensatz erzeugen und speichern
+		let data = {
+			le: leVal,
+			ty: tyVal,
+			re: reVal,
+			xl: xmlStr,
+		};
+		xml.data.xl.le.push(data);
+		xml.speichern();
+		// Container erzeugen
+		xml.lemmaMake({
+			slot: xml.data.xl.le.length - 1,
+		});
+		// Formular leeren und wieder fokussieren
+		le.value = "";
+		ty.value = "";
+		re.value = "";
+		le.focus();
+	},
+	// Lemma: Lemmablock aufbauen
+	//   slot = Number
+	//     (Slot, in dem der Datensatz steht)
+	//   restore = true || undefined
+	//     (die Inhalte werden beim Öffnen des Fensters wiederhergestellt)
+	lemmaMake ({slot, restore = false}) {
+		// neuen Lemmakopf hinzufügen
+		let kopf = xml.elementKopf({key: "le", slot});
+		document.getElementById("le").appendChild(kopf);
+		// Layout der Köpfe anpassen
+		let layout = {
+			id: "le",
+			ele: [3, 4],
+		};
+		if (restore) {
+			layout.warten = 300;
+		}
+		xml.layoutTabellig(layout);
 	},
 	// Empfangen von Datensätzen: Verteilerfunktion
 	//   xmlDatensatz = Object
@@ -212,7 +327,11 @@ let xml = {
 		let div = document.createElement("div");
 		div.classList.add("kopf");
 		div.dataset.key = key;
-		div.dataset.id = xml.data.xl[key][slot].id;
+		if (key === "le") {
+			div.dataset.slot = slot;
+		} else {
+			div.dataset.id = xml.data.xl[key][slot].id;
+		}
 		if (textKopf === "abschnitt") { // Abschnittköpfe
 			div.dataset.slot = slot;
 			div.classList.add(`level-${xml.data.xl[key][slot].le}`);
@@ -244,7 +363,7 @@ let xml = {
 			xml.elementLoeschenArr({a});
 		}
 		// Verschiebe-Icons
-		if (textKopf) {
+		if (textKopf || key === "le") {
 			let pfeile = {
 				"icon-pfeil-gerade-hoch": "nach oben",
 				"icon-pfeil-gerade-runter": "nach unten",
@@ -255,7 +374,7 @@ let xml = {
 			pfeileCont.classList.add("pfeile");
 			div.appendChild(pfeileCont);
 			for (let [k, v] of Object.entries(pfeile)) {
-				if (textKopf === "textblock" &&
+				if ((textKopf === "textblock" || key === "le") &&
 						k === "icon-pfeil-gerade-links") {
 					break;
 				}
@@ -278,6 +397,8 @@ let xml = {
 			} else {
 				idText = " ";
 			}
+		} else if (key === "le") {
+			idText = xml.data.xl[key][slot].le.join("/");
 		} else {
 			idText = xml.data.xl[key][slot].id;
 		}
@@ -290,13 +411,15 @@ let xml = {
 			let hinweis = document.createElement("span");
 			div.appendChild(hinweis);
 			hinweis.classList.add("hinweis");
-			if (key === "bl") {
-				hinweis.textContent = xml.data.xl.bl[slot].da;
-			} else if (key === "lt") {
-				hinweis.textContent = xml.data.xl.lt[slot].si;
+			if (key === "le") {
+				hinweis.textContent = xml.data.xl.le[slot].ty;
 			} else if (textKopf === "abschnitt") {
 				const typ = xml.data.xl[key][slot].ty;
 				hinweis.textContent = typ ? typ : "Standard";
+			} else if (key === "bl") {
+				hinweis.textContent = xml.data.xl.bl[slot].da;
+			} else if (key === "lt") {
+				hinweis.textContent = xml.data.xl.lt[slot].si;
 			}
 		}
 		// Vorschaufeld
@@ -304,12 +427,8 @@ let xml = {
 			let vorschau = document.createElement("span");
 			div.appendChild(vorschau);
 			let text = "";
-			if (key === "bl") {
-				let belegtext = xml.data.xl.bl[slot].xl.match(/<Belegtext>(.+?)<\/Belegtext>/s);
-				text = belegtext[1].replace(/<.+?>/g, "");
-			} else if (key === "lt") {
-				let unstrukturiert = xml.data.xl.lt[slot].xl.match(/<unstrukturiert>(.+?)<\/unstrukturiert>/);
-				text = unstrukturiert[1];
+			if (key === "le") {
+				text = xml.data.xl.le[slot].re ? `#${xml.data.xl.le[slot].re}` : " ";
 			} else if (textKopf) {
 				if (xml.data.xl[key][slot].ct[slotBlock].it === "Überschrift") {
 					vorschau.classList.add("ueberschrift");
@@ -324,6 +443,12 @@ let xml = {
 					// darum hier lieber kein display: block + margin.
 					b.textContent = "Blockzitat  ";
 				}
+			} else if (key === "bl") {
+				let belegtext = xml.data.xl.bl[slot].xl.match(/<Belegtext>(.+?)<\/Belegtext>/s);
+				text = belegtext[1].replace(/<.+?>/g, "");
+			} else if (key === "lt") {
+				let unstrukturiert = xml.data.xl.lt[slot].xl.match(/<unstrukturiert>(.+?)<\/unstrukturiert>/);
+				text = unstrukturiert[1];
 			}
 			text = text.substring(0, 300);
 			vorschau.appendChild(document.createTextNode(text));
@@ -347,10 +472,15 @@ let xml = {
 				return;
 			}
 			// Preview einblenden
-			let kopf = this.closest(".kopf");
-			const key = kopf.dataset.key,
+			let kopf = this.closest(".kopf"),
+				key = kopf.dataset.key,
 				id = kopf.dataset.id,
+				slot = -1;
+			if (key === "le") {
+				slot = parseInt(kopf.dataset.slot, 10);
+			} else {
 				slot = xml.data.xl[key].findIndex(i => i.id === id);
+			}
 			xml.preview({
 				xmlStr: xml.data.xl[key][slot].xl,
 				key,
@@ -385,8 +515,13 @@ let xml = {
 			// Datensatz löschen
 			let kopf = this.closest(".kopf"),
 				key = kopf.dataset.key,
-				id = kopf.dataset.id;
-			const slot = xml.data.xl[key].findIndex(i => i.id === id);
+				id = kopf.dataset.id,
+				slot = -1;
+			if (key === "le") {
+				slot = parseInt(kopf.dataset.slot, 10);
+			} else {
+				slot = xml.data.xl[key].findIndex(i => i.id === id);
+			}
 			xml.data.xl[key].splice(slot, 1);
 			// ggf. Preview ausblenden
 			let pre = kopf.nextSibling;
@@ -396,7 +531,14 @@ let xml = {
 			// Element entfernen
 			kopf.parentNode.removeChild(kopf);
 			// Leermeldung erzeugen oder Ansicht auffrischen
-			if (!xml.data.xl[key].length) {
+			if (key === "le") {
+				if (xml.data.xl.le.length) {
+					xml.layoutTabellig({
+						id: "le",
+						ele: [3, 4],
+					});
+				}
+			} else if (!xml.data.xl[key].length) {
 				xml.elementLeer({
 					ele: document.getElementById(key),
 				});
@@ -647,15 +789,10 @@ let xml = {
 		const typ = helfer.textTrim(input.value, true);
 		// korrekter Typ?
 		if (!xml.dropdown.abschnittTypen.includes(typ)) {
-			let typen = [...xml.dropdown.abschnittTypen];
-			typen.forEach((i, n) => typen[n] = `„${i}“`);
-			let text = typen.join(", ");
-			text = text.replace(/(.+), (.+)/, (m, p1, p2) => {
-				return `${p1} und ${p2}`;
-			});
+			const typen = xml.typen({key: "abschnittTypen"});
 			dialog.oeffnen({
 				typ: "alert",
-				text: `Als Block-Typen stehen nur ${text} zur Verfügung.`,
+				text: `Als Block-Typen stehen nur ${typen} zur Verfügung.`,
 				callback: () => input.select(),
 			});
 			return;
@@ -1570,6 +1707,17 @@ let xml = {
 				k.childNodes[e].style.width = `${max + 1}px`; // +1, sonst ist die Textellipse immer sichtbar
 			}
 		}
+	},
+	// trägt mögliche Typen in Formularen zusammen und formatiert sie schön
+	//   key = String
+	//     (Name des Typs);
+	typen ({key}) {
+		let typen = [...xml.dropdown[key]];
+		typen.forEach((i, n) => typen[n] = `„${i}“`);
+		const text = typen.join(", ");
+		return text.replace(/(.+), (.+)/, (m, p1, p2) => {
+			return `${p1} und ${p2}`;
+		});
 	},
 	// Änderungen in der Kartei speichern
 	speichern () {
