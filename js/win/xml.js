@@ -11,8 +11,18 @@ let xml = {
 		abschnittTypen: ["Überschrift", "Textblock", "Illustration"],
 		textblock: ["Blockzitat"],
 	},
+	// Counter, der fortlaufende Ziffern auswirft
+	// (für Formularfelder, die eine ID brauchen)
+	counter: null,
+	*counterGenerator (n) {
+		while (true) {
+			yield n++;
+		}
+	},
 	// Anzeige mit den gelieferten Daten aufbereiten
 	init () {
+		// Counter initialisieren
+		xml.counter = xml.counterGenerator(1);
 		// Wort eintragen
 		document.querySelector("h1").textContent = xml.data.wort;
 		// Init: Metadaten
@@ -463,7 +473,7 @@ let xml = {
 		// ID-Feld
 		let id = document.createElement("input");
 		p.appendChild(id);
-		id.id = `abschnitt-${slot}-id`;
+		id.id = `abschnitt-${xml.counter.next().value}-id`;
 		id.placeholder = "Abschnitt-ID";
 		id.type = "text";
 		id.value = xml.data.xl[key][slot].id;
@@ -472,7 +482,7 @@ let xml = {
 		let typ = document.createElement("input");
 		p.appendChild(typ);
 		typ.classList.add("dropdown-feld");
-		typ.id = `abschnitt-${slot}-ty`;
+		typ.id = `abschnitt-${xml.counter.next().value}-ty`;
 		typ.placeholder = "Abschnitt-Typ";
 		typ.type = "text";
 		typ.value = xml.data.xl[key][slot].ty;
@@ -487,7 +497,7 @@ let xml = {
 		let add = document.createElement("input");
 		span.appendChild(add);
 		add.classList.add("dropdown-feld");
-		add.id = `textblock-add-${slot}-${key}`;
+		add.id = `textblock-add-${xml.counter.next().value}-${key}`;
 		add.type = "text";
 		add.value = "Textblock";
 		add.placeholder = "Block-Typ";
@@ -679,7 +689,7 @@ let xml = {
 			// ID-Feld
 			let id = document.createElement("input");
 			p.appendChild(id);
-			id.id = `textblock-${slotBlock}-id`;
+			id.id = `textblock-${xml.counter.next().value}-id`;
 			id.placeholder = "Textblock-ID";
 			id.type = "text";
 			id.value = xml.data.xl[key][slot].ct[slotBlock].id;
@@ -688,7 +698,7 @@ let xml = {
 			let typ = document.createElement("input");
 			p.appendChild(typ);
 			typ.classList.add("dropdown-feld");
-			typ.id = `textblock-${slotBlock}-ty`;
+			typ.id = `textblock-${xml.counter.next().value}-ty`;
 			typ.placeholder = "Textblock-Typ";
 			typ.type = "text";
 			typ.value = xml.data.xl[key][slot].ct[slotBlock].ty;
