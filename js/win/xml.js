@@ -865,17 +865,21 @@ let xml = {
 					xml.checkAbschnitt({
 						cont: abschnitt,
 					});
-					// Pre zurücksetzen
-					let cont = textblock.querySelector(".pre-cont"),
-						pre = document.createElement("pre");
-					cont.replaceChild(pre, cont.firstChild);
+					// XML-String auffrischen
 					const xmlStr = xml.textblockXmlStr({xmlStr: null, key, slot, slotBlock});
-					xml.preview({
-						xmlStr,
-						after: cont.previousSibling,
-						textblockCont: textblock,
-					});
-					xml.editPreDbl({pre});
+					// Pre zurücksetzen
+					// (aber nur, wenn er nicht gerade in Bearbeitung ist)
+					let cont = textblock.querySelector(".pre-cont");
+					if (cont.querySelector("pre")) {
+						let pre = document.createElement("pre");
+						cont.replaceChild(pre, cont.firstChild);
+						xml.preview({
+							xmlStr,
+							after: cont.previousSibling,
+							textblockCont: textblock,
+						});
+						xml.editPreDbl({pre});
+					}
 					// XML updaten
 					xml.data.xl[key][slot].ct[slotBlock].xl = xmlStr;
 					// Layout der Köpfe anpassen
