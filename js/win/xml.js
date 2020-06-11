@@ -1333,8 +1333,9 @@ let xml = {
 		// <Belegreferenz>
 		str = str.replace(/(?<!##(?:\p{Lowercase}|-)*)((\p{Lowercase}|-)+-[0-9]{4}-[0-9]+)(?!##)/ug, (m, p1) => `<Belegreferenz Ziel="${p1}"/>`);
 		// <Literaturreferenz>
-		str = str.replace(/(?<!##(?:\p{Lowercase}|-)*)([a-zäöüß0-9\-]+)([0-9\s,\-–]+)?(?!##)/ug, (m, p1, p2) => {
-			if (!/[0-9\-]/.test(p1) || !/[a-z]/.test(p1) ||
+		str = str.replace(/(?<!##(?:\p{Lowercase}|-)*)([a-zäöüß0-9\-]+)((?:,\shier)?[0-9\s,\-–]+)?(?!##)/ug, (m, p1, p2) => {
+			if (!/[0-9\-]/.test(p1) && !/[0-9]/.test(p2) ||
+					!/[a-z]/.test(p1) ||
 					/-/.test(p1) && (!p2 || /^\s$/.test(p2) ) ) {
 				return m;
 			}
@@ -1343,6 +1344,9 @@ let xml = {
 				if (/,\s$/.test(p2)) {
 					anschluss = ", ";
 					p2 = p2.replace(/,\s$/, "");
+				} else if (/^,\shier\s$/.test(p2)) {
+					anschluss = p2;
+					p2 = "";
 				} else if (/^\s$/.test(p2)) {
 					return `<Literaturreferenz Ziel="${p1}"/>${p2}`;
 				}
