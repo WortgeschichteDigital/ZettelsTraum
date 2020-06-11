@@ -41,6 +41,11 @@
 }
 
 /* XML-Pretty-Print ----------------------------- */
+.xml-empty {
+	color: var(--textWarnung);
+	font-weight: bold;
+}
+
 .xml-err {
 	text-decoration: var(--textWarnung) wavy underline;
 }

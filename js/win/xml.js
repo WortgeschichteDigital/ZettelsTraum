@@ -695,8 +695,8 @@ let xml = {
 		}
 	},
 	// Textblock: XML-String zusammenbauen
-	//   xmlStr = String
-	//     (kann leer sein; dann wird der gespeicherte Wert ausgelesen)
+	//   xmlStr = String || null
+	//     (null, wenn der String aus dem Datensatz ausgelesen werden soll)
 	//   key = String
 	//     (der Schlüssel des Datensatzes)
 	//   slot = Number
@@ -705,8 +705,13 @@ let xml = {
 	//     (Slot, in dem der Textblock steht)
 	textblockXmlStr ({xmlStr, key, slot, slotBlock}) {
 		// XML-String ggf. auslesen
-		if (!xmlStr) {
+		if (xmlStr === null) {
 			xmlStr = xml.data.xl[key][slot].ct[slotBlock].xl;
+		}
+		// sollte der XML-String jetzt immer noch leer sein => einen leeren String zurückgeben
+		// (leere Textfelder sollten immer einen Fehler zurückgeben, was so sichergestellt wird)
+		if (!xmlStr) {
+			return "";
 		}
 		// Wurzelelement ermitteln
 		const rootEle = xml.data.xl[key][slot].ct[slotBlock].it.replace(/^Ü/, "Ue");
@@ -815,7 +820,7 @@ let xml = {
 					let cont = textblock.querySelector(".pre-cont"),
 						pre = document.createElement("pre");
 					cont.replaceChild(pre, cont.firstChild);
-					const xmlStr = xml.textblockXmlStr({xmlStr: "", key, slot, slotBlock});
+					const xmlStr = xml.textblockXmlStr({xmlStr: null, key, slot, slotBlock});
 					xml.preview({
 						xmlStr,
 						after: cont.previousSibling,

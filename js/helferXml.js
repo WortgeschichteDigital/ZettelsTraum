@@ -167,8 +167,11 @@ let helferXml = {
 				start = errLine.slice(0, xmlErr.column - 1),
 				end = errLine.slice(xmlErr.column - 1);
 			if (!/</.test(start) || !/>/.test(start)) {
-				// ganze Zeile markieren
-				xmlStrLines[xmlErr.line - 1] = `<span class="xml-err">${errLine}</span>`;
+				if (!xmlStr) { // Textfeld leer => dieses im Fehler vermerken
+					xmlStrLines[xmlErr.line - 1] = `<span class="xml-empty">kein Text</span>`;
+				} else { // ganze Zeile markieren
+					xmlStrLines[xmlErr.line - 1] = `<span class="xml-err">${errLine}</span>`;
+				}
 			} else {
 				if (xmlErr.entity) {
 					// Text zwischen Tags markieren (Entity-Fehler)
@@ -195,8 +198,8 @@ let helferXml = {
 			// Zeilen zusammenfügen, Zeichen maskieren, Fehlermarkierung demaskieren
 			xmlStr = xmlStrLines.join("\n");
 			xmlStr = helferXml.maskieren({text: xmlStr});
-			xmlStr = xmlStr.replace(/&lt;span class=&quot;xml-err&quot;&gt;(.+?)&lt;\/span&gt;/, (m, p1) => {
-				return `<span class="xml-err">${p1}</span>`;
+			xmlStr = xmlStr.replace(/&lt;span class=&quot;xml-(err|empty)&quot;&gt;(.+?)&lt;\/span&gt;/, (m, p1, p2) => {
+				return `<span class="xml-${p1}">${p2}</span>`;
 			});
 		} else {
 			// Zeichen maskieren
