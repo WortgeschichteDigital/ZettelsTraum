@@ -1182,7 +1182,8 @@ let xml = {
 					xmlStr = xml.textblockXmlStr({xmlStr, key, slot, slotBlock});
 					xml.data.xl[key][slot].ct[slotBlock].xl = xmlStr;
 					// ggf. ID erzeugen
-					if (xml.data.xl[key][slot].ct[slotBlock].it === "Überschrift") {
+					if (key === "tx" &&
+							xml.data.xl[key][slot].ct[slotBlock].it === "Überschrift") {
 						xml.abschnittSetId({key, slot, slotBlock});
 					}
 				} else {
