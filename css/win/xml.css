@@ -194,6 +194,32 @@ label {
 	outline: none;
 }
 
+/* Spezifika der Abschnitte --------------------- */
+#le > p > span {
+	display: inline-block;
+}
+
+#le > p > span:nth-child(3),
+#le > p > span:nth-child(4) {
+	margin-left: -14px;
+}
+
+#le > p input[id$="le"] {
+	width: 200px;
+}
+
+#le > p input[id$="ty"] {
+	width: 130px;
+}
+
+#le > p input[id$="re"] {
+	width: 250px;
+}
+
+#le .icon-plus-dick {
+	margin: 0 5px;
+}
+
 .text-cont {
 	position: relative;
 }

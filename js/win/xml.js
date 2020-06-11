@@ -5,11 +5,43 @@ let xml = {
 	//   data.key = String (Schlüssel, der den Datentyp angibt)
 	//   data.ds = Object (der je spezifisch strukturierte Datensatz)
 	data: {},
-	// enthält Auswahlmöglichkeiten für Dropdown-Felder
+	// Dropdown: Auswahlmöglichkeiten für Dropdown-Felder
 	dropdown: {
+		lemmaTypen: ["Hauptlemma", "Nebenlemma"],
 		abschnittTyp: ["Exkurs"],
 		abschnittTypen: ["Überschrift", "Textblock", "Illustration"],
 		textblock: ["Blockzitat"],
+	},
+	// Dropdown: Vorschlagliste der Lemmata zusammentragen
+	dropdownLemmata () {
+		let arr = [],
+			lemmata = xml.data.wort.replace(/\s?\(.+?\)/g, "").split(",");
+		for (let i = 0, len = lemmata.length; i < len; i++) {
+			const lemma = helfer.textTrim(lemmata[i], true);
+			if (lemma) {
+				arr.push(lemma);
+			}
+		}
+		arr.sort(helfer.sortAlpha);
+		return arr;
+	},
+	// Dropdown: Referenzen zusammentragen
+	dropdownReferenzen () {
+		let arr = [],
+			bloecke = ["ab", "tx"];
+		for (let block of bloecke) {
+			for (let i of xml.data.xl[block]) {
+				if (i.id) {
+					arr.push(i.id);
+				}
+				for (let j of i.ct) {
+					if (j.id) {
+						arr.push(j.id);
+					}
+				}
+			}
+		}
+		return arr;
 	},
 	// Counter, der fortlaufende Ziffern auswirft
 	// (für Formularfelder, die eine ID brauchen)
@@ -28,9 +60,8 @@ let xml = {
 		// Init: Metadaten
 		let md = document.getElementById("md");
 		xml.elementLeer({ele: md});
-		// Init: Lemmata
+		// Init: Lemmata TODO
 		let le = document.getElementById("le");
-		xml.elementLeer({ele: le});
 		// Init: Abstract/Text
 		let bloecke = ["ab", "tx"];
 		for (let block of bloecke) {

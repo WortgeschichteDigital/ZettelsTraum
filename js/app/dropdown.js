@@ -302,6 +302,12 @@ let dropdown = {
 			dropdown.data = [...redWi.dropdown.lt];
 		} else if (/^red-wi-.+-tx$/.test(feld_id)) {
 			dropdown.data = redWi.dropdownVerweistexte();
+		} else if (feld_id === "le-le") {
+			dropdown.data = xml.dropdownLemmata();
+		} else if (feld_id === "le-ty") {
+			dropdown.data = [...xml.dropdown.lemmaTypen];
+		} else if (feld_id === "le-re") {
+			dropdown.data = xml.dropdownReferenzen();
 		} else if (/^abschnitt-/.test(feld_id)) {
 			dropdown.data = [...xml.dropdown.abschnittTyp];
 		} else if (/^textblock-add/.test(feld_id)) {
