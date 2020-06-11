@@ -826,6 +826,7 @@ let xml = {
 						after: cont.previousSibling,
 						textblockCont: textblock,
 					});
+					xml.editPreDbl({pre});
 					// XML updaten
 					xml.data.xl[key][slot].ct[slotBlock].xl = xmlStr;
 					// Layout der Köpfe anpassen
@@ -931,6 +932,7 @@ let xml = {
 			let p = document.createElement("p");
 			cont.appendChild(p);
 			xml.editBearbeiten({p});
+			xml.editPreDbl({pre});
 		}
 		// Pre-Container smooth einblenden
 		if (!animation) {
@@ -995,6 +997,15 @@ let xml = {
 			button.value = b;
 			xml.editSpeichern({button});
 		}
+	},
+	// XML-Vorschau: Doppelklick zum Bearbeiten einer Vorschau
+	//   pre = Element
+	//     (der Vorschaucontainer .pre-cont)
+	editPreDbl ({pre}) {
+		pre.addEventListener("dblclick", function() {
+			let button = this.closest(".pre-cont").querySelector(`input[value="Bearbeiten"]`);
+			button.dispatchEvent(new MouseEvent("click"));
+		});
 	},
 	// XML-Vorschau: Bearbeiten-Button erzeugen
 	//   p = Element
@@ -1133,6 +1144,7 @@ let xml = {
 				});
 				// Button zurücksetzen
 				xml.editBearbeiten({p: cont.lastChild});
+				xml.editPreDbl({pre});
 			}
 		});
 	},
