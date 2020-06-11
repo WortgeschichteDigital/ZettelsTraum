@@ -21,12 +21,34 @@ let xml = {
 		// Init: Lemmata
 		let le = document.getElementById("le");
 		xml.elementLeer({ele: le});
-		// Init: Abstract TODO
-		let ab = document.getElementById("ab");
-// 		xml.elementLeer({ele: ab});
-		// Init: Text TODO
-		let tx = document.getElementById("tx");
-// 		xml.elementLeer({ele: tx});
+		// Init: Abstract/Text
+		let bloecke = ["ab", "tx"];
+		for (let block of bloecke) {
+			let cont = document.getElementById(block);
+			// Abschnitte erzeugen
+			for (let i = 0, len = xml.data.xl[block].length; i < len; i++) {
+				xml.abschnittMake({
+					key: block,
+					slot: i,
+					cont: cont,
+					restore: true,
+				});
+				// Textblöcke erzeugen
+				for (let j = 0, len = xml.data.xl[block][i].ct.length; j < len; j++) {
+					xml.textblockMake({
+						key: block,
+						slot: i,
+						slotBlock: j,
+						element: cont.lastChild.firstChild,
+						restore: true,
+					});
+				}
+			}
+			// ggf. letzten Abschnitt schließen => alle Abschnitte sind geschlossen
+			if (xml.data.xl[block].length) {
+				cont.lastChild.previousSibling.dispatchEvent(new MouseEvent("click"));
+			}
+		}
 		// Init: Belege/Literatur (Standard-Arrays)
 		let keys = ["bl", "lt"];
 		for (let key of keys) {
@@ -417,7 +439,9 @@ let xml = {
 	//     (Slot, in dem der Datensatz steht)
 	//   cont = Element
 	//     (Element, an das der Abschnitt angehängt werden soll)
-	abschnittMake ({key, slot, cont}) {
+	//   restore = true || undefined
+	//     (die Inhalte werden beim Öffnen des Fensters wiederhergestellt)
+	abschnittMake ({key, slot, cont, restore = false}) {
 		// offene Abschnitte und Unterabschnitte schließen
 		document.querySelectorAll(`#${cont.id} > .kopf`).forEach(async div => {
 			if (!div.nextSibling.dataset.off) {
@@ -477,7 +501,9 @@ let xml = {
 				}, 25);
 			}
 		});
-		add.select();
+		if (!restore) {
+			add.select();
+		}
 		let aAdd = dropdown.makeLink("dropdown-link-element", "Block-Typ auswählen", true);
 		span.appendChild(aAdd);
 		// Add-Link
@@ -622,7 +648,9 @@ let xml = {
 	//     (Slot, in dem der Textblock steht)
 	//   element = Element
 	//     (Element, an dem sich beim Einfügen orientiert wird)
-	textblockMake ({key, slot, slotBlock, element}) {
+	//   restore = true || undefined
+	//     (die Inhalte werden beim Öffnen des Fensters wiederhergestellt)
+	textblockMake ({key, slot, slotBlock, element, restore = false}) {
 		// Kopf erzeugen und Textblock-Container hinzufügen
 		let kopf = xml.elementKopf({key, slot, slotBlock, textKopf: "textblock"}),
 			div = document.createElement("div");
@@ -675,9 +703,11 @@ let xml = {
 			animation: false,
 			editable: true,
 		});
-		xml.edit({
-			cont: div.lastChild,
-		});
+		if (!restore) {
+			xml.edit({
+				cont: div.lastChild,
+			});
+		}
 		// Layout der Köpfe anpassen
 		xml.layoutTabellig({
 			id: key,
