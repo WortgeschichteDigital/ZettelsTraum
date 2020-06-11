@@ -63,7 +63,7 @@ let xml = {
 				xml.layoutTabellig({
 					id: key,
 					ele: [2, 3],
-					warten: 250,
+					warten: 300,
 				});
 			}
 		}
@@ -518,10 +518,14 @@ let xml = {
 			xml.textblockAdd({input});
 		});
 		// Layout der Köpfe anpassen
-		xml.layoutTabellig({
+		let layout = {
 			id: key,
 			ele: [3, 4],
-		});
+		};
+		if (restore) {
+			layout.warten = 300;
+		}
+		xml.layoutTabellig(layout);
 	},
 	// Abschnitt: ID automatisch anpassen (nach Speichern einer Überschrift)
 	//   key = String
@@ -709,11 +713,15 @@ let xml = {
 			});
 		}
 		// Layout der Köpfe anpassen
-		xml.layoutTabellig({
+		let layout = {
 			id: key,
 			ele: [3],
 			inAbschnitt: div.closest(".abschnitt-cont"),
-		});
+		};
+		if (restore) {
+			layout.warten = 300;
+		}
+		xml.layoutTabellig(layout);
 	},
 	// Textblock: Textfeld automatisch speichern, sollte das Bearbeiten-Feld noch offen sein
 	//   cont = Element
