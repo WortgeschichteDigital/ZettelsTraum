@@ -957,22 +957,29 @@ let xml = {
 					return;
 				}
 			}
+			// ggf. Block ausblenden
+			let abschnitt = kopf.closest(".abschnitt-cont"), // null, wenn Abschnitt gelöscht wird
+				cont = kopf.nextSibling,
+				parent = kopf.parentNode;
+			if (!cont.dataset.off) {
+				kopf.dispatchEvent(new MouseEvent("click"));
+				await new Promise(warten => setTimeout(() => warten(true), 300));
+			}
+			// Elemente entfernen
+			// (wird beim Schließen der Container ein Speichern angestoßen, wird
+			// der Kopf neu erstellt => die Referenz zu parentNode besteht dann nicht mehr;
+			// das kann nur bei Textblöcken geschehen)
+			if (!kopf.parentNode && slotBlock !== null) {
+				kopf = parent.querySelector(`[data-slot-block="${slotBlock}"]`);
+			}
+			kopf.parentNode.removeChild(cont);
+			kopf.parentNode.removeChild(kopf);
 			// Datensatz löschen
 			if (slotBlock !== null) {
 				xml.data.xl[key][slot].ct.splice(slotBlock, 1);
 			} else {
 				xml.data.xl[key].splice(slot, 1);
 			}
-			// ggf. Block ausblenden
-			let abschnitt = kopf.closest(".abschnitt-cont"), // null, wenn Abschnitt gelöscht wird
-				cont = kopf.nextSibling;
-			if (!cont.dataset.off) {
-				kopf.dispatchEvent(new MouseEvent("click"));
-				await new Promise(warten => setTimeout(() => warten(true), 300));
-			}
-			// Elemente entfernen
-			kopf.parentNode.removeChild(cont);
-			kopf.parentNode.removeChild(kopf);
 			// Slot-Datasets anpassen
 			xml.refreshSlots({key, abschnitt});
 			// ggf. Ansicht auffrischen
