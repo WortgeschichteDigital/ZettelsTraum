@@ -410,7 +410,7 @@ let xml = {
 	//   element = Element
 	//     (das Element, von dem ausgehend entschieden wird,
 	//     wo der Abschnitt hinzugefügt werden soll)
-	abschnittAdd ({element}) {
+	async abschnittAdd ({element}) {
 		// Datensatz erzeugen und speichern
 		let data = {
 			id: "",
@@ -428,6 +428,21 @@ let xml = {
 			slot: xml.data.xl[key].length - 1,
 			cont: cont,
 		});
+		// ggf. an die richtige Fensterposition scrollen
+		// 300ms warten, weil evtl. andere Blöcke gerade geschlossen werden
+		await new Promise(resolve => setTimeout(() => resolve(true), 300));
+		let aktiv = document.activeElement,
+			rect = aktiv.getBoundingClientRect();
+		const header = document.querySelector("header").offsetHeight,
+				kopf = aktiv.closest(".abschnitt-cont").previousSibling.offsetHeight;
+		if (rect.bottom > window.innerHeight ||
+				rect.top - header - kopf - 15 < 0) {
+			window.scrollTo({
+				top: rect.top + window.scrollY - header - kopf - 15, // 15px Extra-Margin nach oben
+				left: 0,
+				behavior: "smooth",
+			});
+		}
 	},
 	// Abschnitt: neuen Datensatz anlegen (Shortcut)
 	abschnittAddShortcut () {
