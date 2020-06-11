@@ -1310,9 +1310,9 @@ let xml = {
 		// <Paraphrase>
 		str = str.replace(/‚(.+?)‘/g, (m, p1) => `<Paraphrase>${p1}</Paraphrase>`);
 		str = str.replace(/'(.+?)'/g, (m, p1) => `<Paraphrase>${p1}</Paraphrase>`);
-		// Zitate TODO (da gibt es noch keinen vernünftigen Tag für)
-		str = str.replace(/„(.+?)“/g, (m, p1) => `<q>${p1}</q>`);
-		str = str.replace(/"(.+?)"/g, (m, p1) => `<q>${p1}</q>`);
+		// <Zitat>
+		str = str.replace(/„(.+?)“/g, (m, p1) => `<Zitat>${p1}</Zitat>`);
+		str = str.replace(/"(.+?)"/g, (m, p1) => `<Zitat>${p1}</Zitat>`);
 		// <Verweis_extern> (viele Klammern, entspannte Leerzeichenverwendung)
 		str = str.replace(/\(\s*\[(.+?)\]\s*\(\s*(https?:\/\/[^\s]+?)\s*\)(?:\s*\(\s*([0-9]{1,2})\.\s*([0-9]{1,2})\.\s*([0-9]{4})\s*\))?\s*\)/g, verweisExtern);
 		// <Verweis_extern> (wenige Klammern, rigide Leerzeichenverwendung)
