@@ -175,10 +175,11 @@ let xml = {
 		if (textKopf === "abschnitt") { // Abschnittköpfe
 			div.dataset.slot = slot;
 			div.classList.add(`level-${xml.data.xl[key][slot].le}`);
-			xml.toggle({div});
+			xml.abtxToggle({div});
 		} else if (slotBlock !== null) { // Textblockköpfe
+			div.dataset.slot = slot;
 			div.dataset.slotBlock = slotBlock;
-			xml.toggle({div});
+			xml.abtxToggle({div});
 		} else { // alle anderen Köpfe
 			xml.elementPreviewArr({div}); // Listener zum Umschalten der Vorschau
 		}
@@ -195,9 +196,9 @@ let xml = {
 		div.appendChild(a);
 		a.href = "#";
 		a.classList.add("icon-link", "icon-x-dick");
-		a.title = "Löeschen";
+		a.title = "Löschen";
 		if (textKopf) {
-			// TODO Listener zum Löschen eines Abschnitt/Textblocks
+			xml.abtxLoeschen({a});
 		} else {
 			xml.elementLoeschenArr({a});
 		}
@@ -463,10 +464,10 @@ let xml = {
 		let id = document.createElement("input");
 		p.appendChild(id);
 		id.id = `abschnitt-${slot}-id`;
-		id.placeholder = "ID";
+		id.placeholder = "Abschnitt-ID";
 		id.type = "text";
 		id.value = xml.data.xl[key][slot].id;
-		xml.change({ele: id});
+		xml.abtxChange({ele: id});
 		// Abschnitt-Typ-Feld
 		let typ = document.createElement("input");
 		p.appendChild(typ);
@@ -478,7 +479,7 @@ let xml = {
 		dropdown.feld(typ);
 		let aTyp = dropdown.makeLink("dropdown-link-element", "Abschnitt-Typ auswählen", true);
 		p.appendChild(aTyp);
-		xml.change({ele: typ});
+		xml.abtxChange({ele: typ});
 		// Block-Typ-Feld
 		let span = document.createElement("span");
 		p.appendChild(span);
@@ -679,10 +680,10 @@ let xml = {
 			let id = document.createElement("input");
 			p.appendChild(id);
 			id.id = `textblock-${slotBlock}-id`;
-			id.placeholder = "ID";
+			id.placeholder = "Textblock-ID";
 			id.type = "text";
 			id.value = xml.data.xl[key][slot].ct[slotBlock].id;
-			xml.change({ele: id});
+			xml.abtxChange({ele: id});
 			// Typ-Feld
 			let typ = document.createElement("input");
 			p.appendChild(typ);
@@ -694,7 +695,7 @@ let xml = {
 			dropdown.feld(typ);
 			let a = dropdown.makeLink("dropdown-link-element", "Textblock-Typ auswählen", true);
 			p.appendChild(a);
-			xml.change({ele: typ});
+			xml.abtxChange({ele: typ});
 		}
 		// Textfeld erzeugen
 		xml.preview({
@@ -778,7 +779,7 @@ let xml = {
 	// Abschnitt/Textblock: Anzeige der Blöcke in Abstract und Text umschalten
 	//   div = Element
 	//     (Kopf, dessen Formularteil ein- oder ausgeblendet werden soll)
-	toggle ({div}) {
+	abtxToggle ({div}) {
 		div.addEventListener("click", function() {
 			let cont = this.nextSibling;
 			if (cont.dataset.off) {
@@ -813,14 +814,14 @@ let xml = {
 		});
 	},
 	// Abschnitt/Textblock, Change-Listener: Timeout
-	changeTimeout: null,
+	abtxChangeTimeout: null,
 	// Abschnitt/Textblock, Change-Listener: generischer Listener für Textformulare
 	//   ele = Element
 	//     (das Input-Element, auf dessen Änderung gehört wird)
-	change ({ele}) {
+	abtxChange ({ele}) {
 		ele.addEventListener("input", function() {
-			clearTimeout(xml.changeTimeout);
-			xml.changeTimeout = setTimeout(() => {
+			clearTimeout(xml.abtxChangeTimeout);
+			xml.abtxChangeTimeout = setTimeout(() => {
 				let abschnitt = this.closest(".abschnitt-cont"),
 					textblock = this.closest(".textblock-cont"),
 					kopf = abschnitt.previousSibling,
@@ -897,6 +898,69 @@ let xml = {
 				}
 				xml.speichern();
 			}, 500);
+		});
+	},
+	// Abschnitt/Textblock: Löschen
+	//   a = Element
+	//     (der Lösch-Link)
+	abtxLoeschen ({a}) {
+		a.addEventListener("click", async function(evt) {
+			evt.stopPropagation();
+			evt.preventDefault();
+			// Datensatz ermitteln
+			let kopf = this.closest(".kopf"),
+				key = kopf.dataset.key,
+				slot = parseInt(kopf.dataset.slot, 10),
+				slotBlock = null;
+			if (kopf.dataset.slotBlock) {
+				slotBlock = parseInt(kopf.dataset.slotBlock, 10);
+			}
+			// Sicherheitsfrage
+			if (slotBlock === null && xml.data.xl[key][slot].ct.length) {
+				const frage = await new Promise(resolve => {
+					dialog.oeffnen({
+						typ: "confirm",
+						text: "Soll der Abschnitt zusammen mit allen untergeordneten Blöcken wirklich gelöscht werden?",
+						callback: () => resolve(dialog.antwort),
+					});
+				});
+				if (!frage) {
+					return;
+				}
+			}
+			// Datensatz löschen
+			if (slotBlock !== null) {
+				xml.data.xl[key][slot].ct.splice(slotBlock, 1);
+			} else {
+				xml.data.xl[key].splice(slot, 1);
+			}
+			// ggf. Block ausblenden
+			let abschnitt = kopf.closest(".abschnitt-cont"), // null, wenn Abschnitt gelöscht wird
+				cont = kopf.nextSibling;
+			if (!cont.dataset.off) {
+				kopf.dispatchEvent(new MouseEvent("click"));
+				await new Promise(warten => setTimeout(() => warten(true), 300));
+			}
+			// Elemente entfernen
+			kopf.parentNode.removeChild(cont);
+			kopf.parentNode.removeChild(kopf);
+			// Slot-Datasets anpassen
+			xml.refreshSlots({key, abschnitt});
+			// ggf. Ansicht auffrischen
+			if (slotBlock !== null && xml.data.xl[key][slot].ct.length) {
+				xml.layoutTabellig({
+					id: key,
+					ele: [3],
+					inAbschnitt: abschnitt,
+				});
+			} else if (slotBlock === null && xml.data.xl[key].length) {
+				xml.layoutTabellig({
+					id: key,
+					ele: [3, 4],
+				});
+			}
+			// Daten speichern
+			xml.speichern();
 		});
 	},
 	// XML-Vorschau erzeugen
@@ -1149,7 +1213,7 @@ let xml = {
 			// ggf. Slots auffrischen
 			// (darf erst nach dem Auffrischen des Kopfs gemacht werden)
 			if (refreshSlots) {
-				xml.editRefreshSlots({key});
+				xml.refreshSlots({key});
 			}
 			// generischer Abschluss
 			abschluss(xmlStr);
@@ -1215,15 +1279,6 @@ let xml = {
 			fun();
 			resolve(true);
 		});
-	},
-	// XML-Vorschau: Slotangaben nach Änderungen auffrischen
-	editRefreshSlots ({key}) {
-		if (key === "bl") {
-			document.querySelectorAll("#bl .pre-cont").forEach(div => {
-				const id = div.previousSibling.dataset.id;
-				div.dataset.slot = xml.data.xl.bl.findIndex(i => i.id === id);
-			});
-		}
 	},
 	// XML-Vorschau: Text in der Vorschau automatisch taggen
 	//   str = String
@@ -1316,6 +1371,35 @@ let xml = {
 			verweis += `\n  </Fundstelle>`;
 			verweis += `\n</Verweis_extern>`;
 			return verweis;
+		}
+	},
+	// Slotangaben bestehender Elemente nach Änderungsoperationen auffrischen
+	//   key = String
+	//     (Schlüssel des Datensatzes, der betroffen ist)
+	//   abschnitt = Element || null || undefined
+	//     (Abschnitt dessen Köpfe betroffen sind; beim Löschen von Textblöcken)
+	refreshSlots ({key, abschnitt = null}) {
+		if (abschnitt) {
+			let koepfe = abschnitt.querySelectorAll(".kopf");
+			for (let i = 0, len = koepfe.length; i < len; i++) {
+				koepfe[i].dataset.slotBlock = i;
+				koepfe[i].nextSibling.querySelector(".pre-cont").dataset.slotBlock = i;
+			}
+		} else if (/^(ab|tx)$/.test(key)) {
+			let koepfe = document.querySelectorAll(`#${key} > .kopf`);
+			for (let i = 0, len = koepfe.length; i < len; i++) {
+				koepfe[i].dataset.slot = i;
+				let subKoepfe = koepfe[i].nextSibling.querySelectorAll(".kopf");
+				for (let kopf of subKoepfe) {
+					kopf.dataset.slot = i;
+					kopf.nextSibling.querySelector(".pre-cont").dataset.slot = i;
+				}
+			}
+		} else if (key === "bl") {
+			document.querySelectorAll("#bl .pre-cont").forEach(div => {
+				const id = div.previousSibling.dataset.id;
+				div.dataset.slot = xml.data.xl.bl.findIndex(i => i.id === id);
+			});
 		}
 	},
 	// überprüft ein XML-Snippet darauf, ob es wohlgeformt ist
