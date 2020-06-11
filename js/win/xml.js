@@ -579,6 +579,21 @@ let xml = {
 		}
 		return val;
 	},
+	// Abschnitt: Blöcke umschalten
+	//   auf = Boolean
+	//     (die Blöcke sollen geöffnet werden)
+	//   key = String
+	//     (Schlüssel des Abschnitts)
+	abschnittToggle ({auf, key}) {
+		let koepfe = document.querySelectorAll(`#${key} > .kopf`);
+		for (let kopf of koepfe) {
+			let cont = kopf.nextSibling;
+			if (auf && cont.dataset.off ||
+					!auf && !cont.dataset.off) {
+				kopf.dispatchEvent(new MouseEvent("click"));
+			}
+		}
+	},
 	// Textblock: neuen Datensatz für einen Textblock anlegen
 	//   input = Element
 	//     (das Textfeld mit dem Textblocktyp)

@@ -149,6 +149,16 @@ let initWin = {
 				xml.abschnittAdd({element: this});
 			});
 		});
+		document.querySelectorAll(".abschnitt-toggle").forEach(abschnitt => {
+			abschnitt.querySelectorAll("a").forEach(i => {
+				i.addEventListener("click", function(evt) {
+					evt.preventDefault();
+					const auf = this.classList.contains("icon-auge") ? true : false,
+						key = this.closest(".text-cont").id;
+					xml.abschnittToggle({auf, key});
+				});
+			});
+		});
 	},
 };
 

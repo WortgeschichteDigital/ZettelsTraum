@@ -18,6 +18,16 @@
 	mask-image: url(../img/bedeutung.svg);
 }
 
+.icon-auge {
+	-webkit-mask-image: url(../img/auge.svg);
+	mask-image: url(../img/auge.svg);
+}
+
+.icon-auge-durchgestrichen {
+	-webkit-mask-image: url(../img/auge-durchgestrichen.svg);
+	mask-image: url(../img/auge-durchgestrichen.svg);
+}
+
 .icon-entkoppeln {
 	-webkit-mask-image: url(../img/x-dick.svg);
 	mask-image: url(../img/x-dick.svg);

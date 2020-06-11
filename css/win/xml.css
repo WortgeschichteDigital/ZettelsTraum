@@ -194,6 +194,20 @@ label {
 	outline: none;
 }
 
+.text-cont {
+	position: relative;
+}
+
+.abschnitt-toggle {
+	position: absolute;
+	top: 0;
+	right: 0;
+}
+
+.abschnitt-toggle a:last-child {
+	margin-left: 5px;
+}
+
 .abschnitt-add {
 	margin-bottom: 10px;
 	width: fit-content;
