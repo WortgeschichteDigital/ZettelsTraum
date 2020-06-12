@@ -45,7 +45,12 @@ let kartei = {
 					bl: [], // Belege
 					le: [], // Lemmata
 					lt: [], // Literatur
-					md: {}, // Metadaten
+					md: { // Metadaten
+						id: "", // Artikel-ID
+						re: [], // Revisionen
+						tf: "", // Themenfeld
+						ty: "", // Artikeltyp
+					},
 					tx: [], // Text
 					wi: {}, // Object
 				},

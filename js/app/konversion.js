@@ -319,7 +319,12 @@ let konversion = {
 			bl: [],
 			le: [],
 			lt: [],
-			md: {},
+			md: {
+				id: "",
+				re: [],
+				tf: "",
+				ty: "",
+			},
 			tx: [],
 			wi: {},
 		};
