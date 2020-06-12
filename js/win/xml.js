@@ -46,8 +46,12 @@ let xml = {
 		// Wort eintragen
 		document.querySelector("h1").textContent = xml.data.wort;
 		// Init: Metadaten TODO
-		let mdId = document.getElementById("md-id");
+		let mdId = document.getElementById("md-id"),
+			mdTy = document.getElementById("md-ty"),
+			mdTf = document.getElementById("md-tf");
 		mdId.value = xml.data.xl.md.id;
+		mdTy.value = xml.data.xl.md.ty;
+		mdTf.value = xml.data.xl.md.tf;
 		// Init: Lemmata
 		for (let i = 0, len = xml.data.xl.le.length; i < len; i++) {
 			xml.lemmaMake({
