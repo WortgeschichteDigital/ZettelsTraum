@@ -302,6 +302,12 @@ let dropdown = {
 			dropdown.data = [...redWi.dropdown.lt];
 		} else if (/^red-wi-.+-tx$/.test(feld_id)) {
 			dropdown.data = redWi.dropdownVerweistexte();
+		} else if (feld_id === "md-ty") {
+			dropdown.data = [...xml.dropdown.artikelTypen];
+		} else if (feld_id === "md-tf") {
+			dropdown.data = [...xml.data.themenfelder];
+		} else if (feld_id === "md-re-au") {
+			dropdown.data = [...xml.data.autorinnen];
 		} else if (feld_id === "le-le") {
 			dropdown.data = xml.lemmata();
 		} else if (feld_id === "le-ty") {

@@ -7,6 +7,7 @@ let xml = {
 	data: {},
 	// Dropdown: Auswahlmöglichkeiten für Dropdown-Felder
 	dropdown: {
+		artikelTypen: ["Vollartikel", "Überblicksartikel"],
 		lemmaTypen: ["Hauptlemma", "Nebenlemma"],
 		abschnittTyp: ["Exkurs"],
 		abschnittTypen: ["Überschrift", "Textblock", "Illustration"],

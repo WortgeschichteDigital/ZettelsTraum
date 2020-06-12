@@ -52,8 +52,25 @@ let redXml = {
 		let xmlDaten = {
 			wort: kartei.wort,
 			contentsId: winInfo.contentsId,
+			themenfelder: [],
+			autorinnen: [],
 			xl: data.rd.xl,
 		};
+		if (optionen.data.tags.themenfelder) {
+			for (let v of Object.values(optionen.data.tags.themenfelder.data)) {
+				xmlDaten.themenfelder.push(v.name);
+			}
+		}
+		if (optionen.data.personen.length) {
+			for (let i of optionen.data.personen) {
+				let name = i;
+				if (/,/.test(i)) {
+					let match = i.match(/(.+),\s?(.+)/);
+					name = `${match[2]} ${match[1]}`;
+				}
+				xmlDaten.autorinnen.push(name);
+			}
+		}
 		// Daten senden
 		const {ipcRenderer} = require("electron");
 		ipcRenderer.sendTo(redXml.contentsId, "xml-daten", xmlDaten);
