@@ -46,7 +46,8 @@ let xml = {
 		// Wort eintragen
 		document.querySelector("h1").textContent = xml.data.wort;
 		// Init: Metadaten TODO
-		let md = document.getElementById("md");
+		let mdId = document.getElementById("md-id");
+		mdId.value = xml.data.xl.md.id;
 		// Init: Lemmata
 		for (let i = 0, len = xml.data.xl.le.length; i < len; i++) {
 			xml.lemmaMake({
@@ -106,6 +107,19 @@ let xml = {
 		// Init: Bedeutungsgerüst
 		let bg = document.getElementById("bg");
 		xml.elementLeer({ele: bg});
+	},
+	// Metadaten: ID
+	mdIdMake () {
+		// ID erstellen
+		let id = document.getElementById("md-id"),
+			lemmata = xml.lemmata();
+		for (let i = 0, len = lemmata.length; i < len; i++) {
+			lemmata[i] = lemmata[i].replace(/\s/g, "_");
+		}
+		id.value = `WGd-${lemmata.join(".")}-1`;
+		// Datensatz speichern
+		xml.data.xl.md.id = id.value;
+		xml.speichern();
 	},
 	// Lemma: neues Lemma erstellen
 	lemmaAdd () {

@@ -138,6 +138,11 @@ let initWin = {
 	},
 	// Events initialisieren: Elemente im XML-Fenster
 	eventsXml () {
+		// Autofill Artikel-ID
+		document.querySelector("#md .icon-stift").addEventListener("click", evt => {
+			evt.preventDefault();
+			xml.mdIdMake();
+		});
 		// Lemma hinzufügen
 		document.querySelectorAll("#le input").forEach(i => {
 			i.addEventListener("keydown", evt => {

@@ -230,6 +230,10 @@ label {
 	width: 234px;
 }
 
+#md input#md-id {
+	width: 406px;
+}
+
 #md-re input:not(:nth-child(2)) {
 	margin-left: 10px;
 }
