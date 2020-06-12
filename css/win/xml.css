@@ -123,14 +123,20 @@ input {
 	font: 16px/24px "Noto Sans", "Noto Sans Symbols2", sans-serif;
 }
 
+input[type="date"],
 input[type="text"] {
 	border: 1px solid var(--linie);
 	padding: 2px 5px;
 }
 
+input[type="date"]:focus,
 input[type="text"]:focus {
 	outline: 1px solid var(--farbe);
 	border-color: var(--farbe);
+}
+
+input[type="date"]:invalid {
+	color: var(--textSehrHell);
 }
 
 input[type="button"] {
@@ -196,9 +202,21 @@ label {
 }
 
 /* Spezifika der Abschnitte --------------------- */
+#md-re,
 #le > p {
 	margin-bottom: 15px;
 }
+
+#md .icon-stift {
+	vertical-align: text-bottom;
+	margin-left: 7px;
+}
+
+#md-re .icon-plus-dick,
+#le .icon-plus-dick {
+	margin: 0 5px;
+}
+
 #le > p > span {
 	display: inline-block;
 }
@@ -208,20 +226,27 @@ label {
 	margin-left: -14px;
 }
 
+#md input {
+	width: 234px;
+}
+
+#md-re input:not(:nth-child(2)) {
+	margin-left: 10px;
+}
+
+#md-re input[id$="au"],
 #le > p input[id$="le"] {
 	width: 200px;
 }
 
+#md-re input[id$="da"],
 #le > p input[id$="ty"] {
-	width: 130px;
+	width: 150px;
 }
 
+#md-re input[id$="no"],
 #le > p input[id$="re"] {
 	width: 250px;
-}
-
-#le .icon-plus-dick {
-	margin: 0 5px;
 }
 
 .toggle {

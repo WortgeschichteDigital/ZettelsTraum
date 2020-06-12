@@ -57,9 +57,8 @@ let xml = {
 		xml.counter = xml.counterGenerator(1);
 		// Wort eintragen
 		document.querySelector("h1").textContent = xml.data.wort;
-		// Init: Metadaten
+		// Init: Metadaten TODO
 		let md = document.getElementById("md");
-		xml.elementLeer({ele: md});
 		// Init: Lemmata
 		for (let i = 0, len = xml.data.xl.le.length; i < len; i++) {
 			xml.lemmaMake({
