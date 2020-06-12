@@ -143,20 +143,30 @@ let initWin = {
 			evt.preventDefault();
 			xml.mdIdMake();
 		});
-		// Lemma hinzufügen
-		document.querySelectorAll("#le input").forEach(i => {
-			i.addEventListener("keydown", evt => {
+		// Revision/Lemma hinzufügen
+		document.querySelectorAll("#le input, #md-re input").forEach(i => {
+			i.addEventListener("keydown", function(evt) {
 				tastatur.detectModifiers(evt);
 				if (!tastatur.modifiers &&
 						evt.key === "Enter" &&
 						!document.getElementById("dropdown")) {
-					xml.lemmaAdd();
+					if (this.closest("#md-re")) {
+						xml.mdRevisionAdd();
+					} else {
+						xml.lemmaAdd();
+					}
 				}
 			});
 		});
-		document.querySelector("#le .icon-plus-dick").addEventListener("click", evt => {
-			evt.preventDefault();
-			xml.lemmaAdd();
+		document.querySelectorAll("#le .icon-plus-dick, #md-re .icon-plus-dick").forEach(i => {
+			i.addEventListener("click", function(evt) {
+				evt.preventDefault();
+				if (this.closest("#md-re")) {
+					xml.mdRevisionAdd();
+				} else {
+					xml.lemmaAdd();
+				}
+			});
 		});
 		// Abschnitt hinzufügen
 		document.querySelectorAll(".abschnitt-add").forEach(i => {

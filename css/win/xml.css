@@ -371,6 +371,7 @@ p.leer {
 	width: 136px;
 }
 
+#md .kopf:hover .pfeile,
 #le .kopf:hover .pfeile,
 .abschnitt-cont .kopf:hover .pfeile {
 	width: 68px;

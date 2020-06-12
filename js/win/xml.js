@@ -45,13 +45,19 @@ let xml = {
 		xml.counter = xml.counterGenerator(1);
 		// Wort eintragen
 		document.querySelector("h1").textContent = xml.data.wort;
-		// Init: Metadaten TODO
+		// Init: Metadaten
 		let mdId = document.getElementById("md-id"),
 			mdTy = document.getElementById("md-ty"),
 			mdTf = document.getElementById("md-tf");
 		mdId.value = xml.data.xl.md.id;
 		mdTy.value = xml.data.xl.md.ty;
 		mdTf.value = xml.data.xl.md.tf;
+		for (let i = 0, len = xml.data.xl.md.re.length; i < len; i++) {
+			xml.mdRevisionMake({
+				slot: i,
+				restore: true,
+			});
+		}
 		// Init: Lemmata
 		for (let i = 0, len = xml.data.xl.le.length; i < len; i++) {
 			xml.lemmaMake({
@@ -124,6 +130,76 @@ let xml = {
 		// Datensatz speichern
 		xml.data.xl.md.id = id.value;
 		xml.speichern();
+	},
+	// Metadaten/Revision: neue Revision erstellen
+	mdRevisionAdd () {
+		let au = document.getElementById("md-re-au"),
+			da = document.getElementById("md-re-da"),
+			no = document.getElementById("md-re-no"),
+			auVal = helfer.textTrim(au.value, true),
+			daVal = da.value,
+			noVal = helfer.typographie(helfer.textTrim(no.value, true));
+		// Überprüfungen
+		if (!auVal) {
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Sie haben keine AutorIn angegeben.",
+				callback: () => au.select(),
+			});
+			return;
+		}
+		if (!daVal) {
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Sie haben kein Datum angegeben.",
+				callback: () => da.select(),
+			});
+			return;
+		}
+		// XML erzeugen
+		let datum = /^(?<jahr>[0-9]{4})-(?<monat>[0-9]{2})-(?<tag>[0-9]{2})$/.exec(daVal),
+			xmlStr = `<Revision>`;
+		xmlStr += `<Autor>${auVal}</Autor>`;
+		xmlStr += `<Datum>${datum.groups.tag}.${datum.groups.monat}.${datum.groups.jahr}</Datum>`;
+		xmlStr += `<Aenderung>${noVal}</Aenderung>`;
+		xmlStr += `</Revision>`;
+		// Datensatz erzeugen und speichern
+		let data = {
+			au: auVal,
+			da: daVal,
+			no: noVal,
+			xl: xmlStr,
+		};
+		xml.data.xl.md.re.push(data); // TODO nach Datum sortieren
+		xml.speichern();
+		// Container erzeugen
+		xml.mdRevisionMake({
+			slot: xml.data.xl.md.re.length - 1, // TODO nach Datum sortieren
+		});
+		// Formular leeren und wieder fokussieren
+		au.value = "";
+		da.value = "";
+		no.value = "";
+		au.focus();
+	},
+	// Metadaten/Revision: Revisionsblock aufbauen
+	//   slot = Number
+	//     (Slot, in dem der Datensatz steht)
+	//   restore = true || undefined
+	//     (die Inhalte werden beim Öffnen des Fensters wiederhergestellt)
+	mdRevisionMake ({slot, restore = false}) {
+		// neuen Revisionskopf hinzufügen
+		let kopf = xml.elementKopf({key: "re", slot});
+		document.getElementById("md").appendChild(kopf);
+		// Layout der Köpfe anpassen
+		let layout = {
+			id: "md",
+			ele: [3, 4],
+		};
+		if (restore) {
+			layout.warten = 300;
+		}
+		xml.layoutTabellig(layout);
 	},
 	// Lemma: neues Lemma erstellen
 	lemmaAdd () {
@@ -332,7 +408,7 @@ let xml = {
 		let div = document.createElement("div");
 		div.classList.add("kopf");
 		div.dataset.key = key;
-		if (key === "le") {
+		if (/^(re|le)$/.test(key)) {
 			div.dataset.slot = slot;
 		} else {
 			div.dataset.id = xml.data.xl[key][slot].id;
@@ -351,9 +427,17 @@ let xml = {
 		// Warn-Icon
 		xml.elementWarn({ele: div});
 		if (!textKopf || textKopf !== "abschnitt") {
+			let xmlStr = "";
+			if (key === "re") {
+				xmlStr = xml.data.xl.md.re[slot].xl;
+			} else if (slotBlock === null) {
+				xmlStr = xml.data.xl[key][slot].xl;
+			} else {
+				xmlStr = xml.data.xl[key][slot].ct[slotBlock].xl;
+			}
 			xml.check({
 				warn: div.firstChild,
-				xmlStr: slotBlock === null ? xml.data.xl[key][slot].xl : xml.data.xl[key][slot].ct[slotBlock].xl,
+				xmlStr,
 			});
 		}
 		// Lösch-Icon
@@ -368,7 +452,7 @@ let xml = {
 			xml.elementLoeschenArr({a});
 		}
 		// Verschiebe-Icons
-		if (textKopf || key === "le") {
+		if (textKopf || /^(re|le)$/.test(key)) {
 			let pfeile = {
 				"icon-pfeil-gerade-hoch": "nach oben",
 				"icon-pfeil-gerade-runter": "nach unten",
@@ -379,7 +463,7 @@ let xml = {
 			pfeileCont.classList.add("pfeile");
 			div.appendChild(pfeileCont);
 			for (let [k, v] of Object.entries(pfeile)) {
-				if ((textKopf === "textblock" || key === "le") &&
+				if ((textKopf === "textblock" || /^(re|le)/.test(key)) &&
 						k === "icon-pfeil-gerade-links") {
 					break;
 				}
@@ -402,6 +486,8 @@ let xml = {
 			} else {
 				idText = " ";
 			}
+		} else if (key === "re") {
+			idText = xml.data.xl.md.re[slot].au;
 		} else if (key === "le") {
 			idText = xml.data.xl[key][slot].le.join("/");
 		} else {
@@ -416,7 +502,10 @@ let xml = {
 			let hinweis = document.createElement("span");
 			div.appendChild(hinweis);
 			hinweis.classList.add("hinweis");
-			if (key === "le") {
+			if (key === "re") {
+				let da = /^(?<jahr>[0-9]{4})-(?<monat>[0-9]{2})-(?<tag>[0-9]{2})$/.exec(xml.data.xl.md.re[slot].da);
+				hinweis.textContent = `${da.groups.tag}.${da.groups.monat}.${da.groups.jahr}`;
+			} else if (key === "le") {
 				hinweis.textContent = xml.data.xl.le[slot].ty;
 			} else if (textKopf === "abschnitt") {
 				const typ = xml.data.xl[key][slot].ty;
@@ -432,7 +521,9 @@ let xml = {
 			let vorschau = document.createElement("span");
 			div.appendChild(vorschau);
 			let text = "";
-			if (key === "le") {
+			if (key === "re") {
+				text = xml.data.xl.md.re[slot].no ? xml.data.xl.md.re[slot].no : " ";
+			} else if (key === "le") {
 				text = xml.data.xl.le[slot].re ? `#${xml.data.xl.le[slot].re}` : " ";
 			} else if (textKopf) {
 				if (xml.data.xl[key][slot].ct[slotBlock].it === "Überschrift") {
@@ -502,13 +593,19 @@ let xml = {
 				key = kopf.dataset.key,
 				id = kopf.dataset.id,
 				slot = -1;
-			if (key === "le") {
+			if (/^(re|le)$/.test(key)) {
 				slot = parseInt(kopf.dataset.slot, 10);
 			} else {
 				slot = xml.data.xl[key].findIndex(i => i.id === id);
 			}
+			let xmlStr = "";
+			if (key === "re") {
+				xmlStr = xml.data.xl.md.re[slot].xl;
+			} else {
+				xmlStr = xml.data.xl[key][slot].xl;
+			}
 			xml.preview({
-				xmlStr: xml.data.xl[key][slot].xl,
+				xmlStr,
 				key,
 				slot,
 				after: this,
@@ -543,12 +640,16 @@ let xml = {
 				key = kopf.dataset.key,
 				id = kopf.dataset.id,
 				slot = -1;
-			if (key === "le") {
+			if (/^(re|le)$/.test(key)) {
 				slot = parseInt(kopf.dataset.slot, 10);
 			} else {
 				slot = xml.data.xl[key].findIndex(i => i.id === id);
 			}
-			xml.data.xl[key].splice(slot, 1);
+			if (key === "re") {
+				xml.data.xl.md.re.splice(slot, 1);
+			} else {
+				xml.data.xl[key].splice(slot, 1);
+			}
 			// ggf. Preview ausblenden
 			let pre = kopf.nextSibling;
 			if (pre && pre.classList.contains("pre-cont")) {
@@ -557,10 +658,12 @@ let xml = {
 			// Element entfernen
 			kopf.parentNode.removeChild(kopf);
 			// Leermeldung erzeugen oder Ansicht auffrischen
-			if (key === "le") {
-				if (xml.data.xl.le.length) {
+			if (/^(re|le)$/.test(key)) {
+				const id = key === "re" ? "md" : "le";
+				if (key === "le" && xml.data.xl.le.length ||
+						key === "re" && xml.data.xl.md.re.length) {
 					xml.layoutTabellig({
-						id: "le",
+						id,
 						ele: [3, 4],
 					});
 				}
