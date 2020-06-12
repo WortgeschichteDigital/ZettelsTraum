@@ -786,7 +786,7 @@ let xml = {
 		// Formular
 		let p = document.createElement("p");
 		div.appendChild(p);
-		p.classList.add("dropdown-cont");
+		p.classList.add("dropdown-cont", "input-text");
 		// ID-Feld
 		let id = document.createElement("input");
 		p.appendChild(id);
@@ -997,7 +997,7 @@ let xml = {
 		if (xml.data.xl[key][slot].ct[slotBlock].it === "Textblock") {
 			let p = document.createElement("p");
 			div.appendChild(p);
-			p.classList.add("dropdown-cont");
+			p.classList.add("dropdown-cont", "input-text");
 			// ID-Feld
 			let id = document.createElement("input");
 			p.appendChild(id);
