@@ -164,6 +164,8 @@ let helferXml = {
 	//     (das XML-Snippet, das eingefärbt werden soll)
 	//   xmlErr = Object || null || undefined
 	prettyPrint ({xmlStr, xmlErr = null}) {
+		// geschützte Leerzeichen markieren
+		xmlStr = xmlStr.replace(/\u{a0}/ug, "␣");
 		// ggf. Fehler markieren
 		if (xmlErr) {
 			let xmlStrLines = xmlStr.split("\n"),
