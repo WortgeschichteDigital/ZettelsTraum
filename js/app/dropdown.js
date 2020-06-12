@@ -637,7 +637,7 @@ let dropdown = {
 				document.getElementById(caller).parentNode.nextSibling.firstChild.focus();
 			} else if (caller === "red-wi-lt") {
 				feld.dispatchEvent(new Event("input"));
-			} else if (/^(red-lit-eingabe-|abschnitt-|textblock-)/.test(caller)) {
+			} else if (/^(red-lit-eingabe-|md-(ty|tf)|abschnitt-|textblock-)/.test(caller)) {
 				feld.dispatchEvent(new Event("change"));
 			}
 			// Dropdown schließen

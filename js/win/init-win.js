@@ -138,6 +138,8 @@ let initWin = {
 	},
 	// Events initialisieren: Elemente im XML-Fenster
 	eventsXml () {
+		// Metadaten-Felder
+		document.querySelectorAll("#md-id, #md-ty, #md-tf").forEach(i => xml.mdChange({input: i}));
 		// Autofill Artikel-ID
 		document.querySelector("#md .icon-stift").addEventListener("click", evt => {
 			evt.preventDefault();

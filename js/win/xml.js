@@ -201,6 +201,43 @@ let xml = {
 		}
 		xml.layoutTabellig(layout);
 	},
+	// Metadaten: Change-Listener für Artikel-ID, Artikeltyp und Themenfeld
+	//   input = Element
+	//     (das Textfeld)
+	mdChange ({input}) {
+		input.addEventListener("change", function() {
+			const key = this.id.replace(/.+-/, "");
+			let val = helfer.textTrim(this.value, true);
+			// Validierung
+			if (key === "id") {
+				let id = xml.abschnittNormId({id: val});
+				id = id.replace(/[,;]/g, "");
+				if (!/^WGd-/.test(id)) {
+					id = `WGd-${id}`;
+				}
+				if (!/-[0-9]+$/.test(id)) {
+					id += "-1";
+				}
+				if (id !== val) {
+					val = id;
+					this.value = id;
+				}
+			} else if (key === "ty" &&
+					!xml.dropdown.artikelTypen.includes(val)) {
+				this.value = "";
+				const typen = xml.typen({key: "artikelTypen"});
+				dialog.oeffnen({
+					typ: "alert",
+					text: `Als Artikeltyp sind nur ${typen} erlaubt.`,
+					callback: () => this.focus(),
+				});
+				return;
+			}
+			// Speichern
+			xml.data.xl.md[key] = val;
+			xml.speichern();
+		});
+	},
 	// Lemma: neues Lemma erstellen
 	lemmaAdd () {
 		let le = document.getElementById("le-le"),
