@@ -1622,6 +1622,8 @@ let xml = {
 	editAutoTagger ({str, blockzitat}) {
 		// Attribute maskieren
 		str = str.replace(/([a-zA-Z]+)="(.+?)"/g, (m, p1, p2) => `${p1}=##${p2}##`);
+		// Ampersands maskieren
+		str = str.replace(/&(?!amp;)/g, "&amp;");
 		// <erwaehntes_Zeichen>
 		str = str.replace(/__(.+?)__/g, (m, p1) => `<erwaehntes_Zeichen>${p1}</erwaehntes_Zeichen>`);
 		// <Stichwort>
@@ -1630,8 +1632,8 @@ let xml = {
 		str = str.replace(/‚(.+?)‘/g, (m, p1) => `<Paraphrase>${p1}</Paraphrase>`);
 		str = str.replace(/'(.+?)'/g, (m, p1) => `<Paraphrase>${p1}</Paraphrase>`);
 		// <Zitat>
-		str = str.replace(/„(.+?)“/g, (m, p1) => `<Zitat>${p1}</Zitat>`);
-		str = str.replace(/"(.+?)"/g, (m, p1) => `<Zitat>${p1}</Zitat>`);
+		str = str.replace(/„(.+?)“/g, (m, p1) => `<Zitat>${azInZitat(p1)}</Zitat>`);
+		str = str.replace(/"(.+?)"/g, (m, p1) => `<Zitat>${azInZitat(p1)}</Zitat>`);
 		// <Verweis_extern> (viele Klammern, entspannte Leerzeichenverwendung)
 		str = str.replace(/\(\s*\[(.+?)\]\s*\(\s*(https?:\/\/[^\s]+?)\s*\)(?:\s*\(\s*([0-9]{1,2})\.\s*([0-9]{1,2})\.\s*([0-9]{4})\s*\))?\s*\)/g, verweisExtern);
 		// <Verweis_extern> (wenige Klammern, rigide Leerzeichenverwendung)
@@ -1643,19 +1645,21 @@ let xml = {
 			if (p1 === p2) {
 				p1 = "";
 			}
-			let verweis = `<Verweis Typ="vgl">`;
+			let verweis = `<Verweis Typ=##vgl##>`;
 			verweis += `\n  <Verweistext>${p1}</Verweistext>`;
 			verweis += `\n  <Verweisziel>${p2}</Verweisziel>`;
 			verweis += "\n</Verweis>";
 			return verweis;
 		});
 		// <Belegreferenz>
-		str = str.replace(/(?<!##(?:\p{Lowercase}|-)*)((\p{Lowercase}|-)+-[0-9]{4}-[0-9]+)(?!##)/ug, (m, p1) => `<Belegreferenz Ziel="${p1}"/>`);
+		str = str.replace(/(?<!##(?:\p{Lowercase}|-)*)((\p{Lowercase}|-)+-[0-9]{4}-[0-9]+)(?!##)/ug, (m, p1) => `<Belegreferenz Ziel=##${p1}##/>`);
 		// <Literaturreferenz>
-		str = str.replace(/(?<!##(?:\p{Lowercase}|-)*)([a-zäöüß0-9\-]+)((?:,\shier|\ss\.\s?v\.)?[0-9\s,\-–]+)?(?!##)/ug, (m, p1, p2) => {
-			if (!/[0-9\-]/.test(p1) && !/[0-9]|s\.\s?v\./.test(p2) ||
-					!/[a-z]/.test(p1) ||
-					/-/.test(p1) && (!p2 || /^\s$/.test(p2) ) ) {
+		str = str.replace(/(?<!(?:\p{Letter}|\d|-|#|\/))([a-zäöüß0-9\-]+)((?:,\shier|\ss\.\s?v\.)?[0-9\s,\-–]+)?(?!(?:\p{Letter}|\d|-|#))/ug, (m, p1, p2) => {
+			if (!/[a-z]/.test(p1) ||
+					/^[a-z]+$/.test(p1) && ( !p2 || /[0-9]/.test(p2) && !/,/.test(p2) ) ||
+					!/[0-9\-]/.test(p1) && !/[0-9]|s\.\s?v\./.test(p2) ||
+					/-/.test(p1) && !/[0-9]/.test(p1) && ( !p2 || /^\s$/.test(p2) ) ||
+					/[0-9]/.test(p1) && !/-/.test(p1) && p1.match(/[a-zäöüß]/g).length / p1.match(/[0-9]/g).length < 2) {
 				return m;
 			}
 			if (p2) {
@@ -1667,24 +1671,38 @@ let xml = {
 					anschluss = p2;
 					p2 = "";
 				} else if (/^\s$/.test(p2)) {
-					return `<Literaturreferenz Ziel="${p1}"/>${p2}`;
+					return `<Literaturreferenz Ziel=##${p1}##/>${p2}`;
 				}
-				return `<Literaturreferenz Ziel="${p1}">${p2.trim()}</Literaturreferenz>${anschluss}`;
+				return `<Literaturreferenz Ziel=##${p1}##>${p2.trim()}</Literaturreferenz>${anschluss}`;
 			}
-			return `<Literaturreferenz Ziel="${p1}"/>`;
+			return `<Literaturreferenz Ziel=##${p1}##/>`;
 		});
 		// <Autorenzusatz>
 		if (blockzitat) {
+			str = str.replace(/\[(.+?)\]/g, (m, p1) => `<Autorenzusatz>${p1}</Autorenzusatz>`);
 			str = str.replace(/\{(.+?)\}/g, (m, p1) => `<Autorenzusatz>${p1}</Autorenzusatz>`);
 		} else {
 			str = str.replace(/<Autorenzusatz>(.+?)<\/Autorenzusatz>/g, (m, p1) => `{${p1}}`);
+			str = str.replace(/<Zitat>(.+?)<\/Zitat>/g, (m, p1) => `<Zitat>${azInZitat(p1)}</Zitat>`);
 		}
 		// Attribute demaskieren
 		str = str.replace(/([a-zA-Z]+)=##(.+?)##/g, (m, p1, p2) => `${p1}="${p2}"`);
 		// Typographie
 		str = helfer.typographie(str);
+		// in <URL> kein Halbgeviertstrich
+		str = str.replace(/<URL>(.+?)<\/URL>/g, (m, p1) => {
+			p1 = p1.replace(/–/g, "-");
+			return `<URL>${p1}</URL>`;
+		});
 		// Ergebnis zurückgeben
 		return str;
+		// <Autorenzusatz> in <Zitat>
+		function azInZitat (str) {
+			str = str.replace(/\[(.+?)\]/g, (m, p1) => `<Autorenzusatz>${p1}</Autorenzusatz>`);
+			// falls jemand auf die Idee kommen sollte, auch das hier
+			str = str.replace(/\{(.+?)\}/g, (m, p1) => `<Autorenzusatz>${p1}</Autorenzusatz>`);
+			return str;
+		}
 		// <Verweis_extern>
 		function verweisExtern (m, p1, p2, p3, p4, p5) {
 			let verweis = `<Verweis_extern>`;
