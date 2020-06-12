@@ -12,19 +12,6 @@ let xml = {
 		abschnittTypen: ["Überschrift", "Textblock", "Illustration"],
 		textblock: ["Blockzitat"],
 	},
-	// Dropdown: Vorschlagliste der Lemmata zusammentragen
-	dropdownLemmata () {
-		let arr = [],
-			lemmata = xml.data.wort.replace(/\s?\(.+?\)/g, "").split(",");
-		for (let i = 0, len = lemmata.length; i < len; i++) {
-			const lemma = helfer.textTrim(lemmata[i], true);
-			if (lemma) {
-				arr.push(lemma);
-			}
-		}
-		arr.sort(helfer.sortAlpha);
-		return arr;
-	},
 	// Dropdown: Referenzen zusammentragen
 	dropdownReferenzen () {
 		let arr = [],
@@ -1712,6 +1699,19 @@ let xml = {
 				k.childNodes[e].style.width = `${max + 1}px`; // +1, sonst ist die Textellipse immer sichtbar
 			}
 		}
+	},
+	// extrahiert die Lemmata aus dem Karteiwort
+	lemmata () {
+		let arr = [],
+			lemmata = xml.data.wort.replace(/\s?\(.+?\)/g, "").split(",");
+		for (let i = 0, len = lemmata.length; i < len; i++) {
+			const lemma = helfer.textTrim(lemmata[i], true);
+			if (lemma) {
+				arr.push(lemma);
+			}
+		}
+		arr.sort(helfer.sortAlpha);
+		return arr;
 	},
 	// trägt mögliche Typen in Formularen zusammen und formatiert sie schön
 	//   key = String
