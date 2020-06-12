@@ -163,6 +163,16 @@ let xml = {
 		xmlStr += `<Datum>${datum.groups.tag}.${datum.groups.monat}.${datum.groups.jahr}</Datum>`;
 		xmlStr += `<Aenderung>${noVal}</Aenderung>`;
 		xmlStr += `</Revision>`;
+		// Position des Datensatzes finden
+		const daValNr = parseInt(daVal.replace(/-/g, ""), 10);
+		let pos = -1;
+		for (let i = 0, len = xml.data.xl.md.re.length; i < len; i++) {
+			const daNr = parseInt(xml.data.xl.md.re[i].da.replace(/-/g, ""), 10);
+			if (daNr > daValNr) {
+				pos = i;
+				break;
+			}
+		}
 		// Datensatz erzeugen und speichern
 		let data = {
 			au: auVal,
@@ -170,11 +180,15 @@ let xml = {
 			no: noVal,
 			xl: xmlStr,
 		};
-		xml.data.xl.md.re.push(data); // TODO nach Datum sortieren
+		if (pos === -1) {
+			xml.data.xl.md.re.push(data);
+		} else {
+			xml.data.xl.md.re.splice(pos, 0, data);
+		}
 		xml.speichern();
 		// Container erzeugen
 		xml.mdRevisionMake({
-			slot: xml.data.xl.md.re.length - 1, // TODO nach Datum sortieren
+			slot: pos === -1 ? xml.data.xl.md.re.length - 1 : pos,
 		});
 		// Formular leeren und wieder fokussieren
 		au.value = "";
@@ -190,7 +204,12 @@ let xml = {
 	mdRevisionMake ({slot, restore = false}) {
 		// neuen Revisionskopf hinzufügen
 		let kopf = xml.elementKopf({key: "re", slot});
-		document.getElementById("md").appendChild(kopf);
+		if (restore || slot === xml.data.xl.md.re.length - 1) {
+			document.getElementById("md").appendChild(kopf);
+		} else {
+			let koepfe = document.querySelectorAll("#md .kopf");
+			document.getElementById("md").insertBefore(kopf, koepfe[slot]);
+		}
 		// Layout der Köpfe anpassen
 		let layout = {
 			id: "md",
