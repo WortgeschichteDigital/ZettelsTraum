@@ -1135,95 +1135,90 @@ let xml = {
 			}
 		});
 	},
-	// Abschnitt/Textblock, Change-Listener: Timeout
-	abtxChangeTimeout: null,
 	// Abschnitt/Textblock, Change-Listener: generischer Listener für Textformulare
 	//   ele = Element
 	//     (das Input-Element, auf dessen Änderung gehört wird)
 	abtxChange ({ele}) {
-		ele.addEventListener("input", function() {
-			clearTimeout(xml.abtxChangeTimeout);
-			xml.abtxChangeTimeout = setTimeout(() => {
-				let abschnitt = this.closest(".abschnitt-cont"),
-					textblock = this.closest(".textblock-cont"),
-					kopf = abschnitt.previousSibling,
-					key = kopf.dataset.key,
-					slot = parseInt(kopf.dataset.slot, 10),
-					feld = this.id.replace(/.+-/, ""),
-					val = helfer.textTrim(this.value, true);
-				if (textblock) {
-					// Textblock (Textblock, Illustration)
-					if (feld === "id") {
-						// ID aufbereiten
-						val = xml.abschnittNormId({id: val, input: this});
-					} else if (val && feld === "ty" && !xml.dropdown.textblock.includes(val)) {
-						val = "";
-						this.value = "";
-					}
-					let kopfBlock = textblock.previousSibling;
-					const slotBlock = parseInt(kopfBlock.dataset.slotBlock, 10);
-					xml.data.xl[key][slot].ct[slotBlock][feld] = val;
-					// ggf. den Auto-Tagger anstoßen
-					if (feld === "ty") {
-						const blockzitat = xml.data.xl[key][slot].ct[slotBlock].ty === "Blockzitat" ? true : false;
-						xml.data.xl[key][slot].ct[slotBlock].xl = xml.editAutoTagger({
-							str: xml.data.xl[key][slot].ct[slotBlock].xl,
-							blockzitat,
-						});
-					}
-					// Kopf anpassen
-					let kopfNeu = xml.elementKopf({key, slot, slotBlock, textKopf: "textblock"});
-					kopfBlock.parentNode.replaceChild(kopfNeu, kopfBlock);
-					xml.checkAbschnitt({
-						cont: abschnitt,
-					});
-					// XML-String auffrischen
-					const xmlStr = xml.textblockXmlStr({xmlStr: null, key, slot, slotBlock});
-					// Pre zurücksetzen
-					// (aber nur, wenn er nicht gerade in Bearbeitung ist)
-					let cont = textblock.querySelector(".pre-cont");
-					if (cont.querySelector("pre")) {
-						let pre = document.createElement("pre");
-						cont.replaceChild(pre, cont.firstChild);
-						xml.preview({
-							xmlStr,
-							after: cont.previousSibling,
-							textblockCont: textblock,
-						});
-						xml.editPreDbl({pre});
-					}
-					// XML updaten
-					xml.data.xl[key][slot].ct[slotBlock].xl = xmlStr;
-					// Layout der Köpfe anpassen
-					xml.layoutTabellig({
-						id: key,
-						ele: [3],
-						inAbschnitt: abschnitt,
-					});
-				} else if (abschnitt) {
-					// Abschnitt
-					if (feld === "id") {
-						// ID aufbereiten
-						val = xml.abschnittNormId({id: val, input: this});
-					} else if (val && feld === "ty" && !xml.dropdown.abschnittTyp.includes(val)) {
-						val = "";
-						this.value = "";
-					}
-					xml.data.xl[key][slot][feld] = val;
-					// Kopf anpassen
-					let kopfNeu = xml.elementKopf({key, slot, textKopf: "abschnitt"});
-					kopf.parentNode.replaceChild(kopfNeu, kopf);
-					xml.checkAbschnitt({
-						cont: abschnitt,
-					});
-					// Layout der Köpfe anpassen
-					xml.layoutTabellig({
-						id: key,
-						ele: [3, 4],
+		ele.addEventListener("change", function() {
+			let abschnitt = this.closest(".abschnitt-cont"),
+				textblock = this.closest(".textblock-cont"),
+				kopf = abschnitt.previousSibling,
+				key = kopf.dataset.key,
+				slot = parseInt(kopf.dataset.slot, 10),
+				feld = this.id.replace(/.+-/, ""),
+				val = helfer.textTrim(this.value, true);
+			if (textblock) {
+				// Textblock (Textblock, Illustration)
+				if (feld === "id") {
+					// ID aufbereiten
+					val = xml.abschnittNormId({id: val, input: this});
+				} else if (val && feld === "ty" && !xml.dropdown.textblock.includes(val)) {
+					val = "";
+					this.value = "";
+				}
+				let kopfBlock = textblock.previousSibling;
+				const slotBlock = parseInt(kopfBlock.dataset.slotBlock, 10);
+				xml.data.xl[key][slot].ct[slotBlock][feld] = val;
+				// ggf. den Auto-Tagger anstoßen
+				if (feld === "ty") {
+					const blockzitat = xml.data.xl[key][slot].ct[slotBlock].ty === "Blockzitat" ? true : false;
+					xml.data.xl[key][slot].ct[slotBlock].xl = xml.editAutoTagger({
+						str: xml.data.xl[key][slot].ct[slotBlock].xl,
+						blockzitat,
 					});
 				}
-				xml.speichern();
-			}, 500);
+				// Kopf anpassen
+				let kopfNeu = xml.elementKopf({key, slot, slotBlock, textKopf: "textblock"});
+				kopfBlock.parentNode.replaceChild(kopfNeu, kopfBlock);
+				xml.checkAbschnitt({
+					cont: abschnitt,
+				});
+				// XML-String auffrischen
+				const xmlStr = xml.textblockXmlStr({xmlStr: null, key, slot, slotBlock});
+				// Pre zurücksetzen
+				// (aber nur, wenn er nicht gerade in Bearbeitung ist)
+				let cont = textblock.querySelector(".pre-cont");
+				if (cont.querySelector("pre")) {
+					let pre = document.createElement("pre");
+					cont.replaceChild(pre, cont.firstChild);
+					xml.preview({
+						xmlStr,
+						after: cont.previousSibling,
+						textblockCont: textblock,
+					});
+					xml.editPreDbl({pre});
+				}
+				// XML updaten
+				xml.data.xl[key][slot].ct[slotBlock].xl = xmlStr;
+				// Layout der Köpfe anpassen
+				xml.layoutTabellig({
+					id: key,
+					ele: [3],
+					inAbschnitt: abschnitt,
+				});
+			} else if (abschnitt) {
+				// Abschnitt
+				if (feld === "id") {
+					// ID aufbereiten
+					val = xml.abschnittNormId({id: val, input: this});
+				} else if (val && feld === "ty" && !xml.dropdown.abschnittTyp.includes(val)) {
+					val = "";
+					this.value = "";
+				}
+				xml.data.xl[key][slot][feld] = val;
+				// Kopf anpassen
+				let kopfNeu = xml.elementKopf({key, slot, textKopf: "abschnitt"});
+				kopf.parentNode.replaceChild(kopfNeu, kopf);
+				xml.checkAbschnitt({
+					cont: abschnitt,
+				});
+				// Layout der Köpfe anpassen
+				xml.layoutTabellig({
+					id: key,
+					ele: [3, 4],
+				});
+			}
+			xml.speichern();
 		});
 	},
 	// Abschnitt/Textblock: Löschen

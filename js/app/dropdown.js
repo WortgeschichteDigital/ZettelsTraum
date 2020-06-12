@@ -635,10 +635,10 @@ let dropdown = {
 				karteisuche.filterFelder(caller);
 				// das erste Input-Feld hinter dem Caller fokussieren
 				document.getElementById(caller).parentNode.nextSibling.firstChild.focus();
-			} else if (/^(red-lit-eingabe-|abschnitt-|textblock-)/.test(caller)) {
-				feld.dispatchEvent(new KeyboardEvent("input"));
 			} else if (caller === "red-wi-lt") {
 				feld.dispatchEvent(new Event("input"));
+			} else if (/^(red-lit-eingabe-|abschnitt-|textblock-)/.test(caller)) {
+				feld.dispatchEvent(new Event("change"));
 			}
 			// Dropdown schließen
 			dropdown.schliessen();
