@@ -785,7 +785,7 @@ let xml = {
 	//   input = Element || undefined
 	//     (das Input-Element, aus dem die ID ausgelesen wurde)
 	abschnittNormId ({id, input = null}) {
-		let val = id.replace(/^[0-9]+|[&=?]+/g, "");
+		let val = id.replace(/^[0-9]+|[&/=?#]+/g, "");
 		val = val.replace(/\s/g, "_");
 		val = val.replace(/_{2,}/g, "_");
 		if (input && val !== id) {
