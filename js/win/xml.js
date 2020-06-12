@@ -456,6 +456,27 @@ let xml = {
 		// Kopf zurückgeben
 		return div;
 	},
+	/* jshint ignore:start */
+	// Elemente umschalten: Blöcke auf oder zuklappen
+	//   auf = Boolean
+	//     (die Blöcke sollen geöffnet werden)
+	//   key = String
+	//     (Schlüssel des Abschnitts)
+	elementKopfToggle ({auf, key}) {
+		let koepfe = document.querySelectorAll(`#${key} > .kopf`);
+		for (let kopf of koepfe) {
+			let next = kopf.nextSibling,
+				nextKopf = next?.classList.contains("kopf"),
+				nextPre = next?.classList.contains("pre-cont"),
+				nextAbschnitt = next?.classList.contains("abschnitt-cont"),
+				nextOff = nextAbschnitt && next.dataset.off;
+			if (auf && (!next || nextKopf || nextAbschnitt && nextOff) ||
+					!auf && (nextPre || nextAbschnitt && !nextOff)) {
+				kopf.dispatchEvent(new MouseEvent("click"));
+			}
+		}
+	},
+	/* jshint ignore:end */
 	// Element-Vorschau umschalten: Standard-Arrays
 	//   div = Element
 	//     (Kopf, zu dem die Vorschau eingeblendet werden soll)
@@ -766,21 +787,6 @@ let xml = {
 			input.value = val;
 		}
 		return val;
-	},
-	// Abschnitt: Blöcke umschalten
-	//   auf = Boolean
-	//     (die Blöcke sollen geöffnet werden)
-	//   key = String
-	//     (Schlüssel des Abschnitts)
-	abschnittToggle ({auf, key}) {
-		let koepfe = document.querySelectorAll(`#${key} > .kopf`);
-		for (let kopf of koepfe) {
-			let cont = kopf.nextSibling;
-			if (auf && cont.dataset.off ||
-					!auf && !cont.dataset.off) {
-				kopf.dispatchEvent(new MouseEvent("click"));
-			}
-		}
 	},
 	// Textblock: neuen Datensatz für einen Textblock anlegen
 	//   input = Element
