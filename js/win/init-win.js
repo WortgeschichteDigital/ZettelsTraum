@@ -182,14 +182,18 @@ let initWin = {
 				xml.abschnittAdd({element: this});
 			});
 		});
-		// Abschnitt umschalten
+		// Beleg einfügen/Blöcke umschalten
 		document.querySelectorAll(".toggle").forEach(abschnitt => {
 			abschnitt.querySelectorAll("a").forEach(i => {
 				i.addEventListener("click", function(evt) {
 					evt.preventDefault();
-					const auf = this.classList.contains("icon-auge") ? true : false,
-						key = this.closest("span").dataset.id;
-					xml.elementKopfToggle({auf, key});
+					if (this.classList.contains("icon-einfuegen")) { // Beleg einfügen
+						xml.belegEinfuegen();
+					} else { // Blöcke umschalten
+						const auf = this.classList.contains("icon-auge") ? true : false,
+							key = this.closest("span").dataset.id;
+						xml.elementKopfToggle({auf, key});
+					}
 				});
 			});
 		});

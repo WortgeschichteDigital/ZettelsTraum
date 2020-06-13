@@ -468,6 +468,43 @@ let xml = {
 			xml.data.xl.lt.sort((a, b) => sortStr.indexOf(a.si) - sortStr.indexOf(b.si));
 		}
 	},
+	// Beleg aus Zwischenablage einfügen
+	belegEinfuegen () {
+		let {clipboard} = require("electron"),
+			cp = clipboard.readText(),
+			parser = new DOMParser(),
+			xmlDoc = parser.parseFromString(cp, "text/xml");
+		// Validierung
+		if (xmlDoc.querySelector("parsererror")) {
+			dialog.oeffnen({
+				typ: "alert",
+				text: `Beim Einlesen des Belegs ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">kein wohlgeformtes XML-Snippet gefunden</p>`,
+			});
+			return;
+		}
+		if (xmlDoc.documentElement.nodeName !== "Beleg" ||
+				!xmlDoc.querySelector("Belegtext")) {
+			dialog.oeffnen({
+				typ: "alert",
+				text: `Beim Einlesen des Belegs ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">kein XML-Snippet mit Belegtext gefunden</p>`,
+			});
+			return;
+		}
+		// Datensatz erstellen
+		let datum = helferXml.datumFormat({xmlStr: cp});
+		let xmlDatensatz = {
+			key: "bl",
+			ds: {
+				da: datum.anzeige,
+				ds: datum.sortier,
+				id: xmlDoc.documentElement.getAttribute("xml:id"),
+				xl: cp,
+			},
+		};
+		// Beleg einfügen und speichern
+		xml.empfangenArr(xmlDatensatz);
+		xml.speichern();
+	},
 	// Element erzeugen: Standard-Kopf
 	//   key = String
 	//     (der Schlüssel des Datensatzes)
