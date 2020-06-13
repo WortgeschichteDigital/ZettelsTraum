@@ -431,6 +431,7 @@ let optionen = {
 		sachgebiete: ["Sachgebiet", "Sachgebiete"],
 		soziolekte: ["Soziolekt", "Soziolekte"],
 		sprachen: ["Sprache", "Sprachen"],
+		themenfelder: ["Themenfeld", "Themenfelder"],
 	},
 	// Check der Tag-Dateien beim Starten der App
 	async anwendenTagsInit () {
