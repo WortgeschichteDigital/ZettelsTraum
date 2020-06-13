@@ -127,7 +127,9 @@ let helferXml = {
 	// geschützte Zeichen maskieren
 	//   text = String
 	//     (String, der maskiert werden soll)
-	maskieren ({text}) {
+	//   demaskieren = true || undefined
+	//     (geschützte Zeichen demaskieren)
+	maskieren ({text, demaskieren = false}) {
 		let zeichen = new Map([
 			["&", "&amp;"],
 			["<", "&lt;"],
@@ -136,8 +138,14 @@ let helferXml = {
 			["'", "&apos;"],
 		]);
 		for (let [k, v] of zeichen) {
-			let reg = new RegExp(k, "g");
-			text = text.replace(reg, v);
+			let zReg = k,
+				zRep = v;
+			if (demaskieren) {
+				zReg = v;
+				zRep = k;
+			}
+			let reg = new RegExp(zReg, "g");
+			text = text.replace(reg, zRep);
 		}
 		return text;
 	},
