@@ -218,8 +218,6 @@ let beleg = {
 			} else {
 				feldDa.focus();
 			}
-		} else if (!beleg.leseansicht) {
-			feldDa.focus();
 		}
 	},
 	// Bedeutung in das Formular eintragen
