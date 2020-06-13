@@ -1093,6 +1093,15 @@ let karteisuche = {
 				pre: "",
 			},
 		],
+		"Themenfeld": [
+			{
+				type: "dropdown",
+				ro: false,
+				cl: "karteisuche-themenfeld",
+				ph: "Themenfeld",
+				pre: "",
+			},
+		],
 		"Sachgebiet": [
 			{
 				type: "dropdown",
@@ -1341,6 +1350,11 @@ let karteisuche = {
 	},
 	// Zwischenspeicher für die Filterwerte
 	filterWerte: [],
+	// Map für Tags
+	filterTagMap: {
+		Themenfeld: "themenfelder",
+		Sachgebiet: "sachgebiete",
+	},
 	// Filterwerte sammeln
 	filterWerteSammeln () {
 		karteisuche.filterWerte = [];
@@ -1367,19 +1381,20 @@ let karteisuche = {
 				obj.reg = new RegExp(helfer.formVariSonderzeichen(helfer.escapeRegExp(text)), "i");
 				karteisuche.filterWerte.push(obj);
 			}
-			// Sachgebiet
-			else if (typ === "Sachgebiet") {
+			// Themenfelder/Sachgebiet
+			else if (/^(Themenfeld|Sachgebiet)$/.test(typ)) {
+				const tagName = karteisuche.filterTagMap[typ];
 				obj.id = "";
-				const tag = document.getElementById(`karteisuche-sachgebiet-${id}`).value;
-				if (!tag || !optionen.data.tags.sachgebiete) {
+				const tag = document.getElementById(`karteisuche-${typ.toLowerCase()}-${id}`).value;
+				if (!tag || !optionen.data.tags[tagName]) {
 					karteisuche.filterIgnorieren(filter, true);
 					continue;
 				}
-				for (let id in optionen.data.tags.sachgebiete.data) {
-					if (!optionen.data.tags.sachgebiete.data.hasOwnProperty(id)) {
+				for (let id in optionen.data.tags[tagName].data) {
+					if (!optionen.data.tags[tagName].data.hasOwnProperty(id)) {
 						continue;
 					}
-					if (optionen.data.tags.sachgebiete.data[id].name === tag) {
+					if (optionen.data.tags[tagName].data[id].name === tag) {
 						obj.id = id;
 						break;
 					}
@@ -1514,13 +1529,17 @@ let karteisuche = {
 					!filter.reg.test(datei.wo)) {
 				return false;
 			}
-			// Sachgebiet
-			else if (filter.typ === "Sachgebiet") {
+			// Themenfeld/Sachgebiet
+			else if (/^(Themenfeld|Sachgebiet)$/.test(filter.typ)) {
 				let gefunden = false;
-				if (datei.rd.sg) {
+				let keys = {
+					Themenfeld: "tf",
+					Sachgebiet: "sg",
+				};
+				if (datei.rd[keys[filter.typ]]) {
 					// dieser Datensatz wurde erst mit Dateiformat Version 13 eingeführt;
 					// davor existierte er nicht
-					for (let i of datei.rd.sg) {
+					for (let i of datei.rd[keys[filter.typ]]) {
 						if (i.id === filter.id) {
 							gefunden = true;
 							break;
