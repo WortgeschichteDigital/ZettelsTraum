@@ -394,6 +394,11 @@ let xml = {
 		// Datensatz ersetzen oder hinzufügen
 		const slot = xml.data.xl[key].findIndex(i => i.id === ds.id);
 		if (slot >= 0) {
+			// ggf. speichern Anstoßen
+			let contAlt = cont.querySelector(`[data-id="${ds.id}"]`).nextSibling;
+			if (contAlt) {
+				xml.textblockSave({cont: contAlt});
+			}
 			// Datensatz ersetzen
 			xml.data.xl[key][slot] = ds;
 			// Element ersetzen
