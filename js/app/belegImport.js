@@ -1068,14 +1068,22 @@ let belegImport = {
 			txt = txt.replace(/^[!?.,;: ]+/, ""); // Satz- und Leerzeichen am Anfang entfernen (kommt wirklich vor!)
 			txt = txt.replace(/\s\/\s/g, "/"); // Leerzeichen um Slashes entfernen
 			txt = txt.replace(/^Von /, ""); // häufig wird die Autorangabe "Von Karl Mustermann" fälschlicherweise als kompletter Autor angegeben
-			// Autorname eintragen
-			if (/^(Name|Nn|o\.\s?A\.|unknown)$/.test(txt)) { // merkwürdige Platzhalter für "Autor unbekannt"
+			// Autorname eintragen;
+			// beim Anpassen dieser Liste auch beleg.toolsQuelleLaden() anpassen;
+			// !txt kann deswegen sein, weil die Funktion auch von
+			// beleg.toolsQuelleLaden() genutzt wird)
+			if (!txt || /^(Name|Nn|o\.\s?A\.|unknown|unkown)$/.test(txt)) { // merkwürdige Platzhalter für "Autor unbekannt"
 				return "N. N.";
 			} else if (!/[A-ZÄÖÜ]/.test(txt)) { // Autorname ist nur ein Kürzel
 				return `N. N. [${txt}]`;
+			} else if (/^[A-Z]\.[A-Z]\.$/.test(txt)) { // Autorname mit Initialen, aber ohne Spatium
+				return txt.replace(/\./, ". ");
 			}
 			let leerzeichen = txt.match(/\s/g);
-			if (!/,\s/.test(txt) && leerzeichen && leerzeichen.length === 1) {
+			if (!/,\s/.test(txt) &&
+					!/^[A-Z]\.\s[A-Z]\.$/.test(txt) &&
+					leerzeichen &&
+					leerzeichen.length === 1) {
 				let txtSp = txt.split(/\s/);
 				return `${txtSp[1]}, ${txtSp[0]}`;
 			}
@@ -1092,7 +1100,8 @@ let belegImport = {
 			for (let i of jahrQuelle) {
 				jahrQuelleStr = i[1];
 			}
-			if (jahrDatierung && jahrQuelle &&
+			if (!/\[[0-9]{4}\]/.test(data.qu) &&
+					jahrDatierung && jahrQuelleStr &&
 					jahrDatierung[0] !== jahrQuelleStr) {
 				let datierung = parseInt(jahrDatierung[0], 10),
 					quelle = parseInt(jahrQuelleStr, 10),
@@ -1112,7 +1121,7 @@ let belegImport = {
 				if (titel && !data.qu.includes(titel)) {
 					let qu = data.qu;
 					data.qu = `${data.au}: ${titel}`;
-					if (!/\.$/.test(data.qu)) {
+					if (!/[.!?]$/.test(data.qu)) {
 						data.qu += ".";
 					}
 					data.qu += ` In: ${qu}`;
@@ -1132,7 +1141,7 @@ let belegImport = {
 				}
 			}
 			// ggf. Punkt am Ende der Quellenangabe ergänzen
-			if (!/\.$/.test(data.qu)) {
+			if (!/[.!?]$/.test(data.qu)) {
 				data.qu += ".";
 			}
 			// Tagesdaten ggf. aufhübschen
@@ -1142,13 +1151,7 @@ let belegImport = {
 				data.qu = data.qu.replace(reg, `${datum.groups.tag.replace(/^0/, "")}. ${datum.groups.monat.replace(/^0/, "")}. ${datum.groups.jahr}`);
 			}
 			// typographische Verbesserungen
-			let von_bis = data.qu.match(/[0-9]+\s?-\s?[0-9]+/g);
-			if (von_bis) {
-				for (let i of von_bis) {
-					let huebsch = i.replace(/\s?-\s?/, "–");
-					data.qu = data.qu.replace(i, huebsch);
-				}
-			}
+			data.qu = helfer.typographie(data.qu);
 			// ggf. URL ergänzen
 			if (titeldaten.url) {
 				data.qu += `\n\n${titeldaten.url}`;
@@ -1162,8 +1165,10 @@ let belegImport = {
 			}
 			// Steht in der Quellenangabe der Autor in der Form "Nachname, Vorname",
 			// im Autor-Feld aber nicht?
-			let auQu = data.qu.split(": ");
-			if (/, /.test(auQu[0]) && !/, /.test(data.au)) {
+			let auQu = data.qu.split(": "),
+				auQuKommata = auQu[0].match(/, /g);
+			if (auQuKommata && auQuKommata.length === 1 &&
+					!/, /.test(data.au)) {
 				let autorQu = auQu[0].replace(/,/g, "").split(/\s/),
 					autorAu = data.au.split(/\s/);
 				if (auQu[0] !== data.au &&
@@ -1181,8 +1186,10 @@ let belegImport = {
 				}
 			}
 			// Steht im Autor-Feld kein Name, in der Quelle scheint aber einer zu sein?
-			if ((!data.au || /^N.\sN./.test(data.au)) && auQu.length > 1) {
-				data.au = auQu[0];
+			if ((!data.au || /^N.\s?N.$/.test(data.au)) && auQu.length > 1 &&
+					(auQuKommata && auQuKommata.length === 1 ||
+					/\su\.\s/.test(auQu[0]))) {
+				data.au = auQu[0].replace(/\su\.\s/g, "/");
 			}
 		} else if (typ === "ts") { // TEXTSORTE
 			if (!/::/.test(txt)) {

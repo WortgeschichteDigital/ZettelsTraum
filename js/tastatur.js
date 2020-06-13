@@ -130,9 +130,11 @@ let tastatur = {
 			drucken.tastatur();
 			return;
 		}
-		// KARTEIKARTE: Key "i" || "k" || "m" || "t" || "u"
+		// KARTEIKARTE: Key "d" || "i" || "k" || "m" || "t" || "u"
 		if (m === "Ctrl" && helfer.belegOffen()) {
-			if (evt.key === "i") {
+			if (evt.key === "d") {
+				beleg.toolsQuelleLaden(true);
+			} else if (evt.key === "i") {
 				if (kopieren.an) {
 					kopieren.addKarte();
 				} else {

@@ -250,14 +250,6 @@ textarea#beleg-bs {
 	background-color: var(--hintergrund);
 }
 
-#beleg-qu {
-	transition: background-color 1s ease-out;
-}
-
-#beleg-qu.neu-geladen {
-	background-color: var(--highlight);
-}
-
 /* Text-Tools ----------------------------------- */
 .text-tools {
 	position: absolute;
