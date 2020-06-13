@@ -394,6 +394,7 @@ let kartei = {
 		data = {};
 		kartei.wort = "";
 		kartei.pfad = "";
+		belegImport.Datei.typ = "dta";
 		belegImport.DateiReset();
 		let wort = document.getElementById("wort");
 		wort.classList.add("keine-kartei");
