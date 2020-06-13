@@ -638,7 +638,7 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
 
 					<p>Nach dem Laden einer <abbr title="Zettel’s Traum JSON">ZTJ</abbr>-Datei in <i class="app-name"></i> befinden sich die <abbr title="JavaScript Object Notation">JSON</abbr>-Daten im globalen Objekt <code class="quelltext">data</code>. Ihre Werte lassen sich dann in allen Funktionen des Hauptfensters durch einfache Statements wie <code class="quelltext">data.dc</code> lesen oder schreiben.</p>
 
-					<p>Alle Dateien sind gleich aufgebaut (<span class="obacht">Datenformat Version 13</span>):</p>
+					<p>Alle Dateien sind gleich aufgebaut (<span class="obacht">Datenformat Version 14</span>):</p>
 
 					<table class="ztj">
 						<tr>
@@ -1065,12 +1065,30 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
 							<td><p><code class="quelltext">id</code></p></td>
 							<td class="datentyp">String</td>
 							<td> </td>
-							<td>ID des Sachgebiete-Tags; zeigt auf <code class="quelltext">optionen.data.tags.sachgebiete.data[id]</code></td>
+							<td>ID des Sachgebiet-Tags; zeigt auf <code class="quelltext">optionen.data.tags.sachgebiete.data[id]</code></td>
 						</tr>
 						<tr class="ztj-ebene2">
 							<td><p><code class="quelltext">ty</code></p></td>
 							<td class="datentyp">String</td>
 							<td>immer <code class="quelltext">"sachgebiete"</code></td>
+							<td>Tag-Typ, der in diesem Fall immer derselbe ist; <abbr title="vergleiche">vgl.</abbr> <code class="quelltext">data.bd.gr[ID].bd.ta</code></td>
+						</tr>
+						<tr class="ztj-ebene1">
+							<td><p><code class="quelltext">tf</code></p></td>
+							<td class="datentyp">Array</td>
+							<td> </td>
+							<td>Themenfelder, zu denen das Karteiwort gehört;<br><span class="obacht">ab Version 14</span></td>
+						</tr>
+						<tr class="ztj-ebene2">
+							<td><p><code class="quelltext">id</code></p></td>
+							<td class="datentyp">String</td>
+							<td> </td>
+							<td>ID des Themenfeld-Tags; zeigt auf <code class="quelltext">optionen.data.tags.themenfelder.data[id]</code></td>
+						</tr>
+						<tr class="ztj-ebene2">
+							<td><p><code class="quelltext">ty</code></p></td>
+							<td class="datentyp">String</td>
+							<td>immer <code class="quelltext">"themenfelder"</code></td>
 							<td>Tag-Typ, der in diesem Fall immer derselbe ist; <abbr title="vergleiche">vgl.</abbr> <code class="quelltext">data.bd.gr[ID].bd.ta</code></td>
 						</tr>
 						<tr>
