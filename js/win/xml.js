@@ -656,10 +656,16 @@ let xml = {
 				}
 			} else if (key === "bl") {
 				let belegtext = xml.data.xl.bl[slot].xl.match(/<Belegtext>(.+?)<\/Belegtext>/s);
-				text = belegtext[1].replace(/<.+?>/g, "");
+				text = helferXml.maskieren({
+					text: belegtext[1].replace(/<.+?>/g, ""),
+					demaskieren: true,
+				});
 			} else if (key === "lt") {
 				let unstrukturiert = xml.data.xl.lt[slot].xl.match(/<unstrukturiert>(.+?)<\/unstrukturiert>/);
-				text = unstrukturiert[1];
+				text = helferXml.maskieren({
+					text: unstrukturiert[1],
+					demaskieren: true,
+				});
 			}
 			text = text.substring(0, 300);
 			vorschau.appendChild(document.createTextNode(text));
