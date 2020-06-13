@@ -326,7 +326,7 @@ let konversion = {
 				ty: "",
 			},
 			tx: [],
-			wi: {},
+			wi: [],
 		};
 		// Versionsnummer hochzählen
 		data.ve++;

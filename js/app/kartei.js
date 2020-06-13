@@ -52,7 +52,7 @@ let kartei = {
 						ty: "", // Artikeltyp
 					},
 					tx: [], // Text
-					wi: {}, // Object
+					wi: [], // Wortinformationen
 				},
 			},
 			re: 0, // Revision
