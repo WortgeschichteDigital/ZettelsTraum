@@ -5,6 +5,11 @@ let tagger = {
 	// (das ist zugleich ein Zeichen, dass das Fenster nicht aus dem
 	// Bedeutungsgerüst heraus geöffnet wurde)
 	limit: [],
+	// Map für die Zuordnung von Tag-Datei-Typen und Schlüsseln
+	limitMap: {
+		sachgebiete: "sg",
+		themenfelder: "tf",
+	},
 	// Tagger-Fenster öffnen
 	//   idx = String
 	//     (Index-Nummer im aktuellen Bedeutungsgerüst, zu der die Tags hinzugefügt werden sollen;
@@ -126,8 +131,9 @@ let tagger = {
 			idx = parseInt(dataIdx, 10);
 		let ta;
 		if (isNaN(idx)) {
-			if (dataIdx === "red-meta") {
-				ta = data.rd.sg;
+			if (/^red-meta-/.test(dataIdx)) {
+				const typ = dataIdx.replace(/.+-/, "");
+				ta = data.rd[tagger.limitMap[typ]];
 			}
 		} else {
 			ta = bedeutungen.akt.bd[idx].ta;
@@ -266,9 +272,10 @@ let tagger = {
 		const dataIdx = document.getElementById("tagger").dataset.idx,
 			idx = parseInt(dataIdx, 10);
 		if (isNaN(idx)) {
-			if (dataIdx === "red-meta") {
-				data.rd.sg = save;
-				redMeta.sachgebiete();
+			if (/^red-meta-/.test(dataIdx)) {
+				const typ = dataIdx.replace(/.+-/, "");
+				data.rd[tagger.limitMap[typ]] = save;
+				redMeta.tags();
 				kartei.karteiGeaendert(true);
 			}
 		} else {
@@ -321,8 +328,9 @@ let tagger = {
 	fokusTagzelle () {
 		const dataIdx = document.getElementById("tagger").dataset.idx;
 		if (tagger.limit.length) {
-			if (dataIdx === "red-meta") {
-				document.getElementById("red-meta-sachgebiete").focus();
+			if (/^red-meta-/.test(dataIdx)) {
+				const typ = dataIdx.replace(/.+-/, "");
+				document.getElementById(`red-meta-${typ}`).focus();
 			}
 			return;
 		}

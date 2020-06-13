@@ -27,6 +27,7 @@
 	width: 250px;
 }
 
+#red-meta-themenfelder,
 #red-meta-sachgebiete {
 	color: var(--text);
 }
@@ -36,6 +37,8 @@
 	font-style: italic;
 }
 
+#red-meta-themenfelder:hover,
+#red-meta-themenfelder:focus,
 #red-meta-sachgebiete:hover,
 #red-meta-sachgebiete:focus {
 	color: var(--farbe);
