@@ -438,14 +438,31 @@ let xml = {
 		let sortStr = [];
 		for (let i of xml.data.xl[key]){
 			if (key === "bl") {
-				sortStr.push(i.ds);
+				sortStr.push({
+					ds: i.ds,
+					id: i.id,
+				});
 			} else if (key === "lt") {
 				sortStr.push(i.si);
 			}
 		}
 		if (key === "bl") {
-			sortStr.sort();
-			xml.data.xl.bl.sort((a, b) => sortStr.indexOf(a.ds) - sortStr.indexOf(b.ds));
+			sortStr.sort((a, b) => {
+				let key = "ds",
+					arr = [a.ds, b.ds]; // sortieren nach Sortierdatum
+				if (a.ds === b.ds) {
+					key = "id";
+					arr = [a.id, b.id]; // Fallback: sortieren nach ID
+				}
+				arr.sort();
+				if (a[key] === arr[0]) {
+					return -1;
+				}
+				return 1;
+			});
+			xml.data.xl.bl.sort((a, b) => {
+				return sortStr.findIndex(i => i.id === a.id) - sortStr.findIndex(i => i.id === b.id);
+			});
 		} else if (key === "lt") {
 			sortStr.sort(helfer.sortSiglen);
 			xml.data.xl.lt.sort((a, b) => sortStr.indexOf(a.si) - sortStr.indexOf(b.si));
