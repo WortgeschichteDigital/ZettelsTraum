@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!DOCTYPE themenfelder [
+	<!ELEMENT themenfelder (item)+>
+	<!ELEMENT item (id, name, abbr?)>
+	<!ELEMENT id (#PCDATA)>
+	<!ELEMENT name (#PCDATA)>
+	<!ELEMENT abbr (#PCDATA)>
+]>
+<themenfelder>
+	<item>
+		<id>1</id>
+		<name>Alltag</name>
+	</item>
+	<item>
+		<id>2</id>
+		<name>Freizeit</name>
+	</item>
+	<item>
+		<id>3</id>
+		<name>Handwerk</name>
+	</item>
+	<item>
+		<id>4</id>
+		<name>Kommunikation</name>
+	</item>
+	<item>
+		<id>5</id>
+		<name>Kunst</name>
+	</item>
+	<item>
+		<id>6</id>
+		<name>Literatur</name>
+	</item>
+	<item>
+		<id>7</id>
+		<name>Lebensstil</name>
+	</item>
+	<item>
+		<id>8</id>
+		<name>Medizin &amp; Gesundheit</name>
+	</item>
+	<item>
+		<id>9</id>
+		<name>Musik</name>
+	</item>
+	<item>
+		<id>10</id>
+		<name>Natur &amp; Umwelt</name>
+	</item>
+	<item>
+		<id>11</id>
+		<name>Philosophie</name>
+	</item>
+	<item>
+		<id>13</id>
+		<name>Politik &amp; Gesellschaft</name>
+	</item>
+	<item>
+		<id>14</id>
+		<name>Religion</name>
+	</item>
+	<item>
+		<id>15</id>
+		<name>Sport</name>
+	</item>
+	<item>
+		<id>16</id>
+		<name>Technik</name>
+	</item>
+	<item>
+		<id>17</id>
+		<name>Verkehr</name>
+	</item>
+	<item>
+		<id>18</id>
+		<name>Wirtschaft</name>
+	</item>
+	<item>
+		<id>19</id>
+		<name>Wissenschaft</name>
+	</item>
+</themenfelder>
