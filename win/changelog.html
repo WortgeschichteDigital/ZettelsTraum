@@ -48,12 +48,6 @@
 
 				<p><span class="obacht">Das Dateiformat hat sich geändert!</span> Ältere <abbr title="Zettel’s Traum JSON">ZTJ</abbr>-Dateien werden automatisch konvertiert; dabei wird eine Änderungsmarkierung gesetzt.</p>
 
-				<h3>Entfernte Funktionen</h3>
-
-				<ul>
-					<li></li>
-				</ul>
-
 				<h3>Neue Funktionen</h3>
 
 				<ul>
@@ -67,7 +61,7 @@
 				<h3>Verbesserungen</h3>
 
 				<ul>
-					<li><a href="#karteikarte" class="link-handbuch">Karteikarte</a>: Die Funktion zum <a href="#karteikarte-quelleLaden" class="link-handbuch">Neuladen der Quelle</a> wurde überarbeitet: Änderungen werden vor der Übernahme angezeigt; wurde kein <abbr title="Digitales Wörterbuch der deutschen Sprache">DWDS</abbr>-Snippet gefunden, wird mit dem Inhalt des Quelle-Feldes gearbeitet; die Funktion kann über das Tastaturkürzel <kbd>Strg</kbd> + <kbd>D</kbd> aufgerufen werden.</li>
+					<li><a href="#karteikarte" class="link-handbuch">Karteikarte</a>: Die Funktion zum <a href="#karteikarte-quelleLaden" class="link-handbuch">Neuladen der Quelle</a> wurde überarbeitet: Änderungen werden vor der Übernahme angezeigt; wurde kein <abbr title="Digitales Wörterbuch der deutschen Sprache">DWDS</abbr>-Snippet gefunden, stammt der Beleg aber aus dem <abbr title="Digitalen Wörterbuch der deutschen Sprache">DWDS</abbr> (weil er im Korpus-Feld als solcher markiert wurde), wird mit dem Inhalt des Quelle-Feldes gearbeitet; die Funktion kann über das Tastaturkürzel <kbd>Strg</kbd> + <kbd>D</kbd> aufgerufen werden.</li>
 
 					<li><a href="#menueRedaktion-literatur" class="link-handbuch">Literaturdatenbank</a>: Mithilfe eines Schalters kann nun auch das ID-Feld durchsucht werden. <abbr title="Siehe">S.</abbr> zu Details die Beschreibung der <a href="#menueRedaktion-literaturSuchsyntax" class="link-handbuch">Suchsyntax</a>.</li>
 
@@ -86,10 +80,14 @@
 
 				<h3>Behobene Fehler</h3>
 
-				<p>Es wurden <i>2 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/master">Commit-Messages</a>.</p>
+				<p>Es wurden <i>3 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/master">Commit-Messages</a>.</p>
 
 				<ul>
-					<li></li>
+					<li>das Einfärben der Klammerungen von Belegen, die zum Schneiden vorbereitet wurden, hat nicht immer korrekt funktioniert</li>
+
+					<li>unter gewissen Umständen wurden beim Öffnen einer leeren Karteikarte zwei Importformulare angezeigt</li>
+
+					<li>beim Navigieren durch bestehende Karteikarten in der Formularansicht wurde der Fokus nach dem Aufbau einer Karteikarte ins Datumsfeld gesetzt, was zum unerwünschten Springen der Karte führen konnte</li>
 				</ul>
 			</div>
 
