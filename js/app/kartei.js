@@ -37,6 +37,7 @@ let kartei = {
 					pr: "",
 				}],
 				sg: [], // Sachgebiete
+				tf: [], // Themenfelder
 			},
 			re: 0, // Revision
 			ty: "ztj", // Datei ist eine ZTJ-Datei (immer dieser Wert! Bis Version 0.24.0 stand in dem Feld "wgd")
@@ -394,6 +395,7 @@ let kartei = {
 		data = {};
 		kartei.wort = "";
 		kartei.pfad = "";
+		belegImport.Datei.typ = "dta";
 		belegImport.DateiReset();
 		let wort = document.getElementById("wort");
 		wort.classList.add("keine-kartei");

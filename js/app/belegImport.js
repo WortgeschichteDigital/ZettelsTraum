@@ -1068,14 +1068,22 @@ let belegImport = {
 			txt = txt.replace(/^[!?.,;: ]+/, ""); // Satz- und Leerzeichen am Anfang entfernen (kommt wirklich vor!)
 			txt = txt.replace(/\s\/\s/g, "/"); // Leerzeichen um Slashes entfernen
 			txt = txt.replace(/^Von /, ""); // häufig wird die Autorangabe "Von Karl Mustermann" fälschlicherweise als kompletter Autor angegeben
-			// Autorname eintragen
-			if (/^(Name|Nn|o\.\s?A\.|unknown)$/.test(txt)) { // merkwürdige Platzhalter für "Autor unbekannt"
+			// Autorname eintragen;
+			// beim Anpassen dieser Liste auch beleg.toolsQuelleLaden() anpassen;
+			// !txt kann deswegen sein, weil die Funktion auch von
+			// beleg.toolsQuelleLaden() genutzt wird)
+			if (!txt || /^(Name|Nn|o\.\s?A\.|unknown|unkown)$/.test(txt)) { // merkwürdige Platzhalter für "Autor unbekannt"
 				return "N. N.";
 			} else if (!/[A-ZÄÖÜ]/.test(txt)) { // Autorname ist nur ein Kürzel
 				return `N. N. [${txt}]`;
+			} else if (/^[A-Z]\.[A-Z]\.$/.test(txt)) { // Autorname mit Initialen, aber ohne Spatium
+				return txt.replace(/\./, ". ");
 			}
 			let leerzeichen = txt.match(/\s/g);
-			if (!/,\s/.test(txt) && leerzeichen && leerzeichen.length === 1) {
+			if (!/,\s/.test(txt) &&
+					!/^[A-Z]\.\s[A-Z]\.$/.test(txt) &&
+					leerzeichen &&
+					leerzeichen.length === 1) {
 				let txtSp = txt.split(/\s/);
 				return `${txtSp[1]}, ${txtSp[0]}`;
 			}
@@ -1092,7 +1100,8 @@ let belegImport = {
 			for (let i of jahrQuelle) {
 				jahrQuelleStr = i[1];
 			}
-			if (jahrDatierung && jahrQuelle &&
+			if (!/\[[0-9]{4}\]/.test(data.qu) &&
+					jahrDatierung && jahrQuelleStr &&
 					jahrDatierung[0] !== jahrQuelleStr) {
 				let datierung = parseInt(jahrDatierung[0], 10),
 					quelle = parseInt(jahrQuelleStr, 10),
@@ -1112,7 +1121,7 @@ let belegImport = {
 				if (titel && !data.qu.includes(titel)) {
 					let qu = data.qu;
 					data.qu = `${data.au}: ${titel}`;
-					if (!/\.$/.test(data.qu)) {
+					if (!/[.!?]$/.test(data.qu)) {
 						data.qu += ".";
 					}
 					data.qu += ` In: ${qu}`;
@@ -1132,7 +1141,7 @@ let belegImport = {
 				}
 			}
 			// ggf. Punkt am Ende der Quellenangabe ergänzen
-			if (!/\.$/.test(data.qu)) {
+			if (!/[.!?]$/.test(data.qu)) {
 				data.qu += ".";
 			}
 			// Tagesdaten ggf. aufhübschen
@@ -1142,13 +1151,7 @@ let belegImport = {
 				data.qu = data.qu.replace(reg, `${datum.groups.tag.replace(/^0/, "")}. ${datum.groups.monat.replace(/^0/, "")}. ${datum.groups.jahr}`);
 			}
 			// typographische Verbesserungen
-			let von_bis = data.qu.match(/[0-9]+\s?-\s?[0-9]+/g);
-			if (von_bis) {
-				for (let i of von_bis) {
-					let huebsch = i.replace(/\s?-\s?/, "–");
-					data.qu = data.qu.replace(i, huebsch);
-				}
-			}
+			data.qu = helfer.typographie(data.qu);
 			// ggf. URL ergänzen
 			if (titeldaten.url) {
 				data.qu += `\n\n${titeldaten.url}`;
@@ -1162,8 +1165,10 @@ let belegImport = {
 			}
 			// Steht in der Quellenangabe der Autor in der Form "Nachname, Vorname",
 			// im Autor-Feld aber nicht?
-			let auQu = data.qu.split(": ");
-			if (/, /.test(auQu[0]) && !/, /.test(data.au)) {
+			let auQu = data.qu.split(": "),
+				auQuKommata = auQu[0].match(/, /g);
+			if (auQuKommata && auQuKommata.length === 1 &&
+					!/, /.test(data.au)) {
 				let autorQu = auQu[0].replace(/,/g, "").split(/\s/),
 					autorAu = data.au.split(/\s/);
 				if (auQu[0] !== data.au &&
@@ -1181,8 +1186,10 @@ let belegImport = {
 				}
 			}
 			// Steht im Autor-Feld kein Name, in der Quelle scheint aber einer zu sein?
-			if ((!data.au || /^N.\sN./.test(data.au)) && auQu.length > 1) {
-				data.au = auQu[0];
+			if ((!data.au || /^N.\s?N.$/.test(data.au)) && auQu.length > 1 &&
+					(auQuKommata && auQuKommata.length === 1 ||
+					/\su\.\s/.test(auQu[0]))) {
+				data.au = auQu[0].replace(/\su\.\s/g, "/");
 			}
 		} else if (typ === "ts") { // TEXTSORTE
 			if (!/::/.test(txt)) {
@@ -2422,14 +2429,19 @@ let belegImport = {
 	//     (URL + Aufrufdatum sollen der Titelaufnahme angehängt werden)
 	makeTitle ({td, mitURL}) {
 		let titel = "";
-		// Liste der Autoren/Herausgeber ggf. kürzen
-		td.autor = ua(td.autor);
-		td.hrsg = ua(td.hrsg);
 		// Autor
 		if (td.autor.length) {
-			titel = `${td.autor.join("/")}: `;
+			if (td.autor.length > 3) {
+				titel = `${td.autor[0]}/${td.autor[1]} u. a.: `;
+			} else {
+				titel = `${td.autor.join("/")}: `;
+			}
 		} else if (td.hrsg.length) {
-			titel = `${td.hrsg.join("/")} (Hrsg.): `;
+			if (td.hrsg.length > 3) {
+				titel = `${td.hrsg[0]}/${td.hrsg[1]} u. a.: `;
+			} else {
+				titel = `${td.hrsg.join("/")} (Hrsg.): `;
+			}
 		} else {
 			titel = "N. N.: ";
 		}
@@ -2451,7 +2463,7 @@ let belegImport = {
 			punkt();
 			titel += " In: ";
 			if (td.autor.length && td.hrsg.length && !td.jahrgang) {
-				titel += `${td.hrsg.join("/")} (Hrsg.): `;
+				titel += `${hrsg(true)} (Hrsg.): `;
 			}
 			titel += td.inTitel.join(". ");
 		}
@@ -2466,28 +2478,14 @@ let belegImport = {
 		// ggf. Herausgeber ergänzen
 		if (!td.inTitel.length && td.hrsg.length && td.autor.length) {
 			punkt();
-			titel += " Hrsg. von ";
-			for (let i = 0, len = td.hrsg.length; i < len; i++) {
-				if (i > 0 && i === len - 1) {
-					titel += " und ";
-				} else if (i > 0) {
-					titel += ", ";
-				}
-				let hrsg = td.hrsg[i].split(", ");
-				if (hrsg.length > 1) {
-					hrsg.reverse();
-					titel += hrsg.join(" ");
-				} else {
-					titel += hrsg[0];
-				}
-			}
+			titel += ` Hrsg. von ${hrsg(false)}`;
 		}
 		// Auflage
-		if (td.auflage && !td.jahrgang && !/^1(\.|$)/.test(td.auflage)) {
-			if (/\s(Aufl(\.|age)?|Ausgabe)$/.test(td.auflage)) {
-				titel += `, ${td.auflage}`;
+		if (td.auflage && !td.jahrgang && !/^1(\.|$)|1\.\sAufl/.test(td.auflage)) {
+			if (/\sAufl(\.|age)?|(\sA|(?<=\p{Lowercase})a)usg(\.|abe)?/u.test(td.auflage)) {
+				titel += `. ${td.auflage}`;
 			} else {
-				titel += `, ${td.auflage}. Aufl.`;
+				titel += `. ${td.auflage}. Aufl.`;
 			}
 		}
 		// Qualifikationsschrift
@@ -2498,7 +2496,11 @@ let belegImport = {
 		// Ort
 		if (td.ort.length && !td.jahrgang) {
 			punkt();
-			titel += ` ${td.ort.join("/")}`;
+			if (td.ort.length > 2) {
+				titel += ` ${td.ort[0]} u. a.`;
+			} else {
+				titel += ` ${td.ort.join("/")}`;
+			}
 		} else if (!td.ort.length && !td.jahrgang) {
 			punkt();
 		}
@@ -2511,9 +2513,12 @@ let belegImport = {
 				titel += ` ${td.verlag}`;
 			}
 		}
-		// Jahrgang + Jahr
+		// Jahrgang (+ Heft) + Jahr
 		if (td.jahrgang) {
 			titel += ` ${td.jahrgang}`;
+			if (/^[0-9]+$/.test(td.heft)) {
+				titel += `/${td.heft}`;
+			}
 			if (td.jahr) {
 				titel += ` (${td.jahr})`;
 			}
@@ -2523,9 +2528,9 @@ let belegImport = {
 				titel += ` [${td.jahrZuerst}]`;
 			}
 		}
-		// Heft
-		if (td.heft) {
-			titel += `, H. ${td.heft}`;
+		// Heft (wenn Angabe nicht-numerisch)
+		if (!/^[0-9]+$/.test(td.heft)) {
+			titel += `, ${td.heft}`;
 		}
 		// Seiten/Spalten
 		const seite_spalte = td.spalte ? "Sp. " : "S. ";
@@ -2562,12 +2567,31 @@ let belegImport = {
 				titel += ".";
 			}
 		}
-		// ggf. Namenslisten kürzen
-		function ua (liste) {
-			if (liste.length > 3) {
-				return [`${liste[0]} u. a.`];
+		// Herausgeber auflisten
+		//   slash = Boolean
+		//     (Anschluss mit Slash, sonst mit Kommata bzw. "und")
+		function hrsg (slash) {
+			let pers = "";
+			for (let i = 0, len = td.hrsg.length; i < len; i++) {
+				// maximal 3 Hrsg. nennen; bei mehr => 2 Hrsg. + u.a.
+				if (len > 3 && i === 2) {
+					pers += " u. a.";
+					break;
+				}
+				// Anschluss
+				if (i > 0 && slash) {
+					pers += "/";
+				} else if (i > 0 && i === len - 1) {
+					pers += " und ";
+				} else if (i > 0) {
+					pers += ", ";
+				}
+				// Namen umdrehen: Nachname, Vorname > Vorname Nachname
+				let hrsg = td.hrsg[i].split(", ");
+				hrsg.reverse();
+				pers += hrsg.join(" ");
 			}
-			return liste;
+			return pers;
 		}
 	},
 	// leeren Datensatz für eine Titelaufnahme erstellen

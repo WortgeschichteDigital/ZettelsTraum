@@ -186,33 +186,43 @@ let helfer = {
 		text = text.replace(/'(.+?)'/g, (m, p1) => `‚${p1}‘`); // einfache Anführungszeichen
 		text = text.replace(/'/g, "’"); // wahrscheinliches Apostroph
 		text = text.replace(/(\s|[0-9]+)-(\s|[0-9]+)/g, (m, p1, p2) => `${p1}–${p2}`); // Halbgeviertstriche
+		text = text.replace(/([0-9])\s[-–]\s([0-9])/g, (m, p1, p2) => `${p1}–${p2}`); // Halbgeviertstriche
 		text = text.replace(/--/g, "–"); // Halbgeviertstriche
 		text = text.replace(/\s([:;])\s/g, (m, p1) => `${p1} `); // nicht planken
 		text = text.replace(/=__(.+?)__/g, (m, p1) => `="${p1}"`); // Attribute in Tags demaskieren
 		text = text.replace(/\.{3}/g, "…"); // horizontale Ellipse
 		text = text.replace(/([a-z]) ([0-9]+ \([0-9]{4}\))/, (m, p1, p2) => `${p1} ${p2}`); // geschütztes Leerzeichen vor Jahrgang einer Zeitschrift
-		// geschützte Leerzeichen
+		// Korrekturen
+		text = text.replace(/([0-9]{4})[–-]([0-9]{2})[–-]([0-9]{2})/g, (m, p1, p2, p3) => `${p1}-${p2}-${p3}`); // falsche Halbgeviertstriche in ISO 8601-Daten
+		// geschützte Leerzeichen (ggf. einfügen, wenn Spatien vergessen wurden)
 		let abk = new Set([
 			/[0-9]{1,2}\. [0-9]{1,2}\. [0-9]{4}/g, // Datumsangabe (nur 1. Leerzeichen wird ersetzt!)
-			/[0-9]{1,2}\. (Jan|Feb|März|Apr|Mai|Juni|Juli|Aug|Sep|Okt|Nov|Dez)/g, // Datumsangabe mit Monat
-			/[0-9]\. Aufl/g, // Auflage
-			/[0-9]{2}\. (Jh\.|Jahrhundert)/g, // Jahrhundertangaben
-			/a\. M\./g, // am Main
-			/Bd\. [0-9]+/g, // Band
-			/d\. (h|i)\./ig,
-			/e\. V\./g, // eingetragener Verein
-			/hrsg\. v\./ig,
-			/H\. [0-9]+/g, // Heft
-			/N\. N\./g, // nomen nescio
-			/Nr\. [0-9]+/g, // Nummer
-			/s\. (d|l|v)\./ig,
-			/Sp?\. [0-9]+/g, // Seiten-/Spaltenangaben
-			/u\. (a|ä)\./ig,
-			/z\. B\./ig,
-			/zit\. n\./ig,
+			/[0-9]{1,2}\.\s?(Jan|Feb|März|Apr|Mai|Juni|Juli|Aug|Sep|Okt|Nov|Dez)/g, // Datumsangabe mit Monat
+			/[0-9]\.\s?Aufl/g, // Auflage
+			/[0-9]\.\s?Hälfte/g,
+			/[0-9]{2}\.\s?(Jh\.|Jahrhundert)/g, // Jahrhundertangaben
+			/(Abschnitt|Kapitel) ([0-9]|[IVXLC])/g,
+			/a\.\s?M\./g, // am Main
+			/Bd\.\s?[0-9]+/g, // Band
+			/d\.\s?(h|i)\./ig,
+			/e\.\s?V\./g, // eingetragener Verein
+			/hrsg\.\s?v\./ig,
+			/H\.\s?[0-9]+/g, // Heft
+			/N\.\s?N\./g, // nomen nescio
+			/Nr\.\s?[0-9]+/g, // Nummer
+			/s\.\s?(d|l|v)\./ig,
+			/Sp?\.\s?[0-9]+/g, // Seiten-/Spaltenangaben
+			/u\.\s?(a|ä)\./ig,
+			/z\.\s?B\./ig,
+			/zit\.\s?n\./ig,
 		]);
 		for (let i of abk) {
-			text = text.replace(i, m => m.replace(/\s/, " "));
+			text = text.replace(i, m => {
+				if (!/\s/.test(m)) {
+					return m.replace(/\./, ". ");
+				}
+				return m.replace(/\s/, " ");
+			});
 		}
 		// Text zurückgeben
 		return text;

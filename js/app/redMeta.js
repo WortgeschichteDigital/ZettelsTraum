@@ -20,52 +20,60 @@ let redMeta = {
 		// Behandelt-mit-Feld füllen
 		document.getElementById("red-meta-behandelt-mit").value = data.rd.bh;
 		// Sachgebiete aufbauen
-		redMeta.sachgebiete();
+		redMeta.tags();
 		// Liste der BearbeterInnen erstellen und das Textfeld leeren
 		redMeta.bearbAuflisten();
 		let be = document.getElementById("red-meta-be");
 		be.value = "";
 	},
-	// Sachgebiete auflisten
-	sachgebiete () {
-		let sg = document.getElementById("red-meta-sachgebiete"),
-			sachgebiete = [],
-			tags = optionen.data.tags.sachgebiete;
-		if (tags) {
-			// Sachgebiete-Tags vorhanden
-			for (let i of data.rd.sg) {
-				sachgebiete.push(tags.data[i.id].name);
+	// Tags auflisten
+	tags () {
+		let tags = ["sachgebiete", "themenfelder"];
+		let keys = {
+			sachgebiete: "sg",
+			themenfelder: "tf",
+		};
+		for (let tag of tags) {
+			let cont = document.getElementById(`red-meta-${tag}`),
+				arr = [],
+				tags = optionen.data.tags[tag],
+				name = tag.substring(0, 1).toUpperCase() + tag.substring(1);
+			if (tags) { // Tags vorhanden
+				for (let i of data.rd[keys[tag]]) {
+					arr.push(tags.data[i.id].name);
+				}
+			} else { // Tags fehlen
+				cont.textContent = `${name}-Datei fehlt`;
+				cont.classList.add("kein-wert");
+				return;
 			}
-		} else {
-			// Sachgebiete-Tags fehlen
-			sg.textContent = "Sachgebiete-Datei fehlt";
-			sg.classList.add("kein-wert");
-			return;
-		}
-		// Tags anzeigen
-		if (sachgebiete.length) {
-			sg.classList.remove("kein-wert");
-			sg.textContent = sachgebiete.join(", ");
-		} else {
-			sg.classList.add("kein-wert");
-			sg.textContent = "keine Sachgebiete zugeordnet";
+			// Tags anzeigen
+			if (arr.length) {
+				cont.classList.remove("kein-wert");
+				cont.textContent = arr.join(", ");
+			} else {
+				cont.classList.add("kein-wert");
+				cont.textContent = `keine ${name} zugeordnet`;
+			}
 		}
 	},
-	// Sachgebiete hinzufügen
-	sachgebieteAdd () {
-		let tags = optionen.data.tags.sachgebiete;
+	// Tags hinzufügen
+	//   typ = String
+	//     (Typ der Tag-Datei)
+	tagsAdd ({typ}) {
+		let tags = optionen.data.tags[typ];
 		// keine Tag-Datei vorhanden
 		if (!tags) {
 			dialog.oeffnen({
 				typ: "alert",
-				text: `Das Programm muss zunächst mit einer Sachgebiete-Datei verknüpft werden.\nTag-Dateien können via <i>${appInfo.name} &gt; Einstellungen &gt; Bedeutungsgerüst</i> geladen werden.`,
+				text: `Das Programm muss zunächst mit einer ${typ.substring(0, 1).toUpperCase()}${typ.substring(1)}-Datei verknüpft werden.\nTag-Dateien können via <i>${appInfo.name} &gt; Einstellungen &gt; Bedeutungsgerüst</i> geladen werden.`,
 				callback: () => document.getElementById("red-meta-behandelt-mit").focus(),
 			});
 			return;
 		}
 		// Tagger öffnen
-		tagger.limit = ["sachgebiete"];
-		tagger.oeffnen("red-meta");
+		tagger.limit = [typ];
+		tagger.oeffnen(`red-meta-${typ}`);
 	},
 	// BearbeiterInnen des Zettels auflisten
 	bearbAuflisten () {

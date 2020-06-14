@@ -5,6 +5,10 @@
 	max-width: 450px;
 }
 
+#dialog > div.breit {
+	max-width: 650px;
+}
+
 #dialog-h-prompt,
 #dialog-h-confirm,
 #dialog-h-alert {

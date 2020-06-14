@@ -654,9 +654,18 @@
 					<div class="info">
 						<p>Enthält das Feld Internetlinks, werden diese in der Leseansicht der Karteikarte und in der Belegliste als klickbare Links dargestellt, über die sich der Standardbrowser des Betriebssystems öffnet. Für den Linktext werden nur Subdomain, Domain und Top-Level-Domain genutzt. Ein Beispiel: http://www.deutschestextarchiv.de/<wbr>book/<wbr>view/<wbr>gutzkow_wally_1835?p=12 wird automatisch zu <a href="http://www.deutschestextarchiv.de/book/view/gutzkow_wally_1835?p=12">www.deutschestextarchiv.de</a>.</p>
 
+						<figure class="right" title="zum Vergrößern anklicken">
+							<img src="../img/win/hb-karteikarte-quelle-laden.png" alt="">
+							<figcaption>Verbesserungsvorschläge für fehlerhafte Datensätze</figcaption>
+						</figure>
+
 						<p id="karteikarte-quelleLaden">Mithilfe des Icons <img src="../img/pfeil-kreis.svg" width="20" height="20" alt=""> über dem Quelle-Feld kann die <b>Literaturangabe neu eingelesen</b> werden. Haben Sie die Karteikarte über die <a href="#karteikarte-importfunktion">Importfunktion</a> ausgefüllt, wurde im Hintergrund ein Datensatz mit den Originaldaten angelegt und in der Kartei gespeichert. Ist dieser Datensatz vorhanden, wird beim Klick auf das Icon versucht, die Titeldaten aus diesem Datensatz zu rekonstruieren. Bei einem <abbr title="Deutsches Textarchiv">DTA</abbr>-Import wird der Datensatz derzeit noch nicht gefüllt. Findet sich im Quelle-Feld jedoch eine passende URL, werden die Titeldaten direkt von der <abbr title="Deutsches Textarchiv">DTA</abbr>-Webseite heruntergeladen.</p>
 
-						<p>Wenn nach dem Klick auf das Icon das Quelle-Feld fokussiert wird und keine Fehlermeldung erscheint, ist die Aktion geglückt. Wurde der Zitiertitel wirklich angepasst, dreht sich das Icon einmal um sich selbst und das Datenfeld blinkt kurz. Die Karteikarte erhält nur in diesem Fall eine Änderungsmarkierung.</p>
+						<p>Stammen die Daten aus dem <abbr title="Deutsches Textarchiv">DTA</abbr> oder dem <abbr title="Digitalen Wörterbuch der deutschen Sprache">DWDS</abbr> wird zusätzlich überprüft, ob der Text im Datenfeld <i>Autor</i> angepasst werden sollte. Liegen zu einem Beleg aus dem <abbr title="Digitalen Wörterbuch der deutschen Sprache">DWDS</abbr> keine Originaldaten vor, wird der Inhalt des Quelle-Felds ausgewertet.</p>
+
+						<p>Die App fragt nach, bevor Datenfelder überschrieben werden und zeigt ihnen an, was sie ändern würde. Bestätigen Sie die Änderungen, wird die Karteikarte automatisch gespeichert.</p>
+
+						<p>Die Funktion lässt sich auch über das Tastaturkürzel <kbd>Strg</kbd> + <kbd>D</kbd> aufrufen.</p>
 					</div>
 
 					<p><b>Korpus:</b> Textkorpus, aus dem der Beleg stammt</p>
@@ -1069,7 +1078,7 @@
 						</li>
 					</ol>
 
-					<p id="bedeutungsgeruest-taggen"><b>Taggen:</b> In der ersten, grau hinterlegten Spalte hinter dem Text einer Bedeutung können Tags erscheinen, die Sie mit einer Bedeutung verknüpft haben. Ist dies noch nicht geschehen, erscheint hier beim Herüberfahren mit der Maus der Platzhaltertext <i>Tags</i>. Um einer Bedeutung <abbr title="zum Beispiel">z. B.</abbr> ein Sachgebiet zuzuordnen, klicken Sie einfach auf diesen Platzhalter (oder die dort bereits stehenden Tags). Es öffnet sich ein Fensterchen, in dem alle zur Verfügung stehenden Tag-Kategorien zu sehen sind. Das sind standardmäßig: Sachgebiete, Regiolekte, Register, Soziolekte, Sprachen.</p>
+					<p id="bedeutungsgeruest-taggen"><b>Taggen:</b> In der ersten, grau hinterlegten Spalte hinter dem Text einer Bedeutung können Tags erscheinen, die Sie mit einer Bedeutung verknüpft haben. Ist dies noch nicht geschehen, erscheint hier beim Herüberfahren mit der Maus der Platzhaltertext <i>Tags</i>. Um einer Bedeutung <abbr title="zum Beispiel">z. B.</abbr> ein Sachgebiet zuzuordnen, klicken Sie einfach auf diesen Platzhalter (oder die dort bereits stehenden Tags). Es öffnet sich ein Fensterchen, in dem alle zur Verfügung stehenden Tag-Kategorien zu sehen sind. Das sind standardmäßig: Sachgebiete, Regiolekte, Register, Soziolekte, Sprachen, Themenfelder.</p>
 
 					<p>Sie können einer Bedeutung beliebig viele Tags aus beliebig vielen Kategorien zuordnen – und diese jederzeit wieder entfernen oder ändern. Akzeptiert werden allerdings nur Tags, die in der zugehörigen Tag-Datei vorhanden sind. Diese Beschränkung wurde eingeführt, damit Tags möglichst normiert vergeben werden.</p>
 
@@ -1084,7 +1093,7 @@
 
 					<p>Ist eines der Textfelder fokussiert, können Sie mit <kbd>⏎</kbd> das Speichern des Tag-Fensters auslösen. (Ist noch ein Dropdown-Menü geöffnet löst <kbd>⏎</kbd> wie gehabt die Auswahl des im Menü selektierten Wertes aus.) Drücken Sie hingegen <kbd>Esc</kbd>, schließt sich das Tag-Fenster.</p>
 
-					<p>Das Tag-Fenster wird auch zum <a href="#menueRedaktion-metadatenSachgebiete">Zuordnen von Sachgebieten im Redaktionsmetadaten-Fenster</a> genutzt.</p>
+					<p>Das Tag-Fenster wird auch zum <a href="#menueRedaktion-metadatenThemenfelder">Zuordnen von Themenfeldern und Sachgebieten im Redaktionsmetadaten-Fenster</a> genutzt.</p>
 
 					<p id="bedeutungsgeruest-alias"><b>Alias vergeben:</b> Wenn ausformulierte Bedeutungen lang werden, kann dies die Übersicht in der <a href="#filter">Filterleiste</a> und in der <a href="#karteikarte-formularansicht">Formularansicht der Karteikarte</a> stark beeinträchtigen. Zu diesem Zweck können Sie Bedeutungen mit einem Alias versehen. In der Formularansicht der Karteikarte, im zugehörigen Dropdown-Menü und in der Filterleiste erscheint dann anstelle der eigentlichen Bedeutungsformulierung das Alias. Im Bedeutungsgerüst-Fenster, in der Belegliste und der Leseansicht der Karteikarte sollten lange Bedeutungsangaben nicht störend sein, weswegen sie hier immer in ausgeschriebener Form gedruckt werden.</p>
 
@@ -2095,7 +2104,7 @@ Mustermann, Erika
 					<div class="info">
 						<p><i>Standard:</i> aktiviert</p>
 
-						<p>In das <a href="#bedeutungsgeruest">Bedeutungsgerüst</a> eingetragene Bedeutungen können nach Belieben getaggt werden. Für diesen Zweck finden sich im <a href="#framework-ordner" class="link-dokumentation">Programmordner</a> von <i class="app-name"></i> bereits fünf verschiedene <b>Tag-Dateien</b>, deren Inhalte beim ersten Programmstart automatisch in die Einstellungen geladen werden und dann im <a href="#bedeutungsgeruest-tagFenster">Tag-Fenster</a> zur Verfügung stehen: <span class="datei">Regiolekte.xml, Register.xml, Sachgebiete.xml, Soziolekte.xml</span> und <span class="datei">Sprachen.xml</span>. Der Einheitlichkeit halber werden bei der Eingabe im Tag-Fenster nur Tags akzeptiert, die in den Tag-Dateien tatsächlich zu finden sind.</p>
+						<p>In das <a href="#bedeutungsgeruest">Bedeutungsgerüst</a> eingetragene Bedeutungen können nach Belieben getaggt werden. Für diesen Zweck finden sich im <a href="#framework-ordner" class="link-dokumentation">Programmordner</a> von <i class="app-name"></i> bereits fünf verschiedene <b>Tag-Dateien</b>, deren Inhalte beim ersten Programmstart automatisch in die Einstellungen geladen werden und dann im <a href="#bedeutungsgeruest-tagFenster">Tag-Fenster</a> zur Verfügung stehen: <span class="datei">Regiolekte.xml, Register.xml, Sachgebiete.xml, Soziolekte.xml, Sprachen.xml</span> und <span class="datei">Themenfelder.xml</span>. Der Einheitlichkeit halber werden bei der Eingabe im Tag-Fenster nur Tags akzeptiert, die in den Tag-Dateien tatsächlich zu finden sind.</p>
 
 						<p>Die Inhalte der Tag-Dateien werden beim Laden zwar eingelesen und in den Einstellungen gespeichert. Die Tag-Dateien selbst bleiben aber trotzdem mit dem Programm verknüpft, damit Änderungen in ihnen automatisch übernommen werden können. Ist diese Einstellung aktiviert, führt die App <b>einmal pro Session einen Abgleich</b> der gespeicherten Tags mit den Tag-Dateien durch: Gelöschte Tags werden entfernt, neue hinzugefügt.</p>
 
@@ -2830,6 +2839,14 @@ Mustermann, Erika
 							<p><a href="#menueBearbeiten-kopieren">Text kopieren</a></p>
 						</td>
 					</tr><tr>
+						<td> </td><td> </td>
+						<td><kbd>Strg</kbd></td><td>+</td>
+						<td> </td><td> </td>
+						<td><kbd>D</kbd></td>
+						<td>
+							<p><a href="#karteikarte">Karteikarte</a>: <a href="#karteikarte-quelleLaden">Quellenangabe neu laden</a></p>
+						</td>
+					</tr><tr>
 						<td><kbd>Alt</kbd></td><td>+</td>
 						<td> </td><td> </td>
 						<td> </td><td> </td>
@@ -3504,9 +3521,11 @@ Mustermann, Erika
 
 						<p><b><i>Karteiwort:</i></b> Der Filter sucht nach passenden Karteiwörtern. Die Suche verläuft trunkiert, es werden also auch Wortteile gefunden; Groß- und Kleinschreibung werden ignoriert. <i class="app-name"></i> bietet zwar an, eine neue Kartei mit dem Karteiwort als Namen abzuspeichern. Der Karteiname spielt für diese Suche jedoch keine Rolle. Es wird lediglich das Datenfeld für das Karteiwort <em>innerhalb</em> der Kartei ausgewertet, das vom Dateinamen durchaus abweichen kann und darf.</p>
 
-						<p id="menueApp-karteisucheSachgebiet"><b><i>Sachgebiet:</i></b> Mit diesem Filter können Sie nach Karteien suchen, die mit einem oder mehreren Sachgebieten verknüpft wurden. Durchsucht wird das Datenfeld <i>Sachgebiete</i>, das über das <a href="#menueRedaktion-metadaten">Redaktionsmetadaten-Fenster</a> gefüllt werden kann. Wollen Sie Karteien finden, in denen Bedeutungen im <a href="#bedeutungsgeruest">Bedeutungsgerüst</a> mit bestimmten Sachgebieten verknüpft wurden, müssen Sie den <a href="#menueApp-karteisucheTag">Tag-Filter</a> nutzen.</p>
+						<p id="menueApp-karteisucheThemenfelder"><b><i>Themenfelder:</i></b> Mit diesem Filter können Sie nach Karteien suchen, die mit einem oder mehreren Themenfeldern verknüpft wurden. Durchsucht wird das Datenfeld <i>Themenfelder</i>, das über das <a href="#menueRedaktion-metadaten">Redaktionsmetadaten-Fenster</a> gefüllt werden kann. Wollen Sie Karteien finden, in denen Bedeutungen im <a href="#bedeutungsgeruest">Bedeutungsgerüst</a> mit bestimmten Themenfeldern verknüpft wurden, müssen Sie den <a href="#menueApp-karteisucheTag">Tag-Filter</a> nutzen.</p>
 
-						<p>Es kann nur nach Sachgebieten gesucht werden, die in einer mit dem Programm <a href="#einstellungen-tagDateien">verknüpften Tag-Datei</a> vorhanden sind. Entscheidend ist hierbei ferner, dass Sie beim Taggen der Dateien, die durchsucht werden, dieselbe Tag-Datei verwendet haben, die aktuell mit dem Programm verknüpft ist. (Es wird nämlich nicht nach dem Tag-Text, sondern der Tag-ID gesucht.) Nutzen Sie immer die mitgelieferte Datei, gibt es keine Probleme.</p>
+						<p>Es kann nur nach Themenfeldern gesucht werden, die in einer mit dem Programm <a href="#einstellungen-tagDateien">verknüpften Tag-Datei</a> vorhanden sind. Entscheidend ist hierbei ferner, dass Sie beim Taggen der Dateien, die durchsucht werden, dieselbe Tag-Datei verwendet haben, die aktuell mit dem Programm verknüpft ist. (Es wird nämlich nicht nach dem Tag-Text, sondern der Tag-ID gesucht.) Nutzen Sie immer die mitgelieferte Datei, gibt es keine Probleme.</p>
+
+						<p id="menueApp-karteisucheSachgebiet"><b><i>Sachgebiet:</i></b> Identisch mit dem Filter <a href="#menueApp-karteisucheThemenfelder"><i>Themenfelder</i></a> mit dem Unterschied, dass es hier um Sachgebiete geht.</p>
 
 						<p><b><i>Volltext:</i></b> Der Volltextfilter durchsucht in allen Karteikarten dieselben Felder wie die <a href="#filter-volltext">Suchfunktion in der Filterleiste</a>. Darüber hinaus werden das Karteiwort und die <a href="#menueKartei-notizen">Karteinotizen</a> in die Suche mit einbezogen. Die Suche läuft trunkiert; es wird also auch nach Wortteilen gesucht. Haken Sie die Einstellung <i>genaue Schreibung</i> ab, wird zwischen Groß- und Kleinschreibung unterschieden.</p>
 
@@ -4067,11 +4086,13 @@ Gerüst 2 &gt; Gerüst 1</pre>
 
 						<p>Ist das Feld <i>Wort</i> gefüllt, erscheint keine <a href="#einstellungen-allgemeinesIconsErinnerungen">Erinnerung</a>, dass Sie die Artikel- oder <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Datei noch anhängen sollten, wenn die entsprechenden <a href="#menueRedaktion-ereignisse">Redaktionsereignisse</a> angelegt wurden, weil davon ausgegangen wird, dass diese Dateien der Kartei zu dem vermerkten Wort zugeordnet werden. Außerdem erscheinen in der <a href="#menueApp-karteisuche">Karteisuche</a> automatisch entsprechende <a href="#menueApp-karteisucheVerweise">Verweise</a>, wenn Karteien gefunden wurden, die von der Eingabe in diesem Textfeld betroffen sind (das sind die aktuelle und die Wortkartei, auf die verwiesen wurde).</p>
 
-						<p id="menueRedaktion-metadatenSachgebiete"><b><i>Karteiwort &gt; Sachgebiete:</i></b> Um der Kartei ein Sachgebiet zuzuordnen, klicken Sie auf den Text <q>keine Sachgebiete zugeordnet</q>; um Sachgebiete zu ändern auf die aufgelisteten Sachgebiete. Zum Taggen wird dasselbe <a href="#bedeutungsgeruest-tagFenster">Tag-Fenster</a> wie für das Bedeutungsgerüst genutzt. Im oberen Teil erscheint jedoch keine Bedeutung (weil es hier nicht um das Taggen von Bedeutungen geht) und es steht allein die Kategorie <i>Sachgebiete</i> zur Verfügung.</p>
+						<p id="menueRedaktion-metadatenThemenfelder"><b><i>Karteiwort &gt; Themenfelder:</i></b> Um der Kartei ein Themenfeld zuzuordnen, klicken Sie auf den Text <q>keine Themenfelder zugeordnet</q>; um Themenfelder zu ändern auf die aufgelisteten Themenfelder. Zum Taggen wird dasselbe <a href="#bedeutungsgeruest-tagFenster">Tag-Fenster</a> wie für das Bedeutungsgerüst genutzt. Im oberen Teil erscheint jedoch keine Bedeutung (weil es hier nicht um das Taggen von Bedeutungen geht) und es steht allein die Kategorie <i>Themenfelder</i> zur Verfügung.</p>
 
-						<p>Zum Taggen von Sachgebieten muss die Kartei zunächst mit einer Sachgebiete-Datei verknüpft sein. Es handelt sich um dieselbe <a href="#einstellungen-tagDateien">Tag-Datei</a>, die auch für das Bedeutungsgerüst genutzt wird. <i class="app-name"></i> wird beim ersten Start automatisch mit einer mitgelieferten Sachgebiete-Datei verknüpft.</p>
+						<p>Zum Taggen von Themenfeldern muss die Kartei zunächst mit einer Themenfelder-Datei verknüpft sein. Es handelt sich um dieselbe <a href="#einstellungen-tagDateien">Tag-Datei</a>, die auch für das Bedeutungsgerüst genutzt wird. <i class="app-name"></i> wird beim ersten Start automatisch mit einer mitgelieferten Themenfelder-Datei verknüpft.</p>
 
-						<p>In der <a href="#menueApp-karteisuche">Karteisuche</a> können Karteien mit dem Filter <a href="#menueApp-karteisucheSachgebiet">Sachgebiet</a> durchsucht werden, der sich ausschließlich auf die Sachgebiete in diesem Datenfeld bezieht.</p>
+						<p>In der <a href="#menueApp-karteisuche">Karteisuche</a> können Karteien mit dem Filter <a href="#menueApp-karteisucheThemenfelder">Themenfelder</a> durchsucht werden, der sich ausschließlich auf die Themenfelder in diesem Datenfeld bezieht.</p>
+
+						<p id="menueRedaktion-metadatenSachgebiete"><b><i>Karteiwort &gt; Sachgebiete:</i></b> Identisch mit <a href="#menueRedaktion-metadatenThemenfelder"><i>Karteiwort &gt; Themenfelder</i></a> mit dem Unterschied, dass es um Sachgebiete geht. Analog zu den Themenfeldern steht auch eine <a href="#menueApp-karteisucheSachgebiet">Karteisuche für Sachgebiete</a> zur Verfügung, die dieses Feld durchsucht.</p>
 
 						<p><b><i>BearbeiterInnen:</i></b> Eine Liste der Personen, die die Kartei zu irgendeinem Zeitpunkt gespeichert haben. Am weitesten oben in der Liste steht die Person, die die Kartei zuletzt gespeichert hat. Fügen Sie über das Formular unter der Liste eine Person hinzu, wird diese an den Anfang der Liste gesetzt. Sie werden als BearbeiterIn automatisch in dieses Feld eingetragen, wenn Sie sich <a href="#einstellungen-allgemeinesBearbeiterin">in den Einstellungen registriert</a> haben. Dann brauchen Sie sich um dieses Datenfeld nicht weiter bemühen; das Programm wird Sie beim Speichern einer Kartei automatisch im Datensatz <i>BearbeiterInnen</i> an erster Stelle vermerken.</p>
 					</div>
@@ -4209,7 +4230,7 @@ Gerüst 2 &gt; Gerüst 1</pre>
 							<figcaption>Suchergebnisse in der Literaturdatenbank</figcaption>
 						</figure>
 
-						<p>Mit der Suchfunktion können Sie alle Titelaufnahmen der aktuellen Literaturdatenbank durchsuchen. Durchsucht werden die <b>Datenfelder</b> <i>Sigle, Titel, URL, Aufrufdatum, Fundort, PPN, Tags</i> und <i>Notizen</i>. Dabei ist allein zu beachten, dass das Datum des Datenfelds <i>Aufrufdatum</i> intern als ISO 8601 formatiert ist, also diese Form hat: JJJJ–MM-DD (Jahr-Monat-Tag). Suchen Sie nach einer Literaturaufnahme, die das Aufrufdatum <q>8. 5. 2020</q> hat, müssen Sie in den Suchschlitz also <code class="quelltext">2020-05-08</code> eingeben.</p>
+						<p>Mit der Suchfunktion können Sie alle Titelaufnahmen der aktuellen Literaturdatenbank durchsuchen. Durchsucht werden die <b>Datenfelder</b> <i>Sigle, Titel, URL, Aufrufdatum, Fundort, PPN, Tags</i> und <i>Notizen</i>. (Das Feld <i>ID</i> kann nur <a href="#menueRedaktion-literaturSuchsyntax">unter Verwendung eines speziellen Schalters</a> durchsucht werden.) Dabei ist allein zu beachten, dass das Datum des Datenfelds <i>Aufrufdatum</i> intern als ISO 8601 formatiert ist, also diese Form hat: JJJJ–MM-DD (Jahr-Monat-Tag). Suchen Sie nach einer Literaturaufnahme, die das Aufrufdatum <q>8. 5. 2020</q> hat, müssen Sie in den Suchschlitz also <code class="quelltext">2020-05-08</code> eingeben.</p>
 
 						<p>Die Suche kann via <kbd>⏎</kbd> oder durch Klick auf das Icon <img src="../img/lupe.svg" width="20" height="20" alt=""> <b>gestartet</b> werden.</p>
 
@@ -4232,6 +4253,8 @@ Gerüst 2 &gt; Gerüst 1</pre>
 						<ul>
 							<li><i>Sigle, si:</i> nur das Sigle-Feld durchsuchen.</li>
 
+							<li><i>ID, id:</i> das ID-Feld durchsuchen. Eine Suche über das ID-Feld ist nur unter Verwendung dieses Schalters möglich.</li>
+
 							<li><i>Titel, ti:</i> nur das Titel-Feld durchsuchen.</li>
 
 							<li><i>URL, ul:</i> nur das URL-Feld durchsuchen.</li>
@@ -4248,6 +4271,14 @@ Gerüst 2 &gt; Gerüst 1</pre>
 
 							<li><i>BearbeiterIn, Bearbeiter, bearb, be:</i> nur das BearbeiterIn-Feld durchsuchen.</li>
 						</ul>
+
+						<p id="menueRedaktion-literaturNurAktuelle">Um die <b>Suche auf die aktuellen Titelaufnahmen zu beschränken</b> gibt es einen eigene Schalter, der an diejenigen der Suchsyntax angelehnt ist:</p>
+
+						<ul>
+							<li><i>nurAktuelle, na:</i> Suche auf die aktuellen Titelaufnahmen beschränken.</li>
+						</ul>
+
+						<p>Dieser Schalter darf niemals Text enthalten; er dient nur zur Beschränkung der Suche und kann mit allen anderen Schaltern oder Suchabfragen beliebig kombiniert werden. Eine Beispielanfrage: <code class="quelltext">"schriften zur" na:""</code>. Hier wird unter Ignoranz von Groß- und Kleinschreibung nach der Phrase <q>schriften zur</q> gesucht, veraltete Titelaufnahmen werden jedoch übergangen und produzieren keine Treffer. Die Position, an der der Schalter zur Beschränkung steht, ist irrelevant; die Groß- und Kleinschreibung im Schalternamen ebenfalls, <code class="quelltext">nuraktuelle:""</code> funktioniert ebenfalls.</p>
 
 						<p>Verwenden Sie mehr als ein Suchwort und/oder mehr als einen Suchausdruck, werden diese immer durch ein <b>logisches Und</b> miteinander verknüpft. Sie bekommen nur Treffer, wenn alle Suchkriterien in einem Titel erfüllt sind.</p>
 

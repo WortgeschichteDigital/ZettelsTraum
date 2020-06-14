@@ -53,6 +53,7 @@
 
 #tagger-typen i {
 	display: inline-block;
+	padding-right: 5px;
 	width: 100px;
 	overflow: hidden;
 	vertical-align: top;
@@ -64,7 +65,7 @@
 	display: inline-block;
 	border: 1px solid var(--linie);
 	padding: 2px 26px 2px 5px;
-	width: calc(100% - 100px - 35px);
+	width: calc(100% - 100px - 5px - 35px);
 	line-height: 24px;
 	color: var(--text);
 	text-indent: 0;

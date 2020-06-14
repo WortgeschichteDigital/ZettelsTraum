@@ -302,9 +302,12 @@ window.addEventListener("load", async () => {
 		}
 	});
 	// Redaktionsmetadaten-Fenster
-	document.getElementById("red-meta-sachgebiete").addEventListener("click", evt => {
-		evt.preventDefault();
-		redMeta.sachgebieteAdd();
+	document.querySelectorAll("#red-meta-themenfelder, #red-meta-sachgebiete").forEach(i => {
+		i.addEventListener("click", function(evt) {
+			evt.preventDefault();
+			const typ = this.id.replace(/.+-/, "");
+			redMeta.tagsAdd({typ});
+		});
 	});
 	document.querySelectorAll("#red-meta input").forEach(i => {
 		if (i.type === "button") {

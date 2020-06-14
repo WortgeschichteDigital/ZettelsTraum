@@ -218,8 +218,6 @@ let beleg = {
 			} else {
 				feldDa.focus();
 			}
-		} else if (!beleg.leseansicht) {
-			feldDa.focus();
 		}
 	},
 	// Bedeutung in das Formular eintragen
@@ -1318,7 +1316,10 @@ let beleg = {
 		return false; // offenbar kein illegales Nesting
 	},
 	// Inhalt des Quelle-Felds neu laden
-	async toolsQuelleLaden () {
+	//   shortcut = true || undefined
+	async toolsQuelleLaden (shortcut = false) {
+		// Zwischenspeicher für Änderungen
+		let aenderungen = {};
 		// Titelinfos aus bx laden
 		let bx = beleg.bxTyp({bx: beleg.data.bx});
 		if (bx.typ) {
@@ -1359,7 +1360,28 @@ let beleg = {
 				}
 				if (direktAusDTA) {
 					titel = await beleg.toolsQuelleLadenDTA({url});
+					if (titel) {
+						aenderungen.Autor = {
+							key: "au",
+							ori: beleg.data.au,
+							neu: belegImport.DTAData.autor.join("/"),
+						};
+						if (!aenderungen.Autor.neu) {
+							aenderungen.Autor.neu = "N. N.";
+						}
+					}
 				} else if (dwds.qu) {
+					if (beleg.data.au &&
+							!/^(N\.\s?N\.|Name|Nn|o\.\s?A\.|unknown|unkown)/.test(beleg.data.au)) {
+						// für den Fall, dass der Autor manuell nachgetragen wurde
+						dwds.qu = dwds.qu.replace(/^N\.\sN\./, beleg.data.au);
+						dwds.au = beleg.data.au;
+					}
+					aenderungen.Autor = {
+						key: "au",
+						ori: beleg.data.au,
+						neu: dwds.au,
+					};
 					titel = dwds.qu;
 				}
 			} else if (bx.typ === "xml-fundstelle") {
@@ -1370,7 +1392,12 @@ let beleg = {
 				titel = daten.ds.qu;
 			}
 			if (titel) {
-				quelleFuellen(titel);
+				aenderungen.Quelle = {
+					key: "qu",
+					ori: beleg.data.qu,
+					neu: titel,
+				};
+				ausfuellen();
 			} else if (titel === "") {
 				// "titel" könnte "false" sein, wenn die Anfrage an das DTA gescheitert ist;
 				// in diesem Fall kommt eine Fehlermeldung von der Fetch-Funktion
@@ -1378,7 +1405,56 @@ let beleg = {
 			}
 			return;
 		}
-		// Titelinfos herunterladen
+		// wenn Korpus "DWDS" => mit dem Text arbeiten, der im Quelle-Feld steht
+		if (/^DWDS/.test(beleg.data.kr)) {
+			let quelle = beleg.data.qu.split("\n");
+			let data = {
+				au: beleg.data.au,
+				da: beleg.data.da,
+				qu: quelle[0],
+			};
+			// versuchen, relativ wild in das Quelle-Feld
+			// kopierte Daten zu Titel und Autor auszulesen
+			let titeldaten = {},
+				autor = /, Autor: (?<Autor>.+?), Titel:/.exec(data.qu),
+				titel = /, Titel: (?<Titel>.+?)(?<Ende>$|, S)/.exec(data.qu);
+			if (autor) {
+				data.au = autor.groups.Autor;
+				data.qu = data.qu.replace(/, Autor: .+?, Titel:/, ", Titel:");
+			}
+			if (titel) {
+				titeldaten.titel = titel.groups.Titel;
+				let reg = new RegExp(", Titel: .+" + titel.groups.Ende);
+				data.qu = data.qu.replace(reg, titel.groups.Ende);
+			}
+			// Autor und Quelle nachbearbeiten
+			data.au = belegImport.DWDSKorrekturen({
+				typ: "au",
+				txt: data.au,
+			});
+			belegImport.DWDSKorrekturen({
+				typ: "qu",
+				txt: data.qu,
+				data,
+				titeldaten,
+			});
+			// Änderungen ermitteln
+			aenderungen.Autor = {
+				key: "au",
+				ori: beleg.data.au,
+				neu: data.au,
+			};
+			quelle[0] = data.qu;
+			aenderungen.Quelle = {
+				key: "qu",
+				ori: beleg.data.qu,
+				neu: quelle.join("\n"),
+			};
+			// fragen, ob Änderungen übernommen werden sollen
+			ausfuellen();
+			return;
+		}
+		// Titelinfos aus dem DTA herunterladen
 		let url = liste.linksErkennen(beleg.data.qu);
 		if (/href="/.test(url)) {
 			url = url.match(/href="(.+?)"/)[1];
@@ -1386,7 +1462,20 @@ let beleg = {
 		if (/^https?:\/\/www\.deutschestextarchiv\.de\//.test(url)) {
 			const titel = await beleg.toolsQuelleLadenDTA({url});
 			if (titel) {
-				quelleFuellen(titel);
+				aenderungen.Autor = {
+					key: "au",
+					ori: beleg.data.au,
+					neu: belegImport.DTAData.autor.join("/"),
+				};
+				if (!aenderungen.Autor.neu) {
+					aenderungen.Autor.neu = "N. N.";
+				}
+				aenderungen.Quelle = {
+					key: "qu",
+					ori: beleg.data.qu,
+					neu: titel,
+				};
+				ausfuellen();
 			} else if (titel === "") {
 				lesefehler();
 			}
@@ -1397,27 +1486,62 @@ let beleg = {
 			typ: "alert",
 			text: "Es wurde keine Quelle gefunden, aus der die Titeldaten automatisch neu geladen werden könnten.",
 		});
-		// Quellenfeld ausfüllen
-		function quelleFuellen (titel) {
-			let quelle = document.getElementById("beleg-qu");
-			let alt = quelle.value.split(/\n\nhttps?:\/\/www\.deutschestextarchiv\.de/)[0],
-				neu = titel.split(/\n\nhttps?:\/\/www\.deutschestextarchiv\.de/)[0];
-			if (alt !== neu) {
-				quelle.value = titel;
-				helfer.textareaGrow(quelle);
-				beleg.belegGeaendert(true);
-				// visuelles Feedback
-				let icon = document.querySelector(".text-tools-quelle .icon-pfeil-kreis");
-				icon.classList.add("rotieren-bitte");
-				quelle.classList.add("neu-geladen");
-				setTimeout(() => {
-					icon.classList.remove("rotieren-bitte");
-					quelle.classList.remove("neu-geladen");
-					quelle.focus();
-				}, 1e3);
-			} else {
-				quelle.focus();
+		// Quellenfeld ausfüllen (wenn gewünscht)
+		function ausfuellen () {
+			// Änderungen ermitteln
+			let txt = [];
+			for (let [k, v] of Object.entries(aenderungen)) {
+				const ori = v.ori.split(/\n+https?:/)[0],
+					neu = v.neu.split(/\n+https?:/)[0];
+				if (ori === neu) {
+					continue;
+				}
+				let val = `<strong>${k}</strong><br>`;
+				val += `${v.ori ? v.ori : "<i>kein Autor</i>"}<br>     →<br>${v.neu}`;
+				txt.push(val);
 			}
+			// abbrechen, weil keine Änderungen gefunden wurden
+			let quelle = document.getElementById("beleg-qu");
+			if (!txt.length) {
+				if (!shortcut) {
+					quelle.focus();
+				} else {
+					dialog.oeffnen({
+						typ: "alert",
+						text: "Keine Änderungen nötig.",
+					});
+				}
+				return;
+			}
+			// nachfragen, ob Änderungen übernommen werden sollen
+			let numerus = "Soll die folgende Änderung";
+			if (txt.length > 1) {
+				numerus = "Sollen die folgenden Änderungen";
+			}
+			dialog.oeffnen({
+				typ: "confirm",
+				text: `${numerus} vorgenommen werden?\n${txt.join("\n")}`,
+				callback: () => {
+					if (dialog.antwort) {
+						for (let v of Object.values(aenderungen)) {
+							beleg.data[v.key] = v.neu;
+							document.getElementById(`beleg-${v.key}`).value = v.neu;
+							if (v.key === "qu") {
+								helfer.textareaGrow(quelle);
+							}
+						}
+						beleg.belegGeaendert(true);
+						beleg.aktionSpeichern();
+					} else if (!shortcut) {
+						quelle.focus();
+					}
+					setTimeout(() => {
+						document.querySelector("#dialog > div").classList.remove("breit");
+					}, 200);
+				},
+			});
+			document.querySelector("#dialog > div").classList.add("breit");
+			document.querySelectorAll("#dialog-text p").forEach(p => p.classList.add("force-wrap"));
 		}
 		// generische Fehlermeldung
 		function lesefehler () {

@@ -267,6 +267,8 @@ let dropdown = {
 			dropdown.data = dropdown.dataKopierenGerueste();
 		} else if (/^karteisuche-filter-/.test(feld_id)) {
 			dropdown.data = Object.keys(karteisuche.filterTypen);
+		} else if (/^karteisuche-themenfeld-/.test(feld_id)) {
+			dropdown.data = dropdown.dataTags("tagger-themenfelder");
 		} else if (/^karteisuche-sachgebiet-/.test(feld_id)) {
 			dropdown.data = dropdown.dataTags("tagger-sachgebiete");
 		} else if (/^karteisuche-tag-typ-/.test(feld_id)) {

@@ -976,7 +976,7 @@ let liste = {
 			return `<span class="klammer-loeschung">${m}</span>`;
 		});
 		// Streichung
-		text = text.replace(/(?<!<span class="klammer-[a-z]+">\[?)\[.+?\]/g, m => {
+		text = text.replace(/(?<!<span class="klammer-[a-z]+">\[?)\[.+?\](?!<\/span>)/g, m => {
 			return `<span class="klammer-streichung">${m}</span>`;
 		});
 		// Ergebnis zurückgeben

@@ -35,6 +35,10 @@ let redaktion = {
 			icon: "stift-quadrat.svg",
 			textNaechstes: "Artikel revidieren",
 		},
+		"Korrekturlesen": {
+			icon: "auge.svg",
+			textNaechstes: "Artikel Korrektur lesen",
+		},
 		"Artikel fertig": {
 			icon: "check.svg",
 			textNaechstes: "Artikel fertigstellen",

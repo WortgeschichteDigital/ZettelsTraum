@@ -1179,6 +1179,7 @@ let redLit = {
 		treffer: [],
 		highlight: null,
 		sonder: "",
+		id: null,
 	},
 	// Suche: zum Formular wechseln
 	sucheWechseln () {
@@ -1288,17 +1289,28 @@ let redLit = {
 			text = helfer.textTrim(input.value, true),
 			ab = document.getElementById("red-lit-suche-ab").value,
 			st = [],
-			da = null;
+			da = null,
+			nurAktuelle = false;
+		redLit.suche.id = null;
 		redLit.suche.treffer = [];
 		redLit.suche.highlight = [];
 		if (text) {
 			let woerter = [];
+			// nur aktuelle Titelaufnahmen
+			text = text.replace(/(na|nuraktuelle):""/ig, m => {
+				nurAktuelle = true;
+				return "";
+			});
 			// Feldsuche
 			text = text.replace(/([a-zA-Z]+):"(.+?)"/g, (m, p1, p2) => {
 				const feld = feldCheck(p1);
 				if (!feld) {
 					// angegebenes Suchfeld existiert nicht => diese Suche sollte keine Treffer produzieren
 					return m;
+				} else if (feld === "id") {
+					// Suche nach ID
+					redLit.suche.id = new RegExp(helfer.escapeRegExp(p2.toLowerCase()));
+					return "";
 				}
 				woerter.push({
 					feld,
@@ -1403,6 +1415,10 @@ let redLit = {
 		}
 		let treffer = redLit.suche.treffer;
 		for (let [id, arr] of Object.entries(redLit.db.data)) {
+			// Suche nach ID
+			if (redLit.suche.id && !redLit.suche.id.test(id)) {
+				continue;
+			}
 			// Sondersuchen
 			if (redLit.suche.sonder === "duplikate" &&
 					!duplikate.has(id)) { // Duplikate
@@ -1415,8 +1431,9 @@ let redLit = {
 			for (let i = 0, len = arr.length; i < len; i++) {
 				let aufnahme = arr[i];
 				// Sondersuchen
-				if (redLit.suche.sonder && i > 0) {
-					// Sondersuchen, für die nur der erste Eintrag berücksichtigt wird
+				if ((redLit.suche.sonder || nurAktuelle) && i > 0) {
+					// Sondersuchen, für die nur der erste Eintrag berücksichtigt wird;
+					// oder der "nur aktuelle"-Schalter wurde verwendet
 					break;
 				} else if (redLit.suche.sonder === "siglen_doppelt" &&
 						!siglen_doppelt.has(aufnahme.td.si)) { // doppelte Siglen
@@ -1484,7 +1501,7 @@ let redLit = {
 		input.select();
 		// Feld-Schalter ermitteln
 		function feldCheck (text) {
-			let erlaubt = ["be", "ad", "fo", "no", "pn", "si", "tg", "ti", "ul"];
+			let erlaubt = ["be", "ad", "fo", "id", "no", "pn", "si", "tg", "ti", "ul"];
 			text = text.toLowerCase();
 			switch (text) {
 				case "bearb":
@@ -1824,7 +1841,7 @@ let redLit = {
 			}
 			// weitere Normierungsoperationen
 			val = val.toLowerCase();
-			val = val.replace(/[\s/]/g, "-");
+			val = val.replace(/[\s/–]/g, "-");
 			val = val.replace(/[^a-z0-9ßäöü-]/g, "");
 			val = val.replace(/-{2,}/g, "-");
 			document.getElementById("red-lit-eingabe-id").value = val;
@@ -3098,7 +3115,11 @@ let redLit = {
 		let idPrint = document.createElement("span");
 		si.appendChild(idPrint);
 		idPrint.classList.add("id");
-		idPrint.textContent = id;
+		let textId = id;
+		if (redLit.suche.id) {
+			textId = id.replace(redLit.suche.id, m => `<mark class="suche">${m}</mark>`);
+		}
+		idPrint.innerHTML = textId;
 		// alte Aufnahme
 		if (slot > 0 && redLit.anzeige.snippetKontext === "suche") {
 			let alt = document.createElement("span");
