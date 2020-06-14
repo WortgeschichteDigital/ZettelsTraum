@@ -231,11 +231,13 @@ let xml = {
 			if (key === "id") {
 				let id = xml.abschnittNormId({id: val});
 				id = id.replace(/[,;]/g, "");
-				if (!/^WGd-/.test(id)) {
-					id = `WGd-${id}`;
-				}
-				if (!/-[0-9]+$/.test(id)) {
-					id += "-1";
+				if (id) {
+					if (!/^WGd-/.test(id)) {
+						id = `WGd-${id}`;
+					}
+					if (!/-[0-9]+$/.test(id)) {
+						id += "-1";
+					}
 				}
 				if (id !== val) {
 					val = id;
