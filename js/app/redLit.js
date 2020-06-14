@@ -1179,6 +1179,7 @@ let redLit = {
 		treffer: [],
 		highlight: null,
 		sonder: "",
+		id: null,
 	},
 	// Suche: zum Formular wechseln
 	sucheWechseln () {
@@ -1290,6 +1291,7 @@ let redLit = {
 			st = [],
 			da = null,
 			nurAktuelle = false;
+		redLit.suche.id = null;
 		redLit.suche.treffer = [];
 		redLit.suche.highlight = [];
 		if (text) {
@@ -1305,6 +1307,10 @@ let redLit = {
 				if (!feld) {
 					// angegebenes Suchfeld existiert nicht => diese Suche sollte keine Treffer produzieren
 					return m;
+				} else if (feld === "id") {
+					// Suche nach ID
+					redLit.suche.id = new RegExp(helfer.escapeRegExp(p2.toLowerCase()));
+					return "";
 				}
 				woerter.push({
 					feld,
@@ -1409,6 +1415,10 @@ let redLit = {
 		}
 		let treffer = redLit.suche.treffer;
 		for (let [id, arr] of Object.entries(redLit.db.data)) {
+			// Suche nach ID
+			if (redLit.suche.id && !redLit.suche.id.test(id)) {
+				continue;
+			}
 			// Sondersuchen
 			if (redLit.suche.sonder === "duplikate" &&
 					!duplikate.has(id)) { // Duplikate
@@ -1491,7 +1501,7 @@ let redLit = {
 		input.select();
 		// Feld-Schalter ermitteln
 		function feldCheck (text) {
-			let erlaubt = ["be", "ad", "fo", "no", "pn", "si", "tg", "ti", "ul"];
+			let erlaubt = ["be", "ad", "fo", "id", "no", "pn", "si", "tg", "ti", "ul"];
 			text = text.toLowerCase();
 			switch (text) {
 				case "bearb":
@@ -3105,7 +3115,11 @@ let redLit = {
 		let idPrint = document.createElement("span");
 		si.appendChild(idPrint);
 		idPrint.classList.add("id");
-		idPrint.textContent = id;
+		let textId = id;
+		if (redLit.suche.id) {
+			textId = id.replace(redLit.suche.id, m => `<mark class="suche">${m}</mark>`);
+		}
+		idPrint.innerHTML = textId;
 		// alte Aufnahme
 		if (slot > 0 && redLit.anzeige.snippetKontext === "suche") {
 			let alt = document.createElement("span");
