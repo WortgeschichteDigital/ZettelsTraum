@@ -1288,11 +1288,17 @@ let redLit = {
 			text = helfer.textTrim(input.value, true),
 			ab = document.getElementById("red-lit-suche-ab").value,
 			st = [],
-			da = null;
+			da = null,
+			nurAktuelle = false;
 		redLit.suche.treffer = [];
 		redLit.suche.highlight = [];
 		if (text) {
 			let woerter = [];
+			// nur aktuelle Titelaufnahmen
+			text = text.replace(/(na|nuraktuelle):""/ig, m => {
+				nurAktuelle = true;
+				return "";
+			});
 			// Feldsuche
 			text = text.replace(/([a-zA-Z]+):"(.+?)"/g, (m, p1, p2) => {
 				const feld = feldCheck(p1);
@@ -1415,8 +1421,9 @@ let redLit = {
 			for (let i = 0, len = arr.length; i < len; i++) {
 				let aufnahme = arr[i];
 				// Sondersuchen
-				if (redLit.suche.sonder && i > 0) {
-					// Sondersuchen, für die nur der erste Eintrag berücksichtigt wird
+				if ((redLit.suche.sonder || nurAktuelle) && i > 0) {
+					// Sondersuchen, für die nur der erste Eintrag berücksichtigt wird;
+					// oder der "nur aktuelle"-Schalter wurde verwendet
 					break;
 				} else if (redLit.suche.sonder === "siglen_doppelt" &&
 						!siglen_doppelt.has(aufnahme.td.si)) { // doppelte Siglen
