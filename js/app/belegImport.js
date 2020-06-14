@@ -2429,14 +2429,19 @@ let belegImport = {
 	//     (URL + Aufrufdatum sollen der Titelaufnahme angehängt werden)
 	makeTitle ({td, mitURL}) {
 		let titel = "";
-		// Liste der Autoren/Herausgeber ggf. kürzen
-		td.autor = ua(td.autor);
-		td.hrsg = ua(td.hrsg);
 		// Autor
 		if (td.autor.length) {
-			titel = `${td.autor.join("/")}: `;
+			if (td.autor.length > 3) {
+				titel = `${td.autor[0]}/${td.autor[1]} u. a.: `;
+			} else {
+				titel = `${td.autor.join("/")}: `;
+			}
 		} else if (td.hrsg.length) {
-			titel = `${td.hrsg.join("/")} (Hrsg.): `;
+			if (td.hrsg.length > 3) {
+				titel = `${td.hrsg[0]}/${td.hrsg[1]} u. a.: `;
+			} else {
+				titel = `${td.hrsg.join("/")} (Hrsg.): `;
+			}
 		} else {
 			titel = "N. N.: ";
 		}
@@ -2458,7 +2463,7 @@ let belegImport = {
 			punkt();
 			titel += " In: ";
 			if (td.autor.length && td.hrsg.length && !td.jahrgang) {
-				titel += `${td.hrsg.join("/")} (Hrsg.): `;
+				titel += `${hrsg(true)} (Hrsg.): `;
 			}
 			titel += td.inTitel.join(". ");
 		}
@@ -2473,28 +2478,14 @@ let belegImport = {
 		// ggf. Herausgeber ergänzen
 		if (!td.inTitel.length && td.hrsg.length && td.autor.length) {
 			punkt();
-			titel += " Hrsg. von ";
-			for (let i = 0, len = td.hrsg.length; i < len; i++) {
-				if (i > 0 && i === len - 1) {
-					titel += " und ";
-				} else if (i > 0) {
-					titel += ", ";
-				}
-				let hrsg = td.hrsg[i].split(", ");
-				if (hrsg.length > 1) {
-					hrsg.reverse();
-					titel += hrsg.join(" ");
-				} else {
-					titel += hrsg[0];
-				}
-			}
+			titel += ` Hrsg. von ${hrsg(false)}`;
 		}
 		// Auflage
-		if (td.auflage && !td.jahrgang && !/^1(\.|$)/.test(td.auflage)) {
-			if (/\s(Aufl(\.|age)?|Ausgabe)$/.test(td.auflage)) {
-				titel += `, ${td.auflage}`;
+		if (td.auflage && !td.jahrgang && !/^1(\.|$)|1\.\sAufl/.test(td.auflage)) {
+			if (/\sAufl(\.|age)?|(\sA|(?<=\p{Lowercase})a)usg(\.|abe)?/u.test(td.auflage)) {
+				titel += `. ${td.auflage}`;
 			} else {
-				titel += `, ${td.auflage}. Aufl.`;
+				titel += `. ${td.auflage}. Aufl.`;
 			}
 		}
 		// Qualifikationsschrift
@@ -2505,7 +2496,11 @@ let belegImport = {
 		// Ort
 		if (td.ort.length && !td.jahrgang) {
 			punkt();
-			titel += ` ${td.ort.join("/")}`;
+			if (td.ort.length > 2) {
+				titel += ` ${td.ort[0]} u. a.`;
+			} else {
+				titel += ` ${td.ort.join("/")}`;
+			}
 		} else if (!td.ort.length && !td.jahrgang) {
 			punkt();
 		}
@@ -2518,9 +2513,12 @@ let belegImport = {
 				titel += ` ${td.verlag}`;
 			}
 		}
-		// Jahrgang + Jahr
+		// Jahrgang (+ Heft) + Jahr
 		if (td.jahrgang) {
 			titel += ` ${td.jahrgang}`;
+			if (/^[0-9]+$/.test(td.heft)) {
+				titel += `/${td.heft}`;
+			}
 			if (td.jahr) {
 				titel += ` (${td.jahr})`;
 			}
@@ -2530,9 +2528,9 @@ let belegImport = {
 				titel += ` [${td.jahrZuerst}]`;
 			}
 		}
-		// Heft
-		if (td.heft) {
-			titel += `, H. ${td.heft}`;
+		// Heft (wenn Angabe nicht-numerisch)
+		if (!/^[0-9]+$/.test(td.heft)) {
+			titel += `, ${td.heft}`;
 		}
 		// Seiten/Spalten
 		const seite_spalte = td.spalte ? "Sp. " : "S. ";
@@ -2569,12 +2567,31 @@ let belegImport = {
 				titel += ".";
 			}
 		}
-		// ggf. Namenslisten kürzen
-		function ua (liste) {
-			if (liste.length > 3) {
-				return [`${liste[0]} u. a.`];
+		// Herausgeber auflisten
+		//   slash = Boolean
+		//     (Anschluss mit Slash, sonst mit Kommata bzw. "und")
+		function hrsg (slash) {
+			let pers = "";
+			for (let i = 0, len = td.hrsg.length; i < len; i++) {
+				// maximal 3 Hrsg. nennen; bei mehr => 2 Hrsg. + u.a.
+				if (len > 3 && i === 2) {
+					pers += " u. a.";
+					break;
+				}
+				// Anschluss
+				if (i > 0 && slash) {
+					pers += "/";
+				} else if (i > 0 && i === len - 1) {
+					pers += " und ";
+				} else if (i > 0) {
+					pers += ", ";
+				}
+				// Namen umdrehen: Nachname, Vorname > Vorname Nachname
+				let hrsg = td.hrsg[i].split(", ");
+				hrsg.reverse();
+				pers += hrsg.join(" ");
 			}
-			return liste;
+			return pers;
 		}
 	},
 	// leeren Datensatz für eine Titelaufnahme erstellen
