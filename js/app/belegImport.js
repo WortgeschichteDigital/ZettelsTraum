@@ -2529,7 +2529,7 @@ let belegImport = {
 			}
 		}
 		// Heft (wenn Angabe nicht-numerisch)
-		if (!/^[0-9]+$/.test(td.heft)) {
+		if (td.heft && !/^[0-9]+$/.test(td.heft)) {
 			titel += `, ${td.heft}`;
 		}
 		// Seiten/Spalten
