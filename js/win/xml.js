@@ -1784,9 +1784,9 @@ let xml = {
 			}
 			if (p2) {
 				let anschluss = "";
-				if (/,\s$/.test(p2)) {
-					anschluss = ", ";
-					p2 = p2.replace(/,\s$/, "");
+				if (/,\s?$/.test(p2)) {
+					anschluss = p2;
+					p2 = p2.replace(/,\s?$/, "");
 				} else if (/^(,\shier|\ss\.\s?v\.)\s$/.test(p2)) {
 					anschluss = p2;
 					p2 = "";
