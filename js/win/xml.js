@@ -1774,19 +1774,18 @@ let xml = {
 		// <Belegreferenz>
 		str = str.replace(/(?<!##(?:\p{Lowercase}|-)*)((\p{Lowercase}|-)+-[0-9]{4}-[0-9]+)(?!##)/ug, (m, p1) => `<Belegreferenz Ziel=##${p1}##/>`);
 		// <Literaturreferenz>
-		str = str.replace(/(?<!(?:\p{Letter}|\d|-|#|\/))([a-zäöüß0-9\-]+)((?:,\shier|\ss\.\s?v\.)?[0-9\s,\-–]+)?(?!(?:\p{Letter}|\d|-|#))/ug, (m, p1, p2) => {
+		str = str.replace(/(?<!(?:\p{Letter}|\d|-|#|\/))([a-zäöü][a-zäöüß0-9\-]+)((?:,\shier|\ss\.\s?v\.)?[0-9\s,\-–]+)?(?!(?:\p{Letter}|\d|-|#))/ug, (m, p1, p2) => {
 			if (!/[a-z]/.test(p1) ||
-					/^[a-z]+$/.test(p1) && ( !p2 || /[0-9]/.test(p2) && !/,/.test(p2) ) ||
-					!/[0-9\-]/.test(p1) && !/[0-9]|s\.\s?v\./.test(p2) ||
-					/-/.test(p1) && !/[0-9]/.test(p1) && ( !p2 || /^\s$/.test(p2) ) ||
+					/^[a-zäöüß]+$/.test(p1) && !p2Typisch(p2) ||
+					/-/.test(p1) && !/[0-9]/.test(p1) && !p2Typisch(p2) ||
 					/[0-9]/.test(p1) && !/-/.test(p1) && p1.match(/[a-zäöüß]/g).length / p1.match(/[0-9]/g).length < 2) {
 				return m;
 			}
 			if (p2) {
 				let anschluss = "";
-				if (/,\s?$/.test(p2)) {
-					anschluss = p2;
-					p2 = p2.replace(/,\s?$/, "");
+				if (/,\s$/.test(p2)) {
+					anschluss = ", ";
+					p2 = p2.replace(/,\s$/, "");
 				} else if (/^(,\shier|\ss\.\s?v\.)\s$/.test(p2)) {
 					anschluss = p2;
 					p2 = "";
@@ -1847,6 +1846,20 @@ let xml = {
 			verweis += `\n  </Fundstelle>`;
 			verweis += `\n</Verweis_extern>`;
 			return verweis;
+		}
+		// typische und untypische Formen des Nachklapps einer Literaturangabe erkennen
+		//   p2 = String
+		//     (ermittelter Nachklapp einer Literaturangabe)
+		function p2Typisch (p2) {
+			if (/^(,\shier|\ss\.\sv\.)/.test(p2)) {
+				return true;
+			} else if (!p2 ||
+					/^(\s|,|\s[-–])$/.test(p2) ||
+					/^,\s/.test(p2) && !/[0-9]/.test(p2) ||
+					/[0-9]/.test(p2) && !/,/.test(p2)) {
+				return false;
+			}
+			return true;
 		}
 	},
 	// Slotangaben bestehender Elemente nach Änderungsoperationen auffrischen
