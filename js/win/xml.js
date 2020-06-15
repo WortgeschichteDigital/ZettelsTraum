@@ -1389,6 +1389,10 @@ let xml = {
 			}
 			kopf.parentNode.removeChild(cont);
 			kopf.parentNode.removeChild(kopf);
+			// Fehlercheck des Abschnitts anstoßen
+			xml.checkAbschnitt({
+				cont: abschnitt,
+			});
 			// Datensatz löschen
 			if (slotBlock !== null) {
 				xml.data.xl[key][slot].ct.splice(slotBlock, 1);
