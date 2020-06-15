@@ -210,11 +210,18 @@ let helfer = {
 			/H\.\s?[0-9]+/g, // Heft
 			/N\.\s?N\./g, // nomen nescio
 			/Nr\.\s?[0-9]+/g, // Nummer
-			/s\.\s?(d|l|v)\./ig,
+			/s\.\s?(d|l)\./ig,
+			/s\.\s?v\./g, // sub voce (nur in Kleinschreibung)
 			/Sp?\.\s?[0-9]+/g, // Seiten-/Spaltenangaben
 			/u\.\s?(a|ä)\./ig,
 			/z\.\s?B\./ig,
 			/zit\.\s?n\./ig,
+			// Dreiwort-Abkürzungen
+			// (aufgeteilt, damit das System, nur das erste Leerzeichen zu ersetzen, bestehen bleibt)
+			/i\.\s?d\./g, // in der Regel
+			/d\.\s?R\./g,
+			/i\.\s?S\./g, // im Sinne von
+			/S\.\s?v\./g,
 		]);
 		for (let i of abk) {
 			text = text.replace(i, m => {
