@@ -3035,6 +3035,7 @@ let redLit = {
 						tags.add(tag);
 					}
 				}
+				break; // nur die neuste Aufnahem auswerten
 			}
 		}
 		// Tags sortieren
