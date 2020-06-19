@@ -955,10 +955,9 @@ let liste = {
 	//     (Belegtext, in dem die Klammern markiert werden sollen)
 	belegKlammernHervorheben ({text}) {
 		// DTA-Import: Anmerkungen werden an der Stelle, an der der Anker ist,
-		// in eckigen Klammern nachgestellt
-		text = text.replace(/\[Anmerkung:(.+?)\]/g, (m, p1) => {
-			return `<span class="klammer-anmerkung">[Anmerkung:</span>${p1}<span class="klammer-anmerkung">]</span>`;
-		});
+		// in eckigen Klammern nachgestellt. Schließende Klammer nicht hervorheben!
+		// Das macht Probleme, wenn innerhalb der Anmerkung andere Klammern sind.
+		text = text.replace(/\[Anmerkung:/g, `<span class="klammer-anmerkung">[Anmerkung:</span>`);
 		// DTA-Import: Trenn- oder Bindestrich am Ende einer Zeile
 		text = text.replace(/\[¬\]/g, m => {
 			return `<span class="klammer-technisch">${m}</span>`;
