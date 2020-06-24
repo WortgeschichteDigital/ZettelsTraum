@@ -837,6 +837,7 @@ let beleg = {
 			html = helfer.typographie(html);
 			html = beleg.toolsKopierenAddQuelle(html, true, obj);
 			html = beleg.toolsKopierenAddJahr(html, true);
+			text = text.replace(/<br>/g, "\n");
 			text = text.replace(/<.+?>/g, "");
 			text = beleg.toolsKopierenKlammern({text});
 			text = helfer.typographie(text);

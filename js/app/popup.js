@@ -442,9 +442,11 @@ let popup = {
 				container = document.createElement("div");
 			container.appendChild(range.cloneContents());
 			// Text aufbereiten
-			let text = container.innerHTML.replace(/<\/p><p>/g, "\n");
+			let text = container.innerHTML.replace(/<br>/g, "__br__");
+			text = text.replace(/<\/p><p>/g, "\n");
 			text = text.replace(/<.+?>/g, "");
 			text = text.replace(/\n/g, "\n\n");
+			text = text.replace(/__br__/g, "\n");
 			// HTML aufbereiten
 			let html = "",
 				xml = "";
