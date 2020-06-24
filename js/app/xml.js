@@ -87,6 +87,10 @@ let xml = {
 				for (let c of n.childNodes) {
 					let close = "";
 					if (c.nodeType === 1 &&
+							c.nodeName === "BR") {
+						text += "<Zeilenumbruch/>";
+						continue;
+					} else if (c.nodeType === 1 &&
 							c.nodeName === "MARK") {
 						if (/wortFarbe[0-9]+/.test(c.getAttribute("class"))) {
 							text += `<erwaehntes_Zeichen>`;
