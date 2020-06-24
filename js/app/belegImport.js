@@ -528,7 +528,12 @@ let belegImport = {
 							ele.appendChild(document.createTextNode(`[/${typ}]`));
 						}
 					} else if (ele.nodeName === "l") { // Verszeile
-						text += "\n";
+						text = text.replace(/ +$/, "");
+						if (/\n$/.test(text)) {
+							text += "\n";
+						} else {
+							text += "<br>";
+						}
 					} else if (ele.nodeName === "lb") { // Zeilenumbruch
 						if (ele.previousSibling &&
 								ele.previousSibling.nodeType === 1) {
