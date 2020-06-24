@@ -189,6 +189,7 @@ let helfer = {
 		text = text.replace(/([0-9])\s[-–]\s([0-9])/g, (m, p1, p2) => `${p1}–${p2}`); // Halbgeviertstriche
 		text = text.replace(/--/g, "–"); // Halbgeviertstriche
 		text = text.replace(/\s([:;])\s/g, (m, p1) => `${p1} `); // nicht planken
+		text = text.replace(/&nbsp;/g, " "); // maskierte geschützte Leerzeichen demaskieren
 		text = text.replace(/=__(.*?)__/g, (m, p1) => `="${p1}"`); // Attribute in Tags demaskieren
 		text = text.replace(/\.{3}/g, "…"); // horizontale Ellipse
 		text = text.replace(/([a-z]) ([0-9]+ \([0-9]{4}\))/, (m, p1, p2) => `${p1} ${p2}`); // geschütztes Leerzeichen vor Jahrgang einer Zeitschrift
