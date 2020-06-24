@@ -59,7 +59,8 @@ let xml = {
 		//   - verschachtelte Hervorhebungen zusammenführen
 		text = text.replace(/(<Zeilenumbruch\/>\s?)+$/, "");
 		text = helfer.textTrim(text, true);
-		let reg = new RegExp(`(?<start>(<Hervorhebung( Stil="#[^>]+")?>){2,})(?<text>[^<]+)(<\/Hervorhebung>)+`, "g"),
+		let textBak = text,
+			reg = new RegExp(`(?<start>(<Hervorhebung( Stil="#[^>]+")?>){2,})(?<text>[^<]+)(<\/Hervorhebung>)+`, "g"),
 			h = reg.exec(text);
 		if (h) {
 			// das Folgende funktioniert natürlich nur gut, wenn die Tags direkt
@@ -75,6 +76,11 @@ let xml = {
 			ersatz += `>${h.groups.text}</Hervorhebung>`;
 			let reg = new RegExp(helfer.escapeRegExp(h[0]));
 			text = text.replace(reg, ersatz);
+			// Test, ob wohlgeformtes XML produziert wurde
+			let xmlDoc = parser.parseFromString(`<Belegtext>${text}</Belegtext>`, "text/xml");
+			if (xmlDoc.querySelector("parsererror")) {
+				text = textBak;
+			}
 		}
 		// Belegtext einhängen
 		let belegtext = parser.parseFromString(`<Belegtext>${text}</Belegtext>`, "text/xml");
