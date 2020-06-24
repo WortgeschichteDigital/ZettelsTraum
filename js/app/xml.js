@@ -54,9 +54,11 @@ let xml = {
 			getText(knoten[i]);
 		}
 		// Belegtext aufbereiten
+		//   - Klammerungen aufbereiten (löschen oder taggen)
 		//   - Zeilenumbrüche am Ende ersetzen (kann bei wilder Auswahl passieren)
 		//   - Text trimmen (durch Streichungen können doppelte Leerzeichen entstehen)
 		//   - verschachtelte Hervorhebungen zusammenführen
+		text = klammernTaggen(text);
 		text = text.replace(/(<Zeilenumbruch\/>\s?)+$/, "");
 		text = helfer.textTrim(text, true);
 		let textBak = text,
@@ -124,8 +126,7 @@ let xml = {
 				}
 			} else if (n.nodeType === 3) {
 				let textEsc = helferXml.maskieren({text: n.nodeValue});
-				textEsc = textEsc.replace(/&/g, "&amp;"); // sonst macht der Parser die &quot; usw. wieder weg
-				text += klammernTaggen(textEsc);
+				text += textEsc.replace(/&/g, "&amp;"); // sonst macht der Parser die &quot; usw. wieder weg
 			}
 		}
 		// geklammerte Texttexteile automatisch taggen
