@@ -891,12 +891,12 @@ let beleg = {
 	toolsKopierenKlammern ({text}) {
 		// Bindestriche einfügen
 		text = text.replace(/\[¬\]([A-ZÄÖÜ])/g, (m, p1) => `-${p1}`);
+		// technische Klammern entfernen
+		text = text.replace(/\[¬\]|\[:.+?:\]/g, "");
 		// eckige Klammern
 		text = text.replace(/\[{1,2}.+?\]{1,2}/g, m => {
 			if (/^\[Anmerkung:\s/.test(m)) {
 				return m;
-			} else if (/^(\[¬\]|\[:.+?:\])$/.test(m)) {
-				return "";
 			}
 			return "[…]";
 		});
