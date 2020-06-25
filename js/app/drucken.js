@@ -31,7 +31,7 @@ let drucken = {
 	//     (Element, hinter dem sich eine der Funktionen im Druckfenster befindet)
 	buttons (span) {
 		span.addEventListener("click", function() {
-			if (/drucken/.test(this.firstChild.src)) {
+			if (/drucker/.test(this.firstChild.src)) {
 				drucken.start();
 			} else if (/kopieren/.test(this.firstChild.src)) {
 				drucken.kopieren();
