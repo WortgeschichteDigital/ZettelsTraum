@@ -250,6 +250,7 @@ let helfer = {
 		return text;
 	},
 	// beim Pasten von Text in ein Edit-Feld den Text ggf. vorher bereinigen
+	// (wird zur Zeit nur von bedeutungen.js genutzt)
 	//   ele = Element
 	//     (das betreffende Edit-Feld)
 	editPaste (ele) {
@@ -267,9 +268,9 @@ let helfer = {
 			text = beleg.toolsEinfuegenHtml(text, true);
 			text = text.replace(/\n+/g, " ");
 			text = helfer.textTrim(text, true);
+			// Bereinigung von Aufzählungszeichen, die Word mitliefert
+			text = text.replace(/^[0-9a-zA-Z·]\.?\s+/, "");
 			// Paraphrasen markieren
-			// (die Funktion wird zur Zeit nur vom Bedeutungsgerüst genutzt,
-			// ist also okay)
 			text = text.replace(/‚(.+?)‘/g, (m, p1) => {
 				return `<mark class="paraphrase">${p1}</mark>`;
 			});
