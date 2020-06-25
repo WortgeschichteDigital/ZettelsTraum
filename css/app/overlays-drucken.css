@@ -110,3 +110,7 @@
 #drucken-cont .bd-win-baum {
 	border-color: transparent;
 }
+
+#drucken-cont mark.paraphrase {
+	color: inherit;
+}
