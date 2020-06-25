@@ -262,11 +262,18 @@ let helfer = {
 			}
 			// Pasten unterbinden
 			evt.preventDefault();
-			// Text aufbereiten und in das Feld eintragen
+			// Text aufbereiten
 			let text = clipHtml ? clipHtml : clipText;
 			text = beleg.toolsEinfuegenHtml(text, true);
 			text = text.replace(/\n+/g, " ");
 			text = helfer.textTrim(text, true);
+			// Paraphrasen markieren
+			// (die Funktion wird zur Zeit nur vom Bedeutungsgerüst genutzt,
+			// ist also okay)
+			text = text.replace(/‚(.+?)‘/g, (m, p1) => {
+				return `<mark class="paraphrase">${p1}</mark>`;
+			});
+			// Text in das Feld eintragen
 			ele.innerHTML = text;
 			// Input-Event abfeuern
 			ele.dispatchEvent(new Event("input"));
