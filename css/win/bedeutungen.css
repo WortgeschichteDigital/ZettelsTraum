@@ -190,3 +190,18 @@ p.bd-win-keine {
 .bd-win-baum p:hover {
 	color: var(--farbe);
 }
+
+mark.paraphrase {
+	border-radius: 0;
+	padding: 0;
+	background-color: transparent;
+	color: var(--farbe);
+}
+
+mark.paraphrase::before {
+	content: "‚";
+}
+
+mark.paraphrase::after {
+	content: "‘";
+}

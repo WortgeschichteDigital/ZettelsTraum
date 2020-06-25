@@ -13,6 +13,11 @@
 	background-color: var(--farbe);
 }
 
+.icon-bedeutung {
+	-webkit-mask-image: url(../img/bedeutung.svg);
+	mask-image: url(../img/bedeutung.svg);
+}
+
 .icon-entkoppeln {
 	-webkit-mask-image: url(../img/x-dick.svg);
 	mask-image: url(../img/x-dick.svg);

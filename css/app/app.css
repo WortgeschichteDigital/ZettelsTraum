@@ -73,6 +73,21 @@ mark {
 	color: var(--text);
 }
 
+mark.paraphrase {
+	border-radius: 0;
+	padding: 0;
+	background-color: transparent;
+	color: var(--farbe);
+}
+
+mark.paraphrase::before {
+	content: "‚";
+}
+
+mark.paraphrase::after {
+	content: "‘";
+}
+
 mark.suche {
 	background-color: var(--farbeOrange);
 	color: #fff;

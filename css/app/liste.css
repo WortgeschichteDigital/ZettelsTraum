@@ -191,6 +191,10 @@
 	padding-bottom: 0;
 }
 
+.filter-baum mark {
+	color: inherit;
+}
+
 .filter-baum > .filter-baum {
 	margin: 0 0 0 8px;
 	border-left: 1px dotted var(--linie);

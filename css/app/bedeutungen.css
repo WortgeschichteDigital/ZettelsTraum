@@ -299,6 +299,11 @@ td #bedeutungen-tagger-link:focus {
 	background-color: var(--farbeRot);
 }
 
+#bedeutungen-cont .bedeutungen-aktiv mark,
+#bedeutungen-cont .bedeutungen-affiziert mark {
+	color: inherit;
+}
+
 a[class*="icon-windrose"] {
 	background-color: transparent;
 }

@@ -1356,20 +1356,30 @@ let bedeutungen = {
 		let tools = [
 			{
 				cl: "icon-tools-save",
+				fun: "save",
 				title: "Speichern (Enter)",
 			},
 			{
 				cl: "icon-tools-bold",
+				fun: "bold",
 				title: `Fetten (${tastatur.shortcutsTextAktuell("Strg")} + B)`,
 				blockStart: true,
 			},
 			{
 				cl: "icon-tools-italic",
+				fun: "italic",
 				title: `Kursivieren (${tastatur.shortcutsTextAktuell("Strg")} + I)`,
 			},
 			{
 				cl: "icon-tools-underline",
+				fun: "undeline",
 				title: `Unterstreichen (${tastatur.shortcutsTextAktuell("Strg")} + U)`,
+			},
+			{
+				cl: "icon-bedeutung",
+				fun: "paraphrase",
+				title: `Paraphrase`,
+				blockStart: true,
 			},
 		];
 		for (let i = 0, len = tools.length; i < len; i++) {
@@ -1378,6 +1388,7 @@ let bedeutungen = {
 			if (tools[i].blockStart) {
 				a.classList.add("block-start");
 			}
+			a.dataset.fun = tools[i].fun;
 			a.href = "#";
 			a.title = tools[i].title;
 			bedeutungen.editToolsExec(a);
@@ -1405,12 +1416,14 @@ let bedeutungen = {
 		a.addEventListener("click", function(evt) {
 			evt.preventDefault();
 			let feld = this.parentNode.parentNode.querySelector("[contenteditable]"),
-				funktion = this.getAttribute("class").match(/icon-tools-([^\s]+)/);
+				funktion = this.dataset.fun;
 			feld.focus();
-			if (funktion[1] === "save") {
+			if (funktion === "save") {
 				feld.dispatchEvent( new KeyboardEvent("keydown", {key: "Enter"}) );
+			} else if (funktion === "paraphrase") {
+				notizen.toolsMark({cl: "paraphrase"});
 			} else {
-				document.execCommand(funktion[1]);
+				document.execCommand(funktion);
 			}
 		});
 	},
