@@ -1031,7 +1031,9 @@ let beleg = {
 	// Bereitet HTML-Text zum Einfügen in das Beleg-Formular auf
 	//   html = String
 	//     (Text mit HTML-Tags, der aufbereitet und dann eingefügt werden soll)
-	toolsEinfuegenHtml (html) {
+	//   minimum = true || undefined
+	//     (nur ein absolutes Minimum an Tags bleibt erhalten)
+	toolsEinfuegenHtml (html, minimum = false) {
 		// wenn <body> => splitten
 		let body = html.split(/<body.*?>/);
 		if (body.length > 1) {
@@ -1064,7 +1066,7 @@ let beleg = {
 			"U",
 			"VAR",
 		];
-		const speziell = {
+		let speziell = {
 			"BIG": { // obsolete!
 				ele: "span",
 				class: "dta-groesser",
@@ -1094,16 +1096,22 @@ let beleg = {
 				class: "dta-groesser",
 			},
 		};
+		// ggf. Anzahl der Tags reduzieren, die erhalten bleiben sollen
+		if (minimum) {
+			inline_keep = [
+				"B",
+				"I",
+				"U",
+			];
+			speziell = {};
+		}
 		// Text extrahieren
 		let text = "";
 		container.childNodes.forEach(function(i) {
 			ana(i);
 		});
 		// erhaltene Inline-Auszeichnungen korrigieren
-		for (let tag in speziell) {
-			if (!speziell.hasOwnProperty(tag)) {
-				continue;
-			}
+		Object.keys(speziell).forEach(tag => {
 			let reg = new RegExp(`\\[#(${tag})\\](.+?)\\[\\/${tag}\\]`, "g");
 			text = text.replace(reg, function(m, p1, p2) {
 				let start = `<${speziell[p1].ele}`;
@@ -1112,7 +1120,7 @@ let beleg = {
 				} 
 				return `${start}>${p2}</${speziell[p1].ele}>`;
 			});
-		}
+		});
 		for (let i = 0, len = inline_keep.length; i < len; i++) {
 			const tag = inline_keep[i];
 			let reg = new RegExp(`\\[#${tag}\\](.+?)\\[\\/${tag}\\]`, "g");
@@ -1135,10 +1143,10 @@ let beleg = {
 				if (inline_keep.includes(ele.nodeName) || speziell[ele.nodeName]) {
 					ele.insertBefore(document.createTextNode(`[#${ele.nodeName}]`), ele.firstChild);
 					ele.appendChild(document.createTextNode(`[/${ele.nodeName}]`));
-				} else if (ele.nodeName === "Q") {
+				} else if (!minimum && ele.nodeName === "Q") {
 					ele.insertBefore(document.createTextNode('"'), ele.firstChild);
 					ele.appendChild(document.createTextNode('"'));
-				} else if (ele.nodeName === "LI") {
+				} else if (!minimum && ele.nodeName === "LI") {
 					ele.insertBefore(document.createTextNode("– "), ele.firstChild);
 				}
 				// Block-Level-Elemente (und andere), die eine Sonderbehandlung benötigen

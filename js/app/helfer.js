@@ -172,7 +172,7 @@ let helfer = {
 		text = text.replace(/^(\s*\n)+|(\s*\n)+$/g, "");
 		text = text.trim(); // berücksichtigt Zeilenumbrüche nicht immer
 		if (doppelleer) {
-			text = text.replace(/ {2,}/g, " ");
+			text = text.replace(/[ \t]{2,}/g, " ");
 		}
 		return text;
 	},
@@ -257,32 +257,19 @@ let helfer = {
 			// Muss der Text aufbereitet werden?
 			const clipHtml = evt.clipboardData.getData("text/html"),
 				clipText = evt.clipboardData.getData("text/plain");
-			if (!clipHtml && !/\n|\t/.test(clipText)) {
+			if (!clipHtml && !clipText) {
 				return;
 			}
-			// Text aufbereiten, ersetzen, pasten
+			// Pasten unterbinden
 			evt.preventDefault();
-			let text = "";
-			if (clipHtml) {
-				text = reinigen(clipHtml, true);
-			} else {
-				text = reinigen(clipText);
-			}
+			// Text aufbereiten und in das Feld eintragen
+			let text = clipHtml ? clipHtml : clipText;
+			text = beleg.toolsEinfuegenHtml(text, true);
+			text = text.replace(/\n+/g, " ");
 			text = helfer.textTrim(text, true);
-			const {clipboard} = require("electron");
-			clipboard.writeText(text);
-			document.execCommand("paste");
-			// Text bereinigen
-			//   text = String
-			//     (Clipboard-Text, der bereinigt werden soll
-			//   tags = true || undefined
-			//     (Tags entfernen)
-			function reinigen (text, tags = false) {
-				if (tags) {
-					text = text.replace(/<.+?>/g, "");
-				}
-				return text.replace(/[\n\t]+/g, " ");
-			}
+			ele.innerHTML = text;
+			// Input-Event abfeuern
+			ele.dispatchEvent(new Event("input"));
 		});
 	},
 	// ergänzt Style-Information für eine Kopie im HTML-Format;
