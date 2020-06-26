@@ -56,10 +56,19 @@ let xml = {
 		// Belegtext aufbereiten
 		//   - Klammerungen aufbereiten (löschen oder taggen)
 		//   - Zeilenumbrüche am Ende ersetzen (kann bei wilder Auswahl passieren)
+		//   - leere Tags ersetzen (kann bei Stichwörtern mit Klammerung in der Mitte vorkommen
+		//   - Stichwort-Tags zusammenführen (kann bei Klammerung in der Mitte vorkommen)
 		//   - Text trimmen (durch Streichungen können doppelte Leerzeichen entstehen)
 		//   - verschachtelte Hervorhebungen zusammenführen
 		text = klammernTaggen(text);
 		text = text.replace(/(<Zeilenumbruch\/>\s?)+$/, "");
+		text = text.replace(/<([a-zA-Z]+)(?: Stil="#[a-z]+")?><\/([a-zA-Z]+)>/g, (m, p1, p2) => {
+			if (p1 === p2) {
+				return "";
+			}
+			return m;
+		});
+		text = text.replace(/<\/Stichwort><Stichwort>/g, "");
 		text = helfer.textTrim(text, true);
 		let textBak = text,
 			reg = new RegExp(`(?<start>(<Hervorhebung( Stil="#[^>]+")?>){2,})(?<text>[^<]+)(<\/Hervorhebung>)+`, "g"),
