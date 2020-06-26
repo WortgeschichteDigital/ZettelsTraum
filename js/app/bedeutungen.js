@@ -1908,6 +1908,129 @@ let bedeutungen = {
 			asterisk.classList.add("aus");
 		}
 	},
+	// Bedeutungsgerüst an das Redaktionssystem schicken (Listener)
+	//   icon = Element
+	//     (das XML-Icon)
+	xml ({icon}) {
+		icon.addEventListener("click", evt => {
+			evt.preventDefault();
+			bedeutungen.xmlDatensatz();
+		});
+	},
+	// Bedeutungsgerüst transformieren und an das Redaktionssystem schicken
+	xmlDatensatz () {
+		// Lesarten auslesen
+		let lesarten = [];
+		for (let i = 0, len = bedeutungen.akt.bd.length; i < len; i++) {
+			let lesart = {
+				ebene: -1,
+				n: "",
+				id: "",
+				dia: [],
+				txt: "",
+			};
+			// Zählzeichen + ID
+			let bd = bedeutungen.akt.bd[i],
+				zaId = bd.za;
+			if (bd.bd.length > 1) {
+				let j = i,
+					bd = bedeutungen.akt.bd[j],
+					ebene = bd.bd.length;
+				do {
+					j--;
+					bd = bedeutungen.akt.bd[j];
+					if (bd.bd.length < ebene) {
+						ebene = bd.bd.length;
+						zaId = bd.za + zaId;
+					}
+				} while (bd.bd.length > 1);
+			}
+			lesart.n = bd.za;
+			lesart.id = zaId;
+			// Diasystematik
+			for (let t of bd.ta) {
+				let tt = optionen.tagsTypen[t.ty];
+				if (!tt) {
+					continue;
+				}
+				lesart.dia.push(`<${tt[0]}>${optionen.data.tags[t.ty].data[t.id].name}</${tt[0]}>`);
+			}
+			// Text
+			let text = bd.bd[bd.bd.length - 1];
+			text = text.replace(/<mark class="paraphrase">(.+?)<\/mark>/g, (m, p1) => {
+				return splitParaphrase(p1);
+			});
+			text = text.replace(/<i>(.+?)<\/i>/g, (m, p1) => {
+				return `<erwaehntes_Zeichen>${p1}</erwaehntes_Zeichen>`;
+			});
+			text = text.replace(/<b>(.+?)<\/b>/g, (m, p1) => {
+				return `<Hervorhebung Stil="#b">${p1}</Hervorhebung>`;
+			});
+			text = text.replace(/<u>(.+?)<\/u>/g, (m, p1) => {
+				return `<Hervorhebung Stil="#u">${p1}</Hervorhebung>`;
+			});
+			text = helfer.typographie(text);
+			if (!/<Paraphrase>/.test(text)) { // gesamter Text ist Paraphrase
+				lesart.txt = splitParaphrase(text);
+			} else {
+				lesart.txt = text;
+			}
+			// Ebene eintragen...
+			lesart.ebene = bd.bd.length;
+			// ... und fertig!
+			lesarten.push(lesart);
+		}
+		// XML erstellen
+		let xl = "<Lesarten>\n\t<Nachweise/>",
+			ebeneZuvor = 1;
+		for (let i of lesarten) {
+			let t = "\n" + "\t".repeat(i.ebene),
+				la = `${t}<Lesart n="${i.n}" xml:id="l-${i.id}">`;
+			if (i.dia.length) {
+				la += `${t}\t<Diasystematik>`;
+				for (let d of i.dia) {
+					la += `${t}\t\t${d}`;
+				}
+				la += `${t}\t</Diasystematik>`;
+			} else {
+				la += `${t}\t<Diasystematik/>`;
+			}
+			la += `${t}\t${i.txt}`;
+			la += `${t}</Lesart>`;
+			if (i.ebene > ebeneZuvor) {
+				xl = xl.replace(/[\t\n]+<\/Lesart>$/, "");
+				xl += la;
+				ebeneZuvor = i.ebene;
+			} else if (i.ebene < ebeneZuvor) {
+				for (let j = 0, len = ebeneZuvor - i.ebene; j < len; j++) {
+					xl += `\n${"\t".repeat(i.ebene - 1 + len - j)}</Lesart>`;
+				}
+				xl += la;
+				ebeneZuvor = i.ebene;
+			} else {
+				xl += la;
+			}
+		}
+		xl += "\n</Lesarten>";
+		// XML-Datensatz erzeugen und an das Redaktionssystem schicken
+		let xmlDatensatz = {
+			key: "bg",
+			ds: {
+				nw: [],
+				xl,
+			},
+		};
+		redXml.datensatz({xmlDatensatz});
+		// Paraphrase aufsplitten
+		function splitParaphrase (text) {
+			let p = text.split(";"),
+				pr = [];
+			for (let i of p) {
+				pr.push(`<Paraphrase>${i.trim()}</Paraphrase>`);
+			}
+			return pr.join("; ");
+		}
+	},
 	// überprüft, ob das Bedeutungsgerüst beim Umbenennen einer Bedeutung korrumpiert wurde
 	// (der Fehler war von 0.10.0 [2019-07-02] an da und wurde mit 0.13.2 [2019-07-30] behoben)
 	korruptionCheck () {
