@@ -448,6 +448,7 @@ let belegImport = {
 		for (let i = 0, len = analyse.length; i < len; i++) {
 			ana(analyse[i]);
 		}
+		// Textauszeichnungen umsetzen
 		for (let typ in rend) {
 			if (!rend.hasOwnProperty(typ)) {
 				continue;
@@ -464,7 +465,14 @@ let belegImport = {
 				});
 			}
 		}
-		belegImport.DTAData.beleg = helfer.textTrim(text, true);
+		// Text trimmen
+		text = helfer.textTrim(text, true);
+		// Leerzeichen am Anfang von Absätzen entfernen;
+		// ana() hierfür lieber nicht anpacken
+		text = text.replace(/\n[ \t]+/g, "\n");
+		// Fertig!
+		belegImport.DTAData.beleg = text;
+		// Analysefunktion
 		function ana (ele) {
 			if (ele.nodeType === 3) { // Text
 				if (start && !ende) {
