@@ -274,6 +274,7 @@ window.addEventListener("load", async () => {
 	document.getElementById("bedeutungen-speichern").addEventListener("click", () => bedeutungen.speichern());
 	document.getElementById("bedeutungen-schliessen").addEventListener("click", () => bedeutungen.schliessen());
 	document.getElementById("bedeutungen-gerueste-config").addEventListener("click", evt => bedeutungenGerueste.oeffnen(evt));
+	bedeutungen.xml({icon: document.getElementById("bedeutungen-link-xml")});
 	document.querySelector(`[for="beleg-bd"]`).addEventListener("click", () => bedeutungenGeruest.oeffnen());
 	// Tagger
 	document.getElementById("tagger-speichern").addEventListener("click", () => tagger.speichern());
