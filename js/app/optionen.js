@@ -427,6 +427,7 @@ let optionen = {
 	},
 	// bekannte Typen von Tag-Dateien
 	tagsTypen: {
+		gebrauchszeitraum: ["Gebrauchszeitraum", "Gebrauchszeiträume"],
 		regiolekte: ["Regiolekt", "Regiolekte"],
 		register: ["Register", "Register"],
 		sachgebiete: ["Sachgebiet", "Sachgebiete"],
