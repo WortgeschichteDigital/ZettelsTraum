@@ -42,16 +42,23 @@ let xml = {
 			knoten = cont.querySelectorAll(`[data-pnumber]`);
 		}
 		for (let i = 0, len = knoten.length; i < len; i++) {
-			if (i > 0) {
+			if (i === 0) {
+				text += "<Absatz>";
+			} else {
 				if (fundort === "DWDS") {
 					// Absätze wurden in DWDS-Belegen intern getilgt; die erscheinen
 					// online nur, um den Kontext besser zu erkennen.
 					text += " ";
 				} else {
-					text += "<Zeilenumbruch/>";
+					text += "<Absatz>";
 				}
 			}
 			getText(knoten[i]);
+			if (i < len - 1 && fundort !== "DWDS") {
+				text += "</Absatz>";
+			} else if (i === len - 1) {
+				text += "</Absatz>";
+			}
 		}
 		// Belegtext aufbereiten
 		//   - Klammerungen aufbereiten (löschen oder taggen)
