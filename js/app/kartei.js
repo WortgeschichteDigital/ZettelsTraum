@@ -41,7 +41,11 @@ let kartei = {
 				wi: [], // Wortinformationen
 				xl: { // XML
 					ab: [], // Abstract
-					bg: {}, // Bedeutungsgerüst
+					bg: { // Bedeutungsgerüst
+						nw: [], // Nachweise
+						tf: [], // Textreferenzen
+						xl: "", // XML
+					},
 					bl: [], // Belege
 					le: [], // Lemmata
 					lt: [], // Literatur

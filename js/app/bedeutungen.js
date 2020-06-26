@@ -2017,6 +2017,7 @@ let bedeutungen = {
 			key: "bg",
 			ds: {
 				nw: [],
+				tf: [],
 				xl,
 			},
 		};

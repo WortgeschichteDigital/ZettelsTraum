@@ -315,7 +315,11 @@ let konversion = {
 		// Datenstruktur "rd.xl" hinzufügen
 		data.rd.xl = {
 			ab: [],
-			bg: {},
+			bg: {
+				nw: [],
+				tf: [],
+				xl: "",
+			},
 			bl: [],
 			le: [],
 			lt: [],
