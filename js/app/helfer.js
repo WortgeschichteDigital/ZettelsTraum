@@ -939,7 +939,8 @@ let helfer = {
 	// Overlay-Animation, die anzeigt, was gerade geschehen ist
 	// (Kopier-Aktion oder Wrap der Suchleiste)
 	//   ziel = String
-	//     ("liste" || "zwischenablage" || "wrap" || "duplikat" || "gespeichert" || "einfuegen")
+	//     ("liste" | "zwischenablage" | "wrap" | "duplikat" |
+	//     "gespeichert" | "einfuegen" | "xml")
 	animation (ziel) {
 		// ggf. Timeout clearen
 		clearTimeout(helfer.animationTimeout);
@@ -982,6 +983,8 @@ let helfer = {
 			img.src = `${cd}img/speichern-blau-96.svg`;
 		} else if (ziel === "einfuegen") {
 			img.src = `${cd}img/einfuegen-blau-96.svg`;
+		} else if (ziel === "xml") {
+			img.src = `${cd}img/xml-blau-96.svg`;
 		}
 		// Element einhängen und wieder entfernen
 		document.querySelector("body").appendChild(div);

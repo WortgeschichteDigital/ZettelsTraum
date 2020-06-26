@@ -43,7 +43,7 @@ let redXml = {
 			resolve(true);
 		});
 	},
-	// Daten zusammentragen und an das Bedeutungsgerüst-Fenster schicken
+	// Daten zusammentragen und an das XML-Fenster schicken
 	daten () {
 		if (!redXml.contentsId) {
 			return;
@@ -95,6 +95,8 @@ let redXml = {
 		// Datensatz an das Fenster schicken
 		const {ipcRenderer} = require("electron");
 		ipcRenderer.sendTo(redXml.contentsId, "xml-datensatz", xmlDatensatz);
+		// Animation
+		helfer.animation("xml");
 	},
 	// aus dem XML-Fenster empfangene Daten in die Kartei schreiben
 	//   daten = Object
