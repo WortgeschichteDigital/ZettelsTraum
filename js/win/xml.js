@@ -1748,6 +1748,8 @@ let xml = {
 		str = str.replace(/&(?!amp;)/g, "&amp;");
 		// <erwaehntes_Zeichen>
 		str = str.replace(/__(.+?)__/g, (m, p1) => `<erwaehntes_Zeichen>${p1}</erwaehntes_Zeichen>`);
+		// <Hervorhebung Stil="#i">
+		str = str.replace(/\*\*(.+?)\*\*/g, (m, p1) => `<Hervorhebung Stil=###i##>${p1}</Hervorhebung>`);
 		// <Stichwort>
 		str = str.replace(/(?<!\p{Letter})_(.+?)_(?!\p{Letter})/ug, (m, p1) => `<Stichwort>${p1}</Stichwort>`);
 		// <Paraphrase>
