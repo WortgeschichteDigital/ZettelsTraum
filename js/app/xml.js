@@ -77,29 +77,7 @@ let xml = {
 		});
 		text = text.replace(/<\/Stichwort><Stichwort>/g, "");
 		text = helfer.textTrim(text, true);
-		let textBak = text,
-			reg = new RegExp(`(?<start>(<Hervorhebung( Stil="#[^>]+")?>){2,})(?<text>[^<]+)(<\/Hervorhebung>)+`, "g"),
-			h = reg.exec(text);
-		if (h) {
-			// das Folgende funktioniert natürlich nur gut, wenn die Tags direkt
-			// ineinander verschachtelt sind; ansonsten produziert es illegales XML
-			let stile = [];
-			for (let i of [...h.groups.start.matchAll(/Stil="(#.+?)"/g)]) {
-				stile.push(i[1]);
-			}
-			let ersatz = `<Hervorhebung`;
-			if (stile.length) {
-				ersatz += ` Stil="${stile.join(" ")}"`;
-			}
-			ersatz += `>${h.groups.text}</Hervorhebung>`;
-			let reg = new RegExp(helfer.escapeRegExp(h[0]));
-			text = text.replace(reg, ersatz);
-			// Test, ob wohlgeformtes XML produziert wurde
-			let xmlDoc = parser.parseFromString(`<Belegtext>${text}</Belegtext>`, "text/xml");
-			if (xmlDoc.querySelector("parsererror")) {
-				text = textBak;
-			}
-		}
+		text = xml.mergeHervorhebungen({text});
 		// Belegtext einhängen
 		let belegtext = parser.parseFromString(`<Belegtext>${text}</Belegtext>`, "text/xml");
 		schnitt.firstChild.appendChild(belegtext.firstChild);
@@ -245,6 +223,36 @@ let xml = {
 		}
 		// String zurückgeben
 		return xmlStr;
+	},
+	// veschachtelte Hervorhebungen-Tags zusammenführen
+	//   text = String
+	//     (Text, in dem die Hervorhebungen zusammengeführt werden sollen)
+	mergeHervorhebungen ({text}) {
+		const bak = text;
+		let reg = new RegExp(`(?<start>(<Hervorhebung( Stil="#[^>]+")?>){2,})(?<text>[^<]+)(<\/Hervorhebung>)+`, "g"),
+			h = reg.exec(text);
+		if (h) {
+			// das Folgende funktioniert natürlich nur gut, wenn die Tags direkt
+			// ineinander verschachtelt sind; ansonsten produziert es illegales XML
+			let stile = [];
+			for (let i of [...h.groups.start.matchAll(/Stil="(#.+?)"/g)]) {
+				stile.push(i[1]);
+			}
+			let ersatz = `<Hervorhebung`;
+			if (stile.length) {
+				ersatz += ` Stil="${stile.join(" ")}"`;
+			}
+			ersatz += `>${h.groups.text}</Hervorhebung>`;
+			let reg = new RegExp(helfer.escapeRegExp(h[0]));
+			text = text.replace(reg, ersatz);
+			// Test, ob wohlgeformtes XML produziert wurde
+			let parser = new DOMParser(),
+				xmlDoc = parser.parseFromString(`<Belegtext>${text}</Belegtext>`, "text/xml");
+			if (xmlDoc.querySelector("parsererror")) {
+				text = bak;
+			}
+		}
+		return text;
 	},
 	// markierten Belegschnitt in die Zwischenablage kopieren
 	schnittInZwischenablage () {
