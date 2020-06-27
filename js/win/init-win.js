@@ -145,8 +145,8 @@ let initWin = {
 			evt.preventDefault();
 			xml.mdIdMake();
 		});
-		// Revision/Lemma hinzufügen
-		document.querySelectorAll("#le input, #md-re input").forEach(i => {
+		// Revision/Lemma/Textreferenz hinzufügen
+		document.querySelectorAll("#le input, #md-re input, #bg-tf input").forEach(i => {
 			i.addEventListener("keydown", function(evt) {
 				tastatur.detectModifiers(evt);
 				if (!tastatur.modifiers &&
@@ -154,19 +154,23 @@ let initWin = {
 						!document.getElementById("dropdown")) {
 					if (this.closest("#md-re")) {
 						xml.mdRevisionAdd();
-					} else {
+					} else if (this.closest("#le")) {
 						xml.lemmaAdd();
+					} else {
+						xml.bgTextreferenzAdd();
 					}
 				}
 			});
 		});
-		document.querySelectorAll("#le .icon-plus-dick, #md-re .icon-plus-dick").forEach(i => {
+		document.querySelectorAll("#le .icon-plus-dick, #md-re .icon-plus-dick, #bg-tf .icon-plus-dick").forEach(i => {
 			i.addEventListener("click", function(evt) {
 				evt.preventDefault();
 				if (this.closest("#md-re")) {
 					xml.mdRevisionAdd();
-				} else {
+				} else if (this.closest("#le")) {
 					xml.lemmaAdd();
+				} else {
+					xml.bgTextreferenzAdd();
 				}
 			});
 		});
