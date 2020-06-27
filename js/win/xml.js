@@ -123,8 +123,12 @@ let xml = {
 		let wi = document.getElementById("wi");
 		xml.elementLeer({ele: wi});
 		// Init: Bedeutungsgerüst
-		let bg = document.getElementById("bg");
-		xml.elementLeer({ele: bg});
+		if (xml.data.xl.bg.xl) {
+			xml.bgMakeXML();
+		} else {
+			let bg = document.getElementById("bg");
+			xml.elementLeer({ele: bg});
+		}
 	},
 	// Metadaten: ID
 	mdIdMake () {
@@ -388,6 +392,9 @@ let xml = {
 				key: xmlDatensatz.key,
 				ds: xmlDatensatz.ds,
 			});
+		} else if (xmlDatensatz.key === "bg") {
+			xml.data.xl.bg = xmlDatensatz.ds;
+			xml.bgMakeXML();
 		}
 		xml.speichern();
 	},
@@ -522,22 +529,35 @@ let xml = {
 		xml.empfangenArr(xmlDatensatz);
 		xml.speichern();
 	},
+	// Bedeutungsgerüst aufbauen
+	bgMakeXML () {
+		// Kopf erzeugen
+		let div = xml.elementKopf({
+			key: "bg",
+		});
+		// Kopf einhängen
+		let bg = document.getElementById("bg");
+		helfer.keineKinder(bg);
+		bg.appendChild(div);
+		// Vorschau aufklappen
+		div.dispatchEvent(new Event("click"));
+	},
 	// Element erzeugen: Standard-Kopf
 	//   key = String
 	//     (der Schlüssel des Datensatzes)
-	//   slot = Number
+	//   slot = Number || undefined
 	//     (Slot, in dem der Datensatz steht)
 	//   slotBlock = Number || undefined
 	//     (Slot, in dem der Textblock steht)
 	//   textKopf = String ("abschnitt" || "textblock") || undefined
 	//     (Typ des Textkopfs)
-	elementKopf ({key, slot, slotBlock = null, textKopf = ""}) {
+	elementKopf ({key, slot = -1, slotBlock = null, textKopf = ""}) {
 		let div = document.createElement("div");
 		div.classList.add("kopf");
 		div.dataset.key = key;
-		if (/^(re|le)$/.test(key)) {
+		if (slot > -1 && /^(re|le)$/.test(key)) {
 			div.dataset.slot = slot;
-		} else {
+		} else if (slot > -1) {
 			div.dataset.id = xml.data.xl[key][slot].id;
 		}
 		if (textKopf === "abschnitt") { // Abschnittköpfe
@@ -557,6 +577,8 @@ let xml = {
 			let xmlStr = "";
 			if (key === "re") {
 				xmlStr = xml.data.xl.md.re[slot].xl;
+			} else if (key === "bg") {
+				xmlStr = xml.data.xl.bg.xl;
 			} else if (slotBlock === null) {
 				xmlStr = xml.data.xl[key][slot].xl;
 			} else {
@@ -617,6 +639,8 @@ let xml = {
 			idText = xml.data.xl.md.re[slot].au;
 		} else if (key === "le") {
 			idText = xml.data.xl[key][slot].le.join("/");
+		} else if (key === "bg") {
+			idText = "XML";
 		} else {
 			idText = xml.data.xl[key][slot].id;
 		}
@@ -625,7 +649,7 @@ let xml = {
 			id.classList.add("keine-id");
 		}
 		// Hinweisfeld
-		if (!textKopf || textKopf === "abschnitt") {
+		if (key !== "bg" && (!textKopf || textKopf === "abschnitt")) {
 			let hinweis = document.createElement("span");
 			div.appendChild(hinweis);
 			hinweis.classList.add("hinweis");
@@ -644,7 +668,7 @@ let xml = {
 			}
 		}
 		// Vorschaufeld
-		if (!textKopf || textKopf === "textblock") {
+		if (key !== "bg" && (!textKopf || textKopf === "textblock")) {
 			let vorschau = document.createElement("span");
 			div.appendChild(vorschau);
 			let text = "";
@@ -726,14 +750,16 @@ let xml = {
 				key = kopf.dataset.key,
 				id = kopf.dataset.id,
 				slot = -1;
-			if (/^(re|le)$/.test(key)) {
+			if (key !== "bg" && /^(re|le)$/.test(key)) {
 				slot = parseInt(kopf.dataset.slot, 10);
-			} else {
+			} else if (key !== "bg") {
 				slot = xml.data.xl[key].findIndex(i => i.id === id);
 			}
 			let xmlStr = "";
 			if (key === "re") {
 				xmlStr = xml.data.xl.md.re[slot].xl;
+			} else if (key === "bg") {
+				xmlStr = xml.data.xl.bg.xl;
 			} else {
 				xmlStr = xml.data.xl[key][slot].xl;
 			}
@@ -742,7 +768,7 @@ let xml = {
 				key,
 				slot,
 				after: this,
-				editable: key === "bl" ? true : false,
+				editable: /^(bg|bl)$/.test(key) ? true : false,
 			});
 		});
 	},
@@ -773,12 +799,14 @@ let xml = {
 				key = kopf.dataset.key,
 				id = kopf.dataset.id,
 				slot = -1;
-			if (/^(re|le)$/.test(key)) {
+			if (key !== "bg" && /^(re|le)$/.test(key)) {
 				slot = parseInt(kopf.dataset.slot, 10);
-			} else {
+			} else if (key !== "bg") {
 				slot = xml.data.xl[key].findIndex(i => i.id === id);
 			}
-			if (key === "re") {
+			if (key === "bg") {
+				xml.data.xl.bg.xl = "";
+			} else if (key === "re") {
 				xml.data.xl.md.re.splice(slot, 1);
 			} else {
 				xml.data.xl[key].splice(slot, 1);
@@ -800,7 +828,7 @@ let xml = {
 						ele: [3, 4],
 					});
 				}
-			} else if (!xml.data.xl[key].length) {
+			} else if (key === "bg" || !xml.data.xl[key].length) {
 				xml.elementLeer({
 					ele: document.getElementById(key),
 				});
@@ -1517,8 +1545,11 @@ let xml = {
 	//     (.pre-cont)
 	edit ({cont}) {
 		let key = cont.dataset.key,
-			slot = parseInt(cont.dataset.slot, 10),
+			slot = -1,
 			slotBlock = null;
+		if (cont.dataset.slot) {
+			slot = parseInt(cont.dataset.slot, 10);
+		}
 		if (cont.dataset.slotBlock) {
 			slotBlock = parseInt(cont.dataset.slotBlock, 10);
 		}
@@ -1528,7 +1559,9 @@ let xml = {
 		let ta = document.createElement("textarea");
 		div.appendChild(ta);
 		ta.setAttribute("rows", "1");
-		if (slotBlock !== null) {
+		if (key === "bg") {
+			ta.value = xml.data.xl.bg.xl;
+		} else if (slotBlock !== null) {
 			ta.value = xml.data.xl[key][slot].ct[slotBlock].xl;
 		} else {
 			ta.value = xml.data.xl[key][slot].xl;
@@ -1602,8 +1635,11 @@ let xml = {
 			}
 			let xmlStr = cont.querySelector("textarea").value.trim(),
 				key = cont.dataset.key,
-				slot = parseInt(cont.dataset.slot, 10),
+				slot = -1,
 				slotBlock = null;
+			if (cont.dataset.slot) {
+				slot = parseInt(cont.dataset.slot, 10);
+			}
 			if (cont.dataset.slotBlock) {
 				slotBlock = parseInt(cont.dataset.slotBlock, 10);
 			}
@@ -1632,7 +1668,9 @@ let xml = {
 					}
 				}
 				// Speichern
-				if (slotBlock !== null) {
+				if (key === "bg") {
+					xml.data.xl.bg.xl = xmlStr;
+				} else if (slotBlock !== null) {
 					// XML anpassen und speichern
 					xmlStr = xml.textblockXmlStr({xmlStr, key, slot, slotBlock});
 					xml.data.xl[key][slot].ct[slotBlock].xl = xmlStr;
@@ -1683,6 +1721,10 @@ let xml = {
 			}
 			// generischer Abschluss
 			abschluss(xmlStr);
+			// hier abbrechen, wenn Bedeutungsgerüst
+			if (key === "bg") {
+				return;
+			}
 			// ggf. Textfeld zum Hinzufügen eines neuen Textblocks fokussieren
 			if (slotBlock !== null) {
 				cont.closest(".abschnitt-cont").querySelector(`input[id^="textblock-add-"]`).select();
