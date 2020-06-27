@@ -477,7 +477,12 @@ let redLit = {
 		let ds = redLit.db.data[id][slot].td,
 			snippet = `<Fundstelle xml:id="${id}">`;
 		snippet += `<Sigle>${helferXml.maskieren({text: ds.si})}</Sigle>`;
-		snippet += `<unstrukturiert>${helferXml.maskieren({text: ds.ti})}</unstrukturiert>`;
+		let titel = helferXml.maskieren({text: ds.ti});
+		titel = helferXml.abbrTagger({
+			text: titel,
+			lit: true,
+		});
+		snippet += `<unstrukturiert>${titel}</unstrukturiert>`;
 		if (ds.ul) {
 			snippet += `<URL>${helferXml.maskieren({text: ds.ul})}</URL>`;
 		}
