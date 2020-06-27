@@ -1,9 +1,17 @@
 "use strict";
 
 let xml = {
-	// enthält die übergebenen Daten
-	//   data.key = String (Schlüssel, der den Datentyp angibt)
-	//   data.ds = Object (der je spezifisch strukturierte Datensatz)
+	// enthält die Daten
+	//   autorinnen = Array
+	//     (Liste der bekannten Autorinnen)
+	//   contentsId = Number
+	//     (ID des webContents, von dem aus das Fenster geöffnet wurde)
+	//   themenfelder = Array
+	//     (Liste der bekannten Themenfelder)
+	//   wort = String
+	//     (das Karteiwort)
+	//   xl = Object
+	//     (die aktuellen Redaktionsdaten: data.rd.xl)
 	data: {},
 	// Dropdown: Auswahlmöglichkeiten für Dropdown-Felder
 	dropdown: {
@@ -371,7 +379,9 @@ let xml = {
 	},
 	// Empfangen von Datensätzen: Verteilerfunktion
 	//   xmlDatensatz = Object
-	//     (der Datensatz)
+	//     (der Datensatz; enthält die übergebenen Daten:
+	//       data.key = String [Schlüssel, der den Datentyp angibt]
+	//       data.ds = Object [der je spezifisch strukturierte Datensatz])
 	empfangen ({xmlDatensatz}) {
 		if (/^bl|lt$/.test(xmlDatensatz.key)) {
 			xml.empfangenArr({
