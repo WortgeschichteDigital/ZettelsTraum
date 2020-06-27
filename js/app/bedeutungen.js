@@ -1970,6 +1970,7 @@ let bedeutungen = {
 				return `<Hervorhebung Stil="#u">${p1}</Hervorhebung>`;
 			});
 			text = helfer.typographie(text);
+			text = helferXml.abbrTagger({text});
 			if (!/<Paraphrase>/.test(text)) { // gesamter Text ist Paraphrase
 				lesart.txt = splitParaphrase(text);
 			} else {
