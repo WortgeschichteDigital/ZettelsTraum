@@ -217,12 +217,14 @@ label {
 	margin: 0 5px;
 }
 
-#le > p > span {
+#le > p > span,
+#bg-tf > p > span {
 	display: inline-block;
 }
 
 #le > p > span:nth-child(3),
-#le > p > span:nth-child(4) {
+#le > p > span:nth-child(4),
+#bg-tf > p > span:last-child {
 	margin-left: -14px;
 }
 
@@ -251,6 +253,11 @@ label {
 #md-re input[id$="no"],
 #le > p input[id$="re"] {
 	width: 250px;
+}
+
+#bg-tf input[id$="li"],
+#bg-tf input[id$="ti"] {
+	width: 300px;
 }
 
 .toggle {
@@ -308,6 +315,10 @@ p.leer {
 
 .kopf:hover {
 	background-color: var(--hover);
+}
+
+#bg-tf .kopf:hover {
+	background-color: transparent;
 }
 
 .kopf > * {
@@ -395,7 +406,8 @@ p.leer {
 	color: var(--text);
 }
 
-.text-cont > .kopf .hinweis {
+.text-cont > .kopf .hinweis,
+#bg-tf > .kopf .hinweis {
 	font-weight: normal;
 }
 
