@@ -346,6 +346,7 @@ let helfer = {
 			/[0-9]{1,2}\. [0-9]{1,2}\. [0-9]{4}/g, // Datumsangabe (nur 1. Leerzeichen wird ersetzt!)
 			/[0-9]{1,2}\.\s?(Jan|Feb|März|Apr|Mai|Juni|Juli|Aug|Sep|Okt|Nov|Dez)/g, // Datumsangabe mit Monat
 			/[0-9]\.\s?Aufl/g, // Auflage
+			/[0-9] Bde/g, // Bände
 			/[0-9]\.\s?Hälfte/g,
 			/[0-9]{2}\.\s?(Jh\.|Jahrhundert)/g, // Jahrhundertangaben
 			/(Abschnitt|Kapitel) ([0-9]|[IVXLC])/g,
@@ -355,8 +356,10 @@ let helfer = {
 			/e\.\s?V\./g, // eingetragener Verein
 			/hrsg\.\s?v\./ig,
 			/H\.\s?[0-9]+/g, // Heft
+			/i\.\s?Br\./g, // im Breisgau
 			/N\.\s?N\./g, // nomen nescio
 			/Nr\.\s?[0-9]+/g, // Nummer
+			/o.\.\s?(D|O)\./ig, // ohne Datum/Ort
 			/s\.\s?(d|l)\./ig,
 			/s\.\s?v\./g, // sub voce (nur in Kleinschreibung)
 			/Sp?\.\s?[0-9]+/g, // Seiten-/Spaltenangaben
@@ -365,6 +368,8 @@ let helfer = {
 			/zit\.\s?n\./ig,
 			// Dreiwort-Abkürzungen
 			// (aufgeteilt, damit das System, nur das erste Leerzeichen zu ersetzen, bestehen bleibt)
+			/a\.\s?d\./g, // an der Saale
+			/d\.\s?S\./g,
 			/i\.\s?d\./g, // in der Regel
 			/d\.\s?R\./g,
 			/i\.\s?S\./g, // im Sinne von
