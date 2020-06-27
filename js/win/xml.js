@@ -39,6 +39,61 @@ let xml = {
 		}
 		return arr;
 	},
+	// Dropdown: Lesarten sammeln
+	dropdownLesarten () {
+		let data = {
+			bg: {},
+			arr: [],
+			err: false,
+		};
+		// kein Bedeutungsgerüst vorhanden
+		if (!xml.data.xl.bg.xl) {
+			return data;
+		}
+		// Bedeutungsgerüst nicht wohlgeformt
+		let parser = new DOMParser(),
+			xmlDoc = parser.parseFromString(xml.data.xl.bg.xl, "text/xml");
+		if (xmlDoc.querySelector("parsererror")) {
+			data.err = true;
+			return data;
+		}
+		// Bedeutungsgerüst parsen
+		let evaluator = xpath => {
+			return xmlDoc.evaluate(xpath, xmlDoc, null, XPathResult.ANY_TYPE, null);
+		};
+		let l = evaluator("//Lesart"),
+			item = l.iterateNext();
+		while (item) {
+			// ID ermitteln
+			let id = item.getAttribute("xml:id");
+			// Zählzeichen ermitteln
+			let n = [item.getAttribute("n")],
+				parent = item.parentNode;
+			while (parent.nodeName !== "Lesarten") {
+				n.push(parent.getAttribute("n"));
+				parent = parent.parentNode;
+			}
+			n.reverse();
+			// Text ermitteln
+			let txt = "";
+			for (let knoten of item.childNodes) {
+				if (/^Diasystematik|Lesart|Textreferenz/.test(knoten.nodeName)) {
+					continue;
+				}
+				txt += knoten.textContent;
+			}
+			txt = helfer.textTrim(txt, true);
+			// Daten speichern
+			data.bg[id] = {
+				n: n.join(" "),
+				txt,
+			};
+			data.arr.push(`${data.bg[id].n} ${txt}`);
+			// nächste Lesart
+			item = l.iterateNext();
+		}
+		return data;
+	},
 	// Counter, der fortlaufende Ziffern auswirft
 	// (für Formularfelder, die eine ID brauchen)
 	counter: null,

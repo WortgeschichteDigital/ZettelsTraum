@@ -312,7 +312,7 @@ let dropdown = {
 			dropdown.data = xml.lemmata();
 		} else if (feld_id === "le-ty") {
 			dropdown.data = [...xml.dropdown.lemmaTypen];
-		} else if (feld_id === "le-re") {
+		} else if (/^(le-re|bg-tf-ti)$/.test(feld_id)) {
 			dropdown.data = xml.dropdownReferenzen();
 		} else if (/^abschnitt-/.test(feld_id)) {
 			dropdown.data = [...xml.dropdown.abschnittTyp];
@@ -320,6 +320,8 @@ let dropdown = {
 			dropdown.data = [...xml.dropdown.abschnittTypen];
 		} else if (/^textblock-/.test(feld_id)) {
 			dropdown.data = [...xml.dropdown.textblock];
+		} else if (feld_id === "bg-tf-li") {
+			dropdown.data = xml.dropdownLesarten().arr;
 		}
 		// Dropdown erzeugen und einhängen
 		let span = document.createElement("span");
