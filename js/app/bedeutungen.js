@@ -1969,6 +1969,7 @@ let bedeutungen = {
 			text = text.replace(/<u>(.+?)<\/u>/g, (m, p1) => {
 				return `<Hervorhebung Stil="#u">${p1}</Hervorhebung>`;
 			});
+			text = xml.mergeHervorhebungen({text});
 			text = helfer.typographie(text);
 			text = helferXml.abbrTagger({text});
 			if (!/<Paraphrase>/.test(text)) { // gesamter Text ist Paraphrase
