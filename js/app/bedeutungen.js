@@ -2014,6 +2014,8 @@ let bedeutungen = {
 			}
 		}
 		xl += "\n</Lesarten>";
+		// Tabs zu Spaces
+		xl = xl.replace(/\t/g, "  ");
 		// XML-Datensatz erzeugen und an das Redaktionssystem schicken
 		let xmlDatensatz = {
 			key: "bg",
