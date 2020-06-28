@@ -145,8 +145,8 @@ let initWin = {
 			evt.preventDefault();
 			xml.mdIdMake();
 		});
-		// Revision/Lemma/Textreferenz hinzufügen
-		document.querySelectorAll("#le input, #md-re input, #bg-tf input").forEach(i => {
+		// Revision/Lemma/Nachweis/Textreferenz hinzufügen
+		document.querySelectorAll("#le input, #md-re input, #bg-nw input, #bg-tf input").forEach(i => {
 			i.addEventListener("keydown", function(evt) {
 				tastatur.detectModifiers(evt);
 				if (!tastatur.modifiers &&
@@ -156,19 +156,26 @@ let initWin = {
 						xml.mdRevisionAdd();
 					} else if (this.closest("#le")) {
 						xml.lemmaAdd();
+					} else if (this.closest("#bg-nw")) {
+						xml.bgNachweisAdd();
 					} else {
 						xml.bgTextreferenzAdd();
 					}
 				}
 			});
+			if (i.id === "nw-ty") {
+				i.addEventListener("input", () => xml.bgNachweisToggle());
+			}
 		});
-		document.querySelectorAll("#le .icon-plus-dick, #md-re .icon-plus-dick, #bg-tf .icon-plus-dick").forEach(i => {
+		document.querySelectorAll("#le .icon-plus-dick, #md-re .icon-plus-dick, #bg-nw .icon-plus-dick, #bg-tf .icon-plus-dick").forEach(i => {
 			i.addEventListener("click", function(evt) {
 				evt.preventDefault();
 				if (this.closest("#md-re")) {
 					xml.mdRevisionAdd();
 				} else if (this.closest("#le")) {
 					xml.lemmaAdd();
+				} else if (this.closest("#bg-nw")) {
+					xml.bgNachweisAdd();
 				} else {
 					xml.bgTextreferenzAdd();
 				}
