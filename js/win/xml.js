@@ -1024,14 +1024,18 @@ let xml = {
 			restore: 300,
 		});
 	},
+	// Bedeutungsgerüst: alle Nachweise/Textreferenze zurücksetzen
+	bgNwTfReset () {
+		xml.data.xl.bg.nw = [];
+		xml.bgNwTfMake({key: "nw"});
+		xml.data.xl.bg.tf = [];
+		xml.bgNwTfMake({key: "tf"});
+	},
 	// Bedeutungsgerüst: Formulardaten nach manuellem Bearbeiten auffrischen
 	bgRefreshData () {
 		// kein Bedeutungsgerüst
 		if (!xml.data.xl.bg.xl) {
-			xml.data.xl.bg.nw = [];
-			xml.bgNwTfMake({key: "nw"});
-			xml.data.xl.bg.tf = [];
-			xml.bgNwTfMake({key: "tf"});
+			xml.bgNwTfReset();
 			return;
 		}
 		// Bedeutungsgerüst nicht wohlgeformt
@@ -1482,6 +1486,9 @@ let xml = {
 					}
 				}
 			} else if (key === "bg" || !xml.data.xl[key].length) {
+				if (key === "bg") {
+					xml.bgNwTfReset();
+				}
 				xml.elementLeer({
 					ele: document.getElementById(key),
 				});
