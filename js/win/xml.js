@@ -112,7 +112,7 @@ let xml = {
 		}
 	},
 	// Anzeige mit den gelieferten Daten aufbereiten
-	init () {
+	async init () {
 		// Counter initialisieren
 		if (!xml.counter) {
 			// init() wird auch von reset() aufgerufen;
@@ -165,9 +165,12 @@ let xml = {
 					});
 				}
 			}
-			// ggf. letzten Abschnitt schließen => alle Abschnitte sind geschlossen
+			// Abschnitte schließen
+			// (werden nicht automatisch geschlossen, weil das Anhängen des
+			// Toggle-Events leicht verzögert ist)
 			if (xml.data.xl[block].length) {
-				cont.lastChild.previousSibling.dispatchEvent(new MouseEvent("click"));
+				await new Promise(warten => setTimeout(() => warten(true), 25));
+				xml.elementKopfToggle({auf: false, key: block});
 			}
 		}
 		// Init: Belege/Literatur (Standard-Arrays)
@@ -1088,7 +1091,7 @@ let xml = {
 		xml.bgNwTfMake({key: "tf"});
 	},
 	// Bedeutungsgerüst: XML aufbauen
-	bgMakeXML () {
+	async bgMakeXML () {
 		let bg = document.getElementById("bg");
 		// Struktur schon vorhanden?
 		if (bg.querySelector(".kopf")) {
@@ -1109,6 +1112,8 @@ let xml = {
 		helfer.keineKinder(bg);
 		bg.appendChild(div);
 		// Vorschau aufklappen
+		// (Toggle-Event wird verzögert an den Kopf gehängt, darum kurz warten)
+		await new Promise(warten => setTimeout(() => warten(true), 25));
 		div.dispatchEvent(new Event("click"));
 	},
 	// Bedeutungsgerüst: Bearbeiten-Modus beenden
@@ -1158,16 +1163,14 @@ let xml = {
 		if (textKopf === "abschnitt") { // Abschnittköpfe
 			div.dataset.slot = slot;
 			div.classList.add(`level-${xml.data.xl[key][slot].le}`);
-			xml.abtxToggle({div});
 		} else if (slotBlock !== null) { // Textblockköpfe
 			div.dataset.slot = slot;
 			div.dataset.slotBlock = slotBlock;
-			xml.abtxToggle({div});
-		} else if (!/^(nw|tf)$/.test(key)) { // alle anderen Köpfe
-			xml.elementPreviewArr({div}); // Listener zum Umschalten der Vorschau
 		}
 		// Warn-Icon
-		xml.elementWarn({ele: div});
+		let warn = document.createElement("span");
+		div.appendChild(warn);
+		warn.classList.add("warn");
 		if (!textKopf || textKopf !== "abschnitt") {
 			let xmlStr = "";
 			if (key === "re") {
@@ -1184,7 +1187,7 @@ let xml = {
 				xmlStr = xml.data.xl[key][slot].ct[slotBlock].xl;
 			}
 			xml.check({
-				warn: div.firstChild,
+				warn,
 				xmlStr,
 			});
 		}
@@ -1194,11 +1197,6 @@ let xml = {
 		a.href = "#";
 		a.classList.add("icon-link", "icon-x-dick");
 		a.title = "Löschen";
-		if (textKopf) {
-			xml.abtxLoeschen({a});
-		} else {
-			xml.elementLoeschenArr({a});
-		}
 		// Verschiebe-Icons
 		if (textKopf || /^(re|le|nw)$/.test(key)) {
 			let pfeile = {
@@ -1221,7 +1219,6 @@ let xml = {
 				a.classList.add("icon-link", k);
 				a.title = v;
 			}
-			// TODO Listener für die Pfeile
 		}
 		// ID
 		let id = document.createElement("span");
@@ -1332,8 +1329,48 @@ let xml = {
 			text = text.substring(0, 300);
 			vorschau.appendChild(document.createTextNode(text));
 		}
+		// Events anhängen
+		xml.elementKopfEvents({kopf: div});
 		// Kopf zurückgeben
 		return div;
+	},
+	// Element: Events an Kopfelemente hängen
+	//   kopf = Element
+	//     (der .kopf, der die Events erhalten soll)
+	async elementKopfEvents ({kopf}) {
+		// warten bis der Kopf eingehängt wurde
+		while (!kopf.closest("body")) {
+			await new Promise(resolve => setTimeout(() => resolve(true), 5));
+		}
+		// Köpfe umschalten
+		if (kopf.closest(".text-cont")) {
+			// Abschnittköpfe, Textblockköpfe
+			xml.abtxToggle({div: kopf});
+		} else if (!kopf.closest("#bg-nw, #bg-tf")) {
+			// alle anderen Köpfe (außer Nachweise, Textreferenzen)
+			xml.elementPreviewArr({div: kopf});
+		}
+		// Warn-Icon
+		let warn = kopf.querySelector(".warn");
+		if (warn) {
+			warn.addEventListener("click", function(evt) {
+				if (!this.classList.contains("aktiv")) {
+					return;
+				}
+				evt.stopPropagation();
+				dialog.oeffnen({
+					typ: "alert",
+					text: `Beim Parsen des XML-Snippets ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n${this.dataset.err}`,
+				});
+			});
+		}
+		// Lösch-Icon
+		let loeschen = kopf.querySelector(".icon-x-dick");
+		if (loeschen.closest(".text-cont")) {
+			xml.abtxLoeschen({a: loeschen});
+		} else {
+			xml.elementLoeschenArr({a: loeschen});
+		}
 	},
 	/* jshint ignore:start */
 	// Elemente umschalten: Blöcke auf oder zuklappen
@@ -1506,24 +1543,6 @@ let xml = {
 			}
 			// Daten speichern
 			xml.speichern();
-		});
-	},
-	// Icon, dass darauf aufmerksam macht, dass das XML nicht valide ist
-	//   ele = Element
-	//     (Element, an das das Icon angehängt werden soll)
-	elementWarn ({ele}) {
-		let warn = document.createElement("span");
-		ele.appendChild(warn);
-		warn.classList.add("warn");
-		warn.addEventListener("click", function(evt) {
-			if (!this.classList.contains("aktiv")) {
-				return;
-			}
-			evt.stopPropagation();
-			dialog.oeffnen({
-				typ: "alert",
-				text: `Beim Parsen des XML-Snippets ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n${this.dataset.err}`,
-			});
 		});
 	},
 	// Meldung anzeigen, dass in einer Datenstruktur noch keine Daten zu finden sind
