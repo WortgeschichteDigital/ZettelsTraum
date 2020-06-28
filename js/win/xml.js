@@ -403,7 +403,7 @@ let xml = {
 		let le = document.getElementById("le-le"),
 			ty = document.getElementById("le-ty"),
 			re = document.getElementById("le-re"),
-			leVal = le.value ? le.value.split(/[,/]/) : [],
+			leVal = le.value ? le.value.split(/\//) : [],
 			tyVal = ty.value.trim(),
 			reVal = re.value.trim();
 		for (let i = 0, len = leVal.length; i < len; i++) {
