@@ -347,6 +347,7 @@ p.leer {
 	background-color: var(--hover);
 }
 
+#bg-nw .kopf:hover,
 #bg-tf .kopf:hover {
 	background-color: transparent;
 }
@@ -420,7 +421,8 @@ p.leer {
 
 #md .kopf:hover .pfeile,
 #le .kopf:hover .pfeile,
-.abschnitt-cont .kopf:hover .pfeile {
+.abschnitt-cont .kopf:hover .pfeile,
+#bg-nw .kopf:hover .pfeile {
 	width: 68px;
 }
 
@@ -445,6 +447,10 @@ p.leer {
 .text-cont > .kopf .hinweis,
 #bg-tf > .kopf .hinweis {
 	font-weight: normal;
+}
+
+.hinweis.err {
+	color: var(--textWarnung);
 }
 
 .keine-id {
