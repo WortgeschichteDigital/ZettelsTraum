@@ -521,6 +521,9 @@ let xml = {
 				key: xmlDatensatz.key,
 				ds: xmlDatensatz.ds,
 			});
+			if (xmlDatensatz.key === "lt") {
+				xml.bgNwTfMake({key: "nw"});
+			}
 		} else if (xmlDatensatz.key === "bg") {
 			xml.data.xl.bg = xmlDatensatz.ds;
 			xml.bgNwTfMake({key: "nw"});
@@ -1493,6 +1496,9 @@ let xml = {
 					ele: document.getElementById(key),
 				});
 			} else {
+				if (key === "lt") {
+					xml.bgNwTfMake({key: "nw"});
+				}
 				xml.layoutTabellig({
 					id: key,
 					ele: [2, 3],
