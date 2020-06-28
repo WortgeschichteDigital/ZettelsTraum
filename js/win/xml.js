@@ -1373,6 +1373,24 @@ let xml = {
 		} else {
 			xml.elementLoeschenArr({a: loeschen});
 		}
+		// Pfeile
+		kopf.querySelectorAll(".pfeile a").forEach(a => {
+			// verschieben
+			if (a.classList.contains("icon-pfeil-gerade-hoch") ||
+					a.classList.contains("icon-pfeil-gerade-runter")) {
+				a.addEventListener("click", function(evt) {
+					evt.preventDefault();
+					evt.stopPropagation();
+					if (evt.detail > 1) { // Doppelklicks abfangen
+						return;
+					}
+					xml.move({
+						dir: this.classList.contains("icon-pfeil-gerade-hoch") ? "up" : "down",
+						kopf: this.closest(".kopf"),
+					});
+				});
+			}
+		});
 	},
 	/* jshint ignore:start */
 	// Elemente umschalten: Blöcke auf oder zuklappen
@@ -2637,6 +2655,72 @@ let xml = {
 			fundort = "IDS";
 		}
 		return fundort;
+	},
+	// Kopf-Element bewegen
+	//   dir = String
+	//     (Bewegungsrichtung, "up" | "down")
+	//   kopf = Element
+	//     (der Kopf, der bewegt werden soll)
+	async move ({dir, kopf}) {
+		// Variablen vorbereiten
+		let key = kopf.dataset.key,
+			refreshKey = key,
+			slot = parseInt(kopf.dataset.slot, 10),
+			slotNeu = -1,
+			arr = [],
+			slotKlon;
+		switch (key) {
+			case "re":
+				refreshKey = "md";
+				break;
+			case "nw":
+				refreshKey = "bg-nw";
+				break;
+		}
+		let koepfe = document.querySelectorAll(`#${refreshKey} > .kopf`);
+		// Datensatz ermitteln und klonen
+		if (key === "re") {
+			arr = xml.data.xl.md.re;
+			slotKlon = {...arr[slot]};
+		} else if (key === "le") {
+			arr = xml.data.xl.le;
+			slotKlon = {...arr[slot]};
+			slotKlon.le = [...arr[slot].le];
+		} else if (key === "nw") {
+			arr = xml.data.xl.bg.nw;
+			slotKlon = arr[slot];
+		}
+		// Variablen ermitteln
+		if (dir === "up" && slot > 0) {
+			slotNeu = slot - 1;
+			slot++;
+		} else if (dir === "down" && slot  < arr.length - 1) {
+			slotNeu = slot + 2;
+		}
+		// Verschieben nicht möglich/nötig
+		if (slotNeu === -1) {
+			return;
+		}
+		// ggf. Vorschau schließen
+		let next = kopf.nextSibling;
+		if (next?.classList.contains("pre-cont")) { // jshint ignore:line
+			await xml.elementPreviewOff({pre: next});
+		}
+		// Verschieben auf Datenebene
+		arr.splice(slotNeu, 0, slotKlon);
+		arr.splice(slot, 1);
+		xml.speichern();
+		// Verschieben auf Elementebene
+		let klon = kopf.cloneNode(true);
+		kopf.parentNode.insertBefore(klon, koepfe[slotNeu]);
+		kopf.parentNode.removeChild(kopf);
+		xml.refreshSlots({key: refreshKey});
+		xml.elementKopfEvents({kopf: klon});
+		// Konsequenzen
+		if (key === "nw") {
+			// Reihenfolge der Nachweise im Bedeutungsgerüst auffrischen
+			xml.bgNachweiseRefresh();
+		}
 	},
 	// Slotangaben bestehender Elemente nach Änderungsoperationen auffrischen
 	//   key = String
