@@ -320,6 +320,10 @@ let dropdown = {
 			dropdown.data = [...xml.dropdown.abschnittTypen];
 		} else if (/^textblock-/.test(feld_id)) {
 			dropdown.data = [...xml.dropdown.textblock];
+		} else if (feld_id === "nw-ty") {
+			dropdown.data = [...xml.dropdown.nachweisTypen];
+		} else if (feld_id === "nw-lit-si") {
+			dropdown.data = xml.dropdownSiglen();
 		} else if (feld_id === "bg-tf-li") {
 			dropdown.data = xml.dropdownLesarten().arr;
 		}
@@ -641,6 +645,8 @@ let dropdown = {
 				feld.dispatchEvent(new Event("input"));
 			} else if (/^(red-lit-eingabe-|md-(ty|tf)|abschnitt-|textblock-)/.test(caller)) {
 				feld.dispatchEvent(new Event("change"));
+			} else if (caller === "nw-ty") {
+				feld.dispatchEvent(new Event("input"));
 			}
 			// Dropdown schließen
 			dropdown.schliessen();

@@ -20,6 +20,7 @@ let xml = {
 		abschnittTyp: ["Exkurs"],
 		abschnittTypen: ["Überschrift", "Textblock", "Illustration"],
 		textblock: ["Blockzitat"],
+		nachweisTypen: ["Literatur", "Link"],
 	},
 	// Dropdown: Referenzen zusammentragen
 	dropdownReferenzen () {
@@ -38,6 +39,14 @@ let xml = {
 			}
 		}
 		return arr;
+	},
+	// Dropdown: Siglen sammeln
+	dropdownSiglen () {
+		let si = [];
+		for (let i of xml.data.xl.lt) {
+			si.push(i.si);
+		}
+		return si;
 	},
 	// Dropdown: Lesarten sammeln
 	dropdownLesarten () {
