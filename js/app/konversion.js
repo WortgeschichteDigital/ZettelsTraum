@@ -313,25 +313,7 @@ let konversion = {
 			return;
 		}
 		// Datenstruktur "rd.xl" hinzufügen
-		data.rd.xl = {
-			ab: [],
-			bg: {
-				nw: [],
-				tf: [],
-				xl: "",
-			},
-			bl: [],
-			le: [],
-			lt: [],
-			md: {
-				id: "",
-				re: [],
-				tf: "",
-				ty: "",
-			},
-			tx: [],
-			wi: [],
-		};
+		data.rd.xl = helferXml.redXmlData();
 		// Versionsnummer hochzählen
 		data.ve++;
 		// Änderungsmarkierung setzen

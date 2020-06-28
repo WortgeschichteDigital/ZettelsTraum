@@ -17,6 +17,28 @@ let helferXml = {
 		}
 		return fundort;
 	},
+	// Datenstruktur des XML-Redaktionsfensters zurückgeben
+	redXmlData () {
+		return {
+			ab: [], // Abstract
+			bg: { // Bedeutungsgerüst
+				nw: [], // Nachweise
+				tf: [], // Textreferenzen
+				xl: "", // XML
+			},
+			bl: [], // Belege
+			le: [], // Lemmata
+			lt: [], // Literatur
+			md: { // Metadaten
+				id: "", // Artikel-ID
+				re: [], // Revisionen
+				tf: "", // Themenfeld
+				ty: "", // Artikeltyp
+			},
+			tx: [], // Text
+			wi: [], // Wortinformationen
+		};
+	},
 	// Datum extrahieren
 	//   text = String
 	//     (Text, aus dem heraus das Datum extrahiert werden soll)

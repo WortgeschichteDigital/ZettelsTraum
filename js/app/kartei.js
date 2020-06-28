@@ -39,25 +39,7 @@ let kartei = {
 				sg: [], // Sachgebiete
 				tf: [], // Themenfelder
 				wi: [], // Wortinformationen
-				xl: { // XML
-					ab: [], // Abstract
-					bg: { // Bedeutungsgerüst
-						nw: [], // Nachweise
-						tf: [], // Textreferenzen
-						xl: "", // XML
-					},
-					bl: [], // Belege
-					le: [], // Lemmata
-					lt: [], // Literatur
-					md: { // Metadaten
-						id: "", // Artikel-ID
-						re: [], // Revisionen
-						tf: "", // Themenfeld
-						ty: "", // Artikeltyp
-					},
-					tx: [], // Text
-					wi: [], // Wortinformationen
-				},
+				xl: helferXml.redXmlData(), // XML
 			},
 			re: 0, // Revision
 			ty: "ztj", // Datei ist eine ZTJ-Datei (immer dieser Wert! Bis Version 0.24.0 stand in dem Feld "wgd")
