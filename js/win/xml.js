@@ -177,7 +177,9 @@ let xml = {
 		// Init: Wortinformationen
 		let wi = document.getElementById("wi");
 		xml.elementLeer({ele: wi});
-		// Init: Bedeutungsgerüst
+		// Init: Bedeutungsgerüst, Textreferenzen
+		xml.bgTextreferenzenMake();
+		// Init: Bedeutungsgerüst, XML
 		if (xml.data.xl.bg.xl) {
 			xml.bgMakeXML();
 		} else {
@@ -449,6 +451,7 @@ let xml = {
 			});
 		} else if (xmlDatensatz.key === "bg") {
 			xml.data.xl.bg = xmlDatensatz.ds;
+			xml.bgTextreferenzenMake();
 			xml.bgMakeXML();
 		}
 		xml.speichern();
@@ -584,18 +587,266 @@ let xml = {
 		xml.empfangenArr(xmlDatensatz);
 		xml.speichern();
 	},
-	// Bedeutungsgerüst aufbauen
+	// Bedeutungsgerüst: neue Textreferenz erstellen
+	async bgTextreferenzAdd () {
+		// Ist das Formular noch im Bearbeiten-Modus?
+		const antwort = await xml.bgCloseXML();
+		if (antwort === null) {
+			return;
+		}
+		// Variablen zusammentragen
+		let li = document.getElementById("bg-tf-li"),
+			ti = document.getElementById("bg-tf-ti"),
+			liVal = li.value.trim(),
+			tiVal = ti.value.trim(),
+			bgData = xml.dropdownLesarten();
+		// Überprüfungen
+		if (!bgData.arr.length && !bgData.err) {
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Kein Bedeutungsgerüst gefunden.",
+				callback: () => li.select(),
+			});
+			return;
+		}
+		if (bgData.err) {
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Das Bedeutungsgerüst ist nicht wohlgeformt.",
+				callback: () => li.select(),
+			});
+			return;
+		}
+		if (!liVal.length) {
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Sie haben keine Lesart angegeben.",
+				callback: () => li.select(),
+			});
+			return;
+		}
+		if (!bgData.arr.includes(liVal)) {
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Die angegebene Lesart wurde im Bedeutungsgerüst nicht gefunden.",
+				callback: () => li.select(),
+			});
+			return;
+		}
+		if (!tiVal) {
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Sie haben keine Textreferenz angegeben.",
+				callback: () => ti.select(),
+			});
+			return;
+		}
+		// Datensatz erzeugen und einhängen
+		let id = "";
+		for (let [k, v] of Object.entries(bgData.bg)) {
+			if (`${v.n} ${v.txt}` === liVal) {
+				id = k;
+				break;
+			}
+		}
+		let data = {
+			li: id,
+			ti: tiVal,
+		};
+		const slot = xml.data.xl.bg.tf.findIndex(i => i.li === id);
+		if (slot > -1) {
+			xml.data.xl.bg.tf.splice(slot, 1, data);
+		} else {
+			xml.data.xl.bg.tf.push(data);
+		}
+		// Datensätze sortieren
+		xml.data.xl.bg.tf.sort((a, b) => {
+			const aTxt = `${bgData.bg[a.li].n} ${bgData.bg[a.li].txt}`,
+				bTxt = `${bgData.bg[b.li].n} ${bgData.bg[b.li].txt}`;
+			return bgData.arr.indexOf(aTxt) - bgData.arr.indexOf(bTxt);
+		});
+		// Bedeutungsgerüst auffrischen
+		xml.bgTextreferenzenRefresh();
+		// Datensatz speichern
+		xml.speichern();
+		// Köpfe erzeugen
+		xml.bgTextreferenzenMake();
+		// Formular leeren und wieder fokussieren
+		li.value = "";
+		ti.value = "";
+		li.focus();
+	},
+	// Bedeutungsgerüst: alle Textreferenzen (neu) aufbauen
+	bgTextreferenzenMake () {
+		// alle Köpfe entfernen
+		let cont = document.getElementById("bg-tf");
+		cont.querySelectorAll(".kopf").forEach(i => i.parentNode.removeChild(i));
+		// alle Köpfe aufbauen
+		for (let i = 0, len = xml.data.xl.bg.tf.length; i < len; i++) {
+			let kopf = xml.elementKopf({
+				key: "tf",
+				slot: i,
+			});
+			cont.appendChild(kopf);
+		}
+		// Layout der Köpfe anpassen
+		xml.layoutTabellig({
+			id: "bg-tf",
+			ele: [2, 3],
+			restore: 300,
+		});
+	},
+	// Bedeutungsgerüst: Textreferenzen im Bedeutungsgerüst auffrischen
+	bgTextreferenzenRefresh () {
+		let parser = new DOMParser(),
+			xmlDoc = parser.parseFromString(xml.data.xl.bg.xl, "text/xml");
+		if (xmlDoc.querySelector("parsererror")) {
+			return;
+		}
+		xmlDoc.querySelectorAll("Lesart").forEach(i => {
+			// IDs ermitteln
+			let id = i.getAttribute("xml:id"),
+				tag = i.querySelector("Textreferenz"),
+				ziel = "";
+			if (tag) {
+				if (tag.parentNode !== i) {
+					tag = null;
+				} else {
+					ziel = tag.getAttribute("Ziel");
+				}
+			}
+			// Textreferenz updaten?
+			let tf = xml.data.xl.bg.tf;
+			const slot = tf.findIndex(i => i.li === id);
+			if (ziel && slot === -1) { // Tag entfernen
+				i.removeChild(tag.previousSibling);
+				i.removeChild(tag);
+			} else if (ziel && tf[slot].ti !== ziel) { // Attribut ändern
+				tag.removeAttribute("Ziel");
+				tag.setAttributeNS("http://www.w3.org/1999/xhtml", "Ziel", tf[slot].ti);
+			} else if (!ziel && slot > -1) { // Tag hinzufügen
+				// Whitespace erzeugen
+				let next = i.querySelector("Diasystematik").nextSibling,
+					lb = document.createTextNode(next.nodeValue.match(/\s+/)[0]);
+				i.insertBefore(lb, next);
+				// Textreferenz erzeugen
+				let Textreferenz = document.createElementNS("http://www.w3.org/1999/xhtml", "Textreferenz");
+				Textreferenz.setAttributeNS("http://www.w3.org/1999/xhtml", "Ziel", tf[slot].ti);
+				i.insertBefore(Textreferenz, lb.nextSibling);
+			}
+		});
+		// Stringify + Namespaces entfernen
+		let xmlStr = new XMLSerializer().serializeToString(xmlDoc);
+		xmlStr = xmlStr.replace(/ xmlns.*?=".+?"/g, "");
+		xmlStr = xmlStr.replace(/[a-z0-9]+:Ziel/g, "Ziel");
+		xmlStr = xmlStr.replace(/><\/Textreferenz>/g, "/>");
+		// Daten auffrischen
+		xml.data.xl.bg.xl = xmlStr;
+		// ggf. Preview auffrischen
+		let bg = document.getElementById("bg");
+		if (bg.querySelector(".pre-cont")) {
+			xml.preview({
+				xmlStr: xmlStr,
+				key: "bg",
+				slot: -1,
+				after: bg.querySelector(".kopf"),
+				editable: true,
+			});
+		}
+	},
+	// Bedeutungsgerüst: Formulardaten nach manuellem Bearbeiten auffrischen
+	bgRefreshData () {
+		// kein Bedeutungsgerüst
+		if (!xml.data.xl.bg.xl) {
+			xml.data.xl.bg.nw = [];
+			xml.data.xl.bg.tf = [];
+			xml.bgTextreferenzenMake();
+			return;
+		}
+		// Bedeutungsgerüst nicht wohlgeformt
+		let parser = new DOMParser(),
+			xmlDoc = parser.parseFromString(xml.data.xl.bg.xl, "text/xml");
+		if (xmlDoc.querySelector("parsererror")) {
+			return;
+		}
+		// Bedeutungsgerüst parsen
+		let evaluator = xpath => {
+			return xmlDoc.evaluate(xpath, xmlDoc, null, XPathResult.ANY_TYPE, null);
+		};
+		// Lesarten
+		let l = evaluator("//Lesart"),
+			item = l.iterateNext(),
+			arrTf = [];
+		while (item) {
+			// Textreferenz vorhanden?
+			let tf = item.querySelector("Textreferenz");
+			if (!tf || tf.parentNode !== item) {
+				item = l.iterateNext();
+				continue;
+			}
+			// Datensatz erstellen
+			arrTf.push({
+				li: item.getAttribute("xml:id"),
+				ti: tf.getAttribute("Ziel"),
+			});
+			// nächste Lesart
+			item = l.iterateNext();
+		}
+		// Daten auffrischen und speichern
+		xml.data.xl.bg.tf = arrTf;
+		xml.speichern();
+		// Köpfe neu aufbauen
+		xml.bgTextreferenzenMake();
+	},
+	// Bedeutungsgerüst: XML aufbauen
 	bgMakeXML () {
+		let bg = document.getElementById("bg");
+		// Struktur schon vorhanden?
+		if (bg.querySelector(".kopf")) {
+			let cont = bg.querySelector(".pre-cont");
+			if (cont) {
+				xml.editSpeichernAbschluss({
+					cont,
+					xmlStr: xml.data.xl.bg.xl,
+				});
+			}
+			return;
+		}
 		// Kopf erzeugen
 		let div = xml.elementKopf({
 			key: "bg",
 		});
 		// Kopf einhängen
-		let bg = document.getElementById("bg");
 		helfer.keineKinder(bg);
 		bg.appendChild(div);
 		// Vorschau aufklappen
 		div.dispatchEvent(new Event("click"));
+	},
+	// Bedeutungsgerüst: Bearbeiten-Modus beenden
+	bgCloseXML () {
+		return new Promise(async resolve => {
+			let pre = document.querySelector("#bg .pre-cont");
+			if (pre && !pre.querySelector("pre")) {
+				await new Promise(warten => setTimeout(() => warten(true), 25));
+				const antwort = await xml.editFrage({
+					pre,
+					fun: () => {},
+				});
+				let ta = pre.querySelector("textarea");
+				if (antwort) {
+					pre.querySelector(`[value="Speichern"]`).dispatchEvent(new Event("click"));
+				} else if (antwort === false) {
+					delete ta.dataset.geaendert;
+					ta.value = xml.data.xl.bg.xl;
+					pre.querySelector(`[value="Abbrechen"]`).dispatchEvent(new Event("click"));
+				} else if (antwort === null) {
+					ta.setSelectionRange(0, 0);
+					ta.focus();
+				}
+				resolve(antwort);
+			}
+			resolve(true);
+		});
 	},
 	// Element erzeugen: Standard-Kopf
 	//   key = String
@@ -610,7 +861,7 @@ let xml = {
 		let div = document.createElement("div");
 		div.classList.add("kopf");
 		div.dataset.key = key;
-		if (slot > -1 && /^(re|le)$/.test(key)) {
+		if (slot > -1 && /^(re|le|tf)$/.test(key)) {
 			div.dataset.slot = slot;
 		} else if (slot > -1) {
 			div.dataset.id = xml.data.xl[key][slot].id;
@@ -623,7 +874,7 @@ let xml = {
 			div.dataset.slot = slot;
 			div.dataset.slotBlock = slotBlock;
 			xml.abtxToggle({div});
-		} else { // alle anderen Köpfe
+		} else if (key !== "tf") { // alle anderen Köpfe
 			xml.elementPreviewArr({div}); // Listener zum Umschalten der Vorschau
 		}
 		// Warn-Icon
@@ -632,6 +883,8 @@ let xml = {
 			let xmlStr = "";
 			if (key === "re") {
 				xmlStr = xml.data.xl.md.re[slot].xl;
+			} else if (key === "tf") {
+				xmlStr = `<Textreferenz Ziel="${xml.data.xl.bg.tf[slot].ti}"/>`;
 			} else if (key === "bg") {
 				xmlStr = xml.data.xl.bg.xl;
 			} else if (slotBlock === null) {
@@ -694,6 +947,8 @@ let xml = {
 			idText = xml.data.xl.md.re[slot].au;
 		} else if (key === "le") {
 			idText = xml.data.xl[key][slot].le.join("/");
+		} else if (key === "tf") {
+			idText = xml.data.xl.bg.tf[slot].li;
 		} else if (key === "bg") {
 			idText = "XML";
 		} else {
@@ -720,10 +975,12 @@ let xml = {
 				hinweis.textContent = xml.data.xl.bl[slot].da;
 			} else if (key === "lt") {
 				hinweis.textContent = xml.data.xl.lt[slot].si;
+			} else if (key === "tf") {
+				hinweis.textContent = `#${xml.data.xl.bg.tf[slot].ti}`;
 			}
 		}
 		// Vorschaufeld
-		if (key !== "bg" && (!textKopf || textKopf === "textblock")) {
+		if (!/^(tf|bg)$/.test(key) && (!textKopf || textKopf === "textblock")) {
 			let vorschau = document.createElement("span");
 			div.appendChild(vorschau);
 			let text = "";
@@ -849,39 +1106,67 @@ let xml = {
 		a.addEventListener("click", async function(evt) {
 			evt.stopPropagation();
 			evt.preventDefault();
-			// Datensatz löschen
+			// Variablen ermitteln
 			let kopf = this.closest(".kopf"),
 				key = kopf.dataset.key,
 				id = kopf.dataset.id,
 				slot = -1;
-			if (key !== "bg" && /^(re|le)$/.test(key)) {
+			if (key !== "bg" && /^(re|le|tf)$/.test(key)) {
 				slot = parseInt(kopf.dataset.slot, 10);
 			} else if (key !== "bg") {
 				slot = xml.data.xl[key].findIndex(i => i.id === id);
 			}
-			if (key === "bg") {
+			// Ist das Bedeutungsgerüst noch im Bearbeiten-Modus?
+			if (key === "tf") {
+				const antwort = await xml.bgCloseXML();
+				if (antwort === null) {
+					return;
+				}
+			}
+			// Datensatz löschen
+			if (key === "tf") {
+				xml.data.xl.bg.tf.splice(slot, 1);
+			} else if (key === "bg") {
 				xml.data.xl.bg.xl = "";
 			} else if (key === "re") {
 				xml.data.xl.md.re.splice(slot, 1);
 			} else {
 				xml.data.xl[key].splice(slot, 1);
 			}
-			// ggf. Preview ausblenden
-			let pre = kopf.nextSibling;
-			if (pre && pre.classList.contains("pre-cont")) {
-				await xml.elementPreviewOff({pre});
+			if (key !== "tf") {
+				// ggf. Preview ausblenden
+				let pre = kopf.nextSibling;
+				if (pre && pre.classList.contains("pre-cont")) {
+					await xml.elementPreviewOff({pre});
+				}
+				// Element entfernen
+				kopf.parentNode.removeChild(kopf);
 			}
-			// Element entfernen
-			kopf.parentNode.removeChild(kopf);
 			// Leermeldung erzeugen oder Ansicht auffrischen
-			if (/^(re|le)$/.test(key)) {
-				const id = key === "re" ? "md" : "le";
+			if (/^(re|le|tf)$/.test(key)) {
+				let id = "";
+				if (key === "re") {
+					id = "md";
+				} else if (key === "tf") {
+					id = "bg-tf";
+				} else {
+					id = key;
+				}
 				if (key === "le" && xml.data.xl.le.length ||
 						key === "re" && xml.data.xl.md.re.length) {
 					xml.layoutTabellig({
 						id,
 						ele: [3, 4],
 					});
+				} else if (key === "tf") {
+					xml.bgTextreferenzenRefresh();
+					xml.bgTextreferenzenMake();
+					if (xml.data.xl.bg.tf.length) {
+						xml.layoutTabellig({
+							id,
+							ele: [2, 3],
+						});
+					}
 				}
 			} else if (key === "bg" || !xml.data.xl[key].length) {
 				xml.elementLeer({
@@ -1725,6 +2010,7 @@ let xml = {
 				// Speichern
 				if (key === "bg") {
 					xml.data.xl.bg.xl = xmlStr;
+					xml.bgRefreshData();
 				} else if (slotBlock !== null) {
 					// XML anpassen und speichern
 					xmlStr = xml.textblockXmlStr({xmlStr, key, slot, slotBlock});
@@ -1747,10 +2033,11 @@ let xml = {
 				if (!frage) {
 					// Änderungen sollen nicht gespeichert werden => generischer Abschluss
 					// (Inhalte werden zurückgesetzt)
-					if (frage !== null && slotBlock !== null) {
-						abschluss(xml.data.xl[key][slot].ct[slotBlock].xl);
-					} else if (frage !== null) {
-						abschluss(xml.data.xl[key][slot].xl);
+					if (frage !== null) {
+						xml.editSpeichernAbschluss({
+							cont,
+							xmlStr: resetXmlStr(),
+						});
 					}
 				} else {
 					// Änderungen sollen gespeichert werden => noch einmal von vorne
@@ -1775,7 +2062,7 @@ let xml = {
 				xml.refreshSlots({key});
 			}
 			// generischer Abschluss
-			abschluss(xmlStr);
+			xml.editSpeichernAbschluss({cont, xmlStr});
 			// hier abbrechen, wenn Bedeutungsgerüst
 			if (key === "bg") {
 				return;
@@ -1796,22 +2083,37 @@ let xml = {
 				ele,
 				inAbschnitt,
 			});
-			// generischer Abschluss: <pre> und Buttons zurücksetzen
-			// (muss auch bei Abbruch ohne Speichern geschehen werden)
-			function abschluss (xmlStr) {
-				// Pre zurücksetzen
-				let pre = document.createElement("pre");
-				cont.replaceChild(pre, cont.firstChild);
-				xml.preview({
-					xmlStr,
-					after: cont.previousSibling,
-					textblockCont: cont.closest(".textblock-cont"),
-				});
-				// Button zurücksetzen
-				xml.editBearbeiten({p: cont.lastChild});
-				xml.editPreDbl({pre});
+			// XML-String für das Zurücksetzen ermitteln
+			function resetXmlStr () {
+				if (key === "bg") {
+					return xml.data.xl.bg.xl;
+				} else if (slotBlock !== null) {
+					return xml.data.xl[key][slot].ct[slotBlock].xl;
+				} else {
+					return xml.data.xl[key][slot].xl;
+				}
 			}
 		});
+	},
+	// XML-Vorschau: Speichern/Abbrechen, generischer Abschluss
+	// (<pre> und Buttons zurücksetzen; muss auch bei Abbruch
+	// ohne Speichern geschehen werden)
+	//   cont = Element
+	//     (der Container mit dem Bearbeitenfeld)
+	//   xmlStr = String
+	//     (die XML-Daten)
+	editSpeichernAbschluss ({cont, xmlStr}) {
+		// Pre zurücksetzen
+		let pre = document.createElement("pre");
+		cont.replaceChild(pre, cont.firstChild);
+		xml.preview({
+			xmlStr,
+			after: cont.previousSibling,
+			textblockCont: cont.closest(".textblock-cont"),
+		});
+		// Button zurücksetzen
+		xml.editBearbeiten({p: cont.lastChild});
+		xml.editPreDbl({pre});
 	},
 	// XML-Vorschau: Frage, ob Änderungen gespeichert werden sollen
 	//   pre = Element
