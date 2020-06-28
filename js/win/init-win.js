@@ -138,6 +138,11 @@ let initWin = {
 	},
 	// Events initialisieren: Elemente im XML-Fenster
 	eventsXml () {
+		// Kopf-Icons
+		document.getElementById("kopf-schliessen").addEventListener("click", evt => {
+			evt.preventDefault();
+			xml.reset();
+		});
 		// Metadaten-Felder
 		document.querySelectorAll("#md-id, #md-ty, #md-tf").forEach(i => xml.mdChange({input: i}));
 		// Autofill Artikel-ID

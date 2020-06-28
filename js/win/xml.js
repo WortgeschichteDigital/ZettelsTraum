@@ -114,7 +114,12 @@ let xml = {
 	// Anzeige mit den gelieferten Daten aufbereiten
 	init () {
 		// Counter initialisieren
-		xml.counter = xml.counterGenerator(1);
+		if (!xml.counter) {
+			// init() wird auch von reset() aufgerufen;
+			// in diesem Fall den Generator nicht neu initialisieren, weil
+			// das zu einem merkwürdigen Fehler führt in den Formularen führt
+			xml.counter = xml.counterGenerator(1);
+		}
 		// Wort eintragen
 		document.querySelector("h1").textContent = xml.data.wort;
 		// Init: Metadaten
@@ -195,6 +200,62 @@ let xml = {
 			let bg = document.getElementById("bg");
 			xml.elementLeer({ele: bg});
 		}
+	},
+	// Daten zurücksetzen
+	async reset () {
+		// Sollen die Daten wirklich zurückgesetzt werden?
+		const antwort = await new Promise(resolve => {
+			dialog.oeffnen({
+				typ: "confirm",
+				text: "Sollen die Daten im Redaktionsfenster wirklich zurückgesetzt werden?",
+				callback: () => {
+					if (dialog.antwort) {
+						resolve(true);
+					} else {
+						resolve(false);
+					}
+				},
+			});
+		});
+		if (!antwort) {
+			return;
+		}
+		// Daten zurücksetzen
+		xml.data.xl = helferXml.redXmlData();
+		xml.speichern();
+		// Formular zurücksetzen
+		document.querySelectorAll(`[data-geaendert="true"]`).forEach(i => {
+			delete i.dataset.geaendert;
+		});
+		let delKoepfe = ["md", "le", "ab", "tx"],
+			delTotal = ["bl", "lt", "wi", "bg"],
+			close = delKoepfe.concat(delTotal),
+			closed = false;
+		for (let i of close) {
+			let koepfe = document.querySelectorAll(`#${i} > .kopf`);
+			for (let kopf of koepfe) {
+				let next = kopf.nextSibling;
+				if (next &&
+						(next.classList.contains("pre-cont") ||
+						next.classList.contains("abschnitt-cont") && !next.dataset.off)) {
+					kopf.dispatchEvent(new Event("click"));
+					closed = true;
+				}
+			}
+		}
+		if (closed) { // Schließen der Köpfe dauert .3s
+			await new Promise(warten => setTimeout(() => warten(true), 350));
+		}
+		for (let i of delKoepfe) {
+			let koepfe = document.querySelectorAll(`#${i} > .kopf`);
+			for (let kopf of koepfe) {
+				kopf.parentNode.removeChild(kopf);
+			}
+		}
+		for (let i of delTotal) {
+			helfer.keineKinder(document.getElementById(i));
+		}
+		xml.init();
 	},
 	// Metadaten: ID
 	mdIdMake () {
