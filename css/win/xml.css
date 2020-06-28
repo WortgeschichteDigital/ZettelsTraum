@@ -218,12 +218,15 @@ label {
 }
 
 #le > p > span,
+#bg-nw > p > span,
 #bg-tf > p > span {
 	display: inline-block;
 }
 
 #le > p > span:nth-child(3),
 #le > p > span:nth-child(4),
+#bg-nw > p > span:nth-child(3),
+#bg-nw > p > span:last-child,
 #bg-tf > p > span:last-child {
 	margin-left: -14px;
 }
@@ -253,6 +256,33 @@ label {
 #md-re input[id$="no"],
 #le > p input[id$="re"] {
 	width: 250px;
+}
+
+#nw-link input {
+	margin-left: 10px;
+}
+
+#nw-link input:first-child {
+	margin-left: 0;
+}
+
+#bg-nw input[id$="ty"] {
+	width: 90px;
+}
+
+#bg-nw input[id$="si"],
+#bg-nw input[id$="tx"] {
+	width: 188px;
+}
+
+#bg-nw input[id$="ul"] {
+	width: 300px;
+}
+
+@media (max-width: 900px) {
+	#bg-nw input[id$="da"] {
+		display: none;
+	}
 }
 
 #bg-tf input[id$="li"],
