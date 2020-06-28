@@ -1611,10 +1611,10 @@ let xml = {
 				cont.style.height = "0px";
 				setTimeout(() => {
 					cont.style.height = `${height}px`;
+					delete cont.dataset.off;
 					setTimeout(() => {
 						cont.style.removeProperty("overflow");
 						cont.style.removeProperty("height");
-						delete cont.dataset.off;
 					}, 300);
 				}, 0);
 			} else {

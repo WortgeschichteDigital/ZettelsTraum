@@ -338,6 +338,12 @@ p.leer {
 #ab > .kopf,
 #tx > .kopf {
 	margin-top: 15px;
+	transition: margin-top .3s ease;
+}
+
+#ab .abschnitt-cont[data-off] + .kopf,
+#tx .abschnitt-cont[data-off] + .kopf {
+	margin-top: 0;
 }
 
 .warn {
