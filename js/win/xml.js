@@ -354,6 +354,8 @@ let xml = {
 			let koepfe = document.querySelectorAll("#md .kopf");
 			document.getElementById("md").insertBefore(kopf, koepfe[slot]);
 		}
+		// Slots neu durchzählen
+		xml.refreshSlots({key: "md"});
 		// Layout der Köpfe anpassen
 		let layout = {
 			id: "md",
@@ -1505,6 +1507,11 @@ let xml = {
 				}
 				if (key === "le" && xml.data.xl.le.length ||
 						key === "re" && xml.data.xl.md.re.length) {
+					if (key === "re") {
+						xml.refreshSlots({key: "md"});
+					} else {
+						xml.refreshSlots({key});
+					}
 					xml.layoutTabellig({
 						id,
 						ele: [3, 4],
@@ -2658,6 +2665,9 @@ let xml = {
 				const id = div.previousSibling.dataset.id;
 				div.dataset.slot = xml.data.xl.bl.findIndex(i => i.id === id);
 			});
+		} else if (/^(md|le|bg-nw)$/.test(key)) {
+			// Slots in Köpfen ganz primitiv durchzählen
+			document.querySelectorAll(`#${key} > .kopf`).forEach((i, n) => i.dataset.slot = n);
 		}
 	},
 	// überprüft ein XML-Snippet darauf, ob es wohlgeformt ist
