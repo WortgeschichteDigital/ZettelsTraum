@@ -596,6 +596,27 @@ let xml = {
 		xml.empfangenArr(xmlDatensatz);
 		xml.speichern();
 	},
+	// Bedeutungsgerüst: Nachweisformular umstellen
+	bgNachweisToggle () {
+		let typ = document.getElementById("nw-ty").value,
+			formLit = document.getElementById("nw-lit"),
+			formLink = document.getElementById("nw-link");
+		if (typ === "Literatur") {
+			formLit.classList.remove("aus");
+			formLit.querySelectorAll("input").forEach(i => i.value = "");
+			formLit.querySelector("input").focus();
+		} else {
+			formLit.classList.add("aus");
+		}
+		if (typ === "Link") {
+			formLink.classList.remove("aus");
+			formLink.querySelectorAll("input").forEach(i => i.value = "");
+			formLink.querySelector(`[id$="da"]`).value = new Date().toISOString().split("T")[0];
+			formLink.querySelector("input").focus();
+		} else {
+			formLink.classList.add("aus");
+		}
+	},
 	// Bedeutungsgerüst: neue Textreferenz erstellen
 	async bgTextreferenzAdd () {
 		// Ist das Formular noch im Bearbeiten-Modus?
