@@ -3,7 +3,7 @@
 /* MODULE & VARIABLEN ***************************/
 
 // Electron- und Node-Module
-const {app, BrowserWindow, ipcMain, Menu, webContents} = require("electron"),
+const {app, BrowserWindow, ipcMain, Menu, webContents, nativeImage} = require("electron"),
 	fs = require("fs"),
 	fsP = fs.promises,
 	path = require("path");
@@ -1136,11 +1136,11 @@ fenster = {
 	// ermittelt das zum Betriebssystem passende Programm-Icon
 	icon () {
 		if (process.platform === "win32") {
-			return path.join(__dirname, "img", "icon", "win", "icon.ico");
+			return nativeImage.createFromPath(path.join(__dirname, "img", "icon", "win", "icon.ico"));
 		} else if (process.platform === "darwin") {
-			return path.join(__dirname, "img", "icon", "mac", "icon.icns");
+			return nativeImage.createFromPath(path.join(__dirname, "img", "icon", "mac", "icon.icns"));
 		} else if (process.platform === "linux") {
-			return path.join(__dirname, "img", "icon", "linux", "icon_32px.png");
+			return nativeImage.createFromPath(path.join(__dirname, "img", "icon", "linux", "icon_32px.png"));
 		} else {
 			return null;
 		}
