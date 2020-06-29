@@ -1045,7 +1045,40 @@
 		<div id="red-wi" class="overlay aus"><div>
 			<h2><span class="icon-h icon-kreis-info"> </span
 				>Wortinformationen<a href="#" class="icon-link icon-handbuch" title="Abschnitt im Handbuch öffnen" data-handbuch="menueRedaktion-wortinformationen"> </a><a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"> </a></h2>
-			<div id="red-wi-form">[Formular]</div>
+			<div id="red-wi-form">
+				<p class="input-text"
+					><span class="dropdown-cont"
+						><input type="text" value="" class="dropdown-feld" id="red-wi-vt" readonly title="Verweistyp auswählen"
+						><a href="#" class="dropdown-link-element" title="Verweistyp auswählen"
+							><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m7 2v8l-3.5-3.5-1.5 1.5 6 6 6-6-1.5-1.5-3.5 3.5v-8z"/></svg></a
+					></span
+					><span class="dropdown-cont"
+						><input type="text" value="" class="dropdown-feld" id="red-wi-lt" readonly title="Linktyp auswählen"
+						><a href="#" class="dropdown-link-element" title="Linktyp auswählen"
+							><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m7 2v8l-3.5-3.5-1.5 1.5 6 6 6-6-1.5-1.5-3.5 3.5v-8z"/></svg></a
+					></span
+				></p>
+				<p class="input-text dropdown-cont" id="red-wi-text"
+					><input type="text" value="" placeholder="Verweistext" class="dropdown-feld" id="red-wi-text-tx"
+					><a href="#" class="dropdown-link-element" title="Textvorschläge anzeigen"
+						><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m7 2v8l-3.5-3.5-1.5 1.5 6 6 6-6-1.5-1.5-3.5 3.5v-8z"/></svg></a
+					><input type="text" value="" placeholder="ID" id="red-wi-text-id"
+				></p>
+				<p class="input-text dropdown-cont" id="red-wi-intern"
+					><input type="text" value="" placeholder="Verweistext" class="dropdown-feld" id="red-wi-intern-tx"
+					><a href="#" class="dropdown-link-element" title="Textvorschläge anzeigen"
+						><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m7 2v8l-3.5-3.5-1.5 1.5 6 6 6-6-1.5-1.5-3.5 3.5v-8z"/></svg></a
+					><input type="text" value="" placeholder="Verweisziel" id="red-wi-intern-zl"
+				></p>
+				<p class="input-text dropdown-cont" id="red-wi-extern"
+					><input type="text" value="" placeholder="Verweistext" class="dropdown-feld" id="red-wi-extern-tx"
+					><a href="#" class="dropdown-link-element" title="Textvorschläge anzeigen"
+						><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m7 2v8l-3.5-3.5-1.5 1.5 6 6 6-6-1.5-1.5-3.5 3.5v-8z"/></svg></a
+					><input type="text" value="" placeholder="URL" id="red-wi-extern-ul"
+					><input type="date" value="" id="red-wi-extern-da" required
+				></p>
+				<p><input type="button" value="Speichern" id="red-wi-speichern"></p>
+			</div>
 			<div id="red-wi-cont">[Content]</div>
 		</div></div>
 

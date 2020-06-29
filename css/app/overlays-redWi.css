@@ -3,12 +3,64 @@
 /* Redaktion: Wortinformationen ----------------- */
 #red-wi > div {
 	margin-top: 40px;
-	max-width: 500px;
+	max-width: 750px;
 }
 
 /* Formular ------------------------------------- */
 #red-wi-form {
 	padding: 10px 10px 0 10px;
+}
+
+#red-wi-form p:first-child > span {
+	display: inline-block;
+}
+
+#red-wi-form p:first-child > span:last-child {
+	margin-left: -14px;
+}
+
+#red-wi-form p:first-child input {
+	width: 144px;
+	cursor: default;
+}
+
+#red-wi-form p:not(:first-child) {
+	white-space: nowrap;
+}
+
+#red-wi-form p:not(:first-child) input:nth-child(3) {
+	margin-left: 10px;
+}
+
+#red-wi-text input:first-child,
+#red-wi-intern input:first-child {
+	width: calc(50% - 29px - 2px - 5px); /* padding, border, margin / 2 */
+}
+
+#red-wi-text input:nth-child(3),
+#red-wi-intern input:nth-child(3) {
+	width: calc(50% - 10px - 2px - 5px); /* padding, border, margin / 2 */
+}
+
+#red-wi-extern input:first-child {
+	width: calc(50% - 29px - 2px - 5px - 81px); /* padding, border, margin / 2, date / 2 */
+}
+
+#red-wi-extern input:nth-child(3) {
+	width: calc(50% - 10px - 2px - 5px - 81px); /* padding, border, margins / 2, date / 2 */
+}
+
+#red-wi-extern input[type="date"] {
+	margin-left: 10px;
+	width: 140px;
+}
+
+#red-wi-extern input:invalid {
+	color: var(--textSehrHell);
+}
+
+#red-wi-form input[type="button"] {
+	margin-left: 0;
 }
 
 /* Content -------------------------------------- */
