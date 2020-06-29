@@ -19,11 +19,13 @@ let redWi = {
 					continue;
 				}
 				for (let i of daten.split("\n")) { // Mehrzeiligkeit möglich
+					let wort = i;
 					if (/: /.test(i)) { // Hierarchieebenen möglich
 						let sp = i.split(": ");
-						set.add(sp[sp.length - 1]);
-					} else {
-						set.add(i);
+						wort = sp[sp.length - 1];
+					}
+					if (!data.rd.wi.some(i => i.tx === wort)) {
+						set.add(wort);
 					}
 				}
 			}
