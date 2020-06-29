@@ -63,7 +63,7 @@
 	color: var(--textSehrHell);
 }
 
-#red-wi-form input[type="button"] {
+#red-wi-form input[type="button"]:first-child {
 	margin-left: 0;
 }
 

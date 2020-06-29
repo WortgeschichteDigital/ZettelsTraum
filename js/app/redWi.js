@@ -46,12 +46,7 @@ let redWi = {
 			return;
 		}
 		// Formular initialisieren
-		let vt = document.getElementById("red-wi-vt");
-		vt.value = redWi.dropdown.vt[0];
-		let lt = document.getElementById("red-wi-lt");
-		lt.value = redWi.dropdown.lt[0];
-		redWi.formToggle();
-		redWi.formReset();
+		redWi.formInit();
 		// Content aufbauen
 		redWi.contMake();
 	},
@@ -77,7 +72,13 @@ let redWi = {
 				}
 			});
 		} else if (input.type === "button") {
-			input.addEventListener("click", () => redWi.formEval());
+			input.addEventListener("click", function() {
+				if (/speichern$/.test(this.id)) {
+					redWi.formEval();
+				} else if (/reset$/.test(this.id)) {
+					redWi.formInit();
+				}
+			});
 		}
 	},
 	// Formular: Formular umstellen
@@ -105,6 +106,14 @@ let redWi = {
 		}
 		let inputs = document.querySelectorAll(redWi.inputs);
 		inputs[0].focus();
+	},
+	formInit () {
+		let vt = document.getElementById("red-wi-vt");
+		vt.value = redWi.dropdown.vt[0];
+		let lt = document.getElementById("red-wi-lt");
+		lt.value = redWi.dropdown.lt[0];
+		redWi.formToggle();
+		redWi.formReset();
 	},
 	// Formular: Felder zurücksetzen
 	formReset () {
