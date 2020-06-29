@@ -1,0 +1,17 @@
+@charset "utf-8";
+
+/* Redaktion: Wortinformationen ----------------- */
+#red-wi > div {
+	margin-top: 40px;
+	max-width: 500px;
+}
+
+/* Formular ------------------------------------- */
+#red-wi-form {
+	padding: 10px 10px 0 10px;
+}
+
+/* Content -------------------------------------- */
+#red-wi-cont {
+	padding: 0 10px 10px 10px;
+}

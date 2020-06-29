@@ -294,6 +294,12 @@ layoutMenu = [
 				icon: path.join(__dirname, "img", "menu", "buecher.png"),
 				click: () => appMenu.befehl("redaktion-literatur"),
 			},
+			{
+				label: "Wortinformationen",
+				icon: path.join(__dirname, "img", "menu", "kreis-info.png"),
+				click: () => appMenu.befehl("redaktion-wortinformationen"),
+				id: "redaktion-wortinformationen",
+			},
 		],
 	},
 	{
@@ -604,7 +610,7 @@ appMenu = {
 			return;
 		}
 		// zu deaktivierende Menüpunkte durchgehen
-		let elemente = ["kartei-speichern", "kartei-speichern-unter", "kartei-formvarianten", "kartei-notizen", "kartei-anhaenge", "kartei-lexika", "kartei-metadaten", "kartei-bedeutungen", "kartei-bedeutungen-wechseln", "kartei-bedeutungen-fenster", "kartei-suche", "kartei-schliessen", "redaktion-metadaten", "redaktion-ereignisse", "belege"];
+		let elemente = ["kartei-speichern", "kartei-speichern-unter", "kartei-formvarianten", "kartei-notizen", "kartei-anhaenge", "kartei-lexika", "kartei-metadaten", "kartei-bedeutungen", "kartei-bedeutungen-wechseln", "kartei-bedeutungen-fenster", "kartei-suche", "kartei-schliessen", "redaktion-metadaten", "redaktion-ereignisse", "redaktion-wortinformationen", "belege"];
 		for (let j = 0, len = layoutMenu.length; j < len; j++) {
 			// sollen vielleicht alle Menüpunkte deaktiviert werden?
 			let alle = false;
