@@ -619,7 +619,7 @@ let dropdown = {
 				document.getElementById(caller).parentNode.nextSibling.firstChild.focus();
 			} else if (/^red-lit-eingabe-/.test(caller)) {
 				feld.dispatchEvent(new KeyboardEvent("input"));
-			} else if (/^red-wi-(vt|lt)/.test(caller)) {
+			} else if (caller === "red-wi-lt") {
 				feld.dispatchEvent(new Event("input"));
 			}
 			// Dropdown schließen

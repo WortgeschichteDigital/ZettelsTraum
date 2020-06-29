@@ -3,12 +3,16 @@
 /* Redaktion: Wortinformationen ----------------- */
 #red-wi > div {
 	margin-top: 40px;
-	max-width: 750px;
+	max-width: 650px;
 }
 
 /* Formular ------------------------------------- */
 #red-wi-form {
-	padding: 10px 10px 0 10px;
+	padding: 10px;
+}
+
+#red-wi-form p:last-child {
+	margin-bottom: 0;
 }
 
 #red-wi-form p:first-child > span {
@@ -20,7 +24,7 @@
 }
 
 #red-wi-form p:first-child input {
-	width: 144px;
+	width: 119px;
 	cursor: default;
 }
 
@@ -43,11 +47,11 @@
 }
 
 #red-wi-extern input:first-child {
-	width: calc(50% - 29px - 2px - 5px - 81px); /* padding, border, margin / 2, date / 2 */
+	width: calc(40% - 29px - 2px - 5px - 81px); /* padding, border, margin / 2, date / 2 */
 }
 
 #red-wi-extern input:nth-child(3) {
-	width: calc(50% - 10px - 2px - 5px - 81px); /* padding, border, margins / 2, date / 2 */
+	width: calc(60% - 10px - 2px - 5px - 81px); /* padding, border, margins / 2, date / 2 */
 }
 
 #red-wi-extern input[type="date"] {
@@ -65,5 +69,48 @@
 
 /* Content -------------------------------------- */
 #red-wi-cont {
+	margin-top: 5px;
 	padding: 0 10px 10px 10px;
+}
+
+#red-wi-cont div {
+	overflow: auto;
+	max-height: 400px;
+}
+
+#red-wi-cont h3 {
+	margin: 15px 0 5px 0;
+}
+
+#red-wi-cont h3:first-child {
+	margin-top: 0;
+}
+
+#red-wi-cont p {
+	margin: 0 25px 5px 25px;
+	border-radius: 3px;
+	white-space: nowrap;
+}
+
+#red-wi-cont p:hover {
+	background-color: var(--hover);
+}
+
+#red-wi-cont a {
+	margin-right: 10px;
+	vertical-align: bottom;
+	background-color: var(--textExtremHell);
+}
+
+#red-wi-cont a:focus {
+	background-color: var(--farbe);
+}
+
+#red-wi-cont a:hover {
+	background-color: var(--text);
+}
+
+#red-wi-cont span {
+	margin-left: 5px;
+	color: var(--textHell);
 }
