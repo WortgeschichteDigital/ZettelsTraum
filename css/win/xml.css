@@ -258,10 +258,12 @@ label {
 	width: 250px;
 }
 
+#nw-lit input,
 #nw-link input {
 	margin-left: 10px;
 }
 
+#nw-lit input:first-child,
 #nw-link input:first-child {
 	margin-left: 0;
 }
@@ -275,6 +277,7 @@ label {
 	width: 188px;
 }
 
+#bg-nw input[id$="st"],
 #bg-nw input[id$="ul"] {
 	width: 300px;
 }

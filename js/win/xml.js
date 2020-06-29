@@ -754,7 +754,7 @@ let xml = {
 				if (!/^<Literaturreferenz/.test(i)) {
 					continue;
 				}
-				const ziel = i.match(/Ziel=".+#(.+)"/)[1];
+				const ziel = i.match(/Ziel="(.+?)"/)[1];
 				if (ziel === id) {
 					dialog.oeffnen({
 						typ: "alert",
@@ -764,7 +764,12 @@ let xml = {
 					return;
 				}
 			}
-			xmlStr = `<Literaturreferenz Ziel="../share/Literaturliste.xml#${id}"/>`;
+			let stVal = helfer.textTrim(document.getElementById("nw-lit-st").value, true);
+			if (!stVal) {
+				xmlStr = `<Literaturreferenz Ziel="${id}"/>`;
+			} else {
+				xmlStr = `<Literaturreferenz Ziel="${id}">${stVal}</Literaturreferenz>`;
+			}
 		} else if (tyVal === "Link") {
 			let tx = document.getElementById("nw-link-tx"),
 				txVal = helfer.textTrim(tx.value, true);
@@ -1240,7 +1245,7 @@ let xml = {
 		} else if (key === "nw") {
 			let xl = xml.data.xl.bg.nw[slot];
 			if (/<Literaturreferenz/.test(xl)) {
-				idText = xl.match(/Ziel=".+#(.+)"/)[1];
+				idText = xl.match(/Ziel="(.+?)"/)[1];
 			} else {
 				idText = xl.match(/<Verweistext>(.+?)<\/Verweistext>/)[1];
 			}
@@ -1275,7 +1280,7 @@ let xml = {
 			} else if (key === "nw") {
 				let xl = xml.data.xl.bg.nw[slot];
 				if (/<Literaturreferenz/.test(xl)) {
-					const id = xl.match(/Ziel=".+#(.+)"/)[1];
+					const id = xl.match(/Ziel="(.+?)"/)[1];
 					let i = xml.data.xl.lt.find(i => i.id === id),
 						text = "";
 					if (i) {
