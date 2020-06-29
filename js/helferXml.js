@@ -1,6 +1,22 @@
 "use strict";
 
 let helferXml = {
+	// Fundort anhand der URL ermitteln
+	//   url = String
+	//     (URL, aus der der Fundort abgeleitet werden soll)
+	fundort ({url}) {
+		let fundort = "online";
+		if (/deutschestextarchiv\.de\//.test(url)) {
+			fundort = "DTA";
+		} else if (/dwds\.de\//.test(url)) {
+			fundort = "DWDS";
+		} else if (/books\.google\.[a-z]+\//.test(url)) {
+			fundort = "GoogleBooks";
+		} else if (/owid\.de\//.test(url)) {
+			fundort = "IDS";
+		}
+		return fundort;
+	},
 	// Datum extrahieren
 	//   text = String
 	//     (Text, aus dem heraus das Datum extrahiert werden soll)
