@@ -143,6 +143,20 @@ let initWin = {
 			evt.preventDefault();
 			xml.reset();
 		});
+		// Kopf-Navigation
+		document.querySelectorAll("#kopf-nav a").forEach(a => {
+			a.addEventListener("click", function(evt) {
+				evt.preventDefault();
+				const id = this.getAttribute("href").replace("#", "");
+				let ziel = document.getElementById(id),
+					header = document.querySelector("body > header");
+				window.scrollTo({
+					left: 0,
+					top: ziel.offsetTop - header.offsetHeight,
+					behavior: "smooth",
+				});
+			});
+		});
 		// Metadaten-Felder
 		document.querySelectorAll("#md-id, #md-ty, #md-tf").forEach(i => xml.mdChange({input: i}));
 		// Autofill Artikel-ID
