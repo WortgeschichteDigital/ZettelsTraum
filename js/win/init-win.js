@@ -139,7 +139,7 @@ let initWin = {
 	// Events initialisieren: Elemente im XML-Fenster
 	eventsXml () {
 		// Kopf-Icons
-		document.getElementById("kopf-schliessen").addEventListener("click", evt => {
+		document.getElementById("kopf-reset").addEventListener("click", evt => {
 			evt.preventDefault();
 			xml.reset();
 		});
