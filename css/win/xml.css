@@ -425,6 +425,7 @@ p.leer {
 #md .kopf:hover .pfeile,
 #le .kopf:hover .pfeile,
 .abschnitt-cont .kopf:hover .pfeile,
+#wi .kopf:hover .pfeile,
 #bg-nw .kopf:hover .pfeile {
 	width: 68px;
 }
@@ -464,6 +465,10 @@ p.leer {
 
 .ueberschrift {
 	font-weight: bold;
+}
+
+.grenze {
+	margin-top: 15px;
 }
 
 /* Abschnitt-Container -------------------------- */

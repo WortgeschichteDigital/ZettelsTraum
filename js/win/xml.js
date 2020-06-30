@@ -192,8 +192,13 @@ let xml = {
 			}
 		}
 		// Init: Wortinformationen
-		let wi = document.getElementById("wi");
-		xml.elementLeer({ele: wi});
+		if (xml.data.xl.wi.length) {
+			xml.wiMake();
+		} else {
+			xml.elementLeer({
+				ele: document.getElementById("wi"),
+			});
+		}
 		// Init: Bedeutungsgerüst, Nachweise
 		xml.bgNwTfMake({key: "nw"});
 		// Init: Bedeutungsgerüst, Textreferenzen
@@ -202,8 +207,9 @@ let xml = {
 		if (xml.data.xl.bg.xl) {
 			xml.bgMakeXML();
 		} else {
-			let bg = document.getElementById("bg");
-			xml.elementLeer({ele: bg});
+			xml.elementLeer({
+				ele: document.getElementById("bg"),
+			});
 		}
 	},
 	// Daten zurücksetzen
@@ -534,6 +540,9 @@ let xml = {
 			xml.bgNwTfMake({key: "nw"});
 			xml.bgNwTfMake({key: "tf"});
 			xml.bgMakeXML();
+		} else if (xmlDatensatz.key === "wi") {
+			xml.data.xl.wi = xmlDatensatz.ds;
+			xml.wiMake();
 		}
 		xml.speichern();
 	},
@@ -667,6 +676,46 @@ let xml = {
 		// Beleg einfügen und speichern
 		xml.empfangenArr(xmlDatensatz);
 		xml.speichern();
+	},
+	// Wortinformationen: alle Wörter aufbauen
+	wiMake () {
+		// alle Köpfe entfernen
+		let wi = document.getElementById("wi");
+		helfer.keineKinder(wi);
+		// alle Köpfe aufbauen
+		for (let i = 0, len = xml.data.xl.wi.length; i < len; i++) {
+			let kopf = xml.elementKopf({
+				key: "wi",
+				slot: i,
+			});
+			wi.appendChild(kopf);
+		}
+		// Verweistypgrenze markieren
+		xml.wiVerweistypGrenze();
+		// Layout der Köpfe anpassen
+		xml.layoutTabellig({
+			id: "wi",
+			ele: [3, 4],
+			restore: 300,
+		});
+	},
+	// Wortinformationen: Verweistypgrenze markieren
+	wiVerweistypGrenze () {
+		let koepfe = document.querySelectorAll("#wi > .kopf");
+		if (!koepfe.length) {
+			return;
+		}
+		let vtZuletzt = koepfe[0].querySelector(".id").textContent;
+		koepfe[0].classList.remove("grenze");
+		for (let i = 1, len = koepfe.length; i < len; i++) {
+			const vt = koepfe[i].querySelector(".id").textContent;
+			if (vt !== vtZuletzt) {
+				koepfe[i].classList.add("grenze");
+				vtZuletzt = vt;
+			} else {
+				koepfe[i].classList.remove("grenze");
+			}
+		}
 	},
 	// Bedeutungsgerüst: Nachweisformular umstellen
 	bgNachweisToggle () {
@@ -1162,7 +1211,7 @@ let xml = {
 		let div = document.createElement("div");
 		div.classList.add("kopf");
 		div.dataset.key = key;
-		if (slot > -1 && /^(re|le|nw|tf)$/.test(key)) {
+		if (slot > -1 && /^(re|le|wi|nw|tf)$/.test(key)) {
 			div.dataset.slot = slot;
 		} else if (slot > -1) {
 			div.dataset.id = xml.data.xl[key][slot].id;
@@ -1205,7 +1254,7 @@ let xml = {
 		a.classList.add("icon-link", "icon-x-dick");
 		a.title = "Löschen";
 		// Verschiebe-Icons
-		if (textKopf || /^(re|le|nw)$/.test(key)) {
+		if (textKopf || /^(re|le|wi|nw)$/.test(key)) {
 			let pfeile = {
 				"icon-pfeil-gerade-hoch": "nach oben",
 				"icon-pfeil-gerade-runter": "nach unten",
@@ -1216,7 +1265,7 @@ let xml = {
 			pfeileCont.classList.add("pfeile");
 			div.appendChild(pfeileCont);
 			for (let [k, v] of Object.entries(pfeile)) {
-				if ((textKopf === "textblock" || /^(re|le|nw)/.test(key)) &&
+				if ((textKopf === "textblock" || /^(re|le|wi|nw)/.test(key)) &&
 						k === "icon-pfeil-gerade-links") {
 					break;
 				}
@@ -1242,6 +1291,8 @@ let xml = {
 			idText = xml.data.xl.md.re[slot].au;
 		} else if (key === "le") {
 			idText = xml.data.xl[key][slot].le.join("/");
+		} else if (key === "wi") {
+			idText = xml.data.xl.wi[slot].vt;
 		} else if (key === "nw") {
 			let xl = xml.data.xl.bg.nw[slot];
 			if (/<Literaturreferenz/.test(xl)) {
@@ -1277,6 +1328,8 @@ let xml = {
 				hinweis.textContent = xml.data.xl.bl[slot].da;
 			} else if (key === "lt") {
 				hinweis.textContent = xml.data.xl.lt[slot].si;
+			} else if (key === "wi") {
+				hinweis.textContent = xml.data.xl.wi[slot].tx;
 			} else if (key === "nw") {
 				let xl = xml.data.xl.bg.nw[slot];
 				if (/<Literaturreferenz/.test(xl)) {
@@ -1332,6 +1385,8 @@ let xml = {
 					text: unstrukturiert[1],
 					demaskieren: true,
 				});
+			} else if (key === "wi") {
+				text = xml.data.xl.wi[slot].lt;
 			}
 			text = text.substring(0, 300);
 			vorschau.appendChild(document.createTextNode(text));
@@ -1438,7 +1493,7 @@ let xml = {
 				key = kopf.dataset.key,
 				id = kopf.dataset.id,
 				slot = -1;
-			if (key !== "bg" && /^(re|le)$/.test(key)) {
+			if (key !== "bg" && /^(re|le|wi)$/.test(key)) {
 				slot = parseInt(kopf.dataset.slot, 10);
 			} else if (key !== "bg") {
 				slot = xml.data.xl[key].findIndex(i => i.id === id);
@@ -1456,7 +1511,7 @@ let xml = {
 				key,
 				slot,
 				after: this,
-				editable: /^(bg|bl)$/.test(key) ? true : false,
+				editable: /^(bg|bl|wi)$/.test(key) ? true : false,
 			});
 		});
 	},
@@ -1487,7 +1542,7 @@ let xml = {
 				key = kopf.dataset.key,
 				id = kopf.dataset.id,
 				slot = -1;
-			if (key !== "bg" && /^(re|le|nw|tf)$/.test(key)) {
+			if (key !== "bg" && /^(re|le|wi|nw|tf)$/.test(key)) {
 				slot = parseInt(kopf.dataset.slot, 10);
 			} else if (key !== "bg") {
 				slot = xml.data.xl[key].findIndex(i => i.id === id);
@@ -1519,7 +1574,7 @@ let xml = {
 				kopf.parentNode.removeChild(kopf);
 			}
 			// Leermeldung erzeugen oder Ansicht auffrischen
-			if (/^(re|le|nw|tf)$/.test(key)) {
+			if (/^(re|le|wi|nw|tf)$/.test(key)) {
 				let id = "";
 				if (key === "re") {
 					id = "md";
@@ -1529,15 +1584,23 @@ let xml = {
 					id = key;
 				}
 				if (key === "le" && xml.data.xl.le.length ||
-						key === "re" && xml.data.xl.md.re.length) {
+						key === "re" && xml.data.xl.md.re.length ||
+						key === "wi" && xml.data.xl.wi.length) {
 					if (key === "re") {
 						xml.refreshSlots({key: "md"});
 					} else {
 						xml.refreshSlots({key});
 					}
+					if (key === "wi") {
+						xml.wiVerweistypGrenze();
+					}
 					xml.layoutTabellig({
 						id,
 						ele: [3, 4],
+					});
+				} else if (key === "wi" && !xml.data.xl.wi.length) {
+					xml.elementLeer({
+						ele: document.getElementById("wi"),
 					});
 				} else if (/^(nw|tf)$/.test(key)) {
 					let ele = [2, 3];
@@ -2381,6 +2444,29 @@ let xml = {
 						slot = slotNeu;
 						refreshSlots = true;
 					}
+				} else if (key === "wi") {
+					// Linktyp neu auslesen
+					let lt = xml.data.xl.wi[slot].lt;
+					if (/^<Textreferenz/.test(xmlStr)) {
+						lt = "Textverweis";
+					} else if (/^<Verweis>/.test(xmlStr)) {
+						lt = "Verweis intern";
+					} else if (/^<Verweis_extern>/.test(xmlStr)) {
+						lt = "Verweis extern";
+					}
+					// Textreferenz neu auslesen
+					let tx = xml.data.xl.wi[slot].tx,
+						reg = /<Textreferenz Ziel=".+?">(?<tr>.+?)<\/Textreferenz>|<Verweistext>(?<vt>.+?)<\/Verweistext>|<Verweisziel>(?<vz>.+?)<\/Verweisziel>/.exec(xmlStr);
+					if (reg?.groups.tr) { // jshint ignore:line
+						tx = reg.groups.tr;
+					} else if (reg?.groups.vt) { // jshint ignore:line
+						tx = reg.groups.vt;
+					} else if (reg?.groups.vz) { // jshint ignore:line
+						tx = reg.groups.vz;
+					}
+					// Werte neu setzen
+					xml.data.xl.wi[slot].lt = lt;
+					xml.data.xl.wi[slot].tx = tx;
 				}
 				// Speichern
 				if (key === "bg") {
@@ -2436,6 +2522,10 @@ let xml = {
 			if (refreshSlots) {
 				xml.refreshSlots({key});
 			}
+			// ggf. Verweistypgrenze neu markieren
+			if (key === "wi") {
+				xml.wiVerweistypGrenze();
+			}
 			// generischer Abschluss
 			xml.editSpeichernAbschluss({cont, xmlStr});
 			// hier abbrechen, wenn Bedeutungsgerüst
@@ -2452,6 +2542,8 @@ let xml = {
 			if (slotBlock !== null) {
 				ele = [3];
 				inAbschnitt = cont.closest(".abschnitt-cont");
+			} else if (key === "wi") {
+				ele = [3, 4];
 			}
 			xml.layoutTabellig({
 				id: key,
@@ -2655,6 +2747,7 @@ let xml = {
 		let key = kopf.dataset.key,
 			refreshKey = key,
 			slot = parseInt(kopf.dataset.slot, 10),
+			slotOri = slot,
 			slotNeu = -1,
 			arr = [],
 			slotKlon;
@@ -2671,19 +2764,41 @@ let xml = {
 		if (key === "re") {
 			arr = xml.data.xl.md.re;
 			slotKlon = {...arr[slot]};
-		} else if (key === "le") {
-			arr = xml.data.xl.le;
-			slotKlon = {...arr[slot]};
-			slotKlon.le = [...arr[slot].le];
 		} else if (key === "nw") {
 			arr = xml.data.xl.bg.nw;
 			slotKlon = arr[slot];
+		} else {
+			arr = xml.data.xl[key];
+			slotKlon = {...arr[slot]};
+			if (key === "le") {
+				slotKlon.le = [...arr[slot].le];
+			}
+		}
+		// spezieller Verschiebeblocker für Wortinformationen
+		let wiBlock = {
+			up: false,
+			down: false,
+		};
+		if (key === "wi") {
+			const vt = xml.data.xl.wi[slot].vt;
+			if (slot > 0 &&
+					xml.data.xl.wi[slot - 1].vt !== vt) {
+				wiBlock.up = true;
+			}
+			if (slot < xml.data.xl.wi.length - 1 &&
+					xml.data.xl.wi[slot + 1].vt !== vt) {
+				wiBlock.down = true;
+			}
 		}
 		// Variablen ermitteln
-		if (dir === "up" && slot > 0) {
+		if (dir === "up" &&
+				slot > 0 &&
+				!wiBlock.up) {
 			slotNeu = slot - 1;
 			slot++;
-		} else if (dir === "down" && slot  < arr.length - 1) {
+		} else if (dir === "down" &&
+				slot  < arr.length - 1 &&
+				!wiBlock.down) {
 			slotNeu = slot + 2;
 		}
 		// Verschieben nicht möglich/nötig
@@ -2691,9 +2806,33 @@ let xml = {
 			return;
 		}
 		// ggf. Vorschau schließen
-		let next = kopf.nextSibling;
-		if (next?.classList.contains("pre-cont")) { // jshint ignore:line
-			await xml.elementPreviewOff({pre: next});
+		let pre = kopf.nextSibling;
+		if (pre?.classList.contains("pre-cont")) { // jshint ignore:line
+			let ta = pre.querySelector("textarea");
+			if (ta && ta.dataset.geaendert) {
+				// XML wurde bearbeitet => Speichern?
+				const antwort = await xml.editFrage({
+					pre,
+					fun: () => {},
+				});
+				if (antwort) {
+					pre.querySelector(`[value="Speichern"]`).dispatchEvent(new Event("click"));
+					slotKlon.xl = xml.data.xl[key][slotOri].xl;
+				} else if (antwort === false) {
+					delete ta.dataset.geaendert;
+					ta.value = slotKlon.xl;
+					pre.querySelector(`[value="Abbrechen"]`).dispatchEvent(new Event("click"));
+				} else if (antwort === null) {
+					ta.setSelectionRange(0, 0);
+					ta.focus();
+					return;
+				}
+				// bei der Aktion wird der Kopf geändert => Kopf neu ermitteln
+				// (ein bisschen warten, sonst steht der neue Kopf außerhalb nicht zur Verfügung)
+				await new Promise(warten => setTimeout(() => warten(true), 25));
+				kopf = document.querySelector(`#${key} > .kopf[data-slot="${slotOri}"]`);
+			}
+			await xml.elementPreviewOff({pre: kopf.nextSibling});
 		}
 		// Verschieben auf Datenebene
 		arr.splice(slotNeu, 0, slotKlon);
@@ -2706,7 +2845,10 @@ let xml = {
 		xml.refreshSlots({key: refreshKey});
 		xml.elementKopfEvents({kopf: klon});
 		// Konsequenzen
-		if (key === "nw") {
+		if (key === "wi") {
+			// Verweistypgrenze in Wortinformationen markieren
+			xml.wiVerweistypGrenze();
+		} else if (key === "nw") {
 			// Reihenfolge der Nachweise im Bedeutungsgerüst auffrischen
 			xml.bgNachweiseRefresh();
 		}
@@ -2738,7 +2880,7 @@ let xml = {
 				const id = div.previousSibling.dataset.id;
 				div.dataset.slot = xml.data.xl.bl.findIndex(i => i.id === id);
 			});
-		} else if (/^(md|le|bg-nw)$/.test(key)) {
+		} else if (/^(md|le|wi|bg-nw)$/.test(key)) {
 			// Slots in Köpfen ganz primitiv durchzählen
 			document.querySelectorAll(`#${key} > .kopf`).forEach((i, n) => i.dataset.slot = n);
 		}
