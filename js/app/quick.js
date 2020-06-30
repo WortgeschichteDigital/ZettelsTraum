@@ -108,6 +108,11 @@ let quick = {
 			short: "",
 			img: "buecher.svg",
 		},
+		"redaktion-wortinformationen": {
+			title: "Redaktion > Wortinformationen",
+			short: "",
+			img: "kreis-info.svg",
+		},
 		"belege-hinzufuegen": {
 			title: "Belege > Hinzufügen",
 			short: `${tastatur.shortcutsTextAktuell("Strg")} + N`,
@@ -360,6 +365,9 @@ let quick = {
 					break;
 				case "redaktion-ereignisse":
 					redaktion.oeffnen();
+					break;
+				case "redaktion-wortinformationen":
+					redWi.oeffnen();
 					break;
 				case "belege-hinzufuegen":
 					speichern.checkInit(() => beleg.erstellen());

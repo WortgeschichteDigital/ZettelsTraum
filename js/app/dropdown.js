@@ -296,6 +296,12 @@ let dropdown = {
 			dropdown.data = [...redLit.eingabe.fundorte];
 		} else if (feld_id === "red-lit-eingabe-tg") {
 			dropdown.data = redLit.eingabeTagsAuflisten();
+		} else if (feld_id === "red-wi-vt") {
+			dropdown.data = [...redWi.dropdown.vt];
+		} else if (feld_id === "red-wi-lt") {
+			dropdown.data = [...redWi.dropdown.lt];
+		} else if (/^red-wi-.+-tx$/.test(feld_id)) {
+			dropdown.data = redWi.dropdownVerweistexte();
 		}
 		// Dropdown erzeugen und einhängen
 		let span = document.createElement("span");
@@ -613,6 +619,8 @@ let dropdown = {
 				document.getElementById(caller).parentNode.nextSibling.firstChild.focus();
 			} else if (/^red-lit-eingabe-/.test(caller)) {
 				feld.dispatchEvent(new KeyboardEvent("input"));
+			} else if (caller === "red-wi-lt") {
+				feld.dispatchEvent(new Event("input"));
 			}
 			// Dropdown schließen
 			dropdown.schliessen();

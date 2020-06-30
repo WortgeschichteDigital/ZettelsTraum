@@ -638,7 +638,7 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
 
 					<p>Nach dem Laden einer <abbr title="Zettel’s Traum JSON">ZTJ</abbr>-Datei in <i class="app-name"></i> befinden sich die <abbr title="JavaScript Object Notation">JSON</abbr>-Daten im globalen Objekt <code class="quelltext">data</code>. Ihre Werte lassen sich dann in allen Funktionen des Hauptfensters durch einfache Statements wie <code class="quelltext">data.dc</code> lesen oder schreiben.</p>
 
-					<p>Alle Dateien sind gleich aufgebaut (<span class="obacht">Datenformat Version 14</span>):</p>
+					<p>Alle Dateien sind gleich aufgebaut (<span class="obacht">Datenformat Version 15</span>):</p>
 
 					<table class="ztj">
 						<tr>
@@ -1090,6 +1090,36 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
 							<td class="datentyp">String</td>
 							<td>immer <code class="quelltext">"themenfelder"</code></td>
 							<td>Tag-Typ, der in diesem Fall immer derselbe ist; <abbr title="vergleiche">vgl.</abbr> <code class="quelltext">data.bd.gr[ID].bd.ta</code></td>
+						</tr>
+						<tr class="ztj-ebene1">
+							<td><p><code class="quelltext">wi</code></p></td>
+							<td class="datentyp">Array</td>
+							<td> </td>
+							<td>Wortinformationen;<br><span class="obacht">ab Version 15</span></td>
+						</tr>
+						<tr class="ztj-ebene2">
+							<td><p><code class="quelltext">lt</code></p></td>
+							<td class="datentyp">String</td>
+							<td><code class="quelltext">Textverweis<br>| Verweis intern<br>| Verweis extern</code></td>
+							<td>Linktyp</td>
+						</tr>
+						<tr class="ztj-ebene2">
+							<td><p><code class="quelltext">tx</code></p></td>
+							<td class="datentyp">String</td>
+							<td> </td>
+							<td>Verweistext, also das verlinkte Wort/der verlinkte Ausdruck</td>
+						</tr>
+						<tr class="ztj-ebene2">
+							<td><p><code class="quelltext">vt</code></p></td>
+							<td class="datentyp">String</td>
+							<td><code class="quelltext">Assoziation<br>| Kollokation<br>| Wortfeld</code></td>
+							<td>Verweistyp</td>
+						</tr>
+						<tr class="ztj-ebene2">
+							<td><p><code class="quelltext">xl</code></p></td>
+							<td class="datentyp">String</td>
+							<td> </td>
+							<td>alle Daten im <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Format</td>
 						</tr>
 						<tr>
 							<td><p><code class="quelltext">re</code></p></td>

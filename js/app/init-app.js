@@ -39,6 +39,7 @@ window.addEventListener("load", async () => {
 	ipcRenderer.on("redaktion-ereignisse", () => redaktion.oeffnen());
 	ipcRenderer.on("redaktion-literatur", () => redLit.oeffnen());
 	ipcRenderer.on("redaktion-metadaten", () => redMeta.oeffnen());
+	ipcRenderer.on("redaktion-wortinformationen", () => redWi.oeffnen());
 	ipcRenderer.on("belege-hinzufuegen", () => {
 		// Sperre für macOS (Menüpunkte können nicht deaktiviert werden)
 		if (!kartei.wort) {
@@ -350,6 +351,8 @@ window.addEventListener("load", async () => {
 	});
 	document.getElementById("red-lit-export-exportieren").addEventListener("click", () => redLit.dbExportieren());
 	document.getElementById("red-lit-export-abbrechen").addEventListener("click", () => overlay.schliessen(document.getElementById("red-lit-export") ) );
+	// Wortinformationen
+	document.querySelectorAll("#red-wi-form input").forEach( input => redWi.formListener({input}) );
 	// Karteisuche
 	document.getElementById("karteisuche-suchen").addEventListener("click", () => karteisuche.suchenPrep());
 	document.getElementById("karteisuche-suchenCache").addEventListener("click", () => karteisuche.suchenPrepZtj([]));
