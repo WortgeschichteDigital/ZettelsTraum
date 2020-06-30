@@ -302,23 +302,38 @@ let redWi = {
 		};
 		let h = "";
 		for (let i of data.rd.wi) {
+			// Überschrift
 			if (h !== i.vt) {
 				let h3 = document.createElement("h3");
 				cont.appendChild(h3);
 				h3.textContent = hTxt[i.vt];
 				h = i.vt;
 			}
+			// Eintrag
 			let p = document.createElement("p");
 			cont.appendChild(p);
 			p.dataset.tx = i.tx;
+			// Lösch-Icon
 			let a = document.createElement("a");
 			p.appendChild(a);
 			a.classList.add("icon-link", "icon-x-dick");
 			a.href = "#";
 			redWi.contLoeschen({a});
-			p.appendChild(document.createTextNode(i.tx));
+			// XML-Icon
+			let xl = document.createElement("a");
+			p.appendChild(xl);
+			xl.classList.add("icon-link", "icon-xml");
+			xl.href = "#";
+			redWi.contXml({a: xl});
+			// Verweistext
+			let text = document.createElement("span");
+			p.appendChild(text);
+			text.classList.add("text");
+			text.appendChild(document.createTextNode(i.tx));
+			// Detail
 			let detail = document.createElement("span");
 			p.appendChild(detail);
+			detail.classList.add("detail");
 			detail.textContent = `(${i.lt})`;
 			redWi.contBearbeiten({p});
 		}
@@ -369,6 +384,21 @@ let redWi = {
 					}
 				},
 			});
+		});
+	},
+	// Verweis an das Redaktionssystem schicken
+	//   a = Element
+	//     (XML-Icon)
+	contXml ({a}) {
+		a.addEventListener("click", function(evt) {
+			evt.preventDefault();
+			evt.stopPropagation();
+			const tx = this.closest("p").dataset.tx;
+			let xmlDatensatz = {
+				key: "wi-single",
+				ds: data.rd.wi.find(i => i.tx === tx),
+			};
+			redXml.datensatz({xmlDatensatz});
 		});
 	},
 	// Wortinformationen an das Redaktionssystem schicken

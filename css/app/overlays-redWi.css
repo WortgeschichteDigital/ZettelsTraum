@@ -108,7 +108,6 @@
 }
 
 #red-wi-cont a {
-	margin-right: 10px;
 	vertical-align: bottom;
 	background-color: var(--textExtremHell);
 }
@@ -121,7 +120,21 @@
 	background-color: var(--text);
 }
 
-#red-wi-cont span {
+#red-wi-cont a.icon-xml {
+	overflow: hidden;
+	width: 0;
+	transition: width .3s ease;
+}
+
+#red-wi-cont p:hover a.icon-xml {
+	width: 24px;
+}
+
+#red-wi-cont .text {
+	margin-left: 10px;
+}
+
+#red-wi-cont .detail {
 	margin-left: 5px;
 	color: var(--textHell);
 }
