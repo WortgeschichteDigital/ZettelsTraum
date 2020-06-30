@@ -1692,7 +1692,7 @@ let xml = {
 		add.classList.add("dropdown-feld");
 		add.id = `textblock-add-${xml.counter.next().value}-${key}`;
 		add.type = "text";
-		add.value = "Textblock";
+		add.value = "Überschrift";
 		add.placeholder = "Block-Typ";
 		dropdown.feld(add);
 		add.addEventListener("keydown", function(evt) {
