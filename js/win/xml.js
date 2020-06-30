@@ -808,7 +808,7 @@ let xml = {
 				});
 				return;
 			}
-			const fundort = xml.editAutoTaggerFo({url: ulVal});
+			const fundort = helferXml.fundort({url: ulVal});
 			let datum = daVal.split("-");
 			xmlStr = "<Verweis_extern>\n";
 			xmlStr += `  <Verweistext>${txVal}</Verweistext>\n`;
@@ -2624,7 +2624,7 @@ let xml = {
 			if (p3) {
 				verweis += `\n    <Aufrufdatum>${p3.length === 1 ? "0" + p3 : p3}.${p4.length === 1 ? "0" + p4 : p4}.${p5}</Aufrufdatum>`;
 			}
-			const fundort = xml.editAutoTaggerFo({url: p2});
+			const fundort = helferXml.fundort({url: p2});
 			verweis += `\n    <Fundort>${fundort}</Fundort>`;
 			verweis += `\n  </Fundstelle>`;
 			verweis += `\n</Verweis_extern>`;
@@ -2644,22 +2644,6 @@ let xml = {
 			}
 			return true;
 		}
-	},
-	// XML-Vorschau: Wert für <Fundort> ermitteln
-	//   url = String
-	//     (URL, aus der der Fundort abgeleitet werden soll)
-	editAutoTaggerFo ({url}) {
-		let fundort = "online";
-		if (/deutschestextarchiv\.de\//.test(url)) {
-			fundort = "DTA";
-		} else if (/dwds\.de\//.test(url)) {
-			fundort = "DWDS";
-		} else if (/books\.google\.[a-z]+\//.test(url)) {
-			fundort = "GoogleBooks";
-		} else if (/owid\.de\//.test(url)) {
-			fundort = "IDS";
-		}
-		return fundort;
 	},
 	// Kopf-Element bewegen
 	//   dir = String
