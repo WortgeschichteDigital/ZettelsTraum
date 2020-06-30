@@ -15,7 +15,7 @@ let bedeutungen = {
 			yield id++;
 		}
 	},
-	// ermittelt, welche ID als nächste vergeben werden sollte
+	// ermittelt, welche ID als Nächstes vergeben werden sollte
 	idInit () {
 		let lastId = 0;
 		bedeutungen.akt.bd.forEach(function(i) {
@@ -305,6 +305,10 @@ let bedeutungen = {
 		}
 		// Gerüst neu aufbauen
 		bedeutungen.aufbauen();
+		// Änderungsmarkierung setzen
+		bedeutungen.bedeutungenGeaendert(true);
+		// ermitteln, welche ID als nächste vergeben werden sollte
+		bedeutungen.idInit();
 	},
 	// Bedeutungsgerüst öffnen
 	oeffnen () {
@@ -343,10 +347,7 @@ let bedeutungen = {
 			document.getElementById("bedeutungen-hierarchie").value = bedeutungen.hierarchieEbenen[bedeutungen.akt.sl];
 			bedeutungen.aufbauen();
 			helfer.sektionWechseln("bedeutungen");
-			// ggf. ID-Generator initialisieren; könnte bereits durch bedeutungen.konstit() geschehen sein
-			if (!bedeutungen.makeId) {
-				bedeutungen.idInit();
-			}
+			bedeutungen.idInit();
 		});
 	},
 	// fertigt eine tiefe Kopie der Bedeutungsgerüstdaten an
