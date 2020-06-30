@@ -30,6 +30,12 @@ let redWi = {
 				}
 			}
 		}
+		for (let wort of Object.keys(data.fv)) { // Formvarianten
+			if (wort !== kartei.wort &&
+					!data.rd.wi.some(i => i.tx === wort)) {
+				set.add(wort);
+			}
+		}
 		return [...set].sort(helfer.sortAlpha);
 	},
 	// Wortinformationenfenster öffnen
