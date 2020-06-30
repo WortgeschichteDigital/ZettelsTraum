@@ -383,4 +383,17 @@ let redWi = {
 			});
 		});
 	},
+	// Wortinformationen an das Redaktionssystem schicken
+	//   icon = Element
+	//     (das XML-Icon)
+	xml ({icon}) {
+		icon.addEventListener("click", evt => {
+			evt.preventDefault();
+			let xmlDatensatz = {
+				key: "wi",
+				ds: data.rd.wi,
+			};
+			redXml.datensatz({xmlDatensatz});
+		});
+	},
 };
