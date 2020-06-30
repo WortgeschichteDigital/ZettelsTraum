@@ -2368,6 +2368,8 @@ let xml = {
 			setTimeout(() => cont.style.removeProperty("height"), 300);
 		}, 0);
 	},
+	// XML-Vorschau: nach Erzeugen des Bearbeitenfeldes an die Nullposition
+	editSelect0: true,
 	// XML-Vorschau: generische Funktion zum Erzeugen eines Bearbeitenfeldes
 	//   cont = Element
 	//     (.pre-cont)
@@ -2412,8 +2414,10 @@ let xml = {
 		// Element einhängen und fokussieren
 		cont.replaceChild(div, cont.firstChild);
 		helfer.textareaGrow(ta, 0);
-		ta.setSelectionRange(0, 0); // an die oberste Position
-		ta.focus();
+		if (xml.editSelect0) {
+			ta.setSelectionRange(0, 0); // an die oberste Position
+			ta.focus();
+		}
 		// Button-Leiste auffrischen
 		let p = cont.lastChild;
 		helfer.keineKinder(p);
@@ -2431,8 +2435,47 @@ let xml = {
 	//     (der Vorschaucontainer .pre-cont)
 	editPreDbl ({pre}) {
 		pre.addEventListener("dblclick", function() {
-			let button = this.closest(".pre-cont").querySelector(`input[value="Bearbeiten"]`);
+			let cont = this.closest(".pre-cont");
+			// feststellen, an welcher Position geklickt wurde
+			let sel = window.getSelection(),
+				breakGetN = false,
+				text = "",
+				posStart = -1,
+				posEnd = -1;
+			if (sel) {
+				getN(this);
+				posEnd = text.length + sel.focusOffset;
+				posStart = posEnd - sel.toString().length;
+			}
+			// Textarea öffnen (ohne Textposition zu markieren)
+			xml.editSelect0 = false;
+			let button = cont.querySelector(`input[value="Bearbeiten"]`);
 			button.dispatchEvent(new MouseEvent("click"));
+			// Textposition markieren
+			let ta = cont.querySelector("textarea");
+			if (posStart > -1) {
+				ta.setSelectionRange(posStart, posEnd);
+			} else {
+				ta.setSelectionRange(0, 0);
+			}
+			ta.focus();
+			xml.editSelect0 = true;
+			// Knoten rekursiv durchgehen, um den Text zu ermitteln
+			//   n = Knoten
+			//     (ein Text- oder Elementknoten im <pre>)
+			function getN (n) {
+				if (breakGetN || n === sel.focusNode) {
+					breakGetN = true;
+					return;
+				}
+				if (n.nodeType === 1) {
+					for (let c of n.childNodes) {
+						getN(c);
+					}
+				} else if (n.nodeType === 3) {
+					text += n.nodeValue;
+				}
+			}
 		});
 	},
 	// XML-Vorschau: Bearbeiten-Button erzeugen
