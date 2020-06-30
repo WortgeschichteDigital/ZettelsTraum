@@ -693,6 +693,23 @@ let helfer = {
 		}
 		return 0;
 	},
+	// Wortinformationen sortieren
+	//   a = Object
+	//   b = Object
+	//     (s. data.rd.wi)
+	sortWi (a, b) {
+		const aVt = redWi.dropdown.vt.indexOf(a.vt),
+			bVt = redWi.dropdown.vt.indexOf(b.vt);
+		if (aVt !== bVt) {
+			return aVt - bVt;
+		}
+		let arr = [a.tx, b.tx];
+		arr.sort(helfer.sortAlpha);
+		if (arr[0] === a.tx) {
+			return -1;
+		}
+		return 1;
+	},
 	// ein übergebenes Datum formatiert ausgeben
 	//   datum = String
 	//     (im ISO 8601-Format)

@@ -276,19 +276,7 @@ let redWi = {
 			data.rd.wi.push(ds);
 		}
 		// Datensätze sortieren
-		data.rd.wi.sort((a, b) => {
-			const aVt = redWi.dropdown.vt.indexOf(a.vt),
-				bVt = redWi.dropdown.vt.indexOf(b.vt);
-			if (aVt !== bVt) {
-				return aVt - bVt;
-			}
-			let arr = [a.tx, b.tx];
-			arr.sort(helfer.sortAlpha);
-			if (arr[0] === a.tx) {
-				return -1;
-			}
-			return 1;
-		});
+		data.rd.wi.sort(helfer.sortWi);
 		// Änderungsmarkierung setzen
 		kartei.karteiGeaendert(true);
 		// Formular zurücksetzen
