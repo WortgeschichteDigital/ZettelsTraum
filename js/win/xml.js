@@ -526,7 +526,7 @@ let xml = {
 	//     (der Datensatz; enthält die übergebenen Daten:
 	//       data.key = String [Schlüssel, der den Datentyp angibt]
 	//       data.ds = Object [der je spezifisch strukturierte Datensatz])
-	empfangen ({xmlDatensatz}) {
+	async empfangen ({xmlDatensatz}) {
 		if (/^bl|lt$/.test(xmlDatensatz.key)) {
 			xml.empfangenArr({
 				key: xmlDatensatz.key,
@@ -543,6 +543,56 @@ let xml = {
 		} else if (xmlDatensatz.key === "wi") {
 			xml.data.xl.wi = xmlDatensatz.ds;
 			xml.wiMake();
+		} else if (xmlDatensatz.key === "wi-single") {
+			if (!xml.data.xl.wi.length) {
+				xml.data.xl.wi.push(xmlDatensatz.ds);
+				xml.wiMake();
+			} else {
+				let slot = xml.data.xl.wi.findIndex(i => i.tx === xmlDatensatz.ds.tx),
+					koepfe = document.querySelectorAll("#wi > .kopf");
+				if (slot > -1) { // Datensatz ersetzen
+					xml.data.xl.wi[slot] = xmlDatensatz.ds;
+					// ggf. Preview schließen
+					let pre = koepfe[slot].nextSibling;
+					if (pre?.classList.contains("pre-cont")) { // jshint ignore:line
+						await xml.elementPreviewOff({pre});
+					}
+					// Kopf erzeugen
+					let kopf = xml.elementKopf({
+						key: "wi",
+						slot,
+					});
+					// ggf. als Verweistypgrenze markieren
+					if (koepfe[slot].classList.contains("grenze")) {
+						kopf.classList.add("grenze");
+					}
+					// Kopf ersetzen
+					koepfe[slot].parentNode.replaceChild(kopf, koepfe[slot]);
+				} else { // Datensatz einhängen
+					xml.data.xl.wi.push(xmlDatensatz.ds);
+					// Wortinformationen sortieren
+					xml.data.xl.wi.sort(helfer.sortWi);
+					// Kopf ersetzen
+					const slot = xml.data.xl.wi.findIndex(i => i.tx === xmlDatensatz.ds.tx);
+					let kopf = xml.elementKopf({
+						key: "wi",
+						slot,
+					});
+					if (slot === xml.data.xl.wi.length - 1) {
+						document.getElementById("wi").appendChild(kopf);
+					} else {
+						koepfe[slot].parentNode.insertBefore(kopf, koepfe[slot]);
+					}
+					// Slots auffrischen und Verweistypgrenze neu markieren
+					xml.refreshSlots({key: "wi"});
+					xml.wiVerweistypGrenze();
+				}
+				// Layout der Köpfe anpassen
+				xml.layoutTabellig({
+					id: "wi",
+					ele: [3, 4],
+				});
+			}
 		}
 		xml.speichern();
 	},
