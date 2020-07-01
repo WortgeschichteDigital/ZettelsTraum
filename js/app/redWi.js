@@ -53,6 +53,11 @@ let redWi = {
 		if (overlay.oeffnen(fenster)) { // Fenster ist schon offen
 			return;
 		}
+		// Fix: in ZT v0.41.0 (2020-06-30) wurde vergessen, die Datenstruktur
+		// bei neuen Dateien zu initialisieren
+		if (!data.rd.wi) {
+			data.rd.wi = [];
+		}
 		// Formular initialisieren
 		redWi.formInit();
 		// Content aufbauen
