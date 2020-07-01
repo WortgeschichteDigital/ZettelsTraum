@@ -2382,14 +2382,17 @@ let xml = {
 				// Zeitverzögerung, sonst ist das Feld noch leer
 				// und es kann nichts ausgelesen werden
 				setTimeout(() => {
+					let val = this.value;
 					// Zeilenumbrüche aus Überschriften entfernen (wenn noch keine Tags drin sind)
 					if (xml.data.xl[key][slot].ct[slotBlock].it === "Überschrift" &&
-							!/<.+?>/.test(this.value)) {
-						this.value = helfer.textTrim(this.value.replace(/\n/g, " "), true);
+							!/<.+?>/.test(val)) {
+						val = val.replace(/\n/g, " ");
 					}
+					// Text trimmen
+					val = helfer.textTrim(val, true);
 					// Auto-Tagger aufrufen
 					const blockzitat = xml.data.xl[key][slot].ct[slotBlock].it === "Blockzitat" ? true : false;
-					this.value = xml.editAutoTagger({str: this.value, blockzitat});
+					this.value = xml.editAutoTagger({str: val, blockzitat});
 					// Formularhöhe anpassen
 					helfer.textareaGrow(this, 0);
 				}, 25);
@@ -2721,11 +2724,11 @@ let xml = {
 			str = str.replace(/\{(.+?)\}/gs, (m, p1) => `<Autorenzusatz>${p1}</Autorenzusatz>`);
 		}
 		// <Verweis_extern> (viele Klammern, entspannte Leerzeichenverwendung)
-		str = str.replace(/\(\s*\[(.+?)\]\s*\(\s*(https?:\/\/[^\s]+?)\s*\)(?:\s*\(\s*([0-9]{1,2})\.\s*([0-9]{1,2})\.\s*([0-9]{4})\s*\))?\s*\)/g, verweisExtern);
+		str = str.replace(/\(\s*\[([^\]]+?)\]\s*\(\s*(https?:\/\/[^\s]+?)\s*\)(?:\s*\(\s*([0-9]{1,2})\.\s*([0-9]{1,2})\.\s*([0-9]{4})\s*\))?\s*\)/g, verweisExtern);
 		// <Verweis_extern> (wenige Klammern, rigide Leerzeichenverwendung)
-		str = str.replace(/\[(.+?)\]\(\s*(https?:\/\/[^\s]+?)\s*\)(?:\(\s*([0-9]{1,2})\.\s*([0-9]{1,2})\.\s*([0-9]{4})\s*\))?/g, verweisExtern);
+		str = str.replace(/\[([^\]]+?)\]\(\s*(https?:\/\/[^\s]+?)\s*\)(?:\(\s*([0-9]{1,2})\.\s*([0-9]{1,2})\.\s*([0-9]{4})\s*\))?/g, verweisExtern);
 		// <Verweis>
-		str = str.replace(/\[(.+?)\]\((.+?)\)/g, (m, p1, p2) => {
+		str = str.replace(/\[([^\]]+?)\]\((.+?)\)/g, (m, p1, p2) => {
 			p1 = p1.trim();
 			p2 = p2.trim();
 			if (p1 === p2) {
@@ -2769,6 +2772,35 @@ let xml = {
 		// in <URL> kein Halbgeviertstrich
 		str = str.replace(/<URL>(.+?)<\/URL>/g, (m, p1) => {
 			p1 = p1.replace(/–/g, "-");
+			return `<URL>${p1}</URL>`;
+		});
+		// in <Zitat> und <Blockzitat> wohl keine <Paraphrase>, sondern <Zitat>
+		if (blockzitat) {
+			str = str.replace(/<Paraphrase>(.+?)<\/Paraphrase>/g, (m, p1) => `<Zitat>${p1}</Zitat>`);
+		} else {
+			str = str.replace(/<Zitat>(.+?)<\/Zitat>/g, (m, p1) => {
+				p1 = p1.replace(/<Paraphrase>(.+?)<\/Paraphrase>/g, (m, p1) => `<Zitat>${p1}</Zitat>`);
+				return `<Zitat>${p1}</Zitat>`;
+			});
+		}
+		// <Abkuerzung>
+		if (blockzitat) {
+			str = str.replace(/<Autorenzusatz>(.+?)<\/Autorenzusatz>/gs, (m, p1) => {
+				return `<Autorenzusatz>${helferXml.abbrTagger({text: p1})}</Autorenzusatz>`;
+			});
+		} else {
+			str = helferXml.abbrTagger({text: str});
+			str = str.replace(/<Zitat>(.+?)<\/Zitat>/g, (m, p1) => {
+				let zitat = p1.replace(/<Abkuerzung Expansion=".+?">(.+?)<\/Abkuerzung>/g, (m, p1) => p1);
+				zitat = zitat.replace(/<Autorenzusatz>(.+?)<\/Autorenzusatz>/g, (m, p1) => {
+					return `<Autorenzusatz>${helferXml.abbrTagger({text: p1})}</Autorenzusatz>`;
+				});
+				return `<Zitat>${zitat}</Zitat>`;
+			});
+		}
+		// in <URL> keine <Abkuerzung>
+		str = str.replace(/<URL>(.+?)<\/URL>/g, (m, p1) => {
+			p1 = p1.replace(/<Abkuerzung Expansion=".+?">(.+?)<\/Abkuerzung>/g, (m, p1) => p1);
 			return `<URL>${p1}</URL>`;
 		});
 		// Ergebnis zurückgeben
