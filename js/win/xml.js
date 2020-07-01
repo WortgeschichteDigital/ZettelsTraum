@@ -1414,10 +1414,11 @@ let xml = {
 			} else if (key === "le") {
 				text = xml.data.xl.le[slot].re ? `#${xml.data.xl.le[slot].re}` : " ";
 			} else if (textKopf) {
+				let xmlStr = xml.data.xl[key][slot].ct[slotBlock].xl;
 				if (xml.data.xl[key][slot].ct[slotBlock].it === "Überschrift") {
+					xmlStr = xmlStr.replace(/<Anmerkung>.+?<\/Anmerkung>/s, "");
 					vorschau.classList.add("ueberschrift");
 				}
-				let xmlStr = xml.data.xl[key][slot].ct[slotBlock].xl;
 				text = xmlStr.replace(/<.+?>/g, "");
 				if (xml.data.xl[key][slot].ct[slotBlock].ty === "Blockzitat") {
 					let b = document.createElement("b");
@@ -1862,6 +1863,7 @@ let xml = {
 	abschnittSetId ({key, slot, slotBlock}) {
 		// ID ermitteln und normieren
 		let id = xml.data.xl[key][slot].ct[slotBlock].xl;
+		id = id.replace(/<Anmerkung>.+?<\/Anmerkung>/s, "");
 		id = id.replace(/<.+?>/g, "");
 		id = helfer.textTrim(id, true);
 		id = xml.abschnittNormId({id});
