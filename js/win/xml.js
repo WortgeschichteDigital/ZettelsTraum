@@ -18,8 +18,7 @@ let xml = {
 		artikelTypen: ["Vollartikel", "Überblicksartikel"],
 		lemmaTypen: ["Hauptlemma", "Nebenlemma"],
 		abschnittTyp: ["Mehr erfahren"],
-		abschnittTypen: ["Überschrift", "Textblock", "Illustration"],
-		textblock: ["Blockzitat"],
+		abschnittTypen: ["Überschrift", "Textblock", "Blockzitat", "Illustration"],
 		nachweisTypen: ["Literatur", "Link"],
 	},
 	// Dropdown: Referenzen zusammentragen
@@ -1420,7 +1419,7 @@ let xml = {
 					vorschau.classList.add("ueberschrift");
 				}
 				text = xmlStr.replace(/<.+?>/g, "");
-				if (xml.data.xl[key][slot].ct[slotBlock].ty === "Blockzitat") {
+				if (xml.data.xl[key][slot].ct[slotBlock].it === "Blockzitat") {
 					let b = document.createElement("b");
 					vorschau.appendChild(b);
 					// blöder Hack mit den beiden Leerzeichen; Problem ist, dass der Container
@@ -1936,7 +1935,6 @@ let xml = {
 		};
 		if (typ === "Textblock") {
 			data.id = "";
-			data.ty = "";
 		}
 		let slotBlock = -1;
 		if (typ === "Überschrift") {
@@ -2005,18 +2003,6 @@ let xml = {
 			id.type = "text";
 			id.value = xml.data.xl[key][slot].ct[slotBlock].id;
 			xml.abtxChange({ele: id});
-			// Typ-Feld
-			let typ = document.createElement("input");
-			p.appendChild(typ);
-			typ.classList.add("dropdown-feld");
-			typ.id = `textblock-${xml.counter.next().value}-ty`;
-			typ.placeholder = "Textblock-Typ";
-			typ.type = "text";
-			typ.value = xml.data.xl[key][slot].ct[slotBlock].ty;
-			dropdown.feld(typ);
-			let a = dropdown.makeLink("dropdown-link-element", "Textblock-Typ auswählen", true);
-			p.appendChild(a);
-			xml.abtxChange({ele: typ});
 		}
 		// Textfeld erzeugen
 		xml.preview({
@@ -2075,9 +2061,6 @@ let xml = {
 		}
 		// Attribute ermitteln
 		let attr = [];
-		if (xml.data.xl[key][slot].ct[slotBlock].ty) {
-			attr.push(`Typ="${xml.data.xl[key][slot].ct[slotBlock].ty}"`);
-		}
 		if (xml.data.xl[key][slot].ct[slotBlock].id) {
 			attr.push(`xml:id="${xml.data.xl[key][slot].ct[slotBlock].id}"`);
 		}
@@ -2146,21 +2129,10 @@ let xml = {
 				if (feld === "id") {
 					// ID aufbereiten
 					val = xml.abschnittNormId({id: val, input: this});
-				} else if (val && feld === "ty" && !xml.dropdown.textblock.includes(val)) {
-					val = "";
-					this.value = "";
 				}
 				let kopfBlock = textblock.previousSibling;
 				const slotBlock = parseInt(kopfBlock.dataset.slotBlock, 10);
 				xml.data.xl[key][slot].ct[slotBlock][feld] = val;
-				// ggf. den Auto-Tagger anstoßen
-				if (feld === "ty") {
-					const blockzitat = xml.data.xl[key][slot].ct[slotBlock].ty === "Blockzitat" ? true : false;
-					xml.data.xl[key][slot].ct[slotBlock].xl = xml.editAutoTagger({
-						str: xml.data.xl[key][slot].ct[slotBlock].xl,
-						blockzitat,
-					});
-				}
 				// Kopf anpassen
 				let kopfNeu = xml.elementKopf({key, slot, slotBlock, textKopf: "textblock"});
 				kopfBlock.parentNode.replaceChild(kopfNeu, kopfBlock);
@@ -2416,7 +2388,7 @@ let xml = {
 						this.value = helfer.textTrim(this.value.replace(/\n/g, " "), true);
 					}
 					// Auto-Tagger aufrufen
-					const blockzitat = xml.data.xl[key][slot].ct[slotBlock].ty === "Blockzitat" ? true : false;
+					const blockzitat = xml.data.xl[key][slot].ct[slotBlock].it === "Blockzitat" ? true : false;
 					this.value = xml.editAutoTagger({str: this.value, blockzitat});
 					// Formularhöhe anpassen
 					helfer.textareaGrow(this, 0);
@@ -2531,7 +2503,7 @@ let xml = {
 			if (this.value === "Speichern") {
 				// XML-String ggf. automatisch taggen
 				if (slotBlock !== null) {
-					const blockzitat = xml.data.xl[key][slot].ct[slotBlock].ty === "Blockzitat" ? true : false;
+					const blockzitat = xml.data.xl[key][slot].ct[slotBlock].it === "Blockzitat" ? true : false;
 					xmlStr = xml.editAutoTagger({str: xmlStr, blockzitat});
 				}
 				// ggf. Daten auffrischen
@@ -2743,13 +2715,10 @@ let xml = {
 		str = str.replace(/"(.+?)"/g, (m, p1) => `<Zitat>${azInZitat(p1)}</Zitat>`);
 		// <Anmerkung>
 		str = str.replace(/\s*\(\((.+?)\)\)/g, (m, p1) => `<Anmerkung>${p1}</Anmerkung>`);
-		// <Autorenzusatz> (vor den Verweisen auflösen!)
+		// <Autorenzusatz> (vor den Verweisen taggen!)
 		if (blockzitat) {
 			str = str.replace(/\[(.+?)\](?!\s*\()/gs, (m, p1) => `<Autorenzusatz>${p1}</Autorenzusatz>`); // sicherstellen, dass nicht Beginn von Verweis!
 			str = str.replace(/\{(.+?)\}/gs, (m, p1) => `<Autorenzusatz>${p1}</Autorenzusatz>`);
-		} else {
-			str = str.replace(/<Autorenzusatz>(.+?)<\/Autorenzusatz>/gs, (m, p1) => `{${p1}}`);
-			str = str.replace(/<Zitat>(.+?)<\/Zitat>/g, (m, p1) => `<Zitat>${azInZitat(p1)}</Zitat>`);
 		}
 		// <Verweis_extern> (viele Klammern, entspannte Leerzeichenverwendung)
 		str = str.replace(/\(\s*\[(.+?)\]\s*\(\s*(https?:\/\/[^\s]+?)\s*\)(?:\s*\(\s*([0-9]{1,2})\.\s*([0-9]{1,2})\.\s*([0-9]{4})\s*\))?\s*\)/g, verweisExtern);

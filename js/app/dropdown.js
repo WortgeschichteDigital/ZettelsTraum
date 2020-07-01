@@ -318,8 +318,6 @@ let dropdown = {
 			dropdown.data = [...xml.dropdown.abschnittTyp];
 		} else if (/^textblock-add/.test(feld_id)) {
 			dropdown.data = [...xml.dropdown.abschnittTypen];
-		} else if (/^textblock-/.test(feld_id)) {
-			dropdown.data = [...xml.dropdown.textblock];
 		} else if (feld_id === "nw-ty") {
 			dropdown.data = [...xml.dropdown.nachweisTypen];
 		} else if (feld_id === "nw-lit-si") {
