@@ -265,6 +265,7 @@ let helferXml = {
 		"attr\\.": "attributiv",
 		"Attr\\.": "Attribut",
 		"bes\\.": "besonders",
+		"bspw\\.": "beispielsweise",
 		"bzw\\.": "beziehungsweise",
 		"ca\\.": "circa",
 		"Dat\\.": "Dativ",
@@ -329,10 +330,10 @@ let helferXml = {
 		"refl\\.": "reflexiv",
 		"Refl\\.pron\\.": "Reflexivpronomen",
 		"Rel\\.pron\\.": "Relativpronomen",
-		"s\\.": "siehe",
-		"S\\.": "Siehe",
 		"s\\.\\sd\\.": "siehe dort",
 		"s\\.\\sv\\.": "sub voce",
+		"s\\.": "siehe",
+		"S\\.": "Siehe",
 		"Sing\\.": "Singular",
 		"subst\\.": "substantivisch",
 		"Subst\\.": "Substantiv",
@@ -423,7 +424,7 @@ let helferXml = {
 			abbr = helferXml.abbrLit;
 		}
 		for (let [k, v] of Object.entries(abbr)) {
-			let r = new RegExp(`(?<!>)${k}`, "g");
+			let r = new RegExp(`(?<!(<Abkuerzung Expansion=".+?">|\\p{Letter}| ))${k}`, "ug");
 			text = text.replace(r, m => `<Abkuerzung Expansion="${v}">${m}</Abkuerzung>`);
 		}
 		return text;
