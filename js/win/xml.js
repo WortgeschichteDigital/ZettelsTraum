@@ -2071,12 +2071,6 @@ let xml = {
 		if (!xmlStr) {
 			return "";
 		}
-		// Wurzelelement ermitteln
-		const rootEle = xml.data.xl[key][slot].ct[slotBlock].it.replace(/^Ü/, "Ue");
-		// Zeilenumbrüche aus Überschrift tilgen
-		if (rootEle === "Ueberschrift") {
-			xmlStr = helfer.textTrim(xmlStr.replace(/\n/g, " "), true);
-		}
 		// Attribute ermitteln
 		let attr = [];
 		if (xml.data.xl[key][slot].ct[slotBlock].ty) {
@@ -2086,7 +2080,8 @@ let xml = {
 			attr.push(`xml:id="${xml.data.xl[key][slot].ct[slotBlock].id}"`);
 		}
 		// XML-String anpassen
-		const rootEleStart = `<${rootEle}${attr.length ? " " + attr.join(" ") : ""}>`;
+		const rootEle = xml.data.xl[key][slot].ct[slotBlock].it.replace(/^Ü/, "Ue"),
+			rootEleStart = `<${rootEle}${attr.length ? " " + attr.join(" ") : ""}>`;
 		if (!new RegExp(`^<${rootEle}`).test(xmlStr)) {
 			xmlStr = `${rootEleStart}${xmlStr}</${rootEle}>`;
 		} else {
@@ -2413,8 +2408,15 @@ let xml = {
 				// Zeitverzögerung, sonst ist das Feld noch leer
 				// und es kann nichts ausgelesen werden
 				setTimeout(() => {
+					// Zeilenumbrüche aus Überschriften entfernen (wenn noch keine Tags drin sind)
+					if (xml.data.xl[key][slot].ct[slotBlock].it === "Überschrift" &&
+							!/<.+?>/.test(this.value)) {
+						this.value = helfer.textTrim(this.value.replace(/\n/g, " "), true);
+					}
+					// Auto-Tagger aufrufen
 					const blockzitat = xml.data.xl[key][slot].ct[slotBlock].ty === "Blockzitat" ? true : false;
 					this.value = xml.editAutoTagger({str: this.value, blockzitat});
+					// Formularhöhe anpassen
 					helfer.textareaGrow(this, 0);
 				}, 25);
 			});
