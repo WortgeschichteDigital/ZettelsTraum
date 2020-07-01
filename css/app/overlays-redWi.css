@@ -23,7 +23,7 @@
 	display: inline-block;
 }
 
-#red-wi-form p:first-child > span:last-child {
+#red-wi-form p:first-child > span:nth-child(2) {
 	margin-left: -14px;
 }
 
