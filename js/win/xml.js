@@ -2743,6 +2743,14 @@ let xml = {
 		str = str.replace(/"(.+?)"/g, (m, p1) => `<Zitat>${azInZitat(p1)}</Zitat>`);
 		// <Anmerkung>
 		str = str.replace(/\s*\(\((.+?)\)\)/g, (m, p1) => `<Anmerkung>${p1}</Anmerkung>`);
+		// <Autorenzusatz> (vor den Verweisen auflösen!)
+		if (blockzitat) {
+			str = str.replace(/\[(.+?)\](?!\s*\()/gs, (m, p1) => `<Autorenzusatz>${p1}</Autorenzusatz>`); // sicherstellen, dass nicht Beginn von Verweis!
+			str = str.replace(/\{(.+?)\}/gs, (m, p1) => `<Autorenzusatz>${p1}</Autorenzusatz>`);
+		} else {
+			str = str.replace(/<Autorenzusatz>(.+?)<\/Autorenzusatz>/gs, (m, p1) => `{${p1}}`);
+			str = str.replace(/<Zitat>(.+?)<\/Zitat>/g, (m, p1) => `<Zitat>${azInZitat(p1)}</Zitat>`);
+		}
 		// <Verweis_extern> (viele Klammern, entspannte Leerzeichenverwendung)
 		str = str.replace(/\(\s*\[(.+?)\]\s*\(\s*(https?:\/\/[^\s]+?)\s*\)(?:\s*\(\s*([0-9]{1,2})\.\s*([0-9]{1,2})\.\s*([0-9]{4})\s*\))?\s*\)/g, verweisExtern);
 		// <Verweis_extern> (wenige Klammern, rigide Leerzeichenverwendung)
@@ -2785,14 +2793,6 @@ let xml = {
 			}
 			return `<Literaturreferenz Ziel=##${p1}##/>`;
 		});
-		// <Autorenzusatz>
-		if (blockzitat) {
-			str = str.replace(/\[(.+?)\]/g, (m, p1) => `<Autorenzusatz>${p1}</Autorenzusatz>`);
-			str = str.replace(/\{(.+?)\}/g, (m, p1) => `<Autorenzusatz>${p1}</Autorenzusatz>`);
-		} else {
-			str = str.replace(/<Autorenzusatz>(.+?)<\/Autorenzusatz>/g, (m, p1) => `{${p1}}`);
-			str = str.replace(/<Zitat>(.+?)<\/Zitat>/g, (m, p1) => `<Zitat>${azInZitat(p1)}</Zitat>`);
-		}
 		// Attribute demaskieren
 		str = str.replace(/([a-zA-Z]+)=##(.+?)##/g, (m, p1, p2) => `${p1}="${p2}"`);
 		// Typographie
