@@ -17,8 +17,8 @@ let xml = {
 	dropdown: {
 		artikelTypen: ["Vollartikel", "Überblicksartikel"],
 		lemmaTypen: ["Hauptlemma", "Nebenlemma"],
-		abschnittTyp: ["Mehr erfahren"],
-		abschnittTypen: ["Überschrift", "Textblock", "Blockzitat", "Illustration"],
+		abschnittTypen: ["Mehr erfahren"],
+		abschnittBloecke: ["Überschrift", "Textblock", "Blockzitat", "Illustration"],
 		nachweisTypen: ["Literatur", "Link"],
 	},
 	// Dropdown: Referenzen zusammentragen
@@ -1900,8 +1900,8 @@ let xml = {
 	textblockAdd ({input}) {
 		const typ = helfer.textTrim(input.value, true);
 		// korrekter Typ?
-		if (!xml.dropdown.abschnittTypen.includes(typ)) {
-			const typen = xml.typen({key: "abschnittTypen"});
+		if (!xml.dropdown.abschnittBloecke.includes(typ)) {
+			const typen = xml.typen({key: "abschnittBloecke"});
 			dialog.oeffnen({
 				typ: "alert",
 				text: `Als Block-Typen stehen nur ${typen} zur Verfügung.`,
@@ -2167,7 +2167,7 @@ let xml = {
 				if (feld === "id") {
 					// ID aufbereiten
 					val = xml.abschnittNormId({id: val, input: this});
-				} else if (val && feld === "ty" && !xml.dropdown.abschnittTyp.includes(val)) {
+				} else if (val && feld === "ty" && !xml.dropdown.abschnittTypen.includes(val)) {
 					val = "";
 					this.value = "";
 				}

@@ -315,9 +315,9 @@ let dropdown = {
 		} else if (/^(le-re|bg-tf-ti)$/.test(feld_id)) {
 			dropdown.data = xml.dropdownReferenzen();
 		} else if (/^abschnitt-/.test(feld_id)) {
-			dropdown.data = [...xml.dropdown.abschnittTyp];
-		} else if (/^textblock-add/.test(feld_id)) {
 			dropdown.data = [...xml.dropdown.abschnittTypen];
+		} else if (/^textblock-add/.test(feld_id)) {
+			dropdown.data = [...xml.dropdown.abschnittBloecke];
 		} else if (feld_id === "nw-ty") {
 			dropdown.data = [...xml.dropdown.nachweisTypen];
 		} else if (feld_id === "nw-lit-si") {
