@@ -196,6 +196,8 @@ let helferXml = {
 	prettyPrint ({xmlStr, xmlErr = null}) {
 		// geschützte Leerzeichen markieren
 		xmlStr = xmlStr.replace(/\u{a0}/ug, "␣");
+		/// horizonatle Ellipse zu drei Punkte (wird in Noto Mono weird dargestellt)
+		xmlStr = xmlStr.replace(/…/g, "...");
 		// ggf. Fehler markieren
 		if (xmlErr) {
 			let xmlStrLines = xmlStr.split("\n"),
