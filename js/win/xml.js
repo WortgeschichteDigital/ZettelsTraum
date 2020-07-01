@@ -1263,7 +1263,7 @@ let xml = {
 		div.dataset.key = key;
 		if (slot > -1 && /^(re|le|wi|nw|tf)$/.test(key)) {
 			div.dataset.slot = slot;
-		} else if (slot > -1) {
+		} else if (slot > -1 && textKopf !== "textblock") {
 			div.dataset.id = xml.data.xl[key][slot].id;
 		}
 		if (textKopf === "abschnitt") { // Abschnittköpfe
@@ -1272,6 +1272,10 @@ let xml = {
 		} else if (slotBlock !== null) { // Textblockköpfe
 			div.dataset.slot = slot;
 			div.dataset.slotBlock = slotBlock;
+			const id = xml.data.xl[key][slot].ct[slotBlock].id;
+			if (id) {
+				div.dataset.id = id;
+			}
 		}
 		// Warn-Icon
 		let warn = document.createElement("span");
