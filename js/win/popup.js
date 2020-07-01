@@ -5,6 +5,8 @@ let popup = {
 	textauswahl: "",
 	// speichert das Element, auf das sich das Event bezieht
 	element: null,
+	// speichert die ID des angeklickten Kopfs (nur Abschnitts- und Textköpfe)
+	kopfID: "",
 	// Popup öffnen
 	//   evt = Event-Object
 	//     (das Ereignis-Objekt, das beim Rechtsklick erzeugt wird)
@@ -18,6 +20,8 @@ let popup = {
 		let items = [];
 		if (target === "kopieren") {
 			items = ["kopierenNebenfenster"];
+		} else if (target === "kopieren-id") {
+			items = ["kopierenID"];
 		} else if (target === "kopieren-code") {
 			items = ["kopierenCode"];
 		} else if (target === "textfeld") {
@@ -51,6 +55,13 @@ let popup = {
 			if (pfad[i].nodeName === "INPUT" ||
 					pfad[i].nodeName === "TEXTAREA") {
 				return "textfeld";
+			}
+			// IDs
+			if (pfad[i].dataset.id &&
+					pfad[i].classList.contains("kopf") &&
+					pfad[i].closest(".text-cont")) {
+				popup.kopfID = pfad[i].dataset.id;
+				return "kopieren-id";
 			}
 			// <code> oder <pre>
 			if (pfad[i].nodeName === "CODE" ||

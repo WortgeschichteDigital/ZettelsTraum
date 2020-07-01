@@ -183,6 +183,15 @@ let punkte = {
 			});
 		`,
 	},
+	kopierenID: {
+		label: "ID kopieren",
+		icon: "kopieren.png",
+		click: `
+			helfer.toClipboard({
+				text: popup.kopfID,
+			});
+		`,
+	},
 	kopierfunktion: {
 		label: "Kopierfunktion beenden",
 		icon: "ausgang.png",
