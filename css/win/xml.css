@@ -529,6 +529,10 @@ p.leer {
 	transition: height .3s ease;
 }
 
+.textblock-cont > p.input-text {
+	margin-bottom: 0;
+}
+
 .abschnitt-cont [id$="-id"],
 .textblock-cont [id$="-id"] {
 	margin-right: 10px;
