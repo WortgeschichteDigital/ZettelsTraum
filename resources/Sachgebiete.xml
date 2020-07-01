@@ -483,4 +483,12 @@
 		<id>119</id>
 		<name>Wissenschaft</name>
 	</item>
+	<item>
+		<id>120</id>
+		<name>Poetik</name>
+	</item>
+	<item>
+		<id>121</id>
+		<name>Naturwissenschaft</name>
+	</item>
 </sachgebiete>
