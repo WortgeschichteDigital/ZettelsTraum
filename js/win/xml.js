@@ -17,7 +17,7 @@ let xml = {
 	dropdown: {
 		artikelTypen: ["Vollartikel", "Überblicksartikel"],
 		lemmaTypen: ["Hauptlemma", "Nebenlemma"],
-		abschnittTyp: ["Exkurs"],
+		abschnittTyp: ["Mehr erfahren"],
 		abschnittTypen: ["Überschrift", "Textblock", "Illustration"],
 		textblock: ["Blockzitat"],
 		nachweisTypen: ["Literatur", "Link"],
