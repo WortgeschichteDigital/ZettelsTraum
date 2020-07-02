@@ -221,6 +221,10 @@ input[type="button"][value="Speichern"] {
 	background-image: url(../../img/speichern-weiss.svg);
 }
 
+input:read-only {
+	cursor: default;
+}
+
 input:read-only::selection {
 	background-color: transparent;
 	color: inherit;
@@ -324,7 +328,6 @@ label {
 #bg-sel input {
 	margin-left: 31px;
 	width: 300px;
-	cursor: default;
 }
 
 #bg-nw input[id$="ty"] {

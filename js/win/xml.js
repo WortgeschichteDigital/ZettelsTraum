@@ -545,6 +545,7 @@ let xml = {
 				xml.data.xl.bg.push(xmlDatensatz.ds);
 				xml.bgAkt = xml.data.xl.bg.length - 1;
 			}
+			xml.bgNwTyReset();
 			xml.bgMakeXML();
 			xml.bgNwTfMake({key: "nw"});
 			xml.bgNwTfMake({key: "tf"});
@@ -1149,6 +1150,12 @@ let xml = {
 			restore: 300,
 		});
 	},
+	// Bedeutungsgerüst: Nachweistyp-Formular zurücksetzen
+	bgNwTyReset () {
+		let nwTy = document.getElementById("nw-ty");
+		nwTy.value = "";
+		nwTy.dispatchEvent(new Event("input"));
+	},
 	// Bedeutungsgerüst: Formulardaten nach manuellem Bearbeiten auffrischen
 	async bgRefreshData () {
 		// kein Bedeutungsgerüst mehr => alle Strukturen und Daten entfernen
@@ -1272,6 +1279,7 @@ let xml = {
 				ele: document.getElementById("bg"),
 			});
 		}
+		xml.bgNwTyReset();
 		xml.bgNwTfMake({key: "nw"});
 		xml.bgNwTfMake({key: "tf"});
 		xml.bgSelSet();
@@ -1281,6 +1289,7 @@ let xml = {
 		let reg = /gerüst (?<gn>[0-9]+)/.exec(document.getElementById("bg-sel-gr").value);
 		if (reg) {
 			xml.bgAkt = xml.data.xl.bg.findIndex(i => i.gn === reg.groups.gn);
+			xml.bgNwTyReset();
 			xml.bgMakeXML();
 			xml.bgNwTfMake({key: "nw"});
 			xml.bgNwTfMake({key: "tf"});
@@ -1857,6 +1866,7 @@ let xml = {
 		span.appendChild(add);
 		add.classList.add("dropdown-feld");
 		add.id = `textblock-add-${xml.counter.next().value}-${key}`;
+		add.setAttribute("readonly", "true");
 		add.type = "text";
 		if (restore) {
 			add.value = "Textblock";
