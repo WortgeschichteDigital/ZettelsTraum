@@ -2490,7 +2490,11 @@ let xml = {
 			// Textposition markieren
 			let ta = cont.querySelector("textarea");
 			if (posStart > -1) {
-				ta.setSelectionRange(posStart, posEnd);
+				if ( /\n/.test( ta.value.substring(posStart, posEnd) ) ) {
+					ta.setSelectionRange(posStart, posStart);
+				} else {
+					ta.setSelectionRange(posEnd, posEnd);
+				}
 			} else {
 				ta.setSelectionRange(0, 0);
 			}
