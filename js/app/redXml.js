@@ -50,17 +50,13 @@ let redXml = {
 		}
 		// Daten zusammentragen
 		let xmlDaten = {
-			wort: kartei.wort,
-			contentsId: winInfo.contentsId,
-			themenfelder: [],
 			autorinnen: [],
+			contentsId: winInfo.contentsId,
+			gerueste: {},
+			themenfelder: [],
+			wort: kartei.wort,
 			xl: data.rd.xl,
 		};
-		if (optionen.data.tags.themenfelder) {
-			for (let v of Object.values(optionen.data.tags.themenfelder.data)) {
-				xmlDaten.themenfelder.push(v.name);
-			}
-		}
 		if (optionen.data.personen.length) {
 			for (let i of optionen.data.personen) {
 				let name = i;
@@ -69,6 +65,14 @@ let redXml = {
 					name = `${match[2]} ${match[1]}`;
 				}
 				xmlDaten.autorinnen.push(name);
+			}
+		}
+		for (let [k, v] of Object.entries(data.bd.gr)) {
+			xmlDaten.gerueste[k] = v.na;
+		}
+		if (optionen.data.tags.themenfelder) {
+			for (let v of Object.values(optionen.data.tags.themenfelder.data)) {
+				xmlDaten.themenfelder.push(v.name);
 			}
 		}
 		// Daten senden

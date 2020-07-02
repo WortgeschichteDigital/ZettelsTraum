@@ -6,6 +6,8 @@ let xml = {
 	//     (Liste der bekannten Autorinnen)
 	//   contentsId = Number
 	//     (ID des webContents, von dem aus das Fenster geöffnet wurde)
+	//   gerueste = Object
+	//     (Namen der bekannten Bedeutungsgerüste: geruest[ID])
 	//   themenfelder = Array
 	//     (Liste der bekannten Themenfelder)
 	//   wort = String
@@ -47,6 +49,16 @@ let xml = {
 		}
 		return si;
 	},
+	// Dropdown: Daten zu den vorhandenen Gerüsten sammeln
+	dropdownGerueste () {
+		let arr = [];
+		for (let i of xml.data.xl.bg) {
+			const na = xml.data.gerueste[i.gn] ? ` (${xml.data.gerueste[i.gn]})` : "";
+			arr.push(`Bedeutungsgerüst ${i.gn}${na}`);
+		}
+		arr.sort(helfer.sortAlpha);
+		return arr;
+	},
 	// Dropdown: Lesarten sammeln
 	dropdownLesarten () {
 		let data = {
@@ -55,12 +67,12 @@ let xml = {
 			err: false,
 		};
 		// kein Bedeutungsgerüst vorhanden
-		if (!xml.data.xl.bg.xl) {
+		if (!xml.data.xl.bg.length) {
 			return data;
 		}
 		// Bedeutungsgerüst nicht wohlgeformt
 		let parser = new DOMParser(),
-			xmlDoc = parser.parseFromString(xml.data.xl.bg.xl, "text/xml");
+			xmlDoc = parser.parseFromString(xml.data.xl.bg[xml.bgAkt].xl, "text/xml");
 		if (xmlDoc.querySelector("parsererror")) {
 			data.err = true;
 			return data;
@@ -198,18 +210,8 @@ let xml = {
 				ele: document.getElementById("wi"),
 			});
 		}
-		// Init: Bedeutungsgerüst, Nachweise
-		xml.bgNwTfMake({key: "nw"});
-		// Init: Bedeutungsgerüst, Textreferenzen
-		xml.bgNwTfMake({key: "tf"});
-		// Init: Bedeutungsgerüst, XML
-		if (xml.data.xl.bg.xl) {
-			xml.bgMakeXML();
-		} else {
-			xml.elementLeer({
-				ele: document.getElementById("bg"),
-			});
-		}
+		// Init: Bedeutungsgerüst (Nachweise, Textreferenzen, XML)
+		xml.bgReset();
 	},
 	// Daten zurücksetzen
 	async reset () {
@@ -535,10 +537,18 @@ let xml = {
 				xml.bgNwTfMake({key: "nw"});
 			}
 		} else if (xmlDatensatz.key === "bg") {
-			xml.data.xl.bg = xmlDatensatz.ds;
+			const slot = xml.data.xl.bg.findIndex(i => i.gn === xmlDatensatz.ds.gn);
+			if (slot > -1) {
+				xml.data.xl.bg[slot] = xmlDatensatz.ds;
+				xml.bgAkt = slot;
+			} else {
+				xml.data.xl.bg.push(xmlDatensatz.ds);
+				xml.bgAkt = xml.data.xl.bg.length - 1;
+			}
+			xml.bgMakeXML();
 			xml.bgNwTfMake({key: "nw"});
 			xml.bgNwTfMake({key: "tf"});
-			xml.bgMakeXML();
+			xml.bgSelSet();
 		} else if (xmlDatensatz.key === "wi") {
 			xml.data.xl.wi = xmlDatensatz.ds;
 			xml.wiMake();
@@ -766,6 +776,8 @@ let xml = {
 			}
 		}
 	},
+	// Bedeutungsgerüst: speichert den Slot des aktuellen Bedeutungsgerüsts
+	bgAkt: -1,
 	// Bedeutungsgerüst: Nachweisformular umstellen
 	bgNachweisToggle () {
 		let typ = document.getElementById("nw-ty").value,
@@ -796,7 +808,7 @@ let xml = {
 		}
 		// Fehler, die das Bedeutungsgerüst betreffen
 		let ty = document.getElementById("nw-ty");
-		if (!xml.data.xl.bg.xl) {
+		if (!xml.data.xl.bg.length) {
 			dialog.oeffnen({
 				typ: "alert",
 				text: "Kein Bedeutungsgerüst gefunden.",
@@ -805,7 +817,7 @@ let xml = {
 			return;
 		}
 		let parser = new DOMParser(),
-			xmlDoc = parser.parseFromString(xml.data.xl.bg.xl, "text/xml");
+			xmlDoc = parser.parseFromString(xml.data.xl.bg[xml.bgAkt].xl, "text/xml");
 		if (xmlDoc.querySelector("parsererror")) {
 			dialog.oeffnen({
 				typ: "alert",
@@ -848,7 +860,7 @@ let xml = {
 				return;
 			}
 			const id = xml.data.xl.lt[ltSlot].id;
-			for (let i of xml.data.xl.bg.nw) {
+			for (let i of xml.data.xl.bg[xml.bgAkt].nw) {
 				if (!/^<Literaturreferenz/.test(i)) {
 					continue;
 				}
@@ -919,7 +931,7 @@ let xml = {
 			xmlStr += "</Verweis_extern>";
 		}
 		// Datensatz pushen
-		xml.data.xl.bg.nw.push(xmlStr);
+		xml.data.xl.bg[xml.bgAkt].nw.push(xmlStr);
 		// Bedeutungsgerüst auffrischen
 		xml.bgNachweiseRefresh();
 		// Datensatz speichern
@@ -933,15 +945,15 @@ let xml = {
 	},
 	// Bedeutungsgerüst: Nachweise im Bedeutungsgerüst auffrischen
 	bgNachweiseRefresh () {
-		let xl = xml.data.xl.bg.xl;
+		let xl = xml.data.xl.bg[xml.bgAkt].xl;
 		if (!/^<Lesarten>/.test(xl)) { // das XML ist wohl korrupt
 			return;
 		}
 		// <Nachweise> neu erstellen
 		let nw = "<Lesarten>\n  <Nachweise/>";
-		if (xml.data.xl.bg.nw.length) {
+		if (xml.data.xl.bg[xml.bgAkt].nw.length) {
 			nw = "<Lesarten>\n  <Nachweise>";
-			for (let i of xml.data.xl.bg.nw) {
+			for (let i of xml.data.xl.bg[xml.bgAkt].nw) {
 				nw += "\n" + " ".repeat(4) + i.replace(/\n/g, "\n" + " ".repeat(4));
 			}
 			nw += "\n  </Nachweise>";
@@ -949,7 +961,7 @@ let xml = {
 		// Daten auffrischen
 		xl = xl.replace(/\s+(<Nachweise\/>|<Nachweise>.+?<\/Nachweise>)/s, "");
 		xl = xl.replace(/<Lesarten>/, nw);
-		xml.data.xl.bg.xl = xl;
+		xml.data.xl.bg[xml.bgAkt].xl = xl;
 		// ggf. Preview auffrischen
 		let bg = document.getElementById("bg");
 		if (bg.querySelector(".pre-cont")) {
@@ -1028,14 +1040,14 @@ let xml = {
 			li: id,
 			ti: tiVal,
 		};
-		const slot = xml.data.xl.bg.tf.findIndex(i => i.li === id);
+		const slot = xml.data.xl.bg[xml.bgAkt].tf.findIndex(i => i.li === id);
 		if (slot > -1) {
-			xml.data.xl.bg.tf.splice(slot, 1, data);
+			xml.data.xl.bg[xml.bgAkt].tf.splice(slot, 1, data);
 		} else {
-			xml.data.xl.bg.tf.push(data);
+			xml.data.xl.bg[xml.bgAkt].tf.push(data);
 		}
 		// Datensätze sortieren
-		xml.data.xl.bg.tf.sort((a, b) => {
+		xml.data.xl.bg[xml.bgAkt].tf.sort((a, b) => {
 			const aTxt = `${bgData.bg[a.li].n} ${bgData.bg[a.li].txt}`,
 				bTxt = `${bgData.bg[b.li].n} ${bgData.bg[b.li].txt}`;
 			return bgData.arr.indexOf(aTxt) - bgData.arr.indexOf(bTxt);
@@ -1054,7 +1066,7 @@ let xml = {
 	// Bedeutungsgerüst: Textreferenzen im Bedeutungsgerüst auffrischen
 	bgTextreferenzenRefresh () {
 		let parser = new DOMParser(),
-			xmlDoc = parser.parseFromString(xml.data.xl.bg.xl, "text/xml");
+			xmlDoc = parser.parseFromString(xml.data.xl.bg[xml.bgAkt].xl, "text/xml");
 		if (xmlDoc.querySelector("parsererror")) {
 			return;
 		}
@@ -1071,7 +1083,7 @@ let xml = {
 				}
 			}
 			// Textreferenz updaten?
-			let tf = xml.data.xl.bg.tf;
+			let tf = xml.data.xl.bg[xml.bgAkt].tf;
 			const slot = tf.findIndex(i => i.li === id);
 			if (ziel && slot === -1) { // Tag entfernen
 				i.removeChild(tag.previousSibling);
@@ -1096,7 +1108,7 @@ let xml = {
 		xmlStr = xmlStr.replace(/[a-z0-9]+:Ziel/g, "Ziel");
 		xmlStr = xmlStr.replace(/><\/Textreferenz>/g, "/>");
 		// Daten auffrischen
-		xml.data.xl.bg.xl = xmlStr;
+		xml.data.xl.bg[xml.bgAkt].xl = xmlStr;
 		// ggf. Preview auffrischen
 		let bg = document.getElementById("bg");
 		if (bg.querySelector(".pre-cont")) {
@@ -1117,12 +1129,14 @@ let xml = {
 		let cont = document.getElementById(`bg-${key}`);
 		cont.querySelectorAll(".kopf").forEach(i => i.parentNode.removeChild(i));
 		// alle Köpfe aufbauen
-		for (let i = 0, len = xml.data.xl.bg[key].length; i < len; i++) {
-			let kopf = xml.elementKopf({
-				key,
-				slot: i,
-			});
-			cont.appendChild(kopf);
+		if (xml.data.xl.bg.length) {
+			for (let i = 0, len = xml.data.xl.bg[xml.bgAkt][key].length; i < len; i++) {
+				let kopf = xml.elementKopf({
+					key,
+					slot: i,
+				});
+				cont.appendChild(kopf);
+			}
 		}
 		// Layout der Köpfe anpassen
 		let ele = [2, 3];
@@ -1135,23 +1149,23 @@ let xml = {
 			restore: 300,
 		});
 	},
-	// Bedeutungsgerüst: alle Nachweise/Textreferenze zurücksetzen
-	bgNwTfReset () {
-		xml.data.xl.bg.nw = [];
-		xml.bgNwTfMake({key: "nw"});
-		xml.data.xl.bg.tf = [];
-		xml.bgNwTfMake({key: "tf"});
-	},
 	// Bedeutungsgerüst: Formulardaten nach manuellem Bearbeiten auffrischen
-	bgRefreshData () {
-		// kein Bedeutungsgerüst
-		if (!xml.data.xl.bg.xl) {
-			xml.bgNwTfReset();
+	async bgRefreshData () {
+		// kein Bedeutungsgerüst mehr => alle Strukturen und Daten entfernen
+		// (passiert, wenn das Bedeutungsgerüst-Feld beim Bearbeiten
+		// komplett geleert wurde)
+		if (!xml.data.xl.bg[xml.bgAkt].xl) {
+			let pre = document.querySelector("#bg .pre-cont");
+			await xml.elementPreviewOff({pre});
+			helfer.keineKinder(document.getElementById("bg"));
+			xml.data.xl.bg.splice(xml.bgAkt, 1);
+			xml.speichern();
+			xml.bgReset();
 			return;
 		}
 		// Bedeutungsgerüst nicht wohlgeformt
 		let parser = new DOMParser(),
-			xmlDoc = parser.parseFromString(xml.data.xl.bg.xl, "text/xml");
+			xmlDoc = parser.parseFromString(xml.data.xl.bg[xml.bgAkt].xl, "text/xml");
 		if (xmlDoc.querySelector("parsererror")) {
 			return;
 		}
@@ -1188,8 +1202,8 @@ let xml = {
 			item = l.iterateNext();
 		}
 		// Daten auffrischen und speichern
-		xml.data.xl.bg.nw = arrNw;
-		xml.data.xl.bg.tf = arrTf;
+		xml.data.xl.bg[xml.bgAkt].nw = arrNw;
+		xml.data.xl.bg[xml.bgAkt].tf = arrTf;
 		xml.speichern();
 		// Köpfe neu aufbauen
 		xml.bgNwTfMake({key: "nw"});
@@ -1204,7 +1218,7 @@ let xml = {
 			if (cont) {
 				xml.editSpeichernAbschluss({
 					cont,
-					xmlStr: xml.data.xl.bg.xl,
+					xmlStr: xml.data.xl.bg[xml.bgAkt].xl,
 				});
 			}
 			return;
@@ -1236,7 +1250,7 @@ let xml = {
 					pre.querySelector(`[value="Speichern"]`).dispatchEvent(new Event("click"));
 				} else if (antwort === false) {
 					delete ta.dataset.geaendert;
-					ta.value = xml.data.xl.bg.xl;
+					ta.value = xml.data.xl.bg[xml.bgAkt].xl;
 					pre.querySelector(`[value="Abbrechen"]`).dispatchEvent(new Event("click"));
 				} else if (antwort === null) {
 					ta.setSelectionRange(0, 0);
@@ -1246,6 +1260,42 @@ let xml = {
 			}
 			resolve(true);
 		});
+	},
+	// Bedeutungsgerüst: zurücksetzen bzw. initialisieren
+	bgReset () {
+		if (xml.data.xl.bg.length) {
+			xml.bgAkt = 0;
+			xml.bgMakeXML();
+		} else {
+			xml.bgAkt = -1;
+			xml.elementLeer({
+				ele: document.getElementById("bg"),
+			});
+		}
+		xml.bgNwTfMake({key: "nw"});
+		xml.bgNwTfMake({key: "tf"});
+		xml.bgSelSet();
+	},
+	// Bedeutungsgerüst: anderes Gerüst auswählen
+	bgSel () {
+		let reg = /gerüst (?<gn>[0-9]+)/.exec(document.getElementById("bg-sel-gr").value);
+		if (reg) {
+			xml.bgAkt = xml.data.xl.bg.findIndex(i => i.gn === reg.groups.gn);
+			xml.bgMakeXML();
+			xml.bgNwTfMake({key: "nw"});
+			xml.bgNwTfMake({key: "tf"});
+		}
+	},
+	// Bedeutungsgerüst: ID und Name des aktuellen Gerüsts in das Auswahlfeld
+	bgSelSet () {
+		let sel = document.getElementById("bg-sel-gr"),
+			val = "";
+		if (xml.data.xl.bg.length) {
+			const gn = xml.data.xl.bg[xml.bgAkt].gn,
+				na = xml.data.gerueste[gn] ? ` (${xml.data.gerueste[gn]})` : "";
+			val = `Bedeutungsgerüst ${gn}${na}`;
+		}
+		sel.value = val;
 	},
 	// Element erzeugen: Standard-Kopf
 	//   key = String
@@ -1285,11 +1335,11 @@ let xml = {
 			if (key === "re") {
 				xmlStr = xml.data.xl.md.re[slot].xl;
 			} else if (key === "nw") {
-				xmlStr = xml.data.xl.bg.nw[slot];
+				xmlStr = xml.data.xl.bg[xml.bgAkt].nw[slot];
 			} else if (key === "tf") {
-				xmlStr = `<Textreferenz Ziel="${xml.data.xl.bg.tf[slot].ti}"/>`;
+				xmlStr = `<Textreferenz Ziel="${xml.data.xl.bg[xml.bgAkt].tf[slot].ti}"/>`;
 			} else if (key === "bg") {
-				xmlStr = xml.data.xl.bg.xl;
+				xmlStr = xml.data.xl.bg[xml.bgAkt].xl;
 			} else if (slotBlock === null) {
 				xmlStr = xml.data.xl[key][slot].xl;
 			} else {
@@ -1347,14 +1397,14 @@ let xml = {
 		} else if (key === "wi") {
 			idText = xml.data.xl.wi[slot].vt;
 		} else if (key === "nw") {
-			let xl = xml.data.xl.bg.nw[slot];
+			let xl = xml.data.xl.bg[xml.bgAkt].nw[slot];
 			if (/<Literaturreferenz/.test(xl)) {
 				idText = xl.match(/Ziel="(.+?)"/)[1];
 			} else {
 				idText = xl.match(/<Verweistext>(.+?)<\/Verweistext>/)[1];
 			}
 		} else if (key === "tf") {
-			idText = xml.data.xl.bg.tf[slot].li;
+			idText = xml.data.xl.bg[xml.bgAkt].tf[slot].li;
 		} else if (key === "bg") {
 			idText = "XML";
 		} else {
@@ -1384,7 +1434,7 @@ let xml = {
 			} else if (key === "wi") {
 				hinweis.textContent = xml.data.xl.wi[slot].tx;
 			} else if (key === "nw") {
-				let xl = xml.data.xl.bg.nw[slot];
+				let xl = xml.data.xl.bg[xml.bgAkt].nw[slot];
 				if (/<Literaturreferenz/.test(xl)) {
 					const id = xl.match(/Ziel="(.+?)"/)[1];
 					let i = xml.data.xl.lt.find(i => i.id === id),
@@ -1400,7 +1450,7 @@ let xml = {
 					hinweis.textContent = xl.match(/<URL>(.+?)<\/URL>/)[1];
 				}
 			} else if (key === "tf") {
-				hinweis.textContent = `#${xml.data.xl.bg.tf[slot].ti}`;
+				hinweis.textContent = `#${xml.data.xl.bg[xml.bgAkt].tf[slot].ti}`;
 			}
 		}
 		// Vorschaufeld
@@ -1556,7 +1606,7 @@ let xml = {
 			if (key === "re") {
 				xmlStr = xml.data.xl.md.re[slot].xl;
 			} else if (key === "bg") {
-				xmlStr = xml.data.xl.bg.xl;
+				xmlStr = xml.data.xl.bg[xml.bgAkt].xl;
 			} else {
 				xmlStr = xml.data.xl[key][slot].xl;
 			}
@@ -1610,9 +1660,9 @@ let xml = {
 			}
 			// Datensatz löschen
 			if (/^(nw|tf)$/.test(key)) {
-				xml.data.xl.bg[key].splice(slot, 1);
+				xml.data.xl.bg[xml.bgAkt][key].splice(slot, 1);
 			} else if (key === "bg") {
-				xml.data.xl.bg.xl = "";
+				xml.data.xl.bg.splice(xml.bgAkt, 1);
 			} else if (key === "re") {
 				xml.data.xl.md.re.splice(slot, 1);
 			} else {
@@ -1665,17 +1715,16 @@ let xml = {
 						xml.bgTextreferenzenRefresh();
 					}
 					xml.bgNwTfMake({key});
-					if (xml.data.xl.bg[key].length) {
+					if (xml.data.xl.bg[xml.bgAkt][key].length) {
 						xml.layoutTabellig({
 							id,
 							ele,
 						});
 					}
 				}
-			} else if (key === "bg" || !xml.data.xl[key].length) {
-				if (key === "bg") {
-					xml.bgNwTfReset();
-				}
+			} else if (key === "bg") {
+				xml.bgReset();
+			} else if (!xml.data.xl[key].length) {
 				xml.elementLeer({
 					ele: document.getElementById(key),
 				});
@@ -2367,7 +2416,7 @@ let xml = {
 		div.appendChild(ta);
 		ta.setAttribute("rows", "1");
 		if (key === "bg") {
-			ta.value = xml.data.xl.bg.xl;
+			ta.value = xml.data.xl.bg[xml.bgAkt].xl;
 		} else if (slotBlock !== null) {
 			ta.value = xml.data.xl[key][slot].ct[slotBlock].xl;
 		} else {
@@ -2550,7 +2599,7 @@ let xml = {
 				}
 				// Speichern
 				if (key === "bg") {
-					xml.data.xl.bg.xl = xmlStr;
+					xml.data.xl.bg[xml.bgAkt].xl = xmlStr;
 					xml.bgRefreshData();
 				} else if (slotBlock !== null) {
 					// XML anpassen und speichern
@@ -2633,7 +2682,7 @@ let xml = {
 			// XML-String für das Zurücksetzen ermitteln
 			function resetXmlStr () {
 				if (key === "bg") {
-					return xml.data.xl.bg.xl;
+					return xml.data.xl.bg[xml.bgAkt].xl;
 				} else if (slotBlock !== null) {
 					return xml.data.xl[key][slot].ct[slotBlock].xl;
 				} else {
@@ -2871,7 +2920,7 @@ let xml = {
 			arr = xml.data.xl.md.re;
 			slotKlon = {...arr[slot]};
 		} else if (key === "nw") {
-			arr = xml.data.xl.bg.nw;
+			arr = xml.data.xl.bg[xml.bgAkt].nw;
 			slotKlon = arr[slot];
 		} else {
 			arr = xml.data.xl[key];

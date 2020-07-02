@@ -2020,6 +2020,7 @@ let bedeutungen = {
 		let xmlDatensatz = {
 			key: "bg",
 			ds: {
+				gn: bedeutungen.data.gn,
 				nw: [],
 				tf: [],
 				xl,

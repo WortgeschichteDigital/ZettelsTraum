@@ -21,11 +21,7 @@ let helferXml = {
 	redXmlData () {
 		return {
 			ab: [], // Abstract
-			bg: { // Bedeutungsgerüst
-				nw: [], // Nachweise
-				tf: [], // Textreferenzen
-				xl: "", // XML
-			},
+			bg: [], // Bedeutungsgerüst
 			bl: [], // Belege
 			le: [], // Lemmata
 			lt: [], // Literatur

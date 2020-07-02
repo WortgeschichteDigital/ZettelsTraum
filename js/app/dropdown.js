@@ -322,6 +322,8 @@ let dropdown = {
 			dropdown.data = [...xml.dropdown.nachweisTypen];
 		} else if (feld_id === "nw-lit-si") {
 			dropdown.data = xml.dropdownSiglen();
+		} else if (feld_id === "bg-sel-gr") {
+			dropdown.data = xml.dropdownGerueste();
 		} else if (feld_id === "bg-tf-li") {
 			dropdown.data = xml.dropdownLesarten().arr;
 		}
@@ -641,6 +643,8 @@ let dropdown = {
 				document.getElementById(caller).parentNode.nextSibling.firstChild.focus();
 			} else if (caller === "red-wi-lt") {
 				feld.dispatchEvent(new Event("input"));
+			} else if (caller === "bg-sel-gr") {
+				xml.bgSel();
 			} else if (/^(red-lit-eingabe-|md-(ty|tf)|abschnitt-|textblock-)/.test(caller)) {
 				feld.dispatchEvent(new Event("change"));
 			} else if (caller === "nw-ty") {
