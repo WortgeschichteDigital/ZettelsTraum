@@ -2834,9 +2834,12 @@ let xml = {
 		str = str.replace(/([a-zA-Z]+)=##(.+?)##/g, (m, p1, p2) => `${p1}="${p2}"`);
 		// Typographie
 		str = helfer.typographie(str);
-		// in <URL> kein Halbgeviertstrich
+		// <URL> bereinigen
 		str = str.replace(/<URL>(.+?)<\/URL>/g, (m, p1) => {
-			p1 = p1.replace(/–/g, "-");
+			p1 = p1.replace(/–/g, "-"); // kein Halbgeviertstrich
+			p1 = p1.replace(/\s/g, ""); // kein Whitespace
+			p1 = p1.replace(/<[a-zA-Z]+ Ziel="(.+?)"\/?>/g, (m, p1) => p1); // keine Referenzen
+			p1 = p1.replace(/<.+?>/g, ""); // keine Tags
 			return `<URL>${p1}</URL>`;
 		});
 		// in <Aufrufdatum> kein Whitespace
