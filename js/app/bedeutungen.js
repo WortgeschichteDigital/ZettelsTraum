@@ -1818,25 +1818,28 @@ let bedeutungen = {
 			del = false,
 			merge = false,
 			add = false,
+			wi = false,
 			gr = bedeutungen.data.gn,
 			grN = "",
 			id = 0,
 			idN = 0,
 		}) {
-		bedeutungen.aendern.push({
-			del: del,
-			merge: merge,
-			add: add,
-			gr: gr,
-			grN: grN,
-			id: id,
-			idN: idN,
-		});
+		bedeutungen.aendern.push({del, merge, add, wi, gr, grN, id, idN});
 	},
 	// Änderungsliste abarbeiten
 	aendernAnwenden () {
 		let a = bedeutungen.aendern;
 		for (let i = 0, len = a.length; i < len; i++) {
+			if (a[i].wi) { // Wortinfos zum gelöschten Gerüst löschen
+				let arr = [];
+				for (let wi of data.rd.wi) {
+					if (wi.gn !== a[i].gr) {
+						arr.push({...wi});
+					}
+				}
+				data.rd.wi = arr;
+				continue;
+			}
 			for (let id in data.ka) {
 				if (!data.ka.hasOwnProperty(id)) {
 					continue;

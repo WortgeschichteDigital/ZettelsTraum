@@ -10,6 +10,7 @@ let redWi = {
 	},
 	// Dropdown: Verweistextvorschläge sammeln
 	dropdownVerweistexte () {
+		const gn = document.getElementById("red-wi-gn").value.match(/[0-9]+/)[0];
 		let set = new Set(),
 			felder = ["sy", "bl"]; // Synonmye und Wortbildungen
 		for (let id of Object.keys(data.ka)) {
@@ -24,7 +25,7 @@ let redWi = {
 						let sp = i.split(": ");
 						wort = sp[sp.length - 1];
 					}
-					if (!data.rd.wi.some(i => i.tx === wort)) {
+					if (!data.rd.wi.some(i => i.gn === gn && i.tx === wort)) {
 						set.add(wort);
 					}
 				}
@@ -32,7 +33,7 @@ let redWi = {
 		}
 		for (let wort of Object.keys(data.fv)) { // Formvarianten
 			if (wort !== kartei.wort &&
-					!data.rd.wi.some(i => i.tx === wort)) {
+					!data.rd.wi.some(i => i.gn === gn && i.tx === wort)) {
 				set.add(wort);
 			}
 		}
@@ -58,10 +59,8 @@ let redWi = {
 		if (!data.rd.wi) {
 			data.rd.wi = [];
 		}
-		// Formular initialisieren
+		// Formular initialisieren/Content aufbauen
 		redWi.formInit();
-		// Content aufbauen
-		redWi.contMake();
 		// Maximalhöhe des Fensters anpassen
 		helfer.elementMaxHeight({
 			ele: document.getElementById("red-wi-cont-over"),
@@ -71,7 +70,9 @@ let redWi = {
 	//   input = Element
 	//     (ein Textfeld im Formular)
 	formListener ({input}) {
-		if (input.id === "red-wi-lt") {
+		if (input.id === "red-wi-gn") {
+			input.addEventListener("input", () => redWi.contMake());
+		} else if (input.id === "red-wi-lt") {
 			input.addEventListener("input", () => {
 				const tx = document.querySelectorAll(redWi.inputs)[0].value;
 				redWi.formToggle();
@@ -85,7 +86,11 @@ let redWi = {
 				if (!tastatur.modifiers &&
 						evt.key === "Enter" &&
 						!document.getElementById("dropdown")) {
-					redWi.formEval();
+					if (this.closest("#red-wi-form")) {
+						redWi.formEval();
+					} else {
+						redWi.kopieren();
+					}
 				}
 			});
 		} else if (input.type === "button") {
@@ -94,6 +99,8 @@ let redWi = {
 					redWi.formEval();
 				} else if (/reset$/.test(this.id)) {
 					redWi.formInit();
+				} else if (/kopieren$/.test(this.id)) {
+					redWi.kopieren();
 				}
 			});
 		}
@@ -124,13 +131,17 @@ let redWi = {
 		let inputs = document.querySelectorAll(redWi.inputs);
 		inputs[0].focus();
 	},
+	// Formular: Fenster initialisieren
 	formInit () {
+		let gn = document.getElementById("red-wi-gn");
+		gn.value = "Gerüst 1";
 		let vt = document.getElementById("red-wi-vt");
 		vt.value = redWi.dropdown.vt[0];
 		let lt = document.getElementById("red-wi-lt");
 		lt.value = redWi.dropdown.lt[0];
 		redWi.formToggle();
 		redWi.formReset();
+		redWi.contMake();
 	},
 	// Formular: Felder zurücksetzen
 	formReset () {
@@ -146,6 +157,7 @@ let redWi = {
 	// Formular: Eingabe überprüfen und Datensatz erstellen
 	formEval () {
 		let ds = {
+			gn: document.getElementById("red-wi-gn").value.match(/[0-9]+/)[0],
 			lt: document.getElementById("red-wi-lt").value,
 			tx: "",
 			vt: document.getElementById("red-wi-vt").value,
@@ -270,7 +282,7 @@ let redWi = {
 	//     (Datensatz, der gespeichert werden soll)
 	formSpeichern ({ds}) {
 		// Datensatz einhängen/überschreiben
-		const idx = data.rd.wi.findIndex(i => i.tx === ds.tx);
+		const idx = data.rd.wi.findIndex(i => i.gn === ds.gn && i.tx === ds.tx);
 		if (idx > -1) {
 			data.rd.wi[idx] = ds;
 		} else {
@@ -287,14 +299,25 @@ let redWi = {
 	},
 	// Content: Anzeige aufbauen
 	contMake () {
-		let cont = document.querySelector("#red-wi-cont div");
-		// keine Wortinformationen vorhanden
-		if (!data.rd.wi.length) {
+		let cont = document.querySelector("#red-wi-cont div"),
+			copy = document.getElementById("red-wi-copy"),
+			gn = document.getElementById("red-wi-gn").value.match(/[0-9]+/)[0];
+		// keine Wortinformationen vorhanden oder
+		// keine zum eingestellten Bedeutungsgerüst passenden Wortinformationen
+		if (!data.rd.wi.length ||
+				!data.rd.wi.some(i => i.gn === gn)) {
+			if (data.rd.wi.length) {
+				redWi.kopierenGn = gn;
+				let gerueste = redWi.kopierenDropdown();
+				document.getElementById("red-wi-copy-gn").value = gerueste[0];
+				copy.classList.remove("aus");
+			}
 			cont.parentNode.classList.add("aus");
 			return;
 		}
 		// Wortinformationen aufbauen
 		cont.parentNode.classList.remove("aus");
+		copy.classList.add("aus");
 		helfer.keineKinder(cont);
 		let hTxt = {
 			Assoziation: "Assoziationen",
@@ -303,6 +326,10 @@ let redWi = {
 		};
 		let h = "";
 		for (let i of data.rd.wi) {
+			// falsches Bedeutungsgerüst
+			if (i.gn !== gn) {
+				continue;
+			}
 			// Überschrift
 			if (h !== i.vt) {
 				let h3 = document.createElement("h3");
@@ -313,6 +340,7 @@ let redWi = {
 			// Eintrag
 			let p = document.createElement("p");
 			cont.appendChild(p);
+			p.dataset.gn = i.gn;
 			p.dataset.tx = i.tx;
 			// Lösch-Icon
 			let a = document.createElement("a");
@@ -344,8 +372,9 @@ let redWi = {
 	//    (Eintrag)
 	contBearbeiten ({p}) {
 		p.addEventListener("click", function() {
-			const tx = this.dataset.tx;
-			let ds = data.rd.wi.find(i => i.tx === tx);
+			const gn = this.dataset.gn,
+				tx = this.dataset.tx;
+			let ds = data.rd.wi.find(i => i.gn === gn && i.tx === tx);
 			document.getElementById("red-wi-vt").value = ds.vt;
 			let lt = document.getElementById("red-wi-lt");
 			lt.value = ds.lt;
@@ -372,13 +401,14 @@ let redWi = {
 		a.addEventListener("click", function(evt) {
 			evt.preventDefault();
 			evt.stopPropagation();
-			const tx = this.closest("p").dataset.tx;
+			const gn = this.closest("p").dataset.gn,
+				tx = this.closest("p").dataset.tx;
 			dialog.oeffnen({
 				typ: "confirm",
 				text: `Soll „${tx}“ wirklich gelöscht werden?`,
 				callback: () => {
 					if (dialog.antwort) {
-						const idx = data.rd.wi.findIndex(i => i.tx === tx);
+						const idx = data.rd.wi.findIndex(i => i.gn === gn && i.tx === tx);
 						data.rd.wi.splice(idx, 1);
 						kartei.karteiGeaendert(true);
 						redWi.contMake();
@@ -394,13 +424,52 @@ let redWi = {
 		a.addEventListener("click", function(evt) {
 			evt.preventDefault();
 			evt.stopPropagation();
-			const tx = this.closest("p").dataset.tx;
+			const gn = this.closest("p").dataset.tx,
+				tx = this.closest("p").dataset.tx;
 			let xmlDatensatz = {
 				key: "wi-single",
-				ds: data.rd.wi.find(i => i.tx === tx),
+				ds: data.rd.wi.find(i => i.gn === gn && i.tx === tx),
 			};
 			redXml.datensatz({xmlDatensatz});
 		});
+	},
+	// Kopieren: speichert die aktuelle Gerüst-ID
+	// (wenn das Kopieren-Formular angezeigt wird)
+	kopierenGn: "",
+	// Kopieren: ermittelt Gerüste, die Content haben
+	kopierenDropdown () {
+		let gerueste = [];
+		for (let i of data.rd.wi) {
+			if (i.gn !== redWi.kopierenGn) {
+				gerueste.push(i.gn);
+			}
+		}
+		gerueste = [...new Set([...gerueste])];
+		gerueste.sort();
+		for (let i = 0, len = gerueste.length; i < len; i++) {
+			gerueste[i] = `Gerüst ${gerueste[i]}`;
+		}
+		return gerueste;
+	},
+	// Kopieren: für das Kopieren der Wortinformationen aus
+	kopieren () {
+		const gn = document.getElementById("red-wi-copy-gn").value.match(/[0-9]+/)[0];
+		// Datensätze kopieren
+		let wi = [];
+		for (let i of data.rd.wi) {
+			if (i.gn === gn) {
+				let ds = {...i};
+				ds.gn = redWi.kopierenGn;
+				wi.push(ds);
+			}
+		}
+		data.rd.wi = data.rd.wi.concat(wi);
+		// Datensätze sortieren
+		data.rd.wi.sort(helfer.sortWi);
+		// Änderungsmarkierung setzen
+		kartei.karteiGeaendert(true);
+		// Anzeige neu aufbauen
+		redWi.contMake();
 	},
 	// Wortinformationen an das Redaktionssystem schicken
 	//   icon = Element

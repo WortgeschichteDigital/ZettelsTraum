@@ -296,12 +296,16 @@ let dropdown = {
 			dropdown.data = [...redLit.eingabe.fundorte];
 		} else if (feld_id === "red-lit-eingabe-tg") {
 			dropdown.data = redLit.eingabeTagsAuflisten();
+		} else if (feld_id === "red-wi-gn") {
+			dropdown.data = dropdown.dataGerueste(data.bd.gr);
 		} else if (feld_id === "red-wi-vt") {
 			dropdown.data = [...redWi.dropdown.vt];
 		} else if (feld_id === "red-wi-lt") {
 			dropdown.data = [...redWi.dropdown.lt];
 		} else if (/^red-wi-.+-tx$/.test(feld_id)) {
 			dropdown.data = redWi.dropdownVerweistexte();
+		} else if (feld_id === "red-wi-copy-gn") {
+			dropdown.data = redWi.kopierenDropdown();
 		} else if (feld_id === "md-ty") {
 			dropdown.data = [...xml.dropdown.artikelTypen];
 		} else if (feld_id === "md-tf") {
@@ -641,7 +645,7 @@ let dropdown = {
 				karteisuche.filterFelder(caller);
 				// das erste Input-Feld hinter dem Caller fokussieren
 				document.getElementById(caller).parentNode.nextSibling.firstChild.focus();
-			} else if (caller === "red-wi-lt") {
+			} else if (/^red-wi-(gn|lt)$/.test(caller)) {
 				feld.dispatchEvent(new Event("input"));
 			} else if (caller === "bg-sel-gr") {
 				xml.bgSel();

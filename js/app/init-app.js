@@ -393,7 +393,7 @@ window.addEventListener("load", async () => {
 	document.getElementById("red-lit-export-exportieren").addEventListener("click", () => redLit.dbExportieren());
 	document.getElementById("red-lit-export-abbrechen").addEventListener("click", () => overlay.schliessen(document.getElementById("red-lit-export") ) );
 	// Wortinformationen
-	document.querySelectorAll("#red-wi-form input").forEach( input => redWi.formListener({input}) );
+	document.querySelectorAll("#red-wi-form input, #red-wi-copy input").forEach( input => redWi.formListener({input}) );
 	redWi.xml({icon: document.getElementById("red-wi-xml")});
 	// Karteisuche
 	document.getElementById("karteisuche-suchen").addEventListener("click", () => karteisuche.suchenPrep());

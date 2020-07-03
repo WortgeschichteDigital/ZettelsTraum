@@ -706,6 +706,9 @@ let helfer = {
 		if (aVt !== bVt) {
 			return aVt - bVt;
 		}
+		if (a.tx === b.tx) {
+			return 0;
+		}
 		let arr = [a.tx, b.tx];
 		arr.sort(helfer.sortAlpha);
 		if (arr[0] === a.tx) {

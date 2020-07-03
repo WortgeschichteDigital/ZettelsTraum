@@ -312,6 +312,10 @@ let konversion = {
 		if (data.ve > 16) {
 			return;
 		}
+		// Objekte in "rd.wi" um "gn" ergänzen
+		for (let i of data.rd.wi) {
+			i.gn = "1";
+		}
 		// Datenstruktur "rd.xl" hinzufügen
 		data.rd.xl = helferXml.redXmlData();
 		// Versionsnummer hochzählen

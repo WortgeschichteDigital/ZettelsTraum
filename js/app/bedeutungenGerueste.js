@@ -143,6 +143,11 @@ let bedeutungenGerueste = {
 							}
 						}
 					}
+					// zum Gerüst gehörende Wortinformationen zum Löschen vormerken
+					bedeutungen.aendernFuellen({
+						wi: true,
+						gr: id,
+					});
 					// Gerüst löschen
 					delete bedeutungen.data.gr[id];
 					// Gerüst im Hauptfenster ggf. wechseln, auf jeden Fall die Überschrift neu aufbauen

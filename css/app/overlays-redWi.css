@@ -23,7 +23,8 @@
 	display: inline-block;
 }
 
-#red-wi-form p:first-child > span:nth-child(2) {
+#red-wi-form p:first-child > span:nth-child(2),
+#red-wi-form p:first-child > span:nth-child(3) {
 	margin-left: -14px;
 }
 
@@ -65,6 +66,12 @@
 
 #red-wi-extern input:invalid {
 	color: var(--textSehrHell);
+}
+
+#red-wi-form input[type="button"] {
+	margin-left: 10px;
+	width: 150px;
+	text-align: left;
 }
 
 #red-wi-form input[type="button"]:first-child {
@@ -137,4 +144,24 @@
 #red-wi-cont .detail {
 	margin-left: 5px;
 	color: var(--textHell);
+}
+
+/* Kopieren ------------------------------------- */
+#red-wi-copy {
+	padding: 0 10px 10px 10px;
+}
+
+#red-wi-copy p{
+	margin-bottom: 0;
+}
+
+#red-wi-copy input[type="text"] {
+	width: 119px;
+	cursor: default;
+}
+
+#red-wi-copy input[type="button"] {
+	margin-left: 10px;
+	width: 150px;
+	text-align: left;
 }
