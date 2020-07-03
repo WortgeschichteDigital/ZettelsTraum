@@ -482,7 +482,9 @@ let xml = {
 		for (let i of leVal) {
 			xmlStr += `<Schreibung>${i}</Schreibung>`;
 		}
-		xmlStr += `<Textreferenz Ziel="${reVal}"/>`;
+		if (reVal) {
+			xmlStr += `<Textreferenz Ziel="${reVal}"/>`;
+		}
 		xmlStr += `</Lemma>`;
 		// Datensatz erzeugen und speichern
 		let data = {
