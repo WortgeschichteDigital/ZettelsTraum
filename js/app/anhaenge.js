@@ -5,7 +5,7 @@ let anhaenge = {
 	data: {},
 	// scannt die übergebenen Anhänge und trägt das Ergebnis
 	// in anhaenge.data ein
-	//   an = Array/String
+	//   an = Array | String
 	//     (Anhang oder Liste von Anhängen, die gescannt werden sollen)
 	scan (an) {
 		return new Promise(async resolve => {
@@ -30,11 +30,11 @@ let anhaenge = {
 					const path = require("path");
 					let pfad = datei;
 					if (!path.isAbsolute(datei)) {
-						pfad = `${path.parse(kartei.pfad).dir}/${datei}`;
+						pfad = `${path.parse(kartei.pfad).dir}${path.sep}${datei}`;
 					}
 					const exists = await helfer.exists(pfad);
 					anhaenge.data[datei] = {
-						exists: exists,
+						exists,
 						path: pfad,
 						ext: path.parse(pfad).ext,
 					};
@@ -77,12 +77,13 @@ let anhaenge = {
 		".ppt": "datei-praes.svg",
 		".pptx": "datei-praes.svg",
 		".rar": "datei-archiv.svg",
+		".rtf": "datei-doc.svg",
 		".txt": "datei-txt.svg",
 		".ztj": "datei-ztj.svg",
 		".xml": "datei-xml.svg",
 		".zip": "datei-archiv.svg",
 	},
-	// passendes Icon zum anhang ermitteln
+	// passendes Icon zum Anhang ermitteln
 	//   an = string
 	//     (Datei, wie sie sich in anhaenge.data findet)
 	getIcon (an) {
@@ -95,12 +96,12 @@ let anhaenge = {
 		return "img/datei.svg";
 	},
 	// Liste von Icons erstellen, die einzeln angeklickt werden können
-	//   arr = Array/null
+	//   arr = Array | null
 	//     (Array mit allen Dateien, für die Icons erstellt werden sollen;
 	//     steht der Wert auf null, soll nur die Liste gelöscht werden)
 	//   ziel = Element
 	//     (Element, in das die Iconliste eingetragen werden soll)
-	//   scan = true || undefined
+	//   scan = true | undefined
 	//     (die übergebene Anhängeliste sollte zunächst gescannt werden)
 	async makeIconList (arr, ziel, scan = false) {
 		helfer.keineKinder(ziel);
@@ -151,7 +152,7 @@ let anhaenge = {
 	//   obj = String
 	//     (verweist auf das Objekt, in dem die Anhänge gespeichert werden;
 	//     Werte durch Haarstrich getrennt)
-	//   leeren = false || undefined
+	//   leeren = false | undefined
 	//     (der Content soll geleert werden)
 	auflisten (cont, obj, leeren = true) {
 		return new Promise(async resolve => {
@@ -248,7 +249,7 @@ let anhaenge = {
 	// Öffnet die übergebene Datei
 	//   datei = "String"
 	//     (Datei, die geöffnet werden soll)
-	//   ordner = true || undefined
+	//   ordner = true | undefined
 	//     (Dateiordner im Filemanager öffnen)
 	async oeffnen (datei, ordner = false) {
 		if (!anhaenge.data[datei].exists) {
