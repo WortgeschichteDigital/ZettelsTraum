@@ -141,6 +141,7 @@ let redWi = {
 		if (inputs[2]) {
 			inputs[2].value = new Date().toISOString().split("T")[0];
 		}
+		inputs[0].focus();
 	},
 	// Formular: Eingabe überprüfen und Datensatz erstellen
 	formEval () {
