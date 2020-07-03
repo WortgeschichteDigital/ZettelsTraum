@@ -1922,11 +1922,14 @@ let xml = {
 	//     (Slot, in dem der Textblock steht)
 	abschnittSetId ({key, slot, slotBlock}) {
 		// ID ermitteln und normieren
-		let id = xml.data.xl[key][slot].ct[slotBlock].xl;
-		id = id.replace(/<Anmerkung>.+?<\/Anmerkung>/s, "");
-		id = id.replace(/<.+?>/g, "");
-		id = helfer.textTrim(id, true);
-		id = xml.abschnittNormId({id});
+		let id = "",
+			xl = xml.data.xl[key][slot].ct[slotBlock]?.xl; // jshint ignore:line
+		if (xl) { // wird nach dem Löschen einer Überschrift genutzt
+			id = xl.replace(/<Anmerkung>.+?<\/Anmerkung>/s, "");
+			id = id.replace(/<.+?>/g, "");
+			id = helfer.textTrim(id, true);
+			id = xml.abschnittNormId({id});
+		}
 		// ID schreiben und Datensatz speichern
 		xml.data.xl[key][slot].id = id;
 		xml.speichern();
@@ -2299,7 +2302,15 @@ let xml = {
 			});
 			// Datensatz löschen
 			if (slotBlock !== null) {
+				// ID des Abschnitts leeren?
+				let setId = false;
+				if (xml.data.xl[key][slot].ct[slotBlock].it === "Überschrift") {
+					setId = true;
+				}
 				xml.data.xl[key][slot].ct.splice(slotBlock, 1);
+				if (setId) {
+					xml.abschnittSetId({key, slot, slotBlock});
+				}
 			} else {
 				xml.data.xl[key].splice(slot, 1);
 			}
