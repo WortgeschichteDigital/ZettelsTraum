@@ -2839,6 +2839,11 @@ let xml = {
 			p1 = p1.replace(/–/g, "-");
 			return `<URL>${p1}</URL>`;
 		});
+		// in <Aufrufdatum> kein Whitespace
+		str = str.replace(/<Aufrufdatum>(.+?)<\/Aufrufdatum>/g, (m, p1) => {
+			p1 = p1.replace(/\s/g, "");
+			return `<Aufrufdatum>${p1}</Aufrufdatum>`;
+		});
 		// in <Zitat> und <Blockzitat> wohl keine <Paraphrase>, sondern <Zitat>
 		if (blockzitat) {
 			str = str.replace(/<Paraphrase>(.+?)<\/Paraphrase>/g, (m, p1) => `<Zitat>${p1}</Zitat>`);
