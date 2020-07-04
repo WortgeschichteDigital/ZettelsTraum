@@ -382,8 +382,12 @@ let anhaenge = {
 	},
 	// Anhang hinzufügen
 	//   input = Element
-	//     (Add-Button zum Hinzufügen eines Anhangs)
+	//     (Add-Button zum Hinzufügen von Anhängen)
 	add (input) {
+		if (input.value === "Auto-Ergänzen") {
+			input.addEventListener("click", () => anhaenge.addAuto({fenster: true}));
+			return;
+		}
 		input.addEventListener("click", async function() {
 			// Optionen für Dateidialog
 			let opt = {
@@ -471,6 +475,135 @@ let anhaenge = {
 		await anhaenge.auflisten(cont, obj);
 		// ggf. Liste der Anhänge in den Belegen neu aufbauen
 		if (cont.dataset.anhaenge === "kartei") {
+			anhaenge.auflistenBelege(cont);
+		}
+		// Erinnerungen auffrischen
+		erinnerungen.check();
+	},
+	// automatisch alle Dateien im Kartei-Verzeichnis hinzufügen
+	//   fenster = Boolean
+	//     (die Funktion wurde aus dem Anhänge-Fenster heraus aufgerufen)
+	async addAuto ({fenster}) {
+		// Kartei noch nicht gespeichert
+		if (!kartei.pfad) {
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Sie müssen die Kartei erst speichern.",
+			});
+			return;
+		}
+		// Ordner auslesen, Dateien sammeln
+		const path = require("path"),
+			fsP = require("fs").promises;
+		let reg = new RegExp(`.+${path.sep}`),
+			ordner = kartei.pfad.match(reg)[0],
+			dateienA = [];
+		const ausgelesen = await new Promise(async resolve => {
+			try {
+				let files = await fsP.readdir(ordner);
+				for (let f of files) {
+					const pfad = path.join(ordner, f);
+					let stats = await fsP.lstat(pfad);
+					if (!stats.isDirectory() &&
+							!/^(~\$|\.)|\.(bak|ztj)$/.test(f)) {
+						dateienA.push(f);
+					}
+				}
+				resolve(true);
+			} catch (err) { // Auslesen des Ordners fehlgeschlagen
+				dialog.oeffnen({
+					typ: "alert",
+					text: `Beim Auslesen des Karteiordners ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.message}</p>`,
+				});
+				resolve(false);
+			}
+		});
+		if (!ausgelesen) {
+			return;
+		}
+		// keine Dateien gefunden
+		if (!dateienA.length) {
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Im Karteiordner wurden keine Dateien zum Anhängen gefunden.",
+			});
+			return;
+		}
+		// Dateien sortieren
+		let gruppen = {
+			// XML
+			"xml": 10,
+			// Office-Dokumente
+			"doc": 9,
+			"docx": 9,
+			"odt": 9,
+			"rtf": 9,
+			// Text-Dateien
+			"pdf": 8,
+			"txt": 8,
+			// Bilder
+			"gif": 7,
+			"jpeg": 7,
+			"jpg": 7,
+			"png": 7,
+			// Sonstiges
+			"gz": 2,
+			"htm": 2,
+			"html": 2,
+			"odp": 2,
+			"ppt": 2,
+			"pptx": 2,
+			"rar": 2,
+			"zip": 2,
+		};
+		dateienA.sort((a, b) => {
+			let extA = a.match(/[^.]+$/),
+				extB = b.match(/[^.]+$/),
+				wertA = extA && gruppen[extA[0]] ? gruppen[extA[0]] : 1,
+				wertB = extB && gruppen[extB[0]] ? gruppen[extB[0]] : 1;
+			// nach Typ sortieren
+			if (wertA !== wertB) {
+				return wertB - wertA;
+			}
+			// alphabetisch sortieren
+			let arr = [a, b];
+			arr.sort(helfer.sortAlpha);
+			if (arr[0] === a) {
+				if (wertA === 9) { // Office-Dokumente reverse
+					return 1;
+				}
+				return -1;
+			}
+			if (wertA === 9) { // Office-Dokumente reverse
+				return -1;
+			}
+			return 1;
+		});
+		// weitere Dateien ermitteln
+		let dateienB = [];
+		for (let i of data.an) {
+			if (/[/\\]/.test(i)) {
+				dateienB.push(i);
+			}
+		}
+		// Änderungen nötig?
+		let dateien = dateienA.concat(dateienB);
+		if (dateien.join() === data.an.join()) {
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Die Dateien aus dem Karteiordner sind alle schon angehängt.",
+			});
+			return;
+		}
+		// Datensatz auffrischen
+		data.an = dateien;
+		await anhaenge.scan(data.an);
+		// Änderungsmarkierung
+		let cont = document.querySelector("#anhaenge-cont");
+		anhaenge.geaendert(cont); // hier werden die Icons im Kopf neu aufgebaut
+		// ggf. Liste der Anhänge im Fenster neu aufbauen
+		if (fenster) {
+			await anhaenge.auflisten(cont, "data|an");
 			anhaenge.auflistenBelege(cont);
 		}
 		// Erinnerungen auffrischen
