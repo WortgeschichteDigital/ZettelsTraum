@@ -3092,6 +3092,9 @@ let xml = {
 		kopf.parentNode.removeChild(kopf);
 		xml.refreshSlots({key: refreshKey});
 		xml.elementKopfEvents({kopf: klon});
+		// Verschiebepfeil im neuen Kopf fokussieren
+		const pfeilNr = dir === "up" ? 0 : 1;
+		klon.querySelectorAll(".pfeile a")[pfeilNr].focus();
 		// Konsequenzen
 		if (key === "wi") {
 			// Verweistypgrenze in Wortinformationen markieren
