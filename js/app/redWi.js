@@ -424,10 +424,11 @@ let redWi = {
 		a.addEventListener("click", function(evt) {
 			evt.preventDefault();
 			evt.stopPropagation();
-			const gn = this.closest("p").dataset.tx,
+			const gn = this.closest("p").dataset.gn,
 				tx = this.closest("p").dataset.tx;
 			let xmlDatensatz = {
 				key: "wi-single",
+				gn,
 				ds: data.rd.wi.find(i => i.gn === gn && i.tx === tx),
 			};
 			redXml.datensatz({xmlDatensatz});
@@ -477,10 +478,19 @@ let redWi = {
 	xml ({icon}) {
 		icon.addEventListener("click", evt => {
 			evt.preventDefault();
+			const gn = document.getElementById("red-wi-gn").value.match(/[0-9]+/)[0];
 			let xmlDatensatz = {
 				key: "wi",
-				ds: data.rd.wi,
+				gn,
+				ds: data.rd.wi.filter(i => i.gn === gn),
 			};
+			if (!xmlDatensatz.ds.length) {
+				dialog.oeffnen({
+					typ: "alert",
+					text: "Sie haben noch keine Wortinformationen eingegeben.",
+				});
+				return;
+			}
 			redXml.datensatz({xmlDatensatz});
 		});
 	},

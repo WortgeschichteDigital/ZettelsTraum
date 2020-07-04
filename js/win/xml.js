@@ -202,16 +202,18 @@ let xml = {
 				});
 			}
 		}
+		// Init: Bedeutungsgerüst (Nachweise, Textreferenzen, XML)
+		xml.bgReset();
 		// Init: Wortinformationen
-		if (xml.data.xl.wi.length) {
+		/* jshint ignore:start */
+		if (xml.data.xl.wi?.[xml.bgAktGn]?.length) {
 			xml.wiMake();
 		} else {
 			xml.elementLeer({
 				ele: document.getElementById("wi"),
 			});
 		}
-		// Init: Bedeutungsgerüst (Nachweise, Textreferenzen, XML)
-		xml.bgReset();
+		/* jshint ignore:end */
 	},
 	// Daten zurücksetzen
 	async reset () {
@@ -547,26 +549,37 @@ let xml = {
 				xml.data.xl.bg.push(xmlDatensatz.ds);
 				xml.bgAkt = xml.data.xl.bg.length - 1;
 			}
+			xml.bgAktGn = xmlDatensatz.ds.gn;
+			xml.wiMake();
 			xml.bgNwTyReset();
 			xml.bgMakeXML();
 			xml.bgNwTfMake({key: "nw"});
 			xml.bgNwTfMake({key: "tf"});
 			xml.bgSelSet();
 		} else if (xmlDatensatz.key === "wi") {
-			xml.data.xl.wi = xmlDatensatz.ds;
-			xml.wiMake();
+			xml.data.xl.wi[xmlDatensatz.gn] = xmlDatensatz.ds;
+			if (xmlDatensatz.gn === xml.bgAktGn) {
+				xml.wiMake();
+			}
 		} else if (xmlDatensatz.key === "wi-single") {
-			if (!xml.data.xl.wi.length) {
-				xml.data.xl.wi.push(xmlDatensatz.ds);
+			/* jshint ignore:start */
+			if (!xml.data.xl.wi?.[xml.bgAktGn]?.length) {
+				xml.data.xl.wi[xml.bgAktGn] = [xmlDatensatz.ds];
 				xml.wiMake();
 			} else {
-				let slot = xml.data.xl.wi.findIndex(i => i.tx === xmlDatensatz.ds.tx),
+				let slot = xml.data.xl.wi[xml.bgAktGn].findIndex(i => i.tx === xmlDatensatz.ds.tx),
 					koepfe = document.querySelectorAll("#wi > .kopf");
-				if (slot > -1) { // Datensatz ersetzen
-					xml.data.xl.wi[slot] = xmlDatensatz.ds;
+				if (slot > -1 &&
+						xml.data.xl.wi[xml.bgAktGn][slot].vt !== xmlDatensatz.ds.vt) { // Verweistyp geändert
+					xml.data.xl.wi[xml.bgAktGn].splice(slot, 1);
+					xml.data.xl.wi[xml.bgAktGn].push(xmlDatensatz.ds);
+					xml.data.xl.wi[xml.bgAktGn].sort(helfer.sortWi);
+					xml.wiMake();
+				} else if (slot > -1) { // Datensatz ersetzen
+					xml.data.xl.wi[xml.bgAktGn][slot] = xmlDatensatz.ds;
 					// ggf. Preview schließen
 					let pre = koepfe[slot].nextSibling;
-					if (pre?.classList.contains("pre-cont")) { // jshint ignore:line
+					if (pre?.classList.contains("pre-cont")) {
 						await xml.elementPreviewOff({pre});
 					}
 					// Kopf erzeugen
@@ -580,17 +593,22 @@ let xml = {
 					}
 					// Kopf ersetzen
 					koepfe[slot].parentNode.replaceChild(kopf, koepfe[slot]);
+					// Layout der Köpfe anpassen
+					xml.layoutTabellig({
+						id: "wi",
+						ele: [3, 4],
+					});
 				} else { // Datensatz einhängen
-					xml.data.xl.wi.push(xmlDatensatz.ds);
+					xml.data.xl.wi[xml.bgAktGn].push(xmlDatensatz.ds);
 					// Wortinformationen sortieren
-					xml.data.xl.wi.sort(helfer.sortWi);
+					xml.data.xl.wi[xml.bgAktGn].sort(helfer.sortWi);
 					// Kopf ersetzen
-					const slot = xml.data.xl.wi.findIndex(i => i.tx === xmlDatensatz.ds.tx);
+					const slot = xml.data.xl.wi[xml.bgAktGn].findIndex(i => i.tx === xmlDatensatz.ds.tx);
 					let kopf = xml.elementKopf({
 						key: "wi",
 						slot,
 					});
-					if (slot === xml.data.xl.wi.length - 1) {
+					if (slot === xml.data.xl.wi[xml.bgAktGn].length - 1) {
 						document.getElementById("wi").appendChild(kopf);
 					} else {
 						koepfe[slot].parentNode.insertBefore(kopf, koepfe[slot]);
@@ -598,13 +616,14 @@ let xml = {
 					// Slots auffrischen und Verweistypgrenze neu markieren
 					xml.refreshSlots({key: "wi"});
 					xml.wiVerweistypGrenze();
+					// Layout der Köpfe anpassen
+					xml.layoutTabellig({
+						id: "wi",
+						ele: [3, 4],
+					});
 				}
-				// Layout der Köpfe anpassen
-				xml.layoutTabellig({
-					id: "wi",
-					ele: [3, 4],
-				});
 			}
+			/* jshint ignore:end */
 		}
 		xml.speichern();
 	},
@@ -744,8 +763,13 @@ let xml = {
 		// alle Köpfe entfernen
 		let wi = document.getElementById("wi");
 		helfer.keineKinder(wi);
+		// keine Daten zum aktuellen Gerüst => Leermeldung
+		if (!xml.data.xl.wi?.[xml.bgAktGn]?.length) { // jshint ignore:line
+			xml.elementLeer({ele: wi});
+			return;
+		}
 		// alle Köpfe aufbauen
-		for (let i = 0, len = xml.data.xl.wi.length; i < len; i++) {
+		for (let i = 0, len = xml.data.xl.wi[xml.bgAktGn].length; i < len; i++) {
 			let kopf = xml.elementKopf({
 				key: "wi",
 				slot: i,
@@ -779,8 +803,10 @@ let xml = {
 			}
 		}
 	},
-	// Bedeutungsgerüst: speichert den Slot des aktuellen Bedeutungsgerüsts
+	// Bedeutungsgerüst: speichert den Slot und die Nummer
+	// des aktuellen Bedeutungsgerüsts
 	bgAkt: -1,
+	bgAktGn: "",
 	// Bedeutungsgerüst: Nachweisformular umstellen
 	bgNachweisToggle () {
 		let typ = document.getElementById("nw-ty").value,
@@ -1274,9 +1300,11 @@ let xml = {
 	bgReset () {
 		if (xml.data.xl.bg.length) {
 			xml.bgAkt = 0;
+			xml.bgAktGn = xml.data.xl.bg[0].gn;
 			xml.bgMakeXML();
 		} else {
 			xml.bgAkt = -1;
+			xml.bgAktGn = "";
 			xml.elementLeer({
 				ele: document.getElementById("bg"),
 			});
@@ -1293,9 +1321,11 @@ let xml = {
 		let reg = /gerüst (?<gn>[0-9]+)/.exec(document.getElementById(caller).value);
 		if (reg) {
 			xml.bgAkt = xml.data.xl.bg.findIndex(i => i.gn === reg.groups.gn);
+			xml.bgAktGn = reg.groups.gn;
 			// Update des anderen Input-Feldes
 			xml.bgSelSet();
-			// Update Wortinformationen TODO
+			// Update Wortinformationen
+			xml.wiMake();
 			// Update Bedeutungsgerüste
 			xml.bgNwTyReset();
 			xml.bgMakeXML();
@@ -1353,6 +1383,8 @@ let xml = {
 			let xmlStr = "";
 			if (key === "re") {
 				xmlStr = xml.data.xl.md.re[slot].xl;
+			} else if (key === "wi") {
+				xmlStr = xml.data.xl.wi[xml.bgAktGn][slot].xl;
 			} else if (key === "nw") {
 				xmlStr = xml.data.xl.bg[xml.bgAkt].nw[slot];
 			} else if (key === "tf") {
@@ -1414,7 +1446,7 @@ let xml = {
 		} else if (key === "le") {
 			idText = xml.data.xl[key][slot].le.join("/");
 		} else if (key === "wi") {
-			idText = xml.data.xl.wi[slot].vt;
+			idText = xml.data.xl.wi[xml.bgAktGn][slot].vt;
 		} else if (key === "nw") {
 			let xl = xml.data.xl.bg[xml.bgAkt].nw[slot];
 			if (/<Literaturreferenz/.test(xl)) {
@@ -1451,7 +1483,7 @@ let xml = {
 			} else if (key === "lt") {
 				hinweis.textContent = xml.data.xl.lt[slot].si;
 			} else if (key === "wi") {
-				hinweis.textContent = xml.data.xl.wi[slot].tx;
+				hinweis.textContent = xml.data.xl.wi[xml.bgAktGn][slot].tx;
 			} else if (key === "nw") {
 				let xl = xml.data.xl.bg[xml.bgAkt].nw[slot];
 				if (/<Literaturreferenz/.test(xl)) {
@@ -1509,7 +1541,7 @@ let xml = {
 					demaskieren: true,
 				});
 			} else if (key === "wi") {
-				text = xml.data.xl.wi[slot].lt;
+				text = xml.data.xl.wi[xml.bgAktGn][slot].lt;
 			}
 			text = text.substring(0, 300);
 			vorschau.appendChild(document.createTextNode(text));
@@ -1624,6 +1656,8 @@ let xml = {
 			let xmlStr = "";
 			if (key === "re") {
 				xmlStr = xml.data.xl.md.re[slot].xl;
+			} else if (key === "wi") {
+				xmlStr = xml.data.xl.wi[xml.bgAktGn][slot].xl;
 			} else if (key === "bg") {
 				xmlStr = xml.data.xl.bg[xml.bgAkt].xl;
 			} else {
@@ -1684,6 +1718,8 @@ let xml = {
 				xml.data.xl.bg.splice(xml.bgAkt, 1);
 			} else if (key === "re") {
 				xml.data.xl.md.re.splice(slot, 1);
+			} else if (key === "wi") {
+				xml.data.xl.wi[xml.bgAktGn].splice(slot, 1);
 			} else {
 				xml.data.xl[key].splice(slot, 1);
 			}
@@ -1708,7 +1744,7 @@ let xml = {
 				}
 				if (key === "le" && xml.data.xl.le.length ||
 						key === "re" && xml.data.xl.md.re.length ||
-						key === "wi" && xml.data.xl.wi.length) {
+						key === "wi" && xml.data.xl.wi?.[xml.bgAktGn]?.length) { // jshint ignore:line
 					if (key === "re") {
 						xml.refreshSlots({key: "md"});
 					} else {
@@ -1721,11 +1757,15 @@ let xml = {
 						id,
 						ele: [3, 4],
 					});
-				} else if (key === "wi" && !xml.data.xl.wi.length) {
+				}
+				/* jshint ignore:start */
+				else if (key === "wi" && !xml.data.xl.wi?.[xml.bgAktGn]?.length) {
 					xml.elementLeer({
 						ele: document.getElementById("wi"),
 					});
-				} else if (/^(nw|tf)$/.test(key)) {
+				}
+				/* jshint ignore:end */
+				else if (/^(nw|tf)$/.test(key)) {
 					let ele = [2, 3];
 					if (key === "nw") {
 						ele = [3, 4];
@@ -1743,6 +1783,7 @@ let xml = {
 				}
 			} else if (key === "bg") {
 				xml.bgReset();
+				xml.wiMake();
 			} else if (!xml.data.xl[key].length) {
 				xml.elementLeer({
 					ele: document.getElementById(key),
@@ -2446,7 +2487,9 @@ let xml = {
 		let ta = document.createElement("textarea");
 		div.appendChild(ta);
 		ta.setAttribute("rows", "1");
-		if (key === "bg") {
+		if (key === "wi") {
+			ta.value = xml.data.xl.wi[xml.bgAktGn][slot].xl;
+		} else if (key === "bg") {
 			ta.value = xml.data.xl.bg[xml.bgAkt].xl;
 		} else if (slotBlock !== null) {
 			ta.value = xml.data.xl[key][slot].ct[slotBlock].xl;
@@ -2610,7 +2653,7 @@ let xml = {
 					}
 				} else if (key === "wi") {
 					// Linktyp neu auslesen
-					let lt = xml.data.xl.wi[slot].lt;
+					let lt = xml.data.xl.wi[xml.bgAktGn][slot].lt;
 					if (/^<Textreferenz/.test(xmlStr)) {
 						lt = "Textverweis";
 					} else if (/^<Verweis>/.test(xmlStr)) {
@@ -2619,7 +2662,7 @@ let xml = {
 						lt = "Verweis extern";
 					}
 					// Textreferenz neu auslesen
-					let tx = xml.data.xl.wi[slot].tx,
+					let tx = xml.data.xl.wi[xml.bgAktGn][slot].tx,
 						reg = /<Textreferenz Ziel=".+?">(?<tr>.+?)<\/Textreferenz>|<Verweistext>(?<vt>.+?)<\/Verweistext>|<Verweisziel>(?<vz>.+?)<\/Verweisziel>/.exec(xmlStr);
 					if (reg?.groups.tr) { // jshint ignore:line
 						tx = reg.groups.tr;
@@ -2629,11 +2672,13 @@ let xml = {
 						tx = reg.groups.vz;
 					}
 					// Werte neu setzen
-					xml.data.xl.wi[slot].lt = lt;
-					xml.data.xl.wi[slot].tx = tx;
+					xml.data.xl.wi[xml.bgAktGn][slot].lt = lt;
+					xml.data.xl.wi[xml.bgAktGn][slot].tx = tx;
 				}
 				// Speichern
-				if (key === "bg") {
+				if (key === "wi") {
+					xml.data.xl.wi[xml.bgAktGn][slot].xl = xmlStr;
+				} else if (key === "bg") {
 					xml.data.xl.bg[xml.bgAkt].xl = xmlStr;
 					xml.bgRefreshData();
 				} else if (slotBlock !== null) {
@@ -2716,7 +2761,9 @@ let xml = {
 			});
 			// XML-String für das Zurücksetzen ermitteln
 			function resetXmlStr () {
-				if (key === "bg") {
+				if (key === "wi") {
+					return xml.data.xl.wi[xml.bgAktGn][slot].xl;
+				} else if (key === "bg") {
 					return xml.data.xl.bg[xml.bgAkt].xl;
 				} else if (slotBlock !== null) {
 					return xml.data.xl[key][slot].ct[slotBlock].xl;
@@ -2962,6 +3009,9 @@ let xml = {
 		if (key === "re") {
 			arr = xml.data.xl.md.re;
 			slotKlon = {...arr[slot]};
+		} else if (key === "wi") {
+			arr = xml.data.xl.wi[xml.bgAktGn];
+			slotKlon = {...arr[slot]};
 		} else if (key === "nw") {
 			arr = xml.data.xl.bg[xml.bgAkt].nw;
 			slotKlon = arr[slot];
@@ -2978,13 +3028,13 @@ let xml = {
 			down: false,
 		};
 		if (key === "wi") {
-			const vt = xml.data.xl.wi[slot].vt;
+			const vt = xml.data.xl.wi[xml.bgAktGn][slot].vt;
 			if (slot > 0 &&
-					xml.data.xl.wi[slot - 1].vt !== vt) {
+					xml.data.xl.wi[xml.bgAktGn][slot - 1].vt !== vt) {
 				wiBlock.up = true;
 			}
-			if (slot < xml.data.xl.wi.length - 1 &&
-					xml.data.xl.wi[slot + 1].vt !== vt) {
+			if (slot < xml.data.xl.wi[xml.bgAktGn].length - 1 &&
+					xml.data.xl.wi[xml.bgAktGn][slot + 1].vt !== vt) {
 				wiBlock.down = true;
 			}
 		}

@@ -32,7 +32,7 @@ let helferXml = {
 				ty: "", // Artikeltyp
 			},
 			tx: [], // Text
-			wi: [], // Wortinformationen
+			wi: {}, // Wortinformationen
 		};
 	},
 	// Datum extrahieren
