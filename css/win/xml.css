@@ -485,14 +485,20 @@ p.leer {
 	transition: width .3s ease .5s;
 }
 
+.pfeile:focus-within,
 .kopf:hover .pfeile {
 	width: 136px;
 }
 
+#md .pfeile:focus-within,
 #md .kopf:hover .pfeile,
+#le .pfeile:focus-within,
 #le .kopf:hover .pfeile,
+.abschnitt-cont .pfeile:focus-within,
 .abschnitt-cont .kopf:hover .pfeile,
+#wi .pfeile:focus-within,
 #wi .kopf:hover .pfeile,
+#bg-nw .pfeile:focus-within,
 #bg-nw .kopf:hover .pfeile {
 	width: 68px;
 }
