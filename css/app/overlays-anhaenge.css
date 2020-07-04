@@ -33,7 +33,16 @@
 }
 
 .anhaenge-add input {
+	width: 155px;
+	text-align: left;
+}
+
+.anhaenge-add input:first-child {
 	margin-left: 0;
+}
+
+#beleg .anhaenge-add input {
+	width: auto;
 }
 
 .anhaenge-item {
