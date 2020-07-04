@@ -325,9 +325,14 @@ label {
 	margin-left: 0;
 }
 
+#wi-sel input,
 #bg-sel input {
 	margin-left: 31px;
 	width: 300px;
+}
+
+#wi-sel input {
+	margin-left: 0;
 }
 
 #bg-nw input[id$="ty"] {

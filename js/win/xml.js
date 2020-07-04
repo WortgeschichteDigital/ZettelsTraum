@@ -1287,26 +1287,34 @@ let xml = {
 		xml.bgSelSet();
 	},
 	// Bedeutungsgerüst: anderes Gerüst auswählen
-	bgSel () {
-		let reg = /gerüst (?<gn>[0-9]+)/.exec(document.getElementById("bg-sel-gr").value);
+	//   caller = String
+	//     (ID des Input-Feldes, das geändert wurde)
+	bgSel ({caller}) {
+		let reg = /gerüst (?<gn>[0-9]+)/.exec(document.getElementById(caller).value);
 		if (reg) {
 			xml.bgAkt = xml.data.xl.bg.findIndex(i => i.gn === reg.groups.gn);
+			// Update des anderen Input-Feldes
+			xml.bgSelSet();
+			// Update Wortinformationen TODO
+			// Update Bedeutungsgerüste
 			xml.bgNwTyReset();
 			xml.bgMakeXML();
 			xml.bgNwTfMake({key: "nw"});
 			xml.bgNwTfMake({key: "tf"});
 		}
 	},
-	// Bedeutungsgerüst: ID und Name des aktuellen Gerüsts in das Auswahlfeld
+	// Bedeutungsgerüst: ID und Name des aktuellen Gerüsts in die Auswahlfelder
 	bgSelSet () {
-		let sel = document.getElementById("bg-sel-gr"),
+		let selWi = document.getElementById("wi-sel-gr"),
+			selBg = document.getElementById("bg-sel-gr"),
 			val = "";
 		if (xml.data.xl.bg.length) {
 			const gn = xml.data.xl.bg[xml.bgAkt].gn,
 				na = xml.data.gerueste[gn] ? ` (${xml.data.gerueste[gn]})` : "";
 			val = `Bedeutungsgerüst ${gn}${na}`;
 		}
-		sel.value = val;
+		selWi.value = val;
+		selBg.value = val;
 	},
 	// Element erzeugen: Standard-Kopf
 	//   key = String
