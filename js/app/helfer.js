@@ -401,6 +401,7 @@ let helfer = {
 					return "ss";
 			}
 		});
+		prep = prep.replace(/[0-9]+/g, m => m.padStart(3, "0"));
 		helfer.sortAlphaPrepCache[s] = prep;
 		return prep;
 	},
