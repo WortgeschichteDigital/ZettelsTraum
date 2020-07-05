@@ -2184,7 +2184,7 @@ let xml = {
 	// Abschnitt/Textblock: Events an Element im Container anhängen
 	//   cont = Element
 	//     (.abschnitt-cont | .textblock-cont)
-	//   make = Boolean
+	//   make = true | undefined
 	//     (Events werden beim Erzeugen des Elements angehängt)
 	abtxEvents ({cont, make = false}) {
 		// Input-Felder
@@ -3060,10 +3060,14 @@ let xml = {
 		let key = kopf.dataset.key,
 			refreshKey = key,
 			slot = parseInt(kopf.dataset.slot, 10),
+			slotBlock = null,
 			slotOri = slot,
 			slotNeu = -1,
 			arr = [],
 			slotKlon;
+		if (kopf.dataset.slotBlock) {
+			slotBlock = parseInt(kopf.dataset.slotBlock, 10);
+		}
 		switch (key) {
 			case "re":
 				refreshKey = "md";
@@ -3077,6 +3081,10 @@ let xml = {
 		if (key === "re") {
 			arr = xml.data.xl.md.re;
 			slotKlon = {...arr[slot]};
+		} else if (/^(ab|tx)$/.test(key) &&
+				slotBlock !== null) {
+			arr = xml.data.xl[key][slot].ct;
+			slotKlon = {...arr[slotBlock]};
 		} else if (key === "wi") {
 			arr = xml.data.xl.wi[xml.bgAktGn];
 			slotKlon = {...arr[slot]};
@@ -3088,6 +3096,12 @@ let xml = {
 			slotKlon = {...arr[slot]};
 			if (key === "le") {
 				slotKlon.le = [...arr[slot].le];
+			} else if (/^(ab|tx)$/.test(key)) {
+				let ct = [];
+				for (let i of arr[slot].ct) {
+					ct.push({...i});
+				}
+				slotKlon.ct = ct;
 			}
 		}
 		// spezieller Verschiebeblocker für Wortinformationen
@@ -3107,15 +3121,30 @@ let xml = {
 			}
 		}
 		// Variablen ermitteln
-		if (dir === "up" &&
-				slot > 0 &&
-				!wiBlock.up) {
-			slotNeu = slot - 1;
-			slot++;
-		} else if (dir === "down" &&
-				slot  < arr.length - 1 &&
-				!wiBlock.down) {
-			slotNeu = slot + 2;
+		if (slotBlock !== null) {
+			const isUeberschrift = arr[slotBlock].it === "Überschrift";
+			if (dir === "up" &&
+					!isUeberschrift &&
+					slotBlock > 0 &&
+					arr[slotBlock - 1].it !== "Überschrift") {
+				slotNeu = slotBlock - 1;
+				slotBlock++;
+			} else if (dir === "down" &&
+					!isUeberschrift &&
+					slotBlock < arr.length - 1) {
+				slotNeu = slotBlock + 2;
+			}
+		} else {
+			if (dir === "up" &&
+					slot > 0 &&
+					!wiBlock.up) {
+				slotNeu = slot - 1;
+				slot++;
+			} else if (dir === "down" &&
+					slot  < arr.length - 1 &&
+					!wiBlock.down) {
+				slotNeu = slot + 2;
+			}
 		}
 		// Verschieben nicht möglich/nötig
 		if (slotNeu === -1) {
@@ -3152,14 +3181,38 @@ let xml = {
 		}
 		// Verschieben auf Datenebene
 		arr.splice(slotNeu, 0, slotKlon);
-		arr.splice(slot, 1);
-		xml.speichern();
+		if (slotBlock !== null) {
+			arr.splice(slotBlock, 1);
+		} else {
+			arr.splice(slot, 1);
+		}
 		// Verschieben auf Elementebene
-		let klon = kopf.cloneNode(true);
+		let klon = kopf.cloneNode(true),
+			next = kopf.nextSibling;
+		if (slotBlock !== null) {
+			koepfe = kopf.closest(".abschnitt-cont").querySelectorAll(".kopf");
+		}
 		kopf.parentNode.insertBefore(klon, koepfe[slotNeu]);
 		kopf.parentNode.removeChild(kopf);
-		xml.refreshSlots({key: refreshKey});
 		xml.elementKopfEvents({kopf: klon});
+		// Kopf von Abschnitt/Textblock: Verschieben des Content-Blocks
+		if (/^(ab|tx)$/.test(key)) {
+			let klonNext = next.cloneNode(true);
+			klon.parentNode.insertBefore(klonNext, klon.nextSibling);
+			klon.parentNode.removeChild(next);
+			xml.abtxEvents({cont: klonNext});
+			if (slotBlock === null) {
+				klonNext.querySelectorAll(".kopf").forEach(kopf => xml.elementKopfEvents( {kopf} ));
+			}
+		}
+		// Slots auffrischen
+		xml.refreshSlots({key: refreshKey});
+		// ggf. Levels auffrischen
+		if (/^(ab|tx)$/.test(key)) {
+			xml.refreshLevels({key, slot: -1});
+		}
+		// Daten speichern
+		xml.speichern();
 		// Verschiebepfeil im neuen Kopf fokussieren
 		const pfeilNr = dir === "up" ? 0 : 1;
 		klon.querySelectorAll(".pfeile a")[pfeilNr].focus();
@@ -3203,21 +3256,37 @@ let xml = {
 		kopf.nextSibling.classList.replace(`level-${level}`, `level-${levelNeu}`);
 		// automatische Korrekturen der folgenden Container,
 		// damit keine illegalen Löcher entstehen
-		let koepfe = document.querySelectorAll(`#${key} > .kopf`);
-		for (let i = slot + 1, len = arr.length; i < len; i++) {
-			const level = arr[i].le,
-				levelVor = arr[i - 1].le;
-			if (level <= levelVor) {
-				break;
-			}
-			if (level - levelVor > 1) {
-				arr[i].le = level - 1;
-				koepfe[i].classList.replace(`level-${level}`, `level-${level - 1}`);
-				koepfe[i].nextSibling.classList.replace(`level-${level}`, `level-${level - 1}`);
-			}
-		}
+		xml.refreshLevels({key, slot});
 		// Daten speichern
 		xml.speichern();
+	},
+	// illegale Einrückungen korrigieren
+	//   key = String
+	//     (ID des Containers, dessen Köpfe überprüft werden sollen)
+	//   slot = Number
+	//     (Slot, vor dem gestartet werden soll; also -1, wenn Start bei 0)
+	refreshLevels ({key, slot}) {
+		let koepfe = document.querySelectorAll(`#${key} > .kopf`),
+			arr = xml.data.xl[key];
+		for (let i = slot + 1, len = arr.length; i < len; i++) {
+			const level = arr[i].le;
+			if (i === 0) {
+				if (level > 1) {
+					arr[0].le = 1;
+					replaceLevel(koepfe[0], level);
+				}
+				continue;
+			}
+			const levelVor = arr[i - 1].le;
+			if (level - levelVor > 1) {
+				arr[i].le = level - 1;
+				replaceLevel(koepfe[i], level);
+			}
+		}
+		function replaceLevel (kopf, level) {
+			kopf.classList.replace(`level-${level}`, `level-${level - 1}`);
+			kopf.nextSibling.classList.replace(`level-${level}`, `level-${level - 1}`);
+		}
 	},
 	// Slotangaben bestehender Elemente nach Änderungsoperationen auffrischen
 	//   key = String
@@ -3236,9 +3305,12 @@ let xml = {
 			for (let i = 0, len = koepfe.length; i < len; i++) {
 				koepfe[i].dataset.slot = i;
 				let subKoepfe = koepfe[i].nextSibling.querySelectorAll(".kopf");
-				for (let kopf of subKoepfe) {
-					kopf.dataset.slot = i;
-					kopf.nextSibling.querySelector(".pre-cont").dataset.slot = i;
+				for (let j = 0, len = subKoepfe.length; j < len; j++) {
+					subKoepfe[j].dataset.slot = i;
+					subKoepfe[j].dataset.slotBlock = j;
+					let pre = subKoepfe[j].nextSibling.querySelector(".pre-cont");
+					pre.dataset.slot = i;
+					pre.dataset.slotBlock = j;
 				}
 			}
 		} else if (key === "bl") {
