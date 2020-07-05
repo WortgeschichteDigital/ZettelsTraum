@@ -94,10 +94,14 @@ let xml = {
 						continue;
 					} else if (c.nodeType === 1 &&
 							c.nodeName === "MARK") {
-						if (c.classList.contains("user") || c.classList.contains("markierung")) {
+						// wenn man in den Formvarianten Mehrwortausdrücken als Wort
+						// aufnimmt, kann es zu Verschachtelungen kommen
+						const verschachtelt = c.parentNode.closest("mark");
+						if (!verschachtelt &&
+								(c.classList.contains("user") || c.classList.contains("markierung"))) {
 							text += `<Markierung>`;
 							close = "</Markierung>";
-						} else {
+						} else if (!verschachtelt) {
 							text += "<Stichwort>";
 							close = "</Stichwort>";
 						}
