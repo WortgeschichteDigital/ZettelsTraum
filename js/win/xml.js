@@ -2420,6 +2420,7 @@ let xml = {
 				}
 			} else {
 				xml.data.xl[key].splice(slot, 1);
+				xml.refreshLevels({key, slot: slot - 1});
 			}
 			// Slot-Datasets anpassen
 			xml.refreshSlots({key, abschnitt});
