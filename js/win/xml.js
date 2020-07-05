@@ -398,16 +398,6 @@ let xml = {
 					val = id;
 					this.value = id;
 				}
-			} else if (key === "ty" &&
-					!xml.dropdown.artikelTypen.includes(val)) {
-				this.value = "";
-				const typen = xml.typen({key: "artikelTypen"});
-				dialog.oeffnen({
-					typ: "alert",
-					text: `Als Artikeltyp sind nur ${typen} erlaubt.`,
-					callback: () => this.focus(),
-				});
-				return;
 			}
 			// Speichern
 			xml.data.xl.md[key] = val;
@@ -420,7 +410,7 @@ let xml = {
 			ty = document.getElementById("le-ty"),
 			re = document.getElementById("le-re"),
 			leVal = le.value ? le.value.split(/\//) : [],
-			tyVal = ty.value.trim(),
+			tyVal = ty.value,
 			reVal = re.value.trim();
 		for (let i = 0, len = leVal.length; i < len; i++) {
 			leVal[i] = helfer.textTrim(leVal[i], true);
@@ -455,15 +445,6 @@ let xml = {
 			dialog.oeffnen({
 				typ: "alert",
 				text: "Sie haben keinen Typ angegeben.",
-				callback: () => ty.select(),
-			});
-			return;
-		}
-		if (!xml.dropdown.lemmaTypen.includes(tyVal)) {
-			const typen = xml.typen({key: "lemmaTypen"});
-			dialog.oeffnen({
-				typ: "alert",
-				text: `Als Typen sind nur ${typen} vorgesehen.`,
 				callback: () => ty.select(),
 			});
 			return;
@@ -856,16 +837,7 @@ let xml = {
 			return;
 		}
 		// Typ ermitteln
-		let tyVal = ty.value.trim();
-		if (!xml.dropdown.nachweisTypen.includes(tyVal)) {
-			let typen = xml.typen({key: "nachweisTypen"});
-			dialog.oeffnen({
-				typ: "alert",
-				text: `Als Nachweis-Typen stehen nur ${typen} zur Verfügung.`,
-				callback: () => ty.select(),
-			});
-			return;
-		}
+		let tyVal = ty.value;
 		// Formular auslesen, validieren und XML erstellen
 		let xmlStr = "";
 		if (tyVal === "Literatur") {
@@ -2007,17 +1979,7 @@ let xml = {
 	//   input = Element
 	//     (das Textfeld mit dem Textblocktyp)
 	textblockAdd ({input}) {
-		const typ = helfer.textTrim(input.value, true);
-		// korrekter Typ?
-		if (!xml.dropdown.abschnittBloecke.includes(typ)) {
-			const typen = xml.typen({key: "abschnittBloecke"});
-			dialog.oeffnen({
-				typ: "alert",
-				text: `Als Block-Typen stehen nur ${typen} zur Verfügung.`,
-				callback: () => input.select(),
-			});
-			return;
-		}
+		const typ = input.value;
 		// Textfeld zurücksetzen
 		input.value = "Textblock";
 		// Key und Slot ermitteln
@@ -3226,17 +3188,6 @@ let xml = {
 		}
 		arr.sort(helfer.sortAlpha);
 		return arr;
-	},
-	// trägt mögliche Typen in Formularen zusammen und formatiert sie schön
-	//   key = String
-	//     (Name des Typs);
-	typen ({key}) {
-		let typen = [...xml.dropdown[key]];
-		typen.forEach((i, n) => typen[n] = `„${i}“`);
-		const text = typen.join(", ");
-		return text.replace(/(.+), (.+)/, (m, p1, p2) => {
-			return `${p1} und ${p2}`;
-		});
 	},
 	// Änderungen in der Kartei speichern
 	speichern () {
