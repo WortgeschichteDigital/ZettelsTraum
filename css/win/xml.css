@@ -558,8 +558,7 @@ p.leer {
 	margin-bottom: 0;
 }
 
-.abschnitt-cont [id$="-id"],
-.textblock-cont [id$="-id"] {
+.abschnitt-cont [id$="-id"] {
 	margin-right: 10px;
 	width: 300px;
 }
@@ -567,6 +566,11 @@ p.leer {
 .textblock-cont [id$="-id"] {
 	margin-left: 39px;
 	width: 261px;
+}
+
+.textblock-cont [id$="-ty"] {
+	margin-left: 39px;
+	width: 125px;
 }
 
 .abschnitt-cont .dropdown-feld,

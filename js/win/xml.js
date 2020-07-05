@@ -20,7 +20,8 @@ let xml = {
 		artikelTypen: ["Vollartikel", "Überblicksartikel"],
 		lemmaTypen: ["Hauptlemma", "Nebenlemma"],
 		abschnittTypen: ["Mehr erfahren"],
-		abschnittBloecke: ["Überschrift", "Textblock", "Blockzitat", "Illustration"],
+		abschnittBloecke: ["Überschrift", "Textblock", "Blockzitat", "Liste", "Illustration"],
+		listenTypen: ["Punkte", "Ziffern"],
 		nachweisTypen: ["Literatur", "Link"],
 	},
 	// Dropdown: Referenzen zusammentragen
@@ -1499,6 +1500,10 @@ let xml = {
 					// display: inline bleiben muss, damit die Textellipse schön funktioniert
 					// darum hier lieber kein display: block + margin.
 					b.textContent = "Blockzitat  ";
+				} else if (xml.data.xl[key][slot].ct[slotBlock].it === "Liste") {
+					let b = document.createElement("b");
+					vorschau.appendChild(b);
+					b.textContent = "Liste  ";
 				}
 			} else if (key === "bl") {
 				let belegtext = xml.data.xl.bl[slot].xl.match(/<Belegtext>(.+?)<\/Belegtext>/s);
@@ -2006,6 +2011,8 @@ let xml = {
 		};
 		if (typ === "Textblock") {
 			data.id = "";
+		} else if (typ === "Liste") {
+			data.ty = xml.dropdown.listenTypen[0];
 		}
 		let slotBlock = -1;
 		if (typ === "Überschrift") {
@@ -2062,18 +2069,34 @@ let xml = {
 			cont: element.closest(".abschnitt-cont"),
 		});
 		// Formular
-		if (xml.data.xl[key][slot].ct[slotBlock].it === "Textblock") {
+		if (/^(Textblock|Liste)$/.test(xml.data.xl[key][slot].ct[slotBlock].it)) {
 			let p = document.createElement("p");
 			div.appendChild(p);
-			p.classList.add("dropdown-cont", "input-text");
-			// ID-Feld
-			let id = document.createElement("input");
-			p.appendChild(id);
-			id.id = `textblock-${xml.counter.next().value}-id`;
-			id.placeholder = "Textblock-ID";
-			id.type = "text";
-			id.value = xml.data.xl[key][slot].ct[slotBlock].id;
-			xml.abtxChange({ele: id});
+			p.classList.add("input-text");
+			if (xml.data.xl[key][slot].ct[slotBlock].it === "Textblock") {
+				// ID-Feld
+				let id = document.createElement("input");
+				p.appendChild(id);
+				id.id = `textblock-${xml.counter.next().value}-id`;
+				id.placeholder = "Textblock-ID";
+				id.type = "text";
+				id.value = xml.data.xl[key][slot].ct[slotBlock].id;
+			} else {
+				// Typ-Feld
+				p.classList.add("dropdown-cont");
+				let typ = document.createElement("input");
+				p.appendChild(typ);
+				typ.classList.add("dropdown-feld");
+				typ.id = `textblock-${xml.counter.next().value}-ty`;
+				typ.title = "Listen-Typ auswählen";
+				typ.type = "text";
+				typ.value = xml.data.xl[key][slot].ct[slotBlock].ty;
+				typ.setAttribute("readonly", "true");
+				dropdown.feld(typ);
+				let a = dropdown.makeLink("dropdown-link-element", "Listen-Typ auswählen", true);
+				p.appendChild(a);
+			}
+			xml.abtxChange({ele: p.firstChild});
 		}
 		// Textfeld erzeugen
 		xml.preview({
@@ -2135,10 +2158,24 @@ let xml = {
 		if (xml.data.xl[key][slot].ct[slotBlock].id) {
 			attr.push(`xml:id="${xml.data.xl[key][slot].ct[slotBlock].id}"`);
 		}
+		if (xml.data.xl[key][slot].ct[slotBlock].ty) {
+			attr.push(`Typ="${xml.data.xl[key][slot].ct[slotBlock].ty}"`);
+		}
 		// XML-String anpassen
 		const rootEle = xml.data.xl[key][slot].ct[slotBlock].it.replace(/^Ü/, "Ue"),
 			rootEleStart = `<${rootEle}${attr.length ? " " + attr.join(" ") : ""}>`;
 		if (!new RegExp(`^<${rootEle}`).test(xmlStr)) {
+			if (xml.data.xl[key][slot].ct[slotBlock].it === "Liste") {
+				let listenpunkte = [];
+				xmlStr.split(/\n/).forEach(i => {
+					i = helfer.textTrim(i, true);
+					if (!i) {
+						return;
+					}
+					listenpunkte.push(`  <Listenpunkt>${i}</Listenpunkt>`);
+				});
+				xmlStr = "\n" + listenpunkte.join("\n") + "\n";
+			}
 			xmlStr = `${rootEleStart}${xmlStr}</${rootEle}>`;
 		} else {
 			xmlStr = xmlStr.replace(/^<.+?>/, rootEleStart);
@@ -2205,11 +2242,13 @@ let xml = {
 				const slotBlock = parseInt(kopfBlock.dataset.slotBlock, 10);
 				xml.data.xl[key][slot].ct[slotBlock][feld] = val;
 				// Kopf anpassen
-				let kopfNeu = xml.elementKopf({key, slot, slotBlock, textKopf: "textblock"});
-				kopfBlock.parentNode.replaceChild(kopfNeu, kopfBlock);
-				xml.checkAbschnitt({
-					cont: abschnitt,
-				});
+				if (feld === "id") {
+					let kopfNeu = xml.elementKopf({key, slot, slotBlock, textKopf: "textblock"});
+					kopfBlock.parentNode.replaceChild(kopfNeu, kopfBlock);
+					xml.checkAbschnitt({
+						cont: abschnitt,
+					});
+				}
 				// XML-String auffrischen
 				const xmlStr = xml.textblockXmlStr({xmlStr: null, key, slot, slotBlock});
 				// Pre zurücksetzen

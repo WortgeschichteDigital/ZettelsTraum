@@ -322,6 +322,8 @@ let dropdown = {
 			dropdown.data = [...xml.dropdown.abschnittTypen];
 		} else if (/^textblock-add/.test(feld_id)) {
 			dropdown.data = [...xml.dropdown.abschnittBloecke];
+		} else if (/^textblock-[0-9]+-ty$/.test(feld_id)) {
+			dropdown.data = [...xml.dropdown.listenTypen];
 		} else if (feld_id === "nw-ty") {
 			dropdown.data = [...xml.dropdown.nachweisTypen];
 		} else if (feld_id === "nw-lit-si") {
