@@ -1884,8 +1884,7 @@ let xml = {
 		id.placeholder = "Abschnitt-ID";
 		id.type = "text";
 		id.value = xml.data.xl[key][slot].id;
-		xml.abtxChange({ele: id});
-		// Abschnitt-Typ-Feld
+		// Abschnitttyp-Feld
 		let typ = document.createElement("input");
 		p.appendChild(typ);
 		typ.classList.add("dropdown-feld");
@@ -1893,11 +1892,9 @@ let xml = {
 		typ.placeholder = "Abschnitt-Typ";
 		typ.type = "text";
 		typ.value = xml.data.xl[key][slot].ty;
-		dropdown.feld(typ);
 		let aTyp = dropdown.makeLink("dropdown-link-element", "Abschnitt-Typ auswählen", true);
 		p.appendChild(aTyp);
-		xml.abtxChange({ele: typ});
-		// Block-Typ-Feld
+		// Blocktyp-Feld
 		let span = document.createElement("span");
 		p.appendChild(span);
 		span.classList.add("dropdown-cont");
@@ -1913,17 +1910,6 @@ let xml = {
 			add.value = "Überschrift";
 		}
 		add.placeholder = "Block-Typ";
-		dropdown.feld(add);
-		add.addEventListener("keydown", function(evt) {
-			tastatur.detectModifiers(evt);
-			if (!tastatur.modifiers &&
-					evt.key === "Enter" &&
-					!document.getElementById("dropdown")) {
-				setTimeout(() => { // ohne Timeout bekommt man direkt einen Zeilenumbruch im Textfeld
-					xml.textblockAdd({input: this});
-				}, 25);
-			}
-		});
 		if (!restore) {
 			add.select();
 		}
@@ -1935,11 +1921,8 @@ let xml = {
 		a.classList.add("icon-link", "icon-plus-dick");
 		a.href = "#";
 		a.textContent = " ";
-		a.addEventListener("click", function(evt) {
-			evt.preventDefault();
-			let input = this.parentNode.querySelector("input");
-			xml.textblockAdd({input});
-		});
+		// Events anhängen
+		xml.abtxEvents({cont: div, make: true});
 		// Layout der Köpfe anpassen
 		let layout = {
 			id: key,
@@ -2107,11 +2090,9 @@ let xml = {
 				typ.type = "text";
 				typ.value = xml.data.xl[key][slot].ct[slotBlock].ty;
 				typ.setAttribute("readonly", "true");
-				dropdown.feld(typ);
 				let a = dropdown.makeLink("dropdown-link-element", "Listen-Typ auswählen", true);
 				p.appendChild(a);
 			}
-			xml.abtxChange({ele: p.firstChild});
 		}
 		// Textfeld erzeugen
 		xml.preview({
@@ -2129,6 +2110,8 @@ let xml = {
 				cont: div.lastChild,
 			});
 		}
+		// Events anhängen
+		xml.abtxEvents({cont: div, make: true});
 		// Layout der Köpfe anpassen
 		let layout = {
 			id: key,
@@ -2197,6 +2180,69 @@ let xml = {
 		}
 		// Ergebnis auswerfen
 		return xmlStr;
+	},
+	// Abschnitt/Textblock: Events an Element im Container anhängen
+	//   cont = Element
+	//     (.abschnitt-cont | .textblock-cont)
+	//   make = Boolean
+	//     (Events werden beim Erzeugen des Elements angehängt)
+	abtxEvents ({cont, make = false}) {
+		// Input-Felder
+		cont.querySelectorAll("input").forEach(i => {
+			// Abschnitt: ID-Feld | Abschnitttyp-Feld
+			// Textblock: ID-Feld | Typ-Feld
+			if (/^(abschnitt|textblock)-[0-9]+-(id|ty)$/.test(i.id)) {
+				xml.abtxChange({ele: i});
+			}
+			// Abschnitt: Blocktyp-Feld
+			else if (/^textblock-add-/.test(i.id)) {
+				i.addEventListener("keydown", function(evt) {
+					tastatur.detectModifiers(evt);
+					if (!tastatur.modifiers &&
+							evt.key === "Enter" &&
+							!document.getElementById("dropdown")) {
+						setTimeout(() => { // ohne Timeout bekommt man direkt einen Zeilenumbruch im Textfeld
+							xml.textblockAdd({input: this});
+						}, 25);
+					}
+				});
+			}
+		});
+		// Abschnitt: Add-Link
+		/* jshint ignore:start */
+		cont.querySelector(".icon-plus-dick")?.addEventListener("click", function(evt) {
+			evt.preventDefault();
+			let input = this.parentNode.querySelector("input");
+			xml.textblockAdd({input});
+		});
+		/* jshint ignore:end */
+		// Dropdown-Felder
+		cont.querySelectorAll(".dropdown-feld").forEach(i => dropdown.feld(i));
+		// Dropdown-Links
+		if (!make) {
+			cont.querySelectorAll(".dropdown-link-element").forEach(i => dropdown.link(i));
+		}
+		if (!make) {
+			// XML-Vorschau
+			cont.querySelectorAll("pre").forEach(pre => {
+				xml.editPreDbl({pre});
+				let next = pre.nextSibling;
+				if (next) {
+					next.firstChild.addEventListener("click", function() {
+						xml.edit({
+							cont: this.closest(".pre-cont"),
+						});
+					});
+				}
+			});
+			// XML-Bearbeitung
+			cont.querySelectorAll("textarea").forEach(ta => {
+				xml.editTaEvents({ta});
+				ta.closest(".pre-cont").querySelectorAll("p input").forEach(button => {
+					xml.editSpeichern({button});
+				});
+			});
+		}
 	},
 	// Abschnitt/Textblock: Anzeige der Blöcke in Abstract und Text umschalten
 	//   div = Element
@@ -2508,31 +2554,6 @@ let xml = {
 		} else {
 			ta.value = xml.data.xl[key][slot].xl;
 		}
-		ta.addEventListener("input", function() {
-			this.dataset.geaendert = "true";
-			helfer.textareaGrow(this, 0);
-		});
-		if (slotBlock !== null) {
-			ta.addEventListener("paste", function() {
-				// Zeitverzögerung, sonst ist das Feld noch leer
-				// und es kann nichts ausgelesen werden
-				setTimeout(() => {
-					let val = this.value;
-					// Zeilenumbrüche aus Überschriften entfernen (wenn noch keine Tags drin sind)
-					if (xml.data.xl[key][slot].ct[slotBlock].it === "Überschrift" &&
-							!/<.+?>/.test(val)) {
-						val = val.replace(/\n/g, " ");
-					}
-					// Text trimmen
-					val = helfer.textTrim(val, true);
-					// Auto-Tagger aufrufen
-					const blockzitat = xml.data.xl[key][slot].ct[slotBlock].it === "Blockzitat" ? true : false;
-					this.value = xml.editAutoTagger({str: val, blockzitat});
-					// Formularhöhe anpassen
-					helfer.textareaGrow(this, 0);
-				}, 25);
-			});
-		}
 		// Element einhängen und fokussieren
 		cont.replaceChild(div, cont.firstChild);
 		helfer.textareaGrow(ta, 0);
@@ -2540,6 +2561,8 @@ let xml = {
 			ta.setSelectionRange(0, 0); // an die oberste Position
 			ta.focus();
 		}
+		// Events anhängen
+		xml.editTaEvents({ta});
 		// Button-Leiste auffrischen
 		let p = cont.lastChild;
 		helfer.keineKinder(p);
@@ -2551,6 +2574,39 @@ let xml = {
 			button.value = b;
 			xml.editSpeichern({button});
 		}
+	},
+	// XML-Vorschau: Events für Textarea
+	editTaEvents ({ta}) {
+		ta.addEventListener("input", function() {
+			this.dataset.geaendert = "true";
+			helfer.textareaGrow(this, 0);
+		});
+		if (!ta.closest(".pre-cont").dataset.slotBlock) {
+			return;
+		}
+		ta.addEventListener("paste", function() {
+			// Zeitverzögerung, sonst ist das Feld noch leer
+			// und es kann nichts ausgelesen werden
+			setTimeout(() => {
+				let val = this.value,
+					cont = ta.closest(".pre-cont"),
+					key = cont.dataset.key,
+					slot = parseInt(cont.dataset.slot, 10),
+					slotBlock = parseInt(cont.dataset.slotBlock, 10);
+				// Zeilenumbrüche aus Überschriften entfernen (wenn noch keine Tags drin sind)
+				if (xml.data.xl[key][slot].ct[slotBlock].it === "Überschrift" &&
+						!/<.+?>/.test(val)) {
+					val = val.replace(/\n/g, " ");
+				}
+				// Text trimmen
+				val = helfer.textTrim(val, true);
+				// Auto-Tagger aufrufen
+				const blockzitat = xml.data.xl[key][slot].ct[slotBlock].it === "Blockzitat" ? true : false;
+				this.value = xml.editAutoTagger({str: val, blockzitat});
+				// Formularhöhe anpassen
+				helfer.textareaGrow(this, 0);
+			}, 25);
+		});
 	},
 	// XML-Vorschau: Doppelklick zum Bearbeiten einer Vorschau
 	//   pre = Element
