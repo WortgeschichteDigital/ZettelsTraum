@@ -100,9 +100,9 @@ let xml = {
 						continue;
 					} else if (c.nodeType === 1 &&
 							c.nodeName === "MARK") {
-						if (/wortFarbe[0-9]+/.test(c.getAttribute("class"))) {
-							text += `<erwaehntes_Zeichen>`;
-							close = "</erwaehntes_Zeichen>";
+						if (c.classList.contains("user") || c.classList.contains("markierung")) {
+							text += `<Markierung>`;
+							close = "</Markierung>";
 						} else {
 							text += "<Stichwort>";
 							close = "</Stichwort>";
@@ -110,7 +110,7 @@ let xml = {
 					} else if (c.nodeType === 1 &&
 							!c.classList.contains("annotierung-wort")) {
 						// visuelle Textauszeichnung
-						// @Stil: hier können alle @rendition des DTA rein
+						// @Stil: hier können (fast) alle @rendition des DTA rein
 						let stil = xml.stil(c);
 						if (stil) {
 							text += `<Hervorhebung Stil="${stil}">`;

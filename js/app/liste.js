@@ -997,12 +997,14 @@ let liste = {
 			return schnitt;
 		}
 		let farbe = 0,
+			nurMarkieren = false,
 			regNoG = null;
 		for (let i of helfer.formVariRegExpRegs) {
 			if (keinNurMarkieren && data.fv[i.wort].ma) {
 				continue;
 			}
 			farbe = data.fv[i.wort].fa;
+			nurMarkieren = data.fv[i.wort].ma;
 			let reg;
 			if (!data.fv[i.wort].tr) {
 				reg = new RegExp(`(?<vorWort>^|[${helfer.ganzesWortRegExp.links}])(?<wort>${i.reg})(?<nachWort>$|[${helfer.ganzesWortRegExp.rechts}])`, "gi");
@@ -1051,6 +1053,10 @@ let liste = {
 			if (farbe) {
 				m = m.replace(/class="wort/g, `class="wort wortFarbe${farbe}`);
 			}
+			// ggf. die Markierungsinfo eintragen (wichtig für XML-Export)
+			if (nurMarkieren) {
+				m = m.replace(/class="wort/g, `class="wort markierung`);
+			}
 			// bei nicht trunkierter Markierung Zeichen links und rechts der Markierung ergänzen
 			if (r) {
 				return `${r.groups.vorWort}${m}${r.groups.nachWort}`;
@@ -1082,7 +1088,7 @@ let liste = {
 		if (marks.length === transparent) {
 			return false;
 		}
-		// Test 3: Ist das Karteiwort mehrgliedrig? Wenn nein => 
+		// Test 3: Ist das Karteiwort mehrgliedrig?
 		if (helfer.formVariRegExpRegs.length === 1) {
 			if (data.fv[helfer.formVariRegExpRegs[0].wort].ma) {
 				return false; // nicht okay (das Wort soll nur markiert, aber nicht berücksichtigt werden)

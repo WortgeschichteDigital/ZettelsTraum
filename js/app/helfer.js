@@ -343,7 +343,7 @@ let helfer = {
 		let cont = document.createElement("div");
 		cont.innerHTML = html;
 		// Hervorhebungen, die standardmäßig gelöscht gehören
-		let marks = [".suche", ".suchleiste", ".user", ".farbe0 .wort"];
+		let marks = [".suche", ".suchleiste", ".farbe0 .user", ".farbe0 .wort"];
 		helfer.clipboardHtmlErsetzen(cont, marks.join(", "));
 		// Ergebnis der Aufbereitung zurückggeben
 		return cont.innerHTML;
