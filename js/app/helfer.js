@@ -655,10 +655,20 @@ let helfer = {
 	// regulären Ausdruck mit allen Formvarianten erstellen
 	formVariRegExp () {
 		helfer.formVariRegExpRegs = [];
-		for (let wort in data.fv) {
-			if (!data.fv.hasOwnProperty(wort)) {
-				continue;
+		// Wörter sammlen
+		// ("Wörter" mit Leerzeichen müssen als erstes markiert werden,
+		// darum an den Anfang sortieren)
+		let woerter = Object.keys(data.fv);
+		woerter.sort((a, b) => {
+			if (/\s/.test(a)) {
+				return -1;
+			} else if (/\s/.test(b)) {
+				return 1;
 			}
+			return 0;
+		});
+		// RegExp erstellen
+		for (let wort of woerter) {
 			// Wort soll nicht berücksichtigt werden
 			if (!data.fv[wort].an) {
 				continue;
