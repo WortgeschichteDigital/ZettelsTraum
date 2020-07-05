@@ -680,10 +680,13 @@ let liste = {
 			zuletzt_gekuerzt = false;
 			// ggf. Trennungszeichen entfernen
 			p_prep[i] = liste.belegTrennungWeg(p_prep[i], false);
+			// ggf. Wort hervorheben
+			p_prep[i] = liste.belegWortHervorheben(p_prep[i], false);
 			// ggf. Klammerungen markieren
 			p_prep[i] = liste.belegKlammernHervorheben({text: p_prep[i]});
+			// ggf. Suchtreffer hervorheben
+			p.innerHTML = liste.suchtreffer(p_prep[i], "bs", id);
 			// Absatz normal einhängen
-			p.innerHTML = liste.suchtreffer(liste.belegWortHervorheben(p_prep[i], false), "bs", id);
 			annotieren.init(p);
 		}
 		// <div> zurückgeben
@@ -735,14 +738,14 @@ let liste = {
 			p.dataset.id = id;
 			if (id) {
 				text = liste.belegTrennungWeg(text, false);
-				text = liste.belegKlammernHervorheben({text});
-				p.innerHTML = liste.belegWortHervorheben(text, false);
+				text = liste.belegWortHervorheben(text, false);
+				p.innerHTML = liste.belegKlammernHervorheben({text});
 			} else {
 				if (!optionen.data.beleg.trennung) {
 					text = liste.belegTrennungWeg(text, true);
 				}
-				text = liste.belegKlammernHervorheben({text});
-				p.innerHTML = liste.belegWortHervorheben(text, true);
+				text = liste.belegWortHervorheben(text, true);
+				p.innerHTML = liste.belegKlammernHervorheben({text});
 			}
 			annotieren.init(p);
 			// neuen Absatz einhängen

@@ -564,12 +564,18 @@ let stamm = {
 	ergaenzenVariante (va) {
 		// Varianten ergänzen, schon vorhandene übergehen
 		let fo = data.fv[stamm.wortAkt].fo,
-			varianten = va.split(/\s/),
+			varianten = [],
 			schon = [];
-		varianten.forEach(v => {
-			if (!v) { // zur Sicherheit
-				return;
+		va = va.replace(/"(.+)"/, (m, p1) => {
+			varianten.push(p1);
+			return "";
+		});
+		va.split(/[\s_]/).forEach(i => {
+			if (i) {
+				varianten.push(i);
 			}
+		});
+		varianten.forEach(v => {
 			const vLower = v.toLowerCase();
 			if (fo.find(i => i.va === vLower)) {
 				schon.push(v);
@@ -853,10 +859,20 @@ let stamm = {
 	//   str = String
 	//     (enthält das Wort oder die Wörter)
 	dtaPrepParole (str) {
-		let wort = str.replace(/[!?.:,;"'§$%&/\\=*+~#()[\]{}<>]+/g, "");
+		let wort = str.replace(/[!?.:,;'§$%&/\\=*+~#()[\]{}<>]+/g, "");
 		wort = helfer.textTrim(wort, true);
-		let woerter = wort.split(/\s|_/);
-		return [...new Set(woerter)];
+		let woerter = new Set();
+		wort = wort.replace(/"(.+)"/, (m, p1) => {
+			woerter.add(p1);
+			return "";
+		});
+		wort = wort.replace(/"/, ""); // vereinzeltes Anführungszeichen ggf. weg
+		wort.split(/[\s_]/).forEach(i => {
+			if (i) {
+				woerter.add(i);
+			}
+		});
+		return [...woerter];
 	},
 	// Request an das DTA schicken, um an die Formvarianten zu kommen
 	//   wort = String

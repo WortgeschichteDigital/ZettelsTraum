@@ -5,7 +5,7 @@ let anhaenge = {
 	data: {},
 	// scannt die übergebenen Anhänge und trägt das Ergebnis
 	// in anhaenge.data ein
-	//   an = Array/String
+	//   an = Array | String
 	//     (Anhang oder Liste von Anhängen, die gescannt werden sollen)
 	scan (an) {
 		return new Promise(async resolve => {
@@ -30,11 +30,11 @@ let anhaenge = {
 					const path = require("path");
 					let pfad = datei;
 					if (!path.isAbsolute(datei)) {
-						pfad = `${path.parse(kartei.pfad).dir}/${datei}`;
+						pfad = `${path.parse(kartei.pfad).dir}${path.sep}${datei}`;
 					}
 					const exists = await helfer.exists(pfad);
 					anhaenge.data[datei] = {
-						exists: exists,
+						exists,
 						path: pfad,
 						ext: path.parse(pfad).ext,
 					};
@@ -77,12 +77,13 @@ let anhaenge = {
 		".ppt": "datei-praes.svg",
 		".pptx": "datei-praes.svg",
 		".rar": "datei-archiv.svg",
+		".rtf": "datei-doc.svg",
 		".txt": "datei-txt.svg",
 		".ztj": "datei-ztj.svg",
 		".xml": "datei-xml.svg",
 		".zip": "datei-archiv.svg",
 	},
-	// passendes Icon zum anhang ermitteln
+	// passendes Icon zum Anhang ermitteln
 	//   an = string
 	//     (Datei, wie sie sich in anhaenge.data findet)
 	getIcon (an) {
@@ -95,12 +96,12 @@ let anhaenge = {
 		return "img/datei.svg";
 	},
 	// Liste von Icons erstellen, die einzeln angeklickt werden können
-	//   arr = Array/null
+	//   arr = Array | null
 	//     (Array mit allen Dateien, für die Icons erstellt werden sollen;
 	//     steht der Wert auf null, soll nur die Liste gelöscht werden)
 	//   ziel = Element
 	//     (Element, in das die Iconliste eingetragen werden soll)
-	//   scan = true || undefined
+	//   scan = true | undefined
 	//     (die übergebene Anhängeliste sollte zunächst gescannt werden)
 	async makeIconList (arr, ziel, scan = false) {
 		helfer.keineKinder(ziel);
@@ -151,7 +152,7 @@ let anhaenge = {
 	//   obj = String
 	//     (verweist auf das Objekt, in dem die Anhänge gespeichert werden;
 	//     Werte durch Haarstrich getrennt)
-	//   leeren = false || undefined
+	//   leeren = false | undefined
 	//     (der Content soll geleert werden)
 	auflisten (cont, obj, leeren = true) {
 		return new Promise(async resolve => {
@@ -248,7 +249,7 @@ let anhaenge = {
 	// Öffnet die übergebene Datei
 	//   datei = "String"
 	//     (Datei, die geöffnet werden soll)
-	//   ordner = true || undefined
+	//   ordner = true | undefined
 	//     (Dateiordner im Filemanager öffnen)
 	async oeffnen (datei, ordner = false) {
 		if (!anhaenge.data[datei].exists) {
@@ -381,8 +382,12 @@ let anhaenge = {
 	},
 	// Anhang hinzufügen
 	//   input = Element
-	//     (Add-Button zum Hinzufügen eines Anhangs)
+	//     (Add-Button zum Hinzufügen von Anhängen)
 	add (input) {
+		if (input.value === "Auto-Ergänzen") {
+			input.addEventListener("click", () => anhaenge.addAuto({fenster: true}));
+			return;
+		}
 		input.addEventListener("click", async function() {
 			// Optionen für Dateidialog
 			let opt = {
@@ -470,6 +475,135 @@ let anhaenge = {
 		await anhaenge.auflisten(cont, obj);
 		// ggf. Liste der Anhänge in den Belegen neu aufbauen
 		if (cont.dataset.anhaenge === "kartei") {
+			anhaenge.auflistenBelege(cont);
+		}
+		// Erinnerungen auffrischen
+		erinnerungen.check();
+	},
+	// automatisch alle Dateien im Kartei-Verzeichnis hinzufügen
+	//   fenster = Boolean
+	//     (die Funktion wurde aus dem Anhänge-Fenster heraus aufgerufen)
+	async addAuto ({fenster}) {
+		// Kartei noch nicht gespeichert
+		if (!kartei.pfad) {
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Sie müssen die Kartei erst speichern.",
+			});
+			return;
+		}
+		// Ordner auslesen, Dateien sammeln
+		const path = require("path"),
+			fsP = require("fs").promises;
+		let reg = new RegExp(`.+${path.sep}`),
+			ordner = kartei.pfad.match(reg)[0],
+			dateienA = [];
+		const ausgelesen = await new Promise(async resolve => {
+			try {
+				let files = await fsP.readdir(ordner);
+				for (let f of files) {
+					const pfad = path.join(ordner, f);
+					let stats = await fsP.lstat(pfad);
+					if (!stats.isDirectory() &&
+							!/^(~\$|\.)|\.(bak|ztj)$/.test(f)) {
+						dateienA.push(f);
+					}
+				}
+				resolve(true);
+			} catch (err) { // Auslesen des Ordners fehlgeschlagen
+				dialog.oeffnen({
+					typ: "alert",
+					text: `Beim Auslesen des Karteiordners ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.message}</p>`,
+				});
+				resolve(false);
+			}
+		});
+		if (!ausgelesen) {
+			return;
+		}
+		// keine Dateien gefunden
+		if (!dateienA.length) {
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Im Karteiordner wurden keine Dateien zum Anhängen gefunden.",
+			});
+			return;
+		}
+		// Dateien sortieren
+		let gruppen = {
+			// XML
+			"xml": 10,
+			// Office-Dokumente
+			"doc": 9,
+			"docx": 9,
+			"odt": 9,
+			"rtf": 9,
+			// Text-Dateien
+			"pdf": 8,
+			"txt": 8,
+			// Bilder
+			"gif": 7,
+			"jpeg": 7,
+			"jpg": 7,
+			"png": 7,
+			// Sonstiges
+			"gz": 2,
+			"htm": 2,
+			"html": 2,
+			"odp": 2,
+			"ppt": 2,
+			"pptx": 2,
+			"rar": 2,
+			"zip": 2,
+		};
+		dateienA.sort((a, b) => {
+			let extA = a.match(/[^.]+$/),
+				extB = b.match(/[^.]+$/),
+				wertA = extA && gruppen[extA[0]] ? gruppen[extA[0]] : 1,
+				wertB = extB && gruppen[extB[0]] ? gruppen[extB[0]] : 1;
+			// nach Typ sortieren
+			if (wertA !== wertB) {
+				return wertB - wertA;
+			}
+			// alphabetisch sortieren
+			let arr = [a, b];
+			arr.sort(helfer.sortAlpha);
+			if (arr[0] === a) {
+				if (wertA === 9) { // Office-Dokumente reverse
+					return 1;
+				}
+				return -1;
+			}
+			if (wertA === 9) { // Office-Dokumente reverse
+				return -1;
+			}
+			return 1;
+		});
+		// weitere Dateien ermitteln
+		let dateienB = [];
+		for (let i of data.an) {
+			if (/[/\\]/.test(i)) {
+				dateienB.push(i);
+			}
+		}
+		// Änderungen nötig?
+		let dateien = dateienA.concat(dateienB);
+		if (dateien.join() === data.an.join()) {
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Die Dateien aus dem Karteiordner sind alle schon angehängt.",
+			});
+			return;
+		}
+		// Datensatz auffrischen
+		data.an = dateien;
+		await anhaenge.scan(data.an);
+		// Änderungsmarkierung
+		let cont = document.querySelector("#anhaenge-cont");
+		anhaenge.geaendert(cont); // hier werden die Icons im Kopf neu aufgebaut
+		// ggf. Liste der Anhänge im Fenster neu aufbauen
+		if (fenster) {
+			await anhaenge.auflisten(cont, "data|an");
 			anhaenge.auflistenBelege(cont);
 		}
 		// Erinnerungen auffrischen

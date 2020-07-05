@@ -10,6 +10,16 @@ let punkte = {
 		icon: "oeffnen.png",
 		click: "anhaenge.oeffnen(popup.anhangDatei)",
 	},
+	anhaengeAutoErgaenzen: {
+		label: "Anhänge automatisch ergänzen",
+		icon: "plus.png",
+		click: "anhaenge.addAuto({fenster: false})",
+	},
+	anhaengeFenster: {
+		label: "Anhänge-Fenster",
+		icon: "bueroklammer.png",
+		click: "anhaenge.fenster()",
+	},
 	bearbeitenRueckgaengig: {
 		label: "Rückgängig",
 		icon: "pfeil-rund-links.png",

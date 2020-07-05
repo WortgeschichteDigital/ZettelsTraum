@@ -145,7 +145,7 @@ let popup = {
 		} else if (target === "anhang") {
 			items = ["anhang", "ordnerAnhang"];
 			 if (popup.anhangDateiKopf) {
-				items.push("sep", "kopfIconsConf");
+				items.push("sep", "anhaengeFenster", "anhaengeAutoErgaenzen", "sep", "kopfIconsConf");
 			} else if (popup.anhangDateiListe) {
 				items.push("sep", {name: "text", sub: ["textReferenz"]}, {name: "xml", sub: ["xmlReferenz"]}, "sep", "belegBearbeiten", "belegLoeschen", "belegZwischenablage", "belegDuplizieren", "sep", "beleglisteConf");
 			} else if (overlay.oben() === "anhaenge") {
@@ -195,6 +195,9 @@ let popup = {
 		} else if (target === "bedeutungen-conf") {
 			items = ["bedeutungenConf", "sep", "belegHinzufuegen"];
 			popup.belegeAuflisten(items);
+		} else if (target === "kopf") {
+			items = ["anhaengeFenster", "anhaengeAutoErgaenzen", "sep", "belegHinzufuegen"];
+			popup.belegeAuflisten(items);
 		} else if (target === "belege") {
 			items = ["belegHinzufuegen"];
 			popup.belegeAuflisten(items);
@@ -239,6 +242,10 @@ let popup = {
 					overlay.oben() === "anhaenge") {
 				popup.belegID = pfad[i].dataset.id;
 				return "beleg";
+			} else if (pfad[i].nodeName === "HEADER" &&
+					pfad[i].parentNode.nodeName === "BODY" &&
+					kartei.wort) {
+				return "kopf";
 			} else if (pfad[i].nodeName === "HEADER" &&
 					pfad[i].parentNode.id === "liste-belege") {
 				return "beleg-einstellungen";
