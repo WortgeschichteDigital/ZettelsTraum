@@ -1940,11 +1940,13 @@ let xml = {
 	//     (Slot, in dem der Datensatz steht)
 	//   slotBlock = Number
 	//     (Slot, in dem der Textblock steht)
-	abschnittSetId ({key, slot, slotBlock}) {
+	//   loeschen = true | undefined
+	//     (die ID soll gelöscht werden)
+	abschnittSetId ({key, slot, slotBlock, loeschen = false}) {
 		// ID ermitteln und normieren
 		let id = "",
 			xl = xml.data.xl[key][slot].ct[slotBlock]?.xl; // jshint ignore:line
-		if (xl) { // wird nach dem Löschen einer Überschrift genutzt
+		if (xl && !loeschen) { // nach dem Löschen einer Überschrift übergehen
 			id = xl.replace(/<Anmerkung>.+?<\/Anmerkung>/s, "");
 			id = id.replace(/<.+?>/g, "");
 			id = helfer.textTrim(id, true);
@@ -2409,15 +2411,11 @@ let xml = {
 			});
 			// Datensatz löschen
 			if (slotBlock !== null) {
-				// ID des Abschnitts leeren?
-				let setId = false;
 				if (xml.data.xl[key][slot].ct[slotBlock].it === "Überschrift") {
-					setId = true;
+					// ID des Abschnitts löschen
+					xml.abschnittSetId({key, slot, slotBlock, loeschen: true});
 				}
 				xml.data.xl[key][slot].ct.splice(slotBlock, 1);
-				if (setId) {
-					xml.abschnittSetId({key, slot, slotBlock});
-				}
 			} else {
 				xml.data.xl[key].splice(slot, 1);
 				xml.refreshLevels({key, slot: slot - 1});
