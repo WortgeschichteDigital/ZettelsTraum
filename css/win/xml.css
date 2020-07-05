@@ -583,6 +583,36 @@ p.leer {
 	margin-bottom: 0;
 }
 
+.abschnitt-cont > p {
+	position: relative;
+}
+
+.abschnitt-cont > p * {
+	opacity: 0;
+	transition: opacity .3s ease;
+}
+
+.abschnitt-cont > p:focus-within *,
+.abschnitt-cont > p:hover * {
+	opacity: 1;
+}
+
+.abschnitt-cont > p::before {
+	content: "Formular";
+	position: absolute;
+	top: 3px;
+	left: 6px;
+	opacity: 1;
+	color: var(--textHell);
+	font-style: italic;
+	transition: opacity .3s ease;
+}
+
+.abschnitt-cont > p:focus-within::before,
+.abschnitt-cont > p:hover::before {
+	opacity: 0;
+}
+
 .abschnitt-cont > p > span {
 	display: inline-block;
 }
