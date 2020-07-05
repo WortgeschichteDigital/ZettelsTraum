@@ -413,6 +413,26 @@ p.leer {
 	white-space: nowrap;
 }
 
+.kopf.level-1 {
+	margin-left: 0;
+}
+
+.kopf.level-2 {
+	margin-left: 34px;
+}
+
+.kopf.level-3 {
+	margin-left: 68px;
+}
+
+.kopf.level-4 {
+	margin-left: 102px;
+}
+
+.kopf.level-5 {
+	margin-left: 136px;
+}
+
 .kopf:hover {
 	background-color: var(--hover);
 }
@@ -439,7 +459,7 @@ p.leer {
 #ab > .kopf,
 #tx > .kopf {
 	margin-top: 15px;
-	transition: margin-top .3s ease;
+	transition: margin-top .3s ease, margin-left .3s ease;
 }
 
 #ab .abschnitt-cont[data-off] + .kopf,
@@ -545,13 +565,29 @@ p.leer {
 }
 
 /* Abschnitt-Container -------------------------- */
-.abschnitt-cont {
-	margin: 0 0 0 34px;
+.abschnitt-cont.level-1 {
+	margin-left: 34px;
+}
+
+.abschnitt-cont.level-2 {
+	margin-left: 68px;
+}
+
+.abschnitt-cont.level-3 {
+	margin-left: 102px;
+}
+
+.abschnitt-cont.level-4 {
+	margin-left: 136px;
+}
+
+.abschnitt-cont.level-5 {
+	margin-left: 170px;
 }
 
 .abschnitt-cont,
 .textblock-cont {
-	transition: height .3s ease;
+	transition: margin-left .3s ease, height .3s ease;
 }
 
 .textblock-cont > p.input-text {

@@ -1582,6 +1582,21 @@ let xml = {
 					});
 				});
 			}
+			// ein- oder ausrücken
+			else if (a.classList.contains("icon-pfeil-gerade-links") ||
+					a.classList.contains("icon-pfeil-gerade-rechts")) {
+				a.addEventListener("click", function(evt) {
+					evt.preventDefault();
+					evt.stopPropagation();
+					if (evt.detail > 1) { // Doppelklicks abfangen
+						return;
+					}
+					xml.indent({
+						dir: this.classList.contains("icon-pfeil-gerade-links") ? "left" : "right",
+						kopf: this.closest(".kopf"),
+					});
+				});
+			}
 		});
 	},
 	/* jshint ignore:start */
@@ -1856,8 +1871,8 @@ let xml = {
 		cont.appendChild(kopf);
 		// Abschnitt-Container hinzufügen
 		let div = document.createElement("div");
-		div.classList.add("abschnitt-cont");
 		cont.appendChild(div);
+		div.classList.add("abschnitt-cont", `level-${xml.data.xl[key][slot].le}`);
 		// Formular
 		let p = document.createElement("p");
 		div.appendChild(p);
@@ -3100,6 +3115,53 @@ let xml = {
 			// Reihenfolge der Nachweise im Bedeutungsgerüst auffrischen
 			xml.bgNachweiseRefresh();
 		}
+	},
+	// Abschnitt ein- oder ausrücken
+	//   dir = String
+	//     (Bewegungsrichtung, "left" | "right")
+	//   kopf = Element
+	//     (der Kopf, in dem der Pfeil angeklickt wurde)
+	indent ({dir, kopf}) {
+		// Variablen vorbereiten
+		let key = kopf.dataset.key,
+			slot = parseInt(kopf.dataset.slot, 10),
+			arr = xml.data.xl[key],
+			level = arr[slot].le,
+			levelNeu = 0;
+		// Variablen ermitteln
+		if (dir === "left" &&
+				level > 1) {
+			levelNeu = level - 1;
+		} else if (dir === "right" &&
+				slot > 0 &&
+				level <= arr[slot - 1].le) {
+			levelNeu = level + 1;
+		}
+		// Verschieben nicht möglich/nötig/erlaubt
+		if (!levelNeu || levelNeu > 5) {
+			return;
+		}
+		// Verschieben
+		arr[slot].le = levelNeu;
+		kopf.classList.replace(`level-${level}`, `level-${levelNeu}`);
+		kopf.nextSibling.classList.replace(`level-${level}`, `level-${levelNeu}`);
+		// automatische Korrekturen der folgenden Container,
+		// damit keine illegalen Löcher entstehen
+		let koepfe = document.querySelectorAll(`#${key} > .kopf`);
+		for (let i = slot + 1, len = arr.length; i < len; i++) {
+			const level = arr[i].le,
+				levelVor = arr[i - 1].le;
+			if (level <= levelVor) {
+				break;
+			}
+			if (level - levelVor > 1) {
+				arr[i].le = level - 1;
+				koepfe[i].classList.replace(`level-${level}`, `level-${level - 1}`);
+				koepfe[i].nextSibling.classList.replace(`level-${level}`, `level-${level - 1}`);
+			}
+		}
+		// Daten speichern
+		xml.speichern();
 	},
 	// Slotangaben bestehender Elemente nach Änderungsoperationen auffrischen
 	//   key = String
