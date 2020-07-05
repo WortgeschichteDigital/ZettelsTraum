@@ -1757,15 +1757,11 @@ let xml = {
 						id,
 						ele: [3, 4],
 					});
-				}
-				/* jshint ignore:start */
-				else if (key === "wi" && !xml.data.xl.wi?.[xml.bgAktGn]?.length) {
+				} else if (key === "wi" && !xml.data.xl.wi?.[xml.bgAktGn]?.length) { // jshint ignore:line
 					xml.elementLeer({
 						ele: document.getElementById("wi"),
 					});
-				}
-				/* jshint ignore:end */
-				else if (/^(nw|tf)$/.test(key)) {
+				} else if (/^(nw|tf)$/.test(key)) {
 					let ele = [2, 3];
 					if (key === "nw") {
 						ele = [3, 4];
