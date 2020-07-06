@@ -961,7 +961,7 @@ let liste = {
 			return `<span class="klammer-technisch">[:${p1}:]</span>`;
 		});
 		// Autorenzusatz
-		text = text.replace(/(?<!<span class="klammer-[a-z]+">)\{.+?\}/g, m => {
+		text = text.replace(/(?<!<span class="klammer-[a-z]+">)\{.*?\}/g, m => {
 			return `<span class="klammer-autorenzusatz">${m}</span>`;
 		});
 		// Löschung
