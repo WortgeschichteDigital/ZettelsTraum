@@ -658,7 +658,12 @@ let helfer = {
 		// Wörter sammlen
 		// ("Wörter" mit Leerzeichen müssen als erstes markiert werden,
 		// darum an den Anfang sortieren)
-		let woerter = Object.keys(data.fv);
+		let woerter = [];
+		if (data.fv) {
+			// beim ersten Aufruf nach dem Erstellen einer neuen Karte,
+			// steht data.fv noch nicht zur Verfügung
+			woerter = Object.keys(data.fv);
+		}
 		woerter.sort((a, b) => {
 			if (/\s/.test(a)) {
 				return -1;
