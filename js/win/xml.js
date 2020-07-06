@@ -1451,7 +1451,7 @@ let xml = {
 				hinweis.textContent = xml.data.xl.le[slot].ty;
 			} else if (textKopf === "abschnitt") {
 				const typ = xml.data.xl[key][slot].ty;
-				hinweis.textContent = typ ? typ : "Standard";
+				hinweis.textContent = typ ? typ : " ";
 			} else if (key === "bl") {
 				hinweis.textContent = xml.data.xl.bl[slot].da;
 			} else if (key === "lt") {

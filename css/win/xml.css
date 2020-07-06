@@ -541,7 +541,6 @@ p.leer {
 	color: var(--text);
 }
 
-.text-cont > .kopf .hinweis,
 #bg-tf > .kopf .hinweis {
 	font-weight: normal;
 }
