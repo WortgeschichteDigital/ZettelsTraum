@@ -2025,7 +2025,6 @@ let xml = {
 			xml.data.xl[key][slot].ct.push(data);
 			slotBlock = xml.data.xl[key][slot].ct.length - 1;
 		}
-		xml.speichern();
 		// alle offenen Blöcke schließen
 		cont.querySelectorAll(".kopf").forEach(div => {
 			if (!div.nextSibling.dataset.off) {
@@ -2039,6 +2038,10 @@ let xml = {
 			slotBlock,
 			element: cont.firstChild,
 		});
+		// Daten speichern
+		// (erst hier, weil im Zuge von textblockMake()
+		// Illustrationsdaten erzeugt werden könnten)
+		xml.speichern();
 	},
 	// Textblock: Kopf und Container erzeugen
 	//   key = String
