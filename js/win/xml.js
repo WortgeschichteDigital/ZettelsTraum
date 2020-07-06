@@ -22,6 +22,7 @@ let xml = {
 		abschnittTypen: ["Mehr erfahren"],
 		abschnittBloecke: ["Überschrift", "Textblock", "Blockzitat", "Liste", "Illustration"],
 		listenTypen: ["Punkte", "Ziffern"],
+		abbPositionen: ["Block", "links", "rechts"],
 		nachweisTypen: ["Literatur", "Link"],
 	},
 	// Dropdown: Referenzen zusammentragen
@@ -1491,19 +1492,18 @@ let xml = {
 				if (xml.data.xl[key][slot].ct[slotBlock].it === "Überschrift") {
 					xmlStr = xmlStr.replace(/<Anmerkung>.+?<\/Anmerkung>/s, "");
 					vorschau.classList.add("ueberschrift");
+				} else if (xml.data.xl[key][slot].ct[slotBlock].it === "Illustration") {
+					let ziel = xmlStr.match(/<Bildreferenz Ziel="(.*?)"\/>/);
+					xmlStr = ziel ? ziel[1] : " ";
 				}
 				text = xmlStr.replace(/<.+?>/g, "");
-				if (xml.data.xl[key][slot].ct[slotBlock].it === "Blockzitat") {
+				if (/^(Blockzitat|Illustration|Liste)$/.test(xml.data.xl[key][slot].ct[slotBlock].it)) {
 					let b = document.createElement("b");
 					vorschau.appendChild(b);
 					// blöder Hack mit den beiden Leerzeichen; Problem ist, dass der Container
 					// display: inline bleiben muss, damit die Textellipse schön funktioniert
 					// darum hier lieber kein display: block + margin.
-					b.textContent = "Blockzitat  ";
-				} else if (xml.data.xl[key][slot].ct[slotBlock].it === "Liste") {
-					let b = document.createElement("b");
-					vorschau.appendChild(b);
-					b.textContent = "Liste  ";
+					b.textContent = `${xml.data.xl[key][slot].ct[slotBlock].it}  `;
 				}
 			} else if (key === "bl") {
 				let belegtext = xml.data.xl.bl[slot].xl.match(/<Belegtext>(.+?)<\/Belegtext>/s);
@@ -1994,8 +1994,7 @@ let xml = {
 			slot = parseInt(kopf.dataset.slot, 10);
 		// Schon eine Überschrift vorhanden?
 		if (typ === "Überschrift") {
-			let ueberschrift = xml.data.xl[key][slot].ct.find(i => i.it === "Überschrift");
-			if (ueberschrift) {
+			if (xml.data.xl[key][slot].ct.some(i => i.it === "Überschrift")) {
 				dialog.oeffnen({
 					typ: "alert",
 					text: "Der Abschnitt hat schon eine Überschrift.",
@@ -2065,10 +2064,8 @@ let xml = {
 			element.parentNode.appendChild(kopf);
 			element.parentNode.appendChild(div);
 		}
-		xml.checkAbschnitt({
-			cont: element.closest(".abschnitt-cont"),
-		});
-		// Formular
+		// Formulare
+		let editable = true;
 		if (/^(Textblock|Liste)$/.test(xml.data.xl[key][slot].ct[slotBlock].it)) {
 			let p = document.createElement("p");
 			div.appendChild(p);
@@ -2095,7 +2092,148 @@ let xml = {
 				let a = dropdown.makeLink("dropdown-link-element", "Listen-Typ auswählen", true);
 				p.appendChild(a);
 			}
+		} else if (xml.data.xl[key][slot].ct[slotBlock].it === "Illustration") {
+			editable = false;
+			// Datenfelder für Abbildungen
+			let felder = {
+				Dateiname: {
+					p: true,
+					cl: "abb-2-felder",
+					val: "",
+					date: false,
+					dropdown: false,
+				},
+				Bildposition: {
+					p: false,
+					cl: "",
+					val: "links",
+					date: false,
+					dropdown: true,
+				},
+				Bildunterschrift: {
+					p: true,
+					cl: "",
+					val: "",
+					date: false,
+					dropdown: false,
+				},
+				Alternativtext: {
+					p: true,
+					cl: "",
+					val: "",
+					date: false,
+					dropdown: false,
+				},
+				Lizenzname: {
+					p: true,
+					cl: "abb-2-felder",
+					val: "",
+					date: false,
+					dropdown: false,
+				},
+				"Lizenz-URL": {
+					p: false,
+					cl: "",
+					val: "",
+					date: false,
+					dropdown: false,
+				},
+				Quelle: {
+					p: true,
+					cl: "",
+					val: "",
+					date: false,
+					dropdown: false,
+				},
+				Aufrufdatum: {
+					p: true,
+					cl: "abb-2-felder",
+					val: "",
+					date: true,
+					dropdown: false,
+				},
+				"Quellen-URL": {
+					p: false,
+					cl: "",
+					val: "",
+					dropdown: false,
+				},
+			};
+			// Formular erzeugen
+			let abb = document.createElement("div");
+			div.appendChild(abb);
+			abb.classList.add("abb");
+			for (let [k, v] of Object.entries(felder)) {
+				if (v.p) {
+					let p = document.createElement("p");
+					abb.appendChild(p);
+					p.classList.add("input-text");
+					if (v.cl) {
+						p.classList.add(v.cl);
+					}
+				}
+				let input = document.createElement("input");
+				abb.lastChild.appendChild(input);
+				input.id = `abb-${xml.counter.next().value}-${k.toLowerCase()}`;
+				if (v.date) {
+					input.title = k;
+					input.type = "date";
+					input.value = new Date().toISOString().split("T")[0];
+					input.setAttribute("required", "true");
+				} else {
+					input.placeholder = k;
+					input.type = "text";
+					input.value = v.val;
+				}
+				if (v.dropdown) {
+					abb.lastChild.classList.add("dropdown-cont");
+					input.classList.add("dropdown-feld");
+					input.title = `${k} auswählen`;
+					input.setAttribute("readonly", "true");
+					let a = dropdown.makeLink("dropdown-link-element", `${k} auswählen`, true);
+					abb.lastChild.appendChild(a);
+				}
+			}
+			// Formulardaten wiederherstellen
+			if (restore) {
+				let xmlStr = xml.data.xl[key][slot].ct[slotBlock].xl,
+					parser = new DOMParser(),
+					xmlDoc = parser.parseFromString(xmlStr, "text/xml");
+				let felder = {
+					/* jshint ignore:start */
+					dateiname: xmlDoc.querySelector("Bildreferenz").getAttribute("Ziel"),
+					bildposition: xmlDoc.documentElement.getAttribute("Position"),
+					bildunterschrift: xmlDoc.querySelector("Bildunterschrift").textContent,
+					alternativtext: xmlDoc.querySelector("Bildinhalt").textContent,
+					quelle: xmlDoc.querySelector("Fundstelle unstrukturiert").textContent,
+					aufrufdatum: xmlDoc.querySelector("Fundstelle Aufrufdatum")?.textContent,
+					"quellen-url": xmlDoc.querySelector("Fundstelle URL")?.textContent,
+					lizenzname: xmlDoc.querySelector("Lizenz Name").textContent,
+					"lizenz-url": xmlDoc.querySelector("Lizenz URL").textContent,
+					/* jshint ignore:end */
+				};
+				for (let [k, v] of Object.entries(felder)) {
+					if (v) {
+						abb.querySelector(`[id$="${k}"]`).value = v;
+					}
+				}
+			} else {
+				abb.querySelector("input").focus();
+			}
+			// XML-Preview aus Formulardaten erzeugen
+			// (erzeugt zugleich das XML-Snippet, wenn es noch nicht existiert;
+			// führt außerdem eine Evaluation durch)
+			xml.textblockAbbXml({form: abb});
+			// XML auf Fehler überprüfen
+			xml.check({
+				warn: kopf.querySelector(".warn"),
+				xmlStr: xml.data.xl[key][slot].ct[slotBlock].xl,
+			});
 		}
+		// Abschnitt auf Fehler überprüfen
+		xml.checkAbschnitt({
+			cont: element.closest(".abschnitt-cont"),
+		});
 		// Textfeld erzeugen
 		xml.preview({
 			xmlStr: xml.data.xl[key][slot].ct[slotBlock].xl,
@@ -2105,9 +2243,9 @@ let xml = {
 			after: div.firstChild,
 			textblockCont: div,
 			animation: false,
-			editable: true,
+			editable,
 		});
-		if (!restore) {
+		if (!restore && editable) {
 			xml.edit({
 				cont: div.lastChild,
 			});
@@ -2183,6 +2321,74 @@ let xml = {
 		// Ergebnis auswerfen
 		return xmlStr;
 	},
+	// Textblock: XML einer Illustration erzeugen, Eingabe im Formular evaluieren
+	//   form = Element
+	//     (Container des Illustrationsformulars)
+	textblockAbbXml ({form}) {
+		// XML erzeugen
+		let xl = `<Illustration Position="${form.querySelector(`[id$="bildposition"]`).value}">\n`;
+		let dn = form.querySelector(`[id$="dateiname"]`);
+		xl += `\t<Bildreferenz Ziel="${mask(dn.value)}"/>\n`;
+		let bu = form.querySelector(`[id$="bildunterschrift"]`);
+		bu.value = helfer.typographie(helfer.textTrim(bu.value, true));
+		xl += `\t<Bildunterschrift>${mask(bu.value)}</Bildunterschrift>\n`;
+		let at = form.querySelector(`[id$="alternativtext"]`);
+		at.value = helfer.typographie(helfer.textTrim(at.value, true));
+		xl += `\t<Bildinhalt>${mask(at.value)}</Bildinhalt>\n`;
+		xl += `\t<Fundstelle>\n`;
+		let qu = form.querySelector(`[id$="quelle"]`);
+		qu.value = helfer.typographie(helfer.textTrim(qu.value, true));
+		xl += `\t\t<unstrukturiert>${mask(qu.value)}</unstrukturiert>\n`;
+		let ul = form.querySelector(`[id$="quellen-url"]`);
+		if (ul.value) {
+			xl += `\t\t<URL>${mask(ul.value)}</URL>\n`;
+			let ad = form.querySelector(`[id$="aufrufdatum"]`);
+			if (!ad.value) {
+				ad.value = new Date().toISOString().split("T")[0];
+			}
+			let datum = ad.value.split("-");
+			xl += `\t\t<Aufrufdatum>${datum[2]}.${datum[1]}.${datum[0]}</Aufrufdatum>\n`;
+			xl += `\t\t<Fundort>${helferXml.fundort({url: ul.value})}</Fundort>\n`;
+		}
+		xl += `\t</Fundstelle>\n`;
+		xl += `\t<Lizenz>\n`;
+		xl += `\t\t<Name>${mask(form.querySelector(`[id$="lizenzname"]`).value)}</Name>\n`;
+		let lul = form.querySelector(`[id$="lizenz-url"]`);
+		xl += `\t\t<URL>${mask(lul.value)}</URL>\n`;
+		xl += `\t</Lizenz>\n`;
+		xl += "</Illustration>";
+		xl = xl.replace(/\t/g, "  ");
+		// Evaluation
+		form.querySelectorAll(".fehler").forEach(i => i.classList.remove("fehler"));
+		if (!dn.value || !/\.(gif|jpeg|jpg|png|svg)$/.test(dn.value) || /\s/.test(dn.value)) {
+			dn.classList.add("fehler");
+		}
+		if (!bu.value) {
+			bu.classList.add("fehler");
+		}
+		if (!at.value) {
+			at.classList.add("fehler");
+		}
+		if (!qu.value) {
+			qu.classList.add("fehler");
+		}
+		if (ul.value && ( !/^https?:\/\//.test(ul.value) || /\s/.test(ul.value) )) {
+			ul.classList.add("fehler");
+		}
+		if (lul.value && ( !/^https?:\/\//.test(lul.value) || /\s/.test(lul.value) )) {
+			lul.classList.add("fehler");
+		}
+		// XML eintragen
+		let kopf = form.closest(".textblock-cont").previousSibling,
+			key = kopf.dataset.key,
+			slot = parseInt(kopf.dataset.slot, 10),
+			slotBlock = parseInt(kopf.dataset.slotBlock, 10);
+		xml.data.xl[key][slot].ct[slotBlock].xl = xl;
+		// Ampersand maskieren
+		function mask (text) {
+			return text.replace(/&(?!amp;)/g, "&amp;");
+		}
+	},
 	// Abschnitt/Textblock: Events an Element im Container anhängen
 	//   cont = Element
 	//     (.abschnitt-cont | .textblock-cont)
@@ -2193,7 +2399,8 @@ let xml = {
 		cont.querySelectorAll("input").forEach(i => {
 			// Abschnitt: ID-Feld | Abschnitttyp-Feld
 			// Textblock: ID-Feld | Typ-Feld
-			if (/^(abschnitt|textblock)-[0-9]+-(id|ty)$/.test(i.id)) {
+			// Illustration: alle Input-Felder
+			if (/^(abschnitt|textblock)-[0-9]+-(id|ty)$|^abb-/.test(i.id)) {
 				xml.abtxChange({ele: i});
 			}
 			// Abschnitt: Blocktyp-Feld
@@ -2220,13 +2427,14 @@ let xml = {
 		/* jshint ignore:end */
 		// Dropdown-Felder
 		cont.querySelectorAll(".dropdown-feld").forEach(i => dropdown.feld(i));
-		// Dropdown-Links
 		if (!make) {
+			// Dropdown-Links
 			cont.querySelectorAll(".dropdown-link-element").forEach(i => dropdown.link(i));
-		}
-		if (!make) {
 			// XML-Vorschau
 			cont.querySelectorAll("pre").forEach(pre => {
+				if (pre.classList.contains("not-editable")) {
+					return;
+				}
 				xml.editPreDbl({pre});
 				let next = pre.nextSibling;
 				if (next) {
@@ -2293,24 +2501,32 @@ let xml = {
 				kopf = abschnitt.previousSibling,
 				key = kopf.dataset.key,
 				slot = parseInt(kopf.dataset.slot, 10),
+				slotBlock = null,
 				feld = this.id.replace(/.+-/, ""),
 				val = helfer.textTrim(this.value, true);
 			if (textblock) {
-				// Textblock (Textblock, Illustration)
+				kopf = textblock.previousSibling;
+				slotBlock = parseInt(kopf.dataset.slotBlock, 10);
+			}
+			if (slotBlock !== null &&
+					xml.data.xl[key][slot].ct[slotBlock].it === "Illustration") {
+				// Illustration
+				xml.textblockAbbXml({form: textblock});
+				if (feld === "dateiname") {
+					kopfNeu();
+				}
+				let cont = textblock.querySelector(".pre-cont");
+				refreshPre(cont, xml.data.xl[key][slot].ct[slotBlock].xl, false);
+			} else if (textblock) {
+				// Textblöcke (Überschrift, Textblock, Blockzitat, Liste)
 				if (feld === "id") {
 					// ID aufbereiten
 					val = xml.abschnittNormId({id: val, input: this});
 				}
-				let kopfBlock = textblock.previousSibling;
-				const slotBlock = parseInt(kopfBlock.dataset.slotBlock, 10);
 				xml.data.xl[key][slot].ct[slotBlock][feld] = val;
 				// Kopf anpassen
 				if (feld === "id") {
-					let kopfNeu = xml.elementKopf({key, slot, slotBlock, textKopf: "textblock"});
-					kopfBlock.parentNode.replaceChild(kopfNeu, kopfBlock);
-					xml.checkAbschnitt({
-						cont: abschnitt,
-					});
+					kopfNeu();
 				}
 				// XML-String auffrischen
 				const xmlStr = xml.textblockXmlStr({xmlStr: null, key, slot, slotBlock});
@@ -2318,14 +2534,7 @@ let xml = {
 				// (aber nur, wenn er nicht gerade in Bearbeitung ist)
 				let cont = textblock.querySelector(".pre-cont");
 				if (cont.querySelector("pre")) {
-					let pre = document.createElement("pre");
-					cont.replaceChild(pre, cont.firstChild);
-					xml.preview({
-						xmlStr,
-						after: cont.previousSibling,
-						textblockCont: textblock,
-					});
-					xml.editPreDbl({pre});
+					refreshPre(cont, xmlStr, true);
 				}
 				// XML updaten
 				xml.data.xl[key][slot].ct[slotBlock].xl = xmlStr;
@@ -2358,6 +2567,29 @@ let xml = {
 				});
 			}
 			xml.speichern();
+			// Kopf neu erstellen
+			function kopfNeu () {
+				let kopfNeu = xml.elementKopf({key, slot, slotBlock, textKopf: "textblock"});
+				kopf.parentNode.replaceChild(kopfNeu, kopf);
+				xml.checkAbschnitt({
+					cont: abschnitt,
+				});
+			}
+			// <pre> auffrischen
+			function refreshPre (cont, xmlStr, editable) {
+				let pre = document.createElement("pre");
+				cont.replaceChild(pre, cont.firstChild);
+				xml.preview({
+					xmlStr,
+					after: cont.previousSibling,
+					textblockCont: textblock,
+				});
+				if (editable) {
+					xml.editPreDbl({pre});
+				} else {
+					pre.classList.add("not-editable");
+				}
+			}
 		});
 	},
 	// Abschnitt/Textblock: Löschen
@@ -2511,6 +2743,8 @@ let xml = {
 			cont.appendChild(p);
 			xml.editBearbeiten({p});
 			xml.editPreDbl({pre});
+		} else {
+			pre.classList.add("not-editable");
 		}
 		// Pre-Container smooth einblenden
 		if (!animation) {

@@ -324,6 +324,8 @@ let dropdown = {
 			dropdown.data = [...xml.dropdown.abschnittBloecke];
 		} else if (/^textblock-[0-9]+-ty$/.test(feld_id)) {
 			dropdown.data = [...xml.dropdown.listenTypen];
+		} else if (/^abb-[0-9]+-bildposition$/.test(feld_id)) {
+			dropdown.data = [...xml.dropdown.abbPositionen];
 		} else if (feld_id === "nw-ty") {
 			dropdown.data = [...xml.dropdown.nachweisTypen];
 		} else if (feld_id === "nw-lit-si") {
@@ -651,7 +653,7 @@ let dropdown = {
 				feld.dispatchEvent(new Event("input"));
 			} else if (/-sel-gr$/.test(caller)) {
 				xml.bgSel({caller});
-			} else if (/^(red-lit-eingabe-|md-(ty|tf)|abschnitt-|textblock-)/.test(caller)) {
+			} else if (/^(red-lit-eingabe-|md-(ty|tf)|abschnitt-|textblock-|abb-)/.test(caller)) {
 				feld.dispatchEvent(new Event("change"));
 			} else if (caller === "nw-ty") {
 				feld.dispatchEvent(new Event("input"));

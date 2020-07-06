@@ -657,6 +657,34 @@ p.leer {
 	margin-left: 10px;
 }
 
+/* Illustrationsformular ------------------------ */
+.abb {
+	margin-left: 39px;
+	max-width: 750px;
+}
+
+.abb p {
+	white-space: nowrap;
+}
+
+.abb input {
+	width: calc(100% - 12px);
+}
+
+.abb input.fehler {
+	border-color: var(--textWarnung);
+	outline: 1px solid var(--textWarnung);
+}
+
+.abb input:nth-child(2) {
+	margin-left: 10px;
+}
+
+.abb-2-felder input,
+.abb-2-felder input.dropdown-feld {
+	width: calc(50% - 12px - 5px);
+}
+
 /* XML-Preview ---------------------------------- */
 .pre-cont {
 	margin: 0 0 0 39px;
