@@ -3184,9 +3184,9 @@ let xml = {
 			}
 			if (p2) {
 				let anschluss = "";
-				if (/,\s$/.test(p2)) {
-					anschluss = ", ";
-					p2 = p2.replace(/,\s$/, "");
+				if (/,\s?$/.test(p2)) {
+					anschluss = p2.match(/,\s?$/)[0];
+					p2 = p2.replace(/,\s?$/, "");
 				} else if (/^(,\shier|\ss\.\s?v\.)\s$/.test(p2)) {
 					anschluss = p2;
 					p2 = "";
@@ -3275,7 +3275,7 @@ let xml = {
 			if (/^(,\shier|\ss\.\sv\.)/.test(p2)) {
 				return true;
 			} else if (!p2 ||
-					/^(\s|,|\s[-–])$/.test(p2) ||
+					/^(\s|,|\s[-–]|\s?[0-9]{4},)$/.test(p2) ||
 					/^,\s/.test(p2) && !/[0-9]/.test(p2) ||
 					/[0-9]/.test(p2) && !/,/.test(p2)) {
 				return false;
