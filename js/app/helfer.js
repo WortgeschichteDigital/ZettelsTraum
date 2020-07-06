@@ -897,12 +897,12 @@ let helfer = {
 	// regulären Ausdruck mit allen Formvarianten erstellen
 	formVariRegExp () {
 		helfer.formVariRegExpRegs = [];
-		// Wörter sammlen
+		// Wörter sammeln
 		// ("Wörter" mit Leerzeichen müssen als erstes markiert werden,
 		// darum an den Anfang sortieren)
 		let woerter = [];
 		if (data.fv) {
-			// beim ersten Aufruf nach dem Erstellen einer neuen Karte,
+			// beim ersten Aufruf nach dem Erstellen einer neuen Kartei,
 			// steht data.fv noch nicht zur Verfügung
 			woerter = Object.keys(data.fv);
 		}
