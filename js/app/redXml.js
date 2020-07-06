@@ -95,6 +95,7 @@ let redXml = {
 			while (!xml.winInit) {
 				await new Promise(warten => setTimeout(() => warten(true), 25));
 			}
+			await new Promise(warten => setTimeout(() => warten(true), 250));
 		}
 		// Datensatz an das Fenster schicken
 		const {ipcRenderer} = require("electron");
