@@ -70,7 +70,8 @@ let xml = {
 		text = klammernTaggen(text);
 		text = text.replace(/(<Zeilenumbruch\/>\s?)+$/, "");
 		text = text.replace(/<([a-zA-Z]+)(?: Stil="#[a-z]+")?><\/([a-zA-Z]+)>/g, (m, p1, p2) => {
-			if (p1 === p2) {
+			if (p1 === p2 &&
+					p1 !== "Autorenzusatz") { // <Autorenzusatz> kann leer sein (Elision)
 				return "";
 			}
 			return m;
@@ -141,7 +142,7 @@ let xml = {
 			// Streichung: [...]
 			text = text.replace(/\[(.+?)\]/g, (m, p1) => `<Streichung>${p1}</Streichung>`);
 			// Autorenzusatz: {...}
-			text = text.replace(/\{(.+?)\}/g, (m, p1) => `<Autorenzusatz>${p1}</Autorenzusatz>`);
+			text = text.replace(/\{(.*?)\}/g, (m, p1) => `<Autorenzusatz>${p1}</Autorenzusatz>`);
 			// Ergebnis zurückgeben
 			return text;
 		}

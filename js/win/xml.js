@@ -3152,8 +3152,8 @@ let xml = {
 		str = str.replace(/\s*\(\((.+?)\)\)/g, (m, p1) => `<Anmerkung>${p1}</Anmerkung>`);
 		// <Autorenzusatz> (vor den Verweisen taggen!)
 		if (blockzitat) {
-			str = str.replace(/\[(.+?)\](?!\s*\()/gs, (m, p1) => `<Autorenzusatz>${p1}</Autorenzusatz>`); // sicherstellen, dass nicht Beginn von Verweis!
-			str = str.replace(/\{(.+?)\}/gs, (m, p1) => `<Autorenzusatz>${p1}</Autorenzusatz>`);
+			str = str.replace(/\[(.*?)\](?!\s*\()/gs, (m, p1) => `<Autorenzusatz>${p1}</Autorenzusatz>`); // sicherstellen, dass nicht Beginn von Verweis!
+			str = str.replace(/\{(.*?)\}/gs, (m, p1) => `<Autorenzusatz>${p1}</Autorenzusatz>`);
 		}
 		// <Verweis_extern> (viele Klammern, entspannte Leerzeichenverwendung)
 		str = str.replace(/\(\s*\[([^\]]+?)\]\s*\(\s*(https?:\/\/[^\s]+?)\s*\)(?:\s*\(\s*([0-9]{1,2})\.\s*([0-9]{1,2})\.\s*([0-9]{4})\s*\))?\s*\)/g, verweisExtern);
@@ -3247,9 +3247,9 @@ let xml = {
 		return str;
 		// <Autorenzusatz> in <Zitat>
 		function azInZitat (str) {
-			str = str.replace(/\[(.+?)\]/g, (m, p1) => `<Autorenzusatz>${p1}</Autorenzusatz>`);
+			str = str.replace(/\[(.*?)\]/g, (m, p1) => `<Autorenzusatz>${p1}</Autorenzusatz>`);
 			// falls jemand auf die Idee kommen sollte, auch das hier
-			str = str.replace(/\{(.+?)\}/g, (m, p1) => `<Autorenzusatz>${p1}</Autorenzusatz>`);
+			str = str.replace(/\{(.*?)\}/g, (m, p1) => `<Autorenzusatz>${p1}</Autorenzusatz>`);
 			return str;
 		}
 		// <Verweis_extern>
