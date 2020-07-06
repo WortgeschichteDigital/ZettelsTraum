@@ -269,11 +269,6 @@ label {
 	margin-left: 7px;
 }
 
-#md-re .icon-plus-dick,
-#le .icon-plus-dick {
-	margin: 0 5px;
-}
-
 #le > p > span,
 #bg-nw > p > span,
 #bg-tf > p > span {
@@ -327,7 +322,7 @@ label {
 
 #wi-sel input,
 #bg-sel input {
-	margin-left: 31px;
+	margin-left: 34px;
 	width: 300px;
 }
 
@@ -379,7 +374,6 @@ label {
 }
 
 .abschnitt-add a.icon-plus-dick {
-	margin: 0 5px;
 	vertical-align: top;
 }
 
@@ -391,10 +385,13 @@ label {
 	background-color: var(--text);
 }
 
-a.icon-plus-dick,
 a.icon-plus-dick {
 	vertical-align: text-bottom;
 	margin-left: 7px;
+}
+
+a.icon-plus-dick:first-child {
+	margin: 0 5px;
 }
 
 /* Kopfleisten ---------------------------------- */
