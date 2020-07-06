@@ -1908,6 +1908,9 @@ let liste = {
 				case "xmlReferenz":
 					auswahl = "4";
 					break;
+				case "xmlFenster":
+					auswahl = "5";
+					break;
 			}
 			// Aktion künftig ohne Nachfrage ausführen
 			if (document.getElementById("ctrlC-auto").checked) {
