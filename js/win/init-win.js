@@ -139,9 +139,18 @@ let initWin = {
 	// Events initialisieren: Elemente im XML-Fenster
 	eventsXml () {
 		// Kopf-Icons
-		document.getElementById("kopf-reset").addEventListener("click", evt => {
-			evt.preventDefault();
-			xml.reset();
+		document.querySelectorAll("#kopf-icons a").forEach(a => {
+			a.addEventListener("click", function(evt) {
+				evt.preventDefault();
+				switch (this.id) {
+					case "kopf-speichern":
+						xml.speichernKartei();
+						break;
+					case "kopf-reset":
+						xml.reset();
+						break;
+				}
+			});
 		});
 		// Kopf-Navigation
 		document.querySelectorAll("#kopf-nav a").forEach(a => {

@@ -387,9 +387,13 @@ let tastatur = {
 			}
 			return;
 		}
-		// Key "n" (XML-Fenster)
-		if (winInfo.typ === "xml" && m === "Ctrl" && evt.key === "n") {
-			xml.abschnittAddShortcut();
+		// Key "n" | "s" (XML-Fenster)
+		if (winInfo.typ === "xml" && m === "Ctrl") {
+			if (evt.key === "n") {
+				xml.abschnittAddShortcut();
+			} else if (evt.key === "s") {
+				xml.speichernKartei();
+			}
 			return;
 		}
 	},

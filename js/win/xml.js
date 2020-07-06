@@ -3656,4 +3656,9 @@ let xml = {
 		const {ipcRenderer} = require("electron");
 		ipcRenderer.sendTo(xml.data.contentsId, "red-xml-speichern", xml.data.xl);
 	},
+	// Speichern der Kartei triggern
+	speichernKartei () {
+		const {ipcRenderer} = require("electron");
+		ipcRenderer.sendTo(xml.data.contentsId, "kartei-speichern");
+	},
 };
