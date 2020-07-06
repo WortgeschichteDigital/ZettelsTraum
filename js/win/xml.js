@@ -1514,7 +1514,7 @@ let xml = {
 			} else if (key === "lt") {
 				let unstrukturiert = xml.data.xl.lt[slot].xl.match(/<unstrukturiert>(.+?)<\/unstrukturiert>/);
 				text = helferXml.maskieren({
-					text: unstrukturiert[1],
+					text: unstrukturiert[1].replace(/<.+?>/g, ""),
 					demaskieren: true,
 				});
 			} else if (key === "wi") {
