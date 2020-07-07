@@ -859,7 +859,8 @@ let stamm = {
 	//   str = String
 	//     (enthält das Wort oder die Wörter)
 	dtaPrepParole (str) {
-		let wort = str.replace(/[!?.:,;'§$%&/\\=*+~#()[\]{}<>]+/g, "");
+		let wort = str.replace(/[([{<](.+?)[)\]}>]/g, m => "");
+		wort = wort.replace(/[!?.:,;'§$%&/\\=*+~#()[\]{}<>]+/g, "");
 		wort = helfer.textTrim(wort, true);
 		let woerter = new Set();
 		wort = wort.replace(/"(.+)"/, (m, p1) => {
