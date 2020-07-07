@@ -143,6 +143,9 @@ let initWin = {
 			a.addEventListener("click", function(evt) {
 				evt.preventDefault();
 				switch (this.id) {
+					case "kopf-export":
+						xml.exportieren();
+						break;
 					case "kopf-speichern":
 						xml.speichernKartei();
 						break;
