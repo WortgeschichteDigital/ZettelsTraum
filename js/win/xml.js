@@ -2360,7 +2360,7 @@ let xml = {
 		xl += `\t\t<URL>${mask(lul.value)}</URL>\n`;
 		xl += `\t</Lizenz>\n`;
 		xl += "</Illustration>";
-		xl = xl.replace(/\t/g, "  ");
+		xl = xl.replace(/\t/g, " ".repeat(2));
 		// Evaluation
 		form.querySelectorAll(".fehler").forEach(i => i.classList.remove("fehler"));
 		if (!dn.value || !/\.(gif|jpeg|jpg|png|svg)$/.test(dn.value) || /\s/.test(dn.value)) {
@@ -3669,5 +3669,208 @@ let xml = {
 		const {ipcRenderer} = require("electron");
 		ipcRenderer.sendTo(xml.data.contentsId, "kartei-speichern");
 		helfer.animation("gespeichert");
+	},
+	// Exportieren: XML-Datei zusammenbauen
+	exportieren () {
+		let parser = new DOMParser(),
+			d = xml.data.xl;
+		// XML zusammenbauen
+		let xmlStr = `<?xml-model href="../share/rnc/Wortgeschichten.rnc" type="application/relax-ng-compact-syntax"?>\n`;
+		xmlStr += `<?xml-stylesheet type="text/css" href="../share/css/zdl.css"?>\n`;
+		xmlStr += `<WGD xmlns="http://www.zdl.org/ns/1.0">\n`;
+		xmlStr += `\t<Artikel xml:id="${d.md.id}" Typ="${d.md.ty}">\n`;
+		// Revisionen
+		xmlStr += "\t".repeat(2) + "<Revisionen>\n";
+		for (let i of d.md.re) {
+			xmlStr += indentXml(i.xl, 3);
+			xmlStr += "\n";
+		}
+		xmlStr += "\t".repeat(2) + "</Revisionen>\n";
+		// Lemmata
+		for (let i of d.le) {
+			xmlStr += indentXml(i.xl, 2);
+			xmlStr += "\n";
+		}
+		// Themenfeld
+		xmlStr += "\t".repeat(2) + "<Diasystematik>\n";
+		xmlStr += "\t".repeat(3) + `<Themenfeld>${d.md.tf.replace(/&(?!amp;)/g, "&amp;")}</Themenfeld>\n`;
+		xmlStr += "\t".repeat(2) + "</Diasystematik>\n";
+		// Kurz gefasst und Wortgeschichte
+		let texte = {
+			ab: "Wortgeschichte_kompakt",
+			tx: "Wortgeschichte",
+		};
+		let basisZuletzt = 0;
+		for (let [k, v] of Object.entries(texte)) {
+			xmlStr += "\t".repeat(2) + `<${v}>\n`;
+			for (let i of d[k]) {
+				let attr = [];
+				if (i.id) {
+					attr.push(`xml:id="${i.id}"`);
+				}
+				if (i.ty) { // z.Zt. immer "Mehr erfahren" | ""
+					attr.push(`Relevanz="niedrig"`);
+				}
+				// Einrückung
+				let basis = 3 + i.le - 1;
+				if (basisZuletzt && basis > basisZuletzt) {
+					for (let b = basis - basisZuletzt; b > 0; b--) {
+						xmlStr = xmlStr.replace(/\s*<\/Abschnitt>\n$/, "\n");
+					}
+				} else if (basisZuletzt && basis < basisZuletzt) {
+					for (let b = basisZuletzt - basis; b > 0; b--) {
+						xmlStr += "\t".repeat(basis + b - 1) + "</Abschnitt>\n";
+					}
+				}
+				basisZuletzt = basis;
+				// neuen Abschnitt erzeugen
+				xmlStr += "\t".repeat(basis) + `<Abschnitt${attr.length ? " " + attr.join(" ") : ""}>\n`;
+				for (let tb of i.ct) {
+					if (/^Blockzitat|Liste$/.test(tb.it)) {
+						// <Blockzitat> | <Liste>
+						if (/<\/Textblock>\n$/.test(xmlStr)) {
+							xmlStr = xmlStr.replace(/\s*<\/Textblock>\n$/, "\n");
+						} else {
+							xmlStr += "\t".repeat(basis + 1) + "<Textblock>\n";
+						}
+						xmlStr += indentStr(tb.xl, basis + 2);
+						xmlStr += "\n" + "\t".repeat(basis + 1) + "</Textblock>\n";
+					} else {
+						// <Ueberschrift> | <Textblock> | <Illustration>
+						xmlStr += indentStr(tb.xl, basis + 1);
+						xmlStr += "\n";
+					}
+				}
+				xmlStr += "\t".repeat(basis) + "</Abschnitt>\n";
+			}
+			xmlStr += "\t".repeat(2) + `</${v}>\n`;
+		}
+		// Belege
+		xmlStr += "\t".repeat(2) + "<Belegreihe>\n";
+		for (let i of d.bl) {
+			xmlStr += indentStr(i.xl, 3);
+			xmlStr += "\n";
+		}
+		xmlStr += "\t".repeat(2) + "</Belegreihe>\n";
+		// Literatur
+		xmlStr += "\t".repeat(2) + "<Literatur>\n";
+		for (let i of d.lt) {
+			xmlStr += "\t".repeat(3) + `<Literaturtitel xml:id="${i.id}" Ziel="../share/Literaturliste.xml#${i.id}"/>\n`;
+		}
+		xmlStr += "\t".repeat(2) + "</Literatur>\n";
+		// Bedeutungsgerüst
+		xmlStr += indentStr(d.bg[xml.bgAkt].xl, 2); // z.Zt. nur ein Gerüst exportieren
+		xmlStr += "\n";
+		// Wortinformationen
+		let wi = d.wi[xml.bgAktGn], // z.Zt. nur einen Wortinfoblock exportieren
+			vt = "";
+		let wiMap = {
+			Assoziation: "Assoziationen",
+			Kollokation: "Kollokationen",
+			Wortfeld: "Wortfeld",
+		};
+		for (let i of wi) {
+			if (wiMap[i.vt] !== vt) {
+				vt = wiMap[i.vt];
+				if (!/<\/Lesarten>\n$/.test(xmlStr)) {
+					xmlStr += "\t".repeat(2) + "</Verweise>\n";
+				}
+				xmlStr += "\t".repeat(2) + `<Verweise Typ="${vt}">\n`;
+			}
+			xmlStr += indentStr(i.xl, 3);
+			xmlStr += "\n";
+		}
+		xmlStr += "\t".repeat(2) + "</Verweise>\n";
+		// Abschluss
+		xmlStr += "\t</Artikel>\n</WGD>\n";
+		// Leerzeilen einfügen
+		let leerzeilen = [
+			/(?<=Revisionen>\n)\t+<Lemma/,
+			/\t+<Diasystematik/,
+			/\t+<Wortgeschichte(_kompakt)?/g,
+			/\t+<Ueberschrift/g,
+			/\t+<Textblock/g,
+			/\t+<Illustration/g,
+			/(?<=(Ueberschrift|Textblock|Illustration)>\n)\t+<Abschnitt/g,
+			/(?<=(Ueberschrift|Textblock|Illustration)>\n)\t+<\/Abschnitt/g,
+			/\t+<Belegreihe/,
+			/(?<=Beleg>\n)\t+<Beleg/g,
+			/\t+<Literatur>/,
+			/\s+<Lesart/g,
+			/\t+<Verweise/g,
+		];
+		for (let i of leerzeilen) {
+			xmlStr = xmlStr.replace(i, m => "\n" + m);
+		}
+		// Tabs durch Leerzeichen ersetzen
+		xmlStr = xmlStr.replace(/\t/g, " ".repeat(2));
+		// Daten exportieren
+		xml.exportierenSpeichern({xmlStr});
+		// Funktionen zum Einrücken der Zeilen eines bestehenden XML-String
+		function indentXml (str, level) {
+			let xmlDoc = parser.parseFromString(str, "text/xml");
+			xmlDoc = helferXml.indent(xmlDoc);
+			const xmlStr = new XMLSerializer().serializeToString(xmlDoc);
+			return indentStr(xmlStr, level);
+		}
+		function indentStr (str, level) {
+			const t = "\t".repeat(level);
+			str = t + str;
+			return str.replace(/\n/g, `\n${t}`);
+		}
+	},
+	// Exportieren: XML-Dateidaten speichern
+	//   xmlStr = String
+	//     (die XML-Dateiedaten)
+	async exportierenSpeichern ({xmlStr}) {
+		const path = require("path");
+		let opt = {
+			title: "XML speichern",
+			defaultPath: path.join(appInfo.documents, `${xml.data.wort}.xml`),
+			filters: [
+				{
+					name: "XML-Dateien",
+					extensions: ["xml"],
+				},
+				{
+					name: "Alle Dateien",
+					extensions: ["*"],
+				},
+			],
+		};
+		if (xml.data.letzter_pfad) {
+			opt.defaultPath = path.join(xml.data.letzter_pfad, `${xml.data.wort}.xml`);
+		}
+		// Dialog anzeigen
+		const {ipcRenderer} = require("electron");
+		let result = await ipcRenderer.invoke("datei-dialog", {
+			open: false,
+			winId: winInfo.winId,
+			opt,
+		});
+		// Fehler oder keine Datei ausgewählt
+		if (result.message || !Object.keys(result).length) {
+			dialog.oeffnen({
+				typ: "alert",
+				text: `Beim Öffnen des Dateidialogs ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${result.message}</p>`,
+			});
+			return;
+		} else if (result.canceled) {
+			return;
+		}
+		// Kartei speichern
+		const fsP = require("fs").promises;
+		fsP.writeFile(result.filePath, xmlStr)
+			.catch(err => {
+				dialog.oeffnen({
+					typ: "alert",
+					text: `Beim Speichern der XML-Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.message}</p>`,
+				});
+			});
+		// Pfad speichern
+		let reg = new RegExp(`^.+\\${path.sep}`);
+		const pfad = result.filePath.match(reg)[0];
+		xml.data.letzter_pfad = pfad;
+		ipcRenderer.sendTo(xml.data.contentsId, "optionen-letzter-pfad", pfad);
 	},
 };
