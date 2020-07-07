@@ -82,6 +82,7 @@ window.addEventListener("load", async () => {
 	ipcRenderer.on("optionen-zuletzt", (evt, karteien) => zuletzt.update(karteien));
 	ipcRenderer.on("optionen-zuletzt-verschwunden", (evt, verschwunden) => zuletzt.verschwundenUpdate(verschwunden));
 	ipcRenderer.on("optionen-fenster", (evt, fenster, status) => optionen.data[fenster] = status);
+	ipcRenderer.on("optionen-letzter-pfad", (evt, pfad) => optionen.aendereLetzterPfad(pfad));
 	// Bedeutungsgerüst-Fenster
 	ipcRenderer.on("bedeutungen-fenster-daten", () => bedeutungenWin.daten());
 	ipcRenderer.on("bedeutungen-fenster-geschlossen", () => bedeutungenWin.contentsId = 0);

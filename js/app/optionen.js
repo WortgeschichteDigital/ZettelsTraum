@@ -1039,10 +1039,15 @@ let optionen = {
 		ipcRenderer.invoke("optionen-speichern", optionen.data, winInfo.winId);
 	},
 	// letzten Pfad speichern
-	aendereLetzterPfad () {
-		const path = require("path");
-		let reg = new RegExp(`^.+\\${path.sep}`);
-		const pfad = kartei.pfad.match(reg)[0];
+	//   pfad = String | undefined
+	//     (Pfad, der gespeichert werden soll; wenn leer
+	//     Pfad aus aktueller Kartei extrahieren)
+	aendereLetzterPfad (pfad = "") {
+		if (!pfad) {
+			const path = require("path");
+			let reg = new RegExp(`^.+\\${path.sep}`);
+			pfad = kartei.pfad.match(reg)[0];
+		}
 		optionen.data.letzter_pfad = pfad;
 		optionen.speichern();
 	},

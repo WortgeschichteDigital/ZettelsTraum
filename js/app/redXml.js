@@ -53,6 +53,7 @@ let redXml = {
 			autorinnen: [],
 			contentsId: winInfo.contentsId,
 			gerueste: {},
+			letzter_pfad: optionen.data.letzter_pfad,
 			themenfelder: [],
 			wort: kartei.wort,
 			xl: data.rd.xl,
