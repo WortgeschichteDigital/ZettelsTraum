@@ -3212,6 +3212,11 @@ let xml = {
 			p1 = p1.replace(/<.+?>/g, ""); // keine Tags
 			return `<URL>${p1}</URL>`;
 		});
+		// @Ziel keine Halbgeviertstriche
+		str = str.replace(/Ziel="(.+?)"/g, (m, p1) => {
+			p1 = p1.replace(/–/g, "-");
+			return `Ziel="${p1}"`;
+		});
 		// in <Aufrufdatum> kein Whitespace
 		str = str.replace(/<Aufrufdatum>(.+?)<\/Aufrufdatum>/g, (m, p1) => {
 			p1 = p1.replace(/\s/g, "");
