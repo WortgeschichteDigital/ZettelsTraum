@@ -387,7 +387,6 @@ let xml = {
 			// Validierung
 			if (key === "id") {
 				let id = xml.abschnittNormId({id: val});
-				id = id.replace(/[,;]/g, "");
 				if (id) {
 					if (!/^WGd-/.test(id)) {
 						id = `WGd-${id}`;
@@ -1972,9 +1971,10 @@ let xml = {
 	//   input = Element || undefined
 	//     (das Input-Element, aus dem die ID ausgelesen wurde)
 	abschnittNormId ({id, input = null}) {
-		let val = id.replace(/^[0-9]+|[&/=?#]+/g, "");
-		val = val.replace(/\s/g, "_");
-		val = val.replace(/_{2,}/g, "_");
+		// erhalten bleiben: . - _
+		let val = id.replace(/^[0-9]+|[!§$%&/()[\]{}<>=?\\*+#:,;'"„“‚‘»«›‹]+/g, "");
+		val = val.replace(/–/g, "-"); // Halbgeviertstriche
+		val = val.replace(/\s+/g, "_");
 		if (input && val !== id) {
 			input.value = val;
 		}
