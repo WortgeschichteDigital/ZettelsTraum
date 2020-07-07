@@ -3663,5 +3663,6 @@ let xml = {
 	speichernKartei () {
 		const {ipcRenderer} = require("electron");
 		ipcRenderer.sendTo(xml.data.contentsId, "kartei-speichern");
+		helfer.animation("gespeichert");
 	},
 };

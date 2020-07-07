@@ -993,7 +993,7 @@ let helfer = {
 		img.width = "96";
 		img.height = "96";
 		let cd = "";
-		if (/changelog|fehlerlog|dokumentation|handbuch/.test(winInfo.typ)) {
+		if (/changelog|fehlerlog|dokumentation|handbuch|xml/.test(winInfo.typ)) {
 			cd = "../";
 		}
 		if (ziel === "zwischenablage") {
