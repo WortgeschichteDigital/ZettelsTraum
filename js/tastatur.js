@@ -311,6 +311,12 @@ let tastatur = {
 				overlay.schliessen(link);
 				return;
 			}
+			// Bearbeitung Textarea abbrechen (XML-Fenster)
+			if (winInfo.typ === "xml" && document.activeElement.nodeName === "TEXTAREA") {
+				let button = document.activeElement.closest(".pre-cont").querySelector(`input[value="Abbrechen"]`);
+				button.dispatchEvent(new Event("click"));
+				return;
+			}
 			// Über-Fenster schließen
 			if (!/^(app|electron)$/.test(winInfo.typ)) {
 				return;
