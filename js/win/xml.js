@@ -458,9 +458,6 @@ let xml = {
 			});
 			return;
 		}
-		if (tyVal === "Hauptlemma" && reVal) {
-			reVal = "";
-		}
 		// XML erzeugen
 		let xmlStr = `<Lemma Typ="${tyVal}">`;
 		for (let i of leVal) {
