@@ -331,6 +331,7 @@ let helferXml = {
 		"s\\.": "siehe",
 		"S\\.": "Siehe",
 		"Sing\\.": "Singular",
+		"sog\\.": "sogenannter",
 		"subst\\.": "substantivisch",
 		"Subst\\.": "Substantiv",
 		"Superl\\.": "Superlativ",
