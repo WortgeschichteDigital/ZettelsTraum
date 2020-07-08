@@ -3155,10 +3155,22 @@ let xml = {
 			str = str.replace(/\[(.*?)\](?!\s*\()/gs, (m, p1) => `<Autorenzusatz>${p1}</Autorenzusatz>`); // sicherstellen, dass nicht Beginn von Verweis!
 			str = str.replace(/\{(.*?)\}/gs, (m, p1) => `<Autorenzusatz>${p1}</Autorenzusatz>`);
 		}
-		// <Verweis_extern> (viele Klammern, entspannte Leerzeichenverwendung)
-		str = str.replace(/\(\s*\[([^\]]+?)\]\s*\(\s*(https?:\/\/[^\s]+?)\s*\)(?:\s*\(\s*([0-9]{1,2})\.\s*([0-9]{1,2})\.\s*([0-9]{4})\s*\))?\s*\)/g, verweisExtern);
-		// <Verweis_extern> (wenige Klammern, rigide Leerzeichenverwendung)
-		str = str.replace(/\[([^\]]+?)\]\(\s*(https?:\/\/[^\s]+?)\s*\)(?:\(\s*([0-9]{1,2})\.\s*([0-9]{1,2})\.\s*([0-9]{4})\s*\))?/g, verweisExtern);
+		// <Verweis_extern>
+		str = str.replace(/\[([^\]]+?)\]\(\s*(https?:\/\/[^\s]+?)\s*\)(?:\(\s*([0-9]{1,2})\.\s*([0-9]{1,2})\.\s*([0-9]{4})\s*\))?/g, (m, p1, p2, p3, p4, p5) => {
+			let verweis = `<Verweis_extern>`;
+			verweis += `\n  <Verweistext>${p1.trim()}</Verweistext>`;
+			verweis += `\n  <Verweisziel/>`;
+			verweis += `\n  <Fundstelle>`;
+			verweis += `\n    <URL>${p2}</URL>`;
+			if (p3) {
+				verweis += `\n    <Aufrufdatum>${p3.length === 1 ? "0" + p3 : p3}.${p4.length === 1 ? "0" + p4 : p4}.${p5}</Aufrufdatum>`;
+			}
+			const fundort = helferXml.fundort({url: p2});
+			verweis += `\n    <Fundort>${fundort}</Fundort>`;
+			verweis += `\n  </Fundstelle>`;
+			verweis += `\n</Verweis_extern>`;
+			return verweis;
+		});
 		// <Verweis>
 		str = str.replace(/\[([^\]]+?)\]\((.+?)\)/g, (m, p1, p2) => {
 			p1 = p1.trim();
@@ -3256,22 +3268,6 @@ let xml = {
 			// falls jemand auf die Idee kommen sollte, auch das hier
 			str = str.replace(/\{(.*?)\}/g, (m, p1) => `<Autorenzusatz>${p1}</Autorenzusatz>`);
 			return str;
-		}
-		// <Verweis_extern>
-		function verweisExtern (m, p1, p2, p3, p4, p5) {
-			let verweis = `<Verweis_extern>`;
-			verweis += `\n  <Verweistext>${p1.trim()}</Verweistext>`;
-			verweis += `\n  <Verweisziel/>`;
-			verweis += `\n  <Fundstelle>`;
-			verweis += `\n    <URL>${p2}</URL>`;
-			if (p3) {
-				verweis += `\n    <Aufrufdatum>${p3.length === 1 ? "0" + p3 : p3}.${p4.length === 1 ? "0" + p4 : p4}.${p5}</Aufrufdatum>`;
-			}
-			const fundort = helferXml.fundort({url: p2});
-			verweis += `\n    <Fundort>${fundort}</Fundort>`;
-			verweis += `\n  </Fundstelle>`;
-			verweis += `\n</Verweis_extern>`;
-			return verweis;
 		}
 		// typische und untypische Formen des Nachklapps einer Literaturangabe erkennen
 		//   p2 = String
