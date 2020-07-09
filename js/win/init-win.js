@@ -14,8 +14,16 @@ let initWin = {
 		});
 		// XML-Redaktionsfenster: alle XML-Daten empfangen
 		ipcRenderer.on("xml-daten", (evt, xmlDaten) => {
-			xml.data = xmlDaten;
-			xml.init();
+			if (xml.data.wort) {
+				// beim Ändern des Karteiworts werden alle Daten noch einmal
+				// an das bereits offene Fenster geschickt; in diesem Fall
+				// darf xml.init() nicht aufgerufen werden (macht Probleme)
+				xml.data.wort = xmlDaten.wort;
+				document.querySelector("h1").textContent = xml.data.wort;
+			} else {
+				xml.data = xmlDaten;
+				xml.init();
+			}
 		});
 		// XML-Redaktionsfester: einen XML-Datensatz empfangen
 		ipcRenderer.on("xml-datensatz", (evt, xmlDatensatz) => xml.empfangen({xmlDatensatz}));
