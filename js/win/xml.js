@@ -3682,6 +3682,9 @@ let xml = {
 	},
 	// Exportieren: XML-Datei zusammenbauen
 	exportieren () {
+		if (!xml.exportierenEval()) {
+			return;
+		}
 		let parser = new DOMParser(),
 			d = xml.data.xl;
 		// XML zusammenbauen
@@ -3828,6 +3831,41 @@ let xml = {
 			str = t + str;
 			return str.replace(/\n/g, `\n${t}`);
 		}
+	},
+	// Exportieren: übperprüfen, ob alle notwendigen Elemente vorhanden sind
+	exportierenEval () {
+		let fehlstellen = [],
+			d = xml.data.xl;
+		if (!d.md.id) {
+			fehlstellen.push("• eine Artikel-ID vergeben");
+		}
+		if (!d.md.ty) {
+			fehlstellen.push("• einen Artikeltyp auswählen");
+		}
+		if (!d.md.tf) {
+			fehlstellen.push("• ein Themenfeld auswählen");
+		}
+		if (!d.md.re.length) {
+			fehlstellen.push("• min. eine Revision anlegen");
+		}
+		if (!d.le.length) {
+			fehlstellen.push("• min. ein Lemma angeben");
+		}
+		if (!d.bl.length) {
+			fehlstellen.push("• min. einen Belege importieren");
+		}
+		if (fehlstellen.length) {
+			let numerus = "eine Pflichtangabe fehlt";
+			if (fehlstellen.length > 1) {
+				numerus = "einige Pflichtangaben fehlen";
+			}
+			dialog.oeffnen({
+				typ: "alert",
+				text: `Die XML-Daten können nicht exportiert werden, da noch ${numerus}. Sie müssen zuvor:\n${fehlstellen.join("<br>")}`,
+			});
+			return false;
+		}
+		return true;
 	},
 	// Exportieren: XML-Dateidaten speichern
 	//   xmlStr = String
