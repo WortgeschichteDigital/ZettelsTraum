@@ -208,15 +208,7 @@ let xml = {
 		// Init: Bedeutungsgerüst (Nachweise, Textreferenzen, XML)
 		xml.bgReset();
 		// Init: Wortinformationen
-		/* jshint ignore:start */
-		if (xml.data.xl.wi?.[xml.bgAktGn]?.length) {
-			xml.wiMake();
-		} else {
-			xml.elementLeer({
-				ele: document.getElementById("wi"),
-			});
-		}
-		/* jshint ignore:end */
+		xml.wiMake();
 	},
 	// Daten zurücksetzen
 	async reset () {
@@ -540,12 +532,14 @@ let xml = {
 			xml.bgSelSet();
 		} else if (xmlDatensatz.key === "wi") {
 			xml.data.xl.wi[xmlDatensatz.gn] = xmlDatensatz.ds;
-			if (xmlDatensatz.gn === xml.bgAktGn) {
+			if (xml.bgAkt > -1 && xmlDatensatz.gn === xml.bgAktGn ||
+					xml.bgAkt === -1) {
 				xml.wiMake();
 			}
 		} else if (xmlDatensatz.key === "wi-single") {
 			/* jshint ignore:start */
 			if (!xml.data.xl.wi?.[xml.bgAktGn]?.length) {
+				xml.bgAktGn = xml.bgAktGn || xmlDatensatz.gn;
 				xml.data.xl.wi[xml.bgAktGn] = [xmlDatensatz.ds];
 				xml.wiMake();
 			} else {
@@ -748,7 +742,8 @@ let xml = {
 		let wi = document.getElementById("wi");
 		helfer.keineKinder(wi);
 		// keine Daten zum aktuellen Gerüst => Leermeldung
-		if (!xml.data.xl.wi?.[xml.bgAktGn]?.length) { // jshint ignore:line
+		let keys = Object.keys(xml.data.xl.wi);
+		if (!keys.length || !xml.data.xl.wi?.[xml.bgAktGn]?.length) { // jshint ignore:line
 			xml.elementLeer({ele: wi});
 			return;
 		}
@@ -787,9 +782,11 @@ let xml = {
 			}
 		}
 	},
-	// Bedeutungsgerüst: speichert den Slot und die Nummer
-	// des aktuellen Bedeutungsgerüsts
+	// Bedeutungsgerüst: speichert den Slot des aktuellen Bedeutungsgerüsts
 	bgAkt: -1,
+	// Bedeutungsgerüst: speichert die ID des aktuellen Bedeutungsgerüsts oder
+	// die ID der aktuellen Wortinformationen, falls kein Bedeutungsgerüst vorhanden
+	// (wird nur für die Wortinformationen genutzt)
 	bgAktGn: "",
 	// Bedeutungsgerüst: Nachweisformular umstellen
 	bgNachweisToggle () {
@@ -1279,7 +1276,7 @@ let xml = {
 			xml.bgMakeXML();
 		} else {
 			xml.bgAkt = -1;
-			xml.bgAktGn = "";
+			xml.bgAktGn = Object.keys(xml.data.xl.wi)[0] ?? ""; // jshint ignore:line
 			xml.elementLeer({
 				ele: document.getElementById("bg"),
 			});
