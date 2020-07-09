@@ -213,10 +213,6 @@
 	width: 200px;
 }
 
-.karteisuche-schmal #karteisuche-filter span input[type="text"] {
-	width: 100px;
-}
-
 #karteisuche-filter span input[type="text"].karteisuche-filter {
 	width: 135px;
 }
@@ -224,11 +220,6 @@
 #karteisuche-filter span input.karteisuche-karteiwort,
 #karteisuche-filter span input.karteisuche-volltext {
 	width: 219px;
-}
-
-.karteisuche-schmal #karteisuche-filter span input.karteisuche-karteiwort,
-.karteisuche-schmal #karteisuche-filter span input.karteisuche-volltext {
-	width: 119px;
 }
 
 #karteisuche-filter span input[type="text"].karteisuche-datum-typ {
@@ -266,6 +257,33 @@
 #karteisuche-filter .dropdown-link-td {
 	top: 3px;
 	right: 2px;
+}
+
+/* Karteisuche schmal --------------------------- */
+@media (max-width: 835px) {
+	#karteisuche-filter span input.karteisuche-tag,
+	#karteisuche-filter span input.karteisuche-redaktion-person {
+		width: 150px;
+	}
+}
+
+@media (max-width: 780px) {
+	#karteisuche-filter span input[type="text"].karteisuche-filter {
+		width: 100px;
+	}
+}
+
+@media (max-width: 750px) {
+	#karteisuche-filter span input[type="text"] {
+		width: 100px;
+	}
+}
+
+@media (max-width: 640px) {
+	#karteisuche-filter input.karteisuche-redaktionsdatum-von,
+	#karteisuche-filter input.karteisuche-redaktionsdatum-bis {
+		width: 120px;
+	}
 }
 
 /* Karteien ------------------------------------- */

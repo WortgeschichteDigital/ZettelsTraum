@@ -5,8 +5,6 @@ let karteisuche = {
 	async oeffnen () {
 		let fenster = document.getElementById("karteisuche");
 		overlay.oeffnen(fenster);
-		// schmale Anzeige?
-		karteisuche.filterBreite();
 		// Läuft im aktuellen Fenster gerade eine Suche?
 		if (!document.getElementById("karteisuche-suche-laeuft").classList.contains("aus")) {
 			return;
@@ -1782,21 +1780,6 @@ let karteisuche = {
 					inputs[j].value = werte[j];
 				}
 			}
-		}
-	},
-	// feststellen, ob die Textfelder in den Filtern verkleiner werden müssen
-	// (blöder Hack, geht aber nicht mit overflow, da die Dropdown-Menüs ausbrechen
-	// müssen; setzt man overflow-x auf "hidden", wird overflow-y automatisch zu "auto",
-	// ganz egal, was man deklariert)
-	filterBreite () {
-		let ks = document.getElementById("karteisuche");
-		if (ks.classList.contains("aus")) {
-			return;
-		}
-		if (ks.querySelector("div").offsetWidth < 730) {
-			ks.classList.add("karteisuche-schmal");
-		} else {
-			ks.classList.remove("karteisuche-schmal");
 		}
 	},
 	// Ansicht der Filter umschalten
