@@ -3716,6 +3716,9 @@ let xml = {
 		let basisZuletzt = 0;
 		for (let [k, v] of Object.entries(texte)) {
 			xmlStr += "\t".repeat(2) + `<${v}>\n`;
+			if (!d[k].length) {
+				xmlStr += "\t".repeat(3) + `<Abschnitt/>\n`;
+			}
 			for (let i of d[k]) {
 				let attr = [];
 				if (i.id) {
@@ -3772,11 +3775,14 @@ let xml = {
 		}
 		xmlStr += "\t".repeat(2) + "</Literatur>\n";
 		// Bedeutungsgerüst
-		xmlStr += indentStr(d.bg[xml.bgAkt].xl, 2); // z.Zt. nur ein Gerüst exportieren
-		xmlStr += "\n";
+		if (xml.bgAkt > -1) {
+			xmlStr += indentStr(d.bg[xml.bgAkt].xl, 2); // z.Zt. nur ein Gerüst exportieren
+			xmlStr += "\n";
+		}
 		// Wortinformationen
-		let wi = d.wi[xml.bgAktGn], // z.Zt. nur einen Wortinfoblock exportieren
-			vt = "";
+		// (z.Zt. nur einen Wortinfoblock exportieren)
+		let wi = d.wi[xml.bgAktGn] ?? []; // jshint ignore:line
+		let vt = "";
 		let wiMap = {
 			Assoziation: "Assoziationen",
 			Kollokation: "Kollokationen",
@@ -3785,7 +3791,7 @@ let xml = {
 		for (let i of wi) {
 			if (wiMap[i.vt] !== vt) {
 				vt = wiMap[i.vt];
-				if (!/<\/Lesarten>\n$/.test(xmlStr)) {
+				if (/<Verweise Typ/.test(xmlStr)) {
 					xmlStr += "\t".repeat(2) + "</Verweise>\n";
 				}
 				xmlStr += "\t".repeat(2) + `<Verweise Typ="${vt}">\n`;
@@ -3793,7 +3799,9 @@ let xml = {
 			xmlStr += indentStr(i.xl, 3);
 			xmlStr += "\n";
 		}
-		xmlStr += "\t".repeat(2) + "</Verweise>\n";
+		if (wi.length) {
+			xmlStr += "\t".repeat(2) + "</Verweise>\n";
+		}
 		// Abschluss
 		xmlStr += "\t</Artikel>\n</WGD>\n";
 		// Leerzeilen einfügen
