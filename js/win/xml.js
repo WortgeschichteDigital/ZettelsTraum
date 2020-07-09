@@ -204,6 +204,7 @@ let xml = {
 				});
 			}
 		}
+		xml.belegeZaehlen();
 		// Init: Bedeutungsgerüst (Nachweise, Textreferenzen, XML)
 		xml.bgReset();
 		// Init: Wortinformationen
@@ -518,6 +519,8 @@ let xml = {
 			});
 			if (xmlDatensatz.key === "lt") {
 				xml.bgNwTfMake({key: "nw"});
+			} else {
+				xml.belegeZaehlen();
 			}
 		} else if (xmlDatensatz.key === "bg") {
 			const slot = xml.data.xl.bg.findIndex(i => i.gn === xmlDatensatz.ds.gn);
@@ -736,6 +739,8 @@ let xml = {
 		// Beleg einfügen und speichern
 		xml.empfangenArr(xmlDatensatz);
 		xml.speichern();
+		// Belege zählen
+		xml.belegeZaehlen();
 	},
 	// Wortinformationen: alle Wörter aufbauen
 	wiMake () {
@@ -1772,9 +1777,14 @@ let xml = {
 				xml.elementLeer({
 					ele: document.getElementById(key),
 				});
+				if (key === "bl") {
+					xml.belegeZaehlen();
+				}
 			} else {
 				if (key === "lt") {
 					xml.bgNwTfMake({key: "nw"});
+				} else if (key === "bl") {
+					xml.belegeZaehlen();
 				}
 				xml.layoutTabellig({
 					id: key,
@@ -3282,6 +3292,16 @@ let xml = {
 				return false;
 			}
 			return true;
+		}
+	},
+	// zählt die Belege durch und trägt die Anzahl ein
+	belegeZaehlen () {
+		let anzahl = document.getElementById("belege-anzahl"),
+			belege = document.querySelectorAll("#bl .kopf");
+		if (belege.length) {
+			anzahl.textContent = `(${belege.length})`;
+		} else {
+			anzahl.textContent = " ";
 		}
 	},
 	// Kopf-Element bewegen

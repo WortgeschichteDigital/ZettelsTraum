@@ -358,6 +358,14 @@ label {
 	width: 300px;
 }
 
+#belege-anzahl {
+	margin-left: 10px;
+	color: var(--textHell);
+	font-size: 14px;
+	font-style: normal;
+	line-height: 22px;
+}
+
 .toggle {
 	position: absolute;
 	top: 11px;
