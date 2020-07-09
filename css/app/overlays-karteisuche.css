@@ -218,7 +218,7 @@
 }
 
 #karteisuche-filter span input[type="text"].karteisuche-filter {
-	width: 100px;
+	width: 135px;
 }
 
 #karteisuche-filter span input.karteisuche-karteiwort,
@@ -245,6 +245,10 @@
 
 #karteisuche-filter input:read-only {
 	cursor: default;
+}
+
+#karteisuche-filter label {
+	margin-right: 5px;
 }
 
 #karteisuche-filter input[type="date"] {
