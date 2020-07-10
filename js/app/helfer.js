@@ -587,6 +587,74 @@ let helfer = {
 			monate = ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"];
 		return `${wochentage[d.getDay()]}, ${d.getDate()}. ${monate[d.getMonth()]} ${d.getFullYear()}, ${d.getHours()}:${m} Uhr`;
 	},
+	// Datum ermitteln, als solches und in einem Sortierformat zurückgeben
+	//   datum = String
+	//     (Text mit dem Datum)
+	//   erstesDatum = true | undefined
+	//     (der String könnte mehrere Daten enthalten => erstgenanntes Datum ermitteln)
+	datumGet ({datum, erstesDatum = false}) {
+		// erstgenanntes Datum ermitteln
+		if (erstesDatum) {
+			let formate = [
+				/[0-9]{4}-[0-9]{2}-[0-9]{2}/,
+				/[0-9]{1,2}\.\s?[0-9]{1,2}\.\s?[0-9]{4}/,
+				/[0-9]{4}[-–][0-9]{4}/,
+				/[0-9]{4}\/[0-9]{2}/,
+				/[0-9]{4}/,
+				/[0-9]{2}\.\sJh\./,
+			];
+			let hit = -1,
+				datumTmp = datum;
+			for (let i = 0, len = formate.length; i < len; i++) {
+				if (!formate[i].test(datumTmp)) {
+					continue;
+				}
+				hit = i;
+				datumTmp = datum.split(formate[i])[0];
+				if (!datumTmp) {
+					break;
+				}
+			}
+			datum = datum.match(formate[hit])[0];
+			if (hit < 2) {
+				let ziffern = datum.match(/[0-9]+/g);
+				if (hit === 0) {
+					datum = `${ziffern[2]}.${ziffern[1]}.${ziffern[0]}`;
+				} else {
+					datum = `${ziffern[0].padStart(2, "0")}.${ziffern[1].padStart(2, "0")}.${ziffern[2]}`;
+				}
+			} else if (hit === 2) {
+				datum = datum.replace("–", "-");
+			}
+		}
+		// Datumformate ermitteln
+		let datumForm1 = /^(?<tag>[0-9]{2})\.(?<monat>[0-9]{2})\.(?<jahr>[0-9]{4})$/.exec(datum),
+			datumForm2 = /^(?<jahrVon>[0-9]{4})-(?<jahrBis>[0-9]{4})$/.exec(datum),
+			datumForm3 = /^(?<jahrVon>[0-9]{4})\/(?<jahrBis>[0-9]{2})$/.exec(datum),
+			datumForm4 = /^(?<jahr>[0-9]{4})$/.exec(datum),
+			datumForm5 = /^(?<jh>[0-9]{2})\.\sJh\.$/.exec(datum),
+			datumSort = "";
+		if (datumForm1) {
+			let g = datumForm1.groups;
+			datumSort = `${g.jahr}-${g.monat}-${g.tag}`;
+		} else if (datumForm2) {
+			let g = datumForm2.groups;
+			datumSort = `${g.jahrVon}-xx-xx-${g.jahrBis}`;
+		} else if (datumForm3) {
+			let g = datumForm3.groups;
+			datumSort = `${g.jahrVon}-xx-xx-${g.jahrVon.substring(0, 2)}${g.jahrBis}`;
+		} else if (datumForm4) {
+			let g = datumForm4.groups;
+			datumSort = `${g.jahr}-00-00`;
+		} else if (datumForm5) {
+			let g = datumForm5.groups;
+			datumSort = `${g.jh}-00-00`;
+		}
+		return {
+			anzeige: datum,
+			sortier: datumSort,
+		};
+	},
 	// überprüft den Typ des übergebenen Objekts zuverlässig
 	// mögliche Rückgabewerte u.a.: Arguments, Array, Boolean, Date, Element, Error, Function, JSON, Math, NodeList, Number, Object, RegExp, String
 	//   typ = String
