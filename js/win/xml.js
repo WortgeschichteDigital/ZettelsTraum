@@ -2226,6 +2226,10 @@ let xml = {
 				};
 				for (let [k, v] of Object.entries(felder)) {
 					if (v) {
+						if (k === "aufrufdatum") {
+							let datum = v.split(".");
+							v = `${datum[2]}-${datum[1]}-${datum[0]}`;
+						}
 						abb.querySelector(`[id$="${k}"]`).value = v;
 					}
 				}
