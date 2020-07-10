@@ -560,58 +560,49 @@ let liste = {
 	//     (IDs der zu sortierenden Belege)
 	belegeSortieren (a, b) {
 		// Sortierdaten ermitteln
-		let datum = {
-			a: 0,
-			b: 0,
-		};
+		let datum = [];
 		for (let i = 0; i < 2; i++) {
-			// Jahreszahl im Zwischenspeicher?
-			if (i === 0 && liste.belegeSortierenCache[a]) {
-				datum.a = liste.belegeSortierenCache[a];
-				continue;
-			} else if (i === 1 && liste.belegeSortierenCache[b]) {
-				datum.b = liste.belegeSortierenCache[b];
+			const id = i === 0 ? a : b;
+			// Sortierdatum im Zwischenspeicher?
+			if (liste.belegeSortierenCache[id]) {
+				datum[i] = liste.belegeSortierenCache[id];
 				continue;
 			}
-			// Jahreszahl ermitteln
-			let id = a,
-				zeiger = "a";
-			if (i === 1) {
-				id = b;
-				zeiger = "b";
-			}
-			let da = liste.zeitschnittErmitteln(data.ka[id].da);
-			datum[zeiger] = parseInt(da.jahr, 10);
-			// Jahreszahl zwischenspeichern
-			liste.belegeSortierenCache[id] = datum[zeiger];
+			// Sortierdatum ermitteln
+			datum[i] = helfer.datumGet({
+				datum: data.ka[id].da,
+				erstesDatum: true,
+			}).sortier;
+			// Sortierdatum zwischenspeichern
+			liste.belegeSortierenCache[id] = datum[i];
 		}
-		// Belege aus demselben Jahr
-		if (datum.a === datum.b) {
-			let autor = [data.ka[a].au, data.ka[b].au];
-			// nach Belegnummer: auf- oder absteigend
-			if (autor[0] === autor[1]) {
-				if (optionen.data.belegliste.sort_aufwaerts) {
-					return parseInt(a, 10) - parseInt(b, 10);
-				} else {
-					return parseInt(b, 10) - parseInt(a, 10);
-				}
+		// 1. Weg: Sortierung nach Datum (chronologisch auf- oder absteigend)
+		let sortierung = [1, -1];
+		if (optionen.data.belegliste.sort_aufwaerts) {
+			sortierung.reverse();
+		}
+		if (datum[0] !== datum[1]) {
+			datum.sort();
+			if (datum[0] === liste.belegeSortierenCache[a]) {
+				return sortierung[0];
 			}
-			// nach Autor: alphabetisch auf- oder absteigend
+			return sortierung[1];
+		}
+		// 2. Weg: Sortierung nach Autor (alphabetisch auf- oder absteigend)
+		let autor = [data.ka[a].au, data.ka[b].au];
+		if (autor[0] !== autor[1]) {
 			autor.sort(helfer.sortAlpha);
-			let sortierung = [1, -1];
-			if (optionen.data.belegliste.sort_aufwaerts) {
-				sortierung.reverse();
-			}
 			if (autor[0] === data.ka[a].au) {
 				return sortierung[0];
 			}
 			return sortierung[1];
 		}
-		// Sortierung nach Jahr
+		// 3. Weg: Sortierung nach Belegnummer (auf- oder absteigend)
 		if (optionen.data.belegliste.sort_aufwaerts) {
-			return datum.a - datum.b;
+			return parseInt(a, 10) - parseInt(b, 10);
+		} else {
+			return parseInt(b, 10) - parseInt(a, 10);
 		}
-		return datum.b - datum.a;
 	},
 	// erstellt die Anzeige des Belegs
 	//   id = String
