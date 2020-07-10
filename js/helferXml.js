@@ -118,29 +118,8 @@ let helferXml = {
 	//   xmlStr = String
 	//     (String mit XML-Tags)
 	datumFormat ({xmlStr}) {
-		let datum = xmlStr.match(/<Datum>(.+?)<\/Datum>/)[1],
-			datumForm1 = /^(?<tag>[0-9]{2})\.(?<monat>[0-9]{2})\.(?<jahr>[0-9]{4})$/.exec(datum),
-			datumForm2 = /^(?<jahrVon>[0-9]{4})-(?<jahrBis>[0-9]{4})$/.exec(datum),
-			datumForm3 = /^(?<jahrVon>[0-9]{4})\/(?<jahrBis>[0-9]{2})$/.exec(datum),
-			datumForm4 = /^(?<jahr>[0-9]{4})$/.exec(datum),
-			datumSort = "";
-		if (datumForm1) {
-			let g = datumForm1.groups;
-			datumSort = `${g.jahr}-${g.monat}-${g.tag}`;
-		} else if (datumForm2) {
-			let g = datumForm2.groups;
-			datumSort = `${g.jahrVon}-xx-xx-${g.jahrBis}`;
-		} else if (datumForm3) {
-			let g = datumForm3.groups;
-			datumSort = `${g.jahrVon}-xx-xx-${g.jahrVon.substring(0, 2)}${g.jahrBis}`;
-		} else if (datumForm4) {
-			let g = datumForm4.groups;
-			datumSort = `${g.jahr}-00-00`;
-		}
-		return {
-			anzeige: datum,
-			sortier: datumSort,
-		};
+		const datum = xmlStr.match(/<Datum>(.+?)<\/Datum>/)[1];
+		return helfer.datumGet({datum});
 	},
 	// geschützte Zeichen maskieren
 	//   text = String
