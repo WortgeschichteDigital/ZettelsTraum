@@ -257,7 +257,7 @@ let stamm = {
 		}
 		if (an > 1 || an === 1 && !data.fv[wort].an) {
 			let check = stamm.kopfKonfigMakeCheckbox({
-				wort: wort,
+				wort,
 				ds: "an",
 				text: "aktivieren",
 			});
@@ -265,14 +265,21 @@ let stamm = {
 		}
 		// Checkbox: erweitern
 		let check = stamm.kopfKonfigMakeCheckbox({
-			wort: wort,
+			wort,
 			ds: "tr",
 			text: "erweitern",
 		});
 		popup.appendChild(check);
+		// Checkbox: Nebenlemma
+		check = stamm.kopfKonfigMakeCheckbox({
+			wort,
+			ds: "nl",
+			text: "Nebenlemma",
+		});
+		popup.appendChild(check);
 		// Checkbox: nur markieren
 		check = stamm.kopfKonfigMakeCheckbox({
-			wort: wort,
+			wort,
 			ds: "ma",
 			text: "nur markieren",
 		});
@@ -404,6 +411,10 @@ let stamm = {
 		// erweitern
 		if (data.fv[wort].an && !data.fv[wort].tr) {
 			span.insertBefore(stamm.kopfMakeIcon("nicht-trunkiert.svg"), text);
+		}
+		// Nebenlemma
+		if (data.fv[wort].an && data.fv[wort].nl) {
+			span.insertBefore(stamm.kopfMakeIcon("raute.svg"), text);
 		}
 		// nur markiert
 		if (data.fv[wort].an && data.fv[wort].ma) {

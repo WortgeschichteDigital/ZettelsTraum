@@ -4,7 +4,7 @@ let konversion = {
 	// aktuelle Version des Dateiformats
 	// *** WICHTIG! *** WICHTIG! *** WICHTIG! ***
 	// Bei Änderungen anpassen!
-	version: 15,
+	version: 16,
 	// Verteilerfunktion
 	start () {
 		konversion.von1nach2();
@@ -21,6 +21,7 @@ let konversion = {
 		konversion.von12nach13();
 		konversion.von13nach14();
 		konversion.von14nach15();
+		konversion.von15nach16();
 	},
 	// Konversion des Dateiformats von Version 1 nach Version 2
 	von1nach2 () {
@@ -286,6 +287,20 @@ let konversion = {
 		}
 		// Datenfeld "rd.wi" ergänzt
 		data.rd.wi = [];
+		// Versionsnummer hochzählen
+		data.ve++;
+		// Änderungsmarkierung setzen
+		kartei.karteiGeaendert(true);
+	},
+	// Konversion des Dateiformats von Version 15 nach Version 16
+	von15nach16 () {
+		if (data.ve > 15) {
+			return;
+		}
+		// Datenfeld "nl" in allen Wörtern der Formvarianten ergänzen
+		for (let v of Object.values(data.fv)) {
+			v.nl = false;
+		}
 		// Versionsnummer hochzählen
 		data.ve++;
 		// Änderungsmarkierung setzen

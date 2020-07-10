@@ -997,13 +997,15 @@ let liste = {
 			return schnitt;
 		}
 		let farbe = 0,
+			nebenlemma = false,
 			nurMarkieren = false,
 			regNoG = null;
 		for (let i of helfer.formVariRegExpRegs) {
-			if (keinNurMarkieren && data.fv[i.wort].ma) {
+			if (keinNurMarkieren && data.fv[i.wort].ma && !data.fv[i.wort].nl) {
 				continue;
 			}
 			farbe = data.fv[i.wort].fa;
+			nebenlemma = data.fv[i.wort].nl;
 			nurMarkieren = data.fv[i.wort].ma;
 			let reg;
 			if (!data.fv[i.wort].tr) {
@@ -1053,6 +1055,12 @@ let liste = {
 			if (farbe) {
 				m = m.replace(/class="wort/g, `class="wort wortFarbe${farbe}`);
 			}
+			// als Neben- oder Hauptlemma markieren
+			if (nebenlemma) {
+				m = m.replace(/class="wort/g, `class="wort nebenlemma`);
+			} else {
+				m = m.replace(/class="wort/g, `class="wort hauptlemma`);
+			}
 			// ggf. die Markierungsinfo eintragen (wichtig für XML-Export)
 			if (nurMarkieren) {
 				m = m.replace(/class="wort/g, `class="wort markierung`);
@@ -1095,10 +1103,14 @@ let liste = {
 			}
 			return true; // alles okay (das Wort taucht auf und soll berücksichtigt werden)
 		}
-		// Test 4: Sollen hier überhaupt Wörter berücksichtigt werden?
+		// Test 4: Enthält der Absatz ein Nebenlemma?
+		if (div.querySelector(".nebenlemma")) {
+			return true; // Absätze mit min. einem Nebenlemma immer anzeigen
+		}
+		// Test 5: Sollen hier überhaupt Wörter berücksichtigt werden?
 		let woerter = [];
 		for (let i of helfer.formVariRegExpRegs) {
-			if (data.fv[i.wort].ma) {
+			if (data.fv[i.wort].ma || data.fv[i.wort].nl) {
 				woerter.push(true);
 			} else {
 				woerter.push(false);
@@ -1107,8 +1119,8 @@ let liste = {
 		if (woerter.every(i => i === true)) {
 			return false; // keine Wörter zu berücksichtigen
 		}
-		// Test 5: Tauchen alle Wörter eines mehrgliedrigen Karteiworts auf?
-		let alleMarks = div.querySelectorAll(".wort");
+		// Test 6: Tauchen alle Wörter eines mehrgliedrigen Karteiworts auf?
+		let alleMarks = div.querySelectorAll(".wort.hauptlemma");
 		for (let i = 0, len = alleMarks.length; i < len; i++) {
 			let treffer = alleMarks[i].textContent;
 			if (alleMarks[i].classList.contains("wort-kein-ende")) {
@@ -1120,7 +1132,9 @@ let liste = {
 			for (let j = 0, len = helfer.formVariRegExpRegs.length; j < len; j++) {
 				let formVari = helfer.formVariRegExpRegs[j],
 					reg;
-				if (data.fv[formVari.wort].ma) { // Wort nur markieren, sonst nicht berücksichtigen
+				if (data.fv[formVari.wort].ma || data.fv[formVari.wort].nl) {
+					// ma: Wort nur markieren, sonst nicht berücksichtigen
+					// nl: Nebenlemmata für diese Operation nicht berücksichtigen
 					continue;
 				}
 				if (!data.fv[formVari.wort].tr) { // nicht trunkiert
