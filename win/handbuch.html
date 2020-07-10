@@ -541,6 +541,8 @@
 						<p>Für die Sortierung der Belege wird die Datumsangabe verwendet, die als erstes im Feld auftaucht. Stünde im Feld also <q>2010 [Nachdruck Ausgabe 1788]</q>, würde der Beleg in der <a href="#belegliste">Belegliste</a> als Text aus dem Jahr <i>2010</i> behandelt; stünde im Feld <q>1788 [Nachdruck 2010]</q>, würde der Beleg als einer aus dem Jahr <i>1788</i> angesehen.</p>
 
 						<p>Jahrhundertangaben werden auf das Jahr null datiert (nicht ganz korrekt, weil dieses Jahr bekanntlich noch zum vorherigen Jahrhundert gehört, das ist aus mehreren Gründen aber leichter zu handhaben). Die Angabe <q>18. Jh.</q> im Datumsfeld wird für die Sortierung der Belegliste mithin so behandelte, als stamme der Beleg aus dem Jahr <i>1700</i>.</p>
+
+						<p>Geben Sie ein Tagesdatum an, werden die Belege in der <a href="#belegliste">Belegliste</a> nach Jahr, Monat und Tag sortiert. Erkannt werden Tagesdaten im ISO 8601-Format (<code class="quelltext">2019-12-01</code>) und Tagesdaten nach dem Muster <code class="quelltext">1. 12. 2019</code>, auch mit führender Null und ohne Leerzeichen: <code class="quelltext">01.12.2019</code>.</p>
 					</div>
 
 					<p><b>Autor:</b> Urheber des Textes im Belegfeld</p>
@@ -1228,7 +1230,8 @@
 					<div class="info">
 						<p>Die Belege in der Liste können chronologisch auf- oder absteigend sortiert werden. Belege, für die nur eine Jahrhundertangabe zur Verfügung steht, werden (inhaltlich nicht ganz korrekt, <abbr title="vergleiche">vgl.</abbr> die Erläuterungen <a href="#karteikarte-datum">zum Datum-Feld der Karteikarte</a>) auf das Jahr null datiert. Die Angabe <q>17. Jh.</q> wird also wie <q>1700</q> behandelt.</p>
 
-						<p>Stammen zwei oder mehr Belege aus demselben Jahr, werden sie alphabetisch nach Autor sortiert: bei chronologisch aufsteigender Belegliste alphabetisch aufsteigend, bei chronologisch absteigender Belegliste alphabetisch absteigend. Sind auch die Autoren identisch, werden die Belege als Fallback nach Belegnummer geordnet: auch hier auf- oder absteigend, je nachdem wie die Chronologie der Liste ist.</p>
+						<p>Für die Sortierung wird das erste im Datumsfeld zu findende Datum genutzt. Handelt es sich um ein Tagesdatum, werden die Belge genau nach Jahre, Monat und Tag sortiert. Erkannt werden Tagesdaten im ISO 8601-Format (<code class="quelltext">2019-12-01</code>) und Tagesdaten nach dem Muster <code class="quelltext">1. 12. 2019</code>, auch mit führender Null und ohne Leerzeichen: <code class="quelltext">01.12.2019</code>.
+						Haben zwei oder mehr Belege dasselbe Datum, werden sie alphabetisch nach Autor sortiert: bei chronologisch aufsteigender Belegliste alphabetisch aufsteigend, bei chronologisch absteigender Belegliste alphabetisch absteigend. Sind auch die Autoren identisch, werden die Belege als Fallback nach Belegnummer geordnet: auch hier auf- oder absteigend, je nachdem wie die Chronologie der Liste ist.</p>
 					</div>
 
 					<p class="erklaerung-icon"><img src="../img/auge.svg" width="24" height="24" alt=""><a href="#belegliste-detailansicht">Detailansicht</a> der Belege umschalten</p>
