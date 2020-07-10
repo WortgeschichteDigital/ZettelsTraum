@@ -284,11 +284,14 @@ let xml = {
 		let au = document.getElementById("md-re-au"),
 			da = document.getElementById("md-re-da"),
 			no = document.getElementById("md-re-no"),
-			auVal = helfer.textTrim(au.value, true),
+			auVal = au.value ? au.value.split(/\//) : [],
 			daVal = da.value,
 			noVal = helfer.typographie(helfer.textTrim(no.value, true));
+		for (let i = 0, len = auVal.length; i < len; i++) {
+			auVal[i] = helfer.textTrim(auVal[i], true);
+		}
 		// Überprüfungen
-		if (!auVal) {
+		if (!auVal.length) {
 			dialog.oeffnen({
 				typ: "alert",
 				text: "Sie haben keine AutorIn angegeben.",
@@ -307,7 +310,9 @@ let xml = {
 		// XML erzeugen
 		let datum = /^(?<jahr>[0-9]{4})-(?<monat>[0-9]{2})-(?<tag>[0-9]{2})$/.exec(daVal),
 			xmlStr = `<Revision>`;
-		xmlStr += `<Autor>${auVal}</Autor>`;
+		for (let i of auVal) {
+			xmlStr += `<Autor>${i}</Autor>`;
+		}
 		xmlStr += `<Datum>${datum.groups.tag}.${datum.groups.monat}.${datum.groups.jahr}</Datum>`;
 		xmlStr += `<Aenderung>${noVal}</Aenderung>`;
 		xmlStr += `</Revision>`;
@@ -1414,7 +1419,7 @@ let xml = {
 				idText = " ";
 			}
 		} else if (key === "re") {
-			idText = xml.data.xl.md.re[slot].au;
+			idText = xml.data.xl.md.re[slot].au.join("/");
 		} else if (key === "le") {
 			idText = xml.data.xl[key][slot].le.join("/");
 		} else if (key === "wi") {
@@ -3335,6 +3340,7 @@ let xml = {
 		if (key === "re") {
 			arr = xml.data.xl.md.re;
 			slotKlon = {...arr[slot]};
+			slotKlon.au = [...arr[slot].au];
 		} else if (/^(ab|tx)$/.test(key) &&
 				slotBlock !== null) {
 			arr = xml.data.xl[key][slot].ct;
