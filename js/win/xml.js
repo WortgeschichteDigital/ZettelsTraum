@@ -3179,13 +3179,16 @@ let xml = {
 			return verweis;
 		});
 		// <Verweis>
-		str = str.replace(/\[([^\]]+?)\]\((.+?)\)/g, (m, p1, p2) => {
+		str = str.replace(/\[([^\]]+?)\]\((.+?)\)(?:\(([a-zA-Z]+)\))?/g, (m, p1, p2, p3) => {
 			p1 = p1.trim();
 			p2 = p2.trim();
 			if (p1 === p2) {
 				p1 = "";
 			}
-			let verweis = `<Verweis Typ=##vgl##>`;
+			if (!p3) {
+				p3 = "vgl";
+			}
+			let verweis = `<Verweis Typ=##${p3}##>`;
 			verweis += `\n  <Verweistext>${p1}</Verweistext>`;
 			verweis += `\n  <Verweisziel>${p2}</Verweisziel>`;
 			verweis += "\n</Verweis>";
