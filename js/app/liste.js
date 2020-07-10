@@ -560,58 +560,49 @@ let liste = {
 	//     (IDs der zu sortierenden Belege)
 	belegeSortieren (a, b) {
 		// Sortierdaten ermitteln
-		let datum = {
-			a: 0,
-			b: 0,
-		};
+		let datum = [];
 		for (let i = 0; i < 2; i++) {
-			// Jahreszahl im Zwischenspeicher?
-			if (i === 0 && liste.belegeSortierenCache[a]) {
-				datum.a = liste.belegeSortierenCache[a];
-				continue;
-			} else if (i === 1 && liste.belegeSortierenCache[b]) {
-				datum.b = liste.belegeSortierenCache[b];
+			const id = i === 0 ? a : b;
+			// Sortierdatum im Zwischenspeicher?
+			if (liste.belegeSortierenCache[id]) {
+				datum[i] = liste.belegeSortierenCache[id];
 				continue;
 			}
-			// Jahreszahl ermitteln
-			let id = a,
-				zeiger = "a";
-			if (i === 1) {
-				id = b;
-				zeiger = "b";
-			}
-			let da = liste.zeitschnittErmitteln(data.ka[id].da);
-			datum[zeiger] = parseInt(da.jahr, 10);
-			// Jahreszahl zwischenspeichern
-			liste.belegeSortierenCache[id] = datum[zeiger];
+			// Sortierdatum ermitteln
+			datum[i] = helfer.datumGet({
+				datum: data.ka[id].da,
+				erstesDatum: true,
+			}).sortier;
+			// Sortierdatum zwischenspeichern
+			liste.belegeSortierenCache[id] = datum[i];
 		}
-		// Belege aus demselben Jahr
-		if (datum.a === datum.b) {
-			let autor = [data.ka[a].au, data.ka[b].au];
-			// nach Belegnummer: auf- oder absteigend
-			if (autor[0] === autor[1]) {
-				if (optionen.data.belegliste.sort_aufwaerts) {
-					return parseInt(a, 10) - parseInt(b, 10);
-				} else {
-					return parseInt(b, 10) - parseInt(a, 10);
-				}
+		// 1. Weg: Sortierung nach Datum (chronologisch auf- oder absteigend)
+		let sortierung = [1, -1];
+		if (optionen.data.belegliste.sort_aufwaerts) {
+			sortierung.reverse();
+		}
+		if (datum[0] !== datum[1]) {
+			datum.sort();
+			if (datum[0] === liste.belegeSortierenCache[a]) {
+				return sortierung[0];
 			}
-			// nach Autor: alphabetisch auf- oder absteigend
+			return sortierung[1];
+		}
+		// 2. Weg: Sortierung nach Autor (alphabetisch auf- oder absteigend)
+		let autor = [data.ka[a].au, data.ka[b].au];
+		if (autor[0] !== autor[1]) {
 			autor.sort(helfer.sortAlpha);
-			let sortierung = [1, -1];
-			if (optionen.data.belegliste.sort_aufwaerts) {
-				sortierung.reverse();
-			}
 			if (autor[0] === data.ka[a].au) {
 				return sortierung[0];
 			}
 			return sortierung[1];
 		}
-		// Sortierung nach Jahr
+		// 3. Weg: Sortierung nach Belegnummer (auf- oder absteigend)
 		if (optionen.data.belegliste.sort_aufwaerts) {
-			return datum.a - datum.b;
+			return parseInt(a, 10) - parseInt(b, 10);
+		} else {
+			return parseInt(b, 10) - parseInt(a, 10);
 		}
-		return datum.b - datum.a;
 	},
 	// erstellt die Anzeige des Belegs
 	//   id = String
@@ -997,12 +988,16 @@ let liste = {
 			return schnitt;
 		}
 		let farbe = 0,
+			nebenlemma = false,
+			nurMarkieren = false,
 			regNoG = null;
 		for (let i of helfer.formVariRegExpRegs) {
-			if (keinNurMarkieren && data.fv[i.wort].ma) {
+			if (keinNurMarkieren && data.fv[i.wort].ma && !data.fv[i.wort].nl) {
 				continue;
 			}
 			farbe = data.fv[i.wort].fa;
+			nebenlemma = data.fv[i.wort].nl;
+			nurMarkieren = data.fv[i.wort].ma;
 			let reg;
 			if (!data.fv[i.wort].tr) {
 				reg = new RegExp(`(?<vorWort>^|[${helfer.ganzesWortRegExp.links}])(?<wort>${i.reg})(?<nachWort>$|[${helfer.ganzesWortRegExp.rechts}])`, "gi");
@@ -1051,6 +1046,16 @@ let liste = {
 			if (farbe) {
 				m = m.replace(/class="wort/g, `class="wort wortFarbe${farbe}`);
 			}
+			// als Neben- oder Hauptlemma markieren
+			if (nebenlemma) {
+				m = m.replace(/class="wort/g, `class="wort nebenlemma`);
+			} else {
+				m = m.replace(/class="wort/g, `class="wort hauptlemma`);
+			}
+			// ggf. die Markierungsinfo eintragen (wichtig für XML-Export)
+			if (nurMarkieren) {
+				m = m.replace(/class="wort/g, `class="wort markierung`);
+			}
 			// bei nicht trunkierter Markierung Zeichen links und rechts der Markierung ergänzen
 			if (r) {
 				return `${r.groups.vorWort}${m}${r.groups.nachWort}`;
@@ -1082,17 +1087,21 @@ let liste = {
 		if (marks.length === transparent) {
 			return false;
 		}
-		// Test 3: Ist das Karteiwort mehrgliedrig? Wenn nein => 
+		// Test 3: Ist das Karteiwort mehrgliedrig?
 		if (helfer.formVariRegExpRegs.length === 1) {
 			if (data.fv[helfer.formVariRegExpRegs[0].wort].ma) {
 				return false; // nicht okay (das Wort soll nur markiert, aber nicht berücksichtigt werden)
 			}
 			return true; // alles okay (das Wort taucht auf und soll berücksichtigt werden)
 		}
-		// Test 4: Sollen hier überhaupt Wörter berücksichtigt werden?
+		// Test 4: Enthält der Absatz ein Nebenlemma?
+		if (div.querySelector(".nebenlemma")) {
+			return true; // Absätze mit min. einem Nebenlemma immer anzeigen
+		}
+		// Test 5: Sollen hier überhaupt Wörter berücksichtigt werden?
 		let woerter = [];
 		for (let i of helfer.formVariRegExpRegs) {
-			if (data.fv[i.wort].ma) {
+			if (data.fv[i.wort].ma || data.fv[i.wort].nl) {
 				woerter.push(true);
 			} else {
 				woerter.push(false);
@@ -1101,8 +1110,8 @@ let liste = {
 		if (woerter.every(i => i === true)) {
 			return false; // keine Wörter zu berücksichtigen
 		}
-		// Test 5: Tauchen alle Wörter eines mehrgliedrigen Karteiworts auf?
-		let alleMarks = div.querySelectorAll(".wort");
+		// Test 6: Tauchen alle Wörter eines mehrgliedrigen Karteiworts auf?
+		let alleMarks = div.querySelectorAll(".wort.hauptlemma");
 		for (let i = 0, len = alleMarks.length; i < len; i++) {
 			let treffer = alleMarks[i].textContent;
 			if (alleMarks[i].classList.contains("wort-kein-ende")) {
@@ -1114,7 +1123,9 @@ let liste = {
 			for (let j = 0, len = helfer.formVariRegExpRegs.length; j < len; j++) {
 				let formVari = helfer.formVariRegExpRegs[j],
 					reg;
-				if (data.fv[formVari.wort].ma) { // Wort nur markieren, sonst nicht berücksichtigen
+				if (data.fv[formVari.wort].ma || data.fv[formVari.wort].nl) {
+					// ma: Wort nur markieren, sonst nicht berücksichtigen
+					// nl: Nebenlemmata für diese Operation nicht berücksichtigen
 					continue;
 				}
 				if (!data.fv[formVari.wort].tr) { // nicht trunkiert

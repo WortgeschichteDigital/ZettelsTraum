@@ -5,8 +5,6 @@ let karteisuche = {
 	async oeffnen () {
 		let fenster = document.getElementById("karteisuche");
 		overlay.oeffnen(fenster);
-		// schmale Anzeige?
-		karteisuche.filterBreite();
 		// Läuft im aktuellen Fenster gerade eine Suche?
 		if (!document.getElementById("karteisuche-suche-laeuft").classList.contains("aus")) {
 			return;
@@ -1091,6 +1089,7 @@ let karteisuche = {
 				cl: "karteisuche-karteiwort",
 				ph: "Suchtext",
 				pre: "",
+				label: "",
 			},
 		],
 		"Themenfeld": [
@@ -1100,6 +1099,7 @@ let karteisuche = {
 				cl: "karteisuche-themenfeld",
 				ph: "Themenfeld",
 				pre: "",
+				label: "",
 			},
 		],
 		"Sachgebiet": [
@@ -1109,6 +1109,7 @@ let karteisuche = {
 				cl: "karteisuche-sachgebiet",
 				ph: "Sachgebiet",
 				pre: "",
+				label: "",
 			},
 		],
 		"Volltext": [
@@ -1118,6 +1119,7 @@ let karteisuche = {
 				cl: "karteisuche-volltext",
 				ph: "Suchtext",
 				pre: "",
+				label: "",
 			},
 			{
 				type: "checkbox",
@@ -1125,6 +1127,7 @@ let karteisuche = {
 				cl: "karteisuche-volltext-genau",
 				ph: "genaue Schreibung",
 				pre: "",
+				label: "",
 			},
 		],
 		"Tag": [
@@ -1134,6 +1137,7 @@ let karteisuche = {
 				cl: "karteisuche-tag-typ",
 				ph: "Typ",
 				pre: "",
+				label: "",
 			},
 			{
 				type: "dropdown",
@@ -1141,6 +1145,7 @@ let karteisuche = {
 				cl: "karteisuche-tag",
 				ph: "Tag",
 				pre: "",
+				label: "",
 			},
 		],
 		"Karteidatum": [
@@ -1150,6 +1155,7 @@ let karteisuche = {
 				cl: "karteisuche-datum-typ",
 				ph: "Ereignis",
 				pre: "erstellt",
+				label: "",
 			},
 			{
 				type: "dropdown",
@@ -1157,6 +1163,7 @@ let karteisuche = {
 				cl: "karteisuche-datum-dir",
 				ph: "Zeitrichtung",
 				pre: "<=",
+				label: "",
 			},
 			{
 				type: "date",
@@ -1164,6 +1171,7 @@ let karteisuche = {
 				cl: "karteisuche-datum",
 				ph: "",
 				pre: "",
+				label: "",
 			},
 		],
 		"BearbeiterIn": [
@@ -1173,6 +1181,7 @@ let karteisuche = {
 				cl: "karteisuche-person",
 				ph: "Person",
 				pre: "",
+				label: "",
 			},
 		],
 		"Redaktion": [
@@ -1182,6 +1191,7 @@ let karteisuche = {
 				cl: "karteisuche-redaktion-logik",
 				ph: "Logik",
 				pre: "=",
+				label: "",
 			},
 			{
 				type: "dropdown",
@@ -1189,6 +1199,7 @@ let karteisuche = {
 				cl: "karteisuche-redaktion-ereignis",
 				ph: "Ereignis",
 				pre: "",
+				label: "",
 			},
 			{
 				type: "dropdown",
@@ -1196,6 +1207,25 @@ let karteisuche = {
 				cl: "karteisuche-redaktion-person",
 				ph: "Person",
 				pre: "",
+				label: "",
+			},
+		],
+		"Redaktionsdatum": [
+			{
+				type: "date",
+				ro: false,
+				cl: "karteisuche-redaktionsdatum-von",
+				ph: "",
+				pre: "",
+				label: "von",
+			},
+			{
+				type: "date",
+				ro: false,
+				cl: "karteisuche-redaktionsdatum-bis",
+				ph: "",
+				pre: "",
+				label: "bis",
 			},
 		],
 	},
@@ -1260,6 +1290,12 @@ let karteisuche = {
 		for (let feld of felder) {
 			let span = document.createElement("span");
 			p.appendChild(span);
+			if (feld.label) {
+				let label = document.createElement("label");
+				span.appendChild(label);
+				label.setAttribute("for", `${feld.cl}-${id}`);
+				label.textContent = feld.label;
+			}
 			if (feld.type === "dropdown") {
 				span.classList.add("dropdown-cont");
 				let input = document.createElement("input");
@@ -1290,7 +1326,14 @@ let karteisuche = {
 				input.classList.add(feld.cl);
 				input.id = `${feld.cl}-${id}`;
 				input.type = "date";
-				input.value = new Date().toISOString().split("T")[0];
+				let datum = new Date();
+				if (feld.cl === "karteisuche-redaktionsdatum-von") {
+					input.value = `${datum.getFullYear()}-01-01`;
+				} else if (feld.cl === "karteisuche-redaktionsdatum-bis") {
+					input.value = `${datum.getFullYear()}-12-31`;
+				} else {
+					input.value = datum.toISOString().split("T")[0];
+				}
 				karteisuche.filterFelderListener(input);
 			} else if (feld.type === "checkbox") {
 				let input = document.createElement("input");
@@ -1485,6 +1528,19 @@ let karteisuche = {
 				obj.logik = document.getElementById(`karteisuche-redaktion-logik-${id}`).value;
 				karteisuche.filterWerte.push(obj);
 			}
+			// Redaktionsdatum
+			else if (typ === "Redaktionsdatum") {
+				let vonVal = document.getElementById(`karteisuche-redaktionsdatum-von-${id}`).value,
+					bisVal = document.getElementById(`karteisuche-redaktionsdatum-bis-${id}`).value;
+				if (vonVal && bisVal) {
+					obj.von = new Date(vonVal);
+					obj.bis = new Date(bisVal);
+					karteisuche.filterWerte.push(obj);
+				} else {
+					karteisuche.filterIgnorieren(filter, true);
+					continue;
+				}
+			}
 			karteisuche.filterIgnorieren(filter, false);
 		}
 	},
@@ -1523,6 +1579,11 @@ let karteisuche = {
 			// erst danach in data.rd.er
 			er = datei.rd;
 		}
+		let redErg = new Set();
+		document.querySelectorAll(".karteisuche-redaktion-ereignis").forEach(i => {
+			redErg.add(helfer.formVariSonderzeichen(helfer.escapeRegExp(i.value)));
+		});
+		let redErgReg = new RegExp([...redErg].join("|"), "i");
 		forX: for (let filter of karteisuche.filterWerte) {
 			// Karteiwort
 			if (filter.typ === "Karteiwort" &&
@@ -1647,6 +1708,25 @@ let karteisuche = {
 				}
 				return false;
 			}
+			// Redaktionsdatum
+			else if (filter.typ === "Redaktionsdatum") {
+				let inRange = false;
+				for (let i of er) {
+					if (redErg.size && !redErgReg.test(i.er)) {
+						continue;
+					}
+					let da = new Date(i.da);
+					if (da >= filter.von && da <= filter.bis) {
+						inRange = true;
+						break;
+					}
+				}
+				if (!inRange) {
+					return false;
+				} else {
+					continue forX;
+				}
+			}
 		}
 		return true;
 		// testet, ob die Bedingungen zutreffen
@@ -1700,21 +1780,6 @@ let karteisuche = {
 					inputs[j].value = werte[j];
 				}
 			}
-		}
-	},
-	// feststellen, ob die Textfelder in den Filtern verkleiner werden müssen
-	// (blöder Hack, geht aber nicht mit overflow, da die Dropdown-Menüs ausbrechen
-	// müssen; setzt man overflow-x auf "hidden", wird overflow-y automatisch zu "auto",
-	// ganz egal, was man deklariert)
-	filterBreite () {
-		let ks = document.getElementById("karteisuche");
-		if (ks.classList.contains("aus")) {
-			return;
-		}
-		if (ks.querySelector("div").offsetWidth < 730) {
-			ks.classList.add("karteisuche-schmal");
-		} else {
-			ks.classList.remove("karteisuche-schmal");
 		}
 	},
 	// Ansicht der Filter umschalten

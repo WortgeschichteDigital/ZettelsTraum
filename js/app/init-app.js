@@ -107,7 +107,6 @@ window.addEventListener("load", async () => {
 	// EVENTS: RESIZE
 	window.addEventListener("resize", () => {
 		karteisuche.hoeheTrefferliste(true);
-		karteisuche.filterBreite();
 		notizen.maxHeight();
 	});
 

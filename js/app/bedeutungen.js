@@ -945,13 +945,19 @@ let bedeutungen = {
 			return;
 		}
 		// Items bewegen
-		let items = bedeutungen.moveGetItems();
+		let items = bedeutungen.moveGetItems(),
+			spliceItem = "";
+		if (dir === "l") {
+			let bd = bedeutungen.akt.bd[items[0]].bd;
+			spliceItem = bd[bd.length - 2];
+		}
 		for (let i = 0, len = items.length; i < len; i++) {
 			let idx = items[i];
 			// spezielle Operationen
 			if (dir === "l") { // nach links
 				idx -= i;
-				bedeutungen.akt.bd[idx].bd.shift();
+				const spliceIdx = bedeutungen.akt.bd[idx].bd.indexOf(spliceItem);
+				bedeutungen.akt.bd[idx].bd.splice(spliceIdx, 1);
 			} else if (dir === "r") { // nach rechts
 				for (let j = 0, len = d.pad.length - 1; j < len; j++) {
 					bedeutungen.akt.bd[idx].bd.shift();

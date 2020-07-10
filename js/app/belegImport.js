@@ -1572,9 +1572,7 @@ let belegImport = {
 			}
 			belegeVorhanden = true;
 			let pos = belegImport.checkWort(bs, true);
-			pos.sort((a, b) => {
-				return a - b;
-			});
+			pos.sort((a, b) => a - b);
 			if (!pos.length) {
 				td.textContent = bs.substring(0, 150);
 			} else {
@@ -2637,7 +2635,10 @@ let belegImport = {
 		if ( !pos && (!bs || !optionen.data.einstellungen["wort-check"]) ) {
 			return;
 		}
-		let positionen = []; // sammelt die Trefferpositionen (wenn gewünscht)
+		let nebenlemmata = [], // Nebenlemmata, die gefunden/nicht gefunden wurden (Slots mit Boolean)
+			hauptlemma = [], // Karteiwörter, die gefunden/nicht gefunden wurden (Slots mit Boolean)
+			hauptlemmaNicht = [], // nicht gefundenes Wort des (evtl. mehrgliedrigen) Karteiworts
+			positionen = []; // sammelt die Trefferpositionen (wenn gewünscht)
 		for (let i of helfer.formVariRegExpRegs) {
 			if (data.fv[i.wort].ma) { // diese Variante nur markieren => hier nicht berücksichtigen
 				continue;
@@ -2648,19 +2649,37 @@ let belegImport = {
 			} else { // trunkiert
 				reg = new RegExp(i.reg, "gi");
 			}
-			let check = reg.test(bs);
-			if (!pos && !check) {
-				dialog.oeffnen({
-					typ: "alert",
-					text: "Das Karteiwort wurde im gerade importierten Belegtext nicht gefunden.",
-					callback: () => {
-						document.getElementById("beleg-dta").focus();
-					},
-				});
-				break;
-			} else if (pos && check) {
+			// prüfen und Ergebnis merken
+			const check = reg.test(bs);
+			if (data.fv[i.wort].nl) {
+				nebenlemmata.push(check);
+			} else {
+				hauptlemma.push(check);
+				if (!check) {
+					hauptlemmaNicht.push(i.wort);
+				}
+			}
+			// ggf. Position merken
+			if (pos && check) {
 				positionen.push(reg.lastIndex);
 			}
+		}
+		// ggf. Warnmeldung ausgeben
+		if (!nebenlemmata.some(i => i === true) &&
+				hauptlemma.some(i => i === false)) {
+			let numerus = ["Das Karteiwort", ""],
+				woerter = hauptlemmaNicht.join(", ");
+			if (hauptlemmaNicht.length > 1) {
+				numerus = ["Die Karteiwörter", "n"];
+				woerter = woerter.replace(/(.+), (.+)/, (m, p1, p2) => `${p1}</i> und <i>${p2}`);
+			}
+			dialog.oeffnen({
+				typ: "alert",
+				text: `${numerus[0]} <i>${woerter}</i> wurde${numerus[1]} im gerade importierten Belegtext nicht gefunden.`,
+				callback: () => {
+					document.getElementById("beleg-dta").focus();
+				},
+			});
 		}
 		// Trefferpositionen zurückgeben (wenn gewünscht)
 		if (pos) {

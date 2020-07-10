@@ -541,6 +541,8 @@
 						<p>Für die Sortierung der Belege wird die Datumsangabe verwendet, die als erstes im Feld auftaucht. Stünde im Feld also <q>2010 [Nachdruck Ausgabe 1788]</q>, würde der Beleg in der <a href="#belegliste">Belegliste</a> als Text aus dem Jahr <i>2010</i> behandelt; stünde im Feld <q>1788 [Nachdruck 2010]</q>, würde der Beleg als einer aus dem Jahr <i>1788</i> angesehen.</p>
 
 						<p>Jahrhundertangaben werden auf das Jahr null datiert (nicht ganz korrekt, weil dieses Jahr bekanntlich noch zum vorherigen Jahrhundert gehört, das ist aus mehreren Gründen aber leichter zu handhaben). Die Angabe <q>18. Jh.</q> im Datumsfeld wird für die Sortierung der Belegliste mithin so behandelte, als stamme der Beleg aus dem Jahr <i>1700</i>.</p>
+
+						<p>Geben Sie ein Tagesdatum an, werden die Belege in der <a href="#belegliste">Belegliste</a> nach Jahr, Monat und Tag sortiert. Erkannt werden Tagesdaten im ISO 8601-Format (<code class="quelltext">2019-12-01</code>) und Tagesdaten nach dem Muster <code class="quelltext">1. 12. 2019</code>, auch mit führender Null und ohne Leerzeichen: <code class="quelltext">01.12.2019</code>.</p>
 					</div>
 
 					<p><b>Autor:</b> Urheber des Textes im Belegfeld</p>
@@ -1228,7 +1230,8 @@
 					<div class="info">
 						<p>Die Belege in der Liste können chronologisch auf- oder absteigend sortiert werden. Belege, für die nur eine Jahrhundertangabe zur Verfügung steht, werden (inhaltlich nicht ganz korrekt, <abbr title="vergleiche">vgl.</abbr> die Erläuterungen <a href="#karteikarte-datum">zum Datum-Feld der Karteikarte</a>) auf das Jahr null datiert. Die Angabe <q>17. Jh.</q> wird also wie <q>1700</q> behandelt.</p>
 
-						<p>Stammen zwei oder mehr Belege aus demselben Jahr, werden sie alphabetisch nach Autor sortiert: bei chronologisch aufsteigender Belegliste alphabetisch aufsteigend, bei chronologisch absteigender Belegliste alphabetisch absteigend. Sind auch die Autoren identisch, werden die Belege als Fallback nach Belegnummer geordnet: auch hier auf- oder absteigend, je nachdem wie die Chronologie der Liste ist.</p>
+						<p>Für die Sortierung wird das erste im Datumsfeld zu findende Datum genutzt. Handelt es sich um ein Tagesdatum, werden die Belge genau nach Jahre, Monat und Tag sortiert. Erkannt werden Tagesdaten im ISO 8601-Format (<code class="quelltext">2019-12-01</code>) und Tagesdaten nach dem Muster <code class="quelltext">1. 12. 2019</code>, auch mit führender Null und ohne Leerzeichen: <code class="quelltext">01.12.2019</code>.
+						Haben zwei oder mehr Belege dasselbe Datum, werden sie alphabetisch nach Autor sortiert: bei chronologisch aufsteigender Belegliste alphabetisch aufsteigend, bei chronologisch absteigender Belegliste alphabetisch absteigend. Sind auch die Autoren identisch, werden die Belege als Fallback nach Belegnummer geordnet: auch hier auf- oder absteigend, je nachdem wie die Chronologie der Liste ist.</p>
 					</div>
 
 					<p class="erklaerung-icon"><img src="../img/auge.svg" width="24" height="24" alt=""><a href="#belegliste-detailansicht">Detailansicht</a> der Belege umschalten</p>
@@ -2213,6 +2216,8 @@ Mustermann, Erika
 						<p><i>Standard:</i> aktiviert</p>
 
 						<p>Haben Sie automatisch einen Beleg aus dem <abbr title="Deutsches Textarchiv">DTA</abbr>, dem <abbr title="Digitalen Wörterbuch der deutschen Sprache">DWDS</abbr> oder dem <abbr title="Deutschen Referenzkorpus">DeReKo</abbr> <a href="#karteikarte-importfunktion">importiert</a>, wird die App nach dem Import einmalig überprüfen, ob in der importieren Belegstelle das Karteiwort (bei mehrgliedrigen Wortverbindungen: alle Karteiwörter) zu finden ist (sind). Wenn nicht, wird es Sie über dieses Manko informieren.</p>
+
+						<p>Sollte sich im importierten Belegtext mindestens eines der Wörter finden, das im <a href="#menueKartei-formvarianten">Formvariatenfenster</a> als <i>Nebenlemma</i> markiert wurde, erscheint keine Warnmeldung.</p>
 
 						<p>Beim <abbr title="Deutsches Textarchiv">DTA</abbr>-Import könnte es vorkommen, dass sich das Wort, das Sie interessiert, erst am Anfang der nächsten Textseite befindet. Wiederholen Sie den Import dann einfach in derselben, immer noch geöffneten Karte und <a href="#karteikarte-dtaImport">importieren Sie eine Seite mehr</a>.</p>
 
@@ -3547,6 +3552,10 @@ Mustermann, Erika
 
 						<p>Wie in allen anderen Filtern wird auch hier trunkiert gesucht. Im Gegensatz zu anderen Filtern haben Sie allerdings die Möglichkeit, die Suchlogik zu ändern. Sie können sowohl nach Vorkommen als auch Nicht-Vorkommen eines Redaktionsereignisses suchen, indem Sie das Feld mit den Zeichen <code class="quelltext">=</code> und <code class="quelltext">≠</code> umstellen. Auf diesem Weg können Sie <abbr title="zum Beispiel">z. B.</abbr> alle Karteien finden, in denen das Ereignis <q>Artikel erstellt</q> noch nicht eingetragen wurde.</p>
 
+						<p id="menueApp-karteisucheRedaktionsdatum"><b><i>Redaktionsdatum:</i></b> Mit diesem Filter können Sie die Suche auf Karteien einschränken, die irgendein Redaktionsereignis aufweisen, das innerhalb eines bestimmten Zeitraums liegt. Geben Sie im <i>Von</i>-Feld <abbr title="zum Beispiel">z. B.</abbr> den 1. 1. 2020 und im <i>Bis</i>-Feld den 31. 3. 2020 ein, finden Sie alle Karteien, die im ersten Quartal 2020 irgendein Redaktionsereignis zugewiesen bekommen haben.</p>
+
+						<p>Richtig nützlich wird dieser Filter freilich erst dann, wenn Sie ihn mit einem <i>Redaktion</i>-Filter kombinieren. Erstellen Sie zugleich einen <i>Redaktion</i>-Filter, in dem als Ereignis <abbr title="beispielsweise">bspw.</abbr> <q>Artikel erstellt</q> eingetragen wurde, finden Sie alle Karteien, zu denen im ersten Quartal 2020 ein Artikel erstellt wurde. Sie können durchaus mehrere <i>Redaktion</i>-Filter kombinieren. Der <i>Redaktionsdatum</i>-Filter berücksichtigt alle Redaktionsereignisse, die er im Suchformular findet.</p>
+
 						<p><b>Tipp:</b> Eine Suche kann nicht nur über den Button <i>Suchen</i>, sondern auch durch <kbd>⏎</kbd> in einem der Filterfelder angestoßen werden. Ist der <a href="#menueApp-karteisucheCache">Cache</a> bereits gefüllt, werden dann jedoch nur die Dateiedaten im Zwischenspeicher durchsucht.</p>
 
 						<p><b>Tipp:</b> Da der Block <i>Pfade &amp; Filter</i> sehr hoch werden kann, können Sie ihn durch Klick auf die Überschrift (den dunkelblau hinterlegten Bereich) schließen. Die Trefferliste wird dann entsprechend höher.</p>
@@ -3745,10 +3754,10 @@ Mustermann, Erika
 
 						<figure class="right" title="zum Vergrößern anklicken">
 							<img src="../img/win/hb-menueKartei-formvarianten-markierung.png" alt="">
-							<figcaption>automatisch markierte Kollokationen im Umfeld des Karteiworts</figcaption>
+							<figcaption>automatisch markiertes Synonym im Umfeld des Karteiworts</figcaption>
 						</figure>
 
-						<p id="menueKartei-formvariantenKollokationen">Die Änderung der Hintergrundfarbe ist freilich keine Spielerei, denn Sie können das Ergänzen von Wörtern und die Einstellung einer je eigenen Hintergrundfarbe dafür verwenden, um in der Belegliste <b>Kollokationen</b> automatisch sichtbar zu machen. Nehmen wir ein Beispiel aus der <a href="#" class="hilfe-demo">Demonstrationskartei</a> zum Wort <i>Team</i>: Ihnen ist aufgefallen, dass <i>Mannschaft</i> häufig synonym gebraucht wird. Sie möchten das im Blick behalten. <a href="#menueKartei-formvariantenErgaenzenWort">Ergänzen</a> Sie also zunächst das Wort <i>Mannschaft</i> im Formvariantenfenster. Ändern Sie im Konfigurations-Popup die Hintergrundfarbe (standardmäßig werden alle Wörter gelb hinterlegt). Das Wort wird in der Belegliste und der Leseansicht der Karteikarte fortan ebenfalls hervorgehoben – mit der gewählten Hintergrundfarbe.</p>
+						<p id="menueKartei-formvariantenKollokationen">Die Änderung der Hintergrundfarbe ist freilich keine Spielerei, denn Sie können das Ergänzen von Wörtern und die Einstellung einer je eigenen Hintergrundfarbe dafür verwenden, um in der Belegliste <b>Kollokationen, Synonyme</b> oder <abbr title="dergleichen">dgl.</abbr> automatisch sichtbar zu machen. Nehmen wir ein Beispiel aus der <a href="#" class="hilfe-demo">Demonstrationskartei</a> zum Wort <i>Team</i>: Ihnen ist aufgefallen, dass <i>Mannschaft</i> häufig synonym gebraucht wird. Sie möchten das im Blick behalten. <a href="#menueKartei-formvariantenErgaenzenWort">Ergänzen</a> Sie also zunächst das Wort <i>Mannschaft</i> im Formvariantenfenster. Ändern Sie im Konfigurations-Popup die Hintergrundfarbe (standardmäßig werden alle Wörter gelb hinterlegt). Das Wort wird in der Belegliste und der Leseansicht der Karteikarte fortan ebenfalls hervorgehoben – mit der gewählten Hintergrundfarbe.</p>
 
 						<p id="menueKartei-formvariantenNurMarkieren">Das ist ein praktisches Verfahren, aber auch problematisch. Denn die Wörter im Formvariantenfenster werden <abbr title="unter anderem">u. a.</abbr> dafür genutzt, den <a href="#belegliste-kuerzung">Kontext eines Belegs zu kürzen</a>. Sind mehrere Wörter vorhanden, nimmt das Programm an, dass Sie zu einem mehrgliedrigen Karteiwort arbeiten. Dies ist hier aber gar nicht der Fall. Sie arbeiten zu <i>Team</i>, nicht zu <i>Mannschaft</i>, um bei dem Beispiel zu bleiben. Kürzen Sie nun den Belegkontext, wird das Programm alle Absätze eliminieren, in denen nicht sowohl <i>Team</i> als auch <i>Mannschaft</i> zu finden sind. Kurzum: Sie müssen dem Programm mitteilen, dass die Formvarianten von <i>Mannschaft</i> nur zum Markieren genutzt werden sollen, das Wort für andere Funktionen jedoch nicht von Relevanz ist. Aktivieren Sie hierzu im Konfigurations-Popup die standardmäßig deaktivierte <b>Option <i>nur markieren</i></b>. Dann wird <i>Mannschaft</i> für die folgenden Funktionen nicht berücksichtigt:</p>
 
@@ -3759,6 +3768,22 @@ Mustermann, Erika
 
 							<li>die <a href="#einstellungen-karteikarteUeberpruefen">Überprüfung, ob das Karteiwort im importierten Belegtext</a> zu finden ist.</li>
 						</ol>
+
+						<p>Außerdem werden Wörter, bei denen die Option <i>nur markiert</i> abgehakt wurde, beim <a href="#belegliste-xmlZwischenablage"><abbr title="Extensible Markup Language" lang="en">XML</abbr>-Export</a> nicht etwa mit dem Tag <code class="quelltext">&lt;Stichwort&gt;</code>, sondern mit <code class="quelltext">&lt;Markierung&gt;</code> umschlossen.</p>
+
+						<p id="menueKartei-formvariantenNebenlemma">Das Konfigurationsfenster bietet Ihnen darüber hinaus die Möglichkeit, ein Wort als <i><b>Nebenlemma</b></i> zu kennzeichnen. Wörter, die als <i>Nebenlemma</i> gekennzeichnet wurden, werden noch einmal anders behandelt:</p>
+
+						<ol>
+							<li>Absätze, in denen mindestens ein als <i>Nebenlemma</i> gekennzeichnetes Wort auftaucht, werden im Gegensatz zu den Wörtern, in denen Sie die Option <i>nur markieren</i> abgehakt haben, niemals gekürzt.</li>
+
+							<li>Wörter, die als <i>Nebenlemma</i> gekennzeichnet wurden, werden für die Ermittlung des Textausschnitts in der Kopfleiste der Belege herangezogen.</li>
+
+							<li>Außerdem wird beim Import eines Beleges überprüft, ob im Belegtext ein <i>Nebenlemma</i> vorhanden ist. Das Vorkommen eines einzigen Nebenlemmas genügt, um die <a href="#einstellungen-karteikarteUeberpruefen">Warnmeldung</a>, dass das Karteiwort nicht gefunden wurde, zu unterdrücken.</li>
+
+							<li>Beim <a href="#belegliste-xmlZwischenablage"><abbr title="Extensible Markup Language" lang="en">XML</abbr>-Export</a> eines Belegschnitts werden als <i>Nebenlemma</i> gekennzeichnete Wörter als <code class="quelltext">&lt;Stichwort&gt;</code> ausgezeichnet.</li>
+						</ol>
+
+						<p>Als <i>Nebenlemma</i> gekennzeichnete Wörter können zusätzlich die Kennzeichnung <i>nur markiert</i> erhalten. Das einzige, was sich dadurch ändert, ist, dass das Wort beim <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Export mit dem Tag <code class="quelltext">&lt;Markierung&gt;</code> umschlossen wird. Ansonsten verhalten sich Wörter, die als <i>Nebenlemma</i> und mit <i>nur markieren</i> gekennzeichnet wurden, genauso wie alle anderen als <i>Nebenlemma</i> gekennzeichneten Wörter.</p>
 
 						<p id="menueKartei-formvariantenAktivieren">Haben Sie sich zu diesem Zweck viele Wörter in der Formvariantenliste angelegt, bekommen Sie im Endeffekt natürlich einen kunterbunten Belegtext. Eine wohl eher unerfreuliche, weil hinderliche Ansicht. Eine Lösung wäre, dass Sie die <a href="#belegliste-karteiwortHervorheben">Hervorhebung des Karteiworts</a> generell ausstellen, denn diese Einstellung bezieht sich auch auf Wörter wie das erwähnte <i>Mannschaft</i>, die nur zum Markieren angelegt wurden. Eine Alternativlösung wäre, dass Sie einzelne Wörter im Konfigurations-Popup deaktivieren. Entfernen Sie den Haken vor der <b>Option <i>aktivieren</i></b> und das Wort wird nicht weiter berücksichtigt. Die Varianten und Einstellungen bleiben dabei erhalten; Sie können das Wort somit leicht wieder aktivieren und sich hervorheben lassen. Haben Sie alle anderen Wörter im Formvarianten-Fenster deaktiviert oder haben Sie nur ein Wort (was der Normalfall sein dürfte), wird Ihnen die Option nicht angeboten. Denn ein Wort muss immer aktiviert sein.</p>
 
@@ -3779,6 +3804,8 @@ Mustermann, Erika
 						<p class="erklaerung-icon"><img src="../img/nicht-trunkiert.svg" width="20" height="20" alt="">Das Wort wird beim Hervorheben <a href="#menueKartei-formvariantenErweitern"><em>nicht</em> links und rechts erweitert</a>.</p>
 
 						<p class="erklaerung-icon"><img src="../img/text-markiert-gelb.svg" width="20" height="20" alt="">Das Wort wird <a href="#menueKartei-formvariantenNurMarkieren">nur markiert</a> und somit <a href="#menueKartei-formvariantenNurMarkierenFunktionen">für einige Funktionen nicht herangezogen</a>.</p>
+
+						<p class="erklaerung-icon"><img src="../img/raute.svg" width="20" height="20" alt="">Das Wort wurde als <a href="#menueKartei-formvariantenNebenlemma">Nebenlemma</a> gekennzeichnet.</p>
 					</div>
 
 					<p class="erklaerung-icon-menues" id="menueKartei-notizen"><img src="../img/stift.svg" width="24" height="24" alt="">Notizen</p>

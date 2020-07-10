@@ -638,7 +638,7 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
 
 					<p>Nach dem Laden einer <abbr title="Zettel’s Traum JSON">ZTJ</abbr>-Datei in <i class="app-name"></i> befinden sich die <abbr title="JavaScript Object Notation">JSON</abbr>-Daten im globalen Objekt <code class="quelltext">data</code>. Ihre Werte lassen sich dann in allen Funktionen des Hauptfensters durch einfache Statements wie <code class="quelltext">data.dc</code> lesen oder schreiben.</p>
 
-					<p>Alle Dateien sind gleich aufgebaut (<span class="obacht">Datenformat Version 15</span>):</p>
+					<p>Alle Dateien sind gleich aufgebaut (<span class="obacht">Datenformat Version 16</span>):</p>
 
 					<table class="ztj">
 						<tr>
@@ -820,6 +820,12 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
 							<td class="datentyp">Boolean</td>
 							<td> </td>
 							<td>Wort nur markieren, <a href="#menueKartei-formvariantenNurMarkieren" class="link-handbuch">für gewisse Funktionen</a> jedoch ignorieren;<br><span class="obacht">mit Version 10 ergänzt</span></td>
+						</tr>
+						<tr class="ztj-ebene3">
+							<td><p><code class="quelltext">nl</code></p></td>
+							<td class="datentyp">Boolean</td>
+							<td> </td>
+							<td>Nebenlemma (Wort, das zusätzlich zum Hauptwort der Kartei behandelt wird); ähnliche wie <code class="quelltext">ma</code>;<br><span class="obacht">mit Version 16 ergänzt</span></td>
 						</tr>
 						<tr class="ztj-ebene3">
 							<td><p><code class="quelltext">ps</code></p></td>
@@ -1389,6 +1395,8 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
 							<p class="eingerueckt"><b>@Stil:</b> <i>fakultativ</i>. Das Attribut kann eine Liste von Werten enthalten, die <a href="http://www.deutschestextarchiv.de/doku/basisformat/typogrAllg.html">im <abbr title="Deutsches Textarchiv-Basisformat">DTABf</abbr> verwendet</a> werden. Beim <a href="#verschiedenes-dta">Import von Texten aus dem <abbr title="Deutschen Textarchiv">DTA</abbr></a> werden nicht alle Textmerkmale übernommen; grob gesagt nur die Inline-Formate. Diese können jedoch prinzipiell alle im @Stil auftauchen. Welche Formate <i class="app-name"></i> importiert, kann man der Datei <span class="datei">./js/app/belegImport.js</span> entnehmen. <abbr title="Siehe">S.</abbr> <code class="quelltext">const rend</code> in <code class="quelltext">belegImport.DTAText()</code>.</p>
 
 							<p><b>&lt;Loeschung&gt;:</b> <i>fakultativ</i>. Text, der ursprünglich in doppelten eckigen Klammern stand: [[Text]]. Der Text soll im Endprodukt (Webseite) auf keinen Fall mehr erscheinen. Der Tag kann verwendet werden, wenn in einem Belegschnitt aus datenschutzrechtlichen Gründen Text vor der Publikation entfernt werden soll. Der Text soll durch eine Ellipse ersetzt werden: […].</p>
+
+							<p><b>&lt;Markierung&gt;:</b> <i>fakultativ</i>. Markierung von Wörtern/Phrasen, die nicht das Karteiwort sind. (Wurde ein Wort in den <a href="#menueKartei-formvarianten" class="link-handbuch">Formvarianten</a> mit <i>nur markieren</i> aufgenommen oder wurde es im Beleg <a href="#belegliste-annotierenBeleg" class="link-handbuch">mithilfe der Annotierungsfunktion manuell markiert</a>, wird es beim XML-Export als <code class="quelltext">&lt;Markierung&gt;</code> ausgezeichnet.)</p>
 
 							<p><b>&lt;Stichwort&gt;:</b> <i>verpflichtend</i>. Markierung des Karteiworts, um das es geht.</p>
 

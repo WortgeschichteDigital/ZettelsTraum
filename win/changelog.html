@@ -46,6 +46,8 @@
 			<div>
 				<h2><span>Version 1.0.0-beta</span><time datetime="2019-12-24">24. Dezember 2019</time></h2>
 
+				<p><span class="obacht">Das Dateiformat hat sich geändert!</span> Ältere <abbr title="Zettel’s Traum JSON">ZTJ</abbr>-Dateien werden automatisch konvertiert; dabei wird eine Änderungsmarkierung gesetzt.</p>
+
 				<h3>Entfernte Funktionen</h3>
 
 				<ul>
@@ -55,13 +57,19 @@
 				<h3>Neue Funktionen</h3>
 
 				<ul>
-					<li></li>
+					<li><a href="#menueKartei-formvarianten" class="link-handbuch">Formvarianten</a>: Wörter in den Formvarianten können nun als <i>Nebenlemma</i> gekennzeichnet werden, was verschiedene, <a href="#menueKartei-formvariantenNebenlemma" class="link-handbuch">im Handbuch ausführlich beschriebene Konsequenzen</a> hat.</li>
+
+					<li><a href="#menueApp-karteisuche" class="link-handbuch">Karteisuche</a>: Mit dem neuen Filter <a href="#menueApp-karteisucheRedaktionsdatum" class="link-handbuch">Redaktionsdatum</a> kann die Suche nach Redaktionsereignissen auf einen spezifischen Zeitraum eingegrenzt werden.</li>
 				</ul>
 
 				<h3>Verbesserungen</h3>
 
 				<ul>
-					<li></li>
+					<li><a href="#belegliste" class="link-handbuch">Belegliste</a>: Steht im Datumsfeld der <a href="#karteikarte-formularansicht" class="link-handbuch">Karteikarte</a> ein Tagesdatum, werden die Belege nun genau nach Jahr, Monat und Tag sortiert. <abbr title="Vergleiche">Vgl.</abbr> die <a href="#belegliste-sortierung" class="link-handbuch">Beschreibung im Handbuch</a>.</li>
+
+					<li><a href="#menueKartei-formvarianten" class="link-handbuch">Formvarianten</a>: Werden bei der Eingabe des Karteiworts eingeklammerte Erläuterungen mit eingegeben, werden für die eingeklammerten Wörter fortan keine Formvariantenlisten mehr erzeugt. Die Eingabe <q>Lebensformen (Wortfeld)</q> ermittelt also nur noch Formvarianten für <q>Lebensformen</q>, jedoch nicht für <q>Wortfeld</q>. Dies betrifft alle Klammern: runde, eckige, geschweifte, spitze.</li>
+
+					<li>Manuell im Beleg vorgenommene sowie automatische Markierungen von Wörtern, die im Formvariantenfenster mit <i>nur markieren</i> gekennzeichnet wurden, werden beim Erstellen eines <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Belegschnitts nun als <code class="quelltext">&lt;Markierung&gt;</code> ausgezeichnet.</li>
 				</ul>
 
 				<h3>Updates</h3>
@@ -213,7 +221,7 @@
 
 				<ul>
 					<li>in der Bedeutungsgerüstfunktion wurde Text, der aus einem Office-Dokument in ein Bedeutungsfeld kopiert wurde, nicht korrekt bereinigt</li>
-					<li>das Zusammenführen mehrerer Hervorhebungen im XML-Belegschnitt produzierte mitunter illegales XML</li>
+					<li>das Zusammenführen mehrerer Hervorhebungen im <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Belegschnitt produzierte mitunter illegales <abbr title="Extensible Markup Language" lang="en">XML</abbr></li>
 					<li>beim Kopieren von Belegtext wurden in der Plain-Version Absätze nicht mehr angezeigt</li>
 					<li>beim Kopieren eines mit der Maus markierten Belegschnitts konnte es passieren, dass versteckter, nicht zum Beleg gehörender Text mitkopiert wurde</li>
 					<li>die Auflösung spezieller Klammern konnte beim Kopieren von Belegtext zu unerwünschten Auslassungen führen</li>
