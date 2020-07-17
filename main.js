@@ -193,6 +193,7 @@ layoutMenu = [
 				label: "Notizen",
 				icon: path.join(__dirname, "img", "menu", "stift.png"),
 				click: () => appMenu.befehl("kartei-notizen"),
+				accelerator: "CommandOrControl+Alt+N",
 				id: "kartei-notizen",
 			},
 			{
