@@ -2664,6 +2664,10 @@ let belegImport = {
 				positionen.push(reg.lastIndex);
 			}
 		}
+		// Trefferpositionen zurückgeben (wenn gewünscht)
+		if (pos) {
+			return positionen;
+		}
 		// ggf. Warnmeldung ausgeben
 		if (!nebenlemmata.some(i => i === true) &&
 				hauptlemma.some(i => i === false)) {
@@ -2680,10 +2684,6 @@ let belegImport = {
 					document.getElementById("beleg-dta").focus();
 				},
 			});
-		}
-		// Trefferpositionen zurückgeben (wenn gewünscht)
-		if (pos) {
-			return positionen;
 		}
 	},
 };
