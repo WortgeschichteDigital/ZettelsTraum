@@ -539,6 +539,7 @@ let xml = {
 			xml.data.xl.wi[xmlDatensatz.gn] = xmlDatensatz.ds;
 			if (xml.bgAkt > -1 && xmlDatensatz.gn === xml.bgAktGn ||
 					xml.bgAkt === -1) {
+				xml.bgAktGn = xml.bgAktGn || xmlDatensatz.gn;
 				xml.wiMake();
 			}
 		} else if (xmlDatensatz.key === "wi-single") {
@@ -1281,7 +1282,7 @@ let xml = {
 			xml.bgMakeXML();
 		} else {
 			xml.bgAkt = -1;
-			xml.bgAktGn = Object.keys(xml.data.xl.wi)[0] ?? ""; // jshint ignore:line
+			xml.bgAktGn = Object.keys(xml.data.xl.wi)[0] || "";
 			xml.elementLeer({
 				ele: document.getElementById("bg"),
 			});
