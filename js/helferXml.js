@@ -282,6 +282,8 @@ let helferXml = {
 		"Num\\.": "Numerale",
 		"Num\\.adj\\.": "Numeraladjektiv",
 		"Num\\.\\sOrd\\.": "Numerale Ordinale",
+		"o\\.\\sä\\.": "oder ähnlich",
+		"o\\.\\sÄ\\.": "oder Ähnliches",
 		"Part\\.": "Partizip",
 		"Part\\.adj\\.": "Partizipialadjektiv",
 		"Part\\.\\sPerf\\.": "Partizip Perfekt",
