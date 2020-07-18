@@ -3787,8 +3787,8 @@ let xml = {
 		let wi = d.wi[xml.bgAktGn] ?? []; // jshint ignore:line
 		let vt = "";
 		let wiMap = {
-			Assoziation: "Assoziationen",
 			Kollokation: "Kollokationen",
+			Wortbildung: "Wortbildungen",
 			Wortfeld: "Wortfeld",
 		};
 		for (let i of wi) {

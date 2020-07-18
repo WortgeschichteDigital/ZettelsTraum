@@ -313,8 +313,12 @@ let konversion = {
 			return;
 		}
 		// Objekte in "rd.wi" um "gn" ergänzen
+		// rd.wi.vt === "Assoziation" in "Wortbildung" ändern
 		for (let i of data.rd.wi) {
 			i.gn = "1";
+			if (i.vt === "Assoziation") {
+				i.vt = "Wortbildung";
+			}
 		}
 		// Datenstruktur "rd.xl" hinzufügen
 		data.rd.xl = helferXml.redXmlData();
