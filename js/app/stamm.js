@@ -694,6 +694,11 @@ let stamm = {
 		stamm.kopf();
 		// Abschluss
 		stamm.ergaenzenAbschluss();
+		// importiertes Wort (bei mehreren das letzte) auswählen
+		if (importieren.length) {
+			let neuesWort = document.querySelector(`#stamm-kopf [data-wort="${importieren[importieren.length - 1]}"]`);
+			neuesWort.dispatchEvent(new Event("click"));
+		}
 	},
 	// Abschluss des Ergänzen einer Variante oder eines Worts
 	ergaenzenAbschluss () {
