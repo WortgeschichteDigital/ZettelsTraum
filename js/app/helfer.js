@@ -36,6 +36,8 @@ let helfer = {
 			return;
 		}
 		// elementspezifische Variablen
+		//   max = Number
+		//     (Maximalhöhe des Bereichs)
 		//   queries = Array
 		//     (verpflichtend! Selektoren für Elemente, deren Höhe auch abgezogen werden muss)
 		//   setOverflow = Boolean
@@ -113,6 +115,7 @@ let helfer = {
 				setOverflow: true,
 			},
 			"stamm-liste": {
+				max: 435,
 				queries: ["#stamm-kopf", "#stamm-cont > p"],
 			},
 			"tagger-typen": {
@@ -161,6 +164,9 @@ let helfer = {
 		//   padding-bottom der Dialog-Fenster: 10px
 		//   margin unterhalb des Fensters: 20px
 		let maxHeight = window.innerHeight - dialogMarginTop - ele.offsetTop - weitereHoehen - 10 - 20;
+		if (conf.max && maxHeight > conf.max) {
+			maxHeight = conf.max;
+		}
 		ele.style.maxHeight = `${maxHeight}px`;
 	},
 	// übergebene Sektion einblenden, alle andere Sektionen ausblenden
