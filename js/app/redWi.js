@@ -306,6 +306,10 @@ let redWi = {
 		redWi.formReset();
 		// Anzeige neu aufbauen
 		redWi.contMake();
+		// Wort highlighten
+		let wort = document.querySelector(`#red-wi-cont [data-tx="${ds.tx}"]`);
+		setTimeout(() => wort.classList.add("update"), 0);
+		setTimeout(() => wort.classList.remove("update"), 750);
 	},
 	// Content: Anzeige aufbauen
 	contMake () {

@@ -107,7 +107,13 @@
 #red-wi-cont p {
 	margin: 0 25px 5px 25px;
 	border-radius: 3px;
+	background-color: transparent;
 	white-space: nowrap;
+	transition: background-color .5s ease;
+}
+
+#red-wi-cont p.update {
+	background-color: var(--highlight);
 }
 
 #red-wi-cont p:hover {
