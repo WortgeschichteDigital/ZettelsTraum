@@ -1976,10 +1976,22 @@ let bedeutungen = {
 			text = helfer.typographie(text);
 			text = helferXml.abbrTagger({text});
 			if (!/<Paraphrase>/.test(text)) { // gesamter Text ist Paraphrase
-				lesart.txt = splitParaphrase(text);
-			} else {
-				lesart.txt = text;
+				text = splitParaphrase(text);
 			}
+			let relevanzHoch = false;
+			for (let p of text.split(/<Paraphrase>.+?<\/Paraphrase>/)) {
+				if (!p) {
+					continue;
+				}
+				if (p !== "; ") {
+					relevanzHoch = true;
+					break;
+				}
+			}
+			if (relevanzHoch) {
+				text = text.replace(/<Paraphrase>/g, `<Paraphrase Relevanz="hoch">`);
+			}
+			lesart.txt = text;
 			// Ebene eintragen...
 			lesart.ebene = bd.bd.length;
 			// ... und fertig!
