@@ -3194,10 +3194,11 @@ let xml = {
 			if (p1 === p2) {
 				p1 = "";
 			}
-			if (!p3) {
-				p3 = "vgl";
+			let typ = "";
+			if (p3) {
+				typ = ` Typ=##${p3}##`;
 			}
-			let verweis = `<Verweis Typ=##${p3}##>`;
+			let verweis = `<Verweis${typ}>`;
 			verweis += `\n  <Verweistext>${p1}</Verweistext>`;
 			verweis += `\n  <Verweisziel>${p2}</Verweisziel>`;
 			verweis += "\n</Verweis>";
