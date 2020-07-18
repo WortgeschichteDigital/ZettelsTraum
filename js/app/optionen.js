@@ -1172,7 +1172,11 @@ let optionen = {
 	oeffnen () {
 		let fenster = document.getElementById("einstellungen");
 		overlay.oeffnen(fenster);
-		optionen.sektionWechselnInput();
+		let inputAktiv = optionen.sektionWechselnInput();
+		// Maximalhöhe des Fensters anpassen
+		helfer.elementMaxHeight({
+			ele: document.getElementById(inputAktiv.closest("section").id),
+		});
 	},
 	// Sektion in den Einstellungen wechseln
 	//   link = Element
@@ -1202,6 +1206,10 @@ let optionen = {
 		quick.rmAktiv();
 		// 1. Input fokussieren
 		optionen.sektionWechselnInput();
+		// Maximalhöhe des Fensters anpassen
+		helfer.elementMaxHeight({
+			ele: document.getElementById(`einstellungen-sec-${sektion}`),
+		});
 	},
 	// Klick-Event zum Wechseln der Sektion in den Einstellungen
 	//   a = Element
@@ -1214,7 +1222,9 @@ let optionen = {
 	},
 	// Fokussiert das erste Input-Element der aktuellen Sektion
 	sektionWechselnInput () {
-		document.querySelector("#einstellungen section:not(.aus) input").focus();
+		let input = document.querySelector("#einstellungen section:not(.aus) input");
+		input.focus();
+		return input;
 	},
 	// durch die Menüelemente navigieren
 	//   evt = Object

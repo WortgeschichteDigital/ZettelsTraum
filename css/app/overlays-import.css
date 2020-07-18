@@ -13,9 +13,12 @@
 
 #import-cont {
 	padding: 10px;
+}
+
+#import-cont-over {
 	overflow-x: hidden;
 	overflow-y: auto;
-	max-height: 300px;
+	transition: max-height .5s ease;
 }
 
 #import-cont table {

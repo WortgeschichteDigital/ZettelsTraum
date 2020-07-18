@@ -73,9 +73,9 @@
 	padding: 0 10px 10px 10px;
 }
 
-#red-wi-cont div {
+#red-wi-cont-over {
 	overflow: auto;
-	max-height: 400px;
+	transition: max-height .5s ease;
 }
 
 #red-wi-cont h3 {

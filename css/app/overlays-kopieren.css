@@ -7,6 +7,10 @@
 	max-width: 503px;
 }
 
+#kopieren-einfuegen > div {
+	padding-bottom: 10px;
+}
+
 .icon-h-kopieren {
 	-webkit-mask-image: url(../../img/kopieren.svg);
 	mask-image: url(../../img/kopieren.svg);
@@ -17,9 +21,18 @@
 	mask-image: url(../../img/einfuegen.svg);
 }
 
+#kopieren-einfuegen-over {
+	overflow: auto;
+	margin: 0 10px;
+	transition: max-height .5s ease;
+}
+
 #kopieren-einfuegen h3 {
 	margin: 20px 0 0 0;
-	padding-left: 10px;
+}
+
+#kopieren-einfuegen h3:first-child {
+	margin-top: 10px;
 }
 
 #kopieren-liste-head,
@@ -54,8 +67,8 @@
 }
 
 #kopieren-liste-cont {
-	max-height: 290px;
 	overflow-y: auto;
+	transition: max-height .5s ease;
 }
 
 #kopieren-liste-cont p {
@@ -73,7 +86,7 @@
 #kopieren-einfuegen-daten,
 #kopieren-einfuegen-bedeutungen,
 #kopieren-einfuegen-formular {
-	padding: 10px 10px 0 10px;
+	margin-top: 10px;
 }
 
 #kopieren-einfuegen-daten p,
@@ -137,6 +150,7 @@
 #kopieren-einfuegen-formular div:last-child {
 	margin-bottom: 0;
 	border-bottom: none;
+	padding-bottom: 0;
 }
 
 #kopieren-einfuegen-formular p {

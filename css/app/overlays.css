@@ -17,6 +17,7 @@
 }
 
 .overlay > div {
+	position: relative;
 	margin: 80px auto 0 auto;
 	border-bottom-right-radius: 10px;
 	border-bottom-left-radius: 10px;

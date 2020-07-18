@@ -3,7 +3,7 @@
 /* Zeitraumgrafik ------------------------------- */
 #zeitraumgrafik > div {
 	margin-top: 40px;
-	max-width: 720px;
+	max-width: 740px;
 }
 
 .icon-h-zeitraumgrafik {
@@ -15,6 +15,12 @@
 	padding: 10px;
 }
 
-#zeitraumgrafik-cont div {
-	overflow-x: auto;
+#zeitraumgrafik-cont-over {
+	overflow: auto;
+	transition: max-height .5s ease;
+}
+
+#zeitraumgrafik-cont-over canvas {
+	display: block;
+	margin: 0 auto;
 }

@@ -104,6 +104,10 @@
 	vertical-align: top;
 }
 
+#redaktion-cont-over {
+	transition: max-height .5s ease;
+}
+
 input[id^="redaktion-datum"] {
 	width: 140px;
 }

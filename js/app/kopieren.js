@@ -132,6 +132,10 @@ let kopieren = {
 	liste () {
 		overlay.oeffnen(document.getElementById("kopieren-liste"));
 		kopieren.listeAufbauen();
+		// Maximalhöhe des Fensters anpassen
+		helfer.elementMaxHeight({
+			ele: document.getElementById("kopieren-liste-cont"),
+		});
 	},
 	// Belegliste aufbauen
 	listeAufbauen () {
@@ -217,6 +221,10 @@ let kopieren = {
 		});
 		// Basisdaten anfragen und eintragen
 		kopieren.einfuegenBasisdaten(false);
+		// Maximalhöhe des Fensters anpassen
+		helfer.elementMaxHeight({
+			ele: document.getElementById("kopieren-einfuegen-over"),
+		});
 	},
 	// Listener für das Abhaken der Datenfelder
 	//   input = Element

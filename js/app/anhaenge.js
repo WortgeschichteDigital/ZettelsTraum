@@ -140,6 +140,10 @@ let anhaenge = {
 		if (overlay.oeffnen(fenster)) { // Fenster ist schon offen
 			return;
 		}
+		// Maximalhöhe der Anhängeliste festlegen
+		helfer.elementMaxHeight({
+			ele: document.getElementById("anhaenge-cont"),
+		});
 		// Anhänge der Kartei auflisten
 		let cont = document.getElementById("anhaenge-cont");
 		await anhaenge.auflisten(cont, "data|an");

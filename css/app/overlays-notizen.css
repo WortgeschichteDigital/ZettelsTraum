@@ -56,9 +56,10 @@
 	border: 1px solid var(--linie);
 	padding: 2px 5px;
 	width: calc(100% - 12px);
-	min-height: 192px;
+	min-height: 144px;
 	overflow-x: hidden;
 	overflow-y: auto;
+	transition: max-height .5s ease;
 }
 
 #notizen-feld:focus {

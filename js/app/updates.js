@@ -204,13 +204,20 @@ let updates = {
 		}
 		td[3].replaceChild(document.createTextNode(online), td[3].lastChild);
 		// Release-Notes
-		let notes = document.getElementById("updatesWin-notes");
+		let notes = document.getElementById("updatesWin-notes"),
+			header = document.getElementById("updatesWin-header");
 		if (data.notes) {
 			notes.innerHTML = data.notes;
 			notes.classList.remove("aus");
+			header.classList.add("notes");
 		} else {
 			notes.classList.add("aus");
+			header.classList.remove("notes");
 		}
+		// Maximalhöhe des Fensters anpassen
+		helfer.elementMaxHeight({
+			ele: document.getElementById("updatesWin-notes"),
+		});
 	},
 	// Benachrichtigung einblenden, dass das Suchen nach Updates misslungen ist
 	fensterFehler () {

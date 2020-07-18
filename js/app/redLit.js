@@ -1207,6 +1207,12 @@ let redLit = {
 				block.classList.remove("aus");
 			}
 		}
+		// Maximalhöhe der Trefferanzeige berechnen
+		if (!aus) {
+			helfer.elementMaxHeight({
+				ele: document.getElementById("red-lit-suche-titel"),
+			});
+		}
 	},
 	// Suche: Listener für die Formularfelder
 	//   input = Element

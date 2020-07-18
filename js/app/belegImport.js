@@ -1519,7 +1519,7 @@ let belegImport = {
 			}
 		}
 		// Belegliste aufbauen
-		let cont = document.getElementById("import-cont"),
+		let cont = document.getElementById("import-cont-over"),
 			daten = belegImport.Datei.data,
 			autorenVorhanden = false,
 			belegeVorhanden = false,
@@ -1590,6 +1590,10 @@ let belegImport = {
 		if (!belegeVorhanden) {
 			table.classList.add("keine-belege");
 		}
+		// Maximalhöhe des Fensters anpassen
+		helfer.elementMaxHeight({
+			ele: document.getElementById("import-cont-over"),
+		});
 		// Import-Markierung entfernen
 		function markierung (img) {
 			img.addEventListener("click", function(evt) {

@@ -87,6 +87,10 @@ let stamm = {
 		stamm.geaendert = false;
 		// Kopf und Liste initial aufbauen
 		stamm.aufbauen();
+		// Maximalhöhe der Variantenliste festlegen
+		helfer.elementMaxHeight({
+			ele: document.getElementById("stamm-liste"),
+		});
 	},
 	// Formvarianten-Fenster schließen
 	schliessen () {

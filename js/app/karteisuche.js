@@ -141,8 +141,10 @@ let karteisuche = {
 		optionen.speichern();
 		// Liste auffrischen
 		karteisuche.pfadeAuflisten();
-		// Maximalhöhe Trefferliste setzen
-		karteisuche.hoeheTrefferliste();
+		// Maximalhöhe Trefferliste setzenclearTimeout(helfer.resizeTimeout);
+		helfer.elementMaxHeight({
+			ele: document.getElementById("karteisuche-karteien"),
+		});
 	},
 	// Pfad aus der Liste entfernen
 	//   a = Element
@@ -157,7 +159,9 @@ let karteisuche = {
 			// Liste auffrischen
 			karteisuche.pfadeAuflisten();
 			// Maximalhöhe Trefferliste setzen
-			karteisuche.hoeheTrefferliste();
+			helfer.elementMaxHeight({
+				ele: document.getElementById("karteisuche-karteien"),
+			});
 		});
 	},
 	// speichert das Input-Element, das vor dem Start der Suche den Fokus hatte
@@ -581,7 +585,9 @@ let karteisuche = {
 			karteisuche.ztjAuflistenInfos(div, wort.i);
 		}
 		// Maximalhöhe Trefferliste setzen
-		karteisuche.hoeheTrefferliste();
+		helfer.elementMaxHeight({
+			ele: document.getElementById("karteisuche-karteien"),
+		});
 		// Alphabet drucken
 		karteisuche.alphabet(alphabet);
 	},
@@ -733,25 +739,6 @@ let karteisuche = {
 			const {ipcRenderer} = require("electron");
 			ipcRenderer.send("kartei-laden", this.dataset.pfad, false);
 		});
-	},
-	// maximal Höhe der Trefferliste berechnen
-	//   resize = true || undefined
-	//     (die Berechnung wurde durch die Größenänderung des Fenster angestoßen)
-	hoeheTrefferliste (resize = false) {
-		// Ist die Karteisuche überhaupt offen?
-		if (resize && document.getElementById("karteisuche").classList.contains("aus")) {
-			return;
-		}
-		// Maximalhöhe berechnen
-		let liste = document.getElementById("karteisuche-karteien"),
-			max = window.innerHeight - 40 - 28 - 20 - 50 - 20; // 40px Abstand oben, 28px Fensterkopf, 20px Paddings, 50px Margins, 20px Abstand unten
-		for (let i of document.getElementById("karteisuche-cont").childNodes) {
-			if (i === liste || i.nodeType !== 1) {
-				continue;
-			}
-			max -= i.offsetHeight;
-		}
-		liste.style.maxHeight = `${max}px`;
 	},
 	// Sortierwort aus dem übergebenen Wort/Ausdruck ableiten
 	// (denn das Wort könnte mehrgliedrig sein, Beispiele:
@@ -1265,7 +1252,9 @@ let karteisuche = {
 			input.focus();
 		}
 		// Maximalhöhe Trefferliste setzen
-		karteisuche.hoeheTrefferliste();
+		helfer.elementMaxHeight({
+			ele: document.getElementById("karteisuche-karteien"),
+		});
 	},
 	// baut die zu einem Filter gehörigen Formularelemente auf
 	//   filterId = String
@@ -1388,7 +1377,9 @@ let karteisuche = {
 			evt.preventDefault();
 			a.parentNode.parentNode.removeChild(a.parentNode);
 			// Maximalhöhe Trefferliste setzen
-			karteisuche.hoeheTrefferliste();
+			helfer.elementMaxHeight({
+				ele: document.getElementById("karteisuche-karteien"),
+			});
 		});
 	},
 	// Zwischenspeicher für die Filterwerte
@@ -1789,7 +1780,9 @@ let karteisuche = {
 		if (filter.classList.contains("aus")) {
 			filter.classList.remove("aus");
 			hoehe = filter.scrollHeight;
-			karteisuche.hoeheTrefferliste();
+			helfer.elementMaxHeight({
+				ele: document.getElementById("karteisuche-karteien"),
+			});
 			filter.classList.add("blenden");
 			filter.style.height = "0px";
 			filter.style.paddingTop = "0px";
@@ -1813,7 +1806,9 @@ let karteisuche = {
 				filter.classList.add("aus");
 				filter.classList.remove("blenden");
 				filter.removeAttribute("style");
-				karteisuche.hoeheTrefferliste();
+				helfer.elementMaxHeight({
+					ele: document.getElementById("karteisuche-karteien"),
+				});
 			}, 300);
 		}
 	},

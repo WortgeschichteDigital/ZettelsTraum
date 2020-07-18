@@ -62,6 +62,10 @@ let redWi = {
 		redWi.formInit();
 		// Content aufbauen
 		redWi.contMake();
+		// Maximalhöhe des Fensters anpassen
+		helfer.elementMaxHeight({
+			ele: document.getElementById("red-wi-cont-over"),
+		});
 	},
 	// Formular: Listener für die Textfelder
 	//   input = Element

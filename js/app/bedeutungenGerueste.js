@@ -25,10 +25,14 @@ let bedeutungenGerueste = {
 		}
 		// Tabelle aufbauen
 		bedeutungenGerueste.aufbauen();
+		// Maximalhöhe der Variantenliste festlegen
+		helfer.elementMaxHeight({
+			ele: document.getElementById("gerueste-cont-over"),
+		});
 	},
 	// Tabelle mit den Bedeutungsgerüsten aufbauen
 	aufbauen () {
-		let cont = document.getElementById("gerueste-cont");
+		let cont = document.getElementById("gerueste-cont-over");
 		helfer.keineKinder(cont);
 		// Tabelle aufbauen
 		let table = document.createElement("table");

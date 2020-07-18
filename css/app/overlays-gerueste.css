@@ -46,7 +46,7 @@
 }
 
 #gerueste-cont input {
-	width: 200px;
+	width: 100%;
 }
 
 #gerueste-cont .icon-link {
@@ -60,4 +60,9 @@
 
 #gerueste-cont .icon-link:focus {
 	background-color: var(--farbe);
+}
+
+#gerueste-cont-over {
+	overflow: auto;
+	transition: max-height .5s ease;
 }

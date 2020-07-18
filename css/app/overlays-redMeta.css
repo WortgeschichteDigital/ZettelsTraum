@@ -10,6 +10,10 @@
 	padding: 10px;
 }
 
+#red-meta-over {
+	transition: max-height .5s ease;
+}
+
 #red-meta p {
 	padding-left: 115px;
 	text-indent: -115px;
@@ -24,7 +28,7 @@
 }
 
 #red-meta-behandelt-mit {
-	width: 250px;
+	width: calc(100% - 12px);
 }
 
 #red-meta-themenfelder,
@@ -71,5 +75,5 @@
 
 #red-meta-be-ergaenzen {
 	position: static;
-	margin-left: -19px;
+	margin-left: -15px;
 }
