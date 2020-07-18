@@ -3756,20 +3756,9 @@ let xml = {
 				// neuen Abschnitt erzeugen
 				xmlStr += "\t".repeat(basis) + `<Abschnitt${attr.length ? " " + attr.join(" ") : ""}>\n`;
 				for (let tb of i.ct) {
-					if (/^Blockzitat|Liste$/.test(tb.it)) {
-						// <Blockzitat> | <Liste>
-						if (/<\/Textblock>\n$/.test(xmlStr)) {
-							xmlStr = xmlStr.replace(/\s*<\/Textblock>\n$/, "\n");
-						} else {
-							xmlStr += "\t".repeat(basis + 1) + "<Textblock>\n";
-						}
-						xmlStr += indentStr(tb.xl, basis + 2);
-						xmlStr += "\n" + "\t".repeat(basis + 1) + "</Textblock>\n";
-					} else {
-						// <Ueberschrift> | <Textblock> | <Illustration>
-						xmlStr += indentStr(tb.xl, basis + 1);
-						xmlStr += "\n";
-					}
+					// <Ueberschrift> | <Textblock> | <Blockzitat> | <Liste> | <Illustration>
+					xmlStr += indentStr(tb.xl, basis + 1);
+					xmlStr += "\n";
 				}
 				xmlStr += "\t".repeat(basis) + "</Abschnitt>\n";
 			}
@@ -3825,9 +3814,11 @@ let xml = {
 			/\t+<Wortgeschichte(_kompakt)?/g,
 			/\t+<Ueberschrift/g,
 			/\t+<Textblock/g,
+			/\t+<Blockzitat/g,
+			/\t+<Liste/g,
 			/\t+<Illustration/g,
-			/(?<=(Ueberschrift|Textblock|Illustration)>\n)\t+<Abschnitt/g,
-			/(?<=(Ueberschrift|Textblock|Illustration)>\n)\t+<\/Abschnitt/g,
+			/(?<=(Ueberschrift|Textblock|Blockzitat|Liste|Illustration)>\n)\t+<Abschnitt/g,
+			/(?<=(Ueberschrift|Textblock|Blockzitat|Liste|Illustration)>\n)\t+<\/Abschnitt/g,
 			/\t+<Belegreihe/,
 			/(?<=Beleg>\n)\t+<Beleg/g,
 			/\t+<Literatur>/,
