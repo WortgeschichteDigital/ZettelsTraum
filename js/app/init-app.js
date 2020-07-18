@@ -106,8 +106,43 @@ window.addEventListener("load", async () => {
 
 	// EVENTS: RESIZE
 	window.addEventListener("resize", () => {
-		karteisuche.hoeheTrefferliste(true);
-		notizen.maxHeight();
+		clearTimeout(helfer.resizeTimeout);
+		helfer.resizeTimeout = setTimeout(() => {
+			let elemente = [
+				"anhaenge-cont",
+				"dialog-text",
+				"drucken-cont",
+				"einstellungen-sec-allgemeines",
+				"einstellungen-sec-kopieren",
+				"einstellungen-sec-literatur",
+				"einstellungen-sec-menue",
+				"einstellungen-sec-notizen",
+				"einstellungen-sec-bedeutungsgeruest",
+				"einstellungen-sec-karteikarte",
+				"einstellungen-sec-filterleiste",
+				"einstellungen-sec-belegliste",
+				"gerueste-cont-over",
+				"import-cont-over",
+				"karteisuche-karteien",
+				"kopieren-einfuegen-over",
+				"kopieren-liste-cont",
+				"meta-cont-over",
+				"notizen-feld",
+				"red-lit-suche-titel",
+				"red-meta-over",
+				"red-wi-cont-over",
+				"redaktion-cont-over",
+				"stamm-liste",
+				"tagger-typen",
+				"updatesWin-notes",
+				"zeitraumgrafik-cont-over",
+			];
+			for (let e of elemente) {
+				helfer.elementMaxHeight({
+					ele: document.getElementById(e),
+				});
+			}
+		}, 100);
 	});
 
 	// EVENTS: TASTATUREINGABEN

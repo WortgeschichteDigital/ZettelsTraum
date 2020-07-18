@@ -4,6 +4,9 @@ let helfer = {
 	// speichert, welche der Hauptfunktionen gerade geöffnet ist;
 	// mögliche Werte: "liste" (= Belegliste), "gerüst" (= Bedeutungsgerüst), "karte" (= Karteikarte)
 	hauptfunktion: "liste",
+	// speichert den Timeout für das Resize-Event,
+	// dessen Konsequenzen nicht zu häufig gezogen werden sollen
+	resizeTimeout: null,
 	// das Fensterladen-Overlay ausblenden
 	fensterGeladen () {
 		setTimeout(function() {
@@ -18,6 +21,147 @@ let helfer = {
 	fensterFokus () {
 		const {ipcRenderer} = require("electron");
 		ipcRenderer.invoke("fenster-fokus");
+	},
+	// Timeout für das Entfernen des Overflow-Styles
+	elementMaxHeightTimeout: null,
+	// maximale Höhe des übergebenen Elements festlegen
+	//   ele = Element
+	//     (Element, dessen maximale Höhe festgelegt werden soll)
+	elementMaxHeight ({ele}) {
+		// Bedingungen:
+		//   - Element ist in einem Overlay-Fenster
+		//   - offsetTop ist der oberste Rand des Fensterkopfs
+		let dialog = ele.closest(".overlay");
+		if (dialog.classList.contains("aus")) {
+			return;
+		}
+		// elementspezifische Variablen
+		//   queries = Array
+		//     (verpflichtend! Selektoren für Elemente, deren Höhe auch abgezogen werden muss)
+		//   setOverflow = Boolean
+		//     (Container hat standardmäßig kein "overflow: auto")
+		let eleConf = {
+			"anhaenge-cont": {
+				queries: [],
+			},
+			"dialog-text": {
+				queries: ["#dialog-prompt", "#dialog-ok", "#dialog-confirm"],
+			},
+			"drucken-cont": {
+				queries: [],
+			},
+			"einstellungen-sec-allgemeines": {
+				queries: [],
+			},
+			"einstellungen-sec-kopieren": {
+				queries: [],
+			},
+			"einstellungen-sec-literatur": {
+				queries: [],
+			},
+			"einstellungen-sec-menue": {
+				queries: [],
+			},
+			"einstellungen-sec-notizen": {
+				queries: [],
+			},
+			"einstellungen-sec-bedeutungsgeruest": {
+				queries: [],
+			},
+			"einstellungen-sec-karteikarte": {
+				queries: [],
+			},
+			"einstellungen-sec-filterleiste": {
+				queries: [],
+			},
+			"einstellungen-sec-belegliste": {
+				queries: [],
+			},
+			"gerueste-cont-over": {
+				queries: [],
+			},
+			"import-cont-over": {
+				queries: ["#import-abbrechen"],
+			},
+			"karteisuche-karteien": {
+				queries: [],
+			},
+			"kopieren-einfuegen-over": {
+				queries: [],
+			},
+			"kopieren-liste-cont": {
+				queries: [],
+			},
+			"meta-cont-over": {
+				queries: [],
+			},
+			"notizen-feld": {
+				queries: ["#notizen-buttons"],
+			},
+			"red-lit-suche-titel": {
+				queries: ["#red-lit-suche-treffer"],
+			},
+			"red-meta-over": {
+				queries: [],
+				setOverflow: true,
+			},
+			"red-wi-cont-over": {
+				queries: [],
+			},
+			"redaktion-cont-over": {
+				queries: [],
+				setOverflow: true,
+			},
+			"stamm-liste": {
+				queries: ["#stamm-kopf", "#stamm-cont > p"],
+			},
+			"tagger-typen": {
+				queries: ["#tagger-cont > p"],
+				setOverflow: true,
+			},
+			"updatesWin-notes": {
+				queries: [],
+			},
+			"zeitraumgrafik-cont-over": {
+				queries: [],
+			},
+		};
+		// Maximalhöhe berechnen
+		let div = document.querySelector(`#${dialog.id} > div`),
+			dialogMarginTop = parseInt(getComputedStyle(div).marginTop.replace("px", ""), 10),
+			conf = eleConf[ele.id],
+			weitereHoehen = 0;
+		// ggf. Overflow des Containers setzen/entfernen
+		if (conf.setOverflow && window.innerHeight - div.getBoundingClientRect().bottom <= 30) {
+			clearTimeout(helfer.elementMaxHeightTimeout);
+			ele.style.overflow = "auto";
+		} else if (conf.setOverflow) {
+			clearTimeout(helfer.elementMaxHeightTimeout);
+			helfer.elementMaxHeightTimeout = setTimeout(() => {
+				// erst entfernen, wenn die Animation vorbei ist
+				// (da sich die Höhe hier schon wieder geändert haben könnte => nochmal checken)
+				if (window.innerHeight - div.getBoundingClientRect().bottom <= 30) {
+					ele.style.overflow = "auto";
+				} else {
+					ele.style.removeProperty("overflow");
+				}
+			}, 500);
+		}
+		// Höhe weiterer Elemente berechnen
+		for (let i of conf.queries) {
+			let elemente = document.querySelectorAll(i);
+			for (let e of elemente) {
+				weitereHoehen += e.offsetHeight;
+				for (let m of ["marginTop", "marginBottom"]) {
+					weitereHoehen += parseInt(getComputedStyle(e)[m].replace("px", ""), 10);
+				}
+			}
+		}
+		// Maximalhöhe festlegen
+		//   padding-bottom der Dialog-Fenster: 10px
+		//   margin unterhalb des Fensters: 20px
+		let maxHeight = window.innerHeight - dialogMarginTop - ele.offsetTop - weitereHoehen - 10 - 20;
+		ele.style.maxHeight = `${maxHeight}px`;
 	},
 	// übergebene Sektion einblenden, alle andere Sektionen ausblenden
 	//   sektion = String
