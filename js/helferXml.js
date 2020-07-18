@@ -401,8 +401,12 @@ let helferXml = {
 		if (lit) {
 			abbr = helferXml.abbrLit;
 		}
+		let notBefore = `(?<!(<Abkuerzung Expansion=".+?">|\\p{Letter}| ))`;
+		if (lit) {
+			notBefore = `(?<!(<Abkuerzung Expansion=".+?">|\\p{Letter}))`;
+		}
 		for (let [k, v] of Object.entries(abbr)) {
-			let r = new RegExp(`(?<!(<Abkuerzung Expansion=".+?">|\\p{Letter}| ))${k}`, "ug");
+			let r = new RegExp(notBefore + k, "ug");
 			text = text.replace(r, m => `<Abkuerzung Expansion="${v}">${m}</Abkuerzung>`);
 		}
 		return text;
