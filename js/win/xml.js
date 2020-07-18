@@ -274,7 +274,12 @@ let xml = {
 		for (let i = 0, len = lemmata.length; i < len; i++) {
 			lemmata[i] = lemmata[i].replace(/\s/g, "_");
 		}
-		id.value = `WGd-${lemmata.join(".")}-1`;
+		let wortfeld = "";
+		if (/Wortfeld/.test(xml.data.wort) ||
+				xml.data.xl.md.ty === "Wortfeldartikel") {
+			wortfeld = "Wortfeldartikel_";
+		}
+		id.value = `WGd-${wortfeld}${lemmata.join("-")}-1`;
 		// Datensatz speichern
 		xml.data.xl.md.id = id.value;
 		xml.speichern();
