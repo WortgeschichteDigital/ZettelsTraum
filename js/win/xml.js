@@ -3511,7 +3511,7 @@ let xml = {
 			levelNeu = level + 1;
 		}
 		// Verschieben nicht möglich/nötig/erlaubt
-		if (!levelNeu || levelNeu > 5) {
+		if (!levelNeu || levelNeu > 4) {
 			return;
 		}
 		// Verschieben
