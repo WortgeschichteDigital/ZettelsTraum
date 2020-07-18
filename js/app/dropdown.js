@@ -302,6 +302,8 @@ let dropdown = {
 			dropdown.data = [...redWi.dropdown.vt];
 		} else if (feld_id === "red-wi-lt") {
 			dropdown.data = [...redWi.dropdown.lt];
+		} else if (/^red-wi-.+-se$/.test(feld_id)) {
+			dropdown.data = [...redWi.dropdown.se];
 		} else if (/^red-wi-.+-tx$/.test(feld_id)) {
 			dropdown.data = redWi.dropdownVerweistexte();
 		} else if (feld_id === "red-wi-copy-gn") {

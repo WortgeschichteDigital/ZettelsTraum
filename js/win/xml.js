@@ -2974,10 +2974,10 @@ let xml = {
 					let lt = xml.data.xl.wi[xml.bgAktGn][slot].lt;
 					if (/^<Textreferenz/.test(xmlStr)) {
 						lt = "Textverweis";
-					} else if (/^<Verweis>/.test(xmlStr)) {
-						lt = "Verweis intern";
 					} else if (/^<Verweis_extern>/.test(xmlStr)) {
 						lt = "Verweis extern";
+					} else if (/^<Verweis/.test(xmlStr)) {
+						lt = "Verweis intern";
 					}
 					// Textreferenz neu auslesen
 					let tx = xml.data.xl.wi[xml.bgAktGn][slot].tx,

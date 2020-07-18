@@ -7,6 +7,7 @@ let redWi = {
 	dropdown: {
 		vt: ["Wortbildung", "Kollokation", "Wortfeld", "Wortfeldartikel"],
 		lt: ["Textverweis", "Verweis intern", "Verweis extern"],
+		se: ["Entsprechung", "Gegensatz", "Hyperonym", "Hyponym", "Synonym"],
 	},
 	// Dropdown: Verweistextvorschläge sammeln
 	dropdownVerweistexte () {
@@ -149,7 +150,7 @@ let redWi = {
 		for (let i of inputs) {
 			i.value = "";
 		}
-		if (inputs[2]) {
+		if (document.getElementById("red-wi-lt").value === "Verweis extern") {
 			inputs[2].value = new Date().toISOString().split("T")[0];
 		}
 		inputs[0].focus();
@@ -215,8 +216,12 @@ let redWi = {
 			if (idVal !== idValNorm) {
 				id.value = idValNorm;
 			}
+			let typ = checkSemantik(text);
+			if (typ === false) {
+				return;
+			}
 			// XML erstellen
-			ds.xl = `<Textreferenz Ziel="${idValNorm}">${txVal}</Textreferenz>`;
+			ds.xl = `<Textreferenz Ziel="${idValNorm}"${typ}>${txVal}</Textreferenz>`;
 		} else if (!intern.classList.contains("aus")) {
 			// Überprüfungen Verweis intern
 			let zl = intern.querySelector(`input[id$="zl"]`),
@@ -233,8 +238,12 @@ let redWi = {
 			if (zlVal !== zlValNorm) {
 				zl.value = zlValNorm;
 			}
+			let typ = checkSemantik(intern);
+			if (typ === false) {
+				return;
+			}
 			// XML erstellen
-			ds.xl = "<Verweis>\n";
+			ds.xl = `<Verweis${typ}>\n`;
 			if (txVal === zlValNorm) {
 				ds.xl += "  <Verweistext/>\n";
 			} else {
@@ -286,6 +295,24 @@ let redWi = {
 		}
 		// Eingabe speichern
 		redWi.formSpeichern({ds});
+		// semantischen Typ überprüfen, ggf. als Attribut zurückgeben
+		function checkSemantik (lt) {
+			let se = lt.querySelector(`input[id$="se"]`),
+				seVal = helfer.textTrim(se.value, true);
+			if (seVal && !redWi.dropdown.se.includes(seVal)) {
+				dialog.oeffnen({
+					typ: "alert",
+					text: `Die semantische Typisierung als „${seVal}“ ist unzulässig.`,
+					callback: () => se.select(),
+				});
+				return false;
+			}
+			let typ = "";
+			if (seVal) {
+				typ = ` Typ="${seVal}"`;
+			}
+			return typ;
+		}
 	},
 	// Formular: Eingabe speichern
 	//   ds = Object
@@ -398,15 +425,22 @@ let redWi = {
 			inputs[0].value = tx;
 			if (/^<Textreferenz/.test(ds.xl)) {
 				inputs[1].value = ds.xl.match(/Ziel="(.+?)"/)[1];
-			} else if (/^<Verweis>/.test(ds.xl)) {
-				inputs[1].value = ds.xl.match(/<Verweisziel>(.+?)<\/Verweisziel>/)[1];
-			} else {
+				seVal();
+			} else if (/^<Verweis_extern>/.test(ds.xl)) {
 				inputs[1].value = ds.xl.match(/<URL>(.+?)<\/URL>/)[1];
 				const da = ds.xl.match(/<Aufrufdatum>(.+?)<\/Aufrufdatum>/)[1];
 				let datum = /^(?<tag>[0-9]{2})\.(?<monat>[0-9]{2})\.(?<jahr>[0-9]{4})$/.exec(da);
 				inputs[2].value = `${datum.groups.jahr}-${datum.groups.monat}-${datum.groups.tag}`;
+			} else {
+				inputs[1].value = ds.xl.match(/<Verweisziel>(.+?)<\/Verweisziel>/)[1];
+				seVal();
 			}
 			inputs[0].select();
+			// semantischen Verweistyp ermitteln
+			function seVal () {
+				let se = ds.xl.match(/Typ="(.+?)"/);
+				inputs[2].value = se ? se[1] : "";
+			}
 		});
 	},
 	// Content: Eintrag löschen
