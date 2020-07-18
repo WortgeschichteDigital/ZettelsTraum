@@ -5,7 +5,7 @@ let redWi = {
 	inputs: "#red-wi-text:not(.aus) input, #red-wi-intern:not(.aus) input, #red-wi-extern:not(.aus) input",
 	// Dropdown: Feldtypen
 	dropdown: {
-		vt: ["Wortbildung", "Kollokation", "Wortfeld"],
+		vt: ["Wortbildung", "Kollokation", "Wortfeld", "Wortfeldartikel"],
 		lt: ["Textverweis", "Verweis intern", "Verweis extern"],
 	},
 	// Dropdown: Verweistextvorschläge sammeln
@@ -156,13 +156,23 @@ let redWi = {
 	},
 	// Formular: Eingabe überprüfen und Datensatz erstellen
 	formEval () {
+		let lt = document.getElementById("red-wi-lt");
 		let ds = {
 			gn: document.getElementById("red-wi-gn").value.match(/[0-9]+/)[0],
-			lt: document.getElementById("red-wi-lt").value,
+			lt: lt.value,
 			tx: "",
 			vt: document.getElementById("red-wi-vt").value,
 			xl: "",
 		};
+		// illegaler Linktyp bei Wortfeldartikel?
+		if (ds.vt === "Wortfeldartikel" && ds.lt !== "Verweis intern") {
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Für den Verweistyp <i>Wortfeldartikel</i> sind nur interne Verweise zulässig.",
+				callback: () => lt.focus(),
+			});
+			return;
+		}
 		// Verweistext eingegeben?
 		// (wird für alle Formulare gebraucht)
 		let inputs = document.querySelectorAll(redWi.inputs),
@@ -323,6 +333,7 @@ let redWi = {
 			Kollokation: "Kollokationen",
 			Wortbildung: "Wortbildungen",
 			Wortfeld: "Wortfeld",
+			Wortfeldartikel: "Wortfeldartikel",
 		};
 		let h = "";
 		for (let i of data.rd.wi) {

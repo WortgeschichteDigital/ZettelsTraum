@@ -3791,6 +3791,7 @@ let xml = {
 			Kollokation: "Kollokationen",
 			Wortbildung: "Wortbildungen",
 			Wortfeld: "Wortfeld",
+			Wortfeldartikel: "Wortfeldartikel",
 		};
 		for (let i of wi) {
 			if (wiMap[i.vt] !== vt) {
