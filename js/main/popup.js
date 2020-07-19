@@ -337,7 +337,7 @@ let punkte = {
 		click: "redLit.titelZwischenablage('xmlReferenz')",
 	},
 	titelXml: {
-		label: "Titelaufnahme in XML-Datei",
+		label: "Titelaufnahme an XML-Fenster",
 		icon: "xml.png",
 		click: `redLit.xmlDatensatz({id: popup.titelaufnahme.ds.id})`,
 	},
@@ -356,7 +356,7 @@ let punkte = {
 		click: "xml.schnittInZwischenablage()",
 	},
 	xmlFenster: {
-		label: "Belegschnitt in XML-Fenster",
+		label: "Belegschnitt an XML-Fenster",
 		icon: "xml.png",
 		click: "xml.schnittInXmlFenster()",
 	},
