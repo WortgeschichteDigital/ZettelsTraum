@@ -955,6 +955,8 @@ Aufrufdatum: 24. 12. 2019</pre>
 
 					<p id="bedeutungsgeruest-zaehlung">Im <b>zweiten Textfeld</b> der Kopfleiste lässt sich festlegen, mit welcher Zählung das aktuelle Bedeutungsgerüst beginnen soll. Standardmäßig beginnt die Zählung der Bedeutungen mit arabischen Ziffern (1, 2, 3 <abbr title="und so weiter">usw.</abbr>). Die Einstellung der Zählung in der obersten Ebene bezieht sich immer nur auf das aktuelle Gerüst. Es kann also jedes Gerüst eine andere Zählung haben. Die Abfolge der Zählzeichen ist wie folgt: I, II, III – A, B, C – 1, 2, 3 – a, b, c – α, β, γ – • – ◦. Bedeutungen mit einer noch tieferen Verschachtelungsebene erhalten immer einen Spiegelstrich (–). Eine Ebenenbegrenzung gibt es zwar nicht, irgendwann wird wegen der Einrückung im Gerüst jedoch ein Punkt erreicht sein, an dem die Darstellbarkeit ihre Grenzen hat.</p>
 
+					<p>Ein Klick auf das <b><abbr title="Extensible Markup Language" lang="en">XML</abbr>-Icon</b> (<img src="../img/xml.svg" width="24" height="24" alt="">) wandelt das gerade aktive Bedeutungsgerüst in <abbr title="Extensible Markup Language" lang="en">XML</abbr> um und schickt es direkt ans <a href="#menueRedaktion-xml"><abbr title="Extensible Markup Language" lang="en">XML</abbr>-Redaktionsfenster</a>. Möchten Sie das Bedeutungsgerüst im <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Format in die Zwischenablage kopieren, wechseln Sie ins Redaktionsfenster und führen einen Rechtsklick auf der <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Vorschau aus. Mithilfe des Befehls <i>Code kopieren</i> schieben Sie das Bedeutungsgerüst in die Zwischenablage. Möchten Sie das Gerüst in ein Office-Dokument einfügen, verwenden Sie besser die Kopierfunktion der Druckfunktion.</p>
+
 					<figure class="right" title="zum Vergrößern anklicken">
 						<img src="../img/win/hb-bedeutungsgeruest-druckvorschau.png" alt="">
 						<figcaption>ein Bedeutungsgerüst im Druckvorschaufenster</figcaption>
@@ -1561,6 +1563,10 @@ Aufrufdatum: 24. 12. 2019</pre>
 					<p class="erklaerung-icon"><img src="../img/link-pfeil-runter.svg" width="24" height="24" alt=""><abbr title="Extensible Markup Language" lang="en">XML</abbr> in Zwischenablage &gt; Referenz</p>
 
 					<p class="info">Analog zum Befehl <a href="#belegliste-textZwischenablageReferenz"><i>Text in Zwischenablage &gt; Referenz</i></a> wird auch in diesem Fall eine ID des Belegs erzeugt und kopiert. Der Unterschied ist, dass sie in einem leeren <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Element steht, das als Anker für einen zuvor kopierten Belegschnitt dienen kann.</p>
+
+					<p class="erklaerung-icon"><img src="../img/xml.svg" width="24" height="24" alt="">Belegschnitt in <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Fenster</p>
+
+					<p class="info">Erscheint nur beim Rechtsklick auf markiertem <em>Beleg-</em>Text. Die Funktion erzeugt ein XML-Snippet in derselben Weise wie <a href="#belegliste-xmlZwischenablageBelegschnitt"><i><abbr title="Extensible Markup Language" lang="en">XML</abbr> in Zwischenablage &gt; Belegschnitt</i></a>. Der einzige Unterschied besteht darin, dass das Snippet nicht in die Zwischenablage kopiert, sondern direkt ans <a href="#menueRedaktion-xml"><abbr title="Extensible Markup Language" lang="en">XML</abbr>-Redaktionsfenster</a> geschickt wird.</p>
 
 					<p class="erklaerung-icon"><img src="../img/link.svg" width="24" height="24" alt="">Link kopieren</p>
 
@@ -2429,6 +2435,8 @@ Mustermann, Erika
 
 							<p>Fokus im Suchfeld des <a href="#filter-volltext">Volltextfilters</a>: Suche und/oder Filtern starten</p>
 
+							<p>Fokus in oder auf einem Textfeld des <a href="#menueRedaktion-xml"><abbr title="Extensible Markup Language" lang="en">XML</abbr>-Redaktionsfenster</a>: Inhalt anwenden oder hinzufügen</p>
+
 							<p>Funktion ausführen, für die das fokussierte Element steht</p>
 
 							<p>Suchfeld in Handbuch oder <a href="#" class="link-dokumentation">technischer Dokumentation</a> fokussiert: Suche anstoßen und den ersten Treffer fokussieren</p>
@@ -2441,9 +2449,11 @@ Mustermann, Erika
 						<td>
 							<p>Fokus in einem Textfeld der <a href="#karteikarte">Karteikarte</a>: Karte speichern</p>
 
-							<p>Fokus im Suchfeld der <a href="#menueRedaktion-literatur">Literaturdatenbank</a>: obersten Eintrag der <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Datei hinzufügen</p>
+							<p>Fokus im Suchfeld der <a href="#menueRedaktion-literatur">Literaturdatenbank</a>: obersten Eintrag an das <a href="#menueRedaktion-xml"><abbr title="Extensible Markup Language" lang="en">XML</abbr>-Redaktionsfenster</a> schicken</p>
 
 							<p>Fokus in einem Textfeld des Eingabeformulars der Literaturdatenbank: Titelaufnahme speichern</p>
+
+							<p>Fokus in einem <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Textfeld des <a href="#menueRedaktion-xml"><abbr title="Extensible Markup Language" lang="en">XML</abbr>-Redaktionsfensters</a>, das sich im Bearbeiten-Modus befindet: Eingabe speichern</p>
 						</td>
 					</tr><tr>
 						<td> </td><td> </td>
@@ -2697,6 +2707,8 @@ Mustermann, Erika
 
 							<p>Textfeld für den Namen eines Gerüsts im <a href="#bedeutungsgeruest-konfigurationsfenster">Konfigurationsfenster für Bedeutungsgerüste</a> fokussiert: Eingabe verwerfen und/oder Textfeld schließen</p>
 
+							<p>Fokus in einem <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Textfeld des <a href="#menueRedaktion-xml"><abbr title="Extensible Markup Language" lang="en">XML</abbr>-Redaktionsfensters</a>, das sich im Bearbeiten-Modus befindet: Eingabe abbrechen</p>
+
 							<p><i>Linux/Windows</i>: Menüleistenpunkt zuklappen</p>
 
 							<p>maximierte Bildanzeige im Handbuch geöffnet: Anzeige schließen</p>
@@ -2888,6 +2900,8 @@ Mustermann, Erika
 						<td><kbd>E</kbd></td>
 						<td>
 							<p><a href="#menueKartei-erstellen">Kartei erstellen</a></p>
+
+							<p>im <a href="#menueRedaktion-xml"><abbr title="Extensible Markup Language" lang="en">XML</abbr>-Redaktionsfensters</a>: <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Datei exportieren</p>
 						</td>
 					</tr><tr>
 						<td> </td><td> </td>
@@ -2978,6 +2992,8 @@ Mustermann, Erika
 						<td><kbd>N</kbd></td>
 						<td>
 							<p>neue <a href="#karteikarte">Karteikarte</a> erstellen</p>
+
+							<p>im <a href="#menueRedaktion-xml"><abbr title="Extensible Markup Language" lang="en">XML</abbr>-Redaktionsfensters</a>: neuen Abschnitt im <i>Kurz gefasst</i> <abbr title="beziehungsweise">bzw.</abbr> in der <i>Wortgeschichte</i> erstellen</p>
 						</td>
 					</tr><tr>
 						<td><kbd>Alt</kbd></td><td>+</td>
@@ -3042,6 +3058,8 @@ Mustermann, Erika
 							<p><a href="#menueRedaktion-literatur">Literaturdatenbank</a> offen: Eingabeformular und/oder Datenbank speichern</p>
 
 							<p><a href="#menueKartei-speichern">Kartei speichern</a></p>
+
+							<p>im <a href="#menueRedaktion-xml"><abbr title="Extensible Markup Language" lang="en">XML</abbr>-Redaktionsfensters</a>: Speichern der zum <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Redaktionsfenster gehörenden Kartei anstoßen</p>
 						</td>
 					</tr><tr>
 						<td> </td><td> </td>
@@ -4363,7 +4381,7 @@ Gerüst 2 &gt; Gerüst 1</pre>
 
 						<p id="menueRedaktion-literaturLoeschen">Das <b>Löschen</b> von Titelaufnahmen geht nur über dieses Versionen-Popup. Dazu dient das allein hier angezeigte Icon <img src="../img/muelleimer.svg" width="20" height="20" alt="">. Gelöscht werden können immer nur einzelne Versionen einer Titelaufnahme. Erst wenn Sie die letzte Version einer Titelaufnahme entfernen, wird die Titelaufnahme komplett gelöscht.</p>
 
-						<p id="menueRedaktion-literaturXml">Wurde in demselben Fenster, in dem die Literaturdatenbank gerade geöffnet ist, auch eine Kartei geladen, erscheint ein weiteres Icon: <img src="../img/xml.svg" width="20" height="20" alt="">. Mit ihm kann man die jeweilige <b>Titelaufnahme der <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Datei hinzufügen</b>, die im <a href="#menueRedaktion-xml"><abbr title="Extensible Markup Language" lang="en">XML</abbr>-Fenster</a> kompiliert werden kann. Ist dieses Fenster noch nicht geöffnet, wird es durch Klick auf das Icon automatisch aufgerufen. Dabei wird immer die aktuellste Version einer Titelaufnahme an das XML-Fenster geschickt, und zwar auch dann, wenn gerade eine veraltete Titelaufnahme angezeigt wird.</p>
+						<p id="menueRedaktion-literaturXml">Wurde in demselben Fenster, in dem die Literaturdatenbank gerade geöffnet ist, auch eine Kartei geladen, erscheint ein weiteres Icon: <img src="../img/xml.svg" width="20" height="20" alt="">. Mit ihm kann man die jeweilige <b>Titelaufnahme an das <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Redaktionsfenster schicken</b> (<abbr title="vergleiche">vgl.</abbr> den Abschnitt zum <a href="#menueRedaktion-xml"><abbr title="Extensible Markup Language" lang="en">XML</abbr>-Redaktionssystem</a>). Ist dieses Fenster noch nicht geöffnet, wird es durch Klick auf das Icon automatisch aufgerufen. Dabei wird immer die aktuellste Version einer Titelaufnahme an das XML-Fenster geschickt, und zwar auch dann, wenn gerade eine veraltete Titelaufnahme angezeigt wird.</p>
 
 						<p id="menueRedaktion-literaturSondersuchen">Unter dem Suchschlitz finden Sie Links, mit denen Sie <b>Sondersuchen</b> starten können. Bei Sondersuchen werden keine veralteten Datensätze durchsucht; sie beziehen sich also immer auf die jüngste Version einer Titelaufnahme. Im Suchschlitz oder im Datumsfeld eingetragene Werte werden auch bei einer Sondersuche berücksichtigt. Die Sondersuchen können Ihnen jedoch Ergebnisse liefern, für die es ein bisschen komplizierterer Suchalgorithmen bedarf. Gefunden werden dabei im Einzelnen:</p>
 
@@ -4497,7 +4515,7 @@ Gerüst 2 &gt; Gerüst 1</pre>
 					<div class="info">
 						<p>Registrieren von Verweisen auf andere Wörter/Ausdrücke.</p>
 
-						<p>Das Dialogfenster ist Teil des Redaktionssystems, das – zumindest in diesem Fall – die sehr spezifischen Bedürfnisse des Projekts <a href="https://adw-goe.de/forschung/weitere-forschungsprojekte/wortgeschichte-digital-teilprojekt-im-zdl/">Wortgeschichte digital</a> adressiert.</p>
+						<p>Das Dialogfenster ist Teil des <a href="#menueRedaktion-xml">Redaktionssystems</a>, das – zumindest in diesem Fall – die sehr spezifischen Bedürfnisse des Projekts <a href="https://adw-goe.de/forschung/weitere-forschungsprojekte/wortgeschichte-digital-teilprojekt-im-zdl/">Wortgeschichte digital</a> adressiert.</p>
 
 						<p>Grundsätzlich gilt, dass Wortinformationen immer an ein bestimmtes <b>Bedeutungsgerüst</b> gebunden sind. Arbeiten Sie mit mehreren <a href="#bedeutungsgeruest">Bedeutungsgerüsten</a> können diese alle unterschiedliche Wortinformationen mit sich führen.</p>
 
@@ -4534,11 +4552,15 @@ Gerüst 2 &gt; Gerüst 1</pre>
 							<li><b>Aufrufdatum:</b> das Aufrufdatum der externen Ressource (nur bei <i>Verweis extern</i>)</li>
 						</ul>
 
-						<p>Sobald Wörter/Ausdrücke registriert wurden, erscheint unter dem Formular eine (nach Verweistyp und Alphabet) sortierte Liste. Durch Klick auf eines der Wörter/einen der Ausdrücke kann das Formular mit den entsprechenden Daten gefüllt werden, um die Daten zu ändern. Nach dem Speichern wird der Eintrag in der Liste ersetzt.</p>
+						<p>Sobald Wörter/Ausdrücke registriert wurden, erscheint unter dem Formular eine (nach Verweistyp und Alphabet) sortierte <b>Liste</b>. Durch Klick auf eines der Wörter/einen der Ausdrücke kann das Formular mit den entsprechenden Daten gefüllt werden, um die Daten zu ändern. Nach dem Speichern wird der Eintrag in der Liste ersetzt.</p>
 
 						<p>Wörter/Ausdrücke können <em>nicht mehrfach</em> in unterschiedlichen Kategorien der Liste erscheinen. Sie können aber durchaus mehreren Bedeutungsgerüsten zugeordnet werden. Dabei dürfen je nach Gerüst die Angaben des Worts/Ausdrucks zu Verweistyp, Linktyp <abbr title="und so weiter">usw.</abbr> variieren.</p>
 
-						<p>Das Icon <img src="../img/x-dick.svg" width="20" height="20" alt=""> dient zum Löschen eines Worts/Ausdrucks.</p>
+						<p>Das Icon <img src="../img/x-dick.svg" width="20" height="20" alt=""> dient zum <b>Löschen</b> eines Worts/Ausdrucks.</p>
+
+						<p>Fährt man mit der Maus über einen der Einträge erscheint das Icon <img src="../img/xml.svg" width="20" height="20" alt="">. Mit ihm kann der jeweilige Eintrag an das <b><abbr title="Extensible Markup Language" lang="en">XML</abbr>-Redaktionsfenster</b> geschickt werden. Befindet sich der Eintrag bereits im Fenster, wird er dort durch die neue Version ersetzt. Andernfalls wird er hinzugefügt. Die Sortierung der Einträge im <a href="#menueRedaktion-xml">Redaktionsfenster</a> bleibt dabei erhalten.</p>
+
+						<p>Dasselbe Icon gibt es – immer sichtbar – noch einmal im oberen rechten Bereich des Fenster. Mit ihm können <em>alle</em> Wortinformationen des eingestellten Bedeutungsgerüsts und nicht nur ausgewählte Einträge an das Redaktionsfenster geschickt werden. Dabei werden allerdings alle Wortinformationen, die sich bereits im Redaktionsfenster befinden, überschrieben. Außerdem gehen spezielle Sortierungen verloren, die sie dort <abbr title="eventuell">evtl.</abbr> vorgenommen haben.</p>
 					</div>
 				</section>
 
