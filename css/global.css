@@ -50,6 +50,10 @@
 	text-decoration: var(--textWarnung) wavy underline;
 }
 
+.xml-comment {
+	color: var(--textHell);
+}
+
 .xml-tag {
 	color: var(--farbeB);
 }

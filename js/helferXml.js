@@ -220,6 +220,9 @@ let helferXml = {
 		}
 		// farbliche Hervorhebungen
 		xmlStr = xmlStr.replace(/&lt;.+?&gt;/g, m => {
+			if (/^&lt;!--/.test(m)) {
+				return `<span class="xml-comment">${m}</span>`;
+			}
 			return `<span class="xml-tag">${m}</span>`;
 		});
 		xmlStr = xmlStr.replace(/<span class="xml-tag">(.+?)<\/span>/g, (m, p1) => {
