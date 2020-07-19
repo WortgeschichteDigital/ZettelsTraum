@@ -744,7 +744,7 @@ let optionen = {
 			defaultPath: appInfo.documents,
 			filters: [
 				{
-					name: "XML-Datei",
+					name: "XML-Dateien",
 					extensions: ["xml"],
 				},
 				{
@@ -1058,7 +1058,7 @@ let optionen = {
 			defaultPath: appInfo.documents,
 			filters: [
 				{
-					name: "Text-Datei",
+					name: "Text-Dateien",
 					extensions: ["txt"],
 				},
 				{
