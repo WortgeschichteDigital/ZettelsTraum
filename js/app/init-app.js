@@ -242,7 +242,7 @@ window.addEventListener("load", async () => {
 		}
 	});
 	document.getElementById("beleg-bs").addEventListener("paste", evt => beleg.pasteBs(evt));
-	document.querySelectorAll("#beleg .icon-link").forEach(a => {
+	document.querySelectorAll("#beleg .icon-link, #beleg .text-link").forEach(a => {
 		if (a.classList.contains("icon-stern")) { // Bewertung
 			beleg.bewertungEvents(a);
 		} else if (/icon-tools/.test(a.getAttribute("class"))) { // Text-Tools
