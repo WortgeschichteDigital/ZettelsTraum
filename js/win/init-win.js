@@ -154,6 +154,9 @@ let initWin = {
 					case "kopf-export":
 						xml.exportieren();
 						break;
+					case "kopf-import":
+						xml.importieren();
+						break;
 					case "kopf-speichern":
 						xml.speichernKartei();
 						break;

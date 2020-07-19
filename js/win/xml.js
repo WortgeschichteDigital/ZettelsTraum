@@ -15,6 +15,21 @@ let xml = {
 	//   xl = Object
 	//     (die aktuellen Redaktionsdaten: data.rd.xl)
 	data: {},
+	// Typen-Mapping für die Wortinformationen
+	wiMap: {
+		export: {
+			Kollokation: "Kollokationen",
+			Wortbildung: "Wortbildungen",
+			Wortfeld: "Wortfeld",
+			Wortfeldartikel: "Wortfeldartikel",
+		},
+		import: {
+			Kollokationen: "Kollokation",
+			Wortbildungen: "Wortbildung",
+			Wortfeld: "Wortfeld",
+			Wortfeldartikel: "Wortfeldartikel",
+		},
+	},
 	// Dropdown: Auswahlmöglichkeiten für Dropdown-Felder
 	dropdown: {
 		artikelTypen: ["Vollartikel", "Wortfeldartikel"],
@@ -232,39 +247,45 @@ let xml = {
 		// Daten zurücksetzen
 		xml.data.xl = helferXml.redXmlData();
 		xml.speichern();
-		// Formular zurücksetzen
-		document.querySelectorAll(`[data-geaendert="true"]`).forEach(i => {
-			delete i.dataset.geaendert;
-		});
-		let delKoepfe = ["md", "le", "ab", "tx"],
-			delTotal = ["bl", "lt", "wi", "bg"],
-			close = delKoepfe.concat(delTotal),
-			closed = false;
-		for (let i of close) {
-			let koepfe = document.querySelectorAll(`#${i} > .kopf`);
-			for (let kopf of koepfe) {
-				let next = kopf.nextSibling;
-				if (next &&
-						(next.classList.contains("pre-cont") ||
-						next.classList.contains("abschnitt-cont") && !next.dataset.off)) {
-					kopf.dispatchEvent(new Event("click"));
-					closed = true;
+		await xml.resetFormular();
+		xml.init();
+	},
+	// Formulardaten zurücksetzen
+	resetFormular () {
+		return new Promise(async resolve => {
+			document.querySelectorAll(`[data-geaendert="true"]`).forEach(i => {
+				delete i.dataset.geaendert;
+			});
+			let delKoepfe = ["md", "le", "ab", "tx"],
+				delTotal = ["bl", "lt", "wi", "bg"],
+				close = delKoepfe.concat(delTotal),
+				closed = false;
+			for (let i of close) {
+				let koepfe = document.querySelectorAll(`#${i} > .kopf`);
+				for (let kopf of koepfe) {
+					let next = kopf.nextSibling;
+					if (next &&
+							(next.classList.contains("pre-cont") ||
+							next.classList.contains("abschnitt-cont") && !next.dataset.off)) {
+						kopf.dispatchEvent(new Event("click"));
+						closed = true;
+					}
 				}
 			}
-		}
-		if (closed) { // Schließen der Köpfe dauert .3s
-			await new Promise(warten => setTimeout(() => warten(true), 350));
-		}
-		for (let i of delKoepfe) {
-			let koepfe = document.querySelectorAll(`#${i} > .kopf`);
-			for (let kopf of koepfe) {
-				kopf.parentNode.removeChild(kopf);
+			if (closed) { // Schließen der Köpfe dauert .3s
+				await new Promise(warten => setTimeout(() => warten(true), 350));
 			}
-		}
-		for (let i of delTotal) {
-			helfer.keineKinder(document.getElementById(i));
-		}
-		xml.init();
+			for (let i of delKoepfe) {
+				let koepfe = document.querySelectorAll(`#${i} > .kopf`);
+				for (let kopf of koepfe) {
+					kopf.parentNode.removeChild(kopf);
+				}
+			}
+			for (let i of delTotal) {
+				helfer.keineKinder(document.getElementById(i));
+			}
+			resolve(true);
+		});
 	},
 	// Metadaten: ID
 	mdIdMake () {
@@ -3792,15 +3813,9 @@ let xml = {
 		// (z.Zt. nur einen Wortinfoblock exportieren)
 		let wi = d.wi[xml.bgAktGn] ?? []; // jshint ignore:line
 		let vt = "";
-		let wiMap = {
-			Kollokation: "Kollokationen",
-			Wortbildung: "Wortbildungen",
-			Wortfeld: "Wortfeld",
-			Wortfeldartikel: "Wortfeldartikel",
-		};
 		for (let i of wi) {
-			if (wiMap[i.vt] !== vt) {
-				vt = wiMap[i.vt];
+			if (xml.wiMap.export[i.vt] !== vt) {
+				vt = xml.wiMap.export[i.vt];
 				if (/<Verweise Typ/.test(xmlStr)) {
 					xmlStr += "\t".repeat(2) + "</Verweise>\n";
 				}
@@ -3829,7 +3844,7 @@ let xml = {
 			/\t+<Belegreihe/,
 			/(?<=Beleg>\n)\t+<Beleg/g,
 			/\t+<Literatur>/,
-			/\s+<Lesart/g,
+			/\s+<Lesart(?!enreferenz)/g,
 			/\t+<Verweise/g,
 		];
 		for (let i of leerzeilen) {
@@ -3940,5 +3955,279 @@ let xml = {
 		const pfad = result.filePath.match(reg)[0];
 		xml.data.letzter_pfad = pfad;
 		ipcRenderer.sendTo(xml.data.contentsId, "optionen-letzter-pfad", pfad);
+	},
+	// Importieren: XML-Datei öffnen und überprüfen
+	async importieren () {
+		let opt = {
+			title: "XML-Datei öffnen",
+			defaultPath: appInfo.documents,
+			filters: [
+				{
+					name: "XML-Dateien",
+					extensions: ["xml"],
+				},
+				{
+					name: "Alle Dateien",
+					extensions: ["*"],
+				},
+			],
+			properties: [
+				"openFile",
+			],
+		};
+		if (xml.data.letzter_pfad) {
+			opt.defaultPath = xml.data.letzter_pfad;
+		}
+		// Dialog anzeigen
+		const {ipcRenderer} = require("electron");
+		let result = await ipcRenderer.invoke("datei-dialog", {
+			open: true,
+			winId: winInfo.winId,
+			opt: opt,
+		});
+		// Fehler oder keine Datei ausgewählt
+		if (result.message || !Object.keys(result).length) {
+			dialog.oeffnen({
+				typ: "alert",
+				text: `Beim Öffnen des Dateidialogs ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${result.message}</p>`,
+			});
+			return;
+		} else if (result.canceled) {
+			return;
+		}
+		// Datei einlesen
+		const fsP = require("fs").promises;
+		fsP.readFile(result.filePaths[0], {encoding: "utf8"})
+			.then(content => {
+				let parser = new DOMParser(),
+					xmlDoc = parser.parseFromString(content, "text/xml");
+				// XML-Datei ist nicht wohlgeformt
+				if (xmlDoc.querySelector("parsererror")) {
+					dialog.oeffnen({
+						typ: "alert",
+						text: "Die XML-Datei kann nicht eingelesen werden.\n<h3>Fehlermeldung</h3>\nXML nicht wohlgeformt",
+					});
+					return;
+				}
+				// XML-Datei folgt unbekanntem Schema
+				if (xmlDoc.documentElement.nodeName !== "WGD" ||
+						xmlDoc.documentElement.getAttribute("xmlns") !== "http://www.zdl.org/ns/1.0") {
+					dialog.oeffnen({
+						typ: "alert",
+						text: "Die XML-Datei kann nicht eingelesen werden.\n<h3>Fehlermeldung</h3>\nXML folgt einem unbekannten Schema",
+					});
+					return;
+				}
+				// XML scheint okay zu sein
+				dialog.oeffnen({
+					typ: "confirm",
+					text: "Sollen die Daten aus der XML-Datei wirklich importiert werden?\n(Alle bisherigen Daten im Redaktionsfenster gehen dabei verloren.)",
+					callback: () => {
+						if (dialog.antwort) {
+							xml.importierenEinlesen({xmlDoc});
+						}
+					},
+				});
+			})
+			.catch(err => {
+				dialog.oeffnen({
+					typ: "alert",
+					text: `Beim Einlesen der Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.name}: ${err.message}</p>`,
+				});
+				throw err;
+			});
+	},
+	// Importieren: XML-Datei einlesen
+	//   xmlDoc = Document
+	//     (die XML-Datei, die eingelesen werden soll)
+	async importierenEinlesen ({xmlDoc}) {
+		// Helfer-Funktionen
+		let nsResolver = prefix => {
+			switch (prefix) {
+				case "x":
+					return "http://www.zdl.org/ns/1.0";
+				case "xml":
+					return "http://www.w3.org/XML/1998/namespace";
+			}
+		};
+		let evaluator = xpath => {
+			return xmlDoc.evaluate(xpath, xmlDoc, nsResolver, XPathResult.ANY_TYPE, null);
+		};
+		let normierer = snippet => {
+			let xmlStr = new XMLSerializer().serializeToString(snippet);
+			xmlStr = xmlStr.replace(/ xmlns=".+?"/g, "");
+			xmlStr = xmlStr.replace(/(\n\s*\n)+/g, "\n"); // Leerzeilen entfernen
+			let n = xmlStr.split("\n"),
+				m = n[n.length - 1].match(/^\s+/),
+				len = m ? m[0].length : 0; // z.B. <Textreferenz> hat keine Zeilenumbrüche
+			xmlStr = xmlStr.replace(new RegExp(`\\n\\s{${len}}`, "g"), "\n");
+			return xmlStr;
+		};
+		// Daten und Formular zurücksetzen
+		xml.data.xl = helferXml.redXmlData();
+		await xml.resetFormular();
+		// Metadaten
+		let xl = xml.data.xl;
+		xl.md.id = evaluator("//x:Artikel/@xml:id").iterateNext().textContent;
+		xl.md.tf = evaluator("//x:Artikel/x:Diasystematik/x:Themenfeld").iterateNext().textContent;
+		xl.md.ty = evaluator("//x:Artikel/@Typ").iterateNext().textContent;
+		let re = evaluator("//x:Revision"),
+			i = re.iterateNext();
+		while (i) {
+			let o = {
+				au: [],
+				no: i.querySelector("Aenderung").textContent,
+				xl: normierer(i),
+			};
+			for (let j of i.querySelectorAll("Autor")) {
+				o.au.push(j.textContent);
+			}
+			let datum = i.querySelector("Datum").textContent.split(".");
+			o.da = `${datum[2]}-${datum[1]}-${datum[0]}`;
+			xl.md.re.push(o);
+			i = re.iterateNext();
+		}
+		// Lemmata
+		let le = evaluator("//x:Lemma");
+		i = le.iterateNext();
+		while (i) {
+			let o = {
+				le: [],
+				re: "",
+				ty: i.getAttribute("Typ"),
+				xl: normierer(i),
+			};
+			for (let j of i.querySelectorAll("Schreibung")) {
+				o.le.push(j.textContent);
+			}
+			let re = i.querySelector("Textreferenz");
+			if (re) {
+				o.re = re.getAttribute("Ziel");
+			}
+			xl.le.push(o);
+			i = le.iterateNext();
+		}
+		// Text (Kurz gefasst, Wortgeschichte)
+		let w = [
+			{
+				key: "ab",
+				tag: "Wortgeschichte_kompakt",
+			},
+			{
+				key: "tx",
+				tag: "Wortgeschichte",
+			},
+		];
+		for (let i of w) {
+			let a = evaluator(`//x:${i.tag}//x:Abschnitt`),
+				j = a.iterateNext();
+			while (j) {
+				// Abschnitt
+				let id = j.getAttribute("xml:id"),
+					relevanz = j.getAttribute("Relevanz");
+				let o = {
+					ct: [],
+					id: id || "",
+					le: 1,
+					ty: relevanz ? "Mehr erfahren" : "",
+				};
+				let parent = j.parentNode;
+				while (parent.nodeName === "Abschnitt") {
+					o.le++;
+					parent = parent.parentNode;
+				}
+				// Element-Knoten im Abschnitt
+				let n = evaluator(`//x:${i.tag}//x:Abschnitt/*`),
+					k = n.iterateNext();
+				while (k) {
+					if (k.parentNode !== j || k.nodeName === "Abschnitt") {
+						k = n.iterateNext();
+						continue;
+					}
+					let id = k.getAttribute("xml:id"),
+						ty = k.getAttribute("Typ");
+					let p = {
+						id: id || "",
+						it: k.nodeName.replace(/^Ue/, "Ü"),
+						ty: ty || "",
+						xl: normierer(k),
+					};
+					o.ct.push(p);
+					k = n.iterateNext();
+				}
+				// nächster Abschnitt
+				xl[i.key].push(o);
+				j = a.iterateNext();
+			}
+		}
+		// Belege
+		let bl = evaluator("//x:Belegreihe/x:Beleg");
+		i = bl.iterateNext();
+		while (i) {
+			let o = {
+				da: i.querySelector("Datum").textContent,
+				id: i.getAttribute("xml:id"),
+				xl: normierer(i),
+			};
+			o.ds = helfer.datumGet({
+				datum: o.da,
+			}).sortier;
+			xl.bl.push(o);
+			i = bl.iterateNext();
+		}
+		// Literatur
+		let lt = evaluator("//x:Literaturtitel");
+		i = lt.iterateNext();
+		while (i) {
+			const id = i.getAttribute("xml:id");
+			let o = {
+				id,
+				si: "[Sigle unbekannt]",
+				xl: `<Fundstelle xml:id="${id}">\n  <unstrukturiert>[Titel unbekannt]</unstrukturiert>\n</Fundstelle>`,
+			};
+			xl.lt.push(o);
+			i = lt.iterateNext();
+		}
+		// Wortinformationen
+		xl.wi["1"] = [];
+		let wi = evaluator("//x:Verweise/*");
+		i = wi.iterateNext();
+		while (i) {
+			let o = {
+				gn: "1",
+				vt: xml.wiMap.import[i.parentNode.getAttribute("Typ")],
+				xl: normierer(i),
+			};
+			if (i.nodeName === "Textreferenz") {
+				o.lt = "Textverweis";
+				o.tx = i.textContent;
+			} else if (i.nodeName === "Verweis") {
+				o.lt = "Verweis intern";
+				o.tx = i.querySelector("Verweistext").textContent || i.querySelector("Verweisziel").textContent;
+			} else if (i.nodeName === "Verweis_extern") {
+				o.lt = "Verweis extern";
+				o.tx = i.querySelector("Verweistext").textContent;
+			}
+			xl.wi["1"].push(o);
+			i = wi.iterateNext();
+		}
+		// Bedeutungsgerüst
+		let bg = evaluator("//x:Lesarten");
+		i = bg.iterateNext();
+		while (i) {
+			xml.bgAkt = 0;
+			xml.bgAktGn = "1";
+			let o = {
+				gn: "1",
+				nw: [],
+				tf: [],
+				xl: normierer(i),
+			};
+			xl.bg.push(o);
+			xml.bgRefreshData(); // hier wird xml.speichern() angestoßen
+			i = bg.iterateNext();
+		}
+		// Abschluss des Einlesevorgangs => Formular neu aufbauen
+		xml.init();
 	},
 };
