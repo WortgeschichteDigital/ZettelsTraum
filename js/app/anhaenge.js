@@ -499,7 +499,7 @@ let anhaenge = {
 		// Ordner auslesen, Dateien sammeln
 		const path = require("path"),
 			fsP = require("fs").promises;
-		let reg = new RegExp(`.+${path.sep}`),
+		let reg = new RegExp(`.+${helfer.escapeRegExp(path.sep)}`),
 			ordner = kartei.pfad.match(reg)[0],
 			dateienA = [];
 		const ausgelesen = await new Promise(async resolve => {
