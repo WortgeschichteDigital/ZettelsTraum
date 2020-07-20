@@ -3252,7 +3252,11 @@ let xml = {
 				} else if (/^\s$/.test(p2)) {
 					return `<Literaturreferenz Ziel=##${p1}##/>${p2}`;
 				}
-				return `<Literaturreferenz Ziel=##${p1}##>${p2.trim()}</Literaturreferenz>${anschluss}`;
+				p2 = p2.trim();
+				if (!p2) {
+					return `<Literaturreferenz Ziel=##${p1}##/>${anschluss}`;
+				}
+				return `<Literaturreferenz Ziel=##${p1}##>${p2}</Literaturreferenz>${anschluss}`;
 			}
 			return `<Literaturreferenz Ziel=##${p1}##/>`;
 		});
