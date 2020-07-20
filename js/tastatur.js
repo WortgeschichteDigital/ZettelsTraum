@@ -285,7 +285,8 @@ let tastatur = {
 	//   evt = Object
 	//     (Event-Object des keydown)
 	neben (evt) {
-		const m = tastatur.modifiers;
+		const m = tastatur.modifiers,
+			overlayId = typeof overlay !== "undefined" ? overlay.oben() : "";
 		// Key "Escape"
 		if (!m && evt.key === "Escape") {
 			// falls die Suchleiste auf ist und den Fokus hat
@@ -294,9 +295,26 @@ let tastatur = {
 				suchleiste.ausblenden();
 				return;
 			}
+			// Dropdown schließen
+			if (document.getElementById("dropdown")) {
+				dropdown.schliessen();
+				return;
+			}
 			// falls ein Vorschau-Bild angezeigt wird
 			if (document.getElementById("bild")) {
 				hilfe.bildSchliessen();
+				return;
+			}
+			// Overlay-Fenster schließen (Dialog im XML-Fenster)
+			if (overlayId) {
+				let link = document.querySelector(`#${overlayId} h2 .icon-schliessen`);
+				overlay.schliessen(link);
+				return;
+			}
+			// Bearbeitung Textarea abbrechen (XML-Fenster)
+			if (winInfo.typ === "xml" && document.activeElement.nodeName === "TEXTAREA") {
+				let button = document.activeElement.closest(".pre-cont").querySelector(`input[value="Abbrechen"]`);
+				button.dispatchEvent(new Event("click"));
 				return;
 			}
 			// Über-Fenster schließen
@@ -305,6 +323,15 @@ let tastatur = {
 			}
 			const {ipcRenderer} = require("electron");
 			ipcRenderer.invoke("fenster-schliessen");
+			return;
+		}
+		// Key "Enter"
+		if (winInfo.typ === "xml" &&
+				m === "Ctrl" && evt.key === "Enter" &&
+				document.activeElement.nodeName === "TEXTAREA") {
+			evt.preventDefault();
+			let button = document.activeElement.closest(".pre-cont").querySelector(`[value="Speichern"]`);
+			button.dispatchEvent(new MouseEvent("click"));
 			return;
 		}
 		// Key " " || "PageUp" || "PageDown" (Changelog, Dokumentation, Handbuch)
@@ -330,6 +357,11 @@ let tastatur = {
 		if (winInfo.typ === "handbuch" &&
 				!m && /^(ArrowLeft|ArrowRight)$/.test(evt.key)) {
 			hilfe.bilderTastatur(evt);
+			return;
+		}
+		// Key "ArrowDown" || "ArrowLeft" || "ArrowRight" || "ArrowUp" (Dialog im XML-Fenster)
+		if (overlayId && !m && /^(ArrowDown|ArrowLeft|ArrowRight|ArrowUp)$/.test(evt.key)) {
+			tastatur.hauptArrows(evt, overlayId);
 			return;
 		}
 		// Key "F3" (Changelog, Dokumentation, Handbuch)
@@ -358,6 +390,17 @@ let tastatur = {
 				bedeutungen.drucken();
 			} else if (/changelog|dokumentation|handbuch/.test(winInfo.typ)) {
 				print();
+			}
+			return;
+		}
+		// Key "e" | "n" | "s" (XML-Fenster)
+		if (winInfo.typ === "xml" && m === "Ctrl") {
+			if (evt.key === "e") {
+				xml.exportieren();
+			} else if (evt.key === "n") {
+				xml.abschnittAddShortcut();
+			} else if (evt.key === "s") {
+				xml.speichernKartei();
 			}
 			return;
 		}

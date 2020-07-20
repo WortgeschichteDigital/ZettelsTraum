@@ -118,6 +118,7 @@ let optionen = {
 			//   2 = Plain-Referenz
 			//   3 = XML-Belegschnitt
 			//   4 = XML-Referenz
+			//   5 = XML-Fenster
 			"ctrlC-vor": "1",
 			// Einfügen-Fenster (Kopierfunktion) nach dem Einfügen direkt schließen
 			"einfuegen-schliessen": true,
@@ -426,6 +427,7 @@ let optionen = {
 	},
 	// bekannte Typen von Tag-Dateien
 	tagsTypen: {
+		gebrauchszeitraum: ["Gebrauchszeitraum", "Gebrauchszeiträume"],
 		regiolekte: ["Regiolekt", "Regiolekte"],
 		register: ["Register", "Register"],
 		sachgebiete: ["Sachgebiet", "Sachgebiete"],
@@ -742,7 +744,7 @@ let optionen = {
 			defaultPath: appInfo.documents,
 			filters: [
 				{
-					name: "XML-Datei",
+					name: "XML-Dateien",
 					extensions: ["xml"],
 				},
 				{
@@ -1037,10 +1039,15 @@ let optionen = {
 		ipcRenderer.invoke("optionen-speichern", optionen.data, winInfo.winId);
 	},
 	// letzten Pfad speichern
-	aendereLetzterPfad () {
-		const path = require("path");
-		let reg = new RegExp(`^.+\\${path.sep}`);
-		const pfad = kartei.pfad.match(reg)[0];
+	//   pfad = String | undefined
+	//     (Pfad, der gespeichert werden soll; wenn leer
+	//     Pfad aus aktueller Kartei extrahieren)
+	aendereLetzterPfad (pfad = "") {
+		if (!pfad) {
+			const path = require("path");
+			let reg = new RegExp(`^.+\\${path.sep}`);
+			pfad = kartei.pfad.match(reg)[0];
+		}
 		optionen.data.letzter_pfad = pfad;
 		optionen.speichern();
 	},
@@ -1051,7 +1058,7 @@ let optionen = {
 			defaultPath: appInfo.documents,
 			filters: [
 				{
-					name: "Text-Datei",
+					name: "Text-Dateien",
 					extensions: ["txt"],
 				},
 				{

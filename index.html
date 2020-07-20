@@ -79,6 +79,7 @@
 		<script src="js/app/redLit.js"></script>
 		<script src="js/app/redMeta.js"></script>
 		<script src="js/app/redWi.js"></script>
+		<script src="js/app/redXml.js"></script>
 		<script src="js/app/sonderzeichen.js"></script>
 		<script src="js/app/speichern.js"></script>
 		<script src="js/app/stamm.js"></script>
@@ -151,6 +152,8 @@
 								><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m7 2v8l-3.5-3.5-1.5 1.5 6 6 6-6-1.5-1.5-3.5 3.5v-8z"/></svg></a
 						></span
 						><span class="bedeutungen-opt-block"
+							><a href="#" id="bedeutungen-link-xml" title="Bedeutungsgerüst an XML-Fenster"
+								><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m9.5 0-4 15.754 1 0.246 4-15.754-1-0.246zm-5.2461 3-3.9746 4.6445-0.2793 0.3555 0.2793 0.3555 3.9746 4.6445 1.7461-0.709-3.6641-4.291 3.6641-4.291-1.7461-0.709zm7.4921 0-1.746 0.709 3.664 4.291-3.664 4.291 1.746 0.709 3.975-4.6445 0.279-0.3555-0.279-0.3555-3.975-4.6445z"/></svg></a
 							><a href="#" class="druck-icon" id="bedeutungen-link-drucken" title="Bedeutungsgerüst drucken (Strg + P)"
 								><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m4 1v2h8v-2h-8zm-2 3c-0.5 0-1 0.5-1 1v4c0 0.5 0.5 1 1 1h1v-2h10v2h1c0.5 0 1-0.5 1-1v-4c0-0.5-0.5-1-1-1h-12zm2 5v5h8v-5h-8z"/></svg></a
 						></span
@@ -277,6 +280,9 @@
 					<th colspan="2"><label for="beleg-bs">Beleg</label
 						><span class="text-tools-beleg"
 							><a href="#" class="icon-link icon-tools-sonderzeichen" title="Sonderzeichen einfügen" tabindex="-1"> </a
+							><a href="#" class="text-link icon-tools-streichung" title="Streichung" tabindex="-1">[…]</a
+							><a href="#" class="text-link icon-tools-loeschung" title="Löschung" tabindex="-1">[[…]]</a
+							><a href="#" class="text-link icon-tools-autorenzusatz" title="Autorenzusatz" tabindex="-1">{…}</a
 							><a href="#" class="icon-link icon-tools-bold" title="Fetten" tabindex="-1"> </a
 							><a href="#" class="icon-link icon-tools-italic" title="Kursivieren" tabindex="-1"> </a
 							><a href="#" class="icon-link icon-tools-underline" title="Unterstreichen" tabindex="-1"> </a
@@ -608,6 +614,9 @@
 						<p class="einzug"
 							><input type="radio" value="3" name="einstellung-ctrlC-vor" id="einstellung-ctrlC-vor-xml"><label for="einstellung-ctrlC-vor-xml">XML-Belegschnitt</label
 							><input type="radio" value="4" name="einstellung-ctrlC-vor" id="einstellung-ctrlC-vor-xmlReferenz"><label for="einstellung-ctrlC-vor-xmlReferenz">XML-Referenz</label
+						></p>
+						<p class="einzug"
+							><input type="radio" value="5" name="einstellung-ctrlC-vor" id="einstellung-ctrlC-vor-xmlFenster"><label for="einstellung-ctrlC-vor-xmlFenster">XML-Fenster</label
 						></p>
 						<h3>Kopierfunktion</h3>
 						<p><input type="checkbox" id="einstellung-einfuegen-schliessen"
@@ -981,6 +990,7 @@
 					<tr>
 						<th colspan="2"
 							><label for="red-lit-eingabe-ti">Titel</label
+							><a href="#" title="Titelaufnahme an XML-Fenster" class="icon-link icon-xml" id="red-lit-eingabe-ti-xml-fenster"> </a
 							><span id="red-lit-eingabe-ti-import"
 								><a href="#" title="DTA-Import" id="red-lit-eingabe-ti-dta">DTA</a
 								> · <a href="#" title="XML-Import" id="red-lit-eingabe-ti-xml">XML</a
@@ -1055,6 +1065,11 @@
 			<div id="red-wi-form">
 				<p class="input-text"
 					><span class="dropdown-cont"
+						><input type="text" value="" class="dropdown-feld" id="red-wi-gn" readonly title="Bedeutungsgerüst auswählen"
+						><a href="#" class="dropdown-link-element" title="Bedeutungsgerüst auswählen" tabindex="-1"
+							><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m7 2v8l-3.5-3.5-1.5 1.5 6 6 6-6-1.5-1.5-3.5 3.5v-8z"/></svg></a
+					></span
+					><span class="dropdown-cont"
 						><input type="text" value="" class="dropdown-feld" id="red-wi-vt" readonly title="Verweistyp auswählen"
 						><a href="#" class="dropdown-link-element" title="Verweistyp auswählen" tabindex="-1"
 							><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m7 2v8l-3.5-3.5-1.5 1.5 6 6 6-6-1.5-1.5-3.5 3.5v-8z"/></svg></a
@@ -1064,18 +1079,31 @@
 						><a href="#" class="dropdown-link-element" title="Linktyp auswählen" tabindex="-1"
 							><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m7 2v8l-3.5-3.5-1.5 1.5 6 6 6-6-1.5-1.5-3.5 3.5v-8z"/></svg></a
 					></span
+					><a href="#" id="red-wi-xml" title="Wortinformationen an XML-Fenster"
+						><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m9.5 0-4 15.754 1 0.246 4-15.754-1-0.246zm-5.2461 3-3.9746 4.6445-0.2793 0.3555 0.2793 0.3555 3.9746 4.6445 1.7461-0.709-3.6641-4.291 3.6641-4.291-1.7461-0.709zm7.4921 0-1.746 0.709 3.664 4.291-3.664 4.291 1.746 0.709 3.975-4.6445 0.279-0.3555-0.279-0.3555-3.975-4.6445z"/></svg
+					></a
 				></p>
 				<p class="input-text dropdown-cont" id="red-wi-text"
 					><input type="text" value="" placeholder="Verweistext" class="dropdown-feld" id="red-wi-text-tx"
 					><a href="#" class="dropdown-link-element" title="Textvorschläge anzeigen" tabindex="-1"
 						><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m7 2v8l-3.5-3.5-1.5 1.5 6 6 6-6-1.5-1.5-3.5 3.5v-8z"/></svg></a
 					><input type="text" value="" placeholder="ID" id="red-wi-text-id"
+					><span class="dropdown-cont"
+						><input type="text" value="" placeholder="Semantik" class="dropdown-feld" id="red-wi-text-se"
+							><a href="#" class="dropdown-link-element" title="Semantiken anzeigen" tabindex="-1"
+								><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m7 2v8l-3.5-3.5-1.5 1.5 6 6 6-6-1.5-1.5-3.5 3.5v-8z"/></svg></a
+					></span
 				></p>
 				<p class="input-text dropdown-cont" id="red-wi-intern"
 					><input type="text" value="" placeholder="Verweistext" class="dropdown-feld" id="red-wi-intern-tx"
 					><a href="#" class="dropdown-link-element" title="Textvorschläge anzeigen" tabindex="-1"
 						><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m7 2v8l-3.5-3.5-1.5 1.5 6 6 6-6-1.5-1.5-3.5 3.5v-8z"/></svg></a
 					><input type="text" value="" placeholder="Verweisziel" id="red-wi-intern-zl"
+					><span class="dropdown-cont"
+						><input type="text" value="" placeholder="Semantik" class="dropdown-feld" id="red-wi-intern-se"
+							><a href="#" class="dropdown-link-element" title="Semantiken anzeigen" tabindex="-1"
+								><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m7 2v8l-3.5-3.5-1.5 1.5 6 6 6-6-1.5-1.5-3.5 3.5v-8z"/></svg></a
+					></span
 				></p>
 				<p class="input-text dropdown-cont" id="red-wi-extern"
 					><input type="text" value="" placeholder="Verweistext" class="dropdown-feld" id="red-wi-extern-tx"
@@ -1090,6 +1118,14 @@
 				></p>
 			</div>
 			<div id="red-wi-cont"><div id="red-wi-cont-over"></div></div>
+			<div class="dropdown-cont aus" id="red-wi-copy">
+				<p class="input-text"><input type="text" value="" class="dropdown-feld" id="red-wi-copy-gn" readonly title="Bedeutungsgerüst auswählen"
+					><a href="#" class="dropdown-link-element" title="Bedeutungsgerüst auswählen" tabindex="-1"
+						><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m7 2v8l-3.5-3.5-1.5 1.5 6 6 6-6-1.5-1.5-3.5 3.5v-8z"/></svg
+					></a
+					><input type="button" value="Kopieren" id="red-wi-copy-kopieren"
+				></p>
+			</div>
 		</div></div>
 
 		<!-- OVERLAY: Tags -->
@@ -1218,6 +1254,9 @@
 				<p
 					><input type="radio" name="ctrlC-typ" id="ctrlC-typ-xml"><label for="ctrlC-typ-xml">XML-Belegschnitt</label
 					><input type="radio" name="ctrlC-typ" id="ctrlC-typ-xmlReferenz"><label for="ctrlC-typ-xmlReferenz">XML-Referenz</label
+				></p>
+				<p
+					><input type="radio" name="ctrlC-typ" id="ctrlC-typ-xmlFenster"><label for="ctrlC-typ-xmlFenster">XML-Fenster</label
 				></p>
 				<p class="checkbox"><input type="checkbox" id="ctrlC-auto"><label for="ctrlC-auto">Aktion künftig ohne Nachfrage ausführen</label></p>
 				<p class="button"

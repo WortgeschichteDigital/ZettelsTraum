@@ -1182,6 +1182,10 @@ let beleg = {
 				start: `<span class="dta-antiqua">`,
 				ende: "</span>",
 			},
+			autorenzusatz: {
+				start: "{",
+				ende: "}",
+			},
 			bold: {
 				start: "<b>",
 				ende: "</b>",
@@ -1194,6 +1198,10 @@ let beleg = {
 				start: "<i>",
 				ende: "</i>",
 			},
+			loeschung: {
+				start: "[[",
+				ende: "]]",
+			},
 			mark: {
 				start: `<mark class="user">`,
 				ende: "</mark>",
@@ -1205,6 +1213,10 @@ let beleg = {
 			spacing: {
 				start: `<span class="dta-gesperrt">`,
 				ende: "</span>",
+			},
+			streichung: {
+				start: "[",
+				ende: "]",
 			},
 			strike: {
 				start: "<s>",

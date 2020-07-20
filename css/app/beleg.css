@@ -263,6 +263,14 @@ textarea#beleg-bs {
 	right: 78px;
 }
 
+@media (max-width: 750px) {
+	.text-tools-beleg {
+		overflow: hidden;
+		width: 320px;
+		white-space: nowrap;
+	}
+}
+
 .text-tools a,
 .text-tools-beleg a,
 .text-tools-bedeutung a,
@@ -278,8 +286,20 @@ textarea#beleg-bs {
 	background-color: var(--text);
 }
 
-.text-tools-beleg a:first-child {
+.text-tools-beleg a:first-child,
+.text-tools-beleg a:nth-child(4) {
 	margin-right: 24px;
+}
+
+.text-tools-beleg a.text-link {
+	padding: 0 5px;
+	color: var(--textSehrHell);
+	font-style: normal;
+	background-color: transparent;
+}
+
+.text-tools-beleg a.text-link:hover {
+	color: var(--text);
 }
 
 .icon-tools-auszug {

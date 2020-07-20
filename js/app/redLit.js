@@ -477,7 +477,12 @@ let redLit = {
 		let ds = redLit.db.data[id][slot].td,
 			snippet = `<Fundstelle xml:id="${id}">`;
 		snippet += `<Sigle>${helferXml.maskieren({text: ds.si})}</Sigle>`;
-		snippet += `<unstrukturiert>${helferXml.maskieren({text: ds.ti})}</unstrukturiert>`;
+		let titel = helferXml.maskieren({text: ds.ti});
+		titel = helferXml.abbrTagger({
+			text: titel,
+			lit: true,
+		});
+		snippet += `<unstrukturiert>${titel}</unstrukturiert>`;
 		if (ds.ul) {
 			snippet += `<URL>${helferXml.maskieren({text: ds.ul})}</URL>`;
 		}
@@ -1223,7 +1228,7 @@ let redLit = {
 			if (!tastatur.modifiers && evt.key === "Enter") {
 				redLit.sucheStarten();
 			} else if (this.id === "red-lit-suche-text") {
-				if (tastatur.modifiers === "Ctrl" && evt.key === "Enter") {
+				if (evt.key === "Enter" && /^(Ctrl|Ctrl\+Shift)$/.test(tastatur.modifiers)) {
 					let titel = document.getElementById("red-lit-suche-titel");
 					if (titel.classList.contains("aus")) {
 						return;
@@ -1231,7 +1236,14 @@ let redLit = {
 					for (let i of titel.querySelectorAll(".red-lit-snippet")) {
 						if (i.offsetTop >= titel.scrollTop - 10) { // 10px padding-top
 							let ds = JSON.parse(i.dataset.ds);
-							redLit.anzeigePopup(ds);
+							if (tastatur.modifiers === "Ctrl") {
+								let xmlIcon = i.querySelector(".icon-xml");
+								if (xmlIcon) {
+									xmlIcon.dispatchEvent(new MouseEvent("click"));
+								}
+							} else {
+								redLit.anzeigePopup(ds);
+							}
 							break;
 						}
 					}
@@ -3138,6 +3150,15 @@ let redLit = {
 		let icons = document.createElement("span");
 		si.appendChild(icons);
 		icons.classList.add("icons");
+		// Icon: XML
+		if (kartei.wort) {
+			let xml = document.createElement("a");
+			icons.appendChild(xml);
+			xml.href = "#";
+			xml.classList.add("icon-link", "icon-xml");
+			xml.title = "Titelaufnahme in XML-Fenster";
+			redLit.xml({icon: xml});
+		}
 		// Icon: Löschen
 		if (redLit.anzeige.snippetKontext === "popup") {
 			let del = document.createElement("a");
@@ -3539,5 +3560,57 @@ let redLit = {
 		}
 		clipboard.writeText(text);
 		helfer.animation("zwischenablage");
+	},
+	// Titelaufnahme an das Redaktionssystem schicken (Listener)
+	//   icon = Element
+	//     (das XML-Icon)
+	xml ({icon}) {
+		icon.addEventListener("click", function(evt) {
+			evt.preventDefault();
+			let id = "",
+				snippet = this.closest(".red-lit-snippet");
+			if (snippet) {
+				// Icon im Snippet
+				let ds = JSON.parse(snippet.dataset.ds);
+				id = ds.id;
+			} else {
+				// Icon im Eingabeformular
+				if (!kartei.wort) {
+					dialog.oeffnen({
+						typ: "alert",
+						text: "Um die Funktion <i>Redaktion &gt; XML</i> zu nutzen, muss eine Kartei geöffnet sein.",
+					});
+					return;
+				} else if (redLit.eingabe.status === "add" && !redLit.eingabe.changed) {
+					dialog.oeffnen({
+						typ: "alert",
+						text: "Im Eingabeformular befindet sich keine Titelaufnahme.",
+					});
+					return;
+				} else if (redLit.eingabe.changed) {
+					dialog.oeffnen({
+						typ: "alert",
+						text: "Sie müssen die Titelaufnahme erst speichern.",
+					});
+					return;
+				}
+				id = redLit.eingabe.id;
+			}
+			redLit.xmlDatensatz({id});
+		});
+	},
+	// Titelaufnahme an das Redaktionssystem schicken
+	//   id = String
+	//     (die ID der Titelaufnahme)
+	xmlDatensatz ({id}) {
+		let xmlDatensatz = {
+			key: "lt",
+			ds: {
+				id,
+				si: redLit.db.data[id][0].td.si,
+				xl: redLit.dbExportierenSnippetXML({id, slot: 0}),
+			},
+		};
+		redXml.datensatz({xmlDatensatz});
 	},
 };

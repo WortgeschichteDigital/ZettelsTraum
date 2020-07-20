@@ -183,6 +183,15 @@ let punkte = {
 			});
 		`,
 	},
+	kopierenID: {
+		label: "ID kopieren",
+		icon: "kopieren.png",
+		click: `
+			helfer.toClipboard({
+				text: popup.kopfID,
+			});
+		`,
+	},
 	kopierfunktion: {
 		label: "Kopierfunktion beenden",
 		icon: "ausgang.png",
@@ -327,6 +336,11 @@ let punkte = {
 		icon: "xml.png",
 		click: "redLit.titelZwischenablage('xmlReferenz')",
 	},
+	titelXml: {
+		label: "Titelaufnahme an XML-Fenster",
+		icon: "xml.png",
+		click: `redLit.xmlDatensatz({id: popup.titelaufnahme.ds.id})`,
+	},
 	wort: {
 		label: "Wort ändern",
 		icon: "text-pfeil-kreis.png",
@@ -340,6 +354,11 @@ let punkte = {
 		label: "Belegschnitt",
 		icon: "beleg.png",
 		click: "xml.schnittInZwischenablage()",
+	},
+	xmlFenster: {
+		label: "Belegschnitt an XML-Fenster",
+		icon: "xml.png",
+		click: "xml.schnittInXmlFenster()",
 	},
 	xmlReferenz: {
 		label: "Referenz",

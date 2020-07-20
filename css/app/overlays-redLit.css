@@ -265,6 +265,11 @@
 	padding-left: 6px;
 }
 
+#red-lit-eingabe label + a.icon-link {
+	margin-left: 15px;
+	vertical-align: bottom;
+}
+
 #red-lit-eingabe-ti-import {
 	position: absolute;
 	right: 0;

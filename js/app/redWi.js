@@ -5,11 +5,13 @@ let redWi = {
 	inputs: "#red-wi-text:not(.aus) input, #red-wi-intern:not(.aus) input, #red-wi-extern:not(.aus) input",
 	// Dropdown: Feldtypen
 	dropdown: {
-		vt: ["Assoziation", "Kollokation", "Wortfeld"],
+		vt: ["Wortbildung", "Kollokation", "Wortfeld", "Wortfeldartikel"],
 		lt: ["Textverweis", "Verweis intern", "Verweis extern"],
+		se: ["Entsprechung", "Gegensatz", "Hyperonym", "Hyponym", "Synonym"],
 	},
 	// Dropdown: Verweistextvorschläge sammeln
 	dropdownVerweistexte () {
+		const gn = document.getElementById("red-wi-gn").value.match(/[0-9]+/)[0];
 		let set = new Set(),
 			felder = ["sy", "bl"]; // Synonmye und Wortbildungen
 		for (let id of Object.keys(data.ka)) {
@@ -24,7 +26,7 @@ let redWi = {
 						let sp = i.split(": ");
 						wort = sp[sp.length - 1];
 					}
-					if (!data.rd.wi.some(i => i.tx === wort)) {
+					if (!data.rd.wi.some(i => i.gn === gn && i.tx === wort)) {
 						set.add(wort);
 					}
 				}
@@ -32,7 +34,7 @@ let redWi = {
 		}
 		for (let wort of Object.keys(data.fv)) { // Formvarianten
 			if (wort !== kartei.wort &&
-					!data.rd.wi.some(i => i.tx === wort)) {
+					!data.rd.wi.some(i => i.gn === gn && i.tx === wort)) {
 				set.add(wort);
 			}
 		}
@@ -58,10 +60,8 @@ let redWi = {
 		if (!data.rd.wi) {
 			data.rd.wi = [];
 		}
-		// Formular initialisieren
+		// Formular initialisieren/Content aufbauen
 		redWi.formInit();
-		// Content aufbauen
-		redWi.contMake();
 		// Maximalhöhe des Fensters anpassen
 		helfer.elementMaxHeight({
 			ele: document.getElementById("red-wi-cont-over"),
@@ -71,7 +71,9 @@ let redWi = {
 	//   input = Element
 	//     (ein Textfeld im Formular)
 	formListener ({input}) {
-		if (input.id === "red-wi-lt") {
+		if (input.id === "red-wi-gn") {
+			input.addEventListener("input", () => redWi.contMake());
+		} else if (input.id === "red-wi-lt") {
 			input.addEventListener("input", () => {
 				const tx = document.querySelectorAll(redWi.inputs)[0].value;
 				redWi.formToggle();
@@ -85,7 +87,11 @@ let redWi = {
 				if (!tastatur.modifiers &&
 						evt.key === "Enter" &&
 						!document.getElementById("dropdown")) {
-					redWi.formEval();
+					if (this.closest("#red-wi-form")) {
+						redWi.formEval();
+					} else {
+						redWi.kopieren();
+					}
 				}
 			});
 		} else if (input.type === "button") {
@@ -94,6 +100,8 @@ let redWi = {
 					redWi.formEval();
 				} else if (/reset$/.test(this.id)) {
 					redWi.formInit();
+				} else if (/kopieren$/.test(this.id)) {
+					redWi.kopieren();
 				}
 			});
 		}
@@ -124,13 +132,17 @@ let redWi = {
 		let inputs = document.querySelectorAll(redWi.inputs);
 		inputs[0].focus();
 	},
+	// Formular: Fenster initialisieren
 	formInit () {
+		let gn = document.getElementById("red-wi-gn");
+		gn.value = "Gerüst 1";
 		let vt = document.getElementById("red-wi-vt");
 		vt.value = redWi.dropdown.vt[0];
 		let lt = document.getElementById("red-wi-lt");
 		lt.value = redWi.dropdown.lt[0];
 		redWi.formToggle();
 		redWi.formReset();
+		redWi.contMake();
 	},
 	// Formular: Felder zurücksetzen
 	formReset () {
@@ -138,18 +150,30 @@ let redWi = {
 		for (let i of inputs) {
 			i.value = "";
 		}
-		if (inputs[2]) {
+		if (document.getElementById("red-wi-lt").value === "Verweis extern") {
 			inputs[2].value = new Date().toISOString().split("T")[0];
 		}
+		inputs[0].focus();
 	},
 	// Formular: Eingabe überprüfen und Datensatz erstellen
 	formEval () {
+		let lt = document.getElementById("red-wi-lt");
 		let ds = {
-			lt: document.getElementById("red-wi-lt").value,
+			gn: document.getElementById("red-wi-gn").value.match(/[0-9]+/)[0],
+			lt: lt.value,
 			tx: "",
 			vt: document.getElementById("red-wi-vt").value,
 			xl: "",
 		};
+		// illegaler Linktyp bei Wortfeldartikel?
+		if (ds.vt === "Wortfeldartikel" && ds.lt !== "Verweis intern") {
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Für den Verweistyp <i>Wortfeldartikel</i> sind nur interne Verweise zulässig.",
+				callback: () => lt.focus(),
+			});
+			return;
+		}
 		// Verweistext eingegeben?
 		// (wird für alle Formulare gebraucht)
 		let inputs = document.querySelectorAll(redWi.inputs),
@@ -192,8 +216,12 @@ let redWi = {
 			if (idVal !== idValNorm) {
 				id.value = idValNorm;
 			}
+			let typ = checkSemantik(text);
+			if (typ === false) {
+				return;
+			}
 			// XML erstellen
-			ds.xl = `<Textreferenz Ziel="${idValNorm}">${txVal}</Textreferenz>`;
+			ds.xl = `<Textreferenz Ziel="${idValNorm}"${typ}>${txVal}</Textreferenz>`;
 		} else if (!intern.classList.contains("aus")) {
 			// Überprüfungen Verweis intern
 			let zl = intern.querySelector(`input[id$="zl"]`),
@@ -210,8 +238,12 @@ let redWi = {
 			if (zlVal !== zlValNorm) {
 				zl.value = zlValNorm;
 			}
+			let typ = checkSemantik(intern);
+			if (typ === false) {
+				return;
+			}
 			// XML erstellen
-			ds.xl = "<Verweis>\n";
+			ds.xl = `<Verweis${typ}>\n`;
 			if (txVal === zlValNorm) {
 				ds.xl += "  <Verweistext/>\n";
 			} else {
@@ -263,74 +295,116 @@ let redWi = {
 		}
 		// Eingabe speichern
 		redWi.formSpeichern({ds});
+		// semantischen Typ überprüfen, ggf. als Attribut zurückgeben
+		function checkSemantik (lt) {
+			let se = lt.querySelector(`input[id$="se"]`),
+				seVal = helfer.textTrim(se.value, true);
+			if (seVal && !redWi.dropdown.se.includes(seVal)) {
+				dialog.oeffnen({
+					typ: "alert",
+					text: `Die semantische Typisierung als „${seVal}“ ist unzulässig.`,
+					callback: () => se.select(),
+				});
+				return false;
+			}
+			let typ = "";
+			if (seVal) {
+				typ = ` Typ="${seVal}"`;
+			}
+			return typ;
+		}
 	},
 	// Formular: Eingabe speichern
 	//   ds = Object
 	//     (Datensatz, der gespeichert werden soll)
 	formSpeichern ({ds}) {
 		// Datensatz einhängen/überschreiben
-		const idx = data.rd.wi.findIndex(i => i.tx === ds.tx);
+		const idx = data.rd.wi.findIndex(i => i.gn === ds.gn && i.tx === ds.tx);
 		if (idx > -1) {
 			data.rd.wi[idx] = ds;
 		} else {
 			data.rd.wi.push(ds);
 		}
 		// Datensätze sortieren
-		data.rd.wi.sort((a, b) => {
-			const aVt = redWi.dropdown.vt.indexOf(a.vt),
-				bVt = redWi.dropdown.vt.indexOf(b.vt);
-			if (aVt !== bVt) {
-				return aVt - bVt;
-			}
-			let arr = [a.tx, b.tx];
-			arr.sort(helfer.sortAlpha);
-			if (arr[0] === a.tx) {
-				return -1;
-			}
-			return 1;
-		});
+		data.rd.wi.sort(helfer.sortWi);
 		// Änderungsmarkierung setzen
 		kartei.karteiGeaendert(true);
 		// Formular zurücksetzen
 		redWi.formReset();
 		// Anzeige neu aufbauen
 		redWi.contMake();
+		// Wort highlighten
+		let wort = document.querySelector(`#red-wi-cont [data-tx="${ds.tx}"]`);
+		setTimeout(() => wort.classList.add("update"), 0);
+		setTimeout(() => wort.classList.remove("update"), 750);
 	},
 	// Content: Anzeige aufbauen
 	contMake () {
-		let cont = document.querySelector("#red-wi-cont div");
-		// keine Wortinformationen vorhanden
-		if (!data.rd.wi.length) {
+		let cont = document.querySelector("#red-wi-cont div"),
+			copy = document.getElementById("red-wi-copy"),
+			gn = document.getElementById("red-wi-gn").value.match(/[0-9]+/)[0];
+		// keine Wortinformationen vorhanden oder
+		// keine zum eingestellten Bedeutungsgerüst passenden Wortinformationen
+		if (!data.rd.wi.length ||
+				!data.rd.wi.some(i => i.gn === gn)) {
+			if (data.rd.wi.length) {
+				redWi.kopierenGn = gn;
+				let gerueste = redWi.kopierenDropdown();
+				document.getElementById("red-wi-copy-gn").value = gerueste[0];
+				copy.classList.remove("aus");
+			}
 			cont.parentNode.classList.add("aus");
 			return;
 		}
 		// Wortinformationen aufbauen
 		cont.parentNode.classList.remove("aus");
+		copy.classList.add("aus");
 		helfer.keineKinder(cont);
 		let hTxt = {
-			Assoziation: "Assoziationen",
 			Kollokation: "Kollokationen",
+			Wortbildung: "Wortbildungen",
 			Wortfeld: "Wortfeld",
+			Wortfeldartikel: "Wortfeldartikel",
 		};
 		let h = "";
 		for (let i of data.rd.wi) {
+			// falsches Bedeutungsgerüst
+			if (i.gn !== gn) {
+				continue;
+			}
+			// Überschrift
 			if (h !== i.vt) {
 				let h3 = document.createElement("h3");
 				cont.appendChild(h3);
 				h3.textContent = hTxt[i.vt];
 				h = i.vt;
 			}
+			// Eintrag
 			let p = document.createElement("p");
 			cont.appendChild(p);
+			p.dataset.gn = i.gn;
 			p.dataset.tx = i.tx;
+			// Lösch-Icon
 			let a = document.createElement("a");
 			p.appendChild(a);
 			a.classList.add("icon-link", "icon-x-dick");
 			a.href = "#";
 			redWi.contLoeschen({a});
-			p.appendChild(document.createTextNode(i.tx));
+			// XML-Icon
+			let xl = document.createElement("a");
+			p.appendChild(xl);
+			xl.classList.add("icon-link", "icon-xml");
+			xl.href = "#";
+			redWi.contXml({a: xl});
+			// Verweistext
+			let text = document.createElement("span");
+			p.appendChild(text);
+			text.classList.add("text");
+			text.appendChild(document.createTextNode(i.tx));
+			// Detail
 			let detail = document.createElement("span");
 			p.appendChild(detail);
+			detail.classList.add("detail");
 			detail.textContent = `(${i.lt})`;
 			redWi.contBearbeiten({p});
 		}
@@ -340,8 +414,9 @@ let redWi = {
 	//    (Eintrag)
 	contBearbeiten ({p}) {
 		p.addEventListener("click", function() {
-			const tx = this.dataset.tx;
-			let ds = data.rd.wi.find(i => i.tx === tx);
+			const gn = this.dataset.gn,
+				tx = this.dataset.tx;
+			let ds = data.rd.wi.find(i => i.gn === gn && i.tx === tx);
 			document.getElementById("red-wi-vt").value = ds.vt;
 			let lt = document.getElementById("red-wi-lt");
 			lt.value = ds.lt;
@@ -350,15 +425,22 @@ let redWi = {
 			inputs[0].value = tx;
 			if (/^<Textreferenz/.test(ds.xl)) {
 				inputs[1].value = ds.xl.match(/Ziel="(.+?)"/)[1];
-			} else if (/^<Verweis>/.test(ds.xl)) {
-				inputs[1].value = ds.xl.match(/<Verweisziel>(.+?)<\/Verweisziel>/)[1];
-			} else {
+				seVal();
+			} else if (/^<Verweis_extern>/.test(ds.xl)) {
 				inputs[1].value = ds.xl.match(/<URL>(.+?)<\/URL>/)[1];
 				const da = ds.xl.match(/<Aufrufdatum>(.+?)<\/Aufrufdatum>/)[1];
 				let datum = /^(?<tag>[0-9]{2})\.(?<monat>[0-9]{2})\.(?<jahr>[0-9]{4})$/.exec(da);
 				inputs[2].value = `${datum.groups.jahr}-${datum.groups.monat}-${datum.groups.tag}`;
+			} else {
+				inputs[1].value = ds.xl.match(/<Verweisziel>(.+?)<\/Verweisziel>/)[1];
+				seVal();
 			}
 			inputs[0].select();
+			// semantischen Verweistyp ermitteln
+			function seVal () {
+				let se = ds.xl.match(/Typ="(.+?)"/);
+				inputs[2].value = se ? se[1] : "";
+			}
 		});
 	},
 	// Content: Eintrag löschen
@@ -368,19 +450,97 @@ let redWi = {
 		a.addEventListener("click", function(evt) {
 			evt.preventDefault();
 			evt.stopPropagation();
-			const tx = this.closest("p").dataset.tx;
+			const gn = this.closest("p").dataset.gn,
+				tx = this.closest("p").dataset.tx;
 			dialog.oeffnen({
 				typ: "confirm",
 				text: `Soll „${tx}“ wirklich gelöscht werden?`,
 				callback: () => {
 					if (dialog.antwort) {
-						const idx = data.rd.wi.findIndex(i => i.tx === tx);
+						const idx = data.rd.wi.findIndex(i => i.gn === gn && i.tx === tx);
 						data.rd.wi.splice(idx, 1);
 						kartei.karteiGeaendert(true);
 						redWi.contMake();
 					}
 				},
 			});
+		});
+	},
+	// Verweis an das Redaktionssystem schicken
+	//   a = Element
+	//     (XML-Icon)
+	contXml ({a}) {
+		a.addEventListener("click", function(evt) {
+			evt.preventDefault();
+			evt.stopPropagation();
+			const gn = this.closest("p").dataset.gn,
+				tx = this.closest("p").dataset.tx;
+			let xmlDatensatz = {
+				key: "wi-single",
+				gn,
+				ds: data.rd.wi.find(i => i.gn === gn && i.tx === tx),
+			};
+			redXml.datensatz({xmlDatensatz});
+		});
+	},
+	// Kopieren: speichert die aktuelle Gerüst-ID
+	// (wenn das Kopieren-Formular angezeigt wird)
+	kopierenGn: "",
+	// Kopieren: ermittelt Gerüste, die Content haben
+	kopierenDropdown () {
+		let gerueste = [];
+		for (let i of data.rd.wi) {
+			if (i.gn !== redWi.kopierenGn) {
+				gerueste.push(i.gn);
+			}
+		}
+		gerueste = [...new Set([...gerueste])];
+		gerueste.sort();
+		for (let i = 0, len = gerueste.length; i < len; i++) {
+			gerueste[i] = `Gerüst ${gerueste[i]}`;
+		}
+		return gerueste;
+	},
+	// Kopieren: für das Kopieren der Wortinformationen aus
+	kopieren () {
+		const gn = document.getElementById("red-wi-copy-gn").value.match(/[0-9]+/)[0];
+		// Datensätze kopieren
+		let wi = [];
+		for (let i of data.rd.wi) {
+			if (i.gn === gn) {
+				let ds = {...i};
+				ds.gn = redWi.kopierenGn;
+				wi.push(ds);
+			}
+		}
+		data.rd.wi = data.rd.wi.concat(wi);
+		// Datensätze sortieren
+		data.rd.wi.sort(helfer.sortWi);
+		// Änderungsmarkierung setzen
+		kartei.karteiGeaendert(true);
+		// Anzeige neu aufbauen
+		redWi.contMake();
+	},
+	// Wortinformationen an das Redaktionssystem schicken
+	//   icon = Element
+	//     (das XML-Icon)
+	xml ({icon}) {
+		icon.addEventListener("click", evt => {
+			evt.preventDefault();
+			const gn = document.getElementById("red-wi-gn").value.match(/[0-9]+/)[0];
+			let xmlDatensatz = {
+				key: "wi",
+				gn,
+				ds: data.rd.wi.filter(i => i.gn === gn),
+			};
+			if (!xmlDatensatz.ds.length) {
+				dialog.oeffnen({
+					typ: "alert",
+					text: "Sie haben noch keine Wortinformationen eingegeben.",
+				});
+				return;
+			}
+			redXml.datensatz({xmlDatensatz});
 		});
 	},
 };

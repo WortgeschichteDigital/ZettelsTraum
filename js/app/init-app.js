@@ -40,6 +40,7 @@ window.addEventListener("load", async () => {
 	ipcRenderer.on("redaktion-literatur", () => redLit.oeffnen());
 	ipcRenderer.on("redaktion-metadaten", () => redMeta.oeffnen());
 	ipcRenderer.on("redaktion-wortinformationen", () => redWi.oeffnen());
+	ipcRenderer.on("redaktion-xml", () => redXml.oeffnen());
 	ipcRenderer.on("belege-hinzufuegen", () => {
 		// Sperre für macOS (Menüpunkte können nicht deaktiviert werden)
 		if (!kartei.wort) {
@@ -81,6 +82,7 @@ window.addEventListener("load", async () => {
 	ipcRenderer.on("optionen-zuletzt", (evt, karteien) => zuletzt.update(karteien));
 	ipcRenderer.on("optionen-zuletzt-verschwunden", (evt, verschwunden) => zuletzt.verschwundenUpdate(verschwunden));
 	ipcRenderer.on("optionen-fenster", (evt, fenster, status) => optionen.data[fenster] = status);
+	ipcRenderer.on("optionen-letzter-pfad", (evt, pfad) => optionen.aendereLetzterPfad(pfad));
 	// Bedeutungsgerüst-Fenster
 	ipcRenderer.on("bedeutungen-fenster-daten", () => bedeutungenWin.daten());
 	ipcRenderer.on("bedeutungen-fenster-geschlossen", () => bedeutungenWin.contentsId = 0);
@@ -92,6 +94,10 @@ window.addEventListener("load", async () => {
 		beleg.bedeutungEinAustragen(bd, eintragen);
 		helfer.fensterFokus();
 	});
+	// XML-Fenster
+	ipcRenderer.on("red-xml-daten", () => redXml.daten());
+	ipcRenderer.on("red-xml-speichern", (evt, daten) => redXml.speichern({daten}));
+	ipcRenderer.on("red-xml-geschlossen", () => redXml.contentsId = 0);
 	// Dialog
 	ipcRenderer.on("dialog-anzeigen", (evt, text) => {
 		dialog.oeffnen({
@@ -236,7 +242,7 @@ window.addEventListener("load", async () => {
 		}
 	});
 	document.getElementById("beleg-bs").addEventListener("paste", evt => beleg.pasteBs(evt));
-	document.querySelectorAll("#beleg .icon-link").forEach(a => {
+	document.querySelectorAll("#beleg .icon-link, #beleg .text-link").forEach(a => {
 		if (a.classList.contains("icon-stern")) { // Bewertung
 			beleg.bewertungEvents(a);
 		} else if (/icon-tools/.test(a.getAttribute("class"))) { // Text-Tools
@@ -269,6 +275,7 @@ window.addEventListener("load", async () => {
 	document.getElementById("bedeutungen-speichern").addEventListener("click", () => bedeutungen.speichern());
 	document.getElementById("bedeutungen-schliessen").addEventListener("click", () => bedeutungen.schliessen());
 	document.getElementById("bedeutungen-gerueste-config").addEventListener("click", evt => bedeutungenGerueste.oeffnen(evt));
+	bedeutungen.xml({icon: document.getElementById("bedeutungen-link-xml")});
 	document.querySelector(`[for="beleg-bd"]`).addEventListener("click", () => bedeutungenGeruest.oeffnen());
 	// Tagger
 	document.getElementById("tagger-speichern").addEventListener("click", () => tagger.speichern());
@@ -362,6 +369,7 @@ window.addEventListener("load", async () => {
 	document.querySelectorAll("#red-lit-suche-sonder a").forEach(a => redLit.sucheSonder(a));
 	document.querySelectorAll("#red-lit-suche-treffer a").forEach(a => redLit.sucheNav(a));
 	document.querySelectorAll("#red-lit-eingabe input, #red-lit-eingabe textarea").forEach(i => redLit.eingabeListener(i));
+	redLit.xml({icon: document.getElementById("red-lit-eingabe-ti-xml-fenster")});
 	document.getElementById("red-lit-eingabe-ti-dta").addEventListener("click", evt => {
 		evt.preventDefault();
 		redLit.dbCheck(() => redLit.eingabeDTA(), false);
@@ -386,7 +394,8 @@ window.addEventListener("load", async () => {
 	document.getElementById("red-lit-export-exportieren").addEventListener("click", () => redLit.dbExportieren());
 	document.getElementById("red-lit-export-abbrechen").addEventListener("click", () => overlay.schliessen(document.getElementById("red-lit-export") ) );
 	// Wortinformationen
-	document.querySelectorAll("#red-wi-form input").forEach( input => redWi.formListener({input}) );
+	document.querySelectorAll("#red-wi-form input, #red-wi-copy input").forEach( input => redWi.formListener({input}) );
+	redWi.xml({icon: document.getElementById("red-wi-xml")});
 	// Karteisuche
 	document.getElementById("karteisuche-suchen").addEventListener("click", () => karteisuche.suchenPrep());
 	document.getElementById("karteisuche-suchenCache").addEventListener("click", () => karteisuche.suchenPrepZtj([]));

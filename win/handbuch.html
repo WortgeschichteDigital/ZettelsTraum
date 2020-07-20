@@ -9,6 +9,7 @@
 		<link rel="stylesheet" href="../css/win/hilfe.css">
 		<link rel="stylesheet" href="../css/win/hilfe-drucken.css" media="print">
 
+		<script src="../js/helferXml.js"></script>
 		<script src="../js/suchleiste.js"></script>
 		<script src="../js/tastatur.js"></script>
 
@@ -85,22 +86,22 @@
 					<p><i class="app-name"></i> ist ein Karteikastenprogramm für historisch arbeitende LexikographInnen, das für das Wörterbuchprojekt <a href="https://adw-goe.de/forschung/weitere-forschungsprojekte/wortgeschichte-digital-teilprojekt-im-zdl/"><i>Wortgeschichte digital</i></a> (WGd) geschrieben wurde. Die App entstand aus der Idee heraus, Belegsammlungen auf Karteikarten, wie sie bereits seit den ersten Anfängen des <cite>Deutschen Wörterbuchs von Jacob Grimm und Wilhelm Grimm</cite> im Jahr 1838 in Gebrauch waren, in das digitale Zeitalter zu holen und sie durch eine Vielzahl an Such-, Filter- und Verwaltungsfunktionen zugänglich zu machen. <i class="app-name"></i> soll das Schreiben von Wörterbuchartikeln, bei denen nicht selten mit großen Massen an Textbelegen hantiert wird, komfortabler, <abbr title="das heißt">d. h.</abbr> schneller, übersichtlicher, schlicht und ergreifend leichter machen.</p>
 
 					<figure class="right" title="zum Vergrößern anklicken">
-						<img src="../img/win/hb-start-karteikarte.png" alt="">
+						<img src="../img/win/start-karteikarte.png" alt="">
 						<figcaption>eine leere Karteikarte</figcaption>
 					</figure>
 
 					<p>Mit <i class="app-name"></i> können Sie Textbelege zu einem Wort (oder einer Wortverbindung) auf virtuelle <a href="#karteikarte">Karteikarten</a> schreiben, die in Wortkarteien gesammelt und verwaltet werden. Sie können die Belege und Wortkarteien in vielfältiger Weise taggen, also mit weiteren Informationen anreichern und verknüpfen: mit Internetressourcen, mit lokalen Dateien und nicht zuletzt mit Bedeutungen aus einem oder mehreren zentral verwalteten <a href="#bedeutungsgeruest">Bedeutungsgerüsten</a>, in denen sich die einzelnen Positionen nach Belieben umbenennen und verschieben, verschmelzen und erweitern lassen, ohne dass man Dutzende oder gar Hunderte Karteikarten einzeln ändern müsste.</p>
 
 					<figure class="left" title="zum Vergrößern anklicken">
-						<img src="../img/win/hb-start-belegliste.png" alt="">
+						<img src="../img/win/start-belegliste.png" alt="">
 						<figcaption>die Belegliste</figcaption>
 					</figure>
 
 					<p>Die auf virtuellen Karteikarten gesammelten Belege lassen sich <a href="#belegliste">auflisten</a> und in vielfältiger Weise <a href="#filter">filtern</a>, <a href="#menueKartei-suche">durchsuchen</a>, <a href="#belegliste-annotieren">markieren</a>, <a href="#menueBelege-kopieren">kopieren</a>, <a href="#karteikarte-duplizieren">duplizieren</a>, auf Wunsch sogar <a href="#karteikarte-drucken">ausdrucken</a>. Die Wortkarteidaten werden dafür in einem ausführlich dokumentieren Klartextformat gespeichert (dem <a href="#ztj-ztj" class="link-dokumentation"><abbr title="Zettel’s Traum JSON">ZTJ</abbr>-Dateiformat</a>), das auf einen Notationsstandard aufsetzt, der auch in der ferneren Zukunft problemlos von Computerprogrammen zu lesen sein sollte.</p>
 
-					<p>Die App ist agnostisch, was die Verwendung eines bestimmten Textkorpus angeht. Sie können Belege aus beliebigen Korpora einpflegen. Allerdings enthält sie spezielle <a href="#karteikarte-importfunktion">Importfunktionen</a>, die das Erstellen von Karteikarten mit Belegen aus dem <a href="http://www.deutschestextarchiv.de/"><i>Deutschen Textarchiv</i></a> (DTA), den <a href="https://www.dwds.de/r">Korpora</a> des <a href="https://www.dwds.de/"><i>Digitalen Wörterbuchs der deutschen Sprache</i></a> (DWDS) und dem <a href="https://cosmas2.ids-mannheim.de/cosmas2-web/"><i>Deutschen Referenzkorpus</i></a> (DeReKo) erheblich erleichtern und beschleunigen. Mit nur einem Klick kann die Karteikarte sowohl mit dem Belegtext als auch mit den zugehörigen Metadaten gefüllt werden. Daneben besteht die Möglichkeit, Titeldaten im <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Format zu importieren, die von <a href="https://books.google.com/"><i>GoogleBooks</i></a> oder Bibliothekskatalogen wie dem <a href="https://kxp.k10plus.de/DB=2.1/SET=2/TTL=1/"><i>Gemeinsamen Verbundkatalog</i></a> (GVK) zum Download angeboten werden.</p>
+					<p>Die App ist agnostisch, was die Verwendung eines bestimmten Textkorpus angeht. Sie können Belege aus beliebigen Korpora einpflegen. Allerdings enthält sie spezielle <a href="#karteikarte-importfunktion">Importfunktionen</a>, die das Erstellen von Karteikarten mit Belegen aus dem <a href="http://www.deutschestextarchiv.de/"><i>Deutschen Textarchiv</i></a> (DTA), den <a href="https://www.dwds.de/r">Korpora</a> des <a href="https://www.dwds.de/"><i>Digitalen Wörterbuchs der deutschen Sprache</i></a> (DWDS) und dem <a href="https://cosmas2.ids-mannheim.de/cosmas2-web/"><i>Deutschen Referenzkorpus</i></a> (DeReKo) erheblich erleichtern und beschleunigen. Mit nur einem Klick kann die Karteikarte sowohl mit dem Belegtext als auch mit den zugehörigen Metadaten gefüllt werden. Daneben besteht die Möglichkeit, Titeldaten mithilfe einer <abbr title="Pica-Produktionsnummer">PPN</abbr> (unter Nutzung der <a href="https://verbundwiki.gbv.de/display/VZG/unAPI">unAPI</a>) oder einer Datei im <a href="https://en.wikipedia.org/wiki/Metadata_Object_Description_Schema">MODS</a>- oder <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Format zu importieren. <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Dateien mit Titeldaten werden von <a href="https://books.google.com/"><i>GoogleBooks</i></a> oder Bibliothekskatalogen wie dem <a href="https://kxp.k10plus.de/DB=2.1/SET=2/TTL=1/"><i>Gemeinsamen Verbundkatalog</i></a> (GVK) zum Download angeboten.</p>
 
-					<p>Nicht zuletzt verfügt die App über leicht zu handhabende Funktionen zum Erstellen von <a href="#belegliste-xmlZwischenablage"><abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippets</a>. Diese wurden so designt, dass der Export von Bedeutungsgerüsten und frei gewählten Belegschnitten rasch und unkompliziert vonstatten geht. (Die Exportfunktion für Bedeutungsgerüste wird demnächst in das Programm integriert.)</p>
+					<p>Neben vielem anderen verfügt die App außerdem über eine <a href="#menueRedaktion-literatur">Literaturdatenbank</a> und ein <a href="#menueRedaktion-xml"><abbr title="Extensible Markup Language" lang="en">XML</abbr>-Redaktionssystem</a>. Literaturtitel aus der Datenbank, <a href="#belegliste-xmlZwischenablage">Belegschnitte</a>, <a href="#bedeutungsgeruest">Bedeutungsgerüste</a> können mit leicht zu handhabenden Funktionen in der Form eines <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippets (alternativ auch in <abbr title="Hypertext Markup Language" lang="en">HTML</abbr> oder als Klartext) kopiert und in anderen Programmen weiterverwendet werden.</p>
 
 					<h2 id="einfuehrung-name">Der Name</h2>
 
@@ -181,17 +182,17 @@
 
 					<div class="bilder">
 						<figure title="zum Vergrößern anklicken">
-							<img src="../img/win/hb-kurzanleitung-hauptfenster.png" alt="">
+							<img src="../img/win/kurzanleitung-hauptfenster.png" alt="">
 							<figcaption>1. Hauptfenster: nach dem ersten Start der App</figcaption>
 						</figure>
 
 						<figure title="zum Vergrößern anklicken">
-							<img src="../img/win/hb-bedeutungsgeruest-fenster.png" alt="">
+							<img src="../img/win/bedeutungsgeruest-fenster.png" alt="">
 							<figcaption>2. Nebenfenster: das Bedeutungsgerüst-Fenster</figcaption>
 						</figure>
 
 						<figure title="zum Vergrößern anklicken">
-							<img src="../img/win/hb-kurzanleitung-dialogfenster.png" alt="">
+							<img src="../img/win/kurzanleitung-dialogfenster.png" alt="">
 							<figcaption>3. Dialogfenster: Eingabeaufforderung für ein Karteiwort</figcaption>
 						</figure>
 					</div>
@@ -269,7 +270,7 @@
 					<p><b><i>Karteikarte</i></b> <img src="../img/pfeil-gerade-rechts.svg" width="24" height="24" alt=""> <a href="#karteikarte">Handbuch-Kapitel</a></p>
 
 					<figure class="right" title="zum Vergrößern anklicken">
-						<img src="../img/win/hb-start-karteikarte.png" alt="">
+						<img src="../img/win/start-karteikarte.png" alt="">
 						<figcaption>leere Karteikarte in der Formularansicht</figcaption>
 					</figure>
 
@@ -302,7 +303,7 @@
 					<p><b><i>Bedeutungsgerüst</i></b> <img src="../img/pfeil-gerade-rechts.svg" width="24" height="24" alt=""> <a href="#bedeutungsgeruest">Handbuch-Kapitel</a></p>
 
 					<figure class="right" title="zum Vergrößern anklicken">
-						<img src="../img/win/hb-kurzanleitung-bedeutungsgeruest.png" alt="">
+						<img src="../img/win/kurzanleitung-bedeutungsgeruest.png" alt="">
 						<figcaption>Bedeutungsgerüst mit einer markierten Bedeutung</figcaption>
 					</figure>
 
@@ -349,7 +350,7 @@
 					<p><b><i>Belegliste</i></b> <img src="../img/pfeil-gerade-rechts.svg" width="24" height="24" alt=""> <a href="#belegliste">Handbuch-Kapitel</a></p>
 
 					<figure class="right" title="zum Vergrößern anklicken">
-						<img src="../img/win/hb-start-belegliste.png" alt="">
+						<img src="../img/win/start-belegliste.png" alt="">
 						<figcaption>eine Belegliste</figcaption>
 					</figure>
 
@@ -387,7 +388,7 @@
 					<h2 id="karteikarte-kopfleiste">Kopfleiste</h2>
 
 					<figure title="zum Vergrößern anklicken">
-						<img src="../img/win/hb-karteikarte-kopfleiste.png" alt="">
+						<img src="../img/win/karteikarte-kopfleiste.png" alt="">
 						<figcaption>die Kopfleiste der Karteikarte</figcaption>
 					</figure>
 
@@ -460,7 +461,7 @@
 					<h2 id="karteikarte-formularansicht">Formularansicht</h2>
 
 					<figure class="right" title="zum Vergrößern anklicken">
-						<img src="../img/win/hb-karteikarte-formularansicht.png" alt="">
+						<img src="../img/win/karteikarte-formularansicht.png" alt="">
 						<figcaption>die Formularansicht der Karteikarte</figcaption>
 					</figure>
 
@@ -492,7 +493,7 @@
 
 					<div class="info">
 						<figure class="right" title="zum Vergrößern anklicken">
-							<img src="../img/win/hb-karteikarte-dropdown.png" alt="">
+							<img src="../img/win/karteikarte-dropdown.png" alt="">
 							<figcaption>ein Dropdown-Menü</figcaption>
 						</figure>
 
@@ -606,19 +607,21 @@
 
 						<p id="karteikarte-belegKlammern">Im Belegfeld steht Ihnen ein ausdifferenziertes System an <b>Klammern</b> zur Verfügung, mit dem Sie Belegschnitte für einen späteren Export vorbereiten können, ohne dass Sie Belegtext wirklich löschen müssten. Das System dient dazu, Streichungen und Ergänzungen so vorzubereiten, dass Ihnen die App beim Export oder Kopieren des Textes den Belegschnitt in just der Form auswerfen kann, die Sie wünschen.</p>
 
+						<p id="karteikarte-belegKlammernTools">Über dem <i>Beleg</i>-Feld, wo auch die übrigen Text-Tools zu finden sind, finden Sie drei Funktionen, die zum bequemen Hinzufügen von Klammerungen dienen: <b>[…]</b> (Streichung), <b>[[…]]</b> (Löschung) und <b>{…}</b> (Autorenzusatz). Sie funktionieren genauso wie die übrigens Text-Tools: Text markieren, gewünschte Klammerung anklicken und der markierte Text wird ein- <abbr title="beziehungsweise">bzw.</abbr> ausgeklammert. Zur Funktion und Bedeutung der Klammern <abbr title="siehe unten">s. u.</abbr>.</p>
+
 						<div class="bilder">
 							<figure title="zum Vergrößern anklicken">
-								<img src="../img/win/hb-karteikarte-klammern-beleg.png" alt="">
+								<img src="../img/win/karteikarte-klammern-beleg.png" alt="">
 								<figcaption>farbig hervorgehobene Klammern in einem Beleg</figcaption>
 							</figure>
 
 							<figure title="zum Vergrößern anklicken">
-								<img src="../img/win/hb-karteikarte-klammern-textprogramm.png" alt="">
+								<img src="../img/win/karteikarte-klammern-textprogramm.png" alt="">
 								<figcaption>aufgelöste Klammern nach dem Kopieren eines Belegschnitts</figcaption>
 							</figure>
 						</div>
 
-						<p>Im Folgenden wird beschrieben, wie die Klammerungen beim <a href="#karteikarte-kopieren">Kopieren</a> von Text, der zum Einfügen in ein Textprogramm dient, transformiert werden. Die Klammerungen werden auch beim Erstellen eines XML-Snippets aufgelöst. <abbr title="Vergleiche">Vgl.</abbr> dazu den entsprechenden <a href="#xml-belegschnitt" class="link-dokumentation"><abbr title="Abschnitt">Abschn.</abbr> in der technischen Dokumentation</a>.</p>
+						<p>Im Folgenden wird beschrieben, wie die Klammerungen beim <a href="#karteikarte-kopieren">Kopieren</a> von Text, der zum Einfügen in ein Textprogramm dient, transformiert werden. Die Klammerungen werden auch beim Erstellen eines <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippets aufgelöst. <abbr title="Vergleiche">Vgl.</abbr> dazu den entsprechenden <a href="#xml-belegschnitt" class="link-dokumentation"><abbr title="Abschnitt">Abschn.</abbr> in der technischen Dokumentation</a>.</p>
 
 						<p><b>{Text}</b> → <b>[Text]</b> = Autorenzusatz. Der markierte Belegtext bleibt beim Export somit erhalten, wird dabei aber in eckige Klammern gesetzt.</p>
 
@@ -654,10 +657,24 @@
 					<p id="karteikarte-quelle"><b>Quelle:</b> Quellenangabe zum Beleg</p>
 
 					<div class="info">
-						<p>Enthält das Feld Internetlinks, werden diese in der Leseansicht der Karteikarte und in der Belegliste als klickbare Links dargestellt, über die sich der Standardbrowser des Betriebssystems öffnet. Für den Linktext werden nur Subdomain, Domain und Top-Level-Domain genutzt. Ein Beispiel: http://www.deutschestextarchiv.de/<wbr>book/<wbr>view/<wbr>gutzkow_wally_1835?p=12 wird automatisch zu <a href="http://www.deutschestextarchiv.de/book/view/gutzkow_wally_1835?p=12">www.deutschestextarchiv.de</a>.</p>
+						<p>Enthält das Feld <b>Internetlinks</b>, werden diese in der Leseansicht der Karteikarte und in der Belegliste als klickbare Links dargestellt, über die sich der Standardbrowser des Betriebssystems öffnet. Für den Linktext werden nur Subdomain, Domain und Top-Level-Domain genutzt. Ein Beispiel: http://www.deutschestextarchiv.de/<wbr>book/<wbr>view/<wbr>gutzkow_wally_1835?p=12 wird automatisch zu <a href="http://www.deutschestextarchiv.de/book/view/gutzkow_wally_1835?p=12">www.deutschestextarchiv.de</a>.</p>
+
+						<p>Ist ein Internetlink vorhanden, wird dieser beim Erstellen eines <a href="#belegliste-xmlZwischenablageBelegschnitt"><abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippets</a> erkannt und entsprechend getaggt. In solchen Fällen wird hinter dem Link nach einem <b>Aufrufdatum</b> gesucht. Als Aufrufdatum wird das erste Datum betrachtet, das hinter dem Link zu finden ist. Es ist ganz egal, ob Sie davor noch eine Notiz wie <q>Aufrufdatum:</q> setzen, das Datum einklammern oder ungeklammert stehenlassen. Ausgelesen wird immer nur das Datum, der restliche Text wird ignoriert.</p>
+
+						<p>Es gibt mehrere mögliche Datumsformate: Sie können das Datum im ISO 8601-Format angeben (<q>2019-12-24</q>) oder im Format Tag/Monat/Jahr: <q>24. 12. 2019</q>. Ob Sie zwischen den einzelnen Datumsteilen Spatien lassen, ob Sie Monate oder Tage &lt; zehn mit führender Null verwenden, ob Sie einen Mix aus all diesen Möglichkeiten produzieren, ist dabei egal. Daten in diesem Format werden immer erkannt.</p>
+
+						<p>Wurde zwar eine URL, aber kein Datum gefunden wird für das <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippet das Erstellungsdatum der Karteikarte genutzt.</p>
+
+						<p>Auch wenn Sie keine URL angeben, können Sie ein Aufrufdatum notieren (<abbr title="zum Beispiel">z. B.</abbr> um sich zu merken, wann Sie einen Beleg, der nicht durch einen Internetlink referenziert werden kann, aus einem Korpus importiert haben). Exportieren Sie einen Belegschnitt in ein <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippet, wird das Aufrufdatum auch in diesem Fall ausgelesen und getaggt. Wichtig ist allein, dass Sie hinter der Quellenangabe einen (oder mehrere) Zeilenumbrüche machen. Ein Beispiel:</p>
+
+						<pre class="quelltext">Peters, Carl: Im Goldland des Altertums, München: Lehmann 1902, S. 166.
+
+Aufrufdatum: 24. 12. 2019</pre>
+
+						<p>Auch in diesem Fall ist es nicht relevant, wie Sie das Datum markieren. Wurde ein Datum erkannt, wird es automatisch in das <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippet übernommen. Allerdings wird bei Abwesenheit einer URL niemals auf das Erstellungsdatum der Kartei als Fallback zurückgegriffen.</p>
 
 						<figure class="right" title="zum Vergrößern anklicken">
-							<img src="../img/win/hb-karteikarte-quelle-laden.png" alt="">
+							<img src="../img/win/karteikarte-quelle-laden.png" alt="">
 							<figcaption>Verbesserungsvorschläge für fehlerhafte Datensätze</figcaption>
 						</figure>
 
@@ -713,7 +730,7 @@
 					<p id="karteikarte-dwdsImport"><b><abbr title="Digitales Wörterbuch der deutschen Sprache">DWDS</abbr>-Import:</b> Aus den Korpora des <abbr title="Digitalen Wörterbuchs der deutschen Sprache">DWDS</abbr> können entweder einzelne Belege (via <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippet) oder gleich ganze Belegreihen (aus einer exportierten <abbr title="JavaScript Object Notation" class="en">JSON</abbr>-Datei) importiert werden.</p>
 
 					<figure class="right" title="zum Vergrößern anklicken">
-						<img src="../img/win/hb-karteikarte-importfunktion-dwds-export.png" alt="">
+						<img src="../img/win/karteikarte-importfunktion-dwds-export.png" alt="">
 						<figcaption>Export-Dialog des <abbr title="Digitalen Wörterbuchs der deutschen Sprache">DWDS</abbr></figcaption>
 					</figure>
 
@@ -730,7 +747,7 @@
 					<p>Die Datei ist nun mit der App verknüpft. Enthält die Datei nur einen Beleg, wird der Import sofort gestartet. Enthält sie mehrere Belege öffnet sich das <a href="#karteikarte-importfenster">Importfenster</a>. Beim Import eines Belegs werden die Datenfelder <i>Datum, Autor, Beleg, Quelle, Korpus, Textsorte</i> und <i>Notizen</i> gefüllt. Welche Felder genau ausgefüllt werden, hängt freilich davon ab, welche Daten zu den einzelnen Belegen verfügbar sind.</p>
 
 					<figure class="right" title="zum Vergrößern anklicken">
-						<img src="../img/win/hb-karteikarte-importfunktion-dwds-snippet.png" alt="">
+						<img src="../img/win/karteikarte-importfunktion-dwds-snippet.png" alt="">
 						<figcaption>Kopier-Icon in der Korporasuche des <abbr title="Digitalen Wörterbuchs der deutschen Sprache">DWDS</abbr></figcaption>
 					</figure>
 
@@ -742,17 +759,17 @@
 
 					<div class="bilder">
 						<figure title="zum Vergrößern anklicken">
-							<img src="../img/win/hb-karteikarte-importfunktion-dereko-kwic.png" alt="">
+							<img src="../img/win/karteikarte-importfunktion-dereko-kwic.png" alt="">
 							<figcaption><abbr title="Deutsches Referenzkorpus">DeReKo</abbr>: KWIC-Ansicht</figcaption>
 						</figure>
 
 						<figure title="zum Vergrößern anklicken">
-							<img src="../img/win/hb-karteikarte-importfunktion-dereko-export.png" alt="">
+							<img src="../img/win/karteikarte-importfunktion-dereko-export.png" alt="">
 							<figcaption><abbr title="Deutsches Referenzkorpus">DeReKo</abbr>: Exporteinstellungen</figcaption>
 						</figure>
 
 						<figure title="zum Vergrößern anklicken">
-							<img src="../img/win/hb-karteikarte-importfunktion-dereko-download.png" alt="">
+							<img src="../img/win/karteikarte-importfunktion-dereko-download.png" alt="">
 							<figcaption><abbr title="Deutsches Referenzkorpus">DeReKo</abbr>: Download-Dialog</figcaption>
 						</figure>
 					</div>
@@ -797,7 +814,7 @@
 					</ol>
 
 					<figure class="right" title="zum Vergrößern anklicken">
-						<img src="../img/win/hb-karteikarte-importfunktion-fenster.png" alt="">
+						<img src="../img/win/karteikarte-importfunktion-fenster.png" alt="">
 						<figcaption>Importfenster mit allen geladenen Datensätzen</figcaption>
 					</figure>
 
@@ -818,7 +835,7 @@
 					<p>Ansonsten funktioniert der Umgang mit solchen <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Dateien genauso wie der mit <a href="#karteikarte-derekoImport">DeReKo-Dateien</a>. Im Unterschied dazu können die <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Daten allerdings auch aus der <b>Zwischenablage</b> Ihres Rechners eingelesen werden, falls dieser Weg für Sie besser zu handhaben ist.</p>
 
 					<figure class="right" title="zum Vergrößern anklicken">
-						<img src="../img/win/hb-menueRedaktion-literatur-ppn.png" alt="">
+						<img src="../img/win/menueRedaktion-literatur-ppn.png" alt="">
 						<figcaption><abbr title="Pica-Produktionsnummer">PPN</abbr> in einer Titelanzeige des <abbr title="Gemeinsamen Verbundkatalogs">GVK</abbr></figcaption>
 					</figure>
 
@@ -832,12 +849,12 @@
 
 					<div class="bilder">
 						<figure title="zum Vergrößern anklicken">
-							<img src="../img/win/hb-karteikarte-importfunktion-bibtex-google1.png" alt="">
+							<img src="../img/win/karteikarte-importfunktion-bibtex-google1.png" alt="">
 							<figcaption>GoogleBooks: Ansicht eines Volldigitalisats</figcaption>
 						</figure>
 
 						<figure title="zum Vergrößern anklicken">
-							<img src="../img/win/hb-karteikarte-importfunktion-bibtex-google2.png" alt="">
+							<img src="../img/win/karteikarte-importfunktion-bibtex-google2.png" alt="">
 							<figcaption>GoogleBooks: Titeldatensatz auf der Übersichtsseite</figcaption>
 						</figure>
 					</div>
@@ -846,12 +863,12 @@
 
 					<div class="bilder">
 						<figure title="zum Vergrößern anklicken">
-							<img src="../img/win/hb-karteikarte-importfunktion-bibtex-gvk1.png" alt="">
+							<img src="../img/win/karteikarte-importfunktion-bibtex-gvk1.png" alt="">
 							<figcaption>GVK: Titelaufnahme</figcaption>
 						</figure>
 
 						<figure title="zum Vergrößern anklicken">
-							<img src="../img/win/hb-karteikarte-importfunktion-bibtex-gvk2.png" alt="">
+							<img src="../img/win/karteikarte-importfunktion-bibtex-gvk2.png" alt="">
 							<figcaption>GVK: Funktion <i>Speichern/Drucken</i></figcaption>
 						</figure>
 					</div>
@@ -869,7 +886,7 @@
 					<p>Die Checkbox <b>Latin-1</b> müssen Sie nur aktivieren, wenn Sie den Datensatz aus einer Quelle bezogen haben, die diese im Prinzip defiziente Kodierung verwendet. <abbr title="Vergleiche">Vgl.</abbr> das oben Gesagte <a href="#karteikarte-dateikodierung">zum Thema Dateikodierung</a>.</p>
 
 					<figure class="right" title="zum Vergrößern anklicken">
-						<img src="../img/win/hb-karteikarte-importfunktion-bibtex-zwischenablage.png" alt="">
+						<img src="../img/win/karteikarte-importfunktion-bibtex-zwischenablage.png" alt="">
 						<figcaption><span class="bibtex"><span>Bib</span>T<span>E</span>X</span>: Import aus der Zwischenablage</figcaption>
 					</figure>
 
@@ -878,7 +895,7 @@
 					<p>Sollten Sie die Karteikarte bereits geöffnet haben, bevor Sie einen <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Datensatz in die Zwischenablage kopiert haben, wird die Anzeige zwar nicht automatisch umgestellt. Klicken Sie auf den Button <i>Importieren</i>, überprüft die App allerdings, ob sie in der Zwischenablage fündig wird.</p>
 
 					<figure class="right" title="zum Vergrößern anklicken">
-						<img src="../img/win/hb-menueRedaktion-literatur-ppn.png" alt="">
+						<img src="../img/win/menueRedaktion-literatur-ppn.png" alt="">
 						<figcaption><abbr title="Pica-Produktionsnummer">PPN</abbr> in einer Titelanzeige des <abbr title="Gemeinsamen Verbundkatalogs">GVK</abbr></figcaption>
 					</figure>
 
@@ -889,7 +906,7 @@
 					<h2 id="karteikarte-leseansicht">Leseansicht</h2>
 
 					<figure class="right" title="zum Vergrößern anklicken">
-						<img src="../img/win/hb-karteikarte-leseansicht.png" alt="">
+						<img src="../img/win/karteikarte-leseansicht.png" alt="">
 						<figcaption>die Leseansicht der Karteikarte</figcaption>
 					</figure>
 
@@ -913,7 +930,7 @@
 					<h2 id="bedeutungsgeruest-kopfleiste">Kopfleiste</h2>
 
 					<figure title="zum Vergrößern anklicken">
-						<img src="../img/win/hb-bedeutungsgeruest-kopfleiste.png" alt="">
+						<img src="../img/win/bedeutungsgeruest-kopfleiste.png" alt="">
 						<figcaption>die Kopfleiste der Bedeutungsgerüst-Funktion</figcaption>
 					</figure>
 
@@ -928,21 +945,23 @@
 					<p>Zum (Um-)Benennen eines Gerüsts müssen Sie im Konfigurationsfenster auf den Namen oder den Platzhaltertext <i>kein Name</i> klicken. Änderungen in dem sich öffnenden Textfeld speichern Sie durch <kbd>⏎</kbd>.</p>
 
 					<figure class="right" title="zum Vergrößern anklicken">
-						<img src="../img/win/hb-bedeutungsgeruest-kopieren.png" alt="">
+						<img src="../img/win/bedeutungsgeruest-kopieren.png" alt="">
 						<figcaption>Kopieren eines Bedeutungsgerüsts</figcaption>
 					</figure>
 
 					<p id="bedeutungsgeruest-neu">Haben Sie ein <b>neues Bedeutungsgerüst</b> hinzugefügt (das geht über das Icon <img src="../img/zahnrad.svg" width="24" height="24" alt="">), können Sie dieses mit nur einem Klick mit den Bedeutungen eines bereits bestehenden Gerüsts füllen (hilfreich, falls Sie ein Gerüst stark modifizieren, seine ursprüngliche Form jedoch nicht verlieren wollen). Anstelle der Bedeutungsdefinitionen sehen Sie in dem neuen Bedeutungsgerüst ein Textfeld und einen Button mit dem Text <i>Kopieren</i>. Durch Klick auf das Textfeld öffnet sich ein <a href="#karteikarte-dropdown">Dropdown-Menü</a> zum Auswählen des Quellgerüsts, dessen Bedeutungen kopiert werden sollen; durch einen Klick auf <i>Kopieren</i> lösen Sie die Operation aus. Beim Kopieren des Gerüsts werden die Karteikarten, die mit den Bedeutungen des Quellgerüsts verknüpft waren, automatisch um die Bedeutungen des neuen Gerüsts ergänzt. In diesem Moment haben Sie also zwei identische Gerüste, die den identischen Karteikarten mit den identischen Bedeutungen zugeordnet sind. Wie gehabt ist auch diese Änderung zunächst nur temporär und wird erst nach dem Speichern endgültig umgesetzt.</p>
 
 					<figure class="right" title="zum Vergrößern anklicken">
-						<img src="../img/win/hb-bedeutungsgeruest-zaehlung.png" alt="">
+						<img src="../img/win/bedeutungsgeruest-zaehlung.png" alt="">
 						<figcaption>Zählung von Hierarchieebenen</figcaption>
 					</figure>
 
 					<p id="bedeutungsgeruest-zaehlung">Im <b>zweiten Textfeld</b> der Kopfleiste lässt sich festlegen, mit welcher Zählung das aktuelle Bedeutungsgerüst beginnen soll. Standardmäßig beginnt die Zählung der Bedeutungen mit arabischen Ziffern (1, 2, 3 <abbr title="und so weiter">usw.</abbr>). Die Einstellung der Zählung in der obersten Ebene bezieht sich immer nur auf das aktuelle Gerüst. Es kann also jedes Gerüst eine andere Zählung haben. Die Abfolge der Zählzeichen ist wie folgt: I, II, III – A, B, C – 1, 2, 3 – a, b, c – α, β, γ – • – ◦. Bedeutungen mit einer noch tieferen Verschachtelungsebene erhalten immer einen Spiegelstrich (–). Eine Ebenenbegrenzung gibt es zwar nicht, irgendwann wird wegen der Einrückung im Gerüst jedoch ein Punkt erreicht sein, an dem die Darstellbarkeit ihre Grenzen hat.</p>
 
+					<p>Ein Klick auf das <b><abbr title="Extensible Markup Language" lang="en">XML</abbr>-Icon</b> (<img src="../img/xml.svg" width="24" height="24" alt="">) wandelt das gerade aktive Bedeutungsgerüst in <abbr title="Extensible Markup Language" lang="en">XML</abbr> um und schickt es direkt ans <a href="#menueRedaktion-xml"><abbr title="Extensible Markup Language" lang="en">XML</abbr>-Redaktionsfenster</a>. Möchten Sie das Bedeutungsgerüst im <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Format in die Zwischenablage kopieren, wechseln Sie ins Redaktionsfenster und führen einen Rechtsklick auf der <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Vorschau aus. Mithilfe des Befehls <i>Code kopieren</i> schieben Sie das Bedeutungsgerüst in die Zwischenablage. Möchten Sie das Gerüst in ein Office-Dokument einfügen, verwenden Sie besser die Kopierfunktion der Druckfunktion.</p>
+
 					<figure class="right" title="zum Vergrößern anklicken">
-						<img src="../img/win/hb-bedeutungsgeruest-druckvorschau.png" alt="">
+						<img src="../img/win/bedeutungsgeruest-druckvorschau.png" alt="">
 						<figcaption>ein Bedeutungsgerüst im Druckvorschaufenster</figcaption>
 					</figure>
 
@@ -953,7 +972,7 @@
 					<h2 id="bedeutungsgeruest-bearbeiten">Bedeutungsgerüst bearbeiten</h2>
 
 					<figure class="right" title="zum Vergrößern anklicken">
-						<img src="../img/win/hb-bedeutungsgeruest-hinzufuegen.png" alt="">
+						<img src="../img/win/bedeutungsgeruest-hinzufuegen.png" alt="">
 						<figcaption>Textfeld zum Hinzufügen von Bedeutungen</figcaption>
 					</figure>
 
@@ -975,28 +994,28 @@
 
 					<div class="bilder">
 						<figure title="zum Vergrößern anklicken">
-							<img src="../img/win/hb-bedeutungsgeruest-verschieben1.png" alt="">
+							<img src="../img/win/bedeutungsgeruest-verschieben1.png" alt="">
 							<figcaption>1. Schritt: Bedeutung nach links schieben</figcaption>
 						</figure>
 
 						<figure title="zum Vergrößern anklicken">
-							<img src="../img/win/hb-bedeutungsgeruest-verschieben2.png" alt="">
+							<img src="../img/win/bedeutungsgeruest-verschieben2.png" alt="">
 							<figcaption>2. Schritt: Bedeutung nach oben schieben</figcaption>
 						</figure>
 
 						<figure title="zum Vergrößern anklicken">
-							<img src="../img/win/hb-bedeutungsgeruest-verschieben3.png" alt="">
+							<img src="../img/win/bedeutungsgeruest-verschieben3.png" alt="">
 							<figcaption>3. Schritt: Bedeutung nach rechts schieben</figcaption>
 						</figure>
 
 						<figure title="zum Vergrößern anklicken">
-							<img src="../img/win/hb-bedeutungsgeruest-verschieben4.png" alt="">
+							<img src="../img/win/bedeutungsgeruest-verschieben4.png" alt="">
 							<figcaption>die Bedeutung ist verschoben</figcaption>
 						</figure>
 					</div>
 
 					<figure class="right" title="zum Vergrößern anklicken">
-						<img src="../img/win/hb-bedeutungsgeruest-verschieben-drag.png" alt="">
+						<img src="../img/win/bedeutungsgeruest-verschieben-drag.png" alt="">
 						<figcaption>Bedeutung via Drag-and-Drop verschieben</figcaption>
 					</figure>
 
@@ -1087,7 +1106,7 @@
 					<p class="info">Die Tag-Listen speisen sich aus Tag-Dateien (im <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Format), die mit dem Programm verknüpft wurden. Welche Dateien dies sind, können Sie im Einstellungen-Fenster einsehen: <i><span class="app-name"></span> &gt; Einstellungen &gt; Bedeutungsgerüst &gt; Tag-Dateien</i>. Wie Sie diese ändern wird <a href="#einstellungen-bedeutungsgeruest">im betreffenden <abbr title="Abschnitt">Abschn.</abbr> zu den Einstellungen</a> beschrieben.</p>
 
 					<figure class="right" title="zum Vergrößern anklicken">
-						<img src="../img/win/hb-bedeutungsgeruest-tag-fenster.png" alt="">
+						<img src="../img/win/bedeutungsgeruest-tag-fenster.png" alt="">
 						<figcaption>das Tag-Fenster</figcaption>
 					</figure>
 
@@ -1152,7 +1171,7 @@
 					<h2 id="bedeutungsgeruest-fenster">Bedeutungsgerüst-Fenster</h2>
 
 					<figure class="right" title="zum Vergrößern anklicken">
-						<img src="../img/win/hb-bedeutungsgeruest-fenster.png" alt="">
+						<img src="../img/win/bedeutungsgeruest-fenster.png" alt="">
 						<figcaption>das Bedeutungsgerüst-Fenster</figcaption>
 					</figure>
 
@@ -1211,7 +1230,7 @@
 					<h2 id="belegliste-kopfleiste">Kopfleiste</h2>
 
 					<figure title="zum Vergrößern anklicken">
-						<img src="../img/win/hb-belegliste-kopfleiste.png" alt="">
+						<img src="../img/win/belegliste-kopfleiste.png" alt="">
 						<figcaption>die Kopfleiste der Belegliste</figcaption>
 					</figure>
 
@@ -1262,7 +1281,7 @@
 						<p>Die Güte einer solchen automatischen Markierung hat natürlich ihre Grenzen, die besonders bei sehr kurzen Wörtern und erst recht bei Homonymen sichtbar werden. Haben Sie eine Kartei zum Wort <i>Tor</i>, werden standardmäßig auch Wörter wie <mark class="wort">Senator</mark>, <mark class="wort">Territorium</mark> oder <mark class="wort">historisch</mark> hervorgehoben. (Für solche Fälle kann man die <a href="#menueKartei-formvariantenErweitern">automatische Erweiterung ausstellen</a>.) Und arbeiten Sie zum Wort <i>Masse</i> im Sinne von <q class="bedeutung">Menschenmasse</q>, wird die App nicht erkennen können, ob im Text von der physikalischen Größe oder einer Menschengruppe die Rede ist.</p>
 
 						<figure class="right" title="zum Vergrößern anklicken">
-							<img src="../img/win/hb-belegliste-annotierung.png" alt="">
+							<img src="../img/win/belegliste-annotierung.png" alt="">
 							<figcaption>die Annotierungsfunktion</figcaption>
 						</figure>
 
@@ -1330,7 +1349,7 @@
 					</div>
 
 					<figure class="right" title="zum Vergrößern anklicken">
-						<img src="../img/win/hb-belegliste-zeitschnitte.png" alt="">
+						<img src="../img/win/belegliste-zeitschnitte.png" alt="">
 						<figcaption>eine Belegliste mit Zeitschnitten im Abstand von 10 Jahren</figcaption>
 					</figure>
 
@@ -1365,7 +1384,7 @@
 					<h2 id="belegliste-kopfleisteBelege">Kopfleiste der Belege</h2>
 
 					<figure title="zum Vergrößern anklicken">
-						<img src="../img/win/hb-belegliste-kopfleiste-belege.png" alt="">
+						<img src="../img/win/belegliste-kopfleiste-belege.png" alt="">
 						<figcaption>die Kopfleiste eines Belegs</figcaption>
 					</figure>
 
@@ -1424,7 +1443,7 @@
 					<h2 id="belegliste-detailansicht">Detailansicht der Belege</h2>
 
 					<figure class="right" title="zum Vergrößern anklicken">
-						<img src="../img/win/hb-belegliste-detailansicht.png" alt="">
+						<img src="../img/win/belegliste-detailansicht.png" alt="">
 						<figcaption>Detailansicht eines Belegs</figcaption>
 					</figure>
 
@@ -1452,22 +1471,22 @@
 
 					<div class="bilder">
 						<figure title="zum Vergrößern anklicken">
-							<img src="../img/win/hb-belegliste-rechtsklick1.png" alt="">
+							<img src="../img/win/belegliste-rechtsklick1.png" alt="">
 							<figcaption>Rechtsklickmenü: Standardansicht</figcaption>
 						</figure>
 
 						<figure title="zum Vergrößern anklicken">
-							<img src="../img/win/hb-belegliste-rechtsklick2.png" alt="">
+							<img src="../img/win/belegliste-rechtsklick2.png" alt="">
 							<figcaption>Rechtsklickmenü: Markierung im Belegtext</figcaption>
 						</figure>
 
 						<figure title="zum Vergrößern anklicken">
-							<img src="../img/win/hb-belegliste-rechtsklick3.png" alt="">
+							<img src="../img/win/belegliste-rechtsklick3.png" alt="">
 							<figcaption>Rechtsklickmenü: Internet-Link</figcaption>
 						</figure>
 
 						<figure title="zum Vergrößern anklicken">
-							<img src="../img/win/hb-belegliste-rechtsklick4.png" alt="">
+							<img src="../img/win/belegliste-rechtsklick4.png" alt="">
 							<figcaption>Rechtsklickmenü: Dateianhang</figcaption>
 						</figure>
 					</div>
@@ -1548,6 +1567,10 @@
 
 					<p class="info">Analog zum Befehl <a href="#belegliste-textZwischenablageReferenz"><i>Text in Zwischenablage &gt; Referenz</i></a> wird auch in diesem Fall eine ID des Belegs erzeugt und kopiert. Der Unterschied ist, dass sie in einem leeren <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Element steht, das als Anker für einen zuvor kopierten Belegschnitt dienen kann.</p>
 
+					<p class="erklaerung-icon"><img src="../img/xml.svg" width="24" height="24" alt="">Belegschnitt in <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Fenster</p>
+
+					<p class="info">Erscheint nur beim Rechtsklick auf markiertem <em>Beleg-</em>Text. Die Funktion erzeugt ein XML-Snippet in derselben Weise wie <a href="#belegliste-xmlZwischenablageBelegschnitt"><i><abbr title="Extensible Markup Language" lang="en">XML</abbr> in Zwischenablage &gt; Belegschnitt</i></a>. Der einzige Unterschied besteht darin, dass das Snippet nicht in die Zwischenablage kopiert, sondern direkt ans <a href="#menueRedaktion-xml"><abbr title="Extensible Markup Language" lang="en">XML</abbr>-Redaktionsfenster</a> geschickt wird.</p>
+
 					<p class="erklaerung-icon"><img src="../img/link.svg" width="24" height="24" alt="">Link kopieren</p>
 
 					<p class="info">Erscheint nur beim Rechtsklick auf einem Internet-Link. Kopiert wird die <abbr title="Uniform Resource Locator" lang="en">URL</abbr> des Links, nicht der angezeigte Text.</p>
@@ -1566,7 +1589,7 @@
 					<h2 id="filter-leiste">Filterleiste</h2>
 
 					<figure class="right" title="zum Vergrößern anklicken">
-						<img src="../img/win/hb-filter-normal.png" alt="">
+						<img src="../img/win/filter-normal.png" alt="">
 						<figcaption>die App mit geöffneter Filterleiste</figcaption>
 					</figure>
 
@@ -1575,7 +1598,7 @@
 					<p>Wurden Filter einmal aktiviert, spielt es für die Anzeige der Belegliste keine Rolle, ob die Filterleiste sichtbar oder unsichtbar ist. Die Filter werden so lange angewandt, bis sie explizit zurückgesetzt worden sind. Ist die Filterleiste ausgeblendet, sehen Sie an der Angabe zur Anzahl der Belege oben rechts in der Kopfleiste der Belegliste, ob die Filter aktiv sind oder nicht. Ist die Schrift schwarz, sind keine Filter aktiv – oder Sie haben einen Filter ausgewählt, der die Liste nicht wirklich gefilter hat, weil er auf alle Belege zutrifft. Tippen Sie im <i>Volltext</i>-Filter <abbr title="beispielsweise">bspw.</abbr> einfach nur <q>e</q> ein, ist die Wahrscheinlichkeit sehr groß, dass er auf alle Belege zutrifft. Wurde die Belegliste hingegen so gefiltert, dass nicht mehr alle Belege der Kartei angezeigt werden, wird die Schrift rot und sieht dann <abbr title="zum Beispiel">z. B.</abbr> so aus: <span class="obacht">7/19 Belegen</span>.</p>
 
 					<figure class="right" title="zum Vergrößern anklicken">
-						<img src="../img/win/hb-filter-belegliste-reset.png" alt="">
+						<img src="../img/win/filter-belegliste-reset.png" alt="">
 						<figcaption>Zurücksetzen der Filter über den Kopf der Belegliste</figcaption>
 					</figure>
 
@@ -1587,17 +1610,17 @@
 
 					<div class="bilder">
 						<figure title="zum Vergrößern anklicken">
-							<img src="../img/win/hb-filter-modus1.png" alt="">
+							<img src="../img/win/filter-modus1.png" alt="">
 							<figcaption>ein geöffneter Filterblock</figcaption>
 						</figure>
 
 						<figure title="zum Vergrößern anklicken">
-							<img src="../img/win/hb-filter-modus2.png" alt="">
+							<img src="../img/win/filter-modus2.png" alt="">
 							<figcaption>aktiver Filterblock mit sichtbarem Reset-Icon</figcaption>
 						</figure>
 
 						<figure title="zum Vergrößern anklicken">
-							<img src="../img/win/hb-filter-modus3.png" alt="">
+							<img src="../img/win/filter-modus3.png" alt="">
 							<figcaption>Filterblock mit ausgegrauten Filtern</figcaption>
 						</figure>
 					</div>
@@ -1605,7 +1628,7 @@
 					<p>Dafür, welche Filterblöcke standardmäßig geöffnet sein sollen und wie sich das Programm verhält, wenn Sie auf einen der Filterköpfe klicken, gibt es spezielle <a href="#einstellungen-filterleiste">Einstellungen</a>.</p>
 
 					<figure class="right" title="zum Vergrößern anklicken">
-						<img src="../img/win/hb-filter-verteilung.png" alt="">
+						<img src="../img/win/filter-verteilung.png" alt="">
 						<figcaption>zeitliche Verteilung der Belege</figcaption>
 					</figure>
 
@@ -1618,7 +1641,7 @@
 					<p>Kann eine Filterkategorie nicht mit Filtern gefüllt werden, weil in keiner der Karteikarten entsprechende Daten zu finden sind, erscheint sie nicht in der Filterleiste. Sie müssen sich also nicht sorgen, wenn <abbr title="beispielsweise">bspw.</abbr> der Filterblock <a href="#filter-verschiedenes"><i>Verschiedenes</i></a> in Ihrer Kartei nicht angezeigt wird. Die App ist nicht kaputt. Der Grund ist einfach, dass Sie in den Karteikarten bisher keine Eingaben gemacht haben, die zu dieser Kategorie gehören.</p>
 
 					<figure class="right" title="zum Vergrößern anklicken">
-						<img src="../img/win/hb-filter-minimal.png" alt="">
+						<img src="../img/win/filter-minimal.png" alt="">
 						<figcaption>Filterleiste einer minimal gefüllten Kartei</figcaption>
 					</figure>
 
@@ -1745,7 +1768,7 @@
 					<p>Ein praktisches Beispiel: In der <a href="#" class="hilfe-demo">Demonstrationskartei</a> finden sich Belege, die fünf verschiedenen Textsorten zugeordnet wurden: <i>Belletristik, Gebrauchsliteratur, Reisebericht, Wissenschaft, Zeitung</i>. Aktivieren Sie nun den Reduktionsmodus. Öffnen Sie dann den Filterblock <i>Zeitraum</i> und klicken Sie auf <i>2000</i>. Sie sehen sofort, wie die Filter <i>1800</i> und <i>1900</i> verschwinden – weil es in den fünf verbliebenen Belegen in der Belegliste keine Belege mehr aus dem Zeitraum 1800–1999 gibt. Alle stammen aus den 2000er-Jahren, weswegen keine anderen Zeitraumfilter mehr aufgebaut werden. Die dynamischen Filter im Block <i>Textsorten</i> wurden ebenfalls stark reduziert: Es wird nur noch der Filter <i>Zeitung</i> angezeigt – weil alle Belege aus den 2000er-Jahren mit dieser und keiner anderen Textsorte getaggt worden sind. Sie können das Spielchen noch weiter treiben und die Belegliste weiter reduzieren, indem Sie <i>Wortbildungen &gt; Teamvergleich</i> hinzuschalten. Im Block <i>Textsorten</i> ist nun auch noch die Unterkategorie <i>Zeitung: Reise</i> verschwunden.</p>
 
 					<figure class="right" title="zum Vergrößern anklicken">
-						<img src="../img/win/hb-filter-reduktionsmodus.png" alt="">
+						<img src="../img/win/filter-reduktionsmodus.png" alt="">
 						<figcaption>Filtern der Belege im Reduktionsmodus</figcaption>
 					</figure>
 
@@ -1758,7 +1781,7 @@
 					<h2 id="filter-notizen">Notizen</h2>
 
 					<figure class="right" title="zum Vergrößern anklicken">
-						<img src="../img/win/hb-filter-notizen.png" alt="">
+						<img src="../img/win/filter-notizen.png" alt="">
 						<figcaption>Notizen in der Filterleiste</figcaption>
 					</figure>
 
@@ -2016,12 +2039,12 @@ Mustermann, Erika
 
 						<div class="bilder">
 							<figure title="zum Vergrößern anklicken">
-								<img src="../img/win/hb-einstellungen-menueleiste-an.png" alt="">
+								<img src="../img/win/einstellungen-menueleiste-an.png" alt="">
 								<figcaption>Programmfenster mit Menüleiste</figcaption>
 							</figure>
 
 							<figure title="zum Vergrößern anklicken">
-								<img src="../img/win/hb-einstellungen-menueleiste-aus.png" alt="">
+								<img src="../img/win/einstellungen-menueleiste-aus.png" alt="">
 								<figcaption>Programmfenster ohne Menüleiste</figcaption>
 							</figure>
 						</div>
@@ -2035,7 +2058,7 @@ Mustermann, Erika
 						<p>Bei der Quick-Access-Bar handelt es sich um eine kleine Leiste am oberen Rand des Programmfensters, in der Icons abgelegt werden können. Die Icons ermöglichen einen Schnellzugriff auf eine Vielzahl an Funktionen, denn für jeden der Punkte in den Menüs <i><span class="app-name"></span>, Kartei, Belege, Bearbeiten</i> und <i>Ansicht</i> steht ein eigenes Icon zur Verfügung – ausgenommen <a href="#menueKartei-zuletztVerwendet"><i>Kartei &gt; Zuletzt verwendet</i></a>. Außerdem kann man sich auch noch ein Icon zum Öffnen dieses Handbuchs hinzufügen und die Icons durch Separatoren gliedern.</p>
 
 						<figure title="zum Vergrößern anklicken">
-							<img src="../img/win/hb-einstellungen-quick.png" alt="">
+							<img src="../img/win/einstellungen-quick.png" alt="">
 							<figcaption>Quick-Access-Bar mit allen zur Verfügung stehenden Icons</figcaption>
 						</figure>
 
@@ -2415,6 +2438,8 @@ Mustermann, Erika
 
 							<p>Fokus im Suchfeld des <a href="#filter-volltext">Volltextfilters</a>: Suche und/oder Filtern starten</p>
 
+							<p>Fokus in oder auf einem Textfeld des <a href="#menueRedaktion-xml"><abbr title="Extensible Markup Language" lang="en">XML</abbr>-Redaktionsfenster</a>: Inhalt anwenden oder hinzufügen</p>
+
 							<p>Funktion ausführen, für die das fokussierte Element steht</p>
 
 							<p>Suchfeld in Handbuch oder <a href="#" class="link-dokumentation">technischer Dokumentation</a> fokussiert: Suche anstoßen und den ersten Treffer fokussieren</p>
@@ -2427,9 +2452,19 @@ Mustermann, Erika
 						<td>
 							<p>Fokus in einem Textfeld der <a href="#karteikarte">Karteikarte</a>: Karte speichern</p>
 
-							<p>Fokus im Suchfeld der <a href="#menueRedaktion-literatur">Literaturdatenbank</a>: Versionen-Popup des obersten Eintrags in der Trefferliste anzeigen</p>
+							<p>Fokus im Suchfeld der <a href="#menueRedaktion-literatur">Literaturdatenbank</a>: obersten Eintrag an das <a href="#menueRedaktion-xml"><abbr title="Extensible Markup Language" lang="en">XML</abbr>-Redaktionsfenster</a> schicken</p>
 
 							<p>Fokus in einem Textfeld des Eingabeformulars der Literaturdatenbank: Titelaufnahme speichern</p>
+
+							<p>Fokus in einem <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Textfeld des <a href="#menueRedaktion-xml"><abbr title="Extensible Markup Language" lang="en">XML</abbr>-Redaktionsfensters</a>, das sich im Bearbeiten-Modus befindet: Eingabe speichern</p>
+						</td>
+					</tr><tr>
+						<td> </td><td> </td>
+						<td><kbd>Strg</kbd></td><td>+</td>
+						<td><kbd>Umsch</kbd></td><td>+</td>
+						<td><kbd>⏎</kbd></td>
+						<td>
+							<p>Fokus im Suchfeld der <a href="#menueRedaktion-literatur">Literaturdatenbank</a>: Versionen-Popup des obersten Eintrags in der Trefferliste anzeigen</p>
 						</td>
 					</tr><tr>
 						<td> </td><td> </td>
@@ -2675,6 +2710,8 @@ Mustermann, Erika
 
 							<p>Textfeld für den Namen eines Gerüsts im <a href="#bedeutungsgeruest-konfigurationsfenster">Konfigurationsfenster für Bedeutungsgerüste</a> fokussiert: Eingabe verwerfen und/oder Textfeld schließen</p>
 
+							<p>Fokus in einem <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Textfeld des <a href="#menueRedaktion-xml"><abbr title="Extensible Markup Language" lang="en">XML</abbr>-Redaktionsfensters</a>, das sich im Bearbeiten-Modus befindet: Eingabe abbrechen</p>
+
 							<p><i>Linux/Windows</i>: Menüleistenpunkt zuklappen</p>
 
 							<p>maximierte Bildanzeige im Handbuch geöffnet: Anzeige schließen</p>
@@ -2866,6 +2903,8 @@ Mustermann, Erika
 						<td><kbd>E</kbd></td>
 						<td>
 							<p><a href="#menueKartei-erstellen">Kartei erstellen</a></p>
+
+							<p>im <a href="#menueRedaktion-xml"><abbr title="Extensible Markup Language" lang="en">XML</abbr>-Redaktionsfensters</a>: <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Datei exportieren</p>
 						</td>
 					</tr><tr>
 						<td> </td><td> </td>
@@ -2956,6 +2995,8 @@ Mustermann, Erika
 						<td><kbd>N</kbd></td>
 						<td>
 							<p>neue <a href="#karteikarte">Karteikarte</a> erstellen</p>
+
+							<p>im <a href="#menueRedaktion-xml"><abbr title="Extensible Markup Language" lang="en">XML</abbr>-Redaktionsfensters</a>: neuen Abschnitt im <i>Kurz gefasst</i> <abbr title="beziehungsweise">bzw.</abbr> in der <i>Wortgeschichte</i> erstellen</p>
 						</td>
 					</tr><tr>
 						<td><kbd>Alt</kbd></td><td>+</td>
@@ -3020,6 +3061,8 @@ Mustermann, Erika
 							<p><a href="#menueRedaktion-literatur">Literaturdatenbank</a> offen: Eingabeformular und/oder Datenbank speichern</p>
 
 							<p><a href="#menueKartei-speichern">Kartei speichern</a></p>
+
+							<p>im <a href="#menueRedaktion-xml"><abbr title="Extensible Markup Language" lang="en">XML</abbr>-Redaktionsfensters</a>: Speichern der zum <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Redaktionsfenster gehörenden Kartei anstoßen</p>
 						</td>
 					</tr><tr>
 						<td> </td><td> </td>
@@ -3482,7 +3525,7 @@ Mustermann, Erika
 
 					<div class="info">
 						<figure class="right" title="zum Vergrößern anklicken">
-							<img src="../img/win/hb-menueApp-start.png" alt="">
+							<img src="../img/win/menueApp-start.png" alt="">
 							<figcaption>Startansicht der App</figcaption>
 						</figure>
 
@@ -3508,7 +3551,7 @@ Mustermann, Erika
 						<p>Sucht und/oder durchsucht alle <abbr title="Zettel’s Traum JSON">ZTJ</abbr>-Dateien in einem oder mehreren Ordnern.</p>
 
 						<figure class="right" title="zum Vergrößern anklicken">
-							<img src="../img/win/hb-menueApp-karteisuche.png" alt="">
+							<img src="../img/win/menueApp-karteisuche.png" alt="">
 							<figcaption>die Karteisuche</figcaption>
 						</figure>
 
@@ -3569,7 +3612,7 @@ Mustermann, Erika
 						<p><b>Tipp:</b> Da der Block <i>Pfade &amp; Filter</i> sehr hoch werden kann, können Sie ihn durch Klick auf die Überschrift (den dunkelblau hinterlegten Bereich) schließen. Die Trefferliste wird dann entsprechend höher.</p>
 
 						<figure class="right" title="zum Vergrößern anklicken">
-							<img src="../img/win/hb-menueApp-karteisuche-redaktion.png" alt="">
+							<img src="../img/win/menueApp-karteisuche-redaktion.png" alt="">
 							<figcaption>Karteisuche: Trefferliste mit Redaktionsereignissen</figcaption>
 						</figure>
 
@@ -3588,7 +3631,7 @@ Mustermann, Erika
 						<p>Dass die Belege einer Kartei im Artikel einer anderen Kartei verarbeitet wurden, können Sie im <a href="#menueRedaktion-metadatenBehandeltMit">Behandelt-mit-Feld der Redaktionsmetadaten</a> vermerken. Geben Sie dort einfach das Wort ein, auf das Sie verweisen möchten.</p>
 
 						<figure class="right" title="zum Vergrößern anklicken">
-							<img src="../img/win/hb-menueApp-karteisuche-verweise.png" alt="">
+							<img src="../img/win/menueApp-karteisuche-verweise.png" alt="">
 							<figcaption>Karteisuche: Verweise auf andere Karteien</figcaption>
 						</figure>
 
@@ -3706,7 +3749,7 @@ Mustermann, Erika
 						<p>Speichert Formvarianten zum Karteiwort.</p>
 
 						<figure class="right" title="zum Vergrößern anklicken">
-							<img src="../img/win/hb-menueKartei-formvarianten.png" alt="">
+							<img src="../img/win/menueKartei-formvarianten.png" alt="">
 							<figcaption>das Formvarianten-Fenster</figcaption>
 						</figure>
 
@@ -3745,14 +3788,14 @@ Mustermann, Erika
 						<p>Bisher war immer von <em>einem</em> Karteiwort die Rede, für das eine Formvariantenliste erstellt wird. Da es prinzipiell denkbar ist (und möglich sein soll), dass Sie eine Kartei zu einem mehrgliedrigen <q>Karteiwort</q> wie <i>politische korrekt</i> oder sogar zu einem Sprichwort wie <i>dem beißt die Maus keinen Faden ab</i> anlegen können, wodurch das Karteiwort letztlich aus <b>mehreren Wörtern</b> besteht, kann es auch mehrere Formvariantenlisten geben. Legen Sie eine Kartei mit solch einem mehrgliedrigen Karteiwort an, wird die App automatisch zu jedem Wort eine eigene Liste erstellen.</p>
 
 						<figure class="right" title="zum Vergrößern anklicken">
-							<img src="../img/win/hb-menueKartei-formvarianten-ergaenzt.png" alt="">
+							<img src="../img/win/menueKartei-formvarianten-ergaenzt.png" alt="">
 							<figcaption>Formvariantenliste zu einem manuell ergänzten Wort</figcaption>
 						</figure>
 
 						<p id="menueKartei-formvariantenErgaenzenWort">Diese Architektur räumt Ihnen zugleich die Möglichkeit ein, die Liste um beliebige <b>Wörter zu ergänzen</b>; wohlgemerkt Wörter, nicht Varianten zu Wörtern. Wählen Sie den Radio-Button <i>Wort</i> unterhalb des Textfelds aus, geben Sie das gewünschte Wort ein und klicken auf den Button <i>Ergänzen</i>. Zu dem Wort wird eine Liste angelegt; es wird versucht, Formvarianten aus dem <abbr title="Deutschen Textarchiv">DTA</abbr> zu laden. Wie im Falle der Formvarianten können Sie auch beim Ergänzen von Wörtern mehrere zugleich hinzufügen, indem Sie diese durch Leerzeichen getrennt eingeben. Wollen Sie einen Mehrwortausdruck als Wort aufnehmen, müssen sie ihn daher mit geraden Anführungszeichen umschließen: <code class="quelltext">"kleiner Mann"</code>. Im Gegensatz zu den Formvarianten bleibt die Differenzierung von Groß- und Kleinschreibung bei den Wörtern erhalten. Allein Satzzeichen, Klammern und dergleichen werden nach der Eingabe automatisch entfernt.</p>
 
 						<figure class="right" title="zum Vergrößern anklicken">
-							<img src="../img/win/hb-menueKartei-formvarianten-konfiguration.png" alt="">
+							<img src="../img/win/menueKartei-formvarianten-konfiguration.png" alt="">
 							<figcaption>Konfigurations-Popup eines Worts im Formvarianten-Fenster</figcaption>
 						</figure>
 
@@ -3761,7 +3804,7 @@ Mustermann, Erika
 						<p>Mithilfe der <b>Farbpalette</b> im unteren Teil des Popups können Sie die Hintergrundfarbe festlegen, mit der das Wort in der <a href="#belegliste">Belegliste</a> oder der <a href="#karteikarte-leseansicht">Lesenansicht der Karteikarte</a> markiert werden soll. Arbeiten Sie <abbr title="beispielsweise">bspw.</abbr> zum Wort <i>völkisch</i>, möchten Sie es vielleicht mit einem dem semantischen Gehalt angemessen braunen Hintergrund versehen.</p>
 
 						<figure class="right" title="zum Vergrößern anklicken">
-							<img src="../img/win/hb-menueKartei-formvarianten-markierung.png" alt="">
+							<img src="../img/win/menueKartei-formvarianten-markierung.png" alt="">
 							<figcaption>automatisch markiertes Synonym im Umfeld des Karteiworts</figcaption>
 						</figure>
 
@@ -3886,7 +3929,7 @@ Mustermann, Erika
 						<p>Sinn dieser Maßnahme ist, dass Sie Ihre Karteienordner frei verschieben, auf andere Partitionen, in andere Ordnerstrukturen und sogar auf andere Computer kopieren können, ohne dass die Verlinkung zu den Anhängen dabei Schaden nähme. Voraussetzung ist nur, dass sich alle Anhänge im selben oder in einem Unterordner der Kartei befinden. Anhänge mit relativer Pfadangabe, also Anhäge, die in der Ordnerstruktur der Kartei liegen, werden dann nämlich immer wiedergefunden. Um das Beispiel von oben aufzugreifen: Kopieren Sie <span class="datei">C:\ZTJ-Karteien\</span> mit der Kartei <span class="datei">Beispiel.ztj</span> auf einen anderen Computer in den Ordner <span class="datei">D:\Meine Dateien\Forschung\ZTJ-Karteien\</span>, könnte der Anhang <span class="datei">Text.pdf</span> auch weiterhin problemlos aus der Kartei heraus geöffnet werden – weil die Pfadangabe relativ zum Ort der Kartei gespeichert wurde.</p>
 
 						<figure class="right" title="zum Vergrößern anklicken">
-							<img src="../img/win/hb-menueKartei-rechtsklick-anhaenge.png" alt="">
+							<img src="../img/win/menueKartei-rechtsklick-anhaenge.png" alt="">
 							<figcaption>Rechtsklickmenü mit Funktion zum automatischen Ergänzen der Anhänge</figcaption>
 						</figure>
 
@@ -3945,7 +3988,7 @@ Mustermann, Erika
 						<p>Öffnet ein Dialogfenster zum Auswählen eines <a href="#bedeutungsgeruest">Bedeutungsgerüsts</a>.</p>
 
 						<figure class="right" title="zum Vergrößern anklicken">
-							<img src="../img/win/hb-menueKartei-bedeutungsgeruest-wechseln.png" alt="">
+							<img src="../img/win/menueKartei-bedeutungsgeruest-wechseln.png" alt="">
 							<figcaption>Dialogfenster zum Wechseln des Bedeutungsgerüsts</figcaption>
 						</figure>
 
@@ -4011,7 +4054,7 @@ Mustermann, Erika
 						<p>Im Kern handelt es sich bei der Kopierfunktion um eine bequeme Möglichkeit, größere Belegmengen zwischen Karteien, die auf demselben Computer gleichzeitig geöffnet sind, <b>hin- und herzukopieren</b>. Darüber hinaus ermöglicht es die Funktion Ihnen, Belege in ein Austauschformat <b>zu exportieren</b> (das <a href="#ztj-ztb" class="link-dokumentation"><abbr title="Zettel’s Traum Belege">ZTB</abbr>-Format</a>), mit dem eine Belegsammlung unkompliziert <abbr title="zum Beispiel">z. B.</abbr> auf einem anderen Rechner in eine <i class="app-name"></i>-Kartei importiert werden kann.</p>
 
 						<figure class="right" title="zum Vergrößern anklicken">
-							<img src="../img/win/hb-menueBelege-kopieren.png" alt="">
+							<img src="../img/win/menueBelege-kopieren.png" alt="">
 							<figcaption>das Kopieren-Fenster mit fünf vorgemerkten Belegen</figcaption>
 						</figure>
 
@@ -4062,7 +4105,7 @@ Mustermann, Erika
 						<p>Vorgemerkte Belege aus einer anderen Kartei einfügen und/oder Belegsammlungen importieren.</p>
 
 						<figure class="right" title="zum Vergrößern anklicken">
-							<img src="../img/win/hb-menueBelege-einfuegen.png" alt="">
+							<img src="../img/win/menueBelege-einfuegen.png" alt="">
 							<figcaption>das Einfügen-Fenster mit zwei Belegquellen</figcaption>
 						</figure>
 
@@ -4153,7 +4196,7 @@ Gerüst 2 &gt; Gerüst 1</pre>
 						<p>Zum <b>Ändern</b> eines einmal angelegten Ereignisses klicken Sie auf den jeweiligen Text. Anstelle des Texts erscheint ein Text- <abbr title="beziehungsweise">bzw.</abbr> Datumsfeld, in dem Sie die gewünschten Änderungen vornehmen können. Speichern geht via <kbd>⏎</kbd>. Möchten Sie eine Änderung verwerfen oder das Feld wieder verlassen, drücken Sie <kbd>Esc</kbd>.</p>
 
 						<figure class="right" title="zum Vergrößern anklicken">
-							<img src="../img/win/hb-menueKartei-redaktion-datum.png" alt="">
+							<img src="../img/win/menueKartei-redaktion-datum.png" alt="">
 							<figcaption>der Date-Picker im Redaktionsfenster</figcaption>
 						</figure>
 
@@ -4188,14 +4231,14 @@ Gerüst 2 &gt; Gerüst 1</pre>
 						<p>Selbst wenn in der <a href="#menueRedaktion-literaturKopfzeile">Kopfzeile des Datenkbankfenster</a> noch der Hinweis <q>keine Datenbank geladen</q> zu sehen sein sollte, steht Ihnen intern bereits eine Literaturdatenbank zur Verfügung. Sie können also schon vor dem ersten Speichern der Datenbank Titelaufnahmen anlegen.</p>
 
 						<figure class="right" title="zum Vergrößern anklicken">
-							<img src="../img/win/hb-menueRedaktion-literatur-formular.png" alt="">
+							<img src="../img/win/menueRedaktion-literatur-formular.png" alt="">
 							<figcaption>Eingabeformular der Literaturdatenbank</figcaption>
 						</figure>
 
 						<p><b><i>Titelaufnahmen anlegen und ändern:</i></b> Klicken Sie als erstes auf den Radio-Button <i>Titelaufnahme</i>. Sollten Sie über dem Formular noch nicht den grün umrandeten Hinweis <q>Titelaufnahme hinzufügen</q> sehen, klicken Sie auf den Button <i>Hinzufügen</i>. Füllen Sie das Formular aus. Es bietet sich an, mit dem Titel-Feld zu beginnen, denn die App versucht im Falle einer neuen Titelaufnahme die Felder <i>Sigle, ID</i> und <i>Fundort</i> automatisch zu befüllen, je nachdem wie das Titel-Feld gefüllt wurde. Klicken Sie auf den Button <i>Speichern</i>. Die Titelaufnahme ist nun angelegt; über dem Formular steht der blau umrandete Hinweis <q>Titelaufnahme ändern</q>. Wenn Sie möchten, können Sie die Aufnahme nun weiterbearbeiten und erneut speichern. Hierbei wird eine neue Version angelegt, die alte also nicht einfach überschrieben.</p>
 
 						<figure class="right" title="zum Vergrößern anklicken">
-							<img src="../img/win/hb-menueRedaktion-literatur-suche.png" alt="">
+							<img src="../img/win/menueRedaktion-literatur-suche.png" alt="">
 							<figcaption>Suchformular der Literaturdatenbank</figcaption>
 						</figure>
 
@@ -4245,7 +4288,7 @@ Gerüst 2 &gt; Gerüst 1</pre>
 						<p class="eingerueckt">Für den Fall, dass Sie kollaborativ mit mehreren MitarbeiterInnen an ein und derselben Datenbankdatei arbeiten, die <abbr title="beispielsweise">bspw.</abbr> in einem Netzwerkordner liegt: Haben Sie einmal eine Datenbankdatei geladen, wird diese bei jedem Öffnen des Literaturdatenbank-Fensters erneut heruntergeladen, sodass Sie immer die neuste Version haben. Nehmen Sie Änderungen in dieser heruntergeladenen Version vor (fügen Sie neue Titelaufnahmen oder neue Versionen einer Titelaufnahme hinzu, entfernen Sie ganze Titelaufnahmen oder einzelne Versionen einer Titelaufnahme), werden diese zunächst nur lokal im Arbeitsspeichers Ihres Rechners zwischengespeichert. Dabei wird eine Liste an Änderungsoperationen angelegt. Klicken Sie auf <img src="../img/speichern.svg" width="20" height="20" alt="">, überprüft <i class="app-name"></i> vor allem anderen, ob Ihre lokale Datenbankversion identisch mit der aktuellen Datenbankversion ist, denn zwischenzeitlich könnte eine andere BenutzerIn dort ihrerseits Änderungen vorgenommen haben. Sind die Versionen nicht identisch, wird die neue Version intern heruntergeladen. In dieser neuen Version der Datenbankdatei wird die Liste der noch nicht gespeicherten Änderungen abgearbeitet und Ihre bisherige Version durch die geänderte Datenbank ersetzt. Danach haben Sie in Ihrem Programmfenster die aktuelle Datenbankversion.</p>
 
 						<figure class="right" title="zum Vergrößern anklicken">
-							<img src="../img/win/hb-menueRedaktion-literatur-aenderungsmeldung.png" alt="">
+							<img src="../img/win/menueRedaktion-literatur-aenderungsmeldung.png" alt="">
 							<figcaption>Meldung nach dem Übernehmen von Änderungsoperationen</figcaption>
 						</figure>
 
@@ -4268,7 +4311,7 @@ Gerüst 2 &gt; Gerüst 1</pre>
 						<p id="menueRedaktion-literaturTitelsuche"><b><i>Titelsuche</i></b></p>
 
 						<figure class="right" title="zum Vergrößern anklicken">
-							<img src="../img/win/hb-menueRedaktion-literatur-suchergebnisse.png" alt="">
+							<img src="../img/win/menueRedaktion-literatur-suchergebnisse.png" alt="">
 							<figcaption>Suchergebnisse in der Literaturdatenbank</figcaption>
 						</figure>
 
@@ -4333,13 +4376,15 @@ Gerüst 2 &gt; Gerüst 1</pre>
 						<p id="menueRedaktion-literaturVersionen">Wie schon mehrfach geschrieben, können Titelaufnahmen in mehreren <b>Versionen</b> vorliegen. In den Suchergebnissen wird immer nur eine Version einer Titelaufnahme angezeigt. Dabei wird die jüngste Version grundsätzlich bevorzugt. Sind Ihre Suchkriterien allerdings so, dass sie nur auf eine ältere Version zutreffen, wird diese zwar angezeigt, aber mit dem Hinweis <q><span class="obacht">[Titelaufnahme veraltet]</span></q> versehen. Um alle Versionen einzusehen, müssen Sie entweder den Versionen-Text in der Metadatenzeile oder das Icon <img src="../img/kreis-info.svg" width="20" height="20" alt=""> anklicken. Ein kleines Popup-Fenster öffnet sich: das Versionen-Popup.</p>
 
 						<figure class="right" title="zum Vergrößern anklicken">
-							<img src="../img/win/hb-menueRedaktion-literatur-versionen.png" alt="">
+							<img src="../img/win/menueRedaktion-literatur-versionen.png" alt="">
 							<figcaption>das Versionen-Popup</figcaption>
 						</figure>
 
 						<p>Im oberen Teil des <b>Versionen-Popups</b> sehen Sie, wie viele verschiedene Versionen der Titelaufnahme vorliegen, wann und von wem sie erstellt wurden. Die grau hinterlegte Version wird im unteren Teil des Fensters gerade angezeigt. Wählen Sie mit der Maus eine andere Version, bekommen Sie diese zu sehen. Zum raschen Hin- und Herschalten zwischen den Versionen können übrigens auch die Tastaturkürzel <kbd>Strg</kbd> + <kbd>⇧</kbd> <abbr title="beziehungsweise">bzw.</abbr> <kbd>⇩</kbd> verwendet werden.</p>
 
 						<p id="menueRedaktion-literaturLoeschen">Das <b>Löschen</b> von Titelaufnahmen geht nur über dieses Versionen-Popup. Dazu dient das allein hier angezeigte Icon <img src="../img/muelleimer.svg" width="20" height="20" alt="">. Gelöscht werden können immer nur einzelne Versionen einer Titelaufnahme. Erst wenn Sie die letzte Version einer Titelaufnahme entfernen, wird die Titelaufnahme komplett gelöscht.</p>
+
+						<p id="menueRedaktion-literaturXml">Wurde in demselben Fenster, in dem die Literaturdatenbank gerade geöffnet ist, auch eine Kartei geladen, erscheint ein weiteres Icon: <img src="../img/xml.svg" width="20" height="20" alt="">. Mit ihm kann man die jeweilige <b>Titelaufnahme an das <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Redaktionsfenster schicken</b> (<abbr title="vergleiche">vgl.</abbr> den Abschnitt zum <a href="#menueRedaktion-xml"><abbr title="Extensible Markup Language" lang="en">XML</abbr>-Redaktionssystem</a>). Ist dieses Fenster noch nicht geöffnet, wird es durch Klick auf das Icon automatisch aufgerufen. Dabei wird immer die aktuellste Version einer Titelaufnahme an das XML-Fenster geschickt, und zwar auch dann, wenn gerade eine veraltete Titelaufnahme angezeigt wird.</p>
 
 						<p id="menueRedaktion-literaturSondersuchen">Unter dem Suchschlitz finden Sie Links, mit denen Sie <b>Sondersuchen</b> starten können. Bei Sondersuchen werden keine veralteten Datensätze durchsucht; sie beziehen sich also immer auf die jüngste Version einer Titelaufnahme. Im Suchschlitz oder im Datumsfeld eingetragene Werte werden auch bei einer Sondersuche berücksichtigt. Die Sondersuchen können Ihnen jedoch Ergebnisse liefern, für die es ein bisschen komplizierterer Suchalgorithmen bedarf. Gefunden werden dabei im Einzelnen:</p>
 
@@ -4356,7 +4401,7 @@ Gerüst 2 &gt; Gerüst 1</pre>
 						</ul>
 
 						<figure class="right" title="zum Vergrößern anklicken">
-							<img src="../img/win/hb-menueRedaktion-literatur-rechtsklick.png" alt="">
+							<img src="../img/win/menueRedaktion-literatur-rechtsklick.png" alt="">
 							<figcaption>Rechtsklickmenü für eine Titelaufnahme</figcaption>
 						</figure>
 
@@ -4383,7 +4428,7 @@ Gerüst 2 &gt; Gerüst 1</pre>
 						<p>Das <b>Eingabeformular</b> dient sowohl zum Erstellen neuer als auch zum Überarbeiten bestehender Titelaufnahmen. Darum kann es sich, sozusagen, in drei verschiedenen Zuständen befinden: <i>Titelaufnahme hinzufügen</i>, <i>Titelaufnahme ändern</i> und <i>Titelaufnahme veraltet</i>. Der aktuelle Status des Eingabeformulars wird immer in einer Meldung über dem Formular angezeigt:</p>
 
 						<figure class="right" title="zum Vergrößern anklicken">
-							<img src="../img/win/hb-menueRedaktion-literatur-formular-veraltet.png" alt="">
+							<img src="../img/win/menueRedaktion-literatur-formular-veraltet.png" alt="">
 							<figcaption>Eingabeformular mit einer veralteten Titelaufnahme</figcaption>
 						</figure>
 
@@ -4410,6 +4455,8 @@ Gerüst 2 &gt; Gerüst 1</pre>
 								<p><i>Titel</i> (verpflichtend): Für das Ausfüllen des Titelfeldes gibt es fast keine Regeln. Allein Zeilenumbrüche sind nicht erlaubt und werden vor dem Speichern automatisch eliminiert. Sie können dieses Feld (und damit das ganze Eingabeformular) mithilfe der <a href="#menueRedaktion-literaturTitelaufnahmeImport">Importfunktionen</a> automatisch befüllen lassen.</p>
 
 								<p>Beim Pasten von Titelaufnahmen und dann noch einmal bei Speichern werden Algorithmen auf den Titel angewandt, die das Ergebnis typographisch ein wenig aufhübschen. So werden <abbr title="zum Beispiel">z. B.</abbr> nicht-typographische Anführungszeichen automatisch in typographische umgewandelt (&quot; zu „ oder “), drei Punkte werden zu einer horizontalen Ellipse und es werden geschützte Leerzeichen an Stellen gesetzt, wo ein Zeilenumbruch im Allgemeinen unerwünscht ist (<abbr title="zum Beispiel">z. B.</abbr> nach Seitenangaben, die mit einem abgkürzten <abbr title="Seite">S.</abbr> eingeleitet werden).</p>
+
+								<p>Das Icon <img src="../img/xml.svg" width="20" height="20" alt=""> dient dazu, die aktuelle Titelaufnahme an das <a href="#menueRedaktion-xml">XML-Fenster</a> zu schicken. <abbr title="Vergleiche">Vgl.</abbr> <a href="#menueRedaktion-literaturXml">die Anmerkungen zu den Titelaufnahmen</a>.</p>
 							</li>
 
 							<li><i>URL</i> (fakultativ): Die Internetadresse, unter der der Titel zu finden ist. Geben Sie die Internetadresse ein, wird das Datenfeld <i>Aufrufdatum</i> automatisch mit dem aktuellen Tagesdatum befüllt (so es denn leer ist) und <i>Fundort</i> auf <q>online</q>, <q>DTA</q> oder <q>GoogleBooks</q> gestellt.</li>
@@ -4422,7 +4469,7 @@ Gerüst 2 &gt; Gerüst 1</pre>
 
 							<li id="menueRedaktion-literaturTags">
 								<figure class="right" title="zum Vergrößern anklicken">
-									<img src="../img/win/hb-menueRedaktion-literatur-formular-tag-loeschen.png" alt="">
+									<img src="../img/win/menueRedaktion-literatur-formular-tag-loeschen.png" alt="">
 									<figcaption>Löschen eines Tags</figcaption>
 								</figure>
 
@@ -4437,7 +4484,7 @@ Gerüst 2 &gt; Gerüst 1</pre>
 						<p id="menueRedaktion-literaturTitelaufnahmeImport">Sie können Titelaufnahmen mithilfe der Funktionen <i>DTA</i>, <i>XML</i> und <i class="bibtex"><span>Bib</span>T<span>E</span>X</i> (rechts über dem Titelfeld) automatisch aus der Zwischenablage <b>importieren</b>. Dabei haben Sie folgende Möglichkeiten:</p>
 
 						<figure class="right" title="zum Vergrößern anklicken">
-							<img src="../img/win/hb-menueRedaktion-literatur-ppn.png" alt="">
+							<img src="../img/win/menueRedaktion-literatur-ppn.png" alt="">
 							<figcaption><abbr title="Pica-Produktionsnummer">PPN</abbr> in einer Titelanzeige des <abbr title="Gemeinsamen Verbundkatalogs">GVK</abbr></figcaption>
 						</figure>
 
@@ -4471,11 +4518,22 @@ Gerüst 2 &gt; Gerüst 1</pre>
 					<div class="info">
 						<p>Registrieren von Verweisen auf andere Wörter/Ausdrücke.</p>
 
-						<p>Das Dialogfenster ist Teil des Redaktionssystems, das – zumindest in diesem Fall – die sehr spezifischen Bedürfnisse des Projekts <a href="https://adw-goe.de/forschung/weitere-forschungsprojekte/wortgeschichte-digital-teilprojekt-im-zdl/">Wortgeschichte digital</a> adressiert.</p>
+						<p>Das Dialogfenster ist Teil des <a href="#menueRedaktion-xml">Redaktionssystems</a>, das – zumindest in diesem Fall – die sehr spezifischen Bedürfnisse des Projekts <a href="https://adw-goe.de/forschung/weitere-forschungsprojekte/wortgeschichte-digital-teilprojekt-im-zdl/">Wortgeschichte digital</a> adressiert.</p>
 
-						<p>Es stehen drei <b>Verweistypen</b> zur Verfügung: <i>Assoziation, Kollokation</i> und <i>Wortfeld</i>.</p>
+						<p>Grundsätzlich gilt, dass Wortinformationen immer an ein bestimmtes <b>Bedeutungsgerüst</b> gebunden sind. Arbeiten Sie mit mehreren <a href="#bedeutungsgeruest">Bedeutungsgerüsten</a> können diese alle unterschiedliche Wortinformationen mit sich führen.</p>
 
-						<p>Für jeden Verweistyp lassen sich Wortverlinkungen mit drei verschiedenen <b>Linktypen</b> erstellen: <i>Textverweis</i> (Verweis auf eine spezifische Position im Wortartikel), <i>Verweis intern</i> (Verweis auf ein anderes Lemma im Wörterbuch) und <i>Verweis extern</i> (Verweis auf eine externe Internet-Ressource).</p>
+						<figure class="right" title="zum Vergrößern anklicken">
+							<img src="../img/win/menueRedaktion-wortinformationen-kopieren.png" alt="">
+							<figcaption>Kopierformular unterhalb des üblichen Wortinformationen-Formulars</figcaption>
+						</figure>
+
+						<p>Analog zu dem Formular, das nach dem <a href="#bedeutungsgeruest-neu">Erstellen eines neuen Bedeutungsgerüsts</a> erscheint, gibt es auch hier ein <b>Kopierformular</b>, mit dem sie die Wortinformationen, die an ein anderes Bedeutungsgerüst gebunden sind, mit einem Klick klonen können. Das Kopierformular erscheint nur, wenn Sie mehr als ein Bedeutungsgerüst haben und es mindestens ein Bedeutungsgerüst gibt, für das bereits Wortinformationen eingegeben wurden.</p>
+
+						<p>Es stehen vier <b>Verweistypen</b> zur Verfügung: <i>Kollokation, Wortbildung, Wortfeld</i> und <i>Wortfeldartikel</i>.</p>
+
+						<p>Für die Verweistypen lassen sich Wortverlinkungen mit drei verschiedenen <b>Linktypen</b> erstellen: <i>Textverweis</i> (Verweis auf eine spezifische Position im Wortartikel), <i>Verweis intern</i> (Verweis auf ein anderes Lemma im Wörterbuch) und <i>Verweis extern</i> (Verweis auf eine externe Internet-Ressource).</p>
+
+						<p>Für den Verweistyp <i>Wortfeldartikel</i> ist nur der Linktyp <i>Verweis intern</i> zulässig.</p>
 
 						<p>Für jeden Linktyp gibt es ein spezifisches Formular. Die Formularfelder sind im Einzelnen:</p>
 
@@ -4490,16 +4548,185 @@ Gerüst 2 &gt; Gerüst 1</pre>
 
 							<li><b>Verweisziel:</b> das Ziellemma des Wörterbuchs, auf das verwiesen werden soll (nur bei <i>Verweis intern</i>)</li>
 
+							<li><b>Semantik:</b> semantische Typisierung des Verweises (nur bei <i>Textverweis</i> und <i>Verweis intern</i>)</li>
+
 							<li><b>URL:</b> die URL der externen Ressource (nur bei <i>Verweis extern</i>)</li>
 
 							<li><b>Aufrufdatum:</b> das Aufrufdatum der externen Ressource (nur bei <i>Verweis extern</i>)</li>
 						</ul>
 
-						<p>Sobald Wörter/Ausdrücke registriert wurden, erscheint unter dem Formular eine (nach Verweistyp und Alphabet) sortierte Liste. Durch Klick auf eines der Wörter/einen der Ausdrücke kann das Formular mit den entsprechenden Daten gefüllt werden, um die Daten zu ändern. Nach dem Speichern wird der Eintrag in der Liste ersetzt.</p>
+						<p>Sobald Wörter/Ausdrücke registriert wurden, erscheint unter dem Formular eine (nach Verweistyp und Alphabet) sortierte <b>Liste</b>. Durch Klick auf eines der Wörter/einen der Ausdrücke kann das Formular mit den entsprechenden Daten gefüllt werden, um die Daten zu ändern. Nach dem Speichern wird der Eintrag in der Liste ersetzt.</p>
 
-						<p>Wörter/Ausdrücke können <em>nicht mehrfach</em> in unterschiedlichen Kategorien der Liste erscheinen.</p>
+						<p>Wörter/Ausdrücke können <em>nicht mehrfach</em> in unterschiedlichen Kategorien der Liste erscheinen. Sie können aber durchaus mehreren Bedeutungsgerüsten zugeordnet werden. Dabei dürfen je nach Gerüst die Angaben des Worts/Ausdrucks zu Verweistyp, Linktyp <abbr title="und so weiter">usw.</abbr> variieren.</p>
 
-						<p>Das Icon <img src="../img/x-dick.svg" width="20" height="20" alt=""> dient zum Löschen eines Worts/Ausdrucks.</p>
+						<p>Das Icon <img src="../img/x-dick.svg" width="20" height="20" alt=""> dient zum <b>Löschen</b> eines Worts/Ausdrucks.</p>
+
+						<p>Fährt man mit der Maus über einen der Einträge erscheint das Icon <img src="../img/xml.svg" width="20" height="20" alt="">. Mit ihm kann der jeweilige Eintrag an das <b><abbr title="Extensible Markup Language" lang="en">XML</abbr>-Redaktionsfenster</b> geschickt werden. Befindet sich der Eintrag bereits im Fenster, wird er dort durch die neue Version ersetzt. Andernfalls wird er hinzugefügt. Die Sortierung der Einträge im <a href="#menueRedaktion-xml">Redaktionsfenster</a> bleibt dabei erhalten.</p>
+
+						<p>Dasselbe Icon gibt es – immer sichtbar – noch einmal im oberen rechten Bereich des Fenster. Mit ihm können <em>alle</em> Wortinformationen des eingestellten Bedeutungsgerüsts und nicht nur ausgewählte Einträge an das Redaktionsfenster geschickt werden. Dabei werden allerdings alle Wortinformationen, die sich bereits im Redaktionsfenster befinden, überschrieben. Außerdem gehen spezielle Sortierungen verloren, die sie dort <abbr title="eventuell">evtl.</abbr> vorgenommen haben.</p>
+					</div>
+
+					<p class="erklaerung-icon-menues" id="menueRedaktion-xml"><img src="../img/xml.svg" width="24" height="24" alt=""><abbr title="Extensible Markup Language" lang="en">XML</abbr></p>
+
+					<div class="info">
+						<p>Aufrufen des <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Redaktionsfensters.</p>
+
+						<p>Das Nebenfenster, das mit diesem Befehl geöffnet werden kann, ist der zentrale Teil eines Redaktionssystems, das die sehr spezifischen Bedürfnisse des Projekts <a href="https://adw-goe.de/forschung/weitere-forschungsprojekte/wortgeschichte-digital-teilprojekt-im-zdl/">Wortgeschichte digital</a> adressiert. Deswegen und weil es sich bei dem Fenster im Grunde nur um ein großes Formular handelt, sollen die Funktionen hier nur kursorisch beschrieben werden.</p>
+
+						<p><b><i>Icons im Fensterkopf</i></b></p>
+
+						<p class="erklaerung-icon"><img src="../img/dokument-export.svg" width="20" height="20" alt=""><abbr title="Extensible Markup Language" lang="en">XML</abbr>-Datei exportieren; Tastaturkürzel <kbd>Strg</kbd> + <kbd>E</kbd>. Es gibt einige wenige <b>Pflichtangaben</b>, die vor dem Export gemacht werden müssen: Artikel-ID, Artikeltyp und Themenfeld müssen angegeben werden, außerdem müssen mindestens eine Revision und ein Lemma aufgenommen werden und ein Beleg importiert sein.</p>
+
+						<p class="erklaerung-icon"><img src="../img/dokument-import.svg" width="20" height="20" alt=""><abbr title="Extensible Markup Language" lang="en">XML</abbr>-Datei importieren. Fehlerfrei importiert werden können nur Dateien, die dem Schema folgen, auf dessen Grundlage die <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Dateien mit <i class="app-name"></i> erstellt werden.</p>
+
+						<p class="erklaerung-icon"><img src="../img/speichern.svg" width="20" height="20" alt="">Stößt das Speichern der zum Redaktionsfenster gehörenden Kartei an; Tastaturkürzel <kbd>Strg</kbd> + <kbd>S</kbd>. Alle im Redaktionsfenster zu findenden Daten werden automatisch an das Hauptfenster geschickt und zum Speichern vorgemerkt, um sie nach dem Verlassen des Programms wiederherstellen zu können. Das Icon ist nur eine Abkürzung für die Funktion <i>Kartei &gt; Speichern</i> im Hauptfenster, in das man zum Speichern somit nicht eigens wechseln muss.</p>
+
+						<p class="erklaerung-icon"><img src="../img/dokument-import.svg" width="20" height="20" alt=""><abbr title="Extensible Markup Language" lang="en">XML</abbr>-Daten zurücksetzen. Alle Daten, die im Redaktionsfenster bereits eingegeben wurden, werden gelöscht; das Formular wird auf den <q>Auslieferungszustand</q> zurückgestellt.</p>
+
+						<p><b><i>Bereiche</i></b>
+
+						<p>Das Fenster ist in acht Bereiche gegliedert, die sich auch über die Navigation im Kopf des Fensters ansteuern lassen.</p>
+
+						<p>Rechts in der Überschrift eines jeden Bereichs finden sich zwei Augen-Icons: <img src="../img/auge.svg" width="20" height="20" alt=""> und <img src="../img/auge-durchgestrichen.svg" width="20" height="20" alt="">. Mit ihnen können die Details im gesamten Bereich ein- <abbr title="beziehungsweise">bzw.</abbr> ausgeblendet werden.</p>
+
+						<p><b><i>Vorschauköpfe</i></b>
+
+						<figure class="right" title="zum Vergrößern anklicken">
+							<img src="../img/win/menueRedaktion-xml-kopf.png" alt="">
+							<figcaption>ein typischer Vorschaukopf im Redaktionsfenster</figcaption>
+						</figure>
+
+						<p>Beim Füllen des Fensters erscheinen in den Bereichen nach und nach anklickbare Vorschauköpfe. Sie dienen zum einen dazu, einen guten Überblick über die bereits eingepflegten Daten zu erhalten. Andererseits lassen sich mit ihnen einige Funktionen ausführen. Klickt man auf einen der Köpfe, wird <abbr title="zum Beispiel">z. B.</abbr> eine <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Vorschau ein- oder ausgeblendet (Ausnahme bilden hier die Köpfe zu den <i>Nachweisen</i> und den <i>Lesartenverlinkungen</i> im Bereich <i>Bedeutungsgerüst</i>).</p>
+
+						<p>In den Vorschauköpfen gibt es vier bis sechs Icons. Die Pfeil-Icons erscheinen der Übersichtlichkeit halber erst, wenn man mit der Maus über einem Kopf schwebt. Ihre Bedeutung und Funktion im Einzelnen:</p>
+
+						<p class="erklaerung-icon"><img src="../img/check.svg" width="20" height="20" alt="">Zeigt an, dass das zugrundeliegende <abbr title="Extensible Markup Language" lang="en">XML</abbr> wohlgeformt ist.</p>
+
+						<p class="erklaerung-icon"><img src="../img/kreis-ausrufezeichen-rot.svg" width="20" height="20" alt="">Zeigt an, dass das zugrundeliegende <abbr title="Extensible Markup Language" lang="en">XML</abbr> <em>nicht</em> wohlgeformt ist. Klickt man das Icon an, erhält man genauere Informationen über den Fehler.</p>
+
+						<p class="erklaerung-icon"><img src="../img/x-dick.svg" width="20" height="20" alt="">Löscht den Vorschaukopf und die zugehörigen Daten.</p>
+
+						<p class="erklaerung-icon"><img src="../img/pfeil-gerade-hoch.svg" width="20" height="20" alt="">Verschiebt den Kopf und die zugehörigen Daten um eine Position nach oben. Nicht alle Verschiebeoperationen sind legal. Es gibt keine Fehlermeldung, sollte eine illegale Verschiebeoperation versucht werden. Sie wird einfach nicht ausgeführt.</p>
+
+						<p class="erklaerung-icon"><img src="../img/pfeil-gerade-runter.svg" width="20" height="20" alt="">Verschiebt den Kopf und die zugehörigen Daten um eine Position nach unten.</p>
+
+						<p class="erklaerung-icon"><img src="../img/pfeil-gerade-links.svg" width="20" height="20" alt="">Nur in den Abschnittsköpfen von <i>Kurz gefasst</i> und <i>Wortgeschichte:</i> Senkt den Level des Abschnitts und aller in ihm verschachtelten Blöcke um einen Grad. Abschnitte können maximal vier Verschachtelungsgrade haben.</p>
+
+						<p class="erklaerung-icon"><img src="../img/pfeil-gerade-rechts.svg" width="20" height="20" alt="">Nur in den Abschnittsköpfen von <i>Kurz gefasst</i> und <i>Wortgeschichte:</i> Erhöt den Level des Abschnitts und aller in ihm verschachtelten Blöcke um einen Grad.</p>
+
+						<p><b><i><abbr title="Extensible Markup Language" lang="en">XML</abbr>-Vorschau</i></b></p>
+
+						<p>Es ist häufig – aber nicht immer – möglich, den automatisch generierten <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Code zu bearbeiten. Dazu muss man in der <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Vorschau zunächst in den Bearbeiten-Modus wechseln. Dies geht nicht nur über den Button <i>Bearbeiten</i>, sondern auch via Doppelklick im Vorschaufeld. Führt man einen Doppelklick aus, wird der Cursor (ungefähr) an der Stelle platziert, an der man den Klick ausgeführt hat.</p>
+
+						<p>Das Speichern oder Abbrechen der Bearbeitung kann auch via Tastaturkürzel erfolgen: <kbd>Esc</kbd> (abbrechen) oder <kbd>Strg</kbd> + <kbd>Enter</kbd> (speichern).</p>
+
+						<figure class="right" title="zum Vergrößern anklicken">
+							<img src="../img/win/menueRedaktion-xml-fehler.png" alt="">
+							<figcaption>Markierung eines Syntaxfehlers im <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Code</figcaption>
+						</figure>
+
+						<p>Führt eine manuelle Bearbeitung des <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Codes dazu, dass er nicht mehr wohlgeformt ist, erscheint im zugehörigen Kopf nicht nur das Hinweis-Icon <img src="../img/kreis-ausrufezeichen-rot.svg" width="20" height="20" alt="">. Die fehlerhafte Stelle wird darüber hinaus in der <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Vorschau rot 	unterkringelt. (Da der im Hintergrund arbeitende <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Parser mitunter merkwürdige, nicht nachvollziehbare Angaben dazu liefert, wo genau in einer Zeile der Fehler zu finden ist, kann die Markierung mitunter falsch sein.)</p>
+
+						<p>Das Fehlen von Text wird ebenfalls als Fehler interpretiert.</p>
+
+						<p>Der <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Code der Vorschau kann übrigens via Rechtsklick auf dem Vorschaufeld in die Zwischenablage kopiert werden. Das Vorschaufeld darf sich dabei nicht im Bearbeiten-Modus befinden.</p>
+
+						<p><b><i>Metadaten</i></b></p>
+
+						<p>Das Icon <img src="../img/stift.svg" width="20" height="20" alt=""> hinter dem Feld <i>Artikel-ID</i> ermittelt automatisch eine ID mithilfe des Karteiworts/der Karteiwörter.</p>
+
+						<p>Mit dem Formular in der letzten Zeile können <b>Revisionen</b> hinzugefügt werden. Die <i>Änderungsnotiz</i> ist fakultativ. Sind für eine Revision mehrere AutorInnen zuständig, kann man diese durch durch Slash voneinander trennen. Im Feld <i>AutorIn</i> sollte dann <abbr title="zum Beispiel">z. B.</abbr> <q>Karin Muster/Helmut Schuster</q> stehen.</p>
+
+						<p><b><i>Lemmata</i></b></p>
+
+						<p>Es können beliebig viele Lemmata aufgenommen werden. Hat ein Lemma mehrere Schreibungen, müssen die einzelnen Schreibungen im Feld <i>Lemma</i> mit einem Slash voneinander getrennt werden: <q>Clan/Klan</q>.</p>
+
+						<p><b><i>Kurz gefasst und Wortgeschichte</i></b></p>
+
+						<p>Diese beiden Bereiche sind zum Erstellen von Fließtext gedacht. Die Texte müssen immer in Abschnitte gegliedert werden. Ein Abschnitt selbst hat keinen Text; in ihm können sich aber verschiedene Blöcke befinden, die wiederum alle zwingend irgendeinen Text enthalten müssen. Es gibt fünf verschiedene Blocktypen: <i>Überschrift, Textblock, Blockzitat, Liste</i> und <i>Illustration</i>.</p>
+
+						<p>Das Formular zum Hinzufügen von Textblöcken wird – der Übersichtlichkeit halber – standardmäßig ausgeblendet und erscheint erst, wenn man mit der Maus über dem Bereich schwebt, in dem in hellgrauer Schrift <i>Formular</i> steht. Sobald der Fokus in einem der Textfelder liegt, bleibt das Formular auch dann sichtbar, wenn die Maus sich woanders hinbewegt.</p>
+
+						<p>Ein neuer Block kann durch Klick auf das Icon <img src="../img/plus-dick.svg" width="20" height="20" alt=""> oder durch <kbd>Enter</kbd> hinzugefügt werden. <kbd>Enter</kbd> funktioniert nur, wenn der Fokus auf dem <i>Block-Typ</i>-Feld oder dem Icon liegt.</p>
+
+						<p>Neue Abschnitte können auch mit dem Tastaturkürzel <kbd>Strg</kbd> + <kbd>N</kbd> hinzugefügt werden. Ob der Abschnitt unter <i>Kurz gefasst</i> oder unter <i>Wortgeschichte</i> hinzugefügt wird, hängt primär davon ab, wo der Fokus liegt. Liegt der Fokus irgendwo in einem der beiden Bereiche, wird in genau dem Bereich ein neuer Abschnitt hinzugefügt, in dem der Fokus liegt. Liegt der Fokus woanders, wird der Abschnitt normalerweise bei <i>Wortgeschichte</i> ergänzt. Es sei denn, <i>Kurz gefasst</i> ist noch leer, hat also noch keinen Abschnitt. Dann wird er dort ergänzt.</p>
+
+						<p>Beim Einfügen und/oder Speichern von Text nimmt die App zahlreiche Ersetzungsoperationen vor. Dazu gehören einige typographische Anpassungen (drei Punkte zu horizontaler Ellipse, das Einfügen von geschützten Leerzeichen <abbr title="und dos weiter">usw.</abbr>), aber auch das automatische Taggen des Texts. Folgende Phänomene werden getaggt:</p>
+
+						<ul>
+							<li><b>_Text_</b> wird zu <code class="quelltext xml-pretty-print">&lt;Stichwort&gt;Text&lt;/Stichwort&gt;</code></li>
+
+							<li><b>__Text__</b> wird zu <code class="quelltext xml-pretty-print">&lt;erwaehntes_Zeichen&gt;Text&lt;/erwaehntes_Zeichen&gt;</code></li>
+
+							<li><b>**Text**</b> wird zu <code class="quelltext xml-pretty-print">&lt;Hervorhebung Stil="#i"&gt;Text&lt;/Hervorhebung&gt;</code></li>
+
+							<li><b>‚Text‘</b> wird zu <code class="quelltext xml-pretty-print">&lt;Paraphrase&gt;Text&lt;/Paraphrase&gt;</code> (innerhalb von <code class="quelltext xml-pretty-print">&lt;Zitat&gt;</code> und im Blocktyp <i>Blockzitat</i> wird der Text als <code class="quelltext xml-pretty-print">&lt;Zitat&gt;Text&lt;/Zitat&gt;</code> ausgezeichnet)</li>
+
+							<li><b>„Text“</b> wird zu <code class="quelltext xml-pretty-print">&lt;Zitat&gt;Text&lt;/Zitat&gt;</code></li>
+
+							<li><b>»Text«</b> wird zu <code class="quelltext xml-pretty-print">&lt;Hervorhebung Stil="#perspective"&gt;Text&lt;/Hervorhebung&gt;</code></li>
+
+							<li><b>((Text))</b> wird zu <code class="quelltext xml-pretty-print">&lt;Anmerkung&gt;Text&lt;/Anmerkung&gt;</code></li>
+
+							<li><b>[Text]</b> wird zu <code class="quelltext xml-pretty-print">&lt;Autorenzusatz&gt;Text&lt;/Autorenzusatz&gt;</code> (nur im Blocktyp <i>Blockzitat</i> und innerhalb von <code class="quelltext xml-pretty-print">&lt;Zitat&gt;</code>)</li>
+
+							<li><b>{Text}</b> wird zu <code class="quelltext xml-pretty-print">&lt;Autorenzusatz&gt;Text&lt;/Autorenzusatz&gt;</code> (nur im Blocktyp <i>Blockzitat</i> und innerhalb von <code class="quelltext xml-pretty-print">&lt;Zitat&gt;</code>)</li>
+
+							<li>
+								<p><b>[Text](http://www.url.de/)(20.7.2020)</b> wird zu</p>
+
+								<pre class="quelltext xml-pretty-print">&lt;Verweis_extern&gt;
+  &lt;Verweistext&gt;Text&lt;/Verweistext&gt;
+  &lt;Verweisziel/&gt;
+  &lt;Fundstelle&gt;
+    &lt;URL&gt;http://www.url.de/&lt;/URL&gt;
+    &lt;Aufrufdatum&gt;20.07.2020&lt;/Aufrufdatum&gt;
+    &lt;Fundort&gt;online&lt;/Fundort&gt;
+  &lt;/Fundstelle&gt;
+&lt;/Verweis_extern&gt;</pre>
+
+								<p>Die letzte Klammer mit dem Datum ist fakultativ. Sie darf also fehlen.</p>
+							</li>
+
+							<li>
+								<p><b>[Text](Ziel)(Synonym)</b> wird zu</p>
+
+								<pre class="quelltext xml-pretty-print">&lt;Verweis Typ="Synonym"&gt;
+  &lt;Verweistext&gt;Text&lt;/Verweistext&gt;
+  &lt;Verweisziel&gt;Ziel&lt;/Verweisziel&gt;
+&lt;/Verweis&gt;</pre>
+
+								<p>Die letzte Klammer mit den Angaben zur Semantik ist fakultativ. Sie darf also fehlen.</p>
+							</li>
+
+							<li><b>z. B.</b> wird zu <code class="quelltext xml-pretty-print">&lt;Abkuerzung Expansion="zum Beispiel"&gt;z. B.&lt;/Abkuerzung&gt;</code> (dies ist nur ein Beispiel; das automatische Taggen funktioniert mit einer Vielzahl von Abkürzungen)</li>
+
+							<li><b>n-n-1859-19</b> wird zu <code class="quelltext xml-pretty-print">&lt;Belegreferenz Ziel="n-n-1859-19"/&gt;</code> (dies ist nur ein Beispiel; es gibt einen Algorithmus, der die IDs von Belegen im Text erkennt; solche IDs können via <a href="#belegliste-textZwischenablageReferenz">Rechtsklick</a> in der <a href="#belegliste">Belegliste</a> in die Zwischenablage kopiert werden)</li>
+
+							<li><b>dwb2 1, 35</b> wird zu <code class="quelltext xml-pretty-print">&lt;Literaturreferenz Ziel="dwb2"&gt;1, 35&lt;/Literaturreferenz&gt;</code> (dies ist nur ein Beispiel; der Erkennungsalgorithmus soll hier nicht weiter erläutert werden)</li>
+						</ul>
+
+						<p><b><i>Belege</i></b></p>
+
+						<p>Die Belege können nicht manuell umsortiert werden. Sie werden automatisch nach Entstehungsdatum sortiert. Ist ein Tagesdatum bekannt, erfolgt die Sortierung nach Jahr, Monat und Tag.</p>
+
+						<p>Belege können auch aus der Zwischenablage eingefügt werden. Liegt in ihr ein <a href="#belegliste-xmlZwischenablageBelegschnitt">XML-Belegschnitt</a>, kann man ihn mithilfe des Icons <img src="../img/einfuegen.svg" width="20" height="20" alt=""> (in der Bereichsüberschrift neben den Augen) importieren.</p>
+
+						<p><abbr title="Vergleiche">Vgl.</abbr> zum automatischen Taggen der Belege den entsprechenden <a href="#xml-belegschnitt" class="link-dokumentation"><abbr title="Abschnitt">Abschn.</abbr> in der technischen Dokumentation</a>.</p>
+
+						<p><b><i>Literatur</i></b></p>
+
+						<p>Die Literaturtitel können nicht manuell umsortiert werden. Sie werden automatisch alphanumerisch nach Sigle sortiert.</p>
+
+						<p><b><i>Wortinformationen</i></b></p>
+
+						<p>Die Wortinformationen sind immer an ein Bedeutungsgerüst gebunden. Befindet sich noch kein Bedeutungsgerüst im Fenster wird der erste Wortinformationenblock angezeigt, der gefunden werden kann.</p>
+
+						<p><b><i>Bedeutungsgerüste</i></b></p>
+
+						<p>Es können mehrere Bedeutungsgerüste importiert werden. (<span class="obacht">Aber Achtung!</span> Zur Zeit wird nur das zuerst importierte Gerüst exportiert – das zuerst importierte, nicht das Gerüst mit der niedrigsten Ordnungsnummer!)</p>
+
+						<p>Für die Verlinkung von Bedeutungen mit einer Textstelle und für die Liste der Nachweise gibt es zwar Formulare, um das Ändern und Hinzufügen bequemer zu gestalten. Diese Positionen können aber durchaus auch manuell im XML eingetragen/geändert werden. Die neuen Daten werden nach dem Speichern automatisch in den jeweiligen Formularbereich übernommen.</p>
 					</div>
 				</section>
 
@@ -4517,7 +4744,7 @@ Gerüst 2 &gt; Gerüst 1</pre>
 						<p>Diese Funktion <strong class="obacht">bezieht sich nur auf Textfelder</strong>!</p>
 
 						<figure class="right" title="zum Vergrößern anklicken">
-							<img src="../img/win/hb-menueBearbeiten-rechtsklick.png" alt="">
+							<img src="../img/win/menueBearbeiten-rechtsklick.png" alt="">
 							<figcaption>Bearbeiten-Funktionen via Rechtsklick auf einem Textfeld</figcaption>
 						</figure>
 
@@ -4688,7 +4915,7 @@ Gerüst 2 &gt; Gerüst 1</pre>
 						<p>Öffnet ein Fenster mit dem <a href="#" class="link-fehlerlog">Fehlerlog</a>.</p>
 
 						<figure class="right" title="zum Vergrößern anklicken">
-							<img src="../img/win/hb-hilfe-fehlerlog.png" alt="">
+							<img src="../img/win/hilfe-fehlerlog.png" alt="">
 							<figcaption>ein Eintrag im Fehlerlog</figcaption>
 						</figure>
 

@@ -138,6 +138,11 @@
 	mask-image: url(../../img/kreis-info.svg);
 }
 
+#quick-redaktion-xml {
+	-webkit-mask-image: url(../../img/xml.svg);
+	mask-image: url(../../img/xml.svg);
+}
+
 #quick-belege-hinzufuegen {
 	-webkit-mask-image: url(../../img/dokument-plus.svg);
 	mask-image: url(../../img/dokument-plus.svg);

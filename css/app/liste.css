@@ -399,7 +399,8 @@ p.no-indent + .filter-baum, /* betrifft Verschiedenes > Filterlogik */
 .bedeutungen-opt-block a,
 .beleg-opt-block a,
 .filter-ctrl-block a,
-.liste-opt-block a {
+.liste-opt-block a,
+#red-wi-xml {
 	display: inline-block;
 	border-right: 1px solid var(--linie);
 	padding: 0 5px;
@@ -415,7 +416,8 @@ p.no-indent + .filter-baum, /* betrifft Verschiedenes > Filterlogik */
 .beleg-opt-block a:first-child,
 .filter-ctrl-block a:first-child,
 .liste-opt-block a:first-child,
-.liste-opt-block a.kopieren-aus {
+.liste-opt-block a.kopieren-aus,
+#red-wi-xml {
 	border-top-left-radius: 3px;
 	border-bottom-left-radius: 3px;
 }
@@ -425,7 +427,8 @@ p.no-indent + .filter-baum, /* betrifft Verschiedenes > Filterlogik */
 .beleg-opt-block a.beleg-opt-anzeige-letztes,
 .filter-ctrl-block a:last-child,
 .liste-opt-block a:last-child,
-.liste-opt-block:not(.liste-opt-anzeige-an):not(:hover):not(:focus-within) a.liste-opt-anzeige-letztes {
+.liste-opt-block:not(.liste-opt-anzeige-an):not(:hover):not(:focus-within) a.liste-opt-anzeige-letztes,
+#red-wi-xml {
 	border-right: 0;
 	border-top-right-radius: 3px;
 	border-bottom-right-radius: 3px;
@@ -434,7 +437,8 @@ p.no-indent + .filter-baum, /* betrifft Verschiedenes > Filterlogik */
 .bedeutungen-opt-block a:focus,
 .beleg-opt-block a:focus,
 .filter-ctrl-block a:focus,
-.liste-opt-block a:focus {
+.liste-opt-block a:focus,
+#red-wi-xml:focus {
 	background-color: var(--hintergrund);
 	color: var(--farbe);
 }
@@ -455,7 +459,8 @@ p.no-indent + .filter-baum, /* betrifft Verschiedenes > Filterlogik */
 .bedeutungen-opt-block svg path,
 .beleg-opt-block svg path,
 .filter-ctrl-block svg path,
-.liste-opt-block svg path {
+.liste-opt-block svg path,
+#red-wi-xml svg path {
 	fill: currentcolor;
 }
 

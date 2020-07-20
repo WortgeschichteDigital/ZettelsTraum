@@ -296,12 +296,46 @@ let dropdown = {
 			dropdown.data = [...redLit.eingabe.fundorte];
 		} else if (feld_id === "red-lit-eingabe-tg") {
 			dropdown.data = redLit.eingabeTagsAuflisten();
+		} else if (feld_id === "red-wi-gn") {
+			dropdown.data = dropdown.dataGerueste(data.bd.gr);
 		} else if (feld_id === "red-wi-vt") {
 			dropdown.data = [...redWi.dropdown.vt];
 		} else if (feld_id === "red-wi-lt") {
 			dropdown.data = [...redWi.dropdown.lt];
+		} else if (/^red-wi-.+-se$/.test(feld_id)) {
+			dropdown.data = [...redWi.dropdown.se];
 		} else if (/^red-wi-.+-tx$/.test(feld_id)) {
 			dropdown.data = redWi.dropdownVerweistexte();
+		} else if (feld_id === "red-wi-copy-gn") {
+			dropdown.data = redWi.kopierenDropdown();
+		} else if (feld_id === "md-ty") {
+			dropdown.data = [...xml.dropdown.artikelTypen];
+		} else if (feld_id === "md-tf") {
+			dropdown.data = [...xml.data.themenfelder];
+		} else if (feld_id === "md-re-au") {
+			dropdown.data = [...xml.data.autorinnen];
+		} else if (feld_id === "le-le") {
+			dropdown.data = xml.lemmata();
+		} else if (feld_id === "le-ty") {
+			dropdown.data = [...xml.dropdown.lemmaTypen];
+		} else if (/^(le-re|bg-tf-ti)$/.test(feld_id)) {
+			dropdown.data = xml.dropdownReferenzen();
+		} else if (/^abschnitt-/.test(feld_id)) {
+			dropdown.data = [...xml.dropdown.abschnittTypen];
+		} else if (/^textblock-add/.test(feld_id)) {
+			dropdown.data = [...xml.dropdown.abschnittBloecke];
+		} else if (/^textblock-[0-9]+-ty$/.test(feld_id)) {
+			dropdown.data = [...xml.dropdown.listenTypen];
+		} else if (/^abb-[0-9]+-bildposition$/.test(feld_id)) {
+			dropdown.data = [...xml.dropdown.abbPositionen];
+		} else if (feld_id === "nw-ty") {
+			dropdown.data = [...xml.dropdown.nachweisTypen];
+		} else if (feld_id === "nw-lit-si") {
+			dropdown.data = xml.dropdownSiglen();
+		} else if (/-sel-gr$/.test(feld_id)) {
+			dropdown.data = xml.dropdownGerueste();
+		} else if (feld_id === "bg-tf-li") {
+			dropdown.data = xml.dropdownLesarten().arr;
 		}
 		// Dropdown erzeugen und einhängen
 		let span = document.createElement("span");
@@ -617,9 +651,13 @@ let dropdown = {
 				karteisuche.filterFelder(caller);
 				// das erste Input-Feld hinter dem Caller fokussieren
 				document.getElementById(caller).parentNode.nextSibling.firstChild.focus();
-			} else if (/^red-lit-eingabe-/.test(caller)) {
-				feld.dispatchEvent(new KeyboardEvent("input"));
-			} else if (caller === "red-wi-lt") {
+			} else if (/^red-wi-(gn|lt)$/.test(caller)) {
+				feld.dispatchEvent(new Event("input"));
+			} else if (/-sel-gr$/.test(caller)) {
+				xml.bgSel({caller});
+			} else if (/^(red-lit-eingabe-|md-(ty|tf)|abschnitt-|textblock-|abb-)/.test(caller)) {
+				feld.dispatchEvent(new Event("change"));
+			} else if (caller === "nw-ty") {
 				feld.dispatchEvent(new Event("input"));
 			}
 			// Dropdown schließen
