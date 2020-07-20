@@ -18,6 +18,21 @@
 	mask-image: url(../img/bedeutung.svg);
 }
 
+.icon-auge {
+	-webkit-mask-image: url(../img/auge.svg);
+	mask-image: url(../img/auge.svg);
+}
+
+.icon-auge-durchgestrichen {
+	-webkit-mask-image: url(../img/auge-durchgestrichen.svg);
+	mask-image: url(../img/auge-durchgestrichen.svg);
+}
+
+.icon-einfuegen {
+	-webkit-mask-image: url(../img/einfuegen.svg);
+	mask-image: url(../img/einfuegen.svg);
+}
+
 .icon-entkoppeln {
 	-webkit-mask-image: url(../img/x-dick.svg);
 	mask-image: url(../img/x-dick.svg);
@@ -48,6 +63,11 @@
 	mask-image: url(../img/oeffnen.svg);
 }
 
+.icon-pfeil-gerade-hoch {
+	-webkit-mask-image: url(../img/pfeil-gerade-hoch.svg);
+	mask-image: url(../img/pfeil-gerade-hoch.svg);
+}
+
 .icon-pfeil-gerade-links {
 	-webkit-mask-image: url(../img/pfeil-gerade-links.svg);
 	mask-image: url(../img/pfeil-gerade-links.svg);
@@ -58,9 +78,19 @@
 	mask-image: url(../img/pfeil-gerade-rechts.svg);
 }
 
+.icon-pfeil-gerade-runter {
+	-webkit-mask-image: url(../img/pfeil-gerade-runter.svg);
+	mask-image: url(../img/pfeil-gerade-runter.svg);
+}
+
 .icon-pfeil-kreis {
 	-webkit-mask-image: url(../img/pfeil-kreis.svg);
 	mask-image: url(../img/pfeil-kreis.svg);
+}
+
+.icon-plus-dick {
+	-webkit-mask-image: url(../img/plus-dick.svg);
+	mask-image: url(../img/plus-dick.svg);
 }
 
 .icon-speichern {

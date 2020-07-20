@@ -961,7 +961,7 @@ let liste = {
 			return `<span class="klammer-technisch">[:${p1}:]</span>`;
 		});
 		// Autorenzusatz
-		text = text.replace(/(?<!<span class="klammer-[a-z]+">)\{.+?\}/g, m => {
+		text = text.replace(/(?<!<span class="klammer-[a-z]+">)\{.*?\}/g, m => {
 			return `<span class="klammer-autorenzusatz">${m}</span>`;
 		});
 		// Löschung
@@ -1908,6 +1908,9 @@ let liste = {
 				case "xmlReferenz":
 					auswahl = "4";
 					break;
+				case "xmlFenster":
+					auswahl = "5";
+					break;
 			}
 			// Aktion künftig ohne Nachfrage ausführen
 			if (document.getElementById("ctrlC-auto").checked) {
@@ -1941,6 +1944,9 @@ let liste = {
 				break;
 			case "4":
 				xml.referenz();
+				break;
+			case "5":
+				xml.schnittInXmlFenster();
 				break;
 		}
 	},

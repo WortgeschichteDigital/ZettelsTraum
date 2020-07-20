@@ -87,6 +87,10 @@ let stamm = {
 		stamm.geaendert = false;
 		// Kopf und Liste initial aufbauen
 		stamm.aufbauen();
+		// Maximalhöhe der Variantenliste festlegen
+		helfer.elementMaxHeight({
+			ele: document.getElementById("stamm-liste"),
+		});
 	},
 	// Formvarianten-Fenster schließen
 	schliessen () {
@@ -690,6 +694,11 @@ let stamm = {
 		stamm.kopf();
 		// Abschluss
 		stamm.ergaenzenAbschluss();
+		// importiertes Wort (bei mehreren das letzte) auswählen
+		if (importieren.length) {
+			let neuesWort = document.querySelector(`#stamm-kopf [data-wort="${importieren[importieren.length - 1]}"]`);
+			neuesWort.dispatchEvent(new Event("click"));
+		}
 	},
 	// Abschluss des Ergänzen einer Variante oder eines Worts
 	ergaenzenAbschluss () {

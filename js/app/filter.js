@@ -1564,6 +1564,10 @@ let filter = {
 			last_font_y = y;
 			ctx.fillText(i, 32, y);
 		}
+		// Maximalhöhe der Variantenliste festlegen
+		helfer.elementMaxHeight({
+			ele: document.getElementById("zeitraumgrafik-cont-over"),
+		});
 	},
 	// Reduktionsmodus der Filter umschalten
 	ctrlReduzierenToggle () {

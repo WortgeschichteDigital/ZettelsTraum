@@ -46,6 +46,10 @@ let dialog = {
 			// Timeout, sonst wird onkeyup das Fenster sofort geschlossen (betrifft Prompt)
 			setTimeout(() => document.getElementById("dialog-ok").querySelector("input").focus(), 25);
 		}
+		// Maximalhöhe des Fensters anpassen
+		helfer.elementMaxHeight({
+			ele: document.getElementById("dialog-text"),
+		});
 	},
 	// Text in Dialog-Fenster eintragen
 	//   text = String

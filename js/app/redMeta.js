@@ -25,6 +25,10 @@ let redMeta = {
 		redMeta.bearbAuflisten();
 		let be = document.getElementById("red-meta-be");
 		be.value = "";
+		// Maximalhöhe des Fensters anpassen
+		helfer.elementMaxHeight({
+			ele: document.getElementById("red-meta-over"),
+		});
 	},
 	// Tags auflisten
 	tags () {

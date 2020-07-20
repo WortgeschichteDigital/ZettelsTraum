@@ -19,6 +19,10 @@
 	padding: 10px;
 }
 
+#tagger-cont > p {
+	margin-top: 25px;
+}
+
 #tagger-cont p:last-child {
 	margin-bottom: 0;
 }
@@ -42,7 +46,10 @@
 }
 
 #tagger-typen {
-	margin-bottom: 25px;
+	/* padding, damit der Outline im ersten und
+	letzten Element nicht abgeschnitten wird */
+	padding: 1px 0;
+	transition: max-height .5s ease;
 }
 
 #tagger-typen.leer {

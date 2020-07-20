@@ -40,6 +40,7 @@ window.addEventListener("load", async () => {
 	ipcRenderer.on("redaktion-literatur", () => redLit.oeffnen());
 	ipcRenderer.on("redaktion-metadaten", () => redMeta.oeffnen());
 	ipcRenderer.on("redaktion-wortinformationen", () => redWi.oeffnen());
+	ipcRenderer.on("redaktion-xml", () => redXml.oeffnen());
 	ipcRenderer.on("belege-hinzufuegen", () => {
 		// Sperre für macOS (Menüpunkte können nicht deaktiviert werden)
 		if (!kartei.wort) {
@@ -81,6 +82,7 @@ window.addEventListener("load", async () => {
 	ipcRenderer.on("optionen-zuletzt", (evt, karteien) => zuletzt.update(karteien));
 	ipcRenderer.on("optionen-zuletzt-verschwunden", (evt, verschwunden) => zuletzt.verschwundenUpdate(verschwunden));
 	ipcRenderer.on("optionen-fenster", (evt, fenster, status) => optionen.data[fenster] = status);
+	ipcRenderer.on("optionen-letzter-pfad", (evt, pfad) => optionen.aendereLetzterPfad(pfad));
 	// Bedeutungsgerüst-Fenster
 	ipcRenderer.on("bedeutungen-fenster-daten", () => bedeutungenWin.daten());
 	ipcRenderer.on("bedeutungen-fenster-geschlossen", () => bedeutungenWin.contentsId = 0);
@@ -92,6 +94,10 @@ window.addEventListener("load", async () => {
 		beleg.bedeutungEinAustragen(bd, eintragen);
 		helfer.fensterFokus();
 	});
+	// XML-Fenster
+	ipcRenderer.on("red-xml-daten", () => redXml.daten());
+	ipcRenderer.on("red-xml-speichern", (evt, daten) => redXml.speichern({daten}));
+	ipcRenderer.on("red-xml-geschlossen", () => redXml.contentsId = 0);
 	// Dialog
 	ipcRenderer.on("dialog-anzeigen", (evt, text) => {
 		dialog.oeffnen({
@@ -106,8 +112,43 @@ window.addEventListener("load", async () => {
 
 	// EVENTS: RESIZE
 	window.addEventListener("resize", () => {
-		karteisuche.hoeheTrefferliste(true);
-		notizen.maxHeight();
+		clearTimeout(helfer.resizeTimeout);
+		helfer.resizeTimeout = setTimeout(() => {
+			let elemente = [
+				"anhaenge-cont",
+				"dialog-text",
+				"drucken-cont",
+				"einstellungen-sec-allgemeines",
+				"einstellungen-sec-kopieren",
+				"einstellungen-sec-literatur",
+				"einstellungen-sec-menue",
+				"einstellungen-sec-notizen",
+				"einstellungen-sec-bedeutungsgeruest",
+				"einstellungen-sec-karteikarte",
+				"einstellungen-sec-filterleiste",
+				"einstellungen-sec-belegliste",
+				"gerueste-cont-over",
+				"import-cont-over",
+				"karteisuche-karteien",
+				"kopieren-einfuegen-over",
+				"kopieren-liste-cont",
+				"meta-cont-over",
+				"notizen-feld",
+				"red-lit-suche-titel",
+				"red-meta-over",
+				"red-wi-cont-over",
+				"redaktion-cont-over",
+				"stamm-liste",
+				"tagger-typen",
+				"updatesWin-notes",
+				"zeitraumgrafik-cont-over",
+			];
+			for (let e of elemente) {
+				helfer.elementMaxHeight({
+					ele: document.getElementById(e),
+				});
+			}
+		}, 100);
 	});
 
 	// EVENTS: TASTATUREINGABEN
@@ -201,7 +242,7 @@ window.addEventListener("load", async () => {
 		}
 	});
 	document.getElementById("beleg-bs").addEventListener("paste", evt => beleg.pasteBs(evt));
-	document.querySelectorAll("#beleg .icon-link").forEach(a => {
+	document.querySelectorAll("#beleg .icon-link, #beleg .text-link").forEach(a => {
 		if (a.classList.contains("icon-stern")) { // Bewertung
 			beleg.bewertungEvents(a);
 		} else if (/icon-tools/.test(a.getAttribute("class"))) { // Text-Tools
@@ -234,6 +275,7 @@ window.addEventListener("load", async () => {
 	document.getElementById("bedeutungen-speichern").addEventListener("click", () => bedeutungen.speichern());
 	document.getElementById("bedeutungen-schliessen").addEventListener("click", () => bedeutungen.schliessen());
 	document.getElementById("bedeutungen-gerueste-config").addEventListener("click", evt => bedeutungenGerueste.oeffnen(evt));
+	bedeutungen.xml({icon: document.getElementById("bedeutungen-link-xml")});
 	document.querySelector(`[for="beleg-bd"]`).addEventListener("click", () => bedeutungenGeruest.oeffnen());
 	// Tagger
 	document.getElementById("tagger-speichern").addEventListener("click", () => tagger.speichern());
@@ -327,6 +369,7 @@ window.addEventListener("load", async () => {
 	document.querySelectorAll("#red-lit-suche-sonder a").forEach(a => redLit.sucheSonder(a));
 	document.querySelectorAll("#red-lit-suche-treffer a").forEach(a => redLit.sucheNav(a));
 	document.querySelectorAll("#red-lit-eingabe input, #red-lit-eingabe textarea").forEach(i => redLit.eingabeListener(i));
+	redLit.xml({icon: document.getElementById("red-lit-eingabe-ti-xml-fenster")});
 	document.getElementById("red-lit-eingabe-ti-dta").addEventListener("click", evt => {
 		evt.preventDefault();
 		redLit.dbCheck(() => redLit.eingabeDTA(), false);
@@ -351,7 +394,8 @@ window.addEventListener("load", async () => {
 	document.getElementById("red-lit-export-exportieren").addEventListener("click", () => redLit.dbExportieren());
 	document.getElementById("red-lit-export-abbrechen").addEventListener("click", () => overlay.schliessen(document.getElementById("red-lit-export") ) );
 	// Wortinformationen
-	document.querySelectorAll("#red-wi-form input").forEach( input => redWi.formListener({input}) );
+	document.querySelectorAll("#red-wi-form input, #red-wi-copy input").forEach( input => redWi.formListener({input}) );
+	redWi.xml({icon: document.getElementById("red-wi-xml")});
 	// Karteisuche
 	document.getElementById("karteisuche-suchen").addEventListener("click", () => karteisuche.suchenPrep());
 	document.getElementById("karteisuche-suchenCache").addEventListener("click", () => karteisuche.suchenPrepZtj([]));

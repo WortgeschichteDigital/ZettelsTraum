@@ -54,7 +54,7 @@ let popup = {
 			}
 			items.push({name: "text", sub: ["kopieren", "textReferenz"]});
 			if (selInBeleg) {
-				items.push({name: "xml", sub: ["xmlBeleg", "xmlReferenz"]});
+				items.push({name: "xml", sub: ["xmlBeleg", "xmlReferenz"]}, "xmlFenster");
 			} else if (/^(karte|liste)$/.test(helfer.hauptfunktion)) {
 				items.push({name: "xml", sub: ["xmlReferenz"]});
 			}
@@ -119,6 +119,9 @@ let popup = {
 				items.push("link", "sep", "schliessen");
 			} else if (oben === "red-lit") {
 				items.push("link", "sep", "titelBearbeiten", "titelAufnahmen", {name: "titelAufnahmeCp", sub: ["titelAufnahmeXml", "titelAufnahmeText"]}, {name: "titelReferenzCp", sub: ["titelReferenzXml", "titelReferenzText"]}, "sep", "literaturConf", "sep", "schliessen");
+				if (kartei.wort) {
+					items.splice(4, 0, "titelXml");
+				}
 				if (popup.titelaufnahme.popup) {
 					items.splice(items.indexOf("titelAufnahmen"), 1, "titelLoeschen");
 				}
@@ -157,6 +160,9 @@ let popup = {
 			popup.belegeAuflisten(items);
 		} else if (target === "titelaufnahme") {
 			items.push("titelBearbeiten", "titelAufnahmen", {name: "titelAufnahmeCp", sub: ["titelAufnahmeXml", "titelAufnahmeText"]}, {name: "titelReferenzCp", sub: ["titelReferenzXml", "titelReferenzText"]}, "sep", "literaturConf", "sep", "schliessen");
+			if (kartei.wort) {
+				items.splice(2, 0, "titelXml");
+			}
 			if (popup.titelaufnahme.popup) {
 				items.splice(items.indexOf("titelAufnahmen"), 1, "titelLoeschen");
 			}

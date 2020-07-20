@@ -22,6 +22,7 @@ const dienste = require("./js/main/dienste"),
 //       "dokumentation" = Nebenfenster "technische Dokumentation"
 //       "handbuch"      = Nebenfenster "Handbuch"
 //       "fehlerlog"     = Nebenfenster "Fehlerlog"
+//       "xml"           = Nebenfenster "XML"
 //       "app"           = modales Nebenfenster "Über App"
 //       "electron"      = modales Nebenfenster "Über Electron")
 //     kartei:      String (Pfad zur Kartei, die gerade in dem Fenster geladen ist;
@@ -193,6 +194,7 @@ layoutMenu = [
 				label: "Notizen",
 				icon: path.join(__dirname, "img", "menu", "stift.png"),
 				click: () => appMenu.befehl("kartei-notizen"),
+				accelerator: "CommandOrControl+Alt+N",
 				id: "kartei-notizen",
 			},
 			{
@@ -299,6 +301,12 @@ layoutMenu = [
 				icon: path.join(__dirname, "img", "menu", "kreis-info.png"),
 				click: () => appMenu.befehl("redaktion-wortinformationen"),
 				id: "redaktion-wortinformationen",
+			},
+			{
+				label: "XML",
+				icon: path.join(__dirname, "img", "menu", "xml.png"),
+				click: () => appMenu.befehl("redaktion-xml"),
+				id: "redaktion-xml",
 			},
 		],
 	},
@@ -610,7 +618,7 @@ appMenu = {
 			return;
 		}
 		// zu deaktivierende Menüpunkte durchgehen
-		let elemente = ["kartei-speichern", "kartei-speichern-unter", "kartei-formvarianten", "kartei-notizen", "kartei-anhaenge", "kartei-lexika", "kartei-metadaten", "kartei-bedeutungen", "kartei-bedeutungen-wechseln", "kartei-bedeutungen-fenster", "kartei-suche", "kartei-schliessen", "redaktion-metadaten", "redaktion-ereignisse", "redaktion-wortinformationen", "belege"];
+		let elemente = ["kartei-speichern", "kartei-speichern-unter", "kartei-formvarianten", "kartei-notizen", "kartei-anhaenge", "kartei-lexika", "kartei-metadaten", "kartei-bedeutungen", "kartei-bedeutungen-wechseln", "kartei-bedeutungen-fenster", "kartei-suche", "kartei-schliessen", "redaktion-metadaten", "redaktion-ereignisse", "redaktion-wortinformationen", "redaktion-xml", "belege"];
 		for (let j = 0, len = layoutMenu.length; j < len; j++) {
 			// sollen vielleicht alle Menüpunkte deaktiviert werden?
 			let alle = false;
@@ -682,10 +690,10 @@ appMenu = {
 				if (!win.hasOwnProperty(id)) {
 					continue;
 				}
-				if (win[id].typ === "bedeutungen") {
-					// Bedeutungsgerüst-Fenster werden vom zugehörigen Hauptfenster geschlossen
-					// (kann zu einem Fehler führen, wenn hier auch noch einmal versucht wird,
-					// sie zu schließen)
+				if (/^bedeutungen|xml$/.test(win[id].typ)) {
+					// Bedeutungsgerüst- und XML-Fenster werden vom zugehörigen Hauptfenster
+					// geschlossen (kann zu einem Fehler führen, wenn hier auch noch einmal
+					// versucht wird, sie zu schließen)
 					continue;
 				}
 				let w = BrowserWindow.fromId(parseInt(id, 10));
@@ -896,13 +904,24 @@ fenster = {
 	},
 	// Neben-Fenster erstellen
 	//   typ = String
-	//     (der Typ des Neben-Fensters: "bedeutungen" || "changelog" || "dokumentation" || "fehlerlog" || "handbuch")
+	//     (der Typ des Neben-Fensters:
+	//     "bedeutungen" || "changelog" || "dokumentation" || "fehlerlog" || "handbuch" || "xml")
 	//   abschnitt = String || undefined
 	//     (Abschnitt, der im Fenster geöffnet werden soll; nur "handbuch" und "dokumentation")
-	erstellenNeben ({typ, abschnitt = "", bdTitle = "", bdCaller = null}) {
+	//   winTitle = String || undefined
+	//     (Fenster-Titel für Bedeutungsgerüst- und XML-Fenster)
+	//   caller = Object || undefined
+	//     (ggf. Fensterobjekt, das als Caller fungiert)
+	erstellenNeben ({
+			typ,
+			abschnitt = "",
+			winTitle = "",
+			caller = null,
+		}) {
 		// ist das Fenster bereits offen? => Fenster fokussieren
-		// (bei Bedeutungsgerüst-Fenstern wissen die Hauptfenster, wenn sie auf sind)
-		if (typ !== "bedeutungen") {
+		// (bei Bedeutungsgerüst- und XML-Fenstern wissen die Hauptfenster,
+		// ob sie auf sind)
+		if (!/^(bedeutungen|xml)$/.test(typ)) {
 			for (let id in win) {
 				if (!win.hasOwnProperty(id)) {
 					continue;
@@ -960,13 +979,18 @@ fenster = {
 			},
 		};
 		if (typ === "bedeutungen") {
-			opt.title = bdTitle;
+			opt.title = winTitle;
 			opt.x = optionen.data["fenster-bedeutungen"].x;
 			opt.y = optionen.data["fenster-bedeutungen"].y;
 			opt.width = optionen.data["fenster-bedeutungen"].width;
 			opt.height = optionen.data["fenster-bedeutungen"].height;
 			opt.minWidth = 400;
 			opt.minHeight = 400;
+		} else if (typ === "xml") {
+			opt.title = winTitle;
+			opt.width = Math.round(Bildschirm.workArea.width / 2);
+			opt.minWidth = 800;
+			opt.minHeight = 600;
 		}
 		// ggf. die Position des Fensters festlegen; sonst wird es zentriert
 		// (damit Handbuch und Dokumentation nicht übereinanderliegen,
@@ -1042,8 +1066,10 @@ fenster = {
 				setTimeout(() => this.send("oeffne-abschnitt", abschnitt), 25);
 			}
 			// ggf. Daten an das Bedeutungsgerüst schicken
-			if (bdCaller) {
-				setTimeout(() => bdCaller.send("bedeutungen-fenster-daten"), 25);
+			if (typ === "bedeutungen" && caller) {
+				setTimeout(() => caller.send("bedeutungen-fenster-daten"), 25);
+			} else if (typ === "xml" && caller) {
+				setTimeout(() => caller.send("red-xml-daten"), 25);
 			}
 		});
 		// Aktionen vor dem Schließen des Fensters
@@ -1474,7 +1500,11 @@ ipcMain.handle("fenster-status", (evt, winId, fenster) => {
 
 // Bedeutungsgerüst-Fenster öffnen
 ipcMain.handle("bedeutungen-oeffnen", (evt, title) => {
-	return fenster.erstellenNeben({typ: "bedeutungen", bdTitle: title, bdCaller: evt.sender});
+	return fenster.erstellenNeben({
+		typ: "bedeutungen",
+		winTitle: title,
+		caller: evt.sender,
+	});
 });
 
 // Bedeutungsgerüst-Fenster schliessen
@@ -1486,6 +1516,29 @@ ipcMain.handle("bedeutungen-schliessen", (evt, contentsId) => {
 
 // Bedeutungsgerüst-Fenster fokussieren
 ipcMain.handle("bedeutungen-fokussieren", (evt, contentsId) => {
+	let wc = webContents.fromId(contentsId),
+		bw = BrowserWindow.fromWebContents(wc);
+	fenster.fokus(bw);
+});
+
+// XML-Fenster öffnen
+ipcMain.handle("red-xml-oeffnen", (evt, title) => {
+	return fenster.erstellenNeben({
+		typ: "xml",
+		winTitle: title,
+		caller: evt.sender,
+	});
+});
+
+// XML-Fenster schliessen
+ipcMain.handle("red-xml-schliessen", (evt, contentsId) => {
+	let wc = webContents.fromId(contentsId),
+		bw = BrowserWindow.fromWebContents(wc);
+	bw.close();
+});
+
+// XML-Fenster fokussieren
+ipcMain.handle("red-xml-fokussieren", (evt, contentsId) => {
 	let wc = webContents.fromId(contentsId),
 		bw = BrowserWindow.fromWebContents(wc);
 	fenster.fokus(bw);

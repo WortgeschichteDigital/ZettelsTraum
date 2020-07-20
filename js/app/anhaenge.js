@@ -140,6 +140,10 @@ let anhaenge = {
 		if (overlay.oeffnen(fenster)) { // Fenster ist schon offen
 			return;
 		}
+		// Maximalhöhe der Anhängeliste festlegen
+		helfer.elementMaxHeight({
+			ele: document.getElementById("anhaenge-cont"),
+		});
 		// Anhänge der Kartei auflisten
 		let cont = document.getElementById("anhaenge-cont");
 		await anhaenge.auflisten(cont, "data|an");
@@ -495,7 +499,7 @@ let anhaenge = {
 		// Ordner auslesen, Dateien sammeln
 		const path = require("path"),
 			fsP = require("fs").promises;
-		let reg = new RegExp(`.+${path.sep}`),
+		let reg = new RegExp(`.+${helfer.escapeRegExp(path.sep)}`),
 			ordner = kartei.pfad.match(reg)[0],
 			dateienA = [];
 		const ausgelesen = await new Promise(async resolve => {

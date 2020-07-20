@@ -25,10 +25,14 @@ let bedeutungenGerueste = {
 		}
 		// Tabelle aufbauen
 		bedeutungenGerueste.aufbauen();
+		// Maximalhöhe der Variantenliste festlegen
+		helfer.elementMaxHeight({
+			ele: document.getElementById("gerueste-cont-over"),
+		});
 	},
 	// Tabelle mit den Bedeutungsgerüsten aufbauen
 	aufbauen () {
-		let cont = document.getElementById("gerueste-cont");
+		let cont = document.getElementById("gerueste-cont-over");
 		helfer.keineKinder(cont);
 		// Tabelle aufbauen
 		let table = document.createElement("table");
@@ -139,6 +143,11 @@ let bedeutungenGerueste = {
 							}
 						}
 					}
+					// zum Gerüst gehörende Wortinformationen zum Löschen vormerken
+					bedeutungen.aendernFuellen({
+						wi: true,
+						gr: id,
+					});
 					// Gerüst löschen
 					delete bedeutungen.data.gr[id];
 					// Gerüst im Hauptfenster ggf. wechseln, auf jeden Fall die Überschrift neu aufbauen

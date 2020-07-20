@@ -4,6 +4,9 @@ let helfer = {
 	// speichert, welche der Hauptfunktionen gerade geöffnet ist;
 	// mögliche Werte: "liste" (= Belegliste), "gerüst" (= Bedeutungsgerüst), "karte" (= Karteikarte)
 	hauptfunktion: "liste",
+	// speichert den Timeout für das Resize-Event,
+	// dessen Konsequenzen nicht zu häufig gezogen werden sollen
+	resizeTimeout: null,
 	// das Fensterladen-Overlay ausblenden
 	fensterGeladen () {
 		setTimeout(function() {
@@ -18,6 +21,153 @@ let helfer = {
 	fensterFokus () {
 		const {ipcRenderer} = require("electron");
 		ipcRenderer.invoke("fenster-fokus");
+	},
+	// Timeout für das Entfernen des Overflow-Styles
+	elementMaxHeightTimeout: null,
+	// maximale Höhe des übergebenen Elements festlegen
+	//   ele = Element
+	//     (Element, dessen maximale Höhe festgelegt werden soll)
+	elementMaxHeight ({ele}) {
+		// Bedingungen:
+		//   - Element ist in einem Overlay-Fenster
+		//   - offsetTop ist der oberste Rand des Fensterkopfs
+		let dialog = ele.closest(".overlay");
+		if (dialog.classList.contains("aus")) {
+			return;
+		}
+		// elementspezifische Variablen
+		//   max = Number
+		//     (Maximalhöhe des Bereichs)
+		//   queries = Array
+		//     (verpflichtend! Selektoren für Elemente, deren Höhe auch abgezogen werden muss)
+		//   setOverflow = Boolean
+		//     (Container hat standardmäßig kein "overflow: auto")
+		let eleConf = {
+			"anhaenge-cont": {
+				queries: [],
+			},
+			"dialog-text": {
+				queries: ["#dialog-prompt", "#dialog-ok", "#dialog-confirm"],
+			},
+			"drucken-cont": {
+				queries: [],
+			},
+			"einstellungen-sec-allgemeines": {
+				queries: [],
+			},
+			"einstellungen-sec-kopieren": {
+				queries: [],
+			},
+			"einstellungen-sec-literatur": {
+				queries: [],
+			},
+			"einstellungen-sec-menue": {
+				queries: [],
+			},
+			"einstellungen-sec-notizen": {
+				queries: [],
+			},
+			"einstellungen-sec-bedeutungsgeruest": {
+				queries: [],
+			},
+			"einstellungen-sec-karteikarte": {
+				queries: [],
+			},
+			"einstellungen-sec-filterleiste": {
+				queries: [],
+			},
+			"einstellungen-sec-belegliste": {
+				queries: [],
+			},
+			"gerueste-cont-over": {
+				queries: [],
+			},
+			"import-cont-over": {
+				queries: ["#import-abbrechen"],
+			},
+			"karteisuche-karteien": {
+				queries: [],
+			},
+			"kopieren-einfuegen-over": {
+				queries: [],
+			},
+			"kopieren-liste-cont": {
+				queries: [],
+			},
+			"meta-cont-over": {
+				queries: [],
+			},
+			"notizen-feld": {
+				queries: ["#notizen-buttons"],
+			},
+			"red-lit-suche-titel": {
+				queries: ["#red-lit-suche-treffer"],
+			},
+			"red-meta-over": {
+				queries: [],
+				setOverflow: true,
+			},
+			"red-wi-cont-over": {
+				queries: [],
+			},
+			"redaktion-cont-over": {
+				queries: [],
+				setOverflow: true,
+			},
+			"stamm-liste": {
+				max: 435,
+				queries: ["#stamm-kopf", "#stamm-cont > p"],
+			},
+			"tagger-typen": {
+				queries: ["#tagger-cont > p"],
+				setOverflow: true,
+			},
+			"updatesWin-notes": {
+				queries: [],
+			},
+			"zeitraumgrafik-cont-over": {
+				queries: [],
+			},
+		};
+		// Maximalhöhe berechnen
+		let div = document.querySelector(`#${dialog.id} > div`),
+			dialogMarginTop = parseInt(getComputedStyle(div).marginTop.replace("px", ""), 10),
+			conf = eleConf[ele.id],
+			weitereHoehen = 0;
+		// ggf. Overflow des Containers setzen/entfernen
+		if (conf.setOverflow && window.innerHeight - div.getBoundingClientRect().bottom <= 30) {
+			clearTimeout(helfer.elementMaxHeightTimeout);
+			ele.style.overflow = "auto";
+		} else if (conf.setOverflow) {
+			clearTimeout(helfer.elementMaxHeightTimeout);
+			helfer.elementMaxHeightTimeout = setTimeout(() => {
+				// erst entfernen, wenn die Animation vorbei ist
+				// (da sich die Höhe hier schon wieder geändert haben könnte => nochmal checken)
+				if (window.innerHeight - div.getBoundingClientRect().bottom <= 30) {
+					ele.style.overflow = "auto";
+				} else {
+					ele.style.removeProperty("overflow");
+				}
+			}, 500);
+		}
+		// Höhe weiterer Elemente berechnen
+		for (let i of conf.queries) {
+			let elemente = document.querySelectorAll(i);
+			for (let e of elemente) {
+				weitereHoehen += e.offsetHeight;
+				for (let m of ["marginTop", "marginBottom"]) {
+					weitereHoehen += parseInt(getComputedStyle(e)[m].replace("px", ""), 10);
+				}
+			}
+		}
+		// Maximalhöhe festlegen
+		//   padding-bottom der Dialog-Fenster: 10px
+		//   margin unterhalb des Fensters: 20px
+		let maxHeight = window.innerHeight - dialogMarginTop - ele.offsetTop - weitereHoehen - 10 - 20;
+		if (conf.max && maxHeight > conf.max) {
+			maxHeight = conf.max;
+		}
+		ele.style.maxHeight = `${maxHeight}px`;
 	},
 	// übergebene Sektion einblenden, alle andere Sektionen ausblenden
 	//   sektion = String
@@ -148,9 +298,11 @@ let helfer = {
 	// (größer als die angegebene max-height werden sie dabei nie)
 	//   textarea = Element
 	//     (Textfeld, dessen Eingaben hier abgefangen werden)
-	textareaGrow (textarea) {
+	//   padding = Number || undefined
+	//     (steuert, ob ein padding abgezogen werden muss)
+	textareaGrow (textarea, padding = 4) {
 		textarea.style.height = "inherit";
-		textarea.style.height = `${textarea.scrollHeight - 4}px`; // 4px padding in scrollHeight enthalten
+		textarea.style.height = `${textarea.scrollHeight - padding}px`; // normalerweise 4px padding in scrollHeight enthalten
 	},
 	// Standardformatierungen in Edit-Feldern abfangen
 	//   edit = Element
@@ -193,6 +345,9 @@ let helfer = {
 		text = text.replace(/=__(.*?)__/g, (m, p1) => `="${p1}"`); // Attribute in Tags demaskieren
 		text = text.replace(/\.{3}/g, "…"); // horizontale Ellipse
 		text = text.replace(/([a-z]) ([0-9]+ \([0-9]{4}\))/, (m, p1, p2) => `${p1} ${p2}`); // geschütztes Leerzeichen vor Jahrgang einer Zeitschrift
+		text = text.replace(/([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})/g, (m, p1, p2, p3) => {
+			return `${p1}. ${p2}. ${p3}`;
+		}); // Leerzeichen bei aneinandergeklatschten Daten
 		// Korrekturen
 		text = text.replace(/([0-9]{4})[–-]([0-9]{2})[–-]([0-9]{2})/g, (m, p1, p2, p3) => `${p1}-${p2}-${p3}`); // falsche Halbgeviertstriche in ISO 8601-Daten
 		// geschützte Leerzeichen (ggf. einfügen, wenn Spatien vergessen wurden)
@@ -200,6 +355,7 @@ let helfer = {
 			/[0-9]{1,2}\. [0-9]{1,2}\. [0-9]{4}/g, // Datumsangabe (nur 1. Leerzeichen wird ersetzt!)
 			/[0-9]{1,2}\.\s?(Jan|Feb|März|Apr|Mai|Juni|Juli|Aug|Sep|Okt|Nov|Dez)/g, // Datumsangabe mit Monat
 			/[0-9]\.\s?Aufl/g, // Auflage
+			/[0-9] Bde/g, // Bände
 			/[0-9]\.\s?Hälfte/g,
 			/[0-9]{2}\.\s?(Jh\.|Jahrhundert)/g, // Jahrhundertangaben
 			/(Abschnitt|Kapitel) ([0-9]|[IVXLC])/g,
@@ -209,8 +365,10 @@ let helfer = {
 			/e\.\s?V\./g, // eingetragener Verein
 			/hrsg\.\s?v\./ig,
 			/H\.\s?[0-9]+/g, // Heft
+			/i\.\s?Br\./g, // im Breisgau
 			/N\.\s?N\./g, // nomen nescio
 			/Nr\.\s?[0-9]+/g, // Nummer
+			/o.\.\s?(D|O)\./ig, // ohne Datum/Ort
 			/s\.\s?(d|l)\./ig,
 			/s\.\s?v\./g, // sub voce (nur in Kleinschreibung)
 			/Sp?\.\s?[0-9]+/g, // Seiten-/Spaltenangaben
@@ -219,6 +377,8 @@ let helfer = {
 			/zit\.\s?n\./ig,
 			// Dreiwort-Abkürzungen
 			// (aufgeteilt, damit das System, nur das erste Leerzeichen zu ersetzen, bestehen bleibt)
+			/a\.\s?d\./g, // an der Saale
+			/d\.\s?S\./g,
 			/i\.\s?d\./g, // in der Regel
 			/d\.\s?R\./g,
 			/i\.\s?S\./g, // im Sinne von
@@ -542,6 +702,26 @@ let helfer = {
 		}
 		return 0;
 	},
+	// Wortinformationen sortieren
+	//   a = Object
+	//   b = Object
+	//     (s. data.rd.wi)
+	sortWi (a, b) {
+		const aVt = redWi.dropdown.vt.indexOf(a.vt),
+			bVt = redWi.dropdown.vt.indexOf(b.vt);
+		if (aVt !== bVt) {
+			return aVt - bVt;
+		}
+		if (a.tx === b.tx) {
+			return 0;
+		}
+		let arr = [a.tx, b.tx];
+		arr.sort(helfer.sortAlpha);
+		if (arr[0] === a.tx) {
+			return -1;
+		}
+		return 1;
+	},
 	// ein übergebenes Datum formatiert ausgeben
 	//   datum = String
 	//     (im ISO 8601-Format)
@@ -723,12 +903,12 @@ let helfer = {
 	// regulären Ausdruck mit allen Formvarianten erstellen
 	formVariRegExp () {
 		helfer.formVariRegExpRegs = [];
-		// Wörter sammlen
+		// Wörter sammeln
 		// ("Wörter" mit Leerzeichen müssen als erstes markiert werden,
 		// darum an den Anfang sortieren)
 		let woerter = [];
 		if (data.fv) {
-			// beim ersten Aufruf nach dem Erstellen einer neuen Karte,
+			// beim ersten Aufruf nach dem Erstellen einer neuen Kartei,
 			// steht data.fv noch nicht zur Verfügung
 			woerter = Object.keys(data.fv);
 		}
@@ -793,7 +973,8 @@ let helfer = {
 	// Overlay-Animation, die anzeigt, was gerade geschehen ist
 	// (Kopier-Aktion oder Wrap der Suchleiste)
 	//   ziel = String
-	//     ("liste" || "zwischenablage" || "wrap" || "duplikat" || "gespeichert" || "einfuegen")
+	//     ("liste" | "zwischenablage" | "wrap" | "duplikat" |
+	//     "gespeichert" | "einfuegen" | "xml")
 	animation (ziel) {
 		// ggf. Timeout clearen
 		clearTimeout(helfer.animationTimeout);
@@ -818,7 +999,7 @@ let helfer = {
 		img.width = "96";
 		img.height = "96";
 		let cd = "";
-		if (/changelog|fehlerlog|dokumentation|handbuch/.test(winInfo.typ)) {
+		if (/changelog|fehlerlog|dokumentation|handbuch|xml/.test(winInfo.typ)) {
 			cd = "../";
 		}
 		if (ziel === "zwischenablage") {
@@ -836,6 +1017,8 @@ let helfer = {
 			img.src = `${cd}img/speichern-blau-96.svg`;
 		} else if (ziel === "einfuegen") {
 			img.src = `${cd}img/einfuegen-blau-96.svg`;
+		} else if (ziel === "xml") {
+			img.src = `${cd}img/xml-blau-96.svg`;
 		}
 		// Element einhängen und wieder entfernen
 		document.querySelector("body").appendChild(div);
@@ -1112,6 +1295,8 @@ let helfer = {
 		}
 		// Bedeutungen-Fenster ggf. schließen
 		await bedeutungenWin.schliessen();
+		// XML-Fenster ggf. schließen
+		await redXml.schliessen();
 		// Kartei entsperren
 		await lock.actions({datei: kartei.pfad, aktion: "unlock"});
 		// Status des Fensters speichern

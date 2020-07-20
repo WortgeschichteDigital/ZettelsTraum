@@ -638,7 +638,7 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
 
 					<p>Nach dem Laden einer <abbr title="Zettel’s Traum JSON">ZTJ</abbr>-Datei in <i class="app-name"></i> befinden sich die <abbr title="JavaScript Object Notation">JSON</abbr>-Daten im globalen Objekt <code class="quelltext">data</code>. Ihre Werte lassen sich dann in allen Funktionen des Hauptfensters durch einfache Statements wie <code class="quelltext">data.dc</code> lesen oder schreiben.</p>
 
-					<p>Alle Dateien sind gleich aufgebaut (<span class="obacht">Datenformat Version 16</span>):</p>
+					<p>Alle Dateien sind gleich aufgebaut (<span class="obacht">Datenformat Version 17</span>):</p>
 
 					<table class="ztj">
 						<tr>
@@ -698,7 +698,7 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
 						<tr class="ztj-ebene4">
 							<td><p><code class="quelltext">bd</code></p></td>
 							<td class="datentyp">Array</td>
-							<td>eindimensional,<br>mit <span class="datentyp">Strings</span> gefüllt,<br><code class="quelltext">&lt;b&gt;</code>, <code class="quelltext">&lt;i&gt;</code>, <code class="quelltext">&lt;u&gt;</code> möglich</td>
+							<td>eindimensional,<br>mit <span class="datentyp">Strings</span> gefüllt,<br><code class="quelltext">&lt;b&gt;</code>, <code class="quelltext">&lt;i&gt;</code>, <code class="quelltext">&lt;u&gt;</code>,<br><code class="quelltext">&lt;mark<br>class="paraphrase"&gt;</code><br>möglich</td>
 							<td>Bedeutung mit dem kompletten Bedeutungspfad; im letzten Slot steht die Bedeutung dieses Eintrags, darüber die vererbten, übergeordneten Bedeutungen</td>
 						</tr>
 						<tr class="ztj-ebene4">
@@ -782,58 +782,58 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
 						<tr class="ztj-ebene2">
 							<td colspan="4"><p>In jedem <span class="datentyp">Object</span> die folgenden Schlüssel und Werte:</p></td>
 						</tr>
-						<tr class="ztj-ebene3">
+						<tr class="ztj-ebene2">
 							<td><p><code class="quelltext">an</code></p></td>
 							<td class="datentyp">Boolean</td>
 							<td> </td>
 							<td><code class="quelltext">true</code> = Wort wird für die <a href="#menueKartei-formvariantenFunktionen" class="link-handbuch">verschiedensten Funktionen</a> berücksichtigt;<br><code class="quelltext">false</code> = Wort wird überhaupt nicht berücksichtigt</td>
 						</tr>
-						<tr class="ztj-ebene3">
+						<tr class="ztj-ebene2">
 							<td><p><code class="quelltext">fa</code></p></td>
 							<td class="datentyp">Number</td>
 							<td><code class="quelltext">0–17</code></td>
 							<td>Markierungsfarbe;<br><span class="obacht">mit Version 10 ergänzt</span></td>
 						</tr>
-						<tr class="ztj-ebene3">
+						<tr class="ztj-ebene2">
 							<td><p><code class="quelltext">fo</code></p></td>
 							<td class="datentyp">Array</td>
 							<td>eindimensional,<br>mit <span class="datentyp">Objects</span> gefüllt</td>
 							<td>Formvarianten;<br><span class="obacht">bis Version 8 war dieses <span class="datentyp">Array</span> identisch mit <code class="quelltext">data.fv</code></span></td>
 						</tr>
-						<tr class="ztj-ebene4">
+						<tr class="ztj-ebene3">
 							<td colspan="4"><p>Die <span class="datentyp">Objects</span> in den Slots haben die folgenden Schlüssel und Werte:</p></td>
 						</tr>
-						<tr class="ztj-ebene4">
+						<tr class="ztj-ebene3">
 							<td><p><code class="quelltext">qu</code></p></td>
 							<td class="datentyp">String</td>
 							<td><code class="quelltext">"dta"</code> oder <code class="quelltext">"zt"</code></td>
 							<td>Quelle der Formvariante; mit <code class="quelltext">"zt"</code> markierte Varianten wurden manuell ergänzt</td>
 						</tr>
-						<tr class="ztj-ebene4">
+						<tr class="ztj-ebene3">
 							<td><p><code class="quelltext">va</code></p></td>
 							<td class="datentyp">String</td>
 							<td> </td>
 							<td>Formvariante</td>
 						</tr>
-						<tr class="ztj-ebene3">
+						<tr class="ztj-ebene2">
 							<td><p><code class="quelltext">ma</code></p></td>
 							<td class="datentyp">Boolean</td>
 							<td> </td>
 							<td>Wort nur markieren, <a href="#menueKartei-formvariantenNurMarkieren" class="link-handbuch">für gewisse Funktionen</a> jedoch ignorieren;<br><span class="obacht">mit Version 10 ergänzt</span></td>
 						</tr>
-						<tr class="ztj-ebene3">
+						<tr class="ztj-ebene2">
 							<td><p><code class="quelltext">nl</code></p></td>
 							<td class="datentyp">Boolean</td>
 							<td> </td>
 							<td>Nebenlemma (Wort, das zusätzlich zum Hauptwort der Kartei behandelt wird); ähnliche wie <code class="quelltext">ma</code>;<br><span class="obacht">mit Version 16 ergänzt</span></td>
 						</tr>
-						<tr class="ztj-ebene3">
+						<tr class="ztj-ebene2">
 							<td><p><code class="quelltext">ps</code></p></td>
 							<td class="datentyp">String</td>
 							<td>Part-of-speech-Tag</td>
 							<td>Wortart, genauer: ein <a href="http://kaskade.dwds.de/~moocow/mirror/projects/moot/">Part-of-speech-Tag</a>;<br><span class="obacht">mit Version 10 ergänzt</span></td>
 						</tr>
-						<tr class="ztj-ebene3">
+						<tr class="ztj-ebene2">
 							<td><p><code class="quelltext">tr</code></p></td>
 							<td class="datentyp">Boolean</td>
 							<td> </td>
@@ -1068,6 +1068,9 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
 							<td>Sachgebiete, zu denen das Karteiwort gehört;<br><span class="obacht">ab Version 13</span></td>
 						</tr>
 						<tr class="ztj-ebene2">
+							<td colspan="4"><p>Die <span class="datentyp">Objects</span> in den Slots haben die folgenden Schlüssel und Werte:</p></td>
+						</tr>
+						<tr class="ztj-ebene2">
 							<td><p><code class="quelltext">id</code></p></td>
 							<td class="datentyp">String</td>
 							<td> </td>
@@ -1084,6 +1087,9 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
 							<td class="datentyp">Array</td>
 							<td> </td>
 							<td>Themenfelder, zu denen das Karteiwort gehört;<br><span class="obacht">ab Version 14</span></td>
+						</tr>
+						<tr class="ztj-ebene2">
+							<td colspan="4"><p>Die <span class="datentyp">Objects</span> in den Slots haben die folgenden Schlüssel und Werte:</p></td>
 						</tr>
 						<tr class="ztj-ebene2">
 							<td><p><code class="quelltext">id</code></p></td>
@@ -1104,6 +1110,15 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
 							<td>Wortinformationen;<br><span class="obacht">ab Version 15</span></td>
 						</tr>
 						<tr class="ztj-ebene2">
+							<td colspan="4"><p>Die <span class="datentyp">Objects</span> in den Slots haben die folgenden Schlüssel und Werte:</p></td>
+						</tr>
+						<tr class="ztj-ebene2">
+							<td><p><code class="quelltext">gn</code></p></td>
+							<td class="datentyp">String</td>
+							<td><code class="quelltext">/[0-9]+/</code>,<br>Start mit 1</td>
+							<td>Bedeutungsgerüst-ID;<br><span class="obacht">ab Version 17</span></td>
+						</tr>
+						<tr class="ztj-ebene2">
 							<td><p><code class="quelltext">lt</code></p></td>
 							<td class="datentyp">String</td>
 							<td><code class="quelltext">Textverweis<br>| Verweis intern<br>| Verweis extern</code></td>
@@ -1118,14 +1133,302 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
 						<tr class="ztj-ebene2">
 							<td><p><code class="quelltext">vt</code></p></td>
 							<td class="datentyp">String</td>
-							<td><code class="quelltext">Assoziation<br>| Kollokation<br>| Wortfeld</code></td>
-							<td>Verweistyp</td>
+							<td><code class="quelltext">Kollokation<br>| Wortbildung<br>| Wortfeld<br>| Wortfeldartikel</code></td>
+							<td>Verweistyp;<br><span class="obacht">mit Version 17 <code class="quelltext">Assoziation</code> in <code class="quelltext">Wortbildung</code> umbenannt</span></td>
 						</tr>
 						<tr class="ztj-ebene2">
 							<td><p><code class="quelltext">xl</code></p></td>
 							<td class="datentyp">String</td>
 							<td> </td>
 							<td>alle Daten im <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Format</td>
+						</tr>
+						<tr class="ztj-ebene1">
+							<td><p><code class="quelltext">xl</code></p></td>
+							<td class="datentyp">Object</td>
+							<td> </td>
+							<td>Daten des <a href="#menueRedaktion-xml" class="link-handbuch"><abbr title="Extensible Markup Language" lang="en">XML</abbr>-Fensters</a>;<br><span class="obacht">ab Version 17</span></td>
+						</tr>
+						<tr class="ztj-ebene2">
+							<td><p><code class="quelltext">ab</code></p></td>
+							<td class="datentyp">Array</td>
+							<td> </td>
+							<td>Abschnitte des <i>Kurz gefasst</i></td>
+						</tr>
+						<tr class="ztj-ebene3">
+							<td colspan="4"><p>Die <span class="datentyp">Objects</span> in den Slots haben die folgenden Schlüssel und Werte:</p></td>
+						</tr>
+						<tr class="ztj-ebene3">
+							<td><p><code class="quelltext">ct</code></p></td>
+							<td class="datentyp">Array</td>
+							<td> </td>
+							<td>Textblöcke des Abschnitts</td>
+						</tr>
+						<tr class="ztj-ebene4">
+							<td colspan="4"><p>Die <span class="datentyp">Objects</span> in den Slots haben die folgenden Schlüssel und Werte:</p></td>
+						</tr>
+						<tr class="ztj-ebene4">
+							<td><p><code class="quelltext">id</code></p></td>
+							<td class="datentyp">String</td>
+							<td>auch <code class="quelltext">""</code></td>
+							<td>ID des Textblocks;<br>nur wenn <code class="quelltext">it === "Textblock"</code></td>
+						</tr>
+						<tr class="ztj-ebene4">
+							<td><p><code class="quelltext">it</code></p></td>
+							<td class="datentyp">String</td>
+							<td><code class="quelltext">Blockzitat<br>| Illustration<br>| Liste<br>| Textblock<br>| Überschrift</code></td>
+							<td>Typ des Textblocks</td>
+						</tr>
+						<tr class="ztj-ebene4">
+							<td><p><code class="quelltext">ty</code></p></td>
+							<td class="datentyp">String</td>
+							<td><code class="quelltext">Punkte<br>| Ziffern</code></td>
+							<td>Typ der Liste;<br>nur wenn <code class="quelltext">it === "Liste"</code></td>
+						</tr>
+						<tr class="ztj-ebene4">
+							<td><p><code class="quelltext">xl</code></p></td>
+							<td class="datentyp">String</td>
+							<td> </td>
+							<td>Content des Textblocks im <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Format</td>
+						</tr>
+						<tr class="ztj-ebene3">
+							<td><p><code class="quelltext">id</code></p></td>
+							<td class="datentyp">String</td>
+							<td>auch <code class="quelltext">""</code></td>
+							<td>ID des Abschnitts</td>
+						</tr>
+						<tr class="ztj-ebene3">
+							<td><p><code class="quelltext">le</code></p></td>
+							<td class="datentyp">Number</td>
+							<td><code class="quelltext">/[1-4]/</code></td>
+							<td>Level der Einrückung des Abschnitts</td>
+						</tr>
+						<tr class="ztj-ebene3">
+							<td><p><code class="quelltext">ty</code></p></td>
+							<td class="datentyp">String</td>
+							<td><code class="quelltext">"Mehr erfahren"<br>| ""</code></td>
+							<td>Typ des Abschnitts</td>
+						</tr>
+						<tr class="ztj-ebene2">
+							<td><p><code class="quelltext">bg</code></p></td>
+							<td class="datentyp">Array</td>
+							<td> </td>
+							<td>Bedeutungsgerüste</td>
+						</tr>
+						<tr class="ztj-ebene3">
+							<td colspan="4"><p>Die <span class="datentyp">Objects</span> in den Slots haben die folgenden Schlüssel und Werte:</p></td>
+						</tr>
+						<tr class="ztj-ebene3">
+							<td><p><code class="quelltext">gn</code></p></td>
+							<td class="datentyp">String</td>
+							<td> </td>
+							<td>ID des Bedeutungsgerüsts (immer identisch mit der des Quellgerüsts)</td>
+						</tr>
+						<tr class="ztj-ebene3">
+							<td><p><code class="quelltext">nw</code></p></td>
+							<td class="datentyp">Array</td>
+							<td>eindimensional,<br>mit <abbr title="Extensible Markup Language" lang="en">XML</abbr>-<span class="datentyp">Strings</span> gefüllt</td>
+							<td>Nachweise</td>
+						</tr>
+						<tr class="ztj-ebene3">
+							<td><p><code class="quelltext">tf</code></p></td>
+							<td class="datentyp">Array</td>
+							<td> </td>
+							<td>Textreferenzen</td>
+						</tr>
+						<tr class="ztj-ebene4">
+							<td colspan="4"><p>Die <span class="datentyp">Objects</span> in den Slots haben die folgenden Schlüssel und Werte:</p></td>
+						</tr>
+						<tr class="ztj-ebene4">
+							<td><p><code class="quelltext">li</code></p></td>
+							<td class="datentyp">String</td>
+							<td> </td>
+							<td>ID der Lesart</td>
+						</tr>
+						<tr class="ztj-ebene4">
+							<td><p><code class="quelltext">ti</code></p></td>
+							<td class="datentyp">String</td>
+							<td> </td>
+							<td>ID der Textposition</td>
+						</tr>
+						<tr class="ztj-ebene3">
+							<td><p><code class="quelltext">xl</code></p></td>
+							<td class="datentyp">String</td>
+							<td> </td>
+							<td>Bedeutungsgerüst im <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Format</td>
+						</tr>
+						<tr class="ztj-ebene2">
+							<td><p><code class="quelltext">bl</code></p></td>
+							<td class="datentyp">Array</td>
+							<td> </td>
+							<td>Belege</td>
+						</tr>
+						<tr class="ztj-ebene3">
+							<td colspan="4"><p>Die <span class="datentyp">Objects</span> in den Slots haben die folgenden Schlüssel und Werte:</p></td>
+						</tr>
+						<tr class="ztj-ebene3">
+							<td><p><code class="quelltext">da</code></p></td>
+							<td class="datentyp">String</td>
+							<td> </td>
+							<td>Datum des Belegs (für die Anzeige)</td>
+						</tr>
+						<tr class="ztj-ebene3">
+							<td><p><code class="quelltext">ds</code></p></td>
+							<td class="datentyp">String</td>
+							<td> </td>
+							<td>Datum des Belegs (zum Sortieren)</td>
+						</tr>
+						<tr class="ztj-ebene3">
+							<td><p><code class="quelltext">id</code></p></td>
+							<td class="datentyp">String</td>
+							<td> </td>
+							<td>ID des Belegs</td>
+						</tr>
+						<tr class="ztj-ebene3">
+							<td><p><code class="quelltext">xl</code></p></td>
+							<td class="datentyp">String</td>
+							<td> </td>
+							<td>Beleg im <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Format</td>
+						</tr>
+						<tr class="ztj-ebene2">
+							<td><p><code class="quelltext">le</code></p></td>
+							<td class="datentyp">Array</td>
+							<td> </td>
+							<td>Lemmata</td>
+						</tr>
+						<tr class="ztj-ebene3">
+							<td colspan="4"><p>Die <span class="datentyp">Objects</span> in den Slots haben die folgenden Schlüssel und Werte:</p></td>
+						</tr>
+						<tr class="ztj-ebene3">
+							<td><p><code class="quelltext">le</code></p></td>
+							<td class="datentyp">Array</td>
+							<td>eindimensional,<br>mit <span class="datentyp">Strings</span> gefüllt</td>
+							<td>Schreibungen des Lemmas</td>
+						</tr>
+						<tr class="ztj-ebene3">
+							<td><p><code class="quelltext">re</code></p></td>
+							<td class="datentyp">String</td>
+							<td>auch <code class="quelltext">""</code></td>
+							<td>Textreferenz;<br>nur gefüllt wenn <code class="quelltext">ty === "Nebenlemma"</code></td>
+						</tr>
+						<tr class="ztj-ebene3">
+							<td><p><code class="quelltext">ty</code></p></td>
+							<td class="datentyp">String</td>
+							<td><code class="quelltext">Hauptlemma<br>| Nebenlemma</code></td>
+							<td>Lemmatyp</td>
+						</tr>
+						<tr class="ztj-ebene3">
+							<td><p><code class="quelltext">xl</code></p></td>
+							<td class="datentyp">String</td>
+							<td> </td>
+							<td>Lemma im <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Format</td>
+						</tr>
+						<tr class="ztj-ebene2">
+							<td><p><code class="quelltext">lt</code></p></td>
+							<td class="datentyp">Array</td>
+							<td> </td>
+							<td>Literatur</td>
+						</tr>
+						<tr class="ztj-ebene3">
+							<td colspan="4"><p>Die <span class="datentyp">Objects</span> in den Slots haben die folgenden Schlüssel und Werte:</p></td>
+						</tr>
+						<tr class="ztj-ebene3">
+							<td><p><code class="quelltext">id</code></p></td>
+							<td class="datentyp">String</td>
+							<td> </td>
+							<td>ID des Literaturtitels</td>
+						</tr>
+						<tr class="ztj-ebene3">
+							<td><p><code class="quelltext">si</code></p></td>
+							<td class="datentyp">String</td>
+							<td> </td>
+							<td>Sigle des Literaturtitels</td>
+						</tr>
+						<tr class="ztj-ebene3">
+							<td><p><code class="quelltext">xl</code></p></td>
+							<td class="datentyp">String</td>
+							<td> </td>
+							<td>Literaturtitel im <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Format</td>
+						</tr>
+						<tr class="ztj-ebene2">
+							<td><p><code class="quelltext">md</code></p></td>
+							<td class="datentyp">Object</td>
+							<td> </td>
+							<td>Metadaten</td>
+						</tr>
+						<tr class="ztj-ebene3">
+							<td><p><code class="quelltext">id</code></p></td>
+							<td class="datentyp">String</td>
+							<td> </td>
+							<td>Artikel-ID</td>
+						</tr>
+						<tr class="ztj-ebene3">
+							<td><p><code class="quelltext">re</code></p></td>
+							<td class="datentyp">Array</td>
+							<td> </td>
+							<td>Revisionen</td>
+						</tr>
+						<tr class="ztj-ebene4">
+							<td colspan="4"><p>Die <span class="datentyp">Objects</span> in den Slots haben die folgenden Schlüssel und Werte:</p></td>
+						</tr>
+						<tr class="ztj-ebene4">
+							<td><p><code class="quelltext">au</code></p></td>
+							<td class="datentyp">Array</td>
+							<td> </td>
+							<td>AutorInnen</td>
+						</tr>
+						<tr class="ztj-ebene4">
+							<td><p><code class="quelltext">da</code></p></td>
+							<td class="datentyp">String</td>
+							<td>ISO 8601-Datum:<br><code class="quelltext">"2001-11-01"</code></td>
+							<td>Datum</td>
+						</tr>
+						<tr class="ztj-ebene4">
+							<td><p><code class="quelltext">no</code></p></td>
+							<td class="datentyp">String</td>
+							<td> </td>
+							<td>Änderungsnotiz</td>
+						</tr>
+						<tr class="ztj-ebene4">
+							<td><p><code class="quelltext">xl</code></p></td>
+							<td class="datentyp">String</td>
+							<td> </td>
+							<td>Revision im <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Format</td>
+						</tr>
+						<tr class="ztj-ebene3">
+							<td><p><code class="quelltext">tf</code></p></td>
+							<td class="datentyp">String</td>
+							<td> </td>
+							<td>Themenfeld</td>
+						</tr>
+						<tr class="ztj-ebene3">
+							<td><p><code class="quelltext">ty</code></p></td>
+							<td class="datentyp">String</td>
+							<td><code class="quelltext">Vollartikel<br>| Überblicksartikel</code></td>
+							<td>Artikeltyp</td>
+						</tr>
+						<tr class="ztj-ebene2">
+							<td><p><code class="quelltext">tx</code></p></td>
+							<td class="datentyp">Array</td>
+							<td> </td>
+							<td>Abschnitte der <i>Wortgeschichte</i></td>
+						</tr>
+						<tr class="ztj-ebene3">
+							<td colspan="4"><p>Die <span class="datentyp">Objects</span> in den Slots sind identisch moduliert wie jene unter <code class="quelltext">data.rd.xl.ab</code>.</p></td>
+						</tr>
+						<tr class="ztj-ebene2">
+							<td><p><code class="quelltext">wi</code></p></td>
+							<td class="datentyp">Object</td>
+							<td> </td>
+							<td>Wortinformationen</td>
+						</tr>
+						<tr class="ztj-ebene3">
+							<td><p>(ID)</p></td>
+							<td class="datentyp">Array</td>
+							<td><code class="quelltext">/[0-9]+/</code></td>
+							<td>ID des Bedeutungsgerüsts</td>
+						</tr>
+						<tr class="ztj-ebene4">
+							<td colspan="4"><p>Die <span class="datentyp">Objects</span> im <span class="datentyp">Array</span> sind identisch moduliert wie jene unter <code class="quelltext">data.rd.wi</code>.</p></td>
 						</tr>
 						<tr>
 							<td><p><code class="quelltext">re</code></p></td>

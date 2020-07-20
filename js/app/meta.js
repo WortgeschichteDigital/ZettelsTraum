@@ -16,6 +16,10 @@ let meta = {
 		if (overlay.oeffnen(fenster)) { // Fenster ist schon offen
 			return;
 		}
+		// Maximalhöhe des Fensters festlegen
+		helfer.elementMaxHeight({
+			ele: document.getElementById("meta-cont-over"),
+		});
 		// Fenster füllen
 		document.getElementById("meta-dc").textContent = helfer.datumFormat(data.dc);
 		let dm = document.getElementById("meta-dm");

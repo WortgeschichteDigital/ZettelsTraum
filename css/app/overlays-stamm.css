@@ -3,7 +3,7 @@
 /* Formvarianten -------------------------------- */
 #stamm > div {
 	margin-top: 40px;
-	max-width: 450px;
+	max-width: 650px;
 }
 
 .icon-h-stamm {
@@ -171,6 +171,10 @@
 	padding: 10px;
 }
 
+#stamm-cont p.input-text {
+	margin-top: 10px;
+}
+
 #stamm-cont p.form {
 	position: relative;
 	margin-bottom: 5px;
@@ -213,10 +217,9 @@
 }
 
 #stamm-liste {
-	margin-bottom: 10px;
-	max-height: 290px;
 	overflow-x: hidden;
 	overflow-y: auto;
+	transition: max-height .5s ease;
 }
 
 #stamm-liste .icon-link,

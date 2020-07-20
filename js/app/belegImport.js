@@ -448,6 +448,7 @@ let belegImport = {
 		for (let i = 0, len = analyse.length; i < len; i++) {
 			ana(analyse[i]);
 		}
+		// Textauszeichnungen umsetzen
 		for (let typ in rend) {
 			if (!rend.hasOwnProperty(typ)) {
 				continue;
@@ -464,7 +465,14 @@ let belegImport = {
 				});
 			}
 		}
-		belegImport.DTAData.beleg = helfer.textTrim(text, true);
+		// Text trimmen
+		text = helfer.textTrim(text, true);
+		// Leerzeichen am Anfang von Absätzen entfernen;
+		// ana() hierfür lieber nicht anpacken
+		text = text.replace(/\n[ \t]+/g, "\n");
+		// Fertig!
+		belegImport.DTAData.beleg = text;
+		// Analysefunktion
 		function ana (ele) {
 			if (ele.nodeType === 3) { // Text
 				if (start && !ende) {
@@ -1519,7 +1527,7 @@ let belegImport = {
 			}
 		}
 		// Belegliste aufbauen
-		let cont = document.getElementById("import-cont"),
+		let cont = document.getElementById("import-cont-over"),
 			daten = belegImport.Datei.data,
 			autorenVorhanden = false,
 			belegeVorhanden = false,
@@ -1590,6 +1598,10 @@ let belegImport = {
 		if (!belegeVorhanden) {
 			table.classList.add("keine-belege");
 		}
+		// Maximalhöhe des Fensters anpassen
+		helfer.elementMaxHeight({
+			ele: document.getElementById("import-cont-over"),
+		});
 		// Import-Markierung entfernen
 		function markierung (img) {
 			img.addEventListener("click", function(evt) {
@@ -2664,6 +2676,10 @@ let belegImport = {
 				positionen.push(reg.lastIndex);
 			}
 		}
+		// Trefferpositionen zurückgeben (wenn gewünscht)
+		if (pos) {
+			return positionen;
+		}
 		// ggf. Warnmeldung ausgeben
 		if (!nebenlemmata.some(i => i === true) &&
 				hauptlemma.some(i => i === false)) {
@@ -2680,10 +2696,6 @@ let belegImport = {
 					document.getElementById("beleg-dta").focus();
 				},
 			});
-		}
-		// Trefferpositionen zurückgeben (wenn gewünscht)
-		if (pos) {
-			return positionen;
 		}
 	},
 };

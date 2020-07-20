@@ -58,6 +58,7 @@ let drucken = {
 				gn = bedeutungen.data.gn;
 			}
 			drucken.initBedeutungen(gn);
+			maxHeight();
 			return;
 		}
 		// Verteiler
@@ -71,6 +72,13 @@ let drucken = {
 			return;
 		}
 		drucken.fillKarten();
+		maxHeight();
+		// Maximalhöhe des Fensters anpassen
+		function maxHeight () {
+			helfer.elementMaxHeight({
+				ele: document.getElementById("drucken-cont"),
+			});
+		}
 	},
 	// Datenfelder der Karten, die gedruckt werden sollen
 	kartenFelder: [

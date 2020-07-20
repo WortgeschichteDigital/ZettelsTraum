@@ -4,7 +4,7 @@ let konversion = {
 	// aktuelle Version des Dateiformats
 	// *** WICHTIG! *** WICHTIG! *** WICHTIG! ***
 	// Bei Änderungen anpassen!
-	version: 16,
+	version: 17,
 	// Verteilerfunktion
 	start () {
 		konversion.von1nach2();
@@ -22,6 +22,7 @@ let konversion = {
 		konversion.von13nach14();
 		konversion.von14nach15();
 		konversion.von15nach16();
+		konversion.von16nach17();
 	},
 	// Konversion des Dateiformats von Version 1 nach Version 2
 	von1nach2 () {
@@ -301,6 +302,26 @@ let konversion = {
 		for (let v of Object.values(data.fv)) {
 			v.nl = false;
 		}
+		// Versionsnummer hochzählen
+		data.ve++;
+		// Änderungsmarkierung setzen
+		kartei.karteiGeaendert(true);
+	},
+	// Konversion des Dateiformats von Version 15 nach Version 16
+	von16nach17 () {
+		if (data.ve > 16) {
+			return;
+		}
+		// Objekte in "rd.wi" um "gn" ergänzen
+		// rd.wi.vt === "Assoziation" in "Wortbildung" ändern
+		for (let i of data.rd.wi) {
+			i.gn = "1";
+			if (i.vt === "Assoziation") {
+				i.vt = "Wortbildung";
+			}
+		}
+		// Datenstruktur "rd.xl" hinzufügen
+		data.rd.xl = helferXml.redXmlData();
 		// Versionsnummer hochzählen
 		data.ve++;
 		// Änderungsmarkierung setzen

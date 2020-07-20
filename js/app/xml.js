@@ -19,7 +19,7 @@ let xml = {
 		} else if (/^DWDS/i.test(data.kr)) {
 			fundort = "DWDS";
 		} else if (/^Google\s?Books$/i.test(data.kr) ||
-			/books\.google\.[a-z]+\//.test(data.qu)) {
+				/books\.google\.[a-z]+\//.test(data.qu)) {
 			fundort = "GoogleBooks";
 		} else if (/^(DeReKo|IDS)/i.test(data.kr)) {
 			fundort = "IDS";
@@ -42,48 +42,43 @@ let xml = {
 			knoten = cont.querySelectorAll(`[data-pnumber]`);
 		}
 		for (let i = 0, len = knoten.length; i < len; i++) {
-			if (i > 0) {
+			if (i === 0) {
+				text += "<Absatz>";
+			} else {
 				if (fundort === "DWDS") {
 					// Absätze wurden in DWDS-Belegen intern getilgt; die erscheinen
 					// online nur, um den Kontext besser zu erkennen.
 					text += " ";
 				} else {
-					text += "<Zeilenumbruch/>";
+					text += "<Absatz>";
 				}
 			}
 			getText(knoten[i]);
+			if (i < len - 1 && fundort !== "DWDS") {
+				text += "</Absatz>";
+			} else if (i === len - 1) {
+				text += "</Absatz>";
+			}
 		}
 		// Belegtext aufbereiten
 		//   - Klammerungen aufbereiten (löschen oder taggen)
 		//   - Zeilenumbrüche am Ende ersetzen (kann bei wilder Auswahl passieren)
+		//   - leere Tags ersetzen (kann bei Stichwörtern mit Klammerung in der Mitte vorkommen
+		//   - Stichwort-Tags zusammenführen (kann bei Klammerung in der Mitte vorkommen)
 		//   - Text trimmen (durch Streichungen können doppelte Leerzeichen entstehen)
 		//   - verschachtelte Hervorhebungen zusammenführen
 		text = klammernTaggen(text);
 		text = text.replace(/(<Zeilenumbruch\/>\s?)+$/, "");
+		text = text.replace(/<([a-zA-Z]+)(?: Stil="#[a-z]+")?><\/([a-zA-Z]+)>/g, (m, p1, p2) => {
+			if (p1 === p2 &&
+					p1 !== "Autorenzusatz") { // <Autorenzusatz> kann leer sein (Elision)
+				return "";
+			}
+			return m;
+		});
+		text = text.replace(/<\/Stichwort><Stichwort>/g, "");
 		text = helfer.textTrim(text, true);
-		let textBak = text,
-			reg = new RegExp(`(?<start>(<Hervorhebung( Stil="#[^>]+")?>){2,})(?<text>[^<]+)(<\/Hervorhebung>)+`, "g"),
-			h = reg.exec(text);
-		if (h) {
-			// das Folgende funktioniert natürlich nur gut, wenn die Tags direkt
-			// ineinander verschachtelt sind; ansonsten produziert es illegales XML
-			let stile = [];
-			for (let i of [...h.groups.start.matchAll(/Stil="(#.+?)"/g)]) {
-				stile.push(i[1]);
-			}
-			let ersatz = `<Hervorhebung`;
-			if (stile.length) {
-				ersatz += ` Stil="${stile.join(" ")}"`;
-			}
-			ersatz += `>${h.groups.text}</Hervorhebung>`;
-			let reg = new RegExp(helfer.escapeRegExp(h[0]));
-			text = text.replace(reg, ersatz);
-			// Test, ob wohlgeformtes XML produziert wurde
-			let xmlDoc = parser.parseFromString(`<Belegtext>${text}</Belegtext>`, "text/xml");
-			if (xmlDoc.querySelector("parsererror")) {
-				text = textBak;
-			}
-		}
+		text = xml.mergeHervorhebungen({text});
 		// Belegtext einhängen
 		let belegtext = parser.parseFromString(`<Belegtext>${text}</Belegtext>`, "text/xml");
 		schnitt.firstChild.appendChild(belegtext.firstChild);
@@ -100,10 +95,14 @@ let xml = {
 						continue;
 					} else if (c.nodeType === 1 &&
 							c.nodeName === "MARK") {
-						if (c.classList.contains("user") || c.classList.contains("markierung")) {
+						// wenn man in den Formvarianten Mehrwortausdrücken als Wort
+						// aufnimmt, kann es zu Verschachtelungen kommen
+						const verschachtelt = c.parentNode.closest("mark");
+						if (!verschachtelt &&
+								(c.classList.contains("user") || c.classList.contains("markierung"))) {
 							text += `<Markierung>`;
 							close = "</Markierung>";
-						} else {
+						} else if (!verschachtelt) {
 							text += "<Stichwort>";
 							close = "</Stichwort>";
 						}
@@ -143,7 +142,7 @@ let xml = {
 			// Streichung: [...]
 			text = text.replace(/\[(.+?)\]/g, (m, p1) => `<Streichung>${p1}</Streichung>`);
 			// Autorenzusatz: {...}
-			text = text.replace(/\{(.+?)\}/g, (m, p1) => `<Autorenzusatz>${p1}</Autorenzusatz>`);
+			text = text.replace(/\{(.*?)\}/g, (m, p1) => `<Autorenzusatz>${p1}</Autorenzusatz>`);
 			// Ergebnis zurückgeben
 			return text;
 		}
@@ -183,6 +182,22 @@ let xml = {
 			let aufrufdatum = document.createElementNS(ns, "Aufrufdatum");
 			fundstelle.appendChild(aufrufdatum);
 			aufrufdatum.appendChild(document.createTextNode(zugriff));
+		} else {
+			// <Aufrufdatum>
+			// (auch wenn keine URL da ist, z.B. nach Import eines DWDS-Belegs manuell eingefügt)
+			let quZeilen = data.qu.split("\n");
+			if (quZeilen.length > 1) {
+				data.qu = quZeilen[0];
+				for (let i = 1, len = quZeilen.length; i < len; i++) {
+					let zugriff = helferXml.datum(quZeilen[i]);
+					if (zugriff) {
+						let aufrufdatum = document.createElementNS(ns, "Aufrufdatum");
+						fundstelle.appendChild(aufrufdatum);
+						aufrufdatum.appendChild(document.createTextNode(zugriff));
+						break;
+					}
+				}
+			}
 		}
 		// <unstrukturiert>
 		let qu = data.qu;
@@ -214,6 +229,36 @@ let xml = {
 		// String zurückgeben
 		return xmlStr;
 	},
+	// veschachtelte Hervorhebungen-Tags zusammenführen
+	//   text = String
+	//     (Text, in dem die Hervorhebungen zusammengeführt werden sollen)
+	mergeHervorhebungen ({text}) {
+		const bak = text;
+		let reg = new RegExp(`(?<start>(<Hervorhebung( Stil="#[^>]+")?>){2,})(?<text>[^<]+)(<\/Hervorhebung>)+`, "g"),
+			h = reg.exec(text);
+		if (h) {
+			// das Folgende funktioniert natürlich nur gut, wenn die Tags direkt
+			// ineinander verschachtelt sind; ansonsten produziert es illegales XML
+			let stile = [];
+			for (let i of [...h.groups.start.matchAll(/Stil="(#.+?)"/g)]) {
+				stile.push(i[1]);
+			}
+			let ersatz = `<Hervorhebung`;
+			if (stile.length) {
+				ersatz += ` Stil="${stile.join(" ")}"`;
+			}
+			ersatz += `>${h.groups.text}</Hervorhebung>`;
+			let reg = new RegExp(helfer.escapeRegExp(h[0]));
+			text = text.replace(reg, ersatz);
+			// Test, ob wohlgeformtes XML produziert wurde
+			let parser = new DOMParser(),
+				xmlDoc = parser.parseFromString(`<Belegtext>${text}</Belegtext>`, "text/xml");
+			if (xmlDoc.querySelector("parsererror")) {
+				text = bak;
+			}
+		}
+		return text;
+	},
 	// markierten Belegschnitt in die Zwischenablage kopieren
 	schnittInZwischenablage () {
 		const xmlStr = xml.schnitt();
@@ -223,6 +268,57 @@ let xml = {
 		});
 		// Animation
 		helfer.animation("zwischenablage");
+	},
+	// markierten Belegschnitt an das XML-Fenster schicken
+	schnittInXmlFenster () {
+		// Karteikarte noch nicht gespeichert?
+		if (helfer.hauptfunktion === "karte" && !data.ka[popup.referenz.id]) {
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Die Karteikarte muss erst gespeichert werden.",
+			});
+			return;
+		}
+		// Sind Stichwort und Trennzeichen sichtbar?
+		if (helfer.hauptfunktion === "karte" && !optionen.data.beleg.trennung) {
+			dialog.oeffnen({
+				typ: "alert",
+				text: `Um diese Aktion auszuführen, müssen Sie die Anzeige der Trennzeichen im Kopf der Karteikarte aktivieren:\n• Icon <img src="img/trennzeichen.svg" width="24" height="24" alt="">`,
+			});
+			return;
+		}
+		if (helfer.hauptfunktion === "liste" &&
+				(!optionen.data.belegliste.trennung || !optionen.data.belegliste.wort_hervorheben)) {
+			let funktionen = [],
+				icons = [];
+			if (!optionen.data.belegliste.trennung) {
+				funktionen.push("die Anzeige der Trennzeichen");
+				icons.push(`• Icon <img src="img/trennzeichen.svg" width="24" height="24" alt="">`);
+			}
+			if (!optionen.data.belegliste.wort_hervorheben) {
+				funktionen.push("die Hervorhebung des Karteiworts");
+				icons.push(`• Icon <img src="img/text-fett.svg" width="24" height="24" alt="">`);
+			}
+			dialog.oeffnen({
+				typ: "alert",
+				text: `Um diese Aktion auszuführen, müssen Sie ${funktionen.join(" und ")} im Kopf der Karteikarte aktivieren:\n${icons.join("<br>")}`,
+			});
+			return;
+		}
+		// Daten zusammentragen
+		const xmlStr = xml.schnitt();
+		let datum = helferXml.datumFormat({xmlStr});
+		// Datensatz an XML-Fenster schicken
+		let xmlDatensatz = {
+			key: "bl",
+			ds: {
+				da: datum.anzeige,
+				ds: datum.sortier,
+				id: xml.belegId({}),
+				xl: xmlStr,
+			},
+		};
+		redXml.datensatz({xmlDatensatz});
 	},
 	// Referenztag des Belegs in die Zwischenablage kopieren
 	referenz () {

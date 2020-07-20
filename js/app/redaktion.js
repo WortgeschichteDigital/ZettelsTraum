@@ -81,6 +81,10 @@ let redaktion = {
 		redaktion.next();
 		// Tabelle aufbauen
 		redaktion.tabelle();
+		// Maximalhöhe des Fensters anpassen
+		helfer.elementMaxHeight({
+			ele: document.getElementById("redaktion-cont-over"),
+		});
 	},
 	// nächstes Redaktionsereignis im Kopf des Ereignisfenster anzeigen
 	next () {
@@ -103,7 +107,7 @@ let redaktion = {
 	// erstellt die Tabelle im Redaktionsfenster
 	tabelle () {
 		// Content leeren
-		let cont = document.getElementById("redaktion-cont");
+		let cont = document.getElementById("redaktion-cont-over");
 		helfer.keineKinder(cont);
 		// Tabelle aufbauen und einhängen
 		let table = document.createElement("table");
@@ -384,7 +388,7 @@ let redaktion = {
 	},
 	// die Liste der Einträge soll ergänzt werden
 	eintragErgaenzen () {
-		let inputs = document.querySelectorAll("#redaktion-cont tr:last-child input");
+		let inputs = document.querySelectorAll("#redaktion-cont-over tr:last-child input");
 		let obj = {
 			da: "",
 			er: "",

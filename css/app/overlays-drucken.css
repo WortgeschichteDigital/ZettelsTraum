@@ -38,11 +38,11 @@
 }
 
 #drucken-cont {
-	max-height: 400px;
 	overflow-y: auto;
 	color: #000;
 	font-family: "Noto Serif", serif;
 	user-select: text;
+	transition: max-height .5s ease;
 }
 
 #drucken-cont h3 {

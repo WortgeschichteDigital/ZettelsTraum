@@ -12,6 +12,21 @@ let initWin = {
 			bedeutungen.data = daten;
 			bedeutungen.aufbauen();
 		});
+		// XML-Redaktionsfenster: alle XML-Daten empfangen
+		ipcRenderer.on("xml-daten", (evt, xmlDaten) => {
+			if (xml.data.wort) {
+				// beim Ändern des Karteiworts werden alle Daten noch einmal
+				// an das bereits offene Fenster geschickt; in diesem Fall
+				// darf xml.init() nicht aufgerufen werden (macht Probleme)
+				xml.data.wort = xmlDaten.wort;
+				document.querySelector("h1").textContent = xml.data.wort;
+			} else {
+				xml.data = xmlDaten;
+				xml.init();
+			}
+		});
+		// XML-Redaktionsfester: einen XML-Datensatz empfangen
+		ipcRenderer.on("xml-datensatz", (evt, xmlDatensatz) => xml.empfangen({xmlDatensatz}));
 		// Before-Unload
 		ipcRenderer.on("before-unload", () => helferWin.beforeUnload());
 	},
@@ -126,6 +141,113 @@ let initWin = {
 				} else if (/drucken$/.test(this.id)) {
 					print();
 				}
+			});
+		});
+	},
+	// Events initialisieren: Elemente im XML-Fenster
+	eventsXml () {
+		// Kopf-Icons
+		document.querySelectorAll("#kopf-icons a").forEach(a => {
+			a.addEventListener("click", function(evt) {
+				evt.preventDefault();
+				switch (this.id) {
+					case "kopf-export":
+						xml.exportieren();
+						break;
+					case "kopf-import":
+						xml.importieren();
+						break;
+					case "kopf-speichern":
+						xml.speichernKartei();
+						break;
+					case "kopf-reset":
+						xml.reset();
+						break;
+				}
+			});
+		});
+		// Kopf-Navigation
+		document.querySelectorAll("#kopf-nav a").forEach(a => {
+			a.addEventListener("click", function(evt) {
+				evt.preventDefault();
+				const id = this.getAttribute("href").replace("#", "");
+				let ziel = document.getElementById(id),
+					header = document.querySelector("body > header");
+				window.scrollTo({
+					left: 0,
+					top: ziel.offsetTop - header.offsetHeight,
+					behavior: "smooth",
+				});
+			});
+		});
+		// Metadaten-Felder
+		document.querySelectorAll("#md-id, #md-ty, #md-tf").forEach(i => xml.mdChange({input: i}));
+		// Autofill Artikel-ID
+		document.querySelector("#md .icon-stift").addEventListener("click", evt => {
+			evt.preventDefault();
+			xml.mdIdMake();
+		});
+		// Revision/Lemma/Nachweis/Textreferenz hinzufügen
+		document.querySelectorAll("#le input, #md-re input, #bg-nw input, #bg-tf input").forEach(i => {
+			i.addEventListener("keydown", function(evt) {
+				tastatur.detectModifiers(evt);
+				if (!tastatur.modifiers &&
+						evt.key === "Enter" &&
+						!document.getElementById("dropdown")) {
+					if (this.closest("#md-re")) {
+						xml.mdRevisionAdd();
+					} else if (this.closest("#le")) {
+						xml.lemmaAdd();
+					} else if (this.closest("#bg-nw")) {
+						xml.bgNachweisAdd();
+					} else {
+						xml.bgTextreferenzAdd();
+					}
+				}
+			});
+			if (i.id === "nw-ty") {
+				i.addEventListener("input", () => xml.bgNachweisToggle());
+			}
+		});
+		document.querySelectorAll("#le .icon-plus-dick, #md-re .icon-plus-dick, #bg-nw .icon-plus-dick, #bg-tf .icon-plus-dick").forEach(i => {
+			i.addEventListener("click", function(evt) {
+				evt.preventDefault();
+				if (this.closest("#md-re")) {
+					xml.mdRevisionAdd();
+				} else if (this.closest("#le")) {
+					xml.lemmaAdd();
+				} else if (this.closest("#bg-nw")) {
+					xml.bgNachweisAdd();
+				} else {
+					xml.bgTextreferenzAdd();
+				}
+			});
+		});
+		// Abschnitt hinzufügen
+		document.querySelectorAll(".abschnitt-add").forEach(i => {
+			i.addEventListener("click", function() {
+				xml.abschnittAdd({element: this});
+			});
+		});
+		document.querySelectorAll(".abschnitt-add a").forEach(i => {
+			i.addEventListener("click", function(evt) {
+				evt.stopPropagation();
+				xml.abschnittAdd({element: this});
+			});
+		});
+		// Beleg einfügen/Blöcke umschalten
+		document.querySelectorAll(".toggle").forEach(abschnitt => {
+			abschnitt.querySelectorAll("a").forEach(i => {
+				i.addEventListener("click", function(evt) {
+					evt.preventDefault();
+					if (this.classList.contains("icon-einfuegen")) { // Beleg einfügen
+						xml.belegEinfuegen();
+					} else { // Blöcke umschalten
+						const auf = this.classList.contains("icon-auge") ? true : false,
+							key = this.closest("span").dataset.id;
+						xml.elementKopfToggle({auf, key});
+					}
+				});
 			});
 		});
 	},

@@ -16,8 +16,8 @@
 }
 
 #anhaenge-cont {
-	max-height: 351px;
 	overflow-y: auto;
+	transition: max-height .5s ease;
 }
 
 #anhaenge-cont h3 {

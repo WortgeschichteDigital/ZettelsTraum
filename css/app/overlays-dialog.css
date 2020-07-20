@@ -41,9 +41,9 @@
 }
 
 #dialog-text {
-	max-height: 400px;
 	overflow-x: hidden;
 	overflow-y: auto;
+	transition: max-height .5s ease;
 }
 
 #dialog-text img {

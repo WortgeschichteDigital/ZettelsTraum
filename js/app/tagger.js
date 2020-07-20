@@ -24,6 +24,9 @@ let tagger = {
 			tagger.aufbauenBedeutung(idx);
 		}
 		tagger.aufbauen();
+		helfer.elementMaxHeight({
+			ele: document.getElementById("tagger-typen"),
+		});
 	},
 	// Bedeutung eintragen, die hier getaggt wird
 	//   idx = String

@@ -15,6 +15,11 @@
 	padding: 10px 10px 5px 10px;
 }
 
+#meta-cont-over {
+	overflow: auto;
+	transition: max-height .5s ease;
+}
+
 #meta-cont h3 {
 	margin: 10px 0 5px 0;
 }
