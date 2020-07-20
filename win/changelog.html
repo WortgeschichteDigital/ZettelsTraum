@@ -48,12 +48,6 @@
 
 				<p><span class="obacht">Das Dateiformat hat sich geändert!</span> Ältere <abbr title="Zettel’s Traum JSON">ZTJ</abbr>-Dateien werden automatisch konvertiert; dabei wird eine Änderungsmarkierung gesetzt.</p>
 
-				<h3>Entfernte Funktionen</h3>
-
-				<ul>
-					<li></li>
-				</ul>
-
 				<h3>Neue Funktionen</h3>
 
 				<ul>
@@ -71,7 +65,7 @@
 
 					<li><a href="#karteikarte-quelle" class="link-handbuch">Karteikarte</a>: Aufrufdaten von Belegen könne im Quelle-Feld angegeben werden, ohne dass eine URL bekannt wäre. Auch in diesem Fall werden sie beim Erstellen eines <a href="#belegliste-xmlZwischenablageBelegschnitt" class="link-handbuch"><abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippets</a> berücksichtigt. <abbr title="Vergleiche">Vgl.</abbr> den verlinkten Handbuchabschnitt zur Karteikarte.</li>
 
-					<li>Die <a href="#menueRedaktion-wortinformationen" class="link-handbuch">Wortinformationen</a> sind nun immer an ein Bedeutungsgerüst gebunden. Mehrere Bedeutungsgerüste können also mit unterschiedliche Wortinformationen verknüpft werden. <abbr title="Vergleiche">Vgl.</abbr> den verlinkten Handbuchabschnitt.</li>
+					<li>Die <a href="#menueRedaktion-wortinformationen" class="link-handbuch">Wortinformationen</a> sind nun immer an ein Bedeutungsgerüst gebunden. Mehrere Bedeutungsgerüste können also mit unterschiedlichen Wortinformationen verknüpft werden. <abbr title="Vergleiche">Vgl.</abbr> den verlinkten Handbuchabschnitt.</li>
 
 					<li>Wortinformationen: Die Linktypen <i>Textverweis</i> und <i>Verweis intern</i> können nun semantisch typisiert werden. Zur Verfügung stehen die Typen <q>Entsprechung, Gegensatz, Hyperonym, Hyponym, Synonym</q>.</li>
 
@@ -79,23 +73,23 @@
 
 					<li>Wortinformationen: Verweistyp <i>Wortfeldartikel</i> ergänzt.</li>
 
-					<li>Literaturdatenbank: Das Tastaturkürzel <kbd>Strg</kbd> + <kbd>⏎</kbd> wurde geändert. Es dient nun dazu, den obersten sichtbaren Titel der <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Datei hinzuzufügen. Zum Öffnen des Versionen-Popups muss <kbd>Strg</kbd> + <kbd>Umsch</kbd> + <kbd>⏎</kbd> gedrückt werden.</li>
+					<li>Literaturdatenbank: Das Tastaturkürzel <kbd>Strg</kbd> + <kbd>⏎</kbd> wurde geändert. Es dient nun dazu, den obersten sichtbaren Titel an das <a href="#menueRedaktion-xml" class="link-handbuch"><abbr title="Extensible Markup Language" lang="en">XML</abbr>-Redaktionsfenster</a> zu schicken. Zum Öffnen des Versionen-Popups muss <kbd>Strg</kbd> + <kbd>Umsch</kbd> + <kbd>⏎</kbd> gedrückt werden.</li>
 
 					<li>Für das Öffnen des <a href="#menueKartei-notizen" class="link-handbuch">Notizen-Fensters</a> gibt es nun das Tastaturkürzel <kbd>Alt</kbd> + <kbd>Strg</kbd> + <kbd>N</kbd>.</li>
 				</ul>
 
-				<h3>Updates</h3>
-
-				<ul>
-					<li></li>
-				</ul>
-
 				<h3>Behobene Fehler</h3>
 
-				<p>Es wurden <i>2 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/master">Commit-Messages</a>.</p>
+				<p>Es wurden <i>4 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/master">Commit-Messages</a>.</p>
 
 				<ul>
-					<li></li>
+					<li>unter Windows funktionierte das automatische Ergänzen der Anhänge nicht</li>
+
+					<li>wurde aus dem DeReKo eine Belegliste importiert, in der mindestens einer der Belege das Karteiwort nicht enthielt, kam es zu einer Fehlermeldung und das Importfenster wurde nicht angezeigt</li>
+
+					<li>wurde in einem Belegtext eine Elision durch einen leeren Autorenzusatz markiert ({}), wurden die Klammern nicht farbig hervorgehoben</li>
+
+					<li>beim <abbr title="Deutsches Textarchiv">DTA</abbr>-Import blieben am Anfang von Absätzen mitunter Leerzeichen stehen</li>
 				</ul>
 			</div>
 
