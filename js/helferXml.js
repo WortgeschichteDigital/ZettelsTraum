@@ -236,6 +236,7 @@ let helferXml = {
 	},
 	// Abkürzungen Fließtext
 	abbr: {
+		"Abb\\.": "Abbildung",
 		"Adj\\.": "Adjektiv",
 		"Adv\\.": "Adverb",
 		"Akk\\.": "Akkusativ",
