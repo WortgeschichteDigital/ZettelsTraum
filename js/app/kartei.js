@@ -200,6 +200,9 @@ let kartei = {
 		// Karteiwort eintragen
 		// (muss wegen konversion.von8nach9() vor der Konersion geschehen)
 		kartei.wort = data.wo;
+		// Version des Datenformats der Kartei für das Metadatenfenster merken
+		// (muss vor der Konversion geschehen)
+		meta.ve = data.ve;
 		// Konversion des Dateiformats anstoßen
 		konversion.start();
 		// Einleseoperationen
@@ -301,6 +304,7 @@ let kartei = {
 				lock.actions({datei: kartei.pfad, aktion: "unlock"});
 				lock.actions({datei: pfad, aktion: "lock"});
 			}
+			meta.ve = data.ve; // Version des Dateiformats für das Metadaten-Fenster bereitstellen
 			kartei.pfad = pfad;
 			optionen.aendereLetzterPfad();
 			zuletzt.aendern();
