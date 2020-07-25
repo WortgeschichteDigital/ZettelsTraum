@@ -3842,6 +3842,7 @@ let xml = {
 			/\t+<Textblock/g,
 			/\t+<Blockzitat/g,
 			/\t+<Liste/g,
+			/(?<=Listenpunkt>)\n\s+<Listenpunkt/g,
 			/\t+<Illustration/g,
 			/(?<=(Ueberschrift|Textblock|Blockzitat|Liste|Illustration)>\n)\t+<Abschnitt/g,
 			/(?<=(Ueberschrift|Textblock|Blockzitat|Liste|Illustration)>\n)\t+<\/Abschnitt/g,
