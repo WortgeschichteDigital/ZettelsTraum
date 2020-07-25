@@ -17,7 +17,10 @@ window.addEventListener("load", async () => {
 	// UMBRUCH IN LANGEN DATEIPFADEN
 	hilfe.dateiBreak();
 
+	// ERWEITERTE NAVIGATION
+	hilfe.naviDetailsInit();
+
 	// FENSTER FREISCHALTEN
-	hilfe.sektionWechseln("einfuehrung"); // damit sich das Inhaltsverzeichnis aufbaut
+	hilfe.sektionWechseln("einfuehrung"); // damit der 1. Punkt im Inhaltsverzeichnis markiert wird
 	helfer.fensterGeladen();
 });

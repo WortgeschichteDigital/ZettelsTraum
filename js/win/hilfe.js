@@ -72,6 +72,160 @@ let hilfe = {
 		// History: Pfeile auffrischen (nachdem der Scroll beendet wurde)
 		hilfe.historyScrollArrows();
 	},
+	// Navi-Details: Timeout für das Ausblenden
+	naviDetailsTimeout: null,
+	// Navi-Details: Öffnen-Icons initialisieren
+	naviDetailsInit () {
+		document.querySelectorAll("nav > ul a").forEach(i => {
+			let span = document.createElement("span");
+			span.classList.add("nav-details-toggle");
+			i.appendChild(span);
+			span.addEventListener("click", function() {
+				if (!this.closest("a").classList.contains("aktiv")) {
+					return;
+				}
+				hilfe.naviDetails({
+					immerAn: false,
+				});
+			});
+		});
+	},
+	// Navi-Details: Anzeige aufbauen
+	//   immerAn = Boolean
+	//     (Detail-Navigation nicht umschalten)
+	naviDetails ({immerAn}) {
+		let nd = document.getElementById("navi-details");
+		if (nd) {
+			if (!immerAn) {
+				hilfe.naviDetailsAus();
+			}
+			return;
+		}
+		// aktive Sektion ermitteln
+		let aktiv = document.querySelector("nav > ul a.aktiv");
+		if (!aktiv) { // bei Suchseite oder Einführung
+			return;
+		}
+		let sek = "sektion-" + aktiv.getAttribute("href").substring(1);
+		// Icon in der Navigationsleiste umstellen
+		aktiv.querySelector(".nav-details-toggle").classList.add("nav-details-toggle-aus");
+		// Container aufbauen
+		nd = document.createElement("div");
+		document.querySelector("main").appendChild(nd);
+		nd.id = "navi-details";
+		let div = document.createElement("div");
+		nd.appendChild(div);
+		// Navigation aufbauen
+		let h = document.querySelectorAll(`#${sek} > h2, #${sek} .add-navi-details, #${sek} > .erklaerung-icon, #${sek} > .erklaerung-icon-menues, #${sek} > .erklaerung-option`);
+		h.forEach(i => {
+			if (!i.id || i.classList.contains("no-navi-details")) {
+				return;
+			}
+			let a = document.createElement("a");
+			div.appendChild(a);
+			if (i.nodeName === "H2") {
+				a.classList.add("h2");
+			} else if (i.classList.contains("add-navi-details")) {
+				a.classList.add("add");
+			} else {
+				a.classList.add("icon");
+			}
+			a.href = "#" + i.id;
+			// Linktext auslesen und aufbereiten
+			let text = "";
+			if (i.classList.contains("add-navi-details")) {
+				text = i.querySelector("b").textContent;
+			} else {
+				text = i.textContent;
+			}
+			text = text.trim();
+			let rep = [
+				/^Tastaturkürzel.+?;\s/,
+				/^nur Leseansicht;\s/,
+				/^nur bei aktiviert.+?;\s/,
+				/^[a-zA-Z]+:\s/,
+				/:$/,
+			];
+			for (let r of rep) {
+				text = text.replace(r, "");
+			}
+			if (/; /.test(text)) {
+				text = text.replace(/(.+?); .+/, (m, p1) => p1);
+			}
+			a.textContent = text;
+			// Events anhängen
+			hilfe.naviSprung(a);
+			a.addEventListener("click", () => hilfe.naviDetailsAus());
+		});
+		// ggf. System der Überschriften umstellen
+		if (!div.querySelector(".h2")) {
+			div.querySelectorAll(".icon").forEach(i => {
+				i.classList.remove("icon");
+				i.classList.add("h2");
+			});
+			div.querySelectorAll(".icon").forEach(i => {
+				i.classList.remove("icon");
+				i.classList.add("add");
+			});
+		}
+		// Einrückungen vornehmen
+		for (let a of div.querySelectorAll(".h2")) {
+			// ermitteln, ob unterhalb Links der Klasse add sind
+			let icon = "level1",
+				next = a.nextSibling;
+			while (next && !next.classList.contains("h2")) {
+				if (next.classList.contains("add")) {
+					icon = "level2";
+					break;
+				}
+				next = next.nextSibling;
+			}
+			// Einzüge setzen
+			next = a.nextSibling;
+			while (next && !next.classList.contains("h2")) {
+				if (next.classList.contains("add")) {
+					next.classList.add("level1");
+				} else {
+					next.classList.add(icon);
+				}
+				next = next.nextSibling;
+			}
+		}
+		// Navigation positionieren
+		let rect = aktiv.getBoundingClientRect();
+		if (rect.top + nd.offsetHeight < window.innerHeight) {
+			// an der oberen Kante des aktiven Menüpunkts ausrichten
+			nd.style.top = `${rect.top}px`;
+		} else if (rect.bottom - nd.offsetHeight < 130) {
+			// an der oberen Kante der Navigation ausrichten
+			nd.style.top = "130px";
+		} else {
+			// an der unteren Kante des aktiven Menüpunkts ausrichten
+			nd.style.top = `${rect.bottom - nd.offsetHeight}px`;
+		}
+		// Navigation einblenden
+		nd.style.left = `${250 - nd.offsetWidth}px`; // 250px = Breite Haupt-Navigation
+		setTimeout(() => nd.style.left = "265px", 0);
+		// ersten Link fokussieren
+		div.querySelector("a").focus();
+	},
+	// Navi-Details: Anzeige schließen
+	naviDetailsAus () {
+		let nd = document.getElementById("navi-details");
+		if (!nd) {
+			return;
+		}
+		nd.style.left = `${250 - nd.offsetWidth}px`;
+		clearTimeout(hilfe.naviDetailsTimeout);
+		hilfe.naviDetailsTimeout = setTimeout(() => {
+			nd.parentNode.removeChild(nd);
+			let aus = document.querySelectorAll(".nav-details-toggle-aus");
+			for (let i of aus) {
+				// schaltet man schnell um, könnten durchaus mehrere vorhanden sein
+				i.classList.remove("nav-details-toggle-aus");
+			}
+		}, 500);
+	},
 	// ermittelt die aktive Sektion
 	sektionAktiv () {
 		let sek = document.querySelectorAll("section");
@@ -96,6 +250,8 @@ let hilfe = {
 		if (document.getElementById("suchleiste")) {
 			suchleiste.ausblenden();
 		}
+		// Detail-Navigation ggf. schließen
+		hilfe.naviDetailsAus();
 		// Navigation auffrischen
 		document.querySelectorAll("nav a.kopf").forEach(function(i) {
 			if (i.getAttribute("href") === `#${sektion}`) {
