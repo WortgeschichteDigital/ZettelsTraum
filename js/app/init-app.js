@@ -195,7 +195,11 @@ window.addEventListener("load", async () => {
 	// alle <input type="number">
 	document.querySelectorAll(`input[type="number"]`).forEach(i => {
 		i.addEventListener("change", function() {
+			const val = this.value;
 			helfer.inputNumber(this);
+			if (this.value !== val) {
+				this.dispatchEvent(new Event("input"));
+			}
 		});
 	});
 	// alle Dropdown-Listen
