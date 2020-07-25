@@ -96,8 +96,6 @@ let hilfe = {
 		if (document.getElementById("suchleiste")) {
 			suchleiste.ausblenden();
 		}
-		// Überschriftenliste aufbauen
-		hilfe.sektionenH(sektion);
 		// Navigation auffrischen
 		document.querySelectorAll("nav a.kopf").forEach(function(i) {
 			if (i.getAttribute("href") === `#${sektion}`) {
@@ -125,71 +123,6 @@ let hilfe = {
 		// Suche: ggf. Link fokussieren
 		if (!history && sektion === "suche") {
 			hilfe.sucheFokus();
-		}
-	},
-	// Überschriftenliste der aktiven Sektion aufbauen
-	//   sektion = String
-	//     (die aktive Sektion)
-	async sektionenH (sektion) {
-		// alte Listen entfernen
-		// (wenn man sehr schnell hoch und runter geht,
-		// können sonst Listen übrigbleiben)
-		document.querySelectorAll("nav li ul").forEach(ul => {
-			ul.classList.add("blenden");
-			ul.style.height = `${ul.offsetHeight}px`;
-			setTimeout(() => {
-				ul.style.height = "0";
-				ul.style.marginTop = "0";
-				setTimeout(() => {
-					// besser mit Timeout, ontransitionend würde zweimal aufgerufen
-					// => Probleme mit dem Entfernen
-					if (document.querySelector("nav").contains(ul)) {
-						ul.parentNode.removeChild(ul);
-					}
-				}, 300);
-			}, 0);
-		});
-		// zu aktivierende Sektion ermitteln
-		let aktiv = document.querySelector(`nav a[href="#${sektion}"]`);
-		// die Suchseite hat niemals ein Inhaltsverzeichnis
-		if (!aktiv) {
-			return;
-		}
-		// wenn mit der Liste gerade etwas gemacht wird => kurz warten
-		if (aktiv.nextSibling) {
-			await new Promise(resolve => setTimeout(resolve, 300));
-			// es könnte sein, dass die Überschriftenliste gerade eingeblendet wurde
-			if (aktiv.nextSibling) {
-				return;
-			}
-		}
-		// neuen Listencontainer erstellen
-		let ul = document.createElement("ul");
-		ul.classList.add("h");
-		// Listencontainer füllen
-		document.querySelectorAll(`section[id="sektion-${sektion}"] h2`).forEach(function(h2) {
-			let li = document.createElement("li"),
-				a = document.createElement("a");
-			a.href = `#${h2.id}`;
-			a.innerHTML = h2.innerHTML;
-			li.appendChild(a);
-			ul.appendChild(li);
-			hilfe.naviSprung(a);
-		});
-		// Listencontainer einhängen?
-		if (ul.hasChildNodes()) {
-			aktiv.parentNode.appendChild(ul);
-			let zielHoehe = ul.offsetHeight;
-			ul.style.height = "0";
-			ul.style.marginTop = "0";
-			setTimeout(() => {
-				ul.classList.add("blenden");
-				ul.style.height = `${zielHoehe}px`;
-				ul.style.marginTop = "5px";
-				ul.addEventListener("transitionend", () => {
-					ul.classList.remove("blenden");
-				});
-			}, 0);
 		}
 	},
 	// lange Dateipfade umbrechen

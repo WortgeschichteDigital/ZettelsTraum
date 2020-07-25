@@ -349,21 +349,6 @@ nav li {
 	margin-bottom: 10px;
 }
 
-nav ul.h {
-	margin: 5px 10px 0 10px;
-}
-
-nav ul.blenden {
-	overflow: hidden;
-	transition: height .3s ease, margin-top .3s ease;
-}
-
-nav ul.h li {
-	margin-bottom: 5px;
-	padding-left: 15px;
-	text-indent: -15px;
-}
-
 nav li a.kopf {
 	display: block;
 	padding: 2px 10px;
