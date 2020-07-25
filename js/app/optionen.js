@@ -141,6 +141,8 @@ let optionen = {
 			"notizen-filterleiste": false,
 			// Notizen in der Filterleiste standardmäßig öffnen
 			"filter-offen-notizen": true,
+			// maximale Breite des Notizen-Fensters
+			"notizen-max-breite": 650,
 			// BEDEUTUNGSGERÜST
 			// Bedeutungsgerüst nach dem Speichern direkt schließen
 			"bedeutungen-schliessen": false,
@@ -347,6 +349,8 @@ let optionen = {
 		// Icons im <caption> der Karteikarte
 		beleg.ctrlKuerzenAnzeige();
 		beleg.ctrlTrennungAnzeige();
+		// maximale Breite des Notizen-Fensters
+		optionen.anwendenNotizenMaxBreite();
 		// Optionen im Optionen-Fenster eintragen
 		optionen.anwendenEinstellungen();
 	},
@@ -361,6 +365,8 @@ let optionen = {
 		optionen.anwendenTags();
 		// Icons für die Detailanzeige immer sichtbar?
 		optionen.anwendenIconsDetails();
+		// maximale Breite des Notizen-Fensters
+		optionen.anwendenNotizenMaxBreite();
 		// Optionen im Optionen-Fenster eintragen
 		optionen.anwendenEinstellungen();
 		// ggf. Update-Hinweis einblenden
@@ -374,7 +380,7 @@ let optionen = {
 			if (ee[i].type === "checkbox") {
 				ee[i].checked = optionen.data.einstellungen[e] ? true : false;
 			} else if (ee[i].type === "text" || ee[i].type === "number") {
-				ee[i].value = optionen.data.einstellungen[e] ? optionen.data.einstellungen[e] : "";
+				ee[i].value = optionen.data.einstellungen[e] || "";
 			}
 		}
 		// Kartei > Speichern anwenden
@@ -405,6 +411,11 @@ let optionen = {
 				notizen.filterleisteEntfernen();
 			}
 		});
+	},
+	// Breite des Notizen-Fensters anpassen
+	anwendenNotizenMaxBreite () {
+		const breite = optionen.data.einstellungen["notizen-max-breite"];
+		document.querySelector("#notizen > div").style.maxWidth = `${breite}px`;
 	},
 	// Icons für die Detail-Anzeige im Kopf der Belegliste ggf. immer sichtbar (Listener)
 	//   input = Element
