@@ -348,9 +348,23 @@ let tastatur = {
 		}
 		// Key "ArrowLeft" || "ArrowRight (Dokumentation, Handbuch)
 		if (/dokumentation|handbuch/.test(winInfo.typ) &&
-				m === "Alt" && /^(ArrowLeft|ArrowRight)$/.test(evt.key)) {
-			const dir = evt.key === "ArrowRight" ? true : false;
-			hilfe.historyNavi(dir);
+				(m === "Alt" || m === "Ctrl") &&
+				/^(ArrowLeft|ArrowRight)$/.test(evt.key)) {
+			if (m === "Alt") {
+				const dir = evt.key === "ArrowRight" ? true : false;
+				hilfe.historyNavi(dir);
+			} else if (m === "Ctrl") {
+				switch (evt.key) {
+					case "ArrowLeft":
+						hilfe.naviDetailsAus();
+						break;
+					case "ArrowRight":
+						hilfe.naviDetails({
+							immerAn: true,
+						});
+						break;
+				}
+			}
 			return;
 		}
 		// Key "ArrowLeft" || "ArrowRight (Handbuch)

@@ -360,6 +360,7 @@ let helfer = {
 			/[0-9]{2}\.\s?(Jh\.|Jahrhundert)/g, // Jahrhundertangaben
 			/(Abschnitt|Kapitel) ([0-9]|[IVXLC])/g,
 			/a\.\s?M\./g, // am Main
+			/Abb\.\s?[0-9]+/g, // Abbildung
 			/Bd\.\s?[0-9]+/g, // Band
 			/d\.\s?(h|i)\./ig,
 			/e\.\s?V\./g, // eingetragener Verein

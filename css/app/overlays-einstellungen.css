@@ -92,12 +92,17 @@
 	color: var(--farbe);
 }
 
+#einstellungen-cont input[type="number"]#einstellung-notizen-max-breite {
+	width: 60px;
+}
+
 #einstellungen-cont input[type="checkbox"] {
 	margin-right: 9px; /* für alignment mit Überschrift */
 }
 
 #einstellungen-cont label[for="einstellung-bearbeiterin"],
-#einstellungen-cont label[for="einstellung-timeout"] {
+#einstellungen-cont label[for="einstellung-timeout"],
+#einstellungen-cont label[for="einstellung-notizen-max-breite"] {
 	margin-left: 10px;
 }
 

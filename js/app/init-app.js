@@ -195,7 +195,11 @@ window.addEventListener("load", async () => {
 	// alle <input type="number">
 	document.querySelectorAll(`input[type="number"]`).forEach(i => {
 		i.addEventListener("change", function() {
+			const val = this.value;
 			helfer.inputNumber(this);
+			if (this.value !== val) {
+				this.dispatchEvent(new Event("input"));
+			}
 		});
 	});
 	// alle Dropdown-Listen
@@ -304,6 +308,9 @@ window.addEventListener("load", async () => {
 	document.querySelectorAll("#einstellungen-quick-alle, #einstellungen-quick-standard, #einstellungen-quick-keine").forEach(a => quick.preset(a));
 	document.querySelectorAll("#quick-config div:nth-child(2) img").forEach(img => quick.eventsPfeile(img));
 	optionen.anwendenNotizenFilterleiste(document.getElementById("einstellung-notizen-filterleiste"));
+	document.getElementById("einstellung-notizen-max-breite").addEventListener("change", () => {
+		optionen.anwendenNotizenMaxBreite();
+	});
 	document.getElementById("tags-laden").addEventListener("click", () => optionen.tagsManuLaden());
 	document.getElementById("tags-zuruecksetzen").addEventListener("click", () => optionen.tagsZuruecksetzen());
 	optionen.anwendenIconsDetailsListener(document.getElementById("einstellung-anzeige-icons-immer-an"));

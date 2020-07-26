@@ -72,6 +72,181 @@ let hilfe = {
 		// History: Pfeile auffrischen (nachdem der Scroll beendet wurde)
 		hilfe.historyScrollArrows();
 	},
+	// Navi-Details: Timeout für das Ausblenden
+	naviDetailsTimeout: null,
+	// Navi-Details: Öffnen-Icons initialisieren
+	naviDetailsInit () {
+		document.querySelectorAll("nav > ul a").forEach(i => {
+			let span = document.createElement("span");
+			span.classList.add("nav-details-toggle");
+			i.appendChild(span);
+			span.addEventListener("click", function() {
+				if (!this.closest("a").classList.contains("aktiv")) {
+					return;
+				}
+				hilfe.naviDetails({
+					immerAn: false,
+				});
+			});
+		});
+	},
+	// Navi-Details: Anzeige aufbauen
+	//   immerAn = Boolean
+	//     (Detail-Navigation nicht umschalten)
+	naviDetails ({immerAn}) {
+		let nd = document.getElementById("navi-details"),
+			sektion = hilfe.naviDetailsAktiv();
+		if (nd) {
+			if (!immerAn) {
+				hilfe.naviDetailsAus();
+				return;
+			} else if (!sektion.id || nd.dataset.sektion === sektion.id) {
+				return;
+			}
+			clearTimeout(hilfe.naviDetailsTimeout);
+		}
+		// ggf. abbrechen (bei Suchseite oder Einführung)
+		if (!sektion.aktiv) {
+			return;
+		}
+		// Icon in der Navigationsleiste umstellen
+		sektion.aktiv.querySelector(".nav-details-toggle").classList.add("nav-details-toggle-aus");
+		// Container aufbauen bzw. leeren
+		let div;
+		if (!nd) {
+			nd = document.createElement("div");
+			document.querySelector("main").appendChild(nd);
+			nd.id = "navi-details";
+			div = document.createElement("div");
+			nd.appendChild(div);
+		} else {
+			div = nd.firstChild;
+			helfer.keineKinder(div);
+		}
+		nd.dataset.sektion = sektion.id;
+		// Navigation aufbauen
+		let h = document.querySelectorAll(`#${sektion.id} > h2, #${sektion.id} .add-navi-details, #${sektion.id} > .erklaerung-icon, #${sektion.id} > .erklaerung-icon-menues, #${sektion.id} > .erklaerung-option`);
+		h.forEach(i => {
+			if (!i.id || i.classList.contains("no-navi-details")) {
+				return;
+			}
+			let a = document.createElement("a");
+			div.appendChild(a);
+			if (i.nodeName === "H2") {
+				a.classList.add("h2");
+			} else if (i.classList.contains("add-navi-details")) {
+				a.classList.add("add");
+			} else {
+				a.classList.add("icon");
+			}
+			a.href = "#" + i.id;
+			// Linktext auslesen und aufbereiten
+			let text = "";
+			if (i.classList.contains("add-navi-details")) {
+				text = i.querySelector("b").textContent;
+			} else {
+				text = i.textContent;
+			}
+			text = text.trim();
+			let rep = [
+				/^Tastaturkürzel.+?;\s/,
+				/^nur Leseansicht;\s/,
+				/^nur bei aktiviert.+?;\s/,
+				/^[a-zA-Z]+:\s/,
+				/:$/,
+			];
+			for (let r of rep) {
+				text = text.replace(r, "");
+			}
+			if (/; /.test(text)) {
+				text = text.replace(/(.+?); .+/, (m, p1) => p1);
+			}
+			a.textContent = text;
+			// Events anhängen
+			hilfe.naviSprung(a);
+			a.addEventListener("click", () => hilfe.naviDetailsAus());
+		});
+		// ggf. System der Überschriften umstellen
+		if (!div.querySelector(".h2")) {
+			div.querySelectorAll(".icon").forEach(i => {
+				i.classList.remove("icon");
+				i.classList.add("h2");
+			});
+			div.querySelectorAll(".icon").forEach(i => {
+				i.classList.remove("icon");
+				i.classList.add("add");
+			});
+		}
+		// Einrückungen vornehmen
+		for (let a of div.querySelectorAll(".h2")) {
+			// ermitteln, ob unterhalb Links der Klasse add sind
+			let icon = "level1",
+				next = a.nextSibling;
+			while (next && !next.classList.contains("h2")) {
+				if (next.classList.contains("add")) {
+					icon = "level2";
+					break;
+				}
+				next = next.nextSibling;
+			}
+			// Einzüge setzen
+			next = a.nextSibling;
+			while (next && !next.classList.contains("h2")) {
+				if (next.classList.contains("add")) {
+					next.classList.add("level1");
+				} else {
+					next.classList.add(icon);
+				}
+				next = next.nextSibling;
+			}
+		}
+		// Navigation positionieren
+		let rect = sektion.aktiv.getBoundingClientRect();
+		if (rect.top + nd.offsetHeight < window.innerHeight) {
+			// an der oberen Kante des aktiven Menüpunkts ausrichten
+			nd.style.top = `${rect.top}px`;
+		} else if (rect.bottom - nd.offsetHeight < 130) {
+			// an der oberen Kante der Navigation ausrichten
+			nd.style.top = "130px";
+		} else {
+			// an der unteren Kante des aktiven Menüpunkts ausrichten
+			nd.style.top = `${rect.bottom - nd.offsetHeight}px`;
+		}
+		// Navigation einblenden
+		nd.style.left = `${250 - nd.offsetWidth}px`; // 250px = Breite Haupt-Navigation
+		setTimeout(() => nd.style.left = "265px", 0);
+		// ersten Link fokussieren
+		div.querySelector("a").focus();
+	},
+	// Navi-Details: Infos zur aktiven Sektion ermitteln
+	naviDetailsAktiv () {
+		let aktiv = document.querySelector("nav > ul a.aktiv"),
+			id = "";
+		if (aktiv) {
+			id = "sektion-" + aktiv.getAttribute("href").substring(1);
+		}
+		return {
+			aktiv,
+			id,
+		};
+	},
+	// Navi-Details: Anzeige schließen
+	naviDetailsAus () {
+		let nd = document.getElementById("navi-details");
+		if (!nd) {
+			return;
+		}
+		nd.style.left = `${250 - nd.offsetWidth}px`;
+		clearTimeout(hilfe.naviDetailsTimeout);
+		hilfe.naviDetailsTimeout = setTimeout(() => {
+			nd.parentNode.removeChild(nd);
+			let aus = document.querySelectorAll(".nav-details-toggle-aus");
+			for (let i of aus) {
+				// schaltet man schnell um, könnten durchaus mehrere vorhanden sein
+				i.classList.remove("nav-details-toggle-aus");
+			}
+		}, 500);
+	},
 	// ermittelt die aktive Sektion
 	sektionAktiv () {
 		let sek = document.querySelectorAll("section");
@@ -96,8 +271,8 @@ let hilfe = {
 		if (document.getElementById("suchleiste")) {
 			suchleiste.ausblenden();
 		}
-		// Überschriftenliste aufbauen
-		hilfe.sektionenH(sektion);
+		// Detail-Navigation ggf. schließen
+		hilfe.naviDetailsAus();
 		// Navigation auffrischen
 		document.querySelectorAll("nav a.kopf").forEach(function(i) {
 			if (i.getAttribute("href") === `#${sektion}`) {
@@ -125,71 +300,6 @@ let hilfe = {
 		// Suche: ggf. Link fokussieren
 		if (!history && sektion === "suche") {
 			hilfe.sucheFokus();
-		}
-	},
-	// Überschriftenliste der aktiven Sektion aufbauen
-	//   sektion = String
-	//     (die aktive Sektion)
-	async sektionenH (sektion) {
-		// alte Listen entfernen
-		// (wenn man sehr schnell hoch und runter geht,
-		// können sonst Listen übrigbleiben)
-		document.querySelectorAll("nav li ul").forEach(ul => {
-			ul.classList.add("blenden");
-			ul.style.height = `${ul.offsetHeight}px`;
-			setTimeout(() => {
-				ul.style.height = "0";
-				ul.style.marginTop = "0";
-				setTimeout(() => {
-					// besser mit Timeout, ontransitionend würde zweimal aufgerufen
-					// => Probleme mit dem Entfernen
-					if (document.querySelector("nav").contains(ul)) {
-						ul.parentNode.removeChild(ul);
-					}
-				}, 300);
-			}, 0);
-		});
-		// zu aktivierende Sektion ermitteln
-		let aktiv = document.querySelector(`nav a[href="#${sektion}"]`);
-		// die Suchseite hat niemals ein Inhaltsverzeichnis
-		if (!aktiv) {
-			return;
-		}
-		// wenn mit der Liste gerade etwas gemacht wird => kurz warten
-		if (aktiv.nextSibling) {
-			await new Promise(resolve => setTimeout(resolve, 300));
-			// es könnte sein, dass die Überschriftenliste gerade eingeblendet wurde
-			if (aktiv.nextSibling) {
-				return;
-			}
-		}
-		// neuen Listencontainer erstellen
-		let ul = document.createElement("ul");
-		ul.classList.add("h");
-		// Listencontainer füllen
-		document.querySelectorAll(`section[id="sektion-${sektion}"] h2`).forEach(function(h2) {
-			let li = document.createElement("li"),
-				a = document.createElement("a");
-			a.href = `#${h2.id}`;
-			a.innerHTML = h2.innerHTML;
-			li.appendChild(a);
-			ul.appendChild(li);
-			hilfe.naviSprung(a);
-		});
-		// Listencontainer einhängen?
-		if (ul.hasChildNodes()) {
-			aktiv.parentNode.appendChild(ul);
-			let zielHoehe = ul.offsetHeight;
-			ul.style.height = "0";
-			ul.style.marginTop = "0";
-			setTimeout(() => {
-				ul.classList.add("blenden");
-				ul.style.height = `${zielHoehe}px`;
-				ul.style.marginTop = "5px";
-				ul.addEventListener("transitionend", () => {
-					ul.classList.remove("blenden");
-				});
-			}, 0);
 		}
 	},
 	// lange Dateipfade umbrechen

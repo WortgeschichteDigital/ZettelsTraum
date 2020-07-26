@@ -1,6 +1,11 @@
 "use strict";
 
 let meta = {
+	// Zwischenspeicher für die aktuelle Version des Dateiformats
+	// (data.ve speichert die interne Version der Daten; die ist nach
+	// der Konversion des Formats natürlich immer die höchste; hier wird
+	// gespeichert, welche Version die Kartei tatsächlich hat)
+	ve: 0,
 	// Metadaten-Fenster einblenden
 	oeffnen () {
 		// Sperre für macOS (Menüpunkte können nicht deaktiviert werden)
@@ -47,7 +52,7 @@ let meta = {
 			speicherort.classList.add("kein-wert");
 		}
 		speicherort.innerHTML = pfad;
-		document.getElementById("meta-ve").textContent = `Version ${data.ve}`;
+		document.getElementById("meta-ve").textContent = `Version ${meta.ve}`;
 		document.getElementById("meta-re").textContent = data.re;
 	},
 };

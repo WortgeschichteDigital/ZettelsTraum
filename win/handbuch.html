@@ -158,6 +158,8 @@
 
 						<li>Durch die einzelnen <b>Kapitel</b> des Handbuchs können Sie mit dem Tastaturkürzeln <kbd>Strg</kbd> + <kbd>⇧</kbd> <abbr title="beziehungsweise">bzw.</abbr> <kbd>⇩</kbd> navigieren.</li>
 
+						<li>Ein <b>detailliertes Inhaltsverzeichnis</b> zu dem jeweiligen Kapitel können Sie über das Icon <img src="../img/plus-dick.svg" width="24" height="24" alt=""> oder mit dem Tastaturkürzel <kbd>Strg</kbd> + <kbd>⇨</kbd> öffnen.</li>
+
 						<li>
 							<p>Das Handbuch merkt sich, welche Links oder Menüpunkte im Inhaltsverzeichnis Sie anklicken und speichert Sie in einer <b>Verlaufshistorie</b>. Mit dem Pfeil <img src="../img/pfeil-gerade-links.svg" width="24" height="24" alt=""> (rechts neben dem Suchfeld) können Sie zur vorherigen Position zurückspringen und mit <img src="../img/pfeil-gerade-rechts.svg" width="24" height="24" alt=""> danach in der Verlaufshistorie wieder vorwärts wandern.</p>
 
@@ -394,7 +396,7 @@
 
 					<p>Einige der Icons in der Kopfleiste stehen für Funktionen, die aktiviert oder deaktiviert werden können. Ist eine Funktion aktiviert, ist der Hintergrund des Icons grün. In der Abbildung sind die Icons, auf die das zutreffen kann, alle grün hinterlegt.</p>
 
-					<p class="erklaerung-icon"><img src="../img/pfeil-gerade-hoch.svg" width="24" height="24" alt="">Tastaturkürzel <kbd>Strg</kbd> + <kbd>Bild ⇧</kbd>; vorherigen Beleg in der <a href="#belegliste">Belegliste</a> öffnen</p>
+					<p class="erklaerung-icon" id="karteikarte-vorherigerBeleg"><img src="../img/pfeil-gerade-hoch.svg" width="24" height="24" alt="">Tastaturkürzel <kbd>Strg</kbd> + <kbd>Bild ⇧</kbd>; vorherigen Beleg in der <a href="#belegliste">Belegliste</a> öffnen</p>
 
 					<div class="info">
 						<p>Welcher der vorherige Beleg ist, hängt davon ab, wie die Belegliste zum Zeitpunkt des Öffnens der Karteikarte <a href="#belegliste-sortierung">sortiert</a> und <a href="#filter">gefiltert</a> war.</p>
@@ -402,7 +404,7 @@
 						<p>Der vorherige Beleg wird in derselben Ansicht geöffnet, die gerade aktiv ist. Selbst wenn neue Belege standardmäßig in der <a href="#karteikarte-leseansicht">Leseansicht</a> geöffnet werden und Sie sich gerade in der <a href="#karteikarte-formularansicht">Formularansicht</a> befinden, wird die vorherige Karteikarte trotzdem in der Formularansicht geöffnet.</p>
 					</div>
 
-					<p class="erklaerung-icon"><img src="../img/pfeil-gerade-runter.svg" width="24" height="24" alt="">Tastaturkürzel <kbd>Strg</kbd> + <kbd>Bild ⇩</kbd>; nächsten Beleg in der Belegliste öffnen</p>
+					<p class="erklaerung-icon" id="karteikarte-naechsterBeleg"><img src="../img/pfeil-gerade-runter.svg" width="24" height="24" alt="">Tastaturkürzel <kbd>Strg</kbd> + <kbd>Bild ⇩</kbd>; nächsten Beleg in der Belegliste öffnen</p>
 
 					<p class="erklaerung-icon" id="karteikarte-umschalten"><img src="../img/auge.svg" width="24" height="24" alt="">Tastaturkürzel <kbd>Strg</kbd> + <kbd>U</kbd>; zwischen Lese- und Formularansicht wechseln</p>
 
@@ -434,7 +436,7 @@
 						<p>In der <b>Formularansicht</b> wird automatisch das Beleg-Feld fokussiert und das Karteiwort markiert. Dabei wird versucht, auch durch <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>-Tags (<code class="quelltext">Fr&lt;b&gt;ei&lt;/b&gt;heit</code>), Trennungs- (<code class="quelltext">Frei[¬]heit</code>) oder Seitenumbruchsmarkierungen (<code class="quelltext">Frei [:351:] heit</code>) aufgesprengte Karteiwörter zu finden.</p>
 					</div>
 
-					<p class="erklaerung-icon"><img src="../img/kopieren.svg" width="24" height="24" alt="">Tastaturkürzel <kbd>Strg</kbd> + <kbd>I</kbd>; nur bei aktivierter <a href="#menueBelege-kopieren">Kopierfunktion</a>; Beleg in die Kopierliste aufnehmen</p>
+					<p class="erklaerung-icon" id="karteikarte-belegKopierliste"><img src="../img/kopieren.svg" width="24" height="24" alt="">Tastaturkürzel <kbd>Strg</kbd> + <kbd>I</kbd>; nur bei aktivierter <a href="#menueBelege-kopieren">Kopierfunktion</a>; Beleg in die Kopierliste aufnehmen</p>
 
 					<p class="erklaerung-icon" id="karteikarte-zwischenablage"><img src="../img/einfuegen-pfeil.svg" width="24" height="24" alt="">Tastaturkürzel <kbd>Strg</kbd> + <kbd>I</kbd>; Beleg in die Zwischenablage kopieren</p>
 
@@ -471,7 +473,7 @@
 
 					<p>In die Karteikarte können mit nur wenigen Klicks Daten aus verschiedenen Quellen importiert werden. Zur <b>Importfunktion</b> gibt es <a href="#karteikarte-importfunktion">weiter unten einen eigenen Abschnitt</a>.</p>
 
-					<p>Es gibt einige <b>Icons</b>, die in der Karteikarte mehrfach zu finden sind:</p>
+					<p class="add-navi-details" id="karteikarte-icons">Es gibt einige <b>Icons</b>, die in der Karteikarte mehrfach zu finden sind:</p>
 
 					<p class="erklaerung-icon" id="karteikarte-kopieren"><img src="../img/kopieren.svg" width="24" height="24" alt="">Text des zugehörigen Feldes kopieren</p>
 
@@ -481,7 +483,7 @@
 						<p>Für markierten Belegtext gibt es die Möglichkeit, ihn als <a href="#belegliste-xmlZwischenablageBelegschnitt"><abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippet</a> zu kopieren.</p>
 					</div>
 
-					<p class="erklaerung-icon"><img src="../img/einfuegen.svg" width="24" height="24" alt="">Text aus der Zwischenablage in das zugehörige Feld einfügen</p>
+					<p class="erklaerung-icon" id="karteikarte-textAusZwischenablage"><img src="../img/einfuegen.svg" width="24" height="24" alt="">Text aus der Zwischenablage in das zugehörige Feld einfügen</p>
 
 					<div class="info">
 						<p>Der Text in der Zwischenablage wird als Plain-Text, also ohne Formatierungen eingefügt. Bezogen auf das <a href="#karteikarte-belegEinfuegen">Feld <i>Beleg</i> verhält sich das Icon anders</a>.</p>
@@ -514,15 +516,15 @@
 
 					<p id="karteikarte-kopf">Die Checkboxes und Textfelder im Einzelnen:</p>
 
-					<p id="karteikarte-unvollstaendig"><b>unvollständig:</b> markiert die Karteikarte als noch nicht vollständig bearbeitet</p>
+					<p class="add-navi-details" id="karteikarte-unvollstaendig"><b>unvollständig:</b> markiert die Karteikarte als noch nicht vollständig bearbeitet</p>
 
-					<p><b>Kontext?:</b> der Belegkontext der Online-Quelle ist so dünn, dass er noch am Original geklärt werden muss</p>
+					<p class="add-navi-details" id="karteikarte-kontext"><b>Kontext?:</b> der Belegkontext der Online-Quelle ist so dünn, dass er noch am Original geklärt werden muss</p>
 
-					<p><b>Bücherdienst:</b> die Originalquelle wurde in einer Bibliothek bestellt (von den dafür verantwortlichen Personen)</p>
+					<p class="add-navi-details" id="karteikarte-buecherdienst"><b>Bücherdienst:</b> die Originalquelle wurde in einer Bibliothek bestellt (von den dafür verantwortlichen Personen)</p>
 
-					<p><b>Buchung:</b> der Beleg wird im fertigen Lexikonartikel zitiert</p>
+					<p class="add-navi-details" id="karteikarte-buchung"><b>Buchung:</b> der Beleg wird im fertigen Lexikonartikel zitiert</p>
 
-					<p><b>Metatext:</b> bei dem Beleg handelt es sich um einen Text, der einen analytischen Blick auf das Karteiwort wirft
+					<p class="add-navi-details" id="karteikarte-metatext"><b>Metatext:</b> bei dem Beleg handelt es sich um einen Text, der einen analytischen Blick auf das Karteiwort wirft
 
 					<p class="info">Denkbare Texttypen für eine solche Markierung wären (historische) Wörterbücher, Artikel in einer Enzyklopädie, philosophische Abhandlungen <abbr title="und so weiter">usw.</abbr></p>
 
@@ -534,7 +536,7 @@
 						<p>Die Markierung wird standardmäßig in der <a href="#belegliste-kopfleisteBelege">Kopfleiste der Belege</a> eingblendet. Dieses Verhalten lässt sich durch das <a href="#einstellungen-beleglisteMark">Deaktivieren einer Einstellung</a> unterbinden.</p>
 					</div>
 
-					<p id="karteikarte-datum"><b>Datum:</b> <i>Pflichtfeld</i>; Entstehungs- oder Publikationsdatum des Belegs</p>
+					<p class="add-navi-details" id="karteikarte-datum"><b>Datum:</b> <i>Pflichtfeld</i>; Entstehungs- oder Publikationsdatum des Belegs</p>
 
 					<div class="info">
 						<p>Das Datumsfeld muss entweder eine vierstellige Jahreszahl (<abbr title="zum Beispiel">z. B.</abbr> <q>1789</q>) und/oder eine Jahrhundertangabe (im Format <q>18. Jh.</q>) enthalten. Die Zeitangabe kann um beliebige zusätzliche Informationen ergänzt werden.</p>
@@ -546,11 +548,11 @@
 						<p>Geben Sie ein Tagesdatum an, werden die Belege in der <a href="#belegliste">Belegliste</a> nach Jahr, Monat und Tag sortiert. Erkannt werden Tagesdaten im ISO 8601-Format (<code class="quelltext">2019-12-01</code>) und Tagesdaten nach dem Muster <code class="quelltext">1. 12. 2019</code>, auch mit führender Null und ohne Leerzeichen: <code class="quelltext">01.12.2019</code>.</p>
 					</div>
 
-					<p><b>Autor:</b> Urheber des Textes im Belegfeld</p>
+					<p class="add-navi-details" id="karteikarte-autor"><b>Autor:</b> Urheber des Textes im Belegfeld</p>
 
 					<p class="info">Wird der Name mit Komma, also im Format <q>Nachname, Vorname</q> eingegeben, kann er in der <a href="#belegliste-kopfleisteBelege">Kopfleiste des Belegs in der Belegliste</a> automatisch um den Vornamen gekürzt werden.</p>
 
-					<p id="karteikarte-beleg"><b>Beleg:</b> <i>Pflichtfeld</i>; Belegtext</p>
+					<p class="add-navi-details" id="karteikarte-beleg"><b>Beleg:</b> <i>Pflichtfeld</i>; Belegtext</p>
 
 					<div class="info">
 						<p id="karteikarte-maskieren">Der Inhalt des Textfeldes wird so behandelt, als sei er in <abbr title="Hypertext Markup Language" lang="en">HTML</abbr> formatiert (was bei einem automatischen Import aus dem <abbr title="Deutschen Textarchiv">DTA</abbr> tatsächlich wohl immer der Fall ist). Sie können zur Auszeichnung des Textes somit alle standardisierten <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>-Tags verwenden. Das heißt aber auch, dass die <b>Spitzklammern</b> &lt; und &gt; maskiert werden müssen, wenn sie literal und nicht als Begrenzungen von Tags gemeint sind. Wollen Sie literale Spitzklammern eingeben, müssen Sie <code class="quelltext">&amp;lt;</code> <abbr title="beziehungsweise">bzw.</abbr> <code class="quelltext">&amp;gt;</code> tippen.</p>
@@ -636,7 +638,7 @@
 						<p><b>[Anmerkung: Text]</b> → <b>[Anmerkung: Text]</b>. Anmerkungen im Originaltext, die über den <abbr title="Deutsches Textarchiv">DTA</abbr>-Import in den Belegtext kommen können.</p>
 					</div>
 
-					<p id="karteikarte-bedeutung"><b>Bedeutung:</b> mit dem Beleg verknüpfte Wortbedeutung(en)</p>
+					<p class="add-navi-details" id="karteikarte-bedeutung"><b>Bedeutung:</b> mit dem Beleg verknüpfte Wortbedeutung(en)</p>
 
 					<div class="info">
 						<p>Wenn Sie Bedeutungen händisch eingeben: Eine neue Hierarchieebene (Markierung des Beginns einer Unterbedeutung) beginnt mit einem <code class="quelltext">:␣</code> (Doppelpunkt, gefolgt von einem Leerzeichen). Unterschiedliche Bedeutungen werden durch einen Zeilenumbruch voneinander getrennt. Spitzklammern sind nur <a href="#karteikarte-maskieren">maskiert</a> zulässig. Die Funktion hinter dem Icon <img src="../img/pi.svg" width="20" height="20" alt=""> kann Sie bei der Eingabe unterstützen. Sie lässt sich auch via <kbd>Strg</kbd> + <kbd>M</kbd> aufrufen. Ist eine Bedeutung neu, wurde sie also noch für keinen anderen Beleg verwendet, wird sie beim Speichern der Karteikarte automatisch an passender Stelle in das aktuelle <a href="#bedeutungsgeruest">Bedeutungsgerüsts</a> integriert.</p>
@@ -646,15 +648,15 @@
 						<p>Arbeiten Sie mit mehreren Bedeutungsgerüsten: Es werden immer nur die Bedeutungen des aktuellen Bedeutungsgerüsts angezeigt. Existieren in der aktuellen Kartei mehrere Gerüste, wird über dem Belegfeld angezeigt, welches Gerüst gerade aktiv ist. Dort wird <abbr title="gegebenenfalls">ggf.</abbr> <q>Gerüst 1</q>, <q>Gerüst 2</q> <abbr title="und so weiter">usw.</abbr> angegeben. Mit einem Klick auf die Überschrift des Bedeutungs-Feldes können sie das Gerüst wechseln, womit sich dann (<abbr title="gegebenenfalls">ggf.</abbr>) auch die Bedeutungen im Bedeutungs-Feld ändern.</p>
 					</div>
 
-					<p id="karteikarte-wortbildung"><b>Wortbildung:</b> Liste an Wortbildungen, die im Beleg zu finden sind</p>
+					<p class="add-navi-details" id="karteikarte-wortbildung"><b>Wortbildung:</b> Liste an Wortbildungen, die im Beleg zu finden sind</p>
 
 					<p class="info">Unterschiedliche Wortbildungen werden durch einen Zeilenumbruch voneinander getrennt. Wie im Bedeutungsfeld können auch Wortbildungen Hierarchieebenen enthalten. Eine neue Ebene öffnen Sie, indem Sie <code class="quelltext">:␣</code> (Doppelpunkt, gefolgt von einem Leerzeichen) eingeben. Auf diese Weise können Wortbildungsbäume mit beliebiger Verschachtelungstiefe erzeugt werden. Eingaben wie <q>Derivation: Diminution: Mütterchen</q> oder <q>Komposition: Mutterherz</q> werden im zugehörigen <a href="#filter">Filter</a> in einer Baumansicht dargestellt.</p>
 
-					<p><b>Synonym:</b> Liste an Synonymen, die im Beleg zu finden sind</p>
+					<p class="add-navi-details" id="karteikarte-synonym"><b>Synonym:</b> Liste an Synonymen, die im Beleg zu finden sind</p>
 
 					<p class="info">Für das Synonymfeld gilt mutatis mutandis das gleiche wie für das Wortbildungsfeld.</p>
 
-					<p id="karteikarte-quelle"><b>Quelle:</b> Quellenangabe zum Beleg</p>
+					<p class="add-navi-details" id="karteikarte-quelle"><b>Quelle:</b> Quellenangabe zum Beleg</p>
 
 					<div class="info">
 						<p>Enthält das Feld <b>Internetlinks</b>, werden diese in der Leseansicht der Karteikarte und in der Belegliste als klickbare Links dargestellt, über die sich der Standardbrowser des Betriebssystems öffnet. Für den Linktext werden nur Subdomain, Domain und Top-Level-Domain genutzt. Ein Beispiel: http://www.deutschestextarchiv.de/<wbr>book/<wbr>view/<wbr>gutzkow_wally_1835?p=12 wird automatisch zu <a href="http://www.deutschestextarchiv.de/book/view/gutzkow_wally_1835?p=12">www.deutschestextarchiv.de</a>.</p>
@@ -687,11 +689,11 @@ Aufrufdatum: 24. 12. 2019</pre>
 						<p>Die Funktion lässt sich auch über das Tastaturkürzel <kbd>Strg</kbd> + <kbd>D</kbd> aufrufen.</p>
 					</div>
 
-					<p><b>Korpus:</b> Textkorpus, aus dem der Beleg stammt</p>
+					<p class="add-navi-details" id="karteikarte-korpus"><b>Korpus:</b> Textkorpus, aus dem der Beleg stammt</p>
 
 					<p class="info">Es kann nur ein Korpus angegeben werden. Die Verwendung von Hierarchieebenen steht aber auch hier zur Verfügung, genauso wie im Wortbildungsfeld.</p>
 
-					<p id="karteikarte-textsorte"><b>Textsorte:</b> Textklasse oder -sorte, aus der der Belegtext stammt</p>
+					<p class="add-navi-details" id="karteikarte-textsorte"><b>Textsorte:</b> Textklasse oder -sorte, aus der der Belegtext stammt</p>
 
 					<div class="info">
 						<p>Für das Textsortenfeld gilt mutatis mutandis das gleiche wie für das Wortbildungsfeld.</p>
@@ -699,7 +701,7 @@ Aufrufdatum: 24. 12. 2019</pre>
 						<p>Die Textsorte kann man sich auf Wunsch in der <a href="#belegliste-kopfleisteBelege">Kopfleiste der Belege</a> einblenden lassen. Dazu muss eine <a href="#einstellungen-beleglisteTextsorte">Einstellung aktiviert</a> werden.</p>
 					</div>
 
-					<p id="karteikarte-notizen"><b>Notizen:</b> Freitextfeld für Notizen zu der Karteikarte</p>
+					<p class="add-navi-details" id="karteikarte-notizen"><b>Notizen:</b> Freitextfeld für Notizen zu der Karteikarte</p>
 
 					<div class="info">
 						<p>Für die Eingabe und Umsetzung von Internetlinks gilt dasselbe wie für das <a href="#karteikarte-quelle">Quellen-Feld</a>. Im Gegensatz zum Textfeld der <a href="#menueKartei-notizen">Funktion für Notizen zur Kartei</a> handelt es sich bei diesem um ein Plain-Text-Feld, in dem keine <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>-Formatierungen vorgenommen werden können.</p>
@@ -707,7 +709,7 @@ Aufrufdatum: 24. 12. 2019</pre>
 						<p>Die erste Zeile der Notizen kann man sich auf Wunsch in der <a href="#belegliste-kopfleisteBelege">Kopfleiste der Belege</a> einblenden lassen. Dazu muss eine <a href="#einstellungen-beleglisteNotizen">Einstellung aktiviert</a> werden.</p>
 					</div>
 
-					<p id="karteikarte-anhaenge"><b>Anhänge:</b> Dateianhänge zur Karteikarte</p>
+					<p class="add-navi-details" id="karteikarte-anhaenge"><b>Anhänge:</b> Dateianhänge zur Karteikarte</p>
 
 					<p class="info">Bei Klick auf einen Anhang wird dieser im Standardprogramm des Betriebssystems geöffnet. Die Anhänge in dieser Liste sind an die aktuelle Karteikarte gebunden. Anhänge, die nicht zu einer einzelnen Karteikarte, sondern zur Wortkartei selbst gehören, können über den Menüpunkt <a href="#menueKartei-anhaenge"><i>Kartei &gt; Anhänge</i></a> hinzugefügt werden.</p>
 
@@ -723,11 +725,11 @@ Aufrufdatum: 24. 12. 2019</pre>
 						<li>Wurde eine <b><abbr title="Digitales Wörterbuch der deutschen Sprache">DWDS</abbr>-, <abbr title="Deutsches Referenzkorpus">DeReKo</abbr>-, <abbr title="Extensible Markup Language" lang="en">XML</abbr>- oder <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Datei</b> geladen, bleibt diese mit dem Programm verknüpft. Befindet sich in der Zwischenablage kein Datensatz, der importiert werden könnte, wird beim Öffnen einer neuen Karteikarte <em>die</em> Importfunktion angezeigt, die zu der mit <i class="app-name"></i> verknüpften Datei passt. Dieses Verhalten ist besonders dann hilfreich, wenn Sie eine Datei mit mehreren Datensätzen geladen haben, die Sie nach und nach in verschiedene Karteikarten schreiben möchten.</li>
 					</ul>
 
-					<p id="karteikarte-dtaImport"><b><abbr title="Deutsches Textarchiv">DTA</abbr>-Import:</b> In das erste, längere Textfeld muss eine <abbr title="Uniform Resource Locator" lang="en">URL</abbr> eingefügt werden, die eine Seite im <abbr title="Deutschen Textarchiv">DTA</abbr> referenziert, also <abbr title="zum Beispiel">z. B.</abbr> <code class="quelltext long">http://www.deutschestextarchiv.de/book/view/gutzkow_wally_1835?p=35</code>. Anstoßen lässt sich der Import, indem man <kbd>⏎</kbd> drückt oder den Button <i>Importieren</i> anklickt. Danach werden die Textfelder <i>Datum, Autor, Beleg, Quelle, Korpus</i> und <i>Textsorte</i> automatisch ausgefüllt.</p>
+					<p class="add-navi-details" id="karteikarte-dtaImport"><b><abbr title="Deutsches Textarchiv">DTA</abbr>-Import:</b> In das erste, längere Textfeld muss eine <abbr title="Uniform Resource Locator" lang="en">URL</abbr> eingefügt werden, die eine Seite im <abbr title="Deutschen Textarchiv">DTA</abbr> referenziert, also <abbr title="zum Beispiel">z. B.</abbr> <code class="quelltext long">http://www.deutschestextarchiv.de/book/view/gutzkow_wally_1835?p=35</code>. Anstoßen lässt sich der Import, indem man <kbd>⏎</kbd> drückt oder den Button <i>Importieren</i> anklickt. Danach werden die Textfelder <i>Datum, Autor, Beleg, Quelle, Korpus</i> und <i>Textsorte</i> automatisch ausgefüllt.</p>
 
 					<p>Über das nebenstehende, zweite Datenfeld, in dem eine Ziffer steht, kann gesteuert werden, wie viel Text importiert werden soll. Die Ziffer steht für die Seitengrenze, bis zu der der Belegtext importiert wird. Ein Beispiel: Gibt man eine <abbr title="Uniform Resource Locator" lang="en">URL</abbr> ein, die (wie im obigen Fall) auf Image <abbr title="Nummer">Nr.</abbr> 35 eines Textes verweist und steht im Ziffernfeld <q>36</q>, wird nur die zu Image <abbr title="Nummer">Nr.</abbr> 35 gehörende Seite importiert. Denn <q>36</q> markiert die Seitengrenze, bis zu der importiert werden soll. Sollen sowohl die auf Image 35 als auch auf 36 zu findenden Seiten importiert werden, muss im Ziffernfeld <q>37</q> stehen. Beim Einfügen der <abbr title="Uniform Resource Locator" lang="en">URL</abbr> wird automatisch die Zahl des folgenden Images in das Ziffernfeld eingetragen. Standardmäßig wird also eine Seite importiert. (Image- und Seitennummer weichen <abbr title="in der Regel">i. d. R.</abbr> voneinander ab; die in der <abbr title="Uniform Resource Locator" lang="en">URL</abbr> stehende Ziffer ist die Image-Nummer.)</p>
 
-					<p id="karteikarte-dwdsImport"><b><abbr title="Digitales Wörterbuch der deutschen Sprache">DWDS</abbr>-Import:</b> Aus den Korpora des <abbr title="Digitalen Wörterbuchs der deutschen Sprache">DWDS</abbr> können entweder einzelne Belege (via <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippet) oder gleich ganze Belegreihen (aus einer exportierten <abbr title="JavaScript Object Notation" class="en">JSON</abbr>-Datei) importiert werden.</p>
+					<p class="add-navi-details" id="karteikarte-dwdsImport"><b><abbr title="Digitales Wörterbuch der deutschen Sprache">DWDS</abbr>-Import:</b> Aus den Korpora des <abbr title="Digitalen Wörterbuchs der deutschen Sprache">DWDS</abbr> können entweder einzelne Belege (via <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippet) oder gleich ganze Belegreihen (aus einer exportierten <abbr title="JavaScript Object Notation" class="en">JSON</abbr>-Datei) importiert werden.</p>
 
 					<figure class="right" title="zum Vergrößern anklicken">
 						<img src="../img/win/karteikarte-importfunktion-dwds-export.png" alt="">
@@ -755,7 +757,7 @@ Aufrufdatum: 24. 12. 2019</pre>
 
 					<p>Beim Importieren eines Belegs aus dem <abbr title="Digitalen Wörterbuch der deutschen Sprache">DWDS</abbr> wird in das <i>Notizen</i>-Feld eine <abbr title="Uniform Resource Locator" lang="en">URL</abbr> eingetragen, mit der sich der Beleg auf der Seite des <abbr title="Digitalen Wörterbuchs der deutschen Sprache">DWDS</abbr> leichter wiederfinden, wenn auch nicht exakt referenzieren lässt. Stammt der Beleg aus einem Zeitungskorpus, kann in die erste Zeile des Notizenfeldes darüber hinaus der Name der Zeitung automatisch eingetragen werden. Hierzu muss eine <a href="#einstellungen-karteikarteZeitungsname">Einstellung</a> aktiviert werden. Es kann sinnvoll sein, dass der Zeitungsname an dieser Stelle steht, wenn man in der <a href="#belegliste">Belegliste</a> immer im Blick haben möchte, aus welcher Zeitung ein Beleg stammt. In der <a href="#belegliste-kopfleisteBelege">Kopfleiste der Belege</a> kann man sich nämlich <a href="#einstellungen-beleglisteNotizen">die erste Zeile des Notizen-Feldes anzeigen</a> lassen.</p>
 
-					<p id="karteikarte-derekoImport"><b><abbr title="Deutsches Referenzkorpus">DeReKo</abbr>-Import:</b> Aus der vom <i><abbr title="Leibniz-Institut für deutsche Sprache">IDS</abbr> Mannheim</i> zur Verfügung gestellten Webanwendung <a href="https://cosmas2.ids-mannheim.de/cosmas2-web/"><abbr title="Corpus Search, Management, and Analysis System" lang="en">COSMAS</abbr> II</a> können ausgewählte Belege in eine Textdatei <b>exportiert</b> werden:</p>
+					<p class="add-navi-details" id="karteikarte-derekoImport"><b><abbr title="Deutsches Referenzkorpus">DeReKo</abbr>-Import:</b> Aus der vom <i><abbr title="Leibniz-Institut für deutsche Sprache">IDS</abbr> Mannheim</i> zur Verfügung gestellten Webanwendung <a href="https://cosmas2.ids-mannheim.de/cosmas2-web/"><abbr title="Corpus Search, Management, and Analysis System" lang="en">COSMAS</abbr> II</a> können ausgewählte Belege in eine Textdatei <b>exportiert</b> werden:</p>
 
 					<div class="bilder">
 						<figure title="zum Vergrößern anklicken">
@@ -828,7 +830,7 @@ Aufrufdatum: 24. 12. 2019</pre>
 
 					<p id="karteikarte-dateikodierung">Die Checkbox <b>Latin-1</b> vor dem Button <i>Datei</i> wird beim Aktivieren des <abbr title="Deutsches Referenzkorpus">DeReKo</abbr>-Formulars automatisch abgehakt. Die in den Exportdateien von <abbr title="Corpus Search, Management, and Analysis System" lang="en">COSMAS</abbr> II zu findenden Belegtexte sind leider nicht als UTF-8 kodiert, was immer dann zum Problem werden könnte, wenn ein Text <abbr title="zum Beispiel">z. B.</abbr> Umlaute enthält. Darum muss dem Programm vor dem Öffnen der Datei mitgeteilt werden, dass es beim Einlesen die Zeichenkodierung <a href="https://de.wikipedia.org/wiki/ISO_8859-1">ISO 8859-1</a> (auch Latin-1 genannt) verwenden soll. Latin-1 ist eine Kodierung, die für westeuropäische Sprachen typische Buchstaben umfasst.</p>
 
-					<p id="karteikarte-xmlImport"><b><abbr title="Extensible Markup Language" lang="en">XML</abbr>-Import:</b> Der Import von <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Dateien ist zur Zeit nur für bibliographische Daten eingerichtet. Akzeptiert werden zum einen <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Dateien mit Fundstellen-Snippets, wie sie aus der in <i class="app-name"></i> integrierten <a href="#menueRedaktion-literaturExportieren">Literaturdatenbank exportiert</a> werden können. Zum anderen können bibliographische <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Dokumente im <a href="https://en.wikipedia.org/wiki/Metadata_Object_Description_Schema">MODS-Format</a> eingelesen werden.</p>
+					<p class="add-navi-details" id="karteikarte-xmlImport"><b><abbr title="Extensible Markup Language" lang="en">XML</abbr>-Import:</b> Der Import von <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Dateien ist zur Zeit nur für bibliographische Daten eingerichtet. Akzeptiert werden zum einen <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Dateien mit Fundstellen-Snippets, wie sie aus der in <i class="app-name"></i> integrierten <a href="#menueRedaktion-literaturExportieren">Literaturdatenbank exportiert</a> werden können. Zum anderen können bibliographische <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Dokumente im <a href="https://en.wikipedia.org/wiki/Metadata_Object_Description_Schema">MODS-Format</a> eingelesen werden.</p>
 
 					<p>Weder das eine noch das andere Format enthält Belegtexte. Diese Importfunktion dient somit primär dazu, bibliographische Daten möglichst reibungslos in die Karteikarte zu bekommen, wenn Sie Belege händisch eingepflegt müssen, weil diese in digitalen Korpora (noch) nicht zur Verfügung stehen. Da in den <abbr title="Extensible Markup Language" lang="en">XML</abbr>, die vearbeitet werden können, keine Belegtexte enthalten sind, wird das Datenfeld <i>Beleg</i> auch niemals überschrieben. Sollte Ihr Workflow so aussehen, dass Sie zunächst die Belegstelle exzerpieren, können Sie die Titeldaten der <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Dateien somit problemlos im Nachhinein importieren, ohne den Belegtext zu verlieren.</p>
 
@@ -843,7 +845,7 @@ Aufrufdatum: 24. 12. 2019</pre>
 
 					<p>Der <abbr title="Pica-Produktionsnummer">PPN</abbr>-Import über das <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Formular ist dem aus dem <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Formular, wo er genauso möglich ist, vorzuziehen. Die heruntergeladenen MODS-Dokumente enthalten häufig deutlich differenziertere und somit auch zuverlässigere Titeldaten als die <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Dateien, die über die API des <abbr title="Gemeinsamen Verbundkatalog">GVK</abbr> angeboten werden.</p>
 
-					<p id="karteikarte-bibtexImport"><b><span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Import:</b> Die Datenfelder in der Karteikarte können auch mit Titeldatensätzen gefüllt werden, die im <a href="https://en.wikipedia.org/wiki/BibTeX"><span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Format</a> vorliegen. <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Daten enthalten zwar niemals Belegtext, die Datenfelder <i>Datum, Autor</i> und <i>Quelle</i> können jedoch gefüllt werden, womit das Format besonders dafür geeignet ist, wenn Sie manuell Belege einpflegen (müssen).</p>
+					<p class="add-navi-details" id="karteikarte-bibtexImport"><b><span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Import:</b> Die Datenfelder in der Karteikarte können auch mit Titeldatensätzen gefüllt werden, die im <a href="https://en.wikipedia.org/wiki/BibTeX"><span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Format</a> vorliegen. <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Daten enthalten zwar niemals Belegtext, die Datenfelder <i>Datum, Autor</i> und <i>Quelle</i> können jedoch gefüllt werden, womit das Format besonders dafür geeignet ist, wenn Sie manuell Belege einpflegen (müssen).</p>
 
 					<p><span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Dateien werden <abbr title="unter anderem">u. a.</abbr> von <b><i>GoogleBooks</i></b> bereitgestellt. Ein Download-Link findet sich auf der Übersichtsseite des Digitalisats. Befinden Sie sich in der Ansicht eines Volldigitalisats, klicken Sie in der Seitenleiste auf den (sehr kleinen) Link <i>Über dieses Buch</i>. Im unteren Teil der sich öffnenden Übersichtsseite, finden Sie dann die Titelinformationen und eine Möglichkeit, diese als <span class="bibtex"><span>Bib</span>T<span>E</span>X</span> zu exportieren. Beim Importieren eines <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Datensatzes von <i>GoogleBooks</i> wird in der Literaturangabe die <abbr title="Uniform Resource Locator" lang="en">URL</abbr> zum Digitalsat übernommen und das Datenfeld <i>Korpus</i> mit <q>GoogleBooks</q> gefüllt.</p>
 
@@ -976,11 +978,11 @@ Aufrufdatum: 24. 12. 2019</pre>
 						<figcaption>Textfeld zum Hinzufügen von Bedeutungen</figcaption>
 					</figure>
 
-					<p id="bedeutungsgeruest-hinzufuegen"><b>Hinzufügen:</b> In der letzten Zeile des Bedeutungsgerüsts finden Sie ein Textfeld, mit dem man das Gerüst um eine neue Bedeutung ergänzen kann. Sobald Sie in ihm eine Definition eingegeben haben, müssen Sie nur noch <kbd>⏎</kbd> drücken und die neue Bedeutung wird auf der obersten Ebene des Bedeutungsgerüsts als letzte Bedeutung eingehängt.</p>
+					<p class="add-navi-details" id="bedeutungsgeruest-hinzufuegen"><b>Hinzufügen:</b> In der letzten Zeile des Bedeutungsgerüsts finden Sie ein Textfeld, mit dem man das Gerüst um eine neue Bedeutung ergänzen kann. Sobald Sie in ihm eine Definition eingegeben haben, müssen Sie nur noch <kbd>⏎</kbd> drücken und die neue Bedeutung wird auf der obersten Ebene des Bedeutungsgerüsts als letzte Bedeutung eingehängt.</p>
 
 					<p>Der Text von Bedeutungen ist immer einzeilig, Zeilenumbrüche sind also nicht zulässig und werden unterbunden. Es stehen drei Formatierungen zur Verfügung: Fetten (<kbd>Strg</kbd> + <kbd>B</kbd>), Kursivieren (<kbd>Strg</kbd> + <kbd>I</kbd>), Unterstreichen (<kbd>Strg</kbd> + <kbd>U</kbd>). Die Formatierungsbefehle können auch über die Toolbar vorgenommen werden, die beim Fokussieren des Textfeldes erscheint. In der Toolbar befindet sich ganz links das Icon <img src="../img/speichern.svg" width="24" height="24" alt="">. Es hat dieselbe Funktion wie <kbd>⏎</kbd>, hängt die eingegebene Bedeutung also auf Klick in das Gerüst ein. Außerdem können mithilfe der Toolbar Teile einer Bedeutung als Paraphrase markiert werden – für den Fall, dass nicht der gesamte Feldinhalt Paraphrase ist. Letztere Funktion dient <abbr title="vor allem">v. a.</abbr> dazu, dass Paraphrasen zuverlässig erkannt und später automatisch mit den entsprechenden <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Tags umschlossen werden können.</p>
 
-					<p id="bedeutungsgeruest-verschieben"><b>Verschieben:</b> Die Bedeutungen können im Gerüst frei verschoben werden – mit gewissen Einschränkungen. Dazu muss auf die Windrose in der ersten Spalte vor der Bedeutung geklickt werden. Die Windrose erscheint, sobald man mit der Maus über die erste Spalte fährt. Ist eine Bedeutung einmal aktiviert (nach Klick auf der Windrose blau hinterlegt) zeigt die Windrose an, in welche Richtung die markierte Bedeutung mit den Cursor-Tasten verschoben werden kann. Einige Beispiele:</p>
+					<p class="add-navi-details" id="bedeutungsgeruest-verschieben"><b>Verschieben:</b> Die Bedeutungen können im Gerüst frei verschoben werden – mit gewissen Einschränkungen. Dazu muss auf die Windrose in der ersten Spalte vor der Bedeutung geklickt werden. Die Windrose erscheint, sobald man mit der Maus über die erste Spalte fährt. Ist eine Bedeutung einmal aktiviert (nach Klick auf der Windrose blau hinterlegt) zeigt die Windrose an, in welche Richtung die markierte Bedeutung mit den Cursor-Tasten verschoben werden kann. Einige Beispiele:</p>
 
 					<p class="erklaerung-icon"><img src="../img/windrose_l-u-r-d.svg" width="24" height="24" alt="">die Bedeutung kann in alle Richtungen verschoben werden;</p>
 
@@ -1027,11 +1029,11 @@ Aufrufdatum: 24. 12. 2019</pre>
 						<p><i>Illegales Verschieben 2:</i> Der zweite Grund, warum die App sich weigert, eine Bedeutung in eine bestimmte Richtung oder Position zu verschieben, ist weitaus schlichterer Natur: In ein und demselben Bedeutungszweig dürfen niemals zwei identische Bedeutungen auf derselben Hierarchieebene existieren. Formatierungen (Fettung, Kursivierung, Unterstreichung) sind dabei kein hinreichendes Unterscheidungsmerkmal. Wollen Sie eine Bedeutung partout einem Zweig unterordnen, in dem bereits eine Bedeutung mit einer identischen Definition zu finden ist, müssen Sie zunächst eine der beiden Bedeutungen umformulieren. Aus dem identischen Grund kann übrigens das <a href="#bedeutungsgeruest-umformulieren">Umformulieren</a> von Bedeutungen unterbunden werden.</p>
 					</div>
 
-					<p id="bedeutungsgeruest-loeschen"><b>Löschen:</b> In der zweiten Spalte des Bedeutungsgerüst, also rechts neben der Windrose für das Verschieben, erscheint beim Herüberfahren der Maus ein Mülleimer-Icon (<img src="../img/muelleimer.svg" width="24" height="24" alt="">). Über dieses Icon kann eine Bedeutung zusammen mit allen Unterbedeutungen gelöscht werden. Sollen Unterbedeutungen erhalten bleiben, müssen diese zunächst in eine andere Ebene <a href="#bedeutungsgeruest-verschieben">verschoben</a> werden. Die App fragt nach, ob Sie die Löschaktion wirklich durchführen möchten.</p>
+					<p class="add-navi-details" id="bedeutungsgeruest-loeschen"><b>Löschen:</b> In der zweiten Spalte des Bedeutungsgerüst, also rechts neben der Windrose für das Verschieben, erscheint beim Herüberfahren der Maus ein Mülleimer-Icon (<img src="../img/muelleimer.svg" width="24" height="24" alt="">). Über dieses Icon kann eine Bedeutung zusammen mit allen Unterbedeutungen gelöscht werden. Sollen Unterbedeutungen erhalten bleiben, müssen diese zunächst in eine andere Ebene <a href="#bedeutungsgeruest-verschieben">verschoben</a> werden. Die App fragt nach, ob Sie die Löschaktion wirklich durchführen möchten.</p>
 
-					<p id="bedeutungsgeruest-verschmelzen"><b>Verschmelzen:</b> In der dritten Spalte des Bedeutungsgerüsts, also direkt vor dem Zählzeichen der Bedeutung, erscheint beim Herüberfahren der Maus das Icon <img src="../img/pfeil-verbinden-rechts.svg" width="24" height="24" alt="">. Mithilfe dieses Icons können Sie Bedeutungen verschmelzen. Hierzu klicken Sie zunächst auf das Verschmelzen-Icon derjenigen Bedeutung, die mit einer anderen verschmolzen werden soll. Diese Quellbedeutung wird nun mit allen Unterbedeutungen gelb hinterlegt. Als nächstes Klicken Sie auf das Icon <img src="../img/pfeil-verbinden-rechts.svg" width="24" height="24" alt=""> der Zielbedeutung, in die die markierte Quellbedeutung aufgehen soll. Nach dem Bestätigen der Sicherheitsfrage ist im Bedeutungsgerüst nur noch die Zielbedeutung vorhanden. Wie bei allen Operationen werden auch in diesem Fall alle Karteikarten automatisch angepasst, sobald Sie das Bedeutungsgerüst speichern: Karten, die die nach dem Verschmelzen verschwundene Bedeutung (oder eine ihrer Unterbedeutungen) hatten, tragen nun die Zielbedeutung. Die Quellbedeutung hingegen wurde gelöscht.</p>
+					<p class="add-navi-details" id="bedeutungsgeruest-verschmelzen"><b>Verschmelzen:</b> In der dritten Spalte des Bedeutungsgerüsts, also direkt vor dem Zählzeichen der Bedeutung, erscheint beim Herüberfahren der Maus das Icon <img src="../img/pfeil-verbinden-rechts.svg" width="24" height="24" alt="">. Mithilfe dieses Icons können Sie Bedeutungen verschmelzen. Hierzu klicken Sie zunächst auf das Verschmelzen-Icon derjenigen Bedeutung, die mit einer anderen verschmolzen werden soll. Diese Quellbedeutung wird nun mit allen Unterbedeutungen gelb hinterlegt. Als nächstes Klicken Sie auf das Icon <img src="../img/pfeil-verbinden-rechts.svg" width="24" height="24" alt=""> der Zielbedeutung, in die die markierte Quellbedeutung aufgehen soll. Nach dem Bestätigen der Sicherheitsfrage ist im Bedeutungsgerüst nur noch die Zielbedeutung vorhanden. Wie bei allen Operationen werden auch in diesem Fall alle Karteikarten automatisch angepasst, sobald Sie das Bedeutungsgerüst speichern: Karten, die die nach dem Verschmelzen verschwundene Bedeutung (oder eine ihrer Unterbedeutungen) hatten, tragen nun die Zielbedeutung. Die Quellbedeutung hingegen wurde gelöscht.</p>
 
-					<p><b>Teilen:</b> Für das Aufsplitten einer Bedeutung gibt es keine eigene Funktion. Sie fehlt auch deswegen, weil Sie am Ende sowieso für jede Karteikarte einzeln entscheiden müssen, welche Bedeutung ihr zugeordnet werden soll. Diese Entscheidung kann Ihnen kein Computer abnehmen. Mit den vorhandenen Funktionen lässt sich das Teilen von Bedeutungen dennoch recht leicht verwirklichen. Gehen wir dazu davon aus, dass Sie eine Bedeutung namens <q>alte Bedeutung</q> haben, die in <q>alte Bedeutung</q> und <q>neue Bedeutung</q> aufgesplittet werden soll:</p>
+					<p class="add-navi-details" id="bedeutungsgeruest-teilen"><b>Teilen:</b> Für das Aufsplitten einer Bedeutung gibt es keine eigene Funktion. Sie fehlt auch deswegen, weil Sie am Ende sowieso für jede Karteikarte einzeln entscheiden müssen, welche Bedeutung ihr zugeordnet werden soll. Diese Entscheidung kann Ihnen kein Computer abnehmen. Mit den vorhandenen Funktionen lässt sich das Teilen von Bedeutungen dennoch recht leicht verwirklichen. Gehen wir dazu davon aus, dass Sie eine Bedeutung namens <q>alte Bedeutung</q> haben, die in <q>alte Bedeutung</q> und <q>neue Bedeutung</q> aufgesplittet werden soll:</p>
 
 					<ol>
 						<li>Erstellen Sie im Bedeutungsgerüst die neue Bedeutung <q>neue Bedeutung</q>.</li>
@@ -1081,7 +1083,7 @@ Aufrufdatum: 24. 12. 2019</pre>
 						</li>
 					</ol>
 
-					<p id="bedeutungsgeruest-umformulieren"><b>Umformulieren:</b> Einmal formulierte Bedeutungsdefinitionen können jederzeit modifiziert werden – natürlich ohne dass Sie jede einzelne Karteikarte öffnen müssten, mit der eine Bedeutung verknüpft ist:</p>
+					<p class="add-navi-details" id="bedeutungsgeruest-umformulieren"><b>Umformulieren:</b> Einmal formulierte Bedeutungsdefinitionen können jederzeit modifiziert werden – natürlich ohne dass Sie jede einzelne Karteikarte öffnen müssten, mit der eine Bedeutung verknüpft ist:</p>
 
 					<ol>
 						<li>Klicken Sie auf den Text der Bedeutung (nicht auf die Nummerierung).</li>
@@ -1099,7 +1101,7 @@ Aufrufdatum: 24. 12. 2019</pre>
 						</li>
 					</ol>
 
-					<p id="bedeutungsgeruest-taggen"><b>Taggen:</b> In der ersten, grau hinterlegten Spalte hinter dem Text einer Bedeutung können Tags erscheinen, die Sie mit einer Bedeutung verknüpft haben. Ist dies noch nicht geschehen, erscheint hier beim Herüberfahren mit der Maus der Platzhaltertext <i>Tags</i>. Um einer Bedeutung <abbr title="zum Beispiel">z. B.</abbr> ein Sachgebiet zuzuordnen, klicken Sie einfach auf diesen Platzhalter (oder die dort bereits stehenden Tags). Es öffnet sich ein Fensterchen, in dem alle zur Verfügung stehenden Tag-Kategorien zu sehen sind. Das sind standardmäßig: Sachgebiete, Regiolekte, Register, Soziolekte, Sprachen, Themenfelder.</p>
+					<p class="add-navi-details" id="bedeutungsgeruest-taggen"><b>Taggen:</b> In der ersten, grau hinterlegten Spalte hinter dem Text einer Bedeutung können Tags erscheinen, die Sie mit einer Bedeutung verknüpft haben. Ist dies noch nicht geschehen, erscheint hier beim Herüberfahren mit der Maus der Platzhaltertext <i>Tags</i>. Um einer Bedeutung <abbr title="zum Beispiel">z. B.</abbr> ein Sachgebiet zuzuordnen, klicken Sie einfach auf diesen Platzhalter (oder die dort bereits stehenden Tags). Es öffnet sich ein Fensterchen, in dem alle zur Verfügung stehenden Tag-Kategorien zu sehen sind. Das sind standardmäßig: Sachgebiete, Regiolekte, Register, Soziolekte, Sprachen, Themenfelder.</p>
 
 					<p>Sie können einer Bedeutung beliebig viele Tags aus beliebig vielen Kategorien zuordnen – und diese jederzeit wieder entfernen oder ändern. Akzeptiert werden allerdings nur Tags, die in der zugehörigen Tag-Datei vorhanden sind. Diese Beschränkung wurde eingeführt, damit Tags möglichst normiert vergeben werden.</p>
 
@@ -1116,7 +1118,7 @@ Aufrufdatum: 24. 12. 2019</pre>
 
 					<p>Das Tag-Fenster wird auch zum <a href="#menueRedaktion-metadatenThemenfelder">Zuordnen von Themenfeldern und Sachgebieten im Redaktionsmetadaten-Fenster</a> genutzt.</p>
 
-					<p id="bedeutungsgeruest-alias"><b>Alias vergeben:</b> Wenn ausformulierte Bedeutungen lang werden, kann dies die Übersicht in der <a href="#filter">Filterleiste</a> und in der <a href="#karteikarte-formularansicht">Formularansicht der Karteikarte</a> stark beeinträchtigen. Zu diesem Zweck können Sie Bedeutungen mit einem Alias versehen. In der Formularansicht der Karteikarte, im zugehörigen Dropdown-Menü und in der Filterleiste erscheint dann anstelle der eigentlichen Bedeutungsformulierung das Alias. Im Bedeutungsgerüst-Fenster, in der Belegliste und der Leseansicht der Karteikarte sollten lange Bedeutungsangaben nicht störend sein, weswegen sie hier immer in ausgeschriebener Form gedruckt werden.</p>
+					<p class="add-navi-details" id="bedeutungsgeruest-alias"><b>Alias vergeben:</b> Wenn ausformulierte Bedeutungen lang werden, kann dies die Übersicht in der <a href="#filter">Filterleiste</a> und in der <a href="#karteikarte-formularansicht">Formularansicht der Karteikarte</a> stark beeinträchtigen. Zu diesem Zweck können Sie Bedeutungen mit einem Alias versehen. In der Formularansicht der Karteikarte, im zugehörigen Dropdown-Menü und in der Filterleiste erscheint dann anstelle der eigentlichen Bedeutungsformulierung das Alias. Im Bedeutungsgerüst-Fenster, in der Belegliste und der Leseansicht der Karteikarte sollten lange Bedeutungsangaben nicht störend sein, weswegen sie hier immer in ausgeschriebener Form gedruckt werden.</p>
 
 					<p>So vergeben Sie ein Alias:</p>
 
@@ -1134,7 +1136,7 @@ Aufrufdatum: 24. 12. 2019</pre>
 
 					<p>Mithilfe dieses Textfeldes können Sie das Alias auch löschen: Entfernen Sie einfach den gesamten Text und drücken Sie <kbd>⏎</kbd>. Das Alias ist gelöscht.</p>
 
-					<p class="abschnitt">Die Bedeutungsgerüst-Funktion ist so eingerichtet, dass sie (fast) vollständig via <b>Tastatur</b> bedient werden kann. Im <a href="#tastaturkuerzel"><abbr title="Kapitel">Kap.</abbr> <i>Tastaturkürzel</i></a> gibt es einen eigenen <a href="#tastaturkuerzel-bedeutungsgeruest">Abschnitt, in dem alle aufgelistet werden</a>. Im Folgenden werden sie ein wenig genauer beschrieben:</p>
+					<p class="abschnitt add-navi-details" id="bedeutungsgeruest-tastatur">Die Bedeutungsgerüst-Funktion ist so eingerichtet, dass sie (fast) vollständig via <b>Tastatur</b> bedient werden kann. Im <a href="#tastaturkuerzel"><abbr title="Kapitel">Kap.</abbr> <i>Tastaturkürzel</i></a> gibt es einen eigenen <a href="#tastaturkuerzel-bedeutungsgeruest">Abschnitt, in dem alle aufgelistet werden</a>. Im Folgenden werden sie ein wenig genauer beschrieben:</p>
 
 					<p>Mit <kbd>Strg</kbd> + <kbd>⇧</kbd> und <kbd>⇩</kbd> können Sie die vorherige <abbr title="beziehungsweise">bzw.</abbr> nächste Bedeutung im Gerüst auswählen. Ist noch keine Bedeutung ausgewählt, wird die erste Bedeutung selektiert.</p>
 
@@ -1240,7 +1242,7 @@ Aufrufdatum: 24. 12. 2019</pre>
 
 					<p>Im Einzelnen stehen die Icons für die folgenden Funktionen:</p>
 
-					<p class="erklaerung-icon"><img src="../img/filter.svg" width="24" height="24" alt="">Ein- <abbr title="beziehungsweise">bzw.</abbr> Ausblenden der Filterleiste</p>
+					<p class="erklaerung-icon" id="belegliste-EinAusblendenFilterleiste"><img src="../img/filter.svg" width="24" height="24" alt="">Ein- <abbr title="beziehungsweise">bzw.</abbr> Ausblenden der Filterleiste</p>
 
 					<p class="info">Die Filterung der Belege wird durch das Ausblenden der Filterleiste nicht rückgängig gemacht. Soll die Filterung aufgehoben werden, müssen Sie die <a href="#filter">Filter</a> explizit zurücksetzen.</p>
 
@@ -1253,7 +1255,7 @@ Aufrufdatum: 24. 12. 2019</pre>
 						Haben zwei oder mehr Belege dasselbe Datum, werden sie alphabetisch nach Autor sortiert: bei chronologisch aufsteigender Belegliste alphabetisch aufsteigend, bei chronologisch absteigender Belegliste alphabetisch absteigend. Sind auch die Autoren identisch, werden die Belege als Fallback nach Belegnummer geordnet: auch hier auf- oder absteigend, je nachdem wie die Chronologie der Liste ist.</p>
 					</div>
 
-					<p class="erklaerung-icon"><img src="../img/auge.svg" width="24" height="24" alt=""><a href="#belegliste-detailansicht">Detailansicht</a> der Belege umschalten</p>
+					<p class="erklaerung-icon" id="belegliste-detailansicht"><img src="../img/auge.svg" width="24" height="24" alt=""><a href="#belegliste-detailansicht">Detailansicht</a> der Belege umschalten</p>
 
 					<p class="info">Beim Aktivieren des Icons werden alle Belege in der Liste aufgeklappt, sodass die Details sichtbar werden. Um welche Details es sich hierbei genau handelt, hängt von den <a href="#belegliste-platzhalter">Detaileinstellungen</a> ab. Deaktiviert man das Icon, werden die Belege wieder zugeklappt, sodass nur die <a href="#belegliste-kopfleisteBelege">Kopfleisten</a> mit knapper Belegvorschau sichtbar sind. Einzelne Belege können durch einen Klick auf die Kopfleiste jederzeit auf- <abbr title="beziehungsweise">bzw.</abbr> zugeklappt werden, ganz egal, ob die Detailansicht aller Belege aktiviert oder deaktiviert ist.</p>
 
@@ -1355,7 +1357,7 @@ Aufrufdatum: 24. 12. 2019</pre>
 
 					<p>Die Blöcke mit den Ziffern <b>10 | 50 | 100 | <s class="rot"><span>100</span></s></b> dienen dazu, Zeitschnitte in der Belegliste einzublenden. Die Zeitschnitte können ein- oder ausgeblendet werden, ohne dass die Belegliste neu aufgebaut werden müsste. Mit dieser Funktion können Sie leichter sehen, aus welchem Zeitraum die von Ihnen gesammelten Belege stammen, indem alle 10, 50 oder 100 Jahre eine Zeitschnittangabe eingeblendet wird. Durch Klick auf <b><s class="rot"><span>100</span></s></b> können die Zeitschnitte wieder abgestellt werden.</p>
 
-					<p class="erklaerung-icon"><img src="../img/kopieren.svg" width="24" height="24" alt="">nur bei aktivierter <a href="#menueBelege-kopieren">Kopierfunktion</a>: alle in der Liste sichtbaren Belege in die Kopierliste aufnehmen</p>
+					<p class="erklaerung-icon" id="belegliste-kopierfunktion"><img src="../img/kopieren.svg" width="24" height="24" alt="">nur bei aktivierter <a href="#menueBelege-kopieren">Kopierfunktion</a>; alle in der Liste sichtbaren Belege in die Kopierliste aufnehmen</p>
 
 					<p class="erklaerung-icon" id="belegliste-suchleiste"><img src="../img/lupe-suchleiste.svg" width="24" height="24" alt="">Tastaturkürzel <kbd>F3</kbd>; Suchleiste öffnen <abbr title="beziehungsweise">bzw.</abbr> fokussieren</p>
 
@@ -1373,7 +1375,7 @@ Aufrufdatum: 24. 12. 2019</pre>
 						<p>Sie können mit der <b>Tastatur</b> durch die Suchtreffer springen. <abbr title="Siehe">S.</abbr> dazu die Liste der <a href="#tastaturkuerzel-suchleiste">Tastaturkürzel in der Suchleiste</a>.</p>
 					</div>
 
-					<p class="erklaerung-icon"><img src="../img/drucker.svg" width="24" height="24" alt="">Tastaturkürzel <kbd>Strg</kbd> + <kbd>P</kbd>; Belegliste drucken</p>
+					<p class="erklaerung-icon" id="belegliste-drucken"><img src="../img/drucker.svg" width="24" height="24" alt="">Tastaturkürzel <kbd>Strg</kbd> + <kbd>P</kbd>; Belegliste drucken</p>
 
 					<div class="info">
 						<p>Es werden nur die gerade in der Belegliste sichtbaren Belege gedruckt. Die Anzahl der sichtbaren Belege kann von der Gesamtzahl der Belege in der Kartei abweichen, wenn die Liste <a href="#filter">gefiltert</a> wurde. Dabei werden immer alle vorhandenen Informationen zu den Belegen gedruckt. Die Konfiguration der Detailansicht in der Belegliste wird demnach ignoriert.</p>
@@ -1392,7 +1394,7 @@ Aufrufdatum: 24. 12. 2019</pre>
 
 					<p>Oben sehen Sie eine Kopfleiste mit allen Elementen, die (unter gewissen Umständen) sichtbar sein können. Dies sind im Einzelnen:</p>
 
-					<p class="erklaerung-icon"><img src="../img/kopieren.svg" width="24" height="24" alt="">nur bei aktivierter <a href="#menueBelege-kopieren">Kopierfunktion</a>; Beleg in die Kopierliste aufnehmen</p>
+					<p class="erklaerung-icon" id="belegliste-kopierliste"><img src="../img/kopieren.svg" width="24" height="24" alt="">nur bei aktivierter <a href="#menueBelege-kopieren">Kopierfunktion</a>; Beleg in die Kopierliste aufnehmen</p>
 
 					<p class="erklaerung-icon" id="belegliste-karteikarteOeffnen"><img src="../img/karteikarte.svg" width="24" height="24" alt="">Karteikarte zum Bearbeiten des Belegs öffnen</p>
 
@@ -1440,7 +1442,7 @@ Aufrufdatum: 24. 12. 2019</pre>
 						<p>Ist die Detailansicht eines Belegs geöffnet, wird die Vorschau in der Kopfleiste ausgeblendet.</p>
 					</div>
 
-					<h2 id="belegliste-detailansicht">Detailansicht der Belege</h2>
+					<h2 id="belegliste-detailansichtBelege">Detailansicht der Belege</h2>
 
 					<figure class="right" title="zum Vergrößern anklicken">
 						<img src="../img/win/belegliste-detailansicht.png" alt="">
@@ -1491,7 +1493,7 @@ Aufrufdatum: 24. 12. 2019</pre>
 						</figure>
 					</div>
 
-					<p class="erklaerung-icon"><img src="../img/karteikarte.svg" width="24" height="24" alt="">Beleg bearbeiten</p>
+					<p class="erklaerung-icon" id="belegliste-belegBearbeiten"><img src="../img/karteikarte.svg" width="24" height="24" alt="">Beleg bearbeiten</p>
 
 					<p class="info">Dient zum Öffnen der Karteikarte. Dieser Punkt erscheint in allen Rechtsklickmenüs der Belegliste, sodass Sie nicht unbedingt zur Kopfleiste des Belegs scrollen müssen, um die <a href="#karteikarte">Karteikarte</a> zu öffnen, was <abbr title="besonders">bes.</abbr> bei langen Belegen hilfreich sein kann. Ob die Karteikarte in der Lese- oder der Formularansicht geöffnet wird, hängt von einer <a href="#einstellungen-karteikarteLeseansicht">Einstellung</a> ab. Standardmäßig wird die Leseansicht geöffnet.</p>
 
@@ -1517,19 +1519,19 @@ Aufrufdatum: 24. 12. 2019</pre>
 
 					<p class="info">Kopiert werden alle Datenfelder des Belegs. Das Kopierformat ist nicht (gut) menschen-, dafür aber sehr gut maschinenlesbar. So kann der Beleg schnell in eine andere Kartei kopiert werden. <abbr title="Vergleiche">Vgl.</abbr> dazu die <a href="#karteikarte-zwischenablage">Erläuterungen im <abbr title="Kapitel">Kap.</abbr> <i>Karteikarte</i></a>. Wollen Sie den Belegtext in ein Textverarbeitungsprogramm einfügen, benutzen Sie besser das <a href="#belegliste-kopierenIcon">Kopier-Icon</a> <img src="../img/kopieren.svg" width="20" height="20" alt="">.</p>
 
-					<p class="erklaerung-icon"><img src="../img/duplizieren.svg" width="24" height="24" alt="">Beleg duplizieren</p>
+					<p class="erklaerung-icon" id="belegliste-belegDuplizieren"><img src="../img/duplizieren.svg" width="24" height="24" alt="">Beleg duplizieren</p>
 
 					<p class="info">Es wird ein inhaltlich hundertprozentiger Klon des Belegs erstellt, der umgehend in der Belegliste erscheint. Der einzige Unterschied zum Quellbeleg ist die Belegnummer (sichtbar in der Überschrift der Karteikarte).</p>
 
-					<p class="erklaerung-icon"><img src="../img/zahnrad.svg" width="24" height="24" alt="">Belegliste-Einstellungen</p>
+					<p class="erklaerung-icon" id="belegliste-einstellungen"><img src="../img/zahnrad.svg" width="24" height="24" alt="">Belegliste-Einstellungen</p>
 
 					<p class="info">Öffnet das <a href="#einstellungen">Einstellungen-Fenster</a> und wechselt direkt in die <a href="#einstellungen-belegliste">Sektion <i>Belegliste</i></a>.</p>
 
-					<p class="erklaerung-icon"><img src="../img/dokument-plus.svg" width="24" height="24" alt="">Beleg hinzufügen</p>
+					<p class="erklaerung-icon" id="belegliste-belegHinzufuegen"><img src="../img/dokument-plus.svg" width="24" height="24" alt="">Beleg hinzufügen</p>
 
 					<p class="info">Öffnet eine neue leere <a href="#karteikarte-formularansicht">Karteikarte in der Formularansicht</a>.</p>
 
-					<p class="erklaerung-icon"><img src="../img/text-markiert.svg" width="24" height="24" alt="">Textauswahl markieren</p>
+					<p class="erklaerung-icon" id="belegliste-textauswahl"><img src="../img/text-markiert.svg" width="24" height="24" alt="">Textauswahl markieren</p>
 
 					<p class="info">Erscheint nur beim Rechtsklick auf markiertem Belegtext. <a href="#belegliste-karteiwortHervorheben">Details zur Annotierungsfunktion</a> finden Sie weiter oben.</p>
 
@@ -1545,7 +1547,7 @@ Aufrufdatum: 24. 12. 2019</pre>
 						<p>Die Aktion lässt sich übrigens auch aus dem <a href="#menueBearbeiten-kopieren">Kopierfenster</a> heraus anstoßen, das nach dem Drücken von <kbd>Strg</kbd> + <kbd>C</kbd> erscheint.</p>
 					</div>
 
-					<p class="erklaerung-icon" id="belegliste-textZwischenablageReferenz"><img src="../img/link-pfeil-runter.svg" width="24" height="24" alt="">Text in Zwischenablage &gt; Referenz</p>
+					<p class="erklaerung-icon no-navi-details" id="belegliste-textZwischenablageReferenz"><img src="../img/link-pfeil-runter.svg" width="24" height="24" alt="">Text in Zwischenablage &gt; Referenz</p>
 
 					<p class="info">Kopiert eine ID in die Zwischenablage. Die ID wird aus den Datenfeldern <i>Datum</i> und <i>Autor</i> desjenigen Belegs abgeleitet, auf dem geklickt wurde. Zusätzlich wird ihr die ID des Beleg hinzugefügt. Das ist die Nummer, die in der Überschrift der <a href="#karteikarte">Karteikarte</a> sichtbar ist (<abbr title="zum Beispiel">z. B.</abbr> <q>Beleg #69</q>). Die ID ist nicht weiter formatiert, es handelt sich bei ihr nur um eine Zeichenkette, die ausschließlich aus Kleinbuchstaben, Zahlen und Bindestrichen besteht. Sie enthält niemals Leerzeichen. <a href="#xml-belegschnittId" class="link-dokumentation">Details dazu in der technischen Dokumentation</a>.</p>
 
@@ -1553,7 +1555,7 @@ Aufrufdatum: 24. 12. 2019</pre>
 
 					<p class="info">Der Menüpunkt erscheint bei Klick auf der <a href="#belegliste-kopfleiste">Kopfleiste</a> oder in der <a href="#belegliste-detailansicht">Detailansicht der Belegliste</a> sowie in der <a href="#karteikarte">Karteikarte</a>.</p>
 
-					<p class="erklaerung-icon" id="belegliste-xmlZwischenablageBelegschnitt"><img src="../img/beleg.svg" width="24" height="24" alt=""><abbr title="Extensible Markup Language" lang="en">XML</abbr> in Zwischenablage &gt; Belegschnitt</p>
+					<p class="erklaerung-icon no-navi-details" id="belegliste-xmlZwischenablageBelegschnitt"><img src="../img/beleg.svg" width="24" height="24" alt=""><abbr title="Extensible Markup Language" lang="en">XML</abbr> in Zwischenablage &gt; Belegschnitt</p>
 
 					<div class="info">
 						<p>Erscheint nur beim Rechtsklick auf markiertem <em>Beleg-</em>Text. Der Befehl erzeugt auf Grundlage des markierten Texts ein <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippet, das nicht nur den gewählten Belegschnitt, sondern auch einige Metainformationen zum Beleg enthält. <a href="#xml-belegschnitt" class="link-dokumentation">Details zum Format des Snippets in der technischen Dokumentation</a>.</p>
@@ -1567,19 +1569,19 @@ Aufrufdatum: 24. 12. 2019</pre>
 
 					<p class="info">Analog zum Befehl <a href="#belegliste-textZwischenablageReferenz"><i>Text in Zwischenablage &gt; Referenz</i></a> wird auch in diesem Fall eine ID des Belegs erzeugt und kopiert. Der Unterschied ist, dass sie in einem leeren <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Element steht, das als Anker für einen zuvor kopierten Belegschnitt dienen kann.</p>
 
-					<p class="erklaerung-icon"><img src="../img/xml.svg" width="24" height="24" alt="">Belegschnitt in <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Fenster</p>
+					<p class="erklaerung-icon" id="belegliste-xmlBelegschnittFenster"><img src="../img/xml.svg" width="24" height="24" alt="">Belegschnitt in <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Fenster</p>
 
 					<p class="info">Erscheint nur beim Rechtsklick auf markiertem <em>Beleg-</em>Text. Die Funktion erzeugt ein XML-Snippet in derselben Weise wie <a href="#belegliste-xmlZwischenablageBelegschnitt"><i><abbr title="Extensible Markup Language" lang="en">XML</abbr> in Zwischenablage &gt; Belegschnitt</i></a>. Der einzige Unterschied besteht darin, dass das Snippet nicht in die Zwischenablage kopiert, sondern direkt ans <a href="#menueRedaktion-xml"><abbr title="Extensible Markup Language" lang="en">XML</abbr>-Redaktionsfenster</a> geschickt wird.</p>
 
-					<p class="erklaerung-icon"><img src="../img/link.svg" width="24" height="24" alt="">Link kopieren</p>
+					<p class="erklaerung-icon" id="belegliste-linkKopieren"><img src="../img/link.svg" width="24" height="24" alt="">Link kopieren</p>
 
 					<p class="info">Erscheint nur beim Rechtsklick auf einem Internet-Link. Kopiert wird die <abbr title="Uniform Resource Locator" lang="en">URL</abbr> des Links, nicht der angezeigte Text.</p>
 
-					<p class="erklaerung-icon"><img src="../img/oeffnen.svg" width="24" height="24" alt="">Anhang öffnen</p>
+					<p class="erklaerung-icon" id="belegliste-anhagOeffnen"><img src="../img/oeffnen.svg" width="24" height="24" alt="">Anhang öffnen</p>
 
 					<p class="info">Erscheint nur beim Rechtsklick auf einem Dateianhang-Icon in der Metainfo-Leiste. <i class="app-name"></i> öffnet die Datei im als Standard festgelegten Programm des Betriebssytems. Welches dies ist, hängt vom Dateityp (und der Dateiendung) ab.</p>
 
-					<p class="erklaerung-icon"><img src="../img/ordner.svg" width="24" height="24" alt="">Ordner öffnen</p>
+					<p class="erklaerung-icon" id="belegliste-ordnerOeffnen"><img src="../img/ordner.svg" width="24" height="24" alt="">Ordner öffnen</p>
 
 					<p class="info">Erscheint nur beim Rechtsklick auf einem Dateianhang-Icon in der Metainfo-Leiste. <i class="app-name"></i> öffnet den Dateimanager des Betriebssystems mit dem Ordner, in dem der Anhang liegt.</p>
 				</section>
@@ -1647,7 +1649,7 @@ Aufrufdatum: 24. 12. 2019</pre>
 
 					<p>In einer Kartei ohne Belege werden die Filter nicht angezeigt. Sobald mindestens eine Karteikarte minimal gefüllt und gespeichert wurde (sprich: die Textfelder <i>Datum, Beleg</i> und <i>Quelle</i> sind ausgefüllt), werden die Filter <i>Volltext, Zeitraum, Kartendatum, Bedeutungen, Korpora</i> und <i>Textsorten</i> angezeigt. Dass der <i>Zeitraum</i>-Filter erscheint, ist nur logisch, weil Sie beim Erstellen einer Karteikarte zwingend eine Jahreszahl oder zumindest ein Jahrhundert eingeben müssen. Ansonsten würde die App sich weigern, die Karte zu speichern. Im Falle der Filter <i>Bedeutungen, Korpora</i> und <i>Textsorten</i> ist es so, dass auch dann ein Filter erstellt wird, wenn es sozusagen einen <q>negativen Befund</q> gibt. Fehlen in einer Karteikarte Einträge in den Datenfeldern Bedeutung, Korpus oder Textsorte, wird automatisch der Filter <i>(nicht bestimmt)</i> erzeugt. Mit ihm können Sie Belege finden, denen Sie <abbr title="zum Beispiel">z. B.</abbr> noch keine Bedeutung zugewiesen haben.</p>
 
-					<p id="filter-volltext"><b>Volltext:</b> Belege nach dem Vorkommen beliebiger Wörter filtern</p>
+					<p class="add-navi-details" id="filter-volltext"><b>Volltext:</b> Belege nach dem Vorkommen beliebiger Wörter filtern</p>
 
 					<div class="info">
 						<p>Der <i>Volltext</i>-Filter ist zugleich die <b>Suchfunktion der App</b>. Deswegen ist er auch der einzige Filter, der direkt über ein Tastaturkürzel zu erreichen ist (<kbd>Strg</kbd> + <kbd>F</kbd>) und der im Programmmenü auftaucht (<a href="#menueKartei-suche"><i>Kartei &gt; Suche</i></a>). Das Tastaturkürzel können Sie im Hauptfenster des Programms jederzeit aufrufen – auch wenn die Filterleiste noch geschlossen ist und ganz egal in welcher Ansicht Sie sich befinden.</p>
@@ -1673,7 +1675,7 @@ Aufrufdatum: 24. 12. 2019</pre>
 						<p>Die erweiterten Suchfilter können dadurch deaktiviert werden, dass Sie sie schließen. Die in ihnen vorgenommenen Einstellungen werden gespeichert und beim Neustart des Programms wiederhergestellt.</p>
 					</div>
 
-					<p id="filter-zeitraum"><b>Zeitraum:</b> Belege nach Entstehungs- oder Publikationsdatum filtern</p>
+					<p class="add-navi-details" id="filter-zeitraum"><b>Zeitraum:</b> Belege nach Entstehungs- oder Publikationsdatum filtern</p>
 
 					<div class="info">
 						<p>Die zur Verfügung stehenden Zeitschnitte werden dynamisch erzeugt: Dazu wird in einem ersten Schritt geschaut, zu welchem Zeitschnitt der älteste Textbeleg in der Kartei gehört und zu welchem der jüngste. Danach werden alle Zeitschnitte dazwischen ergänzt, und zwar in der Frequenz, die in der ersten Zeile des aufgeklappten Filters durch die runden Radio-Buttons vorgegeben ist: in 10er-, 50er- oder 100er-Schritten.</p>
@@ -1685,7 +1687,7 @@ Aufrufdatum: 24. 12. 2019</pre>
 						<p>Durch das Aktivieren eines Zeitschnittfilters werden alle Belege gefunden, die vom Beginn dieses Zeitschnitts bis zum Beginn des nächsten Zeitschnitts datiert wurden, das letzte Jahr exklusive. Sind 100er-Schritte eingestellt steht der Filter <i>1800</i> somit für alle Belege, die vom Jahr 1800 bis <abbr title="inklusive">inkl.</abbr> 1899 datieren.</p>
 					</div>
 
-					<p id="filter-kartendatum"><b>Kartendatum:</b> zu einem bestimmen Zeitraum angelegte oder geänderte Belege herausfiltern</p>
+					<p class="add-navi-details" id="filter-kartendatum"><b>Kartendatum:</b> zu einem bestimmen Zeitraum angelegte oder geänderte Belege herausfiltern</p>
 
 					<div class="info">
 						<p>Dieser Filter weicht insofern von den anderen Filtern ab, als es bei ihm nicht um inhaltliche Kriterien der Belege, sondern rein formale der Belegsammlung geht. Legen Sie eine <a href="#karteikarte">Karteikarte</a> an oder ändern Sie in einer bestehenden Karteikarte ein Datenfeld, werden beim Speichern in zwei versteckten, sprich: auf der Programmoberfläche nicht sichtbaren, Datenfeldern die genauen Daten der jeweiligen Aktion vermerkt. Nur diese beiden Datenfelder werden vom <i>Kartendatum</i>-Filter angesprochen. Es geht hier also <em>nicht</em> um das <a href="#karteikarte-datum">Datumsfeld in der Karteikarte</a>!</p>
@@ -1695,7 +1697,7 @@ Aufrufdatum: 24. 12. 2019</pre>
 						<p>Mithilfe des Icons <img src="../img/uhr.svg" width="20" height="20" alt=""> kann das Datum des vorstehenden Feldes auf die aktuell laufende Minute gesetzt werden. Die Datumsfelder lassen sich darüber hinaus manuell auf jeden gewünschten Zeitpunkt einstellen. Unlogische Datumseingaben werden abgefangen: Sollte das Bis-Datum kleiner als das Von-Datum sein, wird das Von-Datum auf das Bis-Datum gesetzt.</p>
 					</div>
 
-					<p id="filter-bedeutungen"><b>Bedeutungen:</b> Belege nach den ihnen zugeordneten Bedeutungen filtern</p>
+					<p class="add-navi-details" id="filter-bedeutungen"><b>Bedeutungen:</b> Belege nach den ihnen zugeordneten Bedeutungen filtern</p>
 
 					<div class="info">
 						<p>Die Filter im <i>Bedeutungen</i>-Block geben die im <a href="#bedeutungsgeruest">Bedeutungsgerüst</a> zu findenden Bedeutungen eins zu eins wieder, und zwar in der Reihenfolge, wie sie im Gerüst zu finden sind, und mit derselben Hierarchisierung, die sie <abbr title="ebenda">ebd.</abbr> haben (dargestellt durch Einrückungen). Allein die Zählzeichen wurden der Übersichtlichkeit halber ausgelassen. Wurde einer Bedeutung im Bedeutungsgerüst ein <a href="#bedeutungsgeruest-alias">Alias</a> zugewiesen, wird an dieser Stelle nicht die (<abbr title="eventuell">evtl.</abbr> lange) Bedeutungsformulierung, sondern das (<abbr title="in der Regel">i. d. R.</abbr> kürzere) Alias eingeblendet.</p>
@@ -1719,23 +1721,23 @@ Aufrufdatum: 24. 12. 2019</pre>
 						<p>Der 3. Fall tritt immer dann ein, wenn Sie beim Taggen der Bedeutungen in den Karteikarten nie die Oberbedeutung vergeben, sondern immer nur Bedeutungen in den tieferen Hierarchieebenen verwenden. Ein Beispiel: Nehmen wir an, Sie hätten eine Kartei zum Wort <i>Rest</i> erstellt. Bei der Recherche haben Sie die Bedeutung <q class="bedeutung">Überbleibsel</q> ermittelt, die Karteikarten aber immer nur mit Unterbedeutungen wie <q class="bedeutung">von einer Meterware</q>, <q class="bedeutung">von einem Geldbetrag</q> <abbr title="und so weiter">usw.</abbr> getaggt. Haben Sie die Einstellung zum Einbeziehen der Unterbedeutung ausgeschaltet, würde <q class="bedeutung">Überbleibsel</q> keinen Treffer mehr generieren, eben weil die Karteikarten immer nur mit den differenzierteren Definitionen getaggt wurden. In diesem Fall würde die Oberbedeutung <q class="bedeutung">Überbleibsel</q> ausgegraut, was freilich der Extremfall wäre. Haben Sie Karteikarten manchmal auch mit <q class="bedeutung">Überbleibsel</q> getaggt, ändert sich durch das Ausschalten der Einstellung allein die Zählung der Belege, die den einzelnen Bedeutungen zugeordnet sind (angezeigt durch die eingeklammerte Ziffer hinter den Bedeutungen).</p>
 					</div>
 
-					<p><b>Wortbildungen:</b> Belege nach Wortbildungen filtern</p>
+					<p class="add-navi-details" id="filter-wortbildungen"><b>Wortbildungen:</b> Belege nach Wortbildungen filtern</p>
 
 					<p class="info">Ähnlich wie im <i>Bedeutungen</i>-Filter können auch hier Hierarchieebenen auftauchen (dargestellt durch Einrückungen), und zwar immer dann, wenn Sie sie beim Taggen der Karteikarten geöffnet haben. <abbr title="Siehe">S.</abbr> dazu die <a href="#karteikarte-wortbildung">Erläuterungen im <abbr title="Kapitel">Kap.</abbr> <i>Karteikarte</i></a>.</p>
 
-					<p><b>Synonyme:</b> Belege nach Synonymen filtern</p>
+					<p class="add-navi-details" id="filter-synonyme"><b>Synonyme:</b> Belege nach Synonymen filtern</p>
 
 					<p class="info">Für diesen Filter gilt dasselbe wie für die <i>Wortbildungen</i>.</p>
 
-					<p><b>Korpora:</b> Belege nach Korpus filtern</p>
+					<p class="add-navi-details" id="filter-korpora"><b>Korpora:</b> Belege nach Korpus filtern</p>
 
 					<p class="info">Für diesen Filter gilt dasselbe wie für die <i>Wortbildungen</i>. Zusätzlich gilt: Gibt es Belege in der Sammlung, denen bisher kein Korpus zugewiesen wurde, erscheint an erster Stelle der Filter <i>(nicht bestimmt)</i>.</p>
 
-					<p><b>Textsorten:</b> Belege nach Textsorte filtern</p>
+					<p class="add-navi-details" id="filter-textsorten"><b>Textsorten:</b> Belege nach Textsorte filtern</p>
 
 					<p class="info">Für diesen Filter gilt dasselbe wie für die <i>Korpora</i>.</p>
 
-					<p id="filter-verschiedenes"><b>Verschiedenes:</b> Belege nach verschiedenen Markierungen und Eigenschaften filtern</p>
+					<p class="add-navi-details" id="filter-verschiedenes"><b>Verschiedenes:</b> Belege nach verschiedenen Markierungen und Eigenschaften filtern</p>
 
 					<div class="info">
 						<p>Dieser Filter versammelt alle Markierungsmöglichkeiten, die sich <a href="#karteikarte-unvollstaendig">ganz oben in der Karteikarte finden</a>: <i>unvollständig, Kontext?, Bücherdienst, Buchung, Metatext</i> und die Markierung mit Sternen (<img src="../img/stern.svg" width="20" height="20" alt="">). Darüber hinaus können auch noch die Filter <i>Annotierung</i> (findet alle Belege, die Annotierungen enthalten) und <i>Notizen</i> (findet alle Belege, die Notizen enthalten) auftauchen.</p>
@@ -1763,7 +1765,7 @@ Aufrufdatum: 24. 12. 2019</pre>
 
 					<p>Innerhalb einer Filterkategorie verhalten sich die Filter freilich genau andersherum als über die Filterkategorien hinweg: Sie werden durch ein logisches Oder miteinander verknüpft. Aktivieren Sie in der Demonstrationskartei <i>Bedeutungen &gt; Zugtiergespann</i> und <i>Bedeutungen &gt; Mannschaft im Sport</i> erhalten Sie zehn Treffer. Drei Belege mit der Bedeutung <q class="bedeutung">Zugtiergespann</q> und sieben mit <q class="bedeutung">Mannschaft im Sport</q> – weil die Filter innerhalb der Kategorie <i>Bedeutungen</i> durch ein logisches Oder miteinander verknüpft wurden. Wenden Sie nun zusätzlich den Filter <i>Zeitraum &gt; 1900</i> an, reduziert sich die Belegliste auf sieben Treffer, weil für Filter unterschiedlicher Kategorien ein logisches Und gilt. Die beiden Belege aus dem Jahr 2016 und der von 1859, die bis zu diesem Zeitpunkt noch angezeigt worden waren, bleiben nun im Filter hängen.</p>
 
-					<p id="filter-reduktionsmodus">Die Lage ändert und verkompliziert sich noch, wenn Sie den <b>Reduktionsmodus</b> aktivieren. Er verbirgt sich hinter dem Icon <img src="../img/reduzieren.svg" width="24" height="24" alt=""> im Kopf der Filterleiste. Mit aktiviertem Reduktionsmodus reduzieren sich die <a href="#filter-dynamische">dynamischen Filter</a> mit jedem Filtervorgang ein Stückchen mehr. Der Grund ist, dass sie nun nur noch aus den Belegen gefüllt werden, die nach der Anwendung eines Filters in der Belegliste übrig geblieben sind. Anders formuliert: Normalerweise speisen sich die Inhalte der dynamischen Filter aus allen in der Kartei vorhandenen Belegen. Im Reduktionsmodus jedoch werden die dynamischen Filter nach jedem Filtervorgang neu aufgebaut. Analysiert werden dabei aber nur noch die Belege, die es zuvor durch den Filter geschafft haben. Dies führt – in aller Regel – zu einer Reduktion der zur Verfügung stehenden dynamischen Filter.</p>
+					<p class="add-navi-details" id="filter-reduktionsmodus">Die Lage ändert und verkompliziert sich noch, wenn Sie den <b>Reduktionsmodus</b> aktivieren. Er verbirgt sich hinter dem Icon <img src="../img/reduzieren.svg" width="24" height="24" alt=""> im Kopf der Filterleiste. Mit aktiviertem Reduktionsmodus reduzieren sich die <a href="#filter-dynamische">dynamischen Filter</a> mit jedem Filtervorgang ein Stückchen mehr. Der Grund ist, dass sie nun nur noch aus den Belegen gefüllt werden, die nach der Anwendung eines Filters in der Belegliste übrig geblieben sind. Anders formuliert: Normalerweise speisen sich die Inhalte der dynamischen Filter aus allen in der Kartei vorhandenen Belegen. Im Reduktionsmodus jedoch werden die dynamischen Filter nach jedem Filtervorgang neu aufgebaut. Analysiert werden dabei aber nur noch die Belege, die es zuvor durch den Filter geschafft haben. Dies führt – in aller Regel – zu einer Reduktion der zur Verfügung stehenden dynamischen Filter.</p>
 
 					<p>Ein praktisches Beispiel: In der <a href="#" class="hilfe-demo">Demonstrationskartei</a> finden sich Belege, die fünf verschiedenen Textsorten zugeordnet wurden: <i>Belletristik, Gebrauchsliteratur, Reisebericht, Wissenschaft, Zeitung</i>. Aktivieren Sie nun den Reduktionsmodus. Öffnen Sie dann den Filterblock <i>Zeitraum</i> und klicken Sie auf <i>2000</i>. Sie sehen sofort, wie die Filter <i>1800</i> und <i>1900</i> verschwinden – weil es in den fünf verbliebenen Belegen in der Belegliste keine Belege mehr aus dem Zeitraum 1800–1999 gibt. Alle stammen aus den 2000er-Jahren, weswegen keine anderen Zeitraumfilter mehr aufgebaut werden. Die dynamischen Filter im Block <i>Textsorten</i> wurden ebenfalls stark reduziert: Es wird nur noch der Filter <i>Zeitung</i> angezeigt – weil alle Belege aus den 2000er-Jahren mit dieser und keiner anderen Textsorte getaggt worden sind. Sie können das Spielchen noch weiter treiben und die Belegliste weiter reduzieren, indem Sie <i>Wortbildungen &gt; Teamvergleich</i> hinzuschalten. Im Block <i>Textsorten</i> ist nun auch noch die Unterkategorie <i>Zeitung: Reise</i> verschwunden.</p>
 
@@ -1850,7 +1852,7 @@ Mustermann, Erika
 						<p>Registrieren Sie sich nicht, nervt Sie das Programm durch das Icon <img src="../img/kreis-ausrufezeichen.svg" width="20" height="20" alt="">, das im Kopf des Hauptfensters rechts neben dem Karteiwort erscheint, sobald eine Kartei geöffnet ist.</p>
 					</div>
 
-					<p class="erklaerung-option">Sekunden Timeout bei Internet-Anfragen</p>
+					<p class="erklaerung-option" id="einstellungen-allgemeinesTimeoutInternet">Sekunden Timeout bei Internet-Anfragen</p>
 
 					<div class="info">
 						<p><i>Standard:</i> 10</p>
@@ -1950,7 +1952,7 @@ Mustermann, Erika
 						<p>Memento: Das Karteiwort wird bei aktivierter Einstellung auch dann hervorgehoben, wenn die <a href="#belegliste-karteiwortHervorheben">Funktion zum Hervorheben von Karteiwörtern</a> im Kopf der Belegliste (also das Icon <img src="../img/text-fett.svg" width="20" height="20" alt="">) ausgeschaltet ist. Die Hervorhebungen werden nachträglich ergänzt, wobei auf die <a href="#belegliste-annotierenBelegTransparent">Markierung falschpositiver Treffer</a> Rücksicht genommen wird: Diese erscheinen im kopierten Text niemals markiert.</p>
 					</div>
 
-					<p class="erklaerung-option">Karteiwort mit grauem Hintergrund</p>
+					<p class="erklaerung-option" id="einstellungen-kopierenKarteiwortHintergrund">Karteiwort mit grauem Hintergrund</p>
 
 					<div class="info">
 						<p><i>Standard:</i> nicht aktiviert</p>
@@ -1968,7 +1970,7 @@ Mustermann, Erika
 						<p>Wenn zugleich die folgende Einstellung aktiviert wurde, erscheint die ID in Klammern hinter dem Jahr.</p>
 					</div>
 
-					<p class="erklaerung-option">ID als Überschrift bei <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>-Kopie</p>
+					<p class="erklaerung-option" id="einstellungen-kopierenIDUeberschrift">ID als Überschrift bei <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>-Kopie</p>
 
 					<div class="info">
 						<p><i>Standard:</i> nicht aktiviert</p>
@@ -1978,7 +1980,7 @@ Mustermann, Erika
 						<p>Wenn zugleich die vorherige Einstellung aktiviert wurde, erscheint die ID in Klammern hinter dem Jahr.</p>
 					</div>
 
-					<p class="erklaerung-option">Vorauswahl ohne Nachfrage ausführen</p>
+					<p class="erklaerung-option" id="einstellungen-kopierenVorauswahl">Vorauswahl ohne Nachfrage ausführen</p>
 
 					<div class="info">
 						<p><i>Standard:</i> nicht aktiviert</p>
@@ -2014,7 +2016,7 @@ Mustermann, Erika
 						<p>Die Importsteuerung des Verlagsnamens ist nur möglich, wenn die Importquelle so strukturiert ist, dass diese Information gezielt ausgelesen werden kann. Dies ist beim Import eines MODS-Dokuments oder via <abbr title="Pica-Produktionsnummer">PPN</abbr> <abbr title="beispielsweise">bspw.</abbr> der Fall.</p>
 					</div>
 
-					<p class="erklaerung-option">Serie anzeigen</p>
+					<p class="erklaerung-option" id="einstellungen-literaturSerie">Serie anzeigen</p>
 
 					<div class="info">
 						<p><i>Standard:</i> nicht aktiviert</p>
@@ -2073,7 +2075,7 @@ Mustermann, Erika
 
 					<p>Die folgenden Einstellungen betreffen die <a href="#menueKartei-notizen">Notizen-Funktion</a>, die über den Menüpunkt <a href="#menueKartei-notizen"><i>Kartei &gt; Notizen</i></a> aufgerufen werden kann.</p>
 
-					<p class="erklaerung-option">Notizen-Fenster nach dem Speichern schließen</p>
+					<p class="erklaerung-option" id="einstellungen-notizenSpeichern">Notizen-Fenster nach dem Speichern schließen</p>
 
 					<div class="info">
 						<p><i>Standard:</i> nicht aktiviert</p>
@@ -2105,11 +2107,19 @@ Mustermann, Erika
 						<p>Die Einstellung hat nur einen Effekt, wenn diejenige zur <a href="#einstellungen-notizenFilterleiste">Anzeige der Notizen in der Filterleiste</a> auch aktiviert ist.</p>
 					</div>
 
+					<p class="erklaerung-option" id="einstellungen-notizenMaxBreite">Pixel maximale Breite des Notizenfensters</p>
+
+					<div class="info">
+						<p><i>Standard:</i> 650</p>
+
+						<p>Legt die Maximalbreite des <a href="#menueKartei-notizen">Notizen-Fensters</a> in Pixeln fest. Wird die Einstellung geändert, wird sie umgehend in allen offenen Hauptfenstern übernommen und auf die Notizenfenster angewendet. Der höchstmögliche Wert ist 2999.</p>
+					</div>
+
 					<h2 id="einstellungen-bedeutungsgeruest">Bedeutungsgerüst</h2>
 
 					<p>Die folgenden Einstellungen betreffen die <a href="#bedeutungsgeruest">Bedeutungsgerüst-Funktion</a>, die über den Menüpunkt <a href="#menueKartei-bedeutungsgeruest"><i>Kartei &gt; Bedeutungsgerüst</i></a> oder das Tastaturkürzel <kbd>Strg</kbd> + <kbd>B</kbd> aufgerufen werden kann.</p>
 
-					<p class="erklaerung-option">Bedeutungsgerüst nach dem Speichern schließen</p>
+					<p class="erklaerung-option" id="einstellungen-bedeutungsgeruestSpeichern">Bedeutungsgerüst nach dem Speichern schließen</p>
 
 					<div class="info">
 						<p><i>Standard:</i> nicht aktiviert</p>
@@ -2155,7 +2165,7 @@ Mustermann, Erika
 
 					<p>Die folgenden Einstellungen betreffen die <a href="#karteikarte">Karteikarte</a>. Neue Karteikarten können über den Menüpunkt <a href="#menueBelege-hinzufuegen"><i>Belege &gt; Hinzufügen</i></a> oder das Tastaturkürzel <kbd>Strg</kbd> + <kbd>N</kbd> erstellt werden.</p>
 
-					<p class="erklaerung-option">Karteikarte nach dem Speichern schließen</p>
+					<p class="erklaerung-option" id="einstellungen-karteikarteSpeichern">Karteikarte nach dem Speichern schließen</p>
 
 					<div class="info">
 						<p><i>Standard:</i> nicht aktiviert</p>
@@ -2173,7 +2183,7 @@ Mustermann, Erika
 						<p>Diese Einstellung zu aktivieren, ist nur für erfahren NutzerInnen sinnvoll, die wissen, was in solchen Fällen zu tun ist!</p>
 					</div>
 
-					<p class="erklaerung-option">neue Karteikarte als unvollständig markieren</p>
+					<p class="erklaerung-option" id="einstellungen-karteikarteUnvollstaendig">neue Karteikarte als unvollständig markieren</p>
 
 					<div class="info">
 						<p><i>Standard:</i> nicht aktiviert</p>
@@ -2183,7 +2193,7 @@ Mustermann, Erika
 						<p>Die Einstellung eignet sich für eine Arbeitsweise, bei der Sie Ihren Karteikasten in rascher Folge mit neuen Karten füllen wollen, die einzelnen Karten dabei aber nicht sofort auf Vollständigkeit (und Richtigkeit) aller Angaben überprüfen möchten. Mithilfe eines Filters im <a href="#filter-verschiedenes">Filterblock <i>Verschiedenes</i></a> können Sie die als unvollständig markierten Karten dann schnell wiederfinden (und <abbr title="gegebenenfalls">ggf.</abbr> ergänzen, korrigieren <abbr title="und so weiter">usw.</abbr>).</p>
 					</div>
 
-					<p class="erklaerung-option">Textfelder beim Einfügen von Text via Icon, Menüeintrag oder Bedeutungsdefinition ohne Nachfrage ergänzen</p>
+					<p class="erklaerung-option" id="einstellungen-karteikarteOhneNachfrage">Textfelder beim Einfügen von Text via Icon, Menüeintrag oder Bedeutungsdefinition ohne Nachfrage ergänzen</p>
 
 					<div class="info">
 						<p><i>Standard:</i> nicht aktiviert</p>
@@ -2203,7 +2213,7 @@ Mustermann, Erika
 						<p>Bei dieser Einstellung handelt es sich im Prinzip um dieselbe, die Sie in jenem Meldungsfenster sehen, das Sie nach einer der genannten Einfüge-Funktionen fragt, ob Sie das Textfeld überschreiben oder ergänzen möchten. Die Checkbox im Meldungsfenster ist mit dieser verknüpft.</p>
 					</div>
 
-					<p class="erklaerung-option"><abbr title="Uniform Resource Locator" lang="en">URL</abbr> aus der Zwischenablage automatisch in das <abbr title="Deutsches Textarchiv">DTA</abbr>-Import-Feld eintragen</p>
+					<p class="erklaerung-option" id="einstellungen-karteikarteURLAutomatisch"><abbr title="Uniform Resource Locator" lang="en">URL</abbr> aus der Zwischenablage automatisch in das <abbr title="Deutsches Textarchiv">DTA</abbr>-Import-Feld eintragen</p>
 
 					<div class="info">
 						<p><i>Standard:</i> aktiviert</p>
@@ -2263,7 +2273,7 @@ Mustermann, Erika
 
 					<p>Die folgenden Einstellungen betreffen die <a href="#filter">Filter</a> in der <a href="#belegliste">Belegliste</a>, die dort über das Icon <img src="../img/filter.svg" width="24" height="24" alt=""> in der <a href="#belegliste-kopfleiste">Kopfleiste</a> eingeblendet werden können.</p>
 
-					<p class="erklaerung-option">beim Öffnen eines Filterblocks die anderen Blöcke zuklappen</p>
+					<p class="erklaerung-option" id="einstellungen-filterleisteZuklappen">beim Öffnen eines Filterblocks die anderen Blöcke zuklappen</p>
 
 					<div class="info">
 						<p><i>Standard:</i> nicht aktiviert</p>
@@ -2273,7 +2283,7 @@ Mustermann, Erika
 						<p>Die Einstellung ist standardmäßig nicht aktiviert, weil es besonders bei der Verwendung des <a href="#filter-reduktionsmodus">Reduktionsmodus</a> hilfreich sein kann, unmittelbar zu sehen, wie sich die Filter in anderen Blöcken beim Filtern anpassen.</p>
 					</div>
 
-					<p class="erklaerung-option">inaktive Filterblöcke automatisch zuklappen</p>
+					<p class="erklaerung-option" id="einstellungen-filterleisteZuklappenAutomatisch">inaktive Filterblöcke automatisch zuklappen</p>
 
 					<div class="info">
 						<p><i>Standard:</i> nicht aktiviert</p>
@@ -2495,6 +2505,8 @@ Mustermann, Erika
 						<td><kbd>⇦</kbd></td>
 						<td>
 							<p>Element in der Konfiguration der <a href="#einstellungen-quick">Quick-Access-Bar</a> im <a href="#menueApp-einstellungen">Einstellungen-Dialog</a> aktiviert: Element zur Leiste hinzufügen</p>
+
+							<p>Handbuch und <a href="#" class="link-dokumentation">technische Dokumentation</a>: detailliertes Inhaltsverzeichnis schließen</p>
 						</td>
 					</tr><tr>
 						<td> </td><td> </td>
@@ -2525,6 +2537,8 @@ Mustermann, Erika
 						<td><kbd>⇨</kbd></td>
 						<td>
 							<p>Element in der Konfiguration der <a href="#einstellungen-quick">Quick-Access-Bar</a> im <a href="#menueApp-einstellungen">Einstellungen-Dialog</a> aktiviert: Element aus der Leiste entfernen</p>
+
+							<p>Handbuch und <a href="#" class="link-dokumentation">technische Dokumentation</a>: detailliertes Inhaltsverzeichnis öffnen</p>
 						</td>
 					</tr><tr>
 						<td> </td><td> </td>
@@ -3575,35 +3589,35 @@ Mustermann, Erika
 
 						<p>Folgende Filter stehen zur Verfügung:</p>
 
-						<p><b><i>Karteiwort:</i></b> Der Filter sucht nach passenden Karteiwörtern. Die Suche verläuft trunkiert, es werden also auch Wortteile gefunden; Groß- und Kleinschreibung werden ignoriert. <i class="app-name"></i> bietet zwar an, eine neue Kartei mit dem Karteiwort als Namen abzuspeichern. Der Karteiname spielt für diese Suche jedoch keine Rolle. Es wird lediglich das Datenfeld für das Karteiwort <em>innerhalb</em> der Kartei ausgewertet, das vom Dateinamen durchaus abweichen kann und darf.</p>
+						<p class="add-navi-details" id="menueApp-karteisucheKarteiwort"><b><i>Karteiwort:</i></b> Der Filter sucht nach passenden Karteiwörtern. Die Suche verläuft trunkiert, es werden also auch Wortteile gefunden; Groß- und Kleinschreibung werden ignoriert. <i class="app-name"></i> bietet zwar an, eine neue Kartei mit dem Karteiwort als Namen abzuspeichern. Der Karteiname spielt für diese Suche jedoch keine Rolle. Es wird lediglich das Datenfeld für das Karteiwort <em>innerhalb</em> der Kartei ausgewertet, das vom Dateinamen durchaus abweichen kann und darf.</p>
 
-						<p id="menueApp-karteisucheThemenfelder"><b><i>Themenfelder:</i></b> Mit diesem Filter können Sie nach Karteien suchen, die mit einem oder mehreren Themenfeldern verknüpft wurden. Durchsucht wird das Datenfeld <i>Themenfelder</i>, das über das <a href="#menueRedaktion-metadaten">Redaktionsmetadaten-Fenster</a> gefüllt werden kann. Wollen Sie Karteien finden, in denen Bedeutungen im <a href="#bedeutungsgeruest">Bedeutungsgerüst</a> mit bestimmten Themenfeldern verknüpft wurden, müssen Sie den <a href="#menueApp-karteisucheTag">Tag-Filter</a> nutzen.</p>
+						<p class="add-navi-details" id="menueApp-karteisucheThemenfelder"><b><i>Themenfelder:</i></b> Mit diesem Filter können Sie nach Karteien suchen, die mit einem oder mehreren Themenfeldern verknüpft wurden. Durchsucht wird das Datenfeld <i>Themenfelder</i>, das über das <a href="#menueRedaktion-metadaten">Redaktionsmetadaten-Fenster</a> gefüllt werden kann. Wollen Sie Karteien finden, in denen Bedeutungen im <a href="#bedeutungsgeruest">Bedeutungsgerüst</a> mit bestimmten Themenfeldern verknüpft wurden, müssen Sie den <a href="#menueApp-karteisucheTag">Tag-Filter</a> nutzen.</p>
 
 						<p>Es kann nur nach Themenfeldern gesucht werden, die in einer mit dem Programm <a href="#einstellungen-tagDateien">verknüpften Tag-Datei</a> vorhanden sind. Entscheidend ist hierbei ferner, dass Sie beim Taggen der Dateien, die durchsucht werden, dieselbe Tag-Datei verwendet haben, die aktuell mit dem Programm verknüpft ist. (Es wird nämlich nicht nach dem Tag-Text, sondern der Tag-ID gesucht.) Nutzen Sie immer die mitgelieferte Datei, gibt es keine Probleme.</p>
 
-						<p id="menueApp-karteisucheSachgebiet"><b><i>Sachgebiet:</i></b> Identisch mit dem Filter <a href="#menueApp-karteisucheThemenfelder"><i>Themenfelder</i></a> mit dem Unterschied, dass es hier um Sachgebiete geht.</p>
+						<p class="add-navi-details" id="menueApp-karteisucheSachgebiet"><b><i>Sachgebiet:</i></b> Identisch mit dem Filter <a href="#menueApp-karteisucheThemenfelder"><i>Themenfelder</i></a> mit dem Unterschied, dass es hier um Sachgebiete geht.</p>
 
-						<p><b><i>Volltext:</i></b> Der Volltextfilter durchsucht in allen Karteikarten dieselben Felder wie die <a href="#filter-volltext">Suchfunktion in der Filterleiste</a>. Darüber hinaus werden das Karteiwort und die <a href="#menueKartei-notizen">Karteinotizen</a> in die Suche mit einbezogen. Die Suche läuft trunkiert; es wird also auch nach Wortteilen gesucht. Haken Sie die Einstellung <i>genaue Schreibung</i> ab, wird zwischen Groß- und Kleinschreibung unterschieden.</p>
+						<p class="add-navi-details" id="menueApp-karteisucheVolltext"><b><i>Volltext:</i></b> Der Volltextfilter durchsucht in allen Karteikarten dieselben Felder wie die <a href="#filter-volltext">Suchfunktion in der Filterleiste</a>. Darüber hinaus werden das Karteiwort und die <a href="#menueKartei-notizen">Karteinotizen</a> in die Suche mit einbezogen. Die Suche läuft trunkiert; es wird also auch nach Wortteilen gesucht. Haken Sie die Einstellung <i>genaue Schreibung</i> ab, wird zwischen Groß- und Kleinschreibung unterschieden.</p>
 
-						<p id="menueApp-karteisucheTag"><b><i>Tag:</i></b> Mithilfe dieses Filters lassen sich die Tags in den Bedeutungsgerüsten der Dateien durchsuchen. So kann man <abbr title="beispielsweise">bspw.</abbr> Karteien finden, in denen Bedeutungsdefinitionen dem Sachgebiet <i>Politik</i> zugeordnet wurden.</p>
+						<p class="add-navi-details" id="menueApp-karteisucheTag"><b><i>Tag:</i></b> Mithilfe dieses Filters lassen sich die Tags in den Bedeutungsgerüsten der Dateien durchsuchen. So kann man <abbr title="beispielsweise">bspw.</abbr> Karteien finden, in denen Bedeutungsdefinitionen dem Sachgebiet <i>Politik</i> zugeordnet wurden.</p>
 
 						<p>Es kann nur nach Tags gesucht werden, die in den aktuellen Tag-Dateien wirklich vorhanden sind. Sie können zwar im dritten Textfeld des Tag-Filters beliebigen Text eingeben. Diese Möglichkeit wurde aber nur eingeräumt, um in einer <abbr title="eventuell">evtl.</abbr> umfangreichen Tag-Liste rasch den gesuchten Begriff zu finden. (Beim Tippen öffnet sich ein entsprechend gefiltertes <a href="#karteikarte-dropdown">Dropdown-Menü</a>.) Geben Sie hier einen Tag ein, den es nicht gibt, wird der Filter ignoriert und mit einem <img src="../img/x-dick-rot.svg" width="20" height="20" alt=""> markiert. Die Suche verläuft dann so, als hätten Sie diesen Filter überhaupt nicht angelegt: Ist der Tag-Filter der einzige Filter, werden alle gefundenen <abbr title="Zettel’s Traum JSON">ZTJ</abbr>-Dateien gelistet.</p>
 
 						<p>Dieses Verhalten zeigt sich in derselben Weise in den anderen Filtern: Das Programm erkennt, wenn ein <b>Filter falsch</b> oder gar nicht gefüllt wurde – und ignoriert ihn, jedoch nicht ohne ihn zuvor mit einem <img src="../img/x-dick-rot.svg" width="20" height="20" alt=""> zu markieren. Ändern Sie die Filtereinstellungen, wird bei der nächsten Suche überprüft, ob er jetzt prozessierbare Angaben enthält, und die Fehlermarkierung <abbr title="gegenbenfalls">ggf.</abbr> entfernt.</p>
 
-						<p><b><i>Karteidatum:</i></b> Der Filter dient dazu, Karteien zu finden, die vor (kleiner gleich, &lt;=) oder nach (größer gleich, &gt;=) einem bestimmten Zeitpunkt (der immer ein bestimmter Tag ist) erstellt oder geändert wurden.</p>
+						<p class="add-navi-details" id="menueApp-karteisucheKarteidatum"><b><i>Karteidatum:</i></b> Der Filter dient dazu, Karteien zu finden, die vor (kleiner gleich, &lt;=) oder nach (größer gleich, &gt;=) einem bestimmten Zeitpunkt (der immer ein bestimmter Tag ist) erstellt oder geändert wurden.</p>
 
 						<p>Tipp: Kombinieren Sie zwei Karteidatumsfilter geschickt miteinander, können Sie Karteien finden, die innerhalb eines bestimmten Zeitraums erstellt oder geändert wurden. Allerdings gibt es keinen Algorithmus, der überprüft, ob die Logik von kombinierten Datumsfiltern stimmig ist. Wenn sie verquer sein sollte (Enddatum liegt vor Startdatum), werden schlicht und ergreifend keine Karteien gefunden.</p>
 
-						<p id="menueApp-karteisucheBearbeiterin"><b><i>BearbeiterIn:</i></b> Mit diesem Filter lassen sich Karteien finden, in denen die genannte Person als BearbeiterIn registriert ist. Durchsucht wird das Datenfeld, das über die <a href="#menueRedaktion-metadaten">Redaktionsmetadaten</a> gefüllt und eingesehen werden kann. Es wird trunkiert gesucht; Differenzen zwischen Groß- und Kleinschreibung werden ignoriert.</p>
+						<p class="add-navi-details" id="menueApp-karteisucheBearbeiterin"><b><i>BearbeiterIn:</i></b> Mit diesem Filter lassen sich Karteien finden, in denen die genannte Person als BearbeiterIn registriert ist. Durchsucht wird das Datenfeld, das über die <a href="#menueRedaktion-metadaten">Redaktionsmetadaten</a> gefüllt und eingesehen werden kann. Es wird trunkiert gesucht; Differenzen zwischen Groß- und Kleinschreibung werden ignoriert.</p>
 
 						<p>Haben Sie eine Liste der MitarbeiterInnen in Ihrem Projekt angelegt und diese <a href="#einstellungen-allgemeinesPersonenliste">Personenliste importiert</a>, bietet Ihnen das Dropdown-Menü des Suchfeldes die Personen aus der Liste an. Das Datenfeld, in dem die BearbeiterInnen einer Kartei gespeichert werden, wird beim Erstellen und/oder Speichern einer Kartei übrigens automatisch gefüllt, wenn Sie sich zuvor <a href="#einstellungen-allgemeinesBearbeiterin">als NutzerIn der App registriert</a> haben.</p>
 
-						<p><b><i>Redaktion:</i></b> Über diesen Filter lassen sich Redaktionsereignisse und/oder mit solchen Ereignissen verknüpfte Personen finden. Für die Suche ist es nicht unbedingt nötig, sowohl ein Ereignis als auch eine Person anzugeben. Man kann genauso gut allein nach einer Person suchen, die für ein beliebiges Redaktionsereignis registriert wurde, oder Karteien finden, die ein spezifisches Redaktionsereignis wie <q>Artikel erstellt</q> aufweisen, und zwar personenunabhängig. Werden sowohl eine Person als auch ein Redaktionsereignis angegeben, werden nur Karteien aufgelistet, in denen das angegebene Ereignis mit der angegebenen Person verknüpft ist. Suchen Sie <abbr title="beispielsweise">bspw.</abbr> alle Karteien, zu denen Sie persönlich einen Artikel geschrieben haben, geben Sie im Feld <i>Ereignis</i> <q>Artikel erstellt</q> und im Feld <i>Person</i> Ihren Namen ein.</p>
+						<p class="add-navi-details" id="menueApp-karteisucheRedaktion"><b><i>Redaktion:</i></b> Über diesen Filter lassen sich Redaktionsereignisse und/oder mit solchen Ereignissen verknüpfte Personen finden. Für die Suche ist es nicht unbedingt nötig, sowohl ein Ereignis als auch eine Person anzugeben. Man kann genauso gut allein nach einer Person suchen, die für ein beliebiges Redaktionsereignis registriert wurde, oder Karteien finden, die ein spezifisches Redaktionsereignis wie <q>Artikel erstellt</q> aufweisen, und zwar personenunabhängig. Werden sowohl eine Person als auch ein Redaktionsereignis angegeben, werden nur Karteien aufgelistet, in denen das angegebene Ereignis mit der angegebenen Person verknüpft ist. Suchen Sie <abbr title="beispielsweise">bspw.</abbr> alle Karteien, zu denen Sie persönlich einen Artikel geschrieben haben, geben Sie im Feld <i>Ereignis</i> <q>Artikel erstellt</q> und im Feld <i>Person</i> Ihren Namen ein.</p>
 
 						<p>Wie in allen anderen Filtern wird auch hier trunkiert gesucht. Im Gegensatz zu anderen Filtern haben Sie allerdings die Möglichkeit, die Suchlogik zu ändern. Sie können sowohl nach Vorkommen als auch Nicht-Vorkommen eines Redaktionsereignisses suchen, indem Sie das Feld mit den Zeichen <code class="quelltext">=</code> und <code class="quelltext">≠</code> umstellen. Auf diesem Weg können Sie <abbr title="zum Beispiel">z. B.</abbr> alle Karteien finden, in denen das Ereignis <q>Artikel erstellt</q> noch nicht eingetragen wurde.</p>
 
-						<p id="menueApp-karteisucheRedaktionsdatum"><b><i>Redaktionsdatum:</i></b> Mit diesem Filter können Sie die Suche auf Karteien einschränken, die irgendein Redaktionsereignis aufweisen, das innerhalb eines bestimmten Zeitraums liegt. Geben Sie im <i>Von</i>-Feld <abbr title="zum Beispiel">z. B.</abbr> den 1. 1. 2020 und im <i>Bis</i>-Feld den 31. 3. 2020 ein, finden Sie alle Karteien, die im ersten Quartal 2020 irgendein Redaktionsereignis zugewiesen bekommen haben.</p>
+						<p class="add-navi-details" id="menueApp-karteisucheRedaktionsdatum"><b><i>Redaktionsdatum:</i></b> Mit diesem Filter können Sie die Suche auf Karteien einschränken, die irgendein Redaktionsereignis aufweisen, das innerhalb eines bestimmten Zeitraums liegt. Geben Sie im <i>Von</i>-Feld <abbr title="zum Beispiel">z. B.</abbr> den 1. 1. 2020 und im <i>Bis</i>-Feld den 31. 3. 2020 ein, finden Sie alle Karteien, die im ersten Quartal 2020 irgendein Redaktionsereignis zugewiesen bekommen haben.</p>
 
 						<p>Richtig nützlich wird dieser Filter freilich erst dann, wenn Sie ihn mit einem <i>Redaktion</i>-Filter kombinieren. Erstellen Sie zugleich einen <i>Redaktion</i>-Filter, in dem als Ereignis <abbr title="beispielsweise">bspw.</abbr> <q>Artikel erstellt</q> eingetragen wurde, finden Sie alle Karteien, zu denen im ersten Quartal 2020 ein Artikel erstellt wurde. Sie können durchaus mehrere <i>Redaktion</i>-Filter kombinieren. Der <i>Redaktionsdatum</i>-Filter berücksichtigt alle Redaktionsereignisse, die er im Suchformular findet.</p>
 
@@ -3967,7 +3981,7 @@ Mustermann, Erika
 
 						<p><b><i>Speicherort:</i></b> Die vollständige Pfadangabe der Datei. Durch Klick auf das Icon <img src="../img/ordner.svg" width="20" height="20" alt=""> können Sie den Dateimanager Ihres Betriebssystems in dem Ordner öffnen, in dem sich die Kartei befindet. Falls ein Teil der Pfadangabe verschluckt wird, weil das Fenster zu schmal oder der Pfad zu lang ist: In einem Tooltip, der beim Herüberfahren mit der Maus erscheint, können Sie den kompletten Pfad sehen.</p>
 
-						<p><b><i>Dateiformat:</i></b> Das <a href="#ztj-ztj" class="link-dokumentation"><abbr title="Zettel’s Traum JSON">ZTJ</abbr>-Dateiformat</a> muss hin und wieder angepasst werden, wenn Features ergänzt oder geändert wurden. In solchen Fällen wird die Versionsnummer hochgezählt. Wurde das Dateiformat in einer Version von <i class="app-name"></i> angepasst, werden ältere <abbr title="Zettel’s Traum JSON">ZTJ</abbr>-Dateien beim Öffnen ohne Ihr Zutun in das derzeit aktuelle Format konvertiert. Sie werden hier also <em>immer</em> die aktuelle Versionsnummer des Dateiformats sehen.</p>
+						<p><b><i>Dateiformat:</i></b> Das <a href="#ztj-ztj" class="link-dokumentation"><abbr title="Zettel’s Traum JSON">ZTJ</abbr>-Dateiformat</a> muss hin und wieder angepasst werden, wenn Features ergänzt oder geändert wurden. In solchen Fällen wird die Versionsnummer hochgezählt. Wurde das Dateiformat in einer Version von <i class="app-name"></i> angepasst, werden ältere <abbr title="Zettel’s Traum JSON">ZTJ</abbr>-Dateien beim Öffnen ohne Ihr Zutun in das derzeit aktuelle Format konvertiert. In diesem Feld steht die Versionsnummer des Dateiformats, das die geöffnete Kartei tatsächlich hat. Wurde das Datenformat beim Öffnen konvertiert, steht hier erst nach dem ersten Speichern die aktuelle Versionsnummer, weil die Daten in der Kartei erst dann wirklich dieses Datenformat haben.</p>
 
 						<p><b><i>Revision:</i></b> Die Revisionsnummer wird mit jedem Speichervorgang um 1 hochgezählt.</p>
 					</div>
@@ -4058,7 +4072,7 @@ Mustermann, Erika
 							<figcaption>das Kopieren-Fenster mit fünf vorgemerkten Belegen</figcaption>
 						</figure>
 
-						<p><b><i>Kopieren einer Belegsammlung</i></b></p>
+						<p class="add-navi-details" id="menueBelege-kopierenBelegsammlung"><b><i>Kopieren einer Belegsammlung</i></b></p>
 
 						<p>Will man einen oder mehrere Belege von einem Quell- in ein Ziel-Fenster am selben Rechner kopieren, muss die Liste zu kopierender Belege zunächst einmal zusammengestellt werden. Dafür dient diese Funktion. Indem Sie auf den Menüpunkt <i>Belege &gt; Kopieren</i> klicken, wird die Kopierfunktion aktiviert. Es öffnet sich zwar kein Dialogfenster, aber die Programmoberfläche wird an mehreren Stellen modifiziert:</p>
 
@@ -4084,7 +4098,7 @@ Mustermann, Erika
 
 						<p>Beenden lässt sich die Kopierfunktion über den Button <i>Beenden</i> mit dem Icon <img src="../img/ausgang.svg" width="20" height="20" alt=""> im Kopf des Fensters oder über das Kopier-Icon im Kopf des Hauptfensters: <i>Rechtsklick &gt; Kopierfunktion beenden</i>. Beim <b>Beenden</b> wird die Kopierliste geleert, sodass Sie beim erneuten Aktivieren der Funktion wieder mit einer leeren Liste starten. Außerdem verschwinden beim Beenden die <a href="#menueBelege-kopierenIcons">Icons 1. – 4.</a>, von denen oben die Rede war.</p>
 
-						<p id="menueBelege-kopierenZwischenablage"><b><i>Spontanes Kopieren eines einzigen Belegs</i></b></p>
+						<p class="add-navi-details" id="menueBelege-kopierenZwischenablage"><b><i>Spontanes Kopieren eines einzigen Belegs</i></b></p>
 
 						<p>Die Kopierfunktion ist wie gesagt im Kern dafür gedacht, größere Belegmengen zwischen Karteien auf demselben Rechner auszutauschen. Es ist aber auch möglich, nur einen einzigen Beleg auf die Schnelle zu kopieren. Hierzu gibt es im Kopf der Karteikarte das immer sichtbare Icon <img src="../img/einfuegen-pfeil.svg" width="20" height="20" alt="">. Klickt man auf das Icon wird die aktuelle <a href="#karteikarte-zwischenablage">Karteikarte in die Zwischenablage</a> des Computers geschoben. Die <a href="#menueBelege-einfuegen">Einfügen-Funktion</a> erkennt ohne Ihr Zutun, dass in der Zwischenablage ein Beleg von <i class="app-name"></i> liegt. Ruft man die Funktion nach dem Kopieren eines singulären Belegs im Quell-Fenster im Ziel-Fenster auf, erscheint dort als erste Belegquelle in der Liste die automatisch ausgewählte <i>Zwischenablage</i>. Der Beleg lässt sich mit der Einfügen-Funktion dann genauso einfügen, als handle es sich um eine aus Dutzenden Belegen bestehende Kopierliste in einem anderen Fenster von <i class="app-name"></i>. Um das Kopieren eines Belegs in die Zwischenablage zu nutzen, muss die Kopier-Funktion im Quell-Fenster nicht eigens aktiviert werden; das Quell-Fenster könnte man nach dem Kopieren sogar umgehend schließen. Die Einfügen-Funktion im Zielfenster findet den Beleg trotzdem. Ein Nachteil dieser Funktion ist freilich, dass man auf diese Weise immer nur einen Beleg kopieren kann.</p>
 
@@ -4092,7 +4106,7 @@ Mustermann, Erika
 
 						<p>Wundern Sie sich bitte nicht, dass ein in die Zwischenablage kopierter Beleg in der Einfügen-Funktion des Quell-Fensters nicht erscheint. Dem wurde ein Riegel vorgeschoben, damit Sie am Ende nicht versehentlich zweimal denselben Beleg in ein und derselben Kartei haben. Für das <a href="#karteikarte-duplizieren">Duplizieren von Belegen</a> gibt es eine eigene Funktion.</p>
 
-						<p id="menueBelege-kopierenExportieren"><b><i>Exportieren einer Belegsammlung</i></b></p>
+						<p class="add-navi-details" id="menueBelege-kopierenExportieren"><b><i>Exportieren einer Belegsammlung</i></b></p>
 
 						<p>Einen in die Zwischenablage kopierten Beleg kann man prinzipiell natürlich in einer Datei speichern oder via E-Mail an andere NutzerInnen von <i class="app-name"></i> verschicken, indem man ihn einfach an der entsprechenden Stelle mit der üblichen Operation einfügt. Der Quelltext ist für ungeübte Augen freilich arg verwirrend, aber grundsätzlich könnte er durch andere NutzerInnen wieder markiert, kopiert und über die <a href="#menueBelege-einfuegen">Einfügen-Funktion</a> in eine Kartei importiert werden.</p>
 
@@ -4152,7 +4166,7 @@ Gerüst 2 &gt; Gerüst 1</pre>
 
 						<p><b>Tipp</b>: Wenn Sie mit dieser Funktion zu einer bestehenden Kartei Belege hinzugefügt haben, möchten Sie diese vielleicht gesondert nachbearbeiten. Es kann sich natürlich schwierig gestalten, die neuen Belege in der Belegliste aufzuspüren, wenn die Kartei schon zuvor zahlreiche Belege umfasste. Denn in der Liste werden die neuen Belege in die Chronologie eingeordnet, müssen also nicht mehr unbedingt nebeneinander stehen. Da beim Einfügen eines Belegs in diesem immer das Erstellungs- und Änderungsdatum des Zeitpunkts der Einfügeoperation gespeichert wird, können Sie die gerade hinzugefügten Belege mit dem <a href="#filter-kartendatum">Filter <i>Kartendatum</i></a> leicht finden. Der Filter lässt sich minutengenau einstellen.</p>
 
-						<p id="menueBelege-einfuegenImportieren"><b><i>Importieren einer Belegsammlung</i></b></p>
+						<p class="add-navi-details" id="menueBelege-einfuegenImportieren"><b><i>Importieren einer Belegsammlung</i></b></p>
 
 						<p>Das Importieren von Belegen aus einer <a href="#ztj-ztb" class="link-dokumentation"><abbr title="Zettel’s Traum Belege">ZTB</abbr></a>-Datei, in der sich eine zuvor <a href="#menueBelege-kopierenExportieren">exportierte Belegsammlung</a> findet, funktioniert im Grunde genauso wie das Einfügen von Belegen aus einem parallel geöffneten Karteifenster: Klicken Sie auf den Button <i>Import</i> mit dem Icon <img src="../img/dokument-import-48.svg" width="20" height="20" alt=""> und wählen Sie die <abbr title="Zettel’s Traum Belege">ZTB</abbr>-Datei aus. Danach erscheint in der Liste mit <i>Belegquellen</i> als erstes der Punkt <i>Belegedatei</i> mit der Anzahl der in der Datei enthaltenen Belege. Der Punkt sollte bereits ausgewählt sein. Wählen Sie die Datenfelder aus, die Sie importieren möchten, konfigurieren Sie <abbr title="gegebenenfalls">ggf.</abbr> das Mapping der <a href="#bedeutungsgeruest">Bedeutungsgerüste</a> und drücken Sie auf den Button <i>Einfügen</i>. Das war’s: Die in der Belegedatei zu findenden Belege wurden alle importiert.</p>
 					</div>
@@ -4216,7 +4230,7 @@ Gerüst 2 &gt; Gerüst 1</pre>
 					<div class="info">
 						<p>Öffnet ein Fenster, in dem einfach gehaltene Literaturdatenbanken erstellt und bearbeitet werden können.</p>
 
-						<p><b><i>Grundsätzliches</i></b></p>
+						<p class="add-navi-details" id="menueRedaktion-literaturGrundsaetzliches"><b><i>Grundsätzliches</i></b></p>
 
 						<p>Die Funktion zum Erstellen und Bearbeiten von Literaturdatenbanken ist <b>nicht an eine einzelne Kartei gebunden</b>. Sie wurde darum auch nur rudimentär in das <a href="#menueKartei-speichern">Speichersystem</a> von <i class="app-name"></i> integriert: Das Tastaturkürzel <kbd>Strg</kbd> + <kbd>S</kbd> funktioniert zwar auch in diesem Dialogfenster. In die <a href="#einstellungen-allgemeinesSpeichern">Speicherkaskade</a> ist die Funktion jedoch nicht eingebunden, weil eine Literaturdatenbank niemals in einer gerade geöffneten Wortkartei, sondern immer in einer separaten Datei gespeichert wird. Das heißt aber auch, dass Sie zum Öffnen der Literaturdatenbank nicht erst eine Kartei öffnen müssen. Die Funktion lässt sich auch in einem leeren Hauptfenster aufrufen und vollumfänglich verwenden.</p>
 
@@ -4226,7 +4240,7 @@ Gerüst 2 &gt; Gerüst 1</pre>
 
 						<p>Schließlich liegt dem Datenbanksystem die Idee zugrunde, dass <b>alle Änderungen nachvollziehbar</b> sein sollen. Darum lassen sich einmal erstellte Titelaufnahmen, wenn man so will, eigentlich gar nicht bearbeiten. Es können nur immer wieder neue Versionen ein und derselben Titelaufnahme angelegt werden, sodass jederzeit nachvollziehbar bleibt, was wann wie von wem geändert wurde. Deswegen weigert sich das System auch, wenn Sie Titelaufnahmen anlegen oder überarbeiten möchten, die jeweilige Operation auszuführen, wenn Sie sich noch nicht als <a href="#einstellungen-allgemeinesBearbeiterin">Bearbeiterin in den Einstellungen namentlich registriert</a> haben. Denn alle Aktionen in einer Datenbank werden mit einem Namen verknüpft. Die Funktionen zum Hinzufügen und Bearbeiten von Titelaufnahmen sind leicht zugänglich; die durchaus vorhandene <a href="#menueRedaktion-literaturLoeschen">Löschfunktion</a> wurde absichtlich ein wenig versteckt.</p>
 
-						<p><b><i>Kurzanleitung</i></b></p>
+						<p class="add-navi-details" id="menueRedaktion-literaturKurzanleitung"><b><i>Kurzanleitung</i></b></p>
 
 						<p>Selbst wenn in der <a href="#menueRedaktion-literaturKopfzeile">Kopfzeile des Datenkbankfenster</a> noch der Hinweis <q>keine Datenbank geladen</q> zu sehen sein sollte, steht Ihnen intern bereits eine Literaturdatenbank zur Verfügung. Sie können also schon vor dem ersten Speichern der Datenbank Titelaufnahmen anlegen.</p>
 
@@ -4248,7 +4262,7 @@ Gerüst 2 &gt; Gerüst 1</pre>
 
 						<p><b><i>Titelaufnahmen kopieren:</i></b> Nutzen Sie die <i>Titelsuche</i>, um die gewünschte Titelaufnahme zu finden. Klicken Sie mit der rechten Maustaste auf einer Titelaufnahme, sehen Sie im Rechtsklickmenü den Punkt <i>Titelaufnahme in Zwischenablage</i>. Die Titelaufnahmen können in der Form eines <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippets (zum maschinellen Weiterverarbeiten) oder in einem unstrukturierten Textformat (<abbr title="zum Beispiel">z. B.</abbr> zum Einfügen in ein Office-Dokument) kopiert werden.</p>
 
-						<p id="menueRedaktion-literaturKopfzeile"><b><i>Kopfzeile</i></b></p>
+						<p class="add-navi-details" id="menueRedaktion-literaturKopfzeile"><b><i>Kopfzeile</i></b></p>
 
 						<p>Die Kopfzeile enthält von links nach rechts die folgenden Elemente:</p>
 
@@ -4308,7 +4322,7 @@ Gerüst 2 &gt; Gerüst 1</pre>
 							<li><i>nur Kartei speichern:</i> Es wird nur die Datenbank gespeichert, auch wenn das Eingabeformular sichtbar ist und Änderungen in ihm noch nicht übernommen wurden.</li>
 						</ul>
 
-						<p id="menueRedaktion-literaturTitelsuche"><b><i>Titelsuche</i></b></p>
+						<p class="add-navi-details" id="menueRedaktion-literaturTitelsuche"><b><i>Titelsuche</i></b></p>
 
 						<figure class="right" title="zum Vergrößern anklicken">
 							<img src="../img/win/menueRedaktion-literatur-suchergebnisse.png" alt="">
@@ -4423,7 +4437,7 @@ Gerüst 2 &gt; Gerüst 1</pre>
 
 						<p>Eigens hingewiesen sei nur auf die Möglichkeit, in der Ergebnisliste zu navigieren, ohne das Suchfeld zu verlassen. Befinden Sie sich im Suchschlitz können Sie mit den Tasten <kbd>⇧</kbd>/<kbd>⇩</kbd> <abbr title="beziehungsweise">bzw.</abbr> <kbd>Bild ⇧</kbd>/<kbd>Bild ⇩</kbd> in der Trefferliste scrollen und mit <kbd>Alt</kbd> + <kbd>⇦</kbd>/<kbd>⇨</kbd> vor- oder zurückblättern.</p>
 
-						<p id="menueRedaktion-literaturTitelaufnahme"><b><i>Titelaufnahme</i></b></p>
+						<p class="add-navi-details" id="menueRedaktion-literaturTitelaufnahme"><b><i>Titelaufnahme</i></b></p>
 
 						<p>Das <b>Eingabeformular</b> dient sowohl zum Erstellen neuer als auch zum Überarbeiten bestehender Titelaufnahmen. Darum kann es sich, sozusagen, in drei verschiedenen Zuständen befinden: <i>Titelaufnahme hinzufügen</i>, <i>Titelaufnahme ändern</i> und <i>Titelaufnahme veraltet</i>. Der aktuelle Status des Eingabeformulars wird immer in einer Meldung über dem Formular angezeigt:</p>
 
@@ -4573,7 +4587,7 @@ Gerüst 2 &gt; Gerüst 1</pre>
 
 						<p>Das Nebenfenster, das mit diesem Befehl geöffnet werden kann, ist der zentrale Teil eines Redaktionssystems, das die sehr spezifischen Bedürfnisse des Projekts <a href="https://adw-goe.de/forschung/weitere-forschungsprojekte/wortgeschichte-digital-teilprojekt-im-zdl/">Wortgeschichte digital</a> adressiert. Deswegen und weil es sich bei dem Fenster im Grunde nur um ein großes Formular handelt, sollen die Funktionen hier nur kursorisch beschrieben werden.</p>
 
-						<p><b><i>Icons im Fensterkopf</i></b></p>
+						<p class="add-navi-details" id="menueRedaktion-xmlIcons"><b><i>Icons im Fensterkopf</i></b></p>
 
 						<p class="erklaerung-icon"><img src="../img/dokument-export.svg" width="20" height="20" alt=""><abbr title="Extensible Markup Language" lang="en">XML</abbr>-Datei exportieren; Tastaturkürzel <kbd>Strg</kbd> + <kbd>E</kbd>. Es gibt einige wenige <b>Pflichtangaben</b>, die vor dem Export gemacht werden müssen: Artikel-ID, Artikeltyp und Themenfeld müssen angegeben werden, außerdem müssen mindestens eine Revision und ein Lemma aufgenommen werden und ein Beleg importiert sein.</p>
 
@@ -4583,13 +4597,13 @@ Gerüst 2 &gt; Gerüst 1</pre>
 
 						<p class="erklaerung-icon"><img src="../img/dokument-import.svg" width="20" height="20" alt=""><abbr title="Extensible Markup Language" lang="en">XML</abbr>-Daten zurücksetzen. Alle Daten, die im Redaktionsfenster bereits eingegeben wurden, werden gelöscht; das Formular wird auf den <q>Auslieferungszustand</q> zurückgestellt.</p>
 
-						<p><b><i>Bereiche</i></b>
+						<p class="add-navi-details" id="menueRedaktion-xmlBereiche"><b><i>Bereiche</i></b>
 
 						<p>Das Fenster ist in acht Bereiche gegliedert, die sich auch über die Navigation im Kopf des Fensters ansteuern lassen.</p>
 
 						<p>Rechts in der Überschrift eines jeden Bereichs finden sich zwei Augen-Icons: <img src="../img/auge.svg" width="20" height="20" alt=""> und <img src="../img/auge-durchgestrichen.svg" width="20" height="20" alt="">. Mit ihnen können die Details im gesamten Bereich ein- <abbr title="beziehungsweise">bzw.</abbr> ausgeblendet werden.</p>
 
-						<p><b><i>Vorschauköpfe</i></b>
+						<p class="add-navi-details" id="menueRedaktion-xmlVorschaukoepfe"><b><i>Vorschauköpfe</i></b>
 
 						<figure class="right" title="zum Vergrößern anklicken">
 							<img src="../img/win/menueRedaktion-xml-kopf.png" alt="">
@@ -4614,7 +4628,7 @@ Gerüst 2 &gt; Gerüst 1</pre>
 
 						<p class="erklaerung-icon"><img src="../img/pfeil-gerade-rechts.svg" width="20" height="20" alt="">Nur in den Abschnittsköpfen von <i>Kurz gefasst</i> und <i>Wortgeschichte:</i> Erhöt den Level des Abschnitts und aller in ihm verschachtelten Blöcke um einen Grad.</p>
 
-						<p><b><i><abbr title="Extensible Markup Language" lang="en">XML</abbr>-Vorschau</i></b></p>
+						<p class="add-navi-details" id="menueRedaktion-xmlVorschau"><b><i><abbr title="Extensible Markup Language" lang="en">XML</abbr>-Vorschau</i></b></p>
 
 						<p>Es ist häufig – aber nicht immer – möglich, den automatisch generierten <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Code zu bearbeiten. Dazu muss man in der <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Vorschau zunächst in den Bearbeiten-Modus wechseln. Dies geht nicht nur über den Button <i>Bearbeiten</i>, sondern auch via Doppelklick im Vorschaufeld. Führt man einen Doppelklick aus, wird der Cursor (ungefähr) an der Stelle platziert, an der man den Klick ausgeführt hat.</p>
 
@@ -4631,17 +4645,17 @@ Gerüst 2 &gt; Gerüst 1</pre>
 
 						<p>Der <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Code der Vorschau kann übrigens via Rechtsklick auf dem Vorschaufeld in die Zwischenablage kopiert werden. Das Vorschaufeld darf sich dabei nicht im Bearbeiten-Modus befinden.</p>
 
-						<p><b><i>Metadaten</i></b></p>
+						<p class="add-navi-details" id="menueRedaktion-xmlMetadaten"><b><i>Metadaten</i></b></p>
 
 						<p>Das Icon <img src="../img/stift.svg" width="20" height="20" alt=""> hinter dem Feld <i>Artikel-ID</i> ermittelt automatisch eine ID mithilfe des Karteiworts/der Karteiwörter.</p>
 
 						<p>Mit dem Formular in der letzten Zeile können <b>Revisionen</b> hinzugefügt werden. Die <i>Änderungsnotiz</i> ist fakultativ. Sind für eine Revision mehrere AutorInnen zuständig, kann man diese durch durch Slash voneinander trennen. Im Feld <i>AutorIn</i> sollte dann <abbr title="zum Beispiel">z. B.</abbr> <q>Karin Muster/Helmut Schuster</q> stehen.</p>
 
-						<p><b><i>Lemmata</i></b></p>
+						<p class="add-navi-details" id="menueRedaktion-xmlLemmata"><b><i>Lemmata</i></b></p>
 
 						<p>Es können beliebig viele Lemmata aufgenommen werden. Hat ein Lemma mehrere Schreibungen, müssen die einzelnen Schreibungen im Feld <i>Lemma</i> mit einem Slash voneinander getrennt werden: <q>Clan/Klan</q>.</p>
 
-						<p><b><i>Kurz gefasst und Wortgeschichte</i></b></p>
+						<p class="add-navi-details" id="menueRedaktion-xmlText"><b><i>Kurz gefasst und Wortgeschichte</i></b></p>
 
 						<p>Diese beiden Bereiche sind zum Erstellen von Fließtext gedacht. Die Texte müssen immer in Abschnitte gegliedert werden. Ein Abschnitt selbst hat keinen Text; in ihm können sich aber verschiedene Blöcke befinden, die wiederum alle zwingend irgendeinen Text enthalten müssen. Es gibt fünf verschiedene Blocktypen: <i>Überschrift, Textblock, Blockzitat, Liste</i> und <i>Illustration</i>.</p>
 
@@ -4706,7 +4720,7 @@ Gerüst 2 &gt; Gerüst 1</pre>
 							<li><b>dwb2 1, 35</b> wird zu <code class="quelltext xml-pretty-print">&lt;Literaturreferenz Ziel="dwb2"&gt;1, 35&lt;/Literaturreferenz&gt;</code> (dies ist nur ein Beispiel; der Erkennungsalgorithmus soll hier nicht weiter erläutert werden)</li>
 						</ul>
 
-						<p><b><i>Belege</i></b></p>
+						<p class="add-navi-details" id="menueRedaktion-xmlBelege"><b><i>Belege</i></b></p>
 
 						<p>Die Belege können nicht manuell umsortiert werden. Sie werden automatisch nach Entstehungsdatum sortiert. Ist ein Tagesdatum bekannt, erfolgt die Sortierung nach Jahr, Monat und Tag.</p>
 
@@ -4714,15 +4728,15 @@ Gerüst 2 &gt; Gerüst 1</pre>
 
 						<p><abbr title="Vergleiche">Vgl.</abbr> zum automatischen Taggen der Belege den entsprechenden <a href="#xml-belegschnitt" class="link-dokumentation"><abbr title="Abschnitt">Abschn.</abbr> in der technischen Dokumentation</a>.</p>
 
-						<p><b><i>Literatur</i></b></p>
+						<p class="add-navi-details" id="menueRedaktion-xmlLiteratur"><b><i>Literatur</i></b></p>
 
 						<p>Die Literaturtitel können nicht manuell umsortiert werden. Sie werden automatisch alphanumerisch nach Sigle sortiert.</p>
 
-						<p><b><i>Wortinformationen</i></b></p>
+						<p class="add-navi-details" id="menueRedaktion-xmlWortinformationen"><b><i>Wortinformationen</i></b></p>
 
 						<p>Die Wortinformationen sind immer an ein Bedeutungsgerüst gebunden. Befindet sich noch kein Bedeutungsgerüst im Fenster wird der erste Wortinformationenblock angezeigt, der gefunden werden kann.</p>
 
-						<p><b><i>Bedeutungsgerüste</i></b></p>
+						<p class="add-navi-details" id="menueRedaktion-xmlBedeutungsgerueste"><b><i>Bedeutungsgerüste</i></b></p>
 
 						<p>Es können mehrere Bedeutungsgerüste importiert werden. (<span class="obacht">Aber Achtung!</span> Zur Zeit wird nur das zuerst importierte Gerüst exportiert – das zuerst importierte, nicht das Gerüst mit der niedrigsten Ordnungsnummer!)</p>
 
@@ -4891,7 +4905,7 @@ Gerüst 2 &gt; Gerüst 1</pre>
 						<p>Lädt man die Kartei über diesen Menüpunkt, wird das Original aus dem Programmordner in einen temporären Systemordner kopiert. Diese <b>temporäre Kartei</b> wird dann von der App geladen. Sie können also gefahrlos Änderungen an der Kartei vornehmen und diese auch speichern. Öffnen Sie die Demonstrationskartei erneut via <i>Hilfe &gt; Demonstrationskartei</i>, wird die temporäre Kartei wieder mit dem Original überschrieben, das niemals angetastet wird.</p>
 					</div>
 
-					<p class="erklaerung-icon-menues"><img src="../img/kreis-leer.svg" width="24" height="24" alt="">Technische Dokumentation</p>
+					<p class="erklaerung-icon-menues" id="menueHilfe-dokumentation"><img src="../img/kreis-leer.svg" width="24" height="24" alt="">Technische Dokumentation</p>
 
 					<div class="info">
 						<p>Öffnet ein Fenster mit der <a href="#" class="link-dokumentation">technischen Dokumentation</a>.</p>
@@ -4899,7 +4913,7 @@ Gerüst 2 &gt; Gerüst 1</pre>
 						<p>Die technische Dokumentation ist nur für diejenigen gedacht, die das <b>Programm bauen</b> oder den <b>Quellcode bearbeiten</b> wollen. Sie enthält <abbr title="unter anderem">u. a.</abbr> Informationen zum verwendeten <a href="#framework" class="link-dokumentation">Framework</a>, Hinweise dazu, <a href="#framework-paketieren" class="link-dokumentation">wie man das Programm paketiert</a>, und nicht zuletzt eine genaue Dokumentation des <a href="#ztj-ztj" class="link-dokumentation"><abbr title="Zettel’s Traum JSON">ZTJ</abbr>-Dateiformats</a>.</p>
 					</div>
 
-					<p class="erklaerung-icon-menues"><img src="../img/kreis-leer.svg" width="24" height="24" alt="">Changelog</p>
+					<p class="erklaerung-icon-menues" id="menueHilfe-changelog"><img src="../img/kreis-leer.svg" width="24" height="24" alt="">Changelog</p>
 
 					<div class="info">
 						<p>Öffnet ein Fenster mit dem <a href="#" class="link-changelog">Changelog</a>.</p>
@@ -4909,7 +4923,7 @@ Gerüst 2 &gt; Gerüst 1</pre>
 						<p>Falls Sie hier im Handbuch zu einer Funktion nicht genügend Informationen finden, hilft Ihnen vielleicht eine Suche im Changelog weiter. Die <b>Suchleiste</b> können Sie dort via <kbd>Strg</kbd> + <kbd>F</kbd> öffnen.</p>
 					</div>
 
-					<p class="erklaerung-icon-menues"><img src="../img/kreis-leer.svg" width="24" height="24" alt="">Fehlerlog</p>
+					<p class="erklaerung-icon-menues" id="menueHilfe-fehlerlog"><img src="../img/kreis-leer.svg" width="24" height="24" alt="">Fehlerlog</p>
 
 					<div class="info">
 						<p>Öffnet ein Fenster mit dem <a href="#" class="link-fehlerlog">Fehlerlog</a>.</p>
@@ -4948,7 +4962,7 @@ Gerüst 2 &gt; Gerüst 1</pre>
 						<p>In dem Fenster finden sich ein paar Informationen zu <i class="app-name"></i>: zum Kontext, in dem das Programm entstanden ist, zur Rechteinhaberin, zu den Lizenzen der App und ihrer Teile sowie zum Entwickler.</p>
 					</div>
 
-					<p class="erklaerung-icon-menues"><img src="../img/kreis-leer.svg" width="24" height="24" alt="">Über Electron</p>
+					<p class="erklaerung-icon-menues" id="menueHilfe-ueberElectron"><img src="../img/kreis-leer.svg" width="24" height="24" alt="">Über Electron</p>
 
 					<div class="info">
 						<p>Öffnet das Fenster <a href="#" class="ueber-electron">Über Electron</a>.</p>
