@@ -154,11 +154,11 @@ let helferXml = {
 		let xslt = new DOMParser().parseFromString(`<xsl:stylesheet version="1.0"
  xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 	<xsl:output omit-xml-declaration="yes" indent="yes"/>
-		<xsl:template match="node()|@*">
-			<xsl:copy>
-				<xsl:apply-templates select="node()|@*"/>
-			</xsl:copy>
-		</xsl:template>
+	<xsl:template match="node()|@*">
+		<xsl:copy>
+			<xsl:apply-templates select="node()|@*"/>
+		</xsl:copy>
+	</xsl:template>
 </xsl:stylesheet>`, "application/xml");
 		let processor = new XSLTProcessor();
 		processor.importStylesheet(xslt);
@@ -171,7 +171,7 @@ let helferXml = {
 	prettyPrint ({xmlStr, xmlErr = null}) {
 		// geschützte Leerzeichen markieren
 		xmlStr = xmlStr.replace(/\u{a0}/ug, "␣");
-		/// horizonatle Ellipse zu drei Punkte (wird in Noto Mono weird dargestellt)
+		/// horizontale Ellipse zu drei Punkte (wird in Noto Mono weird dargestellt)
 		xmlStr = xmlStr.replace(/…/g, "...");
 		// ggf. Fehler markieren
 		if (xmlErr) {
@@ -401,12 +401,10 @@ let helferXml = {
 	//   lit = true | undefined
 	//     (Literatur-Subset benutzen)
 	abbrTagger ({text, lit = false}) {
-		let abbr = helferXml.abbr;
+		let abbr = helferXml.abbr,
+			notBefore = `(?<!(<Abkuerzung Expansion=".+?">|\\p{Letter}| ))`;
 		if (lit) {
 			abbr = helferXml.abbrLit;
-		}
-		let notBefore = `(?<!(<Abkuerzung Expansion=".+?">|\\p{Letter}| ))`;
-		if (lit) {
 			notBefore = `(?<!(<Abkuerzung Expansion=".+?">|\\p{Letter}))`;
 		}
 		for (let [k, v] of Object.entries(abbr)) {
