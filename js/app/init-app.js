@@ -65,6 +65,7 @@ window.addEventListener("load", async () => {
 	});
 	ipcRenderer.on("belege-kopieren", () => kopieren.init());
 	ipcRenderer.on("belege-einfuegen", () => kopieren.einfuegen());
+	ipcRenderer.on("belege-zwischenablage", () => liste.kopierenAlleBelege());
 	ipcRenderer.on("hilfe-demo", () => helfer.demoOeffnen());
 	ipcRenderer.on("hilfe-updates", () => updates.fenster());
 	// Kopierfunktion

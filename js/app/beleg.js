@@ -778,7 +778,12 @@ let beleg = {
 		if (!text) {
 			return;
 		}
-		beleg.toolsKopierenExec(ds, beleg.data, text, document.querySelector(`#beleg-lese-${ds} p`));
+		beleg.toolsKopierenExec({
+			ds,
+			obj: beleg.data,
+			text,
+			ele: document.querySelector(`#beleg-lese-${ds} p`),
+		});
 	},
 	// führt die Kopieroperation aus (eigene Funktion,
 	// weil sie auch für die Kopierfunktion in der Belegliste benutzt wird)
@@ -789,10 +794,13 @@ let beleg = {
 	//     wichtig, um die Literaturangabe beim Kopieren von Belegtext zu finden)
 	//   text = String
 	//     (der komplette Feldtext, wie er in der DB steht)
-	//   ele = Element || null
+	//   ele = Element | null
 	//     (ein Element auf der 1. Ebene im Kopierbereich; "ele" kann "null" sein,
 	//     wenn die Leseansicht noch nie aufgebaut wurde)
-	toolsKopierenExec (ds, obj, text, ele) {
+	//   cb = false | undefined
+	//     (Text nicht Zwischenablage kopieren;
+	//     nur wenn alle Belegtexte kopiert werden auf false)
+	toolsKopierenExec ({ds, obj, text, ele, cb = true}) {
 		// clipboard initialisieren
 		const {clipboard} = require("electron");
 		// Ist Text ausgewählt und ist er im Bereich des Kopier-Icons?
@@ -817,20 +825,22 @@ let beleg = {
 			});
 			// Referenz vorbereiten
 			popup.referenz.data = obj;
-			let eleListe, eleKarte;
-			if (!ele) {
-				// wenn die Leseansicht noch nie aufgebaut wurde,
-				// kann ele === null sein; dann erfolgt das Kopieren immer
-				// aus dem Karteikartenformular heraus
-				eleKarte = true;
-			} else if (ele) {
-				eleListe = ele.closest(".liste-details");
-				eleKarte = ele.closest("tr");
-			}
-			if (eleListe) {
-				popup.referenz.id = eleListe.previousSibling.dataset.id;
-			} else if (eleKarte) {
-				popup.referenz.id = "" + beleg.id_karte;
+			if (cb) {
+				let eleListe, eleKarte;
+				if (!ele) {
+					// wenn die Leseansicht noch nie aufgebaut wurde,
+					// kann ele === null sein; dann erfolgt das Kopieren immer
+					// aus dem Karteikartenformular heraus
+					eleKarte = true;
+				} else if (ele) {
+					eleListe = ele.closest(".liste-details");
+					eleKarte = ele.closest("tr");
+				}
+				if (eleListe) {
+					popup.referenz.id = eleListe.previousSibling.dataset.id;
+				} else if (eleKarte) {
+					popup.referenz.id = "" + beleg.id_karte;
+				}
 			}
 			// Texte aufbereiten
 			html = helfer.clipboardHtml(html);
@@ -843,11 +853,18 @@ let beleg = {
 			text = helfer.typographie(text);
 			text = beleg.toolsKopierenAddQuelle(text, false, obj);
 			text = beleg.toolsKopierenAddJahr(text, false);
-			// Text in Zwischenablage
-			clipboard.write({
-				text: text,
-				html: html,
-			});
+			// Text in Zwischenablage oder Text zurückgeben
+			if (cb) {
+				clipboard.write({
+					text: text,
+					html: html,
+				});
+			} else {
+				return {
+					html,
+					text,
+				};
+			}
 		} else if (ds === "bd") { // Bedeutung
 			const bd = beleg.bedeutungAufbereiten();
 			let bds = [];
@@ -884,7 +901,9 @@ let beleg = {
 			clipboard.writeText(text);
 		}
 		// Animation, die anzeigt, dass die Zwischenablage gefüllt wurde
-		helfer.animation("zwischenablage");
+		if (cb) {
+			helfer.animation("zwischenablage");
+		}
 	},
 	// Klammern im Belegtext aufbereiten
 	//   text = String
