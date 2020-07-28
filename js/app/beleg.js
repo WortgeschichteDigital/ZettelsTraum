@@ -804,7 +804,7 @@ let beleg = {
 		// clipboard initialisieren
 		const {clipboard} = require("electron");
 		// Ist Text ausgewählt und ist er im Bereich des Kopier-Icons?
-		if (window.getSelection().toString() &&
+		if (cb && window.getSelection().toString() &&
 				popup.getTargetSelection([ele])) {
 			clipboard.write({
 				text: popup.textauswahl.text,
