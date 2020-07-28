@@ -1980,6 +1980,24 @@ Mustermann, Erika
 						<p>Wenn zugleich die vorherige Einstellung aktiviert wurde, erscheint die ID in Klammern hinter dem Jahr.</p>
 					</div>
 
+					<p class="erklaerung-option" id="einstellungen-kopierenKlammerungen">Text in Streichungen und Löschungen mitkopieren</p>
+
+					<div class="info">
+						<p><i>Standard:</i> nicht aktiviert</p>
+
+						<p>Ist die Einstellung aktiviert wird der Textinhalt von <a href="#karteikarte-belegKlammern">Klammerungen mit spezifischer Bedeutung</a> nicht durch eine horizonalte Ellipse […] ersetzt, sondern mitkopiert. Die verschiedenen Klammern werden normalisiert und alle als eckige Klammern wiedergegeben.</p>
+					</div>
+
+					<p class="erklaerung-option" id="einstellungen-kopierenKlammerungenEinfaerben">Streichung, Löschung und Autorenzusatz einfärben</p>
+
+					<div class="info">
+						<p><i>Standard:</i> nicht aktiviert</p>
+
+						<p><a href="#karteikarte-belegKlammern">Klammerungen mit spezifischer Bedeutung</a> werden beim Kopieren, rot, grün <abbr title="beziehungsweise">bzw.</abbr> blau eingefärbt, wenn die Einstellung aktiviert ist.</p>
+
+						<p>Der kopierte Text liegt in der Zwischenablage in zwei verschiedenen Formaten vor: einmal in einem unformatierten Textformat und einmal in <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>. Die Farbmarkierungen können nur wiedergegeben werden, wenn Sie den Text in ein Programm einfügen, dass auf das <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>-Format zurückgreift. Auf Office-Programme wie Microsoft Office oder LibreOffice trifft dies zu.</p>
+					</div>
+
 					<p class="erklaerung-option" id="einstellungen-kopierenVorauswahl">Vorauswahl ohne Nachfrage ausführen</p>
 
 					<div class="info">
@@ -4169,6 +4187,18 @@ Gerüst 2 &gt; Gerüst 1</pre>
 						<p class="add-navi-details" id="menueBelege-einfuegenImportieren"><b><i>Importieren einer Belegsammlung</i></b></p>
 
 						<p>Das Importieren von Belegen aus einer <a href="#ztj-ztb" class="link-dokumentation"><abbr title="Zettel’s Traum Belege">ZTB</abbr></a>-Datei, in der sich eine zuvor <a href="#menueBelege-kopierenExportieren">exportierte Belegsammlung</a> findet, funktioniert im Grunde genauso wie das Einfügen von Belegen aus einem parallel geöffneten Karteifenster: Klicken Sie auf den Button <i>Import</i> mit dem Icon <img src="../img/dokument-import-48.svg" width="20" height="20" alt=""> und wählen Sie die <abbr title="Zettel’s Traum Belege">ZTB</abbr>-Datei aus. Danach erscheint in der Liste mit <i>Belegquellen</i> als erstes der Punkt <i>Belegedatei</i> mit der Anzahl der in der Datei enthaltenen Belege. Der Punkt sollte bereits ausgewählt sein. Wählen Sie die Datenfelder aus, die Sie importieren möchten, konfigurieren Sie <abbr title="gegebenenfalls">ggf.</abbr> das Mapping der <a href="#bedeutungsgeruest">Bedeutungsgerüste</a> und drücken Sie auf den Button <i>Einfügen</i>. Das war’s: Die in der Belegedatei zu findenden Belege wurden alle importiert.</p>
+					</div>
+
+					<p class="erklaerung-icon-menues" id="menueBelege-zwischenablage"><img src="../img/kopieren.svg" width="24" height="24" alt="">Belegtexte in Zwischenablage</p>
+
+					<div class="info">
+						<p>Texte aller in der Belegliste sichtbaren Belege in die Zwischenablage kopieren.</p>
+
+						<p>Es werden nur die Texte derjenigen Belege kopiert, die gerade in der Belegliste sichtbar sind. Wurden <a href="#filter">Filter</a> angewendet, werden diejenigen Belege, auf die die Filter nicht zutreffen von der Funktion somit ignoriert.</p>
+
+						<p>Die Belegtexte werden immer komplett kopiert, also so, wie sie in der <a href="#karteikarte">Karteikarte</a> stehen. Dabei werden alle weiteren Informationen in der Karteikarte ignoriert, außer der <a href="#karteikarte-quelle">Quellenangabe</a>, die automatisch an den Belegtext angehängt wird. Die Funktion kopiert den Beleg also so, wie es das <a href="#belegliste-textZwischenablage">Kopier-Icon neben dem Belegtext</a> tun würde, nur dass alle Belege auf einmal kopiert werden.</p>
+
+						<p>Nach dem Kopieren, liegen die Belegtexte in der Zwischenablage in zwei verschiedenen Formaten vor: in einem unformatierten Text- und im <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>-Format. Fügen Sie den Text in ein Office-Programm ein, wird die <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>-Fassung, fügen Sie ihn in einen Plain-Text-Editor ein, wird die unformatierte Textfassung verwendet.</p>
 					</div>
 				</section>
 

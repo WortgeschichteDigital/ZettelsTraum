@@ -274,6 +274,12 @@ layoutMenu = [
 				icon: path.join(__dirname, "img", "menu", "einfuegen.png"),
 				click: () => appMenu.befehl("belege-einfuegen"),
 			},
+			{ type: "separator" },
+			{
+				label: "Belegtexte in Zwischenablage",
+				icon: path.join(__dirname, "img", "menu", "kopieren.png"),
+				click: () => appMenu.befehl("belege-zwischenablage"),
+			},
 		],
 	},
 	{

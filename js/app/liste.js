@@ -1819,8 +1819,44 @@ let liste = {
 			evt.preventDefault();
 			let ds = this.dataset.ds.split("|"),
 				text = data.ka[ds[0]][ds[1]];
-			beleg.toolsKopierenExec(ds[1], data.ka[ds[0]], text, this);
+			beleg.toolsKopierenExec({
+				ds: ds[1],
+				obj: data.ka[ds[0]],
+				text,
+				ele: this,
+			});
 		});
+	},
+	// alle in der Belegliste angezeigten Belege in die Zwischenablage
+	kopierenAlleBelege () {
+		let text = [],
+			html = [];
+		// Daten sammeln
+		for (let i of document.querySelectorAll("#liste-belege .liste-kopf")) {
+			const id = i.dataset.id;
+			popup.referenz.id = id; // popup.referenz.data wird in beleg.toolsKopierenExec() gesetzt
+			let texte = beleg.toolsKopierenExec({
+				ds: "bs",
+				obj: data.ka[id],
+				text: data.ka[id].bs,
+				ele: null,
+				cb: false,
+			});
+			text.push(texte.text);
+			html.push(texte.html);
+		}
+		// Margin vor Absatz
+		for (let i = 0, len = html.length; i < len; i++) {
+			html[i] = html[i].replace(/^<p>/, `<p style="margin-top: 18pt">`);
+		}
+		// Daten => Clipboard
+		const {clipboard} = require("electron");
+		clipboard.write({
+			text: text.join("\n".repeat(4)),
+			html: html.join(""),
+		});
+		// Feedback
+		helfer.animation("zwischenablage");
 	},
 	// Tastaturkürzel Strg + C abfangen und das Kopieren von markiertem Text ggf. selbst regeln
 	//   evt = Object
