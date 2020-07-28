@@ -817,7 +817,7 @@ let beleg = {
 			let p = text.replace(/\n\s*\n/g, "\n").split("\n"),
 				html = "";
 			p.forEach(text => {
-				text = beleg.toolsKopierenKlammern({text});
+				text = beleg.toolsKopierenKlammern({text, html: true});
 				if (optionen.data.einstellungen["textkopie-wort"]) {
 					text = liste.belegWortHervorheben(text, true);
 				}
@@ -908,20 +908,31 @@ let beleg = {
 	// Klammern im Belegtext aufbereiten
 	//   text = String
 	//     (Belegtext, in dem die Klammern aufbereitet werden sollen)
-	toolsKopierenKlammern ({text}) {
+	//   html = true | undefined
+	//     (Text wird in HTML formatiert)
+	toolsKopierenKlammern ({text, html = false}) {
 		// Bindestriche einfügen
 		text = text.replace(/\[¬\]([A-ZÄÖÜ])/g, (m, p1) => `-${p1}`);
 		// technische Klammern entfernen
 		text = text.replace(/\[¬\]|\[:.+?:\]/g, "");
 		// eckige Klammern
 		text = text.replace(/\[{1,2}.+?\]{1,2}/g, m => {
-			if (/^\[Anmerkung:\s/.test(m)) {
-				return m;
+			let r = "[…]";
+			if (/^\[Anmerkung:\s/.test(m) ||
+					optionen.data.einstellungen["textkopie-klammern-inhalt"]) {
+				r = m.replace(/^\[{2}/, "[").replace(/\]{2}$/, "]");
 			}
-			return "[…]";
+			if (html && optionen.data.einstellungen["textkopie-klammern-farbe"]) {
+				let farbe = /^\[{2}/.test(m) ? "#f00" : "#00f";
+				r = `<span style="color: ${farbe}">${r}</span>`;
+			}
+			return r;
 		});
 		// Autorenzusatz
 		text = text.replace(/\{(.+?)\}/g, (m, p1) => {
+			if (html && optionen.data.einstellungen["textkopie-klammern-farbe"]) {
+				return `<span style="color: #0a0">[${p1}]</span>`;
+			}
 			return `[${p1}]`;
 		});
 		// Ergebnis zurückgeben
