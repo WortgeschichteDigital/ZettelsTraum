@@ -146,6 +146,21 @@ let helferXml = {
 		}
 		return text;
 	},
+	// ID normieren
+	//   id = String
+	//     (die ID)
+	//   input = Element || undefined
+	//     (das Input-Element, aus dem die ID ausgelesen wurde)
+	normId ({id, input = null}) {
+		// erhalten bleiben: . - _
+		let val = id.replace(/^[0-9\-.·]+|[!§$%&/()[\]{}<>=?\\^°|*+#:,;'"„“‚‘»«›‹]+/g, "");
+		val = val.replace(/–/g, "-"); // Halbgeviertstriche
+		val = val.replace(/\s+/g, "_");
+		if (input && val !== id) {
+			input.value = val;
+		}
+		return val;
+	},
 	// XML-Dokument mit Einzügen versehen
 	// (s. https://stackoverflow.com/a/376503)
 	//   xml = Document

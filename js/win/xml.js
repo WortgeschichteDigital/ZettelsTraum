@@ -410,7 +410,7 @@ let xml = {
 			let val = helfer.textTrim(this.value, true);
 			// Validierung
 			if (key === "id") {
-				let id = xml.abschnittNormId({id: val});
+				let id = helferXml.normId({id: val});
 				if (id) {
 					if (!/^WGd-/.test(id)) {
 						id = `WGd-${id}`;
@@ -1985,7 +1985,7 @@ let xml = {
 			id = xl.replace(/<Anmerkung>.+?<\/Anmerkung>/s, "");
 			id = id.replace(/<.+?>/g, "");
 			id = helfer.textTrim(id, true);
-			id = xml.abschnittNormId({id});
+			id = helferXml.normId({id});
 		}
 		// ID schreiben und Datensatz speichern
 		xml.data.xl[key][slot].id = id;
@@ -2000,21 +2000,6 @@ let xml = {
 		xml.checkAbschnitt({
 			cont: abschnitt,
 		});
-	},
-	// Abschnitt: ID normieren
-	//   id = String
-	//     (die ID)
-	//   input = Element || undefined
-	//     (das Input-Element, aus dem die ID ausgelesen wurde)
-	abschnittNormId ({id, input = null}) {
-		// erhalten bleiben: . - _
-		let val = id.replace(/^[0-9]+|[!§$%&/()[\]{}<>=?\\*+#:,;'"„“‚‘»«›‹]+/g, "");
-		val = val.replace(/–/g, "-"); // Halbgeviertstriche
-		val = val.replace(/\s+/g, "_");
-		if (input && val !== id) {
-			input.value = val;
-		}
-		return val;
 	},
 	// Textblock: neuen Datensatz für einen Textblock anlegen
 	//   input = Element
@@ -2564,7 +2549,7 @@ let xml = {
 				// Textblöcke (Überschrift, Textblock, Blockzitat, Liste)
 				if (feld === "id") {
 					// ID aufbereiten
-					val = xml.abschnittNormId({id: val, input: this});
+					val = helferXml.normId({id: val, input: this});
 				}
 				xml.data.xl[key][slot].ct[slotBlock][feld] = val;
 				// Kopf anpassen
@@ -2591,7 +2576,7 @@ let xml = {
 				// Abschnitt
 				if (feld === "id") {
 					// ID aufbereiten
-					val = xml.abschnittNormId({id: val, input: this});
+					val = helferXml.normId({id: val, input: this});
 				} else if (val && feld === "ty" && !xml.dropdown.abschnittTypen.includes(val)) {
 					val = "";
 					this.value = "";
