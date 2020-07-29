@@ -321,6 +321,7 @@ let helferXml = {
 		"Subst\\.": "Substantiv",
 		"Superl\\.": "Superlativ",
 		"trans\\.": "transitiv",
+		"u\\.": "und",
 		"u\\.\\sa\\.": "unter anderem",
 		"u\\.\\sä\\.": "und ähnlich",
 		"usw\\.": "und so weiter",
