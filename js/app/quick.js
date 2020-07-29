@@ -138,6 +138,11 @@ let quick = {
 			short: "",
 			img: "einfuegen.svg",
 		},
+		"belege-zwischenablage": {
+			title: "Belege > Belegtexte in Zwischenablage",
+			short: "",
+			img: "kopieren.svg",
+		},
 		"bearbeiten-rueckgaengig": {
 			title: "Bearbeiten > Rückgängig",
 			short: `${tastatur.shortcutsTextAktuell("Strg")} + Z`,
@@ -388,6 +393,9 @@ let quick = {
 					break;
 				case "belege-einfuegen":
 					kopieren.einfuegen();
+					break;
+				case "belege-zwischenablage":
+					liste.kopierenAlleBelege();
 					break;
 			}
 		});
