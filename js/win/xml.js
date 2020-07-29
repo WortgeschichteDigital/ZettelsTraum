@@ -2545,6 +2545,12 @@ let xml = {
 				}
 				let cont = textblock.querySelector(".pre-cont");
 				refreshPre(cont, xml.data.xl[key][slot].ct[slotBlock].xl, false);
+				// Layout der Köpfe anpassen
+				xml.layoutTabellig({
+					id: key,
+					ele: [3],
+					inAbschnitt: abschnitt,
+				});
 			} else if (textblock) {
 				// Textblöcke (Überschrift, Textblock, Blockzitat, Liste)
 				if (feld === "id") {
