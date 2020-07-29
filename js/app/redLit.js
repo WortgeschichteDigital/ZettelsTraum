@@ -3557,6 +3557,8 @@ let redLit = {
 				xmlDoc = parser.parseFromString(snippet, "text/xml");
 			xmlDoc = helferXml.indent(xmlDoc);
 			text = new XMLSerializer().serializeToString(xmlDoc);
+		} else if (typ === "sigle") {
+			text = redLit.db.data[popup.titelaufnahme.ds.id][0].td.si;
 		}
 		clipboard.writeText(text);
 		helfer.animation("zwischenablage");

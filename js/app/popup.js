@@ -118,7 +118,7 @@ let popup = {
 			if (oben === "stamm") {
 				items.push("link", "sep", "schliessen");
 			} else if (oben === "red-lit") {
-				items.push("link", "sep", "titelBearbeiten", "titelAufnahmen", {name: "titelAufnahmeCp", sub: ["titelAufnahmeXml", "titelAufnahmeText"]}, {name: "titelReferenzCp", sub: ["titelReferenzXml", "titelReferenzText"]}, "sep", "literaturConf", "sep", "schliessen");
+				items.push("link", "sep", "titelBearbeiten", "titelAufnahmen", {name: "titelAufnahmeCp", sub: ["titelAufnahmeXml", "titelAufnahmeText"]}, {name: "titelReferenzCp", sub: ["titelReferenzXml", "titelReferenzText"]}, "titelSigle", "sep", "literaturConf", "sep", "schliessen");
 				if (kartei.wort) {
 					items.splice(4, 0, "titelXml");
 				}
@@ -159,7 +159,7 @@ let popup = {
 			items.push("sep", "belegHinzufuegen");
 			popup.belegeAuflisten(items);
 		} else if (target === "titelaufnahme") {
-			items.push("titelBearbeiten", "titelAufnahmen", {name: "titelAufnahmeCp", sub: ["titelAufnahmeXml", "titelAufnahmeText"]}, {name: "titelReferenzCp", sub: ["titelReferenzXml", "titelReferenzText"]}, "sep", "literaturConf", "sep", "schliessen");
+			items.push("titelBearbeiten", "titelAufnahmen", {name: "titelAufnahmeCp", sub: ["titelAufnahmeXml", "titelAufnahmeText"]}, {name: "titelReferenzCp", sub: ["titelReferenzXml", "titelReferenzText"]}, "titelSigle", "sep", "literaturConf", "sep", "schliessen");
 			if (kartei.wort) {
 				items.splice(2, 0, "titelXml");
 			}
