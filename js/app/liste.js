@@ -1829,9 +1829,21 @@ let liste = {
 	},
 	// alle in der Belegliste angezeigten Belege in die Zwischenablage
 	kopierenAlleBelege () {
+		// Sperre für macOS (Menüpunkte können nicht deaktiviert werden)
+		if (!kartei.wort) {
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Um die Funktion <i>Belege &gt; Belegtexte in Zwischenablage</i> zu nutzen, muss eine Kartei geöffnet sein.",
+			});
+			return;
+		}
+		// Ist die Belegliste sichtbar?
+		if ( !liste.listeSichtbar({funktion: "Belege &gt; Belegtexte in Zwischenablage"}) ) {
+			return;
+		}
+		// Daten sammeln
 		let text = [],
 			html = [];
-		// Daten sammeln
 		for (let i of document.querySelectorAll("#liste-belege .liste-kopf")) {
 			const id = i.dataset.id;
 			popup.referenz.id = id; // popup.referenz.data wird in beleg.toolsKopierenExec() gesetzt
@@ -1857,6 +1869,21 @@ let liste = {
 		});
 		// Feedback
 		helfer.animation("zwischenablage");
+	},
+	// stellt fest, ob die Belegliste sichtbar ist
+	//   funktion = String
+	//     (Name der Funktion, die nur ausgeführt werden darf,
+	//     wenn die Liste sichtbar ist)
+	listeSichtbar ({funktion}) {
+		if (helfer.hauptfunktion !== "liste" ||
+				overlay.oben()) {
+			dialog.oeffnen({
+				typ: "alert",
+				text: `Die Funktion <i>${funktion}</i> steht nur zur Verfügung, wenn die Belegliste sichtbar ist.`,
+			});
+			return false;
+		}
+		return true;
 	},
 	// Tastaturkürzel Strg + C abfangen und das Kopieren von markiertem Text ggf. selbst regeln
 	//   evt = Object
