@@ -3784,6 +3784,10 @@ let xml = {
 				}
 				xmlStr += "\t".repeat(basis) + "</Abschnitt>\n";
 			}
+			while (basisZuletzt > 3) {
+				basisZuletzt--;
+				xmlStr += "\t".repeat(basisZuletzt) + "</Abschnitt>\n";
+			}
 			xmlStr += "\t".repeat(2) + `</${v}>\n`;
 		}
 		// Belege
