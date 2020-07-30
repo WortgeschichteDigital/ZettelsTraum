@@ -486,7 +486,7 @@
 					<p class="erklaerung-icon" id="karteikarte-textAusZwischenablage"><img src="../img/einfuegen.svg" width="24" height="24" alt="">Text aus der Zwischenablage in das zugehörige Feld einfügen</p>
 
 					<div class="info">
-						<p>Der Text in der Zwischenablage wird als Plain-Text, also ohne Formatierungen eingefügt. Bezogen auf das <a href="#karteikarte-belegEinfuegen">Feld <i>Beleg</i> verhält sich das Icon anders</a>.</p>
+						<p>Der Text in der Zwischenablage wird ohne Formatierungen eingefügt. Bezogen auf das <a href="#karteikarte-belegEinfuegen">Feld <i>Beleg</i> verhält sich das Icon anders</a>.</p>
 
 						<p>Steht bereits Text im Feld, fragt das Programm, ob es das Feld überschreiben oder ergänzen soll.</p>
 					</div>
@@ -593,7 +593,7 @@
 
 						<p>Etwas Besonderes stellt das Text-Tool <img src="../img/text-markiert.svg" width="20" height="20" alt=""> dar. Mit ihm können Sie Textteile markieren, um sie später leichter wiederzufinden. So <b>markierte Texte</b> werden standardmäßig gelb hinterlegt und werden explizit als Nutzermarkierung klassifiziert (durch <code class="quelltext">class="user"</code>). Die so markierten Textteile sind in der Detailansicht der Belegliste und der Leseansicht der Karteikarte klicksensitiv. In einem Popup-Fensterchen können Sie die Farbe der Markierung ändern und/oder die markierte Stelle um eine Notiz ergänzen. Die Funktion wird genauer in der <a href="#belegliste-karteiwortHervorheben">Belegliste im Zusammenhang mit der Annotierung von Karteiwörtern erläutert</a>.</p>
 
-						<p id="karteikarte-belegEinfuegen">Das <b>Einfügen von Text</b> funktioniert in diesem Feld anders als in anderen Textfeldern der Karteikarte. Normalerweise wird der in der Zwischenablage befindliche Text als Plain-Text, <abbr title="das heißt">d. h.</abbr> unformatiert, in das betreffende Feld hineinkopiert. Wird hingegen Text in das Beleg-Feld eingefügt und hat der in der Zwischenablage liegende Text Formatierungen mit <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>-Tags, bleiben einfache Formate wie fett (<code class="quelltext">&lt;b&gt;</code>), kursiv (<code class="quelltext">&lt;i&gt;</code>) oder unterstrichen (<code class="quelltext">&lt;u&gt;</code>) erhalten. Es wird also kein Plain-Text eingefügt; der <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>-Text wird aber automatisch bereinigt.</p>
+						<p id="karteikarte-belegEinfuegen">Das <b>Einfügen von Text</b> funktioniert in diesem Feld anders als in anderen Textfeldern der Karteikarte. Normalerweise wird der in der Zwischenablage befindliche Text so, wie er ist, <abbr title="das heißt">d. h.</abbr> ohne jede Formatierung, in das betreffende Feld hineinkopiert. Verfügt der in der Zwischenablage liegende Text jedoch über Layoutangaben im <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>-Format, bleiben einfache Formate wie fett (<code class="quelltext">&lt;b&gt;</code>), kursiv (<code class="quelltext">&lt;i&gt;</code>) oder unterstrichen (<code class="quelltext">&lt;u&gt;</code>) erhalten. Dabei wird das Original-<abbr title="Hypertext Markup Language" lang="en">HTML</abbr> automatisch bereinigt.</p>
 
 						<p>Diese Tags werden beim Einfügen unverändert importiert (<abbr title="eventuell">evtl.</abbr> vorhandene Attribute werden gelöscht): <code class="quelltext">&lt;b&gt; &lt;cite&gt; &lt;del&gt; &lt;dfn&gt; &lt;em&gt; &lt;i&gt; &lt;mark&gt; &lt;s&gt; &lt;small&gt; &lt;strong&gt; &lt;sub&gt; &lt;sup&gt; &lt;u&gt; &lt;var&gt;</code>.</p>
 
@@ -601,7 +601,7 @@
 
 						<p>Dass der formatierte Text nicht eins zu eins übernommen wird, hat praktische, aber auch Sicherheitsgründe. Zum einen können solche Textdaten Header-Informationen enthalten, die in Bezug auf den Belegtext schlicht uninteressant, im Beleg-Feld dann aber verwirrend, ja sogar störend sein können. Zum anderen ist zu bedenken, dass der Inhalt des Belegfeldes an verschiedenen Stellen des Programms als <abbr title="Hypertext Markup Language" lang="en">HTML</abbr> interpretiert wird. Anweisungen wie <abbr title="zum Beispiel">z. B.</abbr> das Laden von Bild- oder Script-Dateien würden dabei ausgeführt. Auf diese Weise könnten potenziell schädliche Ressourcen in das Programm gelangen und unter Umständen Schaden an Ihrem Computer anrichten. Das Risiko ist eher ein theoretisches, weil das Laden solch externer Daten schon durch andere Sicherheitsmaßnahmen unterbunden würde. Es ist aber besser, potenziell Schädliches landet gar nicht erst in der Kartei.</p>
 
-						<p>Aus diesem Grund werden selbst Plain-Text-Daten, also Daten ohne <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>-Formatierungen, auf dieselbe Weise behandelt, als handle es sich um Text mit <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>-Tags. Stehen im Plain-Text Tags (also in Spitzklammern eingeschlossener Text), die nicht zu den oben erwähnten gehören, werden sie eliminiert.</p>
+						<p>Aus diesem Grund werden alle Plain-Text-Daten, so behandelt, als handle es sich um Text mit <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>-Tags. Werden Tags gefunden (also in Spitzklammern eingeschlossener Text), die nicht zu den oben erwähnten zählen, werden diese eliminiert.</p>
 
 						<p>Was Sie trotz dieser automatischen Bereinigung, die beim Einfügen von Text angestoßen wird, dennoch jederzeit machen können: <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>-Elemente händisch eintippen. Hier gibt es keine Beschränkungen. Der Text wird so gespeichert, wie Sie ihn eingetippt haben. Bedenken Sie allerdings das oben Gesagte: Möchten Sie nicht <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>-Tags, sondern Text in literalen Spitzklammern eingeben, müssen Sie diese <a href="#karteikarte-maskieren">maskieren</a>.</p>
 
@@ -704,7 +704,7 @@ Aufrufdatum: 24. 12. 2019</pre>
 					<p class="add-navi-details" id="karteikarte-notizen"><b>Notizen:</b> Freitextfeld für Notizen zu der Karteikarte</p>
 
 					<div class="info">
-						<p>Für die Eingabe und Umsetzung von Internetlinks gilt dasselbe wie für das <a href="#karteikarte-quelle">Quellen-Feld</a>. Im Gegensatz zum Textfeld der <a href="#menueKartei-notizen">Funktion für Notizen zur Kartei</a> handelt es sich bei diesem um ein Plain-Text-Feld, in dem keine <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>-Formatierungen vorgenommen werden können.</p>
+						<p>Für die Eingabe und Umsetzung von Internetlinks gilt dasselbe wie für das <a href="#karteikarte-quelle">Quellen-Feld</a>. Im Gegensatz zum Textfeld der <a href="#menueKartei-notizen">Funktion für Notizen zur Kartei</a> handelt es sich bei diesem um ein Textfeld, in dem keine <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>-Formatierungen vorgenommen werden können.</p>
 
 						<p>Die erste Zeile der Notizen kann man sich auf Wunsch in der <a href="#belegliste-kopfleisteBelege">Kopfleiste der Belege</a> einblenden lassen. Dazu muss eine <a href="#einstellungen-beleglisteNotizen">Einstellung aktiviert</a> werden.</p>
 					</div>
@@ -1965,7 +1965,7 @@ Mustermann, Erika
 					<div class="info">
 						<p><i>Standard:</i> aktiviert</p>
 
-						<p>Wird Belegtext in einem gemischten <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>- und Plain-Text-Format kopiert, wird bei aktivierter Einstellung über der Textkopie das Entstehungsjahr <abbr title="beziehungsweise">bzw.</abbr> -jahrhundert des Belegs in einer eigenen Zeile halbfett gedruckt.</p>
+						<p>Wird Belegtext kopiert, wird bei aktivierter Einstellung über der Textkopie das Entstehungsjahr <abbr title="beziehungsweise">bzw.</abbr> -jahrhundert des Belegs in einer eigenen Zeile halbfett gedruckt.</p>
 
 						<p>Wenn zugleich die folgende Einstellung aktiviert wurde, erscheint die ID in Klammern hinter dem Jahr.</p>
 					</div>
@@ -1975,7 +1975,7 @@ Mustermann, Erika
 					<div class="info">
 						<p><i>Standard:</i> nicht aktiviert</p>
 
-						<p>Wird Belegtext in einem gemischten <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>- und Plain-Text-Format kopiert, wird bei aktivierter Einstellung über der Textkopie die ID des Belegs in einer eigenen Zeile halbfett gedruckt. Die ID wird aus dem Beleg abgeleitet. <a href="#belegliste-textZwischenablageReferenz">Genaueres dazu</a> im <a href="#belegliste"><abbr title="Kapitel">Kap.</abbr> <i>Belegliste</i></a>.</p>
+						<p>Wird Belegtext kopiert, wird bei aktivierter Einstellung über der Textkopie die ID des Belegs in einer eigenen Zeile halbfett gedruckt. Die ID wird aus dem Beleg abgeleitet. <a href="#belegliste-textZwischenablageReferenz">Genaueres dazu</a> im <a href="#belegliste"><abbr title="Kapitel">Kap.</abbr> <i>Belegliste</i></a>.</p>
 
 						<p>Wenn zugleich die vorherige Einstellung aktiviert wurde, erscheint die ID in Klammern hinter dem Jahr.</p>
 					</div>
@@ -3896,7 +3896,7 @@ Mustermann, Erika
 					<div class="info">
 						<p>Notizen verfassen, die die Kartei im Ganzen betreffen.</p>
 
-						<p>Im Gegensatz zum <a href="#karteikarte-notizen">Notizen-Feld in der Karteikarte</a> lassen sich in diesem Dialogfenster Notizen anlegen, die sich auf die Kartei als Ganzes beziehen. Anders als das simple Plain-Text-Feld der Karteikartennotizen handelt es sich bei diesem Notizenfeld jedoch um ein <b><abbr title="What You See Is What You Get" lang="en">WYSIWYG</abbr>-Feld</b>: Wie in einem Textverarbeitungsprogramm können Sie eine Anzahl einfacher Formatierungen vornehmen und das Ergebnis sofort bestaunen. Hierzu gibt es über dem Textfeld eine Leiste mit Icons, die die jeweilige Formatierung triggern.</p>
+						<p>Im Gegensatz zum <a href="#karteikarte-notizen">Notizen-Feld in der Karteikarte</a> lassen sich in diesem Dialogfenster Notizen anlegen, die sich auf die Kartei als Ganzes beziehen. Anders als das simple Textfeld der Karteikartennotizen handelt es sich bei diesem Notizenfeld jedoch um ein <b><abbr title="What You See Is What You Get" lang="en">WYSIWYG</abbr>-Feld</b>: Wie in einem Textverarbeitungsprogramm können Sie eine Anzahl einfacher Formatierungen vornehmen und das Ergebnis sofort bestaunen. Hierzu gibt es über dem Textfeld eine Leiste mit Icons, die die jeweilige Formatierung triggern.</p>
 
 						<p>Folgende <b>Absatzformatierungen</b> stehen zur Verfügung:</p>
 
@@ -4076,6 +4076,16 @@ Mustermann, Erika
 						<p>Die Belegliste ist gleichsam die <b>Standardansicht</b> der App. Der Befehl hilft einem somit, zu dieser Ansicht zurückzukehren, wenn man sich in zu vielen <a href="#kurzanleitung-programmfensterDialogfenster">Dialogfenstern</a> und Funktionen verloren hat. Löst man ihn aus, werden alle die Anzeige überlagernden Dialogfenster geschlossen; danach wird die Belegliste geöffnet – wenn sie denn nicht schon offfen ist.</p>
 
 						<p>Steht die Übernahme von <b>Änderungen</b> in einem Fenster oder einer Funktion noch aus, fragt die App, ob diese nicht erst einmal gesichert werden sollen. Durch das Auslösen des Befehls kann es somit nicht zu Datenverlusten kommen.</p>
+					</div>
+
+					<p class="erklaerung-icon-menues" id="menueBelege-loeschen"><img src="../img/muelleimer.svg" width="24" height="24" alt="">Löschen</p>
+
+					<div class="info">
+						<p>Löscht alle in der <a href="#belegliste">Belegliste</a> sichtbaren Belege.</p>
+
+						<p>Die Funktion erfasst immer nur die <em>sichtbaren</em> Belege. Sind <a href="#filter">Filter</a> aktiv, werden von der Löschaktion somit nur die Belege erfasst, die es durch den Filter geschafft haben, die also aktuell in der Belegliste angezeigt werden.</p>
+
+						<p>Vor dem Löschen gibt es eine Sicherheitsfrage, die Aktion kann allerdings nicht rückgängig gemacht werden. Die einzige Möglichkeit, die gelöschten Belege wiederherzustellen, wäre, die Kartei nach der Operation zu schließen, sie zuvor allerdings nicht zu speichern.</p>
 					</div>
 
 					<p class="erklaerung-icon-menues" id="menueBelege-kopieren"><img src="../img/kopieren.svg" width="24" height="24" alt="">Kopieren</p>
@@ -4461,6 +4471,8 @@ Gerüst 2 &gt; Gerüst 1</pre>
 							</li>
 
 							<li><i>Referenz in Zwischenablage:</i> Eine einfache Möglichkeit, die ID der Titelaufnahme in die Zwischenablage zu kopieren (<abbr title="vergleiche">vgl.</abbr> auch hier den <a href="#xml-referenzLiteratur" class="link-dokumentation">Abschnitt in der technischen Dokumentation</a>).</li>
+
+							<li><i>Sigle in Zwischenablage:</i> Kopiert die Sigle der Titelaufnahme, auf die geklickt wurde, in die Zwischenablage.</li>
 						</ul>
 
 						<p>Für die reibungslose Bedienung des Literaturdatenbank-Fensters wurden einige <b>Tastaturkürzel</b> eingerichtet. Diese können Sie alle in der Übersicht des <a href="#tastaturkuerzel"><abbr title="Kapitels">Kap.</abbr> <i>Tastaturkürzel</i></a> finden. Suchen Sie mit der Suchleiste (<kbd>F3</kbd>) einfach nach <q>Literaturdatenbank</q>.</p>
@@ -4827,7 +4839,7 @@ Gerüst 2 &gt; Gerüst 1</pre>
 						<p>Wurde in der Belegliste oder der Leseansicht der Karteikarte Text markiert, öffnet der Befehl automatisch ein <b>Kopierfenster</b>. (Es wird übrigens auch dann geöffnet, wenn Sie das Tastaturkürzel <kbd>Strg</kbd> + <kbd>C</kbd> verwenden.) Im Kopierfenster können Sie auswählen, was genau kopiert werden und wie das Ergebnis formatiert sein soll. Zur Verfügung stehen vier Optionen, die sich alternativ alle über das <a href="#belegliste-textZwischenablage">Rechtsklickmenü</a> aufrufen lassen:</p>
 
 						<ul>
-							<li><i><abbr title="Hypertext Markup Language" lang="en">HTML</abbr> und Plain:</i> Die markierte Passage wird zugleich als <abbr title="Hypertext Markup Language" lang="en">HTML</abbr> und als unformatierter Klartext kopiert. Welches der beiden Textformate für das Einfügen verwendet wird, hängt von dem Programm ab, in das Sie den Text übertragen möchten. Office-Programme haben in aller Regel kompliziertere Einfügeoptionen, über die man das eine oder das andere Format auswählen kann, greifen standardmäßig aber auf <abbr title="Hypertext Markup Language" lang="en">HTML</abbr> zurück. Ein simples Programm wie der <i>Editor</i> von <i>Windows</i> wird automatisch die Plain-Text-Variante benutzen.</li>
+							<li><i><abbr title="Hypertext Markup Language" lang="en">HTML</abbr> und Plain:</i> Die markierte Passage wird zugleich als <abbr title="Hypertext Markup Language" lang="en">HTML</abbr> und als Klartext ohne Layoutangaben kopiert. Welches der beiden Textformate für das Einfügen verwendet wird, hängt von dem Programm ab, in das Sie den Text übertragen möchten. Office-Programme haben in aller Regel kompliziertere Einfügeoptionen, über die man das eine oder das andere Format auswählen kann, greifen standardmäßig aber auf <abbr title="Hypertext Markup Language" lang="en">HTML</abbr> zurück. Ein simples Programm wie der <i>Editor</i> von <i>Windows</i> wird automatisch die Variante ohne Layoutangaben benutzen.</li>
 
 							<li><i>Plain-Referenz:</i> Kopiert eine ID, die sich aus dem betreffenden Beleg ergibt. <a href="#belegliste-textZwischenablageReferenz">Genaueres dazu</a> im <a href="#belegliste"><abbr title="Kapitel">Kap.</abbr> <i>Belegliste</i></a> und in der <a href="#xml-belegschnittId" class="link-dokumentation">technischen Dokumentation</a>.</li>
 
@@ -4836,9 +4848,9 @@ Gerüst 2 &gt; Gerüst 1</pre>
 							<li><i><abbr title="Extensible Markup Language" lang="en">XML</abbr>-Referenz:</i> Kopiert eine ID, die sich aus dem betreffenden Beleg ergibt, zusammen mit einem leeren <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Tag. <abbr title="Vergleiche">Vgl.</abbr> die <a href="#xml-referenzBeleg" class="link-dokumentation">technische Dokumentation</a>.</li>
 						</ul>
 
-						<p>Vor dem eigentlichen Kopiervorgang wird der <b>Text bereinigt</b>, genauso als hätten Sie eines der Kopier-Icons <img src="../img/kopieren.svg" width="20" height="20" alt=""> genutzt, die das Kopierfenster nicht öffnen, sondern immer eine gemischte HTML- und Plain-Text-Kopie erzeugen. (Ist Text markiert, kopieren diese Icons übrigens nur die Textauswahl und nicht den Text des gesamten Feldes, zu dem sie gehören.) Im <a href="#belegliste"><abbr title="Kapitel">Kap.</abbr> <i>Belegliste</i></a> gibt es einige <a href="#belegliste-bereinigen">Hinweise, was bei der Bereinigung geschieht</a>. Man kann das Programm so konfigurieren, dass die <a href="#einstellungen-kopierenHervorhebung">Hervorhebung des Karteiworts beim Kopieren von HTML-Text erhalten</a> bleibt. Wird ein <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippet erstellt, wird das Karteiwort in jedem Fall hervorgehoben.</p>
+						<p>Vor dem eigentlichen Kopiervorgang wird der <b>Text bereinigt</b>, genauso als hätten Sie eines der Kopier-Icons <img src="../img/kopieren.svg" width="20" height="20" alt=""> genutzt, die das Kopierfenster nicht öffnen. (Ist Text markiert, kopieren diese Icons übrigens nur die Textauswahl und nicht den Text des gesamten Feldes, zu dem sie gehören.) Im <a href="#belegliste"><abbr title="Kapitel">Kap.</abbr> <i>Belegliste</i></a> gibt es einige <a href="#belegliste-bereinigen">Hinweise, was bei der Bereinigung geschieht</a>. Man kann das Programm so konfigurieren, dass die <a href="#einstellungen-kopierenHervorhebung">Hervorhebung des Karteiworts beim Kopieren von HTML-Text erhalten</a> bleibt. Wird ein <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippet erstellt, wird das Karteiwort in jedem Fall hervorgehoben.</p>
 
-						<p>Geht es nur darum, Plain-Text (also nicht formatierten Text) aus Textfeldern herauszukopieren, wird das Kopierfenster nicht aufgerufen, sondern der Kopiervorgang dem <a href="#framework" class="link-dokumentation">Framework</a> überlassen, das den Text direkt in die Zwischenablage schiebt. In <b><abbr title="What You See Is What You Get" lang="en">WYSIWYG</abbr>-Textfeldern</b>, wie dem der <a href="#menueKartei-notizen">Notizen-Funktion</a> oder denen für die Bedeutungen im <a href="#bedeutungsgeruest">Bedeutungsgerüst</a>, ist allerdings Folgendes zu beachten: Diese Felder operieren intern mit <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>. Das Framework wird im Falle solcher Felder versuchen, so viele Formatierungsinformationen wie nur irgend möglich zu erhalten. Das klingt zunächst einmal positiv, kann aber durchaus problematisch werden. So wird für die Textanzeige in <i class="app-name"></i> <abbr title="beispielsweise">bspw.</abbr> die mitgelieferte Schriftart <i>Noto Sans</i> verwendet. Fügen Sie den so kopierten Text in ein Office-Programm ein, wird dieses versuchen, ihn ebenfalls mit <i>Noto Sans</i> darzustellen und die von Ihnen eingestellte Schriftart ignorieren. Unter anderem deswegen wird das Kopieren aus der Belegliste und der Leseansicht der Karteikarte von der App verwaltet. Da davon auszugehen ist, dass man Texte aus den <abbr title="What You See Is What You Get" lang="en">WYSIWYG</abbr>-Feldern eher nicht herauskopiert, um sie in Textverarbeitungsprogramme einzufügen, gibt es hierfür bisher keine Funktion, die den markierten Text vor dem Kopieren bereinigt.</p>
+						<p>Geht es nur darum, nicht formatierten Text aus Textfeldern herauszukopieren, wird das Kopierfenster nicht aufgerufen, sondern der Kopiervorgang dem <a href="#framework" class="link-dokumentation">Framework</a> überlassen, das den Text direkt in die Zwischenablage schiebt. In <b><abbr title="What You See Is What You Get" lang="en">WYSIWYG</abbr>-Textfeldern</b>, wie dem der <a href="#menueKartei-notizen">Notizen-Funktion</a> oder denen für die Bedeutungen im <a href="#bedeutungsgeruest">Bedeutungsgerüst</a>, ist allerdings Folgendes zu beachten: Diese Felder operieren intern mit <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>. Das Framework wird im Falle solcher Felder versuchen, so viele Formatierungsinformationen wie nur irgend möglich zu erhalten. Das klingt zunächst einmal positiv, kann aber durchaus problematisch werden. So wird für die Textanzeige in <i class="app-name"></i> <abbr title="beispielsweise">bspw.</abbr> die mitgelieferte Schriftart <i>Noto Sans</i> verwendet. Fügen Sie den so kopierten Text in ein Office-Programm ein, wird dieses versuchen, ihn ebenfalls mit <i>Noto Sans</i> darzustellen und die von Ihnen eingestellte Schriftart ignorieren. Unter anderem deswegen wird das Kopieren aus der Belegliste und der Leseansicht der Karteikarte von der App verwaltet. Da davon auszugehen ist, dass man Texte aus den <abbr title="What You See Is What You Get" lang="en">WYSIWYG</abbr>-Feldern eher nicht herauskopiert, um sie in Textverarbeitungsprogramme einzufügen, gibt es hierfür bisher keine Funktion, die den markierten Text vor dem Kopieren bereinigt.</p>
 					</div>
 
 					<p class="erklaerung-icon-menues" id="menueBearbeiten-einfuegen"><img src="../img/einfuegen.svg" width="24" height="24" alt="">Einfügen</p>

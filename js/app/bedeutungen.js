@@ -2028,6 +2028,10 @@ let bedeutungen = {
 				xl += la;
 			}
 		}
+		while (ebeneZuvor > 1) {
+			xl += `\n${"\t".repeat(ebeneZuvor - 1)}</Lesart>`;
+			ebeneZuvor--;
+		}
 		xl += "\n</Lesarten>";
 		// Tabs zu Spaces
 		xl = xl.replace(/\t/g, "  ");

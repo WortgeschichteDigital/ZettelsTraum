@@ -263,6 +263,11 @@ layoutMenu = [
 				click: () => appMenu.befehl("belege-auflisten"),
 				accelerator: "CommandOrControl+L",
 			},
+			{
+				label: "Löschen",
+				icon: path.join(__dirname, "img", "menu", "muelleimer.png"),
+				click: () => appMenu.befehl("belege-loeschen"),
+			},
 			{ type: "separator" },
 			{
 				label: "Kopieren",

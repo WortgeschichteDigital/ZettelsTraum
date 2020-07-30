@@ -156,7 +156,10 @@ let redWi = {
 		inputs[0].focus();
 	},
 	// Formular: Eingabe überprüfen und Datensatz erstellen
-	formEval () {
+	async formEval () {
+		// kurz warten, sonst verschwinden Meldungen sofort wieder
+		await new Promise(resolve => setTimeout(() => resolve(true), 25));
+		// Datensatz vorbereiten
 		let lt = document.getElementById("red-wi-lt");
 		let ds = {
 			gn: document.getElementById("red-wi-gn").value.match(/[0-9]+/)[0],
@@ -204,17 +207,27 @@ let redWi = {
 				});
 				return;
 			}
-			if (/^[0-9]|[&/=?#]/.test(idVal)) {
-				dialog.oeffnen({
-					typ: "alert",
-					text: "Die ID ist illegal.\n• IDs dürfen <em>nicht</em> mit einer Ziffer beginnen<br>• IDs dürfen die folgenden Zeichen <em>nicht</em> enthalten: & / = ? #",
-					callback: () => id.select(),
-				});
-				return;
-			}
-			let idValNorm = idVal.replace(/\s/g, "_");
+			const idValNorm = helferXml.normId({
+				id: idVal,
+				input: id,
+			});
 			if (idVal !== idValNorm) {
-				id.value = idValNorm;
+				const idOkay = await new Promise(resolve => {
+					dialog.oeffnen({
+						typ: "confirm",
+						text: `Die ID war illegal und wurde automatisch korrigiert zu:\n<i>${idValNorm}</i>\nWollen Sie die Korrektur übernehmen?`,
+						callback: () => {
+							if (!dialog.antwort) {
+								id.value = idVal;
+								id.select();
+							}
+							resolve(dialog.antwort);
+						},
+					});
+				});
+				if (!idOkay) {
+					return;
+				}
 			}
 			let typ = checkSemantik(text);
 			if (typ === false) {

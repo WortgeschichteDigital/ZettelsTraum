@@ -153,7 +153,13 @@
 	mask-image: url(../../img/liste-bullets.svg);
 }
 
-#quick-belege-kopieren {
+#quick-belege-loeschen {
+	-webkit-mask-image: url(../../img/muelleimer.svg);
+	mask-image: url(../../img/muelleimer.svg);
+}
+
+#quick-belege-kopieren,
+#quick-belege-zwischenablage {
 	-webkit-mask-image: url(../../img/kopieren.svg);
 	mask-image: url(../../img/kopieren.svg);
 }

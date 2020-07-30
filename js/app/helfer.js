@@ -369,7 +369,8 @@ let helfer = {
 			/i\.\s?Br\./g, // im Breisgau
 			/N\.\s?N\./g, // nomen nescio
 			/Nr\.\s?[0-9]+/g, // Nummer
-			/o.\.\s?(D|O)\./ig, // ohne Datum/Ort
+			/o\.\s?ä\./g, // oder ähnlich
+			/o\.\s?(D|O)\./ig, // ohne Datum/Ort
 			/s\.\s?(d|l)\./ig,
 			/s\.\s?v\./g, // sub voce (nur in Kleinschreibung)
 			/Sp?\.\s?[0-9]+/g, // Seiten-/Spaltenangaben

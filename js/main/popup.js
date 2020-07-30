@@ -336,6 +336,11 @@ let punkte = {
 		icon: "xml.png",
 		click: "redLit.titelZwischenablage('xmlReferenz')",
 	},
+	titelSigle: {
+		label: "Sigle in Zwischenablage",
+		icon: "kopieren.png",
+		click: "redLit.titelZwischenablage('sigle')",
+	},
 	titelXml: {
 		label: "Titelaufnahme an XML-Fenster",
 		icon: "xml.png",

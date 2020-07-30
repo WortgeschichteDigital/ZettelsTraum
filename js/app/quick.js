@@ -128,6 +128,11 @@ let quick = {
 			short: `${tastatur.shortcutsTextAktuell("Strg")} + L`,
 			img: "liste-bullets.svg",
 		},
+		"belege-loeschen": {
+			title: "Belege > Löschen",
+			short: "",
+			img: "muelleimer.svg",
+		},
 		"belege-kopieren": {
 			title: "Belege > Kopieren",
 			short: "",
@@ -137,6 +142,11 @@ let quick = {
 			title: "Belege > Einfügen",
 			short: "",
 			img: "einfuegen.svg",
+		},
+		"belege-zwischenablage": {
+			title: "Belege > Belegtexte in Zwischenablage",
+			short: "",
+			img: "kopieren.svg",
 		},
 		"bearbeiten-rueckgaengig": {
 			title: "Bearbeiten > Rückgängig",
@@ -383,11 +393,17 @@ let quick = {
 				case "belege-auflisten":
 					speichern.checkInit(() => liste.wechseln());
 					break;
+				case "belege-loeschen":
+					speichern.checkInit(() => liste.loeschenAlleBelege());
+					break;
 				case "belege-kopieren":
 					kopieren.init();
 					break;
 				case "belege-einfuegen":
 					kopieren.einfuegen();
+					break;
+				case "belege-zwischenablage":
+					liste.kopierenAlleBelege();
 					break;
 			}
 		});
