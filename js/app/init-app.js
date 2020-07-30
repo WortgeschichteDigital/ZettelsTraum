@@ -63,6 +63,7 @@ window.addEventListener("load", async () => {
 		}
 		speichern.checkInit(() => liste.wechseln());
 	});
+	ipcRenderer.on("belege-loeschen", () => liste.loeschenAlleBelege());
 	ipcRenderer.on("belege-kopieren", () => kopieren.init());
 	ipcRenderer.on("belege-einfuegen", () => kopieren.einfuegen());
 	ipcRenderer.on("belege-zwischenablage", () => liste.kopierenAlleBelege());

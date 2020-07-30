@@ -1870,6 +1870,54 @@ let liste = {
 		// Feedback
 		helfer.animation("zwischenablage");
 	},
+	// alle in der Belegliste sichtbaren Belege löschen
+	async loeschenAlleBelege () {
+		// Sperre für macOS (Menüpunkte können nicht deaktiviert werden)
+		if (!kartei.wort) {
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Um die Funktion <i>Belege &gt; Löschen</i> zu nutzen, muss eine Kartei geöffnet sein.",
+			});
+			return;
+		}
+		// Ist die Belegliste sichtbar?
+		if ( !liste.listeSichtbar({funktion: "Belege &gt; Löschen"}) ) {
+			return;
+		}
+		// Wirklich löschen
+		let belege = document.querySelectorAll("#liste-belege .liste-kopf");
+		const loeschen = await new Promise(resolve => {
+			let numerus = `Sollen die <i>${belege.length} Belege</i>, die derzeit in der Belegliste sichtbar sind,`;
+			if (belege.length === 1) {
+				numerus = `Soll <i>${liste.detailAnzeigenH3(belege[0].dataset.id)}</i>`;
+			}
+			dialog.oeffnen({
+				typ: "confirm",
+				text: `${numerus} wirklich gelöscht werden?`,
+				callback: () => resolve(dialog.antwort),
+			});
+		});
+		if (!loeschen) {
+			return;
+		}
+		// Löschen ausführen
+		for (let i of belege) {
+			const id = i.dataset.id;
+			delete data.ka[id];
+			if (kopieren.an && kopieren.belege.includes(id)) {
+				kopieren.belege.splice(kopieren.belege.indexOf(id), 1);
+			}
+		}
+		// Belegliste und Filter auffrischen
+		kartei.karteiGeaendert(true);
+		liste.statusNeu = "";
+		liste.statusGeaendert = "";
+		liste.status(true);
+		// ggf. Zählung über dem Kopier-Icon im Fensterkopf auffrischen
+		if (kopieren.an) {
+			kopieren.uiText();
+		}
+	},
 	// stellt fest, ob die Belegliste sichtbar ist
 	//   funktion = String
 	//     (Name der Funktion, die nur ausgeführt werden darf,
