@@ -346,7 +346,7 @@ let helfer = {
 		text = text.replace(/\.{3}/g, "…"); // horizontale Ellipse
 		text = text.replace(/([a-z]) ([0-9]+ \([0-9]{4}\))/, (m, p1, p2) => `${p1} ${p2}`); // geschütztes Leerzeichen vor Jahrgang einer Zeitschrift
 		text = text.replace(/([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})/g, (m, p1, p2, p3) => {
-			return `${p1}. ${p2}. ${p3}`;
+			return `${p1.replace(/^0/, "")}. ${p2.replace(/^0/, "")}. ${p3}`;
 		}); // Leerzeichen bei aneinandergeklatschten Daten
 		// Korrekturen
 		text = text.replace(/([0-9]{4})[–-]([0-9]{2})[–-]([0-9]{2})/g, (m, p1, p2, p3) => `${p1}-${p2}-${p3}`); // falsche Halbgeviertstriche in ISO 8601-Daten
