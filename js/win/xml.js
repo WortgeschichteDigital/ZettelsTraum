@@ -3270,10 +3270,11 @@ let xml = {
 			p1 = p1.replace(/–/g, "-");
 			return `Ziel="${p1}"`;
 		});
-		// in <Aufrufdatum> kein Whitespace
+		// in <Aufrufdatum> kein Whitespace; führenden Nullen ergänzen
+		// (Aufhübschung von helfer.typographie() rückgängig machen)
 		str = str.replace(/<Aufrufdatum>(.+?)<\/Aufrufdatum>/g, (m, p1) => {
-			p1 = p1.replace(/\s/g, "");
-			return `<Aufrufdatum>${p1}</Aufrufdatum>`;
+			p1 = p1.replace(/\s/g, "").split(".");
+			return `<Aufrufdatum>${p1[0].padStart(2, "0")}.${p1[1].padStart(2, "0")}.${p1[2]}</Aufrufdatum>`;
 		});
 		// in <Zitat> und <Blockzitat> wohl keine <Paraphrase>, sondern <Zitat>
 		if (blockzitat) {
