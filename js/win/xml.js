@@ -2353,8 +2353,13 @@ let xml = {
 	//   form = Element
 	//     (Container des Illustrationsformulars)
 	textblockAbbXml ({form}) {
+		let kopf = form.closest(".textblock-cont").previousSibling,
+			key = kopf.dataset.key,
+			slot = parseInt(kopf.dataset.slot, 10),
+			slotBlock = parseInt(kopf.dataset.slotBlock, 10),
+			abbNr = xml.textblockAbbSetId({key, slot, slotBlock}) + 1;
 		// XML erzeugen
-		let xl = `<Illustration Position="${form.querySelector(`[id$="bildposition"]`).value}">\n`;
+		let xl = `<Illustration xml:id="abb-${abbNr}" Position="${form.querySelector(`[id$="bildposition"]`).value}">\n`;
 		let dn = form.querySelector(`[id$="dateiname"]`);
 		xl += `\t<Bildreferenz Ziel="${mask(dn.value)}"/>\n`;
 		let bu = form.querySelector(`[id$="bildunterschrift"]`);
@@ -2407,14 +2412,38 @@ let xml = {
 			lul.classList.add("fehler");
 		}
 		// XML eintragen
-		let kopf = form.closest(".textblock-cont").previousSibling,
-			key = kopf.dataset.key,
-			slot = parseInt(kopf.dataset.slot, 10),
-			slotBlock = parseInt(kopf.dataset.slotBlock, 10);
 		xml.data.xl[key][slot].ct[slotBlock].xl = xl;
+		// IDs der Abbildungen auffrischen
+		xml.textblockAbbSetId({});
 		// Ampersand maskieren
 		function mask (text) {
 			return text.replace(/&(?!amp;)/g, "&amp;");
+		}
+	},
+	// Textblock: IDs der Abbildungen auffrischen
+	textblockAbbSetId ({key = "", slot = -1, slotBlock = -1}) {
+		let nr = 0;
+		for (let k of ["ab", "tx"]) {
+			for (let i = 0, len = xml.data.xl[k].length; i < len; i++) {
+				for (let j = 0, len = xml.data.xl[k][i].ct.length; j < len; j++) {
+					if (xml.data.xl[k][i].ct[j].it === "Illustration") {
+						if (k === key && i === slot && j >= slotBlock) {
+							// wenn key !== "" soll nur die Abbildungsnummer ermittelt werden
+							return nr;
+						}
+						nr++;
+						if (!key) {
+							xml.data.xl[k][i].ct[j].xl = xml.data.xl[k][i].ct[j].xl.replace(/xml:id="abb-[0-9]+"/, `xml:id="abb-${nr}"`);
+							// .pre-cont auffrischen
+							// (existiert das <pre> nicht, ist der Block gerade in Bearbeitung)
+							let pre = document.querySelector(`.pre-cont[data-key="${k}"][data-slot="${i}"][data-slot-block="${j}"] pre`);
+							if (pre) {
+								xml.abtxRefreshPre({cont: pre.parentNode, xmlStr: xml.data.xl[k][i].ct[j].xl, editable: false});
+							}
+						}
+					}
+				}
+			}
 		}
 	},
 	// Abschnitt/Textblock: Events an Element im Container anhängen
@@ -2544,7 +2573,7 @@ let xml = {
 					kopfNeu();
 				}
 				let cont = textblock.querySelector(".pre-cont");
-				refreshPre(cont, xml.data.xl[key][slot].ct[slotBlock].xl, false);
+				xml.abtxRefreshPre({cont, xmlStr: xml.data.xl[key][slot].ct[slotBlock].xl, editable: false, textblock});
 				// Layout der Köpfe anpassen
 				xml.layoutTabellig({
 					id: key,
@@ -2568,7 +2597,7 @@ let xml = {
 				// (aber nur, wenn er nicht gerade in Bearbeitung ist)
 				let cont = textblock.querySelector(".pre-cont");
 				if (cont.querySelector("pre")) {
-					refreshPre(cont, xmlStr, true);
+					xml.abtxRefreshPre({cont, xmlStr, editable: true, textblock});
 				}
 				// XML updaten
 				xml.data.xl[key][slot].ct[slotBlock].xl = xmlStr;
@@ -2609,22 +2638,30 @@ let xml = {
 					cont: abschnitt,
 				});
 			}
-			// <pre> auffrischen
-			function refreshPre (cont, xmlStr, editable) {
-				let pre = document.createElement("pre");
-				cont.replaceChild(pre, cont.firstChild);
-				xml.preview({
-					xmlStr,
-					after: cont.previousSibling,
-					textblockCont: textblock,
-				});
-				if (editable) {
-					xml.editPreDbl({pre});
-				} else {
-					pre.classList.add("not-editable");
-				}
-			}
 		});
+	},
+	// Abschnitt/Textblock: <pre> auffrischen
+	//   cont = Element
+	//     (Container mit dem <pre>)
+	//   xmlStr = String
+	//     (das XML)
+	//   editable = Boolean
+	//     (Preview ist editierbar)
+	//   textblock = Element
+	//     (Container eines Textblocks: .textblock-cont)
+	abtxRefreshPre ({cont, xmlStr, editable, textblock = null}) {
+		let pre = document.createElement("pre");
+		cont.replaceChild(pre, cont.firstChild);
+		xml.preview({
+			xmlStr,
+			after: cont.previousSibling,
+			textblockCont: textblock,
+		});
+		if (editable) {
+			xml.editPreDbl({pre});
+		} else {
+			pre.classList.add("not-editable");
+		}
 	},
 	// Abschnitt/Textblock: Löschen
 	//   a = Element
@@ -2676,6 +2713,7 @@ let xml = {
 				cont: abschnitt,
 			});
 			// Datensatz löschen
+			const abb = xml.data.xl[key][slot].ct?.[slotBlock].it === "Illustration"; // jshint ignore:line
 			if (slotBlock !== null) {
 				if (xml.data.xl[key][slot].ct[slotBlock].it === "Überschrift") {
 					// ID des Abschnitts löschen
@@ -2688,6 +2726,10 @@ let xml = {
 			}
 			// Slot-Datasets anpassen
 			xml.refreshSlots({key, abschnitt});
+			// ggf. XML-ID der Abbildungen auffrischen
+			if (abb) {
+				xml.textblockAbbSetId({});
+			}
 			// ggf. Ansicht auffrischen
 			if (slotBlock !== null && xml.data.xl[key][slot].ct.length) {
 				xml.layoutTabellig({
@@ -3353,9 +3395,11 @@ let xml = {
 			slotOri = slot,
 			slotNeu = -1,
 			arr = [],
-			slotKlon;
+			slotKlon,
+			illustration = false;
 		if (kopf.dataset.slotBlock) {
 			slotBlock = parseInt(kopf.dataset.slotBlock, 10);
+			illustration = xml.data.xl[key][slot].ct[slotBlock].it === "Illustration";
 		}
 		switch (key) {
 			case "re":
@@ -3513,6 +3557,8 @@ let xml = {
 		} else if (key === "nw") {
 			// Reihenfolge der Nachweise im Bedeutungsgerüst auffrischen
 			xml.bgNachweiseRefresh();
+		} else if (illustration) {
+			xml.textblockAbbSetId({});
 		}
 	},
 	// Abschnitt ein- oder ausrücken
