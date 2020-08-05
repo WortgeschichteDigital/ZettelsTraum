@@ -3217,7 +3217,7 @@ let xml = {
 		// <Hervorhebung Stil="#perspective">
 		str = str.replace(/»(.+?)«/g, (m, p1) => `<Hervorhebung Stil=###perspective##>${p1}</Hervorhebung>`);
 		// <Stichwort>
-		str = str.replace(/(?<!\p{Letter})_(.+?)_(?!\p{Letter})/ug, (m, p1) => `<Stichwort>${p1}</Stichwort>`);
+		str = str.replace(/(?<![\p{Letter}\-.])_(.+?)_(?![\p{Letter}\-])/ug, (m, p1) => `<Stichwort>${p1}</Stichwort>`);
 		// <Paraphrase>
 		str = str.replace(/‚(.+?)‘/g, (m, p1) => `<Paraphrase>${p1}</Paraphrase>`); // deutsch
 		str = str.replace(/‘(.+?)’/g, (m, p1) => `<Paraphrase>${p1}</Paraphrase>`); // englisch
@@ -3262,7 +3262,7 @@ let xml = {
 			}
 			let verweis = `<Verweis${typ}>`;
 			verweis += `\n  <Verweistext>${p1}</Verweistext>`;
-			verweis += `\n  <Verweisziel>${p2}</Verweisziel>`;
+			verweis += `\n  <Verweisziel>${p2.replace(/ /g, "%20")}</Verweisziel>`;
 			verweis += "\n</Verweis>";
 			return verweis;
 		});
@@ -3304,6 +3304,8 @@ let xml = {
 			p1 = p1.replace(/–/g, "-"); // kein Halbgeviertstrich
 			p1 = p1.replace(/\s/g, ""); // kein Whitespace
 			p1 = p1.replace(/<[a-zA-Z]+ Ziel="(.+?)"\/?>/g, (m, p1) => p1); // keine Referenzen
+			p1 = p1.replace(/<\/?erwaehntes_Zeichen>/g, "__"); // kein <erwaehntes_Zeichen>
+			p1 = p1.replace(/<\/?Stichwort>/g, "_"); // kein <Stichwort>
 			p1 = p1.replace(/<.+?>/g, ""); // keine Tags
 			return `<URL>${p1}</URL>`;
 		});
