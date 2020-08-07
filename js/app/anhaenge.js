@@ -78,6 +78,7 @@ let anhaenge = {
 		".pptx": "datei-praes.svg",
 		".rar": "datei-archiv.svg",
 		".rtf": "datei-doc.svg",
+		".svg": "datei-img.svg",
 		".txt": "datei-txt.svg",
 		".ztj": "datei-ztj.svg",
 		".xml": "datei-xml.svg",
@@ -550,6 +551,7 @@ let anhaenge = {
 			"jpeg": 7,
 			"jpg": 7,
 			"png": 7,
+			"svg": 7,
 			// Sonstiges
 			"gz": 2,
 			"htm": 2,
