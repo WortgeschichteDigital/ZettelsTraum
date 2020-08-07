@@ -3957,10 +3957,11 @@ let xml = {
 	//   xmlStr = String
 	//     (die XML-Dateiedaten)
 	async exportierenSpeichern ({xmlStr}) {
-		const path = require("path");
+		const path = require("path"),
+			wort = xml.data.wort.replace(/ /g, "_");
 		let opt = {
 			title: "XML speichern",
-			defaultPath: path.join(appInfo.documents, `${xml.data.wort}.xml`),
+			defaultPath: path.join(appInfo.documents, `${wort}.xml`),
 			filters: [
 				{
 					name: "XML-Dateien",
@@ -3973,7 +3974,7 @@ let xml = {
 			],
 		};
 		if (xml.data.letzter_pfad) {
-			opt.defaultPath = path.join(xml.data.letzter_pfad, `${xml.data.wort}.xml`);
+			opt.defaultPath = path.join(xml.data.letzter_pfad, `${wort}.xml`);
 		}
 		// Dialog anzeigen
 		const {ipcRenderer} = require("electron");
