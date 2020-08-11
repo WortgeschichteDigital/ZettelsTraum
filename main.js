@@ -869,19 +869,19 @@ fenster = {
 			}
 			// Soll eine Kartei geöffnet oder eine neue Kartei erstellt werden?
 			const ztj = fenster.argvZtj(process.argv);
-			if (ztj || kartei) {
-				let datei = kartei;
-				if (!datei) {
-					datei = ztj;
-				}
-				this.send("kartei-oeffnen", datei);
-			} else if (neuesWort) {
+			if (neuesWort) {
 				// 500ms warten, damit der Ladebildschirm Zeit hat zu verschwinden
 				setTimeout(() => {
 					if (!this.isDestroyed()) {
 						this.send("kartei-erstellen");
 					}
 				}, 500);
+			} else if (ztj || kartei) {
+				let datei = kartei;
+				if (!datei) {
+					datei = ztj;
+				}
+				this.send("kartei-oeffnen", datei);
 			}
 		});
 		// Aktionen vor dem Schließen des Fensters
