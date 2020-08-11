@@ -2134,6 +2134,20 @@ let xml = {
 					date: false,
 					dropdown: true,
 				},
+				Breite: {
+					p: true,
+					cl: "abb-2-felder",
+					val: "",
+					date: false,
+					dropdown: false,
+				},
+				Höhe: {
+					p: false,
+					cl: "",
+					val: "",
+					date: false,
+					dropdown: false,
+				},
 				Bildunterschrift: {
 					p: true,
 					cl: "",
@@ -2227,6 +2241,8 @@ let xml = {
 					/* jshint ignore:start */
 					dateiname: xmlDoc.querySelector("Bildreferenz").getAttribute("Ziel"),
 					bildposition: xmlDoc.documentElement.getAttribute("Position"),
+					breite: xmlDoc.documentElement.getAttribute("Breite"),
+					höhe: xmlDoc.documentElement.getAttribute("Hoehe"),
 					bildunterschrift: xmlDoc.querySelector("Bildunterschrift").textContent,
 					alternativtext: xmlDoc.querySelector("Bildinhalt").textContent,
 					quelle: xmlDoc.querySelector("Fundstelle unstrukturiert").textContent,
@@ -2359,7 +2375,16 @@ let xml = {
 			slotBlock = parseInt(kopf.dataset.slotBlock, 10),
 			abbNr = xml.textblockAbbSetId({key, slot, slotBlock}) + 1;
 		// XML erzeugen
-		let xl = `<Illustration xml:id="abb-${abbNr}" Position="${form.querySelector(`[id$="bildposition"]`).value}">\n`;
+		let xl = `<Illustration xml:id="abb-${abbNr}" Position="${form.querySelector(`[id$="bildposition"]`).value}"`
+		let breite = form.querySelector(`[id$="breite"]`).value,
+			hoehe = form.querySelector(`[id$="höhe"]`).value;
+		if (breite) {
+			xl += ` Breite="${breite}"`
+		}
+		if (hoehe) {
+			xl += ` Hoehe="${hoehe}"`
+		}
+		xl += `>\n`;
 		let dn = form.querySelector(`[id$="dateiname"]`);
 		xl += `\t<Bildreferenz Ziel="${mask(dn.value)}"/>\n`;
 		let bu = form.querySelector(`[id$="bildunterschrift"]`);
