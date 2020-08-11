@@ -179,7 +179,7 @@ let punkte = {
 		icon: "kopieren.png",
 		click: `
 			helfer.toClipboard({
-				text: popup.element.innerText,
+				text: popup.element.innerText.replace(/␣/g, " ").replace(/[.]{3}/g, "…")
 			});
 		`,
 	},
