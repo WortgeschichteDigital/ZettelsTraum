@@ -138,7 +138,8 @@
 	mask-image: url(../../img/kreis-info.svg);
 }
 
-#quick-redaktion-xml {
+#quick-redaktion-xml,
+#quick-redaktion-xmlBelegeFenster {
 	-webkit-mask-image: url(../../img/xml.svg);
 	mask-image: url(../../img/xml.svg);
 }

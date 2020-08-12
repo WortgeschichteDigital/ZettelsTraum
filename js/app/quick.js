@@ -118,6 +118,11 @@ let quick = {
 			short: "",
 			img: "xml.svg",
 		},
+		"redaktion-xmlBelegeFenster": {
+			title: "Redaktion > Belege in XML-Fenster",
+			short: "",
+			img: "xml.svg",
+		},
 		"belege-hinzufuegen": {
 			title: "Belege > Hinzufügen",
 			short: `${tastatur.shortcutsTextAktuell("Strg")} + N`,
@@ -386,6 +391,9 @@ let quick = {
 					break;
 				case "redaktion-xml":
 					redXml.oeffnen();
+					break;
+				case "redaktion-xmlBelegeFenster":
+					xml.belegeInXmlFenster();
 					break;
 				case "belege-hinzufuegen":
 					speichern.checkInit(() => beleg.erstellen());
