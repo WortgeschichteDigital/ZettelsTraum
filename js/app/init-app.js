@@ -41,6 +41,7 @@ window.addEventListener("load", async () => {
 	ipcRenderer.on("redaktion-metadaten", () => redMeta.oeffnen());
 	ipcRenderer.on("redaktion-wortinformationen", () => redWi.oeffnen());
 	ipcRenderer.on("redaktion-xml", () => redXml.oeffnen());
+	ipcRenderer.on("redaktion-belege-xml", () => xml.belegeInXmlFenster());
 	ipcRenderer.on("belege-hinzufuegen", () => {
 		// Sperre für macOS (Menüpunkte können nicht deaktiviert werden)
 		if (!kartei.wort) {

@@ -319,6 +319,13 @@ layoutMenu = [
 				click: () => appMenu.befehl("redaktion-xml"),
 				id: "redaktion-xml",
 			},
+			{ type: "separator" },
+			{
+				label: "Belege in XML-Fenster",
+				icon: path.join(__dirname, "img", "menu", "xml.png"),
+				click: () => appMenu.befehl("redaktion-belege-xml"),
+				id: "redaktion-belege-xml",
+			},
 		],
 	},
 	{
@@ -629,7 +636,7 @@ appMenu = {
 			return;
 		}
 		// zu deaktivierende Menüpunkte durchgehen
-		let elemente = ["kartei-speichern", "kartei-speichern-unter", "kartei-formvarianten", "kartei-notizen", "kartei-anhaenge", "kartei-lexika", "kartei-metadaten", "kartei-bedeutungen", "kartei-bedeutungen-wechseln", "kartei-bedeutungen-fenster", "kartei-suche", "kartei-schliessen", "redaktion-metadaten", "redaktion-ereignisse", "redaktion-wortinformationen", "redaktion-xml", "belege"];
+		let elemente = ["kartei-speichern", "kartei-speichern-unter", "kartei-formvarianten", "kartei-notizen", "kartei-anhaenge", "kartei-lexika", "kartei-metadaten", "kartei-bedeutungen", "kartei-bedeutungen-wechseln", "kartei-bedeutungen-fenster", "kartei-suche", "kartei-schliessen", "redaktion-metadaten", "redaktion-ereignisse", "redaktion-wortinformationen", "redaktion-xml", "redaktion-belege-xml", "belege"];
 		for (let j = 0, len = layoutMenu.length; j < len; j++) {
 			// sollen vielleicht alle Menüpunkte deaktiviert werden?
 			let alle = false;
