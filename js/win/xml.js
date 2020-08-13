@@ -3331,6 +3331,7 @@ let xml = {
 			p1 = p1.replace(/<[a-zA-Z]+ Ziel="(.+?)"\/?>/g, (m, p1) => p1); // keine Referenzen
 			p1 = p1.replace(/<\/?erwaehntes_Zeichen>/g, "__"); // kein <erwaehntes_Zeichen>
 			p1 = p1.replace(/<\/?Stichwort>/g, "_"); // kein <Stichwort>
+			p1 = p1.replace(/<\/?Hervorhebung.*?>/g, "**"); // kein <Hervorhebung>
 			p1 = p1.replace(/<.+?>/g, ""); // keine Tags
 			return `<URL>${p1}</URL>`;
 		});
