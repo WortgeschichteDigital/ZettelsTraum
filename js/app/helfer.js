@@ -451,22 +451,32 @@ let helfer = {
 		let cont = document.createElement("div");
 		cont.innerHTML = html;
 		// Hervorhebungen, die standardmäßig gelöscht gehören
-		let marks = [".suche", ".suchleiste", ".user", `[class^="klammer-"]`];
+		let marks = [".suche", ".suchleiste", `[class^="klammer-"]`];
 		if (!optionen.data.einstellungen["textkopie-wort"]) { // Hervorhebung Karteiwort ebenfalls löschen
 			marks.push(".wort");
 		} else {
 			marks.push(".farbe0 .wort");
 		}
+		if (!optionen.data.einstellungen["textkopie-annotierung"]) { // Annotierungen ebenfalls löschen
+			marks.push(".user");
+		}
 		helfer.clipboardHtmlErsetzen(cont, marks.join(", "));
 		// Hervorhebung Karteiwort ggf. umwandeln
+		let hervorhebungen = [];
 		if (optionen.data.einstellungen["textkopie-wort"]) {
+			hervorhebungen.push(".wort");
+		}
+		if (optionen.data.einstellungen["textkopie-annotierung"]) {
+			hervorhebungen.push(".user");
+		}
+		if (hervorhebungen.length) {
 			// Layout festlegen
 			let style = "font-weight: bold";
 			if (optionen.data.einstellungen["textkopie-wort-hinterlegt"]) {
 				style += "; background-color: #e5e5e5";
 			}
 			// verbliebene Karteiwort-Hervorhebungen umwandeln
-			helfer.clipboardHtmlErsetzen(cont, ".wort", "span", style);
+			helfer.clipboardHtmlErsetzen(cont, hervorhebungen.join(", "), "span", style);
 		}
 		// Annotierungen endgültig löschen
 		helfer.clipboardHtmlErsetzen(cont, ".annotierung-wort");

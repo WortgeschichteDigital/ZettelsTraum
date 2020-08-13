@@ -105,7 +105,9 @@ let optionen = {
 			// KOPIEREN
 			// Hervorhebung des Karteiworts beim Kopieren von Text mitkopieren
 			"textkopie-wort": false,
-			// beim Kopieren ist das Karteiworts grau hinterlegt
+			// Hervorhebung der Annotierungen beim Kopieren von Text mitkopieren
+			"textkopie-annotierung": false,
+			// beim Kopieren sind Karteiwort/Markierung grau hinterlegt
 			"textkopie-wort-hinterlegt": false,
 			// beim Kopieren das Jahr als Überschrift ergänzen
 			"textkopie-h-jahr": true,
