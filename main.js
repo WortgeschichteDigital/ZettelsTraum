@@ -319,6 +319,13 @@ layoutMenu = [
 				click: () => appMenu.befehl("redaktion-xml"),
 				id: "redaktion-xml",
 			},
+			{ type: "separator" },
+			{
+				label: "Belege in XML-Fenster",
+				icon: path.join(__dirname, "img", "menu", "xml.png"),
+				click: () => appMenu.befehl("redaktion-belege-xml"),
+				id: "redaktion-belege-xml",
+			},
 		],
 	},
 	{
@@ -629,7 +636,7 @@ appMenu = {
 			return;
 		}
 		// zu deaktivierende Menüpunkte durchgehen
-		let elemente = ["kartei-speichern", "kartei-speichern-unter", "kartei-formvarianten", "kartei-notizen", "kartei-anhaenge", "kartei-lexika", "kartei-metadaten", "kartei-bedeutungen", "kartei-bedeutungen-wechseln", "kartei-bedeutungen-fenster", "kartei-suche", "kartei-schliessen", "redaktion-metadaten", "redaktion-ereignisse", "redaktion-wortinformationen", "redaktion-xml", "belege"];
+		let elemente = ["kartei-speichern", "kartei-speichern-unter", "kartei-formvarianten", "kartei-notizen", "kartei-anhaenge", "kartei-lexika", "kartei-metadaten", "kartei-bedeutungen", "kartei-bedeutungen-wechseln", "kartei-bedeutungen-fenster", "kartei-suche", "kartei-schliessen", "redaktion-metadaten", "redaktion-ereignisse", "redaktion-wortinformationen", "redaktion-xml", "redaktion-belege-xml", "belege"];
 		for (let j = 0, len = layoutMenu.length; j < len; j++) {
 			// sollen vielleicht alle Menüpunkte deaktiviert werden?
 			let alle = false;
@@ -869,19 +876,19 @@ fenster = {
 			}
 			// Soll eine Kartei geöffnet oder eine neue Kartei erstellt werden?
 			const ztj = fenster.argvZtj(process.argv);
-			if (ztj || kartei) {
-				let datei = kartei;
-				if (!datei) {
-					datei = ztj;
-				}
-				this.send("kartei-oeffnen", datei);
-			} else if (neuesWort) {
+			if (neuesWort) {
 				// 500ms warten, damit der Ladebildschirm Zeit hat zu verschwinden
 				setTimeout(() => {
 					if (!this.isDestroyed()) {
 						this.send("kartei-erstellen");
 					}
 				}, 500);
+			} else if (ztj || kartei) {
+				let datei = kartei;
+				if (!datei) {
+					datei = ztj;
+				}
+				this.send("kartei-oeffnen", datei);
 			}
 		});
 		// Aktionen vor dem Schließen des Fensters

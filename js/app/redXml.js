@@ -30,6 +30,22 @@ let redXml = {
 			resolve(true);
 		});
 	},
+	// XML-Fenster öffnen (Promise)
+	oeffnenPromise () {
+		return new Promise(async resolve => {
+			// Init-Markierung zurücksetzen
+			xml.winInit = false;
+			// Fenster öffnen
+			await redXml.oeffnen();
+			// warten, bis das Fenster mit dem Init fertig ist
+			while (!xml.winInit) {
+				await new Promise(warten => setTimeout(() => warten(true), 25));
+			}
+			await new Promise(warten => setTimeout(() => warten(true), 250));
+			// Fenster ist geöffnet => Promise auflösen
+			resolve(true);
+		});
+	},
 	// Bedeutungsgerüst-Fenster schließen
 	schliessen () {
 		return new Promise(async resolve => {
@@ -88,15 +104,7 @@ let redXml = {
 	async datensatz ({xmlDatensatz}) {
 		// Ist das Fenster schon offen?
 		if (!redXml.contentsId) {
-			// Init-Markierung zurücksetzen
-			xml.winInit = false;
-			// Fenster öffnen
-			await redXml.oeffnen();
-			// warten, bis das Fenster mit dem Init fertig ist
-			while (!xml.winInit) {
-				await new Promise(warten => setTimeout(() => warten(true), 25));
-			}
-			await new Promise(warten => setTimeout(() => warten(true), 250));
+			await redXml.oeffnenPromise();
 		}
 		// Datensatz an das Fenster schicken
 		const {ipcRenderer} = require("electron");

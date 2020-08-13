@@ -369,9 +369,9 @@ let helfer = {
 			/i\.\s?Br\./g, // im Breisgau
 			/N\.\s?N\./g, // nomen nescio
 			/Nr\.\s?[0-9]+/g, // Nummer
-			/o\.\s?ä\./g, // oder ähnlich
+			/o\.\s?ä\./ig, // oder ähnlich/Ähnliches
 			/o\.\s?(D|O)\./ig, // ohne Datum/Ort
-			/s\.\s?(d|l)\./ig,
+			/s\.\s?(d|l|o|u)\./ig,
 			/s\.\s?v\./g, // sub voce (nur in Kleinschreibung)
 			/Sp?\.\s?[0-9]+/g, // Seiten-/Spaltenangaben
 			/u\.\s?(a|ä)\./ig,
@@ -451,22 +451,32 @@ let helfer = {
 		let cont = document.createElement("div");
 		cont.innerHTML = html;
 		// Hervorhebungen, die standardmäßig gelöscht gehören
-		let marks = [".suche", ".suchleiste", ".user", `[class^="klammer-"]`];
+		let marks = [".suche", ".suchleiste", `[class^="klammer-"]`];
 		if (!optionen.data.einstellungen["textkopie-wort"]) { // Hervorhebung Karteiwort ebenfalls löschen
 			marks.push(".wort");
 		} else {
 			marks.push(".farbe0 .wort");
 		}
+		if (!optionen.data.einstellungen["textkopie-annotierung"]) { // Annotierungen ebenfalls löschen
+			marks.push(".user");
+		}
 		helfer.clipboardHtmlErsetzen(cont, marks.join(", "));
 		// Hervorhebung Karteiwort ggf. umwandeln
+		let hervorhebungen = [];
 		if (optionen.data.einstellungen["textkopie-wort"]) {
+			hervorhebungen.push(".wort");
+		}
+		if (optionen.data.einstellungen["textkopie-annotierung"]) {
+			hervorhebungen.push(".user");
+		}
+		if (hervorhebungen.length) {
 			// Layout festlegen
 			let style = "font-weight: bold";
 			if (optionen.data.einstellungen["textkopie-wort-hinterlegt"]) {
 				style += "; background-color: #e5e5e5";
 			}
 			// verbliebene Karteiwort-Hervorhebungen umwandeln
-			helfer.clipboardHtmlErsetzen(cont, ".wort", "span", style);
+			helfer.clipboardHtmlErsetzen(cont, hervorhebungen.join(", "), "span", style);
 		}
 		// Annotierungen endgültig löschen
 		helfer.clipboardHtmlErsetzen(cont, ".annotierung-wort");

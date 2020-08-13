@@ -1952,12 +1952,20 @@ Mustermann, Erika
 						<p>Memento: Das Karteiwort wird bei aktivierter Einstellung auch dann hervorgehoben, wenn die <a href="#belegliste-karteiwortHervorheben">Funktion zum Hervorheben von Karteiwörtern</a> im Kopf der Belegliste (also das Icon <img src="../img/text-fett.svg" width="20" height="20" alt="">) ausgeschaltet ist. Die Hervorhebungen werden nachträglich ergänzt, wobei auf die <a href="#belegliste-annotierenBelegTransparent">Markierung falschpositiver Treffer</a> Rücksicht genommen wird: Diese erscheinen im kopierten Text niemals markiert.</p>
 					</div>
 
-					<p class="erklaerung-option" id="einstellungen-kopierenKarteiwortHintergrund">Karteiwort mit grauem Hintergrund</p>
+					<p class="erklaerung-option" id="einstellungen-kopierenAnnotierung">Hervorhebung der Annotierungen bei <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>-Kopie erhalten</p>
 
 					<div class="info">
 						<p><i>Standard:</i> nicht aktiviert</p>
 
-						<p>Diese Einstellung wirkt nur im Zusammenhang mit der vorherigen, die das <a href="#einstellungen-kopierenHervorhebung">Löschen oder Erhalten der Hervorhebung des Karteiworts beim Kopieren</a> steuert. Ist diese Einstellung aktiviert, wird das Karteiwort nach dem Einfügen des Belegtextes in einem Textverarbeitungsprogramm zusätzlich zur Fettung grau hinterlegt.</p>
+						<p>In den Belegtexten können <a href="#belegliste-annotierenBeleg">Textpassagen markiert und annotiert</a> werden. Diese werden beim Kopieren normalerweise eliminiert (<abbr title="vergleiche">vgl.</abbr> die <a href="#einstellungen-kopierenHervorhebung">Bemerkungen zur vorherigen Einstellung</a>). Aktivieren Sie diese Funktion bleibt die Annotierung jedoch erhalten, wenn Sie eine Kopie im <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>-Format erstellen. Fügen Sie den kopierten Text in ein Textverarbeitungsprogramm ein, erscheint der annotierte Text fett.</p>
+					</div>
+
+					<p class="erklaerung-option" id="einstellungen-kopierenKarteiwortHintergrund">Hervorhebungen mit grauem Hintergrund</p>
+
+					<div class="info">
+						<p><i>Standard:</i> nicht aktiviert</p>
+
+						<p>Diese Einstellung wirkt nur im Zusammenspiel mit den vorherigen Einstellungen, die das Löschen oder Erhalten der <a href="#einstellungen-kopierenHervorhebung">Hervorhebung des Karteiworts</a> <abbr title="beziehungsweise">bzw.</abbr> die <a href="#einstellungen-kopierenAnnotierung">Hervorhebung der Annotierungen</a> beim Kopieren steuern. Ist eine dieser Einstellung aktiviert, werden Karteiwort und/oder Annotierung nach dem Einfügen des Belegtextes in einem Textverarbeitungsprogramm zusätzlich zur Fettung grau hinterlegt.</p>
 					</div>
 
 					<p class="erklaerung-option" id="einstellungen-kopierenJahr">Jahr als Überschrift bei <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>-Kopie</p>
@@ -4783,6 +4791,16 @@ Gerüst 2 &gt; Gerüst 1</pre>
 						<p>Es können mehrere Bedeutungsgerüste importiert werden. (<span class="obacht">Aber Achtung!</span> Zur Zeit wird nur das zuerst importierte Gerüst exportiert – das zuerst importierte, nicht das Gerüst mit der niedrigsten Ordnungsnummer!)</p>
 
 						<p>Für die Verlinkung von Bedeutungen mit einer Textstelle und für die Liste der Nachweise gibt es zwar Formulare, um das Ändern und Hinzufügen bequemer zu gestalten. Diese Positionen können aber durchaus auch manuell im XML eingetragen/geändert werden. Die neuen Daten werden nach dem Speichern automatisch in den jeweiligen Formularbereich übernommen.</p>
+					</div>
+
+					<p class="erklaerung-icon-menues" id="menueRedaktion-xmlBelegeFenster"><img src="../img/xml.svg" width="24" height="24" alt="">Belege in <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Fenster</p>
+
+					<div class="info">
+						<p>Alle in der Belegliste sichtbaren Belege ans <a href="#menueRedaktion-xml">Redaktionsfenster</a> schicken.</p>
+
+						<p>Es werden nur die Belege verschickt, die aktuell in der <a href="#belegliste">Belegliste</a> angezeigt werden. Man kann also <a href="#filter">filtern</a>, welche Belege an das Fenster geschickt werden sollen.</p>
+
+						<p>Als Belegschnitt wird immer der <em>komplette</em> Belegtext der jeweiligen Karteikarte genutzt, vom ersten bis zum letzten Zeichen. Die Belege sollten also vor der Verwendung dieser Funktion sehr gut vorbereitet werden.</p>
 					</div>
 				</section>
 

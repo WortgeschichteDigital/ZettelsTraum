@@ -320,6 +320,82 @@ let xml = {
 		};
 		redXml.datensatz({xmlDatensatz});
 	},
+	// alle in der Belegliste sichtbaren Belege ans XML-Fenster schicken
+	async belegeInXmlFenster () {
+		// Sperre für macOS (Menüpunkte können nicht deaktiviert werden)
+		if (!kartei.wort) {
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Um die Funktion <i>Redaktion &gt; Belege in XML-Fenster</i> zu nutzen, muss eine Kartei geöffnet sein.",
+			});
+			return;
+		}
+		// Ist die Belegliste sichtbar?
+		if ( !liste.listeSichtbar({funktion: "Redaktion &gt; Belege in XML-Fenster"}) ) {
+			return;
+		}
+		// keine Belege in der Liste
+		let belege = document.querySelectorAll("#liste-belege .liste-kopf");
+		if (!belege.length) {
+			dialog.oeffnen({
+				typ: "alert",
+				text: "In der Belegliste werden derzeit keine Belege angezeigt.",
+			});
+			return;
+		}
+		// Sicherheitsfrage
+		let numerus = `Sollen die <i>${belege.length} Belege</i> aus der Belegliste wirklich alle`;
+		if (belege.length === 1) {
+			numerus = `Soll der <i>${liste.detailAnzeigenH3(belege[0].dataset.id)}</i> wirklich`;
+		}
+		const senden = await new Promise(resolve => {
+			dialog.oeffnen({
+				typ: "confirm",
+				text: `${numerus} an das XML-Redaktionsfenster geschickt werden?`,
+				callback: () => resolve(dialog.antwort),
+			});
+		});
+		if (!senden) {
+			return;
+		}
+		// Ist das XML-Redaktionsfenster schon offen?
+		if (!redXml.contentsId) {
+			await redXml.oeffnenPromise();
+		}
+		// Belege an XML-Fenster
+		for (let i of belege) {
+			const id = i.dataset.id;
+			popup.referenz.data = data.ka[id];
+			popup.referenz.id = id;
+			// Absätzen erzeugen
+			let container = document.createElement("div"),
+				bs = data.ka[id].bs.replace(/\n\s*\n/g, "\n").split("\n");
+			for (let i of bs) {
+				let p = document.createElement("p");
+				p.dataset.pnumber = 0; // wegen xml.schnitt()
+				p.innerHTML = i;
+				container.appendChild(p);
+			}
+			// Text aufbereiten
+			let html = liste.belegWortHervorheben(container.innerHTML, true);
+			popup.textauswahl.xml = helfer.clipboardXml(html);
+			// Datensatz umwandeln an XML-Fenster schicken
+			const xmlStr = xml.schnitt();
+			let datum = helferXml.datumFormat({xmlStr});
+			let xmlDatensatz = {
+				key: "bl",
+				ds: {
+					da: datum.anzeige,
+					ds: datum.sortier,
+					id: xml.belegId({}),
+					xl: xmlStr,
+				},
+			};
+			redXml.datensatz({xmlDatensatz});
+			// kurz warten
+			await new Promise(resolve => setTimeout(() => resolve(true), 100));
+		}
+	},
 	// Referenztag des Belegs in die Zwischenablage kopieren
 	referenz () {
 		const id = xml.belegId({});
