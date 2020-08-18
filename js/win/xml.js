@@ -3983,8 +3983,21 @@ let xml = {
 	//   xmlStr = String
 	//     (die XML-Dateiedaten)
 	async exportierenSpeichern ({xmlStr}) {
-		const path = require("path"),
-			wort = xml.data.wort.replace(/ /g, "_");
+		const path = require("path");
+		let ascii = new Map([
+			[/ /g, "_"],
+			[/Ä/g, "Ae"],
+			[/ä/g, "ae"],
+			[/Ö/g, "Oe"],
+			[/ö/g, "oe"],
+			[/Ü/g, "Ue"],
+			[/ü/g, "ue"],
+			[/ß/g, "ss"],
+		]);
+		let wort = xml.data.wort;
+		for (let [k, v] of ascii) {
+			wort = wort.replace(k, v);
+		}
 		let opt = {
 			title: "XML speichern",
 			defaultPath: path.join(appInfo.documents, `${wort}.xml`),
