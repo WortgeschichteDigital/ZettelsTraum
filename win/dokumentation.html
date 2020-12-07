@@ -638,7 +638,7 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
 
 					<p>Nach dem Laden einer <abbr title="Zettel’s Traum JSON">ZTJ</abbr>-Datei in <i class="app-name"></i> befinden sich die <abbr title="JavaScript Object Notation">JSON</abbr>-Daten im globalen Objekt <code class="quelltext">data</code>. Ihre Werte lassen sich dann in allen Funktionen des Hauptfensters durch einfache Statements wie <code class="quelltext">data.dc</code> lesen oder schreiben.</p>
 
-					<p>Alle Dateien sind gleich aufgebaut (<span class="obacht">Datenformat Version 17</span>):</p>
+					<p>Alle Dateien sind gleich aufgebaut (<span class="obacht">Datenformat Version 18</span>):</p>
 
 					<table class="ztj">
 						<tr>
@@ -1133,8 +1133,8 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
 						<tr class="ztj-ebene2">
 							<td><p><code class="quelltext">vt</code></p></td>
 							<td class="datentyp">String</td>
-							<td><code class="quelltext">Kollokation<br>| Wortbildung<br>| Wortfeld<br>| Wortfeldartikel</code></td>
-							<td>Verweistyp;<br><span class="obacht">mit Version 17 <code class="quelltext">Assoziation</code> in <code class="quelltext">Wortbildung</code> umbenannt</span></td>
+							<td><code class="quelltext">Wortbildung<br>| Wortfeld<br>| Wortfeldartikel<br>| Wortverbindung</code></td>
+							<td>Verweistyp;<br><span class="obacht">mit Version 17 <code class="quelltext">Assoziation</code> in <code class="quelltext">Wortbildung</code> umbenannt</span>;<br><span class="obacht">mit Version 18 <code class="quelltext">Kollokation</code> in <code class="quelltext">Wortverbindung</code> umbenannt</span></td>
 						</tr>
 						<tr class="ztj-ebene2">
 							<td><p><code class="quelltext">xl</code></p></td>

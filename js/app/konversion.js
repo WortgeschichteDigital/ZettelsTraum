@@ -4,7 +4,7 @@ let konversion = {
 	// aktuelle Version des Dateiformats
 	// *** WICHTIG! *** WICHTIG! *** WICHTIG! ***
 	// Bei Änderungen anpassen!
-	version: 17,
+	version: 18,
 	// Verteilerfunktion
 	start () {
 		konversion.von1nach2();
@@ -23,6 +23,7 @@ let konversion = {
 		konversion.von14nach15();
 		konversion.von15nach16();
 		konversion.von16nach17();
+		konversion.von17nach18();
 	},
 	// Konversion des Dateiformats von Version 1 nach Version 2
 	von1nach2 () {
@@ -307,7 +308,7 @@ let konversion = {
 		// Änderungsmarkierung setzen
 		kartei.karteiGeaendert(true);
 	},
-	// Konversion des Dateiformats von Version 15 nach Version 16
+	// Konversion des Dateiformats von Version 16 nach Version 17
 	von16nach17 () {
 		if (data.ve > 16) {
 			return;
@@ -322,6 +323,30 @@ let konversion = {
 		}
 		// Datenstruktur "rd.xl" hinzufügen
 		data.rd.xl = helferXml.redXmlData();
+		// Versionsnummer hochzählen
+		data.ve++;
+		// Änderungsmarkierung setzen
+		kartei.karteiGeaendert(true);
+	},
+	// Konversion des Dateiformats von Version 17 nach Version 18
+	von17nach18 () {
+		if (data.ve > 17) {
+			return;
+		}
+		// rd.wi.vt === "Kollokation" in "Wortverbindung" ändern
+		for (let i of data.rd.wi) {
+			if (i.vt === "Kollokation") {
+				i.vt = "Wortverbindung";
+			}
+		}
+		// rd.xl.wi.vt === "Kollokation" in "Wortverbindung" ändern
+		for (let v of Object.values(data.rd.xl.wi)) {
+			for (let i of v) {
+				if (i.vt === "Kollokation") {
+					i.vt = "Wortverbindung";
+				}
+			}
+		}
 		// Versionsnummer hochzählen
 		data.ve++;
 		// Änderungsmarkierung setzen

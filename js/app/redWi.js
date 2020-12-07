@@ -5,7 +5,7 @@ let redWi = {
 	inputs: "#red-wi-text:not(.aus) input, #red-wi-intern:not(.aus) input, #red-wi-extern:not(.aus) input",
 	// Dropdown: Feldtypen
 	dropdown: {
-		vt: ["Wortbildung", "Kollokation", "Wortfeld", "Wortfeldartikel"],
+		vt: ["Wortbildung", "Wortverbindung", "Wortfeld", "Wortfeldartikel"],
 		lt: ["Textverweis", "Verweis intern", "Verweis extern"],
 		se: ["Entsprechung", "Gegensatz", "Hyperonym", "Hyponym", "Synonym"],
 	},
@@ -374,7 +374,7 @@ let redWi = {
 		copy.classList.add("aus");
 		helfer.keineKinder(cont);
 		let hTxt = {
-			Kollokation: "Kollokationen",
+			Wortverbindung: "Wortverbindungen",
 			Wortbildung: "Wortbildungen",
 			Wortfeld: "Wortfeld",
 			Wortfeldartikel: "Wortfeldartikel",

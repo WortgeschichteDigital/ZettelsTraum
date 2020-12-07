@@ -18,13 +18,13 @@ let xml = {
 	// Typen-Mapping für die Wortinformationen
 	wiMap: {
 		export: {
-			Kollokation: "Kollokationen",
+			Wortverbindung: "Wortverbindungen",
 			Wortbildung: "Wortbildungen",
 			Wortfeld: "Wortfeld",
 			Wortfeldartikel: "Wortfeldartikel",
 		},
 		import: {
-			Kollokationen: "Kollokation",
+			Wortverbindungen: "Wortverbindung",
 			Wortbildungen: "Wortbildung",
 			Wortfeld: "Wortfeld",
 			Wortfeldartikel: "Wortfeldartikel",
