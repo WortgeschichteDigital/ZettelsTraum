@@ -833,6 +833,7 @@ fenster = {
 			minHeight: 350,
 			autoHideMenuBar: optionen.data.einstellungen ? optionen.data.einstellungen.autoHideMenuBar : false,
 			webPreferences: {
+				contextIsolation: false,
 				nodeIntegration: true,
 				enableRemoteModule: false,
 				devTools: devtools,
@@ -989,6 +990,7 @@ fenster = {
 			minWidth: bounds.minWidth,
 			minHeight: bounds.minHeight,
 			webPreferences: {
+				contextIsolation: false,
 				nodeIntegration: true,
 				enableRemoteModule: false,
 				devTools: devtools,
@@ -1138,6 +1140,7 @@ fenster = {
 			minimizable: false,
 			maximizable: false,
 			webPreferences: {
+				contextIsolation: false,
 				nodeIntegration: true,
 				enableRemoteModule: false,
 				devTools: devtools,

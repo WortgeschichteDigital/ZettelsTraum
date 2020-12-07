@@ -41,7 +41,6 @@ input[type="checkbox"] {
 	padding: 0;
 	width: 13px;
 	height: 13px;
-	-webkit-appearance: none;
 	appearance: none;
 	background-color: #fff;
 	font-size: 16px;
