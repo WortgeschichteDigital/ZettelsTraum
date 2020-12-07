@@ -19,11 +19,11 @@
 
 ## Die App
 
-<a href="img/win/hb-start-karteikarte.png"><img align="right" src="img/readme/screenshot-karteikarte.png" width="300" height="233" alt="Karteikarte"></a>
+<a href="img/win/start-karteikarte.png"><img align="right" src="img/readme/screenshot-karteikarte.png" width="300" height="233" alt="Karteikarte"></a>
 
 *Zettel’s Traum* ist ein Karteikastenprogramm für historisch arbeitende LexikographInnen, das für das Wörterbuchprojekt *[Wortgeschichte digital](https://adw-goe.de/forschung/weitere-forschungsprojekte/wortgeschichte-digital-teilprojekt-im-zdl/)* (WGd) geschrieben wurde. Die App entstand aus der Idee heraus, Belegsammlungen auf Karteikarten, wie sie bereits seit den ersten Anfängen des *Deutschen Wörterbuchs von Jacob Grimm und Wilhelm Grimm* im Jahr 1838 in Gebrauch waren, in das digitale Zeitalter zu holen und sie durch eine Vielzahl an Such-, Filter- und Verwaltungsfunktionen zugänglich zu machen. *Zettel’s Traum* soll das Schreiben von Wörterbuchartikeln, bei denen nicht selten mit großen Massen an Textbelegen hantiert wird, komfortabler, das heißt schneller, übersichtlicher, schlicht und ergreifend leichter machen.
 
-<a href="img/win/hb-start-belegliste.png"><img align="left" src="img/readme/screenshot-belegliste.png" width="300" height="233" alt="Belegliste"></a>
+<a href="img/win/start-belegliste.png"><img align="left" src="img/readme/screenshot-belegliste.png" width="300" height="233" alt="Belegliste"></a>
 
 Mit *Zettel’s Traum* können Sie Textbelege zu einem Wort (oder einer Wortverbindung) auf virtuelle Karteikarten schreiben, die in Wortkarteien gesammelt und verwaltet werden. Sie können die Belege und Wortkarteien in vielfältiger Weise taggen, also mit weiteren Informationen anreichern und verknüpfen: mit Internetressourcen, mit lokalen Dateien und nicht zuletzt mit Bedeutungen aus einem oder mehreren zentral verwalteten Bedeutungsgerüsten, in denen sich die einzelnen Positionen nach Belieben umbenennen und verschieben, verschmelzen und erweitern lassen, ohne dass man Dutzende oder gar Hunderte Karteikarten einzeln ändern müsste.
 
