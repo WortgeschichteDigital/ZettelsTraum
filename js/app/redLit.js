@@ -3335,8 +3335,8 @@ let redLit = {
 			}
 			text = text.replace(i.reg, m => `<mark class="suche">${m}</mark>`);
 		}
-		text = redLit.anzeigeSnippetMaskieren(text);
 		text = helfer.suchtrefferBereinigen(text);
+		text = redLit.anzeigeSnippetMaskieren(text);
 		return text;
 	},
 	// Anzeige: Maskieren von Spitzklammern
