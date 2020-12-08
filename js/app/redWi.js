@@ -5,7 +5,7 @@ let redWi = {
 	inputs: "#red-wi-text:not(.aus) input, #red-wi-intern:not(.aus) input, #red-wi-extern:not(.aus) input",
 	// Dropdown: Feldtypen
 	dropdown: {
-		vt: ["Wortbildung", "Kollokation", "Wortfeld", "Wortfeldartikel"],
+		vt: ["Wortbildung", "Wortverbindung", "Wortfeld", "Wortfeldartikel"],
 		lt: ["Textverweis", "Verweis intern", "Verweis extern"],
 		se: ["Entsprechung", "Gegensatz", "Hyperonym", "Hyponym", "Synonym"],
 	},
@@ -332,7 +332,7 @@ let redWi = {
 	//     (Datensatz, der gespeichert werden soll)
 	formSpeichern ({ds}) {
 		// Datensatz einhängen/überschreiben
-		const idx = data.rd.wi.findIndex(i => i.gn === ds.gn && i.tx === ds.tx);
+		const idx = data.rd.wi.findIndex(i => i.gn === ds.gn && i.vt === ds.vt && i.tx === ds.tx);
 		if (idx > -1) {
 			data.rd.wi[idx] = ds;
 		} else {
@@ -347,7 +347,7 @@ let redWi = {
 		// Anzeige neu aufbauen
 		redWi.contMake();
 		// Wort highlighten
-		let wort = document.querySelector(`#red-wi-cont [data-tx="${ds.tx}"]`);
+		let wort = document.querySelector(`#red-wi-cont [data-vt="${ds.vt}"][data-tx="${ds.tx}"]`);
 		setTimeout(() => wort.classList.add("update"), 0);
 		setTimeout(() => wort.classList.remove("update"), 750);
 	},
@@ -374,7 +374,7 @@ let redWi = {
 		copy.classList.add("aus");
 		helfer.keineKinder(cont);
 		let hTxt = {
-			Kollokation: "Kollokationen",
+			Wortverbindung: "Wortverbindungen",
 			Wortbildung: "Wortbildungen",
 			Wortfeld: "Wortfeld",
 			Wortfeldartikel: "Wortfeldartikel",
@@ -396,6 +396,7 @@ let redWi = {
 			let p = document.createElement("p");
 			cont.appendChild(p);
 			p.dataset.gn = i.gn;
+			p.dataset.vt = i.vt;
 			p.dataset.tx = i.tx;
 			// Lösch-Icon
 			let a = document.createElement("a");
@@ -428,8 +429,9 @@ let redWi = {
 	contBearbeiten ({p}) {
 		p.addEventListener("click", function() {
 			const gn = this.dataset.gn,
+				vt = this.dataset.vt,
 				tx = this.dataset.tx;
-			let ds = data.rd.wi.find(i => i.gn === gn && i.tx === tx);
+			let ds = data.rd.wi.find(i => i.gn === gn && i.vt === vt && i.tx === tx);
 			document.getElementById("red-wi-vt").value = ds.vt;
 			let lt = document.getElementById("red-wi-lt");
 			lt.value = ds.lt;
@@ -464,13 +466,14 @@ let redWi = {
 			evt.preventDefault();
 			evt.stopPropagation();
 			const gn = this.closest("p").dataset.gn,
+				vt = this.closest("p").dataset.vt,
 				tx = this.closest("p").dataset.tx;
 			dialog.oeffnen({
 				typ: "confirm",
 				text: `Soll „${tx}“ wirklich gelöscht werden?`,
 				callback: () => {
 					if (dialog.antwort) {
-						const idx = data.rd.wi.findIndex(i => i.gn === gn && i.tx === tx);
+						const idx = data.rd.wi.findIndex(i => i.gn === gn && i.vt === vt && i.tx === tx);
 						data.rd.wi.splice(idx, 1);
 						kartei.karteiGeaendert(true);
 						redWi.contMake();
@@ -487,11 +490,12 @@ let redWi = {
 			evt.preventDefault();
 			evt.stopPropagation();
 			const gn = this.closest("p").dataset.gn,
+				vt = this.closest("p").dataset.vt,
 				tx = this.closest("p").dataset.tx;
 			let xmlDatensatz = {
 				key: "wi-single",
 				gn,
-				ds: data.rd.wi.find(i => i.gn === gn && i.tx === tx),
+				ds: data.rd.wi.find(i => i.gn === gn && i.vt === vt && i.tx === tx),
 			};
 			redXml.datensatz({xmlDatensatz});
 		});

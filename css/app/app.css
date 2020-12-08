@@ -379,7 +379,6 @@ input[type="radio"] {
 	padding: 0;
 	width: 13px;
 	height: 13px;
-	-webkit-appearance: none;
 	appearance: none;
 	background-color: #fff;
 	font-size: 16px;
@@ -393,6 +392,7 @@ input[type="radio"] {
 input[type="checkbox"]:focus,
 input[type="radio"]:focus {
 	outline: 1px solid var(--farbe);
+	outline-offset: 0;
 	border-color: var(--farbe);
 }
 

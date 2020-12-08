@@ -860,7 +860,7 @@ let helfer = {
 	// Sprache der Nutzerumgebung ermitteln
 	checkLang () {
 		let env = process.env;
-		return env.LC_ALL || env.LC_MESSAGES || env.LANG || env.LANGUAGE;
+		return env.LANG || env.LANGUAGE || env.LC_ALL || env.LC_MESSAGES;
 	},
 	// Variablen um Wortgrenzen zu bestimmen
 	ganzesWortRegExp: {

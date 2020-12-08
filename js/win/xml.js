@@ -18,13 +18,13 @@ let xml = {
 	// Typen-Mapping für die Wortinformationen
 	wiMap: {
 		export: {
-			Kollokation: "Kollokationen",
+			Wortverbindung: "Wortverbindungen",
 			Wortbildung: "Wortbildungen",
 			Wortfeld: "Wortfeld",
 			Wortfeldartikel: "Wortfeldartikel",
 		},
 		import: {
-			Kollokationen: "Kollokation",
+			Wortverbindungen: "Wortverbindung",
 			Wortbildungen: "Wortbildung",
 			Wortfeld: "Wortfeld",
 			Wortfeldartikel: "Wortfeldartikel",
@@ -535,7 +535,7 @@ let xml = {
 	//       data.key = String [Schlüssel, der den Datentyp angibt]
 	//       data.ds = Object [der je spezifisch strukturierte Datensatz])
 	async empfangen ({xmlDatensatz}) {
-		if (/^bl|lt$/.test(xmlDatensatz.key)) {
+		if (/^(bl|lt)$/.test(xmlDatensatz.key)) {
 			xml.empfangenArr({
 				key: xmlDatensatz.key,
 				ds: xmlDatensatz.ds,
@@ -575,15 +575,9 @@ let xml = {
 				xml.data.xl.wi[xml.bgAktGn] = [xmlDatensatz.ds];
 				xml.wiMake();
 			} else {
-				let slot = xml.data.xl.wi[xml.bgAktGn].findIndex(i => i.tx === xmlDatensatz.ds.tx),
+				let slot = xml.data.xl.wi[xml.bgAktGn].findIndex(i => i.vt === xmlDatensatz.ds.vt && i.tx === xmlDatensatz.ds.tx),
 					koepfe = document.querySelectorAll("#wi > .kopf");
-				if (slot > -1 &&
-						xml.data.xl.wi[xml.bgAktGn][slot].vt !== xmlDatensatz.ds.vt) { // Verweistyp geändert
-					xml.data.xl.wi[xml.bgAktGn].splice(slot, 1);
-					xml.data.xl.wi[xml.bgAktGn].push(xmlDatensatz.ds);
-					xml.data.xl.wi[xml.bgAktGn].sort(helfer.sortWi);
-					xml.wiMake();
-				} else if (slot > -1) { // Datensatz ersetzen
+				if (slot > -1) { // Datensatz ersetzen
 					xml.data.xl.wi[xml.bgAktGn][slot] = xmlDatensatz.ds;
 					// ggf. Preview schließen
 					let pre = koepfe[slot].nextSibling;
@@ -606,12 +600,12 @@ let xml = {
 						id: "wi",
 						ele: [3, 4],
 					});
-				} else { // Datensatz einhängen
+				} else { // neuen Datensatz einhängen
 					xml.data.xl.wi[xml.bgAktGn].push(xmlDatensatz.ds);
 					// Wortinformationen sortieren
 					xml.data.xl.wi[xml.bgAktGn].sort(helfer.sortWi);
 					// Kopf ersetzen
-					const slot = xml.data.xl.wi[xml.bgAktGn].findIndex(i => i.tx === xmlDatensatz.ds.tx);
+					const slot = xml.data.xl.wi[xml.bgAktGn].findIndex(i => i.vt === xmlDatensatz.ds.vt && i.tx === xmlDatensatz.ds.tx);
 					let kopf = xml.elementKopf({
 						key: "wi",
 						slot,
