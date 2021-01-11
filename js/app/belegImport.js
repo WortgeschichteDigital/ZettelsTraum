@@ -159,38 +159,30 @@ let belegImport = {
 	//     (URL des Dokument, das aus dem DTA geladen werden soll)
 	//   fak = String
 	//     (Faksimile-Seite des Titels)
-	DTARequest (url, fak) {
-		let ajax = new XMLHttpRequest();
-		ajax.open("GET", url, true);
-		ajax.timeout = parseInt(optionen.data.einstellungen.timeout, 10) * 1000;
-		ajax.addEventListener("load", function () {
-			if (ajax.status >= 200 && ajax.status < 300) {
-				if (!ajax.responseXML) {
-					if (ajax.responseText &&
-							/<title>DTA Qualitätssicherung<\/title>/.test(ajax.responseText)) {
-						belegImport.DTAFehler("DTAQ: Titel noch nicht freigeschaltet");
-					} else {
-						belegImport.DTAFehler("XMLHttpRequest: keine XML-Daten");
-					}
-					return;
-				}
-				let text = ajax.responseText.replace(/ xmlns=".+?"/, ""); // da habe ich sonst Probleme mit evaluate() in belegImport.DTAMeta()
-				let parser = new DOMParser(),
-					xmlDoc = parser.parseFromString(text, "text/xml");
-				belegImport.DTAMeta(xmlDoc);
-				belegImport.DTAText(xmlDoc, fak);
-				belegImport.DTAFill();
-			} else {
-				belegImport.DTAFehler("XMLHttpRequest: falscher Status-Code");
-			}
-		});
-		ajax.addEventListener("timeout", function () {
-			belegImport.DTAFehler("XMLHttpRequest: Timeout");
-		});
-		ajax.addEventListener("error", function () {
-			belegImport.DTAFehler("XMLHttpRequest: unbestimmter Fehler");
-		});
-		ajax.send(null);
+	async DTARequest (url, fak) {
+		// In 2020-01 kommt es bei DTA-Anfragen via fetch() oder XMLHttpRequest()
+		// zu einem automatischen Upgrade von http auf https. DTA-Content ist aber
+		// nur über http zu erreichen, darum müssen wir eine Schleife drehen
+		// und das alles mit Node.js regeln.
+		const {ipcRenderer} = require("electron");
+		let response = await ipcRenderer.invoke("http-request", url);
+		if (!response) {
+			belegImport.DTAFehler("HttpRequest: keine Antwort vom Server");
+			return;
+		} else if (/<title>DTA Qualitätssicherung<\/title>/.test(response)) {
+			belegImport.DTAFehler("DTAQ: Titel noch nicht freigeschaltet");
+			return;
+		}
+		response = response.replace(/ xmlns=".+?"/, ""); // da habe ich sonst Probleme mit evaluate() in belegImport.DTAMeta()
+		const parser = new DOMParser(),
+			xmlDoc = parser.parseFromString(response, "text/xml");
+		if (xmlDoc.querySelector("parsererror")) {
+			belegImport.DTAFehler("HttpRequest: keine XML-Daten");
+			return;
+		}
+		belegImport.DTAMeta(xmlDoc);
+		belegImport.DTAText(xmlDoc, fak);
+		belegImport.DTAFill();
 	},
 	// DTA-Import: Fehler beim Laden der Daten des DTA
 	//   fehlertyp = String

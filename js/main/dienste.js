@@ -100,4 +100,23 @@ module.exports = {
 				break;
 		}
 	},
+	// einen expliziten HTTP-Request senden
+	// (die Funktion vermeidet einen automatischen Upgrade von http auf https,
+	// der in 2020-01 via XMLHttpRequest() und fetch() zu beobachten ist;
+	// DTA-Content ist nur über HTTP zu erreichen!
+	//   url = string (die URL zur XML-Datei)
+	httpRequest (url) {
+		return new Promise(resolve => {
+			const http = require("http");
+			http.get(url, result => {
+					let responseBody = "";
+					result.on("data", chunk => {
+							responseBody += chunk;
+					});
+					result.on("end", () => resolve(responseBody));
+			}).on("error", err => {
+					resolve(err);
+			});
+		});
+	},
 };
