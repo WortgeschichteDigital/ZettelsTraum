@@ -530,6 +530,7 @@ p.no-indent + .filter-baum, /* betrifft Verschiedenes > Filterlogik */
 }
 
 .liste-kopf {
+	position: relative; /* damit ein überlappendes Buchungs-Icon unter dem Kopf verschwindet */
 	border-top: 1px solid var(--linie);
 	border-left: 3px solid var(--farbeB);
 	padding: 2px 10px;
@@ -653,6 +654,10 @@ p.no-indent + .filter-baum, /* betrifft Verschiedenes > Filterlogik */
 
 .liste-details .icon-link[data-ds$="|bs"] { /* Beleg hat keinen padding-top */
 	top: 0;
+}
+
+.liste-details .icon-tools-buchen {
+	top: 34px;
 }
 
 .liste-details .icon-link:hover {

@@ -307,6 +307,16 @@ textarea#beleg-bs {
 	mask-image: url(../../img/pfeil-doppelt-links.svg);
 }
 
+.icon-tools-buchen {
+	-webkit-mask-image: url(../../img/buch.svg);
+	mask-image: url(../../img/buch.svg);
+}
+
+.icon-tools-gebucht {
+	-webkit-mask-image: url(../../img/buch-check-gruen.svg);
+	mask-image: url(../../img/buch-check-gruen.svg);
+}
+
 .icon-tools-einfuegen {
 	-webkit-mask-image: url(../../img/einfuegen.svg);
 	mask-image: url(../../img/einfuegen.svg);
