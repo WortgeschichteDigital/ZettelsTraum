@@ -617,6 +617,17 @@ let liste = {
 		a.classList.add("icon-link", "icon-tools-kopieren");
 		a.dataset.ds = `${id}|bs`;
 		liste.kopieren(a);
+		// ggf. Buchungslink erzeugen
+		if (optionen.data.einstellungen["belegliste-buchungsicon"]) {
+			let a = document.createElement("a");
+			div.appendChild(a);
+			a.classList.add("icon-link", "icon-tools-buchen");
+			if (data.ka[id].bc) {
+				a.classList.add("icon-tools-gebucht");
+			}
+			a.dataset.id = id;
+			liste.buchen(a);
+		}
 		// Suche ohne Treffer im Beleg
 		if (filter.volltextSuche.suche &&
 				!filter.volltextSuche.ka[id].includes("bs")) {
@@ -1810,6 +1821,22 @@ let liste = {
 				break;
 			}
 		}
+	},
+	// Beleg als gebucht markieren
+	//   icon = Element
+	//     (Buchungs-Icon neben dem Belegtext)
+	buchen (icon) {
+		icon.addEventListener("click", function(evt) {
+			evt.preventDefault();
+			const id = this.dataset.id;
+			data.ka[id].bc = !data.ka[id].bc;
+			if (data.ka[id].bc) {
+				this.classList.add("icon-tools-gebucht");
+			} else {
+				this.classList.remove("icon-tools-gebucht");
+			}
+			kartei.karteiGeaendert(true);
+		});
 	},
 	// Datenfeld durch Klick auf ein Icon kopieren
 	//   icon = Element

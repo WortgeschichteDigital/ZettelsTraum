@@ -200,6 +200,8 @@ let optionen = {
 			// BELEGLISTE
 			// die Icons, die die Anzeige der Datenfelder in der Belegliste steuern, sollen immer an sein
 			"anzeige-icons-immer-an": false,
+			// neben dem Belegtext soll ein Buchungs-Icon angezeigt werden
+			"belegliste-buchungsicon": false,
 			// Belegreferenz (ID des Belegs) in den Kopf der Belegliste eintragen
 			"belegliste-referenz": false,
 			// Markierung (Sterne) in den Kopf der Belegliste eintragen
