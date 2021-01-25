@@ -1986,7 +1986,7 @@ let redLit = {
 		ti.dispatchEvent(new KeyboardEvent("input"));
 		// URL-Feld ausfüllen
 		let ul = document.getElementById("red-lit-eingabe-ul");
-		ul.value = `http://www.deutschestextarchiv.de/${titelId}`;
+		ul.value = `https://www.deutschestextarchiv.de/${titelId}`;
 		ul.dispatchEvent(new KeyboardEvent("input"));
 		// Titelfeld fokussieren
 		ti.focus();
@@ -2018,7 +2018,7 @@ let redLit = {
 				return;
 			}
 			// TEI-Header herunterladen
-			let feedback = await helfer.fetchURL(`http://www.deutschestextarchiv.de/api/tei_header/${titelId}`);
+			let feedback = await helfer.fetchURL(`https://www.deutschestextarchiv.de/api/tei_header/${titelId}`);
 			if (feedback.fehler) {
 				await new Promise(meldung => {
 					dialog.oeffnen({

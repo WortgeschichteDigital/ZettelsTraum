@@ -112,8 +112,8 @@ let belegImport = {
 		// Startfunktion
 		function startImport () {
 			belegImport.DTAResetData();
-			belegImport.DTAData.url = `http://www.deutschestextarchiv.de/${titel_id}/${fak}`;
-			const url_xml = `http://www.deutschestextarchiv.de/book/download_xml/${titel_id}`;
+			belegImport.DTAData.url = `https://www.deutschestextarchiv.de/${titel_id}/${fak}`;
+			const url_xml = `https://www.deutschestextarchiv.de/book/download_xml/${titel_id}`;
 			document.activeElement.blur();
 			belegImport.DTARequest(url_xml, fak);
 		}
@@ -160,26 +160,34 @@ let belegImport = {
 	//   fak = String
 	//     (Faksimile-Seite des Titels)
 	async DTARequest (url, fak) {
-		// In 2020-01 kommt es bei DTA-Anfragen via fetch() oder XMLHttpRequest()
-		// zu einem automatischen Upgrade von http auf https. DTA-Content ist aber
-		// nur über http zu erreichen, darum müssen wir eine Schleife drehen
-		// und das alles mit Node.js regeln.
-		const {ipcRenderer} = require("electron");
-		let response = await ipcRenderer.invoke("http-request", url);
-		if (!response) {
-			belegImport.DTAFehler("HttpRequest: keine Antwort vom Server");
+		const response = await helfer.fetchURL(url);
+		// Fehler
+		if (response.fehler) {
+			belegImport.DTAFehler(`HttpRequest: ${response.fehler}`);
 			return;
-		} else if (/<title>DTA Qualitätssicherung<\/title>/.test(response)) {
+		}
+		// keine Textdaten
+		if (!response.text) {
+			belegImport.DTAFehler("HttpRequest: keine Daten empfangen");
+			return;
+		}
+		// DTAQ
+		if (/<title>DTA Qualitätssicherung<\/title>/.test(response.text)) {
 			belegImport.DTAFehler("DTAQ: Titel noch nicht freigeschaltet");
 			return;
 		}
-		response = response.replace(/ xmlns=".+?"/, ""); // da habe ich sonst Probleme mit evaluate() in belegImport.DTAMeta()
-		const parser = new DOMParser(),
-			xmlDoc = parser.parseFromString(response, "text/xml");
+		// Daten parsen
+		// (Namespace-Attribut entfernen; da habe ich sonst Probleme mit
+		// evaluate() in belegImport.DTAMeta())
+		const text = response.text.replace(/ xmlns=".+?"/, ""),
+			parser = new DOMParser(),
+			xmlDoc = parser.parseFromString(text, "text/xml");
+		// XML nicht wohlgeformt
 		if (xmlDoc.querySelector("parsererror")) {
-			belegImport.DTAFehler("HttpRequest: keine XML-Daten");
+			belegImport.DTAFehler("HttpRequest: XML-Daten nicht wohlgeformt");
 			return;
 		}
+		// XML-Daten okay => weiterverarbeiten
 		belegImport.DTAMeta(xmlDoc);
 		belegImport.DTAText(xmlDoc, fak);
 		belegImport.DTAFill();
@@ -962,7 +970,7 @@ let belegImport = {
 						i.meta_.basename &&
 						i.matches[0] &&
 						i.matches[0].page) {
-					titeldaten.url = `http://www.deutschestextarchiv.de/${i.meta_.basename}/${i.matches[0].page}`;
+					titeldaten.url = `https://www.deutschestextarchiv.de/${i.meta_.basename}/${i.matches[0].page}`;
 				}
 				belegImport.DWDSKorrekturen({
 					typ: "qu",

@@ -1741,6 +1741,3 @@ ipcMain.handle("quick-roles", (evt, befehl) => dienste.quickRoles(evt.sender, be
 
 // Dateidialoge öffnen
 ipcMain.handle("datei-dialog", async (evt, args) => await dienste.dateiDialog(args));
-
-// HTTP-Request
-ipcMain.handle("http-request", async (evt, url) => await dienste.httpRequest(url));
