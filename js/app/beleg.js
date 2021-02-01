@@ -917,13 +917,15 @@ let beleg = {
 		text = text.replace(/\[¬\]|\[:.+?:\]/g, "");
 		// eckige Klammern
 		text = text.replace(/\[{1,2}.+?\]{1,2}/g, m => {
+			const typ = /^\[{2}/.test(m) ? "loeschung" : "streichung";
 			let r = "[…]";
 			if (/^\[Anmerkung:\s/.test(m) ||
-					optionen.data.einstellungen["textkopie-klammern-inhalt"]) {
+					typ === "loeschung" && optionen.data.einstellungen["textkopie-klammern-loeschung"] ||
+					typ === "streichung" && optionen.data.einstellungen["textkopie-klammern-streichung"]) {
 				r = m.replace(/^\[{2}/, "[").replace(/\]{2}$/, "]");
 			}
 			if (html && optionen.data.einstellungen["textkopie-klammern-farbe"]) {
-				let farbe = /^\[{2}/.test(m) ? "#f00" : "#00f";
+				let farbe = typ === "loeschung" ? "#f00" : "#00f";
 				r = `<span style="color: ${farbe}">${r}</span>`;
 			}
 			return r;

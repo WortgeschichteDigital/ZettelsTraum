@@ -113,8 +113,10 @@ let optionen = {
 			"textkopie-h-jahr": true,
 			// beim Kopieren die ID als Überschrift ergänzen
 			"textkopie-h-id": false,
-			// beim Kopieren den Inhalt von Streichungen und Löschungen erhalten
-			"textkopie-klammern-inhalt": false,
+			// beim Kopieren den Inhalt von Streichungen erhalten
+			"textkopie-klammern-streichung": false,
+			// beim Kopieren den Inhalt von Löschungen erhalten
+			"textkopie-klammern-loeschung": false,
 			// beim Kopieren Streichung, Löschung und Autorenzusatz einfärben
 			"textkopie-klammern-farbe": false,
 			// Vorauswahl für Kopierfenster ohne Nachfrage ausführen
