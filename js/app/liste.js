@@ -382,7 +382,6 @@ let liste = {
 				h: "Quelle",
 				text: data.ka[id].qu,
 				id,
-				icon: true,
 			});
 		}
 		// Korpus
@@ -1275,8 +1274,7 @@ let liste = {
 	//        id:   String  (ID der Karteikarte)
 	//        text: String  (vollständiger Text des Datenfelds)
 	//              Array   (bei Bedeutungen)
-	//        icon: Boolean (Kopierlink soll erzeugt werden)
-	detailErstellen ({cont, ds, h, text, id, icon = false}) {
+	detailErstellen ({cont, ds, h, text, id}) {
 		// Datenfeld kann leer sein
 		if (!text || ds === "bd" && !text.length) {
 			return;
@@ -1293,14 +1291,6 @@ let liste = {
 		let div = document.createElement("div");
 		cont.appendChild(div);
 		div.classList.add(`liste-${ds}`, "liste-label");
-		// ggf. Kopierlink erzeugen
-		if (icon) {
-			let a = document.createElement("a");
-			div.appendChild(a);
-			a.classList.add("icon-link", "icon-tools-kopieren");
-			a.dataset.ds = `${id}|${ds}`;
-			liste.kopieren(a);
-		}
 		// Label erzeugen
 		let span = document.createElement("span");
 		div.appendChild(span);
