@@ -476,4 +476,9 @@
 		<name>vulgärlateinisch</name>
 		<abbr>vulglat.</abbr>
 	</item>
+	<item>
+		<id>95</id>
+		<name>spätlateinisch</name>
+		<abbr>spaetlat.</abbr>
+	</item>
 </sprachen>
