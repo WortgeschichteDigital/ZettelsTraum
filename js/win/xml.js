@@ -2732,7 +2732,7 @@ let xml = {
 				cont: abschnitt,
 			});
 			// Datensatz löschen
-			const abb = xml.data.xl[key][slot].ct?.[slotBlock].it === "Illustration"; // jshint ignore:line
+			const abb = xml.data.xl[key][slot].ct?.[slotBlock]?.it === "Illustration"; // jshint ignore:line
 			if (slotBlock !== null) {
 				if (xml.data.xl[key][slot].ct[slotBlock].it === "Überschrift") {
 					// ID des Abschnitts löschen
@@ -3957,17 +3957,42 @@ let xml = {
 		if (!d.le.length) {
 			fehlstellen.push("• min. ein Lemma angeben");
 		}
+		const bloecke = [
+			{
+				obj: d.ab,
+				name: "im „Kurz gefasst“",
+			},
+			{
+				obj: d.tx,
+				name: "in der Wortgeschichte",
+			},
+		];
+		for (let i = 0; i < 2; i++) {
+			for (const item of bloecke[i].obj) {
+				if (!item.ct.length) {
+					fehlstellen.push("• leere Abschnitte " + bloecke[i].name + " entfernen");
+					break;
+				}
+			}
+		}
+		for (let i = 1, len = d.tx.length; i < len; i++) {
+			if (d.tx[i].ty === "Mehr erfahren" &&
+					d.tx[i].le <= d.tx[i - 1].le) {
+				fehlstellen.push("• „Mehr erfahren“-Abschnitte um eine Ebene einrücken");
+				break;
+			}
+		}
 		if (!d.bl.length) {
 			fehlstellen.push("• min. einen Belege importieren");
 		}
 		if (fehlstellen.length) {
-			let numerus = "eine Pflichtangabe fehlt";
+			let numerus = "einen Fehler gibt";
 			if (fehlstellen.length > 1) {
-				numerus = "einige Pflichtangaben fehlen";
+				numerus = "einige Fehler gibt";
 			}
 			dialog.oeffnen({
 				typ: "alert",
-				text: `Die XML-Daten können nicht exportiert werden, da noch ${numerus}. Sie müssen zuvor:\n${fehlstellen.join("<br>")}`,
+				text: `Die XML-Daten können nicht exportiert werden, da es noch ${numerus}. Sie müssen zuvor:\n${fehlstellen.join("<br>")}`,
 			});
 			return false;
 		}
