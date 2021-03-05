@@ -3975,6 +3975,13 @@ let xml = {
 				}
 			}
 		}
+		for (let i = 1, len = d.tx.length; i < len; i++) {
+			if (d.tx[i].ty === "Mehr erfahren" &&
+					d.tx[i].le <= d.tx[i - 1].le) {
+				fehlstellen.push("• „Mehr erfahren“-Abschnitte um eine Ebene einrücken");
+				break;
+			}
+		}
 		if (!d.bl.length) {
 			fehlstellen.push("• min. einen Belege importieren");
 		}
