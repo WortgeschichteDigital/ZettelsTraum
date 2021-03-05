@@ -2732,7 +2732,7 @@ let xml = {
 				cont: abschnitt,
 			});
 			// Datensatz löschen
-			const abb = xml.data.xl[key][slot].ct?.[slotBlock].it === "Illustration"; // jshint ignore:line
+			const abb = xml.data.xl[key][slot].ct?.[slotBlock]?.it === "Illustration"; // jshint ignore:line
 			if (slotBlock !== null) {
 				if (xml.data.xl[key][slot].ct[slotBlock].it === "Überschrift") {
 					// ID des Abschnitts löschen
