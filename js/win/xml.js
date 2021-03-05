@@ -3957,17 +3957,35 @@ let xml = {
 		if (!d.le.length) {
 			fehlstellen.push("• min. ein Lemma angeben");
 		}
+		const bloecke = [
+			{
+				obj: d.ab,
+				name: "im „Kurz gefasst“",
+			},
+			{
+				obj: d.tx,
+				name: "in der Wortgeschichte",
+			},
+		];
+		for (let i = 0; i < 2; i++) {
+			for (const item of bloecke[i].obj) {
+				if (!item.ct.length) {
+					fehlstellen.push("• leere Abschnitte " + bloecke[i].name + " entfernen");
+					break;
+				}
+			}
+		}
 		if (!d.bl.length) {
 			fehlstellen.push("• min. einen Belege importieren");
 		}
 		if (fehlstellen.length) {
-			let numerus = "eine Pflichtangabe fehlt";
+			let numerus = "einen Fehler gibt";
 			if (fehlstellen.length > 1) {
-				numerus = "einige Pflichtangaben fehlen";
+				numerus = "einige Fehler gibt";
 			}
 			dialog.oeffnen({
 				typ: "alert",
-				text: `Die XML-Daten können nicht exportiert werden, da noch ${numerus}. Sie müssen zuvor:\n${fehlstellen.join("<br>")}`,
+				text: `Die XML-Daten können nicht exportiert werden, da es noch ${numerus}. Sie müssen zuvor:\n${fehlstellen.join("<br>")}`,
 			});
 			return false;
 		}
