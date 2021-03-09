@@ -3281,7 +3281,7 @@ let xml = {
 			}
 			let verweis = `<Verweis${typ}>`;
 			verweis += `\n  <Verweistext>${p1}</Verweistext>`;
-			verweis += `\n  <Verweisziel>${p2.replace(/ /g, "%20")}</Verweisziel>`;
+			verweis += `\n  <Verweisziel>${p2}</Verweisziel>`;
 			verweis += "\n</Verweis>";
 			return verweis;
 		});
