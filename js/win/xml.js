@@ -4013,7 +4013,19 @@ let xml = {
 			[/ü/g, "ue"],
 			[/ß/g, "ss"],
 		]);
-		let wort = xml.data.wort;
+		let wort = "";
+		for (const le of xml.data.xl.le) {
+			if (le.ty !== "Hauptlemma") {
+				continue;
+			}
+			if (wort) {
+				wort += "-";
+			}
+			wort += le.le[0];
+		}
+		if (xml.data.xl.md.ty === "Wortfeldartikel") {
+			wort = "Wortfeldartikel_" + wort;
+		}
 		for (let [k, v] of ascii) {
 			wort = wort.replace(k, v);
 		}
