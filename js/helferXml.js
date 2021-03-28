@@ -342,6 +342,7 @@ let helferXml = {
 		"trans\\.": "transitiv",
 		"u\\.\\sa\\.": "unter anderem",
 		"u\\.\\sä\\.": "und ähnlich",
+		"u\\.\\sÄ\\.": "und Ähnliches",
 		"u\\.": "und",
 		"usw\\.": "und so weiter",
 		"Vb\\.": "Verb",
