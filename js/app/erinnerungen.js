@@ -18,10 +18,6 @@ let erinnerungen = {
 			okay: false,
 			text: `Sie haben den Artikel erstellt, die Datei mit dem Artikel aber noch nicht mit dieser Kartei verknüpft (<a href="#" class="link-erinnerung" data-funktion="anhaenge">⇨ <i>Kartei &gt; Anhänge</i></a>).`,
 		},
-		xmlDatei: {
-			okay: false,
-			text: `Sie haben eine XML-Datei erstellt, aber noch nicht mit dieser Kartei verknüpft (<a href="#" class="link-erinnerung" data-funktion="anhaenge">⇨ <i>Kartei &gt; Anhänge</i></a>).`,
-		},
 	},
 	// speichert, ob alle Tests bestanden wurden
 	allesOkay: false,
@@ -84,31 +80,6 @@ let erinnerungen = {
 				break;
 			} else {
 				erinnerungen.data.artikelDatei.okay = true;
-			}
-		}
-		// XML-Datei erstellt, aber nicht verknüpft?
-		for (let i of data.rd.er) {
-			if (i.er === "XML-Auszeichnung") {
-				if (data.rd.bh) {
-					// Wort wird in einer anderen Datei mit behandelt;
-					// dort ist die XML-Datei
-					erinnerungen.data.xmlDatei.okay = true;
-					break;
-				}
-				let okay = false;
-				for (let f of data.an) {
-					if (/\.xml$/.test(f)) {
-						okay = true;
-						break;
-					}
-				}
-				erinnerungen.data.xmlDatei.okay = okay;
-				if (!okay) {
-					erinnerungen.allesOkay = false;
-				}
-				break;
-			} else {
-				erinnerungen.data.xmlDatei.okay = true;
 			}
 		}
 		// Icon umschalten
