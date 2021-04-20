@@ -840,7 +840,7 @@ let helfer = {
 			datumSort = `${g.jahr}-00-00`;
 		} else if (datumForm5) {
 			let g = datumForm5.groups;
-			datumSort = `${g.jh}-00-00`;
+			datumSort = `${g.jh - 1}00-00-00`;
 		}
 		return {
 			anzeige: datum,

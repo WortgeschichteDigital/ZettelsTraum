@@ -170,7 +170,7 @@ let punkte = {
 		icon: "kopieren.png",
 		click: `
 			helfer.toClipboard({
-				text: popup.textauswahl,
+				text: popup.textauswahl.replace(/␣/g, " ").replace(/[.]{3}/g, "…"),
 			});
 		`,
 	},
@@ -179,7 +179,7 @@ let punkte = {
 		icon: "kopieren.png",
 		click: `
 			helfer.toClipboard({
-				text: popup.element.innerText.replace(/␣/g, " ").replace(/[.]{3}/g, "…")
+				text: popup.element.innerText.replace(/␣/g, " ").replace(/[.]{3}/g, "…"),
 			});
 		`,
 	},

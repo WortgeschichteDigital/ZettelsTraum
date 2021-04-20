@@ -197,7 +197,7 @@ let liste = {
 				let span = document.createElement("span");
 				span.classList.add("liste-jahr");
 				span.innerHTML = liste.suchtreffer(zeitschnitt_akt.datum, "da", id);
-				if (zeitschnitt_akt.datum !== data.ka[id].da) {
+				if (zeitschnitt_akt.datum.replace(/ /g, " ") !== data.ka[id].da) {
 					span.title = data.ka[id].da;
 					span.classList.add("liste-jahr-hinweis");
 					liste.detailAnzeigen(span);
