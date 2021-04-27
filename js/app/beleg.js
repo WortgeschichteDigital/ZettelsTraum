@@ -1140,7 +1140,7 @@ let beleg = {
 		// Text extrahieren
 		let text = "";
 		container.childNodes.forEach(function(i) {
-			ana(i);
+			ana(i, false);
 		});
 		// erhaltene Inline-Auszeichnungen korrigieren
 		Object.keys(speziell).forEach(tag => {
@@ -1167,9 +1167,13 @@ let beleg = {
 		// rekursive Analyse der Tags
 		//   ele = Element
 		//     (Knoten im XML-Baum)
-		function ana (ele) {
+		function ana (ele, preformatted) {
 			if (ele.nodeType === 3) { // Text
-				text += ele.nodeValue.replace(/\n/g, " ");
+				if (preformatted) {
+					text += ele.nodeValue;
+				} else {
+					text += ele.nodeValue.replace(/\n/g, " ");
+				}
 			} else if (ele.nodeType === 1) { // Element
 				// Inline-Elemente ggf. gesondert behandeln
 				if (inline_keep.includes(ele.nodeName) || speziell[ele.nodeName]) {
@@ -1182,14 +1186,18 @@ let beleg = {
 					ele.insertBefore(document.createTextNode("– "), ele.firstChild);
 				}
 				// Block-Level-Elemente (und andere), die eine Sonderbehandlung benötigen
+				let preformatted = false;
 				if (/^(BR|DT|FIGCAPTION|HR|LI|TR)$/.test(ele.nodeName)) { // Zeilenumbruch
 					text += "\n";
 				} else if (/^(ADDRESS|ARTICLE|ASIDE|BLOCKQUOTE|DETAILS|DIALOG|DIV|DL|FIELDSET|FIGURE|FOOTER|FORM|H([1-6]{1})|HEADER|MAIN|NAV|OL|P|PRE|SECTION|TABLE|UL)$/.test(ele.nodeName)) { // Absätze
 					text = helfer.textTrim(text, false);
 					text += "\n\n";
+					if (/^PRE$/.test(ele.nodeName)) {
+						preformatted = true;
+					}
 				}
 				ele.childNodes.forEach(function(i) {
-					ana(i);
+					ana(i, preformatted);
 				});
 			}
 		}
