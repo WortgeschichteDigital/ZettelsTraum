@@ -378,7 +378,7 @@ let helferXml = {
 		"erg\\.": "ergänzte",
 		"erw\\.": "erweiterte",
 		"etc\\.": "et cetera",
-		"(?<=[0-9])ff?\\.": "folgende",
+		"(?<=[0-9]\\s?)ff?\\.": "folgende",
 		"H\\.(?=\\s[0-9])": "Heft",
 		"Hrsg\\.(?=\\s[uv])": "Herausgegeben",
 		"(?<=\\()Hrsg\\.(?=\\))": "Herausgeber",
