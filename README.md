@@ -21,7 +21,7 @@
 
 <a href="img/win/start-karteikarte.png"><img align="right" src="img/readme/screenshot-karteikarte.png" width="300" height="233" alt="Karteikarte"></a>
 
-*Zettel’s Traum* ist ein Karteikastenprogramm für historisch arbeitende LexikographInnen, das für das Wörterbuchprojekt *[Wortgeschichte digital](https://adw-goe.de/forschung/weitere-forschungsprojekte/wortgeschichte-digital-teilprojekt-im-zdl/)* (WGd) geschrieben wurde. Die App entstand aus der Idee heraus, Belegsammlungen auf Karteikarten, wie sie bereits seit den ersten Anfängen des *Deutschen Wörterbuchs von Jacob Grimm und Wilhelm Grimm* im Jahr 1838 in Gebrauch waren, in das digitale Zeitalter zu holen und sie durch eine Vielzahl an Such-, Filter- und Verwaltungsfunktionen zugänglich zu machen. *Zettel’s Traum* soll das Schreiben von Wörterbuchartikeln, bei denen nicht selten mit großen Massen an Textbelegen hantiert wird, komfortabler, das heißt schneller, übersichtlicher, schlicht und ergreifend leichter machen.
+*Zettel’s Traum* ist ein Karteikastenprogramm für historisch arbeitende Lexikographen und Lexikographinnen, das für das Wörterbuchprojekt *[Wortgeschichte digital](https://adw-goe.de/forschung/weitere-forschungsprojekte/wortgeschichte-digital-teilprojekt-im-zdl/)* (WGd) geschrieben wurde. Die App entstand aus der Idee heraus, Belegsammlungen auf Karteikarten, wie sie bereits seit den ersten Anfängen des *Deutschen Wörterbuchs von Jacob Grimm und Wilhelm Grimm* im Jahr 1838 in Gebrauch waren, in das digitale Zeitalter zu holen und sie durch eine Vielzahl an Such-, Filter- und Verwaltungsfunktionen zugänglich zu machen. *Zettel’s Traum* soll das Schreiben von Wörterbuchartikeln, bei denen nicht selten mit großen Massen an Textbelegen hantiert wird, komfortabler, das heißt schneller, übersichtlicher, schlicht und ergreifend leichter machen.
 
 <a href="img/win/start-belegliste.png"><img align="left" src="img/readme/screenshot-belegliste.png" width="300" height="233" alt="Belegliste"></a>
 
@@ -66,7 +66,7 @@ Da die App bisher nicht zertifiziert ist, wird Windows vermutlich das reibungslo
 
 ### Linux
 
-Für Linux-NutzerInnen stehen pro [Release](https://github.com/WortgeschichteDigital/ZettelsTraum/releases) ebenfalls zwei verschiedene Downloads zur Verfügung:
+Für Linux-Nutzer stehen pro [Release](https://github.com/WortgeschichteDigital/ZettelsTraum/releases) ebenfalls zwei verschiedene Downloads zur Verfügung:
 
 1. eine portable Paketierung, die keine Installation erfordert: `zettelstraum_1.0.0_linux_x64.tar.gz`;
 2. ein DEB-Paket für Debian, Ubuntu usw.: `zettelstraum_1.0.0_amd64.deb`.
@@ -93,7 +93,7 @@ Die App wird in `/opt/zettelstraum/` abgelegt. Bei der Installation wird die Dat
 
 ### macOS
 
-Für Mac-NutzerInnen wird mit jedem [Release](https://github.com/WortgeschichteDigital/ZettelsTraum/releases) eine portable **Paketierung** zum Download angeboten: `zettelstraum_1.0.0_darwin_x64.tar.gz`.
+Für Mac-Nutzer wird mit jedem [Release](https://github.com/WortgeschichteDigital/ZettelsTraum/releases) eine portable **Paketierung** zum Download angeboten: `zettelstraum_1.0.0_darwin_x64.tar.gz`.
 
 Entpacken Sie die Datei durch Doppelklick. Zum Starten wechseln Sie in den Ordner `zettelstraum-darwin-x64` und klicken auf das Icon mit dem Titel „Zettel’s Traum“.
 
