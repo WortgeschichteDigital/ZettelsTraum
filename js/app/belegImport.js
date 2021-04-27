@@ -2636,23 +2636,23 @@ let belegImport = {
 			ppn: [],
 		};
 	},
-	// überprüft, ob das Wort im importierten Text gefunden wurde;
-	// außerdem gibt es die Möglichkeit, sich die Textposition der Wörter
+	// überprüft, ob eines der Karteiwörter im importierten Text gefunden wurde;
+	// außerdem gibt es die Möglichkeit, sich die Textposition der Karteiwörter
 	// zurückgeben zu lassen (wird für das Datei-Import-Fenster gebraucht)
-	//   bs = String || undefined
+	//   bs = String | undefined
 	//     (Belegtext, der überprüft werden soll)
-	//   pos = true || undefined
+	//   pos = true | undefined
 	//     (Position der Treffer soll zurückgegeben werden)
 	checkWort (bs = beleg.data.bs, pos = false) {
 		if ( !pos && (!bs || !optionen.data.einstellungen["wort-check"]) ) {
 			return;
 		}
-		let nebenlemmata = [], // Nebenlemmata, die gefunden/nicht gefunden wurden (Slots mit Boolean)
-			hauptlemma = [], // Karteiwörter, die gefunden/nicht gefunden wurden (Slots mit Boolean)
-			hauptlemmaNicht = [], // nicht gefundenes Wort des (evtl. mehrgliedrigen) Karteiworts
+		let wortGefunden = false,
 			positionen = []; // sammelt die Trefferpositionen (wenn gewünscht)
 		for (let i of helfer.formVariRegExpRegs) {
-			if (data.fv[i.wort].ma) { // diese Variante nur markieren => hier nicht berücksichtigen
+			if (data.fv[i.wort].ma &&
+					!optionen.data.einstellungen["wort-check-nur-markieren"]) {
+				// "Nur markieren"-Varianten normalerweise nicht berücksichtigen
 				continue;
 			}
 			let reg;
@@ -2661,19 +2661,12 @@ let belegImport = {
 			} else { // trunkiert
 				reg = new RegExp(i.reg, "gi");
 			}
-			// prüfen und Ergebnis merken
 			const check = reg.test(bs);
-			if (data.fv[i.wort].nl) {
-				nebenlemmata.push(check);
-			} else {
-				hauptlemma.push(check);
-				if (!check) {
-					hauptlemmaNicht.push(i.wort);
-				}
-			}
-			// ggf. Position merken
 			if (pos && check) {
 				positionen.push(reg.lastIndex);
+			} else if (check) {
+				wortGefunden = true;
+				break;
 			}
 		}
 		// Trefferpositionen zurückgeben (wenn gewünscht)
@@ -2681,11 +2674,17 @@ let belegImport = {
 			return positionen;
 		}
 		// ggf. Warnmeldung ausgeben
-		if (!nebenlemmata.some(i => i === true) &&
-				hauptlemma.some(i => i === false)) {
+		if (!wortGefunden) {
+			let lemmata = [];
+			for (const [k, v] of Object.entries(data.fv)) {
+				if (v.ma && !optionen.data.einstellungen["wort-check-nur-markieren"]) {
+					continue;
+				}
+				lemmata.push(k);
+			}
 			let numerus = ["Das Karteiwort", ""],
-				woerter = hauptlemmaNicht.join(", ");
-			if (hauptlemmaNicht.length > 1) {
+				woerter = lemmata.join(", ");
+			if (lemmata.length > 1) {
 				numerus = ["Die Karteiwörter", "n"];
 				woerter = woerter.replace(/(.+), (.+)/, (m, p1, p2) => `${p1}</i> und <i>${p2}`);
 			}

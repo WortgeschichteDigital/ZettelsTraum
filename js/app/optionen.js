@@ -174,8 +174,10 @@ let optionen = {
 			"dta-bevorzugen": false,
 			// bei Zeitungskorpora Namen in die erste Zeile der Notizen schreiben
 			"notizen-zeitung": false,
-			// nach DTA-Import überprüft, ob das Karteiwort im Belegtext gefunden werden kann
+			// nach Text-Import überprüfen, ob das Karteiwort im Belegtext gefunden werden kann
 			"wort-check": true,
+			// bei der Überprüfung nach Text-Import Wörter mit einbeziehen, die nur markiert werden sollen
+			"wort-check-nur-markieren": false,
 			// bestehende Karteikarten in der Leseansicht öffnen
 			leseansicht: true,
 			// FILTERLEISTE

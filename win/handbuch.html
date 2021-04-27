@@ -2279,20 +2279,26 @@ Mustermann, Erika
 						<p>Für die <a href="#einstellungen-beleglisteNotizen">Anzeige der ersten Zeile des Notizenfeldes muss eine Einstellung aktiviert</a> werden.</p>
 					</div>
 
-					<p class="erklaerung-option" id="einstellungen-karteikarteUeberpruefen">nach dem Import überprüfen, ob der Belegtext das Karteiwort enthält</p>
+					<p class="erklaerung-option" id="einstellungen-karteikarteUeberpruefen">nach dem Import überprüfen, ob der Belegtext eines der Karteiwörter enthält</p>
 
 					<div class="info">
 						<p><i>Standard:</i> aktiviert</p>
 
-						<p>Haben Sie automatisch einen Beleg aus dem <abbr title="Deutsches Textarchiv">DTA</abbr>, dem <abbr title="Digitalen Wörterbuch der deutschen Sprache">DWDS</abbr> oder dem <abbr title="Deutschen Referenzkorpus">DeReKo</abbr> <a href="#karteikarte-importfunktion">importiert</a>, wird die App nach dem Import einmalig überprüfen, ob in der importieren Belegstelle das Karteiwort (bei mehrgliedrigen Wortverbindungen: alle Karteiwörter) zu finden ist (sind). Wenn nicht, wird es Sie über dieses Manko informieren.</p>
-
-						<p>Sollte sich im importierten Belegtext mindestens eines der Wörter finden, das im <a href="#menueKartei-formvarianten">Formvariatenfenster</a> als <i>Nebenlemma</i> markiert wurde, erscheint keine Warnmeldung.</p>
+						<p>Haben Sie automatisch einen Beleg aus dem <abbr title="Deutsches Textarchiv">DTA</abbr>, dem <abbr title="Digitalen Wörterbuch der deutschen Sprache">DWDS</abbr> oder dem <abbr title="Deutschen Referenzkorpus">DeReKo</abbr> <a href="#karteikarte-importfunktion">importiert</a>, wird die App nach dem Import einmalig überprüfen, ob in der importieren Belegstelle eines der Karteiwörter zu finden ist. Wenn nicht, werden Sie über dieses Manko informiert.</p>
 
 						<p>Beim <abbr title="Deutsches Textarchiv">DTA</abbr>-Import könnte es vorkommen, dass sich das Wort, das Sie interessiert, erst am Anfang der nächsten Textseite befindet. Wiederholen Sie den Import dann einfach in derselben, immer noch geöffneten Karte und <a href="#karteikarte-dtaImport">importieren Sie eine Seite mehr</a>.</p>
 
 						<p>Ansonsten gilt: Der Algorithmus, der nach dem Karteiwort sucht, ist gut, aber gewiss nicht perfekt. Vielleicht ist die Meldung falsch. Sie können sofort nach dem Import, <abbr title="das heißt">d. h.</abbr> ohne die Karte zu speichern, in die <a href="#karteikarte-leseansicht">Leseansicht der Karteikarte</a> wechseln, um hier (<abbr title="eventuell">evtl.</abbr> mit Hilfe der <a href="#karteikarte-suchleiste">Suchleiste</a>) zu überprüfen, ob das Wort nicht doch zu finden ist.</p>
 
 						<p>Der Kontrollalgorithmus bedient sich übrigens der <a href="#menueKartei-formvarianten">Formvarianten</a>, die beim Erstellen einer Kartei automatisch importiert werden. Sollte es wiederholt passieren, dass Sie auf ein Fehlen des Karteiworts aufmerksam gemacht werden, es aber eigentlich im Text zu finden ist, wurden die Formvarianten vielleicht noch nicht importiert oder Sie müssen sie manuell um dem <abbr title="Deutschen Textarchiv">DTA</abbr> unbekannte Formen ergänzen.</p>
+					</div>
+
+					<p class="erklaerung-option" id="einstellungen-karteikarteUeberpruefenNurMarkieren">mit <q>nur markieren</q> gekennzeichnete Wörter in die Überprüfung mit einbeziehen</p>
+
+					<div class="info">
+						<p><i>Standard:</i> nicht aktiviert</p>
+
+						<p>Wörter, für die die <a href="#menueKartei-formvariantenNurMarkieren">Option <i>nur markieren</i></a> aktiviert wurde, werden in die <a href="#einstellungen-karteikarteUeberpruefen">Überprüfung</a>, ob das Karteiwort vorhanden ist, nicht mit einbezogen. Durch das Aktivieren dieser Option kann man das Verhalten der App in diesem Punkt ändern.</p>
 					</div>
 
 					<p class="erklaerung-option" id="einstellungen-karteikarteLeseansicht">bestehende Karteikarte in der Leseansicht öffnen</p>
@@ -3875,7 +3881,7 @@ Mustermann, Erika
 
 							<li>die Ermittlung des Textausschnitts in der <a href="#belegliste-kopfleisteBelege">Kopfleiste der Belege</a>,</li>
 
-							<li>die <a href="#einstellungen-karteikarteUeberpruefen">Überprüfung, ob das Karteiwort im importierten Belegtext</a> zu finden ist.</li>
+							<li>die <a href="#einstellungen-karteikarteUeberpruefen">Überprüfung, ob das Karteiwort im importierten Belegtext</a> zu finden ist (es sei denn <a href="#einstellungen-karteikarteUeberpruefenNurMarkieren">die entsprechende Option</a> wurde aktiviert).</li>
 						</ol>
 
 						<p>Außerdem werden Wörter, bei denen die Option <i>nur markiert</i> abgehakt wurde, beim <a href="#belegliste-xmlZwischenablage"><abbr title="Extensible Markup Language" lang="en">XML</abbr>-Export</a> nicht etwa mit dem Tag <code class="quelltext">&lt;Stichwort&gt;</code>, sondern mit <code class="quelltext">&lt;Markierung&gt;</code> umschlossen.</p>
