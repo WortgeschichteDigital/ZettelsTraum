@@ -1,6 +1,37 @@
 "use strict";
 
 let xml = {
+	// Liste der Zeitungen, deren Autor und Titel beim Erstellen des Snippets ggf. automatisch eliminiert werden sollen
+	zeitungen: [
+		"Aachener Zeitung",
+		"Berliner Zeitung",
+		"BILD",
+		"Frankfurter Allgemeine Zeitung",
+		"der freitag",
+		"freundin",
+		"Die Gartenlaube",
+		"Grenzboten",
+		"Jungfrau Zeitung",
+		"Leipziger Volkszeitung",
+		"Merkur",
+		"Mittelbayerische",
+		"Münchner Merkur",
+		"Neue Rheinische Zeitung",
+		"Neue Zürcher Zeitung",
+		"neues deutschland",
+		"Siebenbürgisch-Deutsches Wochenblatt",
+		"(Der )?Spiegel",
+		"(Der )?Standard",
+		"stern",
+		"St\\. Galler Tageblatt",
+		"Süddeutsche Zeitung",
+		"Südkurier",
+		"Der Tagesspiegel",
+		"taz",
+		"Völkischer Beobachter",
+		"(Der )?Welt",
+		"Die ZEIT",
+	],
 	// markierten Belegschnitt aufbereiten
 	schnitt () {
 		let data = popup.referenz.data,
@@ -209,7 +240,14 @@ let xml = {
 		qu = qu.replace(/N\. ?N\./g, "N. N.");
 		let unstrukturiert = document.createElementNS(ns, "unstrukturiert");
 		fundstelle.appendChild(unstrukturiert);
-		unstrukturiert.appendChild( document.createTextNode( helferXml.maskieren( {text: helfer.typographie(qu)} ) ) );
+		let unstrukturiertTxt = helferXml.maskieren({ text: helfer.typographie(qu) });
+		if (optionen.data.einstellungen["textkopie-xml-zeitungen"]) {
+			const reg = new RegExp(` In: (${xml.zeitungen.join("|")})`, "i");
+			if (reg.test(unstrukturiertTxt)) {
+				unstrukturiertTxt = unstrukturiertTxt.replace(/.+? In: /, "");
+			}
+		}
+		unstrukturiert.appendChild(document.createTextNode(unstrukturiertTxt));
 		// Einzüge hinzufügen
 		schnitt = helferXml.indent(schnitt);
 		// Text in String umwandeln und aufbereiten

@@ -113,6 +113,8 @@ let optionen = {
 			"textkopie-h-jahr": true,
 			// beim Kopieren die ID als Überschrift ergänzen
 			"textkopie-h-id": false,
+			// Autor und Titel von Zeitungsbelegen beim Erstellen eines XML-Snippets löschen
+			"textkopie-xml-zeitungen": true,
 			// beim Kopieren den Inhalt von Streichungen erhalten
 			"textkopie-klammern-streichung": false,
 			// beim Kopieren den Inhalt von Löschungen erhalten
