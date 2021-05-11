@@ -2,11 +2,23 @@
 
 # Presets
 presets=(
+	"GitHub (kein Windows)"
+	"GitHub (nur Windows)"
 	"GitHub"
 	"Test (Linux)"
 	"Test (alle)"
 )
 preset1=(
+	"type=installer|os=linux|pkg=deb|clean=j"
+	"type=packager|os=linux|arch=gz|clean=j"
+	"type=packager|os=mac|arch=gz|clean=j"
+	"type=tarball|clean=n"
+)
+preset2=(
+	"type=installer|os=win|pkg=nsis|clean=j"
+	"type=packager|os=win|arch=zip|clean=j"
+)
+preset3=(
 	"type=installer|os=linux|pkg=deb|clean=j"
 	"type=installer|os=win|pkg=nsis|clean=j"
 	"type=packager|os=linux|arch=gz|clean=j"
@@ -14,10 +26,10 @@ preset1=(
 	"type=packager|os=win|arch=zip|clean=j"
 	"type=tarball|clean=n"
 )
-preset2=(
+preset4=(
 	"type=packager|os=linux|arch=-|clean=j"
 )
-preset3=(
+preset5=(
 	"type=packager|os=linux|arch=-|clean=j"
 	"type=packager|os=win|arch=-|clean=j"
 	"type=packager|os=mac|arch=gz|clean=j"
