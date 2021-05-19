@@ -3972,6 +3972,9 @@ let xml = {
 				if (!item.ct.length) {
 					fehlstellen.push("• leere Abschnitte " + bloecke[i].name + " entfernen");
 					break;
+				} else if (item.id &&
+						!item.ct.some(i => i.it === "Überschrift")) {
+					fehlstellen.push("• überflüssige Abschnitts-ID „" + item.id + "“ entfernen");
 				}
 			}
 		}

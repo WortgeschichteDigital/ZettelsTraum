@@ -876,7 +876,8 @@ fenster = {
 				this.send("optionen-zuletzt-verschwunden", appMenu.zuletztVerschwunden);
 			}
 			// Soll eine Kartei geöffnet oder eine neue Kartei erstellt werden?
-			const ztj = fenster.argvZtj(process.argv);
+			// Soll die Literatur-DB exportiert werden?
+			const cli = fenster.parseArgv(process.argv);
 			if (neuesWort) {
 				// 500ms warten, damit der Ladebildschirm Zeit hat zu verschwinden
 				setTimeout(() => {
@@ -884,12 +885,19 @@ fenster = {
 						this.send("kartei-erstellen");
 					}
 				}, 500);
-			} else if (ztj || kartei) {
+			} else if (cli.type === "ztj" ||
+					kartei && typeof kartei === "string") {
 				let datei = kartei;
 				if (!datei) {
-					datei = ztj;
+					datei = cli.vars.ztj;
 				}
 				this.send("kartei-oeffnen", datei);
+			} else if (cli.type === "literatur-db" ||
+					kartei && kartei.type === "literatur-db") {
+				if (kartei) {
+					cli.vars = kartei.vars;
+				}
+				this.send("redaktion-literatur-export-auto", cli.vars);
 			}
 		});
 		// Aktionen vor dem Schließen des Fensters
@@ -1240,18 +1248,30 @@ fenster = {
 			w.close();
 		}
 	},
-	// ermittelt den Pfad der übergebenen ZTJ-Datei
-	// (unter Windows steht die übergebene Datei nicht unbedingt in argv[1];
-	// davor können verschiedene Schalter sein)
+	// analysiert beim Programmstart übergebene Argument:
+	//   * sucht nach Komandozeilen-Optionen
+	//   * sucht nach ZTJ-Dateien, die direkt geöffnet werden sollen
+	//     (unter Windows steht die übergebene Datei nicht unbedingt in argv[1];
+	//     davor können verschiedene Schalter sein)
 	//   argv = Array
 	//     (Array mit den Startargumenten)
-	argvZtj (argv) {
-		for (let i of argv) {
+	parseArgv (argv) {
+		let cli = {
+			type: "", // ztj | literatur-db
+			vars: {},
+		};
+		const regLiteraturDB = /literatur-db-(quelle|ziel|format)=(.+)/;
+		for (const i of argv) {
 			if (/\.ztj$/.test(i)) {
-				return i;
+				cli.type = "ztj";
+				cli.vars.ztj = i;
+			} else if (regLiteraturDB.test(i)) {
+				cli.type = "literatur-db";
+				const m = i.match(regLiteraturDB);
+				cli.vars[ m[1] ] = m[2];
 			}
 		}
-		return "";
+		return cli;
 	},
 };
 
@@ -1318,31 +1338,38 @@ app.on("activate", () => {
 
 // zweite Instanz wird gestartet
 app.on("second-instance", (evt, argv) => {
-	// Kartei öffnen?
-	const ztj = fenster.argvZtj(argv);
-	if (!ztj) {
+	// Kartei öffnen? Literatur-DB exportieren?
+	const cli = fenster.parseArgv(argv);
+	if (!cli.type) {
 		return;
 	}
-	// Kartei schon offen => Fenster fokussieren
-	let leereFenster = [];
-	for (let id in win) {
-		if (!win.hasOwnProperty(id)) {
-			continue;
+	// Kartei öffnen
+	if (cli.type === "ztj") {
+		// Kartei schon offen => Fenster fokussieren
+		let leereFenster = [];
+		for (let id in win) {
+			if (!win.hasOwnProperty(id)) {
+				continue;
+			}
+			if (win[id].kartei === cli.vars.ztj) {
+				fenster.fokus(BrowserWindow.fromId(parseInt(id, 10)));
+				return;
+			} else if (win[id].typ === "index" && !win[id].kartei) {
+				leereFenster.push(parseInt(id, 10));
+			}
 		}
-		if (win[id].kartei === ztj) {
-			fenster.fokus(BrowserWindow.fromId(parseInt(id, 10)));
-			return;
-		} else if (win[id].typ === "index" && !win[id].kartei) {
-			leereFenster.push(parseInt(id, 10));
+		// Kartei noch nicht offen => Kartei öffnen
+		if (leereFenster.length) {
+			let w = BrowserWindow.fromId(leereFenster[0]);
+			w.webContents.send("kartei-oeffnen", cli.vars.ztj);
+			fenster.fokus(w);
+		} else {
+			fenster.erstellen(cli.vars.ztj);
 		}
 	}
-	// Kartei noch nicht offen => Kartei öffnen
-	if (leereFenster.length) {
-		let w = BrowserWindow.fromId(leereFenster[0]);
-		w.webContents.send("kartei-oeffnen", ztj);
-		fenster.fokus(w);
-	} else {
-		fenster.erstellen(ztj);
+	// Literatur-DB exportieren
+	else if (cli.type === "literatur-db") {
+		fenster.erstellen(cli);
 	}
 });
 

@@ -421,20 +421,27 @@ let redLit = {
 		fenster.querySelector("input:checked").focus();
 	},
 	// Datenbank: Export starten
-	dbExportieren () {
+	//   autoExportFormat = String
+	//     (xml | txt)
+	//   autoExportPath = String
+	//     (Pfad zur Datei);
+	dbExportieren (autoExportFormat, autoExportPath) {
 		// Format ermitteln
 		let format = {
 			name: "XML",
 			ext: "xml",
 			content: "Literaturliste",
 		};
-		if (document.getElementById("red-lit-export-format-plain").checked) {
+		if (autoExportFormat === "txt" ||
+				!autoExportFormat && document.getElementById("red-lit-export-format-plain").checked) {
 			format.name = "Text";
 			format.ext = "txt";
 		}
 		// Fenster schließen
-		overlay.schliessen(document.getElementById("red-lit-export"));
-		document.getElementById("red-lit-pfad-exportieren").focus();
+		if (!autoExportFormat) {
+			overlay.schliessen(document.getElementById("red-lit-export"));
+			document.getElementById("red-lit-pfad-exportieren").focus();
+		}
 		// Titelaufnahmen zusammentragen und sortieren
 		let aufnahmen = [];
 		for (let id of Object.keys(redLit.db.data)) {
@@ -466,7 +473,84 @@ let redLit = {
 			content += "\n";
 		}
 		// Datei schreiben
-		karteisuche.trefferlisteExportierenDialog(content, format);
+		if (autoExportPath) {
+			const fsP = require("fs").promises;
+			fsP.writeFile(autoExportPath, content)
+				.then(() => {
+					dialog.oeffnen({
+						typ: "alert",
+						text: `Die Literaturdatenbank wurde exportiert!\n<p class="force-wrap">${autoExportPath}</p>`,
+					});
+				})
+				.catch(err => {
+					dialog.oeffnen({
+						typ: "alert",
+						text: `Beim Exportieren der Literaturdatenbank ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.message}</p>`,
+					});
+				});
+		} else {
+			karteisuche.trefferlisteExportierenDialog(content, format);
+		}
+	},
+	// Datenbank: automatischen Export durchführen
+	//   vars = Object
+	//     (Pfade: vars.quelle, vars.ziel; ggf. auch das Format: vars.format)
+	async dbExportierenAuto (vars) {
+		// Format ermitteln
+		const format = vars.format || "xml";
+		// überprüfen, ob die Pfade existieren
+		let quelleExists = await helfer.exists(vars.quelle),
+			zielExists = await helfer.exists(vars.ziel),
+			neueDatei = false;
+		if (!zielExists &&
+				!/(\/|\\)$/.test(vars.ziel)) {
+			zielExists = await helfer.exists(vars.ziel.replace(/\/[^/\\]+$/, ""));
+			neueDatei = true;
+		}
+		if (!quelleExists || !zielExists) {
+			let falsch = "Quellpfad",
+				pfad = vars.quelle;
+			if (!zielExists) {
+				falsch = "Zielpfad";
+				pfad = vars.ziel;
+			}
+			dialog.oeffnen({
+				typ: "alert",
+				text: `Beim Exportieren der Literaturdatenbank ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\nDer ${falsch} wurde nicht gefunden!\n<p class="force-wrap">${pfad}</p>`,
+			});
+			return;
+		}
+		// Ist der Zielpfad ein Ordner?
+		if (!neueDatei) {
+			try {
+				const fsP = require("fs").promises,
+					stats = await fsP.lstat(vars.ziel);
+				if (stats.isDirectory()) {
+					if (!/(\/|\\)$/.test(vars.ziel)) {
+						vars.ziel += require("path").sep;
+					}
+					vars.ziel += "Literaturliste." + format;
+				}
+			} catch (err) {
+				dialog.oeffnen({
+					typ: "alert",
+					text: `Beim Exportieren der Literaturdatenbank ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\nFehler beim Zugriff auf den Zielpfad!`,
+				});
+				return;
+			}
+		}
+		// DB einlesen
+		const ergebnis = await redLit.dbOeffnenEinlesen({pfad: vars.quelle});
+		if (ergebnis !== true) {
+			dialog.oeffnen({
+				typ: "altert",
+				text: ergebnis,
+			});
+			return;
+		}
+		redLit.dbOeffnenAbschließen({ergebnis, pfad: vars.quelle});
+		// DB exportieren
+		redLit.dbExportieren(format, vars.ziel);
 	},
 	// Datenbank: Titelaufnahme-Snippet in XML erstellen
 	//   id = String
