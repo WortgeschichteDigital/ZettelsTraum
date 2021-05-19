@@ -29,7 +29,7 @@ let xml = {
 		"Der Tagesspiegel",
 		"taz",
 		"Völkischer Beobachter",
-		"(Der )?Welt",
+		"(Die )?Welt",
 		"Die ZEIT",
 	],
 	// markierten Belegschnitt aufbereiten
