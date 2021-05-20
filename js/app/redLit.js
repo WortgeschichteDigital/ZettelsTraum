@@ -504,7 +504,7 @@ let redLit = {
 			neueDatei = false;
 		if (!zielExists &&
 				!/(\/|\\)$/.test(vars.ziel)) {
-			zielExists = await helfer.exists(vars.ziel.replace(/\/[^/\\]+$/, ""));
+			zielExists = await helfer.exists(vars.ziel.replace(/(\/|\\)[^/\\]+$/, ""));
 			neueDatei = true;
 		}
 		if (!quelleExists || !zielExists) {
