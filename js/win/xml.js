@@ -3985,6 +3985,28 @@ let xml = {
 				break;
 			}
 		}
+		let textIDs = xml.dropdownReferenzen(),
+			bgLinkFehler = [];
+		for (const geruest of d.bg) {
+			for (const referenz of geruest.tf) {
+				if (!textIDs.includes(referenz.ti)) {
+					bgLinkFehler.push("#" + referenz.ti);
+				}
+			}
+		}
+		if (bgLinkFehler.length) {
+			fehlstellen.push(`• fehlerhafte Verweise im Bedeutungsgerüst korrigieren (fehlende Verweisziele: <i>${bgLinkFehler.join(", ")}</i>)`);
+		}
+		let leLinkFehler = [];
+		for (const lemma of d.le) {
+			if (lemma.re &&
+					!textIDs.includes(lemma.re)) {
+				leLinkFehler.push("#" + lemma.re);
+			}
+		}
+		if (leLinkFehler.length) {
+			fehlstellen.push(`• fehlerhafte Verweise der Nebenlemmata korrigieren (fehlende Verweisziele: <i>${leLinkFehler.join(", ")}</i>)`);
+		}
 		if (!d.bl.length) {
 			fehlstellen.push("• min. einen Belege importieren");
 		}
