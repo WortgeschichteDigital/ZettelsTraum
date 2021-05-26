@@ -466,7 +466,7 @@ let kartei = {
 			typ: "prompt",
 			text: "Soll das Wort geändert werden?",
 			platzhalter: "Karteiwort",
-			callback: () => {
+			callback: async () => {
 				let wort = dialog.getPromptText();
 				if (dialog.antwort && wort === kartei.wort) {
 					dialog.oeffnen({
@@ -477,11 +477,18 @@ let kartei = {
 					kartei.karteiGeaendert(true);
 					kartei.wort = wort;
 					data.wo = wort;
-					data.fv = {};
-					stamm.dtaGet(kartei.wort, false);
 					kartei.wortEintragen();
 					bedeutungenWin.daten();
 					redXml.daten();
+					// Formvarianten auffrischen
+					//   - neue Varianten laden (falls nötig)
+					//   - Varianten deaktivieren, die nicht zum neuen Wort gehören
+					await stamm.dtaGet(kartei.wort, false);
+					const woerter = stamm.dtaPrepParole(wort);
+					for (const [k, v] of Object.entries(data.fv)) {
+						v.an = woerter.includes(k);
+					}
+					helfer.formVariRegExp();
 				} else if (dialog.antwort && !wort) {
 					dialog.oeffnen({
 						typ: "alert",
