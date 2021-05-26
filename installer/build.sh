@@ -15,7 +15,7 @@ preset1=(
 	"type=tarball|clean=n"
 )
 preset2=(
-	"type=installer|os=win|pkg=nsis|build=../../zt-build|clean=j"
+	"type=installer|os=win|pkg=nsis|clean=j"
 	"type=packager|os=win|arch=zip|build=../../zt-build|clean=j"
 )
 preset3=(
