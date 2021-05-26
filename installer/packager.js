@@ -15,7 +15,7 @@ let config = {
 	platform: typ,
 	arch: "x64",
 	dir: "./",
-	out: "../build",
+	out: process.argv[3] || "../build",
 	executableName: "zettelstraum",
 	extraResource: "./resources",
 	ignore: [/node_modules/, /package-lock\.json/],
@@ -55,19 +55,19 @@ packager(config)
 		// ist aber noch experimentell und funktioniert nicht gut)
 		let renameCount = 0,
 			renameString = "";
-		while (fs.existsSync(`../build/${ordnerNeu}${renameString}`)) {
+		while (fs.existsSync(`${config.out}/${ordnerNeu}${renameString}`)) {
 			renameCount++;
 			renameString = `-old.${renameCount}`;
 		}
 		if (renameCount > 0) {
-			await fsPromises.rename(`../build/${ordnerNeu}`, `../build/${ordnerNeu}${renameString}`);
+			await fsPromises.rename(`${config.out}/${ordnerNeu}`, `${config.out}/${ordnerNeu}${renameString}`);
 		}
 		// Ordner umbenennen
-		await fsPromises.rename(`../build/${ordnerAlt}`, `../build/${ordnerNeu}`);
+		await fsPromises.rename(`${config.out}/${ordnerAlt}`, `${config.out}/${ordnerNeu}`);
 		// Resources müssen umkopiert werden
-		let resources = `../build/${ordnerNeu}/resources`;
+		let resources = `${config.out}/${ordnerNeu}/resources`;
 		if (typ === "darwin") {
-			resources = `../build/${ordnerNeu}/Zettel’s Traum.app/Contents/Resources`;
+			resources = `${config.out}/${ordnerNeu}/Zettel’s Traum.app/Contents/Resources`;
 		}
 		let files = await fsPromises.readdir(`${resources}/resources`);
 		for (let f of files) {

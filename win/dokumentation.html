@@ -204,25 +204,25 @@ $ npm install --save-dev electron-packager</pre>
 
 					<p>Besser ist es jedoch, ihn über ein Node-Script zu steuern. Das macht das Ganze variabler und deutlich übersichtlicher. Über die zur Verfügung stehenden Optionen gibt die <a href="https://github.com/electron-userland/electron-packager/blob/master/docs/api.md"><abbr title="Application Programming Interface" lang="en">API</abbr></a>-Dokumentation des Packagers ausführlich Auskunft.</p>
 
-					<p>Im Prinzip muss man sich mit dieser Dokumentation allerdings nicht weiter beschäftigen, da für das Paketieren bereits alles eingerichtet ist: In der Datei <span class="datei">./installer/packager.js</span> befindet sich ein Node-Script, das das Erstellen von <i>Linux-</i>, <i>Windows-</i> und <i>macOS</i>-Paketen übernimmt. Die paketierte Version von <i class="app-name"></i> wird nach dem Ausführen eine Ebene oberhalb des Wurzelverzeichnisses in einem Ordner namens <span class="datei">build</span> abgelegt. Existiert der Ordner nicht, wird er automatisch erzeugt. Die Option <code class="quelltext">overwrite: true</code> sorgt dafür, dass alte Paketierungen im Ordner <span class="datei">../build</span> vor dem erneuten Paketieren entfernt werden. Das Script kann über die folgenden Befehle ausgeführt werden.</p>
+					<p>Im Prinzip muss man sich mit dieser Dokumentation allerdings nicht weiter beschäftigen, da für das Paketieren bereits alles eingerichtet ist: In der Datei <span class="datei">./installer/packager.js</span> befindet sich ein Node-Script, das das Erstellen von <i>Linux-</i>, <i>Windows-</i> und <i>macOS</i>-Paketen übernimmt. Die paketierte Version von <i class="app-name"></i> wird nach dem Ausführen eine Ebene oberhalb des Wurzelverzeichnisses in einem Ordner namens <span class="datei">build</span> abgelegt. Existiert der Ordner nicht, wird er automatisch erzeugt. Die Option <code class="quelltext">overwrite: true</code> sorgt dafür, dass alte Paketierungen im Ordner <span class="datei">../build</span> vor dem erneuten Paketieren entfernt werden. Das Script kann über die folgenden Befehle ausgeführt werden. Gibt man den Build-Ordner explizit an (drittes Argument), wird dieser anstelle von <span class="datei">../build</span> genutzt.</p>
 
 					<ul>
 						<li>
 							<p>Für <i>Linux</i>:</p>
 
-							<pre>$ node installer/packager.js linux</pre>
+							<pre>$ node installer/packager.js linux [Build-Ordner]</pre>
 						</li>
 
 						<li>
 							<p>Für <i>Windows</i>:</p>
 
-							<pre>$ node installer/packager.js win32</pre>
+							<pre>$ node installer/packager.js win32 [Build-Ordner]</pre>
 						</li>
 
 						<li>
 							<p>Für <i>macOS</i>:</p>
 
-							<pre>$ node installer/packager.js darwin</pre>
+							<pre>$ node installer/packager.js darwin [Build-Ordner]</pre>
 						</li>
 					</ul>
 

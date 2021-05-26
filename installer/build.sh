@@ -15,8 +15,8 @@ preset1=(
 	"type=tarball|clean=n"
 )
 preset2=(
-	"type=installer|os=win|pkg=nsis|clean=j"
-	"type=packager|os=win|arch=zip|clean=j"
+	"type=installer|os=win|pkg=nsis|build=../../zt-build|clean=j"
+	"type=packager|os=win|arch=zip|build=../../zt-build|clean=j"
 )
 preset3=(
 	"type=installer|os=linux|pkg=deb|clean=j"
@@ -216,6 +216,9 @@ konfiguration() {
 			fi
 			break
 		done
+		# Build-Ordner
+		build="../build"
+		read -ep "Build-Ordner: " -i "$build" build
 	fi
 
 	# Bereinigen
@@ -238,6 +241,9 @@ konfiguration() {
 	fi
 	if ! test -z "$arch"; then
 		job+="|arch=${arch}"
+	fi
+	if ! test -z "$build"; then
+		job+="|build=${build}"
 	fi
 	job+="|clean=${clean}"
 }
@@ -352,7 +358,7 @@ makeChangelog() {
 
 makeArchive() {
 	echo -e "  \033[1;32m*\033[0m Archiv erstellen"
-	cd "${dir}/../../build"
+	cd "$1"
 
 	# Dateiname
 	version=$(appVersion)
@@ -395,10 +401,16 @@ execJob() {
 	pkg=""
 	arch=""
 	clean=""
+	build=""
 	vars=$(echo "$1" | tr "|" "\n")
 	for var in $vars; do
 		eval "$var"
 	done
+	if echo "$build" | egrep -q "^\.\."; then
+		build="${dir}/../${build}"
+	elif test -z "$build" || ! test -e "$build"; then
+		build="${dir}/../../build"
+	fi
 
 	# Checks
 	if [ "$arch" = "zip" ] && ! command -v zip >/dev/null 2>&1; then
@@ -407,11 +419,11 @@ execJob() {
 	fi
 
 	# Build-Ordner erstellen
-	if ! test -d "${dir}/../../build"; then
-		echo -e "  \033[1;32m*\033[0m ../../build erstellen"
-		mkdir "${dir}/../../build"
+	if ! test -d "$build"; then
+		echo -e "  \033[1;32m*\033[0m $build erstellen"
+		mkdir "$build"
 		if (( $? > 0 )); then
-			echo -e "\033[1;31mFehler!\033[0m\n  \033[1;31m*\033[0m \"../../build\" erstellen gescheitert"
+			echo -e "\033[1;31mFehler!\033[0m\n  \033[1;31m*\033[0m \"$build\" erstellen gescheitert"
 			return
 		fi
 	fi
@@ -419,7 +431,7 @@ execJob() {
 	# Changelog für DEB bzw. RPM erstellen
 	if echo "$pkg" | egrep -q "^(deb|rpm)$" ; then
 		echo -e "  \033[1;32m*\033[0m Changelog erstellen"
-		echo -en "$(makeChangelog $pkg)" > "${dir}/../../build/changelog"
+		echo -en "$(makeChangelog $pkg)" > "${build}/changelog"
 	fi
 
 	# Installer
@@ -438,7 +450,7 @@ execJob() {
 	if [ "$type" = "packager" ]; then
 		echo -e "  \033[1;32m*\033[0m Packager ausführen"
 		cd "${dir}/../"
-		node ./installer/packager.js $(sysName) $(getMail)
+		node ./installer/packager.js "$(sysName)" "${build}"
 		if (( $? > 0 )); then
 			echo -e "\033[1;31mFehler!\033[0m\n  \033[1;31m*\033[0m Installer-Script abgebrochen"
 			cd "$dir"
@@ -455,19 +467,19 @@ execJob() {
 			return
 		fi
 		version=$(appVersion)
-		git archive --format=tar --prefix=zettelstraum_${version}/ HEAD | gzip > "${dir}/../../build/zettelstraum_${version}.tar.gz"
+		git archive --format=tar --prefix=zettelstraum_${version}/ HEAD | gzip > "${build}/zettelstraum_${version}.tar.gz"
 	fi
 
 	cd "$dir"
 
 	# Archiv erstellen
 	if echo "$arch" | egrep -q "^(gz|zip)$"; then
-		makeArchive
+		makeArchive "$build"
 	fi
 
 	# Bereinigen
 	if [ "$clean" = "j" ]; then
-		echo -e "  \033[1;32m*\033[0m ../../build aufräumen"
+		echo -e "  \033[1;32m*\033[0m $build aufräumen"
 
 		# Bereinigen
 		while read f; do
@@ -475,7 +487,7 @@ execJob() {
 				continue
 			fi
 			rm -r "$f"
-		done < <(find "${dir}/../../build" -mindepth 1 -maxdepth 1)
+		done < <(find "$build" -mindepth 1 -maxdepth 1)
 	fi
 }
 
