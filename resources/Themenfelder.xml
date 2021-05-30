@@ -12,10 +12,6 @@
 		<name>Alltag</name>
 	</item>
 	<item>
-		<id>2</id>
-		<name>Freizeit</name>
-	</item>
-	<item>
 		<id>3</id>
 		<name>Handwerk</name>
 	</item>
@@ -60,10 +56,6 @@
 		<name>Religion</name>
 	</item>
 	<item>
-		<id>15</id>
-		<name>Sport</name>
-	</item>
-	<item>
 		<id>16</id>
 		<name>Technik</name>
 	</item>
@@ -78,5 +70,9 @@
 	<item>
 		<id>19</id>
 		<name>Wissenschaft</name>
+	</item>
+	<item>
+		<id>20</id>
+		<name>Freizeit &amp; Sport</name>
 	</item>
 </themenfelder>
