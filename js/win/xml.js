@@ -569,7 +569,6 @@ let xml = {
 				xml.wiMake();
 			}
 		} else if (xmlDatensatz.key === "wi-single") {
-			/* jshint ignore:start */
 			if (!xml.data.xl.wi?.[xml.bgAktGn]?.length) {
 				xml.bgAktGn = xml.bgAktGn || xmlDatensatz.gn;
 				xml.data.xl.wi[xml.bgAktGn] = [xmlDatensatz.ds];
@@ -625,7 +624,6 @@ let xml = {
 					});
 				}
 			}
-			/* jshint ignore:end */
 		}
 		xml.speichern();
 	},
@@ -769,7 +767,7 @@ let xml = {
 		helfer.keineKinder(wi);
 		// keine Daten zum aktuellen Gerüst => Leermeldung
 		let keys = Object.keys(xml.data.xl.wi);
-		if (!keys.length || !xml.data.xl.wi?.[xml.bgAktGn]?.length) { // jshint ignore:line
+		if (!keys.length || !xml.data.xl.wi?.[xml.bgAktGn]?.length) {
 			xml.elementLeer({ele: wi});
 			return;
 		}
@@ -1623,7 +1621,6 @@ let xml = {
 			}
 		});
 	},
-	/* jshint ignore:start */
 	// Elemente umschalten: Blöcke auf oder zuklappen
 	//   auf = Boolean
 	//     (die Blöcke sollen geöffnet werden)
@@ -1643,7 +1640,6 @@ let xml = {
 			}
 		}
 	},
-	/* jshint ignore:end */
 	// Element-Vorschau umschalten: Standard-Arrays
 	//   div = Element
 	//     (Kopf, zu dem die Vorschau eingeblendet werden soll)
@@ -1760,7 +1756,7 @@ let xml = {
 				}
 				if (key === "le" && xml.data.xl.le.length ||
 						key === "re" && xml.data.xl.md.re.length ||
-						key === "wi" && xml.data.xl.wi?.[xml.bgAktGn]?.length) { // jshint ignore:line
+						key === "wi" && xml.data.xl.wi?.[xml.bgAktGn]?.length) {
 					if (key === "re") {
 						xml.refreshSlots({key: "md"});
 					} else {
@@ -1773,7 +1769,7 @@ let xml = {
 						id,
 						ele: [3, 4],
 					});
-				} else if (key === "wi" && !xml.data.xl.wi?.[xml.bgAktGn]?.length) { // jshint ignore:line
+				} else if (key === "wi" && !xml.data.xl.wi?.[xml.bgAktGn]?.length) {
 					xml.elementLeer({
 						ele: document.getElementById("wi"),
 					});
@@ -1974,7 +1970,7 @@ let xml = {
 	abschnittSetId ({key, slot, slotBlock, loeschen = false}) {
 		// ID ermitteln und normieren
 		let id = "",
-			xl = xml.data.xl[key][slot].ct[slotBlock]?.xl; // jshint ignore:line
+			xl = xml.data.xl[key][slot].ct[slotBlock]?.xl;
 		if (xl && !loeschen) { // nach dem Löschen einer Überschrift übergehen
 			id = xl.replace(/<Anmerkung>.+?<\/Anmerkung>/s, "");
 			id = id.replace(/<.+?>/g, "");
@@ -2232,7 +2228,6 @@ let xml = {
 					parser = new DOMParser(),
 					xmlDoc = parser.parseFromString(xmlStr, "text/xml");
 				let felder = {
-					/* jshint ignore:start */
 					dateiname: xmlDoc.querySelector("Bildreferenz").getAttribute("Ziel"),
 					bildposition: xmlDoc.documentElement.getAttribute("Position"),
 					breite: xmlDoc.documentElement.getAttribute("Breite"),
@@ -2244,7 +2239,6 @@ let xml = {
 					"quellen-url": xmlDoc.querySelector("Fundstelle URL")?.textContent,
 					lizenzname: xmlDoc.querySelector("Lizenz Name").textContent,
 					"lizenz-url": xmlDoc.querySelector("Lizenz URL").textContent,
-					/* jshint ignore:end */
 				};
 				for (let [k, v] of Object.entries(felder)) {
 					if (v) {
@@ -2369,14 +2363,14 @@ let xml = {
 			slotBlock = parseInt(kopf.dataset.slotBlock, 10),
 			abbNr = xml.textblockAbbSetId({key, slot, slotBlock}) + 1;
 		// XML erzeugen
-		let xl = `<Illustration xml:id="abb-${abbNr}" Position="${form.querySelector(`[id$="bildposition"]`).value}"`
-		let breite = form.querySelector(`[id$="breite"]`).value,
+		let xl = `<Illustration xml:id="abb-${abbNr}" Position="${form.querySelector(`[id$="bildposition"]`).value}"`,
+			breite = form.querySelector(`[id$="breite"]`).value,
 			hoehe = form.querySelector(`[id$="höhe"]`).value;
 		if (breite) {
-			xl += ` Breite="${breite}"`
+			xl += ` Breite="${breite}"`;
 		}
 		if (hoehe) {
-			xl += ` Hoehe="${hoehe}"`
+			xl += ` Hoehe="${hoehe}"`;
 		}
 		xl += `>\n`;
 		let dn = form.querySelector(`[id$="dateiname"]`);
@@ -2494,13 +2488,11 @@ let xml = {
 			}
 		});
 		// Abschnitt: Add-Link
-		/* jshint ignore:start */
 		cont.querySelector(".icon-plus-dick")?.addEventListener("click", function(evt) {
 			evt.preventDefault();
 			let input = this.parentNode.querySelector("input");
 			xml.textblockAdd({input});
 		});
-		/* jshint ignore:end */
 		// Dropdown-Felder
 		cont.querySelectorAll(".dropdown-feld").forEach(i => dropdown.feld(i));
 		if (!make) {
@@ -2732,7 +2724,7 @@ let xml = {
 				cont: abschnitt,
 			});
 			// Datensatz löschen
-			const abb = xml.data.xl[key][slot].ct?.[slotBlock]?.it === "Illustration"; // jshint ignore:line
+			const abb = xml.data.xl[key][slot].ct?.[slotBlock]?.it === "Illustration";
 			if (slotBlock !== null) {
 				if (xml.data.xl[key][slot].ct[slotBlock].it === "Überschrift") {
 					// ID des Abschnitts löschen
@@ -2800,7 +2792,7 @@ let xml = {
 		}
 		let warn = kopf.querySelector(".warn"),
 			xmlErr = null;
-		if (warn?.dataset?.err) { // jshint ignore:line
+		if (warn?.dataset?.err) {
 			let err = warn.dataset.err.match(/on line ([0-9]+) at column ([0-9]+)/);
 			if (err) {
 				xmlErr = {
@@ -3060,11 +3052,11 @@ let xml = {
 					// Textreferenz neu auslesen
 					let tx = xml.data.xl.wi[xml.bgAktGn][slot].tx,
 						reg = /<Textreferenz Ziel=".+?">(?<tr>.+?)<\/Textreferenz>|<Verweistext>(?<vt>.+?)<\/Verweistext>|<Verweisziel>(?<vz>.+?)<\/Verweisziel>/.exec(xmlStr);
-					if (reg?.groups.tr) { // jshint ignore:line
+					if (reg?.groups.tr) {
 						tx = reg.groups.tr;
-					} else if (reg?.groups.vt) { // jshint ignore:line
+					} else if (reg?.groups.vt) {
 						tx = reg.groups.vt;
-					} else if (reg?.groups.vz) { // jshint ignore:line
+					} else if (reg?.groups.vz) {
 						tx = reg.groups.vz;
 					}
 					// Werte neu setzen
@@ -3508,7 +3500,7 @@ let xml = {
 		}
 		// ggf. Vorschau schließen
 		let pre = kopf.nextSibling;
-		if (pre?.classList.contains("pre-cont")) { // jshint ignore:line
+		if (pre?.classList.contains("pre-cont")) {
 			let ta = pre.querySelector("textarea");
 			if (ta && ta.dataset.geaendert) {
 				// XML wurde bearbeitet => Speichern?
@@ -3881,7 +3873,7 @@ let xml = {
 		}
 		// Wortinformationen
 		// (z.Zt. nur einen Wortinfoblock exportieren)
-		let wi = d.wi[xml.bgAktGn] ?? []; // jshint ignore:line
+		let wi = d.wi[xml.bgAktGn] ?? [];
 		let vt = "";
 		for (let i of wi) {
 			if (xml.wiMap.export[i.vt] !== vt) {
