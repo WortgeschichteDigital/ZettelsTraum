@@ -558,6 +558,7 @@ let xml = {
 			xml.wiMake();
 			xml.bgNwTyReset();
 			xml.bgMakeXML();
+			document.getElementById("la").value = "";
 			xml.bgNwTfMake({key: "nw"});
 			xml.bgNwTfMake({key: "tf"});
 			xml.bgSelSet();
@@ -812,6 +813,61 @@ let xml = {
 	// die ID der aktuellen Wortinformationen, falls kein Bedeutungsgerüst vorhanden
 	// (wird nur für die Wortinformationen genutzt)
 	bgAktGn: "",
+	// Label eines Bedeutungsgerüsts eingeben/ändern/löschen
+	async bgLabelChange () {
+		// Ist das Formular noch im Bearbeiten-Modus?
+		const antwort = await xml.bgCloseXML();
+		if (antwort === null) {
+			return;
+		}
+		// Fehler, die das Bedeutungsgerüst betreffen
+		const la = document.getElementById("la");
+		if (!xml.data.xl.bg.length) {
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Kein Bedeutungsgerüst gefunden.",
+				callback: () => la.select(),
+			});
+			return;
+		}
+		let parser = new DOMParser(),
+			xmlDoc = parser.parseFromString(xml.data.xl.bg[xml.bgAkt].xl, "text/xml");
+		if (xmlDoc.querySelector("parsererror")) {
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Das Bedeutungsgerüst ist nicht wohlgeformt.",
+				callback: () => la.select(),
+			});
+			return;
+		}
+		// Datensatz auffrischen
+		xml.data.xl.bg[xml.bgAkt].la = la.value.trim();
+		// XML ein- bzw. austragen
+		let xl = xml.data.xl.bg[xml.bgAkt].xl,
+			xmlStr = "";
+		if (xml.data.xl.bg[xml.bgAkt].la) {
+			xmlStr = "\n  <Lemma>\n";
+			xmlStr += `    <Schreibung>${xml.data.xl.bg[xml.bgAkt].la}</Schreibung>\n`;
+			xmlStr += "  </Lemma>";
+		}
+		if (/<Lemma>/.test(xl)) {
+			xl = xl.replace(/\s+<Lemma>.+?<\/Lemma>/s, xmlStr);
+		} else {
+			xl = xl.replace(/\s+<Nachweise/, xmlStr + "\n  <Nachweise");
+		}
+		xml.data.xl.bg[xml.bgAkt].xl = xl;
+		// Preview auffrischen
+		const bg = document.getElementById("bg");
+		xml.preview({
+			xmlStr: xl,
+			key: "bg",
+			slot: -1,
+			after: bg.querySelector(".kopf"),
+			editable: true,
+		});
+		// Datensatz speichern
+		xml.speichern();
+	},
 	// Bedeutungsgerüst: Nachweisformular umstellen
 	bgNachweisToggle () {
 		let typ = document.getElementById("nw-ty").value,
@@ -975,17 +1031,16 @@ let xml = {
 			return;
 		}
 		// <Nachweise> neu erstellen
-		let nw = "<Lesarten>\n  <Nachweise/>";
+		let nw = "\n  <Nachweise/>";
 		if (xml.data.xl.bg[xml.bgAkt].nw.length) {
-			nw = "<Lesarten>\n  <Nachweise>";
+			nw = "\n  <Nachweise>";
 			for (let i of xml.data.xl.bg[xml.bgAkt].nw) {
 				nw += "\n" + " ".repeat(4) + i.replace(/\n/g, "\n" + " ".repeat(4));
 			}
 			nw += "\n  </Nachweise>";
 		}
 		// Daten auffrischen
-		xl = xl.replace(/\s+(<Nachweise\/>|<Nachweise>.+?<\/Nachweise>)/s, "");
-		xl = xl.replace(/<Lesarten>/, nw);
+		xl = xl.replace(/\s+(<Nachweise\/>|<Nachweise>.+?<\/Nachweise>)/s, nw);
 		xml.data.xl.bg[xml.bgAkt].xl = xl;
 		// ggf. Preview auffrischen
 		let bg = document.getElementById("bg");
@@ -1204,6 +1259,12 @@ let xml = {
 		let evaluator = xpath => {
 			return xmlDoc.evaluate(xpath, xmlDoc, null, XPathResult.ANY_TYPE, null);
 		};
+		// Label
+		let la = evaluator("//Schreibung").iterateNext(),
+			label = "";
+		if (la) {
+			label = la.textContent;
+		}
 		// Nachweise
 		let lr = evaluator("//Nachweise"),
 			nw = lr.iterateNext(),
@@ -1233,10 +1294,12 @@ let xml = {
 			item = l.iterateNext();
 		}
 		// Daten auffrischen und speichern
+		xml.data.xl.bg[xml.bgAkt].la = label;
 		xml.data.xl.bg[xml.bgAkt].nw = arrNw;
 		xml.data.xl.bg[xml.bgAkt].tf = arrTf;
 		xml.speichern();
 		// Köpfe neu aufbauen
+		document.getElementById("la").value = label;
 		xml.bgNwTfMake({key: "nw"});
 		xml.bgNwTfMake({key: "tf"});
 	},
@@ -1306,6 +1369,11 @@ let xml = {
 			});
 		}
 		xml.bgNwTyReset();
+		let la = "";
+		if (xml.bgAkt >= 0) {
+			 la = xml.data.xl.bg[xml.bgAkt].la;
+		}
+		document.getElementById("la").value = la;
 		xml.bgNwTfMake({key: "nw"});
 		xml.bgNwTfMake({key: "tf"});
 		xml.bgSelSet();
@@ -1325,6 +1393,7 @@ let xml = {
 			// Update Bedeutungsgerüste
 			xml.bgNwTyReset();
 			xml.bgMakeXML();
+			document.getElementById("la").value = xml.data.xl.bg[xml.bgAkt].la;
 			xml.bgNwTfMake({key: "nw"});
 			xml.bgNwTfMake({key: "tf"});
 		}
@@ -3866,27 +3935,33 @@ let xml = {
 			xmlStr += "\t".repeat(3) + `<Literaturtitel xml:id="${i.id}" Ziel="../share/Literaturliste.xml#${i.id}"/>\n`;
 		}
 		xmlStr += "\t".repeat(2) + "</Literatur>\n";
-		// Bedeutungsgerüst
+		// Bedeutungsgerüste
 		if (xml.bgAkt > -1) {
-			xmlStr += indentStr(d.bg[xml.bgAkt].xl, 2); // z.Zt. nur ein Gerüst exportieren
+			for (const g of d.bg) {
+				xmlStr += indentStr(g.xl, 2) + "\n";
+			}
 			xmlStr += "\n";
 		}
 		// Wortinformationen
-		// (z.Zt. nur einen Wortinfoblock exportieren)
-		let wi = d.wi[xml.bgAktGn] ?? [];
-		let vt = "";
-		for (let i of wi) {
-			if (xml.wiMap.export[i.vt] !== vt) {
-				vt = xml.wiMap.export[i.vt];
-				if (/<Verweise Typ/.test(xmlStr)) {
-					xmlStr += "\t".repeat(2) + "</Verweise>\n";
+		let wi = {};
+		for (const typ of Object.keys(xml.wiMap.export)) {
+			for (const v of Object.values(d.wi)) {
+				for (const i of v) {
+					if (i.vt !== typ) {
+						continue;
+					}
+					if (!wi[typ]) {
+						wi[typ] = [];
+					}
+					wi[typ].push(indentStr(i.xl, 3) + "\n");
 				}
-				xmlStr += "\t".repeat(2) + `<Verweise Typ="${vt}">\n`;
 			}
-			xmlStr += indentStr(i.xl, 3);
-			xmlStr += "\n";
 		}
-		if (wi.length) {
+		for (const [k, v] of Object.entries(wi)) {
+			xmlStr += "\t".repeat(2) + `<Verweise Typ="${xml.wiMap.export[k]}">\n`;
+			for (const i of v) {
+				xmlStr += i;
+			}
 			xmlStr += "\t".repeat(2) + "</Verweise>\n";
 		}
 		// Abschluss
@@ -4227,7 +4302,7 @@ let xml = {
 			i = re.iterateNext();
 		}
 		// Lemmata
-		let le = evaluator("//x:Lemma");
+		let le = evaluator("//x:Artikel/x:Lemma");
 		i = le.iterateNext();
 		while (i) {
 			let o = {
@@ -4351,19 +4426,22 @@ let xml = {
 			i = wi.iterateNext();
 		}
 		// Bedeutungsgerüst
-		let bg = evaluator("//x:Lesarten");
+		let bg = evaluator("//x:Lesarten"),
+			bgNr = 1;
 		i = bg.iterateNext();
 		while (i) {
-			xml.bgAkt = 0;
-			xml.bgAktGn = "1";
+			xml.bgAkt = bgNr - 1;
+			xml.bgAktGn = "" + bgNr;
 			let o = {
-				gn: "1",
+				gn: "" + bgNr,
+				la: "",
 				nw: [],
 				tf: [],
 				xl: normierer(i),
 			};
 			xl.bg.push(o);
 			xml.bgRefreshData(); // hier wird xml.speichern() angestoßen
+			bgNr++;
 			i = bg.iterateNext();
 		}
 		// Abschluss des Einlesevorgangs => Formular neu aufbauen

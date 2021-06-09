@@ -638,7 +638,7 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
 
 					<p>Nach dem Laden einer <abbr title="Zettel’s Traum JSON">ZTJ</abbr>-Datei in <i class="app-name"></i> befinden sich die <abbr title="JavaScript Object Notation">JSON</abbr>-Daten im globalen Objekt <code class="quelltext">data</code>. Ihre Werte lassen sich dann in allen Funktionen des Hauptfensters durch einfache Statements wie <code class="quelltext">data.dc</code> lesen oder schreiben.</p>
 
-					<p>Alle Dateien sind gleich aufgebaut (<span class="obacht">Datenformat Version 18</span>):</p>
+					<p>Alle Dateien sind gleich aufgebaut (<span class="obacht">Datenformat Version 19</span>):</p>
 
 					<table class="ztj">
 						<tr>
@@ -1222,6 +1222,12 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
 							<td class="datentyp">String</td>
 							<td> </td>
 							<td>ID des Bedeutungsgerüsts (immer identisch mit der des Quellgerüsts)</td>
+						</tr>
+						<tr class="ztj-ebene3">
+							<td><p><code class="quelltext">la</code></p></td>
+							<td class="datentyp">String</td>
+							<td> </td>
+							<td>Label;<br><span class="obacht">mit Version 19 ergänzt</span></td>
 						</tr>
 						<tr class="ztj-ebene3">
 							<td><p><code class="quelltext">nw</code></p></td>
