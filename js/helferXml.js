@@ -28,7 +28,7 @@ let helferXml = {
 			md: { // Metadaten
 				id: "", // Artikel-ID
 				re: [], // Revisionen
-				tf: "", // Themenfeld
+				tf: [], // Themenfeld
 				ty: "", // Artikeltyp
 			},
 			tx: [], // Text

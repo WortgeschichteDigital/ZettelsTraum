@@ -156,7 +156,7 @@ let xml = {
 			mdTf = document.getElementById("md-tf");
 		mdId.value = xml.data.xl.md.id;
 		mdTy.value = xml.data.xl.md.ty;
-		mdTf.value = xml.data.xl.md.tf;
+		mdTf.value = xml.data.xl.md.tf[0] || "";
 		for (let i = 0, len = xml.data.xl.md.re.length; i < len; i++) {
 			xml.mdRevisionMake({
 				slot: i,
@@ -425,7 +425,11 @@ let xml = {
 				}
 			}
 			// Speichern
-			xml.data.xl.md[key] = val;
+			if (Array.isArray(xml.data.xl.md[key])) {
+				xml.data.xl.md[key][0] = val;
+			} else {
+				xml.data.xl.md[key] = val;
+			}
 			xml.speichern();
 		});
 	},
@@ -3874,7 +3878,9 @@ let xml = {
 		}
 		// Themenfeld
 		xmlStr += "\t".repeat(2) + "<Diasystematik>\n";
-		xmlStr += "\t".repeat(3) + `<Themenfeld>${d.md.tf.replace(/&(?!amp;)/g, "&amp;")}</Themenfeld>\n`;
+		for (const tf of d.md.tf) {
+			xmlStr += "\t".repeat(3) + `<Themenfeld>${tf.replace(/&(?!amp;)/g, "&amp;")}</Themenfeld>\n`;
+		}
 		xmlStr += "\t".repeat(2) + "</Diasystematik>\n";
 		// Kurz gefasst und Wortgeschichte
 		let texte = {
@@ -4015,7 +4021,7 @@ let xml = {
 		if (!d.md.ty) {
 			fehlstellen.push("• einen Artikeltyp auswählen");
 		}
-		if (!d.md.tf) {
+		if (!d.md.tf[0]) {
 			fehlstellen.push("• ein Themenfeld auswählen");
 		}
 		if (!d.md.re.length) {
@@ -4283,7 +4289,13 @@ let xml = {
 		// Metadaten
 		let xl = xml.data.xl;
 		xl.md.id = evaluator("//x:Artikel/@xml:id").iterateNext().textContent;
-		xl.md.tf = evaluator("//x:Artikel/x:Diasystematik/x:Themenfeld").iterateNext().textContent;
+		xl.md.tf = [];
+		let tff = evaluator("//x:Artikel/x:Diasystematik/x:Themenfeld"),
+			tf = tff.iterateNext();
+		while (tf) {
+			xl.md.tf.push(tf.textContent);
+			tf = tff.iterateNext();
+		}
 		xl.md.ty = evaluator("//x:Artikel/@Typ").iterateNext().textContent;
 		let re = evaluator("//x:Revision"),
 			i = re.iterateNext();

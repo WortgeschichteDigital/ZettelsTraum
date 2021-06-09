@@ -362,6 +362,12 @@ let konversion = {
 		for (let v of Object.values(data.rd.xl.bg)) {
 			v.la = "";
 		}
+		// data.xl.md.tf in Array umwandeln
+		if (data.xl.md.tf) {
+			data.xl.md.tf = [data.xl.md.tf];
+		} else {
+			data.xl.md.tf = [];
+		}
 		// Versionsnummer hochzählen
 		data.ve++;
 		// Änderungsmarkierung setzen
