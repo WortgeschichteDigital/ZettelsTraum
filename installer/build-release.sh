@@ -164,6 +164,7 @@ makeReleaseNotes() {
 # Release vorbereiten
 vorbereiten() {
 	echo -e "  \033[1;32m*\033[0m Release vorbereiten\n"
+	cd "${dir}/../"
 
 	# Version festlegen
 	read -p "  Nächste Aufgabe \"Version festlegen\" (Enter) . . ."
