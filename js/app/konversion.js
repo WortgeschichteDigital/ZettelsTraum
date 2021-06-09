@@ -4,7 +4,7 @@ let konversion = {
 	// aktuelle Version des Dateiformats
 	// *** WICHTIG! *** WICHTIG! *** WICHTIG! ***
 	// Bei Änderungen anpassen!
-	version: 18,
+	version: 19,
 	// Verteilerfunktion
 	start () {
 		konversion.von1nach2();
@@ -24,6 +24,7 @@ let konversion = {
 		konversion.von15nach16();
 		konversion.von16nach17();
 		konversion.von17nach18();
+		konversion.von18nach19();
 	},
 	// Konversion des Dateiformats von Version 1 nach Version 2
 	von1nach2 () {
@@ -346,6 +347,26 @@ let konversion = {
 					i.vt = "Wortverbindung";
 				}
 			}
+		}
+		// Versionsnummer hochzählen
+		data.ve++;
+		// Änderungsmarkierung setzen
+		kartei.karteiGeaendert(true);
+	},
+	// Konversion des Dateiformats von Version 18 nach Version 19
+	von18nach19 () {
+		if (data.ve > 18) {
+			return;
+		}
+		// Label in Bedeutungsgerüsten im XML-Redaktionsfenster ergänzen
+		for (let v of Object.values(data.rd.xl.bg)) {
+			v.la = "";
+		}
+		// data.xl.md.tf in Array umwandeln
+		if (data.xl.md.tf) {
+			data.xl.md.tf = [data.xl.md.tf];
+		} else {
+			data.xl.md.tf = [];
 		}
 		// Versionsnummer hochzählen
 		data.ve++;

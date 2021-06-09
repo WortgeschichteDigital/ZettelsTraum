@@ -187,8 +187,8 @@ let initWin = {
 			evt.preventDefault();
 			xml.mdIdMake();
 		});
-		// Revision/Lemma/Nachweis/Textreferenz hinzufügen
-		document.querySelectorAll("#le input, #md-re input, #bg-nw input, #bg-tf input").forEach(i => {
+		// Revision/Lemma/Label/Nachweis/Textreferenz hinzufügen
+		document.querySelectorAll("#le input, #md-re input, #la, #bg-nw input, #bg-tf input").forEach(i => {
 			i.addEventListener("keydown", function(evt) {
 				tastatur.detectModifiers(evt);
 				if (!tastatur.modifiers &&
@@ -198,6 +198,8 @@ let initWin = {
 						xml.mdRevisionAdd();
 					} else if (this.closest("#le")) {
 						xml.lemmaAdd();
+					} else if (this.id === "la") {
+						xml.bgLabelChange();
 					} else if (this.closest("#bg-nw")) {
 						xml.bgNachweisAdd();
 					} else {

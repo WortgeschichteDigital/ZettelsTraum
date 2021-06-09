@@ -156,7 +156,7 @@ let xml = {
 			mdTf = document.getElementById("md-tf");
 		mdId.value = xml.data.xl.md.id;
 		mdTy.value = xml.data.xl.md.ty;
-		mdTf.value = xml.data.xl.md.tf;
+		mdTf.value = xml.data.xl.md.tf[0] || "";
 		for (let i = 0, len = xml.data.xl.md.re.length; i < len; i++) {
 			xml.mdRevisionMake({
 				slot: i,
@@ -425,7 +425,11 @@ let xml = {
 				}
 			}
 			// Speichern
-			xml.data.xl.md[key] = val;
+			if (Array.isArray(xml.data.xl.md[key])) {
+				xml.data.xl.md[key][0] = val;
+			} else {
+				xml.data.xl.md[key] = val;
+			}
 			xml.speichern();
 		});
 	},
@@ -558,6 +562,7 @@ let xml = {
 			xml.wiMake();
 			xml.bgNwTyReset();
 			xml.bgMakeXML();
+			document.getElementById("la").value = "";
 			xml.bgNwTfMake({key: "nw"});
 			xml.bgNwTfMake({key: "tf"});
 			xml.bgSelSet();
@@ -569,7 +574,6 @@ let xml = {
 				xml.wiMake();
 			}
 		} else if (xmlDatensatz.key === "wi-single") {
-			/* jshint ignore:start */
 			if (!xml.data.xl.wi?.[xml.bgAktGn]?.length) {
 				xml.bgAktGn = xml.bgAktGn || xmlDatensatz.gn;
 				xml.data.xl.wi[xml.bgAktGn] = [xmlDatensatz.ds];
@@ -625,7 +629,6 @@ let xml = {
 					});
 				}
 			}
-			/* jshint ignore:end */
 		}
 		xml.speichern();
 	},
@@ -769,7 +772,7 @@ let xml = {
 		helfer.keineKinder(wi);
 		// keine Daten zum aktuellen Gerüst => Leermeldung
 		let keys = Object.keys(xml.data.xl.wi);
-		if (!keys.length || !xml.data.xl.wi?.[xml.bgAktGn]?.length) { // jshint ignore:line
+		if (!keys.length || !xml.data.xl.wi?.[xml.bgAktGn]?.length) {
 			xml.elementLeer({ele: wi});
 			return;
 		}
@@ -814,6 +817,61 @@ let xml = {
 	// die ID der aktuellen Wortinformationen, falls kein Bedeutungsgerüst vorhanden
 	// (wird nur für die Wortinformationen genutzt)
 	bgAktGn: "",
+	// Label eines Bedeutungsgerüsts eingeben/ändern/löschen
+	async bgLabelChange () {
+		// Ist das Formular noch im Bearbeiten-Modus?
+		const antwort = await xml.bgCloseXML();
+		if (antwort === null) {
+			return;
+		}
+		// Fehler, die das Bedeutungsgerüst betreffen
+		const la = document.getElementById("la");
+		if (!xml.data.xl.bg.length) {
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Kein Bedeutungsgerüst gefunden.",
+				callback: () => la.select(),
+			});
+			return;
+		}
+		let parser = new DOMParser(),
+			xmlDoc = parser.parseFromString(xml.data.xl.bg[xml.bgAkt].xl, "text/xml");
+		if (xmlDoc.querySelector("parsererror")) {
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Das Bedeutungsgerüst ist nicht wohlgeformt.",
+				callback: () => la.select(),
+			});
+			return;
+		}
+		// Datensatz auffrischen
+		xml.data.xl.bg[xml.bgAkt].la = la.value.trim();
+		// XML ein- bzw. austragen
+		let xl = xml.data.xl.bg[xml.bgAkt].xl,
+			xmlStr = "";
+		if (xml.data.xl.bg[xml.bgAkt].la) {
+			xmlStr = "\n  <Lemma>\n";
+			xmlStr += `    <Schreibung>${xml.data.xl.bg[xml.bgAkt].la}</Schreibung>\n`;
+			xmlStr += "  </Lemma>";
+		}
+		if (/<Lemma>/.test(xl)) {
+			xl = xl.replace(/\s+<Lemma>.+?<\/Lemma>/s, xmlStr);
+		} else {
+			xl = xl.replace(/\s+<Nachweise/, xmlStr + "\n  <Nachweise");
+		}
+		xml.data.xl.bg[xml.bgAkt].xl = xl;
+		// Preview auffrischen
+		const bg = document.getElementById("bg");
+		xml.preview({
+			xmlStr: xl,
+			key: "bg",
+			slot: -1,
+			after: bg.querySelector(".kopf"),
+			editable: true,
+		});
+		// Datensatz speichern
+		xml.speichern();
+	},
 	// Bedeutungsgerüst: Nachweisformular umstellen
 	bgNachweisToggle () {
 		let typ = document.getElementById("nw-ty").value,
@@ -977,17 +1035,16 @@ let xml = {
 			return;
 		}
 		// <Nachweise> neu erstellen
-		let nw = "<Lesarten>\n  <Nachweise/>";
+		let nw = "\n  <Nachweise/>";
 		if (xml.data.xl.bg[xml.bgAkt].nw.length) {
-			nw = "<Lesarten>\n  <Nachweise>";
+			nw = "\n  <Nachweise>";
 			for (let i of xml.data.xl.bg[xml.bgAkt].nw) {
 				nw += "\n" + " ".repeat(4) + i.replace(/\n/g, "\n" + " ".repeat(4));
 			}
 			nw += "\n  </Nachweise>";
 		}
 		// Daten auffrischen
-		xl = xl.replace(/\s+(<Nachweise\/>|<Nachweise>.+?<\/Nachweise>)/s, "");
-		xl = xl.replace(/<Lesarten>/, nw);
+		xl = xl.replace(/\s+(<Nachweise\/>|<Nachweise>.+?<\/Nachweise>)/s, nw);
 		xml.data.xl.bg[xml.bgAkt].xl = xl;
 		// ggf. Preview auffrischen
 		let bg = document.getElementById("bg");
@@ -1206,6 +1263,12 @@ let xml = {
 		let evaluator = xpath => {
 			return xmlDoc.evaluate(xpath, xmlDoc, null, XPathResult.ANY_TYPE, null);
 		};
+		// Label
+		let la = evaluator("//Schreibung").iterateNext(),
+			label = "";
+		if (la) {
+			label = la.textContent;
+		}
 		// Nachweise
 		let lr = evaluator("//Nachweise"),
 			nw = lr.iterateNext(),
@@ -1235,10 +1298,12 @@ let xml = {
 			item = l.iterateNext();
 		}
 		// Daten auffrischen und speichern
+		xml.data.xl.bg[xml.bgAkt].la = label;
 		xml.data.xl.bg[xml.bgAkt].nw = arrNw;
 		xml.data.xl.bg[xml.bgAkt].tf = arrTf;
 		xml.speichern();
 		// Köpfe neu aufbauen
+		document.getElementById("la").value = label;
 		xml.bgNwTfMake({key: "nw"});
 		xml.bgNwTfMake({key: "tf"});
 	},
@@ -1308,6 +1373,11 @@ let xml = {
 			});
 		}
 		xml.bgNwTyReset();
+		let la = "";
+		if (xml.bgAkt >= 0) {
+			 la = xml.data.xl.bg[xml.bgAkt].la;
+		}
+		document.getElementById("la").value = la;
 		xml.bgNwTfMake({key: "nw"});
 		xml.bgNwTfMake({key: "tf"});
 		xml.bgSelSet();
@@ -1327,6 +1397,7 @@ let xml = {
 			// Update Bedeutungsgerüste
 			xml.bgNwTyReset();
 			xml.bgMakeXML();
+			document.getElementById("la").value = xml.data.xl.bg[xml.bgAkt].la;
 			xml.bgNwTfMake({key: "nw"});
 			xml.bgNwTfMake({key: "tf"});
 		}
@@ -1623,7 +1694,6 @@ let xml = {
 			}
 		});
 	},
-	/* jshint ignore:start */
 	// Elemente umschalten: Blöcke auf oder zuklappen
 	//   auf = Boolean
 	//     (die Blöcke sollen geöffnet werden)
@@ -1643,7 +1713,6 @@ let xml = {
 			}
 		}
 	},
-	/* jshint ignore:end */
 	// Element-Vorschau umschalten: Standard-Arrays
 	//   div = Element
 	//     (Kopf, zu dem die Vorschau eingeblendet werden soll)
@@ -1760,7 +1829,7 @@ let xml = {
 				}
 				if (key === "le" && xml.data.xl.le.length ||
 						key === "re" && xml.data.xl.md.re.length ||
-						key === "wi" && xml.data.xl.wi?.[xml.bgAktGn]?.length) { // jshint ignore:line
+						key === "wi" && xml.data.xl.wi?.[xml.bgAktGn]?.length) {
 					if (key === "re") {
 						xml.refreshSlots({key: "md"});
 					} else {
@@ -1773,7 +1842,7 @@ let xml = {
 						id,
 						ele: [3, 4],
 					});
-				} else if (key === "wi" && !xml.data.xl.wi?.[xml.bgAktGn]?.length) { // jshint ignore:line
+				} else if (key === "wi" && !xml.data.xl.wi?.[xml.bgAktGn]?.length) {
 					xml.elementLeer({
 						ele: document.getElementById("wi"),
 					});
@@ -1974,7 +2043,7 @@ let xml = {
 	abschnittSetId ({key, slot, slotBlock, loeschen = false}) {
 		// ID ermitteln und normieren
 		let id = "",
-			xl = xml.data.xl[key][slot].ct[slotBlock]?.xl; // jshint ignore:line
+			xl = xml.data.xl[key][slot].ct[slotBlock]?.xl;
 		if (xl && !loeschen) { // nach dem Löschen einer Überschrift übergehen
 			id = xl.replace(/<Anmerkung>.+?<\/Anmerkung>/s, "");
 			id = id.replace(/<.+?>/g, "");
@@ -2232,7 +2301,6 @@ let xml = {
 					parser = new DOMParser(),
 					xmlDoc = parser.parseFromString(xmlStr, "text/xml");
 				let felder = {
-					/* jshint ignore:start */
 					dateiname: xmlDoc.querySelector("Bildreferenz").getAttribute("Ziel"),
 					bildposition: xmlDoc.documentElement.getAttribute("Position"),
 					breite: xmlDoc.documentElement.getAttribute("Breite"),
@@ -2244,7 +2312,6 @@ let xml = {
 					"quellen-url": xmlDoc.querySelector("Fundstelle URL")?.textContent,
 					lizenzname: xmlDoc.querySelector("Lizenz Name").textContent,
 					"lizenz-url": xmlDoc.querySelector("Lizenz URL").textContent,
-					/* jshint ignore:end */
 				};
 				for (let [k, v] of Object.entries(felder)) {
 					if (v) {
@@ -2369,14 +2436,14 @@ let xml = {
 			slotBlock = parseInt(kopf.dataset.slotBlock, 10),
 			abbNr = xml.textblockAbbSetId({key, slot, slotBlock}) + 1;
 		// XML erzeugen
-		let xl = `<Illustration xml:id="abb-${abbNr}" Position="${form.querySelector(`[id$="bildposition"]`).value}"`
-		let breite = form.querySelector(`[id$="breite"]`).value,
+		let xl = `<Illustration xml:id="abb-${abbNr}" Position="${form.querySelector(`[id$="bildposition"]`).value}"`,
+			breite = form.querySelector(`[id$="breite"]`).value,
 			hoehe = form.querySelector(`[id$="höhe"]`).value;
 		if (breite) {
-			xl += ` Breite="${breite}"`
+			xl += ` Breite="${breite}"`;
 		}
 		if (hoehe) {
-			xl += ` Hoehe="${hoehe}"`
+			xl += ` Hoehe="${hoehe}"`;
 		}
 		xl += `>\n`;
 		let dn = form.querySelector(`[id$="dateiname"]`);
@@ -2494,13 +2561,11 @@ let xml = {
 			}
 		});
 		// Abschnitt: Add-Link
-		/* jshint ignore:start */
 		cont.querySelector(".icon-plus-dick")?.addEventListener("click", function(evt) {
 			evt.preventDefault();
 			let input = this.parentNode.querySelector("input");
 			xml.textblockAdd({input});
 		});
-		/* jshint ignore:end */
 		// Dropdown-Felder
 		cont.querySelectorAll(".dropdown-feld").forEach(i => dropdown.feld(i));
 		if (!make) {
@@ -2732,7 +2797,7 @@ let xml = {
 				cont: abschnitt,
 			});
 			// Datensatz löschen
-			const abb = xml.data.xl[key][slot].ct?.[slotBlock]?.it === "Illustration"; // jshint ignore:line
+			const abb = xml.data.xl[key][slot].ct?.[slotBlock]?.it === "Illustration";
 			if (slotBlock !== null) {
 				if (xml.data.xl[key][slot].ct[slotBlock].it === "Überschrift") {
 					// ID des Abschnitts löschen
@@ -2800,7 +2865,7 @@ let xml = {
 		}
 		let warn = kopf.querySelector(".warn"),
 			xmlErr = null;
-		if (warn?.dataset?.err) { // jshint ignore:line
+		if (warn?.dataset?.err) {
 			let err = warn.dataset.err.match(/on line ([0-9]+) at column ([0-9]+)/);
 			if (err) {
 				xmlErr = {
@@ -3060,11 +3125,11 @@ let xml = {
 					// Textreferenz neu auslesen
 					let tx = xml.data.xl.wi[xml.bgAktGn][slot].tx,
 						reg = /<Textreferenz Ziel=".+?">(?<tr>.+?)<\/Textreferenz>|<Verweistext>(?<vt>.+?)<\/Verweistext>|<Verweisziel>(?<vz>.+?)<\/Verweisziel>/.exec(xmlStr);
-					if (reg?.groups.tr) { // jshint ignore:line
+					if (reg?.groups.tr) {
 						tx = reg.groups.tr;
-					} else if (reg?.groups.vt) { // jshint ignore:line
+					} else if (reg?.groups.vt) {
 						tx = reg.groups.vt;
-					} else if (reg?.groups.vz) { // jshint ignore:line
+					} else if (reg?.groups.vz) {
 						tx = reg.groups.vz;
 					}
 					// Werte neu setzen
@@ -3508,7 +3573,7 @@ let xml = {
 		}
 		// ggf. Vorschau schließen
 		let pre = kopf.nextSibling;
-		if (pre?.classList.contains("pre-cont")) { // jshint ignore:line
+		if (pre?.classList.contains("pre-cont")) {
 			let ta = pre.querySelector("textarea");
 			if (ta && ta.dataset.geaendert) {
 				// XML wurde bearbeitet => Speichern?
@@ -3813,7 +3878,9 @@ let xml = {
 		}
 		// Themenfeld
 		xmlStr += "\t".repeat(2) + "<Diasystematik>\n";
-		xmlStr += "\t".repeat(3) + `<Themenfeld>${d.md.tf.replace(/&(?!amp;)/g, "&amp;")}</Themenfeld>\n`;
+		for (const tf of d.md.tf) {
+			xmlStr += "\t".repeat(3) + `<Themenfeld>${tf.replace(/&(?!amp;)/g, "&amp;")}</Themenfeld>\n`;
+		}
 		xmlStr += "\t".repeat(2) + "</Diasystematik>\n";
 		// Kurz gefasst und Wortgeschichte
 		let texte = {
@@ -3874,27 +3941,33 @@ let xml = {
 			xmlStr += "\t".repeat(3) + `<Literaturtitel xml:id="${i.id}" Ziel="../share/Literaturliste.xml#${i.id}"/>\n`;
 		}
 		xmlStr += "\t".repeat(2) + "</Literatur>\n";
-		// Bedeutungsgerüst
+		// Bedeutungsgerüste
 		if (xml.bgAkt > -1) {
-			xmlStr += indentStr(d.bg[xml.bgAkt].xl, 2); // z.Zt. nur ein Gerüst exportieren
+			for (const g of d.bg) {
+				xmlStr += indentStr(g.xl, 2) + "\n";
+			}
 			xmlStr += "\n";
 		}
 		// Wortinformationen
-		// (z.Zt. nur einen Wortinfoblock exportieren)
-		let wi = d.wi[xml.bgAktGn] ?? []; // jshint ignore:line
-		let vt = "";
-		for (let i of wi) {
-			if (xml.wiMap.export[i.vt] !== vt) {
-				vt = xml.wiMap.export[i.vt];
-				if (/<Verweise Typ/.test(xmlStr)) {
-					xmlStr += "\t".repeat(2) + "</Verweise>\n";
+		let wi = {};
+		for (const typ of Object.keys(xml.wiMap.export)) {
+			for (const v of Object.values(d.wi)) {
+				for (const i of v) {
+					if (i.vt !== typ) {
+						continue;
+					}
+					if (!wi[typ]) {
+						wi[typ] = [];
+					}
+					wi[typ].push(indentStr(i.xl, 3) + "\n");
 				}
-				xmlStr += "\t".repeat(2) + `<Verweise Typ="${vt}">\n`;
 			}
-			xmlStr += indentStr(i.xl, 3);
-			xmlStr += "\n";
 		}
-		if (wi.length) {
+		for (const [k, v] of Object.entries(wi)) {
+			xmlStr += "\t".repeat(2) + `<Verweise Typ="${xml.wiMap.export[k]}">\n`;
+			for (const i of v) {
+				xmlStr += i;
+			}
 			xmlStr += "\t".repeat(2) + "</Verweise>\n";
 		}
 		// Abschluss
@@ -3948,7 +4021,7 @@ let xml = {
 		if (!d.md.ty) {
 			fehlstellen.push("• einen Artikeltyp auswählen");
 		}
-		if (!d.md.tf) {
+		if (!d.md.tf[0]) {
 			fehlstellen.push("• ein Themenfeld auswählen");
 		}
 		if (!d.md.re.length) {
@@ -4216,7 +4289,13 @@ let xml = {
 		// Metadaten
 		let xl = xml.data.xl;
 		xl.md.id = evaluator("//x:Artikel/@xml:id").iterateNext().textContent;
-		xl.md.tf = evaluator("//x:Artikel/x:Diasystematik/x:Themenfeld").iterateNext().textContent;
+		xl.md.tf = [];
+		let tff = evaluator("//x:Artikel/x:Diasystematik/x:Themenfeld"),
+			tf = tff.iterateNext();
+		while (tf) {
+			xl.md.tf.push(tf.textContent);
+			tf = tff.iterateNext();
+		}
 		xl.md.ty = evaluator("//x:Artikel/@Typ").iterateNext().textContent;
 		let re = evaluator("//x:Revision"),
 			i = re.iterateNext();
@@ -4235,7 +4314,7 @@ let xml = {
 			i = re.iterateNext();
 		}
 		// Lemmata
-		let le = evaluator("//x:Lemma");
+		let le = evaluator("//x:Artikel/x:Lemma");
 		i = le.iterateNext();
 		while (i) {
 			let o = {
@@ -4359,19 +4438,22 @@ let xml = {
 			i = wi.iterateNext();
 		}
 		// Bedeutungsgerüst
-		let bg = evaluator("//x:Lesarten");
+		let bg = evaluator("//x:Lesarten"),
+			bgNr = 1;
 		i = bg.iterateNext();
 		while (i) {
-			xml.bgAkt = 0;
-			xml.bgAktGn = "1";
+			xml.bgAkt = bgNr - 1;
+			xml.bgAktGn = "" + bgNr;
 			let o = {
-				gn: "1",
+				gn: "" + bgNr,
+				la: "",
 				nw: [],
 				tf: [],
 				xl: normierer(i),
 			};
 			xl.bg.push(o);
 			xml.bgRefreshData(); // hier wird xml.speichern() angestoßen
+			bgNr++;
 			i = bg.iterateNext();
 		}
 		// Abschluss des Einlesevorgangs => Formular neu aufbauen

@@ -2002,7 +2002,7 @@ let bedeutungen = {
 			ebeneZuvor = 1;
 		for (let i of lesarten) {
 			let t = "\n" + "\t".repeat(i.ebene),
-				la = `${t}<Lesart n="${i.n}" xml:id="l-${i.id}">`;
+				la = `${t}<Lesart n="${i.n}" xml:id="l${bedeutungen.data.gn}-${i.id}">`;
 			if (i.dia.length) {
 				la += `${t}\t<Diasystematik>`;
 				for (let d of i.dia) {
@@ -2040,6 +2040,7 @@ let bedeutungen = {
 			key: "bg",
 			ds: {
 				gn: bedeutungen.data.gn,
+				la: "",
 				nw: [],
 				tf: [],
 				xl,

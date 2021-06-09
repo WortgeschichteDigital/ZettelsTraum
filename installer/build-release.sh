@@ -165,33 +165,6 @@ makeReleaseNotes() {
 vorbereiten() {
 	echo -e "  \033[1;32m*\033[0m Release vorbereiten\n"
 
-	# Module updaten
-	read -p "  Nächste Aufgabe \"Module updaten\" (Enter) . . ."
-	echo ""
-	bash "${dir}/build-modules.sh" inc
-	echo ""
-	cd "${dir}/../"
-	while : ; do
-		read -ep "Commit erstellen (j/n): " commit
-		if [ "$commit" = "j" ]; then
-			echo ""
-			git status
-			echo ""
-			read -p "  Nächste Aufgabe \"Commit erstellen\" (Enter) . . ."
-			echo ""
-			git commit -a
-			echo ""
-			git status
-			echo ""
-			break
-		elif [ "$commit" = "n" ]; then
-			echo ""
-			break
-		else
-			zeilenWeg 1
-		fi
-	done
-
 	# Version festlegen
 	read -p "  Nächste Aufgabe \"Version festlegen\" (Enter) . . ."
 	echo -e "\n  \033[1;32m*\033[0m Version festlegen\n"

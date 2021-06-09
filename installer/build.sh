@@ -381,11 +381,6 @@ makeArchive() {
 		zip -qr $file zettelstraum-${system}-x64
 	fi
 
-	# Quellordner umbenennen
-	if [ "$clean" = "j" ]; then
-		mv zettelstraum-${system}-x64 zettelstraum-${system}-x64-packed
-	fi
-
 	cd "$dir"
 }
 
@@ -456,6 +451,10 @@ execJob() {
 			cd "$dir"
 			return
 		fi
+		if ! echo "$arch" | egrep -q "^(gz|zip)$"; then
+			system=$(sysName)
+			mv "${build}/zettelstraum-${system}-x64" "${build}/zettelstraum-${system}-x64-packed"
+		fi
 	fi
 
 	# Tarball
@@ -483,7 +482,7 @@ execJob() {
 
 		# Bereinigen
 		while read f; do
-			if echo "$f" | egrep -q "(zettelstraum-(darwin|linux|win32)-x64|\.AppImage|\.deb|\.dmg|\.exe|\.rpm|\.tar\.gz|\.zip)\$"; then
+			if ! echo "$f" | egrep -q "(\.blockmap|changelog|-unpacked|\.yaml|\.yml|zettelstraum-(darwin|linux|win32)-x64)\$"; then
 				continue
 			fi
 			rm -r "$f"
