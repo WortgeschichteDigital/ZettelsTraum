@@ -363,9 +363,9 @@ let konversion = {
 			v.la = "";
 		}
 		// data.xl.md.tf in Array umwandeln
-		if (data.xl.md.tf) {
+		if (data.xl?.md.tf) {
 			data.xl.md.tf = [data.xl.md.tf];
-		} else {
+		} else if (data.xl?.md) {
 			data.xl.md.tf = [];
 		}
 		// Versionsnummer hochzählen
