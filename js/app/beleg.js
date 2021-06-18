@@ -1073,7 +1073,7 @@ let beleg = {
 		}
 		// Style-Block(s) und Kommentare entfernen
 		html = html.replace(/<style.*?>(.|\n)+?<\/style>/g, "");
-		html = html.replace(/<!--(.|\n)+?-->/g, "");
+		html = html.replace(/<!--.+?-->/gs, "");
 		// Inline-Styles löschen (widerspricht sonst der Content-Security-Policy)
 		html = html.replace(/<([a-zA-Z0-9]+) .+?>/g, function(m, p1) {
 			return `<${p1}>`;
