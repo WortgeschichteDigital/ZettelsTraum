@@ -4,7 +4,7 @@ let konversion = {
 	// aktuelle Version des Dateiformats
 	// *** WICHTIG! *** WICHTIG! *** WICHTIG! ***
 	// Bei Änderungen anpassen!
-	version: 19,
+	version: 20,
 	// Verteilerfunktion
 	start () {
 		konversion.von1nach2();
@@ -25,6 +25,7 @@ let konversion = {
 		konversion.von16nach17();
 		konversion.von17nach18();
 		konversion.von18nach19();
+		konversion.von19nach20();
 	},
 	// Konversion des Dateiformats von Version 1 nach Version 2
 	von1nach2 () {
@@ -362,11 +363,21 @@ let konversion = {
 		for (let v of Object.values(data.rd.xl.bg)) {
 			v.la = "";
 		}
+		// Versionsnummer hochzählen
+		data.ve++;
+		// Änderungsmarkierung setzen
+		kartei.karteiGeaendert(true);
+	},
+	// Konversion des Dateiformats von Version 18 nach Version 19
+	von19nach20 () {
+		if (data.ve > 19) {
+			return;
+		}
 		// data.xl.md.tf in Array umwandeln
-		if (data.xl?.md.tf) {
-			data.xl.md.tf = [data.xl.md.tf];
-		} else if (data.xl?.md) {
-			data.xl.md.tf = [];
+		if (data.rd.xl?.md.tf) {
+			data.rd.xl.md.tf = [data.rd.xl.md.tf];
+		} else if (data.rd.xl.md) {
+			data.rd.xl.md.tf = [];
 		}
 		// Versionsnummer hochzählen
 		data.ve++;
