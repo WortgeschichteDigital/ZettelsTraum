@@ -1825,6 +1825,12 @@ let liste = {
 			} else {
 				this.classList.remove("icon-tools-gebucht");
 			}
+			// Filterleiste neu aufbauen
+			const belege = Object.keys(data.ka);
+			liste.belegeSortierenCache = {};
+			belege.sort(liste.belegeSortieren);
+			filter.aufbauen(belege);
+			// Kartei geändert
 			kartei.karteiGeaendert(true);
 		});
 	},
