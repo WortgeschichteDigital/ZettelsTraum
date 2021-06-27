@@ -379,6 +379,8 @@ let konversion = {
 		} else if (data.rd.xl.md) {
 			data.rd.xl.md.tf = [];
 		}
+		// Datenfeld für Nebenlemmata erzeugen, die mit dem aktuellen Wort behandelt werden
+		data.rd.nl = "";
 		// Versionsnummer hochzählen
 		data.ve++;
 		// Änderungsmarkierung setzen

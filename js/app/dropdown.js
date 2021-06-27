@@ -316,6 +316,14 @@ let dropdown = {
 			dropdown.data = [...xml.data.autorinnen];
 		} else if (feld_id === "le-le") {
 			dropdown.data = xml.lemmata();
+			if (xml.data.nebenlemmata) {
+				xml.data.nebenlemmata.split(/, */).forEach(nl => {
+					if (!nl) {
+						return;
+					}
+					dropdown.data.push(nl);
+				});
+			}
 		} else if (feld_id === "le-ty") {
 			dropdown.data = [...xml.dropdown.lemmaTypen];
 		} else if (/^(le-re|bg-tf-ti)$/.test(feld_id)) {

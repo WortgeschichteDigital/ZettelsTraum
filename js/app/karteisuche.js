@@ -332,6 +332,7 @@ let karteisuche = {
 						wort: "",
 						wortSort: "",
 						redaktion: [],
+						nebenlemmata: [],
 						behandeltIn: "",
 						behandeltMit: [],
 						passt: false,
@@ -394,6 +395,7 @@ let karteisuche = {
 						wort: "",
 						wortSort: "",
 						redaktion: [],
+						nebenlemmata: [],
 						behandeltIn: "",
 						behandeltMit: [],
 						passt: false,
@@ -403,6 +405,20 @@ let karteisuche = {
 				// Wort merken
 				ziel.wort = woerter[i];
 				ziel.wortSort = karteisuche.wortSort(woerter[i]);
+				// Nebenlemmata
+				if (datei.rd.nl) {
+					datei.rd.nl.split(/, */).forEach(nl => {
+						if (!nl) {
+							return;
+						}
+						ziel.nebenlemmata.push(nl);
+						ziel.behandeltMit.push(nl);
+						if (!ztjMit[woerter[i]]) {
+							ztjMit[woerter[i]] = [];
+						}
+						ztjMit[woerter[i]].push(nl);
+					});
+				}
 				// Behandelt-Datensätze
 				if (woerter.length > 1) {
 					let mit = [...woerter];
@@ -430,7 +446,7 @@ let karteisuche = {
 						// erst danach in data.rd.er
 						er = datei.rd;
 					}
-					for (let erg of er) {
+					for (const erg of er) {
 						ziel.redaktion.push({...erg});
 					}
 				}
@@ -438,9 +454,47 @@ let karteisuche = {
 		}
 		// Karteiliste ggf. ergänzen
 		karteisuche.ztj = karteisuche.ztj.concat(ztjAdd);
-		for (let i of karteisuche.ztj) {
+		for (const i of karteisuche.ztj) {
+			// Wörter ergänzen, die mit dem Wort der aktuellen Kartei behandelt werden
 			if (ztjMit[i.wort]) {
 				i.behandeltMit = i.behandeltMit.concat(ztjMit[i.wort]);
+			}
+			// ggf. Einträge der Nebenlemmata ergänzen
+			if (i.nebenlemmata.length) {
+				forX: for (const nl of i.nebenlemmata) {
+					for (const ztj of karteisuche.ztj) {
+						if (ztj.wort === nl) {
+							continue forX;
+						}
+					}
+					const obj = {
+						pfad: i.pfad,
+						ctime: i.ctime,
+						wort: nl,
+						wortSort: karteisuche.wortSort(nl),
+						redaktion: [],
+						nebenlemmata: [],
+						behandeltIn: i.wort,
+						behandeltMit: [],
+						passt: i.passt,
+					};
+					karteisuche.ztj.push(obj);
+				}
+			}
+		}
+		// Redaktionsereignisse ggf. aus der übergeordneten Kartei holen
+		for (const i of karteisuche.ztj) {
+			if (!i.behandeltIn) {
+				continue;
+			}
+			for (const j of karteisuche.ztj) {
+				if (j.wort === i.behandeltIn) {
+					i.redaktion = [];
+					for (const erg of j.redaktion) {
+						i.redaktion.push({...erg});
+					}
+					break;
+				}
 			}
 		}
 		// passende Karteien auflisten
@@ -471,7 +525,7 @@ let karteisuche = {
 	//   wortSort (String; Sortierform des Worts der Kartei)
 	//   redaktion (Array; Klon von data.rd.er)
 	//   behandeltIn (String; Wort, in dem das aktuelle Wort behandelt wird)
-	//   behandeltMit (String; Array, mit denen das aktuelle Wort behandelt wird)
+	//   behandeltMit (Array; Lemmata, die mit dem aktuellen Wort behandelt werden)
 	//   passt (Boolean; passt zu den Suchfiltern)
 	ztj: [],
 	// Cache für ZTJ-Dateien
@@ -517,6 +571,7 @@ let karteisuche = {
 						wort: "",
 						wortSort: "",
 						redaktion: [],
+						nebenlemmata: [],
 						behandeltIn: "",
 						behandeltMit: [],
 						passt: false,

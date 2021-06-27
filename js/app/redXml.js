@@ -71,6 +71,7 @@ let redXml = {
 			gerueste: {},
 			letzter_pfad: optionen.data.letzter_pfad,
 			themenfelder: [],
+			nebenlemmata: data.rd.nl,
 			wort: kartei.wort,
 			xl: data.rd.xl,
 		};

@@ -15,18 +15,19 @@
 }
 
 #red-meta p {
-	padding-left: 115px;
-	text-indent: -115px;
+	padding-left: 120px;
+	text-indent: -120px;
 }
 
 #red-meta label,
 #red-meta span.label {
 	display: inline-block;
-	width: 115px;
+	width: 120px;
 	font-style: italic;
 	text-indent: 0;
 }
 
+#red-meta-nebenlemmata,
 #red-meta-behandelt-mit {
 	width: calc(100% - 12px);
 }
