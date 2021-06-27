@@ -853,6 +853,10 @@ let beleg = {
 			text = helfer.typographie(text);
 			text = beleg.toolsKopierenAddQuelle(text, false, obj);
 			text = beleg.toolsKopierenAddJahr(text, false);
+			if (optionen.data.einstellungen["textkopie-notizen"]) {
+				html = beleg.toolsKopierenAddNotizen(html, true, obj);
+				text = beleg.toolsKopierenAddNotizen(text, false, obj);
+			}
 			// Text in Zwischenablage oder Text zurückgeben
 			if (cb) {
 				clipboard.write({
@@ -995,6 +999,33 @@ let beleg = {
 		} else {
 			text += "\n\n---\n\n";
 			text += obj.qu;
+		}
+		return text;
+	},
+	// Notizen zum Belegtext hinzufügen
+	//   text = String
+	//     (Text, der um die Notizen ergänzt werden soll)
+	//   html = Boolean
+	//     (Text soll um eine html-formatierte Notizenangaben ergänzt werden)
+	//   obj = Object
+	//     (das Datenobjekt, in dem die Notizen steht)
+	toolsKopierenAddNotizen (text, html, obj) {
+		if (!obj.no) {
+			return text;
+		}
+		if (html) {
+			text += "<hr>";
+			let notizen = obj.no.trim().split("\n");
+			notizen.forEach(i => {
+				i = helfer.textTrim(i, true);
+				if (!i) {
+					return;
+				}
+				text += `<p>${helfer.escapeHtml(i)}</p>`;
+			});
+		} else {
+			text += "\n\n---\n\n";
+			text += obj.no.trim();
 		}
 		return text;
 	},

@@ -488,6 +488,10 @@ let popup = {
 				html = helfer.typographie(html);
 				html = beleg.toolsKopierenAddQuelle(html, true, obj);
 				html = beleg.toolsKopierenAddJahr(html, true);
+				if (optionen.data.einstellungen["textkopie-notizen"]) {
+					html = beleg.toolsKopierenAddNotizen(html, true, obj);
+					text = beleg.toolsKopierenAddNotizen(text, false, obj);
+				}
 			}
 			popup.textauswahl.text = helfer.escapeHtml(text, true);
 			popup.textauswahl.html = html;
