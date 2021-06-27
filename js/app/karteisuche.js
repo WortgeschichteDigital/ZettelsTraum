@@ -829,16 +829,20 @@ let karteisuche = {
 	//     (das Wort, um das es geht)
 	wortAlpha (wort) {
 		let erster = wort.substring(0, 1).toUpperCase();
-		switch (erster) {
-			case "Ä":
-				erster = "A";
-				break;
-			case "Ö":
-				erster = "O";
-				break;
-			case "Ü":
-				erster = "U";
-				break;
+		if (/[0-9]/.test(erster)) {
+			erster = "#";
+		} else if (/[ÄÖÜ]/.test(erster)) {
+			switch (erster) {
+				case "Ä":
+					erster = "A";
+					break;
+				case "Ö":
+					erster = "O";
+					break;
+				case "Ü":
+					erster = "U";
+					break;
+			}
 		}
 		return erster;
 	},
