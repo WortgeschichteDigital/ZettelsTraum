@@ -516,6 +516,21 @@ let karteisuche = {
 		karteisuche.filterSpeichern();
 		// Status der Karteisuche zurücksetzen
 		ipcRenderer.invoke("ztj-cache-status-set", false);
+		// Systemmeldung ausgeben
+		let notifyOpts = {
+			body: "Die Karteisuche ist abgeschlossen!",
+			icon: "img/icon/linux/icon_128px.png",
+			lang: "de",
+		};
+		switch (process.platform) {
+			case "darwin":
+				notifyOpts.icon = "img/icon/mac/icon.icns";
+				break;
+			case "win32":
+				notifyOpts.icon = "img/icon/win/icon.ico";
+				break;
+		}
+		new Notification(appInfo.name, notifyOpts);
 	},
 	// ZTJ-Dateien, die gefunden wurden;
 	// Array enthält Objekte:
