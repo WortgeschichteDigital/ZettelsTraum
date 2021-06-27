@@ -265,6 +265,8 @@ let dropdown = {
 			dropdown.data = dropdown.dataTags(feld_id);
 		} else if (/^kopieren-geruest-/.test(feld_id)) {
 			dropdown.data = dropdown.dataKopierenGerueste();
+		} else if (/^karteisuche-lemmatyp-/.test(feld_id)) {
+			dropdown.data = ["Hauptlemma", "Nebenlemma"];
 		} else if (/^karteisuche-filter-/.test(feld_id)) {
 			dropdown.data = Object.keys(karteisuche.filterTypen);
 		} else if (/^karteisuche-themenfeld-/.test(feld_id)) {

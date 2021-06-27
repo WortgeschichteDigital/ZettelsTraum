@@ -349,7 +349,8 @@ let karteisuche = {
 		// Karteien analysieren
 		const {ipcRenderer} = require("electron");
 		let ztjAdd = [],
-			ztjMit = {};
+			ztjMit = {},
+			nebenlemmata = new Set();
 		for (let kartei of karteisuche.ztj) {
 			// Kartei einlesen
 			let datei = {};
@@ -411,6 +412,7 @@ let karteisuche = {
 						if (!nl) {
 							return;
 						}
+						nebenlemmata.add(nl);
 						ziel.nebenlemmata.push(nl);
 						ziel.behandeltMit.push(nl);
 						if (!ztjMit[woerter[i]]) {
@@ -426,6 +428,7 @@ let karteisuche = {
 					ziel.behandeltMit = [...mit];
 				}
 				if (datei.rd.bh) {
+					nebenlemmata.add(woerter[i]);
 					ziel.behandeltIn = datei.rd.bh;
 					if (!ztjMit[datei.rd.bh]) {
 						ztjMit[datei.rd.bh] = [];
@@ -479,6 +482,18 @@ let karteisuche = {
 						passt: i.passt,
 					};
 					karteisuche.ztj.push(obj);
+				}
+			}
+		}
+		// ggf. Karteien nach Lemmatyp filtern
+		// (da die Lemmatypen keine Eigenschaft der Karteien sind, kann dieser Filter
+		// nicht in karteisuche.filtern() angewendet werden)
+		const lt = karteisuche.filterWerte.filter(i => i.typ === "Lemmatyp");
+		if (lt.length) {
+			for (const i of karteisuche.ztj) {
+				if (lt[0].lt === "Hauptlemma" && nebenlemmata.has(i.wort) ||
+						lt[0].lt === "Nebenlemma" && !nebenlemmata.has(i.wort)) {
+					i.passt = false;
 				}
 			}
 		}
@@ -1153,6 +1168,16 @@ let karteisuche = {
 				label: "",
 			},
 		],
+		"Lemmatyp": [
+			{
+				type: "dropdown",
+				ro: true,
+				cl: "karteisuche-lemmatyp",
+				ph: "",
+				pre: "Hauptlemma",
+				label: "",
+			},
+		],
 		"Themenfeld": [
 			{
 				type: "dropdown",
@@ -1487,6 +1512,11 @@ let karteisuche = {
 					continue;
 				}
 				obj.reg = new RegExp(helfer.formVariSonderzeichen(helfer.escapeRegExp(text)), "i");
+				karteisuche.filterWerte.push(obj);
+			}
+			// Lemmatyp
+			else if (typ === "Lemmatyp") {
+				obj.lt = document.getElementById(`karteisuche-lemmatyp-${id}`).value;
 				karteisuche.filterWerte.push(obj);
 			}
 			// Themenfelder/Sachgebiet
