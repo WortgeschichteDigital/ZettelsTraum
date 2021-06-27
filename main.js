@@ -43,7 +43,7 @@ let devtools = !app.isPackaged;
 let fehler = [];
 
 // Menü-Vorlagen
-let layoutMenu, layoutMenuAnsicht, layoutMenuMac;
+let layoutMenu, layoutMenuBearbeiten, layoutMenuAnsicht, layoutMenuMac;
 
 // Variablen für die Kopierfunktion
 let kopieren = {
@@ -329,42 +329,6 @@ layoutMenu = [
 		],
 	},
 	{
-		label: "B&earbeiten",
-		submenu: [
-			{
-				label: "Rückgängig",
-				icon: path.join(__dirname, "img", "menu", "pfeil-rund-links.png"),
-				role: "undo",
-			},
-			{
-				label: "Wiederherstellen",
-				icon: path.join(__dirname, "img", "menu", "pfeil-rund-rechts.png"),
-				role: "redo",
-			},
-			{ type: "separator" },
-			{
-				label: "Ausschneiden",
-				icon: path.join(__dirname, "img", "menu", "schere.png"),
-				role: "cut",
-			},
-			{
-				label: "Kopieren",
-				icon: path.join(__dirname, "img", "menu", "kopieren.png"),
-				role: "copy",
-			},
-			{
-				label: "Einfügen",
-				icon: path.join(__dirname, "img", "menu", "einfuegen.png"),
-				role: "paste",
-			},
-			{
-				label: "Alles auswählen",
-				icon: path.join(__dirname, "img", "menu", "auswaehlen.png"),
-				role: "selectAll",
-			},
-		],
-	},
-	{
 		label: "&Hilfe",
 		submenu: [
 			{
@@ -404,6 +368,45 @@ layoutMenu = [
 			{
 				label: "Über Electron",
 				click: () => fenster.erstellenUeber("electron"),
+			},
+		],
+	},
+];
+
+layoutMenuBearbeiten = [
+	{
+		label: "B&earbeiten",
+		submenu: [
+			{
+				label: "Rückgängig",
+				icon: path.join(__dirname, "img", "menu", "pfeil-rund-links.png"),
+				role: "undo",
+			},
+			{
+				label: "Wiederherstellen",
+				icon: path.join(__dirname, "img", "menu", "pfeil-rund-rechts.png"),
+				role: "redo",
+			},
+			{ type: "separator" },
+			{
+				label: "Ausschneiden",
+				icon: path.join(__dirname, "img", "menu", "schere.png"),
+				role: "cut",
+			},
+			{
+				label: "Kopieren",
+				icon: path.join(__dirname, "img", "menu", "kopieren.png"),
+				role: "copy",
+			},
+			{
+				label: "Einfügen",
+				icon: path.join(__dirname, "img", "menu", "einfuegen.png"),
+				role: "paste",
+			},
+			{
+				label: "Alles auswählen",
+				icon: path.join(__dirname, "img", "menu", "auswaehlen.png"),
+				role: "selectAll",
 			},
 		],
 	},
@@ -453,12 +456,13 @@ layoutMenuMac = [
 	},
 ];
 
-// Ansicht im Hauptmenü ergänzen
+// Bearbeiten + Ansicht im Hauptmenü ergänzen
+layoutMenu.splice(layoutMenu.length - 1, 0, layoutMenuBearbeiten[0]);
 layoutMenu.splice(layoutMenu.length - 1, 0, layoutMenuAnsicht[0]);
 
 // ggf. Developer-Menü ergänzen
 if (devtools) {
-	[layoutMenu, layoutMenuAnsicht].forEach(i => {
+	[layoutMenu, layoutMenuBearbeiten, layoutMenuAnsicht].forEach(i => {
 		i.push({
 			label: "&Dev",
 			submenu: [
@@ -489,7 +493,7 @@ if (process.platform !== "darwin") {
 // macOS: Menüvorlagen aufbereiten
 if (process.platform === "darwin") {
 	// Standardmenüs anpassen
-	for (let menu of [layoutMenu, layoutMenuAnsicht]) {
+	for (let menu of [layoutMenu, layoutMenuBearbeiten, layoutMenuAnsicht]) {
 		for (let mp of menu) {
 			mp.label = mp.label.replace("&", "");
 			const zuletztIdx = mp.submenu.findIndex(i => i.id === "kartei-zuletzt");
@@ -498,7 +502,8 @@ if (process.platform === "darwin") {
 			}
 		}
 	}
-	// Ansichtmenü ergänzen
+	// Bearbeiten + App im Ansichtmenü ergänzen
+	layoutMenuAnsicht.unshift(layoutMenuBearbeiten[0]);
 	layoutMenuAnsicht.unshift(layoutMenuMac[0]);
 }
 
