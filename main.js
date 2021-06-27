@@ -314,7 +314,7 @@ layoutMenu = [
 				id: "redaktion-wortinformationen",
 			},
 			{
-				label: "XML",
+				label: "XML-Fenster",
 				icon: path.join(__dirname, "img", "menu", "xml.png"),
 				click: () => appMenu.befehl("redaktion-xml"),
 				id: "redaktion-xml",
