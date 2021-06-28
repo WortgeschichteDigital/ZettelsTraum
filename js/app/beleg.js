@@ -853,6 +853,10 @@ let beleg = {
 			text = helfer.typographie(text);
 			text = beleg.toolsKopierenAddQuelle(text, false, obj);
 			text = beleg.toolsKopierenAddJahr(text, false);
+			if (optionen.data.einstellungen["textkopie-notizen"]) {
+				html = beleg.toolsKopierenAddNotizen(html, true, obj);
+				text = beleg.toolsKopierenAddNotizen(text, false, obj);
+			}
 			// Text in Zwischenablage oder Text zurückgeben
 			if (cb) {
 				clipboard.write({
@@ -998,6 +1002,33 @@ let beleg = {
 		}
 		return text;
 	},
+	// Notizen zum Belegtext hinzufügen
+	//   text = String
+	//     (Text, der um die Notizen ergänzt werden soll)
+	//   html = Boolean
+	//     (Text soll um eine html-formatierte Notizenangaben ergänzt werden)
+	//   obj = Object
+	//     (das Datenobjekt, in dem die Notizen steht)
+	toolsKopierenAddNotizen (text, html, obj) {
+		if (!obj.no) {
+			return text;
+		}
+		if (html) {
+			text += "<hr>";
+			let notizen = obj.no.trim().split("\n");
+			notizen.forEach(i => {
+				i = helfer.textTrim(i, true);
+				if (!i) {
+					return;
+				}
+				text += `<p>${helfer.escapeHtml(i)}</p>`;
+			});
+		} else {
+			text += "\n\n---\n\n";
+			text += obj.no.trim();
+		}
+		return text;
+	},
 	// Tool Einfügen: Text möglichst unter Beibehaltung der Formatierung einfügen
 	//   link = Element
 	//     (Link, auf den geklickt wurde)
@@ -1073,7 +1104,7 @@ let beleg = {
 		}
 		// Style-Block(s) und Kommentare entfernen
 		html = html.replace(/<style.*?>(.|\n)+?<\/style>/g, "");
-		html = html.replace(/<!--(.|\n)+?-->/g, "");
+		html = html.replace(/<!--.+?-->/gs, "");
 		// Inline-Styles löschen (widerspricht sonst der Content-Security-Policy)
 		html = html.replace(/<([a-zA-Z0-9]+) .+?>/g, function(m, p1) {
 			return `<${p1}>`;

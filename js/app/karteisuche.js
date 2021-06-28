@@ -332,6 +332,7 @@ let karteisuche = {
 						wort: "",
 						wortSort: "",
 						redaktion: [],
+						nebenlemmata: [],
 						behandeltIn: "",
 						behandeltMit: [],
 						passt: false,
@@ -348,7 +349,8 @@ let karteisuche = {
 		// Karteien analysieren
 		const {ipcRenderer} = require("electron");
 		let ztjAdd = [],
-			ztjMit = {};
+			ztjMit = {},
+			nebenlemmata = new Set();
 		for (let kartei of karteisuche.ztj) {
 			// Kartei einlesen
 			let datei = {};
@@ -394,6 +396,7 @@ let karteisuche = {
 						wort: "",
 						wortSort: "",
 						redaktion: [],
+						nebenlemmata: [],
 						behandeltIn: "",
 						behandeltMit: [],
 						passt: false,
@@ -403,6 +406,21 @@ let karteisuche = {
 				// Wort merken
 				ziel.wort = woerter[i];
 				ziel.wortSort = karteisuche.wortSort(woerter[i]);
+				// Nebenlemmata
+				if (datei.rd.nl) {
+					datei.rd.nl.split(/, */).forEach(nl => {
+						if (!nl) {
+							return;
+						}
+						nebenlemmata.add(nl);
+						ziel.nebenlemmata.push(nl);
+						ziel.behandeltMit.push(nl);
+						if (!ztjMit[woerter[i]]) {
+							ztjMit[woerter[i]] = [];
+						}
+						ztjMit[woerter[i]].push(nl);
+					});
+				}
 				// Behandelt-Datensätze
 				if (woerter.length > 1) {
 					let mit = [...woerter];
@@ -410,6 +428,7 @@ let karteisuche = {
 					ziel.behandeltMit = [...mit];
 				}
 				if (datei.rd.bh) {
+					nebenlemmata.add(woerter[i]);
 					ziel.behandeltIn = datei.rd.bh;
 					if (!ztjMit[datei.rd.bh]) {
 						ztjMit[datei.rd.bh] = [];
@@ -430,7 +449,7 @@ let karteisuche = {
 						// erst danach in data.rd.er
 						er = datei.rd;
 					}
-					for (let erg of er) {
+					for (const erg of er) {
 						ziel.redaktion.push({...erg});
 					}
 				}
@@ -438,9 +457,59 @@ let karteisuche = {
 		}
 		// Karteiliste ggf. ergänzen
 		karteisuche.ztj = karteisuche.ztj.concat(ztjAdd);
-		for (let i of karteisuche.ztj) {
+		for (const i of karteisuche.ztj) {
+			// Wörter ergänzen, die mit dem Wort der aktuellen Kartei behandelt werden
 			if (ztjMit[i.wort]) {
 				i.behandeltMit = i.behandeltMit.concat(ztjMit[i.wort]);
+			}
+			// ggf. Einträge der Nebenlemmata ergänzen
+			if (i.nebenlemmata.length) {
+				forX: for (const nl of i.nebenlemmata) {
+					for (const ztj of karteisuche.ztj) {
+						if (ztj.wort === nl) {
+							continue forX;
+						}
+					}
+					const obj = {
+						pfad: i.pfad,
+						ctime: i.ctime,
+						wort: nl,
+						wortSort: karteisuche.wortSort(nl),
+						redaktion: [],
+						nebenlemmata: [],
+						behandeltIn: i.wort,
+						behandeltMit: [],
+						passt: i.passt,
+					};
+					karteisuche.ztj.push(obj);
+				}
+			}
+		}
+		// ggf. Karteien nach Lemmatyp filtern
+		// (da die Lemmatypen keine Eigenschaft der Karteien sind, kann dieser Filter
+		// nicht in karteisuche.filtern() angewendet werden)
+		const lt = karteisuche.filterWerte.filter(i => i.typ === "Lemmatyp");
+		if (lt.length) {
+			for (const i of karteisuche.ztj) {
+				if (lt[0].lt === "Hauptlemma" && nebenlemmata.has(i.wort) ||
+						lt[0].lt === "Nebenlemma" && !nebenlemmata.has(i.wort)) {
+					i.passt = false;
+				}
+			}
+		}
+		// Redaktionsereignisse ggf. aus der übergeordneten Kartei holen
+		for (const i of karteisuche.ztj) {
+			if (!i.behandeltIn) {
+				continue;
+			}
+			for (const j of karteisuche.ztj) {
+				if (j.wort === i.behandeltIn) {
+					i.redaktion = [];
+					for (const erg of j.redaktion) {
+						i.redaktion.push({...erg});
+					}
+					break;
+				}
 			}
 		}
 		// passende Karteien auflisten
@@ -462,6 +531,21 @@ let karteisuche = {
 		karteisuche.filterSpeichern();
 		// Status der Karteisuche zurücksetzen
 		ipcRenderer.invoke("ztj-cache-status-set", false);
+		// Systemmeldung ausgeben
+		let notifyOpts = {
+			body: "Die Karteisuche ist abgeschlossen!",
+			icon: "img/icon/linux/icon_128px.png",
+			lang: "de",
+		};
+		switch (process.platform) {
+			case "darwin":
+				notifyOpts.icon = "img/icon/mac/icon.icns";
+				break;
+			case "win32":
+				notifyOpts.icon = "img/icon/win/icon.ico";
+				break;
+		}
+		new Notification(appInfo.name, notifyOpts);
 	},
 	// ZTJ-Dateien, die gefunden wurden;
 	// Array enthält Objekte:
@@ -471,7 +555,7 @@ let karteisuche = {
 	//   wortSort (String; Sortierform des Worts der Kartei)
 	//   redaktion (Array; Klon von data.rd.er)
 	//   behandeltIn (String; Wort, in dem das aktuelle Wort behandelt wird)
-	//   behandeltMit (String; Array, mit denen das aktuelle Wort behandelt wird)
+	//   behandeltMit (Array; Lemmata, die mit dem aktuellen Wort behandelt werden)
 	//   passt (Boolean; passt zu den Suchfiltern)
 	ztj: [],
 	// Cache für ZTJ-Dateien
@@ -517,6 +601,7 @@ let karteisuche = {
 						wort: "",
 						wortSort: "",
 						redaktion: [],
+						nebenlemmata: [],
 						behandeltIn: "",
 						behandeltMit: [],
 						passt: false,
@@ -774,16 +859,20 @@ let karteisuche = {
 	//     (das Wort, um das es geht)
 	wortAlpha (wort) {
 		let erster = wort.substring(0, 1).toUpperCase();
-		switch (erster) {
-			case "Ä":
-				erster = "A";
-				break;
-			case "Ö":
-				erster = "O";
-				break;
-			case "Ü":
-				erster = "U";
-				break;
+		if (/[0-9]/.test(erster)) {
+			erster = "#";
+		} else if (/[ÄÖÜ]/.test(erster)) {
+			switch (erster) {
+				case "Ä":
+					erster = "A";
+					break;
+				case "Ö":
+					erster = "O";
+					break;
+				case "Ü":
+					erster = "U";
+					break;
+			}
 		}
 		return erster;
 	},
@@ -1076,6 +1165,16 @@ let karteisuche = {
 				cl: "karteisuche-karteiwort",
 				ph: "Suchtext",
 				pre: "",
+				label: "",
+			},
+		],
+		"Lemmatyp": [
+			{
+				type: "dropdown",
+				ro: true,
+				cl: "karteisuche-lemmatyp",
+				ph: "",
+				pre: "Hauptlemma",
 				label: "",
 			},
 		],
@@ -1413,6 +1512,11 @@ let karteisuche = {
 					continue;
 				}
 				obj.reg = new RegExp(helfer.formVariSonderzeichen(helfer.escapeRegExp(text)), "i");
+				karteisuche.filterWerte.push(obj);
+			}
+			// Lemmatyp
+			else if (typ === "Lemmatyp") {
+				obj.lt = document.getElementById(`karteisuche-lemmatyp-${id}`).value;
 				karteisuche.filterWerte.push(obj);
 			}
 			// Themenfelder/Sachgebiet

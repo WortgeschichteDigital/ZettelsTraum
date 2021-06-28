@@ -17,6 +17,8 @@ let redMeta = {
 			return;
 		}
 		fenster.querySelector("input").focus();
+		// Nebenlemmata-Feld füllen
+		document.getElementById("red-meta-nebenlemmata").value = data.rd.nl;
 		// Behandelt-mit-Feld füllen
 		document.getElementById("red-meta-behandelt-mit").value = data.rd.bh;
 		// Sachgebiete aufbauen
@@ -71,7 +73,7 @@ let redMeta = {
 			dialog.oeffnen({
 				typ: "alert",
 				text: `Das Programm muss zunächst mit einer ${typ.substring(0, 1).toUpperCase()}${typ.substring(1)}-Datei verknüpft werden.\nTag-Dateien können via <i>${appInfo.name} &gt; Einstellungen &gt; Bedeutungsgerüst</i> geladen werden.`,
-				callback: () => document.getElementById("red-meta-behandelt-mit").focus(),
+				callback: () => document.getElementById("red-meta-nebenlemmata").focus(),
 			});
 			return;
 		}
@@ -181,9 +183,14 @@ let redMeta = {
 	//   input = Element
 	//     (das Textfeld)
 	aktionText (input) {
-		if (input.id === "red-meta-behandelt-mit") {
+		if (/red-meta-(nebenlemmata|behandelt-mit)/.test(input.id)) {
 			input.addEventListener("input", function() {
-				data.rd.bh = this.value;
+				const map = {
+					"red-meta-nebenlemmata": "nl",
+					"red-meta-behandelt-mit": "bh",
+				};
+				const key = map[this.id];
+				data.rd[key] = this.value;
 				// die folgenden Funktionen nicht zu häufig aufrufen
 				clearTimeout(redMeta.behandeltInTimeout);
 				redMeta.behandeltInTimeout = setTimeout(() => {

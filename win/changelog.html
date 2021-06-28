@@ -46,6 +46,8 @@
 			<div>
 				<h2><span>Version 1.0.0-beta</span><time datetime="2019-12-24">24. Dezember 2019</time></h2>
 
+				<p><span class="obacht">Das Dateiformat hat sich geändert!</span> Ältere <abbr title="Zettel’s Traum JSON">ZTJ</abbr>-Dateien werden automatisch konvertiert; dabei wird eine Änderungsmarkierung gesetzt.</p>
+
 				<h3>Entfernte Funktionen</h3>
 
 				<ul>
@@ -55,13 +57,21 @@
 				<h3>Neue Funktionen</h3>
 
 				<ul>
-					<li></li>
+					<li>Beim Kopieren von Belegtext(en) können nun optional auch die Notizen zum Beleg mitkopiert werden. Um diese Funktion zu nutzen, muss eine <a href="#einstellungen-kopierenNotizen" class="link-handbuch">neue Einstellung</a> aktiviert werden.</li>
+
+					<li><a href="#menueApp-karteisuche" class="link-handbuch">Karteisuche</a>: Mit dem neuen Filter <a href="#menueApp-karteisucheLemmatyp" class="link-handbuch">Lemmatyp</a> können die Suchergebnisse nach Haupt- <abbr title="beziehungsweise">bzw.</abbr> Nebenlemmata gefiltert werden.</li>
+
+					<li>
+						<p>Für Nebenlemmata muss nun keine eigene Kartei mehr erstellt werden. Werden die mit dem Karteiwort zusammen beschriebenen Lemmata in das <a href="#menueRedaktion-metadatenNebenlemmata" class="link-handbuch">neue Textfeld in den Redaktionsmetadaten</a> eingetragen, erscheinen sie auch dann in der <a href="#menueApp-karteisuche" class="link-handbuch">Karteisuche</a>, wenn für diese Lemmata keine Kartei vorhanden ist.</p>
+
+						<p>Außerdem müssen die <a href="#menueRedaktion-ereignisse" class="link-handbuch">Redaktionsereignisse</a> für Karteien, in denen Belege für Nebenlemmata gesammelt werden, nun nicht mehr eigens gepflegt werden. In der Karteisuche werden <abbr title="gegebenenfalls">ggf.</abbr> die Ereignisse desjenigen Hauptlemmas angezeigt, dem das jeweilige Nebenlemma zugeordnet wurde.</p>
+					</li>
 				</ul>
 
 				<h3>Verbesserungen</h3>
 
 				<ul>
-					<li></li>
+					<li><a href="#menueApp-karteisuche" class="link-handbuch">Karteisuche</a>: Nach dem Ende der Suche wird nun eine Systemmeldung ausgegeben.</li>
 				</ul>
 
 				<h3>Updates</h3>

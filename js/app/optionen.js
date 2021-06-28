@@ -121,6 +121,8 @@ let optionen = {
 			"textkopie-klammern-loeschung": false,
 			// beim Kopieren Streichung, Löschung und Autorenzusatz einfärben
 			"textkopie-klammern-farbe": false,
+			// Notizen mitkopieren
+			"textkopie-notizen": false,
 			// Vorauswahl für Kopierfenster ohne Nachfrage ausführen
 			"ctrlC-auto": false,
 			// Vorauswahl für Kopierfenster

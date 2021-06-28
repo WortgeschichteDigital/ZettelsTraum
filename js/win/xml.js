@@ -8,6 +8,10 @@ let xml = {
 	//     (ID des webContents, von dem aus das Fenster geöffnet wurde)
 	//   gerueste = Object
 	//     (Namen der bekannten Bedeutungsgerüste: geruest[ID])
+	//   letzter_pfad = String
+	//     (zuletzt verwendeter Pfad)
+	//   nebenlemmata = String
+	//     (Nebenlemmata der Kartei)
 	//   themenfelder = Array
 	//     (Liste der bekannten Themenfelder)
 	//   wort = String

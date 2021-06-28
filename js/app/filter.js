@@ -1267,7 +1267,7 @@ let filter = {
 							if (filter.regCacheBaum[arr[j]]) {
 								reg = filter.regCacheBaum[arr[j]];
 							} else {
-								reg = new RegExp(`^${helfer.escapeRegExp(arr[j])}(:|\n|$)`);
+								reg = new RegExp(`(^|\n)${helfer.escapeRegExp(arr[j])}(:|\n|$)`);
 								filter.regCacheBaum[arr[j]] = reg;
 							}
 							// suchen

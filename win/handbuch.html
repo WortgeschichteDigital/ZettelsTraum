@@ -2026,6 +2026,14 @@ Mustermann, Erika
 						<p>Der kopierte Text liegt in der Zwischenablage in zwei verschiedenen Formaten vor: einmal in einem unformatierten Textformat und einmal in <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>. Die Farbmarkierungen können nur wiedergegeben werden, wenn Sie den Text in ein Programm einfügen, dass auf das <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>-Format zurückgreift. Auf Office-Programme wie Microsoft Office oder LibreOffice trifft dies zu.</p>
 					</div>
 
+					<p class="erklaerung-option" id="einstellungen-kopierenNotizen">Notizen mitkopieren</p>
+
+					<div class="info">
+						<p><i>Standard:</i> nicht aktiviert</p>
+
+						<p>Ist die Einstellung aktiviert wird beim Kopieren eines Belegtextes der Text im Notizen-Feld mit angehängt (wenn das Feld gefüllt ist). Die Option betrifft auch das stapelweise Kopieren, das mit <a href="#menueBelege-zwischenablage">Belegtexte in Zwischenablage</a> ausgelöst wird.</p>
+					</div>
+
 					<p class="erklaerung-option" id="einstellungen-kopierenVorauswahl">Vorauswahl ohne Nachfrage ausführen</p>
 
 					<div class="info">
@@ -3651,6 +3659,8 @@ Mustermann, Erika
 
 						<p class="add-navi-details" id="menueApp-karteisucheKarteiwort"><b><i>Karteiwort:</i></b> Der Filter sucht nach passenden Karteiwörtern. Die Suche verläuft trunkiert, es werden also auch Wortteile gefunden; Groß- und Kleinschreibung werden ignoriert. <i class="app-name"></i> bietet zwar an, eine neue Kartei mit dem Karteiwort als Namen abzuspeichern. Der Karteiname spielt für diese Suche jedoch keine Rolle. Es wird lediglich das Datenfeld für das Karteiwort <em>innerhalb</em> der Kartei ausgewertet, das vom Dateinamen durchaus abweichen kann und darf.</p>
 
+						<p class="add-navi-details" id="menueApp-karteisucheLemmatyp"><b><i>Lemmatyp:</i></b> Mit diesem Filter kann die Anzeige auf Hautlemmata (eigenständig behandelte Wörter) oder Nebenlemmata (zusammen mit Hauptlemmata kursorisch mitbehandelte Wörter) eingeschränkt werden, je nachdem wie der Filter eingestellt wurde. <abbr title="Vergleich">Vgl.</abbr> auch das <a href="#menueRedaktion-metadatenNebenlemmata">Nebenlemmata-Feld in den Redaktionsmetadaten</a>.</p>
+
 						<p class="add-navi-details" id="menueApp-karteisucheThemenfelder"><b><i>Themenfelder:</i></b> Mit diesem Filter können Sie nach Karteien suchen, die mit einem oder mehreren Themenfeldern verknüpft wurden. Durchsucht wird das Datenfeld <i>Themenfelder</i>, das über das <a href="#menueRedaktion-metadaten">Redaktionsmetadaten-Fenster</a> gefüllt werden kann. Wollen Sie Karteien finden, in denen Bedeutungen im <a href="#bedeutungsgeruest">Bedeutungsgerüst</a> mit bestimmten Themenfeldern verknüpft wurden, müssen Sie den <a href="#menueApp-karteisucheTag">Tag-Filter</a> nutzen.</p>
 
 						<p>Es kann nur nach Themenfeldern gesucht werden, die in einer mit dem Programm <a href="#einstellungen-tagDateien">verknüpften Tag-Datei</a> vorhanden sind. Entscheidend ist hierbei ferner, dass Sie beim Taggen der Dateien, die durchsucht werden, dieselbe Tag-Datei verwendet haben, die aktuell mit dem Programm verknüpft ist. (Es wird nämlich nicht nach dem Tag-Text, sondern der Tag-ID gesucht.) Nutzen Sie immer die mitgelieferte Datei, gibt es keine Probleme.</p>
@@ -4263,6 +4273,8 @@ Gerüst 2 &gt; Gerüst 1</pre>
 					<div class="info">
 						<p>Registriert Metadaten, die in unterschiedlicher Weise die Redaktion von Artikeln betreffen.</p>
 
+						<p id="menueRedaktion-metadatenNebenlemmata"><b><i>Karteiwort &gt; Nebenlemmata:</i></b> Werden zusammen mit dem aktuellen Karteiwort Nebenlemmata behandelt, für die keine eigenen Karteikästen erstellt werden, können diese hier vermerkt werden. Die einzelnen Nebenlemmata müssen durch ein Komma voneinander getrennt werden. Ist dieses Feld gefüllt, werden die genannten Nebenlemmata auch dann in der <a href="#menueApp-karteisuche">Karteisuche</a> aufgelistet, wenn für sie kein Karteikasten existiert.</p>
+
 						<p id="menueRedaktion-metadatenBehandeltMit"><b><i>Karteiwort &gt; behandelt mit:</i></b> Wird zum aktuellen Karteiwort kein eigener Artikel erstellt, es aber in einem Artikel zu einem anderen Wort mit behandelt, kann das Bezugswort hier vermerkt werden.</p>
 
 						<p>Ist das Feld <i>Wort</i> gefüllt, erscheinen in der <a href="#menueApp-karteisuche">Karteisuche</a> automatisch entsprechende <a href="#menueApp-karteisucheVerweise">Verweise</a>, wenn Karteien gefunden wurden, die von der Eingabe in diesem Textfeld betroffen sind (das sind die aktuelle und die Wortkartei, auf die verwiesen wurde).</p>
@@ -4664,7 +4676,7 @@ Gerüst 2 &gt; Gerüst 1</pre>
 						<p>Dasselbe Icon gibt es – immer sichtbar – noch einmal im oberen rechten Bereich des Fenster. Mit ihm können <em>alle</em> Wortinformationen des eingestellten Bedeutungsgerüsts und nicht nur ausgewählte Einträge an das Redaktionsfenster geschickt werden. Dabei werden allerdings alle Wortinformationen, die sich bereits im Redaktionsfenster befinden, überschrieben. Außerdem gehen spezielle Sortierungen verloren, die sie dort <abbr title="eventuell">evtl.</abbr> vorgenommen haben.</p>
 					</div>
 
-					<p class="erklaerung-icon-menues" id="menueRedaktion-xml"><img src="../img/xml.svg" width="24" height="24" alt=""><abbr title="Extensible Markup Language" lang="en">XML</abbr></p>
+					<p class="erklaerung-icon-menues" id="menueRedaktion-xml"><img src="../img/xml.svg" width="24" height="24" alt=""><abbr title="Extensible Markup Language" lang="en">XML-Fenster</abbr></p>
 
 					<div class="info">
 						<p>Aufrufen des <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Redaktionsfensters.</p>

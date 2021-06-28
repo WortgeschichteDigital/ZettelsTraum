@@ -265,6 +265,8 @@ let dropdown = {
 			dropdown.data = dropdown.dataTags(feld_id);
 		} else if (/^kopieren-geruest-/.test(feld_id)) {
 			dropdown.data = dropdown.dataKopierenGerueste();
+		} else if (/^karteisuche-lemmatyp-/.test(feld_id)) {
+			dropdown.data = ["Hauptlemma", "Nebenlemma"];
 		} else if (/^karteisuche-filter-/.test(feld_id)) {
 			dropdown.data = Object.keys(karteisuche.filterTypen);
 		} else if (/^karteisuche-themenfeld-/.test(feld_id)) {
@@ -316,6 +318,14 @@ let dropdown = {
 			dropdown.data = [...xml.data.autorinnen];
 		} else if (feld_id === "le-le") {
 			dropdown.data = xml.lemmata();
+			if (xml.data.nebenlemmata) {
+				xml.data.nebenlemmata.split(/, */).forEach(nl => {
+					if (!nl) {
+						return;
+					}
+					dropdown.data.push(nl);
+				});
+			}
 		} else if (feld_id === "le-ty") {
 			dropdown.data = [...xml.dropdown.lemmaTypen];
 		} else if (/^(le-re|bg-tf-ti)$/.test(feld_id)) {
