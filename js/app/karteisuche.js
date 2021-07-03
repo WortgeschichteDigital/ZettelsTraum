@@ -435,23 +435,15 @@ let karteisuche = {
 					}
 					ztjMit[datei.rd.bh].push(woerter[i]);
 				}
-				// mit Suchfiltern abgleichen
-				if (i > 0) {
-					ziel.passt = kartei.passt;
-				} else {
-					ziel.passt = karteisuche.filtern(datei);
-				}
 				// Redaktionsereignisse klonen
-				if (ziel.passt) {
-					let er = datei.rd.er;
-					if (!er) {
-						// bis Dateiformat Version 12 standen die Redaktionsereignisse in data.rd;
-						// erst danach in data.rd.er
-						er = datei.rd;
-					}
-					for (const erg of er) {
-						ziel.redaktion.push({...erg});
-					}
+				let er = datei.rd.er;
+				if (!er) {
+					// bis Dateiformat Version 12 standen die Redaktionsereignisse in data.rd;
+					// erst danach in data.rd.er
+					er = datei.rd;
+				}
+				for (const erg of er) {
+					ziel.redaktion.push({...erg});
 				}
 			}
 		}
@@ -485,18 +477,6 @@ let karteisuche = {
 				}
 			}
 		}
-		// ggf. Karteien nach Lemmatyp filtern
-		// (da die Lemmatypen keine Eigenschaft der Karteien sind, kann dieser Filter
-		// nicht in karteisuche.filtern() angewendet werden)
-		const lt = karteisuche.filterWerte.filter(i => i.typ === "Lemmatyp");
-		if (lt.length) {
-			for (const i of karteisuche.ztj) {
-				if (lt[0].lt === "Hauptlemma" && nebenlemmata.has(i.wort) ||
-						lt[0].lt === "Nebenlemma" && !nebenlemmata.has(i.wort)) {
-					i.passt = false;
-				}
-			}
-		}
 		// Redaktionsereignisse ggf. aus der übergeordneten Kartei holen
 		for (const i of karteisuche.ztj) {
 			if (!i.behandeltIn) {
@@ -509,6 +489,28 @@ let karteisuche = {
 						i.redaktion.push({...erg});
 					}
 					break;
+				}
+			}
+		}
+		// Karteien filtern
+		for (const kartei of karteisuche.ztj) {
+			let datei = karteisuche.ztjCache[kartei.pfad].data;
+			if (datei.rd.er) {
+				datei.rd.er = kartei.redaktion;
+			} else {
+				datei.rd = kartei.redaktion;
+			}
+			kartei.passt = karteisuche.filtern(datei);
+		}
+		// ggf. Karteien nach Lemmatyp filtern
+		// (da die Lemmatypen keine Eigenschaft der Karteien sind, kann dieser Filter
+		// nicht in karteisuche.filtern() angewendet werden)
+		const lt = karteisuche.filterWerte.filter(i => i.typ === "Lemmatyp");
+		if (lt.length) {
+			for (const i of karteisuche.ztj) {
+				if (lt[0].lt === "Hauptlemma" && nebenlemmata.has(i.wort) ||
+						lt[0].lt === "Nebenlemma" && !nebenlemmata.has(i.wort)) {
+					i.passt = false;
 				}
 			}
 		}
