@@ -264,6 +264,11 @@ layoutMenu = [
 				accelerator: "CommandOrControl+L",
 			},
 			{
+				label: "Taggen",
+				icon: path.join(__dirname, "img", "menu", "etikett.png"),
+				click: () => appMenu.befehl("belege-taggen"),
+			},
+			{
 				label: "Löschen",
 				icon: path.join(__dirname, "img", "menu", "muelleimer.png"),
 				click: () => appMenu.befehl("belege-loeschen"),

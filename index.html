@@ -13,6 +13,7 @@
 		<link rel="stylesheet" href="css/app/liste.css">
 		<link rel="stylesheet" href="css/app/overlays.css">
 		<link rel="stylesheet" href="css/app/overlays-anhaenge.css">
+		<link rel="stylesheet" href="css/app/overlays-belegeTaggen.css">
 		<link rel="stylesheet" href="css/app/overlays-ctrlC.css">
 		<link rel="stylesheet" href="css/app/overlays-dialog.css">
 		<link rel="stylesheet" href="css/app/overlays-drucken.css">
@@ -53,6 +54,7 @@
 		<script src="js/app/bedeutungenGerueste.js"></script>
 		<script src="js/app/bedeutungenWin.js"></script>
 		<script src="js/app/beleg.js"></script>
+		<script src="js/app/belegeTaggen.js"></script>
 		<script src="js/app/belegImport.js"></script>
 		<script src="js/app/dialog.js"></script>
 		<script src="js/app/drucken.js"></script>
@@ -916,6 +918,60 @@
 					<h3>Revision</h3>
 					<p id="meta-re"></p>
 				</div>
+			</div>
+		</div></div>
+
+		<!-- OVERLAY: Belege taggen -->
+		<div id="belege-taggen" class="overlay aus"><div>
+			<h2><span class="icon-h icon-h-belege-taggen"> </span
+				>Belege taggen<a href="#" class="icon-link icon-handbuch" title="Abschnitt im Handbuch öffnen" data-handbuch="menueBelege-taggen"> </a><a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"> </a></h2>
+			<div id="belege-taggen-cont">
+				<p id="belege-taggen-nr"></p>
+				<table>
+					<tr>
+						<th>○</th>
+						<th>＋</th>
+						<th>－</th>
+						<th> </th>
+					</tr>
+					<tr>
+						<td><input type="radio" name="belege-taggen-unvollstaendig" checked></td>
+						<td><input type="radio" name="belege-taggen-unvollstaendig"></td>
+						<td><input type="radio" name="belege-taggen-unvollstaendig"></td>
+						<td>unvollständig</td>
+					</tr>
+					<tr>
+						<td><input type="radio" name="belege-taggen-ungeprueft" checked></td>
+						<td><input type="radio" name="belege-taggen-ungeprueft"></td>
+						<td><input type="radio" name="belege-taggen-ungeprueft"></td>
+						<td>ungeprüft</td>
+					</tr>
+					<tr>
+						<td><input type="radio" name="belege-taggen-kontext" checked></td>
+						<td><input type="radio" name="belege-taggen-kontext"></td>
+						<td><input type="radio" name="belege-taggen-kontext"></td>
+						<td>Kontext?</td>
+					</tr>
+					<tr>
+						<td><input type="radio" name="belege-taggen-buecherdienst" checked></td>
+						<td><input type="radio" name="belege-taggen-buecherdienst"></td>
+						<td><input type="radio" name="belege-taggen-buecherdienst"></td>
+						<td>Bücherdienst</td>
+					</tr>
+					<tr>
+						<td><input type="radio" name="belege-taggen-buchung" checked></td>
+						<td><input type="radio" name="belege-taggen-buchung"></td>
+						<td><input type="radio" name="belege-taggen-buchung"></td>
+						<td>Buchung</td>
+					</tr>
+					<tr>
+						<td><input type="radio" name="belege-taggen-metatext" checked></td>
+						<td><input type="radio" name="belege-taggen-metatext"></td>
+						<td><input type="radio" name="belege-taggen-metatext"></td>
+						<td>Metatext</td>
+					</tr>
+				</table>
+				<p class="input-text" id="belege-taggen-button"><input type="button" value="Taggen" id="belege-taggen-input"></p>
 			</div>
 		</div></div>
 
