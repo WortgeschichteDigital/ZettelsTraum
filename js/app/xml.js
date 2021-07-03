@@ -457,7 +457,7 @@ let xml = {
 			autor = autor.replace(/[;.:'"„“”‚‘»«›‹+*!?(){}[\]<>&]/g, "");
 			autor = helfer.textTrim(autor, true);
 			autor = autor.toLowerCase();
-			autor = autor.replace(/\s/g, "-");
+			autor = autor.replace(/[\s/]/g, "-");
 		}
 		// Jahr
 		let jahr = "",
