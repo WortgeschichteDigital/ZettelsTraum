@@ -4,7 +4,7 @@ let konversion = {
 	// aktuelle Version des Dateiformats
 	// *** WICHTIG! *** WICHTIG! *** WICHTIG! ***
 	// Bei Änderungen anpassen!
-	version: 20,
+	version: 21,
 	// Verteilerfunktion
 	start () {
 		konversion.von1nach2();
@@ -26,6 +26,7 @@ let konversion = {
 		konversion.von17nach18();
 		konversion.von18nach19();
 		konversion.von19nach20();
+		konversion.von20nach21();
 	},
 	// Konversion des Dateiformats von Version 1 nach Version 2
 	von1nach2 () {
@@ -368,7 +369,7 @@ let konversion = {
 		// Änderungsmarkierung setzen
 		kartei.karteiGeaendert(true);
 	},
-	// Konversion des Dateiformats von Version 18 nach Version 19
+	// Konversion des Dateiformats von Version 19 nach Version 20
 	von19nach20 () {
 		if (data.ve > 19) {
 			return;
@@ -381,6 +382,23 @@ let konversion = {
 		}
 		// Datenfeld für Nebenlemmata erzeugen, die mit dem aktuellen Wort behandelt werden
 		data.rd.nl = "";
+		// Versionsnummer hochzählen
+		data.ve++;
+		// Änderungsmarkierung setzen
+		kartei.karteiGeaendert(true);
+	},
+	// Konversion des Dateiformats von Version 20 nach Version 21
+	von20nach21 () {
+		if (data.ve > 20) {
+			return;
+		}
+		// Datenfeld "up" (ungeprüft) in allen Karteikarten ergänzen
+		for (let id in data.ka) {
+			if (!data.ka.hasOwnProperty(id)) {
+				continue;
+			}
+			data.ka[id].up = false;
+		}
 		// Versionsnummer hochzählen
 		data.ve++;
 		// Änderungsmarkierung setzen

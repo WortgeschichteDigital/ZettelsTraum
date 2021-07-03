@@ -1354,7 +1354,7 @@ let liste = {
 	//     entweder "liste-meta" oder "")
 	metainfosErstellen (beleg, cont, klasse) {
 		// Gibt es überhaupt Meta-Infos, die angezeigt werden müssen
-		if (!beleg.un && !beleg.ko && !beleg.bu && !beleg.bc && !beleg.mt && !beleg.be && !beleg.an.length) {
+		if (!beleg.un && !beleg.up && !beleg.ko && !beleg.bu && !beleg.bc && !beleg.mt && !beleg.be && !beleg.an.length) {
 			return;
 		}
 		// es gibt also Infos
@@ -1370,6 +1370,15 @@ let liste = {
 			img.width = "24";
 			img.height = "24";
 			img.title = "unvollständig";
+			div.appendChild(img);
+		}
+		// Beleg ungeprüft?
+		if (beleg.up) {
+			let img = document.createElement("img");
+			img.src = "img/verboten.svg";
+			img.width = "24";
+			img.height = "24";
+			img.title = "ungeprüft";
 			div.appendChild(img);
 		}
 		// Kontext unklar?

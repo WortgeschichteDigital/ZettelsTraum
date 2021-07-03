@@ -93,6 +93,7 @@ let beleg = {
 			sy: "", // Synonym
 			ts: "", // Textsorte
 			un: optionen.data.einstellungen.unvollstaendig, // Bearbeitung unvollständig
+			up: false, // ungeprüft
 		};
 	},
 	// bestehende Karteikarte öffnen

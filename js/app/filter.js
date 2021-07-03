@@ -103,6 +103,10 @@ let filter = {
 						name: "unvollständig",
 						wert: 0,
 					},
+					"verschiedenes-ungeprueft": {
+						name: "ungeprüft",
+						wert: 0,
+					},
 					"verschiedenes-kontext": {
 						name: "Kontext?",
 						wert: 0,
@@ -134,6 +138,7 @@ let filter = {
 				},
 				filter_folge: [
 					"verschiedenes-unvollstaendig",
+					"verschiedenes-ungeprueft",
 					"verschiedenes-kontext",
 					"verschiedenes-buecherdienst",
 					"verschiedenes-notizen",
@@ -242,6 +247,11 @@ let filter = {
 			// Vollständigkeit
 			if (data.ka[id].un) {
 				filter.typen.verschiedenes.filter["verschiedenes-unvollstaendig"].wert++;
+				filter.typen.verschiedenes.filter_vorhanden = true;
+			}
+			// ungeprüft
+			if (data.ka[id].up) {
+				filter.typen.verschiedenes.filter["verschiedenes-ungeprueft"].wert++;
 				filter.typen.verschiedenes.filter_vorhanden = true;
 			}
 			// Kontext
@@ -1286,6 +1296,12 @@ let filter = {
 			if (filter.aktiveFilter["verschiedenes-unvollstaendig"] &&
 					(data.ka[id].un && !filter_inklusiv ||
 					!data.ka[id].un && filter_inklusiv)) {
+				continue;
+			}
+			// geprüft oder ungeprüft
+			if (filter.aktiveFilter["verschiedenes-ungeprueft"] &&
+					(data.ka[id].up && !filter_inklusiv ||
+					!data.ka[id].up && filter_inklusiv)) {
 				continue;
 			}
 			// Kontext
