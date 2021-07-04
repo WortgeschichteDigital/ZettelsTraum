@@ -518,13 +518,15 @@
 
 					<p class="add-navi-details" id="karteikarte-unvollstaendig"><b>unvollständig:</b> markiert die Karteikarte als noch nicht vollständig bearbeitet</p>
 
+					<p class="add-navi-details" id="karteikarte-ungeprueft"><b>ungeprüft:</b> der Beleg muss noch Korrektur gelesen werden</p>
+
 					<p class="add-navi-details" id="karteikarte-kontext"><b>Kontext?:</b> der Belegkontext der Online-Quelle ist so dünn, dass er noch am Original geklärt werden muss</p>
 
 					<p class="add-navi-details" id="karteikarte-buecherdienst"><b>Bücherdienst:</b> die Originalquelle wurde in einer Bibliothek bestellt (von den dafür verantwortlichen Personen)</p>
 
 					<p class="add-navi-details" id="karteikarte-buchung"><b>Buchung:</b> der Beleg wird im fertigen Lexikonartikel zitiert</p>
 
-					<p class="add-navi-details" id="karteikarte-metatext"><b>Metatext:</b> bei dem Beleg handelt es sich um einen Text, der einen analytischen Blick auf das Karteiwort wirft
+					<p class="add-navi-details" id="karteikarte-metatext"><b>Metatext:</b> bei dem Beleg handelt es sich um einen Text, der einen analytischen Blick auf das Karteiwort wirft</p>
 
 					<p class="info">Denkbare Texttypen für eine solche Markierung wären (historische) Wörterbücher, Artikel in einer Enzyklopädie, philosophische Abhandlungen <abbr title="und so weiter">usw.</abbr></p>
 
@@ -1337,6 +1339,8 @@ Aufrufdatum: 24. 12. 2019</pre>
 
 						<p class="erklaerung-icon"><img src="../img/kreis-unvollstaendig.svg" width="20" height="20" alt="">Metainfo <i>unvollständig</i>: Karteikarte ist noch nicht vollständig bearbeitet</p>
 
+						<p class="erklaerung-icon"><img src="../img/verboten.svg" width="20" height="20" alt="">Metainfo <i>ungeprüft</i>: der Belegtext muss noch Korrektur gelesen werden</p>
+
 						<p class="erklaerung-icon"><img src="../img/kontext.svg" width="20" height="20" alt="">Metainfo <i>Kontext?</i>: der Belegkontext ist zu dünn</p>
 
 						<p class="erklaerung-icon"><img src="../img/buch.svg" width="20" height="20" alt="">Metainfo <i>Bücherdienst</i>: die Originalquelle wurde in einer Bibliothek bestellt</p>
@@ -1742,7 +1746,7 @@ Aufrufdatum: 24. 12. 2019</pre>
 					<p class="add-navi-details" id="filter-verschiedenes"><b>Verschiedenes:</b> Belege nach verschiedenen Markierungen und Eigenschaften filtern</p>
 
 					<div class="info">
-						<p>Dieser Filter versammelt alle Markierungsmöglichkeiten, die sich <a href="#karteikarte-unvollstaendig">ganz oben in der Karteikarte finden</a>: <i>unvollständig, Kontext?, Bücherdienst, Buchung, Metatext</i> und die Markierung mit Sternen (<img src="../img/stern.svg" width="20" height="20" alt="">). Darüber hinaus können auch noch die Filter <i>Annotierung</i> (findet alle Belege, die Annotierungen enthalten) und <i>Notizen</i> (findet alle Belege, die Notizen enthalten) auftauchen.</p>
+						<p>Dieser Filter versammelt alle Markierungsmöglichkeiten, die sich <a href="#karteikarte-unvollstaendig">ganz oben in der Karteikarte finden</a>: <i>unvollständig, ungeprüft, Kontext?, Bücherdienst, Buchung, Metatext</i> und die Markierung mit Sternen (<img src="../img/stern.svg" width="20" height="20" alt="">). Darüber hinaus können auch noch die Filter <i>Annotierung</i> (findet alle Belege, die Annotierungen enthalten) und <i>Notizen</i> (findet alle Belege, die Notizen enthalten) auftauchen.</p>
 
 						<p>Dieser Filterblock hat zwei Besonderheiten:</p>
 
@@ -4118,6 +4122,24 @@ Mustermann, Erika
 						<p>Steht in irgendeiner Funktionen die Übernahme von <b>Änderungen</b> noch aus, fragt das Programm, ob diese nicht erst einmal gesichert werden sollen. Das Ausführen des Befehls an sich führt also niemals zu Datenverlusten.</p>
 
 						<p>Danach werden alle <b>Dialogfenster</b> im aktuellen Hauptfenster geschlossen und die <b>Karteikarte</b> mit einem leeren <a href="#karteikarte-formularansicht">Formular</a> geöffnet. Erst wenn dieses ausgefüllt und gespeichert wurde, wird der neue Beleg wirklich erstellt. Bis zu diesem Zeitpunkt sind alle Änderungen somit temporär: Verlässt man die Karte, ohne sie zu speichern, ist alles so, als hätte man den Befehl nie aufgerufen.</p>
+					</div>
+
+					<p class="erklaerung-icon-menues" id="menueBelege-taggen"><img src="../img/etikett.svg" width="24" height="24" alt="">Taggen</p>
+
+					<div class="info">
+						<p>Öffnet ein Dialogfenster zum Taggen der in der <a href="#belegliste">Belegliste</a> sichtbaren Belege.</p>
+
+						<p>Getaggt werden nur diejenigen Belege, die aktuell in der Belegliste <em>sichtbar</em> sind. Wurde die Liste zuvor <a href="#filter">gefiltert</a>, werden nur die Belege angepasst, die es durch den Filter geschafft haben.</p>
+
+						<p>Es können alle <a href="#belegliste-metainfos">Metainfos</a> geändert werden, die im Kopf der <a href="#karteikarte">Karteikarte</a> abgehakt werden können. (Die <i>Markierung</i> mit Sternen kann nicht stapleweise geändert werden.) Die Tags müssen nicht nacheinander, sondern können auch alle gleichzeitig angepasst werden. Es ist also problemlos möglich, alle Belege in einem Arbeitsschritt als <i>unvollständig</i> und <i>ungeprüft</i> zu taggen.</p>
+						
+						<p><b><i>Bedeutung der Radio-Buttons</i></b></p>
+
+						<p>○   Tag nicht ändern</p>
+
+						<p>＋   in allen Belegen einen Haken setzen</p>
+
+						<p>－   aus allen Belegen den Haken entfernen</p>
 					</div>
 
 					<p class="erklaerung-icon-menues" id="menueBelege-auflisten"><img src="../img/liste-bullets.svg" width="24" height="24" alt="">Auflisten</p>

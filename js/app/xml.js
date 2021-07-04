@@ -107,7 +107,7 @@ let xml = {
 			}
 			return m;
 		});
-		text = text.replace(/<\/Stichwort><Stichwort>/g, "");
+		text = text.replace(/<\/Stichwort><Stichwort>|<\/Markierung><Markierung>/g, "");
 		text = helfer.textTrim(text, true);
 		text = xml.mergeHervorhebungen({text});
 		// Belegtext einhängen
@@ -130,7 +130,9 @@ let xml = {
 						// aufnimmt, kann es zu Verschachtelungen kommen
 						const verschachtelt = c.parentNode.closest("mark");
 						if (!verschachtelt &&
-								(c.classList.contains("user") || c.classList.contains("markierung"))) {
+								(c.parentNode.classList.contains("annotierung-wort") ||
+								c.classList.contains("user") ||
+								c.classList.contains("markierung"))) {
 							text += `<Markierung>`;
 							close = "</Markierung>";
 						} else if (!verschachtelt) {
@@ -457,7 +459,7 @@ let xml = {
 			autor = autor.replace(/[;.:'"„“”‚‘»«›‹+*!?(){}[\]<>&]/g, "");
 			autor = helfer.textTrim(autor, true);
 			autor = autor.toLowerCase();
-			autor = autor.replace(/\s/g, "-");
+			autor = autor.replace(/[\s/]/g, "-");
 		}
 		// Jahr
 		let jahr = "",

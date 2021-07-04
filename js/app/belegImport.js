@@ -877,7 +877,12 @@ let belegImport = {
 		if (nKr && nKr.firstChild) {
 			korpus = nKr.firstChild.nodeValue;
 			if (/^dta/.test(korpus)) {
-				korpus = "dta";
+				if (korpus.length > 3) {
+					korpus = "DTA: " + korpus.substring(3).toUpperCase();
+					data.kr = korpus;
+				} else {
+					korpus = "dta";
+				}
 			}
 			if (belegImport.DWDSKorpora[korpus]) { // Korpus könnte noch nicht in der Liste sein
 				data.kr = belegImport.DWDSKorpora[korpus].kr;
@@ -984,7 +989,12 @@ let belegImport = {
 			if (i.collection) {
 				korpus = i.collection;
 				if (/^dta/.test(i.collection)) {
-					korpus = "dta";
+					if (korpus.length > 3) {
+						korpus = "DTA: " + korpus.substring(3).toUpperCase();
+						data.kr = korpus;
+					} else {
+						korpus = "dta";
+					}
 				}
 				if (belegImport.DWDSKorpora[korpus]) { // Korpus könnte noch nicht in der Liste sein
 					data.ds.kr = belegImport.DWDSKorpora[korpus].kr;

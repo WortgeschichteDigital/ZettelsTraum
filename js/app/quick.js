@@ -133,6 +133,11 @@ let quick = {
 			short: `${tastatur.shortcutsTextAktuell("Strg")} + L`,
 			img: "liste-bullets.svg",
 		},
+		"belege-taggen": {
+			title: "Belege > Taggen",
+			short: "",
+			img: "etikett.svg",
+		},
 		"belege-loeschen": {
 			title: "Belege > Löschen",
 			short: "",
@@ -400,6 +405,9 @@ let quick = {
 					break;
 				case "belege-auflisten":
 					speichern.checkInit(() => liste.wechseln());
+					break;
+				case "belege-taggen":
+					speichern.checkInit(() => belegeTaggen.oeffnen());
 					break;
 				case "belege-loeschen":
 					speichern.checkInit(() => liste.loeschenAlleBelege());

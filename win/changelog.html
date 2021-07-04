@@ -46,6 +46,8 @@
 			<div>
 				<h2><span>Version 1.0.0-beta</span><time datetime="2019-12-24">24. Dezember 2019</time></h2>
 
+				<p><span class="obacht">Das Dateiformat hat sich geändert!</span> Ältere <abbr title="Zettel’s Traum JSON">ZTJ</abbr>-Dateien werden automatisch konvertiert; dabei wird eine Änderungsmarkierung gesetzt.</p>
+
 				<h3>Entfernte Funktionen</h3>
 
 				<ul>
@@ -55,19 +57,23 @@
 				<h3>Neue Funktionen</h3>
 
 				<ul>
-					<li></li>
+					<li><a href="#karteikarte" class="link-handbuch">Karteikarte</a>: Karteikarten können jetzt als <a href="#karteikarte-ungeprueft" class="link-handbuch">ungeprüft</a> getaggt werden. Die <a href="#belegliste" class="link-handbuch">Belegliste</a> kann nach Karteikarten mit dem neuen Tag <a href="#filter" class="link-handbuch">gefiltert</a> werden.</li>
+
+					<li>Alle in der <a href="#belegliste" class="link-handbuch">Belegliste</a> sichtbaren Belege können nun stapelweise getaggt werden. <abbr title="Vergleiche">Vgl.</abbr> die <a href="#menueBelege-taggen" class="link-handbuch">Beschreibung im Handbuch</a>.</li>
 				</ul>
 
 				<h3>Verbesserungen</h3>
 
 				<ul>
-					<li></li>
+					<li>Stammt ein Beleg, der mithilfe eines <a href="#karteikarte-dwdsImport" class="link-handbuch"><abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippets des <abbr title="Digitales Wörterbuch der deutschen Sprache">DWDS</abbr> importiert</a> werden soll, aus den Erweiterungen des <abbr title="Deutsches Textarchiv">DTA</abbr> und findet sich im Snippet eine entsprechende Korpusangabe, wird das Korpus beim Import fortan genauer angegeben: <code class="quelltext">&lt;Korpus&gt;dtaxl&lt;/Korpus&gt;</code> wird <abbr title="zum Beispiel">z. B.</abbr> als <code class="quelltext">DTA: XL</code> importiert.</li>
 				</ul>
 
 				<h3>Updates</h3>
 
 				<ul>
 					<li></li><li><a href="#" class="ueber-electron"><i>Electron</i></a>-Update auf Version 13.1.5.</li>
+
+					<li>Tag-Datei für Sachgebiete geändert (<i>Kosmetik</i> ergänzt).</li>
 				</ul>
 
 				<h3>Behobene Fehler</h3>

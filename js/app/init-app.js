@@ -64,6 +64,7 @@ window.addEventListener("load", async () => {
 		}
 		speichern.checkInit(() => liste.wechseln());
 	});
+	ipcRenderer.on("belege-taggen", () => belegeTaggen.oeffnen());
 	ipcRenderer.on("belege-loeschen", () => liste.loeschenAlleBelege());
 	ipcRenderer.on("belege-kopieren", () => kopieren.init());
 	ipcRenderer.on("belege-einfuegen", () => kopieren.einfuegen());
@@ -355,6 +356,8 @@ window.addEventListener("load", async () => {
 			helfer.ordnerOeffnen(kartei.pfad);
 		}
 	});
+	// Belege-taggen-Fenster
+	document.getElementById("belege-taggen-input").addEventListener("click", () => belegeTaggen.taggen());
 	// Redaktionsmetadaten-Fenster
 	document.querySelectorAll("#red-meta-themenfelder, #red-meta-sachgebiete").forEach(i => {
 		i.addEventListener("click", function(evt) {

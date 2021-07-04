@@ -243,6 +243,7 @@ let optionen = {
 			sy: true, // Synonym
 			ts: true, // Textsorte
 			un: false, // unvollständig
+			up: false, // ungeprüft
 		},
 		// Taglisten, die aus XML-Dateien importiert wurden; Aufbau:
 		//   TYP         Tag-Typ (String)
