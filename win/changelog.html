@@ -48,16 +48,10 @@
 
 				<p><span class="obacht">Das Dateiformat hat sich geändert!</span> Ältere <abbr title="Zettel’s Traum JSON">ZTJ</abbr>-Dateien werden automatisch konvertiert; dabei wird eine Änderungsmarkierung gesetzt.</p>
 
-				<h3>Entfernte Funktionen</h3>
-
-				<ul>
-					<li></li>
-				</ul>
-
 				<h3>Neue Funktionen</h3>
 
 				<ul>
-					<li><a href="#karteikarte" class="link-handbuch">Karteikarte</a>: Karteikarten können jetzt als <a href="#karteikarte-ungeprueft" class="link-handbuch">ungeprüft</a> getaggt werden. Die <a href="#belegliste" class="link-handbuch">Belegliste</a> kann nach Karteikarten mit dem neuen Tag <a href="#filter" class="link-handbuch">gefiltert</a> werden.</li>
+					<li><a href="#karteikarte" class="link-handbuch">Karteikarte</a>: Die Karten können jetzt als <a href="#karteikarte-ungeprueft" class="link-handbuch">ungeprüft</a> getaggt werden. Die <a href="#belegliste" class="link-handbuch">Belegliste</a> kann nach Karteikarten mit dem neuen Tag <a href="#filter" class="link-handbuch">gefiltert</a> werden.</li>
 
 					<li>Alle in der <a href="#belegliste" class="link-handbuch">Belegliste</a> sichtbaren Belege können nun stapelweise getaggt werden. <abbr title="Vergleiche">Vgl.</abbr> die <a href="#menueBelege-taggen" class="link-handbuch">Beschreibung im Handbuch</a>.</li>
 				</ul>
@@ -71,17 +65,23 @@
 				<h3>Updates</h3>
 
 				<ul>
-					<li></li><li><a href="#" class="ueber-electron"><i>Electron</i></a>-Update auf Version 13.1.5.</li>
+					<li><a href="#" class="ueber-electron"><i>Electron</i></a>-Update auf Version 13.1.5.</li>
 
 					<li>Tag-Datei für Sachgebiete geändert (<i>Kosmetik</i> ergänzt).</li>
 				</ul>
 
 				<h3>Behobene Fehler</h3>
 
-				<p>Es wurden <i>2 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/master">Commit-Messages</a>.</p>
+				<p>Es wurden <i>4 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/master">Commit-Messages</a>.</p>
 
 				<ul>
-					<li></li>
+					<li>beim Filtern nach Redaktionsereignissen wurden nicht in allen Fällen die Redaktionsdaten der übergeordneten Kartei berücksichtigt</li>
+
+					<li>Stichwörter, die eine Markierungsfarbe erhielten, wurden beim Erstellen eines XML-Snippets fälschlicherweise mit <code class="quelltext">&lt;Stichwort&gt;</code> und nicht mit <code class="quelltext">&lt;Markierung&gt;</code> ausgezeichnet</li>
+
+					<li>die Belegreferenzen konnten illegalerweise Slashes enthalten</li>
+
+					<li>für das Exportieren einer XML-Datei aus dem Redaktionsfenster wurde bei Stichwörtern mit è oder é kein valider Dateiname erzeugt</li>
 				</ul>
 			</div>
 
