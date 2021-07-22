@@ -1554,15 +1554,16 @@ let liste = {
 		let sec_liste = document.getElementById("liste");
 		sec_liste.classList.remove("preload"); // damit bei der ersten Anzeige keine Animation läuft
 		// Link im Header
-		let link = document.getElementById("liste-link-filter");
+		let link = document.getElementById("liste-link-filter"),
+			mod = process.platform === "darwin" ? "⌘" : "Strg";
 		if (optionen.data.belegliste.filterleiste) {
 			sec_liste.classList.remove("filter-aus");
 			link.classList.add("aktiv");
-			link.title = "Filter ausblenden";
+			link.title = `Filter ausblenden (${mod} + Umsch + F)`;
 		} else {
 			sec_liste.classList.add("filter-aus");
 			link.classList.remove("aktiv");
-			link.title = "Filter einblenden";
+			link.title = `Filter einblenden (${mod} + Umsch + F)`;
 		}
 		// Scroll-Status wiederherstellen
 		if (scroll_bak) {

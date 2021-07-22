@@ -130,6 +130,11 @@ let tastatur = {
 			drucken.tastatur();
 			return;
 		}
+		// BELEGLISTE: Key "f"
+		if (helfer.hauptfunktion === "liste" && !overlayId &&
+				m === "Ctrl+Shift" && evt.key === "F") {
+			document.getElementById("liste-link-filter").click();
+		}
 		// KARTEIKARTE: Key "d" || "i" || "k" || "m" || "t" || "u"
 		if (m === "Ctrl" && helfer.belegOffen()) {
 			if (evt.key === "d") {

@@ -196,13 +196,13 @@ let xml = {
 		// <URL>
 		let href = data.qu.match(/https?:[^\s]+|www\.[^\s]+/);
 		if (href) {
-			href[0] = href[0].replace(/(&gt;|[.:,;!?)\]}>]+)$/, "");
+			let url = href[0].replace(/(&gt;|[.:,;!?)\]}>]+)$/, "");
 			if (!/^https?:/.test(href[0])) {
-				href[0] = `https://${href[0]}`;
+				url = `https://${href[0]}`;
 			}
-			let url = document.createElementNS(ns, "URL");
-			fundstelle.appendChild(url);
-			url.appendChild( document.createTextNode( helferXml.maskieren( {text: href[0]} ) ) );
+			let urlTag = document.createElementNS(ns, "URL");
+			fundstelle.appendChild(urlTag);
+			urlTag.appendChild( document.createTextNode( helferXml.maskieren( {text: url} ) ) );
 			// <Aufrufdatum>
 			let reg = new RegExp(helfer.escapeRegExp(href[0])),
 				zugriff = helferXml.datum(data.qu.split(reg)[1]);
