@@ -1,7 +1,7 @@
 #!/bin/bash
 
 modules=(
-	"electron@13-x-y"
+	"electron"
 	"electron-builder"
 	"electron-packager"
 )
