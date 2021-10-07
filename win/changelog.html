@@ -49,45 +49,45 @@
 				<h3>Entfernte Funktionen</h3>
 
 				<ul>
-					<li><a href="#menueRedaktion-literatur" class="link-handbuch">Literaturdatenbank</a>: Der Schalter <code class="quelltext">na:&quot;&quot;</code> <abbr title="beziehungsweise">bzw.</abbr> <code class="quelltext">nurAktuelle:&quot;&quot;</code>, um die Suche auf die jüngste Aufnahme eines Titels zu beschränken, wurde entfernt. Standardmäßig wird nun allein in der jüngsten Titelaufnahme gesucht.</li>
+					<li><a href="#menueRedaktion-literatur" class="link-handbuch">Literaturdatenbank</a>: Der Schalter <code class="quelltext">na:&quot;&quot;</code> <abbr title="beziehungsweise">bzw.</abbr> <code class="quelltext">nurAktuelle:&quot;&quot;</code>, der dazu diente, die Suche auf die jüngste Aufnahme eines Titels zu beschränken, wurde entfernt. Standardmäßig wird nur noch in den jüngsten Titelaufnahmen gesucht.</li>
 
-					<li>Literaturdatenbank: Die Sondersuchen nach Titeln mit Notizen sowie Titeln mit und ohne <abbr title="Pica-Produktionsnummer">PPN</abbr> wurden genaus entfernt wie diejenige nach doppelten Siglen. Für die ersten drei Suchen können nun die entsprechenden Suchschalter genutzt werden. Titel mit doppelten Siglen lassen sich mit der Duplikatesuche finden.</li>
+					<li>Literaturdatenbank: Die Sondersuchen nach Titeln mit Notizen sowie Titeln mit und ohne <abbr title="Pica-Produktionsnummer">PPN</abbr> wurden genauso entfernt wie diejenige nach doppelten Siglen. Für die ersten drei Suchen können nun die entsprechenden Suchschalter genutzt werden. Titel mit doppelten Siglen lassen sich mit der überarbeiteten Duplikatesuche leicht finden.</li>
 				</ul>
 
 				<h3>Neue Funktionen</h3>
 
 				<ul>
-					<li><a href="#menueRedaktion-literatur" class="link-handbuch">Literaturdatenbank</a>: Zur Suchsyntax gibt es nun ein Hilfe-Popup mit kurzen Erläuterungen, das über das Icon <img src="../img/kreis-fragezeichen.svg" width="24" height="24" alt=""> geöffnet werden kann.</li>
+					<li><a href="#menueRedaktion-literatur" class="link-handbuch">Literaturdatenbank</a>: Zur Suchsyntax gibt es nun ein Hilfe-Popup mit kurzen Erläuterungen. Es kann über das Icon <img src="../img/kreis-fragezeichen.svg" width="24" height="24" alt=""> geöffnet werden.</li>
 
-					<li>Literaturdatenbank: Mithilfe des neuen <a href="#menueRedaktion-literaturAuchAlte" class="link-handbuch">Suchschalters</a> <code class="quelltext">aa:&quot;&quot;</code> <abbr title="beziehungsweise">bzw.</abbr> <code class="quelltext">auchAlte:&quot;&quot;</code> können veraltete Titelaufnahmen in die Suche mit einbezogen werden.</li>
+					<li>Literaturdatenbank: Mithilfe des neuen <a href="#menueRedaktion-literaturAuchAlte" class="link-handbuch">Suchschalters</a> <code class="quelltext">aa:&quot;&quot;</code> <abbr title="beziehungsweise">bzw.</abbr> <code class="quelltext">auchAlte:&quot;&quot;</code> können veraltete Titelaufnahmen in die Suche mit einbezogen werden. Standardmäßig wird nur noch in den jüngsten Titelaufnahmen gesucht.</li>
 
 					<li>
-						<p>Literaturdatenbank: Suchausdrücke können nun negiert werden. Dazu muss einem Suchwort, einer Phrase oder einem Schalter der speziellen <a href="#menueRedaktion-literaturSuchsyntax" class="link-handbuch">Suchsyntax</a> ein <code class="quelltext">-</code> vorangestellt werden. Einige Beispiele:</p>
+						<p>Literaturdatenbank: Suchausdrücke können nun auch negativ verwendet werden. Dazu muss einem Suchwort, einer -phrase oder einem <a href="#menueRedaktion-literaturSuchschalter" class="link-handbuch">-schalter</a> ein <code class="quelltext">-</code> vorangestellt werden. Einige Beispiele:</p>
 
-						<p class="einzug">- Der Suchausdruck <code class="quelltext">wörterbuch -und</code> findet alle Titel, in denen in irgendeinem der Datenfelder <q>wörterbuch</q>, aber in keinem <q>und</q> steht.</p>
+						<p class="einzug">- Der Suchausdruck <code class="quelltext">wörterbuch -deutsch</code> findet alle Titel, in denen in irgendeinem der Datenfelder <q>wörterbuch</q>, aber in keinem <q>deutsch</q> steht.</p>
 
 						<p class="einzug">- Der Suchausdruck <code class="quelltext">wörterbuch -"deutsches wörterbuch"</code> findet alle Titel, in denen in irgendeinem der Datenfelder <q>wörterbuch</q>, aber in keinem die Phrase <q>deutsches wörterbuch</q> steht.</p>
 
-						<p class="einzug">- Der Suchausdruck <code class="quelltext">wörterbuch -Tags:&quot;artikel&quot;</code> findet alle Titel, in denen in irgendeinem der Datenfelder <q>wörterbuch</q> steht, aber entweder kein Tag vorhanden ist oder in keinem der vorhandenen Tags <q>artikel</q> steht.</p>
+						<p class="einzug">- Der Suchausdruck <code class="quelltext">wörterbuch -Tags:&quot;lemma&quot;</code> findet alle Titel, in denen in irgendeinem der Datenfelder <q>wörterbuch</q> steht, aber entweder kein Tag vorhanden ist oder in keinem der vorhandenen Tags <q>lemma</q> steht.</p>
 
-						<p>Wird ein Schalter der speziellen Suchsyntax ohne Suchtext verwendet, produziert dieser Ausdruck nun im Gegensatz zu früher Treffer. Zwei Beispiele:</p>
+						<p>Wird ein Schalter ohne Suchtext verwendet, produziert dieser Ausdruck nun im Gegensatz zu früher Treffer. Zwei Beispiele:</p>
 
-						<p class="einzug">- Der Suchausdruck <code class="quelltext">Tags:&quot;&quot;</code> findet alle Titel, die einen Tag haben.</p>
+						<p class="einzug">- Mit dem Schalter <code class="quelltext">Tags:&quot;&quot;</code> finden Sie alle Titel, die einen Tag haben.</p>
 
-						<p class="einzug">- Der Suchausdruck <code class="quelltext">-Tags:&quot;&quot;</code> findet alle Titel, die keinen Tag haben.</p>
+						<p class="einzug">- Mit dem Schalter <code class="quelltext">-Tags:&quot;&quot;</code> finden Sie alle Titel, die keinen Tag haben.</p>
 
-						<p>Suchwörter, Phrasen und Schalter sind nach wie vor frei miteinander kombinierbar. Auch die mehrfache Verwendung eines speziellen Suchschalters kann mitunter sinnvolle Ergebnisse zutage bringen:</p>
+						<p>Suchwörter, -phrasen und -schalter sind nach wie vor frei miteinander kombinierbar. Auch die mehrfache Verwendung eines Suchschalters kann mitunter sinnvolle Ergebnisse zutage bringen:</p>
 
-						<p class="einzug">- Der Suchausdruck <code class="quelltext">Tags:&quot;&quot; -Tags:&quot;artikel&quot;</code> zeigt alle Titel, die einen Tag haben, aber keine Titel, die einen Tag haben, in dem <q>artikel</q> steht.</p>
+						<p class="einzug">- Der Suchausdruck <code class="quelltext">Tags:&quot;&quot; -Tags:&quot;lemma&quot;</code> zeigt alle Titel, die einen Tag haben, aber keine Titel, die einen Tag haben, in dem <q>lemma</q> steht.</p>
 
-						<p><abbr title="Vergleiche">Vgl.</abbr> die neue, ausführliche <a href="#menueRedaktion-suchausdruecke" class="link-handbuch">Beispielliste denkbarer Suchausdrücke</a>.</p>
+						<p><abbr title="Vergleiche">Vgl.</abbr> die neue, ausführliche <a href="#menueRedaktion-suchausdruecke" class="link-handbuch">Beispielliste üblicher Suchausdrücke</a>.</p>
 					</li>
 				</ul>
 
 				<h3>Verbesserungen</h3>
 
 				<ul>
-					<li><a href="#menueRedaktion-literatur" class="link-handbuch">Literaturdatenbank</a>: Die Sondersuche nach Duplikaten wurde grundlegend überarbeitet. Zum einen wird nun immer der Grund angegeben, warum es sich bei einem Titel wohl um ein Duplikat handelt. Zum anderen folgen Titel, die aus demselben Grund als Duplikat angesehen werden, in der Ergebnisanzeige immer direkt aufeinander, sodass ein Vergleich der Titel leicht fällt.</li>
+					<li><a href="#menueRedaktion-literatur" class="link-handbuch">Literaturdatenbank</a>: Die Sondersuche nach Duplikaten wurde grundlegend überarbeitet. Zum einen wird nun immer der Grund angegeben, warum es sich bei einem Titel wohl um ein Duplikat handelt. Zum anderen folgen Titel, die aus demselben Grund als Duplikat angesehen werden, in der Ergebnisanzeige immer direkt aufeinander, sodass ein Vergleich der Titel leicht möglich ist.</li>
 
 					<li><a href="#menueRedaktion-xml" class="link-handbuch"><abbr title="Extensible Markup Language" lang="en">XML</abbr>-Redaktionsfenster</a>: Verbesserung des Auto-Taggers.</li>
 				</ul>
@@ -96,14 +96,6 @@
 
 				<ul>
 					<li><a href="#" class="ueber-electron"><i>Electron</i></a>-Update auf Version 15.1.1.</li>
-				</ul>
-
-				<h3>Behobene Fehler</h3>
-
-				<p>Es wurden <i>2 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/master">Commit-Messages</a>.</p>
-
-				<ul>
-					<li></li>
 				</ul>
 			</div>
 
@@ -1208,7 +1200,7 @@
 				<ul>
 					<li><a href="#karteikarte" class="link-handbuch">Karteikarte</a>: Die Funktion zum <a href="#karteikarte-quelleLaden" class="link-handbuch">Neuladen der Quelle</a> wurde überarbeitet: Änderungen werden vor der Übernahme angezeigt; wurde kein <abbr title="Digitales Wörterbuch der deutschen Sprache">DWDS</abbr>-Snippet gefunden, stammt der Beleg aber aus dem <abbr title="Digitalen Wörterbuch der deutschen Sprache">DWDS</abbr> (weil er im Korpus-Feld als solcher markiert wurde), wird mit dem Inhalt des Quelle-Feldes gearbeitet; die Funktion kann über das Tastaturkürzel <kbd>Strg</kbd> + <kbd>D</kbd> aufgerufen werden.</li>
 
-					<li><a href="#menueRedaktion-literatur" class="link-handbuch">Literaturdatenbank</a>: Mithilfe eines Schalters kann nun auch das ID-Feld durchsucht werden. <abbr title="Siehe">S.</abbr> zu Details die Beschreibung der <a href="#menueRedaktion-literaturSuchsyntax" class="link-handbuch">Suchsyntax</a>.</li>
+					<li><a href="#menueRedaktion-literatur" class="link-handbuch">Literaturdatenbank</a>: Mithilfe eines Schalters kann nun auch das ID-Feld durchsucht werden. <abbr title="Siehe">S.</abbr> zu Details die Beschreibung der <a href="#menueRedaktion-literaturSuchschalter" class="link-handbuch">Suchschalter</a>.</li>
 
 					<li>Literaturdatenbank: Die Suche kann mithilfe eines neuen Schalters auf die aktuellen Titelaufnahmen eingeschränkt werden.</li>
 
@@ -1257,7 +1249,7 @@
 				<ul>
 					<li><a href="#menueRedaktion-literatur" class="link-handbuch">Literaturdatenbank</a> und <a href="#karteikarte" class="link-handbuch">Karteikarte</a>: Für den Import von Literaturtiteln lässt sich nun steuern, ob der Verlagsname und/oder die Angaben zur Serie, in der ein Titel erschienen ist, angezeigt werden sollen. <abbr title="Vergleiche">Vgl.</abbr> die <a href="#einstellungen-literatur" class="link-handbuch">Beschreibung der Optionen im Handbuch</a>.</li>
 
-					<li>Literaturdatenbank: Mit einer <a href="#menueRedaktion-literaturSuchsyntax" class="link-handbuch">speziellen, im Handbuch beschriebenen Suchsyntax</a> kann die Suche nach Wörtern oder Phrasen auf ein einzelnes Datenfeld eingegrenzt werden.</li>
+					<li>Literaturdatenbank: Mit einer <a href="#menueRedaktion-literaturSuchschalter" class="link-handbuch">speziellen, im Handbuch beschriebenen Suchschalter</a> kann die Suche nach Wörtern oder Phrasen auf ein einzelnes Datenfeld eingegrenzt werden.</li>
 
 					<li>Literaturdatenbank: Das Dialogfenster für die Verwaltung der Literaturdatenbank kann nun auch über ein Icon in der Quick-Access-Bar geöffnet werden.</li>
 
