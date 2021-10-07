@@ -1556,20 +1556,13 @@ let redLit = {
 			// Suche nach Text und Datum
 			for (let i = 0, len = arr.length; i < len; i++) {
 				let aufnahme = arr[i];
+				// standardmäßig nur die erste Titelaufnahme durchsuchen
+				if (i > 0 && !auchAlte) {
+					break;
+				}
 				// Sondersuchen
-				if (i > 0 && !auchAlte) { // standardmäßig nur die erste Titelaufnahme durchsuchen
-					break;
-				} else if (redLit.suche.sonder === "siglen_doppelt" &&
+				if (redLit.suche.sonder === "siglen_doppelt" &&
 						!siglen_doppelt.has(aufnahme.td.si)) { // doppelte Siglen
-					break;
-				} else if (redLit.suche.sonder === "ppn_mit" &&
-					!aufnahme.td.pn.length) { // mit PPN
-					break;
-				} else if (redLit.suche.sonder === "ppn_ohne" &&
-					aufnahme.td.pn.length) { // ohne PPN
-					break;
-				} else if (redLit.suche.sonder === "notizen" &&
-					!aufnahme.td.no) { // mit Notizen
 					break;
 				}
 				// Datum

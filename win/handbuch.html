@@ -4570,18 +4570,14 @@ Gerüst 2 &gt; Gerüst 1</pre>
 
 						<p id="menueRedaktion-literaturXml">Wurde in demselben Fenster, in dem die Literaturdatenbank gerade geöffnet ist, auch eine Kartei geladen, erscheint ein weiteres Icon: <img src="../img/xml.svg" width="20" height="20" alt="">. Mit ihm kann man die jeweilige <b>Titelaufnahme an das <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Redaktionsfenster schicken</b> (<abbr title="vergleiche">vgl.</abbr> den Abschnitt zum <a href="#menueRedaktion-xml"><abbr title="Extensible Markup Language" lang="en">XML</abbr>-Redaktionssystem</a>). Ist dieses Fenster noch nicht geöffnet, wird es durch Klick auf das Icon automatisch aufgerufen. Dabei wird immer die aktuellste Version einer Titelaufnahme an das XML-Fenster geschickt, und zwar auch dann, wenn gerade eine veraltete Titelaufnahme angezeigt wird.</p>
 
-						<p id="menueRedaktion-literaturSondersuchen">Unter dem Suchschlitz finden Sie Links, mit denen Sie <b>Sondersuchen</b> starten können. Bei Sondersuchen werden keine veralteten Datensätze durchsucht; sie beziehen sich also immer auf die jüngste Version einer Titelaufnahme. Im Suchschlitz oder im Datumsfeld eingetragene Werte werden auch bei einer Sondersuche berücksichtigt. Die Sondersuchen können Ihnen jedoch Ergebnisse liefern, für die es ein bisschen komplizierterer Suchalgorithmen bedarf. Gefunden werden dabei im Einzelnen:</p>
+						<p id="menueRedaktion-literaturSondersuchen">Unter dem Suchschlitz finden Sie Links, mit denen Sie <b>Sondersuchen</b> starten können. Bei Sondersuchen werden niemals veraltete Datensätze durchsucht. Im Suchschlitz oder im Datumsfeld eingetragene Werte werden auch bei einer Sondersuche berücksichtigt, mit Ausnahme des Schalters <code class="quelltext">auchAlte:&quot;&quot;</code>, mit dem bei normalen Suchen veraltete Datensätze mit einbezogen werden können. Die Sondersuchen können Ihnen Ergebnisse liefern, für die es ein bisschen komplizierterer Suchalgorithmen bedarf. Gefunden werden dabei im Einzelnen:</p>
 
 						<ul>
 							<li><i>Duplikate:</i> Ja, mit dieser Sondersuchen kann die Datenbank nach Duplikaten durchsucht werden. Als Duplikate gelten Titelaufnahmen, die mindestens eines der folgenden Kriterien erfüllen: identischer Titel, identische Sigle, identische URL, identische <abbr title="Pica-Produktionsnummer">PPN</abbr>.</li>
 
 							<li><i>doppelte Siglen:</i> Eine auf identische Siglen reduzierte Suche nach Duplikaten.</li>
 
-							<li><i>mit/ohne <abbr title="Pica-Produktionsnummer">PPN</abbr>:</i> Findet Titelaufnahmen, denen mindestens eine <abbr title="respektive">resp.</abbr> keine <abbr title="Pica-Produktionsnummer">PPN</abbr> zugewiesen wurde.</li>
-
 							<li><i>mehrere Versionen:</i> Zeigt nur Titelaufnahmen an, die mehr als eine Version haben.</li>
-
-							<li><i>mit Notizen:</i> Zeigt nur Titelaufnahmen mit Notizen an. Wie bei allen Sondersuchen wird auch bei dieser immer nur die jüngste Titelaufnahme durchsucht. Finden sich in einer veralteten Version einer Titelaufnahme Notizen in der jüngsten aber nicht, kann diese Aufnahme so nicht gefunden werden.</li>
 						</ul>
 
 						<figure class="right" title="zum Vergrößern anklicken">
@@ -4662,7 +4658,7 @@ Gerüst 2 &gt; Gerüst 1</pre>
 								<p><i>Tags</i> (fakultativ): Sie können Titelaufnahmen mit beliebig vielen Tags versehen. Das Dropdown-Menü bietet Ihnen einige vordefinierte und alle in der aktuell geladenen Literaturdatenbank zu findenden Tags zur Auswahl an. Sie können aber auch jederzeit neue Tags eingeben und ergänzen. Zum Übernehmen eines Tags müssen Sie die Eingabe mit <kbd>⏎</kbd> bestätigen. Zum Löschen eines Tags, klicken Sie den betreffenden Tag rechts neben dem Eingabefeld an.</p>
 							</li>
 
-							<li><i>Notizen</i> (fakultativ): Ein Freitextfeld für Notizen zu der Titelaufnahme. Zeilenumbrüche sind erlaubt und werden in der Titelanzeige der <a href="#menueRedaktion-literaturTitelsuche">Titelsuche</a> auch dargestellt. Diese Notizen sind allein für die Arbeit in der Literaturdatenbank gedacht. Darum werden sie von den <a href="#menueRedaktion-literaturExportieren">Exportfunktionen</a> ignoriert. Titelaufnahmen mit Notizen lassen sich mit der entsprechenden <a href="#menueRedaktion-literaturSondersuchen">Sondersuche</a> finden.</li>
+							<li><i>Notizen</i> (fakultativ): Ein Freitextfeld für Notizen zu der Titelaufnahme. Zeilenumbrüche sind erlaubt und werden in der Titelanzeige der <a href="#menueRedaktion-literaturTitelsuche">Titelsuche</a> auch dargestellt. Diese Notizen sind allein für die Arbeit in der Literaturdatenbank gedacht. Darum werden sie von den <a href="#menueRedaktion-literaturExportieren">Exportfunktionen</a> ignoriert. Titelaufnahmen mit Notizen lassen sich mit dem Suchschalter <code class="quelltext">Notizen:&quot;&quot;</code> finden.</li>
 
 							<li><i>Metadaten:</i> Die Metadaten unterhalb des Formulars (<i>BearbeiterIn, Datum, Aufnahme</i>) werden von der App eigenständig befüllt und können nicht manuell geändert werden. Das Feld <i>Aufnahme</i> ist klicksensitiv: Man kann mit ihm das <a href="#menueRedaktion-literaturVersionen">Versionen-Popup</a> öffnen.</li>
 						</ul>
