@@ -1386,6 +1386,8 @@ let redLit = {
 	},
 	// Suche: starten
 	sucheStarten () {
+		// Suchhilfe schließen
+		document.getElementById("red-lit-suche-hilfe-fenster").classList.add("aus");
 		// Filterkriterien auslesen/Variablen vorbereiten
 		let input = document.getElementById("red-lit-suche-text"),
 			text = helfer.textTrim(input.value, true),
@@ -1852,6 +1854,38 @@ let redLit = {
 			// Titelaufnahme auffrischen
 			redLit.anzeige.snippetKontext = "suche";
 			i.parentNode.replaceChild(redLit.anzeigeSnippet(ds), i);
+		});
+	},
+	// Suche: Schalter ins Suchfeld eintragen
+	//   a = Element
+	//     (Anker im Hilfefenster)
+	sucheSchalter (a) {
+		a.addEventListener("click", function(evt) {
+			evt.preventDefault();
+			// Suchfeld vorbereiten
+			let suchfeld = document.getElementById("red-lit-suche-text");
+			if (suchfeld.value) {
+				suchfeld.value += " ";
+			}
+			// Suchfeld ergänzen
+			let schalter = this.textContent;
+			if (/^Aufrufdatum/.test(schalter)) {
+				const datum = new Date();
+				schalter = schalter.replace(/""/, `"${datum.getFullYear()}-${(datum.getMonth() + 1).toString().padStart(2, "0")}-${datum.getDate().toString().padStart(2, "0")}"`);
+			}
+			suchfeld.value += schalter;
+			// Cursor im Suchfeld setzen
+			const len = suchfeld.value.length;
+			if (/^auchAlte/.test(schalter)) {
+				suchfeld.setSelectionRange(len, len);
+			} else if (/^Aufrufdatum/.test(schalter)) {
+				suchfeld.setSelectionRange(len - 11, len - 1);
+			} else {
+				suchfeld.setSelectionRange(len, len - 1);
+			}
+			// Fenster schließen und Suchfeld fokussieren
+			document.getElementById("red-lit-suche-hilfe-fenster").classList.add("aus");
+			suchfeld.focus();
 		});
 	},
 	// Eingabeformular: Speicher für Variablen
@@ -3504,6 +3538,8 @@ let redLit = {
 	anzeigePopup ({id, slot}) {
 		redLit.anzeige.snippetKontext = "popup";
 		redLit.anzeige.id = id;
+		// Suchhilfe schließen
+		document.getElementById("red-lit-suche-hilfe-fenster").classList.add("aus");
 		// aktuelles Popup ggf. entfernen
 		redLit.anzeigePopupSchliessen();
 		// Fenster erzeugen

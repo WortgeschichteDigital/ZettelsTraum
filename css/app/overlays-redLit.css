@@ -116,8 +116,8 @@
 
 #red-lit-suche-text {
 	margin-right: 15px;
-	padding-right: 29px;
-	width: calc(100% - 228px); /* 36px Padding und Border, 15px Margin, 20px Label, 157px Datumsfeld */
+	padding-right: 58px;
+	width: calc(100% - 257px); /* 36px Padding und Border, 15px Margin, 20px Label, 157px Datumsfeld */
 	transition: background-color .5s linear;
 }
 
@@ -139,10 +139,81 @@
 	width: 20px;
 }
 
+#red-lit-suche-hilfe,
 #red-lit-suche-start {
 	position: absolute;
-	left: calc(100% - 228px + 6px); /* vgl. #red-lit-suche-text */
+	left: calc(100% - 257px + 6px); /* vgl. #red-lit-suche-text */
 	top: 3px;
+}
+
+#red-lit-suche-start {
+	left: calc(100% - 228px + 6px); /* vgl. #red-lit-suche-text */
+}
+
+#red-lit-suche-hilfe-fenster {
+	position: absolute;
+	top: 34px;
+	right: 0;
+	z-index: 1;
+	box-shadow: var(--boxShadow);
+	border: 1px solid var(--linie);
+	border-radius: 5px;
+	padding: 10px;
+	width: 500px;
+	background-color: #fff;
+	color: var(--text);
+	font-size: 14px;
+	line-height: 24px;
+}
+
+#red-lit-suche-hilfe-fenster img {
+	position: absolute;
+	top: 0;
+	right: 0;
+}
+
+#red-lit-suche-hilfe-fenster table {
+	border-spacing: 0;
+	border-top: 1px solid var(--linie);
+}
+
+#red-lit-suche-hilfe-fenster th,
+#red-lit-suche-hilfe-fenster td {
+	padding: 0;
+	border-bottom: 1px solid var(--linie);
+}
+
+#red-lit-suche-hilfe-fenster th {
+	padding-right: 10px;
+	vertical-align: top;
+	text-align: left;
+	font-weight: normal;
+	white-space: nowrap;
+}
+
+#red-lit-suche-hilfe-fenster p {
+	margin-bottom: 5px;
+}
+
+#red-lit-suche-hilfe-fenster table + p {
+	margin-top: 10px;
+}
+
+#red-lit-suche-hilfe-fenster p:last-child {
+	margin-bottom: 0;
+}
+
+#red-lit-suche-hilfe-fenster a {
+	display: inline-block;
+	margin: 5px 0;
+	border-radius: 3px;
+	border: 1px solid var(--linie);
+	padding: 0 5px;
+	color: var(--hintergrundBlau);
+}
+
+#red-lit-suche-hilfe-fenster a:hover {
+	cursor: pointer;
 }
 
 #red-lit-suche-sonder {

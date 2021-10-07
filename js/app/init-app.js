@@ -377,6 +377,13 @@ window.addEventListener("load", async () => {
 	document.querySelectorAll(`#red-lit-pfad a`).forEach(a => redLit.dbListener(a));
 	document.querySelectorAll(`#red-lit-nav input`).forEach(i => redLit.navListener(i));
 	document.querySelectorAll("#red-lit-suche-form input").forEach(i => redLit.sucheListener(i));
+	document.querySelectorAll("#red-lit-suche-hilfe, #red-lit-suche-hilfe-fenster img").forEach(i => {
+		i.addEventListener("click", evt => {
+			evt.preventDefault();
+			document.getElementById("red-lit-suche-hilfe-fenster").classList.toggle("aus");
+		});
+	});
+	document.querySelectorAll("#red-lit-suche-hilfe-fenster a").forEach(a => redLit.sucheSchalter(a));
 	document.getElementById("red-lit-suche-start").addEventListener("click", evt => {
 		evt.preventDefault();
 		redLit.sucheStarten();
