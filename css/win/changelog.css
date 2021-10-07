@@ -143,6 +143,10 @@ p {
 	margin: 0 0 10px 0;
 }
 
+p.einzug {
+	margin-left: 25px;
+}
+
 q.bedeutung::before {
 	content: "‚";
 }
