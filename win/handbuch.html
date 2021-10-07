@@ -4570,14 +4570,22 @@ Gerüst 2 &gt; Gerüst 1</pre>
 
 						<p id="menueRedaktion-literaturXml">Wurde in demselben Fenster, in dem die Literaturdatenbank gerade geöffnet ist, auch eine Kartei geladen, erscheint ein weiteres Icon: <img src="../img/xml.svg" width="20" height="20" alt="">. Mit ihm kann man die jeweilige <b>Titelaufnahme an das <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Redaktionsfenster schicken</b> (<abbr title="vergleiche">vgl.</abbr> den Abschnitt zum <a href="#menueRedaktion-xml"><abbr title="Extensible Markup Language" lang="en">XML</abbr>-Redaktionssystem</a>). Ist dieses Fenster noch nicht geöffnet, wird es durch Klick auf das Icon automatisch aufgerufen. Dabei wird immer die aktuellste Version einer Titelaufnahme an das XML-Fenster geschickt, und zwar auch dann, wenn gerade eine veraltete Titelaufnahme angezeigt wird.</p>
 
-						<p id="menueRedaktion-literaturSondersuchen">Unter dem Suchschlitz finden Sie Links, mit denen Sie <b>Sondersuchen</b> starten können. Bei Sondersuchen werden niemals veraltete Datensätze durchsucht. Im Suchschlitz oder im Datumsfeld eingetragene Werte werden auch bei einer Sondersuche berücksichtigt, mit Ausnahme des Schalters <code class="quelltext">auchAlte:&quot;&quot;</code>, mit dem bei normalen Suchen veraltete Datensätze mit einbezogen werden können. Die Sondersuchen können Ihnen Ergebnisse liefern, für die es ein bisschen komplizierterer Suchalgorithmen bedarf. Gefunden werden dabei im Einzelnen:</p>
+						<p id="menueRedaktion-literaturSondersuchen">Unter dem Suchschlitz finden Sie Links, mit denen Sie <b>Sondersuchen</b> starten können. Die Sondersuchen können Ihnen Ergebnisse liefern, für die es ein bisschen komplizierterer Suchalgorithmen bedarf. Es werden niemals veraltete Datensätze, sondern immer nur der jüngste durchsucht. Gefunden werden dabei im Einzelnen:</p>
 
 						<ul>
-							<li><i>Duplikate:</i> Ja, mit dieser Sondersuchen kann die Datenbank nach Duplikaten durchsucht werden. Als Duplikate gelten Titelaufnahmen, die mindestens eines der folgenden Kriterien erfüllen: identischer Titel, identische Sigle, identische URL, identische <abbr title="Pica-Produktionsnummer">PPN</abbr>.</li>
+							<li>
+								<p><i>Duplikate:</i> Als Duplikate gelten Titelaufnahmen, die mindestens eines der folgenden Kriterien erfüllen: identischer Titel, identische Sigle, identische URL, identische <abbr title="Pica-Produktionsnummer">PPN</abbr>.</p>
 
-							<li><i>doppelte Siglen:</i> Eine auf identische Siglen reduzierte Suche nach Duplikaten.</li>
+								<p>Die Titel in der Ergebnisanzeige werden so geordnet, dass Titelaufnahmen, die aus demselben Grund Duplikate sind, direkt hintereinander stehen.</p>
 
-							<li><i>mehrere Versionen:</i> Zeigt nur Titelaufnahmen an, die mehr als eine Version haben.</li>
+								<p>Im Suchschlitz oder im Datumsfeld stehender Text wird bei dieser Sondersuche ignoriert.</p>
+							</li>
+
+							<li>
+								<p><i>mehrere Versionen:</i> Zeigt nur Titelaufnahmen an, die mehr als eine Version haben.</p>
+
+								<p>Im Suchschlitz oder im Datumsfeld stehender Text wird bei dieser Sondersuche berücksichtigt. Übergangen wird jedoch der Schalter <code class="quelltext">auchAlte:&quot;&quot;</code>, mit dem bei normalen Suchen veraltete Datensätze in die Suche mit einbezogen werden können.</p>
+							</li>
 						</ul>
 
 						<figure class="right" title="zum Vergrößern anklicken">
