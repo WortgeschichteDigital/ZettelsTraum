@@ -4501,7 +4501,15 @@ Gerüst 2 &gt; Gerüst 1</pre>
 
 						<p>Das Datenfeld <i>ID</i> bildet hier eine Ausnahme: Die Suche nach einer ID kann nicht negiert werden. Wird ein Suchausdruck angegeben, die Suche aber negiert (<code class="quelltext">-ID:&quot;dwb&quot;</code>), wird so getan, als sei die Suche nicht negiert worden.</p>
 
-						<p>Wirk kein Suchausdruck angegeben (<code class="quelltext">ID:&quot;&quot;</code>), trifft der Ausdruck auf alle Titel zu; wird diese Suche negiert (<code class="quelltext">-ID:&quot;&quot;</code>) trifft er auf keinen Titel zu.</p>
+						<p>Wird kein Suchausdruck angegeben (<code class="quelltext">ID:&quot;&quot;</code>), trifft der Ausdruck auf alle Titel zu; wird diese Suche negiert (<code class="quelltext">-ID:&quot;&quot;</code>) trifft er auf keinen Titel zu.</p>
+
+						<p id="menueRedaktion-literaturAuchAlte">Um in die Suche auch <b>veraltete Titelaufnahmen</b> einzubeziehen, gibt es einen eigene Schalter, der an diejenigen der Suchsyntax angelehnt ist:</p>
+
+						<ul>
+							<li><i>auchAlte, aa:</i> Suche auch auf veraltete Titelaufnahmen erweitern.</li>
+						</ul>
+
+						<p>Dieser Schalter darf niemals Text enthalten; er dient nur zur Erweiterung des Suchskopus und kann mit allen anderen Schaltern oder Suchabfragen beliebig kombiniert werden. Da nun auch ältere Versionen einer Titelaufnahme durchsucht werden, könnte es sein, dass ihre Suche nicht auf die jüngste, aber auf eine ältere Version einer Titelaufnahme zutrifft. Ist dies der Fall, wird der Hinweis <q><span class="obacht">[Titelaufnahme veraltet]</span></q> gedruckt. Selbst wenn Ihre Suche auf mehrere der veralteten Titelaufnahmen zutrifft, wird dennoch nur die jüngste passende Aufnahme zu einem Titel angezeigt. Dies kann natürlich auch die jüngste, somit also nicht veraltete Aufnahme sein.</p>
 
 						<p>Verwenden Sie mehr als ein Suchwort und/oder mehr als einen Suchausdruck, werden diese immer durch ein <b>logisches Und</b> miteinander verknüpft. Sie bekommen nur Treffer, wenn alle Suchkriterien in einem Titel erfüllt sind.</p>
 
@@ -4549,7 +4557,7 @@ Gerüst 2 &gt; Gerüst 1</pre>
 
 						<p>Zum <b>Bearbeiten</b> klicken Sie einfach auf das Stift-Icon <img src="../img/stift.svg" width="20" height="20" alt=""> oben rechts in der Ecke der jeweiligen Titelaufnahme. Die Aufnahme wird dann in das <a href="#menueRedaktion-literaturTitelaufnahme">Eingabeformular</a> geladen, kann geändert und gespeichert werden. Dabei wird eine neue Version der Titelaufnahme angelegt, die alte also nicht einfach überschrieben. Wichtig zu verstehen ist, dass in das Formular nicht unbedingt die jüngste, sondern die angezeigte Version geladen wird. Denn:</p>
 
-						<p id="menueRedaktion-literaturVersionen">Wie schon mehrfach geschrieben, können Titelaufnahmen in mehreren <b>Versionen</b> vorliegen. In den Suchergebnissen wird immer nur eine Version einer Titelaufnahme angezeigt. Dabei wird die jüngste Version grundsätzlich bevorzugt. Sind Ihre Suchkriterien allerdings so, dass sie nur auf eine ältere Version zutreffen, wird diese zwar angezeigt, aber mit dem Hinweis <q><span class="obacht">[Titelaufnahme veraltet]</span></q> versehen. Um alle Versionen einzusehen, müssen Sie entweder den Versionen-Text in der Metadatenzeile oder das Icon <img src="../img/kreis-info.svg" width="20" height="20" alt=""> anklicken. Ein kleines Popup-Fenster öffnet sich: das Versionen-Popup.</p>
+						<p id="menueRedaktion-literaturVersionen">Wie schon mehrfach geschrieben, können Titelaufnahmen in mehreren <b>Versionen</b> vorliegen. In den Suchergebnissen wird immer nur eine Version einer Titelaufnahme angezeigt. Dies ist standardmäßig die jüngste Version, da veraltete Versionen nur durchsucht werden, wenn Sie den <a href="#menueRedaktion-literaturAuchAlte">Schalter</a> <code class="quelltext">na:&quot;&quot;</code> verwenden. Trifft die Suchanfrage sowohl auf die jüngste als auch auf eine veraltete Version zu, wird bei der Anzeige die jüngste Version bevorzugt. Um alle Versionen einzusehen, müssen Sie entweder den Versionen-Text in der Metadatenzeile oder das Icon <img src="../img/kreis-info.svg" width="20" height="20" alt=""> anklicken. Ein kleines Popup-Fenster öffnet sich: das Versionen-Popup.</p>
 
 						<figure class="right" title="zum Vergrößern anklicken">
 							<img src="../img/win/menueRedaktion-literatur-versionen.png" alt="">

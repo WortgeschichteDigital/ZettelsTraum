@@ -1391,12 +1391,20 @@ let redLit = {
 			text = helfer.textTrim(input.value, true),
 			ab = document.getElementById("red-lit-suche-ab").value,
 			st = [],
-			da = null;
+			da = null,
+			auchAlte = false;
 		redLit.suche.id = null;
 		redLit.suche.treffer = [];
 		redLit.suche.highlight = [];
 		if (text) {
 			let woerter = [];
+			// auch veraltete Titelaufnahmen durchsuchen
+			text = text.replace(/(aa|auchalte):""/ig, m => {
+				if (!redLit.suche.sonder) {
+					auchAlte = true;
+				}
+				return "";
+			});
 			// Feldsuche
 			text = text.replace(/(-?)([a-zA-Z]+):"(.*?)"/g, (m, p1, p2, p3) => {
 				const feld = feldCheck(p2);
@@ -1549,7 +1557,7 @@ let redLit = {
 			for (let i = 0, len = arr.length; i < len; i++) {
 				let aufnahme = arr[i];
 				// Sondersuchen
-				if (i > 0) { // standardmäßig nur die erste Titelaufnahme durchsuchen
+				if (i > 0 && !auchAlte) { // standardmäßig nur die erste Titelaufnahme durchsuchen
 					break;
 				} else if (redLit.suche.sonder === "siglen_doppelt" &&
 						!siglen_doppelt.has(aufnahme.td.si)) { // doppelte Siglen
