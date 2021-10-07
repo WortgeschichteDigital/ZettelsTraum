@@ -55,7 +55,27 @@
 				<h3>Neue Funktionen</h3>
 
 				<ul>
-					<li></li>
+					<li>
+						<p><a href="#menueRedaktion-literatur" class="link-handbuch">Literaturdatenbank</a>: Suchausdrücke können nun negiert werden. Dazu muss einem Suchwort, einer Phrase oder einem Schalter der speziellen <a href="#menueRedaktion-literaturSuchsyntax" class="link-handbuch">Suchsyntax</a> ein <code class="quelltext">-</code> vorangestellt werden. Einige Beispiele:</p>
+
+						<p class="einzug">- Der Suchausdruck <code class="quelltext">wörterbuch -und</code> findet alle Titel, in denen in irgendeinem der Datenfelder <q>wörterbuch</q>, aber in keinem <q>und</q> steht.</p>
+
+						<p class="einzug">- Der Suchausdruck <code class="quelltext">wörterbuch -"deutsches wörterbuch"</code> findet alle Titel, in denen in irgendeinem der Datenfelder <q>wörterbuch</q>, aber in keinem die Phrase <q>deutsches wörterbuch</q> steht.</p>
+
+						<p class="einzug">- Der Suchausdruck <code class="quelltext">wörterbuch -Tags:&quot;artikel&quot;</code> findet alle Titel, in denen in irgendeinem der Datenfelder <q>wörterbuch</q> steht, aber entweder kein Tag vorhanden ist oder in keinem der vorhandenen Tags <q>artikel</q> steht.</p>
+
+						<p>Wird ein Schalter der speziellen Suchsyntax ohne Suchtext verwendet, produziert dieser Ausdruck nun im Gegensatz zu früher Treffer. Zwei Beispiele:</p>
+
+						<p class="einzug">- Der Suchausdruck <code class="quelltext">Tags:&quot;&quot;</code> findet alle Titel, die einen Tag haben.</p>
+
+						<p class="einzug">- Der Suchausdruck <code class="quelltext">-Tags:&quot;&quot;</code> findet alle Titel, die keinen Tag haben.</p>
+
+						<p>Suchwörter, Phrasen und Schalter sind nach wie vor frei miteinander kombinierbar. Auch die mehrfache Verwendung eines speziellen Suchschalters kann mitunter sinnvolle Ergebnisse zutage bringen:</p>
+
+						<p class="einzug">- Der Suchausdruck <code class="quelltext">Tags:&quot;&quot; -Tags:&quot;artikel&quot;</code> zeigt alle Titel, die einen Tag haben, aber keine Titel, die einen Tag haben, in dem <q>artikel</q> steht.</p>
+
+						<p><abbr title="Vergleiche">Vgl.</abbr> die neue, ausführliche <a href="#menueRedaktion-suchausdruecke" class="link-handbuch">Beispielliste denkbarer Suchausdrücke</a>.</p>
+					</li>
 				</ul>
 
 				<h3>Verbesserungen</h3>

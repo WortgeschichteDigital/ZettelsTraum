@@ -1404,49 +1404,71 @@ let redLit = {
 				return "";
 			});
 			// Feldsuche
-			text = text.replace(/([a-zA-Z]+):"(.+?)"/g, (m, p1, p2) => {
-				const feld = feldCheck(p1);
-				if (!feld) {
-					// angegebenes Suchfeld existiert nicht => diese Suche sollte keine Treffer produzieren
+			text = text.replace(/(-?)([a-zA-Z]+):"(.*?)"/g, (m, p1, p2, p3) => {
+				const feld = feldCheck(p2);
+				if (feld === "id" && !p3) {
+					// Suche nach ID ohne Suchtext
+					if (p1) {
+						// negiert => keine Treffer produzieren
+						return m.substring(1);
+					} else {
+						// nicht negiert => trifft auf alle Titel zu => ignorieren
+						return "";
+					}
+				} else if (!feld) {
+					// angegebenes Suchfeld existiert nicht => diese Suchanfrage sollte keine Treffer produzieren
 					return m;
 				} else if (feld === "id") {
 					// Suche nach ID
-					redLit.suche.id = new RegExp(helfer.escapeRegExp(p2.toLowerCase()));
+					redLit.suche.id = new RegExp(helfer.escapeRegExp(p3.toLowerCase()));
 					return "";
 				}
 				woerter.push({
 					feld,
-					text: p2,
+					text: p3,
+					negativ: Boolean(p1),
 				});
 				return "";
 			});
 			// Phrasensuche
-			text = text.replace(/(?<!:)"(.+?)"/g, (m, p1) => {
+			text = text.replace(/(-?)(?<!:)"(.+?)"/g, (m, p1, p2) => {
 				// (?<!:) damit Suchen mit irregulärer Suchsyntax keine Treffer produzieren
 				woerter.push({
 					feld: "",
-					text: p1,
+					text: p2,
+					negativ: Boolean(p1),
 				});
 				return "";
 			});
 			// Wortsuche
 			text.split(/\s/).forEach(i => {
-				if (i) {
-					woerter.push({
-						feld: "",
-						text: i,
-					});
+				if (!i) {
+					return;
 				}
+				let negativ = false;
+				if (/^-/.test(i)) {
+					negativ = true;
+					i = i.substring(1);
+				}
+				woerter.push({
+					feld: "",
+					text: i,
+					negativ,
+				});
 			});
 			for (let wort of woerter) {
 				let insensitive = "i";
 				if (/[A-ZÄÖÜ]/.test(wort.text)) {
 					insensitive = "";
 				}
-				let reg = new RegExp(helfer.escapeRegExp(wort.text).replace(/ /g, "\\s"), "g" + insensitive);
+				let reg = null;
+				if (wort.text) {
+					reg = new RegExp(helfer.escapeRegExp(wort.text).replace(/ /g, "\\s"), "g" + insensitive);
+				}
 				st.push({
 					feld: wort.feld,
 					reg,
+					negativ: wort.negativ,
 				});
 			}
 			redLit.suche.highlight = st;
@@ -1562,23 +1584,41 @@ let redLit = {
 				let stOk = !st.length ? true : false;
 				if (st.length) {
 					let ok = Array(st.length).fill(false);
-					x: for (let j = 0, len = st.length; j < len; j++) {
-						for (let k of datensaetze) {
+					x: for (let j = 0, lenJ = st.length; j < lenJ; j++) {
+						let okNegativ = Array(datensaetze.length).fill(false);
+						for (let k = 0, lenK = datensaetze.length; k < lenK; k++) {
+							const l = datensaetze[k];
 							// dieses Feld durchsuchen?
-							if (st[j].feld && !k.includes(st[j].feld)) {
+							if (st[j].feld && !l.includes(st[j].feld)) {
 								continue;
 							}
 							// Datensatz ermitteln
-							let ds = aufnahme[k[0]];
-							if (k[1]) {
-								ds = ds[k[1]];
+							let ds = aufnahme[l[0]];
+							if (l[1]) {
+								ds = ds[l[1]];
 							}
 							// Datensatz durchsuchen
 							const txt = Array.isArray(ds) ? ds.join(", ") : ds;
-							if (txt.match(st[j].reg)) {
-								ok[j] = true;
-								continue x;
+							if (
+									!st[j].reg && // kein Suchtext
+										(st[j].negativ && !txt || // Negativsuche && Feld leer
+										!st[j].negativ && txt) || // keine Negativsuche && Feld irgendwie gefüllt
+									st[j].reg && // Suchtext
+										(st[j].negativ && !txt.match(st[j].reg) || // Negativsuche && kein Treffer im Feld
+										!st[j].negativ && txt.match(st[j].reg)) // keine Negativsuche && Treffer im Feld
+									) {
+								if (!st[j].feld && st[j].negativ) {
+									// bei Negativsuche ohne Feldangabe muss die Negation auf alle Datensätze zutreffen
+									okNegativ[k] = true;
+								} else {
+									ok[j] = true;
+									continue x;
+								}
 							}
+						}
+						if (st[j].negativ && !okNegativ.includes(false)) {
+							// Negativsuche okay, wenn keiner der Datensätze einen Treffer produzierte
+							ok[j] = true;
 						}
 						if (!ok[j]) {
 							break;
