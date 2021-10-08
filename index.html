@@ -1038,14 +1038,72 @@
 					><label for="red-lit-nav-eingabe">Titelaufnahme</label
 			></div>
 			<div id="red-lit-suche" class="aus">
-				<p id="red-lit-suche-form"
+				<div id="red-lit-suche-form"
 					><input type="text" value="" placeholder="Suchtext" id="red-lit-suche-text"
 					><label for="red-lit-suche-ab">ab</label
 					><input type="date" value="" id="red-lit-suche-ab" required
+					><a href="#" class="icon-link icon-kreis-fragezeichen" id="red-lit-suche-hilfe" tabindex="-1" title="Hilfe zur Suchsyntax"> </a
 					><a href="#" class="icon-link icon-lupe" id="red-lit-suche-start" tabindex="-1" title="Suche starten"> </a
-				></p>
+				><div id="red-lit-suche-hilfe-fenster" class="aus"
+					><img src="img/x.svg" width="24" height="24" alt="x" title="Popup schließen (Esc)">
+					<p>Grundlegende <b>Suchsyntax</b>:</p>
+					<table>
+						<tr>
+							<th><code>wörterbuch</code></th>
+							<td>Einzelwortsuche</td>
+						</tr>
+						<tr>
+							<th><code>Wörterbuch</code></th>
+							<td>Einzelwortsuche mit genauer Schreibung</td>
+						</tr>
+						<tr>
+							<th><code>wörterbuch deutsch</code></th>
+							<td>Mehrwortsuche</td>
+						</tr>
+						<tr>
+							<th><code>&quot;wörterbuch der&quot;</code></th>
+							<td>Phrasensuche</td>
+						</tr>
+						<tr>
+							<th><code>-wörterbuch</code></th>
+							<td>negative Einzelwortsuche</td>
+						</tr>
+						<tr>
+							<th><code>-&quot;wörterbuch der&quot;</code></th>
+							<td>negative Phrasensuche</td>
+						</tr>
+						<tr>
+							<th><code>wörterbuch -deutsch</code></th>
+							<td>Mehrwortsuche, positiv und negativ</td>
+						</tr>
+					</table>
+					<p>Mit <b>speziellen Schaltern</b> können Sie die die Suche auf ein Datenfeld eingrenzen. Der Schalter <code>auchAlte:&quot;&quot;</code> spielt eine Sonderrolle. Er dient dazu, auch veraltete Datensätze zu durchsuchen.</p>
+					<p><a href="#" title="Kurzform: si">Sigle:&quot;&quot;</a> <a href="#" title="Kurzform: id">ID:&quot;&quot;</a> <a href="#" title="Kurzform: ti">Titel:&quot;&quot;</a> <a href="#" title="Kurzform: ul">URL:&quot;&quot;</a> <a href="#" title="Kurzform: ad">Aufrufdatum:&quot;&quot;</a> <a href="#" title="Kurzform: fo">Fundort:&quot;&quot;</a> <a href="#" title="Kurzform: pn">PPN:&quot;&quot;</a> <a href="#" title="Kurzform: tg">Tags:&quot;&quot;</a> <a href="#" title="Kurzform: no">Notizen:&quot;&quot;</a> <a href="#" title="Kurzform: be">BearbeiterIn:&quot;&quot;</a> <a href="#" title="Kurzform: aa">auchAlte:&quot;&quot;</a></p>
+					<table>
+						<tr>
+							<th><code>Titel:&quot;Suchtext&quot;</code></th>
+							<td><q>Suchtext</q> muss im Feld <i>Titel</i> stehen</td>
+						</tr>
+						<tr>
+							<th><code>-Titel:&quot;Suchtext&quot;</code></th>
+							<td><q>Suchtext</q> darf nicht im Feld <i>Titel</i> stehen</td>
+						</tr>
+						<tr>
+							<th><code>Tags:&quot;&quot;</code></th>
+							<td>Feld <i>Tags</i> muss gefüllt sein</td>
+						</tr>
+						<tr>
+							<th><code>-Tags:&quot;&quot;</code></th>
+							<td>Feld <i>Tags</i> darf nicht gefüllt sein</td>
+						</tr>
+						<tr>
+							<th><code>auchAlte:&quot;&quot;</code></th>
+							<td>niemals negativ, immer ohne Suchtext</td>
+						</tr>
+					</table>
+				</div></div>
 				<p id="red-lit-suche-sonder"
-					><i>Sondersuchen:</i> <a href="#" data-sonder="duplikate">Duplikate</a> · <a href="#" data-sonder="siglen_doppelt">doppelte Siglen</a> · <a href="#" data-sonder="ppn_mit">mit</a> / <a href="#" data-sonder="ppn_ohne">ohne</a> PPN · <a href="#" data-sonder="versionen">mehrere Versionen</a> · <a href="#" data-sonder="notizen">mit Notizen</a
+					><i>Sondersuchen:</i> <a href="#" data-sonder="duplikate">Duplikate</a> · <a href="#" data-sonder="versionen">mehrere Versionen</a
 				></p>
 				<div id="red-lit-suche-titel"></div>
 				<div id="red-lit-suche-treffer"

@@ -1386,67 +1386,93 @@ let redLit = {
 	},
 	// Suche: starten
 	sucheStarten () {
+		// Suchhilfe schließen
+		document.getElementById("red-lit-suche-hilfe-fenster").classList.add("aus");
 		// Filterkriterien auslesen/Variablen vorbereiten
 		let input = document.getElementById("red-lit-suche-text"),
 			text = helfer.textTrim(input.value, true),
 			ab = document.getElementById("red-lit-suche-ab").value,
 			st = [],
 			da = null,
-			nurAktuelle = false;
+			auchAlte = false;
 		redLit.suche.id = null;
 		redLit.suche.treffer = [];
 		redLit.suche.highlight = [];
 		if (text) {
 			let woerter = [];
-			// nur aktuelle Titelaufnahmen
-			text = text.replace(/(na|nuraktuelle):""/ig, m => {
-				nurAktuelle = true;
+			// auch veraltete Titelaufnahmen durchsuchen
+			text = text.replace(/(aa|auchalte):""/ig, m => {
+				if (!redLit.suche.sonder) {
+					auchAlte = true;
+				}
 				return "";
 			});
 			// Feldsuche
-			text = text.replace(/([a-zA-Z]+):"(.+?)"/g, (m, p1, p2) => {
-				const feld = feldCheck(p1);
-				if (!feld) {
-					// angegebenes Suchfeld existiert nicht => diese Suche sollte keine Treffer produzieren
+			text = text.replace(/(-?)([a-zA-Z]+):"(.*?)"/g, (m, p1, p2, p3) => {
+				const feld = feldCheck(p2);
+				if (feld === "id" && !p3) {
+					// Suche nach ID ohne Suchtext
+					if (p1) {
+						// negiert => keine Treffer produzieren
+						return m.substring(1);
+					} else {
+						// nicht negiert => trifft auf alle Titel zu => ignorieren
+						return "";
+					}
+				} else if (!feld) {
+					// angegebenes Suchfeld existiert nicht => diese Suchanfrage sollte keine Treffer produzieren
 					return m;
 				} else if (feld === "id") {
 					// Suche nach ID
-					redLit.suche.id = new RegExp(helfer.escapeRegExp(p2.toLowerCase()));
+					redLit.suche.id = new RegExp(helfer.escapeRegExp(p3.toLowerCase()));
 					return "";
 				}
 				woerter.push({
 					feld,
-					text: p2,
+					text: p3,
+					negativ: Boolean(p1),
 				});
 				return "";
 			});
 			// Phrasensuche
-			text = text.replace(/(?<!:)"(.+?)"/g, (m, p1) => {
+			text = text.replace(/(-?)(?<!:)"(.+?)"/g, (m, p1, p2) => {
 				// (?<!:) damit Suchen mit irregulärer Suchsyntax keine Treffer produzieren
 				woerter.push({
 					feld: "",
-					text: p1,
+					text: p2,
+					negativ: Boolean(p1),
 				});
 				return "";
 			});
 			// Wortsuche
 			text.split(/\s/).forEach(i => {
-				if (i) {
-					woerter.push({
-						feld: "",
-						text: i,
-					});
+				if (!i) {
+					return;
 				}
+				let negativ = false;
+				if (/^-/.test(i)) {
+					negativ = true;
+					i = i.substring(1);
+				}
+				woerter.push({
+					feld: "",
+					text: i,
+					negativ,
+				});
 			});
 			for (let wort of woerter) {
 				let insensitive = "i";
 				if (/[A-ZÄÖÜ]/.test(wort.text)) {
 					insensitive = "";
 				}
-				let reg = new RegExp(helfer.escapeRegExp(wort.text).replace(/ /g, "\\s"), "g" + insensitive);
+				let reg = null;
+				if (wort.text) {
+					reg = new RegExp(helfer.escapeRegExp(wort.text).replace(/ /g, "\\s"), "g" + insensitive);
+				}
 				st.push({
 					feld: wort.feld,
 					reg,
+					negativ: wort.negativ,
 				});
 			}
 			redLit.suche.highlight = st;
@@ -1457,6 +1483,63 @@ let redLit = {
 			// Sonst wird der Offset zur GMT hinzugerechnet, weswegen Titelaufnahme, die
 			// um 0 Uhr erstellt wurden, nicht korrekt gefunden werden.
 			da = new Date(da.getFullYear(), da.getMonth(), da.getDate());
+		}
+		// Zeiger für das Trefferobjekt
+		let treffer = redLit.suche.treffer;
+		// Sondersuche Duplikate
+		let duplikate = {
+			ti: {}, // Titel identisch
+			si: {}, // Sigle identisch
+			ul: {}, // URL identisch
+			pn: {}, // PPN identisch
+		};
+		if (redLit.suche.sonder === "duplikate") {
+			for (const [k, v] of Object.entries(redLit.db.data)) {
+				for (const [l, w] of Object.entries(redLit.db.data)) {
+					if (l === k) {
+						continue;
+					}
+					if (w[0].td.si === v[0].td.si) { // Sigle identisch
+						addDuplikat("si", w[0].td.si, k, l);
+					}
+					if (w[0].td.ti === v[0].td.ti) { // Titel identisch
+						addDuplikat("ti", w[0].td.ti, k, l);
+					}
+					if (v[0].td.ul && w[0].td.ul === v[0].td.ul) { // URL identisch
+						addDuplikat("ul", w[0].td.ul, k, l);
+					}
+					for (const p of v[0].td.pn) { // PPN identisch
+						if (w[0].td.pn.includes(p)) {
+							addDuplikat("pn", w[0].td.pn, k, l);
+						}
+					}
+				}
+			}
+			let duplikateGruende = {
+				ti: "Titel identisch",
+				si: "Sigle identisch",
+				ul: "URL identisch",
+				pn: "PPN identisch",
+			};
+			for (const [k, v] of Object.entries(duplikate)) {
+				for (const s of Object.values(v)) {
+					for (const id of s) {
+						treffer.push({
+							id,
+							slot: 0,
+							meldung: duplikateGruende[k],
+						});
+					}
+				}
+			}
+		}
+		function addDuplikat (key, value, k, l) {
+			if (!duplikate[key][value]) {
+				duplikate[key][value] = new Set();
+			}
+			for (const i of [k, l]) {
+				duplikate[key][value].add(i);
+			}
 		}
 		// Einträge durchsuchen
 		let datensaetze = [
@@ -1470,61 +1553,14 @@ let redLit = {
 			["td", "ti"],
 			["td", "ul"],
 		];
-		let duplikate = new Set(),
-			siglen_doppelt = new Set();
-		if (redLit.suche.sonder === "duplikate") {
-			for (let [k, v] of Object.entries(redLit.db.data)) {
-				if (duplikate.has(k)) {
-					continue;
-				}
-				x: for (let [l, w] of Object.entries(redLit.db.data)) {
-					if (l === k) {
-						continue;
-					}
-					if (w[0].td.si === v[0].td.si) { // Sigle identisch
-						duplikate.add(k);
-						duplikate.add(l);
-						break;
-					} else if (w[0].td.ti === v[0].td.ti) { // Titel identisch
-						duplikate.add(k);
-						duplikate.add(l);
-						break;
-					} else if (v[0].td.ul && w[0].td.ul === v[0].td.ul) { // URL identisch
-						duplikate.add(k);
-						duplikate.add(l);
-						break;
-					}
-					for (let p of v[0].td.pn) { // PPN identisch
-						if (w[0].td.pn.includes(p)) {
-							duplikate.add(k);
-							duplikate.add(l);
-							break x;
-						}
-					}
-				}
-			}
-		} else if (redLit.suche.sonder === "siglen_doppelt") {
-			let siglen = [];
-			for (let arr of Object.values(redLit.db.data)) {
-				siglen.push(arr[0].td.si);
-			}
-			siglen.forEach(i => {
-				let treffer = siglen.filter(j => j === i);
-				if (treffer.length > 1) {
-					siglen_doppelt.add(i);
-				}
-			});
-		}
-		let treffer = redLit.suche.treffer;
 		for (let [id, arr] of Object.entries(redLit.db.data)) {
 			// Suche nach ID
 			if (redLit.suche.id && !redLit.suche.id.test(id)) {
 				continue;
 			}
 			// Sondersuchen
-			if (redLit.suche.sonder === "duplikate" &&
-					!duplikate.has(id)) { // Duplikate
-				continue;
+			if (redLit.suche.sonder === "duplikate") { // Suche bereits abgeschlossen
+				break;
 			} else if (redLit.suche.sonder === "versionen" &&
 					arr.length === 1) { // mehrere Versionen
 				continue;
@@ -1532,22 +1568,8 @@ let redLit = {
 			// Suche nach Text und Datum
 			for (let i = 0, len = arr.length; i < len; i++) {
 				let aufnahme = arr[i];
-				// Sondersuchen
-				if ((redLit.suche.sonder || nurAktuelle) && i > 0) {
-					// Sondersuchen, für die nur der erste Eintrag berücksichtigt wird;
-					// oder der "nur aktuelle"-Schalter wurde verwendet
-					break;
-				} else if (redLit.suche.sonder === "siglen_doppelt" &&
-						!siglen_doppelt.has(aufnahme.td.si)) { // doppelte Siglen
-					break;
-				} else if (redLit.suche.sonder === "ppn_mit" &&
-					!aufnahme.td.pn.length) { // mit PPN
-					break;
-				} else if (redLit.suche.sonder === "ppn_ohne" &&
-					aufnahme.td.pn.length) { // ohne PPN
-					break;
-				} else if (redLit.suche.sonder === "notizen" &&
-					!aufnahme.td.no) { // mit Notizen
+				// standardmäßig nur die erste Titelaufnahme durchsuchen
+				if (i > 0 && !auchAlte) {
 					break;
 				}
 				// Datum
@@ -1562,23 +1584,41 @@ let redLit = {
 				let stOk = !st.length ? true : false;
 				if (st.length) {
 					let ok = Array(st.length).fill(false);
-					x: for (let j = 0, len = st.length; j < len; j++) {
-						for (let k of datensaetze) {
+					x: for (let j = 0, lenJ = st.length; j < lenJ; j++) {
+						let okNegativ = Array(datensaetze.length).fill(false);
+						for (let k = 0, lenK = datensaetze.length; k < lenK; k++) {
+							const l = datensaetze[k];
 							// dieses Feld durchsuchen?
-							if (st[j].feld && !k.includes(st[j].feld)) {
+							if (st[j].feld && !l.includes(st[j].feld)) {
 								continue;
 							}
 							// Datensatz ermitteln
-							let ds = aufnahme[k[0]];
-							if (k[1]) {
-								ds = ds[k[1]];
+							let ds = aufnahme[l[0]];
+							if (l[1]) {
+								ds = ds[l[1]];
 							}
 							// Datensatz durchsuchen
 							const txt = Array.isArray(ds) ? ds.join(", ") : ds;
-							if (txt.match(st[j].reg)) {
-								ok[j] = true;
-								continue x;
+							if (
+									!st[j].reg && // kein Suchtext
+										(st[j].negativ && !txt || // Negativsuche && Feld leer
+										!st[j].negativ && txt) || // keine Negativsuche && Feld irgendwie gefüllt
+									st[j].reg && // Suchtext
+										(st[j].negativ && !txt.match(st[j].reg) || // Negativsuche && kein Treffer im Feld
+										!st[j].negativ && txt.match(st[j].reg)) // keine Negativsuche && Treffer im Feld
+									) {
+								if (!st[j].feld && st[j].negativ) {
+									// bei Negativsuche ohne Feldangabe muss die Negation auf alle Datensätze zutreffen
+									okNegativ[k] = true;
+								} else {
+									ok[j] = true;
+									continue x;
+								}
 							}
+						}
+						if (st[j].negativ && !okNegativ.includes(false)) {
+							// Negativsuche okay, wenn keiner der Datensätze einen Treffer produzierte
+							ok[j] = true;
 						}
 						if (!ok[j]) {
 							break;
@@ -1596,7 +1636,9 @@ let redLit = {
 			}
 		}
 		// Treffer sortieren (nach Sigle)
-		treffer.sort(helfer.sortSiglen);
+		if (redLit.suche.sonder !== "duplikate") {
+			treffer.sort(helfer.sortSiglen);
+		}
 		// Suchtreffer anzeigen
 		redLit.sucheAnzeigen(0);
 		// Suchtext selektieren
@@ -1812,6 +1854,38 @@ let redLit = {
 			// Titelaufnahme auffrischen
 			redLit.anzeige.snippetKontext = "suche";
 			i.parentNode.replaceChild(redLit.anzeigeSnippet(ds), i);
+		});
+	},
+	// Suche: Schalter ins Suchfeld eintragen
+	//   a = Element
+	//     (Anker im Hilfefenster)
+	sucheSchalter (a) {
+		a.addEventListener("click", function(evt) {
+			evt.preventDefault();
+			// Suchfeld vorbereiten
+			let suchfeld = document.getElementById("red-lit-suche-text");
+			if (suchfeld.value) {
+				suchfeld.value += " ";
+			}
+			// Suchfeld ergänzen
+			let schalter = this.textContent;
+			if (/^Aufrufdatum/.test(schalter)) {
+				const datum = new Date();
+				schalter = schalter.replace(/""/, `"${datum.getFullYear()}-${(datum.getMonth() + 1).toString().padStart(2, "0")}-${datum.getDate().toString().padStart(2, "0")}"`);
+			}
+			suchfeld.value += schalter;
+			// Cursor im Suchfeld setzen
+			const len = suchfeld.value.length;
+			if (/^auchAlte/.test(schalter)) {
+				suchfeld.setSelectionRange(len, len);
+			} else if (/^Aufrufdatum/.test(schalter)) {
+				suchfeld.setSelectionRange(len - 11, len - 1);
+			} else {
+				suchfeld.setSelectionRange(len, len - 1);
+			}
+			// Fenster schließen und Suchfeld fokussieren
+			document.getElementById("red-lit-suche-hilfe-fenster").classList.add("aus");
+			suchfeld.focus();
 		});
 	},
 	// Eingabeformular: Speicher für Variablen
@@ -3200,7 +3274,9 @@ let redLit = {
 	//     (ID der Titelaufnahme)
 	//   slot = Number
 	//     (Slot der Titelaufnahme)
-	anzeigeSnippet ({id, slot}) {
+	//   meldung = String | undefined
+	//     (ggf. Meldung, die angezeigt werden soll)
+	anzeigeSnippet ({id, slot, meldung = ""}) {
 		let ds = redLit.db.data[id][slot];
 		// Snippet füllen
 		let div = document.createElement("div");
@@ -3224,11 +3300,16 @@ let redLit = {
 		}
 		idPrint.innerHTML = textId;
 		// alte Aufnahme
-		if (slot > 0 && redLit.anzeige.snippetKontext === "suche") {
+		if ((slot > 0 || meldung) &&
+				redLit.anzeige.snippetKontext === "suche") {
 			let alt = document.createElement("span");
 			si.appendChild(alt);
 			alt.classList.add("veraltet");
-			alt.textContent = "[Titelaufnahme veraltet]";
+			if (slot > 0) {
+				alt.textContent = "[Titelaufnahme veraltet]";
+			} else {
+				alt.textContent = `[${meldung}]`;
+			}
 		}
 		// Icons
 		let icons = document.createElement("span");
@@ -3407,6 +3488,10 @@ let redLit = {
 	//   text = String
 	//     (Text, der gedruckt werden soll)
 	anzeigeSnippetHighlight ({feld, text}) {
+		// kein Highlighting für Sondersuche Duplikate
+		if (redLit.suche.sonder === "duplikate") {
+			return text;
+		}
 		// Muss/kann Text hervorgehoben werden?
 		if (redLit.anzeige.snippetKontext !== "suche" ||
 				!redLit.suche.highlight.length) {
@@ -3453,6 +3538,8 @@ let redLit = {
 	anzeigePopup ({id, slot}) {
 		redLit.anzeige.snippetKontext = "popup";
 		redLit.anzeige.id = id;
+		// Suchhilfe schließen
+		document.getElementById("red-lit-suche-hilfe-fenster").classList.add("aus");
 		// aktuelles Popup ggf. entfernen
 		redLit.anzeigePopupSchliessen();
 		// Fenster erzeugen

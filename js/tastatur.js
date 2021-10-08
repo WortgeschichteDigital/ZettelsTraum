@@ -45,8 +45,13 @@ let tastatur = {
 			}
 			// Versionen-Popup in der Literaturdatenbank schließen
 			if (overlayId === "red-lit" &&
-					document.getElementById("red-lit-popup")) {
-				redLit.anzeigePopupSchliessen();
+						(document.getElementById("red-lit-popup") ||
+						!document.getElementById("red-lit-suche-hilfe-fenster").classList.contains("aus"))) {
+				if (document.getElementById("red-lit-popup")) {
+					redLit.anzeigePopupSchliessen();
+				} else {
+					document.getElementById("red-lit-suche-hilfe-fenster").classList.add("aus");
+				}
 				return;
 			}
 			// Overlay-Fenster schließen

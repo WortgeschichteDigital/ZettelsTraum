@@ -32,6 +32,15 @@ body {
 	user-select: none;
 }
 
+code {
+	border-radius: 3px;
+	padding: 0 3px;
+	background-color: var(--hintergrund);
+	color: var(--text);
+	font-family: "Noto Sans Mono", "Noto Sans Symbols2", monospace;
+	user-select: text;
+}
+
 h2 {
 	margin: 0;
 	padding: 0 0 0 10px;

@@ -4453,11 +4453,13 @@ Gerüst 2 &gt; Gerüst 1</pre>
 							<figcaption>Suchergebnisse in der Literaturdatenbank</figcaption>
 						</figure>
 
-						<p>Mit der Suchfunktion können Sie alle Titelaufnahmen der aktuellen Literaturdatenbank durchsuchen. Durchsucht werden die <b>Datenfelder</b> <i>Sigle, Titel, URL, Aufrufdatum, Fundort, PPN, Tags</i> und <i>Notizen</i>. (Das Feld <i>ID</i> kann nur <a href="#menueRedaktion-literaturSuchsyntax">unter Verwendung eines speziellen Schalters</a> durchsucht werden.) Dabei ist allein zu beachten, dass das Datum des Datenfelds <i>Aufrufdatum</i> intern als ISO 8601 formatiert ist, also diese Form hat: JJJJ–MM-DD (Jahr-Monat-Tag). Suchen Sie nach einer Literaturaufnahme, die das Aufrufdatum <q>8. 5. 2020</q> hat, müssen Sie in den Suchschlitz also <code class="quelltext">2020-05-08</code> eingeben.</p>
+						<p>Mit der Suchfunktion können Sie alle Titelaufnahmen der aktuellen Literaturdatenbank durchsuchen. Durchsucht werden die <b>Datenfelder</b> <i>Sigle, Titel, URL, Aufrufdatum, Fundort, PPN, Tags</i> und <i>Notizen</i>. (Das Feld <i>ID</i> kann nur <a href="#menueRedaktion-literaturSuchschalter">unter Verwendung eines speziellen Schalters</a> durchsucht werden.) Dabei ist allein zu beachten, dass das Datum des Datenfelds <i>Aufrufdatum</i> intern als ISO 8601 formatiert ist, also diese Form hat: JJJJ–MM-DD (Jahr-Monat-Tag). Suchen Sie nach einer Literaturaufnahme, die das Aufrufdatum <q>8. 5. 2020</q> hat, müssen Sie in den Suchschlitz also <code class="quelltext">2020-05-08</code> eingeben.</p>
 
 						<p>Die Suche kann via <kbd>⏎</kbd> oder durch Klick auf das Icon <img src="../img/lupe.svg" width="20" height="20" alt=""> <b>gestartet</b> werden.</p>
 
-						<p>Geben Sie <b>kein Suchwort</b> ein, werden alle Titelaufnahmen in der Datenbank aufgelistet. Dabei werden pro Seite maximal 50 Treffer ausgeworfen. Im unteren Teil des Popups sehen Sie, wie viele Treffer angezeigt werden und ob es noch weitere gibt. Passen die Treffer nicht alle auf eine Seite, können Sie mithilfe der Pfeile vor- oder zurückblättern.</p>
+						<p>Im <b>Hilfe-Popup</b> finden Sie Kurzhinweise zur Suchsyntax. Das Popup kann durch Klick auf das Icon <img src="../img/kreis-fragezeichen.svg" width="20" height="20" alt=""> geöffnet werden.</p>
+
+						<p>Geben Sie <b>keinen Suchausdruck</b> ein, werden alle Titelaufnahmen in der Datenbank aufgelistet. Dabei werden pro Seite maximal 50 Treffer ausgeworfen. Im unteren Teil des Popups sehen Sie, wie viele Treffer angezeigt werden und ob es noch weitere gibt. Passen die Treffer nicht alle auf eine Seite, können Sie mithilfe der Pfeile vor- oder zurückblättern.</p>
 
 						<p>Die Suchergebnisse werden immer <b>alphanumerisch</b> nach Sigle sortiert.</p>
 
@@ -4469,7 +4471,7 @@ Gerüst 2 &gt; Gerüst 1</pre>
 
 						<p>Daneben gibt es die Möglichkeit nach <b>Phrasen</b> zu suchen. Schließen Sie mehrere Suchwörter in Anführungsstriche ein, werden diese nur gefunden, wenn sie so wie eingegeben direkt aufeinanderfolgen. Ein Beispiel: Die Eingabe <code class="quelltext">&quot;Jacob Grimm&quot;</code> würde <abbr title="zum Beispiel">z. B.</abbr> das <q>Deutsche Wörterbuch von Jacob Grimm und Wilhelm Grimm</q> finden, die Titelaufnahme <q>Grimm, Jacob: Die drei Federn</q> aber nicht. Lassen Sie die Anführungszeichen weg und suchen Sie nach <code class="quelltext">Jacob Grimm</code>, passt der Suchausdruck auf beide Titel.</p>
 
-						<p id="menueRedaktion-literaturSuchsyntax">Mithilfe einer speziellen <b>Suchsyntax</b> können sie die Suche von Suchwörtern oder -phrasen auf nur eines der Datenfelder beschränken. Die Syntax ist so aufgebaut: <code class="quelltext">FELDNAME:&quot;SUCHAUSDRUCK&quot;</code> (vor und hinter dem Doppelpunkt <em>kein</em> Leerzeichen). Mit der Suchanfrage <code class="quelltext">Bearbeiter:&quot;Müller&quot;</code> finden Sie nur Titelaufnahmen, die von einer Person namens <q>Müller</q> bearbeitet wurden. Taucht <q>Müller</q> allein in einer Titelaufnahme, Sigle oder dergleichen auf, produziert die Anfrage keinen Treffer.</p>
+						<p id="menueRedaktion-literaturSuchschalter">Mithilfe von <b>speziellen Schaltern</b> können sie die Suche von Suchwörtern oder -phrasen auf nur eines der Datenfelder beschränken. Die Schalter sind so aufgebaut: <code class="quelltext">FELDNAME:&quot;SUCHWORT&quot;</code> (vor und hinter dem Doppelpunkt <em>kein</em> Leerzeichen). Mit der Suchanfrage <code class="quelltext">Bearbeiter:&quot;Müller&quot;</code> finden Sie nur Titelaufnahmen, die von einer Person namens <q>Müller</q> bearbeitet wurden. Taucht <q>Müller</q> allein in einer Titelaufnahme, Sigle oder dergleichen auf, produziert die Anfrage keinen Treffer.</p>
 
 						<p>Für das Ansprechen der Datenfelder gibt es immer mehrere Alternativen (in der Liste durch Kommata getrennt); Groß- oder Kleinschreibung spielt bei der Angabe der Feldnamen keine Rolle; <code class="quelltext">bearbeiterin</code> wird genauso behandelt wie <code class="quelltext">BearbeiterIn</code>:</p>
 
@@ -4495,15 +4497,61 @@ Gerüst 2 &gt; Gerüst 1</pre>
 							<li><i>BearbeiterIn, Bearbeiter, bearb, be:</i> nur das BearbeiterIn-Feld durchsuchen.</li>
 						</ul>
 
-						<p id="menueRedaktion-literaturNurAktuelle">Um die <b>Suche auf die aktuellen Titelaufnahmen zu beschränken</b> gibt es einen eigene Schalter, der an diejenigen der Suchsyntax angelehnt ist:</p>
+						<p>Wird ein Schalter verwendet, aber <b>kein Suchwort</b> angegeben, produziert der Ausdruck immer dann einen Treffer, wenn das angesprochene Datenfeld in irgendeiner Weise gefüllt ist. Mit der Suchanfrage <code class="quelltext">Tags:&quot;&quot;</code> finden Sie <abbr title="zum Beispiel">z. B.</abbr> alle Titel, denen ein Tag mit beliebigem Text angehängt wurde.</p>
+
+						<p>Die Suchwörter, -phrasen und -schalter können alle <b>negativ</b> verwendet werden. Hierzu müssen sie dem Wort, der Phrase, dem Schalter nur <code class="quelltext">-</code> voranstellen. Positive und negative Suchausdrücke können beliebig kombiniert werden. Eine Suche nach <code class="quelltext">wörterbuch -handbuch</code> findet alle Titel, in denen <q>wörterbuch</q> steht, schließt aber alle aus, in denen <q>handbuch</q> zu finden ist.</p>
+
+						<p>Das Datenfeld <i>ID</i> bildet hier eine Ausnahme: Verwenden Sie einen negativen Schalter (<code class="quelltext">-ID:&quot;dwb&quot;</code>), wird dieser wie eine positive Suche behandelt. Der Ausdruck produziert also durchaus Treffer. Wird kein Suchwort angegeben (<code class="quelltext">ID:&quot;&quot;</code>), trifft der Ausdruck auf alle Titel zu; wird ein negativer Ausdruck ohne Suchwort verwendet (<code class="quelltext">-ID:&quot;&quot;</code>), trifft er auf keinen Titel zu.</p>
+
+						<p id="menueRedaktion-literaturAuchAlte">Um in die Suche auch <b>veraltete Titelaufnahmen</b> einzubeziehen, gibt es einen eigene Schalter, der keinen Suchtext haben und nicht negativ verwendet werden darf:</p>
 
 						<ul>
-							<li><i>nurAktuelle, na:</i> Suche auf die aktuellen Titelaufnahmen beschränken.</li>
+							<li><i>auchAlte, aa:</i> Suche auch auf veraltete Titelaufnahmen erweitern.</li>
 						</ul>
 
-						<p>Dieser Schalter darf niemals Text enthalten; er dient nur zur Beschränkung der Suche und kann mit allen anderen Schaltern oder Suchabfragen beliebig kombiniert werden. Eine Beispielanfrage: <code class="quelltext">"schriften zur" na:""</code>. Hier wird unter Ignoranz von Groß- und Kleinschreibung nach der Phrase <q>schriften zur</q> gesucht, veraltete Titelaufnahmen werden jedoch übergangen und produzieren keine Treffer. Die Position, an der der Schalter zur Beschränkung steht, ist irrelevant; die Groß- und Kleinschreibung im Schalternamen ebenfalls, <code class="quelltext">nuraktuelle:""</code> funktioniert ebenfalls.</p>
+						<p>Dieser Schalter dient nur zur Erweiterung des Suchskopus und kann mit allen anderen Schaltern oder Suchabfragen beliebig kombiniert werden. Da nun auch ältere Versionen einer Titelaufnahme durchsucht werden, könnte es sein, dass ihre Suche nicht auf die jüngste, aber auf eine ältere Version einer Titelaufnahme zutrifft. Ist dies der Fall, wird der Hinweis <q><span class="obacht">[Titelaufnahme veraltet]</span></q> gedruckt. Selbst wenn Ihre Suche auf mehrere der veralteten Titelaufnahmen zutrifft, wird dennoch nur die jüngste passende Aufnahme zu einem Titel angezeigt. Dies kann natürlich auch die jüngste, somit also nicht veraltete Aufnahme sein. Auch mit diesem Schalter erscheint in der Suche kein Titel mehrfach.</p>
 
-						<p>Verwenden Sie mehr als ein Suchwort und/oder mehr als einen Suchausdruck, werden diese immer durch ein <b>logisches Und</b> miteinander verknüpft. Sie bekommen nur Treffer, wenn alle Suchkriterien in einem Titel erfüllt sind.</p>
+						<p>Die Schalter lassen sich alle durch Klick im <b>Hilfe-Popup</b> in den Suchschlitz einfügen (Icon  <img src="../img/kreis-fragezeichen.svg" width="20" height="20" alt="">).</p>
+
+						<p>Verwenden Sie mehr als ein Suchwort und/oder mehr als einen Schalter, werden diese immer durch ein <b>logisches Und</b> miteinander verknüpft. Sie bekommen nur Treffer, wenn alle Suchkriterien zu einem Titel passen.</p>
+
+						<p id="menueRedaktion-suchausdruecke">Einige <b>Beispiele möglicher Suchausdrücke</b>:</p>
+
+						<ul>
+							<li><code class="quelltext">wörterbuch</code> findet alle Titel, in denen in irgendeinem der Datenfelder <q>wörterbuch</q> steht. Groß- und Kleinschreibung spielen keine Rolle.</li>
+
+							<li><code class="quelltext">&quot;wörterbuch der&quot;</code> findet alle Titel, in denen in irgendeinem der Datenfelder die Phrase <q>wörterbuch der</q> steht. Die beiden Suchwörter müssen direkt aufeinanderfolgen; Groß- und Kleinschreibung spielen keine Rolle.</li>
+
+							<li><code class="quelltext">wörterbuch deutsch</code> findet alle Titel, in denen in irgendeinem der Datenfelder entweder <q>wörterbuch</q> und/oder <q>deutsch</q> steht. Beide Wörter <em>müssen</em> in mindestens einem der Datenfelder auftauchen.</li>
+
+							<li><code class="quelltext">wörterbuch -deutsch</code> findet alle Titel, in denen in irgendeinem der Datenfelder <q>wörterbuch</q>, aber in keinem <q>deutsch</q> steht.</li>
+
+							<li><code class="quelltext">Wörterbuch</code> findet alle Titel, in denen in irgendeinem der Datenfelder <q>Wörterbuch</q> in genau dieser Schreibung steht. Groß- und Kleinschreibung werden mithin beachtet.</li>
+
+							<li><code class="quelltext">wörterbuch -Deutsch</code> findet alle Titel, in denen in irgendeinem der Datenfelder <q>wörterbuch</q>, aber in keinem <q>Deutsch</q> in genau dieser Schreibung steht. Groß- und Kleinschreibung werden mithin beachtet, aber nur in Bezug auf das zweite Suchwort.</li>
+
+							<li><code class="quelltext">-wörterbuch</code> findet alle Titel, in denen in keinem der Datenfelder <q>wörterbuch</q> steht.</li>
+
+							<li><code class="quelltext">-wörterbuch -deutsch</code> findet alle Titel, in denen in keinem der Datenfelder entweder <q>wörterbuch</q> oder <q>deutsch</q> steht.</li>
+
+							<li><code class="quelltext">-&quot;deutsches wörterbuch&quot;</code> findet alle Titel, in denen in keinem der Datenfelder die Phrase <q>deutsches wörterbuch</q> steht.</li>
+
+							<li><code class="quelltext">wörterbuch Tags:&quot;lemma&quot;</code> findet alle Titel, in denen in irgendeinem der Datenfelder <q>wörterbuch</q> und in mindestens einem der angehängten Tags <q>lemma</q> steht.</li>
+
+							<li><code class="quelltext">wörterbuch -Tags:&quot;Lemma&quot;</code> findet alle Titel, in denen in irgendeinem der Datenfelder <q>wörterbuch</q> steht. Außerdem darf entweder kein Tag vorhanden sein oder in keinem der vorhandenen Tags <q>Lemma</q> in genau dieser Schreibung stehen.</li>
+
+							<li><code class="quelltext">wörterbuch Tags:&quot;&quot;</code> findet alle Titel, in denen in irgendeinem der Datenfelder <q>wörterbuch</q> steht und denen ein Tag beliebigen Inhalts angehängt wurde.</li>
+
+							<li><code class="quelltext">wörterbuch -Tags:&quot;&quot;</code> findet alle Titel, in denen in irgendeinem der Datenfelder <q>wörterbuch</q> steht, die aber keinen Tag haben.</li>
+
+							<li><code class="quelltext">Tags:&quot;&quot;</code> findet alle Titel, die einen Tag haben.</li>
+
+							<li><code class="quelltext">-Tags:&quot;&quot;</code> findet alle Titel, die keinen Tag haben.</li>
+
+							<li><code class="quelltext">Tags:&quot;&quot; -Tags:&quot;lemma&quot;</code> zeigt alle Titel, die einen Tag haben, aber keine Titel, die einen Tag haben, in dem <q>lemma</q> steht.</li>
+
+							<li><code class="quelltext">Wörterbuch Tags:&quot;&quot; -Tags:&quot;lemma&quot;</code> zeigt alle Titel, in denen <q>Wörterbuch</q> in genau dieser Schreibung steht, wenn sie einen Tag haben, aber keinen Tag, in dem <q>lemma</q> (in beliebiger Schreibung) steht.</li>
+						</ul>
 
 						<p>Die Suche kann nach <b>Erstellungsdatum</b> einer Titelaufnahme eingegrenzt werden. Wählen Sie im Datumsfeld <i>ab</i> ein Tagesdatum aus, bekommen Sie nur Titelaufnahmen angezeigt, die ab diesem Datum angelegt wurden.</p>
 
@@ -4511,7 +4559,7 @@ Gerüst 2 &gt; Gerüst 1</pre>
 
 						<p>Zum <b>Bearbeiten</b> klicken Sie einfach auf das Stift-Icon <img src="../img/stift.svg" width="20" height="20" alt=""> oben rechts in der Ecke der jeweiligen Titelaufnahme. Die Aufnahme wird dann in das <a href="#menueRedaktion-literaturTitelaufnahme">Eingabeformular</a> geladen, kann geändert und gespeichert werden. Dabei wird eine neue Version der Titelaufnahme angelegt, die alte also nicht einfach überschrieben. Wichtig zu verstehen ist, dass in das Formular nicht unbedingt die jüngste, sondern die angezeigte Version geladen wird. Denn:</p>
 
-						<p id="menueRedaktion-literaturVersionen">Wie schon mehrfach geschrieben, können Titelaufnahmen in mehreren <b>Versionen</b> vorliegen. In den Suchergebnissen wird immer nur eine Version einer Titelaufnahme angezeigt. Dabei wird die jüngste Version grundsätzlich bevorzugt. Sind Ihre Suchkriterien allerdings so, dass sie nur auf eine ältere Version zutreffen, wird diese zwar angezeigt, aber mit dem Hinweis <q><span class="obacht">[Titelaufnahme veraltet]</span></q> versehen. Um alle Versionen einzusehen, müssen Sie entweder den Versionen-Text in der Metadatenzeile oder das Icon <img src="../img/kreis-info.svg" width="20" height="20" alt=""> anklicken. Ein kleines Popup-Fenster öffnet sich: das Versionen-Popup.</p>
+						<p id="menueRedaktion-literaturVersionen">Wie schon mehrfach geschrieben, können Titelaufnahmen in mehreren <b>Versionen</b> vorliegen. In den Suchergebnissen wird immer nur eine Version einer Titelaufnahme angezeigt. Dies ist standardmäßig die jüngste Version, da veraltete Versionen nur durchsucht werden, wenn Sie den <a href="#menueRedaktion-literaturAuchAlte">Schalter</a> <code class="quelltext">na:&quot;&quot;</code> verwenden. Trifft die Suchanfrage sowohl auf die jüngste als auch auf eine veraltete Version zu, wird bei der Anzeige die jüngste Version bevorzugt. Um alle Versionen einzusehen, müssen Sie entweder den Versionen-Text in der Metadatenzeile oder das Icon <img src="../img/kreis-info.svg" width="20" height="20" alt=""> anklicken. Ein kleines Popup-Fenster öffnet sich: das Versionen-Popup.</p>
 
 						<figure class="right" title="zum Vergrößern anklicken">
 							<img src="../img/win/menueRedaktion-literatur-versionen.png" alt="">
@@ -4524,18 +4572,20 @@ Gerüst 2 &gt; Gerüst 1</pre>
 
 						<p id="menueRedaktion-literaturXml">Wurde in demselben Fenster, in dem die Literaturdatenbank gerade geöffnet ist, auch eine Kartei geladen, erscheint ein weiteres Icon: <img src="../img/xml.svg" width="20" height="20" alt="">. Mit ihm kann man die jeweilige <b>Titelaufnahme an das <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Redaktionsfenster schicken</b> (<abbr title="vergleiche">vgl.</abbr> den Abschnitt zum <a href="#menueRedaktion-xml"><abbr title="Extensible Markup Language" lang="en">XML</abbr>-Redaktionssystem</a>). Ist dieses Fenster noch nicht geöffnet, wird es durch Klick auf das Icon automatisch aufgerufen. Dabei wird immer die aktuellste Version einer Titelaufnahme an das XML-Fenster geschickt, und zwar auch dann, wenn gerade eine veraltete Titelaufnahme angezeigt wird.</p>
 
-						<p id="menueRedaktion-literaturSondersuchen">Unter dem Suchschlitz finden Sie Links, mit denen Sie <b>Sondersuchen</b> starten können. Bei Sondersuchen werden keine veralteten Datensätze durchsucht; sie beziehen sich also immer auf die jüngste Version einer Titelaufnahme. Im Suchschlitz oder im Datumsfeld eingetragene Werte werden auch bei einer Sondersuche berücksichtigt. Die Sondersuchen können Ihnen jedoch Ergebnisse liefern, für die es ein bisschen komplizierterer Suchalgorithmen bedarf. Gefunden werden dabei im Einzelnen:</p>
+						<p id="menueRedaktion-literaturSondersuchen">Unter dem Suchschlitz finden Sie Links, mit denen Sie <b>Sondersuchen</b> starten können. Die Sondersuchen können Ihnen Ergebnisse liefern, für die es ein bisschen komplizierterer Suchalgorithmen bedarf. Es werden niemals veraltete Datensätze, sondern immer nur der jüngste durchsucht. Gefunden werden dabei im Einzelnen:</p>
 
 						<ul>
-							<li><i>Duplikate:</i> Ja, mit dieser Sondersuchen kann die Datenbank nach Duplikaten durchsucht werden. Als Duplikate gelten Titelaufnahmen, die mindestens eines der folgenden Kriterien erfüllen: identischer Titel, identische Sigle, identische URL, identische <abbr title="Pica-Produktionsnummer">PPN</abbr>.</li>
+							<li>
+								<p><i>Duplikate:</i> Als Duplikate gelten Titelaufnahmen, die mindestens eines der folgenden Kriterien erfüllen: identischer Titel, identische Sigle, identische URL, identische <abbr title="Pica-Produktionsnummer">PPN</abbr>. Die Titel in der Ergebnisanzeige werden so geordnet, dass Titelaufnahmen, die aus demselben Grund Duplikate sind, direkt hintereinander stehen.</p>
 
-							<li><i>doppelte Siglen:</i> Eine auf identische Siglen reduzierte Suche nach Duplikaten.</li>
+								<p>Im Suchschlitz oder im Datumsfeld stehender Text wird bei dieser Sondersuche ignoriert.</p>
+							</li>
 
-							<li><i>mit/ohne <abbr title="Pica-Produktionsnummer">PPN</abbr>:</i> Findet Titelaufnahmen, denen mindestens eine <abbr title="respektive">resp.</abbr> keine <abbr title="Pica-Produktionsnummer">PPN</abbr> zugewiesen wurde.</li>
+							<li>
+								<p><i>mehrere Versionen:</i> Zeigt nur Titelaufnahmen an, die mehr als eine Version haben.</p>
 
-							<li><i>mehrere Versionen:</i> Zeigt nur Titelaufnahmen an, die mehr als eine Version haben.</li>
-
-							<li><i>mit Notizen:</i> Zeigt nur Titelaufnahmen mit Notizen an. Wie bei allen Sondersuchen wird auch bei dieser immer nur die jüngste Titelaufnahme durchsucht. Finden sich in einer veralteten Version einer Titelaufnahme Notizen in der jüngsten aber nicht, kann diese Aufnahme so nicht gefunden werden.</li>
+								<p>Im Suchschlitz oder im Datumsfeld stehender Text wird bei dieser Sondersuche berücksichtigt. Übergangen wird jedoch der Schalter <code class="quelltext">auchAlte:&quot;&quot;</code>, mit dem bei normalen Suchen veraltete Datensätze in die Suche mit einbezogen werden können.</p>
+							</li>
 						</ul>
 
 						<figure class="right" title="zum Vergrößern anklicken">
@@ -4616,7 +4666,7 @@ Gerüst 2 &gt; Gerüst 1</pre>
 								<p><i>Tags</i> (fakultativ): Sie können Titelaufnahmen mit beliebig vielen Tags versehen. Das Dropdown-Menü bietet Ihnen einige vordefinierte und alle in der aktuell geladenen Literaturdatenbank zu findenden Tags zur Auswahl an. Sie können aber auch jederzeit neue Tags eingeben und ergänzen. Zum Übernehmen eines Tags müssen Sie die Eingabe mit <kbd>⏎</kbd> bestätigen. Zum Löschen eines Tags, klicken Sie den betreffenden Tag rechts neben dem Eingabefeld an.</p>
 							</li>
 
-							<li><i>Notizen</i> (fakultativ): Ein Freitextfeld für Notizen zu der Titelaufnahme. Zeilenumbrüche sind erlaubt und werden in der Titelanzeige der <a href="#menueRedaktion-literaturTitelsuche">Titelsuche</a> auch dargestellt. Diese Notizen sind allein für die Arbeit in der Literaturdatenbank gedacht. Darum werden sie von den <a href="#menueRedaktion-literaturExportieren">Exportfunktionen</a> ignoriert. Titelaufnahmen mit Notizen lassen sich mit der entsprechenden <a href="#menueRedaktion-literaturSondersuchen">Sondersuche</a> finden.</li>
+							<li><i>Notizen</i> (fakultativ): Ein Freitextfeld für Notizen zu der Titelaufnahme. Zeilenumbrüche sind erlaubt und werden in der Titelanzeige der <a href="#menueRedaktion-literaturTitelsuche">Titelsuche</a> auch dargestellt. Diese Notizen sind allein für die Arbeit in der Literaturdatenbank gedacht. Darum werden sie von den <a href="#menueRedaktion-literaturExportieren">Exportfunktionen</a> ignoriert. Titelaufnahmen mit Notizen lassen sich mit dem Suchschalter <code class="quelltext">Notizen:&quot;&quot;</code> finden.</li>
 
 							<li><i>Metadaten:</i> Die Metadaten unterhalb des Formulars (<i>BearbeiterIn, Datum, Aufnahme</i>) werden von der App eigenständig befüllt und können nicht manuell geändert werden. Das Feld <i>Aufnahme</i> ist klicksensitiv: Man kann mit ihm das <a href="#menueRedaktion-literaturVersionen">Versionen-Popup</a> öffnen.</li>
 						</ul>
@@ -4804,7 +4854,7 @@ Gerüst 2 &gt; Gerüst 1</pre>
 
 							<li><b>„Text“</b> (deutsch) oder <b>“Text”</b> (englisch) wird zu <code class="quelltext xml-pretty-print">&lt;Zitat&gt;Text&lt;/Zitat&gt;</code></li>
 
-							<li><b>»Text«</b> wird zu <code class="quelltext xml-pretty-print">&lt;Hervorhebung Stil="#perspective"&gt;Text&lt;/Hervorhebung&gt;</code></li>
+							<li><b>»Text«</b> wird zu <code class="quelltext xml-pretty-print">&lt;Hervorhebung Stil="#perspective"&gt;Text&lt;/Hervorhebung&gt;</code> (<code class="quelltext">&gt;&gt;</code> <abbr title="und">u.</abbr> <code class="quelltext">&lt;&lt;</code> werden automatisch in die passenden Guillements umgewandelt)</li>
 
 							<li><b>((Text))</b> wird zu <code class="quelltext xml-pretty-print">&lt;Anmerkung&gt;Text&lt;/Anmerkung&gt;</code></li>
 

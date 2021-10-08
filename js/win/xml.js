@@ -3294,6 +3294,9 @@ let xml = {
 	//   blockzitat = Boolean
 	//     (der Text steht in einem Blockzitat)
 	editAutoTagger ({str, blockzitat}) {
+		// Korrekturen
+		str = str.replace(/<</g, "«");
+		str = str.replace(/>>/g, "»");
 		// Attribute maskieren
 		str = str.replace(/([a-zA-Z]+)="(.+?)"/g, (m, p1, p2) => `${p1}=##${p2}##`);
 		// Ampersands maskieren
