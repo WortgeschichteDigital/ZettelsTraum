@@ -176,6 +176,22 @@ let xml = {
 			text = text.replace(/\[(.+?)\]/g, (m, p1) => `<Streichung>${p1}</Streichung>`);
 			// Autorenzusatz: {...}
 			text = text.replace(/\{(.*?)\}/g, (m, p1) => `<Autorenzusatz>${p1}</Autorenzusatz>`);
+			// Korrekturen Taggingfehler
+			// (<Autorenzusatz> innerhalb von <Streichung> nicht ersetzen)
+			text = text.replace(/<Streichung>…<\/Streichung>/g, "<Loeschung>…</Loeschung>");
+			let sStart = text.split(/<Streichung>/);
+			text = "";
+			for (let i = 0, len = sStart.length; i < len; i++) {
+				if (i === 0) {
+					text += korrekturAutorenz(sStart[0]);
+				} else {
+					let sEnd = sStart[i].split(/<\/Streichung>/);
+					text += "<Streichung>" + sEnd[0] + "</Streichung>" + korrekturAutorenz(sEnd[1]);
+				}
+			}
+			function korrekturAutorenz (s) {
+				return s.replace(/<Autorenzusatz>…<\/Autorenzusatz>/g, "<Loeschung>…</Loeschung>");
+			}
 			// Ergebnis zurückgeben
 			return text;
 		}
