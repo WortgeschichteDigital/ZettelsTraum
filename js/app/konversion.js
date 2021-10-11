@@ -389,6 +389,13 @@ let konversion = {
 	},
 	// Konversion des Dateiformats von Version 20 nach Version 21
 	von20nach21 () {
+		// BUG-Korrektur: ggf. Datenfeld für Nebenlemmata erzeugen
+		// (das Feld wurde beim Erzeugen neuer Karteien nicht angelegt)
+		if (data.ve === 21 &&
+				typeof data.rd.nl === "undefined") {
+			data.rd.nl = "";
+		}
+		// Abbruch
 		if (data.ve > 20) {
 			return;
 		}

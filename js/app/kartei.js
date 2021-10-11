@@ -36,6 +36,7 @@ let kartei = {
 					er: "Kartei erstellt",
 					pr: "",
 				}],
+				nl: "", // Nebenlemmata
 				sg: [], // Sachgebiete
 				tf: [], // Themenfelder
 				wi: [], // Wortinformationen
