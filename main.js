@@ -805,7 +805,9 @@ fenster = {
 	//     (Pfad zur Kartei, die geöffnet werden soll)
 	//   neuesWort = true | undefined
 	//     (im Fenster soll ein neues Wort erstellt werden)
-	erstellen (kartei, neuesWort = false) {
+	//   init = true | undefined
+	//     (App wurde gerade gestartet => erstes Fenster öffnen)
+	erstellen (kartei, neuesWort = false, init = false) {
 		// Position und Größe des Fensters ermitteln;
 		const Bildschirm = require("electron").screen.getPrimaryDisplay();
 		let x = optionen.data.fenster ? optionen.data.fenster.x : null,
@@ -887,7 +889,10 @@ fenster = {
 			}
 			// Soll eine Kartei geöffnet oder eine neue Kartei erstellt werden?
 			// Soll die Literatur-DB exportiert werden?
-			const cli = fenster.parseArgv(process.argv);
+			let cli = {};
+			if (init) {
+				cli = fenster.parseArgv(process.argv);
+			}
 			if (neuesWort) {
 				// 500ms warten, damit der Ladebildschirm Zeit hat zu verschwinden
 				setTimeout(() => {
@@ -1295,7 +1300,7 @@ app.on("ready", async () => {
 	// Menu der zuletzt verwendeten Karteien erzeugen
 	appMenu.zuletzt();
 	// warten mit dem Öffnen des Fensters, bis die Optionen eingelesen wurden
-	fenster.erstellen("");
+	fenster.erstellen("", false, true);
 	// überprüfen, ob die zuletzt verwendten Karteien noch vorhanden sind
 	setTimeout(() => {
 		appMenu.zuletztCheck();
