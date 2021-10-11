@@ -30,7 +30,7 @@ const dienste = require("./js/main/dienste"),
 //       kann in Fenstern vom typ === "index" leer sein, dann ist keine Kartei geladen;
 //       kann in Fenstern vom typ === "index" auch "neu" sein, dann wurde die Karte erstellt,
 //       aber noch nicht gespeichert)
-//     exit:        true || undefined (wird dem Objekt kurz vor dem Schließen hinzugefügt,
+//     exit:        true | undefined (wird dem Objekt kurz vor dem Schließen hinzugefügt,
 //       damit dieses Schließen nicht blockiert wird; s. BrowserWindow.on("close"))
 let win = {};
 
@@ -708,7 +708,7 @@ appMenu = {
 	// führt den aufgerufenen Befehl im aktuellen Fenster aus
 	//   befehl = String
 	//     (die Aktion)
-	//   parameter = String || Array || undefined
+	//   parameter = String | Array | undefined
 	//     (einige Befehle bekommen einen Wert übergeben; im Falle der zuletzt geöffneten
 	//     Dateien kann es auch ein Array sein)
 	befehl (befehl, parameter) {
@@ -803,7 +803,7 @@ fenster = {
 	// Hauptfenster erstellen
 	//   kartei = String
 	//     (Pfad zur Kartei, die geöffnet werden soll)
-	//   neuesWort = true || undefined
+	//   neuesWort = true | undefined
 	//     (im Fenster soll ein neues Wort erstellt werden)
 	erstellen (kartei, neuesWort = false) {
 		// Position und Größe des Fensters ermitteln;
@@ -942,12 +942,12 @@ fenster = {
 	// Neben-Fenster erstellen
 	//   typ = String
 	//     (der Typ des Neben-Fensters:
-	//     "bedeutungen" || "changelog" || "dokumentation" || "fehlerlog" || "handbuch" || "xml")
-	//   abschnitt = String || undefined
+	//     "bedeutungen" | "changelog" | "dokumentation" | "fehlerlog" | "handbuch" | "xml")
+	//   abschnitt = String | undefined
 	//     (Abschnitt, der im Fenster geöffnet werden soll; nur "handbuch" und "dokumentation")
-	//   winTitle = String || undefined
+	//   winTitle = String | undefined
 	//     (Fenster-Titel für Bedeutungsgerüst- und XML-Fenster)
-	//   caller = Object || undefined
+	//   caller = Object | undefined
 	//     (ggf. Fensterobjekt, das als Caller fungiert)
 	erstellenNeben ({
 			typ,
@@ -1126,7 +1126,7 @@ fenster = {
 	},
 	// Über-Fenster erstellen
 	//   typ = String
-	//     (der Typ des Über-Fensters: "app" || "electron")
+	//     (der Typ des Über-Fensters: "app" | "electron")
 	erstellenUeber (typ) {
 		// Titel Name der Seite ermitteln
 		let title, html;
@@ -1220,7 +1220,7 @@ fenster = {
 	// (löst das Problem, dass nicht immer klar ist, ob ein Hauptfenster den Fokus hat)
 	//   befehl = String
 	//     (der IPC-Channel)
-	//   arg = String || undefined
+	//   arg = String | undefined
 	//     (Befehlsargument, könnte prinzipiell alles sein, was in JSON linearisiert werden kann)
 	befehlAnHauptfenster (befehl, arg = "") {
 		let bw = BrowserWindow.getFocusedWindow();
