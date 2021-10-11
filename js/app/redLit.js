@@ -1394,7 +1394,8 @@ let redLit = {
 			ab = document.getElementById("red-lit-suche-ab").value,
 			st = [],
 			da = null,
-			auchAlte = false;
+			auchAlte = false,
+			erstellerin = null;
 		redLit.suche.id = null;
 		redLit.suche.treffer = [];
 		redLit.suche.highlight = [];
@@ -1404,6 +1405,21 @@ let redLit = {
 			text = text.replace(/(aa|auchalte):""/ig, m => {
 				if (!redLit.suche.sonder) {
 					auchAlte = true;
+				}
+				return "";
+			});
+			// Suche auf Titel einer bestimmten ErstellerIn eingrenzen
+			text = text.replace(/(?:er|erst|ersteller|erstellerin):"(.*?)"/ig, (m, p1) => {
+				if (!redLit.suche.sonder && p1) {
+					// kein Suchtext => Feld ignorieren => trifft auf alle Aufnahmen zu;
+					// kein Suchtext + negative Suche => sinnlos => trifft auf keine Aufnahme zu
+					const reg = new RegExp(helfer.escapeRegExp(p1), "gi");
+					erstellerin = reg;
+					redLit.suche.highlight.push({
+						feld: "be",
+						reg,
+						negativ: false,
+					});
 				}
 				return "";
 			});
@@ -1469,13 +1485,14 @@ let redLit = {
 				if (wort.text) {
 					reg = new RegExp(helfer.escapeRegExp(wort.text).replace(/ /g, "\\s"), "g" + insensitive);
 				}
-				st.push({
+				const obj = {
 					feld: wort.feld,
 					reg,
 					negativ: wort.negativ,
-				});
+				};
+				st.push(obj);
+				redLit.suche.highlight.push(obj);
 			}
-			redLit.suche.highlight = st;
 		}
 		if (ab) {
 			da = new Date(ab);
@@ -1554,6 +1571,11 @@ let redLit = {
 			["td", "ul"],
 		];
 		for (let [id, arr] of Object.entries(redLit.db.data)) {
+			// Suche ggf. auf ErstellerIn einer Titelaufnahme eingrenzen
+			if (erstellerin &&
+					!erstellerin.test(arr[arr.length - 1].be)) {
+				continue;
+			}
 			// Suche nach ID
 			if (redLit.suche.id && !redLit.suche.id.test(id)) {
 				continue;
