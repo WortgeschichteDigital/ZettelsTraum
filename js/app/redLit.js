@@ -3449,14 +3449,23 @@ let redLit = {
 				p.appendChild(span);
 			}
 		}
-		// Metadaten: BearbeiterIn + Datum + Titelaufnahmen
+		// Metadaten: ErstellerIn + BearbeiterIn + Datum + Titelaufnahmen
 		// (nur im Suchkontext anzeigen)
 		if (redLit.anzeige.snippetKontext === "suche") {
 			let meta = document.createElement("p");
 			div.appendChild(meta);
 			meta.classList.add("meta");
-			// Bearbeiterin
+			// ErstellerIn + BearbeiterIn
+			let erst = redLit.db.data[id][redLit.db.data[id].length - 1].be;
+			if (erst === ds.be) {
+				erst = "";
+			} else {
+				erst += " / ";
+			}
 			meta.innerHTML = redLit.anzeigeSnippetHighlight({
+				feld: "be",
+				text: erst,
+			}) + redLit.anzeigeSnippetHighlight({
 				feld: "be",
 				text: ds.be,
 			});
