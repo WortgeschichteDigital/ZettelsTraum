@@ -3167,12 +3167,11 @@ let redLit = {
 	eingabeTagsFuellen ({tags}) {
 		let cont = document.getElementById("red-lit-eingabe-tags");
 		helfer.keineKinder(cont);
-		for (let tag of tags) {
-			let span = redLit.eingabeTagErzeugen({tag});
-			cont.appendChild(span);
-			span.classList.add("loeschbar");
-			redLit.eingabeTagLoeschen({tag: span});
-		}
+		redLit.tagsList({
+			cont,
+			tags,
+			eingabe: true,
+		});
 	},
 	// Eingabeformular: Tag-Element erzeugen
 	//   tag = String
@@ -3218,7 +3217,6 @@ let redLit = {
 		}
 		// Tag ergänzen und die Anzeige neu aufbauen
 		arr.push(val);
-		arr.sort(helfer.sortAlpha);
 		redLit.eingabeTagsFuellen({tags: arr});
 		redLit.eingabeGeaendert();
 		tg.value = "";
@@ -3226,23 +3224,25 @@ let redLit = {
 	// Eingabeformular: alle Tags aus der Literaturdatenbank zusammensuchen
 	eingabeTagsAuflisten () {
 		let tags = new Set();
-		for (let titel of Object.values(redLit.db.data)) { // Titel durchgehen
-			for (let aufnahme of titel) { // Aufnahmen durchgehen
-				for (let tag of aufnahme.td.tg) { // Tags durchgehen
-					if (!redLit.eingabe.tags.includes(tag)) {
-						tags.add(tag);
-					}
+		for (const titel of Object.values(redLit.db.data)) { // Titel durchgehen
+			for (const aufnahme of titel) { // Aufnahmen durchgehen
+				for (const tag of aufnahme.td.tg) { // Tags durchgehen
+					tags.add(tag);
 				}
 				break; // nur die neuste Aufnahem auswerten
 			}
 		}
 		// Tags sortieren
 		let arr = [...tags];
-		arr.sort(helfer.sortAlpha);
+		arr = redLit.tagsSort(arr);
 		// vordefinierte Tags an den Anfang schieben
 		let pre = [...redLit.eingabe.tags];
 		pre.reverse();
-		for (let i of pre) {
+		for (const i of pre) {
+			const idx = arr.indexOf(i);
+			if (idx > -1) {
+				arr.splice(idx, 1);
+			}
 			arr.unshift(i);
 		}
 		return arr;
@@ -3462,14 +3462,11 @@ let redLit = {
 			let p = document.createElement("p");
 			div.appendChild(p);
 			p.classList.add("tags");
-			for (let tag of ds.td.tg) {
-				tag = redLit.anzeigeSnippetHighlight({
-					feld: "tg",
-					text: tag,
-				});
-				let span = redLit.eingabeTagErzeugen({tag});
-				p.appendChild(span);
-			}
+			redLit.tagsList({
+				cont: p,
+				tags: ds.td.tg,
+				eingabe: false,
+			});
 		}
 		// Metadaten: ErstellerIn + BearbeiterIn + Datum + Titelaufnahmen
 		// (nur im Suchkontext anzeigen)
@@ -3816,5 +3813,77 @@ let redLit = {
 			},
 		};
 		redXml.datensatz({xmlDatensatz});
+	},
+	// Tags auflisten
+	//   cont = Element
+	//     (Container, in den die Tags eingefügt werden sollen)
+	//   tags = Array
+	//     (die noch unsortierten Tags)
+	//   eingabe = Boolean
+	//     (Tags im Eingabeformular einfügen)
+	tagsList ({cont, tags, eingabe = false}) {
+		let more = document.createElement("span"),
+			tagsArt = 0;
+		tags = redLit.tagsSort(tags);
+		for (const t of tags) {
+			let tag = t;
+			if (!eingabe) {
+				tag = redLit.anzeigeSnippetHighlight({
+					feld: "tg",
+					text: t,
+				});
+			}
+			if (/^Artikel: /.test(t)) {
+				tagsArt++;
+			}
+			let span = redLit.eingabeTagErzeugen({tag});
+			if (eingabe) {
+				span.classList.add("loeschbar");
+				redLit.eingabeTagLoeschen({tag: span});
+			}
+			if (tagsArt > 3) {
+				more.appendChild(span);
+			} else {
+				cont.appendChild(span);
+			}
+		}
+		if (tagsArt > 3) {
+			more.classList.add("mehr-tags-kuerzung");
+			cont.appendChild(more);
+			let blende = document.createElement("span");
+			more.appendChild(blende);
+			blende.classList.add("mehr-tags-kuerzung-blende");
+			blende.textContent = " ";
+			let expand = document.createElement("span");
+			cont.appendChild(expand);
+			expand.classList.add("mehr-tags");
+			expand.textContent = "mehr…";
+			expand.addEventListener("click", function() {
+				this.classList.add("aus");
+				this.previousSibling.classList.remove("mehr-tags-kuerzung");
+				this.previousSibling.querySelector(".mehr-tags-kuerzung-blende").classList.add("aus");
+			});
+		}
+	},
+	// spezielle Sortierung von Tags
+	//   tags = Array
+	//     (eindimensionales Array mit den Tags)
+	tagsSort (tags) {
+		let artikel = [],
+			lemma = [],
+			sonstige = [];
+		for (const t of tags) {
+			if (/^Artikel: /.test(t)) {
+				artikel.push(t);
+			} else if (/^Lemma: /.test(t)) {
+				lemma.push(t);
+			} else {
+				sonstige.push(t);
+			}
+		}
+		artikel.sort(helfer.sortAlpha);
+		lemma.sort(helfer.sortAlpha);
+		sonstige.sort(helfer.sortAlpha);
+		return sonstige.concat(lemma).concat(artikel);
 	},
 };
