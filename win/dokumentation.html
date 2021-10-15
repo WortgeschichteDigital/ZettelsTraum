@@ -1551,7 +1551,7 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
 					<!-- ZTL-Format -->
 					<h2 id="ztj-ztl"><abbr title="Zettel’s Traum Literaturdatenbank">ZTL</abbr>-Format</h2>
 
-					<p>Mithilfe der Funktion <a href="#menueRedaktion-literatur" class="link-handbuch"><i>Redaktion &gt; Literatur</i></a> kann eine Literaturdatenbank angelegt, geladen und bearbeitet werden. Hierfür gibt es ein eigenes Dateiformat. Der Inhalt dieser <abbr title="Zettel’s Traum Literaturdatenbank">ZTL</abbr>-Dateien ist ebenfalls <abbr title="GNU zip">gzip</abbr>-komprimierter Plain-Text im <abbr title="JavaScript Object Notation">JSON</abbr>-Format. Der Aufbau (<span class="obacht">Datenformat Version 2</span>):</p>
+					<p>Mithilfe der Funktion <a href="#menueRedaktion-literatur" class="link-handbuch"><i>Redaktion &gt; Literatur</i></a> kann eine Literaturdatenbank angelegt, geladen und bearbeitet werden. Hierfür gibt es ein eigenes Dateiformat. Der Inhalt dieser <abbr title="Zettel’s Traum Literaturdatenbank">ZTL</abbr>-Dateien ist ebenfalls <abbr title="GNU zip">gzip</abbr>-komprimierter Plain-Text im <abbr title="JavaScript Object Notation">JSON</abbr>-Format. Der Aufbau (<span class="obacht">Datenformat Version 3</span>):</p>
 
 					<table class="ztj">
 						<tr>
@@ -1559,6 +1559,27 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
 							<th>Datentyp</th>
 							<th>Format</th>
 							<th>Funktion</th>
+						</tr>
+						<tr>
+							<td><code class="quelltext">bl</code></td>
+							<td class="datentyp">Array</td>
+							<td> </td>
+							<td>Blockliste mit gelöschten und darum gesperrten IDs;<br><span class="obacht">mit Version 3 ergänzt</span></td>
+						</tr>
+						<tr class="ztj-ebene1">
+							<td colspan="4"><p>In jedem Slot <span class="datentyp">Objects</span> mit den folgenden Schlüsseln und Werten:</p></td>
+						</tr>
+						<tr class="ztj-ebene1">
+							<td><p><code class="quelltext">da</code></p></td>
+							<td class="datentyp">String</td>
+							<td>ISO 8601-Datum:<br><code class="quelltext">"2001-11-01"</code></td>
+							<td>Tagesdatum der Löschung</td>
+						</tr>
+						<tr class="ztj-ebene1">
+							<td><p><code class="quelltext">id</code></p></td>
+							<td class="datentyp">String</td>
+							<td> </td>
+							<td>ID der gelöschten Titelaufnahme <abbr title="beziehungsweise">bzw.</abbr> der gelöschten Version einer Titelaufnahme (</td>
 						</tr>
 						<tr>
 							<td><code class="quelltext">dc</code></td>

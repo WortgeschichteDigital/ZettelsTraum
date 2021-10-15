@@ -171,11 +171,12 @@ let redLit = {
 	},
 	// Datenbank: Speicher für Variablen
 	db: {
-		ve: 2, // Versionsnummer des aktuellen Datenbankformats
+		ve: 3, // Versionsnummer des aktuellen Datenbankformats
 		data: {}, // Titeldaten der Literaturdatenbank (wenn DB geladen => Inhalt von DB.ti)
 		dataTmp: {}, // temporäre Titeldaten der Literaturdatenbank (Kopie von redLit.db.data)
 		dataOpts: [], // Operationenspeicher für alle Änderungen in redLit.db.data
 		dataMeta: { // Metadaten der Literaturdatenbank
+			bl: [], // Blockliste mit gesperrten IDs
 			dc: "", // Erstellungszeitpunkt (DB.dc)
 			dm: "", // Änderungszeitpunkt (DB.dm)
 			re: 0, // Revisionsnummer (DB.re)
@@ -258,6 +259,7 @@ let redLit = {
 		redLit.db.dataTmp = {};
 		redLit.db.dataOpts = [];
 		redLit.db.dataMeta = {
+			bl: [],
 			dc: "",
 			dm: "",
 			re: 0,
@@ -363,13 +365,30 @@ let redLit = {
 				}
 				return;
 			}
+			// Datenbank nicht kompatibel mit aktueller Programmversion
+			if (data_tmp.ve > redLit.db.ve) {
+				resolve(`Die Literaturdatenbank ist nicht kompatibel mit der installierten Version von <i>${appInfo.name}</i>.\nSie sollten ein Programm-Update durchführen.`);
+				if (!zusammenfuehren) {
+					redLit.dbEntkoppeln();
+				}
+				return;
+			}
 			// Daten ggf. konvertieren
 			redLit.dbKonversion({daten: data_tmp});
 			// Datei kann eingelesen werden
 			redLit.db.data = data_tmp.ti;
+			redLit.db.dataMeta.bl = data_tmp.bl;
 			redLit.db.dataMeta.dc = data_tmp.dc;
 			redLit.db.dataMeta.dm = data_tmp.dm;
 			redLit.db.dataMeta.re = data_tmp.re;
+			// Blockliste bereinigen (alte Einträge entfernen)
+			let vorSechsMonaten = new Date();
+			vorSechsMonaten.setDate(vorSechsMonaten.getMonth() - 6);
+			for (let i = redLit.db.dataMeta.bl.length - 1; i >= 0; i--) {
+				if (new Date(redLit.db.dataMeta.bl[i].da) <= vorSechsMonaten) {
+					redLit.db.dataMeta.bl.splice(i, 1); // keine Änderungsmarkierung setzen!
+				}
+			}
 			// Datenbank für Offline-Nutzung verfügbar halten
 			if (!offline && !zusammenfuehren) {
 				redLit.dbOfflineKopie(pfad);
@@ -767,6 +786,7 @@ let redLit = {
 			}
 			// alte Metadaten merken für den Fall, dass das Speichern scheitert
 			let metaPreMerge = {
+				bl: redLit.dbBlocklisteKlonen(redLit.db.dataMeta.bl),
 				dc: redLit.db.dataMeta.dc,
 				dm: redLit.db.dataMeta.dm,
 				re: redLit.db.dataMeta.re,
@@ -783,6 +803,7 @@ let redLit = {
 					redLit.db.data = {};
 					redLit.dbKlonen({quelle: redLit.db.dataTmp, ziel: redLit.db.data});
 					// Metdaten zurücksetzen
+					redLit.db.dataMeta.bl = redLit.dbBlocklisteKlonen(metaPreMerge.bl);
 					redLit.db.dataMeta.dc = metaPreMerge.dc;
 					redLit.db.dataMeta.dm = metaPreMerge.dm;
 					redLit.db.dataMeta.re = metaPreMerge.re;
@@ -819,7 +840,7 @@ let redLit = {
 						redLit.db.data[i.id].unshift(ds);
 						mergeOpts[aktion].add(ds.td.si);
 						merged = true;
-					} else if (i.aktion === "del") {
+					} else if (i.aktion === "del") { // Datensatz löschen
 						if (!redLit.db.data[i.id]) {
 							return;
 						}
@@ -833,7 +854,7 @@ let redLit = {
 						if (!redLit.db.data[i.id].length) {
 							delete redLit.db.data[i.id];
 						}
-					} else if (i.aktion === "changeId") {
+					} else if (i.aktion === "changeId") { // Datensatz-ID geändert
 						if (redLit.db.data[i.id] || !redLit.db.data[i.idAlt]) {
 							return;
 						}
@@ -848,6 +869,10 @@ let redLit = {
 			// ggf. Datenbanken mergen
 			if (merge) {
 				for (let [k, v] of Object.entries(redLit.db.dataTmp)) {
+					// Titelaufnahme ist in Blockliste
+					if (redLit.db.dataMeta.bl.some(i => i.id === k)) {
+						continue;
+					}
 					// Titelaufnahme nicht vorhanden => Aufnahme mit allen Versionen klonen
 					if (!redLit.db.data[k]) {
 						redLit.db.data[k] = [];
@@ -866,11 +891,33 @@ let redLit = {
 			}
 			// alte Metadaten merken für den Fall, dass das Speichern scheitert
 			let meta = {
+				bl: redLit.dbBlocklisteKlonen(redLit.db.dataMeta.bl),
 				dc: redLit.db.dataMeta.dc,
 				dm: redLit.db.dataMeta.dm,
 				re: redLit.db.dataMeta.re,
 			};
-			// Metadaten auffrischen
+			// Blockliste auffrischen
+			let heute = new Date().toISOString().split("T")[0];
+			redLit.db.dataOpts.forEach(i => {
+				if (i.aktion === "del") { // Datensatz gelöscht
+					if (!redLit.db.data[i.id] &&
+							!redLit.db.dataMeta.bl.some(j => j.id === i.id)) {
+						populateBlocklist(i.id);
+					} else if (redLit.db.data[i.id]) {
+						populateBlocklist(i.idSlot);
+					}
+				} else if (i.aktion === "changeId" &&
+						!redLit.db.data[i.idAlt]) { // Datensatz-ID geändert
+					populateBlocklist(i.idAlt);
+				}
+			});
+			function populateBlocklist (id) {
+				redLit.db.dataMeta.bl.push({
+					da: heute,
+					id,
+				});
+			}
+			// weitere Metadaten auffrischen
 			if (!redLit.db.dataMeta.dc) {
 				redLit.db.dataMeta.dc = new Date().toISOString();
 			}
@@ -886,11 +933,13 @@ let redLit = {
 					redLit.db.data = {};
 					redLit.dbKlonen({quelle: redLit.db.dataTmp, ziel: redLit.db.data});
 					// Metdaten zurücksetzen
+					redLit.db.dataMeta.bl = redLit.dbBlocklisteKlonen(metaPreMerge.bl);
 					redLit.db.dataMeta.dc = metaPreMerge.dc;
 					redLit.db.dataMeta.dm = metaPreMerge.dm;
 					redLit.db.dataMeta.re = metaPreMerge.re;
 				} else {
 					// Metdaten zurücksetzen
+					redLit.db.dataMeta.bl = redLit.dbBlocklisteKlonen(meta.bl);
 					redLit.db.dataMeta.dc = meta.dc;
 					redLit.db.dataMeta.dm = meta.dm;
 					redLit.db.dataMeta.re = meta.re;
@@ -963,6 +1012,7 @@ let redLit = {
 	// Datenbank: Daten zuammentragen, die geschrieben werden sollen
 	dbSpeichernSchreibenDaten () {
 		return {
+			bl: redLit.db.dataMeta.bl,
 			dc: redLit.db.dataMeta.dc,
 			dm: redLit.db.dataMeta.dm,
 			re: redLit.db.dataMeta.re,
@@ -1139,6 +1189,16 @@ let redLit = {
 			redLit.dbTitelKlonen(v, ziel[k]);
 		}
 	},
+	// Datenbank: Daten der Blockliste klonen
+	//   quelle = Object
+	//     (Quelle der Blockliste)
+	dbBlocklisteKlonen (quelle) {
+		let bl = [];
+		for (const i of quelle) {
+			bl.push({...i});
+		}
+		return bl;
+	},
 	// Datenbank: kompletten Datensatz einer Titelaufnahme klonen
 	//   quelle = Object
 	//     (der Quell-Datensatz)
@@ -1146,6 +1206,9 @@ let redLit = {
 	//     (der Ziel-Datensatz)
 	dbTitelKlonen (quelle, ziel) {
 		for (let i = 0, len = quelle.length; i < len; i++) {
+			if (redLit.db.dataMeta.bl.some(j => j.id === quelle[i].id)) { // Titelaufnahme in Blockliste
+				continue;
+			}
 			let ds = {};
 			redLit.dbTitelKlonenAufnahme(quelle[i], ds);
 			ziel.push(ds);
@@ -1176,7 +1239,8 @@ let redLit = {
 	dbTitelMergeAufnahmen (quelle, ziel) {
 		let ergaenzt = false;
 		quelle.forEach(aq => {
-			if (ziel.some(i => i.id === aq.id)) {
+			if (ziel.some(i => i.id === aq.id) ||
+					redLit.db.dataMeta.bl.some(i => i.id === aq.id)) { // Titelaufnahme in Blockliste
 				return;
 			}
 			let ds = {};
@@ -1216,6 +1280,13 @@ let redLit = {
 					i.td.tg = [];
 				}
 			}
+			daten.ve++;
+			redLit.dbGeaendert(true);
+		}
+		// von v2 > v3
+		if (daten.ve === 2) {
+			// Blockliste anlegen
+			daten.bl = [];
 			daten.ve++;
 			redLit.dbGeaendert(true);
 		}
@@ -2715,8 +2786,19 @@ let redLit = {
 					helfer.textareaGrow(i);
 				}
 			}
-			// ID schon vergeben => bestehende Titelaufnahme ergänzen?
+			// ID ist in Blockliste => kann nicht vergeben werden
 			const id = document.getElementById("red-lit-eingabe-id").value;
+			if (redLit.db.dataMeta.bl.some(i => i.id === id)) {
+				dialog.oeffnen({
+					typ: "alert",
+					text: "Die ID ist blockiert.\nEin Datensatz mit dieser ID wurde gelöscht, weswegen die ID vorerst nicht neu vergeben werden kann.",
+					callback: () => {
+						document.getElementById("red-lit-eingabe-id").select();
+					},
+				});
+				return;
+			}
+			// ID schon vergeben => bestehende Titelaufnahme ergänzen?
 			if (redLit.eingabe.status === "add" && redLit.db.data[id]) {
 				const verschmelzen = await new Promise(verschmelzen => {
 					dialog.oeffnen({
@@ -3070,6 +3152,10 @@ let redLit = {
 					}
 				}
 			}
+			if (redLit.db.dataMeta.bl.some(i => i.id === id)) {
+				continue;
+			}
+			// ID ist in Ordnung
 			break;
 		}
 		return id;
