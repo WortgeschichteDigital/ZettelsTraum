@@ -3765,6 +3765,12 @@ let redLit = {
 		}
 		let div = document.querySelector(`#red-lit-popup-versionen [data-slot="${slot}"]`);
 		div.dispatchEvent(new MouseEvent("click"));
+		let versionen = document.getElementById("red-lit-popup-versionen");
+		if (div.offsetTop + div.offsetHeight > versionen.offsetHeight + versionen.scrollTop) {
+			versionen.scrollTop = div.offsetTop;
+		} else if (div.offsetTop < versionen.scrollTop) {
+			versionen.scrollTop = div.offsetTop - versionen.offsetHeight + div.offsetHeight;
+		}
 	},
 	// Anzeige: Versionen-Popup schließen
 	anzeigePopupSchliessen () {

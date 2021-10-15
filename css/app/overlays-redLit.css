@@ -493,6 +493,7 @@
 }
 
 #red-lit-popup-versionen {
+	position: relative;
 	direction: rtl;
 	overflow: auto;
 	max-height: 150px;
