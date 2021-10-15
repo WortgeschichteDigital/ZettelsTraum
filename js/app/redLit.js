@@ -335,9 +335,9 @@ let redLit = {
 	// Datenbank: Datei einlesen
 	//   pfad = String
 	//     (Pfad zur Datei)
-	//   offline = true || undefined
+	//   offline = true | undefined
 	//     (die Offlinedatei wird geöffnet => keine Offline-Kopie anlegen)
-	//   zusammenfuehren = true || undefined
+	//   zusammenfuehren = true | undefined
 	//     (die Literaturdatenbank wird geladen, um sie mit den aktuellen Daten zusammenzuführen)
 	dbOeffnenEinlesen ({pfad, offline = false, zusammenfuehren = false}) {
 		return new Promise(async resolve => {
@@ -379,7 +379,7 @@ let redLit = {
 		});
 	},
 	// Datenbank: Öffnen der Datenbank abschließen
-	//   ergebnis = true || String
+	//   ergebnis = true | String
 	//     (bei Fehlermeldung String)
 	//   pfad = String
 	//     (Pfad zur geöffneten Datenbank)
@@ -605,7 +605,7 @@ let redLit = {
 		return snippet;
 	},
 	// Datenbank: Datei speichern
-	//   speichernUnter = true || undefined
+	//   speichernUnter = true | undefined
 	//     (Dateidialog in jedem Fall anzeigen)
 	async dbSpeichern (speichernUnter = false) {
 		// Wurden überhaupt Änderungen vorgenommen?
@@ -717,7 +717,7 @@ let redLit = {
 	// Datenbank: Datei schreiben
 	//   pfad = String
 	//     (Pfad zur Datei)
-	//   merge = true || undefined
+	//   merge = true | undefined
 	//     (Datenbanken sollen verschmolzen werden)
 	dbSpeichernSchreiben ({pfad, merge = false}) {
 		return new Promise(async resolve => {
@@ -1063,7 +1063,7 @@ let redLit = {
 	// Datenbank: prüft, ob noch ein Speichervorgang aussteht
 	//   fun = Function
 	//     (Callback-Funktion)
-	//   db = false || undefined
+	//   db = false | undefined
 	//     (überprüfen, ob die Datenbank gespeichert wurde)
 	dbCheck (fun, db = true) {
 		return new Promise(async resolve => {
@@ -1232,7 +1232,7 @@ let redLit = {
 	// Navigation: Umschalten zwischen Eingabe- und Suchformular
 	//   form = String
 	//     ("eingabe" od. "suche")
-	//   nav = true || undefined
+	//   nav = true | undefined
 	//     (Funktion wurde über das Navigationsformular aufgerufen => nie abbrechen)
 	nav (form, nav = false) {
 		// ggf. Popup schließen
@@ -1816,7 +1816,7 @@ let redLit = {
 	// Suche: Titelaufnahme auffrischen, falls sie geändert wurde (bearbeitet, gelöscht)
 	//   id = String
 	//     (ID der Titelaufnahme)
-	//   delSlot = Number || undefined
+	//   delSlot = Number | undefined
 	//     (Slot dessen Titelaufnahme gelöscht wurde)
 	sucheTrefferAuffrischen (id, delSlot = -1) {
 		let treffer = redLit.suche.treffer.find(i => i.id === id);
@@ -2182,7 +2182,7 @@ let redLit = {
 	//     (Link zu einer Ressource des DTA)
 	//   fokusId = String
 	//     (ID des Elements, das beim Scheitern fokussiert werden soll)
-	//   seitenData = Object || undefined
+	//   seitenData = Object | undefined
 	//     (enthält Informationen zur Seite des DTA-Titels; die Daten sind gefüllt, wenn
 	//     die Quellenangabe der Karteikarte neu geladen werden soll)
 	eingabeDTAFetch ({url, fokusId, seitenData = {}}) {
@@ -2900,7 +2900,7 @@ let redLit = {
 				resolve(false);
 				return;
 			}
-			// wenn URL => Fundort "DTA" || "GoogleBooks" || "IDS" || "online"
+			// wenn URL => Fundort "DTA" | "GoogleBooks" | "IDS" | "online"
 			let fo = document.getElementById("red-lit-eingabe-fo");
 			if (url.value && !/^(DTA|GoogleBooks|IDS|online)$/.test(fo.value)) {
 				fehler({
@@ -2954,7 +2954,7 @@ let redLit = {
 				resolve(false);
 				return;
 			}
-			// wenn Fundort "DTA" || "GoogleBooks" || "IDS" || "online" => URL eingeben
+			// wenn Fundort "DTA" | "GoogleBooks" | "IDS" | "online" => URL eingeben
 			if (/^(DTA|GoogleBooks|IDS|online)$/.test(fo.value) && !url.value) {
 				fehler({
 					text: "Ist der Fundort „online“, „DTA“, „GoogleBooks“ oder „IDS“, müssen Sie eine URL angeben.",
@@ -3294,7 +3294,7 @@ let redLit = {
 	},
 	// Anzeige: Speicher für Variablen
 	anzeige: {
-		snippetKontext: "suche", // "suche" || "popup"
+		snippetKontext: "suche", // "suche" | "popup"
 		id: "", // ID des im Popup angezeigten Titels
 	},
 	// Anzeige: Snippet einer Titelaufnahme erstellen
@@ -3600,7 +3600,7 @@ let redLit = {
 		titel.appendChild(redLit.anzeigeSnippet({id, slot}));
 	},
 	// Anzeige: vorhandene Titelaufnahmen im Versionen-Popup auflisten
-	//   slot = Number || undefined
+	//   slot = Number | undefined
 	//     (Titelaufnahme, die angezeigt werden soll)
 	anzeigePopupVersionen (slot = 0) {
 		let vers = document.getElementById("red-lit-popup-versionen"),
