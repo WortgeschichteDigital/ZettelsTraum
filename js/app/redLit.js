@@ -93,6 +93,7 @@ let redLit = {
 							resolve(false);
 							return;
 						}
+						redLit.db.konvertiert = false;
 						resolve(true);
 					});
 				} else {
@@ -187,6 +188,7 @@ let redLit = {
 		changed: false, // Inhalt der Datenbank wurde geändert und noch nicht gespeichert
 		locked: false, // Datenbank wird gerade geschrieben, ist also für die Bearbeitung gesperrt
 		lockedInterval: null, // Intervall für den Lockbildschirm
+		konvertiert: false, // temporäre Markierung dafür, dass eine DB konvertiert wurde
 	},
 	// Datenkbank: versuchen, die Offline-Version zu laden
 	dbLadenOffline () {
@@ -196,6 +198,7 @@ let redLit = {
 			if (dbOffline) {
 				const result = await redLit.dbOeffnenEinlesen({pfad: offlinePfad, offline: true});
 				if (result === true) { // Laden der Offline-Version war erfolgreich
+					redLit.db.konvertiert = false;
 					let span = document.createElement("span");
 					span.textContent = "[offline]";
 					document.getElementById("red-lit-pfad-db").appendChild(span);
@@ -217,7 +220,7 @@ let redLit = {
 			pfad.textContent = `\u200E${redLit.db.path}\u200E`;
 		}
 		// Änderungsmarkierung zurücksetzen
-		redLit.dbGeaendert(false);
+		redLit.dbGeaendert(redLit.db.konvertiert);
 	},
 	// Datenbank: Inhalt wurde geändert
 	//   geaendert = Boolean
@@ -332,7 +335,8 @@ let redLit = {
 		// Datei einlesen
 		const ergebnis = await redLit.dbOeffnenEinlesen({pfad: result.filePaths[0]});
 		// Öffnen abschließen
-		redLit.dbOeffnenAbschließen({ergebnis, pfad: result.filePaths[0]});
+		await redLit.dbOeffnenAbschließen({ergebnis, pfad: result.filePaths[0]});
+		redLit.db.konvertiert = false;
 	},
 	// Datenbank: Datei einlesen
 	//   pfad = String
@@ -567,7 +571,8 @@ let redLit = {
 			});
 			return;
 		}
-		redLit.dbOeffnenAbschließen({ergebnis, pfad: vars.quelle});
+		await redLit.dbOeffnenAbschließen({ergebnis, pfad: vars.quelle});
+		redLit.db.konvertiert = false;
 		// DB exportieren
 		redLit.dbExportieren(format, vars.ziel);
 	},
@@ -814,6 +819,7 @@ let redLit = {
 					resolve(`Zusammenführen der Literaturdatenbanken gescheitert!\n${result}`);
 					return;
 				}
+				redLit.db.konvertiert = false;
 				// ggf. Popup schließen
 				redLit.anzeigePopupSchliessen();
 				// Operationen seit dem letzten Speichern anwenden
@@ -1272,6 +1278,7 @@ let redLit = {
 		if (daten.ve === redLit.db.ve) {
 			return;
 		}
+		let konvertiert = false;
 		// von v1 > v2
 		if (daten.ve === 1) {
 			// Tag-Array in allen Datensätzen ergänzen
@@ -1281,13 +1288,17 @@ let redLit = {
 				}
 			}
 			daten.ve++;
-			redLit.dbGeaendert(true);
+			konvertiert = true;
 		}
 		// von v2 > v3
 		if (daten.ve === 2) {
 			// Blockliste anlegen
 			daten.bl = [];
 			daten.ve++;
+			konvertiert = true;
+		}
+		if (konvertiert) {
+			redLit.db.konvertiert = true;
 			redLit.dbGeaendert(true);
 		}
 	},
