@@ -639,10 +639,12 @@ let redLit = {
 			return;
 		}
 		// Datei soll/muss neu angelegt werden
-		redLit.dbSpeichernUnter();
+		redLit.dbSpeichernUnter(speichernUnter);
 	},
 	// Datenkbank: Datei speichern unter
-	async dbSpeichernUnter () {
+	//   speichernUnter = Boolean
+	//     (Speichern unter/verschmelzen mit gewählt)
+	async dbSpeichernUnter (speichernUnter) {
 		const path = require("path");
 		let opt = {
 			title: "Literaturdatenbank speichern",
@@ -658,6 +660,10 @@ let redLit = {
 				},
 			],
 		};
+		if (speichernUnter) {
+			opt.title = "Literaturdatenbank speichern unter/verschmelzen mit";
+			opt.buttonLabel = "Speichern unter/verschmelzen mit";
+		}
 		// Wo wurde zuletzt eine Datei gespeichert oder geöffnet?
 		if (optionen.data.letzter_pfad) {
 			opt.defaultPath = path.join(optionen.data.letzter_pfad, "Literaturdatenbank.ztl");
