@@ -93,6 +93,7 @@ let redLit = {
 							resolve(false);
 							return;
 						}
+						redLit.db.konvertiert = false;
 						resolve(true);
 					});
 				} else {
@@ -171,11 +172,12 @@ let redLit = {
 	},
 	// Datenbank: Speicher für Variablen
 	db: {
-		ve: 2, // Versionsnummer des aktuellen Datenbankformats
+		ve: 3, // Versionsnummer des aktuellen Datenbankformats
 		data: {}, // Titeldaten der Literaturdatenbank (wenn DB geladen => Inhalt von DB.ti)
 		dataTmp: {}, // temporäre Titeldaten der Literaturdatenbank (Kopie von redLit.db.data)
 		dataOpts: [], // Operationenspeicher für alle Änderungen in redLit.db.data
 		dataMeta: { // Metadaten der Literaturdatenbank
+			bl: [], // Blockliste mit gesperrten IDs
 			dc: "", // Erstellungszeitpunkt (DB.dc)
 			dm: "", // Änderungszeitpunkt (DB.dm)
 			re: 0, // Revisionsnummer (DB.re)
@@ -186,6 +188,7 @@ let redLit = {
 		changed: false, // Inhalt der Datenbank wurde geändert und noch nicht gespeichert
 		locked: false, // Datenbank wird gerade geschrieben, ist also für die Bearbeitung gesperrt
 		lockedInterval: null, // Intervall für den Lockbildschirm
+		konvertiert: false, // temporäre Markierung dafür, dass eine DB konvertiert wurde
 	},
 	// Datenkbank: versuchen, die Offline-Version zu laden
 	dbLadenOffline () {
@@ -195,6 +198,7 @@ let redLit = {
 			if (dbOffline) {
 				const result = await redLit.dbOeffnenEinlesen({pfad: offlinePfad, offline: true});
 				if (result === true) { // Laden der Offline-Version war erfolgreich
+					redLit.db.konvertiert = false;
 					let span = document.createElement("span");
 					span.textContent = "[offline]";
 					document.getElementById("red-lit-pfad-db").appendChild(span);
@@ -216,7 +220,7 @@ let redLit = {
 			pfad.textContent = `\u200E${redLit.db.path}\u200E`;
 		}
 		// Änderungsmarkierung zurücksetzen
-		redLit.dbGeaendert(false);
+		redLit.dbGeaendert(redLit.db.konvertiert);
 	},
 	// Datenbank: Inhalt wurde geändert
 	//   geaendert = Boolean
@@ -258,6 +262,7 @@ let redLit = {
 		redLit.db.dataTmp = {};
 		redLit.db.dataOpts = [];
 		redLit.db.dataMeta = {
+			bl: [],
 			dc: "",
 			dm: "",
 			re: 0,
@@ -330,14 +335,15 @@ let redLit = {
 		// Datei einlesen
 		const ergebnis = await redLit.dbOeffnenEinlesen({pfad: result.filePaths[0]});
 		// Öffnen abschließen
-		redLit.dbOeffnenAbschließen({ergebnis, pfad: result.filePaths[0]});
+		await redLit.dbOeffnenAbschließen({ergebnis, pfad: result.filePaths[0]});
+		redLit.db.konvertiert = false;
 	},
 	// Datenbank: Datei einlesen
 	//   pfad = String
 	//     (Pfad zur Datei)
-	//   offline = true || undefined
+	//   offline = true | undefined
 	//     (die Offlinedatei wird geöffnet => keine Offline-Kopie anlegen)
-	//   zusammenfuehren = true || undefined
+	//   zusammenfuehren = true | undefined
 	//     (die Literaturdatenbank wird geladen, um sie mit den aktuellen Daten zusammenzuführen)
 	dbOeffnenEinlesen ({pfad, offline = false, zusammenfuehren = false}) {
 		return new Promise(async resolve => {
@@ -363,13 +369,30 @@ let redLit = {
 				}
 				return;
 			}
+			// Datenbank nicht kompatibel mit aktueller Programmversion
+			if (data_tmp.ve > redLit.db.ve) {
+				resolve(`Die Literaturdatenbank ist nicht kompatibel mit der installierten Version von <i>${appInfo.name}</i>.\nSie sollten ein Programm-Update durchführen.`);
+				if (!zusammenfuehren) {
+					redLit.dbEntkoppeln();
+				}
+				return;
+			}
 			// Daten ggf. konvertieren
 			redLit.dbKonversion({daten: data_tmp});
 			// Datei kann eingelesen werden
 			redLit.db.data = data_tmp.ti;
+			redLit.db.dataMeta.bl = data_tmp.bl;
 			redLit.db.dataMeta.dc = data_tmp.dc;
 			redLit.db.dataMeta.dm = data_tmp.dm;
 			redLit.db.dataMeta.re = data_tmp.re;
+			// Blockliste bereinigen (alte Einträge entfernen)
+			let vorSechsMonaten = new Date();
+			vorSechsMonaten.setDate(vorSechsMonaten.getMonth() - 6);
+			for (let i = redLit.db.dataMeta.bl.length - 1; i >= 0; i--) {
+				if (new Date(redLit.db.dataMeta.bl[i].da) <= vorSechsMonaten) {
+					redLit.db.dataMeta.bl.splice(i, 1); // keine Änderungsmarkierung setzen!
+				}
+			}
 			// Datenbank für Offline-Nutzung verfügbar halten
 			if (!offline && !zusammenfuehren) {
 				redLit.dbOfflineKopie(pfad);
@@ -379,7 +402,7 @@ let redLit = {
 		});
 	},
 	// Datenbank: Öffnen der Datenbank abschließen
-	//   ergebnis = true || String
+	//   ergebnis = true | String
 	//     (bei Fehlermeldung String)
 	//   pfad = String
 	//     (Pfad zur geöffneten Datenbank)
@@ -548,7 +571,8 @@ let redLit = {
 			});
 			return;
 		}
-		redLit.dbOeffnenAbschließen({ergebnis, pfad: vars.quelle});
+		await redLit.dbOeffnenAbschließen({ergebnis, pfad: vars.quelle});
+		redLit.db.konvertiert = false;
 		// DB exportieren
 		redLit.dbExportieren(format, vars.ziel);
 	},
@@ -605,7 +629,7 @@ let redLit = {
 		return snippet;
 	},
 	// Datenbank: Datei speichern
-	//   speichernUnter = true || undefined
+	//   speichernUnter = true | undefined
 	//     (Dateidialog in jedem Fall anzeigen)
 	async dbSpeichern (speichernUnter = false) {
 		// Wurden überhaupt Änderungen vorgenommen?
@@ -639,10 +663,12 @@ let redLit = {
 			return;
 		}
 		// Datei soll/muss neu angelegt werden
-		redLit.dbSpeichernUnter();
+		redLit.dbSpeichernUnter(speichernUnter);
 	},
 	// Datenkbank: Datei speichern unter
-	async dbSpeichernUnter () {
+	//   speichernUnter = Boolean
+	//     (Speichern unter/verschmelzen mit gewählt)
+	async dbSpeichernUnter (speichernUnter) {
 		const path = require("path");
 		let opt = {
 			title: "Literaturdatenbank speichern",
@@ -658,6 +684,10 @@ let redLit = {
 				},
 			],
 		};
+		if (speichernUnter) {
+			opt.title = "Literaturdatenbank speichern unter/verschmelzen mit";
+			opt.buttonLabel = "Speichern unter/verschmelzen mit";
+		}
 		// Wo wurde zuletzt eine Datei gespeichert oder geöffnet?
 		if (optionen.data.letzter_pfad) {
 			opt.defaultPath = path.join(optionen.data.letzter_pfad, "Literaturdatenbank.ztl");
@@ -711,7 +741,7 @@ let redLit = {
 	// Datenbank: Datei schreiben
 	//   pfad = String
 	//     (Pfad zur Datei)
-	//   merge = true || undefined
+	//   merge = true | undefined
 	//     (Datenbanken sollen verschmolzen werden)
 	dbSpeichernSchreiben ({pfad, merge = false}) {
 		return new Promise(async resolve => {
@@ -761,6 +791,7 @@ let redLit = {
 			}
 			// alte Metadaten merken für den Fall, dass das Speichern scheitert
 			let metaPreMerge = {
+				bl: redLit.dbBlocklisteKlonen(redLit.db.dataMeta.bl),
 				dc: redLit.db.dataMeta.dc,
 				dm: redLit.db.dataMeta.dm,
 				re: redLit.db.dataMeta.re,
@@ -777,6 +808,7 @@ let redLit = {
 					redLit.db.data = {};
 					redLit.dbKlonen({quelle: redLit.db.dataTmp, ziel: redLit.db.data});
 					// Metdaten zurücksetzen
+					redLit.db.dataMeta.bl = redLit.dbBlocklisteKlonen(metaPreMerge.bl);
 					redLit.db.dataMeta.dc = metaPreMerge.dc;
 					redLit.db.dataMeta.dm = metaPreMerge.dm;
 					redLit.db.dataMeta.re = metaPreMerge.re;
@@ -787,6 +819,7 @@ let redLit = {
 					resolve(`Zusammenführen der Literaturdatenbanken gescheitert!\n${result}`);
 					return;
 				}
+				redLit.db.konvertiert = false;
 				// ggf. Popup schließen
 				redLit.anzeigePopupSchliessen();
 				// Operationen seit dem letzten Speichern anwenden
@@ -813,7 +846,7 @@ let redLit = {
 						redLit.db.data[i.id].unshift(ds);
 						mergeOpts[aktion].add(ds.td.si);
 						merged = true;
-					} else if (i.aktion === "del") {
+					} else if (i.aktion === "del") { // Datensatz löschen
 						if (!redLit.db.data[i.id]) {
 							return;
 						}
@@ -827,7 +860,7 @@ let redLit = {
 						if (!redLit.db.data[i.id].length) {
 							delete redLit.db.data[i.id];
 						}
-					} else if (i.aktion === "changeId") {
+					} else if (i.aktion === "changeId") { // Datensatz-ID geändert
 						if (redLit.db.data[i.id] || !redLit.db.data[i.idAlt]) {
 							return;
 						}
@@ -842,6 +875,10 @@ let redLit = {
 			// ggf. Datenbanken mergen
 			if (merge) {
 				for (let [k, v] of Object.entries(redLit.db.dataTmp)) {
+					// Titelaufnahme ist in Blockliste
+					if (redLit.db.dataMeta.bl.some(i => i.id === k)) {
+						continue;
+					}
 					// Titelaufnahme nicht vorhanden => Aufnahme mit allen Versionen klonen
 					if (!redLit.db.data[k]) {
 						redLit.db.data[k] = [];
@@ -860,11 +897,33 @@ let redLit = {
 			}
 			// alte Metadaten merken für den Fall, dass das Speichern scheitert
 			let meta = {
+				bl: redLit.dbBlocklisteKlonen(redLit.db.dataMeta.bl),
 				dc: redLit.db.dataMeta.dc,
 				dm: redLit.db.dataMeta.dm,
 				re: redLit.db.dataMeta.re,
 			};
-			// Metadaten auffrischen
+			// Blockliste auffrischen
+			let heute = new Date().toISOString().split("T")[0];
+			redLit.db.dataOpts.forEach(i => {
+				if (i.aktion === "del") { // Datensatz gelöscht
+					if (!redLit.db.data[i.id] &&
+							!redLit.db.dataMeta.bl.some(j => j.id === i.id)) {
+						populateBlocklist(i.id);
+					} else if (redLit.db.data[i.id]) {
+						populateBlocklist(i.idSlot);
+					}
+				} else if (i.aktion === "changeId" &&
+						!redLit.db.data[i.idAlt]) { // Datensatz-ID geändert
+					populateBlocklist(i.idAlt);
+				}
+			});
+			function populateBlocklist (id) {
+				redLit.db.dataMeta.bl.push({
+					da: heute,
+					id,
+				});
+			}
+			// weitere Metadaten auffrischen
 			if (!redLit.db.dataMeta.dc) {
 				redLit.db.dataMeta.dc = new Date().toISOString();
 			}
@@ -880,11 +939,13 @@ let redLit = {
 					redLit.db.data = {};
 					redLit.dbKlonen({quelle: redLit.db.dataTmp, ziel: redLit.db.data});
 					// Metdaten zurücksetzen
+					redLit.db.dataMeta.bl = redLit.dbBlocklisteKlonen(metaPreMerge.bl);
 					redLit.db.dataMeta.dc = metaPreMerge.dc;
 					redLit.db.dataMeta.dm = metaPreMerge.dm;
 					redLit.db.dataMeta.re = metaPreMerge.re;
 				} else {
 					// Metdaten zurücksetzen
+					redLit.db.dataMeta.bl = redLit.dbBlocklisteKlonen(meta.bl);
 					redLit.db.dataMeta.dc = meta.dc;
 					redLit.db.dataMeta.dm = meta.dm;
 					redLit.db.dataMeta.re = meta.re;
@@ -957,6 +1018,7 @@ let redLit = {
 	// Datenbank: Daten zuammentragen, die geschrieben werden sollen
 	dbSpeichernSchreibenDaten () {
 		return {
+			bl: redLit.db.dataMeta.bl,
 			dc: redLit.db.dataMeta.dc,
 			dm: redLit.db.dataMeta.dm,
 			re: redLit.db.dataMeta.re,
@@ -1057,7 +1119,7 @@ let redLit = {
 	// Datenbank: prüft, ob noch ein Speichervorgang aussteht
 	//   fun = Function
 	//     (Callback-Funktion)
-	//   db = false || undefined
+	//   db = false | undefined
 	//     (überprüfen, ob die Datenbank gespeichert wurde)
 	dbCheck (fun, db = true) {
 		return new Promise(async resolve => {
@@ -1133,6 +1195,16 @@ let redLit = {
 			redLit.dbTitelKlonen(v, ziel[k]);
 		}
 	},
+	// Datenbank: Daten der Blockliste klonen
+	//   quelle = Object
+	//     (Quelle der Blockliste)
+	dbBlocklisteKlonen (quelle) {
+		let bl = [];
+		for (const i of quelle) {
+			bl.push({...i});
+		}
+		return bl;
+	},
 	// Datenbank: kompletten Datensatz einer Titelaufnahme klonen
 	//   quelle = Object
 	//     (der Quell-Datensatz)
@@ -1140,6 +1212,9 @@ let redLit = {
 	//     (der Ziel-Datensatz)
 	dbTitelKlonen (quelle, ziel) {
 		for (let i = 0, len = quelle.length; i < len; i++) {
+			if (redLit.db.dataMeta.bl.some(j => j.id === quelle[i].id)) { // Titelaufnahme in Blockliste
+				continue;
+			}
 			let ds = {};
 			redLit.dbTitelKlonenAufnahme(quelle[i], ds);
 			ziel.push(ds);
@@ -1170,7 +1245,8 @@ let redLit = {
 	dbTitelMergeAufnahmen (quelle, ziel) {
 		let ergaenzt = false;
 		quelle.forEach(aq => {
-			if (ziel.some(i => i.id === aq.id)) {
+			if (ziel.some(i => i.id === aq.id) ||
+					redLit.db.dataMeta.bl.some(i => i.id === aq.id)) { // Titelaufnahme in Blockliste
 				return;
 			}
 			let ds = {};
@@ -1202,6 +1278,7 @@ let redLit = {
 		if (daten.ve === redLit.db.ve) {
 			return;
 		}
+		let konvertiert = false;
 		// von v1 > v2
 		if (daten.ve === 1) {
 			// Tag-Array in allen Datensätzen ergänzen
@@ -1211,6 +1288,17 @@ let redLit = {
 				}
 			}
 			daten.ve++;
+			konvertiert = true;
+		}
+		// von v2 > v3
+		if (daten.ve === 2) {
+			// Blockliste anlegen
+			daten.bl = [];
+			daten.ve++;
+			konvertiert = true;
+		}
+		if (konvertiert) {
+			redLit.db.konvertiert = true;
 			redLit.dbGeaendert(true);
 		}
 	},
@@ -1226,7 +1314,7 @@ let redLit = {
 	// Navigation: Umschalten zwischen Eingabe- und Suchformular
 	//   form = String
 	//     ("eingabe" od. "suche")
-	//   nav = true || undefined
+	//   nav = true | undefined
 	//     (Funktion wurde über das Navigationsformular aufgerufen => nie abbrechen)
 	nav (form, nav = false) {
 		// ggf. Popup schließen
@@ -1810,7 +1898,7 @@ let redLit = {
 	// Suche: Titelaufnahme auffrischen, falls sie geändert wurde (bearbeitet, gelöscht)
 	//   id = String
 	//     (ID der Titelaufnahme)
-	//   delSlot = Number || undefined
+	//   delSlot = Number | undefined
 	//     (Slot dessen Titelaufnahme gelöscht wurde)
 	sucheTrefferAuffrischen (id, delSlot = -1) {
 		let treffer = redLit.suche.treffer.find(i => i.id === id);
@@ -2176,7 +2264,7 @@ let redLit = {
 	//     (Link zu einer Ressource des DTA)
 	//   fokusId = String
 	//     (ID des Elements, das beim Scheitern fokussiert werden soll)
-	//   seitenData = Object || undefined
+	//   seitenData = Object | undefined
 	//     (enthält Informationen zur Seite des DTA-Titels; die Daten sind gefüllt, wenn
 	//     die Quellenangabe der Karteikarte neu geladen werden soll)
 	eingabeDTAFetch ({url, fokusId, seitenData = {}}) {
@@ -2709,8 +2797,19 @@ let redLit = {
 					helfer.textareaGrow(i);
 				}
 			}
-			// ID schon vergeben => bestehende Titelaufnahme ergänzen?
+			// ID ist in Blockliste => kann nicht vergeben werden
 			const id = document.getElementById("red-lit-eingabe-id").value;
+			if (redLit.db.dataMeta.bl.some(i => i.id === id)) {
+				dialog.oeffnen({
+					typ: "alert",
+					text: "Die ID ist blockiert.\nEin Datensatz mit dieser ID wurde gelöscht, weswegen die ID vorerst nicht neu vergeben werden kann.",
+					callback: () => {
+						document.getElementById("red-lit-eingabe-id").select();
+					},
+				});
+				return;
+			}
+			// ID schon vergeben => bestehende Titelaufnahme ergänzen?
 			if (redLit.eingabe.status === "add" && redLit.db.data[id]) {
 				const verschmelzen = await new Promise(verschmelzen => {
 					dialog.oeffnen({
@@ -2894,7 +2993,7 @@ let redLit = {
 				resolve(false);
 				return;
 			}
-			// wenn URL => Fundort "DTA" || "GoogleBooks" || "IDS" || "online"
+			// wenn URL => Fundort "DTA" | "GoogleBooks" | "IDS" | "online"
 			let fo = document.getElementById("red-lit-eingabe-fo");
 			if (url.value && !/^(DTA|GoogleBooks|IDS|online)$/.test(fo.value)) {
 				fehler({
@@ -2948,7 +3047,7 @@ let redLit = {
 				resolve(false);
 				return;
 			}
-			// wenn Fundort "DTA" || "GoogleBooks" || "IDS" || "online" => URL eingeben
+			// wenn Fundort "DTA" | "GoogleBooks" | "IDS" | "online" => URL eingeben
 			if (/^(DTA|GoogleBooks|IDS|online)$/.test(fo.value) && !url.value) {
 				fehler({
 					text: "Ist der Fundort „online“, „DTA“, „GoogleBooks“ oder „IDS“, müssen Sie eine URL angeben.",
@@ -3064,6 +3163,10 @@ let redLit = {
 					}
 				}
 			}
+			if (redLit.db.dataMeta.bl.some(i => i.id === id)) {
+				continue;
+			}
+			// ID ist in Ordnung
 			break;
 		}
 		return id;
@@ -3167,12 +3270,11 @@ let redLit = {
 	eingabeTagsFuellen ({tags}) {
 		let cont = document.getElementById("red-lit-eingabe-tags");
 		helfer.keineKinder(cont);
-		for (let tag of tags) {
-			let span = redLit.eingabeTagErzeugen({tag});
-			cont.appendChild(span);
-			span.classList.add("loeschbar");
-			redLit.eingabeTagLoeschen({tag: span});
-		}
+		redLit.tagsList({
+			cont,
+			tags,
+			eingabe: true,
+		});
 	},
 	// Eingabeformular: Tag-Element erzeugen
 	//   tag = String
@@ -3218,7 +3320,6 @@ let redLit = {
 		}
 		// Tag ergänzen und die Anzeige neu aufbauen
 		arr.push(val);
-		arr.sort(helfer.sortAlpha);
 		redLit.eingabeTagsFuellen({tags: arr});
 		redLit.eingabeGeaendert();
 		tg.value = "";
@@ -3226,23 +3327,25 @@ let redLit = {
 	// Eingabeformular: alle Tags aus der Literaturdatenbank zusammensuchen
 	eingabeTagsAuflisten () {
 		let tags = new Set();
-		for (let titel of Object.values(redLit.db.data)) { // Titel durchgehen
-			for (let aufnahme of titel) { // Aufnahmen durchgehen
-				for (let tag of aufnahme.td.tg) { // Tags durchgehen
-					if (!redLit.eingabe.tags.includes(tag)) {
-						tags.add(tag);
-					}
+		for (const titel of Object.values(redLit.db.data)) { // Titel durchgehen
+			for (const aufnahme of titel) { // Aufnahmen durchgehen
+				for (const tag of aufnahme.td.tg) { // Tags durchgehen
+					tags.add(tag);
 				}
 				break; // nur die neuste Aufnahem auswerten
 			}
 		}
 		// Tags sortieren
 		let arr = [...tags];
-		arr.sort(helfer.sortAlpha);
+		arr = redLit.tagsSort(arr);
 		// vordefinierte Tags an den Anfang schieben
 		let pre = [...redLit.eingabe.tags];
 		pre.reverse();
-		for (let i of pre) {
+		for (const i of pre) {
+			const idx = arr.indexOf(i);
+			if (idx > -1) {
+				arr.splice(idx, 1);
+			}
 			arr.unshift(i);
 		}
 		return arr;
@@ -3288,7 +3391,7 @@ let redLit = {
 	},
 	// Anzeige: Speicher für Variablen
 	anzeige: {
-		snippetKontext: "suche", // "suche" || "popup"
+		snippetKontext: "suche", // "suche" | "popup"
 		id: "", // ID des im Popup angezeigten Titels
 	},
 	// Anzeige: Snippet einer Titelaufnahme erstellen
@@ -3462,14 +3565,11 @@ let redLit = {
 			let p = document.createElement("p");
 			div.appendChild(p);
 			p.classList.add("tags");
-			for (let tag of ds.td.tg) {
-				tag = redLit.anzeigeSnippetHighlight({
-					feld: "tg",
-					text: tag,
-				});
-				let span = redLit.eingabeTagErzeugen({tag});
-				p.appendChild(span);
-			}
+			redLit.tagsList({
+				cont: p,
+				tags: ds.td.tg,
+				eingabe: false,
+			});
 		}
 		// Metadaten: ErstellerIn + BearbeiterIn + Datum + Titelaufnahmen
 		// (nur im Suchkontext anzeigen)
@@ -3597,7 +3697,7 @@ let redLit = {
 		titel.appendChild(redLit.anzeigeSnippet({id, slot}));
 	},
 	// Anzeige: vorhandene Titelaufnahmen im Versionen-Popup auflisten
-	//   slot = Number || undefined
+	//   slot = Number | undefined
 	//     (Titelaufnahme, die angezeigt werden soll)
 	anzeigePopupVersionen (slot = 0) {
 		let vers = document.getElementById("red-lit-popup-versionen"),
@@ -3665,6 +3765,12 @@ let redLit = {
 		}
 		let div = document.querySelector(`#red-lit-popup-versionen [data-slot="${slot}"]`);
 		div.dispatchEvent(new MouseEvent("click"));
+		let versionen = document.getElementById("red-lit-popup-versionen");
+		if (div.offsetTop + div.offsetHeight > versionen.offsetHeight + versionen.scrollTop) {
+			versionen.scrollTop = div.offsetTop;
+		} else if (div.offsetTop < versionen.scrollTop) {
+			versionen.scrollTop = div.offsetTop - versionen.offsetHeight + div.offsetHeight;
+		}
 	},
 	// Anzeige: Versionen-Popup schließen
 	anzeigePopupSchliessen () {
@@ -3816,5 +3922,77 @@ let redLit = {
 			},
 		};
 		redXml.datensatz({xmlDatensatz});
+	},
+	// Tags auflisten
+	//   cont = Element
+	//     (Container, in den die Tags eingefügt werden sollen)
+	//   tags = Array
+	//     (die noch unsortierten Tags)
+	//   eingabe = Boolean
+	//     (Tags im Eingabeformular einfügen)
+	tagsList ({cont, tags, eingabe = false}) {
+		let more = document.createElement("span"),
+			tagsArt = 0;
+		tags = redLit.tagsSort(tags);
+		for (const t of tags) {
+			let tag = t;
+			if (!eingabe) {
+				tag = redLit.anzeigeSnippetHighlight({
+					feld: "tg",
+					text: t,
+				});
+			}
+			if (/^Artikel: /.test(t)) {
+				tagsArt++;
+			}
+			let span = redLit.eingabeTagErzeugen({tag});
+			if (eingabe) {
+				span.classList.add("loeschbar");
+				redLit.eingabeTagLoeschen({tag: span});
+			}
+			if (tagsArt > 3) {
+				more.appendChild(span);
+			} else {
+				cont.appendChild(span);
+			}
+		}
+		if (tagsArt > 3) {
+			more.classList.add("mehr-tags-kuerzung");
+			cont.appendChild(more);
+			let blende = document.createElement("span");
+			more.appendChild(blende);
+			blende.classList.add("mehr-tags-kuerzung-blende");
+			blende.textContent = " ";
+			let expand = document.createElement("span");
+			cont.appendChild(expand);
+			expand.classList.add("mehr-tags");
+			expand.textContent = "mehr…";
+			expand.addEventListener("click", function() {
+				this.classList.add("aus");
+				this.previousSibling.classList.remove("mehr-tags-kuerzung");
+				this.previousSibling.querySelector(".mehr-tags-kuerzung-blende").classList.add("aus");
+			});
+		}
+	},
+	// spezielle Sortierung von Tags
+	//   tags = Array
+	//     (eindimensionales Array mit den Tags)
+	tagsSort (tags) {
+		let artikel = [],
+			lemma = [],
+			sonstige = [];
+		for (const t of tags) {
+			if (/^Artikel: /.test(t)) {
+				artikel.push(t);
+			} else if (/^Lemma: /.test(t)) {
+				lemma.push(t);
+			} else {
+				sonstige.push(t);
+			}
+		}
+		artikel.sort(helfer.sortAlpha);
+		lemma.sort(helfer.sortAlpha);
+		sonstige.sort(helfer.sortAlpha);
+		return sonstige.concat(lemma).concat(artikel);
 	},
 };

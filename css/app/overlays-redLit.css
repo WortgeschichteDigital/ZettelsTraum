@@ -49,6 +49,40 @@
 
 #red-lit p.tags {
  margin: 5px 0 0 25px;
+ padding-left: 0;
+ text-indent: 0;
+}
+
+#red-lit .mehr-tags-kuerzung {
+	position: relative;
+	display: inline-block;
+	vertical-align: top;
+	overflow: hidden;
+	width: 100px;
+	white-space: nowrap;
+}
+
+#red-lit .mehr-tags-kuerzung-blende {
+	position: absolute;
+	top: 0;
+	left: 50px;
+	width: 50px;
+	background: linear-gradient(to right, transparent, #fff);
+}
+
+#red-lit .red-lit-snippet.markiert .mehr-tags-kuerzung-blende {
+	background: linear-gradient(to right, transparent, var(--hover));
+}
+
+#red-lit .mehr-tags {
+	vertical-align: top;
+	margin-left: 15px;
+	color: var(--textFarbe);
+	font-size: 14px;
+}
+
+#red-lit-eingabe td#red-lit-eingabe-tags {
+	padding-top: 5px;
 }
 
 /* Datenkbankpfad ------------------------------- */
@@ -459,11 +493,13 @@
 }
 
 #red-lit-popup-versionen {
+	position: relative;
 	direction: rtl;
 	overflow: auto;
 	max-height: 150px;
 	font-size: 14px;
 	line-height: 20px;
+	pointer-events: none;
 }
 
 #red-lit-popup-versionen div {
@@ -474,10 +510,7 @@
 	overflow: hidden;
 	width: 85%;
 	white-space: nowrap;
-}
-
-#red-lit-popup-versionen div:not(.aktiv) {
-	cursor: pointer;
+	pointer-events: auto;
 }
 
 #red-lit-popup-versionen div.aktiv {

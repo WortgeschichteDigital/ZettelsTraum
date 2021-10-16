@@ -30,7 +30,7 @@ const dienste = require("./js/main/dienste"),
 //       kann in Fenstern vom typ === "index" leer sein, dann ist keine Kartei geladen;
 //       kann in Fenstern vom typ === "index" auch "neu" sein, dann wurde die Karte erstellt,
 //       aber noch nicht gespeichert)
-//     exit:        true || undefined (wird dem Objekt kurz vor dem Schließen hinzugefügt,
+//     exit:        true | undefined (wird dem Objekt kurz vor dem Schließen hinzugefügt,
 //       damit dieses Schließen nicht blockiert wird; s. BrowserWindow.on("close"))
 let win = {};
 
@@ -708,7 +708,7 @@ appMenu = {
 	// führt den aufgerufenen Befehl im aktuellen Fenster aus
 	//   befehl = String
 	//     (die Aktion)
-	//   parameter = String || Array || undefined
+	//   parameter = String | Array | undefined
 	//     (einige Befehle bekommen einen Wert übergeben; im Falle der zuletzt geöffneten
 	//     Dateien kann es auch ein Array sein)
 	befehl (befehl, parameter) {
@@ -803,9 +803,11 @@ fenster = {
 	// Hauptfenster erstellen
 	//   kartei = String
 	//     (Pfad zur Kartei, die geöffnet werden soll)
-	//   neuesWort = true || undefined
+	//   neuesWort = true | undefined
 	//     (im Fenster soll ein neues Wort erstellt werden)
-	erstellen (kartei, neuesWort = false) {
+	//   init = true | undefined
+	//     (App wurde gerade gestartet => erstes Fenster öffnen)
+	erstellen (kartei, neuesWort = false, init = false) {
 		// Position und Größe des Fensters ermitteln;
 		const Bildschirm = require("electron").screen.getPrimaryDisplay();
 		let x = optionen.data.fenster ? optionen.data.fenster.x : null,
@@ -887,7 +889,10 @@ fenster = {
 			}
 			// Soll eine Kartei geöffnet oder eine neue Kartei erstellt werden?
 			// Soll die Literatur-DB exportiert werden?
-			const cli = fenster.parseArgv(process.argv);
+			let cli = {};
+			if (init) {
+				cli = fenster.parseArgv(process.argv);
+			}
 			if (neuesWort) {
 				// 500ms warten, damit der Ladebildschirm Zeit hat zu verschwinden
 				setTimeout(() => {
@@ -942,12 +947,12 @@ fenster = {
 	// Neben-Fenster erstellen
 	//   typ = String
 	//     (der Typ des Neben-Fensters:
-	//     "bedeutungen" || "changelog" || "dokumentation" || "fehlerlog" || "handbuch" || "xml")
-	//   abschnitt = String || undefined
+	//     "bedeutungen" | "changelog" | "dokumentation" | "fehlerlog" | "handbuch" | "xml")
+	//   abschnitt = String | undefined
 	//     (Abschnitt, der im Fenster geöffnet werden soll; nur "handbuch" und "dokumentation")
-	//   winTitle = String || undefined
+	//   winTitle = String | undefined
 	//     (Fenster-Titel für Bedeutungsgerüst- und XML-Fenster)
-	//   caller = Object || undefined
+	//   caller = Object | undefined
 	//     (ggf. Fensterobjekt, das als Caller fungiert)
 	erstellenNeben ({
 			typ,
@@ -1126,7 +1131,7 @@ fenster = {
 	},
 	// Über-Fenster erstellen
 	//   typ = String
-	//     (der Typ des Über-Fensters: "app" || "electron")
+	//     (der Typ des Über-Fensters: "app" | "electron")
 	erstellenUeber (typ) {
 		// Titel Name der Seite ermitteln
 		let title, html;
@@ -1220,7 +1225,7 @@ fenster = {
 	// (löst das Problem, dass nicht immer klar ist, ob ein Hauptfenster den Fokus hat)
 	//   befehl = String
 	//     (der IPC-Channel)
-	//   arg = String || undefined
+	//   arg = String | undefined
 	//     (Befehlsargument, könnte prinzipiell alles sein, was in JSON linearisiert werden kann)
 	befehlAnHauptfenster (befehl, arg = "") {
 		let bw = BrowserWindow.getFocusedWindow();
@@ -1295,7 +1300,7 @@ app.on("ready", async () => {
 	// Menu der zuletzt verwendeten Karteien erzeugen
 	appMenu.zuletzt();
 	// warten mit dem Öffnen des Fensters, bis die Optionen eingelesen wurden
-	fenster.erstellen("");
+	fenster.erstellen("", false, true);
 	// überprüfen, ob die zuletzt verwendten Karteien noch vorhanden sind
 	setTimeout(() => {
 		appMenu.zuletztCheck();
