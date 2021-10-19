@@ -502,6 +502,7 @@
 	position: absolute;
 	top: 0;
 	right: 0;
+	z-index: 1;
 }
 
 #red-lit-popup-versionen {
@@ -511,7 +512,6 @@
 	max-height: 150px;
 	font-size: 14px;
 	line-height: 20px;
-	pointer-events: none;
 }
 
 #red-lit-popup-versionen div {
@@ -522,7 +522,6 @@
 	overflow: hidden;
 	width: 85%;
 	white-space: nowrap;
-	pointer-events: auto;
 }
 
 #red-lit-popup-versionen div.aktiv {
