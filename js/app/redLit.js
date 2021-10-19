@@ -3270,8 +3270,10 @@ let redLit = {
 	eingabeTagsFuellen ({tags}) {
 		let cont = document.getElementById("red-lit-eingabe-tags");
 		helfer.keineKinder(cont);
+		let div = document.createElement("div");
+		cont.appendChild(div);
 		redLit.tagsList({
-			cont,
+			cont: div,
 			tags,
 			eingabe: true,
 		});
@@ -3329,7 +3331,10 @@ let redLit = {
 		let tags = new Set();
 		for (const titel of Object.values(redLit.db.data)) { // Titel durchgehen
 			for (const aufnahme of titel) { // Aufnahmen durchgehen
-				for (const tag of aufnahme.td.tg) { // Tags durchgehen
+				for (let tag of aufnahme.td.tg) { // Tags durchgehen
+					if (/^Lemma: /.test(tag)) {
+						tag = tag.replace(/\s\(.+?\)$/, "");
+					}
 					tags.add(tag);
 				}
 				break; // nur die neuste Aufnahem auswerten
@@ -3969,7 +3974,7 @@ let redLit = {
 			expand.textContent = "mehr…";
 			expand.addEventListener("click", function() {
 				this.classList.add("aus");
-				this.previousSibling.classList.remove("mehr-tags-kuerzung");
+				this.previousSibling.classList.add("erweitert");
 				this.previousSibling.querySelector(".mehr-tags-kuerzung-blende").classList.add("aus");
 			});
 		}
