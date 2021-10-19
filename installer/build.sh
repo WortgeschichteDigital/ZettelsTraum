@@ -426,6 +426,7 @@ execJob() {
 	# Changelog für DEB bzw. RPM erstellen
 	if echo "$pkg" | egrep -q "^(deb|rpm)$" ; then
 		echo -e "  \033[1;32m*\033[0m Changelog erstellen"
+		cd "$dir"
 		echo -en "$(makeChangelog $pkg)" > "${build}/changelog"
 	fi
 
