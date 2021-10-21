@@ -28,9 +28,15 @@
 	line-height: 20px;
 }
 
+#red-lit-eingabe-tags div {
+	max-height: 120px;
+	overflow-y: auto;
+}
+
 #red-lit .tag {
 	display: inline-block;
 	margin-right: 15px;
+	overflow:  hidden;
 	height: 20px;
 	font-size: 14px;
 	text-indent: 0;
@@ -60,6 +66,12 @@
 	overflow: hidden;
 	width: 100px;
 	white-space: nowrap;
+}
+
+#red-lit .mehr-tags-kuerzung.erweitert {
+	overflow: visible;
+	width: auto;
+	white-space: normal;
 }
 
 #red-lit .mehr-tags-kuerzung-blende {
@@ -490,6 +502,7 @@
 	position: absolute;
 	top: 0;
 	right: 0;
+	z-index: 1;
 }
 
 #red-lit-popup-versionen {
@@ -499,7 +512,6 @@
 	max-height: 150px;
 	font-size: 14px;
 	line-height: 20px;
-	pointer-events: none;
 }
 
 #red-lit-popup-versionen div {
@@ -510,7 +522,6 @@
 	overflow: hidden;
 	width: 85%;
 	white-space: nowrap;
-	pointer-events: auto;
 }
 
 #red-lit-popup-versionen div.aktiv {
