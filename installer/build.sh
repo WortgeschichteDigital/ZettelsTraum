@@ -547,8 +547,8 @@ presetsExec() {
 # Starter
 while : ; do
 	# Auswahl treffen
-	read -ep "Ausführen (job/release/preset/sha/config/modules/exit): " action
-	if ! echo "$action" | egrep -q "^(job|release|preset|sha|config|modules|exit)$"; then
+	read -ep "Ausführen (job/release/preset/sha/config/modules/prepare/exit): " action
+	if ! echo "$action" | egrep -q "^(job|release|preset|sha|config|modules|prepare|exit)$"; then
 		zeilenWeg 1
 		continue
 	fi
@@ -582,6 +582,11 @@ while : ; do
 	elif [ "$action" = "modules" ]; then
 		echo -e "\n"
 		bash "${dir}/build-modules.sh" inc
+		echo -e "\n"
+	# neue ZT-Version vorbereiten
+	elif [ "$action" = "prepare" ]; then
+		echo -e "\n"
+		bash "${dir}/build-prepare.sh" inc
 		echo -e "\n"
 	# Script verlassen
 	elif [ "$action" = "exit" ]; then
