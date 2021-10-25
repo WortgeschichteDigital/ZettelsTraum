@@ -69,7 +69,7 @@ zeilenWeg() {
 # aktuelle App-Version ermitteln
 appVersion() {
 	packageJson="${dir}/../package.json"
-	echo $(grep '"version":' "$packageJson" | perl -pe 's/.+: "(.+?)",/\1/')
+	echo $(grep '"version":' "$packageJson" | sed -r 's/.+: "(.+?)",/\1/')
 }
 
 # HTML-Update
@@ -81,7 +81,7 @@ updateHtml() {
 	if [ "$(date +%Y)" != "$copyrightJahr" ]; then
 		copyrightJahr+="–$(date +%Y)"
 	fi
-	local copyrightJahrUeber=$(grep "id=\"copyright-jahr\"" "$htmlUeber" | perl -pe 's/.+"copyright-jahr">(.+?)<.+/\1/')
+	local copyrightJahrUeber=$(grep "id=\"copyright-jahr\"" "$htmlUeber" | sed -r 's/.+"copyright-jahr">(.+?)<.+/\1/')
 	if [ "$copyrightJahrUeber" != "$copyrightJahr" ]; then
 		echo -e "  \033[1;32m*\033[0m Copyright-Jahr auffrischen"
 		sed -i "s/copyright-jahr\">.*<\/span>/copyright-jahr\">${copyrightJahr}<\/span>/" "$htmlUeber"
@@ -151,7 +151,7 @@ makeReleaseNotes() {
 					neuerTyp=0;
 					output+="\n## ${clH[${commitTypen[$typ]}]}\n\n"
 				fi
-				message=$(echo "$message" | perl -pe 's/^.+?:\s//')
+				message=$(echo "$message" | sed -r 's/^.+?:\s//')
 				output+="* $message\n"
 			fi
 		done

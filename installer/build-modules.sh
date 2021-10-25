@@ -98,7 +98,7 @@ zeilenWeg() {
 # Modul-Version ermitteln
 #   $1 = Pfad zur package.json
 getVersion() {
-	echo $(grep '"version":' "$1" | perl -pe 's/.+?: "(.+?)".*/\1/')
+	echo $(grep '"version":' "$1" | sed -r 's/.+?: "(.+?)".*/\1/')
 }
 
 # Module installieren
