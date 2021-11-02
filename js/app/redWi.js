@@ -262,7 +262,12 @@ let redWi = {
 			} else {
 				ds.xl += `  <Verweistext>${txVal}</Verweistext>\n`;
 			}
-			ds.xl += `  <Verweisziel>${zlValNorm}</Verweisziel>\n`;
+			let zlValSp = zlVal.split("#");
+			zlVal = zlValSp[0].replace(/_/g, " ");
+			if (zlValSp[1]) {
+				zlVal += "#" + zlValSp[1];
+			}
+			ds.xl += `  <Verweisziel>${zlVal}</Verweisziel>\n`;
 			ds.xl += "</Verweis>";
 		} else if (!extern.classList.contains("aus")) {
 			// Überprüfungen Verweis extern
