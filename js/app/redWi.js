@@ -247,17 +247,13 @@ let redWi = {
 				});
 				return;
 			}
-			let zlValNorm = zlVal.replace(/\s/g, "%20");
-			if (zlVal !== zlValNorm) {
-				zl.value = zlValNorm;
-			}
 			let typ = checkSemantik(intern);
 			if (typ === false) {
 				return;
 			}
 			// XML erstellen
 			ds.xl = `<Verweis${typ}>\n`;
-			if (txVal === zlValNorm) {
+			if (txVal === zlVal) {
 				ds.xl += "  <Verweistext/>\n";
 			} else {
 				ds.xl += `  <Verweistext>${txVal}</Verweistext>\n`;
