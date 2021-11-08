@@ -2,6 +2,8 @@
 
 *Zettel’s Traum* ist die Wortkartei-App von *Wortgeschichte digital* ([WGd](https://adw-goe.de/forschung/weitere-forschungsprojekte/wortgeschichte-digital-teilprojekt-im-zdl/)), dem an der *Akademie der Wissenschaften zu Göttingen* ([AdWG](https://adw-goe.de/)) angesiedelten Teilprojekt des *Zentrums für digitale Lexikographie der deutschen Sprache* ([ZDL](https://www.zdl.org/)). WGd und das ZDL werden gefördert vom *Bundesministerium für Bildung und Forschung* ([BMBF](https://www.bmbf.de/)).
 
+Die im Projekt *Wortgeschichte digital* mithilfe von *Zettel’s Traum* verfassten <a href="https://www.zdl.org/wb/wortgeschichten/">Wortgeschichten finden Sie auf der Homepage des ZDL</a>.
+
 <a href="https://adw-goe.de/"><img src="img/readme/AdWG.png" width="157" height="156" alt="AdWG"></a><a href="https://www.zdl.org/"><img src="img/readme/ZDL.png" width="262" height="156" alt="ZDL"></a><a href="https://www.bmbf.de/"><img src="img/readme/BMBF.png" width="227" height="156" alt="BMBF"></a>
 
 ## Inhalt
