@@ -3297,6 +3297,7 @@ let xml = {
 		// Korrekturen
 		str = str.replace(/<</g, "«");
 		str = str.replace(/>>/g, "»");
+		str = str.replace(/\[(.+?)\]\(www\.(.+?)\)/g, (m, p1, p2) => `[${p1}](https://www.${p2})`);
 		// Attribute maskieren
 		str = str.replace(/([a-zA-Z]+)="(.+?)"/g, (m, p1, p2) => `${p1}=##${p2}##`);
 		// Ampersands maskieren
@@ -3351,6 +3352,13 @@ let xml = {
 			if (p3) {
 				typ = ` Typ=##${p3}##`;
 			}
+			// Fehlerkorrektur <Verweisziel>
+			let p2Sp = p2.split("#");
+			p2 = p2Sp[0].replace(/_/g, " ");
+			if (p2Sp[1]) {
+				p2 += "#" + p2Sp[1];
+			}
+			// <Verweis> erzeugen
 			let verweis = `<Verweis${typ}>`;
 			verweis += `\n  <Verweistext>${p1}</Verweistext>`;
 			verweis += `\n  <Verweisziel>${p2}</Verweisziel>`;

@@ -247,22 +247,23 @@ let redWi = {
 				});
 				return;
 			}
-			let zlValNorm = zlVal.replace(/\s/g, "%20");
-			if (zlVal !== zlValNorm) {
-				zl.value = zlValNorm;
-			}
 			let typ = checkSemantik(intern);
 			if (typ === false) {
 				return;
 			}
 			// XML erstellen
 			ds.xl = `<Verweis${typ}>\n`;
-			if (txVal === zlValNorm) {
+			if (txVal === zlVal) {
 				ds.xl += "  <Verweistext/>\n";
 			} else {
 				ds.xl += `  <Verweistext>${txVal}</Verweistext>\n`;
 			}
-			ds.xl += `  <Verweisziel>${zlValNorm}</Verweisziel>\n`;
+			let zlValSp = zlVal.split("#");
+			zlVal = zlValSp[0].replace(/_/g, " ");
+			if (zlValSp[1]) {
+				zlVal += "#" + zlValSp[1];
+			}
+			ds.xl += `  <Verweisziel>${zlVal}</Verweisziel>\n`;
 			ds.xl += "</Verweis>";
 		} else if (!extern.classList.contains("aus")) {
 			// Überprüfungen Verweis extern

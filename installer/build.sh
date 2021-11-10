@@ -74,12 +74,6 @@ if ! command -v node >/dev/null 2>&1; then
 	exit 1
 fi
 
-# Perl nicht installiert
-if ! command -v perl >/dev/null 2>&1; then
-	echo -e "\033[1;31mFehler!\033[0m\n  \033[1;31m*\033[0m \"perl\" nicht installiert"
-	exit 1
-fi
-
 # Zeilen entfernen
 #   $1 = Number, die angibt, wie viele Zeilen entfernt werden sollen
 zeilenWeg() {
@@ -92,7 +86,7 @@ zeilenWeg() {
 # App-Version ermitteln
 appVersion() {
 	packageJson="${dir}/../package.json"
-	echo $(grep '"version":' "$packageJson" | perl -pe 's/.+: "(.+?)",/\1/')
+	echo $(grep '"version":' "$packageJson" | sed -r 's/.+: "(.+?)",/\1/')
 }
 
 # Systembezeichnung für Node
@@ -127,7 +121,7 @@ getMail() {
 	local okay=$(gitOkay)
 	if (( okay > 0 )); then
 		local tagger=$(git show $(git describe --abbrev=0) | head -n 2 | tail -n 1)
-		local name=$(echo "$tagger" | perl -pe 's/.+?:\s+(.+?)\s<.+/$1/')
+		local name=$(echo "$tagger" | sed -r 's/.+?:\s+(.+?)\s<.+/\1/')
 		if [ ${adressen[$name]+isset} ]; then
 			mail=${adressen[$name]/ /@}
 			mail=${mail/ /.}
@@ -281,7 +275,7 @@ makeChangelog() {
 			if test -z "$z"; then
 				continue
 			elif echo "$z" | egrep -q "^Tagger:"; then
-				clName=$(echo "$z" | perl -pe 's/.+?:\s+(.+?)\s<.+/$1/')
+				clName=$(echo "$z" | sed -r 's/.+?:\s+(.+?)\s<.+/\1/')
 				if [ ${adressen[$clName]+isset} ]; then
 					clMail=${adressen[$clName]/ /@}
 					clMail=${clMail/ /.}
@@ -289,14 +283,14 @@ makeChangelog() {
 					clMail="no-reply@address.com"
 				fi
 			elif echo "$z" | egrep -q "^Date:"; then
-				datum=($(echo "$z" | perl -pe 's/.+?:\s+(.+)/$1/'))
+				datum=($(echo "$z" | sed -r 's/.+?:\s+(.+)/\1/'))
 				if [ "$1" = "deb" ]; then
 					clDate="${datum[0]}, ${datum[2]} ${datum[1]} ${datum[4]} ${datum[3]} ${datum[5]}"
 				elif [ "$1" = "rpm" ]; then
 					clDate="${datum[0]} ${datum[1]} ${datum[2]} ${datum[4]}"
 				fi
 			else
-				clRelease=$(echo "$z" | perl -pe 's/\sv[0-9]+\.[0-9]+\.[0-9]+//')
+				clRelease=$(echo "$z" | sed -r 's/\sv[0-9]+\.[0-9]+\.[0-9]+//')
 			fi
 		done < <(git show "${tags[$i]}" | head -n 5 | tail -n 4)
 
@@ -547,8 +541,8 @@ presetsExec() {
 # Starter
 while : ; do
 	# Auswahl treffen
-	read -ep "Ausführen (job/release/preset/sha/config/modules/exit): " action
-	if ! echo "$action" | egrep -q "^(job|release|preset|sha|config|modules|exit)$"; then
+	read -ep "Ausführen (job/release/preset/sha/config/modules/prepare/exit): " action
+	if ! echo "$action" | egrep -q "^(job|release|preset|sha|config|modules|prepare|exit)$"; then
 		zeilenWeg 1
 		continue
 	fi
@@ -582,6 +576,11 @@ while : ; do
 	elif [ "$action" = "modules" ]; then
 		echo -e "\n"
 		bash "${dir}/build-modules.sh" inc
+		echo -e "\n"
+	# neue ZT-Version vorbereiten
+	elif [ "$action" = "prepare" ]; then
+		echo -e "\n"
+		bash "${dir}/build-prepare.sh" inc
 		echo -e "\n"
 	# Script verlassen
 	elif [ "$action" = "exit" ]; then
