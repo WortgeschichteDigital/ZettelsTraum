@@ -152,10 +152,6 @@
 		<name>Geschichte</name>
 	</item>
 	<item>
-		<id>37</id>
-		<name>Gesellschaft</name>
-	</item>
-	<item>
 		<id>38</id>
 		<name>Grammatik</name>
 	</item>
@@ -346,10 +342,6 @@
 	<item>
 		<id>85</id>
 		<name>Physiologie</name>
-	</item>
-	<item>
-		<id>86</id>
-		<name>Politik</name>
 	</item>
 	<item>
 		<id>87</id>
