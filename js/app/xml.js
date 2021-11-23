@@ -209,7 +209,9 @@ let xml = {
 		if (da) {
 			let datum = document.createElementNS(ns, "Datum");
 			fundstelle.appendChild(datum);
-			datum.appendChild(document.createTextNode(da.replace("–", "-"))); // hier lieber keinen Halbgeviertstrich
+			da = da.replace("–", "-"); // hier lieber keinen Halbgeviertstrich
+			da = da.replace(/\.\s?Jh\./, ""); // Jahrhundertangabe auf Ziffern reduzieren
+			datum.appendChild(document.createTextNode(da));
 		}
 		// <URL>
 		let href = data.qu.match(/https?:[^\s]+|www\.[^\s]+/);
