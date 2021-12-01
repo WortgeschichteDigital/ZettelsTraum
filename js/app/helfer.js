@@ -348,6 +348,7 @@ let helfer = {
 		text = text.replace(/([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})/g, (m, p1, p2, p3) => {
 			return `${p1.replace(/^0/, "")}. ${p2.replace(/^0/, "")}. ${p3}`;
 		}); // Leerzeichen bei aneinandergeklatschten Daten
+		text = text.replace(/ \/(?!>)/g, " /"); // geschütztes Leerzeichen vor Virgel
 		// Korrekturen
 		text = text.replace(/([0-9]{4})[–-]([0-9]{2})[–-]([0-9]{2})/g, (m, p1, p2, p3) => `${p1}-${p2}-${p3}`); // falsche Halbgeviertstriche in ISO 8601-Daten
 		// geschützte Leerzeichen (ggf. einfügen, wenn Spatien vergessen wurden)
