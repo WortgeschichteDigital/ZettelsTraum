@@ -32,7 +32,7 @@
 		"start": "electron ."
 	},
 	"devDependencies": {
-		"electron": "^16.0.1",
+		"electron": "^16.0.3",
 		"electron-builder": "^22.14.5",
 		"electron-packager": "^15.4.0"
 	}
