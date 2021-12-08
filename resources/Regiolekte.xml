@@ -277,4 +277,9 @@
 		<name>württembergisch</name>
 		<abbr>württ.</abbr>
 	</item>
+	<item>
+		<id>55</id>
+		<name>dialektal</name>
+		<abbr>dial.</abbr>
+	</item>
 </regiolekte>

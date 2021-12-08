@@ -7,7 +7,7 @@ let redWi = {
 	dropdown: {
 		vt: ["Wortbildung", "Wortverbindung", "Wortfeld", "Wortfeldartikel"],
 		lt: ["Textverweis", "Verweis intern", "Verweis extern"],
-		se: ["Cluster", "Entsprechung", "Gegensatz", "Hyperonym", "Hyponym", "Synonym"],
+		se: ["Cluster", "Entsprechung", "Gegensatz", "Hyperonym", "Hyponym", "Kontext", "Synonym"],
 	},
 	// Dropdown: Verweistextvorschläge sammeln
 	dropdownVerweistexte () {

@@ -524,9 +524,11 @@ let bedeutungen = {
 		}
 		// Tags eintragen
 		td.classList.remove("leer");
+		const tagsEx = [];
 		for (let tag of ta) {
 			if (!optionen.data.tags[tag.ty] ||
 					!optionen.data.tags[tag.ty].data[tag.id]) {
+				tagsEx.push(ta.findIndex(i => i === tag));
 				continue;
 			}
 			let span = document.createElement("span");
@@ -541,6 +543,14 @@ let bedeutungen = {
 				span.textContent = name;
 			}
 			span.title = `${typ}: ${name}`;
+		}
+		// ggf. nicht mehr existierende Tags entfernen
+		if (tagsEx.length) {
+			tagsEx.reverse();
+			for (const idx of tagsEx) {
+				ta.splice(idx, 1);
+			}
+			bedeutungen.bedeutungenGeaendert(true);
 		}
 	},
 	// Zeile zum Kopieren eines Bedeutungsgerüsts einfügen
