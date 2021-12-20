@@ -3898,7 +3898,6 @@ let xml = {
 			d = xml.data.xl;
 		// XML zusammenbauen
 		let xmlStr = `<?xml-model href="../share/rnc/Wortgeschichten.rnc" type="application/relax-ng-compact-syntax"?>\n`;
-		xmlStr += `<?xml-stylesheet type="text/css" href="../share/css/zdl.css"?>\n`;
 		xmlStr += `<WGD xmlns="http://www.zdl.org/ns/1.0">\n`;
 		xmlStr += `\t<Artikel xml:id="${d.md.id}" Typ="${d.md.ty}">\n`;
 		// Revisionen
