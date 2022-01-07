@@ -2684,6 +2684,22 @@ let redLit = {
 		td.ort.forEach((i, n) => td.ort[n] = i.replace(/\[u\.a\.\]/, "u. a."));
 		// Korrektur: Jahr ohne eckige Klammern
 		td.jahr = td.jahr.replace(/^\[|\]$/g, "");
+		// Korrektur: unvollständige eckige Klammern entfernen
+		for (const [k, v] of Object.entries(td)) {
+			if (Array.isArray(v)) {
+				for (let i = 0, len = v.length; i < len; i++) {
+					v[i] = cleanBrackets(v[i]);
+				}
+			} else {
+				td[k] = cleanBrackets(v);
+			}
+		}
+		function cleanBrackets (str) {
+			if (/[[\]]/.test(str) && !/\[.+\]/.test(str)) {
+				return str.replace(/[[\]]/g, "");
+			}
+			return str;
+		}
 		// Datensatz zurückgeben
 		return td;
 		// Großschreibung am Titelanfang
