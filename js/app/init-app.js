@@ -320,6 +320,7 @@ window.addEventListener("load", async () => {
 	document.getElementById("tags-laden").addEventListener("click", () => optionen.tagsManuLaden());
 	document.getElementById("tags-zuruecksetzen").addEventListener("click", () => optionen.tagsZuruecksetzen());
 	optionen.anwendenIconsDetailsListener(document.getElementById("einstellung-anzeige-icons-immer-an"));
+	optionen.anwendenHelleDunklerListener(document.getElementById("einstellung-helle-dunkler"));
 	// Formvarianten-Fenster
 	document.querySelectorAll("#stamm input").forEach(i => {
 		if (i.type === "button") {

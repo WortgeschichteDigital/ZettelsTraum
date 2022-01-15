@@ -480,7 +480,7 @@ p.leer {
 	display: inline-block;
 	width: 24px;
 	height: 24px;
-	background-color: var(--textExtremHell);
+	background-color: var(--iconHell);
 	-webkit-mask-image: url(../../img/check.svg);
 	mask-image: url(../../img/check.svg);
 }
@@ -496,7 +496,7 @@ p.leer {
 }
 
 .icon-link {
-	background-color: var(--textExtremHell);
+	background-color: var(--iconHell);
 }
 
 .icon-link:focus {

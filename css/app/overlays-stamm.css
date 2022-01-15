@@ -45,7 +45,7 @@
 	-webkit-mask-image: url(../../img/zahnrad.svg);
 	mask-image: url(../../img/zahnrad.svg);
 	margin-left: 2px;
-	background-color: var(--textExtremHell);
+	background-color: var(--iconHell);
 }
 
 #stamm-kopf .konfig:hover {
@@ -229,7 +229,7 @@
 	top: 1px;
 	margin-right: 10px;
 	vertical-align: bottom;
-	background-color: var(--textExtremHell);
+	background-color: var(--iconHell);
 }
 
 #kopieren-liste-cont .icon-link {

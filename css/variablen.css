@@ -10,6 +10,8 @@
 	--textWarnung: #d00;
 	--textWarnungHover: #f00;
 	--textDTA: #827b66;
+	/* Icon-Farben */
+	--iconHell: #e5e5e5;
 	/* Hintergrund-Farben */
 	--hintergrund: #f9f9f9;
 	--hintergrundDunkel: #e5e5e5;
@@ -56,4 +58,15 @@
 	--palette17: #000; /* schwarz */
 	/* Schatten */
 	--boxShadow: 3px 3px 6px 0 #d1d1d1;
+}
+
+.dunkler:root {
+	/* Textfarben */
+	--textHell: #212121;
+	--textSehrHell: #9e9e9e;
+	--textExtremHell: #bebebe;
+	/* Icon-Farben */
+	--iconHell: #9e9e9e;
+	/* Hintergrund-Farben */
+	--hover: #e5e5e5;
 }

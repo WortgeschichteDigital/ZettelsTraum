@@ -724,7 +724,11 @@ Aufrufdatum: 24. 12. 2019</pre>
 					<ul>
 						<li>Befindet sich in der <b>Zwischenablage</b> Ihres Computers eine <abbr title="Uniform Resource Locator" lang="en">URL</abbr> des <abbr title="Deutschen Textarchivs">DTA</abbr>, ein <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippet aus den Korpora des <abbr title="Digitalen Wörterbuchs der deutschen Sprache">DWDS</abbr>, ein bibliographisches <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippet, ein <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Datensatz oder eine <abbr title="Pica-Produktionsnummer">PPN</abbr>, wird das Importformular beim Öffnen einer neuen, leeren Karteikarte automatisch umgeschaltet und ein passendes Formularelement fokussiert, sodass Sie nur noch <kbd>⏎</kbd> drücken müssen, um den Import zu starten.</li>
 
-						<li>Wurde eine <b><abbr title="Digitales Wörterbuch der deutschen Sprache">DWDS</abbr>-, <abbr title="Deutsches Referenzkorpus">DeReKo</abbr>-, <abbr title="Extensible Markup Language" lang="en">XML</abbr>- oder <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Datei</b> geladen, bleibt diese mit dem Programm verknüpft. Befindet sich in der Zwischenablage kein Datensatz, der importiert werden könnte, wird beim Öffnen einer neuen Karteikarte <em>die</em> Importfunktion angezeigt, die zu der mit <i class="app-name"></i> verknüpften Datei passt. Dieses Verhalten ist besonders dann hilfreich, wenn Sie eine Datei mit mehreren Datensätzen geladen haben, die Sie nach und nach in verschiedene Karteikarten schreiben möchten.</li>
+						<li>
+							<p>Wurde eine <b><abbr title="Digitales Wörterbuch der deutschen Sprache">DWDS</abbr>-, <abbr title="Deutsches Referenzkorpus">DeReKo</abbr>-, <abbr title="Extensible Markup Language" lang="en">XML</abbr>- oder <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Datei</b> geladen, bleibt diese mit dem Programm verknüpft. Befindet sich in der Zwischenablage kein Datensatz, der importiert werden könnte, wird beim Öffnen einer neuen Karteikarte <em>die</em> Importfunktion angezeigt, die zu der mit <i class="app-name"></i> verknüpften Datei passt. Dieses Verhalten ist besonders dann hilfreich, wenn Sie eine Datei mit mehreren Datensätzen geladen haben, die Sie nach und nach in verschiedene Karteikarten schreiben möchten.</p>
+
+							<p>Die Verknüpfung einer Datei mit dem Programm kann wieder aufgehoben werden. Klicken Sie dazu im Importformular auf <i>Datei</i> und schließen den sich öffnenden Dateidialog direkt wieder, ohne eine Datei auszuwählen.</p>
+						</li>
 					</ul>
 
 					<p class="add-navi-details" id="karteikarte-dtaImport"><b><abbr title="Deutsches Textarchiv">DTA</abbr>-Import:</b> In das erste, längere Textfeld muss eine <abbr title="Uniform Resource Locator" lang="en">URL</abbr> eingefügt werden, die eine Seite im <abbr title="Deutschen Textarchiv">DTA</abbr> referenziert, also <abbr title="zum Beispiel">z. B.</abbr> <code class="quelltext long">https://www.deutschestextarchiv.de/book/view/gutzkow_wally_1835?p=35</code>. Anstoßen lässt sich der Import, indem man <kbd>⏎</kbd> drückt oder den Button <i>Importieren</i> anklickt. Danach werden die Textfelder <i>Datum, Autor, Beleg, Quelle, Korpus</i> und <i>Textsorte</i> automatisch ausgefüllt.</p>
@@ -1878,6 +1882,14 @@ Mustermann, Erika
 						<p>Gibt es ein neues Release, erscheint im Kopf des Hauptfensters das rote Icon <img src="../img/pfeil-kreis-rot-48.svg" width="20" height="20" alt="">. Durch Klick auf dieses Icon oder über den <a href="#menueHilfe-updates">Menüpunkt <i>Hilfe &gt; Updates</i></a> kann man ein Dialogfenster öffnen, in dem sich ein Link zur Download-Seite und <abbr title="gegebenenfalls">ggf.</abbr> auch die Release-Notes der aktuellen Version finden.</p>
 					</div>
 
+					<p class="erklaerung-option" id="einstellungen-allgemeinesHelleDunkler">sehr helle Elemente dunkler darstellen</p>
+
+					<div class="info">
+						<p><i>Standard:</i> nicht aktiviert</p>
+
+						<p>Ist die Einstellung aktiviert, werden sehr helle, nicht aktive Icons deutlich dunkler dargestellt. Daneben wirkt sich die Einstellung auf hellen Text und mitunter auch auf helle Hintergrundfarben aus.</p>
+					</div>
+
 					<p class="erklaerung-option" id="einstellungen-allgemeinesSpeichern">Speichern-Befehl</p>
 
 					<div class="info">
@@ -2251,6 +2263,16 @@ Mustermann, Erika
 						<p>Die Einstellung eignet sich für eine Arbeitsweise, bei der Sie Ihren Karteikasten in rascher Folge mit neuen Karten füllen wollen, die einzelnen Karten dabei aber nicht sofort auf Vollständigkeit (und Richtigkeit) aller Angaben überprüfen möchten. Mithilfe eines Filters im <a href="#filter-verschiedenes">Filterblock <i>Verschiedenes</i></a> können Sie die als unvollständig markierten Karten dann schnell wiederfinden (und <abbr title="gegebenenfalls">ggf.</abbr> ergänzen, korrigieren <abbr title="und so weiter">usw.</abbr>).</p>
 					</div>
 
+					<p class="erklaerung-option" id="einstellungen-karteikarteFokusBeleg">in neuer Karteikarte Belegfeld fokussieren</p>
+
+					<div class="info">
+						<p><i>Standard:</i> nicht aktiviert</p>
+
+						<p>Beim Anlegen einer <a href="#karteikarte">neuen Karteikarte</a> wird nicht das Datum-, sondern das Beleg-Feld fokussiert.</p>
+
+						<p>Befindet sich in der Zwischenablage Text für einen automatischen Belegimport (<abbr title="zum Beispiel">z. B.</abbr> eine <abbr title="Deutsches Textarchiv">DTA</abbr>-URL oder ein <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippet), wird diese Einstellung übergangen. Für solche Fälle kann es hilfreich sein, die <a href="#einstellungen-karteikarteClipboardClear">Einstellung zum Löschen der Zwischenablage nach Import</a> zu aktivieren.</p>
+					</div>
+
 					<p class="erklaerung-option" id="einstellungen-karteikarteOhneNachfrage">Textfelder beim Einfügen von Text via Icon, Menüeintrag oder Bedeutungsdefinition ohne Nachfrage ergänzen</p>
 
 					<div class="info">
@@ -2321,6 +2343,16 @@ Mustermann, Erika
 						<p><i>Standard:</i> nicht aktiviert</p>
 
 						<p>Wörter, für die die <a href="#menueKartei-formvariantenNurMarkieren">Option <i>nur markieren</i></a> aktiviert wurde, werden in die <a href="#einstellungen-karteikarteUeberpruefen">Überprüfung</a>, ob das Karteiwort vorhanden ist, nicht mit einbezogen. Durch das Aktivieren dieser Option kann man das Verhalten der App in diesem Punkt ändern.</p>
+					</div>
+
+					<p class="erklaerung-option" id="einstellungen-karteikarteClipboardClear">nach dem Import den Inhalt der Zwischenablage löschen</p>
+
+					<div class="info">
+						<p><i>Standard:</i> nicht aktiviert</p>
+
+						<p>Befindet sich in der Zwischenablage eine <abbr title="Deutsches Textarchiv">DTA</abbr>-URL, ein <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippet oder eine <abbr title="Pica-Produktionsnummer">PPN</abbr>, wird die Zwischenablage nach erfolgreichem Import der Daten gelöscht.</p>
+
+						<p>Es ist sinnvoll, diese Einstellung zu aktivieren, wenn bei neuen Karteikarten der <a href="#einstellungen-karteikarteFokusBeleg">Fokus standardmäßig im Belegfeld</a> liegen soll.</p>
 					</div>
 
 					<p class="erklaerung-option" id="einstellungen-karteikarteLeseansicht">bestehende Karteikarte in der Leseansicht öffnen</p>

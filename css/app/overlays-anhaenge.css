@@ -82,7 +82,7 @@
 .anhaenge-item a {
 	margin-left: 10px;
 	vertical-align: top;
-	background-color: var(--textExtremHell);
+	background-color: var(--iconHell);
 }
 
 .anhaenge-item a:focus {

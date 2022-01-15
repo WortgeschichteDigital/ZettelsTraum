@@ -20,7 +20,7 @@
 }
 
 #notizen-cont .icon-link {
-	background-color: var(--textExtremHell);
+	background-color: var(--iconHell);
 }
 
 #notizen-cont .icon-link:hover {

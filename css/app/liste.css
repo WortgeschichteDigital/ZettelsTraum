@@ -241,7 +241,7 @@ p.no-indent + .filter-baum, /* betrifft Verschiedenes > Filterlogik */
 
 #filter-kartendatum .icon-jetzt {
 	margin-left: 5px;
-	background-color: var(--textExtremHell);
+	background-color: var(--iconHell);
 	-webkit-mask-image: url(../../img/uhr.svg);
 	mask-image: url(../../img/uhr.svg);
 }
@@ -593,7 +593,7 @@ p.no-indent + .filter-baum, /* betrifft Verschiedenes > Filterlogik */
 
 .liste-kopficon {
 	margin-right: 15px;
-	background-color: var(--textExtremHell);
+	background-color: var(--iconHell);
 }
 
 .liste-kopficon:hover {
@@ -647,7 +647,7 @@ p.no-indent + .filter-baum, /* betrifft Verschiedenes > Filterlogik */
 	position: absolute;
 	top: 10px; /* padding-top */
 	left: -39px;
-	background-color: var(--textExtremHell);
+	background-color: var(--iconHell);
 	user-select: none;
 	cursor: default;
 }

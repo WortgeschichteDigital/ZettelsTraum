@@ -844,6 +844,7 @@ fenster = {
 			minWidth: 600,
 			minHeight: 350,
 			autoHideMenuBar: optionen.data.einstellungen ? optionen.data.einstellungen.autoHideMenuBar : false,
+			show: false,
 			webPreferences: {
 				contextIsolation: false,
 				nodeIntegration: true,
@@ -852,6 +853,10 @@ fenster = {
 				defaultEncoding: "utf-8",
 				spellcheck: false,
 			},
+		});
+		// Browserfenster anzeigen
+		bw.once("ready-to-show", function() {
+			this.show();
 		});
 		// ggf. maximieren
 		// (die Option kann noch fehlen)
@@ -1012,6 +1017,7 @@ fenster = {
 			height: bounds.height,
 			minWidth: bounds.minWidth,
 			minHeight: bounds.minHeight,
+			show: false,
 			webPreferences: {
 				contextIsolation: false,
 				nodeIntegration: true,
@@ -1066,6 +1072,10 @@ fenster = {
 		}
 		// Fenster öffnen
 		let bw = new BrowserWindow(opt);
+		// Browserfenster anzeigen
+		bw.once("ready-to-show", function() {
+			this.show();
+		});
 		// ggf. maximieren
 		if (typ === "bedeutungen" &&
 				optionen.data["fenster-bedeutungen"].maximiert) {
@@ -1162,6 +1172,7 @@ fenster = {
 			resizable: false,
 			minimizable: false,
 			maximizable: false,
+			show: false,
 			webPreferences: {
 				contextIsolation: false,
 				nodeIntegration: true,
@@ -1170,6 +1181,10 @@ fenster = {
 				defaultEncoding: "utf-8",
 				spellcheck: false,
 			},
+		});
+		// Browserfenster anzeigen
+		bw.once("ready-to-show", function() {
+			this.show();
 		});
 		// Windows/Linux: Menü nur erzeugen, wenn Dev-Tools zugänglich sein sollen; sonst haben die Fenster kein Menü
 		// macOS: minimales Menü mit nur einem Punkt erzeugen

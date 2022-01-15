@@ -192,7 +192,6 @@ let beleg = {
 		// Erstellen einer neuen Wortkartei aufgerufen, wird der fokussierte Button
 		// automatisch ausgeführt, wenn man Enter gedrückt hat)
 		await new Promise(resolve => setTimeout(() => resolve(true), 25));
-		let feldDa = document.getElementById("beleg-da");
 		if (neu && !beleg.leseansicht) {
 			// Was ist in der Zwischenablage?
 			const {clipboard} = require("electron"),
@@ -217,7 +216,11 @@ let beleg = {
 			} else if (belegImport.Datei.data.length) {
 				beleg.formularImport(belegImport.Datei.typ);
 			} else {
-				feldDa.focus();
+				let feld = document.querySelector("#beleg-da");
+				if (optionen.data.einstellungen["karteikarte-fokus-beleg"]) {
+					feld = document.querySelector("#beleg-bs");
+				}
+				feld.focus();
 			}
 		}
 	},

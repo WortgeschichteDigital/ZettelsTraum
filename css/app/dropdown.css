@@ -38,7 +38,7 @@ textarea.dropdown-feld {
 	width: 24px;
 	height: 24px;
 	background-color: #fff;
-	color: var(--textExtremHell);
+	color: var(--iconHell);
 }
 
 .dropdown-link-td:focus,

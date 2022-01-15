@@ -82,7 +82,7 @@
 	margin-left: 5px;
 	-webkit-mask-image: url(../../img/zahnrad.svg);
 	mask-image: url(../../img/zahnrad.svg);
-	background-color: var(--textExtremHell);
+	background-color: var(--iconHell);
 }
 
 #bedeutungen-gerueste-config:hover {
@@ -512,7 +512,7 @@ a[class*="icon-windrose"] {
 
 #bedeutungen-tools .icon-link {
 	top: 0;
-	background-color: var(--textExtremHell);
+	background-color: var(--iconHell);
 }
 
 #bedeutungen-tools .icon-link:hover {

@@ -276,7 +276,7 @@ p#quick-config-presets a {
 }
 
 #tags-cont .icon-link {
-	background-color: var(--textExtremHell);
+	background-color: var(--iconHell);
 }
 
 #tags-cont .icon-link:hover {

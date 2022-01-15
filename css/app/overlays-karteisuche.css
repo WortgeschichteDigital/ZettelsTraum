@@ -112,7 +112,7 @@
 #karteisuche-add-filter a {
 	margin: 0 5px 0 4px;
 	vertical-align: top;
-	background-color: var(--textExtremHell);
+	background-color: var(--iconHell);
 }
 
 #karteisuche-pfade a:focus,
@@ -171,7 +171,7 @@
 #karteisuche-filter p > a {
 	vertical-align: text-bottom;
 	margin: 0 5px 0 4px;
-	background-color: var(--textExtremHell);
+	background-color: var(--iconHell);
 }
 
 #karteisuche-filter p > a:hover {
