@@ -1383,6 +1383,7 @@ let belegImport = {
 			});
 			return;
 		} else if (result.canceled) {
+			belegImport.DateiReset();
 			return;
 		}
 		// Encoding ermitteln
