@@ -134,7 +134,7 @@
 
 #red-wi-cont a {
 	vertical-align: bottom;
-	background-color: var(--textExtremHell);
+	background-color: var(--iconHell);
 }
 
 #red-wi-cont a:focus {

@@ -90,6 +90,8 @@ let optionen = {
 			timeout: "10",
 			// automatisch nach Software-Update suchen
 			"updates-suche": true,
+			// helle Elemente dunkler darstellen
+			"helle-dunkler": false,
 			// legt das Verhalten von Kartei > Speichern fest
 			//   1 = Speicherkaskade
 			//   2 = nur aktive Funktion speichern
@@ -363,6 +365,8 @@ let optionen = {
 		liste.headerDetailsLetztesIcon();
 		// Icons für die Detailanzeige immer sichtbar?
 		optionen.anwendenIconsDetails();
+		// Farbe sehr heller Elemente anpassen
+		optionen.anwendenHelleDunkler();
 		// Icons im <caption> der Karteikarte
 		beleg.ctrlKuerzenAnzeige();
 		beleg.ctrlTrennungAnzeige();
@@ -382,6 +386,8 @@ let optionen = {
 		optionen.anwendenTags();
 		// Icons für die Detailanzeige immer sichtbar?
 		optionen.anwendenIconsDetails();
+		// Farbe sehr heller Elemente anpassen
+		optionen.anwendenHelleDunkler();
 		// maximale Breite des Notizen-Fensters
 		optionen.anwendenNotizenMaxBreite();
 		// Optionen im Optionen-Fenster eintragen
@@ -451,6 +457,22 @@ let optionen = {
 			iconsDetails.classList.add("liste-opt-anzeige-an");
 		} else {
 			iconsDetails.classList.remove("liste-opt-anzeige-an");
+		}
+	},
+	// Farbe sehr heller Elemente anpassen (Listener)
+	anwendenHelleDunklerListener (input) {
+		input.addEventListener("change", function() {
+			optionen.data.einstellungen["helle-dunkler"] = this.checked;
+			optionen.speichern();
+			optionen.anwendenHelleDunkler();
+		});
+	},
+	// Farbe sehr heller Elemente anpassen
+	anwendenHelleDunkler () {
+		if (optionen.data.einstellungen["helle-dunkler"]) {
+			document.documentElement.classList.add("dunkler");
+		} else {
+			document.documentElement.classList.remove("dunkler");
 		}
 	},
 	// bekannte Typen von Tag-Dateien

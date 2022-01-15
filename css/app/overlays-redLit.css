@@ -12,7 +12,7 @@
 
 #red-lit > div > div .icon-link {
 	vertical-align: text-bottom;
-	background-color: var(--textExtremHell);
+	background-color: var(--iconHell);
 }
 
 #red-lit > div > div .icon-link:focus {

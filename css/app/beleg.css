@@ -276,7 +276,7 @@ textarea#beleg-bs {
 .text-tools-bedeutung a,
 .text-tools-quelle a {
 	display: inline-block;
-	background-color: var(--textExtremHell);
+	background-color: var(--iconHell);
 }
 
 .text-tools a:hover,
@@ -489,7 +489,7 @@ textarea#beleg-bs {
 
 #beleg-lese-bd a {
 	vertical-align: bottom;
-	background-color: var(--textExtremHell);
+	background-color: var(--iconHell);
 	cursor: default;
 }
 

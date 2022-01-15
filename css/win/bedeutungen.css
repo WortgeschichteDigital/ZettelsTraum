@@ -97,7 +97,7 @@ h2 {
 	width: 24px;
 	height: 24px;
 	background-color: #fff;
-	color: var(--textExtremHell);
+	color: var(--iconHell);
 }
 
 .dropdown-link-td svg {

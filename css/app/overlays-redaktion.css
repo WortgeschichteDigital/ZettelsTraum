@@ -41,7 +41,7 @@
 
 #redaktion-cont .icon-link {
 	vertical-align: text-bottom;
-	background-color: var(--textExtremHell);
+	background-color: var(--iconHell);
 }
 
 #redaktion-cont .icon-link:focus {

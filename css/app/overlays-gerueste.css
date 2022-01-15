@@ -51,7 +51,7 @@
 
 #gerueste-cont .icon-link {
 	vertical-align: text-bottom;
-	background-color: var(--textExtremHell);
+	background-color: var(--iconHell);
 }
 
 #gerueste-cont .icon-link:hover {
