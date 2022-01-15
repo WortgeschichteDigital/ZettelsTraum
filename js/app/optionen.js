@@ -171,6 +171,8 @@ let optionen = {
 			"karteikarte-keine-fehlermeldung": false,
 			// neue Karteikarten als unvollständig markieren
 			unvollstaendig: false,
+			// in neuer Karteikarte Belegfeld fokussieren
+			"karteikarte-fokus-beleg": false,
 			// Textfeld immer ergänzen, wenn aus einem Dropdown-Menü ein Wert
 			// ausgewählt wurde (betrifft Bedeutung und Textsorte)
 			"immer-ergaenzen": false,
