@@ -110,12 +110,13 @@ let belegImport = {
 		// Dann mal los...
 		startImport();
 		// Startfunktion
-		function startImport () {
+		async function startImport () {
 			belegImport.DTAResetData();
 			belegImport.DTAData.url = `https://www.deutschestextarchiv.de/${titel_id}/${fak}`;
 			const url_xml = `https://www.deutschestextarchiv.de/book/download_xml/${titel_id}`;
 			document.activeElement.blur();
-			belegImport.DTARequest(url_xml, fak);
+			const result = await belegImport.DTARequest(url_xml, fak);
+			belegImport.clearClipboard(result, false);
 		}
 	},
 	// DTA-Import: Titel-ID ermitteln
@@ -164,17 +165,17 @@ let belegImport = {
 		// Fehler
 		if (response.fehler) {
 			belegImport.DTAFehler(`HttpRequest: ${response.fehler}`);
-			return;
+			return false;
 		}
 		// keine Textdaten
 		if (!response.text) {
 			belegImport.DTAFehler("HttpRequest: keine Daten empfangen");
-			return;
+			return false;
 		}
 		// DTAQ
 		if (/<title>DTA Qualitätssicherung<\/title>/.test(response.text)) {
 			belegImport.DTAFehler("DTAQ: Titel noch nicht freigeschaltet");
-			return;
+			return false;
 		}
 		// Daten parsen
 		// (Namespace-Attribut entfernen; da habe ich sonst Probleme mit
@@ -185,12 +186,13 @@ let belegImport = {
 		// XML nicht wohlgeformt
 		if (xmlDoc.querySelector("parsererror")) {
 			belegImport.DTAFehler("HttpRequest: XML-Daten nicht wohlgeformt");
-			return;
+			return false;
 		}
 		// XML-Daten okay => weiterverarbeiten
 		belegImport.DTAMeta(xmlDoc);
 		belegImport.DTAText(xmlDoc, fak);
 		belegImport.DTAFill();
+		return true;
 	},
 	// DTA-Import: Fehler beim Laden der Daten des DTA
 	//   fehlertyp = String
@@ -1440,12 +1442,13 @@ let belegImport = {
 		const {clipboard} = require("electron"),
 			cp = clipboard.readText().trim(),
 			ppn = belegImport.PPNCheck({ppn: cp}) ? true : false;
-		let importTypAktiv = "dereko";
+		let importTypAktiv = "dereko",
+			result;
 		if (document.getElementById("beleg-import-dwds").checked) {
 			importTypAktiv = "dwds";
 			let xml = belegImport.DWDSXMLCheck(cp);
 			if (xml) {
-				belegImport.DWDS(xml, "– Zwischenablage –", false);
+				result = belegImport.DWDS(xml, "– Zwischenablage –", false);
 			}
 		} else if (document.getElementById("beleg-import-xml").checked) {
 			// Download der XML-Daten
@@ -1461,13 +1464,14 @@ let belegImport = {
 				}
 				belegImport.Datei.meta = "";
 				belegImport.Datei.data = [xmlDaten];
-				belegImport.DateiImportAusfuehren(0);
+				result = await belegImport.DateiImportAusfuehren(0);
+				belegImport.clearClipboard(result, true);
 				return;
 			}
 			// Import aus Zwischenablage
 			importTypAktiv = "xml";
 			if (belegImport.XMLCheck(cp)) {
-				belegImport.XML(cp, "– Zwischenablage –", false);
+				result = belegImport.XML(cp, "– Zwischenablage –", false);
 			}
 		} else if (document.getElementById("beleg-import-bibtex").checked) {
 			// Download der BibTex-Daten
@@ -1491,13 +1495,14 @@ let belegImport = {
 					});
 					return;
 				}
-				belegImport.DateiImportAusfuehren(0);
+				result = await belegImport.DateiImportAusfuehren(0);
+				belegImport.clearClipboard(result, true);
 				return;
 			}
 			// Import aus Zwischenablage
 			importTypAktiv = "bibtex";
 			if (belegImport.BibTeXCheck(cp)) {
-				belegImport.BibTeX(cp, "– Zwischenablage –", false);
+				result = belegImport.BibTeX(cp, "– Zwischenablage –", false);
 			}
 		}
 		// keine Daten vorhanden => Meldung + Abbruch
@@ -1517,7 +1522,10 @@ let belegImport = {
 		// direkt importieren oder Importfenster öffnen
 		if (belegImport.Datei.data.length === 1) {
 			// nur ein Datensatz vorhanden => direkt importieren
-			belegImport.DateiImportAusfuehren(0);
+			await belegImport.DateiImportAusfuehren(0);
+			if (result) {
+				belegImport.clearClipboard(result, true);
+			}
 		} else {
 			// mehrere Datensätze vorhanden => Importfenster öffnen
 			belegImport.DateiImportFenster();
@@ -1694,7 +1702,7 @@ let belegImport = {
 					}
 				},
 			});
-			return;
+			return false;
 		}
 		// Wurde der Datensatz schon einmal importiert?
 		if (belegImport.Datei.data[idx].importiert) {
@@ -1709,10 +1717,11 @@ let belegImport = {
 					}
 				},
 			});
-			return;
+			return false;
 		}
 		// Dann mal los...
 		startImport();
+		return true;
 		// Import-Funktion
 		function startImport () {
 			let data = belegImport.Datei.data[idx];
@@ -2705,6 +2714,26 @@ let belegImport = {
 					document.getElementById("beleg-dta").focus();
 				},
 			});
+		}
+	},
+	// Clipboard nach Import leeren
+	//   result = Boolean
+	//     (Importaktion ist geglückt)
+	//   zwischenspeicher = Boolean
+	//     (Zwischenspeicher für Dateien löschen
+	clearClipboard (result, zwischenspeicher) {
+		if (!result) {
+			return;
+		}
+		if (optionen.data.einstellungen["karteikarte-clear-clipboard"]) {
+			const {clipboard} = require("electron");
+			clipboard.clear();
+			if (zwischenspeicher) {
+				if (belegImport.Datei.typ === "ppn") {
+					belegImport.Datei.typ = "xml";
+				}
+				belegImport.DateiReset();
+			}
 		}
 	},
 };

@@ -2266,7 +2266,7 @@ Mustermann, Erika
 
 						<p>Beim Anlegen einer <a href="#karteikarte">neuen Karteikarte</a> wird nicht das Datum-, sondern das Beleg-Feld fokussiert.</p>
 
-						<p>Befindet sich in der Zwischenablage Text für einen automatischen Belegimport (<abbr title="zum Beispiel">z. B.</abbr> eine <abbr title="Deutsches Textarchiv">DTA</abbr>-URL oder ein <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippet), wird diese Einstellung übergangen.</p>
+						<p>Befindet sich in der Zwischenablage Text für einen automatischen Belegimport (<abbr title="zum Beispiel">z. B.</abbr> eine <abbr title="Deutsches Textarchiv">DTA</abbr>-URL oder ein <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippet), wird diese Einstellung übergangen. Für solche Fälle kann es hilfreich sein, die <a href="#einstellungen-karteikarteClipboardClear">Einstellung zum Löschen der Zwischenablage nach Import</a> zu aktivieren.</p>
 					</div>
 
 					<p class="erklaerung-option" id="einstellungen-karteikarteOhneNachfrage">Textfelder beim Einfügen von Text via Icon, Menüeintrag oder Bedeutungsdefinition ohne Nachfrage ergänzen</p>
@@ -2339,6 +2339,16 @@ Mustermann, Erika
 						<p><i>Standard:</i> nicht aktiviert</p>
 
 						<p>Wörter, für die die <a href="#menueKartei-formvariantenNurMarkieren">Option <i>nur markieren</i></a> aktiviert wurde, werden in die <a href="#einstellungen-karteikarteUeberpruefen">Überprüfung</a>, ob das Karteiwort vorhanden ist, nicht mit einbezogen. Durch das Aktivieren dieser Option kann man das Verhalten der App in diesem Punkt ändern.</p>
+					</div>
+
+					<p class="erklaerung-option" id="einstellungen-karteikarteClipboardClear">nach dem Import den Inhalt der Zwischenablage löschen</p>
+
+					<div class="info">
+						<p><i>Standard:</i> nicht aktiviert</p>
+
+						<p>Befindet sich in der Zwischenablage eine <abbr title="Deutsches Textarchiv">DTA</abbr>-URL, ein <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippet oder eine <abbr title="Pica-Produktionsnummer">PPN</abbr>, wird die Zwischenablage nach erfolgreichem Import der Daten gelöscht.</p>
+
+						<p>Es ist sinnvoll, diese Einstellung zu aktivieren, wenn bei neuen Karteikarten der <a href="#einstellungen-karteikarteFokusBeleg">Fokus standardmäßig im Belegfeld</a> liegen soll.</p>
 					</div>
 
 					<p class="erklaerung-option" id="einstellungen-karteikarteLeseansicht">bestehende Karteikarte in der Leseansicht öffnen</p>

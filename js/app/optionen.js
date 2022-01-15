@@ -186,6 +186,8 @@ let optionen = {
 			"wort-check": true,
 			// bei der Überprüfung nach Text-Import Wörter mit einbeziehen, die nur markiert werden sollen
 			"wort-check-nur-markieren": false,
+			// nach dem Import den Inhalt der Zwischenablage löschen
+			"karteikarte-clear-clipboard": false,
 			// bestehende Karteikarten in der Leseansicht öffnen
 			leseansicht: true,
 			// FILTERLEISTE
