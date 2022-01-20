@@ -768,7 +768,7 @@ let beleg = {
 				this.parentNode.classList.contains("text-tools-bedeutung")) {
 				beleg.toolsText(this);
 			} else if (this.parentNode.classList.contains("text-tools-quelle")) {
-				beleg.toolsQuelleLaden();
+				beleg.toolsQuelle(this);
 			}
 		});
 	},
@@ -1411,6 +1411,16 @@ let beleg = {
 		}
 		return false; // offenbar kein illegales Nesting
 	},
+	// Tools für Quelle-Feld
+	//   link = Element
+	//     (Link, auf den geklickt wurde)
+	toolsQuelle (link) {
+		if (link.classList.contains("icon-pfeil-kreis")) {
+			beleg.toolsQuelleLaden();
+		} else if (link.classList.contains("icon-link-link")) {
+			beleg.toolsQuelleDTALink();
+		}
+	},
 	// Inhalt des Quelle-Felds neu laden
 	//   shortcut = true || undefined
 	async toolsQuelleLaden (shortcut = false) {
@@ -1746,6 +1756,28 @@ let beleg = {
 			typ: "",
 			daten: "",
 		};
+	},
+	// DTA-Link aus dem Quelle-Feld in das Importformular holen
+	toolsQuelleDTALink () {
+		const quelle = document.querySelector("#beleg-qu").value,
+			link = quelle.match(/https?:\/\/www\.deutschestextarchiv\.de\/[^\s]+/);
+		if (!link) {
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Kein DTA-Link gefunden.",
+			});
+			return;
+		}
+		window.scrollTo({
+			left: 0,
+			top: 0,
+			behavior: "smooth",
+		});
+		document.querySelector("#beleg-import-dta").click();
+		const dta = document.querySelector("#beleg-dta");
+		dta.value = link[0];
+		dta.dispatchEvent(new Event("input"));
+		document.querySelector("#beleg-dta-bis").select();
 	},
 	// Bewertung des Belegs vor- od. zurücknehmen
 	//   stern = Element

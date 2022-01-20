@@ -141,27 +141,31 @@ let tastatur = {
 			document.getElementById("liste-link-filter").click();
 		}
 		// KARTEIKARTE: Key "d" || "i" || "k" || "m" || "t" || "u"
-		if (m === "Ctrl" && helfer.belegOffen()) {
-			if (evt.key === "d") {
-				beleg.toolsQuelleLaden(true);
-			} else if (evt.key === "i") {
-				if (kopieren.an) {
-					kopieren.addKarte();
-				} else {
-					beleg.ctrlZwischenablage(beleg.data);
+		if (helfer.belegOffen()) {
+			if (m === "Ctrl") {
+				if (evt.key === "d") {
+					beleg.toolsQuelleLaden(true);
+				} else if (evt.key === "i") {
+					if (kopieren.an) {
+						kopieren.addKarte();
+					} else {
+						beleg.ctrlZwischenablage(beleg.data);
+					}
+				} else if (evt.key === "k") {
+					beleg.ctrlKuerzen();
+				} else if (evt.key === "m") {
+					let id = document.activeElement.id;
+					if (/^beleg-(bd|bs)$/.test(id)) {
+						let a = document.getElementById(id).closest("tr").previousSibling.querySelector(".icon-tools-sonderzeichen");
+						a.dispatchEvent(new MouseEvent("click"));
+					}
+				} else if (evt.key === "t") {
+					beleg.ctrlTrennung();
+				} else if (evt.key === "u") {
+					beleg.leseToggle(true);
 				}
-			} else if (evt.key === "k") {
-				beleg.ctrlKuerzen();
-			} else if (evt.key === "m") {
-				let id = document.activeElement.id;
-				if (/^beleg-(bd|bs)$/.test(id)) {
-					let a = document.getElementById(id).closest("tr").previousSibling.querySelector(".icon-tools-sonderzeichen");
-					a.dispatchEvent(new MouseEvent("click"));
-				}
-			} else if (evt.key === "t") {
-				beleg.ctrlTrennung();
-			} else if (evt.key === "u") {
-				beleg.leseToggle(true);
+			} else if (m === "Ctrl+Shift" && evt.key === "D") {
+				beleg.toolsQuelleDTALink();
 			}
 			return;
 		}
