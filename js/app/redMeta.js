@@ -43,15 +43,28 @@ let redMeta = {
 			let cont = document.getElementById(`red-meta-${tag}`),
 				arr = [],
 				tags = optionen.data.tags[tag],
-				name = tag.substring(0, 1).toUpperCase() + tag.substring(1);
+				name = tag.substring(0, 1).toUpperCase() + tag.substring(1),
+				del = []; // zu löschende Tags, die nicht mehr existieren
 			if (tags) { // Tags vorhanden
 				for (let i of data.rd[keys[tag]]) {
+					if (!tags.data[i.id]) { // Tag existiert nicht mehr
+						del.push(i.id);
+						continue;
+					}
 					arr.push(tags.data[i.id].name);
 				}
 			} else { // Tags fehlen
 				cont.textContent = `${name}-Datei fehlt`;
 				cont.classList.add("kein-wert");
-				return;
+				continue;
+			}
+			// ggf. nicht mehr existente Tags löschen
+			if (del.length) {
+				for (const i of del) {
+					const idx = data.rd[keys[tag]].findIndex(entry => entry.id === i);
+					data.rd[keys[tag]].splice(idx, 1);
+				}
+				kartei.karteiGeaendert(true);
 			}
 			// Tags anzeigen
 			if (arr.length) {

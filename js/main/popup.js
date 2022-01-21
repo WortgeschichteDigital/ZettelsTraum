@@ -138,6 +138,11 @@ let punkte = {
 			optionen.sektionWechseln(document.getElementById("einstellungen-link-karteikarte"));
 		`,
 	},
+	karteiOeffnen: {
+		label: "Kartei öffnen",
+		icon: "dokument-kartei.png",
+		click: "popup.karteiLink.click()",
+	},
 	kopfIconsConf: {
 		label: "Icon-Einstellungen",
 		icon: "zahnrad.png",

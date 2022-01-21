@@ -34,6 +34,8 @@ let popup = {
 	startDatei: "",
 	// speichert den Pfad aus einer Karteiliste (zur Zeit, 2019-10-26, nur Karteisuche)
 	karteiPfad: "",
+	// speichert den Karteilink, auf dem ein Rechtsklick ausgeführt wurde
+	karteiLink: null,
 	// speichert das Element, auf das sich das Event bezieht
 	element: null,
 	// Popup öffnen
@@ -112,7 +114,7 @@ let popup = {
 			items = ["filterReset", "sep", "belegHinzufuegen"];
 			popup.belegeAuflisten(items);
 		} else if (target === "start-datei") {
-			items = ["karteiEntfernen", "sep", "ordner", "sep", "karteiErstellen"];
+			items = ["karteiEntfernen", "sep", "karteiOeffnen", "ordner", "sep", "karteiErstellen"];
 		} else if (target === "link") {
 			let oben = overlay.oben();
 			if (oben === "stamm") {
@@ -188,7 +190,7 @@ let popup = {
 				popup.belegeAuflisten(items);
 			}
 		} else if (target === "kartei-pfad") {
-			items = ["ordnerKartei", "sep", "schliessen"];
+			items = ["karteiOeffnen", "ordnerKartei", "sep", "schliessen"];
 			if (kartei.wort) {
 				items.push("sep", "belegHinzufuegen");
 				popup.belegeAuflisten(items);
@@ -303,6 +305,7 @@ let popup = {
 			if (pfad[i].classList) {
 				if (pfad[i].classList.contains("start-datei")) {
 					popup.startDatei = pfad[i].dataset.datei;
+					popup.karteiLink = pfad[i];
 					return "start-datei";
 				} else if (pfad[i].classList.contains("link")) {
 					popup.element = pfad[i];
@@ -356,6 +359,7 @@ let popup = {
 			// Datasets
 			if (pfad[i].dataset && pfad[i].dataset.pfad) {
 				popup.karteiPfad = pfad[i].dataset.pfad;
+				popup.karteiLink = pfad[i];
 				return "kartei-pfad";
 			}
 			// IDs untergeordnet

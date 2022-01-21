@@ -1113,6 +1113,10 @@ fenster = {
 		});
 		// Seite ist fertig geladen
 		bw.webContents.once("did-finish-load", function() {
+			// ggf. helle Elemente dunkler darstellen
+			if (optionen.data.einstellungen["helle-dunkler"]) {
+				this.send("helle-dunkler");
+			}
 			// ggf. Abschnitt öffnen
 			if (abschnitt) {
 				// die IPC-Listener im Renderer-Prozess müssen erst initialisiert werden

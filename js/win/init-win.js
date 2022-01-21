@@ -5,6 +5,8 @@ let initWin = {
 	// Listener für Signale des Main-Prozesses
 	ipcListener () {
 		const {ipcRenderer} = require("electron");
+		// helle Elemente dunkler darstellen
+		ipcRenderer.on("helle-dunkler", () => document.documentElement.classList.add("dunkler"));
 		// Abschnitt öffnen (Dokumentation, Handbuch)
 		ipcRenderer.on("oeffne-abschnitt", (evt, abschnitt) => hilfe.naviSprungAusfuehren(abschnitt));
 		// Gerüstdaten übernehmen (Bedeutungen)

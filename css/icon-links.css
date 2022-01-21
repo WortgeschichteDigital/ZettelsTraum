@@ -53,6 +53,11 @@
 	mask-image: url(../img/kreis-info.svg);
 }
 
+.icon-link-link {
+	-webkit-mask-image: url(../img/link.svg);
+	mask-image: url(../img/link.svg);
+}
+
 .icon-lupe {
 	-webkit-mask-image: url(../img/lupe.svg);
 	mask-image: url(../img/lup.svg);

@@ -383,10 +383,7 @@ let karteisuche = {
 				};
 			}
 			// Werden in der Kartei mehrere Wörter behandelt?
-			let woerter = [datei.wo];
-			if (/, (?!der|die|das)/.test(datei.wo)) {
-				woerter = datei.wo.split(", ");
-			}
+			let woerter = datei.wo.split(", ");
 			for (let i = 0, len = woerter.length; i < len; i++) {
 				let ziel = kartei;
 				if (i > 0) {
@@ -920,6 +917,7 @@ let karteisuche = {
 			let b = this.dataset.buchstabe,
 				liste = document.getElementById("karteisuche-karteien"),
 				treffer = 0;
+			liste.scrollTop = 0;
 			// filtern
 			for (let i of liste.childNodes) {
 				let anzeigen = false;
