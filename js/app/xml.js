@@ -217,9 +217,21 @@ let xml = {
 		let href = data.qu.match(/https?:[^\s]+|www\.[^\s]+/);
 		if (href) {
 			let url = href[0].replace(/(&gt;|[.:,;!?)\]}>]+)$/, "");
+			// ggf. Protokoll ergänzen
 			if (!/^https?:/.test(href[0])) {
 				url = `https://${href[0]}`;
 			}
+			// DTA-Links aufbereiten
+			if (/www\.deutschestextarchiv\.de\//.test(url)) {
+				// immer https
+				url = url.replace(/^http:/, "https:");
+				// immer Zitierform
+				const webform = url.match(/^https:\/\/www\.deutschestextarchiv\.de\/book\/view\/(.+)\?p=(.+)$/);
+				if (webform) {
+					url = `https://www.deutschestextarchiv.de/${webform[1]}/${webform[2]}`;
+				}
+			}
+			// Tag erzeugen
 			let urlTag = document.createElementNS(ns, "URL");
 			fundstelle.appendChild(urlTag);
 			urlTag.appendChild( document.createTextNode( helferXml.maskieren( {text: url} ) ) );
