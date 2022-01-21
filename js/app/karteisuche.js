@@ -917,6 +917,7 @@ let karteisuche = {
 			let b = this.dataset.buchstabe,
 				liste = document.getElementById("karteisuche-karteien"),
 				treffer = 0;
+			liste.scrollTop = 0;
 			// filtern
 			for (let i of liste.childNodes) {
 				let anzeigen = false;
