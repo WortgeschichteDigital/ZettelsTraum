@@ -215,6 +215,13 @@ window.addEventListener("load", async () => {
 	document.addEventListener("mousedown", function() {
 		quick.accessRolesActive = document.activeElement;
 	});
+	// BearbeiterIn registrieren
+	document.querySelector("#bearbeiterin-name").addEventListener("keydown", evt => {
+		if (evt.key === "Enter") {
+			bearbeiterin.check();
+		}
+	});
+	document.querySelector("#bearbeiterin-registrieren").addEventListener("click", evt => bearbeiterin.check());
 	// Wort-Element
 	document.getElementById("wort").addEventListener("click", () => kartei.wortAendern());
 	// Erinnerungen-Icon
@@ -461,7 +468,7 @@ window.addEventListener("load", async () => {
 	// Schließen-Links von Overlays
 	document.querySelectorAll(".overlay-schliessen").forEach(a => overlay.initSchliessen(a));
 	// Handbuch-Links von Overlays
-	document.querySelectorAll(".icon-handbuch").forEach(a => helfer.handbuchLink(a));
+	document.querySelectorAll(".icon-handbuch, .link-handbuch").forEach(a => helfer.handbuchLink(a));
 	// Rotationsanimationen
 	document.querySelectorAll("#kopieren-einfuegen-reload").forEach(i => {
 		i.addEventListener("animationend", function() {

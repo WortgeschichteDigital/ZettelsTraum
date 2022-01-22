@@ -419,7 +419,8 @@ let karteisuche = {
 					});
 				}
 				// Behandelt-Datensätze
-				if (woerter.length > 1) {
+				if (woerter.length > 1 &&
+						!datei.rd.bh) {
 					let mit = [...woerter];
 					mit.splice(i, 1);
 					ziel.behandeltMit = [...mit];
@@ -640,6 +641,7 @@ let karteisuche = {
 		// Karteiliste füllen
 		let cont = document.getElementById("karteisuche-karteien"),
 			alphabet = new Set();
+		cont.scrollTop = 0;
 		helfer.keineKinder(cont);
 		for (let wort of woerter) {
 			// Absatz

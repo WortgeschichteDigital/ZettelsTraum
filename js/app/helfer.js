@@ -14,6 +14,10 @@ let helfer = {
 			fl.classList.add("geladen");
 			fl.addEventListener("transitionend", function() {
 				this.classList.add("aus");
+				if (typeof optionen !== "undefined" && // die Funktion wird auch von Nebenfenstern genutzt
+						!optionen.data.einstellungen.bearbeiterin) {
+					bearbeiterin.oeffnen();
+				}
 			});
 		}, 500);
 	},

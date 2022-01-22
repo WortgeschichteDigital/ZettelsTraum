@@ -117,6 +117,7 @@ layoutMenu = [
 				label: "Neues Fenster",
 				icon: path.join(__dirname, "img", "menu", "fenster-plus.png"),
 				click: () => fenster.erstellen(""),
+				accelerator: "CommandOrControl+Shift+N",
 			},
 			{ type: "separator" },
 			{
