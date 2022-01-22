@@ -13,6 +13,7 @@
 		<link rel="stylesheet" href="css/app/liste.css">
 		<link rel="stylesheet" href="css/app/overlays.css">
 		<link rel="stylesheet" href="css/app/overlays-anhaenge.css">
+		<link rel="stylesheet" href="css/app/overlays-bearbeiterin.css">
 		<link rel="stylesheet" href="css/app/overlays-belegeTaggen.css">
 		<link rel="stylesheet" href="css/app/overlays-ctrlC.css">
 		<link rel="stylesheet" href="css/app/overlays-dialog.css">
@@ -48,6 +49,7 @@
 		<script src="js/app/init-app.js"></script>
 		<script src="js/app/anhaenge.js"></script>
 		<script src="js/app/annotieren.js"></script>
+		<script src="js/app/bearbeiterin.js"></script>
 		<script src="js/app/bedeutungen.js"></script>
 		<script src="js/app/bedeutungenDrag.js"></script>
 		<script src="js/app/bedeutungenGeruest.js"></script>
@@ -544,6 +546,19 @@
 				<div id="liste-belege-cont"></div>
 			</div>
 		</section>
+
+		<!-- OVERLAY: Bearbeiterin registrieren -->
+		<div id="bearbeiterin" class="overlay aus"><div>
+			<h2><span class="icon-h icon-h-bearbeiterin"> </span
+				>Registrieren<a href="#" class="icon-link icon-handbuch" title="Abschnitt im Handbuch öffnen" data-handbuch="einstellungen-allgemeinesBearbeiterin"> </a><a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"> </a></h2>
+			<div id="bearbeiterin-rahmen">
+				<p><i class="app-name"></i> trägt bei vielen Aktionen den Namen der BearbeiterIn in die Kartei ein. Darum müssen Sie sich in den Einstellungen registrieren (<a href="#" class="link-handbuch" data-handbuch="einstellungen-allgemeinesBearbeiterin">Erläuterungen</a>).</p>
+				<p class="button"
+					><input type="text" value="" placeholder="Name, Vorname" id="bearbeiterin-name"
+					><input type="button" value="Registrieren" id="bearbeiterin-registrieren"
+				></p>
+			</div>
+		</div></div>
 
 		<!-- OVERLAY: Einstellungen -->
 		<div id="einstellungen" class="overlay aus"><div>

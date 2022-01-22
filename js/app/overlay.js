@@ -12,7 +12,11 @@ let overlay = {
 		// Ist das Fenster schon offen?
 		const schon_offen = !fenster.classList.contains("aus");
 		// Fenster in den Vordergrund holen
-		fenster.style.zIndex = ++overlay.zIndex;
+		if (fenster.id === "bearbeiterin") {
+			fenster.style.zIndex = 1e6; // dieses Fenster muss immer über allem anderen liegen
+		} else {
+			fenster.style.zIndex = ++overlay.zIndex;
+		}
 		// Fenster einblenden
 		clearTimeout(overlay.timeout);
 		if (schon_offen) {
@@ -46,7 +50,10 @@ let overlay = {
 			fenster = fenster.parentNode;
 		}
 		// Sonderbehandlung für einige Fenster
-		if (fenster.id === "tagger") {
+		if (fenster.id === "bearbeiterin" &&
+				!bearbeiterin.check()) {
+			return;
+		} else if (fenster.id === "tagger") {
 			tagger.schliessen();
 			return;
 		} else if (fenster.id === "notizen") {

@@ -1,0 +1,30 @@
+@charset "utf-8";
+
+/* Bearbeiterin --------------------------------- */
+#bearbeiterin > div {
+	margin-top: 40px;
+	max-width: 550px;
+}
+
+.icon-h-bearbeiterin {
+	-webkit-mask-image: url(../../img/personen.svg);
+	mask-image: url(../../img/personen.svg);
+}
+
+#bearbeiterin-rahmen {
+	padding: 10px;
+}
+
+#bearbeiterin-rahmen p:first-child {
+	font-size: 14px;
+	line-height: 20px;
+}
+
+#bearbeiterin-rahmen p:last-child {
+	margin: 20px auto 0 auto;
+	width: max-content;
+}
+
+#bearbeiterin-name {
+	width: 250px;
+}

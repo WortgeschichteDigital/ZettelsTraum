@@ -2,10 +2,6 @@
 
 let erinnerungen = {
 	data: {
-		bearbeiterin: {
-			okay: false,
-			text: `Sie haben sich noch nicht registriert (<a href="#" class="link-erinnerung" data-funktion="einstellungen-allgemeines">⇨ <i>APP &gt; Einstellungen &gt; Allgemeines &gt; BearbeiterIn</i></a>).`,
-		},
 		metadaten: {
 			okay: false,
 			text: `In den redaktionellen Metadaten ist keine BearbeiterIn registriert (<a href="#" class="link-erinnerung" data-funktion="metadaten">⇨ <i>Redaktion &gt; Metadaten</i></a>).`,
@@ -29,13 +25,6 @@ let erinnerungen = {
 		}
 		// Tests durchführen
 		erinnerungen.allesOkay = true;
-		// BearbeiterIn registriert?
-		if (optionen.data.einstellungen.bearbeiterin) {
-			erinnerungen.data.bearbeiterin.okay = true;
-		} else {
-			erinnerungen.allesOkay = false;
-			erinnerungen.data.bearbeiterin.okay = false;
-		}
 		// BearbeiterIn in Metadaten?
 		if (data.rd.be.length) {
 			erinnerungen.data.metadaten.okay = true;
@@ -95,7 +84,7 @@ let erinnerungen = {
 			if (erinnerungen.data[i].okay) {
 				continue;
 			}
-			text.push(`• ${erinnerungen.data[i].text.replace(/APP/g, appInfo.name)}`);
+			text.push(`• ${erinnerungen.data[i].text}`);
 		}
 		let punkt = "Der folgende Punkt sollte";
 		if (text.length > 1) {
