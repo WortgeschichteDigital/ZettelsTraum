@@ -1194,6 +1194,13 @@ let optionen = {
 		ele.addEventListener("input", function() {
 			optionen.aendereEinstellung(this);
 		});
+		if (ele.id === "einstellung-bearbeiterin") {
+			ele.addEventListener("blur", () => {
+				if (!optionen.data.einstellungen.bearbeiterin) {
+					bearbeiterin.oeffnen();
+				}
+			});
+		}
 	},
 	// Einstellung aus dem Einstellungen-Dialog ändern
 	//   ele = Element
