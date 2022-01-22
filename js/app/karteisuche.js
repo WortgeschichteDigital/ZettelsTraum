@@ -419,7 +419,8 @@ let karteisuche = {
 					});
 				}
 				// Behandelt-Datensätze
-				if (woerter.length > 1) {
+				if (woerter.length > 1 &&
+						!datei.rd.bh) {
 					let mit = [...woerter];
 					mit.splice(i, 1);
 					ziel.behandeltMit = [...mit];
