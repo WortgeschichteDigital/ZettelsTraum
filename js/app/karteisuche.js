@@ -640,6 +640,7 @@ let karteisuche = {
 		// Karteiliste füllen
 		let cont = document.getElementById("karteisuche-karteien"),
 			alphabet = new Set();
+		cont.scrollTop = 0;
 		helfer.keineKinder(cont);
 		for (let wort of woerter) {
 			// Absatz
