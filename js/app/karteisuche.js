@@ -514,6 +514,9 @@ let karteisuche = {
 		}
 		// Karteien filtern
 		for (const kartei of karteisuche.ztj) {
+			if (!karteisuche.ztjCache[kartei.pfad]) {
+				continue;
+			}
 			let datei = karteisuche.ztjCache[kartei.pfad].data;
 			if (datei.rd.er) {
 				datei.rd.er = kartei.redaktion;
