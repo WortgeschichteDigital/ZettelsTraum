@@ -3,7 +3,7 @@
 /* Einstellungen -------------------------------- */
 #einstellungen > div {
 	margin-top: 40px;
-	max-width: 700px;
+	max-width: 900px;
 }
 
 .icon-h-einstellungen {
@@ -140,7 +140,7 @@
 	display: flex;
 	flex-direction: column;
 	flex-wrap: wrap;
-	padding-left: 24px;
+	align-content: flex-start;
 	height: 145px; /* 5 Items pro Spalte */
 }
 
@@ -150,7 +150,7 @@
 
 #einstellungen-cont .einstellungen-spalten p {
 	margin: 0 10px 5px 0;
-	padding-left: 1px; /* damit beim Fokussieren der Checkbox der linke Rand nicht abgeschnitten erscheint */
+	padding-left: 24px; /* damit beim Fokussieren der Checkbox der linke Rand nicht abgeschnitten erscheint */
 	overflow: hidden;
 	text-indent: 0;
 	text-overflow: ellipsis;
