@@ -1698,6 +1698,7 @@ let karteisuche = {
 	// (für die Bedeutungen wird es komplizierter)
 	filterVolltext: {
 		datei: ["no", "wo"],
+		redaktion: ["bh", "nl", "no"],
 		karten: ["au", "bl", "bs", "da", "kr", "no", "qu", "sy", "ts"],
 	},
 	// überprüfen, ob eine Kartei zu den übergebenen Filtern passt
@@ -1753,6 +1754,12 @@ let karteisuche = {
 				// Datenfelder Kartei
 				for (let ds of karteisuche.filterVolltext.datei) {
 					if (filter.reg.test(datei[ds])) {
+						continue forX;
+					}
+				}
+				// Datenfelder Redaktion
+				for (let ds of karteisuche.filterVolltext.redaktion) {
+					if (filter.reg.test(datei.rd[ds])) {
 						continue forX;
 					}
 				}
