@@ -28,7 +28,8 @@
 }
 
 #red-meta-nebenlemmata,
-#red-meta-behandelt-mit {
+#red-meta-behandelt-mit,
+#red-meta-notizen {
 	width: calc(100% - 12px);
 }
 

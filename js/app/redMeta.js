@@ -21,6 +21,8 @@ let redMeta = {
 		document.getElementById("red-meta-nebenlemmata").value = data.rd.nl;
 		// Behandelt-mit-Feld füllen
 		document.getElementById("red-meta-behandelt-mit").value = data.rd.bh;
+		// Notizen-Feld füllen
+		document.getElementById("red-meta-notizen").value = data.rd.no;
 		// Sachgebiete aufbauen
 		redMeta.tags();
 		// Liste der BearbeterInnen erstellen und das Textfeld leeren
@@ -196,11 +198,12 @@ let redMeta = {
 	//   input = Element
 	//     (das Textfeld)
 	aktionText (input) {
-		if (/red-meta-(nebenlemmata|behandelt-mit)/.test(input.id)) {
+		if (/red-meta-(nebenlemmata|behandelt-mit|notizen)/.test(input.id)) {
 			input.addEventListener("input", function() {
 				const map = {
 					"red-meta-nebenlemmata": "nl",
 					"red-meta-behandelt-mit": "bh",
+					"red-meta-notizen": "no",
 				};
 				const key = map[this.id];
 				data.rd[key] = this.value;
