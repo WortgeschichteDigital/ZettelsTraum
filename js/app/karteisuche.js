@@ -313,6 +313,8 @@ let karteisuche = {
 		// Animation einblenden
 		karteisuche.animation(true);
 		// Dateien suchen
+		const fs = require("fs"),
+			fsP = fs.promises;
 		setTimeout(async () => {
 			karteisuche.ztj = [];
 			if (pfade.length) {
@@ -320,7 +322,17 @@ let karteisuche = {
 				for (let ordner of pfade) {
 					const exists = await helfer.exists(ordner);
 					if (exists) {
-						await karteisuche.ordnerParsen(ordner);
+						try {
+							await fsP.access(ordner, fs.constants.R_OK); // Lesezugriff auf Basisordner? Wenn kein Zugriff => throw
+							await karteisuche.ordnerParsen(ordner);
+						} catch (err) { // wahrscheinlich besteht kein Zugriff auf den Pfad
+							karteisuche.suchenAbschluss();
+							dialog.oeffnen({
+								typ: "alert",
+								text: `Die Karteisuche wurde wegen eines Fehlers nicht gestartet.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.message}</p>`,
+							});
+							return;
+						}
 					}
 				}
 			} else {
@@ -522,15 +534,10 @@ let karteisuche = {
 		} else {
 			button.classList.add("aus");
 		}
-		// Sperrbild weg und das zuletzt fokussierte Element wieder fokussieren
-		karteisuche.animation(false);
-		if (karteisuche.suchenFokus) {
-			karteisuche.suchenFokus.focus();
-		}
+		// Sperrbild weg, Status zurücksetzen
+		karteisuche.suchenAbschluss();
 		// Filter speichern
 		karteisuche.filterSpeichern();
-		// Status der Karteisuche zurücksetzen
-		ipcRenderer.invoke("ztj-cache-status-set", false);
 		// Systemmeldung ausgeben
 		let notifyOpts = {
 			body: "Die Karteisuche ist abgeschlossen!",
@@ -546,6 +553,17 @@ let karteisuche = {
 				break;
 		}
 		new Notification(appInfo.name, notifyOpts);
+	},
+	// Karteisuche abschließen (bei Erfolg oder vorzeitigem Abbruch)
+	suchenAbschluss () {
+		const {ipcRenderer} = require("electron");
+		// Sperrbild weg und das zuletzt fokussierte Element wieder fokussieren
+		karteisuche.animation(false);
+		if (karteisuche.suchenFokus) {
+			karteisuche.suchenFokus.focus();
+		}
+		// Status der Karteisuche zurücksetzen
+		ipcRenderer.invoke("ztj-cache-status-set", false);
 	},
 	// ZTJ-Dateien, die gefunden wurden;
 	// Array enthält Objekte:
@@ -568,9 +586,9 @@ let karteisuche = {
 	//     (Ordner, von dem aus die Suche beginnen soll)
 	ordnerParsen (ordner) {
 		return new Promise(async resolve => {
-			const fsP = require("fs").promises;
 			try {
-				let files = await fsP.readdir(ordner);
+				const fsP = require("fs").promises,
+					files = await fsP.readdir(ordner);
 				for (let i of files) {
 					const path = require("path"),
 						pfad = path.join(ordner, i);
@@ -587,12 +605,15 @@ let karteisuche = {
 	//     (Ordner, von dem aus die Suche beginnen soll)
 	pfadPruefen (pfad) {
 		return new Promise(async resolve => {
-			const fs = require("fs"),
-				fsP = fs.promises;
 			try {
-				await fsP.access(pfad, fs.constants.R_OK); // Lesezugriff auf Pfad? Wenn kein Zugriff => throw
-				let stats = await fsP.lstat(pfad); // Natur des Pfades?
-				if (stats.isDirectory()) { // Ordner => parsen
+				let stats; // Natur des Pfades?
+				if (/\.ztj$/.test(pfad) ||
+						!/\.[a-z]{3,4}/.test(pfad)) {
+					// zur Beschleunigung nur testen, wenn ZTJ-Datei oder wahrscheinlich Ordner
+					const fsP = require("fs").promises;
+					stats = await fsP.lstat(pfad);
+				}
+				if (stats?.isDirectory()) { // Ordner => parsen
 					await karteisuche.ordnerParsen(pfad);
 				} else if (/\.ztj$/.test(pfad)) { // ZTJ-Datei => merken
 					karteisuche.ztj.push({
