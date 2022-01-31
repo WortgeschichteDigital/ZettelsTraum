@@ -429,6 +429,10 @@ window.addEventListener("load", async () => {
 	// Karteisuche
 	document.getElementById("karteisuche-suchen").addEventListener("click", () => karteisuche.suchenPrep());
 	document.getElementById("karteisuche-suchenCache").addEventListener("click", () => karteisuche.suchenPrepZtj([]));
+	document.getElementById("karteisuche-suchenTiefe").addEventListener("input", function() {
+		optionen.data.karteisuche.tiefe = parseInt(this.value, 10);
+		optionen.speichern();
+	});
 	document.querySelector("#karteisuche-cont h3").addEventListener("click", () => karteisuche.filterUmschalten());
 	document.getElementById("karteisuche-add-filter").addEventListener("click", () => karteisuche.filterHinzufuegen());
 	document.getElementById("karteisuche-speichern").addEventListener("click", evt => {

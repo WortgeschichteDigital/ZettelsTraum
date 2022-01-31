@@ -811,7 +811,11 @@
 				>Karteisuche<a href="#" class="icon-link icon-handbuch" title="Abschnitt im Handbuch öffnen" data-handbuch="menueApp-karteisuche"> </a><a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"> </a></h2>
 			<div id="karteisuche-cont">
 				<p><input type="button" value="Suchen" id="karteisuche-suchen"
-					><input type="button" value="Suchen im Cache" id="karteisuche-suchenCache" class="aus"></p>
+					><input type="button" value="Suchen im Cache" id="karteisuche-suchenCache" class="aus"
+					><span id="karteisuche-suchenRechts"
+						><label for="karteisuche-suchenTiefe">Suchtiefe</label><input type="number" value="2" min="1" max="9" id="karteisuche-suchenTiefe"
+					></span
+				></p>
 				<h3><span class="icon-h icon-filter"> </span>Pfade &amp; Filter</h3>
 				<div id="karteisuche-filterblock">
 					<div id="karteisuche-pfade"></div>

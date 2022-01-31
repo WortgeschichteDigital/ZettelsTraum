@@ -229,6 +229,7 @@ let optionen = {
 		karteisuche: {
 			pfade: [], // Pfade, in denen gesucht wird
 			filter: [], // Filter, die zuletzt verwendet wurden
+			tiefe: 2, // Suchtiefe, also Anzahl der Ordner, die in der Tiefe gesucht wird
 		},
 		// Datenfelder im Einfüge-Fenster der Kopierfunktion
 		kopieren: {
