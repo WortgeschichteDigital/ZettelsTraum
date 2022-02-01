@@ -346,8 +346,29 @@ let karteisuche = {
 					}
 				}
 			} else {
+				// aktive Pfade ermitteln
+				let pfade = [];
+				document.querySelectorAll("#karteisuche-pfade span[data-pfad]").forEach(i => {
+					const input = i.querySelector("input");
+					if (input && input.checked ||
+							!input) {
+						const reg = new RegExp("^" + helfer.escapeRegExp(i.dataset.pfad));
+						pfade.push(reg);
+					}
+				});
 				// Dateidaten aus dem Cache zusammentragen
 				for (let pfad of Object.keys(karteisuche.ztjCache)) {
+					let pfadAktiv = false;
+					for (const reg of pfade) {
+						if (reg.test(pfad)) {
+							pfadAktiv = true;
+							break;
+						}
+					}
+					if (!pfadAktiv) {
+						// Dateien aus inaktiven Pfaden ignorieren
+						continue;
+					}
 					karteisuche.ztj.push({
 						pfad: pfad,
 						ctime: karteisuche.ztjCache[pfad].ctime,
