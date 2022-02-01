@@ -37,6 +37,7 @@ let kartei = {
 					pr: "",
 				}],
 				nl: "", // Nebenlemmata
+				no: "", // Notizen
 				sg: [], // Sachgebiete
 				tf: [], // Themenfelder
 				wi: [], // Wortinformationen
