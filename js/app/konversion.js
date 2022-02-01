@@ -4,7 +4,7 @@ let konversion = {
 	// aktuelle Version des Dateiformats
 	// *** WICHTIG! *** WICHTIG! *** WICHTIG! ***
 	// Bei Änderungen anpassen!
-	version: 21,
+	version: 22,
 	// Verteilerfunktion
 	start () {
 		konversion.von1nach2();
@@ -27,6 +27,7 @@ let konversion = {
 		konversion.von18nach19();
 		konversion.von19nach20();
 		konversion.von20nach21();
+		konversion.von21nach22();
 	},
 	// Konversion des Dateiformats von Version 1 nach Version 2
 	von1nach2 () {
@@ -406,6 +407,18 @@ let konversion = {
 			}
 			data.ka[id].up = false;
 		}
+		// Versionsnummer hochzählen
+		data.ve++;
+		// Änderungsmarkierung setzen
+		kartei.karteiGeaendert(true);
+	},
+	// Konversion des Dateiformats von Version 21 nach Version 22
+	von21nach22 () {
+		if (data.ve > 21) {
+			return;
+		}
+		// Datenfeld für Notizen im Redaktionsmetadaten-Fenster erzeugen
+		data.rd.no = "";
 		// Versionsnummer hochzählen
 		data.ve++;
 		// Änderungsmarkierung setzen

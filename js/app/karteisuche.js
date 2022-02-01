@@ -9,6 +9,8 @@ let karteisuche = {
 		if (!document.getElementById("karteisuche-suche-laeuft").classList.contains("aus")) {
 			return;
 		}
+		// Suchtiefe aus den Optionen übernehmen
+		document.querySelector("#karteisuche-suchenTiefe").value = optionen.data.karteisuche.tiefe;
 		// Cache laden
 		const {ipcRenderer} = require("electron");
 		karteisuche.ztjCache = await ipcRenderer.invoke("ztj-cache-get");
@@ -164,6 +166,13 @@ let karteisuche = {
 			});
 		});
 	},
+	// speichert die Suchttiefe, also die Angaben darüber, wie viele Ordner
+	// in die Tiefe gegangen wird, um nach ZTJ-Dateien zu suchen;
+	//   1 = nur im angegebenen Ordner suchen
+	//   2 = bis zu einen Ordner tief gehen
+	//   3 = bis zu zwei Ordner tief gehen
+	//   ...
+	suchenTiefe: 0,
 	// speichert das Input-Element, das vor dem Start der Suche den Fokus hatte
 	suchenFokus: null,
 	// Suche vorbereiten
@@ -313,6 +322,9 @@ let karteisuche = {
 		// Animation einblenden
 		karteisuche.animation(true);
 		// Dateien suchen
+		const fs = require("fs"),
+			fsP = fs.promises;
+		karteisuche.suchenTiefe = parseInt(document.querySelector("#karteisuche-suchenTiefe").value, 10);
 		setTimeout(async () => {
 			karteisuche.ztj = [];
 			if (pfade.length) {
@@ -320,12 +332,43 @@ let karteisuche = {
 				for (let ordner of pfade) {
 					const exists = await helfer.exists(ordner);
 					if (exists) {
-						await karteisuche.ordnerParsen(ordner);
+						try {
+							await fsP.access(ordner, fs.constants.R_OK); // Lesezugriff auf Basisordner? Wenn kein Zugriff => throw
+							await karteisuche.ordnerParsen(ordner, 1);
+						} catch (err) { // wahrscheinlich besteht kein Zugriff auf den Pfad
+							karteisuche.suchenAbschluss();
+							dialog.oeffnen({
+								typ: "alert",
+								text: `Die Karteisuche wurde wegen eines Fehlers nicht gestartet.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.message}</p>`,
+							});
+							return;
+						}
 					}
 				}
 			} else {
+				// aktive Pfade ermitteln
+				let pfade = [];
+				document.querySelectorAll("#karteisuche-pfade span[data-pfad]").forEach(i => {
+					const input = i.querySelector("input");
+					if (input && input.checked ||
+							!input) {
+						const reg = new RegExp("^" + helfer.escapeRegExp(i.dataset.pfad));
+						pfade.push(reg);
+					}
+				});
 				// Dateidaten aus dem Cache zusammentragen
 				for (let pfad of Object.keys(karteisuche.ztjCache)) {
+					let pfadAktiv = false;
+					for (const reg of pfade) {
+						if (reg.test(pfad)) {
+							pfadAktiv = true;
+							break;
+						}
+					}
+					if (!pfadAktiv) {
+						// Dateien aus inaktiven Pfaden ignorieren
+						continue;
+					}
 					karteisuche.ztj.push({
 						pfad: pfad,
 						ctime: karteisuche.ztjCache[pfad].ctime,
@@ -492,6 +535,9 @@ let karteisuche = {
 		}
 		// Karteien filtern
 		for (const kartei of karteisuche.ztj) {
+			if (!karteisuche.ztjCache[kartei.pfad]) {
+				continue;
+			}
 			let datei = karteisuche.ztjCache[kartei.pfad].data;
 			if (datei.rd.er) {
 				datei.rd.er = kartei.redaktion;
@@ -522,15 +568,10 @@ let karteisuche = {
 		} else {
 			button.classList.add("aus");
 		}
-		// Sperrbild weg und das zuletzt fokussierte Element wieder fokussieren
-		karteisuche.animation(false);
-		if (karteisuche.suchenFokus) {
-			karteisuche.suchenFokus.focus();
-		}
+		// Sperrbild weg, Status zurücksetzen
+		karteisuche.suchenAbschluss();
 		// Filter speichern
 		karteisuche.filterSpeichern();
-		// Status der Karteisuche zurücksetzen
-		ipcRenderer.invoke("ztj-cache-status-set", false);
 		// Systemmeldung ausgeben
 		let notifyOpts = {
 			body: "Die Karteisuche ist abgeschlossen!",
@@ -546,6 +587,17 @@ let karteisuche = {
 				break;
 		}
 		new Notification(appInfo.name, notifyOpts);
+	},
+	// Karteisuche abschließen (bei Erfolg oder vorzeitigem Abbruch)
+	suchenAbschluss () {
+		const {ipcRenderer} = require("electron");
+		// Sperrbild weg und das zuletzt fokussierte Element wieder fokussieren
+		karteisuche.animation(false);
+		if (karteisuche.suchenFokus) {
+			karteisuche.suchenFokus.focus();
+		}
+		// Status der Karteisuche zurücksetzen
+		ipcRenderer.invoke("ztj-cache-status-set", false);
 	},
 	// ZTJ-Dateien, die gefunden wurden;
 	// Array enthält Objekte:
@@ -566,15 +618,18 @@ let karteisuche = {
 	// findet alle Pfade in einem übergebenen Ordner
 	//   ordner = String
 	//     (Ordner, von dem aus die Suche beginnen soll)
-	ordnerParsen (ordner) {
+	//   suchtiefe = Number
+	//     (Tiefe gezählt vom Startordner aus; Startordner = 1)
+	ordnerParsen (ordner, suchtiefe) {
+		suchtiefe++;
 		return new Promise(async resolve => {
-			const fsP = require("fs").promises;
 			try {
-				let files = await fsP.readdir(ordner);
+				const fsP = require("fs").promises,
+					files = await fsP.readdir(ordner);
 				for (let i of files) {
 					const path = require("path"),
 						pfad = path.join(ordner, i);
-					await karteisuche.pfadPruefen(pfad);
+					await karteisuche.pfadPruefen(pfad, suchtiefe);
 				}
 				resolve(true);
 			} catch (err) { // Auslesen des Ordners fehlgeschlagen
@@ -585,15 +640,21 @@ let karteisuche = {
 	// überprüft einen übergebenen Pfad: Ordner oder ZTJ-Datei?
 	//   pfad = String
 	//     (Ordner, von dem aus die Suche beginnen soll)
-	pfadPruefen (pfad) {
+	//   suchtiefe = Number
+	//     (Tiefe gezählt vom Startordner aus; Startordner = 1)
+	pfadPruefen (pfad, suchtiefe) {
 		return new Promise(async resolve => {
-			const fs = require("fs"),
-				fsP = fs.promises;
 			try {
-				await fsP.access(pfad, fs.constants.R_OK); // Lesezugriff auf Pfad? Wenn kein Zugriff => throw
-				let stats = await fsP.lstat(pfad); // Natur des Pfades?
-				if (stats.isDirectory()) { // Ordner => parsen
-					await karteisuche.ordnerParsen(pfad);
+				let stats; // Natur des Pfades?
+				if (/\.ztj$/.test(pfad) ||
+						!/\.[a-z]{3,4}/.test(pfad)) {
+					// zur Beschleunigung nur testen, wenn ZTJ-Datei oder wahrscheinlich Ordner
+					const fsP = require("fs").promises;
+					stats = await fsP.lstat(pfad);
+				}
+				if (stats?.isDirectory() && // Ordner => parsen
+						suchtiefe <= karteisuche.suchenTiefe) { // nur bis zu dieser Verschachtelungstiefe suchen
+					await karteisuche.ordnerParsen(pfad, suchtiefe);
 				} else if (/\.ztj$/.test(pfad)) { // ZTJ-Datei => merken
 					karteisuche.ztj.push({
 						pfad: pfad,
@@ -1658,6 +1719,7 @@ let karteisuche = {
 	// (für die Bedeutungen wird es komplizierter)
 	filterVolltext: {
 		datei: ["no", "wo"],
+		redaktion: ["bh", "nl", "no"],
 		karten: ["au", "bl", "bs", "da", "kr", "no", "qu", "sy", "ts"],
 	},
 	// überprüfen, ob eine Kartei zu den übergebenen Filtern passt
@@ -1713,6 +1775,12 @@ let karteisuche = {
 				// Datenfelder Kartei
 				for (let ds of karteisuche.filterVolltext.datei) {
 					if (filter.reg.test(datei[ds])) {
+						continue forX;
+					}
+				}
+				// Datenfelder Redaktion
+				for (let ds of karteisuche.filterVolltext.redaktion) {
+					if (filter.reg.test(datei.rd[ds])) {
 						continue forX;
 					}
 				}

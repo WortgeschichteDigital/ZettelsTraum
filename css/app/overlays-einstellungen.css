@@ -3,7 +3,7 @@
 /* Einstellungen -------------------------------- */
 #einstellungen > div {
 	margin-top: 40px;
-	max-width: 700px;
+	max-width: 900px;
 }
 
 .icon-h-einstellungen {
@@ -127,9 +127,22 @@
 	text-indent: 0;
 }
 
+#einstellungen-cont p.button:last-child {
+	margin-bottom: 0;
+}
+
 #einstellungen-cont p.button input {
 	margin-left: 0;
 	width: 216px;
+}
+
+#einstellungen-cont p.button input.einstellung-sichern {
+	margin-left: 15px;
+	width: 135px;
+}
+
+#einstellungen-cont p.button input.einstellung-sichern:first-child {
+	margin-left: 0;
 }
 
 #einstellungen-cont p.einzug {
@@ -140,7 +153,7 @@
 	display: flex;
 	flex-direction: column;
 	flex-wrap: wrap;
-	padding-left: 24px;
+	align-content: flex-start;
 	height: 145px; /* 5 Items pro Spalte */
 }
 
@@ -150,7 +163,7 @@
 
 #einstellungen-cont .einstellungen-spalten p {
 	margin: 0 10px 5px 0;
-	padding-left: 1px; /* damit beim Fokussieren der Checkbox der linke Rand nicht abgeschnitten erscheint */
+	padding-left: 24px; /* damit beim Fokussieren der Checkbox der linke Rand nicht abgeschnitten erscheint */
 	overflow: hidden;
 	text-indent: 0;
 	text-overflow: ellipsis;

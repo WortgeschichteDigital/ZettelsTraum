@@ -3,7 +3,7 @@
 /* Redaktion: Metadaten ------------------------- */
 #red-meta > div {
 	margin-top: 40px;
-	max-width: 400px;
+	max-width: 600px;
 }
 
 #red-meta-cont {
@@ -28,7 +28,8 @@
 }
 
 #red-meta-nebenlemmata,
-#red-meta-behandelt-mit {
+#red-meta-behandelt-mit,
+#red-meta-notizen {
 	width: calc(100% - 12px);
 }
 

@@ -300,6 +300,7 @@
 							><a href="#" class="icon-link icon-tools-superscript" title="Hochstellen" tabindex="-1"> </a
 							><a href="#" class="icon-link icon-tools-subscript" title="Tiefstellen" tabindex="-1"> </a
 							><a href="#" class="icon-link icon-tools-mark" title="Markierung" tabindex="-1"> </a
+							><a href="#" class="icon-link icon-tools-br" title="Zeilenumbruch" tabindex="-1"> </a
 						></span
 						><span class="text-tools"
 							><a href="#" class="icon-link icon-tools-kopieren" title="Text kopieren" tabindex="-1"> </a
@@ -613,6 +614,11 @@
 							<p><input type="checkbox" id="einstellung-kopf-icon-anhaenge"
 								><label for="einstellung-kopf-icon-anhaenge">Anhänge</label></p>
 						</div>
+						<h3>Einstellungen sichern</h3>
+						<p class="button"
+							><input type="button" value="Importieren" class="einstellung-sichern" id="einstellung-sichern-importieren"
+							><input type="button" value="Exportieren" class="einstellung-sichern" id="einstellung-sichern-exportieren"
+						></p>
 					</section>
 
 					<!-- Kopieren -->
@@ -811,7 +817,11 @@
 				>Karteisuche<a href="#" class="icon-link icon-handbuch" title="Abschnitt im Handbuch öffnen" data-handbuch="menueApp-karteisuche"> </a><a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"> </a></h2>
 			<div id="karteisuche-cont">
 				<p><input type="button" value="Suchen" id="karteisuche-suchen"
-					><input type="button" value="Suchen im Cache" id="karteisuche-suchenCache" class="aus"></p>
+					><input type="button" value="Suchen im Cache" id="karteisuche-suchenCache" class="aus"
+					><span id="karteisuche-suchenRechts"
+						><label for="karteisuche-suchenTiefe">Suchtiefe</label><input type="number" value="2" min="1" max="9" id="karteisuche-suchenTiefe"
+					></span
+				></p>
 				<h3><span class="icon-h icon-filter"> </span>Pfade &amp; Filter</h3>
 				<div id="karteisuche-filterblock">
 					<div id="karteisuche-pfade"></div>
@@ -1006,11 +1016,15 @@
 					<h3>Karteiwort</h3>
 					<p class="input-text"
 						><label for="red-meta-nebenlemmata">Nebenlemmata:</label
-						><input type="text" value="" placeholder="Nebenlemmata" id="red-meta-nebenlemmata"
+						><input type="text" value="" placeholder="Nebenlemmata" id="red-meta-nebenlemmata" title="kommagetrennte Liste von Nebenlemmata, z. B. „Kölscher Klünger, Klüngelwirtschaft, klüngeln“"
 					></p>
 					<p class="input-text"
 						><label for="red-meta-behandelt-mit">behandelt mit:</label
-						><input type="text" value="" placeholder="Wort" id="red-meta-behandelt-mit"
+						><input type="text" value="" placeholder="Hauptlemma" id="red-meta-behandelt-mit" title="Hauptlemma, in dessen Artikel die zu diesem Karteiwort gesammelten Belege mit behandelt werden. Es darf nur ein Hauptlemma genannt werden. Richtig: „Lebensweise“; falsch: „Lebensweise, Lebensführung“."
+					></p>
+					<p class="input-text"
+						><label for="red-meta-notizen">Notizen:</label
+						><input type="text" value="" placeholder="Freitext" id="red-meta-notizen" title="Freitextfeld für Notizen"
 					></p>
 					<p
 						><span class="label">Themenfelder:</span

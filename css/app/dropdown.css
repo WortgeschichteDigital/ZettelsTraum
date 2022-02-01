@@ -63,7 +63,7 @@ textarea.dropdown-feld {
 	box-shadow: var(--boxShadow);
 	border: 1px solid var(--linie);
 	border-radius: 3px;
-	max-height: 200px; /* Höhe pro <span> = 25px, -1px für border-bottom */
+	max-height: 400px; /* Höhe pro <span> = 25px */
 	overflow-y: auto;
 	background-color: #fff;
 	color: var(--text);
@@ -72,6 +72,18 @@ textarea.dropdown-feld {
 	font-variant: normal;
 	line-height: 24px;
 	text-indent: 0; /* nötig wegen des Dropdowns im Optionen-Fenster */
+}
+
+@media screen and (max-height: 700px) {
+	#dropdown {
+		max-height: 300px;
+	}
+}
+
+@media screen and (max-height: 500px) {
+	#dropdown {
+		max-height: 200px;
+	}
 }
 
 #dropdown span {

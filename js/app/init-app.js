@@ -318,6 +318,11 @@ window.addEventListener("load", async () => {
 	document.querySelectorAll("#einstellungen ul a").forEach(a => optionen.sektionWechselnLink(a));
 	document.querySelectorAll("#einstellungen input").forEach(i => optionen.aendereEinstellungListener(i));
 	document.getElementById("einstellung-personenliste").addEventListener("click", () => optionen.aenderePersonenliste());
+	document.querySelectorAll(".einstellung-sichern").forEach(i => {
+		i.addEventListener("click", function() {
+			optionen.sichern(this);
+		});
+	});
 	document.querySelectorAll("#einstellungen-quick-alle, #einstellungen-quick-standard, #einstellungen-quick-keine").forEach(a => quick.preset(a));
 	document.querySelectorAll("#quick-config div:nth-child(2) img").forEach(img => quick.eventsPfeile(img));
 	optionen.anwendenNotizenFilterleiste(document.getElementById("einstellung-notizen-filterleiste"));
@@ -429,6 +434,10 @@ window.addEventListener("load", async () => {
 	// Karteisuche
 	document.getElementById("karteisuche-suchen").addEventListener("click", () => karteisuche.suchenPrep());
 	document.getElementById("karteisuche-suchenCache").addEventListener("click", () => karteisuche.suchenPrepZtj([]));
+	document.getElementById("karteisuche-suchenTiefe").addEventListener("input", function() {
+		optionen.data.karteisuche.tiefe = parseInt(this.value, 10);
+		optionen.speichern();
+	});
 	document.querySelector("#karteisuche-cont h3").addEventListener("click", () => karteisuche.filterUmschalten());
 	document.getElementById("karteisuche-add-filter").addEventListener("click", () => karteisuche.filterHinzufuegen());
 	document.getElementById("karteisuche-speichern").addEventListener("click", evt => {

@@ -229,6 +229,7 @@ let optionen = {
 		karteisuche: {
 			pfade: [], // Pfade, in denen gesucht wird
 			filter: [], // Filter, die zuletzt verwendet wurden
+			tiefe: 2, // Suchtiefe, also Anzahl der Ordner, die in der Tiefe gesucht wird
 		},
 		// Datenfelder im Einfüge-Fenster der Kopierfunktion
 		kopieren: {
@@ -1194,6 +1195,13 @@ let optionen = {
 		ele.addEventListener("input", function() {
 			optionen.aendereEinstellung(this);
 		});
+		if (ele.id === "einstellung-bearbeiterin") {
+			ele.addEventListener("blur", () => {
+				if (!optionen.data.einstellungen.bearbeiterin) {
+					bearbeiterin.oeffnen();
+				}
+			});
+		}
 	},
 	// Einstellung aus dem Einstellungen-Dialog ändern
 	//   ele = Element
@@ -1349,5 +1357,91 @@ let optionen = {
 		p.appendChild(label);
 		// Absatz zurückgeben
 		return p;
+	},
+	// Einstellungen importieren oder exportieren
+	//   input = Element
+	//     (Button, auf den geklickt wurde)
+	async sichern (input) {
+		// Dialog öffnen
+		let opt = {
+			title: "Einstellungen ",
+			defaultPath: appInfo.documents,
+			filters: [
+				{
+					name: `${appInfo.name} Einstellungen`,
+					extensions: ["zte"],
+				},
+				{
+					name: "Alle Dateien",
+					extensions: ["*"],
+				},
+			],
+		};
+		if (optionen.data.letzter_pfad) {
+			opt.defaultPath = optionen.data.letzter_pfad;
+		}
+		let {ipcRenderer} = require("electron"),
+			path = require("path"),
+			result;
+		if (/exportieren$/.test(input.id)) { // Einstellungen exportieren
+			opt.title += "exportieren";
+			opt.defaultPath = path.join(opt.defaultPath, "Einstellungen.zte");
+			result = await ipcRenderer.invoke("datei-dialog", {
+				open: false,
+				winId: winInfo.winId,
+				opt: opt,
+			});
+		} else { // Einstellungen importieren
+			opt.title += "importieren";
+			opt.properties = ["openFile"];
+			result = await ipcRenderer.invoke("datei-dialog", {
+				open: true,
+				winId: winInfo.winId,
+				opt: opt,
+			});
+		}
+		// Fehler oder nichts ausgewählt
+		if (result.message || !Object.keys(result).length) {
+			dialog.oeffnen({
+				typ: "alert",
+				text: `Beim Öffnen des Dateidialogs ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${result.message}</p>`,
+			});
+			return;
+		} else if (result.canceled) {
+			return;
+		}
+		// Exportieren od. importieren
+		if (/exportieren$/.test(input.id)) {
+			const opt = await io.schreiben(result.filePath, JSON.stringify(optionen.data));
+			if (opt !== true) {
+				dialog.oeffnen({
+					typ: "alert",
+					text: `Beim Exportieren der Einstellungen ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${opt.name}: ${opt.message}</p>`,
+				});
+			}
+		} else {
+			const opt = await io.lesen(result.filePaths[0]);
+			if (!helfer.checkType("String", opt)) {
+				dialog.oeffnen({
+					typ: "alert",
+					text: `Beim Importieren der Einstellungen ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${opt.name}: ${opt.message}</p>`,
+				});
+				return;
+			}
+			let data;
+			try {
+				data = JSON.parse(opt);
+			} catch (err) {
+				dialog.oeffnen({
+					typ: "alert",
+					text: `Beim Importieren der Einstellungen ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.name}: ${err.message}</p>`,
+				});
+				return;
+			}
+			optionen.einlesen(optionen.data, data);
+			optionen.anwenden();
+			zuletzt.aufbauen();
+			optionen.speichern();
+		}
 	},
 };

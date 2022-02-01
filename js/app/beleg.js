@@ -1265,6 +1265,10 @@ let beleg = {
 				start: "<b>",
 				ende: "</b>",
 			},
+			br: {
+				start: "<br>",
+				ende: "",
+			},
 			caps: {
 				start: `<span class="dta-kapitaelchen">`,
 				ende: "</span>",
@@ -1336,12 +1340,12 @@ let beleg = {
 		// Aktion durchführen
 		let reg_start = new RegExp(`${helfer.escapeRegExp(tags[aktion].start)}$`),
 			reg_ende = new RegExp(`^${helfer.escapeRegExp(tags[aktion].ende)}`);
-		if (reg_start.test(str_start) && reg_ende.test(str_ende)) { // Tag entfernen
+		if (aktion !== "br" && reg_start.test(str_start) && reg_ende.test(str_ende)) { // Tag entfernen
 			str_start = str_start.replace(reg_start, "");
 			str_ende = str_ende.replace(reg_ende, "");
 			start -= tags[aktion].start.length;
 			ende -= tags[aktion].start.length;
-		} else { // Tag hinzufüren
+		} else { // Tag hinzufügen
 			str_sel = `${tags[aktion].start}${str_sel}${tags[aktion].ende}`;
 			start += tags[aktion].start.length;
 			ende += tags[aktion].start.length;

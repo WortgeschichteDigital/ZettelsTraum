@@ -342,6 +342,11 @@ textarea#beleg-bs {
 	mask-image: url(../../img/text-fett.svg);
 }
 
+.icon-tools-br {
+	-webkit-mask-image: url(../../img/text-br.svg);
+	mask-image: url(../../img/text-br.svg);
+}
+
 .icon-tools-caps {
 	-webkit-mask-image: url(../../img/text-kapitaelchen.svg);
 	mask-image: url(../../img/text-kapitaelchen.svg);
