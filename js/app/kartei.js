@@ -328,10 +328,11 @@ let kartei = {
 	},
 	// Speichern: Pfad ermitteln
 	async speichernUnter () {
-		const path = require("path");
+		const path = require("path"),
+			wort = kartei.wort.split(/[\\/]/)[0];
 		let opt = {
 			title: "Kartei speichern",
-			defaultPath: path.join(appInfo.documents, `${kartei.wort}.ztj`),
+			defaultPath: path.join(appInfo.documents, `${wort}.ztj`),
 			filters: [
 				{
 					name: `${appInfo.name} JSON`,
@@ -345,7 +346,7 @@ let kartei = {
 		};
 		// Wo wurde zuletzt eine Datei gespeichert oder geöffnet?
 		if (optionen.data.letzter_pfad) {
-			opt.defaultPath = path.join(optionen.data.letzter_pfad, `${kartei.wort}.ztj`);
+			opt.defaultPath = path.join(optionen.data.letzter_pfad, `${wort}.ztj`);
 		}
 		// Dialog anzeigen
 		const {ipcRenderer} = require("electron");
