@@ -17,17 +17,29 @@ let liste = {
 	statusGeaendert: "",
 	// Zwischenspeicher für die aufgeklappten Belege
 	statusOffen: {},
+	// Zwischenspeicher für sichtbare Absätze in Belegen
+	statusSichtbarP: {},
 	// speichert den Status der aktuellen Belegliste, d.h. ob die Karten auf oder zugeklappt sind
 	//   filter_init = Boolean
 	//     (speichert, ob die Filterliste initialisiert werden sollen)
-	status (filter_init) {
-		// Klapp-Status sichern
+	//   statusP = false | undefined
+	//     (sichtbare Absätze sollen gemerkt werden)
+	status (filter_init, statusP = true) {
+		// Klapp-Status und sichtbarer Absätze sichern
 		liste.statusOffen = {};
-		let koepfe = document.querySelectorAll(".liste-kopf");
+		liste.statusSichtbarP = {};
+		const koepfe = document.querySelectorAll(".liste-kopf");
 		for (let i = 0, len = koepfe.length; i < len; i++) {
-			let id = koepfe[i].dataset.id;
+			const id = koepfe[i].dataset.id;
 			if (koepfe[i].classList.contains("schnitt-offen")) {
 				liste.statusOffen[id] = true;
+				if (statusP) {
+					liste.statusSichtbarP[id] = [];
+					const sichtbar = koepfe[i].nextSibling.querySelectorAll("p[data-pnumber]");
+					for (const p of sichtbar) {
+						liste.statusSichtbarP[id].push(p.dataset.pnumber);
+					}
+				}
 			} else {
 				liste.statusOffen[id] = false;
 			}
@@ -645,8 +657,14 @@ let liste = {
 			div.appendChild(p);
 			p.dataset.pnumber = i;
 			p.dataset.id = id;
+			let kuerzungMoeglich = true;
+			if (liste.statusSichtbarP[id] &&
+					liste.statusSichtbarP[id].includes( i.toString() )) {
+				kuerzungMoeglich = false;
+			}
 			// Absatz ggf. kürzen
-			if (filter.volltextSuche.suche) { // ggf. kürzen, wenn Suchtreffer nicht enthalten
+			if (kuerzungMoeglich &&
+					filter.volltextSuche.suche) { // ggf. kürzen, wenn Suchtreffer nicht enthalten
 				const text_rein = p_prep[i].replace(/<.+?>/g, "");
 				let treffer = false;
 				for (let j = 0, len = filter.volltextSuche.reg.length; j < len; j++) {
@@ -664,7 +682,8 @@ let liste = {
 					}
 					continue;
 				}
-			} else if (optionen.data.belegliste.beleg_kuerzen &&
+			} else if (kuerzungMoeglich &&
+					optionen.data.belegliste.beleg_kuerzen &&
 					!liste.wortVorhanden(p_prep[i]) &&
 					!(filter.aktiveFilter["verschiedenes-annotierung"] && /annotierung-wort/.test(p_prep[i]) ) ) {
 				// ggf. kürzen, wenn
@@ -1224,6 +1243,7 @@ let liste = {
 	belegUmschalten (div) {
 		div.addEventListener("click", function() {
 			if (this.classList.contains("schnitt-offen")) {
+				delete liste.statusSichtbarP[this.dataset.id]; // Status sichtbarer Absätze zurücksetzen
 				this.classList.remove("schnitt-offen");
 				// Ausblenden animieren
 				let details = this.nextSibling;
@@ -1630,8 +1650,9 @@ let liste = {
 		optionen.speichern();
 		// Link im Header anpassen
 		liste.headerBelegAnzeige();
-		// List geöffneter Belege zurückstellen
+		// Listen geöffneter Belege und Absätze zurückstellen
 		liste.statusOffen = {};
+		liste.statusSichtbarP = {};
 		// Anzeige der Belege anpassen
 		document.querySelectorAll(".liste-kopf").forEach(function(i) {
 			const offen = i.classList.contains("schnitt-offen");
@@ -1677,7 +1698,7 @@ let liste = {
 		// Link anpassen
 		liste.headerBelegKuerzenAnzeige();
 		// Liste neu aufbauen
-		liste.status(false);
+		liste.status(false, false);
 	},
 	// Header-Icons: Kürzung des Belegs aus-/einschalten (Anzeige im Header anpassen)
 	headerBelegKuerzenAnzeige () {

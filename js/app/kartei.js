@@ -216,6 +216,7 @@ let kartei = {
 		anhaenge.makeIconList(data.an, document.getElementById("kartei-anhaenge"), true); // impliziert kopf.icons()
 		filter.kartendatumInit();
 		liste.statusOffen = {}; // sonst werden unter Umständen Belege aufgeklappt, selbst wenn alle geschlossen sein sollten; s. Changelog zu Version 0.23.0
+		liste.statusSichtbarP = {};
 		liste.aufbauen(true);
 		liste.wechseln();
 		window.scrollTo({
