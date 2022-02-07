@@ -879,20 +879,22 @@ let stamm = {
 	//   str = String
 	//     (enthält das Wort oder die Wörter)
 	dtaPrepParole (str) {
-		let wort = str.replace(/[([{<](.+?)[)\]}>]/g, m => "");
-		wort = wort.replace(/[!?.:,;'§$%&/\\=*+~#()[\]{}<>]+/g, "");
-		wort = helfer.textTrim(wort, true);
 		let woerter = new Set();
-		wort = wort.replace(/"(.+)"/, (m, p1) => {
-			woerter.add(p1);
-			return "";
-		});
-		wort = wort.replace(/"/, ""); // vereinzeltes Anführungszeichen ggf. weg
-		wort.split(/[\s_]/).forEach(i => {
-			if (i) {
-				woerter.add(i);
-			}
-		});
+		for (const w of str.split(/(?<=[0-9a-zäöü])\/(?=[0-9a-zäöü])/i)) {
+			let wort = w.replace(/[([{<](.+?)[)\]}>]/g, m => "");
+			wort = wort.replace(/[!?.:,;'§$%&/\\=*+~#()[\]{}<>]+/g, "");
+			wort = helfer.textTrim(wort, true);
+			wort = wort.replace(/"(.+)"/, (m, p1) => {
+				woerter.add(p1);
+				return "";
+			});
+			wort = wort.replace(/"/, ""); // vereinzeltes Anführungszeichen ggf. weg
+			wort.split(/[\s_]/).forEach(i => {
+				if (i) {
+					woerter.add(i);
+				}
+			});
+		}
 		return [...woerter];
 	},
 	// Request an das DTA schicken, um an die Formvarianten zu kommen

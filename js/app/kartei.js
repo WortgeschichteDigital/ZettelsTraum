@@ -37,6 +37,7 @@ let kartei = {
 					pr: "",
 				}],
 				nl: "", // Nebenlemmata
+				no: "", // Notizen
 				sg: [], // Sachgebiete
 				tf: [], // Themenfelder
 				wi: [], // Wortinformationen
@@ -215,6 +216,7 @@ let kartei = {
 		anhaenge.makeIconList(data.an, document.getElementById("kartei-anhaenge"), true); // impliziert kopf.icons()
 		filter.kartendatumInit();
 		liste.statusOffen = {}; // sonst werden unter Umständen Belege aufgeklappt, selbst wenn alle geschlossen sein sollten; s. Changelog zu Version 0.23.0
+		liste.statusSichtbarP = {};
 		liste.aufbauen(true);
 		liste.wechseln();
 		window.scrollTo({
@@ -326,10 +328,11 @@ let kartei = {
 	},
 	// Speichern: Pfad ermitteln
 	async speichernUnter () {
-		const path = require("path");
+		const path = require("path"),
+			wort = kartei.wort.split(/[\\/]/)[0];
 		let opt = {
 			title: "Kartei speichern",
-			defaultPath: path.join(appInfo.documents, `${kartei.wort}.ztj`),
+			defaultPath: path.join(appInfo.documents, `${wort}.ztj`),
 			filters: [
 				{
 					name: `${appInfo.name} JSON`,
@@ -343,7 +346,7 @@ let kartei = {
 		};
 		// Wo wurde zuletzt eine Datei gespeichert oder geöffnet?
 		if (optionen.data.letzter_pfad) {
-			opt.defaultPath = path.join(optionen.data.letzter_pfad, `${kartei.wort}.ztj`);
+			opt.defaultPath = path.join(optionen.data.letzter_pfad, `${wort}.ztj`);
 		}
 		// Dialog anzeigen
 		const {ipcRenderer} = require("electron");
