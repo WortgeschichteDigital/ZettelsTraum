@@ -2,23 +2,90 @@
 
 /* Karteisuche: Export -------------------------- */
 #karteisuche-export > div {
-	width: 375px;
+	max-width: 600px;
 }
 
-#karteisuche-export-cont {
-	padding: 10px;
+#karteisuche-export-form-cont {
+	margin: 10px;
+	padding-left: 1px; /* damit der Checkbox-Fokus am linken Rand niht abgeschnitten wird */
+	overflow-x: hidden;
+	overflow-y: auto;
+	transition: max-height .5s ease;
 }
 
-#karteisuche-export-cont p {
+
+/* Formular ------------------------------------- */
+#karteisuche-export-form {
+	display: grid;
+	grid-template-columns: repeat(2, calc(50% - 10px));
+	column-gap: 20px;
+}
+
+#karteisuche-export-form .icon-link {
+	vertical-align: top;
+	margin-left: 5px;
+	background-color: var(--iconHell);
+}
+
+#karteisuche-export-form .icon-link:first-child {
+	margin-left: 0;
+}
+
+#karteisuche-export-form .icon-link:hover {
+	background-color: var(--text);
+}
+
+#karteisuche-export-form .icon-link:focus {
+	background-color: var(--farbe);
+}
+
+#karteisuche-export-form p {
 	margin-bottom: 5px;
 }
 
-#karteisuche-export-cont label {
-	display: inline-block;
-	width: 150px;
+#karteisuche-export-form p:last-child {
+	margin-bottom: 0;
 }
 
-#karteisuche-export-cont p:last-child {
-	margin: 15px 0 0 0;
-	text-align: right;
+#karteisuche-export-form p.einzug {
+	margin-left: 24px;
+}
+
+/* Vorlagen ------------------------------------- */
+#karteisuche-export-vorlagen {
+	margin-top: 10px;
+}
+
+#karteisuche-export-vorlagen a:not(.icon-link) {
+	margin-left: 5px;
+	color: var(--text);
+}
+
+#karteisuche-export-vorlagen a:not(.icon-link):focus {
+	color: var(--farbe);
+}
+
+.karteisuche-export-vorlage {
+	display: inline-block;
+	vertical-align: top;
+	max-width: calc(100% - 29px); /* 24px Icon + 5px Margin */
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+
+/* Buttons -------------------------------------- */
+#karteisuche-export p.button {
+	margin: 20px 0 0 0;
+	padding-bottom: 10px;
+	text-align: center;
+}
+
+#karteisuche-export p.button input:first-child {
+	margin-left: 0;
+}
+
+#karteisuche-export p.button input:last-child {
+	margin-left: 20px;
 }

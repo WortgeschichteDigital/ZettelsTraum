@@ -231,6 +231,8 @@ let optionen = {
 			filter: [], // Filter, die zuletzt verwendet wurden
 			tiefe: 2, // Suchtiefe, also Anzahl der Ordner, die in der Tiefe gesucht wird
 		},
+		// Vorlagen für das Exportfenster der Karteisuche
+		"karteisuche-export-vorlagen": [],
 		// Datenfelder im Einfüge-Fenster der Kopierfunktion
 		kopieren: {
 			an: true, // Anhänge

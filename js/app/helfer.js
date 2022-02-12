@@ -89,6 +89,9 @@ let helfer = {
 			"import-cont-over": {
 				queries: ["#import-abbrechen"],
 			},
+			"karteisuche-export-form-cont": {
+				queries: ["#karteisuche-export p.button"],
+			},
 			"karteisuche-karteien": {
 				queries: [],
 			},

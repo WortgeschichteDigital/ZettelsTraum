@@ -512,7 +512,7 @@ let redLit = {
 					});
 				});
 		} else {
-			karteisuche.trefferlisteExportierenDialog(content, format);
+			karteisucheExport.speichern(content, format);
 		}
 	},
 	// Datenbank: automatischen Export durchführen

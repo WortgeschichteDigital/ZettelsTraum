@@ -135,6 +135,7 @@ window.addEventListener("load", async () => {
 				"einstellungen-sec-belegliste",
 				"gerueste-cont-over",
 				"import-cont-over",
+				"karteisuche-export-form-cont",
 				"karteisuche-karteien",
 				"kopieren-einfuegen-over",
 				"kopieren-liste-cont",
@@ -442,19 +443,20 @@ window.addEventListener("load", async () => {
 	document.getElementById("karteisuche-add-filter").addEventListener("click", () => karteisuche.filterHinzufuegen());
 	document.getElementById("karteisuche-speichern").addEventListener("click", evt => {
 		evt.preventDefault();
-		karteisuche.trefferlisteExportieren();
+		karteisucheExport.oeffnen();
 	});
 	// Karteisuche: Export
-	document.querySelectorAll(`#karteisuche-export-cont input[type="radio"]`).forEach(i => {
+	document.querySelectorAll("#karteisuche-export-vorlagen-tools a").forEach(a => karteisucheExport.vorlagenToolsListener(a));
+	document.querySelectorAll("#karteisuche-export-form input").forEach(i => {
 		i.addEventListener("keydown", evt => {
 			tastatur.detectModifiers(evt);
 			if (!tastatur.modifiers && evt.key === "Enter") {
-				karteisuche.trefferlisteExportierenDo();
+				karteisucheExport.exportieren();
 			}
 		});
 	});
-	document.getElementById("karteisuche-export-exportieren").addEventListener("click", () => karteisuche.trefferlisteExportierenDo());
-	document.getElementById("karteisuche-export-abbrechen").addEventListener("click", () => overlay.schliessen(document.getElementById("karteisuche-export") ) );
+	document.getElementById("karteisuche-export-exportieren").addEventListener("click", () => karteisucheExport.exportieren());
+	document.getElementById("karteisuche-export-abbrechen").addEventListener("click", () => overlay.schliessen(document.querySelector("#karteisuche-export") ) );
 	// Prompt-Textfeld
 	document.getElementById("dialog-prompt-text").addEventListener("keydown", function(evt) {
 		tastatur.detectModifiers(evt);

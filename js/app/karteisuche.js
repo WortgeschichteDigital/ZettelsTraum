@@ -454,11 +454,15 @@ let karteisuche = {
 						}
 						nebenlemmata.add(nl);
 						ziel.nebenlemmata.push(nl);
-						ziel.behandeltMit.push(nl);
+						if (!ziel.behandeltMit.includes(nl)) {
+							ziel.behandeltMit.push(nl);
+						}
 						if (!ztjMit[woerter[i]]) {
 							ztjMit[woerter[i]] = [];
 						}
-						ztjMit[woerter[i]].push(nl);
+						if (!ztjMit[woerter[i]].includes(nl)) {
+							ztjMit[woerter[i]].push(nl);
+						}
 					});
 				}
 				// Behandelt-Datensätze
@@ -474,7 +478,9 @@ let karteisuche = {
 					if (!ztjMit[datei.rd.bh]) {
 						ztjMit[datei.rd.bh] = [];
 					}
-					ztjMit[datei.rd.bh].push(woerter[i]);
+					if (!ztjMit[datei.rd.bh].includes(woerter[i])) {
+						ztjMit[datei.rd.bh].push(woerter[i]);
+					}
 				}
 				// Redaktionsereignisse klonen
 				let er = datei.rd.er;
@@ -493,7 +499,11 @@ let karteisuche = {
 		for (const i of karteisuche.ztj) {
 			// Wörter ergänzen, die mit dem Wort der aktuellen Kartei behandelt werden
 			if (ztjMit[i.wort]) {
-				i.behandeltMit = i.behandeltMit.concat(ztjMit[i.wort]);
+				for (const mit of ztjMit[i.wort]) {
+					if (!i.behandeltMit.includes(mit)) {
+						i.behandeltMit.push(mit);
+					}
+				}
 			}
 			// ggf. Einträge der Nebenlemmata ergänzen
 			if (i.nebenlemmata.length) {
@@ -606,12 +616,14 @@ let karteisuche = {
 	//   wort (String; Wort der Kartei)
 	//   wortSort (String; Sortierform des Worts der Kartei)
 	//   redaktion (Array; Klon von data.rd.er)
+	//   nebenlemmata (Array; Liste der Nebenlemmata)
 	//   behandeltIn (String; Wort, in dem das aktuelle Wort behandelt wird)
 	//   behandeltMit (Array; Lemmata, die mit dem aktuellen Wort behandelt werden)
 	//   passt (Boolean; passt zu den Suchfiltern)
 	ztj: [],
 	// Cache für ZTJ-Dateien
-	// (wird beim Öffnen des Fensters und Start einer Suche aus Main geholt)
+	// (wird beim Öffnen des Fensters und Start einer Suche aus Main geholt;
+	// Schlüssel ist der Pfad der ZTJ-Datei)
 	//   ctime (String; Änderungsdatum der Kartei)
 	//   data (Object; die kompletten Karteidaten)
 	ztjCache: {},
@@ -1001,216 +1013,6 @@ let karteisuche = {
 			// Trefferzahl auffrischen
 			document.getElementById("karteisuche-treffer").textContent = `(${treffer})`;
 		});
-	},
-	// Trefferlistenexport: sichtbare Treffer, die exportiert werden können
-	// (Indizes, die auf karteisuche.ztj verweisen)
-	trefferlisteItems: [],
-	// Trefferlistenexport
-	trefferlisteExportieren () {
-		// keine Treffer in der Liste
-		let items = document.querySelectorAll("#karteisuche-karteien > div");
-		if (!items.length) {
-			let text = "Es wurden keine Karteien gefunden.";
-			if (!document.getElementById("karteisuche-treffer").textContent) {
-				text = "Sie müssen zuerst eine Suche anstoßen.";
-			}
-			dialog.oeffnen({
-				typ: "alert",
-				text,
-				callback: () => document.getElementById("karteisuche-suchen").focus(),
-			});
-			return;
-		}
-		// Treffer sammeln
-		karteisuche.trefferlisteItems = [];
-		for (let i = 0, len = items.length; i < len; i++) {
-			if (items[i].classList.contains("aus")) {
-				continue;
-			}
-			karteisuche.trefferlisteItems.push(i);
-		}
-		// Exportformat erfragen
-		let fenster = document.getElementById("karteisuche-export");
-		overlay.oeffnen(fenster);
-		fenster.querySelector("input").focus();
-	},
-	// Trefferlistenexport durchführen
-	trefferlisteExportierenDo () {
-		// Auswahlfenster schließen
-		overlay.schliessen(document.getElementById("karteisuche-export"));
-		// Ausgabe erzeugen
-		let md = document.getElementById("karteisuche-export-format-md").checked,
-			knapp = document.getElementById("karteisuche-export-typ-knapp").checked,
-			items = document.querySelectorAll("#karteisuche-karteien > div"),
-			content = "",
-			alpha = "";
-		if (!md) {
-			content = `<!doctype html>\n<html lang="de"><head>\n<meta charset="utf-8">\n<title>Karteiliste</title>\n</head><body>`;
-		}
-		for (let i of karteisuche.trefferlisteItems) {
-			// Überschrift und Kopfzeile
-			let item = items[i],
-				buchstabe = item.dataset.buchstabe;
-			if (buchstabe !== alpha) {
-				alpha = buchstabe;
-				if (md) {
-					content += `\n# ${buchstabe}\n\n`;
-					if (!knapp) {
-						content += "| Wort |   | Status | in/mit | Kartei | Datum | Artikel | Datum |\n";
-						content += "| --- | --- | --- | --- | --- | --- | --- | --- |\n";
-					}
-				} else {
-					if (/<\/li>$/.test(content)) {
-						content += "\n</ul>";
-					} else if (/<\/tr>$/.test(content)) {
-						content += "\n</table>";
-					}
-					content += `\n<h1>${buchstabe}</h1>`;
-					if (knapp) {
-						content += "\n<ul>";
-					} else {
-						content += "\n<table>\n<tr><th>Wort</th><th> </th><th>Status</th><th>in/mit</th><th>Kartei</th><th>Datum</th><th>Artikel</th><th>Datum</th></tr>";
-					}
-				}
-			}
-			// Artikelzeile
-			let idx = parseInt(item.dataset.idx, 10),
-				status = karteisuche.ztjAuflistenRedaktion(idx),
-				statusTxt = "abgeschlossen",
-				kartei = karteisuche.ztj[idx].redaktion.filter(v => v.er === "Kartei erstellt"),
-				karteiDa = helfer.datumFormat(kartei[0].da, "minuten").split(", ")[0],
-				karteiPr = kartei[0].pr ? kartei[0].pr : "N. N.",
-				artikel = karteisuche.ztj[idx].redaktion.filter(v => v.er === "Artikel erstellt"),
-				artikelDa = "",
-				artikelPr = "",
-				behandeltIn = karteisuche.ztj[idx].behandeltIn,
-				behandeltMit = [...new Set(karteisuche.ztj[idx].behandeltMit)],
-				inMit = [],
-				check = "✓";
-			if (status.status === 1) {
-				statusTxt = "in Arbeit";
-			}
-			if (artikel.length) {
-				artikelDa = helfer.datumFormat(artikel[0].da, "minuten").split(", ")[0];
-				artikelPr = artikel[0].pr ? artikel[0].pr : "N. N.";
-			}
-			if (behandeltIn || behandeltMit.length) {
-				inMit = [...behandeltMit];
-				inMit.sort(helfer.sortAlpha);
-				for (let j = 0, len = inMit.length; j < len; j++) {
-					inMit[j] = `+ ${inMit[j]}`;
-				}
-				if (behandeltIn) {
-					inMit.unshift(`→ ${behandeltIn}`);
-				}
-			}
-			if (status.hoechst < status.status3) {
-				check = " ";
-			}
-			if (md) {
-				if (knapp) {
-					content += `* ${karteisuche.ztj[idx].wort} (${statusTxt})\n`;
-				} else {
-					content += `| ${karteisuche.ztj[idx].wort} | ${check} | ${status.ereignis} | `;
-					if (inMit.length) {
-						content += inMit.join(", ");
-					} else {
-						content += " ";
-					}
-					content += ` | ${karteiPr} | ${karteiDa}`;
-					if (artikelPr) {
-						content += ` | ${artikelPr} | ${artikelDa} |\n`;
-					} else {
-						content += " | – | – |\n";
-					}
-				}
-			} else {
-				if (knapp) {
-					content += `\n<li>${helferXml.maskieren({text: karteisuche.ztj[idx].wort})} (${statusTxt})</li>`;
-				} else {
-					content += `\n<tr><td>${helferXml.maskieren({text: karteisuche.ztj[idx].wort})}</td><td>${check}</td><td>${helferXml.maskieren({text: status.ereignis})}</td>`;
-					if (inMit.length) {
-						content += `<td>${helferXml.maskieren({text: inMit.join(", ")})}</td>`;
-					} else {
-						content += "<td> </td>";
-					}
-					content += `<td>${helferXml.maskieren({text: karteiPr})}</td><td>${karteiDa}</td>`;
-					if (artikelPr) {
-						content += `<td>${helferXml.maskieren({text: artikelPr})}</td><td>${artikelDa}</td></tr>`;
-					} else {
-						content += "<td>–</td><td>–</td></tr>";
-					}
-				}
-			}
-		}
-		if (!md) {
-			if (/<\/li>$/.test(content)) {
-				content += "\n</ul>";
-			} else if (/<\/tr>$/.test(content)) {
-				content += "\n</table>";
-			}
-			content += "\n</body></html>\n";
-		}
-		// Daten zum Speichern anbieten
-		let format = {
-			name: "Markdown",
-			ext: "md",
-			content: "Karteiliste",
-		};
-		if (!md) {
-			format.name = "HTML";
-			format.ext = "html";
-		}
-		karteisuche.trefferlisteExportierenDialog(content, format);
-	},
-	// Trefferlistenexport: Daten zum Speichern anbieten
-	// (Funktion wird auch für das Speichern der Literaturdatenbank genutzt)
-	//   content = String
-	//     (die Daten)
-	//   format = Object
-	//     (Angaben zum Format und Inhalt der Daten)
-	async trefferlisteExportierenDialog (content, format) {
-		const path = require("path");
-		let opt = {
-			title: `${format.name} speichern`,
-			defaultPath: path.join(appInfo.documents, `${format.content}.${format.ext}`),
-			filters: [
-				{
-					name: `${format.name}-Dateien`,
-					extensions: [format.ext],
-				},
-				{
-					name: "Alle Dateien",
-					extensions: ["*"],
-				},
-			],
-		};
-		// Dialog anzeigen
-		const {ipcRenderer} = require("electron");
-		let result = await ipcRenderer.invoke("datei-dialog", {
-			open: false,
-			winId: winInfo.winId,
-			opt: opt,
-		});
-		// Fehler oder keine Datei ausgewählt
-		if (result.message || !Object.keys(result).length) {
-			dialog.oeffnen({
-				typ: "alert",
-				text: `Beim Öffnen des Dateidialogs ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${result.message}</p>`,
-			});
-			return;
-		} else if (result.canceled) {
-			return;
-		}
-		// Kartei speichern
-		const fsP = require("fs").promises;
-		fsP.writeFile(result.filePath, content)
-			.catch(err => {
-				dialog.oeffnen({
-					typ: "alert",
-					text: `Beim Speichern der ${format.content} ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.message}</p>`,
-				});
-			});
 	},
 	// Generator zur Erzeugung der nächsten Filter-ID
 	makeId: null,
