@@ -171,16 +171,16 @@ let karteisucheExport = {
 					user-select: none;
 				}
 				.redaktion-status-1 {
-					background-color: #d00;
+					background-color: #c00;
 				}
 				.redaktion-status-2 {
-					background-color: #f60;
+					background-color: #ecec00;
 				}
 				.redaktion-status-3 {
 					background-color: #080;
 				}
 				.redaktion-status-4 {
-					background-color: #0f0;
+					background-color: #0c0;
 				}
 				</style>\n`;
 			content = `<!doctype html>\n<html lang="de">\n<head>\n<meta charset="utf-8">\n<title>Karteiliste</title>\n${opt.optStylesheet ? stylesheet.replace(/\n\t{4}/g, "\n") : ""}</head>\n<body>\n<h1>Karteiliste${datum}</h1>\n`;
