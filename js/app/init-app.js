@@ -109,8 +109,9 @@ window.addEventListener("load", async () => {
 			text: text,
 		});
 	});
-	// Literatur-DB automatisch exportieren
+	// CLI-Operationen
 	ipcRenderer.on("redaktion-literatur-export-auto", (evt, vars) => redLit.dbExportierenAuto(vars));
+	ipcRenderer.on("karteisuche-karteiliste-export-auto", (evt, vars) => karteisucheExport.exportierenAuto(vars));
 	// Updates suchen
 	ipcRenderer.on("updates-check", () => updates.check(true));
 	// Before-Unload

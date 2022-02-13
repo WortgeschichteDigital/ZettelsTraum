@@ -251,7 +251,7 @@ let karteisuche = {
 			return;
 		}
 		// Suche starten
-		karteisuche.suchenPrepZtj(pfade);
+		await karteisuche.suchenPrepZtj(pfade);
 	},
 	// markiert einen Pfad, wenn er nicht gefunden wurde, und demarkiert ihn,
 	// wenn er gefunden wurde
@@ -325,65 +325,69 @@ let karteisuche = {
 		const fs = require("fs"),
 			fsP = fs.promises;
 		karteisuche.suchenTiefe = parseInt(document.querySelector("#karteisuche-suchenTiefe").value, 10);
-		setTimeout(async () => {
-			karteisuche.ztj = [];
-			if (pfade.length) {
-				// Dateien auf Speichermedium suchen
-				for (let ordner of pfade) {
-					const exists = await helfer.exists(ordner);
-					if (exists) {
-						try {
-							await fsP.access(ordner, fs.constants.R_OK); // Lesezugriff auf Basisordner? Wenn kein Zugriff => throw
-							await karteisuche.ordnerParsen(ordner, 1);
-						} catch (err) { // wahrscheinlich besteht kein Zugriff auf den Pfad
-							karteisuche.suchenAbschluss();
-							dialog.oeffnen({
-								typ: "alert",
-								text: `Die Karteisuche wurde wegen eines Fehlers nicht gestartet.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.message}</p>`,
-							});
-							return;
+		await new Promise(resolve => {
+			setTimeout(async () => {
+				karteisuche.ztj = [];
+				if (pfade.length) {
+					// Dateien auf Speichermedium suchen
+					for (let ordner of pfade) {
+						const exists = await helfer.exists(ordner);
+						if (exists) {
+							try {
+								await fsP.access(ordner, fs.constants.R_OK); // Lesezugriff auf Basisordner? Wenn kein Zugriff => throw
+								await karteisuche.ordnerParsen(ordner, 1);
+							} catch (err) { // wahrscheinlich besteht kein Zugriff auf den Pfad
+								karteisuche.suchenAbschluss();
+								dialog.oeffnen({
+									typ: "alert",
+									text: `Die Karteisuche wurde wegen eines Fehlers nicht gestartet.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.message}</p>`,
+								});
+								resolve(false);
+								return;
+							}
 						}
 					}
-				}
-			} else {
-				// aktive Pfade ermitteln
-				let pfade = [];
-				document.querySelectorAll("#karteisuche-pfade span[data-pfad]").forEach(i => {
-					const input = i.querySelector("input");
-					if (input && input.checked ||
-							!input) {
-						const reg = new RegExp("^" + helfer.escapeRegExp(i.dataset.pfad));
-						pfade.push(reg);
-					}
-				});
-				// Dateidaten aus dem Cache zusammentragen
-				for (let pfad of Object.keys(karteisuche.ztjCache)) {
-					let pfadAktiv = false;
-					for (const reg of pfade) {
-						if (reg.test(pfad)) {
-							pfadAktiv = true;
-							break;
+				} else {
+					// aktive Pfade ermitteln
+					let pfade = [];
+					document.querySelectorAll("#karteisuche-pfade span[data-pfad]").forEach(i => {
+						const input = i.querySelector("input");
+						if (input && input.checked ||
+								!input) {
+							const reg = new RegExp("^" + helfer.escapeRegExp(i.dataset.pfad));
+							pfade.push(reg);
 						}
-					}
-					if (!pfadAktiv) {
-						// Dateien aus inaktiven Pfaden ignorieren
-						continue;
-					}
-					karteisuche.ztj.push({
-						pfad: pfad,
-						ctime: karteisuche.ztjCache[pfad].ctime,
-						wort: "",
-						wortSort: "",
-						redaktion: [],
-						nebenlemmata: [],
-						behandeltIn: "",
-						behandeltMit: [],
-						passt: false,
 					});
+					// Dateidaten aus dem Cache zusammentragen
+					for (let pfad of Object.keys(karteisuche.ztjCache)) {
+						let pfadAktiv = false;
+						for (const reg of pfade) {
+							if (reg.test(pfad)) {
+								pfadAktiv = true;
+								break;
+							}
+						}
+						if (!pfadAktiv) {
+							// Dateien aus inaktiven Pfaden ignorieren
+							continue;
+						}
+						karteisuche.ztj.push({
+							pfad: pfad,
+							ctime: karteisuche.ztjCache[pfad].ctime,
+							wort: "",
+							wortSort: "",
+							redaktion: [],
+							nebenlemmata: [],
+							behandeltIn: "",
+							behandeltMit: [],
+							passt: false,
+						});
+					}
 				}
-			}
-			karteisuche.suchen();
-		}, 500);
+				await karteisuche.suchen();
+				resolve(true);
+			}, 500);
+		});
 	},
 	// Suche starten
 	async suchen () {
@@ -1335,7 +1339,7 @@ let karteisuche = {
 	},
 	// entfernt einen Filter
 	//   a = Element
-	//     (Anker zum Entfernen des Fitlers)
+	//     (Anker zum Entfernen des Filters)
 	filterEntfernen (a) {
 		a.addEventListener("click", function(evt) {
 			evt.preventDefault();

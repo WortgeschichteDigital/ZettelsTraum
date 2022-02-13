@@ -894,7 +894,7 @@ fenster = {
 				this.send("optionen-zuletzt-verschwunden", appMenu.zuletztVerschwunden);
 			}
 			// Soll eine Kartei geöffnet oder eine neue Kartei erstellt werden?
-			// Soll die Literatur-DB exportiert werden?
+			// Soll eine CLI-Operation ausgeführt werden werden?
 			let cli = {};
 			if (init) {
 				cli = fenster.parseArgv(process.argv);
@@ -919,6 +919,12 @@ fenster = {
 					cli.vars = kartei.vars;
 				}
 				this.send("redaktion-literatur-export-auto", cli.vars);
+			} else if (cli.type === "karteiliste" ||
+					kartei && kartei.type === "karteiliste") {
+				if (kartei) {
+					cli.vars = kartei.vars;
+				}
+				this.send("karteisuche-karteiliste-export-auto", cli.vars);
 			}
 		});
 		// Aktionen vor dem Schließen des Fensters
@@ -1292,18 +1298,18 @@ fenster = {
 	//     (Array mit den Startargumenten)
 	parseArgv (argv) {
 		let cli = {
-			type: "", // ztj | literatur-db
+			type: "", // ztj | literatur-db | karteiliste
 			vars: {},
 		};
-		const regLiteraturDB = /literatur-db-(quelle|ziel|format)=(.+)/;
+		const regCLI = /(literatur-db|karteiliste)-(quelle|ziel|format|vorlage)=(.+)/;
 		for (const i of argv) {
 			if (/\.ztj$/.test(i)) {
 				cli.type = "ztj";
 				cli.vars.ztj = i;
-			} else if (regLiteraturDB.test(i)) {
-				cli.type = "literatur-db";
-				const m = i.match(regLiteraturDB);
-				cli.vars[ m[1] ] = m[2];
+			} else if (regCLI.test(i)) {
+				const m = i.match(regCLI);
+				cli.type = m[1];
+				cli.vars[ m[2] ] = m[3];
 			}
 		}
 		return cli;
@@ -1404,6 +1410,10 @@ app.on("second-instance", (evt, argv) => {
 	}
 	// Literatur-DB exportieren
 	else if (cli.type === "literatur-db") {
+		fenster.erstellen(cli);
+	}
+	// Karteiliste exportieren
+	else if (cli.type === "karteiliste") {
 		fenster.erstellen(cli);
 	}
 });

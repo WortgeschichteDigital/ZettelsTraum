@@ -48,7 +48,9 @@ let karteisucheExport = {
 	// Exportieren: ausgewählte Optionen
 	exportierenOpt: {},
 	// Exportieren
-	exportieren () {
+	//   auto = Boolean
+	//     (automatischer Export)
+	exportieren (auto = false) {
 		// Einstellungen auslesen
 		karteisucheExport.exportierenOpt = {
 			format: "html",
@@ -249,11 +251,15 @@ let karteisucheExport = {
 			}
 		}
 		// Dateidaten speichern
-		karteisucheExport.speichern(content, {
-			name: opt.format === "html" ? "HTML" : "Markdown",
-			ext: opt.format,
-			content: "Karteiliste",
-		});
+		if (auto) {
+			return content;
+		} else {
+			karteisucheExport.speichern(content, {
+				name: opt.format === "html" ? "HTML" : "Markdown",
+				ext: opt.format,
+				content: "Karteiliste",
+			});
+		}
 	},
 	// Exportieren: Lemmaliste erstellen
 	exportierenListe () {
@@ -618,6 +624,104 @@ let karteisucheExport = {
 			return kopf;
 		}
 	},
+	// Exportieren: Karteiliste automatisch speichern
+	//   vars = Object
+	//     (Pfade: vars.quelle, vars.ziel; Vorlagen-Index: vars.vorlage)
+	async exportierenAuto (vars) {
+		let opt = optionen.data["karteisuche-export-vorlagen"];
+		if (!opt.length) {
+			karteisucheExport.vorlagenFillOpt();
+			opt = optionen.data["karteisuche-export-vorlagen"];
+		}
+		// Vorlage vorhanden?
+		if (typeof vars.vorlage === "undefined") {
+			vars.vorlage = 0;
+		} else {
+			vars.vorlage = parseInt(vars.vorlage, 10);
+		}
+		if (!opt[vars.vorlage]) {
+			dialog.oeffnen({
+				typ: "alert",
+				text: `Beim Exportieren der Karteiliste ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\nVorlage ${vars.vorlage} nicht gefunden`,
+			});
+			return;
+		}
+		const format = opt[vars.vorlage].inputs.includes("format-html") ? "html" : "md";
+		// Ordner überprüfen
+		const result = await helfer.cliFolderCheck({
+			format,
+			typ: "Karteiliste",
+			vars,
+		});
+		if (result === false) {
+			return;
+		}
+		vars = result;
+		// Karteisuche aufrufen
+		await karteisuche.oeffnen();
+		// ggf. Quellpfad in Liste ergänzen
+		let pfadBereinigen = false;
+		if (!optionen.data.karteisuche.pfade.includes(vars.quelle)) {
+			optionen.data.karteisuche.pfade.push(vars.quelle);
+			karteisuche.pfadeAuflisten();
+			pfadBereinigen = true;
+		}
+		// Filter: Backup erstellen und temporär entfernen
+		let filter = [];
+		for (const f of optionen.data.karteisuche.filter) {
+			filter.push([...f]);
+		}
+		document.querySelectorAll("#karteisuche-filter .icon-loeschen").forEach(a => a.click());
+		// nur der Quellpfad darf aktiv sein
+		document.querySelectorAll("#karteisuche-pfade input").forEach(i => {
+			if (i.value !== vars.quelle) {
+				i.checked = false;
+			}
+		});
+		// Suche durchführen > Exportfenster öffnen > Vorlage laden > Dateidaten ermitteln
+		await karteisuche.suchenPrep();
+		karteisucheExport.oeffnen();
+		karteisucheExport.vorlageLaden(vars.vorlage);
+		const content = karteisucheExport.exportieren(true);
+		// Daten speichern
+		const fsP = require("fs").promises;
+		fsP.writeFile(vars.ziel, content)
+			.then(async () => {
+				// alle Pfade abhaken
+				document.querySelectorAll("#karteisuche-pfade input").forEach(i => i.checked = true);
+				// ggf. Quellpfad wieder aus der Liste entfernen
+				if (pfadBereinigen) {
+					const idx = optionen.data.karteisuche.pfade.indexOf(vars.quelle);
+					optionen.data.karteisuche.pfade.splice(idx, 1);
+					karteisuche.pfadeAuflisten();
+				}
+				// Filter wiederherstellen
+				filterWieder();
+				// Fenster schließen
+				await overlay.alleSchliessen();
+				// Feedback
+				dialog.oeffnen({
+					typ: "alert",
+					text: `Die Karteiliste wurde exportiert!\n<p class="force-wrap">${vars.ziel}</p>`,
+				});
+			})
+			.catch(err => {
+				// Filter wiederherstellen
+				filterWieder();
+				// Fehlermeldung
+				dialog.oeffnen({
+					typ: "alert",
+					text: `Beim Exportieren der Karteiliste ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\nVorlage ${err.message} nicht gefunden`,
+				});
+			});
+		// Filter wiederherstellen
+		function filterWieder () {
+			for (const f of filter) {
+				optionen.data.karteisuche.filter.push([...f]);
+			}
+			karteisuche.filterWiederherstellen();
+		}
+	},
 	// Vorlagen
 	vorlagen: [
 		{
@@ -821,6 +925,11 @@ let karteisucheExport = {
 			}
 		}
 		// Zurücksetzen
+		karteisucheExport.vorlagenFillOpt();
+		karteisucheExport.vorlagenListe();
+	},
+	// Vorlagen-Tools: Optionen mit Standardvorlagen füllen
+	vorlagenFillOpt () {
 		optionen.data["karteisuche-export-vorlagen"] = [];
 		let opt = optionen.data["karteisuche-export-vorlagen"];
 		for (const i of karteisucheExport.vorlagen) {
@@ -830,7 +939,6 @@ let karteisucheExport = {
 			});
 		}
 		optionen.speichern();
-		karteisucheExport.vorlagenListe();
 	},
 	// Datei speichern
 	// (Funktion wird auch für das Speichern der Literaturdatenbank genutzt)
