@@ -509,7 +509,7 @@ let kopieren = {
 	//     (in jedem Slot ist eine Zettelkopie, wie sie in kopieren.datenBeleg() erstellt wird)
 	//   duplikat = true || undefined
 	//     (der übergebene Beleg soll dupliziert werden)
-	einfuegenEinlesen (daten, duplikat = false) {
+	async einfuegenEinlesen (daten, duplikat = false) {
 		// Bedeutungsmapper (welche Bedeutungen in welche Gerüste kommen)
 		let bdMap = {};
 		if (duplikat) {
@@ -606,7 +606,7 @@ let kopieren = {
 		bedeutungenWin.daten();
 		// Liste und Filter neu aufbauen, Liste anzeigen
 		liste.status(true);
-		liste.wechseln();
+		await liste.wechseln();
 		// Einfüge-Fenster ggf. schließen
 		if (optionen.data.einstellungen["einfuegen-schliessen"]) {
 			overlay.schliessen(document.getElementById("kopieren-einfuegen"));

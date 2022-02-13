@@ -1713,13 +1713,13 @@ let filter = {
 			return;
 		}
 		// Suchfilter öffnen
-		speichern.checkInit(() => {
+		speichern.checkInit(async () => {
 			// Bedeutungen schließen
 			bedeutungen.schliessen();
 			// Beleg schließen
 			beleg.aktionAbbrechen();
 			// alle Overlays schließen
-			overlay.alleSchliessen();
+			await overlay.alleSchliessen();
 			// ggf. Filter öffnen
 			if (!optionen.data.belegliste.filterleiste) {
 				liste.headerFilter();
