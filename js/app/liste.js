@@ -2,9 +2,9 @@
 
 let liste = {
 	// zur Belegliste wechseln (von wo auch immer)
-	wechseln () {
+	async wechseln () {
 		helfer.hauptfunktion = "liste";
-		overlay.alleSchliessen();
+		await overlay.alleSchliessen();
 		document.getElementById("liste").classList.add("preload");
 		helfer.sektionWechseln("liste");
 	},

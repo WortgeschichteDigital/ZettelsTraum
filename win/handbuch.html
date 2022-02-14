@@ -3795,9 +3795,39 @@ Mustermann, Erika
 
 						<p>Ein konkretes Beispiel (<abbr title="vergleiche">vgl.</abbr> den nebenstehenden Screenshot): Sie legen sich eine Kartei an, in der Sie bereits im Namen vermerken, dass in ihr Belege zu mehreren Wörtern zu finden sind: <q>Großfamilie, Kleinfamilie, Kernfamilie</q>. In solchen Fällen wird in der Karteisuche immer nur eines der Wörter erscheinen, aber vermerkt werden, dass dieses zusammen mit den anderen beiden behandelt wird. Dafür steht das <q>+</q>. Ein anderer Fall liegt vor, wenn Sie in ihrer Kartei zum Wort <q>Fitnessbewegung</q> (im <a href="#menueRedaktion-metadatenBehandeltMit">Behandelt-mit-Feld</a>) vermerkt haben, dass es zusammen mit <q>Sportbewegung</q> behandelt wird. In der Trefferliste wird <q>Sportbewegung</q> darum durch <q>+ Fitnessbewegung</q> und <q>Fitnessbewegung</q> durch <q>→ Sportbewegung</q> gekennzeichnet.</p>
 
-						<p id="menueApp-karteisucheExport">Sie können die <b>Trefferliste exportieren</b>, indem Sie auf das Icon <img src="../img/dokument-export.svg" width="20" height="20" alt=""> klicken. Die Karteiliste kann in zwei Formaten exportiert werden: als <abbr title="Hypertext Markup Language" lang="en">HTML</abbr> (das sie auch in einem Office-Programm öffnen können) oder als Markdown. Vor dem Export öffnet sich ein Fenster, in dem Sie das Format und die Informationsdichte der exportierten Liste wählen können.</p>
+						<p id="menueApp-karteisucheExport">Sie können die <b>Trefferliste exportieren</b>, indem Sie auf das Icon <img src="../img/dokument-export.svg" width="20" height="20" alt=""> klicken. Dabei können Sie recht kleinteilig bestimmen, welches Format die exportierte Datei haben soll und welche Datenfelder gedruckt werden sollen. Was genau die einzelnen Optionen bewirken, ist entweder selbsterklärend und/oder wird in einem Tooltip erläutert, der beim Herüberfahren mit der Maus sichtbar wird.</p>
 
-						<p>Exportiert werden immer nur Angaben zu den Karteien, die in der Trefferliste gerade sichtbar sind. Filtern Sie die Trefferliste nach Buchstaben, werden allein die Informationen zu den Karteien des ausgewählten Buchstaben exportiert.</p>
+						<p>Es stehen zwei verschiedene Dateiformate zur Verfügung: Markdown (<abbr title="Markdown">MD</abbr>), bei dem es sich um ein einfach strukturiertes Textformat handelt, und <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>, also eine <i lang="en">stand-alone webpage</i>. Eine mithilfe dieser Funktion exportierte Webseite kann in jedem Browser angezeigt werden. <abbr title="Hypertext Markup Language" lang="en">HTML</abbr> eignet sich ferner für einen Import der Daten in Office-Programme. Hierfür sollten Sie allerdings die Option <i>Stylesheet einbinden</i> deaktivieren.</p>
+
+						<p>Ein paar <b>Besonderheiten</b> gibt es zu beachten:</p>
+
+						<ul>
+							<li>Das Feld <i>Lemma</i> kann nicht deaktiviert werden.</li>
+
+							<li>Ein <abbr title="Markdown">MD</abbr>-Export erfolgt immer mit Tabellenkopf, ganz gleich ob die entsprechende Option aktiviert wurde oder nicht.</li>
+
+							<li>Ferner können in <abbr title="Markdown">MD</abbr> keine Stylesheets eingebunden werden, weswegen die Option <i>Redaktion: Status</i> immer automatisch deaktiviert wird.</li>
+
+							<li>In <abbr title="Hypertext Markup Language" lang="en">HTML</abbr> wird das Feld <i>Redaktion: Status</i> nur gedruckt, wenn die Option <i>Stylesheet einbinden</i> aktiviert ist.</li>
+
+							<li>Exportiert werden immer nur Angaben zu den Karteien, die in der Trefferliste gerade sichtbar sind. Filtern Sie die Trefferliste nach Buchstaben, werden allein Informationen zu den Karteien des ausgewählten Buchstabens exportiert.</li>
+						</ul>
+
+						<p>Sie können <b>eigene Exportvorlagen</b> erstellen:</p>
+
+						<ol>
+							<li>Die gewünschten Einstellungen vornehmen.</li>
+
+							<li>Icon <img src="../img/plus-dick.svg" width="20" height="20" alt=""> anklicken.</li>
+
+							<li>Name der Vorlage eingeben und <kbd>Enter</kbd> drücken.</li>
+						</ol>
+
+						<p>Formatvorlagen können durch Klick auf <img src="../img/muelleimer.svg" width="20" height="20" alt=""> wieder gelöscht werden. Dies gilt auch für die vordefinierten Vorlagen. Möchten Sie diese wiederherstellen, müssen Sie auf <img src="../img/pfeil-kreis.svg" width="20" height="20" alt=""> klicken. Dabei gehen jedoch alle selbst erstellten Vorlagen verloren.</p>
+
+						<p>Wird beim Erstellen einer Vorlage ein bereits bestehender Vorlagenname gewählt, wird die bestehende Vorlage ersetzt.</p>
+
+						<p>Die Vorlagen werden in den Einstellungen gespeichert. Sie können also auch zusammen mit diesen <a href="#einstellungen-allgemeinesSichern">im- und exportiert</a> werden.</p>
 					</div>
 
 					<p class="erklaerung-icon-menues" id="menueApp-einstellungen"><img src="../img/zahnrad.svg" width="24" height="24" alt="">Einstellungen</p>
@@ -3835,6 +3865,8 @@ Mustermann, Erika
 						<p>Vollkommen unproblematisch ist es andererseits, <b>Wortverbindungen</b> wie <q>politisch korrekt</q> oder Redewendungen wie <q>Kopf an Kopf</q> einzugeben. Im letzten Fall wollen Sie wahrscheinlich nicht, dass die Präposition <i>an</i> im Belegtext hervorgehoben wird, zumal eine trunkierte Hervorhebung zahlreiche falschpositive Markierungen produzieren wird. Die Hervorhebung einzelner Wörter kann man darum <a href="#menueKartei-formvariantenAktivieren">abstellen</a>, ebenso wie die <a href="#menueKartei-formvariantenErweitern">automatische Erweiterung</a>.</p>
 
 						<p>Sammeln Sie in ein und derselben Kartei Belege zu <b>mehreren Wörtern</b>, sollten Sie diese Wörter auch alle mit angeben. Dies kann besonders für die <a href="#menueApp-karteisucheTrefferliste">Trefferliste der Karteisuche</a> hilfreich sein: In solchen Fällen werden die Wörter dort einzeln aufgeführt. Dafür müssen Sie bei der Eingabe nur die Regel beachten, dass Einzelwörter durch Komma und Leerzeichen voneinander getrennt werden. Dies könnte dann so aussehen: <q>Großfamilie, Kleinfamilie, Kernfamilie</q>.</p>
+
+						<p>Hat ein Lemma <b>variierende Schreibungen</b> sollten Sie diese mit Schrägstrich voneinander trennen. Eine Eingabe könnte also so aussehen: <q>Clan/Klan</q> oder <q>Getto/Ghetto, gehttoisieren/ghettoisieren</q>. Die Varianten werden <abbr title="zum Beispiel">z. B.</abbr> in der <a href="#menueApp-karteisucheExport">Exportfunktion der Karteisuche</a> als solche erkannt. Außerdem werden in diesem Fall auch für die alternierenden Schreibungen automatisch entsprechende <a href="#menueKartei-formvarianten">Formvarianten</a> gesucht.</p>
 					</div>
 
 					<p class="erklaerung-icon-menues" id="menueKartei-oeffnen"><img src="../img/oeffnen.svg" width="24" height="24" alt="">Öffnen</p>

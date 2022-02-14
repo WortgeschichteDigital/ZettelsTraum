@@ -92,7 +92,7 @@ let overlay = {
 		}
 	},
 	// alle offenen Overlays schließen
-	alleSchliessen () {
+	async alleSchliessen () {
 		let offen = [];
 		document.querySelectorAll(".overlay").forEach(function(i) {
 			if (!i.classList.contains("aus")) {
@@ -101,6 +101,7 @@ let overlay = {
 		});
 		for (let i = 0, len = offen.length; i < len; i++) {
 			overlay.schliessen(document.getElementById(offen[i]));
+			await new Promise(resolve => setTimeout(() => resolve(true), 200));
 		}
 	},
 	// blendet ein Overlay-Fenster aus

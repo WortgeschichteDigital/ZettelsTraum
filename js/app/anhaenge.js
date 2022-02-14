@@ -286,8 +286,8 @@ let anhaenge = {
 		ele.addEventListener("click", function(evt) {
 			evt.preventDefault();
 			const id = this.dataset.id;
-			speichern.checkInit(() => {
-				overlay.alleSchliessen();
+			speichern.checkInit(async () => {
+				await overlay.alleSchliessen();
 				beleg.oeffnen(id);
 			});
 		});

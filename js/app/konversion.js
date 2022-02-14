@@ -3,7 +3,8 @@
 let konversion = {
 	// aktuelle Version des Dateiformats
 	// *** WICHTIG! *** WICHTIG! *** WICHTIG! ***
-	// 1.) Beim Anlegen neuer Datenwerte Objekt in kartei.erstellen() ergänzen!
+	// 1.) Beim Anlegen neuer Datenwerte Objekte in
+	//   kartei.erstellen() u. beleg.karteErstellen() ergänzen!
 	// 2.) Diese Versionsnummer hochzählen!
 	version: 22,
 	// Verteilerfunktion

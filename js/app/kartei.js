@@ -6,7 +6,7 @@ let kartei = {
 	// Pfad der geladenen Datei (dient zum automatischen Speichern der Datei)
 	pfad: "",
 	// neue Kartei erstellen
-	erstellen () {
+	async erstellen () {
 		// Kartei-Pfad löschen
 		kartei.pfad = "";
 		// globales Datenobjekt initialisieren
@@ -61,7 +61,7 @@ let kartei = {
 		// außerdem könnte es sein, dass die Bearbeiter*in keinen Beleg erstellt
 		liste.aufbauen(true);
 		// alle Overlays schließen
-		overlay.alleSchliessen();
+		await overlay.alleSchliessen();
 		// Bedeutungsgerüst-Fenster schließen
 		bedeutungenWin.schliessen();
 		// XML-Fenster schließen
@@ -194,7 +194,7 @@ let kartei = {
 		// Main melden, dass die Kartei in diesem Fenster geöffnet wurde
 		ipcRenderer.send("kartei-geoeffnet", winInfo.winId, datei);
 		// alle Overlays schließen
-		overlay.alleSchliessen();
+		await overlay.alleSchliessen();
 		// alle Filter zurücksetzen (wichtig für Text- und Zeitraumfilter)
 		filter.ctrlReset(false);
 		// Okay! Content kann eingelesen werden
@@ -218,7 +218,7 @@ let kartei = {
 		liste.statusOffen = {}; // sonst werden unter Umständen Belege aufgeklappt, selbst wenn alle geschlossen sein sollten; s. Changelog zu Version 0.23.0
 		liste.statusSichtbarP = {};
 		liste.aufbauen(true);
-		liste.wechseln();
+		await liste.wechseln();
 		window.scrollTo({
 			left: 0,
 			top: 0,
@@ -393,7 +393,7 @@ let kartei = {
 		});
 	},
 	// Kartei im aktuellen Fenster schließen, das Fenster selbst aber erhalten
-	schliessenDurchfuehren () {
+	async schliessenDurchfuehren () {
 		const {ipcRenderer} = require("electron");
 		ipcRenderer.send("kartei-geschlossen", winInfo.winId);
 		lock.actions({datei: kartei.pfad, aktion: "unlock"});
@@ -402,7 +402,7 @@ let kartei = {
 		beleg.belegGeaendert(false);
 		bedeutungen.bedeutungenGeaendert(false);
 		kartei.karteiGeaendert(false);
-		overlay.alleSchliessen();
+		await overlay.alleSchliessen();
 		bedeutungenWin.schliessen();
 		redXml.schliessen();
 		data = {};
@@ -435,7 +435,7 @@ let kartei = {
 			typ: "prompt",
 			text: "Zu welchem Wort soll die Kartei angelegt werden?",
 			platzhalter: "Karteiwort",
-			callback: () => {
+			callback: async () => {
 				let wort = dialog.getPromptText();
 				if (dialog.antwort && !wort) {
 					dialog.oeffnen({
@@ -451,7 +451,7 @@ let kartei = {
 					kartei.wort = wort;
 					helfer.formVariRegExp();
 					kartei.wortEintragen();
-					kartei.erstellen();
+					await kartei.erstellen();
 					kartei.menusDeaktivieren(false);
 					erinnerungen.check();
 				}

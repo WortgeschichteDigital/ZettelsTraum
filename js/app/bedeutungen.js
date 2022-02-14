@@ -337,9 +337,9 @@ let bedeutungen = {
 			return;
 		}
 		// Bedeutungenformular anzeigen und initialisieren
-		speichern.checkInit(() => {
+		speichern.checkInit(async () => {
 			helfer.hauptfunktion = "geruest";
-			overlay.alleSchliessen();
+			await overlay.alleSchliessen();
 			bedeutungen.data = {};
 			bedeutungen.copyData(data.bd, bedeutungen.data);
 			bedeutungen.akt = bedeutungen.data.gr[bedeutungen.data.gn];

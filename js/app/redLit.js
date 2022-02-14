@@ -512,7 +512,7 @@ let redLit = {
 					});
 				});
 		} else {
-			karteisuche.trefferlisteExportierenDialog(content, format);
+			karteisucheExport.speichern(content, format);
 		}
 	},
 	// Datenbank: automatischen Export durchführen
@@ -521,47 +521,16 @@ let redLit = {
 	async dbExportierenAuto (vars) {
 		// Format ermitteln
 		const format = vars.format || "xml";
-		// überprüfen, ob die Pfade existieren
-		let quelleExists = await helfer.exists(vars.quelle),
-			zielExists = await helfer.exists(vars.ziel),
-			neueDatei = false;
-		if (!zielExists &&
-				!/(\/|\\)$/.test(vars.ziel)) {
-			zielExists = await helfer.exists(vars.ziel.replace(/(\/|\\)[^/\\]+$/, ""));
-			neueDatei = true;
-		}
-		if (!quelleExists || !zielExists) {
-			let falsch = "Quellpfad",
-				pfad = vars.quelle;
-			if (!zielExists) {
-				falsch = "Zielpfad";
-				pfad = vars.ziel;
-			}
-			dialog.oeffnen({
-				typ: "alert",
-				text: `Beim Exportieren der Literaturdatenbank ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\nDer ${falsch} wurde nicht gefunden!\n<p class="force-wrap">${pfad}</p>`,
-			});
+		// Ordner überprüfen
+		const result = await helfer.cliFolderCheck({
+			format,
+			typ: "Literaturliste",
+			vars,
+		});
+		if (result === false) {
 			return;
 		}
-		// Ist der Zielpfad ein Ordner?
-		if (!neueDatei) {
-			try {
-				const fsP = require("fs").promises,
-					stats = await fsP.lstat(vars.ziel);
-				if (stats.isDirectory()) {
-					if (!/(\/|\\)$/.test(vars.ziel)) {
-						vars.ziel += require("path").sep;
-					}
-					vars.ziel += "Literaturliste." + format;
-				}
-			} catch (err) {
-				dialog.oeffnen({
-					typ: "alert",
-					text: `Beim Exportieren der Literaturdatenbank ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\nFehler beim Zugriff auf den Zielpfad!`,
-				});
-				return;
-			}
-		}
+		vars = result;
 		// DB einlesen
 		const ergebnis = await redLit.dbOeffnenEinlesen({pfad: vars.quelle});
 		if (ergebnis !== true) {

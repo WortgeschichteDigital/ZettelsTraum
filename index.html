@@ -66,6 +66,7 @@
 		<script src="js/app/io.js"></script>
 		<script src="js/app/kartei.js"></script>
 		<script src="js/app/karteisuche.js"></script>
+		<script src="js/app/karteisucheExport.js"></script>
 		<script src="js/app/kopf.js"></script>
 		<script src="js/app/konversion.js"></script>
 		<script src="js/app/kopieren.js"></script>
@@ -839,20 +840,121 @@
 			<h2><span class="icon-h icon-h-kopieren"> </span
 				>Karteiliste exportieren<a href="#" class="icon-link icon-handbuch" title="Abschnitt im Handbuch öffnen" data-handbuch="menueApp-karteisucheExport"> </a><a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"
 				> </a></h2>
-			<div id="karteisuche-export-cont">
-				<p
-					><input type="radio" name="karteisuche-export-format" id="karteisuche-export-format-md" checked><label for="karteisuche-export-format-md">Markdown</label
-					><input type="radio" name="karteisuche-export-format" id="karteisuche-export-format-html"><label for="karteisuche-export-format-html">HTML</label
-				></p>
-				<p
-					><input type="radio" name="karteisuche-export-typ" id="karteisuche-export-typ-knapp" checked><label for="karteisuche-export-typ-knapp">Format <i>knapp</i></label
-					><input type="radio" name="karteisuche-export-typ" id="karteisuche-export-typ-ausfuehrlich"><label for="karteisuche-export-typ-ausfuehrlich">Format <i>ausführlich</i></label
-				></p>
-				<p class="button"
-					><input type="button" value="Exportieren" id="karteisuche-export-exportieren"
-					><input type="button" value="Abbrechen" id="karteisuche-export-abbrechen"
-				></p>
+			<div id="karteisuche-export-form-cont">
+				<div id="karteisuche-export-form">
+					<div>
+						<h3>Vorlagen</h3>
+						<div id="karteisuche-export-vorlagen-tools"
+							><a href="#" class="icon-link icon-plus-dick" id="karteisuche-export-vorlagen-tools-add" title="Vorlage hinzufügen"> </a
+							><a href="#" class="icon-link icon-pfeil-kreis" id="karteisuche-export-vorlagen-tools-reset" title="Vorlagen zurücksetzen"> </a
+						></div>
+						<div id="karteisuche-export-vorlagen"></div>
+
+						<h3>Format</h3>
+						<p title="eine Webseiten-Datei erzeugen"
+							><input type="radio" name="karteisuche-export-format" id="karteisuche-export-format-html"
+							><label for="karteisuche-export-format-html">HTML</label
+						></p>
+						<p title="eine Markdown-Datei erzeugen"
+							><input type="radio" name="karteisuche-export-format" id="karteisuche-export-format-md"
+							><label for="karteisuche-export-format-md">MD</label
+						></p>
+
+						<h3>Optionen</h3>
+						<p title="Exportdatum in der Titelüberschrift drucken"
+							><input type="checkbox" id="karteisuche-export-optionen-datum"
+							><label for="karteisuche-export-optionen-datum">Datum drucken</label
+						></p>
+						<p title="mehrere durch Alphabetüberschriften unterbrochene Tabellen erzeugen"
+							><input type="checkbox" id="karteisuche-export-optionen-alphabet"
+							><label for="karteisuche-export-optionen-alphabet">Alphabet drucken</label
+						></p>
+						<p title="jede Tabelle mit einer Kopfzeile beginnen (in MD immer aktiv)"
+							><input type="checkbox" id="karteisuche-export-optionen-tabellenkopf"
+							><label for="karteisuche-export-optionen-tabellenkopf">Tabellenkopf drucken</label
+						></p>
+						<p class="einzug" title="Beschriftung der Kopfzeilen möglichst kurz halten"
+							><input type="checkbox" id="karteisuche-export-optionen-tabellenkopf-kurz"
+							><label for="karteisuche-export-optionen-tabellenkopf-kurz">Beschriftung kurz</label
+						></p>
+						<p title="durch Querstrich voneinander getrennte Varianten eines Lemmas auftrennen"
+							><input type="checkbox" id="karteisuche-export-optionen-varianten-trennen"
+							><label for="karteisuche-export-optionen-varianten-trennen">Varianten trennen</label
+						></p>
+						<p title="Namen als Initialien drucken"
+							><input type="checkbox" id="karteisuche-export-optionen-initialien"
+							><label for="karteisuche-export-optionen-initialien">Namen als Initialien</label
+						></p>
+						<p title="Stylesheet in die exportierte Datei einbinden (nur HTML)"
+							><input type="checkbox" id="karteisuche-export-optionen-stylesheet"
+							><label for="karteisuche-export-optionen-stylesheet">Stylesheet einbinden</label
+						></p>
+					</div>
+					<div>
+						<h3>Felder</h3>
+						<p title="jede Tabellenzeile mit fortlaufender Nummerierung"
+							><input type="checkbox" id="karteisuche-export-felder-nummerierung"
+							><label for="karteisuche-export-felder-nummerierung">Nummerierung</label
+						></p>
+						<p title="das Lemma wird immer gedruckt"
+							><input type="checkbox" id="karteisuche-export-felder-lemma" checked disabled
+							><label for="karteisuche-export-felder-lemma">Lemma</label
+						></p>
+						<p title="Markierung für den Fall, dass das Lemma ein Hauptlemma ist"
+							><input type="checkbox" id="karteisuche-export-felder-hauptlemma"
+							><label for="karteisuche-export-felder-hauptlemma">Hauptlemma</label
+						></p>
+						<p title="Markierung für den Fall, dass das Lemma ein Nebenlemma ist"
+							><input type="checkbox" id="karteisuche-export-felder-nebenlemma"
+							><label for="karteisuche-export-felder-nebenlemma">Nebenlemma</label
+						></p>
+						<p title="farbiger Kreis, der den Redaktionsstatus verdeutlicht (nur HTML mit Stylesheet)"
+							><input type="checkbox" id="karteisuche-export-felder-redaktion-status"
+							><label for="karteisuche-export-felder-redaktion-status">Redaktion: Status</label
+						></p>
+						<p title="Markierung für den Fall, dass der Artikel erstellt ist"
+							><input type="checkbox" id="karteisuche-export-felder-redaktion-erstellt"
+							><label for="karteisuche-export-felder-redaktion-erstellt">Redaktion: Artikel erstellt</label
+						></p>
+						<p title="Markierung für den Fall, dass der Artikel online steht"
+							><input type="checkbox" id="karteisuche-export-felder-redaktion-online"
+							><label for="karteisuche-export-felder-redaktion-online">Redaktion: Artikel online</label
+						></p>
+						<p title="ausgeschriebener Redaktionsstatus"
+							><input type="checkbox" id="karteisuche-export-felder-redaktion-text"
+							><label for="karteisuche-export-felder-redaktion-text">Redaktion: Text</label
+						></p>
+						<p title="Verweise auf Artikel oder Lemmata, in bzw. mit denen dieses Lemma behandelt wird"
+							><input type="checkbox" id="karteisuche-export-felder-behandelt"
+							><label for="karteisuche-export-felder-behandelt">behandelt in/mit</label
+						></p>
+						<p title="AutorIn, die die Kartei erstellt hat"
+							><input type="checkbox" id="karteisuche-export-felder-kartei-durch"
+							><label for="karteisuche-export-felder-kartei-durch">Kartei durch</label
+						></p>
+						<p title="Datum, an dem die Kartei erstellt wurde"
+							><input type="checkbox" id="karteisuche-export-felder-kartei-am"
+							><label for="karteisuche-export-felder-kartei-am">Kartei am</label
+						></p>
+						<p title="AutorIn, die den Artikel erstellt hat"
+							><input type="checkbox" id="karteisuche-export-felder-artikel-durch"
+							><label for="karteisuche-export-felder-artikel-durch">Artikel durch</label
+						></p>
+						<p title="Datum, an dem der Artikel erstellt wurde"
+							><input type="checkbox" id="karteisuche-export-felder-artikel-am"
+							><label for="karteisuche-export-felder-artikel-am">Artikel am</label
+						></p>
+						<p title="Notizen aus den Redaktionsmetadaten"
+							><input type="checkbox" id="karteisuche-export-felder-notizen"
+							><label for="karteisuche-export-felder-notizen">Notizen</label
+						></p>
+					</div>
+				</div>
 			</div>
+			<p class="button"
+				><input type="button" value="Exportieren" id="karteisuche-export-exportieren"
+				><input type="button" value="Abbrechen" id="karteisuche-export-abbrechen"
+			></p>
 		</div></div>
 
 		<!-- OVERLAY: Formvarianten -->

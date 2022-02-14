@@ -35,11 +35,11 @@ let beleg = {
 		"DWDS: ZDL-Regionalkorpus",
 	],
 	// neue Karteikarte erstellen
-	erstellen () {
+	async erstellen () {
 		// registrieren, dass die Hauptfunktion "Karteikarte" offen ist
 		helfer.hauptfunktion = "karte";
 		// alle Overlay-Fenster schließen
-		overlay.alleSchliessen();
+		await overlay.alleSchliessen();
 		// nächste ID ermitteln
 		beleg.id_karte = beleg.idErmitteln();
 		// neues Karten-Objekt anlegen
@@ -604,8 +604,8 @@ let beleg = {
 	// Bearbeiten des Belegs beenden, Beleg also schließen
 	// (Der Button hieß früher "Abbrechen", darum heißt die Funktion noch so)
 	aktionAbbrechen () {
-		speichern.checkInit(() => {
-			liste.wechseln(); // erst zur Liste wechseln, sonst wird die Meldung, dass der neue Beleg gerade nicht sichtbar ist, sofort wieder ausgeblendet
+		speichern.checkInit(async () => {
+			await liste.wechseln(); // erst zur Liste wechseln, sonst wird die Meldung, dass der neue Beleg gerade nicht sichtbar ist, sofort wieder ausgeblendet
 			if (beleg.listeGeaendert) {
 				liste.status(true);
 			}
@@ -631,7 +631,7 @@ let beleg = {
 		dialog.oeffnen({
 			typ: "confirm",
 			text: `Soll <i>${liste.detailAnzeigenH3(id.toString())}</i> wirklich gelöscht werden?`,
-			callback: () => {
+			callback: async () => {
 				if (!dialog.antwort) {
 					return;
 				}
@@ -641,7 +641,7 @@ let beleg = {
 				liste.statusNeu = "";
 				liste.statusGeaendert = "";
 				liste.status(true);
-				liste.wechseln();
+				await liste.wechseln();
 				beleg.listeGeaendert = false;
 				bedeutungenWin.daten();
 				if (kopieren.an && kopieren.belege.includes(id.toString())) {
@@ -2292,7 +2292,7 @@ let beleg = {
 		helfer.animation("zwischenablage");
 	},
 	// Dupliziert den übergebenen Beleg
-	ctrlDuplikat () {
+	async ctrlDuplikat () {
 		// Versuchen noch nicht gespeicherte Änderungen anzuwenden;
 		// scheitert das => abbrechen
 		if (beleg.geaendert && !beleg.aktionSpeichern(true)) {
@@ -2300,7 +2300,7 @@ let beleg = {
 		}
 		// Duplizieren kann durchgeführt werden
 		const daten = [kopieren.datenBeleg(beleg.data)],
-			id_karte = kopieren.einfuegenEinlesen(daten, true);
+			id_karte = await kopieren.einfuegenEinlesen(daten, true);
 		// Duplikat öffnen (in derselben Ansicht)
 		const leseansicht_status = beleg.leseansicht;
 		beleg.oeffnen(id_karte);

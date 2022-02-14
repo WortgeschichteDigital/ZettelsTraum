@@ -57,7 +57,7 @@ let erinnerungen = {
 				}
 				let okay = false;
 				for (let f of data.an) {
-					if (/\.(doc|docx|odt)$/.test(f)) {
+					if (/\.(doc|docx|odt|rtf)$/.test(f)) {
 						okay = true;
 						break;
 					}

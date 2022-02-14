@@ -240,6 +240,7 @@
 
 #red-lit-suche-hilfe-fenster p {
 	margin-bottom: 5px;
+	white-space: normal;
 }
 
 #red-lit-suche-hilfe-fenster table + p {

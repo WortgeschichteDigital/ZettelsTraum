@@ -89,6 +89,9 @@ let helfer = {
 			"import-cont-over": {
 				queries: ["#import-abbrechen"],
 			},
+			"karteisuche-export-form-cont": {
+				queries: ["#karteisuche-export p.button"],
+			},
 			"karteisuche-karteien": {
 				queries: [],
 			},
@@ -1156,6 +1159,58 @@ let helfer = {
 				.then(() => resolve(true))
 				.catch(() => resolve(false));
 		});
+	},
+	// überprüft Quell- und Zielpfade von CLI-Befehlen
+	//   format = String
+	//     (Dateiformat)
+	//   typ = String
+	//     (Literaturliste | Karteiliste)
+	//   vars = Object
+	//     (CLI-Parameter)
+	async cliFolderCheck ({format, typ, vars}) {
+		let quelleExists = await helfer.exists(vars.quelle),
+			zielExists = await helfer.exists(vars.ziel),
+			neueDatei = false;
+		if (!zielExists &&
+				!/(\/|\\)$/.test(vars.ziel)) {
+			zielExists = await helfer.exists(vars.ziel.replace(/(\/|\\)[^/\\]+$/, ""));
+			neueDatei = true;
+		}
+		if (!quelleExists || !zielExists) {
+			let falsch = "Quellpfad",
+				pfad = vars.quelle;
+			if (!zielExists) {
+				falsch = "Zielpfad";
+				pfad = vars.ziel;
+			}
+			dialog.oeffnen({
+				typ: "alert",
+				text: `Beim Exportieren der ${typ} ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\nDer ${falsch} wurde nicht gefunden!\n<p class="force-wrap">${pfad}</p>`,
+			});
+			return false;
+		}
+		// Ist der Zielpfad ein Ordner?
+		if (!neueDatei) {
+			try {
+				const fsP = require("fs").promises,
+					stats = await fsP.lstat(vars.ziel);
+				if (stats.isDirectory()) {
+					if (!/(\/|\\)$/.test(vars.ziel)) {
+						vars.ziel += require("path").sep;
+					}
+					vars.ziel += `${typ}.${format}`;
+				}
+			} catch (err) {
+				dialog.oeffnen({
+					typ: "alert",
+					text: `Beim Exportieren der ${typ} ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\nFehler beim Zugriff auf den Zielpfad!`,
+				});
+				return false;
+			}
+		}
+		// CLI-Paramenter zurückgeben
+		// (könnten sich geändert haben)
+		return vars;
 	},
 	// markiert in der Titelleiste des Programms, dass irgendeine Änderung
 	// noch nicht gespeichert wurde

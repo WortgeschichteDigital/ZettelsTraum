@@ -393,19 +393,19 @@
 }
 
 .karteisuche-status1 {
-	background-color: var(--farbeRot);
+	background-color: var(--status1);
 }
 
 .karteisuche-status2 {
-	background-color: var(--farbeOrange);
+	background-color: var(--status2);
 }
 
 .karteisuche-status3 {
-	background-color: var(--farbeGruenDunkel);
+	background-color: var(--status3);
 }
 
 .karteisuche-status4 {
-	background-color: var(--farbeGruenHell);
+	background-color: var(--status4);
 }
 
 .karteisuche-hoechst {
