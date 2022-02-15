@@ -1198,7 +1198,7 @@ let helfer = {
 					if (!/(\/|\\)$/.test(vars.ziel)) {
 						vars.ziel += require("path").sep;
 					}
-					vars.ziel += `${typ}.${format}`;
+					vars.ziel += `${typ.replace(/[/\\]/g, "-")}.${format}`;
 				}
 			} catch (err) {
 				dialog.oeffnen({

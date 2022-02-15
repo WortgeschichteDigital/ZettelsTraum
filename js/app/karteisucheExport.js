@@ -116,6 +116,7 @@ let karteisucheExport = {
 		}
 		// Dateidaten erstellen
 		let tabellenkopf = karteisucheExport.exportierenTabellenkopf(spaltenCenter),
+			titel = document.querySelector("#karteisuche-export-optionen-titel").value.trim() || "Karteiliste",
 			content = "";
 		// HTML
 		if (opt.format === "html") {
@@ -200,7 +201,7 @@ let karteisucheExport = {
 					background-color: #0c0;
 				}
 				</style>\n`;
-			content = `<!doctype html>\n<html lang="de">\n<head>\n<meta charset="utf-8">\n<title>Karteiliste</title>\n${opt.optStylesheet ? stylesheet.replace(/\n\t{4}/g, "\n") : ""}</head>\n<body>\n<h1>Karteiliste${datum}</h1>\n`;
+			content = `<!doctype html>\n<html lang="de">\n<head>\n<meta charset="utf-8">\n<title>${titel}</title>\n${opt.optStylesheet ? stylesheet.replace(/\n\t{4}/g, "\n") : ""}</head>\n<body>\n<h1>${titel + datum}</h1>\n`;
 			// Spalten ermitteln, in denen umgebrochen werden darf
 			let spaltenUmbruch = [],
 				nummerierung = opt.feldNummerierung ? 1 : 0;
@@ -249,7 +250,7 @@ let karteisucheExport = {
 		}
 		// MD
 		else if (opt.format === "md") {
-			content = `\n# Karteiliste${datum}\n\n`;
+			content = `\n# ${titel + datum}\n\n`;
 			let tabelleStart = true;
 			for (const item of daten) {
 				if (item.typ === "Überschrift") {
@@ -280,7 +281,7 @@ let karteisucheExport = {
 			karteisucheExport.speichern(content, {
 				name: opt.format === "html" ? "HTML" : "Markdown",
 				ext: opt.format,
-				content: "Karteiliste",
+				content: titel.replace(/[/\\]/g, "-"),
 			});
 		}
 	},
@@ -745,11 +746,12 @@ let karteisucheExport = {
 			});
 			return;
 		}
-		const format = opt[vars.vorlage].inputs.includes("format-html") ? "html" : "md";
+		const format = opt[vars.vorlage].inputs.includes("format-html") ? "html" : "md",
+			titel = opt[vars.vorlage].titel || "Karteiliste";
 		// Ordner überprüfen
 		const result = await helfer.cliFolderCheck({
 			format,
-			typ: "Karteiliste",
+			typ: titel,
 			vars,
 		});
 		if (result === false) {
@@ -801,7 +803,7 @@ let karteisucheExport = {
 				// Feedback
 				dialog.oeffnen({
 					typ: "alert",
-					text: `Die Karteiliste wurde exportiert!\n<p class="force-wrap">${vars.ziel}</p>`,
+					text: `Die ${titel} wurde exportiert!\n<p class="force-wrap">${vars.ziel}</p>`,
 				});
 			})
 			.catch(err => {
@@ -810,7 +812,7 @@ let karteisucheExport = {
 				// Fehlermeldung
 				dialog.oeffnen({
 					typ: "alert",
-					text: `Beim Exportieren der Karteiliste ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\nVorlage ${err.message} nicht gefunden`,
+					text: `Beim Exportieren der ${titel} ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\nVorlage ${err.message} nicht gefunden`,
 				});
 			});
 		// Filter wiederherstellen
@@ -825,6 +827,7 @@ let karteisucheExport = {
 	vorlagen: [
 		{
 			name: "1 Stichwortübersicht",
+			titel: "Stichwortliste",
 			inputs: [
 				"format-html",
 				"optionen-datum",
@@ -844,6 +847,7 @@ let karteisucheExport = {
 		},
 		{
 			name: "2 Artikelübersicht",
+			titel: "Artikelliste",
 			inputs: [
 				"format-html",
 				"optionen-datum",
@@ -854,12 +858,14 @@ let karteisucheExport = {
 				"felder-nummerierung",
 				"felder-artikel",
 				"felder-redaktion-status",
+				"felder-redaktion-text",
 				"felder-kartei-durch",
 				"felder-notizen",
 			],
 		},
 		{
 			name: "3 Statistik",
+			titel: "Stichwortliste",
 			inputs: [
 				"format-html",
 				"optionen-tabellenkopf",
@@ -872,6 +878,7 @@ let karteisucheExport = {
 		},
 		{
 			name: "4 ausführliche Tabellen",
+			titel: "Stichwortliste",
 			inputs: [
 				"format-html",
 				"optionen-datum",
@@ -924,8 +931,16 @@ let karteisucheExport = {
 	//     (Index der zu ladenden Vorlage)
 	vorlageLaden (idx) {
 		// Inputs zurücksetzen
-		document.querySelectorAll("#karteisuche-export-form input").forEach(i => i.checked = false);
+		document.querySelectorAll("#karteisuche-export-form input").forEach(i => {
+			if (i.type === "text") {
+				i.value = "";
+			} else {
+				i.checked = false;
+			}
+		});
 		// Inputs abhaken
+		const titel = optionen.data["karteisuche-export-vorlagen"][idx].titel || "Karteiliste";
+		document.querySelector("#karteisuche-export-optionen-titel").value = titel;
 		const inputs = optionen.data["karteisuche-export-vorlagen"][idx].inputs;
 		for (const i of inputs) {
 			const box = document.querySelector(`#karteisuche-export-${i}`);
@@ -997,15 +1012,18 @@ let karteisucheExport = {
 				inputs.push(id);
 			}
 		});
-		const idx = optionen.data["karteisuche-export-vorlagen"].findIndex(i => i.name === name);
+		const titel = document.querySelector("#karteisuche-export-optionen-titel").value.trim() || "Karteiliste",
+			idx = optionen.data["karteisuche-export-vorlagen"].findIndex(i => i.name === name);
 		if (idx >= 0) {
 			optionen.data["karteisuche-export-vorlagen"].splice(idx, 1, {
 				name,
+				titel,
 				inputs,
 			});
 		} else {
 			optionen.data["karteisuche-export-vorlagen"].push({
 				name,
+				titel,
 				inputs,
 			});
 		}
@@ -1050,6 +1068,7 @@ let karteisucheExport = {
 		for (const i of karteisucheExport.vorlagen) {
 			opt.push({
 				name: i.name,
+				titel: i.titel,
 				inputs: [...i.inputs],
 			});
 		}

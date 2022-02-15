@@ -51,6 +51,10 @@
 	margin-left: 24px;
 }
 
+#karteisuche-export-form input[type="text"] {
+	width: calc(100% - 12px);
+}
+
 /* Vorlagen ------------------------------------- */
 #karteisuche-export-vorlagen {
 	margin-top: 10px;
