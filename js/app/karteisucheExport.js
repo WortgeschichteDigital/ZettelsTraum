@@ -62,7 +62,8 @@ let karteisucheExport = {
 			optInitialien: document.querySelector("#karteisuche-export-optionen-initialien").checked,
 			optStylesheet: document.querySelector("#karteisuche-export-optionen-stylesheet").checked,
 			feldNummerierung: document.querySelector("#karteisuche-export-felder-nummerierung").checked,
-			feldLemma: true,
+			feldLemma: document.querySelector("#karteisuche-export-felder-lemma").checked,
+			feldArtikel: document.querySelector("#karteisuche-export-felder-artikel").checked,
 			feldHauptlemma: document.querySelector("#karteisuche-export-felder-hauptlemma").checked,
 			feldNebenlemma: document.querySelector("#karteisuche-export-felder-nebenlemma").checked,
 			feldRedaktionStatus: document.querySelector("#karteisuche-export-felder-redaktion-status").checked,
@@ -85,7 +86,17 @@ let karteisucheExport = {
 		if (!opt.optStylesheet) {
 			opt.feldRedaktionStatus = false;
 		}
-		// Lemmaliste erstellen
+		if (!opt.feldLemma &&
+				!opt.feldArtikel) {
+			opt.feldLemma = true;
+		}
+		if (!opt.feldLemma) {
+			opt.optVariantenTrennen = false;
+			opt.feldHauptlemma = false;
+			opt.feldNebenlemma = false;
+			opt.feldBehandelt = false;
+		}
+		// Lemma- und Artikelliste erstellen
 		const liste = karteisucheExport.exportierenListe();
 		// Datensätze zusammentragen
 		const daten = karteisucheExport.exportierenDaten(liste);
@@ -153,7 +164,7 @@ let karteisucheExport = {
 				td.center {
 					text-align: center;
 				}
-				td.lemma {
+				td.umbruch {
 					white-space: normal;
 				}
 				tr:nth-child(even) td {
@@ -161,6 +172,10 @@ let karteisucheExport = {
 				}
 				tr:hover td {
 					background-color: #ffffcd;
+				}
+				.nebenlemmata {
+					font-size: 14px;
+					line-height: 20px;
 				}
 				.redaktion-status {
 					position: relative;
@@ -186,9 +201,17 @@ let karteisucheExport = {
 				}
 				</style>\n`;
 			content = `<!doctype html>\n<html lang="de">\n<head>\n<meta charset="utf-8">\n<title>Karteiliste</title>\n${opt.optStylesheet ? stylesheet.replace(/\n\t{4}/g, "\n") : ""}</head>\n<body>\n<h1>Karteiliste${datum}</h1>\n`;
+			// Spalten ermitteln, in denen umgebrochen werden darf
+			let spaltenUmbruch = [],
+				nummerierung = opt.feldNummerierung ? 1 : 0;
+			if (opt.feldLemma) {
+				spaltenUmbruch.push(0 + nummerierung);
+			}
+			if (opt.feldArtikel) {
+				spaltenUmbruch.push(spaltenUmbruch.length + nummerierung);
+			}
 			// Dokument erzeugen
-			let spalteLemma = opt.feldNummerierung ? 1 : 0,
-				tabelleStart = true;
+			let tabelleStart = true;
 			for (const item of daten) {
 				if (item.typ === "Überschrift") {
 					if (!tabelleStart) {
@@ -211,9 +234,9 @@ let karteisucheExport = {
 						if (opt.optStylesheet) {
 							if (spaltenCenter.includes(i)) {
 								content += ` class="center"`;
-							} else if (i === spalteLemma) {
-								content += ` class="lemma"`;
-								text = text.replace(/\//g, "/<wbr>");
+							} else if (spaltenUmbruch.includes(i)) {
+								content += ` class="umbruch"`;
+								text = text.replace(/\/(?!span>)/g, "/<wbr>");
 							}
 						}
 						content += `>${text}</td>`;
@@ -261,16 +284,20 @@ let karteisucheExport = {
 			});
 		}
 	},
-	// Exportieren: Lemmaliste erstellen
+	// Exportieren: Lemma- und Artikelliste erstellen
 	exportierenListe () {
 		const opt = karteisucheExport.exportierenOpt;
-		// Lemmaliste erstellen
+		// Karteien sammeln
 		let indizes = [];
 		const items = document.querySelectorAll("#karteisuche-karteien > div:not(.aus)");
 		for (const i of items) {
 			indizes.push(parseInt(i.dataset.idx, 10));
 		}
-		let liste = [];
+		indizes.sort((a, b) => a - b);
+		let liste = {
+			artikel: [],
+			lemmata: [],
+		};
 		for (const idx of indizes) {
 			if (karteisuche.ztj[idx].behandeltIn) {
 				// dieses Lemma steht in der korrespondierenden Kartei
@@ -286,12 +313,29 @@ let karteisucheExport = {
 				artikelDurch = ztj.redaktion.find(i => i.er === "Artikel erstellt")?.pr || "",
 				artikelAm = ztj.redaktion.find(i => i.er === "Artikel erstellt")?.da || "",
 				notizen = karteisuche.ztjCache[ztj.pfad].data.rd.no || "",
-				lemmata = [...new Set([ztj.wort].concat(ztj.behandeltMit).concat(ztj.nebenlemmata))];
+				lemmata = [...new Set([ztj.wort].concat(ztj.behandeltMit).concat(ztj.nebenlemmata))],
+				lemmataPushed = [],
+				artLemmas = [],
+				artLemmasHl = [],
+				artLemmasNl = [];
 			for (const lemma of lemmata) {
 				// Nebenlemma?
 				let nebenlemma = false;
 				if (ztj.nebenlemmata.includes(lemma)) {
 					nebenlemma = true;
+				}
+				// Artikel
+				if (!liste.artikel.some(i => i.lemmas.includes(lemma))) {
+					artLemmas.push(lemma);
+					if (nebenlemma) {
+						artLemmasNl.push(lemma);
+					} else {
+						artLemmasHl.push(lemma);
+					}
+				}
+				// Lemmata-Daten sammeln?
+				if (!opt.feldLemma) {
+					continue;
 				}
 				// behandelt in/mit
 				let behandeltInMit = [];
@@ -310,10 +354,11 @@ let karteisucheExport = {
 					ll = lemma.split("/");
 				}
 				for (const l of ll) {
-					if (liste.some(i => i.lemma === l)) {
+					if (liste.lemmata.some(i => i.lemma === l)) {
 						continue;
 					}
-					liste.push({
+					lemmataPushed.push(liste.lemmata.length);
+					liste.lemmata.push({
 						lemma: l,
 						lemmaSort: karteisuche.wortSort(l),
 						nebenlemma,
@@ -331,29 +376,57 @@ let karteisucheExport = {
 					});
 				}
 			}
+			if (opt.feldArtikel &&
+					artLemmas.length) {
+				const idxArtikel = liste.artikel.length;
+				for (const i of lemmataPushed) {
+					liste.lemmata[i].artikel = idxArtikel;
+				}
+				liste.artikel.push({
+					lemmas: artLemmas,
+					lemmaSort: karteisuche.wortSort(artLemmas[0]),
+					lemmasHl: artLemmasHl,
+					lemmasNl: artLemmasNl,
+					redaktionStatus: redaktion.status,
+					artikelErstellt,
+					artikelOnline,
+					redaktionText: redaktion.ereignis,
+					karteiDurch,
+					karteiAm,
+					artikelDurch,
+					artikelAm,
+					notizen,
+				});
+			}
 		}
 		// Liste sortieren
-		liste.sort((a, b) => {
+		liste.artikel.sort(sortierer);
+		liste.lemmata.sort(sortierer);
+		function sortierer (a, b) {
 			let x = [a.lemmaSort, b.lemmaSort];
 			x.sort(helfer.sortAlpha);
 			if (x[0] === a.lemmaSort) {
 				return -1;
 			}
 			return 1;
-		});
+		}
 		// Liste zurückgeben
 		return liste;
 	},
 	// Exportieren: Datensätze zusammentragen
-	//   liste = Array
-	//     (Liste mit den Lemmata)
+	//   liste = Object
+	//     (Liste mit Lemmata- und Artikeldaten)
 	exportierenDaten (liste) {
 		const opt = karteisucheExport.exportierenOpt;
 		// Daten zusammenstellen
 		let daten = [],
 			buchstabeZuletzt = "",
-			n = 0;
-		for (const i of liste) {
+			n = 0,
+			arr = liste.lemmata;
+		if (!opt.feldLemma) {
+			arr = liste.artikel;
+		}
+		for (const i of arr) {
 			n++;
 			// BUCHSTABE
 			if (opt.optAlphabet) {
@@ -375,8 +448,16 @@ let karteisucheExport = {
 			if (opt.feldNummerierung) {
 				zeile.daten.push(`${n}.`);
 			}
-			// Lemma
-			zeile.daten.push(i.lemma);
+			// Lemma und Artikel
+			if (opt.feldLemma) {
+				zeile.daten.push(i.lemma);
+				if (opt.feldArtikel) {
+					const artikel = liste.artikel[i.artikel];
+					zeile.daten.push(artikelLemmata(artikel));
+				}
+			} else {
+				zeile.daten.push(artikelLemmata(i));
+			}
 			// Hauptlemma
 			if (opt.feldHauptlemma) {
 				if (i.hauptlemma) {
@@ -463,6 +544,20 @@ let karteisucheExport = {
 		// Daten zurückgeben
 		return daten;
 		// Helferfunktionen
+		function artikelLemmata (artikel) {
+			let text = artikel.lemmasHl.join(" · ");
+			if (artikel.lemmasNl.length) {
+				text += "<br>";
+				if (opt.optStylesheet) {
+					text += `<span class="nebenlemmata">${artikel.lemmasNl.join(" · ")}</span>`;
+				} else if (opt.format === "html") {
+					text += `<small>${artikel.lemmasNl.join(" · ")}</small>`;
+				} else {
+					text += artikel.lemmasNl.join(" · ");
+				}
+			}
+			return text;
+		}
 		function initialien (name) {
 			if (!opt.optInitialien) {
 				return name;
@@ -540,6 +635,10 @@ let karteisucheExport = {
 			feldLemma: {
 				lang: "Lemma",
 				kurz: "Lemma",
+			},
+			feldArtikel: {
+				lang: "Artikel",
+				kurz: "Artikel",
 			},
 			feldHauptlemma: {
 				lang: "Haupt&shy;lemma",
@@ -744,7 +843,23 @@ let karteisucheExport = {
 			],
 		},
 		{
-			name: "2 Statistik",
+			name: "2 Artikelübersicht",
+			inputs: [
+				"format-html",
+				"optionen-datum",
+				"optionen-tabellenkopf",
+				"optionen-tabellenkopf-kurz",
+				"optionen-initialien",
+				"optionen-stylesheet",
+				"felder-nummerierung",
+				"felder-artikel",
+				"felder-redaktion-status",
+				"felder-kartei-durch",
+				"felder-notizen",
+			],
+		},
+		{
+			name: "3 Statistik",
 			inputs: [
 				"format-html",
 				"optionen-tabellenkopf",
@@ -756,7 +871,7 @@ let karteisucheExport = {
 			],
 		},
 		{
-			name: "3 ausführliche Tabellen",
+			name: "4 ausführliche Tabellen",
 			inputs: [
 				"format-html",
 				"optionen-datum",
