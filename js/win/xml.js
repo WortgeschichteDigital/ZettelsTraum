@@ -2475,7 +2475,8 @@ let xml = {
 		}
 		xl += `\t</Fundstelle>\n`;
 		xl += `\t<Lizenz>\n`;
-		xl += `\t\t<Name>${mask(form.querySelector(`[id$="lizenzname"]`).value)}</Name>\n`;
+		let ln = form.querySelector(`[id$="lizenzname"]`);
+		xl += `\t\t<Name>${mask(ln.value)}</Name>\n`;
 		let lul = form.querySelector(`[id$="lizenz-url"]`);
 		xl += `\t\t<URL>${mask(lul.value)}</URL>\n`;
 		xl += `\t</Lizenz>\n`;
@@ -2498,7 +2499,10 @@ let xml = {
 		if (ul.value && ( !/^https?:\/\//.test(ul.value) || /\s/.test(ul.value) )) {
 			ul.classList.add("fehler");
 		}
-		if (lul.value && ( !/^https?:\/\//.test(lul.value) || /\s/.test(lul.value) )) {
+		if (!ln.value) {
+			ln.classList.add("fehler");
+		}
+		if (!/^https?:\/\//.test(lul.value) || /\s/.test(lul.value)) {
 			lul.classList.add("fehler");
 		}
 		// XML eintragen
