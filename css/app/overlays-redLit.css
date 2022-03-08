@@ -595,7 +595,7 @@
 }
 
 .red-lit-snippet.markiert p.sigle .icons {
-	background-image: linear-gradient(to right, rgba(245, 245, 245, 0), rgba(245, 245, 245, 1) 40px);
+	background-image: linear-gradient(to right, var(--redLitTitelIcons0), var(--redLitTitelIcons1) 40px);
 }
 
 .red-lit-snippet p.sigle .icons a {

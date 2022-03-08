@@ -71,8 +71,9 @@ let zuletzt = {
 		}
 		// Datei vorne anhängen
 		karteien.unshift(kartei.pfad);
-		// Liste auf 20 Einträge begrenzen
-		if (karteien.length > 20) {
+		// Listenlänge begrenzen
+		const maxLen = parseInt(optionen.data.einstellungen.zuletzt, 10);
+		while (karteien.length > maxLen) {
 			karteien.pop();
 		}
 		// Optionen speichern
