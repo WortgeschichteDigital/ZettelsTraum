@@ -88,6 +88,8 @@ let optionen = {
 			// Timeout für Anfrage an das DTA in Sekunden
 			// (einfacher als String, wird bei Bedarf in Number konvertiert)
 			timeout: "10",
+			// Karteien unter zuletzt verwendet
+			zuletzt: "20",
 			// automatisch nach Software-Update suchen
 			"updates-suche": true,
 			// helle Elemente dunkler darstellen

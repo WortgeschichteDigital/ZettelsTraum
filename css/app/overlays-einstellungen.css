@@ -102,6 +102,7 @@
 
 #einstellungen-cont label[for="einstellung-bearbeiterin"],
 #einstellungen-cont label[for="einstellung-timeout"],
+#einstellungen-cont label[for="einstellung-zuletzt"],
 #einstellungen-cont label[for="einstellung-notizen-max-breite"] {
 	margin-left: 10px;
 }

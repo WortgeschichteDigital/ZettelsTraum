@@ -1876,6 +1876,18 @@ Mustermann, Erika
 						<p>In allen Fällen sendet die App intern eine Anfrage an die entsprechende Internet-Ressource. Erhält sie nach der hier eingegebenen Zeitspanne keine Antwort, wird die Anfrage mit einem Timeout-Fehler abgebrochen und ein Dialogfenster geöffnet, das über diesen Fehler informiert. Arbeiten Sie in einer Umgebung mit schlechter Internetverbindung (<abbr title="zum Beispiel">z. B.</abbr> im Zug), könnte es hilfreich sein, diesen Wert ein bisschen anzuheben. Die App wartet dann entsprechend länger, ehe sie die Anfrage als gescheitert bewertet.</p>
 					</div>
 
+					<p class="erklaerung-option" id="einstellungen-allgemeinesZuletzt">Karteien unter „Zuletzt verwendet“</p>
+
+					<div class="info">
+						<p><i>Standard:</i> 20</p>
+
+						<p>Steuert die Anzahl der Karteien, die in der Startansicht angezeigt werden, wenn ein <a href="#menueApp-neuesFenster">neues Hauptfenster</a> geöffnet wird. Der Minimalwert ist 5, der Höchstwert 999.</p>
+
+						<p>Sobald eine gelistete Kartei geöffnet wird, rückt diese an die oberste Stelle der Liste. Am Ende der Liste wird diese so gestutzt, dass sie die hier eingstellt Anzahl an Karteien nicht überschreitet. Es verschwinden also die Karteien, die am längsten nicht geöffnet wurden.</p>
+
+						<p>Die Liste unter <i>Kartei &gt; Zuletzt verwendet</i> ist immer auf <abbr title="maximal">max.</abbr> 10 Einträge begrenzt.</p>
+					</div>
+
 					<p class="erklaerung-option" id="einstellungen-allgemeinesUpdates">automatisch nach Updates suchen</p>
 
 					<div class="info">
@@ -3687,7 +3699,7 @@ Mustermann, Erika
 
 						<p>Nach dem Öffnen wird die <b>Startansicht</b> angezeigt mit den Buttons <i>Kartei erstellen</i> und <i>Kartei öffnen</i> sowie eine Liste der zuletzt verwendeten Karteien.</p>
 
-						<p>Die Liste <b>zuletzt verwendeter Karteien</b> ist auf 20 Einträge begrenzt. Sobald eine gelistete Kartei geöffnet wird, rückt diese an die oberste Stelle der Liste. Wird die 21. Kartei geöffnet, verschwindet der letzte Listeneintrag. Es verschwindet also der Eintrag der Kartei, die am längsten nicht geöffnet wurde. Auf Wunsch können Sie in dieser Ansicht einzelne Einträge manuell aus der Liste entfernen: <i>Rechtsklick &gt; Aus Liste entfernen</i>.</p>
+						<p>Die Liste <b>zuletzt verwendeter Karteien</b> umfasst standardmäßig 20 Einträge. Die <a href="#einstellungen-allgemeinesZuletzt">Anzahl lässt sich allerdings einstellen</a>. Auf Wunsch können Sie in dieser Ansicht einzelne Einträge manuell aus der Liste entfernen: <i>Rechtsklick &gt; Aus Liste entfernen</i>.</p>
 
 						<p>Einige Sekunden nach dem Start der App wird einmalig überprüft, ob die Karteien in der Liste noch auf dem Rechner zu finden sind. Ist dem nicht so werden alle geöffneten Hauptfenster darüber informiert, welche Karteien verschwunden sind. In der Liste zuletzt verwendeter Karteien werden diejenigen, die nicht gefunden wurden, dann mit dem Icon <img src="../img/x-dick-rot.svg" width="20" height="20" alt=""> markiert. Dass eine Kartei nicht gefunden wurde, kann natürlich auch den Grund haben, dass sie in einem Netzwerkordner liegt, der nicht oder noch nicht gemountet ist. Darum werden die Karteien nicht automatisch aus der Liste gelöscht. Steht der Pfad einer Kartei erst nach dem Start der App wieder zur Verfügung, können Sie Karteien, die als verschwunden markiert sind, problemlos über diese Liste öffnen. Wurde eine als verschwunden markierte Kartei fehlerfrei geöffnet, wird allen offenen Programmfenstern mitgeteilt, dass sie wiedergefunden wurde.</p>
 
