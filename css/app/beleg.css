@@ -302,6 +302,11 @@ textarea#beleg-bs {
 	color: var(--text);
 }
 
+.icon-tools-aufrufdatum {
+	-webkit-mask-image: url(../../img/uhr.svg);
+	mask-image: url(../../img/uhr.svg);
+}
+
 .icon-tools-auszug {
 	-webkit-mask-image: url(../../img/pfeil-doppelt-links.svg);
 	mask-image: url(../../img/pfeil-doppelt-links.svg);

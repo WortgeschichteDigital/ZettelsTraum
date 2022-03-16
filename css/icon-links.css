@@ -123,6 +123,11 @@
 	mask-image: url(../img/stern.svg);
 }
 
+.icon-uhr {
+	-webkit-mask-image: url(../img/uhr.svg);
+	mask-image: url(../img/uhr.svg);
+}
+
 .icon-x-dick {
 	-webkit-mask-image: url(../img/x-dick.svg);
 	mask-image: url(../img/x-dick.svg);

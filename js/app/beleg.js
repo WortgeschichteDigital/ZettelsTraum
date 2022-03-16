@@ -764,6 +764,8 @@ let beleg = {
 				beleg.toolsKopieren(this);
 			} else if (this.classList.contains("icon-tools-einfuegen")) {
 				beleg.toolsEinfuegen(this);
+			} else if (this.classList.contains("icon-uhr")) {
+				beleg.toolsAufrufdatum();
 			} else if (this.parentNode.classList.contains("text-tools-beleg") ||
 				this.parentNode.classList.contains("text-tools-bedeutung")) {
 				beleg.toolsText(this);
@@ -1424,6 +1426,16 @@ let beleg = {
 		} else if (link.classList.contains("icon-link-link")) {
 			beleg.toolsQuelleDTALink();
 		}
+	},
+	// Aufrufdatum in Quelle-Feld einfügen
+	toolsAufrufdatum () {
+		const qu = document.getElementById("beleg-qu");
+		qu.focus();
+		const heute = new Date(),
+			start = qu.value.substring(0, qu.selectionStart),
+			ende = qu.value.substring(qu.selectionStart),
+			leerzeichen = / $/.test(start) ? "" : " ";
+		qu.value = start + leerzeichen + `(Aufrufdatum: ${heute.getDate()}. ${heute.getMonth() + 1}. ${heute.getFullYear()})` + ende;
 	},
 	// Inhalt des Quelle-Felds neu laden
 	//   shortcut = true || undefined
