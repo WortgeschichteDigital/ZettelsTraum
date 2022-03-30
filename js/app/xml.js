@@ -179,7 +179,9 @@ let xml = {
 			// Autorenzusatz: {...}
 			text = text.replace(/\{(.*?)\}/g, (m, p1) => `<Autorenzusatz>${p1}</Autorenzusatz>`);
 			// Korrekturen Taggingfehler
-			// (<Autorenzusatz> innerhalb von <Streichung> nicht ersetzen)
+			//   * wenn <Streichung> für Auslassung benutzt wird => <Loeschung>
+			//   * <Autorenzusatz> innerhalb von <Streichung> nicht ersetzen)
+			//   * Spatien am Anfang/Ende von <Streichung> u. <Loeschung> ausklammern
 			text = text.replace(/<Streichung>…<\/Streichung>/g, "<Loeschung>…</Loeschung>");
 			let sStart = text.split(/<Streichung>/);
 			text = "";
@@ -194,6 +196,11 @@ let xml = {
 			function korrekturAutorenz (s) {
 				return s.replace(/<Autorenzusatz>…<\/Autorenzusatz>/g, "<Loeschung>…</Loeschung>");
 			}
+			text = text.replace(/<(Streichung|Loeschung)>(.+?)<\/(Streichung|Loeschung)>/g, (m, p1, p2, p3) => {
+				const spaceStart = /^ /.test(p2) ? " " : "",
+					spaceEnd = / $/.test(p2) ? " " : "";
+				return `${spaceStart}<${p1}>${p2.replace(/^ | $/g, "")}</${p3}>${spaceEnd}`;
+			});
 			// Ergebnis zurückgeben
 			return text;
 		}
