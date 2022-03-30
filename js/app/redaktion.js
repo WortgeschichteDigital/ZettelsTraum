@@ -79,8 +79,9 @@ let redaktion = {
 		}
 		// nächstes Ereignis eintragen
 		redaktion.next();
-		// Tabelle aufbauen
+		// Tabelle aufbauen + Zeile für neuen Eintrag fokussieren
 		redaktion.tabelle();
+		document.querySelector('#redaktion-cont-over [data-slot="neu"] input').focus();
 		// Maximalhöhe des Fensters anpassen
 		helfer.elementMaxHeight({
 			ele: document.getElementById("redaktion-cont-over"),
