@@ -345,6 +345,7 @@ let helferXml = {
 		"u\\.\\sÄ\\.": "und Ähnliches",
 		"u\\.": "und",
 		"usw\\.": "und so weiter",
+		"v\\.\\sa\\.": "vor allem",
 		"Vb\\.": "Verb",
 		"vgl\\.": "vergleiche",
 		"Vgl\\.": "Vergleiche",

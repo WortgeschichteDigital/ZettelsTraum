@@ -383,6 +383,7 @@ let helfer = {
 			/s\.\s?v\./g, // sub voce (nur in Kleinschreibung)
 			/Sp?\.\s?[0-9]+/g, // Seiten-/Spaltenangaben
 			/u\.\s?(a|ä)\./ig,
+			/v\.\s?a\./ig,
 			/z\.\s?B\./ig,
 			/zit\.\s?n\./ig,
 			// Dreiwort-Abkürzungen
