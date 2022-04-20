@@ -3295,6 +3295,8 @@ let xml = {
 	//     (der Text steht in einem Blockzitat)
 	editAutoTagger ({str, blockzitat}) {
 		// Korrekturen
+		str = str.replace(/<<</g, "‹");
+		str = str.replace(/>>>/g, "›");
 		str = str.replace(/<</g, "«");
 		str = str.replace(/>>/g, "»");
 		str = str.replace(/\[(.+?)\]\(www\.(.+?)\)/g, (m, p1, p2) => `[${p1}](https://www.${p2})`);
@@ -3308,8 +3310,10 @@ let xml = {
 		str = str.replace(/__(.+?)__/g, (m, p1) => `<erwaehntes_Zeichen>${p1}</erwaehntes_Zeichen>`);
 		// <Hervorhebung Stil="#i">
 		str = str.replace(/\*\*(.+?)\*\*/g, (m, p1) => `<Hervorhebung Stil=###i##>${p1}</Hervorhebung>`);
-		// <Hervorhebung Stil="#perspective">
-		str = str.replace(/»(.+?)«/g, (m, p1) => `<Hervorhebung Stil=###perspective##>${p1}</Hervorhebung>`);
+		// <Hervorhebung Stil="#singleMarks">
+		str = str.replace(/›(.+?)‹/g, (m, p1) => `<Hervorhebung Stil=###singleMarks##>${p1}</Hervorhebung>`);
+		// <sogenannt>
+		str = str.replace(/»(.+?)«/g, (m, p1) => `<sogenannt>${p1}</sogenannt>`);
 		// <Stichwort>
 		str = str.replace(/(?<![\p{Letter}\-.])_(.+?)_(?![\p{Letter}\-])/ug, (m, p1) => `<Stichwort>${p1}</Stichwort>`);
 		// <Paraphrase>
