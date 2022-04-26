@@ -693,6 +693,10 @@ p.leer {
 	width: calc(50% - 12px - 5px);
 }
 
+.abb-2-dropdown input:nth-child(3) {
+	margin-left: 10px;
+}
+
 /* XML-Preview ---------------------------------- */
 .pre-cont {
 	margin: 0 0 0 39px;
