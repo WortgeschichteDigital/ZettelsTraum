@@ -429,7 +429,20 @@ let redaktion = {
 			// Der Wert des Inputfelds ist okay.
 			obj[redaktion.feldtypen[feldtyp]] = val;
 		}
-		data.rd.er.push(obj);
+		let datumNeu = new Date(obj.da),
+			idx = -1;
+		for (let i = 1, len = data.rd.er.length; i < len; i++) {
+			const datum = new Date(data.rd.er[i].da);
+			if (datum > datumNeu) {
+				idx = i;
+				break;
+			}
+		}
+		if (idx === -1) {
+			data.rd.er.push(obj);
+		} else {
+			data.rd.er.splice(idx, 0, obj);
+		}
 		kartei.karteiGeaendert(true);
 		redaktion.tabelle();
 		// Anzeige nächstes Ereignis auffrischen
