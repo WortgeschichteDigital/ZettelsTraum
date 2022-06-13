@@ -34,6 +34,7 @@ let kartei = {
 				er: [{ // Ereignisse
 					da: new Date().toISOString().split("T")[0],
 					er: "Kartei erstellt",
+					no: "",
 					pr: "",
 				}],
 				nl: "", // Nebenlemmata

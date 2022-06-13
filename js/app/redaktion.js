@@ -60,6 +60,7 @@ let redaktion = {
 	feldtypen: {
 		datum: "da",
 		ereignis: "er",
+		notiz: "no",
 		person: "pr",
 	},
 	// Redaktionsfenster einblenden
@@ -143,6 +144,9 @@ let redaktion = {
 			// Person
 			redaktion.zelleErzeugen(tr, i.pr ? i.pr : "keine Person", false);
 			redaktion.wertAendern(tr.lastChild, "person");
+			// Notiz
+			redaktion.zelleErzeugen(tr, i.no ? i.no : " ", false);
+			redaktion.wertAendern(tr.lastChild, "notiz");
 			// Lösch-Icon
 			if (n === 0) {
 				redaktion.zelleErzeugen(tr, " ", false);
@@ -180,6 +184,10 @@ let redaktion = {
 		// Person
 		redaktion.zelleErzeugen(tr, null, false);
 		redaktion.inputText(tr.lastChild, "", "person", "neu");
+		redaktion.inputSubmit(tr.lastChild.firstChild.id);
+		// Notiz
+		redaktion.zelleErzeugen(tr, null, false);
+		redaktion.inputText(tr.lastChild, "", "notiz", "neu");
 		redaktion.inputSubmit(tr.lastChild.firstChild.id);
 		// Leerzelle (Lösch-Icon)
 		redaktion.zelleErzeugen(tr, null, false);
@@ -256,10 +264,16 @@ let redaktion = {
 			ereignis: {
 				placeholder: "Ereignis",
 				title: "Ereignisse auflisten",
+				dropdown: true,
 			},
 			person: {
 				placeholder: "Person",
 				title: "BearbeiterInnen auflisten",
+				dropdown: true,
+			},
+			notiz: {
+				placeholder: "Notiz",
+				dropdown: false,
 			},
 		};
 		// <td> als Dropdown-Container bestimmen
@@ -267,15 +281,17 @@ let redaktion = {
 		// Input erzeugen
 		let input = document.createElement("input");
 		td.appendChild(input);
-		input.classList.add("dropdown-feld");
 		input.id = `redaktion-${droptyp}-${id}`;
 		input.type = "text";
 		input.value = val;
 		input.placeholder = droptypen[droptyp].placeholder;
-		dropdown.feld(input);
 		// Dropdown-Link erzeugen
-		let a = dropdown.makeLink("dropdown-link-td", droptypen[droptyp].title, true);
-		td.appendChild(a);
+		if (droptypen[droptyp].dropdown) {
+			input.classList.add("dropdown-feld");
+			dropdown.feld(input);
+			let a = dropdown.makeLink("dropdown-link-td", droptypen[droptyp].title, true);
+			td.appendChild(a);
+		}
 	},
 	// Fokus auf ein Input-Feld setzen
 	// (ja, das muss leider über eine eigene Funktion geschehen)
@@ -355,6 +371,8 @@ let redaktion = {
 			redaktion.zelleErzeugen(frag, redaktion.formatDatum(val), false);
 		} else if (feldtyp === "person") {
 			redaktion.zelleErzeugen(frag, val ? val : "keine Person", false);
+		} else if (feldtyp === "notiz") {
+			redaktion.zelleErzeugen(frag, val, false);
 		} else {
 			redaktion.zelleErzeugen(frag, val, true);
 		}
@@ -377,7 +395,7 @@ let redaktion = {
 				val = data.rd.er[slot][redaktion.feldtypen[feldtyp]];
 			if (feldtyp === "datum") {
 				redaktion.inputDate(frag.lastChild, val, slot);
-			} else if (feldtyp === "ereignis" || feldtyp === "person") {
+			} else if (feldtyp === "ereignis" || feldtyp === "person" || feldtyp === "notiz") {
 				redaktion.inputText(frag.lastChild, val, feldtyp, slot);
 			}
 			const id = frag.lastChild.firstChild.id;
@@ -393,6 +411,7 @@ let redaktion = {
 		let obj = {
 			da: "",
 			er: "",
+			no: "",
 			pr: "",
 		};
 		for (let i = 0, len = inputs.length; i < len; i++) {
@@ -428,6 +447,7 @@ let redaktion = {
 			let obj = {
 				da: data.rd.er[slot].da,
 				er: data.rd.er[slot].er,
+				no: data.rd.er[slot].no,
 				pr: data.rd.er[slot].pr,
 			};
 			data.rd.er.splice(slot, 1);

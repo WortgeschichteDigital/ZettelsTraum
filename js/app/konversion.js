@@ -6,7 +6,7 @@ let konversion = {
 	// 1.) Beim Anlegen neuer Datenwerte Objekte in
 	//   kartei.erstellen() u. beleg.karteErstellen() ergänzen!
 	// 2.) Diese Versionsnummer hochzählen!
-	version: 22,
+	version: 23,
 	// Verteilerfunktion
 	start () {
 		konversion.von1nach2();
@@ -30,6 +30,7 @@ let konversion = {
 		konversion.von19nach20();
 		konversion.von20nach21();
 		konversion.von21nach22();
+		konversion.von22nach23();
 	},
 	// Konversion des Dateiformats von Version 1 nach Version 2
 	von1nach2 () {
@@ -421,6 +422,20 @@ let konversion = {
 		}
 		// Datenfeld für Notizen im Redaktionsmetadaten-Fenster erzeugen
 		data.rd.no = "";
+		// Versionsnummer hochzählen
+		data.ve++;
+		// Änderungsmarkierung setzen
+		kartei.karteiGeaendert(true);
+	},
+	// Konversion des Dateiformats von Version 22 nach Version 23
+	von22nach23 () {
+		if (data.ve > 22) {
+			return;
+		}
+		// Datenfeld für Notizen im Redaktionsereignis-Fenster erzeugen
+		for (let i of data.rd.er) {
+			i.no = "";
+		}
 		// Versionsnummer hochzählen
 		data.ve++;
 		// Änderungsmarkierung setzen

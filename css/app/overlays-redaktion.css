@@ -3,7 +3,7 @@
 /* Redaktion ------------------------------------ */
 #redaktion > div {
 	margin-top: 40px;
-	max-width: 800px;
+	max-width: 1000px;
 }
 
 .icon-h-redaktion {
@@ -91,6 +91,11 @@
 	white-space: normal;
 }
 
+#redaktion-cont td:nth-child(5) {
+	width: 25%;
+	white-space: normal;
+}
+
 #redaktion-cont td:last-child {
 	padding-right: 0;
 	min-width: 24px;
@@ -115,4 +120,14 @@ input[id^="redaktion-datum"] {
 input[id^="redaktion-ereignis"],
 input[id^="redaktion-person"] {
 	width: calc(100% - 31px);
+}
+
+input[id^="redaktion-notiz"] {
+	width: calc(100% - 12px);
+}
+
+@media (max-width: 800px) {
+	#redaktion-cont td:nth-child(5) {
+		display: none;
+	}
 }
