@@ -42,6 +42,26 @@ let xml = {
 		abschnittBloecke: ["Überschrift", "Textblock", "Blockzitat", "Liste", "Illustration"],
 		listenTypen: ["Punkte", "Ziffern"],
 		abbPositionen: ["Block", "links", "rechts"],
+		lizenzenNamen: [
+			"Bildzitat (§ 51 UrhG)",
+			"CC BY 4.0",
+			"CC BY-ND 4.0",
+			"CC BY-SA 4.0",
+			"CC BY-NC 4.0",
+			"CC BY-NC-ND 4.0",
+			"CC BY-NC-SA 4.0",
+			"Public Domain Mark 1.0",
+		],
+		lizenzenURL: [
+			"https://www.gesetze-im-internet.de/urhg/__51.html",
+			"https://creativecommons.org/licenses/by/4.0/deed.de",
+			"https://creativecommons.org/licenses/by-nd/4.0/deed.de",
+			"https://creativecommons.org/licenses/by-sa/4.0/deed.de",
+			"https://creativecommons.org/licenses/by-nc/4.0/deed.de",
+			"https://creativecommons.org/licenses/by-nc-nd/4.0/deed.de",
+			"https://creativecommons.org/licenses/by-nc-sa/4.0/deed.de",
+			"https://creativecommons.org/publicdomain/mark/1.0/deed.de",
+		],
 		nachweisTypen: ["Literatur", "Link"],
 	},
 	// Dropdown: Referenzen zusammentragen
@@ -2193,6 +2213,7 @@ let xml = {
 					val: "",
 					date: false,
 					dropdown: false,
+					ro: false,
 				},
 				Bildposition: {
 					p: false,
@@ -2200,6 +2221,7 @@ let xml = {
 					val: "links",
 					date: false,
 					dropdown: true,
+					ro: true,
 				},
 				Breite: {
 					p: true,
@@ -2207,6 +2229,7 @@ let xml = {
 					val: "",
 					date: false,
 					dropdown: false,
+					ro: false,
 				},
 				Höhe: {
 					p: false,
@@ -2214,6 +2237,7 @@ let xml = {
 					val: "",
 					date: false,
 					dropdown: false,
+					ro: false,
 				},
 				Bildunterschrift: {
 					p: true,
@@ -2221,6 +2245,7 @@ let xml = {
 					val: "",
 					date: false,
 					dropdown: false,
+					ro: false,
 				},
 				Alternativtext: {
 					p: true,
@@ -2228,13 +2253,15 @@ let xml = {
 					val: "",
 					date: false,
 					dropdown: false,
+					ro: false,
 				},
 				Lizenzname: {
 					p: true,
-					cl: "abb-2-felder",
+					cl: "abb-2-felder abb-2-dropdown",
 					val: "",
 					date: false,
-					dropdown: false,
+					dropdown: true,
+					ro: false,
 				},
 				"Lizenz-URL": {
 					p: false,
@@ -2242,6 +2269,7 @@ let xml = {
 					val: "",
 					date: false,
 					dropdown: false,
+					ro: false,
 				},
 				Quelle: {
 					p: true,
@@ -2249,6 +2277,7 @@ let xml = {
 					val: "",
 					date: false,
 					dropdown: false,
+					ro: false,
 				},
 				Aufrufdatum: {
 					p: true,
@@ -2256,12 +2285,14 @@ let xml = {
 					val: "",
 					date: true,
 					dropdown: false,
+					ro: false,
 				},
 				"Quellen-URL": {
 					p: false,
 					cl: "",
 					val: "",
 					dropdown: false,
+					ro: false,
 				},
 			};
 			// Formular erzeugen
@@ -2274,7 +2305,7 @@ let xml = {
 					abb.appendChild(p);
 					p.classList.add("input-text");
 					if (v.cl) {
-						p.classList.add(v.cl);
+						v.cl.split(" ").forEach(i => p.classList.add(i));
 					}
 				}
 				let input = document.createElement("input");
@@ -2294,7 +2325,9 @@ let xml = {
 					abb.lastChild.classList.add("dropdown-cont");
 					input.classList.add("dropdown-feld");
 					input.title = `${k} auswählen`;
-					input.setAttribute("readonly", "true");
+					if (v.ro) {
+						input.setAttribute("readonly", "true");
+					}
 					let a = dropdown.makeLink("dropdown-link-element", `${k} auswählen`, true);
 					abb.lastChild.appendChild(a);
 				}
@@ -2475,7 +2508,8 @@ let xml = {
 		}
 		xl += `\t</Fundstelle>\n`;
 		xl += `\t<Lizenz>\n`;
-		xl += `\t\t<Name>${mask(form.querySelector(`[id$="lizenzname"]`).value)}</Name>\n`;
+		let ln = form.querySelector(`[id$="lizenzname"]`);
+		xl += `\t\t<Name>${mask(ln.value)}</Name>\n`;
 		let lul = form.querySelector(`[id$="lizenz-url"]`);
 		xl += `\t\t<URL>${mask(lul.value)}</URL>\n`;
 		xl += `\t</Lizenz>\n`;
@@ -2498,7 +2532,10 @@ let xml = {
 		if (ul.value && ( !/^https?:\/\//.test(ul.value) || /\s/.test(ul.value) )) {
 			ul.classList.add("fehler");
 		}
-		if (lul.value && ( !/^https?:\/\//.test(lul.value) || /\s/.test(lul.value) )) {
+		if (!ln.value) {
+			ln.classList.add("fehler");
+		}
+		if (!/^https?:\/\//.test(lul.value) || /\s/.test(lul.value)) {
 			lul.classList.add("fehler");
 		}
 		// XML eintragen
