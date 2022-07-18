@@ -821,7 +821,7 @@ let belegImport = {
 			data = belegImport.Datei.data[0].ds;
 		}
 		// Datensatz: Datum
-		let nDa = xml.querySelector("Fundstelle Datum");
+		let nDa = xml.querySelector("Fundstelle Erstpublikation") || xml.querySelector("Fundstelle Datum");
 		if (nDa && nDa.firstChild) {
 			data.da = nDa.firstChild.nodeValue;
 		}
@@ -929,8 +929,8 @@ let belegImport = {
 			let data = belegImport.DWDSDatensatz();
 			belegImport.Datei.data.push(data);
 			// Datensatz: Datum
-			if (i.meta_.date_) {
-				data.ds.da = i.meta_.date_;
+			if (i.meta_.firstDate || i.meta_.date_) {
+				data.ds.da = i.meta_.firstDate || i.meta_.date_;
 				if (/-12-31$/.test(data.ds.da) && i.meta_.pageRange) {
 					data.ds.da = data.ds.da.replace(/-.+/, "");
 				}
