@@ -888,6 +888,8 @@ let belegImport = {
 			}
 			if (belegImport.DWDSKorpora[korpus]) { // Korpus könnte noch nicht in der Liste sein
 				data.kr = belegImport.DWDSKorpora[korpus].kr;
+			} else {
+				data.kr = `DWDS: ${korpus}`;
 			}
 		}
 		// Datensatz: Textsorte
@@ -1000,6 +1002,8 @@ let belegImport = {
 				}
 				if (belegImport.DWDSKorpora[korpus]) { // Korpus könnte noch nicht in der Liste sein
 					data.ds.kr = belegImport.DWDSKorpora[korpus].kr;
+				} else {
+					data.ds.kr = `DWDS: ${korpus}`;
 				}
 			}
 			// Datensatz: Textsorte
