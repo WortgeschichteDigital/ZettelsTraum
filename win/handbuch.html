@@ -559,6 +559,8 @@
 					<div class="info">
 						<p id="karteikarte-maskieren">Der Inhalt des Textfeldes wird so behandelt, als sei er in <abbr title="Hypertext Markup Language" lang="en">HTML</abbr> formatiert (was bei einem automatischen Import aus dem <abbr title="Deutschen Textarchiv">DTA</abbr> tatsächlich wohl immer der Fall ist). Sie können zur Auszeichnung des Textes somit alle standardisierten <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>-Tags verwenden. Das heißt aber auch, dass die <b>Spitzklammern</b> &lt; und &gt; maskiert werden müssen, wenn sie literal und nicht als Begrenzungen von Tags gemeint sind. Wollen Sie literale Spitzklammern eingeben, müssen Sie <code class="quelltext">&amp;lt;</code> <abbr title="beziehungsweise">bzw.</abbr> <code class="quelltext">&amp;gt;</code> tippen.</p>
 
+						<p id="karteikarte-kuerzenBeleg">Mithilfe des Icons <img src="../img/kuerzung.svg" width="20" height="20" alt=""> kann der <b>Belegtext gekürzt</b> werden. Die Funktion operiert auf der Ebene von Absätzen. Standardmäßig werden alle Absätze gestrichen, in denen das Karteiwort nicht auftaucht. Für gekürzte Absätze wird <abbr title="gegebenenfalls">ggf.</abbr> ein Kürzungszeichen eingefügt: <code class="quelltext">[[...]]</code> (falls sie zwischen Absätzen mit Karteiwort stehen). Über Einstellungen lässt sich steuern, dass der <a href="#einstellungen-karteikarteTextKuerzenKontext">Kontext erhalten</a> bleibt (ein Absatz vor und einer hinter einem Absatz mit Karteiwort) oder die <a href="#einstellungen-karteikarteTextKuerzenAuto">Kürzung nach dem Import automatisch</a> vorgenommen wird.</p>
+
 						<p id="karteikarte-sonderzeichen">Über das Icon <img src="../img/pi.svg" width="20" height="20" alt=""> können einige <b>Sonderzeichen</b> an der Stelle des Belegs eingefügt werden, an der sich der Cursor gerade befindet, darunter auch die maskierten Spitzklammern. Befinden Sie sich im Beleg- der Bedeutungs-Feld kann die Funktion auch mit <kbd>Strg</kbd> + <kbd>M</kbd> aufgerufen werden.</p>
 
 						<p id="karteikarte-TextToolIcons">Um Text zu formatieren, müssen Sie ihn einfach nur markieren und auf eines der <b>Text-Tool-Icons</b> über dem Belegfeld klicken. Der markierte Text wird automatisch von den entsprechenden <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>-Tags umschlossen. Zum Rückgängigmachen einer Formatierung können Sie erneut auf das entsprechende Icon klicken. Dazu muss allerdings der gesamte Text innerhalb des zu entfernenden Elements markiert sein. Die Markierung muss also links und rechts direkt auf die öffnenden <abbr title="beziehungsweise">bzw.</abbr> schließenden Tags stoßen. Ansonsten wird ein neues Formatierungselement erzeugt.</p>
@@ -2379,6 +2381,26 @@ Mustermann, Erika
 						<p>Befindet sich in der Zwischenablage eine <abbr title="Deutsches Textarchiv">DTA</abbr>-URL, ein <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippet oder eine <abbr title="Pica-Produktionsnummer">PPN</abbr>, wird die Zwischenablage nach erfolgreichem Import der Daten gelöscht.</p>
 
 						<p>Es ist sinnvoll, diese Einstellung zu aktivieren, wenn bei neuen Karteikarten der <a href="#einstellungen-karteikarteFokusBeleg">Fokus standardmäßig im Belegfeld</a> liegen soll.</p>
+					</div>
+
+					<p class="erklaerung-option" id="einstellungen-karteikarteTextKuerzenAuto">nach dem Import Absätze ohne Karteiwort automatisch löschen</p>
+
+					<div class="info">
+						<p><i>Standard:</i> nicht aktiviert</p>
+
+						<p>Die Karteikarte verfügt über eine <a href="#karteikarte-kuerzenBeleg">Funktion, mit der der Belegtext automatisch gekürzt</a> werden kann. Ist diese Option aktiviert, wird die Kürzungsfunktion direkt nach dem Import eines Belegs automatisch aufgerufen.</p>
+
+						<p>Im Gegensatz zur dynamischen Kürzungsfunktion (in der <a href="#karteikarte-kuerzen">Leseansicht der Karteikarte</a> und der <a href="#belegliste-kuerzung">Belegliste</a>) wird in diesem Fall Belegtext wirklich entfernt.</p>
+					</div>
+
+					<p class="erklaerung-option" id="einstellungen-karteikarteTextKuerzenKontext">Kontext beim Löschen der Absätze ohne Karteiwort teilweise erhalten</p>
+
+					<div class="info">
+						<p><i>Standard:</i> nicht aktiviert</p>
+
+						<p>Ist diese Option aktiviert, streicht die <a href="#karteikarte-kuerzenBeleg">Kürzungsfunktion für den Belegtext</a> den unmittelbaren Kontext von Absätzen, in denen das Karteiwort auftaucht, nicht. Das heißt konkret, dass aus der Sicht eines Absatzes, in dem das Karteiwort auftaucht, der vorhergehende und der folgende Absatz erhalten bleiben.</p>
+
+						<p>Diese Option wird auch <a href="#einstellungen-karteikarteTextKuerzenAuto">bei der automatische Kürzung nach Belegimport</a> berücksichtigt.</p>
 					</div>
 
 					<p class="erklaerung-option" id="einstellungen-karteikarteLeseansicht">bestehende Karteikarte in der Leseansicht öffnen</p>

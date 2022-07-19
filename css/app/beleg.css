@@ -287,7 +287,8 @@ textarea#beleg-bs {
 }
 
 .text-tools-beleg a:first-child,
-.text-tools-beleg a:nth-child(4) {
+.text-tools-beleg a:nth-child(2),
+.text-tools-beleg a:nth-child(5) {
 	margin-right: 24px;
 }
 
@@ -370,6 +371,11 @@ textarea#beleg-bs {
 .icon-tools-italic {
 	-webkit-mask-image: url(../../img/text-kursiv.svg);
 	mask-image: url(../../img/text-kursiv.svg);
+}
+
+.icon-tools-kuerzen {
+	-webkit-mask-image: url(../../img/kuerzung.svg);
+	mask-image: url(../../img/kuerzung.svg);
 }
 
 .icon-tools-list-unordered {

@@ -612,7 +612,7 @@ let belegImport = {
 		beleg.data.kr = "DTA";
 		beleg.data.qu = belegImport.DTAQuelle(true);
 		// Formular füllen
-		beleg.formular(false);
+		beleg.formular(false, true);
 		beleg.belegGeaendert(true);
 		// Wort gefunden?
 		belegImport.checkWort();
@@ -1740,7 +1740,7 @@ let belegImport = {
 			// Datensatz als importiert markieren
 			data.importiert = true;
 			// Formular füllen
-			beleg.formular(false);
+			beleg.formular(false, true);
 			beleg.belegGeaendert(true);
 			// Wort gefunden?
 			// (nur überprüfen, wenn Belegtext importiert wurde;

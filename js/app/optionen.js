@@ -190,6 +190,10 @@ let optionen = {
 			"wort-check-nur-markieren": false,
 			// nach dem Import den Inhalt der Zwischenablage löschen
 			"karteikarte-clear-clipboard": false,
+			// nach dem Import Absätze ohne Stichwort automatisch löschen
+			"karteikarte-text-kuerzen-auto": false,
+			// Kontext beim Löschen der Absätze ohne Stichwort teilweise erhalten
+			"karteikarte-text-kuerzen-kontext": false,
 			// bestehende Karteikarten in der Leseansicht öffnen
 			leseansicht: true,
 			// FILTERLEISTE
