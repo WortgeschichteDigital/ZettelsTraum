@@ -612,7 +612,7 @@ let belegImport = {
 		beleg.data.kr = "DTA";
 		beleg.data.qu = belegImport.DTAQuelle(true);
 		// Formular füllen
-		beleg.formular(false);
+		beleg.formular(false, true);
 		beleg.belegGeaendert(true);
 		// Wort gefunden?
 		belegImport.checkWort();
@@ -821,7 +821,7 @@ let belegImport = {
 			data = belegImport.Datei.data[0].ds;
 		}
 		// Datensatz: Datum
-		let nDa = xml.querySelector("Fundstelle Datum");
+		let nDa = xml.querySelector("Fundstelle Erstpublikation") || xml.querySelector("Fundstelle Datum");
 		if (nDa && nDa.firstChild) {
 			data.da = nDa.firstChild.nodeValue;
 		}
@@ -888,6 +888,8 @@ let belegImport = {
 			}
 			if (belegImport.DWDSKorpora[korpus]) { // Korpus könnte noch nicht in der Liste sein
 				data.kr = belegImport.DWDSKorpora[korpus].kr;
+			} else {
+				data.kr = `DWDS: ${korpus}`;
 			}
 		}
 		// Datensatz: Textsorte
@@ -929,8 +931,8 @@ let belegImport = {
 			let data = belegImport.DWDSDatensatz();
 			belegImport.Datei.data.push(data);
 			// Datensatz: Datum
-			if (i.meta_.date_) {
-				data.ds.da = i.meta_.date_;
+			if (i.meta_.firstDate || i.meta_.date_) {
+				data.ds.da = i.meta_.firstDate || i.meta_.date_;
 				if (/-12-31$/.test(data.ds.da) && i.meta_.pageRange) {
 					data.ds.da = data.ds.da.replace(/-.+/, "");
 				}
@@ -1000,6 +1002,8 @@ let belegImport = {
 				}
 				if (belegImport.DWDSKorpora[korpus]) { // Korpus könnte noch nicht in der Liste sein
 					data.ds.kr = belegImport.DWDSKorpora[korpus].kr;
+				} else {
+					data.ds.kr = `DWDS: ${korpus}`;
 				}
 			}
 			// Datensatz: Textsorte
@@ -1736,7 +1740,7 @@ let belegImport = {
 			// Datensatz als importiert markieren
 			data.importiert = true;
 			// Formular füllen
-			beleg.formular(false);
+			beleg.formular(false, true);
 			beleg.belegGeaendert(true);
 			// Wort gefunden?
 			// (nur überprüfen, wenn Belegtext importiert wurde;

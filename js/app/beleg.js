@@ -143,7 +143,9 @@ let beleg = {
 	// Formular füllen und anzeigen
 	//   neu = Boolean
 	//     (neue Karteikarte erstellen)
-	async formular (neu) {
+	//   imp = true | undefined
+	//     (Formular wird direkt nach einem Import gefüllt)
+	async formular (neu, imp = false) {
 		// regulären Ausdruck für Sprung zum Wort zurücksetzen
 		beleg.ctrlSpringenFormReg.again = false;
 		beleg.ctrlSpringenFormReset();
@@ -187,6 +189,10 @@ let beleg = {
 			textarea.scrollTop = 0;
 			helfer.textareaGrow(textarea);
 		});
+		// Belegtext nach Import ggf. automatisch kürzen
+		if (imp && optionen.data.einstellungen["karteikarte-text-kuerzen-auto"]) {
+			beleg.toolsKuerzen();
+		}
 		// Fokus setzen
 		// (hier braucht es eine Verzögerung: Wird die Karte z.B. direkt nach dem
 		// Erstellen einer neuen Wortkartei aufgerufen, wird der fokussierte Button
@@ -1245,7 +1251,10 @@ let beleg = {
 	toolsText (link) {
 		// Sonderzeichen eingeben
 		const aktion = link.getAttribute("class").replace(/.+-/, "");
-		if (aktion === "sonderzeichen") {
+		if (aktion === "kuerzen") {
+			beleg.toolsKuerzen();
+			return;
+		} else if (aktion === "sonderzeichen") {
 			const feld = link.parentNode.previousSibling.getAttribute("for");
 			sonderzeichen.oeffnen(feld);
 			return;
@@ -1794,6 +1803,54 @@ let beleg = {
 		dta.value = link[0];
 		dta.dispatchEvent(new Event("input"));
 		document.querySelector("#beleg-dta-bis").select();
+	},
+	// Belegtext um alle Absätze kürzen, die kein Stichwort enthalten
+	toolsKuerzen () {
+		// Absätze ermitteln, die das Wort enthalten
+		let bs = document.querySelector("#beleg-bs"),
+			textOri = bs.value,
+			text = textOri.split("\n\n"),
+			wortVorhanden = [];
+		for (let i = 0, len = text.length; i < len; i++) {
+			if (liste.wortVorhanden(text[i])) {
+				wortVorhanden.push(i);
+			}
+		}
+		// gekürzten Text ermitteln
+		let kurz = [],
+			kurzZuletzt = -1,
+			kontextErhalten = optionen.data.einstellungen["karteikarte-text-kuerzen-kontext"];
+		for (let i = 0, len = text.length; i < len; i++) {
+			if (wortVorhanden.includes(i) || // Stichwort vorhananden
+					kontextErhalten && ( wortVorhanden.includes(i - 1) || wortVorhanden.includes(i + 1) ) ) { // Kontext erhalten
+				kurz.push(text[i]);
+				kurzZuletzt = i;
+			} else if (i > 0 && i < len - 1 && kurzZuletzt === i - 1) { // Kürzungszeichen
+				kurz.push("[[…]]" + seitenumbruch(text[i]));
+			} else {
+				const su = seitenumbruch(text[i]);
+				if (su) {
+					kurz[kurz.length - 1] = kurz[kurz.length - 1] + su;
+				}
+			}
+		}
+		function seitenumbruch (text) { // Seitenumbruch erhalten
+			const reg = /\[:.+?:\]/;
+			if (reg.test(text)) {
+				return " " + text.match(reg)[0];
+			}
+			return "";
+		}
+		if (/\[\[…\]\]/.test(kurz[kurz.length - 1])) { // überflüssige Kürzung am Ende entfernen
+			kurz.pop();
+		}
+		// gekürzten Text übernehmen
+		const textKurz = kurz.join("\n\n");
+		if (textOri !== textKurz) {
+			beleg.data.bs = bs.value = textKurz;
+			helfer.textareaGrow(bs);
+			beleg.belegGeaendert(true);
+		}
 	},
 	// Bewertung des Belegs vor- od. zurücknehmen
 	//   stern = Element

@@ -910,6 +910,8 @@ let karteisuche = {
 	//   wort = String
 	//     (Wort oder Ausdruck)
 	wortSort (wort) {
+		// Homographenziffern entfernen
+		wort = wort.replace(/[¹²³⁴⁵⁶⁷⁸⁹⁰]/g, "");
 		let sortform = "";
 		for (let i of wort.split(/\s/)) {
 			// Artikel ignorieren

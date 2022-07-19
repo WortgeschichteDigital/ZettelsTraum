@@ -639,21 +639,13 @@ let liste = {
 			a.dataset.id = id;
 			liste.buchen(a);
 		}
-		// Suche ohne Treffer im Beleg
-		if (filter.volltextSuche.suche &&
-				!filter.volltextSuche.ka[id].includes("bs")) {
-			let p = document.createElement("p");
-			p.dataset.id = id;
-			liste.belegAbsatzGekuerzt(p);
-			div.appendChild(p);
-			return div;
-		}
 		// Absätze erzeugen
 		let prep = data.ka[id].bs.replace(/\n\s*\n/g, "\n"), // Leerzeilen löschen
 			p_prep = prep.split("\n"),
 			zuletzt_gekuerzt = false; // true, wenn der vorherige Absatz gekürzt wurde
 		for (let i = 0, len = p_prep.length; i < len; i++) {
-			let p = document.createElement("p");
+			let wortVorhanden = liste.wortVorhanden(p_prep[i]),
+				p = document.createElement("p");
 			div.appendChild(p);
 			p.dataset.pnumber = i;
 			p.dataset.id = id;
@@ -673,7 +665,7 @@ let liste = {
 						break;
 					}
 				}
-				if (!treffer) {
+				if (!treffer && !wortVorhanden) {
 					if (zuletzt_gekuerzt) {
 						div.removeChild(div.lastChild);
 					} else {
@@ -682,9 +674,18 @@ let liste = {
 					}
 					continue;
 				}
+			} else if (filter.volltextSuche.suche &&
+					!wortVorhanden) {
+				if (zuletzt_gekuerzt) {
+					div.removeChild(div.lastChild);
+				} else {
+					liste.belegAbsatzGekuerzt(p);
+					zuletzt_gekuerzt = true;
+				}
+				continue;
 			} else if (kuerzungMoeglich &&
 					optionen.data.belegliste.beleg_kuerzen &&
-					!liste.wortVorhanden(p_prep[i]) &&
+					!wortVorhanden &&
 					!(filter.aktiveFilter["verschiedenes-annotierung"] && /annotierung-wort/.test(p_prep[i]) ) ) {
 				// ggf. kürzen, wenn
 				//   - Wort nicht enthalten
