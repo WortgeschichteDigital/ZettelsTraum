@@ -882,7 +882,7 @@ let stamm = {
 		let woerter = new Set();
 		for (const w of str.split(/(?<=[0-9a-zäöü])\/(?=[0-9a-zäöü])/i)) {
 			let wort = w.replace(/[([{<](.+?)[)\]}>]/g, m => "");
-			wort = wort.replace(/[!?.:,;'§$%&/\\=*+~#()[\]{}<>¹²³⁴⁵⁶⁷⁸⁹⁰]+/g, "");
+			wort = wort.replace(/[!?.:,;§$%&/\\=*+~#()[\]{}<>¹²³⁴⁵⁶⁷⁸⁹⁰]+/g, "");
 			wort = helfer.textTrim(wort, true);
 			wort = wort.replace(/"(.+)"/, (m, p1) => {
 				woerter.add(p1);
