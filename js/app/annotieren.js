@@ -12,17 +12,17 @@ let annotieren = {
 			range = sel.getRangeAt(0),
 			mark = document.createElement("mark");
 		mark.classList.add("user");
-		try {
+// 		try {
 			range.surroundContents(mark);
 			range.collapse();
 			annotieren.mod(mark);
 			annotieren.ausfuehren();
-		} catch (err) {
-			dialog.oeffnen({
-				typ: "alert",
-				text: `Die Markierung kann an dieser Position nicht vorgenommen werden.\n<h3>Fehlermeldung</h3>\n${err.name}: ${err.message}`,
-			});
-		}
+// 		} catch (err) {
+// 			dialog.oeffnen({
+// 				typ: "alert",
+// 				text: `Die Markierung kann an dieser Position nicht vorgenommen werden.\n<h3>Fehlermeldung</h3>\n${err.name}: ${err.message}`,
+// 			});
+// 		}
 	},
 	// Meldung, dass das Annotieren nicht möglich ist
 	unmoeglich () {
@@ -113,6 +113,7 @@ let annotieren = {
 		// Werte auslesen (falls vorhanden)
 		let werte = {
 			farbe: 1,
+			taggen: true,
 			text: "",
 		};
 		let data = annotieren.data.data;
@@ -121,6 +122,9 @@ let annotieren = {
 			werte.farbe = parseInt(farbe[1], 10);
 			if (data.title) {
 				werte.text = data.title;
+			}
+			if (data.dataset.nichtTaggen === "true") {
+				werte.taggen = false;
 			}
 		}
 		// UI ggf. entfernen
@@ -144,6 +148,21 @@ let annotieren = {
 				farbe.classList.add("aktiv");
 			}
 		}
+		// Checkbox "nicht taggen"
+		let nichtTaggen = document.createElement("span");
+		span.appendChild(nichtTaggen);
+		nichtTaggen.classList.add("check");
+		let input = document.createElement("input");
+		nichtTaggen.appendChild(input);
+		input.id = "annotierung-nicht-taggen";
+		input.type = "checkbox";
+		if (!werte.taggen) {
+			input.checked = true;
+		}
+		let label = document.createElement("label");
+		nichtTaggen.appendChild(label);
+		label.setAttribute("for", "annotierung-nicht-taggen");
+		label.textContent = "nicht taggen";
 		// Text
 		let txt = document.createElement("span");
 		span.appendChild(txt);
@@ -164,7 +183,7 @@ let annotieren = {
 			pos.push("rechts");
 			knoten = annotieren.data.ende;
 		}
-		if (knoten.offsetTop < 65) {
+		if (knoten.offsetTop < 91) {
 			pos.push("unten");
 		} else {
 			pos.push("oben");
@@ -180,6 +199,10 @@ let annotieren = {
 		aw.addEventListener("click", evt => evt.stopPropagation()); // sonst wird das Popup bei jedem Klick neu aufgebaut
 		aw.querySelector("img").addEventListener("click", () => annotieren.modSchliessen()); // Schließen-Icon
 		aw.querySelectorAll(".farbe").forEach(i => annotieren.modFarbe(i)); // Farbkästchen
+		aw.querySelector("#annotierung-nicht-taggen").addEventListener("click", function() {
+			
+			annotieren.ausfuehren();
+		}); // Checkbox
 		annotieren.modText(aw.querySelector(".text")); // Textfeld
 	},
 	// Annotierungs-Popup schließen
@@ -221,6 +244,7 @@ let annotieren = {
 			this.classList.add("aktiv");
 			let edit = document.createElement("input");
 			this.replaceChild(edit, this.firstChild);
+			edit.type = "text";
 			edit.value = text;
 			edit.focus();
 			edit.addEventListener("input", function() {
@@ -262,6 +286,7 @@ let annotieren = {
 		let aw = document.getElementById("annotierung-wort");
 		let werte = {
 			farbe: 1,
+			taggen: aw.querySelector("#annotierung-nicht-taggen:checked") ? false : true,
 			text: "",
 		};
 		// Text ermitteln
@@ -283,7 +308,7 @@ let annotieren = {
 		}
 		// Anzeige auffrischen
 		const cl = annotieren.data.cl;
-		if (cl === "user" && werte.farbe === 0 && !werte.text) { // Annotierung entfernen (user)
+		if (cl === "user" && werte.farbe === 0 && werte.taggen && !werte.text) { // Annotierung entfernen (user)
 			let frag = document.createDocumentFragment(),
 				start = annotieren.data.start;
 			for (let i of start.childNodes) {
@@ -294,7 +319,7 @@ let annotieren = {
 			}
 			let data = annotieren.data.data;
 			data.parentNode.replaceChild(frag, data);
-		} else if (cl === "wort" && werte.farbe === 1 && !werte.text) { // Annotierung entfernen (wort)
+		} else if (cl === "wort" && werte.farbe === 1 && werte.taggen && !werte.text) { // Annotierung entfernen (wort)
 			let data = annotieren.data.data;
 			if (!data) {
 				// noch keine Annotierung vorhanden => nichts entfernen und nichts auffrischen
@@ -336,12 +361,20 @@ let annotieren = {
 			} else {
 				data.title = "";
 			}
+			if (!werte.taggen) {
+				data.dataset.nichtTaggen = "true";
+			} else if (data?.dataset?.nichtTaggen) {
+				delete data.dataset.nichtTaggen;
+			}
 		} else { // Annotierung vornehmen
 			// Annotierung erzeugen
 			let annotierung = document.createElement("span");
 			annotierung.classList.add("annotierung-wort", `farbe${werte.farbe}`);
 			if (werte.text) {
 				annotierung.title = werte.text;
+			}
+			if (!werte.taggen) {
+				annotierung.dataset.nichtTaggen = "true";
 			}
 			// Knoten ersetzen
 			if (annotieren.data.start === annotieren.data.ende) { // nur ein <mark>

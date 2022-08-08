@@ -61,7 +61,8 @@
 
 #drucken-cont mark.wort {
 	padding: 0;
-	background-color: var(--hover);
+	background-color: var(--hover) !important;
+	color: var(--text);
 	font-weight: bold;
 }
 

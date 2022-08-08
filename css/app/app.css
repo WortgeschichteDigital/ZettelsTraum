@@ -482,12 +482,12 @@ textarea:focus {
 }
 
 #annotierung-wort.links-oben {
-	top: -65px;
+	top: -91px;
 	left: 0;
 }
 
 #annotierung-wort.rechts-oben {
-	top: -65px;
+	top: -91px;
 	right: 0;
 }
 
@@ -522,7 +522,7 @@ textarea:focus {
 .farbe.farbe0,
 .farbe0 mark.wort,
 .farbe0 mark.user {
-	padding: 0;
+	outline: 1px solid var(--linie);
 	background-color: transparent !important;
 	color: var(--text); /* Textfarbe könnte über Formvarianten auf weiß gesetzt worden sein */
 	font-weight: normal;
@@ -556,6 +556,7 @@ textarea:focus {
 	color: #fff;
 }
 
+#annotierung-wort .check,
 #annotierung-wort .text {
 	display: block;
 	padding: 1px 6px;
@@ -563,6 +564,10 @@ textarea:focus {
 	color: var(--text);
 	text-overflow: ellipsis;
 	white-space: nowrap;
+}
+
+#annotierung-wort .text {
+	font-style: italic;
 }
 
 #annotierung-wort .text.leer {
@@ -575,29 +580,37 @@ textarea:focus {
 	padding: 0;
 }
 
-#annotierung-wort input {
+#annotierung-wort input[type="text"] {
 	display: block;
 	border: 1px solid var(--linie);
 	padding: 0 5px;
 	width: calc(100% - 12px);
 	font-size: 14px;
+	font-style: normal;
 }
 
-#annotierung-wort input:focus {
+#annotierung-wort input[type="text"]:focus {
 	outline: 1px solid var(--farbe);
 	border-color: var(--farbe);
 }
 
-#annotierung-wort input.changed {
+#annotierung-wort input[type="text"].changed {
 	outline-color: var(--farbeRot);
 	border-color: var(--farbeRot);
 }
 
 .annotierung-wort::after {
-	content: url(../../img/zeilen-3,5-12.svg);
-	position: relative;
-	top: -5px;
-	margin-left: 2px;
+	content: url(../../img/annotiert.svg);
+	display: inline-block;
+	vertical-align: text-bottom;
+	margin: 0 2px;
+	width: 24px;
+	height: 24px;
+}
+
+.annotierung-wort.farbe0::after,
+.annotierung-wort[data-nicht-taggen]::after {
+	content: url(../../img/annotiert_nicht-taggen.svg);
 }
 
 /* DTA-Auszeichnungen in XML-Dokumenten --------- */
