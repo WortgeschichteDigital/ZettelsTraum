@@ -128,16 +128,18 @@ let xml = {
 						continue;
 					} else if (c.nodeType === 1 &&
 							c.nodeName === "MARK") {
+						// diese Markierung/dieses Stichwort soll evtl. nicht getaggt werden
+						const nichtTaggen = c.parentNode?.dataset?.nichtTaggen ? true : false;
 						// wenn man in den Formvarianten Mehrwortausdrücken als Wort
 						// aufnimmt, kann es zu Verschachtelungen kommen
 						const verschachtelt = c.parentNode.closest("mark");
-						if (!verschachtelt &&
+						if (!verschachtelt && !nichtTaggen &&
 								(c.parentNode.classList.contains("annotierung-wort") ||
 								c.classList.contains("user") ||
 								c.classList.contains("markierung"))) {
 							text += `<Markierung>`;
 							close = "</Markierung>";
-						} else if (!verschachtelt) {
+						} else if (!verschachtelt && !nichtTaggen) {
 							text += "<Stichwort>";
 							close = "</Stichwort>";
 						}
