@@ -477,7 +477,7 @@ let liste = {
 			}
 		} else if (/[0-9]{4}/.test(datum)) { // 1. Jahresangabe verwenden
 			datum_vierstellig(datum);
-		} else { // 1. Jarhhundert verwenden
+		} else { // 1. Jahrhundert verwenden
 			datum_jahrhundert(datum);
 		}
 		// Jahrzehnt ermitteln
@@ -493,8 +493,8 @@ let liste = {
 			output.jahr = output.datum;
 		}
 		function datum_jahrhundert (datum) {
-			output.datum = `${datum.match(/([0-9]{2})\./)[1]}. Jh.`;
-			output.jahr = ((parseInt(datum.match(/([0-9]{2})\./)[1], 10) - 1) * 100).toString();
+			output.datum = `${datum.match(/([0-9]{2})\.\sJh\./)[1]}. Jh.`;
+			output.jahr = ((parseInt(datum.match(/([0-9]{2})\.\sJh\./)[1], 10) - 1) * 100).toString();
 		}
 		// Output auswerfen
 		return output;
