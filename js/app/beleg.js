@@ -2018,7 +2018,7 @@ let beleg = {
 			}
 			helfer.keineKinder(cont);
 			// Absätze einhängen
-			const p = v.replace(/\n\s*\n/g, "\n").split("\n");
+			const p = liste.belegErstellenPrepP(v).split("\n");
 			let zuletzt_gekuerzt = false; // true, wenn der vorherige Absatz gekürzt wurde
 			for (let i = 0, len = p.length; i < len; i++) {
 				let text = p[i];

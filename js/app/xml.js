@@ -94,14 +94,15 @@ let xml = {
 		// Belegtext aufbereiten
 		//   - Klammerungen aufbereiten (löschen oder taggen)
 		//   - Leerzeichen vor <Streichung> ergänzen (werden beim Auflösen wieder entfernt)
-		//   - Zeilenumbrüche am Ende ersetzen (kann bei wilder Auswahl passieren)
+		//   - überflüssige Versauszeichnungen am Ende ersetzen (kann bei wilder Auswahl passieren)
 		//   - leere Tags ersetzen (kann bei Stichwörtern mit Klammerung in der Mitte vorkommen
 		//   - Stichwort-Tags zusammenführen (kann bei Klammerung in der Mitte vorkommen)
 		//   - Text trimmen (durch Streichungen können doppelte Leerzeichen entstehen)
 		//   - verschachtelte Hervorhebungen zusammenführen
+		//   - Versauszeichnungen komplettieren/korrigieren
 		text = klammernTaggen(text);
 		text = text.replace(/([^\s])(<Streichung>[,;:/])/, (m, p1, p2) => p1 + " " + p2);
-		text = text.replace(/(<Zeilenumbruch\/>\s?)+$/, "");
+		text = text.replace(/(<\/Vers><Vers>\s?)+$/, "");
 		text = text.replace(/<([a-zA-Z]+)(?: Stil="#[a-z]+")?><\/([a-zA-Z]+)>/g, (m, p1, p2) => {
 			if (p1 === p2 &&
 					p1 !== "Autorenzusatz") { // <Autorenzusatz> kann leer sein (Elision)
@@ -112,6 +113,15 @@ let xml = {
 		text = text.replace(/<\/Stichwort><Stichwort>|<\/Markierung><Markierung>/g, "");
 		text = helfer.textTrim(text, true);
 		text = xml.mergeHervorhebungen({text});
+		text = text.replace(/<Absatz>(.+?)<\/Absatz>/g, (m, p1) => {
+			if (/<Vers>/.test(p1)) {
+				p1 = `<Vers>${p1}</Vers>`;
+				p1 = p1.replace(/<Vers><(Streichung|Loeschung)>/g, (m, p1) => `<${p1}><Vers>`);
+				p1 = p1.replace(/<\/(Streichung|Loeschung)><\/Vers>/g, (m, p1) => `</Vers></${p1}>`);
+				p1 = p1.replace(/<Vers><\/Absatz>$/, "</Absatz>");
+			}
+			return `<Absatz>${p1}</Absatz>`;
+		});
 		// Belegtext einhängen
 		let belegtext = parser.parseFromString(`<Belegtext>${text}</Belegtext>`, "text/xml");
 		schnitt.firstChild.appendChild(belegtext.firstChild);
@@ -124,7 +134,7 @@ let xml = {
 					let close = "";
 					if (c.nodeType === 1 &&
 							c.nodeName === "BR") {
-						text += "<Zeilenumbruch/>";
+						text += "</Vers><Vers>";
 						continue;
 					} else if (c.nodeType === 1 &&
 							c.nodeName === "MARK") {

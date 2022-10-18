@@ -539,10 +539,10 @@ let belegImport = {
 						}
 					} else if (ele.nodeName === "l") { // Verszeile
 						text = text.replace(/ +$/, "");
-						if (/\n$/.test(text)) {
+						if (/(?<!<br>)\n$/.test(text)) {
 							text += "\n";
 						} else {
-							text += "<br>";
+							text += "<br>\n";
 						}
 					} else if (ele.nodeName === "lb") { // Zeilenumbruch
 						if (ele.previousSibling &&

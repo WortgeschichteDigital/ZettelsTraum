@@ -640,7 +640,7 @@ let liste = {
 			liste.buchen(a);
 		}
 		// Absätze erzeugen
-		let prep = data.ka[id].bs.replace(/\n\s*\n/g, "\n"), // Leerzeilen löschen
+		let prep = liste.belegErstellenPrepP(data.ka[id].bs),
 			p_prep = prep.split("\n"),
 			zuletzt_gekuerzt = false; // true, wenn der vorherige Absatz gekürzt wurde
 		for (let i = 0, len = p_prep.length; i < len; i++) {
@@ -712,6 +712,18 @@ let liste = {
 		}
 		// <div> zurückgeben
 		return div;
+	},
+	// Absätze aufbereiten
+	//   p = String
+	//     (Text mit Absätzen)
+	belegErstellenPrepP (p) {
+		// Zeilenumbruch am Ende von Autorenzusatz/Streichung/Löschung verschieben
+		p = p.replace(/<br>(\]\]?|\})/g, (m, p1) => p1 + "<br>");
+		// aufeinanderfolgende Verse alle im selben Absatz
+		p = p.replace(/<br>\n/g, "<br>");
+		// Leerzeilen löschen
+		p = p.replace(/\n\s*\n/g, "\n");
+		return p;
 	},
 	// gekürzte Absätze darstellen
 	//   p = Element
