@@ -514,7 +514,7 @@ let xml = {
 		}
 		// Jahr
 		let jahr = "",
-			datum = helferXml.datum(data.da).match(/[0-9]{4}/);
+			datum = helferXml.datum(data.da.replace(/0000[-–]/, "")).match(/[0-9]{4}/);
 		if (datum) {
 			jahr = datum[0];
 		}

@@ -4135,6 +4135,14 @@ let xml = {
 				break;
 			}
 		}
+		if (d.bg.length > 1) {
+			for (let i of d.bg) {
+				if (!i.la) {
+					fehlstellen.push("• alle Bedeutungsgerüste mit Labeln versehen");
+					break;
+				}
+			}
+		}
 		let textIDs = xml.dropdownReferenzen(),
 			bgLinkFehler = [];
 		for (const geruest of d.bg) {

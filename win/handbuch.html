@@ -548,6 +548,10 @@
 						<p>Jahrhundertangaben werden auf das Jahr null datiert (nicht ganz korrekt, weil dieses Jahr bekanntlich noch zum vorherigen Jahrhundert gehört, das ist aus mehreren Gründen aber leichter zu handhaben). Die Angabe <q>18. Jh.</q> im Datumsfeld wird für die Sortierung der Belegliste mithin so behandelte, als stamme der Beleg aus dem Jahr <i>1700</i>.</p>
 
 						<p>Geben Sie ein Tagesdatum an, werden die Belege in der <a href="#belegliste">Belegliste</a> nach Jahr, Monat und Tag sortiert. Erkannt werden Tagesdaten im ISO 8601-Format (<code class="quelltext">2019-12-01</code>) und Tagesdaten nach dem Muster <code class="quelltext">1. 12. 2019</code>, auch mit führender Null und ohne Leerzeichen: <code class="quelltext">01.12.2019</code>.</p>
+
+						<p>Ferner gibt es die Möglichkeit einen Zeitraum anzugeben. Bei der Angabe <code class="quelltext">1980-1984</code> wird für die Sortierung des Belegs in der Liste das erste Datum genutzt. Beim Erstellen eines <a href="#belegliste-xmlZwischenablageBelegschnitt"><abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippets</a> wird die Datumsangabe jedoch als Zeitraum (von 1980 bis 1984) exportiert.</p>
+
+						<p>Auch für den Fall, dass ein Beleg vor oder nach einem bestimmten Jahr entstanden ist, gibt es ein spezielles Eingabeformat, das bei der Konversion in XML berücksichtigt wird: <code class="quelltext">0000-1984</code> bedeutet <q class="bedeutung">der Beleg ist vor 1984 entstanden</q>, <code class="quelltext">1984-9999</code> bedeutet <q class="bedeutung">der Beleg ist nach 1984 entstanden</q>.</p>
 					</div>
 
 					<p class="add-navi-details" id="karteikarte-autor"><b>Autor:</b> Urheber des Textes im Belegfeld</p>
