@@ -851,6 +851,18 @@ let helfer = {
 			let g = datumForm5.groups;
 			datumSort = `${g.jh - 1}00-00-00`;
 		}
+		// Daten vor/nach Jahr
+		if (datumForm2) {
+			const sp = datum.split(/[-–]/);
+			if (/^0000/.test(datum)) { // vor Jahr
+				datum = `vor ${sp[1]}`;
+				datumSort = `${sp[1]}-00-00`;
+			} else if (/9999$/.test(datum)) { // nach Jahr
+				datum = `nach ${sp[0]}`;
+				datumSort = `${sp[0]}-00-00`;
+			}
+		}
+		// Datumsformate zurückgeben
 		return {
 			anzeige: datum,
 			sortier: datumSort,

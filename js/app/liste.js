@@ -489,6 +489,7 @@ let liste = {
 		}
 		// Datum und Jahr im Output füllen
 		function datum_vierstellig (datum) {
+			datum = datum.replace(/^0000-/, "");
 			output.datum = datum.match(/[0-9]{4}/)[0];
 			output.jahr = output.datum;
 		}
