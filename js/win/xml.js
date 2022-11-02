@@ -4187,9 +4187,10 @@ let xml = {
 	async exportierenSpeichern ({xmlStr}) {
 		const path = require("path");
 		let ascii = new Map([
-			[/ /g, "_"],
+			[/[\s’']/g, "_"],
 			[/Ä/g, "Ae"],
 			[/ä/g, "ae"],
+			[/[ÈÉ]/g, "E"],
 			[/[èé]/g, "e"],
 			[/Ö/g, "Oe"],
 			[/ö/g, "oe"],
