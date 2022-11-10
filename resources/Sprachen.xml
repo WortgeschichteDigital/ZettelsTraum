@@ -481,4 +481,9 @@
 		<name>spätlateinisch</name>
 		<abbr>spaetlat.</abbr>
 	</item>
+	<item>
+		<id>96</id>
+		<name>ungarisch</name>
+		<abbr>ungar.</abbr>
+	</item>
 </sprachen>
