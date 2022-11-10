@@ -9,6 +9,7 @@ let xml = {
 		"Frankfurter Allgemeine Zeitung",
 		"der freitag",
 		"freundin",
+		"Die Fackel",
 		"Die Gartenlaube",
 		"Grenzboten",
 		"Jungfrau Zeitung",
