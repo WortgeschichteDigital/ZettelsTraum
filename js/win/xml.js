@@ -317,7 +317,7 @@ let xml = {
 		let id = document.getElementById("md-id"),
 			lemmata = xml.lemmata();
 		for (let i = 0, len = lemmata.length; i < len; i++) {
-			lemmata[i] = lemmata[i].replace(/\s/g, "_");
+			lemmata[i] = lemmata[i].replace(/[\s’]/g, "_");
 		}
 		let wortfeld = "";
 		if (/Wortfeld/.test(xml.data.wort) ||

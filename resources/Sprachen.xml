@@ -486,4 +486,9 @@
 		<name>ungarisch</name>
 		<abbr>ungar.</abbr>
 	</item>
+	<item>
+		<id>97</id>
+		<name>jiddisch</name>
+		<abbr>jidd.</abbr>
+	</item>
 </sprachen>

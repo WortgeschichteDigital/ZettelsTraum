@@ -29,6 +29,9 @@ window.addEventListener("load", async () => {
 	document.querySelectorAll(".dropdown-feld").forEach(i => dropdown.feld(i));
 	document.querySelectorAll(".dropdown-link-td, .dropdown-link-element").forEach(i => dropdown.link(i));
 
+	// ÄNDERUNGSNOTIZ
+	document.querySelector("#md-re-no").value = "Erstpublikation";
+
 	// FENSTER FREISCHALTEN
 	helfer.fensterGeladen();
 });
