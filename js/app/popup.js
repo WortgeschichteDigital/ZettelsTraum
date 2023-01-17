@@ -43,7 +43,7 @@ let popup = {
 	//     (das Ereignis-Objekt, das beim Rechtsklick erzeugt wird)
 	oeffnen (evt) {
 		// Klickziel ermitteln
-		const target = popup.getTarget(evt.path);
+		const target = popup.getTarget(evt.composedPath());
 		if (!target) {
 			return;
 		}

@@ -2020,7 +2020,7 @@ let liste = {
 		// Kopieren wird vom Programm erledigt
 		evt.preventDefault();
 		// Text auslesen
-		popup.getTargetSelection(evt.path);
+		popup.getTargetSelection(evt.composedPath());
 		// Aktion ohne Nachfrage ausführen
 		if (optionen.data.einstellungen["ctrlC-auto"]) {
 			liste.textKopierenExec();
