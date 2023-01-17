@@ -4138,10 +4138,13 @@ let xml = {
 		if (d.bg.length > 1) {
 			for (let i of d.bg) {
 				if (!i.la) {
-					fehlstellen.push("• alle Bedeutungsgerüste mit Labeln versehen");
+					fehlstellen.push("• alle Bedeutungsgerüste mit Hauptlemma-Label versehen");
 					break;
 				}
 			}
+		} else if (d.bg.length === 1 &&
+				d.bg[0].la) {
+			fehlstellen.push("• Hauptlemma-Label des Bedeutungsgerüsts entfernen");
 		}
 		let textIDs = xml.dropdownReferenzen(),
 			bgLinkFehler = [];
