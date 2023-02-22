@@ -1,10 +1,10 @@
 # Zettel’s Traum
 
-*Zettel’s Traum* ist die Wortkartei-App von *Wortgeschichte digital* ([WGd](https://adw-goe.de/forschung/weitere-forschungsprojekte/wortgeschichte-digital-teilprojekt-im-zdl/)), dem an der *Akademie der Wissenschaften zu Göttingen* ([AdWG](https://adw-goe.de/)) angesiedelten Teilprojekt des *Zentrums für digitale Lexikographie der deutschen Sprache* ([ZDL](https://www.zdl.org/)). WGd und das ZDL werden gefördert vom *Bundesministerium für Bildung und Forschung* ([BMBF](https://www.bmbf.de/)).
+*Zettel’s Traum* ist die Wortkartei-App von *Wortgeschichte digital* ([WGd](https://adw-goe.de/forschung/weitere-forschungsprojekte/wortgeschichte-digital-teilprojekt-im-zdl/)), dem an der *Niedersächsischen Akademie der Wissenschaften zu Göttingen* ([NAdWG](https://adw-goe.de/)) angesiedelten Teilprojekt des *Zentrums für digitale Lexikographie der deutschen Sprache* ([ZDL](https://www.zdl.org/)). WGd und das ZDL werden gefördert vom *Bundesministerium für Bildung und Forschung* ([BMBF](https://www.bmbf.de/)).
 
-Die im Projekt *Wortgeschichte digital* mithilfe von *Zettel’s Traum* verfassten Wortgeschichten finden Sie auf der Homepage des ZDL: <a href="https://wortgeschichten.zdl.org/">wortgeschichten.zdl.org</a>.
+Die im Projekt *Wortgeschichte digital* mithilfe von *Zettel’s Traum* verfassten Wortgeschichten werden auf der Homepage des ZDL publiziert: <a href="https://wortgeschichten.zdl.org/">wortgeschichten.zdl.org</a>.
 
-<a href="https://adw-goe.de/"><img src="img/readme/AdWG.png" width="157" height="156" alt="AdWG"></a><a href="https://www.zdl.org/"><img src="img/readme/ZDL.png" width="262" height="156" alt="ZDL"></a><a href="https://www.bmbf.de/"><img src="img/readme/BMBF.png" width="227" height="156" alt="BMBF"></a>
+<a href="https://adw-goe.de/"><img src="img/readme/NAdWG.png" width="157" height="156" alt="NAdWG"></a><a href="https://www.zdl.org/"><img src="img/readme/ZDL.png" width="262" height="156" alt="ZDL"></a><a href="https://www.bmbf.de/"><img src="img/readme/BMBF.png" width="227" height="156" alt="BMBF"></a>
 
 ## Inhalt
 * [Die App](#die-app)
@@ -62,7 +62,7 @@ Für ein Update laden Sie sich einfach die neue Version herunter und ersetzen de
 
 Der **Installer** legt ein Icon im Windows-Startmenü an, über das das Programm aufgerufen werden kann. Außerdem werden während der Installation automatisch Dateien mit der Endung `.ztj` mit *Zettel’s Traum* verknüpft, sodass sie durch Doppelklick im *Windows-Explorer* geöffnet werden können.
 
-**Unterstützung:** Windows 7 und später mit 64-Bit-Architektur. Das Bauen von 32-Bit-Versionen wäre prinzipiell möglich, dafür müssten Sie aber [selbst aktiv werden](#bauanleitung).
+**Unterstützung:** Windows 10 und später mit 64-Bit-Architektur. Das Bauen von 32-Bit-Versionen wäre prinzipiell möglich, dafür müssten Sie aber [selbst aktiv werden](#bauanleitung).
 
 Da die App bisher nicht zertifiziert ist, wird Windows vermutlich das reibungslose Starten des Installers oder Pakets auf Ihrem Rechner unterbinden. Unter Windows 10 könnte die Meldung: „Der Computer wurde durch Windows geschützt“, erscheinen. Klicken Sie in der Meldung auf den Link „Weitere Informationen“, erscheint im Meldungsfenster der Button „Trotzdem ausführen", mit dem Sie die Software installieren bzw. starten können – natürlich nur, wenn Sie uns vertrauen.
 
@@ -142,7 +142,7 @@ Starten der App:
 $ npm start
 ```
 
-Packager installieren:
+Electron-Packager installieren:
 
 ```
 $ npm install --save-dev electron-packager
@@ -158,10 +158,10 @@ $ node installer/packager.js [win32|linux|darwin]
 
 Alle Eigenentwicklungen von *Zettel’s Traum* stehen unter der [GNU General Public License v3.0](https://www.gnu.org/licenses/gpl-3.0.en.html).
 
-Die Icons stammen zum größten Teil aus dem *[Papirus Icon Theme](https://github.com/PapirusDevelopmentTeam/papirus-icon-theme)*, das ebenfals mit [GNU General Public License v3.0](https://www.gnu.org/licenses/gpl-3.0.en.html) lizenziert wurde. Die Original-Icons wurden alle leicht verändert. Daneben gibt es eigens für *Zettel’s Traum* erstellte Icons, die unter derselben Lizenz stehen. Welche der Grafiken aus dem *Papirus Theme* stammen und welche neu erstellt wurden, lässt sich im Einzelnen den Metadaten der SVG-Dateien entnehmen. Einige neu erstellte Grafiken basieren mitunter auf Teilen von *Papirus*-Icons.
+Die Icons stammen zum größten Teil aus dem *[Papirus Icon Theme](https://github.com/PapirusDevelopmentTeam/papirus-icon-theme)*, das ebenfals unter [GNU General Public License v3.0](https://www.gnu.org/licenses/gpl-3.0.en.html) lizenziert wurde. Die Original-Icons wurden alle leicht verändert. Daneben gibt es eigens für *Zettel’s Traum* erstellte Icons, die unter derselben Lizenz stehen. Welche der Grafiken aus dem *Papirus Theme* stammen und welche neu erstellt wurden, lässt sich im Einzelnen den Metadaten der SVG-Dateien entnehmen. Einige neu erstellte Grafiken basieren mitunter auf Teilen von *Papirus*-Icons.
 
 Die mitgelieferten *[Noto Fonts](https://www.google.com/get/noto/)* stehen unter einer [SIL Open Font License v1.1](https://scripts.sil.org/cms/scripts/page.php?id=OFL).
 
 ## Kontakt
 
-[Nico Dorn](https://adw-goe.de/forschung/weitere-forschungsprojekte/wortgeschichte-digital-teilprojekt-im-zdl/mitarbeiterinnen-und-mitarbeiter/nico-dorn/), Akademie der Wissenschaften zu Göttingen
+[Nico Dorn](https://adw-goe.de/forschung/weitere-forschungsprojekte/wortgeschichte-digital-teilprojekt-im-zdl/mitarbeiterinnen-und-mitarbeiter/nico-dorn/), Niedersächsische Akademie der Wissenschaften zu Göttingen
