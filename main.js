@@ -1177,7 +1177,7 @@ fenster = {
 			icon: fenster.icon(),
 			backgroundColor: "#386ea6",
 			width: 650,
-			height: 334,
+			height: 358,
 			useContentSize: contentSize,
 			center: true,
 			resizable: false,
