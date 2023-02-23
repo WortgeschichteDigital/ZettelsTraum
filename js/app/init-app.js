@@ -374,7 +374,7 @@ window.addEventListener("load", async () => {
 	// Belege-taggen-Fenster
 	document.getElementById("belege-taggen-input").addEventListener("click", () => belegeTaggen.taggen());
 	// Redaktionsmetadaten-Fenster
-	document.querySelectorAll("#red-meta-themenfelder, #red-meta-sachgebiete").forEach(i => {
+	document.querySelectorAll("#red-meta-themenfelder, #red-meta-sachgebiete, #red-meta-stichwortplanung").forEach(i => {
 		i.addEventListener("click", function(evt) {
 			evt.preventDefault();
 			const typ = this.id.replace(/.+-/, "");

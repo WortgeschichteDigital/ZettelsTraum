@@ -23,7 +23,7 @@ let redMeta = {
 		document.getElementById("red-meta-behandelt-mit").value = data.rd.bh;
 		// Notizen-Feld füllen
 		document.getElementById("red-meta-notizen").value = data.rd.no;
-		// Sachgebiete aufbauen
+		// Sachgebiete, Themenfelder, Stichwortplanung aufbauen
 		redMeta.tags();
 		// Liste der BearbeterInnen erstellen und das Textfeld leeren
 		redMeta.bearbAuflisten();
@@ -36,9 +36,10 @@ let redMeta = {
 	},
 	// Tags auflisten
 	tags () {
-		let tags = ["sachgebiete", "themenfelder"];
+		let tags = [ "sachgebiete", "stichwortplanung", "themenfelder" ];
 		let keys = {
 			sachgebiete: "sg",
+			stichwortplanung: "sp",
 			themenfelder: "tf",
 		};
 		for (let tag of tags) {
