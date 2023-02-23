@@ -40,6 +40,7 @@ let kartei = {
 				nl: "", // Nebenlemmata
 				no: "", // Notizen
 				sg: [], // Sachgebiete
+				sp: [], // Stichwortplanung
 				tf: [], // Themenfelder
 				wi: [], // Wortinformationen
 				xl: helferXml.redXmlData(), // XML

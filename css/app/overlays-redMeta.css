@@ -15,14 +15,14 @@
 }
 
 #red-meta p {
-	padding-left: 120px;
-	text-indent: -120px;
+	padding-left: 140px;
+	text-indent: -140px;
 }
 
 #red-meta label,
 #red-meta span.label {
 	display: inline-block;
-	width: 120px;
+	width: 140px;
 	font-style: italic;
 	text-indent: 0;
 }
@@ -34,7 +34,8 @@
 }
 
 #red-meta-themenfelder,
-#red-meta-sachgebiete {
+#red-meta-sachgebiete,
+#red-meta-stichwortplanung {
 	color: var(--text);
 }
 
@@ -43,10 +44,7 @@
 	font-style: italic;
 }
 
-#red-meta-themenfelder:hover,
-#red-meta-themenfelder:focus,
-#red-meta-sachgebiete:hover,
-#red-meta-sachgebiete:focus {
+:is(#red-meta-themenfelder, #red-meta-sachgebiete, #red-meta-stichwortplanung):is(:hover, :focus) {
 	color: var(--farbe);
 }
 

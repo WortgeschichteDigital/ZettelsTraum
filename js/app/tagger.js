@@ -8,6 +8,7 @@ let tagger = {
 	// Map für die Zuordnung von Tag-Datei-Typen und Schlüsseln
 	limitMap: {
 		sachgebiete: "sg",
+		stichwortplanung: "sp",
 		themenfelder: "tf",
 	},
 	// Tagger-Fenster öffnen
