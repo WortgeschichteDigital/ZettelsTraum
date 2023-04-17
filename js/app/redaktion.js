@@ -133,9 +133,7 @@ let redaktion = {
 			}
 			// Datum
 			redaktion.zelleErzeugen(tr, redaktion.formatDatum(i.da), false);
-			if (n > 0) {
-				redaktion.wertAendern(tr.lastChild, "datum");
-			}
+			redaktion.wertAendern(tr.lastChild, "datum");
 			// Ereignis
 			redaktion.zelleErzeugen(tr, i.er, true);
 			if (n > 0) {
