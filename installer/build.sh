@@ -25,7 +25,7 @@ preset3=(
 
 # Mail-Adressen der Maintainer
 declare -A adressen
-adressen["Nico Dorn"]="ndorn gwdg de"
+adressen["Nico Dorn"]="nico.dorn adwgoe de"
 
 cat <<- EOF
 

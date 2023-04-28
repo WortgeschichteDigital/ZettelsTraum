@@ -3347,6 +3347,8 @@ let xml = {
 		str = str.replace(/__(.+?)__/g, (m, p1) => `<erwaehntes_Zeichen>${p1}</erwaehntes_Zeichen>`);
 		// <Hervorhebung Stil="#i">
 		str = str.replace(/\*\*(.+?)\*\*/g, (m, p1) => `<Hervorhebung Stil=###i##>${p1}</Hervorhebung>`);
+		// <Zitat_primaer>
+		str = str.replace(/\*(.+?)\*/g, (m, p1) => `<Zitat_primaer>${p1}</Zitat_primaer>`);
 		// <Hervorhebung Stil="#singleMarks">
 		str = str.replace(/›(.+?)‹/g, (m, p1) => `<Hervorhebung Stil=###singleMarks##>${p1}</Hervorhebung>`);
 		// <sogenannt>

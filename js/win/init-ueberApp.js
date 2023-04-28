@@ -15,7 +15,7 @@ window.addEventListener("load", async () => {
 	document.getElementById("version").textContent = appInfo.version;
 
 	// MAIL-ADRESSE EINTRAGEN
-	const dekodiert = helfer.mailEntschluesseln("xbwfiehdhwrerzkpn{mbgutfpogspeqspAixfh0eg");
+	const dekodiert = helfer.mailEntschluesseln("wvjkiovxidgbwvefekxfzutfpogspjep0eqspAceyhqf0eg");
 	let mail = document.getElementById("mail");
 	mail.href = `mailto:${dekodiert}`;
 	mail.textContent = dekodiert;
