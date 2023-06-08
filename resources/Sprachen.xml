@@ -491,4 +491,14 @@
 		<name>jiddisch</name>
 		<abbr>jidd.</abbr>
 	</item>
+	<item>
+		<id>98</id>
+		<name>finnisch</name>
+		<abbr>finn.</abbr>
+	</item>
+	<item>
+		<id>99</id>
+		<name>Hindi</name>
+		<abbr>hindi</abbr>
+	</item>
 </sprachen>
