@@ -98,14 +98,6 @@ function onError (err) {
 }
 
 
-/* SINGLE-INSTANCE ******************************/
-
-if (!app.requestSingleInstanceLock()) {
-	app.quit();
-	process.exit(0);
-}
-
-
 /* APP-MENÜ *************************************/
 
 // Menü-Vorlagen
@@ -806,9 +798,9 @@ fenster = {
 	//     (Pfad zur Kartei, die geöffnet werden soll)
 	//   neuesWort = true | undefined
 	//     (im Fenster soll ein neues Wort erstellt werden)
-	//   init = true | undefined
-	//     (App wurde gerade gestartet => erstes Fenster öffnen)
-	erstellen (kartei, neuesWort = false, init = false) {
+	//   cli = object | undefined
+	//     (ggf. verstecktes Fenster öffnen, in dem CLI-Befehle ausgeführt werden)
+	erstellen (kartei, neuesWort = false, cli = null) {
 		// Position und Größe des Fensters ermitteln;
 		const Bildschirm = require("electron").screen.getPrimaryDisplay();
 		let x = optionen.data.fenster ? optionen.data.fenster.x : null,
@@ -816,20 +808,22 @@ fenster = {
 			width = optionen.data.fenster ? optionen.data.fenster.width : 1100,
 			height = optionen.data.fenster ? optionen.data.fenster.height : Bildschirm.workArea.height;
 		// Position des Fensters anpassen, falls das gerade fokussierte Fenster ein Hauptfenster ist
-		let w = BrowserWindow.getFocusedWindow();
-		if (w && win[w.id].typ === "index") {
-			let wBounds = w.getBounds();
-			// Verschieben in der Horizontalen
-			if (wBounds.x + width + 100 <= Bildschirm.workArea.width) {
-				x = wBounds.x + 100;
-			} else if (wBounds.x - 100 >= 0) {
-				x = wBounds.x - 100;
-			}
-			// Verschieben in der Vertikalen
-			if (wBounds.y + height + 100 <= Bildschirm.workArea.height) {
-				y = wBounds.y + 100;
-			} else if (wBounds.y - 100 >= 0) {
-				y = wBounds.y - 100;
+		if (!cli) {
+			let w = BrowserWindow.getFocusedWindow();
+			if (w && win[w.id].typ === "index") {
+				let wBounds = w.getBounds();
+				// Verschieben in der Horizontalen
+				if (wBounds.x + width + 100 <= Bildschirm.workArea.width) {
+					x = wBounds.x + 100;
+				} else if (wBounds.x - 100 >= 0) {
+					x = wBounds.x - 100;
+				}
+				// Verschieben in der Vertikalen
+				if (wBounds.y + height + 100 <= Bildschirm.workArea.height) {
+					y = wBounds.y + 100;
+				} else if (wBounds.y - 100 >= 0) {
+					y = wBounds.y - 100;
+				}
 			}
 		}
 		// Fenster öffnen
@@ -838,10 +832,10 @@ fenster = {
 			title: app.name,
 			icon: fenster.icon(),
 			backgroundColor: "#386ea6",
-			x: x,
-			y: y,
-			width: width,
-			height: height,
+			x,
+			y,
+			width,
+			height,
 			minWidth: 600,
 			minHeight: 350,
 			autoHideMenuBar: optionen.data.einstellungen ? optionen.data.einstellungen.autoHideMenuBar : false,
@@ -856,27 +850,34 @@ fenster = {
 			},
 		});
 		// Browserfenster anzeigen
-		bw.once("ready-to-show", function() {
-			this.show();
-		});
+		if (!cli) {
+			bw.once("ready-to-show", function() {
+				this.show();
+			});
+		}
 		// ggf. maximieren
 		// (die Option kann noch fehlen)
-		if (optionen.data.fenster &&
+		if (!cli &&
+				optionen.data.fenster &&
 				optionen.data.fenster.maximiert) {
 			bw.maximize();
 		}
 		// Windows/Linux: Menüs, die nur bei offenen Karteikarten funktionieren, deaktivieren; Menüleiste an das neue Fenster hängen
 		// macOS: beim Fokussieren des Fensters Standardmenü erzeugen
-		if (process.platform !== "darwin") {
-			appMenu.deaktivieren(true, bw.id);
-		} else if (process.platform === "darwin") {
-			bw.on("focus", () => appMenu.erzeugenMac(layoutMenu));
+		if (!cli) {
+			if (process.platform !== "darwin") {
+				appMenu.deaktivieren(true, bw.id);
+			} else if (process.platform === "darwin") {
+				bw.on("focus", () => appMenu.erzeugenMac(layoutMenu));
+			}
 		}
 		// HTML laden
 		bw.loadFile(path.join(__dirname, "index.html"));
 		// Fenster fokussieren
 		// (mitunter ist das Fenster sonst nicht im Vordergrund)
-		fenster.fokus(bw);
+		if (!cli) {
+			fenster.fokus(bw);
+		}
 		// Fenster-Objekt anlegen
 		// (wird Fenster neu geladen => Fenster-Objekt neu anlegen)
 		bw.webContents.on("dom-ready", function() {
@@ -893,12 +894,10 @@ fenster = {
 			if (appMenu.zuletztVerschwunden.length) {
 				this.send("optionen-zuletzt-verschwunden", appMenu.zuletztVerschwunden);
 			}
-			// Soll eine Kartei geöffnet oder eine neue Kartei erstellt werden?
-			// Soll eine CLI-Operation ausgeführt werden werden?
-			let cli = {};
-			if (init) {
-				cli = fenster.parseArgv(process.argv);
-			}
+			// Was soll getan werden?
+			//   - leeres Fenster öffnen und neues Wort erstellen?
+			//   - übergebene Kartei öffnen?
+			//   - CLI-Kommando ausführen?
 			if (neuesWort) {
 				// 500ms warten, damit der Ladebildschirm Zeit hat zu verschwinden
 				setTimeout(() => {
@@ -906,25 +905,10 @@ fenster = {
 						this.send("kartei-erstellen");
 					}
 				}, 500);
-			} else if (cli.type === "ztj" ||
-					kartei && typeof kartei === "string") {
-				let datei = kartei;
-				if (!datei) {
-					datei = cli.vars.ztj;
-				}
-				this.send("kartei-oeffnen", datei);
-			} else if (cli.type === "literatur-db" ||
-					kartei && kartei.type === "literatur-db") {
-				if (kartei) {
-					cli.vars = kartei.vars;
-				}
-				this.send("redaktion-literatur-export-auto", cli.vars);
-			} else if (cli.type === "karteiliste" ||
-					kartei && kartei.type === "karteiliste") {
-				if (kartei) {
-					cli.vars = kartei.vars;
-				}
-				this.send("karteisuche-karteiliste-export-auto", cli.vars);
+			} else if (kartei) {
+				this.send("kartei-oeffnen", kartei);
+			} else if (cli) {
+				this.send("cli-command", cli);
 			}
 		});
 		// Aktionen vor dem Schließen des Fensters
@@ -1289,134 +1273,174 @@ fenster = {
 			w.close();
 		}
 	},
-	// analysiert beim Programmstart übergebene Argument:
-	//   * sucht nach Komandozeilen-Optionen
-	//   * sucht nach ZTJ-Dateien, die direkt geöffnet werden sollen
-	//     (unter Windows steht die übergebene Datei nicht unbedingt in argv[1];
-	//     davor können verschiedene Schalter sein)
-	//   argv = Array
-	//     (Array mit den Startargumenten)
-	parseArgv (argv) {
-		let cli = {
-			type: "", // ztj | literatur-db | karteiliste
-			vars: {},
-		};
-		const regCLI = /(literatur-db|karteiliste)-(quelle|ziel|format|vorlage)=(.+)/;
-		for (const i of argv) {
-			if (/\.ztj$/.test(i)) {
-				cli.type = "ztj";
-				cli.vars.ztj = i;
-			} else if (regCLI.test(i)) {
-				const m = i.match(regCLI);
-				cli.type = m[1];
-				cli.vars[ m[2] ] = m[3];
-			}
-		}
-		return cli;
-	},
 };
 
 
 /* LISTENER (app) *******************************/
 
-// Initialisierung abgeschlossen => Fenster erstellen
-app.on("ready", async () => {
-	// Optionen einlesen
-	await optionen.lesen();
-	// Menu der zuletzt verwendeten Karteien erzeugen
-	appMenu.zuletzt();
-	// warten mit dem Öffnen des Fensters, bis die Optionen eingelesen wurden
-	fenster.erstellen("", false, true);
-	// überprüfen, ob die zuletzt verwendten Karteien noch vorhanden sind
-	setTimeout(() => {
-		appMenu.zuletztCheck();
-	}, 5000);
-	// ggf. auf Updates prüfen
-	if (!optionen.data.updates) {
-		return;
-	}
-	let updatesChecked = optionen.data.updates.checked.split("T")[0],
-		heute = new Date().toISOString().split("T")[0];
-	if (updatesChecked === heute ||
-			!optionen.data.einstellungen["updates-suche"]) {
-		return;
-	}
-	setTimeout(() => {
-		for (let id in win) {
-			if (!win.hasOwnProperty(id)) {
-				continue;
-			}
-			if (win[id].typ !== "index") {
-				continue;
-			}
-			let w = BrowserWindow.fromId(parseInt(id, 10));
-			w.webContents.send("updates-check");
-			break;
+// parse CLI options
+const cliCommand = {
+	// Literatur-DB exportieren
+	"literatur-db-quelle": "", // Pfad
+	"literatur-db-ziel": "", // Pfad
+	"literatur-db-format": "", // xml | txt
+	// Karteiliste exportieren
+	"karteiliste-quelle": "", // Pfad
+	"karteiliste-ziel": "", // Pfad
+	"karteiliste-vorlage": "", // kommagetrennte Index-Nummer der zu nutzenden Vorlagen
+	// ZTJ-Kartei öffnen
+	ztj: "", // Pfad
+};
+
+for (let i = 0, len = process.argv.length; i < len; i++) {
+	if (/\.ztj$/.test(process.argv[i])) {
+		for (const k of Object.keys(cliCommand)) {
+			cliCommand[k] = "";
 		}
-	}, 3e4);
-});
+		cliCommand.ztj = process.argv[i];
+		break;
+	}
+	const arg = process.argv[i].match(/^--([^\s=]+)(?:=(.+))?/);
+	if (!arg || typeof cliCommand[arg[1]] === "undefined" || !arg[2]) {
+		// Kommando unbekannt oder Wert fehlt
+		continue;
+	}
+	cliCommand[arg[1]] = arg[2].replace(/^"|"$/g, "");
+}
 
-// App beenden, wenn alle Fenster geschlossen worden sind
-app.on("window-all-closed", async () => {
-	// Optionen schreiben
-	clearTimeout(optionen.schreibenTimeout);
-	await optionen.schreiben();
-	// auf macOS bleibt das Programm üblicherweise aktiv,
-	// bis die BenutzerIn es explizit beendet
-	if (process.platform !== "darwin") {
-		// App beenden
+let cliCommandFound = false;
+for (const [ k, v ] of Object.entries(cliCommand)) {
+	if (/^ztj/.test(k)) {
+		continue;
+	}
+	if (v) {
+		cliCommandFound = true;
+		break;
+	}
+}
+let cliReturnCode = -1;
+
+// single instance lock
+const locked = app.requestSingleInstanceLock(cliCommand);
+
+if (cliCommandFound || !locked) {
+	(async function () {
+		// sofort beenden, wenn eine zweite Instanz ohne CLI-Kommando gestartet wurde
+		if (!cliCommandFound) {
+			app.quit();
+			process.exit(0);
+		}
+
+		// warten bis die App bereit ist
+		await app.whenReady();
+
+		// Optionen einlesen
+		await optionen.lesen();
+
+		// CLI-Kommandos ausführen
+		fenster.erstellen("", false, cliCommand);
+
+		// auf einen validen return code warten
+		await new Promise(resolve => {
+			const interval = setInterval(() => {
+				if (cliReturnCode >= 0) {
+					clearInterval(interval);
+					resolve(true);
+				}
+			}, 100);
+		});
+
+		// Instanz beenden
 		app.quit();
-	}
-});
+		process.exit(cliReturnCode);
+	}());
+} else {
+	// zweite Instanz wird gestartet
+	app.on("second-instance", (...args) => {
+		// Kartei zum Öffnen übergeben?
+		if (!args?.[3]?.ztj) {
+			return;
+		}
 
-// App wiederherstellen
-app.on("activate", () => {
-	// auf macOS wird einfach ein neues Fenster wiederhergestellt
-	if (Object.keys(win).length === 0) {
-		fenster.erstellen("");
-	}
-});
-
-// zweite Instanz wird gestartet
-app.on("second-instance", (evt, argv) => {
-	// Kartei öffnen? Literatur-DB exportieren?
-	const cli = fenster.parseArgv(argv);
-	if (!cli.type) {
-		return;
-	}
-	// Kartei öffnen
-	if (cli.type === "ztj") {
-		// Kartei schon offen => Fenster fokussieren
-		let leereFenster = [];
-		for (let id in win) {
-			if (!win.hasOwnProperty(id)) {
-				continue;
-			}
-			if (win[id].kartei === cli.vars.ztj) {
+		// Kartei schon offen? => Fenster fokussieren
+		const leereFenster = [];
+		for (const [ id, val ] of Object.entries(win)) {
+			if (val.kartei === args[3].ztj) {
 				fenster.fokus(BrowserWindow.fromId(parseInt(id, 10)));
 				return;
-			} else if (win[id].typ === "index" && !win[id].kartei) {
+			} else if (val.typ === "index" && !val.kartei) {
 				leereFenster.push(parseInt(id, 10));
 			}
 		}
+
 		// Kartei noch nicht offen => Kartei öffnen
 		if (leereFenster.length) {
-			let w = BrowserWindow.fromId(leereFenster[0]);
-			w.webContents.send("kartei-oeffnen", cli.vars.ztj);
+			const w = BrowserWindow.fromId(leereFenster[0]);
+			w.webContents.send("kartei-oeffnen", args[3].ztj);
 			fenster.fokus(w);
 		} else {
-			fenster.erstellen(cli.vars.ztj);
+			fenster.erstellen(args[3].ztj);
 		}
-	}
-	// Literatur-DB exportieren
-	else if (cli.type === "literatur-db") {
-		fenster.erstellen(cli);
-	}
-	// Karteiliste exportieren
-	else if (cli.type === "karteiliste") {
-		fenster.erstellen(cli);
-	}
-});
+	});
+
+	// Initialisierung abgeschlossen => Fenster erstellen
+	app.on("ready", async () => {
+		// Optionen einlesen
+		await optionen.lesen();
+		// Menu der zuletzt verwendeten Karteien erzeugen
+		appMenu.zuletzt();
+		// warten mit dem Öffnen des Fensters, bis die Optionen eingelesen wurden
+		fenster.erstellen(cliCommand.ztj, false);
+		// überprüfen, ob die zuletzt verwendten Karteien noch vorhanden sind
+		setTimeout(() => {
+			appMenu.zuletztCheck();
+		}, 5000);
+		// ggf. auf Updates prüfen
+		if (!optionen.data.updates) {
+			return;
+		}
+		let updatesChecked = optionen.data.updates.checked.split("T")[0],
+			heute = new Date().toISOString().split("T")[0];
+		if (updatesChecked === heute ||
+				!optionen.data.einstellungen["updates-suche"]) {
+			return;
+		}
+		setTimeout(() => {
+			for (let id in win) {
+				if (!win.hasOwnProperty(id)) {
+					continue;
+				}
+				if (win[id].typ !== "index") {
+					continue;
+				}
+				let w = BrowserWindow.fromId(parseInt(id, 10));
+				w.webContents.send("updates-check");
+				break;
+			}
+		}, 3e4);
+	});
+
+	// App beenden, wenn alle Fenster geschlossen worden sind
+	app.on("window-all-closed", async () => {
+		// Optionen schreiben
+		clearTimeout(optionen.schreibenTimeout);
+		await optionen.schreiben();
+		// auf macOS bleibt das Programm üblicherweise aktiv,
+		// bis die BenutzerIn es explizit beendet
+		if (process.platform !== "darwin") {
+			// App beenden
+			app.quit();
+		}
+	});
+
+	// App wiederherstellen
+	app.on("activate", () => {
+		// auf macOS wird einfach ein neues Fenster wiederhergestellt
+		if (Object.keys(win).length === 0) {
+			fenster.erstellen("");
+		}
+	});
+}
 
 
 /* LISTENER (ipcMain) ***************************/
@@ -1561,9 +1585,14 @@ ipcMain.handle("fenster-schliessen-endgueltig", evt => {
 
 // Fenster-Dimensionen in den Einstellungen speichern
 ipcMain.handle("fenster-status", (evt, winId, fenster) => {
-	let bw = BrowserWindow.fromId(winId),
-		bounds = bw.getBounds(),
-		opt = optionen.data[fenster];
+	const bw = BrowserWindow.fromId(winId);
+	if (!bw) {
+		// werden CLI-Kommandos ausgeführt, kann der ganze Prozess
+		// zu diesem Zeitpunkt schon wieder beendet sein => kein BrowserWindow
+		return false;
+	}
+	const bounds = bw.getBounds();
+	const opt = optionen.data[fenster];
 	// Status in den Optionen speichern
 	opt.x = bounds.x;
 	opt.y = bounds.y;
@@ -1571,21 +1600,18 @@ ipcMain.handle("fenster-status", (evt, winId, fenster) => {
 	opt.height = bounds.height;
 	opt.maximiert = bw.isMaximized();
 	// Status an alle Hauptfenster melden
-	let status = {
+	const status = {
 		x: opt.x,
 		y: opt.y,
 		width: opt.width,
 		height: opt.height,
 		maximiert: opt.maximiert,
 	};
-	for (let w in win) {
-		if (!win.hasOwnProperty(w)) {
+	for (const [ w, v ] of Object.entries(win)) {
+		if (v.typ !== "index" || parseInt(w, 10) === winId) {
 			continue;
 		}
-		if (win[w].typ !== "index" || parseInt(w, 10) === winId) {
-			continue;
-		}
-		let bw = BrowserWindow.fromId(parseInt(w, 10));
+		const bw = BrowserWindow.fromId(parseInt(w, 10));
 		bw.webContents.send("optionen-fenster", fenster, status);
 	}
 	return status;
@@ -1805,6 +1831,14 @@ ipcMain.handle("ztj-cache-get", () => ztjCache);
 ipcMain.handle("ztj-cache-status-set", (evt, status) => ztjCacheStatus = status);
 
 ipcMain.handle("ztj-cache-status-get", () => ztjCacheStatus);
+
+
+// ***** CLI *****
+ipcMain.handle("cli-message", (evt, message) => console.log(message));
+
+ipcMain.handle("cli-return-code", (evt, returnCode) => {
+  cliReturnCode = returnCode;
+});
 
 
 // ***** QUODLIBETICA *****

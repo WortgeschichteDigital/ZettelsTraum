@@ -448,7 +448,7 @@ let redLit = {
 	//     (xml | txt)
 	//   autoExportPath = String
 	//     (Pfad zur Datei);
-	dbExportieren (autoExportFormat, autoExportPath) {
+	async dbExportieren (autoExportFormat, autoExportPath) {
 		// Format ermitteln
 		let format = {
 			name: "XML",
@@ -497,20 +497,17 @@ let redLit = {
 		}
 		// Datei schreiben
 		if (autoExportPath) {
-			const fsP = require("fs").promises;
-			fsP.writeFile(autoExportPath, content)
-				.then(() => {
-					dialog.oeffnen({
-						typ: "alert",
-						text: `Die Literaturdatenbank wurde exportiert!\n<p class="force-wrap">${autoExportPath}</p>`,
+			const result = await new Promise(resolve => {
+				const fsP = require("fs").promises;
+				fsP.writeFile(autoExportPath, content)
+					.then(() => resolve(true))
+					.catch(err => {
+						const { ipcRenderer: ipc } = require("electron");
+						ipc.invoke("cli-message", `Fehler: ${err.name} - ${err.message}`);
+						resolve(false);
 					});
-				})
-				.catch(err => {
-					dialog.oeffnen({
-						typ: "alert",
-						text: `Beim Exportieren der Literaturdatenbank ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.message}</p>`,
-					});
-				});
+			});
+			return result;
 		} else {
 			karteisucheExport.speichern(content, format);
 		}
@@ -519,8 +516,11 @@ let redLit = {
 	//   vars = Object
 	//     (Pfade: vars.quelle, vars.ziel; ggf. auch das Format: vars.format)
 	async dbExportierenAuto (vars) {
+		const { ipcRenderer: ipc } = require("electron");
+
 		// Format ermitteln
 		const format = vars.format || "xml";
+
 		// Ordner überprüfen
 		const result = await helfer.cliFolderCheck({
 			format,
@@ -528,22 +528,25 @@ let redLit = {
 			vars,
 		});
 		if (result === false) {
-			return;
+			return false;
 		}
 		vars = result;
+
+		// Message
+		ipc.invoke("cli-message", `Exportiere Literaturliste nach ${vars.ziel}`);
+
 		// DB einlesen
 		const ergebnis = await redLit.dbOeffnenEinlesen({pfad: vars.quelle});
 		if (ergebnis !== true) {
-			dialog.oeffnen({
-				typ: "altert",
-				text: ergebnis,
-			});
-			return;
+			ipc.invoke("cli-message", `Fehler: ${ergebnis.replace(/<.+?>/g)}`);
+			return false;
 		}
 		await redLit.dbOeffnenAbschließen({ergebnis, pfad: vars.quelle});
 		redLit.db.konvertiert = false;
+
 		// DB exportieren
-		redLit.dbExportieren(format, vars.ziel);
+		const resultExport = await redLit.dbExportieren(format, vars.ziel);
+		return resultExport;
 	},
 	// Datenbank: Titelaufnahme-Snippet in XML erstellen
 	//   id = String

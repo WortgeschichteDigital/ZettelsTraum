@@ -728,11 +728,13 @@ let karteisucheExport = {
 	//   vars = Object
 	//     (Pfade: vars.quelle, vars.ziel; Vorlagen-Index: vars.vorlage)
 	async exportierenAuto (vars) {
+		const { ipcRenderer: ipc } = require("electron");
 		let opt = optionen.data["karteisuche-export-vorlagen"];
 		if (!opt.length) {
 			karteisucheExport.vorlagenFillOpt();
 			opt = optionen.data["karteisuche-export-vorlagen"];
 		}
+
 		// Vorlage vorhanden?
 		if (typeof vars.vorlage === "undefined") {
 			vars.vorlage = 0;
@@ -740,14 +742,14 @@ let karteisucheExport = {
 			vars.vorlage = parseInt(vars.vorlage, 10);
 		}
 		if (!opt[vars.vorlage]) {
-			dialog.oeffnen({
-				typ: "alert",
-				text: `Beim Exportieren der Karteiliste ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\nVorlage ${vars.vorlage} nicht gefunden`,
-			});
-			return;
+			ipc.invoke("cli-message", `Fehler: Vorlage ${vars.vorlage} nicht gefunden`);
+			return false;
 		}
-		const format = opt[vars.vorlage].inputs.includes("format-html") ? "html" : "md",
-			titel = opt[vars.vorlage].titel || "Karteiliste";
+
+		// Format ermitteln
+		const format = opt[vars.vorlage].inputs.includes("format-html") ? "html" : "md";
+		const titel = opt[vars.vorlage].titel || "Karteiliste";
+
 		// Ordner überprüfen
 		const result = await helfer.cliFolderCheck({
 			format,
@@ -755,11 +757,16 @@ let karteisucheExport = {
 			vars,
 		});
 		if (result === false) {
-			return;
+			return false;
 		}
 		vars = result;
+
+		// Message
+		ipc.invoke("cli-message", `Exportiere Karteiliste "${titel}" nach ${vars.ziel}`);
+
 		// Karteisuche aufrufen
 		await karteisuche.oeffnen();
+
 		// ggf. Quellpfad in Liste ergänzen
 		let pfadBereinigen = false;
 		if (!optionen.data.karteisuche.pfade.includes(vars.quelle)) {
@@ -767,54 +774,64 @@ let karteisucheExport = {
 			karteisuche.pfadeAuflisten();
 			pfadBereinigen = true;
 		}
+
 		// Filter: Backup erstellen und temporär entfernen
 		let filter = [];
 		for (const f of optionen.data.karteisuche.filter) {
 			filter.push([...f]);
 		}
 		document.querySelectorAll("#karteisuche-filter .icon-loeschen").forEach(a => a.click());
+
 		// nur der Quellpfad darf aktiv sein
 		document.querySelectorAll("#karteisuche-pfade input").forEach(i => {
 			if (i.value !== vars.quelle) {
 				i.checked = false;
 			}
 		});
+
 		// Suche durchführen > Exportfenster öffnen > Vorlage laden > Dateidaten ermitteln
 		await karteisuche.suchenPrep();
 		karteisucheExport.oeffnen();
 		karteisucheExport.vorlageLaden(vars.vorlage);
 		const content = karteisucheExport.exportieren(true);
+
 		// Daten speichern
 		const fsP = require("fs").promises;
-		fsP.writeFile(vars.ziel, content)
-			.then(async () => {
-				// alle Pfade abhaken
-				document.querySelectorAll("#karteisuche-pfade input").forEach(i => i.checked = true);
-				// ggf. Quellpfad wieder aus der Liste entfernen
-				if (pfadBereinigen) {
-					const idx = optionen.data.karteisuche.pfade.indexOf(vars.quelle);
-					optionen.data.karteisuche.pfade.splice(idx, 1);
-					karteisuche.pfadeAuflisten();
-				}
-				// Filter wiederherstellen
-				filterWieder();
-				// Fenster schließen
-				await overlay.alleSchliessen();
-				// Feedback
-				dialog.oeffnen({
-					typ: "alert",
-					text: `Die ${titel} wurde exportiert!\n<p class="force-wrap">${vars.ziel}</p>`,
+		const writeResult = await new Promise(resolve => {
+			fsP.writeFile(vars.ziel, content)
+				.then(async () => {
+					// alle Pfade abhaken
+					document.querySelectorAll("#karteisuche-pfade input").forEach(i => i.checked = true);
+
+					// ggf. Quellpfad wieder aus der Liste entfernen
+					if (pfadBereinigen) {
+						const idx = optionen.data.karteisuche.pfade.indexOf(vars.quelle);
+						optionen.data.karteisuche.pfade.splice(idx, 1);
+						karteisuche.pfadeAuflisten();
+					}
+
+					// Filter wiederherstellen
+					filterWieder();
+
+					// Fenster schließen
+					await overlay.alleSchliessen();
+
+					// Promise auflösen
+					resolve(true);
+				})
+				.catch(err => {
+					// Filter wiederherstellen
+					filterWieder();
+
+					// Fehlermeldung
+					ipc.invoke("cli-message", `Fehler: ${err.name} – ${err.message}`);
+
+					// Promise auflösen
+					resolve(false);
 				});
-			})
-			.catch(err => {
-				// Filter wiederherstellen
-				filterWieder();
-				// Fehlermeldung
-				dialog.oeffnen({
-					typ: "alert",
-					text: `Beim Exportieren der ${titel} ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\nVorlage ${err.message} nicht gefunden`,
-				});
-			});
+		});
+		return writeResult;
+
 		// Filter wiederherstellen
 		function filterWieder () {
 			for (const f of filter) {

@@ -1181,6 +1181,7 @@ let helfer = {
 	//   vars = Object
 	//     (CLI-Parameter)
 	async cliFolderCheck ({format, typ, vars}) {
+		const { ipcRenderer: ipc } = require("electron");
 		let quelleExists = await helfer.exists(vars.quelle),
 			zielExists = await helfer.exists(vars.ziel),
 			neueDatei = false;
@@ -1196,10 +1197,7 @@ let helfer = {
 				falsch = "Zielpfad";
 				pfad = vars.ziel;
 			}
-			dialog.oeffnen({
-				typ: "alert",
-				text: `Beim Exportieren der ${typ} ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\nDer ${falsch} wurde nicht gefunden!\n<p class="force-wrap">${pfad}</p>`,
-			});
+			ipc.invoke("cli-message", `Fehler: ${falsch} nicht gefunden (${pfad})`);
 			return false;
 		}
 		// Ist der Zielpfad ein Ordner?
@@ -1214,10 +1212,7 @@ let helfer = {
 					vars.ziel += `${typ.replace(/[/\\]/g, "-")}.${format}`;
 				}
 			} catch (err) {
-				dialog.oeffnen({
-					typ: "alert",
-					text: `Beim Exportieren der ${typ} ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\nFehler beim Zugriff auf den Zielpfad!`,
-				});
+				ipc.invoke("cli-message", `Fehler: Zugriffsfehler auf Zielpfad (${vars.ziel})`);
 				return false;
 			}
 		}
@@ -1386,7 +1381,10 @@ let helfer = {
 		await lock.actions({datei: kartei.pfad, aktion: "unlock"});
 		// Status des Fensters speichern
 		const {ipcRenderer} = require("electron");
-		optionen.data.fenster = await ipcRenderer.invoke("fenster-status", winInfo.winId, "fenster");
+		const fensterStatus = await ipcRenderer.invoke("fenster-status", winInfo.winId, "fenster");
+		if (fensterStatus) {
+			optionen.data.fenster = fensterStatus;
+		}
 		// Optionen speichern
 		await ipcRenderer.invoke("optionen-speichern", optionen.data, winInfo.winId);
 		// Fenster endgültig schließen

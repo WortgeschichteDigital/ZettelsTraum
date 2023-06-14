@@ -1930,11 +1930,11 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
 
 					<p id="verschiedenes-cliKarteiliste"><b>Export der Karteisuche</b></p>
 
-					<pre>zettelstraum[.exe] --karteiliste-quelle=[Pfad] --karteiliste-ziel=[Pfad] [--karteiliste-vorlage=[Index]]</pre>
+					<pre>zettelstraum[.exe] --karteiliste-quelle=[Pfad] --karteiliste-ziel=[Pfad] [--karteiliste-vorlage=[Indizes]]</pre>
 
 					<p>Der Quellpfad muss ein Ordner sein. Der Zielpfad kann der Name der Zieldatei oder ein bestehender Ordner sein, in dem die Zieldatei abgelegt werden soll. Ist der Zielpfad ein Ordner, wird der Pfad automatisch um den Dateinamen <code class="quelltext">Karteiliste.[html|md]</code> ergänzt.</p>
 
-					<p>Die Angabe der Vorlage ist fakultativ. Wird keine Vorlage angegeben, wird die erste Vorlage für den Export genutzt. Der Index ist nullbasiert: <code>--karteiliste-vorlage=0</code> zeigt auf die erste Vorlage.</p>
+					<p>Die Angabe der Vorlage ist fakultativ. Wird keine Vorlage angegeben, wird die erste Vorlage für den Export genutzt. Die Indizes, die hier stehen müssen, sind nullbasiert: <code>--karteiliste-vorlage=0</code> zeigt <abbr title="zum Beispiel">z. B.</abbr> auf die erste Vorlage. Es können auch mehrere, kommagetrennte Indizes angegeben werden, <abbr title="zum Beispiel">z. B.</abbr> <code>--karteiliste-vorlage=0,2</code>. In diesem Fall werden zwei Listen exportiert, und zwar mithilfe der ersten und dritten Vorlage.</p>
 
 					<h2 id="verschiedenes-bekannteFehler">Bekannte Fehler</h2>
 

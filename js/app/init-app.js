@@ -110,8 +110,7 @@ window.addEventListener("load", async () => {
 		});
 	});
 	// CLI-Operationen
-	ipcRenderer.on("redaktion-literatur-export-auto", (evt, vars) => redLit.dbExportierenAuto(vars));
-	ipcRenderer.on("karteisuche-karteiliste-export-auto", (evt, vars) => karteisucheExport.exportierenAuto(vars));
+	ipcRenderer.on("cli-command", (evt, commands) => cli.verarbeiten(commands));
 	// Updates suchen
 	ipcRenderer.on("updates-check", () => updates.check(true));
 	// Before-Unload
