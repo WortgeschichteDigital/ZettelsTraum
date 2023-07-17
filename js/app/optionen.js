@@ -496,6 +496,7 @@ let optionen = {
 		sachgebiete: ["Sachgebiet", "Sachgebiete"],
 		soziolekte: ["Soziolekt", "Soziolekte"],
 		sprachen: ["Sprache", "Sprachen"],
+		standardvarietät: ["Standardvarietät", "Standardvarietäten"],
 		themenfelder: ["Themenfeld", "Themenfelder"],
 	},
 	// Check der Tag-Dateien beim Starten der App

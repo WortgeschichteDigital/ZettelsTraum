@@ -53,11 +53,6 @@
 		<abbr>hess.</abbr>
 	</item>
 	<item>
-		<id>10</id>
-		<name>hochdeutsch</name>
-		<abbr>hd.</abbr>
-	</item>
-	<item>
 		<id>11</id>
 		<name>holsteinisch</name>
 		<abbr>holst.</abbr>
@@ -153,11 +148,6 @@
 		<abbr>obs.</abbr>
 	</item>
 	<item>
-		<id>30</id>
-		<name>österreichisch</name>
-		<abbr>öst.</abbr>
-	</item>
-	<item>
 		<id>31</id>
 		<name>ostfränkisch</name>
 		<abbr>ofrk.</abbr>
@@ -226,11 +216,6 @@
 		<id>44</id>
 		<name>schwäbisch</name>
 		<abbr>schwäb.</abbr>
-	</item>
-	<item>
-		<id>45</id>
-		<name>schweizerisch</name>
-		<abbr>schweiz.</abbr>
 	</item>
 	<item>
 		<id>46</id>
