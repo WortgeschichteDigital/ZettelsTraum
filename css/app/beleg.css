@@ -61,9 +61,15 @@
 }
 
 #beleg h2 {
-	margin: 21px 0 10px 15px; /* 21px von oben, damit identische Position mit Überschrift Bedeutungsgerüst */
-	padding: 0;
-	background-color: transparent;
+	position: sticky;
+	top: 104px;
+	z-index: 2;
+	margin: 0 auto;
+	padding: 21px 0 10px; /* 21px von oben, damit identische Position mit Überschrift Bedeutungsgerüst */
+	width: calc(100% - 104px);
+	min-width: 500px;
+	max-width: 850px;
+	background-color: #fff;
 	color: var(--textFarbe);
 	font-size: 24px;
 	font-style: italic;
