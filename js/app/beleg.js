@@ -673,6 +673,23 @@ let beleg = {
 			beleg.geaendertBd = false;
 			asterisk.classList.add("aus");
 		}
+		if (beleg.id_karte > -1) {
+			// Diese Funktion wird beim Schließen der Kartei aufgerufen. Wenn zuvor keine
+			// Karteikarte offen war, führt der Aufruf von belegReferenz() zu einem Fehler,
+			// der das Schließen unmöglich macht.
+			beleg.belegReferenz();
+		}
+	},
+	// frischt die Beleg-Referenz in der Belegüberschrift auf;
+	// Format: Name-Jahr-Belegnummer
+	belegReferenz () {
+		let ref = xml.belegId({ data: beleg.data, id: beleg.id_karte });
+		if (/--[0-9]+$/.test(ref)) {
+			// die Jahresangabe fehlt => keine Referenz drucken
+			ref = "";
+		}
+		const cont = document.querySelector("#beleg-referenz");
+		cont.textContent = ref;
 	},
 	// Speichern oder DTAImport starten (wenn Fokus auf einem Input-Element)
 	//   input = Element
