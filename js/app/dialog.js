@@ -57,7 +57,7 @@ let dialog = {
 	text (text) {
 		// alten Text löschen
 		let cont = document.getElementById("dialog-text");
-		helfer.keineKinder(cont);
+		cont.replaceChildren();
 		// neue Absätze hinzufügen
 		let absaetze = text.split("\n");
 		for (let i = 0, len = absaetze.length; i < len; i++) {

@@ -541,7 +541,7 @@ let optionen = {
 	//     (der Typ der Tag-Datei, der manuell überprüft wurde)
 	anwendenTags (check = false, checkTyp = "") {
 		let cont = document.getElementById("tags-cont");
-		helfer.keineKinder(cont);
+		cont.replaceChildren();
 		// Tabelle erstellen
 		let table = document.createElement("table");
 		cont.appendChild(table);

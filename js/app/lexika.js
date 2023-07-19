@@ -40,7 +40,7 @@ let lexika = {
 	auflisten () {
 		// Liste leeren
 		let cont = document.getElementById("lexika-liste");
-		helfer.keineKinder(cont);
+		cont.replaceChildren();
 		// Array erstellen
 		let l = [];
 		for (let i in lexika.preset) {

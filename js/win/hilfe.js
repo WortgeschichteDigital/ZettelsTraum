@@ -121,7 +121,7 @@ let hilfe = {
 			nd.appendChild(div);
 		} else {
 			div = nd.firstChild;
-			helfer.keineKinder(div);
+			div.replaceChildren();
 		}
 		nd.dataset.sektion = sektion.id;
 		// Navigation aufbauen
@@ -325,7 +325,7 @@ let hilfe = {
 			div.id = "bild";
 			schonAn = false;
 		}
-		helfer.keineKinder(div);
+		div.replaceChildren();
 		// Content
 		let cont = document.createElement("div");
 		div.appendChild(cont);
@@ -608,7 +608,7 @@ let hilfe = {
 		let cont = document.getElementById("suchergebnisse");
 		// bei der Erstanzeige Ergebnisfeld leeren und in die Sektion wechseln
 		if (start === 0) {
-			helfer.keineKinder(cont);
+			cont.replaceChildren();
 			hilfe.sektionWechseln("suche");
 		}
 		// keine Treffer

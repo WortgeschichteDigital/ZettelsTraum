@@ -2011,7 +2011,7 @@ let beleg = {
 		beleg.ctrlSpringenPos = -1;
 		// Meta-Infos
 		let cont = document.getElementById("beleg-lese-meta");
-		helfer.keineKinder(cont);
+		cont.replaceChildren();
 		liste.metainfosErstellen(beleg.data, cont, "");
 		if (!cont.hasChildNodes()) {
 			cont.parentNode.classList.add("aus");
@@ -2033,7 +2033,7 @@ let beleg = {
 			if (!cont) { // manche Datensätze (dc, dm, bx) werden nicht angezeigt
 				continue;
 			}
-			helfer.keineKinder(cont);
+			cont.replaceChildren();
 			// Absätze einhängen
 			const p = liste.belegErstellenPrepP(v).split("\n");
 			let zuletzt_gekuerzt = false; // true, wenn der vorherige Absatz gekürzt wurde
@@ -2094,7 +2094,7 @@ let beleg = {
 	leseFillBedeutung () {
 		let feldBd = beleg.bedeutungAufbereiten(),
 			contBd = document.getElementById("beleg-lese-bd");
-		helfer.keineKinder(contBd);
+		contBd.replaceChildren();
 		if (feldBd) {
 			feldBd.split("\n").forEach(function(i) {
 				let bd = beleg.bedeutungSuchen(i),

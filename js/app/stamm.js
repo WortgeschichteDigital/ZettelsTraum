@@ -128,7 +128,7 @@ let stamm = {
 	// Kopf aufbauen
 	kopf () {
 		let cont = document.getElementById("stamm-kopf");
-		helfer.keineKinder(cont);
+		cont.replaceChildren();
 		// Wortblöcke aufbauen
 		let woerter = Object.keys(data.fv);
 		for (let i = 0, len = woerter.length; i < len; i++) {
@@ -516,7 +516,7 @@ let stamm = {
 	// Liste der Formvarianten des aktuellen Worts aufbauen
 	auflisten () {
 		let cont = document.getElementById("stamm-liste");
-		helfer.keineKinder(cont);
+		cont.replaceChildren();
 		// Einträge auflisten
 		let fo = data.fv[stamm.wortAkt].fo;
 		for (let i = 1, len = fo.length; i < len; i++) {

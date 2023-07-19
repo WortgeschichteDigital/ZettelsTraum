@@ -1793,7 +1793,7 @@ let redLit = {
 		redLit.anzeige.snippetKontext = "suche";
 		let titel = document.getElementById("red-lit-suche-titel");
 		titel.scrollTop = 0;
-		helfer.keineKinder(titel);
+		titel.replaceChildren();
 		for (let i = start, len = start + 50; i < len; i++) {
 			// letzter Treffer erreicht
 			if (!treffer[i]) {
@@ -2076,7 +2076,7 @@ let redLit = {
 			}
 		}
 		// Tag-Zelle leeren
-		helfer.keineKinder(document.getElementById("red-lit-eingabe-tags"));
+		document.getElementById("red-lit-eingabe-tags").replaceChildren();
 		// Metadaten leeren
 		redLit.eingabeMetaFuellen({id: "", slot: -1});
 	},
@@ -3257,7 +3257,7 @@ let redLit = {
 	//     (Array mit den Tags)
 	eingabeTagsFuellen ({tags}) {
 		let cont = document.getElementById("red-lit-eingabe-tags");
-		helfer.keineKinder(cont);
+		cont.replaceChildren();
 		let div = document.createElement("div");
 		cont.appendChild(div);
 		redLit.tagsList({
@@ -3367,7 +3367,7 @@ let redLit = {
 		}
 		// Werte drucken
 		let td = document.getElementById("red-lit-eingabe-meta");
-		helfer.keineKinder(td);
+		td.replaceChildren();
 		for (let [k, v] of Object.entries(werte)) {
 			let cont = document.createElement("span");
 			td.appendChild(cont);
@@ -3696,7 +3696,7 @@ let redLit = {
 		let vers = document.getElementById("red-lit-popup-versionen"),
 			aufnahme = redLit.db.data[redLit.anzeige.id];
 		vers.scrollTop = 0;
-		helfer.keineKinder(vers);
+		vers.replaceChildren();
 		for (let i = 0, len = aufnahme.length; i < len; i++) {
 			let div = document.createElement("div");
 			vers.appendChild(div);

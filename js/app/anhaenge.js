@@ -105,7 +105,7 @@ let anhaenge = {
 	//   scan = true | undefined
 	//     (die übergebene Anhängeliste sollte zunächst gescannt werden)
 	async makeIconList (arr, ziel, scan = false) {
-		helfer.keineKinder(ziel);
+		ziel.replaceChildren();
 		if (!arr) {
 			return;
 		}
@@ -164,7 +164,7 @@ let anhaenge = {
 			// Content leeren
 			// (im Anhänge-Fenster darf dies nur beim kompletten Neuaufbau der Liste geschehen)
 			if (leeren) {
-				helfer.keineKinder(cont);
+				cont.replaceChildren();
 			}
 			// abbrechen, wenn keine Anhänge vorhanden sind
 			let arr = anhaenge.getArr(obj);

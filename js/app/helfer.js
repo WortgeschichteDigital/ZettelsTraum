@@ -259,14 +259,6 @@ let helfer = {
 			behavior: "smooth",
 		});
 	},
-	// eleminiert alle childNodes des übergebenen Objekts
-	//   obj = Element
-	//     (dieses Element soll von all seinen Kindern befreit werden)
-	keineKinder (obj) {
-		while (obj.hasChildNodes()) {
-			obj.removeChild(obj.lastChild);
-		}
-	},
 	// Zufallsgenerator
 	//   min = Number
 	//     (Minimalwert)
@@ -1026,7 +1018,7 @@ let helfer = {
 			div.style.zIndex = zIndex;
 		}
 		// Element füllen
-		helfer.keineKinder(div);
+		div.replaceChildren();
 		let img = document.createElement("img");
 		div.appendChild(img);
 		img.width = "96";

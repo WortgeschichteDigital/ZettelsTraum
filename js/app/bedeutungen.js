@@ -1281,7 +1281,7 @@ let bedeutungen = {
 		a.href = "#";
 		a.id = "bedeutungen-tagger-link";
 		a.innerHTML = zelle.innerHTML;
-		helfer.keineKinder(zelle);
+		zelle.replaceChildren();
 		zelle.appendChild(a);
 		a.focus();
 		a.addEventListener("click", function(evt) {
@@ -1330,7 +1330,7 @@ let bedeutungen = {
 			edit.textContent = z;
 			helfer.editNoFormat(edit);
 		}
-		helfer.keineKinder(ele);
+		ele.replaceChildren();
 		ele.appendChild(edit);
 		// für Bedeutungen-Edit Toolbox erzeugen
 		if (Array.isArray(z)) {
@@ -1652,7 +1652,7 @@ let bedeutungen = {
 				ele.classList.remove("leer");
 			}
 		}
-		helfer.keineKinder(ele);
+		ele.replaceChildren();
 		ele.innerHTML = wert;
 		bedeutungen.editZeile(ele, false);
 	},

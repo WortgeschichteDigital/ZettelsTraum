@@ -141,7 +141,7 @@ let kopieren = {
 	listeAufbauen () {
 		// Liste leeren
 		let cont = document.getElementById("kopieren-liste-cont");
-		helfer.keineKinder(cont);
+		cont.replaceChildren();
 		// keine Belege zum Kopieren vorgemerkt
 		if (!kopieren.belege.length) {
 			let p = document.createElement("p");
@@ -270,7 +270,7 @@ let kopieren = {
 	einfuegenBasisdatenEintragen (daten) {
 		kopieren.basisdaten = daten; // Struktur der Daten in kopieren.basidatenSenden()
 		let cont = document.getElementById("kopieren-einfuegen-daten");
-		helfer.keineKinder(cont);
+		cont.replaceChildren();
 		// Zwischenablage auf Daten überprüfen
 		kopieren.einfuegenParseClipboard();
 		// keine Belegquellen
@@ -420,7 +420,7 @@ let kopieren = {
 	//     (ID des aktiven Datensatzes, kann leer sein)
 	einfuegenBasisdatenBedeutungen (id_aktiv) {
 		let cont = document.getElementById("kopieren-einfuegen-bedeutungen");
-		helfer.keineKinder(cont);
+		cont.replaceChildren();
 		// Gerüste ermitteln
 		let gerueste = [];
 		if (id_aktiv) {

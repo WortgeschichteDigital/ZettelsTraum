@@ -220,7 +220,7 @@ let quick = {
 	fill () {
 		// Leiste leeren
 		let bar = document.getElementById("quick");
-		helfer.keineKinder(bar);
+		bar.replaceChildren();
 		// ggf. veraltete Einträge in der Konfiguration umbenennen
 		quick.amendItems();
 		// Leiste füllen
@@ -451,8 +451,8 @@ let quick = {
 			contSelected.scrollTop = 0;
 			contSelectable.scrollTop = 0;
 		}
-		helfer.keineKinder(contSelected);
-		helfer.keineKinder(contSelectable);
+		contSelected.replaceChildren();
+		contSelectable.replaceChildren();
 		// ausgewählte Optionen aufbauen
 		for (let i of optionen.data.einstellungen["quick-icons"]) {
 			contSelected.appendChild(quick.fillConfigItem(i));

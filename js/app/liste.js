@@ -254,7 +254,7 @@ let liste = {
 	aufbauenBasis (filter_init) {
 		// Content-Objekt vorbereiten
 		let cont = document.getElementById("liste-belege-cont");
-		helfer.keineKinder(cont);
+		cont.replaceChildren();
 		// Anzahl der Belege feststellen
 		let belege = Object.keys(data.ka),
 			belege_anzahl = belege.length;

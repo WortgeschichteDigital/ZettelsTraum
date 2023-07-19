@@ -8,7 +8,7 @@ let fehlerlog = {
 		let cont = document.querySelector("main"),
 			reload = document.getElementById("reload"),
 			copy = document.getElementById("kopieren");
-		helfer.keineKinder(cont);
+		cont.replaceChildren();
 		// keine Fehler
 		if (!fehler.length) {
 			let div = document.createElement("div");

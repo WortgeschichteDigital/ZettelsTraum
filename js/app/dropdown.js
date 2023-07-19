@@ -410,7 +410,7 @@ let dropdown = {
 			dropdown.cursor = -1;
 		}
 		// Liste leeren
-		helfer.keineKinder(drop);
+		drop.replaceChildren();
 		// Elemente ggf. filtern
 		let items = [...dropdown.data],
 			va = dropdown.feldWert(feld),

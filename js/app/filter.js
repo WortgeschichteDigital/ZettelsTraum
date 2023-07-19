@@ -317,7 +317,7 @@ let filter = {
 		}
 		// dynamische Filter drucken
 		let cont = document.getElementById("liste-filter-dynamisch");
-		helfer.keineKinder(cont);
+		cont.replaceChildren();
 		for (let block in filter.typen) {
 			if (!filter.typen.hasOwnProperty(block)) {
 				continue;
@@ -434,7 +434,7 @@ let filter = {
 	aufbauenZeitraum () {
 		// Liste leeren
 		let cont = document.getElementById("filter-zeitraum-dynamisch");
-		helfer.keineKinder(cont);
+		cont.replaceChildren();
 		// Zeitraum-Cache leeren
 		filter.zeitraumTrefferCache = {};
 		// Belege vorhanden?

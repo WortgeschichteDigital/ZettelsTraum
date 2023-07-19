@@ -306,7 +306,7 @@ let xml = {
 				}
 			}
 			for (let i of delTotal) {
-				helfer.keineKinder(document.getElementById(i));
+				document.getElementById(i).replaceChildren();
 			}
 			resolve(true);
 		});
@@ -793,7 +793,7 @@ let xml = {
 	wiMake () {
 		// alle Köpfe entfernen
 		let wi = document.getElementById("wi");
-		helfer.keineKinder(wi);
+		wi.replaceChildren();
 		// keine Daten zum aktuellen Gerüst => Leermeldung
 		let keys = Object.keys(xml.data.xl.wi);
 		if (!keys.length || !xml.data.xl.wi?.[xml.bgAktGn]?.length) {
@@ -1271,7 +1271,7 @@ let xml = {
 		if (!xml.data.xl.bg[xml.bgAkt].xl) {
 			let pre = document.querySelector("#bg .pre-cont");
 			await xml.elementPreviewOff({pre});
-			helfer.keineKinder(document.getElementById("bg"));
+			document.getElementById("bg").replaceChildren();
 			xml.data.xl.bg.splice(xml.bgAkt, 1);
 			xml.speichern();
 			xml.bgReset();
@@ -1350,7 +1350,7 @@ let xml = {
 			key: "bg",
 		});
 		// Kopf einhängen
-		helfer.keineKinder(bg);
+		bg.replaceChildren();
 		bg.appendChild(div);
 		// Vorschau aufklappen
 		// (Toggle-Event wird verzögert an den Kopf gehängt, darum kurz warten)
@@ -2999,7 +2999,7 @@ let xml = {
 		xml.editTaEvents({ta});
 		// Button-Leiste auffrischen
 		let p = cont.lastChild;
-		helfer.keineKinder(p);
+		p.replaceChildren();
 		let buttons = ["Speichern", "Abbrechen"];
 		for (let b of buttons) {
 			let button = document.createElement("input");
@@ -3098,7 +3098,7 @@ let xml = {
 	//   p = Element
 	//     (Absatz für den Bearbeiten-Button)
 	editBearbeiten ({p}) {
-		helfer.keineKinder(p);
+		p.replaceChildren();
 		let bearb = document.createElement("input");
 		p.appendChild(bearb);
 		bearb.type = "button";

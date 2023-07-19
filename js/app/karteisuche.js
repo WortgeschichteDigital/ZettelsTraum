@@ -46,7 +46,7 @@ let karteisuche = {
 		}
 		// Content leeren
 		let cont = document.getElementById("karteisuche-pfade");
-		helfer.keineKinder(cont);
+		cont.replaceChildren();
 		// Pfad hinzufügen
 		let p = document.createElement("p");
 		cont.appendChild(p);
@@ -719,7 +719,7 @@ let karteisuche = {
 		let cont = document.getElementById("karteisuche-karteien"),
 			alphabet = new Set();
 		cont.scrollTop = 0;
-		helfer.keineKinder(cont);
+		cont.replaceChildren();
 		for (let wort of woerter) {
 			// Absatz
 			let div = document.createElement("div");
@@ -962,7 +962,7 @@ let karteisuche = {
 	alphabet (alpha) {
 		// Liste löschen
 		let cont = document.getElementById("karteisuche-alphabet");
-		helfer.keineKinder(cont);
+		cont.replaceChildren();
 		// keine Treffer
 		if (!alpha.size) {
 			return;
