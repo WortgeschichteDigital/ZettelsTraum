@@ -57,8 +57,11 @@ let optionen = {
 		belegliste: {
 			// Filterleiste anzeigen
 			filterleiste: false,
-			// chronologischen Richtung, in der die Belege sortiert werden sollen
+			// Richtung, in der die Belege sortiert werden sollen
 			sort_aufwaerts: false,
+			// Datentyp, nach dem die Belege sortiert werden sollen
+			// (Datenfeld aus data.ka oder "ref" als Stellvertreter für die Belegreferenz)
+			sort_typ: "da",
 			// kompletten Beleg anzeigen oder ausblenden
 			beleg: false,
 			// Absätze im Beleg ohne Worttreffer gekürzt darstellen
