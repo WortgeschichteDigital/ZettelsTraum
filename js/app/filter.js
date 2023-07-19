@@ -31,6 +31,14 @@ let filter = {
 	//   belege = Array
 	//     (die IDs der Belege, bereits chronologisch sortiert)
 	aufbauen (belege) {
+		// Belege chronologisch sortieren (wenn dies nicht schon der Fall ist)
+		if (optionen.data.belegliste.sort_typ !== "da") {
+			const bak = optionen.data.belegliste.sort_typ;
+			optionen.data.belegliste.sort_typ = "da";
+			liste.belegeSortierenCache = {};
+			belege.sort(liste.belegeSortieren);
+			optionen.data.belegliste.sort_typ = bak;
+		}
 		// Backup des Klappstatus und der Scrollposition erstellen
 		filter.backupKlappMake();
 		// Backup der Filtereinstellungen erstellen
