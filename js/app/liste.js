@@ -1646,6 +1646,9 @@ let liste = {
 			link.firstChild.src = "img/pfeil-gerade-hoch-weiss.svg";
 			link.title = "Belege aufsteigend sortieren";
 		}
+		if (optionen.data.einstellungen["belegliste-sort-erweitert"]) {
+			link.title = "Belege umsortieren";
+		}
 	},
 	// Header-Icons: Anzahl der Zeitschnitte festlegen, die angezeigt werden sollen
 	//   funktion = String
