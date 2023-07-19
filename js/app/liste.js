@@ -1618,11 +1618,11 @@ let liste = {
 	headerSortierenAnzeige () {
 		let link = document.getElementById("liste-link-sortieren");
 		if (optionen.data.belegliste.sort_aufwaerts) {
-			link.classList.add("aktiv");
-			link.title = "Chronologisch absteigend sortieren";
+			link.firstChild.src = "img/pfeil-gerade-runter-weiss.svg";
+			link.title = "Belege absteigend sortieren";
 		} else {
-			link.classList.remove("aktiv");
-			link.title = "Chronologisch aufsteigend sortieren";
+			link.firstChild.src = "img/pfeil-gerade-hoch-weiss.svg";
+			link.title = "Belege aufsteigend sortieren";
 		}
 	},
 	// Header-Icons: Anzahl der Zeitschnitte festlegen, die angezeigt werden sollen
