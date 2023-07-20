@@ -69,6 +69,10 @@ let tastatur = {
 				}
 				return;
 			}
+			// Sortieren-Popup schließen
+			if (liste.headerSortierenSchliessen()) {
+				return;
+			}
 			// Annotierungs-Popup schließen
 			if (annotieren.modSchliessen()) {
 				return;

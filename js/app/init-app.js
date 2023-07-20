@@ -315,6 +315,14 @@ window.addEventListener("load", async () => {
 	document.querySelectorAll("#filter-kartendatum .icon-jetzt").forEach(a => filter.kartendatumJetzt(a));
 	// Funktionen im Belegliste-Header
 	document.querySelectorAll("#liste header a").forEach(a => liste.header(a));
+	document.querySelector("#liste-sort-schliessen").addEventListener("click", () => liste.headerSortierenSchliessen());
+	document.querySelectorAll("#liste-sort a").forEach(i => {
+		i.addEventListener("click", function (evt) {
+			evt.preventDefault();
+			liste.headerSortierenAuswahl = this.getAttribute("href").substring(1).split("-");
+			liste.headerSortierenSchliessen();
+		});
+	});
 	// Einstellungen-Fenster
 	document.querySelectorAll("#einstellungen ul a").forEach(a => optionen.sektionWechselnLink(a));
 	document.querySelectorAll("#einstellungen input").forEach(i => optionen.aendereEinstellungListener(i));

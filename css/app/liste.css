@@ -390,6 +390,10 @@ p.no-indent + .filter-baum, /* betrifft Verschiedenes > Filterlogik */
 	height: 24px;
 }
 
+.liste-opt-block {
+	position: relative;
+}
+
 .beleg-opt-block:first-child,
 .filter-ctrl-block:first-child,
 .liste-opt-block:first-child {
@@ -505,6 +509,39 @@ p.no-indent + .filter-baum, /* betrifft Verschiedenes > Filterlogik */
 
 #liste-belege-anzahl.belege-gefiltert {
 	color: var(--textWarnung);
+}
+
+#liste-sort {
+	position: absolute;
+	top: 29px;
+	left: 59px;
+	z-index: 2;
+	box-shadow: var(--boxShadow);
+	border: 1px solid var(--linie);
+	border-radius: 5px;
+	padding: 10px 40px 10px 10px;
+	background-color: #fff;
+}
+
+#liste-sort > img {
+	position: absolute;
+	top: 5px;
+	right: 5px;
+}
+
+#liste-sort :is(th, td) {
+	padding-top: 5px;
+	padding-right: 5px;
+	padding-bottom: 5px;
+}
+
+#liste-sort th {
+	font-weight: normal;
+	text-align: left;
+}
+
+#liste-sort .aktiv th {
+	font-weight: bold;
 }
 
 /* Belegliste: Content -------------------------- */

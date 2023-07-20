@@ -102,6 +102,8 @@ let beleg = {
 	oeffnen (id) {
 		// registrieren, dass die Hauptfunktion "Karteikarte" offen ist
 		helfer.hauptfunktion = "karte";
+		// ggf. Sortieren-Popup in der Belegliste schließen
+		liste.headerSortierenSchliessen();
 		// ggf. Annotierungs-Popup in der Belegliste schließen
 		annotieren.modSchliessen();
 		// ID zwischenspeichern
