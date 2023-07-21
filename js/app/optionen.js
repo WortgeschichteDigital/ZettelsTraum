@@ -57,8 +57,11 @@ let optionen = {
 		belegliste: {
 			// Filterleiste anzeigen
 			filterleiste: false,
-			// chronologischen Richtung, in der die Belege sortiert werden sollen
+			// Richtung, in der die Belege sortiert werden sollen
 			sort_aufwaerts: false,
+			// Datentyp, nach dem die Belege sortiert werden sollen
+			// (Datenfeld aus data.ka oder "ref" als Stellvertreter für die Belegreferenz)
+			sort_typ: "da",
 			// kompletten Beleg anzeigen oder ausblenden
 			beleg: false,
 			// Absätze im Beleg ohne Worttreffer gekürzt darstellen
@@ -218,6 +221,8 @@ let optionen = {
 			"filter-offen-textsorten": false,
 			"filter-offen-verschiedenes": false,
 			// BELEGLISTE
+			// erweiterte Sortieroptionen nutzen
+			"belegliste-sort-erweitert": false,
 			// die Icons, die die Anzeige der Datenfelder in der Belegliste steuern, sollen immer an sein
 			"anzeige-icons-immer-an": false,
 			// neben dem Belegtext soll ein Buchungs-Icon angezeigt werden
@@ -380,6 +385,8 @@ let optionen = {
 		optionen.anwendenIconsDetails();
 		// Farbe sehr heller Elemente anpassen
 		optionen.anwendenHelleDunkler();
+		// Tooltip für das Sortiericon der Belegliste anpassen
+		liste.headerSortierenAnzeige();
 		// Icons im <caption> der Karteikarte
 		beleg.ctrlKuerzenAnzeige();
 		beleg.ctrlTrennungAnzeige();
@@ -401,6 +408,8 @@ let optionen = {
 		optionen.anwendenIconsDetails();
 		// Farbe sehr heller Elemente anpassen
 		optionen.anwendenHelleDunkler();
+		// Tooltip für das Sortiericon der Belegliste anpassen
+		liste.headerSortierenAnzeige();
 		// maximale Breite des Notizen-Fensters
 		optionen.anwendenNotizenMaxBreite();
 		// Optionen im Optionen-Fenster eintragen
@@ -487,6 +496,10 @@ let optionen = {
 		} else {
 			document.documentElement.classList.remove("dunkler");
 		}
+	},
+	// erweiterte Sortierfunktionen umschalten
+	anwendenSortErweitertListener (input) {
+		input.addEventListener("change", () => liste.headerSortierenAnzeige());
 	},
 	// bekannte Typen von Tag-Dateien
 	tagsTypen: {

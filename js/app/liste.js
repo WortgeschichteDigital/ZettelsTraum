@@ -140,109 +140,131 @@ let liste = {
 	//     (true = Filter müssen erneut initialisiert werden)
 	aufbauen (filter_init) {
 		// die Basis der Belegliste vorbereiten
-		let belege = liste.aufbauenBasis(filter_init);
+		const belege = liste.aufbauenBasis(filter_init);
+
 		// Hat die Kartei überhaupt Belege?
 		if (!belege.length) {
 			liste.aufbauenKeineBelege();
 			return;
 		}
-		// Zeitschnitte drucken
-		let cont = document.getElementById("liste-belege-cont"),
-			start = liste.zeitschnittErmitteln(data.ka[belege[0]].da).jahrzehnt,
-			ende = liste.zeitschnittErmitteln(data.ka[belege[belege.length - 1]].da).jahrzehnt,
-			jahrzehnt = start,
-			beleg_akt = 0;
-		while (!(optionen.data.belegliste.sort_aufwaerts && jahrzehnt > ende ||
-					!optionen.data.belegliste.sort_aufwaerts && jahrzehnt < ende)) {
-			// Zeitschnitt drucken?
-			if (jahrzehnt !== start) {
-				cont.appendChild(liste.zeitschnittErstellen(jahrzehnt));
-				// diese Meldung wird ggf. nachträglich ausgeblendet
-				let div = document.createElement("div");
-				div.classList.add("liste-keine-belege");
-				div.textContent = "keine Belege";
-				cont.appendChild(div);
-			}
-			// zugehörige Belege drucken
-			while (beleg_akt <= belege.length - 1) { // Obacht!
-				// id und Jahrzehnt des Belegs ermitteln
-				let id = belege[beleg_akt],
-					zeitschnitt_akt = liste.zeitschnittErmitteln(data.ka[id].da);
-				// Abbruchbedingung Endlosschleife
-				if (zeitschnitt_akt.jahrzehnt !== jahrzehnt) {
-					break;
+
+		// Zeitschnitte (Jahrzehnte) in die Belegliste injizieren
+		if (optionen.data.belegliste.sort_typ === "da") {
+			const start = liste.zeitschnittErmitteln(data.ka[belege[0]].da).jahrzehnt;
+			const ende = liste.zeitschnittErmitteln(data.ka[belege[belege.length - 1]].da).jahrzehnt;
+			let jahrzehnt = start;
+			let beleg_akt = 0;
+			while (!(optionen.data.belegliste.sort_aufwaerts && jahrzehnt > ende ||
+						!optionen.data.belegliste.sort_aufwaerts && jahrzehnt < ende)) {
+				if (jahrzehnt !== start) {
+					belege.splice(beleg_akt, 0, { jahrzehnt });
+					beleg_akt++;
 				}
-				// für den nächsten Durchgang den nächsten Beleg auswählen
-				beleg_akt++;
-				// Beleg-Kopf erstellen
-				let div = document.createElement("div");
-				div.classList.add("liste-kopf");
-				div.dataset.id = id;
-				// Kopficons einfügen
-				for (let i = 0; i < 2; i++) {
-					let a = document.createElement("a");
-					div.appendChild(a);
-					a.href = "#";
-					a.classList.add("liste-kopficon", "icon-link");
-					a.textContent = " ";
-					if (i === 0) { // Beleg kopieren
-						a.classList.add("icon-kopieren");
-						if (!kopieren.an) {
-							a.classList.add("aus");
-						}
-						a.title = "Beleg kopieren";
-						kopieren.addListe(a);
-					} else { // Beleg bearbeiten
-						a.classList.add("icon-bearbeiten");
-						a.title = "Beleg bearbeiten";
-						liste.formularOeffnen(a);
+				while (beleg_akt <= belege.length - 1) { // Obacht!
+					const id = belege[beleg_akt];
+					const zeitschnitt_akt = liste.zeitschnittErmitteln(data.ka[id].da);
+					if (zeitschnitt_akt.jahrzehnt !== jahrzehnt) {
+						break;
 					}
+					beleg_akt++;
 				}
-				// Belegreferenz
-				if (optionen.data.einstellungen["belegliste-referenz"]) {
-					let span = document.createElement("span");
-					span.classList.add("liste-referenz");
-					span.textContent = xml.belegId({data: data.ka[id], id});
-					div.appendChild(span);
+				if (optionen.data.belegliste.sort_aufwaerts) {
+					jahrzehnt += 10;
+				} else {
+					jahrzehnt -= 10;
 				}
-				// Jahr
-				let span = document.createElement("span");
-				span.classList.add("liste-jahr");
-				span.innerHTML = liste.suchtreffer(zeitschnitt_akt.datum, "da", id);
-				if (zeitschnitt_akt.datum.replace(/ /g, " ") !== data.ka[id].da) {
-					span.title = data.ka[id].da;
-					span.classList.add("liste-jahr-hinweis");
-					liste.detailAnzeigen(span);
-				}
-				div.appendChild(span);
-				// Belegvorschau
-				div.appendChild(liste.belegVorschau(data.ka[id], id));
-				// <div> für Belegkopf einhängen
-				cont.appendChild(div);
-				liste.belegUmschalten(div);
-				// <div> für die Detail-Ansicht erzeugen
-				if (filter.volltextSuche.suche ||
-						optionen.data.belegliste.beleg && (typeof liste.statusOffen[id] === "undefined" || liste.statusOffen[id]) ||
-						!optionen.data.belegliste.beleg && liste.statusOffen[id]) {
-					if (liste.aufbauenDetailsBeiSuche(id)) {
-						div.classList.add("schnitt-offen");
-						liste.aufbauenDetails({
-							id: id,
-						});
-					}
-				}
-			}
-			// Jahrzehnt hoch- bzw. runterzählen
-			if (optionen.data.belegliste.sort_aufwaerts) {
-				jahrzehnt += 10;
-			} else {
-				jahrzehnt -= 10;
 			}
 		}
+
+		// Liste aufbauen
+		const cont = document.getElementById("liste-belege-cont");
+		for (let i = 0, len = belege.length; i < len; i++) {
+			const id = belege[i];
+
+			// Zeitschnitt drucken
+			if (typeof id !== "string") {
+				cont.appendChild(liste.zeitschnittErstellen(id.jahrzehnt));
+				const div = document.createElement("div");
+				cont.appendChild(div);
+				div.classList.add("liste-keine-belege");
+				div.textContent = "keine Belege";
+				continue;
+			}
+
+			// Beleg drucken
+			// Kopf erstellen
+			const div = document.createElement("div");
+			div.classList.add("liste-kopf");
+			div.dataset.id = id;
+
+			// Kopficons einfügen
+			for (let j = 0; j < 2; j++) {
+				const a = document.createElement("a");
+				div.appendChild(a);
+				a.href = "#";
+				a.classList.add("liste-kopficon", "icon-link");
+				a.textContent = " ";
+				if (j === 0) {
+					// Beleg kopieren
+					a.classList.add("icon-kopieren");
+					if (!kopieren.an) {
+						a.classList.add("aus");
+					}
+					a.title = "Beleg kopieren";
+					kopieren.addListe(a);
+				} else {
+					// Beleg bearbeiten
+					a.classList.add("icon-bearbeiten");
+					a.title = "Beleg bearbeiten";
+					liste.formularOeffnen(a);
+				}
+			}
+
+			// Belegreferenz
+			if (optionen.data.einstellungen["belegliste-referenz"]) {
+				const span = document.createElement("span");
+				span.classList.add("liste-referenz");
+				span.textContent = xml.belegId({ data: data.ka[id], id });
+				div.appendChild(span);
+			}
+
+			// Jahr
+			const zeitschnitt_akt = liste.zeitschnittErmitteln(data.ka[id].da);
+			const span = document.createElement("span");
+			span.classList.add("liste-jahr");
+			span.innerHTML = liste.suchtreffer(zeitschnitt_akt.datum, "da", id);
+			if (zeitschnitt_akt.datum.replace(/\u00A0/g, " ") !== data.ka[id].da) {
+				span.title = data.ka[id].da;
+				span.classList.add("liste-jahr-hinweis");
+				liste.detailAnzeigen(span);
+			}
+			div.appendChild(span);
+
+			// Belegvorschau
+			div.appendChild(liste.belegVorschau(data.ka[id], id));
+
+			// <div> für Belegkopf einhängen
+			cont.appendChild(div);
+			liste.belegUmschalten(div);
+
+			// <div> für die Detail-Ansicht erzeugen
+			if ((filter.volltextSuche.suche ||
+						optionen.data.belegliste.beleg && (typeof liste.statusOffen[id] === "undefined" || liste.statusOffen[id]) ||
+						!optionen.data.belegliste.beleg && liste.statusOffen[id]) &&
+					liste.aufbauenDetailsBeiSuche(id)) {
+				div.classList.add("schnitt-offen");
+				liste.aufbauenDetails({
+					id,
+				});
+			}
+		}
+
 		// Anzeige der Zeitschnitte anpassen
 		liste.zeitschnitteAnpassen(false);
+
 		// Anzeige, dass kein Beleg vorhanden ist, ggf. ausblenden
 		liste.zeitschnitteKeineBelege();
+
 		// ggf. Suche der Suchleiste erneut anstoßen (nur Neuaufbau)
 		if (document.getElementById("suchleiste")) {
 			suchleiste.suchen(true);
@@ -571,50 +593,100 @@ let liste = {
 	//   a, b = String
 	//     (IDs der zu sortierenden Belege)
 	belegeSortieren (a, b) {
-		// Sortierdaten ermitteln
-		let datum = [];
-		for (let i = 0; i < 2; i++) {
-			const id = i === 0 ? a : b;
-			// Sortierdatum im Zwischenspeicher?
-			if (liste.belegeSortierenCache[id]) {
-				datum[i] = liste.belegeSortierenCache[id];
-				continue;
-			}
-			// Sortierdatum ermitteln
-			datum[i] = helfer.datumGet({
-				datum: data.ka[id].da,
-				erstesDatum: true,
-			}).sortier;
-			// Sortierdatum zwischenspeichern
-			liste.belegeSortierenCache[id] = datum[i];
-		}
-		// 1. Weg: Sortierung nach Datum (chronologisch auf- oder absteigend)
-		let sortierung = [1, -1];
+		const sortierung = [ 1, -1 ];
 		if (optionen.data.belegliste.sort_aufwaerts) {
 			sortierung.reverse();
 		}
-		if (datum[0] !== datum[1]) {
-			datum.sort();
-			if (datum[0] === liste.belegeSortierenCache[a]) {
-				return sortierung[0];
+		let typ = optionen.data.belegliste.sort_typ;
+
+		// Sortierung nach Datum
+		if (/^d/.test(typ)) {
+			const datum = [];
+			if (typ === "da") {
+				for (let i = 0; i < 2; i++) {
+					const id = i ? b : a;
+
+					// Sortierdatum im Zwischenspeicher?
+					if (liste.belegeSortierenCache[id]) {
+						datum[i] = liste.belegeSortierenCache[id];
+						continue;
+					}
+
+					// Sortierdatum ermitteln
+					datum[i] = helfer.datumGet({
+						datum: data.ka[id].da,
+						erstesDatum: true,
+					}).sortier;
+
+					// Sortierdatum zwischenspeichern
+					liste.belegeSortierenCache[id] = datum[i];
+				}
+			} else {
+				datum.push(data.ka[a][typ]);
+				datum.push(data.ka[b][typ]);
 			}
-			return sortierung[1];
-		}
-		// 2. Weg: Sortierung nach Autor (alphabetisch auf- oder absteigend)
-		let autor = [data.ka[a].au, data.ka[b].au];
-		if (autor[0] !== autor[1]) {
-			autor.sort(helfer.sortAlpha);
-			if (autor[0] === data.ka[a].au) {
-				return sortierung[0];
+			if (datum[0] !== datum[1]) {
+				const datumA = datum[0];
+				datum.sort();
+				return datum[0] === datumA ? sortierung[0] : sortierung[1];
 			}
-			return sortierung[1];
+
+			// Daten identisch => versuchen nach Autor zu sortieren
+			typ = "au";
 		}
-		// 3. Weg: Sortierung nach Belegnummer (auf- oder absteigend)
+
+		// Sortierung nach Autor
+		if (typ === "au") {
+			const autor = [ data.ka[a].au, data.ka[b].au ];
+			for (let i = 0; i < 2; i++) {
+				autor[i] = autor[i].replace(/\u00A0/g, " ");
+			}
+			if (autor[0] !== autor[1]) {
+				const autorA = autor[0];
+				autor.sort(helfer.sortAlpha);
+				return autor[0] === autorA ? sortierung[0] : sortierung[1];
+			}
+
+			// Autoren identisch => nach Belegreferenz sortieren
+			// (wenn Sortierung nach Autor gewählt, sonst Fallback nutzen)
+			if (optionen.data.belegliste.sort_typ === "au") {
+				typ = "ref";
+			}
+		}
+
+		// Sortierung nach Belegreferenz
+		if (typ === "ref") {
+			if (!liste.belegeSortierenCache.ref) {
+				liste.belegeSortierenCache.ref = {};
+			}
+			const ref = [];
+			for (let i = 0; i < 2; i++) {
+				const id = i ? b : a;
+
+				// Belegreferrenz im Zwischenspeicher?
+				if (liste.belegeSortierenCache.ref[id]) {
+					ref[i] = liste.belegeSortierenCache.ref[id];
+					continue;
+				}
+
+				// Belegreferenz ermitteln
+				ref[i] = xml.belegId({
+					data: data.ka[id],
+					id,
+				});
+
+				// Sortierdatum zwischenspeichern
+				liste.belegeSortierenCache.ref[id] = ref[i];
+			}
+			ref.sort(helfer.sortAlpha);
+			return ref[0] === liste.belegeSortierenCache.ref[a] ? sortierung[0] : sortierung[1];
+		}
+
+		// Fallback: Sortierung nach Belegnummer
 		if (optionen.data.belegliste.sort_aufwaerts) {
 			return parseInt(a, 10) - parseInt(b, 10);
-		} else {
-			return parseInt(b, 10) - parseInt(a, 10);
 		}
+		return parseInt(b, 10) - parseInt(a, 10);
 	},
 	// erstellt die Anzeige des Belegs
 	//   id = String
@@ -1604,13 +1676,55 @@ let liste = {
 			setTimeout(() => liste.statusScrollReset(), 500);
 		}
 	},
+	// Header-Icons: speichert die ausgewählte Sortierrichtung
+	headerSortierenAuswahl: null,
 	// Header-Icons: chronologisches Sortieren der Belege
-	headerSortieren () {
-		// Option ändern
-		optionen.data.belegliste.sort_aufwaerts = !optionen.data.belegliste.sort_aufwaerts;
+	async headerSortieren () {
+		// Sortierfunktion auswählen
+		if (optionen.data.einstellungen["belegliste-sort-erweitert"]) {
+			// Popup öffnen
+			const popup = document.querySelector("#liste-sort");
+			if (!popup.classList.contains("aus")) {
+				// Popup schon offen
+				return;
+			}
+			popup.classList.remove("aus");
+
+			// aktive Sortierung markieren
+			popup.querySelector(".aktiv")?.classList?.remove("aktiv");
+			const aktiv = popup.querySelector(`[href^="#${optionen.data.belegliste.sort_typ}"]`).closest("tr");
+			aktiv.classList.add("aktiv");
+			const links = aktiv.querySelectorAll("a");
+			const linkNr = optionen.data.belegliste.sort_aufwaerts ? 0 : 1;
+			links[linkNr].focus();
+
+			// auf Eingabe warten
+			liste.headerSortierenAuswahl = null;
+			await new Promise(resolve => {
+				const wait = setInterval(() => {
+					if (popup.classList.contains("aus")) {
+						clearInterval(wait);
+						resolve(true);
+					}
+				}, 100);
+			});
+
+			// Eingabe auswerten
+			if (!liste.headerSortierenAuswahl) {
+				// Popup ohne Eingabe geschlossen
+				return;
+			}
+			optionen.data.belegliste.sort_typ = liste.headerSortierenAuswahl[0];
+			optionen.data.belegliste.sort_aufwaerts = liste.headerSortierenAuswahl[1] === "true" ? true : false;
+		} else {
+			optionen.data.belegliste.sort_typ = "da";
+			optionen.data.belegliste.sort_aufwaerts = !optionen.data.belegliste.sort_aufwaerts;
+		}
 		optionen.speichern();
+
 		// Link anpassen
 		liste.headerSortierenAnzeige();
+
 		// Liste neu aufbauen
 		liste.status(false);
 	},
@@ -1618,12 +1732,31 @@ let liste = {
 	headerSortierenAnzeige () {
 		let link = document.getElementById("liste-link-sortieren");
 		if (optionen.data.belegliste.sort_aufwaerts) {
-			link.classList.add("aktiv");
-			link.title = "Chronologisch absteigend sortieren";
+			link.firstChild.src = "img/pfeil-gerade-runter-weiss.svg";
+			link.title = "Belege absteigend sortieren";
 		} else {
-			link.classList.remove("aktiv");
-			link.title = "Chronologisch aufsteigend sortieren";
+			link.firstChild.src = "img/pfeil-gerade-hoch-weiss.svg";
+			link.title = "Belege aufsteigend sortieren";
 		}
+		if (optionen.data.einstellungen["belegliste-sort-erweitert"]) {
+			const typenMap = {
+				au: "Autor",
+				da: "Datum",
+				dc: "Beleg erstellt",
+				dm: "Beleg geändert",
+				ref: "Belegreferenz",
+			};
+			link.title = "<i>Aktuelle Sortierung:</i> " + typenMap[optionen.data.belegliste.sort_typ];
+		}
+	},
+	// Header-Icons: Sortieren-Popup schließen
+	headerSortierenSchliessen () {
+		const ls = document.querySelector("#liste-sort");
+		if (!ls.classList.contains("aus")) {
+			ls.classList.add("aus");
+			return true;
+		}
+		return false;
 	},
 	// Header-Icons: Anzahl der Zeitschnitte festlegen, die angezeigt werden sollen
 	//   funktion = String

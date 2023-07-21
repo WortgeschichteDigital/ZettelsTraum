@@ -1269,10 +1269,12 @@ Aufrufdatum: 24. 12. 2019</pre>
 					<p class="erklaerung-icon" id="belegliste-sortierung"><img src="../img/pfeil-gerade-hoch.svg" width="24" height="24" alt="">Sortierrichtung der Belege ändern</p>
 
 					<div class="info">
-						<p>Die Belege in der Liste können chronologisch auf- oder absteigend sortiert werden. Belege, für die nur eine Jahrhundertangabe zur Verfügung steht, werden (inhaltlich nicht ganz korrekt, <abbr title="vergleiche">vgl.</abbr> die Erläuterungen <a href="#karteikarte-datum">zum Datum-Feld der Karteikarte</a>) auf das Jahr null datiert. Die Angabe <q>17. Jh.</q> wird also wie <q>1700</q> behandelt.</p>
+						<p>Standardmäßig können die Belege in der Liste nur chronologisch auf- oder absteigend sortiert werden. Belege, für die nur eine Jahrhundertangabe zur Verfügung steht, werden (inhaltlich nicht ganz korrekt, <abbr title="vergleiche">vgl.</abbr> die Erläuterungen <a href="#karteikarte-datum">zum Datum-Feld der Karteikarte</a>) auf das Jahr null datiert. Die Angabe <q>17.&nbsp;Jh.</q> wird also wie <q>1600</q> behandelt.</p>
 
-						<p>Für die Sortierung wird das erste im Datumsfeld zu findende Datum genutzt. Handelt es sich um ein Tagesdatum, werden die Belge genau nach Jahre, Monat und Tag sortiert. Erkannt werden Tagesdaten im ISO 8601-Format (<code class="quelltext">2019-12-01</code>) und Tagesdaten nach dem Muster <code class="quelltext">1. 12. 2019</code>, auch mit führender Null und ohne Leerzeichen: <code class="quelltext">01.12.2019</code>.
-						Haben zwei oder mehr Belege dasselbe Datum, werden sie alphabetisch nach Autor sortiert: bei chronologisch aufsteigender Belegliste alphabetisch aufsteigend, bei chronologisch absteigender Belegliste alphabetisch absteigend. Sind auch die Autoren identisch, werden die Belege als Fallback nach Belegnummer geordnet: auch hier auf- oder absteigend, je nachdem wie die Chronologie der Liste ist.</p>
+						<p>Für die Sortierung wird das erste im Datum-Feld zu findende Datum genutzt. Handelt es sich um ein Tagesdatum, werden die Belge genau nach Jahr, Monat und Tag sortiert. Erkannt werden Tagesdaten im ISO 8601-Format (<code class="quelltext">2019-12-01</code>) und Tagesdaten nach dem Muster <code class="quelltext">1. 12. 2019</code>, auch mit führender Null und ohne Leerzeichen: <code class="quelltext">01.12.2019</code>.
+						Haben zwei oder mehr Belege dasselbe Datum, werden sie alphabetisch nach Autor sortiert. Sind auch die Autoren identisch, werden die Belege als Fallback nach <a href="#belegliste-kopfleisteBelegreferenz">Belegreferenz</a> geordnet.</p>
+
+						<p>Daneben gibt es <b>erweiterte Sortierfunktionen</b>, die allerdings erst <a href="#einstellungen-beleglisteSortErweitert">durch eine Einstellung aktiviert</a> werden müssen. Sind die erweiterten Funktionen aktiviert, öffnet sich beim Klick auf den Pfeil ein Popup-Fenster. Hier haben Sie die Möglichkeit, die Belegliste nach <i>Datum, Autor, Belegreferenz</i> und nach <i>Erstellungs-</i> oder <i>Änderungdatum des Belegs</i> zu sortierieren, jeweils auf- oder absteigend.</p>
 					</div>
 
 					<p class="erklaerung-icon" id="belegliste-detailansicht"><img src="../img/auge.svg" width="24" height="24" alt=""><a href="#belegliste-detailansicht">Detailansicht</a> der Belege umschalten</p>
@@ -1426,7 +1428,7 @@ Aufrufdatum: 24. 12. 2019</pre>
 
 					<p class="info">Standardmäßig öffnet sich die <a href="#karteikarte-leseansicht">Karteikarte in der Leseansicht</a>. Allerdings gibt es auch eine <a href="#einstellungen-karteikarte">Einstellung</a>, um die Karteikarte immer in der <a href="#karteikarte-formularansicht">Formularansicht</a> zu öffnen.</p>
 
-					<p><b>Belegreferenz:</b> eine Zeichenkette zum eindeutigen Identifizieren des Belegs</p>
+					<p id="belegliste-kopfleisteBelegreferenz"><b>Belegreferenz:</b> eine Zeichenkette zum eindeutigen Identifizieren des Belegs</p>
 
 					<div class="info">
 						<p>Die Belegreferenz setzt sich aus Autor, Datum und der Beleg-ID zusammen. Mit ihr kann ein Beleg im Karteikasten eindeutig referenziert werden, <abbr title="zum Beispiel">z. B.</abbr> um sich in einem <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Dokument auf ihn zu beziehen. Die Referenz lässt sich über das <a href="#belegliste-textZwischenablageReferenz">Rechtsklickmenü der Belegliste</a> (oder das der <a href="#karteikarte">Karteikarte</a>) kopieren.</p>
@@ -1444,7 +1446,7 @@ Aufrufdatum: 24. 12. 2019</pre>
 
 					<p><b>Autor:</b> Urheber des Belegtextes</p>
 
-					<p class="info">Ist die Detailansicht geschlossen, wird versucht, den Autornamen zu kürzen. Dazu wird nach dem ersten Komma gesucht und nur der Namensteil vor dem Komma eingeblendet. Klickt man auf die Kopfleiste, um die Detailansicht zu öffnen, erscheint der vollständige Name. Es bietet sich also an, Autornamen im Format <q>Nachname, Vorname</q> in der <a href="#karteikarte">Karteikarte</a> zu notieren – auch weil der Autorname als Fallback für die <a href="#belegliste-sortierung">Sortierung von Belegen</a> aus demselben Jahr herangezogen wird.</p>
+					<p class="info">Ist die Detailansicht geschlossen, wird versucht, den Autornamen zu kürzen. Dazu wird nach dem ersten Komma gesucht und nur der Namensteil vor dem Komma eingeblendet. Klickt man auf die Kopfleiste, um die Detailansicht zu öffnen, erscheint der vollständige Name. Es bietet sich also an, Autornamen im Format <q>Nachname, Vorname</q> in der <a href="#karteikarte">Karteikarte</a> zu notieren – auch weil <abbr title="unter anderem">u.&nbsp;</abbr> der Autorname als Fallback für die <a href="#belegliste-sortierung">Sortierung von Belegen</a> aus demselben Jahr herangezogen wird.</p>
 
 					<p><b>Markierung</b> des Belegs</p>
 
@@ -2500,6 +2502,14 @@ Mustermann, Erika
 					<h2 id="einstellungen-belegliste">Belegliste</h2>
 
 					<p>Die folgenden Einstellungen betreffen die <a href="#belegliste">Belegliste</a>, die über den Menüpunkt <a href="#menueBelege-auflisten"><i>Belege &gt; Auflisten</i></a> oder das Tastaturkürzel <kbd>Strg</kbd> + <kbd>L</kbd> aufgerufen werden kann.</p>
+
+					<p class="erklaerung-option" id="einstellungen-beleglisteSortErweitert">erweiterte Sortierfunktionen nutzen</p>
+
+					<div class="info">
+						<p><i>Standard:</i> nicht aktiviert</p>
+
+						<p>Standardmäßig wird die Belegliste <a href="#belegliste-sortierung">chronologisch sortiert</a>, und zwar auf- oder absteigend. Aktivieren Sie diese Einstellungen werden beim Klick auf den Sortierpfeil <img src="../img/pfeil-gerade-hoch.svg" width="20" height="20" alt=""> erweiterte Sortieroptionen eingeblendet.</p>
+					</div>
 
 					<p class="erklaerung-option" id="einstellungen-beleglisteIcons">die Icons zur Steuerung der Detailansicht sollen immer alle sichtbar sein</p>
 
