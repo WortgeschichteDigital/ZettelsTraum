@@ -1644,6 +1644,7 @@ let xml = {
 		}
 		// Events anhängen
 		xml.elementKopfEvents({kopf: div});
+		tooltip.init(div);
 		// Kopf zurückgeben
 		return div;
 	},
@@ -2054,6 +2055,8 @@ let xml = {
 			layout.warten = 300;
 		}
 		xml.layoutTabellig(layout);
+		// Tooltips initialisieren
+		tooltip.init(cont);
 	},
 	// Abschnitt: ID automatisch anpassen (nach Speichern einer Überschrift)
 	//   key = String
@@ -2202,6 +2205,7 @@ let xml = {
 				typ.setAttribute("readonly", "true");
 				let a = dropdown.makeLink("dropdown-link-element", "Listen-Typ auswählen", true);
 				p.appendChild(a);
+				tooltip.init(p);
 			}
 		} else if (xml.data.xl[key][slot].ct[slotBlock].it === "Illustration") {
 			editable = false;
@@ -2332,6 +2336,7 @@ let xml = {
 					abb.lastChild.appendChild(a);
 				}
 			}
+			tooltip.init(abb);
 			// Formulardaten wiederherstellen
 			if (restore) {
 				let xmlStr = xml.data.xl[key][slot].ct[slotBlock].xl,
@@ -3866,6 +3871,7 @@ let xml = {
 			}
 			warn.title = "keine Fehler";
 		}
+		tooltip.init(warn.parentNode);
 	},
 	// Breite von Elementen anpassen, sodass Kopfzeilen wie eine Tabelle wirken
 	//   id = String

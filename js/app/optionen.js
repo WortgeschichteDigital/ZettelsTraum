@@ -647,6 +647,7 @@ let optionen = {
 			datum = helfer.datumFormat(optionen.data.tags[typ].update, "minuten");
 			tdSub.appendChild(document.createTextNode(datum));
 		}
+		tooltip.init(cont);
 		// keine Tag-Dateien vorhanden
 		if (!table.hasChildNodes()) {
 			let tr = document.createElement("tr");

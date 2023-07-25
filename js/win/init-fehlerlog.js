@@ -9,6 +9,9 @@ window.addEventListener("load", async () => {
 	// ANZEIGE TASTATURKÜRZEL ANPASSEN
 	tastatur.shortcutsText();
 
+	// TOOLTIPS INITIALISIEREN
+	tooltip.init();
+
 	// ICONS
 	let reload = document.getElementById("reload");
 	reload.addEventListener("click", evt => {

@@ -159,6 +159,7 @@ let stamm = {
 			a.title = "Konfiguration öffnen";
 			stamm.kopfKonfigListener(a);
 		}
+		tooltip.init(cont);
 	},
 	// Wort auswählen, dessen Formvarianten aufgelistet werden sollen
 	//   span = Element
@@ -320,6 +321,8 @@ let stamm = {
 			button.value = "Löschen";
 			stamm.kopfKonfigLoeschen(button);
 		}
+		// Tooltips initialisieren
+		tooltip.init(popup);
 	},
 	// Konfigurations-Popup entfernen, wenn es existiert
 	kopfKonfigSchliessen () {
@@ -542,6 +545,7 @@ let stamm = {
 				p.appendChild(span);
 			}
 		}
+		tooltip.init(cont);
 		// keine Varianten vorhanden
 		if (!cont.hasChildNodes()) {
 			let p = document.createElement("p");

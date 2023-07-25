@@ -122,6 +122,7 @@ let anhaenge = {
 			anhaenge.oeffnenListener(img);
 			ziel.appendChild(img);
 		});
+		tooltip.init(ziel);
 		if (ziel.id === "kartei-anhaenge") {
 			kopf.icons();
 		}
@@ -218,6 +219,7 @@ let anhaenge = {
 				// <div> einhängen
 				cont.appendChild(div);
 			});
+			tooltip.init(cont);
 			resolve(true);
 		});
 	},

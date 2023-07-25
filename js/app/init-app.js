@@ -514,6 +514,8 @@ window.addEventListener("load", async () => {
 	}
 	// Tastaturkürzel ändern
 	tastatur.shortcutsText();
+	// Tooltips initialisieren
+	tooltip.init();
 
 	// IPC-ANFRAGEN
 	// Bilder vorladen

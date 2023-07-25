@@ -1625,6 +1625,8 @@ let belegImport = {
 		helfer.elementMaxHeight({
 			ele: document.getElementById("import-cont-over"),
 		});
+		// Tooltip initialisieren
+		tooltip.init(cont);
 		// Import-Markierung entfernen
 		function markierung (img) {
 			img.addEventListener("click", function(evt) {
@@ -1638,6 +1640,7 @@ let belegImport = {
 					this.src = "img/platzhalter.svg";
 					this.title = "markieren";
 				}
+				tooltip.init(this.parentNode);
 			});
 		}
 		// Import-Fenster schließen ausgewählten Datensatz übernehmen

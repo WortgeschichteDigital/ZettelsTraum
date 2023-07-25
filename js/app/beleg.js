@@ -1968,6 +1968,7 @@ let beleg = {
 			tab.classList.add("leseansicht");
 		}
 		button.classList.toggle("aktiv");
+		tooltip.init(button.parentNode);
 		// Header-Icons ein- oder ausblenden
 		document.querySelectorAll("#beleg .icon-leseansicht").forEach(function(i) {
 			if (beleg.leseansicht) {
@@ -1977,11 +1978,13 @@ let beleg = {
 			}
 		});
 		// Title des Sprung-Icons anpassen
+		const springen = document.getElementById("beleg-link-springen");
 		if (beleg.leseansicht) {
-			document.getElementById("beleg-link-springen").title = `zur nächsten Markierung springen (${tastatur.shortcutsTextAktuell("Strg")} + ↓)`;
+			springen.title = `zur nächsten Markierung springen (${tastatur.shortcutsTextAktuell("Strg")} + ↓)`;
 		} else {
-			document.getElementById("beleg-link-springen").title = `zum Wort im Belegtext springen (${tastatur.shortcutsTextAktuell("Strg")} + ↓)`;
+			springen.title = `zum Wort im Belegtext springen (${tastatur.shortcutsTextAktuell("Strg")} + ↓)`;
 		}
+		tooltip.init(springen.parentNode);
 		// Einfüge-Icons ein- oder ausblenden
 		document.querySelectorAll("#beleg .icon-tools-einfuegen").forEach(function(i) {
 			if (beleg.leseansicht) {
@@ -2214,6 +2217,7 @@ let beleg = {
 			link.classList.remove("aktiv");
 			link.title = `Belegkontext kürzen (${tastatur.shortcutsTextAktuell("Strg")} + K)`;
 		}
+		tooltip.init(link.parentNode);
 	},
 	// Trennstriche in der Leseansicht ein- bzw. ausblenden
 	ctrlTrennung () {
@@ -2241,6 +2245,7 @@ let beleg = {
 			link.classList.remove("aktiv");
 			link.title = `Silbentrennung anzeigen (${tastatur.shortcutsTextAktuell("Strg")} + T)`;
 		}
+		tooltip.init(link.parentNode);
 	},
 	// Verteiler für die Sprungfunktion (Ctrl + ↓)
 	//   evt = Event-Objekt

@@ -93,6 +93,7 @@ let bedeutungen = {
 			// Fragment einhängen
 			tr.lastChild.appendChild(frag);
 		}
+		tooltip.init(cont);
 	},
 	// Bedeutungsbaum drucken
 	drucken () {

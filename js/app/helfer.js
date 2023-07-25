@@ -1083,6 +1083,7 @@ let helfer = {
 	//     (Link, auf dem geklickt wurde)
 	externeLinks (a) {
 		a.title = a.getAttribute("href");
+		tooltip.init(a.parentNode);
 		a.addEventListener("click", function(evt) {
 			evt.preventDefault();
 			if (evt.detail > 1) { // Doppelklicks abfangen

@@ -344,6 +344,7 @@ let hilfe = {
 		schliessen.height = "48";
 		schliessen.title = "Bild schließen (Esc)";
 		schliessen.addEventListener("click", () => hilfe.bildSchliessen());
+		tooltip.init(cont);
 		// ggf. Icons zum Navigieren durch eine Bilderstrecke
 		hilfe.bilder(fig, cont);
 		// Einblenden
@@ -406,6 +407,8 @@ let hilfe = {
 			}
 			hilfe.bilderNav(img);
 		}
+		// Tooltips initialisieren
+		tooltip.init(cont);
 	},
 	// Navigation durch die Bilder (Klick auf Icon)
 	//   img = Element

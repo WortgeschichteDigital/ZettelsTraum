@@ -87,6 +87,7 @@ let tagger = {
 			let a = dropdown.makeLink("dropdown-link-td", `${name} auswählen`, true);
 			p.appendChild(a);
 		}
+		tooltip.init(cont);
 		// keine Tag-Typen gefunden
 		if (!cont.hasChildNodes()) {
 			cont.classList.add("leer");

@@ -942,6 +942,7 @@ let karteisucheExport = {
 			text.textContent = opt[i].name;
 			karteisucheExport.vorlagenToolsListener(text);
 		}
+		tooltip.init(vorlagen);
 	},
 	// Vorlage laden
 	//   idx = Number

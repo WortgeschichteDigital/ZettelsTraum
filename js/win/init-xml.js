@@ -24,6 +24,9 @@ window.addEventListener("load", async () => {
 
 	// ANZEIGE TASTATURKÜRZEL ANPASSEN
 	tastatur.shortcutsText();
+
+	// TOOLTIPS INITIALISIEREN
+	tooltip.init();
 	
 	// DROPDOWN
 	document.querySelectorAll(".dropdown-feld").forEach(i => dropdown.feld(i));

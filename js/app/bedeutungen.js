@@ -476,6 +476,8 @@ let bedeutungen = {
 		}
 		// Ergänzungszeile einrücken
 		bedeutungen.aufbauenErgaenzen(table);
+		// Tooltips initialisieren
+		tooltip.init(cont);
 	},
 	// Überschrift des Bedeutungsgerüst ggf. anpassen
 	aufbauenH2 () {
@@ -583,6 +585,7 @@ let bedeutungen = {
 		input.value = `Gerüst ${gerueste[0]}`;
 		let a = dropdown.makeLink("dropdown-link-element", "Bedeutungsgerüst auswählen");
 		span.appendChild(a);
+		tooltip.init(span);
 		// Add-Button
 		let button = document.createElement("input");
 		button.type = "button";
@@ -1425,6 +1428,8 @@ let bedeutungen = {
 			}
 		}
 		parent.appendChild(div);
+		// Tooltip initialisieren
+		tooltip.init(div);
 	},
 	// Funktion der Text-Tools auf das Content-Feld anwenden
 	//   a = Element

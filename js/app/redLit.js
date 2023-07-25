@@ -3467,6 +3467,8 @@ let redLit = {
 		bearb.classList.add("icon-link", "icon-stift");
 		bearb.title = "Titelaufnahme bearbeiten";
 		redLit.eingabeBearbeitenListener(bearb);
+		// Icons: Tooltip initialisieren
+		tooltip.init(icons);
 		// Titelaufnahme
 		let ti = document.createElement("p");
 		div.appendChild(ti);
@@ -3688,6 +3690,8 @@ let redLit = {
 		win.appendChild(titel);
 		titel.id = "red-lit-popup-titel";
 		titel.appendChild(redLit.anzeigeSnippet({id, slot}));
+		// Tooltips initialisieren
+		tooltip.init(win);
 	},
 	// Anzeige: vorhandene Titelaufnahmen im Versionen-Popup auflisten
 	//   slot = Number | undefined

@@ -90,6 +90,7 @@ let karteisuche = {
 				span.textContent = pfad;
 			}
 		}
+		tooltip.init(p);
 	},
 	// Pfad zur Pfadliste hinzufügen (Listener)
 	//   p = Element
@@ -747,6 +748,7 @@ let karteisuche = {
 			// ggf. Infos ergänzen
 			karteisuche.ztjAuflistenInfos(div, wort.i);
 		}
+		tooltip.init(cont);
 		// Maximalhöhe Trefferliste setzen
 		helfer.elementMaxHeight({
 			ele: document.getElementById("karteisuche-karteien"),
@@ -808,6 +810,7 @@ let karteisuche = {
 				wrap.appendChild(document.createElement("br"));
 			}
 			wrap.appendChild(verweise);
+			tooltip.init(wrap);
 		}
 		// Wrapper einhängen, wenn er denn gefüllt wurde
 		if (wrap.hasChildNodes()) {
@@ -1215,6 +1218,7 @@ let karteisuche = {
 		input.type = "text";
 		input.value = "";
 		span.appendChild(dropdown.makeLink("dropdown-link-td", "Filtertyp", true));
+		tooltip.init(span);
 		dropdown.feld(input);
 		karteisuche.filterFelderListener(input);
 		// Filter fokussieren, wenn er manuell hinzugefügt wurde
@@ -1307,6 +1311,7 @@ let karteisuche = {
 				label.textContent = feld.ph;
 			}
 		}
+		tooltip.init(p);
 	},
 	// Suche mit Enter starten
 	filterFelderListener (input) {

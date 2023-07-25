@@ -474,6 +474,7 @@ let kopieren = {
 			let a = dropdown.makeLink("dropdown-link-td", "Bedeutungsgerüst auswählen");
 			td.appendChild(a);
 		}
+		tooltip.init(cont);
 	},
 	// Einfügen aus der gewünschten Datenquelle wird angestoßen
 	einfuegenAusfuehren () {

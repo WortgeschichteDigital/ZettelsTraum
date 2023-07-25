@@ -374,6 +374,7 @@ let filter = {
 				}
 			}
 		}
+		tooltip.init(cont);
 		// Notizen anhängen
 		notizen.filterleiste();
 		// Backup der Filtereinstellungen wiederherstellen
@@ -495,6 +496,8 @@ let filter = {
 			span.title = "Anzahl der Belege in diesem Zeitraum";
 			p.appendChild(span);
 		}
+		// Tooltips initialiseren
+		tooltip.init(cont);
 		// Liste nach oben scrollen
 		cont.scrollTop = 0;
 	},
@@ -1609,6 +1612,7 @@ let filter = {
 			link.classList.remove("aktiv");
 			link.title = "Reduktionsmodus einschalten";
 		}
+		tooltip.init(link.parentNode);
 	},
 	// Datensätze im Volltextfilter en bloc umschalten
 	//   a = Element

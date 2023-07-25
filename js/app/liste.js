@@ -258,6 +258,7 @@ let liste = {
 				});
 			}
 		}
+		tooltip.init(cont);
 
 		// Anzeige der Zeitschnitte anpassen
 		liste.zeitschnitteAnpassen(false);
@@ -462,6 +463,8 @@ let liste = {
 			div.style.paddingTop = "0";
 			div.style.paddingBottom = "0";
 		}
+		// Tooltip initialisieren
+		tooltip.init(div);
 	},
 	// ermittelt, ob die Detail-Anzeige wirklich aufgebaut werden soll (für den Fall einer Suche)
 	//   id = String
@@ -1541,6 +1544,8 @@ let liste = {
 			anhaenge.makeIconList(beleg.an, cont_span, true);
 			div.appendChild(cont_span);
 		}
+		// Tooltip initialisieren
+		tooltip.init(div);
 	},
 	// Text-Links erkennen und in echte HTML-Links umwandeln
 	//   text = String
@@ -1671,6 +1676,7 @@ let liste = {
 			link.classList.remove("aktiv");
 			link.title = `Filter einblenden (${mod} + Umsch + F)`;
 		}
+		tooltip.init(link.parentNode);
 		// Scroll-Status wiederherstellen
 		if (scroll_bak) {
 			setTimeout(() => liste.statusScrollReset(), 500);
@@ -1748,6 +1754,7 @@ let liste = {
 			};
 			link.title = "<i>Aktuelle Sortierung:</i> " + typenMap[optionen.data.belegliste.sort_typ];
 		}
+		tooltip.init(link.parentNode);
 	},
 	// Header-Icons: Sortieren-Popup schließen
 	headerSortierenSchliessen () {
@@ -1836,6 +1843,7 @@ let liste = {
 			link.classList.remove("aktiv");
 			link.title = "Komplettanzeige des Belegs einblenden";
 		}
+		tooltip.init(link.parentNode);
 	},
 	// Header-Icons: Kürzung des Belegs aus-/einschalten
 	headerBelegKuerzen () {
@@ -1857,6 +1865,7 @@ let liste = {
 			link.classList.remove("aktiv");
 			link.title = "Belegkontext kürzen";
 		}
+		tooltip.init(link.parentNode);
 	},
 	// Header-Icons: Silbentrennung im Beleg aus-/einschalten
 	headerTrennung () {
@@ -1878,6 +1887,7 @@ let liste = {
 			link.classList.remove("aktiv");
 			link.title = "Silbentrennung anzeigen";
 		}
+		tooltip.init(link.parentNode);
 	},
 	// Header-Icons: Hervorhebung des Worts im Beleg und der Vorschau aus-/einschalten
 	headerWortHervorheben () {
@@ -1899,6 +1909,7 @@ let liste = {
 			link.classList.remove("aktiv");
 			link.title = "Wort hervorheben";
 		}
+		tooltip.init(link.parentNode);
 	},
 	// Header-Icons: Steuerung der Detailanzeige ändern
 	//   funktion = String
@@ -1971,6 +1982,7 @@ let liste = {
 			link.classList.remove("aktiv");
 			link.title = `${title[funktion]} einblenden`;
 		}
+		tooltip.init(link.parentNode);
 	},
 	// Header-Icons: das letzte angezeigte Icon soll rechts keine border, dafür runde Kanten haben
 	headerDetailsLetztesIcon () {

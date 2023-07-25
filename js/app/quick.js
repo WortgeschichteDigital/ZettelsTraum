@@ -247,6 +247,7 @@ let quick = {
 			a.title = title;
 			a.textContent = " ";
 		}
+		tooltip.init(bar);
 		// Events anhängen
 		document.querySelectorAll("#quick a").forEach(a => {
 			if (/^quick-(bearbeiten|ansicht)-/.test(a.id)) {

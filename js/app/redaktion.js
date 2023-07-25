@@ -289,6 +289,7 @@ let redaktion = {
 			dropdown.feld(input);
 			let a = dropdown.makeLink("dropdown-link-td", droptypen[droptyp].title, true);
 			td.appendChild(a);
+			tooltip.init(td);
 		}
 	},
 	// Fokus auf ein Input-Feld setzen

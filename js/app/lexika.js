@@ -81,6 +81,7 @@ let lexika = {
 				label.textContent = `${l[i]} +`;
 			}
 		}
+		tooltip.init(cont);
 	},
 	// Lexikon als überprüft kennzeichnen
 	//   input = Element

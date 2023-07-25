@@ -474,6 +474,7 @@ let dropdown = {
 			dropdown.auswahlKlick(opt);
 			drop.appendChild(opt);
 		});
+		tooltip.init(drop);
 		// Dropdown positionieren
 		dropdown.position();
 	},

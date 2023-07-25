@@ -52,6 +52,7 @@ let meta = {
 			speicherort.classList.add("kein-wert");
 		}
 		speicherort.innerHTML = pfad;
+		tooltip.init(speicherort.parentNode);
 		document.getElementById("meta-ve").textContent = `Version ${meta.ve}`;
 		document.getElementById("meta-re").textContent = data.re;
 	},
