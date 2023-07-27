@@ -1,0 +1,78 @@
+@charset "utf-8";
+
+/* Quick-Access-Einstellung --------------------- */
+#quick-ein > div {
+  margin-top: 40px;
+  max-width: 500px;
+}
+
+.icon-h-quick-ein {
+  -webkit-mask-image: url(../../img/checkbox.svg);
+  mask-image: url(../../img/checkbox.svg);
+}
+
+#quick-ein-cont {
+  padding: 10px;
+}
+
+#quick-ein-opts {
+  overflow-x: hidden;
+  overflow-y: auto;
+  max-height: 260px;
+  padding: 5px;
+  font-size: 14px;
+}
+
+#quick-ein-opts a {
+  display: block;
+  margin-bottom: 2px;
+  padding: 1px 5px;
+  overflow: hidden;
+  color: var(--text);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+#quick-ein-opts a:last-child {
+  margin-bottom: 0;
+}
+
+#quick-ein-opts p {
+  margin: 16px 0 2px;
+  padding: 1px 5px;
+  font-weight: bold;
+}
+
+#quick-ein-opts p:first-child {
+  margin-top: 0;
+}
+
+#quick-ein-over {
+  overflow: auto;
+  transition: max-height .5s ease;
+}
+
+#quick-ein-icons a {
+  display: inline-block;
+  margin: 5px;
+  padding: 2px;
+  width: 24px;
+  height: 24px;
+}
+
+:is(#quick-ein-icons, #quick-ein-cont) a.aktiv {
+  outline: 2px solid var(--farbe);
+  outline-offset: 0;
+}
+
+:is(#quick-ein-icons, #quick-ein-cont) a:focus {
+  background-color: var(--hover);
+}
+
+#quick-ein-buttons {
+  padding: 10px;
+}
+
+#quick-ein-buttons input:first-child {
+  margin-left: 0;
+}

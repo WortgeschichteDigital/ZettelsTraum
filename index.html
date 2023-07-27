@@ -28,6 +28,7 @@
 		<link rel="stylesheet" href="css/app/overlays-lexika.css">
 		<link rel="stylesheet" href="css/app/overlays-meta.css">
 		<link rel="stylesheet" href="css/app/overlays-notizen.css">
+		<link rel="stylesheet" href="css/app/overlays-quickEin.css">
 		<link rel="stylesheet" href="css/app/overlays-redaktion.css">
 		<link rel="stylesheet" href="css/app/overlays-redLit.css">
 		<link rel="stylesheet" href="css/app/overlays-redLitExport.css">
@@ -80,6 +81,7 @@
 		<script defer src="js/app/optionen.js"></script> <!-- defer! -->
 		<script src="js/app/overlay.js"></script>
 		<script src="js/app/quick.js"></script>
+		<script src="js/app/quickEin.js"></script>
 		<script src="js/app/dropdown.js"></script>
 		<script src="js/app/popup.js"></script>
 		<script src="js/app/redaktion.js"></script>
@@ -846,6 +848,24 @@
 					</section>
 				</div>
 			</div>
+		</div></div>
+
+		<!-- OVERLAY: Quick-Access-Einstellung -->
+		<div id="quick-ein" class="overlay aus"><div>
+			<h2><span class="icon-h icon-h-quick-ein"> </span
+				>Quick-Access-Einstellung<a href="#" class="icon-link icon-handbuch" title="Abschnitt im Handbuch öffnen" data-handbuch="einstellungen-quick"> </a><a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"> </a></h2>
+			<div id="quick-ein-cont">
+				<div id="quick-ein-over">
+					<h3>Einstellung</h3>
+					<div id="quick-ein-opts"></div>
+					<h3>Icon</h3>
+					<div id="quick-ein-icons"></div>
+				</div>
+			</div>
+			<div id="quick-ein-buttons"
+				><input type="button" value="Übernehmen" id="quick-ein-uebernehmen"
+				><input type="button" value="Schließen" id="quick-ein-schliessen"
+			></div>
 		</div></div>
 
 		<!-- OVERLAY: Karteisuche -->

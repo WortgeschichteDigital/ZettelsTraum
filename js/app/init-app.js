@@ -12,6 +12,9 @@ window.addEventListener("load", async () => {
 	// globales Datenobjekt für Kartei
 	window.data = {};
 
+	// Liste der Einstellungen für die Quick-Access-Bar ermitteln
+	quickEin.optionsDetect();
+
 	// IPC-LISTENER INITIALISIEREN
 	// Menüpunkte
 	ipcRenderer.on("app-karteisuche", () => karteisuche.oeffnen());
@@ -141,6 +144,7 @@ window.addEventListener("load", async () => {
 				"kopieren-liste-cont",
 				"meta-cont-over",
 				"notizen-feld",
+				"quick-ein-over",
 				"red-lit-suche-titel",
 				"red-meta-over",
 				"red-wi-cont-over",
@@ -343,6 +347,9 @@ window.addEventListener("load", async () => {
 	optionen.anwendenIconsDetailsListener(document.getElementById("einstellung-anzeige-icons-immer-an"));
 	optionen.anwendenHelleDunklerListener(document.getElementById("einstellung-helle-dunkler"));
 	optionen.anwendenSortErweitertListener(document.getElementById("einstellung-belegliste-sort-erweitert"));
+	// Quick-Access-Einstellung
+	document.getElementById("quick-ein-uebernehmen").addEventListener("click", () => quickEin.uebernehmen());
+	document.getElementById("quick-ein-schliessen").addEventListener("click", () => quickEin.schliessen());
 	// Formvarianten-Fenster
 	document.querySelectorAll("#stamm input").forEach(i => {
 		if (i.type === "button") {

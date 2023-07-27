@@ -107,6 +107,9 @@ let helfer = {
 			"notizen-feld": {
 				queries: ["#notizen-buttons"],
 			},
+			"quick-ein-over": {
+				queries: ["#quick-ein-buttons"],
+			},
 			"red-lit-suche-titel": {
 				queries: ["#red-lit-suche-treffer"],
 			},
