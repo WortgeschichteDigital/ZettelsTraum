@@ -639,7 +639,7 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
 
 					<p>Nach dem Laden einer <abbr title="Zettel’s Traum JSON">ZTJ</abbr>-Datei in <i class="app-name"></i> befinden sich die <abbr title="JavaScript Object Notation">JSON</abbr>-Daten im globalen Objekt <code class="quelltext">data</code>. Ihre Werte lassen sich dann in allen Funktionen des Hauptfensters durch einfache Statements wie <code class="quelltext">data.dc</code> lesen oder schreiben.</p>
 
-					<p>Alle Dateien sind gleich aufgebaut (<span class="obacht">Datenformat Version 24</span>):</p>
+					<p>Alle Dateien sind gleich aufgebaut (<span class="obacht">Datenformat Version&nbsp;25</span>):</p>
 
 					<table class="ztj">
 						<tr>
@@ -914,6 +914,12 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
 							<td class="datentyp">Number</td>
 							<td><code class="quelltext">0–5</code></td>
 							<td>Markierung mit Sternen; <code class="quelltext">0</code> = unmarkiert, <code class="quelltext">5</code> = 5 Sterne</td>
+						</tr>
+						<tr class="ztj-ebene2">
+							<td><p><code class="quelltext">bi</code></p></td>
+							<td class="datentyp">String</td>
+							<td><code class="quelltext">bibtex<br>| dereko<br>| dwds<br>| xml-fundstelle<br>| xml-mods</code></td>
+							<td>Importtyp; bezieht sich auf die importierten Daten, die in <code class="quelltext">bx</code> gespeichert werden;<br><span class="obacht">mit Version&nbsp;25 ergänzt</span></td>
 						</tr>
 						<tr class="ztj-ebene2">
 							<td><p><code class="quelltext">bl</code></p></td>

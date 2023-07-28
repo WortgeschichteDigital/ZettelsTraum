@@ -2474,6 +2474,7 @@ let redLit = {
 		if (autor.length === 2) {
 			data.ds.au = autor.join(", ");
 		}
+		data.ds.bi = "xml-fundstelle";
 		data.ds.bx = xmlStr;
 		let jahr = data.td.ti.match(/[0-9]{4}/g);
 		if (jahr) {
@@ -2509,6 +2510,7 @@ let redLit = {
 		} else if (td.hrsg.length) {
 			data.ds.au = `${td.hrsg.join("/")} (Hrsg.)`;
 		}
+		data.ds.bi = "xml-mods";
 		data.ds.bx = xmlStr;
 		data.ds.da = td.jahr;
 		if (td.url.some(i => /^https?:\/\/www\.deutschestextarchiv\.de\//.test(i))) {

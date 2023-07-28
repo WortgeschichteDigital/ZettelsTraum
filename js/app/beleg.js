@@ -78,6 +78,7 @@ let beleg = {
 			bc: false, // Buchung
 			bd: [], // Bedeutung
 			be: 0, // Bewertung (Markierung)
+			bi: "", // Importtyp (bezieht sich auf die Daten in bx)
 			bl: "", // Wortbildung
 			bs: "", // Beleg
 			bu: false, // Bücherdienstauftrag

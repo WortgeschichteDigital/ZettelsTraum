@@ -852,6 +852,7 @@ let belegImport = {
 			data.bs = bs.join("\n\n");
 		}
 		// Datensatz: Beleg-XML
+		data.bi = "dwds";
 		data.bx = clipboard;
 		// Datensatz: Quelle
 		let nQu = xml.querySelector("Fundstelle Bibl");
@@ -1063,6 +1064,7 @@ let belegImport = {
 			let parser = new DOMParser(),
 				xmlDoc = parser.parseFromString(xmlTxt, "text/xml"),
 				xmlDocIndent = helferXml.indent(xmlDoc);
+			data.ds.bi = "dwds";
 			data.ds.bx = new XMLSerializer().serializeToString(xmlDocIndent);
 		}
 	},
@@ -1912,6 +1914,7 @@ let belegImport = {
 			let data = belegImport.DateiDatensatz();
 			data.ds.au = "N. N."; // Autor
 			data.ds.bs = beleg.join("\n\n"); // Beleg
+			data.ds.bi = "dereko";
 			data.ds.bx = `${id}${quelle}\n\n${beleg.join("\n")}`; // Original
 			data.ds.kr = "IDS"; // Korpus
 			data.ds.no = belegImport.Datei.meta; // Notizen
@@ -2052,6 +2055,7 @@ let belegImport = {
 				data.ds.au = "N. N.";
 			}
 			// Originaltitel rekonstruieren
+			data.ds.bi = "bibtex";
 			data.ds.bx = `${item.startzeile}\n`;
 			for (let [k, v] of Object.entries(item)) {
 				if (k === "startzeile") {
