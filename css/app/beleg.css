@@ -109,6 +109,10 @@
 	width: auto;
 }
 
+#beleg th#beleg-meta {
+	padding-top: 30px;
+}
+
 #beleg td {
 	position: relative;
 	padding: 0 5px;
@@ -266,6 +270,39 @@ textarea#beleg-bs {
 #beleg-an .anhaenge-item:hover {
 	background-color: var(--hintergrund);
 }
+
+
+/* Metadaten ------------------------------------ */
+#beleg pre {
+	margin: 0;
+	border: 1px solid var(--linie);
+	padding: 2px 5px;
+	background-color: #fff;
+	font-family: "Noto Sans Mono", "Noto Sans Symbols2", monospace;
+	font-size: 14px;
+	line-height: 20px;
+	white-space: pre-wrap;
+	user-select: text;
+	tab-size: 2;
+	word-break: break-all;
+}
+
+#beleg .meta div {
+	border: 1px solid var(--linie);
+	padding: 2px 5px;
+	width: calc(100% - 12px);
+	background-color: #fff;
+	user-select: text;
+}
+
+#beleg-meta-toggle {
+	vertical-align: bottom;
+	display: inline-block;
+	margin-left: 5px;
+	width: 24px;
+	height: 24px;
+}
+
 
 /* Text-Tools ----------------------------------- */
 .text-tools {
@@ -448,6 +485,16 @@ textarea#beleg-bs {
 .icon-tools-underline {
 	-webkit-mask-image: url(../../img/text-unterstrichen.svg);
 	mask-image: url(../../img/text-unterstrichen.svg);
+}
+
+.icon-tools-meta-plus {
+	-webkit-mask-image: url(../../img/plus.svg);
+	mask-image: url(../../img/plus.svg);
+}
+
+.icon-tools-meta-minus {
+	-webkit-mask-image: url(../../img/minus.svg);
+	mask-image: url(../../img/minus.svg);
 }
 
 /* Leseansicht ---------------------------------- */

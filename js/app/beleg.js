@@ -183,6 +183,8 @@ let beleg = {
 		beleg.bewertungAnzeigen();
 		// Anhänge auflisten
 		anhaenge.auflisten(document.getElementById("beleg-an"), "beleg|data|an");
+		// Metadatenfelder füllen
+		beleg.metadaten();
 		// Änderungsmarkierung ausblenden
 		beleg.belegGeaendert(false);
 		// Formular einblenden
@@ -555,7 +557,11 @@ let beleg = {
 			}
 		}
 		// Änderungsdatum speichern
-		data.ka[beleg.id_karte].dm = new Date().toISOString();
+		const dm = new Date().toISOString();
+		beleg.data.dm = dm;
+		data.ka[beleg.id_karte].dm = dm;
+		// Metadatenfelder füllen
+		beleg.metadaten();
 		// Änderungsmarkierungen auffrischen
 		beleg.belegGeaendert(false);
 		beleg.listeGeaendert = true;
@@ -787,7 +793,11 @@ let beleg = {
 	toolsKlick (a) {
 		a.addEventListener("click", function(evt) {
 			evt.preventDefault();
-			if (this.classList.contains("icon-tools-kopieren")) {
+			if (this.id === "beleg-meta-toggle") {
+				beleg.metadatenToggle(true);
+			} else if (this.id === "beleg-meta-reimport") {
+				beleg.metadatenReimport();
+			} else if (this.classList.contains("icon-tools-kopieren")) {
 				beleg.toolsKopieren(this);
 			} else if (this.classList.contains("icon-tools-einfuegen")) {
 				beleg.toolsEinfuegen(this);
@@ -2821,5 +2831,122 @@ let beleg = {
 				}
 			},
 		});
+	},
+
+	// Metadaten: füllen oder auffrischen
+	metadaten () {
+		const felder = [ "dc", "dm", "bi", "bx" ];
+		for (const feld of felder) {
+			const cont = document.querySelector(`#beleg-${feld}`);
+			cont.replaceChildren();
+			if (beleg.data[feld] && feld === "bx") {
+				// Importdaten
+				const pre = document.createElement("pre");
+				cont.appendChild(pre);
+				if (/^<.+>/.test(beleg.data.bx)) {
+					const pretty = helferXml.prettyPrint({
+						xmlStr: beleg.data[feld],
+					});
+					pre.innerHTML = pretty;
+				} else {
+					pre.textContent = beleg.data[feld];
+				}
+			} else {
+				// weitere Datenfelder
+				let text = "–";
+				if (beleg.data[feld]) {
+					text = beleg.data[feld];
+				}
+				const div = document.createElement("div");
+				cont.appendChild(div);
+				div.textContent = text;
+			}
+		}
+	},
+
+	// Metadaten: Anzeige umschalten
+	//   optionenSpeichern = Booleand
+	metadatenToggle (optionenSpeichern) {
+		// Icon umstellen
+		const link = document.querySelector("#beleg-meta-toggle");
+		if (optionen.data.beleg.meta) {
+			link.classList.remove("icon-tools-meta-minus");
+			link.classList.add("icon-tools-meta-plus");
+			link.title = "Metadaten anzeigen";
+		} else {
+			link.classList.remove("icon-tools-meta-plus");
+			link.classList.add("icon-tools-meta-minus");
+			link.title = "Metadaten verbergen";
+		}
+		tooltip.init(link.parentNode);
+
+		// Anzeige der Tabellenzeilen umstellen
+		document.querySelectorAll("#beleg .meta").forEach(i => {
+			if (optionen.data.beleg.meta) {
+				i.classList.add("aus");
+			} else {
+				i.classList.remove("aus");
+			}
+		});
+
+		// Optionen auffrischen
+		optionen.data.beleg.meta = !optionen.data.beleg.meta;
+		if (optionenSpeichern) {
+			optionen.speichern();
+		}
+	},
+
+	// Metadaten: Daten aus bx erneut importieren
+	metadatenReimport () {
+		// keine Daten vorhanden
+		if (!beleg.data.bx) {
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Keine Importdaten vorhanden.",
+			});
+			return;
+		}
+
+		// Importtyp ermitteln
+		let bi = beleg.data.bi || "";
+		if (!bi) {
+			if (/@[a-z]+{/.test(beleg.data.bx)) {
+				bi = "bibtex";
+			} else if (/^<Beleg>/.test(beleg.data.bx)) {
+				bi = "dwds";
+			} else if (/^<Fundstelle /.test(beleg.data.bx)) {
+				bi = "xml-fundstelle";
+			} else if (/<mods /.test(beleg.data.bx)) {
+				bi = "xml-mods";
+			} else if (!/<.+>/.test(beleg.data.bx)) {
+				bi = "dereko";
+			}
+		}
+		if (!bi) {
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Der Importtyp konnte nicht ermittelt werden.",
+			});
+			return;
+		}
+
+		// Import neu anstoßen
+		if (bi === "bibtex") {
+			document.querySelector("#beleg-import-bibtex").click();
+			belegImport.BibTeX(beleg.data.bx, "");
+		} else if (bi === "dereko") {
+			document.querySelector("#beleg-import-dereko").click();
+			belegImport.DeReKo(beleg.data.bx, "", true);
+		} else if (bi === "dwds") {
+			document.querySelector("#beleg-import-dwds").click();
+			const obj = {
+				clipboard: beleg.data.bx,
+				xml: new DOMParser().parseFromString(beleg.data.bx, "text/xml")
+			};
+			belegImport.DWDS(obj, "");
+		} else if (/^xml/.test(bi)) {
+			document.querySelector("#beleg-import-xml").click();
+			belegImport.XML(beleg.data.bx, "");
+		}
 	},
 };

@@ -730,6 +730,28 @@ Aufrufdatum: 24. 12. 2019</pre>
 
 					<p class="info">Bei Klick auf einen Anhang wird dieser im Standardprogramm des Betriebssystems geöffnet. Die Anhänge in dieser Liste sind an die aktuelle Karteikarte gebunden. Anhänge, die nicht zu einer einzelnen Karteikarte, sondern zur Wortkartei selbst gehören, können über den Menüpunkt <a href="#menueKartei-anhaenge"><i>Kartei &gt; Anhänge</i></a> hinzugefügt werden.</p>
 
+					<p class="add-navi-details" id="karteikarte-meta"><b>Metadaten</b></p>
+
+					<p class="info">Neben den Datenfeldern, die Sie aktiv befüllen müssen, gibt es zu jeder Karteikarte Metadaten, in die beim Erstellen und Speichern einer Karte automatisch Daten eingetragen werden. Diese Datenfelder sind normalerweise ausgeblendet. Am rechten Rand neben der Überschrift <i>Metadaten</i> finden Sie das Icon <img src="../img/plus.svg" width="20" height="20" alt="">, mit dem Sie sich die Datenfelder anzeigen lassen können.</p>
+
+					<p class="info">Die Metadaten können nicht manuell geändert werden. Ihr Inhalt ist eher technischer Natur. Steht in einem Feld nur <code class="quelltext">–</code>, ist das Feld (noch) nicht gefüllt.</p>
+
+					<p class="add-navi-details"><b>Karteikarte erstellt:</b> Datum, zu dem die Karteikarte angelegt wurde</p>
+
+					<p class="info">Die Datumsangabe folgt dem ISO&nbsp;8601-Standard. Das Z am Ende steht für <q>Zulu</q>. Es zeigt an, dass es sich bei der Zeitangabe, um ein Datum der <a href="https://en.wikipedia.org/wiki/Coordinated_Universal_Time">koordinierten Weltzeit</a> handelt. Zulu-Zeit entspricht der <a href="https://en.wikipedia.org/wiki/Greenwich_Mean_Time" lang="en"><abbr title="Greenwich Mean Time">GMT</abbr></a>.</p>
+
+					<p class="add-navi-details"><b>Karteikarte geändert:</b> Datum, zu dem die Karteikarte zuletzt geändert wurde</p>
+
+					<p class="add-navi-details"><b>Importtyp:</b> eine Zeichenkette, die die Quelle der <i>Importdaten</i> beschreibt</p>
+
+					<p class="info">Die Zeichenkette erlaubt Rückschlüsse auf das Format der Rohdaten (die im folgenden Datenfeld stehen).</p>
+
+					<p class="add-navi-details"><b>Importdaten:</b> Rohdaten, aus denen heraus der Beleg ursprünglich importiert wurde</p>
+
+					<p class="info">Bei diesen Rohdaten kann es sich um <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Code handeln, um einen <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Datensatz oder um einen weitgehend unstrukturierten Belegtext (aus einem <a href="#karteikarte-derekoImport">DeReKo-Import</a>). Die Daten werden beim automatischen <a href="#karteikarte-importfunktion">Import</a> eines Belegs gespeichert.</p>
+
+					<p class="info">Mithilfe des Icons <img src="../img/pfeil-kreis.svg" width="20" height="20" alt=""> können Sie die Karte aus den Importdaten heraus neu befüllen lassen. Dabei werden ausschließlich die Rohdaten aus dem Datenfeld <i>Importdaten</i> genutzt. Bereits gefüllte Felder der Karteikarte werden überschrieben. (Es erscheint eine Warnmeldung.)</p>
+
 					<h2 id="karteikarte-importfunktion">Importfunktion</h2>
 
 					<p>Belege können automatisch aus dem <a href="#karteikarte-dtaImport"><abbr title="Deutschen Textarchiv">DTA</abbr></a>, dem <a href="#karteikarte-dwdsImport"><abbr title="Digitalen Wörterbuch der deutschen Sprache">DWDS</abbr></a> oder dem <a href="#karteikarte-derekoImport"><abbr title="Deutschen Referenzkorpus">DeReKo</abbr></a> importiert werden. Ferner besteht die Möglichkeit Titeldaten in bestimmten <a href="#karteikarte-xmlImport"><abbr title="Extensible Markup Language" lang="en">XML</abbr></a>- oder im <a href="#karteikarte-bibtexImport" class="bibtex"><span>Bib</span>T<span>E</span>X</a>-Format in eine Karteikarte zu laden. Für all diese Funktionen gibt es in der <a href="#karteikarte-formularansicht">Formularansicht der Karteikarte</a> unter dem Titel <i>Import</i> entsprechende Formulare. Bei den Textfeldern und Checkboxes in diesen Formularen handelt es sich <em>nicht</em> um Datenfelder. Sie werden beim Speichern der Karteikarte somit nicht berücksichtigt.</p>

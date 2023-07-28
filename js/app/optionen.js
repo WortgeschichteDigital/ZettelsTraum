@@ -26,6 +26,8 @@ let optionen = {
 			kuerzen: true,
 			// Trennstriche und Seitenumbrüche in der Leseansicht anzeigen
 			trennung: true,
+			// Anzeige Metadatenfelder
+			meta: false,
 		},
 		// Filterleiste
 		filter: {
@@ -311,14 +313,17 @@ let optionen = {
 			if (!data.hasOwnProperty(block)) {
 				continue;
 			}
-			if (!/^(fenster|fenster-bedeutungen|einstellungen|kopieren|tags|personen|letzter_pfad|literatur-db)$/.test(block)) {
+			if (!/^(beleg|fenster|fenster-bedeutungen|einstellungen|kopieren|tags|personen|letzter_pfad|literatur-db)$/.test(block)) {
 				delete data[block];
 				// diese Einstellungen werden nicht aus einem anderen Fenster übernommen
 				// (das führt nur zu einem unschönen Springen):
-				//   * beleg (steuert die Anzeige der Leseansicht der Karteikarte)
 				//   * filter (steuert die Einstellungen der Filterleiste)
 				//   * belegliste (steuert die Anzeige der Belegliste)
 				//   * zuletzt (wird extra behandelt und wenn nötig an alle Renderer-Prozesse geschickt)
+			} else if (block === "beleg") {
+				// im Beleg sollte die Anzeige der Leseansicht nicht aufgefrischt werden (unschönes Springen)
+				delete data.beleg.kuerzen;
+				delete data.beleg.trennung;
 			}
 		}
 		// Daten einlesen
@@ -401,6 +406,8 @@ let optionen = {
 		beleg.ctrlTrennungAnzeige();
 		// maximale Breite des Notizen-Fensters
 		optionen.anwendenNotizenMaxBreite();
+		// Anzeige der Metadatenfelder in der Karteikarte
+		optionen.anwendenMetadatenfelder();
 		// Optionen im Optionen-Fenster eintragen
 		optionen.anwendenEinstellungen();
 	},
@@ -421,6 +428,8 @@ let optionen = {
 		liste.headerSortierenAnzeige();
 		// maximale Breite des Notizen-Fensters
 		optionen.anwendenNotizenMaxBreite();
+		// Anzeige der Metadatenfelder in der Karteikarte
+		optionen.anwendenMetadatenfelder();
 		// Optionen im Optionen-Fenster eintragen
 		optionen.anwendenEinstellungen();
 		// ggf. Update-Hinweis einblenden
@@ -477,6 +486,15 @@ let optionen = {
 	anwendenNotizenMaxBreite () {
 		const breite = optionen.data.einstellungen["notizen-max-breite"];
 		document.querySelector("#notizen > div").style.maxWidth = `${breite}px`;
+	},
+	// Anzeige der Metadatenfelder in der Karteikarte
+	anwendenMetadatenfelder () {
+		const toggle = document.querySelector("#beleg-meta-toggle");
+		if (optionen.data.beleg.meta && toggle.classList.contains("icon-tools-meta-plus") ||
+				!optionen.data.beleg.meta && toggle.classList.contains("icon-tools-meta-minus")) {
+			optionen.data.beleg.meta = !optionen.data.beleg.meta;
+			beleg.metadatenToggle(false);
+		}
 	},
 	// Icons für die Detail-Anzeige im Kopf der Belegliste ggf. immer sichtbar (Listener)
 	//   input = Element
