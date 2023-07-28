@@ -50,6 +50,7 @@
 /* Tabelle des Formulars ------------------------ */
 #beleg table {
 	margin: 0 auto 20px auto;
+	table-layout: fixed;
 	border-collapse: separate;
 	border-spacing: 0;
 	border-radius: 10px;
