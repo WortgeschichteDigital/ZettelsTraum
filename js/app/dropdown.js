@@ -231,6 +231,8 @@ let dropdown = {
 				/^redaktion-person/.test(feld_id) ||
 				/^karteisuche-(redaktion-)*person-/.test(feld_id)) {
 			dropdown.data = [...optionen.data.personen];
+		} else if (feld_id === "einstellung-sprache") {
+			dropdown.data = Object.keys(optionen.sprachen);
 		} else if (/^redaktion-ereignis/.test(feld_id) ||
 				/^karteisuche-redaktion-ereignis-/.test(feld_id)) {
 			dropdown.data = [...Object.keys(redaktion.ereignisse)];

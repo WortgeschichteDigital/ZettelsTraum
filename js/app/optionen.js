@@ -88,6 +88,8 @@ let optionen = {
 			// ALLGEMEINES
 			// für diesen Computer registrierte BearbeiterIn
 			bearbeiterin: "",
+			// Sprache der Fenster-Menüs
+			sprache: "de",
 			// Timeout für Anfrage an das DTA in Sekunden
 			// (einfacher als String, wird bei Bedarf in Number konvertiert)
 			timeout: "10",
@@ -292,6 +294,13 @@ let optionen = {
 		// Pfad zur Literaturdatenbank
 		"literatur-db": "",
 	},
+	// Sprachen Fenster-Menü
+	sprachen: {
+		Deutsch: "de",
+		English: "en",
+		Français: "fr",
+		Italiano: "it",
+	},
 	// Optionen on-the-fly empfangen
 	// (wird aufgerufen, wenn in einem anderen Hauptfenster Optionen geändert wurden)
 	//   data = Object
@@ -424,6 +433,13 @@ let optionen = {
 			let e = ee[i].id.replace(/^einstellung-/, "");
 			if (ee[i].type === "checkbox") {
 				ee[i].checked = optionen.data.einstellungen[e] ? true : false;
+			} else if (e === "sprache") {
+				for (const [ k, v ] of Object.entries(optionen.sprachen)) {
+					if (v === optionen.data.einstellungen.sprache) {
+						ee[i].value = k;
+						break;
+					}
+				}
 			} else if (ee[i].type === "text" || ee[i].type === "number") {
 				ee[i].value = optionen.data.einstellungen[e] || "";
 			}
@@ -1236,6 +1252,10 @@ let optionen = {
 			optionen.data.einstellungen[e] = ele.checked;
 		} else if (ele.type === "text" || ele.type === "number") {
 			optionen.data.einstellungen[e] = ele.value;
+		}
+		// Sprache Fenster-Menüs
+		if (e === "sprache") {
+			optionen.data.einstellungen.sprache = optionen.sprachen[ele.value];
 		}
 		// Kartei > Speichern
 		if (ele.name === "einstellung-speichern") {
