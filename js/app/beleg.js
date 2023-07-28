@@ -579,9 +579,10 @@ let beleg = {
 	selectFormEle (ele) {
 		let hBody = document.querySelector("body > header").offsetHeight,
 			hKarte = document.querySelector("#beleg > header").offsetHeight,
+			hTitle = document.querySelector("#beleg-titel").offsetHeight,
 			quick = document.getElementById("quick"),
 			hQuick = quick.offsetHeight,
-			h = hBody + hKarte,
+			h = hBody + hKarte + hTitle,
 			rect = ele.getBoundingClientRect();
 		if (quick.classList.contains("an")) {
 			h += hQuick;
@@ -2283,11 +2284,12 @@ let beleg = {
 			quick = document.getElementById("quick"),
 			quick_height = quick.offsetHeight;
 		const header_height = document.querySelector("body > header").offsetHeight,
-			beleg_header_height = document.querySelector("#beleg header").offsetHeight;
+			beleg_header_height = document.querySelector("#beleg > header").offsetHeight,
+			beleg_title_height = document.querySelector("#beleg-titel").offsetHeight;
 		if (!quick.classList.contains("an")) {
 			quick_height = 0;
 		}
-		const platz = window.innerHeight - header_height - beleg_header_height - quick_height;
+		const platz = window.innerHeight - header_height - beleg_header_height - beleg_title_height - quick_height;
 		window.scrollTo({
 			left: 0,
 			top: window.scrollY + rect.bottom - window.innerHeight + Math.round(platz / 2),
