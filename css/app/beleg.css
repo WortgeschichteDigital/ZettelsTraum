@@ -79,6 +79,10 @@
 	text-align: left;
 }
 
+#beleg.quick h2 {
+	top: 133px;
+}
+
 #beleg-geaendert {
 	margin-left: 10px;
 }
