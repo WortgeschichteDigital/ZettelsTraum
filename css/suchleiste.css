@@ -2,78 +2,78 @@
 
 /* Icon-Links ----------------------------------- */
 .icon-hoch {
-	-webkit-mask-image: url(../img/pfeil-gerade-hoch.svg);
-	mask-image: url(../img/pfeil-gerade-hoch.svg);
+  -webkit-mask-image: url(../img/pfeil-gerade-hoch.svg);
+  mask-image: url(../img/pfeil-gerade-hoch.svg);
 }
 
 .icon-runter {
-	-webkit-mask-image: url(../img/pfeil-gerade-runter.svg);
-	mask-image: url(../img/pfeil-gerade-runter.svg);
+  -webkit-mask-image: url(../img/pfeil-gerade-runter.svg);
+  mask-image: url(../img/pfeil-gerade-runter.svg);
 }
 
 /* Layout Suchleiste ---------------------------- */
 #suchleiste {
-	position: fixed;
-	bottom: -41px;
-	left: 0;
-	z-index: 1;
-	border-top: 1px solid var(--linie);
-	padding: 5px 54px 5px 15px;
-	height: 30px;
-	width: calc(100% - 69px);
-	overflow: hidden;
-	background-color: var(--hintergrund);
-	color: var(--textFarbe);
-	text-overflow: ellipsis;
-	white-space: nowrap;
-	transition: bottom .5s ease;
+  position: fixed;
+  bottom: -41px;
+  left: 0;
+  z-index: 1;
+  border-top: 1px solid var(--linie);
+  padding: 5px 54px 5px 15px;
+  height: 30px;
+  width: calc(100% - 69px);
+  overflow: hidden;
+  background-color: var(--hintergrund);
+  color: var(--textFarbe);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  transition: bottom .5s ease;
 }
 
 #suchleiste.an {
-	bottom: 0;
+  bottom: 0;
 }
 
 #suchleiste input[type="text"] {
-	margin-right: 15px;
-	width: 50%;
-	min-width: 100px;
-	max-width: 300px;
+  margin-right: 15px;
+  width: 50%;
+  min-width: 100px;
+  max-width: 300px;
 }
 
 #suchleiste input[type="text"].keine-treffer {
-	background-color: var(--hintergrundRot);
+  background-color: var(--hintergrundRot);
 }
 
 #suchleiste input[type="checkbox"] {
-	margin-left: 15px;
+  margin-left: 15px;
 }
 
 #suchleiste-schliessen {
-	position: absolute;
-	top: 8px;
-	right: 8px;
+  position: absolute;
+  top: 8px;
+  right: 8px;
 }
 
 /* Markierungen --------------------------------- */
 mark.suchleiste {
-	border-radius: 3px;
-	padding: 0 3px;
-	background-color: var(--farbeOrange);
-	color: #fff;
+  border-radius: 3px;
+  padding: 0 3px;
+  background-color: var(--farbeOrange);
+  color: #fff;
 }
 
 mark.suchleiste-kein-start {
-	padding-left: 0;
-	border-top-left-radius: 0;
-	border-bottom-left-radius: 0;
+  padding-left: 0;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
 }
 
 mark.suchleiste-kein-ende {
-	padding-right: 0;
-	border-top-right-radius: 0;
-	border-bottom-right-radius: 0;
+  padding-right: 0;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
 }
 
 mark.suchleiste-aktiv {
-	background-color: var(--hintergrundGruen);
+  background-color: var(--hintergrundGruen);
 }

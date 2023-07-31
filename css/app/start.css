@@ -2,81 +2,81 @@
 
 /* Startsektion --------------------------------- */
 #start {
-	padding: 0 25px 20px 25px;
-	text-align: center;
+  padding: 0 25px 20px 25px;
+  text-align: center;
 }
 
 /* Buttons -------------------------------------- */
 #start input {
-	margin: 65px 25px 0 0;
-	border-radius: 3px;
-	padding: 2px 0 2px 40px;
-	width: 205px;
-	background: var(--farbeB) url(../../img/dokument-plus-weiss-32.svg) no-repeat 4px center;
-	color: #fff;
-	font-size: 20px;
-	line-height: 32px;
-	text-align: left;
+  margin: 65px 25px 0 0;
+  border-radius: 3px;
+  padding: 2px 0 2px 40px;
+  width: 205px;
+  background: var(--farbeB) url(../../img/dokument-plus-weiss-32.svg) no-repeat 4px center;
+  color: #fff;
+  font-size: 20px;
+  line-height: 32px;
+  text-align: left;
 }
 
 #start input + input {
-	margin-right: 0;
-	background-image: url(../../img/oeffnen-weiss-32.svg);
+  margin-right: 0;
+  background-image: url(../../img/oeffnen-weiss-32.svg);
 }
 
 #start input:focus {
-	background-color: var(--farbe);
+  background-color: var(--farbe);
 }
 
 /* List der zuletzt verwendeten Karteien -------- */
 #start-zuletzt {
-	margin-top: 75px;
-	text-align: left;
+  margin-top: 75px;
+  text-align: left;
 }
 
 .icon-h-zuletzt {
-	-webkit-mask-image: url(../../img/uhr.svg);
-	mask-image: url(../../img/uhr.svg);
+  -webkit-mask-image: url(../../img/uhr.svg);
+  mask-image: url(../../img/uhr.svg);
 }
 
 #start-liste {
-	margin: 0;
-	padding-left: 0;
-	list-style-type: none;
+  margin: 0;
+  padding-left: 0;
+  list-style-type: none;
 }
 
 #start-liste li {
-	border-bottom: 1px solid var(--linie);
+  border-bottom: 1px solid var(--linie);
 }
 
 #start-liste a {
-	position: relative;
-	display: block;
-	padding: 0 10px;
-	height: 40px;
-	overflow: hidden;
-	line-height: 40px;
-	text-overflow: ellipsis;
-	white-space: nowrap;
+  position: relative;
+  display: block;
+  padding: 0 10px;
+  height: 40px;
+  overflow: hidden;
+  line-height: 40px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 #start-liste a:focus,
 #start-liste a:hover {
-	background-color: var(--hover);
+  background-color: var(--hover);
 }
 
 #start-liste span:first-child {
-	font-size: 20px;
+  font-size: 20px;
 }
 
 #start-liste span + span {
-	margin-left: 15px;
-	color: var(--text);
-	font-size: 12px;
+  margin-left: 15px;
+  color: var(--text);
+  font-size: 12px;
 }
 
 #start-liste img {
-	position: absolute;
-	top: 0;
-	left: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
 }

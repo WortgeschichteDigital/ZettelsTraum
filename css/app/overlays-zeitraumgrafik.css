@@ -2,25 +2,25 @@
 
 /* Zeitraumgrafik ------------------------------- */
 #zeitraumgrafik > div {
-	margin-top: 40px;
-	max-width: 740px;
+  margin-top: 40px;
+  max-width: 740px;
 }
 
 .icon-h-zeitraumgrafik {
-	-webkit-mask-image: url(../../img/diagramm.svg);
-	mask-image: url(../../img/diagramm.svg);
+  -webkit-mask-image: url(../../img/diagramm.svg);
+  mask-image: url(../../img/diagramm.svg);
 }
 
 #zeitraumgrafik-cont {
-	padding: 10px;
+  padding: 10px;
 }
 
 #zeitraumgrafik-cont-over {
-	overflow: auto;
-	transition: max-height .5s ease;
+  overflow: auto;
+  transition: max-height .5s ease;
 }
 
 #zeitraumgrafik-cont-over canvas {
-	display: block;
-	margin: 0 auto;
+  display: block;
+  margin: 0 auto;
 }

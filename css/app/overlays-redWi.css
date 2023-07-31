@@ -2,184 +2,184 @@
 
 /* Redaktion: Wortinformationen ----------------- */
 #red-wi > div {
-	margin-top: 40px;
-	max-width: 650px;
+  margin-top: 40px;
+  max-width: 650px;
 }
 
 /* Formular ------------------------------------- */
 #red-wi-form {
-	padding: 10px;
+  padding: 10px;
 }
 
 #red-wi-form p:first-child {
-	position: relative;
+  position: relative;
 }
 
 #red-wi-form p:last-child {
-	margin-bottom: 0;
+  margin-bottom: 0;
 }
 
 #red-wi-form p:first-child > span {
-	display: inline-block;
+  display: inline-block;
 }
 
 #red-wi-form p:first-child > span:nth-child(2),
 #red-wi-form p:first-child > span:nth-child(3) {
-	margin-left: -14px;
+  margin-left: -14px;
 }
 
 #red-wi-form p:first-child input {
-	width: 119px;
-	cursor: default;
+  width: 119px;
+  cursor: default;
 }
 
 #red-wi-form p:not(:first-child) {
-	white-space: nowrap;
+  white-space: nowrap;
 }
 
 #red-wi-form p:not(:first-child) input:nth-child(3) {
-	margin-left: 10px;
+  margin-left: 10px;
 }
 
 #red-wi-text > input:first-child,
 #red-wi-intern > input:first-child {
-	width: calc(38% - 29px - 2px - 5px); /* padding, border, margin / 2 */
+  width: calc(38% - 29px - 2px - 5px); /* padding, border, margin / 2 */
 }
 
 #red-wi-text > input:nth-child(3),
 #red-wi-intern > input:nth-child(3) {
-	width: calc(38% - 10px - 2px - 5px); /* padding, border, margin / 2 */
+  width: calc(38% - 10px - 2px - 5px); /* padding, border, margin / 2 */
 }
 
 #red-wi-text .dropdown-cont,
 #red-wi-intern .dropdown-cont {
-	display: inline-block;
-	margin-left: 10px;
-	width: calc(23% - 4px);
+  display: inline-block;
+  margin-left: 10px;
+  width: calc(23% - 4px);
 }
 
 #red-wi-text .dropdown-cont input,
 #red-wi-intern .dropdown-cont input {
-	width: calc(100% - 29px - 2px); /* padding, border */
+  width: calc(100% - 29px - 2px); /* padding, border */
 }
 
 #red-wi-extern input:first-child {
-	width: calc(40% - 29px - 2px - 5px - 81px); /* padding, border, margin / 2, date / 2 */
+  width: calc(40% - 29px - 2px - 5px - 81px); /* padding, border, margin / 2, date / 2 */
 }
 
 #red-wi-extern input:nth-child(3) {
-	width: calc(60% - 10px - 2px - 5px - 81px); /* padding, border, margins / 2, date / 2 */
+  width: calc(60% - 10px - 2px - 5px - 81px); /* padding, border, margins / 2, date / 2 */
 }
 
 #red-wi-extern input[type="date"] {
-	margin-left: 10px;
-	width: 140px;
+  margin-left: 10px;
+  width: 140px;
 }
 
 #red-wi-extern input:invalid {
-	color: var(--textSehrHell);
+  color: var(--textSehrHell);
 }
 
 #red-wi-form input[type="button"] {
-	margin-left: 10px;
-	width: 150px;
-	text-align: left;
+  margin-left: 10px;
+  width: 150px;
+  text-align: left;
 }
 
 #red-wi-form input[type="button"]:first-child {
-	margin-left: 0;
+  margin-left: 0;
 }
 
 /* weitere Styles zu #red-wi-xml → liste.css */
 #red-wi-xml {
-	position: absolute;
-	right: 0;
-	top: 6px;
+  position: absolute;
+  right: 0;
+  top: 6px;
 }
 
 /* Content -------------------------------------- */
 #red-wi-cont {
-	margin-top: 5px;
-	padding: 0 10px 10px 10px;
+  margin-top: 5px;
+  padding: 0 10px 10px 10px;
 }
 
 #red-wi-cont-over {
-	overflow: auto;
-	transition: max-height .5s ease;
+  overflow: auto;
+  transition: max-height .5s ease;
 }
 
 #red-wi-cont h3 {
-	margin: 15px 0 5px 0;
+  margin: 15px 0 5px 0;
 }
 
 #red-wi-cont h3:first-child {
-	margin-top: 0;
+  margin-top: 0;
 }
 
 #red-wi-cont p {
-	margin: 0 25px 5px 25px;
-	border-radius: 3px;
-	background-color: transparent;
-	white-space: nowrap;
-	transition: background-color .5s ease;
+  margin: 0 25px 5px 25px;
+  border-radius: 3px;
+  background-color: transparent;
+  white-space: nowrap;
+  transition: background-color .5s ease;
 }
 
 #red-wi-cont p.update {
-	background-color: var(--highlight);
+  background-color: var(--highlight);
 }
 
 #red-wi-cont p:hover {
-	background-color: var(--hover);
+  background-color: var(--hover);
 }
 
 #red-wi-cont a {
-	vertical-align: bottom;
-	background-color: var(--iconHell);
+  vertical-align: bottom;
+  background-color: var(--iconHell);
 }
 
 #red-wi-cont a:focus {
-	background-color: var(--farbe);
+  background-color: var(--farbe);
 }
 
 #red-wi-cont a:hover {
-	background-color: var(--text);
+  background-color: var(--text);
 }
 
 #red-wi-cont a.icon-xml {
-	overflow: hidden;
-	width: 0;
-	transition: width .3s ease;
+  overflow: hidden;
+  width: 0;
+  transition: width .3s ease;
 }
 
 #red-wi-cont p:hover a.icon-xml {
-	width: 24px;
+  width: 24px;
 }
 
 #red-wi-cont .text {
-	margin-left: 10px;
+  margin-left: 10px;
 }
 
 #red-wi-cont .detail {
-	margin-left: 5px;
-	color: var(--textHell);
+  margin-left: 5px;
+  color: var(--textHell);
 }
 
 /* Kopieren ------------------------------------- */
 #red-wi-copy {
-	padding: 0 10px 10px 10px;
+  padding: 0 10px 10px 10px;
 }
 
 #red-wi-copy p{
-	margin-bottom: 0;
+  margin-bottom: 0;
 }
 
 #red-wi-copy input[type="text"] {
-	width: 119px;
-	cursor: default;
+  width: 119px;
+  cursor: default;
 }
 
 #red-wi-copy input[type="button"] {
-	margin-left: 10px;
-	width: 150px;
-	text-align: left;
+  margin-left: 10px;
+  width: 150px;
+  text-align: left;
 }

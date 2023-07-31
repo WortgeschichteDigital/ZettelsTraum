@@ -2,36 +2,36 @@
 
 /* Überprüfte Lexika ---------------------------- */
 #lexika > div {
-	margin-top: 40px;
-	max-width: 500px;
+  margin-top: 40px;
+  max-width: 500px;
 }
 
 .icon-h-lexika {
-	-webkit-mask-image: url(../../img/buecher.svg);
-	mask-image: url(../../img/buecher.svg);
+  -webkit-mask-image: url(../../img/buecher.svg);
+  mask-image: url(../../img/buecher.svg);
 }
 
 #lexika-cont {
-	padding: 10px;
+  padding: 10px;
 }
 
 #lexika-cont .input-text {
-	margin: 5px 0 0 0;
+  margin: 5px 0 0 0;
 }
 
 #lexika-liste {
-	display: flex;
-	flex-direction: column;
-	flex-wrap: wrap;
-	height: 203px;
-	overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  height: 203px;
+  overflow: hidden;
 }
 
 #lexika-liste p {
-	margin-bottom: 5px;
-	padding: 0 10px 0 1px; /* 1px links, damit die linke Grenze des Outline onfocus angezeigt wird */
-	width: 150px;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	white-space: nowrap;
+  margin-bottom: 5px;
+  padding: 0 10px 0 1px; /* 1px links, damit die linke Grenze des Outline onfocus angezeigt wird */
+  width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }

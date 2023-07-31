@@ -5,16 +5,16 @@ rm -f "/usr/local/bin/zettelstraum"
 
 # ZTJ-Dateityp entfernen
 if ! command -v xdg-mime >/dev/null 2>&1; then
-	exit 1
+  exit 1
 fi
 xml=/tmp/x-ztj.xml
 cat > $xml <<EOF
 <?xml version="1.0"?>
 <mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
-	<mime-type type="application/x-ztj">
-		<comment>Zettel’s Traum JSON-Datei</comment>
-		<glob pattern="*.ztj"/>
-	</mime-type>
+  <mime-type type="application/x-ztj">
+    <comment>Zettel’s Traum JSON-Datei</comment>
+    <glob pattern="*.ztj"/>
+  </mime-type>
 </mime-info>
 EOF
 xdg-mime uninstall $xml

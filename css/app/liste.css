@@ -2,402 +2,402 @@
 
 /* Listensektion -------------------------------- */
 @keyframes liste-re {
-	0% {
-		transform: translateX(var(--filterKeyframe));
-	}
-	100% {
-		transform: translateX(0);
-	}
+  0% {
+    transform: translateX(var(--filterKeyframe));
+  }
+  100% {
+    transform: translateX(0);
+  }
 }
 
 @keyframes liste-li {
-	0% {
-		transform: translateX(0);
-	}
-	100% {
-		transform: translateX(var(--filterKeyframe));
-	}
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(var(--filterKeyframe));
+  }
 }
 
 #liste {
-	position: relative; /* sonst bekomm ich keine offsetTop-Werte in der Belegliste */
-	display: grid;
-	grid-template-columns: var(--filter) calc(100% - var(--filter) - 15px); /* minus Breite Filterleiste und Gap */
-	grid-gap: 15px;
-	padding-left: 0;
-	width: calc(100% - 10px); /* minus padding-right; diese Width ist für die Animation wichtig */
-	height: calc(100vh - 70px);
-	animation-name: liste-re;
-	animation-timing-function: ease;
-	animation-duration: .5s;
-	animation-fill-mode: forwards;
-	transition: width .5s ease, margin-top .5s ease;
+  position: relative; /* sonst bekomm ich keine offsetTop-Werte in der Belegliste */
+  display: grid;
+  grid-template-columns: var(--filter) calc(100% - var(--filter) - 15px); /* minus Breite Filterleiste und Gap */
+  grid-gap: 15px;
+  padding-left: 0;
+  width: calc(100% - 10px); /* minus padding-right; diese Width ist für die Animation wichtig */
+  height: calc(100vh - 70px);
+  animation-name: liste-re;
+  animation-timing-function: ease;
+  animation-duration: .5s;
+  animation-fill-mode: forwards;
+  transition: width .5s ease, margin-top .5s ease;
 }
 
 #liste.quick {
-	margin-top: 99px;
-	height: calc(100vh - 99px);
+  margin-top: 99px;
+  height: calc(100vh - 99px);
 }
 
 #liste.filter-aus {
-	width: calc(100% + var(--filter) - 5px); /* plus Breite Filterleiste und minus verstecktem Gap */
-	animation-name: liste-li;
+  width: calc(100% + var(--filter) - 5px); /* plus Breite Filterleiste und minus verstecktem Gap */
+  animation-name: liste-li;
 }
 
 #liste.preload { /* damit beim ersten Anzeigen der Liste keine Animation läuft */
-	animation-duration: 0s;
+  animation-duration: 0s;
 }
 
 #liste > div:first-child {
-	background-color: var(--hintergrund);
+  background-color: var(--hintergrund);
 }
 
 :root {
-	--filter: 315px;
-	--filterKeyframe: -320px;
+  --filter: 315px;
+  --filterKeyframe: -320px;
 }
 
 @media (min-width: 780px) {
-	:root {
-		--filter: 40vw;
-		--filterKeyframe: calc(-40vw - 5px);
-	}
+  :root {
+    --filter: 40vw;
+    --filterKeyframe: calc(-40vw - 5px);
+  }
 }
 
 @media (min-width: 1500px) {
-	:root {
-		--filter: 600px;
-		--filterKeyframe: -605px;
-	}
+  :root {
+    --filter: 600px;
+    --filterKeyframe: -605px;
+  }
 }
 
 /* Filterleiste --------------------------------- */
 #liste-filter {
-	position: sticky;
-	top: 70px; /* 70px + margin-top über dem ersten Element in #liste-filter */
-	max-height: calc(100vh - 70px);
-	overflow: hidden;
-	transition: top .5s ease;
+  position: sticky;
+  top: 70px; /* 70px + margin-top über dem ersten Element in #liste-filter */
+  max-height: calc(100vh - 70px);
+  overflow: hidden;
+  transition: top .5s ease;
 }
 
 .quick #liste-filter {
-	top: 99px; /* 99px + margin-top über dem ersten Element in #liste-filter */
-	max-height: calc(100vh - 99px);
+  top: 99px; /* 99px + margin-top über dem ersten Element in #liste-filter */
+  max-height: calc(100vh - 99px);
 }
 
 #liste-filter header {
-	padding: 0 0 10px 10px;
-	height: 24px;
-	background-color: #fff;
+  padding: 0 0 10px 10px;
+  height: 24px;
+  background-color: #fff;
 }
 
 #liste-filter-dynamisch {
-	display: block;
+  display: block;
 }
 
 .filter-kopf {
-	position: relative;
-	display: block;
-	margin: 0 0 10px 0;
-	padding: 3px 5px 2px 5px; /* ein bisschen krum, damit der Kopf exakt dieselbe Höhe hat, wie ein Listenkopf */
-	background-color: var(--farbeB);
-	color: #fff;
+  position: relative;
+  display: block;
+  margin: 0 0 10px 0;
+  padding: 3px 5px 2px 5px; /* ein bisschen krum, damit der Kopf exakt dieselbe Höhe hat, wie ein Listenkopf */
+  background-color: var(--farbeB);
+  color: #fff;
 }
 
 .filter-kopf:first-child {
-	margin-top: 0;
+  margin-top: 0;
 }
 
 .filter-kopf.aktiv {
-	background-color: var(--aktiv);
+  background-color: var(--aktiv);
 }
 
 .filter-kopf:focus,
 .filter-kopf.aktiv:focus {
-	background-color: var(--farbe);
+  background-color: var(--farbe);
 }
 
 .filter-kopf span.filter-bedeutungen-details {
-	display: inline-block;
-	vertical-align: bottom;
-	max-width: 50%;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	white-space: nowrap;
+  display: inline-block;
+  vertical-align: bottom;
+  max-width: 50%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .filter-kopf span.filter-reset,
 .filter-kopf span.filter-notizen {
-	position: absolute;
-	right: 5px;
-	top: 3px;
-	width: 24px;
-	height: 24px;
-	background-color: transparent;
-	-webkit-mask-image: url(../../img/pfeil-kreis-weiss.svg);
-	mask-image: url(../../img/pfeil-kreis-weiss.svg);
+  position: absolute;
+  right: 5px;
+  top: 3px;
+  width: 24px;
+  height: 24px;
+  background-color: transparent;
+  -webkit-mask-image: url(../../img/pfeil-kreis-weiss.svg);
+  mask-image: url(../../img/pfeil-kreis-weiss.svg);
 }
 
 .filter-kopf span.filter-notizen {
-	-webkit-mask-image: url(../../img/stift-weiss.svg);
-	mask-image: url(../../img/stift-weiss.svg);
+  -webkit-mask-image: url(../../img/stift-weiss.svg);
+  mask-image: url(../../img/stift-weiss.svg);
 }
 
 .filter-kopf:hover span.filter-reset,
 .filter-kopf:hover span.filter-notizen {
-	background-color: #fff;
+  background-color: #fff;
 }
 
 .filter-cont {
-	margin: 0 10px 10px 9px; /* vgl. .filter-cont p */
+  margin: 0 10px 10px 9px; /* vgl. .filter-cont p */
 }
 
 .filter-cont-max {
-	margin-bottom: 10px;
-	max-height: 348px;
-	overflow-y: auto;
+  margin-bottom: 10px;
+  max-height: 348px;
+  overflow-y: auto;
 }
 
 .filter-cont-max p:last-child {
-	margin-bottom: 0;
+  margin-bottom: 0;
 }
 
 .filter-cont.blenden {
-	overflow: hidden;
-	transition: height .3s ease, margin-bottom .3s ease;
+  overflow: hidden;
+  transition: height .3s ease, margin-bottom .3s ease;
 }
 
 .filter-cont a:focus {
-	text-decoration: underline;
+  text-decoration: underline;
 }
 
 .filter-cont p {
-	margin-bottom: 0;
-	padding: 0 0 5px 25px; /* 25px, sonst wird der outline links abgeschnitten; vgl. .filter-cont */
-	text-indent: -24px;
+  margin-bottom: 0;
+  padding: 0 0 5px 25px; /* 25px, sonst wird der outline links abgeschnitten; vgl. .filter-cont */
+  text-indent: -24px;
 }
 
 .filter-cont p.no-indent {
-	margin-bottom: 10px;
-	padding: 0;
-	text-indent: 0;
+  margin-bottom: 10px;
+  padding: 0;
+  text-indent: 0;
 }
 
 .filter-cont p.small {
-	margin-bottom: 5px;
+  margin-bottom: 5px;
 }
 
 .filter-baum p {
-	padding-bottom: 0;
+  padding-bottom: 0;
 }
 
 .filter-baum mark {
-	color: inherit;
+  color: inherit;
 }
 
 .filter-baum > .filter-baum {
-	margin: 0 0 0 8px;
-	border-left: 1px dotted var(--linie);
-	padding: 5px 0 5px 14px;
-	text-indent: 0;
+  margin: 0 0 0 8px;
+  border-left: 1px dotted var(--linie);
+  padding: 5px 0 5px 14px;
+  text-indent: 0;
 }
 
 .filter-baum > .filter-baum:last-child {
-	padding-bottom: 0;
+  padding-bottom: 0;
 }
 
 p.no-indent + .filter-baum, /* betrifft Verschiedenes > Filterlogik */
 .filter-baum + .filter-baum {
-	padding-top: 0;
+  padding-top: 0;
 }
 
 .filter-cont > .filter-baum {
-	padding: 5px 0 0 0;
+  padding: 5px 0 0 0;
 }
 
 .filter-cont > .filter-baum:first-child {
-	padding-top: 0;
+  padding-top: 0;
 }
 
 .filter-treffer {
-	display: inline-block;
-	margin-left: 10px;
-	color: var(--textHell);
-	text-indent: 0; /* wegen des text-indent in p */
+  display: inline-block;
+  margin-left: 10px;
+  color: var(--textHell);
+  text-indent: 0; /* wegen des text-indent in p */
 }
 
 #filter-volltext {
-	width: calc(100% - 12px);
+  width: calc(100% - 12px);
 }
 
 #filter-kartendatum p:first-child label + input {
-	margin-left: 25px;
+  margin-left: 25px;
 }
 
 #filter-kartendatum label.davor {
-	display: inline-block;
-	width: 37px;
+  display: inline-block;
+  width: 37px;
 }
 
 #filter-kartendatum .icon-jetzt {
-	margin-left: 5px;
-	background-color: var(--iconHell);
-	-webkit-mask-image: url(../../img/uhr.svg);
-	mask-image: url(../../img/uhr.svg);
+  margin-left: 5px;
+  background-color: var(--iconHell);
+  -webkit-mask-image: url(../../img/uhr.svg);
+  mask-image: url(../../img/uhr.svg);
 }
 
 #filter-kartendatum .icon-jetzt:hover {
-	background-color: var(--text);
+  background-color: var(--text);
 }
 
 #filter-kartendatum .icon-jetzt:focus {
-	background-color: var(--farbe);
+  background-color: var(--farbe);
 }
 
 #filter-erweiterte {
-	padding-left: 24px;
-	background: url(../../img/plus.svg) no-repeat left -2px;
+  padding-left: 24px;
+  background: url(../../img/plus.svg) no-repeat left -2px;
 }
 
 #filter-erweiterte.aktiv {
-	background-image: url(../../img/minus.svg);
+  background-image: url(../../img/minus.svg);
 }
 
 #filter-erweiterte-cont {
-	margin-bottom: -5px;
-	padding-left: 24px;
+  margin-bottom: -5px;
+  padding-left: 24px;
 }
 
 #filter-erweiterte-cont.blenden {
-	overflow: hidden;
-	transition: height .3s ease, margin-bottom .3s ease;
+  overflow: hidden;
+  transition: height .3s ease, margin-bottom .3s ease;
 }
 
 #filter-erweiterte-cont h3 {
-	margin: 15px 0 5px 0;
-	color: var(--text);
-	font-style: normal;
+  margin: 15px 0 5px 0;
+  color: var(--text);
+  font-style: normal;
 }
 
 #filter-erweiterte-cont p {
-	margin-bottom: 5px;
+  margin-bottom: 5px;
 }
 
 .filter-erweiterte-flex {
-	display: flex;
-	flex-wrap: wrap;
+  display: flex;
+  flex-wrap: wrap;
 }
 
 .filter-erweiterte-flex p {
-	flex: 1 0 130px;
-	padding: 0;
-	max-width: 130px;
-	text-indent: 0;
+  flex: 1 0 130px;
+  padding: 0;
+  max-width: 130px;
+  text-indent: 0;
 }
 
 #filter-zeitraum-dynamisch p:last-child {
-	padding-bottom: 0;
+  padding-bottom: 0;
 }
 
 #filter-datenfelder {
-	margin-left: 36px;
+  margin-left: 36px;
 }
 
 #liste-filter input[type="radio"] {
-	margin-left: 15px;
+  margin-left: 15px;
 }
 
 #liste-filter input[type="radio"]:first-child {
-	margin-left: 0;
+  margin-left: 0;
 }
 
 #liste-filter label {
-	color: var(--textFarbe);
+  color: var(--textFarbe);
 }
 
 #liste-filter input:disabled + label {
-	color: var(--textSehrHell);
+  color: var(--textSehrHell);
 }
 
 #filter-verschiedenes-bewertung {
-	margin: 5px 0 0 22px;
+  margin: 5px 0 0 22px;
 }
 
 #filter-verschiedenes-bewertung a.aktiv {
-	background-color: var(--farbeStern);
+  background-color: var(--farbeStern);
 }
 
 #filter-verschiedenes-bewertung a.aktiv:focus {
-	background-color: var(--farbe);
+  background-color: var(--farbe);
 }
 
 #liste-filter-keine {
-	display: none;
-	margin-top: 11px;
-	color: var(--textSehrHell);
-	font-style: italic;
-	text-align: center;
+  display: none;
+  margin-top: 11px;
+  color: var(--textSehrHell);
+  font-style: italic;
+  text-align: center;
 }
 
 .keine-filter #liste-filter-keine {
-	display: block;
+  display: block;
 }
 
 .keine-filter header span,
 .keine-filter .filter-kopf,
 .keine-filter .filter-cont {
-	display: none;
+  display: none;
 }
 
 /* Belegliste: Header --------------------------- */
 #liste-belege {
-	position: relative;
+  position: relative;
 }
 
 #liste-belege header {
-	position: sticky;
-	top: 70px;
-	z-index: 2;
-	padding: 0 0 10px 0;
-	width: 100%;
-	height: 24px;
-	overflow: hidden;
-	background-color: #fff;
-	white-space: nowrap;
-	transition: top .5s ease;
+  position: sticky;
+  top: 70px;
+  z-index: 2;
+  padding: 0 0 10px 0;
+  width: 100%;
+  height: 24px;
+  overflow: hidden;
+  background-color: #fff;
+  white-space: nowrap;
+  transition: top .5s ease;
 }
 
 .quick #liste-belege header {
-	top: 99px;
+  top: 99px;
 }
 
 .icon-kopieren {
-	-webkit-mask-image: url(../../img/kopieren.svg);
-	mask-image: url(../../img/kopieren.svg);
+  -webkit-mask-image: url(../../img/kopieren.svg);
+  mask-image: url(../../img/kopieren.svg);
 }
 
 .icon-bearbeiten {
-	-webkit-mask-image: url(../../img/karteikarte.svg);
-	mask-image: url(../../img/karteikarte.svg);
+  -webkit-mask-image: url(../../img/karteikarte.svg);
+  mask-image: url(../../img/karteikarte.svg);
 }
 
 .bedeutungen-opt-block,
 .beleg-opt-block,
 .filter-ctrl-block,
 .liste-opt-block {
-	display: inline-block;
-	margin-left: 25px;
-	height: 24px;
+  display: inline-block;
+  margin-left: 25px;
+  height: 24px;
 }
 
 .liste-opt-block {
-	position: relative;
+  position: relative;
 }
 
 .beleg-opt-block:first-child,
 .filter-ctrl-block:first-child,
 .liste-opt-block:first-child {
-	margin-left: 0;
+  margin-left: 0;
 }
 
 .bedeutungen-opt-block a,
@@ -405,15 +405,15 @@ p.no-indent + .filter-baum, /* betrifft Verschiedenes > Filterlogik */
 .filter-ctrl-block a,
 .liste-opt-block a,
 #red-wi-xml {
-	display: inline-block;
-	border-right: 1px solid var(--linie);
-	padding: 0 5px;
-	width: 24px;
-	height: 24px;
-	overflow: hidden;
-	background-color: var(--hintergrund);
-	color: var(--text);
-	text-decoration: none;
+  display: inline-block;
+  border-right: 1px solid var(--linie);
+  padding: 0 5px;
+  width: 24px;
+  height: 24px;
+  overflow: hidden;
+  background-color: var(--hintergrund);
+  color: var(--text);
+  text-decoration: none;
 }
 
 .bedeutungen-opt-block a:first-child,
@@ -422,8 +422,8 @@ p.no-indent + .filter-baum, /* betrifft Verschiedenes > Filterlogik */
 .liste-opt-block a:first-child,
 .liste-opt-block a.kopieren-aus,
 #red-wi-xml {
-	border-top-left-radius: 3px;
-	border-bottom-left-radius: 3px;
+  border-top-left-radius: 3px;
+  border-bottom-left-radius: 3px;
 }
 
 .bedeutungen-opt-block a:last-child,
@@ -433,9 +433,9 @@ p.no-indent + .filter-baum, /* betrifft Verschiedenes > Filterlogik */
 .liste-opt-block a:last-child,
 .liste-opt-block:not(.liste-opt-anzeige-an):not(:hover):not(:focus-within) a.liste-opt-anzeige-letztes,
 #red-wi-xml {
-	border-right: 0;
-	border-top-right-radius: 3px;
-	border-bottom-right-radius: 3px;
+  border-right: 0;
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
 }
 
 .bedeutungen-opt-block a:focus,
@@ -443,21 +443,21 @@ p.no-indent + .filter-baum, /* betrifft Verschiedenes > Filterlogik */
 .filter-ctrl-block a:focus,
 .liste-opt-block a:focus,
 #red-wi-xml:focus {
-	background-color: var(--hintergrund);
-	color: var(--farbe);
+  background-color: var(--hintergrund);
+  color: var(--farbe);
 }
 
 .beleg-opt-block a.aktiv,
 .filter-ctrl-block a.aktiv,
 .liste-opt-block a.aktiv {
-	background-color: var(--aktiv);
-	color: #fff;
+  background-color: var(--aktiv);
+  color: #fff;
 }
 
 .beleg-opt-block a.aktiv:focus,
 .filter-ctrl-block a.aktiv:focus,
 .liste-opt-block a.aktiv:focus {
-	background-color: var(--farbe);
+  background-color: var(--farbe);
 }
 
 .bedeutungen-opt-block svg path,
@@ -465,30 +465,30 @@ p.no-indent + .filter-baum, /* betrifft Verschiedenes > Filterlogik */
 .filter-ctrl-block svg path,
 .liste-opt-block svg path,
 #red-wi-xml svg path {
-	fill: currentcolor;
+  fill: currentcolor;
 }
 
 .liste-opt-block .liste-text {
-	width: auto;
+  width: auto;
 }
 
 .liste-opt-block .liste-link-zeitschnitte {
-	text-align: center;
-	width: 32px;
+  text-align: center;
+  width: 32px;
 }
 
 .liste-opt-anzeige a:not(.aktiv) {
-	display: none;
+  display: none;
 }
 
 .liste-opt-anzeige:hover a,
 .liste-opt-anzeige:focus-within a,
 .liste-opt-anzeige.liste-opt-anzeige-an a {
-	display: inline-block;
+  display: inline-block;
 }
 
 .liste-strike {
-	position: relative;
+  position: relative;
 }
 
 .liste-strike::before {
@@ -501,265 +501,265 @@ p.no-indent + .filter-baum, /* betrifft Verschiedenes > Filterlogik */
 }
 
 #liste-belege-anzahl {
-	position: absolute;
-	right: 0;
-	padding: 0 5px 0 50px;
-	background-image: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1) 25px);
+  position: absolute;
+  right: 0;
+  padding: 0 5px 0 50px;
+  background-image: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1) 25px);
 }
 
 #liste-belege-anzahl.belege-gefiltert {
-	color: var(--textWarnung);
+  color: var(--textWarnung);
 }
 
 #liste-sort {
-	position: absolute;
-	top: 29px;
-	left: 59px;
-	z-index: 2;
-	box-shadow: var(--boxShadow);
-	border: 1px solid var(--linie);
-	border-radius: 5px;
-	padding: 10px 40px 10px 10px;
-	background-color: #fff;
+  position: absolute;
+  top: 29px;
+  left: 59px;
+  z-index: 2;
+  box-shadow: var(--boxShadow);
+  border: 1px solid var(--linie);
+  border-radius: 5px;
+  padding: 10px 40px 10px 10px;
+  background-color: #fff;
 }
 
 #liste-sort > img {
-	position: absolute;
-	top: 5px;
-	right: 5px;
+  position: absolute;
+  top: 5px;
+  right: 5px;
 }
 
 #liste-sort :is(th, td) {
-	padding-top: 5px;
-	padding-right: 5px;
-	padding-bottom: 5px;
+  padding-top: 5px;
+  padding-right: 5px;
+  padding-bottom: 5px;
 }
 
 #liste-sort th {
-	font-weight: normal;
-	text-align: left;
+  font-weight: normal;
+  text-align: left;
 }
 
 #liste-sort .aktiv th {
-	font-weight: bold;
+  font-weight: bold;
 }
 
 /* Belegliste: Content -------------------------- */
 #liste-belege-cont {
-	margin: 0 0 25px 0;
+  margin: 0 0 25px 0;
 }
 
 #liste-belege-cont.padding-suchleiste {
-	padding-bottom: 51px;
+  padding-bottom: 51px;
 }
 
 #liste-belege-cont a,
 #liste-belege-cont span {
-	display: inline-block;
+  display: inline-block;
 }
 
 #liste-belege-cont span.liste-autor-details-block {
-	display: inline;
+  display: inline;
 }
 
 #liste-belege-cont p span {
-	display: inline;
+  display: inline;
 }
 
 .liste-kopf {
-	position: relative; /* damit ein überlappendes Buchungs-Icon unter dem Kopf verschwindet */
-	border-top: 1px solid var(--linie);
-	border-left: 3px solid var(--farbeB);
-	padding: 2px 10px;
-	height: 24px;
-	overflow: hidden;
-	line-height: 24px;
-	text-overflow: ellipsis;
-	white-space: nowrap;
-	background-color: var(--hintergrund);
+  position: relative; /* damit ein überlappendes Buchungs-Icon unter dem Kopf verschwindet */
+  border-top: 1px solid var(--linie);
+  border-left: 3px solid var(--farbeB);
+  padding: 2px 10px;
+  height: 24px;
+  overflow: hidden;
+  line-height: 24px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  background-color: var(--hintergrund);
 }
 
 .liste-kopf .liste-mark img {
-	vertical-align: top;
+  vertical-align: top;
 }
 
 .liste-kopf .liste-mark + .liste-notiz,
 .liste-kopf .liste-mark + .liste-textsorte,
 .liste-kopf .liste-notiz + .liste-textsorte {
-	margin-left: 15px;
+  margin-left: 15px;
 }
 
 .liste-kopf .liste-notiz {
-	color: var(--farbeB);
+  color: var(--farbeB);
 }
 
 .liste-kopf .liste-textsorte {
-	font-variant: small-caps;
+  font-variant: small-caps;
 }
 
 .liste-kopf.hinweis-beleg {
-	background-color: var(--farbeGruen);
-	color: #fff;
+  background-color: var(--farbeGruen);
+  color: #fff;
 }
 
 .liste-kopf.hinweis-beleg .liste-jahr-hinweis:after,
 .liste-kopf.hinweis-beleg mark {
-	color: #fff;
+  color: #fff;
 }
 
 .liste-kopf mark:not(.suche):not(.suchleiste) {
-	padding: 0;
-	background-color: transparent;
+  padding: 0;
+  background-color: transparent;
 }
 
 #liste-belege-cont .liste-autor-detail {
-	display: none;
+  display: none;
 }
 
 .liste-kopf.schnitt-offen {
-	text-overflow: clip;
+  text-overflow: clip;
 }
 
 #liste-belege-cont .liste-kopf.schnitt-offen .liste-autor-detail {
-	display: inline-block;
+  display: inline-block;
 }
 
 .liste-kopf.schnitt-offen q {
-	visibility: hidden;
+  visibility: hidden;
 }
 
 .liste-kopficon {
-	margin-right: 15px;
-	background-color: var(--iconHell);
+  margin-right: 15px;
+  background-color: var(--iconHell);
 }
 
 .liste-kopficon:hover {
-	background-color: var(--text);
+  background-color: var(--text);
 }
 
 .liste-referenz {
-	margin-right: 15px;
-	color: var(--farbeGruenDunkel);
-	font-size: 14px;
+  margin-right: 15px;
+  color: var(--farbeGruenDunkel);
+  font-size: 14px;
 }
 
 .liste-jahr {
-	margin-right: 15px;
-	font-style: italic;
+  margin-right: 15px;
+  font-style: italic;
 }
 
 .liste-jahr-hinweis:after {
-	content: "*";
-	position: relative;
-	left: 3px;
-	color: var(--textWarnung);
+  content: "*";
+  position: relative;
+  left: 3px;
+  color: var(--textWarnung);
 }
 
 .liste-details {
-	border-left: 3px solid var(--farbeB);
-	padding: 10px 10px 20px 49px;
-	height: auto;
-	background-color: transparent;
-	user-select: text;
+  border-left: 3px solid var(--farbeB);
+  padding: 10px 10px 20px 49px;
+  height: auto;
+  background-color: transparent;
+  user-select: text;
 }
 
 .liste-details.blenden-prep {
-	overflow: hidden; /* nicht direkt in .liste-details schreiben, sonst verschwindet das Annotierungsfenster mitunter hinter dem folgenden Belegkopf*/
+  overflow: hidden; /* nicht direkt in .liste-details schreiben, sonst verschwindet das Annotierungsfenster mitunter hinter dem folgenden Belegkopf*/
 }
 
 .liste-details.blenden {
-	transition: height .3s ease, padding-top .3s ease, padding-bottom .3s ease;
+  transition: height .3s ease, padding-top .3s ease, padding-bottom .3s ease;
 }
 
 .liste-details > div {
-	position: relative; /* für die Positionierung der Kopier-Links */
-	margin-top: 10px;
+  position: relative; /* für die Positionierung der Kopier-Links */
+  margin-top: 10px;
 }
 
 .liste-details > div:first-child {
-	margin-top: 0;
+  margin-top: 0;
 }
 
 .liste-details .icon-link {
-	position: absolute;
-	top: 10px; /* padding-top */
-	left: -39px;
-	background-color: var(--iconHell);
-	user-select: none;
-	cursor: default;
+  position: absolute;
+  top: 10px; /* padding-top */
+  left: -39px;
+  background-color: var(--iconHell);
+  user-select: none;
+  cursor: default;
 }
 
 .liste-details .icon-link[data-ds$="|bs"] { /* Beleg hat keinen padding-top */
-	top: 0;
+  top: 0;
 }
 
 .liste-details .icon-tools-buchen {
-	top: 34px;
+  top: 34px;
 }
 
 .liste-details .icon-link:hover {
-	background-color: var(--text);
+  background-color: var(--text);
 }
 
 .liste-details a {
-	cursor: pointer;
+  cursor: pointer;
 }
 
 .liste-details a:focus {
-	text-decoration: underline;
+  text-decoration: underline;
 }
 
 .liste-details p {
-	max-width: 650px;
+  max-width: 650px;
 }
 
 .liste-details p.einblenden {
-	overflow: hidden;
-	transition: height .3s ease;
+  overflow: hidden;
+  transition: height .3s ease;
 }
 
 .liste-details p:last-child {
-	margin-bottom: 0;
+  margin-bottom: 0;
 }
 
 #liste-belege-cont .gekuerzt,
 .beleg-lese p.gekuerzt {
-	cursor: default;
-	user-select: none;
+  cursor: default;
+  user-select: none;
 }
 
 #liste-belege-cont .gekuerzt .kuerzung,
 .beleg-lese p.gekuerzt .kuerzung {
-	display: none;
+  display: none;
 }
 
 #liste-belege-cont .gekuerzt:hover .kuerzung,
 .beleg-lese p.gekuerzt:hover .kuerzung {
-	display: inline;
-	color: var(--farbe);
+  display: inline;
+  color: var(--farbe);
 }
 
 div.liste-label {
-	position: relative;
-	border-top: 1px dotted var(--linie);
-	padding: 10px 10px 0 10px;
-	max-width: 630px;
+  position: relative;
+  border-top: 1px dotted var(--linie);
+  padding: 10px 10px 0 10px;
+  max-width: 630px;
 }
 
 span.liste-label {
-	position: absolute;
-	top: -9px;
-	right: 10px;
-	padding: 0 5px;
-	max-width: 80%;
-	overflow: hidden;
-	background-color: #fff;
-	color: var(--textFarbe);
-	font-size: 12px;
-	line-height: 16px;
-	text-overflow: ellipsis;
-	white-space: nowrap;
-	user-select: none;
+  position: absolute;
+  top: -9px;
+  right: 10px;
+  padding: 0 5px;
+  max-width: 80%;
+  overflow: hidden;
+  background-color: #fff;
+  color: var(--textFarbe);
+  font-size: 12px;
+  line-height: 16px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  user-select: none;
 }
 
 .liste-bd p,
@@ -769,68 +769,68 @@ span.liste-label {
 .liste-kr p,
 .liste-ts p,
 .liste-no p {
-	margin-bottom: 5px;
-	font-size: 14px;
-	line-height: 20px;
+  margin-bottom: 5px;
+  font-size: 14px;
+  line-height: 20px;
 }
 
 .liste-bd b {
-	display: inline-block;
-	padding: 0 5px 0 15px;
-	text-align: center;
+  display: inline-block;
+  padding: 0 5px 0 15px;
+  text-align: center;
 }
 
 .liste-bd b:first-child {
-	padding-left: 0;
+  padding-left: 0;
 }
 
 .liste-meta {
-	border-radius: 3px;
-	padding: 5px 10px;
-	width: fit-content;
-	height: 24px;
-	background-color: var(--hintergrund);
-	user-select: none;
+  border-radius: 3px;
+  padding: 5px 10px;
+  width: fit-content;
+  height: 24px;
+  background-color: var(--hintergrund);
+  user-select: none;
 }
 
 .liste-meta img {
-	margin-right: 5px;
-	vertical-align: top;
+  margin-right: 5px;
+  vertical-align: top;
 }
 
 .liste-meta img:last-child {
-	margin-right: 0;
+  margin-right: 0;
 }
 
 .liste-meta > span {
-	display: inline-block;
-	margin-left: 20px;
-	overflow: hidden;
+  display: inline-block;
+  margin-left: 20px;
+  overflow: hidden;
 }
 
 .liste-meta > span:first-child {
-	margin-left: 0;
+  margin-left: 0;
 }
 
 .liste-stern {
-	display: inline-block;
-	width: 24px;
-	height: 24px;
-	background-color: var(--farbeStern);
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  background-color: var(--farbeStern);
 }
 
 .liste-zeitschnitt,
 .liste-keine-belege,
 .liste-kartei-leer {
-	border-top: 1px solid var(--linie);
-	padding: 10px;
-	background-color: transparent;
-	color: var(--textFarbe);
-	font-style: italic;
-	text-align: center;
+  border-top: 1px solid var(--linie);
+  padding: 10px;
+  background-color: transparent;
+  color: var(--textFarbe);
+  font-style: italic;
+  text-align: center;
 }
 
 .liste-keine-belege,
 .liste-kartei-leer {
-	color: var(--textSehrHell);
+  color: var(--textSehrHell);
 }

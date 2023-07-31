@@ -1,82 +1,82 @@
 @charset "utf-8";
 
 :root {
-	/* Textfarben */
-	--text: #212121;
-	--textHell: #9e9e9e;
-	--textSehrHell: #bebebe;
-	--textExtremHell: #e5e5e5;
-	--textFarbe: #32af79;
-	--textWarnung: #d00;
-	--textWarnungHover: #f00;
-	--textDTA: #827b66;
-	/* Icon-Farben */
-	--iconHell: #e5e5e5;
-	/* Hintergrund-Farben */
-	--hintergrund: #f9f9f9;
-	--hintergrundDunkel: #e5e5e5;
-	--hintergrundGruen: #0b0;
-	--hintergrundRot: #fdd;
-	--hintergrundBlau: #00f;
-	--hover: #f5f5f5;
-	--highlight: #c0f3dd;
-	/* Border-Farben */
-	--grenzeBlau: #386ea6;
-	--grenzeGruen: #0b0;
-	--grenzeRot: #d00;
-	/* Farb-Elemente */
-	--farbe: #72a0cf;
-	--farbeB: #386ea6; /* Buttons */
-	--farbeH: #386ea6; /* Überschriften */
-	--farbeGelb: #ff0;
-	--farbeGruen: #32af79;
-	--farbeGruenHell: #0f0;
-	--farbeGruenDunkel: #080;
-	--farbeOrange: #f60;
-	--farbeRot: #d00;
-	--farbeStern: #fd0;
-	--aktiv: #32af79;
-	--linie: #c3d9f1;
-	--status1: #c00;
-	--status2: #ecec00;
-	--status3: #080;
-	--status4: #0c0;
-	/* Farbpalette */
-	--palette0: #ff0;
-	--palette1: #ccbe00; /* gelb, dunkel */
-	--palette2: #6b6400; /* braun */
-	--palette3: #f60; /* orange */
-	--palette4: #d00; /* rot */
-	--palette5: #fcd4d1; /* rosa */
-	--palette6: #aa55a1; /* lila */
-	--palette7: #512480; /* lila, dunkel */
-	--palette8: #0d1f63; /* blau, dunkel */
-	--palette9: #00f; /* blau */
-	--palette10: #adc5e7; /* blau, hell */
-	--palette11: #59c5c7; /* türkis */
-	--palette12: #00888a; /* türkis, dunkel */
-	--palette13: #006c3b; /* grün, dunkel */
-	--palette14: #0b0; /* grün */
-	--palette15: #c2e0ae; /* grün, hell */
-	--palette16: #999999; /* grau-silber */
-	--palette17: #000; /* schwarz */
-	/* Schatten */
-	--boxShadow: 3px 3px 6px 0 #d1d1d1;
-	/* Farbverläufe */
-	--redLitTitelIcons0: rgba(245, 245, 245, 0);
-	--redLitTitelIcons1: rgba(245, 245, 245, 1);
+  /* Textfarben */
+  --text: #212121;
+  --textHell: #9e9e9e;
+  --textSehrHell: #bebebe;
+  --textExtremHell: #e5e5e5;
+  --textFarbe: #32af79;
+  --textWarnung: #d00;
+  --textWarnungHover: #f00;
+  --textDTA: #827b66;
+  /* Icon-Farben */
+  --iconHell: #e5e5e5;
+  /* Hintergrund-Farben */
+  --hintergrund: #f9f9f9;
+  --hintergrundDunkel: #e5e5e5;
+  --hintergrundGruen: #0b0;
+  --hintergrundRot: #fdd;
+  --hintergrundBlau: #00f;
+  --hover: #f5f5f5;
+  --highlight: #c0f3dd;
+  /* Border-Farben */
+  --grenzeBlau: #386ea6;
+  --grenzeGruen: #0b0;
+  --grenzeRot: #d00;
+  /* Farb-Elemente */
+  --farbe: #72a0cf;
+  --farbeB: #386ea6; /* Buttons */
+  --farbeH: #386ea6; /* Überschriften */
+  --farbeGelb: #ff0;
+  --farbeGruen: #32af79;
+  --farbeGruenHell: #0f0;
+  --farbeGruenDunkel: #080;
+  --farbeOrange: #f60;
+  --farbeRot: #d00;
+  --farbeStern: #fd0;
+  --aktiv: #32af79;
+  --linie: #c3d9f1;
+  --status1: #c00;
+  --status2: #ecec00;
+  --status3: #080;
+  --status4: #0c0;
+  /* Farbpalette */
+  --palette0: #ff0;
+  --palette1: #ccbe00; /* gelb, dunkel */
+  --palette2: #6b6400; /* braun */
+  --palette3: #f60; /* orange */
+  --palette4: #d00; /* rot */
+  --palette5: #fcd4d1; /* rosa */
+  --palette6: #aa55a1; /* lila */
+  --palette7: #512480; /* lila, dunkel */
+  --palette8: #0d1f63; /* blau, dunkel */
+  --palette9: #00f; /* blau */
+  --palette10: #adc5e7; /* blau, hell */
+  --palette11: #59c5c7; /* türkis */
+  --palette12: #00888a; /* türkis, dunkel */
+  --palette13: #006c3b; /* grün, dunkel */
+  --palette14: #0b0; /* grün */
+  --palette15: #c2e0ae; /* grün, hell */
+  --palette16: #999999; /* grau-silber */
+  --palette17: #000; /* schwarz */
+  /* Schatten */
+  --boxShadow: 3px 3px 6px 0 #d1d1d1;
+  /* Farbverläufe */
+  --redLitTitelIcons0: rgba(245, 245, 245, 0);
+  --redLitTitelIcons1: rgba(245, 245, 245, 1);
 }
 
 .dunkler:root {
-	/* Textfarben */
-	--textHell: #212121;
-	--textSehrHell: #9e9e9e;
-	--textExtremHell: #bebebe;
-	/* Icon-Farben */
-	--iconHell: #9e9e9e;
-	/* Hintergrund-Farben */
-	--hover: #e5e5e5;
-	/* Farbverläufe */
-	--redLitTitelIcons0: rgba(229, 229, 229, 0);
-	--redLitTitelIcons1: rgba(229, 229, 229, 1);
+  /* Textfarben */
+  --textHell: #212121;
+  --textSehrHell: #9e9e9e;
+  --textExtremHell: #bebebe;
+  /* Icon-Farben */
+  --iconHell: #9e9e9e;
+  /* Hintergrund-Farben */
+  --hover: #e5e5e5;
+  /* Farbverläufe */
+  --redLitTitelIcons0: rgba(229, 229, 229, 0);
+  --redLitTitelIcons1: rgba(229, 229, 229, 1);
 }

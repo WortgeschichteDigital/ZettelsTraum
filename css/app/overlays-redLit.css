@@ -2,55 +2,55 @@
 
 /* Redaktion: Literaturdatenbank ---------------- */
 #red-lit > div {
-	margin-top: 40px;
-	max-width: 700px;
+  margin-top: 40px;
+  max-width: 700px;
 }
 
 #red-lit > div > div {
-	padding: 10px;
+  padding: 10px;
 }
 
 #red-lit > div > div .icon-link {
-	vertical-align: text-bottom;
-	background-color: var(--iconHell);
+  vertical-align: text-bottom;
+  background-color: var(--iconHell);
 }
 
 #red-lit > div > div .icon-link:focus {
-	background-color: var(--farbe);
+  background-color: var(--farbe);
 }
 
 #red-lit > div > div .icon-link:hover {
-	background-color: var(--text);
+  background-color: var(--text);
 }
 
 /* Tags ----------------------------------------- */
 #red-lit-eingabe-tags {
-	line-height: 20px;
+  line-height: 20px;
 }
 
 #red-lit-eingabe-tags div {
-	max-height: 120px;
-	overflow-y: auto;
+  max-height: 120px;
+  overflow-y: auto;
 }
 
 #red-lit .tag {
-	display: inline-block;
-	margin-right: 15px;
-	overflow:  hidden;
-	height: 20px;
-	font-size: 14px;
-	text-indent: 0;
+  display: inline-block;
+  margin-right: 15px;
+  overflow:  hidden;
+  height: 20px;
+  font-size: 14px;
+  text-indent: 0;
 }
 
 #red-lit .tag::before {
-	content: url(../../img/etikett-20.svg);
-	vertical-align: top;
-	padding-right: 1px;
+  content: url(../../img/etikett-20.svg);
+  vertical-align: top;
+  padding-right: 1px;
 }
 
 #red-lit .tag.loeschbar:hover {
-	color: var(--textWarnung);
-	text-decoration: line-through;
+  color: var(--textWarnung);
+  text-decoration: line-through;
 }
 
 #red-lit p.tags {
@@ -60,588 +60,588 @@
 }
 
 #red-lit .mehr-tags-kuerzung {
-	position: relative;
-	display: inline-block;
-	vertical-align: top;
-	overflow: hidden;
-	width: 100px;
-	white-space: nowrap;
+  position: relative;
+  display: inline-block;
+  vertical-align: top;
+  overflow: hidden;
+  width: 100px;
+  white-space: nowrap;
 }
 
 #red-lit .mehr-tags-kuerzung.erweitert {
-	overflow: visible;
-	width: auto;
-	white-space: normal;
+  overflow: visible;
+  width: auto;
+  white-space: normal;
 }
 
 #red-lit .mehr-tags-kuerzung-blende {
-	position: absolute;
-	top: 0;
-	left: 50px;
-	width: 50px;
-	background: linear-gradient(to right, transparent, #fff);
+  position: absolute;
+  top: 0;
+  left: 50px;
+  width: 50px;
+  background: linear-gradient(to right, transparent, #fff);
 }
 
 #red-lit .red-lit-snippet.markiert .mehr-tags-kuerzung-blende {
-	background: linear-gradient(to right, transparent, var(--hover));
+  background: linear-gradient(to right, transparent, var(--hover));
 }
 
 #red-lit .mehr-tags {
-	vertical-align: top;
-	margin-left: 15px;
-	color: var(--textFarbe);
-	font-size: 14px;
+  vertical-align: top;
+  margin-left: 15px;
+  color: var(--textFarbe);
+  font-size: 14px;
 }
 
 #red-lit-eingabe td#red-lit-eingabe-tags {
-	padding-top: 5px;
+  padding-top: 5px;
 }
 
 /* Datenkbankpfad ------------------------------- */
 #red-lit-pfad {
-	position: relative;
+  position: relative;
 }
 
 #red-lit-pfad-changed {
-	display: inline-block;
-	width: 12px;
-	color: var(--textSehrHell);
+  display: inline-block;
+  width: 12px;
+  color: var(--textSehrHell);
 }
 
 #red-lit-pfad-changed.changed {
-	color: var(--textWarnung);
+  color: var(--textWarnung);
 }
 
 #red-lit-pfad-db {
-	display: inline-block;
-	vertical-align: text-bottom;
-	padding: 0 6px;
-	overflow: hidden;
-	max-width: calc(100% - 168px); /* 12px Asterisk, 5 * 24px Icons, 2 * 12px Margin, 12px Padding */
-	direction: rtl;
-	text-overflow: ellipsis;
-	white-space: nowrap;
+  display: inline-block;
+  vertical-align: text-bottom;
+  padding: 0 6px;
+  overflow: hidden;
+  max-width: calc(100% - 168px); /* 12px Asterisk, 5 * 24px Icons, 2 * 12px Margin, 12px Padding */
+  direction: rtl;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 #red-lit-pfad-db.keine-db {
-	color: var(--textSehrHell);
-	direction: ltr;
-	font-style: italic;
+  color: var(--textSehrHell);
+  direction: ltr;
+  font-style: italic;
 }
 
 #red-lit-pfad-db span {
-	margin-left: 6px;
-	color: var(--textWarnung);
+  margin-left: 6px;
+  color: var(--textWarnung);
 }
 
 #red-lit-pfad-icons {
-	position: absolute;
-	right: 10px;
+  position: absolute;
+  right: 10px;
 }
 
 #red-lit-pfad-icons a:nth-child(3),
 #red-lit-pfad-icons a:nth-child(4) {
-	margin-left: 12px;
+  margin-left: 12px;
 }
 
 /* Navigation ----------------------------------- */
 #red-lit input[type="radio"]:not(:first-child) {
-	margin-left: 25px;
+  margin-left: 25px;
 }
 
 #red-lit label {
-	color: var(--textFarbe);
-	font-style: italic;
+  color: var(--textFarbe);
+  font-style: italic;
 }
 
 /* Suche ---------------------------------------- */
 #red-lit-suche-form {
-	position: relative;
-	margin: 0;
-	white-space: nowrap;
+  position: relative;
+  margin: 0;
+  white-space: nowrap;
 }
 
 #red-lit-suche-text {
-	margin-right: 15px;
-	padding-right: 58px;
-	width: calc(100% - 257px); /* 36px Padding und Border, 15px Margin, 20px Label, 157px Datumsfeld */
-	transition: background-color .5s linear;
+  margin-right: 15px;
+  padding-right: 58px;
+  width: calc(100% - 257px); /* 36px Padding und Border, 15px Margin, 20px Label, 157px Datumsfeld */
+  transition: background-color .5s linear;
 }
 
 #red-lit-suche-text.keine-treffer {
-	background-color: var(--hintergrundRot);
+  background-color: var(--hintergrundRot);
 }
 
 #red-lit-suche-ab {
-	margin-left: 5px;
-	width: 140px;
+  margin-left: 5px;
+  width: 140px;
 }
 
 #red-lit-suche-ab:invalid {
-	color: var(--textSehrHell);
+  color: var(--textSehrHell);
 }
 
 #red-lit-suche-form label {
-	display: inline-block;
-	width: 20px;
+  display: inline-block;
+  width: 20px;
 }
 
 #red-lit-suche-hilfe,
 #red-lit-suche-start {
-	position: absolute;
-	left: calc(100% - 257px + 6px); /* vgl. #red-lit-suche-text */
-	top: 3px;
+  position: absolute;
+  left: calc(100% - 257px + 6px); /* vgl. #red-lit-suche-text */
+  top: 3px;
 }
 
 #red-lit-suche-start {
-	left: calc(100% - 228px + 6px); /* vgl. #red-lit-suche-text */
+  left: calc(100% - 228px + 6px); /* vgl. #red-lit-suche-text */
 }
 
 #red-lit-suche-hilfe-fenster {
-	position: absolute;
-	top: 34px;
-	right: 0;
-	z-index: 1;
-	box-shadow: var(--boxShadow);
-	border: 1px solid var(--linie);
-	border-radius: 5px;
-	padding: 10px;
-	width: 500px;
-	background-color: #fff;
-	color: var(--text);
-	font-size: 14px;
-	line-height: 24px;
+  position: absolute;
+  top: 34px;
+  right: 0;
+  z-index: 1;
+  box-shadow: var(--boxShadow);
+  border: 1px solid var(--linie);
+  border-radius: 5px;
+  padding: 10px;
+  width: 500px;
+  background-color: #fff;
+  color: var(--text);
+  font-size: 14px;
+  line-height: 24px;
 }
 
 #red-lit-suche-hilfe-fenster img {
-	position: absolute;
-	top: 0;
-	right: 0;
+  position: absolute;
+  top: 0;
+  right: 0;
 }
 
 #red-lit-suche-hilfe-fenster table {
-	border-spacing: 0;
-	border-top: 1px solid var(--linie);
+  border-spacing: 0;
+  border-top: 1px solid var(--linie);
 }
 
 #red-lit-suche-hilfe-fenster th,
 #red-lit-suche-hilfe-fenster td {
-	padding: 0;
-	border-bottom: 1px solid var(--linie);
+  padding: 0;
+  border-bottom: 1px solid var(--linie);
 }
 
 #red-lit-suche-hilfe-fenster th {
-	padding-right: 10px;
-	vertical-align: top;
-	text-align: left;
-	font-weight: normal;
-	white-space: nowrap;
+  padding-right: 10px;
+  vertical-align: top;
+  text-align: left;
+  font-weight: normal;
+  white-space: nowrap;
 }
 
 #red-lit-suche-hilfe-fenster p {
-	margin-bottom: 5px;
-	white-space: normal;
+  margin-bottom: 5px;
+  white-space: normal;
 }
 
 #red-lit-suche-hilfe-fenster table + p {
-	margin-top: 10px;
+  margin-top: 10px;
 }
 
 #red-lit-suche-hilfe-fenster p:last-child {
-	margin-bottom: 0;
+  margin-bottom: 0;
 }
 
 #red-lit-suche-hilfe-fenster a {
-	display: inline-block;
-	margin: 5px 0;
-	border-radius: 3px;
-	border: 1px solid var(--linie);
-	padding: 0 5px;
-	color: var(--hintergrundBlau);
+  display: inline-block;
+  margin: 5px 0;
+  border-radius: 3px;
+  border: 1px solid var(--linie);
+  padding: 0 5px;
+  color: var(--hintergrundBlau);
 }
 
 #red-lit-suche-hilfe-fenster a:hover {
-	cursor: pointer;
+  cursor: pointer;
 }
 
 #red-lit-suche-sonder {
-	margin: 5px 0 0 0;
-	font-size: 12px;
-	line-height: 18px;
+  margin: 5px 0 0 0;
+  font-size: 12px;
+  line-height: 18px;
 }
 
 #red-lit-suche-titel {
-	position: relative;
-	margin-top: 10px;
-	overflow: auto;
-	transition: max-height .5s ease;
+  position: relative;
+  margin-top: 10px;
+  overflow: auto;
+  transition: max-height .5s ease;
 }
 
 #red-lit-suche-titel .red-lit-snippet {
-	border-bottom: 1px dotted var(--linie);
-	padding: 10px;
+  border-bottom: 1px dotted var(--linie);
+  padding: 10px;
 }
 
 #red-lit-suche-titel .red-lit-snippet:last-child {
-	border-bottom: none;
+  border-bottom: none;
 }
 
 #red-lit-suche-titel a:not(.icon-link),
 #red-lit-popup a:not(.icon-link) {
-	cursor: pointer;
+  cursor: pointer;
 }
 
 #red-lit-suche-sonder a:focus,
 #red-lit-suche-titel a:not(.icon-link):focus,
 #red-lit-popup a:not(.icon-link):focus {
-	text-decoration: underline;
+  text-decoration: underline;
 }
 
 #red-lit #red-lit-suche-treffer {
-	margin-top: 10px;
-	text-align: center;
+  margin-top: 10px;
+  text-align: center;
 }
 
 #red-lit #red-lit-suche-treffer a {
-	background-color: var(--text);
+  background-color: var(--text);
 }
 
 #red-lit #red-lit-suche-treffer a.inaktiv {
-	background-color: var(--textSehrHell);
+  background-color: var(--textSehrHell);
 }
 
 #red-lit #red-lit-suche-treffer a:focus,
 #red-lit #red-lit-suche-treffer a:hover,
 #red-lit #red-lit-suche-treffer a.inaktiv:focus,
 #red-lit #red-lit-suche-treffer a.inaktiv:hover {
-	background-color: var(--farbe);
+  background-color: var(--farbe);
 }
 
 #red-lit-suche-trefferzahl {
-	display: inline-block;
-	width: 150px;
+  display: inline-block;
+  width: 150px;
 }
 
 /* Eingabeformular ------------------------------ */
 #red-lit-eingabe-meldung {
-	margin-bottom: 20px;
-	border-width: 2px;
-	border-radius: 5px;
-	border-style: solid;
-	padding: 2px 5px;
-	background-color: var(--hintergrund);
-	font-size: 14px;
-	line-height: 20px;
-	text-align: center;
+  margin-bottom: 20px;
+  border-width: 2px;
+  border-radius: 5px;
+  border-style: solid;
+  padding: 2px 5px;
+  background-color: var(--hintergrund);
+  font-size: 14px;
+  line-height: 20px;
+  text-align: center;
 }
 
 #red-lit-eingabe-meldung.add {
-	border-color: var(--grenzeGruen);
+  border-color: var(--grenzeGruen);
 }
 
 #red-lit-eingabe-meldung.change {
-	border-color: var(--grenzeBlau);
+  border-color: var(--grenzeBlau);
 }
 
 #red-lit-eingabe-meldung.old {
-	border-color: var(--grenzeRot);
+  border-color: var(--grenzeRot);
 }
 
 #red-lit-eingabe-meldung span {
-	padding-left: 3px;
-	color: var(--textWarnung);
+  padding-left: 3px;
+  color: var(--textWarnung);
 }
 
 #red-lit-eingabe p.button {
-	margin-bottom: 0;
-	text-align: center;
+  margin-bottom: 0;
+  text-align: center;
 }
 
 #red-lit-eingabe input[type="button"] {
-	margin-left: 0;
-	width: 130px;
+  margin-left: 0;
+  width: 130px;
 }
 
 #red-lit-eingabe input[type="button"]:last-child {
-	margin-left: 10px;
+  margin-left: 10px;
 }
 
 #red-lit-eingabe table {
-	table-layout: fixed;
-	width: 100%;
-	border-spacing: 0;
+  table-layout: fixed;
+  width: 100%;
+  border-spacing: 0;
 }
 
 #red-lit-eingabe th {
-	position: relative;
-	padding: 10px 35px 0 11px;
-	font-size: 14px;
-	font-weight: normal;
-	text-align: left;
+  position: relative;
+  padding: 10px 35px 0 11px;
+  font-size: 14px;
+  font-weight: normal;
+  text-align: left;
 }
 
 #red-lit-eingabe th:first-child {
-	padding-left: 6px;
+  padding-left: 6px;
 }
 
 #red-lit-eingabe label + a.icon-link {
-	margin-left: 15px;
-	vertical-align: bottom;
+  margin-left: 15px;
+  vertical-align: bottom;
 }
 
 #red-lit-eingabe-ti-import {
-	position: absolute;
-	right: 0;
-	color: var(--textSehrHell);
+  position: absolute;
+  right: 0;
+  color: var(--textSehrHell);
 }
 
 #red-lit-eingabe-ti-import a {
-	color: var(--textSehrHell);
+  color: var(--textSehrHell);
 }
 
 #red-lit-eingabe-ti-import a:focus {
-	color: var(--farbe);
+  color: var(--farbe);
 }
 
 #red-lit-eingabe-ti-import a:hover {
-	color: var(--text);
+  color: var(--text);
 }
 
 #red-lit-eingabe td {
-	vertical-align: top;
-	padding: 0 5px;
-	width: calc(50% - 5px);
+  vertical-align: top;
+  padding: 0 5px;
+  width: calc(50% - 5px);
 }
 
 #red-lit-eingabe td:first-child {
-	padding-left: 0;
+  padding-left: 0;
 }
 
 #red-lit-eingabe td:last-child {
-	padding-right: 0;
+  padding-right: 0;
 }
 
 #red-lit-eingabe td[colspan] {
-	width: 100%;
+  width: 100%;
 }
 
 #red-lit-eingabe input[type="text"],
 #red-lit-eingabe input[type="date"] {
-	width: calc(100% - 12px);
+  width: calc(100% - 12px);
 }
 
 #red-lit-eingabe input[type="date"]:invalid {
-	color: var(--textSehrHell);
+  color: var(--textSehrHell);
 }
 
 #red-lit-eingabe input[type="text"].dropdown-feld {
-	width: calc(100% - 31px);
+  width: calc(100% - 31px);
 }
 
 #red-lit-eingabe textarea {
-	margin: 0 auto;
-	min-height: 24px;
-	max-height: 120px;
+  margin: 0 auto;
+  min-height: 24px;
+  max-height: 120px;
 }
 
 #red-lit-eingabe textarea:invalid {
-	background: #fff url(../../img/zeilen-2,5-grau.svg) no-repeat left 2px;
+  background: #fff url(../../img/zeilen-2,5-grau.svg) no-repeat left 2px;
 }
 
 #red-lit-eingabe textarea#red-lit-eingabe-no {
-	min-height: 20px;
-	max-height: 60px;
-	font-size: 14px;
-	line-height: 20px;
+  min-height: 20px;
+  max-height: 60px;
+  font-size: 14px;
+  line-height: 20px;
 }
 
 #red-lit-eingabe textarea#red-lit-eingabe-no:invalid {
-	background: #fff url(../../img/zeilen-2,5-grau.svg) no-repeat left top;
+  background: #fff url(../../img/zeilen-2,5-grau.svg) no-repeat left top;
 }
 
 #red-lit-eingabe td#red-lit-eingabe-meta {
-	padding-top: 10px;
+  padding-top: 10px;
 }
 
 #red-lit-eingabe-meta > span {
-	display: inline-block;
-	overflow: hidden;
-	font-size: 14px;
-	line-height: 20px;
-	text-overflow: ellipsis;
-	white-space: nowrap;
+  display: inline-block;
+  overflow: hidden;
+  font-size: 14px;
+  line-height: 20px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 #red-lit-eingabe-meta > span:first-child,
 #red-lit-eingabe-meta > span:last-child {
-	width: 30%;
+  width: 30%;
 }
 
 #red-lit-eingabe-meta > span:nth-child(2) {
-	padding: 0 10px;
-	width: calc(40% - 20px);
+  padding: 0 10px;
+  width: calc(40% - 20px);
 }
 
 #red-lit-eingabe-meta span span {
-	color: var(--textFarbe);
-	font-style: italic;
+  color: var(--textFarbe);
+  font-style: italic;
 }
 
 /* Versionen-Popup ------------------------------ */
 #red-lit-popup {
-	position: absolute;
-	top: 70px;
-	left: calc(10% - 11px);
-	z-index: 1;
-	box-shadow: var(--boxShadow);
-	border: 1px solid var(--linie);
-	border-radius: 5px;
-	width: 80%;
-	background-color: #fff;
+  position: absolute;
+  top: 70px;
+  left: calc(10% - 11px);
+  z-index: 1;
+  box-shadow: var(--boxShadow);
+  border: 1px solid var(--linie);
+  border-radius: 5px;
+  width: 80%;
+  background-color: #fff;
 }
 
 #red-lit-popup > img {
-	position: absolute;
-	top: 0;
-	right: 0;
-	z-index: 1;
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 1;
 }
 
 #red-lit-popup-versionen {
-	position: relative;
-	direction: rtl;
-	overflow: auto;
-	max-height: 150px;
-	font-size: 14px;
-	line-height: 20px;
+  position: relative;
+  direction: rtl;
+  overflow: auto;
+  max-height: 150px;
+  font-size: 14px;
+  line-height: 20px;
 }
 
 #red-lit-popup-versionen div {
-	margin: 0 auto;
-	border-radius: 5px;
-	padding: 5px 10px;
-	direction: ltr;
-	overflow: hidden;
-	width: 85%;
-	white-space: nowrap;
+  margin: 0 auto;
+  border-radius: 5px;
+  padding: 5px 10px;
+  direction: ltr;
+  overflow: hidden;
+  width: 85%;
+  white-space: nowrap;
 }
 
 #red-lit-popup-versionen div.aktiv {
-	background-color: var(--hover);
+  background-color: var(--hover);
 }
 
 #red-lit-popup-versionen span {
-	display: inline-block;
-	margin-left: 15px;
+  display: inline-block;
+  margin-left: 15px;
 }
 
 #red-lit-popup-versionen span:first-child {
-	margin-left: 0;
+  margin-left: 0;
 }
 
 #red-lit-popup-titel {
-	margin-top: 10px;
-	border-top: 1px dotted var(--linie);
-	padding-top: 10px;
+  margin-top: 10px;
+  border-top: 1px dotted var(--linie);
+  padding-top: 10px;
 }
 
 /* Titelsnippet --------------------------------- */
 .red-lit-snippet.markiert {
-	background-color: var(--hover);
+  background-color: var(--hover);
 }
 
 .red-lit-snippet p {
-	margin: 0 0 0 25px;
-	padding-left: 25px;
-	overflow-wrap: break-word;
-	font-size: 14px;
-	line-height: 20px;
-	text-indent: -25px;
+  margin: 0 0 0 25px;
+  padding-left: 25px;
+  overflow-wrap: break-word;
+  font-size: 14px;
+  line-height: 20px;
+  text-indent: -25px;
 }
 
 .red-lit-snippet p.sigle,
 .red-lit-snippet p.aufnahme {
-	position: relative;
-	margin: 0;
-	padding-left: 0;
-	font-weight: bold;
-	font-size: 16px;
-	line-height: 24px;
-	text-indent: 0;
+  position: relative;
+  margin: 0;
+  padding-left: 0;
+  font-weight: bold;
+  font-size: 16px;
+  line-height: 24px;
+  text-indent: 0;
 }
 .red-lit-snippet p.sigle {
-	overflow: hidden;
-	white-space: nowrap;
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 .red-lit-snippet p.sigle .id,
 .red-lit-snippet p.sigle .veraltet {
-	display: inline-block;
-	margin-left: 15px;
-	color: var(--textWarnung);
-	font-size: 14px;
-	font-weight: normal;
+  display: inline-block;
+  margin-left: 15px;
+  color: var(--textWarnung);
+  font-size: 14px;
+  font-weight: normal;
 }
 
 .red-lit-snippet p.sigle .id {
-	color: var(--text);
+  color: var(--text);
 }
 
 .red-lit-snippet p.sigle .icons {
-	position: absolute;
-	right: 0;
-	padding-left: 40px;
-	background-image: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1) 40px);
+  position: absolute;
+  right: 0;
+  padding-left: 40px;
+  background-image: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1) 40px);
 }
 
 .red-lit-snippet.markiert p.sigle .icons {
-	background-image: linear-gradient(to right, var(--redLitTitelIcons0), var(--redLitTitelIcons1) 40px);
+  background-image: linear-gradient(to right, var(--redLitTitelIcons0), var(--redLitTitelIcons1) 40px);
 }
 
 .red-lit-snippet p.sigle .icons a {
-	margin-left: 6px;
+  margin-left: 6px;
 }
 
 .red-lit-snippet p.aufnahme {
-	margin: 0 0 5px 0;
-	font-weight: normal;
+  margin: 0 0 5px 0;
+  font-weight: normal;
 }
 
 .red-lit-snippet p.meta {
-	margin: 5px 0 0 0;
-	color: var(--textHell);
+  margin: 5px 0 0 0;
+  color: var(--textHell);
 }
 
 .red-lit-snippet p.meta span {
-	margin-left: 15px;
+  margin-left: 15px;
 }
 
 .red-lit-snippet p.meta span.veraltet {
-	margin-left: 0;
-	color: var(--textWarnung);
+  margin-left: 0;
+  color: var(--textWarnung);
 }
 
 .red-lit-snippet p.meta span.titelaufnahmen:hover {
-	color: var(--text);
+  color: var(--text);
 }
 
 .red-lit-snippet i {
-	margin-left: 15px;
-	display: inline-block;
-	text-indent: 0;
+  margin-left: 15px;
+  display: inline-block;
+  text-indent: 0;
 }
 
 .red-lit-snippet i:first-child {
-	margin-left: 0;
-	width: 60px;
+  margin-left: 0;
+  width: 60px;
 }
 
 /* Sperrbildschirm ------------------------------ */
 /* Styles von #red-lit-sperre > #karteisuche-suche-laeuft */
 #red-lit #red-lit-sperre {
-	padding: 0;
+  padding: 0;
 }
 
 #red-lit-sperre div {
-	width: 250px;
+  width: 250px;
 }

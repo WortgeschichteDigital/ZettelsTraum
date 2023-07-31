@@ -23,629 +23,629 @@
 
 /* Basis-Elemente ------------------------------- */
 abbr {
-	text-decoration: none;
+  text-decoration: none;
 }
 
 body {
-	margin: 0;
-	overflow-x: hidden;
-	background-color: #fff;
-	color: var(--text);
-	font: 16px/24px "Noto Sans", "Noto Sans Symbols2", sans-serif;
-	user-select: none;
+  margin: 0;
+  overflow-x: hidden;
+  background-color: #fff;
+  color: var(--text);
+  font: 16px/24px "Noto Sans", "Noto Sans Symbols2", sans-serif;
+  user-select: none;
 }
 
 code {
-	border-radius: 3px;
-	padding: 0 3px;
-	background-color: var(--hintergrund);
-	color: var(--text);
-	font-family: "Noto Sans Mono", "Noto Sans Symbols2", monospace;
-	user-select: text;
+  border-radius: 3px;
+  padding: 0 3px;
+  background-color: var(--hintergrund);
+  color: var(--text);
+  font-family: "Noto Sans Mono", "Noto Sans Symbols2", monospace;
+  user-select: text;
 }
 
 h2 {
-	margin: 0;
-	padding: 0 0 0 10px;
-	background-color: var(--farbeH);
-	color: #fff;
-	font-size: 14px;
-	line-height: 28px;
+  margin: 0;
+  padding: 0 0 0 10px;
+  background-color: var(--farbeH);
+  color: #fff;
+  font-size: 14px;
+  line-height: 28px;
 }
 
 h2 span:first-child {
-	margin-right: 5px;
+  margin-right: 5px;
 }
 
 h3 {
-	margin: 20px 0 10px 0;
-	color: var(--textFarbe);
-	font-size: 16px;
-	font-style: italic;
-	font-weight: normal;
+  margin: 20px 0 10px 0;
+  color: var(--textFarbe);
+  font-size: 16px;
+  font-style: italic;
+  font-weight: normal;
 }
 
 h3:first-child {
-	margin-top: 0;
+  margin-top: 0;
 }
 
 .icon-h {
-	display: inline-block;
-	width: 24px;
-	height: 28px;
-	background-color: #fff;
-	-webkit-mask-position: center;
-	mask-position: center;
+  display: inline-block;
+  width: 24px;
+  height: 28px;
+  background-color: #fff;
+  -webkit-mask-position: center;
+  mask-position: center;
 }
 
 mark {
-	border-radius: 3px;
-	padding: 0 3px;
-	background-color: var(--highlight);
-	color: var(--text);
+  border-radius: 3px;
+  padding: 0 3px;
+  background-color: var(--highlight);
+  color: var(--text);
 }
 
 mark.paraphrase {
-	border-radius: 0;
-	padding: 0;
-	background-color: transparent;
-	color: var(--farbe);
+  border-radius: 0;
+  padding: 0;
+  background-color: transparent;
+  color: var(--farbe);
 }
 
 mark.paraphrase::before {
-	content: "‚";
+  content: "‚";
 }
 
 mark.paraphrase::after {
-	content: "‘";
+  content: "‘";
 }
 
 mark.suche {
-	background-color: var(--farbeOrange);
-	color: #fff;
+  background-color: var(--farbeOrange);
+  color: #fff;
 }
 
 mark.suche-kein-start {
-	padding-left: 0;
-	border-top-left-radius: 0;
-	border-bottom-left-radius: 0;
+  padding-left: 0;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
 }
 
 mark.suche-kein-ende {
-	padding-right: 0;
-	border-top-right-radius: 0;
-	border-bottom-right-radius: 0;
+  padding-right: 0;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
 }
 
 mark.user {
-	position: relative;
-	background-color: var(--farbeGelb);
+  position: relative;
+  background-color: var(--farbeGelb);
 }
 
 mark.wort {
-	position: relative;
-	background-color: var(--farbeGelb);
-	font-weight: bold;
+  position: relative;
+  background-color: var(--farbeGelb);
+  font-weight: bold;
 }
 
 mark.wort-kein-start {
-	padding-left: 0;
-	border-top-left-radius: 0;
-	border-bottom-left-radius: 0;
+  padding-left: 0;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
 }
 
 mark.wort-kein-ende {
-	padding-right: 0;
-	border-top-right-radius: 0;
-	border-bottom-right-radius: 0;
+  padding-right: 0;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
 }
 
 .wortFarbe0 {
-	background-color: var(--palette0) !important;
+  background-color: var(--palette0) !important;
 }
 
 .wortFarbe1 {
-	background-color: var(--palette1) !important;
-	color: #fff;
+  background-color: var(--palette1) !important;
+  color: #fff;
 }
 
 .wortFarbe2 {
-	background-color: var(--palette2) !important;
-	color: #fff;
+  background-color: var(--palette2) !important;
+  color: #fff;
 }
 
 .wortFarbe3 {
-	background-color: var(--palette3) !important;
-	color: #fff;
+  background-color: var(--palette3) !important;
+  color: #fff;
 }
 
 .wortFarbe4 {
-	background-color: var(--palette4) !important;
-	color: #fff;
+  background-color: var(--palette4) !important;
+  color: #fff;
 }
 
 .wortFarbe5 {
-	background-color: var(--palette5) !important;
+  background-color: var(--palette5) !important;
 }
 
 .wortFarbe6 {
-	background-color: var(--palette6) !important;
-	color: #fff;
+  background-color: var(--palette6) !important;
+  color: #fff;
 }
 
 .wortFarbe7 {
-	background-color: var(--palette7) !important;
-	color: #fff;
+  background-color: var(--palette7) !important;
+  color: #fff;
 }
 
 .wortFarbe8 {
-	background-color: var(--palette8) !important;
-	color: #fff;
+  background-color: var(--palette8) !important;
+  color: #fff;
 }
 
 .wortFarbe9 {
-	background-color: var(--palette9) !important;
-	color: #fff;
+  background-color: var(--palette9) !important;
+  color: #fff;
 }
 
 .wortFarbe10 {
-	background-color: var(--palette10) !important;
+  background-color: var(--palette10) !important;
 }
 
 .wortFarbe11 {
-	background-color: var(--palette11) !important;
-	color: #fff;
+  background-color: var(--palette11) !important;
+  color: #fff;
 }
 
 .wortFarbe12 {
-	background-color: var(--palette12) !important;
-	color: #fff;
+  background-color: var(--palette12) !important;
+  color: #fff;
 }
 
 .wortFarbe13 {
-	background-color: var(--palette13) !important;
-	color: #fff;
+  background-color: var(--palette13) !important;
+  color: #fff;
 }
 
 .wortFarbe14 {
-	background-color: var(--palette14) !important;
-	color: #fff;
+  background-color: var(--palette14) !important;
+  color: #fff;
 }
 
 .wortFarbe15 {
-	background-color: var(--palette15) !important;
+  background-color: var(--palette15) !important;
 }
 
 .wortFarbe16 {
-	background-color: var(--palette16) !important;
-	color: #fff;
+  background-color: var(--palette16) !important;
+  color: #fff;
 }
 
 .wortFarbe17 {
-	background-color: var(--palette17) !important;
-	color: #fff;
+  background-color: var(--palette17) !important;
+  color: #fff;
 }
 
 mark.mark {
-	background-color: var(--farbeGruen) !important;
-	color: #fff !important;
+  background-color: var(--farbeGruen) !important;
+  color: #fff !important;
 }
 
 p {
-	margin: 0 0 10px 0;
+  margin: 0 0 10px 0;
 }
 
 p.force-wrap {
-	overflow-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 p.checkbox {
-	padding-left: 1px;
+  padding-left: 1px;
 }
 
 p.input-text {
-	line-height: 30px;
+  line-height: 30px;
 }
 
 body > section {
-	position: relative;
-	margin-top: 70px; /* 60 px = Höhe des fixierten <header> + 10px = border */
-	padding: 0 10px;
-	transition: margin-top .5s ease;
+  position: relative;
+  margin-top: 70px; /* 60 px = Höhe des fixierten <header> + 10px = border */
+  padding: 0 10px;
+  transition: margin-top .5s ease;
 }
 
 body > section.quick {
-	margin-top: 99px;
+  margin-top: 99px;
 }
 
 /* Links ---------------------------------------- */
 a {
-	outline: none;
-	color: var(--textFarbe);
-	text-decoration: none;
-	cursor: default;
+  outline: none;
+  color: var(--textFarbe);
+  text-decoration: none;
+  cursor: default;
 }
 
 /* Formular-Elemente ---------------------------- */
 input,
 textarea {
-	margin: 0;
-	color: var(--text);
-	font: 16px/24px "Noto Sans", "Noto Sans Symbols2", sans-serif;
+  margin: 0;
+  color: var(--text);
+  font: 16px/24px "Noto Sans", "Noto Sans Symbols2", sans-serif;
 }
 
 input[type="date"],
 input[type="datetime-local"],
 input[type="number"],
 input[type="text"] {
-	border: 1px solid var(--linie);
-	padding: 2px 5px;
+  border: 1px solid var(--linie);
+  padding: 2px 5px;
 }
 
 input[type="date"]:focus,
 input[type="datetime-local"]:focus,
 input[type="number"]:focus,
 input[type="text"]:focus {
-	outline: 1px solid var(--farbe);
-	border-color: var(--farbe);
+  outline: 1px solid var(--farbe);
+  border-color: var(--farbe);
 }
 
 input[type="date"],
 input[type="datetime-local"] {
-	height: 24px;
+  height: 24px;
 }
 
 input[type="date"]::-webkit-clear-button,
 input[type="datetime-local"]::-webkit-clear-button {
-	display: none;
+  display: none;
 }
 
 input[type="datetime-local"] {
-	width: 190px;
+  width: 190px;
 }
 
 input[type="datetime-local"].lang-en {
-	width: 222px;
+  width: 222px;
 }
 
 input[type="button"] {
-	outline: none;
-	margin: 0 0 0 15px;
-	border: 0;
-	border-radius: 3px;
-	padding: 0 8px 0 33px;
-	background: var(--farbeB) url(../../img/check-weiss.svg) no-repeat 4px center;
-	color: #fff;
+  outline: none;
+  margin: 0 0 0 15px;
+  border: 0;
+  border-radius: 3px;
+  padding: 0 8px 0 33px;
+  background: var(--farbeB) url(../../img/check-weiss.svg) no-repeat 4px center;
+  color: #fff;
 }
 
 input[type="button"]:focus {
-	background-color: var(--farbe);
+  background-color: var(--farbe);
 }
 
 input[type="button"][value="Abbrechen"],
 input[type="button"][value="Schließen"] {
-	background-image: url(../../img/x-dick-weiss.svg);
+  background-image: url(../../img/x-dick-weiss.svg);
 }
 
 input[type="button"][value="Datei"] {
-	background-image: url(../../img/oeffnen-weiss.svg);
+  background-image: url(../../img/oeffnen-weiss.svg);
 }
 
 input[type="button"][value="DTA-Import"],
 input[type="button"][value="Importieren"],
 input[type="button"][value^="Personenliste"],
 input[type="button"][value="Tag-Datei laden"] {
-	background-image: url(../../img/dokument-import-weiss.svg);
+  background-image: url(../../img/dokument-import-weiss.svg);
 }
 
 input[type="button"][value="Auto-Ergänzen"],
 input[type="button"][value="Ergänzen"],
 input[type="button"][value="Hinzufügen"] {
-	background-image: url(../../img/plus-weiss.svg);
+  background-image: url(../../img/plus-weiss.svg);
 }
 
 input[type="button"][value="Exportieren"] {
-	background-image: url(../../img/dokument-export-weiss.svg);
+  background-image: url(../../img/dokument-export-weiss.svg);
 }
 
 input[type="button"][value="GitHub"] {
-	background-image: url(../../img/github-weiss.svg);
+  background-image: url(../../img/github-weiss.svg);
 }
 
 input[type="button"][value="Kopieren"] {
-	background-image: url(../../img/kopieren-weiss.svg);
+  background-image: url(../../img/kopieren-weiss.svg);
 }
 
 input[type="button"][value="Löschen"] {
-	background-image: url(../../img/muelleimer-weiss.svg);
+  background-image: url(../../img/muelleimer-weiss.svg);
 }
 
 input[type="button"][value="Nein"] {
-	background-image: url(../../img/stopp-weiss.svg);
+  background-image: url(../../img/stopp-weiss.svg);
 }
 
 input[type="button"][value="Speichern"] {
-	background-image: url(../../img/speichern-weiss.svg);
+  background-image: url(../../img/speichern-weiss.svg);
 }
 
 input[type="button"][value^="Suche"] {
-	background-image: url(../../img/lupe-weiss.svg);
+  background-image: url(../../img/lupe-weiss.svg);
 }
 
 input[type="button"]#updatesWin-suchen {
-	background-image: url(../../img/pfeil-kreis-weiss.svg);
+  background-image: url(../../img/pfeil-kreis-weiss.svg);
 }
 
 input[type="button"][value^="Zurücksetzen"] {
-	background-image: url(../../img/pfeil-kreis-weiss.svg);
+  background-image: url(../../img/pfeil-kreis-weiss.svg);
 }
 
 input[type="checkbox"],
 input[type="radio"] {
-	position: relative;
-	top: 2px;
-	z-index: 1;
-	box-sizing: content-box;
-	margin: 0 7px 0 0;
-	border: 1px solid var(--linie);
-	padding: 0;
-	width: 13px;
-	height: 13px;
-	appearance: none;
-	background-color: #fff;
-	font-size: 16px;
-	line-height: 13px;
+  position: relative;
+  top: 2px;
+  z-index: 1;
+  box-sizing: content-box;
+  margin: 0 7px 0 0;
+  border: 1px solid var(--linie);
+  padding: 0;
+  width: 13px;
+  height: 13px;
+  appearance: none;
+  background-color: #fff;
+  font-size: 16px;
+  line-height: 13px;
 }
 
 input[type="radio"] {
-	border-radius: 6.5px;
+  border-radius: 6.5px;
 }
 
 input[type="checkbox"]:focus,
 input[type="radio"]:focus {
-	outline: 1px solid var(--farbe);
-	outline-offset: 0;
-	border-color: var(--farbe);
+  outline: 1px solid var(--farbe);
+  outline-offset: 0;
+  border-color: var(--farbe);
 }
 
 input[type="checkbox"]:checked,
 input[type="radio"]:checked {
-	border-color: var(--farbe);
+  border-color: var(--farbe);
 }
 
 input[type="checkbox"]:checked:focus,
 input[type="radio"]:checked:focus {
-	outline-color: var(--aktiv);
+  outline-color: var(--aktiv);
 }
 
 input[type="checkbox"]:checked::before,
 input[type="radio"]:checked::before {
-	position: absolute;
-	display: block;
-	content: "✓";
-	width: 13px;
-	background-color: var(--farbe);
-	color: #fff;
-	font-size: 12px;
-	font-weight: bold;
-	text-align: center;
+  position: absolute;
+  display: block;
+  content: "✓";
+  width: 13px;
+  background-color: var(--farbe);
+  color: #fff;
+  font-size: 12px;
+  font-weight: bold;
+  text-align: center;
 }
 
 input[type="checkbox"]:disabled {
-	background-color: var(--hintergrundDunkel);
+  background-color: var(--hintergrundDunkel);
 }
 
 input[type="radio"]:checked::before {
-	content: "⬤";
-	border-radius: 6.5px;
-	width: 13px;
-	font-size: 7px;
-	text-align: center;
+  content: "⬤";
+  border-radius: 6.5px;
+  width: 13px;
+  font-size: 7px;
+  text-align: center;
 }
 
 input:read-only::selection {
-	 /* user-select: none funktioniert nicht
-			auf disabled kann ich sie auch nicht stellen, weil dann kein Klick-Event mehr gefeuert wird */
-	background-color: transparent;
-	color: inherit;
+   /* user-select: none funktioniert nicht
+      auf disabled kann ich sie auch nicht stellen, weil dann kein Klick-Event mehr gefeuert wird */
+  background-color: transparent;
+  color: inherit;
 }
 
 textarea {
-	display: block;
-	margin: 0;
-	resize: vertical;
-	border: 1px solid var(--linie);
-	padding: 2px 5px;
-	width: calc(100% - 12px);
-	resize: none;
+  display: block;
+  margin: 0;
+  resize: vertical;
+  border: 1px solid var(--linie);
+  padding: 2px 5px;
+  width: calc(100% - 12px);
+  resize: none;
 }
 
 textarea:focus {
-	outline: 1px solid var(--farbe);
-	border-color: var(--farbe);
+  outline: 1px solid var(--farbe);
+  border-color: var(--farbe);
 }
 
 /* Annotierung Wort ----------------------------- */
 #annotierung-wort {
-	position: absolute;
-	z-index: 1;
-	box-shadow: var(--boxShadow);
-	border: 1px solid var(--linie);
-	border-radius: 5px;
-	padding: 5px 5px;
-	width: 175px;
-	background-color: #fff;
-	/* die folgenden Styles sind nötig, damit Textauszeichnungen oberhalb des <mark> nicht vererbt werden; s. u. die Styles .dta-* */
-	font: 14px/24px "Noto Sans", "Noto Sans Symbols2", sans-serif;
-	font-style: normal;
-	font-variant: normal;
-	font-weight: normal;
-	text-decoration: none;
-	letter-spacing: normal;
+  position: absolute;
+  z-index: 1;
+  box-shadow: var(--boxShadow);
+  border: 1px solid var(--linie);
+  border-radius: 5px;
+  padding: 5px 5px;
+  width: 175px;
+  background-color: #fff;
+  /* die folgenden Styles sind nötig, damit Textauszeichnungen oberhalb des <mark> nicht vererbt werden; s. u. die Styles .dta-* */
+  font: 14px/24px "Noto Sans", "Noto Sans Symbols2", sans-serif;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  text-decoration: none;
+  letter-spacing: normal;
 }
 
 #annotierung-wort.links-oben {
-	top: -91px;
-	left: 0;
+  top: -91px;
+  left: 0;
 }
 
 #annotierung-wort.rechts-oben {
-	top: -91px;
-	right: 0;
+  top: -91px;
+  right: 0;
 }
 
 #annotierung-wort.links-unten {
-	top: 27px;
-	left: 0;
+  top: 27px;
+  left: 0;
 }
 
 #annotierung-wort.rechts-unten {
-	top: 27px;
-	right: 0;
+  top: 27px;
+  right: 0;
 }
 
 #annotierung-wort > img {
-	position: absolute;
-	top: 0;
-	right: 0;
+  position: absolute;
+  top: 0;
+  right: 0;
 }
 
 #annotierung-wort .farbe {
-	display: inline-block;
-	margin-right: 10px;
-	width: 13px;
-	height: 13px;
-	border: 1px solid var(--linie);
+  display: inline-block;
+  margin-right: 10px;
+  width: 13px;
+  height: 13px;
+  border: 1px solid var(--linie);
 }
 
 #annotierung-wort .farbe.aktiv {
-	outline: 2px solid var(--farbe);
+  outline: 2px solid var(--farbe);
 }
 
 .farbe.farbe0,
 .farbe0 mark.wort,
 .farbe0 mark.user {
-	outline: 1px solid var(--linie);
-	background-color: transparent !important;
-	color: var(--text); /* Textfarbe könnte über Formvarianten auf weiß gesetzt worden sein */
-	font-weight: normal;
+  outline: 1px solid var(--linie);
+  background-color: transparent !important;
+  color: var(--text); /* Textfarbe könnte über Formvarianten auf weiß gesetzt worden sein */
+  font-weight: normal;
 }
 
 .farbe.farbe1,
 .farbe1 mark.wort,
 .farbe1 mark.user {
-	background-color: var(--farbeGelb) !important;
-	color: var(--text); /* Textfarbe könnte über Formvarianten auf weiß gesetzt worden sein */
+  background-color: var(--farbeGelb) !important;
+  color: var(--text); /* Textfarbe könnte über Formvarianten auf weiß gesetzt worden sein */
 }
 
 .farbe.farbe2,
 .farbe2 mark.wort,
 .farbe2 mark.user {
-	background-color: var(--hintergrundGruen) !important;
-	color: #fff;
+  background-color: var(--hintergrundGruen) !important;
+  color: #fff;
 }
 
 .farbe.farbe3,
 .farbe3 mark.wort,
 .farbe3 mark.user {
-	background-color: var(--farbeRot) !important;
-	color: #fff;
+  background-color: var(--farbeRot) !important;
+  color: #fff;
 }
 
 .farbe.farbe4,
 .farbe4 mark.wort,
 .farbe4 mark.user {
-	background-color: var(--hintergrundBlau) !important;
-	color: #fff;
+  background-color: var(--hintergrundBlau) !important;
+  color: #fff;
 }
 
 #annotierung-wort .check,
 #annotierung-wort .text {
-	display: block;
-	padding: 1px 6px;
-	overflow: hidden;
-	color: var(--text);
-	text-overflow: ellipsis;
-	white-space: nowrap;
+  display: block;
+  padding: 1px 6px;
+  overflow: hidden;
+  color: var(--text);
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 #annotierung-wort .text {
-	font-style: italic;
+  font-style: italic;
 }
 
 #annotierung-wort .text.leer {
-	color: var(--textSehrHell);
-	font-style: italic;
-	cursor: default;
+  color: var(--textSehrHell);
+  font-style: italic;
+  cursor: default;
 }
 
 #annotierung-wort .text.aktiv {
-	padding: 0;
+  padding: 0;
 }
 
 #annotierung-wort input[type="text"] {
-	display: block;
-	border: 1px solid var(--linie);
-	padding: 0 5px;
-	width: calc(100% - 12px);
-	font-size: 14px;
-	font-style: normal;
+  display: block;
+  border: 1px solid var(--linie);
+  padding: 0 5px;
+  width: calc(100% - 12px);
+  font-size: 14px;
+  font-style: normal;
 }
 
 #annotierung-wort input[type="text"]:focus {
-	outline: 1px solid var(--farbe);
-	border-color: var(--farbe);
+  outline: 1px solid var(--farbe);
+  border-color: var(--farbe);
 }
 
 #annotierung-wort input[type="text"].changed {
-	outline-color: var(--farbeRot);
-	border-color: var(--farbeRot);
+  outline-color: var(--farbeRot);
+  border-color: var(--farbeRot);
 }
 
 .annotierung-wort::after {
-	content: url(../../img/annotiert.svg);
-	display: inline-block;
-	vertical-align: text-bottom;
-	margin: 0 2px;
-	width: 24px;
-	height: 24px;
+  content: url(../../img/annotiert.svg);
+  display: inline-block;
+  vertical-align: text-bottom;
+  margin: 0 2px;
+  width: 24px;
+  height: 24px;
 }
 
 .annotierung-wort.farbe0::after,
 .annotierung-wort[data-nicht-taggen]::after {
-	content: url(../../img/annotiert_nicht-taggen.svg);
+  content: url(../../img/annotiert_nicht-taggen.svg);
 }
 
 /* DTA-Auszeichnungen in XML-Dokumenten --------- */
 .dta-antiqua {
-	font-family: "Noto Serif", serif;
-	font-size: 110%;
+  font-family: "Noto Serif", serif;
+  font-size: 110%;
 }
 
 .dta-blau {
-	color: blue;
+  color: blue;
 }
 
 .dta-doppelt {
-	text-decoration: underline double;
+  text-decoration: underline double;
 }
 
 .dta-gesperrt {
-	letter-spacing: 0.125em;
+  letter-spacing: 0.125em;
 }
 
 .dta-groesser {
-	font-size: larger;
+  font-size: larger;
 }
 
 .dta-initiale {
-	font-size: 150%;
+  font-size: 150%;
 }
 
 .dta-kapitaelchen {
-	font-variant: small-caps;
+  font-variant: small-caps;
 }
 
 .dta-rot {
-	color: red;
+  color: red;
 }

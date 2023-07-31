@@ -5,7 +5,7 @@ ln -sf "/opt/zettelstraum/zettelstraum" "/usr/local/bin/zettelstraum"
 
 # ZTJ-Dateityp registrieren
 if ! command -v xdg-mime >/dev/null 2>&1; then
-	exit 1
+  exit 1
 fi
 cd /opt/zettelstraum/resources/filetype/linux
 xdg-mime install x-ztj.xml

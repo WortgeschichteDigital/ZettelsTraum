@@ -1,22 +1,22 @@
 @charset "utf-8";
 
 .bd-win-baum > .bd-win-baum {
-	margin: 0 0 0 18px;
-	border-left: 1px dotted var(--linie);
-	padding: 0 0 0 18px;
+  margin: 0 0 0 18px;
+  border-left: 1px dotted var(--linie);
+  padding: 0 0 0 18px;
 }
 
 .bd-win-baum p {
-	margin: 0;
-	padding-left: 37px;
-	width: fit-content;
-	line-height: 30px;
-	text-indent: -37px;
+  margin: 0;
+  padding-left: 37px;
+  width: fit-content;
+  line-height: 30px;
+  text-indent: -37px;
 }
 
 .bd-win-baum b.zaehlung {
-	display: inline-block;
-	width: 37px;
-	text-align: center;
-	text-indent: 0;
+  display: inline-block;
+  width: 37px;
+  text-align: center;
+  text-indent: 0;
 }

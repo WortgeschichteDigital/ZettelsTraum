@@ -2,275 +2,275 @@
 
 /* Formvarianten -------------------------------- */
 #stamm > div {
-	margin-top: 40px;
-	max-width: 650px;
+  margin-top: 40px;
+  max-width: 650px;
 }
 
 .icon-h-stamm {
-	-webkit-mask-image: url(../../img/formvarianten.svg);
-	mask-image: url(../../img/formvarianten.svg);
+  -webkit-mask-image: url(../../img/formvarianten.svg);
+  mask-image: url(../../img/formvarianten.svg);
 }
 
 /* Fensterkopf ---------------------------------- */
 #stamm-kopf {
-	position: relative;
-	margin-bottom: 10px;
-	color: var(--textSehrHell);
+  position: relative;
+  margin-bottom: 10px;
+  color: var(--textSehrHell);
 }
 
 #stamm-kopf > span {
-	position: relative;
-	display: inline-block;
-	margin: 0 10px 5px 0;
-	padding: 2px 5px;
-	border: 1px solid var(--linie);
-	border-radius: 5px;
+  position: relative;
+  display: inline-block;
+  margin: 0 10px 5px 0;
+  padding: 2px 5px;
+  border: 1px solid var(--linie);
+  border-radius: 5px;
 }
 
 #stamm-kopf > span.aktiv {
-	border-color: var(--farbe);
-	color: var(--farbe);
-	font-weight: bold;
+  border-color: var(--farbe);
+  color: var(--farbe);
+  font-weight: bold;
 }
 
 #stamm-kopf img {
-	vertical-align: bottom;
+  vertical-align: bottom;
 }
 
 #stamm-kopf .wort {
-	margin-left: 5px;
+  margin-left: 5px;
 }
 
 #stamm-kopf .konfig {
-	-webkit-mask-image: url(../../img/zahnrad.svg);
-	mask-image: url(../../img/zahnrad.svg);
-	margin-left: 2px;
-	background-color: var(--iconHell);
+  -webkit-mask-image: url(../../img/zahnrad.svg);
+  mask-image: url(../../img/zahnrad.svg);
+  margin-left: 2px;
+  background-color: var(--iconHell);
 }
 
 #stamm-kopf .konfig:hover {
-	background-color: var(--text);
+  background-color: var(--text);
 }
 
 #stamm-kopf .konfig:focus {
-	background-color: var(--farbe);
+  background-color: var(--farbe);
 }
 
 /* Popup ---------------------------------------- */
 #stamm-popup {
-	position: absolute;
-	top: 32px;
-	z-index: 2;
-	box-shadow: var(--boxShadow);
-	border: 1px solid var(--linie);
-	border-radius: 5px;
-	padding: 10px 10px 5px 10px;
-	width: 250px;
-	background-color: #fff;
-	color: var(--text);
-	font-weight: normal;
+  position: absolute;
+  top: 32px;
+  z-index: 2;
+  box-shadow: var(--boxShadow);
+  border: 1px solid var(--linie);
+  border-radius: 5px;
+  padding: 10px 10px 5px 10px;
+  width: 250px;
+  background-color: #fff;
+  color: var(--text);
+  font-weight: normal;
 }
 
 #stamm-popup.links {
-	left: -1px;
+  left: -1px;
 }
 
 #stamm-popup.rechts {
-	right: -1px;
+  right: -1px;
 }
 
 #stamm-popup > img {
-	position: absolute;
-	top: 0;
-	right: 0;
+  position: absolute;
+  top: 0;
+  right: 0;
 }
 
 #stamm-popup p {
-	margin-bottom: 5px;
+  margin-bottom: 5px;
 }
 
 #stamm-popup .stamm-popup-ps {
-	margin: 0 15px 15px 0;
-	padding-left: 25px;
-	font-style: italic;
-	text-indent: -25px;
+  margin: 0 15px 15px 0;
+  padding-left: 25px;
+  font-style: italic;
+  text-indent: -25px;
 }
 
 #stamm-popup .stamm-popup-ps strong {
-	font-style: normal;
+  font-style: normal;
 }
 
 #stamm-popup .stamm-popup-ps span {
-	color: var(--textSehrHell);
+  color: var(--textSehrHell);
 }
 
 #stamm-popup p img {
-	margin-right: 5px;
+  margin-right: 5px;
 }
 
 #stamm-popup .link {
-	cursor: pointer;
+  cursor: pointer;
 }
 
 #stamm-popup input[type="checkbox"] {
-	margin: 0 9px 0 5px;
+  margin: 0 9px 0 5px;
 }
 
 #stamm-popup label {
-	color: var(--textFarbe);
+  color: var(--textFarbe);
 }
 
 #stamm-popup .farben {
-	margin: 15px 0 0 5px;
+  margin: 15px 0 0 5px;
 }
 
 #stamm-popup .farbe {
-	display: inline-block;
-	margin-right: 10px;
-	width: 13px;
-	height: 13px;
-	border: 1px solid var(--linie);
+  display: inline-block;
+  margin-right: 10px;
+  width: 13px;
+  height: 13px;
+  border: 1px solid var(--linie);
 }
 
 #stamm-popup .farbe.aktiv {
-	outline: 2px solid var(--farbe);
+  outline: 2px solid var(--farbe);
 }
 
 #stamm-popup .stamm-popup-buttons {
-	margin-top: 15px;
+  margin-top: 15px;
 }
 
 #stamm-popup .stamm-popup-buttons input[type="button"] {
-	margin: 0;
-	width: auto;
+  margin: 0;
+  width: auto;
 }
 
 #stamm-popup .stamm-popup-buttons input:first-child {
-	margin-right: 15px;
+  margin-right: 15px;
 }
 
 /* Sperre --------------------------------------- */
 #stamm-sperre {
-	position: absolute;
-	top: 0;
-	left: 0;
-	z-index: 1;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	border-radius: 10px; /* für #stamm-cont müssen es 10px sein, für #stamm-popup würden 5px reichen */
-	width: 100%;
-	height: 100%;
-	background-color: rgba(255, 255, 255, .7);
-	backdrop-filter: blur(2px);
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px; /* für #stamm-cont müssen es 10px sein, für #stamm-popup würden 5px reichen */
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, .7);
+  backdrop-filter: blur(2px);
 }
 
 /* Formenliste ---------------------------------- */
 #stamm-cont {
-	position: relative;
-	padding: 10px;
+  position: relative;
+  padding: 10px;
 }
 
 #stamm-cont p.input-text {
-	margin-top: 10px;
+  margin-top: 10px;
 }
 
 #stamm-cont p.form {
-	position: relative;
-	margin-bottom: 5px;
+  position: relative;
+  margin-bottom: 5px;
 }
 
 #stamm-cont p.form input[type="button"] {
-	position: absolute;
-	right: 0;
+  position: absolute;
+  right: 0;
 }
 
 #stamm-cont input[type="radio"] {
-	margin-left: 15px;
+  margin-left: 15px;
 }
 
 #stamm-cont input[type="radio"]:first-child {
-	margin-left: 6px;
+  margin-left: 6px;
 }
 
 #stamm-cont input[type="button"] {
-	margin-left: 5px;
-	width: 132px;
-	text-align: left;
+  margin-left: 5px;
+  width: 132px;
+  text-align: left;
 }
 
 #lexika-cont input[type="button"] {
-	margin-left: 5px;
-	width: 116px;
+  margin-left: 5px;
+  width: 116px;
 }
 
 #stamm-cont input[type="text"] {
-	width: calc(100% - 137px - 12px); /* Button 137px, 12px padding und border */
+  width: calc(100% - 137px - 12px); /* Button 137px, 12px padding und border */
 }
 
 #lexika-cont input[type="text"] {
-	width: calc(100% - 121px - 12px); /* Button 121px, 12px padding und border */
+  width: calc(100% - 121px - 12px); /* Button 121px, 12px padding und border */
 }
 
 #stamm-cont label {
-	color: var(--textFarbe);
+  color: var(--textFarbe);
 }
 
 #stamm-liste {
-	overflow-x: hidden;
-	overflow-y: auto;
-	transition: max-height .5s ease;
+  overflow-x: hidden;
+  overflow-y: auto;
+  transition: max-height .5s ease;
 }
 
 #stamm-liste .icon-link,
 #red-meta-be-liste .icon-link,
 #kopieren-liste-cont .icon-link {
-	position: relative;
-	top: 1px;
-	margin-right: 10px;
-	vertical-align: bottom;
-	background-color: var(--iconHell);
+  position: relative;
+  top: 1px;
+  margin-right: 10px;
+  vertical-align: bottom;
+  background-color: var(--iconHell);
 }
 
 #kopieren-liste-cont .icon-link {
-	position: static;
+  position: static;
 }
 
 #stamm-liste .icon-link:focus,
 #red-meta-be-liste .icon-link:focus,
 #kopieren-liste-cont .icon-link:focus {
-	background-color: var(--farbe);
+  background-color: var(--farbe);
 }
 
 #stamm-liste .icon-link:hover,
 #red-meta-be-liste .icon-link:hover,
 #kopieren-liste-cont .icon-link:hover {
-	background-color: var(--text);
+  background-color: var(--text);
 }
 
 #kopieren-liste-cont a:not(.icon-link):focus {
-	text-decoration: underline;
+  text-decoration: underline;
 }
 
 #stamm-liste p {
-	margin-bottom: 5px;
-	height: 24px;
+  margin-bottom: 5px;
+  height: 24px;
 }
 
 #stamm-liste .keine {
-	margin-left: 6px;
-	color: var(--textSehrHell);
-	font-style: italic;
+  margin-left: 6px;
+  color: var(--textSehrHell);
+  font-style: italic;
 }
 
 #stamm-liste .dta {
-	display: inline-block;
-	margin-left: 7px;
-	color: var(--textDTA);
-	font-size: 12px;
+  display: inline-block;
+  margin-left: 7px;
+  color: var(--textDTA);
+  font-size: 12px;
 }
 
 .icon-entfernen {
-	-webkit-mask-image: url(../../img/x-dick.svg);
-	mask-image: url(../../img/x-dick.svg);
+  -webkit-mask-image: url(../../img/x-dick.svg);
+  mask-image: url(../../img/x-dick.svg);
 }

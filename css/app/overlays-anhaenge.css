@@ -2,110 +2,110 @@
 
 /* Anhänge -------------------------------------- */
 #anhaenge > div {
-	margin-top: 40px;
-	max-width: 550px;
+  margin-top: 40px;
+  max-width: 550px;
 }
 
 .icon-h-anhaenge {
-	-webkit-mask-image: url(../../img/bueroklammer.svg);
-	mask-image: url(../../img/bueroklammer.svg);
+  -webkit-mask-image: url(../../img/bueroklammer.svg);
+  mask-image: url(../../img/bueroklammer.svg);
 }
 
 #anhaenge-rahmen {
-	padding: 10px;
+  padding: 10px;
 }
 
 #anhaenge-cont {
-	overflow-y: auto;
-	transition: max-height .5s ease;
+  overflow-y: auto;
+  transition: max-height .5s ease;
 }
 
 #anhaenge-cont h3 {
-	margin-bottom: 5px;
+  margin-bottom: 5px;
 }
 
 #anhaenge-cont p:last-child {
-	margin-bottom: 0;
+  margin-bottom: 0;
 }
 
 .anhaenge-add {
-	text-align: center;
+  text-align: center;
 }
 
 .anhaenge-add input {
-	width: 155px;
-	text-align: left;
+  width: 155px;
+  text-align: left;
 }
 
 .anhaenge-add input:first-child {
-	margin-left: 0;
+  margin-left: 0;
 }
 
 #beleg .anhaenge-add input {
-	width: auto;
+  width: auto;
 }
 
 .anhaenge-item {
-	border-top: 1px solid var(--linie);
-	padding: 5px 10px;
-	height: 24px;
-	background-color: #fff;
+  border-top: 1px solid var(--linie);
+  padding: 5px 10px;
+  height: 24px;
+  background-color: #fff;
 }
 
 .anhaenge-item:last-child {
-	border-bottom: 1px solid var(--linie);
+  border-bottom: 1px solid var(--linie);
 }
 
 .anhaenge-item ~ h3 {
-	margin-top: 0;
-	border-top: 1px solid var(--linie);
-	padding-top: 20px;
+  margin-top: 0;
+  border-top: 1px solid var(--linie);
+  padding-top: 20px;
 }
 
 .anhaenge-item:hover {
-	background-color: var(--hover);
+  background-color: var(--hover);
 }
 
 .anhaenge-item img {
-	margin-right: 10px;
+  margin-right: 10px;
 }
 
 .anhaenge-datei {
-	display: inline-block;
-	vertical-align: top;
-	width: calc(100% - 34px * 3); /* 24px Image, 10px Margin */
-	overflow: hidden;
-	text-overflow: ellipsis;
-	white-space: nowrap;
+  display: inline-block;
+  vertical-align: top;
+  width: calc(100% - 34px * 3); /* 24px Image, 10px Margin */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .anhaenge-item a {
-	margin-left: 10px;
-	vertical-align: top;
-	background-color: var(--iconHell);
+  margin-left: 10px;
+  vertical-align: top;
+  background-color: var(--iconHell);
 }
 
 .anhaenge-item a:focus {
-	background-color: var(--farbe);
+  background-color: var(--farbe);
 }
 
 .anhaenge-item a:hover {
-	background-color: var(--text);
+  background-color: var(--text);
 }
 
 .anhaenge-aufwaerts {
-	-webkit-mask-image: url(../../img/pfeil-gerade-hoch.svg);
-	mask-image: url(../../img/pfeil-gerade-hoch.svg);
+  -webkit-mask-image: url(../../img/pfeil-gerade-hoch.svg);
+  mask-image: url(../../img/pfeil-gerade-hoch.svg);
 }
 
 .anhaenge-loeschen {
-	-webkit-mask-image: url(../../img/muelleimer.svg);
-	mask-image: url(../../img/muelleimer.svg);
+  -webkit-mask-image: url(../../img/muelleimer.svg);
+  mask-image: url(../../img/muelleimer.svg);
 }
 
 .anhaenge-platzhalter {
-	display: inline-block;
-	margin-left: 10px;
-	width: 24px;
-	height: 24px;
+  display: inline-block;
+  margin-left: 10px;
+  width: 24px;
+  height: 24px;
 }

@@ -1,248 +1,248 @@
 <!doctype html>
 <html lang="de">
-	<head>
-		<meta charset="utf-8">
-		<meta http-equiv="Content-Security-Policy" content="default-src 'self'">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'">
 
-		<title> </title>
+    <title> </title>
 
-		<link rel="stylesheet" href="../css/tooltip.css">
-		<link rel="stylesheet" href="../css/app/dropdown.css">
-		<link rel="stylesheet" href="../css/app/overlays.css">
-		<link rel="stylesheet" href="../css/app/overlays-dialog.css">
-		<link rel="stylesheet" href="../css/win/xml.css">
+    <link rel="stylesheet" href="../css/tooltip.css">
+    <link rel="stylesheet" href="../css/app/dropdown.css">
+    <link rel="stylesheet" href="../css/app/overlays.css">
+    <link rel="stylesheet" href="../css/app/overlays-dialog.css">
+    <link rel="stylesheet" href="../css/win/xml.css">
 
-		<script src="../js/helferXml.js"></script>
-		<script src="../js/tastatur.js"></script>
-		<script src="../js/tooltip.js"></script>
+    <script src="../js/helferXml.js"></script>
+    <script src="../js/tastatur.js"></script>
+    <script src="../js/tooltip.js"></script>
 
-		<script src="../js/app/dialog.js"></script>
-		<script src="../js/app/dropdown.js"></script>
-		<script src="../js/app/helfer.js"></script>
-		<script src="../js/app/overlay.js"></script>
-		<script src="../js/app/redWi.js"></script> <!-- helfer.sortWi() hängt davon ab -->
+    <script src="../js/app/dialog.js"></script>
+    <script src="../js/app/dropdown.js"></script>
+    <script src="../js/app/helfer.js"></script>
+    <script src="../js/app/overlay.js"></script>
+    <script src="../js/app/redWi.js"></script> <!-- helfer.sortWi() hängt davon ab -->
 
-		<script src="../js/win/init-win.js"></script>
-		<script src="../js/win/init-xml.js"></script>
-		<script src="../js/win/helferWin.js"></script>
-		<script src="../js/win/popup.js"></script>
-		<script src="../js/win/xml.js"></script>
-	</head>
-	<body>
-		<!-- FENSTERLADEN -->
-		<div id="fensterladen"><img src="../img/icon-app-weiss-48.svg" width="96" height="96" alt=""></div>
+    <script src="../js/win/init-win.js"></script>
+    <script src="../js/win/init-xml.js"></script>
+    <script src="../js/win/helferWin.js"></script>
+    <script src="../js/win/popup.js"></script>
+    <script src="../js/win/xml.js"></script>
+  </head>
+  <body>
+    <!-- FENSTERLADEN -->
+    <div id="fensterladen"><img src="../img/icon-app-weiss-48.svg" width="96" height="96" alt=""></div>
 
-		<!-- KOPF -->
-		<header>
-			<h1> </h1
-			><span id="kopf-icons"
-				><a href="#" id="kopf-export" title="XML-Datei exportieren (Strg + E)"
-					><svg width="24" height="24" version="1.1" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="m6.75 5s-1 0-1 1v12c0 1 1 1 1 1h10c1 0 1-1 1-1v-4.25l-2 1.25v2h-8v-9.996h8v1.9961l2 1.25v-4.25c0-1-1-1-1-1zm7 3.998v2h-4v2h4v2l4.5-3z"/></svg
-				></a
-				><a href="#" id="kopf-import" title="XML-Datei importieren"
-					><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4,4)" d="m3 1s-1 0-1 1v12c0 1 1 1 1 1h10s1 0 1-1v-4h-2v3h-8v-10h8v3h2v-4c0-1-1-1-1-1zm8 4-4.5 3 4.5 3v-2h4v-2h-4z"/></svg
-				></a
-				><a href="#" id="kopf-speichern" title="Kartei speichern (Strg + S)"
-					><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m5.998 1.0195v6h-2.3398l4.332 6.3047 4.3809-6.3047h-2.373v-5.9707l-4-0.029297zm-4.998 13.012v1.9688h14.006l-0.005859-1.9688h-14z"/></svg
-				></a
-				><a href="#" id="kopf-reset" title="XML-Daten zurücksetzen"
-					><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m6 0.99219c-1 0-1 1-1 1h-3s-1 0.0035063-1 1.0039v1l13-0.0039063v-0.99609c0-1-1-1.0039-1-1.0039h-3s0-1-1-1h-3zm-4 4.0039v9c5e-5 0.52358 0.47642 0.99995 1 1h9c0.52358-5e-5 0.99995-0.47642 1-1v-9h-11z"/></svg
-				></a
-			></span
-			><div id="kopf-nav">Navigation<ul>
-					<li><a href="#h-metadaten">Metadaten</a></li>
-					<li><a href="#h-lemmata">Lemmata</a></li>
-					<li><a href="#h-kurz-gefasst">Kurz gefasst</a></li>
-					<li><a href="#h-wortgeschichte">Wortgeschichte</a></li>
-					<li><a href="#h-belege">Belege</a></li>
-					<li><a href="#h-literatur">Literatur</a></li>
-					<li><a href="#h-wortinformationen">Wortinformationen</a></li>
-					<li><a href="#h-bedeutungsgerueste">Bedeutungsgerüste</a></li>
-				</ul>
-			</div
-			><img src="../img/icon-app-weiss-48.svg" width="48" height="48" alt="" id="icon">
-		</header>
+    <!-- KOPF -->
+    <header>
+      <h1> </h1
+      ><span id="kopf-icons"
+        ><a href="#" id="kopf-export" title="XML-Datei exportieren (Strg + E)"
+          ><svg width="24" height="24" version="1.1" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="m6.75 5s-1 0-1 1v12c0 1 1 1 1 1h10c1 0 1-1 1-1v-4.25l-2 1.25v2h-8v-9.996h8v1.9961l2 1.25v-4.25c0-1-1-1-1-1zm7 3.998v2h-4v2h4v2l4.5-3z"/></svg
+        ></a
+        ><a href="#" id="kopf-import" title="XML-Datei importieren"
+          ><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4,4)" d="m3 1s-1 0-1 1v12c0 1 1 1 1 1h10s1 0 1-1v-4h-2v3h-8v-10h8v3h2v-4c0-1-1-1-1-1zm8 4-4.5 3 4.5 3v-2h4v-2h-4z"/></svg
+        ></a
+        ><a href="#" id="kopf-speichern" title="Kartei speichern (Strg + S)"
+          ><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m5.998 1.0195v6h-2.3398l4.332 6.3047 4.3809-6.3047h-2.373v-5.9707l-4-0.029297zm-4.998 13.012v1.9688h14.006l-0.005859-1.9688h-14z"/></svg
+        ></a
+        ><a href="#" id="kopf-reset" title="XML-Daten zurücksetzen"
+          ><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m6 0.99219c-1 0-1 1-1 1h-3s-1 0.0035063-1 1.0039v1l13-0.0039063v-0.99609c0-1-1-1.0039-1-1.0039h-3s0-1-1-1h-3zm-4 4.0039v9c5e-5 0.52358 0.47642 0.99995 1 1h9c0.52358-5e-5 0.99995-0.47642 1-1v-9h-11z"/></svg
+        ></a
+      ></span
+      ><div id="kopf-nav">Navigation<ul>
+          <li><a href="#h-metadaten">Metadaten</a></li>
+          <li><a href="#h-lemmata">Lemmata</a></li>
+          <li><a href="#h-kurz-gefasst">Kurz gefasst</a></li>
+          <li><a href="#h-wortgeschichte">Wortgeschichte</a></li>
+          <li><a href="#h-belege">Belege</a></li>
+          <li><a href="#h-literatur">Literatur</a></li>
+          <li><a href="#h-wortinformationen">Wortinformationen</a></li>
+          <li><a href="#h-bedeutungsgerueste">Bedeutungsgerüste</a></li>
+        </ul>
+      </div
+      ><img src="../img/icon-app-weiss-48.svg" width="48" height="48" alt="" id="icon">
+    </header>
 
-		<!-- FORMULAR -->
-		<main>
-			<!-- METADATEN -->
-			<h2 id="h-metadaten">Metadaten<span class="toggle" data-id="md"
-				><a href="#" class="icon-link icon-auge" title="alle Blöcke öffnen"> </a
-				><a href="#" class="icon-link icon-auge-durchgestrichen" title="alle Blöcke schließen"> </a
-			></span></h2>
+    <!-- FORMULAR -->
+    <main>
+      <!-- METADATEN -->
+      <h2 id="h-metadaten">Metadaten<span class="toggle" data-id="md"
+        ><a href="#" class="icon-link icon-auge" title="alle Blöcke öffnen"> </a
+        ><a href="#" class="icon-link icon-auge-durchgestrichen" title="alle Blöcke schließen"> </a
+      ></span></h2>
 
-			<div id="md">
-				<p class="input-text"
-					><input type="text" value="" placeholder="Artikel-ID" id="md-id"
-					><a href="#" class="icon-link icon-stift"> </a
-				></p>
+      <div id="md">
+        <p class="input-text"
+          ><input type="text" value="" placeholder="Artikel-ID" id="md-id"
+          ><a href="#" class="icon-link icon-stift"> </a
+        ></p>
 
-				<p class="dropdown-cont input-text"
-					><input type="text" value="" placeholder="Artikeltyp" class="dropdown-feld" id="md-ty" readonly
-					><a href="#" class="dropdown-link-element" title="Artikeltypen auflisten" tabindex="-1"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m7 2v8l-3.5-3.5-1.5 1.5 6 6 6-6-1.5-1.5-3.5 3.5v-8z"/></svg></a
-				></p>
+        <p class="dropdown-cont input-text"
+          ><input type="text" value="" placeholder="Artikeltyp" class="dropdown-feld" id="md-ty" readonly
+          ><a href="#" class="dropdown-link-element" title="Artikeltypen auflisten" tabindex="-1"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m7 2v8l-3.5-3.5-1.5 1.5 6 6 6-6-1.5-1.5-3.5 3.5v-8z"/></svg></a
+        ></p>
 
-				<p class="dropdown-cont input-text"
-					><input type="text" value="" placeholder="Themenfeld" class="dropdown-feld" id="md-tf"
-					><a href="#" class="dropdown-link-element" title="Themenfelder auflisten" tabindex="-1"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m7 2v8l-3.5-3.5-1.5 1.5 6 6 6-6-1.5-1.5-3.5 3.5v-8z"/></svg></a
-				></p>
+        <p class="dropdown-cont input-text"
+          ><input type="text" value="" placeholder="Themenfeld" class="dropdown-feld" id="md-tf"
+          ><a href="#" class="dropdown-link-element" title="Themenfelder auflisten" tabindex="-1"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m7 2v8l-3.5-3.5-1.5 1.5 6 6 6-6-1.5-1.5-3.5 3.5v-8z"/></svg></a
+        ></p>
 
-				<p class="dropdown-cont input-text" id="md-re"
-					><a href="#" class="icon-link icon-plus-dick"> </a
-					><input type="text" value="" placeholder="AutorIn" class="dropdown-feld" id="md-re-au"
-					><a href="#" class="dropdown-link-element" title="AutorInnen auflisten" tabindex="-1"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m7 2v8l-3.5-3.5-1.5 1.5 6 6 6-6-1.5-1.5-3.5 3.5v-8z"/></svg></a
-					><input type="date" value="" id="md-re-da" required
-					><input type="text" value="" placeholder="Änderungsnotiz" id="md-re-no"
-				></p>
-			</div>
+        <p class="dropdown-cont input-text" id="md-re"
+          ><a href="#" class="icon-link icon-plus-dick"> </a
+          ><input type="text" value="" placeholder="AutorIn" class="dropdown-feld" id="md-re-au"
+          ><a href="#" class="dropdown-link-element" title="AutorInnen auflisten" tabindex="-1"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m7 2v8l-3.5-3.5-1.5 1.5 6 6 6-6-1.5-1.5-3.5 3.5v-8z"/></svg></a
+          ><input type="date" value="" id="md-re-da" required
+          ><input type="text" value="" placeholder="Änderungsnotiz" id="md-re-no"
+        ></p>
+      </div>
 
-			<!-- LEMMATA -->
-			<h2 id="h-lemmata">Lemmata<span class="toggle" data-id="le"
-				><a href="#" class="icon-link icon-auge" title="alle Blöcke öffnen"> </a
-				><a href="#" class="icon-link icon-auge-durchgestrichen" title="alle Blöcke schließen"> </a
-			></span></h2>
+      <!-- LEMMATA -->
+      <h2 id="h-lemmata">Lemmata<span class="toggle" data-id="le"
+        ><a href="#" class="icon-link icon-auge" title="alle Blöcke öffnen"> </a
+        ><a href="#" class="icon-link icon-auge-durchgestrichen" title="alle Blöcke schließen"> </a
+      ></span></h2>
 
-			<div id="le">
-				<p class="input-text"
-					><a href="#" class="icon-link icon-plus-dick"> </a
-					><span class="dropdown-cont"
-						><input type="text" value="" placeholder="Lemma" class="dropdown-feld" id="le-le"
-						><a href="#" class="dropdown-link-element" title="Lemmata auflisten" tabindex="-1"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m7 2v8l-3.5-3.5-1.5 1.5 6 6 6-6-1.5-1.5-3.5 3.5v-8z"/></svg></a
-					></span><span class="dropdown-cont"
-						><input type="text" value="" placeholder="Typ" class="dropdown-feld" id="le-ty" readonly
-						><a href="#" class="dropdown-link-element" title="Lemmatypen auflisten" tabindex="-1"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m7 2v8l-3.5-3.5-1.5 1.5 6 6 6-6-1.5-1.5-3.5 3.5v-8z"/></svg></a
-					></span><span class="dropdown-cont"
-						><input type="text" value="" placeholder="ID" class="dropdown-feld" id="le-re"
-						><a href="#" class="dropdown-link-element" title="IDs auflisten" tabindex="-1"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m7 2v8l-3.5-3.5-1.5 1.5 6 6 6-6-1.5-1.5-3.5 3.5v-8z"/></svg></a
-					></span
-				></p>
-			</div>
+      <div id="le">
+        <p class="input-text"
+          ><a href="#" class="icon-link icon-plus-dick"> </a
+          ><span class="dropdown-cont"
+            ><input type="text" value="" placeholder="Lemma" class="dropdown-feld" id="le-le"
+            ><a href="#" class="dropdown-link-element" title="Lemmata auflisten" tabindex="-1"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m7 2v8l-3.5-3.5-1.5 1.5 6 6 6-6-1.5-1.5-3.5 3.5v-8z"/></svg></a
+          ></span><span class="dropdown-cont"
+            ><input type="text" value="" placeholder="Typ" class="dropdown-feld" id="le-ty" readonly
+            ><a href="#" class="dropdown-link-element" title="Lemmatypen auflisten" tabindex="-1"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m7 2v8l-3.5-3.5-1.5 1.5 6 6 6-6-1.5-1.5-3.5 3.5v-8z"/></svg></a
+          ></span><span class="dropdown-cont"
+            ><input type="text" value="" placeholder="ID" class="dropdown-feld" id="le-re"
+            ><a href="#" class="dropdown-link-element" title="IDs auflisten" tabindex="-1"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m7 2v8l-3.5-3.5-1.5 1.5 6 6 6-6-1.5-1.5-3.5 3.5v-8z"/></svg></a
+          ></span
+        ></p>
+      </div>
 
-			<!-- KURZ GEFASST -->
-			<h2 id="h-kurz-gefasst">Kurz gefasst<span class="toggle" data-id="ab"
-				><a href="#" class="icon-link icon-auge" title="alle Blöcke öffnen"> </a
-				><a href="#" class="icon-link icon-auge-durchgestrichen" title="alle Blöcke schließen"> </a
-			></span></h2>
+      <!-- KURZ GEFASST -->
+      <h2 id="h-kurz-gefasst">Kurz gefasst<span class="toggle" data-id="ab"
+        ><a href="#" class="icon-link icon-auge" title="alle Blöcke öffnen"> </a
+        ><a href="#" class="icon-link icon-auge-durchgestrichen" title="alle Blöcke schließen"> </a
+      ></span></h2>
 
-			<div class="text-cont" id="ab">
-				<p class="abschnitt-add"><a href="#" class="icon-link icon-plus-dick"> </a>Abschnitt hinzufügen</p>
-			</div>
+      <div class="text-cont" id="ab">
+        <p class="abschnitt-add"><a href="#" class="icon-link icon-plus-dick"> </a>Abschnitt hinzufügen</p>
+      </div>
 
-			<!-- WORTGESCHICHTE -->
-			<h2 id="h-wortgeschichte">Wortgeschichte<span class="toggle" data-id="tx"
-				><a href="#" class="icon-link icon-auge" title="alle Blöcke öffnen"> </a
-				><a href="#" class="icon-link icon-auge-durchgestrichen" title="alle Blöcke schließen"> </a
-			></span></h2>
+      <!-- WORTGESCHICHTE -->
+      <h2 id="h-wortgeschichte">Wortgeschichte<span class="toggle" data-id="tx"
+        ><a href="#" class="icon-link icon-auge" title="alle Blöcke öffnen"> </a
+        ><a href="#" class="icon-link icon-auge-durchgestrichen" title="alle Blöcke schließen"> </a
+      ></span></h2>
 
-			<div class="text-cont" id="tx">
-				<p class="abschnitt-add"><a href="#" class="icon-link icon-plus-dick"> </a>Abschnitt hinzufügen</p>
-			</div>
+      <div class="text-cont" id="tx">
+        <p class="abschnitt-add"><a href="#" class="icon-link icon-plus-dick"> </a>Abschnitt hinzufügen</p>
+      </div>
 
-			<!-- BELEGE -->
-			<h2 id="h-belege">Belege<span id="belege-anzahl"> </span><span class="toggle" data-id="bl"
-				><a href="#" class="icon-link icon-einfuegen" title="Beleg aus Zwischenablage einfügen"> </a
-				><a href="#" class="icon-link icon-auge" title="alle Blöcke öffnen"> </a
-				><a href="#" class="icon-link icon-auge-durchgestrichen" title="alle Blöcke schließen"> </a
-			></span></h2>
+      <!-- BELEGE -->
+      <h2 id="h-belege">Belege<span id="belege-anzahl"> </span><span class="toggle" data-id="bl"
+        ><a href="#" class="icon-link icon-einfuegen" title="Beleg aus Zwischenablage einfügen"> </a
+        ><a href="#" class="icon-link icon-auge" title="alle Blöcke öffnen"> </a
+        ><a href="#" class="icon-link icon-auge-durchgestrichen" title="alle Blöcke schließen"> </a
+      ></span></h2>
 
-			<div id="bl"></div>
+      <div id="bl"></div>
 
-			<!-- LITERATUR -->
-			<h2 id="h-literatur">Literatur<span class="toggle" data-id="lt"
-				><a href="#" class="icon-link icon-auge" title="alle Blöcke öffnen"> </a
-				><a href="#" class="icon-link icon-auge-durchgestrichen" title="alle Blöcke schließen"> </a
-			></span></h2>
+      <!-- LITERATUR -->
+      <h2 id="h-literatur">Literatur<span class="toggle" data-id="lt"
+        ><a href="#" class="icon-link icon-auge" title="alle Blöcke öffnen"> </a
+        ><a href="#" class="icon-link icon-auge-durchgestrichen" title="alle Blöcke schließen"> </a
+      ></span></h2>
 
-			<div id="lt"></div>
+      <div id="lt"></div>
 
-			<!-- WORTINFORMATIONEN -->
-			<h2 id="h-wortinformationen">Wortinformationen<span class="toggle" data-id="wi"
-				><a href="#" class="icon-link icon-auge" title="alle Blöcke öffnen"> </a
-				><a href="#" class="icon-link icon-auge-durchgestrichen" title="alle Blöcke schließen"> </a
-			></span></h2>
+      <!-- WORTINFORMATIONEN -->
+      <h2 id="h-wortinformationen">Wortinformationen<span class="toggle" data-id="wi"
+        ><a href="#" class="icon-link icon-auge" title="alle Blöcke öffnen"> </a
+        ><a href="#" class="icon-link icon-auge-durchgestrichen" title="alle Blöcke schließen"> </a
+      ></span></h2>
 
-			<div class="dropdown-cont" id="wi-sel">
-				<p class="input-text"
-					><input type="text" value="" placeholder="keine Bedeutungsgerüste" class="dropdown-feld" id="wi-sel-gr" readonly title="Bedeutungsgerüst wählen"
-					><a href="#" class="dropdown-link-element" title="Bedeutungsgerüst wählen" tabindex="-1"
-						><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m7 2v8l-3.5-3.5-1.5 1.5 6 6 6-6-1.5-1.5-3.5 3.5v-8z"/></svg
-					></a
-				></p>
-			</div>
+      <div class="dropdown-cont" id="wi-sel">
+        <p class="input-text"
+          ><input type="text" value="" placeholder="keine Bedeutungsgerüste" class="dropdown-feld" id="wi-sel-gr" readonly title="Bedeutungsgerüst wählen"
+          ><a href="#" class="dropdown-link-element" title="Bedeutungsgerüst wählen" tabindex="-1"
+            ><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m7 2v8l-3.5-3.5-1.5 1.5 6 6 6-6-1.5-1.5-3.5 3.5v-8z"/></svg
+          ></a
+        ></p>
+      </div>
 
-			<div id="wi"></div>
+      <div id="wi"></div>
 
-			<!-- BEDEUTUNGSGERÜSTE -->
-			<h2 id="h-bedeutungsgerueste">Bedeutungsgerüste</h2>
+      <!-- BEDEUTUNGSGERÜSTE -->
+      <h2 id="h-bedeutungsgerueste">Bedeutungsgerüste</h2>
 
-			<div class="dropdown-cont" id="bg-sel"
-				><input type="text" value="" placeholder="keine Bedeutungsgerüste" class="dropdown-feld" id="bg-sel-gr" readonly title="Bedeutungsgerüst wählen"
-				><a href="#" class="dropdown-link-element" title="Bedeutungsgerüst wählen" tabindex="-1"
-					><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m7 2v8l-3.5-3.5-1.5 1.5 6 6 6-6-1.5-1.5-3.5 3.5v-8z"/></svg
-				></a
-			></div>
+      <div class="dropdown-cont" id="bg-sel"
+        ><input type="text" value="" placeholder="keine Bedeutungsgerüste" class="dropdown-feld" id="bg-sel-gr" readonly title="Bedeutungsgerüst wählen"
+        ><a href="#" class="dropdown-link-element" title="Bedeutungsgerüst wählen" tabindex="-1"
+          ><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m7 2v8l-3.5-3.5-1.5 1.5 6 6 6-6-1.5-1.5-3.5 3.5v-8z"/></svg
+        ></a
+      ></div>
 
-			<div id="bg-la">
-				<p class="input-text"
-					><input type="text" value="" placeholder="Hauptlemma-Label" id="la"
-				></p>
-			</div>
+      <div id="bg-la">
+        <p class="input-text"
+          ><input type="text" value="" placeholder="Hauptlemma-Label" id="la"
+        ></p>
+      </div>
 
-			<div id="bg-nw">
-				<p class="input-text"
-					><a href="#" class="icon-link icon-plus-dick"> </a
-					><span class="dropdown-cont"
-						><input type="text" value="" placeholder="Nachweis" class="dropdown-feld" id="nw-ty" readonly
-						><a href="#" class="dropdown-link-element" title="Nachweistypen auflisten" tabindex="-1"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m7 2v8l-3.5-3.5-1.5 1.5 6 6 6-6-1.5-1.5-3.5 3.5v-8z"/></svg></a
-					></span><span class="dropdown-cont aus" id="nw-lit"
-							><input type="text" value="" placeholder="Sigle" class="dropdown-feld" id="nw-lit-si" readonly
-							><a href="#" class="dropdown-link-element" title="Siglen auflisten" tabindex="-1"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m7 2v8l-3.5-3.5-1.5 1.5 6 6 6-6-1.5-1.5-3.5 3.5v-8z"/></svg></a
-						><input type="text" value="" placeholder="Stellenangabe" id="nw-lit-st"
-					></span><span class="aus" id="nw-link"
-						><input type="text" value="" placeholder="Linktext" id="nw-link-tx"
-						><input type="text" value="" placeholder="URL" id="nw-link-ul"
-						><input type="date" value="" id="nw-link-da" required
-					></span
-				></p>
-			</div>
+      <div id="bg-nw">
+        <p class="input-text"
+          ><a href="#" class="icon-link icon-plus-dick"> </a
+          ><span class="dropdown-cont"
+            ><input type="text" value="" placeholder="Nachweis" class="dropdown-feld" id="nw-ty" readonly
+            ><a href="#" class="dropdown-link-element" title="Nachweistypen auflisten" tabindex="-1"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m7 2v8l-3.5-3.5-1.5 1.5 6 6 6-6-1.5-1.5-3.5 3.5v-8z"/></svg></a
+          ></span><span class="dropdown-cont aus" id="nw-lit"
+              ><input type="text" value="" placeholder="Sigle" class="dropdown-feld" id="nw-lit-si" readonly
+              ><a href="#" class="dropdown-link-element" title="Siglen auflisten" tabindex="-1"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m7 2v8l-3.5-3.5-1.5 1.5 6 6 6-6-1.5-1.5-3.5 3.5v-8z"/></svg></a
+            ><input type="text" value="" placeholder="Stellenangabe" id="nw-lit-st"
+          ></span><span class="aus" id="nw-link"
+            ><input type="text" value="" placeholder="Linktext" id="nw-link-tx"
+            ><input type="text" value="" placeholder="URL" id="nw-link-ul"
+            ><input type="date" value="" id="nw-link-da" required
+          ></span
+        ></p>
+      </div>
 
-			<div id="bg-tf">
-				<p class="input-text"
-					><a href="#" class="icon-link icon-plus-dick"> </a
-					><span class="dropdown-cont"
-						><input type="text" value="" placeholder="Lesart" class="dropdown-feld" id="bg-tf-li"
-						><a href="#" class="dropdown-link-element" title="Lesarten auflisten" tabindex="-1"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m7 2v8l-3.5-3.5-1.5 1.5 6 6 6-6-1.5-1.5-3.5 3.5v-8z"/></svg></a
-					></span><span class="dropdown-cont"
-						><input type="text" value="" placeholder="Textreferenz" class="dropdown-feld" id="bg-tf-ti"
-						><a href="#" class="dropdown-link-element" title="Textreferenzen auflisten" tabindex="-1"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m7 2v8l-3.5-3.5-1.5 1.5 6 6 6-6-1.5-1.5-3.5 3.5v-8z"/></svg></a
-					></span
-				></p>
-			</div>
+      <div id="bg-tf">
+        <p class="input-text"
+          ><a href="#" class="icon-link icon-plus-dick"> </a
+          ><span class="dropdown-cont"
+            ><input type="text" value="" placeholder="Lesart" class="dropdown-feld" id="bg-tf-li"
+            ><a href="#" class="dropdown-link-element" title="Lesarten auflisten" tabindex="-1"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m7 2v8l-3.5-3.5-1.5 1.5 6 6 6-6-1.5-1.5-3.5 3.5v-8z"/></svg></a
+          ></span><span class="dropdown-cont"
+            ><input type="text" value="" placeholder="Textreferenz" class="dropdown-feld" id="bg-tf-ti"
+            ><a href="#" class="dropdown-link-element" title="Textreferenzen auflisten" tabindex="-1"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m7 2v8l-3.5-3.5-1.5 1.5 6 6 6-6-1.5-1.5-3.5 3.5v-8z"/></svg></a
+          ></span
+        ></p>
+      </div>
 
-			<div id="bg"></div>
-		</main>
+      <div id="bg"></div>
+    </main>
 
-		<!-- OVERLAY: Dialog-Fenster -->
-		<div id="dialog" class="overlay aus"><div>
-			<h2><span class="icon-h"> </span
-			><span id="dialog-h-prompt">Eingabe</span
-			><span id="dialog-h-confirm">Frage</span
-			><span id="dialog-h-alert">Meldung</span
-			><a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"> </a></h2>
-			<div id="dialog-rahmen">
-				<div id="dialog-text"></div>
-			</div>
-			<div id="dialog-prompt">
-				<p class="input-text"><input type="text" value="" id="dialog-prompt-text"></p>
-			</div>
-			<div id="dialog-ok">
-				<p class="button"><input type="button" value="Okay" id="dialog-ok-button"
-					><input type="button" value="Abbrechen" id="dialog-abbrechen-button"></p>
-			</div>
-			<div id="dialog-confirm">
-				<p class="button"><input type="button" value="Ja" id="dialog-ja-button"
-					><input type="button" value="Nein" id="dialog-nein-button"></p>
-			</div>
-		</div></div>
-	</body>
+    <!-- OVERLAY: Dialog-Fenster -->
+    <div id="dialog" class="overlay aus"><div>
+      <h2><span class="icon-h"> </span
+      ><span id="dialog-h-prompt">Eingabe</span
+      ><span id="dialog-h-confirm">Frage</span
+      ><span id="dialog-h-alert">Meldung</span
+      ><a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"> </a></h2>
+      <div id="dialog-rahmen">
+        <div id="dialog-text"></div>
+      </div>
+      <div id="dialog-prompt">
+        <p class="input-text"><input type="text" value="" id="dialog-prompt-text"></p>
+      </div>
+      <div id="dialog-ok">
+        <p class="button"><input type="button" value="Okay" id="dialog-ok-button"
+          ><input type="button" value="Abbrechen" id="dialog-abbrechen-button"></p>
+      </div>
+      <div id="dialog-confirm">
+        <p class="button"><input type="button" value="Ja" id="dialog-ja-button"
+          ><input type="button" value="Nein" id="dialog-nein-button"></p>
+      </div>
+    </div></div>
+  </body>
 </html>

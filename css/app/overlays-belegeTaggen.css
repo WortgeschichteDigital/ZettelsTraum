@@ -2,50 +2,50 @@
 
 /* Belege taggen -------------------------------- */
 #belege-taggen > div {
-	margin-top: 40px;
-	max-width: 250px;
+  margin-top: 40px;
+  max-width: 250px;
 }
 
 .icon-h-belege-taggen {
-	-webkit-mask-image: url(../../img/etikett.svg);
-	mask-image: url(../../img/etikett.svg);
+  -webkit-mask-image: url(../../img/etikett.svg);
+  mask-image: url(../../img/etikett.svg);
 }
 
 #belege-taggen-cont {
-	padding: 10px;
+  padding: 10px;
 }
 
 #belege-taggen-cont p {
-	text-align: center;
-	font-weight: bold;
+  text-align: center;
+  font-weight: bold;
 }
 
 #belege-taggen-button {
-	margin: 10px 0 0 0;
+  margin: 10px 0 0 0;
 }
 
 #belege-taggen-button input {
-	margin: 0;
+  margin: 0;
 }
 
 #belege-taggen-cont table {
-	margin: 0 auto;
+  margin: 0 auto;
 }
 
 #belege-taggen-cont th,
 #belege-taggen-cont td {
-	padding: 2px 5px;
-	text-align: center;
+  padding: 2px 5px;
+  text-align: center;
 }
 
 #belege-taggen-cont th {
-	font-weight: bold;
+  font-weight: bold;
 }
 
 #belege-taggen-cont td:last-child {
-	text-align: left;
+  text-align: left;
 }
 
 #belege-taggen-cont input[type="radio"] {
-	margin: 0;
+  margin: 0;
 }

@@ -16,209 +16,209 @@
 
 /* Struktur-Elemente ---------------------------- */
 body {
-	margin: 0;
-	overflow-x: hidden;
-	background-color: #fff;
-	color: var(--text);
-	font: 16px/24px "Noto Sans", "Noto Sans Symbols2", sans-serif;
-	user-select: none;
+  margin: 0;
+  overflow-x: hidden;
+  background-color: #fff;
+  color: var(--text);
+  font: 16px/24px "Noto Sans", "Noto Sans Symbols2", sans-serif;
+  user-select: none;
 }
 
 body > header {
-	position: fixed;
-	top: 0;
-	left: 0;
-	z-index: 1;
-	border-bottom: 10px solid #fff;
-	padding: 0 10px;
-	width: calc(100% - 20px);
-	height: 60px;
-	background-color: var(--farbe);
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  border-bottom: 10px solid #fff;
+  padding: 0 10px;
+  width: calc(100% - 20px);
+  height: 60px;
+  background-color: var(--farbe);
 }
 
 body > header h1 {
-	display: inline-block;
-	margin: 0;
-	color: #fff;
-	font-size: 30px;
-	font-weight: normal;
-	line-height: 60px;
+  display: inline-block;
+  margin: 0;
+  color: #fff;
+  font-size: 30px;
+  font-weight: normal;
+  line-height: 60px;
 }
 
 #icon {
-	position: absolute;
-	top: 6px;
-	right: 10px;
+  position: absolute;
+  top: 6px;
+  right: 10px;
 }
 
 main {
-	margin-top: 70px;
-	padding: 0 10px 10px 10px;
+  margin-top: 70px;
+  padding: 0 10px 10px 10px;
 }
 
 main.padding-suchleiste {
-	padding-bottom: 51px;
+  padding-bottom: 51px;
 }
 
 /* Elemente ------------------------------------- */
 a {
-	outline: none;
-	color: var(--textFarbe);
-	text-decoration: none;
+  outline: none;
+  color: var(--textFarbe);
+  text-decoration: none;
 }
 
 a:not(.icon-link):focus {
-	text-decoration: underline;
+  text-decoration: underline;
 }
 
 abbr {
-	text-decoration: none;
+  text-decoration: none;
 }
 
 code {
-	display: inline-block;
-	border-radius: 3px;
-	padding: 0 3px;
-	background-color: var(--text);
-	color: #fff;
-	font-family: "Noto Sans Mono", "Noto Sans Symbols2", monospace;
+  display: inline-block;
+  border-radius: 3px;
+  padding: 0 3px;
+  background-color: var(--text);
+  color: #fff;
+  font-family: "Noto Sans Mono", "Noto Sans Symbols2", monospace;
 }
 
 code.quelltext {
-	background-color: var(--hintergrund);
-	color: var(--text);
+  background-color: var(--hintergrund);
+  color: var(--text);
 }
 
 h2 {
-	margin: 0 0 10px 0;
-	font-size: 18px;
-	font-weight: normal;
-	line-height: 26px;
+  margin: 0 0 10px 0;
+  font-size: 18px;
+  font-weight: normal;
+  line-height: 26px;
 }
 
 h2 span {
-	display: inline-block;
-	margin-right: 10px;
-	border: 1px solid var(--linie);
-	border-radius: 3px;
-	padding: 2px 5px;
+  display: inline-block;
+  margin-right: 10px;
+  border: 1px solid var(--linie);
+  border-radius: 3px;
+  padding: 2px 5px;
 }
 
 h2 time {
-	font-size: 14px;
-	color: var(--textHell);
+  font-size: 14px;
+  color: var(--textHell);
 }
 
 h3 {
-	margin: 25px 0 5px 0;
-	color: var(--textFarbe);
-	font-size: 16px;
-	font-style: italic;
-	font-weight: normal;
+  margin: 25px 0 5px 0;
+  color: var(--textFarbe);
+  font-size: 16px;
+  font-style: italic;
+  font-weight: normal;
 }
 
 hr {
-	margin: 10px 0;
-	border: none;
-	border-top: 1px solid var(--linie);
+  margin: 10px 0;
+  border: none;
+  border-top: 1px solid var(--linie);
 }
 
 kbd {
-	display: inline-block;
-	border: 1px solid var(--linie);
-	border-radius: 3px;
-	padding: 0 3px;
-	background-color: var(--hintergrund);
-	font-family: "Noto Sans Mono", "Noto Sans Symbols2", monospace;
+  display: inline-block;
+  border: 1px solid var(--linie);
+  border-radius: 3px;
+  padding: 0 3px;
+  background-color: var(--hintergrund);
+  font-family: "Noto Sans Mono", "Noto Sans Symbols2", monospace;
 }
 
 mark.wort {
-	border-radius: 3px;
-	padding: 0 3px;
-	background-color: var(--farbeGelb);
-	font-weight: bold;
+  border-radius: 3px;
+  padding: 0 3px;
+  background-color: var(--farbeGelb);
+  font-weight: bold;
 }
 
 p {
-	margin: 0 0 10px 0;
+  margin: 0 0 10px 0;
 }
 
 p.einzug {
-	margin-left: 25px;
+  margin-left: 25px;
 }
 
 q.bedeutung::before {
-	content: "‚";
+  content: "‚";
 }
 
 q.bedeutung::after {
-	content: "‘";
+  content: "‘";
 }
 
 pre {
-	border-radius: 3px;
-	padding: 3px;
-	background-color: var(--text);
-	color: #fff;
-	font-family: "Noto Sans Mono", "Noto Sans Symbols2", monospace;
-	white-space: pre-wrap;
-	tab-size: 2;
+  border-radius: 3px;
+  padding: 3px;
+  background-color: var(--text);
+  color: #fff;
+  font-family: "Noto Sans Mono", "Noto Sans Symbols2", monospace;
+  white-space: pre-wrap;
+  tab-size: 2;
 }
 
 pre.quelltext {
-	background-color: var(--hintergrund);
-	color: var(--text);
+  background-color: var(--hintergrund);
+  color: var(--text);
 }
 
 ul {
-	margin: 0 0 10px 0;
-	padding-left: 20px;
-	list-style-type: disc;
+  margin: 0 0 10px 0;
+  padding-left: 20px;
+  list-style-type: disc;
 }
 
 li {
-	margin-bottom: 5px;
+  margin-bottom: 5px;
 }
 
 li img {
-	vertical-align: bottom;
+  vertical-align: bottom;
 }
 
 li img.klein {
-	vertical-align: baseline;
+  vertical-align: baseline;
 }
 
 li p {
-	margin-bottom: 5px;
+  margin-bottom: 5px;
 }
 
 /* Besonderheiten ------------------------------- */
 .datei {
-	font-family: "Noto Sans Mono", "Noto Sans Symbols2", monospace;
+  font-family: "Noto Sans Mono", "Noto Sans Symbols2", monospace;
 }
 
 .datei.long {
-	word-break: break-all;
+  word-break: break-all;
 }
 
 .version {
-	position: sticky;
-	top: 70px;
-	margin-top: 50px;
-	padding-right: 10px; /* nötig, damit schmale Nummern breitere überdecken */
-	width: fit-content;
-	line-height: 32px;
-	background-color: #fff;
-	color: var(--textHell);
-	font-size: 14px;
-	font-style: italic;
+  position: sticky;
+  top: 70px;
+  margin-top: 50px;
+  padding-right: 10px; /* nötig, damit schmale Nummern breitere überdecken */
+  width: fit-content;
+  line-height: 32px;
+  background-color: #fff;
+  color: var(--textHell);
+  font-size: 14px;
+  font-style: italic;
 }
 
 main > div:not(.version) {
-	margin-top: -32px;
-	padding: 0 25px 0 50px;
+  margin-top: -32px;
+  padding: 0 25px 0 50px;
 }
 
 .obacht {
-	color: var(--textWarnung);
+  color: var(--textWarnung);
 }
