@@ -156,7 +156,7 @@ let drucken = {
 	fillKarten () {
 		// Content leeren
 		let cont = document.getElementById("drucken-cont");
-		helfer.keineKinder(cont);
+		cont.replaceChildren();
 		cont.scrollTop = 0;
 		// Karten einhängen
 		drucken.kartenIds.forEach(function(i) {
@@ -253,7 +253,7 @@ let drucken = {
 		}
 		// Content leeren
 		let cont = document.getElementById("drucken-cont");
-		helfer.keineKinder(cont);
+		cont.replaceChildren();
 		cont.scrollTop = 0;
 		// Bedeutungen aufbauen
 		let bd = qu.gr[gn].bd;

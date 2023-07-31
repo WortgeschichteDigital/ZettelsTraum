@@ -121,7 +121,7 @@ let hilfe = {
 			nd.appendChild(div);
 		} else {
 			div = nd.firstChild;
-			helfer.keineKinder(div);
+			div.replaceChildren();
 		}
 		nd.dataset.sektion = sektion.id;
 		// Navigation aufbauen
@@ -325,7 +325,7 @@ let hilfe = {
 			div.id = "bild";
 			schonAn = false;
 		}
-		helfer.keineKinder(div);
+		div.replaceChildren();
 		// Content
 		let cont = document.createElement("div");
 		div.appendChild(cont);
@@ -344,6 +344,7 @@ let hilfe = {
 		schliessen.height = "48";
 		schliessen.title = "Bild schließen (Esc)";
 		schliessen.addEventListener("click", () => hilfe.bildSchliessen());
+		tooltip.init(cont);
 		// ggf. Icons zum Navigieren durch eine Bilderstrecke
 		hilfe.bilder(fig, cont);
 		// Einblenden
@@ -406,6 +407,8 @@ let hilfe = {
 			}
 			hilfe.bilderNav(img);
 		}
+		// Tooltips initialisieren
+		tooltip.init(cont);
 	},
 	// Navigation durch die Bilder (Klick auf Icon)
 	//   img = Element
@@ -608,7 +611,7 @@ let hilfe = {
 		let cont = document.getElementById("suchergebnisse");
 		// bei der Erstanzeige Ergebnisfeld leeren und in die Sektion wechseln
 		if (start === 0) {
-			helfer.keineKinder(cont);
+			cont.replaceChildren();
 			hilfe.sektionWechseln("suche");
 		}
 		// keine Treffer

@@ -50,6 +50,7 @@
 /* Tabelle des Formulars ------------------------ */
 #beleg table {
 	margin: 0 auto 20px auto;
+	table-layout: fixed;
 	border-collapse: separate;
 	border-spacing: 0;
 	border-radius: 10px;
@@ -61,9 +62,15 @@
 }
 
 #beleg h2 {
-	margin: 21px 0 10px 15px; /* 21px von oben, damit identische Position mit Überschrift Bedeutungsgerüst */
-	padding: 0;
-	background-color: transparent;
+	position: sticky;
+	top: 104px;
+	z-index: 2;
+	margin: 0 auto;
+	padding: 21px 0 10px; /* 21px von oben, damit identische Position mit Überschrift Bedeutungsgerüst */
+	width: calc(100% - 104px);
+	min-width: 500px;
+	max-width: 850px;
+	background-color: #fff;
 	color: var(--textFarbe);
 	font-size: 24px;
 	font-style: italic;
@@ -72,8 +79,18 @@
 	text-align: left;
 }
 
+#beleg.quick h2 {
+	top: 133px;
+}
+
 #beleg-geaendert {
 	margin-left: 10px;
+}
+
+#beleg-referenz {
+	margin-left: 10px;
+	font-size: 16px;
+	line-height: 24px;
 }
 
 #beleg th {
@@ -90,6 +107,10 @@
 
 #beleg th[colspan="2"] {
 	width: auto;
+}
+
+#beleg th#beleg-meta {
+	padding-top: 30px;
 }
 
 #beleg td {
@@ -249,6 +270,39 @@ textarea#beleg-bs {
 #beleg-an .anhaenge-item:hover {
 	background-color: var(--hintergrund);
 }
+
+
+/* Metadaten ------------------------------------ */
+#beleg pre {
+	margin: 0;
+	border: 1px solid var(--linie);
+	padding: 2px 5px;
+	background-color: #fff;
+	font-family: "Noto Sans Mono", "Noto Sans Symbols2", monospace;
+	font-size: 14px;
+	line-height: 20px;
+	white-space: pre-wrap;
+	user-select: text;
+	tab-size: 2;
+	word-break: break-all;
+}
+
+#beleg .meta div {
+	border: 1px solid var(--linie);
+	padding: 2px 5px;
+	width: calc(100% - 12px);
+	background-color: #fff;
+	user-select: text;
+}
+
+#beleg-meta-toggle {
+	vertical-align: bottom;
+	display: inline-block;
+	margin-left: 5px;
+	width: 24px;
+	height: 24px;
+}
+
 
 /* Text-Tools ----------------------------------- */
 .text-tools {
@@ -431,6 +485,16 @@ textarea#beleg-bs {
 .icon-tools-underline {
 	-webkit-mask-image: url(../../img/text-unterstrichen.svg);
 	mask-image: url(../../img/text-unterstrichen.svg);
+}
+
+.icon-tools-meta-plus {
+	-webkit-mask-image: url(../../img/plus.svg);
+	mask-image: url(../../img/plus.svg);
+}
+
+.icon-tools-meta-minus {
+	-webkit-mask-image: url(../../img/minus.svg);
+	mask-image: url(../../img/minus.svg);
 }
 
 /* Leseansicht ---------------------------------- */

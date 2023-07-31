@@ -15,7 +15,7 @@ let bedeutungen = {
 		}
 		// Content leeren
 		let cont = document.getElementById("bd-win-cont");
-		helfer.keineKinder(cont);
+		cont.replaceChildren();
 		// Details zum Bedeutungsgerüst in die Überschrift eintragen
 		let detail = "";
 		if (Object.keys(bedeutungen.data.bd.gr).length > 1) {
@@ -93,6 +93,7 @@ let bedeutungen = {
 			// Fragment einhängen
 			tr.lastChild.appendChild(frag);
 		}
+		tooltip.init(cont);
 	},
 	// Bedeutungsbaum drucken
 	drucken () {

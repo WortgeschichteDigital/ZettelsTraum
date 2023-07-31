@@ -1793,7 +1793,7 @@ let redLit = {
 		redLit.anzeige.snippetKontext = "suche";
 		let titel = document.getElementById("red-lit-suche-titel");
 		titel.scrollTop = 0;
-		helfer.keineKinder(titel);
+		titel.replaceChildren();
 		for (let i = start, len = start + 50; i < len; i++) {
 			// letzter Treffer erreicht
 			if (!treffer[i]) {
@@ -2076,7 +2076,7 @@ let redLit = {
 			}
 		}
 		// Tag-Zelle leeren
-		helfer.keineKinder(document.getElementById("red-lit-eingabe-tags"));
+		document.getElementById("red-lit-eingabe-tags").replaceChildren();
 		// Metadaten leeren
 		redLit.eingabeMetaFuellen({id: "", slot: -1});
 	},
@@ -2474,6 +2474,7 @@ let redLit = {
 		if (autor.length === 2) {
 			data.ds.au = autor.join(", ");
 		}
+		data.ds.bi = "xml-fundstelle";
 		data.ds.bx = xmlStr;
 		let jahr = data.td.ti.match(/[0-9]{4}/g);
 		if (jahr) {
@@ -2509,6 +2510,7 @@ let redLit = {
 		} else if (td.hrsg.length) {
 			data.ds.au = `${td.hrsg.join("/")} (Hrsg.)`;
 		}
+		data.ds.bi = "xml-mods";
 		data.ds.bx = xmlStr;
 		data.ds.da = td.jahr;
 		if (td.url.some(i => /^https?:\/\/www\.deutschestextarchiv\.de\//.test(i))) {
@@ -3257,7 +3259,7 @@ let redLit = {
 	//     (Array mit den Tags)
 	eingabeTagsFuellen ({tags}) {
 		let cont = document.getElementById("red-lit-eingabe-tags");
-		helfer.keineKinder(cont);
+		cont.replaceChildren();
 		let div = document.createElement("div");
 		cont.appendChild(div);
 		redLit.tagsList({
@@ -3367,7 +3369,7 @@ let redLit = {
 		}
 		// Werte drucken
 		let td = document.getElementById("red-lit-eingabe-meta");
-		helfer.keineKinder(td);
+		td.replaceChildren();
 		for (let [k, v] of Object.entries(werte)) {
 			let cont = document.createElement("span");
 			td.appendChild(cont);
@@ -3467,6 +3469,8 @@ let redLit = {
 		bearb.classList.add("icon-link", "icon-stift");
 		bearb.title = "Titelaufnahme bearbeiten";
 		redLit.eingabeBearbeitenListener(bearb);
+		// Icons: Tooltip initialisieren
+		tooltip.init(icons);
 		// Titelaufnahme
 		let ti = document.createElement("p");
 		div.appendChild(ti);
@@ -3688,6 +3692,8 @@ let redLit = {
 		win.appendChild(titel);
 		titel.id = "red-lit-popup-titel";
 		titel.appendChild(redLit.anzeigeSnippet({id, slot}));
+		// Tooltips initialisieren
+		tooltip.init(win);
 	},
 	// Anzeige: vorhandene Titelaufnahmen im Versionen-Popup auflisten
 	//   slot = Number | undefined
@@ -3696,7 +3702,7 @@ let redLit = {
 		let vers = document.getElementById("red-lit-popup-versionen"),
 			aufnahme = redLit.db.data[redLit.anzeige.id];
 		vers.scrollTop = 0;
-		helfer.keineKinder(vers);
+		vers.replaceChildren();
 		for (let i = 0, len = aufnahme.length; i < len; i++) {
 			let div = document.createElement("div");
 			vers.appendChild(div);

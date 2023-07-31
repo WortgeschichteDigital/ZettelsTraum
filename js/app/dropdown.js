@@ -231,6 +231,8 @@ let dropdown = {
 				/^redaktion-person/.test(feld_id) ||
 				/^karteisuche-(redaktion-)*person-/.test(feld_id)) {
 			dropdown.data = [...optionen.data.personen];
+		} else if (feld_id === "einstellung-sprache") {
+			dropdown.data = Object.keys(optionen.sprachen);
 		} else if (/^redaktion-ereignis/.test(feld_id) ||
 				/^karteisuche-redaktion-ereignis-/.test(feld_id)) {
 			dropdown.data = [...Object.keys(redaktion.ereignisse)];
@@ -410,7 +412,7 @@ let dropdown = {
 			dropdown.cursor = -1;
 		}
 		// Liste leeren
-		helfer.keineKinder(drop);
+		drop.replaceChildren();
 		// Elemente ggf. filtern
 		let items = [...dropdown.data],
 			va = dropdown.feldWert(feld),
@@ -474,6 +476,7 @@ let dropdown = {
 			dropdown.auswahlKlick(opt);
 			drop.appendChild(opt);
 		});
+		tooltip.init(drop);
 		// Dropdown positionieren
 		dropdown.position();
 	},

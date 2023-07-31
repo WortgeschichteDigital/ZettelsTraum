@@ -33,7 +33,7 @@ let bedeutungenGerueste = {
 	// Tabelle mit den Bedeutungsgerüsten aufbauen
 	aufbauen () {
 		let cont = document.getElementById("gerueste-cont-over");
-		helfer.keineKinder(cont);
+		cont.replaceChildren();
 		// Tabelle aufbauen
 		let table = document.createElement("table");
 		cont.appendChild(table);

@@ -78,6 +78,7 @@ let beleg = {
 			bc: false, // Buchung
 			bd: [], // Bedeutung
 			be: 0, // Bewertung (Markierung)
+			bi: "", // Importtyp (bezieht sich auf die Daten in bx)
 			bl: "", // Wortbildung
 			bs: "", // Beleg
 			bu: false, // Bücherdienstauftrag
@@ -102,6 +103,8 @@ let beleg = {
 	oeffnen (id) {
 		// registrieren, dass die Hauptfunktion "Karteikarte" offen ist
 		helfer.hauptfunktion = "karte";
+		// ggf. Sortieren-Popup in der Belegliste schließen
+		liste.headerSortierenSchliessen();
 		// ggf. Annotierungs-Popup in der Belegliste schließen
 		annotieren.modSchliessen();
 		// ID zwischenspeichern
@@ -180,6 +183,8 @@ let beleg = {
 		beleg.bewertungAnzeigen();
 		// Anhänge auflisten
 		anhaenge.auflisten(document.getElementById("beleg-an"), "beleg|data|an");
+		// Metadatenfelder füllen
+		beleg.metadaten();
 		// Änderungsmarkierung ausblenden
 		beleg.belegGeaendert(false);
 		// Formular einblenden
@@ -552,7 +557,11 @@ let beleg = {
 			}
 		}
 		// Änderungsdatum speichern
-		data.ka[beleg.id_karte].dm = new Date().toISOString();
+		const dm = new Date().toISOString();
+		beleg.data.dm = dm;
+		data.ka[beleg.id_karte].dm = dm;
+		// Metadatenfelder füllen
+		beleg.metadaten();
 		// Änderungsmarkierungen auffrischen
 		beleg.belegGeaendert(false);
 		beleg.listeGeaendert = true;
@@ -577,9 +586,10 @@ let beleg = {
 	selectFormEle (ele) {
 		let hBody = document.querySelector("body > header").offsetHeight,
 			hKarte = document.querySelector("#beleg > header").offsetHeight,
+			hTitle = document.querySelector("#beleg-titel").offsetHeight,
 			quick = document.getElementById("quick"),
 			hQuick = quick.offsetHeight,
-			h = hBody + hKarte,
+			h = hBody + hKarte + hTitle,
 			rect = ele.getBoundingClientRect();
 		if (quick.classList.contains("an")) {
 			h += hQuick;
@@ -673,6 +683,23 @@ let beleg = {
 			beleg.geaendertBd = false;
 			asterisk.classList.add("aus");
 		}
+		if (beleg.id_karte > -1) {
+			// Diese Funktion wird beim Schließen der Kartei aufgerufen. Wenn zuvor keine
+			// Karteikarte offen war, führt der Aufruf von belegReferenz() zu einem Fehler,
+			// der das Schließen unmöglich macht.
+			beleg.belegReferenz();
+		}
+	},
+	// frischt die Beleg-Referenz in der Belegüberschrift auf;
+	// Format: Name-Jahr-Belegnummer
+	belegReferenz () {
+		let ref = xml.belegId({ data: beleg.data, id: beleg.id_karte });
+		if (/--[0-9]+$/.test(ref)) {
+			// die Jahresangabe fehlt => keine Referenz drucken
+			ref = "";
+		}
+		const cont = document.querySelector("#beleg-referenz");
+		cont.textContent = ref;
 	},
 	// Speichern oder DTAImport starten (wenn Fokus auf einem Input-Element)
 	//   input = Element
@@ -766,7 +793,11 @@ let beleg = {
 	toolsKlick (a) {
 		a.addEventListener("click", function(evt) {
 			evt.preventDefault();
-			if (this.classList.contains("icon-tools-kopieren")) {
+			if (this.id === "beleg-meta-toggle") {
+				beleg.metadatenToggle(true);
+			} else if (this.id === "beleg-meta-reimport") {
+				beleg.metadatenReimport();
+			} else if (this.classList.contains("icon-tools-kopieren")) {
 				beleg.toolsKopieren(this);
 			} else if (this.classList.contains("icon-tools-einfuegen")) {
 				beleg.toolsEinfuegen(this);
@@ -1949,6 +1980,7 @@ let beleg = {
 			tab.classList.add("leseansicht");
 		}
 		button.classList.toggle("aktiv");
+		tooltip.init(button.parentNode);
 		// Header-Icons ein- oder ausblenden
 		document.querySelectorAll("#beleg .icon-leseansicht").forEach(function(i) {
 			if (beleg.leseansicht) {
@@ -1958,11 +1990,13 @@ let beleg = {
 			}
 		});
 		// Title des Sprung-Icons anpassen
+		const springen = document.getElementById("beleg-link-springen");
 		if (beleg.leseansicht) {
-			document.getElementById("beleg-link-springen").title = `zur nächsten Markierung springen (${tastatur.shortcutsTextAktuell("Strg")} + ↓)`;
+			springen.title = `zur nächsten Markierung springen (${tastatur.shortcutsTextAktuell("Strg")} + ↓)`;
 		} else {
-			document.getElementById("beleg-link-springen").title = `zum Wort im Belegtext springen (${tastatur.shortcutsTextAktuell("Strg")} + ↓)`;
+			springen.title = `zum Wort im Belegtext springen (${tastatur.shortcutsTextAktuell("Strg")} + ↓)`;
 		}
+		tooltip.init(springen.parentNode);
 		// Einfüge-Icons ein- oder ausblenden
 		document.querySelectorAll("#beleg .icon-tools-einfuegen").forEach(function(i) {
 			if (beleg.leseansicht) {
@@ -1994,7 +2028,7 @@ let beleg = {
 		beleg.ctrlSpringenPos = -1;
 		// Meta-Infos
 		let cont = document.getElementById("beleg-lese-meta");
-		helfer.keineKinder(cont);
+		cont.replaceChildren();
 		liste.metainfosErstellen(beleg.data, cont, "");
 		if (!cont.hasChildNodes()) {
 			cont.parentNode.classList.add("aus");
@@ -2016,7 +2050,7 @@ let beleg = {
 			if (!cont) { // manche Datensätze (dc, dm, bx) werden nicht angezeigt
 				continue;
 			}
-			helfer.keineKinder(cont);
+			cont.replaceChildren();
 			// Absätze einhängen
 			const p = liste.belegErstellenPrepP(v).split("\n");
 			let zuletzt_gekuerzt = false; // true, wenn der vorherige Absatz gekürzt wurde
@@ -2077,7 +2111,7 @@ let beleg = {
 	leseFillBedeutung () {
 		let feldBd = beleg.bedeutungAufbereiten(),
 			contBd = document.getElementById("beleg-lese-bd");
-		helfer.keineKinder(contBd);
+		contBd.replaceChildren();
 		if (feldBd) {
 			feldBd.split("\n").forEach(function(i) {
 				let bd = beleg.bedeutungSuchen(i),
@@ -2195,6 +2229,7 @@ let beleg = {
 			link.classList.remove("aktiv");
 			link.title = `Belegkontext kürzen (${tastatur.shortcutsTextAktuell("Strg")} + K)`;
 		}
+		tooltip.init(link.parentNode);
 	},
 	// Trennstriche in der Leseansicht ein- bzw. ausblenden
 	ctrlTrennung () {
@@ -2222,6 +2257,7 @@ let beleg = {
 			link.classList.remove("aktiv");
 			link.title = `Silbentrennung anzeigen (${tastatur.shortcutsTextAktuell("Strg")} + T)`;
 		}
+		tooltip.init(link.parentNode);
 	},
 	// Verteiler für die Sprungfunktion (Ctrl + ↓)
 	//   evt = Event-Objekt
@@ -2259,11 +2295,12 @@ let beleg = {
 			quick = document.getElementById("quick"),
 			quick_height = quick.offsetHeight;
 		const header_height = document.querySelector("body > header").offsetHeight,
-			beleg_header_height = document.querySelector("#beleg header").offsetHeight;
+			beleg_header_height = document.querySelector("#beleg > header").offsetHeight,
+			beleg_title_height = document.querySelector("#beleg-titel").offsetHeight;
 		if (!quick.classList.contains("an")) {
 			quick_height = 0;
 		}
-		const platz = window.innerHeight - header_height - beleg_header_height - quick_height;
+		const platz = window.innerHeight - header_height - beleg_header_height - beleg_title_height - quick_height;
 		window.scrollTo({
 			left: 0,
 			top: window.scrollY + rect.bottom - window.innerHeight + Math.round(platz / 2),
@@ -2794,5 +2831,122 @@ let beleg = {
 				}
 			},
 		});
+	},
+
+	// Metadaten: füllen oder auffrischen
+	metadaten () {
+		const felder = [ "dc", "dm", "bi", "bx" ];
+		for (const feld of felder) {
+			const cont = document.querySelector(`#beleg-${feld}`);
+			cont.replaceChildren();
+			if (beleg.data[feld] && feld === "bx") {
+				// Importdaten
+				const pre = document.createElement("pre");
+				cont.appendChild(pre);
+				if (/^<.+>/.test(beleg.data.bx)) {
+					const pretty = helferXml.prettyPrint({
+						xmlStr: beleg.data[feld],
+					});
+					pre.innerHTML = pretty;
+				} else {
+					pre.textContent = beleg.data[feld];
+				}
+			} else {
+				// weitere Datenfelder
+				let text = "–";
+				if (beleg.data[feld]) {
+					text = beleg.data[feld];
+				}
+				const div = document.createElement("div");
+				cont.appendChild(div);
+				div.textContent = text;
+			}
+		}
+	},
+
+	// Metadaten: Anzeige umschalten
+	//   optionenSpeichern = Booleand
+	metadatenToggle (optionenSpeichern) {
+		// Icon umstellen
+		const link = document.querySelector("#beleg-meta-toggle");
+		if (optionen.data.beleg.meta) {
+			link.classList.remove("icon-tools-meta-minus");
+			link.classList.add("icon-tools-meta-plus");
+			link.title = "Metadaten anzeigen";
+		} else {
+			link.classList.remove("icon-tools-meta-plus");
+			link.classList.add("icon-tools-meta-minus");
+			link.title = "Metadaten verbergen";
+		}
+		tooltip.init(link.parentNode);
+
+		// Anzeige der Tabellenzeilen umstellen
+		document.querySelectorAll("#beleg .meta").forEach(i => {
+			if (optionen.data.beleg.meta) {
+				i.classList.add("aus");
+			} else {
+				i.classList.remove("aus");
+			}
+		});
+
+		// Optionen auffrischen
+		optionen.data.beleg.meta = !optionen.data.beleg.meta;
+		if (optionenSpeichern) {
+			optionen.speichern();
+		}
+	},
+
+	// Metadaten: Daten aus bx erneut importieren
+	metadatenReimport () {
+		// keine Daten vorhanden
+		if (!beleg.data.bx) {
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Keine Importdaten vorhanden.",
+			});
+			return;
+		}
+
+		// Importtyp ermitteln
+		let bi = beleg.data.bi || "";
+		if (!bi) {
+			if (/@[a-z]+{/.test(beleg.data.bx)) {
+				bi = "bibtex";
+			} else if (/^<Beleg>/.test(beleg.data.bx)) {
+				bi = "dwds";
+			} else if (/^<Fundstelle /.test(beleg.data.bx)) {
+				bi = "xml-fundstelle";
+			} else if (/<mods /.test(beleg.data.bx)) {
+				bi = "xml-mods";
+			} else if (!/<.+>/.test(beleg.data.bx)) {
+				bi = "dereko";
+			}
+		}
+		if (!bi) {
+			dialog.oeffnen({
+				typ: "alert",
+				text: "Der Importtyp konnte nicht ermittelt werden.",
+			});
+			return;
+		}
+
+		// Import neu anstoßen
+		if (bi === "bibtex") {
+			document.querySelector("#beleg-import-bibtex").click();
+			belegImport.BibTeX(beleg.data.bx, "");
+		} else if (bi === "dereko") {
+			document.querySelector("#beleg-import-dereko").click();
+			belegImport.DeReKo(beleg.data.bx, "", true);
+		} else if (bi === "dwds") {
+			document.querySelector("#beleg-import-dwds").click();
+			const obj = {
+				clipboard: beleg.data.bx,
+				xml: new DOMParser().parseFromString(beleg.data.bx, "text/xml")
+			};
+			belegImport.DWDS(obj, "");
+		} else if (/^xml/.test(bi)) {
+			document.querySelector("#beleg-import-xml").click();
+			belegImport.XML(beleg.data.bx, "");
+		}
 	},
 };

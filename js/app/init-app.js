@@ -12,6 +12,9 @@ window.addEventListener("load", async () => {
 	// globales Datenobjekt für Kartei
 	window.data = {};
 
+	// Liste der Einstellungen für die Quick-Access-Bar ermitteln
+	quickEin.optionsDetect();
+
 	// IPC-LISTENER INITIALISIEREN
 	// Menüpunkte
 	ipcRenderer.on("app-karteisuche", () => karteisuche.oeffnen());
@@ -141,6 +144,7 @@ window.addEventListener("load", async () => {
 				"kopieren-liste-cont",
 				"meta-cont-over",
 				"notizen-feld",
+				"quick-ein-over",
 				"red-lit-suche-titel",
 				"red-meta-over",
 				"red-wi-cont-over",
@@ -315,6 +319,14 @@ window.addEventListener("load", async () => {
 	document.querySelectorAll("#filter-kartendatum .icon-jetzt").forEach(a => filter.kartendatumJetzt(a));
 	// Funktionen im Belegliste-Header
 	document.querySelectorAll("#liste header a").forEach(a => liste.header(a));
+	document.querySelector("#liste-sort-schliessen").addEventListener("click", () => liste.headerSortierenSchliessen());
+	document.querySelectorAll("#liste-sort a").forEach(i => {
+		i.addEventListener("click", function (evt) {
+			evt.preventDefault();
+			liste.headerSortierenAuswahl = this.getAttribute("href").substring(1).split("-");
+			liste.headerSortierenSchliessen();
+		});
+	});
 	// Einstellungen-Fenster
 	document.querySelectorAll("#einstellungen ul a").forEach(a => optionen.sektionWechselnLink(a));
 	document.querySelectorAll("#einstellungen input").forEach(i => optionen.aendereEinstellungListener(i));
@@ -334,6 +346,10 @@ window.addEventListener("load", async () => {
 	document.getElementById("tags-zuruecksetzen").addEventListener("click", () => optionen.tagsZuruecksetzen());
 	optionen.anwendenIconsDetailsListener(document.getElementById("einstellung-anzeige-icons-immer-an"));
 	optionen.anwendenHelleDunklerListener(document.getElementById("einstellung-helle-dunkler"));
+	optionen.anwendenSortErweitertListener(document.getElementById("einstellung-belegliste-sort-erweitert"));
+	// Quick-Access-Einstellung
+	document.getElementById("quick-ein-uebernehmen").addEventListener("click", () => quickEin.uebernehmen());
+	document.getElementById("quick-ein-schliessen").addEventListener("click", () => quickEin.schliessen());
 	// Formvarianten-Fenster
 	document.querySelectorAll("#stamm input").forEach(i => {
 		if (i.type === "button") {
@@ -505,6 +521,8 @@ window.addEventListener("load", async () => {
 	}
 	// Tastaturkürzel ändern
 	tastatur.shortcutsText();
+	// Tooltips initialisieren
+	tooltip.init();
 
 	// IPC-ANFRAGEN
 	// Bilder vorladen

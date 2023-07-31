@@ -34,7 +34,7 @@ let tagger = {
 	//     (Index-Nummer im aktuellen Bedeutungsgerüst, zu der die Tags hinzugefügt werden sollen)
 	aufbauenBedeutung (idx) {
 		let cont = document.getElementById("tagger-bedeutung");
-		helfer.keineKinder(cont);
+		cont.replaceChildren();
 		cont.classList.remove("aus");
 		// Daten ermitteln
 		const i = parseInt(idx, 10);
@@ -52,7 +52,7 @@ let tagger = {
 	aufbauen () {
 		tagger.filled = false;
 		let cont = document.getElementById("tagger-typen");
-		helfer.keineKinder(cont);
+		cont.replaceChildren();
 		let typen = [];
 		for (let typ in optionen.data.tags) {
 			if (!optionen.data.tags.hasOwnProperty(typ)) {
@@ -87,6 +87,7 @@ let tagger = {
 			let a = dropdown.makeLink("dropdown-link-td", `${name} auswählen`, true);
 			p.appendChild(a);
 		}
+		tooltip.init(cont);
 		// keine Tag-Typen gefunden
 		if (!cont.hasChildNodes()) {
 			cont.classList.add("leer");
@@ -286,7 +287,7 @@ let tagger = {
 			bedeutungen.akt.bd[idx].ta = save;
 			// Tags in die Tabelle eintragen
 			let zelle = document.querySelector(`#bedeutungen-cont tr[data-idx="${idx}"] td[data-feld="ta"]`);
-			helfer.keineKinder(zelle);
+			zelle.replaceChildren();
 			bedeutungen.aufbauenTags(save, zelle);
 			// Änderungsmarkierung Bedeutungsgerüst setzen
 			bedeutungen.bedeutungenGeaendert(true);

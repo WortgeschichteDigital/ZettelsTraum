@@ -373,7 +373,7 @@ let redWi = {
 		// Wortinformationen aufbauen
 		cont.parentNode.classList.remove("aus");
 		copy.classList.add("aus");
-		helfer.keineKinder(cont);
+		cont.replaceChildren();
 		let hTxt = {
 			Wortverbindung: "Wortverbindungen",
 			Wortbildung: "Wortbildungen",

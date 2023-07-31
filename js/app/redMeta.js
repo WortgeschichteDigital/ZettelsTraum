@@ -100,7 +100,7 @@ let redMeta = {
 	// BearbeiterInnen des Zettels auflisten
 	bearbAuflisten () {
 		let cont = document.getElementById("red-meta-be-liste");
-		helfer.keineKinder(cont);
+		cont.replaceChildren();
 		// keine BearbeiterInnen eingetragen
 		if (!data.rd.be.length) {
 			let p = document.createElement("p");

@@ -109,6 +109,8 @@ let suchleiste = {
 		a.textContent = " ";
 		a.title = "Suchleiste schließen (Esc)";
 		suchleiste.ausblendenListener(a);
+		// Tooltips initialisieren
+		tooltip.init(div);
 	},
 	// Listener für das Suchfeld
 	//   input = Element

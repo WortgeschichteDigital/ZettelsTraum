@@ -120,8 +120,8 @@ let annotieren = {
 		if (data) {
 			let farbe = data.getAttribute("class").match(/farbe([0-9]{1})/);
 			werte.farbe = parseInt(farbe[1], 10);
-			if (data.title) {
-				werte.text = data.title;
+			if (data.dataset.tooltip) {
+				werte.text = data.dataset.tooltip.replace(/\/<wbr>/g, "/");
 			}
 			if (data.dataset.nichtTaggen === "true") {
 				werte.taggen = false;
@@ -132,6 +132,7 @@ let annotieren = {
 		// UI erstellen
 		let span = document.createElement("span");
 		span.id = "annotierung-wort";
+		span.addEventListener("mouseover", evt => evt.stopPropagation());
 		// Schließen-Icon
 		let img = document.createElement("img");
 		span.appendChild(img);
@@ -191,6 +192,7 @@ let annotieren = {
 		span.classList.add(pos.join("-"));
 		// Popup einhängen und Events anhängen
 		knoten.appendChild(span);
+		tooltip.init(knoten);
 		annotieren.modEvents();
 	},
 	// Events an das Annotieren-Feld hängen

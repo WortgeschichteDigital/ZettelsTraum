@@ -9,6 +9,9 @@
 /* Globale Klassen ------------------------------ */
 @import url(../global.css);
 
+/* Tooltip -------------------------------------- */
+@import url(../tooltip.css);
+
 /* Struktur-Elemente ---------------------------- */
 body {
 	margin: 0;

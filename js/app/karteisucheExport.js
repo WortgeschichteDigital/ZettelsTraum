@@ -919,7 +919,7 @@ let karteisucheExport = {
 	vorlagenListe () {
 		let opt = optionen.data["karteisuche-export-vorlagen"],
 			vorlagen = document.querySelector("#karteisuche-export-vorlagen");
-		helfer.keineKinder(vorlagen);
+		vorlagen.replaceChildren();
 		for (let i = 0, len = opt.length; i < len; i++) {
 			let p = document.createElement("p");
 			vorlagen.appendChild(p);
@@ -942,6 +942,7 @@ let karteisucheExport = {
 			text.textContent = opt[i].name;
 			karteisucheExport.vorlagenToolsListener(text);
 		}
+		tooltip.init(vorlagen);
 	},
 	// Vorlage laden
 	//   idx = Number

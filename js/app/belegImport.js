@@ -852,6 +852,7 @@ let belegImport = {
 			data.bs = bs.join("\n\n");
 		}
 		// Datensatz: Beleg-XML
+		data.bi = "dwds";
 		data.bx = clipboard;
 		// Datensatz: Quelle
 		let nQu = xml.querySelector("Fundstelle Bibl");
@@ -1063,6 +1064,7 @@ let belegImport = {
 			let parser = new DOMParser(),
 				xmlDoc = parser.parseFromString(xmlTxt, "text/xml"),
 				xmlDocIndent = helferXml.indent(xmlDoc);
+			data.ds.bi = "dwds";
 			data.ds.bx = new XMLSerializer().serializeToString(xmlDocIndent);
 		}
 	},
@@ -1625,6 +1627,8 @@ let belegImport = {
 		helfer.elementMaxHeight({
 			ele: document.getElementById("import-cont-over"),
 		});
+		// Tooltip initialisieren
+		tooltip.init(cont);
 		// Import-Markierung entfernen
 		function markierung (img) {
 			img.addEventListener("click", function(evt) {
@@ -1638,6 +1642,7 @@ let belegImport = {
 					this.src = "img/platzhalter.svg";
 					this.title = "markieren";
 				}
+				tooltip.init(this.parentNode);
 			});
 		}
 		// Import-Fenster schließen ausgewählten Datensatz übernehmen
@@ -1801,9 +1806,11 @@ let belegImport = {
 	//     (Inhalt der Datei)
 	//   pfad = String
 	//     (Pfad zur Datei)
-	DeReKo (content, pfad) {
+	//   reimport = true | undefined
+	//     (Daten stammen aus einem Reimport)
+	DeReKo (content, pfad, reimport = false) {
 		// DeReKo-Datei?
-		if (!/^© Leibniz-Institut für Deutsche Sprache, Mannheim/.test(content)) {
+		if (!reimport && !/^© Leibniz-Institut für Deutsche Sprache, Mannheim/.test(content)) {
 			dialog.oeffnen({
 				typ: "alert",
 				text: `Beim Einlesen des Dateiinhalts ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">Datei stammt nicht aus COSMAS II</p>`,
@@ -1811,7 +1818,7 @@ let belegImport = {
 			return;
 		}
 		// Daten einlesen
-		if (!belegImport.DeReKoLesen(content)) {
+		if (!belegImport.DeReKoLesen(content, reimport)) {
 			return;
 		}
 		// Metadaten auffrischen
@@ -1824,15 +1831,22 @@ let belegImport = {
 	// DeReKo-Import: Belege einlesen
 	//   content = String
 	//     (Inhalt der Datei)
-	DeReKoLesen (content) {
+	//   reimport = Boolean
+	//     (Daten stammen aus einem Reimport => keine Metadaten, nur ein Beleg)
+	DeReKoLesen (content, reimport) {
 		// Daten extrahieren
-		let meta = content.match(/\nDatum\s+:.+?\n\n/s),
-			belege = content.match(/\nBelege \(.+?_{5,}\n\n(.+)/s);
+		let meta = content.match(/\nDatum\s+:.+?\n\n/s)?.[0];
+		let belege = content.match(/\nBelege \(.+?_{5,}\n\n(.+)/s)?.[1]?.trim();
+		// Daten stammen aus Reimport
+		if (reimport) {
+			meta = true;
+			belege = content;
+		}
 		// wichtige Daten nicht gefunden?
 		let fehler = "";
-		if (!meta || !meta[0]) {
+		if (!meta) {
 			fehler = "Metadaten nicht gefunden";
-		} else if (!belege || !belege[1]) {
+		} else if (!belege) {
 			fehler = "Belege nicht gefunden";
 		}
 		if (fehler) {
@@ -1843,8 +1857,10 @@ let belegImport = {
 			return false; // Einlesen fehlgeschlagen
 		}
 		// Daten analysieren
-		belegImport.DeReKoLesenMeta(meta[0]);
-		belegImport.DeReKoLesenBelege(belege[1].trim());
+		if (!reimport) {
+			belegImport.DeReKoLesenMeta(meta);
+		}
+		belegImport.DeReKoLesenBelege(belege);
 		return true; // Einlesen erfolgreich
 	},
 	// DeReKo-Import: Metadaten parsen
@@ -1909,6 +1925,7 @@ let belegImport = {
 			let data = belegImport.DateiDatensatz();
 			data.ds.au = "N. N."; // Autor
 			data.ds.bs = beleg.join("\n\n"); // Beleg
+			data.ds.bi = "dereko";
 			data.ds.bx = `${id}${quelle}\n\n${beleg.join("\n")}`; // Original
 			data.ds.kr = "IDS"; // Korpus
 			data.ds.no = belegImport.Datei.meta; // Notizen
@@ -2049,6 +2066,7 @@ let belegImport = {
 				data.ds.au = "N. N.";
 			}
 			// Originaltitel rekonstruieren
+			data.ds.bi = "bibtex";
 			data.ds.bx = `${item.startzeile}\n`;
 			for (let [k, v] of Object.entries(item)) {
 				if (k === "startzeile") {

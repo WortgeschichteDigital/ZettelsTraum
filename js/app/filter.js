@@ -31,6 +31,14 @@ let filter = {
 	//   belege = Array
 	//     (die IDs der Belege, bereits chronologisch sortiert)
 	aufbauen (belege) {
+		// Belege chronologisch sortieren (wenn dies nicht schon der Fall ist)
+		if (optionen.data.belegliste.sort_typ !== "da") {
+			const bak = optionen.data.belegliste.sort_typ;
+			optionen.data.belegliste.sort_typ = "da";
+			liste.belegeSortierenCache = {};
+			belege.sort(liste.belegeSortieren);
+			optionen.data.belegliste.sort_typ = bak;
+		}
 		// Backup des Klappstatus und der Scrollposition erstellen
 		filter.backupKlappMake();
 		// Backup der Filtereinstellungen erstellen
@@ -317,7 +325,7 @@ let filter = {
 		}
 		// dynamische Filter drucken
 		let cont = document.getElementById("liste-filter-dynamisch");
-		helfer.keineKinder(cont);
+		cont.replaceChildren();
 		for (let block in filter.typen) {
 			if (!filter.typen.hasOwnProperty(block)) {
 				continue;
@@ -366,6 +374,7 @@ let filter = {
 				}
 			}
 		}
+		tooltip.init(cont);
 		// Notizen anhängen
 		notizen.filterleiste();
 		// Backup der Filtereinstellungen wiederherstellen
@@ -434,7 +443,7 @@ let filter = {
 	aufbauenZeitraum () {
 		// Liste leeren
 		let cont = document.getElementById("filter-zeitraum-dynamisch");
-		helfer.keineKinder(cont);
+		cont.replaceChildren();
 		// Zeitraum-Cache leeren
 		filter.zeitraumTrefferCache = {};
 		// Belege vorhanden?
@@ -487,6 +496,8 @@ let filter = {
 			span.title = "Anzahl der Belege in diesem Zeitraum";
 			p.appendChild(span);
 		}
+		// Tooltips initialiseren
+		tooltip.init(cont);
 		// Liste nach oben scrollen
 		cont.scrollTop = 0;
 	},
@@ -1601,6 +1612,7 @@ let filter = {
 			link.classList.remove("aktiv");
 			link.title = "Reduktionsmodus einschalten";
 		}
+		tooltip.init(link.parentNode);
 	},
 	// Datensätze im Volltextfilter en bloc umschalten
 	//   a = Element

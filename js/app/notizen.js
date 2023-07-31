@@ -427,6 +427,7 @@ let notizen = {
 		if (!document.getElementById("filter-notizen-content")) {
 			let filterCont = document.getElementById("liste-filter-dynamisch");
 			filterCont.appendChild(filter.aufbauenCont("Notizen"));
+			tooltip.init(filterCont);
 			let div = document.createElement("div");
 			document.getElementById("filter-kopf-notizen").nextSibling.appendChild(div);
 			div.id = "filter-notizen-content";

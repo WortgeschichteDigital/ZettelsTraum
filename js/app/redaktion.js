@@ -92,7 +92,7 @@ let redaktion = {
 	next () {
 		// Element leeren
 		let next = document.getElementById("redaktion-next");
-		helfer.keineKinder(next);
+		next.replaceChildren();
 		// nächstes Ereignis ermitteln
 		let ereignis = redaktion.naechstesEreignis(false).title;
 		// Anzeige auffrischen
@@ -110,7 +110,7 @@ let redaktion = {
 	tabelle () {
 		// Content leeren
 		let cont = document.getElementById("redaktion-cont-over");
-		helfer.keineKinder(cont);
+		cont.replaceChildren();
 		// Tabelle aufbauen und einhängen
 		let table = document.createElement("table");
 		cont.appendChild(table);
@@ -289,6 +289,7 @@ let redaktion = {
 			dropdown.feld(input);
 			let a = dropdown.makeLink("dropdown-link-td", droptypen[droptyp].title, true);
 			td.appendChild(a);
+			tooltip.init(td);
 		}
 	},
 	// Fokus auf ein Input-Feld setzen

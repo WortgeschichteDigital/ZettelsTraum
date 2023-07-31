@@ -10,6 +10,9 @@ window.addEventListener("load", async () => {
 	// ANZEIGE TASTATURKÜRZEL ANPASSEN
 	tastatur.shortcutsText();
 
+	// TOOLTIPS INITIALISIEREN
+	tooltip.init();
+
 	// ICONS
 	document.getElementById("bd-win-drucken").addEventListener("click", evt => {
 		evt.preventDefault();

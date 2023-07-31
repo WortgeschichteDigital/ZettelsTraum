@@ -476,6 +476,8 @@ let bedeutungen = {
 		}
 		// Ergänzungszeile einrücken
 		bedeutungen.aufbauenErgaenzen(table);
+		// Tooltips initialisieren
+		tooltip.init(cont);
 	},
 	// Überschrift des Bedeutungsgerüst ggf. anpassen
 	aufbauenH2 () {
@@ -583,6 +585,7 @@ let bedeutungen = {
 		input.value = `Gerüst ${gerueste[0]}`;
 		let a = dropdown.makeLink("dropdown-link-element", "Bedeutungsgerüst auswählen");
 		span.appendChild(a);
+		tooltip.init(span);
 		// Add-Button
 		let button = document.createElement("input");
 		button.type = "button";
@@ -1281,7 +1284,7 @@ let bedeutungen = {
 		a.href = "#";
 		a.id = "bedeutungen-tagger-link";
 		a.innerHTML = zelle.innerHTML;
-		helfer.keineKinder(zelle);
+		zelle.replaceChildren();
 		zelle.appendChild(a);
 		a.focus();
 		a.addEventListener("click", function(evt) {
@@ -1330,7 +1333,7 @@ let bedeutungen = {
 			edit.textContent = z;
 			helfer.editNoFormat(edit);
 		}
-		helfer.keineKinder(ele);
+		ele.replaceChildren();
 		ele.appendChild(edit);
 		// für Bedeutungen-Edit Toolbox erzeugen
 		if (Array.isArray(z)) {
@@ -1425,6 +1428,8 @@ let bedeutungen = {
 			}
 		}
 		parent.appendChild(div);
+		// Tooltip initialisieren
+		tooltip.init(div);
 	},
 	// Funktion der Text-Tools auf das Content-Feld anwenden
 	//   a = Element
@@ -1652,7 +1657,7 @@ let bedeutungen = {
 				ele.classList.remove("leer");
 			}
 		}
-		helfer.keineKinder(ele);
+		ele.replaceChildren();
 		ele.innerHTML = wert;
 		bedeutungen.editZeile(ele, false);
 	},

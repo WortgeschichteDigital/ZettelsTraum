@@ -6,12 +6,14 @@
 
 		<title> </title>
 
+		<link rel="stylesheet" href="../css/tooltip.css">
 		<link rel="stylesheet" href="../css/win/changelog.css">
 		<link rel="stylesheet" href="../css/win/changelog-drucken.css" media="print">
 
 		<script src="../js/helferXml.js"></script>
 		<script src="../js/suchleiste.js"></script>
 		<script src="../js/tastatur.js"></script>
+		<script src="../js/tooltip.js"></script>
 
 		<script src="../js/app/helfer.js"></script>
 
@@ -46,6 +48,8 @@
 			<div>
 				<h2><span>Version 1.0.0-beta</span><time datetime="2019-12-24">24. Dezember 2019</time></h2>
 
+				<p><span class="obacht">Das Dateiformat hat sich geändert!</span> Ältere <abbr title="Zettel’s Traum JSON">ZTJ</abbr>-Dateien werden automatisch konvertiert; dabei wird eine Änderungsmarkierung gesetzt.</p>
+
 				<h3>Entfernte Funktionen</h3>
 
 				<ul>
@@ -55,13 +59,29 @@
 				<h3>Neue Funktionen</h3>
 
 				<ul>
-					<li></li>
+					<li><a href="#belegliste" class="link-handbuch">Belegliste</a>: Es gibt nun <a href="#belegliste-sortierung" class="link-handbuch">erweiterte Sortierfunktionen</a>, die allerdings erst <a href="#einstellungen-beleglisteSortErweitert" class="link-handbuch">durch eine Einstellung aktiviert</a> werden müssen.</li>
+
+					<li><a href="#einstellungen-quick" class="link-handbuch">Quick-Access-Bar</a>: Die meisten Einstellungen aus dem Dialogfenster <i>Einstellungen</i> lassen sich nun als Icon in die Quick-Access-Bar legen.</li>
+
+					<li>
+						<p><a href="#karteikarte" class="link-handbuch">Karteikarte</a>: Diverse <a href="#karteikarte-meta" class="link-handbuch">Metadaten</a>, die schon in der Vergangenheit beim Speichern einer Karteikarte angelegt wurden, werden nun auch in der <a href="#karteikarte-formularansicht" class="link-handbuch">Formularansicht</a> angezeigt. Dazu zählen zwei Datumsfelder, die zeigen, wann eine Karteikarte erstellt und wann sie zuletzt gespeichert wurde; ein Feld mit Rohdaten, aus denen der Beleg importiert wurde; und das erst mit dieser Version eingeführte Feld zum Importtyp (eine Zeichenkette, die die Quelle der Rohdaten beschreibt). Liegen zu einem Feld keine Daten vor, wird nur <code class="quelltext">–</code> gedruckt.</p>
+
+						<p>Der Inhalt der Metadaten ist eher technischer Natur und kann deswegen auch nicht manuell geändert werden. Außerdem sind die Felder standardmäßig ausgeblendet. Rechts neben der Überschrift <i>Metadaten</i> finden Sie das Icon <img src="../img/plus.svg" width="24" height="24" alt="">, mit dem Sie die Datenfelder einblenden können.</p>
+
+						<p>Neben der Überschrift des Datenfelds <i>Importdaten</i> gibt es ein weiteres Icon: <img src="../img/pfeil-kreis.svg" width="24" height="24" alt="">. Mit ihm können Sie die Karteikarte aus den gespeicherten Importdaten neu befüllen. Bereits gefüllte Datenfelder werden dabei überschrieben.</p>
+					</li>
+
+					<li>Die <a href="#einstellungen-allgemeinesSprache" class="link-handbuch">Sprache der Fenster-Menüs</a> wurde lokalisiert. Zur Verfügung stehen Menüs in den Sprachen Deutsch, Englisch, Französisch und Italienisch.</li>
 				</ul>
 
 				<h3>Verbesserungen</h3>
 
 				<ul>
-					<li></li>
+					<li><a href="#karteikarte" class="link-handbuch">Karteikarte</a>: Die Karteikartenüberschrift mit der Belegnummer bleibt nun auch beim Scrollen sichtbar.</li>
+
+					<li>Karteikarte: In der Karteikartenüberschrift wird nun neben der Belegnummer auch die Beleg-Referenz angezeigt. (Diese Referenz wird für den XML-Export genutzt, um Belege eindeutig referenzieren zu können.)</li>
+
+					<li>Die Anzeige der Tooltips wurde verbessert.</li>
 				</ul>
 
 				<h3>Updates</h3>

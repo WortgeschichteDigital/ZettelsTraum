@@ -107,6 +107,9 @@ let helfer = {
 			"notizen-feld": {
 				queries: ["#notizen-buttons"],
 			},
+			"quick-ein-over": {
+				queries: ["#quick-ein-buttons"],
+			},
 			"red-lit-suche-titel": {
 				queries: ["#red-lit-suche-treffer"],
 			},
@@ -258,14 +261,6 @@ let helfer = {
 			top: top,
 			behavior: "smooth",
 		});
-	},
-	// eleminiert alle childNodes des übergebenen Objekts
-	//   obj = Element
-	//     (dieses Element soll von all seinen Kindern befreit werden)
-	keineKinder (obj) {
-		while (obj.hasChildNodes()) {
-			obj.removeChild(obj.lastChild);
-		}
 	},
 	// Zufallsgenerator
 	//   min = Number
@@ -582,7 +577,7 @@ let helfer = {
 					return "ss";
 			}
 		});
-		prep = prep.replace(/[0-9]+/g, m => m.padStart(3, "0"));
+		prep = prep.replace(/[0-9]+/g, m => m.padStart(4, "0"));
 		helfer.sortAlphaPrepCache[s] = prep;
 		return prep;
 	},
@@ -1026,7 +1021,7 @@ let helfer = {
 			div.style.zIndex = zIndex;
 		}
 		// Element füllen
-		helfer.keineKinder(div);
+		div.replaceChildren();
 		let img = document.createElement("img");
 		div.appendChild(img);
 		img.width = "96";
@@ -1091,6 +1086,7 @@ let helfer = {
 	//     (Link, auf dem geklickt wurde)
 	externeLinks (a) {
 		a.title = a.getAttribute("href");
+		tooltip.init(a.parentNode);
 		a.addEventListener("click", function(evt) {
 			evt.preventDefault();
 			if (evt.detail > 1) { // Doppelklicks abfangen

@@ -128,7 +128,7 @@ let stamm = {
 	// Kopf aufbauen
 	kopf () {
 		let cont = document.getElementById("stamm-kopf");
-		helfer.keineKinder(cont);
+		cont.replaceChildren();
 		// Wortblöcke aufbauen
 		let woerter = Object.keys(data.fv);
 		for (let i = 0, len = woerter.length; i < len; i++) {
@@ -159,6 +159,7 @@ let stamm = {
 			a.title = "Konfiguration öffnen";
 			stamm.kopfKonfigListener(a);
 		}
+		tooltip.init(cont);
 	},
 	// Wort auswählen, dessen Formvarianten aufgelistet werden sollen
 	//   span = Element
@@ -320,6 +321,8 @@ let stamm = {
 			button.value = "Löschen";
 			stamm.kopfKonfigLoeschen(button);
 		}
+		// Tooltips initialisieren
+		tooltip.init(popup);
 	},
 	// Konfigurations-Popup entfernen, wenn es existiert
 	kopfKonfigSchliessen () {
@@ -516,7 +519,7 @@ let stamm = {
 	// Liste der Formvarianten des aktuellen Worts aufbauen
 	auflisten () {
 		let cont = document.getElementById("stamm-liste");
-		helfer.keineKinder(cont);
+		cont.replaceChildren();
 		// Einträge auflisten
 		let fo = data.fv[stamm.wortAkt].fo;
 		for (let i = 1, len = fo.length; i < len; i++) {
@@ -542,6 +545,7 @@ let stamm = {
 				p.appendChild(span);
 			}
 		}
+		tooltip.init(cont);
 		// keine Varianten vorhanden
 		if (!cont.hasChildNodes()) {
 			let p = document.createElement("p");

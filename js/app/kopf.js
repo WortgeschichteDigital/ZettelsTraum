@@ -79,6 +79,7 @@ let kopf = {
 		} else {
 			iconRedaktion.classList.add("aus");
 		}
+		tooltip.init(iconRedaktion.parentNode);
 	},
 	// Redaktion-Icon ändern
 	//   abgeschlossen = Boolean

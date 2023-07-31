@@ -18,6 +18,9 @@
 /* Suchleiste ----------------------------------- */
 @import url(../suchleiste.css);
 
+/* Tooltip -------------------------------------- */
+@import url(../tooltip.css);
+
 /* Basis-Elemente ------------------------------- */
 abbr {
 	text-decoration: none;

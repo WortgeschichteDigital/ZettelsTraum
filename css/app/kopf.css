@@ -235,6 +235,67 @@
 	width: 20px;
 }
 
+.quick-ein-1 {
+	-webkit-mask-image: url(../../img/checkbox.svg);
+	mask-image: url(../../img/checkbox.svg);
+}
+
+.quick-ein-2 {
+	-webkit-mask-image: url(../../img/zahnrad.svg);
+	mask-image: url(../../img/zahnrad.svg);
+}
+
+.quick-ein-3 {
+	-webkit-mask-image: url(../../img/stern.svg);
+	mask-image: url(../../img/stern.svg);
+}
+
+.quick-ein-4 {
+	-webkit-mask-image: url(../../img/fahne.svg);
+	mask-image: url(../../img/fahne.svg);
+}
+
+.quick-ein-5 {
+	-webkit-mask-image: url(../../img/birne.svg);
+	mask-image: url(../../img/birne.svg);
+}
+
+.quick-ein-6 {
+	-webkit-mask-image: url(../../img/lesezeichen.svg);
+	mask-image: url(../../img/lesezeichen.svg);
+}
+
+.quick-ein-7 {
+	-webkit-mask-image: url(../../img/stecknadel.svg);
+	mask-image: url(../../img/stecknadel.svg);
+}
+
+.quick-ein-8 {
+	-webkit-mask-image: url(../../img/sonne.svg);
+	mask-image: url(../../img/sonne.svg);
+}
+
+.quick-ein-9 {
+	-webkit-mask-image: url(../../img/herz.svg);
+	mask-image: url(../../img/herz.svg);
+}
+
+.quick-ein-10 {
+	-webkit-mask-image: url(../../img/check.svg);
+	mask-image: url(../../img/check.svg);
+}
+
+.quick-ein-11 {
+	-webkit-mask-image: url(../../img/plus-dick.svg);
+	mask-image: url(../../img/plus-dick.svg);
+}
+
+.quick-ein-12 {
+	-webkit-mask-image: url(../../img/minus-dick.svg);
+	mask-image: url(../../img/minus-dick.svg);
+}
+
+
 /* Kopf allgemein ------------------------------- */
 body > header {
 	position: fixed;

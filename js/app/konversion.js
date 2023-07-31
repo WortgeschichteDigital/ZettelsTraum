@@ -6,7 +6,7 @@ let konversion = {
 	// 1.) Beim Anlegen neuer Datenwerte Objekte in
 	//   kartei.erstellen() u. beleg.karteErstellen() ergänzen!
 	// 2.) Diese Versionsnummer hochzählen!
-	version: 24,
+	version: 25,
 	// Verteilerfunktion
 	start () {
 		konversion.von1nach2();
@@ -32,6 +32,7 @@ let konversion = {
 		konversion.von21nach22();
 		konversion.von22nach23();
 		konversion.von23nach24();
+		konversion.von24nach25();
 	},
 	// Konversion des Dateiformats von Version 1 nach Version 2
 	von1nach2 () {
@@ -449,6 +450,20 @@ let konversion = {
 		}
 		// Datenfeld "rd.sp" ergänt
 		data.rd.sp = [];
+		// Versionsnummer hochzählen
+		data.ve++;
+		// Änderungsmarkierung setzen
+		kartei.karteiGeaendert(true);
+	},
+	// Konversion des Dateiformats von Version 24 nach Version 25
+	von24nach25 () {
+		if (data.ve > 24) {
+			return;
+		}
+		// Datenfeld "bi" (Importtyp) in allen Karteikarten ergänzen
+		for (const i of Object.values(data.ka)) {
+			i.bi = "";
+		}
 		// Versionsnummer hochzählen
 		data.ve++;
 		// Änderungsmarkierung setzen

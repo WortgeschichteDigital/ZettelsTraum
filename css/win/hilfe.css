@@ -14,6 +14,9 @@
 @import url(../suchleiste.css);
 @import url(../win/suchleiste-extra.css);
 
+/* Tooltip -------------------------------------- */
+@import url(../tooltip.css);
+
 /* Struktur-Elemente ---------------------------- */
 body {
 	margin: 0;

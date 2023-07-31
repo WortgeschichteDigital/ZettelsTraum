@@ -1,0 +1,31 @@
+@charset "utf-8";
+
+#tooltip {
+  position: fixed;
+  opacity: 0;
+  box-shadow: var(--boxShadow);
+  border-radius: 4px;
+  padding: 2px 4px;
+  max-width: 250px;
+  background-color: var(--text);
+  color: #fff;
+  font-size: 14px;
+  line-height: 18px;
+  transition: opacity .1s linear;
+}
+
+#tooltip.visible {
+  opacity: 1;
+}
+
+#tooltip.wide {
+  max-width: 450px;
+}
+
+#tooltip p {
+  margin: 0 0 10px;
+}
+
+#tooltip p:last-child {
+  margin: 0;
+}

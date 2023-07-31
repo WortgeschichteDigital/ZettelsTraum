@@ -12,7 +12,7 @@ let zuletzt = {
 		cont.classList.remove("aus");
 		// Dateiliste leeren
 		let liste = document.getElementById("start-liste");
-		helfer.keineKinder(liste);
+		liste.replaceChildren();
 		// Dateiliste aufbauen
 		for (let i = 0, len = optionen.data.zuletzt.length; i < len; i++) {
 			let datei = optionen.data.zuletzt[i],

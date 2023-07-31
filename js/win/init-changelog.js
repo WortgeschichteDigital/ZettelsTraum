@@ -13,6 +13,9 @@ window.addEventListener("load", async () => {
 	// ANZEIGE TASTATURKÜRZEL ANPASSEN
 	tastatur.shortcutsText();
 
+	// TOOLTIPS INITIALISIEREN
+	tooltip.init();
+
 	// FENSTER FREISCHALTEN
 	helfer.fensterGeladen();
 });

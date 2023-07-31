@@ -12,6 +12,7 @@
 		<script src="../js/helferXml.js"></script>
 		<script src="../js/suchleiste.js"></script>
 		<script src="../js/tastatur.js"></script>
+		<script src="../js/tooltip.js"></script>
 
 		<script src="../js/app/helfer.js"></script>
 
@@ -729,6 +730,28 @@ Aufrufdatum: 24. 12. 2019</pre>
 
 					<p class="info">Bei Klick auf einen Anhang wird dieser im Standardprogramm des Betriebssystems geöffnet. Die Anhänge in dieser Liste sind an die aktuelle Karteikarte gebunden. Anhänge, die nicht zu einer einzelnen Karteikarte, sondern zur Wortkartei selbst gehören, können über den Menüpunkt <a href="#menueKartei-anhaenge"><i>Kartei &gt; Anhänge</i></a> hinzugefügt werden.</p>
 
+					<p class="add-navi-details" id="karteikarte-meta"><b>Metadaten</b></p>
+
+					<p class="info">Neben den Datenfeldern, die Sie aktiv befüllen müssen, gibt es zu jeder Karteikarte Metadaten, in die beim Erstellen und Speichern einer Karte automatisch Daten eingetragen werden. Diese Datenfelder sind normalerweise ausgeblendet. Am rechten Rand neben der Überschrift <i>Metadaten</i> finden Sie das Icon <img src="../img/plus.svg" width="20" height="20" alt="">, mit dem Sie sich die Datenfelder anzeigen lassen können.</p>
+
+					<p class="info">Die Metadaten können nicht manuell geändert werden. Ihr Inhalt ist eher technischer Natur. Steht in einem Feld nur <code class="quelltext">–</code>, ist das Feld (noch) nicht gefüllt.</p>
+
+					<p class="add-navi-details"><b>Karteikarte erstellt:</b> Datum, zu dem die Karteikarte angelegt wurde</p>
+
+					<p class="info">Die Datumsangabe folgt dem ISO&nbsp;8601-Standard. Das Z am Ende steht für <q>Zulu</q>. Es zeigt an, dass es sich bei der Zeitangabe, um ein Datum der <a href="https://en.wikipedia.org/wiki/Coordinated_Universal_Time">koordinierten Weltzeit</a> handelt. Zulu-Zeit entspricht der <a href="https://en.wikipedia.org/wiki/Greenwich_Mean_Time" lang="en"><abbr title="Greenwich Mean Time">GMT</abbr></a>.</p>
+
+					<p class="add-navi-details"><b>Karteikarte geändert:</b> Datum, zu dem die Karteikarte zuletzt geändert wurde</p>
+
+					<p class="add-navi-details"><b>Importtyp:</b> eine Zeichenkette, die die Quelle der <i>Importdaten</i> beschreibt</p>
+
+					<p class="info">Die Zeichenkette erlaubt Rückschlüsse auf das Format der Rohdaten (die im folgenden Datenfeld stehen).</p>
+
+					<p class="add-navi-details"><b>Importdaten:</b> Rohdaten, aus denen heraus der Beleg ursprünglich importiert wurde</p>
+
+					<p class="info">Bei diesen Rohdaten kann es sich um <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Code handeln, um einen <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Datensatz oder um einen weitgehend unstrukturierten Belegtext (aus einem <a href="#karteikarte-derekoImport">DeReKo-Import</a>). Die Daten werden beim automatischen <a href="#karteikarte-importfunktion">Import</a> eines Belegs gespeichert.</p>
+
+					<p class="info">Mithilfe des Icons <img src="../img/pfeil-kreis.svg" width="20" height="20" alt=""> können Sie die Karte aus den Importdaten heraus neu befüllen lassen. Dabei werden ausschließlich die Rohdaten aus dem Datenfeld <i>Importdaten</i> genutzt. Bereits gefüllte Felder der Karteikarte werden überschrieben. (Es erscheint eine Warnmeldung.)</p>
+
 					<h2 id="karteikarte-importfunktion">Importfunktion</h2>
 
 					<p>Belege können automatisch aus dem <a href="#karteikarte-dtaImport"><abbr title="Deutschen Textarchiv">DTA</abbr></a>, dem <a href="#karteikarte-dwdsImport"><abbr title="Digitalen Wörterbuch der deutschen Sprache">DWDS</abbr></a> oder dem <a href="#karteikarte-derekoImport"><abbr title="Deutschen Referenzkorpus">DeReKo</abbr></a> importiert werden. Ferner besteht die Möglichkeit Titeldaten in bestimmten <a href="#karteikarte-xmlImport"><abbr title="Extensible Markup Language" lang="en">XML</abbr></a>- oder im <a href="#karteikarte-bibtexImport" class="bibtex"><span>Bib</span>T<span>E</span>X</a>-Format in eine Karteikarte zu laden. Für all diese Funktionen gibt es in der <a href="#karteikarte-formularansicht">Formularansicht der Karteikarte</a> unter dem Titel <i>Import</i> entsprechende Formulare. Bei den Textfeldern und Checkboxes in diesen Formularen handelt es sich <em>nicht</em> um Datenfelder. Sie werden beim Speichern der Karteikarte somit nicht berücksichtigt.</p>
@@ -1269,10 +1292,12 @@ Aufrufdatum: 24. 12. 2019</pre>
 					<p class="erklaerung-icon" id="belegliste-sortierung"><img src="../img/pfeil-gerade-hoch.svg" width="24" height="24" alt="">Sortierrichtung der Belege ändern</p>
 
 					<div class="info">
-						<p>Die Belege in der Liste können chronologisch auf- oder absteigend sortiert werden. Belege, für die nur eine Jahrhundertangabe zur Verfügung steht, werden (inhaltlich nicht ganz korrekt, <abbr title="vergleiche">vgl.</abbr> die Erläuterungen <a href="#karteikarte-datum">zum Datum-Feld der Karteikarte</a>) auf das Jahr null datiert. Die Angabe <q>17. Jh.</q> wird also wie <q>1700</q> behandelt.</p>
+						<p>Standardmäßig können die Belege in der Liste nur chronologisch auf- oder absteigend sortiert werden. Belege, für die nur eine Jahrhundertangabe zur Verfügung steht, werden (inhaltlich nicht ganz korrekt, <abbr title="vergleiche">vgl.</abbr> die Erläuterungen <a href="#karteikarte-datum">zum Datum-Feld der Karteikarte</a>) auf das Jahr null datiert. Die Angabe <q>17.&nbsp;Jh.</q> wird also wie <q>1600</q> behandelt.</p>
 
-						<p>Für die Sortierung wird das erste im Datumsfeld zu findende Datum genutzt. Handelt es sich um ein Tagesdatum, werden die Belge genau nach Jahre, Monat und Tag sortiert. Erkannt werden Tagesdaten im ISO 8601-Format (<code class="quelltext">2019-12-01</code>) und Tagesdaten nach dem Muster <code class="quelltext">1. 12. 2019</code>, auch mit führender Null und ohne Leerzeichen: <code class="quelltext">01.12.2019</code>.
-						Haben zwei oder mehr Belege dasselbe Datum, werden sie alphabetisch nach Autor sortiert: bei chronologisch aufsteigender Belegliste alphabetisch aufsteigend, bei chronologisch absteigender Belegliste alphabetisch absteigend. Sind auch die Autoren identisch, werden die Belege als Fallback nach Belegnummer geordnet: auch hier auf- oder absteigend, je nachdem wie die Chronologie der Liste ist.</p>
+						<p>Für die Sortierung wird das erste im Datum-Feld zu findende Datum genutzt. Handelt es sich um ein Tagesdatum, werden die Belge genau nach Jahr, Monat und Tag sortiert. Erkannt werden Tagesdaten im ISO 8601-Format (<code class="quelltext">2019-12-01</code>) und Tagesdaten nach dem Muster <code class="quelltext">1. 12. 2019</code>, auch mit führender Null und ohne Leerzeichen: <code class="quelltext">01.12.2019</code>.
+						Haben zwei oder mehr Belege dasselbe Datum, werden sie alphabetisch nach Autor sortiert. Sind auch die Autoren identisch, werden die Belege als Fallback nach <a href="#belegliste-kopfleisteBelegreferenz">Belegreferenz</a> geordnet.</p>
+
+						<p>Daneben gibt es <b>erweiterte Sortierfunktionen</b>, die allerdings erst <a href="#einstellungen-beleglisteSortErweitert">durch eine Einstellung aktiviert</a> werden müssen. Sind die erweiterten Funktionen aktiviert, öffnet sich beim Klick auf den Pfeil ein Popup-Fenster. Hier haben Sie die Möglichkeit, die Belegliste nach <i>Datum, Autor, Belegreferenz</i> und nach <i>Erstellungs-</i> oder <i>Änderungdatum des Belegs</i> zu sortierieren, jeweils auf- oder absteigend.</p>
 					</div>
 
 					<p class="erklaerung-icon" id="belegliste-detailansicht"><img src="../img/auge.svg" width="24" height="24" alt=""><a href="#belegliste-detailansicht">Detailansicht</a> der Belege umschalten</p>
@@ -1426,7 +1451,7 @@ Aufrufdatum: 24. 12. 2019</pre>
 
 					<p class="info">Standardmäßig öffnet sich die <a href="#karteikarte-leseansicht">Karteikarte in der Leseansicht</a>. Allerdings gibt es auch eine <a href="#einstellungen-karteikarte">Einstellung</a>, um die Karteikarte immer in der <a href="#karteikarte-formularansicht">Formularansicht</a> zu öffnen.</p>
 
-					<p><b>Belegreferenz:</b> eine Zeichenkette zum eindeutigen Identifizieren des Belegs</p>
+					<p id="belegliste-kopfleisteBelegreferenz"><b>Belegreferenz:</b> eine Zeichenkette zum eindeutigen Identifizieren des Belegs</p>
 
 					<div class="info">
 						<p>Die Belegreferenz setzt sich aus Autor, Datum und der Beleg-ID zusammen. Mit ihr kann ein Beleg im Karteikasten eindeutig referenziert werden, <abbr title="zum Beispiel">z. B.</abbr> um sich in einem <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Dokument auf ihn zu beziehen. Die Referenz lässt sich über das <a href="#belegliste-textZwischenablageReferenz">Rechtsklickmenü der Belegliste</a> (oder das der <a href="#karteikarte">Karteikarte</a>) kopieren.</p>
@@ -1444,7 +1469,7 @@ Aufrufdatum: 24. 12. 2019</pre>
 
 					<p><b>Autor:</b> Urheber des Belegtextes</p>
 
-					<p class="info">Ist die Detailansicht geschlossen, wird versucht, den Autornamen zu kürzen. Dazu wird nach dem ersten Komma gesucht und nur der Namensteil vor dem Komma eingeblendet. Klickt man auf die Kopfleiste, um die Detailansicht zu öffnen, erscheint der vollständige Name. Es bietet sich also an, Autornamen im Format <q>Nachname, Vorname</q> in der <a href="#karteikarte">Karteikarte</a> zu notieren – auch weil der Autorname als Fallback für die <a href="#belegliste-sortierung">Sortierung von Belegen</a> aus demselben Jahr herangezogen wird.</p>
+					<p class="info">Ist die Detailansicht geschlossen, wird versucht, den Autornamen zu kürzen. Dazu wird nach dem ersten Komma gesucht und nur der Namensteil vor dem Komma eingeblendet. Klickt man auf die Kopfleiste, um die Detailansicht zu öffnen, erscheint der vollständige Name. Es bietet sich also an, Autornamen im Format <q>Nachname, Vorname</q> in der <a href="#karteikarte">Karteikarte</a> zu notieren – auch weil <abbr title="unter anderem">u.&nbsp;</abbr> der Autorname als Fallback für die <a href="#belegliste-sortierung">Sortierung von Belegen</a> aus demselben Jahr herangezogen wird.</p>
 
 					<p><b>Markierung</b> des Belegs</p>
 
@@ -1878,6 +1903,14 @@ Mustermann, Erika
 						<p>Eine importierte Personenliste kann auch wieder gelöscht werden: Erstellen Sie eine leere Textdatei und öffnen diese mit dem Button <i>Personenliste laden</i>. Danach ist die zuvor importierte Personenliste nicht mehr existent.</p>
 					</div>
 
+					<p class="erklaerung-option" id="einstellungen-allgemeinesSprache">Sprache der Fenster-Menüs</p>
+
+					<div class="info">
+						<p><i>Standard:</i> Deutsch</p>
+
+						<p>Die Einstellung passt die Sprache der Menüleiste am oberen Rand des Fensters an. Der Rest des Programms bleibt allerdings Deutsch. Diese sehr basale Internationalisierung dient nur dazu, Fremdsprachlern einen groben Eindruck vom Programmumfang zu geben.</p>
+					</div>
+
 					<p class="erklaerung-option" id="einstellungen-allgemeinesTimeoutInternet">Sekunden Timeout bei Internet-Anfragen</p>
 
 					<div class="info">
@@ -2175,6 +2208,14 @@ Mustermann, Erika
 						<p>Das Hinzufügen, Entfernen und Verschieben der Listenelemente erfolgt über die Pfeile zwischen den Listenblöcken. Bewegt wird immer das aktive Element, das durch eine blaue Umrandung als solches markiert wird. Ist ein Pfeil ausgegraut, kann das aktive Elemente nicht in die entsprechende Richtung bewegt werden. Das aktive Element kann man deaktivieren, indem man ein anderes Element auswählt oder indem man es noch einmal anklickt.</p>
 
 						<p>Über den Listenblöcken stehen drei Textbefehle, über die Sie die anzeigbaren Elemente mit einem Klick komplett entfernen (<q>keine</q>) oder komplett hinzufügen (<q>alle</q>) können. <q>Standard</q> setzt die Elemente auf eine Vorauswahl zurück, mit der das Programm ausgeliefert wird.</p>
+
+						<p>Bei den ersten beiden Punkten in der rechten Liste, also der Liste, in der die hinzufügbaren Elemente stehen, handelt es sich um <b>Sonderfunktionen</b>. Diese Menü-Punkte bleiben in der Liste immer stehen, weil sie mehrfach hinzugefügt werden können.</p>
+
+						<ul>
+							<li><b>Separator:</b> Die Linie steht für einen Separator, mit dessen Hilfe die Icons in der Quick-Access-Bar in Gruppen gegliedert werden können.</li>
+
+							<li><b>Einstellung:</b> Dieser Menü-Punkt öffnet ein Konfigurationsfenster, sobald Sie den Hinzufügenpfeil <img src="../img/pfeil-gerade-links.svg" width="20" height="20" alt=""> anklicken. Im geöffneten Dialog können Sie sich dann eine Einstellung auswählen, die der Quick-Access-Bar hinzugefügt werden soll. Klicken Sie später in der Quick-Access-Bar auf das mithilfe dieser Funktion hinzugefügte Icon, wird die Einstellung umgeschaltet. Es lassen sich alle Einstellungen hinzufügen, die sich im Dialogfenster <i>Einstellungen</i> befinden <em>und</em> bei denen es sich um eine Checkbox (also ein Kästchen mit Haken) oder einen Radio-Button (ein rundes Auswahlfeld) handelt.</li>
+						</ul>
 					</div>
 
 					<h2 id="einstellungen-notizen">Notizen</h2>
@@ -2500,6 +2541,14 @@ Mustermann, Erika
 					<h2 id="einstellungen-belegliste">Belegliste</h2>
 
 					<p>Die folgenden Einstellungen betreffen die <a href="#belegliste">Belegliste</a>, die über den Menüpunkt <a href="#menueBelege-auflisten"><i>Belege &gt; Auflisten</i></a> oder das Tastaturkürzel <kbd>Strg</kbd> + <kbd>L</kbd> aufgerufen werden kann.</p>
+
+					<p class="erklaerung-option" id="einstellungen-beleglisteSortErweitert">erweiterte Sortierfunktionen nutzen</p>
+
+					<div class="info">
+						<p><i>Standard:</i> nicht aktiviert</p>
+
+						<p>Standardmäßig wird die Belegliste <a href="#belegliste-sortierung">chronologisch sortiert</a>, und zwar auf- oder absteigend. Aktivieren Sie diese Einstellungen werden beim Klick auf den Sortierpfeil <img src="../img/pfeil-gerade-hoch.svg" width="20" height="20" alt=""> erweiterte Sortieroptionen eingeblendet.</p>
+					</div>
 
 					<p class="erklaerung-option" id="einstellungen-beleglisteIcons">die Icons zur Steuerung der Detailansicht sollen immer alle sichtbar sein</p>
 

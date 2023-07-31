@@ -10,7 +10,8 @@ const {app, BrowserWindow, ipcMain, Menu, webContents, nativeImage} = require("e
 
 // eigene Module
 const dienste = require("./js/main/dienste"),
-	popup = require("./js/main/popup");
+	popup = require("./js/main/popup"),
+	i18n = require("./js/main/i18n");
 
 // Speicher-Objekt für die Fenster; Format der Einträge:
 //   "Fenster-ID" (numerischer String, beginnend mit 1; wird von Electron vergeben)
@@ -110,18 +111,21 @@ layoutMenu = [
 				icon: path.join(__dirname, "img", "menu", "fenster-plus.png"),
 				click: () => fenster.erstellen(""),
 				accelerator: "CommandOrControl+Shift+N",
+				id: "app-neues-fenster",
 			},
 			{ type: "separator" },
 			{
 				label: "Karteisuche",
 				icon: path.join(__dirname, "img", "menu", "lupe.png"),
 				click: () => appMenu.befehl("app-karteisuche"),
+				id: "app-karteisuche",
 			},
 			{ type: "separator" },
 			{
 				label: "Einstellungen",
 				icon: path.join(__dirname, "img", "menu", "zahnrad.png"),
 				click: () => appMenu.befehl("app-einstellungen"),
+				id: "app-einstellungen",
 			},
 			{ type: "separator" },
 			{
@@ -135,12 +139,14 @@ layoutMenu = [
 	},
 	{
 		label: "&Kartei",
+		id: "kartei",
 		submenu: [
 			{
 				label: "Erstellen",
 				icon: path.join(__dirname, "img", "menu", "dokument-plus.png"),
 				click: () => appMenu.befehl("kartei-erstellen"),
 				accelerator: "CommandOrControl+E",
+				id: "kartei-erstellen",
 			},
 			{ type: "separator" },
 			{
@@ -148,6 +154,7 @@ layoutMenu = [
 				icon: path.join(__dirname, "img", "menu", "oeffnen.png"),
 				click: () => appMenu.befehl("kartei-oeffnen", ""),
 				accelerator: "CommandOrControl+O",
+				id: "kartei-oeffnen",
 			},
 			{
 				label: "Zuletzt verwendet", // Menü wird über appMenu.zuletzt() gefüllt
@@ -249,44 +256,52 @@ layoutMenu = [
 				icon: path.join(__dirname, "img", "menu", "dokument-plus.png"),
 				click: () => appMenu.befehl("belege-hinzufuegen"),
 				accelerator: "CommandOrControl+N",
+				id: "belege-hinzufuegen",
 			},
 			{
 				label: "Auflisten",
 				icon: path.join(__dirname, "img", "menu", "liste-bullets.png"),
 				click: () => appMenu.befehl("belege-auflisten"),
 				accelerator: "CommandOrControl+L",
+				id: "belege-auflisten",
 			},
 			{
 				label: "Taggen",
 				icon: path.join(__dirname, "img", "menu", "etikett.png"),
 				click: () => appMenu.befehl("belege-taggen"),
+				id: "belege-taggen",
 			},
 			{
 				label: "Löschen",
 				icon: path.join(__dirname, "img", "menu", "muelleimer.png"),
 				click: () => appMenu.befehl("belege-loeschen"),
+				id: "belege-loeschen",
 			},
 			{ type: "separator" },
 			{
 				label: "Kopieren",
 				icon: path.join(__dirname, "img", "menu", "kopieren.png"),
 				click: () => appMenu.befehl("belege-kopieren"),
+				id: "belege-kopieren",
 			},
 			{
 				label: "Einfügen",
 				icon: path.join(__dirname, "img", "menu", "einfuegen.png"),
 				click: () => appMenu.befehl("belege-einfuegen"),
+				id: "belege-einfuegen",
 			},
 			{ type: "separator" },
 			{
 				label: "Belegtexte in Zwischenablage",
 				icon: path.join(__dirname, "img", "menu", "kopieren.png"),
 				click: () => appMenu.befehl("belege-zwischenablage"),
+				id: "belege-zwischenablage",
 			},
 		],
 	},
 	{
 		label: "&Redaktion",
+		id: "redaktion",
 		submenu: [
 			{
 				label: "Metadaten",
@@ -304,6 +319,7 @@ layoutMenu = [
 				label: "Literatur",
 				icon: path.join(__dirname, "img", "menu", "buecher.png"),
 				click: () => appMenu.befehl("redaktion-literatur"),
+				id: "redaktion-literatur",
 			},
 			{
 				label: "Wortinformationen",
@@ -328,44 +344,53 @@ layoutMenu = [
 	},
 	{
 		label: "&Hilfe",
+		id: "hilfe",
 		submenu: [
 			{
 				label: "Handbuch",
 				icon: path.join(__dirname, "img", "menu", "kreis-fragezeichen.png"),
 				click: () => fenster.erstellenNeben({typ: "handbuch"}),
 				accelerator: "F1",
+				id: "hilfe-handbuch",
 			},
 			{
 				label: "Demonstrationskartei",
 				click: () => appMenu.befehl("hilfe-demo"),
+				id: "hilfe-demonstrationskartei",
 			},
 			{
 				label: "Technische Dokumentation",
 				click: () => fenster.erstellenNeben({typ: "dokumentation"}),
+				id: "hilfe-dokumentation",
 			},
 			{ type: "separator" },
 			{
 				label: "Changelog",
 				click: () => fenster.erstellenNeben({typ: "changelog"}),
+				id: "hilfe-changelog",
 			},
 			{
 				label: "Fehlerlog",
 				click: () => fenster.erstellenNeben({typ: "fehlerlog"}),
+				id: "hilfe-fehlerlog",
 			},
 			{ type: "separator" },
 			{
 				label: "Updates",
 				icon: path.join(__dirname, "img", "menu", "pfeil-kreis.png"),
 				click: () => appMenu.befehl("hilfe-updates"),
+				id: "hilfe-updates",
 			},
 			{ type: "separator" },
 			{
 				label: `Über ${app.name}`,
 				click: () => fenster.erstellenUeber("app"),
+				id: "hilfe-ueber-app",
 			},
 			{
 				label: "Über Electron",
 				click: () => fenster.erstellenUeber("electron"),
+				id: "hilfe-ueber-electron",
 			},
 		],
 	},
@@ -374,37 +399,44 @@ layoutMenu = [
 layoutMenuBearbeiten = [
 	{
 		label: "B&earbeiten",
+		id: "bearbeiten",
 		submenu: [
 			{
 				label: "Rückgängig",
 				icon: path.join(__dirname, "img", "menu", "pfeil-rund-links.png"),
 				role: "undo",
+				id: "bearbeiten-rueckgaengig",
 			},
 			{
 				label: "Wiederherstellen",
 				icon: path.join(__dirname, "img", "menu", "pfeil-rund-rechts.png"),
 				role: "redo",
+				id: "bearbeiten-wiederherstellen",
 			},
 			{ type: "separator" },
 			{
 				label: "Ausschneiden",
 				icon: path.join(__dirname, "img", "menu", "schere.png"),
 				role: "cut",
+				id: "bearbeiten-ausschneiden",
 			},
 			{
 				label: "Kopieren",
 				icon: path.join(__dirname, "img", "menu", "kopieren.png"),
 				role: "copy",
+				id: "bearbeiten-kopieren",
 			},
 			{
 				label: "Einfügen",
 				icon: path.join(__dirname, "img", "menu", "einfuegen.png"),
 				role: "paste",
+				id: "bearbeiten-einfuegen",
 			},
 			{
 				label: "Alles auswählen",
 				icon: path.join(__dirname, "img", "menu", "auswaehlen.png"),
 				role: "selectAll",
+				id: "bearbeiten-auswaehlen",
 			},
 		],
 	},
@@ -413,28 +445,33 @@ layoutMenuBearbeiten = [
 layoutMenuAnsicht = [
 	{
 		label: "&Ansicht",
+		id: "ansicht",
 		submenu: [
 			{
 				label: "Anzeige vergrößern",
 				icon: path.join(__dirname, "img", "menu", "plus-quadrat.png"),
 				role: "zoomIn",
 				accelerator: "CommandOrControl+=",
+				id: "ansicht-vergroessern",
 			},
 			{
 				label: "Anzeige verkleinern",
 				icon: path.join(__dirname, "img", "menu", "minus-quadrat.png"),
 				role: "zoomOut",
+				id: "ansicht-verkleinern",
 			},
 			{
 				label: "Standardgröße",
 				icon: path.join(__dirname, "img", "menu", "fenster-standard.png"),
 				role: "resetZoom",
+				id: "ansicht-standard",
 			},
 			{ type: "separator" },
 			{
 				label: "Vollbild",
 				icon: path.join(__dirname, "img", "menu", "fenster-vollbild.png"),
 				role: "toggleFullScreen",
+				id: "ansicht-vollbild",
 			},
 		],
 	},
@@ -449,6 +486,7 @@ layoutMenuMac = [
 				icon: path.join(__dirname, "img", "menu", "fenster-schliessen.png"),
 				click: () => fenster.schliessen(),
 				accelerator: "CommandOrControl+W",
+				id: "fenster-schliessen",
 			},
 		],
 	},
@@ -467,15 +505,18 @@ if (devtools) {
 				{
 					label: "Neu laden",
 					role: "reload",
+					id: "dev-reload",
 				},
 				{
 					label: "Neu laden erzwingen",
 					role: "forceReload",
+					id: "dev-force-reload",
 				},
 				{ type: "separator" },
 				{
-					label: "Developer tools",
+					label: "Developer-Tools",
 					role: "toggleDevTools",
+					id: "dev-tools",
 				},
 			],
 		});
@@ -513,12 +554,7 @@ appMenu = {
 			return;
 		}
 		// Submenü-Vorlage
-		let layoutZuletzt = {
-			label: "Zuletzt verwendet",
-			icon: path.join(__dirname, "img", "menu", "uhr.png"),
-			id: "kartei-zuletzt",
-			submenu: [],
-		};
+		const zuletzt = [];
 		// Dateiliste ggf. ergänzen
 		if (optionen.data.zuletzt) {
 			let len = optionen.data.zuletzt.length;
@@ -528,16 +564,27 @@ appMenu = {
 				len = 10;
 			}
 			for (let i = 0; i < len; i++) {
-				appMenu.zuletztItem(layoutZuletzt, optionen.data.zuletzt[i], i);
+				appMenu.zuletztItem(zuletzt, optionen.data.zuletzt[i], i);
 			}
 		}
 		// ggf. Löschmenü hinzufügen
-		if (layoutZuletzt.submenu.length) {
-			layoutZuletzt.submenu.push(
+		if (zuletzt.length) {
+			let label = "Liste löschen";
+			const lang = optionen.data?.einstellungen?.sprache;
+			if (lang && lang !== "de") {
+				const trans = i18n.trans({
+					lang,
+					key: "kartei-zuletzt-liste-loeschen",
+				});
+				if (trans) {
+					label = trans;
+				}
+			}
+			zuletzt.push(
 				{ type: "separator" },
 				{
+					label,
 					click: () => appMenu.zuletztLoeschen(),
-					label: "Liste löschen",
 				},
 			);
 		}
@@ -551,16 +598,16 @@ appMenu = {
 			}
 		}
 		// neue Liste einhängen
-		layoutMenu[1].submenu[pos] = layoutZuletzt;
+		layoutMenu[1].submenu[pos].submenu = zuletzt;
 	},
 	// Menüpunkt im Untermenü "Zuletzt verwendet" erzeugen
-	//   layoutZuletzt = Object
-	//     (der Menüpunkt "Zuletzt verwendet")
+	//   zuletzt = Object
+	//     (submenu im Menüpunkt "Zuletzt verwendet")
 	//   datei = String
 	//     (Dateipfad)
 	//   i = Number
 	//     (Index-Punkt, an dem sich die Datei befindet)
-	zuletztItem (layoutZuletzt, datei, i) {
+	zuletztItem (zuletzt, datei, i) {
 		let item = {
 			label: path.basename(datei, ".ztj"),
 			sublabel: datei,
@@ -569,7 +616,7 @@ appMenu = {
 		if (i <= 8) {
 			item.accelerator = `CommandOrControl+${i + 1}`;
 		}
-		layoutZuletzt.submenu.push(item);
+		zuletzt.push(item);
 	},
 	// überprüft, ob die zuletzt verwendeten Karteien noch vorhanden sind
 	async zuletztCheck () {
@@ -730,10 +777,56 @@ appMenu = {
 			w.webContents.send(befehl);
 		}
 	},
+	// Sprache des Menüs ggf. auffrischen
+	lang () {
+		// App-Sprache ermitteln
+		const locale = app.getLocale().split("-")[0];
+		let lang = i18n.transLang({
+			lang: locale,
+		});
+		if (optionen.data?.einstellungen?.sprache) {
+			// Sprache aus Einstellungen übernehmen
+			lang = optionen.data.einstellungen.sprache;
+		} else if (optionen.data.einstellungen && !optionen.data.einstellungen.sprache) {
+			// Sprache der locale in den Einstellungen übernehmen, wenn der Wert noch nicht gesetzt ist
+			optionen.data.einstellungen.sprache = lang;
+		}
+		// Sprache DE => Menü muss nicht angepasst werden
+		if (lang === "de") {
+			return;
+		}
+		// Menü übersetzen
+		for (const menu of [ layoutMenu, layoutMenuBearbeiten, layoutMenuAnsicht, layoutMenuMac]) {
+			for (const block of menu) {
+				if (block.id) {
+					translate(block, block.id);
+				}
+				for (const i of block.submenu) {
+					translate(i, i.id);
+				}
+			}
+		}
+		function translate (item, key) {
+			if (!key) {
+				return;
+			}
+			const trans = i18n.trans({
+				lang,
+				key,
+			});
+			if (trans) {
+				item.label = trans;
+			}
+		}
+	},
 	// uovo di Pasqua
 	uovo () {
-		let l = "Beenden",
-			h = new Date().getHours();
+		const lang = optionen.data?.einstellungen?.sprache;
+		if (!lang || lang !== "de") {
+			return;
+		}
+		const h = new Date().getHours();
+		let l = "Beenden";
 		if (h >= 23 || h < 6) {
 			l = "Ausgeträumt";
 		}
@@ -1387,7 +1480,9 @@ if (cliCommandFound || !locked) {
 	app.on("ready", async () => {
 		// Optionen einlesen
 		await optionen.lesen();
-		// Menu der zuletzt verwendeten Karteien erzeugen
+		// ggf. Sprache des Menüs anpassen
+		appMenu.lang();
+		// Menü der zuletzt verwendeten Karteien erzeugen
 		appMenu.zuletzt();
 		// warten mit dem Öffnen des Fensters, bis die Optionen eingelesen wurden
 		fenster.erstellen(cliCommand.ztj, false);

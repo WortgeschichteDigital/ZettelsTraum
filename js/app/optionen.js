@@ -26,6 +26,8 @@ let optionen = {
 			kuerzen: true,
 			// Trennstriche und Seitenumbrüche in der Leseansicht anzeigen
 			trennung: true,
+			// Anzeige Metadatenfelder
+			meta: false,
 		},
 		// Filterleiste
 		filter: {
@@ -57,8 +59,11 @@ let optionen = {
 		belegliste: {
 			// Filterleiste anzeigen
 			filterleiste: false,
-			// chronologischen Richtung, in der die Belege sortiert werden sollen
+			// Richtung, in der die Belege sortiert werden sollen
 			sort_aufwaerts: false,
+			// Datentyp, nach dem die Belege sortiert werden sollen
+			// (Datenfeld aus data.ka oder "ref" als Stellvertreter für die Belegreferenz)
+			sort_typ: "da",
 			// kompletten Beleg anzeigen oder ausblenden
 			beleg: false,
 			// Absätze im Beleg ohne Worttreffer gekürzt darstellen
@@ -85,6 +90,8 @@ let optionen = {
 			// ALLGEMEINES
 			// für diesen Computer registrierte BearbeiterIn
 			bearbeiterin: "",
+			// Sprache der Fenster-Menüs
+			sprache: "de",
 			// Timeout für Anfrage an das DTA in Sekunden
 			// (einfacher als String, wird bei Bedarf in Number konvertiert)
 			timeout: "10",
@@ -218,6 +225,8 @@ let optionen = {
 			"filter-offen-textsorten": false,
 			"filter-offen-verschiedenes": false,
 			// BELEGLISTE
+			// erweiterte Sortieroptionen nutzen
+			"belegliste-sort-erweitert": false,
 			// die Icons, die die Anzeige der Datenfelder in der Belegliste steuern, sollen immer an sein
 			"anzeige-icons-immer-an": false,
 			// neben dem Belegtext soll ein Buchungs-Icon angezeigt werden
@@ -287,6 +296,13 @@ let optionen = {
 		// Pfad zur Literaturdatenbank
 		"literatur-db": "",
 	},
+	// Sprachen Fenster-Menü
+	sprachen: {
+		Deutsch: "de",
+		English: "en",
+		Français: "fr",
+		Italiano: "it",
+	},
 	// Optionen on-the-fly empfangen
 	// (wird aufgerufen, wenn in einem anderen Hauptfenster Optionen geändert wurden)
 	//   data = Object
@@ -297,14 +313,17 @@ let optionen = {
 			if (!data.hasOwnProperty(block)) {
 				continue;
 			}
-			if (!/^(fenster|fenster-bedeutungen|einstellungen|kopieren|tags|personen|letzter_pfad|literatur-db)$/.test(block)) {
+			if (!/^(beleg|fenster|fenster-bedeutungen|einstellungen|kopieren|tags|personen|letzter_pfad|literatur-db)$/.test(block)) {
 				delete data[block];
 				// diese Einstellungen werden nicht aus einem anderen Fenster übernommen
 				// (das führt nur zu einem unschönen Springen):
-				//   * beleg (steuert die Anzeige der Leseansicht der Karteikarte)
 				//   * filter (steuert die Einstellungen der Filterleiste)
 				//   * belegliste (steuert die Anzeige der Belegliste)
 				//   * zuletzt (wird extra behandelt und wenn nötig an alle Renderer-Prozesse geschickt)
+			} else if (block === "beleg") {
+				// im Beleg sollte die Anzeige der Leseansicht nicht aufgefrischt werden (unschönes Springen)
+				delete data.beleg.kuerzen;
+				delete data.beleg.trennung;
 			}
 		}
 		// Daten einlesen
@@ -380,11 +399,15 @@ let optionen = {
 		optionen.anwendenIconsDetails();
 		// Farbe sehr heller Elemente anpassen
 		optionen.anwendenHelleDunkler();
+		// Tooltip für das Sortiericon der Belegliste anpassen
+		liste.headerSortierenAnzeige();
 		// Icons im <caption> der Karteikarte
 		beleg.ctrlKuerzenAnzeige();
 		beleg.ctrlTrennungAnzeige();
 		// maximale Breite des Notizen-Fensters
 		optionen.anwendenNotizenMaxBreite();
+		// Anzeige der Metadatenfelder in der Karteikarte
+		optionen.anwendenMetadatenfelder();
 		// Optionen im Optionen-Fenster eintragen
 		optionen.anwendenEinstellungen();
 	},
@@ -401,8 +424,12 @@ let optionen = {
 		optionen.anwendenIconsDetails();
 		// Farbe sehr heller Elemente anpassen
 		optionen.anwendenHelleDunkler();
+		// Tooltip für das Sortiericon der Belegliste anpassen
+		liste.headerSortierenAnzeige();
 		// maximale Breite des Notizen-Fensters
 		optionen.anwendenNotizenMaxBreite();
+		// Anzeige der Metadatenfelder in der Karteikarte
+		optionen.anwendenMetadatenfelder();
 		// Optionen im Optionen-Fenster eintragen
 		optionen.anwendenEinstellungen();
 		// ggf. Update-Hinweis einblenden
@@ -415,6 +442,13 @@ let optionen = {
 			let e = ee[i].id.replace(/^einstellung-/, "");
 			if (ee[i].type === "checkbox") {
 				ee[i].checked = optionen.data.einstellungen[e] ? true : false;
+			} else if (e === "sprache") {
+				for (const [ k, v ] of Object.entries(optionen.sprachen)) {
+					if (v === optionen.data.einstellungen.sprache) {
+						ee[i].value = k;
+						break;
+					}
+				}
 			} else if (ee[i].type === "text" || ee[i].type === "number") {
 				ee[i].value = optionen.data.einstellungen[e] || "";
 			}
@@ -453,6 +487,15 @@ let optionen = {
 		const breite = optionen.data.einstellungen["notizen-max-breite"];
 		document.querySelector("#notizen > div").style.maxWidth = `${breite}px`;
 	},
+	// Anzeige der Metadatenfelder in der Karteikarte
+	anwendenMetadatenfelder () {
+		const toggle = document.querySelector("#beleg-meta-toggle");
+		if (optionen.data.beleg.meta && toggle.classList.contains("icon-tools-meta-plus") ||
+				!optionen.data.beleg.meta && toggle.classList.contains("icon-tools-meta-minus")) {
+			optionen.data.beleg.meta = !optionen.data.beleg.meta;
+			beleg.metadatenToggle(false);
+		}
+	},
 	// Icons für die Detail-Anzeige im Kopf der Belegliste ggf. immer sichtbar (Listener)
 	//   input = Element
 	//     (die zugehörige Checkbox in den Einstellungen)
@@ -487,6 +530,10 @@ let optionen = {
 		} else {
 			document.documentElement.classList.remove("dunkler");
 		}
+	},
+	// erweiterte Sortierfunktionen umschalten
+	anwendenSortErweitertListener (input) {
+		input.addEventListener("change", () => liste.headerSortierenAnzeige());
 	},
 	// bekannte Typen von Tag-Dateien
 	tagsTypen: {
@@ -541,7 +588,7 @@ let optionen = {
 	//     (der Typ der Tag-Datei, der manuell überprüft wurde)
 	anwendenTags (check = false, checkTyp = "") {
 		let cont = document.getElementById("tags-cont");
-		helfer.keineKinder(cont);
+		cont.replaceChildren();
 		// Tabelle erstellen
 		let table = document.createElement("table");
 		cont.appendChild(table);
@@ -634,6 +681,7 @@ let optionen = {
 			datum = helfer.datumFormat(optionen.data.tags[typ].update, "minuten");
 			tdSub.appendChild(document.createTextNode(datum));
 		}
+		tooltip.init(cont);
 		// keine Tag-Dateien vorhanden
 		if (!table.hasChildNodes()) {
 			let tr = document.createElement("tr");
@@ -1222,6 +1270,10 @@ let optionen = {
 			optionen.data.einstellungen[e] = ele.checked;
 		} else if (ele.type === "text" || ele.type === "number") {
 			optionen.data.einstellungen[e] = ele.value;
+		}
+		// Sprache Fenster-Menüs
+		if (e === "sprache") {
+			optionen.data.einstellungen.sprache = optionen.sprachen[ele.value];
 		}
 		// Kartei > Speichern
 		if (ele.name === "einstellung-speichern") {
