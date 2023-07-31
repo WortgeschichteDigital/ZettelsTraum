@@ -7,18 +7,18 @@ if (!typ || !/^(darwin|linux|win32)$/.test(typ)) {
 }
 
 // Vorbereitung
-const packager = require("electron-packager"),
-  prepare = require("./installer"),
-  jahr = prepare.getYear();
+const packager = require("electron-packager");
+const prepare = require("./installer");
+const jahr = prepare.getYear();
 
-let config = {
+const config = {
   platform: typ,
   arch: "x64",
   dir: "./",
   out: process.argv[3] || "../build",
   executableName: "zettelstraum",
   extraResource: "./resources",
-  ignore: [/node_modules/, /package-lock\.json/],
+  ignore: [ /node_modules/, /package-lock\.json/ ],
   overwrite: true,
   asar: true,
   prune: true,
@@ -46,15 +46,16 @@ switch (typ) {
 // Paketierer
 packager(config)
   .then(async () => {
-    const fs = require("fs"),
-      fsPromises = fs.promises,
-      ordnerAlt = `Zettel’s Traum-${typ}-x64`,
-      ordnerNeu = `zettelstraum-${typ}-x64`;
+    const fs = require("fs");
+    const fsPromises = fs.promises;
+    const ordnerAlt = `Zettel’s Traum-${typ}-x64`;
+    const ordnerNeu = `zettelstraum-${typ}-x64`;
+
     // ggf. alten Ordner umbenennen
     // (fsPromises.rmdir() hat zwar einen rekursiven Modus,
     // ist aber noch experimentell und funktioniert nicht gut)
-    let renameCount = 0,
-      renameString = "";
+    let renameCount = 0;
+    let renameString = "";
     while (fs.existsSync(`${config.out}/${ordnerNeu}${renameString}`)) {
       renameCount++;
       renameString = `-old.${renameCount}`;
@@ -62,18 +63,21 @@ packager(config)
     if (renameCount > 0) {
       await fsPromises.rename(`${config.out}/${ordnerNeu}`, `${config.out}/${ordnerNeu}${renameString}`);
     }
+
     // Ordner umbenennen
     await fsPromises.rename(`${config.out}/${ordnerAlt}`, `${config.out}/${ordnerNeu}`);
+
     // Resources müssen umkopiert werden
     let resources = `${config.out}/${ordnerNeu}/resources`;
     if (typ === "darwin") {
       resources = `${config.out}/${ordnerNeu}/Zettel’s Traum.app/Contents/Resources`;
     }
-    let files = await fsPromises.readdir(`${resources}/resources`);
-    for (let f of files) {
+    const files = await fsPromises.readdir(`${resources}/resources`);
+    for (const f of files) {
       await fsPromises.rename(`${resources}/resources/${f}`, `${resources}/${f}`);
     }
     await fsPromises.rmdir(`${resources}/resources`);
+
     // Feedback
     let os = "Linux";
     if (typ === "darwin") {

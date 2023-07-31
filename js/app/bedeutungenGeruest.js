@@ -1,6 +1,6 @@
 "use strict";
 
-let bedeutungenGeruest = {
+const bedeutungenGeruest = {
   // Fenster öffnen
   oeffnen () {
     // Sperre für macOS (Menüpunkte können nicht deaktiviert werden)
@@ -36,14 +36,14 @@ let bedeutungenGeruest = {
       return;
     }
     // Fenster öffnen
-    let fenster = document.getElementById("geruestwechseln");
+    const fenster = document.getElementById("geruestwechseln");
     if (overlay.oeffnen(fenster)) { // Fenster ist schon offen
       return;
     }
     // Gerüste eintragen
-    let input = document.getElementById("geruestwechseln-dropdown");
+    const input = document.getElementById("geruestwechseln-dropdown");
     input.value = `Gerüst ${obj.gn}`;
-    setTimeout(function() {
+    setTimeout(function () {
       input.focus();
     }, 5); // ohne Timeout fokussiert das Fenster nicht
   },
@@ -67,7 +67,7 @@ let bedeutungenGeruest = {
       }
       // Tagger-Fenster offen?
       if (!document.getElementById("tagger").classList.contains("aus")) {
-        let fenster = document.getElementById("tagger");
+        const fenster = document.getElementById("tagger");
         overlay.oeffnen(fenster);
         tagger.schliessen();
         if (tagger.geaendert) {
@@ -105,7 +105,7 @@ let bedeutungenGeruest = {
   // Listener für Überschriften zum Öffnen des Fensters
   //   ele = Element
   listener (ele) {
-    ele.addEventListener("click", function(evt) {
+    ele.addEventListener("click", function (evt) {
       evt.stopPropagation();
       evt.preventDefault();
       bedeutungenGeruest.oeffnen();

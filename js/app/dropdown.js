@@ -1,6 +1,6 @@
 "use strict";
 
-let dropdown = {
+const dropdown = {
   // speichert Daten der aktuellen Dropdown-Liste
   data: [],
 
@@ -8,13 +8,13 @@ let dropdown = {
   //   ds = String
   //     (der Datensatz, aus dem die Daten zusammengetragen werden sollen)
   dataFormular (ds) {
-    for (let id in data.ka) {
+    for (const id in data.ka) {
       if (!data.ka.hasOwnProperty(id)) {
         continue;
       }
-      let d = data.ka[id][ds].split("\n");
+      const d = data.ka[id][ds].split("\n");
       for (let i = 0, len = d.length; i < len; i++) {
-        let d_tmp = helfer.textTrim(d[i]);
+        const d_tmp = helfer.textTrim(d[i]);
         if (!d_tmp) {
           continue;
         }
@@ -28,7 +28,7 @@ let dropdown = {
 
   // sammelt die Bedeutungen für das Dropdown-Menü im Formular
   dataBedeutungen () {
-    let bd = data.bd.gr[data.bd.gn].bd;
+    const bd = data.bd.gr[data.bd.gn].bd;
     for (let i = 0, len = bd.length; i < len; i++) {
       dropdown.data.push(bedeutungen.bedeutungenTief({
         gr: data.bd.gn,
@@ -42,9 +42,9 @@ let dropdown = {
 
   // ergänzt die vordefinierte Liste der Korpora um manuell ergänzte
   dataKorpora () {
-    let korpora = [...beleg.korpora],
-      korpora_ergaenzt = [];
-    for (let id in data.ka) {
+    const korpora = [ ...beleg.korpora ];
+    const korpora_ergaenzt = [];
+    for (const id in data.ka) {
       if (!data.ka.hasOwnProperty(id)) {
         continue;
       }
@@ -62,12 +62,12 @@ let dropdown = {
   //     (ID des Dropdownfeldes, für das die Tagliste erstellt werden soll)
   dataTags (feld_id) {
     const typ = feld_id.replace(/^tagger-/, "");
-    let arr = [];
+    const arr = [];
     if (!optionen.data.tags[typ]) { // jemand könnte die Tag-Datei löschen, während der Tagger offen ist
       return arr;
     }
-    let data = optionen.data.tags[typ].data;
-    for (let id in data) {
+    const data = optionen.data.tags[typ].data;
+    for (const id in data) {
       if (!data.hasOwnProperty(id)) {
         continue;
       }
@@ -83,8 +83,8 @@ let dropdown = {
   //   skipAkt = true || undefined
   //     (das aktuelle Gerüst wird übersprungen; immer in bedeutungen.data gucken!)
   dataGerueste (gr, skipAkt = false) {
-    let arr = [];
-    Object.keys(gr).forEach(function(i) {
+    const arr = [];
+    Object.keys(gr).forEach(function (i) {
       if (skipAkt && i === bedeutungen.data.gn) {
         return;
       }
@@ -95,8 +95,8 @@ let dropdown = {
 
   // Gerüste-Auswahl im Einfügen-Fenster der Kopierfunktion
   dataKopierenGerueste () {
-    let arr = [];
-    Object.keys(data.bd.gr).forEach(function(id) {
+    const arr = [];
+    Object.keys(data.bd.gr).forEach(function (id) {
       arr.push(`Gerüst ${id}`);
     });
     arr.push("kein Import");
@@ -111,36 +111,36 @@ let dropdown = {
   //   inp = Element
   //     (Textinput-Feld, das ein Dropdown-Element haben könnte)
   feld (inp) {
-    inp.addEventListener("blur", function() {
+    inp.addEventListener("blur", function () {
       clearTimeout(dropdown.timeoutBlur);
-      dropdown.timeoutBlur = setTimeout(function() {
+      dropdown.timeoutBlur = setTimeout(function () {
         dropdown.schliessen();
       }, 250); // deutlich Verzögerung, damit Klicks im Dropdown funktionieren
       clearTimeout(dropdown.timeoutFill);
     });
-    inp.addEventListener("focus", function() {
+    inp.addEventListener("focus", function () {
       clearTimeout(dropdown.timeoutBlur); // sonst kann das Dropdown-Fensterchen nicht aufgeklappt werden
       clearTimeout(dropdown.timeoutFill);
       if (dropdown.caller && dropdown.caller !== this.id) {
         dropdown.schliessen();
       }
     });
-    inp.addEventListener("input", function() {
+    inp.addEventListener("input", function () {
       clearTimeout(dropdown.timeoutBlur);
       clearTimeout(dropdown.timeoutFill);
-      let feld_id = this.id;
-      dropdown.timeoutFill = setTimeout(function() {
+      const feld_id = this.id;
+      dropdown.timeoutFill = setTimeout(function () {
         if (!document.getElementById("dropdown")) {
           dropdown.init(feld_id);
         }
         dropdown.fill(true);
       }, 250);
     });
-    inp.addEventListener("keydown", function(evt) {
+    inp.addEventListener("keydown", function (evt) {
       tastatur.detectModifiers(evt);
       if (!tastatur.modifiers && evt.key === "Enter") {
         // Dropdown existiert noch nicht od. hält keine Vorschläge bereit
-        let drop = document.getElementById("dropdown");
+        const drop = document.getElementById("dropdown");
         if (!drop || drop.firstChild.classList.contains("keine-vorschlaege")) {
           return;
         }
@@ -148,17 +148,17 @@ let dropdown = {
         evt.preventDefault();
         // kein Element ausgewählt
         // (dysfunktional, wenn in solchen Fällen einfach das 1. Element ausgewählt würde)
-        let aktiv = drop.querySelector(".aktiv");
+        const aktiv = drop.querySelector(".aktiv");
         if (!aktiv) {
           return;
         }
         // Text des aktivien Elements eintragen
-        let feld = drop.parentNode.querySelector(".dropdown-feld");
-        setTimeout(function() {
+        const feld = drop.parentNode.querySelector(".dropdown-feld");
+        setTimeout(function () {
           dropdown.auswahl(feld, aktiv.textContent);
         }, 10); // damit andere Enter-Events, die an dem Input hängen, nicht auch noch ausgelöst werden
       } else if (/^(ArrowDown|ArrowUp)$/.test(evt.key)) {
-        let drop = document.getElementById("dropdown");
+        const drop = document.getElementById("dropdown");
         if (!drop && tastatur.modifiers !== "Ctrl" && document.activeElement.nodeName === "TEXTAREA") { // sonst kann man in textareas nicht mehr navigieren
           return;
         }
@@ -175,7 +175,7 @@ let dropdown = {
       }
     });
     if (inp.getAttribute("readonly") !== null) {
-      inp.addEventListener("click", function() {
+      inp.addEventListener("click", function () {
         dropdown.init(this.id);
       });
     }
@@ -189,7 +189,7 @@ let dropdown = {
   //    noTab = true || undefined
   //     (Link wird aus der Tabliste ausgeschlossen
   makeLink (cl, title, noTab = false) {
-    let a = document.createElement("a");
+    const a = document.createElement("a");
     a.classList.add(cl);
     a.href = "#";
     a.title = title;
@@ -197,13 +197,13 @@ let dropdown = {
       a.setAttribute("tabindex", "-1");
     }
     dropdown.link(a);
-    let svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     svg.setAttribute("version", "1.1");
     svg.setAttribute("width", "24");
     svg.setAttribute("height", "24");
     svg.setAttribute("viewBox", "0 0 24 24");
     a.appendChild(svg);
-    let path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
     path.setAttribute("transform", "translate(4 4)");
     path.setAttribute("d", "m7 2v8l-3.5-3.5-1.5 1.5 6 6 6-6-1.5-1.5-3.5 3.5v-8z");
     path.setAttribute("fill", "#212121");
@@ -215,7 +215,7 @@ let dropdown = {
   //   a = Element
   //     (Link, der geklickt wurde, um die Dropdown-Liste aufzubauen)
   link (a) {
-    a.addEventListener("click", function(evt) {
+    a.addEventListener("click", function (evt) {
       evt.preventDefault();
       dropdown.init(this.previousSibling.id);
       this.previousSibling.focus();
@@ -242,12 +242,12 @@ let dropdown = {
         feld_id === "red-meta-be" ||
         /^redaktion-person/.test(feld_id) ||
         /^karteisuche-(redaktion-)*person-/.test(feld_id)) {
-      dropdown.data = [...optionen.data.personen];
+      dropdown.data = [ ...optionen.data.personen ];
     } else if (feld_id === "einstellung-sprache") {
       dropdown.data = Object.keys(optionen.sprachen);
     } else if (/^redaktion-ereignis/.test(feld_id) ||
         /^karteisuche-redaktion-ereignis-/.test(feld_id)) {
-      dropdown.data = [...Object.keys(redaktion.ereignisse)];
+      dropdown.data = [ ...Object.keys(redaktion.ereignisse) ];
       if (/^redaktion-ereignis-/.test(feld_id)) {
         dropdown.data.shift();
       }
@@ -262,7 +262,7 @@ let dropdown = {
     } else if (feld_id === "beleg-ts") {
       dropdown.dataFormular("ts");
     } else if (feld_id === "bedeutungen-hierarchie") {
-      dropdown.data = [...bedeutungen.hierarchieEbenen];
+      dropdown.data = [ ...bedeutungen.hierarchieEbenen ];
     } else if (feld_id === "bedeutungen-gerueste") {
       dropdown.data = dropdown.dataGerueste(bedeutungen.data.gr);
     } else if (feld_id === "bedeutungen-gerueste-kopieren") {
@@ -280,7 +280,7 @@ let dropdown = {
     } else if (/^kopieren-geruest-/.test(feld_id)) {
       dropdown.data = dropdown.dataKopierenGerueste();
     } else if (/^karteisuche-lemmatyp-/.test(feld_id)) {
-      dropdown.data = ["Hauptlemma", "Nebenlemma"];
+      dropdown.data = [ "Hauptlemma", "Nebenlemma" ];
     } else if (/^karteisuche-filter-/.test(feld_id)) {
       dropdown.data = Object.keys(karteisuche.filterTypen);
     } else if (/^karteisuche-themenfeld-/.test(feld_id)) {
@@ -288,7 +288,7 @@ let dropdown = {
     } else if (/^karteisuche-sachgebiet-/.test(feld_id)) {
       dropdown.data = dropdown.dataTags("tagger-sachgebiete");
     } else if (/^karteisuche-tag-typ-/.test(feld_id)) {
-      let typen = Object.keys(optionen.data.tags);
+      const typen = Object.keys(optionen.data.tags);
       for (let i = 0, len = typen.length; i < len; i++) {
         const typ = typen[i];
         if (optionen.tagsTypen[typ]) {
@@ -299,37 +299,37 @@ let dropdown = {
       }
       dropdown.data = typen;
     } else if (/^karteisuche-tag-/.test(feld_id)) {
-      let typenFeld = document.getElementById(feld_id).parentNode.previousSibling.firstChild;
+      const typenFeld = document.getElementById(feld_id).parentNode.previousSibling.firstChild;
       const typ = karteisuche.filterTagTyp(typenFeld);
       dropdown.data = dropdown.dataTags(`tagger-${typ}`);
     } else if (/^karteisuche-datum-typ/.test(feld_id)) {
-      dropdown.data = ["erstellt", "geändert"];
+      dropdown.data = [ "erstellt", "geändert" ];
     } else if (/^karteisuche-datum-dir/.test(feld_id)) {
-      dropdown.data = ["<=", ">="];
+      dropdown.data = [ "<=", ">=" ];
     } else if (/^karteisuche-redaktion-logik/.test(feld_id)) {
-      dropdown.data = ["=", "≠"];
+      dropdown.data = [ "=", "≠" ];
     } else if (feld_id === "red-lit-eingabe-fo") {
-      dropdown.data = [...redLit.eingabe.fundorte];
+      dropdown.data = [ ...redLit.eingabe.fundorte ];
     } else if (feld_id === "red-lit-eingabe-tg") {
       dropdown.data = redLit.eingabeTagsAuflisten();
     } else if (feld_id === "red-wi-gn") {
       dropdown.data = dropdown.dataGerueste(data.bd.gr);
     } else if (feld_id === "red-wi-vt") {
-      dropdown.data = [...redWi.dropdown.vt];
+      dropdown.data = [ ...redWi.dropdown.vt ];
     } else if (feld_id === "red-wi-lt") {
-      dropdown.data = [...redWi.dropdown.lt];
+      dropdown.data = [ ...redWi.dropdown.lt ];
     } else if (/^red-wi-.+-se$/.test(feld_id)) {
-      dropdown.data = [...redWi.dropdown.se];
+      dropdown.data = [ ...redWi.dropdown.se ];
     } else if (/^red-wi-.+-tx$/.test(feld_id)) {
       dropdown.data = redWi.dropdownVerweistexte();
     } else if (feld_id === "red-wi-copy-gn") {
       dropdown.data = redWi.kopierenDropdown();
     } else if (feld_id === "md-ty") {
-      dropdown.data = [...xml.dropdown.artikelTypen];
+      dropdown.data = [ ...xml.dropdown.artikelTypen ];
     } else if (feld_id === "md-tf") {
-      dropdown.data = [...xml.data.themenfelder];
+      dropdown.data = [ ...xml.data.themenfelder ];
     } else if (feld_id === "md-re-au") {
-      dropdown.data = [...xml.data.autorinnen];
+      dropdown.data = [ ...xml.data.autorinnen ];
     } else if (feld_id === "le-le") {
       dropdown.data = xml.lemmata();
       if (xml.data.nebenlemmata) {
@@ -341,21 +341,21 @@ let dropdown = {
         });
       }
     } else if (feld_id === "le-ty") {
-      dropdown.data = [...xml.dropdown.lemmaTypen];
+      dropdown.data = [ ...xml.dropdown.lemmaTypen ];
     } else if (/^(le-re|bg-tf-ti)$/.test(feld_id)) {
       dropdown.data = xml.dropdownReferenzen();
     } else if (/^abschnitt-/.test(feld_id)) {
-      dropdown.data = [...xml.dropdown.abschnittTypen];
+      dropdown.data = [ ...xml.dropdown.abschnittTypen ];
     } else if (/^textblock-add/.test(feld_id)) {
-      dropdown.data = [...xml.dropdown.abschnittBloecke];
+      dropdown.data = [ ...xml.dropdown.abschnittBloecke ];
     } else if (/^textblock-[0-9]+-ty$/.test(feld_id)) {
-      dropdown.data = [...xml.dropdown.listenTypen];
+      dropdown.data = [ ...xml.dropdown.listenTypen ];
     } else if (/^abb-[0-9]+-bildposition$/.test(feld_id)) {
-      dropdown.data = [...xml.dropdown.abbPositionen];
+      dropdown.data = [ ...xml.dropdown.abbPositionen ];
     } else if (/^abb-[0-9]+-lizenzname$/.test(feld_id)) {
-      dropdown.data = [...xml.dropdown.lizenzenNamen];
+      dropdown.data = [ ...xml.dropdown.lizenzenNamen ];
     } else if (feld_id === "nw-ty") {
-      dropdown.data = [...xml.dropdown.nachweisTypen];
+      dropdown.data = [ ...xml.dropdown.nachweisTypen ];
     } else if (feld_id === "nw-lit-si") {
       dropdown.data = xml.dropdownSiglen();
     } else if (/-sel-gr$/.test(feld_id)) {
@@ -364,15 +364,15 @@ let dropdown = {
       dropdown.data = xml.dropdownLesarten().arr;
     }
     // Dropdown erzeugen und einhängen
-    let span = document.createElement("span");
+    const span = document.createElement("span");
     span.id = "dropdown";
-    let inp_text = document.getElementById(feld_id);
+    const inp_text = document.getElementById(feld_id);
     inp_text.parentNode.appendChild(span);
     // Dropdown füllen
     if (dropdown.data.length) {
       dropdown.fill(false);
     } else {
-      let opt = document.createElement("span");
+      const opt = document.createElement("span");
       opt.classList.add("keine-vorschlaege");
       opt.textContent = "keine Vorschläge vorhanden";
       span.appendChild(opt);
@@ -383,11 +383,11 @@ let dropdown = {
 
   // Dropdown korrekt positionieren
   position () {
-    let drop = document.getElementById("dropdown"),
-      feld = drop.parentNode.querySelector(".dropdown-feld");
+    const drop = document.getElementById("dropdown");
+    const feld = drop.parentNode.querySelector(".dropdown-feld");
     drop.style.left = `${feld.offsetLeft}px`;
     drop.style.maxWidth = `${feld.parentNode.offsetWidth - 12}px`; // 12px padding und border
-    let rect = feld.getBoundingClientRect();
+    const rect = feld.getBoundingClientRect();
     if (rect.top + rect.height + drop.offsetHeight + 5 > window.innerHeight) { // 5px hinzuzählen, damit unten immer ein bisschen Absatz bleibt
       drop.style.top = `-${drop.offsetHeight + 4}px`;
     } else {
@@ -401,9 +401,8 @@ let dropdown = {
   feldWert (feld) {
     if (feld.getAttribute("contenteditable")) {
       return feld.textContent;
-    } else {
-      return feld.value;
     }
+    return feld.value;
   },
 
   // Wenn >= 0 heißt das, dass die Dropdownliste gefiltert wurde. Sie ist also
@@ -414,12 +413,12 @@ let dropdown = {
   //   filtern = Boolean
   //     (Vorschläge sollen gefiltert werden)
   fill (filtern) {
-    let drop = document.getElementById("dropdown"),
-      feld = drop.parentNode.querySelector(".dropdown-feld");
+    const drop = document.getElementById("dropdown");
+    const feld = drop.parentNode.querySelector(".dropdown-feld");
     // wird die Liste gefiltert?
     if (filtern) {
       if (feld.getAttribute("contenteditable")) {
-        let sel = window.getSelection();
+        const sel = window.getSelection();
         dropdown.cursor = sel.focusOffset;
       } else {
         dropdown.cursor = feld.selectionStart;
@@ -430,29 +429,29 @@ let dropdown = {
     // Liste leeren
     drop.replaceChildren();
     // Elemente ggf. filtern
-    let items = [...dropdown.data],
-      va = dropdown.feldWert(feld),
-      vaTrimmed = helfer.textTrim(va, true);
+    let items = [ ...dropdown.data ];
+    const va = dropdown.feldWert(feld);
+    const vaTrimmed = helfer.textTrim(va, true);
     if (filtern && vaTrimmed) {
-      let reg_chunks = "",
-        va_split = [],
-        nur_aktuelle_zeile = false;
+      let reg_chunks = "";
+      let va_split = [];
+      let nur_aktuelle_zeile = false;
       if (feld.getAttribute("contenteditable")) {
         va_split = vaTrimmed.split(", ");
       } else {
         va_split = vaTrimmed.split("\n");
         // nur aktuelle Zeile zum Filtern benutzen
         nur_aktuelle_zeile = true;
-        let anfang = va.substring(0, dropdown.cursor),
-          anfangSp = anfang.split("\n"),
-          ende = va.substring(dropdown.cursor),
-          endeSp = ende.split("\n");
+        let anfang = va.substring(0, dropdown.cursor);
+        const anfangSp = anfang.split("\n");
+        let ende = va.substring(dropdown.cursor);
+        const endeSp = ende.split("\n");
         anfang = anfangSp[anfangSp.length - 1];
         ende = endeSp[0];
         reg_chunks = anfang + ende;
       }
       if (!nur_aktuelle_zeile) {
-        va_split.forEach(function(i) {
+        va_split.forEach(function (i) {
           // leere Einträge ausschließen
           if (!i) {
             return;
@@ -466,16 +465,16 @@ let dropdown = {
       } else {
         reg_chunks = helfer.escapeRegExp(reg_chunks);
       }
-      let reg = new RegExp(reg_chunks, "i"),
-        gefiltert = [];
+      const reg = new RegExp(reg_chunks, "i");
+      const gefiltert = [];
       if (reg_chunks) { // wenn nur in der aktuellen Zeile gesucht wird, könnte diese leer sein => alles würde gefunden
-        items.forEach(function(i) {
+        items.forEach(function (i) {
           if (reg.test(i) && !va_split.includes(i)) {
             gefiltert.push(i);
           }
         });
       }
-      items = [...gefiltert];
+      items = [ ...gefiltert ];
     }
     // Liste ist leer od. Textfeld ist leer (beim Aufrufen der Filterliste durch Tippen)
     if (!items.length || !vaTrimmed && filtern) {
@@ -483,8 +482,8 @@ let dropdown = {
       return;
     }
     // Liste füllen
-    items.forEach(function(i) {
-      let opt = document.createElement("span");
+    items.forEach(function (i) {
+      const opt = document.createElement("span");
       opt.textContent = i;
       if (i.length > 80) {
         opt.title = i;
@@ -501,8 +500,8 @@ let dropdown = {
   //   evt = Object
   //     (Event-Object des keydown)
   navigation (evt) {
-    let drop = document.getElementById("dropdown"),
-      opts = drop.querySelectorAll("span");
+    const drop = document.getElementById("dropdown");
+    const opts = drop.querySelectorAll("span");
     // ggf. abbrechen, wenn keine Vorschläge vorhanden sind
     if (opts[0].classList.contains("keine-vorschlaege")) {
       return;
@@ -528,10 +527,10 @@ let dropdown = {
     // neues Element aktivieren
     opts[pos].classList.add("aktiv");
     // ggf. die Liste an eine gute Position scrollen
-    let drop_hoehe = drop.offsetHeight,
-      span_hoehe = opts[0].offsetHeight,
-      scroll_top = drop.scrollTop,
-      pos_von_oben = opts[pos].offsetTop;
+    const drop_hoehe = drop.offsetHeight;
+    const span_hoehe = opts[0].offsetHeight;
+    const scroll_top = drop.scrollTop;
+    const pos_von_oben = opts[pos].offsetTop;
     if (pos_von_oben >= drop_hoehe + scroll_top - span_hoehe * 2) {
       drop.scrollTop = pos_von_oben - drop_hoehe + span_hoehe * 2;
     } else if (pos_von_oben < scroll_top + span_hoehe) {
@@ -543,8 +542,8 @@ let dropdown = {
   //   ein = Element
   //     (<span>, auf den geklickt wurde)
   auswahlKlick (ein) {
-    ein.addEventListener("click", function() {
-      let feld = this.parentNode.parentNode.querySelector(".dropdown-feld");
+    ein.addEventListener("click", function () {
+      const feld = this.parentNode.parentNode.querySelector(".dropdown-feld");
       dropdown.auswahl(feld, this.textContent);
     });
   },
@@ -556,11 +555,11 @@ let dropdown = {
   //   text = String
   //     (der Text, der eingetragen werden soll)
   auswahl (feld, text) {
-    let caller = dropdown.caller; // muss zwischengespeichert werden, weil das Dropdown sich schließt, wenn sich das Dialog-Fenster öffnet
+    const caller = dropdown.caller; // muss zwischengespeichert werden, weil das Dropdown sich schließt, wenn sich das Dialog-Fenster öffnet
     const wert = dropdown.feldWert(feld);
     if (wert && /^beleg-(bd|bl|sy|ts)/.test(caller)) {
       // Steht der Wert schon im Feld?
-      let feld_val = wert.split("\n");
+      const feld_val = wert.split("\n");
       if (feld_val.includes(text)) {
         eintragUnnoetig();
         return;
@@ -587,7 +586,7 @@ let dropdown = {
       document.getElementById("dialog-text").appendChild(optionen.shortcut("Textfeld künftig ohne Nachfrage ergänzen", "immer-ergaenzen"));
       return;
     } else if (wert && feld.getAttribute("contenteditable")) {
-      let feld_val = wert.split(", ");
+      const feld_val = wert.split(", ");
       if (feld_val.includes(text)) {
         eintragUnnoetig();
         return;
@@ -601,8 +600,8 @@ let dropdown = {
       if (ergaenzen) {
         if (feld.getAttribute("contenteditable")) {
           if (dropdown.cursor >= 0) {
-            let arr = [],
-              feld_start = wert.substring(0, dropdown.cursor);
+            const arr = [];
+            let feld_start = wert.substring(0, dropdown.cursor);
             feld_start = feld_start.replace(/[^,]+$/, "").replace(/,$/, "").trim();
             if (feld_start) {
               arr.push(feld_start);
@@ -617,24 +616,22 @@ let dropdown = {
           } else {
             text = `${helfer.textTrim(wert, true)}, ${text}`;
           }
-        } else {
-          if (dropdown.cursor >= 0) {
-            let arr = [],
-              feld_start = wert.substring(0, dropdown.cursor);
-            feld_start = feld_start.replace(/[^\n]+$/, "").replace(/\n$/, "");
-            if (feld_start) {
-              arr.push(feld_start);
-            }
-            arr.push(text);
-            let feld_ende = wert.substring(dropdown.cursor);
-            feld_ende = feld_ende.replace(/^[^\n]+/, "").replace(/^\n/, "");
-            if (feld_ende) {
-              arr.push(feld_ende);
-            }
-            text = arr.join("\n");
-          } else {
-            text = `${helfer.textTrim(wert, true)}\n${text}`;
+        } else if (dropdown.cursor >= 0) {
+          const arr = [];
+          let feld_start = wert.substring(0, dropdown.cursor);
+          feld_start = feld_start.replace(/[^\n]+$/, "").replace(/\n$/, "");
+          if (feld_start) {
+            arr.push(feld_start);
           }
+          arr.push(text);
+          let feld_ende = wert.substring(dropdown.cursor);
+          feld_ende = feld_ende.replace(/^[^\n]+/, "").replace(/^\n/, "");
+          if (feld_ende) {
+            arr.push(feld_ende);
+          }
+          text = arr.join("\n");
+        } else {
+          text = `${helfer.textTrim(wert, true)}\n${text}`;
         }
       }
       // Auswahl übernehmen
@@ -648,7 +645,7 @@ let dropdown = {
       if (/^beleg-(bd|bl|sy|ts)/.test(caller)) {
         helfer.textareaGrow(feld);
         if (caller === "beleg-bd") { // Daten des Bedeutungsfelds werden erst beim Speichern aufgefrischt; vgl. beleg.aktionSpeichern()
-          let bd = document.getElementById("beleg-bd");
+          const bd = document.getElementById("beleg-bd");
           bd.value = helfer.textTrim(bd.value, true);
           // es ist möglich, dass die Leseansicht aktiv ist
           // (beim Einfügen aus dem Bedeutungsgerüst-Fenster)
@@ -677,7 +674,7 @@ let dropdown = {
         bedeutungen.geruest = text.replace(/^Gerüst /, "");
         bedeutungen.aufbauen();
       } else if (/^tagger-/.test(caller)) {
-        let ele = document.getElementById(caller);
+        const ele = document.getElementById(caller);
         window.getSelection().collapse(ele.firstChild, ele.textContent.length);
         ele.classList.add("changed");
         tagger.taggerGeaendert(true);
@@ -688,12 +685,12 @@ let dropdown = {
       } else if (/^red-wi-(gn|lt)$/.test(caller)) {
         feld.dispatchEvent(new Event("input"));
       } else if (/-sel-gr$/.test(caller)) {
-        xml.bgSel({caller});
+        xml.bgSel({ caller });
       } else if (/^abb-[0-9]+-lizenzname$/.test(caller)) {
-        const lizenzFeld = document.getElementById(caller),
-          idx = xml.dropdown.lizenzenNamen.indexOf(lizenzFeld.value);
+        const lizenzFeld = document.getElementById(caller);
+        const idx = xml.dropdown.lizenzenNamen.indexOf(lizenzFeld.value);
         if (idx >= 0) {
-          const url = lizenzFeld.parentNode.querySelector('[id$=-lizenz-url]');
+          const url = lizenzFeld.parentNode.querySelector("[id$=-lizenz-url]");
           url.value = xml.dropdown.lizenzenURL[idx];
           url.dispatchEvent(new Event("change"));
         }
@@ -719,7 +716,7 @@ let dropdown = {
 
   // Dropdown-Liste schließen
   schliessen () {
-    let drop = document.getElementById("dropdown");
+    const drop = document.getElementById("dropdown");
     if (drop) {
       drop.parentNode.removeChild(drop);
     }

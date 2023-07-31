@@ -1,7 +1,7 @@
 "use strict";
 
 // Pakettyp
-let typ = "dmg";
+const typ = "dmg";
 
 // Maintainer-Mail
 let email = process.argv[3];
@@ -10,11 +10,11 @@ if (!email || !/^.+@.+\..+$/.test(email)) {
 }
 
 // Vorbereitung
-const builder = require("electron-builder"),
-  Arch = builder.Arch,
-  Platform = builder.Platform,
-  prepare = require("./installer"),
-  jahr = prepare.getYear();
+const builder = require("electron-builder");
+const Arch = builder.Arch;
+const Platform = builder.Platform;
+const prepare = require("./installer");
+const jahr = prepare.getYear();
 let config = {};
 
 prepare.makeBuild()
@@ -34,7 +34,7 @@ function makeConfig () {
     config: {
       extraMetadata: {
         author: {
-          email: email,
+          email,
         },
       },
       appId: "zdl.wgd.zettelstraum",
@@ -64,7 +64,7 @@ function makeConfig () {
         {
           from: "./resources",
           to: "./",
-          filter: ["*.ztj", "*.xml", "filetype"],
+          filter: [ "*.ztj", "*.xml", "filetype" ],
         },
       ],
     },

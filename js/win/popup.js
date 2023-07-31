@@ -1,6 +1,6 @@
 "use strict";
 
-let popup = {
+const popup = {
   // speichert die ermittelte Textauswahl
   textauswahl: "",
 
@@ -22,17 +22,17 @@ let popup = {
     // Menü entwerfen
     let items = [];
     if (target === "kopieren") {
-      items = ["kopierenNebenfenster"];
+      items = [ "kopierenNebenfenster" ];
     } else if (target === "kopieren-id") {
-      items = ["kopierenID"];
+      items = [ "kopierenID" ];
     } else if (target === "kopieren-code") {
-      items = ["kopierenCode"];
+      items = [ "kopierenCode" ];
     } else if (target === "textfeld") {
-      items = ["bearbeitenRueckgaengig", "bearbeitenWiederherstellen", "sep", "bearbeitenAusschneiden", "bearbeitenKopieren", "bearbeitenEinfuegen", "bearbeitenAlles"];
+      items = [ "bearbeitenRueckgaengig", "bearbeitenWiederherstellen", "sep", "bearbeitenAusschneiden", "bearbeitenKopieren", "bearbeitenEinfuegen", "bearbeitenAlles" ];
     } else if (target === "link") {
-      items = ["link"];
+      items = [ "link" ];
     } else if (target === "mail") {
-      items = ["mail"];
+      items = [ "mail" ];
     }
     // Menü vom Main-Prozess erzeugen lassen
     modules.ipc.invoke("popup", items);
@@ -88,14 +88,14 @@ let popup = {
   //     (speichert den Event-Pfad, also die Elementeliste, über die das
   //     Klick-Event aufgerufen wurde)
   getTargetSelection (pfad) {
-    let sel = window.getSelection(),
-      ele = sel.anchorNode;
+    const sel = window.getSelection();
+    let ele = sel.anchorNode;
     while (ele.nodeType !== 1) {
       ele = ele.parentNode;
     }
     if (/^(CODE|PRE)$/.test(ele.nodeName) && ele === pfad[0]) {
-      let range = sel.getRangeAt(0),
-        container = document.createElement("div");
+      const range = sel.getRangeAt(0);
+      const container = document.createElement("div");
       container.appendChild(range.cloneContents());
       popup.textauswahl = container.innerText;
       return true;

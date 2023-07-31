@@ -1,6 +1,6 @@
 "use strict";
 
-let karteisucheExport = {
+const karteisucheExport = {
   // Fenster initialisieren
   init: true,
 
@@ -37,7 +37,7 @@ let karteisucheExport = {
     }
     karteisucheExport.init = false;
     // Fenster öffnen
-    let fenster = document.querySelector("#karteisuche-export");
+    const fenster = document.querySelector("#karteisuche-export");
     overlay.oeffnen(fenster);
     // Maximalhöhe des Fensters festlegen
     helfer.elementMaxHeight({
@@ -80,7 +80,7 @@ let karteisucheExport = {
       feldArtikelAm: document.querySelector("#karteisuche-export-felder-artikel-am").checked,
       feldNotizen: document.querySelector("#karteisuche-export-felder-notizen").checked,
     };
-    let opt = karteisucheExport.exportierenOpt;
+    const opt = karteisucheExport.exportierenOpt;
     if (document.querySelector("#karteisuche-export-format-md").checked) {
       opt.format = "md";
       opt.optTabellenkopf = true;
@@ -106,9 +106,9 @@ let karteisucheExport = {
     // Exportdatum ermitteln
     const datum = karteisucheExport.exportierenDatum();
     // zentrierte Spalten ermitteln
-    let spaltenCenter = [],
-      n = -1;
-    for (const [k, v] of Object.entries(opt)) {
+    const spaltenCenter = [];
+    let n = -1;
+    for (const [ k, v ] of Object.entries(opt)) {
       if (/^(format|opt)/.test(k) || !v) {
         continue;
       }
@@ -118,11 +118,11 @@ let karteisucheExport = {
       }
     }
     // Dateidaten erstellen
-    let tabellenkopf = karteisucheExport.exportierenTabellenkopf(spaltenCenter),
-      titel = document.querySelector("#karteisuche-export-optionen-titel").value.trim() || "Karteiliste",
-      content = "";
-    // HTML
+    const tabellenkopf = karteisucheExport.exportierenTabellenkopf(spaltenCenter);
+    const titel = document.querySelector("#karteisuche-export-optionen-titel").value.trim() || "Karteiliste";
+    let content = "";
     if (opt.format === "html") {
+      // HTML
       // Content vorbereiten
       const stylesheet = `<style>
         body {
@@ -206,8 +206,8 @@ let karteisucheExport = {
         </style>\n`;
       content = `<!doctype html>\n<html lang="de">\n<head>\n<meta charset="utf-8">\n<title>${titel}</title>\n${opt.optStylesheet ? stylesheet.replace(/\n\t{4}/g, "\n") : ""}</head>\n<body>\n<h1>${titel + datum}</h1>\n`;
       // Spalten ermitteln, in denen umgebrochen werden darf
-      let spaltenUmbruch = [],
-        nummerierung = opt.feldNummerierung ? 1 : 0;
+      const spaltenUmbruch = [];
+      const nummerierung = opt.feldNummerierung ? 1 : 0;
       if (opt.feldLemma) {
         spaltenUmbruch.push(0 + nummerierung);
       }
@@ -237,9 +237,9 @@ let karteisucheExport = {
             content += "<td";
             if (opt.optStylesheet) {
               if (spaltenCenter.includes(i)) {
-                content += ` class="center"`;
+                content += ' class="center"';
               } else if (spaltenUmbruch.includes(i)) {
-                content += ` class="umbruch"`;
+                content += ' class="umbruch"';
                 text = text.replace(/\/(?!span>)/g, "/<wbr>");
               }
             }
@@ -250,9 +250,8 @@ let karteisucheExport = {
       }
       content += "</table>\n";
       content += "</body>\n</html>\n";
-    }
-    // MD
-    else if (opt.format === "md") {
+    } else if (opt.format === "md") {
+      // MD
       content = `\n# ${titel + datum}\n\n`;
       let tabelleStart = true;
       for (const item of daten) {
@@ -280,26 +279,25 @@ let karteisucheExport = {
     // Dateidaten speichern
     if (auto) {
       return content;
-    } else {
-      karteisucheExport.speichern(content, {
-        name: opt.format === "html" ? "HTML" : "Markdown",
-        ext: opt.format,
-        content: titel.replace(/[/\\]/g, "-"),
-      });
     }
+    karteisucheExport.speichern(content, {
+      name: opt.format === "html" ? "HTML" : "Markdown",
+      ext: opt.format,
+      content: titel.replace(/[/\\]/g, "-"),
+    });
   },
 
   // Exportieren: Lemma- und Artikelliste erstellen
   exportierenListe () {
     const opt = karteisucheExport.exportierenOpt;
     // Karteien sammeln
-    let indizes = [];
+    const indizes = [];
     const items = document.querySelectorAll("#karteisuche-karteien > div:not(.aus)");
     for (const i of items) {
       indizes.push(parseInt(i.dataset.idx, 10));
     }
     indizes.sort((a, b) => a - b);
-    let liste = {
+    const liste = {
       artikel: [],
       lemmata: [],
     };
@@ -309,20 +307,20 @@ let karteisucheExport = {
         // in karteisuche.ztj[idx].behandeltMit
         continue;
       }
-      const ztj = karteisuche.ztj[idx],
-        redaktion = karteisuche.ztjAuflistenRedaktion(idx),
-        artikelErstellt = redaktion.status >= 2,
-        artikelOnline = redaktion.status >= 4,
-        karteiDurch = ztj.redaktion.find(i => i.er === "Kartei erstellt").pr || "N. N.",
-        karteiAm = ztj.redaktion.find(i => i.er === "Kartei erstellt").da,
-        artikelDurch = ztj.redaktion.find(i => i.er === "Artikel erstellt")?.pr || "",
-        artikelAm = ztj.redaktion.find(i => i.er === "Artikel erstellt")?.da || "",
-        notizen = karteisuche.ztjCache[ztj.pfad].data.rd.no || "",
-        lemmata = [...new Set([ztj.wort].concat(ztj.behandeltMit).concat(ztj.nebenlemmata))],
-        lemmataPushed = [],
-        artLemmas = [],
-        artLemmasHl = [],
-        artLemmasNl = [];
+      const ztj = karteisuche.ztj[idx];
+      const redaktion = karteisuche.ztjAuflistenRedaktion(idx);
+      const artikelErstellt = redaktion.status >= 2;
+      const artikelOnline = redaktion.status >= 4;
+      const karteiDurch = ztj.redaktion.find(i => i.er === "Kartei erstellt").pr || "N.\u00A0N.";
+      const karteiAm = ztj.redaktion.find(i => i.er === "Kartei erstellt").da;
+      const artikelDurch = ztj.redaktion.find(i => i.er === "Artikel erstellt")?.pr || "";
+      const artikelAm = ztj.redaktion.find(i => i.er === "Artikel erstellt")?.da || "";
+      const notizen = karteisuche.ztjCache[ztj.pfad].data.rd.no || "";
+      const lemmata = [ ...new Set([ ztj.wort ].concat(ztj.behandeltMit).concat(ztj.nebenlemmata)) ];
+      const lemmataPushed = [];
+      const artLemmas = [];
+      const artLemmasHl = [];
+      const artLemmasNl = [];
       for (const lemma of lemmata) {
         // Nebenlemma?
         let nebenlemma = false;
@@ -343,18 +341,18 @@ let karteisucheExport = {
           continue;
         }
         // behandelt in/mit
-        let behandeltInMit = [];
+        const behandeltInMit = [];
         if (nebenlemma) {
-          behandeltInMit.push(`→ ${ztj.wort}`);
+          behandeltInMit.push(`→\u00A0${ztj.wort}`);
         } else if (lemmata.length > 1) {
-          let mit = [...lemmata];
+          const mit = [ ...lemmata ];
           mit.splice(mit.indexOf(lemma), 1);
           for (const m of mit) {
-            behandeltInMit.push(`+ ${m}`);
+            behandeltInMit.push(`+\u00A0${m}`);
           }
         }
         // Lemmata
-        let ll = [lemma];
+        let ll = [ lemma ];
         if (opt.optVariantenTrennen) {
           ll = lemma.split("/");
         }
@@ -408,7 +406,7 @@ let karteisucheExport = {
     liste.artikel.sort(sortierer);
     liste.lemmata.sort(sortierer);
     function sortierer (a, b) {
-      let x = [a.lemmaSort, b.lemmaSort];
+      const x = [ a.lemmaSort, b.lemmaSort ];
       x.sort(helfer.sortAlpha);
       if (x[0] === a.lemmaSort) {
         return -1;
@@ -425,10 +423,10 @@ let karteisucheExport = {
   exportierenDaten (liste) {
     const opt = karteisucheExport.exportierenOpt;
     // Daten zusammenstellen
-    let daten = [],
-      buchstabeZuletzt = "",
-      n = 0,
-      arr = liste.lemmata;
+    const daten = [];
+    let buchstabeZuletzt = "";
+    let n = 0;
+    let arr = liste.lemmata;
     if (!opt.feldLemma) {
       arr = liste.artikel;
     }
@@ -436,17 +434,17 @@ let karteisucheExport = {
       n++;
       // BUCHSTABE
       if (opt.optAlphabet) {
-        let buchstabeAktuell = karteisuche.wortAlpha(i.lemmaSort);
+        const buchstabeAktuell = karteisuche.wortAlpha(i.lemmaSort);
         if (buchstabeAktuell !== buchstabeZuletzt) {
           daten.push({
             typ: "Überschrift",
-            daten: [buchstabeAktuell],
+            daten: [ buchstabeAktuell ],
           });
           buchstabeZuletzt = buchstabeAktuell;
         }
       }
       // ZEILE
-      let zeile = {
+      const zeile = {
         typ: "Zeile",
         daten: [],
       };
@@ -469,7 +467,7 @@ let karteisucheExport = {
         if (i.hauptlemma) {
           zeile.daten.push("X");
         } else {
-          zeile.daten.push(" ");
+          zeile.daten.push("\u00A0");
         }
       }
       // Nebenlemma
@@ -477,19 +475,19 @@ let karteisucheExport = {
         if (i.nebenlemma) {
           zeile.daten.push("X");
         } else {
-          zeile.daten.push(" ");
+          zeile.daten.push("\u00A0");
         }
       }
       // Redaktion: Status
       if (opt.feldRedaktionStatus) {
-        zeile.daten.push(`<span class="redaktion-status redaktion-status-${i.redaktionStatus}" title="${i.redaktionText}"> </span>`);
+        zeile.daten.push(`<span class="redaktion-status redaktion-status-${i.redaktionStatus}" title="${i.redaktionText}">\u00A0</span>`);
       }
       // Redaktion: Artikel erstellt
       if (opt.feldRedaktionErstellt) {
         if (i.artikelErstellt) {
           zeile.daten.push("X");
         } else {
-          zeile.daten.push(" ");
+          zeile.daten.push("\u00A0");
         }
       }
       // Redaktion: Artikel online
@@ -497,7 +495,7 @@ let karteisucheExport = {
         if (i.artikelOnline) {
           zeile.daten.push("X");
         } else {
-          zeile.daten.push(" ");
+          zeile.daten.push("\u00A0");
         }
       }
       // Redaktion: Text
@@ -509,7 +507,7 @@ let karteisucheExport = {
         if (i.behandeltInMit.length) {
           zeile.daten.push(i.behandeltInMit.join("<br>"));
         } else {
-          zeile.daten.push(" ");
+          zeile.daten.push("\u00A0");
         }
       }
       // Kartei durch
@@ -525,7 +523,7 @@ let karteisucheExport = {
         if (i.artikelDurch) {
           zeile.daten.push(initialien(i.artikelDurch));
         } else {
-          zeile.daten.push(" ");
+          zeile.daten.push("\u00A0");
         }
       }
       // Artikel am
@@ -533,7 +531,7 @@ let karteisucheExport = {
         if (i.artikelDurch) {
           zeile.daten.push(datum(i.artikelAm));
         } else {
-          zeile.daten.push(" ");
+          zeile.daten.push("\u00A0");
         }
       }
       // Notizen
@@ -541,7 +539,7 @@ let karteisucheExport = {
         if (i.notizen) {
           zeile.daten.push(i.notizen);
         } else {
-          zeile.daten.push(" ");
+          zeile.daten.push("\u00A0");
         }
       }
       // ZEILE EINHÄNGEN
@@ -551,15 +549,15 @@ let karteisucheExport = {
     return daten;
     // Helferfunktionen
     function artikelLemmata (artikel) {
-      let text = artikel.lemmasHl.join(" · ");
+      let text = artikel.lemmasHl.join("\u00A0· ");
       if (artikel.lemmasNl.length) {
         text += "<br>";
         if (opt.optStylesheet) {
-          text += `<span class="nebenlemmata">${artikel.lemmasNl.join(" · ")}</span>`;
+          text += `<span class="nebenlemmata">${artikel.lemmasNl.join("\u00A0· ")}</span>`;
         } else if (opt.format === "html") {
-          text += `<small>${artikel.lemmasNl.join(" · ")}</small>`;
+          text += `<small>${artikel.lemmasNl.join("\u00A0· ")}</small>`;
         } else {
-          text += artikel.lemmasNl.join(" · ");
+          text += artikel.lemmasNl.join("\u00A0· ");
         }
       }
       return text;
@@ -581,7 +579,7 @@ let karteisucheExport = {
     }
     function datum (d) {
       const arr = d.split("-");
-      return arr[2] + ". " + arr[1] + ". " + arr[0];
+      return arr[2] + ".\u00A0" + arr[1] + ". " + arr[0];
     }
   },
 
@@ -614,14 +612,13 @@ let karteisucheExport = {
       "November",
       "Dezember",
     ];
-    let jetzt = new Date(),
-      datum = wochentage[jetzt.getDay()] + ", " + jetzt.getDate().toString().replace(/^0/, "") + ". " + monate[jetzt.getMonth()] + " " + jetzt.getFullYear();
+    const jetzt = new Date();
+    const datum = wochentage[jetzt.getDay()] + ", " + jetzt.getDate().toString().replace(/^0/, "") + ".\u00A0" + monate[jetzt.getMonth()] + " " + jetzt.getFullYear();
     if (opt.format === "html" &&
         opt.optStylesheet) {
       return `<span>${datum}</span>`;
-    } else {
-      return ` – ${datum}`;
     }
+    return ` – ${datum}`;
   },
 
   // Exportieren: Tabellenkopf erstellen
@@ -637,8 +634,8 @@ let karteisucheExport = {
     // Tabellenkopf gewünscht
     const spalten = {
       feldNummerierung: {
-        lang: " ",
-        kurz: " ",
+        lang: "\u00A0",
+        kurz: "\u00A0",
       },
       feldLemma: {
         lang: "Lemma",
@@ -657,8 +654,8 @@ let karteisucheExport = {
         kurz: "NL",
       },
       feldRedaktionStatus: {
-        lang: " ",
-        kurz: " ",
+        lang: "\u00A0",
+        kurz: "\u00A0",
       },
       feldRedaktionErstellt: {
         lang: "Artikel<br>erstellt",
@@ -697,9 +694,9 @@ let karteisucheExport = {
         kurz: "Notizen",
       },
     };
-    let kopf = "",
-      n = -1;
-    for (const [spalte, texte] of Object.entries(spalten)) {
+    let kopf = "";
+    let n = -1;
+    for (const [ spalte, texte ] of Object.entries(spalten)) {
       if (!opt[spalte]) {
         continue;
       }
@@ -727,7 +724,7 @@ let karteisucheExport = {
           kopf += "| :--- ";
         }
       }
-      kopf+= "|\n";
+      kopf += "|\n";
       return kopf;
     }
   },
@@ -783,9 +780,9 @@ let karteisucheExport = {
     }
 
     // Filter: Backup erstellen und temporär entfernen
-    let filter = [];
+    const filter = [];
     for (const f of optionen.data.karteisuche.filter) {
-      filter.push([...f]);
+      filter.push([ ...f ]);
     }
     document.querySelectorAll("#karteisuche-filter .icon-loeschen").forEach(a => a.click());
 
@@ -807,7 +804,9 @@ let karteisucheExport = {
       modules.fsp.writeFile(vars.ziel, content)
         .then(async () => {
           // alle Pfade abhaken
-          document.querySelectorAll("#karteisuche-pfade input").forEach(i => i.checked = true);
+          document.querySelectorAll("#karteisuche-pfade input").forEach(i => {
+            i.checked = true;
+          });
 
           // ggf. Quellpfad wieder aus der Liste entfernen
           if (pfadBereinigen) {
@@ -841,7 +840,7 @@ let karteisucheExport = {
     // Filter wiederherstellen
     function filterWieder () {
       for (const f of filter) {
-        optionen.data.karteisuche.filter.push([...f]);
+        optionen.data.karteisuche.filter.push([ ...f ]);
       }
       karteisuche.filterWiederherstellen();
     }
@@ -925,25 +924,25 @@ let karteisucheExport = {
 
   // Vorlagen auflisten
   vorlagenListe () {
-    let opt = optionen.data["karteisuche-export-vorlagen"],
-      vorlagen = document.querySelector("#karteisuche-export-vorlagen");
+    const opt = optionen.data["karteisuche-export-vorlagen"];
+    const vorlagen = document.querySelector("#karteisuche-export-vorlagen");
     vorlagen.replaceChildren();
     for (let i = 0, len = opt.length; i < len; i++) {
-      let p = document.createElement("p");
+      const p = document.createElement("p");
       vorlagen.appendChild(p);
       p.dataset.idx = i;
       // Löschlink
       if (len > 1) {
-        let del = document.createElement("a");
+        const del = document.createElement("a");
         p.appendChild(del);
         del.classList.add("icon-link", "icon-muelleimer");
         del.href = "#";
-        del.textContent = " ";
+        del.textContent = "\u00A0";
         del.title = "diese Vorlage löschen";
         karteisucheExport.vorlagenToolsListener(del);
       }
       // Vorlagentext
-      let text = document.createElement("a");
+      const text = document.createElement("a");
       p.appendChild(text);
       text.classList.add("karteisuche-export-vorlage");
       text.href = "#";
@@ -981,7 +980,7 @@ let karteisucheExport = {
   //   a = Element
   //     (Tool-Link)
   vorlagenToolsListener (a) {
-    a.addEventListener("click", function(evt) {
+    a.addEventListener("click", function (evt) {
       evt.preventDefault();
       karteisucheExport.vorlagenTools(this);
     });
@@ -990,7 +989,7 @@ let karteisucheExport = {
   // Vorlagen-Tools
   //   a = Element
   //     (Tool-Link)
-  async vorlagenTools (a) {
+  vorlagenTools (a) {
     if (/tools-add$/.test(a.id)) { // Vorlage hinzufügen
       karteisucheExport.vorlagenToolsAdd();
     } else if (/tools-reset$/.test(a.id)) { // Vorlagen zurücksetzen
@@ -1035,15 +1034,15 @@ let karteisucheExport = {
       return;
     }
     // neue Vorlage anlegen
-    let inputs = [];
+    const inputs = [];
     document.querySelectorAll("#karteisuche-export-form input").forEach(i => {
       if (i.checked) {
         const id = i.id.replace(/^karteisuche-export-/, "");
         inputs.push(id);
       }
     });
-    const titel = document.querySelector("#karteisuche-export-optionen-titel").value.trim() || "Karteiliste",
-      idx = optionen.data["karteisuche-export-vorlagen"].findIndex(i => i.name === name);
+    const titel = document.querySelector("#karteisuche-export-optionen-titel").value.trim() || "Karteiliste";
+    const idx = optionen.data["karteisuche-export-vorlagen"].findIndex(i => i.name === name);
     if (idx >= 0) {
       optionen.data["karteisuche-export-vorlagen"].splice(idx, 1, {
         name,
@@ -1059,7 +1058,7 @@ let karteisucheExport = {
     }
     // Vorlagen sortieren
     optionen.data["karteisuche-export-vorlagen"].sort((a, b) => {
-      const x = [a.name, b.name];
+      const x = [ a.name, b.name ];
       x.sort(helfer.sortAlpha);
       if (x[0] === a.name) {
         return -1;
@@ -1096,12 +1095,12 @@ let karteisucheExport = {
   // Vorlagen-Tools: Optionen mit Standardvorlagen füllen
   vorlagenFillOpt () {
     optionen.data["karteisuche-export-vorlagen"] = [];
-    let opt = optionen.data["karteisuche-export-vorlagen"];
+    const opt = optionen.data["karteisuche-export-vorlagen"];
     for (const i of karteisucheExport.vorlagen) {
       opt.push({
         name: i.name,
         titel: i.titel,
-        inputs: [...i.inputs],
+        inputs: [ ...i.inputs ],
       });
     }
     optionen.speichern();
@@ -1120,11 +1119,11 @@ let karteisucheExport = {
       filters: [
         {
           name: `${format.name}-Dateien`,
-          extensions: [format.ext],
+          extensions: [ format.ext ],
         },
         {
           name: "Alle Dateien",
-          extensions: ["*"],
+          extensions: [ "*" ],
         },
       ],
     };

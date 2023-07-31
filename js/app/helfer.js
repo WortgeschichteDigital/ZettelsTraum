@@ -1,6 +1,6 @@
 "use strict";
 
-let helfer = {
+const helfer = {
   // speichert, welche der Hauptfunktionen gerade geöffnet ist;
   // mögliche Werte: "liste" (= Belegliste), "gerüst" (= Bedeutungsgerüst), "karte" (= Karteikarte)
   hauptfunktion: "liste",
@@ -11,10 +11,10 @@ let helfer = {
 
   // das Fensterladen-Overlay ausblenden
   fensterGeladen () {
-    setTimeout(function() {
-      let fl = document.getElementById("fensterladen");
+    setTimeout(function () {
+      const fl = document.getElementById("fensterladen");
       fl.classList.add("geladen");
-      fl.addEventListener("transitionend", function() {
+      fl.addEventListener("transitionend", function () {
         this.classList.add("aus");
         if (typeof optionen !== "undefined" && // die Funktion wird auch von Nebenfenstern genutzt
             !optionen.data.einstellungen.bearbeiterin) {
@@ -30,11 +30,11 @@ let helfer = {
   // maximale Höhe des übergebenen Elements festlegen
   //   ele = Element
   //     (Element, dessen maximale Höhe festgelegt werden soll)
-  elementMaxHeight ({ele}) {
+  elementMaxHeight ({ ele }) {
     // Bedingungen:
     //   - Element ist in einem Overlay-Fenster
     //   - offsetTop ist der oberste Rand des Fensterkopfs
-    let dialog = ele.closest(".overlay");
+    const dialog = ele.closest(".overlay");
     if (dialog.classList.contains("aus")) {
       return;
     }
@@ -45,12 +45,12 @@ let helfer = {
     //     (verpflichtend! Selektoren für Elemente, deren Höhe auch abgezogen werden muss)
     //   setOverflow = Boolean
     //     (Container hat standardmäßig kein "overflow: auto")
-    let eleConf = {
+    const eleConf = {
       "anhaenge-cont": {
         queries: [],
       },
       "dialog-text": {
-        queries: ["#dialog-prompt", "#dialog-ok", "#dialog-confirm"],
+        queries: [ "#dialog-prompt", "#dialog-ok", "#dialog-confirm" ],
       },
       "drucken-cont": {
         queries: [],
@@ -86,10 +86,10 @@ let helfer = {
         queries: [],
       },
       "import-cont-over": {
-        queries: ["#import-abbrechen"],
+        queries: [ "#import-abbrechen" ],
       },
       "karteisuche-export-form-cont": {
-        queries: ["#karteisuche-export p.button"],
+        queries: [ "#karteisuche-export p.button" ],
       },
       "karteisuche-karteien": {
         queries: [],
@@ -104,13 +104,13 @@ let helfer = {
         queries: [],
       },
       "notizen-feld": {
-        queries: ["#notizen-buttons"],
+        queries: [ "#notizen-buttons" ],
       },
       "quick-ein-over": {
-        queries: ["#quick-ein-buttons"],
+        queries: [ "#quick-ein-buttons" ],
       },
       "red-lit-suche-titel": {
-        queries: ["#red-lit-suche-treffer"],
+        queries: [ "#red-lit-suche-treffer" ],
       },
       "red-meta-over": {
         queries: [],
@@ -125,10 +125,10 @@ let helfer = {
       },
       "stamm-liste": {
         max: 435,
-        queries: ["#stamm-kopf", "#stamm-cont > p"],
+        queries: [ "#stamm-kopf", "#stamm-cont > p" ],
       },
       "tagger-typen": {
-        queries: ["#tagger-cont > p"],
+        queries: [ "#tagger-cont > p" ],
         setOverflow: true,
       },
       "updatesWin-notes": {
@@ -139,10 +139,10 @@ let helfer = {
       },
     };
     // Maximalhöhe berechnen
-    let div = document.querySelector(`#${dialog.id} > div`),
-      dialogMarginTop = parseInt(getComputedStyle(div).marginTop.replace("px", ""), 10),
-      conf = eleConf[ele.id],
-      weitereHoehen = 0;
+    const div = document.querySelector(`#${dialog.id} > div`);
+    const dialogMarginTop = parseInt(getComputedStyle(div).marginTop.replace("px", ""), 10);
+    const conf = eleConf[ele.id];
+    let weitereHoehen = 0;
     // ggf. Overflow des Containers setzen/entfernen
     if (conf.setOverflow && window.innerHeight - div.getBoundingClientRect().bottom <= 30) {
       clearTimeout(helfer.elementMaxHeightTimeout);
@@ -160,11 +160,11 @@ let helfer = {
       }, 500);
     }
     // Höhe weiterer Elemente berechnen
-    for (let i of conf.queries) {
-      let elemente = document.querySelectorAll(i);
-      for (let e of elemente) {
+    for (const i of conf.queries) {
+      const elemente = document.querySelectorAll(i);
+      for (const e of elemente) {
         weitereHoehen += e.offsetHeight;
-        for (let m of ["marginTop", "marginBottom"]) {
+        for (const m of [ "marginTop", "marginBottom" ]) {
           weitereHoehen += parseInt(getComputedStyle(e)[m].replace("px", ""), 10);
         }
       }
@@ -199,7 +199,7 @@ let helfer = {
     }
     helfer.sektion_aktiv = sektion;
     // Sektion umschalten
-    let sektionen = document.querySelectorAll("body > section");
+    const sektionen = document.querySelectorAll("body > section");
     for (let i = 0, len = sektionen.length; i < len; i++) {
       if (sektionen[i].id === sektion) {
         sektionen[i].classList.remove("aus");
@@ -234,7 +234,7 @@ let helfer = {
       return;
     }
     // Space nicht abfangen, wenn Fokus auf <input>, <textarea>, contenteditable
-    let aktiv = document.activeElement;
+    const aktiv = document.activeElement;
     if (evt.key === " " &&
         (/^(INPUT|TEXTAREA)$/.test(aktiv.nodeName) || aktiv.getAttribute("contenteditable"))) {
       return;
@@ -242,8 +242,8 @@ let helfer = {
     // normales scrollen unterbinden
     evt.preventDefault();
     // aktive Sektion und deren Abstand nach oben ermitteln
-    let sektion = document.querySelector("body > section:not(.aus)"),
-      sektionHeader = sektion.querySelector("header");
+    const sektion = document.querySelector("body > section:not(.aus)");
+    const sektionHeader = sektion.querySelector("header");
     const sektionTop = sektion.offsetTop;
     let header = 0;
     if (sektionHeader) {
@@ -259,7 +259,7 @@ let helfer = {
     // scrollen
     window.scrollTo({
       left: 0,
-      top: top,
+      top,
       behavior: "smooth",
     });
   },
@@ -277,16 +277,16 @@ let helfer = {
   //   obj = Element
   //     (das Element, in dem der Text komplett markiert werden soll)
   auswahl (obj) {
-    let range = document.createRange();
+    const range = document.createRange();
     range.selectNodeContents(obj);
-    let sel = window.getSelection();
+    const sel = window.getSelection();
     sel.removeAllRanges();
     sel.addRange(range);
   },
 
   // Fokus aus Formularfeldern entfernen
   inputBlur () {
-    let aktiv = document.activeElement;
+    const aktiv = document.activeElement;
     if (aktiv.type === "text" || aktiv.nodeName === "TEXTAREA") {
       aktiv.blur();
     }
@@ -317,7 +317,7 @@ let helfer = {
   //   edit = Element
   //     (das Edit-Feld, das keine Standardformatierungen erhalten soll
   editNoFormat (edit) {
-    edit.addEventListener("keydown", function(evt) {
+    edit.addEventListener("keydown", function (evt) {
       tastatur.detectModifiers(evt);
       if (tastatur.modifiers === "Ctrl" && /^(b|i|u)$/.test(evt.key)) {
         evt.preventDefault();
@@ -343,7 +343,7 @@ let helfer = {
   //   text = String
   //     (Text, in dem die Anpassungen vorgenommen werden sollen)
   typographie (text) {
-    text = text.replace(/="(.*?)"/g, (m, p1) => `=__${p1}__`); // Attribute in Tags maskieren
+    text = text.replace(/[=]"(.*?)"/g, (m, p1) => `=__${p1}__`); // Attribute in Tags maskieren
     text = text.replace(/"(.+?)"/g, (m, p1) => `„${p1}“`); // doppelte Anführungszeichen
     text = text.replace(/([a-z])'([a-z])/g, (m, p1, p2) => `${p1}’${p2}`); // offenkundiges Apostroph
     text = text.replace(/'(.+?)'/g, (m, p1) => `‚${p1}‘`); // einfache Anführungszeichen
@@ -352,18 +352,16 @@ let helfer = {
     text = text.replace(/([0-9])\s[-–]\s([0-9])/g, (m, p1, p2) => `${p1}–${p2}`); // Halbgeviertstriche
     text = text.replace(/--/g, "–"); // Halbgeviertstriche
     text = text.replace(/\s([:;])\s/g, (m, p1) => `${p1} `); // nicht planken
-    text = text.replace(/&nbsp;/g, " "); // maskierte geschützte Leerzeichen demaskieren
-    text = text.replace(/=__(.*?)__/g, (m, p1) => `="${p1}"`); // Attribute in Tags demaskieren
+    text = text.replace(/&nbsp;/g, "\u00A0"); // maskierte geschützte Leerzeichen demaskieren
+    text = text.replace(/[=]__(.*?)__/g, (m, p1) => `="${p1}"`); // Attribute in Tags demaskieren
     text = text.replace(/\.{3}/g, "…"); // horizontale Ellipse
-    text = text.replace(/([a-z]) ([0-9]+ \([0-9]{4}\))/, (m, p1, p2) => `${p1} ${p2}`); // geschütztes Leerzeichen vor Jahrgang einer Zeitschrift
-    text = text.replace(/([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})/g, (m, p1, p2, p3) => {
-      return `${p1.replace(/^0/, "")}. ${p2.replace(/^0/, "")}. ${p3}`;
-    }); // Leerzeichen bei aneinandergeklatschten Daten
-    text = text.replace(/ \/(?!>)/g, " /"); // geschütztes Leerzeichen vor Virgel
+    text = text.replace(/([a-z]) ([0-9]+ \([0-9]{4}\))/, (m, p1, p2) => `${p1}\u00A0${p2}`); // geschütztes Leerzeichen vor Jahrgang einer Zeitschrift
+    text = text.replace(/([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})/g, (...args) => `${args[1].replace(/^0/, "")}.\u00A0${args[2].replace(/^0/, "")}. ${args[3]}`); // Leerzeichen bei aneinandergeklatschten Daten
+    text = text.replace(/ \/(?!>)/g, "\u00A0/"); // geschütztes Leerzeichen vor Virgel
     // Korrekturen
-    text = text.replace(/([0-9]{4})[–-]([0-9]{2})[–-]([0-9]{2})/g, (m, p1, p2, p3) => `${p1}-${p2}-${p3}`); // falsche Halbgeviertstriche in ISO 8601-Daten
+    text = text.replace(/([0-9]{4})[–-]([0-9]{2})[–-]([0-9]{2})/g, (...args) => `${args[1]}-${args[2]}-${args[3]}`); // falsche Halbgeviertstriche in ISO 8601-Daten
     // geschützte Leerzeichen (ggf. einfügen, wenn Spatien vergessen wurden)
-    let abk = new Set([
+    const abk = new Set([
       /[0-9]{1,2}\. [0-9]{1,2}\. [0-9]{4}/g, // Datumsangabe (nur 1. Leerzeichen wird ersetzt!)
       /[0-9]{1,2}\.\s?(Jan|Feb|März|Apr|Mai|Juni|Juli|Aug|Sep|Okt|Nov|Dez)/g, // Datumsangabe mit Monat
       /[0-9]\.\s?Aufl/g, // Auflage
@@ -399,12 +397,12 @@ let helfer = {
       /i\.\s?S\./g, // im Sinne von
       /S\.\s?v\./g,
     ]);
-    for (let i of abk) {
+    for (const i of abk) {
       text = text.replace(i, m => {
         if (!/\s/.test(m)) {
-          return m.replace(/\./, ". ");
+          return m.replace(/\./, ".\u00A0");
         }
-        return m.replace(/\s/, " ");
+        return m.replace(/\s/, "\u00A0");
       });
     }
     // Text zurückgeben
@@ -417,9 +415,9 @@ let helfer = {
   //   cl = String || undefined
   //     (die Class des <mark>)
   suchtrefferBereinigen (text, cl = "suche") {
-    let reg = new RegExp(`(<[^>]*?)<mark class="${cl}">(.+?)<\/mark>`, "g");
+    const reg = new RegExp(`(<[^>]*?)<mark class="${cl}">(.+?)</mark>`, "g");
     while (text.match(reg)) { // > 1 Treffer in ein un demselben Tag => mehrfach durchlaufen
-      text = text.replace(reg, function(m, p1, p2) {
+      text = text.replace(reg, function (m, p1, p2) {
         return `${p1}${p2}`;
       });
     }
@@ -431,10 +429,10 @@ let helfer = {
   //   ele = Element
   //     (das betreffende Edit-Feld)
   editPaste (ele) {
-    ele.addEventListener("paste", function(evt) {
+    ele.addEventListener("paste", function (evt) {
       // Muss der Text aufbereitet werden?
-      const clipHtml = evt.clipboardData.getData("text/html"),
-        clipText = evt.clipboardData.getData("text/plain");
+      const clipHtml = evt.clipboardData.getData("text/html");
+      const clipText = evt.clipboardData.getData("text/plain");
       if (!clipHtml && !clipText) {
         return;
       }
@@ -448,9 +446,7 @@ let helfer = {
       // Bereinigung von Aufzählungszeichen, die Word mitliefert
       text = text.replace(/^[0-9a-zA-Z·]\.?\s+/, "");
       // Paraphrasen markieren
-      text = text.replace(/‚(.+?)‘/g, (m, p1) => {
-        return `<mark class="paraphrase">${p1}</mark>`;
-      });
+      text = text.replace(/‚(.+?)‘/g, (m, p1) => `<mark class="paraphrase">${p1}</mark>`);
       // Text in das Feld eintragen
       ele.innerHTML = text;
       // Input-Event abfeuern
@@ -464,10 +460,10 @@ let helfer = {
   //     (der Quelltext, in dem die Ersetzungen vorgenommen werden sollen)
   clipboardHtml (html) {
     // temporären Container erstellen
-    let cont = document.createElement("div");
+    const cont = document.createElement("div");
     cont.innerHTML = html;
     // Hervorhebungen, die standardmäßig gelöscht gehören
-    let marks = [".suche", ".suchleiste", `[class^="klammer-"]`];
+    const marks = [ ".suche", ".suchleiste", '[class^="klammer-"]' ];
     if (!optionen.data.einstellungen["textkopie-wort"]) { // Hervorhebung Karteiwort ebenfalls löschen
       marks.push(".wort");
     } else {
@@ -478,7 +474,7 @@ let helfer = {
     }
     helfer.clipboardHtmlErsetzen(cont, marks.join(", "));
     // Hervorhebung Karteiwort ggf. umwandeln
-    let hervorhebungen = [];
+    const hervorhebungen = [];
     if (optionen.data.einstellungen["textkopie-wort"]) {
       hervorhebungen.push(".wort");
     }
@@ -497,7 +493,7 @@ let helfer = {
     // Annotierungen endgültig löschen
     helfer.clipboardHtmlErsetzen(cont, ".annotierung-wort");
     // DTA-Klassen umwandeln
-    let styles = {
+    const styles = {
       "dta-antiqua": "font-family: sans-serif",
       "dta-blau": "color: blue",
       "dta-doppelt": "text-decoration: underline double",
@@ -507,7 +503,7 @@ let helfer = {
       "dta-kapitaelchen": "font-variant: small-caps",
       "dta-rot": "color: red",
     };
-    for (let style in styles) {
+    for (const style in styles) {
       if (!styles.hasOwnProperty(style)) {
         continue;
       }
@@ -529,10 +525,10 @@ let helfer = {
   //     (der Quelltext, in dem die Ersetzungen vorgenommen werden sollen)
   clipboardXml (html) {
     // temporären Container erstellen
-    let cont = document.createElement("div");
+    const cont = document.createElement("div");
     cont.innerHTML = html;
     // Hervorhebungen, die standardmäßig gelöscht gehören
-    let marks = [".suche", ".suchleiste", ".farbe0 .user", ".farbe0 .wort"];
+    const marks = [ ".suche", ".suchleiste", ".farbe0 .user", ".farbe0 .wort" ];
     helfer.clipboardHtmlErsetzen(cont, marks.join(", "));
     // Ergebnis der Aufbereitung zurückggeben
     return cont.innerHTML;
@@ -597,7 +593,7 @@ let helfer = {
   sortAlpha (a, b) {
     a = helfer.sortAlphaPrep(a);
     b = helfer.sortAlphaPrep(b);
-    let x = [a, b];
+    const x = [ a, b ];
     x.sort();
     if (x[0] === a) {
       return -1;
@@ -609,8 +605,8 @@ let helfer = {
   //   a = String
   //   b = String
   sortLengthAlpha (a, b) {
-    const a_len = a.length,
-      b_len = b.length;
+    const a_len = a.length;
+    const b_len = b.length;
     if (a_len !== b_len) {
       return b_len - a_len;
     }
@@ -621,8 +617,8 @@ let helfer = {
   //   a = String
   //   b = String
   sortLengthAlphaKurz (a, b) {
-    const a_len = a.length,
-      b_len = b.length;
+    const a_len = a.length;
+    const b_len = b.length;
     if (a_len !== b_len) {
       return a_len - b_len;
     }
@@ -635,7 +631,10 @@ let helfer = {
   //     (wenn Objekte: enthalten sind Schlüssel "id" [String] und "slot" [Number];
   //     wenn String: direkt die Sigle der Titelaufnahme)
   sortSiglen (a, b) {
-    let siA, siB, oriA, oriB;
+    let siA;
+    let siB;
+    let oriA;
+    let oriB;
     if (helfer.checkType("String", a)) {
       oriA = a;
       oriB = b;
@@ -657,7 +656,7 @@ let helfer = {
       }
     }
     // Siglen sind nicht identisch => sortieren
-    let arr = [siA, siB];
+    const arr = [ siA, siB ];
     arr.sort();
     if (arr[0] === siA) {
       return -1;
@@ -690,7 +689,7 @@ let helfer = {
     if (helfer.sortSiglenPrepSuperCache[s]) {
       return helfer.sortSiglenPrepSuperCache[s];
     }
-    let prep = s.replace(/[⁰¹²³⁴⁵⁶⁷⁸⁹]/g, m => {
+    const prep = s.replace(/[⁰¹²³⁴⁵⁶⁷⁸⁹]/g, m => {
       switch (m) {
         case "⁰":
           return "0";
@@ -739,15 +738,15 @@ let helfer = {
   //   b = Object
   //     (s. data.rd.wi)
   sortWi (a, b) {
-    const aVt = redWi.dropdown.vt.indexOf(a.vt),
-      bVt = redWi.dropdown.vt.indexOf(b.vt);
+    const aVt = redWi.dropdown.vt.indexOf(a.vt);
+    const bVt = redWi.dropdown.vt.indexOf(b.vt);
     if (aVt !== bVt) {
       return aVt - bVt;
     }
     if (a.tx === b.tx) {
       return 0;
     }
-    let arr = [a.tx, b.tx];
+    const arr = [ a.tx, b.tx ];
     arr.sort(helfer.sortAlpha);
     if (arr[0] === a.tx) {
       return -1;
@@ -762,9 +761,9 @@ let helfer = {
   //     (steuert die verschiedenen Formatierungstypen)
   datumFormat (datum, format = "") {
     // Minuten und Sekunden formatieren
-    let d = new Date(datum),
-      m = d.getMinutes().toString(),
-      s = d.getSeconds().toString();
+    const d = new Date(datum);
+    let m = d.getMinutes().toString();
+    let s = d.getSeconds().toString();
     if (m.length < 2) {
       m = "0" + m;
     }
@@ -773,17 +772,17 @@ let helfer = {
     }
     // Format "minuten"
     if (format === "minuten") {
-      return `${d.getDate()}. ${d.getMonth() + 1}. ${d.getFullYear()}, ${d.getHours()}:${m} Uhr`;
+      return `${d.getDate()}.\u00A0${d.getMonth() + 1}. ${d.getFullYear()}, ${d.getHours()}:${m}\u00A0Uhr`;
     }
     // Format "sekunden"
     if (format === "sekunden") {
-      return `${d.getDate()}. ${d.getMonth() + 1}. ${d.getFullYear()}, ${d.getHours()}:${m}:${s} Uhr`;
+      return `${d.getDate()}.\u00A0${d.getMonth() + 1}. ${d.getFullYear()}, ${d.getHours()}:${m}:${s}\u00A0Uhr`;
     }
     // Format "technisch"
     if (format === "technisch") {
-      let tag = d.getDate().toString(),
-        monat = (d.getMonth() + 1).toString(),
-        stunde = d.getHours().toString();
+      let tag = d.getDate().toString();
+      let monat = (d.getMonth() + 1).toString();
+      let stunde = d.getHours().toString();
       if (tag.length < 2) {
         tag = "0" + tag;
       }
@@ -793,12 +792,12 @@ let helfer = {
       if (stunde.length < 2) {
         stunde = "0" + stunde;
       }
-      return `${tag}. ${monat}. ${d.getFullYear()}, ${stunde}:${m}:${s} Uhr`;
+      return `${tag}.\u00A0${monat}. ${d.getFullYear()}, ${stunde}:${m}:${s}\u00A0Uhr`;
     }
     // Standardformat
-    let wochentage = ["Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"],
-      monate = ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"];
-    return `${wochentage[d.getDay()]}, ${d.getDate()}. ${monate[d.getMonth()]} ${d.getFullYear()}, ${d.getHours()}:${m} Uhr`;
+    const wochentage = [ "Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag" ];
+    const monate = [ "Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember" ];
+    return `${wochentage[d.getDay()]}, ${d.getDate()}.\u00A0${monate[d.getMonth()]} ${d.getFullYear()}, ${d.getHours()}:${m}\u00A0Uhr`;
   },
 
   // Datum ermitteln, als solches und in einem Sortierformat zurückgeben
@@ -806,10 +805,10 @@ let helfer = {
   //     (Text mit dem Datum)
   //   erstesDatum = true | undefined
   //     (der String könnte mehrere Daten enthalten => erstgenanntes Datum ermitteln)
-  datumGet ({datum, erstesDatum = false}) {
+  datumGet ({ datum, erstesDatum = false }) {
     // erstgenanntes Datum ermitteln
     if (erstesDatum) {
-      let formate = [
+      const formate = [
         /[0-9]{4}-[0-9]{2}-[0-9]{2}/,
         /[0-9]{1,2}\.\s?[0-9]{1,2}\.\s?[0-9]{4}/,
         /[0-9]{4}[-–][0-9]{4}/,
@@ -817,8 +816,8 @@ let helfer = {
         /[0-9]{4}/,
         /[0-9]{2}\.\sJh\./,
       ];
-      let hit = -1,
-        datumTmp = datum;
+      let hit = -1;
+      let datumTmp = datum;
       for (let i = 0, len = formate.length; i < len; i++) {
         if (!formate[i].test(datumTmp)) {
           continue;
@@ -831,7 +830,7 @@ let helfer = {
       }
       datum = datum.match(formate[hit])[0];
       if (hit < 2) {
-        let ziffern = datum.match(/[0-9]+/g);
+        const ziffern = datum.match(/[0-9]+/g);
         if (hit === 0) {
           datum = `${ziffern[2]}.${ziffern[1]}.${ziffern[0]}`;
         } else {
@@ -842,26 +841,26 @@ let helfer = {
       }
     }
     // Datumformate ermitteln
-    let datumForm1 = /^(?<tag>[0-9]{2})\.(?<monat>[0-9]{2})\.(?<jahr>[0-9]{4})$/.exec(datum),
-      datumForm2 = /^(?<jahrVon>[0-9]{4})-(?<jahrBis>[0-9]{4})$/.exec(datum),
-      datumForm3 = /^(?<jahrVon>[0-9]{4})\/(?<jahrBis>[0-9]{2})$/.exec(datum),
-      datumForm4 = /^(?<jahr>[0-9]{4})$/.exec(datum),
-      datumForm5 = /^(?<jh>[0-9]{2})\.\sJh\.$/.exec(datum),
-      datumSort = "";
+    const datumForm1 = /^(?<tag>[0-9]{2})\.(?<monat>[0-9]{2})\.(?<jahr>[0-9]{4})$/.exec(datum);
+    const datumForm2 = /^(?<jahrVon>[0-9]{4})-(?<jahrBis>[0-9]{4})$/.exec(datum);
+    const datumForm3 = /^(?<jahrVon>[0-9]{4})\/(?<jahrBis>[0-9]{2})$/.exec(datum);
+    const datumForm4 = /^(?<jahr>[0-9]{4})$/.exec(datum);
+    const datumForm5 = /^(?<jh>[0-9]{2})\.\sJh\.$/.exec(datum);
+    let datumSort = "";
     if (datumForm1) {
-      let g = datumForm1.groups;
+      const g = datumForm1.groups;
       datumSort = `${g.jahr}-${g.monat}-${g.tag}`;
     } else if (datumForm2) {
-      let g = datumForm2.groups;
+      const g = datumForm2.groups;
       datumSort = `${g.jahrVon}-xx-xx-${g.jahrBis}`;
     } else if (datumForm3) {
-      let g = datumForm3.groups;
+      const g = datumForm3.groups;
       datumSort = `${g.jahrVon}-xx-xx-${g.jahrVon.substring(0, 2)}${g.jahrBis}`;
     } else if (datumForm4) {
-      let g = datumForm4.groups;
+      const g = datumForm4.groups;
       datumSort = `${g.jahr}-00-00`;
     } else if (datumForm5) {
-      let g = datumForm5.groups;
+      const g = datumForm5.groups;
       datumSort = `${g.jh - 1}00-00-00`;
     }
     // Daten vor/nach Jahr
@@ -895,19 +894,19 @@ let helfer = {
 
   // Sprache der Nutzerumgebung ermitteln
   checkLang () {
-    let env = process.env;
+    const env = process.env;
     return env.LANG || env.LANGUAGE || env.LC_ALL || env.LC_MESSAGES;
   },
 
   // Variablen um Wortgrenzen zu bestimmen
   ganzesWortRegExp: {
-    links: `\\s"„“”‚‘»«›‹/\\\\([\\\]{<>`,
-    rechts: `\\s"„“”‚‘»«›‹/\\\\)\\\]!?.:,;<>`,
+    links: '\\s"„“”‚‘»«›‹/\\\\([\\\]{<>',
+    rechts: '\\s"„“”‚‘»«›‹/\\\\)\\\]!?.:,;<>',
     // für Hervorhebung Karteiwort gewisse Klammern ignorieren: [] ()
     // (das ist deswegen, damit ich Komposita, in denen ein Glied geklammert ist,
     // auch hervorheben kann; z.B.: "(Handels-)Kolonie")
-    linksWort: `\\s"„“”‚‘»«›‹/\\{<>`,
-    rechtsWort: `\\s"„“”‚‘»«›‹/\\!?.:,;<>`,
+    linksWort: '\\s"„“”‚‘»«›‹/\\{<>',
+    rechtsWort: '\\s"„“”‚‘»«›‹/\\!?.:,;<>',
   },
 
   // Tokens mit spezieller Bedeutung für reguläre Ausdrücke escapen
@@ -923,7 +922,7 @@ let helfer = {
   //   undo = Boolean
   //     (Maskierung zurücknehmen)
   escapeHtml (string, undo = false) {
-    let zeichen = [
+    const zeichen = [
       {
         orig: "<",
         mask: "&lt;",
@@ -933,8 +932,9 @@ let helfer = {
         mask: "&gt;",
       },
     ];
-    for (let z of zeichen) {
-      let reg, rep;
+    for (const z of zeichen) {
+      let reg;
+      let rep;
       if (undo) {
         reg = new RegExp(z.mask, "g");
         rep = z.orig;
@@ -974,14 +974,14 @@ let helfer = {
       return 0;
     });
     // RegExp erstellen
-    for (let wort of woerter) {
+    for (const wort of woerter) {
       // Wort soll nicht berücksichtigt werden
       if (!data.fv[wort].an) {
         continue;
       }
       // Varianten zusammenstellen
-      let varianten = [];
-      for (let form of data.fv[wort].fo) {
+      const varianten = [];
+      for (const form of data.fv[wort].fo) {
         let text = helfer.escapeRegExp(form.va.charAt(0));
         for (let i = 1, len = form.va.length; i < len; i++) {
           text += "(?:<[^>]+>|\\[¬\\]| \\[:.+?:\\] )*";
@@ -991,7 +991,7 @@ let helfer = {
         varianten.push(text);
       }
       helfer.formVariRegExpRegs.push({
-        wort: wort,
+        wort,
         reg: varianten.join("|"),
       });
     }
@@ -1001,7 +1001,7 @@ let helfer = {
   //   wort = String
   //     (die Zeichenkette, mit der gesucht werden soll
   formVariSonderzeichen (wort) {
-    return wort.replace(/en|e|nn|n|s|ä|ö|ü/g, function(m) {
+    return wort.replace(/en|e|nn|n|s|ä|ö|ü/g, function (m) {
       switch (m) {
         case "en":
           return "(?:ẽ|en)";
@@ -1050,7 +1050,7 @@ let helfer = {
     }
     // Element füllen
     div.replaceChildren();
-    let img = document.createElement("img");
+    const img = document.createElement("img");
     div.appendChild(img);
     img.width = "96";
     img.height = "96";
@@ -1062,7 +1062,7 @@ let helfer = {
       img.src = `${cd}img/einfuegen-pfeil-blau-96.svg`;
     } else if (ziel === "liste") {
       img.src = `${cd}img/kopieren-blau-96.svg`;
-      let span = document.createElement("span");
+      const span = document.createElement("span");
       div.appendChild(span);
       span.textContent = kopieren.belege.length;
     } else if (ziel === "wrap") {
@@ -1078,12 +1078,12 @@ let helfer = {
     }
     // Element einhängen und wieder entfernen
     document.querySelector("body").appendChild(div);
-    setTimeout(function() {
+    setTimeout(function () {
       div.classList.add("an");
     }, 1); // ohne Timeout geht es nicht
-    helfer.animationTimeout = setTimeout(function() {
+    helfer.animationTimeout = setTimeout(function () {
       div.classList.remove("an");
-      helfer.animationTimeout = setTimeout(function() {
+      helfer.animationTimeout = setTimeout(function () {
         if (!document.querySelector("body").contains(div)) {
           // der <div> könnte bereits verschwunden sein
           // (kann vorkommen, wenn er im 500ms-Gap noch einmal aktiviert wird)
@@ -1117,7 +1117,7 @@ let helfer = {
   externeLinks (a) {
     a.title = a.getAttribute("href");
     tooltip.init(a.parentNode);
-    a.addEventListener("click", function(evt) {
+    a.addEventListener("click", function (evt) {
       evt.preventDefault();
       if (evt.detail > 1) { // Doppelklicks abfangen
         return;
@@ -1135,44 +1135,40 @@ let helfer = {
   // lädt den Inhalt der übergebenen URL herunter
   //   url = String
   //     (URL, deren Inhalt heruntergeladen werden soll)
-  fetchURL (url) {
-    return new Promise(async resolve => {
-      // Abort-Controller initialisieren
-      let controller = new AbortController();
-      setTimeout(() => controller.abort(), parseInt(optionen.data.einstellungen.timeout, 10) * 1000);
-      // Feedback vorbereiten
-      let feedback = {
-        fetchOk: true,
-        fehler: "",
-        text: "",
-      };
-      // Fetch durchführen
-      let response;
-      try {
-        response = await fetch(url, {
-          signal: controller.signal,
-        });
-      } catch (err) {
-        feedback.fetchOk = false;
-        if (err.name === "AbortError") {
-          feedback.fehler = "Timeout-Fehler";
-        } else {
-          feedback.fehler = `${err.name}: ${err.message}`;
-        }
-        resolve(feedback);
-        throw err;
+  async fetchURL (url) {
+    // Abort-Controller initialisieren
+    const controller = new AbortController();
+    setTimeout(() => controller.abort(), parseInt(optionen.data.einstellungen.timeout, 10) * 1000);
+    // Feedback vorbereiten
+    const feedback = {
+      fetchOk: true,
+      fehler: "",
+      text: "",
+    };
+    // Fetch durchführen
+    let response;
+    try {
+      response = await fetch(url, {
+        signal: controller.signal,
+      });
+    } catch (err) {
+      feedback.fetchOk = false;
+      if (err.name === "AbortError") {
+        feedback.fehler = "Timeout-Fehler";
+      } else {
+        feedback.fehler = `${err.name}: ${err.message}`;
       }
-      // Antwort des Servers fehlerhaft
-      if (!response.ok) {
-        feedback.fehler = `HTTP-Status-Code ${response.status}`;
-        resolve(feedback);
-        return;
-      }
-      // Antworttext auslesen
-      feedback.text = await response.text();
-      // Promise auflösen
-      resolve(feedback);
-    });
+      return feedback;
+    }
+    // Antwort des Servers fehlerhaft
+    if (!response.ok) {
+      feedback.fehler = `HTTP-Status-Code ${response.status}`;
+      return feedback;
+    }
+    // Antworttext auslesen
+    feedback.text = await response.text();
+    // Feedback auswerfen
+    return feedback;
   },
 
   // öffnet den Dateimanager im Ordner der übergebenen Datei
@@ -1206,18 +1202,18 @@ let helfer = {
   //     (Literaturliste | Karteiliste)
   //   vars = Object
   //     (CLI-Parameter)
-  async cliFolderCheck ({format, typ, vars}) {
-    let quelleExists = await helfer.exists(vars.quelle),
-      zielExists = await helfer.exists(vars.ziel),
-      neueDatei = false;
+  async cliFolderCheck ({ format, typ, vars }) {
+    const quelleExists = await helfer.exists(vars.quelle);
+    let zielExists = await helfer.exists(vars.ziel);
+    let neueDatei = false;
     if (!zielExists &&
         !/(\/|\\)$/.test(vars.ziel)) {
       zielExists = await helfer.exists(vars.ziel.replace(/(\/|\\)[^/\\]+$/, ""));
       neueDatei = true;
     }
     if (!quelleExists || !zielExists) {
-      let falsch = "Quellpfad",
-        pfad = vars.quelle;
+      let falsch = "Quellpfad";
+      let pfad = vars.quelle;
       if (!zielExists) {
         falsch = "Zielpfad";
         pfad = vars.ziel;
@@ -1292,8 +1288,8 @@ let helfer = {
       // App ist nicht paketiert => resourcesPath zeigt auf die resources von Electron
       resources = `${resources.replace(/node_modules.+/, "")}resources`;
     }
-    const quelle = modules.path.join(resources, "Demonstrationskartei Team.ztj"),
-      ziel = modules.path.join(appInfo.temp, "Demonstrationskartei Team.ztj");
+    const quelle = modules.path.join(resources, "Demonstrationskartei Team.ztj");
+    const ziel = modules.path.join(appInfo.temp, "Demonstrationskartei Team.ztj");
     modules.fsp.copyFile(quelle, ziel)
       .then(() => {
         kartei.oeffnenEinlesen(ziel);
@@ -1311,12 +1307,12 @@ let helfer = {
   //   a = Element
   //     (der Link, der einen abschnitt im Handbuch referenziert)
   handbuchLink (a) {
-    a.addEventListener("click", function(evt) {
+    a.addEventListener("click", function (evt) {
       evt.preventDefault();
       let abschnitt = this.dataset.handbuch;
       // Aufruf aus den Einstellungen => Abschnitt um Sektionen-ID ergänzen
       if (overlay.oben() === "einstellungen") {
-        for (let section of document.querySelectorAll("#einstellungen-cont section")) {
+        for (const section of document.querySelectorAll("#einstellungen-cont section")) {
           if (!section.classList.contains("aus")) {
             abschnitt += `-${section.id.replace(/.+-/, "")}`;
             break;
@@ -1332,10 +1328,10 @@ let helfer = {
   //   evt = Object
   //     (Fehler-Objekt)
   onError (evt) {
-    let fileJs = evt.filename, // gewöhnliche Fehler
-      message = evt.message,
-      line = evt.lineno,
-      column = evt.colno;
+    let fileJs = evt.filename; // gewöhnliche Fehler
+    let message = evt.message;
+    let line = evt.lineno;
+    let column = evt.colno;
     if (evt.stack) { // weitergeleitete Fehler
       if (!/file:.+?\.js/.test(evt.stack)) {
         noDetails();
@@ -1356,14 +1352,14 @@ let helfer = {
       }
     }
     // Fehler-Objekt erzeugen
-    let err = {
+    const err = {
       time: new Date().toISOString(),
       word: typeof kartei === "undefined" ? winInfo.typ : kartei.wort,
       fileZtj: typeof kartei === "undefined" ? "Nebenfenster" : kartei.pfad,
-      fileJs: fileJs,
-      message: message,
-      line: line,
-      column: column,
+      fileJs,
+      message,
+      line,
+      column,
     };
     // Fehler-Objekt an Renderer schicken
     modules.ipc.send("fehler", err);
@@ -1404,7 +1400,7 @@ let helfer = {
     // XML-Fenster ggf. schließen
     await redXml.schliessen();
     // Kartei entsperren
-    await lock.actions({datei: kartei.pfad, aktion: "unlock"});
+    await lock.actions({ datei: kartei.pfad, aktion: "unlock" });
     // Status des Fensters speichern
     const fensterStatus = await modules.ipc.invoke("fenster-status", winInfo.winId, "fenster");
     if (fensterStatus) {

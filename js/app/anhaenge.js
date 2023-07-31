@@ -1,6 +1,6 @@
 "use strict";
 
-let anhaenge = {
+const anhaenge = {
   // hier stehen Details zu den einzelnen Anhängen (s. anhaenge.scan())
   data: {},
 
@@ -8,40 +8,32 @@ let anhaenge = {
   // in anhaenge.data ein
   //   an = Array | String
   //     (Anhang oder Liste von Anhängen, die gescannt werden sollen)
-  scan (an) {
-    return new Promise(async resolve => {
-      if (Array.isArray(an)) {
-        for (let i of an) {
-          await scannen(i);
-        }
-      } else {
-        await scannen(an);
+  async scan (an) {
+    if (Array.isArray(an)) {
+      for (const i of an) {
+        await scannen(i);
       }
-      // Signal, dass das Scannen fertig ist
-      resolve(true);
-      // Scannfunktion
-      function scannen (datei) {
-        return new Promise(async resolve => {
-          // schon gescannt
-          if (anhaenge.data[datei]) {
-            resolve(true);
-            return;
-          }
-          // scannen
-          let pfad = datei;
-          if (!modules.path.isAbsolute(datei)) {
-            pfad = `${modules.path.parse(kartei.pfad).dir}${modules.path.sep}${datei}`;
-          }
-          const exists = await helfer.exists(pfad);
-          anhaenge.data[datei] = {
-            exists,
-            path: pfad,
-            ext: modules.path.parse(pfad).ext,
-          };
-          resolve(true);
-        });
+    } else {
+      await scannen(an);
+    }
+    // Scannfunktion
+    async function scannen (datei) {
+      // schon gescannt
+      if (anhaenge.data[datei]) {
+        return;
       }
-    });
+      // scannen
+      let pfad = datei;
+      if (!modules.path.isAbsolute(datei)) {
+        pfad = `${modules.path.parse(kartei.pfad).dir}${modules.path.sep}${datei}`;
+      }
+      const exists = await helfer.exists(pfad);
+      anhaenge.data[datei] = {
+        exists,
+        path: pfad,
+        ext: modules.path.parse(pfad).ext,
+      };
+    }
   },
 
   // ermittelt das Array, in dem die aufzulistenden Anhänge zu finden sind
@@ -49,8 +41,8 @@ let anhaenge = {
   //     (String mit Angaben zu dem Objekt; dieser muss in einen echten Verweis
   //     umgewandelt werden)
   getArr (obj) {
-    let obj_split = obj.split("|"),
-      arr = {};
+    const obj_split = obj.split("|");
+    let arr = {};
     if (obj_split[0] === "data") {
       arr = data;
     } else if (obj_split[0] === "beleg") {
@@ -116,8 +108,8 @@ let anhaenge = {
     if (scan) {
       await anhaenge.scan(arr);
     }
-    arr.forEach(function(i) {
-      let img = document.createElement("img");
+    arr.forEach(function (i) {
+      const img = document.createElement("img");
       img.dataset.datei = i;
       img.src = anhaenge.getIcon(i);
       img.width = "24";
@@ -143,7 +135,7 @@ let anhaenge = {
       return;
     }
     // Fenster öffnen oder in den Vordergrund holen
-    let fenster = document.getElementById("anhaenge");
+    const fenster = document.getElementById("anhaenge");
     if (overlay.oeffnen(fenster)) { // Fenster ist schon offen
       return;
     }
@@ -152,7 +144,7 @@ let anhaenge = {
       ele: document.getElementById("anhaenge-cont"),
     });
     // Anhänge der Kartei auflisten
-    let cont = document.getElementById("anhaenge-cont");
+    const cont = document.getElementById("anhaenge-cont");
     await anhaenge.auflisten(cont, "data|an");
     // Anhänge der Belege auflisten
     anhaenge.auflistenBelege(cont);
@@ -166,73 +158,69 @@ let anhaenge = {
   //     Werte durch Haarstrich getrennt)
   //   leeren = false | undefined
   //     (der Content soll geleert werden)
-  auflisten (cont, obj, leeren = true) {
-    return new Promise(async resolve => {
-      // Content leeren
-      // (im Anhänge-Fenster darf dies nur beim kompletten Neuaufbau der Liste geschehen)
-      if (leeren) {
-        cont.replaceChildren();
-      }
-      // abbrechen, wenn keine Anhänge vorhanden sind
-      let arr = anhaenge.getArr(obj);
-      if (!arr.length) {
-        resolve(true);
-        return;
-      }
-      await anhaenge.scan(arr);
-      // Anhänge auflisten
-      arr.forEach(function(i, n) {
-        let div = document.createElement("div");
-        div.classList.add("anhaenge-item");
-        div.dataset.obj = obj;
-        div.dataset.datei = i;
-        anhaenge.oeffnenListener(div);
-        // Icon
-        let icon = document.createElement("img");
-        icon.src = anhaenge.getIcon(i);
-        icon.width = "24";
-        icon.height = "24";
-        div.appendChild(icon);
-        // Datei
-        let datei = `\u200E${i}\u200E`; // vgl. den Sermon in meta.oeffnen()
-        let span = document.createElement("span");
-        span.classList.add("anhaenge-datei");
-        span.setAttribute("dir", "rtl");
-        span.textContent = datei;
-        span.title = datei;
+  async auflisten (cont, obj, leeren = true) {
+    // Content leeren
+    // (im Anhänge-Fenster darf dies nur beim kompletten Neuaufbau der Liste geschehen)
+    if (leeren) {
+      cont.replaceChildren();
+    }
+    // abbrechen, wenn keine Anhänge vorhanden sind
+    const arr = anhaenge.getArr(obj);
+    if (!arr.length) {
+      return;
+    }
+    await anhaenge.scan(arr);
+    // Anhänge auflisten
+    arr.forEach(function (i, n) {
+      const div = document.createElement("div");
+      div.classList.add("anhaenge-item");
+      div.dataset.obj = obj;
+      div.dataset.datei = i;
+      anhaenge.oeffnenListener(div);
+      // Icon
+      const icon = document.createElement("img");
+      icon.src = anhaenge.getIcon(i);
+      icon.width = "24";
+      icon.height = "24";
+      div.appendChild(icon);
+      // Datei
+      const datei = `\u200E${i}\u200E`; // vgl. den Sermon in meta.oeffnen()
+      const span = document.createElement("span");
+      span.classList.add("anhaenge-datei");
+      span.setAttribute("dir", "rtl");
+      span.textContent = datei;
+      span.title = datei;
+      div.appendChild(span);
+      // aufwärts
+      if (n > 0) {
+        const up = document.createElement("a");
+        up.classList.add("icon-link", "anhaenge-aufwaerts");
+        up.href = "#";
+        up.textContent = "\u00A0";
+        anhaenge.sortieren(up);
+        div.appendChild(up);
+      } else {
+        const span = document.createElement("span");
+        span.classList.add("anhaenge-platzhalter");
+        span.textContent = "\u00A0";
         div.appendChild(span);
-        // aufwärts
-        if (n > 0) {
-          let up = document.createElement("a");
-          up.classList.add("icon-link", "anhaenge-aufwaerts");
-          up.href = "#";
-          up.textContent = " ";
-          anhaenge.sortieren(up);
-          div.appendChild(up);
-        } else {
-          let span = document.createElement("span");
-          span.classList.add("anhaenge-platzhalter");
-          span.textContent = " ";
-          div.appendChild(span);
-        }
-        // Löschen
-        let del = document.createElement("a");
-        del.classList.add("icon-link", "anhaenge-loeschen");
-        del.href = "#";
-        del.textContent = " ";
-        anhaenge.loeschen(del);
-        div.appendChild(del);
-        // <div> einhängen
-        cont.appendChild(div);
-      });
-      tooltip.init(cont);
-      resolve(true);
+      }
+      // Löschen
+      const del = document.createElement("a");
+      del.classList.add("icon-link", "anhaenge-loeschen");
+      del.href = "#";
+      del.textContent = "\u00A0";
+      anhaenge.loeschen(del);
+      div.appendChild(del);
+      // <div> einhängen
+      cont.appendChild(div);
     });
+    tooltip.init(cont);
   },
 
   // Anhänge der Belege im Anhänge-Fenster auflisten
   async auflistenBelege (cont) {
-    for (let id in data.ka) {
+    for (const id in data.ka) {
       if (!data.ka.hasOwnProperty(id)) {
         continue;
       }
@@ -241,7 +229,7 @@ let anhaenge = {
         continue;
       }
       // Anhänge drucken
-      let h3 = document.createElement("h3");
+      const h3 = document.createElement("h3");
       h3.textContent = liste.detailAnzeigenH3(id);
       h3.dataset.id = id;
       anhaenge.belegOeffnen(h3);
@@ -254,7 +242,7 @@ let anhaenge = {
   //   item = Element
   //     (der <div> oder <img>, auf den/das geklickt wurde)
   oeffnenListener (item) {
-    item.addEventListener("click", function(evt) {
+    item.addEventListener("click", function (evt) {
       if (evt.detail > 1) { // Doppelklicks abfangen
         return;
       }
@@ -294,7 +282,7 @@ let anhaenge = {
   //   ele = Element
   //     (die Überschrift, auf die geklickt wurde)
   belegOeffnen (ele) {
-    ele.addEventListener("click", function(evt) {
+    ele.addEventListener("click", function (evt) {
       evt.preventDefault();
       const id = this.dataset.id;
       speichern.checkInit(async () => {
@@ -308,14 +296,14 @@ let anhaenge = {
   //   item = Element
   //     (der Icon-Link, auf den geklickt wurde)
   sortieren (item) {
-    item.addEventListener("click", async function(evt) {
+    item.addEventListener("click", async function (evt) {
       evt.stopPropagation();
       evt.preventDefault();
-      let cont = this.parentNode.parentNode,
-        obj = this.parentNode.dataset.obj,
-        datei = this.parentNode.dataset.datei,
-        arr = anhaenge.getArr(obj),
-        idx = arr.indexOf(datei);
+      let obj = this.parentNode.dataset.obj;
+      const cont = this.parentNode.parentNode;
+      const datei = this.parentNode.dataset.datei;
+      const arr = anhaenge.getArr(obj);
+      const idx = arr.indexOf(datei);
       // umsortieren
       arr.splice(idx, 1);
       arr.splice(idx - 1, 0, datei);
@@ -326,7 +314,7 @@ let anhaenge = {
         const id = obj.split("|")[2];
         if (beleg.id_karte === parseInt(id, 10) &&
             helfer.hauptfunktion === "karte") {
-          beleg.data.an = [...arr];
+          beleg.data.an = [ ...arr ];
           anhaenge.auflisten(document.getElementById("beleg-an"), "beleg|data|an");
           beleg.belegGeaendert(true);
         } else {
@@ -343,7 +331,7 @@ let anhaenge = {
         anhaenge.auflistenBelege(cont);
       }
       // ggf. Pfeil-Icon fokussieren
-      let pfeil = cont.querySelector(`[data-datei="${datei}"] .anhaenge-aufwaerts`);
+      const pfeil = cont.querySelector(`[data-datei="${datei}"] .anhaenge-aufwaerts`);
       if (pfeil) {
         pfeil.focus();
       }
@@ -354,16 +342,16 @@ let anhaenge = {
   //   item = Element
   //     (der Icon-Link, auf den geklickt wurde)
   loeschen (item) {
-    item.addEventListener("click", function(evt) {
+    item.addEventListener("click", function (evt) {
       evt.stopPropagation();
       evt.preventDefault();
-      let cont = this.parentNode.parentNode,
-        obj = this.parentNode.dataset.obj,
-        datei = this.parentNode.dataset.datei,
-        arr = anhaenge.getArr(obj);
+      let obj = this.parentNode.dataset.obj;
+      const cont = this.parentNode.parentNode;
+      const datei = this.parentNode.dataset.datei;
+      const arr = anhaenge.getArr(obj);
       dialog.oeffnen({
         typ: "confirm",
-        text: `Soll die folgende Datei wirklich aus der Liste entfernt werden?\n<p class="force-wrap">• ${datei}</p>`,
+        text: `Soll die folgende Datei wirklich aus der Liste entfernt werden?\n<p class="force-wrap">•\u00A0${datei}</p>`,
         callback: async () => {
           if (!dialog.antwort) {
             return;
@@ -376,7 +364,7 @@ let anhaenge = {
             const id = obj.split("|")[2];
             if (beleg.id_karte === parseInt(id, 10) &&
                 helfer.hauptfunktion === "karte") {
-              beleg.data.an = [...arr];
+              beleg.data.an = [ ...arr ];
               anhaenge.auflisten(document.getElementById("beleg-an"), "beleg|data|an");
               beleg.belegGeaendert(true);
             } else {
@@ -404,18 +392,18 @@ let anhaenge = {
   //     (Add-Button zum Hinzufügen von Anhängen)
   add (input) {
     if (input.value === "Auto-Ergänzen") {
-      input.addEventListener("click", () => anhaenge.addAuto({fenster: true}));
+      input.addEventListener("click", () => anhaenge.addAuto({ fenster: true }));
       return;
     }
-    input.addEventListener("click", async function() {
+    input.addEventListener("click", async function () {
       // Optionen für Dateidialog
-      let opt = {
+      const opt = {
         title: "Anhang hinzufügen",
         defaultPath: appInfo.documents,
         filters: [
           {
             name: "Alle Dateien",
-            extensions: ["*"],
+            extensions: [ "*" ],
           },
         ],
         properties: [
@@ -428,10 +416,10 @@ let anhaenge = {
         opt.defaultPath = optionen.data.letzter_pfad;
       }
       // Dialog anzeigen
-      let result = await modules.ipc.invoke("datei-dialog", {
+      const result = await modules.ipc.invoke("datei-dialog", {
         open: true,
         winId: winInfo.winId,
-        opt: opt,
+        opt,
       });
       // Fehler oder keine Datei ausgewählt
       if (result.message || !Object.keys(result).length) {
@@ -445,7 +433,7 @@ let anhaenge = {
       }
       // Datei ausgewählt
       const obj = this.dataset.obj;
-      let cont = this.parentNode.parentNode.querySelector("div");
+      const cont = this.parentNode.parentNode.querySelector("div");
       anhaenge.addFiles(result.filePaths, cont, obj);
     });
   },
@@ -460,13 +448,13 @@ let anhaenge = {
   //     Werte durch Haarstriche getrennt)
   async addFiles (dateien, cont, obj) {
     // Dateien hinzufügen
-    let reg_pfad = new RegExp(helfer.escapeRegExp(`${modules.path.dirname(kartei.pfad)}${modules.path.sep}`)),
-      schon = [],
-      arr = anhaenge.getArr(obj);
-    for (let i of dateien) {
+    const reg_pfad = new RegExp(helfer.escapeRegExp(`${modules.path.dirname(kartei.pfad)}${modules.path.sep}`));
+    const schon = [];
+    const arr = anhaenge.getArr(obj);
+    for (const i of dateien) {
       const datei = i.replace(reg_pfad, "");
       if (arr.includes(datei)) {
-        schon.push(`• ${datei}`);
+        schon.push(`•\u00A0${datei}`);
         continue;
       }
       await anhaenge.scan(datei);
@@ -502,7 +490,7 @@ let anhaenge = {
   // automatisch alle Dateien im Kartei-Verzeichnis hinzufügen
   //   fenster = Boolean
   //     (die Funktion wurde aus dem Anhänge-Fenster heraus aufgerufen)
-  async addAuto ({fenster}) {
+  async addAuto ({ fenster }) {
     // Kartei noch nicht gespeichert
     if (!kartei.pfad) {
       dialog.oeffnen({
@@ -512,29 +500,29 @@ let anhaenge = {
       return;
     }
     // Ordner auslesen, Dateien sammeln
-    let reg = new RegExp(`.+${helfer.escapeRegExp(modules.path.sep)}`),
-      ordner = kartei.pfad.match(reg)[0],
-      dateienA = [];
-    const ausgelesen = await new Promise(async resolve => {
+    const reg = new RegExp(`.+${helfer.escapeRegExp(modules.path.sep)}`);
+    const ordner = kartei.pfad.match(reg)[0];
+    const dateienA = [];
+    const ausgelesen = await (async function () {
       try {
-        let files = await modules.fsp.readdir(ordner);
-        for (let f of files) {
+        const files = await modules.fsp.readdir(ordner);
+        for (const f of files) {
           const pfad = modules.path.join(ordner, f);
-          let stats = await modules.fsp.lstat(pfad);
+          const stats = await modules.fsp.lstat(pfad);
           if (!stats.isDirectory() &&
               !/^(~\$|\.)|\.(bak|ztj)$/.test(f)) {
             dateienA.push(f);
           }
         }
-        resolve(true);
+        return true;
       } catch (err) { // Auslesen des Ordners fehlgeschlagen
         dialog.oeffnen({
           typ: "alert",
           text: `Beim Auslesen des Karteiordners ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.message}</p>`,
         });
-        resolve(false);
+        return false;
       }
-    });
+    }());
     if (!ausgelesen) {
       return;
     }
@@ -547,44 +535,44 @@ let anhaenge = {
       return;
     }
     // Dateien sortieren
-    let gruppen = {
+    const gruppen = {
       // XML
-      "xml": 10,
+      xml: 10,
       // Office-Dokumente
-      "doc": 9,
-      "docx": 9,
-      "odt": 9,
-      "rtf": 9,
+      doc: 9,
+      docx: 9,
+      odt: 9,
+      rtf: 9,
       // Text-Dateien
-      "pdf": 8,
-      "txt": 8,
+      pdf: 8,
+      txt: 8,
       // Bilder
-      "gif": 7,
-      "jpeg": 7,
-      "jpg": 7,
-      "png": 7,
-      "svg": 7,
+      gif: 7,
+      jpeg: 7,
+      jpg: 7,
+      png: 7,
+      svg: 7,
       // Sonstiges
-      "gz": 2,
-      "htm": 2,
-      "html": 2,
-      "odp": 2,
-      "ppt": 2,
-      "pptx": 2,
-      "rar": 2,
-      "zip": 2,
+      gz: 2,
+      htm: 2,
+      html: 2,
+      odp: 2,
+      ppt: 2,
+      pptx: 2,
+      rar: 2,
+      zip: 2,
     };
     dateienA.sort((a, b) => {
-      let extA = a.match(/[^.]+$/),
-        extB = b.match(/[^.]+$/),
-        wertA = extA && gruppen[extA[0]] ? gruppen[extA[0]] : 1,
-        wertB = extB && gruppen[extB[0]] ? gruppen[extB[0]] : 1;
+      const extA = a.match(/[^.]+$/);
+      const extB = b.match(/[^.]+$/);
+      const wertA = extA && gruppen[extA[0]] ? gruppen[extA[0]] : 1;
+      const wertB = extB && gruppen[extB[0]] ? gruppen[extB[0]] : 1;
       // nach Typ sortieren
       if (wertA !== wertB) {
         return wertB - wertA;
       }
       // alphabetisch sortieren
-      let arr = [a, b];
+      const arr = [ a, b ];
       arr.sort(helfer.sortAlpha);
       if (arr[0] === a) {
         if (wertA === 9) { // Office-Dokumente reverse
@@ -598,14 +586,14 @@ let anhaenge = {
       return 1;
     });
     // weitere Dateien ermitteln
-    let dateienB = [];
-    for (let i of data.an) {
+    const dateienB = [];
+    for (const i of data.an) {
       if (/[/\\]/.test(i)) {
         dateienB.push(i);
       }
     }
     // Änderungen nötig?
-    let dateien = dateienA.concat(dateienB);
+    const dateien = dateienA.concat(dateienB);
     if (dateien.join() === data.an.join()) {
       dialog.oeffnen({
         typ: "alert",
@@ -617,7 +605,7 @@ let anhaenge = {
     data.an = dateien;
     await anhaenge.scan(data.an);
     // Änderungsmarkierung
-    let cont = document.querySelector("#anhaenge-cont");
+    const cont = document.querySelector("#anhaenge-cont");
     anhaenge.geaendert(cont); // hier werden die Icons im Kopf neu aufgebaut
     // ggf. Liste der Anhänge im Fenster neu aufbauen
     if (fenster) {
@@ -634,7 +622,7 @@ let anhaenge = {
   //     die Markierung, ob die Kartei oder ein Beleg betroffen sind)
   geaendert (cont) {
     // Änderungsmarkierung
-    let typ = cont.dataset.anhaenge;
+    const typ = cont.dataset.anhaenge;
     if (typ === "kartei") {
       kartei.karteiGeaendert(true);
       anhaenge.makeIconList(data.an, document.getElementById("kartei-anhaenge"));

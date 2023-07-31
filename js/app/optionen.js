@@ -1,6 +1,6 @@
 "use strict";
 
-let optionen = {
+const optionen = {
   // Speicherort aller Optionen
   // (ausgenommen ist der Fenster-Status, der nur im Main-Prozess steht)
   data: {
@@ -156,7 +156,7 @@ let optionen = {
       // Quick-Access-Bar anzeigen
       quick: false,
       // Icons in der Quick-Access-Bar
-      "quick-icons": [...quick.iconsStandard],
+      "quick-icons": [ ...quick.iconsStandard ],
       // NOTIZEN
       // Notizen-Fenster nach dem Speichern direkt schließen
       "notizen-schliessen": false,
@@ -311,7 +311,7 @@ let optionen = {
   //     (die Optionen, strukturiert wie optionen.data)
   empfangen (data) {
     // Daten bereinigen um alles, was nicht synchronisiert werden soll
-    for (let block in data) {
+    for (const block in data) {
       if (!data.hasOwnProperty(block)) {
         continue;
       }
@@ -342,7 +342,7 @@ let optionen = {
   //   opt = Object
   //     (Objekt-Referenz der durch den Main-Prozess übergebenen Daten)
   einlesen (obj, opt) {
-    for (let o in obj) {
+    for (const o in obj) {
       if (!obj.hasOwnProperty(o)) {
         continue;
       }
@@ -351,7 +351,7 @@ let optionen = {
       }
       if (helfer.checkType("Object", obj[o])) {
         if (o === "tags") {
-          optionen.data.tags = {...opt[o]};
+          optionen.data.tags = { ...opt[o] };
         } else {
           optionen.einlesen(obj[o], opt[o]);
         }
@@ -370,7 +370,7 @@ let optionen = {
     // Tag-Dateien überprüfen => Anzeige auffrischen
     optionen.anwendenTagsInit();
     // Zeitfilter in der Filterleiste anpassen
-    let filter_zeitraum = document.getElementsByName("filter-zeitraum");
+    const filter_zeitraum = document.getElementsByName("filter-zeitraum");
     for (let i = 0, len = filter_zeitraum.length; i < len; i++) {
       if (filter_zeitraum[i].id === `filter-zeitraum-${optionen.data.filter.zeitraum}`) {
         filter_zeitraum[i].checked = true;
@@ -379,7 +379,7 @@ let optionen = {
       }
     }
     // andere Filter-Optionen in der Filterleiste anpassen
-    document.querySelectorAll(".filter-optionen").forEach(function(i) {
+    document.querySelectorAll(".filter-optionen").forEach(function (i) {
       const opt = i.id.replace(/^filter-/, "");
       i.checked = optionen.data.filter[opt];
     });
@@ -394,7 +394,7 @@ let optionen = {
     liste.headerTrennungAnzeige();
     liste.headerWortHervorhebenAnzeige();
     // Auswahllinks für Detail-Anzeige anpassen
-    let details = ["bd", "bl", "sy", "qu", "kr", "ts", "no", "meta"];
+    const details = [ "bd", "bl", "sy", "qu", "kr", "ts", "no", "meta" ];
     for (let i = 0, len = details.length; i < len; i++) {
       liste.headerDetailsAnzeige(details[i], `detail_${details[i]}`);
     }
@@ -443,11 +443,11 @@ let optionen = {
 
   // die Einstellungen im Einstellungen-Fenster nach dem Empfangen von Optionen anpassen
   anwendenEinstellungen () {
-    let ee = document.querySelectorAll("#einstellungen input");
+    const ee = document.querySelectorAll("#einstellungen input");
     for (let i = 0, len = ee.length; i < len; i++) {
-      let e = ee[i].id.replace(/^einstellung-/, "");
+      const e = ee[i].id.replace(/^einstellung-/, "");
       if (ee[i].type === "checkbox") {
-        ee[i].checked = optionen.data.einstellungen[e] ? true : false;
+        ee[i].checked = optionen.data.einstellungen[e];
       } else if (e === "sprache") {
         for (const [ k, v ] of Object.entries(optionen.sprachen)) {
           if (v === optionen.data.einstellungen.sprache) {
@@ -481,7 +481,7 @@ let optionen = {
   //   input = Element
   //     (die zugehörige Checkbox in den Einstellungen)
   anwendenNotizenFilterleiste (input) {
-    input.addEventListener("change", function() {
+    input.addEventListener("change", function () {
       if (this.checked) {
         notizen.filterleiste();
       } else {
@@ -510,7 +510,7 @@ let optionen = {
   //   input = Element
   //     (die zugehörige Checkbox in den Einstellungen)
   anwendenIconsDetailsListener (input) {
-    input.addEventListener("change", function() {
+    input.addEventListener("change", function () {
       optionen.data.einstellungen["anzeige-icons-immer-an"] = this.checked;
       optionen.speichern();
       optionen.anwendenIconsDetails();
@@ -519,7 +519,7 @@ let optionen = {
 
   // Icons für die Detail-Anzeige im Kopf der Belegliste ggf. immer sichtbar
   anwendenIconsDetails () {
-    let iconsDetails = document.querySelector(".liste-opt-anzeige");
+    const iconsDetails = document.querySelector(".liste-opt-anzeige");
     if (optionen.data.einstellungen["anzeige-icons-immer-an"]) {
       iconsDetails.classList.add("liste-opt-anzeige-an");
     } else {
@@ -529,7 +529,7 @@ let optionen = {
 
   // Farbe sehr heller Elemente anpassen (Listener)
   anwendenHelleDunklerListener (input) {
-    input.addEventListener("change", function() {
+    input.addEventListener("change", function () {
       optionen.data.einstellungen["helle-dunkler"] = this.checked;
       optionen.speichern();
       optionen.anwendenHelleDunkler();
@@ -552,14 +552,14 @@ let optionen = {
 
   // bekannte Typen von Tag-Dateien
   tagsTypen: {
-    gebrauchszeitraum: ["Gebrauchszeitraum", "Gebrauchszeiträume"],
-    regiolekte: ["Regiolekt", "Regiolekte"],
-    register: ["Register", "Register"],
-    sachgebiete: ["Sachgebiet", "Sachgebiete"],
-    soziolekte: ["Soziolekt", "Soziolekte"],
-    sprachen: ["Sprache", "Sprachen"],
-    standardvarietät: ["Standardvarietät", "Standardvarietäten"],
-    themenfelder: ["Themenfeld", "Themenfelder"],
+    gebrauchszeitraum: [ "Gebrauchszeitraum", "Gebrauchszeiträume" ],
+    regiolekte: [ "Regiolekt", "Regiolekte" ],
+    register: [ "Register", "Register" ],
+    sachgebiete: [ "Sachgebiet", "Sachgebiete" ],
+    soziolekte: [ "Soziolekt", "Soziolekte" ],
+    sprachen: [ "Sprache", "Sprachen" ],
+    standardvarietät: [ "Standardvarietät", "Standardvarietäten" ],
+    themenfelder: [ "Themenfeld", "Themenfelder" ],
   },
 
   // Check der Tag-Dateien beim Starten der App
@@ -578,17 +578,17 @@ let optionen = {
         return;
       }
       // Tag-Dateien abgleichen
-      let promises = [];
-      for (let typ in optionen.data.tags) {
+      const promises = [];
+      for (const typ in optionen.data.tags) {
         if (!optionen.data.tags.hasOwnProperty(typ)) {
           continue;
         }
         promises.push(optionen.tagsCheckLaden({
-          typ: typ,
+          typ,
           datei: optionen.data.tags[typ].datei,
         }));
       }
-      Promise.all(promises).then((result) => {
+      Promise.all(promises).then(result => {
         if (result.includes(true)) { // wenn mindestens eine Datei normal überprüft wurde
           optionen.speichern();
         }
@@ -603,12 +603,12 @@ let optionen = {
   //   checkTyp = String || undefined
   //     (der Typ der Tag-Datei, der manuell überprüft wurde)
   anwendenTags (check = false, checkTyp = "") {
-    let cont = document.getElementById("tags-cont");
+    const cont = document.getElementById("tags-cont");
     cont.replaceChildren();
     // Tabelle erstellen
-    let table = document.createElement("table");
+    const table = document.createElement("table");
     cont.appendChild(table);
-    for (let typ in optionen.data.tags) {
+    for (const typ in optionen.data.tags) {
       if (!optionen.data.tags.hasOwnProperty(typ)) {
         continue;
       }
@@ -647,7 +647,7 @@ let optionen = {
       td.title = pfad;
       // Fehler-Markierung
       if (optionen.tagsFehlerMeldungen[typ]) {
-        let img = document.createElement("img");
+        const img = document.createElement("img");
         td.insertBefore(img, td.firstChild);
         img.dataset.typ = typ;
         img.src = "img/x-dick-rot.svg";
@@ -661,9 +661,9 @@ let optionen = {
       table.appendChild(tr);
       td = document.createElement("td");
       tr.appendChild(td);
-      let tableSub = document.createElement("table");
+      const tableSub = document.createElement("table");
       td.appendChild(tableSub);
-      let trSub = document.createElement("tr");
+      const trSub = document.createElement("tr");
       tableSub.appendChild(trSub);
       // Anzahl
       let tdSub = document.createElement("td");
@@ -677,7 +677,7 @@ let optionen = {
       if (!optionen.tagsTypen[typ]) {
         text = len === 1 ? "Tag" : "Tags";
       } else {
-        let typen = optionen.tagsTypen[typ];
+        const typen = optionen.tagsTypen[typ];
         text = len === 1 ? typen[0] : typen[1];
       }
       a.textContent = `${len} ${text}`;
@@ -700,9 +700,9 @@ let optionen = {
     tooltip.init(cont);
     // keine Tag-Dateien vorhanden
     if (!table.hasChildNodes()) {
-      let tr = document.createElement("tr");
+      const tr = document.createElement("tr");
       table.appendChild(tr);
-      let td = document.createElement("td");
+      const td = document.createElement("td");
       tr.appendChild(td);
       td.classList.add("tags-leer");
       td.textContent = "keine Tag-Dateien";
@@ -713,7 +713,7 @@ let optionen = {
   //   a = Element
   //     (Reload-Icon)
   anwendenTagsAnimation (a) {
-    a.addEventListener("animationend", function() {
+    a.addEventListener("animationend", function () {
       this.classList.remove("rotieren-bitte");
     });
     setTimeout(() => a.classList.add("rotieren-bitte"), 250);
@@ -728,11 +728,11 @@ let optionen = {
       resources = `${resources.replace(/node_modules.+/, "")}resources`;
     }
     // XML-Dateien ermitteln => Dateien überprüfen + laden
-    let xml = [],
-      promises = [];
-    modules.fsp.readdir(resources, {withFileTypes: true})
+    const xml = [];
+    const promises = [];
+    modules.fsp.readdir(resources, { withFileTypes: true })
       .then(dateien => {
-        for (let dirent of dateien) {
+        for (const dirent of dateien) {
           if (dirent.isFile() && /\.xml$/.test(dirent.name)) {
             xml.push(dirent.name);
           }
@@ -759,13 +759,13 @@ let optionen = {
   //     (Pfad zur XML-Datei, die überprüft werden soll)
   //   typ = String || undefined
   //     (Typ der Datei, entspricht dem Namen des Wurzelelements)
-  tagsCheckLaden ({datei, typ = "-"}) {
-    return new Promise((resolve) => {
-      modules.fsp.readFile(datei, {encoding: "utf8"})
+  tagsCheckLaden ({ datei, typ = "-" }) {
+    return new Promise(resolve => {
+      modules.fsp.readFile(datei, { encoding: "utf8" })
         .then(content => {
           // Datei parsen
-          let parsed = optionen.tagsParsen(content),
-            xml = parsed[0];
+          const parsed = optionen.tagsParsen(content);
+          const xml = parsed[0];
           if (!xml) {
             resolve(false);
             return;
@@ -775,19 +775,19 @@ let optionen = {
           if (typ === "-") {
             typ = xmlTyp;
           } else if (typ !== xmlTyp) {
-            optionen.tagsFehlerMeldungen[typ] = `<abbr title="Extensible Markup Language">XML</span>-Dateityp geändert`;
+            optionen.tagsFehlerMeldungen[typ] = '<abbr title="Extensible Markup Language">XML</span>-Dateityp geändert';
             resolve(false);
             return;
           }
           // Items auslesen
-          let tagsNeu = {},
-            update = false;
-          xml.querySelectorAll("item").forEach(function(i) {
-            const id = i.querySelector("id").firstChild.nodeValue,
-              name = i.querySelector("name").firstChild.nodeValue;
-            let abbr = i.querySelector("abbr");
+          const tagsNeu = {};
+          let update = false;
+          xml.querySelectorAll("item").forEach(function (i) {
+            const id = i.querySelector("id").firstChild.nodeValue;
+            const name = i.querySelector("name").firstChild.nodeValue;
+            const abbr = i.querySelector("abbr");
             tagsNeu[id] = {
-              name: name,
+              name,
             };
             if (abbr) {
               tagsNeu[id].abbr = abbr.firstChild.nodeValue;
@@ -795,8 +795,8 @@ let optionen = {
           });
           // Einlesen
           if (optionen.data.tags[typ]) { // Typ existiert => Änderungen ggf. übernehmen
-            let data = optionen.data.tags[typ].data;
-            for (let id in data) { // veraltete Einträge löschen
+            const data = optionen.data.tags[typ].data;
+            for (const id in data) { // veraltete Einträge löschen
               if (!data.hasOwnProperty(id)) {
                 continue;
               }
@@ -805,7 +805,7 @@ let optionen = {
                 delete data[id];
               }
             }
-            for (let id in tagsNeu) { // neue Einträge anlegen, geänderte auffrischen
+            for (const id in tagsNeu) { // neue Einträge anlegen, geänderte auffrischen
               if (!tagsNeu.hasOwnProperty(id)) {
                 continue;
               }
@@ -814,7 +814,7 @@ let optionen = {
                   data[id].abbr !== tagsNeu[id].abbr) {
                 update = true;
                 data[id] = {
-                  name: tagsNeu[id].name
+                  name: tagsNeu[id].name,
                 };
                 if (tagsNeu[id].abbr) {
                   data[id].abbr = tagsNeu[id].abbr;
@@ -825,7 +825,7 @@ let optionen = {
             update = true;
             optionen.data.tags[typ] = {
               data: tagsNeu, // Daten
-              datei: datei, // Pfad zur Datei
+              datei, // Pfad zur Datei
               abgleich: "", // Datum letzter Abgleich
               update: "", // Datum letztes Update
             };
@@ -851,12 +851,12 @@ let optionen = {
   //   a = Element
   //     (Reload-Icon)
   tagsManuCheck (a) {
-    a.addEventListener("click", function(evt) {
+    a.addEventListener("click", function (evt) {
       evt.preventDefault();
       const typ = this.dataset.typ;
       optionen.tagsCheckLaden({
         datei: optionen.data.tags[typ].datei,
-        typ: typ,
+        typ,
       })
         .then(result => {
           if (result === true) { // Datei wurde normal überprüft
@@ -869,28 +869,26 @@ let optionen = {
 
   // Tag-Datei manuell laden
   async tagsManuLaden () {
-    let opt = {
+    const opt = {
       title: "Tag-Datei laden",
       defaultPath: appInfo.documents,
       filters: [
         {
           name: "XML-Dateien",
-          extensions: ["xml"],
+          extensions: [ "xml" ],
         },
         {
           name: "Alle Dateien",
-          extensions: ["*"],
+          extensions: [ "*" ],
         },
       ],
-      properties: [
-        "openFile",
-      ],
+      properties: [ "openFile" ],
     };
     // Dialog anzeigen
-    let result = await modules.ipc.invoke("datei-dialog", {
+    const result = await modules.ipc.invoke("datei-dialog", {
       open: true,
       winId: winInfo.winId,
-      opt: opt,
+      opt,
     });
     // Fehler oder keine Datei ausgewählt
     if (result.message || !Object.keys(result).length) {
@@ -903,12 +901,12 @@ let optionen = {
       return;
     }
     // Datei laden
-    modules.fsp.readFile(result.filePaths[0], {encoding: "utf8"})
+    modules.fsp.readFile(result.filePaths[0], { encoding: "utf8" })
       .then(content => {
         // Tag-Datei parsen
-        let parsed = optionen.tagsParsen(content),
-          xml = parsed[0],
-          typ = parsed[1];
+        const parsed = optionen.tagsParsen(content);
+        const xml = parsed[0];
+        const typ = parsed[1];
         if (!xml) {
           optionen.tagsFehler(typ);
           return;
@@ -920,13 +918,13 @@ let optionen = {
           abgleich: new Date().toISOString(), // Datum letzter Abgleich
           update: new Date().toISOString(), // Datum letztes Update
         };
-        let data = optionen.data.tags[typ].data;
-        xml.querySelectorAll("item").forEach(function(i) {
-          const id = i.querySelector("id").firstChild.nodeValue,
-            name = i.querySelector("name").firstChild.nodeValue;
-          let abbr = i.querySelector("abbr");
+        const data = optionen.data.tags[typ].data;
+        xml.querySelectorAll("item").forEach(function (i) {
+          const id = i.querySelector("id").firstChild.nodeValue;
+          const name = i.querySelector("name").firstChild.nodeValue;
+          const abbr = i.querySelector("abbr");
           data[id] = {
-            name: name,
+            name,
           };
           if (abbr) {
             data[id].abbr = abbr.firstChild.nodeValue;
@@ -950,30 +948,30 @@ let optionen = {
   //   content = String
   //     (Inhalt der geladenen Tag-Datei)
   tagsParsen (content) {
-    let parser = new DOMParser(),
-      xml = parser.parseFromString(content, "text/xml"),
-      typ = xml.documentElement.nodeName;
+    const parser = new DOMParser();
+    const xml = parser.parseFromString(content, "text/xml");
+    const typ = xml.documentElement.nodeName;
     // <parsererror>
     if (xml.querySelector("parsererror")) {
-      optionen.tagsFehlerMeldungen[typ] = `<abbr title="Extensible Markup Language">XML</span>-Datei korrupt`;
-      return [null, typ];
+      optionen.tagsFehlerMeldungen[typ] = '<abbr title="Extensible Markup Language">XML</span>-Datei korrupt';
+      return [ null, typ ];
     }
     // kein <item>
     if (!xml.querySelector("item")) {
       optionen.tagsFehlerMeldungen[typ] = "unerwartetes Dateiformat";
-      return [null, typ];
+      return [ null, typ ];
     }
     // Strukturtests
-    let tag_fehlt = "",
-      tag_doppelt = "",
-      tag_unbekannt = "",
-      ids = new Set(),
-      ids_doppelt = [],
-      names = new Set(),
-      names_doppelt = [],
-      abbrs = new Set(),
-      abbrs_doppelt = [];
-    forX: for (let i of xml.querySelectorAll("item")) {
+    let tag_fehlt = "";
+    let tag_doppelt = "";
+    let tag_unbekannt = "";
+    const ids = new Set();
+    let ids_doppelt = [];
+    const names = new Set();
+    let names_doppelt = [];
+    const abbrs = new Set();
+    let abbrs_doppelt = [];
+    forX: for (const i of xml.querySelectorAll("item")) {
       // fehlende Tags, die verpflichtend sind
       if (!i.querySelector("id")) {
         tag_fehlt = "id";
@@ -983,14 +981,14 @@ let optionen = {
         break;
       }
       // doppelt vergebene ID?
-      let id = i.querySelector("id").firstChild.nodeValue;
+      const id = i.querySelector("id").firstChild.nodeValue;
       if (ids.has(id)) {
         ids_doppelt.push(id);
       } else {
         ids.add(id);
       }
       // doppelt vergebener Name?
-      let name = i.querySelector("name").firstChild.nodeValue;
+      const name = i.querySelector("name").firstChild.nodeValue;
       if (names.has(name)) {
         names_doppelt.push(name);
       } else {
@@ -998,7 +996,7 @@ let optionen = {
       }
       // doppelt vergebene Abkürzung?
       if (i.querySelector("abbr")) {
-        let abbr = i.querySelector("abbr").firstChild.nodeValue;
+        const abbr = i.querySelector("abbr").firstChild.nodeValue;
         if (abbrs.has(abbr)) {
           abbrs_doppelt.push(abbr);
         } else {
@@ -1006,13 +1004,13 @@ let optionen = {
         }
       }
       // doppelte eingefügte oder unbekannte Elemente?
-      let elemente = new Set();
-      for (let k of i.childNodes) {
+      const elemente = new Set();
+      for (const k of i.childNodes) {
         if (k.nodeType !== 1) {
           continue;
         }
         const knoten = k.nodeName;
-        if (!["abbr", "id", "name"].includes(knoten)) {
+        if (![ "abbr", "id", "name" ].includes(knoten)) {
           tag_unbekannt = knoten;
           break forX;
         } else if (elemente.has(knoten)) {
@@ -1025,48 +1023,48 @@ let optionen = {
     // Fehlerbehandlung
     if (tag_fehlt) {
       optionen.tagsFehlerMeldungen[typ] = `fehlender &lt;${tag_fehlt}&gt;-Tag`;
-      return [null, typ];
+      return [ null, typ ];
     }
     if (tag_doppelt) {
       optionen.tagsFehlerMeldungen[typ] = `doppelter &lt;${tag_doppelt}&gt;-Tag`;
-      return [null, typ];
+      return [ null, typ ];
     }
     if (tag_unbekannt) {
       optionen.tagsFehlerMeldungen[typ] = `unbekannter &lt;${tag_unbekannt}&gt;-Tag`;
-      return [null, typ];
+      return [ null, typ ];
     }
     if (ids_doppelt.length) {
-      ids_doppelt = [...new Set(ids_doppelt)];
+      ids_doppelt = [ ...new Set(ids_doppelt) ];
       let plural = "s";
       if (ids_doppelt.length === 1) {
         plural = "";
       }
       optionen.tagsFehlerMeldungen[typ] = `doppelte ID${plural}: ${ids_doppelt.join(", ")}`;
-      return [null, typ];
+      return [ null, typ ];
     }
     if (names_doppelt.length) {
-      names_doppelt = [...new Set(names_doppelt)];
+      names_doppelt = [ ...new Set(names_doppelt) ];
       let text = "doppelte Namen: ";
       if (names_doppelt.length === 1) {
         text = "doppelter Name: ";
       }
       optionen.tagsFehlerMeldungen[typ] = text + names_doppelt.join(", ");
-      return [null, typ];
+      return [ null, typ ];
     }
     if (abbrs_doppelt.length) {
-      abbrs_doppelt = [...new Set(abbrs_doppelt)];
+      abbrs_doppelt = [ ...new Set(abbrs_doppelt) ];
       let text = "doppelte Abkürzungen: ";
       if (abbrs_doppelt.length === 1) {
         text = "doppelte Abkürzung: ";
       }
       optionen.tagsFehlerMeldungen[typ] = text + abbrs_doppelt.join(", ");
-      return [null, typ];
+      return [ null, typ ];
     }
     // alles okay => alte Fehler-Meldungen ggf. entfernen + XML-Dokument zurückgeben
     if (optionen.tagsFehlerMeldungen[typ]) {
       delete optionen.tagsFehlerMeldungen[typ];
     }
-    return [xml, typ];
+    return [ xml, typ ];
   },
 
   // Fehlertypen, die beim Einlesen einer Tag-Datei aufgetreten sind
@@ -1074,7 +1072,7 @@ let optionen = {
 
   // Listener für die Fehler-Markierung
   tagsFehlerKlick (img) {
-    img.addEventListener("click", function() {
+    img.addEventListener("click", function () {
       optionen.tagsFehler(this.dataset.typ);
     });
   },
@@ -1093,10 +1091,10 @@ let optionen = {
   //   a = Element
   //     (Lösch-Icon, auf das geklickt wurde)
   tagsLoeschen (a) {
-    a.addEventListener("click", function(evt) {
+    a.addEventListener("click", function (evt) {
       evt.preventDefault();
       const typ = this.dataset.typ;
-      let text = ["Tags", "Tag"];
+      let text = [ "Tags", "Tag" ];
       if (optionen.tagsTypen[typ]) {
         text = Array(2).fill(optionen.tagsTypen[typ][1]);
       }
@@ -1118,11 +1116,11 @@ let optionen = {
   //   a = Element
   //     (Anker, auf den geklickt wurde)
   tagsAnzeigen (a) {
-    a.addEventListener("click", function(evt) {
+    a.addEventListener("click", function (evt) {
       evt.preventDefault();
       const typ = this.dataset.typ;
-      let tags = [];
-      for (let id in optionen.data.tags[typ].data) {
+      const tags = [];
+      for (const id in optionen.data.tags[typ].data) {
         if (!optionen.data.tags[typ].data.hasOwnProperty(id)) {
           continue;
         }
@@ -1137,9 +1135,9 @@ let optionen = {
         typ: "alert",
         text: `<h3>${h3}</h3>\n<div class="dialog-tags-liste"></div>`,
       });
-      let liste = document.querySelector(".dialog-tags-liste");
-      for (let tag of tags) {
-        let p = document.createElement("p");
+      const liste = document.querySelector(".dialog-tags-liste");
+      for (const tag of tags) {
+        const p = document.createElement("p");
         p.textContent = tag;
         liste.appendChild(p);
       }
@@ -1156,7 +1154,7 @@ let optionen = {
           return;
         }
         // Verknüpfungen aufheben
-        for (let typ in optionen.data.tags) {
+        for (const typ in optionen.data.tags) {
           if (!optionen.data.tags.hasOwnProperty(typ)) {
             continue;
           }
@@ -1180,7 +1178,7 @@ let optionen = {
   //     Pfad aus aktueller Kartei extrahieren)
   aendereLetzterPfad (pfad = "") {
     if (!pfad) {
-      let reg = new RegExp(`^.+\\${modules.path.sep}`);
+      const reg = new RegExp(`^.+\\${modules.path.sep}`);
       pfad = kartei.pfad.match(reg)[0];
     }
     optionen.data.letzter_pfad = pfad;
@@ -1189,28 +1187,26 @@ let optionen = {
 
   // Personenliste einlesen
   async aenderePersonenliste () {
-    let opt = {
+    const opt = {
       title: "Personenliste laden",
       defaultPath: appInfo.documents,
       filters: [
         {
           name: "Text-Dateien",
-          extensions: ["txt"],
+          extensions: [ "txt" ],
         },
         {
           name: "Alle Dateien",
-          extensions: ["*"],
+          extensions: [ "*" ],
         },
       ],
-      properties: [
-        "openFile",
-      ],
+      properties: [ "openFile" ],
     };
     // Dialog anzeigen
-    let result = await modules.ipc.invoke("datei-dialog", {
+    const result = await modules.ipc.invoke("datei-dialog", {
       open: true,
       winId: winInfo.winId,
-      opt: opt,
+      opt,
     });
     // Fehler oder keine Datei ausgewählt
     if (result.message || !Object.keys(result).length) {
@@ -1223,7 +1219,7 @@ let optionen = {
       return;
     }
     // Datei laden
-    modules.fsp.readFile(result.filePaths[0], {encoding: "utf8"})
+    modules.fsp.readFile(result.filePaths[0], { encoding: "utf8" })
       .then(content => {
         // Inhalt einlesen und speichern
         optionen.data.personen = [];
@@ -1235,13 +1231,13 @@ let optionen = {
         });
         optionen.speichern();
         // Rückmeldung
-        let fb_obj = function () {
+        const fb_obj = function () {
           const len = optionen.data.personen.length;
           this.personen = len === 1 ? "eine" : len;
           this.verb = len === 1 ? "ist" : "sind";
           this.text = len === 1 ? "Person" : "Personen";
         };
-        let fb = new fb_obj();
+        const fb = new fb_obj();
         // Liste wurde geleert
         if (fb.personen === 0) {
           dialog.oeffnen({
@@ -1272,7 +1268,7 @@ let optionen = {
     if (ele.type === "button") { // Lade-Button für die Personenliste
       return;
     }
-    ele.addEventListener("input", function() {
+    ele.addEventListener("input", function () {
       optionen.aendereEinstellung(this);
     });
     if (ele.id === "einstellung-bearbeiterin") {
@@ -1289,7 +1285,7 @@ let optionen = {
   //     (Element, dessen Wert geändert wurde)
   aendereEinstellung (ele) {
     // Option ermitteln und umstellen
-    let e = ele.id.replace(/^einstellung-/, "");
+    const e = ele.id.replace(/^einstellung-/, "");
     if (ele.type === "checkbox") {
       optionen.data.einstellungen[e] = ele.checked;
     } else if (ele.type === "text" || ele.type === "number") {
@@ -1326,9 +1322,9 @@ let optionen = {
 
   // das Optionen-Fenster öffnen
   oeffnen () {
-    let fenster = document.getElementById("einstellungen");
+    const fenster = document.getElementById("einstellungen");
     overlay.oeffnen(fenster);
-    let inputAktiv = optionen.sektionWechselnInput();
+    const inputAktiv = optionen.sektionWechselnInput();
     // Maximalhöhe des Fensters anpassen
     helfer.elementMaxHeight({
       ele: document.getElementById(inputAktiv.closest("section").id),
@@ -1340,8 +1336,8 @@ let optionen = {
   //     (Link, der für die Sektion steht, in die gewechsel werden soll)
   sektionWechseln (link) {
     // Links im Menü anpassen
-    let menu = document.querySelectorAll("#einstellungen ul a"),
-      sektion = "";
+    const menu = document.querySelectorAll("#einstellungen ul a");
+    let sektion = "";
     for (let i = 0, len = menu.length; i < len; i++) {
       if (menu[i] === link) {
         menu[i].classList.add("aktiv");
@@ -1351,7 +1347,7 @@ let optionen = {
       }
     }
     // Anzeige der Sektionen anpassen
-    let sektionen = document.querySelectorAll("#einstellungen section");
+    const sektionen = document.querySelectorAll("#einstellungen section");
     for (let i = 0, len = sektionen.length; i < len; i++) {
       if (sektionen[i].id === `einstellungen-sec-${sektion}`) {
         sektionen[i].classList.remove("aus");
@@ -1373,7 +1369,7 @@ let optionen = {
   //   a = Element
   //     (Link, auf den geklickt wurde)
   sektionWechselnLink (a) {
-    a.addEventListener("click", function(evt) {
+    a.addEventListener("click", function (evt) {
       evt.preventDefault();
       optionen.sektionWechseln(this);
     });
@@ -1381,7 +1377,7 @@ let optionen = {
 
   // Fokussiert das erste Input-Element der aktuellen Sektion
   sektionWechselnInput () {
-    let input = document.querySelector("#einstellungen section:not(.aus) input");
+    const input = document.querySelector("#einstellungen section:not(.aus) input");
     input.focus();
     return input;
   },
@@ -1391,9 +1387,9 @@ let optionen = {
   //     (Event-Object des keydown)
   naviMenue (evt) {
     // aktives Element ermitteln
-    let links = document.querySelectorAll("#einstellungen li a"),
-      aktiv = document.querySelector("#einstellungen a.aktiv"),
-      pos = -1;
+    const links = document.querySelectorAll("#einstellungen li a");
+    const aktiv = document.querySelector("#einstellungen a.aktiv");
+    let pos = -1;
     for (let i = 0, len = links.length; i < len; i++) {
       if (links[i] === aktiv) {
         pos = i;
@@ -1422,16 +1418,16 @@ let optionen = {
   //     (die Einstellung, die eigentlich geändert werden soll)
   shortcut (label_text, option) {
     // Absatz erzeugen
-    let p = document.createElement("p");
+    const p = document.createElement("p");
     p.classList.add("checkbox");
     // Input
-    let input = document.createElement("input");
+    const input = document.createElement("input");
     p.appendChild(input);
     input.checked = optionen.data.einstellungen[option];
     input.id = "optionen-shortcut";
     input.type = "checkbox";
-    input.addEventListener("change", function() {
-      let ein = document.getElementById(`einstellung-${option}`);
+    input.addEventListener("change", function () {
+      const ein = document.getElementById(`einstellung-${option}`);
       if (this.checked) {
         optionen.data.einstellungen[option] = true;
         ein.checked = true;
@@ -1442,7 +1438,7 @@ let optionen = {
       optionen.speichern();
     });
     // Label
-    let label = document.createElement("label");
+    const label = document.createElement("label");
     label.setAttribute("for", "optionen-shortcut");
     label.textContent = label_text;
     p.appendChild(label);
@@ -1455,17 +1451,17 @@ let optionen = {
   //     (Button, auf den geklickt wurde)
   async sichern (input) {
     // Dialog öffnen
-    let opt = {
+    const opt = {
       title: "Einstellungen ",
       defaultPath: appInfo.documents,
       filters: [
         {
           name: `${appInfo.name} Einstellungen`,
-          extensions: ["zte"],
+          extensions: [ "zte" ],
         },
         {
           name: "Alle Dateien",
-          extensions: ["*"],
+          extensions: [ "*" ],
         },
       ],
     };
@@ -1479,15 +1475,15 @@ let optionen = {
       result = await modules.ipc.invoke("datei-dialog", {
         open: false,
         winId: winInfo.winId,
-        opt: opt,
+        opt,
       });
     } else { // Einstellungen importieren
       opt.title += "importieren";
-      opt.properties = ["openFile"];
+      opt.properties = [ "openFile" ];
       result = await modules.ipc.invoke("datei-dialog", {
         open: true,
         winId: winInfo.winId,
-        opt: opt,
+        opt,
       });
     }
     // Fehler oder nichts ausgewählt

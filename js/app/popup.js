@@ -1,6 +1,6 @@
 "use strict";
 
-let popup = {
+const popup = {
   // speichert die ermittelte Textauswahl
   textauswahl: {
     text: "",
@@ -62,15 +62,15 @@ let popup = {
     // Menü entwerfen
     let items = [];
     if (target === "kopieren") {
-      let selInBeleg = popup.selInBeleg();
+      const selInBeleg = popup.selInBeleg();
       if (selInBeleg) {
         items.push("markieren");
       }
-      items.push({name: "text", sub: ["kopieren", "textReferenz"]});
+      items.push({ name: "text", sub: [ "kopieren", "textReferenz" ] });
       if (selInBeleg) {
-        items.push({name: "xml", sub: ["xmlBeleg", "xmlReferenz"]}, "xmlFenster");
+        items.push({ name: "xml", sub: [ "xmlBeleg", "xmlReferenz" ] }, "xmlFenster");
       } else if (/^(karte|liste)$/.test(helfer.hauptfunktion)) {
-        items.push({name: "xml", sub: ["xmlReferenz"]});
+        items.push({ name: "xml", sub: [ "xmlReferenz" ] });
       }
       if (overlay.oben() === "drucken") {
         items.push("sep", "schliessen", "sep", "belegHinzufuegen");
@@ -86,9 +86,9 @@ let popup = {
         popup.belegeAuflisten(items);
       }
     } else if (target === "textfeld") {
-      items = ["bearbeitenRueckgaengig", "bearbeitenWiederherstellen", "sep", "bearbeitenAusschneiden", "bearbeitenKopieren", "bearbeitenEinfuegen", "bearbeitenAlles"];
+      items = [ "bearbeitenRueckgaengig", "bearbeitenWiederherstellen", "sep", "bearbeitenAusschneiden", "bearbeitenKopieren", "bearbeitenEinfuegen", "bearbeitenAlles" ];
     } else if (target === "quick") {
-      items = ["quickConf"];
+      items = [ "quickConf" ];
       if (kartei.wort) {
         items.push("sep", "belegHinzufuegen");
         popup.belegeAuflisten(items);
@@ -96,43 +96,43 @@ let popup = {
         items.push("sep", "karteiErstellen");
       }
     } else if (target === "wort") {
-      items = ["wort", "sep", "belegHinzufuegen"];
+      items = [ "wort", "sep", "belegHinzufuegen" ];
       popup.belegeAuflisten(items);
     } else if (target === "erinnerungen") {
-      items = ["erinnerungen", "sep", "kopfIconsConf", "sep", "belegHinzufuegen"];
+      items = [ "erinnerungen", "sep", "kopfIconsConf", "sep", "belegHinzufuegen" ];
       popup.belegeAuflisten(items);
     } else if (target === "karteiordner") {
-      items = ["ordnerKartei", "sep", "kopfIconsConf", "sep", "belegHinzufuegen"];
+      items = [ "ordnerKartei", "sep", "kopfIconsConf", "sep", "belegHinzufuegen" ];
       popup.belegeAuflisten(items);
     } else if (target === "redaktion") {
-      items = ["redaktion", "sep", "kopfIconsConf", "sep", "belegHinzufuegen"];
+      items = [ "redaktion", "sep", "kopfIconsConf", "sep", "belegHinzufuegen" ];
       popup.belegeAuflisten(items);
     } else if (target === "notizen") {
-      items = ["notizen", "sep", "kopfIconsConf", "sep", "belegHinzufuegen"];
+      items = [ "notizen", "sep", "kopfIconsConf", "sep", "belegHinzufuegen" ];
       popup.belegeAuflisten(items);
     } else if (target === "lexika") {
-      items = ["lexika", "sep", "kopfIconsConf", "sep", "belegHinzufuegen"];
+      items = [ "lexika", "sep", "kopfIconsConf", "sep", "belegHinzufuegen" ];
       popup.belegeAuflisten(items);
     } else if (target === "kopierfunktion") {
-      items = ["kopierfunktion", "sep", "belegHinzufuegen"];
+      items = [ "kopierfunktion", "sep", "belegHinzufuegen" ];
       popup.belegeAuflisten(items);
     } else if (target === "notizen-conf") {
-      items = ["notizen", "sep", "notizenConf", "sep", "belegHinzufuegen"];
+      items = [ "notizen", "sep", "notizenConf", "sep", "belegHinzufuegen" ];
       popup.belegeAuflisten(items);
     } else if (target === "filter-conf") {
-      items = ["filterConf", "sep", "belegHinzufuegen"];
+      items = [ "filterConf", "sep", "belegHinzufuegen" ];
       popup.belegeAuflisten(items);
     } else if (target === "filter-reset") {
-      items = ["filterReset", "sep", "belegHinzufuegen"];
+      items = [ "filterReset", "sep", "belegHinzufuegen" ];
       popup.belegeAuflisten(items);
     } else if (target === "start-datei") {
-      items = ["karteiEntfernen", "sep", "karteiOeffnen", "ordner", "sep", "karteiErstellen"];
+      items = [ "karteiEntfernen", "sep", "karteiOeffnen", "ordner", "sep", "karteiErstellen" ];
     } else if (target === "link") {
-      let oben = overlay.oben();
+      const oben = overlay.oben();
       if (oben === "stamm") {
         items.push("link", "sep", "schliessen");
       } else if (oben === "red-lit") {
-        items.push("link", "sep", "titelBearbeiten", "titelAufnahmen", {name: "titelAufnahmeCp", sub: ["titelAufnahmeXml", "titelAufnahmeText"]}, {name: "titelReferenzCp", sub: ["titelReferenzXml", "titelReferenzText"]}, "titelSigle", "sep", "literaturConf", "sep", "schliessen");
+        items.push("link", "sep", "titelBearbeiten", "titelAufnahmen", { name: "titelAufnahmeCp", sub: [ "titelAufnahmeXml", "titelAufnahmeText" ] }, { name: "titelReferenzCp", sub: [ "titelReferenzXml", "titelReferenzText" ] }, "titelSigle", "sep", "literaturConf", "sep", "schliessen");
         if (kartei.wort) {
           items.splice(4, 0, "titelXml");
         }
@@ -140,9 +140,9 @@ let popup = {
           items.splice(items.indexOf("titelAufnahmen"), 1, "titelLoeschen");
         }
       } else if (helfer.hauptfunktion === "karte") {
-        items.push("link", "sep", {name: "text", sub: ["textReferenz"]}, {name: "xml", sub: ["xmlReferenz"]}, "sep", "karteikarteConf");
+        items.push("link", "sep", { name: "text", sub: [ "textReferenz" ] }, { name: "xml", sub: [ "xmlReferenz" ] }, "sep", "karteikarteConf");
       } else if (helfer.hauptfunktion === "liste") {
-        items.push("link", "sep", {name: "text", sub: ["textReferenz"]}, {name: "xml", sub: ["xmlReferenz"]}, "sep", "belegBearbeiten", "belegLoeschen", "belegZwischenablage", "belegDuplizieren", "sep", "beleglisteConf");
+        items.push("link", "sep", { name: "text", sub: [ "textReferenz" ] }, { name: "xml", sub: [ "xmlReferenz" ] }, "sep", "belegBearbeiten", "belegLoeschen", "belegZwischenablage", "belegDuplizieren", "sep", "beleglisteConf");
       } else {
         items.push("link");
       }
@@ -151,29 +151,29 @@ let popup = {
         popup.belegeAuflisten(items);
       }
     } else if (target === "beleg") {
-      items = ["belegBearbeiten", "sep", "schliessen", "sep", "belegHinzufuegen"];
+      items = [ "belegBearbeiten", "sep", "schliessen", "sep", "belegHinzufuegen" ];
       popup.belegeAuflisten(items);
     } else if (target === "beleg-einstellungen") {
-      items = ["beleglisteConf", "sep", "belegHinzufuegen"];
+      items = [ "beleglisteConf", "sep", "belegHinzufuegen" ];
       popup.belegeAuflisten(items);
     } else if (target === "beleg-moddel") {
-      items = [{name: "text", sub: ["textReferenz"]}, {name: "xml", sub: ["xmlReferenz"]}, "sep", "belegBearbeiten", "belegLoeschen", "belegZwischenablage", "belegDuplizieren", "sep", "beleglisteConf", "sep", "belegHinzufuegen"];
+      items = [ { name: "text", sub: [ "textReferenz" ] }, { name: "xml", sub: [ "xmlReferenz" ] }, "sep", "belegBearbeiten", "belegLoeschen", "belegZwischenablage", "belegDuplizieren", "sep", "beleglisteConf", "sep", "belegHinzufuegen" ];
       popup.belegeAuflisten(items);
     } else if (target === "anhang") {
-      items = ["anhang", "ordnerAnhang"];
-       if (popup.anhangDateiKopf) {
+      items = [ "anhang", "ordnerAnhang" ];
+      if (popup.anhangDateiKopf) {
         items.push("sep", "anhaengeFenster", "anhaengeAutoErgaenzen", "sep", "kopfIconsConf");
       } else if (popup.anhangDateiListe) {
-        items.push("sep", {name: "text", sub: ["textReferenz"]}, {name: "xml", sub: ["xmlReferenz"]}, "sep", "belegBearbeiten", "belegLoeschen", "belegZwischenablage", "belegDuplizieren", "sep", "beleglisteConf");
+        items.push("sep", { name: "text", sub: [ "textReferenz" ] }, { name: "xml", sub: [ "xmlReferenz" ] }, "sep", "belegBearbeiten", "belegLoeschen", "belegZwischenablage", "belegDuplizieren", "sep", "beleglisteConf");
       } else if (overlay.oben() === "anhaenge") {
         items.push("sep", "schliessen");
       } else if (helfer.hauptfunktion === "karte") {
-        items.push("sep", {name: "text", sub: ["textReferenz"]}, {name: "xml", sub: ["xmlReferenz"]}, "sep", "karteikarteConf");
+        items.push("sep", { name: "text", sub: [ "textReferenz" ] }, { name: "xml", sub: [ "xmlReferenz" ] }, "sep", "karteikarteConf");
       }
       items.push("sep", "belegHinzufuegen");
       popup.belegeAuflisten(items);
     } else if (target === "titelaufnahme") {
-      items.push("titelBearbeiten", "titelAufnahmen", {name: "titelAufnahmeCp", sub: ["titelAufnahmeXml", "titelAufnahmeText"]}, {name: "titelReferenzCp", sub: ["titelReferenzXml", "titelReferenzText"]}, "titelSigle", "sep", "literaturConf", "sep", "schliessen");
+      items.push("titelBearbeiten", "titelAufnahmen", { name: "titelAufnahmeCp", sub: [ "titelAufnahmeXml", "titelAufnahmeText" ] }, { name: "titelReferenzCp", sub: [ "titelReferenzXml", "titelReferenzText" ] }, "titelSigle", "sep", "literaturConf", "sep", "schliessen");
       if (kartei.wort) {
         items.splice(2, 0, "titelXml");
       }
@@ -185,7 +185,7 @@ let popup = {
         popup.belegeAuflisten(items);
       }
     } else if (target === "schliessen") {
-      items = ["schliessen"];
+      items = [ "schliessen" ];
       if (popup.overlayID === "notizen") {
         items.push("sep", "notizenConf");
       } else if (popup.overlayID === "tagger" ||
@@ -202,7 +202,7 @@ let popup = {
         popup.belegeAuflisten(items);
       }
     } else if (target === "kartei-pfad") {
-      items = ["karteiOeffnen", "ordnerKartei", "sep", "schliessen"];
+      items = [ "karteiOeffnen", "ordnerKartei", "sep", "schliessen" ];
       if (kartei.wort) {
         items.push("sep", "belegHinzufuegen");
         popup.belegeAuflisten(items);
@@ -210,19 +210,19 @@ let popup = {
     } else if (target === "beleg-conf") {
       popup.referenz.data = beleg.data;
       popup.referenz.id = "" + beleg.id_karte;
-      items = [{name: "text", sub: ["textReferenz"]}, {name: "xml", sub: ["xmlReferenz"]}, "sep", "karteikarteConf", "sep", "belegHinzufuegen"];
+      items = [ { name: "text", sub: [ "textReferenz" ] }, { name: "xml", sub: [ "xmlReferenz" ] }, "sep", "karteikarteConf", "sep", "belegHinzufuegen" ];
       popup.belegeAuflisten(items);
     } else if (target === "bedeutungen-conf") {
-      items = ["bedeutungenConf", "sep", "belegHinzufuegen"];
+      items = [ "bedeutungenConf", "sep", "belegHinzufuegen" ];
       popup.belegeAuflisten(items);
     } else if (target === "kopf") {
-      items = ["anhaengeFenster", "anhaengeAutoErgaenzen", "sep", "belegHinzufuegen"];
+      items = [ "anhaengeFenster", "anhaengeAutoErgaenzen", "sep", "belegHinzufuegen" ];
       popup.belegeAuflisten(items);
     } else if (target === "belege") {
-      items = ["belegHinzufuegen"];
+      items = [ "belegHinzufuegen" ];
       popup.belegeAuflisten(items);
     } else if (target === "kartei") {
-      items = ["karteiErstellen"];
+      items = [ "karteiErstellen" ];
     }
     // Menü vom Main-Prozess erzeugen lassen
     modules.ipc.invoke("popup", items);
@@ -321,7 +321,7 @@ let popup = {
           return "start-datei";
         } else if (pfad[i].classList.contains("link")) {
           popup.element = pfad[i];
-          let oben = overlay.oben();
+          const oben = overlay.oben();
           if (oben === "red-lit") {
             popup.titelaufnahme.ds = JSON.parse(pfad[i].closest(".red-lit-snippet").dataset.ds);
             popup.titelaufnahme.popup = pfad[i].closest("#red-lit-popup");
@@ -400,12 +400,12 @@ let popup = {
   getTargetSelection (pfad) {
     // ermitteln, ob der ausgewählte Text in einem Bereicht steht,
     // der berücksichtigt werden soll ("liste-details" oder "beleg-lese")
-    let sel = window.getSelection(),
-      bereich = false,
-      ele = sel.anchorNode,
-      bs = false, // true, wenn die Textauswahl innerhalb des Belegs ist
-      obj = {};
-    let container = {
+    const sel = window.getSelection();
+    let bereich = false;
+    let ele = sel.anchorNode;
+    let bs = false; // true, wenn die Textauswahl innerhalb des Belegs ist
+    let obj = {};
+    const container = {
       umfeld: "",
       id: "",
     };
@@ -448,7 +448,7 @@ let popup = {
     // (auch wenn Text markiert ist, stehen verschiedene andere Funktion zur
     // Verfügung, die die ID unbedingt brauchen)
     if (helfer.hauptfunktion === "liste") {
-      let details = ele.closest(".liste-details");
+      const details = ele.closest(".liste-details");
       if (details) {
         popup.belegID = details.previousSibling.dataset.id;
       }
@@ -468,8 +468,8 @@ let popup = {
     // Kopie des ausgewählten Texts ermitteln und zwischenspeichern;
     // Kopieranweisung geben
     if (bereich && umfeld) {
-      let range = sel.getRangeAt(0),
-        container = document.createElement("div");
+      const range = sel.getRangeAt(0);
+      const container = document.createElement("div");
       container.appendChild(range.cloneContents());
       // Text aufbereiten
       let text = container.innerHTML.replace(/<br>/g, "__br__");
@@ -478,8 +478,8 @@ let popup = {
       text = text.replace(/\n/g, "\n\n");
       text = text.replace(/__br__/g, "\n");
       // HTML aufbereiten
-      let html = "",
-        xml = "";
+      let html = "";
+      let xml = "";
       if (container.firstChild.nodeType === 1 &&
           container.firstChild.nodeName === "P") {
         html = container.innerHTML;
@@ -497,11 +497,11 @@ let popup = {
       }
       xml = helfer.clipboardXml(xml);
       if (bs) {
-        text = beleg.toolsKopierenKlammern({text});
+        text = beleg.toolsKopierenKlammern({ text });
         text = helfer.typographie(text);
         text = beleg.toolsKopierenAddQuelle(text, false, obj);
         text = beleg.toolsKopierenAddJahr(text, false);
-        html = beleg.toolsKopierenKlammern({text: html, html: true});
+        html = beleg.toolsKopierenKlammern({ text: html, html: true });
         html = helfer.typographie(html);
         html = beleg.toolsKopierenAddQuelle(html, true, obj);
         html = beleg.toolsKopierenAddJahr(html, true);
@@ -521,8 +521,8 @@ let popup = {
 
   // ermittelt, ob eine Selection innerhalb des Belegtextes ist (Belegliste oder Leseansicht)
   selInBeleg () {
-    let sel = window.getSelection(),
-      anchor = sel.anchorNode;
+    const sel = window.getSelection();
+    let anchor = sel.anchorNode;
     while (!(anchor.nodeName === "DIV" || anchor.nodeName === "TD")) {
       anchor = anchor.parentNode;
     }

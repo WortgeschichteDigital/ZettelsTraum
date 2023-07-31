@@ -1,6 +1,6 @@
 "use strict";
 
-let kopieren = {
+const kopieren = {
   // speichert, ob der Kopiermodus an ist
   an: false,
 
@@ -35,7 +35,7 @@ let kopieren = {
     // Icon im Kopf der Karteikarte einblenden
     document.getElementById("beleg-link-kopieren").classList.remove("aus");
     // Icon im Kopf der Belegliste einblenden
-    let listeLink = document.getElementById("liste-link-kopieren");
+    const listeLink = document.getElementById("liste-link-kopieren");
     listeLink.classList.remove("aus");
     listeLink.nextSibling.classList.remove("kopieren-aus");
     // Icons im Listenkopf einblenden
@@ -70,7 +70,7 @@ let kopieren = {
       // Icon im Kopf der Karteikarte ausblenden
       document.getElementById("beleg-link-kopieren").classList.add("aus");
       // Icon im Kopf der Belegliste ausblenden
-      let listeLink = document.getElementById("liste-link-kopieren");
+      const listeLink = document.getElementById("liste-link-kopieren");
       listeLink.classList.add("aus");
       listeLink.nextSibling.classList.add("kopieren-aus");
       // Icons im Listenkopf ausblenden
@@ -93,7 +93,7 @@ let kopieren = {
   //   a = Element
   //     (das Kopier-Icon im Belegkopf)
   addListe (a) {
-    a.addEventListener("click", function(evt) {
+    a.addEventListener("click", function (evt) {
       evt.preventDefault();
       evt.stopPropagation();
       kopieren.add(this.parentNode.dataset.id);
@@ -104,9 +104,9 @@ let kopieren = {
   //   a = Element
   //     (das Kopier-Icon im Listenkopf)
   addListeAlle (a) {
-    a.addEventListener("click", function(evt) {
+    a.addEventListener("click", function (evt) {
       evt.preventDefault();
-      document.querySelectorAll(".liste-kopf").forEach(function(i) {
+      document.querySelectorAll(".liste-kopf").forEach(function (i) {
         const id = i.dataset.id;
         if (kopieren.belege.includes(id)) {
           return;
@@ -151,19 +151,19 @@ let kopieren = {
   // Belegliste aufbauen
   listeAufbauen () {
     // Liste leeren
-    let cont = document.getElementById("kopieren-liste-cont");
+    const cont = document.getElementById("kopieren-liste-cont");
     cont.replaceChildren();
     // keine Belege zum Kopieren vorgemerkt
     if (!kopieren.belege.length) {
-      let p = document.createElement("p");
+      const p = document.createElement("p");
       cont.appendChild(p);
       p.classList.add("keine");
       p.textContent = "keine Belege ausgewählt";
       return;
     }
     // Liste mit Belegen füllen
-    for (let id of kopieren.belege) {
-      let p = document.createElement("p");
+    for (const id of kopieren.belege) {
+      const p = document.createElement("p");
       cont.appendChild(p);
       // Entfernen-Icon
       let a = document.createElement("a");
@@ -186,7 +186,7 @@ let kopieren = {
   //   a = Element
   //     (das Entfernen-Icon vor dem Beleg in der Liste)
   listeEntfernen (a) {
-    a.addEventListener("click", function(evt) {
+    a.addEventListener("click", function (evt) {
       evt.preventDefault();
       kopieren.belege.splice(kopieren.belege.indexOf(this.dataset.id), 1);
       kopieren.uiText();
@@ -229,7 +229,7 @@ let kopieren = {
     // zuvor geladene Belegedatei löschen
     kopieren.belegedatei = [];
     // Datenfelder abhaken
-    document.querySelectorAll("#kopieren-einfuegen-formular input").forEach(function(i) {
+    document.querySelectorAll("#kopieren-einfuegen-formular input").forEach(function (i) {
       const feld = i.id.replace(/.+-/, "");
       i.checked = optionen.data.kopieren[feld];
     });
@@ -245,7 +245,7 @@ let kopieren = {
   //   input = Element
   //     (eine Checkbox in der Datenfelder-Liste)
   einfuegenDatenfelder (input) {
-    input.addEventListener("input", function() {
+    input.addEventListener("input", function () {
       const feld = this.id.replace(/.+-/, "");
       if (/^(bs|da|qu)$/.test(feld)) {
         this.checked = true;
@@ -288,7 +288,7 @@ let kopieren = {
   //     (Objekt mit Informationen zu den Daten, die kopiert werden können)
   einfuegenBasisdatenEintragen (daten) {
     kopieren.basisdaten = daten; // Struktur der Daten in kopieren.basidatenSenden()
-    let cont = document.getElementById("kopieren-einfuegen-daten");
+    const cont = document.getElementById("kopieren-einfuegen-daten");
     cont.replaceChildren();
     // Zwischenablage auf Daten überprüfen
     kopieren.einfuegenParseClipboard();
@@ -296,7 +296,7 @@ let kopieren = {
     if (!Object.keys(daten).length &&
         !kopieren.belegedatei.length &&
         !kopieren.zwischenablage.length) {
-      let p = document.createElement("p");
+      const p = document.createElement("p");
       cont.appendChild(p);
       p.classList.add("keine");
       p.textContent = "keine Belegquellen gefunden";
@@ -310,8 +310,8 @@ let kopieren = {
         gerueste: [],
         wort: "Belegedatei",
       };
-      for (let beleg of kopieren.belegedatei) {
-        for (let bd of beleg.bd) {
+      for (const beleg of kopieren.belegedatei) {
+        for (const bd of beleg.bd) {
           if (!daten.belegedatei.gerueste.includes(bd.gr)) {
             daten.belegedatei.gerueste.push(bd.gr);
           }
@@ -326,7 +326,7 @@ let kopieren = {
         gerueste: [],
         wort: "Zwischenablage",
       };
-      for (let bd of kopieren.zwischenablage[0].bd) {
+      for (const bd of kopieren.zwischenablage[0].bd) {
         if (!daten.zwischenablage.gerueste.includes(bd.gr)) {
           daten.zwischenablage.gerueste.push(bd.gr);
         }
@@ -334,8 +334,8 @@ let kopieren = {
       daten.zwischenablage.gerueste.sort();
     }
     // Datensätze sortieren;
-    let ds = Object.keys(daten);
-    ds.sort(function(a, b) {
+    const ds = Object.keys(daten);
+    ds.sort(function (a, b) {
       if (a === "belegedatei") {
         return -1;
       } else if (b === "belegedatei") {
@@ -346,7 +346,7 @@ let kopieren = {
       } else if (b === "zwischenablage") {
         return 1;
       }
-      let x = [a, b];
+      const x = [ a, b ];
       x.sort();
       if (x[0] === a) {
         return -1;
@@ -354,16 +354,16 @@ let kopieren = {
       return 1;
     });
     // Belegquellen aufbauen
-    let ausgewaehlt = false,
-      id_aktiv = "";
+    let ausgewaehlt = false;
+    let id_aktiv = "";
     for (let i = 0, len = ds.length; i < len; i++) {
       const id = ds[i];
       // Absatz
-      let p = document.createElement("p");
+      const p = document.createElement("p");
       cont.appendChild(p);
       kopieren.einfuegenDatensatzWaehlen(p);
       // Input
-      let input = document.createElement("input");
+      const input = document.createElement("input");
       p.appendChild(input);
       input.id = `kopieren-kartei-${id}`;
       input.type = "radio";
@@ -375,7 +375,7 @@ let kopieren = {
       }
       // Wort
       if (/^[0-9]+$/.test(id)) {
-        let i = document.createElement("i");
+        const i = document.createElement("i");
         i.textContent = daten[id].wort;
         p.appendChild(i);
       } else {
@@ -420,11 +420,11 @@ let kopieren = {
   //   ele = Element
   //     (der Absatz, hinter dem sich der Datensatz verbirgt)
   einfuegenDatensatzWaehlen (ele) {
-    ele.addEventListener("click", function() {
-      let ps = document.querySelectorAll("#kopieren-einfuegen-daten p"),
-        id_aktiv = "";
-      for (let p of ps) {
-        let input = p.querySelector("input");
+    ele.addEventListener("click", function () {
+      const ps = document.querySelectorAll("#kopieren-einfuegen-daten p");
+      let id_aktiv = "";
+      for (const p of ps) {
+        const input = p.querySelector("input");
         if (p === this) {
           input.checked = true;
           id_aktiv = input.value;
@@ -440,7 +440,7 @@ let kopieren = {
   //   id_aktiv = String
   //     (ID des aktiven Datensatzes, kann leer sein)
   einfuegenBasisdatenBedeutungen (id_aktiv) {
-    let cont = document.getElementById("kopieren-einfuegen-bedeutungen");
+    const cont = document.getElementById("kopieren-einfuegen-bedeutungen");
     cont.replaceChildren();
     // Gerüste ermitteln
     let gerueste = [];
@@ -450,18 +450,18 @@ let kopieren = {
     // es könnte sein, dass die ausgewählten Belege keine Bedeutungen haben =>
     // dann werden auch keine Bedeutungsgerüste gefunden
     if (!gerueste.length) {
-      let p = document.createElement("p");
+      const p = document.createElement("p");
       cont.appendChild(p);
       p.classList.add("keine");
       p.textContent = "keine Bedeutungen gefunden";
       return;
     }
     // Tabelle erzeugen
-    let table = document.createElement("table");
+    const table = document.createElement("table");
     cont.appendChild(table);
     for (let i = 0, len = gerueste.length; i < len; i++) {
       const id = gerueste[i];
-      let tr = document.createElement("tr");
+      const tr = document.createElement("tr");
       table.appendChild(tr);
       // Gerüst-ID
       let td = document.createElement("td");
@@ -470,7 +470,7 @@ let kopieren = {
       // Pfeil
       td = document.createElement("td");
       tr.appendChild(td);
-      let img = document.createElement("img");
+      const img = document.createElement("img");
       td.appendChild(img);
       img.src = "img/pfeil-gerade-rechts.svg";
       img.width = "24";
@@ -479,7 +479,7 @@ let kopieren = {
       td = document.createElement("td");
       tr.appendChild(td);
       td.classList.add("dropdown-cont");
-      let input = document.createElement("input");
+      const input = document.createElement("input");
       td.appendChild(input);
       input.classList.add("dropdown-feld");
       input.id = `kopieren-geruest-${id}`;
@@ -492,7 +492,7 @@ let kopieren = {
         input.value = "kein Import";
       }
       dropdown.feld(input);
-      let a = dropdown.makeLink("dropdown-link-td", "Bedeutungsgerüst auswählen");
+      const a = dropdown.makeLink("dropdown-link-td", "Bedeutungsgerüst auswählen");
       td.appendChild(a);
     }
     tooltip.init(cont);
@@ -501,9 +501,9 @@ let kopieren = {
   // Einfügen aus der gewünschten Datenquelle wird angestoßen
   einfuegenAusfuehren () {
     // ermitteln, aus welcher Quelle eingefügt werden soll
-    let quellen = document.querySelectorAll("#kopieren-einfuegen-daten input"),
-      quelle = "";
-    for (let i of quellen) {
+    const quellen = document.querySelectorAll("#kopieren-einfuegen-daten input");
+    let quelle = "";
+    for (const i of quellen) {
       if (i.checked) {
         quelle = i.value;
         break;
@@ -534,16 +534,16 @@ let kopieren = {
   //     (der übergebene Beleg soll dupliziert werden)
   async einfuegenEinlesen (daten, duplikat = false) {
     // Bedeutungsmapper (welche Bedeutungen in welche Gerüste kommen)
-    let bdMap = {};
+    const bdMap = {};
     if (duplikat) {
-      Object.keys(data.bd.gr).forEach(function(i) {
+      Object.keys(data.bd.gr).forEach(function (i) {
         bdMap[i] = i;
       });
     } else {
-      document.querySelectorAll("#kopieren-einfuegen-bedeutungen input").forEach(function(i) {
+      document.querySelectorAll("#kopieren-einfuegen-bedeutungen input").forEach(function (i) {
         const idQuelle = i.id.replace(/.+-/, "");
-        let idZiel = "",
-          wert = i.value.match(/^Gerüst ([0-9]+)/);
+        let idZiel = "";
+        const wert = i.value.match(/^Gerüst ([0-9]+)/);
         if (wert) {
           idZiel = wert[1];
         }
@@ -551,16 +551,16 @@ let kopieren = {
       });
     }
     // Datenfelder ermitteln, die importiert werden sollen
-    let ds = ["bx"]; // "bs" (Beleg) wird immer importiert => Beleg-XML auch immer importieren
-    document.querySelectorAll("#kopieren-einfuegen-formular input").forEach(function(i) {
+    const ds = [ "bx" ]; // "bs" (Beleg) wird immer importiert => Beleg-XML auch immer importieren
+    document.querySelectorAll("#kopieren-einfuegen-formular input").forEach(function (i) {
       if (!i.checked && !duplikat) {
         return;
       }
       ds.push(i.id.replace(/.+-/, ""));
     });
     // neue Karten anlegen
-    let fehler_bedeutungen = new Set(),
-      id_karte_duplikat = 0;
+    const fehler_bedeutungen = new Set();
+    let id_karte_duplikat = 0;
     for (let i = 0, len = daten.length; i < len; i++) {
       // eine neue Karte erzeugen
       const id_karte = beleg.idErmitteln();
@@ -578,7 +578,7 @@ let kopieren = {
           continue;
         }
         if (ds[j] === "bd") { // Bedeutungen
-          for (let k of daten[i].bd) { // sind keine Bedeutungen eingetragen, wird diese Schleife einfach nicht ausgeführt
+          for (const k of daten[i].bd) { // sind keine Bedeutungen eingetragen, wird diese Schleife einfach nicht ausgeführt
             // Sollen Bedeutungen aus diesem Gerüst überhaupt importiert werden?
             //   k.gr = String (die ID des Bedeutungsgerüsts in der Quell-Kartei)
             //   k.bd = String (die Bedeutung, ausgeschrieben mit Hierarchien ": ")
@@ -596,10 +596,10 @@ let kopieren = {
             }
             // Ist die Bedeutung schon vorhanden?
             const schon_vorhanden = bedeutungen.schonVorhanden({
-                bd: data.ka[id_karte].bd,
-                gr: bdMap[k.gr],
-                id: bd.id,
-              });
+              bd: data.ka[id_karte].bd,
+              gr: bdMap[k.gr],
+              id: bd.id,
+            });
             if (schon_vorhanden[0]) {
               continue;
             }
@@ -609,7 +609,7 @@ let kopieren = {
             });
           }
         } else if (Array.isArray(daten[i][ds[j]])) { // eindimensionale Arrays
-          data.ka[id_karte][ds[j]] = [...daten[i][ds[j]]];
+          data.ka[id_karte][ds[j]] = [ ...daten[i][ds[j]] ];
         } else { // Primitiven
           data.ka[id_karte][ds[j]] = daten[i][ds[j]];
         }
@@ -638,8 +638,8 @@ let kopieren = {
     helfer.animation("einfuegen");
     // Gab es Fehler beim Importieren der Bedeutungen?
     if (fehler_bedeutungen.size) {
-      let fehler_belege = [];
-      for (let id of fehler_bedeutungen) {
+      const fehler_belege = [];
+      for (const id of fehler_bedeutungen) {
         fehler_belege.push(liste.detailAnzeigenH3(id.toString()));
       }
       dialog.oeffnen({
@@ -651,7 +651,7 @@ let kopieren = {
 
   // Basisdaten über die Belegmenge und das Fenster an den Main-Prozess senden
   basisdatenSenden () {
-    let daten = {
+    const daten = {
       id: winInfo.winId,
       wort: kartei.wort,
       belege: kopieren.belege.length,
@@ -662,8 +662,8 @@ let kopieren = {
 
   // alle Belegdaten an den Main-Prozess senden
   datenSenden () {
-    let daten = [];
-    for (let id of kopieren.belege) {
+    const daten = [];
+    for (const id of kopieren.belege) {
       daten.push(kopieren.datenBeleg(data.ka[id]));
     }
     modules.ipc.send("kopieren-daten-lieferung", daten);
@@ -673,8 +673,8 @@ let kopieren = {
   //   quelle = Object
   //     (Datenquelle des Belegs)
   datenBeleg (quelle) {
-    let kopie = {};
-    for (let wert in quelle) {
+    const kopie = {};
+    for (const wert in quelle) {
       if (!quelle.hasOwnProperty(wert)) {
         continue;
       }
@@ -700,7 +700,7 @@ let kopieren = {
       }
       // Wert kopieren
       if (Array.isArray(quelle[wert])) {
-        kopie[wert] = [...quelle[wert]];
+        kopie[wert] = [ ...quelle[wert] ];
       } else {
         kopie[wert] = quelle[wert];
       }
@@ -719,12 +719,12 @@ let kopieren = {
       return;
     }
     // Daten zusammentragen
-    let daten = {
+    const daten = {
       bl: [],
       ty: "ztb",
       ve: 2,
     };
-    for (let id of kopieren.belege) {
+    for (const id of kopieren.belege) {
       daten.bl.push(kopieren.datenBeleg(data.ka[id]));
     }
     // Daten in Datei speichern
@@ -732,25 +732,25 @@ let kopieren = {
     if (kopieren.belege.length === 1) {
       num = "Beleg";
     }
-    let opt = {
+    const opt = {
       title: "Belege exportieren",
       defaultPath: modules.path.join(appInfo.documents, `${kartei.wort}, ${kopieren.belege.length} ${num}.ztb`),
       filters: [
         {
           name: `${appInfo.name} Belege`,
-          extensions: ["ztb"],
+          extensions: [ "ztb" ],
         },
         {
           name: "Alle Dateien",
-          extensions: ["*"],
+          extensions: [ "*" ],
         },
       ],
     };
     // Dialog anzeigen
-    let result = await modules.ipc.invoke("datei-dialog", {
+    const result = await modules.ipc.invoke("datei-dialog", {
       open: false,
       winId: winInfo.winId,
-      opt: opt,
+      opt,
     });
     // Fehler oder keine Datei ausgewählt
     if (result.message || !Object.keys(result).length) {
@@ -763,7 +763,7 @@ let kopieren = {
       return;
     }
     // Datei schreiben
-    let ergebnis = await io.schreiben(result.filePath, JSON.stringify(daten));
+    const ergebnis = await io.schreiben(result.filePath, JSON.stringify(daten));
     // beim Speichern ist ein Fehler aufgetreten
     if (ergebnis !== true) {
       dialog.oeffnen({
@@ -776,28 +776,26 @@ let kopieren = {
 
   // Kopierliste aus Datei importieren
   async importieren () {
-    let opt = {
+    const opt = {
       title: "Belege importieren",
       defaultPath: appInfo.documents,
       filters: [
         {
           name: `${appInfo.name} Belege`,
-          extensions: ["ztb"],
+          extensions: [ "ztb" ],
         },
         {
           name: "Alle Dateien",
-          extensions: ["*"],
+          extensions: [ "*" ],
         },
       ],
-      properties: [
-        "openFile",
-      ],
+      properties: [ "openFile" ],
     };
     // Dialog anzeigen
-    let result = await modules.ipc.invoke("datei-dialog", {
+    const result = await modules.ipc.invoke("datei-dialog", {
       open: true,
       winId: winInfo.winId,
-      opt: opt,
+      opt,
     });
     // Fehler oder keine Datei ausgewählt
     if (result.message || !Object.keys(result).length) {

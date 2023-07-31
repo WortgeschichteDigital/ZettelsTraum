@@ -1,6 +1,6 @@
 "use strict";
 
-let bedeutungenWin = {
+const bedeutungenWin = {
   // speichert die contentsId des zugehörigen Bedeutungsgerüst-Fensters
   contentsId: 0,
 
@@ -24,16 +24,13 @@ let bedeutungenWin = {
   },
 
   // Bedeutungsgerüst-Fenster schließen
-  schliessen () {
-    return new Promise(async resolve => {
-      if (!bedeutungenWin.contentsId) {
-        resolve(false);
-        return;
-      }
-      await modules.ipc.invoke("bedeutungen-schliessen", bedeutungenWin.contentsId);
-      bedeutungenWin.contentsId = 0;
-      resolve(true);
-    });
+  async schliessen () {
+    if (!bedeutungenWin.contentsId) {
+      return false;
+    }
+    await modules.ipc.invoke("bedeutungen-schliessen", bedeutungenWin.contentsId);
+    bedeutungenWin.contentsId = 0;
+    return true;
   },
 
   // Daten zusammentragen und an das Bedeutungsgerüst-Fenster schicken
@@ -42,7 +39,7 @@ let bedeutungenWin = {
       return;
     }
     // Daten zusammentragen
-    let daten = {
+    const daten = {
       wort: kartei.wort,
       bd: data.bd,
       contentsId: winInfo.contentsId,

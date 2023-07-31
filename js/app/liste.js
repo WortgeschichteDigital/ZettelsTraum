@@ -1,6 +1,6 @@
 "use strict";
 
-let liste = {
+const liste = {
   // zur Belegliste wechseln (von wo auch immer)
   async wechseln () {
     helfer.hauptfunktion = "liste";
@@ -62,7 +62,7 @@ let liste = {
     // ggf. den neuen Beleg visuell hervorheben
     if (liste.statusNeu) {
       // neuen Beleg markieren
-      let beleg_unsichtbar = markBelegsuche(liste.statusNeu);
+      const beleg_unsichtbar = markBelegsuche(liste.statusNeu);
       // neuer Beleg könnte aufgrund der Filter versteckt sein
       if (beleg_unsichtbar && !optionen.data.einstellungen["nicht-karte-gefiltert"]) {
         dialog.oeffnen({
@@ -71,9 +71,9 @@ let liste = {
         });
         document.getElementById("dialog-text").appendChild(optionen.shortcut("Meldung nicht mehr anzeigen", "nicht-karte-gefiltert"));
       } else if (!beleg_unsichtbar) { // zum Beleg scrollen
-        let id = liste.statusNeu; // wird unten geleert, darum hier zwischenspeichern
-        setTimeout(function() {
-          let scroll = document.querySelector(`.liste-kopf[data-id="${id}"]`).offsetTop - 34; // 34 = Höhe des Listen-Headers
+        const id = liste.statusNeu; // wird unten geleert, darum hier zwischenspeichern
+        setTimeout(function () {
+          const scroll = document.querySelector(`.liste-kopf[data-id="${id}"]`).offsetTop - 34; // 34 = Höhe des Listen-Headers
           window.scrollTo({
             left: 0,
             top: scroll,
@@ -88,7 +88,7 @@ let liste = {
     liste.statusGeaendert = "";
     // Beleg suchen, der neu ist oder geändert wurde
     function markBelegsuche (status) {
-      let beleg = document.querySelector(`.liste-kopf[data-id="${status}"]`);
+      const beleg = document.querySelector(`.liste-kopf[data-id="${status}"]`);
       if (beleg) {
         markSetzen(beleg);
         return false;
@@ -115,11 +115,11 @@ let liste = {
       return;
     }
     // es sind Belege offen => Scroll-Status ermitteln
-    let header = document.querySelector("#liste-belege header").offsetHeight,
-      win = window.scrollY,
-      koepfe = document.querySelectorAll(".liste-kopf");
+    const header = document.querySelector("#liste-belege header").offsetHeight;
+    const win = window.scrollY;
+    const koepfe = document.querySelectorAll(".liste-kopf");
     for (let i = 0, len = koepfe.length; i < len; i++) {
-      let scroll = koepfe[i].offsetTop - header - win;
+      const scroll = koepfe[i].offsetTop - header - win;
       if (scroll >= 0) {
         liste.statusScroll.id = koepfe[i].dataset.id;
         liste.statusScroll.scroll = scroll;
@@ -133,9 +133,9 @@ let liste = {
     if (!liste.statusScroll.id) {
       return;
     }
-    let kopf = document.querySelector(`.liste-kopf[data-id="${liste.statusScroll.id}"]`);
+    const kopf = document.querySelector(`.liste-kopf[data-id="${liste.statusScroll.id}"]`);
     if (kopf) {
-      let header = document.querySelector("#liste-belege header").offsetHeight;
+      const header = document.querySelector("#liste-belege header").offsetHeight;
       window.scrollTo({
         left: 0,
         top: kopf.offsetTop - liste.statusScroll.scroll - header,
@@ -212,7 +212,7 @@ let liste = {
         div.appendChild(a);
         a.href = "#";
         a.classList.add("liste-kopficon", "icon-link");
-        a.textContent = " ";
+        a.textContent = "\u00A0";
         if (j === 0) {
           // Beleg kopieren
           a.classList.add("icon-kopieren");
@@ -286,11 +286,11 @@ let liste = {
   //     (true = Filter müssen neu initialisiert werden)
   aufbauenBasis (filter_init) {
     // Content-Objekt vorbereiten
-    let cont = document.getElementById("liste-belege-cont");
+    const cont = document.getElementById("liste-belege-cont");
     cont.replaceChildren();
     // Anzahl der Belege feststellen
-    let belege = Object.keys(data.ka),
-      belege_anzahl = belege.length;
+    let belege = Object.keys(data.ka);
+    const belege_anzahl = belege.length;
     // Filter ausblenden?
     if (!belege_anzahl) {
       filter.keineFilter(true);
@@ -307,14 +307,14 @@ let liste = {
         // (Wenn sich die Filter durch die Bearbeitung der Karteikarte ändern, kann es sonst
         // passieren, dass kein Filter aktiv ist, aber trotzdem alle Belege herausgefiltert
         // wurden. Kein aktiver Filter, trotzdem keine Belege. Das wäre nicht gut!)
-        filter.aufbauen([...belege]);
+        filter.aufbauen([ ...belege ]);
         belege = filter.kartenFiltern(belege);
-        filter.aufbauen([...belege]);
+        filter.aufbauen([ ...belege ]);
       } else {
         // Wichtig: Erst Filter aufbauen, dann Belege filtern!
         // (Wenn sich die Filter durch die Bearbeitung der Karteikarte ändern, kann es sonst
         // passieren, dass noch Filter aktiv sind, die längst nicht mehr existieren.)
-        filter.aufbauen([...belege]);
+        filter.aufbauen([ ...belege ]);
         belege = filter.kartenFiltern(belege);
       }
     } else {
@@ -328,8 +328,8 @@ let liste = {
 
   // In der Kartei sind keine Belege (mehr) und das sollte auch gezeigt werden.
   aufbauenKeineBelege () {
-    let cont = document.getElementById("liste-belege-cont"),
-      div = document.createElement("div");
+    const cont = document.getElementById("liste-belege-cont");
+    const div = document.createElement("div");
     div.classList.add("liste-kartei-leer");
     div.textContent = "keine Belege";
     cont.appendChild(div);
@@ -349,8 +349,8 @@ let liste = {
     }
     // Anzahl der Belege anzeigen
     cont.classList.remove("aus");
-    let anzahl = "",
-      text = "Beleg";
+    let anzahl = "";
+    let text = "Beleg";
     if (gesamt !== gefiltert) {
       if (gesamt !== 1) {
         text = "Belegen";
@@ -374,9 +374,9 @@ let liste = {
   //     (der Belegkopf, der dem mit der übergebenen ID folgt)
   //   einblenden = true || undefined
   //     (die Detailansicht soll eingeblendet werden)
-  aufbauenDetails ({id, folgekopf, einblenden = false}) {
+  aufbauenDetails ({ id, folgekopf, einblenden = false }) {
     // Detailblock aufbauen
-    let div = document.createElement("div");
+    const div = document.createElement("div");
     div.classList.add("liste-details");
     if (!folgekopf) {
       folgekopf = document.querySelector(`.liste-kopf[data-id="${id}"]`).nextSibling;
@@ -488,8 +488,8 @@ let liste = {
       return true;
     }
     // ermitteln
-    let felder = ["bs", "bd", "bl", "sy", "qu", "kr", "ts", "no"];
-    for (let feld of felder) {
+    const felder = [ "bs", "bd", "bl", "sy", "qu", "kr", "ts", "no" ];
+    for (const feld of felder) {
       if (filter.volltextSuche.ka[id].includes(feld)) {
         return true;
       }
@@ -502,14 +502,14 @@ let liste = {
   //     (das im Datum-Feld des Belegformulars eingetragene Datum)
   zeitschnittErmitteln (datum) {
     // Output-Objekt vorbereiten
-    let output = {
+    const output = {
       datum: "", // Belegdatum, das angezeigt werden soll
       jahr: "", // Jahr, mit dem gerechnet werden kann
       jahrzehnt: -1, // Jahrzehnt für die Zeitschnittanzeige
     };
     // Anzeigedatum und Jahr, mit dem gerechnet wird, ermitteln
     if (/[0-9]{4}/.test(datum) && /[0-9]{2}\.\sJh\./.test(datum)) { // mehrere Datentypen => 1. verwenden
-      let datum_split = datum.split(/\sJh\./);
+      const datum_split = datum.split(/\sJh\./);
       if (/[0-9]{4}/.test(datum_split[0])) {
         datum_vierstellig(datum_split[0]);
       } else {
@@ -534,7 +534,7 @@ let liste = {
       output.jahr = output.datum;
     }
     function datum_jahrhundert (datum) {
-      output.datum = `${datum.match(/([0-9]{2})\.\sJh\./)[1]}. Jh.`;
+      output.datum = `${datum.match(/([0-9]{2})\.\sJh\./)[1]}.\u00A0Jh.`;
       output.jahr = ((parseInt(datum.match(/([0-9]{2})\.\sJh\./)[1], 10) - 1) * 100).toString();
     }
     // Output auswerfen
@@ -546,7 +546,7 @@ let liste = {
   //     (das Jahrzehnt des Zeitschnitts, der erstellt werden soll)
   zeitschnittErstellen (jahrzehnt) {
     // Element erzeugen
-    let div = document.createElement("div");
+    const div = document.createElement("div");
     div.classList.add("liste-zeitschnitt");
     div.textContent = jahrzehnt;
     // dataset erstellen
@@ -565,7 +565,7 @@ let liste = {
   // Anzeige, dass für einen Zeitabschnitt keine Belege vorhanden sind, ggf. ausblenden
   zeitschnitteKeineBelege () {
     // 1. Schritt: Meldungen, nur nach Zeitschnitten einblenden, die angezeigt werden.
-    let zeitschnitte = document.querySelectorAll("#liste-belege-cont .liste-zeitschnitt");
+    const zeitschnitte = document.querySelectorAll("#liste-belege-cont .liste-zeitschnitt");
     for (let i = 0, len = zeitschnitte.length; i < len; i++) {
       if (zeitschnitte[i].classList.contains("aus")) {
         zeitschnitte[i].nextSibling.classList.add("aus");
@@ -575,8 +575,8 @@ let liste = {
     }
     // 2. Schritt: Meldungen, denen irgendwann ein Beleg folgt ausblenden
     for (let i = 0, len = zeitschnitte.length; i < len; i++) {
-      let keine_belege = zeitschnitte[i].nextSibling,
-        naechster_div = keine_belege.nextSibling;
+      const keine_belege = zeitschnitte[i].nextSibling;
+      let naechster_div = keine_belege.nextSibling;
       while (naechster_div.classList.contains("aus")) {
         naechster_div = naechster_div.nextSibling;
       }
@@ -593,9 +593,9 @@ let liste = {
     if (scroll_bak) {
       liste.statusScrollBak();
     }
-    let zeitschnitte = document.querySelectorAll("#liste-belege-cont [data-zeitschnitt]");
+    const zeitschnitte = document.querySelectorAll("#liste-belege-cont [data-zeitschnitt]");
     for (let i = 0, len = zeitschnitte.length; i < len; i++) {
-      let reg = new RegExp(helfer.escapeRegExp(`${optionen.data.belegliste.zeitschnitte}|`));
+      const reg = new RegExp(helfer.escapeRegExp(`${optionen.data.belegliste.zeitschnitte}|`));
       if (reg.test(zeitschnitte[i].dataset.zeitschnitt)) {
         zeitschnitte[i].classList.remove("aus");
       } else {
@@ -717,17 +717,17 @@ let liste = {
   //     (ID des Belegs)
   belegErstellen (id) {
     // <div> für Beleg
-    let div = document.createElement("div");
+    const div = document.createElement("div");
     div.classList.add("liste-bs");
     // Kopierlink erzeugen
-    let a = document.createElement("a");
+    const a = document.createElement("a");
     div.appendChild(a);
     a.classList.add("icon-link", "icon-tools-kopieren");
     a.dataset.ds = `${id}|bs`;
     liste.kopieren(a);
     // ggf. Buchungslink erzeugen
     if (optionen.data.einstellungen["belegliste-buchungsicon"]) {
-      let a = document.createElement("a");
+      const a = document.createElement("a");
       div.appendChild(a);
       a.classList.add("icon-link", "icon-tools-buchen");
       if (data.ka[id].bc) {
@@ -737,18 +737,18 @@ let liste = {
       liste.buchen(a);
     }
     // Absätze erzeugen
-    let prep = liste.belegErstellenPrepP(data.ka[id].bs),
-      p_prep = prep.split("\n"),
-      zuletzt_gekuerzt = false; // true, wenn der vorherige Absatz gekürzt wurde
+    const prep = liste.belegErstellenPrepP(data.ka[id].bs);
+    const p_prep = prep.split("\n");
+    let zuletzt_gekuerzt = false; // true, wenn der vorherige Absatz gekürzt wurde
     for (let i = 0, len = p_prep.length; i < len; i++) {
-      let wortVorhanden = liste.wortVorhanden(p_prep[i]),
-        p = document.createElement("p");
+      const wortVorhanden = liste.wortVorhanden(p_prep[i]);
+      const p = document.createElement("p");
       div.appendChild(p);
       p.dataset.pnumber = i;
       p.dataset.id = id;
       let kuerzungMoeglich = true;
       if (liste.statusSichtbarP[id] &&
-          liste.statusSichtbarP[id].includes( i.toString() )) {
+          liste.statusSichtbarP[id].includes(i.toString())) {
         kuerzungMoeglich = false;
       }
       // Absatz ggf. kürzen
@@ -783,7 +783,7 @@ let liste = {
       } else if (kuerzungMoeglich &&
           optionen.data.belegliste.beleg_kuerzen &&
           !wortVorhanden &&
-          !(filter.aktiveFilter["verschiedenes-annotierung"] && /annotierung-wort/.test(p_prep[i]) ) ) {
+          !(filter.aktiveFilter["verschiedenes-annotierung"] && /annotierung-wort/.test(p_prep[i]))) {
         // ggf. kürzen, wenn
         //   - Wort nicht enthalten
         //   - Annotierungsfilter aktiv und Annotierung nicht vorhanden
@@ -801,7 +801,7 @@ let liste = {
       // ggf. Wort hervorheben
       p_prep[i] = liste.belegWortHervorheben(p_prep[i], false);
       // ggf. Klammerungen markieren
-      p_prep[i] = liste.belegKlammernHervorheben({text: p_prep[i]});
+      p_prep[i] = liste.belegKlammernHervorheben({ text: p_prep[i] });
       // ggf. Suchtreffer hervorheben
       p.innerHTML = liste.suchtreffer(p_prep[i], "bs", id);
       // Absatz normal einhängen
@@ -832,7 +832,7 @@ let liste = {
     p.classList.add("gekuerzt");
     delete p.dataset.pnumber;
     p.appendChild(document.createTextNode("["));
-    let span = document.createElement("span");
+    const span = document.createElement("span");
     span.classList.add("kuerzung");
     p.appendChild(span);
     span.textContent = "einblenden";
@@ -845,17 +845,17 @@ let liste = {
   //   p = Element
   //     (der gekürzte Absatz)
   belegAbsatzEinblenden (p) {
-    p.addEventListener("click", function() {
+    p.addEventListener("click", function () {
       // ermitteln, welcher Absatz eingeblendet werden könnte
-      let k = kontext(this),
-        n = -1;
+      let k = kontext(this);
+      let n = -1;
       if (k.next >= 0 || k.prev >= 0) {
         n = k.next >= 0 ? k.next - 1 : k.prev + 1;
       }
       // ID, Absätze und Text ermitteln
       const id = this.dataset.id ? this.dataset.id : "";
-      let absaetze = [],
-        text = "";
+      let absaetze = [];
+      let text = "";
       if (id) {
         absaetze = data.ka[id].bs.replace(/\n\s*\n/g, "\n").split("\n");
       } else {
@@ -866,33 +866,33 @@ let liste = {
       }
       text = absaetze[n];
       // neuen Absatz erzeugen
-      let p = document.createElement("p");
+      const p = document.createElement("p");
       p.dataset.pnumber = n;
       p.dataset.id = id;
       if (id) {
         text = liste.belegTrennungWeg(text, false);
         text = liste.belegWortHervorheben(text, false);
-        p.innerHTML = liste.belegKlammernHervorheben({text});
+        p.innerHTML = liste.belegKlammernHervorheben({ text });
       } else {
         if (!optionen.data.beleg.trennung) {
           text = liste.belegTrennungWeg(text, true);
         }
         text = liste.belegWortHervorheben(text, true);
-        p.innerHTML = liste.belegKlammernHervorheben({text});
+        p.innerHTML = liste.belegKlammernHervorheben({ text });
       }
       annotieren.init(p);
       // neuen Absatz einhängen
-      const after = k.next >= 0 || k.prev === -1 && k.next === -1 ? true : false;
+      const after = k.next >= 0 || k.prev === -1 && k.next === -1;
       if (after) {
         this.parentNode.insertBefore(p, this.nextSibling);
       } else {
         this.parentNode.insertBefore(p, this);
       }
       // Einblenden animieren
-      let height = p.offsetHeight;
+      const height = p.offsetHeight;
       p.classList.add("einblenden");
       p.style.height = "24px"; // initial Höhe Standardzeile, damit es nicht so springt
-      setTimeout(function() {
+      setTimeout(function () {
         p.style.height = `${height}px`;
         setTimeout(() => {
           // muss mit Timeout gemacht werden; denn "transitionend" wird nicht dispatched,
@@ -914,9 +914,9 @@ let liste = {
       }
       // Nummer des vorherigen und des nachfolgenden Absatzes ermitteln
       function kontext (pKurz) {
-        let prev = pKurz.previousSibling,
-          next = pKurz.nextSibling;
-        let n = {
+        const prev = pKurz.previousSibling;
+        const next = pKurz.nextSibling;
+        const n = {
           prev: -1,
           next: -1,
         };
@@ -944,10 +944,10 @@ let liste = {
     schnitt = liste.belegWortHervorheben(schnitt, true, true); // Wörter hervorheben (Nur-Markieren-Wörter ausschließen);
     // 2. alle Knoten durchgehen und allein die <mark> erhalten;
     // diese aber nur, wenn sie nicht transparent gesetzt wurden
-    let div = document.createElement("div");
+    const div = document.createElement("div");
     div.innerHTML = schnitt;
     let snippet = "";
-    for (let k of div.childNodes) {
+    for (const k of div.childNodes) {
       getText(k);
     }
     function getText (k) {
@@ -956,7 +956,7 @@ let liste = {
           snippet += `<mark class="wort">${k.textContent}</mark>`;
           return;
         }
-        for (let i of k.childNodes) {
+        for (const i of k.childNodes) {
           getText(i);
         }
       } else {
@@ -964,7 +964,7 @@ let liste = {
       }
     }
     // 3. Snippet vorne kürzen, wenn vor dem ersten <mark> viel Text kommt
-    let reg = new RegExp("<mark", "g");
+    const reg = /<mark/g;
     if (reg.test(snippet) && reg.lastIndex - 5 > 35) {
       snippet = `…${snippet.substring(reg.lastIndex - 5 - 25)}`;
     }
@@ -979,26 +979,26 @@ let liste = {
       snippet = snippet.replace(/<.+?>/g, "");
     }
     // Autor und weitere Details
-    let frag = document.createDocumentFragment();
+    const frag = document.createDocumentFragment();
     if (beleg_akt.au) {
-      let autor = helfer.escapeHtml(beleg_akt.au).split(/,(.+)/),
-        autor_span = document.createElement("span");
+      const autor = helfer.escapeHtml(beleg_akt.au).split(/,(.+)/);
+      const autor_span = document.createElement("span");
       frag.appendChild(autor_span);
       autor_span.classList.add("liste-autor-details-block");
       autor_span.innerHTML = liste.suchtreffer(autor[0], "au", id);
       if (autor.length > 1) {
-        let span = document.createElement("span");
+        const span = document.createElement("span");
         span.classList.add("liste-autor-detail");
         span.innerHTML = liste.suchtreffer(`,${autor[1]}`, "au", id);
         autor_span.appendChild(span);
       }
-      liste.belegVorschauFelder(autor_span, beleg_akt, " ", "");
-      autor_span.appendChild(document.createTextNode(": "));
+      liste.belegVorschauFelder(autor_span, beleg_akt, "\u00A0", "");
+      autor_span.appendChild(document.createTextNode(":\u00A0"));
     } else {
-      liste.belegVorschauFelder(frag, beleg_akt, "", " ");
+      liste.belegVorschauFelder(frag, beleg_akt, "", "\u00A0");
     }
     // Textschnitt in Anführungsstriche
-    let q = document.createElement("q");
+    const q = document.createElement("q");
     q.innerHTML = snippet;
     frag.appendChild(q);
     // Fragment zurückgeben
@@ -1016,7 +1016,7 @@ let liste = {
   //     (Text nach der Textsorte)
   belegVorschauFelder (ele, beleg_akt, vor, nach) {
     // Gibt es überhaupt etwas einzutragen?
-    let eintragen = {
+    const eintragen = {
       be: false,
       no: false,
       ts: false,
@@ -1038,10 +1038,10 @@ let liste = {
     ele.appendChild(document.createTextNode(`${vor}(`));
     // Markierung
     if (eintragen.be) {
-      let span = document.createElement("span");
+      const span = document.createElement("span");
       span.classList.add("liste-mark");
       for (let i = 0; i < beleg_akt.be; i++) {
-        let img = document.createElement("img");
+        const img = document.createElement("img");
         span.appendChild(img);
         img.src = "img/stern-gelb.svg";
         img.width = "24";
@@ -1051,7 +1051,7 @@ let liste = {
     }
     // Notiz
     if (eintragen.no) {
-      let span = document.createElement("span");
+      const span = document.createElement("span");
       span.classList.add("liste-notiz");
       if (notiz.length > 35) {
         notiz = `${notiz.substring(0, 30)}…`;
@@ -1061,7 +1061,7 @@ let liste = {
     }
     // Textsorte
     if (eintragen.ts) {
-      let span = document.createElement("span");
+      const span = document.createElement("span");
       span.classList.add("liste-textsorte");
       span.textContent = beleg_akt.ts.split(":")[0];
       ele.appendChild(span);
@@ -1080,7 +1080,7 @@ let liste = {
     if (optionen.data.belegliste.trennung && !immer_weg) {
       return text;
     }
-    text = text.replace(/\[¬\]([A-Z]+)/, function(m, p1) {
+    text = text.replace(/\[¬\]([A-Z]+)/, function (m, p1) {
       return `-${p1}`;
     });
     if (/\] \[:/.test(text)) { // Seitenumbruch, davor kürzbarer Trennstrich
@@ -1093,31 +1093,21 @@ let liste = {
   // die im Belegtext zu finden sind
   //   text = String
   //     (Belegtext, in dem die Klammern markiert werden sollen)
-  belegKlammernHervorheben ({text}) {
+  belegKlammernHervorheben ({ text }) {
     // DTA-Import: Anmerkungen werden an der Stelle, an der der Anker ist,
     // in eckigen Klammern nachgestellt. Schließende Klammer nicht hervorheben!
     // Das macht Probleme, wenn innerhalb der Anmerkung andere Klammern sind.
-    text = text.replace(/\[Anmerkung:/g, `<span class="klammer-anmerkung">[Anmerkung:</span>`);
+    text = text.replace(/\[Anmerkung:/g, '<span class="klammer-anmerkung">[Anmerkung:</span>');
     // DTA-Import: Trenn- oder Bindestrich am Ende einer Zeile
-    text = text.replace(/\[¬\]/g, m => {
-      return `<span class="klammer-technisch">${m}</span>`;
-    });
+    text = text.replace(/\[¬\]/g, m => `<span class="klammer-technisch">${m}</span>`);
     // DTA-Import: Spalten- oder Seitenumbruch
-    text = text.replace(/\[:(.+?):\]/g, (m, p1) => {
-      return `<span class="klammer-technisch">[:${p1}:]</span>`;
-    });
+    text = text.replace(/\[:(.+?):\]/g, (m, p1) => `<span class="klammer-technisch">[:${p1}:]</span>`);
     // Autorenzusatz
-    text = text.replace(/(?<!<span class="klammer-[a-z]+">)\{.*?\}/g, m => {
-      return `<span class="klammer-autorenzusatz">${m}</span>`;
-    });
+    text = text.replace(/(?<!<span class="klammer-[a-z]+">)\{.*?\}/g, m => `<span class="klammer-autorenzusatz">${m}</span>`);
     // Löschung
-    text = text.replace(/(?<!<span class="klammer-[a-z]+">)\[{2}.+?\]{2}/g, m => {
-      return `<span class="klammer-loeschung">${m}</span>`;
-    });
+    text = text.replace(/(?<!<span class="klammer-[a-z]+">)\[{2}.+?\]{2}/g, m => `<span class="klammer-loeschung">${m}</span>`);
     // Streichung
-    text = text.replace(/(?<!<span class="klammer-[a-z]+">\[?)\[.+?\](?!<\/span>)/g, m => {
-      return `<span class="klammer-streichung">${m}</span>`;
-    });
+    text = text.replace(/(?<!<span class="klammer-[a-z]+">\[?)\[.+?\](?!<\/span>)/g, m => `<span class="klammer-streichung">${m}</span>`);
     // Ergebnis zurückgeben
     return text;
   },
@@ -1128,17 +1118,17 @@ let liste = {
   //   immer = Boolean
   //     (das Wort soll immer hervorgehoben werden, egal was in der Option steht)
   //   keinNurMarkieren = true || undefined
-  //     (Wörter, die nur markiert werden sollen, von der Hervorhebung ausschließen) 
+  //     (Wörter, die nur markiert werden sollen, von der Hervorhebung ausschließen)
   belegWortHervorheben (schnitt, immer, keinNurMarkieren = false) {
     // Wort soll nicht hervorgehoben werden
     if (!optionen.data.belegliste.wort_hervorheben && !immer) {
       return schnitt;
     }
-    let farbe = 0,
-      nebenlemma = false,
-      nurMarkieren = false,
-      regNoG = null;
-    for (let i of helfer.formVariRegExpRegs) {
+    let farbe = 0;
+    let nebenlemma = false;
+    let nurMarkieren = false;
+    let regNoG = null;
+    for (const i of helfer.formVariRegExpRegs) {
       if (keinNurMarkieren && data.fv[i.wort].ma && !data.fv[i.wort].nl) {
         continue;
       }
@@ -1164,7 +1154,7 @@ let liste = {
         m = r.groups.wort;
       }
       if (/<.+?>/.test(m)) {
-        m = m.replace(/<.+?>/g, function(m) {
+        m = m.replace(/<.+?>/g, function (m) {
           return `</mark>${m}<mark class="wort">`;
         });
       }
@@ -1175,15 +1165,15 @@ let liste = {
       // alle <mark> ermitteln, die weder Anfang noch Ende sind
       const marks = m.match(/class="wort"/g).length;
       if (marks > 1) { // marks === 1 => der einzige <mark>-Tag ist Anfang und Ende zugleich
-        let splitted = m.split(/class="wort"/);
+        const splitted = m.split(/class="wort"/);
         m = "";
         for (let i = 0, len = splitted.length; i < len; i++) {
           if (i === 0) {
-            m += splitted[i] + `class="wort wort-kein-ende"`;
+            m += splitted[i] + 'class="wort wort-kein-ende"';
           } else if (i === len - 2) {
-            m += splitted[i] + `class="wort wort-kein-start"`;
+            m += splitted[i] + 'class="wort wort-kein-start"';
           } else if (i < len - 1) {
-            m += splitted[i] + `class="wort wort-kein-start wort-kein-ende"`;
+            m += splitted[i] + 'class="wort wort-kein-start wort-kein-ende"';
           } else {
             m += splitted[i];
           }
@@ -1195,13 +1185,13 @@ let liste = {
       }
       // als Neben- oder Hauptlemma markieren
       if (nebenlemma) {
-        m = m.replace(/class="wort/g, `class="wort nebenlemma`);
+        m = m.replace(/class="wort/g, 'class="wort nebenlemma');
       } else {
-        m = m.replace(/class="wort/g, `class="wort hauptlemma`);
+        m = m.replace(/class="wort/g, 'class="wort hauptlemma');
       }
       // ggf. die Markierungsinfo eintragen (wichtig für XML-Export)
       if (nurMarkieren) {
-        m = m.replace(/class="wort/g, `class="wort markierung`);
+        m = m.replace(/class="wort/g, 'class="wort markierung');
       }
       // bei nicht trunkierter Markierung Zeichen links und rechts der Markierung ergänzen
       if (r) {
@@ -1217,38 +1207,38 @@ let liste = {
   //     (Text, der auf die Existenz des Karteiworts überprüft werden soll)
   wortVorhanden (text) {
     // temporäres Element mit hervorgehobenen Karteiwörtern erzeugen
-    let div = document.createElement("div");
+    const div = document.createElement("div");
     div.innerHTML = liste.belegWortHervorheben(text, true);
-    // Test 1: Kommt überhaupt ein Karteiwort im Text vor?
+    // 1. Test: Kommt überhaupt ein Karteiwort im Text vor?
     if (!div.querySelector(".wort")) {
       return false;
     }
-    // Test 2: Sind evtl. alle Treffer des Karteiworts als falschpositive markiert?
-    let marks = div.querySelectorAll(".wort:not(.wort-kein-start)"),
-      transparent = 0;
-    for (let m of marks) {
+    // 2. Test: Sind evtl. alle Treffer des Karteiworts als falschpositive markiert?
+    const marks = div.querySelectorAll(".wort:not(.wort-kein-start)");
+    let transparent = 0;
+    for (const m of marks) {
       if (m.closest(".farbe0")) {
-        // Test ist nur problematisch, wenn ein Karteiwort in eine Textmarkierung eingeschlossen ist, deren Hintergrundfarbe transparent gesetzt wurde; nur: Wer macht sowas?
+        // Dieser Test ist nur problematisch, wenn ein Karteiwort in eine Textmarkierung eingeschlossen ist, deren Hintergrundfarbe transparent gesetzt wurde; nur: Wer macht sowas?
         transparent++;
       }
     }
     if (marks.length === transparent) {
       return false;
     }
-    // Test 3: Ist das Karteiwort mehrgliedrig?
+    // 3. Test: Ist das Karteiwort mehrgliedrig?
     if (helfer.formVariRegExpRegs.length === 1) {
       if (data.fv[helfer.formVariRegExpRegs[0].wort].ma) {
         return false; // nicht okay (das Wort soll nur markiert, aber nicht berücksichtigt werden)
       }
       return true; // alles okay (das Wort taucht auf und soll berücksichtigt werden)
     }
-    // Test 4: Enthält der Absatz ein Nebenlemma?
+    // 4. Test: Enthält der Absatz ein Nebenlemma?
     if (div.querySelector(".nebenlemma")) {
       return true; // Absätze mit min. einem Nebenlemma immer anzeigen
     }
-    // Test 5: Sollen hier überhaupt Wörter berücksichtigt werden?
-    let woerter = [];
-    for (let i of helfer.formVariRegExpRegs) {
+    // 5. Test: Sollen hier überhaupt Wörter berücksichtigt werden?
+    const woerter = [];
+    for (const i of helfer.formVariRegExpRegs) {
       if (data.fv[i.wort].ma || data.fv[i.wort].nl) {
         woerter.push(true);
       } else {
@@ -1258,8 +1248,8 @@ let liste = {
     if (woerter.every(i => i === true)) {
       return false; // keine Wörter zu berücksichtigen
     }
-    // Test 6: Tauchen alle Wörter eines mehrgliedrigen Karteiworts auf?
-    let alleMarks = div.querySelectorAll(".wort.hauptlemma");
+    // 6. Test: Tauchen alle Wörter eines mehrgliedrigen Karteiworts auf?
+    const alleMarks = div.querySelectorAll(".wort.hauptlemma");
     for (let i = 0, len = alleMarks.length; i < len; i++) {
       let treffer = alleMarks[i].textContent;
       if (alleMarks[i].classList.contains("wort-kein-ende")) {
@@ -1269,8 +1259,8 @@ let liste = {
         } while (i < len - 1 && alleMarks[i].classList.contains("wort-kein-ende"));
       }
       for (let j = 0, len = helfer.formVariRegExpRegs.length; j < len; j++) {
-        let formVari = helfer.formVariRegExpRegs[j],
-          reg;
+        const formVari = helfer.formVariRegExpRegs[j];
+        let reg;
         if (data.fv[formVari.wort].ma || data.fv[formVari.wort].nl) {
           // ma: Wort nur markieren, sonst nicht berücksichtigen
           // nl: Nebenlemmata für diese Operation nicht berücksichtigen
@@ -1307,7 +1297,7 @@ let liste = {
     }
     // Suchtreffer hervorheben
     let treffer;
-    filter.volltextSuche.reg.forEach(function(i) {
+    filter.volltextSuche.reg.forEach(function (i) {
       treffer = i.exec(text);
       text = text.replace(i, setzenMark);
     });
@@ -1321,7 +1311,7 @@ let liste = {
         m = treffer.groups.wort;
       }
       if (/<.+?>/.test(m)) {
-        m = m.replace(/<.+?>/g, function(m) {
+        m = m.replace(/<.+?>/g, function (m) {
           return `</mark>${m}<mark class="suche">`;
         });
       }
@@ -1332,15 +1322,15 @@ let liste = {
       // alle <mark> ermitteln, die weder Anfang noch Ende sind
       const marks = m.match(/class="suche"/g).length;
       if (marks > 1) { // marks === 1 => der einzige <mark>-Tag ist Anfang und Ende zugleich
-        let splitted = m.split(/class="suche"/);
+        const splitted = m.split(/class="suche"/);
         m = "";
         for (let i = 0, len = splitted.length; i < len; i++) {
           if (i === 0) {
-            m += splitted[i] + `class="suche suche-kein-ende"`;
+            m += splitted[i] + 'class="suche suche-kein-ende"';
           } else if (i === len - 2) {
-            m += splitted[i] + `class="suche suche-kein-start"`;
+            m += splitted[i] + 'class="suche suche-kein-start"';
           } else if (i < len - 1) {
-            m += splitted[i] + `class="suche suche-kein-start suche-kein-ende"`;
+            m += splitted[i] + 'class="suche suche-kein-start suche-kein-ende"';
           } else {
             m += splitted[i];
           }
@@ -1364,18 +1354,18 @@ let liste = {
   //   div = Element
   //     (der Belegkopf, auf den geklickt werden kann)
   belegUmschalten (div) {
-    div.addEventListener("click", function() {
+    div.addEventListener("click", function () {
       if (this.classList.contains("schnitt-offen")) {
         delete liste.statusSichtbarP[this.dataset.id]; // Status sichtbarer Absätze zurücksetzen
         this.classList.remove("schnitt-offen");
         // Ausblenden animieren
-        let details = this.nextSibling;
+        const details = this.nextSibling;
         if (details.querySelector("#annotierung-wort")) {
           annotieren.modSchliessen();
         }
         details.classList.add("blenden", "blenden-prep");
         details.style.height = `${details.offsetHeight - 30}px`; // 30px = padding-top + padding-bottom
-        setTimeout(function() {
+        setTimeout(function () {
           details.style.height = "0px";
           details.style.paddingTop = "0px";
           details.style.paddingBottom = "0px";
@@ -1389,8 +1379,8 @@ let liste = {
           einblenden: true,
         });
         // Einblenden animieren
-        let details = this.nextSibling;
-        setTimeout(function() {
+        const details = this.nextSibling;
+        setTimeout(function () {
           details.classList.add("blenden");
           details.style.height = `${liste.belegUmschaltenZielhoehe}px`;
           details.style.removeProperty("padding-top");
@@ -1418,25 +1408,25 @@ let liste = {
   //        id:   String  (ID der Karteikarte)
   //        text: String  (vollständiger Text des Datenfelds)
   //              Array   (bei Bedeutungen)
-  detailErstellen ({cont, ds, h, text, id}) {
+  detailErstellen ({ cont, ds, h, text, id }) {
     // Datenfeld kann leer sein
     if (!text || ds === "bd" && !text.length) {
       return;
     }
     // Sonderbehandlung Bedeutungen
     if (ds === "bd") {
-      let textTmp = liste.textBd(text);
+      const textTmp = liste.textBd(text);
       if (!textTmp.length) { // im aktuellen Gerüst könnten keine passenden Bedeutungen sein
         return;
       }
       text = textTmp.join("\n");
     }
     // <div> für Datenfeld erzeugen
-    let div = document.createElement("div");
+    const div = document.createElement("div");
     cont.appendChild(div);
     div.classList.add(`liste-${ds}`, "liste-label");
     // Label erzeugen
-    let span = document.createElement("span");
+    const span = document.createElement("span");
     div.appendChild(span);
     span.classList.add("liste-label");
     if (ds === "bd") {
@@ -1457,18 +1447,18 @@ let liste = {
       text = liste.linksErkennen(text);
     }
     // Absätze erzeugen
-    for (let absatz of text.split("\n")) {
+    for (const absatz of text.split("\n")) {
       if (!absatz) {
         // die erste Zeile der Notizen könnte leer sein;
         // hierfür keinen Absatz erzeugen
         continue;
       }
-      let p = document.createElement("p");
+      const p = document.createElement("p");
       div.appendChild(p);
       p.innerHTML = liste.suchtreffer(absatz, ds, id);
     }
     // Klick-Events an Links hängen
-    for (let link of div.querySelectorAll(".link")) {
+    for (const link of div.querySelectorAll(".link")) {
       helfer.externeLinks(link);
     }
   },
@@ -1477,7 +1467,7 @@ let liste = {
   //   bd = Array
   //     (Bedeutungen, wie sie in den Karteikarten stehen; d.h. Array mit Objects in den Slots)
   textBd (bd) {
-    let arr = [];
+    const arr = [];
     for (let i = 0, len = bd.length; i < len; i++) {
       if (bd[i].gr !== data.bd.gn) { // nur Bedeutungen des aktuellen Gerüsts anzeigen
         continue;
@@ -1504,14 +1494,14 @@ let liste = {
       return;
     }
     // es gibt also Infos
-    let div = document.createElement("div");
+    const div = document.createElement("div");
     if (klasse) {
       div.classList.add(klasse);
     }
     cont.appendChild(div);
     // Karte unvollständig?
     if (beleg.un) {
-      let img = document.createElement("img");
+      const img = document.createElement("img");
       img.src = "img/kreis-unvollstaendig.svg";
       img.width = "24";
       img.height = "24";
@@ -1520,7 +1510,7 @@ let liste = {
     }
     // Beleg ungeprüft?
     if (beleg.up) {
-      let img = document.createElement("img");
+      const img = document.createElement("img");
       img.src = "img/verboten.svg";
       img.width = "24";
       img.height = "24";
@@ -1529,7 +1519,7 @@ let liste = {
     }
     // Kontext unklar?
     if (beleg.ko) {
-      let img = document.createElement("img");
+      const img = document.createElement("img");
       img.src = "img/kontext.svg";
       img.width = "24";
       img.height = "24";
@@ -1538,7 +1528,7 @@ let liste = {
     }
     // Bücherdienstauftrag?
     if (beleg.bu) {
-      let img = document.createElement("img");
+      const img = document.createElement("img");
       img.src = "img/buch.svg";
       img.width = "24";
       img.height = "24";
@@ -1547,7 +1537,7 @@ let liste = {
     }
     // Buchung?
     if (beleg.bc) {
-      let img = document.createElement("img");
+      const img = document.createElement("img");
       img.src = "img/buch-check-gruen.svg";
       img.width = "24";
       img.height = "24";
@@ -1556,7 +1546,7 @@ let liste = {
     }
     // Metatext?
     if (beleg.mt) {
-      let img = document.createElement("img");
+      const img = document.createElement("img");
       img.src = "img/augen.svg";
       img.width = "24";
       img.height = "24";
@@ -1565,19 +1555,19 @@ let liste = {
     }
     // Markierung?
     if (beleg.be) {
-      let cont_span = document.createElement("span");
+      const cont_span = document.createElement("span");
       cont_span.title = "Markierung";
       div.appendChild(cont_span);
       for (let i = 0; i < beleg.be; i++) {
-        let span = document.createElement("span");
+        const span = document.createElement("span");
         span.classList.add("liste-stern", "icon-stern");
-        span.textContent = " ";
+        span.textContent = "\u00A0";
         cont_span.appendChild(span);
       }
     }
     // Anhänge?
     if (beleg.an.length && klasse) {
-      let cont_span = document.createElement("span");
+      const cont_span = document.createElement("span");
       anhaenge.makeIconList(beleg.an, cont_span, true);
       div.appendChild(cont_span);
     }
@@ -1589,13 +1579,13 @@ let liste = {
   //   text = String
   //     (Plain-Text, in dem die Links umgewandelt werden sollen)
   linksErkennen (text) {
-    text = text.replace(/https?:[^\s]+|www\.[^\s]+/g, function(m) {
-      let reg = /(&gt;|[.:,;!?)\]}>]+)$/g,
-        url = m.replace(reg, ""),
-        basis = m.match(/(https?:\/\/)*([^\/]+)/)[2].replace(reg, ""),
-        schluss = "";
+    text = text.replace(/https?:[^\s]+|www\.[^\s]+/g, function (m) {
+      const reg = /(&gt;|[.:,;!?)\]}>]+)$/g;
+      const url = m.replace(reg, "");
+      const basis = m.match(/(https?:\/\/)*([^/]+)/)[2].replace(reg, "");
+      let schluss = "";
       if (m.match(reg)) {
-        schluss = m.replace(/.+?(&gt;|[.:,;!?)\]}>]+)$/g, function(m, p) {
+        schluss = m.replace(/.+?(&gt;|[.:,;!?)\]}>]+)$/g, function (m, p) {
           return p;
         });
       }
@@ -1608,7 +1598,7 @@ let liste = {
   //   a = Element
   //     (Icon-Link, über den das Formular geöffnet werden kann)
   formularOeffnen (a) {
-    a.addEventListener("click", function(evt) {
+    a.addEventListener("click", function (evt) {
       evt.preventDefault();
       evt.stopPropagation();
       beleg.oeffnen(parseInt(this.parentNode.dataset.id, 10));
@@ -1619,10 +1609,10 @@ let liste = {
   //   span = Element
   //     (<span>, in dem das Detail steht)
   detailAnzeigen (span) {
-    span.addEventListener("click", function(evt) {
+    span.addEventListener("click", function (evt) {
       evt.stopPropagation();
-      let detail = helfer.escapeHtml(this.title),
-        beleg_id = this.parentNode.dataset.id;
+      const detail = helfer.escapeHtml(this.title);
+      const beleg_id = this.parentNode.dataset.id;
       dialog.oeffnen({
         typ: "alert",
         text: `<h3>${liste.detailAnzeigenH3(beleg_id)}</h3>\n${detail}`,
@@ -1635,18 +1625,18 @@ let liste = {
   //   beleg_id = String || Object
   //     (ID des Belegs; soll die aktuelle Karteikarte gedruckt werden ist es ein Object)
   detailAnzeigenH3 (beleg_id) {
-    let obj = {},
-      nr = beleg_id;
+    let obj = {};
+    let nr = beleg_id;
     if (helfer.checkType("String", beleg_id)) {
       obj = data.ka[beleg_id];
     } else { // falls die aktuelle Karteikarte als Objekt übergeben wird
       obj = beleg_id;
       nr = beleg.id_karte;
     }
-    let text = `Beleg #${nr}`,
-      text_detail = [];
+    let text = `Beleg #${nr}`;
+    const text_detail = [];
     if (obj.au) {
-      let autor = obj.au.split(",")[0];
+      const autor = obj.au.split(",")[0];
       text_detail.push(autor);
     }
     if (obj.da && /[0-9]{4}|[0-9]{2}\.\sJh\./.test(obj.da)) { // in neuen Karten kann das Datumsfeld noch fehlen oder inkorrekt sein
@@ -1662,9 +1652,9 @@ let liste = {
   //   link = Element
   //     (Link im Header, auf den geklickt wird)
   header (link) {
-    link.addEventListener("click", function(evt) {
+    link.addEventListener("click", function (evt) {
       evt.preventDefault();
-      let funktion = this.id.replace(/^liste-link-/, "");
+      const funktion = this.id.replace(/^liste-link-/, "");
       if (funktion === "filter") {
         liste.headerFilter();
       } else if (funktion === "sortieren") {
@@ -1706,11 +1696,11 @@ let liste = {
       liste.statusScrollBak();
     }
     // Filterleiste
-    let sec_liste = document.getElementById("liste");
+    const sec_liste = document.getElementById("liste");
     sec_liste.classList.remove("preload"); // damit bei der ersten Anzeige keine Animation läuft
     // Link im Header
-    let link = document.getElementById("liste-link-filter"),
-      mod = process.platform === "darwin" ? "⌘" : "Strg";
+    const link = document.getElementById("liste-link-filter");
+    const mod = process.platform === "darwin" ? "⌘" : "Strg";
     if (optionen.data.belegliste.filterleiste) {
       sec_liste.classList.remove("filter-aus");
       link.classList.add("aktiv");
@@ -1767,7 +1757,7 @@ let liste = {
         return;
       }
       optionen.data.belegliste.sort_typ = liste.headerSortierenAuswahl[0];
-      optionen.data.belegliste.sort_aufwaerts = liste.headerSortierenAuswahl[1] === "true" ? true : false;
+      optionen.data.belegliste.sort_aufwaerts = liste.headerSortierenAuswahl[1] === "true";
     } else {
       optionen.data.belegliste.sort_typ = "da";
       optionen.data.belegliste.sort_aufwaerts = !optionen.data.belegliste.sort_aufwaerts;
@@ -1783,7 +1773,7 @@ let liste = {
 
   // Header-Icons: chronologisches Sortieren der Belege (Anzeige im Header anpassen)
   headerSortierenAnzeige () {
-    let link = document.getElementById("liste-link-sortieren");
+    const link = document.getElementById("liste-link-sortieren");
     if (optionen.data.belegliste.sort_aufwaerts) {
       link.firstChild.src = "img/pfeil-gerade-runter-weiss.svg";
       link.title = "Belege absteigend sortieren";
@@ -1838,7 +1828,7 @@ let liste = {
       aktiv = `-${optionen.data.belegliste.zeitschnitte}`;
     }
     const id = `liste-link-zeitschnitte${aktiv}`; // der aktive Link
-    let links = document.getElementsByClassName("liste-link-zeitschnitte"); // alle Links
+    const links = document.getElementsByClassName("liste-link-zeitschnitte"); // alle Links
     for (let i = 0, len = links.length; i < len; i++) {
       if (links[i].id === id) {
         links[i].classList.add("aktiv");
@@ -1859,7 +1849,7 @@ let liste = {
     liste.statusOffen = {};
     liste.statusSichtbarP = {};
     // Anzeige der Belege anpassen
-    document.querySelectorAll(".liste-kopf").forEach(function(i) {
+    document.querySelectorAll(".liste-kopf").forEach(function (i) {
       const offen = i.classList.contains("schnitt-offen");
       if (optionen.data.belegliste.beleg) {
         const id = i.dataset.id;
@@ -1887,7 +1877,7 @@ let liste = {
 
   // Header-Icons: Anzeige der Details des Belegs umstellen (Anzeige im Header anpassen)
   headerBelegAnzeige () {
-    let link = document.getElementById("liste-link-beleg");
+    const link = document.getElementById("liste-link-beleg");
     if (optionen.data.belegliste.beleg) {
       link.classList.add("aktiv");
       link.title = "Komplettanzeige des Belegs ausblenden";
@@ -1911,7 +1901,7 @@ let liste = {
 
   // Header-Icons: Kürzung des Belegs aus-/einschalten (Anzeige im Header anpassen)
   headerBelegKuerzenAnzeige () {
-    let link = document.getElementById("liste-link-kuerzen");
+    const link = document.getElementById("liste-link-kuerzen");
     if (optionen.data.belegliste.beleg_kuerzen) {
       link.classList.add("aktiv");
       link.title = "Belegkontext anzeigen";
@@ -1935,7 +1925,7 @@ let liste = {
 
   // Header-Icons: Silbentrennung im Beleg aus-/einschalten (Anzeige im Header anpassen)
   headerTrennungAnzeige () {
-    let link = document.getElementById("liste-link-trennung");
+    const link = document.getElementById("liste-link-trennung");
     if (optionen.data.belegliste.trennung) {
       link.classList.add("aktiv");
       link.title = "Silbentrennung nicht anzeigen";
@@ -1959,7 +1949,7 @@ let liste = {
 
   // Header-Icons: Hervorhebung des Worts im Beleg und der Vorschau aus-/einschalten (Anzeige im Header anpassen)
   headerWortHervorhebenAnzeige () {
-    let link = document.getElementById("liste-link-hervorheben");
+    const link = document.getElementById("liste-link-hervorheben");
     if (optionen.data.belegliste.wort_hervorheben) {
       link.classList.add("aktiv");
       link.title = "Wort nicht hervorheben";
@@ -1986,7 +1976,7 @@ let liste = {
       return;
     }
     // Einstellung umstellen und speichern
-    let opt = `detail_${funktion}`;
+    const opt = `detail_${funktion}`;
     optionen.data.belegliste[opt] = !optionen.data.belegliste[opt];
     optionen.speichern();
     // Anzeige der Icons auffrischen
@@ -2006,7 +1996,7 @@ let liste = {
     // Scroll-Status speichern
     liste.statusScrollBak();
     // Detail-Anzeige auffrischen
-    document.querySelectorAll(".liste-kopf").forEach(function(i) {
+    document.querySelectorAll(".liste-kopf").forEach(function (i) {
       if (!i.nextSibling || !i.nextSibling.classList.contains("liste-details")) {
         return;
       }
@@ -2025,7 +2015,7 @@ let liste = {
   //   opt = String
   //     (Name der Option, die betroffen ist)
   headerDetailsAnzeige (funktion, opt) {
-    let title = {
+    const title = {
       bd: "Bedeutung",
       bl: "Wortbildung",
       sy: "Synonym",
@@ -2035,7 +2025,7 @@ let liste = {
       no: "Notizen",
       meta: "Metainfos",
     };
-    let link = document.getElementById(`liste-link-${funktion}`);
+    const link = document.getElementById(`liste-link-${funktion}`);
     if (optionen.data.belegliste[opt]) {
       link.classList.add("aktiv");
       link.title = `${title[funktion]} ausblenden`;
@@ -2049,12 +2039,12 @@ let liste = {
   // Header-Icons: das letzte angezeigte Icon soll rechts keine border, dafür runde Kanten haben
   headerDetailsLetztesIcon () {
     // alte Markierung entfernen
-    let letztes = document.querySelector(".liste-opt-anzeige .liste-opt-anzeige-letztes");
+    const letztes = document.querySelector(".liste-opt-anzeige .liste-opt-anzeige-letztes");
     if (letztes) {
       letztes.classList.remove("liste-opt-anzeige-letztes");
     }
     // letztes aktives Element finden und ggf. markieren
-    let a = document.querySelectorAll(".liste-opt-anzeige a");
+    const a = document.querySelectorAll(".liste-opt-anzeige a");
     for (let i = a.length - 1; i >= 0; i--) {
       if (a[i].classList.contains("aktiv")) {
         if (i < a.length - 1) { // das letzte Icon muss nie markiert werden
@@ -2069,7 +2059,7 @@ let liste = {
   //   icon = Element
   //     (Buchungs-Icon neben dem Belegtext)
   buchen (icon) {
-    icon.addEventListener("click", function(evt) {
+    icon.addEventListener("click", function (evt) {
       evt.preventDefault();
       const id = this.dataset.id;
       data.ka[id].bc = !data.ka[id].bc;
@@ -2092,10 +2082,10 @@ let liste = {
   //   icon = Element
   //     (Kopier-Icon, auf das geklickt wurde)
   kopieren (icon) {
-    icon.addEventListener("click", function(evt) {
+    icon.addEventListener("click", function (evt) {
       evt.preventDefault();
-      let ds = this.dataset.ds.split("|"),
-        text = data.ka[ds[0]][ds[1]];
+      const ds = this.dataset.ds.split("|");
+      const text = data.ka[ds[0]][ds[1]];
       beleg.toolsKopierenExec({
         ds: ds[1],
         obj: data.ka[ds[0]],
@@ -2116,16 +2106,16 @@ let liste = {
       return;
     }
     // Ist die Belegliste sichtbar?
-    if ( !liste.listeSichtbar({funktion: "Belege &gt; Belegtexte in Zwischenablage"}) ) {
+    if (!liste.listeSichtbar({ funktion: "Belege &gt; Belegtexte in Zwischenablage" })) {
       return;
     }
     // Daten sammeln
-    let text = [],
-      html = [];
-    for (let i of document.querySelectorAll("#liste-belege .liste-kopf")) {
+    const text = [];
+    const html = [];
+    for (const i of document.querySelectorAll("#liste-belege .liste-kopf")) {
       const id = i.dataset.id;
       popup.referenz.id = id; // popup.referenz.data wird in beleg.toolsKopierenExec() gesetzt
-      let texte = beleg.toolsKopierenExec({
+      const texte = beleg.toolsKopierenExec({
         ds: "bs",
         obj: data.ka[id],
         text: data.ka[id].bs,
@@ -2137,7 +2127,7 @@ let liste = {
     }
     // Margin vor Absatz
     for (let i = 0, len = html.length; i < len; i++) {
-      html[i] = html[i].replace(/^<p>/, `<p style="margin-top: 18pt">`);
+      html[i] = html[i].replace(/^<p>/, '<p style="margin-top: 18pt">');
     }
     // Daten => Clipboard
     modules.clipboard.write({
@@ -2159,11 +2149,11 @@ let liste = {
       return;
     }
     // Ist die Belegliste sichtbar?
-    if ( !liste.listeSichtbar({funktion: "Belege &gt; Löschen"}) ) {
+    if (!liste.listeSichtbar({ funktion: "Belege &gt; Löschen" })) {
       return;
     }
     // Wirklich löschen
-    let belege = document.querySelectorAll("#liste-belege .liste-kopf");
+    const belege = document.querySelectorAll("#liste-belege .liste-kopf");
     const loeschen = await new Promise(resolve => {
       let numerus = `Sollen die <i>${belege.length} Belege</i>, die derzeit in der Belegliste sichtbar sind,`;
       if (belege.length === 1) {
@@ -2179,7 +2169,7 @@ let liste = {
       return;
     }
     // Löschen ausführen
-    for (let i of belege) {
+    for (const i of belege) {
       const id = i.dataset.id;
       delete data.ka[id];
       if (kopieren.an && kopieren.belege.includes(id)) {
@@ -2201,7 +2191,7 @@ let liste = {
   //   funktion = String
   //     (Name der Funktion, die nur ausgeführt werden darf,
   //     wenn die Liste sichtbar ist)
-  listeSichtbar ({funktion}) {
+  listeSichtbar ({ funktion }) {
     if (helfer.hauptfunktion !== "liste" ||
         overlay.oben()) {
       dialog.oeffnen({
@@ -2217,8 +2207,8 @@ let liste = {
   //   evt = Object
   //     (das Event-Objekt, das beim Kopieren erzeugt wird)
   textKopieren (evt) {
-    let sel = window.getSelection(),
-      anker = sel.anchorNode;
+    const sel = window.getSelection();
+    let anker = sel.anchorNode;
     // Text ausgewählt?
     if (!anker) {
       return;
@@ -2239,13 +2229,13 @@ let liste = {
       return;
     }
     // Fenster öffnen
-    let fenster = document.getElementById("ctrlC");
+    const fenster = document.getElementById("ctrlC");
     overlay.oeffnen(fenster);
     // Checkbox zurücksetzen
     document.getElementById("ctrlC-auto").checked = false;
     // Radio-Buttons vorbereiten
-    let auswahl = parseInt(optionen.data.einstellungen["ctrlC-vor"], 10),
-      radios = fenster.querySelectorAll(`input[type="radio"]`);
+    let auswahl = parseInt(optionen.data.einstellungen["ctrlC-vor"], 10);
+    const radios = fenster.querySelectorAll('input[type="radio"]');
     // kein Belegtext ausgewählt
     if (!popup.selInBeleg()) {
       radios[2].disabled = true;
@@ -2270,7 +2260,7 @@ let liste = {
   //     (Radio-Button oder Button)
   textKopierenInputs (input) {
     if (/checkbox|radio/.test(input.type)) {
-      input.addEventListener("keydown", function(evt) {
+      input.addEventListener("keydown", function (evt) {
         tastatur.detectModifiers(evt);
         if (!tastatur.modifiers && evt.key === "Enter") {
           liste.textKopierenExec();
@@ -2283,11 +2273,11 @@ let liste = {
 
   // Kopieren von markiertem Text ausführen
   textKopierenExec () {
-    let fenster = document.getElementById("ctrlC"),
-      auswahl = optionen.data.einstellungen["ctrlC-vor"];
+    const fenster = document.getElementById("ctrlC");
+    let auswahl = optionen.data.einstellungen["ctrlC-vor"];
     if (overlay.oben() === "ctrlC") { // Overlay-Fenster geöffnet
-      let radio = fenster.querySelector("input:checked"),
-        aktion = radio.id.replace(/.+-/, "");
+      const radio = fenster.querySelector("input:checked");
+      const aktion = radio.id.replace(/.+-/, "");
       switch (aktion) {
         case "html":
           auswahl = "1";

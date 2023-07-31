@@ -1,6 +1,6 @@
 "use strict";
 
-let belegeTaggen = {
+const belegeTaggen = {
   // in der Belegliste sichtbare Belege
   karten: [],
 
@@ -15,7 +15,7 @@ let belegeTaggen = {
       return;
     }
     // Ist die Belegliste sichtbar?
-    if ( !liste.listeSichtbar({funktion: "Belege &gt; Taggen"}) ) {
+    if (!liste.listeSichtbar({ funktion: "Belege &gt; Taggen" })) {
       return;
     }
     // sichtbare Belege ermitteln
@@ -34,7 +34,7 @@ let belegeTaggen = {
       return;
     }
     // Fenster öffnen oder in den Vordergrund holen
-    let fenster = document.getElementById("belege-taggen");
+    const fenster = document.getElementById("belege-taggen");
     if (overlay.oeffnen(fenster)) { // Fenster ist schon offen
       return;
     }
@@ -45,7 +45,9 @@ let belegeTaggen = {
     }
     document.getElementById("belege-taggen-nr").textContent = `${belegeTaggen.karten.length} ${numerus}`;
     // Formular zurücksetzen
-    document.querySelectorAll("#belege-taggen-cont table input").forEach(i => i.checked = i.defaultChecked);
+    document.querySelectorAll("#belege-taggen-cont table input").forEach(i => {
+      i.checked = i.defaultChecked;
+    });
   },
 
   // Taggen ausführen
@@ -55,35 +57,35 @@ let belegeTaggen = {
         key: "un",
         name: "unvollständig",
       },
-      ungeprueft:  {
+      ungeprueft: {
         key: "up",
         name: "ungeprüft",
       },
-      kontext:  {
+      kontext: {
         key: "ko",
         name: "Kontext?",
       },
-      buecherdienst:  {
+      buecherdienst: {
         key: "bu",
         name: "Bücherdienst",
       },
-      buchung:  {
+      buchung: {
         key: "bc",
         name: "Buchung",
       },
-      metatext:  {
+      metatext: {
         key: "mt",
         name: "Metatext",
       },
     };
     // Tagging-Daten sammeln
-    let taggen = {};
+    const taggen = {};
     document.querySelectorAll("#belege-taggen-cont tr").forEach((i, n) => {
       if (n === 0) {
         return;
       }
-      const radio = i.querySelectorAll("input"),
-        key = keyMap[radio[0].name.replace(/.+-/, "")].key;
+      const radio = i.querySelectorAll("input");
+      const key = keyMap[radio[0].name.replace(/.+-/, "")].key;
       if (radio[1].checked) {
         taggen[key] = true;
       } else if (radio[2].checked) {
@@ -103,8 +105,8 @@ let belegeTaggen = {
     if (belegeTaggen.karten.length === 1) {
       numerus = "Beleg";
     }
-    let ds = [];
-    for (const [k, v] of Object.entries(taggen)) {
+    const ds = [];
+    for (const [ k, v ] of Object.entries(taggen)) {
       let aktion = "－";
       if (v) {
         aktion = "＋";
@@ -116,7 +118,7 @@ let belegeTaggen = {
           break;
         }
       }
-      ds.push(`${aktion}   <i>${name}</i>`);
+      ds.push(`${aktion}${"\u00A0".repeat(3)}<i>${name}</i>`);
     }
     dialog.oeffnen({
       typ: "confirm",
@@ -126,7 +128,7 @@ let belegeTaggen = {
           return;
         }
         for (const id of belegeTaggen.karten) {
-          for (const [k, v] of Object.entries(taggen)) {
+          for (const [ k, v ] of Object.entries(taggen)) {
             data.ka[id][k] = v;
           }
         }

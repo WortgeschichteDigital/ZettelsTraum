@@ -1,6 +1,6 @@
 "use strict";
 
-let belegImport = {
+const belegImport = {
   // DTA-Import: Daten, die importiert wurden
   DTAData: {},
 
@@ -35,7 +35,7 @@ let belegImport = {
 
   // DTA-Import: Daten aus dem DTA importieren
   DTA () {
-    let dta = document.getElementById("beleg-dta");
+    const dta = document.getElementById("beleg-dta");
     const url = helfer.textTrim(dta.value, true);
     // URL fehlt
     if (!url) {
@@ -71,7 +71,7 @@ let belegImport = {
       return;
     }
     // Titel-ID ermitteln
-    let titel_id = belegImport.DTAGetTitelId(url);
+    const titel_id = belegImport.DTAGetTitelId(url);
     if (!titel_id) {
       dialog.oeffnen({
         typ: "alert",
@@ -83,7 +83,7 @@ let belegImport = {
       return;
     }
     // Faksimileseite ermitteln
-    let fak = belegImport.DTAGetFak(url, titel_id);
+    const fak = belegImport.DTAGetFak(url, titel_id);
     if (!fak) {
       dialog.oeffnen({
         typ: "alert",
@@ -126,7 +126,8 @@ let belegImport = {
   //   url = String
   //     (DTA-URL)
   DTAGetTitelId (url) {
-    let m, titel_id = "";
+    let m;
+    let titel_id = "";
     if (/\/(show|view)\//.test(url)) {
       m = /\/(show|view)\/(?<titel_id>[^/?]+)/.exec(url);
     } else {
@@ -154,7 +155,7 @@ let belegImport = {
     if (/p=[0-9]+/.test(url)) {
       fak = url.match(/p=([0-9]+)/)[1];
     } else if (new RegExp(`${titel_id}\\/[0-9]+`).test(url)) {
-      let reg = new RegExp(`${titel_id}\\/([0-9]+)`);
+      const reg = new RegExp(`${titel_id}\\/([0-9]+)`);
       fak = url.match(reg)[1];
     }
     return fak;
@@ -185,9 +186,9 @@ let belegImport = {
     // Daten parsen
     // (Namespace-Attribut entfernen; da habe ich sonst Probleme mit
     // evaluate() in belegImport.DTAMeta())
-    const text = response.text.replace(/ xmlns=".+?"/, ""),
-      parser = new DOMParser(),
-      xmlDoc = parser.parseFromString(text, "text/xml");
+    const text = response.text.replace(/ xmlns=".+?"/, "");
+    const parser = new DOMParser();
+    const xmlDoc = parser.parseFromString(text, "text/xml");
     // XML nicht wohlgeformt
     if (xmlDoc.querySelector("parsererror")) {
       belegImport.DTAFehler("HttpRequest: XML-Daten nicht wohlgeformt");
@@ -208,7 +209,7 @@ let belegImport = {
       typ: "alert",
       text: `Beim Download der Textdaten aus dem DTA ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n${fehlertyp}`,
       callback: () => {
-        let dta = document.getElementById("beleg-dta");
+        const dta = document.getElementById("beleg-dta");
         dta.select();
       },
     });
@@ -220,23 +221,21 @@ let belegImport = {
   //     werden soll [enthält auch den TEI-Header], oder ein XML-Dokument,
   //     das allein die TEI-Header des Buchs umfasst)
   DTAMeta (xmlDoc) {
-    let evaluator = xpath => {
-      return xmlDoc.evaluate(xpath, xmlDoc, null, XPathResult.ANY_TYPE, null);
-    };
-    let dta = belegImport.DTAData;
+    const evaluator = xpath => xmlDoc.evaluate(xpath, xmlDoc, null, XPathResult.ANY_TYPE, null);
+    const dta = belegImport.DTAData;
     // Personen
-    let personen = {
+    const personen = {
       autor: evaluator("//biblFull/titleStmt/author/persName"),
       hrsg: evaluator("//biblFull/titleStmt/editor/persName"),
     };
-    for (let [k, v] of Object.entries(personen)) {
+    for (const [ k, v ] of Object.entries(personen)) {
       let item = v.iterateNext();
       while (item) {
-        let vorname = item.querySelector("forename"),
-          nachname = item.querySelector("surname"),
-          addName = item.querySelector("addName"); // in <addName> steht häufig der ganze Name nach dem Muster "Vorname Nachname"; dafür fehlen <forname> und <surname>
+        const vorname = item.querySelector("forename");
+        const nachname = item.querySelector("surname");
+        const addName = item.querySelector("addName"); // in <addName> steht häufig der ganze Name nach dem Muster "Vorname Nachname"; dafür fehlen <forname> und <surname>
         if (nachname) {
-          let name = [trimmer(nachname.textContent)];
+          const name = [ trimmer(nachname.textContent) ];
           if (vorname) {
             name.push(trimmer(vorname.textContent));
           }
@@ -248,7 +247,7 @@ let belegImport = {
       }
     }
     // normale Werte
-    let werte = {
+    const werte = {
       titel: evaluator("//biblFull/titleStmt/title[@type='main']"),
       untertitel: evaluator("//biblFull/titleStmt/title[@type='sub']"),
       band: evaluator("//biblFull/titleStmt/title[@type='volume']"),
@@ -258,7 +257,7 @@ let belegImport = {
       datum_druck: evaluator("//biblFull/publicationStmt/date[@type='publication']"),
       datum_entstehung: evaluator("//biblFull/publicationStmt/date[@type='creation']"),
     };
-    for (let [k, v] of Object.entries(werte)) {
+    for (const [ k, v ] of Object.entries(werte)) {
       let item = v.iterateNext();
       while (item) {
         if (Array.isArray(dta[k])) {
@@ -270,19 +269,19 @@ let belegImport = {
       }
     }
     // Zeitschrift/Serie
-    let istZeitschrift = false,
-      zeitschriftEval = evaluator("//sourceDesc/bibl").iterateNext();
+    let istZeitschrift = false;
+    const zeitschriftEval = evaluator("//sourceDesc/bibl").iterateNext();
     if (/^JA?/.test(zeitschriftEval.getAttribute("type"))) {
       istZeitschrift = true;
     }
-    let series = {
+    const series = {
       titel: evaluator("//biblFull/seriesStmt/title"),
       bd_jg: evaluator("//biblFull/seriesStmt/biblScope[@unit='volume']"),
       heft: evaluator("//biblFull/seriesStmt/biblScope[@unit='issue']"),
       seiten: evaluator("//biblFull/seriesStmt/biblScope[@unit='pages']"),
     };
-    let seriesTitel = [],
-      item = series.titel.iterateNext();
+    const seriesTitel = [];
+    let item = series.titel.iterateNext();
     while (item) {
       seriesTitel.push(trimmer(item.textContent));
       item = series.titel.iterateNext();
@@ -309,11 +308,11 @@ let belegImport = {
       }
     }
     // Textsorte
-    let textsorte = evaluator("//profileDesc//textClass/classCode");
+    const textsorte = evaluator("//profileDesc//textClass/classCode");
     item = textsorte.iterateNext();
     while (item) {
-      let scheme = item.getAttribute("scheme"),
-        key = "";
+      const scheme = item.getAttribute("scheme");
+      let key = "";
       if (/main$/.test(scheme)) {
         key = "textsorte";
       } else if (/sub$/.test(scheme)) {
@@ -340,21 +339,22 @@ let belegImport = {
   DTAText (xml, fak) {
     // Grenze des Textimports ermitteln
     // (importiert wird bis zum Seitenumbruch "fak_bis", aber nie darüber hinaus)
-    let int_fak = parseInt(fak, 10),
-      int_fak_bis = parseInt(document.getElementById("beleg-dta-bis").value, 10),
-      fak_bis = "";
+    const int_fak = parseInt(fak, 10);
+    const int_fak_bis = parseInt(document.getElementById("beleg-dta-bis").value, 10);
+    let fak_bis = "";
     if (int_fak_bis && int_fak_bis > int_fak) {
       fak_bis = int_fak_bis.toString();
     } else {
       fak_bis = (int_fak + 1).toString();
     }
     // Start- und Endelement ermitteln
-    let ele_start = xml.querySelector(`pb[facs="#f${fak.padStart(4, "0")}"]`),
-      ele_ende = xml.querySelector(`pb[facs="#f${fak_bis.padStart(4, "0")}"]`);
+    const ele_start = xml.querySelector(`pb[facs="#f${fak.padStart(4, "0")}"]`);
+    const ele_ende = xml.querySelector(`pb[facs="#f${fak_bis.padStart(4, "0")}"]`);
     // Seite auslesen
     const n = ele_start.getAttribute("n");
     if (n) { // bei Seiten mit <cb> gibt es kein n-Attribut
-      belegImport.DTAData.seite = belegImport.DTAData.seite_zuletzt = n;
+      belegImport.DTAData.seite = n;
+      belegImport.DTAData.seite_zuletzt = n;
     }
     // Elemente ermitteln, die analysiert werden müssen
     let parent;
@@ -372,8 +372,8 @@ let belegImport = {
         parent = parent.parentNode;
       }
     }
-    let analyse = [],
-      alleKinder = parent.childNodes;
+    const analyse = [];
+    const alleKinder = parent.childNodes;
     for (let i = 0, len = alleKinder.length; i < len; i++) {
       if (!analyse.length && alleKinder[i] !== ele_start && !alleKinder[i].contains(ele_start)) {
         continue;
@@ -452,20 +452,20 @@ let belegImport = {
         class: "dta-doppelt",
       },
     };
-    let text = "",
-      start = false,
-      ende = false;
+    let text = "";
+    let start = false;
+    let ende = false;
     for (let i = 0, len = analyse.length; i < len; i++) {
       ana(analyse[i]);
     }
     // Textauszeichnungen umsetzen
-    for (let typ in rend) {
+    for (const typ in rend) {
       if (!rend.hasOwnProperty(typ)) {
         continue;
       }
-      let reg = new RegExp(`\\[(${typ})\\](.+?)\\[\\/${typ}\\]`, "g");
+      const reg = new RegExp(`\\[(${typ})\\](.+?)\\[\\/${typ}\\]`, "g");
       while (text.match(reg)) { // bei komischen Verschachtelungen kann es dazu kommen, dass beim 1. Durchgang nicht alle Tags ersetzt werden
-        text = text.replace(reg, function(m, p1, p2) {
+        text = text.replace(reg, function (m, p1, p2) {
           let start = `<${rend[p1].ele}`;
           if (rend[p1].class) {
             start += ` class="${rend[p1].class}"`;
@@ -486,7 +486,7 @@ let belegImport = {
     function ana (ele) {
       if (ele.nodeType === 3) { // Text
         if (start && !ende) {
-          let text_tmp = ele.nodeValue.replace(/\n/g, "");
+          const text_tmp = ele.nodeValue.replace(/\n/g, "");
           if (/(-|¬)$/.test(text_tmp) &&
               ele.nextSibling &&
               ele.nextSibling.nodeName === "lb") {
@@ -565,12 +565,12 @@ let belegImport = {
           } else if (ele.nodeName === "sic") { // <sic> Fehler im Original, Korrektur steht in <corr>; die wird übernommen
             return;
           } else if (ele.nodeName === "speaker") { // Sprecher im Drama
-            ele.insertBefore(document.createTextNode(`[#b]`), ele.firstChild);
-            ele.appendChild(document.createTextNode(`[/#b]`));
+            ele.insertBefore(document.createTextNode("[#b]"), ele.firstChild);
+            ele.appendChild(document.createTextNode("[/#b]"));
             text = helfer.textTrim(text, false);
             text += "\n\n";
           }
-          let kinder = ele.childNodes;
+          const kinder = ele.childNodes;
           for (let i = 0, len = kinder.length; i < len; i++) {
             if (ende) {
               break;
@@ -584,8 +584,8 @@ let belegImport = {
 
   // DTA-Import: Daten in das Formular eintragen
   DTAFill () {
-    let dta = belegImport.DTAData,
-      datum_feld = dta.datum_entstehung;
+    const dta = belegImport.DTAData;
+    let datum_feld = dta.datum_entstehung;
     if (!datum_feld && dta.datum_druck) {
       datum_feld = dta.datum_druck;
     } else if (dta.datum_druck) {
@@ -599,12 +599,12 @@ let belegImport = {
     beleg.data.au = autor;
     beleg.data.bs = dta.beleg;
     if (dta.textsorte.length) {
-      let textsorte = [];
+      const textsorte = [];
       for (let i = 0, len = dta.textsorte.length; i < len; i++) {
-        let ts = dta.textsorte[i],
-          ts_sub = dta.textsorte_sub[i];
+        const ts = dta.textsorte[i];
+        const ts_sub = dta.textsorte_sub[i];
         if (ts_sub && /[,;] /.test(ts_sub)) {
-          let ts_sub_sp = ts_sub.split(/[,;] /);
+          const ts_sub_sp = ts_sub.split(/[,;] /);
           for (let j = 0, len = ts_sub_sp.length; j < len; j++) {
             textsorte.push(`${ts}: ${ts_sub_sp[j]}`);
           }
@@ -615,7 +615,7 @@ let belegImport = {
         }
       }
       // identische Werte eliminieren
-      let textsorteUnique = new Set(textsorte);
+      const textsorteUnique = new Set(textsorte);
       beleg.data.ts = Array.from(textsorteUnique).join("\n");
     }
     beleg.data.kr = "DTA";
@@ -631,23 +631,23 @@ let belegImport = {
   //   mitURL = Boolean
   //     (URL + Aufrufdatum sollen der Titelaufnahme angehängt werden)
   DTAQuelle (mitURL) {
-    let dta = belegImport.DTAData,
-      td = belegImport.makeTitleDataObject();
-    td.autor = [...dta.autor];
-    td.hrsg = [...dta.hrsg];
-    td.titel = [...dta.titel];
-    td.untertitel = [...dta.untertitel];
+    const dta = belegImport.DTAData;
+    const td = belegImport.makeTitleDataObject();
+    td.autor = [ ...dta.autor ];
+    td.hrsg = [ ...dta.hrsg ];
+    td.titel = [ ...dta.titel ];
+    td.untertitel = [ ...dta.untertitel ];
     if (dta.zeitschrift) {
       td.inTitel.push(dta.zeitschrift);
     }
-    let regBand = new RegExp(helfer.escapeRegExp(dta.band));
+    const regBand = new RegExp(helfer.escapeRegExp(dta.band));
     if (dta.band &&
         !dta.titel.some(i => regBand.test(i)) &&
         !dta.untertitel.some(i => regBand.test(i))) {
       td.band = dta.band;
     }
     td.auflage = dta.auflage;
-    td.ort = [...dta.ort];
+    td.ort = [ ...dta.ort ];
     td.verlag = dta.verlag !== "s. e." ? dta.verlag : "";
     td.jahrgang = dta.zeitschrift_jg;
     td.jahr = dta.datum_druck;
@@ -672,7 +672,7 @@ let belegImport = {
     td.serie = dta.serie;
     td.serieBd = dta.serie_bd;
     td.url.push(dta.url);
-    return belegImport.makeTitle({td, mitURL});
+    return belegImport.makeTitle({ td, mitURL });
   },
 
   // DWDS-Import: Liste der Korpora des DWDS
@@ -776,7 +776,8 @@ let belegImport = {
   //     (nach dem Parsen soll ein automatischer Import angestoßen werden)
   DWDS (content, pfad, autoImport = true) {
     // Daten überprüfen
-    let xml, json;
+    let xml;
+    let json;
     if (helfer.checkType("Object", content)) {
       xml = content;
     } else {
@@ -810,8 +811,8 @@ let belegImport = {
 
   // DWDS-Import: einen leeren Datensatz erzeugen
   DWDSDatensatz () {
-    let data = belegImport.DateiDatensatz();
-    data.ds.au = "N. N.";
+    const data = belegImport.DateiDatensatz();
+    data.ds.au = "N.\u00A0N.";
     data.ds.kr = "DWDS";
     return data;
   },
@@ -824,23 +825,23 @@ let belegImport = {
   //   returnResult = true || undefined
   //     (das Ergebnis der Analyse soll nicht in den Datei-Zwischenspeicher
   //     geschrieben, sondern direkt zurückgegeben werden)
-  DWDSLesenXML ({clipboard, xml, returnResult = false}) {
+  DWDSLesenXML ({ clipboard, xml, returnResult = false }) {
     // Datenobjekt erzeugen
     let data;
     if (returnResult) {
       data = belegImport.DWDSDatensatz().ds;
     } else {
       belegImport.Datei.meta = "";
-      belegImport.Datei.data = [belegImport.DWDSDatensatz()];
+      belegImport.Datei.data = [ belegImport.DWDSDatensatz() ];
       data = belegImport.Datei.data[0].ds;
     }
     // Datensatz: Datum
-    let nDa = xml.querySelector("Fundstelle Erstpublikation") || xml.querySelector("Fundstelle Datum");
+    const nDa = xml.querySelector("Fundstelle Erstpublikation") || xml.querySelector("Fundstelle Datum");
     if (nDa && nDa.firstChild) {
       data.da = nDa.firstChild.nodeValue;
     }
     // Datensatz: Autor
-    let nAu = xml.querySelector("Fundstelle Autor");
+    const nAu = xml.querySelector("Fundstelle Autor");
     if (nAu && nAu.firstChild) {
       data.au = belegImport.DWDSKorrekturen({
         typ: "au",
@@ -848,10 +849,10 @@ let belegImport = {
       });
     }
     // Datensatz: Beleg
-    let nBs = xml.querySelector("Belegtext");
+    const nBs = xml.querySelector("Belegtext");
     if (nBs && nBs.firstChild) {
-      let bs = [],
-        bsContent = nBs.textContent.replace(/<Stichwort>(.+?)<\/Stichwort>/g, (m, p1) => p1);
+      const bs = [];
+      let bsContent = nBs.textContent.replace(/<Stichwort>(.+?)<\/Stichwort>/g, (m, p1) => p1);
       bsContent = belegImport.DWDSKorrekturen({
         typ: "bs",
         txt: bsContent,
@@ -869,13 +870,13 @@ let belegImport = {
     data.bi = "dwds";
     data.bx = clipboard;
     // Datensatz: Quelle
-    let nQu = xml.querySelector("Fundstelle Bibl");
+    const nQu = xml.querySelector("Fundstelle Bibl");
     if (nQu && nQu.firstChild) {
-      let nTitel = xml.querySelector("Fundstelle Titel"),
-        nSeite = xml.querySelector("Fundstelle Seite"),
-        nURL = xml.querySelector("Fundstelle URL"),
-        nAuf = xml.querySelector("Fundstelle Aufrufdatum");
-      let titeldaten = {
+      const nTitel = xml.querySelector("Fundstelle Titel");
+      const nSeite = xml.querySelector("Fundstelle Seite");
+      const nURL = xml.querySelector("Fundstelle URL");
+      const nAuf = xml.querySelector("Fundstelle Aufrufdatum");
+      const titeldaten = {
         titel: nTitel && nTitel.firstChild ? nTitel.firstChild.nodeValue : "",
         seite: nSeite && nSeite.firstChild ? nSeite.firstChild.nodeValue : "",
         url: nURL && nURL.firstChild ? nURL.firstChild.nodeValue : "",
@@ -889,8 +890,8 @@ let belegImport = {
       });
     }
     // Datensatz: Korpus
-    let korpus = "",
-      nKr = xml.querySelector("Fundstelle Korpus");
+    let korpus = "";
+    const nKr = xml.querySelector("Fundstelle Korpus");
     if (nKr && nKr.firstChild) {
       korpus = nKr.firstChild.nodeValue;
       if (/^dta/.test(korpus)) {
@@ -908,7 +909,7 @@ let belegImport = {
       }
     }
     // Datensatz: Textsorte
-    let nTs = xml.querySelector("Fundstelle Textklasse");
+    const nTs = xml.querySelector("Fundstelle Textklasse");
     if (korpus &&
         belegImport.DWDSKorpora[korpus] &&
         belegImport.DWDSKorpora[korpus].ts) {
@@ -920,12 +921,12 @@ let belegImport = {
       });
     }
     // Datensatz: Notizen
-    let nDok = xml.querySelector("Fundstelle Dokument");
+    const nDok = xml.querySelector("Fundstelle Dokument");
     if (nDok && nDok.firstChild) {
       data.no = belegImport.DWDSKorrekturen({
         typ: "no",
         txt: nDok.firstChild.nodeValue,
-        korpus
+        korpus,
       });
     }
     // ggf. Datensatz direkt zurückgeben
@@ -942,9 +943,9 @@ let belegImport = {
     belegImport.Datei.meta = "";
     belegImport.Datei.data = [];
     // Datensätze parsen
-    for (let i of json) {
+    for (const i of json) {
       // Datensatz vorbereiten
-      let data = belegImport.DWDSDatensatz();
+      const data = belegImport.DWDSDatensatz();
       belegImport.Datei.data.push(data);
       // Datensatz: Datum
       if (i.meta_.firstDate || i.meta_.date_) {
@@ -961,13 +962,13 @@ let belegImport = {
         });
       }
       // Datensatz: Beleg
-      let bs = [];
-      for (let s of i.ctx_) {
+      const bs = [];
+      for (const s of i.ctx_) {
         let satz = "";
         if (helfer.checkType("String", s)) {
           satz = s;
         } else {
-          for (let w of s) {
+          for (const w of s) {
             if (w.ws === "1") {
               satz += " ";
             }
@@ -984,7 +985,7 @@ let belegImport = {
       data.ds.bs = bs.join("\n\n");
       // Datensatz: Quelle
       if (i.meta_.bibl) {
-        let titeldaten = {
+        const titeldaten = {
           titel: i.meta_.title ? i.meta_.title : "",
           seite: i.meta_.page_ ? i.meta_.page_ : "",
           url: i.meta_.url ? i.meta_.url : "",
@@ -1038,7 +1039,7 @@ let belegImport = {
         data.ds.no = belegImport.DWDSKorrekturen({
           typ: "no",
           txt: i.meta_.basename,
-          korpus
+          korpus,
         });
       }
       // Datensatz: Beleg-XML
@@ -1076,9 +1077,9 @@ let belegImport = {
         xmlTxt += `<URL>${i.meta_.url}</URL>`;
       }
       xmlTxt += "</Fundstelle></Beleg>";
-      let parser = new DOMParser(),
-        xmlDoc = parser.parseFromString(xmlTxt, "text/xml"),
-        xmlDocIndent = helferXml.indent(xmlDoc);
+      const parser = new DOMParser();
+      const xmlDoc = parser.parseFromString(xmlTxt, "text/xml");
+      const xmlDocIndent = helferXml.indent(xmlDoc);
       data.ds.bi = "dwds";
       data.ds.bx = new XMLSerializer().serializeToString(xmlDocIndent);
     }
@@ -1095,7 +1096,7 @@ let belegImport = {
   //     (ergänzende Titeldaten)
   //   korpus = String
   //     (das DWDS-Korpus)
-  DWDSKorrekturen ({typ, txt, data, titeldaten, korpus}) {
+  DWDSKorrekturen ({ typ, txt, data, titeldaten, korpus }) {
     if (typ === "au") { // AUTOR
       // Autor-ID entfernen (bei Snippets aus dem DTA)
       txt = txt.replace(/\s\(#.+?\)/, "");
@@ -1120,18 +1121,18 @@ let belegImport = {
       // !txt kann deswegen sein, weil die Funktion auch von
       // beleg.toolsQuelleLaden() genutzt wird)
       if (!txt || /^(Name|Nn|o\.\s?A\.|unknown|unkown)$/.test(txt)) { // merkwürdige Platzhalter für "Autor unbekannt"
-        return "N. N.";
+        return "N.\u00A0N.";
       } else if (!/[A-ZÄÖÜ]/.test(txt)) { // Autorname ist nur ein Kürzel
-        return `N. N. [${txt}]`;
+        return `N.\u00A0N. [${txt}]`;
       } else if (/^[A-Z]\.[A-Z]\.$/.test(txt)) { // Autorname mit Initialen, aber ohne Spatium
-        return txt.replace(/\./, ". ");
+        return txt.replace(/\./, ".\u00A0");
       }
-      let leerzeichen = txt.match(/\s/g);
+      const leerzeichen = txt.match(/\s/g);
       if (!/,\s/.test(txt) &&
           !/^[A-Z]\.\s[A-Z]\.$/.test(txt) &&
           leerzeichen &&
           leerzeichen.length === 1) {
-        let txtSp = txt.split(/\s/);
+        const txtSp = txt.split(/\s/);
         return `${txtSp[1]}, ${txtSp[0]}`;
       }
       return txt;
@@ -1141,18 +1142,18 @@ let belegImport = {
       data.qu = txt;
       // eine Verrenkung wegen der häufig merkwürdigen Zitierweise
       data.qu = data.qu.replace(/ Zitiert nach:.+/, "");
-      let jahrDatierung = data.da.match(/[0-9]{4}/),
-        jahrQuelle = data.qu.matchAll(/(?<!S. )(?<![0-9])([0-9]{4})/g),
-        jahrQuelleStr = "";
-      for (let i of jahrQuelle) {
+      const jahrDatierung = data.da.match(/[0-9]{4}/);
+      const jahrQuelle = data.qu.matchAll(/(?<!S. )(?<![0-9])([0-9]{4})/g);
+      let jahrQuelleStr = "";
+      for (const i of jahrQuelle) {
         jahrQuelleStr = i[1];
       }
       if (!/\[[0-9]{4}\]/.test(data.qu) &&
           jahrDatierung && jahrQuelleStr &&
           jahrDatierung[0] !== jahrQuelleStr) {
-        let datierung = parseInt(jahrDatierung[0], 10),
-          quelle = parseInt(jahrQuelleStr, 10),
-          publikation = `${quelle} [${datierung}]`;
+        const datierung = parseInt(jahrDatierung[0], 10);
+        const quelle = parseInt(jahrQuelleStr, 10);
+        let publikation = `${quelle} [${datierung}]`;
         if (quelle > datierung) {
           publikation = `${quelle} [zuerst ${datierung}]`;
         }
@@ -1166,7 +1167,7 @@ let belegImport = {
           titel = "";
         }
         if (titel && !data.qu.includes(titel)) {
-          let qu = data.qu;
+          const qu = data.qu;
           data.qu = `${data.au}: ${titel}`;
           if (!/[.!?]$/.test(data.qu)) {
             data.qu += ".";
@@ -1176,7 +1177,7 @@ let belegImport = {
       }
       // ggf. "o. A." am Anfang der Quellenangabe ersetzen
       if (/^o\.\s?A\./.test(data.qu)) {
-        data.qu = data.qu.replace(/^o\.\s?A\./, "N. N.");
+        data.qu = data.qu.replace(/^o\.\s?A\./, "N.\u00A0N.");
       }
       // ggf. Seite ergänzen
       if (titeldaten.seite) {
@@ -1184,7 +1185,7 @@ let belegImport = {
           if (/\.$/.test(data.qu)) {
             data.qu = data.qu.substring(0, data.qu.length - 1);
           }
-          data.qu += `, S. ${titeldaten.seite}`;
+          data.qu += `, S.\u00A0${titeldaten.seite}`;
         }
       }
       // ggf. Punkt am Ende der Quellenangabe ergänzen
@@ -1192,10 +1193,10 @@ let belegImport = {
         data.qu += ".";
       }
       // Tagesdaten ggf. aufhübschen
-      let datum = data.qu.match(/(?<tag>[0-9]{2})\.(?<monat>[0-9]{2})\.(?<jahr>[0-9]{4})/);
+      const datum = data.qu.match(/(?<tag>[0-9]{2})\.(?<monat>[0-9]{2})\.(?<jahr>[0-9]{4})/);
       if (datum) {
-        let reg = new RegExp(helfer.escapeRegExp(datum[0]));
-        data.qu = data.qu.replace(reg, `${datum.groups.tag.replace(/^0/, "")}. ${datum.groups.monat.replace(/^0/, "")}. ${datum.groups.jahr}`);
+        const reg = new RegExp(helfer.escapeRegExp(datum[0]));
+        data.qu = data.qu.replace(reg, `${datum.groups.tag.replace(/^0/, "")}.\u00A0${datum.groups.monat.replace(/^0/, "")}. ${datum.groups.jahr}`);
       }
       // typographische Verbesserungen
       data.qu = helfer.typographie(data.qu);
@@ -1206,22 +1207,22 @@ let belegImport = {
         if (titeldaten.auf) {
           data.qu += ` (Aufrufdatum: ${titeldaten.auf})`;
         } else {
-          let heute = new Date();
+          const heute = new Date();
           data.qu += ` (Aufrufdatum: ${heute.getDate()}. ${heute.getMonth() + 1}. ${heute.getFullYear()})`;
         }
       }
       // Steht in der Quellenangabe der Autor in der Form "Nachname, Vorname",
       // im Autor-Feld aber nicht?
-      let auQu = data.qu.split(": "),
-        auQuKommata = auQu[0].match(/, /g);
+      const auQu = data.qu.split(": ");
+      const auQuKommata = auQu[0].match(/, /g);
       if (auQuKommata && auQuKommata.length === 1 &&
           !/, /.test(data.au)) {
-        let autorQu = auQu[0].replace(/,/g, "").split(/\s/),
-          autorAu = data.au.split(/\s/);
+        const autorQu = auQu[0].replace(/,/g, "").split(/\s/);
+        const autorAu = data.au.split(/\s/);
         if (auQu[0] !== data.au &&
             autorQu.length === autorAu.length) {
           let autorAendern = true;
-          for (let i of autorAu) {
+          for (const i of autorAu) {
             if (!autorQu.includes(i)) {
               autorAendern = false;
               break;
@@ -1242,10 +1243,10 @@ let belegImport = {
       if (!/::/.test(txt)) {
         return txt.split(":")[0];
       }
-      let ts = "",
-        tsSp = txt.split("::");
+      let ts = "";
+      const tsSp = txt.split("::");
       for (let i = 0, len = tsSp.length; i < len; i++) {
-        let tsClean = helfer.textTrim(tsSp[i], true);
+        const tsClean = helfer.textTrim(tsSp[i], true);
         if (!tsClean || /^[A-ZÄÖÜ]{2,}/.test(tsClean)) {
           continue;
         }
@@ -1257,9 +1258,9 @@ let belegImport = {
       return ts;
     } else if (typ === "no") { // NOTIZEN
       if (korpus) {
-        let wort = kartei.wort.replace(/\s/g, " && "),
-          query = encodeURIComponent(`${wort} #HAS[basename,'${txt}']`),
-          ersteZeile = "\n";
+        const wort = kartei.wort.replace(/\s/g, " && ");
+        const query = encodeURIComponent(`${wort} #HAS[basename,'${txt}']`);
+        let ersteZeile = "\n";
         if (optionen.data.einstellungen["notizen-zeitung"] &&
             belegImport.DWDSKorpora[korpus] &&
             belegImport.DWDSKorpora[korpus].ts === "Zeitung") {
@@ -1289,8 +1290,8 @@ let belegImport = {
       return false;
     }
     // XML nicht wohlgeformt
-    let parser = new DOMParser(),
-      xmlDoc = parser.parseFromString(cb, "text/xml");
+    const parser = new DOMParser();
+    const xmlDoc = parser.parseFromString(cb, "text/xml");
     if (xmlDoc.querySelector("parsererror")) {
       return false;
     }
@@ -1325,10 +1326,10 @@ let belegImport = {
 
   // Datei-Import: Zwischenspeicher und Importformular zurücksetzen
   DateiReset () {
-    let datei = belegImport.Datei,
-      typ = datei.typ;
+    const datei = belegImport.Datei;
+    const typ = datei.typ;
     // Zwischenspeicher zurücksetzen
-    for (let k of Object.keys(datei)) {
+    for (const k of Object.keys(datei)) {
       if (Array.isArray(datei[k])) {
         datei[k] = [];
       } else {
@@ -1361,45 +1362,43 @@ let belegImport = {
   // Datei-Import: öffnet eine Datei und liest sie ein
   async DateiOeffnen () {
     // Optionen
-    let opt = {
+    const opt = {
       title: "Datei öffnen",
       defaultPath: appInfo.documents,
       filters: [
         {
           name: "Alle Dateien",
-          extensions: ["*"],
+          extensions: [ "*" ],
         },
       ],
-      properties: [
-        "openFile",
-      ],
+      properties: [ "openFile" ],
     };
     if (document.getElementById("beleg-import-dwds").checked) {
       opt.filters.unshift({
-        name: `JSON-Datei`,
-        extensions: ["json"],
+        name: "JSON-Datei",
+        extensions: [ "json" ],
       });
     } else if (document.getElementById("beleg-import-dereko").checked) {
       opt.filters.unshift({
-        name: `Text-Datei`,
-        extensions: ["txt"],
+        name: "Text-Datei",
+        extensions: [ "txt" ],
       });
     } else if (document.getElementById("beleg-import-xml").checked) {
       opt.filters.unshift({
-        name: `XML-Datei`,
-        extensions: ["xml"],
+        name: "XML-Datei",
+        extensions: [ "xml" ],
       });
     } else if (document.getElementById("beleg-import-bibtex").checked) {
       opt.filters.unshift({
-        name: `BibTeX-Datei`,
-        extensions: ["bib", "bibtex"],
+        name: "BibTeX-Datei",
+        extensions: [ "bib", "bibtex" ],
       });
     }
     // Dialog anzeigen
-    let result = await modules.ipc.invoke("datei-dialog", {
+    const result = await modules.ipc.invoke("datei-dialog", {
       open: true,
       winId: winInfo.winId,
-      opt: opt,
+      opt,
     });
     // Fehler oder keine Datei ausgewählt
     if (result.message || !Object.keys(result).length) {
@@ -1418,13 +1417,13 @@ let belegImport = {
       encoding = "latin1";
     }
     // Datei einlesen
-    modules.fsp.readFile(result.filePaths[0], {encoding: encoding})
+    modules.fsp.readFile(result.filePaths[0], { encoding })
       .then(content => {
         // sollten DWDS- oder BibTeX-Daten oder eine PPN in der Zwischenablage sein => Zwischenablage leeren
         const cb = modules.clipboard.readText().trim();
         if (belegImport.DWDSXMLCheck(cb) ||
             belegImport.BibTeXCheck(cb) ||
-            belegImport.PPNCheck({ppn: cb})) {
+            belegImport.PPNCheck({ ppn: cb })) {
           modules.clipboard.clear();
         }
         // Datei-Inhalt importieren
@@ -1453,8 +1452,8 @@ let belegImport = {
   //   typ = String
   //     (Typ der Datei, also dwds || dereko || xml || bibtex)
   DateiMeta (pfad, typ) {
-    let dataPfad = "",
-    dataTyp = "";
+    let dataPfad = "";
+    let dataTyp = "";
     if (belegImport.Datei.data.length) {
       dataPfad = pfad;
       dataTyp = typ;
@@ -1466,20 +1465,20 @@ let belegImport = {
   // Datei-Import: Verteilerfunktion für das Importieren eingelesener Datensätze
   async DateiImport () {
     // Clipboard-Content schlägt Datei-Content
-    const cb = modules.clipboard.readText().trim(),
-      ppn = belegImport.PPNCheck({ppn: cb}) ? true : false;
-    let importTypAktiv = "dereko",
-      result;
+    const cb = modules.clipboard.readText().trim();
+    const ppn = belegImport.PPNCheck({ ppn: cb });
+    let importTypAktiv = "dereko";
+    let result;
     if (document.getElementById("beleg-import-dwds").checked) {
       importTypAktiv = "dwds";
-      let xml = belegImport.DWDSXMLCheck(cb);
+      const xml = belegImport.DWDSXMLCheck(cb);
       if (xml) {
         result = belegImport.DWDS(xml, "– Zwischenablage –", false);
       }
     } else if (document.getElementById("beleg-import-xml").checked) {
       // Download der XML-Daten
       if (ppn) {
-        belegImport.PPNAnzeigeKarteikarte({typ: "xml"});
+        belegImport.PPNAnzeigeKarteikarte({ typ: "xml" });
         const xmlDaten = await belegImport.PPNXML({
           ppn: cb,
           fokus: "beleg-datei-importieren",
@@ -1489,7 +1488,7 @@ let belegImport = {
           return;
         }
         belegImport.Datei.meta = "";
-        belegImport.Datei.data = [xmlDaten];
+        belegImport.Datei.data = [ xmlDaten ];
         result = await belegImport.DateiImportAusfuehren(0);
         belegImport.clearClipboard(result, true);
         return;
@@ -1502,7 +1501,7 @@ let belegImport = {
     } else if (document.getElementById("beleg-import-bibtex").checked) {
       // Download der BibTex-Daten
       if (ppn) {
-        belegImport.PPNAnzeigeKarteikarte({typ: "bibtex"});
+        belegImport.PPNAnzeigeKarteikarte({ typ: "bibtex" });
         const bibtexDaten = await belegImport.PPNBibTeX({
           ppn: cb,
           fokus: "beleg-datei-importieren",
@@ -1511,12 +1510,12 @@ let belegImport = {
           // Fehlermeldungen werden in belegImport.PPNBibTeX() abgesetzt
           return;
         }
-        const bibtexCheck = belegImport.BibTeXCheck(bibtexDaten),
-          bibtexLesen = bibtexCheck ? belegImport.BibTeXLesen(bibtexDaten) : false;
+        const bibtexCheck = belegImport.BibTeXCheck(bibtexDaten);
+        const bibtexLesen = bibtexCheck ? belegImport.BibTeXLesen(bibtexDaten) : false;
         if (!bibtexCheck || !bibtexLesen) {
           dialog.oeffnen({
             typ: "alert",
-            text: `Das Einlesen der heruntergeladenen <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Daten ist gescheitert.`,
+            text: 'Das Einlesen der heruntergeladenen <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Daten ist gescheitert.',
             callback: () => document.getElementById("beleg-datei-importieren").focus(),
           });
           return;
@@ -1561,35 +1560,35 @@ let belegImport = {
   // Datei-Import: Overlay-Fenster mit der Liste der eingelesenen Belege öffnen
   DateiImportFenster () {
     // Fenster öffnen
-    let fenster = document.getElementById("import");
+    const fenster = document.getElementById("import");
     overlay.oeffnen(fenster);
     document.getElementById("import-abbrechen-button").focus();
     // längstes Wort ermitteln (wird für die Auswahl des Textausschnitts gebraucht)
     let laengstesWort = 0;
-    for (let wort of Object.keys(data.fv)) {
+    for (const wort of Object.keys(data.fv)) {
       if (wort.length > laengstesWort) {
         laengstesWort = wort.length;
       }
     }
     // Belegliste aufbauen
-    let cont = document.getElementById("import-cont-over"),
-      daten = belegImport.Datei.data,
-      autorenVorhanden = false,
-      belegeVorhanden = false,
-      table = document.createElement("table");
+    const cont = document.getElementById("import-cont-over");
+    const daten = belegImport.Datei.data;
+    let autorenVorhanden = false;
+    let belegeVorhanden = false;
+    const table = document.createElement("table");
     cont.replaceChild(table, cont.firstChild);
     daten.forEach((i, n) => {
-      let tr = document.createElement("tr");
+      const tr = document.createElement("tr");
       table.appendChild(tr);
       tr.dataset.idx = n;
       auswahl(tr);
       // Haken
       let td = document.createElement("td");
       tr.appendChild(td);
-      let img = document.createElement("img");
+      const img = document.createElement("img");
       td.appendChild(img);
       img.width = "24";
-      img.height= "24";
+      img.height = "24";
       if (i.importiert) {
         img.src = "img/check-gruen.svg";
         img.title = "demarkieren";
@@ -1601,7 +1600,7 @@ let belegImport = {
       // Datum
       td = document.createElement("td");
       tr.appendChild(td);
-      td.textContent = i.ds.da ? i.ds.da : "o. J.";
+      td.textContent = i.ds.da ? i.ds.da : "o.\u00A0J.";
       if (i.ds.da.length > 4) {
         table.classList.add("datum-breit");
       }
@@ -1609,7 +1608,7 @@ let belegImport = {
       td = document.createElement("td");
       tr.appendChild(td);
       td.textContent = i.ds.au;
-      if (i.ds.au === "N. N.") {
+      if (i.ds.au === "N.\u00A0N.") {
         td.classList.add("kein-wert");
       } else {
         autorenVorhanden = true;
@@ -1617,20 +1616,20 @@ let belegImport = {
       // Beleganriss
       td = document.createElement("td");
       tr.appendChild(td);
-      let bs = i.ds.bs.replace(/\n/g, " ");
+      const bs = i.ds.bs.replace(/\n/g, " ");
       if (!bs) { // wird bei BibTeX und XML immer so sein
         td.classList.add("kein-wert");
         td.textContent = "kein Beleg";
         return;
       }
       belegeVorhanden = true;
-      let pos = belegImport.checkWort(bs, true);
+      const pos = belegImport.checkWort(bs, true);
       pos.sort((a, b) => a - b);
       if (!pos.length) {
         td.textContent = bs.substring(0, 150);
       } else {
-        let vor = laengstesWort + 20,
-          start = pos[0] - vor < 0 ? 0 : pos[0] - vor;
+        let vor = laengstesWort + 20;
+        const start = pos[0] - vor < 0 ? 0 : pos[0] - vor;
         if (start === 0) {
           vor = 0;
         }
@@ -1651,9 +1650,9 @@ let belegImport = {
     tooltip.init(cont);
     // Import-Markierung entfernen
     function markierung (img) {
-      img.addEventListener("click", function(evt) {
+      img.addEventListener("click", function (evt) {
         evt.stopPropagation();
-        let idx = parseInt(this.closest("tr").dataset.idx, 10);
+        const idx = parseInt(this.closest("tr").dataset.idx, 10);
         daten[idx].importiert = !daten[idx].importiert;
         if (daten[idx].importiert) {
           this.src = "img/check-gruen.svg";
@@ -1667,10 +1666,10 @@ let belegImport = {
     }
     // Import-Fenster schließen ausgewählten Datensatz übernehmen
     function auswahl (tr) {
-      tr.addEventListener("click", function() {
+      tr.addEventListener("click", function () {
         belegImport.DateiImportFensterSchliessen();
         setTimeout(() => {
-          let idx = parseInt(this.dataset.idx, 10);
+          const idx = parseInt(this.dataset.idx, 10);
           belegImport.DateiImportAusfuehren(idx);
         }, 200); // 200ms Zeit lassen, um das Overlay-Fenster zu schließen
       });
@@ -1692,7 +1691,7 @@ let belegImport = {
       return;
     }
     // Ist die Kartei schon ausgefüllt?
-    let feldnamen = {
+    const feldnamen = {
       da: "Datum",
       au: "Autor",
       bs: "Beleg",
@@ -1701,9 +1700,9 @@ let belegImport = {
       ts: "Textsorte",
       no: "Notizen",
     };
-    let karteGefuellt = false,
-      felderGefuellt = new Set();
-    for (let [k, v] of Object.entries(belegImport.Datei.data[idx].ds)) {
+    let karteGefuellt = false;
+    const felderGefuellt = new Set();
+    for (const [ k, v ] of Object.entries(belegImport.Datei.data[idx].ds)) {
       if (k === "bx") {
         continue;
       }
@@ -1714,13 +1713,13 @@ let belegImport = {
     }
     if (karteGefuellt) {
       // Feldnamen für die Anzeige vorbereiten
-      let felder = [...felderGefuellt],
-        felderFolge = Object.values(feldnamen);
+      const felder = [ ...felderGefuellt ];
+      const felderFolge = Object.values(feldnamen);
       felder.sort((a, b) => felderFolge.indexOf(a) - felderFolge.indexOf(b));
-      let felderTxt= felder.join(", ").replace(/, ([a-zA-Z]+)$/, (m, p1) => `</i> und <i>${p1}`),
-        numerus = ["Die Felder", "werden"];
+      const felderTxt = felder.join(", ").replace(/, ([a-zA-Z]+)$/, (m, p1) => `</i> und <i>${p1}`);
+      let numerus = [ "Die Felder", "werden" ];
       if (felder.length === 1) {
-        numerus = ["Das Feld", "wird"];
+        numerus = [ "Das Feld", "wird" ];
       }
       // Meldung anzeigen
       dialog.oeffnen({
@@ -1756,9 +1755,9 @@ let belegImport = {
     return true;
     // Import-Funktion
     function startImport () {
-      let data = belegImport.Datei.data[idx];
+      const data = belegImport.Datei.data[idx];
       // Datenfelder importieren
-      for (let feld of Object.keys(data.ds)) {
+      for (const feld of Object.keys(data.ds)) {
         if (!data.ds[feld]) { // Datensatz ist leer
           continue;
         }
@@ -1783,7 +1782,7 @@ let belegImport = {
   //     (der Index in belegImport.Datei.data, der importiert werden soll)
   DateiImportDTA (idx) {
     return new Promise(resolve => {
-      let ds = belegImport.Datei.data[idx].ds;
+      const ds = belegImport.Datei.data[idx].ds;
       // Beleg wohl nicht aus DTA
       if (!/https?:\/\/www\.deutschestextarchiv\.de\//.test(ds.qu)) {
         resolve(false);
@@ -1812,8 +1811,8 @@ let belegImport = {
       document.getElementById("dialog-text").appendChild(optionen.shortcut("DTA-Import künftig ohne Nachfrage anstoßen", "dta-bevorzugen"));
       // DTA-Import anstoßen
       function dtaImport () {
-        let url = liste.linksErkennen(ds.qu).match(/href="([^"]+\.deutschestextarchiv\.de\/.+?)"/)[1],
-          dtaFeld = document.getElementById("beleg-dta");
+        const url = liste.linksErkennen(ds.qu).match(/href="([^"]+\.deutschestextarchiv\.de\/.+?)"/)[1];
+        const dtaFeld = document.getElementById("beleg-dta");
         dtaFeld.value = url;
         const fak = belegImport.DTAGetFak(url, "");
         if (fak) {
@@ -1837,7 +1836,7 @@ let belegImport = {
     if (!reimport && !/^© Leibniz-Institut für Deutsche Sprache, Mannheim/.test(content)) {
       dialog.oeffnen({
         typ: "alert",
-        text: `Beim Einlesen des Dateiinhalts ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">Datei stammt nicht aus COSMAS II</p>`,
+        text: 'Beim Einlesen des Dateiinhalts ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">Datei stammt nicht aus COSMAS II</p>',
       });
       return;
     }
@@ -1894,10 +1893,10 @@ let belegImport = {
   //     (Metadaten zum Export, die für alle Belege gelten)
   DeReKoLesenMeta (meta) {
     belegImport.Datei.meta = "";
-    let daten = ["Datum", "Archiv", "Korpus", "Suchanfrage"];
-    for (let d of daten) {
-      let reg = new RegExp(`(${d})\\s*:(.+)`),
-        treffer = meta.match(reg);
+    const daten = [ "Datum", "Archiv", "Korpus", "Suchanfrage" ];
+    for (const d of daten) {
+      const reg = new RegExp(`(${d})\\s*:(.+)`);
+      const treffer = meta.match(reg);
       if (treffer && treffer.length === 3) {
         belegImport.Datei.meta += `\n${treffer[1]}:${treffer[2]}`;
       }
@@ -1914,12 +1913,12 @@ let belegImport = {
     // Zwischenspeicher zurücksetzen
     belegImport.Datei.data = [];
     // Zeilen analysieren
-    let regQuVor = new RegExp(`^(${belegImport.DeReKoId})(.+)`),
-      regQuNach = new RegExp(`\\s\\((${belegImport.DeReKoId})(.+)\\)$`),
-      regQuNachId = new RegExp(`\\s\\(${belegImport.DeReKoId}`),
-      id = "",
-      quelle = "",
-      beleg = [];
+    const regQuVor = new RegExp(`^(${belegImport.DeReKoId})(.+)`);
+    const regQuNach = new RegExp(`\\s\\((${belegImport.DeReKoId})(.+)\\)$`);
+    const regQuNachId = new RegExp(`\\s\\(${belegImport.DeReKoId}`);
+    let id = "";
+    let quelle = "";
+    let beleg = [];
     for (let zeile of belege.split("\n")) {
       if (!zeile) { // Leerzeile
         pushBeleg();
@@ -1929,14 +1928,14 @@ let belegImport = {
       zeile = zeile.replace(/&#(.+?);/g, (m, p1) => String.fromCharCode(p1));
       // vorangestellte Quelle
       if (regQuVor.test(zeile)) {
-        let match = zeile.match(regQuVor);
+        const match = zeile.match(regQuVor);
         id = match[1];
         quelle = match[2];
         continue;
       }
       // nachgestellte Quelle
       if (regQuNach.test(zeile)) {
-        let match = zeile.match(regQuNach);
+        const match = zeile.match(regQuNach);
         id = match[1];
         quelle = match[2];
         zeile = zeile.split(regQuNachId)[0];
@@ -1950,17 +1949,17 @@ let belegImport = {
         return;
       }
       // Datensatz füllen
-      let data = belegImport.DateiDatensatz();
-      data.ds.au = "N. N."; // Autor
+      const data = belegImport.DateiDatensatz();
+      data.ds.au = "N.\u00A0N."; // Autor
       data.ds.bs = beleg.join("\n\n"); // Beleg
       data.ds.bi = "dereko";
       data.ds.bx = `${id}${quelle}\n\n${beleg.join("\n")}`; // Original
       data.ds.kr = "IDS"; // Korpus
       data.ds.no = belegImport.Datei.meta; // Notizen
       data.ds.qu = quelle.replace(/\s\[Ausführliche Zitierung nicht verfügbar\]/, ""); // Quellenangabe
-      let autor = quelle.split(":"),
-        kommata = autor[0].match(/,/g),
-        illegal = /[0-9.;!?]/.test(autor[0]);
+      const autor = quelle.split(":");
+      const kommata = autor[0].match(/,/g);
+      const illegal = /[0-9.;!?]/.test(autor[0]);
       if (!illegal && (/[^\s]+/.test(autor[0]) || kommata <= 1)) {
         data.ds.au = autor[0];
       }
@@ -2007,7 +2006,7 @@ let belegImport = {
   //   content = String
   //     (Inhalt der Datei)
   BibTeXFix (content) {
-    let zeilen = [];
+    const zeilen = [];
     for (let zeile of content.split(/\n/)) {
       if (/^[@\s}]/.test(zeile)) {
         zeile = zeile.replace(/^\s+/, "\t");
@@ -2034,7 +2033,7 @@ let belegImport = {
     // Content fixen
     content = belegImport.BibTeXFix(content);
     // Zwischenspeicher der Titel
-    let titel = [];
+    const titel = [];
     // Daten parsen
     let item = {};
     for (let zeile of content.split(/\n/)) {
@@ -2055,7 +2054,7 @@ let belegImport = {
         continue;
       }
       // Zeile analysieren
-      let kv = /^(?<key>[a-z]+)\s*=\s*[{"](?<value>.+)[}"],?$/.exec(zeile);
+      const kv = /^(?<key>[a-z]+)\s*=\s*[{"](?<value>.+)[}"],?$/.exec(zeile);
       if (!kv || !kv.groups.key || !kv.groups.value) {
         // da ist wohl was schiefgelaufen
         continue;
@@ -2066,7 +2065,7 @@ let belegImport = {
       }
       const val = kv.groups.value;
       if (/^(author|editor)$/.test(key)) {
-        for (let i of val.split(/\sand\s/)) {
+        for (const i of val.split(/\sand\s/)) {
           item[key].push(belegImport.BibTeXSymbols(i));
         }
       } else {
@@ -2087,34 +2086,38 @@ let belegImport = {
     // Titeldaten übertragen
     function pushTitle () {
       // Datensatz füllen
-      let data = belegImport.DateiDatensatz();
+      const data = belegImport.DateiDatensatz();
       // Autor(en) ermitteln
       if (item.author) {
         data.ds.au = item.author.join("/");
       } else if (item.editor) {
         data.ds.au = `${item.editor.join("/")} (Hrsg.)`;
       } else {
-        data.ds.au = "N. N.";
+        data.ds.au = "N.\u00A0N.";
       }
       // Originaltitel rekonstruieren
       data.ds.bi = "bibtex";
       data.ds.bx = `${item.startzeile}\n`;
-      for (let [k, v] of Object.entries(item)) {
+      for (const [ k, v ] of Object.entries(item)) {
         if (k === "startzeile") {
           continue;
         }
-        for (let i of v) {
-          data.ds.bx += `\t${k} = \{${i}\},\n`;
+        for (const i of v) {
+          data.ds.bx += `\t${k} = {${i}},\n`;
         }
       }
       data.ds.bx = data.ds.bx.substring(0, data.ds.bx.length - 2);
-      data.ds.bx += `\n}`;
+      data.ds.bx += "\n}";
       // Datum
       if (item.year) {
-        item.year.forEach((i, n) => item.year[n] = i.replace(/^\[|\]$/g, ""));
+        item.year.forEach((i, n) => {
+          item.year[n] = i.replace(/^\[|\]$/g, "");
+        });
         data.ds.da = item.year.join("/");
       } else if (item.date) {
-        item.date.forEach((i, n) => item.date[n] = i.replace(/^\[|\]$/g, ""));
+        item.date.forEach((i, n) => {
+          item.date[n] = i.replace(/^\[|\]$/g, "");
+        });
         data.ds.da = item.date.join("/");
       }
       // Datensatz von GoogleBooks?
@@ -2124,32 +2127,32 @@ let belegImport = {
         }
       }
       // Quellenangabe ermitteln
-      let td = belegImport.makeTitleDataObject();
+      const td = belegImport.makeTitleDataObject();
       if (item.author) {
-        td.autor = [...item.author];
+        td.autor = [ ...item.author ];
       }
       if (item.editor) {
-        td.hrsg = [...item.editor];
+        td.hrsg = [ ...item.editor ];
       }
       if (item.title) {
-        td.titel = [...item.title];
+        td.titel = [ ...item.title ];
       } else if (item.booktitle) {
-        td.titel = [...item.booktitle];
+        td.titel = [ ...item.booktitle ];
       } else if (item.shorttitle) {
-        td.titel = [...item.shorttitle];
+        td.titel = [ ...item.shorttitle ];
       } else {
-        td.titel = ["[ohne Titel]"];
+        td.titel = [ "[ohne Titel]" ];
       }
-      let istZeitschrift = false,
-        istAbschnitt = false;
+      let istZeitschrift = false;
+      let istAbschnitt = false;
       if (item.title && item.booktitle) {
-        td.inTitel = [...item.booktitle];
+        td.inTitel = [ ...item.booktitle ];
         istAbschnitt = true;
       } else if (item.title && (item.journal || item.journaltitle)) {
         if (item.journal) {
-          td.inTitel = [...item.journal];
+          td.inTitel = [ ...item.journal ];
         } else if (item.journaltitle) {
-          td.inTitel = [...item.journaltitle];
+          td.inTitel = [ ...item.journaltitle ];
         }
         istZeitschrift = true;
         istAbschnitt = true;
@@ -2168,17 +2171,17 @@ let belegImport = {
         td.quali = item.school.join(", ");
       }
       if (item.location) {
-        td.ort = [...item.location];
+        td.ort = [ ...item.location ];
       } else if (item.address) {
-        td.ort = [...item.address];
+        td.ort = [ ...item.address ];
       }
       if (item.publisher) {
         td.verlag = item.publisher.join("/");
       }
       td.jahr = data.ds.da;
       if (item.number) {
-        const heft = item.number.join("/"),
-          bdStart = /^Bd\./.test(item.number); // BibTeX von GoogleBooks hat mitunter diesen Fehler
+        const heft = item.number.join("/");
+        const bdStart = /^Bd\./.test(item.number); // BibTeX von GoogleBooks hat mitunter diesen Fehler
         if (bdStart && !istZeitschrift) {
           td.band = heft;
         } else if (!bdStart) {
@@ -2193,7 +2196,7 @@ let belegImport = {
         td.serie = item.series.join(". ");
       }
       if (item.url) {
-        td.url = [...item.url];
+        td.url = [ ...item.url ];
         td.url.sort(helfer.sortURL);
       }
       data.ds.qu = belegImport.makeTitle({
@@ -2212,7 +2215,7 @@ let belegImport = {
   BibTeXSymbols (text) {
     // das scheint der Standard zu sein: \‘{a}
     // Google und die GVK-API verwenden i.d.R. diese Form {\‘a}
-    let symbols = new Map();
+    const symbols = new Map();
     symbols.set("``", '"'); // GVK
     symbols.set("''", '"'); // GVK
     symbols.set("`", "'"); // GVK
@@ -2304,9 +2307,9 @@ let belegImport = {
     symbols.set("\\o", "ø");
     symbols.set("\\ss", "ß");
     // Symbole ersetzen
-    for (let [k, v] of symbols) {
-      let regLC = new RegExp(helfer.escapeRegExp(k), "g"),
-        regUC = new RegExp(helfer.escapeRegExp( k ), "gi");
+    for (const [ k, v ] of symbols) {
+      const regLC = new RegExp(helfer.escapeRegExp(k), "g");
+      const regUC = new RegExp(helfer.escapeRegExp(k), "gi");
       text = text.replace(regLC, v);
       text = text.replace(regUC, v.toUpperCase());
     }
@@ -2336,16 +2339,16 @@ let belegImport = {
   //     (nach dem Parsen soll ein automatischer Import angestoßen werden)
   XML (content, pfad, autoImport = true) {
     // Liegen passende XML-Daten vor?
-    let xmlDoc = belegImport.XMLCheck({xmlStr: content});
+    const xmlDoc = belegImport.XMLCheck({ xmlStr: content });
     if (!xmlDoc) {
       dialog.oeffnen({
         typ: "alert",
-        text: `Beim Einlesen des Dateiinhalts ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">Datei enthält keine verwertbaren XML-Daten</p>`,
+        text: 'Beim Einlesen des Dateiinhalts ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">Datei enthält keine verwertbaren XML-Daten</p>',
       });
       return false;
     }
     // Daten einlesen
-    if (!belegImport.XMLLesen({xmlDoc, xmlStr: content})) {
+    if (!belegImport.XMLLesen({ xmlDoc, xmlStr: content })) {
       return false;
     }
     // Metadaten auffrischen
@@ -2364,17 +2367,17 @@ let belegImport = {
   //     (Inhalt der Datei)
   //   returnResult = true || undefined
   //     (die Titeldaten sollen zurückgegeben werden)
-  XMLLesen ({xmlDoc, xmlStr, returnResult = false}) {
+  XMLLesen ({ xmlDoc, xmlStr, returnResult = false }) {
     // Zwischenspeicher der Titel
-    let titel = [];
+    const titel = [];
     // Dokumente parsen
     if (xmlDoc.querySelector("mods titleInfo")) {
       // MODS-Dokument
-      titel.push(redLit.eingabeXMLMODS({xmlDoc, xmlStr}));
+      titel.push(redLit.eingabeXMLMODS({ xmlDoc, xmlStr }));
     } else if (xmlDoc.querySelector("Fundstelle unstrukturiert")) {
       // Fundstellen-Dokument
-      let fundstellen = xmlDoc.evaluate("//Fundstelle", xmlDoc, null, XPathResult.ANY_TYPE, null),
-        item = fundstellen.iterateNext();
+      const fundstellen = xmlDoc.evaluate("//Fundstelle", xmlDoc, null, XPathResult.ANY_TYPE, null);
+      let item = fundstellen.iterateNext();
       while (item) {
         titel.push(redLit.eingabeXMLFundstelle({
           xmlDoc: item,
@@ -2399,7 +2402,7 @@ let belegImport = {
   // XML-Import: überprüft, ob sich hinter einem String ein passendes XML-Dokument verbirgt
   //   xmlStr = String
   //     (String, der überprüft werden soll)
-  XMLCheck ({xmlStr}) {
+  XMLCheck ({ xmlStr }) {
     // Daten beginnen nicht mit <Fundstelle>, <mods> oder XML-Deklaration
     if (!/^<(Fundstelle|mods|\?xml)/.test(xmlStr)) {
       return false;
@@ -2407,14 +2410,14 @@ let belegImport = {
     // Namespace-Attribut entfernen; das macht nur Problem mit evaluate()
     xmlStr = xmlStr.replace(/xmlns=".+?"/, "");
     // XML nicht wohlgeformt
-    let parser = new DOMParser(),
-      xmlDoc = parser.parseFromString(xmlStr, "text/xml");
+    const parser = new DOMParser();
+    const xmlDoc = parser.parseFromString(xmlStr, "text/xml");
     if (xmlDoc.querySelector("parsererror")) {
       return false;
     }
     // keine Fundstellen-Snippet(s)/kein MODS-Dokument
-    let fundstellen = xmlDoc.querySelector("Fundstelle unstrukturiert"),
-      mods = xmlDoc.querySelector("mods titleInfo");
+    const fundstellen = xmlDoc.querySelector("Fundstelle unstrukturiert");
+    const mods = xmlDoc.querySelector("mods titleInfo");
     if (!fundstellen && !mods) {
       return false;
     }
@@ -2425,7 +2428,7 @@ let belegImport = {
   // PPN-Download: Anzeige der Karteikarte für einen PPN-Download auffrischen
   //   typ = String
   //     (Datensatztyp, dessen Formular angezeigt werden soll)
-  PPNAnzeigeKarteikarte ({typ}) {
+  PPNAnzeigeKarteikarte ({ typ }) {
     belegImport.DateiReset();
     belegImport.Datei.pfad = "– PPN in Zwischenablage –";
     belegImport.Datei.typ = "ppn";
@@ -2437,10 +2440,10 @@ let belegImport = {
   //     (die PPN, deren Datensatz heruntergeladen werden soll)
   //   fokus = String
   //     (ID des Elements, das ggf. fokussiert werden soll)
-  PPNBibTeX ({ppn, fokus}) {
-    return new Promise(async resolve => {
-      // BibTeX-Daten herunterladen
-      let feedback = await helfer.fetchURL(`https://unapi.k10plus.de/?id=gvk:ppn:${ppn}&format=bibtex`);
+  async PPNBibTeX ({ ppn, fokus }) {
+    // BibTeX-Daten herunterladen
+    const feedback = await helfer.fetchURL(`https://unapi.k10plus.de/?id=gvk:ppn:${ppn}&format=bibtex`);
+    const result = new Promise(resolve => {
       // Fehler-Handling
       if (feedback.fehler) {
         dialog.oeffnen({
@@ -2456,7 +2459,7 @@ let belegImport = {
       if (!belegImport.BibTeXCheck(feedback.text)) {
         dialog.oeffnen({
           typ: "alert",
-          text: `Bei den aus dem GVK heruntergeladenen Daten handelt es sich nicht um einen validen <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Datensatz.`,
+          text: 'Bei den aus dem GVK heruntergeladenen Daten handelt es sich nicht um einen validen <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Datensatz.',
           callback: () => {
             document.getElementById(fokus).focus();
             resolve("");
@@ -2465,7 +2468,7 @@ let belegImport = {
         return;
       }
       // BibTeX-Daten aufbereiten
-      let daten = feedback.text.split("\n");
+      const daten = feedback.text.split("\n");
       for (let i = 0, len = daten.length; i < len; i++) {
         if (/^[a-z]+="/.test(daten[i])) {
           daten[i] = "\t" + daten[i];
@@ -2473,6 +2476,7 @@ let belegImport = {
       }
       resolve(daten.join("\n"));
     });
+    return result;
   },
 
   // PPN-Download: XML-Datensatz herunterladen
@@ -2480,10 +2484,10 @@ let belegImport = {
   //     (die PPN, deren Datensatz heruntergeladen werden soll)
   //   fokus = String
   //     (ID des Elements, das ggf. fokussiert werden soll)
-  PPNXML ({ppn, fokus}) {
-    return new Promise(async resolve => {
-      // MODS-Dokument herunterladen
-      let feedback = await helfer.fetchURL(`https://unapi.k10plus.de/?id=gvk:ppn:${ppn}&format=mods`);
+  async PPNXML ({ ppn, fokus }) {
+    // MODS-Dokument herunterladen
+    const feedback = await helfer.fetchURL(`https://unapi.k10plus.de/?id=gvk:ppn:${ppn}&format=mods`);
+    const result = new Promise(resolve => {
       // Fehler-Handling
       if (feedback.fehler) {
         dialog.oeffnen({
@@ -2496,11 +2500,11 @@ let belegImport = {
         });
         return;
       }
-      let xmlDaten = redLit.eingabeXMLCheck({xmlStr: feedback.text});
+      const xmlDaten = redLit.eingabeXMLCheck({ xmlStr: feedback.text });
       if (!xmlDaten) {
         dialog.oeffnen({
           typ: "alert",
-          text: `Bei den aus dem GVK heruntergeladenen Daten handelt es sich nicht um ein XML-Dokument, dessen Titeldaten ausgelesen werden könnten.`,
+          text: "Bei den aus dem GVK heruntergeladenen Daten handelt es sich nicht um ein XML-Dokument, dessen Titeldaten ausgelesen werden könnten.",
           callback: () => {
             document.getElementById(fokus).focus();
             resolve("");
@@ -2510,10 +2514,11 @@ let belegImport = {
       }
       resolve(xmlDaten);
     });
+    return result;
   },
 
   // PPN-Download: überprüfen, ob der übergebene Text eine PPN sein könnte
-  PPNCheck ({ppn}) {
+  PPNCheck ({ ppn }) {
     if (/^([0-9]{9,10}|[0-9]{8,9}X)$/.test(ppn)) {
       return true;
     }
@@ -2525,32 +2530,32 @@ let belegImport = {
   //     (Datensatz mit den Titeldaten)
   //   mitURL = Boolean
   //     (URL + Aufrufdatum sollen der Titelaufnahme angehängt werden)
-  makeTitle ({td, mitURL}) {
+  makeTitle ({ td, mitURL }) {
     let titel = "";
     // Autor
     if (td.autor.length) {
       if (td.autor.length > 3) {
-        titel = `${td.autor[0]}/${td.autor[1]} u. a.: `;
+        titel = `${td.autor[0]}/${td.autor[1]} u.\u00A0a.: `;
       } else {
         titel = `${td.autor.join("/")}: `;
       }
     } else if (td.hrsg.length) {
       if (td.hrsg.length > 3) {
-        titel = `${td.hrsg[0]}/${td.hrsg[1]} u. a.: `;
+        titel = `${td.hrsg[0]}/${td.hrsg[1]} u.\u00A0a.: `;
       } else {
         titel = `${td.hrsg.join("/")} (Hrsg.): `;
       }
     } else {
-      titel = "N. N.: ";
+      titel = "N.\u00A0N.: ";
     }
     // Titel
     titel += td.titel.join(". ");
     // Untertitel
     if (td.untertitel.length) {
-      td.untertitel.forEach(function(i) {
+      td.untertitel.forEach(function (i) {
         if (/^[a-zäöü]/.test(i)) {
           titel += ",";
-        } else if (!/^[(\[{]/.test(i)) {
+        } else if (!/^[([{]/.test(i)) {
           punkt();
         }
         titel += ` ${i}`;
@@ -2595,7 +2600,7 @@ let belegImport = {
     if (td.ort.length && !td.jahrgang) {
       punkt();
       if (td.ort.length > 2) {
-        titel += ` ${td.ort[0]} u. a.`;
+        titel += ` ${td.ort[0]} u.\u00A0a.`;
       } else {
         titel += ` ${td.ort.join("/")}`;
       }
@@ -2631,7 +2636,7 @@ let belegImport = {
       titel += `, ${td.heft}`;
     }
     // Seiten/Spalten
-    const seite_spalte = td.spalte ? "Sp. " : "S. ";
+    const seite_spalte = td.spalte ? "Sp.\u00A0" : "S.\u00A0";
     if (td.seiten) {
       titel += `, ${/Sp?\. /.test(td.seiten) ? "" : seite_spalte}${td.seiten}`;
     }
@@ -2649,9 +2654,9 @@ let belegImport = {
     punkt();
     // URL und Aufrufdatum
     if (mitURL && td.url.length) {
-      let heute = helfer.datumFormat(new Date().toISOString(), "minuten").split(",")[0];
+      const heute = helfer.datumFormat(new Date().toISOString(), "minuten").split(",")[0];
       titel += "\n";
-      for (let url of td.url) {
+      for (const url of td.url) {
         titel += `\n${url} (Aufrufdatum: ${heute})`;
       }
     }
@@ -2661,7 +2666,7 @@ let belegImport = {
     return titel;
     // ggf. Punkt ergänzen
     function punkt () {
-      if (!/[,;\.:!?]$/.test(titel)) {
+      if (!/[,;.:!?]$/.test(titel)) {
         titel += ".";
       }
     }
@@ -2673,7 +2678,7 @@ let belegImport = {
       for (let i = 0, len = td.hrsg.length; i < len; i++) {
         // maximal 3 Hrsg. nennen; bei mehr => 2 Hrsg. + u.a.
         if (len > 3 && i === 2) {
-          pers += " u. a.";
+          pers += " u.\u00A0a.";
           break;
         }
         // Anschluss
@@ -2685,7 +2690,7 @@ let belegImport = {
           pers += ", ";
         }
         // Namen umdrehen: Nachname, Vorname > Vorname Nachname
-        let hrsg = td.hrsg[i].split(", ");
+        const hrsg = td.hrsg[i].split(", ");
         hrsg.reverse();
         pers += hrsg.join(" ");
       }
@@ -2729,12 +2734,12 @@ let belegImport = {
   //   pos = true | undefined
   //     (Position der Treffer soll zurückgegeben werden)
   checkWort (bs = beleg.data.bs, pos = false) {
-    if ( !pos && (!bs || !optionen.data.einstellungen["wort-check"]) ) {
+    if (!pos && (!bs || !optionen.data.einstellungen["wort-check"])) {
       return;
     }
-    let wortGefunden = false,
-      positionen = []; // sammelt die Trefferpositionen (wenn gewünscht)
-    for (let i of helfer.formVariRegExpRegs) {
+    let wortGefunden = false;
+    const positionen = []; // sammelt die Trefferpositionen (wenn gewünscht)
+    for (const i of helfer.formVariRegExpRegs) {
       if (data.fv[i.wort].ma &&
           !optionen.data.einstellungen["wort-check-nur-markieren"]) {
         // "Nur markieren"-Varianten normalerweise nicht berücksichtigen
@@ -2760,17 +2765,17 @@ let belegImport = {
     }
     // ggf. Warnmeldung ausgeben
     if (!wortGefunden) {
-      let lemmata = [];
-      for (const [k, v] of Object.entries(data.fv)) {
+      const lemmata = [];
+      for (const [ k, v ] of Object.entries(data.fv)) {
         if (v.ma && !optionen.data.einstellungen["wort-check-nur-markieren"]) {
           continue;
         }
         lemmata.push(k);
       }
-      let numerus = ["Das Karteiwort", ""],
-        woerter = lemmata.join(", ");
+      let numerus = [ "Das Karteiwort", "" ];
+      let woerter = lemmata.join(", ");
       if (lemmata.length > 1) {
-        numerus = ["Die Karteiwörter", "n"];
+        numerus = [ "Die Karteiwörter", "n" ];
         woerter = woerter.replace(/(.+), (.+)/, (m, p1, p2) => `${p1}</i> und <i>${p2}`);
       }
       dialog.oeffnen({

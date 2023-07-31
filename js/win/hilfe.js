@@ -1,14 +1,14 @@
 "use strict";
 
-let hilfe = {
+const hilfe = {
   // mit der Tastatur durch durch die Menüelemente navigieren
   //   evt = Object
   //     (Event-Object des keydown)
   naviMenue (evt) {
     // aktives Element ermitteln
-    let links = document.querySelectorAll("nav a.kopf"),
-      aktiv = document.querySelector("nav a.aktiv"),
-      pos = -1;
+    const links = document.querySelectorAll("nav a.kopf");
+    const aktiv = document.querySelector("nav a.aktiv");
+    let pos = -1;
     for (let i = 0, len = links.length; i < len; i++) {
       if (links[i] === aktiv) {
         pos = i;
@@ -38,7 +38,7 @@ let hilfe = {
         a.classList.contains("link-dokumentation")) {
       return;
     }
-    a.addEventListener("click", function(evt) {
+    a.addEventListener("click", function (evt) {
       evt.preventDefault();
       const id = this.getAttribute("href").replace(/^#/, "");
       hilfe.naviSprungAusfuehren(id);
@@ -81,10 +81,10 @@ let hilfe = {
   // Navi-Details: Öffnen-Icons initialisieren
   naviDetailsInit () {
     document.querySelectorAll("nav > ul a").forEach(i => {
-      let span = document.createElement("span");
+      const span = document.createElement("span");
       span.classList.add("nav-details-toggle");
       i.appendChild(span);
-      span.addEventListener("click", function() {
+      span.addEventListener("click", function () {
         if (!this.closest("a").classList.contains("aktiv")) {
           return;
         }
@@ -98,9 +98,9 @@ let hilfe = {
   // Navi-Details: Anzeige aufbauen
   //   immerAn = Boolean
   //     (Detail-Navigation nicht umschalten)
-  naviDetails ({immerAn}) {
-    let nd = document.getElementById("navi-details"),
-      sektion = hilfe.naviDetailsAktiv();
+  naviDetails ({ immerAn }) {
+    let nd = document.getElementById("navi-details");
+    const sektion = hilfe.naviDetailsAktiv();
     if (nd) {
       if (!immerAn) {
         hilfe.naviDetailsAus();
@@ -130,12 +130,12 @@ let hilfe = {
     }
     nd.dataset.sektion = sektion.id;
     // Navigation aufbauen
-    let h = document.querySelectorAll(`#${sektion.id} > h2, #${sektion.id} .add-navi-details, #${sektion.id} > .erklaerung-icon, #${sektion.id} > .erklaerung-icon-menues, #${sektion.id} > .erklaerung-option`);
+    const h = document.querySelectorAll(`#${sektion.id} > h2, #${sektion.id} .add-navi-details, #${sektion.id} > .erklaerung-icon, #${sektion.id} > .erklaerung-icon-menues, #${sektion.id} > .erklaerung-option`);
     h.forEach(i => {
       if (!i.id || i.classList.contains("no-navi-details")) {
         return;
       }
-      let a = document.createElement("a");
+      const a = document.createElement("a");
       div.appendChild(a);
       if (i.nodeName === "H2") {
         a.classList.add("h2");
@@ -153,14 +153,14 @@ let hilfe = {
         text = i.textContent;
       }
       text = text.trim();
-      let rep = [
+      const rep = [
         /^Tastaturkürzel.+?;\s/,
         /^nur Leseansicht;\s/,
         /^nur bei aktiviert.+?;\s/,
         /^[a-zA-Z]+:\s/,
         /:$/,
       ];
-      for (let r of rep) {
+      for (const r of rep) {
         text = text.replace(r, "");
       }
       if (/; /.test(text)) {
@@ -183,10 +183,10 @@ let hilfe = {
       });
     }
     // Einrückungen vornehmen
-    for (let a of div.querySelectorAll(".h2")) {
+    for (const a of div.querySelectorAll(".h2")) {
       // ermitteln, ob unterhalb Links der Klasse add sind
-      let icon = "level1",
-        next = a.nextSibling;
+      let icon = "level1";
+      let next = a.nextSibling;
       while (next && !next.classList.contains("h2")) {
         if (next.classList.contains("add")) {
           icon = "level2";
@@ -206,7 +206,7 @@ let hilfe = {
       }
     }
     // Navigation positionieren
-    let rect = sektion.aktiv.getBoundingClientRect();
+    const rect = sektion.aktiv.getBoundingClientRect();
     if (rect.top + nd.offsetHeight < window.innerHeight) {
       // an der oberen Kante des aktiven Menüpunkts ausrichten
       nd.style.top = `${rect.top}px`;
@@ -219,15 +219,17 @@ let hilfe = {
     }
     // Navigation einblenden
     nd.style.left = `${250 - nd.offsetWidth}px`; // 250px = Breite Haupt-Navigation
-    setTimeout(() => nd.style.left = "265px", 0);
+    setTimeout(() => {
+      nd.style.left = "265px";
+    }, 0);
     // ersten Link fokussieren
     div.querySelector("a").focus();
   },
 
   // Navi-Details: Infos zur aktiven Sektion ermitteln
   naviDetailsAktiv () {
-    let aktiv = document.querySelector("nav > ul a.aktiv"),
-      id = "";
+    const aktiv = document.querySelector("nav > ul a.aktiv");
+    let id = "";
     if (aktiv) {
       id = "sektion-" + aktiv.getAttribute("href").substring(1);
     }
@@ -239,7 +241,7 @@ let hilfe = {
 
   // Navi-Details: Anzeige schließen
   naviDetailsAus () {
-    let nd = document.getElementById("navi-details");
+    const nd = document.getElementById("navi-details");
     if (!nd) {
       return;
     }
@@ -247,8 +249,8 @@ let hilfe = {
     clearTimeout(hilfe.naviDetailsTimeout);
     hilfe.naviDetailsTimeout = setTimeout(() => {
       nd.parentNode.removeChild(nd);
-      let aus = document.querySelectorAll(".nav-details-toggle-aus");
-      for (let i of aus) {
+      const aus = document.querySelectorAll(".nav-details-toggle-aus");
+      for (const i of aus) {
         // schaltet man schnell um, könnten durchaus mehrere vorhanden sein
         i.classList.remove("nav-details-toggle-aus");
       }
@@ -257,7 +259,7 @@ let hilfe = {
 
   // ermittelt die aktive Sektion
   sektionAktiv () {
-    let sek = document.querySelectorAll("section");
+    const sek = document.querySelectorAll("section");
     for (let i = 0, len = sek.length; i < len; i++) {
       if (!sek[i].classList.contains("aus")) {
         return sek[i].id.replace(/^sektion-/, "");
@@ -283,7 +285,7 @@ let hilfe = {
     // Detail-Navigation ggf. schließen
     hilfe.naviDetailsAus();
     // Navigation auffrischen
-    document.querySelectorAll("nav a.kopf").forEach(function(i) {
+    document.querySelectorAll("nav a.kopf").forEach(function (i) {
       if (i.getAttribute("href") === `#${sektion}`) {
         i.classList.add("aktiv");
       } else {
@@ -291,7 +293,7 @@ let hilfe = {
       }
     });
     // Sektionen ein- bzw. ausblenden
-    document.querySelectorAll("section").forEach(function(i) {
+    document.querySelectorAll("section").forEach(function (i) {
       if (i.id === `sektion-${sektion}`) {
         i.classList.remove("aus");
       } else {
@@ -314,7 +316,7 @@ let hilfe = {
 
   // lange Dateipfade umbrechen
   dateiBreak () {
-    document.querySelectorAll(".datei").forEach(function(i) {
+    document.querySelectorAll(".datei").forEach(function (i) {
       if (i.innerText.length > 30) {
         i.classList.add("long");
       }
@@ -329,8 +331,8 @@ let hilfe = {
   //     (das <figure>-Element, auf das geklickt wurde)
   bild (fig) {
     // Rahmen
-    let div = document.getElementById("bild"),
-      schonAn = true;
+    let div = document.getElementById("bild");
+    let schonAn = true;
     if (!div) {
       div = document.createElement("div");
       document.body.appendChild(div);
@@ -339,16 +341,16 @@ let hilfe = {
     }
     div.replaceChildren();
     // Content
-    let cont = document.createElement("div");
+    const cont = document.createElement("div");
     div.appendChild(cont);
     cont.id = "bild-cont";
     // Bild und Beschreibung einhängen
-    let h2 = document.createElement("h2");
+    const h2 = document.createElement("h2");
     cont.appendChild(h2);
     h2.textContent = fig.querySelector("figcaption").textContent;
     cont.appendChild(fig.querySelector("img").cloneNode());
     // Schließen-Icon
-    let schliessen = document.createElement("img");
+    const schliessen = document.createElement("img");
     cont.appendChild(schliessen);
     schliessen.id = "bild-schliessen";
     schliessen.src = "../img/x-dick-48.svg";
@@ -382,7 +384,7 @@ let hilfe = {
       return;
     }
     // Position ermitteln, an der sich das geöffnete Bild befindet
-    let figs = fig.parentNode.querySelectorAll("figure");
+    const figs = fig.parentNode.querySelectorAll("figure");
     for (let i = 0, len = figs.length; i < len; i++) {
       if (figs[i] === fig) {
         hilfe.bilderData.prev = null;
@@ -397,9 +399,9 @@ let hilfe = {
       }
     }
     // Navigationsbilder einhängen
-    let bilder = ["prev", "next"];
+    const bilder = [ "prev", "next" ];
     for (let i = 0; i < 2; i++) {
-      let img = document.createElement("img");
+      const img = document.createElement("img");
       cont.appendChild(img);
       img.id = `bilder-${bilder[i]}`;
       img.width = "48";
@@ -429,8 +431,8 @@ let hilfe = {
   //   img = Element
   //     (Navigationsbild, auf das geklickt wurde)
   bilderNav (img) {
-    img.addEventListener("click", function() {
-      let dir = this.id.match(/.+-(.+)/)[1];
+    img.addEventListener("click", function () {
+      const dir = this.id.match(/.+-(.+)/)[1];
       if (hilfe.bilderData[dir]) {
         hilfe.bild(hilfe.bilderData[dir]);
       }
@@ -444,11 +446,11 @@ let hilfe = {
     if (!document.getElementById("bild")) {
       return;
     }
-    let aktionen = {
-      "ArrowLeft": "prev",
-      "ArrowRight": "next",
+    const aktionen = {
+      ArrowLeft: "prev",
+      ArrowRight: "next",
     };
-    let dir = aktionen[evt.key];
+    const dir = aktionen[evt.key];
     if (hilfe.bilderData[dir]) {
       hilfe.bild(hilfe.bilderData[dir]);
     }
@@ -456,7 +458,7 @@ let hilfe = {
 
   // schließt das vergrößte Vorschau-Bild
   bildSchliessen () {
-    let bild = document.getElementById("bild");
+    const bild = document.getElementById("bild");
     bild.classList.remove("einblenden");
     clearTimeout(hilfe.bildTimeout);
     hilfe.bildTimeout = setTimeout(() => bild.parentNode.removeChild(bild), 200);
@@ -469,20 +471,20 @@ let hilfe = {
   //   input = Element
   //     (das Suchfeld)
   sucheListener (input) {
-    input.addEventListener("input", function() {
+    input.addEventListener("input", function () {
       clearTimeout(hilfe.sucheTimeout);
-      hilfe.sucheTimeout = setTimeout(function() {
+      hilfe.sucheTimeout = setTimeout(function () {
         hilfe.suche();
       }, 250);
     });
-    input.addEventListener("keydown", function(evt) {
+    input.addEventListener("keydown", function (evt) {
       tastatur.detectModifiers(evt);
       if (!tastatur.modifiers && evt.key === "Enter") {
         clearTimeout(hilfe.sucheTimeout);
         hilfe.suche(true);
       }
     });
-    input.addEventListener("focus", function() {
+    input.addEventListener("focus", function () {
       this.select();
       if (document.getElementById("suchleiste")) {
         suchleiste.ausblenden();
@@ -505,7 +507,7 @@ let hilfe = {
   //     (die Suche wurde via Enter angestoßen)
   suche (enter) {
     // Suchtext ermitteln
-    let feld = document.getElementById("suchfeld");
+    const feld = document.getElementById("suchfeld");
     const val = helfer.textTrim(feld.value, true);
     // erst ab 3 Buchstaben suchen
     if (!val || val.length < 3) {
@@ -522,29 +524,29 @@ let hilfe = {
     feld.parentNode.classList.add("lupe");
     // Cache vorbereiten
     hilfe.suchergebnis = {
-      val: val,
+      val,
       scroll: 0,
       reg: [],
       regPhrase: null,
       treffer: [],
       lastClick: -1,
     };
-    let e = hilfe.suchergebnis;
+    const e = hilfe.suchergebnis;
     if (/\s/.test(val)) { // nur, wenn es mehrere Wörter gibt
       e.regPhrase = new RegExp(helfer.escapeRegExp(val), "gi");
     }
     // reguläre Ausdrücke
-    let val_sp = val.split(/\s/);
+    const val_sp = val.split(/\s/);
     val_sp.sort(helfer.sortLengthAlpha);
     for (let i = 0, len = val_sp.length; i < len; i++) {
-      let reg = new RegExp(helfer.escapeRegExp(val_sp[i]), "gi");
+      const reg = new RegExp(helfer.escapeRegExp(val_sp[i]), "gi");
       e.reg.push(reg);
     }
     // Suche durchführen
-    let sek_suche = document.querySelectorAll(".suche");
+    const sek_suche = document.querySelectorAll(".suche");
     for (let i = 0, len = sek_suche.length; i < len; i++) {
       const sektion = sek_suche[i].id.replace(/^sektion-/, "");
-      let knoten = sek_suche[i].childNodes;
+      const knoten = sek_suche[i].childNodes;
       for (let j = 0, len = knoten.length; j < len; j++) {
         if (/^(DIV|OL|TABLE|UL)$/.test(knoten[j].nodeName)) {
           let knoten_tief = knoten[j].childNodes;
@@ -560,7 +562,7 @@ let hilfe = {
       }
     }
     // Treffer sortieren
-    e.treffer.sort(function(a, b) {
+    e.treffer.sort(function (a, b) {
       if (a.gewicht > b.gewicht) {
         return -1;
       } else if (a.gewicht < b.gewicht) {
@@ -580,15 +582,15 @@ let hilfe = {
         return;
       }
       const text = helfer.textTrim(knoten.innerText, true);
-      let gewicht = 0,
-        regs = 0, // Anzahl der regulären Ausdrücke, die Treffer produzierten
-        idx = -1;
+      let gewicht = 0;
+      let regs = 0; // Anzahl der regulären Ausdrücke, die Treffer produzierten
+      let idx = -1;
       for (let i = 0, len = e.reg.length; i < len; i++) {
-        let s = text.match(e.reg[i]);
+        const s = text.match(e.reg[i]);
         if (s) {
           regs++;
           gewicht += s.length; // Anzahl der Treffer im Textausschnitt
-          let idx_tmp = text.split(e.reg[i])[0].length;
+          const idx_tmp = text.split(e.reg[i])[0].length;
           if (idx === -1 || idx_tmp < idx) {
             idx = idx_tmp;
           }
@@ -619,9 +621,9 @@ let hilfe = {
         // Treffer einhängen
         e.treffer.push({
           text: ausschnitt,
-          gewicht: gewicht,
-          sektion: sektion,
-          knoten: knoten,
+          gewicht,
+          sektion,
+          knoten,
         });
       }
     }
@@ -630,16 +632,16 @@ let hilfe = {
   // Suchtreffer ausdrucken
   sucheDrucken (start) {
     // Ergebnisfeld leeren
-    let cont = document.getElementById("suchergebnisse");
+    const cont = document.getElementById("suchergebnisse");
     // bei der Erstanzeige Ergebnisfeld leeren und in die Sektion wechseln
     if (start === 0) {
       cont.replaceChildren();
       hilfe.sektionWechseln("suche");
     }
     // keine Treffer
-    let e = hilfe.suchergebnis;
+    const e = hilfe.suchergebnis;
     if (!e.treffer.length) {
-      let p = document.createElement("p");
+      const p = document.createElement("p");
       p.classList.add("keine-treffer");
       p.textContent = "keine Treffer";
       cont.appendChild(p);
@@ -649,7 +651,7 @@ let hilfe = {
     for (let i = start, len = e.treffer.length; i < len; i++) {
       // immer nur 10 Suchergebnisse auf einmal drucken
       if (i === start + 10) {
-        let a = document.createElement("a");
+        const a = document.createElement("a");
         cont.appendChild(a);
         a.href = "#";
         a.dataset.idx = i;
@@ -659,27 +661,27 @@ let hilfe = {
         break;
       }
       // Treffer erzeugen
-      let a = document.createElement("a");
+      const a = document.createElement("a");
       cont.appendChild(a);
       a.href = "#";
       a.dataset.idx = i;
       hilfe.sucheSprung(a);
       // Treffernummer drucken
-      let b = document.createElement("b");
+      const b = document.createElement("b");
       a.appendChild(b);
       b.textContent = i + 1;
       // Text erzeugen, Suchtreffer markieren und einhängen
-      let span = document.createElement("span");
+      const span = document.createElement("span");
       a.appendChild(span);
       let text = e.treffer[i].text;
       text = text.replace(/</g, "&lt;").replace(/>/g, "&gt;"); // für ursprünglich maskierte Code-Beispiele
       if (e.regPhrase) {
-        text = text.replace(e.regPhrase, function(m) {
+        text = text.replace(e.regPhrase, function (m) {
           return `<mark class="suche">${m}</mark>`;
         });
       }
       for (let j = 0, len = e.reg.length; j < len; j++) {
-        text = text.replace(e.reg[j], function(m) {
+        text = text.replace(e.reg[j], function (m) {
           return `<mark class="suche">${m}</mark>`;
         });
       }
@@ -687,7 +689,7 @@ let hilfe = {
       // verschachtelte Treffer entfernen
       let inner = span.querySelector(".suche .suche");
       while (inner) {
-        let text = document.createTextNode(inner.textContent);
+        const text = document.createTextNode(inner.textContent);
         inner.parentNode.replaceChild(text, inner);
         inner = span.querySelector(".suche .suche");
       }
@@ -698,7 +700,7 @@ let hilfe = {
   //   a = Element
   //     (der Link zum Nachladen der Treffer)
   sucheNachladen (a) {
-    a.addEventListener("click", function(evt) {
+    a.addEventListener("click", function (evt) {
       evt.preventDefault();
       const idx = parseInt(this.dataset.idx, 10);
       this.parentNode.removeChild(this);
@@ -712,14 +714,14 @@ let hilfe = {
   //   a = Element
   //     (Link mit der Vorschau des Treffers)
   sucheSprung (a) {
-    a.addEventListener("click", function(evt) {
+    a.addEventListener("click", function (evt) {
       evt.preventDefault();
       // Scroll-Position sichern
       hilfe.suchergebnis.scroll = window.scrollY;
       // Sektion wechseln und zum Treffer-Knoten wechseln
-      const idx = parseInt(this.dataset.idx, 10),
-        sektion = hilfe.suchergebnis.treffer[idx].sektion,
-        knoten = hilfe.suchergebnis.treffer[idx].knoten;
+      const idx = parseInt(this.dataset.idx, 10);
+      const sektion = hilfe.suchergebnis.treffer[idx].sektion;
+      const knoten = hilfe.suchergebnis.treffer[idx].knoten;
       hilfe.sektionWechseln(sektion);
       window.scrollTo({
         left: 0,
@@ -730,11 +732,11 @@ let hilfe = {
       hilfe.suchergebnis.lastClick = idx;
       // Treffer-Knoten animieren
       knoten.classList.add("treffer-vor");
-      setTimeout(function() {
+      setTimeout(function () {
         knoten.classList.add("treffer", "treffer-nach");
-        setTimeout(function() {
+        setTimeout(function () {
           knoten.classList.remove("treffer");
-          setTimeout(function() {
+          setTimeout(function () {
             knoten.classList.remove("treffer-vor", "treffer-nach");
           }, 1500);
         }, 1500);
@@ -782,13 +784,13 @@ let hilfe = {
       sek = hilfe.sektionAktiv();
     }
     // Speicherobjekt erstellen
-    let posNeu = {
+    const posNeu = {
       scrollY: window.scrollY,
       section: sek,
     };
     // ggf. die History-Daten kürzen;
-    let pos = hilfe.historyData.pos,
-      akt = hilfe.historyData.akt;
+    const pos = hilfe.historyData.pos;
+    const akt = hilfe.historyData.akt;
     if (akt < pos.length - 1) {
       pos.splice(akt + 1);
     }
@@ -809,8 +811,8 @@ let hilfe = {
   //   next = Boolean
   //     (zur nächsten Position springen)
   historyNavi (next) {
-    let pos = hilfe.historyData.pos,
-      akt = hilfe.historyData.akt;
+    const pos = hilfe.historyData.pos;
+    let akt = hilfe.historyData.akt;
     if (next) { // vorwärts
       akt++;
     } else { // rückwärts
@@ -824,7 +826,7 @@ let hilfe = {
     if (!pos[akt]) {
       return;
     }
-    let ziel = pos[akt];
+    const ziel = pos[akt];
     // Postion in der History auffrischen
     hilfe.historyData.akt = akt;
     // ggf. zur Sektion wechseln
@@ -858,17 +860,19 @@ let hilfe = {
   // überprüft, ob der Scroll vorbei ist
   historyScroll () {
     clearTimeout(hilfe.historyData.scrollCheck);
-    hilfe.historyData.scrollCheck = setTimeout(() => hilfe.historyData.scrollAktiv = false, 25);
+    hilfe.historyData.scrollCheck = setTimeout(() => {
+      hilfe.historyData.scrollAktiv = false;
+    }, 25);
   },
 
   // Pfeilfarbe anpassen
   historyArrows () {
-    let data = hilfe.historyData,
-      back = document.getElementById("navi-back"),
-      forward = document.getElementById("navi-forward");
+    const data = hilfe.historyData;
+    const back = document.getElementById("navi-back");
+    const forward = document.getElementById("navi-forward");
     // aktuelle Position
-    const section = hilfe.sektionAktiv(),
-      scrollY = window.scrollY;
+    const section = hilfe.sektionAktiv();
+    const scrollY = window.scrollY;
     // rückwärts
     if (data.pos.length > 1 && data.akt > 0 ||
         data.pos.length === 1 && (data.pos[0].section !== section || data.pos[0].scrollY !== scrollY)) {
@@ -877,7 +881,7 @@ let hilfe = {
       back.classList.remove("navigierbar");
     }
     // vorwärts
-    if (data.akt >=0 && data.akt < data.pos.length - 1) {
+    if (data.akt >= 0 && data.akt < data.pos.length - 1) {
       forward.classList.add("navigierbar");
     } else {
       forward.classList.remove("navigierbar");

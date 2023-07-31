@@ -46,7 +46,7 @@ const cli = {
       }
 
       // Export durchführen
-      let vorlagen =  [ "0" ];
+      let vorlagen = [ "0" ];
       if (commands["karteiliste-vorlage"]) {
         vorlagen = commands["karteiliste-vorlage"].split(",");
       }

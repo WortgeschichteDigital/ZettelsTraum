@@ -1,18 +1,18 @@
 "use strict";
 
-let erinnerungen = {
+const erinnerungen = {
   data: {
     metadaten: {
       okay: false,
-      text: `In den redaktionellen Metadaten ist keine BearbeiterIn registriert (<a href="#" class="link-erinnerung" data-funktion="metadaten">⇨ <i>Redaktion &gt; Metadaten</i></a>).`,
+      text: 'In den redaktionellen Metadaten ist keine BearbeiterIn registriert (<a href="#" class="link-erinnerung" data-funktion="metadaten">⇨\u00A0<i>Redaktion\u00A0&gt; Metadaten</i></a>).',
     },
     redaktion: {
       okay: false,
-      text: `In den Redaktionsereignissen fehlen Angaben zu den BearbeiterInnen (<a href="#" class="link-erinnerung" data-funktion="redaktion">⇨ <i>Redaktion &gt; Ereignisse</i></a>).`,
+      text: 'In den Redaktionsereignissen fehlen Angaben zu den BearbeiterInnen (<a href="#" class="link-erinnerung" data-funktion="redaktion">⇨\u00A0<i>Redaktion\u00A0&gt; Ereignisse</i></a>).',
     },
     artikelDatei: {
       okay: false,
-      text: `Sie haben den Artikel erstellt, die Datei mit dem Artikel aber noch nicht mit dieser Kartei verknüpft (<a href="#" class="link-erinnerung" data-funktion="anhaenge">⇨ <i>Kartei &gt; Anhänge</i></a>).`,
+      text: 'Sie haben den Artikel erstellt, die Datei mit dem Artikel aber noch nicht mit dieser Kartei verknüpft (<a href="#" class="link-erinnerung" data-funktion="anhaenge">⇨\u00A0<i>Kartei\u00A0&gt; Anhänge</i></a>).',
     },
   },
 
@@ -49,7 +49,7 @@ let erinnerungen = {
       erinnerungen.data.redaktion.okay = false;
     }
     // Artikel erstellt, aber nicht verknüpft?
-    for (let i of data.rd.er) {
+    for (const i of data.rd.er) {
       if (i.er === "Artikel erstellt") {
         if (data.rd.bh) {
           // Wort wird in einer anderen Datei mit behandelt;
@@ -58,7 +58,7 @@ let erinnerungen = {
           break;
         }
         let okay = false;
-        for (let f of data.an) {
+        for (const f of data.an) {
           if (/\.(doc|docx|odt|rtf)$/.test(f)) {
             okay = true;
             break;
@@ -79,8 +79,8 @@ let erinnerungen = {
 
   // Erinnerungen auf Klick anzeigen
   show () {
-    let text = [];
-    for (let i in erinnerungen.data) {
+    const text = [];
+    for (const i in erinnerungen.data) {
       if (!erinnerungen.data.hasOwnProperty(i)) {
         continue;
       }
@@ -104,7 +104,7 @@ let erinnerungen = {
   //   a = Element
   //     (der Link im Erinnerungenfenster, der zu der Funktion führt)
   listener (a) {
-    a.addEventListener("click", function(evt) {
+    a.addEventListener("click", function (evt) {
       evt.preventDefault();
       switch (this.dataset.funktion) {
         case "anhaenge":

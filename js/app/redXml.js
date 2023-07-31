@@ -1,6 +1,6 @@
 "use strict";
 
-let redXml = {
+const redXml = {
   // speichert die contentsId des zugehörigen XML-Fensters
   contentsId: 0,
 
@@ -9,57 +9,46 @@ let redXml = {
   winInit: false,
 
   // XML-Fenster öffnen
-  oeffnen () {
-    return new Promise(async resolve => {
-      // Sperre für macOS (Menüpunkte können nicht deaktiviert werden)
-      if (!kartei.wort) {
-        dialog.oeffnen({
-          typ: "alert",
-          text: "Um die Funktion <i>Redaktion &gt; XML</i> zu nutzen, muss eine Kartei geöffnet sein.",
-        });
-        resolve(false);
-        return;
-      }
-      // Fenster schon offen? => Fenster fokussieren
-      if (redXml.contentsId) {
-        modules.ipc.invoke("red-xml-fokussieren", redXml.contentsId);
-        resolve(false);
-        return;
-      }
-      // Fenster durch Main-Prozess öffnen lassen
-      redXml.contentsId = await modules.ipc.invoke("red-xml-oeffnen", `XML: ${kartei.wort}`);
-      resolve(true);
-    });
+  async oeffnen () {
+    // Sperre für macOS (Menüpunkte können nicht deaktiviert werden)
+    if (!kartei.wort) {
+      dialog.oeffnen({
+        typ: "alert",
+        text: "Um die Funktion <i>Redaktion &gt; XML</i> zu nutzen, muss eine Kartei geöffnet sein.",
+      });
+      return false;
+    }
+    // Fenster schon offen? => Fenster fokussieren
+    if (redXml.contentsId) {
+      modules.ipc.invoke("red-xml-fokussieren", redXml.contentsId);
+      return false;
+    }
+    // Fenster durch Main-Prozess öffnen lassen
+    redXml.contentsId = await modules.ipc.invoke("red-xml-oeffnen", `XML: ${kartei.wort}`);
+    return true;
   },
 
   // XML-Fenster öffnen (Promise)
-  oeffnenPromise () {
-    return new Promise(async resolve => {
-      // Init-Markierung zurücksetzen
-      xml.winInit = false;
-      // Fenster öffnen
-      await redXml.oeffnen();
-      // warten, bis das Fenster mit dem Init fertig ist
-      while (!xml.winInit) {
-        await new Promise(warten => setTimeout(() => warten(true), 25));
-      }
-      await new Promise(warten => setTimeout(() => warten(true), 250));
-      // Fenster ist geöffnet => Promise auflösen
-      resolve(true);
-    });
+  async oeffnenPromise () {
+    // Init-Markierung zurücksetzen
+    xml.winInit = false;
+    // Fenster öffnen
+    await redXml.oeffnen();
+    // warten, bis das Fenster mit dem Init fertig ist
+    while (!xml.winInit) {
+      await new Promise(warten => setTimeout(() => warten(true), 25));
+    }
+    await new Promise(warten => setTimeout(() => warten(true), 250));
   },
 
   // Bedeutungsgerüst-Fenster schließen
-  schliessen () {
-    return new Promise(async resolve => {
-      if (!redXml.contentsId) {
-        resolve(false);
-        return;
-      }
-      await modules.ipc.invoke("red-xml-schliessen", redXml.contentsId);
-      redXml.contentsId = 0;
-      resolve(true);
-    });
+  async schliessen () {
+    if (!redXml.contentsId) {
+      return false;
+    }
+    await modules.ipc.invoke("red-xml-schliessen", redXml.contentsId);
+    redXml.contentsId = 0;
+    return true;
   },
 
   // Daten zusammentragen und an das XML-Fenster schicken
@@ -68,7 +57,7 @@ let redXml = {
       return;
     }
     // Daten zusammentragen
-    let xmlDaten = {
+    const xmlDaten = {
       autorinnen: [],
       contentsId: winInfo.contentsId,
       gerueste: {},
@@ -79,20 +68,20 @@ let redXml = {
       xl: data.rd.xl,
     };
     if (optionen.data.personen.length) {
-      for (let i of optionen.data.personen) {
+      for (const i of optionen.data.personen) {
         let name = i;
         if (/,/.test(i)) {
-          let match = i.match(/(.+),\s?(.+)/);
+          const match = i.match(/(.+),\s?(.+)/);
           name = `${match[2]} ${match[1]}`;
         }
         xmlDaten.autorinnen.push(name);
       }
     }
-    for (let [k, v] of Object.entries(data.bd.gr)) {
+    for (const [ k, v ] of Object.entries(data.bd.gr)) {
       xmlDaten.gerueste[k] = v.na;
     }
     if (optionen.data.tags.themenfelder) {
-      for (let v of Object.values(optionen.data.tags.themenfelder.data)) {
+      for (const v of Object.values(optionen.data.tags.themenfelder.data)) {
         xmlDaten.themenfelder.push(v.name);
       }
     }
@@ -105,7 +94,7 @@ let redXml = {
   // einen Datensatz an das XML-Fenster schicken
   //   xmlDatensatz = Object
   //     (der Datensatz, der an das Fenster gehen soll)
-  async datensatz ({xmlDatensatz}) {
+  async datensatz ({ xmlDatensatz }) {
     // Ist das Fenster schon offen?
     if (!redXml.contentsId) {
       await redXml.oeffnenPromise();
@@ -119,7 +108,7 @@ let redXml = {
   // aus dem XML-Fenster empfangene Daten in die Kartei schreiben
   //   daten = Object
   //     (die XML-Datei-Daten)
-  speichern ({daten}) {
+  speichern ({ daten }) {
     data.rd.xl = daten;
     kartei.karteiGeaendert(true);
   },

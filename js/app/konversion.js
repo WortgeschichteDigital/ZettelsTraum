@@ -1,6 +1,6 @@
 "use strict";
 
-let konversion = {
+const konversion = {
   // aktuelle Version des Dateiformats
   // *** WICHTIG! *** WICHTIG! *** WICHTIG! ***
   // 1.) Beim Anlegen neuer Datenwerte Objekte in
@@ -42,7 +42,7 @@ let konversion = {
       return;
     }
     // Datenfeld "kr" (Korpus) in allen Karteikarten ergänzen
-    for (let id in data.ka) {
+    for (const id in data.ka) {
       if (!data.ka.hasOwnProperty(id)) {
         continue;
       }
@@ -60,7 +60,7 @@ let konversion = {
       return;
     }
     // Datenfeld "bl" (Wortbildung) in allen Karteikarten ergänzen
-    for (let id in data.ka) {
+    for (const id in data.ka) {
       if (!data.ka.hasOwnProperty(id)) {
         continue;
       }
@@ -78,7 +78,7 @@ let konversion = {
       return;
     }
     // Datenfeld "sy" (Wortbildung) in allen Karteikarten ergänzen
-    for (let id in data.ka) {
+    for (const id in data.ka) {
       if (!data.ka.hasOwnProperty(id)) {
         continue;
       }
@@ -98,12 +98,12 @@ let konversion = {
     // Bedeutungsgerüst konstituieren
     bedeutungen.konstit();
     // Datenfeld "bd" (Wortbildung) in allen Karteikarten auf das neue Format umstellen
-    let gr = data.bd.gr["1"].bd;
-    for (let id in data.ka) {
+    const gr = data.bd.gr["1"].bd;
+    for (const id in data.ka) {
       if (!data.ka.hasOwnProperty(id)) {
         continue;
       }
-      let bd = data.ka[id].bd.split("\n");
+      const bd = data.ka[id].bd.split("\n");
       data.ka[id].bd = [];
       for (let i = 0, len = bd.length; i < len; i++) {
         for (let j = 0, len = gr.length; j < len; j++) {
@@ -131,9 +131,9 @@ let konversion = {
     // Format der Kartei-Notizen: plain text => HTML
     if (data.no) {
       // Spitzklammern maskieren
-      let notizen = data.no.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+      const notizen = data.no.replace(/</g, "&lt;").replace(/>/g, "&gt;");
       // Zeilenumbrüche in HTML überführen
-      let zeilen = notizen.split("\n");
+      const zeilen = notizen.split("\n");
       data.no = zeilen[0]; // 1. Zeile ist nicht in <div> eingeschlossen
       for (let i = 1, len = zeilen.length; i < len; i++) {
         data.no += "<div>";
@@ -170,7 +170,7 @@ let konversion = {
       return;
     }
     // Datenfeld "mt" (Metatext) in allen Karteikarten ergänzen
-    for (let id in data.ka) {
+    for (const id in data.ka) {
       if (!data.ka.hasOwnProperty(id)) {
         continue;
       }
@@ -190,25 +190,27 @@ let konversion = {
     // Datenfeld "fv" konvertieren
     if (/\s/.test(kartei.wort)) {
       data.fv = {};
-      let woerter = kartei.wort.split(/\s/);
-      for (let i of woerter) {
+      const woerter = kartei.wort.split(/\s/);
+      for (const i of woerter) {
         data.fv[i] = {
           an: true,
-          fo: [{
-            qu: "zt",
-            va: i,
-          }],
+          fo: [
+            {
+              qu: "zt",
+              va: i,
+            },
+          ],
         };
       }
     } else {
-      let fo = [];
-      data.fv.forEach(function(i) {
-        fo.push({...i});
+      const fo = [];
+      data.fv.forEach(function (i) {
+        fo.push({ ...i });
       });
       data.fv = {
         [kartei.wort]: {
           an: true,
-          fo: fo,
+          fo,
         },
       };
     }
@@ -224,7 +226,7 @@ let konversion = {
       return;
     }
     // Datenfelder "fa", "ma", "ps" und "tr" in allen Wörtern der Formvarianten ergänzen
-    for (let wort in data.fv) {
+    for (const wort in data.fv) {
       if (!data.fv.hasOwnProperty(wort)) {
         continue;
       }
@@ -258,7 +260,7 @@ let konversion = {
       return;
     }
     // Datenfeld "bx" (Beleg-XML) in allen Karteikarten ergänzen
-    for (let id in data.ka) {
+    for (const id in data.ka) {
       if (!data.ka.hasOwnProperty(id)) {
         continue;
       }
@@ -276,12 +278,12 @@ let konversion = {
       return;
     }
     // Datenfeld "rd" konvertieren
-    let rdKlon = [];
-    for (let er of data.rd) {
-      rdKlon.push({...er});
+    const rdKlon = [];
+    for (const er of data.rd) {
+      rdKlon.push({ ...er });
     }
     data.rd = {
-      be: [...data.be],
+      be: [ ...data.be ],
       bh: "",
       er: rdKlon,
       sg: [],
@@ -325,7 +327,7 @@ let konversion = {
       return;
     }
     // Datenfeld "nl" in allen Wörtern der Formvarianten ergänzen
-    for (let v of Object.values(data.fv)) {
+    for (const v of Object.values(data.fv)) {
       v.nl = false;
     }
     // Versionsnummer hochzählen
@@ -341,7 +343,7 @@ let konversion = {
     }
     // Objekte in "rd.wi" um "gn" ergänzen
     // rd.wi.vt === "Assoziation" in "Wortbildung" ändern
-    for (let i of data.rd.wi) {
+    for (const i of data.rd.wi) {
       i.gn = "1";
       if (i.vt === "Assoziation") {
         i.vt = "Wortbildung";
@@ -361,14 +363,14 @@ let konversion = {
       return;
     }
     // rd.wi.vt === "Kollokation" in "Wortverbindung" ändern
-    for (let i of data.rd.wi) {
+    for (const i of data.rd.wi) {
       if (i.vt === "Kollokation") {
         i.vt = "Wortverbindung";
       }
     }
     // rd.xl.wi.vt === "Kollokation" in "Wortverbindung" ändern
-    for (let v of Object.values(data.rd.xl.wi)) {
-      for (let i of v) {
+    for (const v of Object.values(data.rd.xl.wi)) {
+      for (const i of v) {
         if (i.vt === "Kollokation") {
           i.vt = "Wortverbindung";
         }
@@ -386,7 +388,7 @@ let konversion = {
       return;
     }
     // Label in Bedeutungsgerüsten im XML-Redaktionsfenster ergänzen
-    for (let v of Object.values(data.rd.xl.bg)) {
+    for (const v of Object.values(data.rd.xl.bg)) {
       v.la = "";
     }
     // Versionsnummer hochzählen
@@ -402,7 +404,7 @@ let konversion = {
     }
     // data.xl.md.tf in Array umwandeln
     if (data.rd.xl?.md.tf) {
-      data.rd.xl.md.tf = [data.rd.xl.md.tf];
+      data.rd.xl.md.tf = [ data.rd.xl.md.tf ];
     } else if (data.rd.xl.md) {
       data.rd.xl.md.tf = [];
     }
@@ -427,7 +429,7 @@ let konversion = {
       return;
     }
     // Datenfeld "up" (ungeprüft) in allen Karteikarten ergänzen
-    for (let id in data.ka) {
+    for (const id in data.ka) {
       if (!data.ka.hasOwnProperty(id)) {
         continue;
       }
@@ -458,7 +460,7 @@ let konversion = {
       return;
     }
     // Datenfeld für Notizen im Redaktionsereignis-Fenster erzeugen
-    for (let i of data.rd.er) {
+    for (const i of data.rd.er) {
       i.no = "";
     }
     // Versionsnummer hochzählen

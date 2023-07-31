@@ -13,26 +13,22 @@ if (!email || !/^.+@.+\..+$/.test(email)) {
 }
 
 // Vorbereitung
-const builder = require("electron-builder"),
-  Arch = builder.Arch,
-  Platform = builder.Platform,
-  prepare = require("./installer"),
-  jahr = prepare.getYear();
-let keywords = "",
-  config = {};
+const builder = require("electron-builder");
+const Arch = builder.Arch;
+const Platform = builder.Platform;
+const prepare = require("./installer");
+const jahr = prepare.getYear();
+let keywords = "";
+let config = {};
 
 prepare.makeBuild()
   .then(async () => {
-    if (typ === "appImage") {
-      return;
-    } else {
+    if (typ !== "appImage") {
       await prepare.makeChangelog();
     }
   })
   .then(async () => {
-    if (typ === "appImage") {
-      return;
-    } else {
+    if (typ !== "appImage") {
       keywords = await prepare.getKeywords();
     }
   })
@@ -52,7 +48,7 @@ function makeConfig () {
     config: {
       extraMetadata: {
         author: {
-          email: email,
+          email,
         },
       },
       appId: "zdl.wgd.zettelstraum",
@@ -77,9 +73,7 @@ function makeConfig () {
         packageCategory: "science",
         afterInstall: "./installer/linux-after-install.sh",
         afterRemove: "./installer/linux-after-remove.sh",
-        fpm: [
-          `--${typ}-changelog=../build/changelog`,
-        ],
+        fpm: [ `--${typ}-changelog=../build/changelog` ],
       },
       // "fileAssociations" funktioniert zwar gut, ordnet den ZTJ-Dateien aber
       // kein Datei-Icon zu; ich übernehme das lieber selbst in "linux-after-install.sh"
@@ -94,7 +88,7 @@ function makeConfig () {
         {
           from: "./resources",
           to: "./",
-          filter: ["*.ztj", "*.xml", "filetype"],
+          filter: [ "*.ztj", "*.xml", "filetype" ],
         },
       ],
     },

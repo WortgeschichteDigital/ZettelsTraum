@@ -1,6 +1,6 @@
 "use strict";
 
-let notizen = {
+const notizen = {
   // Fenster für Notizen einblenden
   oeffnen () {
     // Sperre für macOS (Menüpunkte können nicht deaktiviert werden)
@@ -12,8 +12,8 @@ let notizen = {
       return;
     }
     // Fenster öffnen oder in den Vordergrund holen
-    let fenster = document.getElementById("notizen"),
-      feld = document.getElementById("notizen-feld");
+    const fenster = document.getElementById("notizen");
+    const feld = document.getElementById("notizen-feld");
     if (overlay.oeffnen(fenster)) { // Fenster ist schon offen
       feld.focus();
       return;
@@ -24,7 +24,7 @@ let notizen = {
     // Notizen-Feld mit den gespeicherten Daten füllen
     notizen.eintragen = true;
     feld.innerHTML = data.no; // data.no kann leer sein
-    setTimeout(function() {
+    setTimeout(function () {
       // der MutationObserver reagiert verzögert, darum muss hier ein Timeout stehen;
       // 0 Millisekunden würde wohl auch gehen
       notizen.eintragen = false;
@@ -35,13 +35,13 @@ let notizen = {
 
   // speichert die Notizen
   speichern () {
-    let feld = document.getElementById("notizen-feld");
+    const feld = document.getElementById("notizen-feld");
     // Es wurde gar nichts geändert!
     if (!notizen.geaendert) {
       direktSchliessen();
       return false;
     }
-    let vorhanden = notizen.vorhanden();
+    const vorhanden = notizen.vorhanden();
     // keine Notizen im Feld, aber Notizen in der Kartei
     if (!vorhanden.feld && vorhanden.kartei) {
       notizen.frageLoeschenGespeicherte(false);
@@ -80,7 +80,7 @@ let notizen = {
       return;
     }
     // Änderungsmarkierung, aber keine Notizen im Feld und keine in Kartei => direkt schließen
-    let vorhanden = notizen.vorhanden();
+    const vorhanden = notizen.vorhanden();
     if (!vorhanden.feld && !vorhanden.kartei) {
       notizen.schliessen();
       return;
@@ -116,13 +116,13 @@ let notizen = {
       return;
     }
     // Sind überhaupt Notizen vorhanden?
-    let vorhanden = notizen.vorhanden();
+    const vorhanden = notizen.vorhanden();
     if (!vorhanden.kartei && !vorhanden.feld) {
       notizen.schliessen();
       return;
     }
     // Sicherheitsfrage
-    let speicher = [];
+    const speicher = [];
     if (vorhanden.kartei) {
       speicher.push("in der Kartei");
     }
@@ -177,7 +177,7 @@ let notizen = {
 
   // überprüft, ob überhaupt Notizen vorhanden sind
   vorhanden () {
-    let vorhanden = {
+    const vorhanden = {
       kartei: false,
       feld: false,
       feld_value: "",
@@ -185,7 +185,7 @@ let notizen = {
     if (data.no) {
       vorhanden.kartei = true;
     }
-    let notiz = notizen.bereinigen(document.getElementById("notizen-feld").innerHTML);
+    const notiz = notizen.bereinigen(document.getElementById("notizen-feld").innerHTML);
     if (notiz.replace(/<.+?>/g, "")) {
       // unter gewissen Umständen können noch Tags im Feld stehen, die aber keinen Text auszeichnen
       vorhanden.feld = true;
@@ -206,8 +206,8 @@ let notizen = {
   //   button = Element
   //     (der Button, auf den geklickt wurde)
   aktionButton (button) {
-    button.addEventListener("click", function() {
-      let aktion = this.id.replace(/^notizen-/, "");
+    button.addEventListener("click", function () {
+      const aktion = this.id.replace(/^notizen-/, "");
       if (aktion === "speichern") {
         notizen.speichern();
       } else if (aktion === "abbrechen") {
@@ -225,7 +225,7 @@ let notizen = {
   //   div = Element
   //     (<div contenteditable="true">, in dem die Notizen stehen)
   change (div) {
-    let observer = new MutationObserver(function() {
+    const observer = new MutationObserver(function () {
       if (notizen.eintragen) { // Das Feld wird gerade gefüllt; dabei ändert sich aber natürlich nichts.
         return;
       }
@@ -266,7 +266,7 @@ let notizen = {
   notizenGeaendert (geaendert) {
     notizen.geaendert = geaendert;
     helfer.geaendert();
-    let asterisk = document.getElementById("notizen-geaendert");
+    const asterisk = document.getElementById("notizen-geaendert");
     if (geaendert) {
       asterisk.classList.remove("aus");
     } else {
@@ -278,15 +278,15 @@ let notizen = {
   //   a = Element
   //     (der Tools-Link, auf den geklickt wurde)
   tools (a) {
-    a.addEventListener("click", function(evt) {
+    a.addEventListener("click", function (evt) {
       evt.preventDefault();
-      let funktion = this.getAttribute("class").match(/icon-tools-([^\s]+)/);
+      const funktion = this.getAttribute("class").match(/icon-tools-([^\s]+)/);
       if (funktion[1] === "mark") {
-        notizen.toolsMark({cl: "user"});
+        notizen.toolsMark({ cl: "user" });
       } else if (funktion[1] === "heading") {
         // ÜBERSCHRIFT
-        let sel = window.getSelection(),
-          absatz = sel.focusNode;
+        const sel = window.getSelection();
+        let absatz = sel.focusNode;
         while (absatz.nodeType !== 1 ||
             !/^(DIV|H3|LI)$/.test(absatz.nodeName)) {
           absatz = absatz.parentNode;
@@ -325,41 +325,41 @@ let notizen = {
   // Text-Tool zum Einfügen/Entfernen eines <mark>
   //   cl = String
   //     (die class, die der <mark> bekommen soll)
-  toolsMark ({cl}) {
+  toolsMark ({ cl }) {
     // keine Range vorhanden
-    let sel = window.getSelection();
+    const sel = window.getSelection();
     if (sel.rangeCount === 0) {
       document.getElementById("notizen-feld").focus();
       return;
     }
     // Range Clonen
-    let range = sel.getRangeAt(0),
-      div = document.createElement("div"),
-      frag = document.createDocumentFragment();
+    const range = sel.getRangeAt(0);
+    const div = document.createElement("div");
+    const frag = document.createDocumentFragment();
     div.appendChild(range.cloneContents());
     frag.appendChild(range.cloneContents());
-    let content = div.innerHTML;
+    const content = div.innerHTML;
     // Knoten und Content ermitteln
-    let focus = sel.focusNode,
-      isFocus = focus.nodeType === 1 && focus.nodeName === "MARK" && focus.innerHTML === content,
-      parent = sel.anchorNode.parentNode,
-      isParent = parent.nodeType === 1 && parent.nodeName === "MARK" && parent.innerHTML === content;
+    const focus = sel.focusNode;
+    const isFocus = focus.nodeType === 1 && focus.nodeName === "MARK" && focus.innerHTML === content;
+    const parent = sel.anchorNode.parentNode;
+    const isParent = parent.nodeType === 1 && parent.nodeName === "MARK" && parent.innerHTML === content;
     // ersetzen oder hinzufügen
     if (isFocus || isParent) {
       let bezug = parent; // Markierung händisch ausgewählt => focusNode = #text
       if (isFocus) {
         bezug = focus; // Markierung gerade hinzugefügt => focusNode = <mark>
       }
-      let knoten = [];
-      for (let k of bezug.childNodes) {
+      const knoten = [];
+      for (const k of bezug.childNodes) {
         knoten.push(k);
       }
-      let parentZuMark = bezug.parentNode;
+      const parentZuMark = bezug.parentNode;
       parentZuMark.removeChild(bezug);
       range.insertNode(frag);
       focusText(knoten, parentZuMark);
     } else {
-      let mark = document.createElement("mark");
+      const mark = document.createElement("mark");
       mark.classList.add(cl);
       mark.innerHTML = content;
       modules.clipboard.writeHTML(mark.outerHTML);
@@ -378,17 +378,17 @@ let notizen = {
         return;
       }
       // Ranges entfernen
-      let sel = window.getSelection();
+      const sel = window.getSelection();
       if (sel.rangeCount > 0) {
         sel.removeAllRanges();
       }
       // es war nur ein Knoten im entfernten <mark>
       if (knoten.length === 1) {
-        let text = knoten[0].textContent;
-        for (let b of parent.childNodes) {
+        const text = knoten[0].textContent;
+        for (const b of parent.childNodes) {
           if (b.textContent.includes(text)) {
-            let idx = b.textContent.indexOf(text),
-              range = document.createRange();
+            const idx = b.textContent.indexOf(text);
+            const range = document.createRange();
             range.setStart(b, idx);
             range.setEnd(b, idx + text.length);
             sel.addRange(range);
@@ -398,17 +398,17 @@ let notizen = {
         return;
       }
       // es waren mehrere Knoten im entfernten <mark>
-      let start = {
+      const start = {
         text: knoten[0].textContent,
         knoten: null,
         pos: -1,
       };
-      let end = {
+      const end = {
         text: knoten[knoten.length - 1].textContent,
         knoten: null,
         pos: -1,
       };
-      for (let b of parent.childNodes) {
+      for (const b of parent.childNodes) {
         if (!start.knoten && b.textContent === start.text) {
           start.knoten = b;
           while (start.knoten.nodeType !== 3) {
@@ -426,7 +426,7 @@ let notizen = {
       }
       // Knoten und Positionen auswählen
       if (start.knoten && end.knoten) {
-        let range = document.createRange();
+        const range = document.createRange();
         range.setStart(start.knoten, start.pos);
         range.setEnd(end.knoten, end.pos);
         sel.addRange(range);
@@ -440,10 +440,10 @@ let notizen = {
       return;
     }
     if (!document.getElementById("filter-notizen-content")) {
-      let filterCont = document.getElementById("liste-filter-dynamisch");
+      const filterCont = document.getElementById("liste-filter-dynamisch");
       filterCont.appendChild(filter.aufbauenCont("Notizen"));
       tooltip.init(filterCont);
-      let div = document.createElement("div");
+      const div = document.createElement("div");
       document.getElementById("filter-kopf-notizen").nextSibling.appendChild(div);
       div.id = "filter-notizen-content";
     }
@@ -452,11 +452,11 @@ let notizen = {
 
   // Notizen aus der Filterleiste entfernen
   filterleisteEntfernen () {
-    let filterkopf = document.getElementById("filter-kopf-notizen");
+    const filterkopf = document.getElementById("filter-kopf-notizen");
     if (!filterkopf) {
       return;
     }
-    let parent = filterkopf.parentNode;
+    const parent = filterkopf.parentNode;
     parent.removeChild(filterkopf.nextSibling);
     parent.removeChild(filterkopf);
   },

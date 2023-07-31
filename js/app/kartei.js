@@ -1,6 +1,6 @@
 "use strict";
 
-let kartei = {
+const kartei = {
   // aktuelles Wort
   wort: "",
 
@@ -17,7 +17,7 @@ let kartei = {
       bd: { // Bedeutungsgerüste
         gn: "1",
         gr: {
-          "1": {
+          1: {
             bd: [],
             na: "",
             sl: 2,
@@ -33,12 +33,14 @@ let kartei = {
       rd: { // Redaktion
         be: [], // BearbeiterInnen
         bh: "", // behandelt in
-        er: [{ // Ereignisse
-          da: new Date().toISOString().split("T")[0],
-          er: "Kartei erstellt",
-          no: "",
-          pr: "",
-        }],
+        er: [
+          { // Ereignisse
+            da: new Date().toISOString().split("T")[0],
+            er: "Kartei erstellt",
+            no: "",
+            pr: "",
+          },
+        ],
         nl: "", // Nebenlemmata
         no: "", // Notizen
         sg: [], // Sachgebiete
@@ -76,32 +78,30 @@ let kartei = {
 
   // bestehende Kartei öffnen (über den Öffnen-Dialog)
   async oeffnen () {
-    let opt = {
+    const opt = {
       title: "Kartei öffnen",
       defaultPath: appInfo.documents,
       filters: [
         {
           name: `${appInfo.name} JSON`,
-          extensions: ["ztj"],
+          extensions: [ "ztj" ],
         },
         {
           name: "Alle Dateien",
-          extensions: ["*"],
+          extensions: [ "*" ],
         },
       ],
-      properties: [
-        "openFile",
-      ],
+      properties: [ "openFile" ],
     };
     // Wo wurde zuletzt eine Datei gespeichert oder geöffnet?
     if (optionen.data.letzter_pfad) {
       opt.defaultPath = optionen.data.letzter_pfad;
     }
     // Dialog anzeigen
-    let result = await modules.ipc.invoke("datei-dialog", {
+    const result = await modules.ipc.invoke("datei-dialog", {
       open: true,
       winId: winInfo.winId,
-      opt: opt,
+      opt,
     });
     // Fehler oder keine Datei ausgewählt
     if (result.message || !Object.keys(result).length) {
@@ -128,9 +128,9 @@ let kartei = {
       return;
     }
     // Ist die Datei gesperrt?
-    let locked = await lock.actions({datei, aktion: "check"});
+    const locked = await lock.actions({ datei, aktion: "check" });
     if (locked) {
-      lock.locked({info: locked});
+      lock.locked({ info: locked });
       return;
     }
     // im aktuellen Fenster könnte eine Kartei geöffnet sein (kartei.pfad = true)
@@ -142,7 +142,7 @@ let kartei = {
       return;
     }
     // Datei einlesen
-    let content = await io.lesen(datei);
+    const content = await io.lesen(datei);
     if (!helfer.checkType("String", content)) {
       dialog.oeffnen({
         typ: "alert",
@@ -182,7 +182,7 @@ let kartei = {
         updates.fenster();
         overlay.schliessen(document.getElementById("dialog"));
         setTimeout(async () => {
-          let data = await modules.ipc.invoke("updates-get-data");
+          const data = await modules.ipc.invoke("updates-get-data");
           if (!data.gesucht) {
             updates.check(false);
           }
@@ -193,7 +193,7 @@ let kartei = {
     // War die Datei evtl. verschwunden?
     zuletzt.verschwundenCheck(datei);
     // Datei sperren
-    lock.actions({datei, aktion: "lock"});
+    lock.actions({ datei, aktion: "lock" });
     // Main melden, dass die Kartei in diesem Fenster geöffnet wurde
     modules.ipc.send("kartei-geoeffnet", winInfo.winId, datei);
     // alle Overlays schließen
@@ -272,79 +272,74 @@ let kartei = {
   // Speichern: Kartei schreiben
   //   pfad = String
   //     (Zielpfad der Kartei)
-  speichernSchreiben (pfad) {
-    return new Promise(async resolve => {
-      // ggf. BearbeiterIn hinzufügen oder an die Spitze der Liste holen
-      const bearb = optionen.data.einstellungen.bearbeiterin;
-      let beAlt = [...data.rd.be];
-      if (bearb) {
-        if (data.rd.be.includes(bearb)) {
-          data.rd.be.splice(data.rd.be.indexOf(bearb), 1);
-        }
-        data.rd.be.unshift(bearb);
+  async speichernSchreiben (pfad) {
+    // ggf. BearbeiterIn hinzufügen oder an die Spitze der Liste holen
+    const bearb = optionen.data.einstellungen.bearbeiterin;
+    const beAlt = [ ...data.rd.be ];
+    if (bearb) {
+      if (data.rd.be.includes(bearb)) {
+        data.rd.be.splice(data.rd.be.indexOf(bearb), 1);
       }
-      // einige Werte müssen vor dem Speichern angepasst werden
-      const dm_alt = data.dm,
-        re_alt = data.re;
-      data.dm = new Date().toISOString();
-      data.re++;
-      // Datei speichern
-      let result = await io.schreiben(pfad, JSON.stringify(data));
-      // beim Speichern ist ein Fehler aufgetreten
-      if (result !== true) {
-        dialog.oeffnen({
-          typ: "alert",
-          text: `Beim Speichern der Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${result.name}: ${result.message}</p>`,
-        });
-        // passiert ein Fehler, müssen manche Werte zurückgesetzt werden
-        data.rd.be = [...beAlt];
-        data.dm = dm_alt;
-        data.re = re_alt;
-        // Promise auflösen
-        resolve(false);
-        throw result;
-      }
-      // das Speichern war erfolgreich
-      zuletzt.verschwundenCheck(pfad);
-      if (!kartei.pfad) {
-        lock.actions({datei: pfad, aktion: "lock"});
-      } else if (pfad !== kartei.pfad) {
-        lock.actions({datei: kartei.pfad, aktion: "unlock"});
-        lock.actions({datei: pfad, aktion: "lock"});
-      }
-      meta.ve = data.ve; // Version des Dateiformats für das Metadaten-Fenster bereitstellen
-      kartei.pfad = pfad;
-      optionen.aendereLetzterPfad();
-      zuletzt.aendern();
-      kartei.karteiGeaendert(false);
-      helfer.animation("gespeichert");
-      modules.ipc.send("kartei-geoeffnet", winInfo.winId, pfad);
-      // ggf. Liste der BearbeiterInnen im redaktionellen Metadaten-Fenster auffrischen
-      if (!document.getElementById("red-meta").classList.contains("aus")) {
-        redMeta.bearbAuflisten();
-      }
-      // ggf. Icons im Kopf des Hauptfensters auffrischen
-      // (wichtig für das Ordner-Icon, das nach dem Speichern einer neuen Kartei erscheinen soll)
-      kopf.icons();
-      // Promise auflösen
-      resolve(true);
-    });
+      data.rd.be.unshift(bearb);
+    }
+    // einige Werte müssen vor dem Speichern angepasst werden
+    const dm_alt = data.dm;
+    const re_alt = data.re;
+    data.dm = new Date().toISOString();
+    data.re++;
+    // Datei speichern
+    const result = await io.schreiben(pfad, JSON.stringify(data));
+    // beim Speichern ist ein Fehler aufgetreten
+    if (result !== true) {
+      dialog.oeffnen({
+        typ: "alert",
+        text: `Beim Speichern der Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${result.name}: ${result.message}</p>`,
+      });
+      // passiert ein Fehler, müssen manche Werte zurückgesetzt werden
+      data.rd.be = [ ...beAlt ];
+      data.dm = dm_alt;
+      data.re = re_alt;
+      return false;
+    }
+    // das Speichern war erfolgreich
+    zuletzt.verschwundenCheck(pfad);
+    if (!kartei.pfad) {
+      lock.actions({ datei: pfad, aktion: "lock" });
+    } else if (pfad !== kartei.pfad) {
+      lock.actions({ datei: kartei.pfad, aktion: "unlock" });
+      lock.actions({ datei: pfad, aktion: "lock" });
+    }
+    meta.ve = data.ve; // Version des Dateiformats für das Metadaten-Fenster bereitstellen
+    kartei.pfad = pfad;
+    optionen.aendereLetzterPfad();
+    zuletzt.aendern();
+    kartei.karteiGeaendert(false);
+    helfer.animation("gespeichert");
+    modules.ipc.send("kartei-geoeffnet", winInfo.winId, pfad);
+    // ggf. Liste der BearbeiterInnen im redaktionellen Metadaten-Fenster auffrischen
+    if (!document.getElementById("red-meta").classList.contains("aus")) {
+      redMeta.bearbAuflisten();
+    }
+    // ggf. Icons im Kopf des Hauptfensters auffrischen
+    // (wichtig für das Ordner-Icon, das nach dem Speichern einer neuen Kartei erscheinen soll)
+    kopf.icons();
+    return true;
   },
 
   // Speichern: Pfad ermitteln
   async speichernUnter () {
     const wort = kartei.wort.split(/[\\/]/)[0];
-    let opt = {
+    const opt = {
       title: "Kartei speichern",
       defaultPath: modules.path.join(appInfo.documents, `${wort}.ztj`),
       filters: [
         {
           name: `${appInfo.name} JSON`,
-          extensions: ["ztj"],
+          extensions: [ "ztj" ],
         },
         {
           name: "Alle Dateien",
-          extensions: ["*"],
+          extensions: [ "*" ],
         },
       ],
     };
@@ -353,10 +348,10 @@ let kartei = {
       opt.defaultPath = modules.path.join(optionen.data.letzter_pfad, `${wort}.ztj`);
     }
     // Dialog anzeigen
-    let result = await modules.ipc.invoke("datei-dialog", {
+    const result = await modules.ipc.invoke("datei-dialog", {
       open: false,
       winId: winInfo.winId,
-      opt: opt,
+      opt,
     });
     // Fehler oder keine Datei ausgewählt
     if (result.message || !Object.keys(result).length) {
@@ -399,7 +394,7 @@ let kartei = {
   // Kartei im aktuellen Fenster schließen, das Fenster selbst aber erhalten
   async schliessenDurchfuehren () {
     modules.ipc.send("kartei-geschlossen", winInfo.winId);
-    lock.actions({datei: kartei.pfad, aktion: "unlock"});
+    lock.actions({ datei: kartei.pfad, aktion: "unlock" });
     notizen.notizenGeaendert(false);
     tagger.taggerGeaendert(false);
     beleg.belegGeaendert(false);
@@ -413,7 +408,7 @@ let kartei = {
     kartei.pfad = "";
     belegImport.Datei.typ = "dta";
     belegImport.DateiReset();
-    let wort = document.getElementById("wort");
+    const wort = document.getElementById("wort");
     wort.classList.add("keine-kartei");
     wort.textContent = "keine Kartei geöffnet";
     helfer.geaendert(); // trägt das Wort aus der Titelleiste aus
@@ -439,14 +434,14 @@ let kartei = {
       text: "Zu welchem Wort soll die Kartei angelegt werden?",
       platzhalter: "Karteiwort",
       callback: async () => {
-        let wort = dialog.getPromptText();
+        const wort = dialog.getPromptText();
         if (dialog.antwort && !wort) {
           dialog.oeffnen({
             typ: "alert",
             text: "Sie müssen ein Wort eingeben, sonst kann keine Kartei angelegt werden.",
           });
         } else if (dialog.antwort && wort) {
-          lock.actions({datei: kartei.pfad, aktion: "unlock"});
+          lock.actions({ datei: kartei.pfad, aktion: "unlock" });
           modules.ipc.send("kartei-geoeffnet", winInfo.winId, "neu");
           kartei.karteiGeaendert(true);
           filter.ctrlReset(false);
@@ -474,7 +469,7 @@ let kartei = {
       text: "Soll das Wort geändert werden?",
       platzhalter: "Karteiwort",
       callback: async () => {
-        let wort = dialog.getPromptText();
+        const wort = dialog.getPromptText();
         if (dialog.antwort && wort === kartei.wort) {
           dialog.oeffnen({
             typ: "alert",
@@ -492,7 +487,7 @@ let kartei = {
           //   - Varianten deaktivieren, die nicht zum neuen Wort gehören
           await stamm.dtaGet(kartei.wort, false);
           const woerter = stamm.dtaPrepParole(wort);
-          for (const [k, v] of Object.entries(data.fv)) {
+          for (const [ k, v ] of Object.entries(data.fv)) {
             v.an = woerter.includes(k);
           }
           helfer.formVariRegExp();
@@ -505,14 +500,14 @@ let kartei = {
       },
     });
     // Text im Prompt-Input eintragen
-    let prompt_text = document.getElementById("dialog-prompt-text");
+    const prompt_text = document.getElementById("dialog-prompt-text");
     prompt_text.value = kartei.wort;
     prompt_text.select();
   },
 
   // Wort der aktuellen Kartei in den Kopf eintragen
   wortEintragen () {
-    let cont = document.getElementById("wort");
+    const cont = document.getElementById("wort");
     cont.classList.remove("keine-kartei");
     cont.textContent = kartei.wort;
   },
@@ -526,7 +521,7 @@ let kartei = {
   karteiGeaendert (geaendert) {
     kartei.geaendert = geaendert;
     helfer.geaendert();
-    let asterisk = document.getElementById("kartei-geaendert");
+    const asterisk = document.getElementById("kartei-geaendert");
     if (geaendert) {
       asterisk.classList.add("geaendert");
     } else {

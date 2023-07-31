@@ -1,6 +1,6 @@
 "use strict";
 
-let xml = {
+const xml = {
   // Liste der Zeitungen, deren Autor und Titel beim Erstellen des Snippets ggf. automatisch eliminiert werden sollen
   zeitungen: [
     "Aachener Zeitung",
@@ -36,11 +36,11 @@ let xml = {
 
   // markierten Belegschnitt aufbereiten
   schnitt () {
-    let data = popup.referenz.data,
-      ns = "http://www.w3.org/1999/xhtml";
+    const data = popup.referenz.data;
+    const ns = "http://www.w3.org/1999/xhtml";
     // <Beleg>
-    let parser = new DOMParser(),
-      schnitt = parser.parseFromString("<Beleg></Beleg>", "text/xml");
+    const parser = new DOMParser();
+    let schnitt = parser.parseFromString("<Beleg></Beleg>", "text/xml");
     // @xml:id
     schnitt.firstChild.setAttribute("xml:id", xml.belegId({}));
     // @Fundort
@@ -62,29 +62,27 @@ let xml = {
       fundort = "Bibliothek";
     }
     // <Belegtext>
-    let cont = document.createElement("div");
+    const cont = document.createElement("div");
     // Belegschnitt typographisch aufbereiten
     // (sollte hier passieren, weil später automatisch XML-Ersetzungen reinkommen)
     cont.innerHTML = helfer.typographie(popup.textauswahl.xml);
     // <span> für farbige Hervorhebung der Klammern ersetzen
-    helfer.clipboardHtmlErsetzen(cont, `[class^="klammer-"]`);
+    helfer.clipboardHtmlErsetzen(cont, '[class^="klammer-"]');
     // Belegschnitt parsen
-    let text = "",
-      knoten = cont.childNodes;
+    let text = "";
+    let knoten = cont.childNodes;
     if (knoten.length > 1) {
-      knoten = cont.querySelectorAll(`[data-pnumber]`);
+      knoten = cont.querySelectorAll("[data-pnumber]");
     }
     for (let i = 0, len = knoten.length; i < len; i++) {
       if (i === 0) {
         text += "<Absatz>";
+      } else if (fundort === "DWDS") {
+        // Absätze wurden in DWDS-Belegen intern getilgt; die erscheinen
+        // online nur, um den Kontext besser zu erkennen.
+        text += " ";
       } else {
-        if (fundort === "DWDS") {
-          // Absätze wurden in DWDS-Belegen intern getilgt; die erscheinen
-          // online nur, um den Kontext besser zu erkennen.
-          text += " ";
-        } else {
-          text += "<Absatz>";
-        }
+        text += "<Absatz>";
       }
       getText(knoten[i]);
       if (i < len - 1 && fundort !== "DWDS") {
@@ -114,7 +112,7 @@ let xml = {
     });
     text = text.replace(/<\/Stichwort><Stichwort>|<\/Markierung><Markierung>/g, "");
     text = helfer.textTrim(text, true);
-    text = xml.mergeHervorhebungen({text});
+    text = xml.mergeHervorhebungen({ text });
     text = text.replace(/<Absatz>(.+?)<\/Absatz>/g, (m, p1) => {
       if (/<Vers>/.test(p1)) {
         p1 = `<Vers>${p1}</Vers>`;
@@ -125,14 +123,14 @@ let xml = {
       return `<Absatz>${p1}</Absatz>`;
     });
     // Belegtext einhängen
-    let belegtext = parser.parseFromString(`<Belegtext>${text}</Belegtext>`, "text/xml");
+    const belegtext = parser.parseFromString(`<Belegtext>${text}</Belegtext>`, "text/xml");
     schnitt.firstChild.appendChild(belegtext.firstChild);
     // Elemente und Text extrahieren
     //   n = Knoten
     //     (Knoten, der geparst werden soll)
     function getText (n) {
       if (n.nodeType === 1) {
-        for (let c of n.childNodes) {
+        for (const c of n.childNodes) {
           let close = "";
           if (c.nodeType === 1 &&
               c.nodeName === "BR") {
@@ -149,7 +147,7 @@ let xml = {
                 (c.parentNode.classList.contains("annotierung-wort") ||
                 c.classList.contains("user") ||
                 c.classList.contains("markierung"))) {
-              text += `<Markierung>`;
+              text += "<Markierung>";
               close = "</Markierung>";
             } else if (!verschachtelt && !nichtTaggen) {
               text += "<Stichwort>";
@@ -159,7 +157,7 @@ let xml = {
               !c.classList.contains("annotierung-wort")) {
             // visuelle Textauszeichnung
             // @Stil: hier können (fast) alle @rendition des DTA rein
-            let stil = xml.stil(c);
+            const stil = xml.stil(c);
             if (stil) {
               text += `<Hervorhebung Stil="${stil}">`;
             } else {
@@ -173,7 +171,7 @@ let xml = {
           }
         }
       } else if (n.nodeType === 3) {
-        let textEsc = helferXml.maskieren({text: n.nodeValue});
+        const textEsc = helferXml.maskieren({ text: n.nodeValue });
         text += textEsc.replace(/&/g, "&amp;"); // sonst macht der Parser die &quot; usw. wieder weg
       }
     }
@@ -197,45 +195,45 @@ let xml = {
       //   * <Autorenzusatz> innerhalb von <Streichung> nicht ersetzen)
       //   * Spatien am Anfang/Ende von <Streichung> u. <Loeschung> ausklammern
       text = text.replace(/<Streichung>…<\/Streichung>/g, "<Loeschung>…</Loeschung>");
-      let sStart = text.split(/<Streichung>/);
+      const sStart = text.split(/<Streichung>/);
       text = "";
       for (let i = 0, len = sStart.length; i < len; i++) {
         if (i === 0) {
           text += korrekturAutorenz(sStart[0]);
         } else {
-          let sEnd = sStart[i].split(/<\/Streichung>/);
+          const sEnd = sStart[i].split(/<\/Streichung>/);
           text += "<Streichung>" + sEnd[0] + "</Streichung>" + korrekturAutorenz(sEnd[1]);
         }
       }
       function korrekturAutorenz (s) {
         return s.replace(/<Autorenzusatz>…<\/Autorenzusatz>/g, "<Loeschung>…</Loeschung>");
       }
-      text = text.replace(/<(Streichung|Loeschung)>(.+?)<\/(Streichung|Loeschung)>/g, (m, p1, p2, p3) => {
-        const spaceStart = /^ /.test(p2) ? " " : "",
-          spaceEnd = / $/.test(p2) ? " " : "";
-        return `${spaceStart}<${p1}>${p2.replace(/^ | $/g, "")}</${p3}>${spaceEnd}`;
+      text = text.replace(/<(Streichung|Loeschung)>(.+?)<\/(Streichung|Loeschung)>/g, (...args) => {
+        const spaceStart = /^ /.test(args[2]) ? " " : "";
+        const spaceEnd = / $/.test(args[2]) ? " " : "";
+        return `${spaceStart}<${args[1]}>${args[2].replace(/^ | $/g, "")}</${args[3]}>${spaceEnd}`;
       });
       // Ergebnis zurückgeben
       return text;
     }
     // <Fundstelle>
-    let fundstelle = document.createElementNS(ns, "Fundstelle");
+    const fundstelle = document.createElementNS(ns, "Fundstelle");
     schnitt.firstChild.appendChild(fundstelle);
     // <Fundort>
-    let fo = document.createElementNS(ns, "Fundort");
+    const fo = document.createElementNS(ns, "Fundort");
     fundstelle.appendChild(fo);
     fo.appendChild(document.createTextNode(fundort));
     // <Datum>
     let da = helferXml.datum(data.da, false, true);
     if (da) {
-      let datum = document.createElementNS(ns, "Datum");
+      const datum = document.createElementNS(ns, "Datum");
       fundstelle.appendChild(datum);
       da = da.replace("–", "-"); // hier lieber keinen Halbgeviertstrich
       da = da.replace(/\.\s?Jh\./, ""); // Jahrhundertangabe auf Ziffern reduzieren
       datum.appendChild(document.createTextNode(da));
     }
     // <URL>
-    let href = data.qu.match(/https?:[^\s]+|www\.[^\s]+/);
+    const href = data.qu.match(/https?:[^\s]+|www\.[^\s]+/);
     if (href) {
       let url = href[0].replace(/(&gt;|[.:,;!?)\]}>]+)$/, "");
       // ggf. Protokoll ergänzen
@@ -253,31 +251,31 @@ let xml = {
         }
       }
       // Tag erzeugen
-      let urlTag = document.createElementNS(ns, "URL");
+      const urlTag = document.createElementNS(ns, "URL");
       fundstelle.appendChild(urlTag);
-      urlTag.appendChild( document.createTextNode( helferXml.maskieren( {text: url} ) ) );
+      urlTag.appendChild(document.createTextNode(helferXml.maskieren({ text: url })));
       // <Aufrufdatum>
-      let reg = new RegExp(helfer.escapeRegExp(href[0])),
-        zugriff = helferXml.datum(data.qu.split(reg)[1]);
+      const reg = new RegExp(helfer.escapeRegExp(href[0]));
+      let zugriff = helferXml.datum(data.qu.split(reg)[1]);
       if (!zugriff) {
         // alternativ Erstellungsdatum Karteikarte nutzen
         // (ist immer vorhanden, auch wenn Kartei noch nicht gespeichert)
-        let datum = data.dc.match(/^(?<jahr>[0-9]{4})-(?<monat>[0-9]{2})-(?<tag>[0-9]{2})/);
+        const datum = data.dc.match(/^(?<jahr>[0-9]{4})-(?<monat>[0-9]{2})-(?<tag>[0-9]{2})/);
         zugriff = `${datum.groups.tag}.${datum.groups.monat}.${datum.groups.jahr}`;
       }
-      let aufrufdatum = document.createElementNS(ns, "Aufrufdatum");
+      const aufrufdatum = document.createElementNS(ns, "Aufrufdatum");
       fundstelle.appendChild(aufrufdatum);
       aufrufdatum.appendChild(document.createTextNode(zugriff));
     } else {
       // <Aufrufdatum>
       // (auch wenn keine URL da ist, z.B. nach Import eines DWDS-Belegs manuell eingefügt)
-      let quZeilen = data.qu.split("\n");
+      const quZeilen = data.qu.split("\n");
       if (quZeilen.length > 1) {
         data.qu = quZeilen[0];
         for (let i = 1, len = quZeilen.length; i < len; i++) {
-          let zugriff = helferXml.datum(quZeilen[i]);
+          const zugriff = helferXml.datum(quZeilen[i]);
           if (zugriff) {
-            let aufrufdatum = document.createElementNS(ns, "Aufrufdatum");
+            const aufrufdatum = document.createElementNS(ns, "Aufrufdatum");
             fundstelle.appendChild(aufrufdatum);
             aufrufdatum.appendChild(document.createTextNode(zugriff));
             break;
@@ -288,12 +286,12 @@ let xml = {
     // <unstrukturiert>
     let qu = data.qu;
     if (href) {
-      let reg = new RegExp(helfer.escapeRegExp(href[0]));
+      const reg = new RegExp(helfer.escapeRegExp(href[0]));
       qu = qu.split(reg)[0];
     }
     qu = helfer.textTrim(qu, true);
-    qu = qu.replace(/N\. ?N\./g, "N. N.");
-    let unstrukturiert = document.createElementNS(ns, "unstrukturiert");
+    qu = qu.replace(/N\. ?N\./g, "N.\u00A0N.");
+    const unstrukturiert = document.createElementNS(ns, "unstrukturiert");
     fundstelle.appendChild(unstrukturiert);
     let unstrukturiertTxt = helferXml.maskieren({ text: helfer.typographie(qu) });
     if (optionen.data.einstellungen["textkopie-xml-zeitungen"]) {
@@ -308,15 +306,15 @@ let xml = {
     // Text in String umwandeln und aufbereiten
     let xmlStr = new XMLSerializer().serializeToString(schnitt);
     xmlStr = xmlStr.replace(/\sxmlns="http:\/\/www\.w3\.org\/1999\/xhtml"/g, "");
-    let zeichen = new Map([
-      ["&amp;amp;", "&amp;"],
-      ["&amp;lt;", "&lt;"],
-      ["&amp;gt;", "&gt;"],
-      ["&amp;quot;", "&quot;"],
-      ["&amp;apos;", "&apos;"],
+    const zeichen = new Map([
+      [ "&amp;amp;", "&amp;" ],
+      [ "&amp;lt;", "&lt;" ],
+      [ "&amp;gt;", "&gt;" ],
+      [ "&amp;quot;", "&quot;" ],
+      [ "&amp;apos;", "&apos;" ],
     ]);
-    for (let [k, v] of zeichen) {
-      let reg = new RegExp(k, "g");
+    for (const [ k, v ] of zeichen) {
+      const reg = new RegExp(k, "g");
       xmlStr = xmlStr.replace(reg, v);
     }
     // String zurückgeben
@@ -326,27 +324,27 @@ let xml = {
   // veschachtelte Hervorhebungen-Tags zusammenführen
   //   text = String
   //     (Text, in dem die Hervorhebungen zusammengeführt werden sollen)
-  mergeHervorhebungen ({text}) {
+  mergeHervorhebungen ({ text }) {
     const bak = text;
-    let reg = new RegExp(`(?<start>(<Hervorhebung( Stil="#[^>]+")?>){2,})(?<text>[^<]+)(<\/Hervorhebung>)+`, "g"),
-      h = reg.exec(text);
+    const reg = /(?<start>(<Hervorhebung( Stil="#[^>]+")?>){2,})(?<text>[^<]+)(<\/Hervorhebung>)+/g;
+    const h = reg.exec(text);
     if (h) {
       // das Folgende funktioniert natürlich nur gut, wenn die Tags direkt
       // ineinander verschachtelt sind; ansonsten produziert es illegales XML
-      let stile = [];
-      for (let i of [...h.groups.start.matchAll(/Stil="(#.+?)"/g)]) {
+      const stile = [];
+      for (const i of [ ...h.groups.start.matchAll(/Stil="(#.+?)"/g) ]) {
         stile.push(i[1]);
       }
-      let ersatz = `<Hervorhebung`;
+      let ersatz = "<Hervorhebung";
       if (stile.length) {
         ersatz += ` Stil="${stile.join(" ")}"`;
       }
       ersatz += `>${h.groups.text}</Hervorhebung>`;
-      let reg = new RegExp(helfer.escapeRegExp(h[0]));
+      const reg = new RegExp(helfer.escapeRegExp(h[0]));
       text = text.replace(reg, ersatz);
-      // Test, ob wohlgeformtes XML produziert wurde
-      let parser = new DOMParser(),
-        xmlDoc = parser.parseFromString(`<Belegtext>${text}</Belegtext>`, "text/xml");
+      // ein Test, ob wohlgeformtes XML produziert wurde
+      const parser = new DOMParser();
+      const xmlDoc = parser.parseFromString(`<Belegtext>${text}</Belegtext>`, "text/xml");
       if (xmlDoc.querySelector("parsererror")) {
         text = bak;
       }
@@ -379,21 +377,21 @@ let xml = {
     if (helfer.hauptfunktion === "karte" && !optionen.data.beleg.trennung) {
       dialog.oeffnen({
         typ: "alert",
-        text: `Um diese Aktion auszuführen, müssen Sie die Anzeige der Trennzeichen im Kopf der Karteikarte aktivieren:\n• Icon <img src="img/trennzeichen.svg" width="24" height="24" alt="">`,
+        text: 'Um diese Aktion auszuführen, müssen Sie die Anzeige der Trennzeichen im Kopf der Karteikarte aktivieren:\n• Icon <img src="img/trennzeichen.svg" width="24" height="24" alt="">',
       });
       return;
     }
     if (helfer.hauptfunktion === "liste" &&
         (!optionen.data.belegliste.trennung || !optionen.data.belegliste.wort_hervorheben)) {
-      let funktionen = [],
-        icons = [];
+      const funktionen = [];
+      const icons = [];
       if (!optionen.data.belegliste.trennung) {
         funktionen.push("die Anzeige der Trennzeichen");
-        icons.push(`• Icon <img src="img/trennzeichen.svg" width="24" height="24" alt="">`);
+        icons.push('• Icon <img src="img/trennzeichen.svg" width="24" height="24" alt="">');
       }
       if (!optionen.data.belegliste.wort_hervorheben) {
         funktionen.push("die Hervorhebung des Karteiworts");
-        icons.push(`• Icon <img src="img/text-fett.svg" width="24" height="24" alt="">`);
+        icons.push('• Icon <img src="img/text-fett.svg" width="24" height="24" alt="">');
       }
       dialog.oeffnen({
         typ: "alert",
@@ -403,9 +401,9 @@ let xml = {
     }
     // Daten zusammentragen
     const xmlStr = xml.schnitt();
-    let datum = helferXml.datumFormat({xmlStr});
+    const datum = helferXml.datumFormat({ xmlStr });
     // Datensatz an XML-Fenster schicken
-    let xmlDatensatz = {
+    const xmlDatensatz = {
       key: "bl",
       ds: {
         da: datum.anzeige,
@@ -414,7 +412,7 @@ let xml = {
         xl: xmlStr,
       },
     };
-    redXml.datensatz({xmlDatensatz});
+    redXml.datensatz({ xmlDatensatz });
   },
 
   // alle in der Belegliste sichtbaren Belege ans XML-Fenster schicken
@@ -428,11 +426,11 @@ let xml = {
       return;
     }
     // Ist die Belegliste sichtbar?
-    if ( !liste.listeSichtbar({funktion: "Redaktion &gt; Belege in XML-Fenster"}) ) {
+    if (!liste.listeSichtbar({ funktion: "Redaktion &gt; Belege in XML-Fenster" })) {
       return;
     }
     // keine Belege in der Liste
-    let belege = document.querySelectorAll("#liste-belege .liste-kopf");
+    const belege = document.querySelectorAll("#liste-belege .liste-kopf");
     if (!belege.length) {
       dialog.oeffnen({
         typ: "alert",
@@ -460,26 +458,26 @@ let xml = {
       await redXml.oeffnenPromise();
     }
     // Belege an XML-Fenster
-    for (let i of belege) {
+    for (const i of belege) {
       const id = i.dataset.id;
       popup.referenz.data = data.ka[id];
       popup.referenz.id = id;
       // Absätzen erzeugen
-      let container = document.createElement("div"),
-        bs = data.ka[id].bs.replace(/\n\s*\n/g, "\n").split("\n");
-      for (let i of bs) {
-        let p = document.createElement("p");
+      const container = document.createElement("div");
+      const bs = data.ka[id].bs.replace(/\n\s*\n/g, "\n").split("\n");
+      for (const i of bs) {
+        const p = document.createElement("p");
         p.dataset.pnumber = 0; // wegen xml.schnitt()
         p.innerHTML = i;
         container.appendChild(p);
       }
       // Text aufbereiten
-      let html = liste.belegWortHervorheben(container.innerHTML, true);
+      const html = liste.belegWortHervorheben(container.innerHTML, true);
       popup.textauswahl.xml = helfer.clipboardXml(html);
       // Datensatz umwandeln an XML-Fenster schicken
       const xmlStr = xml.schnitt();
-      let datum = helferXml.datumFormat({xmlStr});
-      let xmlDatensatz = {
+      const datum = helferXml.datumFormat({ xmlStr });
+      const xmlDatensatz = {
         key: "bl",
         ds: {
           da: datum.anzeige,
@@ -488,7 +486,7 @@ let xml = {
           xl: xmlStr,
         },
       };
-      redXml.datensatz({xmlDatensatz});
+      redXml.datensatz({ xmlDatensatz });
       // kurz warten
       await new Promise(resolve => setTimeout(() => resolve(true), 100));
     }
@@ -508,7 +506,7 @@ let xml = {
   //     (das Datenobjekt der betreffenden Karteikarte)
   //   id = String || undefined
   //     (ID der betreffenden Karteikarte)
-  belegId ({data = popup.referenz.data, id = popup.referenz.id}) {
+  belegId ({ data = popup.referenz.data, id = popup.referenz.id }) {
     // Autor
     let autor = helfer.textTrim(data.au, true);
     if (!autor) {
@@ -521,8 +519,8 @@ let xml = {
       autor = autor.replace(/[\s/]/g, "-");
     }
     // Jahr
-    let jahr = "",
-      datum = helferXml.datum(data.da.replace(/0000[-–]/, "")).match(/[0-9]{4}/);
+    let jahr = "";
+    const datum = helferXml.datum(data.da.replace(/0000[-–]/, "")).match(/[0-9]{4}/);
     if (datum) {
       jahr = datum[0];
     }
@@ -570,15 +568,13 @@ let xml = {
       case "dta-blau":
         return "#blue";
       case "dta-groesser":
-        return "#fr";
+        return "#larger";
       case "dta-gesperrt":
         return "#g";
       case "dta-initiale":
         return "#in";
       case "dta-kapitaelchen":
         return "#k";
-      case "dta-groesser":
-        return "#larger";
       case "dta-rot":
         return "#red";
       case "dta-doppelt":

@@ -24,7 +24,7 @@ window.addEventListener("load", async () => {
 
   // MAIL-ADRESSE EINTRAGEN
   const dekodiert = helfer.mailEntschluesseln("wvjkiovxidgbwvefekxfzutfpogspjep0eqspAceyhqf0eg");
-  let mail = document.getElementById("mail");
+  const mail = document.getElementById("mail");
   mail.href = `mailto:${dekodiert}`;
   mail.textContent = dekodiert;
 

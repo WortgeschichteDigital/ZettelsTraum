@@ -1,11 +1,11 @@
 "use strict";
 
-let filter = {
+const filter = {
   // zeigt an, dass keine Filter vorhanden sind
   //   keine = Boolean
   //     (es sind keine Filter vorhanden)
   keineFilter (keine) {
-    let filterliste = document.getElementById("liste-filter");
+    const filterliste = document.getElementById("liste-filter");
     if (keine) {
       filterliste.classList.add("keine-filter");
     } else {
@@ -46,7 +46,7 @@ let filter = {
     // Backup des Klappstatus und der Scrollposition erstellen
     filter.backupKlappMake();
     // Backup der Filtereinstellungen erstellen
-    let filter_backup = filter.backup();
+    const filter_backup = filter.backup();
     // Zeitraum-Filter
     if (!optionen.data.belegliste.sort_aufwaerts) {
       belege.reverse();
@@ -64,14 +64,14 @@ let filter = {
     filter.typen = {
       bedeutungen: {
         name: "Bedeutungen",
-        filter_vorhanden: belege.length ? true : false,
+        filter_vorhanden: belege.length,
         filter: {
           "bedeutungen-undefined": {
             name: "(nicht bestimmt)",
             wert: 0,
           },
         },
-        filter_folge: ["bedeutungen-undefined"],
+        filter_folge: [ "bedeutungen-undefined" ],
       },
       wortbildungen: {
         name: "Wortbildungen",
@@ -87,29 +87,29 @@ let filter = {
       },
       korpora: {
         name: "Korpora",
-        filter_vorhanden: belege.length ? true : false,
+        filter_vorhanden: belege.length,
         filter: {
           "korpora-undefined": {
             name: "(nicht bestimmt)",
             wert: 0,
           },
         },
-        filter_folge: ["korpora-undefined"],
+        filter_folge: [ "korpora-undefined" ],
       },
       textsorten: {
         name: "Textsorten",
-        filter_vorhanden: belege.length ? true : false,
+        filter_vorhanden: belege.length,
         filter: {
           "textsorten-undefined": {
             name: "(nicht bestimmt)",
             wert: 0,
           },
         },
-        filter_folge: ["textsorten-undefined"],
+        filter_folge: [ "textsorten-undefined" ],
       },
       verschiedenes: {
         name: "Verschiedenes",
-        filter_vorhanden: filter.exklusivAktiv.length ? true : false,
+        filter_vorhanden: filter.exklusivAktiv.length,
         filter: {
           "verschiedenes-unvollstaendig": {
             name: "unvollständig",
@@ -161,7 +161,7 @@ let filter = {
         ],
       },
     };
-    let baeume = [
+    const baeume = [
       {
         data: "bl",
         typen: "wortbildungen",
@@ -180,7 +180,7 @@ let filter = {
       },
     ];
     // alle Bedeutungen aus dem aktuellen Bedeutungsgerüst pushen
-    let bd = data.bd.gr[data.bd.gn].bd;
+    const bd = data.bd.gr[data.bd.gn].bd;
     for (let i = 0, len = bd.length; i < len; i++) {
       const id = `bedeutungen-${data.bd.gn}_${bd[i].id}`;
       let name = bd[i].bd[bd[i].bd.length - 1];
@@ -188,7 +188,7 @@ let filter = {
         name = bd[i].al;
       }
       filter.typen.bedeutungen.filter[id] = {
-        name: name,
+        name,
         wert: 0,
       };
       filter.typen.bedeutungen.filter_folge.push(id);
@@ -199,7 +199,7 @@ let filter = {
       regAnnotierung = /farbe[0-9]/;
     }
     for (let x = 0, len = belege.length; x < len; x++) {
-      let id = belege[x];
+      const id = belege[x];
       // BEDEUTUNGEN
       let bdGefunden = false;
       for (let i = 0, len = data.ka[id].bd.length; i < len; i++) {
@@ -215,19 +215,19 @@ let filter = {
       }
       // WORTBILDUNGEN, SYNONYME, KORPORA UND TEXTSORTEN
       for (let i = 0, len = baeume.length; i < len; i++) {
-        let d = baeume[i].data,
-          t = baeume[i].typen;
+        const d = baeume[i].data;
+        const t = baeume[i].typen;
         if (!data.ka[id][d]) {
           if (!/^(bl|sy)$/.test(d)) { // Wortbildung und Synonym hat kein undefined-Feld
             filter.typen[t].filter[`${t}-undefined`].wert++;
           }
           continue;
         }
-        let schon_gezaehlt = new Set(),
-          b = filter.baumExtrakt(data.ka[id][d], t);
+        const schon_gezaehlt = new Set();
+        const b = filter.baumExtrakt(data.ka[id][d], t);
         for (let j = 0, len = b.length; j < len; j++) {
           if (!filter.typen[t].filter[b[j]]) {
-            let name = b[j].replace(/^.+?-/, "").split(": ");
+            const name = b[j].replace(/^.+?-/, "").split(": ");
             filter.typen[t].filter[b[j]] = {
               name: name[name.length - 1],
               wert: 0,
@@ -305,11 +305,11 @@ let filter = {
     // statistische Angaben der Bedeutungen um die untergeordneten Bedeutungen ergänzen
     filter.statistikBd(belege);
     // wegen der Möglichkeit, aus dem Bedeutungsgerüst-Fenster Bedeutungen zu entfernen,
-    // kann es sein, dass eine Bedeutung aktiv ist, aber gar nicht mehr gefunden 
+    // kann es sein, dass eine Bedeutung aktiv ist, aber gar nicht mehr gefunden
     // werden kann; in solchen Fällen lässt sie sich nicht mehr deaktivieren, weswegen
     // in der Liste keine Belege mehr gefunden werden können => solche Bedeutungen
     // müssen deaktiviert werden
-    for (let a in filter.aktiveFilter) {
+    for (const a in filter.aktiveFilter) {
       if (!filter.aktiveFilter.hasOwnProperty(a)) {
         continue;
       }
@@ -322,15 +322,15 @@ let filter = {
       }
     }
     // Wortbildungen, Synonyme, Korpora und Textsorten sortieren
-    let arr_typen = ["wortbildungen", "synonyme", "korpora", "textsorten"];
+    const arr_typen = [ "wortbildungen", "synonyme", "korpora", "textsorten" ];
     for (let i = 0, len = arr_typen.length; i < len; i++) {
-      let arr = filter.typen[arr_typen[i]].filter_folge;
+      const arr = filter.typen[arr_typen[i]].filter_folge;
       arr.sort(filter.baumSort);
     }
     // dynamische Filter drucken
-    let cont = document.getElementById("liste-filter-dynamisch");
+    const cont = document.getElementById("liste-filter-dynamisch");
     cont.replaceChildren();
-    for (let block in filter.typen) {
+    for (const block in filter.typen) {
       if (!filter.typen.hasOwnProperty(block)) {
         continue;
       }
@@ -341,18 +341,18 @@ let filter = {
       if (block === "verschiedenes") {
         cont.lastChild.appendChild(filter.aufbauenFilterlogik());
       }
-      let f = filter.typen[block].filter_folge;
+      const f = filter.typen[block].filter_folge;
       for (let i = 0, len = f.length; i < len; i++) {
-        let neuer_filter = filter.aufbauenFilter(f[i], filter.typen[block].filter[f[i]]);
+        const neuer_filter = filter.aufbauenFilter(f[i], filter.typen[block].filter[f[i]]);
         // kein neuer Filter
         if (!neuer_filter[0]) {
           continue;
         }
         // Verschachtelungstiefe Bedeutungen ermitteln
         if (/^bedeutungen-[0-9]/.test(f[i])) {
-          let d = f[i].match(/bedeutungen-(?<gr>[0-9]+)_(?<id>[0-9]+)/);
-          const bd = data.bd.gr[d.groups.gr].bd,
-            id = parseInt(d.groups.id, 10);
+          const d = f[i].match(/bedeutungen-(?<gr>[0-9]+)_(?<id>[0-9]+)/);
+          const bd = data.bd.gr[d.groups.gr].bd;
+          const id = parseInt(d.groups.id, 10);
           for (let j = 0, len = bd.length; j < len; j++) {
             if (bd[j].id === id) {
               neuer_filter[1] = bd[j].bd.length - 1;
@@ -367,7 +367,7 @@ let filter = {
         if (neuer_filter[1] > 0) {
           let schachtel;
           if (block === "bedeutungen") {
-            let e = cont.querySelectorAll(`[data-tiefe="${neuer_filter[1] - 1}"]`);
+            const e = cont.querySelectorAll(`[data-tiefe="${neuer_filter[1] - 1}"]`);
             schachtel = e[e.length - 1];
           } else {
             schachtel = schachtelFinden(neuer_filter[0].firstChild.dataset.f);
@@ -392,14 +392,14 @@ let filter = {
     //     (Filter, ggf. mit Hierarchieebenen ": ")
     function schachtelFinden (f) {
       // Filter kürzen
-      let bd_arr = f.split(": ");
+      const bd_arr = f.split(": ");
       if (bd_arr.length > 1) {
         bd_arr.pop();
       }
       f = bd_arr.join(": ");
       f = f.replace(/"/g, '\\"'); // der Filter könnte " enthalten
       // Schachtel suchen
-      let schachtel = cont.lastChild.querySelector(`[data-f^="${f}"]`);
+      const schachtel = cont.lastChild.querySelector(`[data-f^="${f}"]`);
       if (schachtel) {
         return schachtel;
       }
@@ -415,21 +415,21 @@ let filter = {
     if (!optionen.data.einstellungen["filter-unterbedeutungen"]) {
       return;
     }
-    let ff = filter.typen.bedeutungen.filter_folge;
+    const ff = filter.typen.bedeutungen.filter_folge;
     for (let i = 1, len = ff.length; i < len; i++) { // ab 1 => undefined ausschließen
-      let d = ff[i].match(/bedeutungen-[0-9]+_(?<id>[0-9]+)/),
-        darunter = filter.kartenUnterBd([`${data.bd.gn}_${d.groups.id}`]),
-        karten_schon = new Set();
+      const d = ff[i].match(/bedeutungen-[0-9]+_(?<id>[0-9]+)/);
+      const darunter = filter.kartenUnterBd([ `${data.bd.gn}_${d.groups.id}` ]);
+      const karten_schon = new Set();
       for (let j = 0, len = darunter.length; j < len; j++) {
-        let d = darunter[j].match(/[0-9]+_(?<id>[0-9]+)/),
-          id = parseInt(d.groups.id, 10);
+        const d = darunter[j].match(/[0-9]+_(?<id>[0-9]+)/);
+        const id = parseInt(d.groups.id, 10);
         for (let k = 0, len = belege.length; k < len; k++) {
           const idK = belege[k];
           if (!karten_schon.has(idK) && bedeutungen.schonVorhanden({
-                bd: data.ka[idK].bd,
-                gr: data.bd.gn,
-                id: id,
-              })[0]) {
+            bd: data.ka[idK].bd,
+            gr: data.bd.gn,
+            id,
+          })[0]) {
             filter.typen.bedeutungen.filter[ff[i]].wert++;
             karten_schon.add(idK);
           }
@@ -449,7 +449,7 @@ let filter = {
   //     (Jahr des letzten Belegs)
   aufbauenZeitraum () {
     // Liste leeren
-    let cont = document.getElementById("filter-zeitraum-dynamisch");
+    const cont = document.getElementById("filter-zeitraum-dynamisch");
     cont.replaceChildren();
     // Zeitraum-Cache leeren
     filter.zeitraumTrefferCache = {};
@@ -458,18 +458,18 @@ let filter = {
       return;
     }
     // Grenzen berechnen
-    let start = filter.zeitraumStart,
-      ende = filter.zeitraumEnde,
-      filter1 = 0,
-      filterN = 0,
-      step = filter.aufbauenZeitraumStep();
+    const start = filter.zeitraumStart;
+    const ende = filter.zeitraumEnde;
+    let filter1 = 0;
+    let filterN = 0;
+    const step = filter.aufbauenZeitraumStep();
     if (step === 100) { // 100er
       filter1 = parseInt(start.substring(0, 2), 10) * 100;
       filterN = parseInt(ende.substring(0, 2), 10) * 100;
     } else if (step === 50) { // 50er
-      let haelfte1 = Math.round(parseInt(start.substring(2), 10) / 100) ? "50" : "00";
+      const haelfte1 = Math.round(parseInt(start.substring(2), 10) / 100) ? "50" : "00";
       filter1 = parseInt(`${start.substring(0, 2)}${haelfte1}`, 10);
-      let haelfteN = Math.round(parseInt(ende.substring(2), 10) / 100) ? "50" : "00";
+      const haelfteN = Math.round(parseInt(ende.substring(2), 10) / 100) ? "50" : "00";
       filterN = parseInt(`${ende.substring(0, 2)}${haelfteN}`, 10);
     } else { // 10er
       filter1 = parseInt(start.substring(0, 3), 10) * 10;
@@ -477,27 +477,27 @@ let filter = {
     }
     // Liste füllen
     for (let i = filter1; i <= filterN; i += step) {
-      let p = document.createElement("p");
+      const p = document.createElement("p");
       cont.appendChild(p);
       // Checkbox
-      let input = document.createElement("input");
+      const input = document.createElement("input");
       input.classList.add("filter");
       input.id = `filter-zeit-${i}`;
       input.type = "checkbox";
       filter.anwenden(input);
       p.appendChild(input);
       // Label
-      let label = document.createElement("label");
+      const label = document.createElement("label");
       label.setAttribute("for", `filter-zeit-${i}`);
       label.textContent = i;
       p.appendChild(label);
       // Anzahl der Treffer anzeigen
-      let treffer = filter.aufbauenZeitraumTreffer(i, step);
+      const treffer = filter.aufbauenZeitraumTreffer(i, step);
       if (!treffer) {
         input.disabled = true;
         continue;
       }
-      let span = document.createElement("span");
+      const span = document.createElement("span");
       span.classList.add("filter-treffer");
       span.textContent = `(${treffer})`;
       span.title = "Anzahl der Belege in diesem Zeitraum";
@@ -511,7 +511,7 @@ let filter = {
 
   // Step ermitteln, in dem die Zeitraumfilter dargestellt werden
   aufbauenZeitraumStep () {
-    let inputs = document.getElementsByName("filter-zeitraum");
+    const inputs = document.getElementsByName("filter-zeitraum");
     for (let i = 0, len = inputs.length; i < len; i++) {
       if (inputs[i].checked) {
         return parseInt(inputs[i].id.match(/[0-9]+$/)[0], 10);
@@ -544,9 +544,9 @@ let filter = {
   //   step = Number
   //     (der Zeitraum für den dieser Jahresfilter steht)
   aufbauenZeitraumTreffer (y, step) {
-    let ende = y + step - 1,
-      treffer = 0;
-    for (let id in filter.jahrBelege) {
+    const ende = y + step - 1;
+    let treffer = 0;
+    for (const id in filter.jahrBelege) {
       if (!filter.jahrBelege.hasOwnProperty(id)) {
         continue;
       }
@@ -562,7 +562,7 @@ let filter = {
   //   input = Element
   //     (Radio-Button, der für die gewünschten Zeitschnitte steht)
   wechselnZeitraum (input) {
-    input.addEventListener("change", function() {
+    input.addEventListener("change", function () {
       filter.setZuletztAktiv(this);
       optionen.data.filter.zeitraum = this.id.match(/[0-9]+$/)[0];
       optionen.speichern();
@@ -584,11 +584,11 @@ let filter = {
     if (/^(wortbildungen|synonyme|korpora|textsorten)/.test(dt)) {
       dt += "-";
     }
-    let extrakt = [],
-      gruppen = baum.split("\n");
+    const extrakt = [];
+    const gruppen = baum.split("\n");
     for (let i = 0, len = gruppen.length; i < len; i++) {
-      let untergruppen = gruppen[i].split(": "),
-        konstrukt = [];
+      const untergruppen = gruppen[i].split(": ");
+      const konstrukt = [];
       for (let j = 0, len = untergruppen.length; j < len; j++) {
         konstrukt.push(untergruppen[j]);
         extrakt.push(`${dt}${konstrukt.join(": ")}`);
@@ -609,7 +609,7 @@ let filter = {
     // alphabetische Sortierung
     a = helfer.sortAlphaPrep(a);
     b = helfer.sortAlphaPrep(b);
-    let arr = [a, b];
+    const arr = [ a, b ];
     arr.sort();
     if (arr[0] === a) {
       return -1;
@@ -621,9 +621,9 @@ let filter = {
   //   name = String
   //     (Name des Filterkopfes)
   aufbauenCont (name) {
-    let frag = document.createDocumentFragment();
+    const frag = document.createDocumentFragment();
     // Filter-Kopf
-    let a = document.createElement("a");
+    const a = document.createElement("a");
     frag.appendChild(a);
     a.classList.add("filter-kopf");
     a.href = "#";
@@ -634,7 +634,7 @@ let filter = {
     if (name === "Bedeutungen") {
       const details = bedeutungen.aufbauenH2Details(data.bd, true);
       if (details) {
-        let span = document.createElement("span");
+        const span = document.createElement("span");
         span.classList.add("filter-bedeutungen-details");
         span.textContent = details;
         a.appendChild(span);
@@ -642,13 +642,13 @@ let filter = {
       }
     }
     // Bild für Block-Reset anhängen
-    let span = document.createElement("span");
+    const span = document.createElement("span");
     a.appendChild(span);
-    span.textContent = " ";
+    span.textContent = "\u00A0";
     if (name === "Notizen") {
       span.classList.add("filter-notizen");
       span.title = "Notizen-Fenster anzeigen";
-      span.addEventListener("click", function(evt) {
+      span.addEventListener("click", function (evt) {
         evt.stopPropagation();
         evt.preventDefault();
         notizen.oeffnen();
@@ -659,7 +659,7 @@ let filter = {
       filter.ctrlResetBlock(span);
     }
     // Filter-Container
-    let div = document.createElement("div");
+    const div = document.createElement("div");
     div.classList.add("filter-cont", "filter-cont-max");
     filter.backupKlappScroll(div);
     frag.appendChild(div);
@@ -669,13 +669,13 @@ let filter = {
 
   // Zeile mit Filterlogik aufbauen
   aufbauenFilterlogik () {
-    let p = document.createElement("p");
+    const p = document.createElement("p");
     p.classList.add("no-indent");
     p.textContent = "Filterlogik: ";
-    let inputs = ["inklusiv", "exklusiv"];
+    const inputs = [ "inklusiv", "exklusiv" ];
     for (let i = 0, len = inputs.length; i < len; i++) {
       // Input
-      let input = document.createElement("input");
+      const input = document.createElement("input");
       input.id = `filter-logik-${inputs[i]}`;
       input.name = "filter-logik";
       input.type = "radio";
@@ -685,7 +685,7 @@ let filter = {
       filter.wechselnFilterlogik(input);
       p.appendChild(input);
       // Label
-      let label = document.createElement("label");
+      const label = document.createElement("label");
       label.setAttribute("for", `filter-logik-${inputs[i]}`);
       label.textContent = inputs[i];
       p.appendChild(label);
@@ -697,7 +697,7 @@ let filter = {
   //   input = Element
   //     (Radio-Button, der für die gewünschten Zeitschnitte steht)
   wechselnFilterlogik (input) {
-    input.addEventListener("change", function() {
+    input.addEventListener("change", function () {
       filter.setZuletztAktiv(this);
       optionen.data.filter.logik = this.id.match(/[a-z]+$/)[0];
       optionen.speichern();
@@ -714,29 +714,29 @@ let filter = {
     // Muss der Filter wirklich gedruckt werden?
     if (/^bedeutungen-/.test(f)) {
       if (obj.wert === 0 && f === "bedeutungen-undefined") {
-        return [null];
+        return [ null ];
       }
     } else if (!obj.wert && !filter.exklusivAktiv.includes(f)) {
-      return [null];
+      return [ null ];
     }
     // Sollte der Filter als Filterbaum dargestellt werden?
-    let baum = f.match(/: /g),
-      baum_tiefe = 0;
+    const baum = f.match(/: /g);
+    let baum_tiefe = 0;
     if (baum) {
       baum_tiefe = baum.length;
     }
     // in der Filter-ID sind wahrscheinlich Leerzeichen
     const f_enc = encodeURI(f);
     // Filter drucken
-    let frag = document.createDocumentFragment(),
-      div = document.createElement("div"),
-      p = document.createElement("p");
+    const frag = document.createDocumentFragment();
+    const div = document.createElement("div");
+    const p = document.createElement("p");
     div.appendChild(p);
     div.classList.add("filter-baum");
     div.dataset.f = f;
     frag.appendChild(div);
     // Input
-    let input = document.createElement("input");
+    const input = document.createElement("input");
     input.classList.add("filter");
     input.id = `filter-${f_enc}`;
     input.type = "checkbox";
@@ -746,7 +746,7 @@ let filter = {
       input.disabled = true;
     }
     // Label
-    let label = document.createElement("label");
+    const label = document.createElement("label");
     label.setAttribute("for", `filter-${f_enc}`);
     if (/^bedeutungen-/.test(f)) {
       label.innerHTML = obj.name;
@@ -756,7 +756,7 @@ let filter = {
     p.appendChild(label);
     // Anzahl der Belege
     if (obj.wert) {
-      let span = document.createElement("span");
+      const span = document.createElement("span");
       span.classList.add("filter-treffer");
       span.textContent = `(${obj.wert})`;
       span.title = `Anzahl der Belege, auf die der Filter „${obj.name}“ zutrifft`;
@@ -768,19 +768,19 @@ let filter = {
       frag.appendChild(filter.aufbauenSterne());
     }
     // Fragment zurückgeben
-    return [frag, baum_tiefe];
+    return [ frag, baum_tiefe ];
   },
 
   // Absatz mit Sternen aufbauen für eine detaillierte Markierungssuche
   aufbauenSterne () {
-    let p = document.createElement("p");
+    const p = document.createElement("p");
     p.dataset.bewertung = "0";
     p.id = "filter-verschiedenes-bewertung";
     for (let i = 0; i < 5; i++) {
-      let a = document.createElement("a");
+      const a = document.createElement("a");
       a.classList.add("icon-link", "icon-stern");
       a.href = "#";
-      a.textContent = " ";
+      a.textContent = "\u00A0";
       beleg.bewertungEvents(a);
       p.appendChild(a);
     }
@@ -789,14 +789,14 @@ let filter = {
 
   // stellt die gespeicherte Markierung im Bewertungsfilter wieder her
   markierenSterne () {
-    let filter_bewertung = document.getElementById("filter-verschiedenes-bewertung");
+    const filter_bewertung = document.getElementById("filter-verschiedenes-bewertung");
     // keine Markierung gespeichert
     if (!filter_bewertung) {
       return;
     }
     // Markierung wiederherstellen
     const be = parseInt(filter_bewertung.dataset.bewertung, 10);
-    let sterne = document.querySelectorAll("#filter-verschiedenes-bewertung a");
+    const sterne = document.querySelectorAll("#filter-verschiedenes-bewertung a");
     for (let i = 0, len = sterne.length; i < len; i++) {
       if (i < be) {
         sterne[i].classList.add("aktiv");
@@ -809,15 +809,15 @@ let filter = {
   // Erstellt ein Backup der aktuellen Filter-Einstellungen, um sie nach
   // dem Neuaufbau der Liste wieder anzuwenden.
   backup () {
-    let bak = {};
-    document.querySelectorAll("#liste-filter input").forEach(function(i) {
+    const bak = {};
+    document.querySelectorAll("#liste-filter input").forEach(function (i) {
       if (i.type === "text" && i.value) {
         bak[i.id] = i.value;
       } else if (i.type === "checkbox" || i.type === "radio") {
         bak[i.id] = i.checked;
       }
     });
-    let filter_bewertung = document.getElementById("filter-verschiedenes-bewertung");
+    const filter_bewertung = document.getElementById("filter-verschiedenes-bewertung");
     if (filter_bewertung) {
       bak["filter-verschiedenes-bewertung"] = filter_bewertung.dataset.bewertung;
     }
@@ -828,7 +828,7 @@ let filter = {
   //   bak = Object
   //     (Das Objekt mit den gespeicherten Einstellungen; vgl. filter.backup().)
   backupWiederher (bak) {
-    document.querySelectorAll("#liste-filter input").forEach(function(i) {
+    document.querySelectorAll("#liste-filter input").forEach(function (i) {
       // kein Wert gespeichert
       if (!bak[i.id]) {
         return;
@@ -840,7 +840,7 @@ let filter = {
         i.checked = bak[i.id];
       }
     });
-    let filter_bewertung = document.getElementById("filter-verschiedenes-bewertung");
+    const filter_bewertung = document.getElementById("filter-verschiedenes-bewertung");
     if (bak["filter-verschiedenes-bewertung"] && filter_bewertung) {
       filter_bewertung.dataset.bewertung = bak["filter-verschiedenes-bewertung"];
     }
@@ -852,25 +852,25 @@ let filter = {
   // Backup des Klappstatus und der Scrollposition der Filterblöcke erstellen
   backupKlappMake () {
     filter.backupKlapp = {};
-    document.querySelectorAll(".filter-kopf").forEach(function(i) {
-      let id = i.id,
-        div = i.nextSibling;
-      let pos = [-1, false];
+    document.querySelectorAll(".filter-kopf").forEach(function (i) {
+      const id = i.id;
+      let div = i.nextSibling;
+      let pos = [ -1, false ];
       if (!div.classList.contains("aus")) {
         if (optionen.data.filter.reduzieren || !div.dataset.scroll) {
-          pos = [0, false];
+          pos = [ 0, false ];
         } else {
           const ds = parseInt(div.dataset.scroll, 10); // vgl. filter.backupKlappScroll()
           // ggf. einen anderen <div> wählen (nötig für Zeitraum-Filter)
-          let div_max = div.querySelector(".filter-cont-max");
+          const div_max = div.querySelector(".filter-cont-max");
           if (div_max) {
             div = div_max;
           }
           const st = div.scrollTop;
           if (ds !== st) {
-            pos = [ds, true];
+            pos = [ ds, true ];
           } else {
-            pos = [st, false];
+            pos = [ st, false ];
           }
         }
       }
@@ -880,15 +880,15 @@ let filter = {
 
   // Backup des Klappstatust und der Scrollposition der Filterblöcke wiederherstellen
   backupKlappReset () {
-    document.querySelectorAll(".filter-kopf").forEach(function(i) {
-      let id = i.id,
-        div = i.nextSibling;
+    document.querySelectorAll(".filter-kopf").forEach(function (i) {
+      const id = i.id;
+      let div = i.nextSibling;
       if (filter.backupKlapp[id] === undefined ||
           filter.backupKlapp[id][0] === -1) {
         div.classList.add("aus");
       } else if (filter.backupKlapp[id][0] > 0) {
         // ggf. einen anderen <div> wählen (nötig für Zeitraum-Filter)
-        let div_max = div.querySelector(".filter-cont-max");
+        const div_max = div.querySelector(".filter-cont-max");
         if (div_max) {
           div = div_max;
         }
@@ -896,7 +896,7 @@ let filter = {
           // das Auslesen von scrollTop hat beim Backup nicht funktioniert =>
           // ein Timeout ist nötig, damit die Scrollposition wiederhergestellt werden kann
           // (dies tritt auf, wenn die Karteikarte gespeichert wurde)
-          setTimeout(function() {
+          setTimeout(function () {
             div.scrollTop = filter.backupKlapp[id][0];
           }, 0);
         } else {
@@ -912,7 +912,7 @@ let filter = {
   //   div = Element
   //     (Block, in dem die Filter stecken)
   backupKlappScroll (div) {
-    div.addEventListener("scroll", function() {
+    div.addEventListener("scroll", function () {
       let ziel = this;
       if (this.id === "filter-zeitraum-dynamisch") {
         ziel = this.parentNode;
@@ -925,7 +925,7 @@ let filter = {
   //   checkbox = Element
   //     (Input-Element, das geändert wurde [wohl immer eine Checkbox])
   filterOptionenListener (checkbox) {
-    checkbox.addEventListener("change", function() {
+    checkbox.addEventListener("change", function () {
       filter.filterOptionen(this, true);
     });
   },
@@ -947,11 +947,11 @@ let filter = {
 
   // erweiterte Filter umschalten
   toggleErweiterte () {
-    document.getElementById("filter-erweiterte").addEventListener("click", function(evt) {
+    document.getElementById("filter-erweiterte").addEventListener("click", function (evt) {
       evt.preventDefault();
       filter.setZuletztAktiv(this);
       this.classList.toggle("aktiv");
-      let cont = document.getElementById("filter-erweiterte-cont");
+      const cont = document.getElementById("filter-erweiterte-cont");
       if (this.classList.contains("aktiv")) {
         filter.anzeigeUmschaltenAnim(cont, true);
       } else {
@@ -974,7 +974,7 @@ let filter = {
     if (input.type === "text") {
       timeout = 250;
     }
-    input.addEventListener("input", function() {
+    input.addEventListener("input", function () {
       filter.setZuletztAktiv(this);
       if (this.id === "filter-volltext") {
         filter.volltextSuchePrep();
@@ -984,7 +984,7 @@ let filter = {
     });
     // das Volltextsuch-Feld sollte auch auf Enter hören
     if (input.type === "text") {
-      input.addEventListener("keydown", function(evt) {
+      input.addEventListener("keydown", function (evt) {
         tastatur.detectModifiers(evt);
         if (!tastatur.modifiers && evt.key === "Enter") {
           filter.volltextSuchePrep();
@@ -995,12 +995,12 @@ let filter = {
   },
   anwendenSterne (stern) {
     filter.setZuletztAktiv(stern);
-    let filter_bewertung = document.getElementById("filter-verschiedenes-bewertung"),
-      be = parseInt(filter_bewertung.dataset.bewertung, 10),
-      sterne = filter_bewertung.querySelectorAll("a");
+    const filter_bewertung = document.getElementById("filter-verschiedenes-bewertung");
+    const be = parseInt(filter_bewertung.dataset.bewertung, 10);
+    const sterne = filter_bewertung.querySelectorAll("a");
     for (let i = 0, len = sterne.length; i < len; i++) {
       if (sterne[i] === stern) {
-        let bewertung = i + 1;
+        const bewertung = i + 1;
         if (be === bewertung) {
           filter_bewertung.dataset.bewertung = "0";
         } else {
@@ -1022,16 +1022,16 @@ let filter = {
   //     (Funktion zum Schließen der inaktiven Filter aufrufen)
   aktiveFilterErmitteln (inaktive) {
     filter.aktiveFilter = {};
-    document.querySelectorAll(".filter").forEach(function(i) {
+    document.querySelectorAll(".filter").forEach(function (i) {
       if (i.type === "text" && i.value ||
           i.type === "checkbox" && i.checked) {
-        let id = decodeURI(i.id.replace(/^filter-/, "")); // Filter-ID könnte enkodiert sein
+        const id = decodeURI(i.id.replace(/^filter-/, "")); // Filter-ID könnte enkodiert sein
         filter.aktiveFilter[id] = true;
       }
     });
     // Angaben zu den Filterblöcken ergänzen
     // Zeitraum-Filter
-    let filter_zeitraum = filter.kartenFilternZeitraum();
+    const filter_zeitraum = filter.kartenFilternZeitraum();
     if (filter_zeitraum.length) {
       filter.aktiveFilter.zeitraum = true;
     }
@@ -1040,15 +1040,15 @@ let filter = {
       filter.aktiveFilter.kartendatum = true;
     }
     // dynamische Filter
-    for (let typ in filter.typen) {
+    for (const typ in filter.typen) {
       if (!filter.typen.hasOwnProperty(typ)) {
         continue;
       }
-      for (let f in filter.typen[typ].filter) {
+      for (const f in filter.typen[typ].filter) {
         if (!filter.typen[typ].filter.hasOwnProperty(f)) {
           continue;
         }
-        let f_check = document.getElementById(`filter-${encodeURI(f)}`);
+        const f_check = document.getElementById(`filter-${encodeURI(f)}`);
         if (f_check && f_check.checked) {
           filter.aktiveFilter[typ] = true;
           break;
@@ -1067,8 +1067,8 @@ let filter = {
 
   // markiert die Filterblöcke, in denen Filter aktiv sind
   aktiveFilterMarkieren () {
-    document.querySelectorAll(".filter-kopf").forEach(function(i) {
-      let block = i.id.replace(/^filter-kopf-/, "");
+    document.querySelectorAll(".filter-kopf").forEach(function (i) {
+      const block = i.id.replace(/^filter-kopf-/, "");
       if (filter.aktiveFilter[block]) {
         i.classList.add("aktiv");
       } else {
@@ -1088,9 +1088,9 @@ let filter = {
       return;
     }
     // inaktive Filter schließen
-    let koepfe = document.querySelectorAll(".filter-kopf"),
-      aktive_filter = false;
-    koepfe.forEach(function(i) {
+    const koepfe = document.querySelectorAll(".filter-kopf");
+    let aktive_filter = false;
+    koepfe.forEach(function (i) {
       if (!i.classList.contains("aktiv") && i.id !== filter.zuletztAktiv) {
         i.nextSibling.classList.add("aus");
         return;
@@ -1099,7 +1099,7 @@ let filter = {
     });
     // sind alle Filter inaktiv => standardmäßig zu öffnende Filter öffnen
     if (!aktive_filter) {
-      koepfe.forEach(function(i) {
+      koepfe.forEach(function (i) {
         const id = i.id.replace(/.+-/, "");
         if (optionen.data.einstellungen[`filter-offen-${id}`]) {
           i.nextSibling.classList.remove("aus");
@@ -1137,7 +1137,7 @@ let filter = {
     const erweiterte = document.getElementById("filter-erweiterte").classList.contains("aktiv");
     // zu durchsuchende Datensätze
     filter.volltextSuche.ds = [];
-    document.querySelectorAll(`input[id^="filter-feld-"]`).forEach(function(i) {
+    document.querySelectorAll('input[id^="filter-feld-"]').forEach(function (i) {
       if (erweiterte && i.checked ||
           !erweiterte) {
         const id = i.id.replace(/^filter-feld-/, "");
@@ -1152,10 +1152,10 @@ let filter = {
     }
     let chunks = vt.split(/\s/);
     if (erweiterte && document.getElementById("filter-phrase").checked) {
-      chunks = [vt];
+      chunks = [ vt ];
     }
     const ganzes_wort = document.getElementById("filter-ganzes-wort").checked;
-    chunks.forEach(function(i) {
+    chunks.forEach(function (i) {
       if (!i) { // i dürfte eigentlich nicht leer sein, aber sicher ist sicher
         return;
       }
@@ -1178,8 +1178,8 @@ let filter = {
   // aktive Verschiedenes-Filter bei exklusiver Filterlogik finden
   getExklusivAktiv () {
     filter.exklusivAktiv = [];
-    let inputs = document.querySelectorAll("#filter-kopf-verschiedenes + div .filter");
-    inputs.forEach(function(i) {
+    const inputs = document.querySelectorAll("#filter-kopf-verschiedenes + div .filter");
+    inputs.forEach(function (i) {
       if (!i.checked) {
         return;
       }
@@ -1192,29 +1192,29 @@ let filter = {
   //   karten = Array
   //     (enthält die IDs der Karten, die gefiltert werden sollen)
   kartenFiltern (karten) {
-    // zwei Fliegen mit einer Klappe: ermitteln, ob Filter aktiv sind; 
+    // zwei Fliegen mit einer Klappe: ermitteln, ob Filter aktiv sind;
     // Array mit Jahren besorgen, die durch die Filter passen
-    let filter_zeitraum = filter.aktiveFilterErmitteln(false);
+    const filter_zeitraum = filter.aktiveFilterErmitteln(false);
     // keine Filter aktiv
     if (!Object.keys(filter.aktiveFilter).length) {
       return karten;
     }
     // aktive Filter in Bedeutungen, Wortbildungen, Synonymen, Korpora und Textsorten
-    let baumfilter = {
+    const baumfilter = {
       bd: [],
       bl: [],
       kr: [],
       sy: [],
       ts: [],
     };
-    for (let i in filter.aktiveFilter) {
+    for (const i in filter.aktiveFilter) {
       if (!filter.aktiveFilter.hasOwnProperty(i)) {
         continue;
       }
       if (!/^(bedeutungen|wortbildungen|synonyme||korpora|textsorten)-/.test(i)) {
         continue;
       }
-      let f = i.match(/^(.+?)-(.+)/);
+      const f = i.match(/^(.+?)-(.+)/);
       if (f[1] === "bedeutungen") {
         baumfilter.bd.push(f[2]);
       } else if (f[1] === "wortbildungen") {
@@ -1228,11 +1228,11 @@ let filter = {
       }
     }
     // das Bedeutungsarray ggf. um übergeordnete Bedeutungen auffüllen
-    let bdErg = filter.kartenUnterBd(baumfilter.bd);
+    const bdErg = filter.kartenUnterBd(baumfilter.bd);
     baumfilter.bd = baumfilter.bd.concat(bdErg);
     // bei vorhandemen Verschiedenes-Filtern
-    let filter_logik = document.getElementById("filter-logik-inklusiv"),
-      filter_inklusiv = true;
+    const filter_logik = document.getElementById("filter-logik-inklusiv");
+    let filter_inklusiv = true;
     if (filter_logik && !filter_logik.checked) {
       filter_inklusiv = false;
       filter.getExklusivAktiv();
@@ -1240,8 +1240,8 @@ let filter = {
       filter.exklusivAktiv = [];
     }
     // bei vorhandemen Bewertungsfilter
-    let filter_bewertung = document.getElementById("filter-verschiedenes-bewertung"),
-      be = 0;
+    const filter_bewertung = document.getElementById("filter-verschiedenes-bewertung");
+    let be = 0;
     if (filter_bewertung) {
       be = parseInt(filter_bewertung.dataset.bewertung, 10);
     }
@@ -1251,9 +1251,9 @@ let filter = {
     // filters aufgerufen wird)
     filter.volltextSuchePrep();
     // Kartendatum vorbereiten
-    let kartendatumVon = null,
-      kartendatumBis = null,
-      kartendatumFeld = "";
+    let kartendatumVon = null;
+    let kartendatumBis = null;
+    let kartendatumFeld = "";
     if (filter.aktiveFilter.kartendatum) {
       kartendatumVon = new Date(document.getElementById("filter-kartendatum-von").value);
       kartendatumBis = new Date(document.getElementById("filter-kartendatum-bis").value);
@@ -1269,33 +1269,33 @@ let filter = {
     if (optionen.data.einstellungen["filter-transparente"]) {
       regAnnotierung = /farbe[0-9]/;
     }
-    let karten_gefiltert = [];
+    const karten_gefiltert = [];
     forX: for (let i = 0, len = karten.length; i < len; i++) {
-      let id = karten[i];
+      const id = karten[i];
       // Volltext
       if (filter.aktiveFilter.volltext && !filter.kartenFilternVolltext(id)) {
         continue;
       }
       // Zeitraum
       if (filter.aktiveFilter.zeitraum) {
-        let jahr = parseInt(liste.zeitschnittErmitteln(data.ka[id].da).jahr, 10);
+        const jahr = parseInt(liste.zeitschnittErmitteln(data.ka[id].da).jahr, 10);
         if (!filter_zeitraum.includes(jahr)) {
           continue;
         }
       }
       // Kartendatum
       if (filter.aktiveFilter.kartendatum) {
-        let datum = new Date(data.ka[id][kartendatumFeld]);
+        const datum = new Date(data.ka[id][kartendatumFeld]);
         if (datum < kartendatumVon || datum > kartendatumBis) {
           continue;
         }
       }
       // Bedeutungen, Wortbildungen, Synonyme, Korpora und Textsorten
-      for (let bf in baumfilter) {
+      for (const bf in baumfilter) {
         if (!baumfilter.hasOwnProperty(bf)) {
           continue;
         }
-        let arr = baumfilter[bf];
+        const arr = baumfilter[bf];
         if (arr.length) {
           let okay = false;
           if (bf === "bd") { // Bedeutungen
@@ -1311,12 +1311,12 @@ let filter = {
                 continue;
               }
               // Ist die spezifische Bedeutung in der Karte?
-              let d = arr[j].match(/(?<gr>[0-9]+)_(?<id>[0-9]+)/);
+              const d = arr[j].match(/(?<gr>[0-9]+)_(?<id>[0-9]+)/);
               if (bedeutungen.schonVorhanden({
-                    bd: data.ka[id].bd,
-                    gr: d.groups.gr,
-                    id: parseInt(d.groups.id, 10),
-                  })[0]) {
+                bd: data.ka[id].bd,
+                gr: d.groups.gr,
+                id: parseInt(d.groups.id, 10),
+              })[0]) {
                 okay = true;
                 break;
               }
@@ -1415,15 +1415,15 @@ let filter = {
       return [];
     }
     // untergeordnete Filter suchen
-    let arrErg = [];
+    const arrErg = [];
     for (let i = 0, len = arr.length; i < len; i++) {
       if (arr[i] === "undefined") {
         continue;
       }
-      let d = arr[i].match(/[0-9]+_(?<id>[0-9]+)/),
-        id = parseInt(d.groups.id, 10),
-        bd = data.bd.gr[data.bd.gn].bd,
-        bd_len = 0;
+      const d = arr[i].match(/[0-9]+_(?<id>[0-9]+)/);
+      const id = parseInt(d.groups.id, 10);
+      const bd = data.bd.gr[data.bd.gn].bd;
+      let bd_len = 0;
       for (let j = 0, len = bd.length; j < len; j++) {
         if (bd[j].id === id) { // hier geht der Bedeutungszweig los => danach aufnehmen
           bd_len = bd[j].bd.length;
@@ -1447,8 +1447,8 @@ let filter = {
       return true;
     }
     // Volltextsuche
-    let treffer = Array(filter.volltextSuche.reg.length).fill(false),
-      trefferDs = [];
+    const treffer = Array(filter.volltextSuche.reg.length).fill(false);
+    const trefferDs = [];
     for (let i = 0, len = filter.volltextSuche.ds.length; i < len; i++) {
       const ds = filter.volltextSuche.ds[i];
       let text_rein = "";
@@ -1461,7 +1461,7 @@ let filter = {
       }
       text_rein = liste.belegTrennungWeg(text_rein, true);
       for (let j = 0, len = treffer.length; j < len; j++) {
-        let reg = filter.volltextSuche.reg[j];
+        const reg = filter.volltextSuche.reg[j];
         if (text_rein.match(reg)) {
           treffer[j] = true;
           trefferDs.push(ds);
@@ -1477,14 +1477,14 @@ let filter = {
 
   // ermitteln, welche Jahre durch den Filter gelassen werden
   kartenFilternZeitraum () {
-    let inputs = document.querySelectorAll("#filter-zeitraum-dynamisch input"),
-      erg = [],
-      step = filter.aufbauenZeitraumStep();
-    inputs.forEach(function(i) {
+    const inputs = document.querySelectorAll("#filter-zeitraum-dynamisch input");
+    const erg = [];
+    const step = filter.aufbauenZeitraumStep();
+    inputs.forEach(function (i) {
       if (!i.checked) {
         return;
       }
-      let jahr = parseInt(i.id.match(/[0-9]+$/)[0], 10);
+      const jahr = parseInt(i.id.match(/[0-9]+$/)[0], 10);
       for (let j = jahr, ende = jahr + step; j < ende; j++) {
         erg.push(j);
       }
@@ -1496,9 +1496,9 @@ let filter = {
   //   a = Element
   //     (Link, der die Aktion triggert)
   ctrlButtons (a) {
-    a.addEventListener("click", function(evt) {
+    a.addEventListener("click", function (evt) {
       evt.preventDefault();
-      let aktion = this.id.replace(/^filter-ctrl-/, "");
+      const aktion = this.id.replace(/^filter-ctrl-/, "");
       if (aktion === "reset") {
         filter.ctrlReset(true);
       } else if (aktion === "zeitraumgrafik") {
@@ -1512,7 +1512,7 @@ let filter = {
   // alle Filter zurücksetzen
   ctrlReset (liste_aufbauen) {
     // Filter zurücksetzen
-    document.querySelectorAll("#filter-volltext, #filter-zeitraum-dynamisch input, #liste-filter-dynamisch input").forEach(function(i) {
+    document.querySelectorAll("#filter-volltext, #filter-zeitraum-dynamisch input, #liste-filter-dynamisch input").forEach(function (i) {
       if (i.type === "text") {
         i.value = "";
       } else if (i.type === "checkbox") {
@@ -1521,7 +1521,7 @@ let filter = {
     });
     filter.volltextSuche.suche = false;
     filter.kartendatumInit();
-    let filter_bewertung = document.getElementById("filter-verschiedenes-bewertung");
+    const filter_bewertung = document.getElementById("filter-verschiedenes-bewertung");
     if (filter_bewertung) {
       filter_bewertung.dataset.bewertung = "0";
       filter.markierenSterne();
@@ -1537,12 +1537,12 @@ let filter = {
 
   // einen einzelnen Filterblock zurücksetzen
   ctrlResetBlock (img) {
-    img.addEventListener("click", function(evt) {
+    img.addEventListener("click", function (evt) {
       evt.stopPropagation();
       evt.preventDefault();
       filter.zuletztAktiv = this.parentNode.id;
-      let block = this.parentNode.nextSibling;
-      block.querySelectorAll(".filter").forEach(function(i) {
+      const block = this.parentNode.nextSibling;
+      block.querySelectorAll(".filter").forEach(function (i) {
         if (i.type === "text") {
           i.value = "";
           if (i.id === "filter-volltext") {
@@ -1567,7 +1567,7 @@ let filter = {
   // Zeitraumgrafik generieren und anzeigen
   ctrlGrafik () {
     // Macht es überhaupt Sinn, die Karte anzuzeigen?
-    let jahre = Object.keys(filter.zeitraumTrefferCache);
+    const jahre = Object.keys(filter.zeitraumTrefferCache);
     if (jahre.length === 1) {
       dialog.oeffnen({
         typ: "alert",
@@ -1576,18 +1576,18 @@ let filter = {
       return;
     }
     // Fenster öffnen od. in den Vordergrund holen
-    let fenster = document.getElementById("zeitraumgrafik");
+    const fenster = document.getElementById("zeitraumgrafik");
     if (overlay.oeffnen(fenster)) {
       return;
     }
     // Canvas vorbereiten
-    let can = document.querySelector("#zeitraumgrafik-cont canvas"),
-      ctx = can.getContext("2d");
+    const can = document.querySelector("#zeitraumgrafik-cont canvas");
+    const ctx = can.getContext("2d");
     ctx.clearRect(0, 0, can.width, can.height);
     // Daten vorbereiten
     const step_x = Math.floor((can.width - 40 - 20) / (jahre.length - 1)); // Platz: 40px links, 20px rechts
     let treffer_max = 0;
-    jahre.forEach(function(i) {
+    jahre.forEach(function (i) {
       if (filter.zeitraumTrefferCache[i] > treffer_max) {
         treffer_max = filter.zeitraumTrefferCache[i];
       }
@@ -1611,11 +1611,11 @@ let filter = {
     ctx.strokeStyle = "#72a0cf";
     ctx.font = "14px Noto Sans";
     ctx.textAlign = "left";
-    let x = 40 - step_x,
-      last_font_x = 0;
+    let x = 40 - step_x;
+    let last_font_x = 0;
     for (let i = 0, len = jahre.length; i < len; i++) {
       x += step_x;
-      let y = can.height - 30 - Math.round(step_y * filter.zeitraumTrefferCache[jahre[i]]) + 0.5; // 30px Platz unten (s.o.)
+      const y = can.height - 30 - Math.round(step_y * filter.zeitraumTrefferCache[jahre[i]]) + 0.5; // 30px Platz unten (s.o.)
       if (i === 0) {
         ctx.beginPath();
         ctx.moveTo(x, y);
@@ -1633,7 +1633,7 @@ let filter = {
     ctx.textAlign = "right";
     let last_font_y = 370;
     for (let i = 1; i <= treffer_max; i++) {
-      let y = 370 + 5 - i * step_y; // der Text ist 11px hoch, darum hier + 5
+      const y = 370 + 5 - i * step_y; // der Text ist 11px hoch, darum hier + 5
       if (last_font_y - y < 30) { // die Anzahl der Treffer braucht ein wenig Platz => nicht zu eng staffeln
         continue;
       }
@@ -1655,7 +1655,7 @@ let filter = {
 
   // Reduktionsmodus der Filter visualisieren
   ctrlReduzierenAnzeige () {
-    let link = document.getElementById("filter-ctrl-reduzieren");
+    const link = document.getElementById("filter-ctrl-reduzieren");
     if (optionen.data.filter.reduzieren) {
       link.classList.add("aktiv");
       link.title = "Reduktionsmodus ausschalten";
@@ -1670,14 +1670,14 @@ let filter = {
   //   a = Element
   //     (Link, über den das Umschalten gesteuert wird)
   ctrlVolltextDs (a) {
-    a.addEventListener("click", function(evt) {
+    a.addEventListener("click", function (evt) {
       evt.preventDefault();
       filter.setZuletztAktiv(this);
       let alle = true;
       if (/keine$/.test(this.id)) {
         alle = false;
       }
-      document.querySelectorAll(`input[id^="filter-feld-"]`).forEach(function(i) {
+      document.querySelectorAll('input[id^="filter-feld-"]').forEach(function (i) {
         if (alle) {
           i.checked = true;
         } else {
@@ -1693,12 +1693,12 @@ let filter = {
   //   a = Element
   //     (Filterkopf)
   anzeigeUmschalten (a) {
-    a.addEventListener("click", function(evt) {
+    a.addEventListener("click", function (evt) {
       evt.preventDefault();
       // wenn nur ein Filter offen sein sollte und der aktive Filter gerade zugeklappt ist
       if (optionen.data.einstellungen["filter-zuklappen"]) {
         document.querySelectorAll(".filter-kopf").forEach(i => {
-          let block = i.nextSibling;
+          const block = i.nextSibling;
           if (i === this) {
             filter.anzeigeUmschaltenAnim(block, block.classList.contains("aus"));
           } else if (!block.classList.contains("aus")) {
@@ -1708,7 +1708,7 @@ let filter = {
         return;
       }
       // wenn mehrere Filter offen sein dürfen
-      let block = this.nextSibling;
+      const block = this.nextSibling;
       filter.anzeigeUmschaltenAnim(block, block.classList.contains("aus"));
       if (this.classList.contains("aktiv")) {
         this.blur();
@@ -1755,7 +1755,7 @@ let filter = {
     block.style.marginBottom = "0";
     setTimeout(() => {
       block.style.height = `${zielHoehe}px`;
-      block.style.marginBottom = `10px`;
+      block.style.marginBottom = "10px";
       setTimeout(() => {
         block.style.height = null;
         block.style.marginBottom = null;
@@ -1793,7 +1793,7 @@ let filter = {
         liste.headerFilter();
       }
       // Suche öffnen
-      let input = document.getElementById("filter-volltext");
+      const input = document.getElementById("filter-volltext");
       input.parentNode.parentNode.classList.remove("aus");
       // Suchfeld fokussieren
       input.select();
@@ -1803,17 +1803,17 @@ let filter = {
   // initialisiert den Kartendatum-Filter
   kartendatumInit () {
     // Checkboxes aus
-    document.querySelectorAll(`#filter-kartendatum input[type="checkbox"]`).forEach(function(i) {
+    document.querySelectorAll('#filter-kartendatum input[type="checkbox"]').forEach(function (i) {
       i.checked = false;
     });
     // Ausgangsdatum an Erstellungsdatum der Karten anpassen
-    let von = null,
-      bis = null;
-    for (let id in data.ka) {
+    let von = null;
+    let bis = null;
+    for (const id in data.ka) {
       if (!data.ka.hasOwnProperty(id)) {
         continue;
       }
-      let datum = new Date(data.ka[id].dc);
+      const datum = new Date(data.ka[id].dc);
       if (!von || datum < von) {
         von = datum;
       }
@@ -1835,11 +1835,11 @@ let filter = {
   //   zeit = Date-Object
   //     (die Zeit, die eingetragen werden soll)
   kartendatumEintragen (feld, zeit) {
-    let jahr = zeit.getFullYear(),
-      monat = zeit.getMonth() + 1,
-      tag = zeit.getDate(),
-      stunde = zeit.getHours(),
-      minute = zeit.getMinutes();
+    const jahr = zeit.getFullYear();
+    let monat = zeit.getMonth() + 1;
+    let tag = zeit.getDate();
+    let stunde = zeit.getHours();
+    let minute = zeit.getMinutes();
     monat = monat.toString().padStart(2, "0");
     tag = tag.toString().padStart(2, "0");
     stunde = stunde.toString().padStart(2, "0");
@@ -1851,9 +1851,9 @@ let filter = {
   //   input = Element
   //     (eine Checkbox)
   kartendatumBox (input) {
-    input.addEventListener("change", function() {
-      let erstellt = document.getElementById("filter-kartendatum-erstellt"),
-        geaendert = document.getElementById("filter-kartendatum-geaendert");
+    input.addEventListener("change", function () {
+      const erstellt = document.getElementById("filter-kartendatum-erstellt");
+      const geaendert = document.getElementById("filter-kartendatum-geaendert");
       if (this === erstellt && this.checked) {
         geaendert.checked = false;
       } else if (this === geaendert && this.checked) {
@@ -1865,8 +1865,8 @@ let filter = {
 
   // ermittelt, ob der Kartendatum-Filter aktiv ist
   kartendatumAktiv () {
-    let erstellt = document.getElementById("filter-kartendatum-erstellt"),
-      geaendert = document.getElementById("filter-kartendatum-geaendert");
+    const erstellt = document.getElementById("filter-kartendatum-erstellt");
+    const geaendert = document.getElementById("filter-kartendatum-geaendert");
     if (erstellt.checked || geaendert.checked) {
       return true;
     }
@@ -1877,7 +1877,7 @@ let filter = {
   //   input = Element
   //     (ein Datumsfeld)
   kartendatumFeld (input) {
-    input.addEventListener("change", function() {
+    input.addEventListener("change", function () {
       filter.kartendatumCheck();
     });
     filter.anwenden(input);
@@ -1887,7 +1887,7 @@ let filter = {
   //   a = Element
   //     (der Icon-Link zum Setzen des Datums)
   kartendatumJetzt (a) {
-    a.addEventListener("click", function(evt) {
+    a.addEventListener("click", function (evt) {
       evt.preventDefault();
       filter.kartendatumEintragen(this.previousSibling, new Date());
       filter.kartendatumCheck();
@@ -1899,10 +1899,10 @@ let filter = {
 
   // die Datumsfelder im Kartendatum-Filter auf Validität überprüfen
   kartendatumCheck () {
-    let feldVon = document.getElementById("filter-kartendatum-von"),
-      feldBis = document.getElementById("filter-kartendatum-bis"),
-      von = new Date(feldVon.value),
-      bis = new Date(feldBis.value);
+    const feldVon = document.getElementById("filter-kartendatum-von");
+    const feldBis = document.getElementById("filter-kartendatum-bis");
+    const von = new Date(feldVon.value);
+    const bis = new Date(feldBis.value);
     if (von > bis) {
       filter.kartendatumEintragen(feldVon, bis);
     }

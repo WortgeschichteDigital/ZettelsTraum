@@ -1,10 +1,10 @@
 "use strict";
 
-let redLit = {
+const redLit = {
   // Fenster öffnen
   async oeffnen () {
     // Fenster öffnen oder in den Vordergrund holen
-    let fenster = document.getElementById("red-lit");
+    const fenster = document.getElementById("red-lit");
     if (overlay.oeffnen(fenster)) { // Fenster ist schon offen
       return;
     }
@@ -81,25 +81,24 @@ let redLit = {
         if (mtime !== redLit.db.mtime) {
           // Datenkbank laden
           redLit.db.mtime = mtime;
-          dbGeladen = await new Promise(async resolve => {
-            const result = await redLit.dbOeffnenEinlesen({pfad: redLit.db.path});
+          dbGeladen = await (async function () {
+            const result = await redLit.dbOeffnenEinlesen({ pfad: redLit.db.path });
             if (result !== true) {
               dialog.oeffnen({
                 typ: "alert",
                 text: result,
               });
-              resolve(false);
-              return;
+              return false;
             }
             redLit.db.konvertiert = false;
-            resolve(true);
-          });
+            return true;
+          }());
         } else {
           // Offline-Kopie erstellen, falls noch keine vorhanden ist
           // (die Offline-Kopie könnte beim Entkoppeln in einem anderen Hauptfenster
           // gelöscht worden sein)
-          const offlinePfad = redLit.dbOfflineKopiePfad(redLit.db.path),
-            offlineVorhanden = await helfer.exists(offlinePfad);
+          const offlinePfad = redLit.dbOfflineKopiePfad(redLit.db.path);
+          const offlineVorhanden = await helfer.exists(offlinePfad);
           if (!offlineVorhanden) {
             redLit.dbOfflineKopie(redLit.db.path);
           }
@@ -140,7 +139,7 @@ let redLit = {
       return;
     }
     // Einstellungen des Speichern-Befehls für die Kartei adaptieren
-    let kaskade = {
+    const kaskade = {
       eingabe: true,
       db: true,
     };
@@ -193,28 +192,25 @@ let redLit = {
   },
 
   // Datenkbank: versuchen, die Offline-Version zu laden
-  dbLadenOffline () {
-    return new Promise(async resolve => {
-      const offlinePfad = redLit.dbOfflineKopiePfad(redLit.db.path),
-        dbOffline = await helfer.exists(offlinePfad);
-      if (dbOffline) {
-        const result = await redLit.dbOeffnenEinlesen({pfad: offlinePfad, offline: true});
-        if (result === true) { // Laden der Offline-Version war erfolgreich
-          redLit.db.konvertiert = false;
-          let span = document.createElement("span");
-          span.textContent = "[offline]";
-          document.getElementById("red-lit-pfad-db").appendChild(span);
-          resolve(true);
-          return;
-        }
+  async dbLadenOffline () {
+    const offlinePfad = redLit.dbOfflineKopiePfad(redLit.db.path);
+    const dbOffline = await helfer.exists(offlinePfad);
+    if (dbOffline) {
+      const result = await redLit.dbOeffnenEinlesen({ pfad: offlinePfad, offline: true });
+      if (result === true) { // Laden der Offline-Version war erfolgreich
+        redLit.db.konvertiert = false;
+        const span = document.createElement("span");
+        span.textContent = "[offline]";
+        document.getElementById("red-lit-pfad-db").appendChild(span);
+        return true;
       }
-      resolve(false);
-    });
+    }
+    return false;
   },
 
   // Datenbank: Anzeige auffrischen
   dbAnzeige () {
-    let pfad = document.getElementById("red-lit-pfad-db");
+    const pfad = document.getElementById("red-lit-pfad-db");
     if (!redLit.db.path) { // keine DB mit dem Programm verknüpft
       pfad.classList.add("keine-db");
       pfad.textContent = "keine Datenbank geladen";
@@ -231,7 +227,7 @@ let redLit = {
   //     (DB wurde geändert)
   dbGeaendert (geaendert) {
     redLit.db.changed = geaendert;
-    let changed = document.getElementById("red-lit-pfad-changed");
+    const changed = document.getElementById("red-lit-pfad-changed");
     if (geaendert) {
       changed.classList.add("changed");
     } else {
@@ -243,7 +239,7 @@ let redLit = {
   //   a = Element
   //     (ein Icon-Link zum Speichern, Öffnen usw.)
   dbListener (a) {
-    a.addEventListener("click", function(evt) {
+    a.addEventListener("click", function (evt) {
       evt.preventDefault();
       if (/-entkoppeln/.test(this.id)) {
         redLit.dbCheck(() => redLit.dbEntkoppeln());
@@ -260,7 +256,7 @@ let redLit = {
   },
 
   // Datenbank: Verknüpfung mit der Datenbank auflösen
-  async dbEntkoppeln () {
+  dbEntkoppeln () {
     // ggf. Popup schließen
     redLit.anzeigePopupSchliessen();
     // DB-Datensätze zurücksetzen
@@ -299,32 +295,30 @@ let redLit = {
 
   // Datenbank: Datei öffnen
   async dbOeffnen () {
-    let opt = {
+    const opt = {
       title: "Literaturdatenbank öffnen",
       defaultPath: appInfo.documents,
       filters: [
         {
           name: `${appInfo.name} Literaturdatenbank`,
-          extensions: ["ztl"],
+          extensions: [ "ztl" ],
         },
         {
           name: "Alle Dateien",
-          extensions: ["*"],
+          extensions: [ "*" ],
         },
       ],
-      properties: [
-        "openFile",
-      ],
+      properties: [ "openFile" ],
     };
     // Wo wurde zuletzt eine Datei gespeichert oder geöffnet?
     if (optionen.data.letzter_pfad) {
       opt.defaultPath = optionen.data.letzter_pfad;
     }
     // Dialog anzeigen
-    let result = await modules.ipc.invoke("datei-dialog", {
+    const result = await modules.ipc.invoke("datei-dialog", {
       open: true,
       winId: winInfo.winId,
-      opt: opt,
+      opt,
     });
     // Fehler oder keine Datei ausgewählt
     if (result.message || !Object.keys(result).length) {
@@ -339,9 +333,9 @@ let redLit = {
     // ggf. Popup schließen
     redLit.anzeigePopupSchliessen();
     // Datei einlesen
-    const ergebnis = await redLit.dbOeffnenEinlesen({pfad: result.filePaths[0]});
+    const ergebnis = await redLit.dbOeffnenEinlesen({ pfad: result.filePaths[0] });
     // Öffnen abschließen
-    await redLit.dbOeffnenAbschließen({ergebnis, pfad: result.filePaths[0]});
+    await redLit.dbOeffnenAbschließen({ ergebnis, pfad: result.filePaths[0] });
     redLit.db.konvertiert = false;
   },
 
@@ -352,9 +346,9 @@ let redLit = {
   //     (die Offlinedatei wird geöffnet => keine Offline-Kopie anlegen)
   //   zusammenfuehren = true | undefined
   //     (die Literaturdatenbank wird geladen, um sie mit den aktuellen Daten zusammenzuführen)
-  dbOeffnenEinlesen ({pfad, offline = false, zusammenfuehren = false}) {
-    return new Promise(async resolve => {
-      let content = await io.lesen(pfad);
+  async dbOeffnenEinlesen ({ pfad, offline = false, zusammenfuehren = false }) {
+    const content = await io.lesen(pfad);
+    return new Promise(resolve => {
       if (!helfer.checkType("String", content)) {
         resolve(`Beim Öffnen der Literaturdatenbank ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${content.name}: ${content.message}</p>`);
         throw content;
@@ -385,7 +379,7 @@ let redLit = {
         return;
       }
       // Daten ggf. konvertieren
-      redLit.dbKonversion({daten: data_tmp});
+      redLit.dbKonversion({ daten: data_tmp });
       // Datei kann eingelesen werden
       redLit.db.data = data_tmp.ti;
       redLit.db.dataMeta.bl = data_tmp.bl;
@@ -393,7 +387,7 @@ let redLit = {
       redLit.db.dataMeta.dm = data_tmp.dm;
       redLit.db.dataMeta.re = data_tmp.re;
       // Blockliste bereinigen (alte Einträge entfernen)
-      let vorSechsMonaten = new Date();
+      const vorSechsMonaten = new Date();
       vorSechsMonaten.setDate(vorSechsMonaten.getMonth() - 6);
       for (let i = redLit.db.dataMeta.bl.length - 1; i >= 0; i--) {
         if (new Date(redLit.db.dataMeta.bl[i].da) <= vorSechsMonaten) {
@@ -414,7 +408,7 @@ let redLit = {
   //     (bei Fehlermeldung String)
   //   pfad = String
   //     (Pfad zur geöffneten Datenbank)
-  async dbOeffnenAbschließen ({ergebnis, pfad}) {
+  async dbOeffnenAbschließen ({ ergebnis, pfad }) {
     if (ergebnis !== true) {
       // Einlesen ist gescheitert
       dialog.oeffnen({
@@ -431,7 +425,7 @@ let redLit = {
       optionen.data["literatur-db"] = pfad;
       optionen.speichern();
     }
-    let stats = await modules.fsp.lstat(redLit.db.path);
+    const stats = await modules.fsp.lstat(redLit.db.path);
     redLit.db.mtime = stats.mtime.toISOString();
     redLit.db.gefunden = true;
     redLit.db.changed = false;
@@ -446,7 +440,7 @@ let redLit = {
 
   // Datenbank: Exportformat erfragen
   dbExportierenFormat () {
-    let fenster = document.getElementById("red-lit-export");
+    const fenster = document.getElementById("red-lit-export");
     overlay.oeffnen(fenster);
     fenster.querySelector("input:checked").focus();
   },
@@ -458,7 +452,7 @@ let redLit = {
   //     (Pfad zur Datei);
   async dbExportieren (autoExportFormat, autoExportPath) {
     // Format ermitteln
-    let format = {
+    const format = {
       name: "XML",
       ext: "xml",
       content: "Literaturliste",
@@ -474,21 +468,21 @@ let redLit = {
       document.getElementById("red-lit-pfad-exportieren").focus();
     }
     // Titelaufnahmen zusammentragen und sortieren
-    let aufnahmen = [];
-    for (let id of Object.keys(redLit.db.data)) {
-      aufnahmen.push({id, slot: 0});
+    const aufnahmen = [];
+    for (const id of Object.keys(redLit.db.data)) {
+      aufnahmen.push({ id, slot: 0 });
     }
     aufnahmen.sort(helfer.sortSiglen);
     // Dateidaten erstellen
     let content = "";
     if (format.ext === "xml") {
-      content = `<?xml-model href="rnc/Literaturliste.rnc" type="application/relax-ng-compact-syntax"?><WGD xmlns="http://www.zdl.org/ns/1.0"><Literaturliste>`;
-      for (let i of aufnahmen) {
+      content = '<?xml-model href="rnc/Literaturliste.rnc" type="application/relax-ng-compact-syntax"?><WGD xmlns="http://www.zdl.org/ns/1.0"><Literaturliste>';
+      for (const i of aufnahmen) {
         content += redLit.dbExportierenSnippetXML(i);
       }
-      content += `</Literaturliste></WGD>`;
-      let parser = new DOMParser(),
-        xmlDoc = parser.parseFromString(content, "text/xml");
+      content += "</Literaturliste></WGD>";
+      const parser = new DOMParser();
+      let xmlDoc = parser.parseFromString(content, "text/xml");
       xmlDoc = helferXml.indent(xmlDoc);
       content = new XMLSerializer().serializeToString(xmlDoc);
       // Fixes
@@ -514,9 +508,8 @@ let redLit = {
           });
       });
       return result;
-    } else {
-      karteisucheExport.speichern(content, format);
     }
+    karteisucheExport.speichern(content, format);
   },
 
   // Datenbank: automatischen Export durchführen
@@ -541,12 +534,12 @@ let redLit = {
     modules.ipc.invoke("cli-message", `Exportiere Literaturliste nach ${vars.ziel}`);
 
     // DB einlesen
-    const ergebnis = await redLit.dbOeffnenEinlesen({pfad: vars.quelle});
+    const ergebnis = await redLit.dbOeffnenEinlesen({ pfad: vars.quelle });
     if (ergebnis !== true) {
       modules.ipc.invoke("cli-message", `Fehler: ${ergebnis.replace(/<.+?>/g)}`);
       return false;
     }
-    await redLit.dbOeffnenAbschließen({ergebnis, pfad: vars.quelle});
+    await redLit.dbOeffnenAbschließen({ ergebnis, pfad: vars.quelle });
     redLit.db.konvertiert = false;
 
     // DB exportieren
@@ -559,25 +552,25 @@ let redLit = {
   //     (ID der Titelaufnahme)
   //   slot = Number
   //     (Slot der Titelaufnahme)
-  dbExportierenSnippetXML ({id, slot}) {
-    let ds = redLit.db.data[id][slot].td,
-      snippet = `<Fundstelle xml:id="${id}">`;
-    snippet += `<Sigle>${helferXml.maskieren({text: ds.si})}</Sigle>`;
-    let titel = helferXml.maskieren({text: ds.ti});
+  dbExportierenSnippetXML ({ id, slot }) {
+    const ds = redLit.db.data[id][slot].td;
+    let snippet = `<Fundstelle xml:id="${id}">`;
+    snippet += `<Sigle>${helferXml.maskieren({ text: ds.si })}</Sigle>`;
+    let titel = helferXml.maskieren({ text: ds.ti });
     titel = helferXml.abbrTagger({
       text: titel,
       lit: true,
     });
     snippet += `<unstrukturiert>${titel}</unstrukturiert>`;
     if (ds.ul) {
-      snippet += `<URL>${helferXml.maskieren({text: ds.ul})}</URL>`;
+      snippet += `<URL>${helferXml.maskieren({ text: ds.ul })}</URL>`;
     }
     if (ds.ad) {
-      let ad = ds.ad.split("-");
+      const ad = ds.ad.split("-");
       snippet += `<Aufrufdatum>${ad[2]}.${ad[1]}.${ad[0]}</Aufrufdatum>`;
     }
     snippet += `<Fundort>${ds.fo}</Fundort>`;
-    for (let i of ds.pn) {
+    for (const i of ds.pn) {
       snippet += `<PPN>${i}</PPN>`;
     }
     snippet += "</Fundstelle>";
@@ -589,15 +582,15 @@ let redLit = {
   //     (ID der Titelaufnahme)
   //   slot = Number
   //     (Slot der Titelaufnahme)
-  dbExportierenSnippetPlain ({id, slot}) {
-    let ds = redLit.db.data[id][slot].td,
-      snippet = `${ds.si}\n`;
+  dbExportierenSnippetPlain ({ id, slot }) {
+    const ds = redLit.db.data[id][slot].td;
+    let snippet = `${ds.si}\n`;
     snippet += `${ds.ti}\n`;
     if (ds.ul) {
       snippet += `\t${ds.ul}`;
       if (ds.ad) {
-        let ad = ds.ad.split("-");
-        snippet += ` (Aufrufdatum: ${ad[2].replace(/^0/, "")}. ${ad[1].replace(/^0/, "")}. ${ad[0]})`;
+        const ad = ds.ad.split("-");
+        snippet += ` (Aufrufdatum: ${ad[2].replace(/^0/, "")}.\u00A0${ad[1].replace(/^0/, "")}. ${ad[0]})`;
       }
       snippet += "\n";
     }
@@ -630,7 +623,7 @@ let redLit = {
     if (redLit.db.path &&
         redLit.db.gefunden &&
         !speichernUnter) {
-      const ergebnis = await redLit.dbSpeichernSchreiben({pfad: redLit.db.path});
+      const ergebnis = await redLit.dbSpeichernSchreiben({ pfad: redLit.db.path });
       if (ergebnis === true) {
         redLit.dbAnzeige();
         redLit.dbOfflineKopie(redLit.db.path);
@@ -650,17 +643,17 @@ let redLit = {
   //   speichernUnter = Boolean
   //     (Speichern unter/verschmelzen mit gewählt)
   async dbSpeichernUnter (speichernUnter) {
-    let opt = {
+    const opt = {
       title: "Literaturdatenbank speichern",
       defaultPath: modules.path.join(appInfo.documents, "Literaturdatenbank.ztl"),
       filters: [
         {
           name: `${appInfo.name} Literaturdatenbank`,
-          extensions: ["ztl"],
+          extensions: [ "ztl" ],
         },
         {
           name: "Alle Dateien",
-          extensions: ["*"],
+          extensions: [ "*" ],
         },
       ],
     };
@@ -673,10 +666,10 @@ let redLit = {
       opt.defaultPath = modules.path.join(optionen.data.letzter_pfad, "Literaturdatenbank.ztl");
     }
     // Dialog anzeigen
-    let result = await modules.ipc.invoke("datei-dialog", {
+    const result = await modules.ipc.invoke("datei-dialog", {
       open: false,
       winId: winInfo.winId,
-      opt: opt,
+      opt,
     });
     // Fehler oder keine Datei ausgewählt
     if (result.message || !Object.keys(result).length) {
@@ -694,7 +687,7 @@ let redLit = {
     if (zielExists && redLit.db.path && redLit.db.path !== result.filePath) {
       merge = true;
     }
-    const ergebnis = await redLit.dbSpeichernSchreiben({pfad: result.filePath, merge});
+    const ergebnis = await redLit.dbSpeichernSchreiben({ pfad: result.filePath, merge });
     if (ergebnis !== true) {
       // Schreiben gescheitert
       if (ergebnis) {
@@ -723,273 +716,264 @@ let redLit = {
   //     (Pfad zur Datei)
   //   merge = true | undefined
   //     (Datenbanken sollen verschmolzen werden)
-  dbSpeichernSchreiben ({pfad, merge = false}) {
-    return new Promise(async resolve => {
-      // Ist die Datenkbank gesperrt?
-      let locked = await lock.actions({
-        datei: pfad,
-        aktion: "check",
-        maxLockTime: 3e5,
-      });
-      if (locked) {
-        lock.locked({info: locked, typ: "Literaturdatenbank"});
-        resolve("");
-        return;
-      }
-      // Datenbank sperren
-      await redLit.dbSperre(true);
-      locked = await lock.actions({datei: pfad, aktion: "lock"});
-      if (!locked) { // Fehler beim Sperren der Datei
-        redLit.dbSperre(false);
-        resolve("");
-        return;
-      }
-      // Datenbanken zusammenführen?
-      let mergeOpts = {
-        angelegt: new Set(), // Titelaufnahme neu angelegt
-        entfernt: new Set(), // Titelaufnahme komplett entfernt
-        ergänzt: new Set(), // Titelaufnahme um Datensätze ergänzt
-        geändert: new Set(), // ID einer Titelaufnahme geändert
-      };
-      let stats,
-        merged = false;
-      try {
-        stats = await modules.fsp.lstat(pfad);
-      } catch {
-        // Datei existiert wohl noch nicht => merge muss eigentlich === false sein;
-        // aber sicher ist sicher; da kann so allerlei schiefgehen
-        if (merge) {
-          // Datenbank entsperren
-          await redLit.dbSperre(false);
-          lock.actions({datei: pfad, aktion: "unlock"});
-          // Fehlermeldung
-          resolve("Zusammenführen der Literaturdatenbanken gescheitert!\n<h3>Fehlermeldung</h3>\nkein Zugriff auf Zieldatei");
-          return;
-        }
-      }
-      // alte Metadaten merken für den Fall, dass das Speichern scheitert
-      let metaPreMerge = {
-        bl: redLit.dbBlocklisteKlonen(redLit.db.dataMeta.bl),
-        dc: redLit.db.dataMeta.dc,
-        dm: redLit.db.dataMeta.dm,
-        re: redLit.db.dataMeta.re,
-      };
-      // Ja, Datenbanken zusammenführen!
-      if (stats && (merge || stats.mtime.toISOString() !== redLit.db.mtime)) {
-        // Kopie der Titeldaten anlegen
-        redLit.db.dataTmp = {};
-        redLit.dbKlonen({quelle: redLit.db.data, ziel: redLit.db.dataTmp});
-        // geänderte Datenbank herunterladen
-        const result = await redLit.dbOeffnenEinlesen({pfad, zusammenfuehren: true});
-        if (result !== true) {
-          // Titeldaten wiederherstellen
-          redLit.db.data = {};
-          redLit.dbKlonen({quelle: redLit.db.dataTmp, ziel: redLit.db.data});
-          // Metdaten zurücksetzen
-          redLit.db.dataMeta.bl = redLit.dbBlocklisteKlonen(metaPreMerge.bl);
-          redLit.db.dataMeta.dc = metaPreMerge.dc;
-          redLit.db.dataMeta.dm = metaPreMerge.dm;
-          redLit.db.dataMeta.re = metaPreMerge.re;
-          // Datenbank entsperren
-          await redLit.dbSperre(false);
-          lock.actions({datei: pfad, aktion: "unlock"});
-          // Fehlermeldung
-          resolve(`Zusammenführen der Literaturdatenbanken gescheitert!\n${result}`);
-          return;
-        }
-        redLit.db.konvertiert = false;
-        // ggf. Popup schließen
-        redLit.anzeigePopupSchliessen();
-        // Operationen seit dem letzten Speichern anwenden
-        redLit.db.dataOpts.forEach(i => {
-          if (i.aktion === "add") { // Datensatz hinzufügen
-            if (!redLit.db.dataTmp[i.id]) {
-              // die Titelaufnahme könnte angelegt und kurz danach wieder
-              // komplett gelöscht worden sein
-              return;
-            }
-            let aktion = "ergänzt";
-            if (!redLit.db.data[i.id]) {
-              aktion = "angelegt";
-              redLit.db.data[i.id] = [];
-            }
-            let slot = redLit.db.dataTmp[i.id].findIndex(j => j.id === i.idSlot),
-              ds = {};
-            redLit.dbTitelKlonenAufnahme(redLit.db.dataTmp[i.id][slot], ds);
-            if (redLit.db.data[i.id].some(j => j.id === i.idSlot)) {
-              // sehr, sehr, sehr, sehr, sehr, sehr unwahrscheinlich,
-              // könnte aber theoretisch sein, dass die ID schon vergeben ist
-              ds.id += "0";
-            }
-            redLit.db.data[i.id].unshift(ds);
-            mergeOpts[aktion].add(ds.td.si);
-            merged = true;
-          } else if (i.aktion === "del") { // Datensatz löschen
-            if (!redLit.db.data[i.id]) {
-              return;
-            }
-            let slot = redLit.db.data[i.id].findIndex(j => j.id === i.idSlot);
-            if (slot === -1) {
-              return;
-            }
-            mergeOpts.entfernt.add(redLit.db.data[i.id][slot].td.si);
-            merged = true;
-            redLit.db.data[i.id].splice(slot, 1);
-            if (!redLit.db.data[i.id].length) {
-              delete redLit.db.data[i.id];
-            }
-          } else if (i.aktion === "changeId") { // Datensatz-ID geändert
-            if (redLit.db.data[i.id] || !redLit.db.data[i.idAlt]) {
-              return;
-            }
-            redLit.db.data[i.id] = [];
-            redLit.dbTitelKlonen(redLit.db.data[i.idAlt], redLit.db.data[i.id]);
-            delete redLit.db.data[i.idAlt];
-            mergeOpts.geändert.add(redLit.db.data[i.id][0].td.si);
-            merged = true;
-          }
-        });
-      }
-      // ggf. Datenbanken mergen
+  async dbSpeichernSchreiben ({ pfad, merge = false }) {
+    // Ist die Datenkbank gesperrt?
+    let locked = await lock.actions({
+      datei: pfad,
+      aktion: "check",
+      maxLockTime: 3e5,
+    });
+    if (locked) {
+      lock.locked({ info: locked, typ: "Literaturdatenbank" });
+      return "";
+    }
+    // Datenbank sperren
+    await redLit.dbSperre(true);
+    locked = await lock.actions({ datei: pfad, aktion: "lock" });
+    if (!locked) { // Fehler beim Sperren der Datei
+      redLit.dbSperre(false);
+      return "";
+    }
+    // Datenbanken zusammenführen?
+    const mergeOpts = {
+      angelegt: new Set(), // Titelaufnahme neu angelegt
+      entfernt: new Set(), // Titelaufnahme komplett entfernt
+      ergänzt: new Set(), // Titelaufnahme um Datensätze ergänzt
+      geändert: new Set(), // ID einer Titelaufnahme geändert
+    };
+    let stats;
+    let merged = false;
+    try {
+      stats = await modules.fsp.lstat(pfad);
+    } catch {
+      // Datei existiert wohl noch nicht => merge muss eigentlich === false sein;
+      // aber sicher ist sicher; da kann so allerlei schiefgehen
       if (merge) {
-        for (let [k, v] of Object.entries(redLit.db.dataTmp)) {
-          // Titelaufnahme ist in Blockliste
-          if (redLit.db.dataMeta.bl.some(i => i.id === k)) {
-            continue;
-          }
-          // Titelaufnahme nicht vorhanden => Aufnahme mit allen Versionen klonen
-          if (!redLit.db.data[k]) {
-            redLit.db.data[k] = [];
-            redLit.dbTitelKlonen(v, redLit.db.data[k]);
-            mergeOpts.angelegt.add(redLit.db.data[k][0].td.si);
-            merged = true;
-            continue;
-          }
-          // einzelne Versionen einer Titelaufnahme klonen
-          const ergaenzt = redLit.dbTitelMergeAufnahmen(v, redLit.db.data[k]);
-          if (ergaenzt) {
-            mergeOpts.ergänzt.add(redLit.db.data[k][0].td.si);
-            merged = true;
-          }
-        }
-      }
-      // alte Metadaten merken für den Fall, dass das Speichern scheitert
-      let meta = {
-        bl: redLit.dbBlocklisteKlonen(redLit.db.dataMeta.bl),
-        dc: redLit.db.dataMeta.dc,
-        dm: redLit.db.dataMeta.dm,
-        re: redLit.db.dataMeta.re,
-      };
-      // Blockliste auffrischen
-      let heute = new Date().toISOString().split("T")[0];
-      redLit.db.dataOpts.forEach(i => {
-        if (i.aktion === "del") { // Datensatz gelöscht
-          if (!redLit.db.data[i.id] &&
-              !redLit.db.dataMeta.bl.some(j => j.id === i.id)) {
-            populateBlocklist(i.id);
-          } else if (redLit.db.data[i.id]) {
-            populateBlocklist(i.idSlot);
-          }
-        } else if (i.aktion === "changeId" &&
-            !redLit.db.data[i.idAlt]) { // Datensatz-ID geändert
-          populateBlocklist(i.idAlt);
-        }
-      });
-      function populateBlocklist (id) {
-        redLit.db.dataMeta.bl.push({
-          da: heute,
-          id,
-        });
-      }
-      // weitere Metadaten auffrischen
-      if (!redLit.db.dataMeta.dc) {
-        redLit.db.dataMeta.dc = new Date().toISOString();
-      }
-      redLit.db.dataMeta.dm = new Date().toISOString();
-      redLit.db.dataMeta.re++;
-      // Daten schreiben
-      let daten = redLit.dbSpeichernSchreibenDaten(),
-        result = await io.schreiben(pfad, JSON.stringify(daten));
-      // beim Schreiben ist ein Fehler aufgetreten
-      if (result !== true) {
-        if (merged) {
-          // Titeldaten wiederherstellen
-          redLit.db.data = {};
-          redLit.dbKlonen({quelle: redLit.db.dataTmp, ziel: redLit.db.data});
-          // Metdaten zurücksetzen
-          redLit.db.dataMeta.bl = redLit.dbBlocklisteKlonen(metaPreMerge.bl);
-          redLit.db.dataMeta.dc = metaPreMerge.dc;
-          redLit.db.dataMeta.dm = metaPreMerge.dm;
-          redLit.db.dataMeta.re = metaPreMerge.re;
-        } else {
-          // Metdaten zurücksetzen
-          redLit.db.dataMeta.bl = redLit.dbBlocklisteKlonen(meta.bl);
-          redLit.db.dataMeta.dc = meta.dc;
-          redLit.db.dataMeta.dm = meta.dm;
-          redLit.db.dataMeta.re = meta.re;
-        }
         // Datenbank entsperren
         await redLit.dbSperre(false);
-        lock.actions({datei: pfad, aktion: "unlock"});
-        // Fehlermeldung zurückgeben
-        resolve(`Beim Speichern der Literaturdatenbank ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${result.name}: ${result.message}</p>`);
-        // Fehler auswerfen
-        throw result;
+        lock.actions({ datei: pfad, aktion: "unlock" });
+        // Fehlermeldung
+        return "Zusammenführen der Literaturdatenbanken gescheitert!\n<h3>Fehlermeldung</h3>\nkein Zugriff auf Zieldatei";
       }
-      // Operationenspeicher leeren
-      redLit.db.dataOpts = [];
-      // Änderungsdatum auffrischen
-      stats = await modules.fsp.lstat(pfad);
-      redLit.db.mtime = stats.mtime.toISOString();
-      // Datenbank entsperren
-      await redLit.dbSperre(false);
-      lock.actions({datei: pfad, aktion: "unlock"});
-      // Datenbank wurde normal gespeichert => alles klar
-      if (!merged) {
-        resolve(true);
-        return;
+    }
+    // alte Metadaten merken für den Fall, dass das Speichern scheitert
+    const metaPreMerge = {
+      bl: redLit.dbBlocklisteKlonen(redLit.db.dataMeta.bl),
+      dc: redLit.db.dataMeta.dc,
+      dm: redLit.db.dataMeta.dm,
+      re: redLit.db.dataMeta.re,
+    };
+    // Ja, Datenbanken zusammenführen!
+    if (stats && (merge || stats.mtime.toISOString() !== redLit.db.mtime)) {
+      // Kopie der Titeldaten anlegen
+      redLit.db.dataTmp = {};
+      redLit.dbKlonen({ quelle: redLit.db.data, ziel: redLit.db.dataTmp });
+      // geänderte Datenbank herunterladen
+      const result = await redLit.dbOeffnenEinlesen({ pfad, zusammenfuehren: true });
+      if (result !== true) {
+        // Titeldaten wiederherstellen
+        redLit.db.data = {};
+        redLit.dbKlonen({ quelle: redLit.db.dataTmp, ziel: redLit.db.data });
+        // Metdaten zurücksetzen
+        redLit.db.dataMeta.bl = redLit.dbBlocklisteKlonen(metaPreMerge.bl);
+        redLit.db.dataMeta.dc = metaPreMerge.dc;
+        redLit.db.dataMeta.dm = metaPreMerge.dm;
+        redLit.db.dataMeta.re = metaPreMerge.re;
+        // Datenbank entsperren
+        await redLit.dbSperre(false);
+        lock.actions({ datei: pfad, aktion: "unlock" });
+        // Fehlermeldung
+        return `Zusammenführen der Literaturdatenbanken gescheitert!\n${result}`;
       }
-      // Suchergebnisse auffrischen
-      redLit.sucheTrefferAlleAuffrischen();
-      // Rückmeldung, was beim Mergen getan wurde
-      let text = "Ihre Änderungen wurden in eine neuere Version der Literaturdatenbank übertragen.";
-      if (merge) {
-        text = `Ihre Literaturdatenbank wurde mit\n<p class="force-wrap"><i>${pfad}</i></p>\nverschmolzen.`;
-      } else if (!redLit.db.path) {
-        text = "Ihre Änderungen wurden in die Literaturdatenbank integriert.";
-      }
-      text += "\nDabei wurden folgende Operationen ausgeführt:";
-      for (let [k, v] of Object.entries(mergeOpts)) {
-        if (!v.size) {
+      redLit.db.konvertiert = false;
+      // ggf. Popup schließen
+      redLit.anzeigePopupSchliessen();
+      // Operationen seit dem letzten Speichern anwenden
+      redLit.db.dataOpts.forEach(i => {
+        if (i.aktion === "add") { // Datensatz hinzufügen
+          if (!redLit.db.dataTmp[i.id]) {
+            // die Titelaufnahme könnte angelegt und kurz danach wieder
+            // komplett gelöscht worden sein
+            return;
+          }
+          let aktion = "ergänzt";
+          if (!redLit.db.data[i.id]) {
+            aktion = "angelegt";
+            redLit.db.data[i.id] = [];
+          }
+          const slot = redLit.db.dataTmp[i.id].findIndex(j => j.id === i.idSlot);
+          const ds = {};
+          redLit.dbTitelKlonenAufnahme(redLit.db.dataTmp[i.id][slot], ds);
+          if (redLit.db.data[i.id].some(j => j.id === i.idSlot)) {
+            // sehr, sehr, sehr, sehr, sehr, sehr unwahrscheinlich,
+            // könnte aber theoretisch sein, dass die ID schon vergeben ist
+            ds.id += "0";
+          }
+          redLit.db.data[i.id].unshift(ds);
+          mergeOpts[aktion].add(ds.td.si);
+          merged = true;
+        } else if (i.aktion === "del") { // Datensatz löschen
+          if (!redLit.db.data[i.id]) {
+            return;
+          }
+          const slot = redLit.db.data[i.id].findIndex(j => j.id === i.idSlot);
+          if (slot === -1) {
+            return;
+          }
+          mergeOpts.entfernt.add(redLit.db.data[i.id][slot].td.si);
+          merged = true;
+          redLit.db.data[i.id].splice(slot, 1);
+          if (!redLit.db.data[i.id].length) {
+            delete redLit.db.data[i.id];
+          }
+        } else if (i.aktion === "changeId") { // Datensatz-ID geändert
+          if (redLit.db.data[i.id] || !redLit.db.data[i.idAlt]) {
+            return;
+          }
+          redLit.db.data[i.id] = [];
+          redLit.dbTitelKlonen(redLit.db.data[i.idAlt], redLit.db.data[i.id]);
+          delete redLit.db.data[i.idAlt];
+          mergeOpts.geändert.add(redLit.db.data[i.id][0].td.si);
+          merged = true;
+        }
+      });
+    }
+    // ggf. Datenbanken mergen
+    if (merge) {
+      for (const [ k, v ] of Object.entries(redLit.db.dataTmp)) {
+        // Titelaufnahme ist in Blockliste
+        if (redLit.db.dataMeta.bl.some(i => i.id === k)) {
           continue;
         }
-        let ziffer = "" + v.size;
-        if (v.size === 1) {
-          ziffer = "eine";
+        // Titelaufnahme nicht vorhanden => Aufnahme mit allen Versionen klonen
+        if (!redLit.db.data[k]) {
+          redLit.db.data[k] = [];
+          redLit.dbTitelKlonen(v, redLit.db.data[k]);
+          mergeOpts.angelegt.add(redLit.db.data[k][0].td.si);
+          merged = true;
+          continue;
         }
-        let numerus = "Titelaufnahme wurde";
-        if (v.size > 1) {
-          numerus = "Titelaufnahmen wurden";
+        // einzelne Versionen einer Titelaufnahme klonen
+        const ergaenzt = redLit.dbTitelMergeAufnahmen(v, redLit.db.data[k]);
+        if (ergaenzt) {
+          mergeOpts.ergänzt.add(redLit.db.data[k][0].td.si);
+          merged = true;
         }
-        let praep = "";
-        if (k === "geändert") {
-          praep = "von ";
-          if (v.size === 1) {
-            ziffer = "einer";
-          } else {
-            numerus = "Titelaufnahmen wurde";
-          }
-          k = "die ID geändert";
-        }
-        let siglen = [...v].sort(helfer.sortSiglen);
-        text += `\n<p class="dialog-liste">• ${praep}${ziffer} ${numerus} ${k} (<i>${siglen.join(", ")}</i>)</p>`;
       }
-      dialog.oeffnen({
-        typ: "alert",
-        text,
-      });
-      resolve(true);
+    }
+    // alte Metadaten merken für den Fall, dass das Speichern scheitert
+    const meta = {
+      bl: redLit.dbBlocklisteKlonen(redLit.db.dataMeta.bl),
+      dc: redLit.db.dataMeta.dc,
+      dm: redLit.db.dataMeta.dm,
+      re: redLit.db.dataMeta.re,
+    };
+    // Blockliste auffrischen
+    const heute = new Date().toISOString().split("T")[0];
+    redLit.db.dataOpts.forEach(i => {
+      if (i.aktion === "del") { // Datensatz gelöscht
+        if (!redLit.db.data[i.id] &&
+            !redLit.db.dataMeta.bl.some(j => j.id === i.id)) {
+          populateBlocklist(i.id);
+        } else if (redLit.db.data[i.id]) {
+          populateBlocklist(i.idSlot);
+        }
+      } else if (i.aktion === "changeId" &&
+          !redLit.db.data[i.idAlt]) { // Datensatz-ID geändert
+        populateBlocklist(i.idAlt);
+      }
     });
+    function populateBlocklist (id) {
+      redLit.db.dataMeta.bl.push({
+        da: heute,
+        id,
+      });
+    }
+    // weitere Metadaten auffrischen
+    if (!redLit.db.dataMeta.dc) {
+      redLit.db.dataMeta.dc = new Date().toISOString();
+    }
+    redLit.db.dataMeta.dm = new Date().toISOString();
+    redLit.db.dataMeta.re++;
+    // Daten schreiben
+    const daten = redLit.dbSpeichernSchreibenDaten();
+    const result = await io.schreiben(pfad, JSON.stringify(daten));
+    // beim Schreiben ist ein Fehler aufgetreten
+    if (result !== true) {
+      if (merged) {
+        // Titeldaten wiederherstellen
+        redLit.db.data = {};
+        redLit.dbKlonen({ quelle: redLit.db.dataTmp, ziel: redLit.db.data });
+        // Metdaten zurücksetzen
+        redLit.db.dataMeta.bl = redLit.dbBlocklisteKlonen(metaPreMerge.bl);
+        redLit.db.dataMeta.dc = metaPreMerge.dc;
+        redLit.db.dataMeta.dm = metaPreMerge.dm;
+        redLit.db.dataMeta.re = metaPreMerge.re;
+      } else {
+        // Metdaten zurücksetzen
+        redLit.db.dataMeta.bl = redLit.dbBlocklisteKlonen(meta.bl);
+        redLit.db.dataMeta.dc = meta.dc;
+        redLit.db.dataMeta.dm = meta.dm;
+        redLit.db.dataMeta.re = meta.re;
+      }
+      // Datenbank entsperren
+      await redLit.dbSperre(false);
+      lock.actions({ datei: pfad, aktion: "unlock" });
+      // Fehlermeldung zurückgeben
+      return `Beim Speichern der Literaturdatenbank ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${result.name}: ${result.message}</p>`;
+    }
+    // Operationenspeicher leeren
+    redLit.db.dataOpts = [];
+    // Änderungsdatum auffrischen
+    stats = await modules.fsp.lstat(pfad);
+    redLit.db.mtime = stats.mtime.toISOString();
+    // Datenbank entsperren
+    await redLit.dbSperre(false);
+    lock.actions({ datei: pfad, aktion: "unlock" });
+    // Datenbank wurde normal gespeichert => alles klar
+    if (!merged) {
+      return true;
+    }
+    // Suchergebnisse auffrischen
+    redLit.sucheTrefferAlleAuffrischen();
+    // Rückmeldung, was beim Mergen getan wurde
+    let text = "Ihre Änderungen wurden in eine neuere Version der Literaturdatenbank übertragen.";
+    if (merge) {
+      text = `Ihre Literaturdatenbank wurde mit\n<p class="force-wrap"><i>${pfad}</i></p>\nverschmolzen.`;
+    } else if (!redLit.db.path) {
+      text = "Ihre Änderungen wurden in die Literaturdatenbank integriert.";
+    }
+    text += "\nDabei wurden folgende Operationen ausgeführt:";
+    for (let [ k, v ] of Object.entries(mergeOpts)) {
+      if (!v.size) {
+        continue;
+      }
+      let ziffer = "" + v.size;
+      if (v.size === 1) {
+        ziffer = "eine";
+      }
+      let numerus = "Titelaufnahme wurde";
+      if (v.size > 1) {
+        numerus = "Titelaufnahmen wurden";
+      }
+      let praep = "";
+      if (k === "geändert") {
+        praep = "von ";
+        if (v.size === 1) {
+          ziffer = "einer";
+        } else {
+          numerus = "Titelaufnahmen wurde";
+        }
+        k = "die ID geändert";
+      }
+      const siglen = [ ...v ].sort(helfer.sortSiglen);
+      text += `\n<p class="dialog-liste">• ${praep}${ziffer} ${numerus} ${k} (<i>${siglen.join(", ")}</i>)</p>`;
+    }
+    dialog.oeffnen({
+      typ: "alert",
+      text,
+    });
+    return true;
   },
 
   // Datenbank: Daten zuammentragen, die geschrieben werden sollen
@@ -1008,48 +992,44 @@ let redLit = {
   // Datenbank: Eingabefenster für Bearbeitung sperren
   //   sperren = Boolean
   //     (DB soll gesperrt werden)
-  dbSperre (sperren) {
-    return new Promise(async resolve => {
-      // sperren
-      if (sperren) {
-        redLit.db.locked = true;
-        document.activeElement.blur();
-        // ggf. auf Schließen des Dropdownmenüs warten
-        if (document.getElementById("dropdown")) {
-          await new Promise(warten => setTimeout(() => warten(true), 500));
+  async dbSperre (sperren) {
+    // sperren
+    if (sperren) {
+      redLit.db.locked = true;
+      document.activeElement.blur();
+      // ggf. auf Schließen des Dropdownmenüs warten
+      if (document.getElementById("dropdown")) {
+        await new Promise(warten => setTimeout(() => warten(true), 500));
+      }
+      // Sperre erzeugen
+      const sperre = document.createElement("div");
+      document.querySelector("#red-lit > div").appendChild(sperre);
+      sperre.id = "red-lit-sperre";
+      const text = document.createElement("div");
+      sperre.appendChild(text);
+      text.textContent = "Speichern läuft ...";
+      // Animation starten
+      redLit.db.lockedInterval = setInterval(() => {
+        const punkte = text.textContent.match(/\.+$/);
+        if (punkte[0].length === 3) {
+          text.textContent = "Speichern läuft .";
+        } else {
+          text.textContent += ".";
         }
-        // Sperre erzeugen
-        let sperre = document.createElement("div");
-        document.querySelector("#red-lit > div").appendChild(sperre);
-        sperre.id = "red-lit-sperre";
-        let text = document.createElement("div");
-        sperre.appendChild(text);
-        text.textContent = "Speichern läuft ...";
-        // Animation starten
-        redLit.db.lockedInterval = setInterval(() => {
-          let punkte = text.textContent.match(/\.+$/);
-          if (punkte[0].length === 3) {
-            text.textContent = "Speichern läuft .";
-          } else {
-            text.textContent += ".";
-          }
-        }, 1e3);
-        resolve(true);
-        return;
-      }
-      // entsperren
-      await new Promise(warten => setTimeout(() => warten(true), 3e3));
-      clearInterval(redLit.db.lockedInterval);
-      let sperre = document.getElementById("red-lit-sperre");
-      sperre.parentNode.removeChild(sperre);
-      if (!document.getElementById("red-lit-suche").classList.contains("aus")) {
-        document.getElementById("red-lit-suche-text").select();
-      } else {
-        document.getElementById("red-lit-eingabe-ti").focus();
-      }
-      redLit.db.locked = false;
-      resolve(true);
-    });
+      }, 1e3);
+      return;
+    }
+    // entsperren
+    await new Promise(warten => setTimeout(() => warten(true), 3e3));
+    clearInterval(redLit.db.lockedInterval);
+    const sperre = document.getElementById("red-lit-sperre");
+    sperre.parentNode.removeChild(sperre);
+    if (!document.getElementById("red-lit-suche").classList.contains("aus")) {
+      document.getElementById("red-lit-suche-text").select();
+    } else {
+      document.getElementById("red-lit-eingabe-ti").focus();
+    }
+    redLit.db.locked = false;
   },
 
   // Datenbank: Offline-Kopie im Einstellungenordner anlegen
@@ -1057,7 +1037,7 @@ let redLit = {
   //     (Pfad zur Datenkbank)
   dbOfflineKopie (pfad) {
     const offlinePfad = redLit.dbOfflineKopiePfad(pfad);
-    let daten = redLit.dbSpeichernSchreibenDaten();
+    const daten = redLit.dbSpeichernSchreibenDaten();
     io.schreiben(offlinePfad, JSON.stringify(daten));
   },
 
@@ -1068,8 +1048,8 @@ let redLit = {
     // Laufwerksbuchstabe entfernen (Windows)
     pfad = pfad.replace(/^[a-zA-Z]:/, "");
     // Pfad splitten
-    let reg = new RegExp(`${helfer.escapeRegExp(modules.path.sep)}`),
-      pfadSplit = pfad.split(reg);
+    const reg = new RegExp(`${helfer.escapeRegExp(modules.path.sep)}`);
+    const pfadSplit = pfad.split(reg);
     // Splits kürzen
     //   (damit der Dateiname nicht zu lang wird, aber noch eindeutig ist)
     // leere Slots am Anfang entfernen
@@ -1088,80 +1068,78 @@ let redLit = {
     if (!pfad) {
       return;
     }
-    const offlinePfad = redLit.dbOfflineKopiePfad(pfad),
-      offlineVorhanden = await helfer.exists(offlinePfad);
+    const offlinePfad = redLit.dbOfflineKopiePfad(pfad);
+    const offlineVorhanden = await helfer.exists(offlinePfad);
     if (offlineVorhanden) {
       modules.fsp.unlink(offlinePfad);
     }
   },
 
   // Datenbank: prüft, ob noch ein Speichervorgang aussteht
-  //   fun = Function
+  //   fun = Function | undefined
   //     (Callback-Funktion)
   //   db = false | undefined
   //     (überprüfen, ob die Datenbank gespeichert wurde)
-  dbCheck (fun, db = true) {
-    return new Promise(async resolve => {
-      // Änderungen im Formular noch nicht gespeichert?
-      if (redLit.eingabe.changed) {
-        if (!document.getElementById("red-lit-nav-eingabe").checked) {
-          redLit.nav("eingabe");
-        }
-        const speichern = await new Promise(antwort => {
-          dialog.oeffnen({
-            typ: "confirm",
-            text: "Die Titelaufnahme im Eingabeformular wurde geändert, aber noch nicht gespeichert.\nMöchten Sie die Titelaufnahme nicht erst einmal speichern?",
-            callback: () => {
-              if (dialog.antwort) {
-                redLit.eingabeSpeichern();
-                antwort(true);
-              } else if (dialog.antwort === false) {
-                redLit.eingabe.changed = false;
-                antwort(false);
-              } else {
-                antwort(null);
-              }
-            },
-          });
-        });
-        if (speichern || speichern === null) {
-          resolve(false);
-          return;
-        }
+  async dbCheck (fun = null, db = true) {
+    // Änderungen im Formular noch nicht gespeichert?
+    if (redLit.eingabe.changed) {
+      if (!document.getElementById("red-lit-nav-eingabe").checked) {
+        redLit.nav("eingabe");
       }
-      // Änderungen in der DB noch nicht gespeichert?
-      if (db && redLit.db.changed) {
-        let text = "Die Datenbank wurde geändert, aber noch nicht gespeichert.\nMöchten Sie die Datenbank nicht erst einmal speichern?";
-        if (!redLit.db.path) {
-          text = "Sie haben Titelaufnahmen angelegt, aber noch nicht gespeichert.\nMöchten Sie die Änderungen nicht erst einmal in einer Datenbank speichern?";
-        }
-        const speichern = await new Promise(antwort => {
-          dialog.oeffnen({
-            typ: "confirm",
-            text,
-            callback: () => {
-              if (dialog.antwort) {
-                redLit.dbSpeichern();
-                antwort(true);
-              } else if (dialog.antwort === false) {
-                redLit.db.mtime = ""; // damit die DB beim erneuten Öffnen des Fenster neu geladen wird
-                redLit.db.changed = false;
-                antwort(false);
-              } else {
-                antwort(null);
-              }
-            },
-          });
+      const speichern = await new Promise(antwort => {
+        dialog.oeffnen({
+          typ: "confirm",
+          text: "Die Titelaufnahme im Eingabeformular wurde geändert, aber noch nicht gespeichert.\nMöchten Sie die Titelaufnahme nicht erst einmal speichern?",
+          callback: () => {
+            if (dialog.antwort) {
+              redLit.eingabeSpeichern();
+              antwort(true);
+            } else if (dialog.antwort === false) {
+              redLit.eingabe.changed = false;
+              antwort(false);
+            } else {
+              antwort(null);
+            }
+          },
         });
-        if (speichern || speichern === null) {
-          resolve(false);
-          return;
-        }
+      });
+      if (speichern || speichern === null) {
+        return false;
       }
-      // es steht nichts mehr aus => Funktion direkt ausführen
+    }
+    // Änderungen in der DB noch nicht gespeichert?
+    if (db && redLit.db.changed) {
+      let text = "Die Datenbank wurde geändert, aber noch nicht gespeichert.\nMöchten Sie die Datenbank nicht erst einmal speichern?";
+      if (!redLit.db.path) {
+        text = "Sie haben Titelaufnahmen angelegt, aber noch nicht gespeichert.\nMöchten Sie die Änderungen nicht erst einmal in einer Datenbank speichern?";
+      }
+      const speichern = await new Promise(antwort => {
+        dialog.oeffnen({
+          typ: "confirm",
+          text,
+          callback: () => {
+            if (dialog.antwort) {
+              redLit.dbSpeichern();
+              antwort(true);
+            } else if (dialog.antwort === false) {
+              redLit.db.mtime = ""; // damit die DB beim erneuten Öffnen des Fenster neu geladen wird
+              redLit.db.changed = false;
+              antwort(false);
+            } else {
+              antwort(null);
+            }
+          },
+        });
+      });
+      if (speichern || speichern === null) {
+        return false;
+      }
+    }
+    // es steht nichts mehr aus => Funktion direkt ausführen
+    if (fun) {
       fun();
-      resolve(true);
-    });
+    }
+    return true;
   },
 
   // Datenbank: alle Titeldaten klonen
@@ -1169,8 +1147,8 @@ let redLit = {
   //     (Quelle der Titeldaten)
   //   ziel = Object
   //     (Ziel der Titeldaten, also der Klon)
-  dbKlonen ({quelle, ziel}) {
-    for (let [k, v] of Object.entries(quelle)) {
+  dbKlonen ({ quelle, ziel }) {
+    for (const [ k, v ] of Object.entries(quelle)) {
       ziel[k] = [];
       redLit.dbTitelKlonen(v, ziel[k]);
     }
@@ -1180,9 +1158,9 @@ let redLit = {
   //   quelle = Object
   //     (Quelle der Blockliste)
   dbBlocklisteKlonen (quelle) {
-    let bl = [];
+    const bl = [];
     for (const i of quelle) {
-      bl.push({...i});
+      bl.push({ ...i });
     }
     return bl;
   },
@@ -1197,7 +1175,7 @@ let redLit = {
       if (redLit.db.dataMeta.bl.some(j => j.id === quelle[i].id)) { // Titelaufnahme in Blockliste
         continue;
       }
-      let ds = {};
+      const ds = {};
       redLit.dbTitelKlonenAufnahme(quelle[i], ds);
       ziel.push(ds);
     }
@@ -1209,12 +1187,12 @@ let redLit = {
   //   ziel = Object
   //     (der Ziel-Datensatz)
   dbTitelKlonenAufnahme (quelle, ziel) {
-    for (let [k, v] of Object.entries(quelle)) {
+    for (const [ k, v ] of Object.entries(quelle)) {
       if (helfer.checkType("Object", v)) { // Objects
         ziel[k] = {};
         redLit.dbTitelKlonenAufnahme(v, ziel[k]);
       } else if (Array.isArray(v)) { // Arrays
-        ziel[k] = [...v];
+        ziel[k] = [ ...v ];
       } else { // Primitiven
         ziel[k] = v;
       }
@@ -1233,12 +1211,12 @@ let redLit = {
           redLit.db.dataMeta.bl.some(i => i.id === aq.id)) { // Titelaufnahme in Blockliste
         return;
       }
-      let ds = {};
+      const ds = {};
       redLit.dbTitelKlonenAufnahme(aq, ds);
-      let dsDatum = new Date(ds.da),
-        slot = -1;
+      const dsDatum = new Date(ds.da);
+      let slot = -1;
       for (let i = 0, len = ziel.length; i < len; i++) {
-        let zielDatum = new Date(ziel[i].da);
+        const zielDatum = new Date(ziel[i].da);
         if (dsDatum > zielDatum) {
           slot = i;
           break;
@@ -1258,7 +1236,7 @@ let redLit = {
   // (WICHTIG! Aktuelle Format-Version in redLit.db.ve einstellen!)
   //   daten = Object
   //     (die kompletten JSON-Daten einer ZTL-Datei)
-  dbKonversion ({daten}) {
+  dbKonversion ({ daten }) {
     // Datenbank hat die aktuelle Version
     if (daten.ve === redLit.db.ve) {
       return;
@@ -1267,8 +1245,8 @@ let redLit = {
     // von v1 > v2
     if (daten.ve === 1) {
       // Tag-Array in allen Datensätzen ergänzen
-      for (let ti of Object.values(daten.ti)) {
-        for (let i of ti) {
+      for (const ti of Object.values(daten.ti)) {
+        for (const i of ti) {
           i.td.tg = [];
         }
       }
@@ -1292,7 +1270,7 @@ let redLit = {
   //   input = Element
   //     (der Radiobutton zum Umschalten der Formulare)
   navListener (input) {
-    input.addEventListener("change", function() {
+    input.addEventListener("change", function () {
       const form = this.id.replace(/.+-/, "");
       redLit.nav(form, true);
     });
@@ -1311,8 +1289,8 @@ let redLit = {
       return;
     }
     // Radio-Buttons umstellen
-    let radio = document.querySelectorAll("#red-lit-nav input");
-    for (let i of radio) {
+    const radio = document.querySelectorAll("#red-lit-nav input");
+    for (const i of radio) {
       if (i.id === `red-lit-nav-${form}`) {
         i.checked = true;
       } else {
@@ -1320,9 +1298,9 @@ let redLit = {
       }
     }
     // Block umstellen
-    let formulare = ["red-lit-suche", "red-lit-eingabe"];
-    for (let i of formulare) {
-      let block = document.getElementById(i);
+    const formulare = [ "red-lit-suche", "red-lit-eingabe" ];
+    for (const i of formulare) {
+      const block = document.getElementById(i);
       if (i.includes(`-${form}`)) {
         block.classList.remove("aus");
       } else {
@@ -1333,7 +1311,7 @@ let redLit = {
     if (nav && form === "suche") {
       document.getElementById("red-lit-suche-text").select();
     } else if (nav) {
-      let ti = document.getElementById("red-lit-eingabe-ti");
+      const ti = document.getElementById("red-lit-eingabe-ti");
       helfer.textareaGrow(ti);
       ti.focus();
     }
@@ -1355,8 +1333,8 @@ let redLit = {
 
   // Suche: Formular zurücksetzen
   sucheReset () {
-    let inputs = document.querySelectorAll("#red-lit-suche p:first-child input");
-    for (let i of inputs) {
+    const inputs = document.querySelectorAll("#red-lit-suche p:first-child input");
+    for (const i of inputs) {
       i.value = "";
     }
     redLit.sucheResetBloecke(true);
@@ -1366,9 +1344,9 @@ let redLit = {
   //   aus = Boolean
   //     (Blöcke ausstellen)
   sucheResetBloecke (aus) {
-    let bloecke = ["titel", "treffer"];
-    for (let i of bloecke) {
-      let block = document.getElementById(`red-lit-suche-${i}`);
+    const bloecke = [ "titel", "treffer" ];
+    for (const i of bloecke) {
+      const block = document.getElementById(`red-lit-suche-${i}`);
       if (aus) {
         block.classList.add("aus");
       } else {
@@ -1387,21 +1365,21 @@ let redLit = {
   //   input = Element
   //     (Formularfeld)
   sucheListener (input) {
-    input.addEventListener("keydown", function(evt) {
+    input.addEventListener("keydown", function (evt) {
       tastatur.detectModifiers(evt);
       if (!tastatur.modifiers && evt.key === "Enter") {
         redLit.sucheStarten();
       } else if (this.id === "red-lit-suche-text") {
         if (evt.key === "Enter" && /^(Ctrl|Ctrl\+Shift)$/.test(tastatur.modifiers)) {
-          let titel = document.getElementById("red-lit-suche-titel");
+          const titel = document.getElementById("red-lit-suche-titel");
           if (titel.classList.contains("aus")) {
             return;
           }
-          for (let i of titel.querySelectorAll(".red-lit-snippet")) {
+          for (const i of titel.querySelectorAll(".red-lit-snippet")) {
             if (i.offsetTop >= titel.scrollTop - 10) { // 10px padding-top
-              let ds = JSON.parse(i.dataset.ds);
+              const ds = JSON.parse(i.dataset.ds);
               if (tastatur.modifiers === "Ctrl") {
-                let xmlIcon = i.querySelector(".icon-xml");
+                const xmlIcon = i.querySelector(".icon-xml");
                 if (xmlIcon) {
                   xmlIcon.dispatchEvent(new MouseEvent("click"));
                 }
@@ -1416,7 +1394,7 @@ let redLit = {
           if (evt.repeat) { // Repeats unterbinden
             return;
           }
-          let a = document.querySelectorAll("#red-lit-suche-treffer a");
+          const a = document.querySelectorAll("#red-lit-suche-treffer a");
           if (evt.key === "ArrowLeft") {
             a[0].dispatchEvent(new MouseEvent("click"));
           } else {
@@ -1427,9 +1405,9 @@ let redLit = {
           if (evt.repeat) { // Repeats unterbinden
             return;
           }
-          let titel = document.getElementById("red-lit-suche-titel"),
-            prozent = titel.offsetHeight / 100 * 88,
-            move = 0;
+          const titel = document.getElementById("red-lit-suche-titel");
+          const prozent = titel.offsetHeight / 100 * 88;
+          let move = 0;
           switch (evt.key) {
             case "ArrowDown":
               move = 40;
@@ -1458,7 +1436,7 @@ let redLit = {
   //   a = Element
   //     (Link für eine Sondersuche)
   sucheSonder (a) {
-    a.addEventListener("click", function(evt) {
+    a.addEventListener("click", function (evt) {
       evt.preventDefault();
       redLit.suche.sonder = this.dataset.sonder;
       redLit.sucheStarten();
@@ -1471,20 +1449,20 @@ let redLit = {
     // Suchhilfe schließen
     document.getElementById("red-lit-suche-hilfe-fenster").classList.add("aus");
     // Filterkriterien auslesen/Variablen vorbereiten
-    let input = document.getElementById("red-lit-suche-text"),
-      text = helfer.textTrim(input.value, true),
-      ab = document.getElementById("red-lit-suche-ab").value,
-      st = [],
-      da = null,
-      auchAlte = false,
-      erstellerin = null;
+    const input = document.getElementById("red-lit-suche-text");
+    let text = helfer.textTrim(input.value, true);
+    const ab = document.getElementById("red-lit-suche-ab").value;
+    const st = [];
+    let da = null;
+    let auchAlte = false;
+    let erstellerin = null;
     redLit.suche.id = null;
     redLit.suche.treffer = [];
     redLit.suche.highlight = [];
     if (text) {
-      let woerter = [];
+      const woerter = [];
       // auch veraltete Titelaufnahmen durchsuchen
-      text = text.replace(/(aa|auchalte):""/ig, m => {
+      text = text.replace(/(aa|auchalte):""/ig, () => {
         if (!redLit.suche.sonder) {
           auchAlte = true;
         }
@@ -1506,29 +1484,28 @@ let redLit = {
         return "";
       });
       // Feldsuche
-      text = text.replace(/(-?)([a-zA-Z]+):"(.*?)"/g, (m, p1, p2, p3) => {
-        const feld = feldCheck(p2);
-        if (feld === "id" && !p3) {
+      text = text.replace(/(-?)([a-zA-Z]+):"(.*?)"/g, (...args) => {
+        const feld = feldCheck(args[2]);
+        if (feld === "id" && !args[3]) {
           // Suche nach ID ohne Suchtext
-          if (p1) {
+          if (args[1]) {
             // negiert => keine Treffer produzieren
-            return m.substring(1);
-          } else {
-            // nicht negiert => trifft auf alle Titel zu => ignorieren
-            return "";
+            return args[0].substring(1);
           }
+          // nicht negiert => trifft auf alle Titel zu => ignorieren
+          return "";
         } else if (!feld) {
           // angegebenes Suchfeld existiert nicht => diese Suchanfrage sollte keine Treffer produzieren
-          return m;
+          return args[0];
         } else if (feld === "id") {
           // Suche nach ID
-          redLit.suche.id = new RegExp(helfer.escapeRegExp(p3.toLowerCase()));
+          redLit.suche.id = new RegExp(helfer.escapeRegExp(args[3].toLowerCase()));
           return "";
         }
         woerter.push({
           feld,
-          text: p3,
-          negativ: Boolean(p1),
+          text: args[3],
+          negativ: Boolean(args[1]),
         });
         return "";
       });
@@ -1558,7 +1535,7 @@ let redLit = {
           negativ,
         });
       });
-      for (let wort of woerter) {
+      for (const wort of woerter) {
         let insensitive = "i";
         if (/[A-ZÄÖÜ]/.test(wort.text)) {
           insensitive = "";
@@ -1584,17 +1561,17 @@ let redLit = {
       da = new Date(da.getFullYear(), da.getMonth(), da.getDate());
     }
     // Zeiger für das Trefferobjekt
-    let treffer = redLit.suche.treffer;
+    const treffer = redLit.suche.treffer;
     // Sondersuche Duplikate
-    let duplikate = {
+    const duplikate = {
       ti: {}, // Titel identisch
       si: {}, // Sigle identisch
       ul: {}, // URL identisch
       pn: {}, // PPN identisch
     };
     if (redLit.suche.sonder === "duplikate") {
-      for (const [k, v] of Object.entries(redLit.db.data)) {
-        for (const [l, w] of Object.entries(redLit.db.data)) {
+      for (const [ k, v ] of Object.entries(redLit.db.data)) {
+        for (const [ l, w ] of Object.entries(redLit.db.data)) {
           if (l === k) {
             continue;
           }
@@ -1614,13 +1591,13 @@ let redLit = {
           }
         }
       }
-      let duplikateGruende = {
+      const duplikateGruende = {
         ti: "Titel identisch",
         si: "Sigle identisch",
         ul: "URL identisch",
         pn: "PPN identisch",
       };
-      for (const [k, v] of Object.entries(duplikate)) {
+      for (const [ k, v ] of Object.entries(duplikate)) {
         for (const s of Object.values(v)) {
           for (const id of s) {
             treffer.push({
@@ -1636,23 +1613,23 @@ let redLit = {
       if (!duplikate[key][value]) {
         duplikate[key][value] = new Set();
       }
-      for (const i of [k, l]) {
+      for (const i of [ k, l ]) {
         duplikate[key][value].add(i);
       }
     }
     // Einträge durchsuchen
-    let datensaetze = [
-      ["be"],
-      ["td", "ad"],
-      ["td", "fo"],
-      ["td", "no"],
-      ["td", "pn"],
-      ["td", "si"],
-      ["td", "tg"],
-      ["td", "ti"],
-      ["td", "ul"],
+    const datensaetze = [
+      [ "be" ],
+      [ "td", "ad" ],
+      [ "td", "fo" ],
+      [ "td", "no" ],
+      [ "td", "pn" ],
+      [ "td", "si" ],
+      [ "td", "tg" ],
+      [ "td", "ti" ],
+      [ "td", "ul" ],
     ];
-    for (let [id, arr] of Object.entries(redLit.db.data)) {
+    for (const [ id, arr ] of Object.entries(redLit.db.data)) {
       // Suche ggf. auf ErstellerIn einer Titelaufnahme eingrenzen
       if (erstellerin &&
           !erstellerin.test(arr[arr.length - 1].be)) {
@@ -1671,7 +1648,7 @@ let redLit = {
       }
       // Suche nach Text und Datum
       for (let i = 0, len = arr.length; i < len; i++) {
-        let aufnahme = arr[i];
+        const aufnahme = arr[i];
         // standardmäßig nur die erste Titelaufnahme durchsuchen
         if (i > 0 && !auchAlte) {
           break;
@@ -1679,7 +1656,7 @@ let redLit = {
         // Datum
         let daOk = !da ? true : false;
         if (da) {
-          let daA = new Date(aufnahme.da);
+          const daA = new Date(aufnahme.da);
           if (daA >= da) {
             daOk = true;
           }
@@ -1687,9 +1664,9 @@ let redLit = {
         // Text
         let stOk = !st.length ? true : false;
         if (st.length) {
-          let ok = Array(st.length).fill(false);
+          const ok = Array(st.length).fill(false);
           x: for (let j = 0, lenJ = st.length; j < lenJ; j++) {
-            let okNegativ = Array(datensaetze.length).fill(false);
+            const okNegativ = Array(datensaetze.length).fill(false);
             for (let k = 0, lenK = datensaetze.length; k < lenK; k++) {
               const l = datensaetze[k];
               // dieses Feld durchsuchen?
@@ -1704,13 +1681,13 @@ let redLit = {
               // Datensatz durchsuchen
               const txt = Array.isArray(ds) ? ds.join(", ") : ds;
               if (
-                  !st[j].reg && // kein Suchtext
+                !st[j].reg && // kein Suchtext
                     (st[j].negativ && !txt || // Negativsuche && Feld leer
                     !st[j].negativ && txt) || // keine Negativsuche && Feld irgendwie gefüllt
                   st[j].reg && // Suchtext
                     (st[j].negativ && !txt.match(st[j].reg) || // Negativsuche && kein Treffer im Feld
                     !st[j].negativ && txt.match(st[j].reg)) // keine Negativsuche && Treffer im Feld
-                  ) {
+              ) {
                 if (!st[j].feld && st[j].negativ) {
                   // bei Negativsuche ohne Feldangabe muss die Negation auf alle Datensätze zutreffen
                   okNegativ[k] = true;
@@ -1734,7 +1711,7 @@ let redLit = {
         }
         // Treffer aufhnehmen?
         if (daOk && stOk) {
-          treffer.push({id, slot: i});
+          treffer.push({ id, slot: i });
           break;
         }
       }
@@ -1749,7 +1726,7 @@ let redLit = {
     input.select();
     // Feld-Schalter ermitteln
     function feldCheck (text) {
-      let erlaubt = ["be", "ad", "fo", "id", "no", "pn", "si", "tg", "ti", "ul"];
+      const erlaubt = [ "be", "ad", "fo", "id", "no", "pn", "si", "tg", "ti", "ul" ];
       text = text.toLowerCase();
       switch (text) {
         case "bearb":
@@ -1800,9 +1777,9 @@ let redLit = {
     // ggf. Popup schließen
     redLit.anzeigePopupSchliessen();
     // keine Treffer => keine Anzeige
-    let treffer = redLit.suche.treffer;
+    const treffer = redLit.suche.treffer;
     if (!treffer.length) {
-      let st = document.getElementById("red-lit-suche-text");
+      const st = document.getElementById("red-lit-suche-text");
       st.classList.add("keine-treffer");
       setTimeout(() => st.classList.remove("keine-treffer"), 1500);
       redLit.sucheResetBloecke(true);
@@ -1814,7 +1791,7 @@ let redLit = {
     }
     // 50 Treffer drucken (max.)
     redLit.anzeige.snippetKontext = "suche";
-    let titel = document.getElementById("red-lit-suche-titel");
+    const titel = document.getElementById("red-lit-suche-titel");
     titel.scrollTop = 0;
     titel.replaceChildren();
     for (let i = start, len = start + 50; i < len; i++) {
@@ -1832,8 +1809,8 @@ let redLit = {
   //   start = Number
   //     (Nummer, ab der die Treffer angezeigt werden; nullbasiert)
   sucheAnzeigenNav (start) {
-    let treffer = redLit.suche.treffer,
-      range = `${start + 1}–${treffer.length > start + 50 ? start + 50 : treffer.length}`;
+    const treffer = redLit.suche.treffer;
+    let range = `${start + 1}–${treffer.length > start + 50 ? start + 50 : treffer.length}`;
     if (treffer.length === 1) {
       range = "1";
     }
@@ -1861,12 +1838,12 @@ let redLit = {
   //   a = Element
   //     (Icon-Link zum Vor- oder Rückwärtsblättern)
   sucheNav (a) {
-    a.addEventListener("click", function(evt) {
+    a.addEventListener("click", function (evt) {
       evt.preventDefault();
       if (this.classList.contains("inaktiv")) {
         return;
       }
-      let start = parseInt(this.dataset.start, 10);
+      const start = parseInt(this.dataset.start, 10);
       redLit.sucheAnzeigen(start);
     });
   },
@@ -1875,7 +1852,7 @@ let redLit = {
   //   div = Element
   //     (Snippet mit einer Titelaufnahme)
   sucheSnippetMarkierenListener (div) {
-    div.addEventListener("click", function() {
+    div.addEventListener("click", function () {
       if (this.classList.contains("markiert")) { // Snippet ist markiert => demarkieren
         this.classList.remove("markiert");
         return;
@@ -1888,7 +1865,7 @@ let redLit = {
   //   div = Element
   //     (Snippet mit einer Titelaufnahme)
   sucheSnippetMarkieren (div) {
-    let markiert = document.querySelector("#red-lit-suche-titel .markiert");
+    const markiert = document.querySelector("#red-lit-suche-titel .markiert");
     if (markiert) {
       markiert.classList.remove("markiert");
     }
@@ -1901,7 +1878,7 @@ let redLit = {
   //   delSlot = Number | undefined
   //     (Slot dessen Titelaufnahme gelöscht wurde)
   sucheTrefferAuffrischen (id, delSlot = -1) {
-    let treffer = redLit.suche.treffer.find(i => i.id === id);
+    const treffer = redLit.suche.treffer.find(i => i.id === id);
     // Titelaufnahme derzeit nicht im Suchergebnis
     if (!treffer) {
       return;
@@ -1911,7 +1888,7 @@ let redLit = {
       treffer.slot++;
     }
     // nach Löschen: Slotnummer ggf. anpassen
-    let titel = document.querySelector(`#red-lit-suche-titel .red-lit-snippet[data-ds*='"${id}"']`);
+    const titel = document.querySelector(`#red-lit-suche-titel .red-lit-snippet[data-ds*='"${id}"']`);
     if (delSlot >= 0) {
       if (treffer.slot === delSlot) {
         // Treffer komplett entfernen, wenn genau diese Titelaufnahme gelöscht wurde;
@@ -1944,7 +1921,7 @@ let redLit = {
   // Suche: alle Treffer in den Suchergebnissen auffrischen
   sucheTrefferAlleAuffrischen () {
     document.querySelectorAll("#red-lit-suche-titel:not(.aus) .red-lit-snippet").forEach(i => {
-      let ds = JSON.parse(i.dataset.ds);
+      const ds = JSON.parse(i.dataset.ds);
       // Titelaufnahme existiert nicht mehr in der DB
       if (!redLit.db.data[ds.id] || !redLit.db.data[ds.id][ds.slot]) {
         // Titelaufnahme aus Trefferliste entfernen
@@ -1972,10 +1949,10 @@ let redLit = {
   //   a = Element
   //     (Anker im Hilfefenster)
   sucheSchalter (a) {
-    a.addEventListener("click", function(evt) {
+    a.addEventListener("click", function (evt) {
       evt.preventDefault();
       // Suchfeld vorbereiten
-      let suchfeld = document.getElementById("red-lit-suche-text");
+      const suchfeld = document.getElementById("red-lit-suche-text");
       if (suchfeld.value) {
         suchfeld.value += " ";
       }
@@ -2003,8 +1980,8 @@ let redLit = {
 
   // Eingabeformular: Speicher für Variablen
   eingabe: {
-    fundorte: ["Bibliothek", "DTA", "DWDS", "GoogleBooks", "IDS", "online"], // gültige Werte im Feld "Fundorte"
-    tags: ["unvollständig", "Wörterbuch"], // vordefinierte Werte im Feld "Tags"
+    fundorte: [ "Bibliothek", "DTA", "DWDS", "GoogleBooks", "IDS", "online" ], // gültige Werte im Feld "Fundorte"
+    tags: [ "unvollständig", "Wörterbuch" ], // vordefinierte Werte im Feld "Tags"
     status: "", // aktueller Status des Formulars
     id: "", // ID des aktuellen Datensatzes (leer, wenn neuer Datensatz)
     slot: -1, // Slot des aktuellen Datensatzes
@@ -2033,7 +2010,7 @@ let redLit = {
     // Titel
     if (input.id === "red-lit-eingabe-ti") {
       redLit.eingabeAutoTitel(input);
-      input.addEventListener("paste", function() {
+      input.addEventListener("paste", function () {
         // das muss zeitverzögert stattfinden, sonst ist das Feld noch leer
         setTimeout(() => {
           this.value = redLit.eingabeFormatTitel(this.value);
@@ -2046,14 +2023,14 @@ let redLit = {
       redLit.eingabeAutoURL(input);
     }
     // alle Textfelder (Change-Listener)
-    input.addEventListener("input", function() {
+    input.addEventListener("input", function () {
       if (/-tg$/.test(this.id)) { // Tippen im Tags-Feld ist nicht unbedingt eine Änderung
         return;
       }
       redLit.eingabeGeaendert();
     });
     // alle Textfelder (Enter-Listener)
-    input.addEventListener("keydown", function(evt) {
+    input.addEventListener("keydown", function (evt) {
       tastatur.detectModifiers(evt);
       if (tastatur.modifiers === "Ctrl" && evt.key === "Enter") {
         // ohne Timeout würden Warnfenster sofort wieder verschwinden
@@ -2071,7 +2048,7 @@ let redLit = {
       return;
     }
     redLit.eingabe.changed = true;
-    let span = document.createElement("span");
+    const span = document.createElement("span");
     span.textContent = "*";
     document.getElementById("red-lit-eingabe-meldung").appendChild(span);
   },
@@ -2088,20 +2065,20 @@ let redLit = {
       redLit.eingabe.id = document.getElementById("red-lit-eingabe-id").value;
     }
     redLit.eingabe.changed = false;
-    let text = {
-      "add": "Titelaufnahme hinzufügen",
-      "change": "Titelaufnahme ändern",
-      "old": "Titelaufnahme veraltet",
+    const text = {
+      add: "Titelaufnahme hinzufügen",
+      change: "Titelaufnahme ändern",
+      old: "Titelaufnahme veraltet",
     };
-    let p = document.getElementById("red-lit-eingabe-meldung");
+    const p = document.getElementById("red-lit-eingabe-meldung");
     p.textContent = text[status];
     p.setAttribute("class", status);
   },
 
   // Eingabeformular: Formular leeren
   eingabeLeeren () {
-    let inputs = document.querySelectorAll("#red-lit-eingabe input, #red-lit-eingabe textarea");
-    for (let i of inputs) {
+    const inputs = document.querySelectorAll("#red-lit-eingabe input, #red-lit-eingabe textarea");
+    for (const i of inputs) {
       if (i.type === "button") {
         continue;
       }
@@ -2113,14 +2090,14 @@ let redLit = {
     // Tag-Zelle leeren
     document.getElementById("red-lit-eingabe-tags").replaceChildren();
     // Metadaten leeren
-    redLit.eingabeMetaFuellen({id: "", slot: -1});
+    redLit.eingabeMetaFuellen({ id: "", slot: -1 });
   },
 
   // Eingabeformular: ID automatisch aus der Sigle ermitteln
   //   input = Element
   //     (das Sigle-Feld)
   eingabeAutoID (input) {
-    input.addEventListener("input", function() {
+    input.addEventListener("input", function () {
       if (redLit.eingabe.status !== "add") {
         return;
       }
@@ -2128,7 +2105,7 @@ let redLit = {
       // hochgestellte Ziffern durch 'normal' gestellte ersetzen
       val = helfer.sortSiglenPrepSuper(val);
       // Ziffern vom Anfang an das Ende der ID schieben
-      let ziffern = val.match(/^[0-9]+/);
+      const ziffern = val.match(/^[0-9]+/);
       if (ziffern) {
         val += ziffern[0];
         val = val.substring(ziffern[0].length);
@@ -2146,21 +2123,21 @@ let redLit = {
   //   input = Element
   //     (das Titel-Feld)
   eingabeAutoTitel (input) {
-    input.addEventListener("input", function() {
+    input.addEventListener("input", function () {
       // Sigle ermitteln
-      let si = document.getElementById("red-lit-eingabe-si");
+      const si = document.getElementById("red-lit-eingabe-si");
       if (!si.value) {
-        let name = this.value.split(/[\s,:]/),
-          jahr = this.value.match(/[0-9]{4}/g),
-          sigle = [];
+        const name = this.value.split(/[\s,:]/);
+        const jahr = this.value.match(/[0-9]{4}/g);
+        const sigle = [];
         if (name[0]) {
-          let namen = this.value.split(":")[0].split("/");
+          const namen = this.value.split(":")[0].split("/");
           if (namen.length > 3) {
-            sigle.push(`${name[0]} u. a.`);
+            sigle.push(`${name[0]} u.\u00A0a.`);
           } else if (namen.length > 1) {
-            let autoren = [];
-            for (let i of namen) {
-              let name = i.split(/[\s,]/);
+            const autoren = [];
+            for (const i of namen) {
+              const name = i.split(/[\s,]/);
               if (name[0]) {
                 autoren.push(name[0]);
               }
@@ -2171,7 +2148,7 @@ let redLit = {
           }
         }
         if (jahr && jahr.length) {
-          let jahrInt = parseInt(jahr[jahr.length - 1], 10);
+          const jahrInt = parseInt(jahr[jahr.length - 1], 10);
           if (jahrInt > 1599 && jahrInt < 2051) {
             sigle.push(jahr[jahr.length - 1]);
           }
@@ -2182,7 +2159,7 @@ let redLit = {
         }
       }
       // Fundort ausfüllen
-      let fo = document.getElementById("red-lit-eingabe-fo");
+      const fo = document.getElementById("red-lit-eingabe-fo");
       if (this.value && !fo.value) {
         fo.value = "Bibliothek";
       }
@@ -2193,13 +2170,13 @@ let redLit = {
   //   input = Element
   //     (das URL-Feld)
   eingabeAutoURL (input) {
-    input.addEventListener("input", function() {
-      let fo = document.getElementById("red-lit-eingabe-fo");
+    input.addEventListener("input", function () {
+      const fo = document.getElementById("red-lit-eingabe-fo");
       if (!this.value) {
         fo.value = "Bibliothek";
         return;
       }
-      let ad = document.getElementById("red-lit-eingabe-ad");
+      const ad = document.getElementById("red-lit-eingabe-ad");
       if (!ad.value) {
         ad.value = new Date().toISOString().split("T")[0];
       }
@@ -2260,11 +2237,11 @@ let redLit = {
       return;
     }
     // Titel-Feld ausfüllen
-    let ti = document.getElementById("red-lit-eingabe-ti");
+    const ti = document.getElementById("red-lit-eingabe-ti");
     ti.value = belegImport.DTAQuelle(false);
     ti.dispatchEvent(new KeyboardEvent("input"));
     // URL-Feld ausfüllen
-    let ul = document.getElementById("red-lit-eingabe-ul");
+    const ul = document.getElementById("red-lit-eingabe-ul");
     ul.value = `https://www.deutschestextarchiv.de/${titelId}`;
     ul.dispatchEvent(new KeyboardEvent("input"));
     // Titelfeld fokussieren
@@ -2279,90 +2256,84 @@ let redLit = {
   //   seitenData = Object | undefined
   //     (enthält Informationen zur Seite des DTA-Titels; die Daten sind gefüllt, wenn
   //     die Quellenangabe der Karteikarte neu geladen werden soll)
-  eingabeDTAFetch ({url, fokusId, seitenData = {}}) {
-    return new Promise(async resolve => {
-      // Titel-ID ermitteln
-      let titelId = belegImport.DTAGetTitelId(url);
-      if (!titelId) {
-        await new Promise(meldung => {
-          dialog.oeffnen({
-            typ: "alert",
-            text: "Aus dem DTA-Link konnte keine Titel-ID extrahiert werden.",
-            callback: () => {
-              document.getElementById(fokusId).focus();
-              meldung(true);
-            },
-          });
+  async eingabeDTAFetch ({ url, fokusId, seitenData = {} }) {
+    // Titel-ID ermitteln
+    const titelId = belegImport.DTAGetTitelId(url);
+    if (!titelId) {
+      await new Promise(meldung => {
+        dialog.oeffnen({
+          typ: "alert",
+          text: "Aus dem DTA-Link konnte keine Titel-ID extrahiert werden.",
+          callback: () => {
+            document.getElementById(fokusId).focus();
+            meldung(true);
+          },
         });
-        resolve("");
-        return;
-      }
-      // TEI-Header herunterladen
-      let feedback = await helfer.fetchURL(`https://www.deutschestextarchiv.de/api/tei_header/${titelId}`);
-      if (feedback.fehler) {
-        await new Promise(meldung => {
-          dialog.oeffnen({
-            typ: "alert",
-            text: `Der Download der Titeldaten des DTA ist gescheitert.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${feedback.fehler}</p>`,
-            callback: () => {
-              document.getElementById(fokusId).focus();
-              meldung(true);
-            },
-          });
+      });
+      return "";
+    }
+    // TEI-Header herunterladen
+    const feedback = await helfer.fetchURL(`https://www.deutschestextarchiv.de/api/tei_header/${titelId}`);
+    if (feedback.fehler) {
+      await new Promise(meldung => {
+        dialog.oeffnen({
+          typ: "alert",
+          text: `Der Download der Titeldaten des DTA ist gescheitert.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${feedback.fehler}</p>`,
+          callback: () => {
+            document.getElementById(fokusId).focus();
+            meldung(true);
+          },
         });
-        resolve("");
-        return;
-      }
-      // Titel noch nicht freigeschaltet? (DTAQ)
-      if (/<title>DTA Qualitätssicherung<\/title>/.test(feedback.text)) {
-        await new Promise(meldung => {
-          dialog.oeffnen({
-            typ: "alert",
-            text: `Der Download der Titeldaten des DTA ist gescheitert.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">DTAQ: Titel noch nicht freigeschaltet</p>`,
-            callback: () => {
-              document.getElementById(fokusId).focus();
-              meldung(true);
-            },
-          });
+      });
+      return "";
+    }
+    // Titel noch nicht freigeschaltet? (DTAQ)
+    if (/<title>DTA Qualitätssicherung<\/title>/.test(feedback.text)) {
+      await new Promise(meldung => {
+        dialog.oeffnen({
+          typ: "alert",
+          text: 'Der Download der Titeldaten des DTA ist gescheitert.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">DTAQ: Titel noch nicht freigeschaltet</p>',
+          callback: () => {
+            document.getElementById(fokusId).focus();
+            meldung(true);
+          },
         });
-        resolve("");
-        return;
-      }
-      // Titeldaten ermitteln
-      let parser = new DOMParser(),
-        xmlDoc = parser.parseFromString(feedback.text, "text/xml");
-      if (xmlDoc.querySelector("parsererror")) {
-        await new Promise(meldung => {
-          dialog.oeffnen({
-            typ: "alert",
-            text: "Die XML-Daten des DTA sind nicht wohlgeformt.",
-            callback: () => {
-              document.getElementById(fokusId).focus();
-              meldung(true);
-            },
-          });
+      });
+      return "";
+    }
+    // Titeldaten ermitteln
+    const parser = new DOMParser();
+    const xmlDoc = parser.parseFromString(feedback.text, "text/xml");
+    if (xmlDoc.querySelector("parsererror")) {
+      await new Promise(meldung => {
+        dialog.oeffnen({
+          typ: "alert",
+          text: "Die XML-Daten des DTA sind nicht wohlgeformt.",
+          callback: () => {
+            document.getElementById(fokusId).focus();
+            meldung(true);
+          },
         });
-        resolve("");
-        return;
-      }
-      belegImport.DTAResetData();
-      if (seitenData.seite) {
-        belegImport.DTAData.seite = seitenData.seite;
-        belegImport.DTAData.seite_zuletzt = seitenData.seite_zuletzt;
-        belegImport.DTAData.spalte = seitenData.spalte;
-      }
-      belegImport.DTAData.url = url;
-      belegImport.DTAMeta(xmlDoc);
-      resolve(titelId);
-    });
+      });
+      return "";
+    }
+    belegImport.DTAResetData();
+    if (seitenData.seite) {
+      belegImport.DTAData.seite = seitenData.seite;
+      belegImport.DTAData.seite_zuletzt = seitenData.seite_zuletzt;
+      belegImport.DTAData.spalte = seitenData.spalte;
+    }
+    belegImport.DTAData.url = url;
+    belegImport.DTAMeta(xmlDoc);
+    return titelId;
   },
 
   // Eingabeformular: XML-Import aus der Zwischenablage
   async eingabeXML () {
     // PPN-Feld auslesen
-    let pn = document.getElementById("red-lit-eingabe-pn"),
-      ppn = pn.value.split(/[,\s]/)[0];
-    if (!belegImport.PPNCheck({ppn})) {
+    const pn = document.getElementById("red-lit-eingabe-pn");
+    let ppn = pn.value.split(/[,\s]/)[0];
+    if (!belegImport.PPNCheck({ ppn })) {
       ppn = "";
     }
     // Formular leeren
@@ -2370,8 +2341,8 @@ let redLit = {
     redLit.eingabeStatus("add");
     // XML-Daten suchen
     const cb = modules.clipboard.readText().trim();
-    let xmlDaten = redLit.eingabeXMLCheck({xmlStr: cb});
-    if (belegImport.PPNCheck({ppn: cb})) {
+    let xmlDaten = redLit.eingabeXMLCheck({ xmlStr: cb });
+    if (belegImport.PPNCheck({ ppn: cb })) {
       ppn = cb;
     } else if (xmlDaten) {
       ppn = "";
@@ -2396,7 +2367,7 @@ let redLit = {
     }
     // XML-Daten gefunden => Titelaufnahme übernehmen
     if (xmlDaten.td.ti) {
-      let feld = document.getElementById("red-lit-eingabe-ti");
+      const feld = document.getElementById("red-lit-eingabe-ti");
       feld.value = redLit.eingabeFormatTitel(xmlDaten.td.ti);
       feld.dispatchEvent(new KeyboardEvent("input"));
     }
@@ -2407,7 +2378,7 @@ let redLit = {
       document.getElementById("red-lit-eingabe-id").value = xmlDaten.td.id;
     }
     if (xmlDaten.td.ul) {
-      let feld = document.getElementById("red-lit-eingabe-ul");
+      const feld = document.getElementById("red-lit-eingabe-ul");
       feld.value = xmlDaten.td.ul;
       feld.dispatchEvent(new KeyboardEvent("input"));
     }
@@ -2427,7 +2398,7 @@ let redLit = {
   // Eingabeformular: überprüft, ob sich hinter einem String ein passendes XML-Dokument verbirgt
   //   xmlStr = String
   //     (String, der überprüft werden soll)
-  eingabeXMLCheck ({xmlStr}) {
+  eingabeXMLCheck ({ xmlStr }) {
     // Daten beginnen nicht mit <Fundstelle>, <mods> oder XML-Deklaration
     if (!/^<(Fundstelle|mods|\?xml)/.test(xmlStr)) {
       return false;
@@ -2435,18 +2406,18 @@ let redLit = {
     // Namespace-Attribut entfernen; das macht nur Problem mit evaluate()
     xmlStr = xmlStr.replace(/xmlns=".+?"/, "");
     // XML nicht wohlgeformt
-    let parser = new DOMParser(),
-      xmlDoc = parser.parseFromString(xmlStr, "text/xml");
+    const parser = new DOMParser();
+    const xmlDoc = parser.parseFromString(xmlStr, "text/xml");
     if (xmlDoc.querySelector("parsererror")) {
       return false;
     }
     // Fundstellen-Snippet
     if (xmlDoc.querySelector("Fundstelle unstrukturiert")) {
-      return redLit.eingabeXMLFundstelle({xmlDoc, xmlStr});
+      return redLit.eingabeXMLFundstelle({ xmlDoc, xmlStr });
     }
     // MODS-Dokument
     if (xmlDoc.querySelector("mods titleInfo")) {
-      return redLit.eingabeXMLMODS({xmlDoc, xmlStr});
+      return redLit.eingabeXMLMODS({ xmlDoc, xmlStr });
     }
     // kein passendes XML-Dokument
     return false;
@@ -2456,7 +2427,7 @@ let redLit = {
   // (der Datensatz muss so strukturiert sein, dass man ihn auch zum
   // Import in eine Karteikarte nutzen kann)
   eingabeXMLDatensatz () {
-    let data = belegImport.DateiDatensatz();
+    const data = belegImport.DateiDatensatz();
     data.td = {
       si: "", // Sigle
       id: "", // ID
@@ -2474,52 +2445,52 @@ let redLit = {
   //     (das geparste XML-Snippet)
   //   xmlStr = String
   //     (das nicht geparste Originaldokument)
-  eingabeXMLFundstelle ({xmlDoc, xmlStr}) {
-    let data = redLit.eingabeXMLDatensatz();
+  eingabeXMLFundstelle ({ xmlDoc, xmlStr }) {
+    const data = redLit.eingabeXMLDatensatz();
     // Daten für Titelaufnahme in der Literaturdatenbank
-    let ti = xmlDoc.querySelector("unstrukturiert");
+    const ti = xmlDoc.querySelector("unstrukturiert");
     if (ti) {
       data.td.ti = ti.textContent;
     }
-    let si = xmlDoc.querySelector("Sigle");
+    const si = xmlDoc.querySelector("Sigle");
     if (si) {
       data.td.si = si.textContent;
     }
-    let fundstelle = xmlDoc.querySelector("Fundstelle") ? xmlDoc.querySelector("Fundstelle") : xmlDoc,
-      id = fundstelle.getAttribute("xml:id");
+    const fundstelle = xmlDoc.querySelector("Fundstelle") ? xmlDoc.querySelector("Fundstelle") : xmlDoc;
+    const id = fundstelle.getAttribute("xml:id");
     if (id) {
       data.td.id = id;
     }
-    let ul = xmlDoc.querySelector("URL");
+    const ul = xmlDoc.querySelector("URL");
     if (ul) {
       data.td.ul = ul.textContent;
     }
-    let ad = xmlDoc.querySelector("Aufrufdatum");
+    const ad = xmlDoc.querySelector("Aufrufdatum");
     if (ad) {
-      let da = ad.textContent.split(".");
+      const da = ad.textContent.split(".");
       data.td.ad = `${da[2]}-${da[1]}-${da[0]}`;
     }
-    let fo = xmlDoc.querySelector("Fundort");
+    const fo = xmlDoc.querySelector("Fundort");
     if (fo) {
       data.td.fo = fo.textContent;
     }
-    let pn = xmlDoc.querySelectorAll("PPN");
+    const pn = xmlDoc.querySelectorAll("PPN");
     if (pn) {
-      let ppn = [];
-      for (let i of pn) {
+      const ppn = [];
+      for (const i of pn) {
         ppn.push(i.textContent);
       }
       data.td.pn = ppn.join(", ");
     }
     // Daten für die Karteikarte
-    data.ds.au = "N. N.";
-    let autor = data.td.ti.split(": ")[0].split(", ");
+    data.ds.au = "N.\u00A0N.";
+    const autor = data.td.ti.split(": ")[0].split(", ");
     if (autor.length === 2) {
       data.ds.au = autor.join(", ");
     }
     data.ds.bi = "xml-fundstelle";
     data.ds.bx = xmlStr;
-    let jahr = data.td.ti.match(/[0-9]{4}/g);
+    const jahr = data.td.ti.match(/[0-9]{4}/g);
     if (jahr) {
       data.ds.da = jahr[jahr.length - 1];
     }
@@ -2544,10 +2515,10 @@ let redLit = {
   //     (das geparste XML-Snippet)
   //   xmlStr = String
   //     (das nicht geparste Originaldokument)
-  eingabeXMLMODS ({xmlDoc, xmlStr}) {
+  eingabeXMLMODS ({ xmlDoc, xmlStr }) {
     // Daten zusammentragen
-    let data = redLit.eingabeXMLDatensatz(),
-      td = redLit.eingabeXMLModsTd({xmlDoc});
+    const data = redLit.eingabeXMLDatensatz();
+    const td = redLit.eingabeXMLModsTd({ xmlDoc });
     // Datensatz für Karteikarte ausfüllen
     if (td.autor.length) {
       data.ds.au = td.autor.join("/");
@@ -2562,9 +2533,9 @@ let redLit = {
     } else if (td.url.some(i => /books\.google/.test(i))) {
       data.ds.kr = "GoogleBooks";
     }
-    data.ds.qu = belegImport.makeTitle({td, mitURL: true});
+    data.ds.qu = belegImport.makeTitle({ td, mitURL: true });
     // Datensatz für Literaturdatenbank ausfüllen
-    data.td.ti = belegImport.makeTitle({td, mitURL: false});
+    data.td.ti = belegImport.makeTitle({ td, mitURL: false });
     if (td.url.length) {
       data.td.ul = td.url[0];
     }
@@ -2576,13 +2547,11 @@ let redLit = {
   // Eingabeformular: MODS-Dokument auslesen (Titeldaten)
   //   xmlDoc = Document
   //     (das geparste XML-Snippet)
-  eingabeXMLModsTd ({xmlDoc}) {
-    let td = belegImport.makeTitleDataObject();
+  eingabeXMLModsTd ({ xmlDoc }) {
+    const td = belegImport.makeTitleDataObject();
     // Helfer-Funktionen
-    let evaluator = xpath => {
-      return xmlDoc.evaluate(xpath, xmlDoc, null, XPathResult.ANY_TYPE, null);
-    };
-    let pusher = (result, key) => {
+    const evaluator = xpath => xmlDoc.evaluate(xpath, xmlDoc, null, XPathResult.ANY_TYPE, null);
+    const pusher = (result, key) => {
       let item = result.iterateNext();
       if (Array.isArray(td[key])) {
         while (item) {
@@ -2597,13 +2566,13 @@ let redLit = {
       }
     };
     // Autor
-    let autor = evaluator("//name[@type='personal']/namePart[not(@*)][contains(following-sibling::role/roleTerm[@type='code'],'aut')]");
+    const autor = evaluator("//name[@type='personal']/namePart[not(@*)][contains(following-sibling::role/roleTerm[@type='code'],'aut')]");
     pusher(autor, "autor");
     // Herausgeber
-    let hrsg = evaluator("//name[@type='personal']/namePart[not(@*)][contains(following-sibling::role/roleTerm[@type='code'],'edt')]");
+    const hrsg = evaluator("//name[@type='personal']/namePart[not(@*)][contains(following-sibling::role/roleTerm[@type='code'],'edt')]");
     pusher(hrsg, "hrsg");
     // Titel
-    let titel = evaluator("/mods/titleInfo[not(@*)]/title");
+    const titel = evaluator("/mods/titleInfo[not(@*)]/title");
     pusher(titel, "titel");
     // Korrektur: Großschreibung
     gross({
@@ -2611,13 +2580,13 @@ let redLit = {
       start: 1,
     });
     // Titel-Vorsatz
-    let titelVorsatz = evaluator("/mods/titleInfo[not(@*)]/nonSort"),
-      item = titelVorsatz.iterateNext();
+    const titelVorsatz = evaluator("/mods/titleInfo[not(@*)]/nonSort");
+    let item = titelVorsatz.iterateNext();
     if (item) {
       td.titel[0] = helfer.textTrim(item.textContent + td.titel[0], true);
     }
     // Untertitel
-    let untertitel = evaluator("/mods/titleInfo[not(@*)]/subTitle");
+    const untertitel = evaluator("/mods/titleInfo[not(@*)]/subTitle");
     pusher(untertitel, "untertitel");
     // Korrektur: Großschreibung
     gross({
@@ -2625,7 +2594,7 @@ let redLit = {
       start: 0,
     });
     // Zeitschrift/Sammelband
-    let inTitel = evaluator("//relatedItem[@type='host']//title");
+    const inTitel = evaluator("//relatedItem[@type='host']//title");
     pusher(inTitel, "inTitel");
     // Korrektur: Großschreibung
     gross({
@@ -2633,19 +2602,19 @@ let redLit = {
       start: 0,
     });
     // Band
-    let band = evaluator("/mods/titleInfo[not(@*)]/partNumber");
+    const band = evaluator("/mods/titleInfo[not(@*)]/partNumber");
     pusher(band, "band");
     // Bandtitel
-    let bandtitel = evaluator("/mods/titleInfo[not(@*)]/partName");
+    const bandtitel = evaluator("/mods/titleInfo[not(@*)]/partName");
     pusher(bandtitel, "bandtitel");
     // Auflage
-    let auflage = evaluator("/mods/originInfo[not(@*)]//edition");
+    const auflage = evaluator("/mods/originInfo[not(@*)]//edition");
     pusher(auflage, "auflage");
     // Qualifikationsschrift
-    let quali = evaluator("/mods/note[@type='thesis']");
+    const quali = evaluator("/mods/note[@type='thesis']");
     pusher(quali, "quali");
     // Ort
-    let ort = evaluator("/mods/originInfo[@eventType='publication']//placeTerm");
+    const ort = evaluator("/mods/originInfo[@eventType='publication']//placeTerm");
     pusher(ort, "ort");
     // Verlag
     let verlag;
@@ -2656,25 +2625,25 @@ let redLit = {
     }
     pusher(verlag, "verlag");
     // Jahr
-    let jahr = evaluator("/mods/originInfo[@eventType='publication']/dateIssued");
+    const jahr = evaluator("/mods/originInfo[@eventType='publication']/dateIssued");
     pusher(jahr, "jahr");
     // Jahrgang, Jahr, Heft, Seiten, Spalten
-    let inDetails = evaluator("//relatedItem[@type='host']/part/text");
+    const inDetails = evaluator("//relatedItem[@type='host']/part/text");
     item = inDetails.iterateNext();
     if (item) {
-      let jahrgang = /(?<val>[0-9]+)\s?\(/.exec(item.textContent);
+      const jahrgang = /(?<val>[0-9]+)\s?\(/.exec(item.textContent);
       if (jahrgang) {
         td.jahrgang = jahrgang.groups.val;
       }
-      let jahr = /\((?<val>.+?)\)/.exec(item.textContent);
+      const jahr = /\((?<val>.+?)\)/.exec(item.textContent);
       if (jahr) {
         td.jahr = jahr.groups.val;
       }
-      let heft = /\), (?<val>.+?),/.exec(item.textContent);
+      const heft = /\), (?<val>.+?),/.exec(item.textContent);
       if (heft) {
         td.heft = heft.groups.val;
       }
-      let seiten = /(?<typ>Seite|Spalte)\s(?<val>.+)/.exec(item.textContent);
+      const seiten = /(?<typ>Seite|Spalte)\s(?<val>.+)/.exec(item.textContent);
       if (seiten) {
         if (seiten.groups.typ === "Spalte") {
           td.spalte = true;
@@ -2683,28 +2652,30 @@ let redLit = {
       }
     }
     // Serie
-    let serie = evaluator("//relatedItem[@type='series']/titleInfo/title");
+    const serie = evaluator("//relatedItem[@type='series']/titleInfo/title");
     pusher(serie, "serie");
     // URL
-    let url = evaluator("//url[@displayLabel='Volltext']");
+    const url = evaluator("//url[@displayLabel='Volltext']");
     pusher(url, "url");
     td.url.sort(helfer.sortURL);
     // PPN
-    let ppn = evaluator("//recordIdentifier[@source='DE-627']");
+    const ppn = evaluator("//recordIdentifier[@source='DE-627']");
     pusher(ppn, "ppn");
     // Korrektur: Auflage ohne eckige Klammern
     td.auflage = td.auflage.replace(/^\[|\]$/g, "");
     // Korrektur: Ort ggf. aus Verlagsangabe ermitteln
     if (!td.ort.length && /:/.test(td.verlag)) {
-      let ort = td.verlag.split(":");
+      const ort = td.verlag.split(":");
       td.ort.push(ort[0].trim());
     }
     // Korrektur: "[u.a.]" in Ort aufhübschen
-    td.ort.forEach((i, n) => td.ort[n] = i.replace(/\[u\.a\.\]/, "u. a."));
+    td.ort.forEach((i, n) => {
+      td.ort[n] = i.replace(/\[u\.a\.\]/, "u.\u00A0a.");
+    });
     // Korrektur: Jahr ohne eckige Klammern
     td.jahr = td.jahr.replace(/^\[|\]$/g, "");
     // Korrektur: unvollständige eckige Klammern entfernen
-    for (const [k, v] of Object.entries(td)) {
+    for (const [ k, v ] of Object.entries(td)) {
       if (Array.isArray(v)) {
         for (let i = 0, len = v.length; i < len; i++) {
           v[i] = cleanBrackets(v[i]);
@@ -2722,7 +2693,7 @@ let redLit = {
     // Datensatz zurückgeben
     return td;
     // Großschreibung am Titelanfang
-    function gross ({ds, start}) {
+    function gross ({ ds, start }) {
       for (let i = start, len = ds.length; i < len; i++) {
         ds[i] = ds[i].substring(0, 1).toUpperCase() + ds[i].substring(1);
       }
@@ -2732,9 +2703,9 @@ let redLit = {
   // Eingabeformular: BibTeX-Import aus der Zwischenablage
   async eingabeBibTeX () {
     // PPN-Feld auslesen
-    let pn = document.getElementById("red-lit-eingabe-pn"),
-      ppn = pn.value.split(/[,\s]/)[0];
-    if (!belegImport.PPNCheck({ppn})) {
+    const pn = document.getElementById("red-lit-eingabe-pn");
+    let ppn = pn.value.split(/[,\s]/)[0];
+    if (!belegImport.PPNCheck({ ppn })) {
       ppn = "";
     }
     // Formular leeren
@@ -2743,7 +2714,7 @@ let redLit = {
     // BibTeX-Daten suchen
     const cb = modules.clipboard.readText().trim();
     let bibtexDaten = "";
-    if (belegImport.PPNCheck({ppn: cb})) {
+    if (belegImport.PPNCheck({ ppn: cb })) {
       ppn = cb;
     } else if (belegImport.BibTeXCheck(cb)) {
       ppn = "";
@@ -2762,29 +2733,29 @@ let redLit = {
     if (!bibtexDaten) {
       dialog.oeffnen({
         typ: "alert",
-        text: `Weder im PPN-Feld noch in der Zwischenablage wurden <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Daten oder eine PPN gefunden.`,
+        text: 'Weder im PPN-Feld noch in der Zwischenablage wurden <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Daten oder eine PPN gefunden.',
         callback: () => document.getElementById("red-lit-eingabe-ti-bibtex").focus(),
       });
       return;
     }
     // BibTeX-Datensatz einlesen
-    let titel = belegImport.BibTeXLesen(bibtexDaten, true);
+    const titel = belegImport.BibTeXLesen(bibtexDaten, true);
     // Einlesen ist fehlgeschlagen
     if (!titel) {
       dialog.oeffnen({
         typ: "alert",
-        text: `Das Einlesen des <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Datensatzes ist fehlgeschlagen.`,
+        text: 'Das Einlesen des <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Datensatzes ist fehlgeschlagen.',
         callback: () => document.getElementById("red-lit-eingabe-ti-bibtex").focus(),
       });
       return;
     }
     // Datensatz übernehmen
-    let titelSp = titel[0].ds.qu.split(/https?:\/\//);
+    const titelSp = titel[0].ds.qu.split(/https?:\/\//);
     if (titelSp[1]) {
       // URL + Aufrufdatum
-      let protokoll = titel[0].ds.qu.match(/https?:\/\//)[0],
-        url = titelSp[1].match(/(.+?) /)[1],
-        ad = titelSp[1].match(/([0-9]{1,2})\.\s([0-9]{1,2})\.\s([0-9]{4})/);
+      const protokoll = titel[0].ds.qu.match(/https?:\/\//)[0];
+      const url = titelSp[1].match(/(.+?) /)[1];
+      const ad = titelSp[1].match(/([0-9]{1,2})\.\s([0-9]{1,2})\.\s([0-9]{4})/);
       if (ad[1].length < 2) {
         ad[1] = "0" + ad[1];
       }
@@ -2792,19 +2763,19 @@ let redLit = {
         ad[2] = "0" + ad[2];
       }
       document.getElementById("red-lit-eingabe-ad").value = `${ad[3]}-${ad[2]}-${ad[1]}`;
-      let ul = document.getElementById("red-lit-eingabe-ul");
+      const ul = document.getElementById("red-lit-eingabe-ul");
       ul.value = protokoll + url;
       ul.dispatchEvent(new KeyboardEvent("input"));
     }
     // Titel
-    let ti = document.getElementById("red-lit-eingabe-ti");
+    const ti = document.getElementById("red-lit-eingabe-ti");
     const quelle = helfer.textTrim(titelSp[0], true);
     ti.value = quelle;
     ti.dispatchEvent(new KeyboardEvent("input"));
     // PPN
     if (!ppn) {
-      let m = /^@[a-zA-Z]+\{(GBV-)?(?<ppn>.+?),/.exec(bibtexDaten);
-      if (m && belegImport.PPNCheck({ppn: m.groups.ppn})) {
+      const m = /^@[a-zA-Z]+\{(GBV-)?(?<ppn>.+?),/.exec(bibtexDaten);
+      if (m && belegImport.PPNCheck({ ppn: m.groups.ppn })) {
         ppn = m.groups.ppn;
       }
     }
@@ -2816,361 +2787,337 @@ let redLit = {
   },
 
   // Eingabeformular: Titelaufnahme speichern
-  eingabeSpeichern () {
-    return new Promise(async resolve => {
-      // Textfelder trimmen und ggf. typographisch aufhübschen
-      let textfelder = document.getElementById("red-lit-eingabe").querySelectorAll(`input[type="text"], textarea`);
-      for (let i of textfelder) {
-        let val = i.value;
-        if (i.id === "red-lit-eingabe-ti") { // Titelaufnahme typographisch aufhübschen
-          val = redLit.eingabeFormatTitel(val);
-        } else {
-          val = val.replace(/[\r\n]+/g, "\n");
-          val = helfer.textTrim(val, true);
-        }
-        i.value = val;
-        if (i.nodeName === "TEXTAREA") {
-          helfer.textareaGrow(i);
-        }
+  async eingabeSpeichern () {
+    // Textfelder trimmen und ggf. typographisch aufhübschen
+    const textfelder = document.getElementById("red-lit-eingabe").querySelectorAll('input[type="text"], textarea');
+    for (const i of textfelder) {
+      let val = i.value;
+      if (i.id === "red-lit-eingabe-ti") { // Titelaufnahme typographisch aufhübschen
+        val = redLit.eingabeFormatTitel(val);
+      } else {
+        val = val.replace(/[\r\n]+/g, "\n");
+        val = helfer.textTrim(val, true);
       }
-      // ID ist in Blockliste => kann nicht vergeben werden
-      const id = document.getElementById("red-lit-eingabe-id").value;
-      if (redLit.db.dataMeta.bl.some(i => i.id === id)) {
+      i.value = val;
+      if (i.nodeName === "TEXTAREA") {
+        helfer.textareaGrow(i);
+      }
+    }
+    // ID ist in Blockliste => kann nicht vergeben werden
+    const id = document.getElementById("red-lit-eingabe-id").value;
+    if (redLit.db.dataMeta.bl.some(i => i.id === id)) {
+      dialog.oeffnen({
+        typ: "alert",
+        text: "Die ID ist blockiert.\nEin Datensatz mit dieser ID wurde gelöscht, weswegen die ID vorerst nicht neu vergeben werden kann.",
+        callback: () => {
+          document.getElementById("red-lit-eingabe-id").select();
+        },
+      });
+      return false;
+    }
+    // ID schon vergeben => bestehende Titelaufnahme ergänzen?
+    if (redLit.eingabe.status === "add" && redLit.db.data[id]) {
+      const verschmelzen = await new Promise(verschmelzen => {
         dialog.oeffnen({
-          typ: "alert",
-          text: "Die ID ist blockiert.\nEin Datensatz mit dieser ID wurde gelöscht, weswegen die ID vorerst nicht neu vergeben werden kann.",
+          typ: "confirm",
+          text: "Die ID ist schon vergeben.\nSoll die bestehende Titelaufnahme ergänzt werden?",
           callback: () => {
-            document.getElementById("red-lit-eingabe-id").select();
+            if (dialog.antwort) {
+              verschmelzen(true);
+            } else {
+              verschmelzen(false);
+            }
           },
         });
-        return;
-      }
-      // ID schon vergeben => bestehende Titelaufnahme ergänzen?
-      if (redLit.eingabe.status === "add" && redLit.db.data[id]) {
-        const verschmelzen = await new Promise(verschmelzen => {
-          dialog.oeffnen({
-            typ: "confirm",
-            text: "Die ID ist schon vergeben.\nSoll die bestehende Titelaufnahme ergänzt werden?",
-            callback: () => {
-              if (dialog.antwort) {
-                verschmelzen(true);
-              } else {
-                verschmelzen(false);
-              }
-            },
-          });
-        });
-        if (verschmelzen) {
-          redLit.eingabe.status = "change";
-          redLit.eingabe.id = id;
-        } else {
-          document.getElementById("red-lit-eingabe-ti").focus();
-          resolve(false);
-          return;
-        }
-      }
-      // Validierung des Formulars
-      const valid = await redLit.eingabeSpeichernValid();
-      if (!valid) {
-        resolve(false);
-        return;
-      }
-      // ggf. neuen Datensatz erstellen
-      if (redLit.eingabe.status === "add") {
-        redLit.db.data[id] = [];
-      }
-      // Daten zusammentragen
-      let ds = redLit.eingabeSpeichernMakeDs();
-      // ID wurde geändert => Datensatz umbenennen
-      let idGeaendert = false;
-      if (redLit.eingabe.status !== "add" &&
-          redLit.eingabe.id !== id) {
-        idGeaendert = true;
-        // ggf. Titelaufnahme aus Suchtrefferliste entfernen
-        redLit.sucheTrefferAuffrischen(redLit.eingabe.id, redLit.eingabe.slot);
-        // ID der Titelaufnahme ändern
-        redLit.db.data[id] = [];
-        redLit.dbTitelKlonen(redLit.db.data[redLit.eingabe.id], redLit.db.data[id]);
-        delete redLit.db.data[redLit.eingabe.id];
-        redLit.db.dataOpts.push({
-          aktion: "changeId",
-          id,
-          idAlt: redLit.eingabe.id,
-        });
-      }
-      // Abbruch, wenn identisch mit vorherigem Datensatz
-      if (redLit.db.data[id].length && !idGeaendert) {
-        const diff = redLit.eingabeSpeichernDiff(redLit.db.data[id][0].td, ds.td);
-        if (!diff) {
-          dialog.oeffnen({
-            typ: "alert",
-            text: "Sie haben keine Änderungen vorgenommen.",
-            callback: () => {
-              document.getElementById("red-lit-eingabe-ti").focus();
-            },
-          });
-          redLit.eingabeStatus(redLit.eingabe.status); // Änderungsmarkierung zurücksetzen
-          resolve(false);
-          return;
-        }
-      }
-      // Datensatz schreiben
-      redLit.db.data[id].unshift(ds);
-      redLit.db.dataOpts.push({
-        aktion: "add",
-        id,
-        idSlot: ds.id,
       });
-      // Metadaten auffrischen
-      redLit.eingabeMetaFuellen({id, slot: 0});
-      // Status Eingabeformular auffrischen
-      redLit.eingabe.slot = 0;
-      redLit.eingabeStatus("change");
-      // ggf. Titelaufnahme in der Suche auffrischen
-      redLit.sucheTrefferAuffrischen(id);
-      // Status Datenbank auffrischen
-      redLit.dbGeaendert(true);
-      resolve(true);
-      return;
+      if (verschmelzen) {
+        redLit.eingabe.status = "change";
+        redLit.eingabe.id = id;
+      } else {
+        document.getElementById("red-lit-eingabe-ti").focus();
+        return false;
+      }
+    }
+    // Validierung des Formulars
+    const valid = await redLit.eingabeSpeichernValid();
+    if (!valid) {
+      return false;
+    }
+    // ggf. neuen Datensatz erstellen
+    if (redLit.eingabe.status === "add") {
+      redLit.db.data[id] = [];
+    }
+    // Daten zusammentragen
+    const ds = redLit.eingabeSpeichernMakeDs();
+    // ID wurde geändert => Datensatz umbenennen
+    let idGeaendert = false;
+    if (redLit.eingabe.status !== "add" &&
+        redLit.eingabe.id !== id) {
+      idGeaendert = true;
+      // ggf. Titelaufnahme aus Suchtrefferliste entfernen
+      redLit.sucheTrefferAuffrischen(redLit.eingabe.id, redLit.eingabe.slot);
+      // ID der Titelaufnahme ändern
+      redLit.db.data[id] = [];
+      redLit.dbTitelKlonen(redLit.db.data[redLit.eingabe.id], redLit.db.data[id]);
+      delete redLit.db.data[redLit.eingabe.id];
+      redLit.db.dataOpts.push({
+        aktion: "changeId",
+        id,
+        idAlt: redLit.eingabe.id,
+      });
+    }
+    // Abbruch, wenn identisch mit vorherigem Datensatz
+    if (redLit.db.data[id].length && !idGeaendert) {
+      const diff = redLit.eingabeSpeichernDiff(redLit.db.data[id][0].td, ds.td);
+      if (!diff) {
+        dialog.oeffnen({
+          typ: "alert",
+          text: "Sie haben keine Änderungen vorgenommen.",
+          callback: () => {
+            document.getElementById("red-lit-eingabe-ti").focus();
+          },
+        });
+        redLit.eingabeStatus(redLit.eingabe.status); // Änderungsmarkierung zurücksetzen
+        return false;
+      }
+    }
+    // Datensatz schreiben
+    redLit.db.data[id].unshift(ds);
+    redLit.db.dataOpts.push({
+      aktion: "add",
+      id,
+      idSlot: ds.id,
     });
+    // Metadaten auffrischen
+    redLit.eingabeMetaFuellen({ id, slot: 0 });
+    // Status Eingabeformular auffrischen
+    redLit.eingabe.slot = 0;
+    redLit.eingabeStatus("change");
+    // ggf. Titelaufnahme in der Suche auffrischen
+    redLit.sucheTrefferAuffrischen(id);
+    // Status Datenbank auffrischen
+    redLit.dbGeaendert(true);
+    return true;
   },
 
   // Eingabeformular: Formular validieren
-  eingabeSpeichernValid () {
-    return new Promise(async resolve => {
-      // BenutzerIn registriert?
-      if (!optionen.data.einstellungen.bearbeiterin) {
-        fehler({
-          text: `Sie können Titelaufnahmen erst ${redLit.eingabe.status === "add" ? "erstellen" : "ändern"}, nachdem Sie sich <a href="#" data-funktion="einstellungen-allgemeines">registriert</a> haben.`,
-        });
-        resolve(false);
-        return;
-      }
-      // Warnung vor dem Ändern der ID
-      let id = document.getElementById("red-lit-eingabe-id");
-      if (redLit.eingabe.status !== "add" && redLit.eingabe.id !== id.value) {
-        const aendern = await new Promise(antwort => {
-          dialog.oeffnen({
-            typ: "confirm",
-            text: "Die ID nachträglich zu ändern, kann gravierende Konsequenzen haben.\nMöchten Sie die ID wirklich ändern?",
-            callback: () => {
-              if (!dialog.antwort) {
-                id.value = redLit.eingabe.id;
-                antwort(false);
-              } else {
-                antwort(true);
-              }
-            },
-          });
-        });
-        if (!aendern) {
-          id.focus();
-          resolve(false);
-          return;
-        }
-      }
-      // Pflichtfelder ausgefüllt?
-      let pflicht = {
-        si: "keine Sigle",
-        id: "keine ID",
-        ti: "keinen Titel",
-        fo: "keinen Fundort",
-      };
-      for (let [k, v] of Object.entries(pflicht)) {
-        let feld = document.getElementById(`red-lit-eingabe-${k}`);
-        if (!feld.value) {
-          fehler({
-            text: `Sie haben ${v} eingegeben.`,
-            fokus: feld,
-          });
-          resolve(false);
-          return;
-        }
-      }
-      // ID korrekt formatiert?
-      if (/[^a-z0-9ßäöü-]/.test(id.value) ||
-          /^[0-9]/.test(id.value)) {
-        fehler({
-          text: "Die ID hat ein fehlerhaftes Format.\n<b>Erlaubt:</b><br>• Kleinbuchstaben a-z, ß und Umlaute<br>• Ziffern<br>• Bindestriche\n<b>Nicht Erlaubt:</b><br>• Großbuchstaben<br>• Ziffern am Anfang<br>• Sonderzeichen<br>• Leerzeichen",
-          fokus: id,
-        });
-        resolve(false);
-        return;
-      }
-      // ID schon vergeben?
-      if (redLit.eingabe.status !== "add" &&
-          redLit.eingabe.id !== id.value &&
-          redLit.db.data[id.value]) {
-        // wenn beim Hinzufügen eines Datensatzes die ID schon vergeben ist,
-        // wird oben das Zusammenführen angeboten; hier geht es also nur um
-        // das Ändern der ID, was nicht möglich ist, wenn sie schon vergeben wurde
-        fehler({
-          text: "Die ID ist schon vergeben.",
-          fokus: id,
-        });
-        resolve(false);
-        return;
-      }
-      // Beginnt die URL mit einem Protokoll?
-      let url = document.getElementById("red-lit-eingabe-ul");
-      if (url.value && !/^https?:\/\//.test(url.value)) {
-        fehler({
-          text: "Die URL muss mit einem Protokoll beginnen (http[s]://).",
-          fokus: url,
-        });
-        resolve(false);
-        return;
-      }
-      // Enthält die URL Whitespace?
-      if (url.value && /\s/.test(url.value)) {
-        fehler({
-          text: "Die URL darf keine Whitespace-Zeichen (Leerzeichen, Tabs, Zeilenumbrüche) enthalten.",
-          fokus: url,
-        });
-        resolve(false);
-        return;
-      }
-      // wenn URL => Fundort "DTA" | "GoogleBooks" | "IDS" | "online"
-      let fo = document.getElementById("red-lit-eingabe-fo");
-      if (url.value && !/^(DTA|GoogleBooks|IDS|online)$/.test(fo.value)) {
-        fehler({
-          text: "Geben Sie eine URL an, muss der Fundort „online“, „DTA“, „GoogleBooks“ oder „IDS“ sein.",
-          fokus: fo,
-        });
-        resolve(false);
-        return;
-      }
-      // wenn URL => genauerer Check, ob die Eingabe konsistent ist
-      if (/^https?:\/\/www\.deutschestextarchiv\.de\//.test(url.value) && fo.value !== "DTA" ||
-          /books\.google/.test(url.value) && fo.value !== "GoogleBooks" ||
-          /owid\.de\//.test(url.value) && fo.value !== "IDS") {
-        fehler({
-          text: `Die URL passt nicht zum Fundort „${fo.value}“.`,
-          fokus: fo,
-        });
-        resolve(false);
-        return;
-      }
-      // wenn Aufrufdatum => URL eingeben
-      let ad = document.getElementById("red-lit-eingabe-ad");
-      if (ad.value && !url.value) {
-        fehler({
-          text: "Geben Sie ein Aufrufdatum an, müssen Sie auch eine URL angeben.",
-          fokus: url,
-        });
-        resolve(false);
-        return;
-      }
-      // Aufrufdatum in der Zukunft?
-      let da = ad.value ? new Date(ad.value) : null;
-      if (da) { // vgl. redLit.sucheStarten()
-        da = new Date(da.getFullYear(), da.getMonth(), da.getDate());
-      }
-      if (da && da >= new Date()) {
-        fehler({
-          text: "Das Aufrufdatum liegt in der Zukunft.",
-          fokus: ad,
-        });
-        resolve(false);
-        return;
-      }
-      // Fundort mit gültigem Wert?
-      if (fo.value && !redLit.eingabe.fundorte.includes(fo.value)) {
-        let fundorte = redLit.eingabe.fundorte.join(", ").match(/(.+), (.+)/);
-        fehler({
-          text: `Der Fundort ist ungültig. Erlaubt sind nur die Werte:\n${fundorte[1]} oder ${fundorte[2]}`,
-          fokus: fo,
-        });
-        resolve(false);
-        return;
-      }
-      // wenn Fundort "DTA" | "GoogleBooks" | "IDS" | "online" => URL eingeben
-      if (/^(DTA|GoogleBooks|IDS|online)$/.test(fo.value) && !url.value) {
-        fehler({
-          text: "Ist der Fundort „online“, „DTA“, „GoogleBooks“ oder „IDS“, müssen Sie eine URL angeben.",
-          fokus: url,
-        });
-        resolve(false);
-        return;
-      }
-      // PPN(s) okay?
-      let ppn = document.getElementById("red-lit-eingabe-pn");
-      if (ppn.value) {
-        let ppns = ppn.value.split(/[,\s]/),
-          korrekt = [],
-          fehlerhaft = [];
-        for (let i of ppns) {
-          if (i && !belegImport.PPNCheck({ppn: i})) {
-            fehlerhaft.push(i);
-          } else if (i) {
-            korrekt.push(i);
-          }
-        }
-        if (fehlerhaft.length) {
-          let numerus = `<abbr title="Pica-Produktionsnummern">PPN</abbr> sind`;
-          if (fehlerhaft.length === 1) {
-            numerus = `<abbr title="Pica-Produktionsnummer">PPN</abbr> ist`;
-          }
-          fehler({
-            text: `Diese ${numerus} fehlerhaft:\n${fehlerhaft.join(", ")}`,
-            fokus: ppn,
-          });
-          resolve(false);
-          return;
-        } else {
-          ppn.value = korrekt.join(", ");
-        }
-      }
-      // alles okay
-      resolve(true);
-      return;
-      // Fehlermeldung
-      function fehler ({text, fokus = false}) {
-        let opt = {
-          typ: "alert",
-          text,
-        };
-        if (fokus) {
-          opt.callback = () => {
-            fokus.select();
-          };
-        }
-        dialog.oeffnen(opt);
-        document.querySelectorAll("#dialog-text a").forEach(a => {
-          a.addEventListener("click", function(evt) {
-            evt.preventDefault();
-            switch (this.dataset.funktion) {
-              case "einstellungen-allgemeines":
-                optionen.oeffnen();
-                optionen.sektionWechseln(document.querySelector("#einstellungen ul a"));
-                break;
+  async eingabeSpeichernValid () {
+    // BenutzerIn registriert?
+    if (!optionen.data.einstellungen.bearbeiterin) {
+      fehler({
+        text: `Sie können Titelaufnahmen erst ${redLit.eingabe.status === "add" ? "erstellen" : "ändern"}, nachdem Sie sich <a href="#" data-funktion="einstellungen-allgemeines">registriert</a> haben.`,
+      });
+      return false;
+    }
+    // Warnung vor dem Ändern der ID
+    const id = document.getElementById("red-lit-eingabe-id");
+    if (redLit.eingabe.status !== "add" && redLit.eingabe.id !== id.value) {
+      const aendern = await new Promise(antwort => {
+        dialog.oeffnen({
+          typ: "confirm",
+          text: "Die ID nachträglich zu ändern, kann gravierende Konsequenzen haben.\nMöchten Sie die ID wirklich ändern?",
+          callback: () => {
+            if (!dialog.antwort) {
+              id.value = redLit.eingabe.id;
+              antwort(false);
+            } else {
+              antwort(true);
             }
-            setTimeout(() => overlay.schliessen(document.getElementById("dialog")), 200);
-          });
+          },
         });
+      });
+      if (!aendern) {
+        id.focus();
+        return false;
       }
-    });
+    }
+    // Pflichtfelder ausgefüllt?
+    const pflicht = {
+      si: "keine Sigle",
+      id: "keine ID",
+      ti: "keinen Titel",
+      fo: "keinen Fundort",
+    };
+    for (const [ k, v ] of Object.entries(pflicht)) {
+      const feld = document.getElementById(`red-lit-eingabe-${k}`);
+      if (!feld.value) {
+        fehler({
+          text: `Sie haben ${v} eingegeben.`,
+          fokus: feld,
+        });
+        return false;
+      }
+    }
+    // ID korrekt formatiert?
+    if (/[^a-z0-9ßäöü-]/.test(id.value) ||
+        /^[0-9]/.test(id.value)) {
+      fehler({
+        text: "Die ID hat ein fehlerhaftes Format.\n<b>Erlaubt:</b><br>• Kleinbuchstaben a-z, ß und Umlaute<br>• Ziffern<br>• Bindestriche\n<b>Nicht Erlaubt:</b><br>• Großbuchstaben<br>• Ziffern am Anfang<br>• Sonderzeichen<br>• Leerzeichen",
+        fokus: id,
+      });
+      return false;
+    }
+    // ID schon vergeben?
+    if (redLit.eingabe.status !== "add" &&
+        redLit.eingabe.id !== id.value &&
+        redLit.db.data[id.value]) {
+      // wenn beim Hinzufügen eines Datensatzes die ID schon vergeben ist,
+      // wird oben das Zusammenführen angeboten; hier geht es also nur um
+      // das Ändern der ID, was nicht möglich ist, wenn sie schon vergeben wurde
+      fehler({
+        text: "Die ID ist schon vergeben.",
+        fokus: id,
+      });
+      return false;
+    }
+    // Beginnt die URL mit einem Protokoll?
+    const url = document.getElementById("red-lit-eingabe-ul");
+    if (url.value && !/^https?:\/\//.test(url.value)) {
+      fehler({
+        text: "Die URL muss mit einem Protokoll beginnen (http[s]://).",
+        fokus: url,
+      });
+      return false;
+    }
+    // Enthält die URL Whitespace?
+    if (url.value && /\s/.test(url.value)) {
+      fehler({
+        text: "Die URL darf keine Whitespace-Zeichen (Leerzeichen, Tabs, Zeilenumbrüche) enthalten.",
+        fokus: url,
+      });
+      return false;
+    }
+    // wenn URL => Fundort "DTA" | "GoogleBooks" | "IDS" | "online"
+    const fo = document.getElementById("red-lit-eingabe-fo");
+    if (url.value && !/^(DTA|GoogleBooks|IDS|online)$/.test(fo.value)) {
+      fehler({
+        text: "Geben Sie eine URL an, muss der Fundort „online“, „DTA“, „GoogleBooks“ oder „IDS“ sein.",
+        fokus: fo,
+      });
+      return false;
+    }
+    // wenn URL => genauerer Check, ob die Eingabe konsistent ist
+    if (/^https?:\/\/www\.deutschestextarchiv\.de\//.test(url.value) && fo.value !== "DTA" ||
+        /books\.google/.test(url.value) && fo.value !== "GoogleBooks" ||
+        /owid\.de\//.test(url.value) && fo.value !== "IDS") {
+      fehler({
+        text: `Die URL passt nicht zum Fundort „${fo.value}“.`,
+        fokus: fo,
+      });
+      return false;
+    }
+    // wenn Aufrufdatum => URL eingeben
+    const ad = document.getElementById("red-lit-eingabe-ad");
+    if (ad.value && !url.value) {
+      fehler({
+        text: "Geben Sie ein Aufrufdatum an, müssen Sie auch eine URL angeben.",
+        fokus: url,
+      });
+      return false;
+    }
+    // Aufrufdatum in der Zukunft?
+    let da = ad.value ? new Date(ad.value) : null;
+    if (da) { // vgl. redLit.sucheStarten()
+      da = new Date(da.getFullYear(), da.getMonth(), da.getDate());
+    }
+    if (da && da >= new Date()) {
+      fehler({
+        text: "Das Aufrufdatum liegt in der Zukunft.",
+        fokus: ad,
+      });
+      return false;
+    }
+    // Fundort mit gültigem Wert?
+    if (fo.value && !redLit.eingabe.fundorte.includes(fo.value)) {
+      const fundorte = redLit.eingabe.fundorte.join(", ").match(/(.+), (.+)/);
+      fehler({
+        text: `Der Fundort ist ungültig. Erlaubt sind nur die Werte:\n${fundorte[1]} oder ${fundorte[2]}`,
+        fokus: fo,
+      });
+      return false;
+    }
+    // wenn Fundort "DTA" | "GoogleBooks" | "IDS" | "online" => URL eingeben
+    if (/^(DTA|GoogleBooks|IDS|online)$/.test(fo.value) && !url.value) {
+      fehler({
+        text: "Ist der Fundort „online“, „DTA“, „GoogleBooks“ oder „IDS“, müssen Sie eine URL angeben.",
+        fokus: url,
+      });
+      return false;
+    }
+    // PPN(s) okay?
+    const ppn = document.getElementById("red-lit-eingabe-pn");
+    if (ppn.value) {
+      const ppns = ppn.value.split(/[,\s]/);
+      const korrekt = [];
+      const fehlerhaft = [];
+      for (const i of ppns) {
+        if (i && !belegImport.PPNCheck({ ppn: i })) {
+          fehlerhaft.push(i);
+        } else if (i) {
+          korrekt.push(i);
+        }
+      }
+      if (fehlerhaft.length) {
+        let numerus = '<abbr title="Pica-Produktionsnummern">PPN</abbr> sind';
+        if (fehlerhaft.length === 1) {
+          numerus = '<abbr title="Pica-Produktionsnummer">PPN</abbr> ist';
+        }
+        fehler({
+          text: `Diese ${numerus} fehlerhaft:\n${fehlerhaft.join(", ")}`,
+          fokus: ppn,
+        });
+        return false;
+      }
+      ppn.value = korrekt.join(", ");
+    }
+    // alles okay
+    return true;
+    // Fehlermeldung
+    function fehler ({ text, fokus = false }) {
+      const opt = {
+        typ: "alert",
+        text,
+      };
+      if (fokus) {
+        opt.callback = () => {
+          fokus.select();
+        };
+      }
+      dialog.oeffnen(opt);
+      document.querySelectorAll("#dialog-text a").forEach(a => {
+        a.addEventListener("click", function (evt) {
+          evt.preventDefault();
+          switch (this.dataset.funktion) {
+            case "einstellungen-allgemeines":
+              optionen.oeffnen();
+              optionen.sektionWechseln(document.querySelector("#einstellungen ul a"));
+              break;
+          }
+          setTimeout(() => overlay.schliessen(document.getElementById("dialog")), 200);
+        });
+      });
+    }
   },
 
   // Eingabeformular: einen neuen Datensatz auf Grundlage des Formulars erstellen
   eingabeSpeichernMakeDs () {
-    let ds = {
+    const ds = {
       be: optionen.data.einstellungen.bearbeiterin,
       da: new Date().toISOString(),
       id: redLit.eingabeSpeichernMakeID(),
       td: {},
     };
-    let felder = document.querySelectorAll("#red-lit-eingabe input, #red-lit-eingabe textarea");
-    for (let i of felder) {
-      let k = i.id.replace(/.+-/, "");
+    const felder = document.querySelectorAll("#red-lit-eingabe input, #red-lit-eingabe textarea");
+    for (const i of felder) {
+      const k = i.id.replace(/.+-/, "");
       if (i.type === "button" ||
           /^(id|tg)$/.test(k)) {
         continue;
       }
       if (k === "pn") {
-        let val = i.value.split(/[,\s]/),
-          arr = [];
-        for (let ppn of val) {
+        const val = i.value.split(/[,\s]/);
+        const arr = [];
+        for (const ppn of val) {
           if (ppn) {
             arr.push(ppn);
           }
@@ -3188,25 +3135,23 @@ let redLit = {
   eingabeSpeichernMakeID () {
     const hex = "0123456789abcdef";
     let id = "";
-    x: while (true) {
+    x: while (!id) {
       // ID erstellen
-      id = "";
       while (id.length < 10) {
         id += hex[helfer.zufall(0, 15)];
       }
       // ID überprüfen
-      for (let v of Object.values(redLit.db.data)) {
+      for (const v of Object.values(redLit.db.data)) {
         for (let i = 0, len = v.length; i < len; i++) {
           if (v[i].id === id) {
+            id = "";
             continue x;
           }
         }
       }
       if (redLit.db.dataMeta.bl.some(i => i.id === id)) {
-        continue;
+        id = "";
       }
-      // ID ist in Ordnung
-      break;
     }
     return id;
   },
@@ -3218,7 +3163,7 @@ let redLit = {
   //     (neuer Datensatz mit Titeldaten)
   eingabeSpeichernDiff (alt, neu) {
     let diff = false;
-    for (let [k, v] of Object.entries(alt)) {
+    for (let [ k, v ] of Object.entries(alt)) {
       let n = neu[k];
       if (Array.isArray(v)) {
         v = v.join(",");
@@ -3248,11 +3193,11 @@ let redLit = {
   //   a = Element
   //     (Icon-Link zum Bearbeiten eines Eintrags)
   eingabeBearbeitenListener (a) {
-    a.addEventListener("click", function(evt) {
+    a.addEventListener("click", function (evt) {
       evt.preventDefault();
       evt.stopPropagation();
       redLit.anzeigePopupSchliessen();
-      let json = JSON.parse(this.closest(".red-lit-snippet").dataset.ds);
+      const json = JSON.parse(this.closest(".red-lit-snippet").dataset.ds);
       redLit.dbCheck(() => redLit.eingabeBearbeiten(json), false);
     });
   },
@@ -3262,7 +3207,7 @@ let redLit = {
   //     (ID der Titelaufnahme)
   //   slot = Number
   //     (Slot der Titelaufnahme)
-  eingabeBearbeiten ({id, slot}) {
+  eingabeBearbeiten ({ id, slot }) {
     // ggf. Popup schließen
     redLit.anzeigePopupSchliessen();
     // zum Formular wechseln
@@ -3270,10 +3215,10 @@ let redLit = {
     // Formular leeren
     redLit.eingabeLeeren();
     // Formular füllen
-    let ds = redLit.db.data[id][slot].td,
-      inputs = document.querySelectorAll("#red-lit-eingabe input, #red-lit-eingabe textarea");
-    for (let i of inputs) {
-      let key = i.id.replace(/.+-/, "");
+    const ds = redLit.db.data[id][slot].td;
+    const inputs = document.querySelectorAll("#red-lit-eingabe input, #red-lit-eingabe textarea");
+    for (const i of inputs) {
+      const key = i.id.replace(/.+-/, "");
       if (i.type === "button" || key === "tg") { // Tags müssen anders angezeigt werden
         continue;
       }
@@ -3287,9 +3232,9 @@ let redLit = {
       }
     }
     // Tags anzeigen
-    redLit.eingabeTagsFuellen({tags: ds.tg});
+    redLit.eingabeTagsFuellen({ tags: ds.tg });
     // Metadaten füllen
-    redLit.eingabeMetaFuellen({id, slot});
+    redLit.eingabeMetaFuellen({ id, slot });
     // Formularstatus auffrischen
     let status = "change";
     if (slot > 0) {
@@ -3303,8 +3248,8 @@ let redLit = {
 
   // Eingabeformular: Tags im Formular zusammentragen
   eingabeTagsZusammentragen () {
-    let tags = document.getElementById("red-lit-eingabe-tags").querySelectorAll(".tag"),
-      arr = [];
+    const tags = document.getElementById("red-lit-eingabe-tags").querySelectorAll(".tag");
+    const arr = [];
     tags.forEach(i => arr.push(i.textContent));
     return arr;
   },
@@ -3312,10 +3257,10 @@ let redLit = {
   // Eingabeformular: Tags anzeigen
   //   tags = Array
   //     (Array mit den Tags)
-  eingabeTagsFuellen ({tags}) {
-    let cont = document.getElementById("red-lit-eingabe-tags");
+  eingabeTagsFuellen ({ tags }) {
+    const cont = document.getElementById("red-lit-eingabe-tags");
     cont.replaceChildren();
-    let div = document.createElement("div");
+    const div = document.createElement("div");
     cont.appendChild(div);
     redLit.tagsList({
       cont: div,
@@ -3327,8 +3272,8 @@ let redLit = {
   // Eingabeformular: Tag-Element erzeugen
   //   tag = String
   //     (der Name des Tags)
-  eingabeTagErzeugen ({tag}) {
-    let span = document.createElement("span");
+  eingabeTagErzeugen ({ tag }) {
+    const span = document.createElement("span");
     span.classList.add("tag");
     span.innerHTML = redLit.anzeigeSnippetMaskieren(tag);
     return span;
@@ -3337,8 +3282,8 @@ let redLit = {
   // Eingabeformular: Tag löschen
   //   tag = Element
   //     (Tag, der gelöscht werden soll)
-  eingabeTagLoeschen ({tag}) {
-    tag.addEventListener("click", function() {
+  eingabeTagLoeschen ({ tag }) {
+    tag.addEventListener("click", function () {
       this.parentNode.removeChild(this);
       redLit.eingabeGeaendert();
     });
@@ -3346,8 +3291,8 @@ let redLit = {
 
   // Eingabeformular: Tag hinzufügen
   eingabeTagHinzufuegen () {
-    let tg = document.getElementById("red-lit-eingabe-tg"),
-      val = helfer.textTrim(tg.value, true);
+    const tg = document.getElementById("red-lit-eingabe-tg");
+    const val = helfer.textTrim(tg.value, true);
     // keine Eingae
     if (!val) {
       dialog.oeffnen({
@@ -3358,7 +3303,7 @@ let redLit = {
       return;
     }
     // aktuelle Tags sammeln
-    let arr = redLit.eingabeTagsZusammentragen();
+    const arr = redLit.eingabeTagsZusammentragen();
     // Tag schon vorhanden
     if (arr.includes(val)) {
       dialog.oeffnen({
@@ -3370,30 +3315,27 @@ let redLit = {
     }
     // Tag ergänzen und die Anzeige neu aufbauen
     arr.push(val);
-    redLit.eingabeTagsFuellen({tags: arr});
+    redLit.eingabeTagsFuellen({ tags: arr });
     redLit.eingabeGeaendert();
     tg.value = "";
   },
 
   // Eingabeformular: alle Tags aus der Literaturdatenbank zusammensuchen
   eingabeTagsAuflisten () {
-    let tags = new Set();
+    const tags = new Set();
     for (const titel of Object.values(redLit.db.data)) { // Titel durchgehen
-      for (const aufnahme of titel) { // Aufnahmen durchgehen
-        for (let tag of aufnahme.td.tg) { // Tags durchgehen
-          if (/^Lemma: /.test(tag)) {
-            tag = tag.replace(/\s\(.+?\)$/, "");
-          }
-          tags.add(tag);
+      for (let tag of titel[0].td.tg) { // Tags durchgehen
+        if (/^Lemma: /.test(tag)) {
+          tag = tag.replace(/\s\(.+?\)$/, "");
         }
-        break; // nur die neuste Aufnahem auswerten
+        tags.add(tag);
       }
     }
     // Tags sortieren
-    let arr = [...tags];
+    let arr = [ ...tags ];
     arr = redLit.tagsSort(arr);
     // vordefinierte Tags an den Anfang schieben
-    let pre = [...redLit.eingabe.tags];
+    const pre = [ ...redLit.eingabe.tags ];
     pre.reverse();
     for (const i of pre) {
       const idx = arr.indexOf(i);
@@ -3410,30 +3352,30 @@ let redLit = {
   //     (ID der Titelaufnahme)
   //   slot = Number
   //     (Slot der Titelaufnahme)
-  eingabeMetaFuellen ({id, slot}) {
+  eingabeMetaFuellen ({ id, slot }) {
     // Werte vorbereiten
-    let werte = {
+    const werte = {
       BearbeiterIn: optionen.data.einstellungen.bearbeiterin,
-      Datum: " ",
-      Aufnahme: " ",
+      Datum: "\u00A0",
+      Aufnahme: "\u00A0",
     };
     if (!werte.BearbeiterIn) {
-      werte.BearbeiterIn = "N. N.";
+      werte.BearbeiterIn = "N.\u00A0N.";
     }
     if (id) {
-      let ds = redLit.db.data[id][slot];
+      const ds = redLit.db.data[id][slot];
       werte.BearbeiterIn = ds.be;
       werte.Datum = helfer.datumFormat(ds.da, "sekunden");
-      let aufnahmen = redLit.db.data[id].length;
+      const aufnahmen = redLit.db.data[id].length;
       werte.Aufnahme = `v${aufnahmen - slot} von ${aufnahmen}`;
     }
     // Werte drucken
-    let td = document.getElementById("red-lit-eingabe-meta");
+    const td = document.getElementById("red-lit-eingabe-meta");
     td.replaceChildren();
-    for (let [k, v] of Object.entries(werte)) {
-      let cont = document.createElement("span");
+    for (const [ k, v ] of Object.entries(werte)) {
+      const cont = document.createElement("span");
       td.appendChild(cont);
-      let label = document.createElement("span");
+      const label = document.createElement("span");
       cont.appendChild(label);
       label.textContent = `${k}:`;
       cont.appendChild(document.createTextNode(` ${v}`));
@@ -3458,14 +3400,14 @@ let redLit = {
   //     (Slot der Titelaufnahme)
   //   meldung = String | undefined
   //     (ggf. Meldung, die angezeigt werden soll)
-  anzeigeSnippet ({id, slot, meldung = ""}) {
-    let ds = redLit.db.data[id][slot];
+  anzeigeSnippet ({ id, slot, meldung = "" }) {
+    const ds = redLit.db.data[id][slot];
     // Snippet füllen
-    let div = document.createElement("div");
+    const div = document.createElement("div");
     div.classList.add("red-lit-snippet");
     div.dataset.ds = `{"id":"${id}","slot":${slot}}`;
     // Sigle
-    let si = document.createElement("p");
+    const si = document.createElement("p");
     div.appendChild(si);
     si.classList.add("sigle");
     si.innerHTML = redLit.anzeigeSnippetHighlight({
@@ -3473,7 +3415,7 @@ let redLit = {
       text: ds.td.si,
     });
     // ID
-    let idPrint = document.createElement("span");
+    const idPrint = document.createElement("span");
     si.appendChild(idPrint);
     idPrint.classList.add("id");
     let textId = id;
@@ -3484,7 +3426,7 @@ let redLit = {
     // alte Aufnahme
     if ((slot > 0 || meldung) &&
         redLit.anzeige.snippetKontext === "suche") {
-      let alt = document.createElement("span");
+      const alt = document.createElement("span");
       si.appendChild(alt);
       alt.classList.add("veraltet");
       if (slot > 0) {
@@ -3494,21 +3436,21 @@ let redLit = {
       }
     }
     // Icons
-    let icons = document.createElement("span");
+    const icons = document.createElement("span");
     si.appendChild(icons);
     icons.classList.add("icons");
     // Icon: XML
     if (kartei.wort) {
-      let xml = document.createElement("a");
+      const xml = document.createElement("a");
       icons.appendChild(xml);
       xml.href = "#";
       xml.classList.add("icon-link", "icon-xml");
       xml.title = "Titelaufnahme in XML-Fenster";
-      redLit.xml({icon: xml});
+      redLit.xml({ icon: xml });
     }
     // Icon: Löschen
     if (redLit.anzeige.snippetKontext === "popup") {
-      let del = document.createElement("a");
+      const del = document.createElement("a");
       icons.appendChild(del);
       del.href = "#";
       del.classList.add("icon-link", "icon-muelleimer");
@@ -3517,7 +3459,7 @@ let redLit = {
     }
     // Icon: Versionen
     if (redLit.anzeige.snippetKontext === "suche") {
-      let vers = document.createElement("a");
+      const vers = document.createElement("a");
       icons.appendChild(vers);
       vers.href = "#";
       vers.classList.add("icon-link", "icon-kreis-info");
@@ -3525,7 +3467,7 @@ let redLit = {
       redLit.anzeigePopupListener(vers);
     }
     // Icon: Bearbeiten
-    let bearb = document.createElement("a");
+    const bearb = document.createElement("a");
     icons.appendChild(bearb);
     bearb.href = "#";
     bearb.classList.add("icon-link", "icon-stift");
@@ -3534,7 +3476,7 @@ let redLit = {
     // Icons: Tooltip initialisieren
     tooltip.init(icons);
     // Titelaufnahme
-    let ti = document.createElement("p");
+    const ti = document.createElement("p");
     div.appendChild(ti);
     ti.classList.add("aufnahme");
     ti.innerHTML = redLit.anzeigeSnippetHighlight({
@@ -3543,9 +3485,9 @@ let redLit = {
     });
     // URL + Aufrufdatum
     if (ds.td.ul) {
-      let ul = document.createElement("p");
+      const ul = document.createElement("p");
       div.appendChild(ul);
-      let a = document.createElement("a");
+      const a = document.createElement("a");
       ul.appendChild(a);
       a.classList.add("link");
       a.href = ds.td.ul;
@@ -3555,28 +3497,28 @@ let redLit = {
       });
       helfer.externeLinks(a);
       if (ds.td.ad) {
-        let datum = ds.td.ad.split("-");
+        const datum = ds.td.ad.split("-");
         datum[1] = datum[1].replace(/^0/, "");
         datum[2] = datum[2].replace(/^0/, "");
-        let i = document.createElement("i");
+        const i = document.createElement("i");
         ul.appendChild(i);
         i.textContent = "Aufrufdatum:";
         ul.appendChild(i);
-        let adFrag = document.createElement("span");
+        const adFrag = document.createElement("span");
         ul.appendChild(adFrag);
         adFrag.innerHTML = redLit.anzeigeSnippetHighlight({
           feld: "ad",
-          text: ` ${datum[2]}. ${datum[1]}. ${datum[0]}`,
+          text: ` ${datum[2]}.\u00A0${datum[1]}. ${datum[0]}`,
         });
       }
     }
     // Fundort
-    let fo = document.createElement("p");
+    const fo = document.createElement("p");
     div.appendChild(fo);
-    let i = document.createElement("i");
+    const i = document.createElement("i");
     fo.appendChild(i);
     i.textContent = "Fundort:";
-    let foFrag = document.createElement("span");
+    const foFrag = document.createElement("span");
     fo.appendChild(foFrag);
     foFrag.innerHTML = redLit.anzeigeSnippetHighlight({
       feld: "fo",
@@ -3584,16 +3526,16 @@ let redLit = {
     });
     // PPN
     if (ds.td.pn.length) {
-      let pn = document.createElement("p");
+      const pn = document.createElement("p");
       div.appendChild(pn);
-      let i = document.createElement("i");
+      const i = document.createElement("i");
       pn.appendChild(i);
       i.textContent = "PPN:";
       for (let i = 0, len = ds.td.pn.length; i < len; i++) {
         if (i > 0) {
           pn.appendChild(document.createTextNode(", "));
         }
-        let a = document.createElement("a");
+        const a = document.createElement("a");
         pn.appendChild(a);
         a.classList.add("link");
         a.href = `https://kxp.k10plus.de/DB=2.1/PPNSET?PPN=${ds.td.pn[i]}`;
@@ -3606,12 +3548,12 @@ let redLit = {
     }
     // Notizen
     if (ds.td.no) {
-      let no = document.createElement("p");
+      const no = document.createElement("p");
       div.appendChild(no);
-      let i = document.createElement("i");
+      const i = document.createElement("i");
       no.appendChild(i);
       i.textContent = "Notizen:";
-      let noFrag = document.createElement("span");
+      const noFrag = document.createElement("span");
       no.appendChild(noFrag);
       const notiz = redLit.anzeigeSnippetHighlight({
         feld: "no",
@@ -3621,7 +3563,7 @@ let redLit = {
     }
     // Tags
     if (ds.td.tg.length) {
-      let p = document.createElement("p");
+      const p = document.createElement("p");
       div.appendChild(p);
       p.classList.add("tags");
       redLit.tagsList({
@@ -3633,7 +3575,7 @@ let redLit = {
     // Metadaten: ErstellerIn + BearbeiterIn + Datum + Titelaufnahmen
     // (nur im Suchkontext anzeigen)
     if (redLit.anzeige.snippetKontext === "suche") {
-      let meta = document.createElement("p");
+      const meta = document.createElement("p");
       div.appendChild(meta);
       meta.classList.add("meta");
       // ErstellerIn + BearbeiterIn
@@ -3641,7 +3583,7 @@ let redLit = {
       if (erst === ds.be) {
         erst = "";
       } else {
-        erst += " / ";
+        erst += "\u00A0/ ";
       }
       meta.innerHTML = redLit.anzeigeSnippetHighlight({
         feld: "be",
@@ -3651,18 +3593,18 @@ let redLit = {
         text: ds.be,
       });
       // Zeitpunkt
-      let zeit = document.createElement("span");
+      const zeit = document.createElement("span");
       meta.appendChild(zeit);
       zeit.textContent = helfer.datumFormat(ds.da, "sekunden");
       // Anzahl Versionen
-      let aufnahmen = document.createElement("span");
+      const aufnahmen = document.createElement("span");
       meta.appendChild(aufnahmen);
       aufnahmen.classList.add("titelaufnahmen");
       let numerus = "Version";
       if (redLit.db.data[id].length > 1) {
         numerus = "Versionen";
       }
-      aufnahmen.textContent = `${redLit.db.data[id].length} ${numerus}`;
+      aufnahmen.textContent = `${redLit.db.data[id].length}\u00A0${numerus}`;
       redLit.anzeigePopupListener(aufnahmen);
     }
     // ggf. Klick-Event an das Snippet hängen
@@ -3678,7 +3620,7 @@ let redLit = {
   //     (Feld, auf das der String zutrifft)
   //   text = String
   //     (Text, der gedruckt werden soll)
-  anzeigeSnippetHighlight ({feld, text}) {
+  anzeigeSnippetHighlight ({ feld, text }) {
     // kein Highlighting für Sondersuche Duplikate
     if (redLit.suche.sonder === "duplikate") {
       return text;
@@ -3689,7 +3631,7 @@ let redLit = {
       return text;
     }
     // Suchtext hervorheben
-    for (let i of redLit.suche.highlight) {
+    for (const i of redLit.suche.highlight) {
       if (i.feld && i.feld !== feld) { // wenn i.feld gefüllt => nur betreffendes Feld highlighten
         continue;
       }
@@ -3706,8 +3648,8 @@ let redLit = {
   anzeigeSnippetMaskieren (text) {
     text = text.replace(/</g, "&lt;");
     text = text.replace(/>/g, "&gt;");
-    text = text.replace(/&lt;mark class="suche"&gt;/g, `<mark class="suche">`);
-    text = text.replace(/&lt;\/mark&gt;/g, `</mark>`);
+    text = text.replace(/&lt;mark class="suche"&gt;/g, '<mark class="suche">');
+    text = text.replace(/&lt;\/mark&gt;/g, "</mark>");
     return text;
   },
 
@@ -3715,11 +3657,11 @@ let redLit = {
   //   ele = Element
   //     (Element, über das das Popup geöffnet werden soll)
   anzeigePopupListener (ele) {
-    ele.addEventListener("click", function(evt) {
+    ele.addEventListener("click", function (evt) {
       evt.preventDefault();
       evt.stopPropagation();
       const ds = this.dataset.ds ? this.dataset.ds : this.closest(".red-lit-snippet").dataset.ds;
-      let json = JSON.parse(ds);
+      const json = JSON.parse(ds);
       redLit.anzeigePopup(json);
     });
   },
@@ -3729,7 +3671,7 @@ let redLit = {
   //     (ID der Titelaufnahme)
   //   slot = Number
   //     (Slot der Titelaufnahme)
-  anzeigePopup ({id, slot}) {
+  anzeigePopup ({ id, slot }) {
     redLit.anzeige.snippetKontext = "popup";
     redLit.anzeige.id = id;
     // Suchhilfe schließen
@@ -3737,11 +3679,11 @@ let redLit = {
     // aktuelles Popup ggf. entfernen
     redLit.anzeigePopupSchliessen();
     // Fenster erzeugen
-    let win = document.createElement("div");
+    const win = document.createElement("div");
     document.querySelector("#red-lit > div").appendChild(win);
     win.id = "red-lit-popup";
     // Schließen-Icon
-    let img = document.createElement("img");
+    const img = document.createElement("img");
     win.appendChild(img);
     img.src = "img/x.svg";
     img.width = "24";
@@ -3749,15 +3691,15 @@ let redLit = {
     img.title = "Popup schließen (Esc)";
     img.addEventListener("click", () => redLit.anzeigePopupSchliessen());
     // Versionen-Feld
-    let vers = document.createElement("div");
+    const vers = document.createElement("div");
     win.appendChild(vers);
     vers.id = "red-lit-popup-versionen";
     redLit.anzeigePopupVersionen(slot);
     // Titel-Feld
-    let titel = document.createElement("div");
+    const titel = document.createElement("div");
     win.appendChild(titel);
     titel.id = "red-lit-popup-titel";
-    titel.appendChild(redLit.anzeigeSnippet({id, slot}));
+    titel.appendChild(redLit.anzeigeSnippet({ id, slot }));
     // Tooltips initialisieren
     tooltip.init(win);
   },
@@ -3766,31 +3708,31 @@ let redLit = {
   //   slot = Number | undefined
   //     (Titelaufnahme, die angezeigt werden soll)
   anzeigePopupVersionen (slot = 0) {
-    let vers = document.getElementById("red-lit-popup-versionen"),
-      aufnahme = redLit.db.data[redLit.anzeige.id];
+    const vers = document.getElementById("red-lit-popup-versionen");
+    const aufnahme = redLit.db.data[redLit.anzeige.id];
     vers.scrollTop = 0;
     vers.replaceChildren();
     for (let i = 0, len = aufnahme.length; i < len; i++) {
-      let div = document.createElement("div");
+      const div = document.createElement("div");
       vers.appendChild(div);
       if (i === slot) {
         div.classList.add("aktiv");
       }
       div.dataset.slot = i;
-      let infos = [
+      const infos = [
         `v${len - i}`, // Version
         helfer.datumFormat(aufnahme[i].da, "technisch"), // Datum
         aufnahme[i].be, // BearbeiterIn
       ];
-      for (let i of infos) {
-        let span = document.createElement("span");
+      for (const i of infos) {
+        const span = document.createElement("span");
         div.appendChild(span);
         span.textContent = i;
       }
       redLit.anzeigePopupWechseln(div);
     }
     // ggf. aktives Element in den Blick scrollen
-    let aktiv = vers.querySelector(".aktiv");
+    const aktiv = vers.querySelector(".aktiv");
     if (aktiv.offsetTop + aktiv.offsetHeight > vers.offsetHeight) {
       vers.scrollTop = aktiv.offsetTop;
     }
@@ -3800,7 +3742,7 @@ let redLit = {
   //   div = Element
   //     (die angeklickte Titelaufnahme)
   anzeigePopupWechseln (div) {
-    div.addEventListener("click", function() {
+    div.addEventListener("click", function () {
       if (this.classList.contains("aktiv")) {
         return;
       }
@@ -3809,11 +3751,11 @@ let redLit = {
       this.classList.add("aktiv");
       // Titelaufnahme anzeigen
       redLit.anzeige.snippetKontext = "popup";
-      let snippet = redLit.anzeigeSnippet({
+      const snippet = redLit.anzeigeSnippet({
         id: redLit.anzeige.id,
         slot: parseInt(this.dataset.slot, 10),
       });
-      let titel = document.getElementById("red-lit-popup-titel");
+      const titel = document.getElementById("red-lit-popup-titel");
       titel.replaceChild(snippet, titel.firstChild);
     });
   },
@@ -3831,9 +3773,9 @@ let redLit = {
     if (slot < 0 || slot === redLit.db.data[redLit.anzeige.id].length) {
       return;
     }
-    let div = document.querySelector(`#red-lit-popup-versionen [data-slot="${slot}"]`);
+    const div = document.querySelector(`#red-lit-popup-versionen [data-slot="${slot}"]`);
     div.dispatchEvent(new MouseEvent("click"));
-    let versionen = document.getElementById("red-lit-popup-versionen");
+    const versionen = document.getElementById("red-lit-popup-versionen");
     if (div.offsetTop + div.offsetHeight > versionen.offsetHeight + versionen.scrollTop) {
       versionen.scrollTop = div.offsetTop;
     } else if (div.offsetTop < versionen.scrollTop) {
@@ -3843,7 +3785,7 @@ let redLit = {
 
   // Anzeige: Versionen-Popup schließen
   anzeigePopupSchliessen () {
-    let win = document.getElementById("red-lit-popup");
+    const win = document.getElementById("red-lit-popup");
     if (!win) {
       return;
     }
@@ -3854,11 +3796,11 @@ let redLit = {
   //   a = Element
   //     (Icon-Link zum Löschen)
   titelLoeschenFrage (a) {
-    a.addEventListener("click", function(evt) {
+    a.addEventListener("click", function (evt) {
       evt.preventDefault();
-      let json = JSON.parse(this.closest(".red-lit-snippet").dataset.ds),
-        aufnahme = redLit.db.data[json.id],
-        text = `Soll Version #${aufnahme.length - json.slot} der Titelaufnahme wirklich gelöscht werden?`;
+      const json = JSON.parse(this.closest(".red-lit-snippet").dataset.ds);
+      const aufnahme = redLit.db.data[json.id];
+      let text = `Soll Version #${aufnahme.length - json.slot} der Titelaufnahme wirklich gelöscht werden?`;
       if (aufnahme.length === 1) {
         text = "Soll die Titelaufnahme wirklich komplett gelöscht werden?";
       }
@@ -3879,7 +3821,7 @@ let redLit = {
   //     (ID der Titelaufnahme)
   //   slot = Number
   //     (Slot der Titelaufnahme)
-  async titelLoeschen ({id, slot}) {
+  async titelLoeschen ({ id, slot }) {
     redLit.db.dataOpts.push({
       aktion: "del",
       id,
@@ -3897,8 +3839,8 @@ let redLit = {
           redLit.eingabeStatus("add");
         }, false);
       } else { // Titelaufnahme existiert noch
-        redLit.eingabeMetaFuellen({id, slot: 0});
-        let ds = redLit.eingabeSpeichernMakeDs();
+        redLit.eingabeMetaFuellen({ id, slot: 0 });
+        const ds = redLit.eingabeSpeichernMakeDs();
         const diff = redLit.eingabeSpeichernDiff(redLit.db.data[id][0].td, ds.td);
         if (diff) {
           document.getElementById("red-lit-eingabe-ti").dispatchEvent(new KeyboardEvent("input"));
@@ -3911,9 +3853,9 @@ let redLit = {
       redLit.anzeigePopupSchliessen();
     } else {
       redLit.anzeigePopupVersionen();
-      let titel = document.getElementById("red-lit-popup-titel");
+      const titel = document.getElementById("red-lit-popup-titel");
       redLit.anzeige.snippetKontext = "popup";
-      titel.replaceChild(redLit.anzeigeSnippet({id, slot: 0}), titel.firstChild);
+      titel.replaceChild(redLit.anzeigeSnippet({ id, slot: 0 }), titel.firstChild);
     }
     // Status Datenbank auffrischen
     redLit.dbGeaendert(true);
@@ -3931,9 +3873,9 @@ let redLit = {
     } else if (typ === "plain") {
       text = redLit.dbExportierenSnippetPlain(popup.titelaufnahme.ds);
     } else if (typ === "xml") {
-      let parser = new DOMParser(),
-        snippet = redLit.dbExportierenSnippetXML(popup.titelaufnahme.ds),
-        xmlDoc = parser.parseFromString(snippet, "text/xml");
+      const parser = new DOMParser();
+      const snippet = redLit.dbExportierenSnippetXML(popup.titelaufnahme.ds);
+      let xmlDoc = parser.parseFromString(snippet, "text/xml");
       xmlDoc = helferXml.indent(xmlDoc);
       text = new XMLSerializer().serializeToString(xmlDoc);
     } else if (typ === "sigle") {
@@ -3946,14 +3888,14 @@ let redLit = {
   // Titelaufnahme an das Redaktionssystem schicken (Listener)
   //   icon = Element
   //     (das XML-Icon)
-  xml ({icon}) {
-    icon.addEventListener("click", function(evt) {
+  xml ({ icon }) {
+    icon.addEventListener("click", function (evt) {
       evt.preventDefault();
-      let id = "",
-        snippet = this.closest(".red-lit-snippet");
+      let id = "";
+      const snippet = this.closest(".red-lit-snippet");
       if (snippet) {
         // Icon im Snippet
-        let ds = JSON.parse(snippet.dataset.ds);
+        const ds = JSON.parse(snippet.dataset.ds);
         id = ds.id;
       } else {
         // Icon im Eingabeformular
@@ -3978,23 +3920,23 @@ let redLit = {
         }
         id = redLit.eingabe.id;
       }
-      redLit.xmlDatensatz({id});
+      redLit.xmlDatensatz({ id });
     });
   },
 
   // Titelaufnahme an das Redaktionssystem schicken
   //   id = String
   //     (die ID der Titelaufnahme)
-  xmlDatensatz ({id}) {
-    let xmlDatensatz = {
+  xmlDatensatz ({ id }) {
+    const xmlDatensatz = {
       key: "lt",
       ds: {
         id,
         si: redLit.db.data[id][0].td.si,
-        xl: redLit.dbExportierenSnippetXML({id, slot: 0}),
+        xl: redLit.dbExportierenSnippetXML({ id, slot: 0 }),
       },
     };
-    redXml.datensatz({xmlDatensatz});
+    redXml.datensatz({ xmlDatensatz });
   },
 
   // Tags auflisten
@@ -4004,9 +3946,9 @@ let redLit = {
   //     (die noch unsortierten Tags)
   //   eingabe = Boolean
   //     (Tags im Eingabeformular einfügen)
-  tagsList ({cont, tags, eingabe = false}) {
-    let more = document.createElement("span"),
-      tagsArt = 0;
+  tagsList ({ cont, tags, eingabe = false }) {
+    const more = document.createElement("span");
+    let tagsArt = 0;
     tags = redLit.tagsSort(tags);
     for (const t of tags) {
       let tag = t;
@@ -4019,10 +3961,10 @@ let redLit = {
       if (/^Artikel: /.test(t)) {
         tagsArt++;
       }
-      let span = redLit.eingabeTagErzeugen({tag});
+      const span = redLit.eingabeTagErzeugen({ tag });
       if (eingabe) {
         span.classList.add("loeschbar");
-        redLit.eingabeTagLoeschen({tag: span});
+        redLit.eingabeTagLoeschen({ tag: span });
       }
       if (tagsArt > 3) {
         more.appendChild(span);
@@ -4033,15 +3975,15 @@ let redLit = {
     if (tagsArt > 3) {
       more.classList.add("mehr-tags-kuerzung");
       cont.appendChild(more);
-      let blende = document.createElement("span");
+      const blende = document.createElement("span");
       more.appendChild(blende);
       blende.classList.add("mehr-tags-kuerzung-blende");
-      blende.textContent = " ";
-      let expand = document.createElement("span");
+      blende.textContent = "\u00A0";
+      const expand = document.createElement("span");
       cont.appendChild(expand);
       expand.classList.add("mehr-tags");
       expand.textContent = "mehr…";
-      expand.addEventListener("click", function() {
+      expand.addEventListener("click", function () {
         this.classList.add("aus");
         this.previousSibling.classList.add("erweitert");
         this.previousSibling.querySelector(".mehr-tags-kuerzung-blende").classList.add("aus");
@@ -4053,9 +3995,9 @@ let redLit = {
   //   tags = Array
   //     (eindimensionales Array mit den Tags)
   tagsSort (tags) {
-    let artikel = [],
-      lemma = [],
-      sonstige = [];
+    const artikel = [];
+    const lemma = [];
+    const sonstige = [];
     for (const t of tags) {
       if (/^Artikel: /.test(t)) {
         artikel.push(t);

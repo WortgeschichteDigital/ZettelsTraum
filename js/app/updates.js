@@ -1,6 +1,6 @@
 "use strict";
 
-let updates = {
+const updates = {
   // wertet den RSS-Feed auf GitHub aus
   //   auto = Boolean
   //     (Suche wurde automatisch angestoßen)
@@ -12,7 +12,7 @@ let updates = {
     // ggf. Such-Animation starten
     updates.animation(auto, true);
     // RSS-Feed laden
-    let feedback = await helfer.fetchURL("https://github.com/WortgeschichteDigital/ZettelsTraum/releases.atom");
+    const feedback = await helfer.fetchURL("https://github.com/WortgeschichteDigital/ZettelsTraum/releases.atom");
     // RSS-Feed konnte nicht abgerufen werden
     if (feedback.fehler) {
       updates.animation(auto, false);
@@ -23,13 +23,13 @@ let updates = {
       return;
     }
     // RSS-Feed auswerten
-    let parser = new DOMParser(),
-      rss = parser.parseFromString(feedback.text, "text/xml");
+    const parser = new DOMParser();
+    const rss = parser.parseFromString(feedback.text, "text/xml");
     // RSS-Feed war offenbar nicht wohlgeformt;
     // (nach rss.querySelector("parsererror") kann nicht geschaut werden, weil
     // GitHub mitunter nicht wohlgeformtes XML ausliefert; in solchen Fällen sind
     // aber dennoch korrekte Entries vorhanden)
-    let entries = rss.querySelectorAll("entry");
+    const entries = rss.querySelectorAll("entry");
     if (!entries.length) {
       updates.animation(auto, false);
       updates.fehler(auto, "RSS-Feed nicht wohlgeformt", true);
@@ -38,8 +38,8 @@ let updates = {
     // RSS-Feed auswerten
     let releaseNotes = "";
     for (let i = 0, len = entries.length; i < len; i++) {
-      let entry = entries[i],
-        version = entry.querySelector("id").firstChild.nodeValue.match(/[0-9]+\.[0-9]+\.[0-9]+$/);
+      const entry = entries[i];
+      const version = entry.querySelector("id").firstChild.nodeValue.match(/[0-9]+\.[0-9]+\.[0-9]+$/);
       if (!version) {
         continue;
       }
@@ -81,7 +81,7 @@ let updates = {
     if (auto) {
       return;
     }
-    let feld = document.querySelector("#updatesWin-header td");
+    const feld = document.querySelector("#updatesWin-header td");
     if (start) {
       // gegenwärtige Anzeige zwischenspeichern
       updates.animationStatus.img = feld.firstChild.src;
@@ -113,7 +113,7 @@ let updates = {
   //     (der Fehler soll protokolliert werden)
   fehler (auto, err, log) {
     if (log) {
-      let e = new Error(err);
+      const e = new Error(err);
       helfer.onError(e);
       updates.fensterFehler();
     }
@@ -139,7 +139,7 @@ let updates = {
 
   // Hinweis, dass Updates verfügbar sind, ein- bzw. ausblenden
   hinweis () {
-    let icon = document.getElementById("updates");
+    const icon = document.getElementById("updates");
     // die neuste Version ist bereits installiert
     if (!optionen.data.updates.online ||
         updates.verToInt(appInfo.version) >= updates.verToInt(optionen.data.updates.online)) {
@@ -153,7 +153,7 @@ let updates = {
   // Update-Fenster
   fenster () {
     // Fenster öffnen oder in den Vordergrund holen
-    let fenster = document.getElementById("updatesWin");
+    const fenster = document.getElementById("updatesWin");
     if (overlay.oeffnen(fenster)) { // Fenster ist schon offen
       return;
     }
@@ -164,8 +164,8 @@ let updates = {
   // Update-Fenster mit Release-Notes füllen
   async fensterFill () {
     // Daten holen
-    let data = await modules.ipc.invoke("updates-get-data"),
-      td = document.querySelectorAll("#updatesWin-header td");
+    const data = await modules.ipc.invoke("updates-get-data");
+    const td = document.querySelectorAll("#updatesWin-header td");
     // Icon und Notiz
     td[0].classList.remove("rotieren-bitte"); // ggf. Animation ausschalten
     while (td[0].childNodes.length > 1) {
@@ -180,7 +180,7 @@ let updates = {
       // ggf. Link zum Laden der Release-Notes anzeigen
       if (!data.notes) {
         td[0].appendChild(document.createTextNode(" ("));
-        let a = document.createElement("a");
+        const a = document.createElement("a");
         a.href = "#";
         a.textContent = "Release-Notes";
         td[0].appendChild(a);
@@ -195,7 +195,7 @@ let updates = {
       td[0].appendChild(document.createTextNode("keine Updates verfügbar"));
     }
     // überprüft
-    let ueberprueft = " ";
+    let ueberprueft = "\u00A0";
     if (optionen.data.updates.checked) {
       ueberprueft = helfer.datumFormat(optionen.data.updates.checked, "minuten");
     }
@@ -203,14 +203,14 @@ let updates = {
     // installiert
     td[1].replaceChild(document.createTextNode(`v${appInfo.version}`), td[1].lastChild);
     // online
-    let online = " ";
+    let online = "\u00A0";
     if (optionen.data.updates.online) {
       online = `v${optionen.data.updates.online}`;
     }
     td[3].replaceChild(document.createTextNode(online), td[3].lastChild);
     // Release-Notes
-    let notes = document.getElementById("updatesWin-notes"),
-      header = document.getElementById("updatesWin-header");
+    const notes = document.getElementById("updatesWin-notes");
+    const header = document.getElementById("updatesWin-header");
     if (data.notes) {
       notes.innerHTML = data.notes;
       notes.classList.remove("aus");
@@ -227,7 +227,7 @@ let updates = {
 
   // Benachrichtigung einblenden, dass das Suchen nach Updates misslungen ist
   fensterFehler () {
-    let td = document.querySelectorAll("#updatesWin-header td");
+    const td = document.querySelectorAll("#updatesWin-header td");
     while (td[0].childNodes.length > 1) {
       td[0].removeChild(td[0].lastChild);
     }
@@ -239,7 +239,7 @@ let updates = {
   //   input = Element
   //     (Button im Update-Fenster)
   buttons (input) {
-    input.addEventListener("click", function() {
+    input.addEventListener("click", function () {
       if (/suchen$/.test(this.id)) {
         updates.check(false);
       } else if (/github$/.test(this.id)) {

@@ -1,6 +1,6 @@
 "use strict";
 
-let stamm = {
+const stamm = {
   // speichert, ob im Formvarianten-Fenster Änderungen vorgenommen wurden
   geaendert: false,
 
@@ -82,7 +82,7 @@ let stamm = {
       return;
     }
     // Fenster öffnen oder in den Vordergrund holen
-    let fenster = document.getElementById("stamm");
+    const fenster = document.getElementById("stamm");
     if (overlay.oeffnen(fenster)) { // Fenster ist schon offen
       return;
     }
@@ -134,14 +134,14 @@ let stamm = {
 
   // Kopf aufbauen
   kopf () {
-    let cont = document.getElementById("stamm-kopf");
+    const cont = document.getElementById("stamm-kopf");
     cont.replaceChildren();
     // Wortblöcke aufbauen
-    let woerter = Object.keys(data.fv);
+    const woerter = Object.keys(data.fv);
     for (let i = 0, len = woerter.length; i < len; i++) {
       const wort = woerter[i];
       // Container
-      let span = document.createElement("span");
+      const span = document.createElement("span");
       cont.appendChild(span);
       span.dataset.wort = wort;
       if (wort === stamm.wortAkt) {
@@ -153,16 +153,16 @@ let stamm = {
       // Icons
       stamm.kopfIcons(span);
       // Wort
-      let spanWort = document.createElement("span");
+      const spanWort = document.createElement("span");
       span.appendChild(spanWort);
       spanWort.classList.add("wort");
       spanWort.textContent = wort;
       // Icon: Konfiguration
-      let a = document.createElement("a");
+      const a = document.createElement("a");
       span.appendChild(a);
       a.classList.add("icon-link", "konfig");
       a.href = "#";
-      a.textContent = " ";
+      a.textContent = "\u00A0";
       a.title = "Konfiguration öffnen";
       stamm.kopfKonfigListener(a);
     }
@@ -173,7 +173,7 @@ let stamm = {
   //   span = Element
   //     (der Kopfblock mit den Icons und dem Wort)
   kopfAktiv (span) {
-    span.addEventListener("click", function() {
+    span.addEventListener("click", function () {
       // ist der angeklickte Block bereits aktiv?
       if (this.classList.contains("aktiv")) {
         return;
@@ -181,7 +181,7 @@ let stamm = {
       // ggf. Konfigurations-Popup schließen
       stamm.kopfKonfigSchliessen();
       // Anzeige im Kopf ändern
-      let aktiv = document.querySelector("#stamm-kopf .aktiv");
+      const aktiv = document.querySelector("#stamm-kopf .aktiv");
       aktiv.classList.remove("aktiv");
       this.classList.add("aktiv");
       // Liste ändern
@@ -194,7 +194,7 @@ let stamm = {
   //   a = Element
   //     (der Icon-Link zum Öffnen des Konfigurations-Popups)
   kopfKonfigListener (a) {
-    a.addEventListener("click", function(evt) {
+    a.addEventListener("click", function (evt) {
       evt.preventDefault();
       // da zugleich stamm.kopfAktiv() depatched wird (was es auch soll),
       // würde das Fenster ohne Timeout nicht aufgebaut werden
@@ -206,12 +206,12 @@ let stamm = {
   //   a = Element
   //     (der Icon-Link zum Öffnen des Konfigurations-Popups)
   kopfKonfig (a) {
-    let cont = a.parentNode;
+    const cont = a.parentNode;
     const wort = cont.dataset.wort;
     // altes Konfigurations-Popup ggf. schließen
     stamm.kopfKonfigSchliessen();
     // Popup
-    let popup = document.createElement("span");
+    const popup = document.createElement("span");
     cont.appendChild(popup);
     popup.id = "stamm-popup";
     if (cont.offsetLeft > 0) {
@@ -221,7 +221,7 @@ let stamm = {
     }
     popup.addEventListener("click", evt => evt.stopPropagation()); // damit stamm.kopfAktiv() nicht dispatched wird, wenn irgendwo im Konfigurations-Popup geklickt wird
     // Schließen-Icon
-    let img = document.createElement("img");
+    const img = document.createElement("img");
     popup.appendChild(img);
     img.src = "img/x.svg";
     img.width = "24";
@@ -232,27 +232,27 @@ let stamm = {
     let p = document.createElement("p");
     popup.appendChild(p);
     p.classList.add("stamm-popup-ps");
-    let strong = document.createElement("strong");
+    const strong = document.createElement("strong");
     p.appendChild(strong);
-    strong.textContent = `${wort}: `;
+    strong.textContent = `${wort}:\u00A0`;
     if (data.fv[wort].ps) {
-      const ps = data.fv[wort].ps,
-        ausgeschrieben = stamm.partOfSpeech[ps] ? ` (${stamm.partOfSpeech[ps]})` : "";
+      const ps = data.fv[wort].ps;
+      const ausgeschrieben = stamm.partOfSpeech[ps] ? ` (${stamm.partOfSpeech[ps]})` : "";
       p.appendChild(document.createTextNode(ps + ausgeschrieben));
     } else {
-      let span = document.createElement("span");
+      const span = document.createElement("span");
       p.appendChild(span);
       span.textContent = "Wortart unbekannt";
     }
     // Link zum DTA
     p = document.createElement("p");
     popup.appendChild(p);
-    let icon = document.createElement("img");
+    const icon = document.createElement("img");
     p.appendChild(icon);
     icon.src = "img/kreis-welt.svg";
     icon.width = "24";
     icon.height = "24";
-    let link = document.createElement("a");
+    const link = document.createElement("a");
     p.appendChild(link);
     link.classList.add("link");
     link.href = `https://www.deutschestextarchiv.de/demo/cab/query?a=expand.eqlemma&fmt=text&clean=1&pretty=1&raw=1&q=${encodeURIComponent(wort)}`;
@@ -260,7 +260,7 @@ let stamm = {
     helfer.externeLinks(link);
     // Checkbox: aktivieren
     let an = 0;
-    for (let w in data.fv) {
+    for (const w in data.fv) {
       // mindestens ein Wort muss aktiviert sein; sonst darf dieses Wort nicht deaktiviert werden;
       // ist derzeit mehr als ein Wort aktiviert?
       if (!data.fv.hasOwnProperty(w)) {
@@ -271,7 +271,7 @@ let stamm = {
       }
     }
     if (an > 1 || an === 1 && !data.fv[wort].an) {
-      let check = stamm.kopfKonfigMakeCheckbox({
+      const check = stamm.kopfKonfigMakeCheckbox({
         wort,
         ds: "an",
         text: "aktivieren",
@@ -307,7 +307,7 @@ let stamm = {
       if (i > 0 && i % 6 === 0) {
         p.appendChild(document.createElement("br"));
       }
-      let span = document.createElement("span");
+      const span = document.createElement("span");
       p.appendChild(span);
       span.classList.add("farbe", `wortFarbe${i}`);
       span.dataset.farbe = i;
@@ -318,14 +318,14 @@ let stamm = {
     p = document.createElement("p");
     popup.appendChild(p);
     p.classList.add("stamm-popup-buttons");
-    let button = document.createElement("input");
+    const button = document.createElement("input");
     p.appendChild(button);
     button.type = "button";
     button.value = "DTA-Import";
     stamm.kopfKonfigImport(button);
     // Button: löschen
     if (Object.keys(data.fv).length > 1) {
-      let button = document.createElement("input");
+      const button = document.createElement("input");
       p.appendChild(button);
       button.type = "button";
       button.value = "Löschen";
@@ -337,7 +337,7 @@ let stamm = {
 
   // Konfigurations-Popup entfernen, wenn es existiert
   kopfKonfigSchliessen () {
-    let popup = document.getElementById("stamm-popup");
+    const popup = document.getElementById("stamm-popup");
     if (popup) {
       popup.parentNode.removeChild(popup);
     }
@@ -350,10 +350,10 @@ let stamm = {
   //     (der Datensatz, der betroffen ist)
   //   text = String
   //     (der Text für das Label)
-  kopfKonfigMakeCheckbox ({wort, ds, text}) {
-    let p = document.createElement("p");
+  kopfKonfigMakeCheckbox ({ wort, ds, text }) {
+    const p = document.createElement("p");
     // Checkbox erzeugen
-    let input = document.createElement("input");
+    const input = document.createElement("input");
     p.appendChild(input);
     input.dataset.ds = ds;
     input.id = `stamm-popup-checkbox-${ds}`;
@@ -363,7 +363,7 @@ let stamm = {
     }
     stamm.kopfKonfigCheckbox(input);
     // Label erzeugen
-    let label = document.createElement("label");
+    const label = document.createElement("label");
     p.appendChild(label);
     label.setAttribute("for", `stamm-popup-checkbox-${ds}`);
     label.textContent = text;
@@ -375,8 +375,8 @@ let stamm = {
   //   span = Element
   //     (das Quadrat, mit dem die Farbe ausgewählt wird)
   kopfKonfigFarbe (span) {
-    span.addEventListener("click", function() {
-      let aktiv = this.parentNode.querySelector(".aktiv");
+    span.addEventListener("click", function () {
+      const aktiv = this.parentNode.querySelector(".aktiv");
       // Ist das Element schon aktiviert?
       if (aktiv === this) {
         return;
@@ -398,12 +398,12 @@ let stamm = {
   //   input = Element
   //     (die Checkbox im Konfigurations-Popup, die angeklickt wurde)
   kopfKonfigCheckbox (input) {
-    input.addEventListener("click", function() {
+    input.addEventListener("click", function () {
       // Änderungsmarkierung setzen
       stamm.geaendert = true;
       // Eintrag in Datenobjekt auffrischen
-      const ds = this.dataset.ds,
-        span = this.closest("[data-wort]");
+      const ds = this.dataset.ds;
+      const span = this.closest("[data-wort]");
       data.fv[span.dataset.wort][ds] = this.checked;
       // Icons auffrischen
       stamm.kopfIcons(span);
@@ -423,7 +423,7 @@ let stamm = {
     // Wort ermitteln
     const wort = span.dataset.wort;
     // Textelement, vor dem die Images stehen sollen, zwischenspeichern
-    let text = span.firstChild;
+    const text = span.firstChild;
     // aktivieren
     if (data.fv[wort].an) {
       span.insertBefore(stamm.kopfMakeIcon("check-gruen.svg"), text);
@@ -448,7 +448,7 @@ let stamm = {
   //   src = String
   //     (Dateiname des Icons)
   kopfMakeIcon (src) {
-    let img = document.createElement("img");
+    const img = document.createElement("img");
     img.classList.add("stamm-kopf-icon");
     img.src = `img/${src}`;
     img.width = "24";
@@ -470,7 +470,7 @@ let stamm = {
           }
           // Sperrbildschirm anzeigen und kurz warten
           document.activeElement.blur();
-          let sperre = stamm.sperre(document.getElementById("stamm-popup"));
+          const sperre = stamm.sperre(document.getElementById("stamm-popup"));
           await new Promise(resolve => setTimeout(() => resolve(true), 250));
           // Request stellen
           const request = await stamm.dtaRequest(stamm.wortAkt, true);
@@ -510,7 +510,7 @@ let stamm = {
           delete data.fv[stamm.wortAkt];
           // ist kein Wort mehr aktiv => erstes Wort aktivieren
           let an = 0;
-          for (let w in data.fv) {
+          for (const w in data.fv) {
             // mindestens ein Wort muss aktiviert sein;
             // ist derzeit mehr als ein Wort aktiviert?
             if (!data.fv.hasOwnProperty(w)) {
@@ -521,7 +521,7 @@ let stamm = {
             }
           }
           if (!an) {
-            let erstesWort = Object.keys(data.fv)[0];
+            const erstesWort = Object.keys(data.fv)[0];
             data.fv[erstesWort].an = true;
           }
           // Kopf und Liste neu aufbauen
@@ -537,17 +537,17 @@ let stamm = {
 
   // Liste der Formvarianten des aktuellen Worts aufbauen
   auflisten () {
-    let cont = document.getElementById("stamm-liste");
+    const cont = document.getElementById("stamm-liste");
     cont.replaceChildren();
     // Einträge auflisten
-    let fo = data.fv[stamm.wortAkt].fo;
+    const fo = data.fv[stamm.wortAkt].fo;
     for (let i = 1, len = fo.length; i < len; i++) {
       // der erste Eintrag ist immer das Wort, wie es eingetragen wurde (allerdings lower case)
       // => diesen Eintrag nicht anzeigen, damit er nicht gelöscht wird
-      let p = document.createElement("p");
+      const p = document.createElement("p");
       cont.appendChild(p);
       // Lösch-Link
-      let a = document.createElement("a");
+      const a = document.createElement("a");
       a.href = "#";
       a.classList.add("icon-link", "icon-entfernen");
       a.dataset.fv = fo[i].va;
@@ -557,7 +557,7 @@ let stamm = {
       p.appendChild(document.createTextNode(fo[i].va));
       // Variante aus dem DTA?
       if (fo[i].qu === "dta") {
-        let span = document.createElement("span");
+        const span = document.createElement("span");
         span.classList.add("dta");
         span.textContent = "DTA";
         span.title = "aus dem DTA importierte Formvariante";
@@ -567,7 +567,7 @@ let stamm = {
     tooltip.init(cont);
     // keine Varianten vorhanden
     if (!cont.hasChildNodes()) {
-      let p = document.createElement("p");
+      const p = document.createElement("p");
       cont.appendChild(p);
       p.classList.add("keine");
       p.textContent = "keine Formvarianten";
@@ -576,10 +576,10 @@ let stamm = {
 
   // Verteilerfunktion für den Ergänzungs-Button
   ergaenzen () {
-    const variante = document.getElementById("stamm-ergaenzen-variante").checked,
-      text = variante ? "keine Variante" : "kein Wort";
-    let st = document.getElementById("stamm-text"),
-      va = helfer.textTrim(st.value, true);
+    const variante = document.getElementById("stamm-ergaenzen-variante").checked;
+    const text = variante ? "keine Variante" : "kein Wort";
+    const st = document.getElementById("stamm-text");
+    const va = helfer.textTrim(st.value, true);
     // Uppala! Keine Variante angegeben!
     if (!va) {
       dialog.oeffnen({
@@ -603,9 +603,9 @@ let stamm = {
   //     (der bereits getrimmte Text im Textfeld)
   ergaenzenVariante (va) {
     // Varianten ergänzen, schon vorhandene übergehen
-    let fo = data.fv[stamm.wortAkt].fo,
-      varianten = [],
-      schon = [];
+    const fo = data.fv[stamm.wortAkt].fo;
+    const varianten = [];
+    const schon = [];
     va = va.replace(/"(.+)"/, (m, p1) => {
       varianten.push(p1);
       return "";
@@ -627,11 +627,13 @@ let stamm = {
       });
     });
     if (schon.length) {
-      let numerus = ["Variante", "ist"];
+      let numerus = [ "Variante", "ist" ];
       if (schon.length > 1) {
-        numerus = ["Varianten", "sind"];
+        numerus = [ "Varianten", "sind" ];
       }
-      schon.forEach((i, n) => schon[n] = `<i>${i}</i>`);
+      schon.forEach((i, n) => {
+        schon[n] = `<i>${i}</i>`;
+      });
       const schonJoined = schon.join(", ").replace(/(.+)(,\s)/, (m, p1) => `${p1} und `);
       dialog.oeffnen({
         typ: "alert",
@@ -655,9 +657,9 @@ let stamm = {
   //     (der bereits getrimmte Text im Textfeld)
   async ergaenzenWort (va) {
     // ermitteln, welche Wörter importiert werden sollen
-    let woerter = stamm.dtaPrepParole(va),
-      schon = [],
-      importieren = [];
+    const woerter = stamm.dtaPrepParole(va);
+    const schon = [];
+    const importieren = [];
     woerter.forEach(w => {
       if (!w) {
         return;
@@ -675,15 +677,17 @@ let stamm = {
       sperre = stamm.sperre(document.getElementById("stamm-cont"));
       await new Promise(resolve => setTimeout(() => resolve(true), 250));
       // Promises erzeugen
-      let promises = [];
+      const promises = [];
       importieren.forEach(w => {
         data.fv[w] = {
           an: true,
           fa: 0,
-          fo: [{
-            qu: "zt",
-            va: w.toLowerCase(),
-          }],
+          fo: [
+            {
+              qu: "zt",
+              va: w.toLowerCase(),
+            },
+          ],
           ma: false,
           ps: "",
           tr: true,
@@ -698,13 +702,15 @@ let stamm = {
     }
     // Rückmeldung, falls Wörter nicht importiert wurden
     if (schon.length) {
-      let numerus = ["Das Wort", "ist"];
+      let numerus = [ "Das Wort", "ist" ];
       if (schon.length > 1) {
-        numerus = ["Die Wörter", "sind"];
+        numerus = [ "Die Wörter", "sind" ];
       }
-      schon.forEach((i, n) => schon[n] = `<i>${i}</i>`);
-      const schonJoined = schon.join(", ").replace(/(.+)(,\s)/, (m, p1) => `${p1} und `),
-        schonAlle = schon.length === woerter.length ? "\nEs wurde kein Wort ergänzt." : "";
+      schon.forEach((i, n) => {
+        schon[n] = `<i>${i}</i>`;
+      });
+      const schonJoined = schon.join(", ").replace(/(.+)(,\s)/, (m, p1) => `${p1} und `);
+      const schonAlle = schon.length === woerter.length ? "\nEs wurde kein Wort ergänzt." : "";
       dialog.oeffnen({
         typ: "alert",
         text: `${numerus[0]} ${schonJoined} ${numerus[1]} schon aufgenommen.${schonAlle}`,
@@ -722,7 +728,7 @@ let stamm = {
     stamm.ergaenzenAbschluss();
     // importiertes Wort (bei mehreren das letzte) auswählen
     if (importieren.length) {
-      let neuesWort = document.querySelector(`#stamm-kopf [data-wort="${importieren[importieren.length - 1]}"]`);
+      const neuesWort = document.querySelector(`#stamm-kopf [data-wort="${importieren[importieren.length - 1]}"]`);
       neuesWort.dispatchEvent(new Event("click"));
     }
   },
@@ -761,9 +767,9 @@ let stamm = {
         return 1;
       }
       // Varianten derselben Kategorie alphabetisch sortieren
-      let x = helfer.sortAlphaPrep(a.va),
-        y = helfer.sortAlphaPrep(b.va),
-        z = [x, y];
+      const x = helfer.sortAlphaPrep(a.va);
+      const y = helfer.sortAlphaPrep(b.va);
+      const z = [ x, y ];
       z.sort();
       if (z[0] === x) {
         return -1;
@@ -776,14 +782,14 @@ let stamm = {
   //   a = Element
   //     (der Entfernen-Link vor der betreffenden Formvariante)
   entfernen (a) {
-    a.addEventListener("click", function(evt) {
+    a.addEventListener("click", function (evt) {
       evt.preventDefault();
       // Änderungsmarkierung setzen
       stamm.geaendert = true;
       // Index ermitteln
-      let fo = data.fv[stamm.wortAkt].fo;
-      const fv = this.dataset.fv,
-        idx = fo.findIndex(i => i.va === fv);
+      const fo = data.fv[stamm.wortAkt].fo;
+      const fv = this.dataset.fv;
+      const idx = fo.findIndex(i => i.va === fv);
       // Löschen
       fo.splice(idx, 1);
       // neu auflisten
@@ -800,7 +806,7 @@ let stamm = {
   //   button = Element
   //     (Button im Formvarianten-Fenster)
   aktionButton (button) {
-    button.addEventListener("click", function() {
+    button.addEventListener("click", function () {
       if (this.id === "stamm-ergaenzen") {
         stamm.ergaenzen();
       } else if (this.id === "stamm-dta") {
@@ -813,9 +819,9 @@ let stamm = {
               return;
             }
             // Wurden manuell Wörter ergänzt? Wenn ja => auch diese müssen aufgefrischt werden
-            let str = kartei.wort,
-              woerter = stamm.dtaPrepParole(kartei.wort);
-            for (let wort in data.fv) {
+            let str = kartei.wort;
+            const woerter = stamm.dtaPrepParole(kartei.wort);
+            for (const wort in data.fv) {
               if (!data.fv.hasOwnProperty(wort)) {
                 continue;
               }
@@ -835,8 +841,8 @@ let stamm = {
   //   input = Element
   //     (der Radio-Button, der geändert wurde)
   aktionRadio (input) {
-    input.addEventListener("change", function() {
-      let st = document.getElementById("stamm-text");
+    input.addEventListener("change", function () {
+      const st = document.getElementById("stamm-text");
       st.setAttribute("placeholder", this.value);
       st.select();
     });
@@ -846,7 +852,7 @@ let stamm = {
   //   input = Element
   //     (Textfeld zum Ergänzen einer Formvariante bzw. eines Worts)
   aktionText (input) {
-    input.addEventListener("keydown", function(evt) {
+    input.addEventListener("keydown", function (evt) {
       tastatur.detectModifiers(evt);
       if (!tastatur.modifiers && evt.key === "Enter") {
         evt.preventDefault();
@@ -870,8 +876,8 @@ let stamm = {
       await new Promise(resolve => setTimeout(() => resolve(true), 250));
     }
     // Objekte anlegen
-    let woerter = stamm.dtaPrepParole(str);
-    for (let wort of woerter) {
+    const woerter = stamm.dtaPrepParole(str);
+    for (const wort of woerter) {
       if (data.fv[wort]) {
         // die Objekte sollten nicht überschrieben werden,
         // wenn alle Varianten auf Wunsch des Users noch einmal geladen werden;
@@ -881,10 +887,12 @@ let stamm = {
       data.fv[wort] = {
         an: true,
         fa: 0,
-        fo: [{
-          qu: "zt",
-          va: wort.toLowerCase(),
-        }],
+        fo: [
+          {
+            qu: "zt",
+            va: wort.toLowerCase(),
+          },
+        ],
         ma: false,
         ps: "",
         tr: true,
@@ -913,9 +921,9 @@ let stamm = {
   //   str = String
   //     (enthält das Wort oder die Wörter)
   dtaPrepParole (str) {
-    let woerter = new Set();
+    const woerter = new Set();
     for (const w of str.split(/(?<=[0-9a-zäöü])\/(?=[0-9a-zäöü])/i)) {
-      let wort = w.replace(/[([{<](.+?)[)\]}>]/g, m => "");
+      let wort = w.replace(/[([{<](.+?)[)\]}>]/g, () => "");
       wort = wort.replace(/[!?.:,;§$%&/\\=*+~#()[\]{}<>¹²³⁴⁵⁶⁷⁸⁹⁰]+/g, "");
       wort = helfer.textTrim(wort, true);
       wort = wort.replace(/"(.+)"/, (m, p1) => {
@@ -929,7 +937,7 @@ let stamm = {
         }
       });
     }
-    return [...woerter];
+    return [ ...woerter ];
   },
 
   // Request an das DTA schicken, um an die Formvarianten zu kommen
@@ -940,7 +948,7 @@ let stamm = {
   //     (der Download der Varianten wurde bewusst angestoßen => ggf. Fehlermeldungen anzeigen)
   dtaRequest (wort, aktiv) {
     return new Promise(resolve => {
-      let ajax = new XMLHttpRequest();
+      const ajax = new XMLHttpRequest();
       ajax.open("GET", `https://www.deutschestextarchiv.de/demo/cab/query?a=expand.eqlemma&fmt=json&clean=1&q=${encodeURIComponent(wort)}`, true);
       ajax.timeout = parseInt(optionen.data.einstellungen.timeout, 10) * 1000;
       ajax.addEventListener("load", function () {
@@ -989,7 +997,7 @@ let stamm = {
       }
       dialog.oeffnen({
         typ: "alert",
-        text: text,
+        text,
       });
     }
   },
@@ -1000,11 +1008,11 @@ let stamm = {
   //   aktiv = Boolean
   //     (das Laden der Lemmaliste wurde von der NutzerIn angestoßen)
   dtaPush (json, aktiv) {
-    let fehler = [];
-    for (let token of json.body[0].tokens) {
+    const fehler = [];
+    for (const token of json.body[0].tokens) {
       // Wort ermitteln
-      const wort = token.text,
-        wortLower = wort.toLowerCase();
+      const wort = token.text;
+      const wortLower = wort.toLowerCase();
       // Abbruch, wenn dieses Token uninteressant ist
       if (!data.fv[wort]) {
         continue;
@@ -1015,7 +1023,7 @@ let stamm = {
       }
       // ein eindimensionales Array mit allen Varianten erzeugen
       let varianten = [];
-      for (let i of token.eqlemma) {
+      for (const i of token.eqlemma) {
         if (helfer.checkType("Object", i) && i.hi) {
           varianten.push(i.hi.toLowerCase());
         } else if (helfer.checkType("String", i)) {
@@ -1030,7 +1038,7 @@ let stamm = {
       }
       // doppelte Varianten eliminieren
       // (denn sie haben sich nur in Groß- und Kleinschreibung unterschieden)
-      varianten = [...new Set(varianten)];
+      varianten = [ ...new Set(varianten) ];
       // ggf. das Wort hinzufügen
       // (Kann durchaus vorkommen! Wichtig, damit die Eliminierung funktioniert;
       // das Wort wird später wieder entfernt, weil es immer an Position 0 des Arrays steht)
@@ -1039,10 +1047,10 @@ let stamm = {
       }
       // Varianten ermitteln, die kürzere Varianten enthalten
       // (diesen Reduktionsschritt nur durchführen, wenn das Wort trunkiert wird)
-      let ex = new Set();
+      const ex = new Set();
       if (data.fv[wort].tr) {
         for (let i = 0, len = varianten.length; i < len; i++) {
-          let variante = varianten[i];
+          const variante = varianten[i];
           for (let j = 0; j < len; j++) {
             if (j === i ||
                 varianten[j] === wortLower) {
@@ -1066,11 +1074,11 @@ let stamm = {
       }
       // alte, manuell hinzugefügte Varianten ermitteln, die nicht im DTA sind
       // (hier wird in jedem Fall auch das Wort gefunden, um das es geht)
-      let variantenZt = [];
+      const variantenZt = [];
       if (data.fv[wort]) {
-        for (let i of data.fv[wort].fo) {
-          if ( i.qu === "zt" &&
-              (i.va === wortLower || !varianten.includes(i.va)) ) {
+        for (const i of data.fv[wort].fo) {
+          if (i.qu === "zt" &&
+              (i.va === wortLower || !varianten.includes(i.va))) {
             variantenZt.push(i.va);
           }
         }
@@ -1123,10 +1131,10 @@ let stamm = {
   //   cont = Element
   //     (Container, in den der Bildschirm eingehängt werden soll)
   sperre (cont) {
-    let div = document.createElement("div");
+    const div = document.createElement("div");
     div.classList.add("rotieren-bitte");
     div.id = "stamm-sperre";
-    let img = document.createElement("img");
+    const img = document.createElement("img");
     div.appendChild(img);
     img.src = "img/pfeil-kreis-blau-96.svg";
     img.width = "96";

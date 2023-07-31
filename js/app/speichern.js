@@ -1,6 +1,6 @@
 "use strict";
 
-let speichern = {
+const speichern = {
   // speichert, ob gerade eine Überprüfung läuft
   // (sonst bekomme ich wiederholte Aufrufe, die die Callback-Funktion überschreiben)
   checkAktiv: false,
@@ -33,7 +33,7 @@ let speichern = {
       beleg: true,
       kartei: false,
     };
-    for (let i in scope) {
+    for (const i in scope) {
       if (!scope.hasOwnProperty(i)) {
         continue;
       }
@@ -79,7 +79,7 @@ let speichern = {
         // Fenster nach oben holen
         overlay.oeffnen(document.getElementById("red-lit"));
         // Sicherheitsfrage triggern
-        redLit.dbCheck(() => {});
+        redLit.dbCheck();
       }, 200); // die Zeit braucht der Dialog, um ausgeblendet zu werden
       return;
     } else if (speichern.checkScope.tagger && tagger.geaendert) {
@@ -100,7 +100,7 @@ let speichern = {
             speichern.checkAktiv = false;
             setTimeout(() => {
               if (overlay.oben() === "tagger") {
-                let feld = document.querySelector("#tagger-typen .dropdown-feld");
+                const feld = document.querySelector("#tagger-typen .dropdown-feld");
                 if (feld) {
                   feld.focus();
                 }

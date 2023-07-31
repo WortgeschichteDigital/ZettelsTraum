@@ -1,6 +1,6 @@
 "use strict";
 
-let redMeta = {
+const redMeta = {
   // Metdatenfenster einblenden
   oeffnen () {
     // Sperre für macOS (Menüpunkte können nicht deaktiviert werden)
@@ -12,7 +12,7 @@ let redMeta = {
       return;
     }
     // Fenster öffnen oder in den Vordergrund holen
-    let fenster = document.getElementById("red-meta");
+    const fenster = document.getElementById("red-meta");
     if (overlay.oeffnen(fenster)) { // Fenster ist schon offen
       return;
     }
@@ -27,7 +27,7 @@ let redMeta = {
     redMeta.tags();
     // Liste der BearbeterInnen erstellen und das Textfeld leeren
     redMeta.bearbAuflisten();
-    let be = document.getElementById("red-meta-be");
+    const be = document.getElementById("red-meta-be");
     be.value = "";
     // Maximalhöhe des Fensters anpassen
     helfer.elementMaxHeight({
@@ -37,20 +37,20 @@ let redMeta = {
 
   // Tags auflisten
   tags () {
-    let tags = [ "sachgebiete", "stichwortplanung", "themenfelder" ];
-    let keys = {
+    const tags = [ "sachgebiete", "stichwortplanung", "themenfelder" ];
+    const keys = {
       sachgebiete: "sg",
       stichwortplanung: "sp",
       themenfelder: "tf",
     };
-    for (let tag of tags) {
-      let cont = document.getElementById(`red-meta-${tag}`),
-        arr = [],
-        tags = optionen.data.tags[tag],
-        name = tag.substring(0, 1).toUpperCase() + tag.substring(1),
-        del = []; // zu löschende Tags, die nicht mehr existieren
+    for (const tag of tags) {
+      const cont = document.getElementById(`red-meta-${tag}`);
+      const arr = [];
+      const tags = optionen.data.tags[tag];
+      const name = tag.substring(0, 1).toUpperCase() + tag.substring(1);
+      const del = []; // zu löschende Tags, die nicht mehr existieren
       if (tags) { // Tags vorhanden
-        for (let i of data.rd[keys[tag]]) {
+        for (const i of data.rd[keys[tag]]) {
           if (!tags.data[i.id]) { // Tag existiert nicht mehr
             del.push(i.id);
             continue;
@@ -84,8 +84,8 @@ let redMeta = {
   // Tags hinzufügen
   //   typ = String
   //     (Typ der Tag-Datei)
-  tagsAdd ({typ}) {
-    let tags = optionen.data.tags[typ];
+  tagsAdd ({ typ }) {
+    const tags = optionen.data.tags[typ];
     // keine Tag-Datei vorhanden
     if (!tags) {
       dialog.oeffnen({
@@ -96,17 +96,17 @@ let redMeta = {
       return;
     }
     // Tagger öffnen
-    tagger.limit = [typ];
+    tagger.limit = [ typ ];
     tagger.oeffnen(`red-meta-${typ}`);
   },
 
   // BearbeiterInnen des Zettels auflisten
   bearbAuflisten () {
-    let cont = document.getElementById("red-meta-be-liste");
+    const cont = document.getElementById("red-meta-be-liste");
     cont.replaceChildren();
     // keine BearbeiterInnen eingetragen
     if (!data.rd.be.length) {
-      let p = document.createElement("p");
+      const p = document.createElement("p");
       cont.appendChild(p);
       p.classList.add("kein-wert");
       p.textContent = "keine BearbeiterIn registriert";
@@ -114,10 +114,10 @@ let redMeta = {
     }
     // BearbeiterInnen auflisten
     for (let i = 0, len = data.rd.be.length; i < len; i++) {
-      let p = document.createElement("p");
+      const p = document.createElement("p");
       cont.appendChild(p);
       // Lösch-Link
-      let a = document.createElement("a");
+      const a = document.createElement("a");
       p.appendChild(a);
       a.href = "#";
       a.classList.add("icon-link", "icon-entfernen");
@@ -130,8 +130,8 @@ let redMeta = {
 
   // BearbeiterIn ergänzen
   bearbErgaenzen () {
-    let be = document.getElementById("red-meta-be"),
-      va = helfer.textTrim(be.value, true);
+    const be = document.getElementById("red-meta-be");
+    const va = helfer.textTrim(be.value, true);
     // Uppala! Keine BearbeiterIn angegeben!
     if (!va) {
       dialog.oeffnen({
@@ -165,10 +165,10 @@ let redMeta = {
   //   a = Element
   //     (Löschlink vor der Bearbeiterin)
   bearbEntfernen (a) {
-    a.addEventListener("click", function(evt) {
+    a.addEventListener("click", function (evt) {
       evt.preventDefault();
-      let bearb = this.dataset.bearb,
-        be = document.getElementById("red-meta-be");
+      const bearb = this.dataset.bearb;
+      const be = document.getElementById("red-meta-be");
       dialog.oeffnen({
         typ: "confirm",
         text: `Soll <i>${bearb}</i> wirklich aus der Liste entfernt werden?`,
@@ -194,7 +194,7 @@ let redMeta = {
 
   // Klick auf Button
   aktionButton (button) {
-    button.addEventListener("click", function() {
+    button.addEventListener("click", function () {
       redMeta.bearbErgaenzen();
     });
   },
@@ -208,7 +208,7 @@ let redMeta = {
   //     (das Textfeld)
   aktionText (input) {
     if (/red-meta-(nebenlemmata|behandelt-mit|notizen)/.test(input.id)) {
-      input.addEventListener("input", function() {
+      input.addEventListener("input", function () {
         const map = {
           "red-meta-nebenlemmata": "nl",
           "red-meta-behandelt-mit": "bh",
@@ -226,7 +226,7 @@ let redMeta = {
         }, 250);
       });
     } else if (input.id === "red-meta-be") {
-      input.addEventListener("keydown", function(evt) {
+      input.addEventListener("keydown", function (evt) {
         tastatur.detectModifiers(evt);
         if (!tastatur.modifiers && evt.key === "Enter") {
           evt.preventDefault();

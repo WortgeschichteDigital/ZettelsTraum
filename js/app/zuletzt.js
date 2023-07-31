@@ -1,9 +1,9 @@
 "use strict";
 
-let zuletzt = {
+const zuletzt = {
   // baut die Liste auf
   aufbauen () {
-    let cont = document.getElementById("start-zuletzt");
+    const cont = document.getElementById("start-zuletzt");
     // Dateiliste vorhanden?
     if (!optionen.data.zuletzt.length) {
       cont.classList.add("aus");
@@ -11,14 +11,14 @@ let zuletzt = {
     }
     cont.classList.remove("aus");
     // Dateiliste leeren
-    let liste = document.getElementById("start-liste");
+    const liste = document.getElementById("start-liste");
     liste.replaceChildren();
     // Dateiliste aufbauen
     for (let i = 0, len = optionen.data.zuletzt.length; i < len; i++) {
-      let datei = optionen.data.zuletzt[i],
-        name = datei.match(/([^\/\\]+)\.[a-z]+$/)[1],
-        li = document.createElement("li"),
-        a = document.createElement("a");
+      const datei = optionen.data.zuletzt[i];
+      const name = datei.match(/([^/\\]+)\.[a-z]+$/)[1];
+      const li = document.createElement("li");
+      const a = document.createElement("a");
       a.href = "#";
       a.classList.add("start-datei"); // dient zur Identifizierung für Rechtsklicks
       a.dataset.datei = datei;
@@ -56,7 +56,7 @@ let zuletzt = {
   //   a = Element
   //     (Link zur Datei, die geöffent werden soll)
   karteiOeffnen (a) {
-    a.addEventListener("click", function(evt) {
+    a.addEventListener("click", function (evt) {
       evt.preventDefault();
       if (evt.detail > 1) { // Doppelklicks abfangen
         return;
@@ -68,7 +68,7 @@ let zuletzt = {
   // Liste der zuletzt verwendeten Karteien ergänzen
   aendern () {
     // Datei ggf. entfernen (falls an einer anderen Stelle schon vorhanden)
-    let karteien = optionen.data.zuletzt;
+    const karteien = optionen.data.zuletzt;
     if (karteien.includes(kartei.pfad)) {
       karteien.splice(karteien.indexOf(kartei.pfad), 1);
     }
@@ -102,7 +102,7 @@ let zuletzt = {
   verschwundenUpdate (verschwunden) {
     zuletzt.verschwunden = verschwunden;
     document.querySelectorAll("#start-liste a").forEach(i => {
-      let datei = i.dataset.datei;
+      const datei = i.dataset.datei;
       if (verschwunden.includes(datei)) {
         i.appendChild(zuletzt.verschwundenImg());
       } else if (i.querySelector("img")) {
@@ -113,7 +113,7 @@ let zuletzt = {
 
   // erzeugt ein Image, das eine Kartei als verschwunden markiert
   verschwundenImg () {
-    let img = document.createElement("img");
+    const img = document.createElement("img");
     img.src = "img/x-dick-rot.svg";
     img.width = "24";
     img.height = "24";

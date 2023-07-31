@@ -1,6 +1,6 @@
 "use strict";
 
-let suchleiste = {
+const suchleiste = {
   // speichert, ob die Suchleiste gerade sichtbar ist oder nicht
   aktiv: false,
 
@@ -13,9 +13,9 @@ let suchleiste = {
     // zwischenspeichern, dass die Leiste aktiv ist
     suchleiste.aktiv = true;
     // Leiste einblenden und fokussieren
-    setTimeout(function() {
+    setTimeout(function () {
       // ohne Timeout kommt nach dem Erzeugen der Leiste keine Animation
-      let leiste = document.getElementById("suchleiste");
+      const leiste = document.getElementById("suchleiste");
       leiste.classList.add("an");
       leiste.firstChild.select();
       if (winInfo.typ === "changelog") {
@@ -36,7 +36,7 @@ let suchleiste = {
   //   a = Element
   //     (der Schließen-Link in der Suchleiste)
   ausblendenListener (a) {
-    a.addEventListener("click", function(evt) {
+    a.addEventListener("click", function (evt) {
       evt.preventDefault();
       suchleiste.ausblenden();
     });
@@ -46,11 +46,11 @@ let suchleiste = {
   ausblenden () {
     suchleiste.aktiv = false;
     suchleiste.suchenReset();
-    let leiste = document.getElementById("suchleiste");
+    const leiste = document.getElementById("suchleiste");
     leiste.firstChild.blur();
     leiste.firstChild.value = "";
     leiste.classList.remove("an");
-    let padding = document.querySelector(".padding-suchleiste");
+    const padding = document.querySelector(".padding-suchleiste");
     if (padding) {
       padding.classList.remove("padding-suchleiste");
     }
@@ -58,7 +58,7 @@ let suchleiste = {
 
   // HTML der Suchleiste aufbauen
   make () {
-    let div = document.createElement("div");
+    const div = document.createElement("div");
     document.querySelector("body").appendChild(div);
     div.id = "suchleiste";
     // Text-Input
@@ -70,7 +70,7 @@ let suchleiste = {
     input.id = "suchleiste-text";
     suchleiste.suchenListener(input);
     // Pfeile
-    let pfeile = [
+    const pfeile = [
       {
         typ: "hoch",
         text: "vorherigen",
@@ -82,13 +82,13 @@ let suchleiste = {
         short: "F3",
       },
     ];
-    for (let pfeil of pfeile) {
-      let a = document.createElement("a");
+    for (const pfeil of pfeile) {
+      const a = document.createElement("a");
       div.appendChild(a);
       a.classList.add("icon-link", `icon-${pfeil.typ}`);
       a.href = "#";
       a.id = `suchleiste-${pfeil.typ}`;
-      a.textContent = " ";
+      a.textContent = "\u00A0";
       a.title = `zum ${pfeil.text} Treffer (${pfeil.short})`;
       suchleiste.naviListener(a);
     }
@@ -97,20 +97,20 @@ let suchleiste = {
     div.appendChild(input);
     input.type = "checkbox";
     input.id = "suchleiste-genaue";
-    input.addEventListener("change", function() {
+    input.addEventListener("change", function () {
       suchleiste.suchenZuletzt = "";
     });
-    let label = document.createElement("label");
+    const label = document.createElement("label");
     div.appendChild(label);
     label.setAttribute("for", "suchleiste-genaue");
     label.textContent = "genaue Schreibung";
     // Schließen
-    let a = document.createElement("a");
+    const a = document.createElement("a");
     div.appendChild(a);
     a.classList.add("icon-link", "icon-schliessen");
     a.href = "#";
     a.id = "suchleiste-schliessen";
-    a.textContent = " ";
+    a.textContent = "\u00A0";
     a.title = "Suchleiste schließen (Esc)";
     suchleiste.ausblendenListener(a);
     // Tooltips initialisieren
@@ -121,13 +121,13 @@ let suchleiste = {
   //   input = Element
   //     (der Text-Input der Suchleiste)
   suchenListener (input) {
-    input.addEventListener("keydown", function(evt) {
+    input.addEventListener("keydown", function (evt) {
       tastatur.detectModifiers(evt);
       if (!tastatur.modifiers && evt.key === "Enter") {
         suchleiste.suchen();
       }
     });
-    input.addEventListener("focus", function() {
+    input.addEventListener("focus", function () {
       this.select();
     });
   },
@@ -140,8 +140,8 @@ let suchleiste = {
   //     (die Suchergebnisse sollen nur neu aufgebaut werden, sonst nichts)
   suchen (neuaufbau = false) {
     // Suchtext vorhanden?
-    let text = document.getElementById("suchleiste-text").value,
-      textMitSpitz = helfer.textTrim(text, true);
+    let text = document.getElementById("suchleiste-text").value;
+    const textMitSpitz = helfer.textTrim(text, true);
     text = helfer.textTrim(text.replace(/</g, "&lt;").replace(/>/g, "&gt;"), true);
     if (!text) {
       if (neuaufbau) {
@@ -181,10 +181,10 @@ let suchleiste = {
         e = document.querySelectorAll(".liste-kopf > span, .liste-details");
       }
     }
-    let genaue = document.getElementById("suchleiste-genaue").checked ? "" : "i",
-      reg = new RegExp(helfer.formVariSonderzeichen(helfer.escapeRegExp(textMitSpitz)).replace(/\s/g, "\\s"), genaue),
-      treffer = new Set();
-    for (let i of e) {
+    const genaue = document.getElementById("suchleiste-genaue").checked ? "" : "i";
+    const reg = new RegExp(helfer.formVariSonderzeichen(helfer.escapeRegExp(textMitSpitz)).replace(/\s/g, "\\s"), genaue);
+    const treffer = new Set();
+    for (const i of e) {
       if (reg.test(i.innerText)) {
         treffer.add(i);
       }
@@ -204,9 +204,9 @@ let suchleiste = {
       textKomplex += helfer.escapeRegExp(text.charAt(i));
     }
     textKomplex = helfer.formVariSonderzeichen(textKomplex).replace(/\s/g, "(&nbsp;|\\s)");
-    let regKomplex = new RegExp(textKomplex, "g" + genaue);
+    const regKomplex = new RegExp(textKomplex, "g" + genaue);
     // Text hervorheben
-    for (let t of treffer) {
+    for (const t of treffer) {
       t.innerHTML = helfer.suchtrefferBereinigen(t.innerHTML.replace(regKomplex, setzenMark), "suchleiste");
       suchleiste.suchenEventsWiederherstellen(t);
     }
@@ -219,7 +219,7 @@ let suchleiste = {
     // die Suchtreffer schön aneinanderzuhängen, sodass sie wie ein Element aussehen)
     function setzenMark (m) {
       if (/<.+?>/.test(m)) {
-        m = m.replace(/<.+?>/g, function(m) {
+        m = m.replace(/<.+?>/g, function (m) {
           return `</mark>${m}<mark class="suchleiste">`;
         });
       }
@@ -230,15 +230,15 @@ let suchleiste = {
       // alle <mark> ermitteln, die weder Anfang noch Ende sind
       const marks = m.match(/class="suchleiste"/g).length;
       if (marks > 1) { // marks === 1 => der einzige <mark>-Tag ist Anfang und Ende zugleich
-        let splitted = m.split(/class="suchleiste"/);
+        const splitted = m.split(/class="suchleiste"/);
         m = "";
         for (let i = 0, len = splitted.length; i < len; i++) {
           if (i === 0) {
-            m += splitted[i] + `class="suchleiste suchleiste-kein-ende"`;
+            m += splitted[i] + 'class="suchleiste suchleiste-kein-ende"';
           } else if (i === len - 2) {
-            m += splitted[i] + `class="suchleiste suchleiste-kein-start"`;
+            m += splitted[i] + 'class="suchleiste suchleiste-kein-start"';
           } else if (i < len - 1) {
-            m += splitted[i] + `class="suchleiste suchleiste-kein-start suchleiste-kein-ende"`;
+            m += splitted[i] + 'class="suchleiste suchleiste-kein-start suchleiste-kein-ende"';
           } else {
             m += splitted[i];
           }
@@ -254,11 +254,11 @@ let suchleiste = {
     // zuletzt gesuchten Text zurücksetzen
     suchleiste.suchenZuletzt = "";
     // alte Suchtreffer entfernen
-    let knoten = new Set();
-    document.querySelectorAll(".suchleiste").forEach(function(i) {
+    const knoten = new Set();
+    document.querySelectorAll(".suchleiste").forEach(function (i) {
       knoten.add(i.parentNode);
     });
-    for (let k of knoten) {
+    for (const k of knoten) {
       k.innerHTML = k.innerHTML.replace(/<mark[^<]+suchleiste[^<]+>(.+?)<\/mark>/g, ersetzenMark);
       suchleiste.suchenEventsWiederherstellen(k);
     }
@@ -273,22 +273,22 @@ let suchleiste = {
   //     hier sollen Events ggf. wiederhergestellt werden)
   suchenEventsWiederherstellen (ele) {
     // Über App öffnen (Changelog, Dokumentation und Handbuch)
-    ele.querySelectorAll(".ueber-app").forEach(function(i) {
-      i.addEventListener("click", function(evt) {
+    ele.querySelectorAll(".ueber-app").forEach(function (i) {
+      i.addEventListener("click", function (evt) {
         evt.preventDefault();
         modules.ipc.send("ueber-app");
       });
     });
     // Über Electron öffnen (Changelog, Dokumentation und Handbuch)
-    ele.querySelectorAll(".ueber-electron").forEach(function(i) {
-      i.addEventListener("click", function(evt) {
+    ele.querySelectorAll(".ueber-electron").forEach(function (i) {
+      i.addEventListener("click", function (evt) {
         evt.preventDefault();
         modules.ipc.send("ueber-electron");
       });
     });
     // Demonstrationskartei öffnen (Dokumentation, Handbuch)
-    ele.querySelectorAll(".hilfe-demo").forEach(function(i) {
-      i.addEventListener("click", function(evt) {
+    ele.querySelectorAll(".hilfe-demo").forEach(function (i) {
+      i.addEventListener("click", function (evt) {
         evt.preventDefault();
         modules.ipc.send("hilfe-demo");
       });
@@ -300,7 +300,7 @@ let suchleiste = {
     // Fehlerlog öffnen (Changelog, Handbuch)
     ele.querySelectorAll(".link-fehlerlog").forEach(a => helferWin.oeffneFehlerlog(a));
     // interne Sprung-Links (Dokumentation und Handbuch)
-    ele.querySelectorAll(`a[href^="#"]`).forEach(function(a) {
+    ele.querySelectorAll('a[href^="#"]').forEach(function (a) {
       if (typeof hilfe !== "undefined" &&
           /^#[a-z]/.test(a.getAttribute("href"))) {
         hilfe.naviSprung(a);
@@ -320,7 +320,7 @@ let suchleiste = {
       });
     });
     // externe Links
-    ele.querySelectorAll(`a[href^="http"]`).forEach(a => helfer.externeLinks(a));
+    ele.querySelectorAll('a[href^="http"]').forEach(a => helfer.externeLinks(a));
     // Kopierlinks in der Belegliste (Hauptfenster)
     if (ele.classList.contains("liste-details")) {
       ele.querySelectorAll(".icon-tools-kopieren").forEach(a => liste.kopieren(a));
@@ -329,17 +329,17 @@ let suchleiste = {
     ele.querySelectorAll(".gekuerzt").forEach(p => liste.belegAbsatzEinblenden(p));
     // Icon-Tools in der Karteikarte (Hauptfenster)
     if (winInfo.typ === "index" && helfer.hauptfunktion === "karte" && ele.nodeName === "TH") {
-      ele.querySelectorAll(`[class*="icon-tools-"]`).forEach(a => beleg.toolsKlick(a));
+      ele.querySelectorAll('[class*="icon-tools-"]').forEach(a => beleg.toolsKlick(a));
     }
     // Bedeutungsgerüst wechseln aus der Karteikarte (Hauptfenster)
-    ele.querySelectorAll(`[for="beleg-bd"]`).forEach(label => {
+    ele.querySelectorAll('[for="beleg-bd"]').forEach(label => {
       label.addEventListener("click", () => bedeutungenGeruest.oeffnen());
     });
     // Bedeutung-entfernen-Icon in der Karteikarte (Hauptfenster)
     ele.querySelectorAll(".icon-entfernen").forEach(a => beleg.leseBedeutungEx(a));
     // Annotierung (Hauptfenster)
-    ele.querySelectorAll("mark.wort, mark.user").forEach(function(i) {
-      i.addEventListener("click", function() {
+    ele.querySelectorAll("mark.wort, mark.user").forEach(function (i) {
+      i.addEventListener("click", function () {
         annotieren.mod(this);
       });
     });
@@ -350,10 +350,10 @@ let suchleiste = {
 
   // visualisieren, dass es keine Treffer gab
   suchenKeineTreffer () {
-    let input = document.getElementById("suchleiste-text");
+    const input = document.getElementById("suchleiste-text");
     input.classList.add("keine-treffer");
     clearTimeout(suchleiste.suchenKeineTrefferTimeout);
-    suchleiste.suchenKeineTrefferTimeout = setTimeout(function() {
+    suchleiste.suchenKeineTrefferTimeout = setTimeout(function () {
       input.classList.remove("keine-treffer");
     }, 1000);
   },
@@ -362,7 +362,7 @@ let suchleiste = {
   //   evt = Object
   //     (das Event-Objekt)
   f3 (evt) {
-    let leiste = document.getElementById("suchleiste");
+    const leiste = document.getElementById("suchleiste");
     if (!leiste || !leiste.classList.contains("an")) {
       suchleiste.einblenden();
       return;
@@ -379,10 +379,10 @@ let suchleiste = {
   //   a = Element
   //     (der Navigationslink)
   naviListener (a) {
-    a.addEventListener("click", function(evt) {
+    a.addEventListener("click", function (evt) {
       evt.preventDefault();
       let next = true;
-      if (/-hoch$/.test(this.id))  {
+      if (/-hoch$/.test(this.id)) {
         next = false;
       }
       suchleiste.navi(next);
@@ -393,15 +393,15 @@ let suchleiste = {
   //   next = Boolean
   //     (zum nächsten Treffer springen)
   navi (next) {
-    let marks = document.querySelectorAll(".suchleiste");
+    const marks = document.querySelectorAll(".suchleiste");
     // Navigation mit Pfeilen ggf. abfangen
     if (!marks.length) {
       suchleiste.suchenKeineTreffer();
       return;
     }
     // aktives Element vorhanden?
-    let pos = -1,
-      aktiv = document.querySelectorAll(".suchleiste-aktiv");
+    let pos = -1;
+    const aktiv = document.querySelectorAll(".suchleiste-aktiv");
     if (aktiv.length) {
       for (let i = 0, len = marks.length; i < len; i++) {
         if (marks[i] === aktiv[0]) {
@@ -416,8 +416,8 @@ let suchleiste = {
     // kein aktives Element vorhanden =>
     // ersten Suchtreffer finden, der der derzeitigen Fensterposition folgt
     if (!aktiv.length) {
-      let headerHeight = document.querySelector("body > header").offsetHeight,
-        quick = document.getElementById("quick");
+      let headerHeight = document.querySelector("body > header").offsetHeight;
+      const quick = document.getElementById("quick");
       if (quick) { // man ist im Hauptfenster
         if (quick.classList.contains("an")) {
           headerHeight += quick.offsetHeight;
@@ -429,7 +429,7 @@ let suchleiste = {
         }
       }
       for (let i = 0, len = marks.length; i < len; i++) {
-        let rect = marks[i].getBoundingClientRect();
+        const rect = marks[i].getBoundingClientRect();
         if (rect.top >= headerHeight) {
           pos = i > 0 ? i - 1 : -1;
           break;
@@ -453,7 +453,7 @@ let suchleiste = {
     // aktive(s) Element(e) hervorheben
     // (wird über Tag-Grenzen hinweg gesucht, können mehrere Elemente am Stück aktiv sein)
     if (aktiv.length) {
-      document.querySelectorAll(".suchleiste-aktiv").forEach(function(i) {
+      document.querySelectorAll(".suchleiste-aktiv").forEach(function (i) {
         i.classList.remove("suchleiste-aktiv");
       });
     }
@@ -461,7 +461,7 @@ let suchleiste = {
     // ggf. direkt anhängende Elemente auch noch hervorheben
     if (marks[pos].classList.contains("suchleiste-kein-ende")) {
       for (let i = pos + 1, len = marks.length; i < len; i++) {
-        let m = marks[i];
+        const m = marks[i];
         if (m.classList.contains("suchleiste-kein-start") &&
             !m.classList.contains("suchleiste-kein-ende")) {
           m.classList.add("suchleiste-aktiv");
@@ -471,13 +471,13 @@ let suchleiste = {
       }
     }
     // zum aktiven Element springen
-    const headerHeight = document.querySelector("header").offsetHeight,
-      suchleisteHeight = document.getElementById("suchleiste").offsetHeight;
-    let rect = marks[pos].getBoundingClientRect();
+    const headerHeight = document.querySelector("header").offsetHeight;
+    const suchleisteHeight = document.getElementById("suchleiste").offsetHeight;
+    const rect = marks[pos].getBoundingClientRect();
     if (winInfo.typ === "index") {
       if (helfer.hauptfunktion === "karte") { // Karteikarte
-        const kopf = document.getElementById("beleg").offsetTop,
-          header = document.querySelector("#beleg header").offsetHeight;
+        const kopf = document.getElementById("beleg").offsetTop;
+        const header = document.querySelector("#beleg header").offsetHeight;
         if (rect.top < kopf + header ||
             rect.top > window.innerHeight - suchleisteHeight - 24) {
           window.scrollTo({
@@ -487,8 +487,8 @@ let suchleiste = {
           });
         }
       } else { // Belegliste
-        const kopf = document.getElementById("liste").offsetTop,
-          listenkopf = document.querySelector("#liste-belege header").offsetHeight;
+        const kopf = document.getElementById("liste").offsetTop;
+        const listenkopf = document.querySelector("#liste-belege header").offsetHeight;
         if (rect.top < kopf + listenkopf ||
             rect.top > window.innerHeight - suchleisteHeight - 24) {
           window.scrollTo({
@@ -518,12 +518,12 @@ let suchleiste = {
   //     (das Tastatur-Event-Objekt)
   scrollen (evt) {
     // Ist die Leiste überhaupt an?
-    let leiste = document.getElementById("suchleiste");
+    const leiste = document.getElementById("suchleiste");
     if (!leiste || !leiste.classList.contains("an")) {
       return;
     }
     // Space nicht abfangen, wenn Fokus auf <input>, <textarea>, contenteditable
-    let aktiv = document.activeElement;
+    const aktiv = document.activeElement;
     if (evt.key === " " &&
         (/^(INPUT|TEXTAREA)$/.test(aktiv.nodeName) || aktiv.getAttribute("contenteditable"))) {
       return;
@@ -531,9 +531,9 @@ let suchleiste = {
     // die Leiste ist an => ich übernehme das Scrollen vom Browser
     evt.preventDefault();
     // Zielposition berechnen
-    const headerHeight = document.querySelector("header").offsetHeight,
-      suchleisteHeight = document.getElementById("suchleiste").offsetHeight,
-      quick = document.getElementById("quick");
+    const headerHeight = document.querySelector("header").offsetHeight;
+    const suchleisteHeight = document.getElementById("suchleiste").offsetHeight;
+    const quick = document.getElementById("quick");
     let indexPlus = 0; // zusätzliche Werte für das Hauptfenster (Fenstertyp "index")
     if (quick) {
       if (quick.classList.contains("an")) {
@@ -554,7 +554,7 @@ let suchleiste = {
     // scrollen
     window.scrollTo({
       left: 0,
-      top: top,
+      top,
       behavior: "smooth",
     });
   },

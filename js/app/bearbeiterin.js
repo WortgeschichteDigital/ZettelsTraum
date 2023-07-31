@@ -1,6 +1,6 @@
 "use strict";
 
-let bearbeiterin = {
+const bearbeiterin = {
   // Registrierungsfenster einblenden
   oeffnen () {
     // Fenster öffnen
@@ -18,8 +18,8 @@ let bearbeiterin = {
       return true;
     }
     // Überprüfung
-    const name = document.querySelector("#bearbeiterin-name"),
-      value = helfer.textTrim(name.value, true);
+    const name = document.querySelector("#bearbeiterin-name");
+    const value = helfer.textTrim(name.value, true);
     if (!value) {
       dialog.oeffnen({
         typ: "alert",

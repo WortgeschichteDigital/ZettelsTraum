@@ -1,6 +1,6 @@
 "use strict";
 
-let bedeutungenDrag = {
+const bedeutungenDrag = {
   // Zwischenspeicher für diverse Daten
   data: {
     // Höhe des Headers über dem Bedeutungsgerüst
@@ -28,22 +28,22 @@ let bedeutungenDrag = {
       }
       window.scrollTo({
         left: 0,
-        top: top,
+        top,
         behavior: "smooth",
       });
       return;
     }
     // Marker
-    let zeilen = document.querySelectorAll("#bedeutungen-cont tr");
+    const zeilen = document.querySelectorAll("#bedeutungen-cont tr");
     for (let i = 0, len = zeilen.length; i < len; i++) {
-      let rectAkt = zeilen[i].getBoundingClientRect();
+      const rectAkt = zeilen[i].getBoundingClientRect();
       if (y < rectAkt.top) {
         break;
       } else if (y >= rectAkt.top && y < rectAkt.top + rectAkt.height) {
         // Ebene ermitteln
-        let x = evt.clientX,
-          rectAktBd = zeilen[i].childNodes[3].getBoundingClientRect(),
-          ebene = 0;
+        const x = evt.clientX;
+        const rectAktBd = zeilen[i].childNodes[3].getBoundingClientRect();
+        let ebene = 0;
         if (x > rectAktBd.left + rectAktBd.width) {
           // Maus ist so weit rechts, dass sie außerhabl des Bedeutungsfeldes ist => Marker ausblenden
           bedeutungenDrag.data.ebene = 0; // damit der Marker beim langsamen bewegen nach links sofort wieder angezeigt wird
@@ -65,13 +65,13 @@ let bedeutungenDrag = {
         bedeutungenDrag.data.pos = i;
         bedeutungenDrag.data.ebene = ebene;
         // Marker positionieren
-        let marker = bedeutungenDrag.marker();
+        const marker = bedeutungenDrag.marker();
         marker.style.top = `${rectAkt.top - 3}px`; // 3px um den 6px hohen Marker zentral zwischen den Items zu positionieren
-        let td = zeilen[i].childNodes[3].getBoundingClientRect();
+        const td = zeilen[i].childNodes[3].getBoundingClientRect();
         marker.style.left = `${td.left + (ebene - 1) * 35}px`;
         marker.style.width = `${td.width - (ebene - 1) * 35}px`;
         marker.classList.remove("aus", "drag-unmovable");
-        let bdCont = document.getElementById("bedeutungen-cont");
+        const bdCont = document.getElementById("bedeutungen-cont");
         bdCont.classList.add("move");
         bdCont.classList.remove("no-drop");
         if (!bedeutungenDrag.movable()) {
@@ -90,7 +90,7 @@ let bedeutungenDrag = {
     if (document.getElementById("bedeutungen-drag-marker")) {
       return document.getElementById("bedeutungen-drag-marker");
     }
-    let div = document.createElement("div");
+    const div = document.createElement("div");
     document.body.appendChild(div);
     div.id = "bedeutungen-drag-marker";
     return div;
@@ -98,7 +98,7 @@ let bedeutungenDrag = {
 
   // Marker ausblenden
   markerAus () {
-    let marker = document.getElementById("bedeutungen-drag-marker");
+    const marker = document.getElementById("bedeutungen-drag-marker");
     if (marker) {
       marker.classList.add("aus");
       document.getElementById("bedeutungen-cont").classList.remove("move", "no-drop");
@@ -117,7 +117,7 @@ let bedeutungenDrag = {
       // Status des Gerüsts zurücksetzen entfernen
       document.getElementById("bedeutungen-cont").classList.remove("drag", "move", "no-drop");
       // Marker entfernen
-      let marker = document.getElementById("bedeutungen-drag-marker");
+      const marker = document.getElementById("bedeutungen-drag-marker");
       if (marker) { // es könnte sein, dass der Marker noch gar nicht initialisiert wurde
         document.body.removeChild(marker);
       }
@@ -126,39 +126,39 @@ let bedeutungenDrag = {
 
   // ermittelt, ob die gewünschte Bewegung erlaubt ist
   movable () {
-    let zeilen = document.querySelectorAll("#bedeutungen-cont tr"),
-      pos = bedeutungenDrag.data.pos,
-      ebeneZiel = bedeutungenDrag.data.ebene,
-      ebeneVor = pos - 1 > 0 ? bedeutungen.akt.bd[pos - 1].bd.length : 1,
-      ebeneNach = 0,
-      ebenePos = pos < zeilen.length - 1 ? bedeutungen.akt.bd[pos].bd.length : 0,
-      affizierte = document.querySelectorAll(".bedeutungen-affiziert");
+    const zeilen = document.querySelectorAll("#bedeutungen-cont tr");
+    const pos = bedeutungenDrag.data.pos;
+    const ebeneZiel = bedeutungenDrag.data.ebene;
+    const ebeneVor = pos - 1 > 0 ? bedeutungen.akt.bd[pos - 1].bd.length : 1;
+    let ebeneNach = 0;
+    const ebenePos = pos < zeilen.length - 1 ? bedeutungen.akt.bd[pos].bd.length : 0;
+    const affizierte = document.querySelectorAll(".bedeutungen-affiziert");
     if (affizierte.length) {
-      let affiziertLetzter = parseInt(affizierte[affizierte.length - 1].dataset.idx, 10);
+      const affiziertLetzter = parseInt(affizierte[affizierte.length - 1].dataset.idx, 10);
       if (affiziertLetzter + 1 < zeilen.length - 1) {
         ebeneNach = bedeutungen.akt.bd[affiziertLetzter + 1].bd.length;
       }
     } else if (pos + 1 < zeilen.length - 1) {
       ebeneNach = bedeutungen.akt.bd[pos + 1].bd.length;
     }
-    // Test 1: Bedeutung kann nicht an dieselbe Stelle, in sich oder in ihren Zweig hinein geschoben werden
-    if (zeilen[pos].classList.contains("bedeutungen-aktiv") && ebenePos === ebeneZiel || 
+    // 1. Test: Bedeutung kann nicht an dieselbe Stelle, in sich oder in ihren Zweig hinein geschoben werden
+    if (zeilen[pos].classList.contains("bedeutungen-aktiv") && ebenePos === ebeneZiel ||
       zeilen[pos].classList.contains("bedeutungen-affiziert") ||
       zeilen[pos - 1] && /bedeutungen-(aktiv|affiziert)/.test(zeilen[pos - 1].getAttribute("class"))) {
       return false;
     }
-    // Test 2: Bedeutung kann nicht an eine Position geschoben werden, wenn dies eine Lücke im Gerüst zur Folge hätte
+    // 2. Test: Bedeutung kann nicht an eine Position geschoben werden, wenn dies eine Lücke im Gerüst zur Folge hätte
     const posZiel = parseInt(document.querySelector(".bedeutungen-aktiv").dataset.idx, 10);
     if (ebeneZiel < ebenePos && !(pos === posZiel && (ebeneZiel === ebeneNach || ebeneZiel > ebeneNach)) ||
       ebeneZiel > ebeneVor + 1 ||
       pos === 0 && ebeneZiel > 1) {
       return false;
     }
-    // Test 3: Bedeutung darf nicht verschoben werden, weil sie identisch mit einer anderen Bedeutung im Zielbedeutungszweig wäre
+    // 3. Test: Bedeutung darf nicht verschoben werden, weil sie identisch mit einer anderen Bedeutung im Zielbedeutungszweig wäre
     let start = pos; // Start des Zweiges, in dem getestet wird
     for (let i = pos - 1; i >= 0; i--) {
       start = i;
-      let ebeneTmp = bedeutungen.akt.bd[i].bd.length;
+      const ebeneTmp = bedeutungen.akt.bd[i].bd.length;
       if (ebeneTmp < ebeneZiel) {
         break;
       }
@@ -166,18 +166,18 @@ let bedeutungenDrag = {
     if (start === 0) { // sonst wird die erste Bedeutung auf der obersten Ebene nicht überprüft
       start--;
     }
-    const aktiv = parseInt(document.querySelector(".bedeutungen-aktiv").dataset.idx, 10),
-      bd = bedeutungen.akt.bd[aktiv].bd,
-      text = bedeutungen.editFormat(bd[bd.length - 1]).replace(/<.+?>/g, "");
+    const aktiv = parseInt(document.querySelector(".bedeutungen-aktiv").dataset.idx, 10);
+    const bd = bedeutungen.akt.bd[aktiv].bd;
+    const text = bedeutungen.editFormat(bd[bd.length - 1]).replace(/<.+?>/g, "");
     for (let i = start + 1, len = bedeutungen.akt.bd.length; i < len; i++) {
-      let ebeneTmp = bedeutungen.akt.bd[i].bd.length;
+      const ebeneTmp = bedeutungen.akt.bd[i].bd.length;
       if (ebeneTmp < ebeneZiel) {
         break;
       } else if (i === aktiv || ebeneTmp !== ebeneZiel) {
         continue;
       }
-      let bdTmp = bedeutungen.akt.bd[i].bd,
-        textTmp = bedeutungen.editFormat(bdTmp[bdTmp.length - 1]).replace(/<.+?>/g, "");
+      const bdTmp = bedeutungen.akt.bd[i].bd;
+      const textTmp = bedeutungen.editFormat(bdTmp[bdTmp.length - 1]).replace(/<.+?>/g, "");
       if (text === textTmp) {
         return false;
       }
@@ -189,7 +189,7 @@ let bedeutungenDrag = {
   // Bewegung ausführen
   move () {
     // Move abbrechen
-    let marker = document.getElementById("bedeutungen-drag-marker");
+    const marker = document.getElementById("bedeutungen-drag-marker");
     if (!marker ||
         marker.classList.contains("aus") ||
         marker.classList.contains("drag-unmovable")) {
@@ -197,14 +197,14 @@ let bedeutungenDrag = {
       return;
     }
     // Move ausführen
-    const pos = bedeutungenDrag.data.pos,
-      ebene = bedeutungenDrag.data.ebene;
+    const pos = bedeutungenDrag.data.pos;
+    const ebene = bedeutungenDrag.data.ebene;
     let pad = [];
     if (ebene > 1) {
       pad = bedeutungen.akt.bd[pos - 1].bd.slice(0, ebene - 1);
     }
-    let idStart = 0, // ID der mit .bedeutungen-aktiv markierten Bedeutung
-      items = bedeutungen.moveGetItems();
+    let idStart = 0; // ID der mit .bedeutungen-aktiv markierten Bedeutung
+    const items = bedeutungen.moveGetItems();
     const ebeneAktiv = bedeutungen.akt.bd[items[0]].bd.length;
     for (let i = 0, len = items.length; i < len; i++) {
       let idx = items[i];
@@ -212,7 +212,7 @@ let bedeutungenDrag = {
         idx -= i;
       }
       // Kopie der Bedeutung erstellen
-      let kopie = bedeutungen.makeCopy(idx);
+      const kopie = bedeutungen.makeCopy(idx);
       // Bedeutungspfad auffrischen
       kopie.bd.splice(0, ebeneAktiv - 1);
       kopie.bd = pad.concat(kopie.bd);

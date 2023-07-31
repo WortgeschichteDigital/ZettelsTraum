@@ -16,7 +16,7 @@ const modules = {
 window.addEventListener("load", async () => {
   // VARIABLEN ANLEGEN
   // Infos zu App und Fenster erfragen
-  let info = await modules.ipc.invoke("infos-senden");
+  const info = await modules.ipc.invoke("infos-senden");
   window.appInfo = info.appInfo;
   window.winInfo = info.winInfo;
 
@@ -99,11 +99,15 @@ window.addEventListener("load", async () => {
   modules.ipc.on("optionen-empfangen", (evt, data) => optionen.empfangen(data));
   modules.ipc.on("optionen-zuletzt", (evt, karteien) => zuletzt.update(karteien));
   modules.ipc.on("optionen-zuletzt-verschwunden", (evt, verschwunden) => zuletzt.verschwundenUpdate(verschwunden));
-  modules.ipc.on("optionen-fenster", (evt, fenster, status) => optionen.data[fenster] = status);
+  modules.ipc.on("optionen-fenster", (evt, fenster, status) => {
+    optionen.data[fenster] = status;
+  });
   modules.ipc.on("optionen-letzter-pfad", (evt, pfad) => optionen.aendereLetzterPfad(pfad));
   // Bedeutungsgerüst-Fenster
   modules.ipc.on("bedeutungen-fenster-daten", () => bedeutungenWin.daten());
-  modules.ipc.on("bedeutungen-fenster-geschlossen", () => bedeutungenWin.contentsId = 0);
+  modules.ipc.on("bedeutungen-fenster-geschlossen", () => {
+    bedeutungenWin.contentsId = 0;
+  });
   modules.ipc.on("bedeutungen-fenster-drucken", (evt, gn) => {
     drucken.init("bedeutungen-", gn);
     modules.ipc.invoke("fenster-fokus");
@@ -114,13 +118,15 @@ window.addEventListener("load", async () => {
   });
   // XML-Fenster
   modules.ipc.on("red-xml-daten", () => redXml.daten());
-  modules.ipc.on("red-xml-speichern", (evt, daten) => redXml.speichern({daten}));
-  modules.ipc.on("red-xml-geschlossen", () => redXml.contentsId = 0);
+  modules.ipc.on("red-xml-speichern", (evt, daten) => redXml.speichern({ daten }));
+  modules.ipc.on("red-xml-geschlossen", () => {
+    redXml.contentsId = 0;
+  });
   // Dialog
   modules.ipc.on("dialog-anzeigen", (evt, text) => {
     dialog.oeffnen({
       typ: "alert",
-      text: text,
+      text,
     });
   });
   // CLI-Operationen
@@ -134,7 +140,7 @@ window.addEventListener("load", async () => {
   window.addEventListener("resize", () => {
     clearTimeout(helfer.resizeTimeout);
     helfer.resizeTimeout = setTimeout(() => {
-      let elemente = [
+      const elemente = [
         "anhaenge-cont",
         "dialog-text",
         "drucken-cont",
@@ -165,7 +171,7 @@ window.addEventListener("load", async () => {
         "updatesWin-notes",
         "zeitraumgrafik-cont-over",
       ];
-      for (let e of elemente) {
+      for (const e of elemente) {
         helfer.elementMaxHeight({
           ele: document.getElementById(e),
         });
@@ -191,11 +197,11 @@ window.addEventListener("load", async () => {
     if (!evt.dataTransfer.files.length) { // wenn z.B. Text gedropt wird
       return;
     }
-    let pfad = evt.dataTransfer.files[0].path;
+    const pfad = evt.dataTransfer.files[0].path;
     if (/\.ztl$/.test(pfad) && overlay.oben() === "red-lit") {
       redLit.dbCheck(async () => {
-        const ergebnis = await redLit.dbOeffnenEinlesen({pfad});
-        redLit.dbOeffnenAbschließen({ergebnis, pfad});
+        const ergebnis = await redLit.dbOeffnenEinlesen({ pfad });
+        redLit.dbOeffnenAbschließen({ ergebnis, pfad });
       });
     } else if (!/\.ztl$/.test(pfad)) {
       kartei.oeffnenEinlesen(pfad);
@@ -210,13 +216,13 @@ window.addEventListener("load", async () => {
   // EVENTS: ELEMENTE
   // alle <textarea>
   document.querySelectorAll("textarea").forEach(textarea => {
-    textarea.addEventListener("input", function() {
+    textarea.addEventListener("input", function () {
       helfer.textareaGrow(this);
     });
   });
   // alle <input type="number">
-  document.querySelectorAll(`input[type="number"]`).forEach(i => {
-    i.addEventListener("change", function() {
+  document.querySelectorAll('input[type="number"]').forEach(i => {
+    i.addEventListener("change", function () {
       const val = this.value;
       helfer.inputNumber(this);
       if (this.value !== val) {
@@ -228,7 +234,7 @@ window.addEventListener("load", async () => {
   document.querySelectorAll(".dropdown-feld").forEach(i => dropdown.feld(i));
   document.querySelectorAll(".dropdown-link-td, .dropdown-link-element").forEach(i => dropdown.link(i));
   // aktives Element für Quick-Access-Bar zwischenspeichern
-  document.addEventListener("mousedown", function() {
+  document.addEventListener("mousedown", function () {
     quick.accessRolesActive = document.activeElement;
   });
   // BearbeiterIn registrieren
@@ -237,7 +243,7 @@ window.addEventListener("load", async () => {
       bearbeiterin.check();
     }
   });
-  document.querySelector("#bearbeiterin-registrieren").addEventListener("click", evt => bearbeiterin.check());
+  document.querySelector("#bearbeiterin-registrieren").addEventListener("click", () => bearbeiterin.check());
   // Wort-Element
   document.getElementById("wort").addEventListener("click", () => kartei.wortAendern());
   // Erinnerungen-Icon
@@ -305,8 +311,8 @@ window.addEventListener("load", async () => {
   document.getElementById("bedeutungen-speichern").addEventListener("click", () => bedeutungen.speichern());
   document.getElementById("bedeutungen-schliessen").addEventListener("click", () => bedeutungen.schliessen());
   document.getElementById("bedeutungen-gerueste-config").addEventListener("click", evt => bedeutungenGerueste.oeffnen(evt));
-  bedeutungen.xml({icon: document.getElementById("bedeutungen-link-xml")});
-  document.querySelector(`[for="beleg-bd"]`).addEventListener("click", () => bedeutungenGeruest.oeffnen());
+  bedeutungen.xml({ icon: document.getElementById("bedeutungen-link-xml") });
+  document.querySelector('[for="beleg-bd"]').addEventListener("click", () => bedeutungenGeruest.oeffnen());
   // Tagger
   document.getElementById("tagger-speichern").addEventListener("click", () => tagger.speichern());
   document.getElementById("tagger-schliessen").addEventListener("click", () => tagger.schliessen());
@@ -318,12 +324,12 @@ window.addEventListener("load", async () => {
   });
   filter.toggleErweiterte();
   document.querySelectorAll(".filter-optionen").forEach(input => filter.filterOptionenListener(input));
-  document.querySelectorAll(`a[id^="filter-datenfelder-"]`).forEach(input => filter.ctrlVolltextDs(input));
+  document.querySelectorAll('a[id^="filter-datenfelder-"]').forEach(input => filter.ctrlVolltextDs(input));
   filter.anwenden(document.getElementById("filter-volltext"));
   document.getElementsByName("filter-zeitraum").forEach(i => filter.wechselnZeitraum(i));
   filter.backupKlappScroll(document.getElementById("filter-zeitraum-dynamisch"));
-  document.querySelectorAll(`#filter-kartendatum input[type="checkbox"]`).forEach(i => filter.kartendatumBox(i));
-  document.querySelectorAll(`#filter-kartendatum input[type="datetime-local"]`).forEach(i => filter.kartendatumFeld(i));
+  document.querySelectorAll('#filter-kartendatum input[type="checkbox"]').forEach(i => filter.kartendatumBox(i));
+  document.querySelectorAll('#filter-kartendatum input[type="datetime-local"]').forEach(i => filter.kartendatumFeld(i));
   document.querySelectorAll("#filter-kartendatum .icon-jetzt").forEach(a => filter.kartendatumJetzt(a));
   // Funktionen im Belegliste-Header
   document.querySelectorAll("#liste header a").forEach(a => liste.header(a));
@@ -340,7 +346,7 @@ window.addEventListener("load", async () => {
   document.querySelectorAll("#einstellungen input").forEach(i => optionen.aendereEinstellungListener(i));
   document.getElementById("einstellung-personenliste").addEventListener("click", () => optionen.aenderePersonenliste());
   document.querySelectorAll(".einstellung-sichern").forEach(i => {
-    i.addEventListener("click", function() {
+    i.addEventListener("click", function () {
       optionen.sichern(this);
     });
   });
@@ -398,10 +404,10 @@ window.addEventListener("load", async () => {
   document.getElementById("belege-taggen-input").addEventListener("click", () => belegeTaggen.taggen());
   // Redaktionsmetadaten-Fenster
   document.querySelectorAll("#red-meta-themenfelder, #red-meta-sachgebiete, #red-meta-stichwortplanung").forEach(i => {
-    i.addEventListener("click", function(evt) {
+    i.addEventListener("click", function (evt) {
       evt.preventDefault();
       const typ = this.id.replace(/.+-/, "");
-      redMeta.tagsAdd({typ});
+      redMeta.tagsAdd({ typ });
     });
   });
   document.querySelectorAll("#red-meta input").forEach(i => {
@@ -412,8 +418,8 @@ window.addEventListener("load", async () => {
     }
   });
   // Literaturdatenbank
-  document.querySelectorAll(`#red-lit-pfad a`).forEach(a => redLit.dbListener(a));
-  document.querySelectorAll(`#red-lit-nav input`).forEach(i => redLit.navListener(i));
+  document.querySelectorAll("#red-lit-pfad a").forEach(a => redLit.dbListener(a));
+  document.querySelectorAll("#red-lit-nav input").forEach(i => redLit.navListener(i));
   document.querySelectorAll("#red-lit-suche-form input").forEach(i => redLit.sucheListener(i));
   document.querySelectorAll("#red-lit-suche-hilfe, #red-lit-suche-hilfe-fenster img").forEach(i => {
     i.addEventListener("click", evt => {
@@ -429,7 +435,7 @@ window.addEventListener("load", async () => {
   document.querySelectorAll("#red-lit-suche-sonder a").forEach(a => redLit.sucheSonder(a));
   document.querySelectorAll("#red-lit-suche-treffer a").forEach(a => redLit.sucheNav(a));
   document.querySelectorAll("#red-lit-eingabe input, #red-lit-eingabe textarea").forEach(i => redLit.eingabeListener(i));
-  redLit.xml({icon: document.getElementById("red-lit-eingabe-ti-xml-fenster")});
+  redLit.xml({ icon: document.getElementById("red-lit-eingabe-ti-xml-fenster") });
   document.getElementById("red-lit-eingabe-ti-dta").addEventListener("click", evt => {
     evt.preventDefault();
     redLit.dbCheck(() => redLit.eingabeDTA(), false);
@@ -443,7 +449,7 @@ window.addEventListener("load", async () => {
     redLit.dbCheck(() => redLit.eingabeBibTeX(), false);
   });
   // Literaturdatenbank: Export
-  document.querySelectorAll(`#red-lit-export-cont input[type="radio"]`).forEach(i => {
+  document.querySelectorAll('#red-lit-export-cont input[type="radio"]').forEach(i => {
     i.addEventListener("keydown", evt => {
       tastatur.detectModifiers(evt);
       if (!tastatur.modifiers && evt.key === "Enter") {
@@ -452,14 +458,14 @@ window.addEventListener("load", async () => {
     });
   });
   document.getElementById("red-lit-export-exportieren").addEventListener("click", () => redLit.dbExportieren());
-  document.getElementById("red-lit-export-abbrechen").addEventListener("click", () => overlay.schliessen(document.getElementById("red-lit-export") ) );
+  document.getElementById("red-lit-export-abbrechen").addEventListener("click", () => overlay.schliessen(document.getElementById("red-lit-export")));
   // Wortinformationen
-  document.querySelectorAll("#red-wi-form input, #red-wi-copy input").forEach( input => redWi.formListener({input}) );
-  redWi.xml({icon: document.getElementById("red-wi-xml")});
+  document.querySelectorAll("#red-wi-form input, #red-wi-copy input").forEach(input => redWi.formListener({ input }));
+  redWi.xml({ icon: document.getElementById("red-wi-xml") });
   // Karteisuche
   document.getElementById("karteisuche-suchen").addEventListener("click", () => karteisuche.suchenPrep());
   document.getElementById("karteisuche-suchenCache").addEventListener("click", () => karteisuche.suchenPrepZtj([]));
-  document.getElementById("karteisuche-suchenTiefe").addEventListener("input", function() {
+  document.getElementById("karteisuche-suchenTiefe").addEventListener("input", function () {
     optionen.data.karteisuche.tiefe = parseInt(this.value, 10);
     optionen.speichern();
   });
@@ -480,17 +486,17 @@ window.addEventListener("load", async () => {
     });
   });
   document.getElementById("karteisuche-export-exportieren").addEventListener("click", () => karteisucheExport.exportieren());
-  document.getElementById("karteisuche-export-abbrechen").addEventListener("click", () => overlay.schliessen(document.querySelector("#karteisuche-export") ) );
+  document.getElementById("karteisuche-export-abbrechen").addEventListener("click", () => overlay.schliessen(document.querySelector("#karteisuche-export")));
   // Prompt-Textfeld
-  document.getElementById("dialog-prompt-text").addEventListener("keydown", function(evt) {
+  document.getElementById("dialog-prompt-text").addEventListener("keydown", function (evt) {
     tastatur.detectModifiers(evt);
     if (!tastatur.modifiers && evt.key === "Enter") {
       overlay.schliessen(this);
     }
   });
   // Dialog-Buttons
-  ["dialog-ok-button", "dialog-abbrechen-button", "dialog-ja-button", "dialog-nein-button"].forEach(button => {
-    document.getElementById(button).addEventListener("click", function() {
+  [ "dialog-ok-button", "dialog-abbrechen-button", "dialog-ja-button", "dialog-nein-button" ].forEach(button => {
+    document.getElementById(button).addEventListener("click", function () {
       overlay.schliessen(this);
     });
   });
@@ -506,25 +512,27 @@ window.addEventListener("load", async () => {
   document.querySelectorAll(".icon-handbuch, .link-handbuch").forEach(a => helfer.handbuchLink(a));
   // Rotationsanimationen
   document.querySelectorAll("#kopieren-einfuegen-reload").forEach(i => {
-    i.addEventListener("animationend", function() {
+    i.addEventListener("animationend", function () {
       this.classList.remove("rotieren-bitte");
     });
   });
 
   // VISUELLE ANPASSUNGEN
   // App-Namen eintragen
-  document.querySelectorAll(".app-name").forEach(i => i.textContent = appInfo.name);
+  document.querySelectorAll(".app-name").forEach(i => {
+    i.textContent = appInfo.name;
+  });
   // Breite Datumsfelder anpassen
   const lang = helfer.checkLang();
   if (!/^de/i.test(lang)) {
-    document.querySelectorAll(`[type="datetime-local"]`).forEach(i => {
+    document.querySelectorAll('[type="datetime-local"]').forEach(i => {
       i.classList.add("lang-en");
     });
   }
   // macOS
   if (process.platform === "darwin") {
     // Option zum Ausblenden der Menüleiste verstecken
-    let option = document.getElementById("einstellung-autoHideMenuBar").parentNode;
+    const option = document.getElementById("einstellung-autoHideMenuBar").parentNode;
     option.classList.add("aus");
   }
   // Tastaturkürzel ändern
@@ -534,10 +542,10 @@ window.addEventListener("load", async () => {
 
   // IPC-ANFRAGEN
   // Bilder vorladen
-  let bilderPreload = [],
-    bilder = await modules.ipc.invoke("bilder-senden");
-  for (let b of bilder) {
-    let img = new Image();
+  const bilderPreload = [];
+  const bilder = await modules.ipc.invoke("bilder-senden");
+  for (const b of bilder) {
+    const img = new Image();
     img.src = `img/${b}`;
     bilderPreload.push(img);
   }

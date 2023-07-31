@@ -1,6 +1,6 @@
 "use strict";
 
-let quick = {
+const quick = {
   // Liste der Befehle
   icons: {
     "app-neues-fenster": {
@@ -216,12 +216,12 @@ let quick = {
   },
 
   // Liste der Standard-Befehle
-  iconsStandard: ["app-beenden", "sep-1", "app-neues-fenster", "sep-2", "kartei-oeffnen", "kartei-speichern", "kartei-schliessen", "sep-3", "belege-hinzufuegen", "sep-4", "hilfe-handbuch"],
+  iconsStandard: [ "app-beenden", "sep-1", "app-neues-fenster", "sep-2", "kartei-oeffnen", "kartei-speichern", "kartei-schliessen", "sep-3", "belege-hinzufuegen", "sep-4", "hilfe-handbuch" ],
 
   // Leiste aufbauen
   fill () {
     // Leiste leeren
-    let bar = document.getElementById("quick");
+    const bar = document.getElementById("quick");
     bar.replaceChildren();
 
     // ggf. veraltete Einträge in der Konfiguration umbenennen
@@ -232,10 +232,10 @@ let quick = {
     for (const i of optionen.data.einstellungen["quick-icons"]) {
       // Spacer
       if (/^sep/?.test(i)) {
-        let span = document.createElement("span");
+        const span = document.createElement("span");
         bar.appendChild(span);
         span.classList.add("quick-spacer");
-        span.textContent = " ";
+        span.textContent = "\u00A0";
         continue;
       }
       // Icon
@@ -262,7 +262,7 @@ let quick = {
         title = "Einstellung\u00A0> " + quickEin.options[i.id].title;
       }
       a.title = title;
-      a.textContent = " ";
+      a.textContent = "\u00A0";
       bar.appendChild(a);
     }
     tooltip.init(bar);
@@ -321,7 +321,7 @@ let quick = {
   //   a = Element
   //     (der Link, der die Aktion triggert)
   preset (a) {
-    a.addEventListener("click", function(evt) {
+    a.addEventListener("click", function (evt) {
       evt.preventDefault();
 
       // Preset laden
@@ -331,7 +331,7 @@ let quick = {
       } else if (preset === "keine") {
         optionen.data.einstellungen["quick-icons"] = [];
       } else if (preset === "standard") {
-        optionen.data.einstellungen["quick-icons"] = [...quick.iconsStandard];
+        optionen.data.einstellungen["quick-icons"] = [ ...quick.iconsStandard ];
       }
 
       // Listen neu aufbauen
@@ -480,10 +480,10 @@ let quick = {
   //   a = Element
   //     (Icon-Link in der Leiste)
   accessRoles (a) {
-    a.addEventListener("click", function(evt) {
+    a.addEventListener("click", function (evt) {
       evt.preventDefault();
       const befehl = this.id.replace(/^quick-/, "");
-      let fokus = ["bearbeiten-rueckgaengig", "bearbeiten-wiederherstellen", "bearbeiten-ausschneiden", "bearbeiten-kopieren", "bearbeiten-einfuegen", "bearbeiten-alles-auswaehlen"];
+      const fokus = [ "bearbeiten-rueckgaengig", "bearbeiten-wiederherstellen", "bearbeiten-ausschneiden", "bearbeiten-kopieren", "bearbeiten-einfuegen", "bearbeiten-alles-auswaehlen" ];
       if (fokus.includes(befehl)) {
         quick.accessRolesActive.focus();
       }
@@ -536,7 +536,8 @@ let quick = {
     if (typeof i !== "string") {
       // Quick-Access-Einstellung
       a.dataset.icon = "ein";
-      let icon, text;
+      let icon;
+      let text;
       if (!i.id) {
         // Platzhalter
         icon = "img/checkbox.svg";
@@ -572,9 +573,9 @@ let quick = {
   // Events an die Elemente in den Konfigurationsblöcken heften
   eventsConfig () {
     document.querySelectorAll("#quick-config a").forEach(a => {
-      a.addEventListener("click", function(evt) {
+      a.addEventListener("click", function (evt) {
         evt.preventDefault();
-        let aktiv = quick.rmAktiv();
+        const aktiv = quick.rmAktiv();
         if (aktiv !== this) {
           this.classList.add("aktiv");
         }
@@ -585,7 +586,7 @@ let quick = {
 
   // aktives Element deaktivieren
   rmAktiv () {
-    let aktiv = document.querySelector("#quick-config .aktiv");
+    const aktiv = document.querySelector("#quick-config .aktiv");
     if (aktiv) {
       aktiv.classList.remove("aktiv");
     }
@@ -636,8 +637,8 @@ let quick = {
       if (icon === "sep") {
         // Separatoren können mehrfach auftauchen,
         // müssen aber eindeutig ansprechbar sein
-        let sepNr = 0,
-          sep;
+        let sepNr = 0;
+        let sep;
         do {
           sepNr++;
           sep = document.querySelector(`#quick-config-selected [data-icon="sep-${sepNr}"]`);
@@ -685,14 +686,14 @@ let quick = {
       // wird eine Einstellung entfernt, wird das Item nicht wiedergefunden => Einstellung fokussieren
       item = document.querySelector('#quick-config-selectable [data-icon="ein"]');
     }
-    item.dispatchEvent( new KeyboardEvent("click", {key: "Enter"}) );
+    item.dispatchEvent(new KeyboardEvent("click", { key: "Enter" }));
 
     // Item ggf. in den sichtbaren Bereich scrollen
-    let cont = item.closest("div"),
-      contScroll = cont.scrollTop,
-      contHeight = cont.offsetHeight,
-      itemTop = item.offsetTop,
-      itemHeight = item.offsetHeight;
+    const cont = item.closest("div");
+    const contScroll = cont.scrollTop;
+    const contHeight = cont.offsetHeight;
+    const itemTop = item.offsetTop;
+    const itemHeight = item.offsetHeight;
     if (itemTop + itemHeight + 26 > contHeight + contScroll) {
       cont.scrollTop = itemTop + itemHeight - 4 * 26 - 4; // 26px = Höhe eines Links
     } else if (itemTop - 26 < contScroll) {
@@ -723,11 +724,11 @@ let quick = {
       runter: false,
       links: false,
     };
-    let aktiv = quick.pfeileAktiv,
-      selectedAktiv = document.querySelector("#quick-config-selected .aktiv");
+    const aktiv = quick.pfeileAktiv;
+    const selectedAktiv = document.querySelector("#quick-config-selected .aktiv");
     if (selectedAktiv) {
       aktiv.rechts = true;
-      let div = selectedAktiv.closest("div");
+      const div = selectedAktiv.closest("div");
       if (div.firstChild !== selectedAktiv) {
         aktiv.hoch = true;
       }
@@ -737,11 +738,11 @@ let quick = {
     } else if (document.querySelector("#quick-config-selectable .aktiv")) {
       aktiv.links = true;
     }
-    for (let i in aktiv) {
+    for (const i in aktiv) {
       if (!aktiv.hasOwnProperty(i)) {
         continue;
       }
-      let src = `img/pfeil-gerade-${i}${aktiv[i] ? "" : "-grau"}.svg`;
+      const src = `img/pfeil-gerade-${i}${aktiv[i] ? "" : "-grau"}.svg`;
       document.getElementById(`quick-config-${i}`).src = src;
     }
   },
@@ -750,7 +751,7 @@ let quick = {
   //   img = Element
   //     (Pfeil, zum Bewegen der Elemente)
   eventsPfeile (img) {
-    img.addEventListener("click", function() {
+    img.addEventListener("click", function () {
       const dir = this.src.match(/.+-(.+)\./)[1];
       quick.moveConfig(dir);
     });
@@ -758,10 +759,10 @@ let quick = {
 
   // veraltete Einträge in den Einstellungen ändern
   amendItems () {
-    let umbenannt = {
+    const umbenannt = {
       "kartei-redaktion": "redaktion-ereignisse",
     };
-    for (let i of Object.keys(umbenannt)) {
+    for (const i of Object.keys(umbenannt)) {
       const idx = optionen.data.einstellungen["quick-icons"].indexOf(i);
       if (idx < 0) {
         continue;

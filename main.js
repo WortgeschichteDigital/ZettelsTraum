@@ -3,15 +3,14 @@
 /* MODULE & VARIABLEN ***************************/
 
 // Electron- und Node-Module
-const {app, BrowserWindow, ipcMain, Menu, webContents, nativeImage} = require("electron"),
-  fs = require("fs"),
-  fsP = fs.promises,
-  path = require("path");
+const { app, BrowserWindow, ipcMain, Menu, webContents, nativeImage } = require("electron");
+const fsp = require("fs").promises;
+const path = require("path");
 
 // eigene Module
-const dienste = require("./js/main/dienste"),
-  popup = require("./js/main/popup"),
-  i18n = require("./js/main/i18n");
+const dienste = require("./js/main/dienste");
+const i18n = require("./js/main/i18n");
+const popup = require("./js/main/popup");
 
 // Speicher-Objekt für die Fenster; Format der Einträge:
 //   "Fenster-ID" (numerischer String, beginnend mit 1; wird von Electron vergeben)
@@ -33,21 +32,18 @@ const dienste = require("./js/main/dienste"),
 //       aber noch nicht gespeichert)
 //     exit:        true | undefined (wird dem Objekt kurz vor dem Schließen hinzugefügt,
 //       damit dieses Schließen nicht blockiert wird; s. BrowserWindow.on("close"))
-let win = {};
+const win = {};
 
 // Developer-Tools sollen angezeigt werden (oder nicht)
 // (wird auch für andere Dinge benutzt, für Testzwecke besser zentral anlegen
 // und nicht überall app.isPackaged abfragen)
-let devtools = !app.isPackaged;
+const devtools = !app.isPackaged;
 
 // speichert Exceptions im Main-Prozess und in den Renderer-Prozessen
-let fehler = [];
-
-// Menü-Vorlagen
-let layoutMenu, layoutMenuBearbeiten, layoutMenuAnsicht, layoutMenuMac;
+const fehler = [];
 
 // Variablen für die Kopierfunktion
-let kopieren = {
+const kopieren = {
   timeout: null,
   basisdaten: {},
   winIdAnfrage: -1,
@@ -55,7 +51,7 @@ let kopieren = {
 
 // Variable mit Release Notes
 // (ist gefüllt, wenn Updates zur Verfügung stehen)
-let updates = {
+const updates = {
   notes: "",
   gesucht: false,
 };
@@ -64,7 +60,7 @@ let updates = {
 //   [ID] (Object; ID = Pfad zur gecachten Kartei)
 //     ctime (String; Änderungsdatum der Kartei)
 //     data (Object; die kompletten Karteidaten)
-let ztjCache = {};
+const ztjCache = {};
 
 // Variable, die speichert, ob gerade eine Karteisuche läuft
 let ztjCacheStatus = false;
@@ -72,9 +68,6 @@ let ztjCacheStatus = false;
 // Variable für Abgleich der Tag-Dateien
 // (soll nur einmal pro Session stattfinden)
 let tagDateienAbgleich = true;
-
-// Funktionen-Container
-let appMenu, optionen, fenster;
 
 
 /* PROGRAMMFEHLER *******************************/
@@ -102,7 +95,7 @@ function onError (err) {
 /* APP-MENÜ *************************************/
 
 // Menü-Vorlagen
-layoutMenu = [
+const layoutMenu = [
   {
     label: `&${app.name}`,
     submenu: [
@@ -349,7 +342,7 @@ layoutMenu = [
       {
         label: "Handbuch",
         icon: path.join(__dirname, "img", "menu", "kreis-fragezeichen.png"),
-        click: () => fenster.erstellenNeben({typ: "handbuch"}),
+        click: () => fenster.erstellenNeben({ typ: "handbuch" }),
         accelerator: "F1",
         id: "hilfe-handbuch",
       },
@@ -360,18 +353,18 @@ layoutMenu = [
       },
       {
         label: "Technische Dokumentation",
-        click: () => fenster.erstellenNeben({typ: "dokumentation"}),
+        click: () => fenster.erstellenNeben({ typ: "dokumentation" }),
         id: "hilfe-dokumentation",
       },
       { type: "separator" },
       {
         label: "Changelog",
-        click: () => fenster.erstellenNeben({typ: "changelog"}),
+        click: () => fenster.erstellenNeben({ typ: "changelog" }),
         id: "hilfe-changelog",
       },
       {
         label: "Fehlerlog",
-        click: () => fenster.erstellenNeben({typ: "fehlerlog"}),
+        click: () => fenster.erstellenNeben({ typ: "fehlerlog" }),
         id: "hilfe-fehlerlog",
       },
       { type: "separator" },
@@ -396,7 +389,7 @@ layoutMenu = [
   },
 ];
 
-layoutMenuBearbeiten = [
+const layoutMenuBearbeiten = [
   {
     label: "B&earbeiten",
     id: "bearbeiten",
@@ -442,7 +435,7 @@ layoutMenuBearbeiten = [
   },
 ];
 
-layoutMenuAnsicht = [
+const layoutMenuAnsicht = [
   {
     label: "&Ansicht",
     id: "ansicht",
@@ -477,7 +470,7 @@ layoutMenuAnsicht = [
   },
 ];
 
-layoutMenuMac = [
+const layoutMenuMac = [
   {
     label: app.name,
     submenu: [
@@ -498,7 +491,7 @@ layoutMenu.splice(layoutMenu.length - 1, 0, layoutMenuAnsicht[0]);
 
 // ggf. Developer-Menü ergänzen
 if (devtools) {
-  [layoutMenu, layoutMenuBearbeiten, layoutMenuAnsicht].forEach(i => {
+  [ layoutMenu, layoutMenuBearbeiten, layoutMenuAnsicht ].forEach(i => {
     i.push({
       label: "&Dev",
       submenu: [
@@ -532,8 +525,8 @@ if (process.platform !== "darwin") {
 // macOS: Menüvorlagen aufbereiten
 if (process.platform === "darwin") {
   // Standardmenüs anpassen
-  for (let menu of [layoutMenu, layoutMenuBearbeiten, layoutMenuAnsicht]) {
-    for (let mp of menu) {
+  for (const menu of [ layoutMenu, layoutMenuBearbeiten, layoutMenuAnsicht ]) {
+    for (const mp of menu) {
       mp.label = mp.label.replace("&", "");
       const zuletztIdx = mp.submenu.findIndex(i => i.id === "kartei-zuletzt");
       if (zuletztIdx >= 0) {
@@ -546,15 +539,17 @@ if (process.platform === "darwin") {
   layoutMenuAnsicht.unshift(layoutMenuMac[0]);
 }
 
-appMenu = {
+const appMenu = {
   // überschreibt das Submenü mit den zuletzt verwendeten Karteien
   zuletzt () {
     // für macOS gibt es ein anderes Menüsystem
     if (process.platform === "darwin") {
       return;
     }
+
     // Submenü-Vorlage
     const zuletzt = [];
+
     // Dateiliste ggf. ergänzen
     if (optionen.data.zuletzt) {
       let len = optionen.data.zuletzt.length;
@@ -567,6 +562,7 @@ appMenu = {
         appMenu.zuletztItem(zuletzt, optionen.data.zuletzt[i], i);
       }
     }
+
     // ggf. Löschmenü hinzufügen
     if (zuletzt.length) {
       let label = "Liste löschen";
@@ -588,15 +584,17 @@ appMenu = {
         },
       );
     }
+
     // Position der Karteiliste ermitteln
-    let menuKartei = layoutMenu[1].submenu,
-      pos = -1;
+    const menuKartei = layoutMenu[1].submenu;
+    let pos = -1;
     for (let i = 0, len = menuKartei.length; i < len; i++) {
       if (menuKartei[i].id === "kartei-zuletzt") {
         pos = i;
         break;
       }
     }
+
     // neue Liste einhängen
     layoutMenu[1].submenu[pos].submenu = zuletzt;
   },
@@ -609,7 +607,7 @@ appMenu = {
   //   i = Number
   //     (Index-Punkt, an dem sich die Datei befindet)
   zuletztItem (zuletzt, datei, i) {
-    let item = {
+    const item = {
       label: path.basename(datei, ".ztj"),
       sublabel: datei,
       click: () => appMenu.befehl("kartei-oeffnen", datei),
@@ -622,7 +620,7 @@ appMenu = {
 
   // überprüft, ob die zuletzt verwendeten Karteien noch vorhanden sind
   async zuletztCheck () {
-    for (let i of optionen.data.zuletzt) {
+    for (const i of optionen.data.zuletzt) {
       const exists = await dienste.exists(i);
       if (!exists) {
         appMenu.zuletztVerschwunden.push(i);
@@ -638,21 +636,21 @@ appMenu = {
 
   // informiert die Browserfenster über Dateipfade mit Karteien, die nicht gefunden wurden
   zuletztVerschwundenInform () {
-    for (let id in win) {
+    for (const id in win) {
       if (!win.hasOwnProperty(id)) {
         continue;
       }
       if (win[id].typ !== "index") {
         continue;
       }
-      let w = BrowserWindow.fromId(parseInt(id, 10));
+      const w = BrowserWindow.fromId(parseInt(id, 10));
       w.webContents.send("optionen-zuletzt-verschwunden", appMenu.zuletztVerschwunden);
     }
   },
 
   // Menüs in den Hauptfenstern auffrischen
   zuletztUpdate () {
-    for (let id in win) {
+    for (const id in win) {
       if (!win.hasOwnProperty(id)) {
         continue;
       }
@@ -660,7 +658,7 @@ appMenu = {
         continue;
       }
       // Fenster des Renderer-Prozesses ermitteln
-      let w = BrowserWindow.fromId(parseInt(id, 10));
+      const w = BrowserWindow.fromId(parseInt(id, 10));
       // App-Menü des Renderer-Prozesses auffrischen
       if (process.platform !== "darwin") {
         let disable = false;
@@ -692,8 +690,9 @@ appMenu = {
     if (process.platform === "darwin") {
       return;
     }
+
     // zu deaktivierende Menüpunkte durchgehen
-    let elemente = ["kartei-speichern", "kartei-speichern-unter", "kartei-formvarianten", "kartei-notizen", "kartei-anhaenge", "kartei-lexika", "kartei-metadaten", "kartei-bedeutungen", "kartei-bedeutungen-wechseln", "kartei-bedeutungen-fenster", "kartei-suche", "kartei-schliessen", "redaktion-metadaten", "redaktion-ereignisse", "redaktion-wortinformationen", "redaktion-xml", "redaktion-belege-xml", "belege"];
+    const elemente = [ "kartei-speichern", "kartei-speichern-unter", "kartei-formvarianten", "kartei-notizen", "kartei-anhaenge", "kartei-lexika", "kartei-metadaten", "kartei-bedeutungen", "kartei-bedeutungen-wechseln", "kartei-bedeutungen-fenster", "kartei-suche", "kartei-schliessen", "redaktion-metadaten", "redaktion-ereignisse", "redaktion-wortinformationen", "redaktion-xml", "redaktion-belege-xml", "belege" ];
     for (let j = 0, len = layoutMenu.length; j < len; j++) {
       // sollen vielleicht alle Menüpunkte deaktiviert werden?
       let alle = false;
@@ -701,7 +700,7 @@ appMenu = {
         alle = true;
       }
       // Submenu durchgehen
-      let submenu = layoutMenu[j].submenu;
+      const submenu = layoutMenu[j].submenu;
       for (let k = 0, len = submenu.length; k < len; k++) {
         if (alle) {
           toggle(submenu[k]);
@@ -710,10 +709,12 @@ appMenu = {
         }
       }
     }
+
     // Programm-Menü erzeugen?
     if (id) {
       appMenu.erzeugen(id);
     }
+
     // Switch-Funktion, die enabled auf true od. false stellt
     //   item = Object
     //     (ein Menü-Objekt)
@@ -731,7 +732,7 @@ appMenu = {
   //     (ID des Fensters)
   erzeugen (id) {
     appMenu.uovo();
-    let menu = Menu.buildFromTemplate(layoutMenu);
+    const menu = Menu.buildFromTemplate(layoutMenu);
     BrowserWindow.fromId(id).setMenu(menu);
   },
 
@@ -743,8 +744,9 @@ appMenu = {
     if (process.platform === "darwin") {
       return;
     }
+
     // Menü für Windows und Linux erzeugen
-    let menu = Menu.buildFromTemplate(layoutMenuAnsicht);
+    const menu = Menu.buildFromTemplate(layoutMenuAnsicht);
     fenster.setMenu(menu);
     fenster.setMenuBarVisibility(false);
   },
@@ -752,7 +754,7 @@ appMenu = {
   // erzeugt die Menüleiste in macOS
   erzeugenMac (vorlage) {
     appMenu.uovo();
-    let menu = Menu.buildFromTemplate(vorlage);
+    const menu = Menu.buildFromTemplate(vorlage);
     Menu.setApplicationMenu(menu);
   },
 
@@ -763,9 +765,9 @@ appMenu = {
   //     (einige Befehle bekommen einen Wert übergeben; im Falle der zuletzt geöffneten
   //     Dateien kann es auch ein Array sein)
   befehl (befehl, parameter) {
-    let w = BrowserWindow.getFocusedWindow();
+    const w = BrowserWindow.getFocusedWindow();
     if (befehl === "app-beenden") {
-      for (let id in win) {
+      for (const id in win) {
         if (!win.hasOwnProperty(id)) {
           continue;
         }
@@ -775,7 +777,7 @@ appMenu = {
           // versucht wird, sie zu schließen)
           continue;
         }
-        let w = BrowserWindow.fromId(parseInt(id, 10));
+        const w = BrowserWindow.fromId(parseInt(id, 10));
         if (w) {
           // Fenster wurde schon geschlossen
           // (kann bei App > Beenden irgendwie passieren)
@@ -803,12 +805,14 @@ appMenu = {
       // Sprache der locale in den Einstellungen übernehmen, wenn der Wert noch nicht gesetzt ist
       optionen.data.einstellungen.sprache = lang;
     }
+
     // Sprache DE => Menü muss nicht angepasst werden
     if (lang === "de") {
       return;
     }
+
     // Menü übersetzen
-    for (const menu of [ layoutMenu, layoutMenuBearbeiten, layoutMenuAnsicht, layoutMenuMac]) {
+    for (const menu of [ layoutMenu, layoutMenuBearbeiten, layoutMenuAnsicht, layoutMenuMac ]) {
       for (const block of menu) {
         if (block.id) {
           translate(block, block.id);
@@ -843,7 +847,7 @@ appMenu = {
     if (h >= 23 || h < 6) {
       l = "Ausgeträumt";
     }
-    let m = layoutMenu[0].submenu.find(i => i.id === "app-beenden");
+    const m = layoutMenu[0].submenu.find(i => i.id === "app-beenden");
     m.label = l;
   },
 };
@@ -851,7 +855,7 @@ appMenu = {
 
 /* OPTIONEN *************************************/
 
-optionen = {
+const optionen = {
   // Pfad zur Optionen-Datei
   pfad: path.join(app.getPath("userData"), "einstellungen.json"),
 
@@ -859,23 +863,20 @@ optionen = {
   data: {},
 
   // liest die Optionen-Datei aus
-  lesen () {
-    return new Promise(async resolve => {
-      const exists = await dienste.exists(optionen.pfad);
-      if (!exists) {
-        resolve(false);
-        return;
-      }
-      let content = await fsP.readFile(optionen.pfad, {encoding: "utf8"});
-      try {
-        optionen.data = JSON.parse(content);
-        resolve(true);
-      } catch (err) {
-        // kann die Optionen-Datei nicht eingelesen werden, ist sie wohl korrupt => löschen
-        fsP.unlink(optionen.pfad);
-        resolve(false);
-      }
-    });
+  async lesen () {
+    const exists = await dienste.exists(optionen.pfad);
+    if (!exists) {
+      return false;
+    }
+    const content = await fsp.readFile(optionen.pfad, { encoding: "utf8" });
+    try {
+      optionen.data = JSON.parse(content);
+      return true;
+    } catch (err) {
+      // kann die Optionen-Datei nicht eingelesen werden, ist sie wohl korrupt => löschen
+      fsp.unlink(optionen.pfad);
+    }
+    return false;
   },
 
   // Optionen werden nicht sofort geschrieben, sondern erst nach einem Timeout
@@ -888,7 +889,7 @@ optionen = {
         resolve(false);
         return;
       }
-      fsP.writeFile(optionen.pfad, JSON.stringify(optionen.data))
+      fsp.writeFile(optionen.pfad, JSON.stringify(optionen.data))
         .then(() => resolve(true))
         .catch(err => {
           fenster.befehlAnHauptfenster("dialog-anzeigen", `Die Optionen-Datei konnte nicht gespeichert werden.\n<h3>Fehlermeldung</h3>\n${err.name}: ${err.message}`);
@@ -902,7 +903,7 @@ optionen = {
 
 /* FENSTER **************************************/
 
-fenster = {
+const fenster = {
   // Hauptfenster erstellen
   //   kartei = String
   //     (Pfad zur Kartei, die geöffnet werden soll)
@@ -913,15 +914,16 @@ fenster = {
   erstellen (kartei, neuesWort = false, cli = null) {
     // Position und Größe des Fensters ermitteln;
     const Bildschirm = require("electron").screen.getPrimaryDisplay();
-    let x = optionen.data.fenster ? optionen.data.fenster.x : null,
-      y = optionen.data.fenster ? optionen.data.fenster.y : null,
-      width = optionen.data.fenster ? optionen.data.fenster.width : 1100,
-      height = optionen.data.fenster ? optionen.data.fenster.height : Bildschirm.workArea.height;
+    let x = optionen.data.fenster ? optionen.data.fenster.x : null;
+    let y = optionen.data.fenster ? optionen.data.fenster.y : null;
+    const width = optionen.data.fenster ? optionen.data.fenster.width : 1100;
+    const height = optionen.data.fenster ? optionen.data.fenster.height : Bildschirm.workArea.height;
+
     // Position des Fensters anpassen, falls das gerade fokussierte Fenster ein Hauptfenster ist
     if (!cli) {
-      let w = BrowserWindow.getFocusedWindow();
+      const w = BrowserWindow.getFocusedWindow();
       if (w && win[w.id].typ === "index") {
-        let wBounds = w.getBounds();
+        const wBounds = w.getBounds();
         // Verschieben in der Horizontalen
         if (wBounds.x + width + 100 <= Bildschirm.workArea.width) {
           x = wBounds.x + 100;
@@ -936,9 +938,10 @@ fenster = {
         }
       }
     }
+
     // Fenster öffnen
     // (die Optionen können noch fehlen)
-    let bw = new BrowserWindow({
+    const bw = new BrowserWindow({
       title: app.name,
       icon: fenster.icon(),
       backgroundColor: "#386ea6",
@@ -959,12 +962,14 @@ fenster = {
         spellcheck: false,
       },
     });
+
     // Browserfenster anzeigen
     if (!cli) {
-      bw.once("ready-to-show", function() {
+      bw.once("ready-to-show", function () {
         this.show();
       });
     }
+
     // ggf. maximieren
     // (die Option kann noch fehlen)
     if (!cli &&
@@ -972,6 +977,7 @@ fenster = {
         optionen.data.fenster.maximiert) {
       bw.maximize();
     }
+
     // Windows/Linux: Menüs, die nur bei offenen Karteikarten funktionieren, deaktivieren; Menüleiste an das neue Fenster hängen
     // macOS: beim Fokussieren des Fensters Standardmenü erzeugen
     if (!cli) {
@@ -981,20 +987,24 @@ fenster = {
         bw.on("focus", () => appMenu.erzeugenMac(layoutMenu));
       }
     }
+
     // HTML laden
     bw.loadFile(path.join(__dirname, "index.html"));
+
     // Fenster fokussieren
     // (mitunter ist das Fenster sonst nicht im Vordergrund)
     if (!cli) {
       fenster.fokus(bw);
     }
+
     // Fenster-Objekt anlegen
     // (wird Fenster neu geladen => Fenster-Objekt neu anlegen)
-    bw.webContents.on("dom-ready", function() {
+    bw.webContents.on("dom-ready", function () {
       fenster.objekt(bw.id, this.id, "index");
     });
+
     // ggf. übergebene Kartei öffnen
-    bw.webContents.on("did-finish-load", async function() {
+    bw.webContents.on("did-finish-load", async function () {
       // die IPC-Listener im Renderer-Prozess müssen erst initialisiert werden
       await new Promise(resolve => setTimeout(() => resolve(true), 25));
       // Optionen-Daten an Renderer schicken (auf Verarbeitung warten)
@@ -1021,19 +1031,22 @@ fenster = {
         this.send("cli-command", cli);
       }
     });
+
     // Aktionen vor dem Schließen des Fensters
-    bw.on("close", function(evt) {
+    bw.on("close", function (evt) {
       // beforeUnload() im Fenster ausführen
       if (!win[this.id].exit) {
         evt.preventDefault();
         this.webContents.send("before-unload");
         return;
       }
+
       // Fenster dereferenzieren
       delete win[this.id];
+
       // Sind noch Hauptfenster vorhanden?
       let hauptfensterOffen = false;
-      for (let id in win) {
+      for (const id in win) {
         if (!win.hasOwnProperty(id)) {
           continue;
         }
@@ -1042,11 +1055,13 @@ fenster = {
           break;
         }
       }
+
       // App ggf. komplett beenden
       if (!hauptfensterOffen) {
         appMenu.befehl("app-beenden");
       }
     });
+
     // ID des Fensters zurückgeben (wird mitunter direkt benötigt)
     return bw.id;
   },
@@ -1062,21 +1077,21 @@ fenster = {
   //   caller = Object | undefined
   //     (ggf. Fensterobjekt, das als Caller fungiert)
   erstellenNeben ({
-      typ,
-      abschnitt = "",
-      winTitle = "",
-      caller = null,
-    }) {
+    typ,
+    abschnitt = "",
+    winTitle = "",
+    caller = null,
+  }) {
     // ist das Fenster bereits offen? => Fenster fokussieren
     // (bei Bedeutungsgerüst- und XML-Fenstern wissen die Hauptfenster,
     // ob sie auf sind)
     if (!/^(bedeutungen|xml)$/.test(typ)) {
-      for (let id in win) {
+      for (const id in win) {
         if (!win.hasOwnProperty(id)) {
           continue;
         }
         if (win[id].typ === typ) {
-          let w = BrowserWindow.fromId(parseInt(id, 10));
+          const w = BrowserWindow.fromId(parseInt(id, 10));
           fenster.fokus(w);
           if (abschnitt) {
             w.webContents.send("oeffne-abschnitt", abschnitt);
@@ -1085,10 +1100,11 @@ fenster = {
         }
       }
     }
+
     // Titel und Dimensionen des Fensters ermitteln
     let title = "";
     const Bildschirm = require("electron").screen.getPrimaryDisplay();
-    let bounds = {
+    const bounds = {
       width: 900,
       height: Bildschirm.workArea.height,
       minWidth: 700,
@@ -1111,8 +1127,8 @@ fenster = {
         bounds.height = 825;
       }
     }
-    let opt = {
-      title: title,
+    const opt = {
+      title,
       icon: fenster.icon(),
       backgroundColor: "#386ea6",
       width: bounds.width,
@@ -1143,15 +1159,16 @@ fenster = {
       opt.minWidth = 800;
       opt.minHeight = 600;
     }
+
     // ggf. die Position des Fensters festlegen; sonst wird es zentriert
     // (damit Handbuch und Dokumentation nicht übereinanderliegen,
     // wenn sie auseinander geöffnet werden)
     if (typ === "dokumentation" || typ === "handbuch") {
-      let w = BrowserWindow.getFocusedWindow(),
-        x = -1,
-        y = -1;
+      const w = BrowserWindow.getFocusedWindow();
+      let x = -1;
+      let y = -1;
       if (w && /dokumentation|handbuch/.test(win[w.id].typ)) {
-        let wBounds = w.getBounds();
+        const wBounds = w.getBounds();
         // Verschieben in der Horizontalen
         if (wBounds.x + bounds.width + 100 <= Bildschirm.workArea.width) {
           x = wBounds.x + 100;
@@ -1172,22 +1189,26 @@ fenster = {
         opt.y = y;
       }
     }
+
     // Fenster öffnen
-    let bw = new BrowserWindow(opt);
+    const bw = new BrowserWindow(opt);
+
     // Browserfenster anzeigen
-    bw.once("ready-to-show", function() {
+    bw.once("ready-to-show", function () {
       this.show();
     });
+
     // ggf. maximieren
     if (typ === "bedeutungen" &&
         optionen.data["fenster-bedeutungen"].maximiert) {
       bw.maximize();
     }
+
     // Windows/Linux: verstecktes Ansicht-Menü erzeugen
     // macOS: angepasstes Ansicht-Menü erzeugen
     if (process.platform !== "darwin") {
       appMenu.erzeugenAnsicht(bw);
-      bw.on("leave-full-screen", function() {
+      bw.on("leave-full-screen", function () {
         // nach Verlassen des Vollbilds muss die Menüleiste wieder ausgeblendet werden
         // (ohne Timeout geht es nicht)
         setTimeout(() => {
@@ -1203,18 +1224,22 @@ fenster = {
     } else if (process.platform === "darwin") {
       bw.on("focus", () => appMenu.erzeugenMac(layoutMenuAnsicht));
     }
+
     // HTML laden
     bw.loadFile(path.join(__dirname, "win", `${typ}.html`));
+
     // Fenster fokussieren
     // (mitunter ist das Fenster sonst nicht im Vordergrund)
     fenster.fokus(bw);
+
     // Fenster-Objekt anlegen
     // (wird Fenster neu geladen => Fenster-Objekt neu anlegen)
-    bw.webContents.on("dom-ready", function() {
+    bw.webContents.on("dom-ready", function () {
       fenster.objekt(bw.id, this.id, typ);
     });
+
     // Seite ist fertig geladen
-    bw.webContents.once("did-finish-load", function() {
+    bw.webContents.once("did-finish-load", function () {
       // ggf. helle Elemente dunkler darstellen
       if (optionen.data.einstellungen["helle-dunkler"]) {
         this.send("helle-dunkler");
@@ -1231,8 +1256,9 @@ fenster = {
         setTimeout(() => caller.send("red-xml-daten"), 25);
       }
     });
+
     // Aktionen vor dem Schließen des Fensters
-    bw.on("close", function(evt) {
+    bw.on("close", function (evt) {
       // beforeUnload() im Fenster ausführen
       if (!win[this.id].exit) {
         evt.preventDefault();
@@ -1242,6 +1268,7 @@ fenster = {
       // Fenster dereferenzieren
       delete win[this.id];
     });
+
     // ID des Web-Content zurückgeben
     return bw.webContents.id;
   },
@@ -1251,7 +1278,8 @@ fenster = {
   //     (der Typ des Über-Fensters: "app" | "electron")
   erstellenUeber (typ) {
     // Titel Name der Seite ermitteln
-    let title, html;
+    let title;
+    let html;
     if (typ === "app") {
       title = `Über ${app.name}`;
       html = "ueberApp";
@@ -1259,17 +1287,19 @@ fenster = {
       title = "Über Electron";
       html = "ueberElectron";
     }
+
     // festlegen, wie die Höhe der Über-Fenster berechnet werden soll
     // (Linux agiert hier offenbar anders als Windows und macOS)
     let contentSize = false;
     if (/darwin|win32/.test(process.platform)) {
       contentSize = true;
     }
+
     // Fenster öffnen
-    let bw = new BrowserWindow({
+    const bw = new BrowserWindow({
       parent: BrowserWindow.getFocusedWindow(),
       modal: true,
-      title: title,
+      title,
       icon: fenster.icon(),
       backgroundColor: "#386ea6",
       width: 650,
@@ -1289,10 +1319,12 @@ fenster = {
         spellcheck: false,
       },
     });
+
     // Browserfenster anzeigen
-    bw.once("ready-to-show", function() {
+    bw.once("ready-to-show", function () {
       this.show();
     });
+
     // Windows/Linux: Menü nur erzeugen, wenn Dev-Tools zugänglich sein sollen; sonst haben die Fenster kein Menü
     // macOS: minimales Menü mit nur einem Punkt erzeugen
     if (process.platform !== "darwin" && devtools) {
@@ -1300,15 +1332,18 @@ fenster = {
     } else if (process.platform === "darwin") {
       bw.on("focus", () => appMenu.erzeugenMac(layoutMenuMac));
     }
+
     // HTML laden
     bw.loadFile(path.join(__dirname, "win", `${html}.html`));
+
     // Fenster-Objekt anlegen
     // (wird Fenster neu geladen => Fenster-Objekt neu anlegen)
-    bw.webContents.on("dom-ready", function() {
+    bw.webContents.on("dom-ready", function () {
       fenster.objekt(bw.id, this.id, typ);
     });
+
     // Aktionen vor dem Schließen des Fensters
-    bw.on("close", function(evt) {
+    bw.on("close", function (evt) {
       // beforeUnload() im Fenster ausführen
       if (!win[this.id].exit) {
         evt.preventDefault();
@@ -1327,8 +1362,8 @@ fenster = {
   //     (Fenstertyp)
   objekt (id, contentsId, typ) {
     win[id] = {
-      contentsId: contentsId,
-      typ: typ,
+      contentsId,
+      typ,
       kartei: "",
     };
   },
@@ -1341,9 +1376,8 @@ fenster = {
       return nativeImage.createFromPath(path.join(__dirname, "img", "icon", "mac", "icon.icns"));
     } else if (process.platform === "linux") {
       return nativeImage.createFromPath(path.join(__dirname, "img", "icon", "linux", "icon_32px.png"));
-    } else {
-      return null;
     }
+    return null;
   },
 
   // schickt eine IPC-Meldung an ein Hauptfenster
@@ -1353,17 +1387,17 @@ fenster = {
   //   arg = String | undefined
   //     (Befehlsargument, könnte prinzipiell alles sein, was in JSON linearisiert werden kann)
   befehlAnHauptfenster (befehl, arg = "") {
-    let bw = BrowserWindow.getFocusedWindow();
+    const bw = BrowserWindow.getFocusedWindow();
     if (bw && win[bw.id].typ === "index") {
       bw.webContents.send(befehl, arg);
       return;
     }
-    for (let w in win) {
+    for (const w in win) {
       if (!win.hasOwnProperty(w)) {
         continue;
       }
       if (win[w].typ === "index") {
-        let bw = BrowserWindow.fromId(parseInt(w, 10));
+        const bw = BrowserWindow.fromId(parseInt(w, 10));
         bw.webContents.send(befehl, arg);
         fenster.fokus(bw);
         return;
@@ -1385,7 +1419,7 @@ fenster = {
   // (macOS bekommt in Nebenfenstern einen extra Menüpunkt,
   // der nur den Befehl "Fenster schließen" hat)
   schliessen () {
-    let w = BrowserWindow.getFocusedWindow();
+    const w = BrowserWindow.getFocusedWindow();
     if (w) { // nur zur Sicherheit, muss eigentlich immer da sein
       w.close();
     }
@@ -1504,35 +1538,40 @@ if (cliCommandFound || !locked) {
   app.on("ready", async () => {
     // Optionen einlesen
     await optionen.lesen();
+
     // ggf. Sprache des Menüs anpassen
     appMenu.lang();
+
     // Menü der zuletzt verwendeten Karteien erzeugen
     appMenu.zuletzt();
+
     // warten mit dem Öffnen des Fensters, bis die Optionen eingelesen wurden
     fenster.erstellen(cliCommand.ztj, false);
+
     // überprüfen, ob die zuletzt verwendten Karteien noch vorhanden sind
     setTimeout(() => {
       appMenu.zuletztCheck();
     }, 5000);
+
     // ggf. auf Updates prüfen
     if (!optionen.data.updates) {
       return;
     }
-    let updatesChecked = optionen.data.updates.checked.split("T")[0],
-      heute = new Date().toISOString().split("T")[0];
+    const updatesChecked = optionen.data.updates.checked.split("T")[0];
+    const heute = new Date().toISOString().split("T")[0];
     if (updatesChecked === heute ||
         !optionen.data.einstellungen["updates-suche"]) {
       return;
     }
     setTimeout(() => {
-      for (let id in win) {
+      for (const id in win) {
         if (!win.hasOwnProperty(id)) {
           continue;
         }
         if (win[id].typ !== "index") {
           continue;
         }
-        let w = BrowserWindow.fromId(parseInt(id, 10));
+        const w = BrowserWindow.fromId(parseInt(id, 10));
         w.webContents.send("updates-check");
         break;
       }
@@ -1544,6 +1583,7 @@ if (cliCommandFound || !locked) {
     // Optionen schreiben
     clearTimeout(optionen.schreibenTimeout);
     await optionen.schreiben();
+
     // auf macOS bleibt das Programm üblicherweise aktiv,
     // bis die BenutzerIn es explizit beendet
     if (process.platform !== "darwin") {
@@ -1575,7 +1615,7 @@ ipcMain.handle("fehler-senden", () => fehler);
 // ***** INIT *****
 // Infos zu App und Fenster senden
 ipcMain.handle("infos-senden", evt => {
-  let bw = BrowserWindow.fromWebContents(evt.sender);
+  const bw = BrowserWindow.fromWebContents(evt.sender);
   return {
     appInfo: {
       documents: app.getPath("documents"),
@@ -1594,7 +1634,10 @@ ipcMain.handle("infos-senden", evt => {
 });
 
 // Verzeichnis der Bilder in ./img senden
-ipcMain.handle("bilder-senden", async () => await dienste.bilder());
+ipcMain.handle("bilder-senden", async () => {
+  const bilder = await dienste.bilder();
+  return bilder;
+});
 
 
 // ***** APP-MENÜ *****
@@ -1620,8 +1663,9 @@ ipcMain.handle("optionen-speichern", (evt, opt, winId) => {
   } else {
     optionen.data = opt;
   }
+
   // Optionen an alle Hauptfenster schicken, mit Ausnahme dem der übergebenen ID
-  for (let id in win) {
+  for (const id in win) {
     if (!win.hasOwnProperty(id)) {
       continue;
     }
@@ -1634,6 +1678,7 @@ ipcMain.handle("optionen-speichern", (evt, opt, winId) => {
     }
     BrowserWindow.fromId(idInt).webContents.send("optionen-empfangen", optionen.data);
   }
+
   // Optionen nach Timeout in einstellungen.json schreiben
   clearTimeout(optionen.schreibenTimeout);
   optionen.schreibenTimeout = setTimeout(() => optionen.schreiben(), 6e4);
@@ -1658,19 +1703,19 @@ ipcMain.handle("optionen-tag-dateien-abgleich", () => {
 
 // ***** FENSTER *****
 // Handbuch öffnen
-ipcMain.on("hilfe-handbuch", (evt, abschnitt) => fenster.erstellenNeben({typ: "handbuch", abschnitt: abschnitt}));
+ipcMain.on("hilfe-handbuch", (evt, abschnitt) => fenster.erstellenNeben({ typ: "handbuch", abschnitt }));
 
 // Demonstrationskartei öffnen
 ipcMain.on("hilfe-demo", () => fenster.befehlAnHauptfenster("hilfe-demo"));
 
 // Dokumentation öffnen
-ipcMain.on("hilfe-dokumentation", (evt, abschnitt) => fenster.erstellenNeben({typ: "dokumentation", abschnitt: abschnitt}));
+ipcMain.on("hilfe-dokumentation", (evt, abschnitt) => fenster.erstellenNeben({ typ: "dokumentation", abschnitt }));
 
 // Changelog öffnen
-ipcMain.on("hilfe-changelog", () => fenster.erstellenNeben({typ: "changelog"}));
+ipcMain.on("hilfe-changelog", () => fenster.erstellenNeben({ typ: "changelog" }));
 
 // Fehlerlog öffnen
-ipcMain.on("hilfe-fehlerlog", () => fenster.erstellenNeben({typ: "fehlerlog"}));
+ipcMain.on("hilfe-fehlerlog", () => fenster.erstellenNeben({ typ: "fehlerlog" }));
 
 // "Über App" öffnen
 ipcMain.on("ueber-app", () => fenster.erstellenUeber("app"));
@@ -1680,19 +1725,19 @@ ipcMain.on("ueber-electron", () => fenster.erstellenUeber("electron"));
 
 // Fenster fokussieren
 ipcMain.handle("fenster-fokus", evt => {
-  let bw = BrowserWindow.fromWebContents(evt.sender);
+  const bw = BrowserWindow.fromWebContents(evt.sender);
   fenster.fokus(bw);
 });
 
 // Fenster schließen
 ipcMain.handle("fenster-schliessen", evt => {
-  let w = BrowserWindow.fromWebContents(evt.sender);
+  const w = BrowserWindow.fromWebContents(evt.sender);
   w.close();
 });
 
 // Fenster endgültig schließen
 ipcMain.handle("fenster-schliessen-endgueltig", evt => {
-  let w = BrowserWindow.fromWebContents(evt.sender);
+  const w = BrowserWindow.fromWebContents(evt.sender);
   if (!w) {
     // Fenster wurde schon geschlossen
     // (kann bei App > Beenden irgendwie passieren)
@@ -1712,12 +1757,14 @@ ipcMain.handle("fenster-status", (evt, winId, fenster) => {
   }
   const bounds = bw.getBounds();
   const opt = optionen.data[fenster];
+
   // Status in den Optionen speichern
   opt.x = bounds.x;
   opt.y = bounds.y;
   opt.width = bounds.width;
   opt.height = bounds.height;
   opt.maximiert = bw.isMaximized();
+
   // Status an alle Hauptfenster melden
   const status = {
     x: opt.x,
@@ -1737,72 +1784,69 @@ ipcMain.handle("fenster-status", (evt, winId, fenster) => {
 });
 
 // Bedeutungsgerüst-Fenster öffnen
-ipcMain.handle("bedeutungen-oeffnen", (evt, title) => {
-  return fenster.erstellenNeben({
-    typ: "bedeutungen",
-    winTitle: title,
-    caller: evt.sender,
-  });
-});
+ipcMain.handle("bedeutungen-oeffnen", (evt, title) => fenster.erstellenNeben({
+  typ: "bedeutungen",
+  winTitle: title,
+  caller: evt.sender,
+}));
 
 // Bedeutungsgerüst-Fenster schliessen
 ipcMain.handle("bedeutungen-schliessen", (evt, contentsId) => {
-  let wc = webContents.fromId(contentsId),
-    bw = BrowserWindow.fromWebContents(wc);
+  const wc = webContents.fromId(contentsId);
+  const bw = BrowserWindow.fromWebContents(wc);
   bw.close();
 });
 
 // Bedeutungsgerüst-Fenster fokussieren
 ipcMain.handle("bedeutungen-fokussieren", (evt, contentsId) => {
-  let wc = webContents.fromId(contentsId),
-    bw = BrowserWindow.fromWebContents(wc);
+  const wc = webContents.fromId(contentsId);
+  const bw = BrowserWindow.fromWebContents(wc);
   fenster.fokus(bw);
 });
 
 // XML-Fenster öffnen
-ipcMain.handle("red-xml-oeffnen", (evt, title) => {
-  return fenster.erstellenNeben({
-    typ: "xml",
-    winTitle: title,
-    caller: evt.sender,
-  });
-});
+ipcMain.handle("red-xml-oeffnen", (evt, title) => fenster.erstellenNeben({
+  typ: "xml",
+  winTitle: title,
+  caller: evt.sender,
+}));
 
 // XML-Fenster schliessen
 ipcMain.handle("red-xml-schliessen", (evt, contentsId) => {
-  let wc = webContents.fromId(contentsId),
-    bw = BrowserWindow.fromWebContents(wc);
+  const wc = webContents.fromId(contentsId);
+  const bw = BrowserWindow.fromWebContents(wc);
   bw.close();
 });
 
 // XML-Fenster fokussieren
 ipcMain.handle("red-xml-fokussieren", (evt, contentsId) => {
-  let wc = webContents.fromId(contentsId),
-    bw = BrowserWindow.fromWebContents(wc);
+  const wc = webContents.fromId(contentsId);
+  const bw = BrowserWindow.fromWebContents(wc);
   fenster.fokus(bw);
 });
 
 // neue Kartei zu einem neuen Wort anlegen
 ipcMain.on("neues-wort", () => {
-  // bestehendes Fenster nutzen?
-  for (let id in win) {
+  // Bestehendes Fenster nutzen?
+  for (const id in win) {
     if (!win.hasOwnProperty(id)) {
       continue;
     }
     if (win[id].typ === "index" && !win[id].kartei) {
-      let w = BrowserWindow.fromId(parseInt(id, 10));
+      const w = BrowserWindow.fromId(parseInt(id, 10));
       fenster.fokus(w);
       w.webContents.send("kartei-erstellen");
       return;
     }
   }
+
   // neues Fenster öffnen
   fenster.erstellen("", true);
 });
 
 // überprüft, ob die übergebene Kartei schon offen ist
 ipcMain.handle("kartei-schon-offen", (evt, kartei) => {
-  for (let id in win) {
+  for (const id in win) {
     if (!win.hasOwnProperty(id)) {
       continue;
     }
@@ -1817,12 +1861,12 @@ ipcMain.handle("kartei-schon-offen", (evt, kartei) => {
 // die übergebene Kartei laden (in einem neuen oder bestehenden Hauptfenster)
 ipcMain.on("kartei-laden", (evt, kartei, in_leerem_fenster = true) => {
   if (in_leerem_fenster) {
-    for (let id in win) {
+    for (const id in win) {
       if (!win.hasOwnProperty(id)) {
         continue;
       }
       if (win[id].typ === "index" && !win[id].kartei) {
-        let w = BrowserWindow.fromId(parseInt(id, 10));
+        const w = BrowserWindow.fromId(parseInt(id, 10));
         w.webContents.send("kartei-oeffnen", kartei);
         fenster.fokus(w);
         return;
@@ -1833,17 +1877,21 @@ ipcMain.on("kartei-laden", (evt, kartei, in_leerem_fenster = true) => {
 });
 
 // registriert im Fenster-Objekt, welche Kartei geöffnet wurde
-ipcMain.on("kartei-geoeffnet", (evt, id, kartei) => win[id].kartei = kartei);
+ipcMain.on("kartei-geoeffnet", (evt, id, kartei) => {
+  win[id].kartei = kartei;
+});
 
 // deregistriert im Fenster-Objekt die Kartei, die geöffnet war
-ipcMain.on("kartei-geschlossen", (evt, id) => win[id].kartei = "");
+ipcMain.on("kartei-geschlossen", (evt, id) => {
+  win[id].kartei = "";
+});
 
 // neues, leeres Hauptfenster öffnen
-ipcMain.on("fenster-oeffnen", (evt) => fenster.erstellen(""));
+ipcMain.on("fenster-oeffnen", () => fenster.erstellen(""));
 
 // feststellen, ob ein weiteres Hauptfenster offen ist
 ipcMain.handle("fenster-hauptfenster", (evt, idFrage) => {
-  for (let id in win) {
+  for (const id in win) {
     if (!win.hasOwnProperty(id)) {
       continue;
     }
@@ -1875,8 +1923,9 @@ ipcMain.on("kopieren-basisdaten", (evt, winId) => {
     win: winId,
     daten: {},
   };
+
   // Daten aus den Fenstern holen
-  for (let id in win) {
+  for (const id in win) {
     if (!win.hasOwnProperty(id)) {
       continue;
     }
@@ -1884,14 +1933,15 @@ ipcMain.on("kopieren-basisdaten", (evt, winId) => {
     if (idInt === winId) {
       continue;
     }
-    let w = BrowserWindow.fromId(idInt);
+    const w = BrowserWindow.fromId(idInt);
     w.webContents.send("kopieren-basisdaten");
   }
+
   // Daten an das anfragende Fenster schicken
   // (auch hier, damit es selbst dann eine Antwort bekommt,
   // wenn keine weiteren Fenster offen sind)
   kopieren.timeout = setTimeout(() => {
-    let w = BrowserWindow.fromId(kopieren.basisdaten.win);
+    const w = BrowserWindow.fromId(kopieren.basisdaten.win);
     w.webContents.send("kopieren-basisdaten-empfangen", kopieren.basisdaten.daten);
   }, 25);
 });
@@ -1902,16 +1952,18 @@ ipcMain.on("kopieren-basisdaten-lieferung", (evt, daten) => {
   if (!daten.belege) {
     return;
   }
+
   // Daten registrieren
   kopieren.basisdaten.daten[daten.id] = {};
   kopieren.basisdaten.daten[daten.id].belege = daten.belege;
-  kopieren.basisdaten.daten[daten.id].gerueste = [...daten.gerueste];
+  kopieren.basisdaten.daten[daten.id].gerueste = [ ...daten.gerueste ];
   kopieren.basisdaten.daten[daten.id].wort = daten.wort;
+
   // Daten an das anfragende Fenster schicken
   // (damit nicht mehrere Meldungen gesendet werden => Timeout)
   clearTimeout(kopieren.timeout);
   kopieren.timeout = setTimeout(() => {
-    let w = BrowserWindow.fromId(kopieren.basisdaten.win);
+    const w = BrowserWindow.fromId(kopieren.basisdaten.win);
     w.webContents.send("kopieren-basisdaten-empfangen", kopieren.basisdaten.daten);
   }, 25);
 });
@@ -1920,19 +1972,20 @@ ipcMain.on("kopieren-basisdaten-lieferung", (evt, daten) => {
 ipcMain.on("kopieren-daten", (evt, winIdQuelle, winIdAnfrage) => {
   // Existiert das Fenster, aus dem die Daten kommen sollen, noch?
   if (!win[winIdQuelle]) {
-    let w = BrowserWindow.fromId(winIdAnfrage);
+    const w = BrowserWindow.fromId(winIdAnfrage);
     w.webContents.send("dialog-anzeigen", "Beim Kopieren der Belege ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\nDas Fenster, das die Belege liefern sollte, existiert nicht mehr.");
     return;
   }
+
   // Fenster existiert => Daten anfragen
   kopieren.winIdAnfrage = winIdAnfrage;
-  let w = BrowserWindow.fromId(winIdQuelle);
+  const w = BrowserWindow.fromId(winIdQuelle);
   w.webContents.send("kopieren-daten");
 });
 
 // angefragte Daten der gewünschten Belegquelle an das anfragende Fenster schicken
 ipcMain.on("kopieren-daten-lieferung", (evt, daten) => {
-  let w = BrowserWindow.fromId(kopieren.winIdAnfrage);
+  const w = BrowserWindow.fromId(kopieren.winIdAnfrage);
   w.webContents.send("kopieren-daten-empfangen", daten);
 });
 
@@ -1947,7 +2000,9 @@ ipcMain.handle("ztj-cache-save", (evt, kartei) => {
 
 ipcMain.handle("ztj-cache-get", () => ztjCache);
 
-ipcMain.handle("ztj-cache-status-set", (evt, status) => ztjCacheStatus = status);
+ipcMain.handle("ztj-cache-status-set", (evt, status) => {
+  ztjCacheStatus = status;
+});
 
 ipcMain.handle("ztj-cache-status-get", () => ztjCacheStatus);
 
@@ -1965,4 +2020,7 @@ ipcMain.handle("cli-return-code", (evt, returnCode) => {
 ipcMain.handle("quick-roles", (evt, befehl) => dienste.quickRoles(evt.sender, befehl));
 
 // Dateidialoge öffnen
-ipcMain.handle("datei-dialog", async (evt, args) => await dienste.dateiDialog(args));
+ipcMain.handle("datei-dialog", async (evt, args) => {
+  const result = await dienste.dateiDialog(args);
+  return result;
+});

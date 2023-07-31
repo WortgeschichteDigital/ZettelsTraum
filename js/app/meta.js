@@ -1,6 +1,6 @@
 "use strict";
 
-let meta = {
+const meta = {
   // Zwischenspeicher für die aktuelle Version des Dateiformats
   // (data.ve speichert die interne Version der Daten; die ist nach
   // der Konversion des Formats natürlich immer die höchste; hier wird
@@ -18,7 +18,7 @@ let meta = {
       return;
     }
     // Fenster öffnen oder in den Vordergrund holen
-    let fenster = document.getElementById("meta");
+    const fenster = document.getElementById("meta");
     if (overlay.oeffnen(fenster)) { // Fenster ist schon offen
       return;
     }
@@ -28,7 +28,7 @@ let meta = {
     });
     // Fenster füllen
     document.getElementById("meta-dc").textContent = helfer.datumFormat(data.dc);
-    let dm = document.getElementById("meta-dm");
+    const dm = document.getElementById("meta-dm");
     if (data.dm) {
       dm.textContent = helfer.datumFormat(data.dm);
       dm.classList.remove("kein-wert");
@@ -36,8 +36,8 @@ let meta = {
       dm.textContent = "noch nicht gespeichert";
       dm.classList.add("kein-wert");
     }
-    let speicherort = document.getElementById("meta-speicherort"),
-      pfad = "noch nicht gespeichert";
+    const speicherort = document.getElementById("meta-speicherort");
+    let pfad = "noch nicht gespeichert";
     if (kartei.pfad) {
       pfad = `\u200E${kartei.pfad}\u200E`;
       // Vor und hinter der Pfad-Angabe steht das nicht druckbare Steuer-Zeichen

@@ -1,9 +1,9 @@
 "use strict";
 
-let karteisuche = {
+const karteisuche = {
   // Suche-Fenster öffnen
   async oeffnen () {
-    let fenster = document.getElementById("karteisuche");
+    const fenster = document.getElementById("karteisuche");
     overlay.oeffnen(fenster);
     // Läuft im aktuellen Fenster gerade eine Suche?
     if (!document.getElementById("karteisuche-suche-laeuft").classList.contains("aus")) {
@@ -14,7 +14,7 @@ let karteisuche = {
     // Cache laden
     karteisuche.ztjCache = await modules.ipc.invoke("ztj-cache-get");
     // Suchbutton fokussieren
-    let buttons = fenster.querySelectorAll(`input[type="button"]`);
+    const buttons = fenster.querySelectorAll('input[type="button"]');
     if (Object.keys(karteisuche.ztjCache).length) {
       buttons[1].classList.remove("aus");
       buttons[1].focus();
@@ -37,22 +37,22 @@ let karteisuche = {
   // Liste der ausgewählten Pfade aufbauen
   pfadeAuflisten () {
     // Check-Status sichern
-    let status = Array(optionen.data.karteisuche.pfade.length).fill(true),
-      inputs = document.querySelectorAll("#karteisuche-pfade input");
+    const status = Array(optionen.data.karteisuche.pfade.length).fill(true);
+    const inputs = document.querySelectorAll("#karteisuche-pfade input");
     for (let i = 0, len = inputs.length; i < len; i++) {
       if (!inputs[i].checked) {
         status[i] = false;
       }
     }
     // Content leeren
-    let cont = document.getElementById("karteisuche-pfade");
+    const cont = document.getElementById("karteisuche-pfade");
     cont.replaceChildren();
     // Pfad hinzufügen
-    let p = document.createElement("p");
+    const p = document.createElement("p");
     cont.appendChild(p);
     p.classList.add("add");
     karteisuche.pfadHinzufuegenListener(p);
-    let a = document.createElement("a");
+    const a = document.createElement("a");
     p.appendChild(a);
     a.href = "#";
     a.classList.add("icon-link", "icon-add");
@@ -60,29 +60,29 @@ let karteisuche = {
     // Pfade auflisten
     for (let i = 0, len = optionen.data.karteisuche.pfade.length; i < len; i++) {
       const pfad = optionen.data.karteisuche.pfade[i];
-      let p = document.createElement("p");
+      const p = document.createElement("p");
       cont.appendChild(p);
       // Lösch-Icon
-      let a = document.createElement("a");
+      const a = document.createElement("a");
       p.appendChild(a);
       a.href = "#";
       a.classList.add("icon-link", "icon-loeschen");
       a.dataset.pfad = pfad;
       karteisuche.pfadEntfernen(a);
       // Pfad
-      let span = document.createElement("span");
+      const span = document.createElement("span");
       p.appendChild(span);
       span.dataset.pfad = pfad; // wegen des Rechtsklickmenüs
       span.title = pfad;
       // ggf. Checkbox einblenden
       if (len > 1) {
-        let input = document.createElement("input");
+        const input = document.createElement("input");
         span.insertBefore(input, span.firstChild);
         input.checked = status[i];
         input.id = `pfad-${i + 1}`;
         input.type = "checkbox";
         input.value = pfad;
-        let label = document.createElement("label");
+        const label = document.createElement("label");
         span.appendChild(label);
         label.setAttribute("for", `pfad-${i + 1}`);
         label.textContent = pfad;
@@ -97,7 +97,7 @@ let karteisuche = {
   //   p = Element
   //     (der Absatz zum Hinzufügen des Pfades)
   pfadHinzufuegenListener (p) {
-    p.addEventListener("click", function(evt) {
+    p.addEventListener("click", function (evt) {
       evt.stopPropagation();
       karteisuche.pfadHinzufuegen();
     });
@@ -105,22 +105,20 @@ let karteisuche = {
 
   // Pfad zur Pfadliste hinzufügen
   async pfadHinzufuegen () {
-    let opt = {
+    const opt = {
       title: "Pfad hinzufügen",
       defaultPath: appInfo.documents,
-      properties: [
-        "openDirectory",
-      ],
+      properties: [ "openDirectory" ],
     };
     // Wo wurde zuletzt eine Datei gespeichert oder geöffnet?
     if (optionen.data.letzter_pfad) {
       opt.defaultPath = optionen.data.letzter_pfad;
     }
     // Dialog anzeigen
-    let result = await modules.ipc.invoke("datei-dialog", {
+    const result = await modules.ipc.invoke("datei-dialog", {
       open: true,
       winId: winInfo.winId,
-      opt: opt,
+      opt,
     });
     // Fehler oder keine Datei ausgewählt
     if (result.message || !Object.keys(result).length) { // Fehler
@@ -155,7 +153,7 @@ let karteisuche = {
   //   a = Element
   //     (das Lösch-Icon)
   pfadEntfernen (a) {
-    a.addEventListener("click", function(evt) {
+    a.addEventListener("click", function (evt) {
       evt.preventDefault();
       // Pfad entfernen
       const pfad = this.dataset.pfad;
@@ -196,12 +194,12 @@ let karteisuche = {
       return;
     }
     // Pfade ermitteln, in denen gesucht werden soll und kann
-    let pfade = [],
-      inputs = document.querySelectorAll("#karteisuche-pfade input"),
-      nichtGefunden = 0,
-      abgehakt = 0;
+    const pfade = [];
+    const inputs = document.querySelectorAll("#karteisuche-pfade input");
+    let nichtGefunden = 0;
+    let abgehakt = 0;
     if (inputs.length) {
-      for (let i of inputs) {
+      for (const i of inputs) {
         if (!i.checked) {
           continue;
         }
@@ -217,8 +215,8 @@ let karteisuche = {
       }
     } else {
       abgehakt++;
-      const pfad = optionen.data.karteisuche.pfade[0],
-        exists = await helfer.exists(pfad);
+      const pfad = optionen.data.karteisuche.pfade[0];
+      const exists = await helfer.exists(pfad);
       if (exists) {
         pfade.push(pfad);
         karteisuche.markierungPfad(pfad, false);
@@ -251,7 +249,7 @@ let karteisuche = {
       }
       dialog.oeffnen({
         typ: "alert",
-        text: text,
+        text,
       });
       karteisuche.animation(false);
       return;
@@ -269,8 +267,8 @@ let karteisuche = {
   markierungPfad (pfad, verschwunden) {
     // betreffenden Span finden
     pfad = pfad.replace(/\\/g, "\\\\"); // Backslash in Windows-Pfaden maskieren!
-    let span = document.querySelector(`#karteisuche-pfade [title="${pfad}"]`),
-      img = span.querySelector("img");
+    const span = document.querySelector(`#karteisuche-pfade [title="${pfad}"]`);
+    const img = span.querySelector("img");
     // Bild ggf. entfernen
     if (!verschwunden) {
       if (img) {
@@ -282,7 +280,7 @@ let karteisuche = {
     if (img) {
       return;
     }
-    let x = document.createElement("img");
+    const x = document.createElement("img");
     span.insertBefore(x, span.lastChild);
     x.src = "img/x-dick-rot.svg";
     x.width = "24";
@@ -294,7 +292,7 @@ let karteisuche = {
   //   img = Element
   //     (das Fehler-Icon)
   markierungFehler (img) {
-    img.addEventListener("click", function() {
+    img.addEventListener("click", function () {
       dialog.oeffnen({
         typ: "alert",
         text: `Der Pfad\n<p class="force-wrap"><i>${this.parentNode.title}</i></p>\nkonnte nicht gefunden werden.`,
@@ -336,7 +334,7 @@ let karteisuche = {
         karteisuche.ztj = [];
         if (pfade.length) {
           // Dateien auf Speichermedium suchen
-          for (let ordner of pfade) {
+          for (const ordner of pfade) {
             const exists = await helfer.exists(ordner);
             if (exists) {
               try {
@@ -355,7 +353,7 @@ let karteisuche = {
           }
         } else {
           // aktive Pfade ermitteln
-          let pfade = [];
+          const pfade = [];
           document.querySelectorAll("#karteisuche-pfade span[data-pfad]").forEach(i => {
             const input = i.querySelector("input");
             if (input && input.checked ||
@@ -365,7 +363,7 @@ let karteisuche = {
             }
           });
           // Dateidaten aus dem Cache zusammentragen
-          for (let pfad of Object.keys(karteisuche.ztjCache)) {
+          for (const pfad of Object.keys(karteisuche.ztjCache)) {
             let pfadAktiv = false;
             for (const reg of pfade) {
               if (reg.test(pfad)) {
@@ -378,7 +376,7 @@ let karteisuche = {
               continue;
             }
             karteisuche.ztj.push({
-              pfad: pfad,
+              pfad,
               ctime: karteisuche.ztjCache[pfad].ctime,
               wort: "",
               wortSort: "",
@@ -401,10 +399,10 @@ let karteisuche = {
     // Filterwerte sammeln
     karteisuche.filterWerteSammeln();
     // Karteien analysieren
-    let ztjAdd = [],
-      ztjMit = {},
-      nebenlemmata = new Set();
-    for (let kartei of karteisuche.ztj) {
+    const ztjAdd = [];
+    const ztjMit = {};
+    const nebenlemmata = new Set();
+    for (const kartei of karteisuche.ztj) {
       // Kartei einlesen
       let datei = {};
       if (karteisuche.ztjCache[kartei.pfad] &&
@@ -436,7 +434,7 @@ let karteisuche = {
         };
       }
       // Werden in der Kartei mehrere Wörter behandelt?
-      let woerter = datei.wo.split(", ");
+      const woerter = datei.wo.split(", ");
       for (let i = 0, len = woerter.length; i < len; i++) {
         let ziel = kartei;
         if (i > 0) {
@@ -478,9 +476,9 @@ let karteisuche = {
         // Behandelt-Datensätze
         if (woerter.length > 1 &&
             !datei.rd.bh) {
-          let mit = [...woerter];
+          const mit = [ ...woerter ];
           mit.splice(i, 1);
-          ziel.behandeltMit = [...mit];
+          ziel.behandeltMit = [ ...mit ];
         }
         if (datei.rd.bh) {
           nebenlemmata.add(woerter[i]);
@@ -500,7 +498,7 @@ let karteisuche = {
           er = datei.rd;
         }
         for (const erg of er) {
-          ziel.redaktion.push({...erg});
+          ziel.redaktion.push({ ...erg });
         }
       }
     }
@@ -547,7 +545,7 @@ let karteisuche = {
         if (j.wort === i.behandeltIn) {
           i.redaktion = [];
           for (const erg of j.redaktion) {
-            i.redaktion.push({...erg});
+            i.redaktion.push({ ...erg });
           }
           break;
         }
@@ -558,7 +556,7 @@ let karteisuche = {
       if (!karteisuche.ztjCache[kartei.pfad]) {
         continue;
       }
-      let datei = karteisuche.ztjCache[kartei.pfad].data;
+      const datei = karteisuche.ztjCache[kartei.pfad].data;
       if (datei.rd.er) {
         datei.rd.er = kartei.redaktion;
       } else {
@@ -581,7 +579,7 @@ let karteisuche = {
     // passende Karteien auflisten
     karteisuche.ztjAuflisten();
     // ggf. Cache-Button ein- oder ausblenden
-    let button = document.querySelectorAll(`#karteisuche input[type="button"]`)[1];
+    const button = document.querySelectorAll('#karteisuche input[type="button"]')[1];
     if (karteisuche.ztj.length ||
         Object.keys(karteisuche.ztjCache).length) {
       button.classList.remove("aus");
@@ -593,7 +591,7 @@ let karteisuche = {
     // Filter speichern
     karteisuche.filterSpeichern();
     // Systemmeldung ausgeben
-    let notifyOpts = {
+    const notifyOpts = {
       body: "Die Karteisuche ist abgeschlossen!",
       icon: "img/icon/linux/icon_128px.png",
       lang: "de",
@@ -645,20 +643,19 @@ let karteisuche = {
   //     (Ordner, von dem aus die Suche beginnen soll)
   //   suchtiefe = Number
   //     (Tiefe gezählt vom Startordner aus; Startordner = 1)
-  ordnerParsen (ordner, suchtiefe) {
+  async ordnerParsen (ordner, suchtiefe) {
     suchtiefe++;
-    return new Promise(async resolve => {
-      try {
-        const files = await modules.fsp.readdir(ordner);
-        for (let i of files) {
-          const pfad = modules.path.join(ordner, i);
-          await karteisuche.pfadPruefen(pfad, suchtiefe);
-        }
-        resolve(true);
-      } catch (err) { // Auslesen des Ordners fehlgeschlagen
-        resolve(false);
+    try {
+      const files = await modules.fsp.readdir(ordner);
+      for (const i of files) {
+        const pfad = modules.path.join(ordner, i);
+        await karteisuche.pfadPruefen(pfad, suchtiefe);
       }
-    });
+      // Auslesen des Ordners geglückt
+      return true;
+    } catch {}
+    // Auslesen des Ordners fehlgeschlagen
+    return false;
   },
 
   // überprüft einen übergebenen Pfad: Ordner oder ZTJ-Datei?
@@ -666,42 +663,40 @@ let karteisuche = {
   //     (Ordner, von dem aus die Suche beginnen soll)
   //   suchtiefe = Number
   //     (Tiefe gezählt vom Startordner aus; Startordner = 1)
-  pfadPruefen (pfad, suchtiefe) {
-    return new Promise(async resolve => {
-      try {
-        let stats; // Natur des Pfades?
-        if (/\.ztj$/.test(pfad) ||
-            !/\.[a-z]{3,4}/.test(pfad)) {
-          // zur Beschleunigung nur testen, wenn ZTJ-Datei oder wahrscheinlich Ordner
-          stats = await modules.fsp.lstat(pfad);
-        }
-        if (stats?.isDirectory() && // Ordner => parsen
-            suchtiefe <= karteisuche.suchenTiefe) { // nur bis zu dieser Verschachtelungstiefe suchen
-          await karteisuche.ordnerParsen(pfad, suchtiefe);
-        } else if (/\.ztj$/.test(pfad)) { // ZTJ-Datei => merken
-          karteisuche.ztj.push({
-            pfad: pfad,
-            ctime: stats.ctime.toString(),
-            wort: "",
-            wortSort: "",
-            redaktion: [],
-            nebenlemmata: [],
-            behandeltIn: "",
-            behandeltMit: [],
-            passt: false,
-          });
-        }
-        resolve(true);
-      } catch (err) { // wahrscheinlich besteht kein Zugriff auf den Pfad
-        resolve(false);
+  async pfadPruefen (pfad, suchtiefe) {
+    try {
+      let stats; // Natur des Pfades?
+      if (/\.ztj$/.test(pfad) ||
+          !/\.[a-z]{3,4}/.test(pfad)) {
+        // zur Beschleunigung nur testen, wenn ZTJ-Datei oder wahrscheinlich Ordner
+        stats = await modules.fsp.lstat(pfad);
       }
-    });
+      if (stats?.isDirectory() && // Ordner => parsen
+          suchtiefe <= karteisuche.suchenTiefe) { // nur bis zu dieser Verschachtelungstiefe suchen
+        await karteisuche.ordnerParsen(pfad, suchtiefe);
+      } else if (/\.ztj$/.test(pfad)) { // ZTJ-Datei => merken
+        karteisuche.ztj.push({
+          pfad,
+          ctime: stats.ctime.toString(),
+          wort: "",
+          wortSort: "",
+          redaktion: [],
+          nebenlemmata: [],
+          behandeltIn: "",
+          behandeltMit: [],
+          passt: false,
+        });
+      }
+      return true;
+    } catch {}
+    // wahrscheinlich besteht kein Zugriff auf den Pfad
+    return false;
   },
 
   // ZTJ-Dateien auflisten
   ztjAuflisten () {
-    let treffer = 0,
-      woerter = [];
+    let treffer = 0;
+    const woerter = [];
     for (let i = 0, len = karteisuche.ztj.length; i < len; i++) {
       if (!karteisuche.ztj[i].passt) {
         continue;
@@ -710,11 +705,11 @@ let karteisuche = {
       woerter.push({
         wort: karteisuche.ztj[i].wort,
         wortSort: karteisuche.ztj[i].wortSort,
-        i: i,
+        i,
       });
     }
-    woerter.sort(function(a, b) {
-      let arr = [a.wortSort, b.wortSort];
+    woerter.sort(function (a, b) {
+      const arr = [ a.wortSort, b.wortSort ];
       arr.sort(helfer.sortAlpha);
       if (a.wortSort === arr[0]) {
         return -1;
@@ -724,23 +719,23 @@ let karteisuche = {
     // Treffer anzeigen
     document.getElementById("karteisuche-treffer").textContent = `(${treffer})`;
     // Karteiliste füllen
-    let cont = document.getElementById("karteisuche-karteien"),
-      alphabet = new Set();
+    const cont = document.getElementById("karteisuche-karteien");
+    const alphabet = new Set();
     cont.scrollTop = 0;
     cont.replaceChildren();
-    for (let wort of woerter) {
+    for (const wort of woerter) {
       // Absatz
-      let div = document.createElement("div");
+      const div = document.createElement("div");
       cont.appendChild(div);
-      let alpha = karteisuche.wortAlpha(wort.wortSort);
+      const alpha = karteisuche.wortAlpha(wort.wortSort);
       alphabet.add(alpha);
       div.dataset.buchstabe = alpha;
       div.dataset.idx = wort.i;
       // Link
-      let a = document.createElement("a");
+      const a = document.createElement("a");
       div.appendChild(a);
       a.href = "#";
-      let pfad = karteisuche.ztj[wort.i].pfad;
+      const pfad = karteisuche.ztj[wort.i].pfad;
       a.dataset.pfad = pfad;
       karteisuche.ztjOeffnen(a);
       // Wort
@@ -771,21 +766,21 @@ let karteisuche = {
   //     (Index, der auf die Daten in karteisuche.ztj zeigt)
   ztjAuflistenInfos (div, i) {
     // Wrapper erzeugen
-    let wrap = document.createElement("div");
+    const wrap = document.createElement("div");
     // Redaktionsinfos
     if (karteisuche.filterWerte.some(i => i.typ === "Redaktion")) {
       // Redaktionsstatus drucken
-      let status = karteisuche.ztjAuflistenRedaktion(i),
-        stat = document.createElement("span");
+      const status = karteisuche.ztjAuflistenRedaktion(i);
+      const stat = document.createElement("span");
       wrap.appendChild(stat);
       stat.classList.add("karteisuche-status", `karteisuche-status${status.status}`);
       // höchstes Redaktionsereignis drucken
-      let erg = document.createElement("span");
+      const erg = document.createElement("span");
       wrap.appendChild(erg);
       erg.classList.add("karteisuche-hoechst");
       erg.textContent = status.ereignis;
       // Personen und Daten: Wer hat wann was erstellt?
-      let erstellt = [
+      const erstellt = [
         {
           arr: karteisuche.ztj[i].redaktion.filter(v => v.er === "Kartei erstellt"),
           txt: "Kartei",
@@ -796,23 +791,23 @@ let karteisuche = {
         },
       ];
       let br = false;
-      for (let e of erstellt) {
-        for (let i of e.arr) {
+      for (const e of erstellt) {
+        for (const i of e.arr) {
           if (br) {
             wrap.appendChild(document.createElement("br"));
           }
-          let typ = document.createElement("i");
+          const typ = document.createElement("i");
           wrap.appendChild(typ);
           typ.textContent = `${e.txt}:`;
-          let da = helfer.datumFormat(i.da, "minuten").split(", ")[0],
-            pr = i.pr ? i.pr : "N. N.";
+          const da = helfer.datumFormat(i.da, "minuten").split(", ")[0];
+          const pr = i.pr ? i.pr : "N.\u00A0N.";
           wrap.appendChild(document.createTextNode(` ${pr} (${da})`));
           br = true;
         }
       }
     }
     // Verweisinfos
-    let verweise = karteisuche.ztjAuflistenVerweise(i);
+    const verweise = karteisuche.ztjAuflistenVerweise(i);
     if (verweise) {
       if (wrap.hasChildNodes()) {
         wrap.appendChild(document.createElement("br"));
@@ -830,15 +825,15 @@ let karteisuche = {
   //   idx = Number
   //     (auf karteisuche.ztj zeigender Index)
   ztjAuflistenRedaktion (idx) {
-    let ds = karteisuche.ztj[idx],
-      ereignisse = Object.keys(redaktion.ereignisse),
-      status = 1,
-      status2 = ereignisse.indexOf("Artikel erstellt"),
-      status3 = ereignisse.indexOf("Artikel fertig"),
-      status4 = ereignisse.indexOf("Artikel online"),
-      hoechst = -1;
-    for (let i of ds.redaktion) {
-      let idx = ereignisse.indexOf(i.er);
+    const ds = karteisuche.ztj[idx];
+    const ereignisse = Object.keys(redaktion.ereignisse);
+    let status = 1;
+    const status2 = ereignisse.indexOf("Artikel erstellt");
+    const status3 = ereignisse.indexOf("Artikel fertig");
+    const status4 = ereignisse.indexOf("Artikel online");
+    let hoechst = -1;
+    for (const i of ds.redaktion) {
+      const idx = ereignisse.indexOf(i.er);
       hoechst = idx > hoechst ? idx : hoechst;
     }
     // Status ermitteln
@@ -864,12 +859,12 @@ let karteisuche = {
   //     (Index, der auf die Daten in karteisuche.ztj zeigt)
   ztjAuflistenVerweise (i) {
     // Verweise ermitteln
-    let verweise = [...new Set(karteisuche.ztj[i].behandeltMit)];
+    const verweise = [ ...new Set(karteisuche.ztj[i].behandeltMit) ];
     verweise.sort(helfer.sortAlpha);
     verweise.forEach((i, n) => {
       verweise[n] = `+ ${i}`;
     });
-    let bhIn = karteisuche.ztj[i].behandeltIn;
+    const bhIn = karteisuche.ztj[i].behandeltIn;
     if (bhIn) {
       verweise.unshift(`→ ${bhIn}`);
     }
@@ -878,19 +873,19 @@ let karteisuche = {
       return null;
     }
     // Verweise vorhanden
-    let span = document.createElement("span");
+    const span = document.createElement("span");
     span.classList.add("verweise");
     for (let i = 0, len = verweise.length; i < len; i++) {
       if (i > 0) {
         span.appendChild(document.createTextNode(", "));
       }
-      let v = verweise[i],
-        wrap = document.createElement("span");
+      const v = verweise[i];
+      const wrap = document.createElement("span");
       if (/^→/.test(v)) {
-        wrap.textContent = "→ ";
+        wrap.textContent = "→\u00A0";
         wrap.title = "behandelt in";
       } else {
-        wrap.textContent = "+ ";
+        wrap.textContent = "+\u00A0";
         wrap.title = "behandelt mit";
       }
       span.appendChild(wrap);
@@ -903,7 +898,7 @@ let karteisuche = {
   //   a = Element
   //     (Link, mit dem eine ZTJ-Datei geöffnet werden kann)
   ztjOeffnen (a) {
-    a.addEventListener("click", function(evt) {
+    a.addEventListener("click", function (evt) {
       evt.preventDefault();
       if (evt.detail > 1) { // Doppelklicks abfangen
         return;
@@ -927,7 +922,7 @@ let karteisuche = {
     // Homographenziffern entfernen
     wort = wort.replace(/[¹²³⁴⁵⁶⁷⁸⁹⁰]/g, "");
     let sortform = "";
-    for (let i of wort.split(/\s/)) {
+    for (const i of wort.split(/\s/)) {
       // Artikel ignorieren
       if (/^der|die|das$/.test(i)) {
         continue;
@@ -977,17 +972,17 @@ let karteisuche = {
   //     (Buchstaben des Alphabets, die auftauchen)
   alphabet (alpha) {
     // Liste löschen
-    let cont = document.getElementById("karteisuche-alphabet");
+    const cont = document.getElementById("karteisuche-alphabet");
     cont.replaceChildren();
     // keine Treffer
     if (!alpha.size) {
       return;
     }
     // Liste aufbauen
-    let alphabet = [...alpha].sort();
+    const alphabet = [ ...alpha ].sort();
     alphabet.unshift("alle");
     for (let i = 0, len = alphabet.length; i < len; i++) {
-      let a = document.createElement("a");
+      const a = document.createElement("a");
       cont.appendChild(a);
       a.dataset.buchstabe = alphabet[i];
       a.href = "#";
@@ -998,9 +993,9 @@ let karteisuche = {
       }
     }
     // Maximalbreite berechnen
-    let h = cont.parentNode,
-      treffer = document.getElementById("karteisuche-treffer"),
-      belegt = treffer.offsetLeft + treffer.offsetWidth + h.lastChild.offsetWidth + 4 + 2 * 25; // 4px Abstand rechts, 2 * 25px Margins zum Alphabet
+    const h = cont.parentNode;
+    const treffer = document.getElementById("karteisuche-treffer");
+    const belegt = treffer.offsetLeft + treffer.offsetWidth + h.lastChild.offsetWidth + 4 + 2 * 25; // 4px Abstand rechts, 2 * 25px Margins zum Alphabet
     cont.style.maxWidth = `calc(100% - ${belegt}px`;
     // Klickevents anhängen
     cont.querySelectorAll("a").forEach(a => karteisuche.alphabetFilter(a));
@@ -1010,14 +1005,14 @@ let karteisuche = {
   //   a = Element
   //     (Link für einen oder alle Buchstaben)
   alphabetFilter (a) {
-    a.addEventListener("click", function(evt) {
+    a.addEventListener("click", function (evt) {
       evt.preventDefault();
-      let b = this.dataset.buchstabe,
-        liste = document.getElementById("karteisuche-karteien"),
-        treffer = 0;
+      const b = this.dataset.buchstabe;
+      const liste = document.getElementById("karteisuche-karteien");
+      let treffer = 0;
       liste.scrollTop = 0;
       // filtern
-      for (let i of liste.childNodes) {
+      for (const i of liste.childNodes) {
         let anzeigen = false;
         if (b === "alle" || b === i.dataset.buchstabe) {
           anzeigen = true;
@@ -1030,7 +1025,7 @@ let karteisuche = {
         }
       }
       // aktiven Filter markieren
-      let alpha = document.getElementById("karteisuche-alphabet");
+      const alpha = document.getElementById("karteisuche-alphabet");
       alpha.querySelector(".aktiv").classList.remove("aktiv");
       this.classList.add("aktiv");
       // Trefferzahl auffrischen
@@ -1048,7 +1043,7 @@ let karteisuche = {
 
   // zur Verfügung stehende Filter-Typen
   filterTypen: {
-    "Karteiwort": [
+    Karteiwort: [
       {
         type: "text",
         ro: false,
@@ -1058,7 +1053,7 @@ let karteisuche = {
         label: "",
       },
     ],
-    "Lemmatyp": [
+    Lemmatyp: [
       {
         type: "dropdown",
         ro: true,
@@ -1068,7 +1063,7 @@ let karteisuche = {
         label: "",
       },
     ],
-    "Themenfeld": [
+    Themenfeld: [
       {
         type: "dropdown",
         ro: false,
@@ -1078,7 +1073,7 @@ let karteisuche = {
         label: "",
       },
     ],
-    "Sachgebiet": [
+    Sachgebiet: [
       {
         type: "dropdown",
         ro: false,
@@ -1088,7 +1083,7 @@ let karteisuche = {
         label: "",
       },
     ],
-    "Volltext": [
+    Volltext: [
       {
         type: "text",
         ro: false,
@@ -1106,7 +1101,7 @@ let karteisuche = {
         label: "",
       },
     ],
-    "Tag": [
+    Tag: [
       {
         type: "dropdown",
         ro: true,
@@ -1124,7 +1119,7 @@ let karteisuche = {
         label: "",
       },
     ],
-    "Karteidatum": [
+    Karteidatum: [
       {
         type: "dropdown",
         ro: true,
@@ -1150,7 +1145,7 @@ let karteisuche = {
         label: "",
       },
     ],
-    "BearbeiterIn": [
+    BearbeiterIn: [
       {
         type: "dropdown",
         ro: false,
@@ -1160,7 +1155,7 @@ let karteisuche = {
         label: "",
       },
     ],
-    "Redaktion": [
+    Redaktion: [
       {
         type: "dropdown",
         ro: false,
@@ -1186,7 +1181,7 @@ let karteisuche = {
         label: "",
       },
     ],
-    "Redaktionsdatum": [
+    Redaktionsdatum: [
       {
         type: "date",
         ro: false,
@@ -1210,25 +1205,25 @@ let karteisuche = {
   //   manuell = Boolean || undefined
   //     (der Filter wurde manuell hinzugefügt)
   filterHinzufuegen (manuell = true) {
-    let cont = document.getElementById("karteisuche-filter"),
-      p = document.createElement("p");
+    const cont = document.getElementById("karteisuche-filter");
+    const p = document.createElement("p");
     cont.insertBefore(p, cont.firstChild);
     p.classList.add("input-text");
     // Lösch-Icon
-    let a = document.createElement("a");
+    const a = document.createElement("a");
     p.appendChild(a);
     a.href = "#";
     a.classList.add("icon-link", "icon-loeschen");
     karteisuche.filterEntfernen(a);
     // Dropdown-Container
-    let span = document.createElement("span");
+    const span = document.createElement("span");
     p.appendChild(span);
     span.classList.add("dropdown-cont");
     // Input
-    let input = document.createElement("input");
+    const input = document.createElement("input");
     span.appendChild(input);
     input.classList.add("dropdown-feld", "karteisuche-filter");
-    let id = karteisuche.makeId.next().value;
+    const id = karteisuche.makeId.next().value;
     input.id = `karteisuche-filter-${id}`;
     input.placeholder = "Filtertyp";
     input.readOnly = true;
@@ -1252,34 +1247,34 @@ let karteisuche = {
   //   filterId = String
   //     (ID des Filters, der gerade geändert wurde)
   filterFelder (filterId) {
-    let filter = document.getElementById(filterId),
-      p = filter.parentNode.parentNode;
+    const filter = document.getElementById(filterId);
+    const p = filter.parentNode.parentNode;
     // ggf. unnötige Inputs entfernen
     // (der Filter kann geändert werden)
     while (p.childNodes.length > 2) {
       p.removeChild(p.lastChild);
     }
     // Filtertyp und ID ermitteln
-    const typ = filter.value,
-      id = filterId.replace(/.+-/, "");
+    const typ = filter.value;
+    const id = filterId.replace(/.+-/, "");
     // der Filtertyp könnte leer sein, wenn ein leerer Filter wiederhergestellt wird
     if (!typ) {
       return;
     }
     // die nötigen Inputs hinzufügen
-    let felder = karteisuche.filterTypen[typ];
-    for (let feld of felder) {
-      let span = document.createElement("span");
+    const felder = karteisuche.filterTypen[typ];
+    for (const feld of felder) {
+      const span = document.createElement("span");
       p.appendChild(span);
       if (feld.label) {
-        let label = document.createElement("label");
+        const label = document.createElement("label");
         span.appendChild(label);
         label.setAttribute("for", `${feld.cl}-${id}`);
         label.textContent = feld.label;
       }
       if (feld.type === "dropdown") {
         span.classList.add("dropdown-cont");
-        let input = document.createElement("input");
+        const input = document.createElement("input");
         span.appendChild(input);
         input.classList.add("dropdown-feld", feld.cl);
         input.id = `${feld.cl}-${id}`;
@@ -1293,7 +1288,7 @@ let karteisuche = {
         dropdown.feld(input);
         karteisuche.filterFelderListener(input);
       } else if (feld.type === "text") {
-        let input = document.createElement("input");
+        const input = document.createElement("input");
         span.appendChild(input);
         input.classList.add(feld.cl);
         input.id = `${feld.cl}-${id}`;
@@ -1302,12 +1297,12 @@ let karteisuche = {
         input.value = feld.pre;
         karteisuche.filterFelderListener(input);
       } else if (feld.type === "date") {
-        let input = document.createElement("input");
+        const input = document.createElement("input");
         span.appendChild(input);
         input.classList.add(feld.cl);
         input.id = `${feld.cl}-${id}`;
         input.type = "date";
-        let datum = new Date();
+        const datum = new Date();
         if (feld.cl === "karteisuche-redaktionsdatum-von") {
           input.value = `${datum.getFullYear()}-01-01`;
         } else if (feld.cl === "karteisuche-redaktionsdatum-bis") {
@@ -1317,13 +1312,13 @@ let karteisuche = {
         }
         karteisuche.filterFelderListener(input);
       } else if (feld.type === "checkbox") {
-        let input = document.createElement("input");
+        const input = document.createElement("input");
         span.appendChild(input);
         input.classList.add(feld.cl);
         input.id = `${feld.cl}-${id}`;
         input.type = "checkbox";
         karteisuche.filterFelderListener(input);
-        let label = document.createElement("label");
+        const label = document.createElement("label");
         span.appendChild(label);
         label.setAttribute("for", `${feld.cl}-${id}`);
         label.textContent = feld.ph;
@@ -1334,7 +1329,7 @@ let karteisuche = {
 
   // Suche mit Enter starten
   filterFelderListener (input) {
-    input.addEventListener("keydown", function(evt) {
+    input.addEventListener("keydown", function (evt) {
       tastatur.detectModifiers(evt);
       if (!tastatur.modifiers &&
           evt.key === "Enter" &&
@@ -1354,7 +1349,7 @@ let karteisuche = {
   //     (das Input-Feld, in dem der ausgeschriebene Tag-Typ steht)
   filterTagTyp (feld) {
     const typ = feld.value;
-    for (let key in optionen.tagsTypen) {
+    for (const key in optionen.tagsTypen) {
       if (!optionen.tagsTypen.hasOwnProperty(key)) {
         continue;
       }
@@ -1369,7 +1364,7 @@ let karteisuche = {
   //   a = Element
   //     (Anker zum Entfernen des Filters)
   filterEntfernen (a) {
-    a.addEventListener("click", function(evt) {
+    a.addEventListener("click", function (evt) {
       evt.preventDefault();
       a.parentNode.parentNode.removeChild(a.parentNode);
       // Maximalhöhe Trefferliste setzen
@@ -1391,20 +1386,20 @@ let karteisuche = {
   // Filterwerte sammeln
   filterWerteSammeln () {
     karteisuche.filterWerte = [];
-    for (let filter of document.querySelectorAll(".karteisuche-filter")) {
-      const id = filter.id.replace(/.+-/, ""),
-        typ = filter.value;
+    for (const filter of document.querySelectorAll(".karteisuche-filter")) {
+      const id = filter.id.replace(/.+-/, "");
+      const typ = filter.value;
       // Filter ausgewählt?
       if (!typ) {
         karteisuche.filterIgnorieren(filter, true);
         continue;
       }
       // Objekt für die Filterwerte
-      let obj = {
-        typ: typ,
+      const obj = {
+        typ,
       };
-      // Karteiwort
       if (typ === "Karteiwort") {
+        // Karteiwort
         let text = document.getElementById(`karteisuche-karteiwort-${id}`).value;
         text = helfer.textTrim(text, true);
         if (!text) {
@@ -1413,14 +1408,12 @@ let karteisuche = {
         }
         obj.reg = new RegExp(helfer.formVariSonderzeichen(helfer.escapeRegExp(text)), "i");
         karteisuche.filterWerte.push(obj);
-      }
-      // Lemmatyp
-      else if (typ === "Lemmatyp") {
+      } else if (typ === "Lemmatyp") {
+        // Lemmatyp
         obj.lt = document.getElementById(`karteisuche-lemmatyp-${id}`).value;
         karteisuche.filterWerte.push(obj);
-      }
-      // Themenfelder/Sachgebiet
-      else if (/^(Themenfeld|Sachgebiet)$/.test(typ)) {
+      } else if (/^(Themenfeld|Sachgebiet)$/.test(typ)) {
+        // Themenfelder/Sachgebiet
         const tagName = karteisuche.filterTagMap[typ];
         obj.id = "";
         const tag = document.getElementById(`karteisuche-${typ.toLowerCase()}-${id}`).value;
@@ -1428,7 +1421,7 @@ let karteisuche = {
           karteisuche.filterIgnorieren(filter, true);
           continue;
         }
-        for (let id in optionen.data.tags[tagName].data) {
+        for (const id in optionen.data.tags[tagName].data) {
           if (!optionen.data.tags[tagName].data.hasOwnProperty(id)) {
             continue;
           }
@@ -1443,9 +1436,8 @@ let karteisuche = {
           karteisuche.filterIgnorieren(filter, true);
           continue;
         }
-      }
-      // Volltext
-      else if (typ === "Volltext") {
+      } else if (typ === "Volltext") {
+        // Volltext
         let text = document.getElementById(`karteisuche-volltext-${id}`).value;
         text = helfer.textTrim(text.replace(/[<>]+/g, ""), true);
         if (!text) {
@@ -1455,9 +1447,8 @@ let karteisuche = {
         const i = document.getElementById(`karteisuche-volltext-genau-${id}`).checked ? "" : "i";
         obj.reg = new RegExp(helfer.formVariSonderzeichen(helfer.escapeRegExp(text)), i);
         karteisuche.filterWerte.push(obj);
-      }
-      // Tag
-      else if (typ === "Tag") {
+      } else if (typ === "Tag") {
+        // Tag
         obj.tagTyp = karteisuche.filterTagTyp(document.getElementById(`karteisuche-tag-typ-${id}`));
         obj.tagId = "";
         const tag = document.getElementById(`karteisuche-tag-${id}`).value;
@@ -1465,7 +1456,7 @@ let karteisuche = {
           karteisuche.filterIgnorieren(filter, true);
           continue;
         }
-        for (let id in optionen.data.tags[obj.tagTyp].data) {
+        for (const id in optionen.data.tags[obj.tagTyp].data) {
           if (!optionen.data.tags[obj.tagTyp].data.hasOwnProperty(id)) {
             continue;
           }
@@ -1480,9 +1471,8 @@ let karteisuche = {
           karteisuche.filterIgnorieren(filter, true);
           continue;
         }
-      }
-      // Karteidatum
-      else if (typ === "Karteidatum") {
+      } else if (typ === "Karteidatum") {
+        // Karteidatum
         obj.typVal = document.getElementById(`karteisuche-datum-typ-${id}`).value;
         obj.dirVal = document.getElementById(`karteisuche-datum-dir-${id}`).value;
         obj.datumVal = document.getElementById(`karteisuche-datum-${id}`).value;
@@ -1492,9 +1482,8 @@ let karteisuche = {
           karteisuche.filterIgnorieren(filter, true);
           continue;
         }
-      }
-      // BearbeiterIn
-      else if (typ === "BearbeiterIn") {
+      } else if (typ === "BearbeiterIn") {
+        // BearbeiterIn
         let text = document.getElementById(`karteisuche-person-${id}`).value;
         text = helfer.textTrim(text, true);
         if (!text) {
@@ -1503,11 +1492,10 @@ let karteisuche = {
         }
         obj.reg = new RegExp(helfer.formVariSonderzeichen(helfer.escapeRegExp(text)), "i");
         karteisuche.filterWerte.push(obj);
-      }
-      // Redaktion
-      else if (typ === "Redaktion") {
-        let textEr = document.getElementById(`karteisuche-redaktion-ereignis-${id}`).value,
-          textPr = document.getElementById(`karteisuche-redaktion-person-${id}`).value;
+      } else if (typ === "Redaktion") {
+        // Redaktion
+        let textEr = document.getElementById(`karteisuche-redaktion-ereignis-${id}`).value;
+        let textPr = document.getElementById(`karteisuche-redaktion-person-${id}`).value;
         textEr = helfer.textTrim(textEr, true);
         textPr = helfer.textTrim(textPr, true);
         if (!textEr && !textPr) {
@@ -1522,11 +1510,10 @@ let karteisuche = {
         }
         obj.logik = document.getElementById(`karteisuche-redaktion-logik-${id}`).value;
         karteisuche.filterWerte.push(obj);
-      }
-      // Redaktionsdatum
-      else if (typ === "Redaktionsdatum") {
-        let vonVal = document.getElementById(`karteisuche-redaktionsdatum-von-${id}`).value,
-          bisVal = document.getElementById(`karteisuche-redaktionsdatum-bis-${id}`).value;
+      } else if (typ === "Redaktionsdatum") {
+        // Redaktionsdatum
+        const vonVal = document.getElementById(`karteisuche-redaktionsdatum-von-${id}`).value;
+        const bisVal = document.getElementById(`karteisuche-redaktionsdatum-bis-${id}`).value;
         if (vonVal && bisVal) {
           obj.von = new Date(vonVal);
           obj.bis = new Date(bisVal);
@@ -1546,7 +1533,7 @@ let karteisuche = {
   //   ignorieren = Boolean
   //     (Filter wird ignoriert bzw. nicht mehr ignoriert)
   filterIgnorieren (filter, ignorieren) {
-    let p = filter.closest("p");
+    const p = filter.closest("p");
     if (ignorieren) {
       p.classList.add("karteisuche-ignoriert");
     } else {
@@ -1557,9 +1544,9 @@ let karteisuche = {
   // String-Datensätze, die der Volltextfilter berücksichtigt
   // (für die Bedeutungen wird es komplizierter)
   filterVolltext: {
-    datei: ["no", "wo"],
-    redaktion: ["bh", "nl", "no"],
-    karten: ["au", "bl", "bs", "da", "kr", "no", "qu", "sy", "ts"],
+    datei: [ "no", "wo" ],
+    redaktion: [ "bh", "nl", "no" ],
+    karten: [ "au", "bl", "bs", "da", "kr", "no", "qu", "sy", "ts" ],
   },
 
   // überprüfen, ob eine Kartei zu den übergebenen Filtern passt
@@ -1578,28 +1565,27 @@ let karteisuche = {
       // erst danach in data.rd.er
       er = datei.rd;
     }
-    let redErg = new Set();
+    const redErg = new Set();
     document.querySelectorAll(".karteisuche-redaktion-ereignis").forEach(i => {
       redErg.add(helfer.formVariSonderzeichen(helfer.escapeRegExp(i.value)));
     });
-    let redErgReg = new RegExp([...redErg].join("|"), "i");
-    forX: for (let filter of karteisuche.filterWerte) {
-      // Karteiwort
+    const redErgReg = new RegExp([ ...redErg ].join("|"), "i");
+    forX: for (const filter of karteisuche.filterWerte) {
       if (filter.typ === "Karteiwort" &&
           !filter.reg.test(datei.wo)) {
+        // Karteiwort
         return false;
-      }
-      // Themenfeld/Sachgebiet
-      else if (/^(Themenfeld|Sachgebiet)$/.test(filter.typ)) {
+      } else if (/^(Themenfeld|Sachgebiet)$/.test(filter.typ)) {
+        // Themenfeld/Sachgebiet
         let gefunden = false;
-        let keys = {
+        const keys = {
           Themenfeld: "tf",
           Sachgebiet: "sg",
         };
         if (datei.rd[keys[filter.typ]]) {
           // dieser Datensatz wurde erst mit Dateiformat Version 13 eingeführt;
           // davor existierte er nicht
-          for (let i of datei.rd[keys[filter.typ]]) {
+          for (const i of datei.rd[keys[filter.typ]]) {
             if (i.id === filter.id) {
               gefunden = true;
               break;
@@ -1609,24 +1595,23 @@ let karteisuche = {
         if (!gefunden) {
           return false;
         }
-      }
-      // Volltext
-      else if (filter.typ === "Volltext") {
+      } else if (filter.typ === "Volltext") {
+        // Volltext
         // Datenfelder Kartei
-        for (let ds of karteisuche.filterVolltext.datei) {
+        for (const ds of karteisuche.filterVolltext.datei) {
           if (filter.reg.test(datei[ds])) {
             continue forX;
           }
         }
         // Datenfelder Redaktion
-        for (let ds of karteisuche.filterVolltext.redaktion) {
+        for (const ds of karteisuche.filterVolltext.redaktion) {
           if (filter.reg.test(datei.rd[ds])) {
             continue forX;
           }
         }
         // Datenfelder Karteikarten
-        for (let ds of karteisuche.filterVolltext.karten) {
-          for (let id in datei.ka) {
+        for (const ds of karteisuche.filterVolltext.karten) {
+          for (const id in datei.ka) {
             if (!datei.ka.hasOwnProperty(id)) {
               continue;
             }
@@ -1640,12 +1625,12 @@ let karteisuche = {
           }
         }
         // Bedeutungen
-        for (let id in datei.bd.gr) {
+        for (const id in datei.bd.gr) {
           if (!datei.bd.gr.hasOwnProperty(id)) {
             continue;
           }
-          let bd = datei.bd.gr[id].bd;
-          for (let i of bd) {
+          const bd = datei.bd.gr[id].bd;
+          for (const i of bd) {
             const bedeutung = i.bd[i.bd.length - 1];
             if (filter.reg.test(bedeutung)) {
               continue forX;
@@ -1653,17 +1638,16 @@ let karteisuche = {
           }
         }
         return false;
-      }
-      // Tag
-      else if (filter.typ === "Tag") {
+      } else if (filter.typ === "Tag") {
+        // Tag
         let gefunden = false;
-        forTag: for (let id in datei.bd.gr) {
+        forTag: for (const id in datei.bd.gr) {
           if (!datei.bd.gr.hasOwnProperty(id)) {
             continue;
           }
-          let bd = datei.bd.gr[id].bd;
-          for (let i of bd) {
-            for (let j of i.ta) {
+          const bd = datei.bd.gr[id].bd;
+          for (const i of bd) {
+            for (const j of i.ta) {
               if (j.ty === filter.tagTyp &&
                   j.id === filter.tagId) {
                 gefunden = true;
@@ -1675,31 +1659,28 @@ let karteisuche = {
         if (!gefunden) {
           return false;
         }
-      }
-      // Karteidatum
-      else if (filter.typ === "Karteidatum") {
-        const ds = filter.typVal === "erstellt" ? "dc" : "dm",
-          lt = filter.dirVal === "<=" ? true : false,
-          datum = new Date(filter.datumVal),
-          datumDatei = new Date(datei[ds].split("T")[0]);
+      } else if (filter.typ === "Karteidatum") {
+        // Karteidatum
+        const ds = filter.typVal === "erstellt" ? "dc" : "dm";
+        const lt = filter.dirVal === "<=";
+        const datum = new Date(filter.datumVal);
+        const datumDatei = new Date(datei[ds].split("T")[0]);
         if (lt && datumDatei > datum ||
             !lt && datumDatei < datum) {
           return false;
         }
-      }
-      // BearbeiterIn
-      else if (filter.typ === "BearbeiterIn" &&
+      } else if (filter.typ === "BearbeiterIn" &&
           !hasSome(be, filter.reg)) {
+        // BearbeiterIn
         return false;
-      }
-      // Redaktion
-      else if (filter.typ === "Redaktion") {
-        for (let i of er) {
-          let gefunden = {
-            er: filter.er && filter.er.test(i.er) ? true : false,
-            pr: filter.pr && filter.pr.test(i.pr) ? true : false,
+      } else if (filter.typ === "Redaktion") {
+        // Redaktion
+        for (const i of er) {
+          const gefunden = {
+            er: filter.er && filter.er.test(i.er),
+            pr: filter.pr && filter.pr.test(i.pr),
           };
-          let treffer = filter.er && filter.pr && gefunden.er && gefunden.pr ||
+          const treffer = filter.er && filter.pr && gefunden.er && gefunden.pr ||
               filter.er && !filter.pr && gefunden.er ||
               !filter.er && filter.pr && gefunden.pr;
           if (treffer && filter.logik === "=") {
@@ -1709,18 +1690,17 @@ let karteisuche = {
           }
         }
         if (filter.logik !== "=") {
-          continue forX;
+          continue;
         }
         return false;
-      }
-      // Redaktionsdatum
-      else if (filter.typ === "Redaktionsdatum") {
+      } else if (filter.typ === "Redaktionsdatum") {
+        // Redaktionsdatum
         let inRange = false;
-        for (let i of er) {
+        for (const i of er) {
           if (redErg.size && !redErgReg.test(i.er)) {
             continue;
           }
-          let da = new Date(i.da);
+          const da = new Date(i.da);
           if (da >= filter.von && da <= filter.bis) {
             inRange = true;
             break;
@@ -1728,9 +1708,8 @@ let karteisuche = {
         }
         if (!inRange) {
           return false;
-        } else {
-          continue forX;
         }
+        continue;
       }
     }
     return true;
@@ -1748,10 +1727,10 @@ let karteisuche = {
   // aktuelle Filterkonfiguration in den Optionen speichern
   filterSpeichern () {
     optionen.data.karteisuche.filter = [];
-    for (let filter of document.querySelectorAll(".karteisuche-filter")) {
-      let inputs = filter.parentNode.parentNode.querySelectorAll("input"),
-        filterDaten = [];
-      for (let i of inputs) {
+    for (const filter of document.querySelectorAll(".karteisuche-filter")) {
+      const inputs = filter.parentNode.parentNode.querySelectorAll("input");
+      const filterDaten = [];
+      for (const i of inputs) {
         if (i.type === "checkbox") {
           filterDaten.push(i.checked);
         } else {
@@ -1766,7 +1745,7 @@ let karteisuche = {
   // in den Optionen gespeicherte Filter wiederherstellen
   filterWiederherstellen () {
     for (let i = optionen.data.karteisuche.filter.length - 1; i >= 0; i--) {
-      let werte = optionen.data.karteisuche.filter[i];
+      const werte = optionen.data.karteisuche.filter[i];
       // Korrektur Redaktionsfilter
       // (ab Version 0.32.0 gibt es ein Logikfeld: = || !=)
       if (werte[0] === "Redaktion" && werte.length === 3) {
@@ -1774,12 +1753,12 @@ let karteisuche = {
       }
       // neuen Absatz erzeugen
       karteisuche.filterHinzufuegen(false);
-      let typ = document.querySelector("#karteisuche-filter input");
+      const typ = document.querySelector("#karteisuche-filter input");
       typ.value = werte[0];
       // Filterfelder einhängen
       karteisuche.filterFelder(typ.id);
       // Filterfelder füllen
-      let inputs = document.querySelectorAll("#karteisuche-filter p:first-child input");
+      const inputs = document.querySelectorAll("#karteisuche-filter p:first-child input");
       for (let j = 1, len = werte.length; j < len; j++) {
         if (helfer.checkType("Boolean", werte[j])) {
           inputs[j].checked = werte[j];
@@ -1792,8 +1771,8 @@ let karteisuche = {
 
   // Ansicht der Filter umschalten
   filterUmschalten () {
-    let filter = document.getElementById("karteisuche-filterblock"),
-      hoehe = 0;
+    const filter = document.getElementById("karteisuche-filterblock");
+    let hoehe = 0;
     if (filter.classList.contains("aus")) {
       filter.classList.remove("aus");
       hoehe = filter.scrollHeight;
@@ -1834,7 +1813,7 @@ let karteisuche = {
   //   anschalten = Boolean
   //     (die Animation soll angeschaltet werden)
   animation (anschalten) {
-    let sperrbild = document.getElementById("karteisuche-suche-laeuft");
+    const sperrbild = document.getElementById("karteisuche-suche-laeuft");
     // Animation soll ausgeschaltet werden
     if (!anschalten) {
       clearInterval(karteisuche.animationStatus.interval);
@@ -1855,9 +1834,9 @@ let karteisuche = {
   },
 
   // Text in der Animation auffrischen
-  animationRefresh() {
-    let span = document.querySelector("#karteisuche-suche-laeuft span"),
-      status = karteisuche.animationStatus;
+  animationRefresh () {
+    const span = document.querySelector("#karteisuche-suche-laeuft span");
+    const status = karteisuche.animationStatus;
     span.textContent = ".".repeat(status.punkte);
     if (status.punkte === 3) {
       status.punkte = 1;

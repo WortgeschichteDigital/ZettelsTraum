@@ -1,11 +1,11 @@
 "use strict";
 
-let helferWin = {
+const helferWin = {
   // Handbuch oder technische Dokumentation über Link öffnen
   //   a = Element
   //     (Link, der zum Handbuch führen soll)
   oeffne (a) {
-    a.addEventListener("click", function(evt) {
+    a.addEventListener("click", function (evt) {
       evt.preventDefault();
       // Handbuch oder Dokumentation?
       let fenster = "hilfe-dokumentation";
@@ -23,7 +23,7 @@ let helferWin = {
   //   a = Element
   //     (Link, der zum Changelog führen soll)
   oeffneChangelog (a) {
-    a.addEventListener("click", function(evt) {
+    a.addEventListener("click", function (evt) {
       evt.preventDefault();
       modules.ipc.send("hilfe-changelog");
       if (this.dataset.caller === "ueber-app") {
@@ -36,7 +36,7 @@ let helferWin = {
   //   a = Element
   //     (Link, der zum Fehlerlog führen soll)
   oeffneFehlerlog (a) {
-    a.addEventListener("click", function(evt) {
+    a.addEventListener("click", function (evt) {
       evt.preventDefault();
       modules.ipc.send("hilfe-fehlerlog");
     });
@@ -47,13 +47,12 @@ let helferWin = {
   //   danach wird ein endgültiger Schließen-Befehl an Main abgesetzt
   // XML-Fenster: zugehörigem Hauptfenster mitteilen, dass es geschlossen wurde
   async beforeUnload () {
-    // Bedeutungsgerüst-Fenster
     if (winInfo.typ === "bedeutungen") {
+      // Bedeutungsgerüst-Fenster
       modules.ipc.sendTo(bedeutungen.data.contentsId, "bedeutungen-fenster-geschlossen");
       await modules.ipc.invoke("fenster-status", winInfo.winId, "fenster-bedeutungen");
-    }
-    // XML-Fenster
-    else if (winInfo.typ === "xml") {
+    } else if (winInfo.typ === "xml") {
+      // XML-Fenster
       modules.ipc.sendTo(xml.data.contentsId, "red-xml-geschlossen");
     }
     // Fenster endgültig schließen

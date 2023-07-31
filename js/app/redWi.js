@@ -1,31 +1,31 @@
 "use strict";
 
-let redWi = {
+const redWi = {
   // Selector für aktive Input-Felder
   inputs: "#red-wi-text:not(.aus) input, #red-wi-intern:not(.aus) input, #red-wi-extern:not(.aus) input",
 
   // Dropdown: Feldtypen
   dropdown: {
-    vt: ["Wortbildung", "Wortverbindung", "Wortfeld", "Wortfeldartikel"],
-    lt: ["Textverweis", "Verweis intern", "Verweis extern"],
-    se: ["Cluster", "Synonym", "Heteronym", "Paronym", "Hyponym", "Hyperonym", "Meronym", "Holonym", "Gegensatz", "Kohyponym"],
+    vt: [ "Wortbildung", "Wortverbindung", "Wortfeld", "Wortfeldartikel" ],
+    lt: [ "Textverweis", "Verweis intern", "Verweis extern" ],
+    se: [ "Cluster", "Synonym", "Heteronym", "Paronym", "Hyponym", "Hyperonym", "Meronym", "Holonym", "Gegensatz", "Kohyponym" ],
   },
 
   // Dropdown: Verweistextvorschläge sammeln
   dropdownVerweistexte () {
     const gn = document.getElementById("red-wi-gn").value.match(/[0-9]+/)[0];
-    let set = new Set(),
-      felder = ["sy", "bl"]; // Synonmye und Wortbildungen
-    for (let id of Object.keys(data.ka)) {
-      for (let feld of felder) {
-        let daten = data.ka[id][feld];
+    const set = new Set();
+    const felder = [ "sy", "bl" ]; // Synonmye und Wortbildungen
+    for (const id of Object.keys(data.ka)) {
+      for (const feld of felder) {
+        const daten = data.ka[id][feld];
         if (!daten) {
           continue;
         }
-        for (let i of daten.split("\n")) { // Mehrzeiligkeit möglich
+        for (const i of daten.split("\n")) { // Mehrzeiligkeit möglich
           let wort = i;
           if (/: /.test(i)) { // Hierarchieebenen möglich
-            let sp = i.split(": ");
+            const sp = i.split(": ");
             wort = sp[sp.length - 1];
           }
           if (!data.rd.wi.some(i => i.gn === gn && i.tx === wort)) {
@@ -34,13 +34,13 @@ let redWi = {
         }
       }
     }
-    for (let wort of Object.keys(data.fv)) { // Formvarianten
+    for (const wort of Object.keys(data.fv)) { // Formvarianten
       if (wort !== kartei.wort &&
           !data.rd.wi.some(i => i.gn === gn && i.tx === wort)) {
         set.add(wort);
       }
     }
-    return [...set].sort(helfer.sortAlpha);
+    return [ ...set ].sort(helfer.sortAlpha);
   },
 
   // Wortinformationenfenster öffnen
@@ -54,7 +54,7 @@ let redWi = {
       return;
     }
     // Fenster öffnen oder in den Vordergrund holen
-    let fenster = document.getElementById("red-wi");
+    const fenster = document.getElementById("red-wi");
     if (overlay.oeffnen(fenster)) { // Fenster ist schon offen
       return;
     }
@@ -74,7 +74,7 @@ let redWi = {
   // Formular: Listener für die Textfelder
   //   input = Element
   //     (ein Textfeld im Formular)
-  formListener ({input}) {
+  formListener ({ input }) {
     if (input.id === "red-wi-gn") {
       input.addEventListener("input", () => redWi.contMake());
     } else if (input.id === "red-wi-lt") {
@@ -86,7 +86,7 @@ let redWi = {
       });
     }
     if (input.type === "text") {
-      input.addEventListener("keydown", function(evt) {
+      input.addEventListener("keydown", function (evt) {
         tastatur.detectModifiers(evt);
         if (!tastatur.modifiers &&
             evt.key === "Enter" &&
@@ -99,7 +99,7 @@ let redWi = {
         }
       });
     } else if (input.type === "button") {
-      input.addEventListener("click", function() {
+      input.addEventListener("click", function () {
         if (/speichern$/.test(this.id)) {
           redWi.formEval();
         } else if (/reset$/.test(this.id)) {
@@ -113,10 +113,10 @@ let redWi = {
 
   // Formular: Formular umstellen
   formToggle () {
-    let lt = document.getElementById("red-wi-lt").value,
-      text = document.getElementById("red-wi-text"),
-      intern = document.getElementById("red-wi-intern"),
-      extern = document.getElementById("red-wi-extern");
+    const lt = document.getElementById("red-wi-lt").value;
+    const text = document.getElementById("red-wi-text");
+    const intern = document.getElementById("red-wi-intern");
+    const extern = document.getElementById("red-wi-extern");
     switch (lt) {
       case "Textverweis":
         text.classList.remove("aus");
@@ -134,17 +134,17 @@ let redWi = {
         extern.classList.remove("aus");
         break;
     }
-    let inputs = document.querySelectorAll(redWi.inputs);
+    const inputs = document.querySelectorAll(redWi.inputs);
     inputs[0].focus();
   },
 
   // Formular: Fenster initialisieren
   formInit () {
-    let gn = document.getElementById("red-wi-gn");
+    const gn = document.getElementById("red-wi-gn");
     gn.value = "Gerüst 1";
-    let vt = document.getElementById("red-wi-vt");
+    const vt = document.getElementById("red-wi-vt");
     vt.value = redWi.dropdown.vt[0];
-    let lt = document.getElementById("red-wi-lt");
+    const lt = document.getElementById("red-wi-lt");
     lt.value = redWi.dropdown.lt[0];
     redWi.formToggle();
     redWi.formReset();
@@ -153,8 +153,8 @@ let redWi = {
 
   // Formular: Felder zurücksetzen
   formReset () {
-    let inputs = document.querySelectorAll(redWi.inputs);
-    for (let i of inputs) {
+    const inputs = document.querySelectorAll(redWi.inputs);
+    for (const i of inputs) {
       i.value = "";
     }
     if (document.getElementById("red-wi-lt").value === "Verweis extern") {
@@ -168,8 +168,8 @@ let redWi = {
     // kurz warten, sonst verschwinden Meldungen sofort wieder
     await new Promise(resolve => setTimeout(() => resolve(true), 25));
     // Datensatz vorbereiten
-    let lt = document.getElementById("red-wi-lt");
-    let ds = {
+    const lt = document.getElementById("red-wi-lt");
+    const ds = {
       gn: document.getElementById("red-wi-gn").value.match(/[0-9]+/)[0],
       lt: lt.value,
       tx: "",
@@ -187,8 +187,8 @@ let redWi = {
     }
     // Verweistext eingegeben?
     // (wird für alle Formulare gebraucht)
-    let inputs = document.querySelectorAll(redWi.inputs),
-      txVal = helfer.textTrim(inputs[0].value, true);
+    const inputs = document.querySelectorAll(redWi.inputs);
+    const txVal = helfer.textTrim(inputs[0].value, true);
     if (!txVal) {
       dialog.oeffnen({
         typ: "alert",
@@ -199,14 +199,14 @@ let redWi = {
     }
     ds.tx = txVal;
     // Daten sammeln und überprüfen
-    let text = document.getElementById("red-wi-text"),
-      intern = document.getElementById("red-wi-intern"),
-      extern = document.getElementById("red-wi-extern");
+    const text = document.getElementById("red-wi-text");
+    const intern = document.getElementById("red-wi-intern");
+    const extern = document.getElementById("red-wi-extern");
     // Daten sammeln und überprüfen
     if (!text.classList.contains("aus")) {
       // Überprüfungen Textverweis
-      let id = text.querySelector(`input[id$="id"]`),
-        idVal = helfer.textTrim(id.value, true);
+      const id = text.querySelector('input[id$="id"]');
+      const idVal = helfer.textTrim(id.value, true);
       if (!idVal) {
         dialog.oeffnen({
           typ: "alert",
@@ -237,7 +237,7 @@ let redWi = {
           return;
         }
       }
-      let typ = checkSemantik(text);
+      const typ = checkSemantik(text);
       if (typ === false) {
         return;
       }
@@ -245,8 +245,8 @@ let redWi = {
       ds.xl = `<Textreferenz Ziel="${idValNorm}"${typ}>${txVal}</Textreferenz>`;
     } else if (!intern.classList.contains("aus")) {
       // Überprüfungen Verweis intern
-      let zl = intern.querySelector(`input[id$="zl"]`),
-        zlVal = helfer.textTrim(zl.value, true);
+      const zl = intern.querySelector('input[id$="zl"]');
+      let zlVal = helfer.textTrim(zl.value, true);
       if (!zlVal) {
         dialog.oeffnen({
           typ: "alert",
@@ -255,7 +255,7 @@ let redWi = {
         });
         return;
       }
-      let typ = checkSemantik(intern);
+      const typ = checkSemantik(intern);
       if (typ === false) {
         return;
       }
@@ -266,7 +266,7 @@ let redWi = {
       } else {
         ds.xl += `  <Verweistext>${txVal}</Verweistext>\n`;
       }
-      let zlValSp = zlVal.split("#");
+      const zlValSp = zlVal.split("#");
       zlVal = zlValSp[0].replace(/_/g, " ");
       if (zlValSp[1]) {
         zlVal += "#" + zlValSp[1];
@@ -275,8 +275,8 @@ let redWi = {
       ds.xl += "</Verweis>";
     } else if (!extern.classList.contains("aus")) {
       // Überprüfungen Verweis extern
-      let ul = extern.querySelector(`input[id$="ul"]`),
-        ulVal = helfer.textTrim(ul.value, true);
+      const ul = extern.querySelector('input[id$="ul"]');
+      const ulVal = helfer.textTrim(ul.value, true);
       if (!ulVal) {
         dialog.oeffnen({
           typ: "alert",
@@ -293,8 +293,8 @@ let redWi = {
         });
         return;
       }
-      let da = extern.querySelector(`input[id$="da"]`),
-        daVal = da.value;
+      const da = extern.querySelector('input[id$="da"]');
+      const daVal = da.value;
       if (!daVal) {
         dialog.oeffnen({
           typ: "alert",
@@ -304,23 +304,23 @@ let redWi = {
         return;
       }
       // XML erstellen
-      let datum = /^(?<jahr>[0-9]{4})-(?<monat>[0-9]{2})-(?<tag>[0-9]{2})$/.exec(daVal);
+      const datum = /^(?<jahr>[0-9]{4})-(?<monat>[0-9]{2})-(?<tag>[0-9]{2})$/.exec(daVal);
       ds.xl = "<Verweis_extern>\n";
       ds.xl += `  <Verweistext>${txVal}</Verweistext>\n`;
-      ds.xl += `  <Verweisziel/>\n`;
-      ds.xl += `  <Fundstelle>\n`;
-      ds.xl += `    <Fundort>${helferXml.fundort({url: ulVal})}</Fundort>\n`;
+      ds.xl += "  <Verweisziel/>\n";
+      ds.xl += "  <Fundstelle>\n";
+      ds.xl += `    <Fundort>${helferXml.fundort({ url: ulVal })}</Fundort>\n`;
       ds.xl += `    <URL>${ulVal}</URL>\n`;
       ds.xl += `    <Aufrufdatum>${datum.groups.tag}.${datum.groups.monat}.${datum.groups.jahr}</Aufrufdatum>\n`;
-      ds.xl += `  </Fundstelle>\n`;
+      ds.xl += "  </Fundstelle>\n";
       ds.xl += "</Verweis_extern>";
     }
     // Eingabe speichern
-    redWi.formSpeichern({ds});
+    redWi.formSpeichern({ ds });
     // semantischen Typ überprüfen, ggf. als Attribut zurückgeben
     function checkSemantik (lt) {
-      let se = lt.querySelector(`input[id$="se"]`),
-        seVal = helfer.textTrim(se.value, true);
+      const se = lt.querySelector('input[id$="se"]');
+      const seVal = helfer.textTrim(se.value, true);
       if (seVal && !redWi.dropdown.se.includes(seVal)) {
         dialog.oeffnen({
           typ: "alert",
@@ -340,7 +340,7 @@ let redWi = {
   // Formular: Eingabe speichern
   //   ds = Object
   //     (Datensatz, der gespeichert werden soll)
-  formSpeichern ({ds}) {
+  formSpeichern ({ ds }) {
     // Datensatz einhängen/überschreiben
     const idx = data.rd.wi.findIndex(i => i.gn === ds.gn && i.vt === ds.vt && i.tx === ds.tx);
     if (idx > -1) {
@@ -357,23 +357,23 @@ let redWi = {
     // Anzeige neu aufbauen
     redWi.contMake();
     // Wort highlighten
-    let wort = document.querySelector(`#red-wi-cont [data-vt="${ds.vt}"][data-tx="${ds.tx}"]`);
+    const wort = document.querySelector(`#red-wi-cont [data-vt="${ds.vt}"][data-tx="${ds.tx}"]`);
     setTimeout(() => wort.classList.add("update"), 0);
     setTimeout(() => wort.classList.remove("update"), 750);
   },
 
   // Content: Anzeige aufbauen
   contMake () {
-    let cont = document.querySelector("#red-wi-cont div"),
-      copy = document.getElementById("red-wi-copy"),
-      gn = document.getElementById("red-wi-gn").value.match(/[0-9]+/)[0];
+    const cont = document.querySelector("#red-wi-cont div");
+    const copy = document.getElementById("red-wi-copy");
+    const gn = document.getElementById("red-wi-gn").value.match(/[0-9]+/)[0];
     // keine Wortinformationen vorhanden oder
     // keine zum eingestellten Bedeutungsgerüst passenden Wortinformationen
     if (!data.rd.wi.length ||
         !data.rd.wi.some(i => i.gn === gn)) {
       if (data.rd.wi.length) {
         redWi.kopierenGn = gn;
-        let gerueste = redWi.kopierenDropdown();
+        const gerueste = redWi.kopierenDropdown();
         document.getElementById("red-wi-copy-gn").value = gerueste[0];
         copy.classList.remove("aus");
       }
@@ -384,71 +384,71 @@ let redWi = {
     cont.parentNode.classList.remove("aus");
     copy.classList.add("aus");
     cont.replaceChildren();
-    let hTxt = {
+    const hTxt = {
       Wortverbindung: "Wortverbindungen",
       Wortbildung: "Wortbildungen",
       Wortfeld: "Wortfeld",
       Wortfeldartikel: "Wortfeldartikel",
     };
     let h = "";
-    for (let i of data.rd.wi) {
+    for (const i of data.rd.wi) {
       // falsches Bedeutungsgerüst
       if (i.gn !== gn) {
         continue;
       }
       // Überschrift
       if (h !== i.vt) {
-        let h3 = document.createElement("h3");
+        const h3 = document.createElement("h3");
         cont.appendChild(h3);
         h3.textContent = hTxt[i.vt];
         h = i.vt;
       }
       // Eintrag
-      let p = document.createElement("p");
+      const p = document.createElement("p");
       cont.appendChild(p);
       p.dataset.gn = i.gn;
       p.dataset.vt = i.vt;
       p.dataset.tx = i.tx;
       // Lösch-Icon
-      let a = document.createElement("a");
+      const a = document.createElement("a");
       p.appendChild(a);
       a.classList.add("icon-link", "icon-x-dick");
       a.href = "#";
-      redWi.contLoeschen({a});
+      redWi.contLoeschen({ a });
       // XML-Icon
-      let xl = document.createElement("a");
+      const xl = document.createElement("a");
       p.appendChild(xl);
       xl.classList.add("icon-link", "icon-xml");
       xl.href = "#";
-      redWi.contXml({a: xl});
+      redWi.contXml({ a: xl });
       // Verweistext
-      let text = document.createElement("span");
+      const text = document.createElement("span");
       p.appendChild(text);
       text.classList.add("text");
       text.appendChild(document.createTextNode(i.tx));
       // Detail
-      let detail = document.createElement("span");
+      const detail = document.createElement("span");
       p.appendChild(detail);
       detail.classList.add("detail");
       detail.textContent = `(${i.lt})`;
-      redWi.contBearbeiten({p});
+      redWi.contBearbeiten({ p });
     }
   },
 
   // Content: Eintrag bearbeiten
   //   p = Element
   //    (Eintrag)
-  contBearbeiten ({p}) {
-    p.addEventListener("click", function() {
-      const gn = this.dataset.gn,
-        vt = this.dataset.vt,
-        tx = this.dataset.tx;
-      let ds = data.rd.wi.find(i => i.gn === gn && i.vt === vt && i.tx === tx);
+  contBearbeiten ({ p }) {
+    p.addEventListener("click", function () {
+      const gn = this.dataset.gn;
+      const vt = this.dataset.vt;
+      const tx = this.dataset.tx;
+      const ds = data.rd.wi.find(i => i.gn === gn && i.vt === vt && i.tx === tx);
       document.getElementById("red-wi-vt").value = ds.vt;
-      let lt = document.getElementById("red-wi-lt");
+      const lt = document.getElementById("red-wi-lt");
       lt.value = ds.lt;
       lt.dispatchEvent(new Event("input"));
-      let inputs = document.querySelectorAll(redWi.inputs);
+      const inputs = document.querySelectorAll(redWi.inputs);
       inputs[0].value = tx;
       if (/^<Textreferenz/.test(ds.xl)) {
         inputs[1].value = ds.xl.match(/Ziel="(.+?)"/)[1];
@@ -456,7 +456,7 @@ let redWi = {
       } else if (/^<Verweis_extern>/.test(ds.xl)) {
         inputs[1].value = ds.xl.match(/<URL>(.+?)<\/URL>/)[1];
         const da = ds.xl.match(/<Aufrufdatum>(.+?)<\/Aufrufdatum>/)[1];
-        let datum = /^(?<tag>[0-9]{2})\.(?<monat>[0-9]{2})\.(?<jahr>[0-9]{4})$/.exec(da);
+        const datum = /^(?<tag>[0-9]{2})\.(?<monat>[0-9]{2})\.(?<jahr>[0-9]{4})$/.exec(da);
         inputs[2].value = `${datum.groups.jahr}-${datum.groups.monat}-${datum.groups.tag}`;
       } else {
         inputs[1].value = ds.xl.match(/<Verweisziel>(.+?)<\/Verweisziel>/)[1];
@@ -465,7 +465,7 @@ let redWi = {
       inputs[0].select();
       // semantischen Verweistyp ermitteln
       function seVal () {
-        let se = ds.xl.match(/Typ="(.+?)"/);
+        const se = ds.xl.match(/Typ="(.+?)"/);
         inputs[2].value = se ? se[1] : "";
       }
     });
@@ -474,13 +474,13 @@ let redWi = {
   // Content: Eintrag löschen
   //   a = Element
   //     (Lösch-Icon)
-  contLoeschen ({a}) {
-    a.addEventListener("click", function(evt) {
+  contLoeschen ({ a }) {
+    a.addEventListener("click", function (evt) {
       evt.preventDefault();
       evt.stopPropagation();
-      const gn = this.closest("p").dataset.gn,
-        vt = this.closest("p").dataset.vt,
-        tx = this.closest("p").dataset.tx;
+      const gn = this.closest("p").dataset.gn;
+      const vt = this.closest("p").dataset.vt;
+      const tx = this.closest("p").dataset.tx;
       dialog.oeffnen({
         typ: "confirm",
         text: `Soll „${tx}“ wirklich gelöscht werden?`,
@@ -499,19 +499,19 @@ let redWi = {
   // Verweis an das Redaktionssystem schicken
   //   a = Element
   //     (XML-Icon)
-  contXml ({a}) {
-    a.addEventListener("click", function(evt) {
+  contXml ({ a }) {
+    a.addEventListener("click", function (evt) {
       evt.preventDefault();
       evt.stopPropagation();
-      const gn = this.closest("p").dataset.gn,
-        vt = this.closest("p").dataset.vt,
-        tx = this.closest("p").dataset.tx;
-      let xmlDatensatz = {
+      const gn = this.closest("p").dataset.gn;
+      const vt = this.closest("p").dataset.vt;
+      const tx = this.closest("p").dataset.tx;
+      const xmlDatensatz = {
         key: "wi-single",
         gn,
         ds: data.rd.wi.find(i => i.gn === gn && i.vt === vt && i.tx === tx),
       };
-      redXml.datensatz({xmlDatensatz});
+      redXml.datensatz({ xmlDatensatz });
     });
   },
 
@@ -522,12 +522,12 @@ let redWi = {
   // Kopieren: ermittelt Gerüste, die Content haben
   kopierenDropdown () {
     let gerueste = [];
-    for (let i of data.rd.wi) {
+    for (const i of data.rd.wi) {
       if (i.gn !== redWi.kopierenGn) {
         gerueste.push(i.gn);
       }
     }
-    gerueste = [...new Set([...gerueste])];
+    gerueste = [ ...new Set([ ...gerueste ]) ];
     gerueste.sort();
     for (let i = 0, len = gerueste.length; i < len; i++) {
       gerueste[i] = `Gerüst ${gerueste[i]}`;
@@ -539,10 +539,10 @@ let redWi = {
   kopieren () {
     const gn = document.getElementById("red-wi-copy-gn").value.match(/[0-9]+/)[0];
     // Datensätze kopieren
-    let wi = [];
-    for (let i of data.rd.wi) {
+    const wi = [];
+    for (const i of data.rd.wi) {
       if (i.gn === gn) {
-        let ds = {...i};
+        const ds = { ...i };
         ds.gn = redWi.kopierenGn;
         wi.push(ds);
       }
@@ -559,11 +559,11 @@ let redWi = {
   // Wortinformationen an das Redaktionssystem schicken
   //   icon = Element
   //     (das XML-Icon)
-  xml ({icon}) {
+  xml ({ icon }) {
     icon.addEventListener("click", evt => {
       evt.preventDefault();
       const gn = document.getElementById("red-wi-gn").value.match(/[0-9]+/)[0];
-      let xmlDatensatz = {
+      const xmlDatensatz = {
         key: "wi",
         gn,
         ds: data.rd.wi.filter(i => i.gn === gn),
@@ -575,7 +575,7 @@ let redWi = {
         });
         return;
       }
-      redXml.datensatz({xmlDatensatz});
+      redXml.datensatz({ xmlDatensatz });
     });
   },
 };

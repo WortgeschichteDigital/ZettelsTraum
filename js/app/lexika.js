@@ -1,18 +1,18 @@
 "use strict";
 
-let lexika = {
+const lexika = {
   // vordefinierte Liste der Lexika, die überprüft werden sollten/könnten
   preset: {
     "¹DWB": "Deutsches Wörterbuch",
     "²DWB": "Deutsches Wörterbuch (Neubearbeitung)",
-    "AWB": "Althochdeutsches Wörterbuch",
-    "FWB": "Frühneuhochdeutsches Wörterbuch",
-    "Kluge": "Etymologisches Wörterbuch der deutschen Sprache",
-    "MWB": "Mittelhochdeutsches Wörterbuch",
-    "Paul": "Deutsches Wörterbuch",
-    "Pfeifer": "Etymologisches Wörterbuch des Deutschen",
+    AWB: "Althochdeutsches Wörterbuch",
+    FWB: "Frühneuhochdeutsches Wörterbuch",
+    Kluge: "Etymologisches Wörterbuch der deutschen Sprache",
+    MWB: "Mittelhochdeutsches Wörterbuch",
+    Paul: "Deutsches Wörterbuch",
+    Pfeifer: "Etymologisches Wörterbuch des Deutschen",
     "Schulz/Basler": "Deutsches Fremdwörterbuch",
-    "Trübner": "Trübners Deutsches Wörterbuch",
+    Trübner: "Trübners Deutsches Wörterbuch",
   },
 
   // Lexika-Fenster einblenden
@@ -26,7 +26,7 @@ let lexika = {
       return;
     }
     // Fenster öffnen oder in den Vordergrund holen
-    let fenster = document.getElementById("lexika");
+    const fenster = document.getElementById("lexika");
     if (overlay.oeffnen(fenster)) { // Fenster ist schon offen
       return;
     }
@@ -41,11 +41,11 @@ let lexika = {
   // Liste der Lexika erstellen
   auflisten () {
     // Liste leeren
-    let cont = document.getElementById("lexika-liste");
+    const cont = document.getElementById("lexika-liste");
     cont.replaceChildren();
     // Array erstellen
-    let l = [];
-    for (let i in lexika.preset) {
+    const l = [];
+    for (const i in lexika.preset) {
       if (!lexika.preset.hasOwnProperty(i)) {
         continue;
       }
@@ -58,10 +58,10 @@ let lexika = {
     }
     // Liste aufbauen
     for (let i = 0, len = l.length; i < len; i++) {
-      let p = document.createElement("p");
+      const p = document.createElement("p");
       cont.appendChild(p);
       // Input
-      let input = document.createElement("input");
+      const input = document.createElement("input");
       lexika.ueberprueft(input);
       input.type = "checkbox";
       input.id = `lexikon-${i}`;
@@ -71,7 +71,7 @@ let lexika = {
       }
       p.appendChild(input);
       // Label
-      let label = document.createElement("label");
+      const label = document.createElement("label");
       label.setAttribute("for", `lexikon-${i}`);
       p.appendChild(label);
       // title setzen oder Hinweis, dass das Lexikon manuell ergänzt wurde
@@ -90,7 +90,7 @@ let lexika = {
   //   input = Element
   //     (Checkbox, die für ein Lexikon steht)
   ueberprueft (input) {
-    input.addEventListener("change", function() {
+    input.addEventListener("change", function () {
       if (this.checked) {
         data.le.push(this.value);
       } else {
@@ -103,8 +103,8 @@ let lexika = {
 
   // Lexikon ergänzen
   ergaenzen () {
-    let le = document.getElementById("lexika-text"),
-      va = helfer.textTrim(le.value);
+    const le = document.getElementById("lexika-text");
+    const va = helfer.textTrim(le.value);
     // Uppala! Kein Wert!
     if (!va) {
       dialog.oeffnen({
@@ -141,14 +141,14 @@ let lexika = {
 
   // Klick auf Button
   aktionButton (button) {
-    button.addEventListener("click", function() {
+    button.addEventListener("click", function () {
       lexika.ergaenzen();
     });
   },
 
   // Tastatureingaben im Textfeld
   aktionText (input) {
-    input.addEventListener("keydown", function(evt) {
+    input.addEventListener("keydown", function (evt) {
       tastatur.detectModifiers(evt);
       if (!tastatur.modifiers && evt.key === "Enter") {
         evt.preventDefault();

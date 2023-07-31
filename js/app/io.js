@@ -1,6 +1,6 @@
 "use strict";
 
-let io = {
+const io = {
   // Daten komprimieren
   //   daten = String
   //     (ein JSON-String, der komprimiert werden soll)
@@ -45,13 +45,13 @@ let io = {
       modules.fsp.readFile(datei)
         .then(async buffer => {
           // Daten dekomprimieren
-          let content = await io.unzipData(buffer);
+          const content = await io.unzipData(buffer);
           // Daten sind nicht String => Fehlermeldung => Daten im Buffer wohl gar nicht komprimiert
           // (Dateien wurden erst mit Version 0.24.0 komprimiert)
           if (!helfer.checkType("String", content)) {
             try {
               // sind die Datei-Daten schon JSON => Daten zurückgeben
-              let daten = buffer.toString();
+              const daten = buffer.toString();
               JSON.parse(daten);
               resolve(daten);
             } catch (err) {
@@ -72,19 +72,19 @@ let io = {
   //     (Pfad zur Datei, in der die komprimierten Daten gespeichert werden sollen)
   //   daten = String
   //     (ein JSON-String, der komprimiert werden soll)
-  schreiben (datei, daten) {
-    return new Promise(async resolve => {
-      // Daten packen
-      let buffer = await io.gzipData(daten);
-      // Fehlerbehandlung => beim Komprimieren ist etwas schiefgelaufen
-      if (buffer.message) {
-        resolve(buffer);
-        return;
-      }
-      // Daten in Datei schreiben
+  async schreiben (datei, daten) {
+    // Daten packen
+    const buffer = await io.gzipData(daten);
+    // Fehlerbehandlung => beim Komprimieren ist etwas schiefgelaufen
+    if (buffer.message) {
+      return buffer;
+    }
+    // Daten in Datei schreiben
+    const result = await new Promise(resolve => {
       modules.fsp.writeFile(datei, buffer)
         .then(() => resolve(true))
         .catch(err => resolve(err));
     });
+    return result;
   },
 };

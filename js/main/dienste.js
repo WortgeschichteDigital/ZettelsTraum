@@ -1,10 +1,10 @@
 "use strict";
 
-const {BrowserWindow, dialog} = require("electron"),
-  fsP = require("fs").promises,
-  path = require("path");
+const { BrowserWindow, dialog } = require("electron");
+const fsP = require("fs").promises;
+const path = require("path");
 
-let svg = [];
+const svg = [];
 
 module.exports = {
   // erzeugt eine Liste der *.svg im Verzeichnis ./app/img/
@@ -12,9 +12,9 @@ module.exports = {
     if (svg.length) {
       return svg;
     }
-    let pfade = await fsP.readdir(path.join(__dirname, "../", "../", "img"));
-    for (let p of pfade) {
-      let stat = await fsP.lstat(path.join(__dirname, "../", "../", "img", p));
+    const pfade = await fsP.readdir(path.join(__dirname, "../", "../", "img"));
+    for (const p of pfade) {
+      const stat = await fsP.lstat(path.join(__dirname, "../", "../", "img", p));
       if (stat.isDirectory()) {
         continue;
       }
@@ -41,9 +41,9 @@ module.exports = {
   //     (ID des Browser-Fensters)
   //   opt = Object
   //     (Einstellungen, die dem Dialog übergeben werden
-  dateiDialog ({open, winId, opt}) {
+  dateiDialog ({ open, winId, opt }) {
     return new Promise(resolve => {
-      let bw = BrowserWindow.fromId(winId);
+      const bw = BrowserWindow.fromId(winId);
       if (open) {
         dialog.showOpenDialog(bw, opt)
           .then(result => resolve(result))
@@ -63,7 +63,7 @@ module.exports = {
   //   befehl = String
   //     (der Befehl, der ausgeführt werden soll)
   quickRoles (contents, befehl) {
-    switch(befehl) {
+    switch (befehl) {
       case "bearbeiten-rueckgaengig":
         contents.undo();
         break;
@@ -82,25 +82,28 @@ module.exports = {
       case "bearbeiten-alles-auswaehlen":
         contents.selectAll();
         break;
-      case "ansicht-anzeige-vergroessern":
+      case "ansicht-anzeige-vergroessern": {
         const faktorGroesser = Math.round((contents.getZoomFactor() + 0.1) * 10) / 10;
         contents.setZoomFactor(faktorGroesser);
         break;
-      case "ansicht-anzeige-verkleinern":
+      }
+      case "ansicht-anzeige-verkleinern": {
         const faktorKleiner = Math.round((contents.getZoomFactor() - 0.1) * 10) / 10;
         contents.setZoomFactor(faktorKleiner);
         break;
+      }
       case "ansicht-standardgroesse":
         contents.setZoomFactor(1);
         break;
-      case "ansicht-vollbild":
-        let win = BrowserWindow.fromWebContents(contents);
+      case "ansicht-vollbild": {
+        const win = BrowserWindow.fromWebContents(contents);
         if (win.isFullScreen()) {
           win.setFullScreen(false);
         } else {
           win.setFullScreen(true);
         }
         break;
+      }
     }
   },
 };

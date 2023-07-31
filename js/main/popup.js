@@ -1,10 +1,10 @@
 "use strict";
 
-const {BrowserWindow, Menu, MenuItem} = require("electron"),
-  path = require("path");
+const { BrowserWindow, Menu, MenuItem } = require("electron");
+const path = require("path");
 
 // Liste der verfügbaren Menüpunkte
-let punkte = {
+const punkte = {
   anhang: {
     label: "Anhang öffnen",
     icon: "oeffnen.png",
@@ -13,7 +13,7 @@ let punkte = {
   anhaengeAutoErgaenzen: {
     label: "Anhänge automatisch ergänzen",
     icon: "plus.png",
-    click: "anhaenge.addAuto({fenster: false})",
+    click: "anhaenge.addAuto({ fenster: false })",
   },
   anhaengeFenster: {
     label: "Anhänge-Fenster",
@@ -175,7 +175,7 @@ let punkte = {
     icon: "kopieren.png",
     click: `
       helfer.toClipboard({
-        text: popup.textauswahl.replace(/␣/g, " ").replace(/[.]{3}/g, "…"),
+        text: popup.textauswahl.replace(/␣/g, "\u00A0").replace(/[.]{3}/g, "…"),
       });
     `,
   },
@@ -184,7 +184,7 @@ let punkte = {
     icon: "kopieren.png",
     click: `
       helfer.toClipboard({
-        text: popup.element.innerText.replace(/␣/g, " ").replace(/[.]{3}/g, "…"),
+        text: popup.element.innerText.replace(/␣/g, "\u00A0").replace(/[.]{3}/g, "…"),
       });
     `,
   },
@@ -325,7 +325,7 @@ let punkte = {
   titelLoeschen: {
     label: "Titelaufnahme löschen",
     icon: "muelleimer.png",
-    click: `document.querySelector("#red-lit-popup .icon-muelleimer").dispatchEvent(new MouseEvent("click"))`,
+    click: 'document.querySelector("#red-lit-popup .icon-muelleimer").dispatchEvent(new MouseEvent("click"))',
   },
   titelReferenzCp: {
     label: "Referenz in Zwischenablage",
@@ -349,7 +349,7 @@ let punkte = {
   titelXml: {
     label: "Titelaufnahme an XML-Fenster",
     icon: "xml.png",
-    click: `redLit.xmlDatensatz({id: popup.titelaufnahme.ds.id})`,
+    click: "redLit.xmlDatensatz({ id: popup.titelaufnahme.ds.id })",
   },
   wort: {
     label: "Wort ändern",
@@ -385,8 +385,8 @@ module.exports = {
   //     (die Menüpunkte)
   make (contents, items) {
     // Menü erzeugen
-    let menu = new Menu();
-    for (let i of items) {
+    const menu = new Menu();
+    for (const i of items) {
       // Separator
       if (i === "sep") {
         menu.append(module.exports.makeSep());
@@ -394,12 +394,12 @@ module.exports = {
       }
       // Submenü
       if (typeof i !== "string") {
-        let args = {...punkte[i.name]};
+        const args = { ...punkte[i.name] };
         args.sub = true;
         args.obj = true;
-        let opt = module.exports.makeItem(args);
-        for (let j of i.sub) {
-          let args = {...punkte[j]};
+        const opt = module.exports.makeItem(args);
+        for (const j of i.sub) {
+          const args = { ...punkte[j] };
           args.contents = contents;
           args.obj = true;
           opt.submenu.push(module.exports.makeItem(args));
@@ -408,7 +408,7 @@ module.exports = {
         continue;
       }
       // Menüpunkt
-      let args = {...punkte[i]};
+      const args = { ...punkte[i] };
       args.contents = contents;
       menu.append(module.exports.makeItem(args));
     }
@@ -442,8 +442,8 @@ module.exports = {
     obj = false,
   }) {
     // Optionen zusammenbauen
-    let opt = {
-      label: label,
+    const opt = {
+      label,
       icon: path.join(__dirname, "../", "../", "img", "menu", icon),
     };
     if (click) {

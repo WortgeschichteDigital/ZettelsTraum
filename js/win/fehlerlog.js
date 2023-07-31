@@ -1,19 +1,19 @@
 "use strict";
 
-let fehlerlog = {
+const fehlerlog = {
   // Fehler ins Fenster eintragen
   //   fehler = Array
   //     (Liste der Fehler, die in dieser Session aufgetreten sind)
   fuellen (fehler) {
-    let cont = document.querySelector("main"),
-      reload = document.getElementById("reload"),
-      copy = document.getElementById("kopieren");
+    const cont = document.querySelector("main");
+    const reload = document.getElementById("reload");
+    const copy = document.getElementById("kopieren");
     cont.replaceChildren();
     // keine Fehler
     if (!fehler.length) {
-      let div = document.createElement("div");
+      const div = document.createElement("div");
       cont.appendChild(div);
-      let p = document.createElement("p");
+      const p = document.createElement("p");
       div.appendChild(p);
       p.classList.add("keine");
       if (fehlerlog.uovo.count >= 5) {
@@ -28,15 +28,15 @@ let fehlerlog = {
     reload.classList.remove("last");
     copy.classList.remove("aus");
     for (let n = fehler.length - 1; n >= 0; n--) {
-      let i = fehler[n];
-      let h2, p,
-        div = document.createElement("div");
+      const i = fehler[n];
+      const div = document.createElement("div");
       cont.appendChild(div);
       // Zeit
-      h2 = document.createElement("h2");
+      const h2 = document.createElement("h2");
       div.appendChild(h2);
       h2.textContent = fehlerlog.datumFormat(i.time);
       // Kartei
+      let p;
       if (i.fileJs !== "main.js") {
         p = document.createElement("p");
         div.appendChild(p);
@@ -65,28 +65,30 @@ let fehlerlog = {
       p.textContent = textJs;
     }
     // Versionen
-    let div = document.createElement("div");
+    const div = document.createElement("div");
     cont.appendChild(div);
-    let p = document.createElement("p");
+    const p = document.createElement("p");
     div.appendChild(p);
     p.classList.add("version");
-    let daten = [{
-      type: "App",
-      data: appInfo.version,
-    },
-    {
-      type: "Electron",
-      data: process.versions.electron,
-    },
-    {
-      type: "System",
-      data: `${modules.os.type()} (${modules.os.arch()})`,
-    }];
+    const daten = [
+      {
+        type: "App",
+        data: appInfo.version,
+      },
+      {
+        type: "Electron",
+        data: process.versions.electron,
+      },
+      {
+        type: "System",
+        data: `${modules.os.type()} (${modules.os.arch()})`,
+      },
+    ];
     for (let i = 0, len = daten.length; i < len; i++) {
       if (i > 0) {
         p.appendChild(document.createElement("br"));
       }
-      let span = document.createElement("span");
+      const span = document.createElement("span");
       span.textContent = `${daten[i].type}: `;
       p.appendChild(span);
       p.appendChild(document.createTextNode(daten[i].data));
@@ -97,10 +99,10 @@ let fehlerlog = {
   //   datum = String
   //     (im ISO 8601-Format)
   datumFormat (datum) {
-    let wochentage = ["Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"],
-    monate = ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"];
-    let d = new Date(datum);
-    return `${wochentage[d.getDay()]}, ${d.getDate()}. ${monate[d.getMonth()]} ${d.getFullYear()}, ${d.getHours()}:${d.getMinutes() < 10 ? `0${d.getMinutes()}` : d.getMinutes()}:${d.getSeconds() < 10 ? `0${d.getSeconds()}` : d.getSeconds()} Uhr`;
+    const wochentage = [ "Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag" ];
+    const monate = [ "Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember" ];
+    const d = new Date(datum);
+    return `${wochentage[d.getDay()]}, ${d.getDate()}.\u00A0${monate[d.getMonth()]} ${d.getFullYear()}, ${d.getHours()}:${d.getMinutes() < 10 ? `0${d.getMinutes()}` : d.getMinutes()}:${d.getSeconds() < 10 ? `0${d.getSeconds()}` : d.getSeconds()}\u00A0Uhr`;
   },
 
   // uovo di Pasqua
@@ -149,16 +151,16 @@ let fehlerlog = {
     ],
   },
   uovoTesto () {
-    let uovo = fehlerlog.uovo;
+    const uovo = fehlerlog.uovo;
     if (uovo.count - 5 >= uovo.texte.length) {
-      return " ";
+      return "\u00A0";
     } else if (uovo.count >= 5) {
       return uovo.texte[uovo.count - 5];
     }
     return "<i>keine Fehler</i>";
   },
   async reload () {
-    let fehler = await modules.ipc.invoke("fehler-senden");
+    const fehler = await modules.ipc.invoke("fehler-senden");
     // Animation
     document.getElementById("reload").classList.add("rotieren-bitte");
     // uovo di Pasqua
@@ -171,7 +173,7 @@ let fehlerlog = {
   //   a = Element
   //     (der Kopier-Link)
   kopieren (a) {
-    a.addEventListener("click", function(evt) {
+    a.addEventListener("click", function (evt) {
       evt.preventDefault();
       // Text holen und aufbereiten
       let text = document.querySelector("main").innerHTML;

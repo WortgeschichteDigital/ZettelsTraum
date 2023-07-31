@@ -1,6 +1,6 @@
 "use strict";
 
-let xml = {
+const xml = {
   // enthält die Daten
   //   autorinnen = Array
   //     (Liste der bekannten Autorinnen)
@@ -38,14 +38,14 @@ let xml = {
 
   // Dropdown: Auswahlmöglichkeiten für Dropdown-Felder
   dropdown: {
-    artikelTypen: ["Vollartikel", "Wortfeldartikel"],
-    lemmaTypen: ["Hauptlemma", "Nebenlemma"],
-    abschnittTypen: ["Mehr erfahren"],
-    abschnittBloecke: ["Überschrift", "Textblock", "Blockzitat", "Liste", "Illustration"],
-    listenTypen: ["Punkte", "Ziffern"],
-    abbPositionen: ["Block", "links", "rechts"],
+    artikelTypen: [ "Vollartikel", "Wortfeldartikel" ],
+    lemmaTypen: [ "Hauptlemma", "Nebenlemma" ],
+    abschnittTypen: [ "Mehr erfahren" ],
+    abschnittBloecke: [ "Überschrift", "Textblock", "Blockzitat", "Liste", "Illustration" ],
+    listenTypen: [ "Punkte", "Ziffern" ],
+    abbPositionen: [ "Block", "links", "rechts" ],
     lizenzenNamen: [
-      "Bildzitat (§ 51 UrhG)",
+      "Bildzitat (§\u00A051 UrhG)",
       "CC BY 4.0",
       "CC BY-ND 4.0",
       "CC BY-SA 4.0",
@@ -64,19 +64,19 @@ let xml = {
       "https://creativecommons.org/licenses/by-nc-sa/4.0/deed.de",
       "https://creativecommons.org/publicdomain/mark/1.0/deed.de",
     ],
-    nachweisTypen: ["Literatur", "Link"],
+    nachweisTypen: [ "Literatur", "Link" ],
   },
 
   // Dropdown: Referenzen zusammentragen
   dropdownReferenzen () {
-    let arr = [],
-      bloecke = ["ab", "tx"];
-    for (let block of bloecke) {
-      for (let i of xml.data.xl[block]) {
+    const arr = [];
+    const bloecke = [ "ab", "tx" ];
+    for (const block of bloecke) {
+      for (const i of xml.data.xl[block]) {
         if (i.id) {
           arr.push(i.id);
         }
-        for (let j of i.ct) {
+        for (const j of i.ct) {
           if (j.id) {
             arr.push(j.id);
           }
@@ -88,8 +88,8 @@ let xml = {
 
   // Dropdown: Siglen sammeln
   dropdownSiglen () {
-    let si = [];
-    for (let i of xml.data.xl.lt) {
+    const si = [];
+    for (const i of xml.data.xl.lt) {
       si.push(i.si);
     }
     return si;
@@ -97,8 +97,8 @@ let xml = {
 
   // Dropdown: Daten zu den vorhandenen Gerüsten sammeln
   dropdownGerueste () {
-    let arr = [];
-    for (let i of xml.data.xl.bg) {
+    const arr = [];
+    for (const i of xml.data.xl.bg) {
       const na = xml.data.gerueste[i.gn] ? ` (${xml.data.gerueste[i.gn]})` : "";
       arr.push(`Bedeutungsgerüst ${i.gn}${na}`);
     }
@@ -108,7 +108,7 @@ let xml = {
 
   // Dropdown: Lesarten sammeln
   dropdownLesarten () {
-    let data = {
+    const data = {
       bg: {},
       arr: [],
       err: false,
@@ -118,24 +118,22 @@ let xml = {
       return data;
     }
     // Bedeutungsgerüst nicht wohlgeformt
-    let parser = new DOMParser(),
-      xmlDoc = parser.parseFromString(xml.data.xl.bg[xml.bgAkt].xl, "text/xml");
+    const parser = new DOMParser();
+    const xmlDoc = parser.parseFromString(xml.data.xl.bg[xml.bgAkt].xl, "text/xml");
     if (xmlDoc.querySelector("parsererror")) {
       data.err = true;
       return data;
     }
     // Bedeutungsgerüst parsen
-    let evaluator = xpath => {
-      return xmlDoc.evaluate(xpath, xmlDoc, null, XPathResult.ANY_TYPE, null);
-    };
-    let l = evaluator("//Lesart"),
-      item = l.iterateNext();
+    const evaluator = xpath => xmlDoc.evaluate(xpath, xmlDoc, null, XPathResult.ANY_TYPE, null);
+    const l = evaluator("//Lesart");
+    let item = l.iterateNext();
     while (item) {
       // ID ermitteln
-      let id = item.getAttribute("xml:id");
+      const id = item.getAttribute("xml:id");
       // Zählzeichen ermitteln
-      let n = [item.getAttribute("n")],
-        parent = item.parentNode;
+      const n = [ item.getAttribute("n") ];
+      let parent = item.parentNode;
       while (parent.nodeName !== "Lesarten") {
         n.push(parent.getAttribute("n"));
         parent = parent.parentNode;
@@ -143,7 +141,7 @@ let xml = {
       n.reverse();
       // Text ermitteln
       let txt = "";
-      for (let knoten of item.childNodes) {
+      for (const knoten of item.childNodes) {
         if (/^Diasystematik|Lesart|Textreferenz/.test(knoten.nodeName)) {
           continue;
         }
@@ -183,9 +181,9 @@ let xml = {
     // Wort eintragen
     document.querySelector("h1").textContent = xml.data.wort;
     // Init: Metadaten
-    let mdId = document.getElementById("md-id"),
-      mdTy = document.getElementById("md-ty"),
-      mdTf = document.getElementById("md-tf");
+    const mdId = document.getElementById("md-id");
+    const mdTy = document.getElementById("md-ty");
+    const mdTf = document.getElementById("md-tf");
     mdId.value = xml.data.xl.md.id;
     mdTy.value = xml.data.xl.md.ty;
     mdTf.value = xml.data.xl.md.tf[0] || "";
@@ -203,15 +201,15 @@ let xml = {
       });
     }
     // Init: Abstract/Text
-    let bloecke = ["ab", "tx"];
-    for (let block of bloecke) {
-      let cont = document.getElementById(block);
+    const bloecke = [ "ab", "tx" ];
+    for (const block of bloecke) {
+      const cont = document.getElementById(block);
       // Abschnitte erzeugen
       for (let i = 0, len = xml.data.xl[block].length; i < len; i++) {
         xml.abschnittMake({
           key: block,
           slot: i,
-          cont: cont,
+          cont,
           restore: true,
         });
         // Textblöcke erzeugen
@@ -230,23 +228,23 @@ let xml = {
       // Toggle-Events leicht verzögert ist)
       if (xml.data.xl[block].length) {
         await new Promise(warten => setTimeout(() => warten(true), 25));
-        xml.elementKopfToggle({auf: false, key: block});
+        xml.elementKopfToggle({ auf: false, key: block });
       }
     }
     // Init: Belege/Literatur (Standard-Arrays)
-    let keys = ["bl", "lt"];
-    for (let key of keys) {
-      let cont = document.getElementById(key);
+    const keys = [ "bl", "lt" ];
+    for (const key of keys) {
+      const cont = document.getElementById(key);
       for (let i = 0, len = xml.data.xl[key].length; i < len; i++) {
-        let ele = xml.elementKopf({key, slot: i});
+        const ele = xml.elementKopf({ key, slot: i });
         cont.appendChild(ele);
       }
       if (!xml.data.xl[key].length) {
-        xml.elementLeer({ele: cont});
+        xml.elementLeer({ ele: cont });
       } else {
         xml.layoutTabellig({
           id: key,
-          ele: [2, 3],
+          ele: [ 2, 3 ],
           warten: 300,
         });
       }
@@ -285,48 +283,45 @@ let xml = {
   },
 
   // Formulardaten zurücksetzen
-  resetFormular () {
-    return new Promise(async resolve => {
-      document.querySelectorAll(`[data-geaendert="true"]`).forEach(i => {
-        delete i.dataset.geaendert;
-      });
-      let delKoepfe = ["md", "le", "ab", "tx"],
-        delTotal = ["bl", "lt", "wi", "bg"],
-        close = delKoepfe.concat(delTotal),
-        closed = false;
-      for (let i of close) {
-        let koepfe = document.querySelectorAll(`#${i} > .kopf`);
-        for (let kopf of koepfe) {
-          let next = kopf.nextSibling;
-          if (next &&
-              (next.classList.contains("pre-cont") ||
-              next.classList.contains("abschnitt-cont") && !next.dataset.off)) {
-            kopf.dispatchEvent(new Event("click"));
-            closed = true;
-          }
-        }
-      }
-      if (closed) { // Schließen der Köpfe dauert .3s
-        await new Promise(warten => setTimeout(() => warten(true), 350));
-      }
-      for (let i of delKoepfe) {
-        let koepfe = document.querySelectorAll(`#${i} > .kopf`);
-        for (let kopf of koepfe) {
-          kopf.parentNode.removeChild(kopf);
-        }
-      }
-      for (let i of delTotal) {
-        document.getElementById(i).replaceChildren();
-      }
-      resolve(true);
+  async resetFormular () {
+    document.querySelectorAll('[data-geaendert="true"]').forEach(i => {
+      delete i.dataset.geaendert;
     });
+    const delKoepfe = [ "md", "le", "ab", "tx" ];
+    const delTotal = [ "bl", "lt", "wi", "bg" ];
+    const close = delKoepfe.concat(delTotal);
+    let closed = false;
+    for (const i of close) {
+      const koepfe = document.querySelectorAll(`#${i} > .kopf`);
+      for (const kopf of koepfe) {
+        const next = kopf.nextSibling;
+        if (next &&
+            (next.classList.contains("pre-cont") ||
+            next.classList.contains("abschnitt-cont") && !next.dataset.off)) {
+          kopf.dispatchEvent(new Event("click"));
+          closed = true;
+        }
+      }
+    }
+    if (closed) { // Schließen der Köpfe dauert .3s
+      await new Promise(warten => setTimeout(() => warten(true), 350));
+    }
+    for (const i of delKoepfe) {
+      const koepfe = document.querySelectorAll(`#${i} > .kopf`);
+      for (const kopf of koepfe) {
+        kopf.parentNode.removeChild(kopf);
+      }
+    }
+    for (const i of delTotal) {
+      document.getElementById(i).replaceChildren();
+    }
   },
 
   // Metadaten: ID
   mdIdMake () {
     // ID erstellen
-    let id = document.getElementById("md-id"),
-      lemmata = xml.lemmata();
+    const id = document.getElementById("md-id");
+    const lemmata = xml.lemmata();
     for (let i = 0, len = lemmata.length; i < len; i++) {
       lemmata[i] = lemmata[i].replace(/[\s’]/g, "_");
     }
@@ -343,12 +338,12 @@ let xml = {
 
   // Metadaten/Revision: neue Revision erstellen
   mdRevisionAdd () {
-    let au = document.getElementById("md-re-au"),
-      da = document.getElementById("md-re-da"),
-      no = document.getElementById("md-re-no"),
-      auVal = au.value ? au.value.split(/\//) : [],
-      daVal = da.value,
-      noVal = helfer.typographie(helfer.textTrim(no.value, true));
+    const au = document.getElementById("md-re-au");
+    const da = document.getElementById("md-re-da");
+    const no = document.getElementById("md-re-no");
+    const auVal = au.value ? au.value.split(/\//) : [];
+    const daVal = da.value;
+    const noVal = helfer.typographie(helfer.textTrim(no.value, true));
     for (let i = 0, len = auVal.length; i < len; i++) {
       auVal[i] = helfer.textTrim(auVal[i], true);
     }
@@ -370,14 +365,14 @@ let xml = {
       return;
     }
     // XML erzeugen
-    let datum = /^(?<jahr>[0-9]{4})-(?<monat>[0-9]{2})-(?<tag>[0-9]{2})$/.exec(daVal),
-      xmlStr = `<Revision>`;
-    for (let i of auVal) {
+    const datum = /^(?<jahr>[0-9]{4})-(?<monat>[0-9]{2})-(?<tag>[0-9]{2})$/.exec(daVal);
+    let xmlStr = "<Revision>";
+    for (const i of auVal) {
       xmlStr += `<Autor>${i}</Autor>`;
     }
     xmlStr += `<Datum>${datum.groups.tag}.${datum.groups.monat}.${datum.groups.jahr}</Datum>`;
     xmlStr += `<Aenderung>${noVal}</Aenderung>`;
-    xmlStr += `</Revision>`;
+    xmlStr += "</Revision>";
     // Position des Datensatzes finden
     const daValNr = parseInt(daVal.replace(/-/g, ""), 10);
     let pos = -1;
@@ -389,7 +384,7 @@ let xml = {
       }
     }
     // Datensatz erzeugen und speichern
-    let data = {
+    const data = {
       au: auVal,
       da: daVal,
       no: noVal,
@@ -417,21 +412,21 @@ let xml = {
   //     (Slot, in dem der Datensatz steht)
   //   restore = true || undefined
   //     (die Inhalte werden beim Öffnen des Fensters wiederhergestellt)
-  mdRevisionMake ({slot, restore = false}) {
+  mdRevisionMake ({ slot, restore = false }) {
     // neuen Revisionskopf hinzufügen
-    let kopf = xml.elementKopf({key: "re", slot});
+    const kopf = xml.elementKopf({ key: "re", slot });
     if (restore || slot === xml.data.xl.md.re.length - 1) {
       document.getElementById("md").appendChild(kopf);
     } else {
-      let koepfe = document.querySelectorAll("#md .kopf");
+      const koepfe = document.querySelectorAll("#md .kopf");
       document.getElementById("md").insertBefore(kopf, koepfe[slot]);
     }
     // Slots neu durchzählen
-    xml.refreshSlots({key: "md"});
+    xml.refreshSlots({ key: "md" });
     // Layout der Köpfe anpassen
-    let layout = {
+    const layout = {
       id: "md",
-      ele: [3, 4],
+      ele: [ 3, 4 ],
     };
     if (restore) {
       layout.warten = 300;
@@ -442,13 +437,13 @@ let xml = {
   // Metadaten: Change-Listener für Artikel-ID, Artikeltyp und Themenfeld
   //   input = Element
   //     (das Textfeld)
-  mdChange ({input}) {
-    input.addEventListener("change", function() {
+  mdChange ({ input }) {
+    input.addEventListener("change", function () {
       const key = this.id.replace(/.+-/, "");
       let val = helfer.textTrim(this.value, true);
       // Validierung
       if (key === "id") {
-        let id = helferXml.normId({id: val});
+        let id = helferXml.normId({ id: val });
         if (id) {
           if (!/^WGd-/.test(id)) {
             id = `WGd-${id}`;
@@ -474,12 +469,12 @@ let xml = {
 
   // Lemma: neues Lemma erstellen
   lemmaAdd () {
-    let le = document.getElementById("le-le"),
-      ty = document.getElementById("le-ty"),
-      re = document.getElementById("le-re"),
-      leVal = le.value ? le.value.split(/\//) : [],
-      tyVal = ty.value,
-      reVal = re.value.trim();
+    const le = document.getElementById("le-le");
+    const ty = document.getElementById("le-ty");
+    const re = document.getElementById("le-re");
+    const leVal = le.value ? le.value.split(/\//) : [];
+    const tyVal = ty.value;
+    const reVal = re.value.trim();
     for (let i = 0, len = leVal.length; i < len; i++) {
       leVal[i] = helfer.textTrim(leVal[i], true);
     }
@@ -493,8 +488,8 @@ let xml = {
       return;
     }
     let schon = "";
-    x: for (let i of xml.data.xl.le) {
-      for (let j of leVal) {
+    x: for (const i of xml.data.xl.le) {
+      for (const j of leVal) {
         if (i.le.includes(j)) {
           schon = j;
           break x;
@@ -527,15 +522,15 @@ let xml = {
     }
     // XML erzeugen
     let xmlStr = `<Lemma Typ="${tyVal}">`;
-    for (let i of leVal) {
+    for (const i of leVal) {
       xmlStr += `<Schreibung>${i}</Schreibung>`;
     }
     if (reVal) {
       xmlStr += `<Textreferenz Ziel="${reVal}"/>`;
     }
-    xmlStr += `</Lemma>`;
+    xmlStr += "</Lemma>";
     // Datensatz erzeugen und speichern
-    let data = {
+    const data = {
       le: leVal,
       ty: tyVal,
       re: reVal,
@@ -559,14 +554,14 @@ let xml = {
   //     (Slot, in dem der Datensatz steht)
   //   restore = true || undefined
   //     (die Inhalte werden beim Öffnen des Fensters wiederhergestellt)
-  lemmaMake ({slot, restore = false}) {
+  lemmaMake ({ slot, restore = false }) {
     // neuen Lemmakopf hinzufügen
-    let kopf = xml.elementKopf({key: "le", slot});
+    const kopf = xml.elementKopf({ key: "le", slot });
     document.getElementById("le").appendChild(kopf);
     // Layout der Köpfe anpassen
-    let layout = {
+    const layout = {
       id: "le",
-      ele: [3, 4],
+      ele: [ 3, 4 ],
     };
     if (restore) {
       layout.warten = 300;
@@ -579,14 +574,14 @@ let xml = {
   //     (der Datensatz; enthält die übergebenen Daten:
   //       data.key = String [Schlüssel, der den Datentyp angibt]
   //       data.ds = Object [der je spezifisch strukturierte Datensatz])
-  async empfangen ({xmlDatensatz}) {
+  async empfangen ({ xmlDatensatz }) {
     if (/^(bl|lt)$/.test(xmlDatensatz.key)) {
       xml.empfangenArr({
         key: xmlDatensatz.key,
         ds: xmlDatensatz.ds,
       });
       if (xmlDatensatz.key === "lt") {
-        xml.bgNwTfMake({key: "nw"});
+        xml.bgNwTfMake({ key: "nw" });
       } else {
         xml.belegeZaehlen();
       }
@@ -604,33 +599,33 @@ let xml = {
       xml.bgNwTyReset();
       xml.bgMakeXML();
       document.getElementById("la").value = "";
-      xml.bgNwTfMake({key: "nw"});
-      xml.bgNwTfMake({key: "tf"});
+      xml.bgNwTfMake({ key: "nw" });
+      xml.bgNwTfMake({ key: "tf" });
       xml.bgSelSet();
     } else if (xmlDatensatz.key === "wi") {
       xml.data.xl.wi[xmlDatensatz.gn] = xmlDatensatz.ds;
       if (xml.bgAkt > -1 && xmlDatensatz.gn === xml.bgAktGn ||
           xml.bgAkt === -1) {
-        xml.bgAktGn = xml.bgAktGn || xmlDatensatz.gn;
+        xml.bgAktGn ||= xmlDatensatz.gn;
         xml.wiMake();
       }
     } else if (xmlDatensatz.key === "wi-single") {
       if (!xml.data.xl.wi?.[xml.bgAktGn]?.length) {
-        xml.bgAktGn = xml.bgAktGn || xmlDatensatz.gn;
-        xml.data.xl.wi[xml.bgAktGn] = [xmlDatensatz.ds];
+        xml.bgAktGn ||= xmlDatensatz.gn;
+        xml.data.xl.wi[xml.bgAktGn] = [ xmlDatensatz.ds ];
         xml.wiMake();
       } else {
-        let slot = xml.data.xl.wi[xml.bgAktGn].findIndex(i => i.vt === xmlDatensatz.ds.vt && i.tx === xmlDatensatz.ds.tx),
-          koepfe = document.querySelectorAll("#wi > .kopf");
+        const slot = xml.data.xl.wi[xml.bgAktGn].findIndex(i => i.vt === xmlDatensatz.ds.vt && i.tx === xmlDatensatz.ds.tx);
+        const koepfe = document.querySelectorAll("#wi > .kopf");
         if (slot > -1) { // Datensatz ersetzen
           xml.data.xl.wi[xml.bgAktGn][slot] = xmlDatensatz.ds;
           // ggf. Preview schließen
-          let pre = koepfe[slot].nextSibling;
+          const pre = koepfe[slot].nextSibling;
           if (pre?.classList.contains("pre-cont")) {
-            await xml.elementPreviewOff({pre});
+            await xml.elementPreviewOff({ pre });
           }
           // Kopf erzeugen
-          let kopf = xml.elementKopf({
+          const kopf = xml.elementKopf({
             key: "wi",
             slot,
           });
@@ -643,7 +638,7 @@ let xml = {
           // Layout der Köpfe anpassen
           xml.layoutTabellig({
             id: "wi",
-            ele: [3, 4],
+            ele: [ 3, 4 ],
           });
         } else { // neuen Datensatz einhängen
           xml.data.xl.wi[xml.bgAktGn].push(xmlDatensatz.ds);
@@ -651,7 +646,7 @@ let xml = {
           xml.data.xl.wi[xml.bgAktGn].sort(helfer.sortWi);
           // Kopf ersetzen
           const slot = xml.data.xl.wi[xml.bgAktGn].findIndex(i => i.vt === xmlDatensatz.ds.vt && i.tx === xmlDatensatz.ds.tx);
-          let kopf = xml.elementKopf({
+          const kopf = xml.elementKopf({
             key: "wi",
             slot,
           });
@@ -661,12 +656,12 @@ let xml = {
             koepfe[slot].parentNode.insertBefore(kopf, koepfe[slot]);
           }
           // Slots auffrischen und Verweistypgrenze neu markieren
-          xml.refreshSlots({key: "wi"});
+          xml.refreshSlots({ key: "wi" });
           xml.wiVerweistypGrenze();
           // Layout der Köpfe anpassen
           xml.layoutTabellig({
             id: "wi",
-            ele: [3, 4],
+            ele: [ 3, 4 ],
           });
         }
       }
@@ -679,10 +674,10 @@ let xml = {
   //     (der Schlüssel des Datensatzes)
   //   ds = Object
   //     (der Datensatz mit den Inhalten)
-  empfangenArr ({key, ds}) {
-    let cont = document.getElementById(key);
+  empfangenArr ({ key, ds }) {
+    const cont = document.getElementById(key);
     // ggf. Leermeldung löschen
-    let leer = cont.querySelector(".leer");
+    const leer = cont.querySelector(".leer");
     if (leer) {
       cont.removeChild(leer);
     }
@@ -690,18 +685,18 @@ let xml = {
     const slot = xml.data.xl[key].findIndex(i => i.id === ds.id);
     if (slot >= 0) {
       // ggf. speichern Anstoßen
-      let contAlt = cont.querySelector(`[data-id="${ds.id}"]`).nextSibling;
+      const contAlt = cont.querySelector(`[data-id="${ds.id}"]`).nextSibling;
       if (contAlt) {
-        xml.textblockSave({cont: contAlt});
+        xml.textblockSave({ cont: contAlt });
       }
       // Datensatz ersetzen
       xml.data.xl[key][slot] = ds;
       // Element ersetzen
-      let ele = xml.elementKopf({key, slot}),
-        divs = cont.querySelectorAll(".kopf");
+      const ele = xml.elementKopf({ key, slot });
+      const divs = cont.querySelectorAll(".kopf");
       cont.replaceChild(ele, divs[slot]);
       // ggf. Vorschau auffrischen
-      let pre = ele.nextSibling;
+      const pre = ele.nextSibling;
       if (pre && pre.classList.contains("pre-cont")) {
         xml.preview({
           xmlStr: xml.data.xl[key][slot].xl,
@@ -714,11 +709,11 @@ let xml = {
       // Datensatz hinzufügen
       xml.data.xl[key].push(ds);
       // Datensätze sortieren
-      xml.empfangenArrSort({key});
+      xml.empfangenArrSort({ key });
       // neues Element einhängen
       const slot = xml.data.xl[key].findIndex(i => i.id === ds.id);
-      let ele = xml.elementKopf({key, slot}),
-        divs = cont.querySelectorAll(".kopf");
+      const ele = xml.elementKopf({ key, slot });
+      const divs = cont.querySelectorAll(".kopf");
       if (slot === xml.data.xl[key].length - 1) {
         cont.appendChild(ele);
       } else {
@@ -728,16 +723,16 @@ let xml = {
     // Ansicht tabellenartig gestalten
     xml.layoutTabellig({
       id: key,
-      ele: [2, 3],
+      ele: [ 2, 3 ],
     });
   },
 
   // Empfangen von Datensätzen: Arrays sortieren
   //   key = String
   //     (der Schlüssel des Datensatzes)
-  empfangenArrSort ({key}) {
-    let sortStr = [];
-    for (let i of xml.data.xl[key]){
+  empfangenArrSort ({ key }) {
+    const sortStr = [];
+    for (const i of xml.data.xl[key]) {
       if (key === "bl") {
         sortStr.push({
           ds: i.ds,
@@ -749,11 +744,11 @@ let xml = {
     }
     if (key === "bl") {
       sortStr.sort((a, b) => {
-        let key = "ds",
-          arr = [a.ds, b.ds]; // sortieren nach Sortierdatum
+        let key = "ds";
+        let arr = [ a.ds, b.ds ]; // sortieren nach Sortierdatum
         if (a.ds === b.ds) {
           key = "id";
-          arr = [a.id, b.id]; // Fallback: sortieren nach ID
+          arr = [ a.id, b.id ]; // Fallback: sortieren nach ID
         }
         arr.sort();
         if (a[key] === arr[0]) {
@@ -761,9 +756,7 @@ let xml = {
         }
         return 1;
       });
-      xml.data.xl.bl.sort((a, b) => {
-        return sortStr.findIndex(i => i.id === a.id) - sortStr.findIndex(i => i.id === b.id);
-      });
+      xml.data.xl.bl.sort((a, b) => sortStr.findIndex(i => i.id === a.id) - sortStr.findIndex(i => i.id === b.id));
     } else if (key === "lt") {
       sortStr.sort(helfer.sortSiglen);
       xml.data.xl.lt.sort((a, b) => sortStr.indexOf(a.si) - sortStr.indexOf(b.si));
@@ -772,14 +765,14 @@ let xml = {
 
   // Beleg aus Zwischenablage einfügen
   belegEinfuegen () {
-    let cb = modules.clipboard.readText(),
-      parser = new DOMParser(),
-      xmlDoc = parser.parseFromString(cb, "text/xml");
+    const cb = modules.clipboard.readText();
+    const parser = new DOMParser();
+    const xmlDoc = parser.parseFromString(cb, "text/xml");
     // Validierung
     if (xmlDoc.querySelector("parsererror")) {
       dialog.oeffnen({
         typ: "alert",
-        text: `Beim Einlesen des Belegs ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">kein wohlgeformtes XML-Snippet gefunden</p>`,
+        text: 'Beim Einlesen des Belegs ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">kein wohlgeformtes XML-Snippet gefunden</p>',
       });
       return;
     }
@@ -787,13 +780,13 @@ let xml = {
         !xmlDoc.querySelector("Belegtext")) {
       dialog.oeffnen({
         typ: "alert",
-        text: `Beim Einlesen des Belegs ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">kein XML-Snippet mit Belegtext gefunden</p>`,
+        text: 'Beim Einlesen des Belegs ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">kein XML-Snippet mit Belegtext gefunden</p>',
       });
       return;
     }
     // Datensatz erstellen
-    let datum = helferXml.datumFormat({xmlStr: cb});
-    let xmlDatensatz = {
+    const datum = helferXml.datumFormat({ xmlStr: cb });
+    const xmlDatensatz = {
       key: "bl",
       ds: {
         da: datum.anzeige,
@@ -812,17 +805,17 @@ let xml = {
   // Wortinformationen: alle Wörter aufbauen
   wiMake () {
     // alle Köpfe entfernen
-    let wi = document.getElementById("wi");
+    const wi = document.getElementById("wi");
     wi.replaceChildren();
     // keine Daten zum aktuellen Gerüst => Leermeldung
-    let keys = Object.keys(xml.data.xl.wi);
+    const keys = Object.keys(xml.data.xl.wi);
     if (!keys.length || !xml.data.xl.wi?.[xml.bgAktGn]?.length) {
-      xml.elementLeer({ele: wi});
+      xml.elementLeer({ ele: wi });
       return;
     }
     // alle Köpfe aufbauen
     for (let i = 0, len = xml.data.xl.wi[xml.bgAktGn].length; i < len; i++) {
-      let kopf = xml.elementKopf({
+      const kopf = xml.elementKopf({
         key: "wi",
         slot: i,
       });
@@ -833,14 +826,14 @@ let xml = {
     // Layout der Köpfe anpassen
     xml.layoutTabellig({
       id: "wi",
-      ele: [3, 4],
+      ele: [ 3, 4 ],
       restore: 300,
     });
   },
 
   // Wortinformationen: Verweistypgrenze markieren
   wiVerweistypGrenze () {
-    let koepfe = document.querySelectorAll("#wi > .kopf");
+    const koepfe = document.querySelectorAll("#wi > .kopf");
     if (!koepfe.length) {
       return;
     }
@@ -882,8 +875,8 @@ let xml = {
       });
       return;
     }
-    let parser = new DOMParser(),
-      xmlDoc = parser.parseFromString(xml.data.xl.bg[xml.bgAkt].xl, "text/xml");
+    const parser = new DOMParser();
+    const xmlDoc = parser.parseFromString(xml.data.xl.bg[xml.bgAkt].xl, "text/xml");
     if (xmlDoc.querySelector("parsererror")) {
       dialog.oeffnen({
         typ: "alert",
@@ -895,8 +888,8 @@ let xml = {
     // Datensatz auffrischen
     xml.data.xl.bg[xml.bgAkt].la = la.value.trim();
     // XML ein- bzw. austragen
-    let xl = xml.data.xl.bg[xml.bgAkt].xl,
-      xmlStr = "";
+    let xl = xml.data.xl.bg[xml.bgAkt].xl;
+    let xmlStr = "";
     if (xml.data.xl.bg[xml.bgAkt].la) {
       xmlStr = "\n  <Lemma>\n";
       xmlStr += `    <Schreibung>${xml.data.xl.bg[xml.bgAkt].la}</Schreibung>\n`;
@@ -923,20 +916,24 @@ let xml = {
 
   // Bedeutungsgerüst: Nachweisformular umstellen
   bgNachweisToggle () {
-    let typ = document.getElementById("nw-ty").value,
-      formLit = document.getElementById("nw-lit"),
-      formLink = document.getElementById("nw-link");
+    const typ = document.getElementById("nw-ty").value;
+    const formLit = document.getElementById("nw-lit");
+    const formLink = document.getElementById("nw-link");
     if (typ === "Literatur") {
       formLit.classList.remove("aus");
-      formLit.querySelectorAll("input").forEach(i => i.value = "");
+      formLit.querySelectorAll("input").forEach(i => {
+        i.value = "";
+      });
       formLit.querySelector("input").focus();
     } else {
       formLit.classList.add("aus");
     }
     if (typ === "Link") {
       formLink.classList.remove("aus");
-      formLink.querySelectorAll("input").forEach(i => i.value = "");
-      formLink.querySelector(`[id$="da"]`).value = new Date().toISOString().split("T")[0];
+      formLink.querySelectorAll("input").forEach(i => {
+        i.value = "";
+      });
+      formLink.querySelector('[id$="da"]').value = new Date().toISOString().split("T")[0];
       formLink.querySelector("input").focus();
     } else {
       formLink.classList.add("aus");
@@ -951,7 +948,7 @@ let xml = {
       return;
     }
     // Fehler, die das Bedeutungsgerüst betreffen
-    let ty = document.getElementById("nw-ty");
+    const ty = document.getElementById("nw-ty");
     if (!xml.data.xl.bg.length) {
       dialog.oeffnen({
         typ: "alert",
@@ -960,8 +957,8 @@ let xml = {
       });
       return;
     }
-    let parser = new DOMParser(),
-      xmlDoc = parser.parseFromString(xml.data.xl.bg[xml.bgAkt].xl, "text/xml");
+    const parser = new DOMParser();
+    const xmlDoc = parser.parseFromString(xml.data.xl.bg[xml.bgAkt].xl, "text/xml");
     if (xmlDoc.querySelector("parsererror")) {
       dialog.oeffnen({
         typ: "alert",
@@ -971,12 +968,12 @@ let xml = {
       return;
     }
     // Typ ermitteln
-    let tyVal = ty.value;
+    const tyVal = ty.value;
     // Formular auslesen, validieren und XML erstellen
     let xmlStr = "";
     if (tyVal === "Literatur") {
-      let si = document.getElementById("nw-lit-si"),
-        siVal = si.value.trim();
+      const si = document.getElementById("nw-lit-si");
+      const siVal = si.value.trim();
       if (!siVal) {
         dialog.oeffnen({
           typ: "alert",
@@ -995,7 +992,7 @@ let xml = {
         return;
       }
       const id = xml.data.xl.lt[ltSlot].id;
-      for (let i of xml.data.xl.bg[xml.bgAkt].nw) {
+      for (const i of xml.data.xl.bg[xml.bgAkt].nw) {
         if (!/^<Literaturreferenz/.test(i)) {
           continue;
         }
@@ -1009,15 +1006,15 @@ let xml = {
           return;
         }
       }
-      let stVal = helfer.textTrim(document.getElementById("nw-lit-st").value, true);
+      const stVal = helfer.textTrim(document.getElementById("nw-lit-st").value, true);
       if (!stVal) {
         xmlStr = `<Literaturreferenz Ziel="${id}"/>`;
       } else {
         xmlStr = `<Literaturreferenz Ziel="${id}">${stVal}</Literaturreferenz>`;
       }
     } else if (tyVal === "Link") {
-      let tx = document.getElementById("nw-link-tx"),
-        txVal = helfer.textTrim(tx.value, true);
+      const tx = document.getElementById("nw-link-tx");
+      const txVal = helfer.textTrim(tx.value, true);
       if (!txVal) {
         dialog.oeffnen({
           typ: "alert",
@@ -1026,8 +1023,8 @@ let xml = {
         });
         return;
       }
-      let ul = document.getElementById("nw-link-ul"),
-        ulVal = ul.value.trim();
+      const ul = document.getElementById("nw-link-ul");
+      const ulVal = ul.value.trim();
       if (!ulVal) {
         dialog.oeffnen({
           typ: "alert",
@@ -1043,8 +1040,8 @@ let xml = {
         });
         return;
       }
-      let da = document.getElementById("nw-link-da"),
-        daVal = da.value;
+      const da = document.getElementById("nw-link-da");
+      const daVal = da.value;
       if (!daVal) {
         dialog.oeffnen({
           typ: "alert",
@@ -1053,8 +1050,8 @@ let xml = {
         });
         return;
       }
-      const fundort = helferXml.fundort({url: ulVal});
-      let datum = daVal.split("-");
+      const fundort = helferXml.fundort({ url: ulVal });
+      const datum = daVal.split("-");
       xmlStr = "<Verweis_extern>\n";
       xmlStr += `  <Verweistext>${txVal}</Verweistext>\n`;
       xmlStr += "  <Verweisziel/>\n";
@@ -1072,7 +1069,7 @@ let xml = {
     // Datensatz speichern
     xml.speichern();
     // Köpfe erzeugen
-    xml.bgNwTfMake({key: "nw"});
+    xml.bgNwTfMake({ key: "nw" });
     // Formular zurücksetzen und wieder fokussieren
     ty.value = "";
     ty.focus();
@@ -1089,7 +1086,7 @@ let xml = {
     let nw = "\n  <Nachweise/>";
     if (xml.data.xl.bg[xml.bgAkt].nw.length) {
       nw = "\n  <Nachweise>";
-      for (let i of xml.data.xl.bg[xml.bgAkt].nw) {
+      for (const i of xml.data.xl.bg[xml.bgAkt].nw) {
         nw += "\n" + " ".repeat(4) + i.replace(/\n/g, "\n" + " ".repeat(4));
       }
       nw += "\n  </Nachweise>";
@@ -1098,7 +1095,7 @@ let xml = {
     xl = xl.replace(/\s+(<Nachweise\/>|<Nachweise>.+?<\/Nachweise>)/s, nw);
     xml.data.xl.bg[xml.bgAkt].xl = xl;
     // ggf. Preview auffrischen
-    let bg = document.getElementById("bg");
+    const bg = document.getElementById("bg");
     if (bg.querySelector(".pre-cont")) {
       xml.preview({
         xmlStr: xl,
@@ -1118,11 +1115,11 @@ let xml = {
       return;
     }
     // Variablen zusammentragen
-    let li = document.getElementById("bg-tf-li"),
-      ti = document.getElementById("bg-tf-ti"),
-      liVal = li.value.trim(),
-      tiVal = ti.value.trim(),
-      bgData = xml.dropdownLesarten();
+    const li = document.getElementById("bg-tf-li");
+    const ti = document.getElementById("bg-tf-ti");
+    const liVal = li.value.trim();
+    const tiVal = ti.value.trim();
+    const bgData = xml.dropdownLesarten();
     // Überprüfungen
     if (!bgData.arr.length && !bgData.err) {
       dialog.oeffnen({
@@ -1166,13 +1163,13 @@ let xml = {
     }
     // Datensatz erzeugen und einhängen
     let id = "";
-    for (let [k, v] of Object.entries(bgData.bg)) {
+    for (const [ k, v ] of Object.entries(bgData.bg)) {
       if (`${v.n} ${v.txt}` === liVal) {
         id = k;
         break;
       }
     }
-    let data = {
+    const data = {
       li: id,
       ti: tiVal,
     };
@@ -1184,8 +1181,8 @@ let xml = {
     }
     // Datensätze sortieren
     xml.data.xl.bg[xml.bgAkt].tf.sort((a, b) => {
-      const aTxt = `${bgData.bg[a.li].n} ${bgData.bg[a.li].txt}`,
-        bTxt = `${bgData.bg[b.li].n} ${bgData.bg[b.li].txt}`;
+      const aTxt = `${bgData.bg[a.li].n} ${bgData.bg[a.li].txt}`;
+      const bTxt = `${bgData.bg[b.li].n} ${bgData.bg[b.li].txt}`;
       return bgData.arr.indexOf(aTxt) - bgData.arr.indexOf(bTxt);
     });
     // Bedeutungsgerüst auffrischen
@@ -1193,7 +1190,7 @@ let xml = {
     // Datensatz speichern
     xml.speichern();
     // Köpfe erzeugen
-    xml.bgNwTfMake({key: "tf"});
+    xml.bgNwTfMake({ key: "tf" });
     // Formular leeren und wieder fokussieren
     li.value = "";
     ti.value = "";
@@ -1202,16 +1199,16 @@ let xml = {
 
   // Bedeutungsgerüst: Textreferenzen im Bedeutungsgerüst auffrischen
   bgTextreferenzenRefresh () {
-    let parser = new DOMParser(),
-      xmlDoc = parser.parseFromString(xml.data.xl.bg[xml.bgAkt].xl, "text/xml");
+    const parser = new DOMParser();
+    const xmlDoc = parser.parseFromString(xml.data.xl.bg[xml.bgAkt].xl, "text/xml");
     if (xmlDoc.querySelector("parsererror")) {
       return;
     }
     xmlDoc.querySelectorAll("Lesart").forEach(i => {
       // IDs ermitteln
-      let id = i.getAttribute("xml:id"),
-        tag = i.querySelector("Textreferenz"),
-        ziel = "";
+      const id = i.getAttribute("xml:id");
+      let tag = i.querySelector("Textreferenz");
+      let ziel = "";
       if (tag) {
         if (tag.parentNode !== i) {
           tag = null;
@@ -1220,7 +1217,7 @@ let xml = {
         }
       }
       // Textreferenz updaten?
-      let tf = xml.data.xl.bg[xml.bgAkt].tf;
+      const tf = xml.data.xl.bg[xml.bgAkt].tf;
       const slot = tf.findIndex(i => i.li === id);
       if (ziel && slot === -1) { // Tag entfernen
         i.removeChild(tag.previousSibling);
@@ -1230,11 +1227,11 @@ let xml = {
         tag.setAttributeNS("http://www.w3.org/1999/xhtml", "Ziel", tf[slot].ti);
       } else if (!ziel && slot > -1) { // Tag hinzufügen
         // Whitespace erzeugen
-        let next = i.querySelector("Diasystematik").nextSibling,
-          lb = document.createTextNode(next.nodeValue.match(/\s+/)[0]);
+        const next = i.querySelector("Diasystematik").nextSibling;
+        const lb = document.createTextNode(next.nodeValue.match(/\s+/)[0]);
         i.insertBefore(lb, next);
         // Textreferenz erzeugen
-        let Textreferenz = document.createElementNS("http://www.w3.org/1999/xhtml", "Textreferenz");
+        const Textreferenz = document.createElementNS("http://www.w3.org/1999/xhtml", "Textreferenz");
         Textreferenz.setAttributeNS("http://www.w3.org/1999/xhtml", "Ziel", tf[slot].ti);
         i.insertBefore(Textreferenz, lb.nextSibling);
       }
@@ -1247,10 +1244,10 @@ let xml = {
     // Daten auffrischen
     xml.data.xl.bg[xml.bgAkt].xl = xmlStr;
     // ggf. Preview auffrischen
-    let bg = document.getElementById("bg");
+    const bg = document.getElementById("bg");
     if (bg.querySelector(".pre-cont")) {
       xml.preview({
-        xmlStr: xmlStr,
+        xmlStr,
         key: "bg",
         slot: -1,
         after: bg.querySelector(".kopf"),
@@ -1262,14 +1259,14 @@ let xml = {
   // Bedeutungsgerüst: alle Nachweise/Textreferenzen (neu) aufbauen
   //   key = String
   //     (Schlüssel des Datensatzes, der neu aufgebaut werden soll)
-  bgNwTfMake ({key}) {
+  bgNwTfMake ({ key }) {
     // alle Köpfe entfernen
-    let cont = document.getElementById(`bg-${key}`);
+    const cont = document.getElementById(`bg-${key}`);
     cont.querySelectorAll(".kopf").forEach(i => i.parentNode.removeChild(i));
     // alle Köpfe aufbauen
     if (xml.data.xl.bg.length) {
       for (let i = 0, len = xml.data.xl.bg[xml.bgAkt][key].length; i < len; i++) {
-        let kopf = xml.elementKopf({
+        const kopf = xml.elementKopf({
           key,
           slot: i,
         });
@@ -1277,9 +1274,9 @@ let xml = {
       }
     }
     // Layout der Köpfe anpassen
-    let ele = [2, 3];
+    let ele = [ 2, 3 ];
     if (key === "nw") {
-      ele = [3, 4];
+      ele = [ 3, 4 ];
     }
     xml.layoutTabellig({
       id: `bg-${key}`,
@@ -1290,7 +1287,7 @@ let xml = {
 
   // Bedeutungsgerüst: Nachweistyp-Formular zurücksetzen
   bgNwTyReset () {
-    let nwTy = document.getElementById("nw-ty");
+    const nwTy = document.getElementById("nw-ty");
     nwTy.value = "";
     nwTy.dispatchEvent(new Event("input"));
   },
@@ -1301,8 +1298,8 @@ let xml = {
     // (passiert, wenn das Bedeutungsgerüst-Feld beim Bearbeiten
     // komplett geleert wurde)
     if (!xml.data.xl.bg[xml.bgAkt].xl) {
-      let pre = document.querySelector("#bg .pre-cont");
-      await xml.elementPreviewOff({pre});
+      const pre = document.querySelector("#bg .pre-cont");
+      await xml.elementPreviewOff({ pre });
       document.getElementById("bg").replaceChildren();
       xml.data.xl.bg.splice(xml.bgAkt, 1);
       xml.speichern();
@@ -1310,37 +1307,35 @@ let xml = {
       return;
     }
     // Bedeutungsgerüst nicht wohlgeformt
-    let parser = new DOMParser(),
-      xmlDoc = parser.parseFromString(xml.data.xl.bg[xml.bgAkt].xl, "text/xml");
+    const parser = new DOMParser();
+    const xmlDoc = parser.parseFromString(xml.data.xl.bg[xml.bgAkt].xl, "text/xml");
     if (xmlDoc.querySelector("parsererror")) {
       return;
     }
     // Bedeutungsgerüst parsen
-    let evaluator = xpath => {
-      return xmlDoc.evaluate(xpath, xmlDoc, null, XPathResult.ANY_TYPE, null);
-    };
+    const evaluator = xpath => xmlDoc.evaluate(xpath, xmlDoc, null, XPathResult.ANY_TYPE, null);
     // Label
-    let la = evaluator("//Schreibung").iterateNext(),
-      label = "";
+    const la = evaluator("//Schreibung").iterateNext();
+    let label = "";
     if (la) {
       label = la.textContent;
     }
     // Nachweise
-    let lr = evaluator("//Nachweise"),
-      nw = lr.iterateNext(),
-      arrNw = [];
-    for (let knoten of nw.childNodes) {
+    const lr = evaluator("//Nachweise");
+    const nw = lr.iterateNext();
+    const arrNw = [];
+    for (const knoten of nw.childNodes) {
       if (knoten.nodeType === 1) {
         arrNw.push(knoten.outerHTML.replace(/\n\s{4}/g, "\n"));
       }
     }
     // Lesarten
-    let l = evaluator("//Lesart"),
-      item = l.iterateNext(),
-      arrTf = [];
+    const l = evaluator("//Lesart");
+    let item = l.iterateNext();
+    const arrTf = [];
     while (item) {
       // Textreferenz vorhanden?
-      let tf = item.querySelector("Textreferenz");
+      const tf = item.querySelector("Textreferenz");
       if (!tf || tf.parentNode !== item) {
         item = l.iterateNext();
         continue;
@@ -1360,16 +1355,16 @@ let xml = {
     xml.speichern();
     // Köpfe neu aufbauen
     document.getElementById("la").value = label;
-    xml.bgNwTfMake({key: "nw"});
-    xml.bgNwTfMake({key: "tf"});
+    xml.bgNwTfMake({ key: "nw" });
+    xml.bgNwTfMake({ key: "tf" });
   },
 
   // Bedeutungsgerüst: XML aufbauen
   async bgMakeXML () {
-    let bg = document.getElementById("bg");
+    const bg = document.getElementById("bg");
     // Struktur schon vorhanden?
     if (bg.querySelector(".kopf")) {
-      let cont = bg.querySelector(".pre-cont");
+      const cont = bg.querySelector(".pre-cont");
       if (cont) {
         xml.editSpeichernAbschluss({
           cont,
@@ -1379,7 +1374,7 @@ let xml = {
       return;
     }
     // Kopf erzeugen
-    let div = xml.elementKopf({
+    const div = xml.elementKopf({
       key: "bg",
     });
     // Kopf einhängen
@@ -1392,30 +1387,27 @@ let xml = {
   },
 
   // Bedeutungsgerüst: Bearbeiten-Modus beenden
-  bgCloseXML () {
-    return new Promise(async resolve => {
-      let pre = document.querySelector("#bg .pre-cont");
-      if (pre && !pre.querySelector("pre")) {
-        await new Promise(warten => setTimeout(() => warten(true), 25));
-        const antwort = await xml.editFrage({
-          pre,
-          fun: () => {},
-        });
-        let ta = pre.querySelector("textarea");
-        if (antwort) {
-          pre.querySelector(`[value="Speichern"]`).dispatchEvent(new Event("click"));
-        } else if (antwort === false) {
-          delete ta.dataset.geaendert;
-          ta.value = xml.data.xl.bg[xml.bgAkt].xl;
-          pre.querySelector(`[value="Abbrechen"]`).dispatchEvent(new Event("click"));
-        } else if (antwort === null) {
-          ta.setSelectionRange(0, 0);
-          ta.focus();
-        }
-        resolve(antwort);
+  async bgCloseXML () {
+    const pre = document.querySelector("#bg .pre-cont");
+    if (pre && !pre.querySelector("pre")) {
+      await new Promise(warten => setTimeout(() => warten(true), 25));
+      const antwort = await xml.editFrage({
+        pre,
+      });
+      const ta = pre.querySelector("textarea");
+      if (antwort) {
+        pre.querySelector('[value="Speichern"]').dispatchEvent(new Event("click"));
+      } else if (antwort === false) {
+        delete ta.dataset.geaendert;
+        ta.value = xml.data.xl.bg[xml.bgAkt].xl;
+        pre.querySelector('[value="Abbrechen"]').dispatchEvent(new Event("click"));
+      } else if (antwort === null) {
+        ta.setSelectionRange(0, 0);
+        ta.focus();
       }
-      resolve(true);
-    });
+      return antwort;
+    }
+    return true;
   },
 
   // Bedeutungsgerüst: zurücksetzen bzw. initialisieren
@@ -1434,19 +1426,19 @@ let xml = {
     xml.bgNwTyReset();
     let la = "";
     if (xml.bgAkt >= 0) {
-       la = xml.data.xl.bg[xml.bgAkt].la;
+      la = xml.data.xl.bg[xml.bgAkt].la;
     }
     document.getElementById("la").value = la;
-    xml.bgNwTfMake({key: "nw"});
-    xml.bgNwTfMake({key: "tf"});
+    xml.bgNwTfMake({ key: "nw" });
+    xml.bgNwTfMake({ key: "tf" });
     xml.bgSelSet();
   },
 
   // Bedeutungsgerüst: anderes Gerüst auswählen
   //   caller = String
   //     (ID des Input-Feldes, das geändert wurde)
-  bgSel ({caller}) {
-    let reg = /gerüst (?<gn>[0-9]+)/.exec(document.getElementById(caller).value);
+  bgSel ({ caller }) {
+    const reg = /gerüst (?<gn>[0-9]+)/.exec(document.getElementById(caller).value);
     if (reg) {
       xml.bgAkt = xml.data.xl.bg.findIndex(i => i.gn === reg.groups.gn);
       xml.bgAktGn = reg.groups.gn;
@@ -1458,19 +1450,19 @@ let xml = {
       xml.bgNwTyReset();
       xml.bgMakeXML();
       document.getElementById("la").value = xml.data.xl.bg[xml.bgAkt].la;
-      xml.bgNwTfMake({key: "nw"});
-      xml.bgNwTfMake({key: "tf"});
+      xml.bgNwTfMake({ key: "nw" });
+      xml.bgNwTfMake({ key: "tf" });
     }
   },
 
   // Bedeutungsgerüst: ID und Name des aktuellen Gerüsts in die Auswahlfelder
   bgSelSet () {
-    let selWi = document.getElementById("wi-sel-gr"),
-      selBg = document.getElementById("bg-sel-gr"),
-      val = "";
+    const selWi = document.getElementById("wi-sel-gr");
+    const selBg = document.getElementById("bg-sel-gr");
+    let val = "";
     if (xml.data.xl.bg.length) {
-      const gn = xml.data.xl.bg[xml.bgAkt].gn,
-        na = xml.data.gerueste[gn] ? ` (${xml.data.gerueste[gn]})` : "";
+      const gn = xml.data.xl.bg[xml.bgAkt].gn;
+      const na = xml.data.gerueste[gn] ? ` (${xml.data.gerueste[gn]})` : "";
       val = `Bedeutungsgerüst ${gn}${na}`;
     }
     selWi.value = val;
@@ -1486,8 +1478,8 @@ let xml = {
   //     (Slot, in dem der Textblock steht)
   //   textKopf = String ("abschnitt" || "textblock") || undefined
   //     (Typ des Textkopfs)
-  elementKopf ({key, slot = -1, slotBlock = null, textKopf = ""}) {
-    let div = document.createElement("div");
+  elementKopf ({ key, slot = -1, slotBlock = null, textKopf = "" }) {
+    const div = document.createElement("div");
     div.classList.add("kopf");
     div.dataset.key = key;
     if (slot > -1 && /^(re|le|wi|nw|tf)$/.test(key)) {
@@ -1507,7 +1499,7 @@ let xml = {
       }
     }
     // Warn-Icon
-    let warn = document.createElement("span");
+    const warn = document.createElement("span");
     div.appendChild(warn);
     warn.classList.add("warn");
     if (!textKopf || textKopf !== "abschnitt") {
@@ -1533,28 +1525,28 @@ let xml = {
       });
     }
     // Lösch-Icon
-    let a = document.createElement("a");
+    const a = document.createElement("a");
     div.appendChild(a);
     a.href = "#";
     a.classList.add("icon-link", "icon-x-dick");
     a.title = "Löschen";
     // Verschiebe-Icons
     if (textKopf || /^(re|le|wi|nw)$/.test(key)) {
-      let pfeile = {
+      const pfeile = {
         "icon-pfeil-gerade-hoch": "nach oben",
         "icon-pfeil-gerade-runter": "nach unten",
         "icon-pfeil-gerade-links": "nach links",
         "icon-pfeil-gerade-rechts": "nach rechts",
       };
-      let pfeileCont = document.createElement("span");
+      const pfeileCont = document.createElement("span");
       pfeileCont.classList.add("pfeile");
       div.appendChild(pfeileCont);
-      for (let [k, v] of Object.entries(pfeile)) {
+      for (const [ k, v ] of Object.entries(pfeile)) {
         if ((textKopf === "textblock" || /^(re|le|wi|nw)/.test(key)) &&
             k === "icon-pfeil-gerade-links") {
           break;
         }
-        let a = document.createElement("a");
+        const a = document.createElement("a");
         pfeileCont.appendChild(a);
         a.href = "#";
         a.classList.add("icon-link", k);
@@ -1562,7 +1554,7 @@ let xml = {
       }
     }
     // ID
-    let id = document.createElement("span");
+    const id = document.createElement("span");
     div.appendChild(id);
     id.classList.add("id");
     let idText;
@@ -1570,7 +1562,7 @@ let xml = {
       if (xml.data.xl[key][slot].ct[slotBlock].it === "Textblock") {
         idText = xml.data.xl[key][slot].ct[slotBlock].id;
       } else {
-        idText = " ";
+        idText = "\u00A0";
       }
     } else if (key === "re") {
       idText = xml.data.xl.md.re[slot].au.join("/");
@@ -1579,7 +1571,7 @@ let xml = {
     } else if (key === "wi") {
       idText = xml.data.xl.wi[xml.bgAktGn][slot].vt;
     } else if (key === "nw") {
-      let xl = xml.data.xl.bg[xml.bgAkt].nw[slot];
+      const xl = xml.data.xl.bg[xml.bgAkt].nw[slot];
       if (/<Literaturreferenz/.test(xl)) {
         idText = xl.match(/Ziel="(.+?)"/)[1];
       } else {
@@ -1598,17 +1590,17 @@ let xml = {
     }
     // Hinweisfeld
     if (key !== "bg" && (!textKopf || textKopf === "abschnitt")) {
-      let hinweis = document.createElement("span");
+      const hinweis = document.createElement("span");
       div.appendChild(hinweis);
       hinweis.classList.add("hinweis");
       if (key === "re") {
-        let da = /^(?<jahr>[0-9]{4})-(?<monat>[0-9]{2})-(?<tag>[0-9]{2})$/.exec(xml.data.xl.md.re[slot].da);
+        const da = /^(?<jahr>[0-9]{4})-(?<monat>[0-9]{2})-(?<tag>[0-9]{2})$/.exec(xml.data.xl.md.re[slot].da);
         hinweis.textContent = `${da.groups.tag}.${da.groups.monat}.${da.groups.jahr}`;
       } else if (key === "le") {
         hinweis.textContent = xml.data.xl.le[slot].ty;
       } else if (textKopf === "abschnitt") {
         const typ = xml.data.xl[key][slot].ty;
-        hinweis.textContent = typ ? typ : " ";
+        hinweis.textContent = typ ? typ : "\u00A0";
       } else if (key === "bl") {
         hinweis.textContent = xml.data.xl.bl[slot].da;
       } else if (key === "lt") {
@@ -1616,11 +1608,11 @@ let xml = {
       } else if (key === "wi") {
         hinweis.textContent = xml.data.xl.wi[xml.bgAktGn][slot].tx;
       } else if (key === "nw") {
-        let xl = xml.data.xl.bg[xml.bgAkt].nw[slot];
+        const xl = xml.data.xl.bg[xml.bgAkt].nw[slot];
         if (/<Literaturreferenz/.test(xl)) {
           const id = xl.match(/Ziel="(.+?)"/)[1];
-          let i = xml.data.xl.lt.find(i => i.id === id),
-            text = "";
+          const i = xml.data.xl.lt.find(i => i.id === id);
+          let text = "";
           if (i) {
             text = i.si;
           } else {
@@ -1637,39 +1629,39 @@ let xml = {
     }
     // Vorschaufeld
     if (!/^(nw|tf|bg)$/.test(key) && (!textKopf || textKopf === "textblock")) {
-      let vorschau = document.createElement("span");
+      const vorschau = document.createElement("span");
       div.appendChild(vorschau);
       let text = "";
       if (key === "re") {
-        text = xml.data.xl.md.re[slot].no ? xml.data.xl.md.re[slot].no : " ";
+        text = xml.data.xl.md.re[slot].no ? xml.data.xl.md.re[slot].no : "\u00A0";
       } else if (key === "le") {
-        text = xml.data.xl.le[slot].re ? `#${xml.data.xl.le[slot].re}` : " ";
+        text = xml.data.xl.le[slot].re ? `#${xml.data.xl.le[slot].re}` : "\u00A0";
       } else if (textKopf) {
         let xmlStr = xml.data.xl[key][slot].ct[slotBlock].xl;
         if (xml.data.xl[key][slot].ct[slotBlock].it === "Überschrift") {
           xmlStr = xmlStr.replace(/<Anmerkung>.+?<\/Anmerkung>/s, "");
           vorschau.classList.add("ueberschrift");
         } else if (xml.data.xl[key][slot].ct[slotBlock].it === "Illustration") {
-          let ziel = xmlStr.match(/<Bildreferenz Ziel="(.*?)"\/>/);
-          xmlStr = ziel ? ziel[1] : " ";
+          const ziel = xmlStr.match(/<Bildreferenz Ziel="(.*?)"\/>/);
+          xmlStr = ziel ? ziel[1] : "\u00A0";
         }
         text = xmlStr.replace(/<.+?>/g, "");
         if (/^(Blockzitat|Illustration|Liste)$/.test(xml.data.xl[key][slot].ct[slotBlock].it)) {
-          let b = document.createElement("b");
+          const b = document.createElement("b");
           vorschau.appendChild(b);
           // blöder Hack mit den beiden Leerzeichen; Problem ist, dass der Container
           // display: inline bleiben muss, damit die Textellipse schön funktioniert
           // darum hier lieber kein display: block + margin.
-          b.textContent = `${xml.data.xl[key][slot].ct[slotBlock].it}  `;
+          b.textContent = `${xml.data.xl[key][slot].ct[slotBlock].it}${"\u00A0".repeat(2)}`;
         }
       } else if (key === "bl") {
-        let belegtext = xml.data.xl.bl[slot].xl.match(/<Belegtext>(.+?)<\/Belegtext>/s);
+        const belegtext = xml.data.xl.bl[slot].xl.match(/<Belegtext>(.+?)<\/Belegtext>/s);
         text = helferXml.maskieren({
           text: belegtext[1].replace(/<.+?>/g, ""),
           demaskieren: true,
         });
       } else if (key === "lt") {
-        let unstrukturiert = xml.data.xl.lt[slot].xl.match(/<unstrukturiert>(.+?)<\/unstrukturiert>/);
+        const unstrukturiert = xml.data.xl.lt[slot].xl.match(/<unstrukturiert>(.+?)<\/unstrukturiert>/);
         text = helferXml.maskieren({
           text: unstrukturiert[1].replace(/<.+?>/g, ""),
           demaskieren: true,
@@ -1681,7 +1673,7 @@ let xml = {
       vorschau.appendChild(document.createTextNode(text));
     }
     // Events anhängen
-    xml.elementKopfEvents({kopf: div});
+    xml.elementKopfEvents({ kopf: div });
     tooltip.init(div);
     // Kopf zurückgeben
     return div;
@@ -1690,7 +1682,7 @@ let xml = {
   // Element: Events an Kopfelemente hängen
   //   kopf = Element
   //     (der .kopf, der die Events erhalten soll)
-  async elementKopfEvents ({kopf}) {
+  async elementKopfEvents ({ kopf }) {
     // warten bis der Kopf eingehängt wurde
     while (!kopf.closest("body")) {
       await new Promise(resolve => setTimeout(() => resolve(true), 5));
@@ -1698,15 +1690,15 @@ let xml = {
     // Köpfe umschalten
     if (kopf.closest(".text-cont")) {
       // Abschnittköpfe, Textblockköpfe
-      xml.abtxToggle({div: kopf});
+      xml.abtxToggle({ div: kopf });
     } else if (!kopf.closest("#bg-nw, #bg-tf")) {
       // alle anderen Köpfe (außer Nachweise, Textreferenzen)
-      xml.elementPreviewArr({div: kopf});
+      xml.elementPreviewArr({ div: kopf });
     }
     // Warn-Icon
-    let warn = kopf.querySelector(".warn");
+    const warn = kopf.querySelector(".warn");
     if (warn) {
-      warn.addEventListener("click", function(evt) {
+      warn.addEventListener("click", function (evt) {
         if (!this.classList.contains("aktiv")) {
           return;
         }
@@ -1718,18 +1710,18 @@ let xml = {
       });
     }
     // Lösch-Icon
-    let loeschen = kopf.querySelector(".icon-x-dick");
+    const loeschen = kopf.querySelector(".icon-x-dick");
     if (loeschen.closest(".text-cont")) {
-      xml.abtxLoeschen({a: loeschen});
+      xml.abtxLoeschen({ a: loeschen });
     } else {
-      xml.elementLoeschenArr({a: loeschen});
+      xml.elementLoeschenArr({ a: loeschen });
     }
     // Pfeile
     kopf.querySelectorAll(".pfeile a").forEach(a => {
-      // verschieben
       if (a.classList.contains("icon-pfeil-gerade-hoch") ||
           a.classList.contains("icon-pfeil-gerade-runter")) {
-        a.addEventListener("click", function(evt) {
+        // verschieben
+        a.addEventListener("click", function (evt) {
           evt.preventDefault();
           evt.stopPropagation();
           if (evt.detail > 1) { // Doppelklicks abfangen
@@ -1740,11 +1732,10 @@ let xml = {
             kopf: this.closest(".kopf"),
           });
         });
-      }
-      // ein- oder ausrücken
-      else if (a.classList.contains("icon-pfeil-gerade-links") ||
+      } else if (a.classList.contains("icon-pfeil-gerade-links") ||
           a.classList.contains("icon-pfeil-gerade-rechts")) {
-        a.addEventListener("click", function(evt) {
+        // ein- oder ausrücken
+        a.addEventListener("click", function (evt) {
           evt.preventDefault();
           evt.stopPropagation();
           if (evt.detail > 1) { // Doppelklicks abfangen
@@ -1764,14 +1755,14 @@ let xml = {
   //     (die Blöcke sollen geöffnet werden)
   //   key = String
   //     (Schlüssel des Abschnitts)
-  elementKopfToggle ({auf, key}) {
-    let koepfe = document.querySelectorAll(`#${key} > .kopf`);
-    for (let kopf of koepfe) {
-      let next = kopf.nextSibling,
-        nextKopf = next?.classList.contains("kopf"),
-        nextPre = next?.classList.contains("pre-cont"),
-        nextAbschnitt = next?.classList.contains("abschnitt-cont"),
-        nextOff = nextAbschnitt && next.dataset.off;
+  elementKopfToggle ({ auf, key }) {
+    const koepfe = document.querySelectorAll(`#${key} > .kopf`);
+    for (const kopf of koepfe) {
+      const next = kopf.nextSibling;
+      const nextKopf = next?.classList.contains("kopf");
+      const nextPre = next?.classList.contains("pre-cont");
+      const nextAbschnitt = next?.classList.contains("abschnitt-cont");
+      const nextOff = nextAbschnitt && next.dataset.off;
       if (auf && (!next || nextKopf || nextAbschnitt && nextOff) ||
           !auf && (nextPre || nextAbschnitt && !nextOff)) {
         kopf.dispatchEvent(new MouseEvent("click"));
@@ -1782,23 +1773,23 @@ let xml = {
   // Element-Vorschau umschalten: Standard-Arrays
   //   div = Element
   //     (Kopf, zu dem die Vorschau eingeblendet werden soll)
-  elementPreviewArr ({div}) {
-    div.addEventListener("click", function() {
+  elementPreviewArr ({ div }) {
+    div.addEventListener("click", function () {
       // Preview ausblenden
-      let pre = this.nextSibling;
+      const pre = this.nextSibling;
       if (pre && pre.classList.contains("pre-cont")) {
         xml.editFrage({
           pre,
-          fun: () => xml.elementPreviewOff({pre}),
+          fun: () => xml.elementPreviewOff({ pre }),
           triggerSave: true,
         });
         return;
       }
       // Preview einblenden
-      let kopf = this.closest(".kopf"),
-        key = kopf.dataset.key,
-        id = kopf.dataset.id,
-        slot = -1;
+      const kopf = this.closest(".kopf");
+      const key = kopf.dataset.key;
+      const id = kopf.dataset.id;
+      let slot = -1;
       if (key !== "bg" && /^(re|le|wi)$/.test(key)) {
         slot = parseInt(kopf.dataset.slot, 10);
       } else if (key !== "bg") {
@@ -1819,7 +1810,7 @@ let xml = {
         key,
         slot,
         after: this,
-        editable: /^(bg|bl|wi)$/.test(key) ? true : false,
+        editable: /^(bg|bl|wi)$/.test(key),
       });
     });
   },
@@ -1827,7 +1818,7 @@ let xml = {
   // Element-Vorschau ausblenden
   //   pre = Element
   //     (Vorschau, die ausgeblendet werden soll)
-  elementPreviewOff ({pre}) {
+  elementPreviewOff ({ pre }) {
     return new Promise(resolve => {
       pre.style.height = `${pre.offsetHeight}px`;
       setTimeout(() => {
@@ -1843,15 +1834,15 @@ let xml = {
   // Element entfernen: Standard-Arrays
   //   a = Element
   //     (der Lösch-Link)
-  elementLoeschenArr ({a}) {
-    a.addEventListener("click", async function(evt) {
+  elementLoeschenArr ({ a }) {
+    a.addEventListener("click", async function (evt) {
       evt.stopPropagation();
       evt.preventDefault();
       // Variablen ermitteln
-      let kopf = this.closest(".kopf"),
-        key = kopf.dataset.key,
-        id = kopf.dataset.id,
-        slot = -1;
+      const kopf = this.closest(".kopf");
+      const key = kopf.dataset.key;
+      const id = kopf.dataset.id;
+      let slot = -1;
       if (key !== "bg" && /^(re|le|wi|nw|tf)$/.test(key)) {
         slot = parseInt(kopf.dataset.slot, 10);
       } else if (key !== "bg") {
@@ -1878,9 +1869,9 @@ let xml = {
       }
       if (!/^(nw|tf)$/.test(key)) {
         // ggf. Preview ausblenden
-        let pre = kopf.nextSibling;
+        const pre = kopf.nextSibling;
         if (pre && pre.classList.contains("pre-cont")) {
-          await xml.elementPreviewOff({pre});
+          await xml.elementPreviewOff({ pre });
         }
         // Element entfernen
         kopf.parentNode.removeChild(kopf);
@@ -1899,30 +1890,30 @@ let xml = {
             key === "re" && xml.data.xl.md.re.length ||
             key === "wi" && xml.data.xl.wi?.[xml.bgAktGn]?.length) {
           if (key === "re") {
-            xml.refreshSlots({key: "md"});
+            xml.refreshSlots({ key: "md" });
           } else {
-            xml.refreshSlots({key});
+            xml.refreshSlots({ key });
           }
           if (key === "wi") {
             xml.wiVerweistypGrenze();
           }
           xml.layoutTabellig({
             id,
-            ele: [3, 4],
+            ele: [ 3, 4 ],
           });
         } else if (key === "wi" && !xml.data.xl.wi?.[xml.bgAktGn]?.length) {
           xml.elementLeer({
             ele: document.getElementById("wi"),
           });
         } else if (/^(nw|tf)$/.test(key)) {
-          let ele = [2, 3];
+          let ele = [ 2, 3 ];
           if (key === "nw") {
-            ele = [3, 4];
+            ele = [ 3, 4 ];
             xml.bgNachweiseRefresh();
           } else {
             xml.bgTextreferenzenRefresh();
           }
-          xml.bgNwTfMake({key});
+          xml.bgNwTfMake({ key });
           if (xml.data.xl.bg[xml.bgAkt][key].length) {
             xml.layoutTabellig({
               id,
@@ -1942,13 +1933,13 @@ let xml = {
         }
       } else {
         if (key === "lt") {
-          xml.bgNwTfMake({key: "nw"});
+          xml.bgNwTfMake({ key: "nw" });
         } else if (key === "bl") {
           xml.belegeZaehlen();
         }
         xml.layoutTabellig({
           id: key,
-          ele: [2, 3],
+          ele: [ 2, 3 ],
         });
       }
       // Daten speichern
@@ -1959,8 +1950,8 @@ let xml = {
   // Meldung anzeigen, dass in einer Datenstruktur noch keine Daten zu finden sind
   //   ele = Element
   //     (Container dessen Datenstruktur betroffen ist)
-  elementLeer ({ele}) {
-    let p = document.createElement("p");
+  elementLeer ({ ele }) {
+    const p = document.createElement("p");
     ele.appendChild(p);
     p.classList.add("leer");
     p.textContent = "keine Daten";
@@ -1970,15 +1961,15 @@ let xml = {
   //   element = Element
   //     (das Element, von dem ausgehend entschieden wird,
   //     wo der Abschnitt hinzugefügt werden soll)
-  async abschnittAdd ({element}) {
+  async abschnittAdd ({ element }) {
     // Datensatz erzeugen und speichern
-    let data = {
+    const data = {
       id: "",
       le: 1,
       ty: "",
       ct: [],
     };
-    let cont = element.closest("div");
+    const cont = element.closest("div");
     const key = cont.id;
     xml.data.xl[key].push(data);
     xml.speichern();
@@ -1986,15 +1977,15 @@ let xml = {
     xml.abschnittMake({
       key,
       slot: xml.data.xl[key].length - 1,
-      cont: cont,
+      cont,
     });
     // ggf. an die richtige Fensterposition scrollen
     // 300ms warten, weil evtl. andere Blöcke gerade geschlossen werden
     await new Promise(resolve => setTimeout(() => resolve(true), 300));
-    let aktiv = document.activeElement,
-      rect = aktiv.getBoundingClientRect();
-    const header = document.querySelector("header").offsetHeight,
-        kopf = aktiv.closest(".abschnitt-cont").previousSibling.offsetHeight;
+    const aktiv = document.activeElement;
+    const rect = aktiv.getBoundingClientRect();
+    const header = document.querySelector("header").offsetHeight;
+    const kopf = aktiv.closest(".abschnitt-cont").previousSibling.offsetHeight;
     if (rect.bottom > window.innerHeight ||
         rect.top - header - kopf - 15 < 0) {
       window.scrollTo({
@@ -2007,8 +1998,8 @@ let xml = {
 
   // Abschnitt: neuen Datensatz anlegen (Shortcut)
   abschnittAddShortcut () {
-    let cont = document.activeElement.closest(".text-cont"),
-      element;
+    const cont = document.activeElement.closest(".text-cont");
+    let element;
     if (cont) { // oberhalb des aktiven Elements
       const key = cont.id;
       element = document.querySelector(`#${key} .abschnitt-add`);
@@ -2017,7 +2008,7 @@ let xml = {
     } else { // in Text
       element = document.querySelector("#tx .abschnitt-add");
     }
-    xml.abschnittAdd({element});
+    xml.abschnittAdd({ element });
   },
 
   // Abschnitt: Kopf und Container erzeugen
@@ -2029,46 +2020,46 @@ let xml = {
   //     (Element, an das der Abschnitt angehängt werden soll)
   //   restore = true || undefined
   //     (die Inhalte werden beim Öffnen des Fensters wiederhergestellt)
-  abschnittMake ({key, slot, cont, restore = false}) {
+  abschnittMake ({ key, slot, cont, restore = false }) {
     // offene Abschnitte und Unterabschnitte schließen
-    document.querySelectorAll(`#${cont.id} > .kopf`).forEach(async div => {
+    document.querySelectorAll(`#${cont.id} > .kopf`).forEach(div => {
       if (!div.nextSibling.dataset.off) {
         div.dispatchEvent(new MouseEvent("click"));
       }
     });
     // neuen Abschnittskopf hinzufügen
-    let kopf = xml.elementKopf({key, slot, textKopf: "abschnitt"});
+    const kopf = xml.elementKopf({ key, slot, textKopf: "abschnitt" });
     cont.appendChild(kopf);
     // Abschnitt-Container hinzufügen
-    let div = document.createElement("div");
+    const div = document.createElement("div");
     cont.appendChild(div);
     div.classList.add("abschnitt-cont", `level-${xml.data.xl[key][slot].le}`);
     // Formular
-    let p = document.createElement("p");
+    const p = document.createElement("p");
     div.appendChild(p);
     p.classList.add("dropdown-cont", "input-text");
     // ID-Feld
-    let id = document.createElement("input");
+    const id = document.createElement("input");
     p.appendChild(id);
     id.id = `abschnitt-${xml.counter.next().value}-id`;
     id.placeholder = "Abschnitt-ID";
     id.type = "text";
     id.value = xml.data.xl[key][slot].id;
     // Abschnitttyp-Feld
-    let typ = document.createElement("input");
+    const typ = document.createElement("input");
     p.appendChild(typ);
     typ.classList.add("dropdown-feld");
     typ.id = `abschnitt-${xml.counter.next().value}-ty`;
     typ.placeholder = "Abschnitt-Typ";
     typ.type = "text";
     typ.value = xml.data.xl[key][slot].ty;
-    let aTyp = dropdown.makeLink("dropdown-link-element", "Abschnitt-Typ auswählen", true);
+    const aTyp = dropdown.makeLink("dropdown-link-element", "Abschnitt-Typ auswählen", true);
     p.appendChild(aTyp);
     // Blocktyp-Feld
-    let span = document.createElement("span");
+    const span = document.createElement("span");
     p.appendChild(span);
     span.classList.add("dropdown-cont");
-    let add = document.createElement("input");
+    const add = document.createElement("input");
     span.appendChild(add);
     add.classList.add("dropdown-feld");
     add.id = `textblock-add-${xml.counter.next().value}-${key}`;
@@ -2083,20 +2074,20 @@ let xml = {
     if (!restore) {
       add.select();
     }
-    let aAdd = dropdown.makeLink("dropdown-link-element", "Block-Typ auswählen", true);
+    const aAdd = dropdown.makeLink("dropdown-link-element", "Block-Typ auswählen", true);
     span.appendChild(aAdd);
     // Add-Link
-    let a = document.createElement("a");
+    const a = document.createElement("a");
     span.appendChild(a);
     a.classList.add("icon-link", "icon-plus-dick");
     a.href = "#";
-    a.textContent = " ";
+    a.textContent = "\u00A0";
     // Events anhängen
-    xml.abtxEvents({cont: div, make: true});
+    xml.abtxEvents({ cont: div, make: true });
     // Layout der Köpfe anpassen
-    let layout = {
+    const layout = {
       id: key,
-      ele: [3, 4],
+      ele: [ 3, 4 ],
     };
     if (restore) {
       layout.warten = 300;
@@ -2115,25 +2106,25 @@ let xml = {
   //     (Slot, in dem der Textblock steht)
   //   loeschen = true | undefined
   //     (die ID soll gelöscht werden)
-  abschnittSetId ({key, slot, slotBlock, loeschen = false}) {
+  abschnittSetId ({ key, slot, slotBlock, loeschen = false }) {
     // ID ermitteln und normieren
-    let id = "",
-      xl = xml.data.xl[key][slot].ct[slotBlock]?.xl;
+    let id = "";
+    const xl = xml.data.xl[key][slot].ct[slotBlock]?.xl;
     if (xl && !loeschen) { // nach dem Löschen einer Überschrift übergehen
       id = xl.replace(/<Anmerkung>.+?<\/Anmerkung>/s, "");
       id = id.replace(/<.+?>/g, "");
       id = helfer.textTrim(id, true);
-      id = helferXml.normId({id});
+      id = helferXml.normId({ id });
     }
     // ID schreiben und Datensatz speichern
     xml.data.xl[key][slot].id = id;
     xml.speichern();
     // Kopf und Abschnitt ermitteln
-    let kopf = document.querySelector(`#${key} .kopf[data-slot="${slot}"]`),
-      abschnitt = kopf.nextSibling;
-    abschnitt.querySelector(`input[id$="-id"]`).value = id;
+    const kopf = document.querySelector(`#${key} .kopf[data-slot="${slot}"]`);
+    const abschnitt = kopf.nextSibling;
+    abschnitt.querySelector('input[id$="-id"]').value = id;
     // Kopf anpassen
-    let kopfNeu = xml.elementKopf({key, slot, textKopf: "abschnitt"});
+    const kopfNeu = xml.elementKopf({ key, slot, textKopf: "abschnitt" });
     kopf.parentNode.replaceChild(kopfNeu, kopf);
     xml.checkAbschnitt({
       cont: abschnitt,
@@ -2143,15 +2134,15 @@ let xml = {
   // Textblock: neuen Datensatz für einen Textblock anlegen
   //   input = Element
   //     (das Textfeld mit dem Textblocktyp)
-  textblockAdd ({input}) {
+  textblockAdd ({ input }) {
     const typ = input.value;
     // Textfeld zurücksetzen
     input.value = "Textblock";
     // Key und Slot ermitteln
-    let cont = input.closest(".abschnitt-cont"),
-      kopf = cont.previousSibling;
-    const key = kopf.dataset.key,
-      slot = parseInt(kopf.dataset.slot, 10);
+    const cont = input.closest(".abschnitt-cont");
+    const kopf = cont.previousSibling;
+    const key = kopf.dataset.key;
+    const slot = parseInt(kopf.dataset.slot, 10);
     // Schon eine Überschrift vorhanden?
     if (typ === "Überschrift") {
       if (xml.data.xl[key][slot].ct.some(i => i.it === "Überschrift")) {
@@ -2164,7 +2155,7 @@ let xml = {
       }
     }
     // Datensatz erzeugen und hinzufügen
-    let data = {
+    const data = {
       it: typ,
       xl: "",
     };
@@ -2215,10 +2206,10 @@ let xml = {
   //     (Element, an dem sich beim Einfügen orientiert wird)
   //   restore = true || undefined
   //     (die Inhalte werden beim Öffnen des Fensters wiederhergestellt)
-  textblockMake ({key, slot, slotBlock, element, restore = false}) {
+  textblockMake ({ key, slot, slotBlock, element, restore = false }) {
     // Kopf erzeugen und Textblock-Container hinzufügen
-    let kopf = xml.elementKopf({key, slot, slotBlock, textKopf: "textblock"}),
-      div = document.createElement("div");
+    const kopf = xml.elementKopf({ key, slot, slotBlock, textKopf: "textblock" });
+    const div = document.createElement("div");
     div.classList.add("textblock-cont");
     if (element.nextSibling &&
         xml.data.xl[key][slot].ct[slotBlock].it === "Überschrift") {
@@ -2231,12 +2222,12 @@ let xml = {
     // Formulare
     let editable = true;
     if (/^(Textblock|Liste)$/.test(xml.data.xl[key][slot].ct[slotBlock].it)) {
-      let p = document.createElement("p");
+      const p = document.createElement("p");
       div.appendChild(p);
       p.classList.add("input-text");
       if (xml.data.xl[key][slot].ct[slotBlock].it === "Textblock") {
         // ID-Feld
-        let id = document.createElement("input");
+        const id = document.createElement("input");
         p.appendChild(id);
         id.id = `textblock-${xml.counter.next().value}-id`;
         id.placeholder = "Textblock-ID";
@@ -2245,7 +2236,7 @@ let xml = {
       } else {
         // Typ-Feld
         p.classList.add("dropdown-cont");
-        let typ = document.createElement("input");
+        const typ = document.createElement("input");
         p.appendChild(typ);
         typ.classList.add("dropdown-feld");
         typ.id = `textblock-${xml.counter.next().value}-ty`;
@@ -2253,14 +2244,14 @@ let xml = {
         typ.type = "text";
         typ.value = xml.data.xl[key][slot].ct[slotBlock].ty;
         typ.setAttribute("readonly", "true");
-        let a = dropdown.makeLink("dropdown-link-element", "Listen-Typ auswählen", true);
+        const a = dropdown.makeLink("dropdown-link-element", "Listen-Typ auswählen", true);
         p.appendChild(a);
         tooltip.init(p);
       }
     } else if (xml.data.xl[key][slot].ct[slotBlock].it === "Illustration") {
       editable = false;
       // Datenfelder für Abbildungen
-      let felder = {
+      const felder = {
         Dateiname: {
           p: true,
           cl: "abb-2-felder",
@@ -2350,19 +2341,19 @@ let xml = {
         },
       };
       // Formular erzeugen
-      let abb = document.createElement("div");
+      const abb = document.createElement("div");
       div.appendChild(abb);
       abb.classList.add("abb");
-      for (let [k, v] of Object.entries(felder)) {
+      for (const [ k, v ] of Object.entries(felder)) {
         if (v.p) {
-          let p = document.createElement("p");
+          const p = document.createElement("p");
           abb.appendChild(p);
           p.classList.add("input-text");
           if (v.cl) {
             v.cl.split(" ").forEach(i => p.classList.add(i));
           }
         }
-        let input = document.createElement("input");
+        const input = document.createElement("input");
         abb.lastChild.appendChild(input);
         input.id = `abb-${xml.counter.next().value}-${k.toLowerCase()}`;
         if (v.date) {
@@ -2382,17 +2373,17 @@ let xml = {
           if (v.ro) {
             input.setAttribute("readonly", "true");
           }
-          let a = dropdown.makeLink("dropdown-link-element", `${k} auswählen`, true);
+          const a = dropdown.makeLink("dropdown-link-element", `${k} auswählen`, true);
           abb.lastChild.appendChild(a);
         }
       }
       tooltip.init(abb);
       // Formulardaten wiederherstellen
       if (restore) {
-        let xmlStr = xml.data.xl[key][slot].ct[slotBlock].xl,
-          parser = new DOMParser(),
-          xmlDoc = parser.parseFromString(xmlStr, "text/xml");
-        let felder = {
+        const xmlStr = xml.data.xl[key][slot].ct[slotBlock].xl;
+        const parser = new DOMParser();
+        const xmlDoc = parser.parseFromString(xmlStr, "text/xml");
+        const felder = {
           dateiname: xmlDoc.querySelector("Bildreferenz").getAttribute("Ziel"),
           bildposition: xmlDoc.documentElement.getAttribute("Position"),
           breite: xmlDoc.documentElement.getAttribute("Breite"),
@@ -2405,10 +2396,10 @@ let xml = {
           lizenzname: xmlDoc.querySelector("Lizenz Name").textContent,
           "lizenz-url": xmlDoc.querySelector("Lizenz URL").textContent,
         };
-        for (let [k, v] of Object.entries(felder)) {
+        for (let [ k, v ] of Object.entries(felder)) {
           if (v) {
             if (k === "aufrufdatum") {
-              let datum = v.split(".");
+              const datum = v.split(".");
               v = `${datum[2]}-${datum[1]}-${datum[0]}`;
             }
             abb.querySelector(`[id$="${k}"]`).value = v;
@@ -2420,7 +2411,7 @@ let xml = {
       // XML-Preview aus Formulardaten erzeugen
       // (erzeugt zugleich das XML-Snippet, wenn es noch nicht existiert;
       // führt außerdem eine Evaluation durch)
-      xml.textblockAbbXml({form: abb});
+      xml.textblockAbbXml({ form: abb });
       // XML auf Fehler überprüfen
       xml.check({
         warn: kopf.querySelector(".warn"),
@@ -2448,11 +2439,11 @@ let xml = {
       });
     }
     // Events anhängen
-    xml.abtxEvents({cont: div, make: true});
+    xml.abtxEvents({ cont: div, make: true });
     // Layout der Köpfe anpassen
-    let layout = {
+    const layout = {
       id: key,
-      ele: [3],
+      ele: [ 3 ],
       inAbschnitt: div.closest(".abschnitt-cont"),
     };
     if (restore) {
@@ -2464,8 +2455,8 @@ let xml = {
   // Textblock: Textfeld automatisch speichern, sollte das Bearbeiten-Feld noch offen sein
   //   cont = Element
   //     (.textblock-cont)
-  textblockSave ({cont}) {
-    let speichernButton = cont.querySelector(`input[value="Speichern"]`);
+  textblockSave ({ cont }) {
+    const speichernButton = cont.querySelector('input[value="Speichern"]');
     if (speichernButton) {
       speichernButton.dispatchEvent(new MouseEvent("click"));
     }
@@ -2480,7 +2471,7 @@ let xml = {
   //     (Slot, in dem der Datensatz steht)
   //   slotBlock = Number
   //     (Slot, in dem der Textblock steht)
-  textblockXmlStr ({xmlStr, key, slot, slotBlock}) {
+  textblockXmlStr ({ xmlStr, key, slot, slotBlock }) {
     // XML-String ggf. auslesen
     if (xmlStr === null) {
       xmlStr = xml.data.xl[key][slot].ct[slotBlock].xl;
@@ -2491,7 +2482,7 @@ let xml = {
       return "";
     }
     // Attribute ermitteln
-    let attr = [];
+    const attr = [];
     if (xml.data.xl[key][slot].ct[slotBlock].id) {
       attr.push(`xml:id="${xml.data.xl[key][slot].ct[slotBlock].id}"`);
     }
@@ -2499,11 +2490,11 @@ let xml = {
       attr.push(`Typ="${xml.data.xl[key][slot].ct[slotBlock].ty}"`);
     }
     // XML-String anpassen
-    const rootEle = xml.data.xl[key][slot].ct[slotBlock].it.replace(/^Ü/, "Ue"),
-      rootEleStart = `<${rootEle}${attr.length ? " " + attr.join(" ") : ""}>`;
+    const rootEle = xml.data.xl[key][slot].ct[slotBlock].it.replace(/^Ü/, "Ue");
+    const rootEleStart = `<${rootEle}${attr.length ? " " + attr.join(" ") : ""}>`;
     if (!new RegExp(`^<${rootEle}`).test(xmlStr)) {
       if (xml.data.xl[key][slot].ct[slotBlock].it === "Liste") {
-        let listenpunkte = [];
+        const listenpunkte = [];
         xmlStr.split(/\n/).forEach(i => {
           i = helfer.textTrim(i, true);
           if (!i) {
@@ -2524,53 +2515,53 @@ let xml = {
   // Textblock: XML einer Illustration erzeugen, Eingabe im Formular evaluieren
   //   form = Element
   //     (Container des Illustrationsformulars)
-  textblockAbbXml ({form}) {
-    let kopf = form.closest(".textblock-cont").previousSibling,
-      key = kopf.dataset.key,
-      slot = parseInt(kopf.dataset.slot, 10),
-      slotBlock = parseInt(kopf.dataset.slotBlock, 10),
-      abbNr = xml.textblockAbbSetId({key, slot, slotBlock}) + 1;
+  textblockAbbXml ({ form }) {
+    const kopf = form.closest(".textblock-cont").previousSibling;
+    const key = kopf.dataset.key;
+    const slot = parseInt(kopf.dataset.slot, 10);
+    const slotBlock = parseInt(kopf.dataset.slotBlock, 10);
+    const abbNr = xml.textblockAbbSetId({ key, slot, slotBlock }) + 1;
     // XML erzeugen
-    let xl = `<Illustration xml:id="abb-${abbNr}" Position="${form.querySelector(`[id$="bildposition"]`).value}"`,
-      breite = form.querySelector(`[id$="breite"]`).value,
-      hoehe = form.querySelector(`[id$="höhe"]`).value;
+    let xl = `<Illustration xml:id="abb-${abbNr}" Position="${form.querySelector('[id$="bildposition"]').value}"`;
+    const breite = form.querySelector('[id$="breite"]').value;
+    const hoehe = form.querySelector('[id$="höhe"]').value;
     if (breite) {
       xl += ` Breite="${breite}"`;
     }
     if (hoehe) {
       xl += ` Hoehe="${hoehe}"`;
     }
-    xl += `>\n`;
-    let dn = form.querySelector(`[id$="dateiname"]`);
+    xl += ">\n";
+    const dn = form.querySelector('[id$="dateiname"]');
     xl += `\t<Bildreferenz Ziel="${mask(dn.value)}"/>\n`;
-    let bu = form.querySelector(`[id$="bildunterschrift"]`);
+    const bu = form.querySelector('[id$="bildunterschrift"]');
     bu.value = helfer.typographie(helfer.textTrim(bu.value, true));
     xl += `\t<Bildunterschrift>${mask(bu.value)}</Bildunterschrift>\n`;
-    let at = form.querySelector(`[id$="alternativtext"]`);
+    const at = form.querySelector('[id$="alternativtext"]');
     at.value = helfer.typographie(helfer.textTrim(at.value, true));
     xl += `\t<Bildinhalt>${mask(at.value)}</Bildinhalt>\n`;
-    xl += `\t<Fundstelle>\n`;
-    let qu = form.querySelector(`[id$="quelle"]`);
+    xl += "\t<Fundstelle>\n";
+    const qu = form.querySelector('[id$="quelle"]');
     qu.value = helfer.typographie(helfer.textTrim(qu.value, true));
     xl += `\t\t<unstrukturiert>${mask(qu.value)}</unstrukturiert>\n`;
-    let ul = form.querySelector(`[id$="quellen-url"]`);
+    const ul = form.querySelector('[id$="quellen-url"]');
     if (ul.value) {
       xl += `\t\t<URL>${mask(ul.value)}</URL>\n`;
-      let ad = form.querySelector(`[id$="aufrufdatum"]`);
+      const ad = form.querySelector('[id$="aufrufdatum"]');
       if (!ad.value) {
         ad.value = new Date().toISOString().split("T")[0];
       }
-      let datum = ad.value.split("-");
+      const datum = ad.value.split("-");
       xl += `\t\t<Aufrufdatum>${datum[2]}.${datum[1]}.${datum[0]}</Aufrufdatum>\n`;
-      xl += `\t\t<Fundort>${helferXml.fundort({url: ul.value})}</Fundort>\n`;
+      xl += `\t\t<Fundort>${helferXml.fundort({ url: ul.value })}</Fundort>\n`;
     }
-    xl += `\t</Fundstelle>\n`;
-    xl += `\t<Lizenz>\n`;
-    let ln = form.querySelector(`[id$="lizenzname"]`);
+    xl += "\t</Fundstelle>\n";
+    xl += "\t<Lizenz>\n";
+    const ln = form.querySelector('[id$="lizenzname"]');
     xl += `\t\t<Name>${mask(ln.value)}</Name>\n`;
-    let lul = form.querySelector(`[id$="lizenz-url"]`);
+    const lul = form.querySelector('[id$="lizenz-url"]');
     xl += `\t\t<URL>${mask(lul.value)}</URL>\n`;
-    xl += `\t</Lizenz>\n`;
+    xl += "\t</Lizenz>\n";
     xl += "</Illustration>";
     xl = xl.replace(/\t/g, " ".repeat(2));
     // Evaluation
@@ -2587,7 +2578,7 @@ let xml = {
     if (!qu.value) {
       qu.classList.add("fehler");
     }
-    if (ul.value && ( !/^https?:\/\//.test(ul.value) || /\s/.test(ul.value) )) {
+    if (ul.value && (!/^https?:\/\//.test(ul.value) || /\s/.test(ul.value))) {
       ul.classList.add("fehler");
     }
     if (!ln.value) {
@@ -2607,9 +2598,9 @@ let xml = {
   },
 
   // Textblock: IDs der Abbildungen auffrischen
-  textblockAbbSetId ({key = "", slot = -1, slotBlock = -1}) {
+  textblockAbbSetId ({ key = "", slot = -1, slotBlock = -1 }) {
     let nr = 0;
-    for (let k of ["ab", "tx"]) {
+    for (const k of [ "ab", "tx" ]) {
       for (let i = 0, len = xml.data.xl[k].length; i < len; i++) {
         for (let j = 0, len = xml.data.xl[k][i].ct.length; j < len; j++) {
           if (xml.data.xl[k][i].ct[j].it === "Illustration") {
@@ -2622,9 +2613,9 @@ let xml = {
               xml.data.xl[k][i].ct[j].xl = xml.data.xl[k][i].ct[j].xl.replace(/xml:id="abb-[0-9]+"/, `xml:id="abb-${nr}"`);
               // .pre-cont auffrischen
               // (existiert das <pre> nicht, ist der Block gerade in Bearbeitung)
-              let pre = document.querySelector(`.pre-cont[data-key="${k}"][data-slot="${i}"][data-slot-block="${j}"] pre`);
+              const pre = document.querySelector(`.pre-cont[data-key="${k}"][data-slot="${i}"][data-slot-block="${j}"] pre`);
               if (pre) {
-                xml.abtxRefreshPre({cont: pre.parentNode, xmlStr: xml.data.xl[k][i].ct[j].xl, editable: false});
+                xml.abtxRefreshPre({ cont: pre.parentNode, xmlStr: xml.data.xl[k][i].ct[j].xl, editable: false });
               }
             }
           }
@@ -2638,34 +2629,33 @@ let xml = {
   //     (.abschnitt-cont | .textblock-cont)
   //   make = true | undefined
   //     (Events werden beim Erzeugen des Elements angehängt)
-  abtxEvents ({cont, make = false}) {
+  abtxEvents ({ cont, make = false }) {
     // Input-Felder
     cont.querySelectorAll("input").forEach(i => {
-      // Abschnitt: ID-Feld | Abschnitttyp-Feld
-      // Textblock: ID-Feld | Typ-Feld
-      // Illustration: alle Input-Felder
       if (/^(abschnitt|textblock)-[0-9]+-(id|ty)$|^abb-/.test(i.id)) {
-        xml.abtxChange({ele: i});
-      }
-      // Abschnitt: Blocktyp-Feld
-      else if (/^textblock-add-/.test(i.id)) {
-        i.addEventListener("keydown", function(evt) {
+        // Abschnitt: ID-Feld | Abschnitttyp-Feld
+        // Textblock: ID-Feld | Typ-Feld
+        // Illustration: alle Input-Felder
+        xml.abtxChange({ ele: i });
+      } else if (/^textblock-add-/.test(i.id)) {
+        // Abschnitt: Blocktyp-Feld
+        i.addEventListener("keydown", function (evt) {
           tastatur.detectModifiers(evt);
           if (!tastatur.modifiers &&
               evt.key === "Enter" &&
               !document.getElementById("dropdown")) {
             setTimeout(() => { // ohne Timeout bekommt man direkt einen Zeilenumbruch im Textfeld
-              xml.textblockAdd({input: this});
+              xml.textblockAdd({ input: this });
             }, 25);
           }
         });
       }
     });
     // Abschnitt: Add-Link
-    cont.querySelector(".icon-plus-dick")?.addEventListener("click", function(evt) {
+    cont.querySelector(".icon-plus-dick")?.addEventListener("click", function (evt) {
       evt.preventDefault();
-      let input = this.parentNode.querySelector("input");
-      xml.textblockAdd({input});
+      const input = this.parentNode.querySelector("input");
+      xml.textblockAdd({ input });
     });
     // Dropdown-Felder
     cont.querySelectorAll(".dropdown-feld").forEach(i => dropdown.feld(i));
@@ -2677,10 +2667,10 @@ let xml = {
         if (pre.classList.contains("not-editable")) {
           return;
         }
-        xml.editPreDbl({pre});
-        let next = pre.nextSibling;
+        xml.editPreDbl({ pre });
+        const next = pre.nextSibling;
         if (next) {
-          next.firstChild.addEventListener("click", function() {
+          next.firstChild.addEventListener("click", function () {
             xml.edit({
               cont: this.closest(".pre-cont"),
             });
@@ -2689,9 +2679,9 @@ let xml = {
       });
       // XML-Bearbeitung
       cont.querySelectorAll("textarea").forEach(ta => {
-        xml.editTaEvents({ta});
+        xml.editTaEvents({ ta });
         ta.closest(".pre-cont").querySelectorAll("p input").forEach(button => {
-          xml.editSpeichern({button});
+          xml.editSpeichern({ button });
         });
       });
     }
@@ -2700,9 +2690,9 @@ let xml = {
   // Abschnitt/Textblock: Anzeige der Blöcke in Abstract und Text umschalten
   //   div = Element
   //     (Kopf, dessen Formularteil ein- oder ausgeblendet werden soll)
-  abtxToggle ({div}) {
-    div.addEventListener("click", function() {
-      let cont = this.nextSibling;
+  abtxToggle ({ div }) {
+    div.addEventListener("click", function () {
+      const cont = this.nextSibling;
       if (cont.dataset.off) {
         cont.style.height = "auto";
         const height = cont.offsetHeight;
@@ -2717,7 +2707,7 @@ let xml = {
         }, 0);
       } else {
         if (this.closest(".abschnitt-cont")) {
-          xml.textblockSave({cont});
+          xml.textblockSave({ cont });
         } else {
           cont.querySelectorAll(".kopf").forEach(kopf => {
             if (!kopf.nextSibling.dataset.off) {
@@ -2738,16 +2728,16 @@ let xml = {
   // Abschnitt/Textblock, Change-Listener: generischer Listener für Textformulare
   //   ele = Element
   //     (das Input-Element, auf dessen Änderung gehört wird)
-  abtxChange ({ele}) {
-    ele.addEventListener("change", function() {
-      let abschnitt = this.closest(".abschnitt-cont"),
-        textblock = this.closest(".textblock-cont"),
-        kopf = abschnitt.previousSibling,
-        key = kopf.dataset.key,
-        slot = parseInt(kopf.dataset.slot, 10),
-        slotBlock = null,
-        feld = this.id.replace(/.+-/, ""),
-        val = helfer.textTrim(this.value, true);
+  abtxChange ({ ele }) {
+    ele.addEventListener("change", function () {
+      const abschnitt = this.closest(".abschnitt-cont");
+      const textblock = this.closest(".textblock-cont");
+      let kopf = abschnitt.previousSibling;
+      const key = kopf.dataset.key;
+      const slot = parseInt(kopf.dataset.slot, 10);
+      let slotBlock = null;
+      const feld = this.id.replace(/.+-/, "");
+      let val = helfer.textTrim(this.value, true);
       if (textblock) {
         kopf = textblock.previousSibling;
         slotBlock = parseInt(kopf.dataset.slotBlock, 10);
@@ -2755,23 +2745,23 @@ let xml = {
       if (slotBlock !== null &&
           xml.data.xl[key][slot].ct[slotBlock].it === "Illustration") {
         // Illustration
-        xml.textblockAbbXml({form: textblock});
+        xml.textblockAbbXml({ form: textblock });
         if (feld === "dateiname") {
           kopfNeu();
         }
-        let cont = textblock.querySelector(".pre-cont");
-        xml.abtxRefreshPre({cont, xmlStr: xml.data.xl[key][slot].ct[slotBlock].xl, editable: false, textblock});
+        const cont = textblock.querySelector(".pre-cont");
+        xml.abtxRefreshPre({ cont, xmlStr: xml.data.xl[key][slot].ct[slotBlock].xl, editable: false, textblock });
         // Layout der Köpfe anpassen
         xml.layoutTabellig({
           id: key,
-          ele: [3],
+          ele: [ 3 ],
           inAbschnitt: abschnitt,
         });
       } else if (textblock) {
         // Textblöcke (Überschrift, Textblock, Blockzitat, Liste)
         if (feld === "id") {
           // ID aufbereiten
-          val = helferXml.normId({id: val, input: this});
+          val = helferXml.normId({ id: val, input: this });
         }
         xml.data.xl[key][slot].ct[slotBlock][feld] = val;
         // Kopf anpassen
@@ -2779,33 +2769,33 @@ let xml = {
           kopfNeu();
         }
         // XML-String auffrischen
-        const xmlStr = xml.textblockXmlStr({xmlStr: null, key, slot, slotBlock});
+        const xmlStr = xml.textblockXmlStr({ xmlStr: null, key, slot, slotBlock });
         // Pre zurücksetzen
         // (aber nur, wenn er nicht gerade in Bearbeitung ist)
-        let cont = textblock.querySelector(".pre-cont");
+        const cont = textblock.querySelector(".pre-cont");
         if (cont.querySelector("pre")) {
-          xml.abtxRefreshPre({cont, xmlStr, editable: true, textblock});
+          xml.abtxRefreshPre({ cont, xmlStr, editable: true, textblock });
         }
         // XML updaten
         xml.data.xl[key][slot].ct[slotBlock].xl = xmlStr;
         // Layout der Köpfe anpassen
         xml.layoutTabellig({
           id: key,
-          ele: [3],
+          ele: [ 3 ],
           inAbschnitt: abschnitt,
         });
       } else if (abschnitt) {
         // Abschnitt
         if (feld === "id") {
           // ID aufbereiten
-          val = helferXml.normId({id: val, input: this});
+          val = helferXml.normId({ id: val, input: this });
         } else if (val && feld === "ty" && !xml.dropdown.abschnittTypen.includes(val)) {
           val = "";
           this.value = "";
         }
         xml.data.xl[key][slot][feld] = val;
         // Kopf anpassen
-        let kopfNeu = xml.elementKopf({key, slot, textKopf: "abschnitt"});
+        const kopfNeu = xml.elementKopf({ key, slot, textKopf: "abschnitt" });
         kopf.parentNode.replaceChild(kopfNeu, kopf);
         xml.checkAbschnitt({
           cont: abschnitt,
@@ -2813,13 +2803,13 @@ let xml = {
         // Layout der Köpfe anpassen
         xml.layoutTabellig({
           id: key,
-          ele: [3, 4],
+          ele: [ 3, 4 ],
         });
       }
       xml.speichern();
       // Kopf neu erstellen
       function kopfNeu () {
-        let kopfNeu = xml.elementKopf({key, slot, slotBlock, textKopf: "textblock"});
+        const kopfNeu = xml.elementKopf({ key, slot, slotBlock, textKopf: "textblock" });
         kopf.parentNode.replaceChild(kopfNeu, kopf);
         xml.checkAbschnitt({
           cont: abschnitt,
@@ -2837,8 +2827,8 @@ let xml = {
   //     (Preview ist editierbar)
   //   textblock = Element
   //     (Container eines Textblocks: .textblock-cont)
-  abtxRefreshPre ({cont, xmlStr, editable, textblock = null}) {
-    let pre = document.createElement("pre");
+  abtxRefreshPre ({ cont, xmlStr, editable, textblock = null }) {
+    const pre = document.createElement("pre");
     cont.replaceChild(pre, cont.firstChild);
     xml.preview({
       xmlStr,
@@ -2846,7 +2836,7 @@ let xml = {
       textblockCont: textblock,
     });
     if (editable) {
-      xml.editPreDbl({pre});
+      xml.editPreDbl({ pre });
     } else {
       pre.classList.add("not-editable");
     }
@@ -2855,15 +2845,15 @@ let xml = {
   // Abschnitt/Textblock: Löschen
   //   a = Element
   //     (der Lösch-Link)
-  abtxLoeschen ({a}) {
-    a.addEventListener("click", async function(evt) {
+  abtxLoeschen ({ a }) {
+    a.addEventListener("click", async function (evt) {
       evt.stopPropagation();
       evt.preventDefault();
       // Datensatz ermitteln
-      let kopf = this.closest(".kopf"),
-        key = kopf.dataset.key,
-        slot = parseInt(kopf.dataset.slot, 10),
-        slotBlock = null;
+      let kopf = this.closest(".kopf");
+      const key = kopf.dataset.key;
+      const slot = parseInt(kopf.dataset.slot, 10);
+      let slotBlock = null;
       if (kopf.dataset.slotBlock) {
         slotBlock = parseInt(kopf.dataset.slotBlock, 10);
       }
@@ -2881,9 +2871,9 @@ let xml = {
         }
       }
       // ggf. Block ausblenden
-      let abschnitt = kopf.closest(".abschnitt-cont"), // null, wenn Abschnitt gelöscht wird
-        cont = kopf.nextSibling,
-        parent = kopf.parentNode;
+      const abschnitt = kopf.closest(".abschnitt-cont"); // null, wenn Abschnitt gelöscht wird
+      const cont = kopf.nextSibling;
+      const parent = kopf.parentNode;
       if (!cont.dataset.off) {
         kopf.dispatchEvent(new MouseEvent("click"));
         await new Promise(warten => setTimeout(() => warten(true), 300));
@@ -2906,15 +2896,15 @@ let xml = {
       if (slotBlock !== null) {
         if (xml.data.xl[key][slot].ct[slotBlock].it === "Überschrift") {
           // ID des Abschnitts löschen
-          xml.abschnittSetId({key, slot, slotBlock, loeschen: true});
+          xml.abschnittSetId({ key, slot, slotBlock, loeschen: true });
         }
         xml.data.xl[key][slot].ct.splice(slotBlock, 1);
       } else {
         xml.data.xl[key].splice(slot, 1);
-        xml.refreshLevels({key, slot: slot - 1});
+        xml.refreshLevels({ key, slot: slot - 1 });
       }
       // Slot-Datasets anpassen
-      xml.refreshSlots({key, abschnitt});
+      xml.refreshSlots({ key, abschnitt });
       // ggf. XML-ID der Abbildungen auffrischen
       if (abb) {
         xml.textblockAbbSetId({});
@@ -2923,13 +2913,13 @@ let xml = {
       if (slotBlock !== null && xml.data.xl[key][slot].ct.length) {
         xml.layoutTabellig({
           id: key,
-          ele: [3],
+          ele: [ 3 ],
           inAbschnitt: abschnitt,
         });
       } else if (slotBlock === null && xml.data.xl[key].length) {
         xml.layoutTabellig({
           id: key,
-          ele: [3, 4],
+          ele: [ 3, 4 ],
         });
       }
       // Daten speichern
@@ -2954,10 +2944,10 @@ let xml = {
   //     (Animation beim Einblenden)
   //   editable = Boolean || undefined
   //     (XML-Snippet darf editiert werden)
-  preview ({xmlStr, key, slot, slotBlock = null, after = null, textblockCont = null, animation = true, editable = false}) {
+  preview ({ xmlStr, key, slot, slotBlock = null, after = null, textblockCont = null, animation = true, editable = false }) {
     // Einzüge hinzufügen (wenn möglich)
-    let parser = new DOMParser(),
-      xmlDoc = parser.parseFromString(xmlStr, "text/xml");
+    const parser = new DOMParser();
+    let xmlDoc = parser.parseFromString(xmlStr, "text/xml");
     if (!xmlDoc.querySelector("parsererror")) {
       xmlDoc = helferXml.indent(xmlDoc);
       xmlStr = new XMLSerializer().serializeToString(xmlDoc);
@@ -2969,10 +2959,10 @@ let xml = {
     } else if (!kopf.classList.contains("kopf")) {
       kopf = after.closest(".textblock-cont").previousSibling;
     }
-    let warn = kopf.querySelector(".warn"),
-      xmlErr = null;
+    const warn = kopf.querySelector(".warn");
+    let xmlErr = null;
     if (warn?.dataset?.err) {
-      let err = warn.dataset.err.match(/on line ([0-9]+) at column ([0-9]+)/);
+      const err = warn.dataset.err.match(/on line ([0-9]+) at column ([0-9]+)/);
       if (err) {
         xmlErr = {
           line: parseInt(err[1], 10),
@@ -2982,22 +2972,22 @@ let xml = {
       }
     }
     // Pre-Container wird schon angezeigt => neu ausfüllen
-    let preCont = after ? after.nextSibling : textblockCont.firstChild;
+    const preCont = after ? after.nextSibling : textblockCont.firstChild;
     if (preCont && preCont.classList.contains("pre-cont")) {
-      preCont.firstChild.innerHTML = helferXml.prettyPrint({xmlStr, xmlErr});
+      preCont.firstChild.innerHTML = helferXml.prettyPrint({ xmlStr, xmlErr });
       return;
     }
     // Pre-Container mit Pre erzeugen und einhängen
-    let cont = document.createElement("div");
+    const cont = document.createElement("div");
     cont.classList.add("pre-cont");
     cont.dataset.key = key;
     cont.dataset.slot = slot;
     if (slotBlock !== null) {
       cont.dataset.slotBlock = slotBlock;
     }
-    let pre = document.createElement("pre");
+    const pre = document.createElement("pre");
     cont.appendChild(pre);
-    pre.innerHTML = helferXml.prettyPrint({xmlStr, xmlErr});
+    pre.innerHTML = helferXml.prettyPrint({ xmlStr, xmlErr });
     if (after) {
       after.parentNode.insertBefore(cont, after.nextSibling);
     } else {
@@ -3005,10 +2995,10 @@ let xml = {
     }
     // ggf. Editier-Button ergänzen
     if (editable) {
-      let p = document.createElement("p");
+      const p = document.createElement("p");
       cont.appendChild(p);
-      xml.editBearbeiten({p});
-      xml.editPreDbl({pre});
+      xml.editBearbeiten({ p });
+      xml.editPreDbl({ pre });
     } else {
       pre.classList.add("not-editable");
     }
@@ -3016,7 +3006,7 @@ let xml = {
     if (!animation) {
       return;
     }
-    let height = cont.offsetHeight;
+    const height = cont.offsetHeight;
     cont.style.height = "0px";
     setTimeout(() => {
       cont.style.height = `${height}px`;
@@ -3030,10 +3020,10 @@ let xml = {
   // XML-Vorschau: generische Funktion zum Erzeugen eines Bearbeitenfeldes
   //   cont = Element
   //     (.pre-cont)
-  edit ({cont}) {
-    let key = cont.dataset.key,
-      slot = -1,
-      slotBlock = null;
+  edit ({ cont }) {
+    const key = cont.dataset.key;
+    let slot = -1;
+    let slotBlock = null;
     if (cont.dataset.slot) {
       slot = parseInt(cont.dataset.slot, 10);
     }
@@ -3041,9 +3031,9 @@ let xml = {
       slotBlock = parseInt(cont.dataset.slotBlock, 10);
     }
     // Bearbeiten-Feld erzeugen
-    let div = document.createElement("div");
+    const div = document.createElement("div");
     div.classList.add("bearbeiten");
-    let ta = document.createElement("textarea");
+    const ta = document.createElement("textarea");
     div.appendChild(ta);
     ta.setAttribute("rows", "1");
     if (key === "wi") {
@@ -3063,38 +3053,38 @@ let xml = {
       ta.focus();
     }
     // Events anhängen
-    xml.editTaEvents({ta});
+    xml.editTaEvents({ ta });
     // Button-Leiste auffrischen
-    let p = cont.lastChild;
+    const p = cont.lastChild;
     p.replaceChildren();
-    let buttons = ["Speichern", "Abbrechen"];
-    for (let b of buttons) {
-      let button = document.createElement("input");
+    const buttons = [ "Speichern", "Abbrechen" ];
+    for (const b of buttons) {
+      const button = document.createElement("input");
       p.appendChild(button);
       button.type = "button";
       button.value = b;
-      xml.editSpeichern({button});
+      xml.editSpeichern({ button });
     }
   },
 
   // XML-Vorschau: Events für Textarea
-  editTaEvents ({ta}) {
-    ta.addEventListener("input", function() {
+  editTaEvents ({ ta }) {
+    ta.addEventListener("input", function () {
       this.dataset.geaendert = "true";
       helfer.textareaGrow(this, 0);
     });
     if (!ta.closest(".pre-cont").dataset.slotBlock) {
       return;
     }
-    ta.addEventListener("paste", function() {
+    ta.addEventListener("paste", function () {
       // Zeitverzögerung, sonst ist das Feld noch leer
       // und es kann nichts ausgelesen werden
       setTimeout(() => {
-        let val = this.value,
-          cont = ta.closest(".pre-cont"),
-          key = cont.dataset.key,
-          slot = parseInt(cont.dataset.slot, 10),
-          slotBlock = parseInt(cont.dataset.slotBlock, 10);
+        let val = this.value;
+        const cont = ta.closest(".pre-cont");
+        const key = cont.dataset.key;
+        const slot = parseInt(cont.dataset.slot, 10);
+        const slotBlock = parseInt(cont.dataset.slotBlock, 10);
         // Zeilenumbrüche aus Überschriften entfernen (wenn noch keine Tags drin sind)
         if (xml.data.xl[key][slot].ct[slotBlock].it === "Überschrift" &&
             !/<.+?>/.test(val)) {
@@ -3103,8 +3093,8 @@ let xml = {
         // Text trimmen
         val = helfer.textTrim(val, true);
         // Auto-Tagger aufrufen
-        const blockzitat = xml.data.xl[key][slot].ct[slotBlock].it === "Blockzitat" ? true : false;
-        this.value = xml.editAutoTagger({str: val, blockzitat});
+        const blockzitat = xml.data.xl[key][slot].ct[slotBlock].it === "Blockzitat";
+        this.value = xml.editAutoTagger({ str: val, blockzitat });
         // Formularhöhe anpassen
         helfer.textareaGrow(this, 0);
       }, 25);
@@ -3114,15 +3104,15 @@ let xml = {
   // XML-Vorschau: Doppelklick zum Bearbeiten einer Vorschau
   //   pre = Element
   //     (der Vorschaucontainer .pre-cont)
-  editPreDbl ({pre}) {
-    pre.addEventListener("dblclick", function() {
-      let cont = this.closest(".pre-cont");
+  editPreDbl ({ pre }) {
+    pre.addEventListener("dblclick", function () {
+      const cont = this.closest(".pre-cont");
       // feststellen, an welcher Position geklickt wurde
-      let sel = window.getSelection(),
-        breakGetN = false,
-        text = "",
-        posStart = -1,
-        posEnd = -1;
+      const sel = window.getSelection();
+      let breakGetN = false;
+      let text = "";
+      let posStart = -1;
+      let posEnd = -1;
       if (sel) {
         getN(this);
         posEnd = text.length + sel.focusOffset;
@@ -3130,12 +3120,12 @@ let xml = {
       }
       // Textarea öffnen (ohne Textposition zu markieren)
       xml.editSelect0 = false;
-      let button = cont.querySelector(`input[value="Bearbeiten"]`);
+      const button = cont.querySelector('input[value="Bearbeiten"]');
       button.dispatchEvent(new MouseEvent("click"));
       // Textposition markieren
-      let ta = cont.querySelector("textarea");
+      const ta = cont.querySelector("textarea");
       if (posStart > -1) {
-        if ( /\n/.test( ta.value.substring(posStart, posEnd) ) ) {
+        if (/\n/.test(ta.value.substring(posStart, posEnd))) {
           ta.setSelectionRange(posStart, posStart);
         } else {
           ta.setSelectionRange(posEnd, posEnd);
@@ -3154,7 +3144,7 @@ let xml = {
           return;
         }
         if (n.nodeType === 1) {
-          for (let c of n.childNodes) {
+          for (const c of n.childNodes) {
             getN(c);
           }
         } else if (n.nodeType === 3) {
@@ -3167,13 +3157,13 @@ let xml = {
   // XML-Vorschau: Bearbeiten-Button erzeugen
   //   p = Element
   //     (Absatz für den Bearbeiten-Button)
-  editBearbeiten ({p}) {
+  editBearbeiten ({ p }) {
     p.replaceChildren();
-    let bearb = document.createElement("input");
+    const bearb = document.createElement("input");
     p.appendChild(bearb);
     bearb.type = "button";
     bearb.value = "Bearbeiten";
-    bearb.addEventListener("click", function() {
+    bearb.addEventListener("click", function () {
       xml.edit({
         cont: this.closest(".pre-cont"),
       });
@@ -3183,18 +3173,18 @@ let xml = {
   // XML-Vorschau: Speichern-/Abbrechen-Button erzeugen
   //   button = Element
   //     (Speichern- oder Abbrechen-Button)
-  editSpeichern ({button}) {
-    button.addEventListener("click", async function() {
+  editSpeichern ({ button }) {
+    button.addEventListener("click", async function () {
       // Datensatz ermitteln
-      let cont = this.closest(".pre-cont"),
-        kopf = cont.previousSibling;
+      const cont = this.closest(".pre-cont");
+      let kopf = cont.previousSibling;
       if (!kopf || !kopf.classList.contains("kopf")) {
         kopf = cont.closest(".textblock-cont").previousSibling;
       }
-      let xmlStr = cont.querySelector("textarea").value.trim(),
-        key = cont.dataset.key,
-        slot = -1,
-        slotBlock = null;
+      let xmlStr = cont.querySelector("textarea").value.trim();
+      const key = cont.dataset.key;
+      let slot = -1;
+      let slotBlock = null;
       if (cont.dataset.slot) {
         slot = parseInt(cont.dataset.slot, 10);
       }
@@ -3206,20 +3196,20 @@ let xml = {
       if (this.value === "Speichern") {
         // XML-String ggf. automatisch taggen
         if (slotBlock !== null) {
-          const blockzitat = xml.data.xl[key][slot].ct[slotBlock].it === "Blockzitat" ? true : false;
-          xmlStr = xml.editAutoTagger({str: xmlStr, blockzitat});
+          const blockzitat = xml.data.xl[key][slot].ct[slotBlock].it === "Blockzitat";
+          xmlStr = xml.editAutoTagger({ str: xmlStr, blockzitat });
         }
         // ggf. Daten auffrischen
         if (key === "bl") {
-          let id = xmlStr.match(/xml:id="(.+)"/),
-            da = xmlStr.match(/<Datum>(.+?)<\/Datum>/);
+          const id = xmlStr.match(/xml:id="(.+)"/);
+          const da = xmlStr.match(/<Datum>(.+?)<\/Datum>/);
           if (id) {
             xml.data.xl.bl[slot].id = id[1];
           }
           if (da && da[1] !== xml.data.xl.bl[slot].da) {
             xml.data.xl.bl[slot].da = da[1];
-            xml.data.xl.bl[slot].ds = helferXml.datumFormat({xmlStr}).sortier;
-            xml.empfangenArrSort({key: "bl"});
+            xml.data.xl.bl[slot].ds = helferXml.datumFormat({ xmlStr }).sortier;
+            xml.empfangenArrSort({ key: "bl" });
             const slotNeu = xml.data.xl.bl.findIndex(i => i.id === id[1]);
             slot = slotNeu;
             refreshSlots = true;
@@ -3235,8 +3225,8 @@ let xml = {
             lt = "Verweis intern";
           }
           // Textreferenz neu auslesen
-          let tx = xml.data.xl.wi[xml.bgAktGn][slot].tx,
-            reg = /<Textreferenz Ziel=".+?">(?<tr>.+?)<\/Textreferenz>|<Verweistext>(?<vt>.+?)<\/Verweistext>|<Verweisziel>(?<vz>.+?)<\/Verweisziel>/.exec(xmlStr);
+          let tx = xml.data.xl.wi[xml.bgAktGn][slot].tx;
+          const reg = /<Textreferenz Ziel=".+?">(?<tr>.+?)<\/Textreferenz>|<Verweistext>(?<vt>.+?)<\/Verweistext>|<Verweisziel>(?<vz>.+?)<\/Verweisziel>/.exec(xmlStr);
           if (reg?.groups.tr) {
             tx = reg.groups.tr;
           } else if (reg?.groups.vt) {
@@ -3256,12 +3246,12 @@ let xml = {
           xml.bgRefreshData();
         } else if (slotBlock !== null) {
           // XML anpassen und speichern
-          xmlStr = xml.textblockXmlStr({xmlStr, key, slot, slotBlock});
+          xmlStr = xml.textblockXmlStr({ xmlStr, key, slot, slotBlock });
           xml.data.xl[key][slot].ct[slotBlock].xl = xmlStr;
           // ggf. ID erzeugen
           if (key === "tx" &&
               xml.data.xl[key][slot].ct[slotBlock].it === "Überschrift") {
-            xml.abschnittSetId({key, slot, slotBlock});
+            xml.abschnittSetId({ key, slot, slotBlock });
           }
         } else {
           xml.data.xl[key][slot].xl = xmlStr;
@@ -3271,7 +3261,6 @@ let xml = {
         // Abbrechen
         const frage = await xml.editFrage({
           pre: cont,
-          fun: () => {},
         });
         if (!frage) {
           // Änderungen sollen nicht gespeichert werden => generischer Abschluss
@@ -3285,7 +3274,7 @@ let xml = {
         } else {
           // Änderungen sollen gespeichert werden => noch einmal von vorne
           // (denn die Statements im Speichern-Zweig wurden noch nicht ausgeführt)
-          cont.querySelector(`[value="Speichern"]`).dispatchEvent(new MouseEvent("click"));
+          cont.querySelector('[value="Speichern"]').dispatchEvent(new MouseEvent("click"));
         }
         return;
       }
@@ -3294,7 +3283,7 @@ let xml = {
       if (slotBlock !== null) {
         textKopf = "textblock";
       }
-      let kopfNeu = xml.elementKopf({key, slot, slotBlock, textKopf});
+      const kopfNeu = xml.elementKopf({ key, slot, slotBlock, textKopf });
       kopf.parentNode.replaceChild(kopfNeu, kopf);
       xml.checkAbschnitt({
         cont: cont.closest(".abschnitt-cont"),
@@ -3302,30 +3291,30 @@ let xml = {
       // ggf. Slots auffrischen
       // (darf erst nach dem Auffrischen des Kopfs gemacht werden)
       if (refreshSlots) {
-        xml.refreshSlots({key});
+        xml.refreshSlots({ key });
       }
       // ggf. Verweistypgrenze neu markieren
       if (key === "wi") {
         xml.wiVerweistypGrenze();
       }
       // generischer Abschluss
-      xml.editSpeichernAbschluss({cont, xmlStr});
+      xml.editSpeichernAbschluss({ cont, xmlStr });
       // hier abbrechen, wenn Bedeutungsgerüst
       if (key === "bg") {
         return;
       }
       // ggf. Textfeld zum Hinzufügen eines neuen Textblocks fokussieren
       if (slotBlock !== null) {
-        cont.closest(".abschnitt-cont").querySelector(`input[id^="textblock-add-"]`).select();
+        cont.closest(".abschnitt-cont").querySelector('input[id^="textblock-add-"]').select();
       }
       // Layout der Köpfe anpassen
-      let ele = [2, 3],
-        inAbschnitt = null;
+      let ele = [ 2, 3 ];
+      let inAbschnitt = null;
       if (slotBlock !== null) {
-        ele = [3];
+        ele = [ 3 ];
         inAbschnitt = cont.closest(".abschnitt-cont");
       } else if (key === "wi") {
-        ele = [3, 4];
+        ele = [ 3, 4 ];
       }
       xml.layoutTabellig({
         id: key,
@@ -3340,9 +3329,8 @@ let xml = {
           return xml.data.xl.bg[xml.bgAkt].xl;
         } else if (slotBlock !== null) {
           return xml.data.xl[key][slot].ct[slotBlock].xl;
-        } else {
-          return xml.data.xl[key][slot].xl;
         }
+        return xml.data.xl[key][slot].xl;
       }
     });
   },
@@ -3354,9 +3342,9 @@ let xml = {
   //     (der Container mit dem Bearbeitenfeld)
   //   xmlStr = String
   //     (die XML-Daten)
-  editSpeichernAbschluss ({cont, xmlStr}) {
+  editSpeichernAbschluss ({ cont, xmlStr }) {
     // Pre zurücksetzen
-    let pre = document.createElement("pre");
+    const pre = document.createElement("pre");
     cont.replaceChild(pre, cont.firstChild);
     xml.preview({
       xmlStr,
@@ -3364,20 +3352,20 @@ let xml = {
       textblockCont: cont.closest(".textblock-cont"),
     });
     // Button zurücksetzen
-    xml.editBearbeiten({p: cont.lastChild});
-    xml.editPreDbl({pre});
+    xml.editBearbeiten({ p: cont.lastChild });
+    xml.editPreDbl({ pre });
   },
 
   // XML-Vorschau: Frage, ob Änderungen gespeichert werden sollen
   //   pre = Element
   //     (.pre-cont)
-  //   fun = Function
+  //   fun = Function | undefined
   //     (Function, die eigentlich ausgeführt werden soll)
   //   triggerSave = true || undefined
   //     (das Speichern des Formulars soll ggf. ausgelöst werden)
-  editFrage ({pre, fun, triggerSave = false}) {
+  editFrage ({ pre, fun = null, triggerSave = false }) {
     return new Promise(resolve => {
-      let ta = pre.querySelector("textarea");
+      const ta = pre.querySelector("textarea");
       if (ta && ta.dataset.geaendert) {
         dialog.oeffnen({
           typ: "confirm",
@@ -3385,16 +3373,20 @@ let xml = {
           callback: () => {
             if (dialog.antwort !== null) {
               if (dialog.antwort && triggerSave) {
-                pre.querySelector(`[value="Speichern"]`).dispatchEvent(new MouseEvent("click"));
+                pre.querySelector('[value="Speichern"]').dispatchEvent(new MouseEvent("click"));
               }
-              fun();
+              if (fun) {
+                fun();
+              }
             }
             resolve(dialog.antwort);
           },
         });
         return;
       }
-      fun();
+      if (fun) {
+        fun();
+      }
       resolve(true);
     });
   },
@@ -3404,7 +3396,7 @@ let xml = {
   //     (String, der getaggt werden soll)
   //   blockzitat = Boolean
   //     (der Text steht in einem Blockzitat)
-  editAutoTagger ({str, blockzitat}) {
+  editAutoTagger ({ str, blockzitat }) {
     // Korrekturen
     str = str.replace(/<<</g, "‹");
     str = str.replace(/>>>/g, "›");
@@ -3428,7 +3420,7 @@ let xml = {
     // <sogenannt>
     str = str.replace(/»(.+?)«/g, (m, p1) => `<sogenannt>${p1}</sogenannt>`);
     // <Stichwort>
-    str = str.replace(/(?<![\p{Letter}\-.])_(.+?)_(?![\p{Letter}\-])/ug, (m, p1) => `<Stichwort>${p1}</Stichwort>`);
+    str = str.replace(/(?<![\p{Letter}.-])_(.+?)_(?![\p{Letter}-])/ug, (m, p1) => `<Stichwort>${p1}</Stichwort>`);
     // <Paraphrase>
     str = str.replace(/‚(.+?)‘/g, (m, p1) => `<Paraphrase>${p1}</Paraphrase>`); // deutsch
     str = str.replace(/‘(.+?)’/g, (m, p1) => `<Paraphrase>${p1}</Paraphrase>`); // englisch
@@ -3445,49 +3437,49 @@ let xml = {
       str = str.replace(/\{(.*?)\}/gs, (m, p1) => `<Autorenzusatz>${p1}</Autorenzusatz>`);
     }
     // <Verweis_extern>
-    str = str.replace(/\[([^\]]+?)\]\(\s*(https?:\/\/[^\s]+?)\s*\)(?:\(\s*([0-9]{1,2})\.\s*([0-9]{1,2})\.\s*([0-9]{4})\s*\))?/g, (m, p1, p2, p3, p4, p5) => {
-      let verweis = `<Verweis_extern>`;
-      verweis += `\n  <Verweistext>${p1.trim()}</Verweistext>`;
-      verweis += `\n  <Verweisziel/>`;
-      verweis += `\n  <Fundstelle>`;
-      verweis += `\n    <URL>${p2}</URL>`;
-      if (p3) {
-        verweis += `\n    <Aufrufdatum>${p3.length === 1 ? "0" + p3 : p3}.${p4.length === 1 ? "0" + p4 : p4}.${p5}</Aufrufdatum>`;
+    str = str.replace(/\[([^\]]+?)\]\(\s*(https?:\/\/[^\s]+?)\s*\)(?:\(\s*([0-9]{1,2})\.\s*([0-9]{1,2})\.\s*([0-9]{4})\s*\))?/g, (...args) => {
+      let verweis = "<Verweis_extern>";
+      verweis += `\n  <Verweistext>${args[1].trim()}</Verweistext>`;
+      verweis += "\n  <Verweisziel/>";
+      verweis += "\n  <Fundstelle>";
+      verweis += `\n    <URL>${args[2]}</URL>`;
+      if (args[3]) {
+        verweis += `\n    <Aufrufdatum>${args[3].length === 1 ? "0" + args[3] : args[3]}.${args[4].length === 1 ? "0" + args[4] : args[4]}.${args[5]}</Aufrufdatum>`;
       }
-      const fundort = helferXml.fundort({url: p2});
+      const fundort = helferXml.fundort({ url: args[2] });
       verweis += `\n    <Fundort>${fundort}</Fundort>`;
-      verweis += `\n  </Fundstelle>`;
-      verweis += `\n</Verweis_extern>`;
+      verweis += "\n  </Fundstelle>";
+      verweis += "\n</Verweis_extern>";
       return verweis;
     });
     // <Verweis>
-    str = str.replace(/\[([^\]]+?)\]\((.+?)\)(?:\(([a-zA-Z]+)\))?/g, (m, p1, p2, p3) => {
-      p1 = p1.trim();
-      p2 = p2.trim();
-      if (p1 === p2) {
-        p1 = "";
+    str = str.replace(/\[([^\]]+?)\]\((.+?)\)(?:\(([a-zA-Z]+)\))?/g, (...args) => {
+      args[1] = args[1].trim();
+      args[2] = args[2].trim();
+      if (args[1] === args[2]) {
+        args[1] = "";
       }
       let typ = "";
-      if (p3) {
-        typ = ` Typ=##${p3}##`;
+      if (args[3]) {
+        typ = ` Typ=##${args[3]}##`;
       }
       // Fehlerkorrektur <Verweisziel>
-      let p2Sp = p2.split("#");
-      p2 = p2Sp[0].replace(/_/g, " ");
+      const p2Sp = args[2].split("#");
+      args[2] = p2Sp[0].replace(/_/g, " ");
       if (p2Sp[1]) {
-        p2 += "#" + p2Sp[1];
+        args[2] += "#" + p2Sp[1];
       }
       // <Verweis> erzeugen
       let verweis = `<Verweis${typ}>`;
-      verweis += `\n  <Verweistext>${p1}</Verweistext>`;
-      verweis += `\n  <Verweisziel>${p2}</Verweisziel>`;
+      verweis += `\n  <Verweistext>${args[1]}</Verweistext>`;
+      verweis += `\n  <Verweisziel>${args[2]}</Verweisziel>`;
       verweis += "\n</Verweis>";
       return verweis;
     });
     // <Belegreferenz>
     str = str.replace(/(?<!##(?:\p{Lowercase}|-)*)((\p{Lowercase}|-)+-[0-9]{4}-[0-9]+)(?!##)/ug, (m, p1) => `<Belegreferenz Ziel=##${p1}##/>`);
     // <Literaturreferenz>
-    str = str.replace(/(?<!(?:\p{Letter}|\d|-|#|\/))([a-zäöü][a-zäöüß0-9\-]+)((?:,\shier|\ss\.\s?v\.)?[0-9\s,\-–]+)?(?!(?:\p{Letter}|\d|-|#))/ug, (m, p1, p2) => {
+    str = str.replace(/(?<!(?:\p{Letter}|\d|-|#|\/))([a-zäöü][a-zäöüß0-9-]+)((?:,\shier|\ss\.\s?v\.)?[0-9\s,\-–]+)?(?!(?:\p{Letter}|\d|-|#))/ug, (m, p1, p2) => {
       if (!/[a-z]/.test(p1) ||
           /^[a-zäöüß]+$/.test(p1) && !p2Typisch(p2) ||
           /-/.test(p1) && !/[0-9]/.test(p1) && !p2Typisch(p2) ||
@@ -3550,16 +3542,12 @@ let xml = {
     }
     // <Abkuerzung>
     if (blockzitat) {
-      str = str.replace(/<Autorenzusatz>(.+?)<\/Autorenzusatz>/gs, (m, p1) => {
-        return `<Autorenzusatz>${helferXml.abbrTagger({text: p1})}</Autorenzusatz>`;
-      });
+      str = str.replace(/<Autorenzusatz>(.+?)<\/Autorenzusatz>/gs, (m, p1) => `<Autorenzusatz>${helferXml.abbrTagger({ text: p1 })}</Autorenzusatz>`);
     } else {
-      str = helferXml.abbrTagger({text: str});
+      str = helferXml.abbrTagger({ text: str });
       str = str.replace(/<Zitat>(.+?)<\/Zitat>/g, (m, p1) => {
         let zitat = p1.replace(/<Abkuerzung Expansion=".+?">(.+?)<\/Abkuerzung>/g, (m, p1) => p1);
-        zitat = zitat.replace(/<Autorenzusatz>(.+?)<\/Autorenzusatz>/g, (m, p1) => {
-          return `<Autorenzusatz>${helferXml.abbrTagger({text: p1})}</Autorenzusatz>`;
-        });
+        zitat = zitat.replace(/<Autorenzusatz>(.+?)<\/Autorenzusatz>/g, (m, p1) => `<Autorenzusatz>${helferXml.abbrTagger({ text: p1 })}</Autorenzusatz>`);
         return `<Zitat>${zitat}</Zitat>`;
       });
     }
@@ -3615,12 +3603,12 @@ let xml = {
 
   // zählt die Belege durch und trägt die Anzahl ein
   belegeZaehlen () {
-    let anzahl = document.getElementById("belege-anzahl"),
-      belege = document.querySelectorAll("#bl .kopf");
+    const anzahl = document.getElementById("belege-anzahl");
+    const belege = document.querySelectorAll("#bl .kopf");
     if (belege.length) {
       anzahl.textContent = `(${belege.length})`;
     } else {
-      anzahl.textContent = " ";
+      anzahl.textContent = "\u00A0";
     }
   },
 
@@ -3629,17 +3617,17 @@ let xml = {
   //     (Bewegungsrichtung, "up" | "down")
   //   kopf = Element
   //     (der Kopf, der bewegt werden soll)
-  async move ({dir, kopf}) {
+  async move ({ dir, kopf }) {
     // Variablen vorbereiten
-    let key = kopf.dataset.key,
-      refreshKey = key,
-      slot = parseInt(kopf.dataset.slot, 10),
-      slotBlock = null,
-      slotOri = slot,
-      slotNeu = -1,
-      arr = [],
-      slotKlon,
-      illustration = false;
+    const key = kopf.dataset.key;
+    let refreshKey = key;
+    let slot = parseInt(kopf.dataset.slot, 10);
+    let slotBlock = null;
+    const slotOri = slot;
+    let slotNeu = -1;
+    let arr = [];
+    let slotKlon;
+    let illustration = false;
     if (kopf.dataset.slotBlock) {
       slotBlock = parseInt(kopf.dataset.slotBlock, 10);
       illustration = xml.data.xl[key][slot].ct[slotBlock].it === "Illustration";
@@ -3656,33 +3644,33 @@ let xml = {
     // Datensatz ermitteln und klonen
     if (key === "re") {
       arr = xml.data.xl.md.re;
-      slotKlon = {...arr[slot]};
-      slotKlon.au = [...arr[slot].au];
+      slotKlon = { ...arr[slot] };
+      slotKlon.au = [ ...arr[slot].au ];
     } else if (/^(ab|tx)$/.test(key) &&
         slotBlock !== null) {
       arr = xml.data.xl[key][slot].ct;
-      slotKlon = {...arr[slotBlock]};
+      slotKlon = { ...arr[slotBlock] };
     } else if (key === "wi") {
       arr = xml.data.xl.wi[xml.bgAktGn];
-      slotKlon = {...arr[slot]};
+      slotKlon = { ...arr[slot] };
     } else if (key === "nw") {
       arr = xml.data.xl.bg[xml.bgAkt].nw;
       slotKlon = arr[slot];
     } else {
       arr = xml.data.xl[key];
-      slotKlon = {...arr[slot]};
+      slotKlon = { ...arr[slot] };
       if (key === "le") {
-        slotKlon.le = [...arr[slot].le];
+        slotKlon.le = [ ...arr[slot].le ];
       } else if (/^(ab|tx)$/.test(key)) {
-        let ct = [];
-        for (let i of arr[slot].ct) {
-          ct.push({...i});
+        const ct = [];
+        for (const i of arr[slot].ct) {
+          ct.push({ ...i });
         }
         slotKlon.ct = ct;
       }
     }
     // spezieller Verschiebeblocker für Wortinformationen
-    let wiBlock = {
+    const wiBlock = {
       up: false,
       down: false,
     };
@@ -3711,39 +3699,36 @@ let xml = {
           slotBlock < arr.length - 1) {
         slotNeu = slotBlock + 2;
       }
-    } else {
-      if (dir === "up" &&
-          slot > 0 &&
-          !wiBlock.up) {
-        slotNeu = slot - 1;
-        slot++;
-      } else if (dir === "down" &&
-          slot  < arr.length - 1 &&
-          !wiBlock.down) {
-        slotNeu = slot + 2;
-      }
+    } else if (dir === "up" &&
+        slot > 0 &&
+        !wiBlock.up) {
+      slotNeu = slot - 1;
+      slot++;
+    } else if (dir === "down" &&
+        slot < arr.length - 1 &&
+        !wiBlock.down) {
+      slotNeu = slot + 2;
     }
     // Verschieben nicht möglich/nötig
     if (slotNeu === -1) {
       return;
     }
     // ggf. Vorschau schließen
-    let pre = kopf.nextSibling;
+    const pre = kopf.nextSibling;
     if (pre?.classList.contains("pre-cont")) {
-      let ta = pre.querySelector("textarea");
+      const ta = pre.querySelector("textarea");
       if (ta && ta.dataset.geaendert) {
         // XML wurde bearbeitet => Speichern?
         const antwort = await xml.editFrage({
           pre,
-          fun: () => {},
         });
         if (antwort) {
-          pre.querySelector(`[value="Speichern"]`).dispatchEvent(new Event("click"));
+          pre.querySelector('[value="Speichern"]').dispatchEvent(new Event("click"));
           slotKlon.xl = xml.data.xl[key][slotOri].xl;
         } else if (antwort === false) {
           delete ta.dataset.geaendert;
           ta.value = slotKlon.xl;
-          pre.querySelector(`[value="Abbrechen"]`).dispatchEvent(new Event("click"));
+          pre.querySelector('[value="Abbrechen"]').dispatchEvent(new Event("click"));
         } else if (antwort === null) {
           ta.setSelectionRange(0, 0);
           ta.focus();
@@ -3754,7 +3739,7 @@ let xml = {
         await new Promise(warten => setTimeout(() => warten(true), 25));
         kopf = document.querySelector(`#${key} > .kopf[data-slot="${slotOri}"]`);
       }
-      await xml.elementPreviewOff({pre: kopf.nextSibling});
+      await xml.elementPreviewOff({ pre: kopf.nextSibling });
     }
     // Verschieben auf Datenebene
     arr.splice(slotNeu, 0, slotKlon);
@@ -3764,29 +3749,29 @@ let xml = {
       arr.splice(slot, 1);
     }
     // Verschieben auf Elementebene
-    let klon = kopf.cloneNode(true),
-      next = kopf.nextSibling;
+    const klon = kopf.cloneNode(true);
+    const next = kopf.nextSibling;
     if (slotBlock !== null) {
       koepfe = kopf.closest(".abschnitt-cont").querySelectorAll(".kopf");
     }
     kopf.parentNode.insertBefore(klon, koepfe[slotNeu]);
     kopf.parentNode.removeChild(kopf);
-    xml.elementKopfEvents({kopf: klon});
+    xml.elementKopfEvents({ kopf: klon });
     // Kopf von Abschnitt/Textblock: Verschieben des Content-Blocks
     if (/^(ab|tx)$/.test(key)) {
-      let klonNext = next.cloneNode(true);
+      const klonNext = next.cloneNode(true);
       klon.parentNode.insertBefore(klonNext, klon.nextSibling);
       klon.parentNode.removeChild(next);
-      xml.abtxEvents({cont: klonNext});
+      xml.abtxEvents({ cont: klonNext });
       if (slotBlock === null) {
-        klonNext.querySelectorAll(".kopf").forEach(kopf => xml.elementKopfEvents( {kopf} ));
+        klonNext.querySelectorAll(".kopf").forEach(kopf => xml.elementKopfEvents({ kopf }));
       }
     }
     // Slots auffrischen
-    xml.refreshSlots({key: refreshKey});
+    xml.refreshSlots({ key: refreshKey });
     // ggf. Levels auffrischen
     if (/^(ab|tx)$/.test(key)) {
-      xml.refreshLevels({key, slot: -1});
+      xml.refreshLevels({ key, slot: -1 });
     }
     // Daten speichern
     xml.speichern();
@@ -3810,13 +3795,13 @@ let xml = {
   //     (Bewegungsrichtung, "left" | "right")
   //   kopf = Element
   //     (der Kopf, in dem der Pfeil angeklickt wurde)
-  indent ({dir, kopf}) {
+  indent ({ dir, kopf }) {
     // Variablen vorbereiten
-    let key = kopf.dataset.key,
-      slot = parseInt(kopf.dataset.slot, 10),
-      arr = xml.data.xl[key],
-      level = arr[slot].le,
-      levelNeu = 0;
+    const key = kopf.dataset.key;
+    const slot = parseInt(kopf.dataset.slot, 10);
+    const arr = xml.data.xl[key];
+    const level = arr[slot].le;
+    let levelNeu = 0;
     // Variablen ermitteln
     if (dir === "left" &&
         level > 1) {
@@ -3836,7 +3821,7 @@ let xml = {
     kopf.nextSibling.classList.replace(`level-${level}`, `level-${levelNeu}`);
     // automatische Korrekturen der folgenden Container,
     // damit keine illegalen Löcher entstehen
-    xml.refreshLevels({key, slot});
+    xml.refreshLevels({ key, slot });
     // Daten speichern
     xml.speichern();
   },
@@ -3846,9 +3831,9 @@ let xml = {
   //     (ID des Containers, dessen Köpfe überprüft werden sollen)
   //   slot = Number
   //     (Slot, vor dem gestartet werden soll; also -1, wenn Start bei 0)
-  refreshLevels ({key, slot}) {
-    let koepfe = document.querySelectorAll(`#${key} > .kopf`),
-      arr = xml.data.xl[key];
+  refreshLevels ({ key, slot }) {
+    const koepfe = document.querySelectorAll(`#${key} > .kopf`);
+    const arr = xml.data.xl[key];
     for (let i = slot + 1, len = arr.length; i < len; i++) {
       const level = arr[i].le;
       if (i === 0) {
@@ -3875,22 +3860,22 @@ let xml = {
   //     (Schlüssel des Datensatzes, der betroffen ist)
   //   abschnitt = Element || null || undefined
   //     (Abschnitt dessen Köpfe betroffen sind; beim Löschen von Textblöcken)
-  refreshSlots ({key, abschnitt = null}) {
+  refreshSlots ({ key, abschnitt = null }) {
     if (abschnitt) {
-      let koepfe = abschnitt.querySelectorAll(".kopf");
+      const koepfe = abschnitt.querySelectorAll(".kopf");
       for (let i = 0, len = koepfe.length; i < len; i++) {
         koepfe[i].dataset.slotBlock = i;
         koepfe[i].nextSibling.querySelector(".pre-cont").dataset.slotBlock = i;
       }
     } else if (/^(ab|tx)$/.test(key)) {
-      let koepfe = document.querySelectorAll(`#${key} > .kopf`);
+      const koepfe = document.querySelectorAll(`#${key} > .kopf`);
       for (let i = 0, len = koepfe.length; i < len; i++) {
         koepfe[i].dataset.slot = i;
-        let subKoepfe = koepfe[i].nextSibling.querySelectorAll(".kopf");
+        const subKoepfe = koepfe[i].nextSibling.querySelectorAll(".kopf");
         for (let j = 0, len = subKoepfe.length; j < len; j++) {
           subKoepfe[j].dataset.slot = i;
           subKoepfe[j].dataset.slotBlock = j;
-          let pre = subKoepfe[j].nextSibling.querySelector(".pre-cont");
+          const pre = subKoepfe[j].nextSibling.querySelector(".pre-cont");
           pre.dataset.slot = i;
           pre.dataset.slotBlock = j;
         }
@@ -3902,7 +3887,9 @@ let xml = {
       });
     } else if (/^(md|le|wi|bg-nw)$/.test(key)) {
       // Slots in Köpfen ganz primitiv durchzählen
-      document.querySelectorAll(`#${key} > .kopf`).forEach((i, n) => i.dataset.slot = n);
+      document.querySelectorAll(`#${key} > .kopf`).forEach((i, n) => {
+        i.dataset.slot = n;
+      });
     }
   },
 
@@ -3911,9 +3898,9 @@ let xml = {
   //     (das Warn-Icon, das angepasst werden muss)
   //   xmlStr = String
   //     (XML-Snippet, das überprüft werden soll)
-  check ({warn, xmlStr}) {
-    let parser = new DOMParser(),
-      xmlDoc = parser.parseFromString(xmlStr, "text/xml");
+  check ({ warn, xmlStr }) {
+    const parser = new DOMParser();
+    const xmlDoc = parser.parseFromString(xmlStr, "text/xml");
     if (xmlDoc.querySelector("parsererror")) {
       warn.classList.add("aktiv");
       const err = xmlDoc.querySelector("parsererror div").textContent;
@@ -3931,11 +3918,11 @@ let xml = {
   // übprüft, ob in einem Abschnitt noch Fehler sind
   //   cont = Element || null
   //     (ggf. der .abschnitt-cont)
-  checkAbschnitt ({cont}) {
+  checkAbschnitt ({ cont }) {
     if (!cont || !cont.classList.contains("abschnitt-cont")) {
       return;
     }
-    let warn = cont.previousSibling.querySelector(".warn");
+    const warn = cont.previousSibling.querySelector(".warn");
     if (cont.querySelector(".warn.aktiv")) {
       warn.classList.add("aktiv");
       warn.dataset.err = "Fehler in einem untergeordneten Textblock";
@@ -3961,32 +3948,32 @@ let xml = {
   //   warten = Number || undefined
   //     (Millisekunden, die vor dem Berechnen der Maximalbreite gewartet werden
   //     soll; beim Initialisieren muss dies deutlich länger sein)
-  async layoutTabellig ({id, ele, inAbschnitt = null, warten = 15}) {
+  async layoutTabellig ({ id, ele, inAbschnitt = null, warten = 15 }) {
     let koepfe;
     if (inAbschnitt) {
-      koepfe = inAbschnitt.querySelectorAll(`.kopf`);
+      koepfe = inAbschnitt.querySelectorAll(".kopf");
     } else {
       koepfe = document.querySelectorAll(`#${id} > .kopf`);
     }
     // Breitenangaben entfernen
-    for (let k of koepfe) {
-      for (let e of ele) {
+    for (const k of koepfe) {
+      for (const e of ele) {
         k.childNodes[e].style = null;
       }
     }
     // kurz warten, um dem Renderer Zeit zum Neuaufbau zu geben
     await new Promise(resolve => setTimeout(() => resolve(true), warten));
     // größte Breite ermitteln und für alle Köpfe setzen
-    for (let e of ele) {
+    for (const e of ele) {
       let max = 0;
-      for (let k of koepfe) {
+      for (const k of koepfe) {
         const breite = k.childNodes[e].offsetWidth;
         if (breite > max) {
           max = breite;
         }
       }
       max = Math.ceil(max);
-      for (let k of koepfe) {
+      for (const k of koepfe) {
         k.childNodes[e].style.width = `${max + 1}px`; // +1, sonst ist die Textellipse immer sichtbar
       }
     }
@@ -3994,8 +3981,8 @@ let xml = {
 
   // extrahiert die Lemmata aus dem Karteiwort
   lemmata () {
-    let arr = [],
-      lemmata = xml.data.wort.replace(/\s?\(.+?\)/g, "").split(",");
+    const arr = [];
+    const lemmata = xml.data.wort.replace(/\s?\(.+?\)/g, "").split(",");
     for (let i = 0, len = lemmata.length; i < len; i++) {
       const lemma = helfer.textTrim(lemmata[i], true);
       if (lemma) {
@@ -4022,21 +4009,21 @@ let xml = {
     if (!xml.exportierenEval()) {
       return;
     }
-    let parser = new DOMParser(),
-      d = xml.data.xl;
+    const parser = new DOMParser();
+    const d = xml.data.xl;
     // XML zusammenbauen
-    let xmlStr = `<?xml-model href="../share/rnc/Wortgeschichten.rnc" type="application/relax-ng-compact-syntax"?>\n`;
-    xmlStr += `<WGD xmlns="http://www.zdl.org/ns/1.0">\n`;
+    let xmlStr = '<?xml-model href="../share/rnc/Wortgeschichten.rnc" type="application/relax-ng-compact-syntax"?>\n';
+    xmlStr += '<WGD xmlns="http://www.zdl.org/ns/1.0">\n';
     xmlStr += `\t<Artikel xml:id="${d.md.id}" Typ="${d.md.ty}">\n`;
     // Revisionen
     xmlStr += "\t".repeat(2) + "<Revisionen>\n";
-    for (let i of d.md.re) {
+    for (const i of d.md.re) {
       xmlStr += indentXml(i.xl, 3);
       xmlStr += "\n";
     }
     xmlStr += "\t".repeat(2) + "</Revisionen>\n";
     // Lemmata
-    for (let i of d.le) {
+    for (const i of d.le) {
       xmlStr += indentXml(i.xl, 2);
       xmlStr += "\n";
     }
@@ -4047,26 +4034,26 @@ let xml = {
     }
     xmlStr += "\t".repeat(2) + "</Diasystematik>\n";
     // Kurz gefasst und Wortgeschichte
-    let texte = {
+    const texte = {
       ab: "Wortgeschichte_kompakt",
       tx: "Wortgeschichte",
     };
     let basisZuletzt = 0;
-    for (let [k, v] of Object.entries(texte)) {
+    for (const [ k, v ] of Object.entries(texte)) {
       xmlStr += "\t".repeat(2) + `<${v}>\n`;
       if (!d[k].length) {
-        xmlStr += "\t".repeat(3) + `<Abschnitt/>\n`;
+        xmlStr += "\t".repeat(3) + "<Abschnitt/>\n";
       }
-      for (let i of d[k]) {
-        let attr = [];
+      for (const i of d[k]) {
+        const attr = [];
         if (i.id) {
           attr.push(`xml:id="${i.id}"`);
         }
         if (i.ty) { // z.Zt. immer "Mehr erfahren" | ""
-          attr.push(`Relevanz="niedrig"`);
+          attr.push('Relevanz="niedrig"');
         }
         // Einrückung
-        let basis = 3 + i.le - 1;
+        const basis = 3 + i.le - 1;
         if (basisZuletzt && basis > basisZuletzt) {
           for (let b = basis - basisZuletzt; b > 0; b--) {
             xmlStr = xmlStr.replace(/\s*<\/Abschnitt>\n$/, "\n");
@@ -4079,7 +4066,7 @@ let xml = {
         basisZuletzt = basis;
         // neuen Abschnitt erzeugen
         xmlStr += "\t".repeat(basis) + `<Abschnitt${attr.length ? " " + attr.join(" ") : ""}>\n`;
-        for (let tb of i.ct) {
+        for (const tb of i.ct) {
           // <Ueberschrift> | <Textblock> | <Blockzitat> | <Liste> | <Illustration>
           xmlStr += indentStr(tb.xl, basis + 1);
           xmlStr += "\n";
@@ -4094,14 +4081,14 @@ let xml = {
     }
     // Belege
     xmlStr += "\t".repeat(2) + "<Belegreihe>\n";
-    for (let i of d.bl) {
+    for (const i of d.bl) {
       xmlStr += indentStr(i.xl, 3);
       xmlStr += "\n";
     }
     xmlStr += "\t".repeat(2) + "</Belegreihe>\n";
     // Literatur
     xmlStr += "\t".repeat(2) + "<Literatur>\n";
-    for (let i of d.lt) {
+    for (const i of d.lt) {
       xmlStr += "\t".repeat(3) + `<Literaturtitel xml:id="${i.id}" Ziel="../share/Literaturliste.xml#${i.id}"/>\n`;
     }
     xmlStr += "\t".repeat(2) + "</Literatur>\n";
@@ -4113,7 +4100,7 @@ let xml = {
       xmlStr += "\n";
     }
     // Wortinformationen
-    let wi = {};
+    const wi = {};
     for (const typ of Object.keys(xml.wiMap.export)) {
       for (const v of Object.values(d.wi)) {
         for (const i of v) {
@@ -4127,7 +4114,7 @@ let xml = {
         }
       }
     }
-    for (const [k, v] of Object.entries(wi)) {
+    for (const [ k, v ] of Object.entries(wi)) {
       xmlStr += "\t".repeat(2) + `<Verweise Typ="${xml.wiMap.export[k]}">\n`;
       for (const i of v) {
         xmlStr += i;
@@ -4137,7 +4124,7 @@ let xml = {
     // Abschluss
     xmlStr += "\t</Artikel>\n</WGD>\n";
     // Leerzeilen einfügen
-    let leerzeilen = [
+    const leerzeilen = [
       /(?<=Revisionen>\n)\t+<Lemma/,
       /\t+<Diasystematik/,
       /\t+<Wortgeschichte(_kompakt)?/g,
@@ -4155,13 +4142,13 @@ let xml = {
       /\s+<Lesart(?!enreferenz)/g,
       /\t+<Verweise/g,
     ];
-    for (let i of leerzeilen) {
+    for (const i of leerzeilen) {
       xmlStr = xmlStr.replace(i, m => "\n" + m);
     }
     // Tabs durch Leerzeichen ersetzen
     xmlStr = xmlStr.replace(/\t/g, " ".repeat(2));
     // Daten exportieren
-    xml.exportierenSpeichern({xmlStr});
+    xml.exportierenSpeichern({ xmlStr });
     // Funktionen zum Einrücken der Zeilen eines bestehenden XML-String
     function indentXml (str, level) {
       let xmlDoc = parser.parseFromString(str, "text/xml");
@@ -4178,8 +4165,8 @@ let xml = {
 
   // Exportieren: übperprüfen, ob alle notwendigen Elemente vorhanden sind
   exportierenEval () {
-    let fehlstellen = [],
-      d = xml.data.xl;
+    const fehlstellen = [];
+    const d = xml.data.xl;
     if (!d.md.id) {
       fehlstellen.push("• eine Artikel-ID vergeben");
     }
@@ -4224,7 +4211,7 @@ let xml = {
       }
     }
     if (d.bg.length > 1) {
-      for (let i of d.bg) {
+      for (const i of d.bg) {
         if (!i.la) {
           fehlstellen.push("• alle Bedeutungsgerüste mit Hauptlemma-Label versehen");
           break;
@@ -4234,8 +4221,8 @@ let xml = {
         d.bg[0].la) {
       fehlstellen.push("• Hauptlemma-Label des Bedeutungsgerüsts entfernen");
     }
-    let textIDs = xml.dropdownReferenzen(),
-      bgLinkFehler = [];
+    const textIDs = xml.dropdownReferenzen();
+    const bgLinkFehler = [];
     for (const geruest of d.bg) {
       for (const referenz of geruest.tf) {
         if (!textIDs.includes(referenz.ti)) {
@@ -4246,7 +4233,7 @@ let xml = {
     if (bgLinkFehler.length) {
       fehlstellen.push(`• fehlerhafte Verweise im Bedeutungsgerüst korrigieren (fehlende Verweisziele: <i>${bgLinkFehler.join(", ")}</i>)`);
     }
-    let leLinkFehler = [];
+    const leLinkFehler = [];
     for (const lemma of d.le) {
       if (lemma.re &&
           !textIDs.includes(lemma.re)) {
@@ -4276,18 +4263,18 @@ let xml = {
   // Exportieren: XML-Dateidaten speichern
   //   xmlStr = String
   //     (die XML-Dateiedaten)
-  async exportierenSpeichern ({xmlStr}) {
-    let ascii = new Map([
-      [/[\s’']/g, "_"],
-      [/Ä/g, "Ae"],
-      [/ä/g, "ae"],
-      [/[ÈÉ]/g, "E"],
-      [/[èé]/g, "e"],
-      [/Ö/g, "Oe"],
-      [/ö/g, "oe"],
-      [/Ü/g, "Ue"],
-      [/ü/g, "ue"],
-      [/ß/g, "ss"],
+  async exportierenSpeichern ({ xmlStr }) {
+    const ascii = new Map([
+      [ /[\s’']/g, "_" ],
+      [ /Ä/g, "Ae" ],
+      [ /ä/g, "ae" ],
+      [ /[ÈÉ]/g, "E" ],
+      [ /[èé]/g, "e" ],
+      [ /Ö/g, "Oe" ],
+      [ /ö/g, "oe" ],
+      [ /Ü/g, "Ue" ],
+      [ /ü/g, "ue" ],
+      [ /ß/g, "ss" ],
     ]);
     let wort = "";
     for (const le of xml.data.xl.le) {
@@ -4302,20 +4289,20 @@ let xml = {
     if (xml.data.xl.md.ty === "Wortfeldartikel") {
       wort = "Wortfeldartikel_" + wort;
     }
-    for (let [k, v] of ascii) {
+    for (const [ k, v ] of ascii) {
       wort = wort.replace(k, v);
     }
-    let opt = {
+    const opt = {
       title: "XML speichern",
       defaultPath: modules.path.join(appInfo.documents, `${wort}.xml`),
       filters: [
         {
           name: "XML-Dateien",
-          extensions: ["xml"],
+          extensions: [ "xml" ],
         },
         {
           name: "Alle Dateien",
-          extensions: ["*"],
+          extensions: [ "*" ],
         },
       ],
     };
@@ -4323,7 +4310,7 @@ let xml = {
       opt.defaultPath = modules.path.join(xml.data.letzter_pfad, `${wort}.xml`);
     }
     // Dialog anzeigen
-    let result = await modules.ipc.invoke("datei-dialog", {
+    const result = await modules.ipc.invoke("datei-dialog", {
       open: false,
       winId: winInfo.winId,
       opt,
@@ -4347,7 +4334,7 @@ let xml = {
         });
       });
     // Pfad speichern
-    let reg = new RegExp(`^.+\\${modules.path.sep}`);
+    const reg = new RegExp(`^.+\\${modules.path.sep}`);
     const pfad = result.filePath.match(reg)[0];
     xml.data.letzter_pfad = pfad;
     modules.ipc.sendTo(xml.data.contentsId, "optionen-letzter-pfad", pfad);
@@ -4355,31 +4342,29 @@ let xml = {
 
   // Importieren: XML-Datei öffnen und überprüfen
   async importieren () {
-    let opt = {
+    const opt = {
       title: "XML-Datei öffnen",
       defaultPath: appInfo.documents,
       filters: [
         {
           name: "XML-Dateien",
-          extensions: ["xml"],
+          extensions: [ "xml" ],
         },
         {
           name: "Alle Dateien",
-          extensions: ["*"],
+          extensions: [ "*" ],
         },
       ],
-      properties: [
-        "openFile",
-      ],
+      properties: [ "openFile" ],
     };
     if (xml.data.letzter_pfad) {
       opt.defaultPath = xml.data.letzter_pfad;
     }
     // Dialog anzeigen
-    let result = await modules.ipc.invoke("datei-dialog", {
+    const result = await modules.ipc.invoke("datei-dialog", {
       open: true,
       winId: winInfo.winId,
-      opt: opt,
+      opt,
     });
     // Fehler oder keine Datei ausgewählt
     if (result.message || !Object.keys(result).length) {
@@ -4392,10 +4377,10 @@ let xml = {
       return;
     }
     // Datei einlesen
-    modules.fsp.readFile(result.filePaths[0], {encoding: "utf8"})
+    modules.fsp.readFile(result.filePaths[0], { encoding: "utf8" })
       .then(content => {
-        let parser = new DOMParser(),
-          xmlDoc = parser.parseFromString(content, "text/xml");
+        const parser = new DOMParser();
+        const xmlDoc = parser.parseFromString(content, "text/xml");
         // XML-Datei ist nicht wohlgeformt
         if (xmlDoc.querySelector("parsererror")) {
           dialog.oeffnen({
@@ -4419,7 +4404,7 @@ let xml = {
           text: "Sollen die Daten aus der XML-Datei wirklich importiert werden?\n(Alle bisherigen Daten im Redaktionsfenster gehen dabei verloren.)",
           callback: () => {
             if (dialog.antwort) {
-              xml.importierenEinlesen({xmlDoc});
+              xml.importierenEinlesen({ xmlDoc });
             }
           },
         });
@@ -4436,9 +4421,9 @@ let xml = {
   // Importieren: XML-Datei einlesen
   //   xmlDoc = Document
   //     (die XML-Datei, die eingelesen werden soll)
-  async importierenEinlesen ({xmlDoc}) {
+  async importierenEinlesen ({ xmlDoc }) {
     // Helfer-Funktionen
-    let nsResolver = prefix => {
+    const nsResolver = prefix => {
       switch (prefix) {
         case "x":
           return "http://www.zdl.org/ns/1.0";
@@ -4446,16 +4431,14 @@ let xml = {
           return "http://www.w3.org/XML/1998/namespace";
       }
     };
-    let evaluator = xpath => {
-      return xmlDoc.evaluate(xpath, xmlDoc, nsResolver, XPathResult.ANY_TYPE, null);
-    };
-    let normierer = snippet => {
+    const evaluator = xpath => xmlDoc.evaluate(xpath, xmlDoc, nsResolver, XPathResult.ANY_TYPE, null);
+    const normierer = snippet => {
       let xmlStr = new XMLSerializer().serializeToString(snippet);
       xmlStr = xmlStr.replace(/ xmlns=".+?"/g, "");
       xmlStr = xmlStr.replace(/(\n\s*\n)+/g, "\n"); // Leerzeilen entfernen
-      let n = xmlStr.split("\n"),
-        m = n[n.length - 1].match(/^\s+/),
-        len = m ? m[0].length : 0; // z.B. <Textreferenz> hat keine Zeilenumbrüche
+      const n = xmlStr.split("\n");
+      const m = n[n.length - 1].match(/^\s+/);
+      const len = m ? m[0].length : 0; // z.B. <Textreferenz> hat keine Zeilenumbrüche
       xmlStr = xmlStr.replace(new RegExp(`\\n\\s{${len}}`, "g"), "\n");
       return xmlStr;
     };
@@ -4463,46 +4446,46 @@ let xml = {
     xml.data.xl = helferXml.redXmlData();
     await xml.resetFormular();
     // Metadaten
-    let xl = xml.data.xl;
+    const xl = xml.data.xl;
     xl.md.id = evaluator("//x:Artikel/@xml:id").iterateNext().textContent;
     xl.md.tf = [];
-    let tff = evaluator("//x:Artikel/x:Diasystematik/x:Themenfeld"),
-      tf = tff.iterateNext();
+    const tff = evaluator("//x:Artikel/x:Diasystematik/x:Themenfeld");
+    let tf = tff.iterateNext();
     while (tf) {
       xl.md.tf.push(tf.textContent);
       tf = tff.iterateNext();
     }
     xl.md.ty = evaluator("//x:Artikel/@Typ").iterateNext().textContent;
-    let re = evaluator("//x:Revision"),
-      i = re.iterateNext();
+    const re = evaluator("//x:Revision");
+    let i = re.iterateNext();
     while (i) {
-      let o = {
+      const o = {
         au: [],
         no: i.querySelector("Aenderung").textContent,
         xl: normierer(i),
       };
-      for (let j of i.querySelectorAll("Autor")) {
+      for (const j of i.querySelectorAll("Autor")) {
         o.au.push(j.textContent);
       }
-      let datum = i.querySelector("Datum").textContent.split(".");
+      const datum = i.querySelector("Datum").textContent.split(".");
       o.da = `${datum[2]}-${datum[1]}-${datum[0]}`;
       xl.md.re.push(o);
       i = re.iterateNext();
     }
     // Lemmata
-    let le = evaluator("//x:Artikel/x:Lemma");
+    const le = evaluator("//x:Artikel/x:Lemma");
     i = le.iterateNext();
     while (i) {
-      let o = {
+      const o = {
         le: [],
         re: "",
         ty: i.getAttribute("Typ"),
         xl: normierer(i),
       };
-      for (let j of i.querySelectorAll("Schreibung")) {
+      for (const j of i.querySelectorAll("Schreibung")) {
         o.le.push(j.textContent);
       }
-      let re = i.querySelector("Textreferenz");
+      const re = i.querySelector("Textreferenz");
       if (re) {
         o.re = re.getAttribute("Ziel");
       }
@@ -4510,7 +4493,7 @@ let xml = {
       i = le.iterateNext();
     }
     // Text (Kurz gefasst, Wortgeschichte)
-    let w = [
+    const w = [
       {
         key: "ab",
         tag: "Wortgeschichte_kompakt",
@@ -4520,14 +4503,14 @@ let xml = {
         tag: "Wortgeschichte",
       },
     ];
-    for (let i of w) {
-      let a = evaluator(`//x:${i.tag}//x:Abschnitt`),
-        j = a.iterateNext();
+    for (const i of w) {
+      const a = evaluator(`//x:${i.tag}//x:Abschnitt`);
+      let j = a.iterateNext();
       while (j) {
         // Abschnitt
-        let id = j.getAttribute("xml:id"),
-          relevanz = j.getAttribute("Relevanz");
-        let o = {
+        const id = j.getAttribute("xml:id");
+        const relevanz = j.getAttribute("Relevanz");
+        const o = {
           ct: [],
           id: id || "",
           le: 1,
@@ -4539,16 +4522,16 @@ let xml = {
           parent = parent.parentNode;
         }
         // Element-Knoten im Abschnitt
-        let n = evaluator(`//x:${i.tag}//x:Abschnitt/*`),
-          k = n.iterateNext();
+        const n = evaluator(`//x:${i.tag}//x:Abschnitt/*`);
+        let k = n.iterateNext();
         while (k) {
           if (k.parentNode !== j || k.nodeName === "Abschnitt") {
             k = n.iterateNext();
             continue;
           }
-          let id = k.getAttribute("xml:id"),
-            ty = k.getAttribute("Typ");
-          let p = {
+          const id = k.getAttribute("xml:id");
+          const ty = k.getAttribute("Typ");
+          const p = {
             id: id || "",
             it: k.nodeName.replace(/^Ue/, "Ü"),
             ty: ty || "",
@@ -4563,10 +4546,10 @@ let xml = {
       }
     }
     // Belege
-    let bl = evaluator("//x:Belegreihe/x:Beleg");
+    const bl = evaluator("//x:Belegreihe/x:Beleg");
     i = bl.iterateNext();
     while (i) {
-      let o = {
+      const o = {
         da: i.querySelector("Datum").textContent,
         id: i.getAttribute("xml:id"),
         xl: normierer(i),
@@ -4578,11 +4561,11 @@ let xml = {
       i = bl.iterateNext();
     }
     // Literatur
-    let lt = evaluator("//x:Literaturtitel");
+    const lt = evaluator("//x:Literaturtitel");
     i = lt.iterateNext();
     while (i) {
       const id = i.getAttribute("xml:id");
-      let o = {
+      const o = {
         id,
         si: "[Sigle unbekannt]",
         xl: `<Fundstelle xml:id="${id}">\n  <unstrukturiert>[Titel unbekannt]</unstrukturiert>\n</Fundstelle>`,
@@ -4592,10 +4575,10 @@ let xml = {
     }
     // Wortinformationen
     xl.wi["1"] = [];
-    let wi = evaluator("//x:Verweise/*");
+    const wi = evaluator("//x:Verweise/*");
     i = wi.iterateNext();
     while (i) {
-      let o = {
+      const o = {
         gn: "1",
         vt: xml.wiMap.import[i.parentNode.getAttribute("Typ")],
         xl: normierer(i),
@@ -4614,13 +4597,13 @@ let xml = {
       i = wi.iterateNext();
     }
     // Bedeutungsgerüst
-    let bg = evaluator("//x:Lesarten"),
-      bgNr = 1;
+    const bg = evaluator("//x:Lesarten");
+    let bgNr = 1;
     i = bg.iterateNext();
     while (i) {
       xml.bgAkt = bgNr - 1;
       xml.bgAktGn = "" + bgNr;
-      let o = {
+      const o = {
         gn: "" + bgNr,
         la: "",
         nw: [],

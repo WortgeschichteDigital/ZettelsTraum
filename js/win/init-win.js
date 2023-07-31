@@ -1,7 +1,7 @@
 "use strict";
 
 // INITIALISIERUNG DES FENSTERS
-let initWin = {
+const initWin = {
   // Listener für Signale des Main-Prozesses
   ipcListener () {
     // helle Elemente dunkler darstellen
@@ -27,28 +27,30 @@ let initWin = {
       }
     });
     // XML-Redaktionsfester: einen XML-Datensatz empfangen
-    modules.ipc.on("xml-datensatz", (evt, xmlDatensatz) => xml.empfangen({xmlDatensatz}));
+    modules.ipc.on("xml-datensatz", (evt, xmlDatensatz) => xml.empfangen({ xmlDatensatz }));
     // Before-Unload
     modules.ipc.on("before-unload", () => helferWin.beforeUnload());
   },
 
   // Infos zu App und Fenster erfragen
   async infos () {
-    let info = await modules.ipc.invoke("infos-senden");
+    const info = await modules.ipc.invoke("infos-senden");
     window.appInfo = info.appInfo;
     window.winInfo = info.winInfo;
   },
 
   // Programmname in Elemente eintragen
   appName () {
-    document.querySelectorAll(".app-name").forEach(i => i.textContent = appInfo.name);
+    document.querySelectorAll(".app-name").forEach(i => {
+      i.textContent = appInfo.name;
+    });
   },
 
   // XML-Quelltexte aufhübschen
   xmlPrettyPrint () {
-    let pretty = document.querySelectorAll(".xml-pretty-print");
-    for (let i of pretty) {
-      i.innerHTML = helferXml.prettyPrint({xmlStr: i.textContent});
+    const pretty = document.querySelectorAll(".xml-pretty-print");
+    for (const i of pretty) {
+      i.innerHTML = helferXml.prettyPrint({ xmlStr: i.textContent });
     }
   },
 
@@ -73,7 +75,7 @@ let initWin = {
       });
     });
     // externe Links
-    document.querySelectorAll(`a[href^="http"], a[href^="mailto"]`).forEach(a => helfer.externeLinks(a));
+    document.querySelectorAll('a[href^="http"], a[href^="mailto"]').forEach(a => helfer.externeLinks(a));
     // Demonstrationskartei
     document.querySelectorAll(".hilfe-demo").forEach(i => {
       i.addEventListener("click", evt => {
@@ -84,14 +86,14 @@ let initWin = {
     // Hilfe-Fenster (Dokumentation, Handbuch)
     if (typeof hilfe !== "undefined") {
       // interne Links
-      document.querySelectorAll(`a[href^="#"]`).forEach(a => {
+      document.querySelectorAll('a[href^="#"]').forEach(a => {
         if (/^#[a-z]/.test(a.getAttribute("href"))) {
           hilfe.naviSprung(a);
         }
       });
       // Vorschau-Bilder
       document.querySelectorAll("figure").forEach(i => {
-        i.addEventListener("click", function() {
+        i.addEventListener("click", function () {
           hilfe.bild(this);
         });
       });
@@ -138,7 +140,7 @@ let initWin = {
   // Events initialisieren: Kopf-Icons (Changelog, Dokumentation, Handbuch)
   eventsHilfeKopf () {
     document.querySelectorAll("#kopf-icons a").forEach(a => {
-      a.addEventListener("click", function(evt) {
+      a.addEventListener("click", function (evt) {
         evt.preventDefault();
         if (/suchleiste$/.test(this.id)) {
           suchleiste.einblenden();
@@ -153,7 +155,7 @@ let initWin = {
   eventsXml () {
     // Kopf-Icons
     document.querySelectorAll("#kopf-icons a").forEach(a => {
-      a.addEventListener("click", function(evt) {
+      a.addEventListener("click", function (evt) {
         evt.preventDefault();
         switch (this.id) {
           case "kopf-export":
@@ -173,11 +175,11 @@ let initWin = {
     });
     // Kopf-Navigation
     document.querySelectorAll("#kopf-nav a").forEach(a => {
-      a.addEventListener("click", function(evt) {
+      a.addEventListener("click", function (evt) {
         evt.preventDefault();
         const id = this.getAttribute("href").replace("#", "");
-        let ziel = document.getElementById(id),
-          header = document.querySelector("body > header");
+        const ziel = document.getElementById(id);
+        const header = document.querySelector("body > header");
         window.scrollTo({
           left: 0,
           top: ziel.offsetTop - header.offsetHeight,
@@ -186,7 +188,7 @@ let initWin = {
       });
     });
     // Metadaten-Felder
-    document.querySelectorAll("#md-id, #md-ty, #md-tf").forEach(i => xml.mdChange({input: i}));
+    document.querySelectorAll("#md-id, #md-ty, #md-tf").forEach(i => xml.mdChange({ input: i }));
     // Autofill Artikel-ID
     document.querySelector("#md .icon-stift").addEventListener("click", evt => {
       evt.preventDefault();
@@ -194,7 +196,7 @@ let initWin = {
     });
     // Revision/Lemma/Label/Nachweis/Textreferenz hinzufügen
     document.querySelectorAll("#le input, #md-re input, #la, #bg-nw input, #bg-tf input").forEach(i => {
-      i.addEventListener("keydown", function(evt) {
+      i.addEventListener("keydown", function (evt) {
         tastatur.detectModifiers(evt);
         if (!tastatur.modifiers &&
             evt.key === "Enter" &&
@@ -217,7 +219,7 @@ let initWin = {
       }
     });
     document.querySelectorAll("#le .icon-plus-dick, #md-re .icon-plus-dick, #bg-nw .icon-plus-dick, #bg-tf .icon-plus-dick").forEach(i => {
-      i.addEventListener("click", function(evt) {
+      i.addEventListener("click", function (evt) {
         evt.preventDefault();
         if (this.closest("#md-re")) {
           xml.mdRevisionAdd();
@@ -232,27 +234,27 @@ let initWin = {
     });
     // Abschnitt hinzufügen
     document.querySelectorAll(".abschnitt-add").forEach(i => {
-      i.addEventListener("click", function() {
-        xml.abschnittAdd({element: this});
+      i.addEventListener("click", function () {
+        xml.abschnittAdd({ element: this });
       });
     });
     document.querySelectorAll(".abschnitt-add a").forEach(i => {
-      i.addEventListener("click", function(evt) {
+      i.addEventListener("click", function (evt) {
         evt.stopPropagation();
-        xml.abschnittAdd({element: this});
+        xml.abschnittAdd({ element: this });
       });
     });
     // Beleg einfügen/Blöcke umschalten
     document.querySelectorAll(".toggle").forEach(abschnitt => {
       abschnitt.querySelectorAll("a").forEach(i => {
-        i.addEventListener("click", function(evt) {
+        i.addEventListener("click", function (evt) {
           evt.preventDefault();
           if (this.classList.contains("icon-einfuegen")) { // Beleg einfügen
             xml.belegEinfuegen();
           } else { // Blöcke umschalten
-            const auf = this.classList.contains("icon-auge") ? true : false,
-              key = this.closest("span").dataset.id;
-            xml.elementKopfToggle({auf, key});
+            const auf = this.classList.contains("icon-auge");
+            const key = this.closest("span").dataset.id;
+            xml.elementKopfToggle({ auf, key });
           }
         });
       });

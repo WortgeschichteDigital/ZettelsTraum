@@ -1,6 +1,6 @@
 "use strict";
 
-let overlay = {
+const overlay = {
   // bisher höchster z-index
   zIndex: 99,
 
@@ -38,7 +38,7 @@ let overlay = {
   //   link = Element
   //     (Link, auf den geklickt wurde)
   initSchliessen (link) {
-    link.addEventListener("click", function(evt) {
+    link.addEventListener("click", function (evt) {
       evt.preventDefault();
       overlay.schliessen(this);
     });
@@ -98,8 +98,8 @@ let overlay = {
 
   // alle offenen Overlays schließen
   async alleSchliessen () {
-    let offen = [];
-    document.querySelectorAll(".overlay").forEach(function(i) {
+    const offen = [];
+    document.querySelectorAll(".overlay").forEach(function (i) {
       if (!i.classList.contains("aus")) {
         offen.push(i.id);
       }
@@ -120,16 +120,16 @@ let overlay = {
 
   // oberstes Overlay-Fenster ermitteln
   oben () {
-    let oben = {
+    const oben = {
       zIndex: 0,
       id: "",
     };
-    let overlays = document.querySelectorAll(".overlay");
+    const overlays = document.querySelectorAll(".overlay");
     for (let i = 0, len = overlays.length; i < len; i++) {
       if (overlays[i].classList.contains("aus")) {
         continue;
       }
-      let zIndex = parseInt(overlays[i].style.zIndex, 10);
+      const zIndex = parseInt(overlays[i].style.zIndex, 10);
       if (zIndex > oben.zIndex) {
         oben.zIndex = zIndex;
         oben.id = overlays[i].id;

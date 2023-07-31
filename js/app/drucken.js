@@ -1,11 +1,11 @@
 "use strict";
 
-let drucken = {
+const drucken = {
   // Listener für die Druck-Icons
   //   a = Element
   //     (Icon-Link, auf den geklickt wurde)
   listener (a) {
-    a.addEventListener("click", function(evt) {
+    a.addEventListener("click", function (evt) {
       evt.preventDefault();
       drucken.init(this.id);
     });
@@ -32,7 +32,7 @@ let drucken = {
   //   span = Element
   //     (Element, hinter dem sich eine der Funktionen im Druckfenster befindet)
   buttons (span) {
-    span.addEventListener("click", function() {
+    span.addEventListener("click", function () {
       if (/drucker/.test(this.firstChild.src)) {
         drucken.start();
       } else if (/kopieren/.test(this.firstChild.src)) {
@@ -47,7 +47,7 @@ let drucken = {
   //   gn = String || undefined
   //     (enthält die Bedeutungsgerüst-Nummer, wenn aus dem Bedeutungsgerüst-Fenster gedruckt wird)
   init (id, gn) {
-    let fenster = document.getElementById("drucken");
+    const fenster = document.getElementById("drucken");
     // Fenster öffnen oder in den Vordergrund holen
     if (overlay.oeffnen(fenster) && id !== "bedeutungen-") {
       // Fenster ist schon offen
@@ -149,11 +149,11 @@ let drucken = {
   // IDs der Karten sammeln, die gedruckt werden sollen
   getIds (id) {
     drucken.kartenIds = [];
-    let a = drucken.kartenIds;
+    const a = drucken.kartenIds;
     if (/^beleg-/.test(id)) {
       a.push(beleg.data);
     } else if (/^liste-/.test(id)) {
-      document.querySelectorAll(".liste-kopf").forEach(function(i) {
+      document.querySelectorAll(".liste-kopf").forEach(function (i) {
         a.push(i.dataset.id);
       });
     }
@@ -162,23 +162,24 @@ let drucken = {
   // Druckfenster mit dem Karteninhalt füllen
   fillKarten () {
     // Content leeren
-    let cont = document.getElementById("drucken-cont");
+    const cont = document.getElementById("drucken-cont");
     cont.replaceChildren();
     cont.scrollTop = 0;
     // Karten einhängen
-    drucken.kartenIds.forEach(function(i) {
+    drucken.kartenIds.forEach(function (i) {
       let obj = i;
       if (!helfer.checkType("Object", obj)) {
         obj = data.ka[i];
       }
       // Überschrift
-      let h3 = document.createElement("h3");
+      const h3 = document.createElement("h3");
       h3.textContent = liste.detailAnzeigenH3(i);
       cont.appendChild(h3);
       // Tabelle
-      let f = drucken.kartenFelder,
-        table = document.createElement("table"),
-        trTh, trTd;
+      const f = drucken.kartenFelder;
+      const table = document.createElement("table");
+      let trTh;
+      let trTd;
       cont.appendChild(table);
       let nr = 2;
       for (let x = 0, len = f.length; x < len; x++) {
@@ -191,15 +192,15 @@ let drucken = {
         }
         nr += f[x].width;
         // Kopf
-        let th = document.createElement("th");
+        const th = document.createElement("th");
         trTh.appendChild(th);
         th.textContent = f[x].name;
         // Wert ermitteln
         let wert = "";
         if (Array.isArray(obj[f[x].val])) {
           if (f[x].val === "bd") {
-            let wertTmp = [];
-            for (let bd of obj[f[x].val]) {
+            const wertTmp = [];
+            for (const bd of obj[f[x].val]) {
               wertTmp.push(bedeutungen.bedeutungenTief({
                 gr: bd.gr,
                 id: bd.id,
@@ -214,16 +215,16 @@ let drucken = {
           wert = obj[f[x].val];
         }
         if (!wert) {
-          wert = " ";
+          wert = "\u00A0";
         }
         // Inhalt
-        let td = document.createElement("td");
+        const td = document.createElement("td");
         trTd.appendChild(td);
         if (helfer.checkType("String", wert)) {
-          let wert_p = wert.replace(/\n\s*\n/g, "\n").split("\n");
+          const wert_p = wert.replace(/\n\s*\n/g, "\n").split("\n");
           for (let y = 0, len = wert_p.length; y < len; y++) {
-            let p = document.createElement("p"),
-              text = wert_p[y];
+            const p = document.createElement("p");
+            let text = wert_p[y];
             if (f[x].val === "bs") { // Wort im Belegschnitt hervorheben
               text = liste.belegWortHervorheben(text, true);
             }
@@ -260,37 +261,37 @@ let drucken = {
       return;
     }
     // Content leeren
-    let cont = document.getElementById("drucken-cont");
+    const cont = document.getElementById("drucken-cont");
     cont.replaceChildren();
     cont.scrollTop = 0;
     // Bedeutungen aufbauen
-    let bd = qu.gr[gn].bd;
+    const bd = qu.gr[gn].bd;
     for (let i = 0, len = bd.length; i < len; i++) {
       // Schachteln erzeugen
-      let frag = document.createDocumentFragment(),
-        schachtel = frag;
+      const frag = document.createDocumentFragment();
+      let schachtel = frag;
       for (let j = 0, len = bd[i].bd.length; j < len; j++) {
-        let div = document.createElement("div");
+        const div = document.createElement("div");
         schachtel.appendChild(div);
         div.classList.add("bd-win-baum");
         schachtel = div;
       }
       // Absatz mit Zählung und Bedeutung
-      let p = document.createElement("p");
+      const p = document.createElement("p");
       schachtel.appendChild(p);
       p.dataset.id = bd[i].id;
       // Zählung
-      let b = document.createElement("b");
+      const b = document.createElement("b");
       p.appendChild(b);
       b.classList.add("zaehlung");
       b.textContent = bd[i].za;
       // Bedeutung
-      let span = document.createElement("span");
+      const span = document.createElement("span");
       p.appendChild(span);
       span.innerHTML = bd[i].bd[bd[i].bd.length - 1];
       // ggf. Tags ergänzen
-      let tags = [];
-      for (let tag of bd[i].ta) {
+      const tags = [];
+      for (const tag of bd[i].ta) {
         if (!optionen.data.tags[tag.ty] ||
             !optionen.data.tags[tag.ty].data[tag.id]) {
           continue;
@@ -317,9 +318,9 @@ let drucken = {
       h += ` (${qu.gr[qu.gn].na})`;
     }
     h += " – ";
-    let h3 = document.createElement("h3");
+    const h3 = document.createElement("h3");
     h3.textContent = h;
-    let i = document.createElement("i");
+    const i = document.createElement("i");
     i.textContent = kartei.wort;
     h3.appendChild(i);
     cont.insertBefore(h3, cont.firstChild);
@@ -337,14 +338,14 @@ let drucken = {
   // Text aus der Vorschau kopieren
   kopieren () {
     // Bedeutungsbaum?
-    let cont = document.getElementById("drucken-cont"),
-      baum = false;
+    const cont = document.getElementById("drucken-cont");
+    let baum = false;
     if (cont.querySelector(".bd-win-baum")) {
       baum = true;
     }
     // Ist Text ausgewählt und ist er im Bereich der Vorschau?
     if (window.getSelection().toString() &&
-        popup.getTargetSelection([cont])) {
+        popup.getTargetSelection([ cont ])) {
       let html = popup.textauswahl.html;
       if (baum) {
         html = baumHtml(html);
@@ -355,8 +356,8 @@ let drucken = {
         text = cleanText(text);
       }
       modules.clipboard.write({
-        text: text,
-        html: html,
+        text,
+        html,
       });
       return;
     }
@@ -376,15 +377,15 @@ let drucken = {
     text = cleanText(text);
     // HTML und Text kopieren
     modules.clipboard.write({
-      text: text,
-      html: html,
+      text,
+      html,
     });
     // Animation, die anzeigt, dass die Zwischenablage gefüllt wurde
     helfer.animation("zwischenablage");
     // Funktionen zum Aufbereiten des Bedeutungsbaums
     function baumHtml (html) {
       html = html.replace(/<\/b>/g, "</b> ");
-      html = html.replace(/<div class="bd-win-baum">/g, function() {
+      html = html.replace(/<div class="bd-win-baum">/g, function () {
         return `<div style="margin-left: ${0.5}cm">`;
       });
       return html;
@@ -398,7 +399,7 @@ let drucken = {
     }
     function cleanText (text) {
       text = text.replace(/<.+?>/g, "");
-      text = text.replace(/&nbsp;/g, " ");
+      text = text.replace(/&nbsp;/g, "\u00A0");
       return text;
     }
   },

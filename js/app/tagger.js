@@ -1,6 +1,6 @@
 "use strict";
 
-let tagger = {
+const tagger = {
   // Anzeige der Kategorien auf die hier genannten limitieren
   // (das ist zugleich ein Zeichen, dass das Fenster nicht aus dem
   // Bedeutungsgerüst heraus geöffnet wurde)
@@ -18,7 +18,7 @@ let tagger = {
   //     (Index-Nummer im aktuellen Bedeutungsgerüst, zu der die Tags hinzugefügt werden sollen;
   //     oder ein String, aus dem ersichtlich wird, welche Funktion das Tagger-Fenster aufgerufen hat)
   oeffnen (idx) {
-    let fenster = document.getElementById("tagger");
+    const fenster = document.getElementById("tagger");
     overlay.oeffnen(fenster);
     fenster.dataset.idx = idx;
     if (tagger.limit.length) {
@@ -36,18 +36,18 @@ let tagger = {
   //   idx = String
   //     (Index-Nummer im aktuellen Bedeutungsgerüst, zu der die Tags hinzugefügt werden sollen)
   aufbauenBedeutung (idx) {
-    let cont = document.getElementById("tagger-bedeutung");
+    const cont = document.getElementById("tagger-bedeutung");
     cont.replaceChildren();
     cont.classList.remove("aus");
     // Daten ermitteln
     const i = parseInt(idx, 10);
-    bedeutungen.zaehlungTief(i).forEach(function(b) {
-      let nB = document.createElement("b");
+    bedeutungen.zaehlungTief(i).forEach(function (b) {
+      const nB = document.createElement("b");
       nB.classList.add("zaehlung");
       nB.textContent = b;
       cont.appendChild(nB);
     });
-    let span = document.createElement("span");
+    const span = document.createElement("span");
     span.innerHTML = bedeutungen.akt.bd[i].bd[bedeutungen.akt.bd[i].bd.length - 1];
     cont.appendChild(span);
   },
@@ -55,10 +55,10 @@ let tagger = {
   // Tag-Kategorien aufbauen
   aufbauen () {
     tagger.filled = false;
-    let cont = document.getElementById("tagger-typen");
+    const cont = document.getElementById("tagger-typen");
     cont.replaceChildren();
-    let typen = [];
-    for (let typ in optionen.data.tags) {
+    const typen = [];
+    for (const typ in optionen.data.tags) {
       if (!optionen.data.tags.hasOwnProperty(typ)) {
         continue;
       }
@@ -69,17 +69,17 @@ let tagger = {
       typen.push(typ);
     }
     typen.sort(tagger.typenSort);
-    for (let typ of typen) {
-      let p = document.createElement("p");
+    for (const typ of typen) {
+      const p = document.createElement("p");
       cont.appendChild(p);
       p.classList.add("input-text", "dropdown-cont");
       // Label
-      let i = document.createElement("i");
+      const i = document.createElement("i");
       p.appendChild(i);
       const name = tagger.getName(typ);
       i.textContent = name;
       // Edit-Feld
-      let span = document.createElement("span");
+      const span = document.createElement("span");
       p.appendChild(span);
       span.id = `tagger-${typ}`;
       span.setAttribute("contenteditable", "true");
@@ -88,7 +88,7 @@ let tagger = {
       tagger.listener(span);
       helfer.editNoFormat(span);
       // Dropdown-Link
-      let a = dropdown.makeLink("dropdown-link-td", `${name} auswählen`, true);
+      const a = dropdown.makeLink("dropdown-link-td", `${name} auswählen`, true);
       p.appendChild(a);
     }
     tooltip.init(cont);
@@ -97,12 +97,11 @@ let tagger = {
       cont.classList.add("leer");
       cont.textContent = "keine Kategorien";
       return;
-    } else {
-      cont.classList.remove("leer");
-      cont.querySelector("[contenteditable]").focus();
-      // Felder mit Tags füllen
-      tagger.fill();
     }
+    cont.classList.remove("leer");
+    cont.querySelector("[contenteditable]").focus();
+    // Felder mit Tags füllen
+    tagger.fill();
   },
 
   // Tag-Typen sortieren
@@ -116,7 +115,7 @@ let tagger = {
       return 1;
     }
     // alphanumerisch
-    let x = [a, b];
+    const x = [ a, b ];
     x.sort();
     if (x[0] === a) {
       return -1;
@@ -140,8 +139,8 @@ let tagger = {
 
   // Tags eintragen
   fill () {
-    const dataIdx = document.getElementById("tagger").dataset.idx,
-      idx = parseInt(dataIdx, 10);
+    const dataIdx = document.getElementById("tagger").dataset.idx;
+    const idx = parseInt(dataIdx, 10);
     let ta;
     if (isNaN(idx)) {
       if (/^red-meta-/.test(dataIdx)) {
@@ -151,8 +150,8 @@ let tagger = {
     } else {
       ta = bedeutungen.akt.bd[idx].ta;
     }
-    let tags = {};
-    for (let i of ta) {
+    const tags = {};
+    for (const i of ta) {
       if (!optionen.data.tags[i.ty]) { // Tag-Datei wurde entfernt
         continue;
       }
@@ -161,14 +160,14 @@ let tagger = {
       }
       tags[i.ty].push(optionen.data.tags[i.ty].data[i.id].name);
     }
-    for (let i in tags) {
+    for (const i in tags) {
       if (!tags.hasOwnProperty(i)) {
         continue;
       }
-      let feld = document.getElementById(`tagger-${i}`);
+      const feld = document.getElementById(`tagger-${i}`);
       feld.textContent = tags[i].join(", ");
     }
-    setTimeout(function() {
+    setTimeout(function () {
       // der MutationObserver reagiert verzögert, darum muss hier ein Timeout stehen;
       // 0 Millisekunden würde wohl auch gehen
       tagger.filled = true;
@@ -178,14 +177,14 @@ let tagger = {
   // hört, ob sich in einem Edit-Feld etwas tut
   listener (span) {
     // Enter abfangen
-    span.addEventListener("keydown", function(evt) {
+    span.addEventListener("keydown", function (evt) {
       if (evt.key === "Enter" && !document.getElementById("dropdown")) {
         evt.preventDefault();
         tagger.speichern();
       }
     });
     // Änderungen
-    let observer = new MutationObserver(function() {
+    const observer = new MutationObserver(function () {
       if (!tagger.filled) {
         return;
       }
@@ -207,21 +206,21 @@ let tagger = {
       return false;
     }
     // Werte der Felder auf Validität prüfen
-    let mismatch = [],
-      save = [],
-      typen = document.querySelectorAll("#tagger-typen span");
-    for (let typ of typen) {
+    const mismatch = [];
+    const save = [];
+    const typen = document.querySelectorAll("#tagger-typen span");
+    for (const typ of typen) {
       const kat = typ.id.replace(/^tagger-/, "");
       if (!optionen.data.tags[kat]) { // die Tag-Dateien könnte inzwischen gelöscht worden sein
         continue;
       }
-      let tags = typ.textContent.split(",");
+      const tags = typ.textContent.split(",");
       forX: for (let tag of tags) {
         tag = helfer.textTrim(tag, true);
         if (!tag) {
           continue;
         }
-        for (let id in optionen.data.tags[kat].data) {
+        for (const id in optionen.data.tags[kat].data) {
           if (!optionen.data.tags[kat].data.hasOwnProperty(id)) {
             continue;
           }
@@ -229,7 +228,7 @@ let tagger = {
             // ist der Tag schon in der Speicherliste?
             // (das könnte passieren, wenn man die Tags nicht aus dem Dropdown-Menü auswählt,
             // sondern händisch eintippt)
-            for (let i of save) {
+            for (const i of save) {
               if (i.ty === kat && i.id === id) {
                 continue forX;
               }
@@ -237,24 +236,24 @@ let tagger = {
             // Tag ist noch nicht in der Liste => aufnehmen
             save.push({
               ty: kat,
-              id: id,
+              id,
             });
             continue forX;
           }
         }
         // Tag ist nicht in der Liste
         mismatch.push({
-          kat: kat,
-          tag: tag,
+          kat,
+          tag,
         });
       }
     }
     // inkorrekte Tags, weil nicht in der Liste
     if (mismatch.length) {
       tagger.filled = false; // da der MutationObserver verzögert reagiert, muss er kurzfristig ausgeschaltet werden
-      let text = "Die folgenden Tags wurden in der zugehörigen Tag-Datei nicht gefunden. Sie wurden <em>nicht</em> gespeichert.",
-        lastH3 = "";
-      for (let mm of mismatch) {
+      let text = "Die folgenden Tags wurden in der zugehörigen Tag-Datei nicht gefunden. Sie wurden <em>nicht</em> gespeichert.";
+      let lastH3 = "";
+      for (const mm of mismatch) {
         // Meldungstext erzeugen
         if (mm.kat !== lastH3) {
           lastH3 = mm.kat;
@@ -264,15 +263,15 @@ let tagger = {
         }
         text += `<s>${helfer.escapeHtml(mm.tag)}</s>`;
         // Feld auffrischen
-        let feld = document.getElementById(`tagger-${mm.kat}`),
-          feldText = feld.textContent,
-          tag = helfer.escapeRegExp(mm.tag),
-          reg = new RegExp(`^${tag}(,\\s*)*|,\\s*${tag}`);
+        const feld = document.getElementById(`tagger-${mm.kat}`);
+        const feldText = feld.textContent;
+        const tag = helfer.escapeRegExp(mm.tag);
+        const reg = new RegExp(`^${tag}(,\\s*)*|,\\s*${tag}`);
         feld.textContent = feldText.replace(reg, "");
       }
       dialog.oeffnen({
         typ: "alert",
-        text: text,
+        text,
         callback: () => {
           tagger.filled = true;
           if (optionen.data.einstellungen["tagger-schliessen"]) {
@@ -284,8 +283,8 @@ let tagger = {
       });
     }
     // korrekte Tags speichern
-    const dataIdx = document.getElementById("tagger").dataset.idx,
-      idx = parseInt(dataIdx, 10);
+    const dataIdx = document.getElementById("tagger").dataset.idx;
+    const idx = parseInt(dataIdx, 10);
     if (isNaN(idx)) {
       if (/^red-meta-/.test(dataIdx)) {
         const typ = dataIdx.replace(/.+-/, "");
@@ -296,17 +295,17 @@ let tagger = {
     } else {
       bedeutungen.akt.bd[idx].ta = save;
       // Tags in die Tabelle eintragen
-      let zelle = document.querySelector(`#bedeutungen-cont tr[data-idx="${idx}"] td[data-feld="ta"]`);
+      const zelle = document.querySelector(`#bedeutungen-cont tr[data-idx="${idx}"] td[data-feld="ta"]`);
       zelle.replaceChildren();
       bedeutungen.aufbauenTags(save, zelle);
       // Änderungsmarkierung Bedeutungsgerüst setzen
       bedeutungen.bedeutungenGeaendert(true);
     }
     // Änderungsmarkierungen im Tagger entfernen
-    document.querySelectorAll("#tagger-typen .changed").forEach(function(i) {
+    document.querySelectorAll("#tagger-typen .changed").forEach(function (i) {
       i.classList.remove("changed");
       i.classList.add("saved");
-      setTimeout(function() {
+      setTimeout(function () {
         i.classList.remove("saved");
       }, 500);
     });
@@ -317,9 +316,8 @@ let tagger = {
     // Rückmeldung, ob das Speichern erfolgreich war
     if (mismatch.length) {
       return false;
-    } else {
-      return true;
     }
+    return true;
     // Schließen-Funktion
     function schliessen () {
       if (optionen.data.einstellungen["tagger-schliessen"]) {
@@ -352,7 +350,7 @@ let tagger = {
       return;
     }
     const idx = parseInt(dataIdx, 10);
-    let zelle = document.querySelector(`#bedeutungen-cont tr[data-idx="${idx}"] td[data-feld="ta"]`);
+    const zelle = document.querySelector(`#bedeutungen-cont tr[data-idx="${idx}"] td[data-feld="ta"]`);
     bedeutungen.editZeile(zelle, true);
     bedeutungen.linkTagger(zelle);
   },
@@ -365,7 +363,7 @@ let tagger = {
   taggerGeaendert (geaendert) {
     tagger.geaendert = geaendert;
     helfer.geaendert();
-    let asterisk = document.getElementById("tagger-geaendert");
+    const asterisk = document.getElementById("tagger-geaendert");
     if (geaendert) {
       asterisk.classList.remove("aus");
     } else {

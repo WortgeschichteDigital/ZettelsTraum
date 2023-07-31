@@ -1,6 +1,6 @@
 "use strict";
 
-let bedeutungenGerueste = {
+const bedeutungenGerueste = {
   // Generator zur Erzeugung der nächsten ID
   makeId: null,
   nextId: 0,
@@ -15,7 +15,7 @@ let bedeutungenGerueste = {
   //     (Klick-Event zum Öffnen des Fensters)
   oeffnen (evt) {
     evt.preventDefault();
-    let fenster = document.getElementById("gerueste");
+    const fenster = document.getElementById("gerueste");
     overlay.oeffnen(fenster);
     // ggf. nächste ID ermitteln
     if (!bedeutungenGerueste.nextId) {
@@ -34,19 +34,19 @@ let bedeutungenGerueste = {
 
   // Tabelle mit den Bedeutungsgerüsten aufbauen
   aufbauen () {
-    let cont = document.getElementById("gerueste-cont-over");
+    const cont = document.getElementById("gerueste-cont-over");
     cont.replaceChildren();
     // Tabelle aufbauen
-    let table = document.createElement("table");
+    const table = document.createElement("table");
     cont.appendChild(table);
-    Object.keys(bedeutungen.data.gr).forEach(function(i, n) {
-      let tr = document.createElement("tr");
+    Object.keys(bedeutungen.data.gr).forEach(function (i, n) {
+      const tr = document.createElement("tr");
       table.appendChild(tr);
       tr.dataset.id = i;
       // ID
       let td = document.createElement("td");
       tr.appendChild(td);
-      td.textContent = `Gerüst ${i}`;
+      td.textContent = `Gerüst\u00A0${i}`;
       // Name
       td = document.createElement("td");
       tr.appendChild(td);
@@ -61,30 +61,30 @@ let bedeutungenGerueste = {
       td = document.createElement("td");
       tr.appendChild(td);
       if (n === 0) { // Gerüst 1 darf nicht gelöscht werden
-        td.textContent = " ";
+        td.textContent = "\u00A0";
         return;
       }
-      let a = document.createElement("a");
+      const a = document.createElement("a");
       td.appendChild(a);
       a.classList.add("icon-link", "icon-loeschen");
       a.href = "#";
-      a.textContent = " ";
+      a.textContent = "\u00A0";
       bedeutungenGerueste.del(a);
     });
     // neues Gerüst hinzufügen
-    let tr = document.createElement("tr");
+    const tr = document.createElement("tr");
     table.appendChild(tr);
     let td = document.createElement("td");
     tr.appendChild(td);
-    td.textContent = `Gerüst ${bedeutungenGerueste.nextId}`;
+    td.textContent = `Gerüst\u00A0${bedeutungenGerueste.nextId}`;
     td = document.createElement("td");
     tr.appendChild(td);
-    let input = document.createElement("input");
+    const input = document.createElement("input");
     td.appendChild(input);
     input.type = "text";
     input.value = "";
     input.placeholder = "Name";
-    input.addEventListener("keydown", function(evt) {
+    input.addEventListener("keydown", function (evt) {
       tastatur.detectModifiers(evt);
       if (!tastatur.modifiers && evt.key === "Enter") {
         bedeutungenGerueste.add();
@@ -92,12 +92,12 @@ let bedeutungenGerueste = {
     });
     td = document.createElement("td");
     tr.appendChild(td);
-    let a = document.createElement("a");
+    const a = document.createElement("a");
     td.appendChild(a);
     a.classList.add("icon-link", "icon-add");
     a.href = "#";
-    a.textContent = " ";
-    a.addEventListener("click", function(evt) {
+    a.textContent = "\u00A0";
+    a.addEventListener("click", function (evt) {
       evt.preventDefault();
       bedeutungenGerueste.add();
     });
@@ -105,8 +105,8 @@ let bedeutungenGerueste = {
 
   // Gerüst hinzufügen
   add () {
-    const name = document.querySelector("#gerueste-cont tr:last-child input").value,
-      id = bedeutungenGerueste.nextId.toString(); // wichtig, dass es ein String ist!
+    const name = document.querySelector("#gerueste-cont tr:last-child input").value;
+    const id = bedeutungenGerueste.nextId.toString(); // wichtig, dass es ein String ist!
     bedeutungen.data.gr[id] = {};
     bedeutungen.data.gr[id].na = helfer.textTrim(name, true);
     bedeutungen.data.gr[id].sl = 2;
@@ -121,19 +121,19 @@ let bedeutungenGerueste = {
   //   a = Element
   //     (Lösch-Link des Gerüsts)
   del (a) {
-    a.addEventListener("click", function(evt) {
+    a.addEventListener("click", function (evt) {
       evt.preventDefault();
-      const id = this.parentNode.parentNode.dataset.id,
-        name = bedeutungen.data.gr[id].na ? bedeutungen.data.gr[id].na : "";
+      const id = this.parentNode.parentNode.dataset.id;
+      const name = bedeutungen.data.gr[id].na ? bedeutungen.data.gr[id].na : "";
       dialog.oeffnen({
         typ: "confirm",
-        text: `Soll <i>Gerüst ${id}${name ? ` (${name})` : ""}</i> wirklich gelöscht werden?`,
+        text: `Soll <i>Gerüst\u00A0${id}${name ? ` (${name})` : ""}</i> wirklich gelöscht werden?`,
         callback: () => {
           if (!dialog.antwort) {
             return;
           }
           // betroffene Bedeutungen aus den Karteikarten zum Löschen vormerken
-          for (let i in data.ka) {
+          for (const i in data.ka) {
             if (!data.ka.hasOwnProperty(i)) {
               continue;
             }
@@ -173,12 +173,12 @@ let bedeutungenGerueste = {
   //   td = Element
   //     (die Tabellenzelle, in der der Name geändert werden soll)
   setName (td) {
-    td.addEventListener("click", function() {
+    td.addEventListener("click", function () {
       if (this.firstChild.nodeType === 1) {
         return;
       }
       const id = this.parentNode.dataset.id;
-      let input = document.createElement("input");
+      const input = document.createElement("input");
       input.type = "text";
       input.value = bedeutungen.data.gr[id].na;
       input.placeholder = "Name";
@@ -192,7 +192,7 @@ let bedeutungenGerueste = {
   //   input = Element
   //     (das aktive Input-Element)
   writeNameListener (input) {
-    input.addEventListener("keydown", function(evt) {
+    input.addEventListener("keydown", function (evt) {
       tastatur.detectModifiers(evt);
       if (!tastatur.modifiers && evt.key === "Enter") {
         bedeutungenGerueste.writeName(this, true);
@@ -201,10 +201,9 @@ let bedeutungenGerueste = {
       if (!tastatur.modifiers && evt.key === "Escape") {
         evt.stopPropagation();
         bedeutungenGerueste.writeName(this, false);
-        return;
       }
     });
-    input.addEventListener("blur", function() {
+    input.addEventListener("blur", function () {
       setTimeout(() => {
         bedeutungenGerueste.writeName(this, false);
       }, 5); // das gibt sonst Probleme, wenn das Enter-Event bereits abgefeuert wurde
@@ -233,7 +232,7 @@ let bedeutungenGerueste = {
     } else {
       input.parentNode.classList.remove("leer");
     }
-    let text = document.createTextNode(name);
+    const text = document.createTextNode(name);
     input.parentNode.replaceChild(text, input);
   },
 };

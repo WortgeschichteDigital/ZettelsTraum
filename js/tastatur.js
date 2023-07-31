@@ -1,6 +1,6 @@
 "use strict";
 
-let tastatur = {
+const tastatur = {
   // Abfangen der Tastatur-Events initialisieren
   //   evt = Object
   //     (Event-Object des keydown)
@@ -23,8 +23,8 @@ let tastatur = {
   //   evt = Object
   //     (Event-Object des keydown)
   haupt (evt) {
-    const m = tastatur.modifiers,
-      overlayId = overlay.oben();
+    const m = tastatur.modifiers;
+    const overlayId = overlay.oben();
     // Key "Escape"
     if (!m && evt.key === "Escape") {
       // falls die Suchleiste auf ist und den Fokus hat
@@ -57,7 +57,7 @@ let tastatur = {
       }
       // Overlay-Fenster schließen
       if (overlayId) {
-        let link = document.querySelector(`#${overlayId} h2 .icon-schliessen`);
+        const link = document.querySelector(`#${overlayId} h2 .icon-schliessen`);
         overlay.schliessen(link);
         return;
       }
@@ -99,7 +99,7 @@ let tastatur = {
     }
     // Key " " || "PageUp" || "PageDown"
     if (!m && /^( |PageDown|PageUp)$/.test(evt.key)) {
-      let leiste = document.getElementById("suchleiste");
+      const leiste = document.getElementById("suchleiste");
       if (leiste && leiste.classList.contains("an")) {
         suchleiste.scrollen(evt);
       } else {
@@ -107,7 +107,7 @@ let tastatur = {
       }
       return;
     } else if (m === "Ctrl" && /^(PageUp|PageDown)$/.test(evt.key) && helfer.belegOffen()) {
-      const next = evt.key === "PageDown" ? true : false;
+      const next = evt.key === "PageDown";
       beleg.ctrlNavi(next);
       return;
     }
@@ -159,9 +159,9 @@ let tastatur = {
         } else if (evt.key === "k") {
           beleg.ctrlKuerzen();
         } else if (evt.key === "m") {
-          let id = document.activeElement.id;
+          const id = document.activeElement.id;
           if (/^beleg-(bd|bs)$/.test(id)) {
-            let a = document.getElementById(id).closest("tr").previousSibling.querySelector(".icon-tools-sonderzeichen");
+            const a = document.getElementById(id).closest("tr").previousSibling.querySelector(".icon-tools-sonderzeichen");
             a.dispatchEvent(new MouseEvent("click"));
           }
         } else if (evt.key === "t") {
@@ -186,7 +186,6 @@ let tastatur = {
       } else if (evt.key === "s" && !kartei.wort) {
         speichern.kaskade();
       }
-      return;
     }
   },
 
@@ -251,7 +250,7 @@ let tastatur = {
       return;
     }
     // NAVIGATION LINKS || RECHTS
-    let aktiv = document.activeElement;
+    const aktiv = document.activeElement;
     // Ist das aktive Element ein Anker oder ein Button?
     if (!(aktiv.nodeName === "A" || aktiv.nodeName === "INPUT" && aktiv.type === "button")) {
       return;
@@ -262,14 +261,14 @@ let tastatur = {
       parent = parent.parentNode;
     }
     // Elemente sammeln und Fokus-Position ermitteln
-    let elemente = [],
-      regA = /filter-kopf|icon-link|navi-link/;
+    const elemente = [];
+    let regA = /filter-kopf|icon-link|navi-link/;
     if (parent.parentNode.id === "liste-filter") {
       // sonst findet er auch die Icon-Links in der Filterleiste
       regA = /filter-kopf/;
     }
-    parent.querySelectorAll(`a, input[type="button"]`).forEach(e => {
-      if ( e.nodeName === "INPUT" || e.nodeName === "A" && regA.test(e.getAttribute("class")) ) {
+    parent.querySelectorAll('a, input[type="button"]').forEach(e => {
+      if (e.nodeName === "INPUT" || e.nodeName === "A" && regA.test(e.getAttribute("class"))) {
         elemente.push(e);
       }
     });
@@ -306,8 +305,8 @@ let tastatur = {
   //   evt = Object
   //     (Event-Object des keydown)
   neben (evt) {
-    const m = tastatur.modifiers,
-      overlayId = typeof overlay !== "undefined" ? overlay.oben() : "";
+    const m = tastatur.modifiers;
+    const overlayId = typeof overlay !== "undefined" ? overlay.oben() : "";
     // Key "Escape"
     if (!m && evt.key === "Escape") {
       // falls die Suchleiste auf ist und den Fokus hat
@@ -328,13 +327,13 @@ let tastatur = {
       }
       // Overlay-Fenster schließen (Dialog im XML-Fenster)
       if (overlayId) {
-        let link = document.querySelector(`#${overlayId} h2 .icon-schliessen`);
+        const link = document.querySelector(`#${overlayId} h2 .icon-schliessen`);
         overlay.schliessen(link);
         return;
       }
       // Bearbeitung Textarea abbrechen (XML-Fenster)
       if (winInfo.typ === "xml" && document.activeElement.nodeName === "TEXTAREA") {
-        let button = document.activeElement.closest(".pre-cont").querySelector(`input[value="Abbrechen"]`);
+        const button = document.activeElement.closest(".pre-cont").querySelector('input[value="Abbrechen"]');
         button.dispatchEvent(new Event("click"));
         return;
       }
@@ -350,7 +349,7 @@ let tastatur = {
         m === "Ctrl" && evt.key === "Enter" &&
         document.activeElement.nodeName === "TEXTAREA") {
       evt.preventDefault();
-      let button = document.activeElement.closest(".pre-cont").querySelector(`[value="Speichern"]`);
+      const button = document.activeElement.closest(".pre-cont").querySelector('[value="Speichern"]');
       button.dispatchEvent(new MouseEvent("click"));
       return;
     }
@@ -371,7 +370,7 @@ let tastatur = {
         (m === "Alt" || m === "Ctrl") &&
         /^(ArrowLeft|ArrowRight)$/.test(evt.key)) {
       if (m === "Alt") {
-        const dir = evt.key === "ArrowRight" ? true : false;
+        const dir = evt.key === "ArrowRight";
         hilfe.historyNavi(dir);
       } else if (m === "Ctrl") {
         switch (evt.key) {
@@ -436,7 +435,6 @@ let tastatur = {
       } else if (evt.key === "s") {
         xml.speichernKartei();
       }
-      return;
     }
   },
 
@@ -447,7 +445,7 @@ let tastatur = {
   //   evt = Object
   //     (Event-Object des keydown)
   detectModifiers (evt) {
-    let s = [];
+    const s = [];
     if (evt.altKey) {
       s.push("Alt");
     }
@@ -480,7 +478,7 @@ let tastatur = {
     if (process.platform !== "darwin") {
       return;
     }
-    let kuerzel = {
+    const kuerzel = {
       Strg: "⌘",
       Alt: "⌥",
     };
@@ -514,7 +512,7 @@ let tastatur = {
     if (process.platform !== "darwin") {
       return text;
     }
-    let kuerzel = {
+    const kuerzel = {
       Strg: "⌘",
       Alt: "⌥",
     };

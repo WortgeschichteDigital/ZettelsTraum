@@ -1,6 +1,6 @@
 "use strict";
 
-let dialog = {
+const dialog = {
   // Speicherort für Funktionen, die nach dem Schließen
   // des Dialogs ausgeführt werden.
   callback: null,
@@ -18,20 +18,20 @@ let dialog = {
   //     (Platzhaltertext für das Prompt-Feld)
   //   funktion = function || undefined
   //     (Funktion, die nach dem Schließen des Dialogs ausgeführt werden soll)
-  oeffnen ({typ, text, platzhalter = "", callback = null}) {
+  oeffnen ({ typ, text, platzhalter = "", callback = null }) {
     // Text eintragen
     dialog.text(text);
     // Funktion zwischenspeichern
     dialog.callback = callback;
     // Overlay öffnen
-    let fenster = document.getElementById("dialog");
+    const fenster = document.getElementById("dialog");
     overlay.oeffnen(fenster);
     // Layout vorbereiten + Fokus setzen
     if (typ === "prompt") { // Prompt
       fenster.classList.add("prompt");
       fenster.classList.remove("confirm");
       fenster.classList.remove("alert");
-      let textfeld = fenster.querySelector("input");
+      const textfeld = fenster.querySelector("input");
       textfeld.value = "";
       textfeld.placeholder = platzhalter;
       textfeld.focus();
@@ -59,26 +59,26 @@ let dialog = {
   //     (Text, der eingetragen werden soll)
   text (text) {
     // alten Text löschen
-    let cont = document.getElementById("dialog-text");
+    const cont = document.getElementById("dialog-text");
     cont.replaceChildren();
     // neue Absätze hinzufügen
-    let absaetze = text.split("\n");
+    const absaetze = text.split("\n");
     for (let i = 0, len = absaetze.length; i < len; i++) {
       if (/^<h3>/.test(absaetze[i])) { // Überschrift
-        let h3 = document.createElement("h3");
+        const h3 = document.createElement("h3");
         h3.innerHTML = absaetze[i].match(/<h3>(.+)<\/h3>/)[1];
         cont.appendChild(h3);
         continue;
       } else if (/^<p class/.test(absaetze[i])) { // vordefinierter Absatz
-        let ab = absaetze[i].match(/<p class="(.+?)">(.+?)<\/p>/),
-          p = document.createElement("p");
+        const ab = absaetze[i].match(/<p class="(.+?)">(.+?)<\/p>/);
+        const p = document.createElement("p");
         p.classList.add(ab[1]);
         p.innerHTML = ab[2];
         cont.appendChild(p);
         continue;
       } else if (/^<div class/.test(absaetze[i])) { // vordefinierter <div>
-        let d = absaetze[i].match(/<div class="(.+?)">(.*?)<\/div>/),
-          div = document.createElement("div");
+        const d = absaetze[i].match(/<div class="(.+?)">(.*?)<\/div>/);
+        const div = document.createElement("div");
         div.classList.add(d[1]);
         if (d[2]) {
           div.innerHTML = d[2];
@@ -87,7 +87,7 @@ let dialog = {
         continue;
       }
       // normaler Absatz
-      let p = document.createElement("p");
+      const p = document.createElement("p");
       p.innerHTML = absaetze[i];
       cont.appendChild(p);
     }

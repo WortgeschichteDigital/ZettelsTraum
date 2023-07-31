@@ -1,6 +1,6 @@
 "use strict";
 
-let beleg = {
+const beleg = {
   // speichert, ob die Leseansicht gerade angezeigt wird
   // (ansonsten sieht man die Formularansicht)
   leseansicht: false,
@@ -64,10 +64,10 @@ let beleg = {
 
   // ermittelt die nächste ID, die in der aktuellen Kartei vergeben werden sollte
   idErmitteln () {
-    let id_karte = 0,
-      ids = Object.keys(data.ka);
+    let id_karte = 0;
+    const ids = Object.keys(data.ka);
     for (let i = 0, len = ids.length; i < len; i++) {
-      let id = parseInt(ids[i], 10);
+      const id = parseInt(ids[i], 10);
       if (id > id_karte) {
         id_karte = id;
       }
@@ -118,7 +118,7 @@ let beleg = {
     beleg.id_karte = id;
     // Daten des Belegs kopieren
     beleg.data = {};
-    for (let i in data.ka[id]) {
+    for (const i in data.ka[id]) {
       if (!data.ka[id].hasOwnProperty(i)) {
         continue;
       }
@@ -126,10 +126,10 @@ let beleg = {
         if (helfer.checkType("Object", data.ka[id][i][0])) {
           beleg.data[i] = [];
           for (let j = 0, len = data.ka[id][i].length; j < len; j++) {
-            beleg.data[i].push({...data.ka[id][i][j]});
+            beleg.data[i].push({ ...data.ka[id][i][j] });
           }
         } else {
-          beleg.data[i] = [...data.ka[id][i]];
+          beleg.data[i] = [ ...data.ka[id][i] ];
         }
       } else {
         beleg.data[i] = data.ka[id][i];
@@ -161,13 +161,13 @@ let beleg = {
     beleg.ctrlSpringenFormReg.again = false;
     beleg.ctrlSpringenFormReset();
     // Beleg-Titel eintragen
-    let beleg_titel = document.getElementById("beleg-titel"),
-      titel_text = document.createTextNode(`Beleg #${beleg.id_karte}`);
+    const beleg_titel = document.getElementById("beleg-titel");
+    const titel_text = document.createTextNode(`Beleg #${beleg.id_karte}`);
     beleg_titel.replaceChild(titel_text, beleg_titel.firstChild);
     // Feld-Werte eintragen
-    let felder = document.querySelectorAll("#beleg input, #beleg textarea");
+    const felder = document.querySelectorAll("#beleg input, #beleg textarea");
     for (let i = 0, len = felder.length; i < len; i++) {
-      let feld = felder[i].id.replace(/^beleg-/, "");
+      const feld = felder[i].id.replace(/^beleg-/, "");
       if (felder[i].type === "button") {
         continue;
       } else if (feld === "dta") {
@@ -198,7 +198,7 @@ let beleg = {
     // Formular einblenden
     helfer.sektionWechseln("beleg");
     // Textarea zurücksetzen
-    document.querySelectorAll("#beleg textarea").forEach(function(textarea) {
+    document.querySelectorAll("#beleg textarea").forEach(function (textarea) {
       textarea.scrollTop = 0;
       helfer.textareaGrow(textarea);
     });
@@ -213,11 +213,11 @@ let beleg = {
     await new Promise(resolve => setTimeout(() => resolve(true), 25));
     if (neu && !beleg.leseansicht) {
       // Was ist in der Zwischenablage?
-      const cb = modules.clipboard.readText().trim(),
-        ppnCp = belegImport.PPNCheck({ppn: cb}) ? true : false,
-        dwds = belegImport.DWDSXMLCheck(cb),
-        xml = belegImport.XMLCheck({xmlStr: cb}),
-        bibtexCp = belegImport.BibTeXCheck(cb);
+      const cb = modules.clipboard.readText().trim();
+      const ppnCp = belegImport.PPNCheck({ ppn: cb });
+      const dwds = belegImport.DWDSXMLCheck(cb);
+      const xml = belegImport.XMLCheck({ xmlStr: cb });
+      const bibtexCp = belegImport.BibTeXCheck(cb);
       if (/^https?:\/\/www\.deutschestextarchiv\.de\//.test(cb)) { // DTA-URL
         beleg.formularImport("dta");
       } else if (dwds) { // DWDS-Snippet
@@ -230,7 +230,7 @@ let beleg = {
         belegImport.BibTeX(cb, "– Zwischenablage –", false);
         beleg.formularImport("bibtex");
       } else if (ppnCp) {
-        belegImport.PPNAnzeigeKarteikarte({typ: "xml"});
+        belegImport.PPNAnzeigeKarteikarte({ typ: "xml" });
       } else if (belegImport.Datei.data.length) {
         beleg.formularImport(belegImport.Datei.typ);
       } else {
@@ -246,7 +246,7 @@ let beleg = {
   // Bedeutung in das Formular eintragen
   formularBedeutung () {
     // Wert ermitteln
-    let bd = [];
+    const bd = [];
     for (let i = 0, len = beleg.data.bd.length; i < len; i++) {
       if (beleg.data.bd[i].gr !== data.bd.gn) { // Bedeutungen aus anderen Gerüsten nicht drucken
         continue;
@@ -260,7 +260,7 @@ let beleg = {
       }));
     }
     // Wert ins Feld eintragen
-    let feld = document.getElementById("beleg-bd");
+    const feld = document.getElementById("beleg-bd");
     feld.value = bd.join("\n");
     // Feld anpassen
     feld.scrollTop = 0;
@@ -270,7 +270,7 @@ let beleg = {
   // Label der Bedeutung auffrischen
   formularBedeutungLabel () {
     const text = `Bedeutung${bedeutungen.aufbauenH2Details(data.bd, true)}`;
-    let label = document.querySelector(`[for="beleg-bd"]`);
+    const label = document.querySelector('[for="beleg-bd"]');
     label.textContent = text;
   },
 
@@ -278,8 +278,8 @@ let beleg = {
   //   feld = Element
   //     (das Formularfeld, das geändert wurde)
   formularGeaendert (feld) {
-    feld.addEventListener("input", function() {
-      let feld = this.id.replace(/^beleg-/, "");
+    feld.addEventListener("input", function () {
+      const feld = this.id.replace(/^beleg-/, "");
       if (/^dta(-bis)*$/.test(feld)) { // #beleg-dta + #beleg-dta-bis gehören nicht zur Kartei, dienen nur zum DTA-Import
         if (feld === "dta" &&
             /^https?:\/\/www\.deutschestextarchiv\.de\//.test(this.value)) { // Bis-Seite ermitteln und eintragen
@@ -315,7 +315,7 @@ let beleg = {
   //   radio = Element
   //     (Radio-Button zum Umschalten des Import-Formulars)
   formularImportListener (radio) {
-    radio.addEventListener("change", function() {
+    radio.addEventListener("change", function () {
       const src = this.id.replace(/.+-/, "");
       beleg.formularImport(src);
     });
@@ -328,7 +328,7 @@ let beleg = {
     // ggf. src umstellen
     src = src === "ppn" ? "xml" : src;
     // Checkbox für ISO 8859-15 umstellen
-    let latin1 = document.getElementById("beleg-datei-latin1");
+    const latin1 = document.getElementById("beleg-datei-latin1");
     if (src === "dereko") {
       latin1.checked = true;
     } else {
@@ -336,9 +336,9 @@ let beleg = {
     }
     // Radio-Buttons umstellen
     // (weil Wechsel nicht nur auf Klick, sondern auch automatisch geschieht)
-    let radios = ["beleg-import-dta", "beleg-import-dwds", "beleg-import-dereko", "beleg-import-xml", "beleg-import-bibtex"];
-    for (let r of radios) {
-      let radio = document.getElementById(r);
+    const radios = [ "beleg-import-dta", "beleg-import-dwds", "beleg-import-dereko", "beleg-import-xml", "beleg-import-bibtex" ];
+    for (const r of radios) {
+      const radio = document.getElementById(r);
       if (r.includes(src)) {
         radio.checked = true;
       } else {
@@ -346,14 +346,14 @@ let beleg = {
       }
     }
     // Formular umstellen
-    let forms = ["beleg-form-dta", "beleg-form-datei"],
-      formsZiel = src;
+    const forms = [ "beleg-form-dta", "beleg-form-datei" ];
+    let formsZiel = src;
     if (/^(dwds|dereko|xml|bibtex)/.test(src)) {
       formsZiel = "datei";
     }
     let eleAktiv = null;
-    for (let f of forms) {
-      let ele = document.getElementById(f);
+    for (const f of forms) {
+      const ele = document.getElementById(f);
       if (f.includes(formsZiel)) {
         ele.classList.remove("aus");
         eleAktiv = ele;
@@ -363,7 +363,7 @@ let beleg = {
     }
     // Fokus setzen
     if (/^(dwds|dereko|xml|bibtex)$/.test(src)) {
-      let inputs = eleAktiv.querySelectorAll("input");
+      const inputs = eleAktiv.querySelectorAll("input");
       if (src === belegImport.Datei.typ &&
           belegImport.Datei.data.length ||
          belegImport.Datei.typ === "ppn") {
@@ -382,7 +382,7 @@ let beleg = {
   //   src = String
   //     (ID der Quelle, aus der importiert werden soll: dwds || dereko || xml || bibtex)
   formularImportDatei (src) {
-    let name = document.getElementById("beleg-datei-name");
+    const name = document.getElementById("beleg-datei-name");
     if (src === "dwds" && belegImport.Datei.typ === "dwds" ||
         src === "dereko" && belegImport.Datei.typ === "dereko" ||
         src === "xml" && belegImport.Datei.typ === "xml" ||
@@ -400,8 +400,8 @@ let beleg = {
   //   button = Element
   //     (der Button, auf den geklickt wurde)
   aktionButton (button) {
-    button.addEventListener("click", function() {
-      let aktion = this.id.replace(/^beleg-/, "");
+    button.addEventListener("click", function () {
+      const aktion = this.id.replace(/^beleg-/, "");
       if (aktion === "speichern") {
         beleg.aktionSpeichern();
       } else if (aktion === "abbrechen") {
@@ -425,9 +425,9 @@ let beleg = {
   //   nieSchliessen = true || undefined
   //     (die Karteikarte sollte nach dem Speichern auf keinen Fall geschlossen werden)
   aktionSpeichern (nieSchliessen = false) {
-    // Test: Datum angegeben?
-    let da = document.getElementById("beleg-da"),
-      dav = helfer.textTrim(da.value, true);
+    // Check: Datum angegeben?
+    const da = document.getElementById("beleg-da");
+    const dav = helfer.textTrim(da.value, true);
     if (!dav) {
       if (!optionen.data.einstellungen["karteikarte-keine-fehlermeldung"]) {
         dialog.oeffnen({
@@ -443,12 +443,12 @@ let beleg = {
       }
       return false;
     }
-    // Test: Datum mit vierstelliger Jahreszahl oder Jahrhundertangabe?
+    // Check: Datum mit vierstelliger Jahreszahl oder Jahrhundertangabe?
     if (!/[0-9]{4}|[0-9]{2}\.\sJh\./.test(dav)) {
       if (!optionen.data.einstellungen["karteikarte-keine-fehlermeldung"]) {
         dialog.oeffnen({
           typ: "alert",
-          text: "Das Datum muss eine vierstellige Jahreszahl (z. B. „1813“) oder eine Jahrhundertangabe (z. B. „17. Jh.“) enthalten.\nZusätzlich können auch andere Angaben gemacht werden (z. B. „ca. 1815“, „1610, vielleicht 1611“).",
+          text: "Das Datum muss eine vierstellige Jahreszahl (z.\u00A0B. „1813“) oder eine Jahrhundertangabe (z.\u00A0B. „17.\u00A0Jh.“) enthalten.\nZusätzlich können auch andere Angaben gemacht werden (z.\u00A0B. „ca. 1815“, „1610, vielleicht 1611“).",
           callback: () => {
             beleg.selectFormEle(da);
           },
@@ -459,8 +459,8 @@ let beleg = {
       }
       return false;
     }
-    // Test: Beleg angegeben?
-    let bs = document.getElementById("beleg-bs");
+    // Check: Beleg angegeben?
+    const bs = document.getElementById("beleg-bs");
     if (!helfer.textTrim(bs.value, true)) {
       if (!optionen.data.einstellungen["karteikarte-keine-fehlermeldung"]) {
         dialog.oeffnen({
@@ -476,8 +476,8 @@ let beleg = {
       }
       return false;
     }
-    // Test: Quelle angegeben?
-    let qu = document.getElementById("beleg-qu");
+    // Check: Quelle angegeben?
+    const qu = document.getElementById("beleg-qu");
     if (!helfer.textTrim(qu.value, true)) {
       if (!optionen.data.einstellungen["karteikarte-keine-fehlermeldung"]) {
         dialog.oeffnen({
@@ -499,10 +499,10 @@ let beleg = {
       return false;
     }
     // ggf. Format von Bedeutung, Wortbildung, Synonym und Textsorte anpassen
-    let bdFeld = document.getElementById("beleg-bd"),
-      ds = ["bd", "bl", "sy", "ts"];
+    const bdFeld = document.getElementById("beleg-bd");
+    const ds = [ "bd", "bl", "sy", "ts" ];
     for (let i = 0, len = ds.length; i < len; i++) {
-      let ds_akt = ds[i];
+      const ds_akt = ds[i];
       if (ds_akt === "bd") {
         bdFeld.value = beleg.bedeutungAufbereiten();
       } else {
@@ -518,7 +518,7 @@ let beleg = {
       }
     }
     // Bedeutung im Bedeutungsfeld hinzufügen
-    let bdFeldSp = bdFeld.value.split("\n");
+    const bdFeldSp = bdFeld.value.split("\n");
     for (let i = 0, len = bdFeldSp.length; i < len; i++) {
       let zeile = bdFeldSp[i];
       // Bedeutungsfeld könnte leer sein
@@ -555,7 +555,7 @@ let beleg = {
     // (für die Hervorhebung in der Liste)
     liste.statusGeaendert = beleg.id_karte.toString();
     // Objekt mit neuen Werten füllen
-    for (let i in beleg.data) {
+    for (const i in beleg.data) {
       if (!beleg.data.hasOwnProperty(i)) {
         continue;
       }
@@ -563,10 +563,10 @@ let beleg = {
         if (helfer.checkType("Object", beleg.data[i][0])) {
           data.ka[beleg.id_karte][i] = [];
           for (let j = 0, len = beleg.data[i].length; j < len; j++) {
-            data.ka[beleg.id_karte][i].push({...beleg.data[i][j]});
+            data.ka[beleg.id_karte][i].push({ ...beleg.data[i][j] });
           }
         } else {
-          data.ka[beleg.id_karte][i] = [...beleg.data[i]];
+          data.ka[beleg.id_karte][i] = [ ...beleg.data[i] ];
         }
       } else {
         data.ka[beleg.id_karte][i] = beleg.data[i];
@@ -601,13 +601,13 @@ let beleg = {
   //   ele = Element
   //     (das Element, das selektiert werden soll)
   selectFormEle (ele) {
-    let hBody = document.querySelector("body > header").offsetHeight,
-      hKarte = document.querySelector("#beleg > header").offsetHeight,
-      hTitle = document.querySelector("#beleg-titel").offsetHeight,
-      quick = document.getElementById("quick"),
-      hQuick = quick.offsetHeight,
-      h = hBody + hKarte + hTitle,
-      rect = ele.getBoundingClientRect();
+    const hBody = document.querySelector("body > header").offsetHeight;
+    const hKarte = document.querySelector("#beleg > header").offsetHeight;
+    const hTitle = document.querySelector("#beleg-titel").offsetHeight;
+    const quick = document.getElementById("quick");
+    const hQuick = quick.offsetHeight;
+    let h = hBody + hKarte + hTitle;
+    const rect = ele.getBoundingClientRect();
     if (quick.classList.contains("an")) {
       h += hQuick;
     }
@@ -629,7 +629,7 @@ let beleg = {
     ele.classList.add("fehler");
     ele.addEventListener("input", fehlerEntfernen);
     ele.addEventListener("blur", fehlerEntfernen);
-    function fehlerEntfernen() {
+    function fehlerEntfernen () {
       ele.classList.remove("fehler");
       ele.removeEventListener("input", fehlerEntfernen);
       ele.removeEventListener("blur", fehlerEntfernen);
@@ -700,7 +700,7 @@ let beleg = {
   belegGeaendert (geaendert) {
     beleg.geaendert = geaendert;
     helfer.geaendert();
-    let asterisk = document.getElementById("beleg-geaendert");
+    const asterisk = document.getElementById("beleg-geaendert");
     if (geaendert) {
       asterisk.classList.remove("aus");
     } else {
@@ -732,7 +732,7 @@ let beleg = {
   //     (Element, auf dem das Event ausgeführt wird:
   //     <input type="checkbox">, <input type="number">, <input type="text">, <textarea>)
   belegSpeichern (input) {
-    input.addEventListener("keydown", function(evt) {
+    input.addEventListener("keydown", function (evt) {
       tastatur.detectModifiers(evt);
       if ((!tastatur.modifiers || tastatur.modifiers === "Ctrl") && evt.key === "Enter") {
         if (tastatur.modifiers === "Ctrl") {
@@ -748,19 +748,18 @@ let beleg = {
         if (document.getElementById("dropdown") &&
             /^beleg-(bd|bl|kr|sy|ts)/.test(this.id)) {
           evt.preventDefault();
-          return;
         }
       }
     });
     // DTA-Feld ggf. direkt aus dem Clipboard füttern
     if (input.id === "beleg-dta") {
-      input.addEventListener("focus", function() {
+      input.addEventListener("focus", function () {
         if (this.value || !optionen.data.einstellungen["url-eintragen"]) {
           return;
         }
         const cb = modules.clipboard.readText();
         if (/^https?:\/\/www\.deutschestextarchiv\.de\//.test(cb)) {
-          setTimeout(function() {
+          setTimeout(function () {
             // der Fokus könnte noch in einem anderen Feld sein, das dann gefüllt werden würde;
             // man muss dem Fokus-Wechsel ein bisschen Zeit geben
             if (document.activeElement.id !== "beleg-dta") {
@@ -790,8 +789,8 @@ let beleg = {
       return;
     }
     // Welche Daten gibt es in der Zwischenablage?
-    const clipHtml = evt.clipboardData.getData("text/html"),
-      clipText = evt.clipboardData.getData("text/plain");
+    const clipHtml = evt.clipboardData.getData("text/html");
+    const clipText = evt.clipboardData.getData("text/plain");
     if (!clipHtml && !clipText) {
       return;
     }
@@ -818,7 +817,7 @@ let beleg = {
   //   a = Element
   //     (Link, auf den geklickt wurde)
   toolsKlick (a) {
-    a.addEventListener("click", function(evt) {
+    a.addEventListener("click", function (evt) {
       evt.preventDefault();
       if (this.id === "beleg-meta-toggle") {
         beleg.metadatenToggle(true);
@@ -844,8 +843,8 @@ let beleg = {
   //     (Link, auf den geklickt wurde)
   toolsKopieren (link) {
     // Datensatz ermitteln. Ist der Wert gefüllt?
-    const ds = link.parentNode.parentNode.firstChild.getAttribute("for").replace(/^beleg-/, ""),
-      text = beleg.data[ds];
+    const ds = link.parentNode.parentNode.firstChild.getAttribute("for").replace(/^beleg-/, "");
+    const text = beleg.data[ds];
     if (!text) {
       return;
     }
@@ -872,10 +871,10 @@ let beleg = {
   //   cb = false | undefined
   //     (Text nicht Zwischenablage kopieren;
   //     nur wenn alle Belegtexte kopiert werden auf false)
-  toolsKopierenExec ({ds, obj, text, ele, cb = true}) {
+  toolsKopierenExec ({ ds, obj, text, ele, cb = true }) {
     // Ist Text ausgewählt und ist er im Bereich des Kopier-Icons?
     if (cb && window.getSelection().toString() &&
-        popup.getTargetSelection([ele])) {
+        popup.getTargetSelection([ ele ])) {
       modules.clipboard.write({
         text: popup.textauswahl.text,
         html: popup.textauswahl.html,
@@ -884,10 +883,10 @@ let beleg = {
     }
     // Kein Text ausgewählt => das gesamte Feld wird kopiert
     if (ds === "bs") { // Beleg
-      let p = text.replace(/\n\s*\n/g, "\n").split("\n"),
-        html = "";
+      const p = text.replace(/\n\s*\n/g, "\n").split("\n");
+      let html = "";
       p.forEach(text => {
-        text = beleg.toolsKopierenKlammern({text, html: true});
+        text = beleg.toolsKopierenKlammern({ text, html: true });
         if (optionen.data.einstellungen["textkopie-wort"]) {
           text = liste.belegWortHervorheben(text, true);
         }
@@ -896,7 +895,8 @@ let beleg = {
       // Referenz vorbereiten
       popup.referenz.data = obj;
       if (cb) {
-        let eleListe, eleKarte;
+        let eleListe;
+        let eleKarte;
         if (!ele) {
           // wenn die Leseansicht noch nie aufgebaut wurde,
           // kann ele === null sein; dann erfolgt das Kopieren immer
@@ -919,7 +919,7 @@ let beleg = {
       html = beleg.toolsKopierenAddJahr(html, true);
       text = text.replace(/<br>/g, "\n");
       text = text.replace(/<.+?>/g, "");
-      text = beleg.toolsKopierenKlammern({text});
+      text = beleg.toolsKopierenKlammern({ text });
       text = helfer.typographie(text);
       text = beleg.toolsKopierenAddQuelle(text, false, obj);
       text = beleg.toolsKopierenAddJahr(text, false);
@@ -930,8 +930,8 @@ let beleg = {
       // Text in Zwischenablage oder Text zurückgeben
       if (cb) {
         modules.clipboard.write({
-          text: text,
-          html: html,
+          text,
+          html,
         });
       } else {
         return {
@@ -941,13 +941,13 @@ let beleg = {
       }
     } else if (ds === "bd") { // Bedeutung
       const bd = beleg.bedeutungAufbereiten();
-      let bds = [];
-      bd.split("\n").forEach(function(i) {
-        let bd = beleg.bedeutungSuchen(i);
+      const bds = [];
+      bd.split("\n").forEach(function (i) {
+        const bd = beleg.bedeutungSuchen(i);
         if (!bd.id) {
-          let bdsTmp = [];
-          i.split(": ").forEach(function(j, n) {
-            let vor = "   ";
+          const bdsTmp = [];
+          i.split(": ").forEach(function (j, n) {
+            let vor = "\u00A0".repeat(3);
             if (!n) {
               vor = "";
             }
@@ -963,13 +963,13 @@ let beleg = {
         }
       });
       let html = "";
-      bds.forEach(function(i) {
+      bds.forEach(function (i) {
         html += `<p>${i}</p>`;
       });
-      let text = bds.join("\n").replace(/<.+?>/g, "");
+      const text = bds.join("\n").replace(/<.+?>/g, "");
       modules.clipboard.write({
-        text: text,
-        html: html,
+        text,
+        html,
       });
     } else { // alle anderen Felder
       modules.clipboard.writeText(text);
@@ -985,7 +985,7 @@ let beleg = {
   //     (Belegtext, in dem die Klammern aufbereitet werden sollen)
   //   html = true | undefined
   //     (Text wird in HTML formatiert)
-  toolsKopierenKlammern ({text, html = false}) {
+  toolsKopierenKlammern ({ text, html = false }) {
     // Bindestriche einfügen
     text = text.replace(/\[¬\]([A-ZÄÖÜ])/g, (m, p1) => `-${p1}`);
     // technische Klammern entfernen
@@ -1000,7 +1000,7 @@ let beleg = {
         r = m.replace(/^\[{2}/, "[").replace(/\]{2}$/, "]");
       }
       if (html && optionen.data.einstellungen["textkopie-klammern-farbe"]) {
-        let farbe = typ === "loeschung" ? "#f00" : "#00f";
+        const farbe = typ === "loeschung" ? "#f00" : "#00f";
         r = `<span style="color: ${farbe}">${r}</span>`;
       }
       return r;
@@ -1023,10 +1023,10 @@ let beleg = {
   //     (Text soll um eine in html-formatierte Angabe ergänzt werden)
   toolsKopierenAddJahr (text, html) {
     // ID und Jahr ermitteln
-    let id = xml.belegId({}),
-      jahr = helferXml.datum(popup.referenz.data.da, false, true); // könnte auch Jh. sein
+    const id = xml.belegId({});
+    const jahr = helferXml.datum(popup.referenz.data.da, false, true); // könnte auch Jh. sein
     // Elemente für Überschrift ermitteln
-    let h = [];
+    const h = [];
     if (optionen.data.einstellungen["textkopie-h-jahr"]) {
       h.push(jahr);
     }
@@ -1061,7 +1061,7 @@ let beleg = {
   toolsKopierenAddQuelle (text, html, obj) {
     if (html) {
       text += "<hr>";
-      let quelle = obj.qu.split("\n");
+      const quelle = obj.qu.split("\n");
       quelle.forEach(i => {
         i = helfer.textTrim(i, true);
         if (!i) {
@@ -1089,7 +1089,7 @@ let beleg = {
     }
     if (html) {
       text += "<hr>";
-      let notizen = obj.no.trim().split("\n");
+      const notizen = obj.no.trim().split("\n");
       notizen.forEach(i => {
         i = helfer.textTrim(i, true);
         if (!i) {
@@ -1110,9 +1110,9 @@ let beleg = {
   toolsEinfuegen (link) {
     // Element ermitteln
     // Text einlesen
-    const id = link.closest("th").firstChild.getAttribute("for"),
-      ds = id.replace(/^beleg-/, "");
-    let feld = document.getElementById(id);
+    const id = link.closest("th").firstChild.getAttribute("for");
+    const ds = id.replace(/^beleg-/, "");
+    const feld = document.getElementById(id);
     // Text auslesen
     let text = "";
     if (id === "beleg-bs") {
@@ -1173,7 +1173,7 @@ let beleg = {
   //     (nur ein absolutes Minimum an Tags bleibt erhalten)
   toolsEinfuegenHtml (html, minimum = false) {
     // wenn <body> => splitten
-    let body = html.split(/<body.*?>/);
+    const body = html.split(/<body.*?>/);
     if (body.length > 1) {
       html = body[1];
     }
@@ -1181,11 +1181,11 @@ let beleg = {
     html = html.replace(/<style.*?>(.|\n)+?<\/style>/g, "");
     html = html.replace(/<!--.+?-->/gs, "");
     // Inline-Styles löschen (widerspricht sonst der Content-Security-Policy)
-    html = html.replace(/<([a-zA-Z0-9]+) .+?>/g, function(m, p1) {
+    html = html.replace(/<([a-zA-Z0-9]+) .+?>/g, function (m, p1) {
       return `<${p1}>`;
     });
     // HTML in temporären Container schieben
-    let container = document.createElement("div");
+    const container = document.createElement("div");
     container.innerHTML = html;
     // Inline-Tags, die erhalten bleiben bzw. ersetzt werden sollen
     let inline_keep = [
@@ -1205,31 +1205,31 @@ let beleg = {
       "VAR",
     ];
     let speziell = {
-      "BIG": { // obsolete!
+      BIG: { // obsolete!
         ele: "span",
         class: "dta-groesser",
       },
-      "H1": {
+      H1: {
         ele: "span",
         class: "dta-groesser",
       },
-      "H2": {
+      H2: {
         ele: "span",
         class: "dta-groesser",
       },
-      "H3": {
+      H3: {
         ele: "span",
         class: "dta-groesser",
       },
-      "H4": {
+      H4: {
         ele: "span",
         class: "dta-groesser",
       },
-      "H5": {
+      H5: {
         ele: "span",
         class: "dta-groesser",
       },
-      "H6": {
+      H6: {
         ele: "span",
         class: "dta-groesser",
       },
@@ -1245,24 +1245,24 @@ let beleg = {
     }
     // Text extrahieren
     let text = "";
-    container.childNodes.forEach(function(i) {
+    container.childNodes.forEach(function (i) {
       ana(i, false);
     });
     // erhaltene Inline-Auszeichnungen korrigieren
     Object.keys(speziell).forEach(tag => {
-      let reg = new RegExp(`\\[#(${tag})\\](.+?)\\[\\/${tag}\\]`, "g");
-      text = text.replace(reg, function(m, p1, p2) {
+      const reg = new RegExp(`\\[#(${tag})\\](.+?)\\[\\/${tag}\\]`, "g");
+      text = text.replace(reg, function (m, p1, p2) {
         let start = `<${speziell[p1].ele}`;
         if (speziell[p1].class) {
           start += ` class="${speziell[p1].class}"`;
-        } 
+        }
         return `${start}>${p2}</${speziell[p1].ele}>`;
       });
     });
     for (let i = 0, len = inline_keep.length; i < len; i++) {
       const tag = inline_keep[i];
-      let reg = new RegExp(`\\[#${tag}\\](.+?)\\[\\/${tag}\\]`, "g");
-      text = text.replace(reg, function(m, p1) {
+      const reg = new RegExp(`\\[#${tag}\\](.+?)\\[\\/${tag}\\]`, "g");
+      text = text.replace(reg, function (m, p1) {
         return `<${tag.toLowerCase()}>${p1}</${tag.toLowerCase()}>`;
       });
     }
@@ -1302,7 +1302,7 @@ let beleg = {
             preformatted = true;
           }
         }
-        ele.childNodes.forEach(function(i) {
+        ele.childNodes.forEach(function (i) {
           ana(i, preformatted);
         });
       }
@@ -1324,12 +1324,12 @@ let beleg = {
       return;
     }
     // Fokus in <textarea>
-    let ta = document.getElementById("beleg-bs");
+    const ta = document.getElementById("beleg-bs");
     ta.focus();
     // Tags ermitteln
-    let tags = {
+    const tags = {
       antiqua: {
-        start: `<span class="dta-antiqua">`,
+        start: '<span class="dta-antiqua">',
         ende: "</span>",
       },
       autorenzusatz: {
@@ -1345,7 +1345,7 @@ let beleg = {
         ende: "",
       },
       caps: {
-        start: `<span class="dta-kapitaelchen">`,
+        start: '<span class="dta-kapitaelchen">',
         ende: "</span>",
       },
       italic: {
@@ -1357,15 +1357,15 @@ let beleg = {
         ende: "]]",
       },
       mark: {
-        start: `<mark class="user">`,
+        start: '<mark class="user">',
         ende: "</mark>",
       },
       size: {
-        start: `<span class="dta-groesser">`,
+        start: '<span class="dta-groesser">',
         ende: "</span>",
       },
       spacing: {
-        start: `<span class="dta-gesperrt">`,
+        start: '<span class="dta-gesperrt">',
         ende: "</span>",
       },
       streichung: {
@@ -1397,15 +1397,15 @@ let beleg = {
       str_sel = window.getSelection().toString();
     }
     // Auswahl ermitteln
-    let start = ta.selectionStart,
-      ende = ta.selectionEnd,
-      str_start = ta.value.substring(0, start),
-      str_ende = ta.value.substring(ende);
+    let start = ta.selectionStart;
+    let ende = ta.selectionEnd;
+    let str_start = ta.value.substring(0, start);
+    let str_ende = ta.value.substring(ende);
     // illegales Nesting von Inline-Tags?
     if (beleg.toolsTextNesting(str_sel)) {
       dialog.oeffnen({
         typ: "alert",
-        text: `Die Formatierung kann an dieser Position nicht vorgenommen werden.\n<h3>Fehlermeldung</h3>\nillegale Verschachtelung`,
+        text: "Die Formatierung kann an dieser Position nicht vorgenommen werden.\n<h3>Fehlermeldung</h3>\nillegale Verschachtelung",
         callback: () => {
           ta.focus();
         },
@@ -1413,8 +1413,8 @@ let beleg = {
       return;
     }
     // Aktion durchführen
-    let reg_start = new RegExp(`${helfer.escapeRegExp(tags[aktion].start)}$`),
-      reg_ende = new RegExp(`^${helfer.escapeRegExp(tags[aktion].ende)}`);
+    const reg_start = new RegExp(`${helfer.escapeRegExp(tags[aktion].start)}$`);
+    const reg_ende = new RegExp(`^${helfer.escapeRegExp(tags[aktion].ende)}`);
     if (aktion !== "br" && reg_start.test(str_start) && reg_ende.test(str_ende)) { // Tag entfernen
       str_start = str_start.replace(reg_start, "");
       str_ende = str_ende.replace(reg_ende, "");
@@ -1441,7 +1441,7 @@ let beleg = {
   //     (String mit [oder ohne] HTML-Tags)
   toolsTextNesting (str) {
     // Sind überhaupt Tags im String?
-    let treffer = {
+    const treffer = {
       auf: str.match(/<[a-z1-6]+/g),
       zu: str.match(/<\/[a-z1-6]+>/g),
     };
@@ -1449,17 +1449,17 @@ let beleg = {
       return false;
     }
     // Analysieren, ob zuerst ein schließender Tag erscheint
-    let first_start = str.match(/<[a-z1-6]+/),
-      first_end = str.match(/<\/[a-z1-6]+/);
+    const first_start = str.match(/<[a-z1-6]+/);
+    const first_end = str.match(/<\/[a-z1-6]+/);
     if (first_start && first_end && first_end.index < first_start.index) {
       return true; // offenbar illegales Nesting
     }
     // Anzahl der Treffer pro Tag ermitteln
-    let tags = {
+    const tags = {
       auf: {},
-      zu: {}
+      zu: {},
     };
-    for (let i in treffer) {
+    for (const i in treffer) {
       if (!treffer.hasOwnProperty(i)) {
         continue;
       }
@@ -1476,11 +1476,11 @@ let beleg = {
     }
     // Analysieren, ob es Diskrepanzen zwischen den
     // öffnenden und schließenden Tags gibt
-    let arr = ["auf", "zu"];
+    const arr = [ "auf", "zu" ];
     for (let i = 0; i < 2; i++) {
-      const a = arr[i],
-        b = arr[i === 1 ? 0 : 1];
-      for (let tag in tags[a]) {
+      const a = arr[i];
+      const b = arr[i === 1 ? 0 : 1];
+      for (const tag in tags[a]) {
         if (!tags[a].hasOwnProperty(tag)) {
           continue;
         }
@@ -1507,10 +1507,10 @@ let beleg = {
   toolsAufrufdatum () {
     const qu = document.getElementById("beleg-qu");
     qu.focus();
-    const heute = new Date(),
-      start = qu.value.substring(0, qu.selectionStart),
-      ende = qu.value.substring(qu.selectionStart),
-      leerzeichen = / $/.test(start) ? "" : " ";
+    const heute = new Date();
+    const start = qu.value.substring(0, qu.selectionStart);
+    const ende = qu.value.substring(qu.selectionStart);
+    const leerzeichen = / $/.test(start) ? "" : " ";
     qu.value = start + leerzeichen + `(Aufrufdatum: ${heute.getDate()}. ${heute.getMonth() + 1}. ${heute.getFullYear()})` + ende;
   },
 
@@ -1518,21 +1518,21 @@ let beleg = {
   //   shortcut = true || undefined
   async toolsQuelleLaden (shortcut = false) {
     // Zwischenspeicher für Änderungen
-    let aenderungen = {};
+    const aenderungen = {};
     // Titelinfos aus bx laden
-    let bx = beleg.bxTyp({bx: beleg.data.bx});
+    const bx = beleg.bxTyp({ bx: beleg.data.bx });
     if (bx.typ) {
       let titel = "";
       if (bx.typ === "bibtex") {
-        let bibtex = belegImport.BibTeXLesen(bx.daten, true);
+        const bibtex = belegImport.BibTeXLesen(bx.daten, true);
         if (bibtex.length) {
           titel = bibtex[0].ds.qu;
         }
       } else if (bx.typ === "dereko") {
-        let reg = new RegExp(`^(${belegImport.DeReKoId})(.+)`);
+        const reg = new RegExp(`^(${belegImport.DeReKoId})(.+)`);
         titel = bx.daten.match(reg)[2] + ".";
       } else if (bx.typ === "xml-dwds") {
-        let dwds = belegImport.DWDSLesenXML({
+        const dwds = belegImport.DWDSLesenXML({
           clipboard: "",
           xml: bx.daten,
           returnResult: true,
@@ -1558,7 +1558,7 @@ let beleg = {
           });
         }
         if (direktAusDTA) {
-          titel = await beleg.toolsQuelleLadenDTA({url});
+          titel = await beleg.toolsQuelleLadenDTA({ url });
           if (titel) {
             aenderungen.Autor = {
               key: "au",
@@ -1566,7 +1566,7 @@ let beleg = {
               neu: belegImport.DTAData.autor.join("/"),
             };
             if (!aenderungen.Autor.neu) {
-              aenderungen.Autor.neu = "N. N.";
+              aenderungen.Autor.neu = "N.\u00A0N.";
             }
           }
         } else if (dwds.qu) {
@@ -1584,10 +1584,10 @@ let beleg = {
           titel = dwds.qu;
         }
       } else if (bx.typ === "xml-fundstelle") {
-        let daten = redLit.eingabeXMLFundstelle({xmlDoc: bx.daten, xmlStr: ""});
+        const daten = redLit.eingabeXMLFundstelle({ xmlDoc: bx.daten, xmlStr: "" });
         titel = daten.ds.qu;
       } else if (bx.typ === "xml-mods") {
-        let daten = redLit.eingabeXMLMODS({xmlDoc: bx.daten, xmlStr: ""});
+        const daten = redLit.eingabeXMLMODS({ xmlDoc: bx.daten, xmlStr: "" });
         titel = daten.ds.qu;
       }
       if (titel) {
@@ -1606,24 +1606,24 @@ let beleg = {
     }
     // wenn Korpus "DWDS" => mit dem Text arbeiten, der im Quelle-Feld steht
     if (/^DWDS/.test(beleg.data.kr)) {
-      let quelle = beleg.data.qu.split("\n");
-      let data = {
+      const quelle = beleg.data.qu.split("\n");
+      const data = {
         au: beleg.data.au,
         da: beleg.data.da,
         qu: quelle[0],
       };
       // versuchen, relativ wild in das Quelle-Feld
       // kopierte Daten zu Titel und Autor auszulesen
-      let titeldaten = {},
-        autor = /, Autor: (?<Autor>.+?), Titel:/.exec(data.qu),
-        titel = /, Titel: (?<Titel>.+?)(?<Ende>$|, S)/.exec(data.qu);
+      const titeldaten = {};
+      const autor = /, Autor: (?<Autor>.+?), Titel:/.exec(data.qu);
+      const titel = /, Titel: (?<Titel>.+?)(?<Ende>$|, S)/.exec(data.qu);
       if (autor) {
         data.au = autor.groups.Autor;
         data.qu = data.qu.replace(/, Autor: .+?, Titel:/, ", Titel:");
       }
       if (titel) {
         titeldaten.titel = titel.groups.Titel;
-        let reg = new RegExp(", Titel: .+" + titel.groups.Ende);
+        const reg = new RegExp(", Titel: .+" + titel.groups.Ende);
         data.qu = data.qu.replace(reg, titel.groups.Ende);
       }
       // Autor und Quelle nachbearbeiten
@@ -1659,7 +1659,7 @@ let beleg = {
       url = url.match(/href="(.+?)"/)[1];
     }
     if (/^https?:\/\/www\.deutschestextarchiv\.de\//.test(url)) {
-      const titel = await beleg.toolsQuelleLadenDTA({url});
+      const titel = await beleg.toolsQuelleLadenDTA({ url });
       if (titel) {
         aenderungen.Autor = {
           key: "au",
@@ -1667,7 +1667,7 @@ let beleg = {
           neu: belegImport.DTAData.autor.join("/"),
         };
         if (!aenderungen.Autor.neu) {
-          aenderungen.Autor.neu = "N. N.";
+          aenderungen.Autor.neu = "N.\u00A0N.";
         }
         aenderungen.Quelle = {
           key: "qu",
@@ -1688,19 +1688,19 @@ let beleg = {
     // Quellenfeld ausfüllen (wenn gewünscht)
     function ausfuellen () {
       // Änderungen ermitteln
-      let txt = [];
-      for (let [k, v] of Object.entries(aenderungen)) {
-        const ori = v.ori.split(/\n+https?:/)[0],
-          neu = v.neu.split(/\n+https?:/)[0];
+      const txt = [];
+      for (const [ k, v ] of Object.entries(aenderungen)) {
+        const ori = v.ori.split(/\n+https?:/)[0];
+        const neu = v.neu.split(/\n+https?:/)[0];
         if (ori === neu) {
           continue;
         }
         let val = `<strong>${k}</strong><br>`;
-        val += `${v.ori ? v.ori : "<i>kein Autor</i>"}<br>     →<br>${v.neu}`;
+        val += `${v.ori ? v.ori : "<i>kein Autor</i>"}<br>${"\u00A0".repeat(5)}→<br>${v.neu}`;
         txt.push(val);
       }
       // abbrechen, weil keine Änderungen gefunden wurden
-      let quelle = document.getElementById("beleg-qu");
+      const quelle = document.getElementById("beleg-qu");
       if (!txt.length) {
         if (!shortcut) {
           quelle.focus();
@@ -1722,7 +1722,7 @@ let beleg = {
         text: `${numerus} vorgenommen werden?\n${txt.join("\n")}`,
         callback: () => {
           if (dialog.antwort) {
-            for (let v of Object.values(aenderungen)) {
+            for (const v of Object.values(aenderungen)) {
               beleg.data[v.key] = v.neu;
               document.getElementById(`beleg-${v.key}`).value = v.neu;
               if (v.key === "qu") {
@@ -1754,52 +1754,49 @@ let beleg = {
   // Zitiertitelanfrage an das DTA
   //   url = String
   //     (DTA-Link)
-  toolsQuelleLadenDTA ({url}) {
-    return new Promise(async resolve => {
-      let quelle = document.getElementById("beleg-qu");
-      // Seitenangabe auslesen
-      let mHier = /, hier (?<seiten>[^\s]+)( |\.\n\n)/.exec(quelle.value),
-        mSeiten = /(?<typ>, Sp?\.)\s(?<seiten>[^\s]+)( |\.\n\n)/.exec(quelle.value);
-      let seitenData = {
-        seite: "",
-        seite_zuletzt: "",
-        spalte: false,
-      };
-      let seiten;
-      if (mHier) {
-        seiten = mHier.groups.seiten;
-      } else if (mSeiten) {
-        seiten = mSeiten.groups.seiten;
-        if (mSeiten.groups.typ === ", Sp.") {
-          seitenData.spalte = true;
-        }
+  async toolsQuelleLadenDTA ({ url }) {
+    const quelle = document.getElementById("beleg-qu");
+    // Seitenangabe auslesen
+    const mHier = /, hier (?<seiten>[^\s]+)( |\.\n\n)/.exec(quelle.value);
+    const mSeiten = /(?<typ>, Sp?\.)\s(?<seiten>[^\s]+)( |\.\n\n)/.exec(quelle.value);
+    const seitenData = {
+      seite: "",
+      seite_zuletzt: "",
+      spalte: false,
+    };
+    let seiten;
+    if (mHier) {
+      seiten = mHier.groups.seiten;
+    } else if (mSeiten) {
+      seiten = mSeiten.groups.seiten;
+      if (mSeiten.groups.typ === ", Sp.") {
+        seitenData.spalte = true;
       }
-      if (seiten) {
-        let seitenSp = seiten.split(/[-–]/);
-        seitenData.seite = seitenSp[0];
-        if (seitenSp[1]) {
-          seitenData.seite_zuletzt = seitenSp[1];
-        }
+    }
+    if (seiten) {
+      const seitenSp = seiten.split(/[-–]/);
+      seitenData.seite = seitenSp[0];
+      if (seitenSp[1]) {
+        seitenData.seite_zuletzt = seitenSp[1];
       }
-      // TEI-Header herunterladen
-      const fetchOk = await redLit.eingabeDTAFetch({
-        url,
-        fokusId: "beleg-qu",
-        seitenData,
-      });
-      // Rückgabewerte
-      if (fetchOk) {
-        resolve(belegImport.DTAQuelle(true));
-      } else {
-        resolve(false);
-      }
+    }
+    // TEI-Header herunterladen
+    const fetchOk = await redLit.eingabeDTAFetch({
+      url,
+      fokusId: "beleg-qu",
+      seitenData,
     });
+    // Rückgabewerte
+    if (fetchOk) {
+      return belegImport.DTAQuelle(true);
+    }
+    return false;
   },
 
   // Typ der Daten im bx-Datensatz ermitteln
   //   bx = String
   //     (Datensatz, der überprüft werden soll)
-  bxTyp ({bx}) {
+  bxTyp ({ bx }) {
     // keine Daten vorhanden
     if (!bx) {
       return {
@@ -1815,7 +1812,7 @@ let beleg = {
       };
     }
     // DeReKo-Daten
-    let reg = new RegExp(`^${belegImport.DeReKoId}`);
+    const reg = new RegExp(`^${belegImport.DeReKoId}`);
     if (reg.test(bx)) {
       return {
         typ: "dereko",
@@ -1823,12 +1820,10 @@ let beleg = {
       };
     }
     // XML-Daten
-    let parser = new DOMParser(),
-      xmlDoc = parser.parseFromString(bx.replace(/ xmlns=".+?"/, ""), "text/xml");
+    const parser = new DOMParser();
+    const xmlDoc = parser.parseFromString(bx.replace(/ xmlns=".+?"/, ""), "text/xml");
     if (!xmlDoc.querySelector("parsererror")) {
-      let evaluator = (xpath) => {
-        return xmlDoc.evaluate(xpath, xmlDoc, null, XPathResult.ANY_TYPE, null).iterateNext();
-      };
+      const evaluator = xpath => xmlDoc.evaluate(xpath, xmlDoc, null, XPathResult.ANY_TYPE, null).iterateNext();
       let typ = "";
       if (evaluator("//teiHeader/sourceDesc/biblFull")) {
         typ = "xml-dta";
@@ -1855,8 +1850,8 @@ let beleg = {
 
   // DTA-Link aus dem Quelle-Feld in das Importformular holen
   toolsQuelleDTALink () {
-    const quelle = document.querySelector("#beleg-qu").value,
-      link = quelle.match(/https?:\/\/www\.deutschestextarchiv\.de\/[^\s]+/);
+    const quelle = document.querySelector("#beleg-qu").value;
+    const link = quelle.match(/https?:\/\/www\.deutschestextarchiv\.de\/[^\s]+/);
     if (!link) {
       dialog.oeffnen({
         typ: "alert",
@@ -1879,22 +1874,22 @@ let beleg = {
   // Belegtext um alle Absätze kürzen, die kein Stichwort enthalten
   toolsKuerzen () {
     // Absätze ermitteln, die das Wort enthalten
-    let bs = document.querySelector("#beleg-bs"),
-      textOri = bs.value,
-      text = textOri.split("\n\n"),
-      wortVorhanden = [];
+    const bs = document.querySelector("#beleg-bs");
+    const textOri = bs.value;
+    const text = textOri.split("\n\n");
+    const wortVorhanden = [];
     for (let i = 0, len = text.length; i < len; i++) {
       if (liste.wortVorhanden(text[i])) {
         wortVorhanden.push(i);
       }
     }
     // gekürzten Text ermitteln
-    let kurz = [],
-      kurzZuletzt = -1,
-      kontextErhalten = optionen.data.einstellungen["karteikarte-text-kuerzen-kontext"];
+    const kurz = [];
+    let kurzZuletzt = -1;
+    const kontextErhalten = optionen.data.einstellungen["karteikarte-text-kuerzen-kontext"];
     for (let i = 0, len = text.length; i < len; i++) {
       if (wortVorhanden.includes(i) || // Stichwort vorhananden
-          kontextErhalten && ( wortVorhanden.includes(i - 1) || wortVorhanden.includes(i + 1) ) ) { // Kontext erhalten
+          kontextErhalten && (wortVorhanden.includes(i - 1) || wortVorhanden.includes(i + 1))) { // Kontext erhalten
         kurz.push(text[i]);
         kurzZuletzt = i;
       } else if (i > 0 && i < len - 1 && kurzZuletzt === i - 1) { // Kürzungszeichen
@@ -1919,7 +1914,8 @@ let beleg = {
     // gekürzten Text übernehmen
     const textKurz = kurz.join("\n\n");
     if (textOri !== textKurz) {
-      beleg.data.bs = bs.value = textKurz;
+      beleg.data.bs = textKurz;
+      bs.value = textKurz;
       helfer.textareaGrow(bs);
       beleg.belegGeaendert(true);
     }
@@ -1929,10 +1925,10 @@ let beleg = {
   //   stern = Element
   //     (Stern, auf den geklickt wurde, um eine Bewertung vorzunehmen)
   bewertung (stern) {
-    let sterne = document.querySelectorAll("#beleg-bewertung a");
+    const sterne = document.querySelectorAll("#beleg-bewertung a");
     for (let i = 0, len = sterne.length; i < len; i++) {
       if (sterne[i] === stern) {
-        let bewertung = i + 1;
+        const bewertung = i + 1;
         if (beleg.data.be === bewertung) {
           beleg.data.be = 0;
         } else {
@@ -1948,7 +1944,7 @@ let beleg = {
 
   // regelt die Anzeige der Bewertung des Belegs
   bewertungAnzeigen () {
-    let sterne = document.querySelectorAll("#beleg-bewertung a");
+    const sterne = document.querySelectorAll("#beleg-bewertung a");
     for (let i = 0, len = sterne.length; i < len; i++) {
       if (i + 1 > beleg.data.be) {
         sterne[i].classList.remove("aktiv");
@@ -1964,10 +1960,10 @@ let beleg = {
   //     (Icon-Link mit dem Stern, der gerade aktiv ist)
   bewertungEvents (a) {
     // Mousover: Vorschau anzeigen
-    a.addEventListener("mouseover", function() {
-      let id = this.parentNode.id,
-        sterne = document.querySelectorAll(`#${id} a`),
-        aktivieren = true;
+    a.addEventListener("mouseover", function () {
+      const id = this.parentNode.id;
+      const sterne = document.querySelectorAll(`#${id} a`);
+      let aktivieren = true;
       for (let i = 0, len = sterne.length; i < len; i++) {
         if (aktivieren) {
           sterne[i].classList.add("aktiv");
@@ -1980,8 +1976,8 @@ let beleg = {
       }
     });
     // Mouseout: die aktuelle Bewertung anzeigen
-    a.addEventListener("mouseout", function() {
-      let id = this.parentNode.id;
+    a.addEventListener("mouseout", function () {
+      const id = this.parentNode.id;
       if (/^beleg/.test(id)) {
         beleg.bewertungAnzeigen();
       } else if (/^filter/.test(id)) {
@@ -1989,9 +1985,9 @@ let beleg = {
       }
     });
     // Click: den Zettel bewerten
-    a.addEventListener("click", function(evt) {
+    a.addEventListener("click", function (evt) {
       evt.preventDefault();
-      let id = this.parentNode.id;
+      const id = this.parentNode.id;
       if (/^beleg/.test(id)) {
         beleg.bewertung(this);
       } else if (/^filter/.test(id)) {
@@ -2011,8 +2007,8 @@ let beleg = {
       suchleiste.ausblenden();
     }
     // Ansicht umstellen
-    let button = document.getElementById("beleg-link-leseansicht"),
-      tab = document.querySelector("#beleg table");
+    const button = document.getElementById("beleg-link-leseansicht");
+    const tab = document.querySelector("#beleg table");
     if (beleg.leseansicht) {
       beleg.leseansicht = false;
       button.classList.add("beleg-opt-anzeige-letztes");
@@ -2027,7 +2023,7 @@ let beleg = {
     button.classList.toggle("aktiv");
     tooltip.init(button.parentNode);
     // Header-Icons ein- oder ausblenden
-    document.querySelectorAll("#beleg .icon-leseansicht").forEach(function(i) {
+    document.querySelectorAll("#beleg .icon-leseansicht").forEach(function (i) {
       if (beleg.leseansicht) {
         i.classList.remove("aus");
       } else {
@@ -2043,7 +2039,7 @@ let beleg = {
     }
     tooltip.init(springen.parentNode);
     // Einfüge-Icons ein- oder ausblenden
-    document.querySelectorAll("#beleg .icon-tools-einfuegen").forEach(function(i) {
+    document.querySelectorAll("#beleg .icon-tools-einfuegen").forEach(function (i) {
       if (beleg.leseansicht) {
         i.classList.add("aus");
       } else {
@@ -2051,8 +2047,8 @@ let beleg = {
       }
     });
     // Text-Tools für Beleg und Bedeutung ein- oder ausblenden
-    let tools_beleg = document.querySelectorAll(".text-tools-beleg, .text-tools-bedeutung");
-    for (let tools of tools_beleg) {
+    const tools_beleg = document.querySelectorAll(".text-tools-beleg, .text-tools-bedeutung");
+    for (const tools of tools_beleg) {
       if (beleg.leseansicht) {
         tools.classList.add("aus");
       } else {
@@ -2063,7 +2059,7 @@ let beleg = {
     if (beleg.leseansicht) {
       beleg.leseFill();
     } else if (user) {
-      document.querySelectorAll("#beleg textarea").forEach((textarea) => helfer.textareaGrow(textarea));
+      document.querySelectorAll("#beleg textarea").forEach(textarea => helfer.textareaGrow(textarea));
       document.getElementById("beleg-da").focus();
     }
   },
@@ -2073,7 +2069,7 @@ let beleg = {
     // Sprungmarke zurücksetzen
     beleg.ctrlSpringenPos = -1;
     // Meta-Infos
-    let cont = document.getElementById("beleg-lese-meta");
+    const cont = document.getElementById("beleg-lese-meta");
     cont.replaceChildren();
     liste.metainfosErstellen(beleg.data, cont, "");
     if (!cont.hasChildNodes()) {
@@ -2082,7 +2078,7 @@ let beleg = {
       cont.parentNode.classList.remove("aus");
     }
     // Datensätze, die String sind
-    for (let wert in beleg.data) {
+    for (const wert in beleg.data) {
       if (!beleg.data.hasOwnProperty(wert)) {
         continue;
       }
@@ -2092,7 +2088,7 @@ let beleg = {
         continue;
       }
       // Container leeren
-      let cont = document.getElementById(`beleg-lese-${wert}`);
+      const cont = document.getElementById(`beleg-lese-${wert}`);
       if (!cont) { // manche Datensätze (dc, dm, bx) werden nicht angezeigt
         continue;
       }
@@ -2107,12 +2103,12 @@ let beleg = {
           // werden, wenn er leer ist; dies gilt allerdings nur, wenn darauf noch ein Absatz folgt
           continue;
         }
-        let nP = document.createElement("p");
+        const nP = document.createElement("p");
         cont.appendChild(nP);
         nP.dataset.pnumber = i;
         nP.dataset.id = "";
         if (!text) {
-          text = " ";
+          text = "\u00A0";
         } else {
           // Absatz ggf. kürzen
           if (wert === "bs" &&
@@ -2139,7 +2135,7 @@ let beleg = {
           }
           if (wert === "bs") {
             text = liste.belegWortHervorheben(text, true);
-            text = liste.belegKlammernHervorheben({text});
+            text = liste.belegKlammernHervorheben({ text });
           }
         }
         nP.innerHTML = text;
@@ -2149,23 +2145,23 @@ let beleg = {
     // Bedeutungen
     beleg.leseFillBedeutung();
     // Klick-Events an alles Links hängen
-    document.querySelectorAll("#beleg .link").forEach(function(i) {
+    document.querySelectorAll("#beleg .link").forEach(function (i) {
       helfer.externeLinks(i);
     });
   },
 
   // Bedeutungsfeld der Leseansicht füllen
   leseFillBedeutung () {
-    let feldBd = beleg.bedeutungAufbereiten(),
-      contBd = document.getElementById("beleg-lese-bd");
+    const feldBd = beleg.bedeutungAufbereiten();
+    const contBd = document.getElementById("beleg-lese-bd");
     contBd.replaceChildren();
     if (feldBd) {
-      feldBd.split("\n").forEach(function(i) {
-        let bd = beleg.bedeutungSuchen(i),
-          p = document.createElement("p");
+      feldBd.split("\n").forEach(function (i) {
+        const bd = beleg.bedeutungSuchen(i);
+        const p = document.createElement("p");
         if (!bd.id) {
-          i.split(": ").forEach(function(j) {
-            let b = document.createElement("b");
+          i.split(": ").forEach(function (j) {
+            const b = document.createElement("b");
             p.appendChild(b);
             b.textContent = "?";
             p.appendChild(document.createTextNode(j));
@@ -2176,7 +2172,7 @@ let beleg = {
             id: bd.id,
           });
         }
-        let a = document.createElement("a");
+        const a = document.createElement("a");
         a.classList.add("icon-link", "icon-entfernen");
         a.dataset.bd = i;
         a.href = "#";
@@ -2185,15 +2181,15 @@ let beleg = {
         contBd.appendChild(p);
       });
     } else {
-      let p = document.createElement("p");
-      p.textContent = " ";
+      const p = document.createElement("p");
+      p.textContent = "\u00A0";
       contBd.appendChild(p);
     }
   },
 
   // Bedeutung in der Leseansicht aus dem Formular entfernen
   leseBedeutungEx (a) {
-    a.addEventListener("click", function(evt) {
+    a.addEventListener("click", function (evt) {
       evt.preventDefault();
       // Wert entfernen
       beleg.leseBedeutungExFeld(this.dataset.bd);
@@ -2213,8 +2209,8 @@ let beleg = {
   //   bd = String
   //     (die Bedeutung, in der Form, in der sie im Formularfeld stehen könnte)
   leseBedeutungExFeld (bd) {
-    let reg = new RegExp(`${helfer.escapeRegExp(bd)}(\n|$)`),
-      feld = document.getElementById("beleg-bd");
+    const reg = new RegExp(`${helfer.escapeRegExp(bd)}(\n|$)`);
+    const feld = document.getElementById("beleg-bd");
     if (!reg.test(feld.value)) {
       return false; // den Rückgabewert braucht man für das Austragen aus dem Bedeutungsgerüst-Fenster heraus
     }
@@ -2228,7 +2224,7 @@ let beleg = {
   //   a = Element
   //     (Link, auf den geklickt wurde)
   ctrlLinks (a) {
-    a.addEventListener("click", function(evt) {
+    a.addEventListener("click", function (evt) {
       evt.preventDefault();
       if (/navi-vorheriger$/.test(this.id)) {
         beleg.ctrlNavi(false);
@@ -2273,7 +2269,7 @@ let beleg = {
 
   // Kürzung des Belegkontexts in der Leseansicht ein- bzw. ausblenden (Anzeige)
   ctrlKuerzenAnzeige () {
-    let link = document.getElementById("beleg-link-kuerzen");
+    const link = document.getElementById("beleg-link-kuerzen");
     if (optionen.data.beleg.kuerzen) {
       link.classList.add("aktiv");
       link.title = `Belegkontext anzeigen (${tastatur.shortcutsTextAktuell("Strg")} + K)`;
@@ -2303,7 +2299,7 @@ let beleg = {
 
   // Trennstriche in der Leseansicht ein- bzw. ausblenden (Anzeige)
   ctrlTrennungAnzeige () {
-    let link = document.getElementById("beleg-link-trennung");
+    const link = document.getElementById("beleg-link-trennung");
     if (optionen.data.beleg.trennung) {
       link.classList.add("aktiv");
       link.title = `Silbentrennung nicht anzeigen (${tastatur.shortcutsTextAktuell("Strg")} + T)`;
@@ -2334,7 +2330,7 @@ let beleg = {
 
   // durch die Hervorhebungen in der Leseansicht der Karteikarte springen
   ctrlSpringenLese () {
-    let marks = document.querySelectorAll("#beleg mark.suchleiste, #beleg-lese-bs mark.user, #beleg-lese-bs mark.wort");
+    const marks = document.querySelectorAll("#beleg mark.suchleiste, #beleg-lese-bs mark.user, #beleg-lese-bs mark.wort");
     if (!marks.length) {
       dialog.oeffnen({
         typ: "alert",
@@ -2348,12 +2344,12 @@ let beleg = {
       beleg.ctrlSpringenPos = 0;
     }
     // Zur Position springen
-    let rect = marks[beleg.ctrlSpringenPos].getBoundingClientRect(),
-      quick = document.getElementById("quick"),
-      quick_height = quick.offsetHeight;
-    const header_height = document.querySelector("body > header").offsetHeight,
-      beleg_header_height = document.querySelector("#beleg > header").offsetHeight,
-      beleg_title_height = document.querySelector("#beleg-titel").offsetHeight;
+    const rect = marks[beleg.ctrlSpringenPos].getBoundingClientRect();
+    const quick = document.getElementById("quick");
+    let quick_height = quick.offsetHeight;
+    const header_height = document.querySelector("body > header").offsetHeight;
+    const beleg_header_height = document.querySelector("#beleg > header").offsetHeight;
+    const beleg_title_height = document.querySelector("#beleg-titel").offsetHeight;
     if (!quick.classList.contains("an")) {
       quick_height = 0;
     }
@@ -2366,13 +2362,13 @@ let beleg = {
     // Element markieren
     const pos = beleg.ctrlSpringenPos; // für schnelles Springen zwischenspeichern
     marks[pos].classList.add("mark");
-    let marked = [pos];
+    const marked = [ pos ];
     // ggf. direkt anhängende Elemente auch noch hervorheben
     if (/-kein-ende/.test(marks[pos].getAttribute("class"))) {
       for (let i = pos + 1, len = marks.length; i < len; i++) {
         beleg.ctrlSpringenPos++;
         marked.push(i);
-        let m = marks[i];
+        const m = marks[i];
         if (/-kein-start/.test(m.getAttribute("class")) &&
             !/-kein-ende/.test(m.getAttribute("class"))) {
           m.classList.add("mark");
@@ -2381,8 +2377,8 @@ let beleg = {
         m.classList.add("mark");
       }
     }
-    setTimeout(function() {
-      for (let i of marked) {
+    setTimeout(function () {
+      for (const i of marked) {
         marks[i].classList.remove("mark");
       }
     }, 1000);
@@ -2396,8 +2392,8 @@ let beleg = {
 
   // regulären Ausdruck für den Sprung im Beleg-Formular zurücksetzen
   ctrlSpringenFormReset () {
-    let regs = [];
-    for (let i of helfer.formVariRegExpRegs) {
+    const regs = [];
+    for (const i of helfer.formVariRegExpRegs) {
       if (!data.fv[i.wort].tr) {
         regs.push(`(^|[${helfer.ganzesWortRegExp.links}])(${i.reg})($|[${helfer.ganzesWortRegExp.rechts}])`);
       } else {
@@ -2412,9 +2408,9 @@ let beleg = {
     if (evt) {
       evt.preventDefault();
     }
-    let textarea = document.getElementById("beleg-bs"),
-      val = textarea.value,
-      search = beleg.ctrlSpringenFormReg.reg.exec(val);
+    const textarea = document.getElementById("beleg-bs");
+    const val = textarea.value;
+    const search = beleg.ctrlSpringenFormReg.reg.exec(val);
     if (search) { // Wort gefunden
       beleg.ctrlSpringenFormReg.again = false;
       const ende = search.index + search[0].length;
@@ -2423,7 +2419,7 @@ let beleg = {
       textarea.scrollTop = ende;
       textarea.value = val;
       if (textarea.scrollTop > 0) {
-        textarea.scrollTop = textarea.scrollTop + 120;
+        textarea.scrollTop += 120;
       }
       textarea.setSelectionRange(search.index, ende);
       textarea.focus();
@@ -2466,8 +2462,8 @@ let beleg = {
       return;
     }
     // Duplizieren kann durchgeführt werden
-    const daten = [kopieren.datenBeleg(beleg.data)],
-      id_karte = await kopieren.einfuegenEinlesen(daten, true);
+    const daten = [ kopieren.datenBeleg(beleg.data) ];
+    const id_karte = await kopieren.einfuegenEinlesen(daten, true);
     // Duplikat öffnen (in derselben Ansicht)
     const leseansicht_status = beleg.leseansicht;
     beleg.oeffnen(id_karte);
@@ -2488,8 +2484,8 @@ let beleg = {
       return;
     }
     // Belege in der Liste und Position des aktuellen Belegs ermitteln
-    let belege = [];
-    document.querySelectorAll(".liste-kopf").forEach(function(i) {
+    const belege = [];
+    document.querySelectorAll(".liste-kopf").forEach(function (i) {
       belege.push(i.dataset.id);
     });
     let pos = belege.indexOf("" + beleg.id_karte);
@@ -2506,7 +2502,7 @@ let beleg = {
     if (pos < 0 || pos === belege.length) {
       dialog.oeffnen({
         typ: "alert",
-        text: `Der aktuelle Beleg ist ${next ? "der letzte" : "der erste" } in der Belegliste.`,
+        text: `Der aktuelle Beleg ist ${next ? "der letzte" : "der erste"} in der Belegliste.`,
         callback: () => {
           fokus();
         },
@@ -2517,8 +2513,8 @@ let beleg = {
     //   1. in derselben Ansicht
     //   2. mit demselben Icon fokussiert
     //   3. mit derselben Scroll-Position
-    const leseansicht_status = beleg.leseansicht,
-      scroll = window.scrollY;
+    const leseansicht_status = beleg.leseansicht;
+    const scroll = window.scrollY;
     beleg.oeffnen(parseInt(belege[pos], 10));
     if (beleg.leseansicht !== leseansicht_status) {
       beleg.leseToggle(true);
@@ -2556,8 +2552,8 @@ let beleg = {
   //   gn = String || undefined
   //     (ID des Gerüsts, in dem gesucht werden soll)
   bedeutungSuchen (bd, gn = data.bd.gn) {
-    let bdS = bd.split(": "),
-      bdA = data.bd.gr[gn].bd;
+    let bdS = bd.split(": ");
+    const bdA = data.bd.gr[gn].bd;
     // Alias ggf. durch vollen Bedeutungsstring ersetzen
     bdS = beleg.bedeutungAliasAufloesen(bdS, bdA);
     // Bedeutung suchen => ID zurückgeben
@@ -2585,11 +2581,11 @@ let beleg = {
   //     (ID des Gerüsts, in dem gesucht werden soll)
   bedeutungErgaenzen (bd, gn = data.bd.gn) {
     // Zeiger auf das betreffende Gerüst ermitteln
-    let gr = data.bd.gr[gn];
+    const gr = data.bd.gr[gn];
     // ggf. höchste ID ermitteln
     if (!bedeutungen.makeId) {
       let lastId = 0;
-      gr.bd.forEach(function(i) {
+      gr.bd.forEach(function (i) {
         if (i.id > lastId) {
           lastId = i.id;
         }
@@ -2600,14 +2596,14 @@ let beleg = {
     let bdS = bd.split(": ");
     bdS = beleg.bedeutungAliasAufloesen(bdS, gr.bd);
     // jetzt wird's kompliziert: korrekte Position der Bedeutung im Gerüst suchen
-    let slice = 1,
-      arr = bdS.slice(0, slice),
-      arrVor = [],
-      arrTmpVor = [],
-      pos = -1; // der Index, an dessen Stelle das Einfügen beginnt
+    let slice = 1;
+    let arr = bdS.slice(0, slice);
+    let arrVor = [];
+    let arrTmpVor = [];
+    let pos = -1; // der Index, an dessen Stelle das Einfügen beginnt
     // 1) Position (initial) und Slice finden
     for (let i = 0, len = gr.bd.length; i < len; i++) {
-      let arrTmp = gr.bd[i].bd.slice(0, slice);
+      const arrTmp = gr.bd[i].bd.slice(0, slice);
       if (arrTmp.join(": ") === arr.join(": ")) {
         pos = i;
         // passender Zweig gefunden
@@ -2616,8 +2612,8 @@ let beleg = {
           break;
         } else {
           // weiter in die Tiefe wandern
-          arrVor = [...arr];
-          arrTmpVor = [...arrTmp];
+          arrVor = [ ...arr ];
+          arrTmpVor = [ ...arrTmp ];
           slice++;
           arr = bdS.slice(0, slice);
         }
@@ -2626,13 +2622,13 @@ let beleg = {
         break;
       }
     }
-    let bdAdd = bdS.slice(slice - 1);
+    const bdAdd = bdS.slice(slice - 1);
     // 2) Position korrigieren (hoch zum Slot, an dessen Stelle eingefügt wird)
     if (pos === -1 || pos === gr.bd.length - 1) { // Sonderregel: die Bedeutung muss am Ende eingefügt werden
       pos = gr.bd.length;
     } else {
-      let i = pos,
-        len = gr.bd.length;
+      let i = pos;
+      const len = gr.bd.length;
       do { // diese Schleife muss mindestens einmal durchlaufen; darum keine gewöhnliche for-Schleife
         i++;
         if (!gr.bd[i] || gr.bd[i].bd.length <= arrVor.length) {
@@ -2643,7 +2639,7 @@ let beleg = {
     }
     // 3) jetzt kann eingehängt werden (die nachfolgenden Slots rutschen alle um einen hoch)
     for (let i = 0, len = bdAdd.length; i < len; i++) {
-      let bd = arrVor.concat(bdAdd.slice(0, i + 1));
+      const bd = arrVor.concat(bdAdd.slice(0, i + 1));
       gr.bd.splice(pos + i, 0, bedeutungen.konstitBedeutung(bd));
     }
     // Zählung auffrischen
@@ -2714,17 +2710,17 @@ let beleg = {
     // nicht aktives Gerüst => einfach eintragen, wenn nicht vorhanden
     if (data.bd.gn !== bd.gr) {
       if (bedeutungen.schonVorhanden({
-            bd: beleg.data.bd,
-            gr: bd.gr,
-            id: bd.id,
-          })[0]) {
+        bd: beleg.data.bd,
+        gr: bd.gr,
+        id: bd.id,
+      })[0]) {
         dialog.oeffnen({
           typ: "alert",
           text: "Die Bedeutung wurde <strong>nicht</strong> eingetragen. Grund: Sie ist schon vorhanden.\n(In der Karteikarte wird ein anderes Gerüst angezeigt als im Bedeutungsgerüst-Fenster.)",
         });
         return;
       }
-      beleg.data.bd.push({...bd});
+      beleg.data.bd.push({ ...bd });
       beleg.belegGeaendert(true);
       dialog.oeffnen({
         typ: "alert",
@@ -2733,7 +2729,7 @@ let beleg = {
       return;
     }
     // aktives Gerüst => Text ermitteln und an die Dropdown-Funktion übergeben
-    let text = bedeutungen.bedeutungenTief({
+    const text = bedeutungen.bedeutungenTief({
       gr: bd.gr,
       id: bd.id,
       za: false,
@@ -2750,7 +2746,7 @@ let beleg = {
   bedeutungAustragenKarte (bd) {
     // nicht aktives Gerüst => einfach austragen, wenn vorhanden
     if (data.bd.gn !== bd.gr) {
-      let vorhanden = bedeutungen.schonVorhanden({
+      const vorhanden = bedeutungen.schonVorhanden({
         bd: beleg.data.bd,
         gr: bd.gr,
         id: bd.id,
@@ -2771,7 +2767,7 @@ let beleg = {
       return;
     }
     // aktives Gerüst => Text ermitteln und entfernen
-    let text = bedeutungen.bedeutungenTief({
+    const text = bedeutungen.bedeutungenTief({
       gr: bd.gr,
       id: bd.id,
       za: false,
@@ -2795,7 +2791,7 @@ let beleg = {
   //   bd = Object
   //     (die Bedeutung mit Gerüstnummer [bd.gr] und ID [bd.id])
   bedeutungEintragenListe (bd) {
-    const bdText = bedeutungen.bedeutungenTief({gr: bd.gr, id: bd.id, zaCl: true});
+    const bdText = bedeutungen.bedeutungenTief({ gr: bd.gr, id: bd.id, zaCl: true });
     // keine Belege in der Liste
     if (!document.querySelector("#liste-belege-cont .liste-kopf")) {
       dialog.oeffnen({
@@ -2813,14 +2809,14 @@ let beleg = {
           return;
         }
         // Bedeutung eintragen
-        document.querySelectorAll("#liste-belege-cont .liste-kopf").forEach(function(i) {
+        document.querySelectorAll("#liste-belege-cont .liste-kopf").forEach(function (i) {
           const id = i.dataset.id;
           if (!bedeutungen.schonVorhanden({
-                bd: data.ka[id].bd,
-                gr: bd.gr,
-                id: bd.id,
-              })[0]) {
-            data.ka[id].bd.push({...bd});
+            bd: data.ka[id].bd,
+            gr: bd.gr,
+            id: bd.id,
+          })[0]) {
+            data.ka[id].bd.push({ ...bd });
             data.ka[id].dm = new Date().toISOString();
           }
         });
@@ -2846,7 +2842,7 @@ let beleg = {
   //   bd = Object
   //     (die Bedeutung mit Gerüstnummer [bd.gr] und ID [bd.id])
   bedeutungAustragenListe (bd) {
-    const bdText = bedeutungen.bedeutungenTief({gr: bd.gr, id: bd.id, zaCl: true});
+    const bdText = bedeutungen.bedeutungenTief({ gr: bd.gr, id: bd.id, zaCl: true });
     // keine Belege in der Liste
     if (!document.querySelector("#liste-belege-cont .liste-kopf")) {
       dialog.oeffnen({
@@ -2865,9 +2861,9 @@ let beleg = {
         }
         // Bedeutung eintragen
         let treffer = false;
-        document.querySelectorAll("#liste-belege-cont .liste-kopf").forEach(function(i) {
+        document.querySelectorAll("#liste-belege-cont .liste-kopf").forEach(function (i) {
           const id = i.dataset.id;
-          let vorhanden = bedeutungen.schonVorhanden({
+          const vorhanden = bedeutungen.schonVorhanden({
             bd: data.ka[id].bd,
             gr: bd.gr,
             id: bd.id,
@@ -3012,7 +3008,7 @@ let beleg = {
       document.querySelector("#beleg-import-dwds").click();
       const obj = {
         clipboard: beleg.data.bx,
-        xml: new DOMParser().parseFromString(beleg.data.bx, "text/xml")
+        xml: new DOMParser().parseFromString(beleg.data.bx, "text/xml"),
       };
       belegImport.DWDS(obj, "");
     } else if (/^xml/.test(bi)) {
