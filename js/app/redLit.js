@@ -56,11 +56,9 @@ let redLit = {
 		//        wenn ja => DB neu laden
 		let dbGeladen = false;
 		if (redLit.db.path) {
-			const fs = require("fs"),
-				fsP = fs.promises;
 			let stats;
 			try {
-				stats = await fsP.lstat(redLit.db.path);
+				stats = await modules.fsp.lstat(redLit.db.path);
 			} catch {
 				// Datenbank kann nicht geladen werden
 				// (kann temporär verschwunden sein, weil sie im Netzwerk liegt)
@@ -314,8 +312,7 @@ let redLit = {
 			opt.defaultPath = optionen.data.letzter_pfad;
 		}
 		// Dialog anzeigen
-		const {ipcRenderer} = require("electron");
-		let result = await ipcRenderer.invoke("datei-dialog", {
+		let result = await modules.ipc.invoke("datei-dialog", {
 			open: true,
 			winId: winInfo.winId,
 			opt: opt,
@@ -423,9 +420,7 @@ let redLit = {
 			optionen.data["literatur-db"] = pfad;
 			optionen.speichern();
 		}
-		const fs = require("fs"),
-			fsP = fs.promises;
-		let stats = await fsP.lstat(redLit.db.path);
+		let stats = await modules.fsp.lstat(redLit.db.path);
 		redLit.db.mtime = stats.mtime.toISOString();
 		redLit.db.gefunden = true;
 		redLit.db.changed = false;
@@ -498,12 +493,10 @@ let redLit = {
 		// Datei schreiben
 		if (autoExportPath) {
 			const result = await new Promise(resolve => {
-				const fsP = require("fs").promises;
-				fsP.writeFile(autoExportPath, content)
+				modules.fsp.writeFile(autoExportPath, content)
 					.then(() => resolve(true))
 					.catch(err => {
-						const { ipcRenderer: ipc } = require("electron");
-						ipc.invoke("cli-message", `Fehler: ${err.name} - ${err.message}`);
+						modules.ipc.invoke("cli-message", `Fehler: ${err.name} - ${err.message}`);
 						resolve(false);
 					});
 			});
@@ -516,8 +509,6 @@ let redLit = {
 	//   vars = Object
 	//     (Pfade: vars.quelle, vars.ziel; ggf. auch das Format: vars.format)
 	async dbExportierenAuto (vars) {
-		const { ipcRenderer: ipc } = require("electron");
-
 		// Format ermitteln
 		const format = vars.format || "xml";
 
@@ -533,12 +524,12 @@ let redLit = {
 		vars = result;
 
 		// Message
-		ipc.invoke("cli-message", `Exportiere Literaturliste nach ${vars.ziel}`);
+		modules.ipc.invoke("cli-message", `Exportiere Literaturliste nach ${vars.ziel}`);
 
 		// DB einlesen
 		const ergebnis = await redLit.dbOeffnenEinlesen({pfad: vars.quelle});
 		if (ergebnis !== true) {
-			ipc.invoke("cli-message", `Fehler: ${ergebnis.replace(/<.+?>/g)}`);
+			modules.ipc.invoke("cli-message", `Fehler: ${ergebnis.replace(/<.+?>/g)}`);
 			return false;
 		}
 		await redLit.dbOeffnenAbschließen({ergebnis, pfad: vars.quelle});
@@ -641,10 +632,9 @@ let redLit = {
 	//   speichernUnter = Boolean
 	//     (Speichern unter/verschmelzen mit gewählt)
 	async dbSpeichernUnter (speichernUnter) {
-		const path = require("path");
 		let opt = {
 			title: "Literaturdatenbank speichern",
-			defaultPath: path.join(appInfo.documents, "Literaturdatenbank.ztl"),
+			defaultPath: modules.path.join(appInfo.documents, "Literaturdatenbank.ztl"),
 			filters: [
 				{
 					name: `${appInfo.name} Literaturdatenbank`,
@@ -662,11 +652,10 @@ let redLit = {
 		}
 		// Wo wurde zuletzt eine Datei gespeichert oder geöffnet?
 		if (optionen.data.letzter_pfad) {
-			opt.defaultPath = path.join(optionen.data.letzter_pfad, "Literaturdatenbank.ztl");
+			opt.defaultPath = modules.path.join(optionen.data.letzter_pfad, "Literaturdatenbank.ztl");
 		}
 		// Dialog anzeigen
-		const {ipcRenderer} = require("electron");
-		let result = await ipcRenderer.invoke("datei-dialog", {
+		let result = await modules.ipc.invoke("datei-dialog", {
 			open: false,
 			winId: winInfo.winId,
 			opt: opt,
@@ -746,9 +735,7 @@ let redLit = {
 			let stats,
 				merged = false;
 			try {
-				const fs = require("fs"),
-					fsP = fs.promises;
-				stats = await fsP.lstat(pfad);
+				stats = await modules.fsp.lstat(pfad);
 			} catch {
 				// Datei existiert wohl noch nicht => merge muss eigentlich === false sein;
 				// aber sicher ist sicher; da kann so allerlei schiefgehen
@@ -933,9 +920,7 @@ let redLit = {
 			// Operationenspeicher leeren
 			redLit.db.dataOpts = [];
 			// Änderungsdatum auffrischen
-			const fs = require("fs"),
-				fsP = fs.promises;
-			stats = await fsP.lstat(pfad);
+			stats = await modules.fsp.lstat(pfad);
 			redLit.db.mtime = stats.mtime.toISOString();
 			// Datenbank entsperren
 			await redLit.dbSperre(false);
@@ -1060,8 +1045,7 @@ let redLit = {
 		// Laufwerksbuchstabe entfernen (Windows)
 		pfad = pfad.replace(/^[a-zA-Z]:/, "");
 		// Pfad splitten
-		const path = require("path");
-		let reg = new RegExp(`${helfer.escapeRegExp(path.sep)}`),
+		let reg = new RegExp(`${helfer.escapeRegExp(modules.path.sep)}`),
 			pfadSplit = pfad.split(reg);
 		// Splits kürzen
 		//   (damit der Dateiname nicht zu lang wird, aber noch eindeutig ist)
@@ -1071,7 +1055,7 @@ let redLit = {
 				!pfadSplit[0]) {
 			pfadSplit.shift();
 		}
-		return path.join(appInfo.userData, pfadSplit.join("_"));
+		return modules.path.join(appInfo.userData, pfadSplit.join("_"));
 	},
 	// Datenbank: Offline-Kopie im Einstellungenordner löschen
 	//   pfad = String
@@ -1083,9 +1067,7 @@ let redLit = {
 		const offlinePfad = redLit.dbOfflineKopiePfad(pfad),
 			offlineVorhanden = await helfer.exists(offlinePfad);
 		if (offlineVorhanden) {
-			const fs = require("fs"),
-				fsP = fs.promises;
-			fsP.unlink(offlinePfad);
+			modules.fsp.unlink(offlinePfad);
 		}
 	},
 	// Datenbank: prüft, ob noch ein Speichervorgang aussteht
@@ -2196,10 +2178,9 @@ let redLit = {
 		redLit.eingabeLeeren();
 		redLit.eingabeStatus("add");
 		// DTA-URL suchen
-		const {clipboard} = require("electron"),
-			cp = clipboard.readText();
-		if (/^https?:\/\/www\.deutschestextarchiv\.de\//.test(cp)) {
-			url = cp;
+		const cb = modules.clipboard.readText();
+		if (/^https?:\/\/www\.deutschestextarchiv\.de\//.test(cb)) {
+			url = cb;
 		} else if (!/^https?:\/\/www\.deutschestextarchiv\.de\//.test(url)) {
 			url = "";
 		}
@@ -2328,11 +2309,10 @@ let redLit = {
 		redLit.eingabeLeeren();
 		redLit.eingabeStatus("add");
 		// XML-Daten suchen
-		const {clipboard} = require("electron"),
-			cp = clipboard.readText().trim();
-		let xmlDaten = redLit.eingabeXMLCheck({xmlStr: cp});
-		if (belegImport.PPNCheck({ppn: cp})) {
-			ppn = cp;
+		const cb = modules.clipboard.readText().trim();
+		let xmlDaten = redLit.eingabeXMLCheck({xmlStr: cb});
+		if (belegImport.PPNCheck({ppn: cb})) {
+			ppn = cb;
 		} else if (xmlDaten) {
 			ppn = "";
 		}
@@ -2695,14 +2675,13 @@ let redLit = {
 		redLit.eingabeLeeren();
 		redLit.eingabeStatus("add");
 		// BibTeX-Daten suchen
-		const {clipboard} = require("electron"),
-			cp = clipboard.readText().trim();
+		const cb = modules.clipboard.readText().trim();
 		let bibtexDaten = "";
-		if (belegImport.PPNCheck({ppn: cp})) {
-			ppn = cp;
-		} else if (belegImport.BibTeXCheck(cp)) {
+		if (belegImport.PPNCheck({ppn: cb})) {
+			ppn = cb;
+		} else if (belegImport.BibTeXCheck(cb)) {
 			ppn = "";
-			bibtexDaten = cp;
+			bibtexDaten = cb;
 		}
 		if (ppn) {
 			bibtexDaten = await belegImport.PPNBibTeX({
@@ -3850,7 +3829,6 @@ let redLit = {
 	//   typ = String
 	//     (Texttyp, der in die Zwischenablage kopiert werden soll)
 	titelZwischenablage (typ) {
-		const {clipboard} = require("electron");
 		let text = "";
 		if (typ === "plainReferenz") {
 			text = popup.titelaufnahme.ds.id;
@@ -3867,7 +3845,7 @@ let redLit = {
 		} else if (typ === "sigle") {
 			text = redLit.db.data[popup.titelaufnahme.ds.id][0].td.si;
 		}
-		clipboard.writeText(text);
+		modules.clipboard.writeText(text);
 		helfer.animation("zwischenablage");
 	},
 	// Titelaufnahme an das Redaktionssystem schicken (Listener)

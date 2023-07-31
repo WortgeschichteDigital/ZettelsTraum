@@ -120,7 +120,6 @@ let zuletzt = {
 			return;
 		}
 		zuletzt.verschwunden.splice(datei.indexOf(datei), 1);
-		const {ipcRenderer} = require("electron");
-		ipcRenderer.invoke("optionen-zuletzt-wiedergefunden", zuletzt.verschwunden);
+		modules.ipc.invoke("optionen-zuletzt-wiedergefunden", zuletzt.verschwunden);
 	},
 };

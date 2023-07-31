@@ -32,8 +32,7 @@ let popup = {
 			items = ["mail"];
 		}
 		// Menü vom Main-Prozess erzeugen lassen
-		const {ipcRenderer} = require("electron");
-		ipcRenderer.invoke("popup", items);
+		modules.ipc.invoke("popup", items);
 	},
 	// ermittelt das für den Rechtsklick passende Klickziel
 	//   pfad = Array

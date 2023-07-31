@@ -358,11 +358,10 @@ let quick = {
 			}
 
 			// Befehle, die immer funktionieren
-			const { ipcRenderer } = require("electron");
 			const befehl = this.id.replace(/^quick-/, "");
 			switch (befehl) {
 				case "app-neues-fenster":
-					ipcRenderer.send("fenster-oeffnen");
+					modules.ipc.send("fenster-oeffnen");
 					return;
 				case "app-karteisuche":
 					karteisuche.oeffnen();
@@ -371,7 +370,7 @@ let quick = {
 					optionen.oeffnen();
 					return;
 				case "app-beenden":
-					ipcRenderer.send("app-beenden");
+					modules.ipc.send("app-beenden");
 					return;
 				case "kartei-erstellen":
 					kartei.wortErfragen();
@@ -383,7 +382,7 @@ let quick = {
 					redLit.oeffnen();
 					return;
 				case "hilfe-handbuch":
-					ipcRenderer.send("hilfe-handbuch", "");
+					modules.ipc.send("hilfe-handbuch", "");
 					return;
 			}
 
@@ -483,13 +482,12 @@ let quick = {
 	accessRoles (a) {
 		a.addEventListener("click", function(evt) {
 			evt.preventDefault();
-			const befehl = this.id.replace(/^quick-/, ""),
-				{ipcRenderer} = require("electron");
+			const befehl = this.id.replace(/^quick-/, "");
 			let fokus = ["bearbeiten-rueckgaengig", "bearbeiten-wiederherstellen", "bearbeiten-ausschneiden", "bearbeiten-kopieren", "bearbeiten-einfuegen", "bearbeiten-alles-auswaehlen"];
 			if (fokus.includes(befehl)) {
 				quick.accessRolesActive.focus();
 			}
-			ipcRenderer.invoke("quick-roles", befehl);
+			modules.ipc.invoke("quick-roles", befehl);
 		});
 	},
 

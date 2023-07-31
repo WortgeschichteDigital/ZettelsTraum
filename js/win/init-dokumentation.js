@@ -1,5 +1,10 @@
 "use strict";
 
+// MODULE
+const modules = {
+	ipc: require("electron").ipcRenderer,
+};
+
 window.addEventListener("load", async () => {
 	// INIT
 	await initWin.infos();

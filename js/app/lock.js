@@ -15,8 +15,7 @@ let lock = {
 				return;
 			}
 			let pfad = datei.match(/^(.+[/\\])(.+)$/);
-			const fsP = require("fs").promises,
-				lockfile = `${pfad[1]}.~lock.${pfad[2]}#`;
+			const lockfile = `${pfad[1]}.~lock.${pfad[2]}#`;
 			if (aktion === "lock") {
 				// alte Datei ggf. löschen
 				// (Unter Windows gibt es Probleme, wenn die Datei direkt überschrieben werden soll.
@@ -30,17 +29,15 @@ let lock = {
 					}
 				}
 				// Lock-Datei erstellen
-				const os = require("os"),
-					host = os.hostname(),
-					user = os.userInfo().username,
+				const host = modules.os.hostname(),
+					user = modules.os.userInfo().username,
 					datum = new Date().toISOString(),
 					lockcontent = `${datum};;${host};;${user}`;
-				fsP.writeFile(lockfile, lockcontent)
+				modules.fsp.writeFile(lockfile, lockcontent)
 					.then(() => {
 						// Datei unter Windows verstecken
 						if (process.platform === "win32") {
-							const child_process = require("child_process");
-							child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);
+							modules.cp.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);
 						}
 						resolve(true);
 					})
@@ -67,9 +64,8 @@ let lock = {
 					return;
 				}
 				let datum_host_user = lockcontent.split(";;");
-				const os = require("os"),
-					host = os.hostname(),
-					user = os.userInfo().username;
+				const host = modules.os.hostname(),
+					user = modules.os.userInfo().username;
 				// nicht gesperrt, wenn:
 				//   derselbe Computer + dieselbe BenutzerIn
 				//   vor mehr als n Millisekunden gesperrt (Standard für Kartei-Lockdateien: 12 h)
@@ -89,8 +85,7 @@ let lock = {
 	//     (Pfad zur Lock-Datei)
 	unlink (lockfile) {
 		return new Promise(resolve => {
-			const fsP = require("fs").promises;
-			fsP.unlink(lockfile)
+			modules.fsp.unlink(lockfile)
 				.then(() => resolve(true))
 				.catch(err => {
 					dialog.oeffnen({
@@ -107,8 +102,7 @@ let lock = {
 	//     (Pfad zur Lock-Datei)
 	read (lockfile) {
 		return new Promise(resolve => {
-			const fsP = require("fs").promises;
-			fsP.readFile(lockfile, {encoding: "utf8"})
+			modules.fsp.readFile(lockfile, {encoding: "utf8"})
 				.then(content => resolve(content))
 				.catch(err => {
 					dialog.oeffnen({

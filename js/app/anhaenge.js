@@ -27,16 +27,15 @@ let anhaenge = {
 						return;
 					}
 					// scannen
-					const path = require("path");
 					let pfad = datei;
-					if (!path.isAbsolute(datei)) {
-						pfad = `${path.parse(kartei.pfad).dir}${path.sep}${datei}`;
+					if (!modules.path.isAbsolute(datei)) {
+						pfad = `${modules.path.parse(kartei.pfad).dir}${modules.path.sep}${datei}`;
 					}
 					const exists = await helfer.exists(pfad);
 					anhaenge.data[datei] = {
 						exists,
 						path: pfad,
-						ext: path.parse(pfad).ext,
+						ext: modules.path.parse(pfad).ext,
 					};
 					resolve(true);
 				});
@@ -266,12 +265,11 @@ let anhaenge = {
 			});
 			return;
 		}
-		const {shell} = require("electron"),
-			pfad = anhaenge.data[datei].path;
+		const pfad = anhaenge.data[datei].path;
 		if (ordner) {
-			shell.showItemInFolder(pfad);
+			modules.shell.showItemInFolder(pfad);
 		} else {
-			const err = await shell.openPath(pfad);
+			const err = await modules.shell.openPath(pfad);
 			if (err) {
 				dialog.oeffnen({
 					typ: "alert",
@@ -416,8 +414,7 @@ let anhaenge = {
 				opt.defaultPath = optionen.data.letzter_pfad;
 			}
 			// Dialog anzeigen
-			const {ipcRenderer} = require("electron");
-			let result = await ipcRenderer.invoke("datei-dialog", {
+			let result = await modules.ipc.invoke("datei-dialog", {
 				open: true,
 				winId: winInfo.winId,
 				opt: opt,
@@ -448,8 +445,7 @@ let anhaenge = {
 	//     Werte durch Haarstriche getrennt)
 	async addFiles (dateien, cont, obj) {
 		// Dateien hinzufügen
-		const path = require("path");
-		let reg_pfad = new RegExp(helfer.escapeRegExp(`${path.dirname(kartei.pfad)}${path.sep}`)),
+		let reg_pfad = new RegExp(helfer.escapeRegExp(`${modules.path.dirname(kartei.pfad)}${modules.path.sep}`)),
 			schon = [],
 			arr = anhaenge.getArr(obj);
 		for (let i of dateien) {
@@ -500,17 +496,15 @@ let anhaenge = {
 			return;
 		}
 		// Ordner auslesen, Dateien sammeln
-		const path = require("path"),
-			fsP = require("fs").promises;
-		let reg = new RegExp(`.+${helfer.escapeRegExp(path.sep)}`),
+		let reg = new RegExp(`.+${helfer.escapeRegExp(modules.path.sep)}`),
 			ordner = kartei.pfad.match(reg)[0],
 			dateienA = [];
 		const ausgelesen = await new Promise(async resolve => {
 			try {
-				let files = await fsP.readdir(ordner);
+				let files = await modules.fsp.readdir(ordner);
 				for (let f of files) {
-					const pfad = path.join(ordner, f);
-					let stats = await fsP.lstat(pfad);
+					const pfad = modules.path.join(ordner, f);
+					let stats = await modules.fsp.lstat(pfad);
 					if (!stats.isDirectory() &&
 							!/^(~\$|\.)|\.(bak|ztj)$/.test(f)) {
 						dateienA.push(f);

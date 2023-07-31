@@ -1258,23 +1258,22 @@ let belegImport = {
 		}
 	},
 	// DWDS-Import: überprüft, ob Daten in Zwischenablage DWDS-Snippet sind
-	//   cp = String || undefined
+	//   cb = String || undefined
 	//     (Text-Inhalt des Clipboards)
-	DWDSXMLCheck (cp) {
-		if (!cp) {
-			const {clipboard} = require("electron");
-			cp = clipboard.readText();
+	DWDSXMLCheck (cb) {
+		if (!cb) {
+			cb = modules.clipboard.readText();
 		}
-		if (!/^<[a-zA-Z]/.test(cp)) {
+		if (!/^<[a-zA-Z]/.test(cb)) {
 			return false;
 		}
 		// Daten beginnen nicht mit <Beleg>
-		if (!/^<Beleg>/.test(cp)) {
+		if (!/^<Beleg>/.test(cb)) {
 			return false;
 		}
 		// XML nicht wohlgeformt
 		let parser = new DOMParser(),
-			xmlDoc = parser.parseFromString(cp, "text/xml");
+			xmlDoc = parser.parseFromString(cb, "text/xml");
 		if (xmlDoc.querySelector("parsererror")) {
 			return false;
 		}
@@ -1284,7 +1283,7 @@ let belegImport = {
 		}
 		// korrektes XML-Dokument
 		return {
-			clipboard: cp,
+			clipboard: cb,
 			xml: xmlDoc,
 		};
 	},
@@ -1375,8 +1374,7 @@ let belegImport = {
 			});
 		}
 		// Dialog anzeigen
-		const {ipcRenderer} = require("electron");
-		let result = await ipcRenderer.invoke("datei-dialog", {
+		let result = await modules.ipc.invoke("datei-dialog", {
 			open: true,
 			winId: winInfo.winId,
 			opt: opt,
@@ -1398,16 +1396,14 @@ let belegImport = {
 			encoding = "latin1";
 		}
 		// Datei einlesen
-		const fsP = require("fs").promises;
-		fsP.readFile(result.filePaths[0], {encoding: encoding})
+		modules.fsp.readFile(result.filePaths[0], {encoding: encoding})
 			.then(content => {
 				// sollten DWDS- oder BibTeX-Daten oder eine PPN in der Zwischenablage sein => Zwischenablage leeren
-				const {clipboard} = require("electron"),
-					cp = clipboard.readText().trim();
-				if (belegImport.DWDSXMLCheck(cp) ||
-						belegImport.BibTeXCheck(cp) ||
-						belegImport.PPNCheck({ppn: cp})) {
-					clipboard.clear();
+				const cb = modules.clipboard.readText().trim();
+				if (belegImport.DWDSXMLCheck(cb) ||
+						belegImport.BibTeXCheck(cb) ||
+						belegImport.PPNCheck({ppn: cb})) {
+					modules.clipboard.clear();
 				}
 				// Datei-Inhalt importieren
 				if (document.getElementById("beleg-import-dwds").checked) {
@@ -1446,14 +1442,13 @@ let belegImport = {
 	// Datei-Import: Verteilerfunktion für das Importieren eingelesener Datensätze
 	async DateiImport () {
 		// Clipboard-Content schlägt Datei-Content
-		const {clipboard} = require("electron"),
-			cp = clipboard.readText().trim(),
-			ppn = belegImport.PPNCheck({ppn: cp}) ? true : false;
+		const cb = modules.clipboard.readText().trim(),
+			ppn = belegImport.PPNCheck({ppn: cb}) ? true : false;
 		let importTypAktiv = "dereko",
 			result;
 		if (document.getElementById("beleg-import-dwds").checked) {
 			importTypAktiv = "dwds";
-			let xml = belegImport.DWDSXMLCheck(cp);
+			let xml = belegImport.DWDSXMLCheck(cb);
 			if (xml) {
 				result = belegImport.DWDS(xml, "– Zwischenablage –", false);
 			}
@@ -1462,7 +1457,7 @@ let belegImport = {
 			if (ppn) {
 				belegImport.PPNAnzeigeKarteikarte({typ: "xml"});
 				const xmlDaten = await belegImport.PPNXML({
-					ppn: cp,
+					ppn: cb,
 					fokus: "beleg-datei-importieren",
 				});
 				if (!xmlDaten) {
@@ -1477,15 +1472,15 @@ let belegImport = {
 			}
 			// Import aus Zwischenablage
 			importTypAktiv = "xml";
-			if (belegImport.XMLCheck(cp)) {
-				result = belegImport.XML(cp, "– Zwischenablage –", false);
+			if (belegImport.XMLCheck(cb)) {
+				result = belegImport.XML(cb, "– Zwischenablage –", false);
 			}
 		} else if (document.getElementById("beleg-import-bibtex").checked) {
 			// Download der BibTex-Daten
 			if (ppn) {
 				belegImport.PPNAnzeigeKarteikarte({typ: "bibtex"});
 				const bibtexDaten = await belegImport.PPNBibTeX({
-					ppn: cp,
+					ppn: cb,
 					fokus: "beleg-datei-importieren",
 				});
 				if (!bibtexDaten) {
@@ -1508,8 +1503,8 @@ let belegImport = {
 			}
 			// Import aus Zwischenablage
 			importTypAktiv = "bibtex";
-			if (belegImport.BibTeXCheck(cp)) {
-				result = belegImport.BibTeX(cp, "– Zwischenablage –", false);
+			if (belegImport.BibTeXCheck(cb)) {
+				result = belegImport.BibTeX(cb, "– Zwischenablage –", false);
 			}
 		}
 		// keine Daten vorhanden => Meldung + Abbruch
@@ -2284,11 +2279,11 @@ let belegImport = {
 		return text;
 	},
 	// BibTeX-Import: prüft, ob ein BibTex-Datensatz im Clipboard liegt
-	//   cp = String
+	//   cb = String
 	//     (Text-Inhalt des Clipboards)
-	BibTeXCheck (cp) {
-		cp = cp.trim();
-		if (!/^@[a-zA-Z]+\{.+?,/.test(cp) || !/\}/.test(cp)) {
+	BibTeXCheck (cb) {
+		cb = cb.trim();
+		if (!/^@[a-zA-Z]+\{.+?,/.test(cb) || !/\}/.test(cb)) {
 			return false;
 		}
 		return true;
@@ -2749,8 +2744,7 @@ let belegImport = {
 			return;
 		}
 		if (optionen.data.einstellungen["karteikarte-clear-clipboard"]) {
-			const {clipboard} = require("electron");
-			clipboard.clear();
+			modules.clipboard.clear();
 			if (zwischenspeicher) {
 				if (belegImport.Datei.typ === "ppn") {
 					belegImport.Datei.typ = "xml";

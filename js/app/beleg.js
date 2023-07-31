@@ -205,22 +205,21 @@ let beleg = {
 		await new Promise(resolve => setTimeout(() => resolve(true), 25));
 		if (neu && !beleg.leseansicht) {
 			// Was ist in der Zwischenablage?
-			const {clipboard} = require("electron"),
-				cp = clipboard.readText().trim(),
-				ppnCp = belegImport.PPNCheck({ppn: cp}) ? true : false,
-				dwds = belegImport.DWDSXMLCheck(cp),
-				xml = belegImport.XMLCheck({xmlStr: cp}),
-				bibtexCp = belegImport.BibTeXCheck(cp);
-			if (/^https?:\/\/www\.deutschestextarchiv\.de\//.test(cp)) { // DTA-URL
+			const cb = modules.clipboard.readText().trim(),
+				ppnCp = belegImport.PPNCheck({ppn: cb}) ? true : false,
+				dwds = belegImport.DWDSXMLCheck(cb),
+				xml = belegImport.XMLCheck({xmlStr: cb}),
+				bibtexCp = belegImport.BibTeXCheck(cb);
+			if (/^https?:\/\/www\.deutschestextarchiv\.de\//.test(cb)) { // DTA-URL
 				beleg.formularImport("dta");
 			} else if (dwds) { // DWDS-Snippet
 				belegImport.DWDS(dwds, "– Zwischenablage –", false);
 				beleg.formularImport("dwds");
 			} else if (xml) {
-				belegImport.XML(cp, "– Zwischenablage –", false);
+				belegImport.XML(cb, "– Zwischenablage –", false);
 				beleg.formularImport("xml");
 			} else if (bibtexCp) {
-				belegImport.BibTeX(cp, "– Zwischenablage –", false);
+				belegImport.BibTeX(cb, "– Zwischenablage –", false);
 				beleg.formularImport("bibtex");
 			} else if (ppnCp) {
 				belegImport.PPNAnzeigeKarteikarte({typ: "xml"});
@@ -732,9 +731,8 @@ let beleg = {
 				if (this.value || !optionen.data.einstellungen["url-eintragen"]) {
 					return;
 				}
-				const {clipboard} = require("electron"),
-					cp = clipboard.readText();
-				if (/^https?:\/\/www\.deutschestextarchiv\.de\//.test(cp)) {
+				const cb = modules.clipboard.readText();
+				if (/^https?:\/\/www\.deutschestextarchiv\.de\//.test(cb)) {
 					setTimeout(function() {
 						// der Fokus könnte noch in einem anderen Feld sein, das dann gefüllt werden würde;
 						// man muss dem Fokus-Wechsel ein bisschen Zeit geben
@@ -778,8 +776,7 @@ let beleg = {
 		}
 		text = beleg.toolsEinfuegenHtml(text);
 		if (pasten) {
-			const {clipboard} = require("electron");
-			clipboard.writeText(text);
+			modules.clipboard.writeText(text);
 			beleg.pasteBsBlock = true;
 			document.execCommand("paste");
 			beleg.pasteBsBlock = false;
@@ -844,12 +841,10 @@ let beleg = {
 	//     (Text nicht Zwischenablage kopieren;
 	//     nur wenn alle Belegtexte kopiert werden auf false)
 	toolsKopierenExec ({ds, obj, text, ele, cb = true}) {
-		// clipboard initialisieren
-		const {clipboard} = require("electron");
 		// Ist Text ausgewählt und ist er im Bereich des Kopier-Icons?
 		if (cb && window.getSelection().toString() &&
 				popup.getTargetSelection([ele])) {
-			clipboard.write({
+			modules.clipboard.write({
 				text: popup.textauswahl.text,
 				html: popup.textauswahl.html,
 			});
@@ -902,7 +897,7 @@ let beleg = {
 			}
 			// Text in Zwischenablage oder Text zurückgeben
 			if (cb) {
-				clipboard.write({
+				modules.clipboard.write({
 					text: text,
 					html: html,
 				});
@@ -940,12 +935,12 @@ let beleg = {
 				html += `<p>${i}</p>`;
 			});
 			let text = bds.join("\n").replace(/<.+?>/g, "");
-			clipboard.write({
+			modules.clipboard.write({
 				text: text,
 				html: html,
 			});
 		} else { // alle anderen Felder
-			clipboard.writeText(text);
+			modules.clipboard.writeText(text);
 		}
 		// Animation, die anzeigt, dass die Zwischenablage gefüllt wurde
 		if (cb) {
@@ -1078,21 +1073,20 @@ let beleg = {
 	toolsEinfuegen (link) {
 		// Element ermitteln
 		// Text einlesen
-		const {clipboard} = require("electron"),
-			id = link.closest("th").firstChild.getAttribute("for"),
+		const id = link.closest("th").firstChild.getAttribute("for"),
 			ds = id.replace(/^beleg-/, "");
 		let feld = document.getElementById(id);
 		// Text auslesen
 		let text = "";
 		if (id === "beleg-bs") {
-			if (clipboard.availableFormats().includes("text/html")) {
-				text = clipboard.readHTML();
+			if (modules.clipboard.availableFormats().includes("text/html")) {
+				text = modules.clipboard.readHTML();
 			} else {
-				text = clipboard.readText(); // aus Sicherheitsgründen auch Plain-Text bereinigen
+				text = modules.clipboard.readText(); // aus Sicherheitsgründen auch Plain-Text bereinigen
 			}
 			text = beleg.toolsEinfuegenHtml(text);
 		} else {
-			text = clipboard.readText();
+			text = modules.clipboard.readText();
 		}
 		// Felder ist leer => Text direkt eintragen
 		if (!feld.value) {
@@ -2388,13 +2382,12 @@ let beleg = {
 	//   dt = Object
 	//     (das Datenobjekt, aus dem heraus der Beleg in die Zwischenablage kopiert werden soll)
 	ctrlZwischenablage (dt) {
-		const {clipboard} = require("electron"),
-			daten = kopieren.datenBeleg(dt);
+		const daten = kopieren.datenBeleg(dt);
 		daten.typ = "ztb";
 		daten.version = 2;
 		daten.winId = winInfo.winId;
 		daten.wort = kartei.wort;
-		clipboard.writeText(JSON.stringify(daten));
+		modules.clipboard.writeText(JSON.stringify(daten));
 		helfer.animation("zwischenablage");
 	},
 	// Dupliziert den übergebenen Beleg

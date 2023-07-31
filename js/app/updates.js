@@ -56,8 +56,7 @@ let updates = {
 			releaseNotes += content;
 		}
 		// Release-Notes an Main schicken
-		const {ipcRenderer} = require("electron");
-		ipcRenderer.invoke("updates-save-data", releaseNotes);
+		modules.ipc.invoke("updates-save-data", releaseNotes);
 		// Check erfolgreich ausgeführt
 		optionen.data.updates.checked = new Date().toISOString();
 		optionen.speichern();
@@ -158,8 +157,7 @@ let updates = {
 	// Update-Fenster mit Release-Notes füllen
 	async fensterFill () {
 		// Daten holen
-		const {ipcRenderer} = require("electron");
-		let data = await ipcRenderer.invoke("updates-get-data"),
+		let data = await modules.ipc.invoke("updates-get-data"),
 			td = document.querySelectorAll("#updatesWin-header td");
 		// Icon und Notiz
 		td[0].classList.remove("rotieren-bitte"); // ggf. Animation ausschalten
@@ -236,8 +234,7 @@ let updates = {
 			if (/suchen$/.test(this.id)) {
 				updates.check(false);
 			} else if (/github$/.test(this.id)) {
-				const {shell} = require("electron");
-				shell.openExternal("https://github.com/WortgeschichteDigital/ZettelsTraum/releases");
+				modules.shell.openExternal("https://github.com/WortgeschichteDigital/ZettelsTraum/releases");
 			}
 		});
 	},

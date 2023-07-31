@@ -6,8 +6,7 @@ let io = {
 	//     (ein JSON-String, der komprimiert werden soll)
 	gzipData (daten) {
 		return new Promise(resolve => {
-			const zlib = require("zlib");
-			zlib.gzip(daten, (err, buffer) => {
+			modules.zlib.gzip(daten, (err, buffer) => {
 				// Fehler beim Packen
 				if (err) {
 					resolve(err);
@@ -23,8 +22,7 @@ let io = {
 	//     (ein Datei-Buffer, der dekomprimiert werden soll)
 	unzipData (daten) {
 		return new Promise(resolve => {
-			const zlib = require("zlib");
-			zlib.unzip(daten, (err, buffer) => {
+			modules.zlib.unzip(daten, (err, buffer) => {
 				// Fehler beim Entpacken
 				// (passiert u.a., wenn die Daten nicht komprimiert sind)
 				if (err) {
@@ -42,8 +40,7 @@ let io = {
 	//     (Pfad zur Datei, die eingelesen werden soll)
 	lesen (datei) {
 		return new Promise(resolve => {
-			const fsP = require("fs").promises;
-			fsP.readFile(datei)
+			modules.fsp.readFile(datei)
 				.then(async buffer => {
 					// Daten dekomprimieren
 					let content = await io.unzipData(buffer);
@@ -82,8 +79,7 @@ let io = {
 				return;
 			}
 			// Daten in Datei schreiben
-			const fsP = require("fs").promises;
-			fsP.writeFile(datei, buffer)
+			modules.fsp.writeFile(datei, buffer)
 				.then(() => resolve(true))
 				.catch(err => resolve(err));
 		});

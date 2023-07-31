@@ -326,8 +326,6 @@ let drucken = {
 	},
 	// Text aus der Vorschau kopieren
 	kopieren () {
-		// clipboard initialisieren
-		const {clipboard} = require("electron");
 		// Bedeutungsbaum?
 		let cont = document.getElementById("drucken-cont"),
 			baum = false;
@@ -346,7 +344,7 @@ let drucken = {
 				text = baumText(popup.textauswahl.html);
 				text = cleanText(text);
 			}
-			clipboard.write({
+			modules.clipboard.write({
 				text: text,
 				html: html,
 			});
@@ -367,7 +365,7 @@ let drucken = {
 		}
 		text = cleanText(text);
 		// HTML und Text kopieren
-		clipboard.write({
+		modules.clipboard.write({
 			text: text,
 			html: html,
 		});

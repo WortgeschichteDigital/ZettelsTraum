@@ -248,8 +248,7 @@ let kopieren = {
 	//   animation = Boolean
 	//     (der Reload-Button soll animiert werden)
 	einfuegenBasisdaten (animation) {
-		const {ipcRenderer} = require("electron");
-		ipcRenderer.send("kopieren-basisdaten", winInfo.winId);
+		modules.ipc.send("kopieren-basisdaten", winInfo.winId);
 		if (animation) {
 			document.getElementById("kopieren-einfuegen-reload").classList.add("rotieren-bitte");
 		}
@@ -376,12 +375,11 @@ let kopieren = {
 	einfuegenParseClipboard () {
 		kopieren.zwischenablage = [];
 		// Clipboard auslesen
-		const {clipboard} = require("electron"),
-			cp = clipboard.readText();
+		const cb = modules.clipboard.readText();
 		// versuchen den Text im Clipboard zu parsen
 		let daten = {};
 		try {
-			daten = JSON.parse(cp);
+			daten = JSON.parse(cb);
 		} catch (err) {
 			return;
 		}
@@ -501,8 +499,7 @@ let kopieren = {
 			return;
 		}
 		// Quelle = Fenster
-		const {ipcRenderer} = require("electron");
-		ipcRenderer.send("kopieren-daten", parseInt(quelle, 10), winInfo.winId);
+		modules.ipc.send("kopieren-daten", parseInt(quelle, 10), winInfo.winId);
 	},
 	// die übergebenen Daten werden eingelesen
 	// (wird auch für zum Duplizieren von Belegen genutzt)
@@ -628,14 +625,13 @@ let kopieren = {
 	},
 	// Basisdaten über die Belegmenge und das Fenster an den Main-Prozess senden
 	basisdatenSenden () {
-		const {ipcRenderer} = require("electron");
 		let daten = {
 			id: winInfo.winId,
 			wort: kartei.wort,
 			belege: kopieren.belege.length,
 			gerueste: Object.keys(data.bd.gr),
 		};
-		ipcRenderer.send("kopieren-basisdaten-lieferung", daten);
+		modules.ipc.send("kopieren-basisdaten-lieferung", daten);
 	},
 	// alle Belegdaten an den Main-Prozess senden
 	datenSenden () {
@@ -643,8 +639,7 @@ let kopieren = {
 		for (let id of kopieren.belege) {
 			daten.push(kopieren.datenBeleg(data.ka[id]));
 		}
-		const {ipcRenderer} = require("electron");
-		ipcRenderer.send("kopieren-daten-lieferung", daten);
+		modules.ipc.send("kopieren-daten-lieferung", daten);
 	},
 	// fertigt eine Kopie des übergebenen Belegs an
 	//   quelle = Object
@@ -708,10 +703,9 @@ let kopieren = {
 		if (kopieren.belege.length === 1) {
 			num = "Beleg";
 		}
-		const path = require("path");
 		let opt = {
 			title: "Belege exportieren",
-			defaultPath: path.join(appInfo.documents, `${kartei.wort}, ${kopieren.belege.length} ${num}.ztb`),
+			defaultPath: modules.path.join(appInfo.documents, `${kartei.wort}, ${kopieren.belege.length} ${num}.ztb`),
 			filters: [
 				{
 					name: `${appInfo.name} Belege`,
@@ -724,8 +718,7 @@ let kopieren = {
 			],
 		};
 		// Dialog anzeigen
-		const {ipcRenderer} = require("electron");
-		let result = await ipcRenderer.invoke("datei-dialog", {
+		let result = await modules.ipc.invoke("datei-dialog", {
 			open: false,
 			winId: winInfo.winId,
 			opt: opt,
@@ -771,8 +764,7 @@ let kopieren = {
 			],
 		};
 		// Dialog anzeigen
-		const {ipcRenderer} = require("electron");
-		let result = await ipcRenderer.invoke("datei-dialog", {
+		let result = await modules.ipc.invoke("datei-dialog", {
 			open: true,
 			winId: winInfo.winId,
 			opt: opt,

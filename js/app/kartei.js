@@ -95,8 +95,7 @@ let kartei = {
 			opt.defaultPath = optionen.data.letzter_pfad;
 		}
 		// Dialog anzeigen
-		const {ipcRenderer} = require("electron");
-		let result = await ipcRenderer.invoke("datei-dialog", {
+		let result = await modules.ipc.invoke("datei-dialog", {
 			open: true,
 			winId: winInfo.winId,
 			opt: opt,
@@ -120,8 +119,7 @@ let kartei = {
 	//     dem Öffnen-Dialog oder via Drag-and-Drop)
 	async oeffnenEinlesen (datei) {
 		// Ist die Kartei schon offen?
-		const {ipcRenderer} = require("electron"),
-			schonOffen = await ipcRenderer.invoke("kartei-schon-offen", datei);
+		const schonOffen = await modules.ipc.invoke("kartei-schon-offen", datei);
 		if (schonOffen) {
 			return;
 		}
@@ -136,7 +134,7 @@ let kartei = {
 		//   aber noch nicht gespeichert worden sein (kartei.geaendert = true)
 		// => neues Hauptfenster öffnen
 		if (kartei.pfad || kartei.geaendert) {
-			ipcRenderer.send("kartei-laden", datei);
+			modules.ipc.send("kartei-laden", datei);
 			return;
 		}
 		// Datei einlesen
@@ -180,8 +178,7 @@ let kartei = {
 				updates.fenster();
 				overlay.schliessen(document.getElementById("dialog"));
 				setTimeout(async () => {
-					const {ipcRenderer} = require("electron");
-					let data = await ipcRenderer.invoke("updates-get-data");
+					let data = await modules.ipc.invoke("updates-get-data");
 					if (!data.gesucht) {
 						updates.check(false);
 					}
@@ -194,7 +191,7 @@ let kartei = {
 		// Datei sperren
 		lock.actions({datei, aktion: "lock"});
 		// Main melden, dass die Kartei in diesem Fenster geöffnet wurde
-		ipcRenderer.send("kartei-geoeffnet", winInfo.winId, datei);
+		modules.ipc.send("kartei-geoeffnet", winInfo.winId, datei);
 		// alle Overlays schließen
 		await overlay.alleSchliessen();
 		// alle Filter zurücksetzen (wichtig für Text- und Zeitraumfilter)
@@ -226,7 +223,7 @@ let kartei = {
 			top: 0,
 			behavior: "auto",
 		}); // war in dem Fenster schon eine Kartei offen, bleibt sonst die Scrollposition der vorherigen Kartei erhalten
-		kartei.menusDeaktivieren(false);
+		modules.ipc.send("menus-deaktivieren", false, winInfo.winId);
 		erinnerungen.check();
 		helfer.geaendert(); // trägt das Wort in die Titelleiste ein
 		// inaktive Filter schließen
@@ -315,8 +312,7 @@ let kartei = {
 			zuletzt.aendern();
 			kartei.karteiGeaendert(false);
 			helfer.animation("gespeichert");
-			const {ipcRenderer} = require("electron");
-			ipcRenderer.send("kartei-geoeffnet", winInfo.winId, pfad);
+			modules.ipc.send("kartei-geoeffnet", winInfo.winId, pfad);
 			// ggf. Liste der BearbeiterInnen im redaktionellen Metadaten-Fenster auffrischen
 			if (!document.getElementById("red-meta").classList.contains("aus")) {
 				redMeta.bearbAuflisten();
@@ -330,11 +326,10 @@ let kartei = {
 	},
 	// Speichern: Pfad ermitteln
 	async speichernUnter () {
-		const path = require("path"),
-			wort = kartei.wort.split(/[\\/]/)[0];
+		const wort = kartei.wort.split(/[\\/]/)[0];
 		let opt = {
 			title: "Kartei speichern",
-			defaultPath: path.join(appInfo.documents, `${wort}.ztj`),
+			defaultPath: modules.path.join(appInfo.documents, `${wort}.ztj`),
 			filters: [
 				{
 					name: `${appInfo.name} JSON`,
@@ -348,11 +343,10 @@ let kartei = {
 		};
 		// Wo wurde zuletzt eine Datei gespeichert oder geöffnet?
 		if (optionen.data.letzter_pfad) {
-			opt.defaultPath = path.join(optionen.data.letzter_pfad, `${wort}.ztj`);
+			opt.defaultPath = modules.path.join(optionen.data.letzter_pfad, `${wort}.ztj`);
 		}
 		// Dialog anzeigen
-		const {ipcRenderer} = require("electron");
-		let result = await ipcRenderer.invoke("datei-dialog", {
+		let result = await modules.ipc.invoke("datei-dialog", {
 			open: false,
 			winId: winInfo.winId,
 			opt: opt,
@@ -381,10 +375,9 @@ let kartei = {
 			return;
 		}
 		// Gibt es noch ein anderes Hauptfenster? Wenn ja => dieses Fenster komplett schließen
-		const {ipcRenderer} = require("electron"),
-			hauptfensterOffen = await ipcRenderer.invoke("fenster-hauptfenster", winInfo.winId);
+		const hauptfensterOffen = await modules.ipc.invoke("fenster-hauptfenster", winInfo.winId);
 		if (hauptfensterOffen) {
-			ipcRenderer.invoke("fenster-schliessen");
+			modules.ipc.invoke("fenster-schliessen");
 			return;
 		}
 		// das aktuelle Fenster ist das letzte Hauptfenster => die Kartei in diesem Fenster schließen, das Fenster erhalten
@@ -396,8 +389,7 @@ let kartei = {
 	},
 	// Kartei im aktuellen Fenster schließen, das Fenster selbst aber erhalten
 	async schliessenDurchfuehren () {
-		const {ipcRenderer} = require("electron");
-		ipcRenderer.send("kartei-geschlossen", winInfo.winId);
+		modules.ipc.send("kartei-geschlossen", winInfo.winId);
 		lock.actions({datei: kartei.pfad, aktion: "unlock"});
 		notizen.notizenGeaendert(false);
 		tagger.taggerGeaendert(false);
@@ -422,14 +414,13 @@ let kartei = {
 		kopieren.uiOff(false);
 		zuletzt.aufbauen();
 		helfer.sektionWechseln("start");
-		kartei.menusDeaktivieren(true);
+		modules.ipc.send("menus-deaktivieren", true, winInfo.winId);
 	},
 	// Benutzer nach dem Wort fragen, für das eine Kartei angelegt werden soll
 	wortErfragen () {
 		// Ist schon eine Kartei offen? Wenn ja => neues Fenster öffnen, direkt nach dem Wort fragen
 		if (kartei.wort) {
-			const {ipcRenderer} = require("electron");
-			ipcRenderer.send("neues-wort");
+			modules.ipc.send("neues-wort");
 			return;
 		}
 		// Es ist noch keine Kartei offen => nach dem Wort fragen
@@ -446,15 +437,14 @@ let kartei = {
 					});
 				} else if (dialog.antwort && wort) {
 					lock.actions({datei: kartei.pfad, aktion: "unlock"});
-					const {ipcRenderer} = require("electron");
-					ipcRenderer.send("kartei-geoeffnet", winInfo.winId, "neu");
+					modules.ipc.send("kartei-geoeffnet", winInfo.winId, "neu");
 					kartei.karteiGeaendert(true);
 					filter.ctrlReset(false);
 					kartei.wort = wort;
 					helfer.formVariRegExp();
 					kartei.wortEintragen();
 					await kartei.erstellen();
-					kartei.menusDeaktivieren(false);
+					modules.ipc.send("menus-deaktivieren", false, winInfo.winId);
 					erinnerungen.check();
 				}
 			},
@@ -528,12 +518,5 @@ let kartei = {
 		} else {
 			asterisk.classList.remove("geaendert");
 		}
-	},
-	// die App-Menüs teilweise deaktivieren oder komplett aktivieren
-	//   disable = Boolean
-	//     (true = Kartei wurde geschlossen, false = Kartei wurde geöffnet)
-	menusDeaktivieren (disable) {
-		const {ipcRenderer} = require("electron");
-		ipcRenderer.send("menus-deaktivieren", disable, winInfo.winId);
 	},
 };

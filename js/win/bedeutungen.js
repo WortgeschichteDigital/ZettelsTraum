@@ -97,8 +97,7 @@ let bedeutungen = {
 	},
 	// Bedeutungsbaum drucken
 	drucken () {
-		const {ipcRenderer} = require("electron");
-		ipcRenderer.sendTo(bedeutungen.data.contentsId, "bedeutungen-fenster-drucken", bedeutungen.geruest);
+		modules.ipc.sendTo(bedeutungen.data.contentsId, "bedeutungen-fenster-drucken", bedeutungen.geruest);
 	},
 	// Bedeutung in Formular/Belegliste des Hauptfensters umtragen (also ein- oder austragen)
 	//   ele = Element
@@ -107,9 +106,8 @@ let bedeutungen = {
 		ele.addEventListener("click", function(evt) {
 			evt.preventDefault();
 			const id = parseInt(this.dataset.id, 10),
-				eintragen = this.dataset.eintragen === "true" ? true : false,
-				{ipcRenderer} = require("electron");
-			ipcRenderer.sendTo(bedeutungen.data.contentsId, "bedeutungen-fenster-umtragen", {
+				eintragen = this.dataset.eintragen === "true" ? true : false;
+			modules.ipc.sendTo(bedeutungen.data.contentsId, "bedeutungen-fenster-umtragen", {
 				gr: bedeutungen.geruest,
 				id: id,
 			}, eintragen);

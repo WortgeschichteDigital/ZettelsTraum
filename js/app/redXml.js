@@ -19,14 +19,13 @@ let redXml = {
 				return;
 			}
 			// Fenster schon offen? => Fenster fokussieren
-			const {ipcRenderer} = require("electron");
 			if (redXml.contentsId) {
-				ipcRenderer.invoke("red-xml-fokussieren", redXml.contentsId);
+				modules.ipc.invoke("red-xml-fokussieren", redXml.contentsId);
 				resolve(false);
 				return;
 			}
 			// Fenster durch Main-Prozess öffnen lassen
-			redXml.contentsId = await ipcRenderer.invoke("red-xml-oeffnen", `XML: ${kartei.wort}`);
+			redXml.contentsId = await modules.ipc.invoke("red-xml-oeffnen", `XML: ${kartei.wort}`);
 			resolve(true);
 		});
 	},
@@ -53,8 +52,7 @@ let redXml = {
 				resolve(false);
 				return;
 			}
-			const {ipcRenderer} = require("electron");
-			await ipcRenderer.invoke("red-xml-schliessen", redXml.contentsId);
+			await modules.ipc.invoke("red-xml-schliessen", redXml.contentsId);
 			redXml.contentsId = 0;
 			resolve(true);
 		});
@@ -94,8 +92,7 @@ let redXml = {
 			}
 		}
 		// Daten senden
-		const {ipcRenderer} = require("electron");
-		ipcRenderer.sendTo(redXml.contentsId, "xml-daten", xmlDaten);
+		modules.ipc.sendTo(redXml.contentsId, "xml-daten", xmlDaten);
 		// Init als abgeschlossen markieren
 		xml.winInit = true;
 	},
@@ -108,8 +105,7 @@ let redXml = {
 			await redXml.oeffnenPromise();
 		}
 		// Datensatz an das Fenster schicken
-		const {ipcRenderer} = require("electron");
-		ipcRenderer.sendTo(redXml.contentsId, "xml-datensatz", xmlDatensatz);
+		modules.ipc.sendTo(redXml.contentsId, "xml-datensatz", xmlDatensatz);
 		// Animation
 		helfer.animation("xml");
 	},

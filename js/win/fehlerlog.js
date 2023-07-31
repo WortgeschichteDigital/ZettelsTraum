@@ -70,7 +70,6 @@ let fehlerlog = {
 		let p = document.createElement("p");
 		div.appendChild(p);
 		p.classList.add("version");
-		const os = require("os");
 		let daten = [{
 			type: "App",
 			data: appInfo.version,
@@ -81,7 +80,7 @@ let fehlerlog = {
 		},
 		{
 			type: "System",
-			data: `${os.type()} (${os.arch()})`,
+			data: `${modules.os.type()} (${modules.os.arch()})`,
 		}];
 		for (let i = 0, len = daten.length; i < len; i++) {
 			if (i > 0) {
@@ -157,8 +156,7 @@ let fehlerlog = {
 		return "<i>keine Fehler</i>";
 	},
 	async reload () {
-		const {ipcRenderer} = require("electron");
-		let fehler = await ipcRenderer.invoke("fehler-senden");
+		let fehler = await modules.ipc.invoke("fehler-senden");
 		// Animation
 		document.getElementById("reload").classList.add("rotieren-bitte");
 		// uovo di Pasqua
@@ -181,8 +179,7 @@ let fehlerlog = {
 			text = text.replace(/<.+?>/g, "");
 			text = text.replace(/^[\n-]+/, "");
 			// Text kopieren
-			const {clipboard} = require("electron");
-			clipboard.writeText(text);
+			modules.clipboard.writeText(text);
 			// Animation, die anzeigt, dass die Zwischenablage gefüllt wurde
 			helfer.animation("zwischenablage");
 		});

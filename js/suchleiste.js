@@ -267,24 +267,21 @@ let suchleiste = {
 		ele.querySelectorAll(".ueber-app").forEach(function(i) {
 			i.addEventListener("click", function(evt) {
 				evt.preventDefault();
-				const {ipcRenderer} = require("electron");
-				ipcRenderer.send("ueber-app");
+				modules.ipc.send("ueber-app");
 			});
 		});
 		// Über Electron öffnen (Changelog, Dokumentation und Handbuch)
 		ele.querySelectorAll(".ueber-electron").forEach(function(i) {
 			i.addEventListener("click", function(evt) {
 				evt.preventDefault();
-				const {ipcRenderer} = require("electron");
-				ipcRenderer.send("ueber-electron");
+				modules.ipc.send("ueber-electron");
 			});
 		});
 		// Demonstrationskartei öffnen (Dokumentation, Handbuch)
 		ele.querySelectorAll(".hilfe-demo").forEach(function(i) {
 			i.addEventListener("click", function(evt) {
 				evt.preventDefault();
-				const {ipcRenderer} = require("electron");
-				ipcRenderer.send("hilfe-demo");
+				modules.ipc.send("hilfe-demo");
 			});
 		});
 		// Changelog, Dokumentation, Handbuch öffnen (Changelog, Dokumentation, Handbuch)

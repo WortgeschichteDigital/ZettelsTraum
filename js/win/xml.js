@@ -752,10 +752,9 @@ let xml = {
 	},
 	// Beleg aus Zwischenablage einfügen
 	belegEinfuegen () {
-		let {clipboard} = require("electron"),
-			cp = clipboard.readText(),
+		let cb = modules.clipboard.readText(),
 			parser = new DOMParser(),
-			xmlDoc = parser.parseFromString(cp, "text/xml");
+			xmlDoc = parser.parseFromString(cb, "text/xml");
 		// Validierung
 		if (xmlDoc.querySelector("parsererror")) {
 			dialog.oeffnen({
@@ -773,14 +772,14 @@ let xml = {
 			return;
 		}
 		// Datensatz erstellen
-		let datum = helferXml.datumFormat({xmlStr: cp});
+		let datum = helferXml.datumFormat({xmlStr: cb});
 		let xmlDatensatz = {
 			key: "bl",
 			ds: {
 				da: datum.anzeige,
 				ds: datum.sortier,
 				id: xmlDoc.documentElement.getAttribute("xml:id"),
-				xl: cp,
+				xl: cb,
 			},
 		};
 		// Beleg einfügen und speichern
@@ -3929,13 +3928,11 @@ let xml = {
 	},
 	// Änderungen in der Kartei speichern
 	speichern () {
-		const {ipcRenderer} = require("electron");
-		ipcRenderer.sendTo(xml.data.contentsId, "red-xml-speichern", xml.data.xl);
+		modules.ipc.sendTo(xml.data.contentsId, "red-xml-speichern", xml.data.xl);
 	},
 	// Speichern der Kartei triggern
 	speichernKartei () {
-		const {ipcRenderer} = require("electron");
-		ipcRenderer.sendTo(xml.data.contentsId, "kartei-speichern");
+		modules.ipc.sendTo(xml.data.contentsId, "kartei-speichern");
 		helfer.animation("gespeichert");
 	},
 	// Exportieren: XML-Datei zusammenbauen
@@ -4196,7 +4193,6 @@ let xml = {
 	//   xmlStr = String
 	//     (die XML-Dateiedaten)
 	async exportierenSpeichern ({xmlStr}) {
-		const path = require("path");
 		let ascii = new Map([
 			[/[\s’']/g, "_"],
 			[/Ä/g, "Ae"],
@@ -4227,7 +4223,7 @@ let xml = {
 		}
 		let opt = {
 			title: "XML speichern",
-			defaultPath: path.join(appInfo.documents, `${wort}.xml`),
+			defaultPath: modules.path.join(appInfo.documents, `${wort}.xml`),
 			filters: [
 				{
 					name: "XML-Dateien",
@@ -4240,11 +4236,10 @@ let xml = {
 			],
 		};
 		if (xml.data.letzter_pfad) {
-			opt.defaultPath = path.join(xml.data.letzter_pfad, `${wort}.xml`);
+			opt.defaultPath = modules.path.join(xml.data.letzter_pfad, `${wort}.xml`);
 		}
 		// Dialog anzeigen
-		const {ipcRenderer} = require("electron");
-		let result = await ipcRenderer.invoke("datei-dialog", {
+		let result = await modules.ipc.invoke("datei-dialog", {
 			open: false,
 			winId: winInfo.winId,
 			opt,
@@ -4260,8 +4255,7 @@ let xml = {
 			return;
 		}
 		// Kartei speichern
-		const fsP = require("fs").promises;
-		fsP.writeFile(result.filePath, xmlStr)
+		modules.fsp.writeFile(result.filePath, xmlStr)
 			.catch(err => {
 				dialog.oeffnen({
 					typ: "alert",
@@ -4269,10 +4263,10 @@ let xml = {
 				});
 			});
 		// Pfad speichern
-		let reg = new RegExp(`^.+\\${path.sep}`);
+		let reg = new RegExp(`^.+\\${modules.path.sep}`);
 		const pfad = result.filePath.match(reg)[0];
 		xml.data.letzter_pfad = pfad;
-		ipcRenderer.sendTo(xml.data.contentsId, "optionen-letzter-pfad", pfad);
+		modules.ipc.sendTo(xml.data.contentsId, "optionen-letzter-pfad", pfad);
 	},
 	// Importieren: XML-Datei öffnen und überprüfen
 	async importieren () {
@@ -4297,8 +4291,7 @@ let xml = {
 			opt.defaultPath = xml.data.letzter_pfad;
 		}
 		// Dialog anzeigen
-		const {ipcRenderer} = require("electron");
-		let result = await ipcRenderer.invoke("datei-dialog", {
+		let result = await modules.ipc.invoke("datei-dialog", {
 			open: true,
 			winId: winInfo.winId,
 			opt: opt,
@@ -4314,8 +4307,7 @@ let xml = {
 			return;
 		}
 		// Datei einlesen
-		const fsP = require("fs").promises;
-		fsP.readFile(result.filePaths[0], {encoding: "utf8"})
+		modules.fsp.readFile(result.filePaths[0], {encoding: "utf8"})
 			.then(content => {
 				let parser = new DOMParser(),
 					xmlDoc = parser.parseFromString(content, "text/xml");

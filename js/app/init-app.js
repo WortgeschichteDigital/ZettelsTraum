@@ -1,11 +1,22 @@
 "use strict";
 
+// MODULE
+const modules = {
+	clipboard: require("electron").clipboard,
+	cp: require("child_process"),
+	fsp: require("fs").promises,
+	ipc: require("electron").ipcRenderer,
+	os: require("os"),
+	path: require("path"),
+	shell: require("electron").shell,
+	zlib: require("zlib"),
+};
+
 // INITIALISIERUNG DER APP
 window.addEventListener("load", async () => {
 	// VARIABLEN ANLEGEN
 	// Infos zu App und Fenster erfragen
-	const {ipcRenderer} = require("electron");
-	let info = await ipcRenderer.invoke("infos-senden");
+	let info = await modules.ipc.invoke("infos-senden");
 	window.appInfo = info.appInfo;
 	window.winInfo = info.winInfo;
 
@@ -17,35 +28,35 @@ window.addEventListener("load", async () => {
 
 	// IPC-LISTENER INITIALISIEREN
 	// Menüpunkte
-	ipcRenderer.on("app-karteisuche", () => karteisuche.oeffnen());
-	ipcRenderer.on("app-einstellungen", () => optionen.oeffnen());
-	ipcRenderer.on("kartei-erstellen", () => kartei.wortErfragen());
-	ipcRenderer.on("kartei-oeffnen", (evt, datei) => {
+	modules.ipc.on("app-karteisuche", () => karteisuche.oeffnen());
+	modules.ipc.on("app-einstellungen", () => optionen.oeffnen());
+	modules.ipc.on("kartei-erstellen", () => kartei.wortErfragen());
+	modules.ipc.on("kartei-oeffnen", (evt, datei) => {
 		if (datei) {
 			kartei.oeffnenEinlesen(datei);
 		} else {
 			kartei.oeffnen();
 		}
 	});
-	ipcRenderer.on("kartei-speichern", () => speichern.kaskade());
-	ipcRenderer.on("kartei-speichern-unter", () => kartei.speichern(true));
-	ipcRenderer.on("kartei-schliessen", () => kartei.schliessen());
-	ipcRenderer.on("kartei-formvarianten", () => stamm.oeffnen());
-	ipcRenderer.on("kartei-notizen", () => notizen.oeffnen());
-	ipcRenderer.on("kartei-anhaenge", () => anhaenge.fenster());
-	ipcRenderer.on("kartei-lexika", () => lexika.oeffnen());
-	ipcRenderer.on("kartei-metadaten", () => meta.oeffnen());
-	ipcRenderer.on("kartei-bedeutungen", () => bedeutungen.oeffnen());
-	ipcRenderer.on("kartei-bedeutungen-wechseln", () => bedeutungenGeruest.oeffnen());
-	ipcRenderer.on("kartei-bedeutungen-fenster", () => bedeutungenWin.oeffnen());
-	ipcRenderer.on("kartei-suche", () => filter.suche());
-	ipcRenderer.on("redaktion-ereignisse", () => redaktion.oeffnen());
-	ipcRenderer.on("redaktion-literatur", () => redLit.oeffnen());
-	ipcRenderer.on("redaktion-metadaten", () => redMeta.oeffnen());
-	ipcRenderer.on("redaktion-wortinformationen", () => redWi.oeffnen());
-	ipcRenderer.on("redaktion-xml", () => redXml.oeffnen());
-	ipcRenderer.on("redaktion-belege-xml", () => xml.belegeInXmlFenster());
-	ipcRenderer.on("belege-hinzufuegen", () => {
+	modules.ipc.on("kartei-speichern", () => speichern.kaskade());
+	modules.ipc.on("kartei-speichern-unter", () => kartei.speichern(true));
+	modules.ipc.on("kartei-schliessen", () => kartei.schliessen());
+	modules.ipc.on("kartei-formvarianten", () => stamm.oeffnen());
+	modules.ipc.on("kartei-notizen", () => notizen.oeffnen());
+	modules.ipc.on("kartei-anhaenge", () => anhaenge.fenster());
+	modules.ipc.on("kartei-lexika", () => lexika.oeffnen());
+	modules.ipc.on("kartei-metadaten", () => meta.oeffnen());
+	modules.ipc.on("kartei-bedeutungen", () => bedeutungen.oeffnen());
+	modules.ipc.on("kartei-bedeutungen-wechseln", () => bedeutungenGeruest.oeffnen());
+	modules.ipc.on("kartei-bedeutungen-fenster", () => bedeutungenWin.oeffnen());
+	modules.ipc.on("kartei-suche", () => filter.suche());
+	modules.ipc.on("redaktion-ereignisse", () => redaktion.oeffnen());
+	modules.ipc.on("redaktion-literatur", () => redLit.oeffnen());
+	modules.ipc.on("redaktion-metadaten", () => redMeta.oeffnen());
+	modules.ipc.on("redaktion-wortinformationen", () => redWi.oeffnen());
+	modules.ipc.on("redaktion-xml", () => redXml.oeffnen());
+	modules.ipc.on("redaktion-belege-xml", () => xml.belegeInXmlFenster());
+	modules.ipc.on("belege-hinzufuegen", () => {
 		// Sperre für macOS (Menüpunkte können nicht deaktiviert werden)
 		if (!kartei.wort) {
 			dialog.oeffnen({
@@ -56,7 +67,7 @@ window.addEventListener("load", async () => {
 		}
 		speichern.checkInit(() => beleg.erstellen());
 	});
-	ipcRenderer.on("belege-auflisten", () => {
+	modules.ipc.on("belege-auflisten", () => {
 		// Sperre für macOS (Menüpunkte können nicht deaktiviert werden)
 		if (!kartei.wort) {
 			dialog.oeffnen({
@@ -67,57 +78,57 @@ window.addEventListener("load", async () => {
 		}
 		speichern.checkInit(() => liste.wechseln());
 	});
-	ipcRenderer.on("belege-taggen", () => belegeTaggen.oeffnen());
-	ipcRenderer.on("belege-loeschen", () => liste.loeschenAlleBelege());
-	ipcRenderer.on("belege-kopieren", () => kopieren.init());
-	ipcRenderer.on("belege-einfuegen", () => kopieren.einfuegen());
-	ipcRenderer.on("belege-zwischenablage", () => liste.kopierenAlleBelege());
-	ipcRenderer.on("hilfe-demo", () => helfer.demoOeffnen());
-	ipcRenderer.on("hilfe-updates", () => updates.fenster());
+	modules.ipc.on("belege-taggen", () => belegeTaggen.oeffnen());
+	modules.ipc.on("belege-loeschen", () => liste.loeschenAlleBelege());
+	modules.ipc.on("belege-kopieren", () => kopieren.init());
+	modules.ipc.on("belege-einfuegen", () => kopieren.einfuegen());
+	modules.ipc.on("belege-zwischenablage", () => liste.kopierenAlleBelege());
+	modules.ipc.on("hilfe-demo", () => helfer.demoOeffnen());
+	modules.ipc.on("hilfe-updates", () => updates.fenster());
 	// Kopierfunktion
-	ipcRenderer.on("kopieren-basisdaten", () => kopieren.basisdatenSenden());
-	ipcRenderer.on("kopieren-basisdaten-empfangen", (evt, daten) => kopieren.einfuegenBasisdatenEintragen(daten));
-	ipcRenderer.on("kopieren-daten", () => kopieren.datenSenden());
-	ipcRenderer.on("kopieren-daten-empfangen", (evt, daten) => kopieren.einfuegenEinlesen(daten));
+	modules.ipc.on("kopieren-basisdaten", () => kopieren.basisdatenSenden());
+	modules.ipc.on("kopieren-basisdaten-empfangen", (evt, daten) => kopieren.einfuegenBasisdatenEintragen(daten));
+	modules.ipc.on("kopieren-daten", () => kopieren.datenSenden());
+	modules.ipc.on("kopieren-daten-empfangen", (evt, daten) => kopieren.einfuegenEinlesen(daten));
 	// Einstellungen
-	ipcRenderer.on("optionen-init", (evt, opt) => {
+	modules.ipc.on("optionen-init", (evt, opt) => {
 		optionen.einlesen(optionen.data, opt);
 		optionen.anwenden();
 		zuletzt.aufbauen();
 	});
-	ipcRenderer.on("optionen-empfangen", (evt, data) => optionen.empfangen(data));
-	ipcRenderer.on("optionen-zuletzt", (evt, karteien) => zuletzt.update(karteien));
-	ipcRenderer.on("optionen-zuletzt-verschwunden", (evt, verschwunden) => zuletzt.verschwundenUpdate(verschwunden));
-	ipcRenderer.on("optionen-fenster", (evt, fenster, status) => optionen.data[fenster] = status);
-	ipcRenderer.on("optionen-letzter-pfad", (evt, pfad) => optionen.aendereLetzterPfad(pfad));
+	modules.ipc.on("optionen-empfangen", (evt, data) => optionen.empfangen(data));
+	modules.ipc.on("optionen-zuletzt", (evt, karteien) => zuletzt.update(karteien));
+	modules.ipc.on("optionen-zuletzt-verschwunden", (evt, verschwunden) => zuletzt.verschwundenUpdate(verschwunden));
+	modules.ipc.on("optionen-fenster", (evt, fenster, status) => optionen.data[fenster] = status);
+	modules.ipc.on("optionen-letzter-pfad", (evt, pfad) => optionen.aendereLetzterPfad(pfad));
 	// Bedeutungsgerüst-Fenster
-	ipcRenderer.on("bedeutungen-fenster-daten", () => bedeutungenWin.daten());
-	ipcRenderer.on("bedeutungen-fenster-geschlossen", () => bedeutungenWin.contentsId = 0);
-	ipcRenderer.on("bedeutungen-fenster-drucken", (evt, gn) => {
+	modules.ipc.on("bedeutungen-fenster-daten", () => bedeutungenWin.daten());
+	modules.ipc.on("bedeutungen-fenster-geschlossen", () => bedeutungenWin.contentsId = 0);
+	modules.ipc.on("bedeutungen-fenster-drucken", (evt, gn) => {
 		drucken.init("bedeutungen-", gn);
-		helfer.fensterFokus();
+		modules.ipc.invoke("fenster-fokus");
 	});
-	ipcRenderer.on("bedeutungen-fenster-umtragen", (evt, bd, eintragen) => {
+	modules.ipc.on("bedeutungen-fenster-umtragen", (evt, bd, eintragen) => {
 		beleg.bedeutungEinAustragen(bd, eintragen);
-		helfer.fensterFokus();
+		modules.ipc.invoke("fenster-fokus");
 	});
 	// XML-Fenster
-	ipcRenderer.on("red-xml-daten", () => redXml.daten());
-	ipcRenderer.on("red-xml-speichern", (evt, daten) => redXml.speichern({daten}));
-	ipcRenderer.on("red-xml-geschlossen", () => redXml.contentsId = 0);
+	modules.ipc.on("red-xml-daten", () => redXml.daten());
+	modules.ipc.on("red-xml-speichern", (evt, daten) => redXml.speichern({daten}));
+	modules.ipc.on("red-xml-geschlossen", () => redXml.contentsId = 0);
 	// Dialog
-	ipcRenderer.on("dialog-anzeigen", (evt, text) => {
+	modules.ipc.on("dialog-anzeigen", (evt, text) => {
 		dialog.oeffnen({
 			typ: "alert",
 			text: text,
 		});
 	});
 	// CLI-Operationen
-	ipcRenderer.on("cli-command", (evt, commands) => cli.verarbeiten(commands));
+	modules.ipc.on("cli-command", (evt, commands) => cli.verarbeiten(commands));
 	// Updates suchen
-	ipcRenderer.on("updates-check", () => updates.check(true));
+	modules.ipc.on("updates-check", () => updates.check(true));
 	// Before-Unload
-	ipcRenderer.on("before-unload", () => helfer.beforeUnload());
+	modules.ipc.on("before-unload", () => helfer.beforeUnload());
 
 	// EVENTS: RESIZE
 	window.addEventListener("resize", () => {
@@ -245,10 +256,7 @@ window.addEventListener("load", async () => {
 	// Updates-Icon
 	document.getElementById("updates").addEventListener("click", () => updates.fenster());
 	// Programm-Icon
-	document.getElementById("icon").addEventListener("click", () => {
-		const {ipcRenderer} = require("electron");
-		ipcRenderer.send("ueber-app");
-	});
+	document.getElementById("icon").addEventListener("click", () => modules.ipc.send("ueber-app"));
 	// Start-Sektion
 	document.getElementById("start-erstellen").addEventListener("click", () => kartei.wortErfragen());
 	document.getElementById("start-oeffnen").addEventListener("click", () => kartei.oeffnen());
@@ -527,7 +535,7 @@ window.addEventListener("load", async () => {
 	// IPC-ANFRAGEN
 	// Bilder vorladen
 	let bilderPreload = [],
-		bilder = await ipcRenderer.invoke("bilder-senden");
+		bilder = await modules.ipc.invoke("bilder-senden");
 	for (let b of bilder) {
 		let img = new Image();
 		img.src = `img/${b}`;

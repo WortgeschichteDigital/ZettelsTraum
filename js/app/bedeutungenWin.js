@@ -14,13 +14,12 @@ let bedeutungenWin = {
 			return;
 		}
 		// Fenster schon offen? => Fenster fokussieren
-		const {ipcRenderer} = require("electron");
 		if (bedeutungenWin.contentsId) {
-			ipcRenderer.invoke("bedeutungen-fokussieren", bedeutungenWin.contentsId);
+			modules.ipc.invoke("bedeutungen-fokussieren", bedeutungenWin.contentsId);
 			return;
 		}
 		// Fenster durch Main-Prozess öffnen lassen
-		bedeutungenWin.contentsId = await ipcRenderer.invoke("bedeutungen-oeffnen", `Bedeutungsgerüst: ${kartei.wort}`);
+		bedeutungenWin.contentsId = await modules.ipc.invoke("bedeutungen-oeffnen", `Bedeutungsgerüst: ${kartei.wort}`);
 	},
 	// Bedeutungsgerüst-Fenster schließen
 	schliessen () {
@@ -29,8 +28,7 @@ let bedeutungenWin = {
 				resolve(false);
 				return;
 			}
-			const {ipcRenderer} = require("electron");
-			await ipcRenderer.invoke("bedeutungen-schliessen", bedeutungenWin.contentsId);
+			await modules.ipc.invoke("bedeutungen-schliessen", bedeutungenWin.contentsId);
 			bedeutungenWin.contentsId = 0;
 			resolve(true);
 		});
@@ -47,7 +45,6 @@ let bedeutungenWin = {
 			contentsId: winInfo.contentsId,
 		};
 		// Daten senden
-		const {ipcRenderer} = require("electron");
-		ipcRenderer.sendTo(bedeutungenWin.contentsId, "daten", daten);
+		modules.ipc.sendTo(bedeutungenWin.contentsId, "daten", daten);
 	},
 };

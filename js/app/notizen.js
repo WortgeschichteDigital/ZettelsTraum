@@ -239,8 +239,7 @@ let notizen = {
 		}
 		let text = beleg.pasteBs(evt, false);
 		text = text.replace(/<.+?>/g, "");
-		const {clipboard} = require("electron");
-		clipboard.writeText(text);
+		modules.clipboard.writeText(text);
 		notizen.pasteBlock = true;
 		document.execCommand("paste");
 		notizen.pasteBlock = false;
@@ -347,8 +346,7 @@ let notizen = {
 			let mark = document.createElement("mark");
 			mark.classList.add(cl);
 			mark.innerHTML = content;
-			let {clipboard} = require("electron");
-			clipboard.writeHTML(mark.outerHTML);
+			modules.clipboard.writeHTML(mark.outerHTML);
 			range.deleteContents();
 			range.insertNode(mark);
 			sel.selectAllChildren(mark);

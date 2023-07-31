@@ -2075,8 +2075,7 @@ let liste = {
 			html[i] = html[i].replace(/^<p>/, `<p style="margin-top: 18pt">`);
 		}
 		// Daten => Clipboard
-		const {clipboard} = require("electron");
-		clipboard.write({
+		modules.clipboard.write({
 			text: text.join("\n".repeat(4)),
 			html: html.join(""),
 		});
@@ -2251,14 +2250,14 @@ let liste = {
 		// Kopieraktion ausführen
 		switch (auswahl) {
 			case "1":
-				helfer.toClipboard({
+				modules.clipboard.write({
 					text: popup.textauswahl.text,
 					html: popup.textauswahl.html,
 				});
 				helfer.animation("zwischenablage");
 				break;
 			case "2":
-				helfer.toClipboard({
+				modules.clipboard.write({
 					text: xml.belegId({}),
 				});
 				helfer.animation("zwischenablage");

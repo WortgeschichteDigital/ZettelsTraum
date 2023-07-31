@@ -15,8 +15,7 @@ let helferWin = {
 			// ggf. Abschnitt ermitteln
 			const abschnitt = a.getAttribute("href").replace(/^#/, "");
 			// Signal an den Main-Prozess
-			const {ipcRenderer} = require("electron");
-			ipcRenderer.send(fenster, abschnitt);
+			modules.ipc.send(fenster, abschnitt);
 		});
 	},
 	// Changelog über Link öffnen
@@ -25,11 +24,9 @@ let helferWin = {
 	oeffneChangelog (a) {
 		a.addEventListener("click", function(evt) {
 			evt.preventDefault();
-			const {ipcRenderer} = require("electron");
-			ipcRenderer.send("hilfe-changelog");
+			modules.ipc.send("hilfe-changelog");
 			if (this.dataset.caller === "ueber-app") {
-				const {ipcRenderer} = require("electron");
-				ipcRenderer.invoke("fenster-schliessen");
+				modules.ipc.invoke("fenster-schliessen");
 			}
 		});
 	},
@@ -39,8 +36,7 @@ let helferWin = {
 	oeffneFehlerlog (a) {
 		a.addEventListener("click", function(evt) {
 			evt.preventDefault();
-			const {ipcRenderer} = require("electron");
-			ipcRenderer.send("hilfe-fehlerlog");
+			modules.ipc.send("hilfe-fehlerlog");
 		});
 	},
 	// Bedeutungsgerüst-Fenster: zuvor noch die Dimensionen speichern;
@@ -48,17 +44,16 @@ let helferWin = {
 	//   danach wird ein endgültiger Schließen-Befehl an Main abgesetzt
 	// XML-Fenster: zugehörigem Hauptfenster mitteilen, dass es geschlossen wurde
 	async beforeUnload () {
-		const {ipcRenderer} = require("electron");
 		// Bedeutungsgerüst-Fenster
 		if (winInfo.typ === "bedeutungen") {
-			ipcRenderer.sendTo(bedeutungen.data.contentsId, "bedeutungen-fenster-geschlossen");
-			await ipcRenderer.invoke("fenster-status", winInfo.winId, "fenster-bedeutungen");
+			modules.ipc.sendTo(bedeutungen.data.contentsId, "bedeutungen-fenster-geschlossen");
+			await modules.ipc.invoke("fenster-status", winInfo.winId, "fenster-bedeutungen");
 		}
 		// XML-Fenster
 		else if (winInfo.typ === "xml") {
-			ipcRenderer.sendTo(xml.data.contentsId, "red-xml-geschlossen");
+			modules.ipc.sendTo(xml.data.contentsId, "red-xml-geschlossen");
 		}
 		// Fenster endgültig schließen
-		ipcRenderer.invoke("fenster-schliessen-endgueltig");
+		modules.ipc.invoke("fenster-schliessen-endgueltig");
 	},
 };

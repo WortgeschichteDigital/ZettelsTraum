@@ -12,8 +12,7 @@ let karteisuche = {
 		// Suchtiefe aus den Optionen übernehmen
 		document.querySelector("#karteisuche-suchenTiefe").value = optionen.data.karteisuche.tiefe;
 		// Cache laden
-		const {ipcRenderer} = require("electron");
-		karteisuche.ztjCache = await ipcRenderer.invoke("ztj-cache-get");
+		karteisuche.ztjCache = await modules.ipc.invoke("ztj-cache-get");
 		// Suchbutton fokussieren
 		let buttons = fenster.querySelectorAll(`input[type="button"]`);
 		if (Object.keys(karteisuche.ztjCache).length) {
@@ -115,8 +114,7 @@ let karteisuche = {
 			opt.defaultPath = optionen.data.letzter_pfad;
 		}
 		// Dialog anzeigen
-		const {ipcRenderer} = require("electron");
-		let result = await ipcRenderer.invoke("datei-dialog", {
+		let result = await modules.ipc.invoke("datei-dialog", {
 			open: true,
 			winId: winInfo.winId,
 			opt: opt,
@@ -299,8 +297,7 @@ let karteisuche = {
 	//     (Pfade, in denen gesucht werden soll;
 	//     das Array ist leer, wenn im Cache gesucht werden soll)
 	async suchenPrepZtj (pfade) {
-		const {ipcRenderer} = require("electron"),
-			status = await ipcRenderer.invoke("ztj-cache-status-get");
+		const status = await modules.ipc.invoke("ztj-cache-status-get");
 		// Abbruch, falls bereits eine Suche läuft
 		if (status) {
 			dialog.oeffnen({
@@ -310,9 +307,9 @@ let karteisuche = {
 			return;
 		}
 		// speichern, dass die Suche läuft
-		ipcRenderer.invoke("ztj-cache-status-set", true);
+		modules.ipc.invoke("ztj-cache-status-set", true);
 		// Cache-Daten aus Main holen
-		karteisuche.ztjCache = await ipcRenderer.invoke("ztj-cache-get");
+		karteisuche.ztjCache = await modules.ipc.invoke("ztj-cache-get");
 		// Element mit Fokus speichern
 		karteisuche.suchenFokus = document.querySelector("#karteisuche input:focus");
 		if (karteisuche.suchenFokus) {
@@ -323,8 +320,6 @@ let karteisuche = {
 		// Animation einblenden
 		karteisuche.animation(true);
 		// Dateien suchen
-		const fs = require("fs"),
-			fsP = fs.promises;
 		karteisuche.suchenTiefe = parseInt(document.querySelector("#karteisuche-suchenTiefe").value, 10);
 		await new Promise(resolve => {
 			setTimeout(async () => {
@@ -335,7 +330,7 @@ let karteisuche = {
 						const exists = await helfer.exists(ordner);
 						if (exists) {
 							try {
-								await fsP.access(ordner, fs.constants.R_OK); // Lesezugriff auf Basisordner? Wenn kein Zugriff => throw
+								await modules.fsp.access(ordner, modules.fsp.constants.R_OK); // Lesezugriff auf Basisordner? Wenn kein Zugriff => throw
 								await karteisuche.ordnerParsen(ordner, 1);
 							} catch (err) { // wahrscheinlich besteht kein Zugriff auf den Pfad
 								karteisuche.suchenAbschluss();
@@ -395,7 +390,6 @@ let karteisuche = {
 		// Filterwerte sammeln
 		karteisuche.filterWerteSammeln();
 		// Karteien analysieren
-		const {ipcRenderer} = require("electron");
 		let ztjAdd = [],
 			ztjMit = {},
 			nebenlemmata = new Set();
@@ -420,7 +414,7 @@ let karteisuche = {
 					continue;
 				}
 				// Kartei cachen
-				ipcRenderer.invoke("ztj-cache-save", {
+				modules.ipc.invoke("ztj-cache-save", {
 					pfad: kartei.pfad,
 					ctime: kartei.ctime,
 					data: datei,
@@ -605,14 +599,13 @@ let karteisuche = {
 	},
 	// Karteisuche abschließen (bei Erfolg oder vorzeitigem Abbruch)
 	suchenAbschluss () {
-		const {ipcRenderer} = require("electron");
 		// Sperrbild weg und das zuletzt fokussierte Element wieder fokussieren
 		karteisuche.animation(false);
 		if (karteisuche.suchenFokus) {
 			karteisuche.suchenFokus.focus();
 		}
 		// Status der Karteisuche zurücksetzen
-		ipcRenderer.invoke("ztj-cache-status-set", false);
+		modules.ipc.invoke("ztj-cache-status-set", false);
 	},
 	// ZTJ-Dateien, die gefunden wurden;
 	// Array enthält Objekte:
@@ -641,11 +634,9 @@ let karteisuche = {
 		suchtiefe++;
 		return new Promise(async resolve => {
 			try {
-				const fsP = require("fs").promises,
-					files = await fsP.readdir(ordner);
+				const files = await modules.fsp.readdir(ordner);
 				for (let i of files) {
-					const path = require("path"),
-						pfad = path.join(ordner, i);
+					const pfad = modules.path.join(ordner, i);
 					await karteisuche.pfadPruefen(pfad, suchtiefe);
 				}
 				resolve(true);
@@ -666,8 +657,7 @@ let karteisuche = {
 				if (/\.ztj$/.test(pfad) ||
 						!/\.[a-z]{3,4}/.test(pfad)) {
 					// zur Beschleunigung nur testen, wenn ZTJ-Datei oder wahrscheinlich Ordner
-					const fsP = require("fs").promises;
-					stats = await fsP.lstat(pfad);
+					stats = await modules.fsp.lstat(pfad);
 				}
 				if (stats?.isDirectory() && // Ordner => parsen
 						suchtiefe <= karteisuche.suchenTiefe) { // nur bis zu dieser Verschachtelungstiefe suchen
@@ -902,8 +892,7 @@ let karteisuche = {
 				return;
 			}
 			// Kartei in einem neuen Fenster öffnen
-			const {ipcRenderer} = require("electron");
-			ipcRenderer.send("kartei-laden", this.dataset.pfad, false);
+			modules.ipc.send("kartei-laden", this.dataset.pfad, false);
 		});
 	},
 	// Sortierwort aus dem übergebenen Wort/Ausdruck ableiten

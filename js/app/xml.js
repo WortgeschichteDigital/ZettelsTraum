@@ -355,7 +355,7 @@ let xml = {
 	schnittInZwischenablage () {
 		const xmlStr = xml.schnitt();
 		// Text kopieren
-		helfer.toClipboard({
+		modules.clipboard.write({
 			text: xmlStr,
 		});
 		// Animation
@@ -491,7 +491,7 @@ let xml = {
 	// Referenztag des Belegs in die Zwischenablage kopieren
 	referenz () {
 		const id = xml.belegId({});
-		helfer.toClipboard({
+		modules.clipboard.write({
 			text: `<Belegreferenz Ziel="${id}"/>`,
 		});
 		helfer.animation("zwischenablage");

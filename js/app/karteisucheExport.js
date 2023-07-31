@@ -728,7 +728,6 @@ let karteisucheExport = {
 	//   vars = Object
 	//     (Pfade: vars.quelle, vars.ziel; Vorlagen-Index: vars.vorlage)
 	async exportierenAuto (vars) {
-		const { ipcRenderer: ipc } = require("electron");
 		let opt = optionen.data["karteisuche-export-vorlagen"];
 		if (!opt.length) {
 			karteisucheExport.vorlagenFillOpt();
@@ -742,7 +741,7 @@ let karteisucheExport = {
 			vars.vorlage = parseInt(vars.vorlage, 10);
 		}
 		if (!opt[vars.vorlage]) {
-			ipc.invoke("cli-message", `Fehler: Vorlage ${vars.vorlage} nicht gefunden`);
+			modules.ipc.invoke("cli-message", `Fehler: Vorlage ${vars.vorlage} nicht gefunden`);
 			return false;
 		}
 
@@ -762,7 +761,7 @@ let karteisucheExport = {
 		vars = result;
 
 		// Message
-		ipc.invoke("cli-message", `Exportiere Karteiliste "${titel}" nach ${vars.ziel}`);
+		modules.ipc.invoke("cli-message", `Exportiere Karteiliste "${titel}" nach ${vars.ziel}`);
 
 		// Karteisuche aufrufen
 		await karteisuche.oeffnen();
@@ -796,9 +795,8 @@ let karteisucheExport = {
 		const content = karteisucheExport.exportieren(true);
 
 		// Daten speichern
-		const fsP = require("fs").promises;
 		const writeResult = await new Promise(resolve => {
-			fsP.writeFile(vars.ziel, content)
+			modules.fsp.writeFile(vars.ziel, content)
 				.then(async () => {
 					// alle Pfade abhaken
 					document.querySelectorAll("#karteisuche-pfade input").forEach(i => i.checked = true);
@@ -824,7 +822,7 @@ let karteisucheExport = {
 					filterWieder();
 
 					// Fehlermeldung
-					ipc.invoke("cli-message", `Fehler: ${err.name} – ${err.message}`);
+					modules.ipc.invoke("cli-message", `Fehler: ${err.name} – ${err.message}`);
 
 					// Promise auflösen
 					resolve(false);
@@ -1099,10 +1097,9 @@ let karteisucheExport = {
 	//   format = Object
 	//     (Angaben zum Format und Inhalt der Daten)
 	async speichern (content, format) {
-		const path = require("path");
 		const opt = {
 			title: `${format.name} speichern`,
-			defaultPath: path.join(appInfo.documents, `${format.content}.${format.ext}`),
+			defaultPath: modules.path.join(appInfo.documents, `${format.content}.${format.ext}`),
 			filters: [
 				{
 					name: `${format.name}-Dateien`,
@@ -1115,8 +1112,7 @@ let karteisucheExport = {
 			],
 		};
 		// Dialog anzeigen
-		const {ipcRenderer} = require("electron");
-		const result = await ipcRenderer.invoke("datei-dialog", {
+		const result = await modules.ipc.invoke("datei-dialog", {
 			open: false,
 			winId: winInfo.winId,
 			opt,
@@ -1132,8 +1128,7 @@ let karteisucheExport = {
 			return;
 		}
 		// Kartei speichern
-		const fsP = require("fs").promises;
-		fsP.writeFile(result.filePath, content)
+		modules.fsp.writeFile(result.filePath, content)
 			.catch(err => {
 				dialog.oeffnen({
 					typ: "alert",

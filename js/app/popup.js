@@ -213,8 +213,7 @@ let popup = {
 			items = ["karteiErstellen"];
 		}
 		// Menü vom Main-Prozess erzeugen lassen
-		const {ipcRenderer} = require("electron");
-		ipcRenderer.invoke("popup", items);
+		modules.ipc.invoke("popup", items);
 	},
 	// ermittelt das für den Rechtsklick "passendste" Klickziel
 	//   pfad = Array

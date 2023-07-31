@@ -4,18 +4,17 @@
 let initWin = {
 	// Listener für Signale des Main-Prozesses
 	ipcListener () {
-		const {ipcRenderer} = require("electron");
 		// helle Elemente dunkler darstellen
-		ipcRenderer.on("helle-dunkler", () => document.documentElement.classList.add("dunkler"));
+		modules.ipc.on("helle-dunkler", () => document.documentElement.classList.add("dunkler"));
 		// Abschnitt öffnen (Dokumentation, Handbuch)
-		ipcRenderer.on("oeffne-abschnitt", (evt, abschnitt) => hilfe.naviSprungAusfuehren(abschnitt));
+		modules.ipc.on("oeffne-abschnitt", (evt, abschnitt) => hilfe.naviSprungAusfuehren(abschnitt));
 		// Gerüstdaten übernehmen (Bedeutungen)
-		ipcRenderer.on("daten", (evt, daten) => {
+		modules.ipc.on("daten", (evt, daten) => {
 			bedeutungen.data = daten;
 			bedeutungen.aufbauen();
 		});
 		// XML-Redaktionsfenster: alle XML-Daten empfangen
-		ipcRenderer.on("xml-daten", (evt, xmlDaten) => {
+		modules.ipc.on("xml-daten", (evt, xmlDaten) => {
 			if (xml.data.wort) {
 				// beim Ändern des Karteiworts werden alle Daten noch einmal
 				// an das bereits offene Fenster geschickt; in diesem Fall
@@ -28,14 +27,13 @@ let initWin = {
 			}
 		});
 		// XML-Redaktionsfester: einen XML-Datensatz empfangen
-		ipcRenderer.on("xml-datensatz", (evt, xmlDatensatz) => xml.empfangen({xmlDatensatz}));
+		modules.ipc.on("xml-datensatz", (evt, xmlDatensatz) => xml.empfangen({xmlDatensatz}));
 		// Before-Unload
-		ipcRenderer.on("before-unload", () => helferWin.beforeUnload());
+		modules.ipc.on("before-unload", () => helferWin.beforeUnload());
 	},
 	// Infos zu App und Fenster erfragen
 	async infos () {
-		const {ipcRenderer} = require("electron");
-		let info = await ipcRenderer.invoke("infos-senden");
+		let info = await modules.ipc.invoke("infos-senden");
 		window.appInfo = info.appInfo;
 		window.winInfo = info.winInfo;
 	},
@@ -61,15 +59,13 @@ let initWin = {
 		document.querySelectorAll("#icon, .ueber-app").forEach(i => {
 			i.addEventListener("click", evt => {
 				evt.preventDefault();
-				const {ipcRenderer} = require("electron");
-				ipcRenderer.send("ueber-app");
+				modules.ipc.send("ueber-app");
 			});
 		});
 		document.querySelectorAll(".ueber-electron").forEach(i => {
 			i.addEventListener("click", evt => {
 				evt.preventDefault();
-				const {ipcRenderer} = require("electron");
-				ipcRenderer.send("ueber-electron");
+				modules.ipc.send("ueber-electron");
 			});
 		});
 		// externe Links
@@ -78,8 +74,7 @@ let initWin = {
 		document.querySelectorAll(".hilfe-demo").forEach(i => {
 			i.addEventListener("click", evt => {
 				evt.preventDefault();
-				const {ipcRenderer} = require("electron");
-				ipcRenderer.send("hilfe-demo");
+				modules.ipc.send("hilfe-demo");
 			});
 		});
 		// Hilfe-Fenster (Dokumentation, Handbuch)

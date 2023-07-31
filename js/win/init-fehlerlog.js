@@ -1,5 +1,12 @@
 "use strict";
 
+// MODULE
+const modules = {
+	clipboard: require("electron").clipboard,
+	ipc: require("electron").ipcRenderer,
+	os: require("os"),
+};
+
 window.addEventListener("load", async () => {
 	// INIT
 	await initWin.infos();

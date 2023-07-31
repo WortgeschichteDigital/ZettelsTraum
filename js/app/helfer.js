@@ -21,11 +21,6 @@ let helfer = {
 			});
 		}, 500);
 	},
-	// fordert den Main-Prozess auf, dieses Fenster zu fokussieren
-	fensterFokus () {
-		const {ipcRenderer} = require("electron");
-		ipcRenderer.invoke("fenster-fokus");
-	},
 	// Timeout für das Entfernen des Overflow-Styles
 	elementMaxHeightTimeout: null,
 	// maximale Höhe des übergebenen Elements festlegen
@@ -549,13 +544,6 @@ let helfer = {
 			quelle.parentNode.replaceChild(ersatz, quelle);
 			quelle = cont.querySelector(selectors);
 		}
-	},
-	// Text in die Zwischenablage schieben
-	//   text = Object
-	//     (enthält Plain-Text und ggf. auch HTML)
-	toClipboard (text) {
-		const {clipboard} = require("electron");
-		clipboard.write(text);
 	},
 	// Strings für alphanumerische Sortierung aufbereiten
 	//   s = String
@@ -1098,8 +1086,7 @@ let helfer = {
 				url = `https://${url}`;
 			}
 			// URL im Browser öffnen
-			const {shell} = require("electron");
-			shell.openExternal(url);
+			modules.shell.openExternal(url);
 		});
 	},
 	// lädt den Inhalt der übergebenen URL herunter
@@ -1148,23 +1135,20 @@ let helfer = {
 	//   pfad = String
 	//     (Pfad zu einer Datei)
 	ordnerOeffnen (pfad) {
-		const {shell} = require("electron"),
-			path = require("path");
 		if (!/\.ztj$/.test(pfad)) { // Ordner öffnen
 			if (!/\/$/.test(pfad)) {
-				pfad += path.sep;
+				pfad += modules.path.sep;
 			}
-			pfad += `.${path.sep}`; // sonst wird nicht der Ordner, sondern der übergeordnete Ordner geöffnet
+			pfad += `.${modules.path.sep}`; // sonst wird nicht der Ordner, sondern der übergeordnete Ordner geöffnet
 		}
-		shell.showItemInFolder(pfad);
+		modules.shell.showItemInFolder(pfad);
 	},
 	// prüft, ob eine Datei existiert
 	//   datei = String
 	//     (Pfad zur Datei)
 	exists (datei) {
 		return new Promise(resolve => {
-			const fsP = require("fs").promises;
-			fsP.access(datei)
+			modules.fsp.access(datei)
 				.then(() => resolve(true))
 				.catch(() => resolve(false));
 		});
@@ -1177,7 +1161,6 @@ let helfer = {
 	//   vars = Object
 	//     (CLI-Parameter)
 	async cliFolderCheck ({format, typ, vars}) {
-		const { ipcRenderer: ipc } = require("electron");
 		let quelleExists = await helfer.exists(vars.quelle),
 			zielExists = await helfer.exists(vars.ziel),
 			neueDatei = false;
@@ -1193,22 +1176,21 @@ let helfer = {
 				falsch = "Zielpfad";
 				pfad = vars.ziel;
 			}
-			ipc.invoke("cli-message", `Fehler: ${falsch} nicht gefunden (${pfad})`);
+			modules.ipc.invoke("cli-message", `Fehler: ${falsch} nicht gefunden (${pfad})`);
 			return false;
 		}
 		// Ist der Zielpfad ein Ordner?
 		if (!neueDatei) {
 			try {
-				const fsP = require("fs").promises,
-					stats = await fsP.lstat(vars.ziel);
+				const stats = await modules.fsp.lstat(vars.ziel);
 				if (stats.isDirectory()) {
 					if (!/(\/|\\)$/.test(vars.ziel)) {
-						vars.ziel += require("path").sep;
+						vars.ziel += modules.path.sep;
 					}
 					vars.ziel += `${typ.replace(/[/\\]/g, "-")}.${format}`;
 				}
 			} catch (err) {
-				ipc.invoke("cli-message", `Fehler: Zugriffsfehler auf Zielpfad (${vars.ziel})`);
+				modules.ipc.invoke("cli-message", `Fehler: Zugriffsfehler auf Zielpfad (${vars.ziel})`);
 				return false;
 			}
 		}
@@ -1260,11 +1242,9 @@ let helfer = {
 			// App ist nicht paketiert => resourcesPath zeigt auf die resources von Electron
 			resources = `${resources.replace(/node_modules.+/, "")}resources`;
 		}
-		const fsP = require("fs").promises,
-			path = require("path"),
-			quelle = path.join(resources, "Demonstrationskartei Team.ztj"),
-			ziel = path.join(appInfo.temp, "Demonstrationskartei Team.ztj");
-		fsP.copyFile(quelle, ziel)
+		const quelle = modules.path.join(resources, "Demonstrationskartei Team.ztj"),
+			ziel = modules.path.join(appInfo.temp, "Demonstrationskartei Team.ztj");
+		modules.fsp.copyFile(quelle, ziel)
 			.then(() => {
 				kartei.oeffnenEinlesen(ziel);
 			})
@@ -1293,8 +1273,7 @@ let helfer = {
 				}
 			}
 			// Signal an den Main-Prozess
-			const {ipcRenderer} = require("electron");
-			ipcRenderer.send("hilfe-handbuch", abschnitt);
+			modules.ipc.send("hilfe-handbuch", abschnitt);
 		});
 	},
 	// Fehler an den Main-Prozess melden
@@ -1335,8 +1314,7 @@ let helfer = {
 			column: column,
 		};
 		// Fehler-Objekt an Renderer schicken
-		const {ipcRenderer} = require("electron");
-		ipcRenderer.send("fehler", err);
+		modules.ipc.send("fehler", err);
 		// keine Details bekannt
 		function noDetails () {
 			let stack = evt.reason.stack ? evt.reason.stack : "";
@@ -1362,8 +1340,7 @@ let helfer = {
 				beleg.geaendert ||
 				kartei.geaendert) {
 			speichern.checkInit(() => {
-				const {ipcRenderer} = require("electron");
-				ipcRenderer.invoke("fenster-schliessen");
+				modules.ipc.invoke("fenster-schliessen");
 			}, {
 				kartei: true,
 			});
@@ -1376,14 +1353,13 @@ let helfer = {
 		// Kartei entsperren
 		await lock.actions({datei: kartei.pfad, aktion: "unlock"});
 		// Status des Fensters speichern
-		const {ipcRenderer} = require("electron");
-		const fensterStatus = await ipcRenderer.invoke("fenster-status", winInfo.winId, "fenster");
+		const fensterStatus = await modules.ipc.invoke("fenster-status", winInfo.winId, "fenster");
 		if (fensterStatus) {
 			optionen.data.fenster = fensterStatus;
 		}
 		// Optionen speichern
-		await ipcRenderer.invoke("optionen-speichern", optionen.data, winInfo.winId);
+		await modules.ipc.invoke("optionen-speichern", optionen.data, winInfo.winId);
 		// Fenster endgültig schließen
-		ipcRenderer.invoke("fenster-schliessen-endgueltig");
+		modules.ipc.invoke("fenster-schliessen-endgueltig");
 	},
 };

@@ -557,8 +557,7 @@ let optionen = {
 				return;
 			}
 			// Wurde in dieser Session schon ein Tag-Dateien-Abgleich gemacht?
-			const {ipcRenderer} = require("electron"),
-				abgleich = await ipcRenderer.invoke("optionen-tag-dateien-abgleich");
+			const abgleich = await modules.ipc.invoke("optionen-tag-dateien-abgleich");
 			if (!abgleich) {
 				return;
 			}
@@ -712,18 +711,16 @@ let optionen = {
 		// XML-Dateien ermitteln => Dateien überprüfen + laden
 		let xml = [],
 			promises = [];
-		const fsP = require("fs").promises;
-		fsP.readdir(resources, {withFileTypes: true})
+		modules.fsp.readdir(resources, {withFileTypes: true})
 			.then(dateien => {
 				for (let dirent of dateien) {
 					if (dirent.isFile() && /\.xml$/.test(dirent.name)) {
 						xml.push(dirent.name);
 					}
 				}
-				const path = require("path");
 				xml.forEach(i => {
 					promises.push(optionen.tagsCheckLaden({
-						datei: path.join(resources, i),
+						datei: modules.path.join(resources, i),
 					}));
 				});
 				Promise.all(promises).then(() => {
@@ -744,8 +741,7 @@ let optionen = {
 	//     (Typ der Datei, entspricht dem Namen des Wurzelelements)
 	tagsCheckLaden ({datei, typ = "-"}) {
 		return new Promise((resolve) => {
-			const fsP = require("fs").promises;
-			fsP.readFile(datei, {encoding: "utf8"})
+			modules.fsp.readFile(datei, {encoding: "utf8"})
 				.then(content => {
 					// Datei parsen
 					let parsed = optionen.tagsParsen(content),
@@ -869,8 +865,7 @@ let optionen = {
 			],
 		};
 		// Dialog anzeigen
-		const {ipcRenderer} = require("electron");
-		let result = await ipcRenderer.invoke("datei-dialog", {
+		let result = await modules.ipc.invoke("datei-dialog", {
 			open: true,
 			winId: winInfo.winId,
 			opt: opt,
@@ -886,8 +881,7 @@ let optionen = {
 			return;
 		}
 		// Datei laden
-		const fsP = require("fs").promises;
-		fsP.readFile(result.filePaths[0], {encoding: "utf8"})
+		modules.fsp.readFile(result.filePaths[0], {encoding: "utf8"})
 			.then(content => {
 				// Tag-Datei parsen
 				let parsed = optionen.tagsParsen(content),
@@ -1147,8 +1141,7 @@ let optionen = {
 	// Optionen an den Main-Prozess schicken, der sie dann speichern soll
 	// (der Main-Prozess setzt einen Timeout, damit das nicht zu häufig geschieht)
 	speichern () {
-		const {ipcRenderer} = require("electron");
-		ipcRenderer.invoke("optionen-speichern", optionen.data, winInfo.winId);
+		modules.ipc.invoke("optionen-speichern", optionen.data, winInfo.winId);
 	},
 	// letzten Pfad speichern
 	//   pfad = String | undefined
@@ -1156,8 +1149,7 @@ let optionen = {
 	//     Pfad aus aktueller Kartei extrahieren)
 	aendereLetzterPfad (pfad = "") {
 		if (!pfad) {
-			const path = require("path");
-			let reg = new RegExp(`^.+\\${path.sep}`);
+			let reg = new RegExp(`^.+\\${modules.path.sep}`);
 			pfad = kartei.pfad.match(reg)[0];
 		}
 		optionen.data.letzter_pfad = pfad;
@@ -1183,8 +1175,7 @@ let optionen = {
 			],
 		};
 		// Dialog anzeigen
-		const {ipcRenderer} = require("electron");
-		let result = await ipcRenderer.invoke("datei-dialog", {
+		let result = await modules.ipc.invoke("datei-dialog", {
 			open: true,
 			winId: winInfo.winId,
 			opt: opt,
@@ -1200,8 +1191,7 @@ let optionen = {
 			return;
 		}
 		// Datei laden
-		const fsP = require("fs").promises;
-		fsP.readFile(result.filePaths[0], {encoding: "utf8"})
+		modules.fsp.readFile(result.filePaths[0], {encoding: "utf8"})
 			.then(content => {
 				// Inhalt einlesen und speichern
 				optionen.data.personen = [];
@@ -1441,13 +1431,11 @@ let optionen = {
 		if (optionen.data.letzter_pfad) {
 			opt.defaultPath = optionen.data.letzter_pfad;
 		}
-		let {ipcRenderer} = require("electron"),
-			path = require("path"),
-			result;
+		let result;
 		if (/exportieren$/.test(input.id)) { // Einstellungen exportieren
 			opt.title += "exportieren";
-			opt.defaultPath = path.join(opt.defaultPath, "Einstellungen.zte");
-			result = await ipcRenderer.invoke("datei-dialog", {
+			opt.defaultPath = modules.path.join(opt.defaultPath, "Einstellungen.zte");
+			result = await modules.ipc.invoke("datei-dialog", {
 				open: false,
 				winId: winInfo.winId,
 				opt: opt,
@@ -1455,7 +1443,7 @@ let optionen = {
 		} else { // Einstellungen importieren
 			opt.title += "importieren";
 			opt.properties = ["openFile"];
-			result = await ipcRenderer.invoke("datei-dialog", {
+			result = await modules.ipc.invoke("datei-dialog", {
 				open: true,
 				winId: winInfo.winId,
 				opt: opt,

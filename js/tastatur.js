@@ -339,8 +339,7 @@ let tastatur = {
 			if (!/^(app|electron)$/.test(winInfo.typ)) {
 				return;
 			}
-			const {ipcRenderer} = require("electron");
-			ipcRenderer.invoke("fenster-schliessen");
+			modules.ipc.invoke("fenster-schliessen");
 			return;
 		}
 		// Key "Enter"
