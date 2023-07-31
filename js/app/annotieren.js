@@ -12,17 +12,10 @@ let annotieren = {
       range = sel.getRangeAt(0),
       mark = document.createElement("mark");
     mark.classList.add("user");
-//     try {
-      range.surroundContents(mark);
-      range.collapse();
-      annotieren.mod(mark);
-      annotieren.ausfuehren();
-//     } catch (err) {
-//       dialog.oeffnen({
-//         typ: "alert",
-//         text: `Die Markierung kann an dieser Position nicht vorgenommen werden.\n<h3>Fehlermeldung</h3>\n${err.name}: ${err.message}`,
-//       });
-//     }
+    range.surroundContents(mark);
+    range.collapse();
+    annotieren.mod(mark);
+    annotieren.ausfuehren();
   },
   // Meldung, dass das Annotieren nicht möglich ist
   unmoeglich () {
